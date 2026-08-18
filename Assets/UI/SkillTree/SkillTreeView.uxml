@@ -1,0 +1,23 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="skill-tree-root" class="skill-tree-root">
+        <ui:VisualElement name="skill-tree-header" class="skill-tree-header">
+            <ui:Label name="tree-title-label" text="Skill Tree" class="skill-tree-title" />
+            <ui:Label name="tree-description-label" text="" class="skill-tree-description" />
+            <ui:VisualElement class="skill-tree-header-spacer" />
+            <ui:Label name="skill-points-label" text="Pontos disponíveis: 0" class="skill-points-label" />
+            <ui:Button name="close-button" text="Fechar" class="skill-tree-close-button" />
+        </ui:VisualElement>
+        <ui:ScrollView name="skill-tree-scroll" class="skill-tree-scroll" horizontal-scroller-visibility="Auto" vertical-scroller-visibility="Auto">
+            <ui:VisualElement name="skill-tree-canvas" class="skill-tree-canvas">
+                <ui:VisualElement name="connector-layer" class="connector-layer" />
+                <ui:VisualElement name="node-layer" class="node-layer" />
+            </ui:VisualElement>
+        </ui:ScrollView>
+        <ui:VisualElement name="skill-detail-panel" class="skill-detail-panel">
+            <ui:Label name="detail-name-label" text="Selecione uma skill" class="skill-detail-name" />
+            <ui:Label name="detail-description-label" text="" class="skill-detail-description" />
+            <ui:Label name="detail-stats-label" text="" class="skill-detail-stats" />
+            <ui:Button name="detail-action-button" text="Aprender" class="skill-detail-action-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
