@@ -131,10 +131,13 @@
 - [ ] Ainda não existe — próxima tarefa
 
 ### Mapa Mundi + Encontros Aleatórios (novo — decisão de design 2026-08-19)
-> 📌 O usuário pediu um jogo "estilo Final Fantasy". Esclarecido via pergunta direta: **mantém o combate em tempo real já implementado** (não vira turno/ATB), mas adiciona uma camada de **mapa do mundo** (visão de cima, navegar entre regiões/biomas) com **batalhas acionadas por encontro aleatório** enquanto anda pelo mapa — like o overworld clássico de FF I-VI. Sistema de batalha em si (o que acontece ao entrar em combate) fica a decidir depois; por enquanto é só a camada de overworld + gatilho de encontro.
+> 📌 Direção final de gameplay, esclarecida em várias rodadas de pergunta direta ao usuário nesta data:
+> - **Estrutura estilo Final Fantasy clássico**: mapa mundi (overworld, visão de cima, navegar entre regiões/biomas) com **encontros aleatórios** que disparam combate — como FF I-VI.
+> - **Combate em si é em tempo real estilo MU Online** (hotbar de skills, ação contínua, sem menu de comando por turno/ATB) — ou seja, **mantém e reaproveita** o sistema já construído (`Hitbox`/`Hurtbox`/`Health`, `SkillManager.TryCast`, `PlayerController`/State Machine), NÃO troca para batalha por turnos. A ideia de ATB foi cogitada e descartada.
+> - Sistema de batalha em si (câmera/arena ao entrar em combate) fica a refinar depois; por enquanto é a camada de overworld + gatilho de encontro + entrada em modo combate em tempo real.
 - [ ] `WorldMapScene`/`WorldMapController`: visão de cima, player anda entre regiões (reaproveitar os 4 biomas já seedados: Floresta, Deserto, Montanha, Cavernas)
 - [ ] Sistema de encontro aleatório (chance por passo/tempo, usando `BiomeDefinition.RollEnemy` já implementado para decidir qual inimigo aparece)
-- [ ] Transição overworld → cena/área de combate ao disparar um encontro
+- [ ] Transição overworld → área de combate em tempo real (reaproveita `EnemyController`/`Hitbox`/`SkillManager` já existentes) ao disparar um encontro
 - [ ] Definir se o mapa mundi é uma Scene separada da `Main.unity` (mais provável) ou um modo dentro dela
 
 ---
