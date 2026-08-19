@@ -33,11 +33,11 @@
 
 ### Infraestrutura de Projeto
 - [ ] Inicializar Git + `.gitignore` para Unity + Git LFS para binários (texturas, áudio, modelos)
-- [ ] Definir estratégia de branches (ex: trunk-based ou GitFlow simplificado)
+- [x] Definir estratégia de branches (ex: trunk-based ou GitFlow simplificado) — `Docs/ProjectConventions.md` (trunk-based simplificado)
 - [ ] Configurar CI/CD (build automático, testes, lint) — GitHub Actions / Jenkins / Unity Cloud Build
-- [ ] Definir Company/Product Name e ícone em Player Settings
-- [ ] Configurar `.editorconfig` + convenções de código (naming, namespaces `Rapadura.*`)
-- [ ] Definir estrutura de pastas definitiva (Assets, Addressables, StreamingAssets)
+- [~] Definir Company/Product Name e ícone em Player Settings — decidido em `Docs/ProjectConventions.md` (Product: Rapadura, Company: Engenho Estúdio); aplicar de fato exige Unity Editor
+- [x] Configurar `.editorconfig` + convenções de código (naming, namespaces `Rapadura.*`) — já existia
+- [x] Definir estrutura de pastas definitiva (Assets, Addressables, StreamingAssets) — `Docs/ProjectConventions.md`
 
 ### Qualidade de Engenharia
 - [ ] Adicionar testes automatizados (Unity Test Framework — EditMode e PlayMode)
@@ -80,7 +80,8 @@
 - [x] Classe `PlayableCharacter` (base) + `CharacterId` (enum) + `CharacterRegistry`
 - [x] Classes `Joaquim`, `Maria`, `Maithe`, `Icaro`, `Lavine` com lore, classe, função, atributo principal e nomes de habilidades
 - [ ] Tela de seleção de personagem (UI)
-- [ ] Instanciar `PlayableCharacter.ApplyPassive` no spawn do player (hoje é placeholder — bônus reais dependem do sistema de Atributos da Fase 3)
+- [x] `PlayableCharacter.ApplyPassive` implementado de verdade (não é mais placeholder) usando `AttributeSet`
+- [ ] Chamar `ApplyPassive` no spawn do player — bloqueado: não existe código de spawn de player ainda (depende de Scene/Prefab, exige Unity Editor)
 - [ ] Implementar as 25 habilidades (5 personagens × 5) como `SkillDefinition` reais na Fase 4
 - [ ] Modelos/animações/rig únicos por personagem (Fase 11 — Arte e Animação)
 - [ ] Voice over / dublagem (se houver, Fase 11 — Cinemáticas)
@@ -139,11 +140,13 @@
 > ⚠️ Nota: `PlayerStats` ainda implementa `ICombatTarget` diretamente e não usa `Health`, então o player recebe dano das novas hitboxes mas sem os benefícios de i-frames/hit-stop do novo sistema ainda — migrar `PlayerStats` para usar `Health` (ou adicionar i-frames nele) é o próximo passo. Também não validado em Play Mode (projeto nunca aberto no Editor), só via testes EditMode.
 
 ### Armas
-- [ ] Arma corpo a corpo
-- [ ] Arma de longo alcance
-- [ ] Sistema de munição
-- [ ] Sistema de recarga
-- [ ] Durabilidade (opcional, avaliar se combina com o jogo) — `ItemDefinition`/`InventorySlotData` já têm campos de durabilidade e dano de arma, mas nada no loop de combate os usa ainda
+- [x] Arma corpo a corpo — `Combat/Weapons/MeleeWeapon.cs` (ativa `Hitbox` por janela de tempo)
+- [x] Arma de longo alcance — `Combat/Weapons/RangedWeapon.cs` + `Projectile.cs`
+- [x] Sistema de munição — ligado a `InventoryManager` (consome item de munição real)
+- [x] Sistema de recarga — temporizador bloqueia disparo durante reload
+- [x] Durabilidade — decrementa `InventorySlotData.currentDurability`, quebra/desequipa em zero
+
+> ✅ Corrigido: `UnequipSlot` agora preserva `currentDurability` real ao devolver o item ao inventário (não reseta mais para o máximo).
 
 ### Inimigos
 - [x] IA básica (Behaviour Tree ou State Machine reutilizando `Core/StateMachine`) — `Enemies/EnemyController.cs` + estados em `Enemies/States/`
@@ -162,8 +165,8 @@
 - [x] Veneno — seedado em `SkillDatabaseSeeder.cs` (DoT via `BuffController`)
 - [ ] Queimadura — engine suporta DoT genérico, mas não há efeito de queimadura seedado especificamente
 - [x] Congelamento — seedado em `SkillDatabaseSeeder.cs` (slow)
-- [ ] Atordoamento (stun) — falta flag de "não pode agir" consumida por `PlayerController`/State Machine
-- [ ] Sistema de resistências/imunidades por tipo de dano
+- [x] Atordoamento (stun) — `BuffController.IsStunned`/`ApplyStun`, `PlayerController` bloqueia `Tick`/`FixedTick` enquanto atordoado (câmera continua livre)
+- [x] Sistema de resistências/imunidades por tipo de dano — `Combat/ElementResistance.cs` + overload de `DamageCalculator.ComputeDamage`, 100% = imune
 
 ---
 
@@ -185,12 +188,12 @@
   - [x] Raro
   - [x] Épico
   - [x] Lendário
-- [ ] Sistema de geração procedural de itens (afixos), se aplicável ao gênero
+- [~] Sistema de geração procedural de itens (afixos), se aplicável ao gênero — `Items/Procedural/{ItemAffixDefinition,AffixDatabase,ProceduralItemGenerator}.cs` prontos e testados; falta autoria de afixos reais em `Resources/Affixes` e exibição na UI de inventário/tooltip (Fase 6)
 
 ### Progressão
 - [x] XP — `PlayerStats.AddExperience`, evento `PlayerExperienceChangedEvent`
 - [x] Níveis — `PlayerStats.Level`
-- [ ] Atributos — só há vitais (vida/stamina/mana); não há força/destreza/etc. (`PlayableCharacter.ApplyPassive` ainda é placeholder)
+- [x] Atributos — `Player/AttributeSet.cs` (Vitalidade/Espírito/Destreza/Inteligência/Poder Arcano, pontos por level-up, fórmulas documentadas), `PlayableCharacter.ApplyPassive` implementado nos 5 personagens
 - [~] Talentos — se sobrepõe à skill tree da Fase 4; não há sistema de "talento" separado de skill
 - [ ] Curva de balanceamento documentada em planilha (fonte única de verdade) — curva hoje é hardcoded em `PlayerStats.cs` (`base * multiplier^(nível-1)`)
 
@@ -221,32 +224,36 @@
 ## 🏗️ FASE 5 — Construção e Crafting
 
 ### Recursos
-- [ ] Madeira
-- [ ] Pedra
-- [ ] Ferro
-- [ ] Ouro
+- [x] Madeira — item `item_wood` via `Editor/ResourceItemSeeder.cs`
+- [x] Pedra — `item_stone`
+- [x] Ferro — `item_iron`
+- [x] Ouro — `item_gold` (nova categoria `ItemCategory.Gold` adicionada)
 
 ### Crafting
-- [ ] Bancada
-- [ ] Receitas
-- [ ] Sistema de desbloqueio
+- [x] Bancada — `CraftingStationType`/`RequiresCraftingStation` na receita
+- [x] Receitas — `Crafting/RecipeDefinition.cs` + `RecipeDatabase.cs`
+- [x] Sistema de desbloqueio — `CraftingManager.UnlockRecipe`/`IsRecipeKnown`
 
 ### Construção
-- [ ] `BuildingManager`
-- [ ] Construção modular
-- [ ] Upgrade de estruturas
-- [ ] Validação de colocação (colisão, terreno válido, grid snapping)
+- [x] `BuildingManager` — `Building/BuildingManager.cs`
+- [~] Construção modular — footprint/grid/níveis prontos; kit modular de prefab real depende do Editor
+- [x] Upgrade de estruturas — `BuildingManager.UpgradeStructure` + `StructureLevelData`
+- [~] Validação de colocação (colisão, terreno válido, grid snapping) — snap/overlap via AABB puro prontos (`GridPlacementUtility.cs`); validação de terreno real (altura/inclinação) depende de terreno no Editor
+
+> ✅ `CraftingManager`/`BuildingManager` registrados em `GameManager.BuildManagers()`.
 
 ---
 
 ## 🎨 FASE 6 — Interface
 
 ### HUD
-- [ ] Vida
-- [ ] Stamina
-- [ ] Mana
-- [ ] Barra de XP
-- [ ] HUD adaptativa (escala/posição configurável — acessibilidade)
+- [x] Vida — `UI/HUD/HudView.uxml/uss` + `HudController.cs` (event-driven via `PlayerHealthChangedEvent`)
+- [x] Stamina — idem (`PlayerStaminaChangedEvent`)
+- [x] Mana — agora event-driven via `PlayerManaChangedEvent` (polling removido)
+- [x] Barra de XP — `PlayerExperienceChangedEvent` + label de nível
+- [x] HUD adaptativa (escala/posição configurável — acessibilidade) — `HudController` expõe escala/âncora/offset serializados + setters em runtime, pronto para tela de Configurações
+
+> ⚠️ Pendente (exige Unity Editor): criar o `GameObject` com `UIDocument` na Scene e conectar `HudController`.
 
 ### Inventário
 - [ ] Janela principal
@@ -254,22 +261,26 @@
 - [ ] Crafting
 
 ### Menus
-- [ ] Main Menu
-- [ ] Pause
-- [ ] Configurações (gráficos, áudio, controles, idioma)
-- [ ] Save/Load
+- [x] Main Menu — `UI/Menus/MainMenuView.uxml` + `MainMenuController.cs` (Novo Jogo/Continuar via `SaveManager`/Configurações/Sair)
+- [x] Pause — `PauseMenuController.cs`, publica `GamePausedEvent`/`GameResumedEvent` (`Menus/MenuEvents.cs`)
+- [x] Configurações (gráficos, áudio, controles, idioma) — `SettingsMenuController.cs` (áudio via `AudioManager`, idioma via `LocalizationManager`, gráficos via QualitySettings/Screen; controles é placeholder documentado, rebind real fica pra depois)
+- [x] Save/Load — `SaveLoadMenuController.cs` + `SaveSlotPresenter.cs`
+
+> ⚠️ Pendente (exige Unity Editor): criar os `GameObject`s com `UIDocument` nas Scenes para cada tela.
 
 ### UX
-- [ ] Tooltips
-- [ ] Feedback visual
-- [ ] Sons de interface
-- [ ] Navegação 100% por controle/teclado (sem depender só de mouse)
+- [x] Tooltips — `UI/Common/TooltipController.cs` + `TooltipView.uxml/uss`
+- [x] Feedback visual — `UiFeedbackUtility.cs` (Pulse/PulseScale via USS transition)
+- [x] Sons de interface — `UiSoundHooks.cs` (PlayClick/PlayHover/PlayError via `AudioManager`)
+- [~] Navegação 100% por controle/teclado (sem depender só de mouse) — `focusable="true"` em todos os elementos interativos dos menus/HUD; falta configurar grupos de navegação específicos de gamepad
 
 ### Acessibilidade
-- [ ] Escala de fonte / alto contraste
-- [ ] Suporte a colorblind (paletas alternativas)
-- [ ] Remapeamento de controles
-- [ ] Opção de reduzir screen shake / efeitos de flash
+- [~] Escala de fonte / alto contraste — `Core/Accessibility/AccessibilitySettings.cs` (backend pronto, falta consumir na UI)
+- [~] Suporte a colorblind (paletas alternativas) — `ColorblindPaletteMap.cs` (mapeia `ItemRarity`, falta consumir na UI)
+- [~] Remapeamento de controles — `InputRebindManager.cs` (usa API real do Input System, falta UI na aba "Controles" do `SettingsMenuController`)
+- [~] Opção de reduzir screen shake / efeitos de flash — `AccessibilitySettings.ScaleShakeMagnitude` pronto, falta plugar em `CombatCameraShakeRelay.OnCameraShakeRequested`/`PlayerCamera.Shake`
+
+> ✅ `AccessibilitySettings` registrado em `GameManager.BuildManagers()` e multiplicador de shake plugado em `CombatCameraShakeRelay`. Pendente: consumir escala de fonte/contraste/paleta/rebind na UI de Configurações.
 
 ### Localização
 - [x] Arquitetura de texto externalizada (não hardcoded em código) — `Core/Localization/LocalizationTable.cs` (ScriptableObject) + `LocalizationCsv.cs`
@@ -304,14 +315,16 @@
 ## 🌎 FASE 8 — Conteúdo
 
 ### NPCs
-- [ ] Sistema de diálogo
+- [~] Sistema de diálogo — `Gameplay/Dialogue/{DialogueNode,DialogueDefinition,DialogueManager}.cs` + `UI/Dialogue/DialogueUIController.cs` prontos, testados e `DialogueManager` já registrado em `GameManager`; falta gatilho de interação com NPC (Scene) e entradas reais `dialogue.*` no idioma
 - [ ] Lojas
 - [ ] Missões
 
 ### Quests
-- [ ] Principal
-- [ ] Secundárias
-- [ ] Diárias
+- [~] Principal — backend genérico pronto (`Gameplay/Quests/QuestManager.cs` + `QuestType.MainStory`), falta conteúdo autorado e UI
+- [~] Secundárias — `QuestType.Side`, mesmo backend
+- [~] Diárias — `QuestType.Daily`, mesmo backend
+
+> ✅ `QuestManager` registrado em `GameManager.BuildManagers()` + `SaveManager.Register`. Pendente: chamar `QuestManager.SetRewardTargets` quando o player existir (Scene); criar assets `QuestDefinition` de conteúdo real; UI de log de quests.
 
 ### Biomas
 - [ ] Floresta
@@ -324,23 +337,25 @@
 ## 🔊 FASE 9 — Áudio
 
 ### AudioManager
-- [ ] Música ambiente
-- [ ] Sons de combate
-- [ ] Sons do jogador
-- [ ] Sons da interface
+- [x] Música ambiente — `Core/Audio/AudioManager.cs` (`PlayMusic`/`StopMusic` com crossfade)
+- [x] Sons de combate — `CombatAudioCueMap.cs`, ouve `DamageAppliedEvent`/`CombatTargetDiedEvent`
+- [x] Sons do jogador — API genérica `PlayOneShot`/`PlaySfx` pronta (ainda não chamada por código de player/UI)
+- [x] Sons da interface — idem
 
 ### Sistema Avançado
-- [ ] Áudio espacial
-- [ ] Mixagem (Audio Mixer com grupos: Master/Música/SFX/UI)
-- [ ] Controle de volume por categoria
-- [ ] Ducking dinâmico (ex: abaixar música durante diálogo)
+- [x] Áudio espacial — `PlaySfxAtPosition` (spatialBlend=1)
+- [~] Mixagem (Audio Mixer com grupos: Master/Música/SFX/UI) — categorias lógicas em C# multiplicando `AudioSource.volume`; asset `.mixer` real exige Unity Editor
+- [x] Controle de volume por categoria — persistido via `PlayerPrefs`
+- [x] Ducking dinâmico (ex: abaixar música durante diálogo) — `DialogueManager` já chama `AudioManager.DuckMusic(...)` em início/troca de linha/fim de diálogo
+
+> ✅ `AudioManager` registrado em `GameManager.BuildManagers()`.
 
 ---
 
 ## 🚀 FASE 10 — Polimento
 
 ### Performance
-- [ ] Object Pooling
+- [~] Object Pooling — `Core/Pooling/GenericObjectPool.cs` pronto e reutilizável; `EnemyPool.cs` ainda não migrado para usá-lo
 - [ ] Addressables
 - [ ] Occlusion Culling
 - [ ] LODs
@@ -348,10 +363,10 @@
 - [ ] Orçamento de memória e draw calls documentado
 
 ### Qualidade
-- [ ] Sistema de Analytics (retenção, funil, eventos de gameplay)
-- [ ] Sistema de Logs
-- [ ] Debug Overlay
-- [ ] Testes automatizados (cobertura de sistemas críticos: save, combate, inventário)
+- [~] Sistema de Analytics (retenção, funil, eventos de gameplay) — `Core/Analytics/AnalyticsManager.cs` registrado em `GameManager` (ouve eventos reais do EventBus, buffer em memória + log); falta backend real (decisão de produto/legal)
+- [x] Sistema de Logs — `Core/Logging/GameLogger.cs` (já existia)
+- [~] Debug Overlay — `Core/Debug/DebugOverlayController.cs` (FPS/memória prontos); falta log rolante (precisa de hook novo em `GameLogger.cs`) e colocar o `UIDocument` numa Scene
+- [~] Testes automatizados (cobertura de sistemas críticos: save, combate, inventário) — cobertura ampla já existe (save, combate, inventário, skills, enemies, UI); ainda não roda de verdade num Unity Editor real (projeto nunca aberto)
 - [ ] Playtesting estruturado com usuários externos + coleta de feedback
 - [ ] QA pass dedicado (checklist de regressão antes de cada release)
 

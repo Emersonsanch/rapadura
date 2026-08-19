@@ -1,0 +1,51 @@
+.main-menu-root {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(10, 11, 16, 0.98);
+}
+
+.main-menu-panel {
+    width: 360px;
+    align-items: center;
+    padding: 24px;
+}
+
+.main-menu-title {
+    font-size: 36px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 245);
+    margin-bottom: 32px;
+}
+
+.main-menu-button-list {
+    width: 100%;
+    flex-direction: column;
+}
+
+.main-menu-button {
+    width: 100%;
+    height: 44px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    background-color: rgba(30, 32, 40, 0.9);
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgb(230, 230, 235);
+}
+
+.main-menu-button:hover {
+    background-color: rgba(50, 54, 66, 0.95);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Visible focus indicator so keyboard/gamepad-only navigation is never ambiguous about
+   which control is currently selected (see TODO.md Fase 6 > UX > navegação 100% por controle). */
+.main-menu-button:focus {
+    border-color: rgb(90, 170, 255);
+    border-width: 3px;
+}
+
+.main-menu-button:disabled {
+    opacity: 0.4;
+}

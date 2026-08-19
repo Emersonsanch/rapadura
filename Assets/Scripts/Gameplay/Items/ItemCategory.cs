@@ -7,6 +7,7 @@ namespace Rapadura.Gameplay.Items
         Wood,
         Stone,
         Metal,
+        Gold,
         Herb,
         Fiber,
 

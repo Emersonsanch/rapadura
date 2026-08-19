@@ -1,4 +1,5 @@
 using Rapadura.Gameplay.Player;
+using UnityEngine;
 
 namespace Rapadura.Gameplay.Characters
 {
@@ -28,7 +29,16 @@ namespace Rapadura.Gameplay.Characters
 
         public override void ApplyPassive(PlayerStats stats)
         {
-            // TODO: substituir por bônus real de Inteligência/Mana Máxima quando o sistema de Atributos (Fase 3) existir.
+            // Inventor da tecnologia perdida: talento inato reforça Inteligência (seu Atributo
+            // Principal), que aumenta a redução de recarga de habilidades (ver
+            // AttributeSet.IntelligenceCooldownReductionPerPoint).
+            AttributeSet attributeSet = stats.GetComponent<AttributeSet>();
+
+            if (attributeSet != null)
+            {
+                attributeSet.ApplyCharacterPassiveBonus(AttributeType.Intelligence);
+            }
+
             stats.RestoreMana(stats.MaxMana * 0.5f);
         }
     }

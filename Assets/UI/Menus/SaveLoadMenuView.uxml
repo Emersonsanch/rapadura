@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="save-load-menu-root" class="save-load-menu-root">
+        <ui:VisualElement name="save-load-menu-panel" class="save-load-menu-panel">
+            <ui:VisualElement name="save-load-header" class="save-load-header">
+                <ui:Label name="save-load-title-label" text="Salvar Jogo" class="save-load-title" />
+                <ui:VisualElement class="save-load-header-spacer" picking-mode="Ignore" />
+                <ui:Button name="close-button" text="Fechar" focusable="true" class="save-load-close-button" />
+            </ui:VisualElement>
+
+            <ui:ScrollView name="slot-scroll" class="save-load-scroll">
+                <ui:VisualElement name="slot-list-container" class="save-slot-list" />
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

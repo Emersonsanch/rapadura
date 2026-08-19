@@ -109,5 +109,32 @@ namespace Rapadura.Tests
 
             Assert.IsTrue(_stats.IsInvulnerable);
         }
+
+        [Test]
+        public void ConsumeMana_PublishesPlayerManaChangedEvent()
+        {
+            PlayerManaChangedEvent? received = null;
+            EventBus.Subscribe<PlayerManaChangedEvent>(evt => received = evt);
+
+            _stats.ConsumeMana(10f);
+
+            Assert.IsTrue(received.HasValue);
+            Assert.AreEqual(_stats.CurrentMana, received.Value.CurrentMana);
+            Assert.AreEqual(_stats.MaxMana, received.Value.MaxMana);
+        }
+
+        [Test]
+        public void RestoreMana_PublishesPlayerManaChangedEvent_WithUpdatedValue()
+        {
+            _stats.ConsumeMana(20f);
+
+            PlayerManaChangedEvent? received = null;
+            EventBus.Subscribe<PlayerManaChangedEvent>(evt => received = evt);
+
+            _stats.RestoreMana(5f);
+
+            Assert.IsTrue(received.HasValue);
+            Assert.AreEqual(_stats.CurrentMana, received.Value.CurrentMana);
+        }
     }
 }

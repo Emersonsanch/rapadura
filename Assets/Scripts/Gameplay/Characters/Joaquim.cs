@@ -1,4 +1,5 @@
 using Rapadura.Gameplay.Player;
+using UnityEngine;
 
 namespace Rapadura.Gameplay.Characters
 {
@@ -29,8 +30,17 @@ namespace Rapadura.Gameplay.Characters
 
         public override void ApplyPassive(PlayerStats stats)
         {
-            // TODO: substituir por bônus real de Vitalidade quando o sistema de Atributos (Fase 3) existir.
-            stats.Heal(stats.CurrentHealth);
+            // Guardião das Raízes: talento inato reforça Vitalidade (seu Atributo Principal), que por
+            // sua vez aumenta a vida máxima (ver AttributeSet.VitalityHealthPerPoint). Também cura o
+            // personagem ao spawnar, já que sua vida máxima acabou de subir.
+            AttributeSet attributeSet = stats.GetComponent<AttributeSet>();
+
+            if (attributeSet != null)
+            {
+                attributeSet.ApplyCharacterPassiveBonus(AttributeType.Vitality);
+            }
+
+            stats.Heal(stats.MaxHealth);
         }
     }
 }

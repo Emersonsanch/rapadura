@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="pause-menu-root" class="pause-menu-root">
+        <ui:VisualElement name="pause-menu-panel" class="pause-menu-panel">
+            <ui:Label text="Pausado" class="pause-menu-title" />
+            <ui:VisualElement name="pause-menu-button-list" class="pause-menu-button-list">
+                <ui:Button name="resume-button" text="Retomar" focusable="true" class="pause-menu-button" />
+                <ui:Button name="settings-button" text="Configurações" focusable="true" class="pause-menu-button" />
+                <ui:Button name="save-button" text="Salvar" focusable="true" class="pause-menu-button" />
+                <ui:Button name="main-menu-button" text="Menu Principal" focusable="true" class="pause-menu-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

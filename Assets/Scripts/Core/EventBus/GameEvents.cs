@@ -28,6 +28,19 @@ namespace Rapadura.Core.EventBus
         }
     }
 
+    /// <summary>Raised whenever the player's mana value changes.</summary>
+    public readonly struct PlayerManaChangedEvent : IGameEvent
+    {
+        public readonly float CurrentMana;
+        public readonly float MaxMana;
+
+        public PlayerManaChangedEvent(float currentMana, float maxMana)
+        {
+            CurrentMana = currentMana;
+            MaxMana = maxMana;
+        }
+    }
+
     /// <summary>Raised whenever the player gains experience or levels up.</summary>
     public readonly struct PlayerExperienceChangedEvent : IGameEvent
     {

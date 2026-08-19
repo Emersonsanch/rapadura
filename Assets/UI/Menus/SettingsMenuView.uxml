@@ -1,0 +1,41 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="settings-menu-root" class="settings-menu-root">
+        <ui:VisualElement name="settings-menu-panel" class="settings-menu-panel">
+            <ui:VisualElement name="settings-header" class="settings-header">
+                <ui:Label text="Configurações" class="settings-title" />
+                <ui:VisualElement class="settings-header-spacer" picking-mode="Ignore" />
+                <ui:Button name="close-button" text="Fechar" focusable="true" class="settings-close-button" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="settings-tab-bar" class="settings-tab-bar">
+                <ui:Button name="tab-graphics-button" text="Gráficos" focusable="true" class="settings-tab-button" />
+                <ui:Button name="tab-audio-button" text="Áudio" focusable="true" class="settings-tab-button" />
+                <ui:Button name="tab-controls-button" text="Controles" focusable="true" class="settings-tab-button" />
+                <ui:Button name="tab-language-button" text="Idioma" focusable="true" class="settings-tab-button" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="settings-content" class="settings-content">
+                <ui:VisualElement name="panel-graphics" class="settings-panel">
+                    <ui:DropdownField name="quality-dropdown" label="Qualidade" focusable="true" class="settings-field" />
+                    <ui:Toggle name="fullscreen-toggle" label="Tela Cheia" focusable="true" class="settings-field" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="panel-audio" class="settings-panel">
+                    <ui:Slider name="master-volume-slider" label="Volume Geral" low-value="0" high-value="1" focusable="true" class="settings-field" />
+                    <ui:Slider name="music-volume-slider" label="Música" low-value="0" high-value="1" focusable="true" class="settings-field" />
+                    <ui:Slider name="sfx-volume-slider" label="Efeitos" low-value="0" high-value="1" focusable="true" class="settings-field" />
+                    <ui:Slider name="ui-volume-slider" label="Interface" low-value="0" high-value="1" focusable="true" class="settings-field" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="panel-controls" class="settings-panel">
+                    <ui:Label text="Remapeamento de teclas/gamepad ainda não implementado." class="settings-placeholder-label" />
+                    <ui:Label text="TODO: usar InputActionRebindingExtensions sobre PlayerControls.inputactions em runtime (Fase 6 / Acessibilidade)." class="settings-placeholder-note" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="panel-language" class="settings-panel">
+                    <ui:DropdownField name="language-dropdown" label="Idioma" focusable="true" class="settings-field" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

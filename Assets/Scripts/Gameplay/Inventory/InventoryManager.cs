@@ -129,6 +129,18 @@ namespace Rapadura.Gameplay.Inventory
         /// <summary>Attempts to add a quantity of an item, filling existing stacks first, then empty slots. Returns leftover that could not fit.</summary>
         public int AddItem(ItemDefinition item, int quantity)
         {
+            return AddItem(item, quantity, null);
+        }
+
+        /// <summary>
+        /// Same as <see cref="AddItem(ItemDefinition,int)"/>, but when the item lands in a fresh
+        /// empty slot, <paramref name="preserveDurability"/> (if given) is used instead of resetting
+        /// to <c>MaxDurability</c>. Used when returning an item that already existed at some
+        /// durability (e.g. unequipping) so it doesn't come back fully repaired. A brand-new item
+        /// (preserveDurability == null) still starts at MaxDurability as before.
+        /// </summary>
+        public int AddItem(ItemDefinition item, int quantity, float? preserveDurability)
+        {
             if (item == null || quantity <= 0)
             {
                 return quantity;
@@ -178,7 +190,9 @@ namespace Rapadura.Gameplay.Inventory
 
                 slot.itemId = item.ItemId;
                 slot.quantity = amountToAdd;
-                slot.currentDurability = item.HasDurability ? item.MaxDurability : 0f;
+                slot.currentDurability = item.HasDurability
+                    ? (preserveDurability ?? item.MaxDurability)
+                    : 0f;
                 remaining -= amountToAdd;
             }
 
@@ -399,7 +413,7 @@ namespace Rapadura.Gameplay.Inventory
 
             if (item != null)
             {
-                int leftover = AddItem(item, 1);
+                int leftover = AddItem(item, 1, equippedData.currentDurability);
 
                 if (leftover > 0)
                 {

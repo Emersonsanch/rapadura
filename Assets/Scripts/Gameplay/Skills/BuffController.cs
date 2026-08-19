@@ -15,6 +15,14 @@ namespace Rapadura.Gameplay.Skills
     {
         private readonly List<ActiveStatEffect> _activeEffects = new List<ActiveStatEffect>();
         private ICombatTarget _combatTarget;
+        private float _stunTimer;
+
+        /// <summary>True while a stun effect is active — consumed by <see cref="Rapadura.Gameplay.Player.PlayerController"/>
+        /// (and any other actor with a BuffController) to block movement/attack input processing for the frame.</summary>
+        public bool IsStunned => _stunTimer > 0f;
+
+        /// <summary>Seconds of stun remaining, clamped to zero (never negative).</summary>
+        public float StunTimeRemaining => Mathf.Max(0f, _stunTimer);
 
         private void Awake()
         {
@@ -23,6 +31,11 @@ namespace Rapadura.Gameplay.Skills
 
         private void Update()
         {
+            if (_stunTimer > 0f)
+            {
+                _stunTimer -= Time.deltaTime;
+            }
+
             for (int i = _activeEffects.Count - 1; i >= 0; i--)
             {
                 ActiveStatEffect effect = _activeEffects[i];
@@ -38,6 +51,23 @@ namespace Rapadura.Gameplay.Skills
                     _activeEffects.RemoveAt(i);
                 }
             }
+        }
+
+        /// <summary>Applies (or refreshes/extends) a stun, preventing the owner from acting for the given duration.</summary>
+        public void ApplyStun(float durationSeconds)
+        {
+            if (durationSeconds <= 0f)
+            {
+                return;
+            }
+
+            _stunTimer = Mathf.Max(_stunTimer, durationSeconds);
+        }
+
+        /// <summary>Immediately ends any active stun (e.g. cleansed by a purify effect).</summary>
+        public void ClearStun()
+        {
+            _stunTimer = 0f;
         }
 
         private void ApplyTick(StatModifierDefinition definition)

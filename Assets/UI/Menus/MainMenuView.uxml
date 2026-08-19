@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="main-menu-root" class="main-menu-root">
+        <ui:VisualElement name="main-menu-panel" class="main-menu-panel">
+            <ui:Label text="Rapadura" class="main-menu-title" />
+            <ui:VisualElement name="main-menu-button-list" class="main-menu-button-list">
+                <ui:Button name="new-game-button" text="Novo Jogo" focusable="true" class="main-menu-button" />
+                <ui:Button name="continue-button" text="Continuar" focusable="true" class="main-menu-button" />
+                <ui:Button name="settings-button" text="Configurações" focusable="true" class="main-menu-button" />
+                <ui:Button name="quit-button" text="Sair" focusable="true" class="main-menu-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

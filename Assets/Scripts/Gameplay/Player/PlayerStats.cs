@@ -53,10 +53,15 @@ namespace Rapadura.Gameplay.Player
 
         private float _invulnerabilityTimer;
 
+        /// <summary>Optional — absence means no resistance/immunity to any element (see <see cref="ElementResistance"/>).</summary>
+        private ElementResistance _elementResistance;
+
         public float CurrentHealth { get; private set; }
         public float CurrentStamina { get; private set; }
         public float CurrentMana { get; private set; }
         public float MaxMana => _maxMana;
+        public float MaxHealth => _maxHealth;
+        public float MaxStamina => _maxStamina;
         public int CurrentExperience { get; private set; }
         public int Level { get; private set; } = 1;
         public bool IsDead { get; private set; }
@@ -72,6 +77,7 @@ namespace Rapadura.Gameplay.Player
             CurrentHealth = _maxHealth;
             CurrentStamina = _maxStamina;
             CurrentMana = _maxMana;
+            _elementResistance = GetComponent<ElementResistance>();
         }
 
         private void Update()
@@ -138,6 +144,7 @@ namespace Rapadura.Gameplay.Player
         private void SetMana(float value)
         {
             CurrentMana = Mathf.Clamp(value, 0f, _maxMana);
+            EventBus.Publish(new PlayerManaChangedEvent(CurrentMana, _maxMana));
         }
 
         public bool HasStamina()
@@ -199,8 +206,22 @@ namespace Rapadura.Gameplay.Player
 
         void ICombatTarget.ApplyDamage(float amount, ElementType element, GameObject source)
         {
-            // Element-specific resistance/weakness calculation is intentionally left to a future
-            // damage-formula system; for now every element deals its raw amount.
+            // Applies the optional ElementResistance table (see Gameplay/Combat/ElementResistance.cs)
+            // as a simple percentage multiplier; PlayerStats has no flat-defense mitigation curve of
+            // its own (that lives in DamageCalculator, used by hitboxes targeting Health-based actors),
+            // so this only layers elemental resistance/immunity on top of the raw amount.
+            if (_elementResistance != null)
+            {
+                float resistanceFraction = _elementResistance.GetResistance(element);
+
+                if (resistanceFraction >= 1f)
+                {
+                    return;
+                }
+
+                amount *= (1f - resistanceFraction);
+            }
+
             ApplyDamage(amount);
         }
 
@@ -280,6 +301,7 @@ namespace Rapadura.Gameplay.Player
 
             EventBus.Publish(new PlayerHealthChangedEvent(CurrentHealth, _maxHealth));
             EventBus.Publish(new PlayerStaminaChangedEvent(CurrentStamina, _maxStamina));
+            EventBus.Publish(new PlayerManaChangedEvent(CurrentMana, _maxMana));
             EventBus.Publish(new PlayerExperienceChangedEvent(CurrentExperience, GetExperienceToNextLevel(), Level));
         }
     }

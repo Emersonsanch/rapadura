@@ -1,3 +1,5 @@
+using Rapadura.Core.Accessibility;
+using Rapadura.Core.DI;
 using Rapadura.Core.EventBus;
 using Rapadura.Gameplay.Player;
 using UnityEngine;
@@ -35,7 +37,14 @@ namespace Rapadura.Gameplay.Combat
 
         private void OnCameraShakeRequested(CameraShakeRequestedEvent evt)
         {
-            _playerCamera?.Shake(evt.Duration, evt.Magnitude);
+            float magnitude = evt.Magnitude;
+
+            if (ServiceLocator.TryGet(out AccessibilitySettings accessibilitySettings))
+            {
+                magnitude = accessibilitySettings.ScaleShakeMagnitude(magnitude);
+            }
+
+            _playerCamera?.Shake(evt.Duration, magnitude);
         }
     }
 }

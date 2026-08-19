@@ -30,6 +30,9 @@ namespace Rapadura.Gameplay.Combat
 
         private float _invulnerabilityTimer;
 
+        /// <summary>Optional — absence means no resistance/immunity to any element (see <see cref="ElementResistance"/>).</summary>
+        private ElementResistance _elementResistance;
+
         public float CurrentHealth { get; private set; }
         public float MaxHealth => _maxHealth;
         public bool IsDead { get; private set; }
@@ -40,6 +43,7 @@ namespace Rapadura.Gameplay.Combat
         private void Awake()
         {
             CurrentHealth = _maxHealth;
+            _elementResistance = GetComponent<ElementResistance>();
         }
 
         private void Update()
@@ -70,7 +74,7 @@ namespace Rapadura.Gameplay.Combat
                 return;
             }
 
-            float finalDamage = DamageCalculator.ComputeDamage(info, _defense, _balanceConfig);
+            float finalDamage = DamageCalculator.ComputeDamage(info, _defense, _balanceConfig, _elementResistance);
             SetHealth(CurrentHealth - finalDamage);
             GrantInvulnerability(_invulnerabilityDuration);
 

@@ -1,4 +1,5 @@
 using Rapadura.Gameplay.Player;
+using UnityEngine;
 
 namespace Rapadura.Gameplay.Characters
 {
@@ -28,8 +29,17 @@ namespace Rapadura.Gameplay.Characters
 
         public override void ApplyPassive(PlayerStats stats)
         {
-            // TODO: substituir por bônus real de Destreza/Stamina Máxima quando o sistema de Atributos (Fase 3) existir.
-            stats.RestoreStamina(stats.CurrentStamina);
+            // Caçadora do Olho do Vento: talento inato reforça Destreza (seu Atributo Principal), que
+            // aumenta a chance de crítico (ver AttributeSet.DexterityCriticalChancePerPoint). Também
+            // enche a stamina ao spawnar.
+            AttributeSet attributeSet = stats.GetComponent<AttributeSet>();
+
+            if (attributeSet != null)
+            {
+                attributeSet.ApplyCharacterPassiveBonus(AttributeType.Dexterity);
+            }
+
+            stats.RestoreStamina(stats.MaxStamina);
         }
     }
 }

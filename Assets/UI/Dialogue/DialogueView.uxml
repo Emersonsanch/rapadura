@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="dialogue-root" class="dialogue-root">
+        <ui:VisualElement name="dialogue-box" class="dialogue-box">
+            <ui:Label name="dialogue-speaker-name" text="Speaker" class="dialogue-speaker-name" />
+            <ui:Label name="dialogue-line-text" text="Line text goes here." class="dialogue-line-text" />
+            <ui:VisualElement name="dialogue-choices-container" class="dialogue-choices-container" />
+            <ui:Button name="dialogue-continue-button" text="..." class="dialogue-continue-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

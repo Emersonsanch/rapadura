@@ -1,0 +1,36 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
+        <ui:VisualElement name="hud-vitals-panel" class="hud-vitals-panel" picking-mode="Ignore">
+            <ui:VisualElement name="health-bar-row" class="hud-bar-row" picking-mode="Ignore">
+                <ui:Label text="Vida" class="hud-bar-label" />
+                <ui:VisualElement name="health-bar-track" class="hud-bar-track hud-bar-track--health" picking-mode="Ignore">
+                    <ui:VisualElement name="health-bar-fill" class="hud-bar-fill hud-bar-fill--health" picking-mode="Ignore" />
+                    <ui:Label name="health-bar-value-label" text="100/100" class="hud-bar-value-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="stamina-bar-row" class="hud-bar-row" picking-mode="Ignore">
+                <ui:Label text="Stamina" class="hud-bar-label" />
+                <ui:VisualElement name="stamina-bar-track" class="hud-bar-track hud-bar-track--stamina" picking-mode="Ignore">
+                    <ui:VisualElement name="stamina-bar-fill" class="hud-bar-fill hud-bar-fill--stamina" picking-mode="Ignore" />
+                    <ui:Label name="stamina-bar-value-label" text="100/100" class="hud-bar-value-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="mana-bar-row" class="hud-bar-row" picking-mode="Ignore">
+                <ui:Label text="Mana" class="hud-bar-label" />
+                <ui:VisualElement name="mana-bar-track" class="hud-bar-track hud-bar-track--mana" picking-mode="Ignore">
+                    <ui:VisualElement name="mana-bar-fill" class="hud-bar-fill hud-bar-fill--mana" picking-mode="Ignore" />
+                    <ui:Label name="mana-bar-value-label" text="100/100" class="hud-bar-value-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="hud-xp-panel" class="hud-xp-panel" picking-mode="Ignore">
+            <ui:VisualElement name="xp-bar-row" class="hud-bar-row hud-bar-row--xp" picking-mode="Ignore">
+                <ui:Label name="level-label" text="Nv. 1" class="hud-bar-label hud-level-label" />
+                <ui:VisualElement name="xp-bar-track" class="hud-bar-track hud-bar-track--xp" picking-mode="Ignore">
+                    <ui:VisualElement name="xp-bar-fill" class="hud-bar-fill hud-bar-fill--xp" picking-mode="Ignore" />
+                    <ui:Label name="xp-bar-value-label" text="0/100" class="hud-bar-value-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

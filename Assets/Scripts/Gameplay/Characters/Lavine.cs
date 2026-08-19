@@ -1,4 +1,5 @@
 using Rapadura.Gameplay.Player;
+using UnityEngine;
 
 namespace Rapadura.Gameplay.Characters
 {
@@ -28,7 +29,15 @@ namespace Rapadura.Gameplay.Characters
 
         public override void ApplyPassive(PlayerStats stats)
         {
-            // TODO: substituir por bônus real de Poder Arcano/Mana Máxima quando o sistema de Atributos (Fase 3) existir.
+            // Feiticeira da Noite Rubra: talento inato reforça Poder Arcano (seu Atributo Principal),
+            // que aumenta o dano de ataque (ver AttributeSet.ArcanePowerAttackDamagePerPoint).
+            AttributeSet attributeSet = stats.GetComponent<AttributeSet>();
+
+            if (attributeSet != null)
+            {
+                attributeSet.ApplyCharacterPassiveBonus(AttributeType.ArcanePower);
+            }
+
             stats.RestoreMana(stats.MaxMana * 0.75f);
         }
     }

@@ -2,6 +2,7 @@ using Rapadura.Core.DI;
 using Rapadura.Core.Interfaces;
 using Rapadura.Core.StateMachine;
 using Rapadura.Gameplay.Player.States;
+using Rapadura.Gameplay.Skills;
 using Rapadura.Save;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -40,6 +41,13 @@ namespace Rapadura.Gameplay.Player
         public Transform CameraTransform => _cameraLookTransform != null ? _cameraLookTransform : Camera.main != null ? Camera.main.transform : transform;
         public StateMachine<PlayerController> StateMachine { get; private set; }
 
+        /// <summary>Optional — not every prefab needs crowd-control (see <see cref="IsStunned"/>). Cached the same
+        /// way SkillManager/ComboTracker/InventoryManager already look it up (GetComponent, no RequireComponent).</summary>
+        private BuffController _buffController;
+
+        /// <summary>True while the player is stunned and should not process movement/attack input this frame.</summary>
+        public bool IsStunned => _buffController != null && _buffController.IsStunned;
+
         public string SaveKey => "PlayerTransform";
 
         private void Awake()
@@ -47,6 +55,7 @@ namespace Rapadura.Gameplay.Player
             Input = GetComponent<PlayerInputHandler>();
             Motor = GetComponent<PlayerMotor>();
             Stats = GetComponent<PlayerStats>();
+            _buffController = GetComponent<BuffController>();
 
             BuildStateMachine();
         }
@@ -90,7 +99,14 @@ namespace Rapadura.Gameplay.Player
 
         private void Update()
         {
-            StateMachine.Tick(Time.deltaTime);
+            // Central stun guard: while stunned, the player cannot act (no movement/attack state
+            // transitions or per-frame state logic). Camera look still works so a stunned player
+            // isn't also blind, matching common ARPG stun conventions (e.g. Diablo/PoE) where
+            // camera/UI stays responsive but character action does not.
+            if (!IsStunned)
+            {
+                StateMachine.Tick(Time.deltaTime);
+            }
 
             if (_playerCamera != null && Input.LookInput.sqrMagnitude > 0.0001f)
             {
@@ -101,6 +117,11 @@ namespace Rapadura.Gameplay.Player
 
         private void FixedUpdate()
         {
+            if (IsStunned)
+            {
+                return;
+            }
+
             StateMachine.FixedTick(Time.fixedDeltaTime);
         }
 

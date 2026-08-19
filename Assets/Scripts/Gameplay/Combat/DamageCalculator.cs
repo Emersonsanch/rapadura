@@ -26,6 +26,25 @@ namespace Rapadura.Gameplay.Combat
         /// <summary>Computes the final damage a hit should deal, given the target's flat defense stat.</summary>
         public static float ComputeDamage(DamageInfo info, float defense, DamageBalanceConfig config)
         {
+            return ComputeDamage(info, defense, config, resistance: null);
+        }
+
+        /// <summary>
+        /// Computes the final damage a hit should deal, given the target's flat defense stat and its
+        /// (optional) elemental resistance table. Resistance is applied as a percentage multiplier on
+        /// top of the existing armor-mitigation result — a target with 100%+ resistance to
+        /// <see cref="DamageInfo.Element"/> is immune and takes zero damage, bypassing even
+        /// <see cref="DamageBalanceConfig.MinimumDamage"/> (immunity means immunity).
+        /// </summary>
+        public static float ComputeDamage(DamageInfo info, float defense, DamageBalanceConfig config, ElementResistance resistance)
+        {
+            float resistanceFraction = resistance != null ? resistance.GetResistance(info.Element) : 0f;
+
+            if (resistanceFraction >= 1f)
+            {
+                return 0f;
+            }
+
             float armorConstant = config != null ? config.ArmorConstant : 100f;
             float minimumDamage = config != null ? config.MinimumDamage : 1f;
             float criticalMultiplier = config != null ? config.CriticalMultiplier : 1.5f;
@@ -33,6 +52,7 @@ namespace Rapadura.Gameplay.Combat
             defense = Mathf.Max(0f, defense);
             float mitigation = defense / (defense + Mathf.Max(0.0001f, armorConstant));
             float mitigated = info.Amount * (1f - mitigation);
+            mitigated *= (1f - resistanceFraction);
 
             if (info.IsCritical)
             {

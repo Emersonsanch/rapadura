@@ -1,0 +1,102 @@
+.hud-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.hud-vitals-panel {
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    width: 260px;
+    flex-direction: column;
+    background-color: rgba(12, 14, 20, 0.55);
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+
+.hud-xp-panel {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
+    width: 400px;
+    flex-direction: column;
+}
+
+.hud-bar-row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.hud-bar-row--xp {
+    margin-bottom: 0;
+}
+
+.hud-bar-label {
+    width: 56px;
+    font-size: 11px;
+    color: rgb(220, 220, 225);
+    -unity-font-style: bold;
+}
+
+.hud-level-label {
+    width: 44px;
+    color: rgb(255, 210, 90);
+}
+
+.hud-bar-track {
+    flex-grow: 1;
+    height: 16px;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+    position: relative;
+}
+
+.hud-bar-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    transition-property: width;
+    transition-duration: 0.15s;
+    transition-timing-function: ease-out;
+}
+
+.hud-bar-fill--health {
+    background-color: rgb(210, 60, 60);
+}
+
+.hud-bar-fill--stamina {
+    background-color: rgb(220, 190, 60);
+}
+
+.hud-bar-fill--mana {
+    background-color: rgb(70, 130, 220);
+}
+
+.hud-bar-fill--xp {
+    background-color: rgb(150, 90, 220);
+}
+
+.hud-bar-value-label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    -unity-text-align: middle-center;
+    font-size: 10px;
+    color: rgb(240, 240, 245);
+}
+
+/* Low-value warning state: applied by HudController when a vital drops below its threshold. */
+.hud-bar-fill--low {
+    background-color: rgb(255, 90, 40);
+}

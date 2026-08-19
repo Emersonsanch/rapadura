@@ -1,7 +1,14 @@
 using System.Collections.Generic;
+using Rapadura.Core.Accessibility;
+using Rapadura.Core.Analytics;
+using Rapadura.Core.Audio;
 using Rapadura.Core.DI;
 using Rapadura.Core.Interfaces;
 using Rapadura.Core.Localization;
+using Rapadura.Gameplay.Building;
+using Rapadura.Gameplay.Crafting;
+using Rapadura.Gameplay.Dialogue;
+using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.World;
 using Rapadura.Save;
 using UnityEngine;
@@ -24,6 +31,13 @@ namespace Rapadura.Core.Managers
         public SaveManager SaveManager { get; private set; }
         public CheckpointManager CheckpointManager { get; private set; }
         public LocalizationManager LocalizationManager { get; private set; }
+        public CraftingManager CraftingManager { get; private set; }
+        public BuildingManager BuildingManager { get; private set; }
+        public AudioManager AudioManager { get; private set; }
+        public AccessibilitySettings AccessibilitySettings { get; private set; }
+        public AnalyticsManager AnalyticsManager { get; private set; }
+        public DialogueManager DialogueManager { get; private set; }
+        public QuestManager QuestManager { get; private set; }
 
         protected override void Awake()
         {
@@ -43,13 +57,34 @@ namespace Rapadura.Core.Managers
             SaveManager = new SaveManager();
             CheckpointManager = new CheckpointManager();
             LocalizationManager = new LocalizationManager();
+            CraftingManager = new CraftingManager();
+            BuildingManager = new BuildingManager();
+            AudioManager = new AudioManager();
+            AccessibilitySettings = new AccessibilitySettings();
+            AnalyticsManager = new AnalyticsManager();
+            DialogueManager = new DialogueManager();
+            QuestManager = new QuestManager();
 
             RegisterManager(SaveManager);
             RegisterManager(CheckpointManager);
             RegisterManager(LocalizationManager);
+            RegisterManager(CraftingManager);
+            RegisterManager(BuildingManager);
+            RegisterManager(AudioManager);
+            RegisterManager(AccessibilitySettings);
+            RegisterManager(AnalyticsManager);
+            RegisterManager(DialogueManager);
+            RegisterManager(QuestManager);
 
-            // Future managers (InventoryManager, SkillManager, AudioManager, BuildingManager, etc.)
-            // are constructed and registered here in dependency order as they are implemented.
+            SaveManager.Register(QuestManager);
+
+            // Future managers (InventoryManager, SkillManager, etc.) are constructed and
+            // registered here in dependency order as they are implemented.
+            //
+            // NOTE: QuestManager.SetRewardTargets(InventoryManager, PlayerStats) still needs to be
+            // called once the player's components exist (Scene bootstrap) so reward granting and
+            // CollectItem checks work — those components aren't available here since GameManager
+            // is constructed before any scene's player is spawned.
         }
 
         private void RegisterManager<TManager>(TManager manager) where TManager : IManager

@@ -1,4 +1,5 @@
 using Rapadura.Gameplay.Player;
+using UnityEngine;
 
 namespace Rapadura.Gameplay.Characters
 {
@@ -28,7 +29,16 @@ namespace Rapadura.Gameplay.Characters
 
         public override void ApplyPassive(PlayerStats stats)
         {
-            // TODO: substituir por bônus real de Espírito/Mana Máxima quando o sistema de Atributos (Fase 3) existir.
+            // Sacerdotisa do Templo Solar: talento inato reforça Espírito (seu Atributo Principal),
+            // que aumenta a mana máxima (ver AttributeSet.SpiritManaPerPoint). Também enche a mana
+            // ao spawnar, já que a mana máxima acabou de subir.
+            AttributeSet attributeSet = stats.GetComponent<AttributeSet>();
+
+            if (attributeSet != null)
+            {
+                attributeSet.ApplyCharacterPassiveBonus(AttributeType.Spirit);
+            }
+
             stats.RestoreMana(stats.MaxMana);
         }
     }
