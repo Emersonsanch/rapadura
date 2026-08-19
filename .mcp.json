@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "coplaydev-unity-mcp": {
+      "url": "http://localhost:8080/mcp",
+      "headers": {
+        "DISABLE_TELEMETRY": "true"
+      }
+    }
+  }
+}

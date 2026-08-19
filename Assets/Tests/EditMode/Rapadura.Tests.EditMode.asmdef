@@ -2,9 +2,10 @@
     "name": "Rapadura.Tests.EditMode",
     "rootNamespace": "Rapadura.Tests",
     "references": [
-        "Assembly-CSharp",
+        "Rapadura.Runtime",
         "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner"
+        "UnityEditor.TestRunner",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [
         "Editor"

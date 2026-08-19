@@ -105,7 +105,7 @@ namespace Rapadura.Tests
         {
             var target = (Rapadura.Gameplay.Combat.ICombatTarget)_stats;
 
-            target.ApplyDamage(1f, Rapadura.Gameplay.Combat.ElementType.Physical, null);
+            target.ApplyDamage(1f, Rapadura.Gameplay.Skills.ElementType.Physical, null);
 
             Assert.IsTrue(_stats.IsInvulnerable);
         }
