@@ -128,8 +128,7 @@
 > ✅ Bloqueio resolvido em 2026-08-19: projeto aberto no Unity Editor (6000.3.22f1) via Unity MCP. `Assets/Scenes/Main.unity` já existe com GameManager + Player + Câmera montados e testados em Play Mode (ver changelog).
 
 ### Tela de Seleção de Personagem (novo — decisão de design 2026-08-19)
-- [ ] Tela de seleção de personagem no início do jogo (`UI/CharacterSelect/`), mostrando os 5 heróis (`CharacterRegistry`) com lore/classe/função, escolha chama `PlayableCharacter.ApplyPassive(stats)` no spawn do player
-- [ ] Ainda não existe — próxima tarefa
+- [x] Tela de seleção de personagem no início do jogo — `UI/CharacterSelect/CharacterSelectController.cs` + `UI/CharacterSelect/CharacterSelectView.uxml/uss`, lista os 5 heróis (`CharacterRegistry`), mostra lore/classe/função ao clicar, `Confirmar` chama `PlayableCharacter.ApplyPassive(stats)` no `PlayerStats` do Player. Congela o jogo (`Time.timeScale = 0`) até escolher. Montada na `Main.unity` e testada em Play Mode via Unity MCP (`Time.timeScale` confirmado em 0 com a tela ativa).
 
 ### Mapa Mundi + Encontros Aleatórios (novo — decisão de design 2026-08-19)
 > 📌 Direção final de gameplay, esclarecida em várias rodadas de pergunta direta ao usuário nesta data:

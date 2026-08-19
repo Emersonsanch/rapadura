@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <Style src="CharacterSelectView.uss" />
+    <ui:VisualElement name="character-select-root" class="character-select__root" focusable="false">
+        <ui:Label text="Escolha seu Herói" class="character-select__title" />
+        <ui:VisualElement class="character-select__body">
+            <ui:VisualElement name="roster-container" class="character-select__roster" />
+            <ui:VisualElement class="character-select__detail">
+                <ui:Label name="detail-name" text="" class="character-select__detail-name" focusable="true" />
+                <ui:Label name="detail-class-role" text="" class="character-select__detail-role" focusable="true" />
+                <ui:Label name="detail-lore" text="Selecione um personagem para ver a história." class="character-select__detail-lore" focusable="true" />
+                <ui:Button name="confirm-button" text="Confirmar" class="character-select__confirm" focusable="true" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

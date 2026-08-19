@@ -1,0 +1,79 @@
+.character-select__root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(10, 10, 18, 0.92);
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.character-select__title {
+    font-size: 36px;
+    color: rgb(230, 220, 190);
+    -unity-font-style: bold;
+    margin-bottom: 24px;
+}
+
+.character-select__body {
+    flex-direction: row;
+    width: 80%;
+    max-width: 900px;
+    height: 60%;
+}
+
+.character-select__roster {
+    width: 220px;
+    margin-right: 24px;
+}
+
+.character-select__roster-button {
+    height: 48px;
+    margin-bottom: 8px;
+    font-size: 18px;
+    background-color: rgb(40, 36, 60);
+    color: rgb(230, 220, 190);
+    border-width: 1px;
+    border-color: rgb(90, 80, 120);
+}
+
+.character-select__roster-button:hover {
+    background-color: rgb(70, 60, 100);
+}
+
+.character-select__detail {
+    flex-grow: 1;
+    background-color: rgba(30, 26, 46, 0.85);
+    padding: 20px;
+    border-width: 1px;
+    border-color: rgb(90, 80, 120);
+}
+
+.character-select__detail-name {
+    font-size: 28px;
+    color: rgb(255, 240, 200);
+    -unity-font-style: bold;
+}
+
+.character-select__detail-role {
+    font-size: 16px;
+    color: rgb(200, 190, 220);
+    margin-bottom: 12px;
+}
+
+.character-select__detail-lore {
+    font-size: 14px;
+    color: rgb(220, 215, 230);
+    white-space: normal;
+    flex-grow: 1;
+}
+
+.character-select__confirm {
+    height: 44px;
+    font-size: 18px;
+    margin-top: 12px;
+    background-color: rgb(120, 40, 40);
+    color: rgb(255, 240, 220);
+}
