@@ -10,6 +10,7 @@
 - **2026-08-17** — Definido que **mobile é plataforma obrigatória** (não opcional) — adicionada checklist específica de mobile na Fase 0; câmera e sistemas novos devem sempre considerar touch desde o início, não como adaptação posterior.
 - **2026-08-17** — Iniciada a Fase 0 (Git/`.gitignore`/`.gitattributes`, `.editorconfig`, `Docs/GDD.md`, `CONTRIBUTING.md`, `GameLogger`, testes automatizados EditMode, workflow de CI) e código da Fase 1 (estados Fall/Slide, câmera com zoom/shake, checkpoints/respawn).
 - **2026-08-17** — Auditoria de código vs. roadmap: Fases 3 (RPG) e 4 (Skills) estavam com o código muito mais avançado do que os checkboxes indicavam (Inventário, Itens, XP/Níveis, SkillManager, Skill Tree UI já implementados). Checkboxes corrigidos para refletir o estado real. Disparadas 3 frentes em paralelo: Combate base (Fase 2), Localização (Fase 6) e Save versionado/anti-corrupção (Fase 7).
+- **2026-08-19** — Marco importante: o projeto foi aberto com sucesso pela primeira vez no Unity Editor (6000.3.22f1), gerando `Library/`/`.meta` reais. Primeiro erro de compilação real corrigido (`InputRebindManager.cs`, tipo aninhado `RebindingOperation` sem qualificação). Conteúdo narrativo dos 5 personagens completo (quests + diálogos pessoais + quest de convergência), árvore genealógica da família documentada no GDD. `Docs/EditorSetupGuide.md` criado para orientar o setup local.
 
 ---
 
