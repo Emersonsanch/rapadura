@@ -316,7 +316,7 @@
 
 ### NPCs
 - [~] Sistema de diálogo — `Gameplay/Dialogue/{DialogueNode,DialogueDefinition,DialogueManager}.cs` + `UI/Dialogue/DialogueUIController.cs` prontos, testados e `DialogueManager` já registrado em `GameManager`; falta gatilho de interação com NPC (Scene) e entradas reais `dialogue.*` no idioma
-- [~] Lojas — `Gameplay/Shop/{ShopDefinition,ShopManager}.cs` + `UI/Shop/ShopUIController.cs` prontos e testados; falta registrar `ShopManager` no `GameManager`, gatilho de NPC e traduções `shop.*`
+- [~] Lojas — `Gameplay/Shop/{ShopDefinition,ShopManager}.cs` + `UI/Shop/ShopUIController.cs` prontos, testados e `ShopManager` já registrado em `GameManager`; falta gatilho de NPC e traduções `shop.*`
 - [ ] Missões
 
 ### Quests
@@ -332,7 +332,7 @@
 - [~] Montanha — idem
 - [~] Cavernas — idem
 
-> ⚠️ `BiomeSeeder` referencia inimigos por id em comentário (`enemy_forest_wolf` etc.) — ainda não existe um seeder de `EnemyDefinition`, só o de itens/recursos. Considerar criar um `EnemyDatabaseSeeder` futuramente.
+> ✅ `Editor/EnemyDatabaseSeeder.cs` criado (8 inimigos, 2 por bioma incl. boss), ids batem com os já referenciados no `BiomeSeeder`. Ambos os seeders precisam rodar no Unity Editor pra gerar os assets de fato (`Assets/Resources/{Enemies,Biomes}/` ainda não existem neste checkout).
 
 ---
 

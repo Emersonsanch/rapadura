@@ -9,6 +9,7 @@ using Rapadura.Gameplay.Building;
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Dialogue;
 using Rapadura.Gameplay.Quests;
+using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.World;
 using Rapadura.Save;
 using UnityEngine;
@@ -38,6 +39,7 @@ namespace Rapadura.Core.Managers
         public AnalyticsManager AnalyticsManager { get; private set; }
         public DialogueManager DialogueManager { get; private set; }
         public QuestManager QuestManager { get; private set; }
+        public ShopManager ShopManager { get; private set; }
 
         protected override void Awake()
         {
@@ -64,6 +66,7 @@ namespace Rapadura.Core.Managers
             AnalyticsManager = new AnalyticsManager();
             DialogueManager = new DialogueManager();
             QuestManager = new QuestManager();
+            ShopManager = new ShopManager();
 
             RegisterManager(SaveManager);
             RegisterManager(CheckpointManager);
@@ -75,6 +78,7 @@ namespace Rapadura.Core.Managers
             RegisterManager(AnalyticsManager);
             RegisterManager(DialogueManager);
             RegisterManager(QuestManager);
+            RegisterManager(ShopManager);
 
             SaveManager.Register(QuestManager);
 

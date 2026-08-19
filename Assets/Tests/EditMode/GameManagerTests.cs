@@ -8,6 +8,7 @@ using Rapadura.Gameplay.Building;
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Dialogue;
 using Rapadura.Gameplay.Quests;
+using Rapadura.Gameplay.Shop;
 using Rapadura.Save;
 using UnityEngine;
 
@@ -106,6 +107,17 @@ namespace Rapadura.Tests
 
             Assert.IsTrue(saveables.Contains(gameManager.QuestManager.SaveKey));
             Assert.AreSame(gameManager.QuestManager, saveables[gameManager.QuestManager.SaveKey]);
+        }
+
+        [Test]
+        public void Awake_RegistersShopManager()
+        {
+            _go = new GameObject("GameManagerTestTarget");
+            GameManager gameManager = _go.AddComponent<GameManager>();
+
+            Assert.IsNotNull(gameManager.ShopManager);
+            Assert.IsTrue(ServiceLocator.IsRegistered<ShopManager>());
+            Assert.AreSame(gameManager.ShopManager, ServiceLocator.Get<ShopManager>());
         }
     }
 }
