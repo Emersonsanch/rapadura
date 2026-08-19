@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 676800758}
   - component: {fileID: 676800757}
   - component: {fileID: 676800756}
+  - component: {fileID: 676800760}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -150,21 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dca59ecc45e21ba42926850344c199ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Player.PlayerCamera
-  _pivot: {fileID: 1211246096}
-  _mouseSensitivity: 2.5
-  _touchSensitivity: 0.15
-  _minPitch: -40
-  _maxPitch: 75
-  _distance: 4.5
-  _minDistance: 1.2
-  _maxDistance: 8
-  _collisionMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  _collisionRadius: 0.25
-  _scrollZoomSpeed: 1.5
-  _pinchZoomSpeed: 0.02
-  _shakeDecay: 2.5
 --- !u!81 &676800757
 AudioListener:
   m_ObjectHideFlags: 0
@@ -239,6 +225,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &676800760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 676800755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56574ed92d4b71143aef9ee89221f6d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Cameras.CameraController
+  _target: {fileID: 1211246096}
+  _settings: {fileID: 0}
+  _shakeDecay: 2.5
 --- !u!1 &1211246095
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,7 +308,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Player.PlayerController
   _animator: {fileID: 1560329231}
-  _playerCamera: {fileID: 676800756}
+  _playerCamera: {fileID: 676800760}
   _cameraLookTransform: {fileID: 1211246096}
 --- !u!95 &1560329231
 Animator:

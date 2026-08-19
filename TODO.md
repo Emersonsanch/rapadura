@@ -109,12 +109,13 @@
   - [x] Sprint (coberto pelo `PlayerRunState`, que já drena stamina — não há um estado "Sprint" redundante por decisão de design)
 - [x] Testes de unidade para transições de estado (`Assets/Tests/EditMode/StateMachineTests.cs`)
 
-### Câmera
-- [x] Sistema de câmera livre (`PlayerCamera`, orbital em torno de um pivot)
-- [x] Camera Follow (segue o pivot em `LateUpdate`)
-- [x] Camera Collision (`SphereCast` contra `_collisionMask`)
-- [x] Zoom dinâmico (scroll do mouse **e pinch de dois dedos no touch**, ver `HandleZoom()`)
-- [x] Camera Shake (`PlayerCamera.Shake(duration, magnitude)` — pronto para ser chamado pelo sistema de combate na Fase 2)
+### Câmera (reescrita em 2026-08-19 — decisão de design: estilo MU Online)
+> 📌 `PlayerCamera.cs` (câmera livre orbital) foi **removida e substituída** por `Gameplay/Cameras/*` — isométrica fixa, MU Online: yaw 45°, pitch 55-60° (default 57,5°), distância 10-25m (default 15m), segue só a posição do alvo (nunca a rotação do personagem), sem controle de olhar pelo mouse. Testado em Play Mode via Unity MCP: `eulerAngles` confirmado em (57.5, 45, 0).
+- [x] `CameraSettings.cs` (ScriptableObject: ângulo, follow, zoom, colisão, rotação Q/E)
+- [x] `CameraController.cs` (MonoBehaviour principal, `SmoothDamp` no follow de posição, mantém `Shake(duration, magnitude)` pro combate)
+- [x] `CameraCollision.cs` (SphereCast do alvo até a câmera, aproxima suave em obstrução, volta suave quando desobstrui)
+- [x] `CameraZoom.cs` (scroll do mouse + pinch touch, suavizado via `SmoothDamp`, 10-25m)
+- [x] `CameraRotation.cs` (Q/E gira em passos de 45°, suavizado, `allowRotation` desliga totalmente)
 - [ ] Suporte a Cinemachine (avaliar se compensa migrar a solução manual atual — `com.unity.cinemachine` não está no `manifest.json` ainda)
 
 ### Mundo

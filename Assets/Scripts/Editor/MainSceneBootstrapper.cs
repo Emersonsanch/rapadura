@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using Rapadura.Core.Managers;
+using Rapadura.Gameplay.Cameras;
 using Rapadura.Gameplay.Player;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -155,16 +156,16 @@ namespace Rapadura.Editor
                 cameraGo.AddComponent<AudioListener>();
             }
 
-            var playerCamera = cameraGo.GetComponent<PlayerCamera>();
+            var playerCamera = cameraGo.GetComponent<CameraController>();
             if (playerCamera == null)
             {
-                playerCamera = cameraGo.AddComponent<PlayerCamera>();
+                playerCamera = cameraGo.AddComponent<CameraController>();
             }
 
-            // _pivot is a private [SerializeField] on PlayerCamera — set via SerializedObject
+            // _target is a private [SerializeField] on CameraController — set via SerializedObject
             // rather than reflection so it plays nicely with the Editor's undo/dirty system.
             var so = new SerializedObject(playerCamera);
-            SerializedProperty pivotProp = so.FindProperty("_pivot");
+            SerializedProperty pivotProp = so.FindProperty("_target");
             if (pivotProp != null)
             {
                 pivotProp.objectReferenceValue = pivotGo.transform;
@@ -177,7 +178,7 @@ namespace Rapadura.Editor
         private static void WirePlayerController(GameObject playerGo, GameObject cameraGo)
         {
             var controller = playerGo.GetComponent<Rapadura.Gameplay.Player.PlayerController>();
-            var playerCamera = cameraGo.GetComponent<PlayerCamera>();
+            var playerCamera = cameraGo.GetComponent<CameraController>();
             Transform pivot = playerGo.transform.Find("CameraPivot");
 
             var so = new SerializedObject(controller);

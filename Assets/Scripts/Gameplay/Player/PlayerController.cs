@@ -31,7 +31,7 @@ namespace Rapadura.Gameplay.Player
     public class PlayerController : MonoBehaviour, ISaveable
     {
         [SerializeField] private Animator _animator;
-        [SerializeField] private PlayerCamera _playerCamera;
+        [SerializeField] private Rapadura.Gameplay.Cameras.CameraController _playerCamera;
         [SerializeField] private Transform _cameraLookTransform;
 
         public PlayerInputHandler Input { get; private set; }

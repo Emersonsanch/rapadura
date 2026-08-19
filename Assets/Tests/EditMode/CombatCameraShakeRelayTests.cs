@@ -4,14 +4,14 @@ using Rapadura.Core.Accessibility;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Gameplay.Combat;
-using Rapadura.Gameplay.Player;
+using Rapadura.Gameplay.Cameras;
 using UnityEngine;
 
 namespace Rapadura.Tests
 {
     /// <summary>
     /// EditMode tests verifying that <see cref="CombatCameraShakeRelay"/> scales the shake
-    /// magnitude it forwards to <see cref="PlayerCamera"/> by
+    /// magnitude it forwards to <see cref="CameraController"/> by
     /// <see cref="AccessibilitySettings.ScaleShakeMagnitude"/> when an
     /// <see cref="AccessibilitySettings"/> instance is registered with the
     /// <see cref="ServiceLocator"/>, and falls back to the raw magnitude when it is not.
@@ -21,7 +21,7 @@ namespace Rapadura.Tests
         private const string ShakeMagnitudeFieldName = "_shakeMagnitude";
 
         private GameObject _go;
-        private PlayerCamera _playerCamera;
+        private CameraController _playerCamera;
         private CombatCameraShakeRelay _relay;
 
         [SetUp]
@@ -30,7 +30,7 @@ namespace Rapadura.Tests
             ServiceLocator.Clear();
 
             _go = new GameObject("CombatCameraShakeRelayTestTarget");
-            _playerCamera = _go.AddComponent<PlayerCamera>();
+            _playerCamera = _go.AddComponent<CameraController>();
             _relay = _go.AddComponent<CombatCameraShakeRelay>();
         }
 
@@ -47,8 +47,8 @@ namespace Rapadura.Tests
 
         private float GetAppliedShakeMagnitude()
         {
-            FieldInfo field = typeof(PlayerCamera).GetField(ShakeMagnitudeFieldName, BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.IsNotNull(field, $"Expected PlayerCamera to have a private field named {ShakeMagnitudeFieldName}.");
+            FieldInfo field = typeof(CameraController).GetField(ShakeMagnitudeFieldName, BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.IsNotNull(field, $"Expected CameraController to have a private field named {ShakeMagnitudeFieldName}.");
             return (float)field.GetValue(_playerCamera);
         }
 
