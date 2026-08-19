@@ -124,7 +124,18 @@
 - [x] Sistema de respawn (`CheckpointManager` escuta `PlayerDiedEvent` e reposiciona o player — hoje é instantâneo, falta tela de morte/fade quando a Fase 2/6 existirem)
 - [ ] Streaming/otimização de cena para mapas grandes (se aplicável)
 
-> ⚠️ **Bloqueio conhecido:** este projeto nunca foi aberto no Unity Editor (pasta `ProjectSettings` está vazia — sem `ProjectVersion.txt`/`ProjectSettings.asset`). Scripts, testes e configs de repositório podem ser criados por fora, mas **Scene e Prefabs precisam ser montados manualmente abrindo o projeto no Editor** — arquivos `.unity`/`.prefab` são YAML com GUIDs gerados pelo Editor e não é seguro criá-los à mão. Próximo passo manual: abrir no Unity Hub (define a versão/`ProjectVersion.txt`), criar `Main.unity`, montar o prefab do Player com os componentes já existentes (`PlayerController`, `PlayerInputHandler`, `PlayerMotor`, `PlayerStats`, `CharacterController`, `Animator`, `PlayerCamera`).
+> ✅ Bloqueio resolvido em 2026-08-19: projeto aberto no Unity Editor (6000.3.22f1) via Unity MCP. `Assets/Scenes/Main.unity` já existe com GameManager + Player + Câmera montados e testados em Play Mode (ver changelog).
+
+### Tela de Seleção de Personagem (novo — decisão de design 2026-08-19)
+- [ ] Tela de seleção de personagem no início do jogo (`UI/CharacterSelect/`), mostrando os 5 heróis (`CharacterRegistry`) com lore/classe/função, escolha chama `PlayableCharacter.ApplyPassive(stats)` no spawn do player
+- [ ] Ainda não existe — próxima tarefa
+
+### Mapa Mundi + Encontros Aleatórios (novo — decisão de design 2026-08-19)
+> 📌 O usuário pediu um jogo "estilo Final Fantasy". Esclarecido via pergunta direta: **mantém o combate em tempo real já implementado** (não vira turno/ATB), mas adiciona uma camada de **mapa do mundo** (visão de cima, navegar entre regiões/biomas) com **batalhas acionadas por encontro aleatório** enquanto anda pelo mapa — like o overworld clássico de FF I-VI. Sistema de batalha em si (o que acontece ao entrar em combate) fica a decidir depois; por enquanto é só a camada de overworld + gatilho de encontro.
+- [ ] `WorldMapScene`/`WorldMapController`: visão de cima, player anda entre regiões (reaproveitar os 4 biomas já seedados: Floresta, Deserto, Montanha, Cavernas)
+- [ ] Sistema de encontro aleatório (chance por passo/tempo, usando `BiomeDefinition.RollEnemy` já implementado para decidir qual inimigo aparece)
+- [ ] Transição overworld → cena/área de combate ao disparar um encontro
+- [ ] Definir se o mapa mundi é uma Scene separada da `Main.unity` (mais provável) ou um modo dentro dela
 
 ---
 
