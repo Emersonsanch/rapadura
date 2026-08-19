@@ -163,6 +163,7 @@
 - [x] Durabilidade — decrementa `InventorySlotData.currentDurability`, quebra/desequipa em zero
 
 > ✅ Corrigido: `UnequipSlot` agora preserva `currentDurability` real ao devolver o item ao inventário (não reseta mais para o máximo).
+> ✅ Novo: `Player/PlayerBasicAttack.cs` — ataque genérico de placeholder (clique esquerdo/`Attack` no `PlayerControls.inputactions`), `OverlapSphere` na frente do player, dano fixo via `ICombatTarget.ApplyDamage`, cooldown. Testado em Play Mode via Unity MCP: vida do inimigo caiu de 30→15 com um ataque. Serve pra testar combate agora; será substituído por `MeleeWeapon`/skill real quando houver arma equipada.
 
 ### Inimigos
 - [x] IA básica (Behaviour Tree ou State Machine reutilizando `Core/StateMachine`) — `Enemies/EnemyController.cs` + estados em `Enemies/States/`

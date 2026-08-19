@@ -1721,6 +1721,7 @@ GameObject:
   - component: {fileID: 1560329232}
   - component: {fileID: 1560329231}
   - component: {fileID: 1560329230}
+  - component: {fileID: 1560329239}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1908,6 +1909,25 @@ Transform:
   - {fileID: 1308177721}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1560329239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560329229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a63245474f35c244ac4eee2b5416a19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Player.PlayerBasicAttack
+  _damage: 15
+  _range: 2.5
+  _radius: 1.2
+  _cooldownSeconds: 0.5
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &1597877521
 GameObject:
   m_ObjectHideFlags: 0

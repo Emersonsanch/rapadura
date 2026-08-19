@@ -21,6 +21,7 @@ namespace Rapadura.Gameplay.Player
         private InputAction _runAction;
         private InputAction _crouchAction;
         private InputAction _interactAction;
+        private InputAction _attackAction;
 
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
@@ -28,6 +29,7 @@ namespace Rapadura.Gameplay.Player
         public bool IsCrouchHeld { get; private set; }
         public bool JumpPressedThisFrame { get; private set; }
         public bool InteractPressedThisFrame { get; private set; }
+        public bool AttackPressedThisFrame { get; private set; }
 
         private void Awake()
         {
@@ -39,6 +41,7 @@ namespace Rapadura.Gameplay.Player
             _runAction = _playerInput.actions["Run"];
             _crouchAction = _playerInput.actions["Crouch"];
             _interactAction = _playerInput.actions["Interact"];
+            _attackAction = _playerInput.actions["Attack"];
         }
 
         private void Update()
@@ -49,6 +52,7 @@ namespace Rapadura.Gameplay.Player
             IsCrouchHeld = _crouchAction.IsPressed();
             JumpPressedThisFrame = _jumpAction.WasPressedThisFrame();
             InteractPressedThisFrame = _interactAction.WasPressedThisFrame();
+            AttackPressedThisFrame = _attackAction.WasPressedThisFrame();
         }
     }
 }
