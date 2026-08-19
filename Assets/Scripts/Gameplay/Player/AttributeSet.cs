@@ -107,8 +107,29 @@ namespace Rapadura.Gameplay.Player
         /// <summary>Raised whenever allocated points, passive bonuses or available points change.</summary>
         public event Action OnAttributesChanged;
 
+        private bool _isInitialized;
+
         private void Awake()
         {
+            EnsureInitialized();
+        }
+
+        /// <summary>
+        /// Idempotently seeds <see cref="_allocatedPoints"/>/<see cref="_passiveBonus"/> with all five
+        /// attributes at zero and caches <see cref="_buffController"/>. Called from <see cref="Awake"/>
+        /// for the normal Play Mode/Scene path, but also defensively at the top of every public method —
+        /// EditMode tests construct this component via <c>gameObject.AddComponent&lt;AttributeSet&gt;()</c>
+        /// and call into it the same frame, and Unity does not guarantee <see cref="Awake"/> has already
+        /// run by then in that context, so relying on Awake alone left the dictionaries empty and every
+        /// indexer access threw <see cref="KeyNotFoundException"/>.
+        /// </summary>
+        private void EnsureInitialized()
+        {
+            if (_isInitialized)
+            {
+                return;
+            }
+
             foreach (AttributeType type in AllTypes)
             {
                 _allocatedPoints[type] = 0;
@@ -119,6 +140,8 @@ namespace Rapadura.Gameplay.Player
             {
                 _buffController = GetComponent<BuffController>();
             }
+
+            _isInitialized = true;
         }
 
         private void Start()
@@ -168,6 +191,8 @@ namespace Rapadura.Gameplay.Player
         /// <summary>Grants unspent attribute points, e.g. on level-up.</summary>
         public void GrantAttributePoints(int amount)
         {
+            EnsureInitialized();
+
             if (amount <= 0)
             {
                 return;
@@ -180,18 +205,21 @@ namespace Rapadura.Gameplay.Player
         /// <summary>Number of points the player has allocated into the given attribute (excludes character passive bonuses).</summary>
         public int GetAllocatedPoints(AttributeType type)
         {
+            EnsureInitialized();
             return _allocatedPoints[type];
         }
 
         /// <summary>Flat bonus points granted by the character's innate passive talent (see <see cref="ApplyCharacterPassiveBonus"/>).</summary>
         public int GetPassiveBonus(AttributeType type)
         {
+            EnsureInitialized();
             return _passiveBonus[type];
         }
 
         /// <summary>Total value of the attribute: allocated points plus the character's passive bonus.</summary>
         public int GetTotal(AttributeType type)
         {
+            EnsureInitialized();
             return _allocatedPoints[type] + _passiveBonus[type];
         }
 
@@ -201,6 +229,8 @@ namespace Rapadura.Gameplay.Player
         /// </summary>
         public bool TrySpendPoint(AttributeType type, int amount = 1)
         {
+            EnsureInitialized();
+
             if (amount <= 0 || AvailableAttributePoints < amount)
             {
                 return false;
@@ -220,6 +250,7 @@ namespace Rapadura.Gameplay.Player
         /// </summary>
         public void ApplyCharacterPassiveBonus(AttributeType type, int bonus = CharacterPassiveBonusPoints)
         {
+            EnsureInitialized();
             _passiveBonus[type] = Mathf.Max(0, bonus);
             ApplyDerivedEffect(type);
             OnAttributesChanged?.Invoke();
@@ -300,6 +331,7 @@ namespace Rapadura.Gameplay.Player
 
         public object CaptureState()
         {
+            EnsureInitialized();
             return new AttributeSetSaveState
             {
                 vitality = _allocatedPoints[AttributeType.Vitality],
@@ -314,6 +346,8 @@ namespace Rapadura.Gameplay.Player
 
         public void RestoreState(object state)
         {
+            EnsureInitialized();
+
             if (state is not AttributeSetSaveState saveState)
             {
                 return;
