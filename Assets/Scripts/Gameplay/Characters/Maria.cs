@@ -16,7 +16,9 @@ namespace Rapadura.Gameplay.Characters
             "Maria foi criada dentro do Templo Solar, onde aprendeu os segredos da energia vital. Quando " +
             "os cristais sagrados começaram a perder seu brilho, ela recebeu uma visão mostrando que apenas " +
             "um grupo de heróis poderia restaurar o equilíbrio do mundo. Ela parte em uma jornada para " +
-            "reunir os escolhidos e impedir que a escuridão consuma Rapadura.";
+            "reunir os escolhidos e impedir que a escuridão consuma Rapadura — e os escolhidos são, antes " +
+            "de tudo, sua própria família: sua irmã mais velha Maithe, seu irmão mais novo Joaquim e seus " +
+            "primos Ícaro e Lavine.";
 
         public override string[] AbilityNames => new[]
         {

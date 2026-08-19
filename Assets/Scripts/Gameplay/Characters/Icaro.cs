@@ -16,7 +16,9 @@ namespace Rapadura.Gameplay.Characters
             "Ícaro sempre acreditou que a tecnologia poderia mudar o mundo. Enquanto outros estudavam " +
             "magia, ele construía máquinas. Após encontrar fragmentos de uma civilização perdida, " +
             "desenvolveu equipamentos capazes de rivalizar com os maiores magos do continente. Seu objetivo " +
-            "é desvendar os segredos da antiga tecnologia que pode salvar ou destruir Rapadura.";
+            "é desvendar os segredos da antiga tecnologia que pode salvar ou destruir Rapadura. Irmão mais " +
+            "novo de Maithe e primo mais velho de Lavine, cresceu tentando impressionar a irmã com suas " +
+            "invenções.";
 
         public override string[] AbilityNames => new[]
         {

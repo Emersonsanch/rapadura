@@ -16,7 +16,9 @@ namespace Rapadura.Gameplay.Characters
             "Maithe cresceu explorando montanhas e florestas proibidas. Conhecida por acertar alvos " +
             "impossíveis, tornou-se uma lenda entre os caçadores. Durante uma expedição encontrou um " +
             "artefato antigo chamado Olho do Vento, que lhe permitiu enxergar ameaças invisíveis. Agora " +
-            "busca descobrir quem criou os monstros que ameaçam os reinos.";
+            "busca descobrir quem criou os monstros que ameaçam os reinos. É a mais velha entre os cinco " +
+            "primos e irmã mais velha de Ícaro, o que a torna a referência natural de toda a família " +
+            "quando o assunto é enfrentar o perigo de frente.";
 
         public override string[] AbilityNames => new[]
         {

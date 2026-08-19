@@ -16,7 +16,9 @@ namespace Rapadura.Gameplay.Characters
             "Lavine nasceu durante um raro eclipse conhecido como Noite Rubra. Desde pequena demonstrou " +
             "uma ligação incomum com energias proibidas. Temida por muitos e incompreendida por outros, ela " +
             "luta constantemente contra a corrupção que tenta dominar sua alma. Apesar da aparência fria, " +
-            "Lavine deseja provar que seu poder pode ser usado para proteger o mundo.";
+            "Lavine deseja provar que seu poder pode ser usado para proteger o mundo. É a mais nova de " +
+            "toda a família, prima de Maithe, Maria, Joaquim e Ícaro, e por trás da frieza carrega o desejo " +
+            "de ser levada tão a sério quanto os primos mais velhos.";
 
         public override string[] AbilityNames => new[]
         {

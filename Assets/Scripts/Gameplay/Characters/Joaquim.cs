@@ -17,7 +17,9 @@ namespace Rapadura.Gameplay.Characters
             "proteger sua comunidade dos perigos que surgiam durante a noite. Após a destruição da vila " +
             "por criaturas sombrias vindas das profundezas do mundo de Rapadura, ele jurou proteger todos " +
             "os inocentes. Carrega consigo o Escudo das Raízes Eternas, um artefato herdado de seus " +
-            "ancestrais que absorve parte do dano sofrido pelos aliados.";
+            "ancestrais que absorve parte do dano sofrido pelos aliados. Irmão mais novo de Maria e primo " +
+            "de Maithe, Ícaro e Lavine, é o mais velho dos homens da família e sente o dever de proteger " +
+            "também os primos mais novos, Ícaro e Lavine.";
 
         public override string[] AbilityNames => new[]
         {

@@ -21,6 +21,21 @@ RPG de ação em terceira pessoa, com combate em tempo real, progressão de pers
 Ver `TODO.md` → seção "👥 Personagens Jogáveis (Roster)" para lore completo, classes, funções e habilidades de Joaquim, Maria, Maithe, Ícaro e Lavine.
 Implementação em código: `Assets/Scripts/Gameplay/Characters/`.
 
+### Árvore genealógica
+Os 5 personagens jogáveis são todos primos entre si — uma família só, não um grupo de estranhos que se conheceu por acaso. A estrutura:
+- **Maithe** e **Ícaro** são irmãos.
+- **Joaquim** e **Maria** são irmãos.
+- **Lavine** é prima dos outros quatro (filha do irmão/irmã dos pais dos outros dois pares).
+
+Ordem de idade, do mais velho para o mais novo:
+1. **Maithe** (mais velha)
+2. **Maria** (~3 meses mais nova que Maithe)
+3. **Joaquim** (nasceu logo depois de Maria)
+4. **Ícaro** (~3 anos mais novo que Joaquim)
+5. **Lavine** (mais nova, ~3 anos mais nova que Ícaro)
+
+Essa relação de parentesco é canônica e deve informar diálogos, quests e lore futuros — os personagens se conhecem a vida inteira como família, não são aliados recém-formados.
+
 ## Loop de Gameplay (macro)
 Explorar → combater/coletar recursos → craftar/equipar → evoluir personagem (skills/atributos) → avançar no mundo/enfrentar bosses → repetir com poder crescente.
 
