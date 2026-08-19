@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5523115d95f44cd4ba9c4e9836067945, type: 3}
+  m_Name: quest_icaro_ancient_gears
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Quests.QuestDefinition
+  _questId: quest_icaro_ancient_gears
+  _titleKey: quest.icaro_ancient_gears.title
+  _descriptionKey: quest.icaro_ancient_gears.description
+  _questType: 0
+  _objectives:
+  - ObjectiveId: defeat_ruin_guardian
+    Type: 0
+    TargetId: enemy_desert_ruin_guardian
+    RequiredAmount: 1
+    DescriptionKey: quest.icaro_ancient_gears.obj_defeat_ruin_guardian
+    CurrentAmount: 0
+  - ObjectiveId: recover_tech_fragment
+    Type: 1
+    TargetId: item_iron
+    RequiredAmount: 1
+    DescriptionKey: quest.icaro_ancient_gears.obj_recover_tech_fragment
+    CurrentAmount: 0
+  - ObjectiveId: decode_fragment
+    Type: 4
+    TargetId: icaro_decoded_fragment
+    RequiredAmount: 1
+    DescriptionKey: quest.icaro_ancient_gears.obj_decode_fragment
+    CurrentAmount: 0
+  _prerequisiteQuestIds: []
+  _rewardExperience: 520
+  _rewardItems:
+  - Item: {fileID: 11400000, guid: 43cd5bf92f7b4c84aa7bac331b1dea78, type: 2}
+    Quantity: 1

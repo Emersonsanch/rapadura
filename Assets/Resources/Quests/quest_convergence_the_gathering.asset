@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5523115d95f44cd4ba9c4e9836067945, type: 3}
+  m_Name: quest_convergence_the_gathering
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Quests.QuestDefinition
+  _questId: quest_convergence_the_gathering
+  _titleKey: quest.convergence.title
+  _descriptionKey: quest.convergence.description
+  _questType: 0
+  _objectives:
+  - ObjectiveId: meet_maria_at_the_gathering
+    Type: 3
+    TargetId: npc_maria_gathering_point
+    RequiredAmount: 1
+    DescriptionKey: quest.convergence.obj_meet_maria_at_the_gathering
+    CurrentAmount: 0
+  - ObjectiveId: five_heroes_unite
+    Type: 4
+    TargetId: convergence_five_heroes_agreed
+    RequiredAmount: 1
+    DescriptionKey: quest.convergence.obj_five_heroes_unite
+    CurrentAmount: 0
+  - ObjectiveId: face_the_mountain_warlord
+    Type: 0
+    TargetId: enemy_mountain_warlord
+    RequiredAmount: 1
+    DescriptionKey: quest.convergence.obj_face_the_mountain_warlord
+    CurrentAmount: 0
+  _prerequisiteQuestIds:
+  - quest_joaquim_echoes_of_home
+  - quest_maithe_windtrail
+  - quest_lavine_redtide
+  - quest_maria_fading_light
+  - quest_icaro_ancient_gears
+  _rewardExperience: 1200
+  _rewardItems:
+  - Item: {fileID: 11400000, guid: 0e4da8196b28d0e4ea2413d80ccd102f, type: 2}
+    Quantity: 5

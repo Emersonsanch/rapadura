@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a8b17b009cb9e740885872d5c9085b4, type: 3}
+  m_Name: skill_regeneration
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
+  _skillId: skill_regeneration
+  _displayName: "Regenera\xE7\xE3o"
+  _description: "Aumenta drasticamente a regenera\xE7\xE3o de vida por um per\xEDodo."
+  _icon: {fileID: 0}
+  _skillType: 0
+  _category: 2
+  _element: 8
+  _cooldownSeconds: 20
+  _manaCost: 30
+  _energyCost: 0
+  _castTimeSeconds: 0
+  _recoverySeconds: 0.2
+  _baseDamage: 0
+  _baseHealing: 0
+  _range: 5
+  _areaRadius: 0
+  _damagePerLevel: 0
+  _healingPerLevel: 0
+  _buffs:
+  - displayName: "Regenera\xE7\xE3o"
+    affectedStat: 1
+    application: 0
+    value: 0
+    durationSeconds: 8
+    isDebuff: 0
+    ticksOverTime: 1
+    tickIntervalSeconds: 1
+    tickDamageOrHeal: 6
+  _debuffs: []
+  _animationTrigger: CastRegeneration
+  _castSound: {fileID: 0}
+  _castParticlesPrefab: {fileID: 0}
+  _impactVfxPrefab: {fileID: 0}
+  _maxLevel: 5
+  _experienceToUnlock: 100
+  _requirement:
+    minimumPlayerLevel: 1
+    requiredSkills: []
+    requiredSkillLevel: 1
+    requiredClassOrSpecialization: 

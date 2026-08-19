@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f171d806ae04e9545a71dcbace88f076, type: 3}
+  m_Name: item_health_potion
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
+  _itemId: item_health_potion
+  _displayName: "Po\xE7\xE3o de Vida"
+  _description: Restaura uma quantidade de vida ao ser consumida.
+  _icon: {fileID: 0}
+  _worldModelPrefab: {fileID: 0}
+  _type: 1
+  _category: 7
+  _rarity: 0
+  _weight: 0.5
+  _value: 15
+  _maxStack: 20
+  _hasDurability: 0
+  _maxDurability: 100
+  _equipSlot: 0
+  _armorDefense: 0
+  _weaponDamage: 0
+  _weaponAttackSpeed: 1
+  _equipStatModifiers: []
+  _healthRestore: 40
+  _staminaRestore: 0
+  _manaRestore: 0
+  _consumeBuffs: []

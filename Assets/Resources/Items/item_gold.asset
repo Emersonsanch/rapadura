@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f171d806ae04e9545a71dcbace88f076, type: 3}
+  m_Name: item_gold
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
+  _itemId: item_gold
+  _displayName: Ouro
+  _description: "Pepita de ouro bruto. Usada em crafting de itens raros/lend\xE1rios."
+  _icon: {fileID: 0}
+  _worldModelPrefab: {fileID: 0}
+  _type: 0
+  _category: 3
+  _rarity: 0
+  _weight: 2
+  _value: 20
+  _maxStack: 99
+  _hasDurability: 0
+  _maxDurability: 100
+  _equipSlot: 0
+  _armorDefense: 0
+  _weaponDamage: 0
+  _weaponAttackSpeed: 1
+  _equipStatModifiers: []
+  _healthRestore: 0
+  _staminaRestore: 0
+  _manaRestore: 0
+  _consumeBuffs: []

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b870b858bb0be4583f94be3707b8a3, type: 3}
+  m_Name: enemy_desert_scorpion
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
+  _enemyName: "Escorpi\xE3o das Dunas"
+  _isBoss: 0
+  _maxHealth: 26
+  _contactDamage: 9
+  _patrolSpeed: 1.6
+  _chaseSpeed: 3.5
+  _fleeSpeed: 4.5
+  _waypointArrivalThreshold: 0.25
+  _detectionRadius: 7
+  _loseTargetRadius: 10
+  _attackRange: 1.4
+  _attackCooldown: 1.3
+  _attackDamage: 9
+  _fleeHealthThreshold: 0.2
+  _fleeSafeDistance: 10

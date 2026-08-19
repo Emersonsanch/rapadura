@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f171d806ae04e9545a71dcbace88f076, type: 3}
+  m_Name: item_hammer
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
+  _itemId: item_hammer
+  _displayName: "Martelo de Constru\xE7\xE3o"
+  _description: Ferramenta usada para construir e reparar estruturas.
+  _icon: {fileID: 0}
+  _worldModelPrefab: {fileID: 0}
+  _type: 4
+  _category: 17
+  _rarity: 0
+  _weight: 2
+  _value: 15
+  _maxStack: 1
+  _hasDurability: 1
+  _maxDurability: 100
+  _equipSlot: 7
+  _armorDefense: 0
+  _weaponDamage: 0
+  _weaponAttackSpeed: 1
+  _equipStatModifiers: []
+  _healthRestore: 0
+  _staminaRestore: 0
+  _manaRestore: 0
+  _consumeBuffs: []

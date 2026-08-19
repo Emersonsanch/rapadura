@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a11674b35d511c54a82e7c0669e0958d, type: 3}
+  m_Name: Mountain
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.World.Biomes.BiomeDefinition
+  _type: 2
+  _nameLocalizationKey: biome.mountain.name
+  _narrativeDescription: "Picos rochosos e passagens estreitas, ricas em min\xE9rio
+    mas hostis a quem n\xE3o domina o terreno vertical. Ventos fortes e altitude
+    testam a resist\xEAncia do jogador."
+  _minTemperatureCelsius: -5
+  _maxTemperatureCelsius: 12
+  _ambientMusicCueId: music.biome.mountain
+  _enemies: []
+  _loot:
+  - _item: {fileID: 11400000, guid: 2891a210ab06ca34e8b5647862436de9, type: 2}
+    _weight: 10
+  - _item: {fileID: 11400000, guid: cd94a946f8299c04893b92f91853aede, type: 2}
+    _weight: 10
+  - _item: {fileID: 11400000, guid: 43cd5bf92f7b4c84aa7bac331b1dea78, type: 2}
+    _weight: 2
+  - _item: {fileID: 11400000, guid: c0ddd06c08ed2ad459d28fdb62702fcb, type: 2}
+    _weight: 2
+  - _item: {fileID: 11400000, guid: 0e4da8196b28d0e4ea2413d80ccd102f, type: 2}
+    _weight: 3

@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d726d6669d349d5488215b751bc0b018, type: 3}
+  m_Name: dialogue_convergence_first_meeting
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Dialogue.DialogueDefinition
+  _dialogueId: dialogue_convergence_first_meeting
+  _startNodeId: maria_opens
+  _nodes:
+  - Id: maria_opens
+    TextKey: dialogue.convergence_first_meeting.maria_opens
+    SpeakerId: npc_maria_gathering_point
+    SpeakerNameKey: dialogue.convergence_first_meeting.speaker_maria
+    Choices: []
+    AutoAdvanceToNodeId: joaquim_worries
+  - Id: joaquim_worries
+    TextKey: dialogue.convergence_first_meeting.joaquim_worries
+    SpeakerId: npc_joaquim
+    SpeakerNameKey: dialogue.convergence_first_meeting.speaker_joaquim
+    Choices: []
+    AutoAdvanceToNodeId: maithe_presses
+  - Id: maithe_presses
+    TextKey: dialogue.convergence_first_meeting.maithe_presses
+    SpeakerId: npc_maithe
+    SpeakerNameKey: dialogue.convergence_first_meeting.speaker_maithe
+    Choices: []
+    AutoAdvanceToNodeId: icaro_weighs_in
+  - Id: icaro_weighs_in
+    TextKey: dialogue.convergence_first_meeting.icaro_weighs_in
+    SpeakerId: npc_icaro
+    SpeakerNameKey: dialogue.convergence_first_meeting.speaker_icaro
+    Choices: []
+    AutoAdvanceToNodeId: lavine_doubts
+  - Id: lavine_doubts
+    TextKey: dialogue.convergence_first_meeting.lavine_doubts
+    SpeakerId: npc_lavine
+    SpeakerNameKey: dialogue.convergence_first_meeting.speaker_lavine
+    Choices: []
+    AutoAdvanceToNodeId: maria_asks
+  - Id: maria_asks
+    TextKey: dialogue.convergence_first_meeting.maria_asks
+    SpeakerId: npc_maria_gathering_point
+    SpeakerNameKey: dialogue.convergence_first_meeting.speaker_maria
+    Choices:
+    - TextKey: dialogue.convergence_first_meeting.choice_unite
+      NextNodeId: group_unites
+      ConditionFlag: 
+      NegateCondition: 0
+    - TextKey: dialogue.convergence_first_meeting.choice_hesitate
+      NextNodeId: group_hesitates
+      ConditionFlag: 
+      NegateCondition: 0
+    AutoAdvanceToNodeId: 
+  - Id: group_unites
+    TextKey: dialogue.convergence_first_meeting.group_unites
+    SpeakerId: npc_maria_gathering_point
+    SpeakerNameKey: dialogue.convergence_first_meeting.speaker_maria
+    Choices: []
+    AutoAdvanceToNodeId: 
+  - Id: group_hesitates
+    TextKey: dialogue.convergence_first_meeting.group_hesitates
+    SpeakerId: npc_maria_gathering_point
+    SpeakerNameKey: dialogue.convergence_first_meeting.speaker_maria
+    Choices: []
+    AutoAdvanceToNodeId: 

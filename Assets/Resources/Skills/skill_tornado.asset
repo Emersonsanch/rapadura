@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a8b17b009cb9e740885872d5c9085b4, type: 3}
+  m_Name: skill_tornado
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
+  _skillId: skill_tornado
+  _displayName: Tornado
+  _description: "Cria um tornado que arrasta e danifica inimigos pr\xF3ximos continuamente."
+  _icon: {fileID: 0}
+  _skillType: 0
+  _category: 0
+  _element: 7
+  _cooldownSeconds: 14
+  _manaCost: 40
+  _energyCost: 0
+  _castTimeSeconds: 0
+  _recoverySeconds: 0.2
+  _baseDamage: 10
+  _baseHealing: 0
+  _range: 8
+  _areaRadius: 3.5
+  _damagePerLevel: 3
+  _healingPerLevel: 0
+  _buffs: []
+  _debuffs: []
+  _animationTrigger: CastTornado
+  _castSound: {fileID: 0}
+  _castParticlesPrefab: {fileID: 0}
+  _impactVfxPrefab: {fileID: 0}
+  _maxLevel: 5
+  _experienceToUnlock: 100
+  _requirement:
+    minimumPlayerLevel: 1
+    requiredSkills: []
+    requiredSkillLevel: 1
+    requiredClassOrSpecialization: 

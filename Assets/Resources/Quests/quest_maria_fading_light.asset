@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5523115d95f44cd4ba9c4e9836067945, type: 3}
+  m_Name: quest_maria_fading_light
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Quests.QuestDefinition
+  _questId: quest_maria_fading_light
+  _titleKey: quest.maria_fading_light.title
+  _descriptionKey: quest.maria_fading_light.description
+  _questType: 0
+  _objectives:
+  - ObjectiveId: cleanse_corrupted_wildlife
+    Type: 0
+    TargetId: enemy_cave_bat_swarm
+    RequiredAmount: 5
+    DescriptionKey: quest.maria_fading_light.obj_cleanse_corrupted_wildlife
+    CurrentAmount: 0
+  - ObjectiveId: gather_crystal_shard
+    Type: 1
+    TargetId: item_iron_ore
+    RequiredAmount: 2
+    DescriptionKey: quest.maria_fading_light.obj_gather_crystal_shard
+    CurrentAmount: 0
+  - ObjectiveId: talk_to_temple_acolyte
+    Type: 3
+    TargetId: npc_temple_acolyte
+    RequiredAmount: 1
+    DescriptionKey: quest.maria_fading_light.obj_talk_to_temple_acolyte
+    CurrentAmount: 0
+  _prerequisiteQuestIds: []
+  _rewardExperience: 500
+  _rewardItems:
+  - Item: {fileID: 11400000, guid: 0e4da8196b28d0e4ea2413d80ccd102f, type: 2}
+    Quantity: 3

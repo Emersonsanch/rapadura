@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f171d806ae04e9545a71dcbace88f076, type: 3}
+  m_Name: item_iron_sword
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
+  _itemId: item_iron_sword
+  _displayName: Espada de Ferro
+  _description: Espada forjada em ferro, resistente e afiada.
+  _icon: {fileID: 0}
+  _worldModelPrefab: {fileID: 0}
+  _type: 2
+  _category: 8
+  _rarity: 1
+  _weight: 3
+  _value: 45
+  _maxStack: 1
+  _hasDurability: 1
+  _maxDurability: 120
+  _equipSlot: 5
+  _armorDefense: 0
+  _weaponDamage: 18
+  _weaponAttackSpeed: 1
+  _equipStatModifiers: []
+  _healthRestore: 0
+  _staminaRestore: 0
+  _manaRestore: 0
+  _consumeBuffs: []

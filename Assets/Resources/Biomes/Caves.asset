@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a11674b35d511c54a82e7c0669e0958d, type: 3}
+  m_Name: Caves
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.World.Biomes.BiomeDefinition
+  _type: 3
+  _nameLocalizationKey: biome.caves.name
+  _narrativeDescription: "Rede subterr\xE2nea escura, \xFAmida e silenciosa at\xE9
+    que algo se mexe. O bioma mais vertical e claustrof\xF3bico, com ilumina\xE7\xE3o
+    escassa e amea\xE7as que dependem de emboscada."
+  _minTemperatureCelsius: 10
+  _maxTemperatureCelsius: 16
+  _ambientMusicCueId: music.biome.caves
+  _enemies: []
+  _loot:
+  - _item: {fileID: 11400000, guid: cd94a946f8299c04893b92f91853aede, type: 2}
+    _weight: 8
+  - _item: {fileID: 11400000, guid: 2891a210ab06ca34e8b5647862436de9, type: 2}
+    _weight: 6
+  - _item: {fileID: 11400000, guid: e9ac32dea3c97e94db317af9a4dc5a85, type: 2}
+    _weight: 4
+  - _item: {fileID: 11400000, guid: 47cd62fe9f7229c4188140ad8d04c26b, type: 2}
+    _weight: 2
+  - _item: {fileID: 11400000, guid: 217646d53d651d540b9fa258ddd6811f, type: 2}
+    _weight: 1

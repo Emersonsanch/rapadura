@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b870b858bb0be4583f94be3707b8a3, type: 3}
+  m_Name: enemy_desert_ruin_guardian
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
+  _enemyName: "Guardi\xE3o da Ru\xEDna"
+  _isBoss: 1
+  _maxHealth: 200
+  _contactDamage: 16
+  _patrolSpeed: 1.8
+  _chaseSpeed: 3.8
+  _fleeSpeed: 0
+  _waypointArrivalThreshold: 0.25
+  _detectionRadius: 14
+  _loseTargetRadius: 20
+  _attackRange: 2
+  _attackCooldown: 1.5
+  _attackDamage: 22
+  _fleeHealthThreshold: 0
+  _fleeSafeDistance: 10

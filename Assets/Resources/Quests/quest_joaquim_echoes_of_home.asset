@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5523115d95f44cd4ba9c4e9836067945, type: 3}
+  m_Name: quest_joaquim_echoes_of_home
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Quests.QuestDefinition
+  _questId: quest_joaquim_echoes_of_home
+  _titleKey: quest.joaquim_echoes.title
+  _descriptionKey: quest.joaquim_echoes.description
+  _questType: 0
+  _objectives:
+  - ObjectiveId: clear_ruin_dwellers
+    Type: 0
+    TargetId: enemy_cave_dweller
+    RequiredAmount: 6
+    DescriptionKey: quest.joaquim_echoes.obj_clear_ruin_dwellers
+    CurrentAmount: 0
+  - ObjectiveId: recover_relic_blade
+    Type: 1
+    TargetId: item_iron_sword
+    RequiredAmount: 1
+    DescriptionKey: quest.joaquim_echoes.obj_recover_relic_blade
+    CurrentAmount: 0
+  - ObjectiveId: talk_to_survivor
+    Type: 3
+    TargetId: npc_village_survivor
+    RequiredAmount: 1
+    DescriptionKey: quest.joaquim_echoes.obj_talk_to_survivor
+    CurrentAmount: 0
+  _prerequisiteQuestIds: []
+  _rewardExperience: 500
+  _rewardItems:
+  - Item: {fileID: 11400000, guid: 5ea679476970ef742b84d30b4dd65031, type: 2}
+    Quantity: 1

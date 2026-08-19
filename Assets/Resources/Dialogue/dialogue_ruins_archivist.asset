@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d726d6669d349d5488215b751bc0b018, type: 3}
+  m_Name: dialogue_ruins_archivist
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Dialogue.DialogueDefinition
+  _dialogueId: dialogue_ruins_archivist
+  _startNodeId: greeting
+  _nodes:
+  - Id: greeting
+    TextKey: dialogue.ruins_archivist.greeting
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices:
+    - TextKey: dialogue.ruins_archivist.choice_ask_fragment
+      NextNodeId: fragment
+      ConditionFlag: 
+      NegateCondition: 0
+    - TextKey: dialogue.ruins_archivist.choice_ask_icaro
+      NextNodeId: about_icaro
+      ConditionFlag: 
+      NegateCondition: 0
+    - TextKey: dialogue.common.choice_goodbye
+      NextNodeId: 
+      ConditionFlag: 
+      NegateCondition: 0
+    AutoAdvanceToNodeId: 
+  - Id: fragment
+    TextKey: dialogue.ruins_archivist.fragment
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices:
+    - TextKey: dialogue.ruins_archivist.choice_share_openly
+      NextNodeId: share
+      ConditionFlag: 
+      NegateCondition: 0
+    - TextKey: dialogue.ruins_archivist.choice_withhold_secret
+      NextNodeId: withhold
+      ConditionFlag: 
+      NegateCondition: 0
+    AutoAdvanceToNodeId: 
+  - Id: about_icaro
+    TextKey: dialogue.ruins_archivist.about_icaro
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+  - Id: share
+    TextKey: dialogue.ruins_archivist.share
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+  - Id: withhold
+    TextKey: dialogue.ruins_archivist.withhold
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices: []
+    AutoAdvanceToNodeId: 

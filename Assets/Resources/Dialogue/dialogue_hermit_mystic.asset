@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d726d6669d349d5488215b751bc0b018, type: 3}
+  m_Name: dialogue_hermit_mystic
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Dialogue.DialogueDefinition
+  _dialogueId: dialogue_hermit_mystic
+  _startNodeId: greeting
+  _nodes:
+  - Id: greeting
+    TextKey: dialogue.hermit_mystic.greeting
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices:
+    - TextKey: dialogue.hermit_mystic.choice_ask_eclipse
+      NextNodeId: eclipse
+      ConditionFlag: 
+      NegateCondition: 0
+    - TextKey: dialogue.hermit_mystic.choice_ask_lavine
+      NextNodeId: about_lavine
+      ConditionFlag: 
+      NegateCondition: 0
+    - TextKey: dialogue.common.choice_goodbye
+      NextNodeId: 
+      ConditionFlag: 
+      NegateCondition: 0
+    AutoAdvanceToNodeId: 
+  - Id: eclipse
+    TextKey: dialogue.hermit_mystic.eclipse
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices: []
+    AutoAdvanceToNodeId: about_lavine
+  - Id: about_lavine
+    TextKey: dialogue.hermit_mystic.about_lavine
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices:
+    - TextKey: dialogue.hermit_mystic.choice_defend_lavine
+      NextNodeId: trust
+      ConditionFlag: 
+      NegateCondition: 0
+    - TextKey: dialogue.hermit_mystic.choice_voice_doubt
+      NextNodeId: doubt
+      ConditionFlag: 
+      NegateCondition: 0
+    AutoAdvanceToNodeId: 
+  - Id: trust
+    TextKey: dialogue.hermit_mystic.trust
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+  - Id: doubt
+    TextKey: dialogue.hermit_mystic.doubt
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices: []
+    AutoAdvanceToNodeId: 

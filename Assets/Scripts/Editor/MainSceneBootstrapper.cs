@@ -194,6 +194,12 @@ namespace Rapadura.Editor
                 lookProp.objectReferenceValue = pivot;
             }
 
+            SerializedProperty animatorProp = so.FindProperty("_animator");
+            if (animatorProp != null)
+            {
+                animatorProp.objectReferenceValue = playerGo.GetComponent<Animator>();
+            }
+
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 
