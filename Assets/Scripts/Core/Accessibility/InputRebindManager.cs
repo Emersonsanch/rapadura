@@ -32,7 +32,7 @@ namespace Rapadura.Core.Accessibility
         private const string PlayerPrefsKeyPrefix = "Accessibility.InputBindings.";
 
         private readonly InputActionAsset _actions;
-        private RebindingOperation _activeRebind;
+        private InputActionRebindingExtensions.RebindingOperation _activeRebind;
 
         public InputRebindManager(InputActionAsset actions)
         {
@@ -87,7 +87,7 @@ namespace Rapadura.Core.Accessibility
             _activeRebind?.Cancel();
         }
 
-        private void CleanUpRebind(RebindingOperation operation, InputAction action)
+        private void CleanUpRebind(InputActionRebindingExtensions.RebindingOperation operation, InputAction action)
         {
             operation.Dispose();
             _activeRebind = null;
