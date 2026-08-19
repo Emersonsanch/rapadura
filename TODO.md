@@ -318,7 +318,7 @@
 - [~] Sistema de diálogo — `Gameplay/Dialogue/{DialogueNode,DialogueDefinition,DialogueManager}.cs` + `UI/Dialogue/DialogueUIController.cs` prontos, testados, `DialogueManager` registrado em `GameManager`, chaves `dialogue.*` traduzidas e `World/NpcInteractable.cs` pronto para disparar via trigger; falta colocar o componente num NPC real em Scene
 - [~] Lojas — `Gameplay/Shop/{ShopDefinition,ShopManager}.cs` + `UI/Shop/ShopUIController.cs` prontos, testados, `ShopManager` registrado em `GameManager`, chaves `shop.*` traduzidas, gatilho via `NpcInteractable.cs`; falta colocar numa Scene
 
-> ⚠️ Conteúdo de diálogo/loja seedado hoje é genérico (vilarejo/ferreiro) — próxima leva de conteúdo deve amarrar diálogos/quests à lore dos 5 personagens jogáveis (Joaquim, Maria, Maithe, Ícaro, Lavine).
+> ✅ Primeira leva de conteúdo narrativo ligado aos personagens: `Editor/CharacterQuestSeeder.cs` (3 quests: Joaquim "Ecos da Vila Perdida", Maithe "Rastros do Vento", Lavine "A Maré Rubra") + `Editor/CharacterDialogueSeeder.cs` (3 diálogos ramificados ligados a essas quests), com traduções `quest.*`/`dialogue.*` reais. Ainda faltam Maria e Ícaro — continuar nas próximas levas.
 - [ ] Missões
 
 ### Quests
