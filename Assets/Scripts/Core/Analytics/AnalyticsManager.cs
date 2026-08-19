@@ -63,16 +63,16 @@ namespace Rapadura.Core.Analytics
 
         public void Initialize()
         {
-            EventBus.EventBus.Subscribe<CombatTargetDiedEvent>(OnCombatTargetDied);
-            EventBus.EventBus.Subscribe<PlayerExperienceChangedEvent>(OnPlayerExperienceChanged);
-            EventBus.EventBus.Subscribe<RecipeCraftedEvent>(OnRecipeCrafted);
+            EventBus.Subscribe<CombatTargetDiedEvent>(OnCombatTargetDied);
+            EventBus.Subscribe<PlayerExperienceChangedEvent>(OnPlayerExperienceChanged);
+            EventBus.Subscribe<RecipeCraftedEvent>(OnRecipeCrafted);
         }
 
         public void Shutdown()
         {
-            EventBus.EventBus.Unsubscribe<CombatTargetDiedEvent>(OnCombatTargetDied);
-            EventBus.EventBus.Unsubscribe<PlayerExperienceChangedEvent>(OnPlayerExperienceChanged);
-            EventBus.EventBus.Unsubscribe<RecipeCraftedEvent>(OnRecipeCrafted);
+            EventBus.Unsubscribe<CombatTargetDiedEvent>(OnCombatTargetDied);
+            EventBus.Unsubscribe<PlayerExperienceChangedEvent>(OnPlayerExperienceChanged);
+            EventBus.Unsubscribe<RecipeCraftedEvent>(OnRecipeCrafted);
         }
 
         /// <summary>Records a gameplay event into the in-memory buffer with the current timestamp.</summary>
