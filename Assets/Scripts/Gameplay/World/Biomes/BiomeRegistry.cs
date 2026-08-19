@@ -58,5 +58,29 @@ namespace Rapadura.Gameplay.World.Biomes
         {
             _biomesByType = null;
         }
+
+        /// <summary>
+        /// Plain-C# injection path for EditMode tests, which can't rely on Resources/AssetDatabase
+        /// (mirrors the *ForTests helpers on ScriptableObject definitions elsewhere in the project).
+        /// Bypasses the Resources scan entirely until <see cref="Invalidate"/> is called again.
+        /// </summary>
+        public static void SetForTests(IEnumerable<BiomeDefinition> biomes)
+        {
+            _biomesByType = new Dictionary<BiomeType, BiomeDefinition>();
+            if (biomes == null)
+            {
+                return;
+            }
+
+            foreach (BiomeDefinition biome in biomes)
+            {
+                if (biome == null)
+                {
+                    continue;
+                }
+
+                _biomesByType[biome.Type] = biome;
+            }
+        }
     }
 }

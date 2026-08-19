@@ -1,0 +1,115 @@
+.shop-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.shop-window {
+    width: 70%;
+    min-width: 520px;
+    max-width: 960px;
+    height: 70%;
+    min-height: 380px;
+    background-color: rgba(12, 14, 20, 0.92);
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.14);
+    padding: 16px 20px;
+}
+
+.shop-header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.shop-name {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: rgb(255, 210, 90);
+    flex-grow: 1;
+}
+
+.shop-currency {
+    flex-direction: row;
+    align-items: center;
+    margin-right: 16px;
+}
+
+.shop-currency-label {
+    color: rgb(200, 200, 205);
+    margin-right: 4px;
+}
+
+.shop-currency-amount {
+    color: rgb(255, 220, 120);
+    -unity-font-style: bold;
+}
+
+.shop-close-button {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    color: rgb(235, 235, 240);
+}
+
+.shop-close-button:hover {
+    background-color: rgba(255, 80, 80, 0.35);
+}
+
+.shop-panels {
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.shop-panel {
+    flex-grow: 1;
+    flex-basis: 0;
+    margin: 0 6px;
+}
+
+.shop-panel-title {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: rgb(235, 235, 240);
+    margin-bottom: 6px;
+}
+
+.shop-scroll {
+    flex-grow: 1;
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 6px;
+}
+
+.shop-list {
+    flex-direction: column;
+    padding: 6px;
+}
+
+.shop-row-button {
+    margin: 3px 0;
+    padding: 8px 10px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    color: rgb(235, 235, 240);
+    -unity-text-align: middle-left;
+}
+
+.shop-row-button:hover {
+    background-color: rgba(255, 255, 255, 0.16);
+}
+
+.shop-row-button:disabled {
+    opacity: 0.4;
+}

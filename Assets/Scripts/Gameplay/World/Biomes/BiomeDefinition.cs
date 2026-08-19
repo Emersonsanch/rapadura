@@ -20,6 +20,17 @@ namespace Rapadura.Gameplay.World.Biomes
 
         public EnemyDefinition Enemy => _enemy;
         public int Weight => _weight;
+
+        public BiomeEnemySpawnEntry()
+        {
+        }
+
+        /// <summary>Plain-C# construction path for EditMode tests.</summary>
+        public BiomeEnemySpawnEntry(EnemyDefinition enemy, int weight)
+        {
+            _enemy = enemy;
+            _weight = weight;
+        }
     }
 
     /// <summary>A single weighted entry in a biome's typical loot table.</summary>
@@ -31,6 +42,17 @@ namespace Rapadura.Gameplay.World.Biomes
 
         public ItemDefinition Item => _item;
         public int Weight => _weight;
+
+        public BiomeLootEntry()
+        {
+        }
+
+        /// <summary>Plain-C# construction path for EditMode tests.</summary>
+        public BiomeLootEntry(ItemDefinition item, int weight)
+        {
+            _item = item;
+            _weight = weight;
+        }
     }
 
     /// <summary>
@@ -92,6 +114,27 @@ namespace Rapadura.Gameplay.World.Biomes
         public ItemDefinition RollLoot(System.Random random)
         {
             return RollWeighted(_loot, entry => entry.Weight, entry => entry.Item, random);
+        }
+
+        /// <summary>Plain-C# construction path for EditMode tests, which can't rely on AssetDatabase/CreateAsset (mirrors DialogueDefinition.SetDataForTests).</summary>
+        public void SetDataForTests(
+            BiomeType type,
+            string nameLocalizationKey,
+            string narrativeDescription,
+            float minTemperatureCelsius,
+            float maxTemperatureCelsius,
+            string ambientMusicCueId,
+            List<BiomeEnemySpawnEntry> enemies,
+            List<BiomeLootEntry> loot)
+        {
+            _type = type;
+            _nameLocalizationKey = nameLocalizationKey;
+            _narrativeDescription = narrativeDescription;
+            _minTemperatureCelsius = minTemperatureCelsius;
+            _maxTemperatureCelsius = maxTemperatureCelsius;
+            _ambientMusicCueId = ambientMusicCueId;
+            _enemies = enemies ?? new List<BiomeEnemySpawnEntry>();
+            _loot = loot ?? new List<BiomeLootEntry>();
         }
 
         private static TResult RollWeighted<TEntry, TResult>(
