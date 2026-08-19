@@ -1,6 +1,6 @@
 using System.Threading;
 using NUnit.Framework;
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using Rapadura.Gameplay.Skills;
 using UnityEditor;
 using UnityEngine;

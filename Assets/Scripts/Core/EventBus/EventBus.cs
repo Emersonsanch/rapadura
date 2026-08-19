@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Rapadura.Core.EventBus
+namespace Rapadura.Core.Events
 {
     /// <summary>
     /// Static, type-safe publish/subscribe event bus used to decouple game systems.

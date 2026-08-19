@@ -1,4 +1,4 @@
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 
 namespace Rapadura.Gameplay.Building
 {

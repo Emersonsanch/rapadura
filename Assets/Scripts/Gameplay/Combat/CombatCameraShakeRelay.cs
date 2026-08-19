@@ -1,6 +1,6 @@
 using Rapadura.Core.Accessibility;
 using Rapadura.Core.DI;
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using Rapadura.Gameplay.Player;
 using UnityEngine;
 

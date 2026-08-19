@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Rapadura.Core.Audio;
 using Rapadura.Core.DI;
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
 using Rapadura.Core.Logging;
 

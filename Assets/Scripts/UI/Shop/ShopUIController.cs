@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Rapadura.Core.DI;
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Items;

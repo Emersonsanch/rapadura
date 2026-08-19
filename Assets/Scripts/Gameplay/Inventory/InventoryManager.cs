@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Rapadura.Core.DI;
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Player;

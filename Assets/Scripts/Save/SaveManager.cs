@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
 using UnityEngine;
 

@@ -1,5 +1,5 @@
 using System;
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Skills;

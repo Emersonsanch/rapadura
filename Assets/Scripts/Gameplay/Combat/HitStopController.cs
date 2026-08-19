@@ -1,5 +1,5 @@
 using System.Collections;
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Combat

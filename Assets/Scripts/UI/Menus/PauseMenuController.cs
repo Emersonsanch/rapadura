@@ -1,5 +1,5 @@
 using Rapadura.Core.DI;
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using Rapadura.Save;
 using UnityEngine;
 using UnityEngine.Events;

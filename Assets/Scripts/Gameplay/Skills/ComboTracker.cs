@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Skills

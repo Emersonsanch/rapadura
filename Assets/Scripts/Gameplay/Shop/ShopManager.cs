@@ -1,4 +1,4 @@
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
 using Rapadura.Core.Logging;
 using Rapadura.Gameplay.Inventory;

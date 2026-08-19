@@ -1,6 +1,6 @@
 using System.Reflection;
 using NUnit.Framework;
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using Rapadura.Gameplay.Building;
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Inventory;

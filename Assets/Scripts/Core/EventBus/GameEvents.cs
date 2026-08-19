@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Rapadura.Core.EventBus
+namespace Rapadura.Core.Events
 {
     /// <summary>Raised whenever the player's health value changes.</summary>
     public readonly struct PlayerHealthChangedEvent : IGameEvent

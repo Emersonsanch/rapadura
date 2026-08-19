@@ -1,4 +1,4 @@
-namespace Rapadura.Core.EventBus
+namespace Rapadura.Core.Events
 {
     /// <summary>
     /// Marker interface implemented by every event dispatched through the EventBus.

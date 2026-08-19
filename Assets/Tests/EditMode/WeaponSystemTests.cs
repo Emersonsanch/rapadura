@@ -1,6 +1,6 @@
 using System.Reflection;
 using NUnit.Framework;
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Combat.Weapons;
 using Rapadura.Gameplay.Inventory;

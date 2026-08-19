@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using Rapadura.Gameplay.Skills;
 using UnityEngine;
 

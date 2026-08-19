@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rapadura.Core.Analytics;
-using Rapadura.Core.EventBus;
+using Rapadura.Core.Events;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Crafting;
 using UnityEngine;
