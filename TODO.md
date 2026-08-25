@@ -4,6 +4,10 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-08-25 (continuação 7 — bug real no pinch-to-zoom)
+- 🐛 **Pinch-to-zoom já existia no código (`CameraZoom.cs`) mas com um bug real**: usava `Touchscreen.current.touches.Count >= 2` pra decidir se havia pinça de dois dedos — só que `touches.Count` é o **tamanho fixo do array de slots de toque do dispositivo** (a capacidade máxima, tipo 10), não quantos dedos estão realmente tocando agora. Isso significa que em qualquer dispositivo com touchscreen presente (mesmo sem nenhum dedo tocando), o código lia as posições dos slots `[0]`/`[1]` (obsoletas/zeradas) como se fossem uma pinça de verdade, aplicando zoom com base em lixo. Corrigido pra contar de verdade quantos `TouchControl` estão com `.press.isPressed` antes de tratar como pinça.
+- 📝 Item do roadmap ("Câmera: suportar pinch-to-zoom") já estava tecnicamente implementado, só nunca foi marcado — e tinha esse bug latente nunca detectado porque nunca rodou num dispositivo touch de verdade.
+
 ### 2026-08-25 (continuação 6 — UI escalável pra diferentes resoluções)
 - 🐛 **Bug real encontrado no `DefaultPanelSettings.asset`**: `m_ScaleMode: 1` já parecia certo à primeira vista, mas o enum real do Unity é `ConstantPixelSize=0, ConstantPhysicalSize=1, ScaleWithScreenSize=2` — ou seja, o painel inteiro (HUD + tela de seleção) estava em **`ConstantPhysicalSize`** (escala por DPI, não reflow por resolução/aspect ratio), não `ScaleWithScreenSize` como o valor `1` sugeria à primeira vista. Corrigido pra `ScaleMode = ScaleWithScreenSize` (valor 2) — `m_ReferenceResolution` (1200x800, já configurado) e `m_ScreenMatchMode`/`m_Match` agora realmente entram em uso (antes eram campos mortos, ignorados nesse modo). `m_Match` ajustado de 0 (só largura) pra 0.5 (balanceado largura/altura), pra não distorcer em aspect ratios bem diferentes de celular (16:9 até 20:9+).
 - ✅ Testado em Play Mode com resolução atípica de screenshot (quase quadrada, 606x609) — HUD, botão de Correr e tela de seleção de personagem continuam legíveis/proporcionais.

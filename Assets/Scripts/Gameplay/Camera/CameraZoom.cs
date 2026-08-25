@@ -42,10 +42,45 @@ namespace Rapadura.Gameplay.Cameras
 
         private void ReadInput()
         {
-            if (Touchscreen.current != null && Touchscreen.current.touches.Count >= 2)
+            // Touchscreen.touches is a fixed-size slot array (its Count is the device's max touch
+            // capacity, not how many fingers are actually down) — indexing [0]/[1] unconditionally
+            // read stale/inactive slots and fed pinch-zoom garbage deltas any time a touchscreen
+            // device merely existed, even with zero fingers on it. Only count touches actually
+            // pressed right now.
+            int activeTouchCount = 0;
+            TouchControl activeTouch0 = null;
+            TouchControl activeTouch1 = null;
+
+            if (Touchscreen.current != null)
             {
-                Vector2 touch0 = Touchscreen.current.touches[0].position.ReadValue();
-                Vector2 touch1 = Touchscreen.current.touches[1].position.ReadValue();
+                foreach (TouchControl touch in Touchscreen.current.touches)
+                {
+                    if (!touch.press.isPressed)
+                    {
+                        continue;
+                    }
+
+                    if (activeTouchCount == 0)
+                    {
+                        activeTouch0 = touch;
+                    }
+                    else if (activeTouchCount == 1)
+                    {
+                        activeTouch1 = touch;
+                    }
+
+                    activeTouchCount++;
+                    if (activeTouchCount >= 2)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (activeTouchCount >= 2)
+            {
+                Vector2 touch0 = activeTouch0.position.ReadValue();
+                Vector2 touch1 = activeTouch1.position.ReadValue();
                 float currentPinchDistance = Vector2.Distance(touch0, touch1);
 
                 if (_previousPinchDistance > 0f)
