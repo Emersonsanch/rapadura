@@ -10,7 +10,13 @@ namespace Rapadura.Gameplay.Enemies
         public int TotalSpawned { get; private set; }
         public int AliveCount { get; private set; }
         public bool IsActive { get; private set; }
-        public bool IsComplete => IsActive && TotalSpawned > 0 && AliveCount <= 0;
+        /// <summary>
+        /// True once a started wave has run out of enemies. Deliberately does NOT require
+        /// <see cref="IsActive"/> — <see cref="RegisterDeath"/> sets <c>IsActive = false</c> at the
+        /// exact moment a wave completes, so requiring it here made this contradictory (always
+        /// false: the instant the condition could become true, IsActive had just been cleared).
+        /// </summary>
+        public bool IsComplete => TotalSpawned > 0 && AliveCount <= 0;
 
         public void StartWave(int waveIndex, int enemyCount)
         {
