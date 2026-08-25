@@ -33,5 +33,6 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
+        <ui:Button name="run-button" text="Correr" class="hud-touch-button hud-run-button" />
     </ui:VisualElement>
 </ui:UXML>

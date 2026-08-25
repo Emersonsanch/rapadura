@@ -17,6 +17,30 @@
     padding: 10px 12px;
 }
 
+.hud-touch-button {
+    position: absolute;
+    width: 84px;
+    height: 84px;
+    border-radius: 42px;
+    background-color: rgba(40, 44, 56, 0.55);
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.35);
+    color: rgb(240, 240, 240);
+    font-size: 16px;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+}
+
+.hud-run-button {
+    right: 32px;
+    bottom: 32px;
+}
+
+.hud-touch-button--active {
+    background-color: rgba(90, 160, 90, 0.75);
+    border-color: rgb(200, 255, 200);
+}
+
 .hud-xp-panel {
     position: absolute;
     left: 24px;

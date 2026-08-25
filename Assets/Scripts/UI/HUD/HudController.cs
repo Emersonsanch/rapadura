@@ -32,6 +32,7 @@ namespace Rapadura.UI.HUD
 
         [Header("References")]
         [SerializeField] private PlayerStats _playerStats;
+        [SerializeField] private PlayerInputHandler _playerInput;
 
         [Header("Adaptive HUD")]
         [Tooltip("Uniform scale applied to the whole HUD root. Exposed here so a future " +
@@ -61,6 +62,7 @@ namespace Rapadura.UI.HUD
         private VisualElement _xpFill;
         private Label _xpValueLabel;
         private Label _levelLabel;
+        private Button _runButton;
 
         private void Awake()
         {
@@ -108,6 +110,8 @@ namespace Rapadura.UI.HUD
             _xpFill = rootVisualElement.Q<VisualElement>("xp-bar-fill");
             _xpValueLabel = rootVisualElement.Q<Label>("xp-bar-value-label");
             _levelLabel = rootVisualElement.Q<Label>("level-label");
+
+            _runButton = rootVisualElement.Q<Button>("run-button");
         }
 
         private void RegisterCallbacks()
@@ -116,6 +120,17 @@ namespace Rapadura.UI.HUD
             EventBus.Subscribe<PlayerStaminaChangedEvent>(OnStaminaChanged);
             EventBus.Subscribe<PlayerManaChangedEvent>(OnManaChanged);
             EventBus.Subscribe<PlayerExperienceChangedEvent>(OnExperienceChanged);
+
+            if (_runButton != null)
+            {
+                // Not the Button's Click event on purpose — Click only fires on release, but Run
+                // needs to stay held for as long as the finger/pointer stays down (a "sprint"
+                // toggle, not a one-shot action), so PointerDown/Up + PointerLeave (finger sliding
+                // off the button without a clean release) drive it directly instead.
+                _runButton.RegisterCallback<PointerDownEvent>(OnRunButtonPressed);
+                _runButton.RegisterCallback<PointerUpEvent>(OnRunButtonPointerUp);
+                _runButton.RegisterCallback<PointerLeaveEvent>(OnRunButtonPointerLeave);
+            }
         }
 
         private void UnregisterCallbacks()
@@ -124,6 +139,41 @@ namespace Rapadura.UI.HUD
             EventBus.Unsubscribe<PlayerStaminaChangedEvent>(OnStaminaChanged);
             EventBus.Unsubscribe<PlayerManaChangedEvent>(OnManaChanged);
             EventBus.Unsubscribe<PlayerExperienceChangedEvent>(OnExperienceChanged);
+
+            if (_runButton != null)
+            {
+                _runButton.UnregisterCallback<PointerDownEvent>(OnRunButtonPressed);
+                _runButton.UnregisterCallback<PointerUpEvent>(OnRunButtonPointerUp);
+                _runButton.UnregisterCallback<PointerLeaveEvent>(OnRunButtonPointerLeave);
+            }
+
+            if (_playerInput != null)
+            {
+                _playerInput.TouchRunHeld = false;
+            }
+        }
+
+        private void OnRunButtonPressed(PointerDownEvent evt)
+        {
+            if (_playerInput != null)
+            {
+                _playerInput.TouchRunHeld = true;
+            }
+
+            _runButton?.AddToClassList("hud-touch-button--active");
+        }
+
+        private void OnRunButtonPointerUp(PointerUpEvent evt) => ReleaseRunButton();
+        private void OnRunButtonPointerLeave(PointerLeaveEvent evt) => ReleaseRunButton();
+
+        private void ReleaseRunButton()
+        {
+            if (_playerInput != null)
+            {
+                _playerInput.TouchRunHeld = false;
+            }
+
+            _runButton?.RemoveFromClassList("hud-touch-button--active");
         }
 
         private void InitializeFromCurrentStats()

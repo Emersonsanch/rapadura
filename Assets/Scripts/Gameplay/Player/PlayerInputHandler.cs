@@ -28,6 +28,13 @@ namespace Rapadura.Gameplay.Player
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
         public bool IsRunHeld { get; private set; }
+
+        /// <summary>
+        /// Set/cleared by an on-screen touch button (see HudController's run button) since there's
+        /// no physical "held" key to bind on mobile. OR'd into <see cref="IsRunHeld"/> every frame —
+        /// keyboard/gamepad Run keeps working unchanged alongside it.
+        /// </summary>
+        public bool TouchRunHeld { get; set; }
         public bool IsCrouchHeld { get; private set; }
         public bool JumpPressedThisFrame { get; private set; }
         public bool InteractPressedThisFrame { get; private set; }
@@ -56,7 +63,7 @@ namespace Rapadura.Gameplay.Player
         {
             MoveInput = _moveAction.ReadValue<Vector2>();
             LookInput = _lookAction.ReadValue<Vector2>();
-            IsRunHeld = _runAction.IsPressed();
+            IsRunHeld = _runAction.IsPressed() || TouchRunHeld;
             IsCrouchHeld = _crouchAction.IsPressed();
             JumpPressedThisFrame = _jumpAction.WasPressedThisFrame();
             InteractPressedThisFrame = _interactAction.WasPressedThisFrame();

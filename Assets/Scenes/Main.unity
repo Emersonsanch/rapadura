@@ -605,6 +605,8 @@ MonoBehaviour:
   _leanDegrees: 10
   _poseSmoothing: 12
   _referenceSpeed: 4
+  _swayAmplitude: 0.05
+  _yawWagDegrees: 6
 --- !u!1 &404233774
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,6 +742,8 @@ MonoBehaviour:
   _leanDegrees: 10
   _poseSmoothing: 12
   _referenceSpeed: 4
+  _swayAmplitude: 0.05
+  _yawWagDegrees: 6
 --- !u!1 &485236500
 GameObject:
   m_ObjectHideFlags: 0
@@ -886,6 +890,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.UI.HUD.HudController
   _playerStats: {fileID: 1560329233}
+  _playerInput: {fileID: 1560329235}
   _hudScale: 1
   _anchorPreset: 0
   _anchorOffset: {x: 0, y: 0}
@@ -1295,6 +1300,8 @@ MonoBehaviour:
   _leanDegrees: 10
   _poseSmoothing: 12
   _referenceSpeed: 4
+  _swayAmplitude: 0.05
+  _yawWagDegrees: 6
 --- !u!1 &676800755
 GameObject:
   m_ObjectHideFlags: 0
@@ -1864,6 +1871,8 @@ MonoBehaviour:
   _leanDegrees: 10
   _poseSmoothing: 12
   _referenceSpeed: 4
+  _swayAmplitude: 0.05
+  _yawWagDegrees: 6
 --- !u!1 &786005208 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b973d68849992ef458dcf4c00f3e6e41, type: 3}
@@ -2253,6 +2262,8 @@ MonoBehaviour:
   _leanDegrees: 10
   _poseSmoothing: 12
   _referenceSpeed: 4
+  _swayAmplitude: 0.05
+  _yawWagDegrees: 6
 --- !u!1 &893226393
 GameObject:
   m_ObjectHideFlags: 0
@@ -2721,6 +2732,8 @@ MonoBehaviour:
   _leanDegrees: 10
   _poseSmoothing: 12
   _referenceSpeed: 4
+  _swayAmplitude: 0.05
+  _yawWagDegrees: 6
 --- !u!1 &1151576478 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 3730cff5da0538c47816a2eaf1148c3b, type: 3}
@@ -2744,6 +2757,8 @@ MonoBehaviour:
   _leanDegrees: 10
   _poseSmoothing: 12
   _referenceSpeed: 4
+  _swayAmplitude: 0.05
+  _yawWagDegrees: 6
 --- !u!1 &1211246095
 GameObject:
   m_ObjectHideFlags: 0
@@ -3169,6 +3184,8 @@ MonoBehaviour:
   _leanDegrees: 10
   _poseSmoothing: 12
   _referenceSpeed: 4
+  _swayAmplitude: 0.05
+  _yawWagDegrees: 6
 --- !u!1 &1425580438
 GameObject:
   m_ObjectHideFlags: 0
@@ -4648,6 +4665,8 @@ MonoBehaviour:
   _leanDegrees: 10
   _poseSmoothing: 12
   _referenceSpeed: 4
+  _swayAmplitude: 0.05
+  _yawWagDegrees: 6
 --- !u!1 &1762428755 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b973d68849992ef458dcf4c00f3e6e41, type: 3}
@@ -4671,6 +4690,8 @@ MonoBehaviour:
   _leanDegrees: 10
   _poseSmoothing: 12
   _referenceSpeed: 4
+  _swayAmplitude: 0.05
+  _yawWagDegrees: 6
 --- !u!1 &1779032278
 GameObject:
   m_ObjectHideFlags: 0
