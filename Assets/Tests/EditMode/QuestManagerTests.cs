@@ -144,10 +144,18 @@ namespace Rapadura.Tests
             QuestDefinition quest = BuildCollectQuest("quest_pelts", _wolfPelt.ItemId, 2);
             _quests.StartQuest(quest);
 
+            // Captured before publishing, not after: QuestProgress is a mutable reference type
+            // that UpdateObjectiveProgress edits in place, but this objective's RequiredAmount (2)
+            // exactly matches the recipe's ResultQuantity (2) below, so the single event also
+            // auto-completes the quest and removes it from QuestManager's active-quest dictionary
+            // (see QuestManager.CompleteQuest) — calling GetProgress() AFTER the event would
+            // return null (already evicted) instead of the completed progress this test wants to
+            // inspect. Grabbing the reference first still reflects every later in-place mutation.
+            QuestProgress progress = _quests.GetProgress("quest_pelts");
+
             RecipeDefinition recipe = CreateRecipe("recipe_pelt", _wolfPelt, 2);
             EventBus.Publish(new RecipeCraftedEvent(recipe));
 
-            QuestProgress progress = _quests.GetProgress("quest_pelts");
             Assert.AreEqual(2, progress.Objectives[0].CurrentAmount);
             Assert.IsTrue(progress.Objectives[0].IsComplete);
         }
