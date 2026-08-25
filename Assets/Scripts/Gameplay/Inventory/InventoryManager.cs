@@ -49,7 +49,14 @@ namespace Rapadura.Gameplay.Inventory
         private InventorySlotData[] _slots;
         private readonly Dictionary<EquipmentSlot, InventorySlotData> _equipped = new Dictionary<EquipmentSlot, InventorySlotData>();
 
-        public IReadOnlyList<InventorySlotData> Slots => _slots;
+        public IReadOnlyList<InventorySlotData> Slots
+        {
+            get
+            {
+                EnsureSlotsInitialized();
+                return _slots;
+            }
+        }
         public IReadOnlyDictionary<EquipmentSlot, InventorySlotData> Equipped => _equipped;
         public float MaxWeight => _maxWeight;
 
@@ -57,12 +64,7 @@ namespace Rapadura.Gameplay.Inventory
 
         private void Awake()
         {
-            _slots = new InventorySlotData[_slotCount];
-
-            for (int i = 0; i < _slotCount; i++)
-            {
-                _slots[i] = InventorySlotData.Empty();
-            }
+            EnsureSlotsInitialized();
 
             if (_playerStats == null)
             {
@@ -72,6 +74,30 @@ namespace Rapadura.Gameplay.Inventory
             if (_buffController == null)
             {
                 _buffController = GetComponent<BuffController>();
+            }
+        }
+
+        /// <summary>
+        /// Guards every public entry point below against being called before Unity has run this
+        /// component's <see cref="Awake"/> — which, unlike Play Mode, is NOT synchronous right
+        /// after <c>AddComponent</c> in Edit Mode (confirmed: <c>_slots</c> was still null
+        /// immediately after <c>AddComponent&lt;InventoryManager&gt;()</c> outside Play Mode),
+        /// so EditMode tests calling <see cref="AddItem(ItemDefinition,int)"/> right after adding
+        /// the component hit a NullReferenceException here. Idempotent and cheap to call from
+        /// every public method.
+        /// </summary>
+        private void EnsureSlotsInitialized()
+        {
+            if (_slots != null)
+            {
+                return;
+            }
+
+            _slots = new InventorySlotData[_slotCount];
+
+            for (int i = 0; i < _slotCount; i++)
+            {
+                _slots[i] = InventorySlotData.Empty();
             }
         }
 
@@ -97,6 +123,7 @@ namespace Rapadura.Gameplay.Inventory
 
         public float GetTotalWeight()
         {
+            EnsureSlotsInitialized();
             float total = 0f;
 
             foreach (InventorySlotData slot in _slots)
@@ -141,6 +168,8 @@ namespace Rapadura.Gameplay.Inventory
         /// </summary>
         public int AddItem(ItemDefinition item, int quantity, float? preserveDurability)
         {
+            EnsureSlotsInitialized();
+
             if (item == null || quantity <= 0)
             {
                 return quantity;
@@ -218,6 +247,8 @@ namespace Rapadura.Gameplay.Inventory
 
         public bool RemoveFromSlot(int slotIndex, int quantity)
         {
+            EnsureSlotsInitialized();
+
             if (!IsValidSlot(slotIndex) || _slots[slotIndex].IsEmpty || _slots[slotIndex].quantity < quantity)
             {
                 return false;
@@ -236,6 +267,7 @@ namespace Rapadura.Gameplay.Inventory
 
         public bool RemoveById(string itemId, int quantity)
         {
+            EnsureSlotsInitialized();
             int remaining = quantity;
 
             foreach (InventorySlotData slot in _slots)
@@ -272,6 +304,7 @@ namespace Rapadura.Gameplay.Inventory
 
         public int GetTotalCount(string itemId)
         {
+            EnsureSlotsInitialized();
             return _slots.Where(s => s.itemId == itemId).Sum(s => s.quantity);
         }
 
@@ -281,6 +314,8 @@ namespace Rapadura.Gameplay.Inventory
 
         public void MoveOrMergeSlot(int fromIndex, int toIndex)
         {
+            EnsureSlotsInitialized();
+
             if (!IsValidSlot(fromIndex) || !IsValidSlot(toIndex) || fromIndex == toIndex)
             {
                 return;
@@ -320,6 +355,8 @@ namespace Rapadura.Gameplay.Inventory
 
         public bool SplitStack(int slotIndex, int amount)
         {
+            EnsureSlotsInitialized();
+
             if (!IsValidSlot(slotIndex) || _slots[slotIndex].quantity <= amount || amount <= 0)
             {
                 return false;
@@ -354,11 +391,13 @@ namespace Rapadura.Gameplay.Inventory
 
         public IEnumerable<InventorySlotData> GetSlotsByType(ItemType type)
         {
+            EnsureSlotsInitialized();
             return _slots.Where(slot => !slot.IsEmpty && ItemDatabase.GetById(slot.itemId)?.Type == type);
         }
 
         public IEnumerable<InventorySlotData> GetSlotsByCategory(ItemCategory category)
         {
+            EnsureSlotsInitialized();
             return _slots.Where(slot => !slot.IsEmpty && ItemDatabase.GetById(slot.itemId)?.Category == category);
         }
 
@@ -368,6 +407,8 @@ namespace Rapadura.Gameplay.Inventory
 
         public bool EquipFromSlot(int slotIndex)
         {
+            EnsureSlotsInitialized();
+
             if (!IsValidSlot(slotIndex) || _slots[slotIndex].IsEmpty)
             {
                 return false;
@@ -456,6 +497,8 @@ namespace Rapadura.Gameplay.Inventory
 
         public bool UseItemInSlot(int slotIndex)
         {
+            EnsureSlotsInitialized();
+
             if (!IsValidSlot(slotIndex) || _slots[slotIndex].IsEmpty)
             {
                 return false;
@@ -500,6 +543,7 @@ namespace Rapadura.Gameplay.Inventory
 
         public object CaptureState()
         {
+            EnsureSlotsInitialized();
             var equippedEntries = _equipped.Select(pair => new InventorySaveState.EquippedEntry
             {
                 slot = pair.Key,

@@ -27,6 +27,17 @@ namespace Rapadura.Tests
         public void SetUp()
         {
             ServiceLocator.Clear();
+
+            // Defensive against leaked state from any earlier test (in this run or another test
+            // class) that constructed a GameManager and didn't clean it up before this one starts:
+            // SingletonBehaviour<GameManager>.Awake() bails out immediately whenever a stale
+            // Instance is still set and isn't this GameObject, silently skipping BuildManagers()
+            // and leaving every manager property null — which read as this class's own bug until
+            // traced back to singleton leakage, not anything specific to GameManagerTests itself.
+            if (GameManager.Instance != null)
+            {
+                Object.DestroyImmediate(GameManager.Instance.gameObject);
+            }
         }
 
         [TearDown]
