@@ -4,6 +4,11 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-08-25 (continuação 12 — indicador visual de destino no clique-pra-mover)
+- ✅ **`ClickToMoveIndicator.cs`** (novo, no `Player`): mostra um anel amarelo pulsante no chão onde o clique/toque aterrissou — antes clicar não dava nenhum feedback visual de que o input registrou ou pra onde o personagem estava indo. `PlayerClickToMove` ganhou eventos `DestinationSet`/`DestinationCleared` (novo `using System`) que o indicador escuta. Anel construído proceduralmente em runtime (mesh de anel/annulus, sem asset importado), com shader `Universal Render Pipeline/Unlit` transparente.
+- 🐛 **Bug real encontrado e corrigido durante o teste**: nos meus primeiros testes o anel parecia completamente invisível em qualquer ângulo de câmera — depurei posição/ativação/camada/culling mask, tudo certo. A causa real: meus screenshots de teste usavam uma câmera manual quase na MESMA altura do anel (ele é um mesh totalmente plano, Y=0), então eu estava vendo a borda de perfil (uma linha de 1px, invisível a essa resolução) em vez da elipse. Confirmado com a câmera isométrica real do jogo (pitch 57.5°): o anel aparece perfeitamente. Lição: pra validar geometria/decal plano no chão, usar sempre a câmera de gameplay de verdade, não uma câmera de debug em ângulo raso.
+- 📝 Raio ajustado de 0.45 pra 0.3 depois de ver o tamanho desproporcional ao personagem no screenshot real.
+
 ### 2026-08-25 (continuação 11 — botão de Pular na HUD)
 - ✅ **Botão "Pular" na HUD**, mesmo padrão do botão Correr: `PlayerInputHandler.TouchJumpRequested` (one-shot, consumido/zerado a cada frame — diferente do Run que é "segurado") OR'd em `JumpPressedThisFrame`. Testado em Play Mode injetando `PointerDownEvent` no botão real: `TouchJumpRequested` liga corretamente. Screenshot confirma os dois botões lado a lado no canto inferior direito, legíveis.
 

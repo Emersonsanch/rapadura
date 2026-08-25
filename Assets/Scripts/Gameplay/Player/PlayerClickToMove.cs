@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -27,6 +28,12 @@ namespace Rapadura.Gameplay.Player
         public bool HasDestination { get; private set; }
         public Vector3 Destination { get; private set; }
 
+        /// <summary>Raised with the world-space point whenever a new click-to-move destination is set — a ground marker (see <see cref="ClickToMoveIndicator"/>) subscribes to show where the player is headed, since there was previously no feedback at all for where a click landed.</summary>
+        public event Action<Vector3> DestinationSet;
+
+        /// <summary>Raised when the destination is cleared (arrived, or overridden by manual movement).</summary>
+        public event Action DestinationCleared;
+
         private void Awake()
         {
             _input = GetComponent<PlayerInputHandler>();
@@ -37,7 +44,12 @@ namespace Rapadura.Gameplay.Player
             if (_input.MoveInput.sqrMagnitude > 0.01f)
             {
                 // Manual movement always wins — abandon any pending click destination immediately.
-                HasDestination = false;
+                if (HasDestination)
+                {
+                    HasDestination = false;
+                    DestinationCleared?.Invoke();
+                }
+
                 return;
             }
 
@@ -77,13 +89,20 @@ namespace Rapadura.Gameplay.Player
             {
                 Destination = hit.point;
                 HasDestination = true;
+                DestinationSet?.Invoke(Destination);
             }
         }
 
         /// <summary>Called by the movement states once the destination has been reached.</summary>
         public void ClearDestination()
         {
+            if (!HasDestination)
+            {
+                return;
+            }
+
             HasDestination = false;
+            DestinationCleared?.Invoke();
         }
     }
 }

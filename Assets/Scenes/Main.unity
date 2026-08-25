@@ -3816,6 +3816,7 @@ GameObject:
   - component: {fileID: 1560329240}
   - component: {fileID: 1560329241}
   - component: {fileID: 1560329242}
+  - component: {fileID: 1560329243}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -4128,6 +4129,22 @@ MonoBehaviour:
   _visualRoot: {fileID: 801356549}
   _speedDriver: {fileID: 801356551}
   _proceduralAnimator: {fileID: 1560329241}
+--- !u!114 &1560329243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560329229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa01991282242c94a8ac97d5a7bed957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Player.ClickToMoveIndicator
+  _ringRadius: 0.45
+  _pulseDuration: 0.5
+  _ringColor: {r: 1, g: 0.85, b: 0.3, a: 0.9}
+  _groundYOffset: 0.03
 --- !u!1 &1597877521
 GameObject:
   m_ObjectHideFlags: 0
