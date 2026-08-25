@@ -61,13 +61,39 @@ namespace Rapadura.Gameplay.Skills
         public string SaveKey => "SkillManager";
 
         public IReadOnlyCollection<SkillInstance> LearnedSkills => _learnedSkills.Values;
-        public IReadOnlyList<SkillInstance> EquippedSlots => _equippedSlots;
+        public IReadOnlyList<SkillInstance> EquippedSlots
+        {
+            get { EnsureInitialized(); return _equippedSlots; }
+        }
         public int AvailableSkillPoints { get; private set; }
 
         public event Action OnSkillPointsChanged;
 
+        private bool _initialized;
+
         private void Awake()
         {
+            EnsureInitialized();
+        }
+
+        /// <summary>
+        /// Guards every public entry point that touches <see cref="_equippedSlots"/>/
+        /// <see cref="_skillDatabase"/>/<see cref="_buffController"/> against being called before
+        /// <see cref="Awake"/> has run — in Edit Mode (outside Play Mode),
+        /// <c>AddComponent&lt;SkillManager&gt;()</c> does NOT call <c>Awake</c> synchronously the
+        /// way Play Mode always does. Concretely: <c>RefundAndRemove</c> indexed the still-null
+        /// <c>_equippedSlots</c> array (NullReferenceException), and passive skills silently
+        /// granted no buff at all since <c>ApplyPassiveEffectIfNeeded</c> treats a null
+        /// <c>_buffController</c> as "no buff controller attached" rather than "not initialized yet".
+        /// </summary>
+        private void EnsureInitialized()
+        {
+            if (_initialized)
+            {
+                return;
+            }
+
+            _initialized = true;
             _equippedSlots = new SkillInstance[_hotbarSlotCount];
             _resourceProvider = GetComponent<ISkillResourceProvider>();
             _selfCombatTarget = GetComponent<ICombatTarget>();
@@ -126,6 +152,8 @@ namespace Rapadura.Gameplay.Skills
 
         public void GrantSkillPoints(int amount)
         {
+            EnsureInitialized();
+
             if (amount <= 0)
             {
                 return;
@@ -234,6 +262,8 @@ namespace Rapadura.Gameplay.Skills
         /// <summary>Learns a new skill, bypassing requirement checks if <paramref name="force"/> is true (used by save/load and admin tools).</summary>
         public SkillInstance LearnSkill(SkillDefinition definition, int casterLevel, bool force = false)
         {
+            EnsureInitialized();
+
             if (!force && !CanLearnSkill(definition, casterLevel))
             {
                 return null;
@@ -301,6 +331,8 @@ namespace Rapadura.Gameplay.Skills
         /// </summary>
         public bool RespecSkill(string skillId)
         {
+            EnsureInitialized();
+
             if (!_learnedSkills.TryGetValue(skillId, out SkillInstance instance))
             {
                 return false;
@@ -323,6 +355,7 @@ namespace Rapadura.Gameplay.Skills
         /// </summary>
         public int ResetSkillPoints()
         {
+            EnsureInitialized();
             int totalRefunded = 0;
 
             while (_learnedSkills.Count > 0)
@@ -423,6 +456,7 @@ namespace Rapadura.Gameplay.Skills
 
         private bool IsValidSlot(int slotIndex)
         {
+            EnsureInitialized();
             return slotIndex >= 0 && slotIndex < _equippedSlots.Length;
         }
 
@@ -444,6 +478,8 @@ namespace Rapadura.Gameplay.Skills
         /// <summary>Attempts to cast a specific learned skill instance, applying costs, cooldown, damage/healing and effects.</summary>
         public bool TryCast(SkillInstance instance, Vector3 aimPoint, GameObject explicitTarget = null)
         {
+            EnsureInitialized();
+
             if (instance == null || instance.IsOnCooldown)
             {
                 return false;

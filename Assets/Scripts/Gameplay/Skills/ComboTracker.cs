@@ -27,11 +27,42 @@ namespace Rapadura.Gameplay.Skills
         }
 
         private readonly Dictionary<ComboDefinition, ComboProgress> _progress = new Dictionary<ComboDefinition, ComboProgress>();
+        private bool _referencesResolved;
 
         public IReadOnlyList<ComboDefinition> Combos => _combos;
 
+        /// <summary>
+        /// Source of "now" for combo window timing — defaults to real <see cref="Time.time"/>, but
+        /// swappable (e.g. by EditMode tests) since <c>Time.time</c> never advances outside Play
+        /// Mode: no engine frame tick runs between statements in an EditMode test, so blocking the
+        /// test thread with <c>Thread.Sleep</c> does not move it, unlike in a real running game.
+        /// </summary>
+        public Func<float> TimeProvider { get; set; } = () => Time.time;
+
         private void Awake()
         {
+            EnsureReferencesResolved();
+        }
+
+        /// <summary>
+        /// Guards <see cref="HandleSkillCast"/> against being called before <see cref="Awake"/> has
+        /// run — in Edit Mode (outside Play Mode), <c>AddComponent&lt;ComboTracker&gt;()</c> does
+        /// NOT call <c>Awake</c> synchronously the way Play Mode always does, which left
+        /// <see cref="_skillManager"/>/<see cref="_buffController"/> both null for any EditMode
+        /// test that added the component and drove it in the same call. With <c>_buffController</c>
+        /// null, <see cref="ApplyTemporaryBuff"/> silently no-ops (by design, for callers that
+        /// genuinely don't have a BuffController) — so a completed combo looked like it granted no
+        /// bonus at all, not an exception, which made this easy to miss.
+        /// </summary>
+        private void EnsureReferencesResolved()
+        {
+            if (_referencesResolved)
+            {
+                return;
+            }
+
+            _referencesResolved = true;
+
             if (_skillManager == null)
             {
                 _skillManager = GetComponent<SkillManager>();
@@ -60,12 +91,14 @@ namespace Rapadura.Gameplay.Skills
         /// </summary>
         public void HandleSkillCast(SkillCastEvent evt)
         {
+            EnsureReferencesResolved();
+
             if (_skillManager != null && evt.Caster != _skillManager.gameObject)
             {
                 return;
             }
 
-            float now = Time.time;
+            float now = TimeProvider();
 
             foreach (ComboDefinition combo in _combos)
             {

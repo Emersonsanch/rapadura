@@ -112,9 +112,14 @@ namespace Rapadura.Tests
                 bonusType: ComboBonusType.DamageMultiplier, bonusValue: 0.5f, bonusDuration: 5f);
             SetCombos(_comboTracker, combo);
 
+            // Time.time never advances in an EditMode test (no engine frame tick runs between
+            // statements outside Play Mode), so Thread.Sleep achieves nothing here — inject a fake
+            // clock instead, matching ComboTracker.TimeProvider's purpose.
+            float fakeNow = 0f;
+            _comboTracker.TimeProvider = () => fakeNow;
+
             _comboTracker.HandleSkillCast(new SkillCastEvent(_go, _skillA, Vector3.zero));
-            // Real time must move forward for Time.time to advance past a zero-second window.
-            Thread.Sleep(50);
+            fakeNow += 0.05f;
             _comboTracker.HandleSkillCast(new SkillCastEvent(_go, _skillB, Vector3.zero));
 
             float modified = _buffController.GetModifiedValue(StatType.AttackDamage, 10f);
