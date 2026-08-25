@@ -9,6 +9,9 @@
 /[Uu]serSettings/
 /[Rr]ecordings/
 
+# Screenshots taken during Unity MCP testing sessions — debug artifacts, not project content
+/Assets/Screenshots/
+
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
 
