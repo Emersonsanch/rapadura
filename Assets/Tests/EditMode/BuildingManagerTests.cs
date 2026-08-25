@@ -128,8 +128,10 @@ namespace Rapadura.Tests
             Assert.IsNotNull(first);
             Assert.IsNull(second);
             Assert.AreEqual(1, _building.PlacedStructures.Count);
-            // Second attempt's cost must not have been charged.
-            Assert.AreEqual(10, _inventory.GetTotalCount("item_wood"));
+            // Second attempt's cost must not have been charged: only the first structure's 5 wood
+            // came out of the 20 added above (20 - 5 = 15), not 10 (which would mean the failed,
+            // overlapping placement got charged anyway).
+            Assert.AreEqual(15, _inventory.GetTotalCount("item_wood"));
         }
 
         [Test]
