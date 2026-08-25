@@ -34,5 +34,6 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:Button name="run-button" text="Correr" class="hud-touch-button hud-run-button" />
+        <ui:Button name="jump-button" text="Pular" class="hud-touch-button hud-jump-button" />
     </ui:VisualElement>
 </ui:UXML>

@@ -63,6 +63,7 @@ namespace Rapadura.UI.HUD
         private Label _xpValueLabel;
         private Label _levelLabel;
         private Button _runButton;
+        private Button _jumpButton;
 
         private void Awake()
         {
@@ -112,6 +113,7 @@ namespace Rapadura.UI.HUD
             _levelLabel = rootVisualElement.Q<Label>("level-label");
 
             _runButton = rootVisualElement.Q<Button>("run-button");
+            _jumpButton = rootVisualElement.Q<Button>("jump-button");
         }
 
         private void RegisterCallbacks()
@@ -131,6 +133,13 @@ namespace Rapadura.UI.HUD
                 _runButton.RegisterCallback<PointerUpEvent>(OnRunButtonPointerUp);
                 _runButton.RegisterCallback<PointerLeaveEvent>(OnRunButtonPointerLeave);
             }
+
+            if (_jumpButton != null)
+            {
+                // One-shot like the physical Jump key, so PointerDown (not Click, which waits for
+                // release) — same responsiveness reasoning as the run button.
+                _jumpButton.RegisterCallback<PointerDownEvent>(OnJumpButtonPressed);
+            }
         }
 
         private void UnregisterCallbacks()
@@ -147,9 +156,22 @@ namespace Rapadura.UI.HUD
                 _runButton.UnregisterCallback<PointerLeaveEvent>(OnRunButtonPointerLeave);
             }
 
+            if (_jumpButton != null)
+            {
+                _jumpButton.UnregisterCallback<PointerDownEvent>(OnJumpButtonPressed);
+            }
+
             if (_playerInput != null)
             {
                 _playerInput.TouchRunHeld = false;
+            }
+        }
+
+        private void OnJumpButtonPressed(PointerDownEvent evt)
+        {
+            if (_playerInput != null)
+            {
+                _playerInput.TouchJumpRequested = true;
             }
         }
 

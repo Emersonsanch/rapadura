@@ -37,6 +37,14 @@ namespace Rapadura.Gameplay.Player
         public bool TouchRunHeld { get; set; }
         public bool IsCrouchHeld { get; private set; }
         public bool JumpPressedThisFrame { get; private set; }
+
+        /// <summary>
+        /// Set by an on-screen touch button's press event (see HudController's jump button).
+        /// Unlike <see cref="TouchRunHeld"/> this is a one-shot request, consumed (cleared) the
+        /// same frame it's read into <see cref="JumpPressedThisFrame"/> — mirroring
+        /// WasPressedThisFrame's single-frame-true semantics for the physical Jump action.
+        /// </summary>
+        public bool TouchJumpRequested { get; set; }
         public bool InteractPressedThisFrame { get; private set; }
         public bool AttackPressedThisFrame { get; private set; }
         /// <summary>True the frame the click/tap-to-move button was pressed (MU Online-style point-and-click).</summary>
@@ -65,7 +73,8 @@ namespace Rapadura.Gameplay.Player
             LookInput = _lookAction.ReadValue<Vector2>();
             IsRunHeld = _runAction.IsPressed() || TouchRunHeld;
             IsCrouchHeld = _crouchAction.IsPressed();
-            JumpPressedThisFrame = _jumpAction.WasPressedThisFrame();
+            JumpPressedThisFrame = _jumpAction.WasPressedThisFrame() || TouchJumpRequested;
+            TouchJumpRequested = false;
             InteractPressedThisFrame = _interactAction.WasPressedThisFrame();
             AttackPressedThisFrame = _attackAction.WasPressedThisFrame();
             MoveClickPressedThisFrame = _moveClickAction.WasPressedThisFrame();

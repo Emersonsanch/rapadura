@@ -4,6 +4,9 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-08-25 (continuação 11 — botão de Pular na HUD)
+- ✅ **Botão "Pular" na HUD**, mesmo padrão do botão Correr: `PlayerInputHandler.TouchJumpRequested` (one-shot, consumido/zerado a cada frame — diferente do Run que é "segurado") OR'd em `JumpPressedThisFrame`. Testado em Play Mode injetando `PointerDownEvent` no botão real: `TouchJumpRequested` liga corretamente. Screenshot confirma os dois botões lado a lado no canto inferior direito, legíveis.
+
 ### 2026-08-25 (continuação 10 — migração de color space pra Linear)
 - ✅ **`PlayerSettings.colorSpace` migrado de Gamma pra Linear** — combinação recomendada com URP (Gamma+URP é a combinação não-recomendada; a maioria dos efeitos/iluminação do URP assume Linear). Testado com screenshot antes/depois (Scene View e Game View): nenhum material ficou rosa/magenta (sintoma clássico de shader incompatível), sem erros novos no console após o reimport de texturas que a troca dispara automaticamente. `AssetDatabase.SaveAssets()` chamado pra garantir a gravação do `ProjectSettings`.
 - 📝 Isso fecha o último gap grande de "mobile 100% pronto" que ainda estava pendente da migração URP (a outra metade, ativar o pipeline em si, já tinha sido feita numa sessão anterior).
