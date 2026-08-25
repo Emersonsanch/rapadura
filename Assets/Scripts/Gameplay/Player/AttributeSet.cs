@@ -141,17 +141,23 @@ namespace Rapadura.Gameplay.Player
                 _buffController = GetComponent<BuffController>();
             }
 
+            // Subscribing here (not just in Start, see below) matters for the same reason the rest
+            // of this method does: Start() is ALSO not called synchronously by AddComponent outside
+            // Play Mode, so an EditMode test that adds this component and immediately publishes
+            // PlayerExperienceChangedEvent reached zero subscribers and silently granted no points.
+            EventBus.Subscribe<PlayerExperienceChangedEvent>(HandlePlayerExperienceChanged);
+
             _isInitialized = true;
         }
 
         private void Start()
         {
+            EnsureInitialized();
+
             if (ServiceLocator.TryGet(out Rapadura.Save.SaveManager saveManager))
             {
                 saveManager.Register(this);
             }
-
-            EventBus.Subscribe<PlayerExperienceChangedEvent>(HandlePlayerExperienceChanged);
         }
 
         private void OnDestroy()

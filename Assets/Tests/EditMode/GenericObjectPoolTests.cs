@@ -175,7 +175,10 @@ namespace Rapadura.Tests
             pool.Prewarm(2);
             pool.Get();
 
-            Assert.AreEqual(3, pool.CountAll);
+            // Get() reuses one of the 2 prewarmed instances (the pool had capacity) rather than
+            // creating a new one, so CountAll (active + inactive) stays at 2, not 3 — the factory
+            // is only invoked when the inactive queue is empty (see GenericObjectPool.Get()).
+            Assert.AreEqual(2, pool.CountAll);
         }
     }
 }
