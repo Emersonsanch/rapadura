@@ -280,34 +280,76 @@ namespace Rapadura.UI.HUD
 
             _root.transform.scale = new Vector3(_hudScale, _hudScale, 1f);
 
-            _root.style.left = StyleKeyword.Auto;
-            _root.style.right = StyleKeyword.Auto;
-            _root.style.top = StyleKeyword.Auto;
-            _root.style.bottom = StyleKeyword.Auto;
+            Vector4 safeInset = ComputeSafeAreaInset();
+
+            float left = safeInset.x;
+            float top = safeInset.y;
+            float right = safeInset.z;
+            float bottom = safeInset.w;
 
             switch (_anchorPreset)
             {
                 case HudAnchorPreset.TopLeft:
-                    _root.style.left = _anchorOffset.x;
-                    _root.style.top = _anchorOffset.y;
+                case HudAnchorPreset.Custom:
+                    left += _anchorOffset.x;
+                    top += _anchorOffset.y;
                     break;
                 case HudAnchorPreset.TopRight:
-                    _root.style.right = _anchorOffset.x;
-                    _root.style.top = _anchorOffset.y;
+                    right += _anchorOffset.x;
+                    top += _anchorOffset.y;
                     break;
                 case HudAnchorPreset.BottomLeft:
-                    _root.style.left = _anchorOffset.x;
-                    _root.style.bottom = _anchorOffset.y;
+                    left += _anchorOffset.x;
+                    bottom += _anchorOffset.y;
                     break;
                 case HudAnchorPreset.BottomRight:
-                    _root.style.right = _anchorOffset.x;
-                    _root.style.bottom = _anchorOffset.y;
-                    break;
-                case HudAnchorPreset.Custom:
-                    _root.style.left = _anchorOffset.x;
-                    _root.style.top = _anchorOffset.y;
+                    right += _anchorOffset.x;
+                    bottom += _anchorOffset.y;
                     break;
             }
+
+            // All four sides are always set (not just the two the preset "anchors" to) — every
+            // corner of the HUD (vitals top-left, XP bar bottom-left, Run/Jump bottom-right) is
+            // positioned absolute relative to hud-root's own box, so every edge needs the safe-area
+            // inset, not just whichever two sides the corner preset happens to touch. This also
+            // means hud-root's box is now fully defined by its 4 offsets, so the USS width:100%/
+            // height:100% no longer applies (Yoga resolves size from left+right / top+bottom instead).
+            _root.style.left = left;
+            _root.style.top = top;
+            _root.style.right = right;
+            _root.style.bottom = bottom;
+        }
+
+        /// <summary>
+        /// Converts <see cref="Screen.safeArea"/> (device screen pixels) into panel-space insets
+        /// (left, top, right, bottom) so HUD content stays clear of notches/camera cutouts/rounded
+        /// corners/home-indicator bars on real phones. In the Editor (and any device reporting a
+        /// full-screen safe area, i.e. no notch) this always returns zero insets — genuinely
+        /// exercising the non-zero path needs a real notched device, which this environment
+        /// doesn't have; the math mirrors Unity's documented safe-area pattern.
+        /// </summary>
+        private Vector4 ComputeSafeAreaInset()
+        {
+            if (_root == null || _root.panel == null)
+            {
+                return Vector4.zero;
+            }
+
+            float pixelsPerPoint = _root.panel.scaledPixelsPerPoint;
+
+            if (pixelsPerPoint <= 0f)
+            {
+                return Vector4.zero;
+            }
+
+            Rect safeArea = Screen.safeArea;
+
+            float left = safeArea.xMin / pixelsPerPoint;
+            float bottom = safeArea.yMin / pixelsPerPoint;
+            float right = (Screen.width - safeArea.xMax) / pixelsPerPoint;
+            float top = (Screen.height - safeArea.yMax) / pixelsPerPoint;
+
+            return new Vector4(left, top, right, bottom);
         }
 
         /// <summary>Runtime entry point for a future Settings/accessibility screen.</summary>
