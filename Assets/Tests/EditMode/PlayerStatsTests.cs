@@ -111,6 +111,34 @@ namespace Rapadura.Tests
         }
 
         [Test]
+        public void ApplyDamage_PublishesDamageAppliedEvent()
+        {
+            Rapadura.Gameplay.Combat.DamageAppliedEvent? received = null;
+            EventBus.Subscribe<Rapadura.Gameplay.Combat.DamageAppliedEvent>(evt => received = evt);
+
+            _stats.ApplyDamage(12f);
+
+            Assert.IsTrue(received.HasValue);
+            Assert.AreEqual(_go, received.Value.Target);
+            Assert.AreEqual(12f, received.Value.FinalDamage);
+        }
+
+        [Test]
+        public void ApplyDamage_LethalAmount_PublishesCombatTargetDiedEventAndPlayerDiedEvent()
+        {
+            bool playerDiedReceived = false;
+            Rapadura.Gameplay.Combat.CombatTargetDiedEvent? combatDiedReceived = null;
+            EventBus.Subscribe<PlayerDiedEvent>(_ => playerDiedReceived = true);
+            EventBus.Subscribe<Rapadura.Gameplay.Combat.CombatTargetDiedEvent>(evt => combatDiedReceived = evt);
+
+            _stats.ApplyDamage(100000f);
+
+            Assert.IsTrue(playerDiedReceived);
+            Assert.IsTrue(combatDiedReceived.HasValue);
+            Assert.AreEqual(_go, combatDiedReceived.Value.Target);
+        }
+
+        [Test]
         public void ConsumeMana_PublishesPlayerManaChangedEvent()
         {
             PlayerManaChangedEvent? received = null;

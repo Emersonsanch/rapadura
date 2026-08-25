@@ -11,11 +11,16 @@ namespace Rapadura.Gameplay.Characters
         public override string ClassName => "Sacerdotisa";
         public override string Role => "Suporte / Cura / Buffs";
         public override string PrimaryAttribute => "Espírito";
+        /// <summary>Luz dourada do Templo Solar — branco quente com toque de ouro.</summary>
+        public override Color AccentColor => new Color(0.95f, 0.85f, 0.55f);
+        public override bool HasDedicatedModel => true;
+        public override int Age => 13;
 
         public override string Lore =>
-            "Maria foi criada dentro do Templo Solar, onde aprendeu os segredos da energia vital. Quando " +
-            "os cristais sagrados começaram a perder seu brilho, ela recebeu uma visão mostrando que apenas " +
-            "um grupo de heróis poderia restaurar o equilíbrio do mundo. Ela parte em uma jornada para " +
+            "Maria, de 13 anos, foi criada dentro do Templo Solar, onde as sacerdotisas mais velhas lhe " +
+            "ensinaram os primeiros segredos da energia vital. Quando os cristais sagrados começaram a " +
+            "perder seu brilho, ela recebeu uma visão mostrando que apenas um grupo de heróis poderia " +
+            "restaurar o equilíbrio do mundo. Corajosa mesmo sendo tão nova, parte em uma jornada para " +
             "reunir os escolhidos e impedir que a escuridão consuma Rapadura — e os escolhidos são, antes " +
             "de tudo, sua própria família: sua irmã mais velha Maithe, seu irmão mais novo Joaquim e seus " +
             "primos Ícaro e Lavine.";

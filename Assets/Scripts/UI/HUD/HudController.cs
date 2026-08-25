@@ -75,6 +75,16 @@ namespace Rapadura.UI.HUD
             InitializeFromCurrentStats();
         }
 
+        private void Start()
+        {
+            // OnEnable can run before PlayerStats.Awake() has set its Current*=Max* defaults
+            // (Unity doesn't guarantee cross-object Awake/OnEnable ordering for objects spawned
+            // at runtime), which left the bars reading 0/0 (invisible fill) until the first
+            // stat-change event. Re-reading here, once every object's Awake has definitely run,
+            // fixes that first-frame empty-bar bug without needing explicit script execution order.
+            InitializeFromCurrentStats();
+        }
+
         private void OnDisable()
         {
             UnregisterCallbacks();

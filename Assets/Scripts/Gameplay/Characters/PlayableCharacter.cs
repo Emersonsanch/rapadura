@@ -1,4 +1,5 @@
 using Rapadura.Gameplay.Player;
+using UnityEngine;
 
 namespace Rapadura.Gameplay.Characters
 {
@@ -18,8 +19,34 @@ namespace Rapadura.Gameplay.Characters
         public abstract string PrimaryAttribute { get; }
         public abstract string Lore { get; }
 
+        /// <summary>
+        /// Idade do personagem. Decisão de design de 2026-08-24: o roster foi revisado de adultos
+        /// para crianças/pré-adolescentes heroicos (mantendo a ordem de nascimento já estabelecida:
+        /// Maithe &gt; Maria &gt; Joaquim &gt; Ícaro &gt; Lavine). Afeta geração de arte 3D e deve
+        /// eventualmente refletir em GDD/quests/diálogos (ver TODO.md — reescrita ainda pendente
+        /// pra esse conteúdo mais extenso).
+        /// </summary>
+        public abstract int Age { get; }
+
         /// <summary>Ability names in order: 4 active abilities followed by the Ultimate.</summary>
         public abstract string[] AbilityNames { get; }
+
+        /// <summary>
+        /// Signature color for this character, used to tint the (currently shared, placeholder)
+        /// player visual on selection so each hero reads as visually distinct in-game before real
+        /// per-character models/materials exist (see Fase 11 — Arte). Also usable later for UI
+        /// theming (roster highlight, health bar accent, etc.).
+        /// </summary>
+        public abstract Color AccentColor { get; }
+
+        /// <summary>
+        /// True once this character has a real generated/authored 3D model assigned as the
+        /// player visual (see Fase 11 — Arte no TODO), instead of sharing the placeholder capsule.
+        /// <see cref="CharacterSelectController"/> uses this to skip the flat <see cref="AccentColor"/>
+        /// tint for characters with a real texture — tinting would wash it out. Remove this flag
+        /// entirely once every character has a dedicated model and the placeholder is retired.
+        /// </summary>
+        public virtual bool HasDedicatedModel => false;
 
         /// <summary>Applies this character's base-stat modifiers/passive to a freshly spawned instance.</summary>
         public abstract void ApplyPassive(PlayerStats stats);

@@ -180,6 +180,17 @@ namespace Rapadura.Gameplay.Player
 
         public void ApplyDamage(float amount)
         {
+            ApplyDamageInternal(amount, ElementType.None, null, isCritical: false);
+        }
+
+        /// <summary>
+        /// Shared damage-application path for both the plain <see cref="ApplyDamage(float)"/> entry
+        /// point and <see cref="ICombatTarget"/>'s. Also publishes <see cref="DamageAppliedEvent"/>
+        /// so the player benefits from the same audio/analytics hooks as <see cref="Health"/>-based
+        /// targets (which previously only fired for enemies/NPCs, never the player).
+        /// </summary>
+        private void ApplyDamageInternal(float amount, ElementType element, GameObject source, bool isCritical)
+        {
             if (IsDead || IsInvulnerable || amount <= 0f)
             {
                 return;
@@ -188,9 +199,11 @@ namespace Rapadura.Gameplay.Player
             SetHealth(CurrentHealth - amount);
             GrantInvulnerability(_invulnerabilityDuration);
 
+            EventBus.Publish(new DamageAppliedEvent(gameObject, source, amount, element, isCritical));
+
             if (CurrentHealth <= 0f)
             {
-                Die();
+                Die(source);
             }
         }
 
@@ -222,7 +235,7 @@ namespace Rapadura.Gameplay.Player
                 amount *= (1f - resistanceFraction);
             }
 
-            ApplyDamage(amount);
+            ApplyDamageInternal(amount, element, source, isCritical: false);
         }
 
         void ICombatTarget.ApplyHealing(float amount, GameObject source)
@@ -267,10 +280,16 @@ namespace Rapadura.Gameplay.Player
             EventBus.Publish(new PlayerStaminaChangedEvent(CurrentStamina, _maxStamina));
         }
 
-        private void Die()
+        private void Die(GameObject killer)
         {
             IsDead = true;
             EventBus.Publish(new PlayerDiedEvent());
+
+            // Also raised as a generic combat event (in addition to the player-specific one above)
+            // so systems that already key off CombatTargetDiedEvent for any other actor — death
+            // SFX in AudioManager, kill tracking in QuestManager/AnalyticsManager — behave the same
+            // way when the target happens to be the player, instead of silently doing nothing.
+            EventBus.Publish(new CombatTargetDiedEvent(gameObject, killer));
         }
 
         public object CaptureState()

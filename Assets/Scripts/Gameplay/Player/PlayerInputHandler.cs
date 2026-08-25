@@ -22,6 +22,8 @@ namespace Rapadura.Gameplay.Player
         private InputAction _crouchAction;
         private InputAction _interactAction;
         private InputAction _attackAction;
+        private InputAction _moveClickAction;
+        private InputAction _pointerPositionAction;
 
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
@@ -30,6 +32,10 @@ namespace Rapadura.Gameplay.Player
         public bool JumpPressedThisFrame { get; private set; }
         public bool InteractPressedThisFrame { get; private set; }
         public bool AttackPressedThisFrame { get; private set; }
+        /// <summary>True the frame the click/tap-to-move button was pressed (MU Online-style point-and-click).</summary>
+        public bool MoveClickPressedThisFrame { get; private set; }
+        /// <summary>Current pointer (mouse/touch) position in screen space, for raycasting the click-to-move target.</summary>
+        public Vector2 PointerPosition { get; private set; }
 
         private void Awake()
         {
@@ -42,6 +48,8 @@ namespace Rapadura.Gameplay.Player
             _crouchAction = _playerInput.actions["Crouch"];
             _interactAction = _playerInput.actions["Interact"];
             _attackAction = _playerInput.actions["Attack"];
+            _moveClickAction = _playerInput.actions["MoveClick"];
+            _pointerPositionAction = _playerInput.actions["PointerPosition"];
         }
 
         private void Update()
@@ -53,6 +61,8 @@ namespace Rapadura.Gameplay.Player
             JumpPressedThisFrame = _jumpAction.WasPressedThisFrame();
             InteractPressedThisFrame = _interactAction.WasPressedThisFrame();
             AttackPressedThisFrame = _attackAction.WasPressedThisFrame();
+            MoveClickPressedThisFrame = _moveClickAction.WasPressedThisFrame();
+            PointerPosition = _pointerPositionAction.ReadValue<Vector2>();
         }
     }
 }

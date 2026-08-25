@@ -37,6 +37,7 @@ namespace Rapadura.Gameplay.Player
         public PlayerInputHandler Input { get; private set; }
         public PlayerMotor Motor { get; private set; }
         public PlayerStats Stats { get; private set; }
+        public PlayerClickToMove ClickToMove { get; private set; }
         public Animator Animator => _animator;
         public Transform CameraTransform => _cameraLookTransform != null ? _cameraLookTransform : Camera.main != null ? Camera.main.transform : transform;
         public StateMachine<PlayerController> StateMachine { get; private set; }
@@ -48,6 +49,11 @@ namespace Rapadura.Gameplay.Player
         /// <summary>True while the player is stunned and should not process movement/attack input this frame.</summary>
         public bool IsStunned => _buffController != null && _buffController.IsStunned;
 
+        /// <summary>True if the player wants to be moving this frame — either manual (WASD/joystick) input,
+        /// or a pending click-to-move destination (see <see cref="ClickToMove"/>). States use this instead of
+        /// reading <c>Input.MoveInput</c> directly so both input styles drive the same Idle/Walk/Run transitions.</summary>
+        public bool HasMoveIntent => Input.MoveInput.sqrMagnitude > 0.01f || (ClickToMove != null && ClickToMove.HasDestination);
+
         public string SaveKey => "PlayerTransform";
 
         private void Awake()
@@ -55,6 +61,7 @@ namespace Rapadura.Gameplay.Player
             Input = GetComponent<PlayerInputHandler>();
             Motor = GetComponent<PlayerMotor>();
             Stats = GetComponent<PlayerStats>();
+            ClickToMove = GetComponent<PlayerClickToMove>();
             _buffController = GetComponent<BuffController>();
 
             BuildStateMachine();

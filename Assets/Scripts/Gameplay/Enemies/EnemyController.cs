@@ -212,6 +212,10 @@ namespace Rapadura.Gameplay.Enemies
             EventBus.Publish(new EnemyTargetLostEvent(gameObject));
         }
 
+        [Header("Movement Feel")]
+        [Tooltip("Degrees/sec the enemy turns to face its movement direction. Instant snapping (very high values) reads as janky/robotic, especially on rig-free mesh visuals.")]
+        [SerializeField] private float _turnSpeedDegPerSec = 360f;
+
         /// <summary>Moves toward (or away from, with a negative-facing direction) a point on the XZ plane. No NavMesh required.</summary>
         public void MoveInDirection(Vector3 direction, float speed, float deltaTime)
         {
@@ -233,7 +237,8 @@ namespace Rapadura.Gameplay.Enemies
 
             if (direction.sqrMagnitude > 0.0001f)
             {
-                transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
+                Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _turnSpeedDegPerSec * deltaTime);
             }
         }
 

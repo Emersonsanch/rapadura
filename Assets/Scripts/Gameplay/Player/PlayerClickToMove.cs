@@ -1,0 +1,89 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+
+namespace Rapadura.Gameplay.Player
+{
+    /// <summary>
+    /// MU Online-style point-and-click movement: left-click/tap a point on the ground and the
+    /// player walks/runs toward it, matching the fixed isometric camera already used by
+    /// <c>Gameplay/Cameras/CameraController</c>. Purely an *input-to-intent* layer — it only
+    /// decides where the player currently wants to go; <see cref="PlayerMotor.MoveToward"/> does
+    /// the actual movement, and the Walk/Run states decide when to consult it (see
+    /// <c>PlayerWalkState</c>/<c>PlayerRunState</c>).
+    ///
+    /// Manual movement (WASD/joystick) always takes priority and immediately cancels any pending
+    /// click destination, so the two input styles never fight each other in the same frame.
+    /// </summary>
+    [RequireComponent(typeof(PlayerInputHandler))]
+    public class PlayerClickToMove : MonoBehaviour
+    {
+        [Tooltip("Layers considered walkable ground for the click-to-move raycast. Defaults to everything so it works out of the box; narrow this to a dedicated Ground layer once one exists in the project.")]
+        [SerializeField] private LayerMask _groundMask = ~0;
+        [SerializeField] private float _maxRayDistance = 200f;
+
+        private PlayerInputHandler _input;
+        private Camera _camera;
+
+        public bool HasDestination { get; private set; }
+        public Vector3 Destination { get; private set; }
+
+        private void Awake()
+        {
+            _input = GetComponent<PlayerInputHandler>();
+        }
+
+        private void Update()
+        {
+            if (_input.MoveInput.sqrMagnitude > 0.01f)
+            {
+                // Manual movement always wins — abandon any pending click destination immediately.
+                HasDestination = false;
+                return;
+            }
+
+            if (!_input.MoveClickPressedThisFrame)
+            {
+                return;
+            }
+
+            if (IsPointerOverUi())
+            {
+                return;
+            }
+
+            TrySetDestinationFromScreenPoint(_input.PointerPosition);
+        }
+
+        private bool IsPointerOverUi()
+        {
+            return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+        }
+
+        private void TrySetDestinationFromScreenPoint(Vector2 screenPosition)
+        {
+            if (_camera == null)
+            {
+                _camera = Camera.main;
+            }
+
+            if (_camera == null)
+            {
+                return;
+            }
+
+            Ray ray = _camera.ScreenPointToRay(screenPosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, _maxRayDistance, _groundMask, QueryTriggerInteraction.Ignore))
+            {
+                Destination = hit.point;
+                HasDestination = true;
+            }
+        }
+
+        /// <summary>Called by the movement states once the destination has been reached.</summary>
+        public void ClearDestination()
+        {
+            HasDestination = false;
+        }
+    }
+}

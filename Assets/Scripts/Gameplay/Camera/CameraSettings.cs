@@ -19,9 +19,9 @@ namespace Rapadura.Gameplay.Cameras
         public float followSpeed = 0.15f;
 
         [Header("Zoom")]
-        public float minZoom = 10f;
-        public float maxZoom = 25f;
-        public float defaultZoom = 15f;
+        public float minZoom = 6f;
+        public float maxZoom = 14f;
+        public float defaultZoom = 9f;
         public float zoomSpeed = 8f;
         [Tooltip("SmoothDamp time in seconds for zoom distance changes.")]
         public float zoomSmoothTime = 0.15f;

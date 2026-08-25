@@ -63,14 +63,43 @@ namespace Rapadura.Gameplay.Player
         /// </summary>
         public void Move(Vector2 moveInput, bool isRunning, Transform cameraTransform, float? speedOverride)
         {
-            IsGrounded = _controller.isGrounded;
-
             Vector3 forward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
             Vector3 right = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized;
             Vector3 desiredDirection = (forward * moveInput.y + right * moveInput.x);
             desiredDirection = Vector3.ClampMagnitude(desiredDirection, 1f);
 
             float speed = speedOverride ?? (_isCrouching ? _crouchSpeed : (isRunning ? _runSpeed : _walkSpeed));
+            MoveInDirection(desiredDirection, speed);
+        }
+
+        /// <summary>
+        /// Moves straight toward a world-space point (MU Online-style click-to-move), ignoring
+        /// camera orientation entirely — the direction is just target minus current position,
+        /// flattened to the XZ plane. Returns true once the character has arrived within
+        /// <paramref name="arrivalThreshold"/> of the destination (caller should stop calling
+        /// this and let the motor fall back to idle/gravity-only once true).
+        /// </summary>
+        public bool MoveToward(Vector3 destination, bool isRunning, float arrivalThreshold = 0.15f)
+        {
+            Vector3 toDestination = destination - transform.position;
+            toDestination.y = 0f;
+
+            if (toDestination.magnitude <= arrivalThreshold)
+            {
+                MoveInDirection(Vector3.zero, 0f);
+                return true;
+            }
+
+            float speed = _isCrouching ? _crouchSpeed : (isRunning ? _runSpeed : _walkSpeed);
+            MoveInDirection(toDestination.normalized, speed);
+            return false;
+        }
+
+        /// <summary>Shared movement integration: rotates toward, accelerates along, and physically moves along a world-space direction.</summary>
+        private void MoveInDirection(Vector3 desiredDirection, float speed)
+        {
+            IsGrounded = _controller.isGrounded;
+
             HorizontalVelocity = desiredDirection * speed;
 
             if (desiredDirection.sqrMagnitude > 0.0001f)

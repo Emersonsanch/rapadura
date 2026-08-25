@@ -11,14 +11,19 @@ namespace Rapadura.Gameplay.Characters
         public override string ClassName => "Feiticeira";
         public override string Role => "Dano Mágico / Controle de Multidão";
         public override string PrimaryAttribute => "Poder Arcano";
+        /// <summary>Roxo sombrio da Noite Rubra e das energias proibidas que carrega.</summary>
+        public override Color AccentColor => new Color(0.45f, 0.20f, 0.55f);
+        public override bool HasDedicatedModel => true;
+        public override int Age => 9;
 
         public override string Lore =>
-            "Lavine nasceu durante um raro eclipse conhecido como Noite Rubra. Desde pequena demonstrou " +
-            "uma ligação incomum com energias proibidas. Temida por muitos e incompreendida por outros, ela " +
-            "luta constantemente contra a corrupção que tenta dominar sua alma. Apesar da aparência fria, " +
-            "Lavine deseja provar que seu poder pode ser usado para proteger o mundo. É a mais nova de " +
-            "toda a família, prima de Maithe, Maria, Joaquim e Ícaro, e por trás da frieza carrega o desejo " +
-            "de ser levada tão a sério quanto os primos mais velhos.";
+            "Lavine, a mais nova de todos com 9 anos, nasceu durante um raro eclipse conhecido como Noite " +
+            "Rubra. Desde bebê demonstrou uma ligação incomum com energias proibidas — algo grande demais " +
+            "pra uma criança carregar. Temida por muitos e incompreendida por outros, ela luta " +
+            "constantemente contra a corrupção que tenta dominar sua alma. Apesar do jeito sério e da " +
+            "aparência fria, no fundo ainda é só uma menina que deseja provar que seu poder pode ser usado " +
+            "para proteger o mundo. É a mais nova de toda a família, prima de Maithe, Maria, Joaquim e " +
+            "Ícaro, e carrega o desejo de ser levada tão a sério quanto os primos mais velhos.";
 
         public override string[] AbilityNames => new[]
         {

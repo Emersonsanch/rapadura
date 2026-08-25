@@ -11,14 +11,19 @@ namespace Rapadura.Gameplay.Characters
         public override string ClassName => "Inventor";
         public override string Role => "Controle / Dano Tecnológico";
         public override string PrimaryAttribute => "Inteligência";
+        /// <summary>Cobre/laranja das engrenagens e faíscas de suas máquinas.</summary>
+        public override Color AccentColor => new Color(0.85f, 0.48f, 0.15f);
+        public override bool HasDedicatedModel => true;
+        public override int Age => 11;
 
         public override string Lore =>
-            "Ícaro sempre acreditou que a tecnologia poderia mudar o mundo. Enquanto outros estudavam " +
-            "magia, ele construía máquinas. Após encontrar fragmentos de uma civilização perdida, " +
-            "desenvolveu equipamentos capazes de rivalizar com os maiores magos do continente. Seu objetivo " +
-            "é desvendar os segredos da antiga tecnologia que pode salvar ou destruir Rapadura. Irmão mais " +
-            "novo de Maithe e primo mais velho de Lavine, cresceu tentando impressionar a irmã com suas " +
-            "invenções.";
+            "Com 11 anos, Ícaro já acredita que a tecnologia pode mudar o mundo. Enquanto as outras " +
+            "crianças brincavam, ele desmontava e remontava tudo que encontrava. Depois de achar " +
+            "fragmentos de uma civilização perdida num terreno baldio perto de casa, começou a montar " +
+            "pequenos equipamentos capazes de surpreender até os magos adultos do continente. Seu sonho é " +
+            "desvendar os segredos da antiga tecnologia que pode salvar ou destruir Rapadura. Irmão mais " +
+            "novo de Maithe e primo mais velho de Lavine, vive tentando impressionar a irmã mais velha com " +
+            "suas invenções.";
 
         public override string[] AbilityNames => new[]
         {

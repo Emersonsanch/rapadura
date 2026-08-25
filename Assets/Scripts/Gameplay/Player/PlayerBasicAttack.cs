@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Rapadura.Core.Events;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Skills;
 using UnityEngine;
@@ -50,6 +51,8 @@ namespace Rapadura.Gameplay.Player
 
         private void PerformAttack()
         {
+            EventBus.Publish(new PlayerAttackPerformedEvent(gameObject));
+
             Vector3 origin = transform.position + Vector3.up + transform.forward * (_range * 0.5f);
             int hitCount = Physics.OverlapSphereNonAlloc(origin, _radius, _hitBuffer, _targetMask, QueryTriggerInteraction.Collide);
 

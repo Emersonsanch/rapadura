@@ -7,7 +7,13 @@ namespace Rapadura.Gameplay.Player.States
     {
         public void Enter(PlayerController context)
         {
-            context.Animator.Play(PlayerAnimatorHashes.Idle);
+            // No explicit Animator.Play() here: the rigged AnimatorControllers (see
+            // PlayerAnimatorSpeedDriver) already auto-transition Idle/Walk/Run purely from the
+            // "Speed" float parameter. Calling Play() here used to fight that — forcing a state
+            // then having the controller's own Speed-driven condition immediately transition
+            // away from it — which showed up as the character visually freezing mid-animation
+            // while still moving (the C# state machine and the Animator's internal state drifted
+            // out of sync since Play() only fires once, on Enter).
         }
 
         public void Tick(PlayerController context, float deltaTime)
@@ -24,7 +30,7 @@ namespace Rapadura.Gameplay.Player.States
                 return;
             }
 
-            if (context.Input.MoveInput.sqrMagnitude > 0.01f)
+            if (context.HasMoveIntent)
             {
                 context.StateMachine.ChangeState<PlayerWalkState>();
                 return;

@@ -7,7 +7,8 @@ namespace Rapadura.Gameplay.Player.States
     {
         public void Enter(PlayerController context)
         {
-            context.Animator.Play(PlayerAnimatorHashes.Run);
+            // See PlayerIdleState.Enter — the rigged AnimatorControllers auto-transition via the
+            // "Speed" float (PlayerAnimatorSpeedDriver), an explicit Play() here fought that.
         }
 
         public void Tick(PlayerController context, float deltaTime)
@@ -30,7 +31,7 @@ namespace Rapadura.Gameplay.Player.States
                 return;
             }
 
-            if (context.Input.MoveInput.sqrMagnitude <= 0.01f)
+            if (!context.HasMoveIntent)
             {
                 context.StateMachine.ChangeState<PlayerIdleState>();
                 return;
@@ -47,7 +48,21 @@ namespace Rapadura.Gameplay.Player.States
 
         public void FixedTick(PlayerController context, float fixedDeltaTime)
         {
-            context.Motor.Move(context.Input.MoveInput, isRunning: true, context.CameraTransform);
+            if (context.Input.MoveInput.sqrMagnitude > 0.01f)
+            {
+                context.Motor.Move(context.Input.MoveInput, isRunning: true, context.CameraTransform);
+                return;
+            }
+
+            if (context.ClickToMove != null && context.ClickToMove.HasDestination)
+            {
+                bool arrived = context.Motor.MoveToward(context.ClickToMove.Destination, isRunning: true);
+
+                if (arrived)
+                {
+                    context.ClickToMove.ClearDestination();
+                }
+            }
         }
 
         public void Exit(PlayerController context)

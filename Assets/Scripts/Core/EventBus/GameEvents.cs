@@ -75,4 +75,17 @@ namespace Rapadura.Core.Events
     public readonly struct InventoryChangedEvent : IGameEvent
     {
     }
+
+    /// <summary>Raised the instant a basic melee attack lands (see <c>PlayerBasicAttack</c>), so
+    /// presentation-only systems (procedural swing animation, sound, VFX) can react without the
+    /// attack logic itself knowing anything about them.</summary>
+    public readonly struct PlayerAttackPerformedEvent : IGameEvent
+    {
+        public readonly GameObject Attacker;
+
+        public PlayerAttackPerformedEvent(GameObject attacker)
+        {
+            Attacker = attacker;
+        }
+    }
 }

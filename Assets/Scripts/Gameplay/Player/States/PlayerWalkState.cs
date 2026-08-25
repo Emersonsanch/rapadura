@@ -7,7 +7,8 @@ namespace Rapadura.Gameplay.Player.States
     {
         public void Enter(PlayerController context)
         {
-            context.Animator.Play(PlayerAnimatorHashes.Walk);
+            // See PlayerIdleState.Enter — the rigged AnimatorControllers auto-transition via the
+            // "Speed" float (PlayerAnimatorSpeedDriver), an explicit Play() here fought that.
         }
 
         public void Tick(PlayerController context, float deltaTime)
@@ -24,27 +25,46 @@ namespace Rapadura.Gameplay.Player.States
                 return;
             }
 
-            if (context.Input.MoveInput.sqrMagnitude <= 0.01f)
+            if (!context.HasMoveIntent)
             {
                 context.StateMachine.ChangeState<PlayerIdleState>();
                 return;
             }
 
-            if (context.Input.IsCrouchHeld)
+            // Click-to-move ignores crouch/run modifiers (there's no manual key held while
+            // walking toward a clicked point) — those only apply to manual WASD/joystick input.
+            if (context.Input.MoveInput.sqrMagnitude > 0.01f)
             {
-                context.StateMachine.ChangeState<PlayerCrouchState>();
-                return;
-            }
+                if (context.Input.IsCrouchHeld)
+                {
+                    context.StateMachine.ChangeState<PlayerCrouchState>();
+                    return;
+                }
 
-            if (context.Input.IsRunHeld && context.Stats.HasStamina())
-            {
-                context.StateMachine.ChangeState<PlayerRunState>();
+                if (context.Input.IsRunHeld && context.Stats.HasStamina())
+                {
+                    context.StateMachine.ChangeState<PlayerRunState>();
+                }
             }
         }
 
         public void FixedTick(PlayerController context, float fixedDeltaTime)
         {
-            context.Motor.Move(context.Input.MoveInput, isRunning: false, context.CameraTransform);
+            if (context.Input.MoveInput.sqrMagnitude > 0.01f)
+            {
+                context.Motor.Move(context.Input.MoveInput, isRunning: false, context.CameraTransform);
+                return;
+            }
+
+            if (context.ClickToMove != null && context.ClickToMove.HasDestination)
+            {
+                bool arrived = context.Motor.MoveToward(context.ClickToMove.Destination, isRunning: false);
+
+                if (arrived)
+                {
+                    context.ClickToMove.ClearDestination();
+                }
+            }
         }
 
         public void Exit(PlayerController context)
