@@ -29,11 +29,23 @@ namespace Rapadura.Gameplay.Combat
         [SerializeField] private float _invulnerabilityDuration = 0.5f;
 
         private float _invulnerabilityTimer;
+        private bool _initialized;
 
         /// <summary>Optional — absence means no resistance/immunity to any element (see <see cref="ElementResistance"/>).</summary>
         private ElementResistance _elementResistance;
 
-        public float CurrentHealth { get; private set; }
+        private float _currentHealth;
+
+        public float CurrentHealth
+        {
+            get
+            {
+                EnsureInitialized();
+                return _currentHealth;
+            }
+            private set => _currentHealth = value;
+        }
+
         public float MaxHealth => _maxHealth;
         public bool IsDead { get; private set; }
         public bool IsAlive => !IsDead;
@@ -42,6 +54,28 @@ namespace Rapadura.Gameplay.Combat
 
         private void Awake()
         {
+            EnsureInitialized();
+        }
+
+        /// <summary>
+        /// Guards <see cref="ApplyDamage(DamageInfo)"/>/<see cref="ApplyHealing"/> against being
+        /// called before <see cref="Awake"/> has run — in Edit Mode (outside Play Mode),
+        /// <c>AddComponent&lt;Health&gt;()</c> does NOT call <c>Awake</c> synchronously the way
+        /// Play Mode always does, which left <see cref="CurrentHealth"/> at its default 0 for any
+        /// EditMode test that added the component and damaged/healed it in the same call (0
+        /// clamped to [0, max] never actually decreases, so "damage reduces health" assertions
+        /// failed). Uses an explicit flag rather than re-running on every call so it doesn't
+        /// clobber <see cref="CurrentHealth"/> back to full after real damage has already been
+        /// dealt (0 health post-lethal-hit is a valid, meaningful state, not "uninitialized").
+        /// </summary>
+        private void EnsureInitialized()
+        {
+            if (_initialized)
+            {
+                return;
+            }
+
+            _initialized = true;
             CurrentHealth = _maxHealth;
             _elementResistance = GetComponent<ElementResistance>();
         }
@@ -69,6 +103,8 @@ namespace Rapadura.Gameplay.Combat
         /// <summary>Applies a fully-resolved damage instance (post mitigation), honoring i-frames and raising events.</summary>
         public void ApplyDamage(DamageInfo info)
         {
+            EnsureInitialized();
+
             if (IsDead || IsInvulnerable || info.Amount <= 0f)
             {
                 return;
@@ -94,6 +130,8 @@ namespace Rapadura.Gameplay.Combat
 
         public void ApplyHealing(float amount, GameObject source)
         {
+            EnsureInitialized();
+
             if (IsDead || amount <= 0f)
             {
                 return;

@@ -52,13 +52,42 @@ namespace Rapadura.Gameplay.Player
         [SerializeField] private float _invulnerabilityDuration = 0.5f;
 
         private float _invulnerabilityTimer;
+        private bool _initialized;
 
         /// <summary>Optional — absence means no resistance/immunity to any element (see <see cref="ElementResistance"/>).</summary>
         private ElementResistance _elementResistance;
 
-        public float CurrentHealth { get; private set; }
-        public float CurrentStamina { get; private set; }
-        public float CurrentMana { get; private set; }
+        private float _currentHealth;
+        private float _currentStamina;
+        private float _currentMana;
+
+        /// <summary>
+        /// Every Current* vital reads through <see cref="EnsureInitialized"/> here, not just
+        /// <see cref="Awake"/> — in Edit Mode (outside Play Mode), <c>AddComponent&lt;PlayerStats&gt;()</c>
+        /// does NOT call <c>Awake</c> synchronously the way Play Mode always does (see the same
+        /// fix in <c>Health.cs</c>), which left every vital at its default 0 for any EditMode test
+        /// that added the component and read/damaged/healed it in the same call. Routing every
+        /// getter through the same guard (rather than only fixing the specific method a test
+        /// happened to call) means any current or future caller is covered automatically.
+        /// </summary>
+        public float CurrentHealth
+        {
+            get { EnsureInitialized(); return _currentHealth; }
+            private set => _currentHealth = value;
+        }
+
+        public float CurrentStamina
+        {
+            get { EnsureInitialized(); return _currentStamina; }
+            private set => _currentStamina = value;
+        }
+
+        public float CurrentMana
+        {
+            get { EnsureInitialized(); return _currentMana; }
+            private set => _currentMana = value;
+        }
+
         public float MaxMana => _maxMana;
         public float MaxHealth => _maxHealth;
         public float MaxStamina => _maxStamina;
@@ -74,6 +103,17 @@ namespace Rapadura.Gameplay.Player
 
         private void Awake()
         {
+            EnsureInitialized();
+        }
+
+        private void EnsureInitialized()
+        {
+            if (_initialized)
+            {
+                return;
+            }
+
+            _initialized = true;
             CurrentHealth = _maxHealth;
             CurrentStamina = _maxStamina;
             CurrentMana = _maxMana;
