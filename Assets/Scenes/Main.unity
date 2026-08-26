@@ -186,10 +186,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3730cff5da0538c47816a2eaf1148c3b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1151576481}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3730cff5da0538c47816a2eaf1148c3b, type: 3}
 --- !u!4 &126321070 stripped
 Transform:
@@ -485,10 +482,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 80d707a1a04f73e4fa21b86171401982, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 415643355}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 80d707a1a04f73e4fa21b86171401982, type: 3}
 --- !u!4 &286139677 stripped
 Transform:
@@ -600,13 +594,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
   _visualRoot: {fileID: 572421671}
-  _bobAmplitude: 0.08
+  _bobAmplitude: 0.22
   _bobFrequency: 10
-  _leanDegrees: 10
+  _leanDegrees: 22
   _poseSmoothing: 12
-  _referenceSpeed: 4
-  _swayAmplitude: 0.05
-  _yawWagDegrees: 6
+  _referenceSpeed: 2
+  _swayAmplitude: 0.09
+  _yawWagDegrees: 10
 --- !u!1 &404233774
 GameObject:
   m_ObjectHideFlags: 0
@@ -719,31 +713,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &415643352 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 80d707a1a04f73e4fa21b86171401982, type: 3}
-  m_PrefabInstance: {fileID: 286139676}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &415643355
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 415643352}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 305ac0083d5c35b439909bf22545e1a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
-  _visualRoot: {fileID: 0}
-  _bobAmplitude: 0.08
-  _bobFrequency: 10
-  _leanDegrees: 10
-  _poseSmoothing: 12
-  _referenceSpeed: 4
-  _swayAmplitude: 0.05
-  _yawWagDegrees: 6
 --- !u!1 &485236500
 GameObject:
   m_ObjectHideFlags: 0
@@ -1090,10 +1059,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3730cff5da0538c47816a2eaf1148c3b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1097892618}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3730cff5da0538c47816a2eaf1148c3b, type: 3}
 --- !u!4 &572421671 stripped
 Transform:
@@ -1295,13 +1261,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
   _visualRoot: {fileID: 126321070}
-  _bobAmplitude: 0.08
+  _bobAmplitude: 0.22
   _bobFrequency: 10
-  _leanDegrees: 10
+  _leanDegrees: 22
   _poseSmoothing: 12
-  _referenceSpeed: 4
-  _swayAmplitude: 0.05
-  _yawWagDegrees: 6
+  _referenceSpeed: 2
+  _swayAmplitude: 0.09
+  _yawWagDegrees: 10
 --- !u!1 &676800755
 GameObject:
   m_ObjectHideFlags: 0
@@ -1866,18 +1832,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
   _visualRoot: {fileID: 924627206}
-  _bobAmplitude: 0.08
+  _bobAmplitude: 0.22
   _bobFrequency: 10
-  _leanDegrees: 10
+  _leanDegrees: 22
   _poseSmoothing: 12
-  _referenceSpeed: 4
-  _swayAmplitude: 0.05
-  _yawWagDegrees: 6
---- !u!1 &786005208 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b973d68849992ef458dcf4c00f3e6e41, type: 3}
-  m_PrefabInstance: {fileID: 812907435}
-  m_PrefabAsset: {fileID: 0}
+  _referenceSpeed: 2
+  _swayAmplitude: 0.09
+  _yawWagDegrees: 10
 --- !u!1 &787353529
 GameObject:
   m_ObjectHideFlags: 0
@@ -2234,36 +2195,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b973d68849992ef458dcf4c00f3e6e41, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 812907439}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b973d68849992ef458dcf4c00f3e6e41, type: 3}
 --- !u!4 &812907436 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b973d68849992ef458dcf4c00f3e6e41, type: 3}
   m_PrefabInstance: {fileID: 812907435}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &812907439
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 786005208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 305ac0083d5c35b439909bf22545e1a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
-  _visualRoot: {fileID: 0}
-  _bobAmplitude: 0.08
-  _bobFrequency: 10
-  _leanDegrees: 10
-  _poseSmoothing: 12
-  _referenceSpeed: 4
-  _swayAmplitude: 0.05
-  _yawWagDegrees: 6
 --- !u!1 &893226393
 GameObject:
   m_ObjectHideFlags: 0
@@ -2421,10 +2359,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b973d68849992ef458dcf4c00f3e6e41, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1762428758}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b973d68849992ef458dcf4c00f3e6e41, type: 3}
 --- !u!4 &924627206 stripped
 Transform:
@@ -2709,56 +2644,6 @@ Transform:
   - {fileID: 799702654}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1097892615 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 3730cff5da0538c47816a2eaf1148c3b, type: 3}
-  m_PrefabInstance: {fileID: 572421670}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1097892618
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1097892615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 305ac0083d5c35b439909bf22545e1a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
-  _visualRoot: {fileID: 0}
-  _bobAmplitude: 0.08
-  _bobFrequency: 10
-  _leanDegrees: 10
-  _poseSmoothing: 12
-  _referenceSpeed: 4
-  _swayAmplitude: 0.05
-  _yawWagDegrees: 6
---- !u!1 &1151576478 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 3730cff5da0538c47816a2eaf1148c3b, type: 3}
-  m_PrefabInstance: {fileID: 126321069}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1151576481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1151576478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 305ac0083d5c35b439909bf22545e1a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
-  _visualRoot: {fileID: 0}
-  _bobAmplitude: 0.08
-  _bobFrequency: 10
-  _leanDegrees: 10
-  _poseSmoothing: 12
-  _referenceSpeed: 4
-  _swayAmplitude: 0.05
-  _yawWagDegrees: 6
 --- !u!1 &1211246095
 GameObject:
   m_ObjectHideFlags: 0
@@ -3179,13 +3064,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
   _visualRoot: {fileID: 812907436}
-  _bobAmplitude: 0.08
+  _bobAmplitude: 0.22
   _bobFrequency: 10
-  _leanDegrees: 10
+  _leanDegrees: 22
   _poseSmoothing: 12
-  _referenceSpeed: 4
-  _swayAmplitude: 0.05
-  _yawWagDegrees: 6
+  _referenceSpeed: 2
+  _swayAmplitude: 0.09
+  _yawWagDegrees: 10
 --- !u!1 &1425580438
 GameObject:
   m_ObjectHideFlags: 0
@@ -4023,6 +3908,7 @@ MonoBehaviour:
   _targetMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  _turnSpeedDegPerSec: 540
 --- !u!114 &1560329240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4039,6 +3925,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   _maxRayDistance: 200
+  _attackStoppingDistance: 2
 --- !u!114 &1560329241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4677,38 +4564,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
   _visualRoot: {fileID: 286139677}
-  _bobAmplitude: 0.08
+  _bobAmplitude: 0.22
   _bobFrequency: 10
-  _leanDegrees: 10
+  _leanDegrees: 22
   _poseSmoothing: 12
-  _referenceSpeed: 4
-  _swayAmplitude: 0.05
-  _yawWagDegrees: 6
---- !u!1 &1762428755 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b973d68849992ef458dcf4c00f3e6e41, type: 3}
-  m_PrefabInstance: {fileID: 924627205}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1762428758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1762428755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 305ac0083d5c35b439909bf22545e1a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
-  _visualRoot: {fileID: 0}
-  _bobAmplitude: 0.08
-  _bobFrequency: 10
-  _leanDegrees: 10
-  _poseSmoothing: 12
-  _referenceSpeed: 4
-  _swayAmplitude: 0.05
-  _yawWagDegrees: 6
+  _referenceSpeed: 2
+  _swayAmplitude: 0.09
+  _yawWagDegrees: 10
 --- !u!1 &1779032278
 GameObject:
   m_ObjectHideFlags: 0

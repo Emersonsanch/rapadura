@@ -15,17 +15,18 @@ namespace Rapadura.Gameplay.Enemies
         [SerializeField] private Transform _visualRoot;
 
         [Header("Locomotion Bob")]
-        [SerializeField] private float _bobAmplitude = 0.12f;
+        [SerializeField] private float _bobAmplitude = 0.22f;
         [SerializeField] private float _bobFrequency = 9f;
-        [SerializeField] private float _leanDegrees = 14f;
+        [SerializeField] private float _leanDegrees = 22f;
         [SerializeField] private float _poseSmoothing = 12f;
-        [SerializeField] private float _referenceSpeed = 4f;
+        [Tooltip("Speed (m/s) at which the bob/lean reaches full intensity. Lowered from 4 so patrol/wander speeds (~1.6-2.5 m/s for most enemies) already read as clearly animated, not just chase/attack-range speeds.")]
+        [SerializeField] private float _referenceSpeed = 2f;
 
         [Header("Locomotion Sway (multi-legged gait illusion)")]
         [Tooltip("Side-to-side hip sway, half the bob frequency so it reads as alternating left/right weight shift instead of a single up-down bounce.")]
-        [SerializeField] private float _swayAmplitude = 0.05f;
+        [SerializeField] private float _swayAmplitude = 0.09f;
         [Tooltip("Small yaw wag synced to the sway, like a creature's body twisting slightly with each stride.")]
-        [SerializeField] private float _yawWagDegrees = 6f;
+        [SerializeField] private float _yawWagDegrees = 10f;
 
         private Transform _root;
         private Vector3 _restLocalPosition;
@@ -51,7 +52,18 @@ namespace Rapadura.Gameplay.Enemies
 
         private void Update()
         {
-            float deltaTime = Time.deltaTime;
+            Tick(Time.deltaTime);
+        }
+
+        /// <summary>
+        /// Core per-frame update, split out from <see cref="Update"/> so it can be driven with an
+        /// explicit deltaTime — both for EditMode/headless tests (this environment's
+        /// <see cref="Time.deltaTime"/> stays frozen at 0 outside a real focused Play Mode frame
+        /// tick, which made this component untestable/unverifiable any other way) and in case
+        /// something other than Unity's own frame loop ever needs to drive it deterministically.
+        /// </summary>
+        public void Tick(float deltaTime)
+        {
             if (deltaTime <= 0f)
             {
                 return;
