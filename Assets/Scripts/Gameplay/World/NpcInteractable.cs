@@ -153,6 +153,19 @@ namespace Rapadura.Gameplay.World
             _dialogue = dialogue;
             _shop = shop;
         }
+
+        /// <summary>
+        /// Editor/test-only entry points running the same logic as the private
+        /// <see cref="OnTriggerEnter"/>/<see cref="OnTriggerExit"/> Unity magic methods, mirroring
+        /// the public ProcessCollision/ProcessTriggerEnter pattern already used by
+        /// <c>Projectile</c>/<c>Hitbox</c> so EditMode tests don't depend on physics callbacks or
+        /// <c>GameObject.SendMessage</c> — which triggers Unity's internal
+        /// <c>ShouldRunBehaviour()</c> engine assertion when called on a component outside Play
+        /// Mode, since <c>SendMessage</c> expects the same fully-started lifecycle state a real
+        /// physics callback would have.
+        /// </summary>
+        public void OnTriggerEnterForTests(Collider other) => OnTriggerEnter(other);
+        public void OnTriggerExitForTests(Collider other) => OnTriggerExit(other);
 #endif
     }
 }

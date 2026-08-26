@@ -214,7 +214,7 @@ namespace Rapadura.Tests
             _npc.SetInteractionSourceForTests(dialogue, null);
 
             var collider = _playerGo.AddComponent<BoxCollider>();
-            _npc.SendMessage("OnTriggerEnter", collider, SendMessageOptions.DontRequireReceiver);
+            _npc.OnTriggerEnterForTests(collider);
 
             Assert.IsTrue(_npc.PlayerInRange);
             Assert.IsTrue(_dialogueManager.IsActive);
@@ -224,10 +224,10 @@ namespace Rapadura.Tests
         public void OnTriggerExit_WithPlayerCollider_ClearsPlayerInRange()
         {
             var collider = _playerGo.AddComponent<BoxCollider>();
-            _npc.SendMessage("OnTriggerEnter", collider, SendMessageOptions.DontRequireReceiver);
+            _npc.OnTriggerEnterForTests(collider);
             Assert.IsTrue(_npc.PlayerInRange);
 
-            _npc.SendMessage("OnTriggerExit", collider, SendMessageOptions.DontRequireReceiver);
+            _npc.OnTriggerExitForTests(collider);
 
             Assert.IsFalse(_npc.PlayerInRange);
         }
