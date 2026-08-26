@@ -48,8 +48,10 @@ namespace Rapadura.Gameplay.Items.Procedural
         /// editor tools).
         /// </param>
         /// <param name="affixPool">
-        /// Optional explicit affix pool (mainly for tests). Defaults to
-        /// <see cref="AffixDatabase.GetCompatibleWith"/> for the base item's equip slot.
+        /// Optional explicit affix pool (mainly for tests). Defaults to every affix in
+        /// <see cref="AffixDatabase"/>. Either way, only affixes compatible with
+        /// <paramref name="baseItem"/>'s equip slot are ever rolled — a caller passing a custom
+        /// pool for test convenience doesn't get to bypass that invariant, intentionally or not.
         /// </param>
         public static GeneratedItemInstance Generate(
             ItemDefinition baseItem,
@@ -65,8 +67,8 @@ namespace Rapadura.Gameplay.Items.Procedural
 
             Random random = seed.HasValue ? new Random(seed.Value) : new Random();
 
-            List<ItemAffixDefinition> pool = (affixPool ?? AffixDatabase.GetCompatibleWith(baseItem.EquipSlot))
-                .Where(a => a != null)
+            List<ItemAffixDefinition> pool = (affixPool ?? AffixDatabase.GetAll())
+                .Where(a => a != null && a.IsCompatibleWith(baseItem.EquipSlot))
                 .ToList();
 
             int affixCount = RollAffixCount(rarity, random);

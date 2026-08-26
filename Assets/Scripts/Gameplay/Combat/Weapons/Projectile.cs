@@ -27,12 +27,33 @@ namespace Rapadura.Gameplay.Combat.Weapons
 
         private void Awake()
         {
-            _hitbox = GetComponent<Hitbox>();
+            EnsureHitboxResolved();
+        }
+
+        /// <summary>
+        /// Guards <see cref="Launch"/>/<see cref="ProcessCollision"/> against being called before
+        /// <see cref="Awake"/> has run — in Edit Mode (outside Play Mode),
+        /// <c>AddComponent&lt;Projectile&gt;()</c> does NOT call <c>Awake</c> synchronously the way
+        /// Play Mode always does, which left <see cref="_hitbox"/> null for any EditMode test that
+        /// added the component and launched/collided it in the same call. Both callers already
+        /// null-check <c>_hitbox</c> defensively, but that null check treated "not initialized yet"
+        /// the same as "genuinely has no Hitbox" (impossible anyway — see
+        /// <see cref="RequireComponent"/> — but the null check predates this fix and is left as
+        /// defense in depth).
+        /// </summary>
+        private void EnsureHitboxResolved()
+        {
+            if (_hitbox == null)
+            {
+                _hitbox = GetComponent<Hitbox>();
+            }
         }
 
         /// <summary>Configures and starts this projectile flying. Call right after Instantiate.</summary>
         public void Launch(Vector3 direction, float speed, float damage, ElementType element, GameObject source)
         {
+            EnsureHitboxResolved();
+
             _direction = direction.sqrMagnitude > 0f ? direction.normalized : transform.forward;
             _speed = speed;
             _lifeTimer = 0f;
@@ -77,6 +98,8 @@ namespace Rapadura.Gameplay.Combat.Weapons
         /// <summary>Runs the same collision handling <see cref="OnTriggerEnter"/> uses. Exposed for EditMode tests that can't rely on physics callbacks.</summary>
         public bool ProcessCollision(Collider other)
         {
+            EnsureHitboxResolved();
+
             if (_isDead || _hitbox == null)
             {
                 return false;
