@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d9a84a3e36279a4b82e1ca76b1fc78b, type: 3}
+  m_Name: affix_of_the_wind
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.Procedural.ItemAffixDefinition
+  _affixId: affix_of_the_wind
+  _nameLocalizationKey: affix.affix_of_the_wind
+  _fallbackDisplayText: do Vento
+  _slotKind: 1
+  _affectedStat: 6
+  _application: 1
+  _minValue: 0.11
+  _maxValue: 0.18
+  _rarityWeight: 15
+  _requiredEquipSlot: 4

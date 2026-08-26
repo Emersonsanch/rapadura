@@ -4,6 +4,10 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-08-26 (continuação — 16 afixos reais autorados)
+- ✅ **`AffixDatabaseSeeder.cs`** (novo, menu `Rapadura/Seed Example Affixes`, mesmo padrão de `SkillDatabaseSeeder`/`EnemyDatabaseSeeder`): sistema de geração procedural de itens já estava pronto e testado, mas `Resources/Affixes` estava vazio — nada pra `ProceduralItemGenerator` sortear. Criados 16 afixos reais cobrindo as principais categorias: armas (dano flat/percentual, crit chance/dano — `MainHand`), armadura (defesa, vida, regen — `Chest`), botas (velocidade de movimento), acessórios (mana, redução de cooldown/custo), e alguns universais sem restrição de slot. Pesos de raridade ajustados (afixos mais fortes têm peso menor, sorteiam com menos frequência).
+- 🔬 **Testado gerando itens de verdade**: `ProceduralItemGenerator.Generate` com uma espada de teste (`MainHand`) e raridade Legendary produz nomes reais tipo "Afiada Sortuda Espada de Teste da Fúria da Resistência" com 3-4 afixos, confirmando o pipeline ponta a ponta funcionando com o banco de dados populado. Suíte de testes sem regressões.
+
 ### 2026-08-26 (continuação — bug real que eu mesmo introduzi, encontrado e corrigido)
 - 🐛 **Bug real (meu, desta sessão anterior)**: ao refatorar `Health.CurrentHealth` de auto-propriedade pra propriedade explícita com backing field próprio (`_currentHealth`), quebrei silenciosamente `EnemyController.ApplyDefinitionToHealth()` — ele usava reflection procurando o campo `<CurrentHealth>k__BackingField` (nome que só existe pra auto-propriedades), que deixou de existir. `GetField(...)?.SetValue(...)` com `?.` engoliu o `null` sem erro nenhum: os inimigos continuavam funcionando com a vida PADRÃO do `Health` (`_maxHealth=50` no Inspector), simplesmente ignorando `EnemyDefinition.MaxHealth` (30 pro lobo, 200+ pra bosses) — nenhum teste cobria esse caminho especificamente, por isso não foi pego antes.
 - ✅ **Corrigido resolvendo a dívida técnica documentada** (nota do roadmap: "considerar adicionar um setter público em Health.cs"): novo `Health.ConfigureMaxHealth(float)` público — seta `_maxHealth`, cura pra vida cheia, limpa `IsDead`. `EnemyController.ApplyDefinitionToHealth()` reescrito pra chamar isso direto, removendo toda a reflection (e os `using System.Reflection`/`Rapadura.Core.Logging` que ficaram órfãos). Confirmado em Play Mode: `Enemy_Wolf` com `Health.MaxHealth=30` batendo com `EnemyDefinition.MaxHealth=30` (antes ficaria em 50, o default do Inspector). Suíte de testes sem regressões.
@@ -824,7 +828,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
   - [x] Raro
   - [x] Épico
   - [x] Lendário
-- [~] Sistema de geração procedural de itens (afixos), se aplicável ao gênero — `Items/Procedural/{ItemAffixDefinition,AffixDatabase,ProceduralItemGenerator}.cs` prontos e testados; falta autoria de afixos reais em `Resources/Affixes` e exibição na UI de inventário/tooltip (Fase 6)
+- [~] Sistema de geração procedural de itens (afixos), se aplicável ao gênero — `Items/Procedural/{ItemAffixDefinition,AffixDatabase,ProceduralItemGenerator}.cs` prontos e testados; **16 afixos reais autorados** (`AffixDatabaseSeeder.cs`, 2026-08-26); falta só exibição na UI de inventário/tooltip (Fase 6)
 
 ### Progressão
 - [x] XP — `PlayerStats.AddExperience`, evento `PlayerExperienceChangedEvent`
