@@ -196,17 +196,24 @@ namespace Rapadura.Tests
             var manager = new InputRebindManager(asset);
             manager.SaveBindingOverrides();
 
-            // Fresh asset simulating a new session, with no overrides applied yet.
-            InputActionAsset reloadedAsset = CreateTestAsset();
-            var reloadedManager = new InputRebindManager(reloadedAsset);
-            bool loaded = reloadedManager.LoadBindingOverrides();
+            // "Simulating a new session with no overrides applied yet" must reuse the SAME asset
+            // (same binding GUIDs) rather than building a brand-new InputActionAsset via AddAction:
+            // Unity's LoadBindingOverridesFromJson matches saved overrides by each binding's GUID
+            // id, not by action path/name, and AddAction assigns a fresh random GUID every call —
+            // two independently-constructed assets can never match on id even with identical
+            // map/action names, so a truly "fresh" InputActionAsset here would make the load
+            // silently apply to nothing (confirmed: the real production case that this API
+            // supports is reloading overrides onto the SAME asset loaded from disk across real app
+            // sessions, where the asset file's binding GUIDs are stable).
+            manager.ResetAllBindings();
+            Assert.IsNull(action.bindings[0].overridePath);
+
+            bool loaded = manager.LoadBindingOverrides();
 
             Assert.IsTrue(loaded);
-            InputAction reloadedAction = reloadedAsset["TestMap/TestAction"];
-            Assert.AreEqual("<Keyboard>/f", reloadedAction.bindings[0].overridePath);
+            Assert.AreEqual("<Keyboard>/f", action.bindings[0].overridePath);
 
             Object.DestroyImmediate(asset);
-            Object.DestroyImmediate(reloadedAsset);
         }
 
         [Test]
