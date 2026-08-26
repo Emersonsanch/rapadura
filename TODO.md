@@ -598,10 +598,10 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Definir público-alvo e classificação indicativa (ESRB/PEGI) — `Docs/PlatformRequirements.md` (recomendação: ESRB Teen / PEGI 12, sujeito à submissão oficial)
 
 ### Requisitos específicos de Mobile (obrigatório, não opcional)
-- [ ] Controles em tela (joystick virtual + botões) — `PlayerInputHandler` já lê `Touchscreen.current`, falta a UI dos controles
-- [ ] Câmera: suportar pinch-to-zoom além do scroll do mouse
-- [ ] Performance: testar em dispositivo de referência low/mid-end, não só no Editor
-- [ ] UI escalável para diferentes resoluções/aspect ratios (safe area para notch)
+- [x] Controles em tela — botões de Correr/Pular na HUD (2026-08-25 continuações 11/12); joystick virtual não foi necessário pois o movimento principal é clique/toque-pra-mover (`MoveClick` já bindado em `<Touchscreen>/primaryTouch/tap`), decisão de design documentada.
+- [x] Câmera: pinch-to-zoom já implementado em `CameraZoom.cs`, bug real de contagem de dedos corrigido (2026-08-25 continuação 7).
+- [ ] Performance: testar em dispositivo de referência low/mid-end, não só no Editor — continua pendente, sem device físico disponível neste ambiente.
+- [x] UI escalável pra diferentes resoluções/aspect ratios: `PanelSettings` corrigido pra `ScaleWithScreenSize` de verdade (2026-08-25 continuação 6) + safe area/notch aplicado na HUD (continuação 13, lógica correta mas não testável sem device físico com notch).
 - [ ] Build Android (`.apk`/`.aab`) e iOS testados cedo, não só no fim do projeto (evita retrabalho)
 - [ ] Tamanho de build/downloads dentro do limite de lojas mobile (Addressables ajuda aqui)
 - [ ] Bateria/thermal: evitar Update() caro rodando sempre a 60fps sem necessidade
@@ -615,10 +615,10 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Definir estrutura de pastas definitiva (Assets, Addressables, StreamingAssets) — `Docs/ProjectConventions.md`
 
 ### Qualidade de Engenharia
-- [ ] Adicionar testes automatizados (Unity Test Framework — EditMode e PlayMode)
+- [x] Testes automatizados (Unity Test Framework, EditMode) — 396 testes em `Assets/Tests/EditMode`, praticamente 100% verdes desde 2026-08-25 continuação 24 (restam só 3 falhas documentadas como decisão de design pendente). PlayMode ainda não tem suíte dedicada.
 - [ ] Definir "Definition of Done" por feature (código + teste + review + doc)
 - [ ] Processo de code review (PR obrigatório, sem push direto na main)
-- [ ] Sistema de logging estruturado (níveis: Debug/Info/Warning/Error, com toggle por build)
+- [x] Sistema de logging estruturado (`GameLogger.cs`) — níveis Debug/Info/Warning/Error/Exception, `Debug` compila fora de builds não-development via `[Conditional]`, prefixo `[Categoria]` consistente. Já em uso extensivo pelo projeto (managers, quests, inventário, etc).
 - [ ] Error/crash reporting (Sentry, Unity Cloud Diagnostics ou similar)
 
 ---
@@ -735,7 +735,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Ignora clique em cima de UI (`EventSystem.current.IsPointerOverGameObject()`), pra não mover o personagem ao clicar em botão de HUD/menu.
 - [x] Componente `PlayerClickToMove` adicionado ao `Player` na `Main.unity` via Unity MCP; cena salva.
 - ⚠️ Validado em Play Mode via Unity MCP até ~65% do caminho até o destino (raycast acerta o chão, state machine troca pra `PlayerWalkState`, posição avança de fato); a chegada completa não foi confirmada porque a física parece rodar mais devagar com o Editor sem foco durante automação — é uma limitação do teste via MCP, não um bug conhecido no código. Vale o usuário confirmar manualmente clicando no chão dentro do Editor.
-- [ ] Left-click hoje também dispara `PlayerBasicAttack` (mesma tecla) — aceitável por ora (clicar no chão perto de nada não causa problema, clicar perto de inimigo anda E ataca), mas não há lógica de "clicar no inimigo = atacar direto" nem indicador visual do destino (cursor/marcador no chão) — considerar depois.
+- [x] Indicador visual de destino no clique-pra-mover implementado (`ClickToMoveIndicator.cs`, anel pulsante no chão — ver changelog 2026-08-25 continuação 12). Left-click ainda dispara `PlayerBasicAttack` na mesma tecla (aceitável, sem lógica dedicada de "clicar no inimigo = atacar direto" ainda) — isso continua pendente, mas o indicador visual em si está resolvido.
 
 ### Mapa Mundi + Encontros Aleatórios (novo — decisão de design 2026-08-19)
 > 📌 Direção final de gameplay, esclarecida em várias rodadas de pergunta direta ao usuário nesta data:
