@@ -4,6 +4,11 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-08-25 (continuação 22 — CombatCameraShakeRelayTests corrigido, LevelUp_ViaExperienceEvent também)
+- ✅ **`CombatCameraShakeRelay.cs`**: mesmo padrão de `NpcInteractable` — exposto `OnCameraShakeRequestedForTests` (`#if UNITY_EDITOR`) chamando o handler privado diretamente, testes trocados de `EventBus.Publish` pra chamar esse método (já que a inscrição em `OnEnable` não roda a tempo fora do Play Mode). Também adicionado `EnsureCameraResolved()` já que `_playerCamera` também só resolvia em `Awake`. Todos os 3 testes passam agora.
+- ✅ **`AttributeSet.LevelUp_ViaExperienceEvent_GrantsAttributePoints` também resolvido**: usando a mesma ideia — exposto `ForceInitializeForTests()` (`#if UNITY_EDITOR`) chamando `EnsureInitialized()` diretamente, chamado uma vez no `SetUp` do teste logo após `AddComponent`. Diferente do `CombatCameraShakeRelay`/`NpcInteractable` (onde troquei a chamada em CADA teste), aqui bastou UMA chamada no `SetUp` compartilhado, já que o resto dos testes desta classe já passava um gancho público antes (`GrantAttributePoints`, etc.) — só esse teste específico não tinha nenhum.
+- 📊 **Restam só 3 falhas nesta família, e são intencionalmente não resolvidas**: `SpendingDexterity`/`SpendingIntelligence`/`Maithe_ApplyPassive` — causa raiz é o bug de fórmula em `GetModifiedValue` (documentado na continuação 18), não mais um problema de inicialização.
+
 ### 2026-08-25 (continuação 21 — NpcInteractableTests corrigido, sem depender de SendMessage)
 - 🐛 **`NpcInteractableTests` usava `GameObject.SendMessage("OnTriggerEnter"/"OnTriggerExit", ...)` pra invocar os métodos privados do Unity** — isso dispara o assert interno do próprio motor `ShouldRunBehaviour()` quando chamado num componente fora do ciclo de vida completo do Play Mode (mesma raiz "não roda sincronamente fora do Play Mode" de toda essa sessão, só que dessa vez o sintoma é um assert do engine, não um valor errado ou NRE). Corrigido expondo `OnTriggerEnterForTests`/`OnTriggerExitForTests` (só em `#if UNITY_EDITOR`, ao lado do já existente `SetInteractionSourceForTests`) que chamam a lógica privada diretamente — mesmo padrão já usado em `Projectile.ProcessCollision`/`Hitbox.ProcessTriggerEnter` em vez de depender de `SendMessage` ou callbacks de física. Todos os 9 testes de `NpcInteractableTests` passam agora.
 

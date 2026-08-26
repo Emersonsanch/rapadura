@@ -60,7 +60,7 @@ namespace Rapadura.Tests
             settings.SetScreenShakeIntensity(0.25f);
             ServiceLocator.Register(settings);
 
-            EventBus.Publish(new CameraShakeRequestedEvent(0.5f, 2f));
+            _relay.OnCameraShakeRequestedForTests(new CameraShakeRequestedEvent(0.5f, 2f));
 
             Assert.AreEqual(0.5f, GetAppliedShakeMagnitude(), 0.0001f);
 
@@ -72,7 +72,7 @@ namespace Rapadura.Tests
         {
             Assert.IsFalse(ServiceLocator.IsRegistered<AccessibilitySettings>());
 
-            EventBus.Publish(new CameraShakeRequestedEvent(0.5f, 2f));
+            _relay.OnCameraShakeRequestedForTests(new CameraShakeRequestedEvent(0.5f, 2f));
 
             Assert.AreEqual(2f, GetAppliedShakeMagnitude(), 0.0001f);
         }
@@ -85,7 +85,7 @@ namespace Rapadura.Tests
             settings.SetScreenShakeIntensity(0f);
             ServiceLocator.Register(settings);
 
-            EventBus.Publish(new CameraShakeRequestedEvent(0.5f, 2f));
+            _relay.OnCameraShakeRequestedForTests(new CameraShakeRequestedEvent(0.5f, 2f));
 
             Assert.AreEqual(0f, GetAppliedShakeMagnitude(), 0.0001f);
 

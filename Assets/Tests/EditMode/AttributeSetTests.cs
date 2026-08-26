@@ -27,6 +27,12 @@ namespace Rapadura.Tests
             _stats = _go.AddComponent<PlayerStats>();
             _buffController = _go.AddComponent<BuffController>();
             _attributeSet = _go.AddComponent<AttributeSet>();
+
+            // AddComponent doesn't call Awake synchronously outside Play Mode, so without this the
+            // PlayerExperienceChangedEvent subscription (which normally happens inside Awake, see
+            // AttributeSet.EnsureInitialized) doesn't exist yet for tests that publish that event
+            // without calling any other AttributeSet method first.
+            _attributeSet.ForceInitializeForTests();
         }
 
         [TearDown]

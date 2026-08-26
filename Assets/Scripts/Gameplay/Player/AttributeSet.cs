@@ -370,5 +370,16 @@ namespace Rapadura.Gameplay.Player
             ApplyAllDerivedEffects();
             OnAttributesChanged?.Invoke();
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        /// Editor/test-only: forces <see cref="EnsureInitialized"/> (and therefore the
+        /// <see cref="PlayerExperienceChangedEvent"/> subscription) to run immediately, for
+        /// EditMode tests that publish that event without calling any other public method first —
+        /// <c>AddComponent&lt;AttributeSet&gt;()</c> does not call <c>Awake</c> synchronously
+        /// outside Play Mode, so without this the subscription simply doesn't exist yet.
+        /// </summary>
+        public void ForceInitializeForTests() => EnsureInitialized();
+#endif
     }
 }
