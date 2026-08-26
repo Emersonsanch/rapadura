@@ -4,6 +4,9 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-08-26 (continuação — efeito de Queimadura seedado)
+- ✅ **Queimadura implementada**: `skill_fireball` (`SkillDatabaseSeeder.cs`) ganhou o debuff "Queimando" — mesmo padrão de `skill_poison_dart`/"Envenenado" (DoT via `BuffController.ticksOverTime`, já suportado genericamente pela engine, só faltava ser usado por uma skill de fogo). 5 de dano por segundo, 4 segundos de duração. Reseedado de verdade no asset via menu `Rapadura/Seed Example Skills`, confirmado inspecionando `skill_fireball.asset` (debuff presente, `ticksOverTime=true`, `tickDamageOrHeal=5`, `durationSeconds=4`). Suíte de testes sem regressões.
+
 ### 2026-08-26 (sessão automática agendada — clicar no inimigo ataca direto)
 - ✅ **"Clicar no inimigo = atacar direto" implementado** (último item pendente da seção de clique-pra-mover, linha 738 do roadmap): `PlayerClickToMove` agora detecta se o clique/toque acertou um `ICombatTarget` (em vez de chão vazio) — se sim, guarda a referência em `AttackTarget` e ajusta o destino pra parar a uma distância de ataque (`_attackStoppingDistance`, padrão 2m) do alvo em vez de andar pra cima dele. `PlayerBasicAttack` ganhou `TickClickToAttack()`: enquanto há um `AttackTarget` perseguido e o player está no alcance, vira automaticamente pra encarar o alvo (suavizado, `_turnSpeedDegPerSec`) e ataca sozinho no cooldown, sem precisar de um input de ataque separado — o próprio clique já expressa a intenção de lutar.
 - 🔬 **Testado em Play Mode via Unity MCP, ponta a ponta**: clique simulado (raycast real via `Camera.WorldToScreenPoint`) confirma `AttackTarget` setado e destino recalculado corretamente; com o player já dentro do alcance, o primeiro tick girou parcialmente (esperado, `RotateTowards` é gradual) e o ataque daquele frame errou (a esfera de ataque fica na frente do personagem, que ainda não tinha virado o suficiente) — ticks subsequentes convergiram a rotação pra encarar o alvo (270° = direção certa) e o ataque seguinte acertou de verdade (30→15 de vida do lobo). Comportamento correto e esperado: numa sessão real a 60fps a rotação converge em poucos frames, não é perceptível como "erro".
@@ -792,7 +795,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Buffs — `BuffController`/`ActiveStatEffect`/`StatModifierDefinition` completos (modificadores flat/percent, duração)
 - [x] Debuffs — mesma engine, flag de debuff em `BuffController.cs`
 - [x] Veneno — seedado em `SkillDatabaseSeeder.cs` (DoT via `BuffController`)
-- [ ] Queimadura — engine suporta DoT genérico, mas não há efeito de queimadura seedado especificamente
+- [x] Queimadura — `skill_fireball` ganhou o debuff "Queimando" (DoT, mesmo padrão de `skill_poison_dart`/"Envenenado": 5 de dano/seg por 4s), reseedado no asset real via `Rapadura/Seed Example Skills` (2026-08-26)
 - [x] Congelamento — seedado em `SkillDatabaseSeeder.cs` (slow)
 - [x] Atordoamento (stun) — `BuffController.IsStunned`/`ApplyStun`, `PlayerController` bloqueia `Tick`/`FixedTick` enquanto atordoado (câmera continua livre)
 - [x] Sistema de resistências/imunidades por tipo de dano — `Combat/ElementResistance.cs` + overload de `DamageCalculator.ComputeDamage`, 100% = imune

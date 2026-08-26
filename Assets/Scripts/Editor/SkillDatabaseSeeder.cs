@@ -131,10 +131,14 @@ namespace Rapadura.Editor
                 new SkillSeed
                 {
                     id = "skill_fireball", name = "Bola de Fogo", animationTrigger = "CastFireball",
-                    description = "Lança uma esfera flamejante que explode ao atingir o alvo, causando dano de fogo em área.",
+                    description = "Lança uma esfera flamejante que explode ao atingir o alvo, causando dano de fogo em área e deixando-o queimando por um tempo.",
                     category = SkillCategory.Offensive, element = ElementType.Fire,
                     cooldown = 4f, mana = 20f, castTime = 0.4f, range = 12f, area = 2.5f,
-                    damage = 25f, damagePerLevel = 6f
+                    damage = 25f, damagePerLevel = 6f,
+                    // Same DoT pattern as "Envenenado" (skill_poison_dart) — engine already supported
+                    // this generically via BuffController's ticksOverTime, just never seeded a fire
+                    // variant (see TODO.md Fase "Efeitos" > Queimadura).
+                    debuffs = { Modifier("Queimando", StatType.HealthRegen, ModifierApplication.Flat, 0f, 4f, true, ticks: true, tickInterval: 1f, tickValue: 5f) }
                 },
                 new SkillSeed
                 {

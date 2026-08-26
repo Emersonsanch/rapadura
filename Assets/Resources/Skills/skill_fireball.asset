@@ -15,7 +15,7 @@ MonoBehaviour:
   _skillId: skill_fireball
   _displayName: Bola de Fogo
   _description: "Lan\xE7a uma esfera flamejante que explode ao atingir o alvo, causando
-    dano de fogo em \xE1rea."
+    dano de fogo em \xE1rea e deixando-o queimando por um tempo."
   _icon: {fileID: 0}
   _skillType: 0
   _category: 0
@@ -32,7 +32,16 @@ MonoBehaviour:
   _damagePerLevel: 6
   _healingPerLevel: 0
   _buffs: []
-  _debuffs: []
+  _debuffs:
+  - displayName: Queimando
+    affectedStat: 1
+    application: 0
+    value: 0
+    durationSeconds: 4
+    isDebuff: 1
+    ticksOverTime: 1
+    tickIntervalSeconds: 1
+    tickDamageOrHeal: 5
   _animationTrigger: CastFireball
   _castSound: {fileID: 0}
   _castParticlesPrefab: {fileID: 0}
