@@ -1,6 +1,4 @@
-using System.Reflection;
 using Rapadura.Core.Events;
-using Rapadura.Core.Logging;
 using Rapadura.Core.StateMachine;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Enemies.States;
@@ -156,10 +154,9 @@ namespace Rapadura.Gameplay.Enemies
         }
 
         /// <summary>
-        /// Bridges data-driven config onto the existing <see cref="Health"/> component without modifying it:
-        /// Health exposes no public setter for max health, so the same shared prefab/controller can still be
-        /// reused for a tougher "boss" variant purely by swapping the <see cref="EnemyDefinition"/> asset.
-        /// Fails silently (with a log) if reflection ever can't find the expected backing fields.
+        /// Bridges data-driven config onto the existing <see cref="Health"/> component: the same
+        /// shared prefab/controller can be reused for a tougher "boss" variant purely by swapping
+        /// the <see cref="EnemyDefinition"/> asset, via <see cref="Health.ConfigureMaxHealth"/>.
         /// </summary>
         private void ApplyDefinitionToHealth()
         {
@@ -168,21 +165,7 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
-            try
-            {
-                FieldInfo maxHealthField = typeof(Health).GetField("_maxHealth", BindingFlags.NonPublic | BindingFlags.Instance);
-                maxHealthField?.SetValue(Health, _definition.MaxHealth);
-
-                FieldInfo currentHealthBackingField = typeof(Health).GetField("<CurrentHealth>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-                currentHealthBackingField?.SetValue(Health, _definition.MaxHealth);
-
-                FieldInfo isDeadBackingField = typeof(Health).GetField("<IsDead>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-                isDeadBackingField?.SetValue(Health, false);
-            }
-            catch (System.Exception exception)
-            {
-                GameLogger.Exception("Enemy", exception);
-            }
+            Health.ConfigureMaxHealth(_definition.MaxHealth);
 
             if (_hitbox != null)
             {

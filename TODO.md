@@ -4,6 +4,10 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-08-26 (continuação — bug real que eu mesmo introduzi, encontrado e corrigido)
+- 🐛 **Bug real (meu, desta sessão anterior)**: ao refatorar `Health.CurrentHealth` de auto-propriedade pra propriedade explícita com backing field próprio (`_currentHealth`), quebrei silenciosamente `EnemyController.ApplyDefinitionToHealth()` — ele usava reflection procurando o campo `<CurrentHealth>k__BackingField` (nome que só existe pra auto-propriedades), que deixou de existir. `GetField(...)?.SetValue(...)` com `?.` engoliu o `null` sem erro nenhum: os inimigos continuavam funcionando com a vida PADRÃO do `Health` (`_maxHealth=50` no Inspector), simplesmente ignorando `EnemyDefinition.MaxHealth` (30 pro lobo, 200+ pra bosses) — nenhum teste cobria esse caminho especificamente, por isso não foi pego antes.
+- ✅ **Corrigido resolvendo a dívida técnica documentada** (nota do roadmap: "considerar adicionar um setter público em Health.cs"): novo `Health.ConfigureMaxHealth(float)` público — seta `_maxHealth`, cura pra vida cheia, limpa `IsDead`. `EnemyController.ApplyDefinitionToHealth()` reescrito pra chamar isso direto, removendo toda a reflection (e os `using System.Reflection`/`Rapadura.Core.Logging` que ficaram órfãos). Confirmado em Play Mode: `Enemy_Wolf` com `Health.MaxHealth=30` batendo com `EnemyDefinition.MaxHealth=30` (antes ficaria em 50, o default do Inspector). Suíte de testes sem regressões.
+
 ### 2026-08-26 (continuação — efeito de Queimadura seedado)
 - ✅ **Queimadura implementada**: `skill_fireball` (`SkillDatabaseSeeder.cs`) ganhou o debuff "Queimando" — mesmo padrão de `skill_poison_dart`/"Envenenado" (DoT via `BuffController.ticksOverTime`, já suportado genericamente pela engine, só faltava ser usado por uma skill de fogo). 5 de dano por segundo, 4 segundos de duração. Reseedado de verdade no asset via menu `Rapadura/Seed Example Skills`, confirmado inspecionando `skill_fireball.asset` (debuff presente, `ticksOverTime=true`, `tickDamageOrHeal=5`, `durationSeconds=4`). Suíte de testes sem regressões.
 
@@ -789,7 +793,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Boss inicial — `EnemyDefinition.IsBoss` (config via ScriptableObject, sem exigir prefab dedicado)
 - [x] Sistema de spawn/wave (pooling de inimigos) — `EnemyPool.cs` + `EnemySpawner.cs` + `WaveTracker.cs`
 
-> ⚠️ Nota técnica: `EnemyController.ApplyDefinitionToHealth()` usa reflection para aplicar stats de `EnemyDefinition` em `Health` porque `Health.cs` não tem setter público de vida máxima — considerar adicionar um setter público em `Health.cs` para remover essa gambiarra.
+> ✅ Nota técnica resolvida (2026-08-26): `Health.ConfigureMaxHealth(float)` público criado, `EnemyController.ApplyDefinitionToHealth()` não usa mais reflection — ver changelog.
 
 ### Efeitos
 - [x] Buffs — `BuffController`/`ActiveStatEffect`/`StatModifierDefinition` completos (modificadores flat/percent, duração)

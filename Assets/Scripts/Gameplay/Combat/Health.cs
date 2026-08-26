@@ -145,6 +145,21 @@ namespace Rapadura.Gameplay.Combat
             CurrentHealth = Mathf.Clamp(value, 0f, _maxHealth);
         }
 
+        /// <summary>
+        /// Reconfigures max health and fully revives at that new max — used by
+        /// <see cref="Rapadura.Gameplay.Enemies.EnemyController"/> to apply a data-driven
+        /// <see cref="Rapadura.Gameplay.Enemies.EnemyDefinition"/>'s stats onto a shared
+        /// prefab/controller (e.g. turning a common enemy into a tougher "boss" variant) without
+        /// reflection into private fields.
+        /// </summary>
+        public void ConfigureMaxHealth(float maxHealth)
+        {
+            EnsureInitialized();
+            _maxHealth = maxHealth;
+            CurrentHealth = maxHealth;
+            IsDead = false;
+        }
+
         private void Die(GameObject killer)
         {
             IsDead = true;
