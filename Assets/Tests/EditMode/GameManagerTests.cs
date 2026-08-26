@@ -56,6 +56,9 @@ namespace Rapadura.Tests
         {
             _go = new GameObject("GameManagerTestTarget");
             GameManager gameManager = _go.AddComponent<GameManager>();
+            // AddComponent doesn't call Awake synchronously outside Play Mode; force it so
+            // BuildManagers()/InitializeManagers() actually run before the assertions below.
+            gameManager.ForceInitializeForTests();
 
             Assert.IsNotNull(gameManager.CraftingManager);
             Assert.IsNotNull(gameManager.BuildingManager);
@@ -75,6 +78,9 @@ namespace Rapadura.Tests
         {
             _go = new GameObject("GameManagerTestTarget");
             GameManager gameManager = _go.AddComponent<GameManager>();
+            // AddComponent doesn't call Awake synchronously outside Play Mode; force it so
+            // BuildManagers()/InitializeManagers() actually run before the assertions below.
+            gameManager.ForceInitializeForTests();
 
             Assert.IsNotNull(gameManager.AccessibilitySettings);
             Assert.IsNotNull(gameManager.AnalyticsManager);
@@ -91,6 +97,9 @@ namespace Rapadura.Tests
         {
             _go = new GameObject("GameManagerTestTarget");
             GameManager gameManager = _go.AddComponent<GameManager>();
+            // AddComponent doesn't call Awake synchronously outside Play Mode; force it so
+            // BuildManagers()/InitializeManagers() actually run before the assertions below.
+            gameManager.ForceInitializeForTests();
 
             Assert.IsNotNull(gameManager.DialogueManager);
             Assert.IsTrue(ServiceLocator.IsRegistered<DialogueManager>());
@@ -102,6 +111,9 @@ namespace Rapadura.Tests
         {
             _go = new GameObject("GameManagerTestTarget");
             GameManager gameManager = _go.AddComponent<GameManager>();
+            // AddComponent doesn't call Awake synchronously outside Play Mode; force it so
+            // BuildManagers()/InitializeManagers() actually run before the assertions below.
+            gameManager.ForceInitializeForTests();
 
             Assert.IsNotNull(gameManager.QuestManager);
             Assert.IsTrue(ServiceLocator.IsRegistered<QuestManager>());
@@ -125,6 +137,9 @@ namespace Rapadura.Tests
         {
             _go = new GameObject("GameManagerTestTarget");
             GameManager gameManager = _go.AddComponent<GameManager>();
+            // AddComponent doesn't call Awake synchronously outside Play Mode; force it so
+            // BuildManagers()/InitializeManagers() actually run before the assertions below.
+            gameManager.ForceInitializeForTests();
 
             Assert.IsNotNull(gameManager.ShopManager);
             Assert.IsTrue(ServiceLocator.IsRegistered<ShopManager>());

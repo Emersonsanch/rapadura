@@ -41,6 +41,8 @@ namespace Rapadura.Core.Managers
         public QuestManager QuestManager { get; private set; }
         public ShopManager ShopManager { get; private set; }
 
+        private bool _managersBuilt;
+
         protected override void Awake()
         {
             base.Awake();
@@ -50,9 +52,32 @@ namespace Rapadura.Core.Managers
                 return;
             }
 
+            EnsureManagersBuilt();
+        }
+
+        /// <summary>
+        /// Idempotent guard around <see cref="BuildManagers"/>/<see cref="InitializeManagers"/> —
+        /// normally only reached from <see cref="Awake"/>, but also exposed (see
+        /// <c>ForceInitializeForTests</c> below) since <c>AddComponent&lt;GameManager&gt;()</c>
+        /// does not call <c>Awake</c> synchronously outside Play Mode, unlike Play Mode where it
+        /// always does.
+        /// </summary>
+        private void EnsureManagersBuilt()
+        {
+            if (_managersBuilt)
+            {
+                return;
+            }
+
+            _managersBuilt = true;
             BuildManagers();
             InitializeManagers();
         }
+
+#if UNITY_EDITOR
+        /// <summary>Editor/test-only: forces manager construction immediately, see <see cref="EnsureManagersBuilt"/>.</summary>
+        public void ForceInitializeForTests() => EnsureManagersBuilt();
+#endif
 
         private void BuildManagers()
         {
