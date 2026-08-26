@@ -59,8 +59,8 @@ namespace Rapadura.Gameplay.Player
     /// <list type="bullet">
     /// <item>Vitality → +<see cref="VitalityHealthPerPoint"/> flat Max Health per point.</item>
     /// <item>Spirit → +<see cref="SpiritManaPerPoint"/> flat Max Mana per point.</item>
-    /// <item>Dexterity → +<see cref="DexterityCriticalChancePerPoint"/> Critical Chance per point (percent-additive).</item>
-    /// <item>Intelligence → +<see cref="IntelligenceCooldownReductionPerPoint"/> Cooldown Reduction per point (percent-additive).</item>
+    /// <item>Dexterity → +<see cref="DexterityCriticalChancePerPoint"/> Critical Chance per point (flat fraction — see <see cref="BuildDerivedEffect"/> for why this is Flat, not PercentAdditive).</item>
+    /// <item>Intelligence → +<see cref="IntelligenceCooldownReductionPerPoint"/> Cooldown Reduction per point (flat fraction, same reasoning).</item>
     /// <item>Poder Arcano (ArcanePower) → +<see cref="ArcanePowerAttackDamagePerPoint"/> Attack Damage per point (percent-additive).</item>
     /// </list>
     /// Each attribute owns exactly one <see cref="StatType"/> so recomputing its bonus never clobbers
@@ -75,10 +75,10 @@ namespace Rapadura.Gameplay.Player
         /// <summary>Flat Max Mana granted per point invested in Spirit.</summary>
         public const float SpiritManaPerPoint = 8f;
 
-        /// <summary>Percent-additive Critical Chance granted per point invested in Dexterity (0.005 = 0.5%).</summary>
+        /// <summary>Flat fraction of Critical Chance granted per point invested in Dexterity (0.005 = 0.5%).</summary>
         public const float DexterityCriticalChancePerPoint = 0.005f;
 
-        /// <summary>Percent-additive Cooldown Reduction granted per point invested in Intelligence (0.004 = 0.4%).</summary>
+        /// <summary>Flat fraction of Cooldown Reduction granted per point invested in Intelligence (0.004 = 0.4%).</summary>
         public const float IntelligenceCooldownReductionPerPoint = 0.004f;
 
         /// <summary>Percent-additive Attack Damage granted per point invested in Poder Arcano (0.01 = 1%).</summary>
@@ -289,8 +289,17 @@ namespace Rapadura.Gameplay.Player
             {
                 AttributeType.Vitality => (StatType.MaxHealth, ModifierApplication.Flat, VitalityHealthPerPoint, "Vitalidade"),
                 AttributeType.Spirit => (StatType.MaxMana, ModifierApplication.Flat, SpiritManaPerPoint, "Espírito"),
-                AttributeType.Dexterity => (StatType.CriticalChance, ModifierApplication.PercentAdditive, DexterityCriticalChancePerPoint, "Destreza"),
-                AttributeType.Intelligence => (StatType.CooldownReduction, ModifierApplication.PercentAdditive, IntelligenceCooldownReductionPerPoint, "Inteligência"),
+                // Flat, not PercentAdditive: CriticalChance/CooldownReduction are already pure
+                // 0..1 fractions, not "a percent of some base value" — every real caller
+                // (SkillManager.GetCooldownReductionPercent, this class's own formula-doc tests)
+                // reads them via GetModifiedValue(stat, 0f), and BuffController.GetModifiedValue's
+                // PercentAdditive branch computes (baseValue + flat) * (1 + percent), which is
+                // always exactly 0 when baseValue is 0 no matter the bonus. Flat sidesteps that
+                // entirely (mirrors how the combo system's CostReduction bonus on
+                // ResourceCostReduction — the same kind of 0-based fraction stat — already
+                // correctly uses Flat, not PercentAdditive; see ComboTracker.ApplyBonus).
+                AttributeType.Dexterity => (StatType.CriticalChance, ModifierApplication.Flat, DexterityCriticalChancePerPoint, "Destreza"),
+                AttributeType.Intelligence => (StatType.CooldownReduction, ModifierApplication.Flat, IntelligenceCooldownReductionPerPoint, "Inteligência"),
                 AttributeType.ArcanePower => (StatType.AttackDamage, ModifierApplication.PercentAdditive, ArcanePowerAttackDamagePerPoint, "Poder Arcano"),
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
