@@ -4,6 +4,11 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-08-27 (continuação — bug real: inimigo morto continuava sólido bloqueando o jogador)
+- 🐛 **Achado no mesmo teste ponta a ponta da correção de XP**: depois de matar um inimigo (`IsDead=true`), o `EnemyController` só para de fazer tick — nada desabilitava o collider, nada escondia/removia o corpo. Um inimigo "morto" continuava fisicamente sólido (bloqueando o jogador) e visualmente parado de pé pra sempre, sem nenhuma leitura de "morreu" pro jogador.
+- ✅ **Corrigido**: `EnemyDeathVfx.cs` (novo, `Assets/Scripts/Gameplay/Enemies/`), inscrito no mesmo `CombatTargetDiedEvent` já usado por `CombatFxManager`/`EnemyRewardGranter` — desativa todos os `Collider` do inimigo imediatamente (para de bloquear/ser alvo no mesmo frame que morre) e afunda + esmaece o corpo ao longo de 1.5s antes de desativar o GameObject. Adicionado ao `GameManager` na cena. Testado em Play Mode: `colliderEnabled=False` confirmado logo após a morte.
+- 🏁 Suíte de testes: 396/396.
+
 ### 2026-08-27 (continuação — bug real de produção: matar inimigo não dava XP nenhuma)
 - 🐛 **Achado testando o loop de combate ponta a ponta pela primeira vez** (aplicando dano real via `Health.ApplyDamage` até matar um lobo e conferindo `PlayerStats.CurrentExperience` antes/depois): o inimigo morre corretamente (`IsDead=true`, `CombatTargetDiedEvent` publicado com o killer certo), mas XP do jogador continuava em 0. Causa raiz: `EnemyDefinition` nunca teve nenhum campo de recompensa de experiência, e nada no projeto jamais chamava `PlayerStats.AddExperience` a partir da morte de um inimigo — o sistema de nível/XP em si está implementado e testado corretamente (curva de XP, level up, etc.), só nunca foi conectado ao combate de verdade.
 - ✅ **Corrigido**: `EnemyDefinition.ExperienceReward` (novo campo, default 10) + `EnemyRewardGranter.cs` (novo, `Assets/Scripts/Gameplay/Enemies/`), inscrito em `CombatTargetDiedEvent`, concede a XP ao `PlayerStats` do killer. Adicionado ao `GameManager` na cena (mesmo padrão do `HitStopController`/`CombatFxManager`). Testado em Play Mode: lobo morto → XP do jogador sobe de 0 para 10.
