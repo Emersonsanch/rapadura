@@ -332,6 +332,23 @@ namespace Rapadura.Gameplay.Player
             EventBus.Publish(new CombatTargetDiedEvent(gameObject, killer));
         }
 
+        /// <summary>
+        /// Fully revives the player at max health/stamina, clearing <see cref="IsDead"/> and any
+        /// lingering invulnerability window. Nothing called this before — <see cref="Die"/> set
+        /// <see cref="IsDead"/> permanently true with no way to clear it anywhere in the codebase, so
+        /// once a player died in this scene every future hit was silently ignored
+        /// (<see cref="ApplyDamageInternal"/>'s <c>if (IsDead ...) return;</c> guard) and the run was
+        /// permanently soft-locked. Called by <see cref="Rapadura.Gameplay.World.CheckpointManager"/>
+        /// after respawn-positioning the player.
+        /// </summary>
+        public void Revive()
+        {
+            IsDead = false;
+            ClearInvulnerability();
+            SetHealth(_maxHealth);
+            SetStamina(_maxStamina);
+        }
+
         public object CaptureState()
         {
             return new PlayerStatsSaveState

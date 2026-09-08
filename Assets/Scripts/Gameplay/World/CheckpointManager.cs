@@ -1,6 +1,7 @@
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
+using Rapadura.Gameplay.Player;
 using Rapadura.Save;
 using UnityEngine;
 
@@ -49,11 +50,6 @@ namespace Rapadura.Gameplay.World
 
         private void OnPlayerDied(PlayerDiedEvent gameEvent)
         {
-            if (_activeCheckpoint == null)
-            {
-                return;
-            }
-
             GameObject player = GameObject.FindGameObjectWithTag(PlayerTag);
 
             if (player == null)
@@ -63,7 +59,19 @@ namespace Rapadura.Gameplay.World
 
             // TODO(Fase 2): trocar por uma tela de morte/fade + delay real via corrotina quando
             // o combate e a UI de HUD existirem. Por enquanto o respawn é instantâneo.
-            player.transform.SetPositionAndRotation(_activeCheckpoint.Position, _activeCheckpoint.Rotation);
+            if (_activeCheckpoint != null)
+            {
+                player.transform.SetPositionAndRotation(_activeCheckpoint.Position, _activeCheckpoint.Rotation);
+            }
+
+            // Reviving was missing entirely before this fix: PlayerStats.Die() set IsDead permanently
+            // true with nothing anywhere to clear it, so a scene with no SpawnPoint configured (like
+            // Main.unity's current test setup — confirmed zero SpawnPoint instances in the scene)
+            // soft-locked the run forever on the player's first death, checkpoint or not. Reviving
+            // always (not only when a checkpoint exists) means dying is at worst "reset in place"
+            // instead of "the run is over with no way to continue."
+            PlayerStats playerStats = player.GetComponent<PlayerStats>();
+            playerStats?.Revive();
         }
     }
 }
