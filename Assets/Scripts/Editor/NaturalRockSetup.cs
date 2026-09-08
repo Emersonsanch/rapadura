@@ -29,12 +29,30 @@ namespace Rapadura.Editor
             }
 
             int replaced = 0;
-            replaced += ReplaceRock(GameObject.Find("Rock1"), rockMaterial, seedBase: 1001);
-            replaced += ReplaceRock(GameObject.Find("Rock2"), rockMaterial, seedBase: 1002);
+            GameObject rock1 = GameObject.Find("Rock1");
+            GameObject rock2 = GameObject.Find("Rock2");
+            replaced += ReplaceRock(rock1, rockMaterial, seedBase: 1001);
+            replaced += ReplaceRock(rock2, rockMaterial, seedBase: 1002);
+            ClearHandPlacedRock(rock1);
+            ClearHandPlacedRock(rock2);
 
             GameObject rocksParent = GameObject.Find("Rocks");
             if (rocksParent != null)
             {
+                // Remove any previously-scattered rocks before re-scattering — re-running this menu
+                // item used to duplicate the scattered set every time (15 -> 25 -> 35...) since
+                // ScatterAdditionalRocks always adds `count` new ones without ever clearing what a
+                // prior run left behind. Hand-placed rocks (anything not named "Rock_Scattered_*")
+                // are left untouched.
+                for (int i = rocksParent.transform.childCount - 1; i >= 0; i--)
+                {
+                    Transform child = rocksParent.transform.GetChild(i);
+                    if (child.name.StartsWith("Rock_Scattered_"))
+                    {
+                        Object.DestroyImmediate(child.gameObject);
+                    }
+                }
+
                 for (int i = 0; i < rocksParent.transform.childCount; i++)
                 {
                     Transform child = rocksParent.transform.GetChild(i);
@@ -42,11 +60,43 @@ namespace Rapadura.Editor
                 }
 
                 ScatterAdditionalRocks(rocksParent.transform, rockMaterial, count: 10, seedBase: 5000);
+
+                // Original hand-placed rocks predate the camera/player clearance check above (it only
+                // ever applied to newly-scattered ones) — confirmed via screenshot that "Rock_5"
+                // (hand-placed, at (3.5, 0.25, -8), scale 1.6) sits only ~4 units from the camera's
+                // rest position and fills the entire view the instant Play starts. Nudge any
+                // hand-placed rock the same way scattered ones are kept clear, instead of leaving a
+                // pre-existing placement bug in a scene this session is explicitly fixing for playability.
+                foreach (Transform child in rocksParent.transform)
+                {
+                    if (child.name.StartsWith("Rock_Scattered_"))
+                    {
+                        continue;
+                    }
+
+                    ClearHandPlacedRock(child.gameObject);
+                }
             }
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
             Debug.Log($"[NaturalRockSetup] Replaced {replaced} rock mesh(es) with procedural geometry and scattered additional rocks in '{scene.name}'.");
+        }
+
+        private static void ClearHandPlacedRock(GameObject rock)
+        {
+            if (rock == null)
+            {
+                return;
+            }
+
+            Vector3 cleared = ClearExclusionZone(rock.transform.position, PlayerSpawnPosition, MinDistanceFromPlayerSpawn, 0f);
+            cleared = ClearExclusionZone(cleared, CameraRestPosition, MinDistanceFromCamera, 0f);
+            if (cleared != rock.transform.position)
+            {
+                rock.transform.position = cleared;
+                EditorUtility.SetDirty(rock);
+            }
         }
 
         private static int ReplaceRock(GameObject rock, Material material, int seedBase)
@@ -95,6 +145,41 @@ namespace Rapadura.Editor
         /// centroid rather than the whole 50x50 ground, so they stay in the area the player
         /// actually walks through in this test scene.
         /// </summary>
+        /// <summary>
+        /// Player spawns at the world origin (see Main.unity) and the isometric follow-camera rests
+        /// at roughly (0, 1, -10) relative to it — scattered rocks must stay clear of BOTH points, not
+        /// just the player, or a rock can pass the player-clearance check while still landing right in
+        /// front of the camera lens. First attempt only excluded the player point and still produced a
+        /// rock 2.49 units from the camera (confirmed via screenshot: a boulder filling the entire
+        /// view on spawn) because the camera sits ~10 units back along -Z, well outside a 4.5-unit
+        /// player-only exclusion ring.
+        /// </summary>
+        private const float MinDistanceFromPlayerSpawn = 4.5f;
+        private const float MinDistanceFromCamera = 5f;
+        private static readonly Vector3 PlayerSpawnPosition = Vector3.zero;
+        private static readonly Vector3 CameraRestPosition = new Vector3(0f, 1f, -10f);
+
+        /// <summary>Pushes <paramref name="position"/> radially away from <paramref name="exclusionCenter"/> (compared on the XZ plane only, since the camera's exclusion point sits above ground level) until it clears <paramref name="minDistance"/>, reusing <paramref name="fallbackAngle"/> if the point starts exactly on the center.</summary>
+        private static Vector3 ClearExclusionZone(Vector3 position, Vector3 exclusionCenter, float minDistance, float fallbackAngle)
+        {
+            Vector2 flatPosition = new Vector2(position.x, position.z);
+            Vector2 flatCenter = new Vector2(exclusionCenter.x, exclusionCenter.z);
+            Vector2 fromCenter = flatPosition - flatCenter;
+
+            if (fromCenter.magnitude >= minDistance)
+            {
+                return position;
+            }
+
+            if (fromCenter.sqrMagnitude < 0.0001f)
+            {
+                fromCenter = new Vector2(Mathf.Cos(fallbackAngle), Mathf.Sin(fallbackAngle));
+            }
+
+            Vector2 cleared = flatCenter + fromCenter.normalized * minDistance;
+            return new Vector3(cleared.x, position.y, cleared.y);
+        }
+
         private static void ScatterAdditionalRocks(Transform parent, Material material, int count, int seedBase)
         {
             Vector3 centroid = Vector3.zero;
@@ -116,6 +201,9 @@ namespace Rapadura.Editor
                 float angle = (float)(random.NextDouble() * Mathf.PI * 2f);
                 float distance = 3f + (float)random.NextDouble() * 9f;
                 Vector3 position = centroid + new Vector3(Mathf.Cos(angle) * distance, 0f, Mathf.Sin(angle) * distance);
+
+                position = ClearExclusionZone(position, PlayerSpawnPosition, MinDistanceFromPlayerSpawn, angle);
+                position = ClearExclusionZone(position, CameraRestPosition, MinDistanceFromCamera, angle);
 
                 // Small/medium/large tiers, weighted toward small (natural fields have many small
                 // rocks and few boulders) — matches the user's request for varied sizes.
