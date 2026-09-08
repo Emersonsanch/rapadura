@@ -44310,6 +44310,7 @@ GameObject:
   - component: {fileID: 1780996526}
   - component: {fileID: 1780996529}
   - component: {fileID: 1780996528}
+  - component: {fileID: 1780996530}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -44370,6 +44371,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Combat.HitStopController
   _maxDuration: 0.3
+--- !u!114 &1780996530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780996525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 022816403fe085d408638a0ec62ad687, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyRewardGranter
 --- !u!1 &1786355262
 GameObject:
   m_ObjectHideFlags: 0

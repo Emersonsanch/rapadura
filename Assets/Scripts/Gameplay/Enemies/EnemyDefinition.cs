@@ -19,6 +19,10 @@ namespace Rapadura.Gameplay.Enemies
         [SerializeField] private float _maxHealth = 30f;
         [SerializeField] private float _contactDamage = 10f;
 
+        [Header("Rewards")]
+        [Tooltip("Experience granted to the killer's PlayerStats when this enemy dies. See EnemyRewardGranter.")]
+        [SerializeField] private int _experienceReward = 10;
+
         [Header("Movement")]
         [SerializeField] private float _patrolSpeed = 2f;
         [SerializeField] private float _chaseSpeed = 4f;
@@ -44,6 +48,7 @@ namespace Rapadura.Gameplay.Enemies
 
         public float MaxHealth => _maxHealth;
         public float ContactDamage => _contactDamage;
+        public int ExperienceReward => _experienceReward;
 
         public float PatrolSpeed => _patrolSpeed;
         public float ChaseSpeed => _chaseSpeed;
