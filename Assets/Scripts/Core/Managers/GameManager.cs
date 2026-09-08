@@ -130,6 +130,32 @@ namespace Rapadura.Core.Managers
             }
         }
 
+        private void Start()
+        {
+            RegisterInitialCheckpoint();
+        }
+
+        /// <summary>
+        /// Finds a scene <see cref="SpawnPoint"/> flagged <c>IsInitialSpawn</c> and registers it with
+        /// <see cref="CheckpointManager"/> — nothing did this before, so a scene with no SpawnPoint the
+        /// player has walked into yet (e.g. right after spawning, before reaching any checkpoint
+        /// trigger) had no active checkpoint at all, and dying reverted to "revive in place" as the
+        /// only fallback (see CheckpointManager.OnPlayerDied) instead of returning to the actual spawn.
+        /// Runs in Start (not BuildManagers) because the scene's SpawnPoint objects don't exist yet
+        /// when GameManager constructs its managers (see the BuildManagers ordering note above).
+        /// </summary>
+        private void RegisterInitialCheckpoint()
+        {
+            foreach (SpawnPoint spawnPoint in FindObjectsOfType<SpawnPoint>())
+            {
+                if (spawnPoint.IsInitialSpawn)
+                {
+                    CheckpointManager.SetInitialCheckpoint(spawnPoint);
+                    break;
+                }
+            }
+        }
+
         protected override void OnDestroy()
         {
             if (Instance == this)

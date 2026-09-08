@@ -4,6 +4,11 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-08-27 (continuação — checkpoint inicial real, não só "reviver no lugar")
+- 🐛 **`SpawnPoint.IsInitialSpawn` existia mas nada nunca lia essa flag** — `CheckpointManager.SetInitialCheckpoint` também nunca era chamado em lugar nenhum. Combinado com a cena de teste não ter nenhum `SpawnPoint`, o fallback "reviver no lugar" da correção anterior era o único comportamento possível, mesmo que um `SpawnPoint` inicial existisse.
+- ✅ **Corrigido**: `GameManager.Start()` agora varre a cena por `SpawnPoint.IsInitialSpawn` e registra no `CheckpointManager` (rodando em `Start`, não em `BuildManagers`, já que os `SpawnPoint`s da cena ainda não existem quando os managers são construídos). Adicionado `InitialSpawnPoint` (novo GameObject, `SpawnPoint` com `_isInitialSpawn=true`) na posição de spawn do player `(0,0,0)` em `Main.unity`. Testado em Play Mode: `CheckpointManager._activeCheckpoint` confirmado setado logo após o início da cena, sem o jogador precisar tocar em nenhum trigger primeiro.
+- 🏁 Suíte de testes: 396/396.
+
 ### 2026-08-27 (continuação — bug crítico real: morte do jogador era soft-lock permanente)
 - 🐛 **O pior bug de jogabilidade encontrado nesta sessão**: `PlayerStats.Die()` setava `IsDead=true` mas **nada em todo o projeto jamais setava de volta pra `false`** — `ApplyDamageInternal` tem `if (IsDead ...) return;` no topo, então depois da primeira morte todo dano futuro era silenciosamente ignorado. `CheckpointManager.OnPlayerDied` só reposicionava o player pro checkpoint ativo (`_activeCheckpoint`) — mas **a cena de teste não tem nenhum `SpawnPoint`** (confirmado: `FindObjectsOfType<SpawnPoint>().Length == 0`), então `_activeCheckpoint` nunca é setado e o método nem reposicionava nada. Resultado real: a primeira morte do jogador travava a run permanentemente, sem tela de game over, sem reinício, sem nada — o jogo simplesmente parava de responder a dano.
 - ✅ **Corrigido**: `PlayerStats.Revive()` (novo) — restaura vida/stamina cheias, `IsDead=false`, limpa invulnerabilidade. `CheckpointManager.OnPlayerDied` agora sempre chama `Revive()` (reposiciona pro checkpoint só se um existir — sem checkpoint configurado, reviver no lugar já é infinitamente melhor que travar pra sempre).
