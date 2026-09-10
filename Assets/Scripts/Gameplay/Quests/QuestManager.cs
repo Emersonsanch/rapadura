@@ -444,11 +444,30 @@ namespace Rapadura.Gameplay.Quests
             }
         }
 
+        /// <summary>
+        /// Same class of id-mismatch bug as <see cref="ResolveEnemyTargetId"/>: every seeded
+        /// TalkToNpc objective's TargetId uses an "npc_" prefix (e.g. "npc_village_survivor"), but
+        /// <see cref="DialogueEndedEvent.DialogueId"/> is always the dialogue asset's own id, which
+        /// uses a "dialogue_" prefix ("dialogue_village_survivor") — confirmed across all seeded
+        /// dialogue/quest pairs in the project. Matching on the raw DialogueId alone (the bug this
+        /// replaces) meant no TalkToNpc objective could ever progress from a real conversation.
+        /// Progress is published under both the raw id and the "npc_"-normalized id so this keeps
+        /// working regardless of which convention a given quest asset happens to use.
+        /// </summary>
         private void OnDialogueEnded(DialogueEndedEvent evt)
         {
-            if (!string.IsNullOrEmpty(evt.DialogueId))
+            if (string.IsNullOrEmpty(evt.DialogueId))
             {
-                UpdateObjectiveProgress(QuestObjectiveType.TalkToNpc, evt.DialogueId, 1);
+                return;
+            }
+
+            UpdateObjectiveProgress(QuestObjectiveType.TalkToNpc, evt.DialogueId, 1);
+
+            const string DialoguePrefix = "dialogue_";
+            if (evt.DialogueId.StartsWith(DialoguePrefix))
+            {
+                string npcId = "npc_" + evt.DialogueId.Substring(DialoguePrefix.Length);
+                UpdateObjectiveProgress(QuestObjectiveType.TalkToNpc, npcId, 1);
             }
         }
 
