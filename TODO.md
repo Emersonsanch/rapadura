@@ -4,6 +4,19 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-10 (fim da sessão automática agendada 20h — resumo)
+- 🏁 **Resumo desta sessão automática**: continuando de onde a sessão interativa parou, focada em achar e corrigir bugs reais testando de verdade em Play Mode (não só compilando). Achados principais, todos corrigidos e verificados ponta a ponta:
+  - **2 tipos de objetivo de quest inteiros e sistemicamente quebrados**: `KillEnemyType` (casava pelo nome de exibição do inimigo em vez do id do asset — nenhuma quest de matar inimigo jamais progredia de verdade) e `TalkToNpc` (prefixo `"dialogue_"` vs `"npc_"` — nenhuma quest de conversa jamais progredia de verdade). Ambos afetavam **100% das quests do jogo** desse tipo.
+  - **Race condition repetida em 4 telas de UI** (`ShopUIController`, `DialogueUIController`, `SaveLoadMenuController`, `SettingsMenuController`): resolviam managers do `ServiceLocator` uma única vez em `OnEnable`, ficando `null` pra sempre se a ordem de inicialização não cooperasse — corrigido com re-resolve lazy em todas as quatro.
+  - **Economia do jogo quebrada**: loot dos inimigos dropava a moeda errada (`item_gold_coin` em vez de `item_gold`, a que a loja realmente usa) e a moeda certa tinha peso configurado (2/unidade) que esgotava o inventário inteiro com só 50 de ouro guardado.
+  - **Afixos de itens gerados proceduralmente nunca davam bônus nenhum** — sistema de raridade (Rare/Epic/Legendary) era puramente cosmético no nome até esta sessão.
+  - **Recompensas de quest nunca eram entregues** (`QuestManager.SetRewardTargets` nunca chamado, apesar do próprio comentário de classe avisar disso).
+  - Além disso: ambiente visual (3 fases), sistema de combate/FX, XP/loot ao matar inimigo, `SkillManager`/`ComboTracker`/`BuffController` ausentes da cena, as 6 telas principais de UI nunca instanciadas, 9 telas sem `<Style>` no UXML (visual quebrado desde sempre), `CombatCameraShakeRelay` ausente, NPCs de loja/diálogo, receitas de crafting seedadas.
+  - Verificações que confirmaram sistemas já corretos (sem bug): save/load de `PlayerStats`/`InventoryManager`, `LocalizationManager`, `CollectItem`, câmera, persistência de progresso de quest, dano de contato inimigo→jogador, animação/perseguição das aranhas.
+- 🛑 **Parando aqui**: os bugs de maior impacto (sistemas inteiros silenciosamente não-funcionais) foram encontrados e corrigidos; o que resta são decisões do usuário (rig da Maithe, identidade de loja) ou features novas fora do escopo de "corrigir bugs" (sistema de construção de base sem prefabs visuais, tooltips não integrados a nenhuma tela). Suíte de testes 100% verde (396/396) mantida em cada etapa, todos os commits documentados com causa raiz.
+
+
+
 ### 2026-09-10 (continuação — mesmo bug de race condition encontrado em 2 telas de menu: Save/Load e Settings)
 - 🐛 **Mesma causa raiz do bug já corrigido em `ShopUIController`/`DialogueUIController` nesta sessão**: `SaveLoadMenuController._saveManager` e `SettingsMenuController._audioManager`/`_localizationManager` resolviam do `ServiceLocator` uma única vez em `OnEnable()`, sem re-tentar depois — se o `GameObject` da tela inicializasse antes do `GameManager` registrar esses managers (ordem de `Awake`/`OnEnable` entre GameObjects não é garantida pela Unity), a referência ficava `null` pra sempre. Confirmado em Play Mode: `_saveManager` estava `null` logo após o início normal da cena — **a tela de Salvar/Carregar inteira (acessível pelo menu de Pause) não fazia nada ao clicar em Salvar/Carregar/Excluir**. `SettingsMenuController` tinha o mesmo problema com áudio e idioma.
 - ✅ **Corrigido nas duas**: `Show()` re-resolve as referências se ainda estiverem `null`, mesmo padrão usado no fix do Shop/Dialogue.
