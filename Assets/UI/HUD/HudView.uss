@@ -45,6 +45,24 @@
     font-size: 14px;
 }
 
+.hud-skills-button {
+    top: 32px;
+    right: 130px;
+    width: 68px;
+    height: 68px;
+    border-radius: 34px;
+    font-size: 14px;
+}
+
+.hud-pause-button {
+    top: 32px;
+    right: 32px;
+    width: 68px;
+    height: 68px;
+    border-radius: 34px;
+    font-size: 14px;
+}
+
 .hud-touch-button--active {
     background-color: rgba(90, 160, 90, 0.75);
     border-color: rgb(200, 255, 200);

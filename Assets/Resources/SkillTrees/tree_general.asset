@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5cb51771aae57a4c9f7a26ca59f9900, type: 3}
+  m_Name: tree_general
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillTreeDefinition
+  _treeId: tree_general
+  _displayName: "\xC1rvore Geral"
+  _description: "Todas as habilidades de exemplo dispon\xEDveis, organizadas em grade."
+  _nodes:
+  - skill: {fileID: 11400000, guid: 3da83607a84ba6842ac92f35b17ce7c7, type: 2}
+    gridPosition: {x: 0, y: 0}
+  - skill: {fileID: 11400000, guid: 2e951adf0fb843740a0b750b12ecdb95, type: 2}
+    gridPosition: {x: 1, y: 0}
+  - skill: {fileID: 11400000, guid: b05dc3fc393648d4488f9e1556c11b89, type: 2}
+    gridPosition: {x: 2, y: 0}
+  - skill: {fileID: 11400000, guid: 70122cac86ca0da41b2f3f49e9aa5dc7, type: 2}
+    gridPosition: {x: 3, y: 0}
+  - skill: {fileID: 11400000, guid: 5ecae0d2bd412064b85638b1607c275f, type: 2}
+    gridPosition: {x: 4, y: 0}
+  - skill: {fileID: 11400000, guid: 561f83f8c70a53641bde937e2898fa2a, type: 2}
+    gridPosition: {x: 0, y: 1}
+  - skill: {fileID: 11400000, guid: adb83abc2a7117748a6ee5190a20cd0e, type: 2}
+    gridPosition: {x: 1, y: 1}
+  - skill: {fileID: 11400000, guid: 8e7d219bc8ee3c2429faed54bea8f515, type: 2}
+    gridPosition: {x: 2, y: 1}
+  - skill: {fileID: 11400000, guid: 161585ebfcf3e27438159e6c74697bdd, type: 2}
+    gridPosition: {x: 3, y: 1}
+  - skill: {fileID: 11400000, guid: 4154aafe699d1ed4b9717491217e37af, type: 2}
+    gridPosition: {x: 4, y: 1}
+  - skill: {fileID: 11400000, guid: 47b2589f5920abb4ba2d7b6dc87e6fbc, type: 2}
+    gridPosition: {x: 0, y: 2}
+  - skill: {fileID: 11400000, guid: ec0ff4ec837213345bf440e0c169ae29, type: 2}
+    gridPosition: {x: 1, y: 2}
+  - skill: {fileID: 11400000, guid: 2e5fa0cb55fe57742a1f86593c0dc2bb, type: 2}
+    gridPosition: {x: 2, y: 2}
+  - skill: {fileID: 11400000, guid: 747a1d15dfe3aab4f90f220ebebbc985, type: 2}
+    gridPosition: {x: 3, y: 2}
+  - skill: {fileID: 11400000, guid: de3201bdf63a33a4982a5b1786aea8ba, type: 2}
+    gridPosition: {x: 4, y: 2}
+  - skill: {fileID: 11400000, guid: d047a8e7e780c8847a4e849e62bae064, type: 2}
+    gridPosition: {x: 0, y: 3}
+  - skill: {fileID: 11400000, guid: 53b7401730574ab48823faa4b51cb2b8, type: 2}
+    gridPosition: {x: 1, y: 3}
+  - skill: {fileID: 11400000, guid: e52cafab6c73401449d8e3854d58dc23, type: 2}
+    gridPosition: {x: 2, y: 3}
+  - skill: {fileID: 11400000, guid: a07024251b99a884982e9c1ec4e2d26b, type: 2}
+    gridPosition: {x: 3, y: 3}
+  - skill: {fileID: 11400000, guid: 4a4bbbc5ce1d2db43a4f57ce68d9bac0, type: 2}
+    gridPosition: {x: 4, y: 3}

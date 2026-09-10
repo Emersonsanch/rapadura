@@ -1,5 +1,7 @@
 using Rapadura.Core.Events;
 using Rapadura.Gameplay.Player;
+using Rapadura.UI.Menus;
+using Rapadura.UI.SkillTree;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -33,6 +35,10 @@ namespace Rapadura.UI.HUD
         [Header("References")]
         [SerializeField] private PlayerStats _playerStats;
         [SerializeField] private PlayerInputHandler _playerInput;
+        [Tooltip("Opened by the on-screen Skills button — see SkillTreeController.Toggle().")]
+        [SerializeField] private SkillTreeController _skillTreeController;
+        [Tooltip("Opened by the on-screen Menu button — see PauseMenuController.Toggle().")]
+        [SerializeField] private PauseMenuController _pauseMenuController;
 
         [Header("Adaptive HUD")]
         [Tooltip("Uniform scale applied to the whole HUD root. Exposed here so a future " +
@@ -64,6 +70,8 @@ namespace Rapadura.UI.HUD
         private Label _levelLabel;
         private Button _runButton;
         private Button _jumpButton;
+        private Button _skillsButton;
+        private Button _pauseButton;
 
         private void Awake()
         {
@@ -114,6 +122,8 @@ namespace Rapadura.UI.HUD
 
             _runButton = rootVisualElement.Q<Button>("run-button");
             _jumpButton = rootVisualElement.Q<Button>("jump-button");
+            _skillsButton = rootVisualElement.Q<Button>("skills-button");
+            _pauseButton = rootVisualElement.Q<Button>("pause-button");
         }
 
         private void RegisterCallbacks()
@@ -140,6 +150,16 @@ namespace Rapadura.UI.HUD
                 // release) — same responsiveness reasoning as the run button.
                 _jumpButton.RegisterCallback<PointerDownEvent>(OnJumpButtonPressed);
             }
+
+            if (_skillsButton != null)
+            {
+                _skillsButton.clicked += OnSkillsButtonClicked;
+            }
+
+            if (_pauseButton != null)
+            {
+                _pauseButton.clicked += OnPauseButtonClicked;
+            }
         }
 
         private void UnregisterCallbacks()
@@ -161,6 +181,16 @@ namespace Rapadura.UI.HUD
                 _jumpButton.UnregisterCallback<PointerDownEvent>(OnJumpButtonPressed);
             }
 
+            if (_skillsButton != null)
+            {
+                _skillsButton.clicked -= OnSkillsButtonClicked;
+            }
+
+            if (_pauseButton != null)
+            {
+                _pauseButton.clicked -= OnPauseButtonClicked;
+            }
+
             if (_playerInput != null)
             {
                 _playerInput.TouchRunHeld = false;
@@ -173,6 +203,16 @@ namespace Rapadura.UI.HUD
             {
                 _playerInput.TouchJumpRequested = true;
             }
+        }
+
+        private void OnSkillsButtonClicked()
+        {
+            _skillTreeController?.Toggle();
+        }
+
+        private void OnPauseButtonClicked()
+        {
+            _pauseMenuController?.Toggle();
         }
 
         private void OnRunButtonPressed(PointerDownEvent evt)

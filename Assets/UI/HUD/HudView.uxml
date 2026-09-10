@@ -35,5 +35,7 @@
         </ui:VisualElement>
         <ui:Button name="run-button" text="Correr" class="hud-touch-button hud-run-button" />
         <ui:Button name="jump-button" text="Pular" class="hud-touch-button hud-jump-button" />
+        <ui:Button name="skills-button" text="Skills" class="hud-touch-button hud-skills-button" />
+        <ui:Button name="pause-button" text="Menu" class="hud-touch-button hud-pause-button" />
     </ui:VisualElement>
 </ui:UXML>
