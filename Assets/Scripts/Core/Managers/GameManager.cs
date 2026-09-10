@@ -109,13 +109,11 @@ namespace Rapadura.Core.Managers
 
             SaveManager.Register(QuestManager);
 
-            // Future managers (InventoryManager, SkillManager, etc.) are constructed and
-            // registered here in dependency order as they are implemented.
-            //
-            // NOTE: QuestManager.SetRewardTargets(InventoryManager, PlayerStats) still needs to be
-            // called once the player's components exist (Scene bootstrap) so reward granting and
-            // CollectItem checks work — those components aren't available here since GameManager
-            // is constructed before any scene's player is spawned.
+            // InventoryManager/SkillManager/ComboTracker/BuffController are MonoBehaviours living
+            // directly on the scene's Player object (not IManager/ServiceLocator-registered) —
+            // resolved via GetComponent by whatever needs them. QuestManager.SetRewardTargets is
+            // called once the Player exists, from Start() (see RegisterQuestRewardTargets below),
+            // since GameManager is constructed before any scene's player is spawned.
         }
 
         private void RegisterManager<TManager>(TManager manager) where TManager : IManager
