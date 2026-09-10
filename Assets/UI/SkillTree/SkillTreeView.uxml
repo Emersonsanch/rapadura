@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/SkillTree/SkillTreeView.uss" />
     <ui:VisualElement name="skill-tree-root" class="skill-tree-root">
         <ui:VisualElement name="skill-tree-header" class="skill-tree-header">
             <ui:Label name="tree-title-label" text="Skill Tree" class="skill-tree-title" />
