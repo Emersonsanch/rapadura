@@ -4,6 +4,11 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-10 (sessão automática agendada 20h — reconfirmações e triagem de pendências)
+- 🔬 **"Layout da Skill Tree com nós sobrepostos" — pendência já obsoleta**: reconfirmado via screenshot (`skilltree_recheck.png`) que o fix do `<Style>` (entrada anterior desta mesma sessão) já corrigiu isso — grade limpa de 20 nós circulares, sem sobreposição. A nota antiga na lista de pendências não tinha sido atualizada depois desse fix. Nenhuma ação necessária.
+- 📌 **"NPC de loja/diálogo não existe na cena" — já resolvido em entrada anterior**: `Npc_Shopkeeper`/`Npc_Villager` já foram colocados e testados (ver changelog "NPCs de loja/diálogo colocados na cena"). Nota também desatualizada na lista de pendências do prompt agendado.
+- 📌 **Pendências reais que continuam bloqueadas por decisão do usuário, não tocadas**: rig da Maithe (créditos Meshy — usuário nunca confirmou gastar depois da última pergunta), Player Settings de ícone/bundle id (identidade de loja, decisão de negócio).
+
 ### 2026-09-10 (continuação — verificações extras sem bug: câmera, persistência de quests)
 - 🔬 **`CameraController._target`**: `SetTarget()` público nunca é chamado em código nenhures, mas `_target` é `[SerializeField]` já configurado via Inspector na cena — confirmado funcionando (câmera segue o jogador corretamente em todos os screenshots desta sessão). Sem bug.
 - 🔬 **Persistência de progresso de quest**: `quest_maria_fading_light` completada de verdade → `Save(5)` → `QuestManager.Shutdown()`/`Initialize()` (simulando reinício de sessão, `IsCompleted` volta a `false`) → `Load(5)` → `IsCompleted` volta a `true`. Sem bug.
