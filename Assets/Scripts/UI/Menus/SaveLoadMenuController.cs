@@ -182,6 +182,18 @@ namespace Rapadura.UI.Menus
 
         public void Show(ScreenMode mode)
         {
+            // Same class of bug as ShopUIController/DialogueUIController (fixed earlier this
+            // session): OnEnable's ServiceLocator.TryGet(out _saveManager) runs once at scene
+            // start, before GameManager.Awake() is guaranteed to have registered SaveManager
+            // (Unity doesn't order Awake/OnEnable across different GameObjects) — left
+            // _saveManager permanently null, so every Save/Load/Delete button on this screen
+            // silently did nothing (confirmed via Play Mode: _saveManager was null after a normal
+            // scene start). Re-resolving here is cheap (only looks up while still null).
+            if (_saveManager == null)
+            {
+                ServiceLocator.TryGet(out _saveManager);
+            }
+
             _mode = mode;
 
             if (_titleLabel != null)

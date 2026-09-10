@@ -302,6 +302,20 @@ namespace Rapadura.UI.Menus
 
         public void Show()
         {
+            // Same class of bug as ShopUIController/DialogueUIController/SaveLoadMenuController
+            // (fixed earlier this session): OnEnable's ServiceLocator.TryGet calls run once at
+            // scene start, before GameManager.Awake() is guaranteed to have registered
+            // AudioManager/LocalizationManager — left both permanently null so every volume slider
+            // and language button on this screen silently did nothing.
+            if (_audioManager == null)
+            {
+                ServiceLocator.TryGet(out _audioManager);
+            }
+            if (_localizationManager == null)
+            {
+                ServiceLocator.TryGet(out _localizationManager);
+            }
+
             if (_root != null)
             {
                 _root.style.display = DisplayStyle.Flex;

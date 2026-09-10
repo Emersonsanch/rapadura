@@ -4,6 +4,13 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-10 (continuação — mesmo bug de race condition encontrado em 2 telas de menu: Save/Load e Settings)
+- 🐛 **Mesma causa raiz do bug já corrigido em `ShopUIController`/`DialogueUIController` nesta sessão**: `SaveLoadMenuController._saveManager` e `SettingsMenuController._audioManager`/`_localizationManager` resolviam do `ServiceLocator` uma única vez em `OnEnable()`, sem re-tentar depois — se o `GameObject` da tela inicializasse antes do `GameManager` registrar esses managers (ordem de `Awake`/`OnEnable` entre GameObjects não é garantida pela Unity), a referência ficava `null` pra sempre. Confirmado em Play Mode: `_saveManager` estava `null` logo após o início normal da cena — **a tela de Salvar/Carregar inteira (acessível pelo menu de Pause) não fazia nada ao clicar em Salvar/Carregar/Excluir**. `SettingsMenuController` tinha o mesmo problema com áudio e idioma.
+- ✅ **Corrigido nas duas**: `Show()` re-resolve as referências se ainda estiverem `null`, mesmo padrão usado no fix do Shop/Dialogue.
+- 🔬 **Testado em Play Mode**: `SaveLoadMenuController.Show()` e `SettingsMenuController.Show()` confirmados resolvendo `_saveManager`/`_audioManager`/`_localizationManager` corretamente (todos não-nulos) logo após a chamada.
+- 📌 **`MainMenuController` tem o mesmo padrão frágil** (`_saveManager` resolvido só em `OnEnable`), mas não está instanciado em `Main.unity` (é uma tela pra uma cena de menu principal separada, que ainda não existe no projeto) — não foi tocado por falta de como verificar nesta cena de teste. Registrar como candidato pra quando essa cena existir.
+- 🏁 Suíte de testes: 396/396.
+
 ### 2026-09-10 (continuação — confirmado: CollectItem já funcionava, os 3 tipos de objetivo agora corretos)
 - 🔬 **Terceiro e último tipo de objetivo de quest verificado ponta a ponta**: `CollectItem` (`quest_maithe_windtrail`, item `item_iron_ore`) — `InventoryManager.AddItem` real disparando `InventoryChangedEvent` → `QuestManager.EvaluateCollectItemObjectives` → progresso atualizado corretamente (capado no `RequiredAmount`). Diferente de `KillEnemyType`/`TalkToNpc`, este já usava o formato de id correto (`ItemDefinition.ItemId`) desde o início — sem bug.
 - 🏁 **Balanço da investigação de quests desta sessão**: dos 3 tipos de objetivo automático, 2 de 3 (`KillEnemyType`, `TalkToNpc`) estavam 100% quebrados por mismatch de prefixo/campo de id, agora corrigidos; `CollectItem` já funcionava. Suíte de testes: 396/396.
