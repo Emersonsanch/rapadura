@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef07b0382b188b44c8450304e20241fe, type: 3}
+  m_Name: recipe_iron_ingot
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Crafting.RecipeDefinition
+  _recipeId: recipe_iron_ingot
+  _displayName: Lingote de Ferro
+  _description: "Funde min\xE9rio de ferro em um lingote utiliz\xE1vel."
+  _ingredients:
+  - item: {fileID: 11400000, guid: cd94a946f8299c04893b92f91853aede, type: 2}
+    quantity: 2
+  - item: {fileID: 11400000, guid: c9bcdd9f33ac04a458fd22b23d3347ac, type: 2}
+    quantity: 1
+  _resultItem: {fileID: 11400000, guid: b3ef5d7014acbfe408ec88662838c2d6, type: 2}
+  _resultQuantity: 1
+  _craftTimeSeconds: 1.5
+  _requiredStation: 0
+  _knownByDefault: 1
+  _minimumPlayerLevel: 1

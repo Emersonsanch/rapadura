@@ -4,6 +4,12 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-10 (continuação — CraftingManager sem nenhuma receita: mesma lacuna da Skill Tree, resolvida)
+- 📌 **Mesma classe de lacuna já resolvida com a Skill Tree**: `CraftingManager` está registrado no `GameManager` com API completa e testada (`TryCraft`/`CanCraft`/`HasAllIngredients`/`UnlockRecipe`), mas **nenhuma `RecipeDefinition` existia no projeto** — sistema funcional sem nenhum dado real pra usar.
+- ✅ **`RecipeSeeder.cs`** (novo, menu `Rapadura/Seed Example Recipes`): 3 receitas de exemplo usando itens já seedados em `Resources/Items` — `recipe_iron_ingot` (2 minério de ferro + 1 madeira → 1 lingote), `recipe_iron_sword` (2 lingotes + 1 madeira → 1 espada de ferro), `recipe_health_potion` (3 ervas → 1 poção de vida).
+- 🔬 **Testado em Play Mode ponta a ponta**: 5 ervas no inventário → `CanCraft`/`TryCraft("recipe_health_potion")` → 2 ervas restantes (3 consumidas corretamente) + 1 poção de vida produzida. Sem bugs encontrados no `CraftingManager` em si — só faltavam os dados.
+- 🏁 Suíte de testes: 396/396.
+
 ### 2026-09-10 (continuação — bug grande real: afixos de itens gerados nunca davam bônus nenhum)
 - 🐛 **Achado real e significativo, não relatado pelo usuário**: `ProceduralItemGenerator` (sessão anterior) gera itens Rare/Epic/Legendary com afixos rolados de verdade, e `InventorySlotData` já tinha campos prontos pra guardar isso (`generatedAffixIds`/`generatedAffixValues`/`generatedName`) — mas **nada em todo o projeto lia esses campos de volta pra aplicar bônus real de stat**. Um item "Espada Flamejante da Fúria" tinha exatamente a mesma força de combate que uma espada comum; os afixos existiam só no nome. Pior ainda: **não existia nenhum método público pra sequer colocar um item gerado (com afixos) dentro do inventário** — `InventoryManager.AddItem` só aceitava `ItemDefinition` + quantidade, sem afixos.
 - ✅ **Corrigido em duas partes**:
