@@ -279,13 +279,21 @@ namespace Rapadura.Tests
         // Helpers
         // ------------------------------------------------------------------
 
-        private void SimulateEnemyDeath(string enemyName)
+        private void SimulateEnemyDeath(string enemyId)
         {
-            var enemyObj = new GameObject("Enemy_" + enemyName);
+            var enemyObj = new GameObject("Enemy_" + enemyId);
             var controller = enemyObj.AddComponent<EnemyController>();
 
             var definition = ScriptableObject.CreateInstance<EnemyDefinition>();
-            SetPrivateField(definition, "_enemyName", enemyName);
+            // QuestManager.ResolveEnemyTargetId matches KillEnemyType objectives against the
+            // EnemyDefinition asset's name (every real quest asset's TargetId is an asset-name-style
+            // id like "enemy_desert_ruin_guardian", never the human-readable _enemyName field, which
+            // is always a display string like "Guardião da Ruína" in every seeded asset — confirmed
+            // by inspecting all 6 quest/enemy asset pairs in the project). Object.name is what
+            // Resources.Load<EnemyDefinition>(...) returns as the asset's filename, so setting it
+            // here (rather than the _enemyName display field) is what actually simulates a real
+            // loaded asset for this test.
+            definition.name = enemyId;
             SetPrivateField(controller, "_definition", definition);
 
             EventBus.Publish(new CombatTargetDiedEvent(enemyObj, null));

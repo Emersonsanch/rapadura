@@ -399,6 +399,17 @@ namespace Rapadura.Gameplay.Quests
             }
         }
 
+        /// <summary>
+        /// Resolves the id used to match a killed enemy against a KillEnemyType objective's
+        /// <see cref="QuestObjective.TargetId"/>. Every quest asset in the project sets TargetId to
+        /// the EnemyDefinition's asset name (e.g. "enemy_desert_ruin_guardian" — confirmed against
+        /// all 6 quest assets), not its human-readable <see cref="EnemyDefinition.EnemyName"/>
+        /// (e.g. "Guardião da Ruína"). Using EnemyName here — the bug this replaces — meant
+        /// KillEnemyType objectives could never progress from a real kill; the only way to advance
+        /// them was forcing QuestObjective.CurrentAmount directly. <c>Definition.name</c> is
+        /// UnityEngine.Object's built-in asset name, which is exactly the id format quests use
+        /// (confirmed: a loaded EnemyDefinition's .name equals its Resources path filename).
+        /// </summary>
         private static string ResolveEnemyTargetId(GameObject target)
         {
             if (target == null)
@@ -407,9 +418,9 @@ namespace Rapadura.Gameplay.Quests
             }
 
             var controller = target.GetComponent<EnemyController>();
-            string definitionName = controller != null ? controller.Definition?.EnemyName : null;
+            string definitionAssetName = controller != null && controller.Definition != null ? controller.Definition.name : null;
 
-            return !string.IsNullOrEmpty(definitionName) ? definitionName : target.name;
+            return !string.IsNullOrEmpty(definitionAssetName) ? definitionAssetName : target.name;
         }
 
         private void OnRecipeCrafted(RecipeCraftedEvent evt)
