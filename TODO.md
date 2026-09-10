@@ -4,6 +4,11 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-10 (continuação — confirmado: movimento e animação das aranhas funcionam de verdade)
+- 🔬 **Pendência antiga do usuário ("depois falta o movimento das aranhas") finalmente reverificada com sucesso**: usando `EnemyController.StateMachine.Tick(deltaTime)` chamado diretamente (sem reflection — descoberta desta rodada: referenciar o tipo público totalmente qualificado no código gerado evita instabilidade do compilador `execute_code` que atrapalhou tentativas anteriores via reflection pesada), confirmado que `Enemy_Spider2` persegue o jogador corretamente (reduziu distância até ficar a 1.2 unidades, dentro do alcance de ataque) e que `EnemyProceduralAnimator` produz bob/lean real durante o deslocamento (posição local Y variou -0.37→-0.50, rotação com lean visível) quando o inimigo de fato se move — e corretamente **não** anima quando parado (ex: já em `EnemyAttackState`, parado no alcance). Nenhum bug encontrado; a correção da sessão anterior (remoção do `EnemyProceduralAnimator` duplicado) resolveu isso definitivamente.
+- 📌 **Achado sobre o ambiente de execução** (não é bug do jogo): `Time.time`/`Time.deltaTime` só avançam de verdade quando o Editor está com foco de janela (`EditorApplication.isFocused`); chamar métodos de tick diretamente pelo tipo público (em vez de via `System.Reflection`) também se mostrou mais estável contra a instabilidade recorrente do compilador `execute_code` neste ambiente — útil registrar pra sessões futuras.
+- 🏁 Suíte de testes: 396/396.
+
 ### 2026-09-10 (continuação — mais um componente esquecido: CombatCameraShakeRelay nunca estava na cena)
 - 🐛 **Mesma classe de bug já encontrada com `InventoryManager`/`SkillManager`/etc.**: `CombatCameraShakeRelay` — implementado e testado isoladamente há várias sessões (`CombatCameraShakeRelayTests`) — nunca tinha um GameObject na cena. Nenhum `CameraShakeRequestedEvent` tinha ouvinte nenhum (`EventBus.Subscribers` confirmado vazio pra esse tipo), então nenhum hit no jogo real produzia tremor de câmera, apesar do sistema funcionar perfeitamente em teste isolado.
 - ✅ **Corrigido**: adicionado à `Main Camera` (que já tem `CameraController`, dependência do relay). Testado em Play Mode: publicar `CameraShakeRequestedEvent` manualmente agora seta `CameraController._shakeMagnitude` corretamente.
