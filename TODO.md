@@ -4,6 +4,12 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-10 (continuação — bug crítico real: recompensas de quest nunca eram entregues)
+- 🐛 **Achado direto no comentário de classe do próprio `QuestManager.cs`**, que avisava explicitamente: *"Callers (Scene bootstrap) are expected to call `SetRewardTargets` once the player's components exist"* — mas **nada em todo o projeto jamais chamava `SetRewardTargets`**. Resultado real: `_rewardInventory`/`_rewardStats` ficavam `null` pra sempre, então **toda recompensa de toda quest (XP e itens) era silenciosamente descartada** ao completar qualquer uma das 6 quests já escritas (5 pessoais + convergência), e objetivos do tipo `CollectItem` (que leem o inventário de recompensa pra checar progresso) nunca podiam ser satisfeitos.
+- ✅ **Corrigido**: `GameManager.RegisterQuestRewardTargets()` (novo, chamado em `Start()` junto com `RegisterInitialCheckpoint`) resolve o Player da cena e chama `QuestManager.SetRewardTargets(inventory, stats)`.
+- 🔬 **Testado em Play Mode ponta a ponta com uma quest real**: `quest_joaquim_echoes_of_home` (recompensa: 500 XP + 1x `item_leather_chest`) — `StartQuest` → objetivos forçados como completos → `CompleteQuest` retornou `true` → XP do jogador confirmado subindo (jogador foi de nível 1 pra nível 4) e `item_leather_chest` apareceu de fato no inventário.
+- 🏁 Suíte de testes: 396/396.
+
 ### 2026-09-10 (continuação — pequena inconsistência de dados corrigida: item_gold tipado como Material)
 - 📝 **Achado numa varredura geral de todos os itens** (`ItemDatabase.GetAll()`): `item_gold` (a moeda real do jogo, corrigida na entrada anterior) estava com `Type = Material` em vez de `Type = Currency` — `item_gold_coin` (o item não-usado) já tinha isso certo. Nenhuma lógica de jogo filtra por `ItemType.Currency` hoje (confirmado via busca no código), então não quebrava nada agora, mas era uma inconsistência que poderia confundir uma UI/lógica futura que espere encontrar a moeda por tipo. Corrigido: `item_gold.Type = Currency`.
 - 🏁 Suíte de testes: 396/396.

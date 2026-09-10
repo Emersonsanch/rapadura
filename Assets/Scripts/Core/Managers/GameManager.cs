@@ -8,6 +8,8 @@ using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Building;
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Dialogue;
+using Rapadura.Gameplay.Inventory;
+using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.World;
@@ -133,6 +135,30 @@ namespace Rapadura.Core.Managers
         private void Start()
         {
             RegisterInitialCheckpoint();
+            RegisterQuestRewardTargets();
+        }
+
+        /// <summary>
+        /// Resolves the scene's Player and hands its InventoryManager/PlayerStats to
+        /// <see cref="QuestManager.SetRewardTargets"/> — without this, the class-level doc comment
+        /// on <see cref="Rapadura.Gameplay.Quests.QuestManager"/> explicitly says a "Scene
+        /// bootstrap" is expected to call it once the player exists, but nothing anywhere in the
+        /// project ever did. Result: every quest reward (items/XP) silently went nowhere, and
+        /// CollectItem objectives (which read the reward inventory to check progress) could never
+        /// be satisfied. Runs in Start for the same reason as RegisterInitialCheckpoint — the
+        /// scene's Player doesn't exist yet when GameManager builds its managers.
+        /// </summary>
+        private void RegisterQuestRewardTargets()
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null)
+            {
+                return;
+            }
+
+            InventoryManager inventory = player.GetComponent<InventoryManager>();
+            PlayerStats stats = player.GetComponent<PlayerStats>();
+            QuestManager.SetRewardTargets(inventory, stats);
         }
 
         /// <summary>
