@@ -4,6 +4,12 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-10 (continuação — verificações extras sem bug: câmera, persistência de quests)
+- 🔬 **`CameraController._target`**: `SetTarget()` público nunca é chamado em código nenhures, mas `_target` é `[SerializeField]` já configurado via Inspector na cena — confirmado funcionando (câmera segue o jogador corretamente em todos os screenshots desta sessão). Sem bug.
+- 🔬 **Persistência de progresso de quest**: `quest_maria_fading_light` completada de verdade → `Save(5)` → `QuestManager.Shutdown()`/`Initialize()` (simulando reinício de sessão, `IsCompleted` volta a `false`) → `Load(5)` → `IsCompleted` volta a `true`. Sem bug.
+- 📌 **Não conectado, fora de escopo por não afetar o jogador**: `AnalyticsManager.TrackEvent` nunca é chamado por nenhum evento de gameplay real — é lacuna de instrumentação/telemetria (dados pro desenvolvedor), não um bug de jogabilidade.
+- 🏁 Suíte de testes: 396/396.
+
 ### 2026-09-10 (continuação — bug crítico real: recompensas de quest nunca eram entregues)
 - 🐛 **Achado direto no comentário de classe do próprio `QuestManager.cs`**, que avisava explicitamente: *"Callers (Scene bootstrap) are expected to call `SetRewardTargets` once the player's components exist"* — mas **nada em todo o projeto jamais chamava `SetRewardTargets`**. Resultado real: `_rewardInventory`/`_rewardStats` ficavam `null` pra sempre, então **toda recompensa de toda quest (XP e itens) era silenciosamente descartada** ao completar qualquer uma das 6 quests já escritas (5 pessoais + convergência), e objetivos do tipo `CollectItem` (que leem o inventário de recompensa pra checar progresso) nunca podiam ser satisfeitos.
 - ✅ **Corrigido**: `GameManager.RegisterQuestRewardTargets()` (novo, chamado em `Start()` junto com `RegisterInitialCheckpoint`) resolve o Player da cena e chama `QuestManager.SetRewardTargets(inventory, stats)`.
