@@ -120,6 +120,15 @@ namespace Rapadura.UI.Shop
 
         private void OnShopOpened(ShopOpenedEvent evt)
         {
+            // OnEnable's ResolveShopManager() runs once at scene start, before GameManager's
+            // Awake() is guaranteed to have registered ShopManager with the ServiceLocator (Unity
+            // does not order Awake/OnEnable across different GameObjects) — that left _shopManager
+            // permanently null here, and RefreshAll()'s "_shopManager == null -> Hide()" guard
+            // silently undid the Show() below on every real shop open. Re-resolving here (cheap,
+            // only actually looks anything up while still null) fixes it without depending on
+            // script execution order, same lazy-resolve pattern as EnsureHitboxResolved/
+            // EnsureCameraResolved elsewhere in this codebase.
+            ResolveShopManager();
             Show();
             RefreshAll();
         }

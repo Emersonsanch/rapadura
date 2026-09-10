@@ -113,6 +113,12 @@ namespace Rapadura.UI.Dialogue
 
         private void OnDialogueStarted(DialogueStartedEvent evt)
         {
+            // Same bug/fix as ShopUIController.OnShopOpened: OnEnable's ResolveDialogueManager()
+            // runs once at scene start, before GameManager.Awake() is guaranteed to have registered
+            // DialogueManager (Unity doesn't order Awake/OnEnable across GameObjects) — left
+            // _dialogueManager permanently null, and RefreshCurrentLine()'s null guard silently
+            // undid Show() on every real dialogue start.
+            ResolveDialogueManager();
             Show();
             RefreshCurrentLine();
         }
