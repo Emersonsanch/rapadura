@@ -4,6 +4,10 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-10 (continuação — verificado: LocalizationManager troca de idioma corretamente)
+- 🔬 **`LocalizationManager` testado em Play Mode**: `SetLanguage(en)`/`SetLanguage(ptBR)` confirmado trocando o texto retornado por `Get(key)` corretamente (`dialogue.temple_acolyte.choice_stay_watchful` → "Keep the temple's strength..." em EN, "Mantenha a força do templo..." em PT-BR). Não precisa de nenhum asset `LocalizationTable` — usa `DefaultEntries.All` hardcoded em C#, carregado no `Initialize()`. Sem bug.
+- 🏁 Suíte de testes: 396/396.
+
 ### 2026-09-10 (sessão automática agendada 20h — reconfirmações e triagem de pendências)
 - 🔬 **"Layout da Skill Tree com nós sobrepostos" — pendência já obsoleta**: reconfirmado via screenshot (`skilltree_recheck.png`) que o fix do `<Style>` (entrada anterior desta mesma sessão) já corrigiu isso — grade limpa de 20 nós circulares, sem sobreposição. A nota antiga na lista de pendências não tinha sido atualizada depois desse fix. Nenhuma ação necessária.
 - 📌 **"NPC de loja/diálogo não existe na cena" — já resolvido em entrada anterior**: `Npc_Shopkeeper`/`Npc_Villager` já foram colocados e testados (ver changelog "NPCs de loja/diálogo colocados na cena"). Nota também desatualizada na lista de pendências do prompt agendado.
