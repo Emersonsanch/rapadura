@@ -1,3 +1,4 @@
+using Rapadura.Gameplay.Items;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Enemies
@@ -22,6 +23,14 @@ namespace Rapadura.Gameplay.Enemies
         [Header("Rewards")]
         [Tooltip("Experience granted to the killer's PlayerStats when this enemy dies. See EnemyRewardGranter.")]
         [SerializeField] private int _experienceReward = 10;
+
+        [Header("Loot")]
+        [Tooltip("Optional base item dropped into the killer's inventory. Leave null for no loot.")]
+        [SerializeField] private ItemDefinition _lootItem;
+        [Range(0f, 1f)]
+        [SerializeField] private float _lootDropChance = 0.5f;
+        [SerializeField] private int _lootQuantityMin = 1;
+        [SerializeField] private int _lootQuantityMax = 1;
 
         [Header("Movement")]
         [SerializeField] private float _patrolSpeed = 2f;
@@ -49,6 +58,11 @@ namespace Rapadura.Gameplay.Enemies
         public float MaxHealth => _maxHealth;
         public float ContactDamage => _contactDamage;
         public int ExperienceReward => _experienceReward;
+
+        public ItemDefinition LootItem => _lootItem;
+        public float LootDropChance => _lootDropChance;
+        public int LootQuantityMin => _lootQuantityMin;
+        public int LootQuantityMax => _lootQuantityMax;
 
         public float PatrolSpeed => _patrolSpeed;
         public float ChaseSpeed => _chaseSpeed;

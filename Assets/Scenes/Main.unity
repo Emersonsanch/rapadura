@@ -38879,6 +38879,7 @@ GameObject:
   - component: {fileID: 1560329241}
   - component: {fileID: 1560329242}
   - component: {fileID: 1560329243}
+  - component: {fileID: 1560329244}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -39209,6 +39210,22 @@ MonoBehaviour:
   _pulseDuration: 0.5
   _ringColor: {r: 1, g: 0.85, b: 0.3, a: 0.9}
   _groundYOffset: 0.03
+--- !u!114 &1560329244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560329229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a1abef15270ce54c83752e9a1b98e3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Inventory.InventoryManager
+  _slotCount: 30
+  _maxWeight: 100
+  _playerStats: {fileID: 0}
+  _buffController: {fileID: 0}
 --- !u!1 &1562616009
 GameObject:
   m_ObjectHideFlags: 0
@@ -44358,6 +44375,7 @@ GameObject:
   - component: {fileID: 1780996528}
   - component: {fileID: 1780996530}
   - component: {fileID: 1780996531}
+  - component: {fileID: 1780996532}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -44444,6 +44462,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDeathVfx
   _sinkDuration: 1.5
   _sinkDistance: 1.2
+--- !u!114 &1780996532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780996525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9929adc5bebdeb94fa89c58096f971ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyLootGranter
 --- !u!1 &1786355262
 GameObject:
   m_ObjectHideFlags: 0
