@@ -17332,6 +17332,7 @@ GameObject:
   - component: {fileID: 676800757}
   - component: {fileID: 676800756}
   - component: {fileID: 676800760}
+  - component: {fileID: 676800761}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -17440,6 +17441,19 @@ MonoBehaviour:
   _target: {fileID: 1211246096}
   _settings: {fileID: 0}
   _shakeDecay: 2.5
+--- !u!114 &676800761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 676800755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab45a836baf7ed440a2144bc39326be7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Combat.CombatCameraShakeRelay
+  _playerCamera: {fileID: 0}
 --- !u!43 &686838400
 Mesh:
   m_ObjectHideFlags: 0

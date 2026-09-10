@@ -4,6 +4,14 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-10 (continuação — mais um componente esquecido: CombatCameraShakeRelay nunca estava na cena)
+- 🐛 **Mesma classe de bug já encontrada com `InventoryManager`/`SkillManager`/etc.**: `CombatCameraShakeRelay` — implementado e testado isoladamente há várias sessões (`CombatCameraShakeRelayTests`) — nunca tinha um GameObject na cena. Nenhum `CameraShakeRequestedEvent` tinha ouvinte nenhum (`EventBus.Subscribers` confirmado vazio pra esse tipo), então nenhum hit no jogo real produzia tremor de câmera, apesar do sistema funcionar perfeitamente em teste isolado.
+- ✅ **Corrigido**: adicionado à `Main Camera` (que já tem `CameraController`, dependência do relay). Testado em Play Mode: publicar `CameraShakeRequestedEvent` manualmente agora seta `CameraController._shakeMagnitude` corretamente.
+- 📝 **Achado colateral, não é bug de código**: `AccessibilitySettings.ScreenShakeIntensity` estava salvo como `0` no `PlayerPrefs` local deste editor (de algum teste anterior de acessibilidade que desligou o shake e nunca resetou) — isso mascarava completamente o efeito mesmo depois do relay corrigido, já que `ScaleShakeMagnitude` multiplica por esse valor. Resetado pra `1` (padrão) neste editor via `PlayerPrefs.DeleteKey` + `SetScreenShakeIntensity(1f)` — não é algo pra commitar (estado local de cada editor/instalação, não faz parte do repositório), só documentando aqui pra não perder tempo re-investigando se aparecer de novo numa sessão futura com o shake "sem efeito".
+- 🔬 **Verificações extras nesta rodada, nenhuma revelou bug**: troca de personagem (Lavine) confirmada visualmente como modelo real controlável (`lavine_closeup.png`, cajado/chapéu/capa corretos); dano de contato inimigo→jogador confirmado funcionando (`EnemyController.ApplyDamageToTarget`, 100→88 de vida); diálogo com escolhas e save/load confirmados na entrada anterior.
+- 📌 **Ainda pendente de verificação plena** (limitação de ambiente, não suspeita de bug): persistência do `InventoryManager` através de save/load — `Load()` retorna `true` sem exceção, mas a confirmação exata da quantidade pós-load não completou por instabilidade recorrente do compilador `execute_code` neste ambiente.
+- 🏁 Suíte de testes: 396/396.
+
 ### 2026-09-10 (continuação — verificação: diálogo com escolhas e save/load, ambos funcionando de verdade)
 - 🔬 **Diálogo com escolhas ramificadas testado ponta a ponta**: `DialogueManager.SelectChoice(0)` avançou o node de `greeting` pra `destruction` de verdade, e a `DialogueUIController` atualizou o texto exibido corretamente (`dialogue_advance_check.png`) — nenhum bug encontrado, a correção da entrada anterior (lazy-resolve) foi suficiente.
 - 🔬 **Save/Load testado ponta a ponta com dado real, não só chamado sem verificar**: `PlayerStats` — gerou XP (0→55), salvou no slot 1, ganhou mais XP (55→1361), carregou o slot 1 de volta, confirmado `CurrentExperience` voltou a 55 exatamente. Sem bugs.
