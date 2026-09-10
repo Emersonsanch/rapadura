@@ -4,6 +4,10 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-10 (continuação — confirmado: CollectItem já funcionava, os 3 tipos de objetivo agora corretos)
+- 🔬 **Terceiro e último tipo de objetivo de quest verificado ponta a ponta**: `CollectItem` (`quest_maithe_windtrail`, item `item_iron_ore`) — `InventoryManager.AddItem` real disparando `InventoryChangedEvent` → `QuestManager.EvaluateCollectItemObjectives` → progresso atualizado corretamente (capado no `RequiredAmount`). Diferente de `KillEnemyType`/`TalkToNpc`, este já usava o formato de id correto (`ItemDefinition.ItemId`) desde o início — sem bug.
+- 🏁 **Balanço da investigação de quests desta sessão**: dos 3 tipos de objetivo automático, 2 de 3 (`KillEnemyType`, `TalkToNpc`) estavam 100% quebrados por mismatch de prefixo/campo de id, agora corrigidos; `CollectItem` já funcionava. Suíte de testes: 396/396.
+
 ### 2026-09-10 (continuação — mesma classe de bug encontrada em TalkToNpc: prefixo diferente)
 - 🐛 **Mesma causa raiz do bug de `KillEnemyType` corrigido na entrada anterior, desta vez em `TalkToNpc`**: todo `QuestObjective.TargetId` de diálogo usa prefixo `"npc_"` (`npc_village_survivor`, `npc_hermit_mystic`, `npc_temple_acolyte`), mas `DialogueEndedEvent.DialogueId` (usado direto pra casar o objetivo) sempre usa prefixo `"dialogue_"` (`dialogue_village_survivor`, etc.) — mesmo sufixo, prefixo diferente, nunca bate. **100% dos objetivos `TalkToNpc` também eram inalcançáveis** através de uma conversa real.
 - ✅ **Corrigido em `OnDialogueEnded`**: publica o progresso tanto com o `DialogueId` bruto quanto com a versão normalizada (`"dialogue_"` trocado por `"npc_"`) — cobre os dois formatos sem precisar migrar dados existentes nem mudar a assinatura pública de `UpdateObjectiveProgress` (usada por múltiplos tipos de objetivo).
