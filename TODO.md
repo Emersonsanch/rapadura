@@ -4,6 +4,10 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-10 (continuação — pequena inconsistência de dados corrigida: item_gold tipado como Material)
+- 📝 **Achado numa varredura geral de todos os itens** (`ItemDatabase.GetAll()`): `item_gold` (a moeda real do jogo, corrigida na entrada anterior) estava com `Type = Material` em vez de `Type = Currency` — `item_gold_coin` (o item não-usado) já tinha isso certo. Nenhuma lógica de jogo filtra por `ItemType.Currency` hoje (confirmado via busca no código), então não quebrava nada agora, mas era uma inconsistência que poderia confundir uma UI/lógica futura que espere encontrar a moeda por tipo. Corrigido: `item_gold.Type = Currency`.
+- 🏁 Suíte de testes: 396/396.
+
 ### 2026-09-10 (continuação — 2 bugs reais: moeda errada no loot + item de moeda com peso)
 - 🐛 **Achado real, testando compra na loja de verdade**: configurei o loot dos inimigos (sessão anterior) pra dropar `item_gold_coin` ("Moeda de Ouro"), mas `ShopDefinition.CurrencyItemId` (`shop_general_store`) usa `item_gold` ("Ouro") — **são dois itens diferentes**. Isso significa que todo o ouro dropado pelos inimigos não podia ser gasto na loja nenhuma. `item_gold_coin` não é referenciado por nenhum outro sistema de gameplay (só pelos próprios seeders que o criaram) — corrigido trocando o loot dos 9 `EnemyDefinition` pra `item_gold` (a moeda real usada pela loja).
 - 🐛 **Segundo bug, mais grave, encontrado na sequência**: mesmo com a moeda certa, `ShopManager.BuyItem` continuava falhando — `item_gold._weight = 2` (contra `item_gold_coin._weight = 0`, que já estava certo). Com peso 2/unidade e capacidade padrão de 100, **50 de ouro já esgotava 100% da capacidade de peso do inventário**, tornando impossível carregar qualquer outro item OU completar qualquer compra depois de acumular uma quantidade moderada de dinheiro — quebra prática da economia inteira do jogo. Corrigido: `item_gold.Weight = 0`, `MaxStack = 9999` (alinhado com o padrão já correto de `item_gold_coin`).
