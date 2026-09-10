@@ -20,9 +20,9 @@ MonoBehaviour:
   _type: 0
   _category: 3
   _rarity: 0
-  _weight: 2
+  _weight: 0
   _value: 20
-  _maxStack: 99
+  _maxStack: 9999
   _hasDurability: 0
   _maxDurability: 100
   _equipSlot: 0

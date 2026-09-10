@@ -17,7 +17,7 @@ MonoBehaviour:
   _maxHealth: 55
   _contactDamage: 12
   _experienceReward: 10
-  _lootItem: {fileID: 11400000, guid: 021f75a38249d8c4c9fedbf88a0bf4b9, type: 2}
+  _lootItem: {fileID: 11400000, guid: 214ad08bc7a3def4cbeb45bedcc4524c, type: 2}
   _lootDropChance: 0.6
   _lootQuantityMin: 1
   _lootQuantityMax: 3

@@ -4,6 +4,12 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-10 (continuação — 2 bugs reais: moeda errada no loot + item de moeda com peso)
+- 🐛 **Achado real, testando compra na loja de verdade**: configurei o loot dos inimigos (sessão anterior) pra dropar `item_gold_coin` ("Moeda de Ouro"), mas `ShopDefinition.CurrencyItemId` (`shop_general_store`) usa `item_gold` ("Ouro") — **são dois itens diferentes**. Isso significa que todo o ouro dropado pelos inimigos não podia ser gasto na loja nenhuma. `item_gold_coin` não é referenciado por nenhum outro sistema de gameplay (só pelos próprios seeders que o criaram) — corrigido trocando o loot dos 9 `EnemyDefinition` pra `item_gold` (a moeda real usada pela loja).
+- 🐛 **Segundo bug, mais grave, encontrado na sequência**: mesmo com a moeda certa, `ShopManager.BuyItem` continuava falhando — `item_gold._weight = 2` (contra `item_gold_coin._weight = 0`, que já estava certo). Com peso 2/unidade e capacidade padrão de 100, **50 de ouro já esgotava 100% da capacidade de peso do inventário**, tornando impossível carregar qualquer outro item OU completar qualquer compra depois de acumular uma quantidade moderada de dinheiro — quebra prática da economia inteira do jogo. Corrigido: `item_gold.Weight = 0`, `MaxStack = 9999` (alinhado com o padrão já correto de `item_gold_coin`).
+- 🔬 **Testado em Play Mode ponta a ponta após as duas correções**: `BuyItem(0, 3)` — 50→44 de ouro (gastou 6, preço 2×3), 0→3 madeira recebida. `SellItem` — 44→46 de ouro, 3→1 madeira. Compra e venda confirmadas funcionando de verdade.
+- 🏁 Suíte de testes: 396/396.
+
 ### 2026-09-10 (continuação — CraftingManager sem nenhuma receita: mesma lacuna da Skill Tree, resolvida)
 - 📌 **Mesma classe de lacuna já resolvida com a Skill Tree**: `CraftingManager` está registrado no `GameManager` com API completa e testada (`TryCraft`/`CanCraft`/`HasAllIngredients`/`UnlockRecipe`), mas **nenhuma `RecipeDefinition` existia no projeto** — sistema funcional sem nenhum dado real pra usar.
 - ✅ **`RecipeSeeder.cs`** (novo, menu `Rapadura/Seed Example Recipes`): 3 receitas de exemplo usando itens já seedados em `Resources/Items` — `recipe_iron_ingot` (2 minério de ferro + 1 madeira → 1 lingote), `recipe_iron_sword` (2 lingotes + 1 madeira → 1 espada de ferro), `recipe_health_potion` (3 ervas → 1 poção de vida).
