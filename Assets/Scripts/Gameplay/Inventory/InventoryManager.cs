@@ -5,6 +5,7 @@ using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
 using Rapadura.Gameplay.Items;
+using Rapadura.Gameplay.Items.Procedural;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
 using Rapadura.Save;
@@ -233,6 +234,47 @@ namespace Rapadura.Gameplay.Inventory
             return remaining;
         }
 
+        /// <summary>
+        /// Adds a single procedurally-generated item (with rolled affixes) into the first empty
+        /// slot. There was previously no way at all to get a <see cref="GeneratedItemInstance"/>
+        /// into an inventory — <see cref="AddItem(ItemDefinition,int)"/> only ever accepted a plain
+        /// base <see cref="ItemDefinition"/> — so loot/quest-reward code had nowhere to hand off a
+        /// Rare/Epic/Legendary roll's affixes even though <see cref="InventorySlotData"/> already had
+        /// fields to store them (<see cref="InventorySlotData.generatedAffixIds"/>/
+        /// <see cref="InventorySlotData.generatedAffixValues"/>). Generated items are never stacked
+        /// with anything (each roll is unique), unlike <see cref="AddItem(ItemDefinition,int)"/>.
+        /// Returns false if no empty slot was available.
+        /// </summary>
+        public bool AddGeneratedItem(GeneratedItemInstance instance)
+        {
+            EnsureSlotsInitialized();
+
+            if (instance?.BaseItem == null)
+            {
+                return false;
+            }
+
+            foreach (InventorySlotData slot in _slots)
+            {
+                if (!slot.IsEmpty)
+                {
+                    continue;
+                }
+
+                slot.itemId = instance.BaseItem.ItemId;
+                slot.quantity = 1;
+                slot.currentDurability = instance.BaseItem.HasDurability ? instance.BaseItem.MaxDurability : 0f;
+                slot.generatedAffixIds = instance.AffixIds;
+                slot.generatedAffixValues = instance.AffixValues;
+                slot.generatedName = instance.GeneratedName;
+
+                EventBus.Publish(new InventoryChangedEvent());
+                return true;
+            }
+
+            return false;
+        }
+
         private int GetWeightAffordableAmount(ItemDefinition item, int desiredAmount)
         {
             if (item.Weight <= 0f)
@@ -424,11 +466,24 @@ namespace Rapadura.Gameplay.Inventory
 
             UnequipSlot(item.EquipSlot);
 
+            // Captured before RemoveFromSlot below — InventorySlotData is a class, so `slot` and
+            // `_slots[slotIndex]` are the same object; RemoveFromSlot's Clear() (once quantity
+            // hits 0) wipes generatedAffixIds/Values/Name on that shared instance. Reading them
+            // from `slot` afterward silently returned null/empty, which is exactly why the fix
+            // below (added in this same change) initially appeared to do nothing — any equip
+            // always saw zero affixes regardless of what was actually rolled.
+            string[] generatedAffixIds = slot.generatedAffixIds;
+            float[] generatedAffixValues = slot.generatedAffixValues;
+            string generatedName = slot.generatedName;
+
             var equippedData = new InventorySlotData
             {
                 itemId = slot.itemId,
                 quantity = 1,
-                currentDurability = slot.currentDurability
+                currentDurability = slot.currentDurability,
+                generatedAffixIds = generatedAffixIds,
+                generatedAffixValues = generatedAffixValues,
+                generatedName = generatedName,
             };
 
             _equipped[item.EquipSlot] = equippedData;
@@ -437,6 +492,46 @@ namespace Rapadura.Gameplay.Inventory
             if (_buffController != null && item.EquipStatModifiers.Length > 0)
             {
                 _buffController.ApplyEffects(item.EquipStatModifiers.Select(WithPermanentDuration), GetEquipSourceKey(item.EquipSlot));
+            }
+
+            // Procedurally-rolled affixes (ProceduralItemGenerator/GeneratedItemInstance) were
+            // stored on the slot (generatedAffixIds/generatedAffixValues) but nothing anywhere in
+            // the codebase ever read them back out to apply a real stat bonus — a Rare/Epic/
+            // Legendary item's rolled affixes only ever showed up in its generated display name
+            // ("Espada Flamejante da Fúria"), with zero actual gameplay effect once equipped, same
+            // stats as a plain Common item. Mirrors the EquipStatModifiers path above exactly.
+            if (_buffController != null && generatedAffixIds != null && generatedAffixIds.Length > 0)
+            {
+                // Grouped by (stat, application) and summed before calling ApplyEffects: each call
+                // to BuffController.ApplyEffect removes any existing effect for the same
+                // affectedStat before adding its own (see BuffController.ApplyEffect), so two
+                // rolled affixes hitting the same stat (e.g. this session's test roll had both
+                // "affix_brutal" +10.6 and "affix_sharp" +2.5 AttackDamage) would otherwise have the
+                // second silently wipe out the first instead of both contributing.
+                var byStat = new Dictionary<(StatType, ModifierApplication), float>();
+                for (int i = 0; i < generatedAffixIds.Length; i++)
+                {
+                    ItemAffixDefinition affix = AffixDatabase.GetById(generatedAffixIds[i]);
+                    if (affix == null)
+                    {
+                        continue;
+                    }
+
+                    float value = i < generatedAffixValues.Length ? generatedAffixValues[i] : 0f;
+                    var key = (affix.AffectedStat, affix.Application);
+                    byStat.TryGetValue(key, out float existing);
+                    byStat[key] = existing + value;
+                }
+
+                var generatedModifiers = byStat.Select(kvp => new StatModifierDefinition
+                {
+                    displayName = "generated_" + kvp.Key.Item1,
+                    affectedStat = kvp.Key.Item1,
+                    application = kvp.Key.Item2,
+                    value = kvp.Value,
+                });
+
+                _buffController.ApplyEffects(generatedModifiers.Select(WithPermanentDuration), GetEquipSourceKey(item.EquipSlot));
             }
 
             EventBus.Publish(new InventoryChangedEvent());
