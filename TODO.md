@@ -4,6 +4,12 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-11 (continuação — bug real: inimigo que começava a fugir ficava fugindo pra sempre)
+- 🐛 **Achado inspecionando `EnemyFleeState` por não ter sido testado nenhuma vez nesta sessão**: a condição de sair do estado de fuga exigia `recovered && safeDistance` (as DUAS) — mas `Health.cs` (usado por todos os inimigos) **não tem nenhuma regeneração passiva de vida**. Uma vez que a vida cai abaixo do `FleeHealthThreshold`, ela só pode diminuir mais (nunca volta a subir sozinha), então `recovered` nunca mais fica `true` pro resto da partida. Resultado real: **qualquer inimigo que começasse a fugir ficava preso em `EnemyFleeState` permanentemente**, mesmo correndo arbitrariamente longe do jogador — a checagem de `safeDistance` era código morto, nunca fazia diferença sozinha.
+- ✅ **Corrigido**: trocado `&&` por `||` — sair de fuga quando QUALQUER uma das duas condições for satisfeita (design natural: parar de fugir por estar seguro OU por ter se recuperado, o que vier primeiro).
+- 🔬 **Testado em Play Mode ponta a ponta**: lobo levado a 1/30 de vida, forçado pra `EnemyFleeState`, teletransportado 50 unidades pra longe do jogador (vida continua em 1, sem cura nenhuma) → um único `Tick` já confirma transição de volta pra `EnemyPatrolState`. Antes do fix, isso nunca aconteceria.
+- 🏁 Suíte de testes: 396/396.
+
 ### 2026-09-11 (sessão automática agendada 3h — ComboTracker sem nenhum combo de dados)
 - 📌 **Mesma classe de lacuna já resolvida com Skill Tree/Crafting/Skill Tree**: `ComboTracker` foi adicionado ao Player e testado nesta sessão (fluxo de aprender/equipar/conjurar skill), mas seu array `_combos` nunca foi populado — nenhum `ComboDefinition` existia no projeto inteiro, e o campo ficou vazio mesmo depois do componente ser adicionado à cena.
 - ✅ **`ComboSeeder.cs`** (novo, menu `Rapadura/Seed Example Combos`): 2 combos de exemplo usando skills já seedadas — `combo_fire_and_ice` (Bola de Fogo → Estilhaço de Gelo, +25% dano por 5s) e `combo_dash_strike` (Dash → Ataque Relâmpago, -30% custo de recursos por 4s). Também conectado `ComboTracker._combos` no Player (a referência ficou vazia quando o componente foi adicionado antes nesta sessão).

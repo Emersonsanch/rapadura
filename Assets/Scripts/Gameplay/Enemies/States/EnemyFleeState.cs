@@ -26,7 +26,14 @@ namespace Rapadura.Gameplay.Enemies.States
                               EnemyDetectionUtility.CanRecoverFromFlee(context.Health.CurrentHealth, context.Health.MaxHealth, definition.FleeHealthThreshold);
             bool safeDistance = EnemyDetectionUtility.IsFarEnoughToStopFleeing(selfPosition, targetPosition, definition.FleeSafeDistance);
 
-            if (recovered && safeDistance)
+            // Was `recovered && safeDistance` (AND) — but Health (used by every enemy) has no
+            // passive regeneration at all, so `recovered` can never become true once health drops
+            // below the flee threshold (it only ever decreases further from here). Requiring BOTH
+            // meant every enemy that ever started fleeing was stuck fleeing permanently, for the
+            // rest of the game, even after running arbitrarily far from the player — the
+            // safeDistance check was dead code. OR matches the actual design intent: stop fleeing
+            // once either condition alone is enough to feel safe.
+            if (recovered || safeDistance)
             {
                 context.MarkTargetLost();
                 context.StateMachine.ChangeState<EnemyPatrolState>();
