@@ -4,6 +4,11 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-11 (fim da sessão automática agendada 3h — resumo)
+- 🏁 **Resumo desta sessão automática**: 2 achados reais desta rodada, ambos corrigidos e testados ponta a ponta em Play Mode: `ComboTracker` sem nenhum `ComboDefinition` (mesma classe de lacuna já resolvida com Skill Tree/Crafting — seedados 2 combos de exemplo, confirmados aplicando buff real de dano/custo ao conjurar a sequência certa), e um bug real de IA (`EnemyFleeState` exigia recuperação de vida E distância segura pra parar de fugir, mas inimigos não têm regeneração passiva — qualquer inimigo que começasse a fugir ficava preso fugindo pra sempre; trocado `&&` por `||`).
+- 📌 **Verificado sem bug**: `EnemyChaseState` (condições de saída independentes, corretas), movimento de inimigos sem `CharacterController` (sem gravidade aplicada no fallback, mas inofensivo no terreno plano atual — limitação latente pra terreno irregular futuro, não bug ativo).
+- 🛑 **Parando aqui**: não há mais pendências óbvias de "sistema inteiro sem dados/conexão" pra achar sem uma varredura muito mais ampla e demorada; itens que restam são decisões do usuário (rig da Maithe, identidade de loja) ou features novas fora do escopo de correção de bugs (sistema de construção sem prefabs, tooltips não integrados, bônus especiais de boss). Suíte de testes 396/396 mantida em cada etapa.
+
 ### 2026-09-11 (continuação — bug real: inimigo que começava a fugir ficava fugindo pra sempre)
 - 🐛 **Achado inspecionando `EnemyFleeState` por não ter sido testado nenhuma vez nesta sessão**: a condição de sair do estado de fuga exigia `recovered && safeDistance` (as DUAS) — mas `Health.cs` (usado por todos os inimigos) **não tem nenhuma regeneração passiva de vida**. Uma vez que a vida cai abaixo do `FleeHealthThreshold`, ela só pode diminuir mais (nunca volta a subir sozinha), então `recovered` nunca mais fica `true` pro resto da partida. Resultado real: **qualquer inimigo que começasse a fugir ficava preso em `EnemyFleeState` permanentemente**, mesmo correndo arbitrariamente longe do jogador — a checagem de `safeDistance` era código morto, nunca fazia diferença sozinha.
 - ✅ **Corrigido**: trocado `&&` por `||` — sair de fuga quando QUALQUER uma das duas condições for satisfeita (design natural: parar de fugir por estar seguro OU por ter se recuperado, o que vier primeiro).
