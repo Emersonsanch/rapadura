@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1390cee9fa598b049b69318ca47c5ee9, type: 3}
+  m_Name: combo_dash_strike
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.ComboDefinition
+  _comboId: combo_dash_strike
+  _displayName: "Investida Rel\xE2mpago"
+  _description: "Dash seguido de um Ataque Rel\xE2mpago reduz o custo das pr\xF3ximas
+    habilidades."
+  _sequence:
+  - {fileID: 11400000, guid: b05dc3fc393648d4488f9e1556c11b89, type: 2}
+  - {fileID: 11400000, guid: 47b2589f5920abb4ba2d7b6dc87e6fbc, type: 2}
+  _windowSeconds: 2
+  _bonusType: 1
+  _bonusValue: 0.3
+  _bonusDurationSeconds: 4
+  _unlockSkill: {fileID: 0}

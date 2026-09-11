@@ -39660,7 +39660,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.ComboTracker
   _skillManager: {fileID: 1560329246}
   _buffController: {fileID: 1560329247}
-  _combos: []
+  _combos:
+  - {fileID: 11400000, guid: a60c26a9fd6f78f4597aeaa356efb2e4, type: 2}
+  - {fileID: 11400000, guid: 0ea505cde6d85cd4d9892436d1c774ef, type: 2}
 --- !u!114 &1560329246
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,6 +4,12 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-09-11 (sessão automática agendada 3h — ComboTracker sem nenhum combo de dados)
+- 📌 **Mesma classe de lacuna já resolvida com Skill Tree/Crafting/Skill Tree**: `ComboTracker` foi adicionado ao Player e testado nesta sessão (fluxo de aprender/equipar/conjurar skill), mas seu array `_combos` nunca foi populado — nenhum `ComboDefinition` existia no projeto inteiro, e o campo ficou vazio mesmo depois do componente ser adicionado à cena.
+- ✅ **`ComboSeeder.cs`** (novo, menu `Rapadura/Seed Example Combos`): 2 combos de exemplo usando skills já seedadas — `combo_fire_and_ice` (Bola de Fogo → Estilhaço de Gelo, +25% dano por 5s) e `combo_dash_strike` (Dash → Ataque Relâmpago, -30% custo de recursos por 4s). Também conectado `ComboTracker._combos` no Player (a referência ficou vazia quando o componente foi adicionado antes nesta sessão).
+- 🔬 **Testado em Play Mode ponta a ponta, os dois combos**: aprender+equipar+conjurar `skill_fireball` seguido de `skill_ice_shard` dentro da janela → `BuffController.GetModifiedValue(AttackDamage)` confirmado subindo de 10 pra 12.5 (+25% real). Mesmo teste com `skill_dash`→`skill_lightning_bolt` → `ResourceCostReduction` confirmado subindo de 0 pra 0.3.
+- 🏁 Suíte de testes: 396/396.
+
 ### 2026-09-10 (fim da sessão automática agendada 20h — resumo)
 - 🏁 **Resumo desta sessão automática**: continuando de onde a sessão interativa parou, focada em achar e corrigir bugs reais testando de verdade em Play Mode (não só compilando). Achados principais, todos corrigidos e verificados ponta a ponta:
   - **2 tipos de objetivo de quest inteiros e sistemicamente quebrados**: `KillEnemyType` (casava pelo nome de exibição do inimigo em vez do id do asset — nenhuma quest de matar inimigo jamais progredia de verdade) e `TalkToNpc` (prefixo `"dialogue_"` vs `"npc_"` — nenhuma quest de conversa jamais progredia de verdade). Ambos afetavam **100% das quests do jogo** desse tipo.
