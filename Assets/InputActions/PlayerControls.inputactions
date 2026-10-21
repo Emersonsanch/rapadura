@@ -159,6 +159,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "CharacterSheet",
+                    "type": "Button",
+                    "id": "c7f20440-3491-4753-91e9-a7a9e5e4bfc1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Pause",
                     "type": "Button",
                     "id": "c4cf4661-8cc6-411c-a49a-ee4c27361d7f",
@@ -573,6 +582,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SkillTree",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cb26f6e1-4bb3-4b8c-8e63-c04345e429f5",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CharacterSheet",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

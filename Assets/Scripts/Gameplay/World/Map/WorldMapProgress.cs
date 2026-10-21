@@ -14,11 +14,15 @@ namespace Rapadura.Gameplay.World.Map
         public List<int> unlockedRegions = new List<int>();
         public List<int> victoryRegions = new List<int>();
         public List<int> victoryCounts = new List<int>();
+
+        /// <summary>Regions whose boss challenge was won (absent in pre-boss-challenge saves = empty list).</summary>
+        public List<int> clearedRegions = new List<int>();
     }
 
     /// <summary>
     /// Persistent world map state: which region the player is in, which regions are unlocked and
-    /// how many encounters were won per region (drives <see cref="WorldMapGraph"/> unlock rules).
+    /// how many encounters were won per region (drives <see cref="WorldMapGraph"/> unlock rules)
+    /// and which regions were cleared by beating their boss challenge (see <see cref="RegionBossProgress"/>).
     /// A top-level manager built by GameManager (so it outlives WorldMap/Main scene swaps) and
     /// registered with SaveManager as an <see cref="ISaveable"/> under <see cref="SaveKey"/>.
     /// </summary>
@@ -27,12 +31,14 @@ namespace Rapadura.Gameplay.World.Map
         private readonly BiomeType _startingRegion;
         private readonly HashSet<BiomeType> _unlocked = new HashSet<BiomeType>();
         private readonly Dictionary<BiomeType, int> _victories = new Dictionary<BiomeType, int>();
+        private readonly HashSet<BiomeType> _cleared = new HashSet<BiomeType>();
 
         public string SaveKey => "WorldMap";
 
         public BiomeType StartingRegion => _startingRegion;
         public BiomeType CurrentRegion { get; private set; }
         public IReadOnlyCollection<BiomeType> UnlockedRegions => _unlocked;
+        public IReadOnlyCollection<BiomeType> ClearedRegions => _cleared;
 
         public WorldMapProgress(BiomeType startingRegion = BiomeType.Forest)
         {
@@ -53,6 +59,7 @@ namespace Rapadura.Gameplay.World.Map
         {
             _unlocked.Clear();
             _victories.Clear();
+            _cleared.Clear();
             _unlocked.Add(_startingRegion);
             CurrentRegion = _startingRegion;
         }
@@ -99,6 +106,24 @@ namespace Rapadura.Gameplay.World.Map
             _victories[region] = GetVictories(region) + 1;
         }
 
+        /// <summary>
+        /// True once the region's boss challenge was won (only this persisted flag — a boss already
+        /// in <c>DefeatedEnemyRegistry</c> also counts as cleared through <see cref="RegionBossProgress.IsRegionCleared"/>).
+        /// </summary>
+        public bool IsRegionCleared(BiomeType region) => _cleared.Contains(region);
+
+        /// <summary>Marks a region's boss as beaten. Returns true (and publishes <see cref="WorldMapRegionClearedEvent"/>) only the first time.</summary>
+        public bool MarkRegionCleared(BiomeType region)
+        {
+            if (!_cleared.Add(region))
+            {
+                return false;
+            }
+
+            EventBus.Publish(new WorldMapRegionClearedEvent(region));
+            return true;
+        }
+
         public object CaptureState()
         {
             var state = new WorldMapSaveState { currentRegion = (int)CurrentRegion };
@@ -114,6 +139,11 @@ namespace Rapadura.Gameplay.World.Map
                 state.victoryCounts.Add(pair.Value);
             }
 
+            foreach (BiomeType region in _cleared)
+            {
+                state.clearedRegions.Add((int)region);
+            }
+
             return state;
         }
 
@@ -126,6 +156,7 @@ namespace Rapadura.Gameplay.World.Map
 
             _unlocked.Clear();
             _victories.Clear();
+            _cleared.Clear();
 
             // The starting region is always reachable, even if an old/hand-edited save omits it.
             _unlocked.Add(_startingRegion);
@@ -150,6 +181,20 @@ namespace Rapadura.Gameplay.World.Map
                     if (Enum.IsDefined(typeof(BiomeType), region))
                     {
                         _victories[(BiomeType)region] = Math.Max(0, saved.victoryCounts[i]);
+                    }
+                }
+            }
+
+            // Older saves have no clearedRegions (null/empty): nothing is cleared by this flag, but a
+            // boss already in DefeatedEnemyRegistry still counts (RegionBossProgress), and regions
+            // already unlocked above stay unlocked — ApplyUnlocks never re-locks.
+            if (saved.clearedRegions != null)
+            {
+                foreach (int region in saved.clearedRegions)
+                {
+                    if (Enum.IsDefined(typeof(BiomeType), region))
+                    {
+                        _cleared.Add((BiomeType)region);
                     }
                 }
             }

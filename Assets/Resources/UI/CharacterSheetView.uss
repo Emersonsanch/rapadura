@@ -1,0 +1,280 @@
+/* Ficha do personagem — same dark window / gold accent language as QuestLogView.uss.
+   Touch-first: every interactive element is at least 44px tall, the "+" buttons are 56px. */
+
+.character-sheet-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.55);
+    display: none;
+}
+
+.character-sheet-window {
+    width: 86%;
+    min-width: 560px;
+    max-width: 1100px;
+    height: 86%;
+    min-height: 380px;
+    background-color: rgba(12, 14, 20, 0.95);
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.14);
+    padding: 16px 20px;
+}
+
+.character-sheet-header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.character-sheet-title {
+    flex-grow: 1;
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: rgb(255, 210, 90);
+}
+
+.character-sheet-close-button {
+    min-width: 96px;
+    min-height: 44px;
+    font-size: 15px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    color: rgb(230, 230, 235);
+}
+
+/* ---- Hero: name/class left, level + XP bar right ---- */
+.character-sheet-hero {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    background-color: rgba(255, 210, 90, 0.08);
+    border-radius: 8px;
+}
+
+.character-sheet-hero-names {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.character-sheet-hero-name {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: rgb(255, 245, 225);
+}
+
+.character-sheet-hero-class {
+    font-size: 14px;
+    color: rgb(200, 190, 170);
+}
+
+.character-sheet-level-block {
+    width: 40%;
+    min-width: 200px;
+    align-items: stretch;
+}
+
+.character-sheet-level {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: rgb(255, 210, 90);
+    -unity-text-align: middle-right;
+}
+
+.character-sheet-xp-track {
+    height: 12px;
+    margin: 4px 0 2px 0;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.10);
+    overflow: hidden;
+}
+
+.character-sheet-xp-fill {
+    height: 100%;
+    width: 0;
+    background-color: rgb(150, 110, 230);
+}
+
+.character-sheet-xp-label {
+    font-size: 12px;
+    color: rgb(190, 190, 200);
+    -unity-text-align: middle-right;
+}
+
+/* ---- Body: attributes | stats + equipment ---- */
+.character-sheet-body {
+    flex-grow: 1;
+    flex-direction: row;
+}
+
+.character-sheet-column {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.character-sheet-column--attributes {
+    flex-grow: 1.4;
+    margin-right: 14px;
+}
+
+.character-sheet-section-header {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: rgb(255, 220, 120);
+    margin: 2px 0 6px 0;
+}
+
+.character-sheet-section-header--spaced {
+    margin-top: 14px;
+}
+
+.character-sheet-points {
+    font-size: 14px;
+    color: rgb(200, 200, 210);
+    white-space: normal;
+    margin-bottom: 8px;
+}
+
+.character-sheet-points--available {
+    color: rgb(120, 230, 140);
+    -unity-font-style: bold;
+}
+
+.character-sheet-attribute-row {
+    flex-direction: row;
+    align-items: center;
+    min-height: 64px;
+    margin-bottom: 6px;
+    padding: 4px 8px 4px 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.08);
+    border-left-width: 4px;
+    border-left-color: rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+}
+
+.character-sheet-attribute-row--primary {
+    border-left-color: rgb(255, 195, 60);
+}
+
+.character-sheet-attribute-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.character-sheet-attribute-name-line {
+    flex-direction: row;
+    align-items: center;
+}
+
+.character-sheet-attribute-name {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 245);
+}
+
+.character-sheet-attribute-primary-tag {
+    font-size: 11px;
+    margin-left: 6px;
+    padding: 1px 6px;
+    border-radius: 8px;
+    background-color: rgba(255, 195, 60, 0.22);
+    color: rgb(255, 210, 90);
+}
+
+.character-sheet-attribute-preview {
+    font-size: 13px;
+    color: rgb(150, 210, 160);
+    white-space: normal;
+}
+
+.character-sheet-attribute-value {
+    min-width: 48px;
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: rgb(255, 245, 225);
+    -unity-text-align: middle-right;
+    margin-right: 4px;
+}
+
+.character-sheet-attribute-talent {
+    font-size: 11px;
+    color: rgb(190, 170, 120);
+    margin-right: 8px;
+}
+
+.character-sheet-spend-button {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    min-height: 56px;
+    margin: 0;
+    padding: 0;
+    font-size: 28px;
+    -unity-font-style: bold;
+    border-radius: 28px;
+    border-width: 2px;
+    border-color: rgb(120, 230, 140);
+    background-color: rgba(60, 150, 80, 0.55);
+    color: rgb(240, 255, 240);
+    -unity-text-align: middle-center;
+}
+
+.character-sheet-spend-button:hover {
+    background-color: rgba(80, 180, 100, 0.75);
+}
+
+.character-sheet-spend-button:focus {
+    border-color: rgb(255, 230, 140);
+}
+
+.character-sheet-spend-button:disabled {
+    border-color: rgba(255, 255, 255, 0.12);
+    background-color: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.character-sheet-stat-row {
+    flex-direction: row;
+    align-items: center;
+    min-height: 30px;
+    padding: 2px 8px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.character-sheet-stat-name {
+    flex-grow: 1;
+    font-size: 14px;
+    color: rgb(200, 200, 210);
+}
+
+.character-sheet-stat-value {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 245);
+}
+
+.character-sheet-equipment-row {
+    font-size: 13px;
+    color: rgb(220, 220, 228);
+    white-space: normal;
+    margin-bottom: 4px;
+    padding: 2px 8px;
+}
+
+.character-sheet-equipment-empty {
+    font-size: 13px;
+    color: rgb(150, 150, 160);
+    white-space: normal;
+    padding: 2px 8px;
+}

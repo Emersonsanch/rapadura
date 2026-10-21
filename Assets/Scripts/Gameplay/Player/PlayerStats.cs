@@ -27,7 +27,7 @@ namespace Rapadura.Gameplay.Player
     /// Also implements ICombatTarget so skills and future combat/AI systems can damage or
     /// heal the player without depending on this concrete class.
     /// </summary>
-    public class PlayerStats : MonoBehaviour, ISaveable, ICombatTarget, ISkillResourceProvider
+    public class PlayerStats : MonoBehaviour, ISaveable, IRestoreOrder, ICombatTarget, ISkillResourceProvider
     {
         [Header("Health")]
         [SerializeField] private float _maxHealth = 100f;
@@ -157,6 +157,12 @@ namespace Rapadura.Gameplay.Player
         public Transform Transform => transform;
 
         public string SaveKey => "PlayerStats";
+
+        /// <summary>
+        /// After AttributeSet/InventoryManager/SkillManager (see <see cref="RestoreOrders.AfterStatBonuses"/>):
+        /// RestoreState caches MaxHealth/MaxMana, which must already include every bonus.
+        /// </summary>
+        public int RestoreOrder => RestoreOrders.AfterStatBonuses;
 
         private void Awake()
         {

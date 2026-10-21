@@ -44,6 +44,11 @@ namespace Rapadura.Gameplay.World.Map
         [SerializeField] private bool _useFixedSeed;
         [SerializeField] private int _seed = 12345;
 
+        [Header("Region boss challenge")]
+        [Tooltip("Regular enemies rolled alongside the region boss when \"Enfrentar o chefe\" starts.")]
+        [SerializeField] [Min(0)] private int _bossMinionsMin = RegionBossProgress.DefaultMinMinions;
+        [SerializeField] [Min(0)] private int _bossMinionsMax = RegionBossProgress.DefaultMaxMinions;
+
         [Header("Input")]
         [SerializeField] private Camera _camera;
         [SerializeField] private LayerMask _nodeMask = ~0;
@@ -52,6 +57,8 @@ namespace Rapadura.Gameplay.World.Map
         private readonly Dictionary<BiomeType, WorldMapRegionNode> _nodesByRegion = new Dictionary<BiomeType, WorldMapRegionNode>();
         private WorldMapGraph _graph;
         private RandomEncounterSystem _encounters;
+        private RegionBossProgress _bosses;
+        private System.Random _challengeRandom;
         private WorldMapProgress _progress;
         private SceneTransitionService _transition;
         private WorldMapRegionNode _currentNode;
@@ -61,12 +68,19 @@ namespace Rapadura.Gameplay.World.Map
         public WorldMapProgress Progress => _progress;
         public WorldMapGraph Graph => _graph;
         public RandomEncounterSystem Encounters => _encounters;
+
+        /// <summary>Region boss rules for this map (null before Start). HUD API: CanChallengeBoss/BossFor/IsRegionCleared.</summary>
+        public RegionBossProgress RegionBosses => _bosses;
+
+        /// <summary>"Enfrentar o chefe" can be pressed right now: offered for the current region and the token is idle.</summary>
+        public bool CanChallengeCurrentBoss =>
+            _bosses != null && _currentNode != null && !_encounterInProgress && !IsTraveling && _bosses.CanChallengeBoss(_currentNode.Region);
         public WorldMapRegionNode CurrentNode => _currentNode;
         public bool IsTraveling => _targetNode != null;
         public IReadOnlyList<WorldMapRegionNode> Nodes => _nodes;
 
         /// <summary>
-        /// Optional screen-space filter for map clicks (bottom-left origin, like <c>Mouse.position</c>):
+        /// Optional screen-space filter for map clicks/taps (bottom-left origin, like <c>Mouse.position</c>/<c>Touch.position</c>):
         /// return true to swallow the click, e.g. when it lands on the world map HUD (WorldMap.unity
         /// has no EventSystem, so UI Toolkit hits are not seen by <c>IsPointerOverGameObject</c>).
         /// </summary>
@@ -77,6 +91,7 @@ namespace Rapadura.Gameplay.World.Map
             _graph = BuildGraph(_nodes, _nodesByRegion);
             int seed = _useFixedSeed ? _seed : System.Environment.TickCount;
             _encounters = new RandomEncounterSystem(_encounterSettings, seed) { Enabled = _encountersEnabled };
+            _challengeRandom = new System.Random(unchecked(seed * 31 + 7));
         }
 
         private void Start()
@@ -93,13 +108,15 @@ namespace Rapadura.Gameplay.World.Map
                 GameLogger.Warning(LogCategory, "No SceneTransitionService registered; encounters will be rolled but cannot load the combat scene.");
             }
 
-            // Defeated unique bosses are never rolled again (no registry = standalone scene, no filtering).
-            if (ServiceLocator.TryGet(out DefeatedEnemyRegistry defeatedEnemies))
-            {
-                _encounters.EnemyFilter = defeatedEnemies.CanSpawn;
-            }
+            // Region bosses are only fought through "Enfrentar o chefe", and defeated unique bosses
+            // are never rolled again (no registry = standalone scene: only the region-boss filter).
+            ServiceLocator.TryGet(out DefeatedEnemyRegistry defeatedEnemies);
+            _bosses = new RegionBossProgress(_graph, _progress, BiomeRegistry.Get, defeatedEnemies);
+            _encounters.EnemyFilter = _bosses.CanRollInNormalEncounter;
 
-            _graph.ApplyUnlocks(_progress);
+            // Old saves: a boss beaten before the challenge existed counts as cleared.
+            _bosses.SyncClearedFromDefeatedBosses();
+            _graph.ApplyUnlocks(_progress, _bosses.IsUnlockGateSatisfied);
 
             if (!_nodesByRegion.TryGetValue(_progress.CurrentRegion, out _currentNode))
             {
@@ -112,6 +129,7 @@ namespace Rapadura.Gameplay.World.Map
             }
 
             RefreshNodeVisuals();
+            PublishBossChallengeState();
         }
 
         private void Update()
@@ -193,13 +211,12 @@ namespace Rapadura.Gameplay.World.Map
                 return;
             }
 
-            Mouse mouse = Mouse.current;
-            if (mouse == null || !mouse.leftButton.wasPressedThisFrame)
+            if (!TryGetPressThisFrame(out Vector2 screenPosition))
             {
                 return;
             }
 
-            if (PointerBlocker != null && PointerBlocker(mouse.position.ReadValue()))
+            if (PointerBlocker != null && PointerBlocker(screenPosition))
             {
                 return;
             }
@@ -219,11 +236,36 @@ namespace Rapadura.Gameplay.World.Map
                 return;
             }
 
-            Ray ray = _camera.ScreenPointToRay(mouse.position.ReadValue());
+            Ray ray = _camera.ScreenPointToRay(screenPosition);
             if (Physics.Raycast(ray, out RaycastHit hit, _maxRayDistance, _nodeMask, QueryTriggerInteraction.Collide))
             {
                 TryTravelTo(hit.collider.GetComponentInParent<WorldMapRegionNode>());
             }
+        }
+
+        /// <summary>
+        /// A tap (Touchscreen primary touch) or left click that started this frame, in screen space
+        /// (bottom-left origin for both devices). Touch is checked first: this is a touch-first game,
+        /// and on devices with both, the touch already reports its own position.
+        /// </summary>
+        private static bool TryGetPressThisFrame(out Vector2 screenPosition)
+        {
+            Touchscreen touchscreen = Touchscreen.current;
+            if (touchscreen != null && touchscreen.primaryTouch.press.wasPressedThisFrame)
+            {
+                screenPosition = touchscreen.primaryTouch.position.ReadValue();
+                return true;
+            }
+
+            Mouse mouse = Mouse.current;
+            if (mouse != null && mouse.leftButton.wasPressedThisFrame)
+            {
+                screenPosition = mouse.position.ReadValue();
+                return true;
+            }
+
+            screenPosition = default;
+            return false;
         }
 
         private void TickTravel(float deltaTime)
@@ -266,11 +308,46 @@ namespace Rapadura.Gameplay.World.Map
             _currentNode = node;
             _progress.SetCurrentRegion(node.Region);
             RefreshNodeVisuals();
+            PublishBossChallengeState();
 
             if (ServiceLocator.TryGet(out SaveManager saveManager))
             {
                 saveManager.AutoSave();
             }
+        }
+
+        /// <summary>
+        /// "Enfrentar o chefe": starts the current region's boss challenge (boss + optional minions,
+        /// <see cref="EncounterPayload.isBossChallenge"/>) through the same encounter hand-off as a
+        /// random roll. False when not offered (<see cref="CanChallengeCurrentBoss"/>).
+        /// </summary>
+        public bool TryChallengeBoss()
+        {
+            if (!CanChallengeCurrentBoss || GameplayPause.IsPaused)
+            {
+                return false;
+            }
+
+            EncounterPayload payload = _bosses.BuildChallengePayload(_currentNode.Region, _challengeRandom, _bossMinionsMin, _bossMinionsMax);
+            if (payload == null)
+            {
+                return false;
+            }
+
+            TriggerEncounter(_currentNode, payload);
+            PublishBossChallengeState();
+            return true;
+        }
+
+        private void PublishBossChallengeState()
+        {
+            if (_bosses == null || _currentNode == null)
+            {
+                return;
+            }
+
+            BiomeType region = _currentNode.Region;
+            EventBus.Publish(new RegionBossChallengeStateChangedEvent(region, _bosses.BossFor(region), CanChallengeCurrentBoss));
         }
 
         private void TriggerEncounter(WorldMapRegionNode regionNode, EncounterPayload payload)

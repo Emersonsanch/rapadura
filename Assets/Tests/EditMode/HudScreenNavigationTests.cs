@@ -145,9 +145,10 @@ namespace Rapadura.Tests
                 HudController.AchievementsScreenId,
                 HudController.CraftingScreenId,
                 HudController.ShopScreenId,
+                HudController.CharacterSheetScreenId,
             };
 
-            Assert.AreEqual(6, ids.Count);
+            Assert.AreEqual(7, ids.Count);
         }
 
         // ---------------------------------------------------------------
@@ -253,6 +254,7 @@ namespace Rapadura.Tests
                          HudController.QuestLogActionName,
                          HudController.InventoryActionName,
                          HudController.SkillTreeActionName,
+                         HudController.CharacterSheetActionName,
                          HudController.PauseActionName,
                      })
             {
@@ -318,6 +320,7 @@ namespace Rapadura.Tests
                 HudController.QuestLogActionName,
                 HudController.InventoryActionName,
                 HudController.SkillTreeActionName,
+                HudController.CharacterSheetActionName,
                 HudController.PauseActionName);
         }
 

@@ -7,6 +7,7 @@ using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.Skills;
 using Rapadura.UI.Achievements;
+using Rapadura.UI.CharacterSheet;
 using Rapadura.UI.Common;
 using Rapadura.UI.Crafting;
 using Rapadura.UI.Inventory;
@@ -16,6 +17,7 @@ using Rapadura.UI.Shop;
 using Rapadura.UI.SkillTree;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace Rapadura.UI.HUD
@@ -32,8 +34,8 @@ namespace Rapadura.UI.HUD
     /// <see cref="PlayerManaChangedEvent"/> from SetMana, and this controller subscribes to it
     /// directly instead of polling every frame.
     ///
-    /// SCREENS: the top-right cluster (Missões / Mochila / Skills / Menu) and the keyboard/gamepad
-    /// shortcuts (QuestLog J, Inventory I / Select, SkillTree K, Pause Esc / Start — actions in
+    /// SCREENS: the top-right cluster (Missões / Mochila / Ficha / Skills / Menu) and the keyboard/gamepad
+    /// shortcuts (QuestLog J, Inventory I / Select, CharacterSheet C, SkillTree K, Pause Esc / Start — actions in
     /// PlayerControls.inputactions, read from the player's PlayerInput like PlayerInputHandler does,
     /// but via <c>performed</c> callbacks so the HUD still needs no Update()) all go through a
     /// <see cref="ScreenExclusivityCoordinator"/>: opening a screen closes the other ones (including
@@ -45,6 +47,11 @@ namespace Rapadura.UI.HUD
     /// Screens opened from the world go through the same rule: the Loja (opened by an NPC via
     /// ShopManager.OpenShop) is picked up from <see cref="ShopOpenedEvent"/>, and a crafting bancada
     /// calls <see cref="OpenScreenExclusive"/> with its station-specific open.
+    ///
+    /// The Ficha (<see cref="CharacterSheetController"/>) needs no scene wiring: if neither the field
+    /// nor the scene has one, the HUD creates it on Start (own GameObject in the HUD's scene, a
+    /// UIDocument sharing this HUD's PanelSettings at sort order 10). The "Ficha" button carries a
+    /// small badge with the unspent attribute points (<see cref="AttributeSet.OnAttributesChanged"/>).
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class HudController : MonoBehaviour
@@ -76,6 +83,8 @@ namespace Rapadura.UI.HUD
         [SerializeField] private CraftingUIController _craftingController;
         [Tooltip("NPC-opened Loja screen — registered here so opening another screen ends the shop session, and a shop opening closes the others. If empty, resolved from the scene.")]
         [SerializeField] private ShopUIController _shopController;
+        [Tooltip("Ficha do personagem (attribute points). If empty, resolved from the scene, else created at runtime next to the HUD.")]
+        [SerializeField] private CharacterSheetController _characterSheetController;
         [Tooltip("Player's SkillHotbar (slot -> skill loadout + casting). If empty it is resolved from " +
                  "_playerInput's GameObject, and added there at runtime if that GameObject has a SkillManager but no SkillHotbar yet.")]
         [SerializeField] private SkillHotbar _skillHotbar;
@@ -119,6 +128,11 @@ namespace Rapadura.UI.HUD
         private Button _inventoryButton;
         private Button _pauseButton;
         private Button _questsButton;
+        private Button _characterSheetButton;
+        private Label _characterSheetBadge;
+        private AttributeSet _attributeSet;
+        private float _nextAttributeSetLookup;
+        private bool _createdCharacterSheet;
 
         // Screen ids for the exclusivity coordinator.
         public const string SkillTreeScreenId = "skill-tree";
@@ -127,11 +141,18 @@ namespace Rapadura.UI.HUD
         public const string AchievementsScreenId = "achievements";
         public const string CraftingScreenId = "crafting";
         public const string ShopScreenId = "shop";
+        public const string CharacterSheetScreenId = "character-sheet";
+
+        // Element names in HudView.uxml referenced from outside (tutorial outline, tests).
+        public const string CharacterSheetButtonName = "character-sheet-button";
+        public const string CharacterSheetBadgeName = "character-sheet-badge";
+        public const string BadgeHiddenClass = "hud-menu-badge--hidden";
 
         // Action names in PlayerControls.inputactions (Player map).
         public const string QuestLogActionName = "QuestLog";
         public const string InventoryActionName = "Inventory";
         public const string SkillTreeActionName = "SkillTree";
+        public const string CharacterSheetActionName = "CharacterSheet";
         public const string PauseActionName = "Pause";
 
         private readonly ScreenExclusivityCoordinator _screens = new ScreenExclusivityCoordinator();
@@ -140,6 +161,7 @@ namespace Rapadura.UI.HUD
         private InputAction _questLogAction;
         private InputAction _inventoryAction;
         private InputAction _skillTreeAction;
+        private InputAction _characterSheetAction;
         private InputAction _pauseAction;
         private bool _shortcutsBound;
         private float _nextShortcutBindAttempt;
@@ -179,7 +201,8 @@ namespace Rapadura.UI.HUD
             BindElements();
             ApplyAdaptiveLayout();
             RegisterCallbacks();
-            _localizer.Attach(_uiDocument.rootVisualElement, UpdateLevelLabel);
+            // CharacterSheetTexts.Get covers the "Ficha" button key and defers every other key to UiTexts.Get.
+            _localizer.Attach(_uiDocument.rootVisualElement, UpdateLevelLabel, CharacterSheetTexts.Get);
             InitializeFromCurrentStats();
         }
 
@@ -195,12 +218,22 @@ namespace Rapadura.UI.HUD
             InitializeFromCurrentStats();
             RefreshSkillHotbar();
             TryBindShortcuts();
+            ResolveCharacterSheet(createIfMissing: true);
+            TryResolveAttributeSet();
         }
 
         private void OnDisable()
         {
             _localizer.Detach();
             UnregisterCallbacks();
+        }
+
+        private void OnDestroy()
+        {
+            if (_createdCharacterSheet && _characterSheetController != null)
+            {
+                Destroy(_characterSheetController.gameObject);
+            }
         }
 
         private void BindElements()
@@ -228,6 +261,8 @@ namespace Rapadura.UI.HUD
             _inventoryButton = rootVisualElement.Q<Button>("inventory-button");
             _pauseButton = rootVisualElement.Q<Button>("pause-button");
             _questsButton = rootVisualElement.Q<Button>("quests-button");
+            _characterSheetButton = rootVisualElement.Q<Button>(CharacterSheetButtonName);
+            _characterSheetBadge = rootVisualElement.Q<Label>(CharacterSheetBadgeName);
 
             for (int i = 0; i < SkillSlotCount; i++)
             {
@@ -290,6 +325,14 @@ namespace Rapadura.UI.HUD
                 _questsButton.clicked += OnQuestsButtonClicked;
             }
 
+            if (_characterSheetButton != null)
+            {
+                _characterSheetButton.clicked += OnCharacterSheetButtonClicked;
+            }
+
+            SubscribeAttributeSet(_attributeSet);
+            UpdateCharacterSheetBadge();
+
             for (int i = 0; i < SkillSlotCount; i++)
             {
                 // PointerDown (not Click) for the same one-shot responsiveness as the jump button.
@@ -345,6 +388,16 @@ namespace Rapadura.UI.HUD
             if (_questsButton != null)
             {
                 _questsButton.clicked -= OnQuestsButtonClicked;
+            }
+
+            if (_characterSheetButton != null)
+            {
+                _characterSheetButton.clicked -= OnCharacterSheetButtonClicked;
+            }
+
+            if (_attributeSet != null)
+            {
+                _attributeSet.OnAttributesChanged -= UpdateCharacterSheetBadge;
             }
 
             for (int i = 0; i < SkillSlotCount; i++)
@@ -441,6 +494,7 @@ namespace Rapadura.UI.HUD
 
             // Cheap retry: the player (and its PlayerInput) may spawn after the HUD.
             TryBindShortcuts();
+            TryResolveAttributeSet();
 
             int charsPerLine = SkillSlotDisplayMath.SlotNameCharsPerLine(CurrentFontScale());
 
@@ -561,6 +615,11 @@ namespace Rapadura.UI.HUD
                 () => ResolveShop() && _shopController.IsOpen,
                 () => { if (ResolveShop()) _shopController.Open(); },
                 () => { if (ResolveShop()) _shopController.Close(); });
+
+            _screens.Register(CharacterSheetScreenId,
+                () => ResolveCharacterSheet() && _characterSheetController.IsOpen,
+                () => { if (ResolveCharacterSheet(createIfMissing: true)) _characterSheetController.Open(); },
+                () => { if (ResolveCharacterSheet()) _characterSheetController.Hide(); });
         }
 
         // Serialized ref first, FindFirstObjectByType fallback (same pattern as the Mochila button had).
@@ -600,6 +659,99 @@ namespace Rapadura.UI.HUD
             return _shopController != null;
         }
 
+        private bool ResolveCharacterSheet(bool createIfMissing = false)
+        {
+            if (_characterSheetController == null) _characterSheetController = FindFirstObjectByType<CharacterSheetController>();
+            if (_characterSheetController == null && createIfMissing) _characterSheetController = CreateCharacterSheet();
+            return _characterSheetController != null;
+        }
+
+        /// <summary>
+        /// Self-bootstrap for scenes without a Ficha: a root GameObject in the HUD's scene (not parented
+        /// to the HUD — a UIDocument under another UIDocument's transform becomes part of that tree) with
+        /// a UIDocument on the HUD's PanelSettings, sort order <see cref="CharacterSheetController.DefaultSortingOrder"/>.
+        /// Built inactive so the document has its settings/view before its first OnEnable.
+        /// </summary>
+        private CharacterSheetController CreateCharacterSheet()
+        {
+            PanelSettings panelSettings = _uiDocument != null ? _uiDocument.panelSettings : null;
+            VisualTreeAsset view = Resources.Load<VisualTreeAsset>(CharacterSheetController.ViewResourcePath);
+
+            if (panelSettings == null || view == null)
+            {
+                return null;
+            }
+
+            var host = new GameObject(nameof(CharacterSheetController));
+            host.SetActive(false);
+
+            if (gameObject.scene.IsValid())
+            {
+                SceneManager.MoveGameObjectToScene(host, gameObject.scene);
+            }
+
+            var document = host.AddComponent<UIDocument>();
+            document.panelSettings = panelSettings;
+            document.sortingOrder = CharacterSheetController.DefaultSortingOrder;
+            document.visualTreeAsset = view;
+            CharacterSheetController controller = host.AddComponent<CharacterSheetController>();
+            host.SetActive(true);
+            _createdCharacterSheet = true;
+            return controller;
+        }
+
+        /// <summary>Finds the player's AttributeSet for the badge (throttled: the player may spawn after the HUD).</summary>
+        private void TryResolveAttributeSet()
+        {
+            if (_attributeSet != null || !isActiveAndEnabled || Time.unscaledTime < _nextAttributeSetLookup)
+            {
+                return;
+            }
+
+            _nextAttributeSetLookup = Time.unscaledTime + ShortcutBindRetrySeconds;
+            AttributeSet found = _playerStats != null ? _playerStats.GetComponent<AttributeSet>() : null;
+
+            if (found == null)
+            {
+                found = FindFirstObjectByType<AttributeSet>();
+            }
+
+            SubscribeAttributeSet(found);
+            UpdateCharacterSheetBadge();
+        }
+
+        private void SubscribeAttributeSet(AttributeSet attributes)
+        {
+            if (attributes == null)
+            {
+                return;
+            }
+
+            // -= first: OnEnable re-subscribes the same set after an OnDisable.
+            attributes.OnAttributesChanged -= UpdateCharacterSheetBadge;
+            attributes.OnAttributesChanged += UpdateCharacterSheetBadge;
+            _attributeSet = attributes;
+        }
+
+        /// <summary>Shows the unspent-points count on the "Ficha" button, hidden at 0 (see <see cref="CharacterSheetPresenter.ShouldShowBadge"/>).</summary>
+        private void UpdateCharacterSheetBadge()
+        {
+            ApplyBadge(_characterSheetBadge, _attributeSet != null ? _attributeSet.AvailableAttributePoints : 0);
+        }
+
+        /// <summary>Badge update (text + hidden class) without any HUD state, shared with EditMode tests.</summary>
+        public static void ApplyBadge(Label badge, int availablePoints)
+        {
+            if (badge == null)
+            {
+                return;
+            }
+
+            bool show = CharacterSheetPresenter.ShouldShowBadge(availablePoints);
+            badge.text = CharacterSheetPresenter.FormatBadge(availablePoints);
+            badge.EnableInClassList(BadgeHiddenClass, !show);
+        }
+
         private bool ResolvePauseMenu()
         {
             if (_pauseMenuController == null) _pauseMenuController = FindFirstObjectByType<PauseMenuController>();
@@ -635,6 +787,7 @@ namespace Rapadura.UI.HUD
         private void OnSkillsButtonClicked() => ToggleScreen(SkillTreeScreenId);
         private void OnInventoryButtonClicked() => ToggleScreen(InventoryScreenId);
         private void OnQuestsButtonClicked() => ToggleScreen(QuestLogScreenId);
+        private void OnCharacterSheetButtonClicked() => ToggleScreen(CharacterSheetScreenId);
 
         private void OnPauseButtonClicked()
         {
@@ -700,7 +853,7 @@ namespace Rapadura.UI.HUD
         // ---------------------------------------------------------------
 
         /// <summary>
-        /// Hooks the QuestLog/Inventory/SkillTree/Pause actions of the player's PlayerInput.
+        /// Hooks the QuestLog/Inventory/SkillTree/CharacterSheet/Pause actions of the player's PlayerInput.
         /// FindAction (not the indexer) so an actions asset without them just leaves the shortcuts
         /// unbound, same as PlayerInputHandler does for Skill1..5. Retried (throttled) from the
         /// hotbar refresh until the player exists — it may spawn after the HUD.
@@ -730,11 +883,13 @@ namespace Rapadura.UI.HUD
             _questLogAction = actions.FindAction(QuestLogActionName, throwIfNotFound: false);
             _inventoryAction = actions.FindAction(InventoryActionName, throwIfNotFound: false);
             _skillTreeAction = actions.FindAction(SkillTreeActionName, throwIfNotFound: false);
+            _characterSheetAction = actions.FindAction(CharacterSheetActionName, throwIfNotFound: false);
             _pauseAction = actions.FindAction(PauseActionName, throwIfNotFound: false);
 
             if (_questLogAction != null) _questLogAction.performed += OnQuestLogActionPerformed;
             if (_inventoryAction != null) _inventoryAction.performed += OnInventoryActionPerformed;
             if (_skillTreeAction != null) _skillTreeAction.performed += OnSkillTreeActionPerformed;
+            if (_characterSheetAction != null) _characterSheetAction.performed += OnCharacterSheetActionPerformed;
             if (_pauseAction != null) _pauseAction.performed += OnPauseActionPerformed;
 
             _shortcutsBound = true;
@@ -745,11 +900,13 @@ namespace Rapadura.UI.HUD
             if (_questLogAction != null) _questLogAction.performed -= OnQuestLogActionPerformed;
             if (_inventoryAction != null) _inventoryAction.performed -= OnInventoryActionPerformed;
             if (_skillTreeAction != null) _skillTreeAction.performed -= OnSkillTreeActionPerformed;
+            if (_characterSheetAction != null) _characterSheetAction.performed -= OnCharacterSheetActionPerformed;
             if (_pauseAction != null) _pauseAction.performed -= OnPauseActionPerformed;
 
             _questLogAction = null;
             _inventoryAction = null;
             _skillTreeAction = null;
+            _characterSheetAction = null;
             _pauseAction = null;
             _shortcutsBound = false;
             _nextShortcutBindAttempt = 0f;
@@ -758,6 +915,7 @@ namespace Rapadura.UI.HUD
         private void OnQuestLogActionPerformed(InputAction.CallbackContext context) => ToggleScreen(QuestLogScreenId);
         private void OnInventoryActionPerformed(InputAction.CallbackContext context) => ToggleScreen(InventoryScreenId);
         private void OnSkillTreeActionPerformed(InputAction.CallbackContext context) => ToggleScreen(SkillTreeScreenId);
+        private void OnCharacterSheetActionPerformed(InputAction.CallbackContext context) => ToggleScreen(CharacterSheetScreenId);
         private void OnPauseActionPerformed(InputAction.CallbackContext context) => OnPauseShortcut();
 
         private void OnRunButtonPressed(PointerDownEvent evt)

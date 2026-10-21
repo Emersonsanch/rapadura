@@ -31,7 +31,7 @@ namespace Rapadura.Core.DI
         {
             if (_instance != null && _instance != this)
             {
-                Destroy(gameObject);
+                RemoveDuplicate();
                 return;
             }
 
@@ -42,6 +42,53 @@ namespace Rapadura.Core.DI
                 DontDestroyOnLoad(gameObject);
             }
         }
+
+        /// <summary>
+        /// A scene loaded after the persistent instance (e.g. Main.unity's GameManager object, reached
+        /// from WorldMap) may carry other per-scene components on the same object (HitStopController,
+        /// EnemyRewardGranter, ...). Destroying the whole duplicate GameObject silently killed them, so
+        /// only this component goes — plus any sibling whose type the persistent object already has
+        /// (it was carried over with it, e.g. when Main.unity was the first scene; keeping both would
+        /// double every reward). The GameObject itself goes only when nothing else is left on it.
+        /// </summary>
+        private void RemoveDuplicate()
+        {
+            var redundant = new System.Collections.Generic.List<Component>();
+            bool keepsOthers = false;
+
+            foreach (Component component in GetComponents<Component>())
+            {
+                if (component == null || component == this || component is Transform)
+                {
+                    continue;
+                }
+
+                if (_instance.GetComponent(component.GetType()) != null)
+                {
+                    redundant.Add(component);
+                }
+                else
+                {
+                    keepsOthers = true;
+                }
+            }
+
+            if (!keepsOthers)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            foreach (Component component in redundant)
+            {
+                Destroy(component);
+            }
+
+            Destroy(this);
+        }
+
+        /// <summary>True when this component is the live singleton (false for a duplicate being removed in Awake).</summary>
+        protected bool IsPrimaryInstance => _instance == this;
 
         protected virtual void OnDestroy()
         {

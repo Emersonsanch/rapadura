@@ -250,6 +250,13 @@ namespace Rapadura.Core.Managers
 
         private void Start()
         {
+            // A duplicate (e.g. Main.unity's, loaded after WorldMap's persistent one) only removes
+            // itself — SingletonBehaviour keeps the rest of its GameObject — and never built managers.
+            if (!IsPrimaryInstance)
+            {
+                return;
+            }
+
             RegisterInitialCheckpoint();
             RegisterQuestRewardTargets();
         }
@@ -349,7 +356,10 @@ namespace Rapadura.Core.Managers
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
 
-            if (Instance == this)
+            // Only the instance that built the managers tears them down: a removed duplicate (Main.unity's,
+            // loaded after WorldMap's) never built any, and must not Shutdown/Clear the live instance's
+            // services — Instance would even re-run FindFirstObjectByType mid-teardown.
+            if (_managersBuilt)
             {
                 foreach (IManager manager in _managers)
                 {

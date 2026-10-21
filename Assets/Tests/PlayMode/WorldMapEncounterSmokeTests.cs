@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rapadura.Core.Events;
+using Rapadura.Core.Managers;
+using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Flow;
+using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.Gameplay.World.Map;
@@ -78,6 +81,97 @@ namespace Rapadura.Tests.PlayMode
             }
 
             // Unexpected Error/Exception logs already fail the test (LogAssert default).
+        }
+
+        /// <summary>
+        /// Regression: Main.unity's GameManager object also carries HitStopController, CombatFxManager,
+        /// EnemyRewardGranter, EnemyDeathVfx and EnemyLootGranter. Reached from WorldMap (whose
+        /// GameManager persists), SingletonBehaviour used to Destroy that whole duplicate object — so
+        /// encounters granted no XP/loot and had no damage numbers, death VFX or hit-stop. Starts from
+        /// WorldMap through the real flow, kills an enemy and expects the XP to arrive.
+        /// </summary>
+        [UnityTest]
+        [Timeout(180000)]
+        public IEnumerator WorldMap_Encounter_KillGrantsExperience_SceneCombatServicesSurviveDuplicateGameManager()
+        {
+            yield return LoadScene(WorldMapSceneName);
+            GameManager persistent = GameManager.Instance;
+            Assert.IsNotNull(persistent, "WorldMap.unity has no GameManager.");
+
+            yield return SelectHero(CharacterId.Lavine, requireCharacterSelect: false);
+
+            WorldMapController map = FindInScene<WorldMapController>();
+            Assert.IsNotNull(map, "WorldMap.unity has no WorldMapController.");
+            yield return WaitUntilOrFail(() => map.isActiveAndEnabled && map.Progress != null,
+                "WorldMapController to be enabled and started once a hero is chosen");
+
+            SceneTransitionService transition = GetService<SceneTransitionService>();
+            BiomeDefinition biome = BiomeRegistry.Get(map.Progress.CurrentRegion);
+            Assert.IsNotNull(biome);
+            EncounterPayload payload = map.Encounters.BuildPayload(biome);
+            Assert.IsNotNull(payload, "Current region rolled no enemies.");
+
+            var spawnedObjects = new List<GameObject>();
+            int experienceEvents = 0;
+            System.Action<EnemySpawnedEvent> onSpawned = e => spawnedObjects.Add(e.Enemy);
+            System.Action<PlayerExperienceChangedEvent> onExperience = _ => experienceEvents++;
+            EventBus.Subscribe(onSpawned);
+            EventBus.Subscribe(onExperience);
+            try
+            {
+                Assert.IsTrue(transition.BeginEncounter(payload), "SceneTransitionService refused the encounter.");
+                yield return WaitUntilOrFail(() => SceneManager.GetActiveScene().name == MainSceneName && SceneManager.GetActiveScene().isLoaded,
+                    "Main.unity to load for the encounter", SceneLoadTimeoutSeconds);
+                yield return WaitFrames(5);
+
+                EncounterArenaController arena = null;
+                yield return WaitUntilOrFail(() =>
+                {
+                    arena = Object.FindFirstObjectByType<EncounterArenaController>();
+                    return arena != null && arena.IsEncounterActive;
+                }, "EncounterArenaController to start the encounter");
+
+                // Main's duplicate GameManager is gone, the persistent one (and its services) is not.
+                Assert.IsTrue(persistent != null, "The persistent GameManager was destroyed when Main.unity loaded.");
+                Assert.AreSame(persistent, GameManager.Instance);
+                Assert.AreEqual(1, FindAllInScene<GameManager>().Length, "Main.unity's duplicate GameManager component was not removed.");
+                Assert.IsTrue(Rapadura.Core.DI.ServiceLocator.TryGet(out Rapadura.Save.SaveManager _), "Removing the duplicate GameManager tore down the live services.");
+
+                // ...but the per-scene combat components sharing its GameObject survived.
+                Assert.IsNotNull(FindInScene<EnemyRewardGranter>(), "EnemyRewardGranter died with Main.unity's duplicate GameManager.");
+                Assert.IsTrue(FindInScene<EnemyRewardGranter>().isActiveAndEnabled);
+                Assert.IsNotNull(FindInScene<EnemyLootGranter>(), "EnemyLootGranter died with Main.unity's duplicate GameManager.");
+                Assert.IsNotNull(FindInScene<EnemyDeathVfx>(), "EnemyDeathVfx died with Main.unity's duplicate GameManager.");
+                Assert.IsNotNull(FindInScene<HitStopController>(), "HitStopController died with Main.unity's duplicate GameManager.");
+                Assert.IsNotNull(FindInScene<CombatFxManager>(), "CombatFxManager died with Main.unity's duplicate GameManager.");
+
+                EnemyController target = spawnedObjects
+                    .Where(go => go != null)
+                    .Select(go => go.GetComponent<EnemyController>())
+                    .FirstOrDefault(e => e != null && e.Definition != null && BossBonusRules.GetExperienceReward(e.Definition) > 0);
+                Assert.IsNotNull(target, "No spawned enemy grants experience.");
+
+                GameObject player = FindPlayer();
+                PlayerStats stats = player.GetComponent<PlayerStats>();
+                Assert.IsNotNull(stats);
+                int levelBefore = stats.Level;
+                int experienceBefore = stats.CurrentExperience;
+                experienceEvents = 0;
+
+                target.Health.ClearInvulnerability();
+                target.Health.ApplyDamage(1_000_000f, ElementType.Physical, player);
+                Assert.IsTrue(target.Health.IsDead);
+                yield return WaitFrames(2);
+
+                Assert.Greater(experienceEvents, 0, "Killing an enemy published no PlayerExperienceChangedEvent (EnemyRewardGranter not listening).");
+                Assert.IsTrue(stats.Level > levelBefore || stats.CurrentExperience > experienceBefore,
+                    $"Killing '{target.Definition.name}' granted no experience (level {levelBefore}->{stats.Level}, xp {experienceBefore}->{stats.CurrentExperience}).");
+            }
+            finally
+            {
+                EventBus.Unsubscribe(onSpawned);
+                EventBus.Unsubscribe(onExperience);
+            }
         }
 
         private static IEnumerator RunEncounter(SceneTransitionService transition, WorldMapProgress progress, EncounterPayload payload,

@@ -15,6 +15,8 @@
             <ui:VisualElement name="wm-region-block" class="wm-top-block wm-region-block" picking-mode="Ignore">
                 <ui:Label name="wm-region-name-label" text="Floresta" class="wm-region-name" picking-mode="Ignore" />
                 <ui:Label name="wm-victories-label" text="Vitórias: 0/3 para desbloquear Deserto" class="wm-victories" picking-mode="Ignore" />
+                <!-- Region boss challenge (WorldMapController.TryChallengeBoss); shown only while offered. -->
+                <ui:Button name="wm-boss-button" text="Enfrentar o chefe" class="wm-boss-button loc" view-data-key="ui.worldmap.boss_challenge" />
             </ui:VisualElement>
             <ui:VisualElement class="wm-top-separator" picking-mode="Ignore" />
             <ui:VisualElement name="wm-env-block" class="wm-top-block wm-env-block" picking-mode="Ignore">

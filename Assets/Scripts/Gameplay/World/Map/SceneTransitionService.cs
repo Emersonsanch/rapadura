@@ -104,7 +104,8 @@ namespace Rapadura.Gameplay.World.Map
         }
 
         /// <summary>
-        /// Resolves the pending encounter: a victory is counted towards the biome's unlock rules,
+        /// Resolves the pending encounter: a victory is counted towards the biome's unlock rules (and a
+        /// won boss challenge marks the region cleared),
         /// <see cref="EncounterEndedEvent"/> is published, the game auto-saves (if a SaveManager is
         /// registered) and the world map scene is loaded. Returns false if nothing was pending.
         /// </summary>
@@ -122,6 +123,13 @@ namespace Rapadura.Gameplay.World.Map
             if (outcome == EncounterOutcome.Victory)
             {
                 _progress?.RecordVictory(payload.biome);
+
+                // Winning the region boss challenge clears the region; the map's ApplyUnlocks then
+                // opens the next one (see RegionBossProgress).
+                if (payload.isBossChallenge)
+                {
+                    _progress?.MarkRegionCleared(payload.biome);
+                }
             }
 
             EventBus.Publish(new EncounterEndedEvent(payload, outcome));

@@ -56,8 +56,8 @@ namespace Rapadura.UI.Tutorial
 
             Title(TutorialSteps.LevelUp, "Level up!", "Você subiu de nível!"),
             Body(TutorialSteps.LevelUp,
-                "You earned attribute and skill points to get stronger. Open Skills to use them.",
-                "Você ganhou pontos de atributo e de skill para ficar mais forte. Abra Skills para usá-los."),
+                "You earned attribute and skill points to get stronger. Tap Sheet to spend your attribute points; skill points go in Skills.",
+                "Você ganhou pontos de atributo e de skill para ficar mais forte. Toque em Ficha para distribuir os atributos; os pontos de skill ficam em Skills."),
 
             Title(TutorialSteps.Death, "Don't give up!", "Não desista!"),
             Body(TutorialSteps.Death,

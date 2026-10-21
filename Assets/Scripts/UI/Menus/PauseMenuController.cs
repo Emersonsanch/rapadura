@@ -161,6 +161,13 @@ namespace Rapadura.UI.Menus
             _isOpen = true;
             _localizer.Refresh();
 
+            // No Criação screen in this scene (e.g. the pause menu reused on WorldMap.unity): hide the dead button.
+            if (_craftingButton != null)
+            {
+                if (_craftingUI == null) _craftingUI = FindFirstObjectByType<CraftingUIController>();
+                _craftingButton.style.display = _craftingUI != null ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+
             if (_root != null)
             {
                 _root.style.display = DisplayStyle.Flex;

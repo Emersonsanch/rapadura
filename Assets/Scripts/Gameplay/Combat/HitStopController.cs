@@ -1,5 +1,6 @@
 using System.Collections;
 using Rapadura.Core.Events;
+using Rapadura.Core.Systems;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Combat
@@ -18,6 +19,7 @@ namespace Rapadura.Gameplay.Combat
         [SerializeField] private float _maxDuration = 0.3f;
 
         private Coroutine _activeHitStop;
+        private readonly HitStopScaleState _scaleState = new HitStopScaleState();
 
         private void OnEnable()
         {
@@ -30,7 +32,8 @@ namespace Rapadura.Gameplay.Combat
 
             if (_activeHitStop != null)
             {
-                Time.timeScale = 1f;
+                _activeHitStop = null;
+                Time.timeScale = _scaleState.End(GameplayPause.IsPaused);
             }
         }
 
@@ -47,18 +50,59 @@ namespace Rapadura.Gameplay.Combat
                 StopCoroutine(_activeHitStop);
             }
 
-            _activeHitStop = StartCoroutine(RunHitStop(duration, Mathf.Clamp01(evt.TimeScale)));
+            // Overlapping hit-stops: the original scale is captured only by the first one, so a
+            // second hit landing mid-freeze no longer "restores" to the frozen scale forever.
+            Time.timeScale = _scaleState.Begin(Time.timeScale, Mathf.Clamp01(evt.TimeScale));
+            _activeHitStop = StartCoroutine(RunHitStop(duration));
         }
 
-        private IEnumerator RunHitStop(float duration, float frozenScale)
+        private IEnumerator RunHitStop(float duration)
         {
-            float previousScale = Time.timeScale;
-            Time.timeScale = frozenScale;
-
             yield return new WaitForSecondsRealtime(duration);
 
-            Time.timeScale = previousScale > 0f ? previousScale : 1f;
             _activeHitStop = null;
+            Time.timeScale = _scaleState.End(GameplayPause.IsPaused);
+        }
+    }
+
+    /// <summary>
+    /// Pure time-scale bookkeeping for <see cref="HitStopController"/> (EditMode-testable): remembers
+    /// the scale from before the first of a run of overlapping hit-stops and hands it back on End.
+    /// </summary>
+    public sealed class HitStopScaleState
+    {
+        private float _originalScale = 1f;
+
+        public bool IsActive { get; private set; }
+
+        /// <summary>Starts (or extends) a freeze; returns the scale to apply.</summary>
+        public float Begin(float currentScale, float frozenScale)
+        {
+            if (!IsActive)
+            {
+                _originalScale = currentScale;
+                IsActive = true;
+            }
+
+            return frozenScale;
+        }
+
+        /// <summary>
+        /// Ends the freeze; returns the scale to restore — 0 while gameplay is paused (GameplayPause
+        /// also re-enforces that), otherwise the captured scale, or 1 if it was itself a pause/freeze.
+        /// </summary>
+        public float End(bool gameplayPaused)
+        {
+            float original = _originalScale;
+            IsActive = false;
+            _originalScale = 1f;
+
+            if (gameplayPaused)
+            {
+                return 0f;
+            }
+
+            return original > 0f ? original : 1f;
         }
     }
 }

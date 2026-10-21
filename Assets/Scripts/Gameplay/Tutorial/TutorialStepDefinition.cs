@@ -69,7 +69,7 @@ namespace Rapadura.Gameplay.Tutorial
         public const string Loot = "loot";
         /// <summary>First quest started: Missões.</summary>
         public const string Quest = "quest";
-        /// <summary>First time at level 2+: attribute/skill points.</summary>
+        /// <summary>First time at level 2+: attribute/skill points (outlines the HUD "Ficha" button, where attribute points are spent).</summary>
         public const string LevelUp = "level_up";
         /// <summary>First player death: the death screen.</summary>
         public const string Death = "death";
@@ -88,7 +88,7 @@ namespace Rapadura.Gameplay.Tutorial
             new TutorialStepDefinition(Skills, 2, TutorialContext.Encounter, "skill-slot-0"),
             new TutorialStepDefinition(Loot, 3, TutorialContext.Any, "inventory-button"),
             new TutorialStepDefinition(Quest, 4, TutorialContext.Any, "quests-button"),
-            new TutorialStepDefinition(LevelUp, 5, TutorialContext.Any, "skills-button"),
+            new TutorialStepDefinition(LevelUp, 5, TutorialContext.Any, "character-sheet-button"),
             new TutorialStepDefinition(Death, 6, TutorialContext.Any),
             new TutorialStepDefinition(Night, 7, TutorialContext.Any),
             new TutorialStepDefinition(Crafting, 8, TutorialContext.Any),

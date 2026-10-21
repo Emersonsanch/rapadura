@@ -219,6 +219,12 @@ namespace Rapadura.UI.WorldMap
 
             string target = RegionName(manager, goal.Target);
 
+            // Victories done but still locked: the region boss gate (RegionBossProgress) is what's left.
+            if (goal.Victories >= goal.Required)
+            {
+                return WorldMapTexts.Format(manager, WorldMapTexts.VictoriesBoss, target, RegionName(manager, goal.RequiredRegion));
+            }
+
             return goal.RequiredRegion == currentRegion
                 ? WorldMapTexts.Format(manager, WorldMapTexts.Victories, goal.Victories, goal.Required, target)
                 : WorldMapTexts.Format(manager, WorldMapTexts.VictoriesIn, goal.Victories, goal.Required, target, RegionName(manager, goal.RequiredRegion));
@@ -264,6 +270,11 @@ namespace Rapadura.UI.WorldMap
                     if (graph != null && progress != null && graph.TryGetUnlockRule(region, out BiomeType required, out int needed))
                     {
                         int victories = Mathf.Min(progress.GetVictories(required), needed);
+                        if (victories >= needed)
+                        {
+                            return WorldMapTexts.Format(manager, WorldMapTexts.LabelBoss, RegionName(manager, required));
+                        }
+
                         return WorldMapTexts.Format(manager, WorldMapTexts.LabelLocked, needed, RegionName(manager, required), victories);
                     }
 

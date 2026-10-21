@@ -21,11 +21,14 @@ using Rapadura.Gameplay.Skills;
 using Rapadura.Gameplay.Tutorial;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.UI.Achievements;
+using Rapadura.UI.CharacterSheet;
 using Rapadura.UI.Common;
 using Rapadura.UI.Crafting;
+using Rapadura.UI.Encounter;
 using Rapadura.UI.Menus;
 using Rapadura.UI.Quests;
 using Rapadura.UI.Tutorial;
+using Rapadura.UI.WorldMap;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -36,7 +39,7 @@ namespace Rapadura.Tests
     /// Coverage audit for every localized text source (see Docs/Localization.md): the core
     /// <see cref="LocalizationManager.DefaultEntries"/> table plus the runtime-merged *Texts helpers
     /// (QuestLogTexts, QuestGiverTexts, DailyQuestTexts, AchievementTexts, TooltipLocalization,
-    /// SettingsMenuTexts, UiTexts, ReturnToTitleTexts, ContentTexts, TutorialTexts, HapticsTexts). Checks that every key referenced by ScriptableObject assets or built in
+    /// SettingsMenuTexts, UiTexts, ReturnToTitleTexts, ContentTexts, TutorialTexts, HapticsTexts, CharacterSheetTexts). Checks that every key referenced by ScriptableObject assets or built in
     /// code exists with both en and pt-BR text, that no key is defined twice with different text,
     /// that helpers never shadow a core key, and that {0}-style placeholders match per language.
     /// Also covers every <c>class="loc"</c> + <c>view-data-key</c> marker in Assets/UI/**/*.uxml
@@ -60,9 +63,12 @@ namespace Rapadura.Tests
             yield return Source(nameof(SettingsMenuTexts), SettingsMenuTexts.Entries);
             yield return Source(nameof(UiTexts), UiTexts.Entries);
             yield return Source(nameof(ReturnToTitleTexts), ReturnToTitleTexts.Entries);
+            yield return Source(nameof(WorldMapTexts), WorldMapTexts.Entries);
             yield return Source(nameof(ContentTexts), ContentTexts.Entries);
             yield return Source(nameof(TutorialTexts), TutorialTexts.Entries);
             yield return Source(nameof(HapticsTexts), HapticsTexts.Entries);
+            yield return Source(nameof(CharacterSheetTexts), CharacterSheetTexts.Entries);
+            yield return Source(nameof(BossTexts), BossTexts.Entries);
         }
 
         private static KeyValuePair<string, IReadOnlyList<LocalizationEntry>> Source(string name, IReadOnlyList<LocalizationEntry> entries)
@@ -248,8 +254,12 @@ namespace Rapadura.Tests
             SettingsMenuTexts.EnsureRegistered(manager);
             UiTexts.EnsureRegistered(manager);
             ReturnToTitleTexts.EnsureRegistered(manager);
+            WorldMapTexts.EnsureRegistered(manager);
             ContentTexts.EnsureRegistered(manager);
             TutorialTexts.EnsureRegistered(manager);
+            CharacterSheetTexts.EnsureRegistered(manager);
+            BossTexts.EnsureRegistered(manager);
+            HapticsTexts.EnsureRegistered(manager);
 
             foreach (KeyValuePair<string, string> pair in external)
             {
@@ -479,7 +489,7 @@ namespace Rapadura.Tests
         public void HelperKeyConstants_AllLocalized()
         {
             var references = new List<(string, string)>();
-            foreach (Type type in new[] { typeof(QuestLogTexts), typeof(QuestLogPresenter), typeof(AchievementTexts), typeof(SettingsMenuTexts), typeof(UiTexts), typeof(TutorialTexts), typeof(HapticsTexts) })
+            foreach (Type type in new[] { typeof(QuestLogTexts), typeof(QuestLogPresenter), typeof(AchievementTexts), typeof(SettingsMenuTexts), typeof(UiTexts), typeof(WorldMapTexts), typeof(TutorialTexts), typeof(HapticsTexts), typeof(CharacterSheetTexts) })
             {
                 foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
                 {
@@ -511,6 +521,12 @@ namespace Rapadura.Tests
             {
                 references.Add((step.TitleKey, $"TutorialSteps[{step.Id}].TitleKey"));
                 references.Add((step.BodyKey, $"TutorialSteps[{step.Id}].BodyKey"));
+            }
+
+            foreach (Rapadura.Gameplay.Player.AttributeType attribute in Enum.GetValues(typeof(Rapadura.Gameplay.Player.AttributeType)))
+            {
+                references.Add((CharacterSheetTexts.AttributeNameKey(attribute), "CharacterSheetTexts.AttributeNameKey"));
+                references.Add((CharacterSheetTexts.PreviewKey(attribute), "CharacterSheetTexts.PreviewKey"));
             }
 
             foreach (CraftingStationType station in Enum.GetValues(typeof(CraftingStationType)))
@@ -612,6 +628,7 @@ namespace Rapadura.Tests
                 "Assets/UI/SkillTree/SkillTreeView.uxml",
                 "Assets/UI/Death/DeathScreenView.uxml",
                 "Assets/UI/CharacterSelect/CharacterSelectView.uxml",
+                "Assets/UI/WorldMap/WorldMapHudView.uxml",
             };
 
             var marked = new HashSet<string>(UxmlElements().Where(e => HasLocClass(e.Classes)).Select(e => e.Path));

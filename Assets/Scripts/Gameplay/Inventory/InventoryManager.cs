@@ -48,7 +48,7 @@ namespace Rapadura.Gameplay.Inventory
     /// itself to JSON through ISaveable, storing only item ids so it can be restored via
     /// <see cref="ItemDatabase"/> regardless of asset GUID churn.
     /// </summary>
-    public class InventoryManager : MonoBehaviour, ISaveable
+    public class InventoryManager : MonoBehaviour, ISaveable, IRestoreOrder
     {
         [Header("Capacity")]
         [SerializeField] private int _slotCount = 30;
@@ -73,6 +73,9 @@ namespace Rapadura.Gameplay.Inventory
         public float MaxWeight => _maxWeight;
 
         public string SaveKey => "Inventory";
+
+        /// <summary>RestoreState clears every BuffController effect, so it runs before AttributeSet/SkillManager re-apply theirs.</summary>
+        public int RestoreOrder => RestoreOrders.Equipment;
 
         private void Awake()
         {
@@ -681,9 +684,14 @@ namespace Rapadura.Gameplay.Inventory
                 return;
             }
 
-            if (item.EquipStatModifiers.Length > 0)
+            // Base modifiers and affixes each get their own sub-key under "equip_<slot>/": they used to
+            // share "equip_<slot>", so an affix on the same stat as a base modifier (or a second base
+            // modifier on the same stat) replaced it in BuffController.ApplyEffect instead of stacking.
+            // UnequipSlot drops the whole prefix.
+            StatModifierDefinition[] baseModifiers = item.EquipStatModifiers;
+            for (int i = 0; i < baseModifiers.Length; i++)
             {
-                _buffController.ApplyEffects(item.EquipStatModifiers.Select(WithPermanentDuration), GetEquipSourceKey(equipSlot));
+                _buffController.ApplyEffect(WithPermanentDuration(baseModifiers[i]), GetEquipBaseSourceKey(equipSlot, i));
             }
 
             // Procedurally-rolled affixes (ProceduralItemGenerator/GeneratedItemInstance) were
@@ -718,15 +726,19 @@ namespace Rapadura.Gameplay.Inventory
                     byStat[key] = existing + value;
                 }
 
-                var generatedModifiers = byStat.Select(kvp => new StatModifierDefinition
+                int affixIndex = 0;
+                foreach (KeyValuePair<(StatType, ModifierApplication), float> kvp in byStat)
                 {
-                    displayName = "generated_" + kvp.Key.Item1,
-                    affectedStat = kvp.Key.Item1,
-                    application = kvp.Key.Item2,
-                    value = kvp.Value,
-                });
+                    var generated = new StatModifierDefinition
+                    {
+                        displayName = "generated_" + kvp.Key.Item1,
+                        affectedStat = kvp.Key.Item1,
+                        application = kvp.Key.Item2,
+                        value = kvp.Value,
+                    };
 
-                _buffController.ApplyEffects(generatedModifiers.Select(WithPermanentDuration), GetEquipSourceKey(equipSlot));
+                    _buffController.ApplyEffect(WithPermanentDuration(generated), GetEquipAffixSourceKey(equipSlot, affixIndex++));
+                }
             }
         }
 
@@ -747,6 +759,8 @@ namespace Rapadura.Gameplay.Inventory
                 return false;
             }
 
+            _buffController?.RemoveEffectsBySourcePrefix(GetEquipSourceKey(equipSlot) + "/");
+            // Pre-sub-key effects (if any were applied under the bare slot key) go too.
             _buffController?.RemoveEffectsBySource(GetEquipSourceKey(equipSlot));
             _equipped.Remove(equipSlot);
 
@@ -791,6 +805,24 @@ namespace Rapadura.Gameplay.Inventory
         private static string GetEquipSourceKey(EquipmentSlot slot)
         {
             return $"equip_{slot}";
+        }
+
+        /// <summary>BuffController source key of an equipped item's <paramref name="index"/>-th base <see cref="ItemDefinition.EquipStatModifiers"/> entry.</summary>
+        public static string GetEquipBaseSourceKey(EquipmentSlot slot, int index)
+        {
+            return $"{GetEquipSourceKey(slot)}/base/{index}";
+        }
+
+        /// <summary>BuffController source key of an equipped item's <paramref name="index"/>-th (stat, application)-summed affix bonus.</summary>
+        public static string GetEquipAffixSourceKey(EquipmentSlot slot, int index)
+        {
+            return $"{GetEquipSourceKey(slot)}/affix/{index}";
+        }
+
+        /// <summary>BuffController source key for a consumed item's <see cref="ItemDefinition.ConsumeBuffs"/>.</summary>
+        public static string GetConsumableSourceKey(string itemId)
+        {
+            return $"consumable_{itemId}";
         }
 
         private static StatModifierDefinition WithPermanentDuration(StatModifierDefinition source)
@@ -849,7 +881,9 @@ namespace Rapadura.Gameplay.Inventory
 
             if (_buffController != null && item.ConsumeBuffs.Length > 0)
             {
-                _buffController.ApplyEffects(item.ConsumeBuffs);
+                // Own source per item: a null source let any two consumables' (or a consumable's and a
+                // skill's) same-stat buffs replace each other; drinking the same potion again still refreshes.
+                _buffController.ApplyEffects(item.ConsumeBuffs, GetConsumableSourceKey(item.ItemId));
             }
 
             return RemoveFromSlot(slotIndex, 1);

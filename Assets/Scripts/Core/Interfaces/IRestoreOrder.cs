@@ -19,6 +19,20 @@ namespace Rapadura.Core.Interfaces
     public static class RestoreOrders
     {
         public const int First = -100;
+
+        /// <summary>
+        /// InventoryManager: its RestoreState clears every BuffController effect before re-applying
+        /// equipment, so it must run before AttributeSet/SkillManager (Default) re-apply theirs.
+        /// </summary>
+        public const int Equipment = -10;
+
         public const int Default = 0;
+
+        /// <summary>
+        /// PlayerStats: restores current health/mana against MaxHealth/MaxMana, so it runs once every
+        /// stat bonus (attributes, equipment, passives) is back — otherwise the max it caches is the
+        /// bare one and the bonuses arriving later read as a max increase (free heal on every scene hop).
+        /// </summary>
+        public const int AfterStatBonuses = 100;
     }
 }

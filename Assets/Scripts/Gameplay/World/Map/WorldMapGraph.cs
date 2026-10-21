@@ -6,7 +6,7 @@ namespace Rapadura.Gameplay.World.Map
     /// <summary>
     /// Plain C# description of the overworld's layout: which regions connect to which (travel is
     /// only allowed along a connection) and what unlocks each region (N victories in another
-    /// region). <see cref="WorldMapController"/> builds one from the scene's
+    /// region, plus — on the map — that region's boss beaten, see <see cref="RegionBossProgress"/>). <see cref="WorldMapController"/> builds one from the scene's
     /// <see cref="WorldMapRegionNode"/>s; <see cref="CreateDefault"/> mirrors the intended
     /// progression for tests and as a fallback when a scene has no nodes wired.
     /// </summary>
@@ -92,8 +92,55 @@ namespace Rapadura.Gameplay.World.Map
             return false;
         }
 
-        /// <summary>Unlocks every still-locked region whose rule is now satisfied. Returns the regions newly unlocked by this call.</summary>
+        /// <summary>
+        /// Victories in <paramref name="region"/> after which its boss challenge is offered: the lowest
+        /// threshold among the rules gated by <paramref name="region"/> (the same N that used to open
+        /// the next region on its own), or <see cref="DefaultVictoriesToUnlock"/> for a region that
+        /// gates nothing (the last one, Cavernas).
+        /// </summary>
+        public int GetVictoriesToChallengeBoss(BiomeType region)
+        {
+            int best = -1;
+            foreach (UnlockRule rule in _unlockRules.Values)
+            {
+                if (rule.RequiredRegion == region && (best < 0 || rule.VictoriesRequired < best))
+                {
+                    best = rule.VictoriesRequired;
+                }
+            }
+
+            return best < 0 ? DefaultVictoriesToUnlock : best;
+        }
+
+        /// <summary>Regions whose unlock rule depends on <paramref name="region"/> (what beating its boss opens).</summary>
+        public List<BiomeType> GetRegionsUnlockedBy(BiomeType region)
+        {
+            var result = new List<BiomeType>();
+            foreach (KeyValuePair<BiomeType, UnlockRule> pair in _unlockRules)
+            {
+                if (pair.Value.RequiredRegion == region)
+                {
+                    result.Add(pair.Key);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>Unlocks every still-locked region whose rule is now satisfied (victories only). Returns the regions newly unlocked by this call.</summary>
         public List<BiomeType> ApplyUnlocks(WorldMapProgress progress)
+        {
+            return ApplyUnlocks(progress, null);
+        }
+
+        /// <summary>
+        /// Like <see cref="ApplyUnlocks(WorldMapProgress)"/>, but a rule also needs
+        /// <paramref name="requiredRegionDone"/> to accept its required region — the world map passes
+        /// <see cref="RegionBossProgress.IsUnlockGateSatisfied"/>, so the next region opens only after
+        /// the previous region's boss falls. Null = victories only. Already-unlocked regions are never
+        /// re-locked, so saves from before the boss gate keep everything they had opened.
+        /// </summary>
+        public List<BiomeType> ApplyUnlocks(WorldMapProgress progress, System.Predicate<BiomeType> requiredRegionDone)
         {
             var newlyUnlocked = new List<BiomeType>();
             if (progress == null)
@@ -115,7 +162,9 @@ namespace Rapadura.Gameplay.World.Map
                     }
 
                     UnlockRule rule = pair.Value;
-                    if (progress.IsUnlocked(rule.RequiredRegion) && progress.GetVictories(rule.RequiredRegion) >= rule.VictoriesRequired)
+                    if (progress.IsUnlocked(rule.RequiredRegion)
+                        && progress.GetVictories(rule.RequiredRegion) >= rule.VictoriesRequired
+                        && (requiredRegionDone == null || requiredRegionDone(rule.RequiredRegion)))
                     {
                         progress.Unlock(pair.Key);
                         newlyUnlocked.Add(pair.Key);

@@ -38,15 +38,26 @@ namespace Rapadura.Gameplay.World.Map
         /// <summary>Seed for any per-encounter randomness in the arena (spawn-slot shuffle, future modifiers).</summary>
         public int seed;
 
+        /// <summary>
+        /// True for a region boss challenge started from the map ("Enfrentar o chefe", see
+        /// <see cref="RegionBossProgress.BuildChallengePayload"/>): winning it clears the region
+        /// (<see cref="WorldMapProgress.MarkRegionCleared"/>), which is what unlocks the next one.
+        /// Random rolls never set it. Serialized, so it survives <see cref="ToJson"/>/<see cref="FromJson"/>.
+        /// </summary>
+        public bool isBossChallenge;
+
+        public bool IsBossChallenge => isBossChallenge;
+
         [NonSerialized] private List<EnemyDefinition> _cachedEnemies;
 
         /// <summary>Builds a payload from rolled enemy definitions, skipping nulls.</summary>
-        public static EncounterPayload Create(BiomeType biome, IReadOnlyList<EnemyDefinition> enemies, int seed)
+        public static EncounterPayload Create(BiomeType biome, IReadOnlyList<EnemyDefinition> enemies, int seed, bool isBossChallenge = false)
         {
             var payload = new EncounterPayload
             {
                 biome = biome,
                 seed = seed,
+                isBossChallenge = isBossChallenge,
                 _cachedEnemies = new List<EnemyDefinition>(),
             };
 
@@ -68,6 +79,25 @@ namespace Rapadura.Gameplay.World.Map
         }
 
         public int EnemyCount => enemyIds != null ? enemyIds.Count : 0;
+
+        /// <summary>First enemy flagged <see cref="EnemyDefinition.IsBoss"/> (resolved like <see cref="ResolveEnemies"/>), or null.</summary>
+        public EnemyDefinition FindBoss(Func<string, EnemyDefinition> lookup = null)
+        {
+            if (EnemyCount == 0)
+            {
+                return null;
+            }
+
+            foreach (EnemyDefinition enemy in ResolveEnemies(lookup))
+            {
+                if (enemy != null && enemy.IsBoss)
+                {
+                    return enemy;
+                }
+            }
+
+            return null;
+        }
 
         public string ToJson() => JsonUtility.ToJson(this);
 

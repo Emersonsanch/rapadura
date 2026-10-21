@@ -99,6 +99,7 @@ namespace Rapadura.UI.Menus
             new RebindRowDefinition("QuestLog", null, "ui.settings.controls.action.quest_log"),
             new RebindRowDefinition("Inventory", null, "ui.settings.controls.action.inventory"),
             new RebindRowDefinition("SkillTree", null, "ui.settings.controls.action.skill_tree"),
+            new RebindRowDefinition("CharacterSheet", null, "ui.settings.controls.action.character_sheet"),
             // Keyboard Pause stays on Esc: Esc is InputRebindManager.DefaultCancelPath (and the
             // SettingsMenuController.Update backup cancel), so a rebind of Pause's keyboard binding
             // could never be confirmed with Esc anyway, and moving Pause off Esc would leave Esc as
@@ -126,6 +127,7 @@ namespace Rapadura.UI.Menus
             new LocalizationEntry("ui.settings.controls.action.quest_log", "Quest log", "Missões"),
             new LocalizationEntry("ui.settings.controls.action.inventory", "Inventory", "Mochila"),
             new LocalizationEntry("ui.settings.controls.action.skill_tree", "Skill tree", "Árvore de habilidades"),
+            new LocalizationEntry("ui.settings.controls.action.character_sheet", "Character sheet", "Ficha do personagem"),
             new LocalizationEntry("ui.settings.controls.action.pause", "Pause / back", "Pausar / voltar"),
 
             new LocalizationEntry(HeaderAction, "Action", "Ação"),

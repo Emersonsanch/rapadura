@@ -38,6 +38,9 @@
         <ui:VisualElement name="hud-top-right-cluster" class="hud-top-right-cluster" picking-mode="Ignore">
             <ui:Button name="quests-button" text="Missões" class="hud-touch-button hud-menu-button hud-quests-button loc" view-data-key="ui.hud.quests" />
             <ui:Button name="inventory-button" text="Mochila" class="hud-touch-button hud-menu-button hud-inventory-button loc" view-data-key="ui.hud.inventory" />
+            <ui:Button name="character-sheet-button" text="Ficha" class="hud-touch-button hud-menu-button hud-character-sheet-button loc" view-data-key="ui.hud.character_sheet">
+                <ui:Label name="character-sheet-badge" text="" class="hud-menu-badge hud-menu-badge--hidden" picking-mode="Ignore" />
+            </ui:Button>
             <ui:Button name="skills-button" text="Skills" class="hud-touch-button hud-menu-button hud-skills-button loc" view-data-key="ui.hud.skills" />
             <ui:Button name="pause-button" text="Menu" class="hud-touch-button hud-menu-button hud-pause-button loc" view-data-key="ui.hud.menu" />
         </ui:VisualElement>

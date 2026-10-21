@@ -107,12 +107,15 @@ namespace Rapadura.Gameplay.Skills
         /// Effects from different sources stack: before, the replacement ignored the source, so e.g.
         /// equipping an <c>affix_vital</c> item silently wiped the Vitality attribute's MaxHealth bonus
         /// (<c>AttributeSet</c>, source "attributes") and casting an AttackDamage buff permanently
-        /// erased Poder Arcano's — they share the stat but not the source.
+        /// erased Poder Arcano's — they share the stat but not the source. The modifier's
+        /// <see cref="ModifierApplication"/> is part of the identity too: a Flat and a Percent bonus on
+        /// the same stat from one source are different effects, not a refresh of each other.
         /// </summary>
         public void ApplyEffect(StatModifierDefinition definition, string sourceKey = null)
         {
             _activeEffects.RemoveAll(e => e.Definition.affectedStat == definition.affectedStat
                                           && e.Definition.isDebuff == definition.isDebuff
+                                          && e.Definition.application == definition.application
                                           && e.SourceKey == sourceKey);
             _activeEffects.Add(new ActiveStatEffect(definition, sourceKey));
             OnModifiersChanged?.Invoke();
@@ -135,6 +138,24 @@ namespace Rapadura.Gameplay.Skills
             }
 
             if (_activeEffects.RemoveAll(e => e.SourceKey == sourceKey) > 0)
+            {
+                OnModifiersChanged?.Invoke();
+            }
+        }
+
+        /// <summary>
+        /// Removes every effect whose source key starts with <paramref name="sourceKeyPrefix"/> — e.g.
+        /// "equip_Chest/" drops an unequipped item's base modifiers and rolled affixes, which live under
+        /// their own sub-keys so they can't replace each other.
+        /// </summary>
+        public void RemoveEffectsBySourcePrefix(string sourceKeyPrefix)
+        {
+            if (string.IsNullOrEmpty(sourceKeyPrefix))
+            {
+                return;
+            }
+
+            if (_activeEffects.RemoveAll(e => e.SourceKey != null && e.SourceKey.StartsWith(sourceKeyPrefix, StringComparison.Ordinal)) > 0)
             {
                 OnModifiersChanged?.Invoke();
             }

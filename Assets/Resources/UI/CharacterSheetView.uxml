@@ -1,0 +1,41 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/Resources/UI/CharacterSheetView.uss" />
+    <!-- Ficha do personagem (CharacterSheetController). Lives in Resources so the HUD can create the
+         screen at runtime without scene wiring. Static text is localized by UiDocumentLocalizer
+         (class "loc" + view-data-key, keys in CharacterSheetTexts); attribute rows, derived stats and
+         the equipment list are built in code. -->
+    <ui:VisualElement name="character-sheet-root" class="character-sheet-root">
+        <ui:VisualElement name="character-sheet-window" class="character-sheet-window">
+            <ui:VisualElement name="character-sheet-header" class="character-sheet-header">
+                <ui:Label name="character-sheet-title" text="Ficha do personagem" class="character-sheet-title loc" view-data-key="ui.sheet.title" />
+                <ui:Button name="character-sheet-close-button" text="Fechar" class="character-sheet-close-button loc" view-data-key="ui.sheet.close" />
+            </ui:VisualElement>
+            <ui:VisualElement name="character-sheet-hero" class="character-sheet-hero">
+                <ui:VisualElement class="character-sheet-hero-names">
+                    <ui:Label name="character-sheet-hero-name" text="Herói" class="character-sheet-hero-name" />
+                    <ui:Label name="character-sheet-hero-class" text="" class="character-sheet-hero-class" />
+                </ui:VisualElement>
+                <ui:VisualElement class="character-sheet-level-block">
+                    <ui:Label name="character-sheet-level" text="Nível 1" class="character-sheet-level" />
+                    <ui:VisualElement name="character-sheet-xp-track" class="character-sheet-xp-track">
+                        <ui:VisualElement name="character-sheet-xp-fill" class="character-sheet-xp-fill" />
+                    </ui:VisualElement>
+                    <ui:Label name="character-sheet-xp-label" text="XP 0/100" class="character-sheet-xp-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="character-sheet-body" class="character-sheet-body">
+                <ui:ScrollView name="character-sheet-attributes-scroll" class="character-sheet-column character-sheet-column--attributes" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                    <ui:Label text="Atributos" class="character-sheet-section-header loc" view-data-key="ui.sheet.attributes" />
+                    <ui:Label name="character-sheet-points" text="" class="character-sheet-points" />
+                    <ui:VisualElement name="character-sheet-attribute-list" class="character-sheet-attribute-list" />
+                </ui:ScrollView>
+                <ui:ScrollView name="character-sheet-stats-scroll" class="character-sheet-column character-sheet-column--stats" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                    <ui:Label text="Status" class="character-sheet-section-header loc" view-data-key="ui.sheet.derived" />
+                    <ui:VisualElement name="character-sheet-derived-list" class="character-sheet-derived-list" />
+                    <ui:Label text="Equipado" class="character-sheet-section-header character-sheet-section-header--spaced loc" view-data-key="ui.sheet.equipment" />
+                    <ui:VisualElement name="character-sheet-equipment-list" class="character-sheet-equipment-list" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,3 +1,4 @@
+using Rapadura.Core.Systems;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -91,8 +92,38 @@ namespace Rapadura.Gameplay.Player
                 return false;
             }
 
+            // A modal (shop, inventory, dialogue...) or the pause menu is up: 1-5 must not cast behind it.
+            if (IsGameplayInputBlocked)
+            {
+                return false;
+            }
+
             InputAction action = _skillActions[slotIndex];
             return action != null && action.WasPressedThisFrame();
+        }
+
+        /// <summary>Gameplay is frozen (GameplayPause modal owner, pause menu, or any timeScale-0 pause).</summary>
+        private static bool IsGameplayInputBlocked => GameplayPause.IsPaused || Time.timeScale == 0f;
+
+        /// <summary>
+        /// Pure gate applied to the raw one-shot presses each frame (EditMode-testable): a pause drops
+        /// every press, and a pointer over UI drops the two that share the left mouse button with UI
+        /// clicks (Attack, MoveClick) — otherwise clicking Buy, an inventory slot or the HUD swung an
+        /// attack.
+        /// </summary>
+        public static void GatePresses(ref bool jump, ref bool interact, ref bool attack, ref bool moveClick, bool paused, bool pointerOverUi)
+        {
+            if (paused)
+            {
+                jump = interact = attack = moveClick = false;
+                return;
+            }
+
+            if (pointerOverUi)
+            {
+                attack = false;
+                moveClick = false;
+            }
         }
 
         private void Update()
@@ -101,12 +132,22 @@ namespace Rapadura.Gameplay.Player
             LookInput = _lookAction.ReadValue<Vector2>();
             IsRunHeld = _runAction.IsPressed() || TouchRunHeld;
             IsCrouchHeld = _crouchAction.IsPressed();
-            JumpPressedThisFrame = _jumpAction.WasPressedThisFrame() || TouchJumpRequested;
-            TouchJumpRequested = false;
-            InteractPressedThisFrame = _interactAction.WasPressedThisFrame();
-            AttackPressedThisFrame = _attackAction.WasPressedThisFrame();
-            MoveClickPressedThisFrame = _moveClickAction.WasPressedThisFrame();
             PointerPosition = _pointerPositionAction.ReadValue<Vector2>();
+
+            bool jump = _jumpAction.WasPressedThisFrame() || TouchJumpRequested;
+            TouchJumpRequested = false;
+            bool interact = _interactAction.WasPressedThisFrame();
+            bool attack = _attackAction.WasPressedThisFrame();
+            bool moveClick = _moveClickAction.WasPressedThisFrame();
+            bool paused = IsGameplayInputBlocked;
+            // Picking UI panels isn't free — only ask when a pointer press actually happened.
+            bool pointerOverUi = !paused && (attack || moveClick) && UiPointerQuery.IsPointerOverUi(PointerPosition);
+            GatePresses(ref jump, ref interact, ref attack, ref moveClick, paused, pointerOverUi);
+
+            JumpPressedThisFrame = jump;
+            InteractPressedThisFrame = interact;
+            AttackPressedThisFrame = attack;
+            MoveClickPressedThisFrame = moveClick;
         }
     }
 }

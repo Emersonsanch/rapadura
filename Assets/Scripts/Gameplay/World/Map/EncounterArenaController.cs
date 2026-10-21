@@ -143,6 +143,15 @@ namespace Rapadura.Gameplay.World.Map
             {
                 GameLogger.Warning(LogCategory, $"Encounter in {payload.biome} resolved to zero enemies; returning to the map.");
                 Resolve(EncounterOutcome.Fled);
+                return;
+            }
+
+            // Boss intro banner (BossIntroBannerController). Music already switched to the Boss
+            // context on EncounterStartedEvent (MusicDirector checks the payload for IsBoss).
+            EnemyDefinition boss = enemies.Find(enemy => enemy != null && enemy.IsBoss);
+            if (boss != null)
+            {
+                EventBus.Publish(new BossEncounterIntroEvent(payload, boss));
             }
         }
 

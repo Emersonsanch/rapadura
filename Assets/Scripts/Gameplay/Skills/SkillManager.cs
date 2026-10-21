@@ -356,6 +356,18 @@ namespace Rapadura.Gameplay.Skills
             return "passive_" + skillId;
         }
 
+        /// <summary>BuffController source key of a cast skill's self-buffs.</summary>
+        public static string SelfBuffSourceKey(string skillId)
+        {
+            return "skill_" + skillId;
+        }
+
+        /// <summary>BuffController source key of a cast skill's debuffs on its targets.</summary>
+        public static string DebuffSourceKey(string skillId)
+        {
+            return "skill_" + skillId + "_debuff";
+        }
+
         public void GrantSkillExperience(string skillId, int amount)
         {
             if (!_learnedSkills.TryGetValue(skillId, out SkillInstance instance))
@@ -640,7 +652,9 @@ namespace Rapadura.Gameplay.Skills
                 return;
             }
 
-            _buffController.ApplyEffects(skill.Buffs);
+            // Per-skill source: with a null source two different skills' same-stat buffs (or a
+            // skill's and a potion's) replaced each other; recasting the same skill still refreshes.
+            _buffController.ApplyEffects(skill.Buffs, SelfBuffSourceKey(skill.SkillId));
         }
 
         private void ApplyHealingToSelf(SkillDefinition skill, int level)
@@ -721,7 +735,7 @@ namespace Rapadura.Gameplay.Skills
 
             if (skill.Debuffs.Length > 0 && targetObject.TryGetComponent(out BuffController targetBuffs))
             {
-                targetBuffs.ApplyEffects(skill.Debuffs);
+                targetBuffs.ApplyEffects(skill.Debuffs, DebuffSourceKey(skill.SkillId));
             }
         }
 

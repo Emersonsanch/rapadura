@@ -184,16 +184,19 @@ namespace Rapadura.Save
 
             foreach (SaveEntry entry in SortByRestoreOrder(pending))
             {
-                _carried.Remove(entry.key);
                 ISaveable saveable = _saveables[entry.key];
 
                 if (saveable is ISceneLocalSaveable)
                 {
+                    _carried.Remove(entry.key);
                     continue;
                 }
 
+                // Dropped from the carry only once applied: an entry whose restore threw stays carried,
+                // so it is still written to the next save instead of being lost with the scene.
                 if (TryRestoreEntry(saveable, entry))
                 {
+                    _carried.Remove(entry.key);
                     restored++;
                 }
             }
@@ -446,19 +449,33 @@ namespace Rapadura.Save
             };
         }
 
+        /// <summary>
+        /// Exception-safe like <see cref="CaptureEntry"/>: one broken entry (bad JSON, a RestoreState
+        /// that throws) is logged and skipped instead of aborting the rest of <see cref="Load"/> /
+        /// <see cref="RestoreCarriedState"/> — which, after SessionReset already wiped the session,
+        /// left every later system at new-game state and never published GameLoadedEvent.
+        /// </summary>
         private static bool TryRestoreEntry(ISaveable saveable, SaveEntry entry)
         {
-            Type stateType = Type.GetType(entry.typeName);
-
-            if (stateType == null)
+            try
             {
-                Debug.LogWarning($"[SaveManager] Could not resolve type '{entry.typeName}' for save key '{entry.key}'. Skipping.");
+                Type stateType = string.IsNullOrEmpty(entry.typeName) ? null : Type.GetType(entry.typeName);
+
+                if (stateType == null)
+                {
+                    Debug.LogWarning($"[SaveManager] Could not resolve type '{entry.typeName}' for save key '{entry.key}'. Skipping.");
+                    return false;
+                }
+
+                object state = JsonUtility.FromJson(entry.json, stateType);
+                saveable.RestoreState(state);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[SaveManager] RestoreState failed for '{entry.key}': {e.Message}");
                 return false;
             }
-
-            object state = JsonUtility.FromJson(entry.json, stateType);
-            saveable.RestoreState(state);
-            return true;
         }
 
         private int GetRestoreOrder(string key)

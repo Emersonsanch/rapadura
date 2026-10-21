@@ -1,0 +1,344 @@
+/* World map HUD (WorldMapHudController). Same look as HudView.uss: dark translucent panels,
+   68px round touch buttons in a flex row top-right so accessibility text scaling only widens them.
+   Budget at 2400x1080 (panel ~1461x657 with the 1200x800 reference): the top bar is ~700px wide
+   at scale 1 (left), the button cluster ~380px (right), leaving room for the notch safe area. */
+
+.wm-hud-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.wm-labels-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* ---- Top bar: hero | region + victories | weather + clock ---- */
+.wm-top-bar {
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    max-width: 62%;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 14px;
+    background-color: rgba(12, 14, 20, 0.62);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.wm-top-block {
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 1;
+}
+
+.wm-top-separator {
+    width: 1px;
+    height: 34px;
+    margin: 0 14px;
+    background-color: rgba(255, 255, 255, 0.18);
+}
+
+.wm-hero-name {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 245);
+}
+
+.wm-hero-level {
+    font-size: 12px;
+    -unity-font-style: bold;
+    color: rgb(255, 210, 90);
+}
+
+.wm-region-name {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: rgb(170, 225, 160);
+}
+
+.wm-victories {
+    font-size: 12px;
+    color: rgb(215, 215, 222);
+    white-space: normal;
+}
+
+.wm-boss-button {
+    display: none;
+    align-self: flex-start;
+    min-height: 44px;
+    margin: 6px 0 0 0;
+    padding: 4px 16px;
+    border-radius: 22px;
+    border-width: 2px;
+    border-color: rgb(218, 158, 56);
+    background-color: rgb(120, 32, 22);
+    color: rgb(250, 240, 220);
+    font-size: 14px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.wm-boss-button:hover {
+    background-color: rgb(150, 44, 30);
+}
+
+.wm-boss-button:active {
+    background-color: rgb(96, 24, 16);
+}
+
+.wm-boss-button--visible {
+    display: flex;
+}
+
+.wm-weather-row {
+    flex-direction: row;
+    align-items: center;
+}
+
+.wm-weather-label {
+    font-size: 13px;
+    color: rgb(230, 230, 235);
+}
+
+.wm-clock {
+    font-size: 12px;
+    color: rgb(200, 200, 210);
+}
+
+/* Weather icon: a small USS-drawn badge (no font glyph dependency), tinted per weather. */
+.wm-weather-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
+    border-radius: 7px;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.wm-weather-icon--clear {
+    background-color: rgb(255, 205, 70);
+    border-color: rgb(255, 235, 150);
+}
+
+.wm-weather-icon--rain {
+    background-color: rgb(80, 140, 230);
+    border-color: rgb(160, 200, 255);
+    border-top-left-radius: 1px;
+}
+
+.wm-weather-icon--fog {
+    background-color: rgb(165, 170, 180);
+    border-color: rgb(210, 214, 222);
+    border-radius: 3px;
+}
+
+.wm-weather-icon--sandstorm {
+    background-color: rgb(210, 150, 70);
+    border-color: rgb(240, 200, 130);
+    border-radius: 3px;
+    rotate: 45deg;
+}
+
+.wm-weather-icon--snow {
+    background-color: rgb(245, 248, 255);
+    border-color: rgb(170, 200, 235);
+}
+
+/* ---- Top-right buttons (Missões / Mochila / Conquistas / Menu) ---- */
+.wm-button-cluster {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.wm-menu-button {
+    min-width: 68px;
+    height: 68px;
+    border-radius: 34px;
+    margin: 0 0 0 22px;
+    padding: 0 10px;
+    font-size: 13px;
+    white-space: nowrap;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 240);
+    background-color: rgba(40, 44, 56, 0.6);
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.wm-menu-button--first {
+    margin-left: 0;
+}
+
+.wm-menu-button:hover {
+    background-color: rgba(60, 66, 82, 0.75);
+}
+
+.wm-menu-button:active {
+    background-color: rgba(90, 160, 90, 0.75);
+    border-color: rgb(200, 255, 200);
+}
+
+/* ---- Region labels (one per WorldMapRegionNode, positioned in code) ---- */
+.wm-region-label {
+    position: absolute;
+    /* left/top is the node's projected point; anchor the label's bottom-center on it. */
+    translate: -50% -100%;
+    min-width: 96px;
+    align-items: center;
+    padding: 6px 12px;
+    background-color: rgba(14, 16, 24, 0.72);
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.wm-region-label--current {
+    border-color: rgb(255, 210, 90);
+    background-color: rgba(40, 34, 14, 0.82);
+}
+
+.wm-region-label--travelable {
+    border-color: rgba(170, 225, 160, 0.85);
+}
+
+.wm-region-label--locked {
+    background-color: rgba(20, 20, 24, 0.7);
+    border-color: rgba(150, 150, 160, 0.4);
+}
+
+.wm-region-label-header {
+    flex-direction: row;
+    align-items: center;
+}
+
+.wm-region-label-name {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 245);
+}
+
+.wm-region-label--locked .wm-region-label-name {
+    color: rgb(170, 170, 180);
+}
+
+.wm-region-label-status {
+    font-size: 11px;
+    color: rgb(210, 210, 218);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    max-width: 220px;
+}
+
+.wm-region-label--current .wm-region-label-status {
+    color: rgb(255, 220, 120);
+    -unity-font-style: bold;
+}
+
+/* Padlock drawn with two boxes (shackle + body). Hidden unless the region is locked. */
+.wm-lock-icon {
+    display: none;
+    width: 14px;
+    height: 16px;
+    margin-right: 6px;
+    align-items: center;
+}
+
+.wm-region-label--locked .wm-lock-icon {
+    display: flex;
+}
+
+.wm-lock-shackle {
+    width: 10px;
+    height: 7px;
+    border-width: 2px;
+    border-bottom-width: 0;
+    border-color: rgb(200, 200, 210);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.wm-lock-body {
+    width: 14px;
+    height: 9px;
+    border-radius: 2px;
+    background-color: rgb(200, 200, 210);
+}
+
+/* ---- Mochila summary (modal) ---- */
+.wm-backpack-overlay {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(6, 7, 10, 0.75);
+}
+
+.wm-backpack-panel {
+    width: 360px;
+    padding: 20px;
+    background-color: rgba(20, 22, 30, 0.97);
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.wm-backpack-title {
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 245);
+    -unity-text-align: middle-center;
+    margin-bottom: 4px;
+}
+
+.wm-backpack-hero {
+    font-size: 13px;
+    color: rgb(255, 210, 90);
+    -unity-text-align: middle-center;
+    margin-bottom: 12px;
+}
+
+.wm-backpack-lines {
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.wm-backpack-line {
+    font-size: 14px;
+    color: rgb(225, 225, 232);
+    white-space: normal;
+    margin-bottom: 4px;
+}
+
+.wm-backpack-hint {
+    font-size: 11px;
+    color: rgb(160, 162, 172);
+    white-space: normal;
+    margin-bottom: 14px;
+}
+
+.wm-backpack-close {
+    min-height: 44px;
+    font-size: 14px;
+    background-color: rgba(35, 38, 48, 0.9);
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgb(230, 230, 235);
+    border-radius: 6px;
+}

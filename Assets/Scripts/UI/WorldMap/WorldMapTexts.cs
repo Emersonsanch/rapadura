@@ -34,6 +34,8 @@ namespace Rapadura.UI.WorldMap
         public const string Victories = "ui.worldmap.victories";
         /// <summary>Like <see cref="Victories"/>, {3} = the (other) region the victories must be won in.</summary>
         public const string VictoriesIn = "ui.worldmap.victories_in";
+        /// <summary>Victories done but the region is still gated (boss challenge): {0} = region to unlock, {1} = region whose boss must fall.</summary>
+        public const string VictoriesBoss = "ui.worldmap.victories_boss";
         public const string AllUnlocked = "ui.worldmap.all_unlocked";
 
         // -- Region labels --
@@ -41,6 +43,12 @@ namespace Rapadura.UI.WorldMap
         public const string LabelTravel = "ui.worldmap.label.travel";
         /// <summary>{0} = victories required, {1} = region to win them in, {2} = victories so far.</summary>
         public const string LabelLocked = "ui.worldmap.label.locked";
+        /// <summary>Locked label once the victories are done (boss gate): {0} = region whose boss must fall.</summary>
+        public const string LabelBoss = "ui.worldmap.label.boss";
+
+        // -- Region boss challenge --
+        /// <summary>"Enfrentar o chefe" button (shown while RegionBossProgress.CanChallengeBoss holds for the current region).</summary>
+        public const string BossChallenge = "ui.worldmap.boss_challenge";
         public const string LabelLockedGeneric = "ui.worldmap.label.locked_generic";
 
         // -- Mochila (read-only summary) --
@@ -68,11 +76,14 @@ namespace Rapadura.UI.WorldMap
             new LocalizationEntry(WeatherSnow, "Snow", "Neve"),
             new LocalizationEntry(Victories, "Victories: {0}/{1} to unlock {2}", "Vitórias: {0}/{1} para desbloquear {2}"),
             new LocalizationEntry(VictoriesIn, "Victories in {3}: {0}/{1} to unlock {2}", "Vitórias em {3}: {0}/{1} para desbloquear {2}"),
+            new LocalizationEntry(VictoriesBoss, "Beat the {1} boss to unlock {0}", "Derrote o chefe de {1} para desbloquear {0}"),
             new LocalizationEntry(AllUnlocked, "Every region unlocked", "Todas as regiões desbloqueadas"),
             new LocalizationEntry(LabelHere, "You are here", "Você está aqui"),
             new LocalizationEntry(LabelTravel, "Tap to travel", "Toque para viajar"),
             new LocalizationEntry(LabelLocked, "Win {0} battles in {1} ({2}/{0})", "Vença {0} batalhas em {1} ({2}/{0})"),
+            new LocalizationEntry(LabelBoss, "Beat the {0} boss", "Derrote o chefe de {0}"),
             new LocalizationEntry(LabelLockedGeneric, "Locked", "Bloqueado"),
+            new LocalizationEntry(BossChallenge, "Face the boss", "Enfrentar o chefe"),
             new LocalizationEntry(BackpackItems, "Items: {0} ({1}/{2} slots)", "Itens: {0} ({1}/{2} espaços)"),
             new LocalizationEntry(BackpackGold, "Gold: {0}", "Ouro: {0}"),
             new LocalizationEntry(BackpackEquipped, "Equipped: {0}", "Equipados: {0}"),
