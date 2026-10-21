@@ -1,5 +1,7 @@
 using Rapadura.Core.Events;
 using Rapadura.Gameplay.Player;
+using Rapadura.Gameplay.Skills;
+using Rapadura.UI.Inventory;
 using Rapadura.UI.Menus;
 using Rapadura.UI.SkillTree;
 using UnityEngine;
@@ -37,8 +39,18 @@ namespace Rapadura.UI.HUD
         [SerializeField] private PlayerInputHandler _playerInput;
         [Tooltip("Opened by the on-screen Skills button — see SkillTreeController.Toggle().")]
         [SerializeField] private SkillTreeController _skillTreeController;
+        [Tooltip("Opened by the on-screen Mochila button — see InventoryUIController.Toggle(). If empty, resolved from the scene on first tap.")]
+        [SerializeField] private InventoryUIController _inventoryController;
         [Tooltip("Opened by the on-screen Menu button — see PauseMenuController.Toggle().")]
         [SerializeField] private PauseMenuController _pauseMenuController;
+        [Tooltip("Player's SkillHotbar (slot -> skill loadout + casting). If empty it is resolved from " +
+                 "_playerInput's GameObject, and added there at runtime if that GameObject has a SkillManager but no SkillHotbar yet.")]
+        [SerializeField] private SkillHotbar _skillHotbar;
+
+        [Header("Skill Hotbar")]
+        [Tooltip("How often (ms) the hotbar's cooldown overlays and mana-insufficient state refresh. " +
+                 "Polled on a UI Toolkit schedule instead of every frame (battery budget, see class summary).")]
+        [SerializeField, Range(16, 500)] private int _skillHotbarRefreshMs = 100;
 
         [Header("Adaptive HUD")]
         [Tooltip("Uniform scale applied to the whole HUD root. Exposed here so a future " +
@@ -71,11 +83,30 @@ namespace Rapadura.UI.HUD
         private Button _runButton;
         private Button _jumpButton;
         private Button _skillsButton;
+        private Button _inventoryButton;
         private Button _pauseButton;
+
+        private const int SkillSlotCount = HotbarLoadout.DefaultSlotCount;
+        private readonly Button[] _skillSlotButtons = new Button[SkillSlotCount];
+        private readonly VisualElement[] _skillSlotIcons = new VisualElement[SkillSlotCount];
+        private readonly Label[] _skillSlotNames = new Label[SkillSlotCount];
+        private readonly VisualElement[] _skillSlotCooldowns = new VisualElement[SkillSlotCount];
+        private readonly Label[] _skillSlotCooldownLabels = new Label[SkillSlotCount];
+        private readonly SkillDefinition[] _skillSlotShownSkill = new SkillDefinition[SkillSlotCount];
+        private readonly int[] _skillSlotCooldownLabelKey = new int[SkillSlotCount];
+        private readonly EventCallback<PointerDownEvent>[] _skillSlotPressedCallbacks = new EventCallback<PointerDownEvent>[SkillSlotCount];
+        private IVisualElementScheduledItem _skillHotbarRefresh;
+        private HotbarLoadout _subscribedLoadout;
 
         private void Awake()
         {
             _uiDocument = GetComponent<UIDocument>();
+
+            for (int i = 0; i < SkillSlotCount; i++)
+            {
+                int slotIndex = i;
+                _skillSlotPressedCallbacks[i] = evt => OnSkillSlotPressed(slotIndex);
+            }
         }
 
         private void OnEnable()
@@ -94,6 +125,7 @@ namespace Rapadura.UI.HUD
             // stat-change event. Re-reading here, once every object's Awake has definitely run,
             // fixes that first-frame empty-bar bug without needing explicit script execution order.
             InitializeFromCurrentStats();
+            RefreshSkillHotbar();
         }
 
         private void OnDisable()
@@ -123,7 +155,20 @@ namespace Rapadura.UI.HUD
             _runButton = rootVisualElement.Q<Button>("run-button");
             _jumpButton = rootVisualElement.Q<Button>("jump-button");
             _skillsButton = rootVisualElement.Q<Button>("skills-button");
+            _inventoryButton = rootVisualElement.Q<Button>("inventory-button");
             _pauseButton = rootVisualElement.Q<Button>("pause-button");
+
+            for (int i = 0; i < SkillSlotCount; i++)
+            {
+                string prefix = "skill-slot-" + i;
+                _skillSlotButtons[i] = rootVisualElement.Q<Button>(prefix);
+                _skillSlotIcons[i] = rootVisualElement.Q<VisualElement>(prefix + "-icon");
+                _skillSlotNames[i] = rootVisualElement.Q<Label>(prefix + "-name");
+                _skillSlotCooldowns[i] = rootVisualElement.Q<VisualElement>(prefix + "-cooldown");
+                _skillSlotCooldownLabels[i] = rootVisualElement.Q<Label>(prefix + "-cooldown-label");
+                _skillSlotShownSkill[i] = null;
+                _skillSlotCooldownLabelKey[i] = -1;
+            }
         }
 
         private void RegisterCallbacks()
@@ -156,10 +201,28 @@ namespace Rapadura.UI.HUD
                 _skillsButton.clicked += OnSkillsButtonClicked;
             }
 
+            if (_inventoryButton != null)
+            {
+                _inventoryButton.clicked += OnInventoryButtonClicked;
+            }
+
             if (_pauseButton != null)
             {
                 _pauseButton.clicked += OnPauseButtonClicked;
             }
+
+            for (int i = 0; i < SkillSlotCount; i++)
+            {
+                // PointerDown (not Click) for the same one-shot responsiveness as the jump button.
+                _skillSlotButtons[i]?.RegisterCallback(_skillSlotPressedCallbacks[i]);
+            }
+
+            if (_root != null)
+            {
+                _skillHotbarRefresh = _root.schedule.Execute(RefreshSkillHotbar).Every(_skillHotbarRefreshMs);
+            }
+
+            SubscribeToLoadout();
         }
 
         private void UnregisterCallbacks()
@@ -186,10 +249,24 @@ namespace Rapadura.UI.HUD
                 _skillsButton.clicked -= OnSkillsButtonClicked;
             }
 
+            if (_inventoryButton != null)
+            {
+                _inventoryButton.clicked -= OnInventoryButtonClicked;
+            }
+
             if (_pauseButton != null)
             {
                 _pauseButton.clicked -= OnPauseButtonClicked;
             }
+
+            for (int i = 0; i < SkillSlotCount; i++)
+            {
+                _skillSlotButtons[i]?.UnregisterCallback(_skillSlotPressedCallbacks[i]);
+            }
+
+            _skillHotbarRefresh?.Pause();
+            _skillHotbarRefresh = null;
+            UnsubscribeFromLoadout();
 
             if (_playerInput != null)
             {
@@ -205,9 +282,152 @@ namespace Rapadura.UI.HUD
             }
         }
 
+        // ---------------------------------------------------------------
+        // Skill hotbar
+        // ---------------------------------------------------------------
+
+        private void OnSkillSlotPressed(int slotIndex)
+        {
+            if (ResolveSkillHotbar() && _skillHotbar.TryCastSlot(slotIndex))
+            {
+                RefreshSkillHotbar();
+            }
+        }
+
+        /// <summary>
+        /// Lazily resolves the player's <see cref="SkillHotbar"/> so the HUD works without extra
+        /// scene wiring: falls back to _playerInput's GameObject, adding the component there if the
+        /// player has a SkillManager but nobody added a SkillHotbar in the scene yet.
+        /// </summary>
+        private bool ResolveSkillHotbar()
+        {
+            if (_skillHotbar != null)
+            {
+                return true;
+            }
+
+            if (_playerInput == null)
+            {
+                return false;
+            }
+
+            _skillHotbar = _playerInput.GetComponent<SkillHotbar>();
+
+            if (_skillHotbar == null && _playerInput.GetComponent<SkillManager>() != null)
+            {
+                _skillHotbar = _playerInput.gameObject.AddComponent<SkillHotbar>();
+            }
+
+            if (_skillHotbar != null)
+            {
+                SubscribeToLoadout();
+            }
+
+            return _skillHotbar != null;
+        }
+
+        private void SubscribeToLoadout()
+        {
+            if (_skillHotbar == null || _subscribedLoadout != null)
+            {
+                return;
+            }
+
+            _subscribedLoadout = _skillHotbar.Loadout;
+            _subscribedLoadout.OnChanged += RefreshSkillHotbar;
+        }
+
+        private void UnsubscribeFromLoadout()
+        {
+            if (_subscribedLoadout != null)
+            {
+                _subscribedLoadout.OnChanged -= RefreshSkillHotbar;
+                _subscribedLoadout = null;
+            }
+        }
+
+        private void RefreshSkillHotbar()
+        {
+            bool hasHotbar = ResolveSkillHotbar();
+
+            for (int i = 0; i < SkillSlotCount; i++)
+            {
+                Button button = _skillSlotButtons[i];
+
+                if (button == null)
+                {
+                    continue;
+                }
+
+                SkillInstance instance = hasHotbar ? _skillHotbar.GetSlotSkill(i) : null;
+                SkillDefinition skill = instance?.Definition;
+
+                if (skill != _skillSlotShownSkill[i])
+                {
+                    _skillSlotShownSkill[i] = skill;
+                    ApplySlotSkill(i, skill);
+                }
+
+                float remaining = instance != null ? instance.CooldownRemaining : 0f;
+                float duration = instance != null && instance.CooldownDuration > 0f
+                    ? instance.CooldownDuration
+                    : (skill != null ? skill.CooldownSeconds : 0f);
+                bool onCooldown = remaining > 0f;
+                bool cannotAfford = skill != null && !_skillHotbar.SkillManager.CanAffordSkill(skill);
+
+                if (_skillSlotCooldowns[i] != null)
+                {
+                    _skillSlotCooldowns[i].style.height = new Length(SkillSlotDisplayMath.ComputeCooldownPercent(remaining, duration), LengthUnit.Percent);
+                }
+
+                int labelKey = SkillSlotDisplayMath.CooldownLabelKey(remaining);
+
+                if (_skillSlotCooldownLabels[i] != null && labelKey != _skillSlotCooldownLabelKey[i])
+                {
+                    _skillSlotCooldownLabelKey[i] = labelKey;
+                    _skillSlotCooldownLabels[i].text = SkillSlotDisplayMath.FormatCooldownLabel(remaining);
+                }
+
+                button.EnableInClassList("hud-skill-button--empty", skill == null);
+                button.EnableInClassList("hud-skill-button--cooldown", onCooldown);
+                button.EnableInClassList("hud-skill-button--no-mana", cannotAfford);
+            }
+        }
+
+        private void ApplySlotSkill(int slotIndex, SkillDefinition skill)
+        {
+            Sprite icon = skill != null ? skill.Icon : null;
+
+            if (_skillSlotIcons[slotIndex] != null)
+            {
+                _skillSlotIcons[slotIndex].style.backgroundImage = icon != null
+                    ? new StyleBackground(icon)
+                    : new StyleBackground(StyleKeyword.None);
+            }
+
+            Label nameLabel = _skillSlotNames[slotIndex];
+
+            if (nameLabel != null)
+            {
+                // Name is the fallback when a skill has no icon yet (many seeded skills don't).
+                nameLabel.text = skill != null ? skill.DisplayName : string.Empty;
+                nameLabel.EnableInClassList("hud-skill-name--hidden", icon != null);
+            }
+        }
+
         private void OnSkillsButtonClicked()
         {
             _skillTreeController?.Toggle();
+        }
+
+        private void OnInventoryButtonClicked()
+        {
+            if (_inventoryController == null)
+            {
+                _inventoryController = FindFirstObjectByType<InventoryUIController>();
+            }
+
+            _inventoryController?.Toggle();
         }
 
         private void OnPauseButtonClicked()

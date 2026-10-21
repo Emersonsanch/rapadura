@@ -54,6 +54,15 @@
     font-size: 14px;
 }
 
+.hud-inventory-button {
+    top: 32px;
+    right: 228px;
+    width: 68px;
+    height: 68px;
+    border-radius: 34px;
+    font-size: 13px;
+}
+
 .hud-pause-button {
     top: 32px;
     right: 32px;
@@ -150,4 +159,104 @@
 /* Low-value warning state: applied by HudController when a vital drops below its threshold. */
 .hud-bar-fill--low {
     background-color: rgb(255, 90, 40);
+}
+
+/* ---- Skill hotbar (5 touch slots above Run/Jump; driven by HudController + SkillHotbar) ---- */
+
+.hud-skill-hotbar {
+    position: absolute;
+    right: 32px;
+    bottom: 132px;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+/* Inherits the round translucent look from .hud-touch-button; overrides absolute positioning
+   so the 5 slots lay out in a row inside .hud-skill-hotbar. */
+.hud-skill-button {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    border-radius: 32px;
+    margin-left: 8px;
+    padding: 0;
+    overflow: hidden;
+    font-size: 10px;
+}
+
+.hud-skill-icon {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    right: 8px;
+    bottom: 8px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.hud-skill-name {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    top: 0;
+    bottom: 0;
+    font-size: 9px;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 240);
+    white-space: normal;
+}
+
+/* Name label is only a fallback for skills without an icon (HudController hides it otherwise). */
+.hud-skill-name--hidden {
+    display: none;
+}
+
+/* Fills from the bottom; HudController sets height to the remaining-cooldown percentage. */
+.hud-skill-cooldown-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.hud-skill-cooldown-label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    -unity-text-align: middle-center;
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+}
+
+.hud-skill-key-hint {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    right: 0;
+    -unity-text-align: upper-center;
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.hud-skill-button--empty {
+    opacity: 0.4;
+}
+
+.hud-skill-button--cooldown {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Not enough mana/energy to pay the skill's cost right now. */
+.hud-skill-button--no-mana {
+    border-color: rgb(70, 130, 220);
+    background-color: rgba(30, 40, 90, 0.6);
+}
+
+.hud-skill-button--no-mana .hud-skill-icon {
+    -unity-background-image-tint-color: rgb(110, 120, 170);
 }

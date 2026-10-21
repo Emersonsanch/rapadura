@@ -16,6 +16,13 @@ namespace Rapadura.Gameplay.Skills
         public int Experience { get; private set; }
         public float CooldownRemaining { get; private set; }
 
+        /// <summary>
+        /// Full length of the cooldown most recently started (after cooldown reduction), so UI can
+        /// show remaining/total as a fill fraction — <see cref="SkillDefinition.CooldownSeconds"/>
+        /// alone would be wrong whenever a CooldownReduction buff shortened it.
+        /// </summary>
+        public float CooldownDuration { get; private set; }
+
         public bool IsOnCooldown => CooldownRemaining > 0f;
         public bool IsMaxLevel => Level >= Definition.MaxLevel;
 
@@ -36,6 +43,7 @@ namespace Rapadura.Gameplay.Skills
         {
             float multiplier = UnityEngine.Mathf.Clamp01(1f - cooldownReductionPercent);
             CooldownRemaining = Definition.CooldownSeconds * multiplier;
+            CooldownDuration = CooldownRemaining;
         }
 
         public void AddExperience(int amount)

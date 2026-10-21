@@ -25,6 +25,10 @@ namespace Rapadura.Gameplay.Player
         private InputAction _moveClickAction;
         private InputAction _pointerPositionAction;
 
+        /// <summary>Number of Skill1..SkillN actions in PlayerControls.inputactions (one per hotbar slot).</summary>
+        public const int SkillActionCount = 5;
+        private readonly InputAction[] _skillActions = new InputAction[SkillActionCount];
+
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
         public bool IsRunHeld { get; private set; }
@@ -65,6 +69,30 @@ namespace Rapadura.Gameplay.Player
             _attackAction = _playerInput.actions["Attack"];
             _moveClickAction = _playerInput.actions["MoveClick"];
             _pointerPositionAction = _playerInput.actions["PointerPosition"];
+
+            // FindAction (not the indexer) so an older/custom actions asset without Skill1..5
+            // just leaves the hotbar keys unbound instead of throwing in Awake.
+            for (int i = 0; i < SkillActionCount; i++)
+            {
+                _skillActions[i] = _playerInput.actions.FindAction("Skill" + (i + 1), throwIfNotFound: false);
+            }
+        }
+
+        /// <summary>
+        /// True the frame the hotbar key for <paramref name="slotIndex"/> (0-based: Skill1 = 0) was
+        /// pressed. Queried straight from the action rather than cached in <see cref="Update"/>, so
+        /// the result is correct regardless of script execution order relative to the reader
+        /// (see <c>SkillHotbar</c>). Touch hotbar buttons call <c>SkillHotbar.TryCastSlot</c> directly.
+        /// </summary>
+        public bool WasSkillPressedThisFrame(int slotIndex)
+        {
+            if (slotIndex < 0 || slotIndex >= SkillActionCount)
+            {
+                return false;
+            }
+
+            InputAction action = _skillActions[slotIndex];
+            return action != null && action.WasPressedThisFrame();
         }
 
         private void Update()

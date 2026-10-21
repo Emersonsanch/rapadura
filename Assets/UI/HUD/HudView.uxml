@@ -36,6 +36,44 @@
         <ui:Button name="run-button" text="Correr" class="hud-touch-button hud-run-button" />
         <ui:Button name="jump-button" text="Pular" class="hud-touch-button hud-jump-button" />
         <ui:Button name="skills-button" text="Skills" class="hud-touch-button hud-skills-button" />
+        <ui:Button name="inventory-button" text="Mochila" class="hud-touch-button hud-inventory-button" />
         <ui:Button name="pause-button" text="Menu" class="hud-touch-button hud-pause-button" />
+        <ui:VisualElement name="skill-hotbar" class="hud-skill-hotbar" picking-mode="Ignore">
+            <ui:Button name="skill-slot-0" class="hud-touch-button hud-skill-button hud-skill-button--empty">
+                <ui:VisualElement name="skill-slot-0-icon" class="hud-skill-icon" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-0-name" text="" class="hud-skill-name" picking-mode="Ignore" />
+                <ui:VisualElement name="skill-slot-0-cooldown" class="hud-skill-cooldown-overlay" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-0-cooldown-label" text="" class="hud-skill-cooldown-label" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-0-key" text="1" class="hud-skill-key-hint" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:Button name="skill-slot-1" class="hud-touch-button hud-skill-button hud-skill-button--empty">
+                <ui:VisualElement name="skill-slot-1-icon" class="hud-skill-icon" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-1-name" text="" class="hud-skill-name" picking-mode="Ignore" />
+                <ui:VisualElement name="skill-slot-1-cooldown" class="hud-skill-cooldown-overlay" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-1-cooldown-label" text="" class="hud-skill-cooldown-label" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-1-key" text="2" class="hud-skill-key-hint" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:Button name="skill-slot-2" class="hud-touch-button hud-skill-button hud-skill-button--empty">
+                <ui:VisualElement name="skill-slot-2-icon" class="hud-skill-icon" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-2-name" text="" class="hud-skill-name" picking-mode="Ignore" />
+                <ui:VisualElement name="skill-slot-2-cooldown" class="hud-skill-cooldown-overlay" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-2-cooldown-label" text="" class="hud-skill-cooldown-label" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-2-key" text="3" class="hud-skill-key-hint" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:Button name="skill-slot-3" class="hud-touch-button hud-skill-button hud-skill-button--empty">
+                <ui:VisualElement name="skill-slot-3-icon" class="hud-skill-icon" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-3-name" text="" class="hud-skill-name" picking-mode="Ignore" />
+                <ui:VisualElement name="skill-slot-3-cooldown" class="hud-skill-cooldown-overlay" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-3-cooldown-label" text="" class="hud-skill-cooldown-label" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-3-key" text="4" class="hud-skill-key-hint" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:Button name="skill-slot-4" class="hud-touch-button hud-skill-button hud-skill-button--empty">
+                <ui:VisualElement name="skill-slot-4-icon" class="hud-skill-icon" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-4-name" text="" class="hud-skill-name" picking-mode="Ignore" />
+                <ui:VisualElement name="skill-slot-4-cooldown" class="hud-skill-cooldown-overlay" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-4-cooldown-label" text="" class="hud-skill-cooldown-label" picking-mode="Ignore" />
+                <ui:Label name="skill-slot-4-key" text="5" class="hud-skill-key-hint" picking-mode="Ignore" />
+            </ui:Button>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
