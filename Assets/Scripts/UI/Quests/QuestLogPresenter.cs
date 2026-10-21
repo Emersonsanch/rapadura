@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Quests;
 
 namespace Rapadura.UI.Quests
@@ -213,6 +214,17 @@ namespace Rapadura.UI.Quests
         /// </summary>
         public static string ResolveTrackedQuestId(string preferredQuestId, IReadOnlyList<QuestEntryViewModel> activeEntries)
         {
+            return ResolveTrackedQuestId(preferredQuestId, activeEntries, null);
+        }
+
+        /// <summary>
+        /// Same as the two-argument overload, but with no explicit choice the current hero's personal
+        /// quest (see <see cref="IsPersonalQuestOf"/>) wins over "first active" — every hero's
+        /// personal quest can be active at once, and display order (main story, then title) used to
+        /// put e.g. Joaquim's quest on the tracker while playing Maithe.
+        /// </summary>
+        public static string ResolveTrackedQuestId(string preferredQuestId, IReadOnlyList<QuestEntryViewModel> activeEntries, CharacterId? hero)
+        {
             if (activeEntries == null || activeEntries.Count == 0)
             {
                 return null;
@@ -223,7 +235,32 @@ namespace Rapadura.UI.Quests
                 return preferredQuestId;
             }
 
+            if (hero.HasValue)
+            {
+                QuestEntryViewModel personal = activeEntries.FirstOrDefault(e => e != null && IsPersonalQuestOf(e.QuestId, hero.Value));
+
+                if (personal != null)
+                {
+                    return personal.QuestId;
+                }
+            }
+
             return activeEntries[0].QuestId;
+        }
+
+        /// <summary>
+        /// Personal (character) quests follow the seeded id convention "quest_&lt;hero&gt;_..." (e.g.
+        /// "quest_maithe_windtrail", "quest_icaro_ancient_gears"); see CharacterQuestSeeder.
+        /// </summary>
+        public static bool IsPersonalQuestOf(string questId, CharacterId hero)
+        {
+            return !string.IsNullOrEmpty(questId)
+                && questId.StartsWith(GetPersonalQuestPrefix(hero), StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static string GetPersonalQuestPrefix(CharacterId hero)
+        {
+            return "quest_" + hero.ToString().ToLowerInvariant() + "_";
         }
 
         private static string SafeFormat(string format, string fallbackFormat, object arg)

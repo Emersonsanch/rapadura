@@ -1,6 +1,7 @@
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Achievements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -75,6 +76,8 @@ namespace Rapadura.UI.Achievements
                 _localization.LanguageChanged -= OnLanguageChanged;
                 _localization = null;
             }
+
+            GameplayPause.Release(this);
         }
 
         /// <summary>Managers may register after this UI's OnEnable, so this is retried from Start/Show.</summary>
@@ -108,6 +111,8 @@ namespace Rapadura.UI.Achievements
                 _root.style.display = DisplayStyle.Flex;
             }
 
+            GameplayPause.Acquire(this);
+
             Refresh();
         }
 
@@ -119,6 +124,8 @@ namespace Rapadura.UI.Achievements
             {
                 _root.style.display = DisplayStyle.None;
             }
+
+            GameplayPause.Release(this);
         }
 
         public void Toggle()

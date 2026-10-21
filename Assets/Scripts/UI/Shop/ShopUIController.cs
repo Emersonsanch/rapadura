@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Shop;
@@ -58,6 +59,7 @@ namespace Rapadura.UI.Shop
         private void OnDisable()
         {
             UnregisterCallbacks();
+            GameplayPause.Release(this);
         }
 
         private void BindElements()
@@ -366,6 +368,8 @@ namespace Rapadura.UI.Shop
                 _root.style.display = DisplayStyle.Flex;
             }
 
+            GameplayPause.Acquire(this);
+
             _isShown = _root != null;
         }
 
@@ -375,6 +379,8 @@ namespace Rapadura.UI.Shop
             {
                 _root.style.display = DisplayStyle.None;
             }
+
+            GameplayPause.Release(this);
 
             _isShown = false;
             ClearRows();

@@ -69,7 +69,7 @@ namespace Rapadura.Tests
         private static Dictionary<string, LocalizationEntry> MergedTable()
         {
             var table = new Dictionary<string, LocalizationEntry>();
-            foreach ((string _, LocalizationEntry entry) in AllEntries())
+            foreach (var (_, entry) in AllEntries())
             {
                 if (entry != null && !string.IsNullOrEmpty(entry.Key) && !table.ContainsKey(entry.Key))
                 {

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Dialogue;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -51,6 +52,7 @@ namespace Rapadura.UI.Dialogue
         private void OnDisable()
         {
             UnregisterCallbacks();
+            GameplayPause.Release(this);
         }
 
         private void BindElements()
@@ -234,6 +236,8 @@ namespace Rapadura.UI.Dialogue
             {
                 _root.style.display = DisplayStyle.Flex;
             }
+
+            GameplayPause.Acquire(this);
         }
 
         private void Hide()
@@ -242,6 +246,8 @@ namespace Rapadura.UI.Dialogue
             {
                 _root.style.display = DisplayStyle.None;
             }
+
+            GameplayPause.Release(this);
 
             ClearChoiceButtons();
         }

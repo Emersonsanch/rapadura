@@ -3,12 +3,14 @@ using Rapadura.Core.Accessibility;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Gameplay.Player;
+using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.Skills;
 using Rapadura.UI.Achievements;
 using Rapadura.UI.Crafting;
 using Rapadura.UI.Inventory;
 using Rapadura.UI.Menus;
 using Rapadura.UI.Quests;
+using Rapadura.UI.Shop;
 using Rapadura.UI.SkillTree;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -37,6 +39,10 @@ namespace Rapadura.UI.HUD
     /// screen's own business (GameplayPause.Acquire/Release); the HUD only ignores screen
     /// buttons/shortcuts while the pause menu or death screen own the screen — Esc/Start then
     /// means "back" in the pause menu. Opening Pause closes any open screen first.
+    ///
+    /// Screens opened from the world go through the same rule: the Loja (opened by an NPC via
+    /// ShopManager.OpenShop) is picked up from <see cref="ShopOpenedEvent"/>, and a crafting bancada
+    /// calls <see cref="OpenScreenExclusive"/> with its station-specific open.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class HudController : MonoBehaviour
@@ -66,6 +72,8 @@ namespace Rapadura.UI.HUD
         [SerializeField] private AchievementListController _achievementListController;
         [Tooltip("Pause-menu / workbench Criação screen — registered here so opening another screen closes it. If empty, resolved from the scene.")]
         [SerializeField] private CraftingUIController _craftingController;
+        [Tooltip("NPC-opened Loja screen — registered here so opening another screen ends the shop session, and a shop opening closes the others. If empty, resolved from the scene.")]
+        [SerializeField] private ShopUIController _shopController;
         [Tooltip("Player's SkillHotbar (slot -> skill loadout + casting). If empty it is resolved from " +
                  "_playerInput's GameObject, and added there at runtime if that GameObject has a SkillManager but no SkillHotbar yet.")]
         [SerializeField] private SkillHotbar _skillHotbar;
@@ -116,6 +124,7 @@ namespace Rapadura.UI.HUD
         public const string QuestLogScreenId = "quest-log";
         public const string AchievementsScreenId = "achievements";
         public const string CraftingScreenId = "crafting";
+        public const string ShopScreenId = "shop";
 
         // Action names in PlayerControls.inputactions (Player map).
         public const string QuestLogActionName = "QuestLog";
@@ -233,6 +242,7 @@ namespace Rapadura.UI.HUD
             EventBus.Subscribe<PlayerExperienceChangedEvent>(OnExperienceChanged);
             EventBus.Subscribe<GamePausedEvent>(OnGamePaused);
             EventBus.Subscribe<GameResumedEvent>(OnGameResumed);
+            EventBus.Subscribe<ShopOpenedEvent>(OnShopOpened);
 
             if (_runButton != null)
             {
@@ -295,6 +305,7 @@ namespace Rapadura.UI.HUD
             EventBus.Unsubscribe<PlayerExperienceChangedEvent>(OnExperienceChanged);
             EventBus.Unsubscribe<GamePausedEvent>(OnGamePaused);
             EventBus.Unsubscribe<GameResumedEvent>(OnGameResumed);
+            EventBus.Unsubscribe<ShopOpenedEvent>(OnShopOpened);
 
             if (_runButton != null)
             {
@@ -535,6 +546,13 @@ namespace Rapadura.UI.HUD
                 () => ResolveCrafting() && _craftingController.IsOpen,
                 () => { if (ResolveCrafting()) _craftingController.Open(); },
                 () => { if (ResolveCrafting()) _craftingController.Close(); });
+
+            // Open only shows an already-started NPC session (a shop can't be opened from the HUD);
+            // Close ends the session, so opening e.g. Mochila over the shop doesn't leave it running.
+            _screens.Register(ShopScreenId,
+                () => ResolveShop() && _shopController.IsOpen,
+                () => { if (ResolveShop()) _shopController.Open(); },
+                () => { if (ResolveShop()) _shopController.Close(); });
         }
 
         // Serialized ref first, FindFirstObjectByType fallback (same pattern as the Mochila button had).
@@ -566,6 +584,12 @@ namespace Rapadura.UI.HUD
         {
             if (_craftingController == null) _craftingController = FindFirstObjectByType<CraftingUIController>();
             return _craftingController != null;
+        }
+
+        private bool ResolveShop()
+        {
+            if (_shopController == null) _shopController = FindFirstObjectByType<ShopUIController>();
+            return _shopController != null;
         }
 
         private bool ResolvePauseMenu()
@@ -644,6 +668,21 @@ namespace Rapadura.UI.HUD
 
             _pauseMenuController?.Show();
         }
+
+        /// <summary>
+        /// Opens a registered screen exclusively (closing the others) from outside the HUD, e.g. a
+        /// crafting bancada (<c>CraftingStationTrigger</c>). <paramref name="openOverride"/> replaces
+        /// the registered open when the caller needs parameters (station, inventory). Not blocked by
+        /// the pause menu/death screen: world triggers can't fire while time is frozen anyway.
+        /// Returns false for an unknown id (the override is not run — fall back to opening directly).
+        /// </summary>
+        public bool OpenScreenExclusive(string screenId, Action openOverride = null)
+        {
+            return _screens.Open(screenId, openOverride);
+        }
+
+        /// <summary>ShopUIController shows itself on the same event; this only closes the other screens.</summary>
+        private void OnShopOpened(ShopOpenedEvent evt) => _screens.Open(ShopScreenId);
 
         private void OnGamePaused(GamePausedEvent evt) => _gamePaused = true;
         private void OnGameResumed(GameResumedEvent evt) => _gamePaused = false;

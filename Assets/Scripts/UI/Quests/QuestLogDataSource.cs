@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Rapadura.Core.DI;
 using Rapadura.Core.Localization;
+using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Quests;
 using UnityEngine;
 
@@ -31,6 +32,9 @@ namespace Rapadura.UI.Quests
         public QuestManager QuestManager => _questManager;
         public LocalizationManager Localization => _localization;
         public IReadOnlyList<QuestDefinition> Definitions => _definitions;
+
+        /// <summary>The hero being played (null before one is chosen) — the tracker defaults to their personal quest.</summary>
+        public CharacterId? CurrentHero => ServiceLocator.TryGet(out CharacterSelectionState selection) ? selection.Selected : null;
 
         /// <summary>Resolves managers lazily (they may register after this UI's OnEnable) and loads the catalog once.</summary>
         public bool EnsureResolved()

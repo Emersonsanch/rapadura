@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rapadura.Core.Localization;
+using Rapadura.Gameplay.Shop;
 using Rapadura.UI.HUD;
+using Rapadura.UI.Menus;
+using Rapadura.UI.Shop;
 using UnityEngine;
 
 namespace Rapadura.Tests
@@ -141,9 +144,170 @@ namespace Rapadura.Tests
                 HudController.QuestLogScreenId,
                 HudController.AchievementsScreenId,
                 HudController.CraftingScreenId,
+                HudController.ShopScreenId,
             };
 
-            Assert.AreEqual(5, ids.Count);
+            Assert.AreEqual(6, ids.Count);
+        }
+
+        // ---------------------------------------------------------------
+        // Open with a caller-supplied open (crafting bancada with its station)
+        // ---------------------------------------------------------------
+
+        [Test]
+        public void OpenWithOverride_RunsOverrideInsteadOfRegisteredOpen_AndClosesOthers()
+        {
+            var coordinator = new ScreenExclusivityCoordinator();
+            FakeScreen crafting = Register(coordinator, HudController.CraftingScreenId);
+            FakeScreen shop = Register(coordinator, HudController.ShopScreenId);
+            shop.Open = true;
+            int overrideCalls = 0;
+
+            Assert.IsTrue(coordinator.Open(HudController.CraftingScreenId, () => { crafting.Open = true; overrideCalls++; }));
+
+            Assert.AreEqual(1, overrideCalls);
+            Assert.AreEqual(0, crafting.OpenCalls, "The registered (parameterless) open must not run when an override is given.");
+            Assert.IsTrue(crafting.Open);
+            Assert.IsFalse(shop.Open);
+        }
+
+        [Test]
+        public void OpenWithOverride_RunsEvenWhenAlreadyOpen()
+        {
+            var coordinator = new ScreenExclusivityCoordinator();
+            FakeScreen crafting = Register(coordinator, "crafting");
+            crafting.Open = true; // opened by another bancada
+            int overrideCalls = 0;
+
+            coordinator.Open("crafting", () => overrideCalls++);
+
+            Assert.AreEqual(1, overrideCalls, "A second station must re-open the window with its own context.");
+            Assert.AreEqual(0, crafting.CloseCalls);
+        }
+
+        [Test]
+        public void OpenWithOverride_UnknownId_DoesNotRunOverride()
+        {
+            var coordinator = new ScreenExclusivityCoordinator();
+            bool ran = false;
+
+            Assert.IsFalse(coordinator.Open("missing", () => ran = true));
+            Assert.IsFalse(ran, "Callers fall back to opening directly, so the override must not run twice.");
+        }
+
+        [Test]
+        public void OpenWithNullOverride_BehavesLikePlainOpen()
+        {
+            var coordinator = new ScreenExclusivityCoordinator();
+            FakeScreen a = Register(coordinator, "a");
+
+            coordinator.Open("a", null);
+            coordinator.Open("a", null);
+
+            Assert.IsTrue(a.Open);
+            Assert.AreEqual(1, a.OpenCalls);
+        }
+
+        // ---------------------------------------------------------------
+        // Shop public open/close
+        // ---------------------------------------------------------------
+
+        [Test]
+        public void ShopUI_OpenWithoutActiveSession_StaysClosed_AndCloseIsSafe()
+        {
+            var go = new GameObject("ShopUITest");
+
+            try
+            {
+                var shopUI = go.AddComponent<ShopUIController>();
+                shopUI.SetShopManager(new ShopManager());
+
+                Assert.IsFalse(shopUI.IsOpen);
+                Assert.IsFalse(shopUI.Open(), "A shop can only be shown for a session an NPC started.");
+                Assert.IsFalse(shopUI.IsOpen);
+
+                Assert.DoesNotThrow(shopUI.Close);
+                Assert.IsFalse(shopUI.IsOpen);
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
+            }
+        }
+
+        // ---------------------------------------------------------------
+        // Settings rebind rows for the HUD shortcuts
+        // ---------------------------------------------------------------
+
+        [Test]
+        public void RebindRows_IncludeHudShortcutActions()
+        {
+            var actions = new HashSet<string>();
+            foreach (RebindRowDefinition row in SettingsMenuTexts.Rows)
+            {
+                actions.Add(row.ActionName);
+            }
+
+            foreach (string expected in new[]
+                     {
+                         HudController.QuestLogActionName,
+                         HudController.InventoryActionName,
+                         HudController.SkillTreeActionName,
+                         HudController.PauseActionName,
+                     })
+            {
+                Assert.IsTrue(actions.Contains(expected), $"Missing Settings rebind row for {expected}");
+            }
+        }
+
+        [Test]
+        public void RebindRows_OnlyPauseKeyboardIsLocked()
+        {
+            foreach (RebindRowDefinition row in SettingsMenuTexts.Rows)
+            {
+                Assert.AreEqual(row.ActionName == HudController.PauseActionName, row.KeyboardLocked, row.ActionName);
+            }
+        }
+
+        [Test]
+        public void RebindRows_HudShortcutLabels_HaveEnglishAndPortugueseTexts()
+        {
+            foreach (RebindRowDefinition row in SettingsMenuTexts.Rows)
+            {
+                LocalizationEntry entry = SettingsMenuTexts.Entries.Find(e => e.Key == row.LabelKey);
+                Assert.IsNotNull(entry, row.LabelKey);
+                Assert.IsFalse(string.IsNullOrEmpty(entry.En), row.LabelKey);
+                Assert.IsFalse(string.IsNullOrEmpty(entry.PtBR), row.LabelKey);
+            }
+        }
+
+        [Test]
+        public void PlayerControls_EveryRebindRowActionExists_AndPauseKeyboardIsTheCancelKey()
+        {
+            string json = System.IO.File.ReadAllText(System.IO.Path.Combine("Assets", "InputActions", "PlayerControls.inputactions"));
+            var asset = UnityEngine.InputSystem.InputActionAsset.FromJson(json);
+
+            try
+            {
+                foreach (RebindRowDefinition row in SettingsMenuTexts.Rows)
+                {
+                    Assert.IsNotNull(asset.FindAction(row.ActionName, throwIfNotFound: false), $"Row '{row.ActionName}' has no action.");
+                }
+
+                // The keyboard Pause row is locked because its key IS the rebind cancel key.
+                UnityEngine.InputSystem.InputAction pause = asset.FindAction(HudController.PauseActionName);
+                bool pauseOnCancelKey = false;
+                foreach (UnityEngine.InputSystem.InputBinding binding in pause.bindings)
+                {
+                    pauseOnCancelKey |= binding.path == Rapadura.Core.Accessibility.InputRebindManager.DefaultCancelPath;
+                }
+
+                Assert.IsTrue(pauseOnCancelKey, "Pause's keyboard binding should be the rebind cancel key (Esc).");
+            }
+            finally
+            {
+                Object.DestroyImmediate(asset);
+            }
         }
 
         [Test]

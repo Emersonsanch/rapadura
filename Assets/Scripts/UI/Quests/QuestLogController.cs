@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Quests;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -95,6 +96,7 @@ namespace Rapadura.UI.Quests
         private void OnDisable()
         {
             UnregisterCallbacks();
+            GameplayPause.Release(this);
         }
 
         private void BindElements()
@@ -217,6 +219,7 @@ namespace Rapadura.UI.Quests
                 _root.style.display = DisplayStyle.Flex;
             }
 
+            GameplayPause.Acquire(this);
             Refresh();
         }
 
@@ -228,6 +231,8 @@ namespace Rapadura.UI.Quests
             {
                 _root.style.display = DisplayStyle.None;
             }
+
+            GameplayPause.Release(this);
         }
 
         public void Toggle()
@@ -345,7 +350,7 @@ namespace Rapadura.UI.Quests
 
             _listContainer.Clear();
 
-            string trackedId = QuestLogPresenter.ResolveTrackedQuestId(QuestTracking.PreferredQuestId, _currentTab == Tab.Active ? _visibleEntries : null);
+            string trackedId = QuestLogPresenter.ResolveTrackedQuestId(QuestTracking.PreferredQuestId, _currentTab == Tab.Active ? _visibleEntries : null, _data.CurrentHero);
 
             foreach (QuestEntryViewModel entry in _visibleEntries)
             {
@@ -517,7 +522,7 @@ namespace Rapadura.UI.Quests
                 return;
             }
 
-            bool isTracked = QuestLogPresenter.ResolveTrackedQuestId(QuestTracking.PreferredQuestId, _visibleEntries) == entry.QuestId;
+            bool isTracked = QuestLogPresenter.ResolveTrackedQuestId(QuestTracking.PreferredQuestId, _visibleEntries, _data.CurrentHero) == entry.QuestId;
             _trackButton.text = _data.Localize(isTracked ? QuestLogTexts.TrackingKey : QuestLogTexts.TrackKey);
             _trackButton.EnableInClassList("quest-detail-track-button--tracking", isTracked);
             _trackButton.SetEnabled(!isTracked);

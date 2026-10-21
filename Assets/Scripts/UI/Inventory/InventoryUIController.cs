@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Rapadura.Core.Events;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Items;
 using Rapadura.UI.Common;
@@ -74,6 +75,7 @@ namespace Rapadura.UI.Inventory
         private void OnDisable()
         {
             UnregisterCallbacks();
+            GameplayPause.Release(this);
         }
 
         /// <summary>Lets a bootstrap script assign the player's inventory explicitly.</summary>
@@ -142,6 +144,7 @@ namespace Rapadura.UI.Inventory
             }
 
             _root.style.display = DisplayStyle.Flex;
+            GameplayPause.Acquire(this);
             RefreshAll();
         }
 
@@ -153,6 +156,8 @@ namespace Rapadura.UI.Inventory
             {
                 _root.style.display = DisplayStyle.None;
             }
+
+            GameplayPause.Release(this);
 
             ClearRows();
         }

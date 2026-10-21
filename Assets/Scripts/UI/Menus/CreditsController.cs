@@ -1,4 +1,5 @@
 using System;
+using Rapadura.Core.Systems;
 using Rapadura.Core.Versioning;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -45,6 +46,7 @@ namespace Rapadura.UI.Menus
         private void OnDisable()
         {
             UnregisterCallbacks();
+            GameplayPause.Release(this);
         }
 
         private void BindElements()
@@ -140,6 +142,15 @@ namespace Rapadura.UI.Menus
             if (_root != null)
             {
                 _root.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+
+            if (visible)
+            {
+                GameplayPause.Acquire(this);
+            }
+            else
+            {
+                GameplayPause.Release(this);
             }
         }
     }

@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Core.Systems;
+using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
 using Rapadura.UI.Common;
@@ -15,6 +18,11 @@ namespace Rapadura.UI.SkillTree
     /// learned/maxed) and lets the player spend skill points through <see cref="SkillManager"/>.
     /// Purely a presentation layer — all rules (requirements, points, leveling) live in
     /// SkillManager/SkillInstance; this class only reads and displays that state.
+    ///
+    /// The tree shown is the selected hero's (<see cref="SkillTreeSelection"/>): resolved on enable
+    /// from <see cref="CharacterSelectionState"/> and switched on <see cref="CharacterSelectedEvent"/>/
+    /// <see cref="CharacterSelectionRestoredEvent"/>; <see cref="_availableTrees"/>[0] is only the
+    /// fallback when no hero is chosen. While open it holds a <see cref="GameplayPause"/>.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class SkillTreeController : MonoBehaviour
@@ -63,9 +71,11 @@ namespace Rapadura.UI.SkillTree
             BindElements();
             RegisterCallbacks();
 
-            if (_activeTree == null && _availableTrees != null && _availableTrees.Length > 0)
+            SkillTreeDefinition defaultTree = ResolveDefaultTree();
+
+            if (defaultTree != null)
             {
-                ShowTree(_availableTrees[0]);
+                ShowTree(defaultTree);
             }
 
             Hide();
@@ -74,6 +84,31 @@ namespace Rapadura.UI.SkillTree
         private void OnDisable()
         {
             UnregisterCallbacks();
+            GameplayPause.Release(this);
+        }
+
+        private SkillTreeDefinition ResolveDefaultTree()
+        {
+            CharacterId? hero = ServiceLocator.TryGet(out CharacterSelectionState selection) ? selection.Selected : null;
+            return ResolveTreeFor(hero);
+        }
+
+        private SkillTreeDefinition ResolveTreeFor(CharacterId? hero)
+        {
+            return SkillTreeSelection.Resolve(hero, CharacterSkillSet.GetSkillTree, _availableTrees);
+        }
+
+        private void OnCharacterSelected(CharacterSelectedEvent evt) => ShowTreeForHero(evt.CharacterId);
+        private void OnCharacterRestored(CharacterSelectionRestoredEvent evt) => ShowTreeForHero(evt.CharacterId);
+
+        private void ShowTreeForHero(CharacterId hero)
+        {
+            SkillTreeDefinition tree = ResolveTreeFor(hero);
+
+            if (tree != null && tree != _activeTree)
+            {
+                ShowTree(tree);
+            }
         }
 
         private void BindElements()
@@ -112,6 +147,8 @@ namespace Rapadura.UI.SkillTree
 
             EventBus.Subscribe<SkillLearnedEvent>(OnSkillProgressionChanged);
             EventBus.Subscribe<SkillLeveledUpEvent>(OnSkillProgressionChanged);
+            EventBus.Subscribe<CharacterSelectedEvent>(OnCharacterSelected);
+            EventBus.Subscribe<CharacterSelectionRestoredEvent>(OnCharacterRestored);
         }
 
         private void UnregisterCallbacks()
@@ -126,6 +163,8 @@ namespace Rapadura.UI.SkillTree
 
             EventBus.Unsubscribe<SkillLearnedEvent>(OnSkillProgressionChanged);
             EventBus.Unsubscribe<SkillLeveledUpEvent>(OnSkillProgressionChanged);
+            EventBus.Unsubscribe<CharacterSelectedEvent>(OnCharacterSelected);
+            EventBus.Unsubscribe<CharacterSelectionRestoredEvent>(OnCharacterRestored);
         }
 
         private void OnSkillProgressionChanged(SkillLearnedEvent evt) => RefreshAll();
@@ -134,6 +173,7 @@ namespace Rapadura.UI.SkillTree
         public void Show()
         {
             _root.style.display = DisplayStyle.Flex;
+            GameplayPause.Acquire(this);
             RefreshAll();
         }
 
@@ -141,6 +181,7 @@ namespace Rapadura.UI.SkillTree
         {
             _tooltip?.Hide();
             _root.style.display = DisplayStyle.None;
+            GameplayPause.Release(this);
         }
 
         public void Toggle()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Rapadura.Core.Accessibility;
 using Rapadura.Core.Localization;
 
@@ -130,16 +131,19 @@ namespace Rapadura.UI.Menus
 
         private static Dictionary<string, string> _fallbackByKey;
 
-        /// <summary>Merges <see cref="Entries"/> into <paramref name="manager"/> if they aren't there yet. Safe to call repeatedly.</summary>
+        /// <summary>Merges <see cref="Entries"/> into <paramref name="manager"/>, skipping keys it already has (external tables take precedence). Safe to call repeatedly.</summary>
         public static void EnsureRegistered(LocalizationManager manager)
         {
-            if (manager == null || manager.HasKey(HeaderAction))
+            if (manager == null || (ReferenceEquals(manager, _mergedInto) && manager.HasKey(HeaderAction)))
             {
                 return;
             }
 
-            manager.LoadEntries(Entries);
+            manager.LoadEntries(Entries.Where(entry => !manager.HasKey(entry.Key)).ToList());
+            _mergedInto = manager;
         }
+
+        private static LocalizationManager _mergedInto;
 
         /// <summary>Localized text via <paramref name="manager"/> when available, else the pt-BR fallback, else the key.</summary>
         public static string Get(LocalizationManager manager, string key)

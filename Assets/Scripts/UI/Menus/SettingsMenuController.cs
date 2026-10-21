@@ -4,6 +4,7 @@ using Rapadura.Core.Audio;
 using Rapadura.Core.DI;
 using Rapadura.Core.Localization;
 using Rapadura.Core.Performance;
+using Rapadura.Core.Systems;
 using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -171,6 +172,7 @@ namespace Rapadura.UI.Menus
             CancelRebind();
             UnregisterCallbacks();
             UnsubscribeLocalization();
+            GameplayPause.Release(this);
         }
 
         private void Update()
@@ -902,6 +904,8 @@ namespace Rapadura.UI.Menus
                 _root.style.display = DisplayStyle.Flex;
             }
 
+            GameplayPause.Acquire(this);
+
             _tabGraphicsButton?.Focus();
         }
 
@@ -913,6 +917,8 @@ namespace Rapadura.UI.Menus
             {
                 _root.style.display = DisplayStyle.None;
             }
+
+            GameplayPause.Release(this);
         }
     }
 }

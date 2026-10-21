@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Rapadura.Core.Localization;
 
@@ -120,16 +121,19 @@ namespace Rapadura.UI.Common
             return key != null && _englishByKey.TryGetValue(key, out string text) ? text : null;
         }
 
-        /// <summary>Merges <see cref="Entries"/> into <paramref name="manager"/> if they aren't there yet. Safe to call repeatedly.</summary>
+        /// <summary>Merges <see cref="Entries"/> into <paramref name="manager"/>, skipping keys it already has (external tables take precedence). Safe to call repeatedly.</summary>
         public static void EnsureRegistered(LocalizationManager manager)
         {
-            if (manager == null || manager.HasKey("ui.tooltip.rarity.common"))
+            if (manager == null || (ReferenceEquals(manager, _mergedInto) && manager.HasKey(Entries[0].Key)))
             {
                 return;
             }
 
-            manager.LoadEntries(Entries);
+            manager.LoadEntries(Entries.Where(entry => !manager.HasKey(entry.Key)).ToList());
+            _mergedInto = manager;
         }
+
+        private static LocalizationManager _mergedInto;
 
         /// <summary>"AttackDamage" -> "attack_damage", "MainHand" -> "main_hand". Used to build enum-based keys.</summary>
         public static string ToSnakeCase(string pascal)

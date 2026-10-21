@@ -308,6 +308,31 @@ namespace Rapadura.Core.Localization
                 new LocalizationEntry("dialogue.convergence_first_meeting.choice_hesitate", "Let's not swear to anything until we've fought side by side once — even family needs to prove it in the field.", "Não vamos jurar nada até termos lutado lado a lado ao menos uma vez — até família precisa provar em campo."),
                 new LocalizationEntry("dialogue.convergence_first_meeting.group_unites", "Then it's settled. Rapadura's balance rests on our family now — let's go earn that vision together.", "Então está decidido. O equilíbrio de Rapadura agora depende da nossa família — vamos honrar essa visão juntos."),
                 new LocalizationEntry("dialogue.convergence_first_meeting.group_hesitates", "Fair enough. Then let the fight ahead be the vow — we've shared blood our whole lives, but we'll know soon enough if we can share a battlefield too.", "Justo. Então que a luta que vem seja o juramento — compartilhamos sangue a vida inteira, mas logo vamos saber se conseguimos compartilhar um campo de batalha também."),
+
+                // -- Biome names (BiomeDefinition._nameLocalizationKey, Resources/Biomes, BiomeSeeder.cs) --
+                new LocalizationEntry("biome.forest.name", "Forest", "Floresta"),
+                new LocalizationEntry("biome.desert.name", "Desert", "Deserto"),
+                new LocalizationEntry("biome.mountain.name", "Mountain", "Montanha"),
+                new LocalizationEntry("biome.caves.name", "Caves", "Cavernas"),
+
+                // -- Procedural item affixes (ItemAffixDefinition._nameLocalizationKey, Resources/Affixes).
+                // pt-BR matches each asset's _fallbackDisplayText; prefixes are adjectives, suffixes "of X". --
+                new LocalizationEntry("affix.affix_sharp", "Sharp", "Afiada"),
+                new LocalizationEntry("affix.affix_brutal", "Brutal", "Brutal"),
+                new LocalizationEntry("affix.affix_devastating", "Devastating", "Devastadora"),
+                new LocalizationEntry("affix.affix_arcane", "Arcane", "Arcana"),
+                new LocalizationEntry("affix.affix_lucky", "Lucky", "Sortuda"),
+                new LocalizationEntry("affix.affix_reinforced", "Reinforced", "Reforçada"),
+                new LocalizationEntry("affix.affix_sturdy", "Sturdy", "Resistente"),
+                new LocalizationEntry("affix.affix_swift", "Swift", "Ligeiras"),
+                new LocalizationEntry("affix.affix_vital", "Vital", "Vital"),
+                new LocalizationEntry("affix.affix_of_fury", "of Fury", "da Fúria"),
+                new LocalizationEntry("affix.affix_of_haste", "of Haste", "da Presteza"),
+                new LocalizationEntry("affix.affix_of_stamina", "of Stamina", "da Resistência"),
+                new LocalizationEntry("affix.affix_of_the_executioner", "of the Executioner", "do Executor"),
+                new LocalizationEntry("affix.affix_of_the_scholar", "of the Scholar", "do Estudioso"),
+                new LocalizationEntry("affix.affix_of_the_wind", "of the Wind", "do Vento"),
+                new LocalizationEntry("affix.affix_of_vigor", "of Vigor", "do Vigor"),
             };
         }
     }

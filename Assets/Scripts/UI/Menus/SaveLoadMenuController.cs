@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Rapadura.Core.DI;
+using Rapadura.Core.Systems;
 using Rapadura.Save;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -68,6 +69,7 @@ namespace Rapadura.UI.Menus
         private void OnDisable()
         {
             UnregisterCallbacks();
+            GameplayPause.Release(this);
         }
 
         private void BindElements()
@@ -209,6 +211,8 @@ namespace Rapadura.UI.Menus
                 _root.style.display = DisplayStyle.Flex;
             }
 
+            GameplayPause.Acquire(this);
+
             RefreshSlots();
 
             if (_slotRows.Count > 0)
@@ -223,6 +227,8 @@ namespace Rapadura.UI.Menus
             {
                 _root.style.display = DisplayStyle.None;
             }
+
+            GameplayPause.Release(this);
         }
     }
 }

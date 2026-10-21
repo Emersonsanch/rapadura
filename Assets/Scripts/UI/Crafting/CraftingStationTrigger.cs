@@ -1,5 +1,6 @@
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Inventory;
+using Rapadura.UI.HUD;
 using UnityEngine;
 
 namespace Rapadura.UI.Crafting
@@ -9,6 +10,10 @@ namespace Rapadura.UI.Crafting
     /// they stand inside it, passing this station's <see cref="CraftingStationType"/> so recipes
     /// requiring it become craftable. Same plain-trigger shape as <c>NpcInteractable</c>/
     /// <c>SpawnPoint</c> (Collider marked "Is Trigger", player tagged "Player").
+    ///
+    /// Opening goes through the HUD's screen-exclusivity rule (<see cref="HudController.OpenScreenExclusive"/>)
+    /// so walking up to a bancada closes Mochila/Missões/Loja/etc.; without a HUD in the scene it
+    /// opens the window directly, as before.
     /// </summary>
     [DisallowMultipleComponent]
     public class CraftingStationTrigger : MonoBehaviour
@@ -20,6 +25,8 @@ namespace Rapadura.UI.Crafting
         [Tooltip("If true, entering the trigger opens the window immediately; otherwise call Interact() from an interact prompt.")]
         [SerializeField] private bool _openOnTriggerEnter = true;
         [SerializeField] private bool _closeOnTriggerExit = true;
+        [Tooltip("HUD whose screen-exclusivity rule the window opens through. If empty, resolved from the scene on first use.")]
+        [SerializeField] private HudController _hud;
 
         private InventoryManager _playerInventory;
 
@@ -58,10 +65,25 @@ namespace Rapadura.UI.Crafting
 
         public void Interact()
         {
-            if (_craftingUI != null)
+            if (_craftingUI == null)
             {
-                _craftingUI.Open(_playerInventory, _station);
+                return;
             }
+
+            if (_hud == null)
+            {
+                _hud = FindFirstObjectByType<HudController>();
+            }
+
+            if (_hud == null || !_hud.OpenScreenExclusive(HudController.CraftingScreenId, OpenCraftingWindow))
+            {
+                OpenCraftingWindow();
+            }
+        }
+
+        private void OpenCraftingWindow()
+        {
+            _craftingUI.Open(_playerInventory, _station);
         }
     }
 }

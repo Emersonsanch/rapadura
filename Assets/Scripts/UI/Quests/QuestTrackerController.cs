@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
+using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Quests;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -15,7 +16,8 @@ namespace Rapadura.UI.Quests
     ///
     /// Which quest is shown: <see cref="QuestTracking.PreferredQuestId"/> (set by the log's
     /// "Acompanhar" button) while it's still active, else the first active quest
-    /// (<see cref="QuestLogPresenter.ResolveTrackedQuestId"/>); hidden when nothing is active.
+    /// (<see cref="QuestLogPresenter.ResolveTrackedQuestId"/>) — preferring the current hero's own
+    /// personal quest when it is active; hidden when nothing is active.
     /// Event-driven like the log — refreshes on quest start/progress/complete/abandon,
     /// <see cref="GameLoadedEvent"/>, <see cref="QuestTrackedChangedEvent"/> and language changes,
     /// and briefly shows a "Missão concluída!" banner on <see cref="QuestCompletedEvent"/>.
@@ -98,6 +100,8 @@ namespace Rapadura.UI.Quests
             EventBus.Subscribe<QuestAbandonedEvent>(OnQuestAbandoned);
             EventBus.Subscribe<GameLoadedEvent>(OnGameLoaded);
             EventBus.Subscribe<QuestTrackedChangedEvent>(OnQuestTrackedChanged);
+            EventBus.Subscribe<CharacterSelectedEvent>(OnCharacterSelected);
+            EventBus.Subscribe<CharacterSelectionRestoredEvent>(OnCharacterRestored);
 
             SubscribeLanguage();
         }
@@ -112,6 +116,8 @@ namespace Rapadura.UI.Quests
             EventBus.Unsubscribe<QuestAbandonedEvent>(OnQuestAbandoned);
             EventBus.Unsubscribe<GameLoadedEvent>(OnGameLoaded);
             EventBus.Unsubscribe<QuestTrackedChangedEvent>(OnQuestTrackedChanged);
+            EventBus.Unsubscribe<CharacterSelectedEvent>(OnCharacterSelected);
+            EventBus.Unsubscribe<CharacterSelectionRestoredEvent>(OnCharacterRestored);
 
             if (_subscribedLocalization != null)
             {
@@ -147,6 +153,8 @@ namespace Rapadura.UI.Quests
         private void OnQuestAbandoned(QuestAbandonedEvent evt) => Refresh();
         private void OnGameLoaded(GameLoadedEvent evt) => Refresh();
         private void OnQuestTrackedChanged(QuestTrackedChangedEvent evt) => Refresh();
+        private void OnCharacterSelected(CharacterSelectedEvent evt) => Refresh();
+        private void OnCharacterRestored(CharacterSelectionRestoredEvent evt) => Refresh();
         private void OnLanguageChanged(LanguageCode language) => Refresh();
 
         private void OnQuestObjectiveUpdated(QuestObjectiveUpdatedEvent evt)
@@ -182,7 +190,7 @@ namespace Rapadura.UI.Quests
             }
 
             List<QuestEntryViewModel> active = _data.BuildActive();
-            string trackedId = QuestLogPresenter.ResolveTrackedQuestId(QuestTracking.PreferredQuestId, active);
+            string trackedId = QuestLogPresenter.ResolveTrackedQuestId(QuestTracking.PreferredQuestId, active, _data.CurrentHero);
             QuestEntryViewModel entry = trackedId != null ? active.Find(e => e.QuestId == trackedId) : null;
 
             _displayedQuestId = entry?.QuestId;

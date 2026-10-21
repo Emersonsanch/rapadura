@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.UI.Common;
@@ -69,6 +70,7 @@ namespace Rapadura.UI.Crafting
         private void OnDisable()
         {
             UnregisterCallbacks();
+            GameplayPause.Release(this);
         }
 
         private void BindElements()
@@ -140,6 +142,8 @@ namespace Rapadura.UI.Crafting
                 _root.style.display = DisplayStyle.Flex;
             }
 
+            GameplayPause.Acquire(this);
+
             SetFeedback(string.Empty, false);
             RebuildRecipeList();
         }
@@ -152,6 +156,8 @@ namespace Rapadura.UI.Crafting
             {
                 _root.style.display = DisplayStyle.None;
             }
+
+            GameplayPause.Release(this);
 
             _recipeListContainer?.Clear();
             _ingredientListContainer?.Clear();
