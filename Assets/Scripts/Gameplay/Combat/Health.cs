@@ -15,7 +15,7 @@ namespace Rapadura.Gameplay.Combat
     /// damage (<see cref="_invulnerabilityDuration"/>), which is standard game-feel to avoid a
     /// single overlapping hitbox instantly deleting a health bar across several trigger frames.
     /// </summary>
-    public class Health : MonoBehaviour, ICombatTarget
+    public class Health : MonoBehaviour, ICombatTarget, ICriticalAwareTarget
     {
         [Header("Vitals")]
         [SerializeField] private float _maxHealth = 50f;
@@ -103,6 +103,21 @@ namespace Rapadura.Gameplay.Combat
         /// <summary>Applies a fully-resolved damage instance (post mitigation), honoring i-frames and raising events.</summary>
         public void ApplyDamage(DamageInfo info)
         {
+            ApplyDamageInternal(info, info.IsCritical);
+        }
+
+        /// <summary>
+        /// <see cref="ICriticalAwareTarget"/>: the attacker already multiplied <paramref name="amount"/> by
+        /// its crit multiplier (<see cref="OutgoingDamage.Resolve"/>), so the hit is computed as a normal
+        /// one and only the published event is flagged critical (for the crit FX/SFX).
+        /// </summary>
+        public void ApplyResolvedCriticalDamage(float amount, ElementType element, GameObject source)
+        {
+            ApplyDamageInternal(DamageInfo.Simple(amount, element, source), displayAsCritical: true);
+        }
+
+        private void ApplyDamageInternal(DamageInfo info, bool displayAsCritical)
+        {
             EnsureInitialized();
 
             if (IsDead || IsInvulnerable || info.Amount <= 0f)
@@ -114,7 +129,7 @@ namespace Rapadura.Gameplay.Combat
             SetHealth(CurrentHealth - finalDamage);
             GrantInvulnerability(_invulnerabilityDuration);
 
-            EventBus.Publish(new DamageAppliedEvent(gameObject, info.Source, finalDamage, info.Element, info.IsCritical));
+            EventBus.Publish(new DamageAppliedEvent(gameObject, info.Source, finalDamage, info.Element, displayAsCritical));
 
             if (CurrentHealth <= 0f)
             {

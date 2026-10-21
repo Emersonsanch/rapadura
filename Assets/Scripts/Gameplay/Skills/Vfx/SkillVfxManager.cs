@@ -367,6 +367,16 @@ namespace Rapadura.Gameplay.Skills.Vfx
             _flashGrowCurve = new AnimationCurve(new Keyframe(0f, 0.4f), new Keyframe(1f, 1f));
         }
 
+        /// <summary>
+        /// Shared runtime particle material (URP Particles/Unlit + generated soft-dot texture), alpha or
+        /// additive. Lets other procedural effects (e.g. <c>AmbientVfx</c>) reuse the same materials.
+        /// </summary>
+        public static Material GetSharedParticleMaterial(bool additive)
+        {
+            EnsureMaterials();
+            return additive ? _additiveMaterial : _alphaMaterial;
+        }
+
         private static void EnsureMaterials()
         {
             if (_softDotTexture == null)

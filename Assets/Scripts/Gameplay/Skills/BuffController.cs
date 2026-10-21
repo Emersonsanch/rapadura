@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Rapadura.Gameplay.Combat;
 using UnityEngine;
@@ -24,6 +25,13 @@ namespace Rapadura.Gameplay.Skills
         /// <summary>Seconds of stun remaining, clamped to zero (never negative).</summary>
         public float StunTimeRemaining => Mathf.Max(0f, _stunTimer);
 
+        /// <summary>
+        /// Raised whenever the set of active modifiers changes (applied, removed, cleared or expired),
+        /// so derived values cached elsewhere — e.g. <c>PlayerStats</c> clamping current health/mana
+        /// when a MaxHealth/MaxMana bonus goes away — can refresh without polling every frame.
+        /// </summary>
+        public event Action OnModifiersChanged;
+
         private void Awake()
         {
             _combatTarget = GetComponent<ICombatTarget>();
@@ -35,6 +43,8 @@ namespace Rapadura.Gameplay.Skills
             {
                 _stunTimer -= Time.deltaTime;
             }
+
+            bool anyExpired = false;
 
             for (int i = _activeEffects.Count - 1; i >= 0; i--)
             {
@@ -49,7 +59,13 @@ namespace Rapadura.Gameplay.Skills
                 if (expired)
                 {
                     _activeEffects.RemoveAt(i);
+                    anyExpired = true;
                 }
+            }
+
+            if (anyExpired)
+            {
+                OnModifiersChanged?.Invoke();
             }
         }
 
@@ -85,11 +101,21 @@ namespace Rapadura.Gameplay.Skills
             }
         }
 
-        /// <summary>Applies a new buff/debuff, replacing any existing instance of the same stat+debuff-flag combo.</summary>
+        /// <summary>
+        /// Applies a new buff/debuff, replacing any existing instance of the same stat+debuff-flag combo
+        /// <b>from the same source</b> (recasting a skill refreshes its own buff instead of stacking).
+        /// Effects from different sources stack: before, the replacement ignored the source, so e.g.
+        /// equipping an <c>affix_vital</c> item silently wiped the Vitality attribute's MaxHealth bonus
+        /// (<c>AttributeSet</c>, source "attributes") and casting an AttackDamage buff permanently
+        /// erased Poder Arcano's — they share the stat but not the source.
+        /// </summary>
         public void ApplyEffect(StatModifierDefinition definition, string sourceKey = null)
         {
-            _activeEffects.RemoveAll(e => e.Definition.affectedStat == definition.affectedStat && e.Definition.isDebuff == definition.isDebuff);
+            _activeEffects.RemoveAll(e => e.Definition.affectedStat == definition.affectedStat
+                                          && e.Definition.isDebuff == definition.isDebuff
+                                          && e.SourceKey == sourceKey);
             _activeEffects.Add(new ActiveStatEffect(definition, sourceKey));
+            OnModifiersChanged?.Invoke();
         }
 
         public void ApplyEffects(IEnumerable<StatModifierDefinition> definitions, string sourceKey = null)
@@ -108,12 +134,21 @@ namespace Rapadura.Gameplay.Skills
                 return;
             }
 
-            _activeEffects.RemoveAll(e => e.SourceKey == sourceKey);
+            if (_activeEffects.RemoveAll(e => e.SourceKey == sourceKey) > 0)
+            {
+                OnModifiersChanged?.Invoke();
+            }
         }
 
         public void ClearAllEffects()
         {
+            if (_activeEffects.Count == 0)
+            {
+                return;
+            }
+
             _activeEffects.Clear();
+            OnModifiersChanged?.Invoke();
         }
 
         /// <summary>Sums every active flat + percent modifier for the given stat, applied to a base value.</summary>
@@ -140,6 +175,28 @@ namespace Rapadura.Gameplay.Skills
             }
 
             return (baseValue + flatTotal) * (1f + percentTotal);
+        }
+
+        /// <summary>
+        /// Sum of every active modifier value (flat AND percent) for a stat that is itself a 0-based
+        /// fraction — <see cref="StatType.CriticalChance"/>, <see cref="StatType.CriticalDamage"/>.
+        /// <see cref="GetModifiedValue"/> would drop the percent ones for these: (0 + flat) × (1 + percent)
+        /// ignores a percent bonus on a zero base, and the procedural affixes (<c>AffixDatabaseSeeder</c>)
+        /// roll crit as PercentAdditive while Destreza applies it as Flat. Here "+3%" means +0.03 either way.
+        /// </summary>
+        public float GetAdditiveFractionTotal(StatType stat)
+        {
+            float total = 0f;
+
+            foreach (ActiveStatEffect effect in _activeEffects)
+            {
+                if (effect.Definition.affectedStat == stat)
+                {
+                    total += effect.Definition.value;
+                }
+            }
+
+            return total;
         }
     }
 }
