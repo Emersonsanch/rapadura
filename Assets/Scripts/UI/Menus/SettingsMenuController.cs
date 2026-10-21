@@ -114,6 +114,12 @@ namespace Rapadura.UI.Menus
         private readonly List<RebindRowView> _rebindRows = new List<RebindRowView>();
         private InputActionAsset _boundActions;
         private InputRebindManager _rebindManager;
+
+        /// <summary>Read by PauseMenuController.HandleBack (Esc/Start closes this before the pause menu).</summary>
+        public bool IsOpen => _root != null && _root.style.display == DisplayStyle.Flex;
+
+        /// <summary>True while a key/button rebind is listening — Esc then belongs to the rebind (cancel), not to "back".</summary>
+        public bool IsRebinding => _rebindManager != null && _rebindManager.IsRebinding;
         private RebindRowView _listeningRow;
         private BindingDeviceKind _listeningKind;
 

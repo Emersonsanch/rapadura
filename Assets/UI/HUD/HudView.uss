@@ -45,31 +45,38 @@
     font-size: 14px;
 }
 
-.hud-skills-button {
-    top: 32px;
-    right: 130px;
-    width: 68px;
-    height: 68px;
-    border-radius: 34px;
-    font-size: 14px;
-}
-
-.hud-inventory-button {
-    top: 32px;
-    right: 228px;
-    width: 68px;
-    height: 68px;
-    border-radius: 34px;
-    font-size: 13px;
-}
-
-.hud-pause-button {
+/* ---- Top-right menu cluster (Missões / Mochila / Skills / Menu) ----
+   A flex row instead of per-button absolute offsets, so buttons can never overlap each other
+   when UiAccessibilityApplier scales their text: each one grows horizontally (min-width keeps the
+   68px round touch target at scale 1, padding keeps the label off the border) and the row just
+   gets wider toward the vitals panel. Budget at 2400x1080 (panel ~1461x657 with the 1200x800
+   reference / match 0.5, minus ~60px per side of notch safe area): the row is ~360px at scale 1
+   and ~480px at the 2x max, vs ~1060px of free width right of the vitals panel. Vertically it ends
+   ~100px from the top, far above the skill hotbar (bottom 132px + 64px). Conquistas and Criação
+   live in the Pause menu instead (rarely used; see PauseMenuController). */
+.hud-top-right-cluster {
+    position: absolute;
     top: 32px;
     right: 32px;
-    width: 68px;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* Overrides .hud-touch-button's absolute positioning so the buttons lay out in the cluster row. */
+.hud-menu-button {
+    position: relative;
+    min-width: 68px;
+    width: auto;
     height: 68px;
     border-radius: 34px;
-    font-size: 14px;
+    margin: 0 0 0 30px;
+    padding: 0 10px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.hud-quests-button {
+    margin-left: 0;
 }
 
 .hud-touch-button--active {
@@ -203,7 +210,11 @@
     -unity-text-align: middle-center;
     -unity-font-style: bold;
     color: rgb(240, 240, 240);
-    white-space: normal;
+    /* nowrap: HudController pre-formats the name (SkillSlotDisplayMath.FormatSlotName) into short
+       whole-word lines joined by explicit newlines, so UI Toolkit never breaks a word mid-way
+       ("Explosiv / o"). overflow: hidden is a last-resort clip under extreme font scaling. */
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 /* Name label is only a fallback for skills without an icon (HudController hides it otherwise). */

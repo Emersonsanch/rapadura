@@ -1,10 +1,17 @@
+using System;
+using Rapadura.Core.Accessibility;
+using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
+using Rapadura.UI.Achievements;
+using Rapadura.UI.Crafting;
 using Rapadura.UI.Inventory;
 using Rapadura.UI.Menus;
+using Rapadura.UI.Quests;
 using Rapadura.UI.SkillTree;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace Rapadura.UI.HUD
@@ -20,6 +27,16 @@ namespace Rapadura.UI.HUD
     /// Mana is driven the same way as health/stamina: <see cref="PlayerStats"/> publishes
     /// <see cref="PlayerManaChangedEvent"/> from SetMana, and this controller subscribes to it
     /// directly instead of polling every frame.
+    ///
+    /// SCREENS: the top-right cluster (Missões / Mochila / Skills / Menu) and the keyboard/gamepad
+    /// shortcuts (QuestLog J, Inventory I / Select, SkillTree K, Pause Esc / Start — actions in
+    /// PlayerControls.inputactions, read from the player's PlayerInput like PlayerInputHandler does,
+    /// but via <c>performed</c> callbacks so the HUD still needs no Update()) all go through a
+    /// <see cref="ScreenExclusivityCoordinator"/>: opening a screen closes the other ones (including
+    /// Conquistas/Criação, which are opened from the Pause menu). Like the screens themselves this
+    /// does not pause gameplay; only the Pause menu (and death screen) do, and while the game is
+    /// paused screen buttons/shortcuts are ignored — Esc/Start then means "back" in the pause menu.
+    /// Opening Pause closes any open screen first.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class HudController : MonoBehaviour
@@ -43,6 +60,12 @@ namespace Rapadura.UI.HUD
         [SerializeField] private InventoryUIController _inventoryController;
         [Tooltip("Opened by the on-screen Menu button — see PauseMenuController.Toggle().")]
         [SerializeField] private PauseMenuController _pauseMenuController;
+        [Tooltip("Opened by the on-screen Missões button / QuestLog shortcut. If empty, resolved from the scene on first use.")]
+        [SerializeField] private QuestLogController _questLogController;
+        [Tooltip("Pause-menu Conquistas screen — registered here so opening another screen closes it. If empty, resolved from the scene.")]
+        [SerializeField] private AchievementListController _achievementListController;
+        [Tooltip("Pause-menu / workbench Criação screen — registered here so opening another screen closes it. If empty, resolved from the scene.")]
+        [SerializeField] private CraftingUIController _craftingController;
         [Tooltip("Player's SkillHotbar (slot -> skill loadout + casting). If empty it is resolved from " +
                  "_playerInput's GameObject, and added there at runtime if that GameObject has a SkillManager but no SkillHotbar yet.")]
         [SerializeField] private SkillHotbar _skillHotbar;
@@ -85,6 +108,33 @@ namespace Rapadura.UI.HUD
         private Button _skillsButton;
         private Button _inventoryButton;
         private Button _pauseButton;
+        private Button _questsButton;
+
+        // Screen ids for the exclusivity coordinator.
+        public const string SkillTreeScreenId = "skill-tree";
+        public const string InventoryScreenId = "inventory";
+        public const string QuestLogScreenId = "quest-log";
+        public const string AchievementsScreenId = "achievements";
+        public const string CraftingScreenId = "crafting";
+
+        // Action names in PlayerControls.inputactions (Player map).
+        public const string QuestLogActionName = "QuestLog";
+        public const string InventoryActionName = "Inventory";
+        public const string SkillTreeActionName = "SkillTree";
+        public const string PauseActionName = "Pause";
+
+        private readonly ScreenExclusivityCoordinator _screens = new ScreenExclusivityCoordinator();
+        private bool _gamePaused;
+
+        private InputAction _questLogAction;
+        private InputAction _inventoryAction;
+        private InputAction _skillTreeAction;
+        private InputAction _pauseAction;
+        private bool _shortcutsBound;
+        private float _nextShortcutBindAttempt;
+        private const float ShortcutBindRetrySeconds = 1f;
+
+        private int _skillSlotNameCharsPerLine = SkillSlotDisplayMath.SlotNameBaseCharsPerLine;
 
         private const int SkillSlotCount = HotbarLoadout.DefaultSlotCount;
         private readonly Button[] _skillSlotButtons = new Button[SkillSlotCount];
@@ -107,6 +157,8 @@ namespace Rapadura.UI.HUD
                 int slotIndex = i;
                 _skillSlotPressedCallbacks[i] = evt => OnSkillSlotPressed(slotIndex);
             }
+
+            RegisterScreens();
         }
 
         private void OnEnable()
@@ -126,6 +178,7 @@ namespace Rapadura.UI.HUD
             // fixes that first-frame empty-bar bug without needing explicit script execution order.
             InitializeFromCurrentStats();
             RefreshSkillHotbar();
+            TryBindShortcuts();
         }
 
         private void OnDisable()
@@ -157,6 +210,7 @@ namespace Rapadura.UI.HUD
             _skillsButton = rootVisualElement.Q<Button>("skills-button");
             _inventoryButton = rootVisualElement.Q<Button>("inventory-button");
             _pauseButton = rootVisualElement.Q<Button>("pause-button");
+            _questsButton = rootVisualElement.Q<Button>("quests-button");
 
             for (int i = 0; i < SkillSlotCount; i++)
             {
@@ -177,6 +231,8 @@ namespace Rapadura.UI.HUD
             EventBus.Subscribe<PlayerStaminaChangedEvent>(OnStaminaChanged);
             EventBus.Subscribe<PlayerManaChangedEvent>(OnManaChanged);
             EventBus.Subscribe<PlayerExperienceChangedEvent>(OnExperienceChanged);
+            EventBus.Subscribe<GamePausedEvent>(OnGamePaused);
+            EventBus.Subscribe<GameResumedEvent>(OnGameResumed);
 
             if (_runButton != null)
             {
@@ -211,6 +267,11 @@ namespace Rapadura.UI.HUD
                 _pauseButton.clicked += OnPauseButtonClicked;
             }
 
+            if (_questsButton != null)
+            {
+                _questsButton.clicked += OnQuestsButtonClicked;
+            }
+
             for (int i = 0; i < SkillSlotCount; i++)
             {
                 // PointerDown (not Click) for the same one-shot responsiveness as the jump button.
@@ -223,6 +284,7 @@ namespace Rapadura.UI.HUD
             }
 
             SubscribeToLoadout();
+            TryBindShortcuts();
         }
 
         private void UnregisterCallbacks()
@@ -231,6 +293,8 @@ namespace Rapadura.UI.HUD
             EventBus.Unsubscribe<PlayerStaminaChangedEvent>(OnStaminaChanged);
             EventBus.Unsubscribe<PlayerManaChangedEvent>(OnManaChanged);
             EventBus.Unsubscribe<PlayerExperienceChangedEvent>(OnExperienceChanged);
+            EventBus.Unsubscribe<GamePausedEvent>(OnGamePaused);
+            EventBus.Unsubscribe<GameResumedEvent>(OnGameResumed);
 
             if (_runButton != null)
             {
@@ -259,6 +323,11 @@ namespace Rapadura.UI.HUD
                 _pauseButton.clicked -= OnPauseButtonClicked;
             }
 
+            if (_questsButton != null)
+            {
+                _questsButton.clicked -= OnQuestsButtonClicked;
+            }
+
             for (int i = 0; i < SkillSlotCount; i++)
             {
                 _skillSlotButtons[i]?.UnregisterCallback(_skillSlotPressedCallbacks[i]);
@@ -267,6 +336,7 @@ namespace Rapadura.UI.HUD
             _skillHotbarRefresh?.Pause();
             _skillHotbarRefresh = null;
             UnsubscribeFromLoadout();
+            UnbindShortcuts();
 
             if (_playerInput != null)
             {
@@ -350,6 +420,18 @@ namespace Rapadura.UI.HUD
         {
             bool hasHotbar = ResolveSkillHotbar();
 
+            // Cheap retry: the player (and its PlayerInput) may spawn after the HUD.
+            TryBindShortcuts();
+
+            int charsPerLine = SkillSlotDisplayMath.SlotNameCharsPerLine(CurrentFontScale());
+
+            if (charsPerLine != _skillSlotNameCharsPerLine)
+            {
+                // Font scale changed in Settings: re-format every slot name for the new width budget.
+                _skillSlotNameCharsPerLine = charsPerLine;
+                Array.Clear(_skillSlotShownSkill, 0, _skillSlotShownSkill.Length);
+            }
+
             for (int i = 0; i < SkillSlotCount; i++)
             {
                 Button button = _skillSlotButtons[i];
@@ -410,30 +492,210 @@ namespace Rapadura.UI.HUD
             if (nameLabel != null)
             {
                 // Name is the fallback when a skill has no icon yet (many seeded skills don't).
-                nameLabel.text = skill != null ? skill.DisplayName : string.Empty;
+                // Pre-split into whole-word lines so it never wraps mid-word inside the 64px slot.
+                nameLabel.text = skill != null
+                    ? SkillSlotDisplayMath.FormatSlotName(skill.DisplayName, _skillSlotNameCharsPerLine)
+                    : string.Empty;
                 nameLabel.EnableInClassList("hud-skill-name--hidden", icon != null);
             }
         }
 
-        private void OnSkillsButtonClicked()
+        private static float CurrentFontScale()
         {
-            _skillTreeController?.Toggle();
+            return ServiceLocator.TryGet(out AccessibilitySettings settings) && settings != null ? settings.FontScale : 1f;
         }
 
-        private void OnInventoryButtonClicked()
+        // ---------------------------------------------------------------
+        // Screens (exclusive) + pause
+        // ---------------------------------------------------------------
+
+        private void RegisterScreens()
         {
-            if (_inventoryController == null)
+            _screens.Register(SkillTreeScreenId,
+                () => ResolveSkillTree() && _skillTreeController.IsVisible,
+                () => { if (ResolveSkillTree()) _skillTreeController.Show(); },
+                () => { if (ResolveSkillTree()) _skillTreeController.Hide(); });
+
+            _screens.Register(InventoryScreenId,
+                () => ResolveInventory() && _inventoryController.IsVisible,
+                () => { if (ResolveInventory()) _inventoryController.Show(); },
+                () => { if (ResolveInventory()) _inventoryController.Hide(); });
+
+            _screens.Register(QuestLogScreenId,
+                () => ResolveQuestLog() && _questLogController.IsOpen,
+                () => { if (ResolveQuestLog()) _questLogController.Open(); },
+                () => { if (ResolveQuestLog()) _questLogController.Hide(); });
+
+            _screens.Register(AchievementsScreenId,
+                () => ResolveAchievements() && _achievementListController.IsOpen,
+                () => { if (ResolveAchievements()) _achievementListController.Open(); },
+                () => { if (ResolveAchievements()) _achievementListController.Hide(); });
+
+            _screens.Register(CraftingScreenId,
+                () => ResolveCrafting() && _craftingController.IsOpen,
+                () => { if (ResolveCrafting()) _craftingController.Open(); },
+                () => { if (ResolveCrafting()) _craftingController.Close(); });
+        }
+
+        // Serialized ref first, FindFirstObjectByType fallback (same pattern as the Mochila button had).
+        private bool ResolveSkillTree()
+        {
+            if (_skillTreeController == null) _skillTreeController = FindFirstObjectByType<SkillTreeController>();
+            return _skillTreeController != null;
+        }
+
+        private bool ResolveInventory()
+        {
+            if (_inventoryController == null) _inventoryController = FindFirstObjectByType<InventoryUIController>();
+            return _inventoryController != null;
+        }
+
+        private bool ResolveQuestLog()
+        {
+            if (_questLogController == null) _questLogController = FindFirstObjectByType<QuestLogController>();
+            return _questLogController != null;
+        }
+
+        private bool ResolveAchievements()
+        {
+            if (_achievementListController == null) _achievementListController = FindFirstObjectByType<AchievementListController>();
+            return _achievementListController != null;
+        }
+
+        private bool ResolveCrafting()
+        {
+            if (_craftingController == null) _craftingController = FindFirstObjectByType<CraftingUIController>();
+            return _craftingController != null;
+        }
+
+        private bool ResolvePauseMenu()
+        {
+            if (_pauseMenuController == null) _pauseMenuController = FindFirstObjectByType<PauseMenuController>();
+            return _pauseMenuController != null;
+        }
+
+        /// <summary>Toggles a screen exclusively. Ignored while paused (pause menu / death screen own the screen then).</summary>
+        private void ToggleScreen(string screenId)
+        {
+            if (_gamePaused)
             {
-                _inventoryController = FindFirstObjectByType<InventoryUIController>();
+                return;
             }
 
-            _inventoryController?.Toggle();
+            _screens.Toggle(screenId);
         }
+
+        private void OnSkillsButtonClicked() => ToggleScreen(SkillTreeScreenId);
+        private void OnInventoryButtonClicked() => ToggleScreen(InventoryScreenId);
+        private void OnQuestsButtonClicked() => ToggleScreen(QuestLogScreenId);
 
         private void OnPauseButtonClicked()
         {
-            _pauseMenuController?.Toggle();
+            if (!ResolvePauseMenu())
+            {
+                return;
+            }
+
+            if (_pauseMenuController.IsOpen)
+            {
+                _pauseMenuController.Hide();
+                return;
+            }
+
+            if (_gamePaused)
+            {
+                // Paused by something else (death screen): don't stack the pause menu on top of it.
+                return;
+            }
+
+            _screens.CloseAll();
+            _pauseMenuController.Show();
         }
+
+        /// <summary>Esc / gamepad Start: back out of the pause menu, else close the open screen, else pause.</summary>
+        private void OnPauseShortcut()
+        {
+            if (ResolvePauseMenu() && _pauseMenuController.IsOpen)
+            {
+                _pauseMenuController.HandleBack();
+                return;
+            }
+
+            if (_gamePaused || _screens.CloseAll() > 0)
+            {
+                return;
+            }
+
+            _pauseMenuController?.Show();
+        }
+
+        private void OnGamePaused(GamePausedEvent evt) => _gamePaused = true;
+        private void OnGameResumed(GameResumedEvent evt) => _gamePaused = false;
+
+        // ---------------------------------------------------------------
+        // Keyboard / gamepad shortcuts
+        // ---------------------------------------------------------------
+
+        /// <summary>
+        /// Hooks the QuestLog/Inventory/SkillTree/Pause actions of the player's PlayerInput.
+        /// FindAction (not the indexer) so an actions asset without them just leaves the shortcuts
+        /// unbound, same as PlayerInputHandler does for Skill1..5. Retried (throttled) from the
+        /// hotbar refresh until the player exists — it may spawn after the HUD.
+        /// </summary>
+        private void TryBindShortcuts()
+        {
+            if (_shortcutsBound || !isActiveAndEnabled || Time.unscaledTime < _nextShortcutBindAttempt)
+            {
+                return;
+            }
+
+            _nextShortcutBindAttempt = Time.unscaledTime + ShortcutBindRetrySeconds;
+
+            if (_playerInput == null)
+            {
+                _playerInput = FindFirstObjectByType<PlayerInputHandler>();
+            }
+
+            PlayerInput playerInput = _playerInput != null ? _playerInput.GetComponent<PlayerInput>() : null;
+            InputActionAsset actions = playerInput != null ? playerInput.actions : null;
+
+            if (actions == null)
+            {
+                return;
+            }
+
+            _questLogAction = actions.FindAction(QuestLogActionName, throwIfNotFound: false);
+            _inventoryAction = actions.FindAction(InventoryActionName, throwIfNotFound: false);
+            _skillTreeAction = actions.FindAction(SkillTreeActionName, throwIfNotFound: false);
+            _pauseAction = actions.FindAction(PauseActionName, throwIfNotFound: false);
+
+            if (_questLogAction != null) _questLogAction.performed += OnQuestLogActionPerformed;
+            if (_inventoryAction != null) _inventoryAction.performed += OnInventoryActionPerformed;
+            if (_skillTreeAction != null) _skillTreeAction.performed += OnSkillTreeActionPerformed;
+            if (_pauseAction != null) _pauseAction.performed += OnPauseActionPerformed;
+
+            _shortcutsBound = true;
+        }
+
+        private void UnbindShortcuts()
+        {
+            if (_questLogAction != null) _questLogAction.performed -= OnQuestLogActionPerformed;
+            if (_inventoryAction != null) _inventoryAction.performed -= OnInventoryActionPerformed;
+            if (_skillTreeAction != null) _skillTreeAction.performed -= OnSkillTreeActionPerformed;
+            if (_pauseAction != null) _pauseAction.performed -= OnPauseActionPerformed;
+
+            _questLogAction = null;
+            _inventoryAction = null;
+            _skillTreeAction = null;
+            _pauseAction = null;
+            _shortcutsBound = false;
+            _nextShortcutBindAttempt = 0f;
+        }
+
+        private void OnQuestLogActionPerformed(InputAction.CallbackContext context) => ToggleScreen(QuestLogScreenId);
+        private void OnInventoryActionPerformed(InputAction.CallbackContext context) => ToggleScreen(InventoryScreenId);
+        private void OnSkillTreeActionPerformed(InputAction.CallbackContext context) => ToggleScreen(SkillTreeScreenId);
+        private void OnPauseActionPerformed(InputAction.CallbackContext context) => OnPauseShortcut();
 
         private void OnRunButtonPressed(PointerDownEvent evt)
         {

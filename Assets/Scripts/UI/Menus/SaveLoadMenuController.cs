@@ -29,6 +29,9 @@ namespace Rapadura.UI.Menus
 
         private UIDocument _uiDocument;
         private VisualElement _root;
+
+        /// <summary>Read by PauseMenuController.HandleBack (Esc/Start closes this before the pause menu).</summary>
+        public bool IsOpen => _root != null && _root.style.display == DisplayStyle.Flex;
         private Label _titleLabel;
         private Button _closeButton;
         private VisualElement _slotListContainer;

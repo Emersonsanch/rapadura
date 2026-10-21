@@ -31,6 +31,9 @@ namespace Rapadura.UI.SkillTree
 
         private UIDocument _uiDocument;
         private VisualElement _root;
+
+        /// <summary>Same shape as InventoryUIController.IsVisible; read by the HUD's screen-exclusivity rule.</summary>
+        public bool IsVisible => _root != null && _root.style.display == DisplayStyle.Flex;
         private Label _treeTitleLabel;
         private Label _treeDescriptionLabel;
         private Label _skillPointsLabel;

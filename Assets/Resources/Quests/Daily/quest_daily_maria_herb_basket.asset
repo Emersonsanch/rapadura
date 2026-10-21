@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5523115d95f44cd4ba9c4e9836067945, type: 3}
+  m_Name: quest_daily_maria_herb_basket
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Quests.QuestDefinition
+  _questId: quest_daily_maria_herb_basket
+  _titleKey: quest.daily_maria_herb_basket.title
+  _descriptionKey: quest.daily_maria_herb_basket.description
+  _questType: 2
+  _objectives:
+  - ObjectiveId: pick_herbs
+    Type: 1
+    TargetId: item_herb
+    RequiredAmount: 5
+    DescriptionKey: quest.daily_maria_herb_basket.obj_pick_herbs
+    CurrentAmount: 0
+  - ObjectiveId: brew_potion
+    Type: 1
+    TargetId: item_health_potion
+    RequiredAmount: 1
+    DescriptionKey: quest.daily_maria_herb_basket.obj_brew_potion
+    CurrentAmount: 0
+  _prerequisiteQuestIds: []
+  _rewardExperience: 70
+  _rewardItems:
+  - Item: {fileID: 11400000, guid: 214ad08bc7a3def4cbeb45bedcc4524c, type: 2}
+    Quantity: 10

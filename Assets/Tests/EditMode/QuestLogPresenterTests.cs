@@ -303,7 +303,8 @@ namespace Rapadura.Tests
             {
                 string journalKey = QuestLogPresenter.GetJournalKey(quest.TitleKey);
                 Assert.IsNotNull(journalKey, $"{quest.QuestId} title key doesn't end with .title");
-                Assert.IsTrue(QuestLogTexts.All.Any(e => e.Key == journalKey), $"{quest.QuestId} has no journal entry '{journalKey}'.");
+                // Daily quests ship their journal notes with their other texts in DailyQuestTexts.
+                Assert.IsTrue(QuestLogTexts.All.Concat(DailyQuestTexts.All).Any(e => e.Key == journalKey), $"{quest.QuestId} has no journal entry '{journalKey}'.");
             }
         }
 

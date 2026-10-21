@@ -41,6 +41,8 @@ namespace Rapadura.Gameplay.Skills
         [SerializeField] private float _minimumAreaRadius = 0.5f;
 
         [Header("Skill Tree Progression")]
+        [Tooltip("Skill points per level and the level damage multiplier come from this curve (or the shipped Resources/Balance/ProgressionCurve when empty); the per-level field below is only a fallback if no curve exists.")]
+        [SerializeField] private Rapadura.Gameplay.Player.ProgressionCurve _progressionCurve;
         [SerializeField] private int _skillPointsPerLevel = 1;
 
         [Header("Skill Database")]
@@ -177,8 +179,22 @@ namespace Rapadura.Gameplay.Skills
             }
 
             int levelsGained = evt.Level - _lastKnownPlayerLevel;
+            int previousLevel = _lastKnownPlayerLevel;
             _lastKnownPlayerLevel = evt.Level;
-            GrantSkillPoints(levelsGained * _skillPointsPerLevel);
+            Rapadura.Gameplay.Player.ProgressionCurve curve = ResolveProgressionCurve();
+            GrantSkillPoints(curve != null
+                ? curve.GetSkillPointsGained(previousLevel, evt.Level)
+                : levelsGained * _skillPointsPerLevel);
+        }
+
+        private Rapadura.Gameplay.Player.ProgressionCurve ResolveProgressionCurve()
+        {
+            if (_progressionCurve == null)
+            {
+                _progressionCurve = Rapadura.Gameplay.Player.ProgressionCurve.LoadDefault();
+            }
+
+            return _progressionCurve;
         }
 
         public void GrantSkillPoints(int amount)
@@ -635,6 +651,13 @@ namespace Rapadura.Gameplay.Skills
         private void ApplyDamageAndDebuffs(SkillDefinition skill, int level, Vector3 aimPoint, GameObject explicitTarget)
         {
             float damage = skill.GetDamageForLevel(level);
+
+            // Player-level damage growth from the progression curve (1x with the default curve).
+            Rapadura.Gameplay.Player.ProgressionCurve curve = ResolveProgressionCurve();
+            if (damage > 0f && curve != null)
+            {
+                damage *= curve.GetDamageMultiplier(_lastKnownPlayerLevel);
+            }
 
             // Applies AttackDamage buffs — including the DamageMultiplier bonus from a completed combo.
             if (damage > 0f && _buffController != null)

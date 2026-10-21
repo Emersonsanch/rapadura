@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5523115d95f44cd4ba9c4e9836067945, type: 3}
+  m_Name: quest_daily_maithe_wolf_patrol
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Quests.QuestDefinition
+  _questId: quest_daily_maithe_wolf_patrol
+  _titleKey: quest.daily_maithe_wolf_patrol.title
+  _descriptionKey: quest.daily_maithe_wolf_patrol.description
+  _questType: 2
+  _objectives:
+  - ObjectiveId: hunt_wolves
+    Type: 0
+    TargetId: enemy_forest_wolf
+    RequiredAmount: 4
+    DescriptionKey: quest.daily_maithe_wolf_patrol.obj_hunt_wolves
+    CurrentAmount: 0
+  _prerequisiteQuestIds: []
+  _rewardExperience: 60
+  _rewardItems:
+  - Item: {fileID: 11400000, guid: 214ad08bc7a3def4cbeb45bedcc4524c, type: 2}
+    Quantity: 12

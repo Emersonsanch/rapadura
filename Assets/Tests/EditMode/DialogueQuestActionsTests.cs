@@ -491,7 +491,9 @@ namespace Rapadura.Tests
                 }
             }
 
-            foreach (QuestDefinition quest in Resources.LoadAll<QuestDefinition>("Quests"))
+            // Daily quests (Resources/Quests/Daily) have no giver: DailyQuestService picks and starts
+            // them itself every day, and resolves them from its own pool rather than "Quests/<id>".
+            foreach (QuestDefinition quest in Resources.LoadAll<QuestDefinition>("Quests").Where(q => q.QuestType != QuestType.Daily))
             {
                 CollectionAssert.Contains(startedQuestIds, quest.QuestId, $"No quest-giver dialogue starts '{quest.QuestId}'.");
                 Assert.IsNotNull(Resources.Load<QuestDefinition>("Quests/" + quest.QuestId), $"QuestDialogueContext can't resolve '{quest.QuestId}' by id.");

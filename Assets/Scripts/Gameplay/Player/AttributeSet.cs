@@ -91,6 +91,8 @@ namespace Rapadura.Gameplay.Player
         public const int CharacterPassiveBonusPoints = 5;
 
         [Header("Progression")]
+        [Tooltip("Points per level come from this curve (or the shipped Resources/Balance/ProgressionCurve when empty); the per-level field below is only a fallback if no curve exists.")]
+        [SerializeField] private ProgressionCurve _progressionCurve;
         [SerializeField] private int _attributePointsPerLevel = 2;
 
         [Header("Optional References")]
@@ -190,8 +192,17 @@ namespace Rapadura.Gameplay.Player
             }
 
             int levelsGained = evt.Level - _lastKnownPlayerLevel;
+            int previousLevel = _lastKnownPlayerLevel;
             _lastKnownPlayerLevel = evt.Level;
-            GrantAttributePoints(levelsGained * _attributePointsPerLevel);
+
+            if (_progressionCurve == null)
+            {
+                _progressionCurve = ProgressionCurve.LoadDefault();
+            }
+
+            GrantAttributePoints(_progressionCurve != null
+                ? _progressionCurve.GetAttributePointsGained(previousLevel, evt.Level)
+                : levelsGained * _attributePointsPerLevel);
         }
 
         /// <summary>Grants unspent attribute points, e.g. on level-up.</summary>

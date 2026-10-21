@@ -44,6 +44,8 @@ namespace Rapadura.Gameplay.Player
         [SerializeField] private float _manaRegenPerSecond = 5f;
 
         [Header("Experience")]
+        [Tooltip("Level curve (XP per level, vitals growth). Left empty, the shipped Resources/Balance/ProgressionCurve asset is used; the two fields below are only a fallback if that asset is missing.")]
+        [SerializeField] private ProgressionCurve _progressionCurve;
         [SerializeField] private int _baseExperienceToLevel = 100;
         [SerializeField] private float _experienceCurveMultiplier = 1.25f;
 
@@ -88,9 +90,28 @@ namespace Rapadura.Gameplay.Player
             private set => _currentMana = value;
         }
 
-        public float MaxMana => _maxMana;
-        public float MaxHealth => _maxHealth;
-        public float MaxStamina => _maxStamina;
+        // Base values from the inspector plus whatever the progression curve grants above level 1
+        // (0 with the default curve, so these equal the serialized values unless designers add growth).
+        public float MaxMana => _maxMana + (Curve != null ? Curve.GetMaxManaBonus(Level) : 0f);
+        public float MaxHealth => _maxHealth + (Curve != null ? Curve.GetMaxHealthBonus(Level) : 0f);
+        public float MaxStamina => _maxStamina + (Curve != null ? Curve.GetMaxStaminaBonus(Level) : 0f);
+
+        /// <summary>The level curve in use (inspector reference, else the shipped Resources asset; may be null).</summary>
+        public ProgressionCurve Curve
+        {
+            get
+            {
+                if (_progressionCurve == null && !_curveLookupDone)
+                {
+                    _curveLookupDone = true;
+                    _progressionCurve = ProgressionCurve.LoadDefault();
+                }
+
+                return _progressionCurve;
+            }
+        }
+
+        private bool _curveLookupDone;
         public int CurrentExperience { get; private set; }
         public int Level { get; private set; } = 1;
         public bool IsDead { get; private set; }
@@ -114,9 +135,9 @@ namespace Rapadura.Gameplay.Player
             }
 
             _initialized = true;
-            CurrentHealth = _maxHealth;
-            CurrentStamina = _maxStamina;
-            CurrentMana = _maxMana;
+            CurrentHealth = MaxHealth;
+            CurrentStamina = MaxStamina;
+            CurrentMana = MaxMana;
             _elementResistance = GetComponent<ElementResistance>();
         }
 
@@ -170,7 +191,7 @@ namespace Rapadura.Gameplay.Player
 
         private void RegenerateMana(float deltaTime)
         {
-            if (CurrentMana < _maxMana)
+            if (CurrentMana < MaxMana)
             {
                 SetMana(CurrentMana + _manaRegenPerSecond * deltaTime);
             }
@@ -183,8 +204,8 @@ namespace Rapadura.Gameplay.Player
 
         private void SetMana(float value)
         {
-            CurrentMana = Mathf.Clamp(value, 0f, _maxMana);
-            EventBus.Publish(new PlayerManaChangedEvent(CurrentMana, _maxMana));
+            CurrentMana = Mathf.Clamp(value, 0f, MaxMana);
+            EventBus.Publish(new PlayerManaChangedEvent(CurrentMana, MaxMana));
         }
 
         public bool HasStamina()
@@ -199,7 +220,7 @@ namespace Rapadura.Gameplay.Player
 
         private void RegenerateStamina(float deltaTime)
         {
-            if (CurrentStamina < _maxStamina)
+            if (CurrentStamina < MaxStamina)
             {
                 SetStamina(CurrentStamina + _staminaRegenPerSecond * deltaTime);
             }
@@ -212,7 +233,7 @@ namespace Rapadura.Gameplay.Player
 
         private void RegenerateHealth(float deltaTime)
         {
-            if (!IsDead && CurrentHealth < _maxHealth)
+            if (!IsDead && CurrentHealth < MaxHealth)
             {
                 SetHealth(CurrentHealth + _healthRegenPerSecond * deltaTime);
             }
@@ -291,6 +312,7 @@ namespace Rapadura.Gameplay.Player
             }
 
             CurrentExperience += amount;
+            int levelBefore = Level;
             int experienceToNextLevel = GetExperienceToNextLevel();
 
             while (CurrentExperience >= experienceToNextLevel)
@@ -300,24 +322,58 @@ namespace Rapadura.Gameplay.Player
                 experienceToNextLevel = GetExperienceToNextLevel();
             }
 
+            if (Level != levelBefore)
+            {
+                PublishVitalsIfCurveGrew(levelBefore);
+            }
+
             EventBus.Publish(new PlayerExperienceChangedEvent(CurrentExperience, experienceToNextLevel, Level));
         }
 
         public int GetExperienceToNextLevel()
         {
+            if (Curve != null)
+            {
+                return Curve.GetExperienceToNextLevel(Level);
+            }
+
             return Mathf.RoundToInt(_baseExperienceToLevel * Mathf.Pow(_experienceCurveMultiplier, Level - 1));
+        }
+
+        /// <summary>Refreshes the vitals bars only when the curve actually raised a max on this level-up (no-op with the default flat curve).</summary>
+        private void PublishVitalsIfCurveGrew(int levelBefore)
+        {
+            if (Curve == null)
+            {
+                return;
+            }
+
+            if (!Mathf.Approximately(Curve.GetMaxHealth(levelBefore), Curve.GetMaxHealth(Level)))
+            {
+                SetHealth(CurrentHealth);
+            }
+
+            if (!Mathf.Approximately(Curve.GetMaxStamina(levelBefore), Curve.GetMaxStamina(Level)))
+            {
+                SetStamina(CurrentStamina);
+            }
+
+            if (!Mathf.Approximately(Curve.GetMaxMana(levelBefore), Curve.GetMaxMana(Level)))
+            {
+                SetMana(CurrentMana);
+            }
         }
 
         private void SetHealth(float value)
         {
-            CurrentHealth = Mathf.Clamp(value, 0f, _maxHealth);
-            EventBus.Publish(new PlayerHealthChangedEvent(CurrentHealth, _maxHealth));
+            CurrentHealth = Mathf.Clamp(value, 0f, MaxHealth);
+            EventBus.Publish(new PlayerHealthChangedEvent(CurrentHealth, MaxHealth));
         }
 
         private void SetStamina(float value)
         {
-            CurrentStamina = Mathf.Clamp(value, 0f, _maxStamina);
-            EventBus.Publish(new PlayerStaminaChangedEvent(CurrentStamina, _maxStamina));
+            CurrentStamina = Mathf.Clamp(value, 0f, MaxStamina);
+            EventBus.Publish(new PlayerStaminaChangedEvent(CurrentStamina, MaxStamina));
         }
 
         private void Die(GameObject killer)
@@ -345,8 +401,8 @@ namespace Rapadura.Gameplay.Player
         {
             IsDead = false;
             ClearInvulnerability();
-            SetHealth(_maxHealth);
-            SetStamina(_maxStamina);
+            SetHealth(MaxHealth);
+            SetStamina(MaxStamina);
         }
 
         public object CaptureState()
@@ -375,9 +431,9 @@ namespace Rapadura.Gameplay.Player
             Level = saveState.level;
             IsDead = CurrentHealth <= 0f;
 
-            EventBus.Publish(new PlayerHealthChangedEvent(CurrentHealth, _maxHealth));
-            EventBus.Publish(new PlayerStaminaChangedEvent(CurrentStamina, _maxStamina));
-            EventBus.Publish(new PlayerManaChangedEvent(CurrentMana, _maxMana));
+            EventBus.Publish(new PlayerHealthChangedEvent(CurrentHealth, MaxHealth));
+            EventBus.Publish(new PlayerStaminaChangedEvent(CurrentStamina, MaxStamina));
+            EventBus.Publish(new PlayerManaChangedEvent(CurrentMana, MaxMana));
             EventBus.Publish(new PlayerExperienceChangedEvent(CurrentExperience, GetExperienceToNextLevel(), Level));
         }
     }

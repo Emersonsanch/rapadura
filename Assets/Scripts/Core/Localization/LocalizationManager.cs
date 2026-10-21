@@ -76,6 +76,16 @@ namespace Rapadura.Core.Localization
             LoadEntries(table.Entries);
         }
 
+        /// <summary>
+        /// Language the real game starts in (applied by GameManager.BuildManagers; a bare
+        /// <c>new LocalizationManager()</c> still starts in English for tests/tools). pt-BR is the
+        /// game's primary language, so it's used unless the device is explicitly set to English.
+        /// </summary>
+        public static LanguageCode ResolveStartupLanguage(UnityEngine.SystemLanguage systemLanguage)
+        {
+            return systemLanguage == UnityEngine.SystemLanguage.English ? LanguageCode.en : LanguageCode.ptBR;
+        }
+
         public void SetLanguage(LanguageCode language)
         {
             if (CurrentLanguage == language)

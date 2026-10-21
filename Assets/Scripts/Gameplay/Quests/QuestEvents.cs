@@ -53,4 +53,18 @@ namespace Rapadura.Gameplay.Quests
             QuestId = questId;
         }
     }
+
+    /// <summary>Raised by <c>DailyQuestService</c> when a new calendar day's daily quests have been picked and started (after yesterday's were reset).</summary>
+    public readonly struct DailyQuestsRefreshedEvent : IGameEvent
+    {
+        /// <summary>Local calendar day the rotation belongs to, "yyyy-MM-dd".</summary>
+        public readonly string DayKey;
+        public readonly System.Collections.Generic.IReadOnlyList<string> QuestIds;
+
+        public DailyQuestsRefreshedEvent(string dayKey, System.Collections.Generic.IReadOnlyList<string> questIds)
+        {
+            DayKey = dayKey;
+            QuestIds = questIds;
+        }
+    }
 }

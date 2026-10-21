@@ -48,6 +48,7 @@ namespace Rapadura.Core.Managers
         public AnalyticsManager AnalyticsManager { get; private set; }
         public DialogueManager DialogueManager { get; private set; }
         public QuestManager QuestManager { get; private set; }
+        public DailyQuestService DailyQuestService { get; private set; }
         public ShopManager ShopManager { get; private set; }
         public WorldMapProgress WorldMapProgress { get; private set; }
         public SceneTransitionService SceneTransitionService { get; private set; }
@@ -102,6 +103,7 @@ namespace Rapadura.Core.Managers
             SaveManager = new SaveManager();
             CheckpointManager = new CheckpointManager();
             LocalizationManager = new LocalizationManager();
+            LocalizationManager.SetLanguage(LocalizationManager.ResolveStartupLanguage(Application.systemLanguage));
             CraftingManager = new CraftingManager();
             BuildingManager = new BuildingManager();
             AudioManager = new AudioManager();
@@ -109,6 +111,7 @@ namespace Rapadura.Core.Managers
             AnalyticsManager = new AnalyticsManager();
             DialogueManager = new DialogueManager();
             QuestManager = new QuestManager();
+            DailyQuestService = new DailyQuestService(QuestManager);
             ShopManager = new ShopManager();
             WorldMapProgress = new WorldMapProgress();
             SceneTransitionService = new SceneTransitionService(WorldMapProgress);
@@ -129,6 +132,7 @@ namespace Rapadura.Core.Managers
             RegisterManager(AnalyticsManager);
             RegisterManager(DialogueManager);
             RegisterManager(QuestManager);
+            RegisterManager(DailyQuestService);
             RegisterManager(ShopManager);
             RegisterManager(WorldMapProgress);
             RegisterManager(SceneTransitionService);
@@ -140,6 +144,7 @@ namespace Rapadura.Core.Managers
             RegisterManager(WeatherSystem);
 
             SaveManager.Register(QuestManager);
+            SaveManager.Register(DailyQuestService);
             SaveManager.Register(WorldMapProgress);
 
             // World state that used to be lost on load. CharacterSelectionState implements
