@@ -4,6 +4,22 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-10-21 (noite — fluxo completo, localização, toque e duas revisões de código)
+- 🏁 **Resumo**: commits `139354e`..`814d3d1` (6 commits). Suítes: **EditMode 1159/1159** (eram 819) e **PlayMode 14/14**. Todos os itens 🚧 da entrada anterior foram concluídos e commitados.
+- 🧭 **Fluxo completo do jogo** (`139354e`): menu principal → seleção de herói → mapa ⇄ encontro (`GameFlowService`, `GameFrontEndController` na `WorldMap.unity`). `GameplayPause` único, com contagem de donos, em todas as telas modais. Nível, inventário e skills não se perdem mais entre cenas. Derrota no encontro passa pela tela de morte e volta ao mapa.
+- ⚖️ **Atributos, crítico e rebalanceamento** (`139354e`): 🐛 Vitalidade, Espírito, Destreza e `affix_vital` não faziam nada (MaxHealth/MaxMana ignoravam buffs e não existia crítico). Agora somam e há crítico 1.5x (`OutgoingDamage`, `PlayerCombatBalance`). Rebalanceamento por dados (XP 1.25→1.10, +8 HP/nível, XP por bioma 10/18/28/40, chefes x8, ultimates ~2.5x) documentado em `Docs/Balance/README.md`.
+- 🌐 **Localização** (`d03a7c3`): `UiDocumentLocalizer` + 90 chaves de UI, idioma salvo, 181 entradas de conteúdo (itens, skills, inimigos, heróis) em en/pt-BR, nomes de itens gerados compostos no idioma atual.
+- 🎒 **Inventário** (`d03a7c3`): arrastar e soltar (`InventoryDragDrop`), botão Organizar (`InventoryManager.SortInventory`), navegação por gamepad/teclado (`FocusNavigator`) em 6 telas.
+- 🛒 **Loja e conquistas** (`d03a7c3`): 🐛 o estoque alterava o asset da loja; agora fica no save e é reposto ao amanhecer. Conquistas em arquivo de perfil próprio.
+- 🏠 **Voltar ao título** com confirmação + `NewSessionReset`. 🐛 Antes, carregar um save antigo mantinha herói, chefes e relógio da sessão anterior.
+- 🏜️ **Arenas por bioma** (`BiomeArenaDressing`: cactos, estalagmites, rochas com neve) e **VFX de ambiente** por bioma, fase do dia e clima (`AmbientVfx*`).
+- 💡 **Tutorial de primeira vez** (`2185493`): 9 dicas por evento, salvas por perfil (`tutorial.json`), bolha não bloqueante; "Mostrar dicas" e "Reiniciar tutorial" na aba Acessibilidade.
+- 🔊 **Áudio e vibração** (`a0e1430`, `814d3d1`): 44 sons procedurais por evento (`ProceduralSfxSynth`, `SfxEventRouter`) e música por contexto (`MusicDirector`: título, mapa, bioma, chefe), gerada em thread separada. São placeholders; os assets reais seguem `Docs/Audio.md`. Vibração no celular (`HapticsService`).
+- 📋 **Ficha do personagem** (gastar pontos de atributo, botão com selo, atalho C), **HUD do mapa** (herói, região, relógio, clima, rótulos, menu) e **chefe de região** (a próxima região só abre depois de derrotá-lo, `RegionBossProgress`). Verificado em Play Mode: Lobo Alfa derrotado → Deserto desbloqueado (`3bf70ee`).
+- 📱 **Controles por toque** (`814d3d1`): tocar e segurar para andar (o binding `tap` antigo falhava se o dedo demorasse mais de 0.2s), joystick virtual opcional (Configurações > Controles), botão Atacar, botões de girar câmera, pinça não vira tap-to-move, botão Voltar do Android abre a pausa.
+- 🐛 **Duas revisões de código, cerca de 15 bugs corrigidos**. O crítico: no fluxo real (mapa → encontro), matar inimigo **não dava XP, loot, números de dano nem VFX**, porque o `GameManager` duplicado da Main era destruído junto com os componentes de recompensa. `SingletonBehaviour` agora remove só o componente duplicado, e há teste PlayMode novo. Outros: clicar em UI atacava, teclas 1-5 lançavam skill com menu aberto, bônus de equipamento se anulavam, hit-stops sobrepostos deixavam câmera lenta permanente, buffs sem fonte se substituíam, cura grátis ao trocar de cena, quest rastreada vazava entre saves, menu e seleção ficavam sem música, música do mapa continuava após voltar ao título.
+- 🧪 **PlayMode**: 14 smoke tests (cenas `Main`/`WorldMap`, telas de UI, encontro e XP no encontro).
+
 ### 2026-10-21 (sessão multiagente coordenada — resumo)
 - 🏁 **Resumo desta sessão**: vários agentes em paralelo fecharam a maior parte das lacunas de "sistema pronto mas inalcançável" e montaram o fluxo de jogo de ponta a ponta. Commits `32f63b1`..`e1f9e09` (14 commits), suíte EditMode subiu de 396 para **819/819**, e agora existe uma assembly de PlayMode com smoke tests.
 - ⚔️ **Skills de verdade**: 25 skills de assinatura (5 por herói, `Resources/Skills/Characters/*`) concedidas na seleção por `CharacterSkillSet.GrantTo`, árvore própria por herói (`SkillTreeSelection`), ultimate exige nível 10. 🐛 **Bug grande real**: nenhum código chamava `SkillManager.TryCast`, ou seja, **era impossível conjurar qualquer skill**. Corrigido com as ações `Skill1`-`Skill5` (teclado/gamepad), `SkillHotbar` + `HotbarLoadout` (salvo) e 5 slots de toque na HUD com cooldown e estado "sem mana".
@@ -12,33 +28,34 @@
 - 💬 **Quests alcançáveis**: `StartQuest` não tinha nenhum chamador. Agora o diálogo tem condições, ações e redirects por estado de quest e por herói (`QuestDialogueContext`), e 5 NPCs oferecem as quests pessoais e a convergência. Também entram missões diárias (`DailyQuestService`, 3 por dia, 8 assets ligados aos heróis).
 - 💾 **Save do mundo**: herói escolhido, construções, receitas, bosses, dia/hora e clima; `SaveManager` v2 com ordem de restauração (`IRestoreOrder`), compatível com save v1, e estado carregado entre cenas. Inventário: item gerado não perde mais afixos/nome/raridade ao equipar, mover, dividir ou salvar.
 - ⚙️ **Configurações e acessibilidade**: aba Controles com rebind em runtime, aba Acessibilidade (escala de fonte, daltonismo, alto contraste) aplicada em todas as telas (`UiAccessibilityApplier`/`UiAccessibilityStyler`), `FrameRateManager` (30/60 fps por contexto, para poupar bateria).
-- 🌦️ **Mundo vivo**: ciclo dia/noite (`TimeOfDayManager` + `DayNightLighting`), clima por bioma (`WeatherSystem`/`WeatherVisuals`), VFX procedural de skills (`SkillVfxManager`, respeita "reduzir flashes") e VFX ambiente (em andamento no working tree).
+- 🌦️ **Mundo vivo**: ciclo dia/noite (`TimeOfDayManager` + `DayNightLighting`), clima por bioma (`WeatherSystem`/`WeatherVisuals`), VFX procedural de skills (`SkillVfxManager`, respeita "reduzir flashes") e VFX ambiente (commitado depois, em `139354e`).
 - 🧭 **Fluxo e HUD**: `GameFlowService`/`GameFlowMachine` (menu principal → seleção → mapa ⇄ encontro), `GameplayPause` consistente, grupo de botões da HUD + atalhos J/I/K/Esc, `ScreenExclusivityCoordinator` (abrir uma tela fecha as outras). O jogo agora inicia em pt-BR.
 - 📊 **Balanceamento e localização**: `ProgressionCurve` (ScriptableObject) + CSV em `Docs/Balance` como fonte única, `LocalizationCoverageTests` + 20 traduções que faltavam, `Docs/Localization.md`.
-- 🛠️ **Engenharia/lançamento**: CI corrigido (disparava em `main`, mas o branch é `master`), Build Settings (WorldMap 0, Main 1) + PlayerSettings (Engenho Estúdio / Rapadura), `CHANGELOG.md` + `BuildVersion` (SemVer), `Docs/ThirdPartyLicenses.md`, `Docs/QAChecklist.md`, orçamento de performance em `Docs/PlatformRequirements.md`, pasta de save isolada para testes + save atômico que preserva o `.bak` válido (working tree).
-- 🚧 **Em andamento no fechamento** (working tree, sem commit ainda): correção do bug de atributos + rebalanceamento (`PlayerCombatBalance`, `OutgoingDamage`), localização dos textos fixos em UXML/C# (`UiTexts`, `UiDocumentLocalizer`), voltar ao título com reset de sessão, ligação de cenas rodada 2 (menu principal/seleção na WorldMap, UI de conquistas, NPCs de quest na cena).
+- 🛠️ **Engenharia/lançamento**: CI corrigido (disparava em `main`, mas o branch é `master`), Build Settings (WorldMap 0, Main 1) + PlayerSettings (Engenho Estúdio / Rapadura), `CHANGELOG.md` + `BuildVersion` (SemVer), `Docs/ThirdPartyLicenses.md`, `Docs/QAChecklist.md`, orçamento de performance em `Docs/PlatformRequirements.md`, pasta de save isolada para testes + save atômico que preserva o `.bak` válido (commitado depois, em `139354e`).
+- ✅ **Concluído depois (ver entrada da noite acima)**, estava em andamento no fechamento: correção do bug de atributos + rebalanceamento (`PlayerCombatBalance`, `OutgoingDamage`), localização dos textos fixos em UXML/C# (`UiTexts`, `UiDocumentLocalizer`), voltar ao título com reset de sessão, ligação de cenas rodada 2 (menu principal/seleção na WorldMap, UI de conquistas, NPCs de quest na cena).
 - 📌 **Dependem de decisão do usuário**: ver "Próximos passos" logo abaixo.
 
-### 🔜 Próximos passos (após 2026-10-21)
+### 🔜 Próximos passos (após 2026-10-21, noite)
 **Código (próximos itens):**
-1. Terminar e commitar o trabalho em andamento: bug de atributos + rebalanceamento, textos fixos localizados, voltar ao título/reset de sessão, ligação de cenas rodada 2.
-2. Rodar a suíte PlayMode completa (`Assets/Tests/PlayMode`) depois da ligação de cenas, e adicionar um smoke test do fluxo menu → seleção → mapa → encontro → volta.
-3. Navegação por gamepad/teclado com grupos de foco em todas as telas (hoje só tem `focusable`).
-4. Arrastar e soltar na Mochila e "auto-organizar" o inventário.
-5. Ultimate com recurso próprio (carga), se esse design for confirmado; hoje a ultimate só exige nível 10.
-6. Terreno/cena real por bioma (hoje os 4 biomas usam a mesma arena de encontro); `EnemyPool` migrado para `GenericObjectPool`.
-7. Debug overlay na cena + log rolante; Addressables/LOD/occlusion quando houver build mobile.
+1. 🚧 Agente de polimento de gameplay em andamento: distância mínima e carência ao gerar encontros, telas modais sobrepostas, textos do mapa e reposição de vida/mana ao subir de nível.
+2. Ultimate com recurso próprio (carga), se esse design for confirmado; hoje a ultimate só exige nível 10.
+3. Terreno/cena real por bioma (hoje a arena é única, só decorada por bioma); `EnemyPool` migrado para `GenericObjectPool`.
+4. Debug overlay na cena + log rolante; Addressables/LOD/occlusion quando houver build mobile.
+5. CI rodando PlayMode e gerando build (depende do secret abaixo).
 
 **Decisões do usuário (bloqueiam itens abertos):**
 - Rig Humanoid da Maithe: retomar no Meshy gasta cerca de 5 créditos por tentativa, ou usar Mixamo.
 - Secret `UNITY_LICENSE` (ou email/senha/serial) no GitHub, para o CI rodar de verdade.
-- Testes em aparelho físico, builds de loja (Android/iOS/Steam) e contas de desenvolvedor.
+- Testes em aparelho físico (toque, vibração, desempenho), builds de loja (Android/iOS/Steam) e contas de desenvolvedor.
 - Licença do plano Meshy para uso comercial dos modelos gerados.
 - `com.coplaydev.unity-mcp` está no `manifest.json` apontando para `#main`: fixar uma versão e/ou excluir dos builds de release.
 - Origem de `Assets/Textures/Characters/Tex_HeroCloth.png` (marcado "[VERIFICAR origem]" em `Docs/ThirdPartyLicenses.md`).
 - Pastas de modelo não usadas `Assets/Models/Characters/Joaquim/` e `Joaquim_Child/` (o jogo usa `Joaquim_RO`): apagar ou manter?
-- Escopo de multiplayer (Fase 12), marketing (Fase 13) e live ops (Fase 14).
+- Ícones de skills e itens por geração de imagem (precisa do OK do usuário antes de gastar créditos).
+- Áudio real (música e SFX) no lugar dos placeholders procedurais, conforme `Docs/Audio.md`.
 - Ícone do app e bundle id (identidade de loja).
+- Escopo de multiplayer (Fase 12), marketing (Fase 13) e live ops (Fase 14).
+
 
 ### 2026-09-11 (fim da sessão automática agendada 3h — resumo)
 - 🏁 **Resumo desta sessão automática**: 2 achados reais desta rodada, ambos corrigidos e testados ponta a ponta em Play Mode: `ComboTracker` sem nenhum `ComboDefinition` (mesma classe de lacuna já resolvida com Skill Tree/Crafting — seedados 2 combos de exemplo, confirmados aplicando buff real de dano/custo ao conjurar a sequência certa), e um bug real de IA (`EnemyFleeState` exigia recuperação de vida E distância segura pra parar de fugir, mas inimigos não têm regeneração passiva — qualquer inimigo que começasse a fugir ficava preso fugindo pra sempre; trocado `&&` por `||`).
@@ -888,7 +905,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Definir público-alvo e classificação indicativa (ESRB/PEGI) — `Docs/PlatformRequirements.md` (recomendação: ESRB Teen / PEGI 12, sujeito à submissão oficial)
 
 ### Requisitos específicos de Mobile (obrigatório, não opcional)
-- [x] Controles em tela — botões de Correr/Pular na HUD (2026-08-25 continuações 11/12); joystick virtual não foi necessário pois o movimento principal é clique/toque-pra-mover (`MoveClick` já bindado em `<Touchscreen>/primaryTouch/tap`), decisão de design documentada.
+- [x] Controles em tela — botões de Correr/Pular na HUD (2026-08-25 continuações 11/12); desde 2026-10-21 (`814d3d1`): tocar e segurar para andar (`MoveClick` agora usa `<Touchscreen>/primaryTouch/press` + `HoldToWalkTimer`; o `tap` antigo falhava com dedo parado >0.2s), joystick virtual opcional (`VirtualJoystickMath`, Configurações > Controles), botão Atacar, botões de girar câmera e Voltar do Android abrindo a pausa.
 - [x] Câmera: pinch-to-zoom já implementado em `CameraZoom.cs`, bug real de contagem de dedos corrigido (2026-08-25 continuação 7).
 - [ ] Performance: testar em dispositivo de referência low/mid-end, não só no Editor — continua pendente, sem device físico disponível neste ambiente. 🙋 **decisão do usuário**: testar em aparelho físico (roteiro em `Docs/QAChecklist.md`, metas em `Docs/PlatformRequirements.md` → "Orçamento de performance").
 - [x] UI escalável pra diferentes resoluções/aspect ratios: `PanelSettings` corrigido pra `ScaleWithScreenSize` de verdade (2026-08-25 continuação 6) + safe area/notch aplicado na HUD (continuação 13, lógica correta mas não testável sem device físico com notch).
@@ -905,7 +922,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Definir estrutura de pastas definitiva (Assets, Addressables, StreamingAssets) — `Docs/ProjectConventions.md`
 
 ### Qualidade de Engenharia
-- [x] Testes automatizados (Unity Test Framework) — **819 testes EditMode** em `Assets/Tests/EditMode` (100% verdes em 2026-10-21, inclusive `LocalizationCoverageTests`) + assembly **PlayMode** `Assets/Tests/PlayMode/Rapadura.Tests.PlayMode.asmdef` com smoke tests (`MainSceneSmokeTests`, `UiScreensSmokeTests`, `WorldMapEncounterSmokeTests`, base `SmokeTestBase`). Os testes de save usam uma pasta isolada (`SaveManager.SaveRootOverride` + `TestSaveRoot`, working tree) e não tocam mais nos saves reais do desenvolvedor.
+- [x] Testes automatizados (Unity Test Framework) — **1159 testes EditMode** em `Assets/Tests/EditMode` (100% verdes em 2026-10-21 à noite, eram 819 de manhã, inclusive `LocalizationCoverageTests`) + **14 testes PlayMode** + assembly **PlayMode** `Assets/Tests/PlayMode/Rapadura.Tests.PlayMode.asmdef` com smoke tests (`MainSceneSmokeTests`, `UiScreensSmokeTests`, `WorldMapEncounterSmokeTests`, base `SmokeTestBase`). Os testes de save usam uma pasta isolada (`SaveManager.SaveRootOverride` + `TestSaveRoot`) e não tocam mais nos saves reais do desenvolvedor.
 - [ ] Definir "Definition of Done" por feature (código + teste + review + doc)
 - [ ] Processo de code review (PR obrigatório, sem push direto na main)
 - [x] Sistema de logging estruturado (`GameLogger.cs`) — níveis Debug/Info/Warning/Error/Exception, `Debug` compila fora de builds não-development via `[Conditional]`, prefixo `[Categoria]` consistente. Já em uso extensivo pelo projeto (managers, quests, inventário, etc).
@@ -1021,7 +1038,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] `Gameplay/Player/PlayerClickToMove.cs` — clique/tap esquerdo faz raycast da câmera até o chão (`_groundMask`, hoje `~0`/tudo — vale restringir a um layer "Ground" dedicado depois) e define um destino; input manual (WASD/joystick) sempre cancela o destino na hora (nunca competem no mesmo frame).
 - [x] `PlayerMotor.MoveToward(destination, isRunning, arrivalThreshold)` — novo método, direção mundial direta (sem depender da câmera), reaproveita a mesma integração de gravidade/rotação do `Move()` existente (extraída pra `MoveInDirection` privado).
 - [x] `PlayerController.HasMoveIntent` — Idle/Walk/Run passam a checar isso (manual OU destino de clique pendente) em vez de só `Input.MoveInput`; `PlayerWalkState`/`PlayerRunState.FixedTick` usam `Motor.Move` quando há input manual, senão `Motor.MoveToward` até chegar (aí limpa o destino).
-- [x] Novas actions no `PlayerControls.inputactions`: `MoveClick` (`<Mouse>/leftButton` + `<Touchscreen>/primaryTouch/tap`) e `PointerPosition` (`<Pointer>/position`), expostas em `PlayerInputHandler`.
+- [x] Novas actions no `PlayerControls.inputactions`: `MoveClick` (`<Mouse>/leftButton` + `<Touchscreen>/primaryTouch/press`; era `tap` até `814d3d1`) e `PointerPosition` (`<Pointer>/position`), expostas em `PlayerInputHandler`.
 - [x] Ignora clique em cima de UI (`EventSystem.current.IsPointerOverGameObject()`), pra não mover o personagem ao clicar em botão de HUD/menu.
 - [x] Componente `PlayerClickToMove` adicionado ao `Player` na `Main.unity` via Unity MCP; cena salva.
 - ⚠️ Validado em Play Mode via Unity MCP até ~65% do caminho até o destino (raycast acerta o chão, state machine troca pra `PlayerWalkState`, posição avança de fato); a chegada completa não foi confirmada porque a física parece rodar mais devagar com o Editor sem foco durante automação — é uma limitação do teste via MCP, não um bug conhecido no código. Vale o usuário confirmar manualmente clicando no chão dentro do Editor.
@@ -1035,6 +1052,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] `WorldMapScene`/`WorldMapController`: visão de cima, player anda entre regiões — `Assets/Scenes/WorldMap.unity` + `Gameplay/World/Map/WorldMapController.cs` + `WorldMapProgress` (regras de desbloqueio, salvo), 4 regiões (Floresta, Deserto, Montanha, Cavernas) — 2026-10-21 (`c16801d`, `c80bfe9`).
 - [x] Sistema de encontro aleatório — `Gameplay/World/Map/RandomEncounterSystem.cs` usando `BiomeDefinition.RollEnemy` (corrigidas as tabelas vazias que o `BiomeSeeder` apagava); a noite aumenta a chance em 25%. Testes em `WorldMapEncounterTests` + `WorldMapEncounterSmokeTests` (PlayMode).
 - [x] Transição overworld → área de combate em tempo real — `SceneTransitionService` + `EncounterArenaController` (prefab `Prefabs/Enemies/Enemy_Encounter`, visual por inimigo via `EnemyVisualSwapper`), volta ao mapa depois da vitória; bosses derrotados não renascem (`DefeatedEnemyRegistry`, `DefeatedBossSpawnTests`). Ciclo verificado em Play Mode.
+- [x] HUD do mapa (`UI/WorldMap/WorldMapHudController.cs`: herói, região, relógio, clima, rótulos, menu) e chefe de região (`RegionBossProgress`: a próxima região só abre depois de derrotar o chefe) — 2026-10-21 (`a0e1430`, `3bf70ee`), verificado em Play Mode.
 - [x] Definir se o mapa mundi é uma Scene separada da `Main.unity` — decidido: **cena separada** (`WorldMap.unity` é a cena 0 do Build Settings, `Main.unity` a 1).
 
 ---
@@ -1091,8 +1109,8 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Sistema de slots — `InventoryManager.cs` + `InventorySlotData.cs`
 - [x] Equipamentos — `EquipFromSlot`/`UnequipSlot` aplicam modificadores via `BuffController`
 - [x] Consumo de itens — `UseItemInSlot`
-- [~] Drag and Drop — backend suporta mover/mesclar slots (`MoveOrMergeSlot`) e desde 2026-10-21 existe a janela da Mochila (`UI/Inventory/InventoryUIController.cs`); falta o gesto de arrastar e soltar na UI.
-- [~] Ordenação/empilhamento automático — empilhar ao adicionar já é automático; falta função de "auto-organizar" o inventário inteiro
+- [x] Drag and Drop — `UI/Inventory/InventoryDragDrop.cs` sobre `MoveOrMergeSlot`, na Mochila — 2026-10-21 (`d03a7c3`).
+- [x] Ordenação/empilhamento automático — empilhar ao adicionar é automático; botão Organizar (`InventoryManager.SortInventory`, ordena pelo nome traduzido) — 2026-10-21 (`d03a7c3`, `814d3d1`).
 
 ### Itens
 - [x] `ItemDefinition`
@@ -1107,9 +1125,9 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 ### Progressão
 - [x] XP — `PlayerStats.AddExperience`, evento `PlayerExperienceChangedEvent`
 - [x] Níveis — `PlayerStats.Level`
-- [x] Atributos — `Player/AttributeSet.cs` (Vitalidade/Espírito/Destreza/Inteligência/Poder Arcano, pontos por level-up, fórmulas documentadas), `PlayableCharacter.ApplyPassive` implementado nos 5 personagens
+- [x] Atributos — `Player/AttributeSet.cs` (Vitalidade/Espírito/Destreza/Inteligência/Poder Arcano, pontos por level-up, fórmulas documentadas), `PlayableCharacter.ApplyPassive` implementado nos 5 personagens. 🐛 Corrigido em `139354e`: Vitalidade/Espírito/Destreza não faziam nada; agora somam com buffs e há crítico 1.5x. Ficha do personagem para gastar pontos (`UI/CharacterSheet/*`, atalho C, `a0e1430`).
 - [~] Talentos — se sobrepõe à skill tree da Fase 4; não há sistema de "talento" separado de skill
-- [x] Curva de balanceamento documentada em planilha (fonte única de verdade) — `Gameplay/Player/ProgressionCurve.cs` (ScriptableObject em `Resources/Balance/ProgressionCurve.asset`, mesmos valores da fórmula antiga) + `ProgressionCsv.cs` + menu de exportar/importar CSV (`Editor/BalanceCsvMenu.cs`) + `Docs/Balance/{progression,enemies,skills}.csv` e `Docs/Balance/README.md` — 2026-10-21 (`21fc798`). 🚧 Rebalanceamento + correção do bug de atributos em andamento no working tree (`PlayerCombatBalance`, `OutgoingDamage`).
+- [x] Curva de balanceamento documentada em planilha (fonte única de verdade) — `Gameplay/Player/ProgressionCurve.cs` (ScriptableObject em `Resources/Balance/ProgressionCurve.asset`, mesmos valores da fórmula antiga) + `ProgressionCsv.cs` + menu de exportar/importar CSV (`Editor/BalanceCsvMenu.cs`) + `Docs/Balance/{progression,enemies,skills}.csv` e `Docs/Balance/README.md` — 2026-10-21 (`21fc798`). Rebalanceamento por dados concluído em `139354e` (`PlayerCombatBalance`, `OutgoingDamage`, tabelas antes/depois em `Docs/Balance/README.md`).
 
 ---
 
@@ -1180,19 +1198,20 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Configurações (gráficos, áudio, controles, idioma) — `SettingsMenuController.cs` (áudio via `AudioManager`, idioma via `LocalizationManager`, gráficos via QualitySettings/Screen); desde 2026-10-21 com aba Controles (rebind real), aba Acessibilidade e toggle de 60 FPS em combate.
 - [x] Save/Load — `SaveLoadMenuController.cs` + `SaveSlotPresenter.cs`
 
-> ✅ **Atualizado em 2026-10-21**: a nota antiga ("criar os `GameObject`s com `UIDocument` nas Scenes / `MainMenuController` não instanciado") está obsoleta. Todas as telas estão na `Main.unity` desde 2026-09-10 (Pause/Settings/SaveLoad/Shop/Dialogue/SkillTree) e desde 2026-10-21 também DeathScreen, Crafting, Mochila, QuestLog/Tracker e conquistas. Fluxo decidido e implementado em código: menu principal → seleção de herói → mapa ⇄ encontro (`Gameplay/Flow/GameFlowService.cs` + `GameFlowMachine.cs`, `UI/Menus/GameFrontEndController.cs`, testes em `GameFlowTests`). 🚧 Em andamento (ligação de cenas rodada 2): `MainMenu` e `CharacterSelect` instanciados na `WorldMap.unity`, UI de conquistas, voltar ao título com reset de sessão (`GameFlowService.ReturnToTitle`).
+> ✅ **Atualizado em 2026-10-21**: a nota antiga ("criar os `GameObject`s com `UIDocument` nas Scenes / `MainMenuController` não instanciado") está obsoleta. Todas as telas estão na `Main.unity` desde 2026-09-10 (Pause/Settings/SaveLoad/Shop/Dialogue/SkillTree) e desde 2026-10-21 também DeathScreen, Crafting, Mochila, QuestLog/Tracker e conquistas. Fluxo decidido e implementado em código: menu principal → seleção de herói → mapa ⇄ encontro (`Gameplay/Flow/GameFlowService.cs` + `GameFlowMachine.cs`, `UI/Menus/GameFrontEndController.cs`, testes em `GameFlowTests`). ✅ Ligação de cenas rodada 2 concluída (`139354e`, `3bf70ee`): menu principal, configurações, créditos, seleção, HUD do mapa, pausa, save/load, missões e conquistas na `WorldMap.unity`; voltar ao título com reset de sessão (`NewSessionReset`).
 
 ### UX
 - [x] Tooltips — `UI/Common/TooltipController.cs` + `TooltipView.uxml/uss`
 - [x] Feedback visual — `UiFeedbackUtility.cs` (Pulse/PulseScale via USS transition)
 - [x] Sons de interface — `UiSoundHooks.cs` (PlayClick/PlayHover/PlayError via `AudioManager`)
-- [~] Navegação 100% por controle/teclado (sem depender só de mouse) — `focusable="true"` em todos os elementos interativos dos menus/HUD; falta configurar grupos de navegação específicos de gamepad
+- [x] Navegação 100% por controle/teclado (sem depender só de mouse) — `UI/Common/FocusNavigator.cs` + `FocusGridMath.cs` (grade de foco por gamepad/teclado) em 6 telas — 2026-10-21 (`d03a7c3`).
+- [x] Tutorial de primeira vez — `Gameplay/Tutorial/TutorialManager.cs` (9 dicas por evento, `tutorial.json` por perfil, bolha não bloqueante, opções na aba Acessibilidade) — 2026-10-21 (`2185493`).
 
 ### Acessibilidade
 - [x] Escala de fonte / alto contraste — aplicados em todas as telas por `UI/Common/UiAccessibilityApplier.cs` + `UiAccessibilityStyler.cs` (aba Acessibilidade, 2026-10-21, `UiAccessibilityStylerTests`); o grupo de botões da HUD cresce com a escala de fonte em vez de sobrepor.
 - [x] Suporte a colorblind (paletas alternativas) — `ColorblindPaletteMap.cs` agora consumido pela UI via `UiAccessibilityStyler` (opção na aba Acessibilidade).
 - [x] Remapeamento de controles — `InputRebindManager.cs` + aba Controles do `SettingsMenuController` (2026-10-21).
-- [x] Opção de reduzir screen shake / efeitos de flash — shake via `AccessibilitySettings.ScaleShakeMagnitude` em `CombatCameraShakeRelay`; flashes via `SkillVfxFlashPolicy` (VFX de skill) e `AmbientVfxFlashPolicy` (VFX ambiente/relâmpago, working tree).
+- [x] Opção de reduzir screen shake / efeitos de flash — shake via `AccessibilitySettings.ScaleShakeMagnitude` em `CombatCameraShakeRelay`; flashes via `SkillVfxFlashPolicy` (VFX de skill) e `AmbientVfxFlashPolicy` (VFX ambiente/relâmpago).
 
 > ✅ `AccessibilitySettings` registrado em `GameManager.BuildManagers()` e multiplicador de shake plugado em `CombatCameraShakeRelay`. ~~Pendente: consumir escala de fonte/contraste/paleta/rebind na UI de Configurações.~~ Feito em 2026-10-21 (ver itens acima).
 
@@ -1200,7 +1219,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Arquitetura de texto externalizada (não hardcoded em código) — `Core/Localization/LocalizationTable.cs` (ScriptableObject) + `LocalizationCsv.cs`
 - [x] Suporte multi-idioma (mínimo PT-BR + EN) — `Core/Localization/LanguageCode.cs` (en/ptBR, fallback pra en) + `LocalizationManager.cs`
 - [~] Pipeline de tradução (planilha/CSV ou serviço tipo Crowdin) — parser CSV pronto (`LocalizationCsv.cs`); desde 2026-10-21 há `LocalizationCoverageTests` (toda chave em en e pt-BR, conflitos, placeholders, chaves usadas por assets) e inventário/plano em `Docs/Localization.md`. Falta decidir a ferramenta de tradução e automatizar o import no CI.
-- [~] Textos fixos em UXML/C# passando pela localização — 🚧 em andamento (working tree): `UI/Common/UiTexts.cs` + `UiDocumentLocalizer.cs`, UXMLs de menus/HUD/loja/crafting/skill tree sendo migrados. O jogo inicia em pt-BR (ou inglês se o aparelho estiver em inglês) desde 2026-10-21.
+- [x] Textos fixos em UXML/C# passando pela localização — `UI/Common/UiTexts.cs` + `UiDocumentLocalizer.cs` (90 chaves de UI), conteúdo (itens, skills, inimigos, heróis) com 181 entradas en/pt-BR, nomes de itens gerados compostos no idioma atual, idioma escolhido salvo — 2026-10-21 (`d03a7c3`). O jogo inicia em pt-BR (ou inglês se o aparelho estiver em inglês).
 
 > ✅ **Atualizado em 2026-10-21**: a nota antiga ("registrar `LocalizationManager` em `GameManager.BuildManagers()`; criar a tabela; UI de seleção de idioma") está obsoleta. `LocalizationManager` está registrado em `GameManager.BuildManagers()`, a troca de idioma foi verificada em 2026-09-10 e o seletor de idioma fica nas Configurações.
 
@@ -1217,8 +1236,8 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Proteção contra corrupção (backup do último save válido) — escrita atômica (`.tmp` verificado antes de sobrescrever) + `.bak` com fallback automático no `Load`
 
 > ✅ Sugestão antiga resolvida: `CheckpointManager` já chama `SaveManager.AutoSave()` ao ativar checkpoint.
-- [x] Save atômico que nunca deixa um arquivo corrompido sobrescrever o último `.bak` válido + pasta de save isolada para testes (`SaveManager.SaveRootOverride`, `Tests/EditMode/TestSaveRoot.cs`) — working tree de 2026-10-21, falta commit.
-- [~] Voltar ao título com reset de sessão (limpar estado carregado antes de outro Novo Jogo/Continuar) — 🚧 em andamento (`GameFlowService.ReturnToTitle`, `PauseMenuController`).
+- [x] Save atômico que nunca deixa um arquivo corrompido sobrescrever o último `.bak` válido + pasta de save isolada para testes (`SaveManager.SaveRootOverride`, `Tests/EditMode/TestSaveRoot.cs`) — 2026-10-21 (`139354e`).
+- [x] Voltar ao título com reset de sessão (limpar estado carregado antes de outro Novo Jogo/Continuar) — `GameFlowService.ReturnToTitle` + `Core/Systems/NewSessionReset.cs`, com confirmação no `PauseMenuController` — 2026-10-21 (`d03a7c3`).
 
 ### Dados Salvos
 - [x] Inventário — `InventoryManager` (verificado em 2026-09-10), itens gerados com afixos preservados (2026-10-21)
@@ -1233,12 +1252,12 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 
 ### NPCs
 - [x] Sistema de diálogo — `Gameplay/Dialogue/{DialogueNode,DialogueDefinition,DialogueManager}.cs` + `UI/Dialogue/DialogueUIController.cs`, NPCs na `Main.unity` desde 2026-09-10; desde 2026-10-21 com condições/ações/redirects por estado de quest e por herói (`DialogueCondition`, `DialogueAction`, `QuestDialogueContext`, `DialogueQuestActionsTests`)
-- [x] Lojas — `Gameplay/Shop/{ShopDefinition,ShopManager}.cs` + `UI/Shop/ShopUIController.cs`, NPC de loja na `Main.unity` desde 2026-09-10; desde 2026-10-21 a loja entra na exclusividade de telas e tem tooltips
+- [x] Lojas — `Gameplay/Shop/{ShopDefinition,ShopManager}.cs` + `UI/Shop/ShopUIController.cs`, NPC de loja na `Main.unity` desde 2026-09-10; desde 2026-10-21 a loja entra na exclusividade de telas e tem tooltips; 🐛 o estoque não altera mais o asset da loja, fica no save e é reposto ao amanhecer (`d03a7c3`)
 
 > ✅ Conteúdo narrativo dos 5 personagens completo: `Editor/CharacterQuestSeeder.cs` (Joaquim "Ecos da Vila Perdida", Maithe "Rastros do Vento", Lavine "A Maré Rubra") + `Editor/CharacterQuestSeeder2.cs` (Maria "O Brilho Que Se Apaga", Ícaro "Engrenagens do Passado"), cada um com diálogo ramificado ligado (`CharacterDialogueSeeder.cs`/`CharacterDialogueSeeder2.cs`), todas as traduções `quest.*`/`dialogue.*` reais em PT-BR/EN. Além disso: `Editor/ConvergenceQuestSeeder.cs` + `ConvergenceDialogueSeeder.cs` — quest final que exige as 5 quests pessoais como pré-requisito e reúne os 5 heróis (que são família: Maithe/Ícaro irmãos, Joaquim/Maria irmãos, Lavine prima de todos — ordem de idade Maithe>Maria>Joaquim>Ícaro>Lavine) para decidirem enfrentar juntos a ameaça maior de Rapadura.
 
 > ⚠️ `Docs/GDD.md` e os comentários de lore em `Assets/Scripts/Gameplay/Characters/*.cs` ainda não foram atualizados com a árvore genealógica da família — fazer isso na próxima leva de conteúdo.
-- [~] Missões (NPCs que dão quest) — `StartQuest` não tinha chamador nenhum até 2026-10-21; agora 5 NPCs oferecem as quests pessoais e a convergência pelo diálogo (`dialogue_*` em `Resources/Dialogue`, `QuestGiverTexts`). 🚧 Colocar/ajustar os NPCs de quest na cena (ligação de cenas rodada 2, `Assets/Materials/Npc/`) em andamento.
+- [x] Missões (NPCs que dão quest) — `StartQuest` não tinha chamador nenhum até 2026-10-21; agora 5 NPCs oferecem as quests pessoais e a convergência pelo diálogo (`dialogue_*` em `Resources/Dialogue`, `QuestGiverTexts`), com os 5 NPCs posicionados na cena em `139354e`.
 
 ### Quests
 - [x] Principal — `QuestManager` + `QuestType.MainStory`, 5 quests pessoais + convergência autoradas, oferecidas por NPCs via diálogo (2026-10-21) e acompanhadas no log de missões + rastreador (`UI/Quests/QuestLogController.cs`, `QuestTrackerController.cs`)
@@ -1253,7 +1272,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [~] Montanha — idem
 - [~] Cavernas — idem
 
-> ✅ `Editor/EnemyDatabaseSeeder.cs` criado (8 inimigos, 2 por bioma incl. boss), ids batem com os já referenciados no `BiomeSeeder`. ~~Os assets ainda não existem neste checkout~~ — existem em `Assets/Resources/{Enemies,Biomes}/` e, desde 2026-10-21, as tabelas de inimigo dos biomas não são mais apagadas pelo `BiomeSeeder`. Cada bioma é uma região do `WorldMap.unity`; terreno/cena próprios por bioma continuam pendentes (todos os encontros usam a mesma `EncounterArena`).
+> ✅ `Editor/EnemyDatabaseSeeder.cs` criado (8 inimigos, 2 por bioma incl. boss), ids batem com os já referenciados no `BiomeSeeder`. ~~Os assets ainda não existem neste checkout~~ — existem em `Assets/Resources/{Enemies,Biomes}/` e, desde 2026-10-21, as tabelas de inimigo dos biomas não são mais apagadas pelo `BiomeSeeder`. Cada bioma é uma região do `WorldMap.unity`; terreno/cena próprios por bioma continuam pendentes; desde `d03a7c3` a `EncounterArena` é decorada por bioma (`Gameplay/World/Biomes/Arena/BiomeArenaDressing.cs`: cactos, estalagmites, rochas com neve).
 
 ---
 
@@ -1262,8 +1281,10 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 ### AudioManager
 - [x] Música ambiente — `Core/Audio/AudioManager.cs` (`PlayMusic`/`StopMusic` com crossfade)
 - [x] Sons de combate — `CombatAudioCueMap.cs`, ouve `DamageAppliedEvent`/`CombatTargetDiedEvent`
-- [x] Sons do jogador — API genérica `PlayOneShot`/`PlaySfx` pronta (ainda não chamada por código de player/UI)
+- [x] Sons do jogador — 44 sons procedurais por evento (`Audio/ProceduralSfxSynth.cs` + `SfxEventRouter`/`SfxEventMap`, `a0e1430`); placeholders até entrarem os assets reais de `Docs/Audio.md`
 - [x] Sons da interface — idem
+- [x] Música por contexto — `Audio/MusicDirector.cs` (título, mapa, bioma, chefe), gerada em thread separada com cache (`814d3d1`)
+- [x] Vibração no celular — `Audio/HapticsService.cs` + opção nas Configurações (`a0e1430`)
 
 ### Sistema Avançado
 - [x] Áudio espacial — `PlaySfxAtPosition` (spatialBlend=1)
@@ -1289,7 +1310,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [~] Sistema de Analytics (retenção, funil, eventos de gameplay) — `Core/Analytics/AnalyticsManager.cs` registrado em `GameManager` (ouve eventos reais do EventBus, buffer em memória + log); falta backend real (decisão de produto/legal)
 - [x] Sistema de Logs — `Core/Logging/GameLogger.cs` (já existia)
 - [~] Debug Overlay — `Core/Debug/DebugOverlayController.cs` (FPS/memória prontos); falta log rolante (precisa de hook novo em `GameLogger.cs`) e colocar o `UIDocument` numa Scene
-- [x] Testes automatizados (cobertura de sistemas críticos: save, combate, inventário) — 819 testes EditMode verdes rodando no Unity Editor real + smoke tests PlayMode (2026-10-21). (Nota antiga "projeto nunca aberto" estava obsoleta.)
+- [x] Testes automatizados (cobertura de sistemas críticos: save, combate, inventário) — 1159 testes EditMode + 14 testes PlayMode verdes no Unity Editor real (2026-10-21, `814d3d1`). (Nota antiga "projeto nunca aberto" estava obsoleta.)
 - [ ] Playtesting estruturado com usuários externos + coleta de feedback
 - [x] QA pass dedicado (checklist de regressão antes de cada release) — `Docs/QAChecklist.md` (2026-10-21); executar em aparelho físico é **decisão do usuário**.
 
@@ -1315,7 +1336,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [ ] Style guide visual (paleta de cores, referências, mood board)
 - [ ] Pipeline de import de assets (naming convention, escala, pivot padronizado)
 - [~] Shaders/Materiais customizados — **2026-08-24**: texturas procedurais + materiais reais aplicados na cena de teste via Unity MCP (`manage_texture`/`manage_material`): `Tex_Grass`/`Mat_Grass` (chão, ruído verde + tiling 10x10), `Tex_Wall`/`Mat_Wall` (paredes, padrão tijolo), `Tex_Bark`/`Mat_Bark` (troncos), `Tex_Leaves`/`Mat_Leaves` (copas das árvores), `Tex_Rock`/`Mat_Rock` (pedras) — tudo em `Assets/Textures/Environment/` + `Assets/Materials/`, shader `Standard` (compatível com Built-in RP). Confirmado visualmente via screenshot do Game View.
-- [x] VFX (partículas de combate, ambiente, skills) — VFX procedural de skills em pool por elemento/categoria (`Gameplay/Skills/Vfx/SkillVfxManager.cs`, `SkillVfxLibrary`, override por skill), clima (`WeatherVisuals`) e VFX ambiente (`Gameplay/Environment/AmbientVfx*.cs` + `Resources/Vfx/AmbientVfxLibrary.asset`, working tree) — 2026-10-21. Todos respeitam "reduzir flashes".
+- [x] VFX (partículas de combate, ambiente, skills) — VFX procedural de skills em pool por elemento/categoria (`Gameplay/Skills/Vfx/SkillVfxManager.cs`, `SkillVfxLibrary`, override por skill), clima (`WeatherVisuals`) e VFX ambiente (`Gameplay/Environment/AmbientVfx*.cs` + `Resources/Vfx/AmbientVfxLibrary.asset`, `139354e`) — 2026-10-21. Todos respeitam "reduzir flashes".
 - [~] Iluminação e pós-processamento — névoa (`RenderSettings.fog`, exponencial) e luz ambiente Trilight configuradas via `manage_graphics` (funcionam em Built-in RP). Volume de pós-processamento (bloom/vinheta/color grading) **não** foi possível: `volume_create` falhou porque a pipeline ativa do projeto é **Built-in**, não URP — apesar do `manifest.json` listar `com.unity.render-pipelines.universal`, o pacote nunca foi de fato ativado em Graphics Settings (Render Pipeline Asset não atribuído). Migrar pra URP de verdade é uma mudança maior (risco de quebrar materiais/shaders existentes) e fica pra uma tarefa dedicada, não decidi fazer isso de forma incidental numa tarefa de "texturizar cenário".
 - ⚠️ **Achado ao vivo**: atribuições de material feitas enquanto o Editor estava em Play Mode não persistem (Unity descarta mudanças de estado de cena ao sair do Play Mode) — sempre confirmar `Application.isPlaying == false` antes de mexer em materiais/componentes de cena via Unity MCP.
 
@@ -1364,7 +1385,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 ---
 
 ## ⭐ Recursos que aumentam MUITO a retenção
-- [x] Sistema de conquistas — `Gameplay/Achievements/AchievementManager.cs` (orientado a eventos, salvo), 20 conquistas em `Resources/Achievements` (9 ligadas à história dos heróis), toast + tela de lista (`UI/Achievements/*`) — 2026-10-21. 🚧 Ligação da UI de conquistas na cena em andamento.
+- [x] Sistema de conquistas — `Gameplay/Achievements/AchievementManager.cs` (orientado a eventos, salvo), 20 conquistas em `Resources/Achievements` (9 ligadas à história dos heróis), toast + tela de lista (`UI/Achievements/*`) — 2026-10-21. Lista de conquistas na `Main.unity` e na `WorldMap.unity`; progresso em arquivo de perfil próprio (`d03a7c3`).
 - [x] Missões diárias — `Gameplay/Quests/DailyQuestService.cs` (3 por dia, escolha determinística pela data), 8 missões em `Resources/Quests/Daily` ligadas aos heróis — 2026-10-21
 - [ ] Sistema de pets
 - [ ] Montarias

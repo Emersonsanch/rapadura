@@ -14,14 +14,45 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 ## [Não lançado]
 
 ### Adicionado
+- Fluxo completo do jogo: menu principal → seleção de herói → mapa mundi ⇄ encontro, com menu, configurações, créditos e seleção na cena `WorldMap` (`GameFlowService`, `GameFrontEndController`).
+- Acerto crítico (1.5x) em ataque básico e skills (`OutgoingDamage`, `PlayerCombatBalance`).
+- Ficha do personagem para gastar pontos de atributo (botão com selo de pontos na HUD, atalho C).
+- HUD do mapa mundi (herói, região, relógio, clima, rótulos das regiões, menu) e chefe de região: a próxima região só abre depois de derrotá-lo.
+- Localização dos textos fixos da UI (`UiDocumentLocalizer`, 90 chaves) e do conteúdo (itens, skills, inimigos, heróis; 181 entradas en/pt-BR), nomes de itens gerados compostos no idioma atual e idioma escolhido salvo.
+- Mochila: arrastar e soltar, botão Organizar; navegação por gamepad/teclado em 6 telas (`FocusNavigator`).
+- Voltar ao título (com confirmação) com reset completo da sessão (`NewSessionReset`).
+- Arena de encontro decorada por bioma (cactos, estalagmites, rochas com neve) e VFX de ambiente por bioma, fase do dia e clima.
+- Tutorial de primeira vez: 9 dicas por evento, salvas por perfil, com "Mostrar dicas" e "Reiniciar tutorial" na aba Acessibilidade.
+- Áudio: 44 sons procedurais por evento e música por contexto (título, mapa, bioma, chefe), como placeholders até os assets reais (ver `Docs/Audio.md`); vibração no celular.
+- Controles por toque: tocar e segurar para andar, joystick virtual opcional (Configurações > Controles), botão Atacar, botões de girar câmera e botão Voltar do Android abrindo a pausa.
 - `FrameRateManager` + `FrameRatePolicy` (`Core/Performance`): economia de bateria/temperatura — no mobile 30 fps em menus, mapa mundi e pausa (pausa renderiza a cada 2 frames via `OnDemandRendering`), 60 fps em combate (opção "60 FPS em combate" persistida em PlayerPrefs, `Performance.HighFrameRateInCombat`); no desktop, vSync ligado.
 - `BuildVersion` (`Core/Versioning`): helper SemVer em runtime sobre `Application.version`.
 - Tela de Créditos (UI Toolkit, `CreditsView.uxml/.uss` + `CreditsController`), aberta pelo botão "Créditos" do menu principal.
-- `Docs/ThirdPartyLicenses.md`, `Docs/QAChecklist.md` e seção "Orçamento de performance" em `Docs/PlatformRequirements.md`.
+- `Docs/ThirdPartyLicenses.md`, `Docs/QAChecklist.md`, `Docs/Audio.md` e seção "Orçamento de performance" em `Docs/PlatformRequirements.md`.
+- 14 smoke tests PlayMode (cenas, telas de UI, encontro e XP no encontro); suíte EditMode com 1159 testes.
 
-### Modificado
+### Alterado
+- Rebalanceamento por dados: curva de XP 1.25→1.10, +8 HP por nível, XP por bioma 10/18/28/40, chefes x8, ultimates ~2.5x e skills fracas reforçadas (tabelas em `Docs/Balance/README.md`).
+- Pausa única com contagem de donos (`GameplayPause`) em todas as telas modais e no menu de pausa.
+- Estoque da loja salvo por save e reposto ao amanhecer; conquistas em arquivo de perfil próprio.
+- Música procedural gerada em thread separada (sem engasgo), com cache de 2 clipes; `StopMusic` esmaece em vez de cortar.
 - Tela de morte só reconstrói o texto da contagem regressiva quando o segundo exibido muda (antes alocava uma string por frame).
 - Anel do clique-para-mover usa `sharedMaterial` (antes `.material` clonava o material criado em runtime no primeiro pulso).
+
+### Corrigido
+- Matar inimigo no fluxo real (mapa → encontro) não dava XP, loot, números de dano nem VFX: o `GameManager` duplicado era destruído junto com os componentes de recompensa (`SingletonBehaviour` agora remove só o componente duplicado).
+- Vitalidade, Espírito, Destreza e o afixo `affix_vital` não tinham efeito; buffs de fontes diferentes (ou sem fonte) no mesmo atributo se substituíam em vez de somar.
+- Nível, inventário e skills do jogador se perdiam a cada encontro.
+- Carregar um save antigo mantinha herói, chefes e relógio da sessão anterior.
+- O estoque da loja alterava o asset da loja.
+- Menu de pausa devolvia a velocidade normal por cima de outra tela aberta.
+- Clicar em UI atacava; teclas 1-5 lançavam skill com menu aberto.
+- Bônus de equipamento (base + afixo, fixo + percentual) se anulavam.
+- Hit-stops sobrepostos deixavam o jogo em câmera lenta permanente.
+- Cura grátis ao trocar de cena; quest rastreada vazava entre saves; `Load` não era à prova de exceção.
+- Menu principal e seleção de herói ficavam sem música; a música do mapa continuava depois de voltar ao título.
+- Tocar para andar falhava se o dedo demorasse mais de 0.2s ou se mexesse 5px; pinça virava tap-to-move; Correr ficava preso depois de gesto do sistema.
+- Preview da seleção de herói (heróis rigados apareciam deitados), ordem de camadas das telas e textos ilegíveis nas configurações e barras da HUD.
 
 ## [0.1.0] - 2026-10-21
 
