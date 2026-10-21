@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Rapadura.Core.Localization;
+using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Items;
@@ -22,7 +23,7 @@ namespace Rapadura.UI.Crafting
         }
 
         public bool IsSatisfied => Have >= Need;
-        public string DisplayName => Item != null ? Item.DisplayName : "?";
+        public string DisplayName => Item != null ? Item.LocalizedName() : "?";
     }
 
     /// <summary>
@@ -112,7 +113,7 @@ namespace Rapadura.UI.Crafting
                 return string.Empty;
             }
 
-            return UiTexts.Format(localization, UiTexts.CraftingResult, recipe.ResultItem.DisplayName, recipe.ResultQuantity);
+            return UiTexts.Format(localization, UiTexts.CraftingResult, recipe.ResultItem.LocalizedName(localization), recipe.ResultQuantity);
         }
 
         public static string FormatSuccessMessage(RecipeDefinition recipe, LocalizationManager localization = null)
@@ -122,7 +123,7 @@ namespace Rapadura.UI.Crafting
                 return UiTexts.Get(localization, UiTexts.CraftingCrafted);
             }
 
-            return UiTexts.Format(localization, UiTexts.CraftingCraftedItem, recipe.ResultItem.DisplayName, recipe.ResultQuantity);
+            return UiTexts.Format(localization, UiTexts.CraftingCraftedItem, recipe.ResultItem.LocalizedName(localization), recipe.ResultQuantity);
         }
 
         /// <summary>

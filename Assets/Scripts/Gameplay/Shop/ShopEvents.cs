@@ -57,4 +57,15 @@ namespace Rapadura.Gameplay.Shop
             ShopId = shopId;
         }
     }
+
+    /// <summary>Raised when <see cref="ShopManager"/> refills every shop to its authored stock (in-game dawn, see <see cref="ShopManager.Restock"/>).</summary>
+    public readonly struct ShopRestockedEvent : IGameEvent
+    {
+        public readonly int Day;
+
+        public ShopRestockedEvent(int day)
+        {
+            Day = day;
+        }
+    }
 }

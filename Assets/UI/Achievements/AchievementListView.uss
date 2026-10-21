@@ -83,6 +83,12 @@
     opacity: 0.75;
 }
 
+/* Gamepad/keyboard focus (FocusNavigator steps through the rows). */
+.achievement-item:focus {
+    border-color: rgb(255, 210, 90);
+    opacity: 1;
+}
+
 .achievement-item--unlocked {
     opacity: 1;
     background-color: rgba(255, 210, 90, 0.1);

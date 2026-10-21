@@ -8006,6 +8006,7 @@ MonoBehaviour:
   - {fileID: 784470028}
   - {fileID: 1386918386}
   - {fileID: 1758323693}
+  _biomeDressing: {fileID: 0}
   _fleeRadius: 30
   _returnDelaySeconds: 1.5
 --- !u!4 &328942816
@@ -14354,7 +14355,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: 44db0f9db776a764a92a19414341535d, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: 5c7c7ebcc07e3ab49a868cce12a4fa57, type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Position: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -20820,7 +20821,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: 44db0f9db776a764a92a19414341535d, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: f239730c0555cc440af17ea3f3cfb1cb, type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 30
   m_Position: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -21000,7 +21001,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: 44db0f9db776a764a92a19414341535d, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: e0b0c01f5e990b74988e37f9ed63ae7d, type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 15
   m_Position: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -21088,7 +21089,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: 44db0f9db776a764a92a19414341535d, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: 88e13f773015e96479559887b5a75a42, type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 25
   m_Position: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -23011,7 +23012,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: 44db0f9db776a764a92a19414341535d, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: 1d200a7a011a56e4f896defbdcbd239e, type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 30
   m_Position: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -28729,8 +28730,8 @@ MonoBehaviour:
   - characterId: 1
     modelPrefab: {fileID: 919132149155446097, guid: 0d43d9c3c90312148b59efba29bb89ca, type: 3}
     localPosition: {x: 0, y: 0, z: 0}
-    localEulerAngles: {x: 270, y: 180, z: 0}
-    uniformScale: 0.014
+    localEulerAngles: {x: 0, y: 180, z: 0}
+    uniformScale: 1
   - characterId: 2
     modelPrefab: {fileID: 919132149155446097, guid: 7f5731fa981aa6d4bb61a96f7a821f90, type: 3}
     localPosition: {x: 0, y: 0, z: 0}
@@ -28739,15 +28740,19 @@ MonoBehaviour:
   - characterId: 3
     modelPrefab: {fileID: 919132149155446097, guid: ad09499982b26e0479c5d5d108360e9e, type: 3}
     localPosition: {x: 0, y: 0, z: 0}
-    localEulerAngles: {x: 270, y: 180, z: 0}
-    uniformScale: 0.014
+    localEulerAngles: {x: 0, y: 180, z: 0}
+    uniformScale: 1
   - characterId: 4
     modelPrefab: {fileID: 919132149155446097, guid: ded4cf3029bb17b448a895953a3d0273, type: 3}
     localPosition: {x: 0, y: 0, z: 0}
-    localEulerAngles: {x: 270, y: 180, z: 0}
-    uniformScale: 0.014
+    localEulerAngles: {x: 0, y: 180, z: 0}
+    uniformScale: 1
   _spawnPoint: {fileID: 2007117380}
   _rotationSpeedDegPerSec: 25
+  _autoFrame: 1
+  _frameHeight: 1.45
+  _frameWidth: 1.6
+  _frameCenterOffset: {x: 0, y: 0.1, z: 0}
 --- !u!4 &1094200196
 Transform:
   m_ObjectHideFlags: 0
@@ -38609,7 +38614,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: 44db0f9db776a764a92a19414341535d, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: b5f3f5d5e7c78954881aaa914cc30696, type: 3}
-  m_SortingOrder: 10
+  m_SortingOrder: 21
   m_Position: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -39810,7 +39815,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: 44db0f9db776a764a92a19414341535d, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: a28e4aa712ee40f5a4ad40d7cc07648a, type: 3}
-  m_SortingOrder: 10
+  m_SortingOrder: 21
   m_Position: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -44698,7 +44703,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: 44db0f9db776a764a92a19414341535d, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: c43c47b7da5411246ac0fad246d95baa, type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Position: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -45158,7 +45163,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: c897d91cd500db64fbb30dffa96a69ac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -54859,6 +54864,7 @@ MonoBehaviour:
   _achievementList: {fileID: 1530136885}
   _craftingUI: {fileID: 1491199035}
   _controlsTimeScale: 1
+  _returnToTitleDialogAsset: {fileID: 0}
   OnMainMenuRequested:
     m_PersistentCalls:
       m_Calls: []
@@ -54877,7 +54883,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: 44db0f9db776a764a92a19414341535d, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: c4f139eb396c10f4782997ca1af9160a, type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 20
   m_Position: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920

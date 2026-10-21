@@ -4,6 +4,7 @@ using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Quests;
+using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -70,6 +71,7 @@ namespace Rapadura.UI.Quests
         private string _selectedQuestId;
         private bool _isOpen;
         private bool _dirty = true;
+        private FocusNavigator _focusNavigator;
 
         public bool IsOpen => _isOpen;
         public Tab CurrentTab => _currentTab;
@@ -83,6 +85,8 @@ namespace Rapadura.UI.Quests
         {
             BindElements();
             RegisterCallbacks();
+            // Gamepad/keyboard: D-pad between tabs/quests/Rastrear, A activates, B closes - see FocusNavigator.
+            _focusNavigator = FocusNavigator.Attach(_root, () => IsOpen, Hide, () => _closeButton);
             Hide();
         }
 
@@ -95,6 +99,8 @@ namespace Rapadura.UI.Quests
 
         private void OnDisable()
         {
+            _focusNavigator?.Detach();
+            _focusNavigator = null;
             UnregisterCallbacks();
             GameplayPause.Release(this);
         }
@@ -221,10 +227,12 @@ namespace Rapadura.UI.Quests
 
             GameplayPause.Acquire(this);
             Refresh();
+            _focusNavigator?.FocusInitial();
         }
 
         public void Hide()
         {
+            _focusNavigator?.ReleaseFocus();
             _isOpen = false;
 
             if (_root != null)

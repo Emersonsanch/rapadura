@@ -195,6 +195,23 @@ namespace Rapadura.Gameplay.Environment
             RefreshTargets(_library.FadeSeconds);
         }
 
+        /// <summary>
+        /// Shows the ambient layers of <paramref name="biome"/> without a region change (e.g. a
+        /// combat arena dressed for the encounter's biome while WeatherSystem kept the same weather,
+        /// so no WeatherChangedEvent carried the new biome). No-op if unchanged.
+        /// </summary>
+        public void SetBiome(BiomeType biome)
+        {
+            if (_biome == biome || _library == null)
+            {
+                _biome = biome;
+                return;
+            }
+
+            _biome = biome;
+            RefreshTargets(_library.FadeSeconds);
+        }
+
         private void OnAccessibilityChanged()
         {
             bool reduce = _accessibility != null && _accessibility.ReduceFlashEffects;

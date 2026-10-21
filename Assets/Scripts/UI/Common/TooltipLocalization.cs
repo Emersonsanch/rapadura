@@ -102,7 +102,8 @@ namespace Rapadura.UI.Common
             new LocalizationEntry("ui.inventory.equipment", "Equipment", "Equipamento"),
             new LocalizationEntry("ui.inventory.items", "Items", "Itens"),
             new LocalizationEntry("ui.inventory.weight", "Weight: {0}/{1}", "Peso: {0}/{1}"),
-            new LocalizationEntry("ui.inventory.hint", "Tap to use/equip. Hold for details.", "Toque para usar/equipar. Segure para ver detalhes."),
+            new LocalizationEntry("ui.inventory.hint", "Tap to use/equip. Hold for details. Drag to move.", "Toque para usar/equipar. Segure para ver detalhes. Arraste para mover."),
+            new LocalizationEntry("ui.inventory.sort", "Sort", "Organizar"),
         };
 
         private static Dictionary<string, string> _englishByKey;

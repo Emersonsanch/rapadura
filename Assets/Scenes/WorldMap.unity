@@ -1370,8 +1370,8 @@ MonoBehaviour:
   - characterId: 1
     modelPrefab: {fileID: 919132149155446097, guid: 0d43d9c3c90312148b59efba29bb89ca, type: 3}
     localPosition: {x: 0, y: 0, z: 0}
-    localEulerAngles: {x: 270, y: 180, z: 0}
-    uniformScale: 0.014
+    localEulerAngles: {x: 0, y: 180, z: 0}
+    uniformScale: 1
   - characterId: 2
     modelPrefab: {fileID: 919132149155446097, guid: 7f5731fa981aa6d4bb61a96f7a821f90, type: 3}
     localPosition: {x: 0, y: 0, z: 0}
@@ -1380,15 +1380,19 @@ MonoBehaviour:
   - characterId: 3
     modelPrefab: {fileID: 919132149155446097, guid: ad09499982b26e0479c5d5d108360e9e, type: 3}
     localPosition: {x: 0, y: 0, z: 0}
-    localEulerAngles: {x: 270, y: 180, z: 0}
-    uniformScale: 0.014
+    localEulerAngles: {x: 0, y: 180, z: 0}
+    uniformScale: 1
   - characterId: 4
     modelPrefab: {fileID: 919132149155446097, guid: ded4cf3029bb17b448a895953a3d0273, type: 3}
     localPosition: {x: 0, y: 0, z: 0}
-    localEulerAngles: {x: 270, y: 180, z: 0}
-    uniformScale: 0.014
+    localEulerAngles: {x: 0, y: 180, z: 0}
+    uniformScale: 1
   _spawnPoint: {fileID: 263214612}
   _rotationSpeedDegPerSec: 25
+  _autoFrame: 1
+  _frameHeight: 1.45
+  _frameWidth: 1.6
+  _frameCenterOffset: {x: 0, y: 0.1, z: 0}
 --- !u!4 &1424999789
 Transform:
   m_ObjectHideFlags: 0

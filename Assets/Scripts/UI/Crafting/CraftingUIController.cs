@@ -3,6 +3,7 @@ using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
+using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.UI.Common;
@@ -54,6 +55,7 @@ namespace Rapadura.UI.Crafting
 
         private readonly List<RecipeDefinition> _recipes = new List<RecipeDefinition>();
         private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
+        private FocusNavigator _focusNavigator;
 
         private LocalizationManager Localization => _localizer.Manager;
 
@@ -69,11 +71,15 @@ namespace Rapadura.UI.Crafting
             BindElements();
             RegisterCallbacks();
             _localizer.Attach(_uiDocument.rootVisualElement, OnLanguageChanged);
+            // Gamepad/keyboard: D-pad between recipes/Criar, A selects/crafts, B closes - see FocusNavigator.
+            _focusNavigator = FocusNavigator.Attach(_root, () => IsOpen, Close, () => _closeButton);
             Close();
         }
 
         private void OnDisable()
         {
+            _focusNavigator?.Detach();
+            _focusNavigator = null;
             _localizer.Detach();
             UnregisterCallbacks();
             GameplayPause.Release(this);
@@ -153,10 +159,12 @@ namespace Rapadura.UI.Crafting
 
             SetFeedback(string.Empty, false);
             RebuildRecipeList();
+            _focusNavigator?.FocusInitial();
         }
 
         public void Close()
         {
+            _focusNavigator?.ReleaseFocus();
             _isOpen = false;
 
             if (_root != null)
@@ -219,7 +227,7 @@ namespace Rapadura.UI.Crafting
                 }
             }
 
-            _recipes.Sort((a, b) => string.CompareOrdinal(a.DisplayName, b.DisplayName));
+            _recipes.Sort((a, b) => string.CompareOrdinal(a.LocalizedName(Localization), b.LocalizedName(Localization)));
 
             if (_selectedRecipe == null || !_recipes.Contains(_selectedRecipe))
             {
@@ -238,7 +246,7 @@ namespace Rapadura.UI.Crafting
                 foreach (RecipeDefinition recipe in _recipes)
                 {
                     RecipeDefinition captured = recipe;
-                    var row = new Button(() => SelectRecipe(captured)) { text = recipe.DisplayName };
+                    var row = new Button(() => SelectRecipe(captured)) { text = recipe.LocalizedName(Localization) };
                     row.userData = recipe;
                     row.AddToClassList("crafting-recipe-button");
                     _recipeListContainer.Add(row);
@@ -247,6 +255,7 @@ namespace Rapadura.UI.Crafting
 
             RefreshRecipeButtons();
             RefreshDetails();
+            _focusNavigator?.RestoreFocusAfterRebuild();
         }
 
         private void SelectRecipe(RecipeDefinition recipe)
@@ -281,8 +290,8 @@ namespace Rapadura.UI.Crafting
         {
             RecipeDefinition recipe = _selectedRecipe;
 
-            if (_recipeNameLabel != null) _recipeNameLabel.text = recipe != null ? recipe.DisplayName : string.Empty;
-            if (_recipeDescriptionLabel != null) _recipeDescriptionLabel.text = recipe != null ? recipe.Description : string.Empty;
+            if (_recipeNameLabel != null) _recipeNameLabel.text = recipe != null ? recipe.LocalizedName(Localization) : string.Empty;
+            if (_recipeDescriptionLabel != null) _recipeDescriptionLabel.text = recipe != null ? recipe.LocalizedDescription(Localization) : string.Empty;
             if (_resultLabel != null) _resultLabel.text = CraftingRecipePresenter.FormatResult(recipe, Localization);
 
             if (_ingredientListContainer != null)

@@ -6,7 +6,10 @@
 }
 
 .settings-menu-panel {
-    width: 560px;
+    /* 640: the Controles tab's action column ("Mover para a esquerda") was clipped at 560. */
+    width: 640px;
+    max-width: 94%;
+    max-height: 96%;
     min-height: 380px;
     background-color: rgba(18, 20, 27, 0.98);
     border-radius: 10px;
@@ -76,6 +79,20 @@
 
 .settings-field {
     margin-bottom: 10px;
+}
+
+/* The default runtime theme draws field labels near-black, which was invisible on this dark panel
+   (Qualidade / Tela Cheia / Volume... measured at ~rgb(27,27,27) on rgb(21,24,30)). */
+.settings-field > .unity-base-field__label,
+.settings-field .unity-toggle__text {
+    color: rgb(220, 220, 228);
+    font-size: 14px;
+    min-width: 170px;
+    -unity-text-align: middle-left;
+}
+
+.settings-field .unity-base-slider__dragger {
+    background-color: rgb(255, 210, 90);
 }
 
 .settings-placeholder-label {

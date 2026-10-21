@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Rapadura.Core.Localization;
 
 namespace Rapadura.Gameplay.Items.Procedural
 {
@@ -18,7 +18,7 @@ namespace Rapadura.Gameplay.Items.Procedural
     /// weight = rarer/stronger, drawn less often).</item>
     /// <item>Each drawn affix rolls a concrete value uniformly within its [min, max] range.</item>
     /// <item>The final display name combines prefix affixes + base name + suffix affixes, e.g.
-    /// "Espada Flamejante da Fúria".</item>
+    /// "Espada Flamejante da Fúria" (pt-BR order, see <see cref="GeneratedItemName"/>).</item>
     /// </list>
     /// An optional seed makes generation fully deterministic (used by EditMode tests and for
     /// reproducible loot debugging); without one, generation uses a randomly-seeded RNG.
@@ -171,20 +171,10 @@ namespace Rapadura.Gameplay.Items.Procedural
                 }
             }
 
-            var builder = new StringBuilder();
-            foreach (string prefix in prefixes)
-            {
-                builder.Append(prefix).Append(' ');
-            }
-
-            builder.Append(baseItem.DisplayName);
-
-            foreach (string suffix in suffixes)
-            {
-                builder.Append(' ').Append(suffix);
-            }
-
-            return builder.ToString();
+            // The stored name is the pt-BR one (raw DisplayName + pt-BR fallback text), so it uses
+            // the pt-BR order. UI composes the name per language from the saved affix ids instead
+            // (GeneratedItemName); this string is the save's legacy/fallback copy.
+            return GeneratedItemName.ComposeParts(baseItem.DisplayName, prefixes, suffixes, LanguageCode.ptBR);
         }
 
         private static string ResolveAffixText(ItemAffixDefinition affix, Func<string, string> localizeName)

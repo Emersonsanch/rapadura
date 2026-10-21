@@ -2,11 +2,11 @@
     <Style src="/Assets/UI/Death/DeathScreenView.uss" />
     <ui:VisualElement name="death-screen-root" class="death-screen-root">
         <ui:VisualElement name="death-screen-panel" class="death-screen-panel">
-            <ui:Label name="death-title" text="Você caiu..." class="death-title" />
-            <ui:Label name="death-message" text="O sertão não perdoa, mas a jornada continua." class="death-message" />
+            <ui:Label name="death-title" text="Você caiu..." class="death-title loc" view-data-key="ui.death.title" />
+            <ui:Label name="death-message" text="O sertão não perdoa, mas a jornada continua." class="death-message loc" view-data-key="ui.death.message" />
             <ui:VisualElement name="death-button-list" class="death-button-list">
-                <ui:Button name="death-continue-button" text="Continuar" focusable="true" class="death-button death-button--primary" />
-                <ui:Button name="death-load-button" text="Carregar jogo" focusable="true" class="death-button" />
+                <ui:Button name="death-continue-button" text="Continuar" focusable="true" class="death-button death-button--primary loc" view-data-key="ui.death.continue" />
+                <ui:Button name="death-load-button" text="Carregar jogo" focusable="true" class="death-button loc" view-data-key="ui.death.load" />
             </ui:VisualElement>
             <ui:Label name="death-countdown" text="" class="death-countdown" />
         </ui:VisualElement>

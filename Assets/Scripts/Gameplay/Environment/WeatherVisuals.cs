@@ -171,7 +171,11 @@ namespace Rapadura.Gameplay.Environment
                 return;
             }
 
-            float clearDensity = _originalFogEnabled ? _originalFogDensity : 0f;
+            // A biome arena (EnvironmentOverrides) can replace the authored clear-weather fog baseline.
+            bool baseline = EnvironmentOverrides.HasFogBaseline;
+            float clearDensity = baseline
+                ? EnvironmentOverrides.FogBaselineDensity
+                : (_originalFogEnabled ? _originalFogDensity : 0f);
             float progress = _weather.TransitionProgress;
 
             WeatherVisualProfile from = GetProfile(_weather.PreviousWeather);
@@ -196,6 +200,12 @@ namespace Rapadura.Gameplay.Environment
                 RenderSettings.fog = true;
                 RenderSettings.fogMode = FogMode.Exponential;
                 RenderSettings.fogDensity = density;
+            }
+            else if (baseline)
+            {
+                RenderSettings.fog = clearDensity > 0f;
+                RenderSettings.fogMode = FogMode.Exponential;
+                RenderSettings.fogDensity = clearDensity;
             }
             else
             {
@@ -371,7 +381,12 @@ namespace Rapadura.Gameplay.Environment
 
         private Color FogColorOf(WeatherVisualProfile profile)
         {
-            return profile == null || profile.Weather == WeatherType.Clear ? _originalFogColor : profile.FogColor;
+            return profile == null || profile.Weather == WeatherType.Clear ? ClearFogColor : profile.FogColor;
+        }
+
+        private Color ClearFogColor
+        {
+            get { return EnvironmentOverrides.HasFogBaseline ? EnvironmentOverrides.FogBaselineColor : _originalFogColor; }
         }
 
         private void BuildProfileLookup()

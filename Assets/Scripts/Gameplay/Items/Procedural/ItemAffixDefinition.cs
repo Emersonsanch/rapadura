@@ -6,7 +6,7 @@ namespace Rapadura.Gameplay.Items.Procedural
     /// <summary>Where in the generated name an affix's text is inserted.</summary>
     public enum AffixSlotKind
     {
-        /// <summary>Rendered before the base item name (e.g. "Flamejante Espada").</summary>
+        /// <summary>An adjective: before the base name in en ("Sharp Sword"), right after it in pt-BR ("Espada Afiada"). See <see cref="GeneratedItemName"/>.</summary>
         Prefix,
 
         /// <summary>Rendered after the base item name (e.g. "Espada da Fúria").</summary>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Items.Procedural;
@@ -69,7 +70,8 @@ namespace Rapadura.UI.Common
     {
         /// <summary>
         /// Builds the tooltip for an item. <paramref name="slot"/> is optional: when given, its
-        /// generated name/affixes/rarity (ProceduralItemGenerator rolls), durability and quantity
+        /// generated name (composed per language by <see cref="GeneratedItemName"/>)/affixes/rarity
+        /// (ProceduralItemGenerator rolls), durability and quantity
         /// are included. <paramref name="resolveAffix"/> defaults to <see cref="AffixDatabase.GetById"/>.
         /// <paramref name="buyPrice"/>/<paramref name="sellPrice"/> add a price line (shop screen).
         /// </summary>
@@ -90,10 +92,11 @@ namespace Rapadura.UI.Common
             ItemRarity rarity = ResolveRarity(item, slot);
             content.Rarity = rarity;
 
-            bool hasGeneratedName = slot != null && slot.HasGeneratedAffixes && !string.IsNullOrEmpty(slot.generatedName);
-            content.Title = hasGeneratedName ? slot.generatedName : item.DisplayName;
+            // Generated items compose "base + affixes" in the current language from the saved affix
+            // ids; the stored pt-BR generatedName is only the fallback (unresolvable ids, old saves).
+            content.Title = GeneratedItemName.Compose(item, slot, ContentText.CurrentManager, resolveAffix);
             content.Subtitle = BuildItemSubtitle(item, rarity, localize);
-            content.Description = item.Description ?? string.Empty;
+            content.Description = item.LocalizedDescription();
 
             List<string> lines = content.StatLines;
 
@@ -182,8 +185,8 @@ namespace Rapadura.UI.Common
                 return content;
             }
 
-            content.Title = skill.DisplayName;
-            content.Description = skill.Description ?? string.Empty;
+            content.Title = skill.LocalizedName();
+            content.Description = skill.LocalizedDescription();
 
             string levelText = currentLevel > 0
                 ? Format(localize, "ui.tooltip.skill_level", currentLevel.ToString(CultureInfo.InvariantCulture), skill.MaxLevel.ToString(CultureInfo.InvariantCulture))

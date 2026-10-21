@@ -1,9 +1,11 @@
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.World;
 using Rapadura.Gameplay.World.Map;
+using Rapadura.UI.Common;
 using Rapadura.UI.Menus;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -32,11 +34,18 @@ namespace Rapadura.UI.Death
     /// Pausing goes through <see cref="GameplayPause"/> like every other modal screen.
     ///
     /// If this component is absent or disabled, CheckpointManager keeps its original instant respawn.
+    ///
+    /// Text goes through <see cref="UiTexts"/> (<c>ui.death.*</c>; static UXML via
+    /// <see cref="UiDocumentLocalizer"/>). The serialized title/message/encounter strings are only used
+    /// when changed from their pt-BR defaults in the Inspector; otherwise the localized key wins.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class DeathScreenController : MonoBehaviour
     {
         private const string PlayerTag = "Player";
+        private const string DefaultTitle = "Você caiu...";
+        private const string DefaultMessage = "O sertão não perdoa, mas a jornada continua.";
+        private const string DefaultEncounterContinueText = "Voltar ao mapa";
 
         [Header("Panels")]
         [Tooltip("Optional: enables the 'Carregar jogo' button. Hidden when not assigned.")]
@@ -52,10 +61,12 @@ namespace Rapadura.UI.Death
         [SerializeField] private bool _controlsTimeScale = true;
 
         [Header("Text")]
-        [SerializeField] private string _title = "Você caiu...";
-        [SerializeField] private string _message = "O sertão não perdoa, mas a jornada continua.";
+        [Tooltip("Custom title. Left at the default, the localized ui.death.title is shown instead.")]
+        [SerializeField] private string _title = DefaultTitle;
+        [Tooltip("Custom message. Left at the default, the localized ui.death.message is shown instead.")]
+        [SerializeField] private string _message = DefaultMessage;
         [Tooltip("'Continuar' label while dying in a world-map encounter (it returns to the map).")]
-        [SerializeField] private string _encounterContinueText = "Voltar ao mapa";
+        [SerializeField] private string _encounterContinueText = DefaultEncounterContinueText;
 
         private UIDocument _uiDocument;
         private VisualElement _root;
@@ -68,7 +79,7 @@ namespace Rapadura.UI.Death
         private DeathScreenFlow _flow;
         private CheckpointManager _checkpointManager;
         private SceneTransitionService _transition;
-        private string _defaultContinueText;
+        private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
         private PlayerInput _pausedPlayerInput;
 
         /// <summary>Last whole second written to the countdown label (-1 = blank) — RefreshWidgets runs every
@@ -87,6 +98,7 @@ namespace Rapadura.UI.Death
         {
             BindElements();
             RegisterCallbacks();
+            _localizer.Attach(_uiDocument.rootVisualElement, OnLanguageChanged);
             ClaimCheckpointManager();
             ClaimEncounterDefeat();
             ApplyVisibility(false);
@@ -99,10 +111,12 @@ namespace Rapadura.UI.Death
             // Awake has run by the time any Start runs, so retrying here is enough.
             ClaimCheckpointManager();
             ClaimEncounterDefeat();
+            _localizer.Refresh();
         }
 
         private void OnDisable()
         {
+            _localizer.Detach();
             UnregisterCallbacks();
 
             if (_flow != null && _flow.IsActive)
@@ -136,11 +150,6 @@ namespace Rapadura.UI.Death
             _countdownLabel = rootVisualElement.Q<Label>("death-countdown");
             _continueButton = rootVisualElement.Q<Button>("death-continue-button");
             _loadButton = rootVisualElement.Q<Button>("death-load-button");
-
-            if (_continueButton != null && _defaultContinueText == null)
-            {
-                _defaultContinueText = _continueButton.text;
-            }
         }
 
         private void RegisterCallbacks()
@@ -207,13 +216,45 @@ namespace Rapadura.UI.Death
                 return;
             }
 
-            if (_titleLabel != null) _titleLabel.text = _title;
-            if (_messageLabel != null) _messageLabel.text = _message;
+            _localizer.Refresh();
+            ApplyTexts();
             if (_loadButton != null) _loadButton.style.display = _saveLoadMenu != null ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_continueButton != null) _continueButton.text = IsInEncounter ? _encounterContinueText : _defaultContinueText;
 
             PauseGameplay();
             ApplyVisibility(true);
+            RefreshWidgets();
+        }
+
+        /// <summary>Title, message and the "Continuar"/"Voltar ao mapa" label for the current language and context.</summary>
+        private void ApplyTexts()
+        {
+            LocalizationManager localization = _localizer.Manager;
+            if (_titleLabel != null) _titleLabel.text = Localized(localization, _title, DefaultTitle, UiTexts.DeathTitle);
+            if (_messageLabel != null) _messageLabel.text = Localized(localization, _message, DefaultMessage, UiTexts.DeathMessage);
+            if (_continueButton != null)
+            {
+                _continueButton.text = IsInEncounter
+                    ? Localized(localization, _encounterContinueText, DefaultEncounterContinueText, UiTexts.DeathReturnToMap)
+                    : UiTexts.Get(localization, UiTexts.DeathContinue);
+            }
+
+            _lastCountdownSecond = int.MinValue;
+        }
+
+        /// <summary>The Inspector override when it was changed from the pt-BR default, else the key's text.</summary>
+        private static string Localized(LocalizationManager localization, string serialized, string defaultText, string key)
+        {
+            return string.IsNullOrEmpty(serialized) || serialized == defaultText ? UiTexts.Get(localization, key) : serialized;
+        }
+
+        private void OnLanguageChanged()
+        {
+            if (_flow == null || !_flow.IsActive)
+            {
+                return;
+            }
+
+            ApplyTexts();
             RefreshWidgets();
         }
 
@@ -272,7 +313,7 @@ namespace Rapadura.UI.Death
                 if (second != _lastCountdownSecond)
                 {
                     _lastCountdownSecond = second;
-                    _countdownLabel.text = second >= 0 ? $"Continuando em {second}s" : string.Empty;
+                    _countdownLabel.text = second >= 0 ? UiTexts.Format(_localizer.Manager, UiTexts.DeathCountdown, second) : string.Empty;
                 }
             }
         }

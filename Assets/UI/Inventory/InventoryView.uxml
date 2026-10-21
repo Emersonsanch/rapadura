@@ -5,19 +5,20 @@
             <ui:VisualElement name="inventory-header" class="inventory-header">
                 <ui:Label name="inventory-title" text="Mochila" class="inventory-title" />
                 <ui:Label name="inventory-weight" text="" class="inventory-weight" />
+                <ui:Button name="inventory-sort-button" text="Organizar" class="inventory-sort-button" focusable="true" />
                 <ui:Button name="inventory-close-button" text="X" class="inventory-close-button" focusable="true" />
             </ui:VisualElement>
             <ui:VisualElement name="inventory-panels" class="inventory-panels">
                 <ui:VisualElement class="inventory-panel inventory-panel--equipment">
                     <ui:Label name="inventory-equipment-title" text="Equipamento" class="inventory-panel-title" />
-                    <ui:ScrollView name="inventory-equipment-scroll" class="inventory-scroll">
+                    <ui:ScrollView name="inventory-equipment-scroll" class="inventory-scroll" touch-scroll-type="Clamped">
                         <ui:VisualElement name="inventory-equipment-list" class="inventory-list" />
                     </ui:ScrollView>
                 </ui:VisualElement>
                 <ui:VisualElement class="inventory-panel">
                     <ui:Label name="inventory-items-title" text="Itens" class="inventory-panel-title" />
-                    <ui:ScrollView name="inventory-item-scroll" class="inventory-scroll">
-                        <ui:VisualElement name="inventory-item-list" class="inventory-list" />
+                    <ui:ScrollView name="inventory-item-scroll" class="inventory-scroll" touch-scroll-type="Clamped">
+                        <ui:VisualElement name="inventory-item-list" class="inventory-list inventory-grid" />
                     </ui:ScrollView>
                 </ui:VisualElement>
             </ui:VisualElement>

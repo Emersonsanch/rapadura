@@ -4,6 +4,7 @@ using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Logging;
 using Rapadura.Gameplay.Enemies;
+using Rapadura.Gameplay.World.Biomes;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Map
@@ -38,6 +39,8 @@ namespace Rapadura.Gameplay.World.Map
         [Header("Scene cleanup")]
         [Tooltip("Objects disabled while an encounter is active (e.g. the sandbox EnemySpawner or pre-placed test enemies).")]
         [SerializeField] private GameObject[] _disableDuringEncounter = new GameObject[0];
+        [Tooltip("Re-dresses the arena for the encounter's biome. Empty = found in the scene, else added to this object at runtime.")]
+        [SerializeField] private BiomeArenaDressing _biomeDressing;
 
         [Header("Resolution")]
         [Tooltip("Player farther than this from the arena center (this transform) counts as fleeing. 0 disables distance fleeing.")]
@@ -108,6 +111,8 @@ namespace Rapadura.Gameplay.World.Map
                 }
             }
 
+            ResolveBiomeDressing().Apply(payload.biome, payload.seed, transform.position);
+
             GameObject playerObject = GameObject.FindGameObjectWithTag(PlayerTag);
             _player = playerObject != null ? playerObject.transform : null;
 
@@ -139,6 +144,20 @@ namespace Rapadura.Gameplay.World.Map
                 GameLogger.Warning(LogCategory, $"Encounter in {payload.biome} resolved to zero enemies; returning to the map.");
                 Resolve(EncounterOutcome.Fled);
             }
+        }
+
+        private BiomeArenaDressing ResolveBiomeDressing()
+        {
+            if (_biomeDressing == null && !TryGetComponent(out _biomeDressing))
+            {
+                _biomeDressing = FindAnyObjectByType<BiomeArenaDressing>();
+                if (_biomeDressing == null)
+                {
+                    _biomeDressing = gameObject.AddComponent<BiomeArenaDressing>();
+                }
+            }
+
+            return _biomeDressing;
         }
 
         private void SpawnEnemy(EnemyDefinition definition, int index)

@@ -11,7 +11,8 @@ namespace Rapadura.UI.Menus
     /// Drives the Créditos screen, opened from <see cref="MainMenuController"/>. Same UI Toolkit
     /// pattern as SettingsMenuController: one <see cref="UIDocument"/> (CreditsView.uxml, which
     /// pulls in CreditsView.uss via &lt;Style&gt;), elements resolved once, hidden on enable until
-    /// <see cref="Show"/> is called. The text itself comes from <see cref="CreditsContent"/>.
+    /// <see cref="Show"/> is called. The text itself comes from <see cref="CreditsContent"/>
+    /// (section headings localized via <c>ui.credits.section.*</c>, rebuilt on a language switch).
     ///
     /// Closes on the "Voltar" button or the UI cancel action (Esc / gamepad B / Android back),
     /// then raises <see cref="Closed"/> so the main menu can restore focus.
@@ -41,7 +42,7 @@ namespace Rapadura.UI.Menus
         {
             BindElements();
             RegisterCallbacks();
-            _localizer.Attach(_uiDocument.rootVisualElement);
+            _localizer.Attach(_uiDocument.rootVisualElement, BuildContent);
             BuildContent();
             SetVisible(false);
         }
@@ -95,7 +96,7 @@ namespace Rapadura.UI.Menus
                 var sectionElement = new VisualElement();
                 sectionElement.AddToClassList("credits-section");
 
-                var title = new Label(section.Title);
+                var title = new Label(section.GetTitle(_localizer.Manager));
                 title.AddToClassList("credits-section-title");
                 sectionElement.Add(title);
 
@@ -124,6 +125,7 @@ namespace Rapadura.UI.Menus
         public void Show()
         {
             _localizer.Refresh();
+            BuildContent();
             SetVisible(true);
             if (_scroll != null) _scroll.scrollOffset = Vector2.zero;
             _backButton?.Focus();

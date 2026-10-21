@@ -1,15 +1,19 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Core.Localization;
 using Rapadura.Core.Logging;
 using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Characters;
+using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Flow;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
 using Rapadura.Gameplay.World.Map;
 using Rapadura.Save;
+using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -39,6 +43,13 @@ namespace Rapadura.UI.CharacterSelect
     /// never shows during an encounter. Pausing goes through <see cref="GameplayPause"/> (the old
     /// direct Time.timeScale = 0 was undone by PauseMenuController.OnEnable, letting enemies attack
     /// behind this screen).
+    ///
+    /// Screen text (title, "Confirmar", prompt, "Continuar com &lt;herói&gt;") goes through
+    /// <see cref="UiTexts"/> (<c>ui.character_select.*</c>, static UXML via <see cref="UiDocumentLocalizer"/>);
+    /// hero names, classes, roles and lore come from <see cref="ContentText"/> (<c>character.*</c>).
+    /// A language switch while the screen is open re-labels the roster buttons and the highlighted
+    /// hero's name/class — role/lore in place (no rebuild, so selection, focus and the pause are
+    /// untouched); the pure text rules are the public static <c>Build*Text</c> helpers.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class CharacterSelectController : MonoBehaviour
@@ -72,8 +83,11 @@ namespace Rapadura.UI.CharacterSelect
         private Button _confirmButton;
         private Button _continueButton;
 
+        private readonly Dictionary<CharacterId, Button> _rosterButtons = new Dictionary<CharacterId, Button>();
         private CharacterId? _hovered;
+        private CharacterId? _continueHero;
         private int _continueSlot = NoContinueSlot;
+        private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
         private bool _isBound;
         private bool _deactivatePending;
 
@@ -135,11 +149,16 @@ namespace Rapadura.UI.CharacterSelect
             _isShowing = true;
             GameplayPause.Acquire(this);
             BindElementsIfNeeded();
+            _localizer.Attach(_root, OnLanguageChanged);
+            // Not just the prompt: the roster is built once, so a language switched while this
+            // screen was hidden (localizer detached) would leave stale hero labels.
+            OnLanguageChanged();
             RefreshContinueOption();
         }
 
         private void OnDisable()
         {
+            _localizer.Detach();
             _isShowing = false;
             GameplayPause.Release(this);
         }
@@ -196,9 +215,10 @@ namespace Rapadura.UI.CharacterSelect
 
                 // Belt-and-suspenders against flexbox collapsing this element to near-zero height
                 // (observed with just the USS class alone) — force the fixed square size inline.
-                _previewImage.style.width = 220;
-                _previewImage.style.height = 220;
-                _previewImage.style.minHeight = 220;
+                // Keep in sync with .character-select__detail-preview (260px, left column of the detail panel).
+                _previewImage.style.width = 260;
+                _previewImage.style.height = 260;
+                _previewImage.style.minHeight = 260;
                 _previewImage.style.flexShrink = 0;
                 _previewImage.style.flexGrow = 0;
             }
@@ -227,23 +247,88 @@ namespace Rapadura.UI.CharacterSelect
             }
 
             _rosterContainer.Clear();
+            _rosterButtons.Clear();
 
             foreach (PlayableCharacter character in CharacterRegistry.GetAll())
             {
-                var button = new Button { text = character.DisplayName, name = $"character-{character.Id}" };
+                var button = new Button { text = BuildRosterButtonText(character, Manager), name = $"character-{character.Id}" };
                 button.AddToClassList("character-select__roster-button");
                 button.clicked += () => ShowDetail(character);
                 _rosterContainer.Add(button);
+                _rosterButtons[character.Id] = button;
             }
+        }
+
+        /// <summary>The localizer's manager (resolved from the ServiceLocator on attach), or the live one; null means pt-BR asset text.</summary>
+        private LocalizationManager Manager => _localizer.Manager ?? ContentText.CurrentManager;
+
+        /// <summary>Roster button label: the hero's name in the current language.</summary>
+        public static string BuildRosterButtonText(PlayableCharacter character, LocalizationManager manager) =>
+            character == null ? string.Empty : character.LocalizedName(manager);
+
+        /// <summary>Detail line under the name: "Caçadora — DPS à distância" / "Huntress — Ranged DPS".</summary>
+        public static string BuildClassRoleText(PlayableCharacter character, LocalizationManager manager) =>
+            character == null ? string.Empty : $"{character.LocalizedClassName(manager)} — {character.LocalizedRole(manager)}";
+
+        /// <summary>Lore area: the highlighted hero's lore, or the "pick a hero" prompt while none is highlighted.</summary>
+        public static string BuildLoreText(PlayableCharacter highlighted, LocalizationManager manager) =>
+            highlighted != null ? highlighted.LocalizedLore(manager) : UiTexts.Get(manager, UiTexts.CharacterSelectPrompt);
+
+        private void RefreshRosterTexts()
+        {
+            foreach (KeyValuePair<CharacterId, Button> pair in _rosterButtons)
+            {
+                pair.Value.text = BuildRosterButtonText(CharacterRegistry.Get(pair.Key), Manager);
+            }
+        }
+
+        /// <summary>Name, class — role and lore of <paramref name="character"/>; text only (no preview/confirm side effects).</summary>
+        private void ApplyDetailTexts(PlayableCharacter character)
+        {
+            if (_nameLabel != null) _nameLabel.text = BuildRosterButtonText(character, Manager);
+            if (_classRoleLabel != null) _classRoleLabel.text = BuildClassRoleText(character, Manager);
+            if (_loreLabel != null) _loreLabel.text = BuildLoreText(character, Manager);
+        }
+
+        /// <summary>The "pick a hero" hint in the lore area, only while no hero is highlighted (lore is content, not a key).</summary>
+        private void ApplyPrompt()
+        {
+            if (_loreLabel != null && _hovered == null)
+            {
+                _loreLabel.text = BuildLoreText(null, Manager);
+            }
+        }
+
+        private void ApplyContinueText()
+        {
+            if (_continueButton != null && _continueHero.HasValue)
+            {
+                _continueButton.text = UiTexts.Format(_localizer.Manager, UiTexts.CharacterSelectContinueWith,
+                    CharacterRegistry.Get(_continueHero.Value).LocalizedName(Manager));
+            }
+        }
+
+        private void OnLanguageChanged()
+        {
+            RefreshRosterTexts();
+
+            if (_hovered is CharacterId hovered)
+            {
+                ApplyDetailTexts(CharacterRegistry.Get(hovered));
+            }
+            else
+            {
+                ApplyPrompt();
+            }
+
+            ApplyContinueText();
         }
 
         private void ShowDetail(PlayableCharacter character)
         {
             _hovered = character.Id;
 
-            if (_nameLabel != null) _nameLabel.text = character.DisplayName;
-            if (_classRoleLabel != null) _classRoleLabel.text = $"{character.ClassName} — {character.Role}";
-            if (_loreLabel != null) _loreLabel.text = character.Lore;
+            ApplyDetailTexts(character);
 
             _previewController?.ShowCharacter(character.Id);
 
@@ -394,12 +479,9 @@ namespace Rapadura.UI.CharacterSelect
                 }
             }
 
+            _continueHero = savedHero;
             _continueButton.style.display = savedHero.HasValue ? DisplayStyle.Flex : DisplayStyle.None;
-
-            if (savedHero.HasValue)
-            {
-                _continueButton.text = $"Continuar com {CharacterRegistry.Get(savedHero.Value).DisplayName}";
-            }
+            ApplyContinueText();
         }
 
         /// <summary>

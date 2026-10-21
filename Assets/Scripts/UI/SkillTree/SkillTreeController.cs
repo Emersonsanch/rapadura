@@ -4,6 +4,7 @@ using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Characters;
+using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
 using Rapadura.UI.Common;
@@ -60,6 +61,7 @@ namespace Rapadura.UI.SkillTree
         private SkillTreeNodeData _selectedNode;
         private readonly Dictionary<string, VisualElement> _nodeElementsBySkillId = new Dictionary<string, VisualElement>();
         private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
+        private FocusNavigator _focusNavigator;
 
         private void Awake()
         {
@@ -73,6 +75,9 @@ namespace Rapadura.UI.SkillTree
             BindElements();
             RegisterCallbacks();
             _localizer.Attach(_uiDocument.rootVisualElement, RefreshAll);
+            // Gamepad/keyboard: D-pad between skill nodes (spatial, follows the tree layout), A selects /
+            // learns, B closes - see FocusNavigator.
+            _focusNavigator = FocusNavigator.Attach(_root, () => IsVisible, Hide, () => _closeButton);
 
             SkillTreeDefinition defaultTree = ResolveDefaultTree();
 
@@ -86,6 +91,8 @@ namespace Rapadura.UI.SkillTree
 
         private void OnDisable()
         {
+            _focusNavigator?.Detach();
+            _focusNavigator = null;
             _localizer.Detach();
             UnregisterCallbacks();
             GameplayPause.Release(this);
@@ -180,11 +187,13 @@ namespace Rapadura.UI.SkillTree
             GameplayPause.Acquire(this);
             _localizer.Refresh();
             RefreshAll();
+            _focusNavigator?.FocusInitial();
         }
 
         public void Hide()
         {
             _tooltip?.Hide();
+            _focusNavigator?.ReleaseFocus();
             _root.style.display = DisplayStyle.None;
             GameplayPause.Release(this);
         }
@@ -227,8 +236,8 @@ namespace Rapadura.UI.SkillTree
 
         private void UpdateHeader()
         {
-            _treeTitleLabel.text = _activeTree.DisplayName;
-            _treeDescriptionLabel.text = _activeTree.Description;
+            _treeTitleLabel.text = _activeTree.LocalizedName();
+            _treeDescriptionLabel.text = _activeTree.LocalizedDescription();
             int points = _skillManager != null ? _skillManager.AvailableSkillPoints : 0;
             _skillPointsLabel.text = UiTexts.Format(Localization, UiTexts.SkillTreePoints, points);
         }
@@ -408,8 +417,8 @@ namespace Rapadura.UI.SkillTree
             SkillDefinition skill = _selectedNode.skill;
             SkillInstance instance = _skillManager != null ? _skillManager.GetLearnedSkill(skill.SkillId) : null;
 
-            _detailNameLabel.text = skill.DisplayName;
-            _detailDescriptionLabel.text = skill.Description;
+            _detailNameLabel.text = skill.LocalizedName();
+            _detailDescriptionLabel.text = skill.LocalizedDescription();
             _detailStatsLabel.text = UiTexts.Format(Localization, UiTexts.SkillTreeStats, skill.ManaCost, skill.EnergyCost, skill.CooldownSeconds);
 
             _detailActionButton.style.display = DisplayStyle.Flex;

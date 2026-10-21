@@ -8,8 +8,11 @@ using NUnit.Framework;
 using Rapadura.Core.Accessibility;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Achievements;
+using Rapadura.Gameplay.Characters;
+using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Dialogue;
+using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Items.Procedural;
 using Rapadura.Gameplay.Quests;
@@ -31,7 +34,7 @@ namespace Rapadura.Tests
     /// Coverage audit for every localized text source (see Docs/Localization.md): the core
     /// <see cref="LocalizationManager.DefaultEntries"/> table plus the runtime-merged *Texts helpers
     /// (QuestLogTexts, QuestGiverTexts, DailyQuestTexts, AchievementTexts, TooltipLocalization,
-    /// SettingsMenuTexts, UiTexts). Checks that every key referenced by ScriptableObject assets or built in
+    /// SettingsMenuTexts, UiTexts, ReturnToTitleTexts, ContentTexts). Checks that every key referenced by ScriptableObject assets or built in
     /// code exists with both en and pt-BR text, that no key is defined twice with different text,
     /// that helpers never shadow a core key, and that {0}-style placeholders match per language.
     /// Also covers every <c>class="loc"</c> + <c>view-data-key</c> marker in Assets/UI/**/*.uxml
@@ -54,6 +57,8 @@ namespace Rapadura.Tests
             yield return Source(nameof(TooltipLocalization), TooltipLocalization.Entries);
             yield return Source(nameof(SettingsMenuTexts), SettingsMenuTexts.Entries);
             yield return Source(nameof(UiTexts), UiTexts.Entries);
+            yield return Source(nameof(ReturnToTitleTexts), ReturnToTitleTexts.Entries);
+            yield return Source(nameof(ContentTexts), ContentTexts.Entries);
         }
 
         private static KeyValuePair<string, IReadOnlyList<LocalizationEntry>> Source(string name, IReadOnlyList<LocalizationEntry> entries)
@@ -238,6 +243,8 @@ namespace Rapadura.Tests
             TooltipLocalization.EnsureRegistered(manager);
             SettingsMenuTexts.EnsureRegistered(manager);
             UiTexts.EnsureRegistered(manager);
+            ReturnToTitleTexts.EnsureRegistered(manager);
+            ContentTexts.EnsureRegistered(manager);
 
             foreach (KeyValuePair<string, string> pair in external)
             {
@@ -253,6 +260,130 @@ namespace Rapadura.Tests
             foreach ((string source, LocalizationEntry entry) in AllEntries())
             {
                 Assert.IsTrue(manager.HasKey(entry.Key), $"{source}: '{entry.Key}' was not merged.");
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // ScriptableObject content (ContentText / ContentTexts)
+        // ------------------------------------------------------------------
+
+        private const string ResourcesRoot = "Assets/Resources/";
+
+        /// <summary>Every (key, asset pt-BR text, origin) the UI resolves through <see cref="ContentText"/>.</summary>
+        private static IEnumerable<(string Key, string PtBR, string Origin)> ContentReferences()
+        {
+            foreach (ItemDefinition item in ResourceAssets<ItemDefinition>("Items"))
+            {
+                yield return (ContentText.ItemNameKey(item.ItemId), item.DisplayName, Origin(item));
+                if (!string.IsNullOrEmpty(item.Description)) yield return (ContentText.ItemDescriptionKey(item.ItemId), item.Description, Origin(item));
+            }
+
+            foreach (SkillDefinition skill in ResourceAssets<SkillDefinition>("Skills"))
+            {
+                yield return (ContentText.SkillNameKey(skill.SkillId), skill.DisplayName, Origin(skill));
+                if (!string.IsNullOrEmpty(skill.Description)) yield return (ContentText.SkillDescriptionKey(skill.SkillId), skill.Description, Origin(skill));
+            }
+
+            foreach (EnemyDefinition enemy in ResourceAssets<EnemyDefinition>("Enemies"))
+            {
+                yield return (ContentText.EnemyNameKey(enemy.name), enemy.EnemyName, Origin(enemy));
+            }
+
+            foreach (RecipeDefinition recipe in ResourceAssets<RecipeDefinition>("Recipes"))
+            {
+                yield return (ContentText.RecipeNameKey(recipe.RecipeId), recipe.DisplayName, Origin(recipe));
+                if (!string.IsNullOrEmpty(recipe.Description)) yield return (ContentText.RecipeDescriptionKey(recipe.RecipeId), recipe.Description, Origin(recipe));
+            }
+
+            foreach (ComboDefinition combo in ResourceAssets<ComboDefinition>("Combos"))
+            {
+                yield return (ContentText.ComboNameKey(combo.ComboId), combo.DisplayName, Origin(combo));
+                if (!string.IsNullOrEmpty(combo.Description)) yield return (ContentText.ComboDescriptionKey(combo.ComboId), combo.Description, Origin(combo));
+            }
+
+            foreach (SkillTreeDefinition tree in ResourceAssets<SkillTreeDefinition>("SkillTrees"))
+            {
+                yield return (ContentText.TreeNameKey(tree.TreeId), tree.DisplayName, Origin(tree));
+                if (!string.IsNullOrEmpty(tree.Description)) yield return (ContentText.TreeDescriptionKey(tree.TreeId), tree.Description, Origin(tree));
+            }
+
+            foreach (PlayableCharacter character in CharacterRegistry.GetAll())
+            {
+                string origin = $"Gameplay/Characters/{character.Id}.cs";
+                yield return (ContentText.CharacterNameKey(character.Id), character.DisplayName, origin);
+                yield return (ContentText.CharacterClassKey(character.Id), character.ClassName, origin);
+                yield return (ContentText.CharacterRoleKey(character.Id), character.Role, origin);
+                yield return (ContentText.CharacterLoreKey(character.Id), character.Lore, origin);
+            }
+        }
+
+        private static IEnumerable<T> ResourceAssets<T>(string folder) where T : UnityEngine.Object
+        {
+            return LoadAssets<T>().Where(a => Origin(a).StartsWith(ResourcesRoot + folder + "/", StringComparison.Ordinal));
+        }
+
+        [Test]
+        public void ContentAssets_AllHaveEnAndPtBR()
+        {
+            List<(string Key, string PtBR, string Origin)> references = ContentReferences().ToList();
+            Assert.Greater(references.Count, 100, "Content assets were not found under Assets/Resources.");
+            AssertKeysResolve(references.Select(r => (r.Key, r.Origin)));
+        }
+
+        [Test]
+        public void ContentTexts_PtBRMatchesAssetText()
+        {
+            Dictionary<string, LocalizationEntry> table = ContentTexts.Entries.ToDictionary(e => e.Key);
+            var problems = new List<string>();
+            foreach ((string key, string ptBR, string origin) in ContentReferences())
+            {
+                if (table.TryGetValue(key, out LocalizationEntry entry) && entry.PtBR != ptBR)
+                {
+                    problems.Add($"{key} ({origin}):\n  asset:        {ptBR}\n  ContentTexts: {entry.PtBR}");
+                }
+            }
+
+            CollectionAssert.IsEmpty(problems, "ContentTexts pt-BR drifted from the asset text (update both together):\n" + string.Join("\n", problems));
+        }
+
+        [Test]
+        public void ContentTexts_HasNoOrphanKeys()
+        {
+            var used = new HashSet<string>(ContentReferences().Select(r => r.Key));
+            List<string> orphans = ContentTexts.Entries.Select(e => e.Key).Where(k => !used.Contains(k)).ToList();
+            CollectionAssert.IsEmpty(orphans, "ContentTexts keys with no matching asset (renamed or deleted?):\n" + string.Join("\n", orphans));
+        }
+
+        [Test]
+        public void ContentText_ResolvesByLanguageWithAssetFallback()
+        {
+            var manager = new LocalizationManager();
+            manager.Initialize();
+            ItemDefinition sword = ResourceAssets<ItemDefinition>("Items").Single(i => i.ItemId == "item_iron_sword");
+            PlayableCharacter icaro = CharacterRegistry.Get(CharacterId.Icaro);
+
+            manager.SetLanguage(LanguageCode.en);
+            Assert.AreEqual("Iron Sword", sword.LocalizedName(manager));
+            Assert.AreEqual("Huntress", CharacterRegistry.Get(CharacterId.Maithe).LocalizedClassName(manager));
+            StringAssert.StartsWith("At 11, Ícaro", icaro.LocalizedLore(manager));
+
+            manager.SetLanguage(LanguageCode.ptBR);
+            Assert.AreEqual(sword.DisplayName, sword.LocalizedName(manager));
+            Assert.AreEqual(icaro.Lore, icaro.LocalizedLore(manager));
+
+            Assert.AreEqual(sword.DisplayName, sword.LocalizedName(null), "no manager -> asset pt-BR text");
+
+            // An asset without an entry keeps showing its own text in any language.
+            var unknown = ScriptableObject.CreateInstance<ItemDefinition>();
+            try
+            {
+                manager.SetLanguage(LanguageCode.en);
+                Assert.AreEqual(unknown.DisplayName, unknown.LocalizedName(manager));
+                Assert.IsFalse(manager.HasKey(ContentText.ItemNameKey(unknown.ItemId)));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(unknown);
             }
         }
 
@@ -468,6 +599,8 @@ namespace Rapadura.Tests
                 "Assets/UI/Menus/CreditsView.uxml",
                 "Assets/UI/Crafting/CraftingView.uxml",
                 "Assets/UI/SkillTree/SkillTreeView.uxml",
+                "Assets/UI/Death/DeathScreenView.uxml",
+                "Assets/UI/CharacterSelect/CharacterSelectView.uxml",
             };
 
             var marked = new HashSet<string>(UxmlElements().Where(e => HasLocClass(e.Classes)).Select(e => e.Path));
@@ -482,6 +615,67 @@ namespace Rapadura.Tests
             {
                 StringAssert.DoesNotContain(literal, shop);
             }
+        }
+
+        [Test]
+        public void UxmlLocMarkers_UseTheExpectedKeys()
+        {
+            var keysByPath = UxmlElements()
+                .Where(e => HasLocClass(e.Classes))
+                .GroupBy(e => e.Path)
+                .ToDictionary(g => g.Key, g => new HashSet<string>(g.Select(e => e.Key)));
+
+            // The title screen has both "Novo jogo" and "Continuar": the first button must not reuse the
+            // core ui.menu.start ("Iniciar Jogo"), which stays as it is.
+            CollectionAssert.IsSubsetOf(new[] { UiTexts.MenuNewGame, UiTexts.MenuContinue }, keysByPath["Assets/UI/Menus/MainMenuView.uxml"]);
+            CollectionAssert.DoesNotContain(keysByPath["Assets/UI/Menus/MainMenuView.uxml"], UiTexts.MenuStart);
+            StringAssert.Contains("text=\"Novo jogo\"", File.ReadAllText("Assets/UI/Menus/MainMenuView.uxml"));
+            Assert.AreEqual("Iniciar Jogo", LocalizationManager.DefaultEntries.All.Single(e => e.Key == UiTexts.MenuStart).PtBR);
+
+            CollectionAssert.IsSubsetOf(
+                new[] { UiTexts.DeathTitle, UiTexts.DeathMessage, UiTexts.DeathContinue, UiTexts.DeathLoad },
+                keysByPath["Assets/UI/Death/DeathScreenView.uxml"]);
+            CollectionAssert.IsSubsetOf(
+                new[] { UiTexts.CharacterSelectTitle, UiTexts.CharacterSelectConfirm },
+                keysByPath["Assets/UI/CharacterSelect/CharacterSelectView.uxml"]);
+        }
+
+        [Test]
+        public void ConvertedControllers_HaveNoHardcodedScreenText()
+        {
+            var forbidden = new Dictionary<string, string[]>
+            {
+                { "Assets/Scripts/UI/Death/DeathScreenController.cs", new[] { "$\"Continuando em" } },
+                { "Assets/Scripts/UI/CharacterSelect/CharacterSelectController.cs", new[] { "$\"Continuar com" } },
+            };
+
+            // Interpolated literals only: doc comments may still quote the pt-BR text.
+            foreach (KeyValuePair<string, string[]> file in forbidden)
+            {
+                string source = File.ReadAllText(file.Key);
+                foreach (string literal in file.Value)
+                {
+                    StringAssert.DoesNotContain(literal, source, $"{file.Key} should build this text from UiTexts.");
+                }
+            }
+        }
+
+        [Test]
+        public void CreditsSectionTitles_AreKeyedWithPtBRFallback()
+        {
+            var manager = new LocalizationManager();
+            manager.Initialize();
+            manager.SetLanguage(LanguageCode.en);
+
+            foreach (CreditsSection section in CreditsContent.Sections)
+            {
+                Assert.IsFalse(string.IsNullOrEmpty(section.TitleKey), $"Credits section \"{section.Title}\" has no TitleKey.");
+                Assert.AreEqual(section.Title, UiTexts.GetFallback(section.TitleKey), $"{section.TitleKey}: pt-BR text must match the authored heading.");
+                Assert.AreEqual(section.Title, section.GetTitle(null), "no manager -> pt-BR heading");
+                Assert.AreNotEqual(section.Title, section.GetTitle(manager), $"{section.TitleKey} is not translated to English.");
+            }
+
+            Assert.AreEqual("Team", CreditsContent.TeamSection.GetTitle(manager));
         }
 
         [Test]
@@ -531,6 +725,10 @@ namespace Rapadura.Tests
             Assert.AreEqual("Comprar", UiTexts.Get(null, UiTexts.ShopBuy));
             Assert.AreEqual("Pausado", UiTexts.Get(null, UiTexts.PauseTitle), "core ui.* keys also fall back to pt-BR");
             Assert.AreEqual("Nv. 3", UiTexts.Format(null, UiTexts.HudLevel, 3));
+            Assert.AreEqual("Novo jogo", UiTexts.Get(null, UiTexts.MenuNewGame));
+            Assert.AreEqual("Continuando em 5s", UiTexts.Format(null, UiTexts.DeathCountdown, 5));
+            Assert.AreEqual("Voltar ao mapa", UiTexts.Get(null, UiTexts.DeathReturnToMap));
+            Assert.AreEqual("Continuar com Maithe", UiTexts.Format(null, UiTexts.CharacterSelectContinueWith, "Maithe"));
             Assert.AreEqual("Português (Brasil)", SettingsMenuTexts.LanguageName(null, LanguageCode.ptBR));
             Assert.AreEqual("English", SettingsMenuTexts.LanguageName(null, LanguageCode.en));
 
@@ -551,6 +749,9 @@ namespace Rapadura.Tests
             Assert.AreEqual("Overwrite", SaveSlotPresenter.GetPrimaryActionLabel(isSaveMode: true, slotExists: true, localization: manager));
             Assert.AreEqual("Requires: Forge", CraftingRecipePresenter.FormatStationRequirement(CraftingStationType.Forge, manager));
             Assert.AreEqual("Requer: Forja", CraftingRecipePresenter.FormatStationRequirement(CraftingStationType.Forge));
+            Assert.AreEqual("New game", UiTexts.Get(manager, UiTexts.MenuNewGame));
+            Assert.AreEqual("Continuing in 5s", UiTexts.Format(manager, UiTexts.DeathCountdown, 5));
+            Assert.AreEqual("Continue as Maithe", UiTexts.Format(manager, UiTexts.CharacterSelectContinueWith, "Maithe"));
         }
 
         // ------------------------------------------------------------------

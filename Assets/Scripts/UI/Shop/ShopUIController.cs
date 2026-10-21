@@ -3,6 +3,7 @@ using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
+using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Shop;
@@ -41,6 +42,7 @@ namespace Rapadura.UI.Shop
         private readonly List<VisualElement> _spawnedBuyRows = new List<VisualElement>();
         private readonly List<VisualElement> _spawnedSellRows = new List<VisualElement>();
         private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
+        private FocusNavigator _focusNavigator;
 
         private void Awake()
         {
@@ -55,11 +57,15 @@ namespace Rapadura.UI.Shop
             ResolveShopManager();
             RegisterCallbacks();
             _localizer.Attach(_uiDocument.rootVisualElement, OnLanguageChanged);
+            // Gamepad/keyboard: D-pad between rows, A buys/sells, B closes - see FocusNavigator.
+            _focusNavigator = FocusNavigator.Attach(_root, () => IsOpen, Close, () => _closeButton);
             Hide();
         }
 
         private void OnDisable()
         {
+            _focusNavigator?.Detach();
+            _focusNavigator = null;
             _localizer.Detach();
             UnregisterCallbacks();
             GameplayPause.Release(this);
@@ -104,6 +110,7 @@ namespace Rapadura.UI.Shop
             EventBus.Subscribe<ItemPurchasedEvent>(OnTransaction);
             EventBus.Subscribe<ItemSoldEvent>(OnTransaction);
             EventBus.Subscribe<ShopClosedEvent>(OnShopClosed);
+            EventBus.Subscribe<ShopRestockedEvent>(OnRestocked);
             EventBus.Subscribe<InventoryChangedEvent>(OnInventoryChanged);
 
             if (_closeButton != null)
@@ -118,6 +125,7 @@ namespace Rapadura.UI.Shop
             EventBus.Unsubscribe<ItemPurchasedEvent>(OnTransaction);
             EventBus.Unsubscribe<ItemSoldEvent>(OnTransaction);
             EventBus.Unsubscribe<ShopClosedEvent>(OnShopClosed);
+            EventBus.Unsubscribe<ShopRestockedEvent>(OnRestocked);
             EventBus.Unsubscribe<InventoryChangedEvent>(OnInventoryChanged);
 
             if (_closeButton != null)
@@ -161,6 +169,14 @@ namespace Rapadura.UI.Shop
             }
         }
 
+        private void OnRestocked(ShopRestockedEvent evt)
+        {
+            if (_shopManager != null && _shopManager.IsOpen)
+            {
+                RefreshAll();
+            }
+        }
+
         private void OnShopClosed(ShopClosedEvent evt)
         {
             Hide();
@@ -192,6 +208,7 @@ namespace Rapadura.UI.Shop
 
             RebuildBuyRows(shop, buyer);
             RebuildSellRows(shop, buyer);
+            _focusNavigator?.RestoreFocusAfterRebuild();
         }
 
         private void RebuildBuyRows(ShopDefinition shop, InventoryManager buyer)
@@ -215,12 +232,13 @@ namespace Rapadura.UI.Shop
                 }
 
                 int catalogIndex = i;
-                string stockText = entry.HasInfiniteStock ? "∞" : entry.Stock.ToString();
-                string label = UiTexts.Format(_localizer.Manager, UiTexts.ShopBuyRow, entry.Item.DisplayName, entry.Price, stockText);
+                int stock = _shopManager.GetStock(shop, entry);
+                string stockText = entry.HasInfiniteStock ? "∞" : stock.ToString();
+                string label = UiTexts.Format(_localizer.Manager, UiTexts.ShopBuyRow, entry.Item.LocalizedName(_localizer.Manager), entry.Price, stockText);
 
                 var row = new Button(() => OnBuyClicked(catalogIndex)) { text = label };
                 row.AddToClassList("shop-row-button");
-                row.SetEnabled(entry.HasStockFor(1) && buyer.GetTotalCount(shop.CurrencyItemId) >= entry.Price);
+                row.SetEnabled(_shopManager.HasStockFor(shop, entry, 1) && buyer.GetTotalCount(shop.CurrencyItemId) >= entry.Price);
 
                 ItemDefinition tooltipItem = entry.Item;
                 int tooltipPrice = entry.Price;
@@ -261,7 +279,7 @@ namespace Rapadura.UI.Shop
 
                 int slotIndex = i;
                 int payout = ShopManager.CalculateSellBackPayout(item.Value, 1, shop.SellBackRate);
-                string label = UiTexts.Format(_localizer.Manager, UiTexts.ShopSellRow, item.DisplayName, slot.quantity, payout);
+                string label = UiTexts.Format(_localizer.Manager, UiTexts.ShopSellRow, item.LocalizedName(_localizer.Manager), slot.quantity, payout);
 
                 var row = new Button(() => OnSellClicked(slotIndex)) { text = label };
                 row.AddToClassList("shop-row-button");
@@ -384,10 +402,17 @@ namespace Rapadura.UI.Shop
             GameplayPause.Acquire(this);
 
             _isShown = _root != null;
+
+            if (_isShown)
+            {
+                _focusNavigator?.FocusInitial();
+            }
         }
 
         private void Hide()
         {
+            _focusNavigator?.ReleaseFocus();
+
             if (_root != null)
             {
                 _root.style.display = DisplayStyle.None;

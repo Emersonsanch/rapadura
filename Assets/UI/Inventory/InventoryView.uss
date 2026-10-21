@@ -7,6 +7,9 @@
     justify-content: center;
     align-items: center;
     display: none;
+    /* Modal backdrop: dims the world + HUD behind the window (the HUD's top-right buttons otherwise
+       read as part of the window's header on 20:9 phones). */
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .inventory-window {
@@ -15,7 +18,9 @@
     max-width: 1000px;
     height: 75%;
     min-height: 380px;
-    background-color: rgba(12, 14, 20, 0.92);
+    max-height: 92%;
+    /* 0.97: in the project's linear colour space 0.92 let the grass show through strongly. */
+    background-color: rgba(12, 14, 20, 0.97);
     border-radius: 10px;
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.14);
@@ -54,6 +59,29 @@
 
 .inventory-close-button:hover {
     background-color: rgba(255, 80, 80, 0.35);
+}
+
+.inventory-sort-button {
+    height: 44px;
+    margin-right: 12px;
+    padding: 0 14px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    color: rgb(235, 235, 240);
+}
+
+.inventory-sort-button:hover {
+    background-color: rgba(255, 210, 90, 0.25);
+}
+
+/* Gamepad/keyboard focus (FocusNavigator): visible on every focusable control of the window. */
+.inventory-close-button:focus,
+.inventory-sort-button:focus,
+.inventory-row-button:focus,
+.inventory-slot:focus {
+    border-color: rgb(255, 210, 90);
 }
 
 .inventory-panels {
@@ -129,6 +157,95 @@
 
 .inventory-row--legendary {
     border-left-color: rgb(242, 153, 26);
+}
+
+/* Backpack grid: one tile per slot (empty ones too, as drop targets). 72px keeps touch targets large. */
+.inventory-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.inventory-slot {
+    width: 72px;
+    height: 72px;
+    margin: 3px;
+    padding: 4px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-width: 1px;
+    border-bottom-width: 4px;
+    border-color: rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    color: rgb(235, 235, 240);
+    font-size: 11px;
+    white-space: normal;
+    overflow: hidden;
+    -unity-text-align: middle-center;
+}
+
+.inventory-slot:hover {
+    background-color: rgba(255, 255, 255, 0.16);
+}
+
+.inventory-slot--empty {
+    background-color: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+    border-bottom-width: 1px;
+}
+
+/* Rarity accent on the bottom border of grid tiles (left border on list rows). */
+.inventory-slot.inventory-row--common {
+    border-bottom-color: rgb(199, 199, 199);
+}
+
+.inventory-slot.inventory-row--uncommon {
+    border-bottom-color: rgb(51, 204, 64);
+}
+
+.inventory-slot.inventory-row--rare {
+    border-bottom-color: rgb(51, 115, 242);
+}
+
+.inventory-slot.inventory-row--epic {
+    border-bottom-color: rgb(166, 64, 230);
+}
+
+.inventory-slot.inventory-row--legendary {
+    border-bottom-color: rgb(242, 153, 26);
+}
+
+.inventory-slot-quantity {
+    position: absolute;
+    right: 4px;
+    bottom: 2px;
+    font-size: 11px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+}
+
+/* Drag & drop feedback. */
+.inventory-slot--drag-source {
+    opacity: 0.4;
+}
+
+.inventory-drop--valid {
+    background-color: rgba(90, 200, 110, 0.28);
+    border-color: rgb(90, 200, 110);
+}
+
+.inventory-drop--invalid {
+    background-color: rgba(220, 70, 70, 0.22);
+    border-color: rgb(220, 70, 70);
+}
+
+.inventory-drag-ghost {
+    position: absolute;
+    padding: 8px 12px;
+    background-color: rgba(30, 32, 42, 0.95);
+    border-width: 1px;
+    border-color: rgb(255, 210, 90);
+    border-radius: 6px;
+    color: rgb(255, 255, 255);
+    font-size: 13px;
 }
 
 .inventory-hint {

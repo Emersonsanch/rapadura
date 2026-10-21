@@ -4,6 +4,7 @@ using System.Linq;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
+using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Items.Procedural;
 using Rapadura.Gameplay.Player;
@@ -456,6 +457,138 @@ namespace Rapadura.Gameplay.Inventory
         private bool IsValidSlot(int slotIndex)
         {
             return slotIndex >= 0 && slotIndex < _slots.Length;
+        }
+
+        // ---------------------------------------------------------------
+        // Auto-sort
+        // ---------------------------------------------------------------
+
+        // Gear first, then what you use, then what you craft with; quest items/currency last.
+        private static readonly ItemType[] SortTypeOrder =
+        {
+            ItemType.Weapon,
+            ItemType.Armor,
+            ItemType.Tool,
+            ItemType.Consumable,
+            ItemType.Material,
+            ItemType.Blueprint,
+            ItemType.QuestItem,
+            ItemType.Currency,
+        };
+
+        /// <summary>
+        /// "Organizar" button: re-packs the backpack with <see cref="BuildSortedSlots"/> (type → rarity →
+        /// name, plain stacks merged, generated items untouched). Equipment is not affected.
+        /// </summary>
+        public void SortInventory()
+        {
+            EnsureSlotsInitialized();
+            _slots = BuildSortedSlots(_slots, ItemDatabase.GetById);
+            EventBus.Publish(new InventoryChangedEvent());
+        }
+
+        /// <summary>
+        /// Pure sort used by <see cref="SortInventory"/> (static so EditMode tests can feed it any
+        /// resolver). Returns a new array of the same length: occupied slots first, ordered by item type
+        /// (<see cref="SortTypeOrder"/>), then rarity (highest first; a generated item counts at its
+        /// rolled rarity, like the tooltip shows it), then the on-screen name (generated name when present,
+        /// else the localized item name, so the order matches the current language),
+        /// then item id; empty slots at the end. Plain stackable items of the same id are merged into
+        /// as few stacks as <see cref="ItemDefinition.MaxStack"/> allows. Generated items
+        /// (<see cref="InventorySlotData.HasGeneratedData"/>) and items with durability are never merged
+        /// — they're carried over as the same slot objects, so affixes/name/rarity/durability survive.
+        /// Ids the resolver doesn't know are kept unchanged after every known item.
+        /// </summary>
+        public static InventorySlotData[] BuildSortedSlots(IReadOnlyList<InventorySlotData> slots, Func<string, ItemDefinition> resolveItem)
+        {
+            if (slots == null)
+            {
+                return Array.Empty<InventorySlotData>();
+            }
+
+            var entries = new List<(InventorySlotData slot, ItemDefinition item, int order)>();
+            var mergedTotals = new Dictionary<string, (ItemDefinition item, int total, int order)>();
+
+            for (int i = 0; i < slots.Count; i++)
+            {
+                InventorySlotData slot = slots[i];
+
+                if (slot == null || slot.IsEmpty)
+                {
+                    continue;
+                }
+
+                ItemDefinition item = resolveItem?.Invoke(slot.itemId);
+                bool mergeable = item != null && item.IsStackable && !item.HasDurability && !slot.HasGeneratedData;
+
+                if (!mergeable)
+                {
+                    entries.Add((slot, item, i));
+                    continue;
+                }
+
+                mergedTotals.TryGetValue(slot.itemId, out var existing);
+                mergedTotals[slot.itemId] = (item, existing.total + slot.quantity, existing.item != null ? existing.order : i);
+            }
+
+            foreach (var merged in mergedTotals.Values)
+            {
+                int remaining = merged.total;
+
+                while (remaining > 0)
+                {
+                    int amount = Mathf.Min(merged.item.MaxStack, remaining);
+                    entries.Add((new InventorySlotData { itemId = merged.item.ItemId, quantity = amount }, merged.item, merged.order));
+                    remaining -= amount;
+                }
+            }
+
+            List<InventorySlotData> ordered = entries
+                .OrderBy(e => e.item == null ? 1 : 0)
+                .ThenBy(e => GetSortTypeRank(e.item))
+                .ThenByDescending(e => (int)GetSortRarity(e.item, e.slot))
+                .ThenBy(e => GetSortName(e.item, e.slot), StringComparer.InvariantCultureIgnoreCase)
+                .ThenBy(e => e.slot.itemId, StringComparer.Ordinal)
+                .ThenByDescending(e => e.slot.quantity)
+                .ThenBy(e => e.order)
+                .Select(e => e.slot)
+                .ToList();
+
+            var result = new InventorySlotData[Mathf.Max(slots.Count, ordered.Count)];
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = i < ordered.Count ? ordered[i] : InventorySlotData.Empty();
+            }
+
+            return result;
+        }
+
+        private static int GetSortTypeRank(ItemDefinition item)
+        {
+            if (item == null)
+            {
+                return int.MaxValue;
+            }
+
+            int rank = Array.IndexOf(SortTypeOrder, item.Type);
+            return rank >= 0 ? rank : SortTypeOrder.Length;
+        }
+
+        private static ItemRarity GetSortRarity(ItemDefinition item, InventorySlotData slot)
+        {
+            ItemRarity baseRarity = item != null ? item.Rarity : ItemRarity.Common;
+            return slot.HasGeneratedAffixes && slot.generatedRarity > baseRarity ? slot.generatedRarity : baseRarity;
+        }
+
+        private static string GetSortName(ItemDefinition item, InventorySlotData slot)
+        {
+            if (slot.HasGeneratedAffixes && !string.IsNullOrEmpty(slot.generatedName))
+            {
+                return slot.generatedName;
+            }
+
+            return item != null ? item.LocalizedName() ?? string.Empty : slot.itemId ?? string.Empty;
         }
 
         // ---------------------------------------------------------------

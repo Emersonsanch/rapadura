@@ -1,11 +1,27 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
 using Rapadura.Core.Logging;
+using Rapadura.Gameplay.Environment;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Items;
 
 namespace Rapadura.Gameplay.Shop
 {
+    /// <summary>JSON-serializable snapshot of <see cref="ShopManager"/>'s live stock (parallel arrays: JsonUtility has no dictionaries).</summary>
+    [Serializable]
+    public class ShopSaveState
+    {
+        /// <summary>"&lt;shopId&gt;/&lt;itemId&gt;" for every finite catalog entry whose stock differs from the authored value.</summary>
+        public string[] stockKeys = Array.Empty<string>();
+        public int[] stockValues = Array.Empty<int>();
+
+        /// <summary>In-game day of the last dawn restock (see <see cref="ShopManager.Restock"/>).</summary>
+        public int lastRestockDay = 1;
+    }
+
     /// <summary>
     /// Central runtime authority over shop buy/sell transactions: plain <see cref="IManager"/>
     /// (not a MonoBehaviour), same shape as <c>CraftingManager</c>/<c>DialogueManager</c>. Holds
@@ -21,23 +37,50 @@ namespace Rapadura.Gameplay.Shop
     /// <c>ShopDefinition.CurrencyItemId</c> from the buyer's inventory and adds the purchased item;
     /// selling does the reverse at <c>Price * SellBackRate</c>.
     ///
-    /// NOTE: this class is intentionally NOT wired into GameManager.cs by this change (per task
-    /// instructions, GameManager.cs is not to be edited here) — a follow-up edit needs to add,
-    /// inside <c>GameManager.BuildManagers()</c>:
-    ///   ShopManager = new ShopManager();
-    ///   RegisterManager(ShopManager);
-    /// plus a public <c>ShopManager</c> property, mirroring CraftingManager/DialogueManager.
+    /// Stock: <see cref="ShopDefinition"/> assets are read-only authored data. The live stock is a
+    /// runtime table keyed "&lt;shopId&gt;/&lt;itemId&gt;" that only holds entries that differ from the
+    /// authored <see cref="ShopInventoryItem.InitialStock"/> (missing key = authored value), so nothing
+    /// ever writes into the ScriptableObject (which in the Editor used to rewrite the asset on disk,
+    /// and in builds leaked depleted stock across saves). The table is per save: saved under
+    /// <see cref="SaveKey"/> ("Shops"), cleared by <see cref="ResetForNewSession"/> (GameManager
+    /// registers it with NewSessionReset), and an older save without a "Shops" entry simply starts
+    /// with authored stock.
+    ///
+    /// Restock rule: at every in-game dawn (<see cref="TimeOfDayPhaseChangedEvent"/> entering
+    /// <see cref="TimeOfDayPhase.Dawn"/>) of a day later than <see cref="LastRestockDay"/>, every shop
+    /// goes back to its authored stock — sold-out items come back, and surplus the player sold to the
+    /// shop is gone (the merchant sold it overnight). Keyed on the day number, so a save restored at
+    /// dawn (which republishes the phase change) never restocks twice for the same day.
+    ///
+    /// Built and registered by <c>GameManager.BuildManagers()</c> (ServiceLocator, SaveManager,
+    /// NewSessionReset), mirroring CraftingManager/DialogueManager.
     /// </summary>
-    public class ShopManager : IManager, IResettable
+    public class ShopManager : IManager, ISaveable, IResettable
     {
+        public const string Key = "Shops";
         private const string LogCategory = "Shop";
+        private const int FirstDay = 1;
+
+        private readonly Dictionary<string, int> _stock = new Dictionary<string, int>(StringComparer.Ordinal);
+        private bool _subscribed;
 
         public ShopDefinition ActiveShop { get; private set; }
         public InventoryManager BuyerInventory { get; private set; }
         public bool IsOpen => ActiveShop != null && BuyerInventory != null;
 
+        public string SaveKey => Key;
+
+        /// <summary>In-game day of the last dawn restock (1 = never restocked this session).</summary>
+        public int LastRestockDay { get; private set; } = FirstDay;
+
         public void Initialize()
         {
+            if (!_subscribed)
+            {
+                _subscribed = true;
+                EventBus.Subscribe<TimeOfDayPhaseChangedEvent>(OnTimeOfDayPhaseChanged);
+            }
+
             GameLogger.Info(LogCategory, "ShopManager initialized.");
         }
 
@@ -47,16 +90,109 @@ namespace Rapadura.Gameplay.Shop
             {
                 CloseShop();
             }
+
+            if (_subscribed)
+            {
+                _subscribed = false;
+                EventBus.Unsubscribe<TimeOfDayPhaseChangedEvent>(OnTimeOfDayPhaseChanged);
+            }
         }
 
-        /// <summary>New game / load: drops the open shop session (its buyer inventory belongs to the old session's player).</summary>
+        /// <summary>New game / load: drops the open shop session (its buyer inventory belongs to the old session's player) and puts every shop back to authored stock.</summary>
         public void ResetForNewSession()
         {
             if (IsOpen)
             {
                 CloseShop();
             }
+
+            _stock.Clear();
+            LastRestockDay = FirstDay;
         }
+
+        // ---------------------------------------------------------------
+        // Stock
+        // ---------------------------------------------------------------
+
+        /// <summary>Live stock of <paramref name="shop"/>'s catalog entry at <paramref name="catalogIndex"/>: -1 when infinite, 0 when the index is invalid.</summary>
+        public int GetStock(ShopDefinition shop, int catalogIndex)
+        {
+            if (shop == null || catalogIndex < 0 || catalogIndex >= shop.Catalog.Count)
+            {
+                return 0;
+            }
+
+            return GetStock(shop, shop.Catalog[catalogIndex]);
+        }
+
+        /// <summary>Live stock of <paramref name="entry"/> in <paramref name="shop"/>: -1 when infinite.</summary>
+        public int GetStock(ShopDefinition shop, ShopInventoryItem entry)
+        {
+            if (shop == null || entry?.Item == null)
+            {
+                return 0;
+            }
+
+            if (entry.HasInfiniteStock)
+            {
+                return -1;
+            }
+
+            return _stock.TryGetValue(GetStockKey(shop, entry), out int live) ? live : entry.InitialStock;
+        }
+
+        /// <summary>Whether <paramref name="shop"/> can sell <paramref name="quantity"/> of <paramref name="entry"/> right now.</summary>
+        public bool HasStockFor(ShopDefinition shop, ShopInventoryItem entry, int quantity)
+        {
+            if (shop == null || entry?.Item == null)
+            {
+                return false;
+            }
+
+            return entry.HasInfiniteStock || GetStock(shop, entry) >= quantity;
+        }
+
+        /// <summary>Refills every shop to its authored stock (drops the whole live table) and publishes <see cref="ShopRestockedEvent"/>.</summary>
+        public void Restock(int day)
+        {
+            _stock.Clear();
+            LastRestockDay = Math.Max(LastRestockDay, day);
+            EventBus.Publish(new ShopRestockedEvent(day));
+        }
+
+        private void OnTimeOfDayPhaseChanged(TimeOfDayPhaseChangedEvent evt)
+        {
+            if (evt.CurrentPhase == TimeOfDayPhase.Dawn && evt.Day > LastRestockDay)
+            {
+                Restock(evt.Day);
+            }
+        }
+
+        private void AddStock(ShopDefinition shop, ShopInventoryItem entry, int delta)
+        {
+            if (entry.HasInfiniteStock)
+            {
+                return;
+            }
+
+            int value = Math.Max(0, GetStock(shop, entry) + delta);
+            string key = GetStockKey(shop, entry);
+
+            if (value == entry.InitialStock)
+            {
+                _stock.Remove(key);
+            }
+            else
+            {
+                _stock[key] = value;
+            }
+        }
+
+        /// <summary>
+        /// Table key of a catalog entry. By item id rather than catalog index so a save keeps
+        /// working when designers reorder a catalog (two entries for the same item share stock).
+        /// </summary>
+        private static string GetStockKey(ShopDefinition shop, ShopInventoryItem entry) => $"{shop.ShopId}/{entry.Item.ItemId}";
 
         // ---------------------------------------------------------------
         // Session
@@ -127,7 +263,7 @@ namespace Rapadura.Gameplay.Shop
                 return false;
             }
 
-            if (!entry.HasStockFor(quantity))
+            if (!HasStockFor(ActiveShop, entry, quantity))
             {
                 return false;
             }
@@ -165,7 +301,7 @@ namespace Rapadura.Gameplay.Shop
                 return false;
             }
 
-            entry.ConsumeStock(quantity);
+            AddStock(ActiveShop, entry, -quantity);
 
             EventBus.Publish(new ItemPurchasedEvent(ActiveShop.ShopId, entry.Item.ItemId, quantity, totalPrice));
             return true;
@@ -223,7 +359,11 @@ namespace Rapadura.Gameplay.Shop
             }
 
             ShopInventoryItem catalogEntry = FindCatalogEntry(item.ItemId);
-            catalogEntry?.RestockFromSale(quantity);
+
+            if (catalogEntry != null)
+            {
+                AddStock(ActiveShop, catalogEntry, quantity);
+            }
 
             EventBus.Publish(new ItemSoldEvent(ActiveShop.ShopId, item.ItemId, quantity, payout));
             return true;
@@ -246,6 +386,46 @@ namespace Rapadura.Gameplay.Shop
             }
 
             return null;
+        }
+
+        // ---------------------------------------------------------------
+        // ISaveable
+        // ---------------------------------------------------------------
+
+        public object CaptureState()
+        {
+            string[] keys = _stock.Keys.OrderBy(k => k, StringComparer.Ordinal).ToArray();
+
+            return new ShopSaveState
+            {
+                stockKeys = keys,
+                stockValues = keys.Select(k => _stock[k]).ToArray(),
+                lastRestockDay = LastRestockDay
+            };
+        }
+
+        /// <summary>Replaces the live stock table with the saved one (SaveManager.Load has already reset it through NewSessionReset).</summary>
+        public void RestoreState(object state)
+        {
+            if (state is not ShopSaveState saved)
+            {
+                return;
+            }
+
+            _stock.Clear();
+
+            if (saved.stockKeys != null && saved.stockValues != null)
+            {
+                for (int i = 0; i < Math.Min(saved.stockKeys.Length, saved.stockValues.Length); i++)
+                {
+                    if (!string.IsNullOrEmpty(saved.stockKeys[i]))
+                    {
+                        _stock[saved.stockKeys[i]] = Math.Max(0, saved.stockValues[i]);
+                    }
+                }
+            }
+
+            LastRestockDay = Math.Max(FirstDay, saved.lastRestockDay);
         }
     }
 }

@@ -7,6 +7,8 @@
     justify-content: center;
     align-items: center;
     display: none;
+    /* Modal backdrop, matching the quest log / achievements windows. */
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .shop-window {
@@ -15,7 +17,8 @@
     max-width: 960px;
     height: 70%;
     min-height: 380px;
-    background-color: rgba(12, 14, 20, 0.92);
+    max-height: 92%;
+    background-color: rgba(12, 14, 20, 0.97);
     border-radius: 10px;
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.14);
@@ -52,8 +55,9 @@
 }
 
 .shop-close-button {
-    width: 28px;
-    height: 28px;
+    /* 44px touch target (was 28px — hard to hit on a phone, and sat under the quest tracker card). */
+    width: 44px;
+    height: 44px;
     padding: 0;
     background-color: rgba(255, 255, 255, 0.08);
     border-width: 1px;
@@ -98,6 +102,7 @@
 .shop-row-button {
     margin: 3px 0;
     padding: 8px 10px;
+    min-height: 44px;
     background-color: rgba(255, 255, 255, 0.08);
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.18);
@@ -111,5 +116,6 @@
 }
 
 .shop-row-button:disabled {
-    opacity: 0.4;
+    /* 0.6: at 0.4 unaffordable items (the whole catalog at 0 gold) were barely legible. */
+    opacity: 0.6;
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Rapadura.Core.Events;
+using Rapadura.Gameplay.Content;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Skills
@@ -195,7 +196,7 @@ namespace Rapadura.Gameplay.Skills
 
             _buffController.ApplyEffect(new StatModifierDefinition
             {
-                displayName = "Combo: " + combo.DisplayName,
+                displayName = "Combo: " + combo.LocalizedName(),
                 affectedStat = stat,
                 application = application,
                 value = combo.BonusValue,

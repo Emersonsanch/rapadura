@@ -2,6 +2,7 @@ using System;
 using Rapadura.Core.Accessibility;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.Skills;
@@ -512,7 +513,7 @@ namespace Rapadura.UI.HUD
                 // Name is the fallback when a skill has no icon yet (many seeded skills don't).
                 // Pre-split into whole-word lines so it never wraps mid-word inside the 64px slot.
                 nameLabel.text = skill != null
-                    ? SkillSlotDisplayMath.FormatSlotName(skill.DisplayName, _skillSlotNameCharsPerLine)
+                    ? SkillSlotDisplayMath.FormatSlotName(skill.LocalizedName(), _skillSlotNameCharsPerLine)
                     : string.Empty;
                 nameLabel.EnableInClassList("hud-skill-name--hidden", icon != null);
             }

@@ -188,7 +188,7 @@ namespace Rapadura.Tests
 
             if (result.Affixes.Count == 2)
             {
-                Assert.AreEqual("Flamejante Espada da Fúria", result.GeneratedName);
+                Assert.AreEqual("Espada Flamejante da Fúria", result.GeneratedName);
             }
             else
             {
@@ -214,7 +214,7 @@ namespace Rapadura.Tests
 
             if (result.Affixes.Count > 0)
             {
-                Assert.AreEqual("Incandescente Espada", result.GeneratedName);
+                Assert.AreEqual("Espada Incandescente", result.GeneratedName);
             }
         }
 

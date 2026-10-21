@@ -161,6 +161,10 @@
     -unity-text-align: middle-center;
     font-size: 10px;
     color: rgb(240, 240, 245);
+    -unity-font-style: bold;
+    /* White on the yellow stamina fill was unreadable at phone DPI; a dark drop shadow keeps the
+       value legible on every fill colour. */
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.95);
 }
 
 /* Low-value warning state: applied by HudController when a vital drops below its threshold. */

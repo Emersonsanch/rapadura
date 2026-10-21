@@ -114,7 +114,7 @@ namespace Rapadura.Gameplay.Environment
             {
                 _sun.transform.rotation = ComputeSunRotation(t, _sunYaw);
                 _sun.color = _sunColor.Evaluate(t);
-                _sun.intensity = Mathf.Max(0f, _sunIntensity.Evaluate(t)) * weatherDim;
+                _sun.intensity = Mathf.Max(0f, _sunIntensity.Evaluate(t)) * weatherDim * EnvironmentOverrides.SunIntensityMultiplier;
             }
 
             if (_driveAmbient)
@@ -124,6 +124,8 @@ namespace Rapadura.Gameplay.Environment
                 {
                     ambient *= Mathf.Lerp(1f, weatherDim, 0.5f);
                 }
+
+                ambient *= EnvironmentOverrides.AmbientTint;
 
                 ApplyAmbient(ambient);
             }

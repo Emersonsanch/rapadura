@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
@@ -9,6 +10,7 @@ using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.Skills;
 using Rapadura.Gameplay.World.Map;
+using Rapadura.Save;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Achievements
@@ -27,6 +29,18 @@ namespace Rapadura.Gameplay.Achievements
         public string[] unlockedAtIso8601 = Array.Empty<string>();
     }
 
+    /// <summary>Root of the per-profile file (<see cref="AchievementManager.ProfileFileName"/>), next to the save slots.</summary>
+    [Serializable]
+    public class AchievementProfileData
+    {
+        public int profileVersion = 1;
+
+        /// <summary>True once achievements found in pre-profile save slots were merged in (done once, see <see cref="AchievementManager"/>).</summary>
+        public bool legacySlotsImported;
+
+        public AchievementSaveState achievements = new AchievementSaveState();
+    }
+
     /// <summary>
     /// Tracks lifetime gameplay stats and unlocks <see cref="AchievementDefinition"/>s ("Conquistas").
     /// Purely event-driven — it subscribes to existing EventBus events in <see cref="Initialize"/> and
@@ -39,15 +53,27 @@ namespace Rapadura.Gameplay.Achievements
     /// an achievement added in a later build unlocks retroactively from progress already on the save.
     /// Each unlock publishes <see cref="AchievementUnlockedEvent"/> exactly once.
     ///
-    /// A plain <see cref="IManager"/> built by GameManager and registered with SaveManager under
-    /// <see cref="SaveKey"/>, same shape as DefeatedEnemyRegistry/WorldMapProgress. Definitions come
-    /// from <c>Resources/Achievements</c> unless explicitly supplied (tests).
+    /// Persistence is per profile, not per save slot: progress lives in
+    /// <see cref="ProfileFilePath"/> (SaveManager.SaveFolderPath/profile.json, so tests' SaveRootOverride
+    /// isolates it), loaded in <see cref="Initialize"/> and written on every unlock, on every slot save
+    /// (<see cref="GameSavingEvent"/>), on app pause/quit (GameManager calls <see cref="SaveProfile"/>)
+    /// and on <see cref="Shutdown"/>. Older builds stored achievements inside each slot under
+    /// <see cref="Key"/>: the first time a profile is created, every existing slot's entry is merged
+    /// into it once, and the manager stays registered with SaveManager as an <see cref="ISaveable"/>
+    /// whose <see cref="CaptureState"/> writes nothing and whose <see cref="RestoreState"/> still merges
+    /// a legacy slot that is loaded later. Definitions come from <c>Resources/Achievements</c> unless
+    /// explicitly supplied (tests) — that constructor also leaves <see cref="PersistsProfile"/> off.
     /// </summary>
     public class AchievementManager : IManager, ISaveable
     {
         public const string Key = "Achievements";
         public const string ResourcesFolder = "Achievements";
         public const string PlayerTag = "Player";
+        public const string ProfileFileName = "profile.json";
+
+        private const string LegacySlotSearchPattern = "slot_*.json";
+        private const string BackupFileExtension = ".bak";
+        private const string TempFileExtension = ".tmp";
 
         private readonly List<AchievementDefinition> _definitions = new List<AchievementDefinition>();
         private readonly Dictionary<AchievementConditionType, long> _counters = new Dictionary<AchievementConditionType, long>();
@@ -56,8 +82,20 @@ namespace Rapadura.Gameplay.Achievements
         private readonly bool _loadFromResources;
         private bool _definitionsLoaded;
         private bool _subscribed;
+        private bool _profileLoaded;
+        private bool _suppressProfileWrites;
 
         public string SaveKey => Key;
+
+        /// <summary>Where the profile lives right now (honours <see cref="SaveManager.SaveRootOverride"/>).</summary>
+        public static string ProfileFilePath => Path.Combine(SaveManager.SaveFolderPath, ProfileFileName);
+
+        /// <summary>
+        /// Whether this manager reads/writes <see cref="ProfileFilePath"/>. On for the runtime
+        /// (Resources) constructor, off for the custom-catalog one so unit tests never touch a
+        /// profile unless they opt in (under TestSaveRoot).
+        /// </summary>
+        public bool PersistsProfile { get; set; }
 
         /// <summary>Every known definition, ordered by sort order then id.</summary>
         public IReadOnlyList<AchievementDefinition> Definitions
@@ -76,6 +114,7 @@ namespace Rapadura.Gameplay.Achievements
         public AchievementManager()
         {
             _loadFromResources = true;
+            PersistsProfile = true;
         }
 
         /// <summary>Uses only the supplied definitions (tests / custom catalogs).</summary>
@@ -99,12 +138,18 @@ namespace Rapadura.Gameplay.Achievements
         {
             EnsureDefinitionsLoaded();
 
+            if (PersistsProfile && !_profileLoaded)
+            {
+                LoadProfile();
+            }
+
             if (_subscribed)
             {
                 return;
             }
 
             _subscribed = true;
+            EventBus.Subscribe<GameSavingEvent>(OnGameSaving);
             EventBus.Subscribe<EnemyDiedEvent>(OnEnemyDied);
             EventBus.Subscribe<QuestCompletedEvent>(OnQuestCompleted);
             EventBus.Subscribe<PlayerExperienceChangedEvent>(OnExperienceChanged);
@@ -117,9 +162,16 @@ namespace Rapadura.Gameplay.Achievements
 
         public void Shutdown()
         {
+            if (_profileLoaded)
+            {
+                SaveProfile();
+                _profileLoaded = false;
+            }
+
             if (_subscribed)
             {
                 _subscribed = false;
+                EventBus.Unsubscribe<GameSavingEvent>(OnGameSaving);
                 EventBus.Unsubscribe<EnemyDiedEvent>(OnEnemyDied);
                 EventBus.Unsubscribe<QuestCompletedEvent>(OnQuestCompleted);
                 EventBus.Unsubscribe<PlayerExperienceChangedEvent>(OnExperienceChanged);
@@ -335,6 +387,7 @@ namespace Rapadura.Gameplay.Achievements
 
             _unlocked[definition.AchievementId] = unlockedAtUtc.ToString("o");
             EventBus.Publish(new AchievementUnlockedEvent(definition));
+            SaveProfile();
             return true;
         }
 
@@ -398,13 +451,160 @@ namespace Rapadura.Gameplay.Achievements
         private void OnItemSold(ItemSoldEvent evt) =>
             RecordProgress(AchievementConditionType.GoldEarned, evt.TotalPayout, evt.ItemId);
 
+        private void OnGameSaving(GameSavingEvent evt) => SaveProfile();
+
         private static bool IsPlayer(GameObject caster) => caster != null && caster.CompareTag(PlayerTag);
 
         // ------------------------------------------------------------------
-        // ISaveable
+        // Profile file
         // ------------------------------------------------------------------
 
-        public object CaptureState()
+        /// <summary>
+        /// Merges <see cref="ProfileFilePath"/> (or its ".bak" if the main file is unreadable) into the
+        /// current progress. When no profile exists yet, or it predates the legacy import, every save
+        /// slot's old "Achievements" entry is merged in once and the profile is written straight away.
+        /// No-op unless <see cref="PersistsProfile"/>.
+        /// </summary>
+        public void LoadProfile()
+        {
+            if (!PersistsProfile)
+            {
+                return;
+            }
+
+            _profileLoaded = true;
+            _suppressProfileWrites = true;
+            bool needsWrite;
+
+            try
+            {
+                string path = ProfileFilePath;
+                AchievementProfileData profile = TryReadProfile(path) ?? TryReadProfile(path + BackupFileExtension);
+
+                if (profile?.achievements != null)
+                {
+                    MergeState(profile.achievements);
+                }
+
+                needsWrite = profile == null || !profile.legacySlotsImported;
+
+                if (needsWrite)
+                {
+                    ImportLegacySlots();
+                }
+            }
+            finally
+            {
+                _suppressProfileWrites = false;
+            }
+
+            // Definitions added since the profile was written unlock from the restored stats.
+            EvaluateAll();
+
+            if (needsWrite)
+            {
+                SaveProfile();
+            }
+        }
+
+        /// <summary>Writes the current progress to <see cref="ProfileFilePath"/> (temp file + ".bak", like save slots). No-op unless <see cref="PersistsProfile"/>.</summary>
+        public void SaveProfile()
+        {
+            if (!PersistsProfile || _suppressProfileWrites)
+            {
+                return;
+            }
+
+            string path = ProfileFilePath;
+            string tempPath = path + TempFileExtension;
+            var profile = new AchievementProfileData { legacySlotsImported = true, achievements = CaptureProfileState() };
+
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                File.WriteAllText(tempPath, JsonUtility.ToJson(profile, prettyPrint: true));
+
+                if (File.Exists(path))
+                {
+                    // Never let a corrupted main file overwrite the last good backup.
+                    if (TryReadProfile(path) != null)
+                    {
+                        File.Copy(path, path + BackupFileExtension, overwrite: true);
+                    }
+
+                    File.Delete(path);
+                }
+
+                File.Move(tempPath, path);
+            }
+            catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
+            {
+                Debug.LogError($"[AchievementManager] Failed to write profile '{path}': {e.Message}");
+            }
+        }
+
+        /// <summary>Merges the "Achievements" entry of every save slot in SaveManager.SaveFolderPath (older builds kept them per slot).</summary>
+        private void ImportLegacySlots()
+        {
+            string folder = SaveManager.SaveFolderPath;
+
+            if (!Directory.Exists(folder))
+            {
+                return;
+            }
+
+            foreach (string slotPath in Directory.GetFiles(folder, LegacySlotSearchPattern))
+            {
+                SaveData data = null;
+
+                try
+                {
+                    data = JsonUtility.FromJson<SaveData>(File.ReadAllText(slotPath));
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"[AchievementManager] Skipping unreadable save '{slotPath}' during legacy import: {e.Message}");
+                }
+
+                if (SaveManager.TryGetEntryState(data, Key, out AchievementSaveState legacy))
+                {
+                    MergeState(legacy);
+                }
+            }
+        }
+
+        private static AchievementProfileData TryReadProfile(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            try
+            {
+                string json = File.ReadAllText(path);
+                return string.IsNullOrWhiteSpace(json) ? null : JsonUtility.FromJson<AchievementProfileData>(json);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[AchievementManager] Failed to read profile '{path}': {e.Message}");
+                return null;
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // ISaveable (legacy slots) / snapshots
+        // ------------------------------------------------------------------
+
+        /// <summary>
+        /// Save slots no longer carry achievements (they live in the profile file), so this returns
+        /// null and SaveManager writes no "Achievements" entry. Use <see cref="CaptureProfileState"/>
+        /// for a snapshot.
+        /// </summary>
+        public object CaptureState() => null;
+
+        /// <summary>Snapshot of the current lifetime progress (what the profile file stores).</summary>
+        public AchievementSaveState CaptureProfileState()
         {
             var types = _counters.Keys.OrderBy(t => (int)t).ToList();
             var observed = new List<string>();
@@ -432,7 +632,8 @@ namespace Rapadura.Gameplay.Achievements
         /// per-profile lifetime progress, not per-save, so loading another (or an older) save never
         /// takes an unlock or a stat away. Counters keep the higher value, observed ids and unlocks are
         /// unioned (an unlock keeps its earliest known timestamp). For the same reason this manager is
-        /// not an <see cref="IResettable"/>: "Novo jogo" keeps every achievement.
+        /// not an <see cref="IResettable"/>: "Novo jogo" keeps every achievement. Only legacy slots
+        /// still have this entry; whatever they add is written to the profile right away.
         /// </summary>
         public void RestoreState(object state)
         {
@@ -440,6 +641,26 @@ namespace Rapadura.Gameplay.Achievements
             {
                 return;
             }
+
+            _suppressProfileWrites = true;
+
+            try
+            {
+                MergeState(saved);
+
+                // Achievements added after this save was written unlock now from the restored stats.
+                EvaluateAll();
+            }
+            finally
+            {
+                _suppressProfileWrites = false;
+            }
+
+            SaveProfile();
+        }
+
+        private void MergeState(AchievementSaveState saved)
+        {
 
             if (saved.counterTypes != null && saved.counterValues != null)
             {
@@ -484,9 +705,6 @@ namespace Rapadura.Gameplay.Achievements
                     _unlocked[id] = string.IsNullOrEmpty(at) ? existing ?? DateTime.UtcNow.ToString("o") : at;
                 }
             }
-
-            // Achievements added after this save was written unlock now from the restored stats.
-            EvaluateAll();
         }
 
         private static bool IsEarlier(string candidateIso, string currentIso)

@@ -7,15 +7,19 @@
     justify-content: center;
     align-items: center;
     display: none;
+    /* Modal backdrop, matching the quest log / achievements windows. */
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .crafting-window {
     width: 70%;
     min-width: 520px;
     max-width: 960px;
-    height: 70%;
+    /* 80%: at 70% only two ingredient rows fit on a 20:9 phone before the list scrolled. */
+    height: 80%;
     min-height: 380px;
-    background-color: rgba(12, 14, 20, 0.92);
+    max-height: 92%;
+    background-color: rgba(12, 14, 20, 0.97);
     border-radius: 10px;
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.14);
@@ -36,8 +40,9 @@
 }
 
 .crafting-close-button {
-    width: 36px;
-    height: 36px;
+    /* 44px: same touch target as the inventory/shop close buttons. */
+    width: 44px;
+    height: 44px;
     padding: 0;
     background-color: rgba(255, 255, 255, 0.08);
     border-width: 1px;
@@ -100,7 +105,7 @@
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.18);
     border-radius: 6px;
-    color: rgb(170, 170, 180);
+    color: rgb(200, 200, 208);
     -unity-text-align: middle-left;
 }
 

@@ -168,6 +168,10 @@ namespace Rapadura.Core.Managers
             SaveManager.Register(BuildingManager);
             SaveManager.Register(CraftingManager);
             SaveManager.Register(DefeatedEnemyRegistry);
+            SaveManager.Register(ShopManager);
+
+            // Only reads achievements out of slots written before they moved to the profile file
+            // (Saves/profile.json); AchievementManager.CaptureState returns null so slots no longer carry them.
             SaveManager.Register(AchievementManager);
             SaveManager.Register(TimeOfDayManager);
             SaveManager.Register(WeatherSystem);
@@ -191,8 +195,8 @@ namespace Rapadura.Core.Managers
         /// AudioManager / AccessibilitySettings / FrameRateManager (per-device settings),
         /// AnalyticsManager (telemetry buffer), SceneTransitionService (scene hop bookkeeping; a load
         /// mid-encounter must keep its arena — ReturnToTitle abandons the encounter explicitly),
-        /// AchievementManager (per-profile lifetime progress, its RestoreState merges instead of
-        /// replacing), GameFlowService (drives the reset itself). Player-scoped state (inventory,
+        /// AchievementManager (per-profile lifetime progress kept in Saves/profile.json; its
+        /// RestoreState only merges legacy slot data in), GameFlowService (drives the reset itself). Player-scoped state (inventory,
         /// stats, skills...) lives on the scene's Player and reaches the next scene only as
         /// SaveManager carried state, which SaveManager's own reset clears.
         /// </summary>
@@ -305,6 +309,23 @@ namespace Rapadura.Core.Managers
                     CheckpointManager.SetInitialCheckpoint(spawnPoint);
                     break;
                 }
+            }
+        }
+
+        /// <summary>Achievements are per-profile (Saves/profile.json): flush them when the app is backgrounded (mobile may kill it there) or quits.</summary>
+        private void OnApplicationPause(bool paused)
+        {
+            if (paused && Instance == this)
+            {
+                AchievementManager?.SaveProfile();
+            }
+        }
+
+        private void OnApplicationQuit()
+        {
+            if (Instance == this)
+            {
+                AchievementManager?.SaveProfile();
             }
         }
 

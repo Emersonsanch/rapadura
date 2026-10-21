@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Rapadura.Gameplay.Characters;
+using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Quests;
 
 namespace Rapadura.UI.Quests
@@ -163,7 +164,7 @@ namespace Rapadura.UI.Quests
                     definition.RewardExperience,
                     definition.RewardItems
                         .Where(r => r != null && r.Item != null)
-                        .Select(r => (r.Item.DisplayName, r.Quantity)),
+                        .Select(r => (r.Item.LocalizedName(), r.Quantity)),
                     text)
             };
 

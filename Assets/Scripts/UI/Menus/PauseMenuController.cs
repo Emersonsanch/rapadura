@@ -21,9 +21,10 @@ namespace Rapadura.UI.Menus
     ///
     /// "Salvar" opens the shared Save/Load screen in save mode rather than silently quick-saving,
     /// so the player picks a slot (consistent with the Save/Load screen also used from Main Menu's
-    /// "Continuar" flow later). "Menu Principal" only raises a UnityEvent — like MainMenuController,
-    /// this project has no scene-loading bootstrap yet, so leaving the scene is a decision for
-    /// whatever script wires that event up.
+    /// "Continuar" flow later). "Menu Principal" opens a "Voltar ao menu?" confirm dialog
+    /// (Resources/UI/ReturnToTitleDialog.uxml, texts in <see cref="ReturnToTitleTexts"/>): "Salvar e
+    /// sair" auto-saves first, both exits then call GameFlowService.ReturnToTitle (see
+    /// <see cref="ReturnToTitleAction"/>) and raise <see cref="OnMainMenuRequested"/>.
     ///
     /// "Conquistas" and "Criação" live here instead of on the HUD: they're rarely-used, full-screen
     /// screens and the top-right HUD cluster (Missões/Mochila/Skills/Menu) is already at the limit
@@ -50,8 +51,22 @@ namespace Rapadura.UI.Menus
         [Tooltip("Whether opening this menu sets Time.timeScale to 0 and closing restores it to 1.")]
         [SerializeField] private bool _controlsTimeScale = true;
 
+        [Header("Return to title")]
+        [Tooltip("\"Voltar ao menu?\" confirm dialog. If empty, loaded from Resources/" + ReturnToTitleDialogResourcePath + ".")]
+        [SerializeField] private VisualTreeAsset _returnToTitleDialogAsset;
+
         [Header("Events")]
+        [Tooltip("Raised after the player confirmed leaving to the title screen (the flow change itself is done here).")]
         public UnityEvent OnMainMenuRequested;
+
+        public const string ReturnToTitleDialogResourcePath = "UI/ReturnToTitleDialog";
+
+        private VisualElement _returnDialog;
+        private Label _returnDialogTitle;
+        private Label _returnDialogMessage;
+        private Button _returnSaveButton;
+        private Button _returnQuitButton;
+        private Button _returnCancelButton;
 
         private UIDocument _uiDocument;
         private VisualElement _root;
@@ -98,6 +113,7 @@ namespace Rapadura.UI.Menus
             _achievementsButton = rootVisualElement.Q<Button>("achievements-button");
             _craftingButton = rootVisualElement.Q<Button>("crafting-button");
             _mainMenuButton = rootVisualElement.Q<Button>("main-menu-button");
+            BindReturnToTitleDialog();
         }
 
         private void RegisterCallbacks()
@@ -108,6 +124,9 @@ namespace Rapadura.UI.Menus
             if (_achievementsButton != null) _achievementsButton.clicked += OnAchievementsClicked;
             if (_craftingButton != null) _craftingButton.clicked += OnCraftingClicked;
             if (_mainMenuButton != null) _mainMenuButton.clicked += OnMainMenuClicked;
+            if (_returnSaveButton != null) _returnSaveButton.clicked += OnReturnSaveAndQuitClicked;
+            if (_returnQuitButton != null) _returnQuitButton.clicked += OnReturnQuitWithoutSavingClicked;
+            if (_returnCancelButton != null) _returnCancelButton.clicked += HideReturnToTitleDialog;
         }
 
         private void UnregisterCallbacks()
@@ -118,6 +137,9 @@ namespace Rapadura.UI.Menus
             if (_achievementsButton != null) _achievementsButton.clicked -= OnAchievementsClicked;
             if (_craftingButton != null) _craftingButton.clicked -= OnCraftingClicked;
             if (_mainMenuButton != null) _mainMenuButton.clicked -= OnMainMenuClicked;
+            if (_returnSaveButton != null) _returnSaveButton.clicked -= OnReturnSaveAndQuitClicked;
+            if (_returnQuitButton != null) _returnQuitButton.clicked -= OnReturnQuitWithoutSavingClicked;
+            if (_returnCancelButton != null) _returnCancelButton.clicked -= HideReturnToTitleDialog;
         }
 
         private void Hide_NoArgs() => Hide();
@@ -170,6 +192,8 @@ namespace Rapadura.UI.Menus
                 _root.style.display = DisplayStyle.None;
             }
 
+            SetReturnToTitleDialogVisible(false);
+
             if (_controlsTimeScale)
             {
                 GameplayPause.Release(this);
@@ -197,6 +221,12 @@ namespace Rapadura.UI.Menus
         /// </summary>
         public void HandleBack()
         {
+            if (IsReturnToTitleDialogOpen)
+            {
+                HideReturnToTitleDialog();
+                return;
+            }
+
             if (_settingsMenu != null && _settingsMenu.IsOpen)
             {
                 if (!_settingsMenu.IsRebinding)
@@ -246,9 +276,117 @@ namespace Rapadura.UI.Menus
             }
         }
 
+        // ------------------------------------------------------------------
+        // "Menu Principal": confirm dialog → (auto-save) → GameFlowService.ReturnToTitle
+        // ------------------------------------------------------------------
+
+        public bool IsReturnToTitleDialogOpen => _returnDialog != null && _returnDialog.style.display == DisplayStyle.Flex;
+
         private void OnMainMenuClicked()
         {
+            if (_returnDialog == null)
+            {
+                // No dialog asset found: never strand the player on the button — ask nothing, keep progress.
+                Debug.LogWarning("[PauseMenuController] Return-to-title dialog missing; saving before leaving.");
+                ConfirmReturnToTitle(ReturnToTitleChoice.SaveAndQuit);
+                return;
+            }
+
+            ApplyReturnToTitleTexts();
+            SetReturnToTitleDialogVisible(true);
+            _returnCancelButton?.Focus();
+        }
+
+        private void OnReturnSaveAndQuitClicked() => ConfirmReturnToTitle(ReturnToTitleChoice.SaveAndQuit);
+
+        private void OnReturnQuitWithoutSavingClicked() => ConfirmReturnToTitle(ReturnToTitleChoice.QuitWithoutSaving);
+
+        private void HideReturnToTitleDialog()
+        {
+            SetReturnToTitleDialogVisible(false);
+            _mainMenuButton?.Focus();
+        }
+
+        private void ConfirmReturnToTitle(ReturnToTitleChoice choice)
+        {
+            ServiceLocator.TryGet(out SaveManager saveManager);
+            ServiceLocator.TryGet(out Rapadura.Gameplay.Flow.GameFlowService flow);
+
+            if (flow != null && ReturnToTitleAction.Execute(choice, saveManager, flow))
+            {
+                // The world map is loading: keep gameplay frozen (this menu still holds GameplayPause)
+                // until the scene swap disables this component, whose OnDisable releases the hold.
+                SetReturnToTitleDialogVisible(false);
+                OnMainMenuRequested?.Invoke();
+                return;
+            }
+
+            if (flow == null)
+            {
+                // Played without a GameManager (scene opened directly): no flow to return to.
+                if (choice == ReturnToTitleChoice.SaveAndQuit)
+                {
+                    saveManager?.AutoSave();
+                }
+
+                Debug.LogWarning("[PauseMenuController] No GameFlowService registered (missing GameManager?); cannot return to the title screen.");
+            }
+
+            Hide();
             OnMainMenuRequested?.Invoke();
+        }
+
+        /// <summary>Instantiates the dialog once into the pause root (serialized asset, else the Resources copy).</summary>
+        private void BindReturnToTitleDialog()
+        {
+            VisualElement host = _root ?? _uiDocument.rootVisualElement;
+            _returnDialog = host.Q<VisualElement>("return-title-dialog");
+
+            if (_returnDialog == null)
+            {
+                VisualTreeAsset asset = _returnToTitleDialogAsset != null
+                    ? _returnToTitleDialogAsset
+                    : Resources.Load<VisualTreeAsset>(ReturnToTitleDialogResourcePath);
+
+                if (asset == null)
+                {
+                    return;
+                }
+
+                asset.CloneTree(host);
+                _returnDialog = host.Q<VisualElement>("return-title-dialog");
+
+                if (_returnDialog == null)
+                {
+                    return;
+                }
+            }
+
+            _returnDialogTitle = _returnDialog.Q<Label>("return-title-title");
+            _returnDialogMessage = _returnDialog.Q<Label>("return-title-message");
+            _returnSaveButton = _returnDialog.Q<Button>("return-title-save-button");
+            _returnQuitButton = _returnDialog.Q<Button>("return-title-quit-button");
+            _returnCancelButton = _returnDialog.Q<Button>("return-title-cancel-button");
+            SetReturnToTitleDialogVisible(false);
+        }
+
+        private void SetReturnToTitleDialogVisible(bool visible)
+        {
+            if (_returnDialog != null)
+            {
+                _returnDialog.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+        }
+
+        private void ApplyReturnToTitleTexts()
+        {
+            ServiceLocator.TryGet(out Rapadura.Core.Localization.LocalizationManager localization);
+
+            if (_returnDialogTitle != null) _returnDialogTitle.text = ReturnToTitleTexts.Get(localization, ReturnToTitleTexts.Title);
+            if (_returnDialogMessage != null) _returnDialogMessage.text = ReturnToTitleTexts.Get(localization, ReturnToTitleTexts.Message);
+            if (_returnSaveButton != null) _returnSaveButton.text = ReturnToTitleTexts.Get(localization, ReturnToTitleTexts.SaveAndQuit);
+            if (_returnQuitButton != null) _returnQuitButton.text = ReturnToTitleTexts.Get(localization, ReturnToTitleTexts.QuitWithoutSaving);
+            if (_returnCancelButton != null) _returnCancelButton.text = ReturnToTitleTexts.Get(localization, ReturnToTitleTexts.Cancel);
         }
     }
 }

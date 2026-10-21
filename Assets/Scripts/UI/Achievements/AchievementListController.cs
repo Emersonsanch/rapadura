@@ -3,6 +3,7 @@ using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Achievements;
+using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -33,6 +34,7 @@ namespace Rapadura.UI.Achievements
         private AchievementManager _manager;
         private LocalizationManager _localization;
         private bool _isOpen;
+        private FocusNavigator _focusNavigator;
 
         public bool IsOpen => _isOpen;
 
@@ -56,6 +58,8 @@ namespace Rapadura.UI.Achievements
             EventBus.Subscribe<AchievementUnlockedEvent>(OnAchievementUnlocked);
             EventBus.Subscribe<GameLoadedEvent>(OnGameLoaded);
             ResolveServices();
+            // Gamepad/keyboard: D-pad steps through the (focusable) rows, B closes - see FocusNavigator.
+            _focusNavigator = FocusNavigator.Attach(_root, () => IsOpen, Hide, () => _closeButton);
             Hide();
         }
 
@@ -66,6 +70,9 @@ namespace Rapadura.UI.Achievements
 
         private void OnDisable()
         {
+            _focusNavigator?.Detach();
+            _focusNavigator = null;
+
             if (_closeButton != null) _closeButton.clicked -= Hide;
 
             EventBus.Unsubscribe<AchievementUnlockedEvent>(OnAchievementUnlocked);
@@ -114,10 +121,12 @@ namespace Rapadura.UI.Achievements
             GameplayPause.Acquire(this);
 
             Refresh();
+            _focusNavigator?.FocusInitial();
         }
 
         public void Hide()
         {
+            _focusNavigator?.ReleaseFocus();
             _isOpen = false;
 
             if (_root != null)
@@ -191,7 +200,8 @@ namespace Rapadura.UI.Achievements
 
         private static VisualElement CreateRow(AchievementEntryViewModel entry)
         {
-            var row = new VisualElement { name = $"achievement-item-{entry.AchievementId}" };
+            // Focusable (no action) so a gamepad can step through - and scroll - the list.
+            var row = new VisualElement { name = $"achievement-item-{entry.AchievementId}", focusable = true };
             row.AddToClassList("achievement-item");
             row.EnableInClassList("achievement-item--unlocked", entry.IsUnlocked);
             row.EnableInClassList("achievement-item--masked", entry.IsMasked);

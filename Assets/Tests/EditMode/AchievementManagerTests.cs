@@ -19,9 +19,9 @@ namespace Rapadura.Tests
 {
     /// <summary>
     /// EditMode tests for the Achievements system: event-driven counter and id-list unlocks, the
-    /// player-only filter on skill casts, distinct region counting, unlock-once semantics, save/load
-    /// through a real <see cref="SaveManager"/> (slot 90041, same cleanup pattern as SaveManagerTests),
-    /// retroactive unlocks for definitions added after a save, hidden-entry masking in the presenter,
+    /// player-only filter on skill casts, distinct region counting, unlock-once semantics, the
+    /// per-profile file (Saves/profile.json under <see cref="TestSaveRoot"/>) and the one-time merge of
+    /// achievements found in legacy save slots (slot 90041), retroactive unlocks for definitions added after a save, hidden-entry masking in the presenter,
     /// and sanity checks over the seeded <c>Resources/Achievements</c> catalog and its localization.
     /// </summary>
     public class AchievementManagerTests
@@ -97,6 +97,46 @@ namespace Rapadura.Tests
             manager.Initialize();
             _managers.Add(manager);
             return manager;
+        }
+
+        /// <summary>Like <see cref="CreateManager"/> but reading/writing the profile file (inside the TestSaveRoot temp folder).</summary>
+        private AchievementManager CreatePersistentManager(params AchievementDefinition[] definitions)
+        {
+            var manager = new AchievementManager(definitions) { PersistsProfile = true };
+            manager.Initialize();
+            _managers.Add(manager);
+            return manager;
+        }
+
+        /// <summary>Writes a save slot the way pre-profile builds did: with an "Achievements" entry.</summary>
+        private static void WriteLegacySlot(int slot, AchievementSaveState state)
+        {
+            var data = new SaveData
+            {
+                entries = new List<SaveEntry>
+                {
+                    new SaveEntry
+                    {
+                        key = AchievementManager.Key,
+                        typeName = typeof(AchievementSaveState).AssemblyQualifiedName,
+                        json = JsonUtility.ToJson(state)
+                    }
+                }
+            };
+
+            Directory.CreateDirectory(TestSaveRoot.Current);
+            File.WriteAllText(SlotPath(slot), JsonUtility.ToJson(data, prettyPrint: true));
+        }
+
+        private static AchievementSaveState LegacyState(long kills, params string[] unlockedIds)
+        {
+            return new AchievementSaveState
+            {
+                counterTypes = new[] { (int)AchievementConditionType.EnemiesKilled },
+                counterValues = new[] { kills },
+                unlockedIds = unlockedIds,
+                unlockedAtIso8601 = unlockedIds.Select(_ => "2026-01-01T00:00:00.0000000Z").ToArray()
+            };
         }
 
         private GameObject CreateObject(string name, string tag = null)
@@ -253,28 +293,24 @@ namespace Rapadura.Tests
         // ---------------------------------------------------------------
 
         [Test]
-        public void SaveAndLoad_RoundTripsStatsObservedIdsAndUnlocks()
+        public void ProfileFile_RoundTripsStatsObservedIdsAndUnlocks()
         {
             AchievementDefinition kill = Def("kill1", AchievementConditionType.EnemiesKilled, 1);
             AchievementDefinition pair = Def("pair", AchievementConditionType.QuestsCompleted, 1, new[] { "q_a", "q_b" });
-            AchievementManager source = CreateManager(kill, pair);
+            AchievementManager source = CreatePersistentManager(kill, pair);
+
+            StringAssert.StartsWith(TestSaveRoot.Current, AchievementManager.ProfileFilePath, "The profile must follow SaveRootOverride.");
 
             EventBus.Publish(new EnemyDiedEvent(null, false));
+            Assert.IsTrue(File.Exists(AchievementManager.ProfileFilePath), "An unlock writes the profile right away.");
+
             EventBus.Publish(new QuestCompletedEvent("q_a"));
             EventBus.Publish(new ItemSoldEvent("shop", "item", 1, 25));
 
-            var saveManager = new SaveManager();
-            saveManager.Initialize();
-            saveManager.Register(source);
-            saveManager.Save(TestSlot);
-            Assert.IsTrue(File.Exists(SlotPath(TestSlot)));
-
-            source.Shutdown();
+            source.Shutdown(); // flushes stats gathered since the last unlock
             _unlockedEvents.Clear();
 
-            AchievementManager restored = CreateManager(kill, pair);
-            saveManager.Register(restored);
-            Assert.IsTrue(saveManager.Load(TestSlot));
+            AchievementManager restored = CreatePersistentManager(kill, pair);
 
             Assert.IsTrue(restored.IsUnlocked("kill1"));
             Assert.IsFalse(restored.IsUnlocked("pair"));
@@ -296,7 +332,7 @@ namespace Rapadura.Tests
                 EventBus.Publish(new EnemyDiedEvent(null, false));
             }
 
-            object state = source.CaptureState();
+            object state = source.CaptureProfileState();
             source.Shutdown();
             _unlockedEvents.Clear();
 
@@ -307,6 +343,109 @@ namespace Rapadura.Tests
 
             Assert.IsTrue(restored.IsUnlocked("kill10"));
             CollectionAssert.AreEqual(new[] { "kill10" }, _unlockedEvents);
+        }
+
+        [Test]
+        public void ProfileFile_IsWrittenOnGameSaving_AndSlotsNoLongerCarryAchievements()
+        {
+            AchievementManager manager = CreatePersistentManager(Def("kill5", AchievementConditionType.EnemiesKilled, 5));
+            EventBus.Publish(new EnemyDiedEvent(null, false));
+            EventBus.Publish(new EnemyDiedEvent(null, false));
+
+            var saveManager = new SaveManager();
+            saveManager.Initialize();
+            saveManager.Register(manager);
+            saveManager.Save(TestSlot); // publishes GameSavingEvent
+
+            SaveData slot = saveManager.PeekSlot(TestSlot);
+            Assert.IsNotNull(slot);
+            Assert.IsFalse(SaveManager.TryGetEntryState(slot, AchievementManager.Key, out AchievementSaveState _),
+                "Achievements live in the profile now, not in each save slot.");
+
+            var profile = JsonUtility.FromJson<AchievementProfileData>(File.ReadAllText(AchievementManager.ProfileFilePath));
+            Assert.IsTrue(profile.legacySlotsImported);
+            CollectionAssert.AreEqual(new[] { (long)2 }, profile.achievements.counterValues);
+        }
+
+        [Test]
+        public void LegacySlots_AreMergedIntoANewProfile_OnlyOnce()
+        {
+            AchievementDefinition kill1 = Def("kill1", AchievementConditionType.EnemiesKilled, 1);
+            AchievementDefinition kill5 = Def("kill5", AchievementConditionType.EnemiesKilled, 5);
+            WriteLegacySlot(TestSlot, LegacyState(3, "kill1"));
+            WriteLegacySlot(TestSlot + 1, LegacyState(1));
+            Assume.That(File.Exists(AchievementManager.ProfileFilePath), Is.False);
+
+            AchievementManager first = CreatePersistentManager(kill1, kill5);
+
+            Assert.IsTrue(first.IsUnlocked("kill1"));
+            Assert.AreEqual(new System.DateTime(2026, 1, 1, 0, 0, 0, System.DateTimeKind.Utc), first.GetUnlockedAt("kill1")?.ToUniversalTime());
+            Assert.AreEqual(3, first.GetStat(AchievementConditionType.EnemiesKilled), "Counters keep the highest value across slots.");
+            Assert.IsTrue(File.Exists(AchievementManager.ProfileFilePath), "The import is persisted immediately.");
+            Assert.IsEmpty(_unlockedEvents, "Imported unlocks must not re-announce.");
+            first.Shutdown();
+
+            // A slot changed after the import is not re-imported on the next start.
+            WriteLegacySlot(TestSlot, LegacyState(50, "kill1", "kill5"));
+            AchievementManager second = CreatePersistentManager(kill1, kill5);
+
+            Assert.AreEqual(3, second.GetStat(AchievementConditionType.EnemiesKilled));
+            Assert.IsFalse(second.IsUnlocked("kill5"));
+        }
+
+        [Test]
+        public void LoadingALegacySlot_MergesIntoTheProfile_WithoutTakingProgressAway()
+        {
+            AchievementDefinition kill1 = Def("kill1", AchievementConditionType.EnemiesKilled, 1);
+            AchievementDefinition boss = Def("boss1", AchievementConditionType.BossesDefeated, 1);
+            AchievementManager manager = CreatePersistentManager(kill1, boss);
+
+            for (int i = 0; i < 5; i++)
+            {
+                EventBus.Publish(new EnemyDiedEvent(null, false));
+            }
+
+            // Written after the profile already exists, e.g. a save copied from another machine.
+            WriteLegacySlot(TestSlot, LegacyState(2, "boss1"));
+
+            var saveManager = new SaveManager();
+            saveManager.Initialize();
+            saveManager.Register(manager);
+            Assert.IsTrue(saveManager.Load(TestSlot));
+
+            Assert.AreEqual(5, manager.GetStat(AchievementConditionType.EnemiesKilled), "Merge keeps the higher counter.");
+            Assert.IsTrue(manager.IsUnlocked("kill1"));
+            Assert.IsTrue(manager.IsUnlocked("boss1"));
+
+            var profile = JsonUtility.FromJson<AchievementProfileData>(File.ReadAllText(AchievementManager.ProfileFilePath));
+            CollectionAssert.Contains(profile.achievements.unlockedIds, "boss1", "What a legacy slot adds is written to the profile right away.");
+        }
+
+        [Test]
+        public void ProfileFile_CorruptedMain_FallsBackToBackup()
+        {
+            AchievementDefinition kill1 = Def("kill1", AchievementConditionType.EnemiesKilled, 1);
+            AchievementDefinition kill2 = Def("kill2", AchievementConditionType.EnemiesKilled, 2);
+            AchievementManager source = CreatePersistentManager(kill1, kill2);
+            EventBus.Publish(new EnemyDiedEvent(null, false)); // writes profile (kill1)
+            EventBus.Publish(new EnemyDiedEvent(null, false)); // writes profile again, previous one becomes .bak
+            source.Shutdown();
+
+            File.WriteAllText(AchievementManager.ProfileFilePath, "{ not json");
+            AchievementManager restored = CreatePersistentManager(kill1, kill2);
+
+            Assert.IsTrue(restored.IsUnlocked("kill1"));
+        }
+
+        [Test]
+        public void CustomCatalogConstructor_NeverTouchesTheProfile()
+        {
+            AchievementManager manager = CreateManager(Def("kill1", AchievementConditionType.EnemiesKilled, 1));
+            EventBus.Publish(new EnemyDiedEvent(null, false));
+            manager.Shutdown();
+
+            Assert.IsFalse(manager.PersistsProfile);
+            Assert.IsFalse(File.Exists(AchievementManager.ProfileFilePath));
         }
 
         // ---------------------------------------------------------------

@@ -1,15 +1,17 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <Style src="CharacterSelectView.uss" />
     <ui:VisualElement name="character-select-root" class="character-select__root" focusable="false">
-        <ui:Label text="Escolha seu Herói" class="character-select__title" />
+        <ui:Label text="Escolha seu Herói" class="character-select__title loc" view-data-key="ui.character_select.title" />
         <ui:VisualElement class="character-select__body">
             <ui:VisualElement name="roster-container" class="character-select__roster" />
             <ui:VisualElement class="character-select__detail">
                 <ui:Image name="detail-preview" class="character-select__detail-preview" focusable="false" />
                 <ui:Label name="detail-name" text="" class="character-select__detail-name" focusable="true" />
                 <ui:Label name="detail-class-role" text="" class="character-select__detail-role" focusable="true" />
-                <ui:Label name="detail-lore" text="Selecione um personagem para ver a história." class="character-select__detail-lore" focusable="true" />
-                <ui:Button name="confirm-button" text="Confirmar" class="character-select__confirm" focusable="true" />
+                <ui:ScrollView name="detail-lore-scroll" class="character-select__detail-lore-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" focusable="false">
+                    <ui:Label name="detail-lore" text="Selecione um personagem para ver a história." class="character-select__detail-lore" focusable="true" />
+                </ui:ScrollView>
+                <ui:Button name="confirm-button" text="Confirmar" class="character-select__confirm loc" focusable="true" view-data-key="ui.character_select.confirm" />
                 <ui:Button name="continue-saved-button" text="Continuar" class="character-select__confirm character-select__continue" focusable="true" style="display: none;" />
             </ui:VisualElement>
         </ui:VisualElement>
