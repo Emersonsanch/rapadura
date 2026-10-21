@@ -60,7 +60,7 @@ namespace Rapadura.Gameplay.Quests
     ///   SaveManager.Register(QuestManager);
     /// plus a public <c>QuestManager</c> property, mirroring DialogueManager/CraftingManager.
     /// </summary>
-    public class QuestManager : IManager, ISaveable
+    public class QuestManager : IManager, ISaveable, IResettable
     {
         private const string LogCategory = "Quests";
 
@@ -94,6 +94,17 @@ namespace Rapadura.Gameplay.Quests
             EventBus.Unsubscribe<DialogueEndedEvent>(OnDialogueEnded);
 
             _definitionsById.Clear();
+            _activeQuests.Clear();
+            _completedQuestIds.Clear();
+            _customFlags.Clear();
+        }
+
+        /// <summary>
+        /// New game / load: no active or completed quests, no custom flags. Registered definitions
+        /// (content) and reward targets (the current scene's player) are kept.
+        /// </summary>
+        public void ResetForNewSession()
+        {
             _activeQuests.Clear();
             _completedQuestIds.Clear();
             _customFlags.Clear();

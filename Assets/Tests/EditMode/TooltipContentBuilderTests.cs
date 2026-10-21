@@ -46,10 +46,10 @@ namespace Rapadura.Tests
             TooltipContent content = TooltipContentBuilder.ForItem(sword);
 
             Assert.AreEqual("Iron Sword", content.Title);
-            Assert.AreEqual("Uncommon · Main hand", content.Subtitle);
+            Assert.AreEqual("Incomum · Mão principal", content.Subtitle);
             Assert.AreEqual(ItemRarity.Uncommon, content.Rarity);
-            CollectionAssert.Contains(content.StatLines, "Damage: 12");
-            CollectionAssert.Contains(content.StatLines, "Attack speed: 1.5");
+            CollectionAssert.Contains(content.StatLines, "Dano: 12");
+            CollectionAssert.Contains(content.StatLines, "Velocidade de ataque: 1.5");
             Assert.AreEqual("A sturdy blade.", content.Description);
         }
 
@@ -61,8 +61,8 @@ namespace Rapadura.Tests
 
             TooltipContent content = TooltipContentBuilder.ForItem(potion);
 
-            Assert.AreEqual("Common · Consumable", content.Subtitle);
-            CollectionAssert.Contains(content.StatLines, "Restores 25 health");
+            Assert.AreEqual("Comum · Consumível", content.Subtitle);
+            CollectionAssert.Contains(content.StatLines, "Restaura 25 de vida");
         }
 
         [Test]
@@ -87,9 +87,9 @@ namespace Rapadura.Tests
 
             Assert.AreEqual("Afiada Iron Sword Ligeira", content.Title);
             Assert.AreEqual(ItemRarity.Rare, content.Rarity);
-            StringAssert.StartsWith("Rare", content.Subtitle);
-            CollectionAssert.Contains(content.StatLines, "+4 Attack damage");
-            CollectionAssert.Contains(content.StatLines, "+10% Move speed");
+            StringAssert.StartsWith("Raro", content.Subtitle);
+            CollectionAssert.Contains(content.StatLines, "+4 Dano de ataque");
+            CollectionAssert.Contains(content.StatLines, "+10% Velocidade de movimento");
             Assert.AreEqual(2, content.StatLines.FindAll(l => l.StartsWith("+")).Count, "unknown affix ids are skipped, not printed");
         }
 
@@ -114,10 +114,10 @@ namespace Rapadura.Tests
 
             TooltipContent content = TooltipContentBuilder.ForItem(helmet, slot, buyPrice: 30, sellPrice: 12);
 
-            CollectionAssert.Contains(content.StatLines, "Defense: 3");
-            CollectionAssert.Contains(content.StatLines, "Durability: 80/100");
-            CollectionAssert.Contains(content.StatLines, "Price: 30");
-            CollectionAssert.Contains(content.StatLines, "Sells for: 12");
+            CollectionAssert.Contains(content.StatLines, "Defesa: 3");
+            CollectionAssert.Contains(content.StatLines, "Durabilidade: 80/100");
+            CollectionAssert.Contains(content.StatLines, "Preço: 30");
+            CollectionAssert.Contains(content.StatLines, "Vende por: 12");
         }
 
         [Test]
@@ -137,11 +137,11 @@ namespace Rapadura.Tests
         [Test]
         public void FormatModifier_FlatPercentNegativeAndFractionStats()
         {
-            Assert.AreEqual("+5 Attack damage", TooltipContentBuilder.FormatModifier(StatType.AttackDamage, ModifierApplication.Flat, 5f));
-            Assert.AreEqual("+10% Move speed", TooltipContentBuilder.FormatModifier(StatType.MoveSpeed, ModifierApplication.PercentAdditive, 0.1f));
-            Assert.AreEqual("-2 Defense", TooltipContentBuilder.FormatModifier(StatType.Defense, ModifierApplication.Flat, -2f));
+            Assert.AreEqual("+5 Dano de ataque", TooltipContentBuilder.FormatModifier(StatType.AttackDamage, ModifierApplication.Flat, 5f));
+            Assert.AreEqual("+10% Velocidade de movimento", TooltipContentBuilder.FormatModifier(StatType.MoveSpeed, ModifierApplication.PercentAdditive, 0.1f));
+            Assert.AreEqual("-2 Defesa", TooltipContentBuilder.FormatModifier(StatType.Defense, ModifierApplication.Flat, -2f));
             // Crit chance / cost reduction are fractions even when Flat (AffixDatabaseSeeder authors 0.03 = 3%).
-            Assert.AreEqual("+3% Resource cost reduction", TooltipContentBuilder.FormatModifier(StatType.ResourceCostReduction, ModifierApplication.Flat, 0.03f));
+            Assert.AreEqual("+3% Redução de custo", TooltipContentBuilder.FormatModifier(StatType.ResourceCostReduction, ModifierApplication.Flat, 0.03f));
         }
 
         // ---------------------------------------------------------------
@@ -149,7 +149,7 @@ namespace Rapadura.Tests
         // ---------------------------------------------------------------
 
         [Test]
-        public void Localizer_IsUsed_AndMissingKeyMarkerFallsBackToEnglish()
+        public void Localizer_IsUsed_AndMissingKeyMarkerFallsBackToPtBR()
         {
             ItemDefinition sword = CreateItem("item_sword", "Espada", ItemType.Weapon, ItemRarity.Rare, EquipmentSlot.MainHand);
             SetPrivateField(sword, "_weaponDamage", 8f);
@@ -160,12 +160,18 @@ namespace Rapadura.Tests
                 ptBR[entry.Key] = entry.PtBR;
             }
 
-            ptBR.Remove("ui.tooltip.slot.main_hand");
+            var en = new Dictionary<string, string>();
+            foreach (var entry in TooltipLocalization.Entries)
+            {
+                en[entry.Key] = entry.En;
+            }
 
-            TooltipContent content = TooltipContentBuilder.ForItem(sword, localize: key => ptBR.TryGetValue(key, out string text) ? text : $"[{key}]");
+            en.Remove("ui.tooltip.slot.main_hand");
 
-            Assert.AreEqual("Raro · Main hand", content.Subtitle, "missing key '[...]' marker should fall back to the English text");
-            CollectionAssert.Contains(content.StatLines, "Dano: 8");
+            TooltipContent content = TooltipContentBuilder.ForItem(sword, localize: key => en.TryGetValue(key, out string text) ? text : $"[{key}]");
+
+            Assert.AreEqual("Rare · Mão principal", content.Subtitle, "missing key '[...]' marker should fall back to the pt-BR text");
+            CollectionAssert.Contains(content.StatLines, "Damage: 8");
         }
 
         [Test]
@@ -233,12 +239,12 @@ namespace Rapadura.Tests
             TooltipContent content = TooltipContentBuilder.ForSkill(fireball, currentLevel: 3);
 
             Assert.AreEqual("Fireball", content.Title);
-            Assert.AreEqual("Level 3/5 · Fire", content.Subtitle);
+            Assert.AreEqual("Nível 3/5 · Fogo", content.Subtitle);
             Assert.IsNull(content.Rarity);
-            CollectionAssert.Contains(content.StatLines, "Damage: 30"); // 20 + 5 * (3 - 1)
-            CollectionAssert.Contains(content.StatLines, "Mana cost: 15");
-            CollectionAssert.Contains(content.StatLines, "Cooldown: 4s");
-            CollectionAssert.Contains(content.StatLines, "-20% Move speed for 3s");
+            CollectionAssert.Contains(content.StatLines, "Dano: 30"); // 20 + 5 * (3 - 1)
+            CollectionAssert.Contains(content.StatLines, "Custo de mana: 15");
+            CollectionAssert.Contains(content.StatLines, "Recarga: 4s");
+            CollectionAssert.Contains(content.StatLines, "-20% Velocidade de movimento por 3s");
             Assert.AreEqual("Hurls a ball of fire.", content.Description);
         }
 
@@ -252,9 +258,9 @@ namespace Rapadura.Tests
 
             TooltipContent content = TooltipContentBuilder.ForSkill(dash, currentLevel: 0);
 
-            Assert.AreEqual("Not learned", content.Subtitle);
-            CollectionAssert.Contains(content.StatLines, "Damage: 10");
-            Assert.IsFalse(content.StatLines.Exists(l => l.StartsWith("Mana cost")), "zero costs are omitted");
+            Assert.AreEqual("Não aprendida", content.Subtitle);
+            CollectionAssert.Contains(content.StatLines, "Dano: 10");
+            Assert.IsFalse(content.StatLines.Exists(l => l.StartsWith("Custo de mana")), "zero costs are omitted");
         }
 
         [Test]
@@ -273,7 +279,7 @@ namespace Rapadura.Tests
 
         private static void AssertHasKey(string key)
         {
-            Assert.IsNotNull(TooltipLocalization.GetEnglishFallback(key), $"missing tooltip localization key '{key}'");
+            Assert.IsNotNull(TooltipLocalization.GetFallback(key), $"missing tooltip localization key '{key}'");
         }
 
         private ItemDefinition CreateItem(string id, string displayName, ItemType type, ItemRarity rarity, EquipmentSlot slot)

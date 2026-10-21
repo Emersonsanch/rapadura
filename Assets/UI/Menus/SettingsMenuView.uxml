@@ -3,31 +3,31 @@
     <ui:VisualElement name="settings-menu-root" class="settings-menu-root">
         <ui:VisualElement name="settings-menu-panel" class="settings-menu-panel">
             <ui:VisualElement name="settings-header" class="settings-header">
-                <ui:Label text="Configurações" class="settings-title" />
+                <ui:Label text="Configurações" class="settings-title loc" view-data-key="ui.settings.title" />
                 <ui:VisualElement class="settings-header-spacer" picking-mode="Ignore" />
-                <ui:Button name="close-button" text="Fechar" focusable="true" class="settings-close-button" />
+                <ui:Button name="close-button" text="Fechar" focusable="true" class="settings-close-button loc" view-data-key="ui.settings.close" />
             </ui:VisualElement>
 
             <ui:VisualElement name="settings-tab-bar" class="settings-tab-bar">
-                <ui:Button name="tab-graphics-button" text="Gráficos" focusable="true" class="settings-tab-button" />
-                <ui:Button name="tab-audio-button" text="Áudio" focusable="true" class="settings-tab-button" />
-                <ui:Button name="tab-controls-button" text="Controles" focusable="true" class="settings-tab-button" />
-                <ui:Button name="tab-language-button" text="Idioma" focusable="true" class="settings-tab-button" />
-                <ui:Button name="tab-accessibility-button" text="Acessibilidade" focusable="true" class="settings-tab-button" />
+                <ui:Button name="tab-graphics-button" text="Gráficos" focusable="true" class="settings-tab-button loc" view-data-key="ui.settings.tab.graphics" />
+                <ui:Button name="tab-audio-button" text="Áudio" focusable="true" class="settings-tab-button loc" view-data-key="ui.settings.tab.audio" />
+                <ui:Button name="tab-controls-button" text="Controles" focusable="true" class="settings-tab-button loc" view-data-key="ui.settings.tab.controls" />
+                <ui:Button name="tab-language-button" text="Idioma" focusable="true" class="settings-tab-button loc" view-data-key="ui.settings.tab.language" />
+                <ui:Button name="tab-accessibility-button" text="Acessibilidade" focusable="true" class="settings-tab-button loc" view-data-key="ui.settings.tab.accessibility" />
             </ui:VisualElement>
 
             <ui:VisualElement name="settings-content" class="settings-content">
                 <ui:VisualElement name="panel-graphics" class="settings-panel">
-                    <ui:DropdownField name="quality-dropdown" label="Qualidade" focusable="true" class="settings-field" />
-                    <ui:Toggle name="fullscreen-toggle" label="Tela Cheia" focusable="true" class="settings-field" />
+                    <ui:DropdownField name="quality-dropdown" label="Qualidade" focusable="true" class="settings-field loc" view-data-key="ui.settings.graphics.quality" />
+                    <ui:Toggle name="fullscreen-toggle" label="Tela Cheia" focusable="true" class="settings-field loc" view-data-key="ui.settings.graphics.fullscreen" />
                     <ui:Toggle name="high-fps-combat-toggle" label="60 FPS em combate" focusable="true" class="settings-field" />
                 </ui:VisualElement>
 
                 <ui:VisualElement name="panel-audio" class="settings-panel">
-                    <ui:Slider name="master-volume-slider" label="Volume Geral" low-value="0" high-value="1" focusable="true" class="settings-field" />
-                    <ui:Slider name="music-volume-slider" label="Música" low-value="0" high-value="1" focusable="true" class="settings-field" />
-                    <ui:Slider name="sfx-volume-slider" label="Efeitos" low-value="0" high-value="1" focusable="true" class="settings-field" />
-                    <ui:Slider name="ui-volume-slider" label="Interface" low-value="0" high-value="1" focusable="true" class="settings-field" />
+                    <ui:Slider name="master-volume-slider" label="Volume Geral" low-value="0" high-value="1" focusable="true" class="settings-field loc" view-data-key="ui.settings.audio.master" />
+                    <ui:Slider name="music-volume-slider" label="Música" low-value="0" high-value="1" focusable="true" class="settings-field loc" view-data-key="ui.settings.audio.music" />
+                    <ui:Slider name="sfx-volume-slider" label="Efeitos" low-value="0" high-value="1" focusable="true" class="settings-field loc" view-data-key="ui.settings.audio.sfx" />
+                    <ui:Slider name="ui-volume-slider" label="Interface" low-value="0" high-value="1" focusable="true" class="settings-field loc" view-data-key="ui.settings.audio.ui" />
                 </ui:VisualElement>
 
                 <ui:VisualElement name="panel-controls" class="settings-panel">
@@ -47,15 +47,15 @@
                 </ui:VisualElement>
 
                 <ui:VisualElement name="panel-language" class="settings-panel">
-                    <ui:DropdownField name="language-dropdown" label="Idioma" focusable="true" class="settings-field" />
+                    <ui:DropdownField name="language-dropdown" label="Idioma" focusable="true" class="settings-field loc" view-data-key="ui.settings.language.label" />
                 </ui:VisualElement>
 
                 <ui:VisualElement name="panel-accessibility" class="settings-panel">
-                    <ui:Slider name="font-scale-slider" label="Tamanho da Fonte" low-value="0.75" high-value="2" show-input-field="false" focusable="true" class="settings-field" />
-                    <ui:Toggle name="high-contrast-toggle" label="Alto Contraste" focusable="true" class="settings-field" />
-                    <ui:DropdownField name="colorblind-dropdown" label="Modo Daltonismo" focusable="true" class="settings-field" />
-                    <ui:Slider name="screen-shake-slider" label="Tremor de Tela" low-value="0" high-value="1" focusable="true" class="settings-field" />
-                    <ui:Toggle name="reduce-flash-toggle" label="Reduzir Flashes" focusable="true" class="settings-field" />
+                    <ui:Slider name="font-scale-slider" label="Tamanho da Fonte" low-value="0.75" high-value="2" show-input-field="false" focusable="true" class="settings-field loc" view-data-key="ui.settings.accessibility.font_scale" />
+                    <ui:Toggle name="high-contrast-toggle" label="Alto Contraste" focusable="true" class="settings-field loc" view-data-key="ui.settings.accessibility.high_contrast" />
+                    <ui:DropdownField name="colorblind-dropdown" label="Modo Daltonismo" focusable="true" class="settings-field loc" view-data-key="ui.settings.accessibility.colorblind" />
+                    <ui:Slider name="screen-shake-slider" label="Tremor de Tela" low-value="0" high-value="1" focusable="true" class="settings-field loc" view-data-key="ui.settings.accessibility.screen_shake" />
+                    <ui:Toggle name="reduce-flash-toggle" label="Reduzir Flashes" focusable="true" class="settings-field loc" view-data-key="ui.settings.accessibility.reduce_flash" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

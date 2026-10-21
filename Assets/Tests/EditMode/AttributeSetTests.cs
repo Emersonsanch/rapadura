@@ -92,23 +92,23 @@ namespace Rapadura.Tests
         [Test]
         public void SpendingVitality_IncreasesMaxHealthByFormula()
         {
+            // Asserts on PlayerStats.MaxHealth itself (it used to re-apply the modifier on top of
+            // _stats.MaxHealth, which only passed because PlayerStats ignored the BuffController).
+            float baseMaxHealth = _stats.MaxHealth;
             _attributeSet.GrantAttributePoints(3);
             _attributeSet.TrySpendPoint(AttributeType.Vitality, 3);
 
-            float modified = _buffController.GetModifiedValue(StatType.MaxHealth, _stats.MaxHealth);
-
-            Assert.AreEqual(_stats.MaxHealth + 3 * AttributeSet.VitalityHealthPerPoint, modified, 0.001f);
+            Assert.AreEqual(baseMaxHealth + 3 * AttributeSet.VitalityHealthPerPoint, _stats.MaxHealth, 0.001f);
         }
 
         [Test]
         public void SpendingSpirit_IncreasesMaxManaByFormula()
         {
+            float baseMaxMana = _stats.MaxMana;
             _attributeSet.GrantAttributePoints(2);
             _attributeSet.TrySpendPoint(AttributeType.Spirit, 2);
 
-            float modified = _buffController.GetModifiedValue(StatType.MaxMana, _stats.MaxMana);
-
-            Assert.AreEqual(_stats.MaxMana + 2 * AttributeSet.SpiritManaPerPoint, modified, 0.001f);
+            Assert.AreEqual(baseMaxMana + 2 * AttributeSet.SpiritManaPerPoint, _stats.MaxMana, 0.001f);
         }
 
         [Test]
@@ -147,11 +147,11 @@ namespace Rapadura.Tests
         [Test]
         public void ApplyCharacterPassiveBonus_AddsToTotalAndRecomputesDerivedStat()
         {
+            float baseMaxHealth = _stats.MaxHealth;
             _attributeSet.ApplyCharacterPassiveBonus(AttributeType.Vitality, 5);
 
             Assert.AreEqual(5, _attributeSet.GetTotal(AttributeType.Vitality));
-            float modified = _buffController.GetModifiedValue(StatType.MaxHealth, _stats.MaxHealth);
-            Assert.AreEqual(_stats.MaxHealth + 5 * AttributeSet.VitalityHealthPerPoint, modified, 0.001f);
+            Assert.AreEqual(baseMaxHealth + 5 * AttributeSet.VitalityHealthPerPoint, _stats.MaxHealth, 0.001f);
         }
 
         [Test]
@@ -183,13 +183,13 @@ namespace Rapadura.Tests
         public void Joaquim_ApplyPassive_GrantsVitalityBonusAndHealsToNewMax()
         {
             PlayableCharacter joaquim = CharacterRegistry.Get(CharacterId.Joaquim);
+            float baseMaxHealth = _stats.MaxHealth;
 
             joaquim.ApplyPassive(_stats);
 
             Assert.AreEqual(AttributeSet.CharacterPassiveBonusPoints, _attributeSet.GetTotal(AttributeType.Vitality));
-            float modifiedMaxHealth = _buffController.GetModifiedValue(StatType.MaxHealth, _stats.MaxHealth);
-            Assert.AreEqual(_stats.MaxHealth + AttributeSet.CharacterPassiveBonusPoints * AttributeSet.VitalityHealthPerPoint, modifiedMaxHealth, 0.001f);
-            Assert.AreEqual(_stats.MaxHealth, _stats.CurrentHealth, 0.001f, "Passive should heal the character back to full base health.");
+            Assert.AreEqual(baseMaxHealth + AttributeSet.CharacterPassiveBonusPoints * AttributeSet.VitalityHealthPerPoint, _stats.MaxHealth, 0.001f);
+            Assert.AreEqual(_stats.MaxHealth, _stats.CurrentHealth, 0.001f, "Passive should heal the character to its new (raised) max health.");
         }
 
         [Test]

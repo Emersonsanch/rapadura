@@ -11,8 +11,9 @@ namespace Rapadura.UI.Common
     /// feature stays self-contained: <see cref="TooltipController"/> merges these into the live
     /// <see cref="LocalizationManager"/> on first use (<see cref="LocalizationManager.LoadEntries"/>
     /// only adds/overwrites matching keys, it never clears others), and
-    /// <see cref="TooltipContentBuilder"/> falls back to the English text below when no localizer is
-    /// available (EditMode tests, editor tools) — a single source of truth for every tooltip string.
+    /// <see cref="TooltipContentBuilder"/> falls back to the pt-BR text below when no localizer is
+    /// available (EditMode tests, editor tools), same as every other *Texts helper — a single source
+    /// of truth for every tooltip string.
     ///
     /// Format strings use <see cref="string.Format(string, object)"/> placeholders ({0}, {1}).
     /// </summary>
@@ -105,6 +106,26 @@ namespace Rapadura.UI.Common
         };
 
         private static Dictionary<string, string> _englishByKey;
+        private static Dictionary<string, string> _fallbackByKey;
+
+        /// <summary>
+        /// No-manager fallback: pt-BR text for <paramref name="key"/> from <see cref="Entries"/>, or null
+        /// if the key isn't one of ours. pt-BR like the other helpers (QuestLogTexts, SettingsMenuTexts,
+        /// UiTexts...), so a screen never mixes languages when no LocalizationManager is around.
+        /// </summary>
+        public static string GetFallback(string key)
+        {
+            if (_fallbackByKey == null)
+            {
+                _fallbackByKey = new Dictionary<string, string>();
+                foreach (LocalizationEntry entry in Entries)
+                {
+                    _fallbackByKey[entry.Key] = entry.PtBR;
+                }
+            }
+
+            return key != null && _fallbackByKey.TryGetValue(key, out string text) ? text : null;
+        }
 
         /// <summary>English text for <paramref name="key"/> from <see cref="Entries"/>, or null if the key isn't one of ours.</summary>
         public static string GetEnglishFallback(string key)

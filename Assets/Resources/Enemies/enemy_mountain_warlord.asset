@@ -14,13 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
   _enemyName: Senhor da Guerra da Montanha
   _isBoss: 1
-  _maxHealth: 220
+  _maxHealth: 170
   _contactDamage: 18
-  _experienceReward: 10
+  _experienceReward: 28
   _lootItem: {fileID: 11400000, guid: 214ad08bc7a3def4cbeb45bedcc4524c, type: 2}
   _lootDropChance: 0.6
   _lootQuantityMin: 1
   _lootQuantityMax: 3
+  _bossExperienceMultiplier: 8
   _visualPrefab: {fileID: 0}
   _visualLocalPosition: {x: 0, y: -0.5, z: 0}
   _visualLocalEulerAngles: {x: -90, y: 0, z: 0}
@@ -36,7 +37,7 @@ MonoBehaviour:
   _detectionRadius: 13
   _loseTargetRadius: 19
   _attackRange: 2.2
-  _attackCooldown: 1.1
-  _attackDamage: 26
+  _attackCooldown: 1.3
+  _attackDamage: 20
   _fleeHealthThreshold: 0
   _fleeSafeDistance: 10

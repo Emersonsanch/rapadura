@@ -35,11 +35,12 @@ namespace Rapadura.Tests
         private ItemDefinition _herb;
         private ItemAffixDefinition _affix;
 
-        private static string SlotPath(int slot) => Path.Combine(Application.persistentDataPath, "Saves", $"slot_{slot}.json");
+        private static string SlotPath(int slot) => TestSaveRoot.SlotPath(slot);
 
         [SetUp]
         public void SetUp()
         {
+            TestSaveRoot.Enter();
             EventBus.Clear();
             DeleteSlotFiles();
 
@@ -71,6 +72,7 @@ namespace Rapadura.Tests
             }
 
             _created.Clear();
+            TestSaveRoot.Exit();
         }
 
         // ---------------------------------------------------------------

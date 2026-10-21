@@ -40,6 +40,7 @@ namespace Rapadura.UI.Shop
         private TooltipController _tooltip;
         private readonly List<VisualElement> _spawnedBuyRows = new List<VisualElement>();
         private readonly List<VisualElement> _spawnedSellRows = new List<VisualElement>();
+        private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
 
         private void Awake()
         {
@@ -53,11 +54,13 @@ namespace Rapadura.UI.Shop
             BindElements();
             ResolveShopManager();
             RegisterCallbacks();
+            _localizer.Attach(_uiDocument.rootVisualElement, OnLanguageChanged);
             Hide();
         }
 
         private void OnDisable()
         {
+            _localizer.Detach();
             UnregisterCallbacks();
             GameplayPause.Release(this);
         }
@@ -213,7 +216,7 @@ namespace Rapadura.UI.Shop
 
                 int catalogIndex = i;
                 string stockText = entry.HasInfiniteStock ? "∞" : entry.Stock.ToString();
-                string label = $"{entry.Item.DisplayName}  -  {entry.Price}  (x{stockText})";
+                string label = UiTexts.Format(_localizer.Manager, UiTexts.ShopBuyRow, entry.Item.DisplayName, entry.Price, stockText);
 
                 var row = new Button(() => OnBuyClicked(catalogIndex)) { text = label };
                 row.AddToClassList("shop-row-button");
@@ -258,7 +261,7 @@ namespace Rapadura.UI.Shop
 
                 int slotIndex = i;
                 int payout = ShopManager.CalculateSellBackPayout(item.Value, 1, shop.SellBackRate);
-                string label = $"{item.DisplayName} x{slot.quantity}  -  {payout} ea.";
+                string label = UiTexts.Format(_localizer.Manager, UiTexts.ShopSellRow, item.DisplayName, slot.quantity, payout);
 
                 var row = new Button(() => OnSellClicked(slotIndex)) { text = label };
                 row.AddToClassList("shop-row-button");
@@ -361,8 +364,18 @@ namespace Rapadura.UI.Shop
             Hide();
         }
 
+        private void OnLanguageChanged()
+        {
+            if (_isShown)
+            {
+                RefreshAll();
+            }
+        }
+
         private void Show()
         {
+            _localizer.Refresh();
+
             if (_root != null)
             {
                 _root.style.display = DisplayStyle.Flex;

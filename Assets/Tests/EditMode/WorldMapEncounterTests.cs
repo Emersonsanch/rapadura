@@ -35,6 +35,7 @@ namespace Rapadura.Tests
         [SetUp]
         public void SetUp()
         {
+            TestSaveRoot.Enter();
             ServiceLocator.Clear();
         }
 
@@ -53,7 +54,7 @@ namespace Rapadura.Tests
 
             _created.Clear();
 
-            string slotPath = Path.Combine(Application.persistentDataPath, "Saves", $"slot_{TestSlot}.json");
+            string slotPath = TestSaveRoot.SlotPath(TestSlot);
             foreach (string path in new[] { slotPath, slotPath + ".bak", slotPath + ".tmp" })
             {
                 if (File.Exists(path))
@@ -61,6 +62,8 @@ namespace Rapadura.Tests
                     File.Delete(path);
                 }
             }
+
+            TestSaveRoot.Exit();
         }
 
         // ------------------------------------------------------------------

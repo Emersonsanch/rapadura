@@ -322,7 +322,7 @@ namespace Rapadura.UI.Inventory
                 return resolved;
             }
 
-            return TooltipLocalization.GetEnglishFallback(key) ?? key;
+            return TooltipLocalization.GetFallback(key) ?? key;
         }
 
         private static void SetText(Label label, string text)

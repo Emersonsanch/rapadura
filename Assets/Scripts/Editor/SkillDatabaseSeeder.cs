@@ -233,7 +233,7 @@ namespace Rapadura.Editor
                     id = "skill_arrow", name = "Flecha", animationTrigger = "CastArrow",
                     description = "Dispara uma flecha precisa de longo alcance contra um único alvo.",
                     category = SkillCategory.Offensive, element = ElementType.Physical,
-                    cooldown = 1.5f, energy = 8f, range = 20f,
+                    cooldown = 1.5f, mana = 6f, energy = 8f, range = 20f,
                     damage = 18f, damagePerLevel = 4f
                 },
                 new SkillSeed

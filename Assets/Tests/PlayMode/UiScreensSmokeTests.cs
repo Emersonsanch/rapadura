@@ -114,7 +114,7 @@ namespace Rapadura.Tests.PlayMode
             Assert.IsFalse(screen.IsOpen(), $"'{screenId}' still reports open after closing.");
             Assert.AreEqual(DisplayStyle.None, root.resolvedStyle.display, $"'{screenId}' panel is still displayed after closing.");
 
-            LogAssert.NoUnexpectedReceived();
+            // Unexpected Error/Exception logs already fail the test (LogAssert default).
         }
 
         private static void AssertVisible(VisualElement element, string screenId)

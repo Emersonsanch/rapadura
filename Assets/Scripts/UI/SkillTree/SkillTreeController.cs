@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Player;
@@ -58,6 +59,7 @@ namespace Rapadura.UI.SkillTree
         private SkillTreeDefinition _activeTree;
         private SkillTreeNodeData _selectedNode;
         private readonly Dictionary<string, VisualElement> _nodeElementsBySkillId = new Dictionary<string, VisualElement>();
+        private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
 
         private void Awake()
         {
@@ -70,6 +72,7 @@ namespace Rapadura.UI.SkillTree
             _tooltip = TooltipController.GetOrAdd(gameObject);
             BindElements();
             RegisterCallbacks();
+            _localizer.Attach(_uiDocument.rootVisualElement, RefreshAll);
 
             SkillTreeDefinition defaultTree = ResolveDefaultTree();
 
@@ -83,6 +86,7 @@ namespace Rapadura.UI.SkillTree
 
         private void OnDisable()
         {
+            _localizer.Detach();
             UnregisterCallbacks();
             GameplayPause.Release(this);
         }
@@ -174,6 +178,7 @@ namespace Rapadura.UI.SkillTree
         {
             _root.style.display = DisplayStyle.Flex;
             GameplayPause.Acquire(this);
+            _localizer.Refresh();
             RefreshAll();
         }
 
@@ -218,12 +223,14 @@ namespace Rapadura.UI.SkillTree
             UpdateDetailPanel();
         }
 
+        private LocalizationManager Localization => _localizer.Manager;
+
         private void UpdateHeader()
         {
             _treeTitleLabel.text = _activeTree.DisplayName;
             _treeDescriptionLabel.text = _activeTree.Description;
             int points = _skillManager != null ? _skillManager.AvailableSkillPoints : 0;
-            _skillPointsLabel.text = $"Pontos disponíveis: {points}";
+            _skillPointsLabel.text = UiTexts.Format(Localization, UiTexts.SkillTreePoints, points);
         }
 
         private void BuildTree()
@@ -391,7 +398,7 @@ namespace Rapadura.UI.SkillTree
         {
             if (_selectedNode?.skill == null)
             {
-                _detailNameLabel.text = "Selecione uma skill";
+                _detailNameLabel.text = UiTexts.Get(Localization, UiTexts.SkillTreeSelectSkill);
                 _detailDescriptionLabel.text = string.Empty;
                 _detailStatsLabel.text = string.Empty;
                 _detailActionButton.style.display = DisplayStyle.None;
@@ -403,24 +410,24 @@ namespace Rapadura.UI.SkillTree
 
             _detailNameLabel.text = skill.DisplayName;
             _detailDescriptionLabel.text = skill.Description;
-            _detailStatsLabel.text = $"Custo: {skill.ManaCost} mana / {skill.EnergyCost} energia — Cooldown: {skill.CooldownSeconds}s";
+            _detailStatsLabel.text = UiTexts.Format(Localization, UiTexts.SkillTreeStats, skill.ManaCost, skill.EnergyCost, skill.CooldownSeconds);
 
             _detailActionButton.style.display = DisplayStyle.Flex;
 
             if (instance == null)
             {
                 bool canLearn = _skillManager != null && _skillManager.CanLearnSkill(skill, GetCasterLevel());
-                _detailActionButton.text = "Aprender (1 ponto)";
+                _detailActionButton.text = UiTexts.Get(Localization, UiTexts.SkillTreeLearnCost);
                 _detailActionButton.SetEnabled(canLearn && _skillManager.AvailableSkillPoints > 0);
             }
             else if (!instance.IsMaxLevel)
             {
-                _detailActionButton.text = "Evoluir (1 ponto)";
+                _detailActionButton.text = UiTexts.Get(Localization, UiTexts.SkillTreeUpgradeCost);
                 _detailActionButton.SetEnabled(_skillManager.AvailableSkillPoints > 0);
             }
             else
             {
-                _detailActionButton.text = "Nível máximo";
+                _detailActionButton.text = UiTexts.Get(Localization, UiTexts.SkillTreeMaxLevel);
                 _detailActionButton.SetEnabled(false);
             }
         }

@@ -8,6 +8,8 @@ using Rapadura.Core.DI;
 using Rapadura.Core.Managers;
 using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Characters;
+using Rapadura.Gameplay.Flow;
+using Rapadura.Save;
 using Rapadura.UI.CharacterSelect;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,9 +25,9 @@ namespace Rapadura.Tests.PlayMode
     /// destroying it every test after the first would inherit the previous one's hero, quests and
     /// world map progress.
     ///
-    /// The real save folder is snapshotted in SetUp and restored in TearDown: encounters and world
-    /// map travel auto-save (slot -1) through the real <c>SaveManager</c>, and a smoke run must never
-    /// clobber the developer's own auto-save.
+    /// Saves are redirected to a throwaway temp folder (<see cref="SaveManager.SaveRootOverride"/>)
+    /// for each test: encounters and world map travel auto-save (slot -1) through the real
+    /// <c>SaveManager</c>, and a smoke run must never touch the developer's own saves.
     /// </summary>
     public abstract class SmokeTestBase
     {
@@ -37,15 +39,16 @@ namespace Rapadura.Tests.PlayMode
 
         private static int _emptySceneCounter;
 
-        private readonly Dictionary<string, byte[]> _saveSnapshot = new Dictionary<string, byte[]>();
-        private bool _saveFolderExisted;
+        private string _previousSaveRoot;
+        private string _testSaveRoot;
 
-        protected static string SaveFolderPath => Path.Combine(Application.persistentDataPath, "Saves");
+        /// <summary>The folder saves go to during this test (a temp folder, see <see cref="SaveManager.SaveRootOverride"/>).</summary>
+        protected static string SaveFolderPath => SaveManager.SaveFolderPath;
 
         [UnitySetUp]
         public IEnumerator BaseSetUp()
         {
-            SnapshotSaveFolder();
+            RedirectSaveFolder();
             Time.timeScale = 1f;
             yield return null;
         }
@@ -169,71 +172,68 @@ namespace Rapadura.Tests.PlayMode
         /// design re-applies an already-chosen hero to the fresh player (passive + signature skills)
         /// and closes itself — the same path Main.unity takes when re-entered from the world map.
         /// </summary>
-        protected static IEnumerator SelectHero(CharacterId id)
+        protected static IEnumerator SelectHero(CharacterId id, bool requireCharacterSelect = true)
         {
+            // On the title screen (WorldMap.unity boot) go through "Novo jogo" first, exactly like
+            // the menu button; everywhere else the flow accepts a hero straight away.
+            if (ServiceLocator.TryGet(out GameFlowService flow) && flow.State == GameFlowState.MainMenu)
+            {
+                Assert.IsTrue(flow.StartNewGame(), "GameFlowService refused StartNewGame from the title screen.");
+                yield return WaitFrames(2);
+            }
+
             CharacterSelectionState state = GetService<CharacterSelectionState>();
             state.Select(id);
+            yield return null;
 
             CharacterSelectController controller = FindInScene<CharacterSelectController>();
-            Assert.IsNotNull(controller, "Main.unity has no CharacterSelectController — nothing applies the chosen hero to the player.");
+            if (requireCharacterSelect)
+            {
+                Assert.IsNotNull(controller, "Scene has no CharacterSelectController — nothing applies the chosen hero to the player.");
+            }
 
-            controller.gameObject.SetActive(false);
-            controller.gameObject.SetActive(true);
+            if (controller != null)
+            {
+                controller.gameObject.SetActive(false);
+                controller.gameObject.SetActive(true);
+            }
 
             // OnEnable hides the screen and defers its own SetActive(false) to the next Update.
             yield return WaitFrames(3);
 
-            Assert.AreEqual(1f, Time.timeScale, "Choosing a hero must unfreeze time (character select leaves timeScale at 0).");
+            yield return WaitUntilOrFail(() => Time.timeScale > 0f && !GameplayPause.IsPaused,
+                "gameplay to unpause after choosing a hero (a front-end screen still holds GameplayPause?)", 5f);
         }
 
         // ------------------------------------------------------------------
         // Save folder isolation
         // ------------------------------------------------------------------
 
-        private void SnapshotSaveFolder()
+        private void RedirectSaveFolder()
         {
-            _saveSnapshot.Clear();
-            _saveFolderExisted = Directory.Exists(SaveFolderPath);
-
-            if (!_saveFolderExisted)
-            {
-                return;
-            }
-
-            foreach (string file in Directory.GetFiles(SaveFolderPath))
-            {
-                _saveSnapshot[file] = File.ReadAllBytes(file);
-            }
+            _previousSaveRoot = SaveManager.SaveRootOverride;
+            _testSaveRoot = Path.Combine(Path.GetTempPath(), "RapaduraSmokeSaves", Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(_testSaveRoot);
+            SaveManager.SaveRootOverride = _testSaveRoot;
         }
 
         private void RestoreSaveFolder()
         {
+            SaveManager.SaveRootOverride = _previousSaveRoot;
+
             try
             {
-                if (Directory.Exists(SaveFolderPath))
+                if (_testSaveRoot != null && Directory.Exists(_testSaveRoot))
                 {
-                    foreach (string file in Directory.GetFiles(SaveFolderPath))
-                    {
-                        if (!_saveSnapshot.ContainsKey(file))
-                        {
-                            File.Delete(file);
-                        }
-                    }
-                }
-
-                if (_saveFolderExisted)
-                {
-                    Directory.CreateDirectory(SaveFolderPath);
-                    foreach (KeyValuePair<string, byte[]> pair in _saveSnapshot)
-                    {
-                        File.WriteAllBytes(pair.Key, pair.Value);
-                    }
+                    Directory.Delete(_testSaveRoot, recursive: true);
                 }
             }
             catch (IOException e)
             {
-                Debug.LogWarning($"[SmokeTestBase] Could not fully restore the save folder: {e.Message}");
+                Debug.LogWarning($"[SmokeTestBase] Could not delete the temp save folder: {e.Message}");
             }
+
+            _testSaveRoot = null;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Rapadura.Gameplay.Environment
 {
     /// <summary>
     /// Adds a scene-local "[Environment]" object with <see cref="DayNightLighting"/> and
-    /// <see cref="WeatherVisuals"/> to every loaded scene that doesn't already contain them, as long
+    /// <see cref="WeatherVisuals"/> (+ <see cref="AmbientVfx"/>) to every loaded scene that doesn't already contain them, as long
     /// as GameManager registered a <see cref="TimeOfDayManager"/>. Same self-registering pattern as
     /// InputRebindBootstrap — no scene wiring required. Placing either component in a scene by hand
     /// (to tune gradients/profiles or assign the sun/material) suppresses the auto-created one;
@@ -41,7 +41,8 @@ namespace Rapadura.Gameplay.Environment
 
             bool hasLighting = Object.FindAnyObjectByType<DayNightLighting>() != null;
             bool hasWeather = Object.FindAnyObjectByType<WeatherVisuals>() != null;
-            if (hasLighting && hasWeather)
+            bool hasAmbient = Object.FindAnyObjectByType<AmbientVfx>() != null;
+            if (hasLighting && hasWeather && hasAmbient)
             {
                 return;
             }
@@ -55,6 +56,11 @@ namespace Rapadura.Gameplay.Environment
             if (!hasWeather)
             {
                 go.AddComponent<WeatherVisuals>();
+            }
+
+            if (!hasAmbient)
+            {
+                go.AddComponent<AmbientVfx>();
             }
         }
     }

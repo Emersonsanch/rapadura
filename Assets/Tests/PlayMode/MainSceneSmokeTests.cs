@@ -76,7 +76,7 @@ namespace Rapadura.Tests.PlayMode
             Assert.IsNotNull(player.GetComponent<InventoryManager>(), "Player has no InventoryManager.");
 
             yield return WaitFrames(30);
-            LogAssert.NoUnexpectedReceived();
+            // Unexpected Error/Exception logs already fail the test (LogAssert default).
         }
 
         // ------------------------------------------------------------------

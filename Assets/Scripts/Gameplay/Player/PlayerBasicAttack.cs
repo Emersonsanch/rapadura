@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Rapadura.Core.Events;
 using Rapadura.Gameplay.Combat;
@@ -18,11 +19,16 @@ namespace Rapadura.Gameplay.Player
     public class PlayerBasicAttack : MonoBehaviour
     {
         [Header("Attack")]
+        [Tooltip("Fallback only: the shipped Resources/Balance/PlayerCombatBalance asset's Basic Attack Damage wins when it exists (see Docs/Balance/README.md).")]
         [SerializeField] private float _damage = 15f;
         [SerializeField] private float _range = 2.5f;
         [SerializeField] private float _radius = 1.2f;
         [SerializeField] private float _cooldownSeconds = 0.5f;
         [SerializeField] private LayerMask _targetMask = ~0;
+
+        [Header("Balance")]
+        [Tooltip("Base damage and crit tuning. Left empty, the shipped Resources/Balance/PlayerCombatBalance asset is used.")]
+        [SerializeField] private PlayerCombatBalance _balance;
 
         [Header("Click-to-Attack")]
         [Tooltip("Degrees/sec the player turns to face a pursued enemy before/while auto-attacking it. Instant snapping reads as janky, same reasoning as EnemyController's turn speed.")]
@@ -33,12 +39,46 @@ namespace Rapadura.Gameplay.Player
         private ICombatTarget _self;
         private float _cooldownRemaining;
         private readonly Collider[] _hitBuffer = new Collider[16];
+        private bool _balanceLookupDone;
+
+        /// <summary>Uniform [0, 1] sampler for crit rolls. Null = Unity's global RNG; tests inject a fixed value.</summary>
+        public Func<float> CriticalRoll { get; set; }
 
         private void Awake()
         {
             _input = GetComponent<PlayerInputHandler>();
             _clickToMove = GetComponent<PlayerClickToMove>();
             _self = GetComponent<ICombatTarget>();
+        }
+
+        private PlayerCombatBalance Balance
+        {
+            get
+            {
+                if (_balance == null && !_balanceLookupDone)
+                {
+                    _balanceLookupDone = true;
+                    _balance = PlayerCombatBalance.LoadDefault();
+                }
+
+                return _balance;
+            }
+        }
+
+        /// <summary>Base damage per hit before buffs/level/crit: the balance asset's value, else the inspector field.</summary>
+        public float BaseDamage => Balance != null ? Balance.BasicAttackDamage : _damage;
+
+        /// <summary>
+        /// Damage one basic-attack hit deals right now, through the same pipeline as skills
+        /// (<see cref="OutgoingDamage.Resolve"/>): level damage multiplier from the progression curve,
+        /// AttackDamage modifiers (Poder Arcano, Berserk, combos, affixes) and a crit roll (Destreza).
+        /// Previously a flat 15 that ignored all of them.
+        /// </summary>
+        public float ComputeHitDamage(out bool isCritical)
+        {
+            var stats = GetComponent<PlayerStats>();
+            float levelMultiplier = stats != null && stats.Curve != null ? stats.Curve.GetDamageMultiplier(stats.Level) : 1f;
+            return OutgoingDamage.Resolve(BaseDamage, levelMultiplier, GetComponent<BuffController>(), Balance, CriticalRoll, out isCritical);
         }
 
         private void Update()
@@ -117,6 +157,8 @@ namespace Rapadura.Gameplay.Player
             int hitCount = Physics.OverlapSphereNonAlloc(origin, _radius, _hitBuffer, _targetMask, QueryTriggerInteraction.Collide);
 
             var alreadyHit = new HashSet<ICombatTarget>();
+            // One roll per swing: every target caught by the same swing shares the crit.
+            float damage = ComputeHitDamage(out bool isCritical);
 
             for (int i = 0; i < hitCount; i++)
             {
@@ -126,7 +168,7 @@ namespace Rapadura.Gameplay.Player
                     continue;
                 }
 
-                target.ApplyDamage(_damage, ElementType.Physical, gameObject);
+                OutgoingDamage.DeliverDamage(target, damage, ElementType.Physical, gameObject, isCritical);
             }
         }
 

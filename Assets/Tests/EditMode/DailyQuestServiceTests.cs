@@ -46,6 +46,7 @@ namespace Rapadura.Tests
         [SetUp]
         public void SetUp()
         {
+            TestSaveRoot.Enter();
             EventBus.Clear();
 
             _owner = new GameObject("DailyOwner");
@@ -78,6 +79,7 @@ namespace Rapadura.Tests
 
             var saves = new SaveManager();
             saves.DeleteSlot(TestSlot);
+            TestSaveRoot.Exit();
         }
 
         // ------------------------------------------------------------------

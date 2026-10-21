@@ -32,11 +32,12 @@ namespace Rapadura.Tests
         private readonly List<AchievementManager> _managers = new List<AchievementManager>();
         private readonly List<string> _unlockedEvents = new List<string>();
 
-        private static string SlotPath(int slot) => Path.Combine(Application.persistentDataPath, "Saves", $"slot_{slot}.json");
+        private static string SlotPath(int slot) => TestSaveRoot.SlotPath(slot);
 
         [SetUp]
         public void SetUp()
         {
+            TestSaveRoot.Enter();
             EventBus.Clear();
             DeleteSlotFiles();
             _unlockedEvents.Clear();
@@ -64,6 +65,7 @@ namespace Rapadura.Tests
             }
 
             _created.Clear();
+            TestSaveRoot.Exit();
         }
 
         private void OnUnlocked(AchievementUnlockedEvent evt) => _unlockedEvents.Add(evt.Achievement.AchievementId);

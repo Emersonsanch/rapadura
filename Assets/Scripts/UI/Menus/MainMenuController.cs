@@ -1,6 +1,7 @@
 using Rapadura.Core.DI;
 using Rapadura.Core.Performance;
 using Rapadura.Save;
+using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -47,6 +48,7 @@ namespace Rapadura.UI.Menus
 
         private SaveManager _saveManager;
         private FrameRateManager _frameRateManager;
+        private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
 
         private void Awake()
         {
@@ -59,6 +61,7 @@ namespace Rapadura.UI.Menus
 
             BindElements();
             RegisterCallbacks();
+            _localizer.Attach(_uiDocument.rootVisualElement);
             RefreshContinueAvailability();
             FocusFirstElement();
             NotifyMenuOpen(IsVisible());
@@ -67,6 +70,7 @@ namespace Rapadura.UI.Menus
         /// <summary>Start runs after every Awake, so GameManager's FrameRateManager is registered by now even if OnEnable missed it.</summary>
         private void Start()
         {
+            _localizer.Refresh();
             NotifyMenuOpen(IsVisible());
         }
 
@@ -77,6 +81,7 @@ namespace Rapadura.UI.Menus
 
         private void OnDisable()
         {
+            _localizer.Detach();
             UnregisterCallbacks();
             NotifyMenuOpen(false);
         }

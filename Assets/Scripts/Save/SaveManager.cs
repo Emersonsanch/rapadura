@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
+using Rapadura.Core.Systems;
 using UnityEngine;
 
 namespace Rapadura.Save
@@ -12,7 +13,8 @@ namespace Rapadura.Save
     /// Any system that needs to survive a save/load cycle implements <see cref="ISaveable"/> and
     /// registers itself here; SaveManager does not know or care what each system's data looks like.
     ///
-    /// Files are written under Application.persistentDataPath, one file per save slot, so this
+    /// Files are written under Application.persistentDataPath/Saves (or <see cref="SaveRootOverride"/>
+    /// when tests redirect it), one file per save slot, so this
     /// works identically on device and in the editor. This is intentionally the only place that
     /// touches disk I/O for game state — a future online backend would replace/augment this class
     /// without any gameplay system needing to change.
@@ -22,7 +24,7 @@ namespace Rapadura.Save
     /// ".bak" file. If a slot's main file is ever found to be corrupted, Load transparently falls
     /// back to that backup instead of failing outright.
     /// </summary>
-    public class SaveManager : IManager
+    public class SaveManager : IManager, IResettable
     {
         /// <summary>Current save schema version. Bump this whenever SaveData's shape changes in a
         /// way older saves need migrating for, and add the corresponding step to <see cref="Migrations"/>.</summary>
@@ -63,7 +65,21 @@ namespace Rapadura.Save
             MigrateV1ToV2,
         };
 
-        private string SaveFolderPath => Path.Combine(Application.persistentDataPath, SaveFolderName);
+        /// <summary>
+        /// Optional replacement for the save folder. Null/empty (the default) means
+        /// <see cref="DefaultSaveFolderPath"/>. Tests point this at a temp folder so they never touch
+        /// the developer's real saves (including the auto-save slot -1); gameplay code never sets it.
+        /// </summary>
+        public static string SaveRootOverride { get; set; }
+
+        /// <summary>Where saves live in a real session: Application.persistentDataPath/Saves.</summary>
+        public static string DefaultSaveFolderPath => Path.Combine(Application.persistentDataPath, SaveFolderName);
+
+        /// <summary>The folder every slot is read from / written to right now (honours <see cref="SaveRootOverride"/>).</summary>
+        public static string SaveFolderPath => string.IsNullOrEmpty(SaveRootOverride) ? DefaultSaveFolderPath : SaveRootOverride;
+
+        /// <summary>Full path of a slot's main file under the current <see cref="SaveFolderPath"/> (".bak"/".tmp" sit next to it).</summary>
+        public static string GetSlotFilePath(int slot) => Path.Combine(SaveFolderPath, $"slot_{slot}{SaveFileExtension}");
 
         public void Initialize()
         {
@@ -119,6 +135,17 @@ namespace Rapadura.Save
             _carried.Clear();
         }
 
+        /// <summary><see cref="IResettable"/>: the only per-save state SaveManager owns is the carried player state.</summary>
+        public void ResetForNewSession() => ClearCarriedState();
+
+        /// <summary>
+        /// Run by <see cref="Load"/> right before a file is applied (GameManager assigns the shared
+        /// one). Every persistent per-save system goes back to new-game state first, so whatever the
+        /// file has no entry for (older schema, a system added later) starts fresh instead of keeping
+        /// the previous session's values. Null (tests, standalone use) keeps the old merge behavior.
+        /// </summary>
+        public NewSessionReset SessionReset { get; set; }
+
         /// <summary>
         /// Applies carried state to every saveable registered since it was carried (in
         /// <see cref="IRestoreOrder"/> order, like <see cref="Load"/>) and drops it from the carry.
@@ -169,7 +196,7 @@ namespace Rapadura.Save
             return restored;
         }
 
-        private string GetSlotPath(int slot) => Path.Combine(SaveFolderPath, $"slot_{slot}{SaveFileExtension}");
+        private string GetSlotPath(int slot) => GetSlotFilePath(slot);
         private string GetBackupPath(int slot) => GetSlotPath(slot) + BackupFileExtension;
         private string GetTempPath(int slot) => GetSlotPath(slot) + TempFileExtension;
 
@@ -248,6 +275,7 @@ namespace Rapadura.Save
 
             try
             {
+                Directory.CreateDirectory(SaveFolderPath);
                 File.WriteAllText(tempPath, json);
 
                 // Verify the file we just wrote round-trips before touching the real save.
@@ -258,19 +286,53 @@ namespace Rapadura.Save
                     return;
                 }
 
-                if (File.Exists(mainPath))
+                if (!File.Exists(mainPath))
                 {
-                    File.Copy(mainPath, backupPath, overwrite: true);
-                    File.Delete(mainPath);
+                    File.Move(tempPath, mainPath);
                 }
-
-                File.Move(tempPath, mainPath);
+                else if (TryReadSaveData(mainPath) == null)
+                {
+                    // The current main file is already corrupt: never let it overwrite the last
+                    // known-good backup. Drop it and put the fresh save in place.
+                    File.Delete(mainPath);
+                    File.Move(tempPath, mainPath);
+                }
+                else
+                {
+                    ReplaceWithBackup(tempPath, mainPath, backupPath);
+                }
             }
             catch (Exception e)
             {
                 Debug.LogError($"[SaveManager] Save to slot {slot} failed: {e.Message}");
                 SafeDelete(tempPath);
             }
+        }
+
+        /// <summary>
+        /// Swaps <paramref name="tempPath"/> into <paramref name="mainPath"/>, keeping the previous main
+        /// file as <paramref name="backupPath"/>. Uses the OS's atomic File.Replace where available and
+        /// falls back to copy + delete + move (still recoverable: the backup exists before the main file
+        /// is removed, and Load falls back to it).
+        /// </summary>
+        private static void ReplaceWithBackup(string tempPath, string mainPath, string backupPath)
+        {
+            try
+            {
+                File.Replace(tempPath, mainPath, backupPath);
+                return;
+            }
+            catch (Exception e) when (e is IOException || e is PlatformNotSupportedException || e is UnauthorizedAccessException)
+            {
+                if (!File.Exists(tempPath))
+                {
+                    throw;
+                }
+            }
+
+            File.Copy(mainPath, backupPath, overwrite: true);
+            File.Delete(mainPath);
+            File.Move(tempPath, mainPath);
         }
 
         /// <summary>Reads a slot from disk (falling back to its backup if the main file is missing/corrupted),
@@ -286,7 +348,9 @@ namespace Rapadura.Save
 
             MigrateToCurrentVersion(saveData);
 
-            // The loaded file replaces the whole session, carried state included.
+            // The loaded file replaces the whole session, carried state included — and so does
+            // anything the file doesn't mention (see SessionReset).
+            SessionReset?.ResetAll();
             _carried.Clear();
 
             foreach (SaveEntry entry in GetEntriesInRestoreOrder(saveData))

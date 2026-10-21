@@ -3,21 +3,21 @@
     <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
         <ui:VisualElement name="hud-vitals-panel" class="hud-vitals-panel" picking-mode="Ignore">
             <ui:VisualElement name="health-bar-row" class="hud-bar-row" picking-mode="Ignore">
-                <ui:Label text="Vida" class="hud-bar-label" />
+                <ui:Label text="Vida" class="hud-bar-label loc" view-data-key="ui.hud.health" />
                 <ui:VisualElement name="health-bar-track" class="hud-bar-track hud-bar-track--health" picking-mode="Ignore">
                     <ui:VisualElement name="health-bar-fill" class="hud-bar-fill hud-bar-fill--health" picking-mode="Ignore" />
                     <ui:Label name="health-bar-value-label" text="100/100" class="hud-bar-value-label" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="stamina-bar-row" class="hud-bar-row" picking-mode="Ignore">
-                <ui:Label text="Stamina" class="hud-bar-label" />
+                <ui:Label text="Stamina" class="hud-bar-label loc" view-data-key="ui.hud.stamina" />
                 <ui:VisualElement name="stamina-bar-track" class="hud-bar-track hud-bar-track--stamina" picking-mode="Ignore">
                     <ui:VisualElement name="stamina-bar-fill" class="hud-bar-fill hud-bar-fill--stamina" picking-mode="Ignore" />
                     <ui:Label name="stamina-bar-value-label" text="100/100" class="hud-bar-value-label" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="mana-bar-row" class="hud-bar-row" picking-mode="Ignore">
-                <ui:Label text="Mana" class="hud-bar-label" />
+                <ui:Label text="Mana" class="hud-bar-label loc" view-data-key="ui.hud.mana" />
                 <ui:VisualElement name="mana-bar-track" class="hud-bar-track hud-bar-track--mana" picking-mode="Ignore">
                     <ui:VisualElement name="mana-bar-fill" class="hud-bar-fill hud-bar-fill--mana" picking-mode="Ignore" />
                     <ui:Label name="mana-bar-value-label" text="100/100" class="hud-bar-value-label" />
@@ -33,13 +33,13 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:Button name="run-button" text="Correr" class="hud-touch-button hud-run-button" />
-        <ui:Button name="jump-button" text="Pular" class="hud-touch-button hud-jump-button" />
+        <ui:Button name="run-button" text="Correr" class="hud-touch-button hud-run-button loc" view-data-key="ui.hud.run" />
+        <ui:Button name="jump-button" text="Pular" class="hud-touch-button hud-jump-button loc" view-data-key="ui.hud.jump" />
         <ui:VisualElement name="hud-top-right-cluster" class="hud-top-right-cluster" picking-mode="Ignore">
-            <ui:Button name="quests-button" text="Missões" class="hud-touch-button hud-menu-button hud-quests-button" />
-            <ui:Button name="inventory-button" text="Mochila" class="hud-touch-button hud-menu-button hud-inventory-button" />
-            <ui:Button name="skills-button" text="Skills" class="hud-touch-button hud-menu-button hud-skills-button" />
-            <ui:Button name="pause-button" text="Menu" class="hud-touch-button hud-menu-button hud-pause-button" />
+            <ui:Button name="quests-button" text="Missões" class="hud-touch-button hud-menu-button hud-quests-button loc" view-data-key="ui.hud.quests" />
+            <ui:Button name="inventory-button" text="Mochila" class="hud-touch-button hud-menu-button hud-inventory-button loc" view-data-key="ui.hud.inventory" />
+            <ui:Button name="skills-button" text="Skills" class="hud-touch-button hud-menu-button hud-skills-button loc" view-data-key="ui.hud.skills" />
+            <ui:Button name="pause-button" text="Menu" class="hud-touch-button hud-menu-button hud-pause-button loc" view-data-key="ui.hud.menu" />
         </ui:VisualElement>
         <ui:VisualElement name="skill-hotbar" class="hud-skill-hotbar" picking-mode="Ignore">
             <ui:Button name="skill-slot-0" class="hud-touch-button hud-skill-button hud-skill-button--empty">

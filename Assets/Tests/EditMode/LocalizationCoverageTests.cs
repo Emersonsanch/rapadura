@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -7,6 +8,7 @@ using NUnit.Framework;
 using Rapadura.Core.Accessibility;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Achievements;
+using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Dialogue;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Items.Procedural;
@@ -16,10 +18,12 @@ using Rapadura.Gameplay.Skills;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.UI.Achievements;
 using Rapadura.UI.Common;
+using Rapadura.UI.Crafting;
 using Rapadura.UI.Menus;
 using Rapadura.UI.Quests;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Rapadura.Tests
 {
@@ -27,9 +31,11 @@ namespace Rapadura.Tests
     /// Coverage audit for every localized text source (see Docs/Localization.md): the core
     /// <see cref="LocalizationManager.DefaultEntries"/> table plus the runtime-merged *Texts helpers
     /// (QuestLogTexts, QuestGiverTexts, DailyQuestTexts, AchievementTexts, TooltipLocalization,
-    /// SettingsMenuTexts). Checks that every key referenced by ScriptableObject assets or built in
+    /// SettingsMenuTexts, UiTexts). Checks that every key referenced by ScriptableObject assets or built in
     /// code exists with both en and pt-BR text, that no key is defined twice with different text,
     /// that helpers never shadow a core key, and that {0}-style placeholders match per language.
+    /// Also covers every <c>class="loc"</c> + <c>view-data-key</c> marker in Assets/UI/**/*.uxml
+    /// (see <see cref="UiDocumentLocalizer"/>) and the persisted-language startup rule.
     /// A new helper must be added to <see cref="Sources"/> or its keys will be reported missing.
     /// </summary>
     public class LocalizationCoverageTests
@@ -47,6 +53,7 @@ namespace Rapadura.Tests
             yield return Source(nameof(AchievementTexts), AchievementTexts.All);
             yield return Source(nameof(TooltipLocalization), TooltipLocalization.Entries);
             yield return Source(nameof(SettingsMenuTexts), SettingsMenuTexts.Entries);
+            yield return Source(nameof(UiTexts), UiTexts.Entries);
         }
 
         private static KeyValuePair<string, IReadOnlyList<LocalizationEntry>> Source(string name, IReadOnlyList<LocalizationEntry> entries)
@@ -230,6 +237,7 @@ namespace Rapadura.Tests
             AchievementTexts.EnsureLoaded(manager);
             TooltipLocalization.EnsureRegistered(manager);
             SettingsMenuTexts.EnsureRegistered(manager);
+            UiTexts.EnsureRegistered(manager);
 
             foreach (KeyValuePair<string, string> pair in external)
             {
@@ -335,7 +343,7 @@ namespace Rapadura.Tests
         public void HelperKeyConstants_AllLocalized()
         {
             var references = new List<(string, string)>();
-            foreach (Type type in new[] { typeof(QuestLogTexts), typeof(QuestLogPresenter), typeof(AchievementTexts), typeof(SettingsMenuTexts) })
+            foreach (Type type in new[] { typeof(QuestLogTexts), typeof(QuestLogPresenter), typeof(AchievementTexts), typeof(SettingsMenuTexts), typeof(UiTexts) })
             {
                 foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
                 {
@@ -356,6 +364,16 @@ namespace Rapadura.Tests
             foreach (ColorblindMode mode in Enum.GetValues(typeof(ColorblindMode)))
             {
                 references.Add((SettingsMenuTexts.ColorblindKey(mode), "SettingsMenuTexts.ColorblindKey"));
+            }
+
+            foreach (LanguageCode language in Enum.GetValues(typeof(LanguageCode)))
+            {
+                references.Add((SettingsMenuTexts.LanguageNameKey(language), "SettingsMenuTexts.LanguageNameKey"));
+            }
+
+            foreach (CraftingStationType station in Enum.GetValues(typeof(CraftingStationType)))
+            {
+                references.Add((CraftingRecipePresenter.StationKey(station), "CraftingRecipePresenter.StationKey"));
             }
 
             AssertKeysResolve(references);
@@ -387,6 +405,155 @@ namespace Rapadura.Tests
         }
 
         // ------------------------------------------------------------------
+        // UXML markers (UiDocumentLocalizer convention)
+        // ------------------------------------------------------------------
+
+        private static readonly Regex UxmlElementPattern = new Regex(@"<ui:(\w+)\b([^>]*)>");
+        private static readonly Regex ClassAttributePattern = new Regex(@"\bclass=""([^""]*)""");
+        private static readonly Regex ViewDataKeyAttributePattern = new Regex(@"\bview-data-key=""([^""]*)""");
+
+        private static IEnumerable<(string Path, string Tag, string Classes, string Key)> UxmlElements()
+        {
+            foreach (string path in Directory.GetFiles("Assets/UI", "*.uxml", SearchOption.AllDirectories))
+            {
+                foreach (Match match in UxmlElementPattern.Matches(File.ReadAllText(path)))
+                {
+                    string attributes = match.Groups[2].Value;
+                    Match classes = ClassAttributePattern.Match(attributes);
+                    Match key = ViewDataKeyAttributePattern.Match(attributes);
+                    yield return (path.Replace('\\', '/'), match.Groups[1].Value,
+                        classes.Success ? classes.Groups[1].Value : string.Empty,
+                        key.Success ? key.Groups[1].Value : string.Empty);
+                }
+            }
+        }
+
+        private static bool HasLocClass(string classes)
+        {
+            return classes.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Contains(UiDocumentLocalizer.LocClass);
+        }
+
+        [Test]
+        public void UxmlLocMarkers_AllKeysLocalized()
+        {
+            var references = new List<(string, string)>();
+            var problems = new List<string>();
+            foreach (var element in UxmlElements().Where(e => HasLocClass(e.Classes)))
+            {
+                if (string.IsNullOrEmpty(element.Key))
+                {
+                    problems.Add($"{element.Path}: <ui:{element.Tag}> has class \"loc\" but no view-data-key");
+                    continue;
+                }
+
+                references.Add((element.Key, $"{element.Path} <ui:{element.Tag}>"));
+            }
+
+            CollectionAssert.IsEmpty(problems, string.Join("\n", problems));
+            Assert.IsNotEmpty(references, "No class=\"loc\" markers found under Assets/UI.");
+            AssertKeysResolve(references);
+        }
+
+        [Test]
+        public void UxmlLocMarkers_CoverTheConvertedScreens()
+        {
+            string[] converted =
+            {
+                "Assets/UI/HUD/HudView.uxml",
+                "Assets/UI/Shop/ShopView.uxml",
+                "Assets/UI/Menus/PauseMenuView.uxml",
+                "Assets/UI/Menus/MainMenuView.uxml",
+                "Assets/UI/Menus/SettingsMenuView.uxml",
+                "Assets/UI/Menus/SaveLoadMenuView.uxml",
+                "Assets/UI/Menus/CreditsView.uxml",
+                "Assets/UI/Crafting/CraftingView.uxml",
+                "Assets/UI/SkillTree/SkillTreeView.uxml",
+            };
+
+            var marked = new HashSet<string>(UxmlElements().Where(e => HasLocClass(e.Classes)).Select(e => e.Path));
+            foreach (string path in converted)
+            {
+                Assert.IsTrue(marked.Contains(path), $"{path} has no class=\"loc\" markers.");
+            }
+
+            // The Shop used to ship English literals in a pt-BR game.
+            string shop = File.ReadAllText("Assets/UI/Shop/ShopView.uxml");
+            foreach (string literal in new[] { "\"Gold:\"", "\"Buy\"", "\"Sell\"" })
+            {
+                StringAssert.DoesNotContain(literal, shop);
+            }
+        }
+
+        [Test]
+        public void UiDocumentLocalizer_AppliesKeysToTextAndFieldLabels()
+        {
+            var root = new VisualElement();
+            var label = new Label("Comprar") { viewDataKey = UiTexts.ShopBuy };
+            label.AddToClassList(UiDocumentLocalizer.LocClass);
+            var toggle = new Toggle("Tela Cheia") { viewDataKey = SettingsMenuTexts.GraphicsFullscreen };
+            toggle.AddToClassList(UiDocumentLocalizer.LocClass);
+            var unmarked = new Label("Fixo") { viewDataKey = UiTexts.ShopSell };
+            var unknown = new Button { text = "Texto", viewDataKey = "ui.test.unknown_key" };
+            unknown.AddToClassList(UiDocumentLocalizer.LocClass);
+            root.Add(label);
+            root.Add(toggle);
+            root.Add(unmarked);
+            root.Add(unknown);
+
+            // No manager: the UXML pt-BR text stays.
+            Assert.AreEqual(0, UiDocumentLocalizer.Apply(root, null));
+            Assert.AreEqual("Comprar", label.text);
+
+            var manager = new LocalizationManager();
+            manager.Initialize();
+            manager.SetLanguage(LanguageCode.en);
+            UiDocumentLocalizer.Apply(root, manager, SettingsMenuTexts.Get);
+            UiDocumentLocalizer.Apply(root, manager);
+
+            Assert.AreEqual("Buy", label.text);
+            Assert.AreEqual("Fullscreen", toggle.label);
+            Assert.AreEqual("Fixo", unmarked.text, "elements without class \"loc\" are left alone");
+            Assert.AreEqual("Texto", unknown.text, "an unknown key keeps the UXML text instead of showing [key]");
+
+            manager.SetLanguage(LanguageCode.ptBR);
+            UiDocumentLocalizer.Apply(root, manager);
+            Assert.AreEqual("Comprar", label.text);
+        }
+
+        // ------------------------------------------------------------------
+        // No-manager fallbacks (pt-BR everywhere)
+        // ------------------------------------------------------------------
+
+        [Test]
+        public void NoManagerFallbacks_ArePtBR()
+        {
+            Assert.AreEqual("Raro", TooltipLocalization.GetFallback("ui.tooltip.rarity.rare"));
+            Assert.AreEqual("Comprar", UiTexts.Get(null, UiTexts.ShopBuy));
+            Assert.AreEqual("Pausado", UiTexts.Get(null, UiTexts.PauseTitle), "core ui.* keys also fall back to pt-BR");
+            Assert.AreEqual("Nv. 3", UiTexts.Format(null, UiTexts.HudLevel, 3));
+            Assert.AreEqual("Português (Brasil)", SettingsMenuTexts.LanguageName(null, LanguageCode.ptBR));
+            Assert.AreEqual("English", SettingsMenuTexts.LanguageName(null, LanguageCode.en));
+
+            // Presenter constants are the pt-BR text of their keys (EditMode tests compare against them).
+            Assert.AreEqual(CraftingRecipePresenter.UnknownRecipeReason, UiTexts.GetFallback(UiTexts.CraftingUnknownRecipe));
+            Assert.AreEqual(CraftingRecipePresenter.MissingMaterialsReason, UiTexts.GetFallback(UiTexts.CraftingMissingMaterials));
+            Assert.AreEqual(CraftingRecipePresenter.NoInventoryReason, UiTexts.GetFallback(UiTexts.CraftingNoInventory));
+        }
+
+        [Test]
+        public void Presenters_UseManagerLanguageWhenGiven()
+        {
+            var manager = new LocalizationManager();
+            manager.Initialize();
+            manager.SetLanguage(LanguageCode.en);
+
+            Assert.AreEqual("Slot 2", SaveSlotPresenter.GetSlotTitle(1, manager));
+            Assert.AreEqual("Overwrite", SaveSlotPresenter.GetPrimaryActionLabel(isSaveMode: true, slotExists: true, localization: manager));
+            Assert.AreEqual("Requires: Forge", CraftingRecipePresenter.FormatStationRequirement(CraftingStationType.Forge, manager));
+            Assert.AreEqual("Requer: Forja", CraftingRecipePresenter.FormatStationRequirement(CraftingStationType.Forge));
+        }
+
+        // ------------------------------------------------------------------
         // Startup language
         // ------------------------------------------------------------------
 
@@ -397,6 +564,47 @@ namespace Rapadura.Tests
         public void StartupLanguage_IsPtBRUnlessDeviceIsEnglish(SystemLanguage system, LanguageCode expected)
         {
             Assert.AreEqual(expected, LocalizationManager.ResolveStartupLanguage(system));
+            Assert.AreEqual(expected, LocalizationManager.ResolveStartupLanguage(system, null), "no saved choice -> system rule");
+            Assert.AreEqual(expected, LocalizationManager.ResolveStartupLanguage(system, "xx"), "garbage saved value -> system rule");
+        }
+
+        [TestCase(SystemLanguage.English, "ptBR", LanguageCode.ptBR)]
+        [TestCase(SystemLanguage.Portuguese, "en", LanguageCode.en)]
+        [TestCase(SystemLanguage.Spanish, "en", LanguageCode.en)]
+        [TestCase(SystemLanguage.English, "en", LanguageCode.en)]
+        public void StartupLanguage_PersistedChoiceWinsOverSystemLanguage(SystemLanguage system, string saved, LanguageCode expected)
+        {
+            Assert.AreEqual(expected, LocalizationManager.ResolveStartupLanguage(system, saved));
+        }
+
+        [Test]
+        public void SaveLanguagePreference_RoundTripsThroughPlayerPrefs()
+        {
+            bool hadValue = PlayerPrefs.HasKey(LocalizationManager.LanguagePrefsKey);
+            string previous = PlayerPrefs.GetString(LocalizationManager.LanguagePrefsKey);
+            try
+            {
+                LocalizationManager.SaveLanguagePreference(LanguageCode.en);
+                Assert.AreEqual(LanguageCode.en,
+                    LocalizationManager.ResolveStartupLanguage(SystemLanguage.Portuguese, LocalizationManager.LoadSavedLanguage()));
+
+                LocalizationManager.SaveLanguagePreference(LanguageCode.ptBR);
+                Assert.AreEqual(LanguageCode.ptBR,
+                    LocalizationManager.ResolveStartupLanguage(SystemLanguage.English, LocalizationManager.LoadSavedLanguage()));
+            }
+            finally
+            {
+                if (hadValue)
+                {
+                    PlayerPrefs.SetString(LocalizationManager.LanguagePrefsKey, previous);
+                }
+                else
+                {
+                    PlayerPrefs.DeleteKey(LocalizationManager.LanguagePrefsKey);
+                }
+
+                PlayerPrefs.Save();
+            }
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Rapadura.Gameplay.Environment
     /// between. All randomness comes from one injected seed, so a given seed + tick sequence
     /// reproduces the same weather. Pauses with GamePausedEvent like the clock.
     /// </summary>
-    public class WeatherSystem : IManager, ISaveable
+    public class WeatherSystem : IManager, ISaveable, IResettable
     {
         public const float DefaultMinDurationSeconds = 180f;
         public const float DefaultMaxDurationSeconds = 420f;
@@ -41,6 +41,7 @@ namespace Rapadura.Gameplay.Environment
         private readonly System.Random _random;
         private readonly Action<float> _tickAction;
         private bool _isInitialized;
+        private readonly BiomeType _startingBiome;
 
         public string SaveKey => "Weather";
 
@@ -70,8 +71,20 @@ namespace Rapadura.Gameplay.Environment
         {
             _random = seed.HasValue ? new System.Random(seed.Value) : new System.Random();
             _tickAction = Tick;
+            _startingBiome = startingBiome;
             CurrentBiome = startingBiome;
             SecondsUntilNextRoll = NextDuration();
+        }
+
+        /// <summary>
+        /// New game / load: clear sky over the starting biome (WorldMapProgress.ResetToNewGame doesn't
+        /// publish a region change, so the biome is reset here directly), fresh roll timer.
+        /// </summary>
+        public void ResetForNewSession()
+        {
+            CurrentBiome = _startingBiome;
+            SecondsUntilNextRoll = NextDuration();
+            BeginTransition(WeatherType.Clear, instant: true);
         }
 
         public void Initialize()

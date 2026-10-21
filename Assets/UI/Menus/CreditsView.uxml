@@ -2,13 +2,13 @@
     <Style src="/Assets/UI/Menus/CreditsView.uss" />
     <ui:VisualElement name="credits-root" class="credits-root">
         <ui:VisualElement name="credits-panel" class="credits-panel">
-            <ui:Label text="Créditos" class="credits-title" />
+            <ui:Label text="Créditos" class="credits-title loc" view-data-key="ui.credits.title" />
             <ui:Label name="credits-version" text="Rapadura" class="credits-version" />
             <ui:ScrollView name="credits-scroll" mode="Vertical" class="credits-scroll">
                 <!-- Filled at runtime by CreditsController from CreditsContent.Sections. -->
                 <ui:VisualElement name="credits-content" class="credits-content" />
             </ui:ScrollView>
-            <ui:Button name="credits-back-button" text="Voltar" focusable="true" class="credits-back-button" />
+            <ui:Button name="credits-back-button" text="Voltar" focusable="true" class="credits-back-button loc" view-data-key="ui.credits.back" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

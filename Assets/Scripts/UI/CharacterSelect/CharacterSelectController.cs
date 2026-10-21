@@ -77,6 +77,12 @@ namespace Rapadura.UI.CharacterSelect
         private bool _isBound;
         private bool _deactivatePending;
 
+        /// <summary>The picker is on screen waiting for a choice (and holds a <see cref="GameplayPause"/>).</summary>
+        private bool _isShowing;
+
+        /// <summary>Whether the picker is currently on screen waiting for a hero.</summary>
+        public bool IsShowing => _isShowing;
+
         private void Awake()
         {
             _uiDocument = GetComponent<UIDocument>();
@@ -85,11 +91,13 @@ namespace Rapadura.UI.CharacterSelect
             // while this screen is already hidden (loading from the pause menu), and the player
             // still needs its hero's visual/passive/skills re-applied then.
             EventBus.Subscribe<CharacterSelectionRestoredEvent>(OnCharacterSelectionRestored);
+            EventBus.Subscribe<CharacterSelectedEvent>(OnCharacterSelectedElsewhere);
         }
 
         private void OnDestroy()
         {
             EventBus.Unsubscribe<CharacterSelectionRestoredEvent>(OnCharacterSelectionRestored);
+            EventBus.Unsubscribe<CharacterSelectedEvent>(OnCharacterSelectedElsewhere);
         }
 
         // Element binding happens in OnEnable rather than Awake: UIDocument builds its
@@ -124,6 +132,7 @@ namespace Rapadura.UI.CharacterSelect
             }
 
             SetRootVisible(true);
+            _isShowing = true;
             GameplayPause.Acquire(this);
             BindElementsIfNeeded();
             RefreshContinueOption();
@@ -131,6 +140,7 @@ namespace Rapadura.UI.CharacterSelect
 
         private void OnDisable()
         {
+            _isShowing = false;
             GameplayPause.Release(this);
         }
 
@@ -138,6 +148,7 @@ namespace Rapadura.UI.CharacterSelect
         {
             // SetActive(false) can't be called while this object is still being activated
             // (Unity rejects it from inside OnEnable) — hide now, deactivate next Update.
+            _isShowing = false;
             GameplayPause.Release(this);
             SetRootVisible(false);
             _deactivatePending = true;
@@ -244,16 +255,47 @@ namespace Rapadura.UI.CharacterSelect
 
         private void ConfirmSelection()
         {
-            if (_hovered is not CharacterId id)
+            if (_hovered is CharacterId id)
             {
-                return;
+                SelectCharacter(id);
             }
+        }
 
+        /// <summary>
+        /// Picks <paramref name="id"/> exactly as the "Confirmar" button does: records it in
+        /// <see cref="CharacterSelectionState"/> (publishing <see cref="CharacterSelectedEvent"/>),
+        /// applies it to the player and closes the screen, releasing its pause.
+        /// </summary>
+        public void SelectCharacter(CharacterId id)
+        {
             if (ServiceLocator.TryGet(out CharacterSelectionState state))
             {
+                // CharacterSelectedEvent → OnCharacterSelectedElsewhere applies + closes while open.
                 state.Select(id);
             }
 
+            if (_isShowing)
+            {
+                FinishSelection(id);
+            }
+        }
+
+        /// <summary>
+        /// A hero chosen through <see cref="CharacterSelectionState.Select"/> by anyone (this
+        /// screen, a script, a test) while the picker is open: apply it and close, so the screen
+        /// never stays up holding <see cref="GameplayPause"/> with a hero already chosen.
+        /// </summary>
+        private void OnCharacterSelectedElsewhere(CharacterSelectedEvent evt)
+        {
+            if (_isShowing)
+            {
+                FinishSelection(evt.CharacterId);
+            }
+        }
+
+        private void FinishSelection(CharacterId id)
+        {
+            _isShowing = false;
             ApplyCharacter(id, grantSkills: true);
             Close();
         }
@@ -305,6 +347,7 @@ namespace Rapadura.UI.CharacterSelect
         private void Close()
         {
             _previewController?.Clear();
+            _isShowing = false;
             GameplayPause.Release(this);
             gameObject.SetActive(false);
         }

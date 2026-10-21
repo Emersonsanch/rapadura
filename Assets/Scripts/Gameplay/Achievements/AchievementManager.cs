@@ -427,6 +427,13 @@ namespace Rapadura.Gameplay.Achievements
             };
         }
 
+        /// <summary>
+        /// Merges a saved snapshot into the current progress instead of replacing it: achievements are
+        /// per-profile lifetime progress, not per-save, so loading another (or an older) save never
+        /// takes an unlock or a stat away. Counters keep the higher value, observed ids and unlocks are
+        /// unioned (an unlock keeps its earliest known timestamp). For the same reason this manager is
+        /// not an <see cref="IResettable"/>: "Novo jogo" keeps every achievement.
+        /// </summary>
         public void RestoreState(object state)
         {
             if (state is not AchievementSaveState saved)
@@ -434,13 +441,12 @@ namespace Rapadura.Gameplay.Achievements
                 return;
             }
 
-            ClearProgress();
-
             if (saved.counterTypes != null && saved.counterValues != null)
             {
                 for (int i = 0; i < Math.Min(saved.counterTypes.Length, saved.counterValues.Length); i++)
                 {
-                    _counters[(AchievementConditionType)saved.counterTypes[i]] = saved.counterValues[i];
+                    var type = (AchievementConditionType)saved.counterTypes[i];
+                    _counters[type] = _counters.TryGetValue(type, out long current) ? Math.Max(current, saved.counterValues[i]) : saved.counterValues[i];
                 }
             }
 
@@ -469,12 +475,24 @@ namespace Rapadura.Gameplay.Achievements
                     }
 
                     string at = saved.unlockedAtIso8601 != null && i < saved.unlockedAtIso8601.Length ? saved.unlockedAtIso8601[i] : null;
-                    _unlocked[id] = string.IsNullOrEmpty(at) ? DateTime.UtcNow.ToString("o") : at;
+
+                    if (_unlocked.TryGetValue(id, out string existing) && !IsEarlier(at, existing))
+                    {
+                        continue;
+                    }
+
+                    _unlocked[id] = string.IsNullOrEmpty(at) ? existing ?? DateTime.UtcNow.ToString("o") : at;
                 }
             }
 
             // Achievements added after this save was written unlock now from the restored stats.
             EvaluateAll();
+        }
+
+        private static bool IsEarlier(string candidateIso, string currentIso)
+        {
+            return DateTime.TryParse(candidateIso, null, System.Globalization.DateTimeStyles.RoundtripKind, out DateTime candidate)
+                && (!DateTime.TryParse(currentIso, null, System.Globalization.DateTimeStyles.RoundtripKind, out DateTime current) || candidate < current);
         }
     }
 }

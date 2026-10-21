@@ -10,6 +10,10 @@
 | `enemies.csv` | Os 9 inimigos de `Assets/Resources/Enemies` (+ bioma e peso de spawn) | Não (só revisão) |
 | `skills.csv` | As 45 skills de `Assets/Resources/Skills/**` (20 gerais + 25 de herói) | Não (só revisão) |
 
+Outros dados de balanceamento (editados direto no Inspector, sem planilha):
+`Assets/Resources/Balance/PlayerCombatBalance.asset` — dano base do ataque básico, chance e multiplicador
+de crítico base (ver §3). Apagar esse asset volta o ataque básico ao valor do Inspector da cena (15).
+
 ---
 
 ## 1. Como editar a curva
@@ -45,11 +49,15 @@ Outros menus:
   `_maxHealthPerLevel`, ...). Útil para testar uma curva nova e depois exportar.
 - **Rapadura > Balance > Export Enemy and Skill CSVs** — regenera `enemies.csv` e `skills.csv`.
 
-Comportamento atual: os valores padrão reproduzem **exatamente** a fórmula antiga
-(`round(100 × 1.25^(nível-1))`, 2 pontos de atributo e 1 de skill por nível, vitais fixos em
-100, sem bônus de dano). Acima do nível 50 (fim da tabela) a fórmula continua valendo. Se o
-asset não existir, `PlayerStats`/`AttributeSet`/`SkillManager` usam os campos antigos do
-inspector como fallback.
+Comportamento atual: o asset usa `_experienceCurveMultiplier` = **1,10** e `_maxHealthPerLevel` =
+**8** (`round(100 × 1.10^(nível-1))`, vida 100 + 8 por nível, 2 pontos de atributo e 1 de skill por
+nível, sem bônus de dano), e a tabela é exatamente a gerada por esses parâmetros
+(`ProgressionCurveTests.ShippedResourcesCurve_TableMatchesItsOwnFormulaParameters`). Os padrões **do
+código** (instância nova do ScriptableObject) continuam sendo a fórmula antiga (1,25, vida fixa) —
+para reverter, basta voltar os dois parâmetros do asset, rodar *Regenerate Progression Table From
+Formula* e *Export Progression CSV*. Acima do nível 50 (fim da tabela) a fórmula continua valendo. Se
+o asset não existir, `PlayerStats`/`AttributeSet`/`SkillManager` usam os campos antigos do inspector
+como fallback.
 
 ### Colunas derivadas de `skills.csv`
 
@@ -62,7 +70,10 @@ inspector como fallback.
 
 ---
 
-## 2. Análise de sanidade (estado atual dos dados)
+## 2. Análise de sanidade — ANTES do rebalanceamento
+
+> Esta seção é o diagnóstico original, mantido como referência do "antes". Os números atuais estão
+> na §3.
 
 Premissas — o jogo **não define** nível esperado por bioma, então foi derivado da economia de
 XP: todo inimigo dá 10 XP; a missão do herói dá 450–520 XP (→ nível 4) e a de convergência
@@ -161,7 +172,7 @@ Pontos fora da curva:
 - **Todas as skills perdem para o ataque básico** (30 DPS, grátis). Hoje, skill serve para
   utilidade/área, não para dano.
 
-### 2.4 Atributos que não fazem nada (bug, não balanceamento)
+### 2.4 Atributos que não fazem nada (bug, não balanceamento) — **corrigido, ver §3.1**
 
 `AttributeSet` aplica Vitalidade → `MaxHealth`, Espírito → `MaxMana` e Destreza →
 `CriticalChance` no `BuffController`, mas **nenhum código lê esses três stats**: `PlayerStats`
@@ -172,39 +183,143 @@ pontos. O mesmo vale para o afixo `affix_vital` (MaxHealth) dos itens procedurai
 
 ---
 
-## 3. Sugestões de rebalanceamento (não aplicadas)
+## 3. Rebalanceamento aplicado (antes → depois)
 
-Nada abaixo foi aplicado. A ordem é por impacto.
+Tudo abaixo é **dado** (assets/planilha), exceto a correção do bug da §3.1 e a ligação do ataque
+básico/crítico ao pipeline de dano. Para reverter um número, edite o asset indicado (e rode
+*Export Enemy and Skill CSVs* / *Export Progression CSV*). As invariantes que importam (faixa de XP
+até o nível 10, bosses vencíveis no nível esperado, XP por bioma, ultimates ≥ 2× a melhor skill...)
+estão em `Assets/Tests/EditMode/BalanceInvariantsTests.cs` — elas testam faixas e ordens, não os
+números exatos.
 
-1. **Ligar os atributos mortos** (código): `PlayerStats.MaxHealth/MaxMana` devem passar por
-   `BuffController.GetModifiedValue(StatType.MaxHealth/MaxMana, base)`, e o dano (skills + ataque
-   básico) deve rolar `CriticalChance`/`CriticalDamage`. Sem isso, 3 dos 5 atributos são
-   armadilhas.
-2. **Curva de XP**: trocar `_experienceCurveMultiplier` de 1,25 por **1,10** (total até o nível
-   50: ~106 mil em vez de 22,4 milhões; nível 10 com 1 357 XP) — ou editar `xp_to_next` à mão
-   na planilha com um polinômio (`100 × nível^1.5`: 690 mil no total). Os testes atuais
-   ("default = fórmula antiga") devem ser atualizados junto.
-3. **XP por bioma e por boss**: `_experienceReward` Floresta 10 → Deserto 18 → Montanha 28 →
-   Cavernas 40; `_bossExperienceMultiplier` = **8** nos 4 bosses (80–320 XP por boss).
-4. **Crescimento de vida do jogador** (já suportado pela planilha): coluna `hp` com +8 por nível
-   (nível 5 = 132, nível 10 = 172). Junto com isso, Senhor da Guerra `_attackDamage` 26 → **20**
-   (18 DPS, ~7,7 s para matar um jogador nível 6 com 140 de vida) e Lobo Alfa
-   `_attackCooldown` 0,9 → **1,1** (16 DPS) — é o primeiro boss e hoje é o segundo mais letal.
-5. **Escala de HP dos comuns por bioma**: Escorpião 26 → **45**, Golem 55 → **75**, Enxame de
-   Morcegos 18 → **28** (eles vêm em bando), mantendo os da Floresta em 30. Cada bioma passa a
-   pedir 2, 3, 5 e 2–3 golpes, com um degrau de dificuldade real.
-6. **Ataque básico vs. skills**: reduzir `PlayerBasicAttack._damage` 15 → **10** (20 DPS) e fazer
-   o básico passar pelo `BuffController` (`AttackDamage`), para Poder Arcano, Berserk e os combos
-   também valerem nele. Outra opção é multiplicar o dano das skills por ~2. Também dá para usar a
-   coluna `damage_mult` (+2%/nível) para o jogador sentir que ficou mais forte.
-7. **Flecha Precisa**: `_manaCost` 10 → **15** (dano/mana 1,87, gasto 5 mana/s = igual à
-   regeneração) ou `_cooldownSeconds` 3 → **4**. **Orbe Sombria**: CD 3,5 → **4**.
-8. **Ultimates ~2,5× mais fortes por cast**: Eclipse Eterno 65 → **150**, Tempestade de Mil
-   Flechas 55 → **130**, Exército Mecânico 45 → **100** de dano base (mantendo CD/mana).
-9. **Chuva de Flechas**: base 18 → **26** (é área; dano/mana passa a 1,18 ≈ mediana).
-   **Correntes das Trevas**: mana 22 → **16** (mantém o papel de controle; dano/mana 0,75, ~0,6× a mediana).
-10. **`skill_arrow` (geral)**: dar a ela um custo de mana de 6 ou subir o CD para 2,5 s. Hoje ela
-    é grátis e é a skill com maior DPS.
+### 3.1 Bug dos atributos mortos (código)
+
+- `PlayerStats.MaxHealth`/`MaxMana` agora passam por
+  `BuffController.GetModifiedValue(StatType.MaxHealth/MaxMana, base + curva)`. Vitalidade, Espírito,
+  equipamentos e o afixo `affix_vital` passam a valer. Quando o máximo muda (atributo, item equipado/
+  removido, buff que expira — `BuffController.OnModifiersChanged`), a vida/mana atual é reconciliada:
+  barra cheia continua cheia no novo máximo; barra parcial mantém o valor e só é **reduzida** se
+  passar do novo máximo (sem cura grátis ao trocar de item).
+- `BuffController.ApplyEffect` substituía qualquer efeito do mesmo stat, **de qualquer fonte**: equipar
+  um item com `affix_vital` apagava o bônus de Vitalidade, e lançar um buff de `AttackDamage` apagava
+  para sempre o de Poder Arcano. Agora só substitui efeitos da mesma fonte (`sourceKey`); fontes
+  diferentes acumulam.
+- **Crítico** (`Gameplay/Combat/OutgoingDamage.cs`), usado pelo ataque básico **e** pelas skills:
+  `chance = base (0) + Σ CriticalChance` (Destreza = 0,5%/ponto; afixos de crítico contam), um
+  sorteio por golpe/cast, `multiplicador = 1,5 + Σ CriticalDamage`. O RNG é injetável
+  (`PlayerBasicAttack.CriticalRoll`, `SkillManager.CriticalRoll`). O golpe crítico sai com
+  `DamageAppliedEvent.IsCritical = true` (FX/áudio de crítico já existentes) sem multiplicar duas vezes
+  no `DamageCalculator`. Maithe (5 de Destreza inata) começa com 2,5%.
+- Base de crítico e multiplicador: `PlayerCombatBalance.asset` (`_baseCriticalChance` = 0,
+  `_baseCriticalMultiplier` = 1,5).
+
+### 3.2 Tabela de mudanças
+
+| Onde | Campo | Antes | Depois |
+|---|---|---|---|
+| `ProgressionCurve.asset` | `_experienceCurveMultiplier` | 1,25 | **1,10** |
+| `ProgressionCurve.asset` | `_maxHealthPerLevel` (coluna `hp`) | 0 | **8** |
+| `PlayerCombatBalance.asset` (novo) | dano do ataque básico | 15 (Inspector da cena) | **10**, e agora passa por `AttackDamage`, `damage_mult` e crítico |
+| Lobo da Mata / Aranha (Floresta) | XP | 10 | 10 |
+| Escorpião das Dunas (Deserto) | HP / XP | 26 / 10 | **45 / 18** |
+| Golem de Pedra (Montanha) | HP / XP | 55 / 10 | **75 / 28** |
+| Enxame de Morcegos (Cavernas) | HP / XP | 18 / 10 | **28 / 40** |
+| 4 bosses | `_bossExperienceMultiplier` | 1 | **8** (XP base = a dos comuns do bioma: 80 / 144 / 224 / 320) |
+| Lobo Alfa (boss Floresta) | HP / `_attackCooldown` | 160 / 0,9 | **120 / 1,1** |
+| Guardião da Ruína (boss Deserto) | HP | 200 | **160** |
+| Senhor da Guerra (boss Montanha) | HP / dano / cooldown | 220 / 26 / 1,1 | **170 / 20 / 1,3** |
+| Habitante Ancestral (boss Cavernas) | HP | 180 | **200** |
+| Flecha Precisa (Maithe) | mana | 10 | **15** |
+| Orbe Sombria (Lavine) | cooldown | 3,5 s | **4 s** |
+| Chuva de Flechas (Maithe) | dano base / por nível | 18 / 4 | **26 / 6** |
+| Correntes das Trevas (Lavine) | mana | 22 | **16** |
+| Tempestade de Mil Flechas (ult) | dano base / por nível | 55 / 14 | **130 / 32** |
+| Eclipse Eterno (ult) | dano base / por nível | 65 / 16 | **150 / 36** |
+| Exército Mecânico (ult) | dano base / por nível | 45 / 12 | **100 / 26** |
+| Flecha (`skill_arrow`, geral) | mana | 0 | **6** (mantém 8 de energia) |
+
+Os HP/dano dos inimigos também foram atualizados no `EnemyDatabaseSeeder` (e `skill_arrow` no
+`SkillDatabaseSeeder`), para que rodar os seeders de novo não desfaça o rebalanceamento.
+
+Por que os bosses perderam HP mesmo com "biomas mais difíceis": o ataque básico caiu de 30 para
+20 DPS, então o tempo para matar cada boss **subiu** (5–7 s → 5,5–9,5 s), crescendo de bioma em
+bioma, enquanto cada boss ainda perde a corrida de DPS para um jogador do nível esperado.
+
+### 3.3 Análise depois das mudanças
+
+Mesmas premissas da §2 (só ataque básico, primeiro golpe em t=0, sem esquiva/dano de contato).
+Ataque básico = **10 a cada 0,5 s = 20 DPS**. Vida do jogador no meio da faixa esperada de cada
+bioma: Floresta nível 2 = 108, Deserto nível 4 = 124, Montanha nível 6 = 140, Cavernas nível 8 = 156.
+
+| Bioma | Inimigo | HP antes → depois | Golpes | TTK antes → depois | DPS do inimigo | Mata o jogador em (antes, 100 HP → depois) |
+|---|---|---|---|---|---|---|
+| Floresta | Lobo da Mata / Aranha | 30 → 30 | 3 | 0,5 → 1,0 s | 7,0 | 14,3 → 15,4 s |
+| Floresta | **Lobo Alfa (boss)** | 160 → 120 | 12 | 5,0 → **5,5 s** | 20,0 → 16,4 | 5,0 → **6,6 s** |
+| Deserto | Escorpião das Dunas | 26 → 45 | 5 | 0,5 → 2,0 s | 6,9 | 14,4 → 17,9 s |
+| Deserto | **Guardião da Ruína (boss)** | 200 → 160 | 16 | 6,5 → **7,5 s** | 14,7 | 6,8 → **8,5 s** |
+| Montanha | Golem de Pedra | 55 → 75 | 8 | 1,5 → 3,5 s | 8,1 | 12,3 → 17,2 s |
+| Montanha | **Senhor da Guerra (boss)** | 220 → 170 | 17 | 7,0 → **8,0 s** | 23,6 → 15,4 | 4,2 → **9,1 s** |
+| Cavernas | Enxame de Morcegos | 18 → 28 | 3 | 0,5 → 1,0 s | 7,1 | 14,0 → 21,8 s (vêm em bando) |
+| Cavernas | **Habitante Ancestral (boss)** | 180 → 200 | 20 | 5,5 → **9,5 s** | 14,3 | 7,0 → **10,9 s** |
+
+Leituras:
+- Os comuns pedem 3 / 5 / 8 / 3 golpes (morcegos compensam em número), em vez de 2 em quase todo
+  bioma.
+- Todo boss agora é vencível só no ataque básico no nível esperado, com margem de 13–20%
+  (Senhor da Guerra: 8,0 s contra 9,1 s). Antes, Lobo Alfa e Senhor da Guerra matavam primeiro.
+  Skills, crítico, Poder Arcano e esquiva aumentam essa margem.
+- O ataque básico agora escala: +1% por ponto de Poder Arcano, Berserk/combos (`AttackDamage`),
+  coluna `damage_mult` e crítico (Destreza).
+
+**Curva de XP** (multiplicador 1,10):
+
+| Nível | XP para o próximo (antes → depois) | XP total para chegar (antes → depois) | Inimigos de 10 XP | Inimigos de 28 XP |
+|---|---|---|---|---|
+| 5 | 244 → 146 | 576 → 464 | 47 | 17 |
+| 10 | 745 → 236 | 2 579 → **1 357** | 136 | 49 |
+| 20 | 6 939 → 612 | 27 354 → 5 114 | 512 | 183 |
+| 30 | 64 623 → 1 586 | 258 094 → 14 861 | 1 487 | 531 |
+| 50 | 5 605 194 → 10 672 | 22 420 374 → **105 715** | 10 572 | 3 776 |
+
+Com XP por bioma, avançar dois níveis em cada bioma custa: Floresta 1→3 (210 XP) ≈ 13 comuns + o boss
+(80); Deserto 3→5 (254) ≈ 6 comuns + boss (144); Montanha 5→7 (307) ≈ 3 comuns + boss (224); Cavernas
+7→9 (372) ≈ 2 comuns + boss (320). As missões de herói (450–520 XP) e de convergência (1 200) adiantam
+o jogador — o que só deixa os bosses mais fáceis que o "nível esperado" da tabela acima. Ultimates
+(nível 10) chegam com ~1 357 XP em vez de ~2 579.
+
+**Skills de herói — DPS por mana** (nível 1; mediana dano/mana **1,23 → 1,48**, DPS 2,7 → 2,8):
+
+| Herói | Skill | Dano/cast | Mana | CD | DPS | Dano/mana (antes → depois) | × mediana | Mana/s |
+|---|---|---|---|---|---|---|---|---|
+| Maithe | Disparo Explosivo | 47 | 25 | 10 s | 4,70 | 1,88 | 1,27× | 2,5 |
+| Maithe | Flecha Precisa | 28 | 10 → **15** | 3 s | 9,33 | 2,80 → **1,87** | 1,26× | 3,3 → **5,0** (= regeneração) |
+| Lavine | Orbe Sombria | 26 | 14 | 3,5 → **4 s** | 7,43 → **6,50** | 1,86 | 1,26× | 4,0 → 3,5 |
+| Maithe | Tempestade de Mil Flechas (ult) | 55 → **130** | 70 | 60 s | 0,92 → **2,17** | 0,79 → **1,86** | 1,26× | 1,2 |
+| Ícaro | Exército Mecânico (ult) | 93 → **148** | 80 | 75 s | 1,24 → **1,97** | 1,16 → **1,85** | 1,25× | 1,1 |
+| Lavine | Eclipse Eterno (ult) | 65 → **150** | 90 | 70 s | 0,93 → **2,14** | 0,72 → **1,67** | 1,13× | 1,3 |
+| Ícaro | Drone de Ataque | 40 | 26 | 14 s | 2,86 | 1,54 | 1,04× | 1,9 |
+| Ícaro | Torreta Automática | 34 | 24 | 12 s | 2,83 | 1,42 | 0,96× | 2,0 |
+| Lavine | Explosão Arcana | 40 | 30 | 10 s | 4,00 | 1,33 | 0,90× | 3,0 |
+| Ícaro | Granada Elétrica | 26 | 20 | 8 s | 3,25 | 1,30 | 0,88× | 2,5 |
+| Maithe | Chuva de Flechas | 18 → **26** | 22 | 8 s | 2,25 → **3,25** | 0,82 → **1,18** | 0,80× | 2,75 |
+| Joaquim | Terremoto | 30 | 28 | 12 s | 2,50 | 1,07 | 0,72× | 2,3 |
+| Maria | Purificação | 15 | 18 | 10 s | 1,50 | 0,83 | 0,56× | 1,8 |
+| Lavine | Correntes das Trevas (controle) | 12 | 22 → **16** | 11 s | 1,09 | 0,55 → **0,75** | 0,51× | 1,45 |
+
+- Nenhuma skill de herói passa de 1,3× a mediana em dano/mana (antes: Flecha Precisa a 2,3×).
+- Cada ultimate de dano agora bate ~3,7× a melhor skill ativa do herói por cast (antes, ~1,5×).
+- `skill_arrow` (geral): 6 de mana + 8 de energia, 3,0 de dano/mana (4 mana/s). Ainda é a skill de
+  maior DPS bruto (12), mas deixou de ser grátis.
+- O ataque básico (20 DPS) continua acima de qualquer skill isolada, mas a diferença caiu de ~11× a
+  mediana de DPS de skill de herói para ~7×; skill + básico é o que leva os bosses em tempo razoável.
+
+### 3.4 Ainda não aplicado (fica para a próxima rodada)
+
+- `skill_meteor_shower` (ultimate geral, 60 de dano/80 de mana) não entrou no ×2,5 das ultimates de
+  herói.
+- `damage_mult` continua 1 em todos os níveis; +2%/nível é a próxima alavanca se o fim do jogo ficar
+  lento (os bosses ficam mais fáceis conforme o jogador passa do nível esperado, só pela vida).
+- Purificação (Maria) e Terremoto (Joaquim) seguem abaixo da mediana; são skills de suporte/controle.
 
 Depois de qualquer mudança em inimigos/skills: **Rapadura > Balance > Export Enemy and Skill
-CSVs** e confira os números de novo nesta análise.
+CSVs** e confira os números de novo nesta análise (e rode `BalanceInvariantsTests`).

@@ -141,8 +141,9 @@ namespace Rapadura.UI.Menus
                 }
                 else if (showMenu && _characterSelect.gameObject.activeSelf)
                 {
-                    // Leaving the picker for World is the picker's own job (it closes itself after
-                    // confirming); only force it off when the title screen takes over.
+                    // Leaving the picker for World is the picker's own job: it closes itself on any
+                    // CharacterSelectedEvent/restore while open — and GameFlowService hears that
+                    // event first, so deactivating it here would stop it applying the hero.
                     _characterSelect.gameObject.SetActive(false);
                 }
             }

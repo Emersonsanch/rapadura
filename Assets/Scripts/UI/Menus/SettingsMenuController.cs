@@ -90,6 +90,10 @@ namespace Rapadura.UI.Menus
 
         // Language
         private DropdownField _languageDropdown;
+        /// <summary>Dropdown order; pt-BR (primary language) first. Shown by name, never by raw code.</summary>
+        private static readonly LanguageCode[] LanguageChoiceOrder = { LanguageCode.ptBR, LanguageCode.en };
+        private readonly List<LanguageCode> _languageChoiceCodes = new List<LanguageCode>();
+        private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
 
         // Controls (rebind)
         private ScrollView _controlsRowsContainer;
@@ -154,6 +158,7 @@ namespace Rapadura.UI.Menus
             SubscribeLocalization();
 
             BindElements();
+            _localizer.Attach(_uiDocument.rootVisualElement, null, SettingsMenuTexts.Get);
             RegisterCallbacks();
             InitializeGraphicsPanel();
             InitializeAudioPanel();
@@ -172,6 +177,7 @@ namespace Rapadura.UI.Menus
             CancelRebind();
             UnregisterCallbacks();
             UnsubscribeLocalization();
+            _localizer.Detach();
             GameplayPause.Release(this);
         }
 
@@ -430,27 +436,36 @@ namespace Rapadura.UI.Menus
                 return;
             }
 
-            _languageDropdown.choices = new System.Collections.Generic.List<string>
+            _languageChoiceCodes.Clear();
+            var choices = new List<string>();
+            foreach (LanguageCode code in LanguageChoiceOrder)
             {
-                LanguageCode.en.ToString(),
-                LanguageCode.ptBR.ToString(),
-            };
+                _languageChoiceCodes.Add(code);
+                choices.Add(SettingsMenuTexts.LanguageName(_localizationManager, code));
+            }
 
-            LanguageCode current = _localizationManager != null ? _localizationManager.CurrentLanguage : LanguageCode.en;
-            _languageDropdown.SetValueWithoutNotify(current.ToString());
+            _languageDropdown.choices = choices;
+
+            // No manager (test scene): show the game's primary language, like the pt-BR UXML text.
+            LanguageCode current = _localizationManager != null ? _localizationManager.CurrentLanguage : LanguageCode.ptBR;
+            int index = Mathf.Max(0, _languageChoiceCodes.IndexOf(current));
+            _languageDropdown.SetValueWithoutNotify(choices[index]);
         }
 
         private void OnLanguageChanged(ChangeEvent<string> evt)
         {
-            if (_localizationManager == null)
+            int index = _languageDropdown.choices.IndexOf(evt.newValue);
+            if (index < 0 || index >= _languageChoiceCodes.Count)
             {
                 return;
             }
 
-            if (System.Enum.TryParse(evt.newValue, out LanguageCode language))
-            {
-                _localizationManager.SetLanguage(language);
-            }
+            LanguageCode language = _languageChoiceCodes[index];
+
+            // Persisted even without a manager, so the next launch starts in the chosen language
+            // (GameManager.BuildManagers reads it before falling back to the system language).
+            LocalizationManager.SaveLanguagePreference(language);
+            _localizationManager?.SetLanguage(language);
         }
 
         // ------------------------------------------------------------------
@@ -890,6 +905,7 @@ namespace Rapadura.UI.Menus
                 ServiceLocator.TryGet(out _frameRateManager);
             }
             SubscribeLocalization();
+            _localizer.SetManager(_localizationManager);
 
             // Re-read every panel on open: managers may have been resolved only now, and the
             // player (and thus the live actions asset) may have spawned since OnEnable.

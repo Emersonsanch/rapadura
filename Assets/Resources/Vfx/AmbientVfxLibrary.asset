@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe0bfc2ced1321b4ea3cfec5a9ffde25, type: 3}
+  m_Name: AmbientVfxLibrary
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Environment.AmbientVfxLibrary
+  _presets:
+  - presetId: forest_fireflies
+    biome: 0
+    kind: 0
+    phases: 12
+    weathers: 5
+    primaryColor: {r: 0.85, g: 1, b: 0.45, a: 0.9}
+    secondaryColor: {r: 1, g: 0.9, b: 0.4, a: 0.8}
+    rate: 4
+    maxParticles: 30
+    particleSize: 0.09
+    particleLifetime: 6
+    particleSpeed: 0.15
+    gravity: 0
+    area: {x: 16, y: 2.5, z: 16}
+    heightOffset: 1
+    blink: 1
+    flashLike: 0
+    additive: 1
+  - presetId: forest_leaves
+    biome: 0
+    kind: 1
+    phases: 3
+    weathers: 5
+    primaryColor: {r: 0.55, g: 0.7, b: 0.25, a: 0.9}
+    secondaryColor: {r: 0.8, g: 0.6, b: 0.25, a: 0.9}
+    rate: 3
+    maxParticles: 30
+    particleSize: 0.14
+    particleLifetime: 7
+    particleSpeed: 0.3
+    gravity: 0
+    area: {x: 18, y: 1, z: 18}
+    heightOffset: 7
+    blink: 0
+    flashLike: 0
+    additive: 0
+  - presetId: desert_dust
+    biome: 1
+    kind: 2
+    phases: 3
+    weathers: 1
+    primaryColor: {r: 0.95, g: 0.85, b: 0.65, a: 0.45}
+    secondaryColor: {r: 0.85, g: 0.72, b: 0.5, a: 0.35}
+    rate: 6
+    maxParticles: 50
+    particleSize: 0.05
+    particleLifetime: 7
+    particleSpeed: 0.4
+    gravity: 0
+    area: {x: 18, y: 3, z: 18}
+    heightOffset: 1.2
+    blink: 0
+    flashLike: 0
+    additive: 0
+  - presetId: desert_heat
+    biome: 1
+    kind: 3
+    phases: 2
+    weathers: 1
+    primaryColor: {r: 1, g: 0.95, b: 0.85, a: 0.08}
+    secondaryColor: {r: 1, g: 0.9, b: 0.75, a: 0.05}
+    rate: 3
+    maxParticles: 20
+    particleSize: 0.9
+    particleLifetime: 3.5
+    particleSpeed: 0.25
+    gravity: 0
+    area: {x: 16, y: 0.3, z: 16}
+    heightOffset: 0.3
+    blink: 0
+    flashLike: 0
+    additive: 0
+  - presetId: mountain_flurry
+    biome: 2
+    kind: 4
+    phases: 15
+    weathers: 5
+    primaryColor: {r: 1, g: 1, b: 1, a: 0.8}
+    secondaryColor: {r: 0.9, g: 0.95, b: 1, a: 0.7}
+    rate: 6
+    maxParticles: 60
+    particleSize: 0.07
+    particleLifetime: 8
+    particleSpeed: 0.4
+    gravity: 0
+    area: {x: 20, y: 1, z: 20}
+    heightOffset: 8
+    blink: 0
+    flashLike: 0
+    additive: 0
+  - presetId: mountain_wind
+    biome: 2
+    kind: 5
+    phases: 15
+    weathers: 21
+    primaryColor: {r: 0.92, g: 0.96, b: 1, a: 0.25}
+    secondaryColor: {r: 0.85, g: 0.9, b: 1, a: 0.15}
+    rate: 2
+    maxParticles: 16
+    particleSize: 0.06
+    particleLifetime: 2.5
+    particleSpeed: 4
+    gravity: 0
+    area: {x: 6, y: 3, z: 18}
+    heightOffset: 1.5
+    blink: 0
+    flashLike: 0
+    additive: 0
+  - presetId: caves_dust
+    biome: 3
+    kind: 2
+    phases: 15
+    weathers: 31
+    primaryColor: {r: 0.8, g: 0.75, b: 0.65, a: 0.35}
+    secondaryColor: {r: 0.65, g: 0.6, b: 0.5, a: 0.25}
+    rate: 4
+    maxParticles: 40
+    particleSize: 0.04
+    particleLifetime: 8
+    particleSpeed: 0.1
+    gravity: 0
+    area: {x: 14, y: 3, z: 14}
+    heightOffset: 1.5
+    blink: 0
+    flashLike: 0
+    additive: 0
+  - presetId: caves_drips
+    biome: 3
+    kind: 6
+    phases: 15
+    weathers: 31
+    primaryColor: {r: 0.7, g: 0.85, b: 1, a: 0.9}
+    secondaryColor: {r: 0.9, g: 0.95, b: 1, a: 0.8}
+    rate: 0.8
+    maxParticles: 10
+    particleSize: 0.05
+    particleLifetime: 1.5
+    particleSpeed: 0
+    gravity: 1
+    area: {x: 12, y: 0.2, z: 12}
+    heightOffset: 5
+    blink: 1
+    flashLike: 1
+    additive: 1
+  _worldMapCapMultiplier: 0.5
+  _mobileCapMultiplier: 0.75
+  _fadeSeconds: 3

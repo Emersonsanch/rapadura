@@ -36,7 +36,7 @@ namespace Rapadura.Gameplay.Dialogue
     /// needed. Quest-giver line texts live in <see cref="QuestGiverTexts"/> and are merged into
     /// LocalizationManager on <see cref="Initialize"/>/<see cref="StartDialogue"/>.
     /// </summary>
-    public class DialogueManager : IManager
+    public class DialogueManager : IManager, IResettable
     {
         private const string LogCategory = "Dialogue";
 
@@ -79,6 +79,17 @@ namespace Rapadura.Gameplay.Dialogue
         }
 
         public void Shutdown()
+        {
+            if (IsActive)
+            {
+                EndDialogue();
+            }
+
+            _flags.Clear();
+        }
+
+        /// <summary>New game / load: closes any open conversation and forgets the session's dialogue flags (they are never saved).</summary>
+        public void ResetForNewSession()
         {
             if (IsActive)
             {

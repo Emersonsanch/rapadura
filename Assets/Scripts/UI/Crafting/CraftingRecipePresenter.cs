@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Items;
+using Rapadura.UI.Common;
 
 namespace Rapadura.UI.Crafting
 {
@@ -29,6 +31,9 @@ namespace Rapadura.UI.Crafting
     /// testable without a UIDocument, same split as <c>SaveSlotPresenter</c>/<c>SaveLoadMenuController</c>.
     /// The actual craftability check is always delegated to <see cref="CraftingManager.CanCraft"/>
     /// so the UI can never disagree with what <see cref="CraftingManager.TryCraft"/> will accept.
+    /// Text comes from <see cref="UiTexts"/> (<c>ui.crafting.*</c>); the optional
+    /// <c>localization</c> argument picks the language, and without it everything is pt-BR (the
+    /// <c>*Reason</c> constants are that pt-BR text).
     /// </summary>
     public static class CraftingRecipePresenter
     {
@@ -89,29 +94,35 @@ namespace Rapadura.UI.Crafting
             return $"{have}/{need}";
         }
 
-        public static string FormatStationRequirement(CraftingStationType station)
+        /// <summary>Key of a station's display name: <c>ui.crafting.station.&lt;snake_case&gt;</c>.</summary>
+        public static string StationKey(CraftingStationType station)
         {
-            return $"Requer: {station}";
+            return UiTexts.CraftingStationPrefix + TooltipLocalization.ToSnakeCase(station.ToString());
         }
 
-        public static string FormatResult(RecipeDefinition recipe)
+        public static string FormatStationRequirement(CraftingStationType station, LocalizationManager localization = null)
+        {
+            return UiTexts.Format(localization, UiTexts.CraftingRequires, UiTexts.Get(localization, StationKey(station)));
+        }
+
+        public static string FormatResult(RecipeDefinition recipe, LocalizationManager localization = null)
         {
             if (recipe == null || recipe.ResultItem == null)
             {
                 return string.Empty;
             }
 
-            return $"Resultado: {recipe.ResultItem.DisplayName} x{recipe.ResultQuantity}";
+            return UiTexts.Format(localization, UiTexts.CraftingResult, recipe.ResultItem.DisplayName, recipe.ResultQuantity);
         }
 
-        public static string FormatSuccessMessage(RecipeDefinition recipe)
+        public static string FormatSuccessMessage(RecipeDefinition recipe, LocalizationManager localization = null)
         {
             if (recipe == null || recipe.ResultItem == null)
             {
-                return "Criado!";
+                return UiTexts.Get(localization, UiTexts.CraftingCrafted);
             }
 
-            return $"Criado: {recipe.ResultItem.DisplayName} x{recipe.ResultQuantity}!";
+            return UiTexts.Format(localization, UiTexts.CraftingCraftedItem, recipe.ResultItem.DisplayName, recipe.ResultQuantity);
         }
 
         /// <summary>
@@ -119,35 +130,35 @@ namespace Rapadura.UI.Crafting
         /// otherwise a short player-facing reason for the disabled button. Order mirrors
         /// <see cref="CraftingManager.CanCraft"/>'s own checks.
         /// </summary>
-        public static string GetCraftBlockReason(CraftingManager craftingManager, RecipeDefinition recipe, InventoryManager inventory, CraftingStationType nearbyStation)
+        public static string GetCraftBlockReason(CraftingManager craftingManager, RecipeDefinition recipe, InventoryManager inventory, CraftingStationType nearbyStation, LocalizationManager localization = null)
         {
             if (craftingManager == null || recipe == null || recipe.ResultItem == null)
             {
-                return UnknownRecipeReason;
+                return UiTexts.Get(localization, UiTexts.CraftingUnknownRecipe);
             }
 
             if (inventory == null)
             {
-                return NoInventoryReason;
+                return UiTexts.Get(localization, UiTexts.CraftingNoInventory);
             }
 
             if (!craftingManager.IsRecipeKnown(recipe))
             {
-                return UnknownRecipeReason;
+                return UiTexts.Get(localization, UiTexts.CraftingUnknownRecipe);
             }
 
             if (recipe.RequiresCraftingStation && recipe.RequiredStation != nearbyStation)
             {
-                return FormatStationRequirement(recipe.RequiredStation);
+                return FormatStationRequirement(recipe.RequiredStation, localization);
             }
 
             if (!craftingManager.HasAllIngredients(recipe, inventory))
             {
-                return MissingMaterialsReason;
+                return UiTexts.Get(localization, UiTexts.CraftingMissingMaterials);
             }
 
             // Belt and braces: anything CanCraft rejects that the checks above didn't explain.
-            return craftingManager.CanCraft(recipe, inventory, nearbyStation) ? null : MissingMaterialsReason;
+            return craftingManager.CanCraft(recipe, inventory, nearbyStation) ? null : UiTexts.Get(localization, UiTexts.CraftingMissingMaterials);
         }
 
         public static bool IsCraftable(CraftingManager craftingManager, RecipeDefinition recipe, InventoryManager inventory, CraftingStationType nearbyStation)

@@ -1,0 +1,76 @@
+/* Same palette as PauseMenuView.uss — this dialog is drawn over the pause panel. */
+.return-title-dialog {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(6, 7, 10, 0.6);
+    display: none;
+}
+
+.return-title-panel {
+    width: 340px;
+    max-width: 90%;
+    align-items: center;
+    padding: 20px;
+    background-color: rgba(20, 22, 30, 0.98);
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.return-title-title {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 245);
+    margin-bottom: 8px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.return-title-message {
+    font-size: 14px;
+    color: rgb(200, 200, 210);
+    margin-bottom: 16px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.return-title-button-list {
+    width: 100%;
+    flex-direction: column;
+}
+
+.return-title-button {
+    width: 100%;
+    /* min-height (not height) so the label can grow with the accessibility font scale. */
+    min-height: 44px;
+    white-space: normal;
+    margin-bottom: 8px;
+    font-size: 14px;
+    background-color: rgba(35, 38, 48, 0.9);
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgb(230, 230, 235);
+}
+
+.return-title-button:hover {
+    background-color: rgba(55, 59, 72, 0.95);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.return-title-button:focus {
+    border-color: rgb(90, 170, 255);
+    border-width: 3px;
+}
+
+.return-title-button--primary {
+    background-color: rgba(40, 70, 110, 0.9);
+}
+
+.return-title-button--danger {
+    background-color: rgba(90, 35, 35, 0.9);
+}

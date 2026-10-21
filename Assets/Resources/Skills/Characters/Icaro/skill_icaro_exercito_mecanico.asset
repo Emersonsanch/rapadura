@@ -24,11 +24,11 @@ MonoBehaviour:
   _energyCost: 0
   _castTimeSeconds: 1.5
   _recoverySeconds: 0.2
-  _baseDamage: 45
+  _baseDamage: 100
   _baseHealing: 0
   _range: 12
   _areaRadius: 7
-  _damagePerLevel: 12
+  _damagePerLevel: 26
   _healingPerLevel: 0
   _buffs:
   - displayName: Oficina a Todo Vapor

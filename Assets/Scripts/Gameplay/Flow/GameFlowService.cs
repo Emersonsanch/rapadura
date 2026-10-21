@@ -4,6 +4,7 @@ using System.Globalization;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
 using Rapadura.Core.Logging;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.World.Map;
 using Rapadura.Save;
@@ -43,15 +44,21 @@ namespace Rapadura.Gameplay.Flow
         private readonly GameFlowMachine _machine = new GameFlowMachine();
         private readonly CharacterSelectionState _selection;
         private readonly SaveManager _saveManager;
+        private readonly NewSessionReset _sessionReset;
+        private readonly SceneTransitionService _transitions;
 
         public GameFlowState State => _machine.State;
 
         public bool HasHero => _selection != null && _selection.HasSelection;
 
-        public GameFlowService(CharacterSelectionState selection, SaveManager saveManager)
+        /// <param name="sessionReset">Run on "Novo jogo" (null = only the hero and the carried player state are cleared).</param>
+        /// <param name="transitions">Used by <see cref="ReturnToTitle"/> to drop the pending encounter and load the world map (null = state change only, e.g. tests).</param>
+        public GameFlowService(CharacterSelectionState selection, SaveManager saveManager, NewSessionReset sessionReset = null, SceneTransitionService transitions = null)
         {
             _selection = selection;
             _saveManager = saveManager;
+            _sessionReset = sessionReset;
+            _transitions = transitions;
         }
 
         public void Initialize()
@@ -77,7 +84,11 @@ namespace Rapadura.Gameplay.Flow
             return State;
         }
 
-        /// <summary>"Novo jogo": forget the hero and the previous run's carried player state, then open the hero picker.</summary>
+        /// <summary>
+        /// "Novo jogo": every per-save system back to new-game state (<see cref="NewSessionReset"/> —
+        /// quests, map, hero, bosses, clock, carried player state...; achievements are kept, they are
+        /// per-profile), then open the hero picker.
+        /// </summary>
         public bool StartNewGame()
         {
             if (State != GameFlowState.MainMenu)
@@ -85,6 +96,12 @@ namespace Rapadura.Gameplay.Flow
                 return false;
             }
 
+            if (_sessionReset != null)
+            {
+                _sessionReset.ResetAll();
+            }
+
+            // Also covered by the reset when both are registered with it; kept for callers without one.
             _selection?.Clear();
             _saveManager?.ClearCarriedState();
             return Apply(_machine.StartNewGame);
@@ -120,7 +137,30 @@ namespace Rapadura.Gameplay.Flow
 
         public bool CancelCharacterSelect() => Apply(_machine.CancelCharacterSelect);
 
-        public bool ReturnToTitle() => Apply(_machine.ReturnToTitle);
+        /// <summary>
+        /// Pause menu "Menu principal": abandons the current encounter (if any), switches to
+        /// <see cref="GameFlowState.MainMenu"/> and loads the world map, whose GameFrontEndController
+        /// shows the title screen for that state. Saving first is the caller's choice. State is not
+        /// reset here — "Novo jogo" and every save load reset it (see <see cref="NewSessionReset"/>),
+        /// and those are the only ways out of the title screen. False when already on the title.
+        /// </summary>
+        public bool ReturnToTitle()
+        {
+            if (State == GameFlowState.MainMenu)
+            {
+                return false;
+            }
+
+            _transitions?.AbandonPendingEncounter();
+
+            if (!Apply(_machine.ReturnToTitle))
+            {
+                return false;
+            }
+
+            _transitions?.ReturnToWorldMap();
+            return true;
+        }
 
         private int FindContinueSlot(int[] slots)
         {

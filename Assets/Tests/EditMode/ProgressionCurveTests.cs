@@ -95,14 +95,33 @@ namespace Rapadura.Tests
             AssertMatchesOldBehaviour(curve);
         }
 
+        // The shipped asset was rebalanced (Docs/Balance/README.md: XP multiplier 1.25 -> 1.10, +8 HP per
+        // level), so it no longer equals the OLD formula. What must still hold is that its table is exactly
+        // what its own formula parameters generate (i.e. "Regenerate Progression Table From Formula" was
+        // run after the parameters changed) — a hand-edited table would have to update this test on purpose.
         [Test]
-        public void ShippedResourcesCurve_MatchesOldHardcodedFormula()
+        public void ShippedResourcesCurve_TableMatchesItsOwnFormulaParameters()
         {
             ProgressionCurve curve = ProgressionCurve.LoadDefault();
 
             Assert.IsNotNull(curve, $"Expected Resources/{ProgressionCurve.ResourcesPath}.asset to exist.");
             Assert.AreEqual(Levels, curve.TableMaxLevel);
-            AssertMatchesOldBehaviour(curve);
+
+            for (int level = 1; level <= Levels; level++)
+            {
+                ProgressionLevelRow expected = curve.BuildFormulaRow(level);
+                ProgressionLevelRow actual = curve.GetRow(level);
+
+                Assert.AreEqual(Mathf.RoundToInt(curve.BaseExperienceToLevel * Mathf.Pow(curve.ExperienceCurveMultiplier, level - 1)),
+                    actual.experienceToNext, $"XP to next at level {level}");
+                Assert.AreEqual(expected.experienceToNext, actual.experienceToNext, $"XP to next at level {level}");
+                Assert.AreEqual(expected.maxHealth, actual.maxHealth, $"Max health at level {level}");
+                Assert.AreEqual(expected.maxMana, actual.maxMana, $"Max mana at level {level}");
+                Assert.AreEqual(expected.maxStamina, actual.maxStamina, $"Max stamina at level {level}");
+                Assert.AreEqual(expected.damageMultiplier, actual.damageMultiplier, $"Damage multiplier at level {level}");
+                Assert.AreEqual(expected.attributePoints, actual.attributePoints, $"Attribute points at level {level}");
+                Assert.AreEqual(expected.skillPoints, actual.skillPoints, $"Skill points at level {level}");
+            }
         }
 
         [Test]
@@ -115,18 +134,24 @@ namespace Rapadura.Tests
             Assert.AreEqual(OldExperienceFormula(20), curve.GetExperienceToNextLevel(20));
         }
 
+        // Was "...UseSameNumbersAsOldFormula" (pinned 1.25^n and a flat 100 HP); the behaviour under test is
+        // that PlayerStats reads the shipped curve, so it now compares against that asset instead of
+        // hardcoding balance numbers.
         [Test]
-        public void PlayerStats_LevelUps_UseSameNumbersAsOldFormula()
+        public void PlayerStats_LevelUps_UseShippedCurveNumbers()
         {
             var go = new GameObject("ProgressionCurveTests_Player");
             _created.Add(go);
             var stats = go.AddComponent<PlayerStats>();
+            ProgressionCurve curve = ProgressionCurve.LoadDefault();
+            Assert.IsNotNull(curve);
+            float baseMaxHealth = stats.MaxHealth;
 
             for (int level = 1; level <= 15; level++)
             {
                 Assert.AreEqual(level, stats.Level);
-                Assert.AreEqual(OldExperienceFormula(level), stats.GetExperienceToNextLevel(), $"XP to next at level {level}");
-                Assert.AreEqual(100f, stats.MaxHealth, "Default curve has no health growth.");
+                Assert.AreEqual(curve.GetExperienceToNextLevel(level), stats.GetExperienceToNextLevel(), $"XP to next at level {level}");
+                Assert.AreEqual(baseMaxHealth + curve.GetMaxHealthBonus(level), stats.MaxHealth, 0.001f, $"Max health at level {level}");
                 stats.AddExperience(stats.GetExperienceToNextLevel());
             }
         }

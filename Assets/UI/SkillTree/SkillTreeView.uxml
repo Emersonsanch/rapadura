@@ -6,7 +6,7 @@
             <ui:Label name="tree-description-label" text="" class="skill-tree-description" />
             <ui:VisualElement class="skill-tree-header-spacer" />
             <ui:Label name="skill-points-label" text="Pontos disponíveis: 0" class="skill-points-label" />
-            <ui:Button name="close-button" text="Fechar" class="skill-tree-close-button" />
+            <ui:Button name="close-button" text="Fechar" class="skill-tree-close-button loc" view-data-key="ui.skilltree.close" />
         </ui:VisualElement>
         <ui:ScrollView name="skill-tree-scroll" class="skill-tree-scroll" horizontal-scroller-visibility="Auto" vertical-scroller-visibility="Auto">
             <ui:VisualElement name="skill-tree-canvas" class="skill-tree-canvas">

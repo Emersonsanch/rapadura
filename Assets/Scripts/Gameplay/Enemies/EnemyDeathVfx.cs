@@ -63,6 +63,12 @@ namespace Rapadura.Gameplay.Enemies
             float elapsed = 0f;
             while (elapsed < _sinkDuration)
             {
+                // The enemy can be destroyed mid-sink (scene unload, pool cleanup).
+                if (enemy == null)
+                {
+                    yield break;
+                }
+
                 elapsed += Time.deltaTime;
                 float t = Mathf.Clamp01(elapsed / _sinkDuration);
                 enemyTransform.position = Vector3.Lerp(startPosition, endPosition, t);

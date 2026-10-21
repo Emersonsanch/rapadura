@@ -5,7 +5,7 @@
             <ui:VisualElement name="save-load-header" class="save-load-header">
                 <ui:Label name="save-load-title-label" text="Salvar Jogo" class="save-load-title" />
                 <ui:VisualElement class="save-load-header-spacer" picking-mode="Ignore" />
-                <ui:Button name="close-button" text="Fechar" focusable="true" class="save-load-close-button" />
+                <ui:Button name="close-button" text="Fechar" focusable="true" class="save-load-close-button loc" view-data-key="ui.saveload.close" />
             </ui:VisualElement>
 
             <ui:ScrollView name="slot-scroll" class="save-load-scroll">

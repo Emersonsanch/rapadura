@@ -22,7 +22,7 @@ namespace Rapadura.Gameplay.World.Map
     /// A top-level manager built by GameManager (so it outlives WorldMap/Main scene swaps) and
     /// registered with SaveManager as an <see cref="ISaveable"/> under <see cref="SaveKey"/>.
     /// </summary>
-    public class WorldMapProgress : IManager, ISaveable
+    public class WorldMapProgress : IManager, ISaveable, IResettable
     {
         private readonly BiomeType _startingRegion;
         private readonly HashSet<BiomeType> _unlocked = new HashSet<BiomeType>();
@@ -56,6 +56,8 @@ namespace Rapadura.Gameplay.World.Map
             _unlocked.Add(_startingRegion);
             CurrentRegion = _startingRegion;
         }
+
+        void IResettable.ResetForNewSession() => ResetToNewGame();
 
         public bool IsUnlocked(BiomeType region) => _unlocked.Contains(region);
 

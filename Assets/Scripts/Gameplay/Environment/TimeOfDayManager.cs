@@ -30,7 +30,7 @@ namespace Rapadura.Gameplay.Environment
     /// Gameplay hook: <see cref="EncounterChanceMultiplier"/> (read by RandomEncounterSystem) is
     /// <see cref="NightEncounterMultiplier"/> at night, 1 otherwise.
     /// </summary>
-    public class TimeOfDayManager : IManager, ISaveable
+    public class TimeOfDayManager : IManager, ISaveable, IResettable
     {
         public const float HoursPerDay = 24f;
         public const float DawnStartHour = 5f;
@@ -47,6 +47,7 @@ namespace Rapadura.Gameplay.Environment
 
         private readonly Action<float> _tickAction;
         private float _dayLengthSeconds;
+        private readonly float _startHour;
         private bool _isInitialized;
 
         public string SaveKey => "TimeOfDay";
@@ -85,9 +86,19 @@ namespace Rapadura.Gameplay.Environment
         public TimeOfDayManager(float dayLengthSeconds = DefaultDayLengthSeconds, float startHour = DefaultStartHour)
         {
             DayLengthSeconds = dayLengthSeconds;
-            CurrentHour = WrapHour(startHour);
+            _startHour = WrapHour(startHour);
+            CurrentHour = _startHour;
             Phase = GetPhase(CurrentHour);
             _tickAction = Tick;
+        }
+
+        /// <summary>New game / load: day 1 at the constructor's start hour (publishes the phase/hour change like a restore).</summary>
+        public void ResetForNewSession()
+        {
+            Day = 1;
+            CurrentHour = _startHour;
+            UpdatePhase();
+            EventBus.Publish(new TimeOfDayHourChangedEvent(Mathf.FloorToInt(CurrentHour), Day, Phase));
         }
 
         public void Initialize()

@@ -25,7 +25,7 @@ namespace Rapadura.Gameplay.Enemies
     /// A plain <see cref="IManager"/> built by GameManager and registered with SaveManager under
     /// <see cref="SaveKey"/>, same shape as WorldMapProgress/QuestManager.
     /// </summary>
-    public class DefeatedEnemyRegistry : IManager, ISaveable
+    public class DefeatedEnemyRegistry : IManager, ISaveable, IResettable
     {
         public const string Key = "DefeatedEnemies";
 
@@ -43,6 +43,12 @@ namespace Rapadura.Gameplay.Enemies
         public void Shutdown()
         {
             EventBus.Unsubscribe<EnemyDiedEvent>(OnEnemyDied);
+            _defeated.Clear();
+        }
+
+        /// <summary>New game / load: every boss is alive again.</summary>
+        public void ResetForNewSession()
+        {
             _defeated.Clear();
         }
 

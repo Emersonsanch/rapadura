@@ -1,6 +1,7 @@
 using System;
 using Rapadura.Core.Systems;
 using Rapadura.Core.Versioning;
+using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,6 +25,7 @@ namespace Rapadura.UI.Menus
         private VisualElement _content;
         private Label _versionLabel;
         private Button _backButton;
+        private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
 
         public bool IsOpen { get; private set; }
 
@@ -39,12 +41,14 @@ namespace Rapadura.UI.Menus
         {
             BindElements();
             RegisterCallbacks();
+            _localizer.Attach(_uiDocument.rootVisualElement);
             BuildContent();
             SetVisible(false);
         }
 
         private void OnDisable()
         {
+            _localizer.Detach();
             UnregisterCallbacks();
             GameplayPause.Release(this);
         }
@@ -119,6 +123,7 @@ namespace Rapadura.UI.Menus
 
         public void Show()
         {
+            _localizer.Refresh();
             SetVisible(true);
             if (_scroll != null) _scroll.scrollOffset = Vector2.zero;
             _backButton?.Focus();

@@ -33,6 +33,7 @@ namespace Rapadura.Tests
         [SetUp]
         public void SetUp()
         {
+            TestSaveRoot.Enter();
             EventBus.Clear();
             DeleteSlotFiles(TestSlot);
 
@@ -54,6 +55,7 @@ namespace Rapadura.Tests
             Object.DestroyImmediate(_fireball);
             Object.DestroyImmediate(_dash);
             Object.DestroyImmediate(_toughness);
+            TestSaveRoot.Exit();
         }
 
         // ---------------------------------------------------------------
@@ -411,8 +413,7 @@ namespace Rapadura.Tests
 
         private static void DeleteSlotFiles(int slot)
         {
-            string folder = Path.Combine(Application.persistentDataPath, "Saves");
-            string main = Path.Combine(folder, $"slot_{slot}.json");
+            string main = TestSaveRoot.SlotPath(slot);
 
             foreach (string path in new[] { main, main + ".bak", main + ".tmp" })
             {

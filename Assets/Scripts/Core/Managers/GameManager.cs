@@ -61,6 +61,7 @@ namespace Rapadura.Core.Managers
         public TimeOfDayManager TimeOfDayManager { get; private set; }
         public WeatherSystem WeatherSystem { get; private set; }
         public GameFlowService GameFlowService { get; private set; }
+        public NewSessionReset NewSessionReset { get; private set; }
 
         private bool _managersBuilt;
 
@@ -113,7 +114,7 @@ namespace Rapadura.Core.Managers
             SaveManager = new SaveManager();
             CheckpointManager = new CheckpointManager();
             LocalizationManager = new LocalizationManager();
-            LocalizationManager.SetLanguage(LocalizationManager.ResolveStartupLanguage(Application.systemLanguage));
+            LocalizationManager.SetLanguage(LocalizationManager.ResolveStartupLanguage(Application.systemLanguage, LocalizationManager.LoadSavedLanguage()));
             CraftingManager = new CraftingManager();
             BuildingManager = new BuildingManager();
             AudioManager = new AudioManager();
@@ -131,7 +132,8 @@ namespace Rapadura.Core.Managers
             AchievementManager = new AchievementManager();
             TimeOfDayManager = new TimeOfDayManager();
             WeatherSystem = new WeatherSystem();
-            GameFlowService = new GameFlowService(CharacterSelectionState, SaveManager);
+            NewSessionReset = new NewSessionReset();
+            GameFlowService = new GameFlowService(CharacterSelectionState, SaveManager, NewSessionReset, SceneTransitionService);
 
             RegisterManager(SaveManager);
             RegisterManager(CheckpointManager);
@@ -170,11 +172,46 @@ namespace Rapadura.Core.Managers
             SaveManager.Register(TimeOfDayManager);
             SaveManager.Register(WeatherSystem);
 
+            RegisterSessionResettables();
+
             // InventoryManager/SkillManager/ComboTracker/BuffController are MonoBehaviours living
             // directly on the scene's Player object (not IManager/ServiceLocator-registered) —
             // resolved via GetComponent by whatever needs them. QuestManager.SetRewardTargets is
             // called once the Player exists, from Start() (see RegisterQuestRewardTargets below),
             // since GameManager is constructed before any scene's player is spawned.
+        }
+
+        /// <summary>
+        /// Every manager holding per-save state goes back to new-game state on "Novo jogo"
+        /// (GameFlowService.StartNewGame) and right before a save is applied (SaveManager.Load), so
+        /// nothing leaks from the previous session. Order matters: QuestManager before
+        /// DailyQuestService (which restarts today's dailies on it), WorldMapProgress before
+        /// WeatherSystem. Audit of the rest of <see cref="BuildManagers"/> — intentionally NOT reset:
+        /// CheckpointManager (scene SpawnPoint refs, rebuilt per scene), LocalizationManager /
+        /// AudioManager / AccessibilitySettings / FrameRateManager (per-device settings),
+        /// AnalyticsManager (telemetry buffer), SceneTransitionService (scene hop bookkeeping; a load
+        /// mid-encounter must keep its arena — ReturnToTitle abandons the encounter explicitly),
+        /// AchievementManager (per-profile lifetime progress, its RestoreState merges instead of
+        /// replacing), GameFlowService (drives the reset itself). Player-scoped state (inventory,
+        /// stats, skills...) lives on the scene's Player and reaches the next scene only as
+        /// SaveManager carried state, which SaveManager's own reset clears.
+        /// </summary>
+        private void RegisterSessionResettables()
+        {
+            NewSessionReset.Register(SaveManager);
+            NewSessionReset.Register(CraftingManager);
+            NewSessionReset.Register(BuildingManager);
+            NewSessionReset.Register(DialogueManager);
+            NewSessionReset.Register(QuestManager);
+            NewSessionReset.Register(DailyQuestService);
+            NewSessionReset.Register(ShopManager);
+            NewSessionReset.Register(WorldMapProgress);
+            NewSessionReset.Register(CharacterSelectionState);
+            NewSessionReset.Register(DefeatedEnemyRegistry);
+            NewSessionReset.Register(TimeOfDayManager);
+            NewSessionReset.Register(WeatherSystem);
+
+            SaveManager.SessionReset = NewSessionReset;
         }
 
         private void RegisterManager<TManager>(TManager manager) where TManager : IManager

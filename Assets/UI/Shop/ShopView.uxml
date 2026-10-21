@@ -3,22 +3,22 @@
     <ui:VisualElement name="shop-root" class="shop-root">
         <ui:VisualElement name="shop-window" class="shop-window">
             <ui:VisualElement name="shop-header" class="shop-header">
-                <ui:Label name="shop-name" text="Shop" class="shop-name" />
+                <ui:Label name="shop-name" text="Loja" class="shop-name" />
                 <ui:VisualElement class="shop-currency">
-                    <ui:Label text="Gold:" class="shop-currency-label" />
+                    <ui:Label text="Ouro:" class="shop-currency-label loc" view-data-key="ui.shop.gold" />
                     <ui:Label name="shop-currency-amount" text="0" class="shop-currency-amount" />
                 </ui:VisualElement>
                 <ui:Button name="shop-close-button" text="X" class="shop-close-button" />
             </ui:VisualElement>
             <ui:VisualElement name="shop-panels" class="shop-panels">
                 <ui:VisualElement class="shop-panel">
-                    <ui:Label text="Buy" class="shop-panel-title" />
+                    <ui:Label text="Comprar" class="shop-panel-title loc" view-data-key="ui.shop.buy" />
                     <ui:ScrollView name="shop-buy-scroll" class="shop-scroll">
                         <ui:VisualElement name="shop-buy-list" class="shop-list" />
                     </ui:ScrollView>
                 </ui:VisualElement>
                 <ui:VisualElement class="shop-panel">
-                    <ui:Label text="Sell" class="shop-panel-title" />
+                    <ui:Label text="Vender" class="shop-panel-title loc" view-data-key="ui.shop.sell" />
                     <ui:ScrollView name="shop-sell-scroll" class="shop-scroll">
                         <ui:VisualElement name="shop-sell-list" class="shop-list" />
                     </ui:ScrollView>

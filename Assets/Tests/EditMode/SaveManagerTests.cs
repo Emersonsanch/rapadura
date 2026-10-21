@@ -1,16 +1,18 @@
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Rapadura.Core.Interfaces;
 using Rapadura.Save;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// Tests for SaveManager's versioning/migration and corruption-protection behavior. Uses
-    /// dedicated, high-numbered slots under Application.persistentDataPath so it can't collide
-    /// with real player save data, and cleans up after itself in TearDown.
+    /// Tests for SaveManager's versioning/migration, corruption-protection and save-root override
+    /// behavior. Every test runs against a throwaway folder (<see cref="TestSaveRoot"/>) so it can't
+    /// collide with real player save data, the auto-save slot included.
     /// </summary>
     public class SaveManagerTests
     {
@@ -35,8 +37,8 @@ namespace Rapadura.Tests
             }
         }
 
-        private static string SaveFolderPath => Path.Combine(Application.persistentDataPath, "Saves");
-        private static string SlotPath(int slot) => Path.Combine(SaveFolderPath, $"slot_{slot}.json");
+        private static string SaveFolderPath => SaveManager.SaveFolderPath;
+        private static string SlotPath(int slot) => TestSaveRoot.SlotPath(slot);
         private static string BackupPath(int slot) => SlotPath(slot) + ".bak";
         private static string TempPath(int slot) => SlotPath(slot) + ".tmp";
 
@@ -61,6 +63,7 @@ namespace Rapadura.Tests
         [SetUp]
         public void SetUp()
         {
+            TestSaveRoot.Enter();
             DeleteSlotFiles(TestSlot);
             DeleteSlotFiles(SaveManager.AutoSaveSlot);
         }
@@ -70,6 +73,7 @@ namespace Rapadura.Tests
         {
             DeleteSlotFiles(TestSlot);
             DeleteSlotFiles(SaveManager.AutoSaveSlot);
+            TestSaveRoot.Exit();
         }
 
         // ---- Basic round trip -------------------------------------------------
@@ -267,6 +271,138 @@ namespace Rapadura.Tests
             Assert.IsFalse(File.Exists(SlotPath(TestSlot)));
             Assert.IsFalse(File.Exists(BackupPath(TestSlot)));
             Assert.IsFalse(File.Exists(TempPath(TestSlot)));
+        }
+
+        [Test]
+        public void Save_OverExistingSave_KeepsPreviousContentInBackup()
+        {
+            SaveManager manager = CreateManager();
+            var saveable = new DummySaveable { Value = 1 };
+            manager.Register(saveable);
+
+            manager.Save(TestSlot);
+            string firstJson = File.ReadAllText(SlotPath(TestSlot));
+
+            saveable.Value = 2;
+            manager.Save(TestSlot);
+
+            Assert.AreEqual(firstJson, File.ReadAllText(BackupPath(TestSlot)), "The .bak should hold exactly the save that was replaced.");
+            Assert.IsFalse(File.Exists(TempPath(TestSlot)), "The temp file must be swapped in, not left behind.");
+
+            saveable.Value = 0;
+            Assert.IsTrue(manager.Load(TestSlot));
+            Assert.AreEqual(2, saveable.Value, "The main file should hold the newest save.");
+        }
+
+        [Test]
+        public void Save_OverCorruptedMainFile_DoesNotOverwriteGoodBackup()
+        {
+            SaveManager manager = CreateManager();
+            var saveable = new DummySaveable { Value = 5 };
+            manager.Register(saveable);
+
+            manager.Save(TestSlot);
+            manager.Save(TestSlot); // .bak now holds a valid save with 5
+            File.WriteAllText(SlotPath(TestSlot), "{ broken");
+
+            saveable.Value = 6;
+            manager.Save(TestSlot);
+
+            SaveData backup = JsonUtility.FromJson<SaveData>(File.ReadAllText(BackupPath(TestSlot)));
+            Assert.IsNotNull(backup, "A corrupted main file must never be rotated into the backup.");
+            Assert.IsTrue(SaveManager.TryGetEntryState(backup, "dummy", out DummyState state));
+            Assert.AreEqual(5, state.value);
+
+            saveable.Value = 0;
+            Assert.IsTrue(manager.Load(TestSlot));
+            Assert.AreEqual(6, saveable.Value);
+        }
+
+        [Test]
+        public void Load_CorruptedMainFile_LogsWarningAndUsesBackup()
+        {
+            SaveManager manager = CreateManager();
+            var saveable = new DummySaveable { Value = 31 };
+            manager.Register(saveable);
+            manager.Save(TestSlot);
+            manager.Save(TestSlot);
+            File.WriteAllText(SlotPath(TestSlot), "not json at all");
+
+            saveable.Value = 0;
+            LogAssert.Expect(LogType.Warning, new Regex("restored from backup"));
+            bool loaded = manager.Load(TestSlot);
+
+            Assert.IsTrue(loaded);
+            Assert.AreEqual(31, saveable.Value);
+        }
+
+        // ---- Save root override --------------------------------------------------
+
+        [Test]
+        public void SaveRootOverride_RoutesSlotFilesIntoOverrideFolder()
+        {
+            Assert.AreEqual(TestSaveRoot.Current, SaveManager.SaveFolderPath);
+
+            SaveManager manager = CreateManager();
+            manager.Save(TestSlot);
+            manager.AutoSave();
+
+            Assert.IsTrue(File.Exists(Path.Combine(TestSaveRoot.Current, $"slot_{TestSlot}.json")));
+            Assert.IsTrue(File.Exists(Path.Combine(TestSaveRoot.Current, $"slot_{SaveManager.AutoSaveSlot}.json")));
+            Assert.IsTrue(manager.HasAutoSave());
+            Assert.IsNotNull(manager.PeekSlot(TestSlot));
+        }
+
+        [Test]
+        public void SaveRootOverride_FolderMissing_SaveCreatesIt()
+        {
+            string nested = Path.Combine(TestSaveRoot.Current, "not", "yet", "created");
+            SaveManager.SaveRootOverride = nested;
+
+            var manager = new SaveManager(); // no Initialize: Save must create the folder itself
+            manager.Save(TestSlot);
+
+            Assert.IsTrue(File.Exists(Path.Combine(nested, $"slot_{TestSlot}.json")));
+        }
+
+        [Test]
+        public void DefaultSaveFolderPath_IsPersistentDataPathSaves()
+        {
+            Assert.AreEqual(Path.Combine(Application.persistentDataPath, "Saves"), SaveManager.DefaultSaveFolderPath);
+        }
+
+        [Test]
+        public void SaveFolderPath_WithoutOverride_IsDefaultPath()
+        {
+            string previous = SaveManager.SaveRootOverride;
+
+            try
+            {
+                SaveManager.SaveRootOverride = null;
+                Assert.AreEqual(SaveManager.DefaultSaveFolderPath, SaveManager.SaveFolderPath);
+                Assert.AreEqual(Path.Combine(SaveManager.DefaultSaveFolderPath, "slot_3.json"), SaveManager.GetSlotFilePath(3));
+
+                SaveManager.SaveRootOverride = string.Empty;
+                Assert.AreEqual(SaveManager.DefaultSaveFolderPath, SaveManager.SaveFolderPath, "An empty override means 'no override'.");
+            }
+            finally
+            {
+                SaveManager.SaveRootOverride = previous;
+            }
+        }
+
+        [Test]
+        public void TestSaveRoot_Exit_RestoresPreviousOverrideAndDeletesFolder()
+        {
+            string folder = TestSaveRoot.Current;
+            CreateManager().Save(TestSlot);
+
+            TestSaveRoot.Exit();
+
+            Assert.IsFalse(Directory.Exists(folder), "Exit should delete everything the test wrote.");
+            Assert.AreEqual(SaveManager.DefaultSaveFolderPath, SaveManager.SaveFolderPath);
+
+            TestSaveRoot.Enter(); // TearDown expects an active root
         }
     }
 }

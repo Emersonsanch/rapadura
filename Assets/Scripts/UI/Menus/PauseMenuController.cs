@@ -1,7 +1,9 @@
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Core.Systems;
 using Rapadura.Save;
 using Rapadura.UI.Achievements;
+using Rapadura.UI.Common;
 using Rapadura.UI.Crafting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -61,6 +63,7 @@ namespace Rapadura.UI.Menus
         private Button _mainMenuButton;
 
         private bool _isOpen;
+        private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
 
         public bool IsOpen => _isOpen;
 
@@ -73,12 +76,15 @@ namespace Rapadura.UI.Menus
         {
             BindElements();
             RegisterCallbacks();
+            _localizer.Attach(_uiDocument.rootVisualElement);
             Hide(publishEvent: false);
         }
 
         private void OnDisable()
         {
+            _localizer.Detach();
             UnregisterCallbacks();
+            GameplayPause.Release(this);
         }
 
         private void BindElements()
@@ -131,20 +137,25 @@ namespace Rapadura.UI.Menus
         public void Show()
         {
             _isOpen = true;
+            _localizer.Refresh();
 
             if (_root != null)
             {
                 _root.style.display = DisplayStyle.Flex;
             }
 
-            if (_controlsTimeScale)
-            {
-                Time.timeScale = 0f;
-            }
-
             _resumeButton?.Focus();
 
-            EventBus.Publish(new GamePausedEvent());
+            // GameplayPause counts holders and publishes GamePausedEvent itself, so this menu no
+            // longer resets timeScale to 1 over another screen's pause.
+            if (_controlsTimeScale)
+            {
+                GameplayPause.Acquire(this);
+            }
+            else
+            {
+                EventBus.Publish(new GamePausedEvent());
+            }
         }
 
         public void Hide() => Hide(publishEvent: true);
@@ -161,10 +172,9 @@ namespace Rapadura.UI.Menus
 
             if (_controlsTimeScale)
             {
-                Time.timeScale = 1f;
+                GameplayPause.Release(this);
             }
-
-            if (publishEvent && wasOpen)
+            else if (publishEvent && wasOpen)
             {
                 EventBus.Publish(new GameResumedEvent());
             }

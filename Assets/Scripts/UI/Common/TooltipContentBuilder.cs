@@ -62,7 +62,7 @@ namespace Rapadura.UI.Common
     ///
     /// Every string goes through the optional <c>localize</c> resolver (normally
     /// <c>LocalizationManager.Get</c>); when it is null, or returns the "[key]" missing-key marker,
-    /// the English text from <see cref="TooltipLocalization.Entries"/> is used instead. Numbers are
+    /// the pt-BR text from <see cref="TooltipLocalization.Entries"/> is used instead. Numbers are
     /// formatted with the invariant culture so output is deterministic across locales.
     /// </summary>
     public static class TooltipContentBuilder
@@ -335,8 +335,8 @@ namespace Rapadura.UI.Common
             }
             catch (FormatException)
             {
-                // A translator broke the placeholders — fall back to the English pattern rather than crash the UI.
-                string fallback = TooltipLocalization.GetEnglishFallback(key) ?? pattern;
+                // A translator broke the placeholders — fall back to the pt-BR pattern rather than crash the UI.
+                string fallback = TooltipLocalization.GetFallback(key) ?? pattern;
                 return string.Format(CultureInfo.InvariantCulture, fallback, args);
             }
         }
@@ -353,7 +353,7 @@ namespace Rapadura.UI.Common
                 }
             }
 
-            return TooltipLocalization.GetEnglishFallback(key) ?? key;
+            return TooltipLocalization.GetFallback(key) ?? key;
         }
 
         /// <summary>Up to one decimal, invariant culture: 12 -> "12", 1.5 -> "1.5", 0.05 -> "0.1".</summary>

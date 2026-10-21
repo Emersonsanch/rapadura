@@ -90,11 +90,47 @@ namespace Rapadura.Gameplay.Player
             private set => _currentMana = value;
         }
 
-        // Base values from the inspector plus whatever the progression curve grants above level 1
-        // (0 with the default curve, so these equal the serialized values unless designers add growth).
-        public float MaxMana => _maxMana + (Curve != null ? Curve.GetMaxManaBonus(Level) : 0f);
-        public float MaxHealth => _maxHealth + (Curve != null ? Curve.GetMaxHealthBonus(Level) : 0f);
+        // Base values from the inspector plus whatever the progression curve grants above level 1,
+        // then (health/mana) every MaxHealth/MaxMana modifier on the BuffController: Vitalidade/Espírito
+        // (AttributeSet), equipment and affixes such as affix_vital (InventoryManager), passives and
+        // buffs. Those modifiers used to be applied but never read here, so the attributes did nothing.
+        public float MaxMana => ApplyStatModifiers(StatType.MaxMana, _maxMana + (Curve != null ? Curve.GetMaxManaBonus(Level) : 0f));
+        public float MaxHealth => ApplyStatModifiers(StatType.MaxHealth, _maxHealth + (Curve != null ? Curve.GetMaxHealthBonus(Level) : 0f));
         public float MaxStamina => _maxStamina + (Curve != null ? Curve.GetMaxStaminaBonus(Level) : 0f);
+
+        /// <summary>
+        /// Sibling BuffController (optional), resolved lazily because EditMode tests and runtime setup
+        /// may add it after this component. Subscribes once to <see cref="BuffController.OnModifiersChanged"/>
+        /// so current health/mana are re-clamped when a max bonus is gained or lost.
+        /// </summary>
+        private BuffController Buffs
+        {
+            get
+            {
+                if (_buffController == null)
+                {
+                    _buffController = GetComponent<BuffController>();
+
+                    if (_buffController != null)
+                    {
+                        _buffController.OnModifiersChanged += HandleModifiersChanged;
+                    }
+                }
+
+                return _buffController;
+            }
+        }
+
+        private BuffController _buffController;
+        private float _lastMaxHealth;
+        private float _lastMaxMana;
+
+        private float ApplyStatModifiers(StatType stat, float baseValue)
+        {
+            BuffController buffs = Buffs;
+            // Never below 1 so a big percent debuff can't produce a zero/negative max (division in HUD bars).
+            return buffs != null ? Mathf.Max(1f, buffs.GetModifiedValue(stat, baseValue)) : baseValue;
+        }
 
         /// <summary>The level curve in use (inspector reference, else the shipped Resources asset; may be null).</summary>
         public ProgressionCurve Curve
@@ -138,7 +174,50 @@ namespace Rapadura.Gameplay.Player
             CurrentHealth = MaxHealth;
             CurrentStamina = MaxStamina;
             CurrentMana = MaxMana;
+            _lastMaxHealth = _currentHealth;
+            _lastMaxMana = _currentMana;
             _elementResistance = GetComponent<ElementResistance>();
+        }
+
+        private void OnDestroy()
+        {
+            if (_buffController != null)
+            {
+                _buffController.OnModifiersChanged -= HandleModifiersChanged;
+            }
+        }
+
+        private void HandleModifiersChanged()
+        {
+            if (_initialized)
+            {
+                RefreshVitalMaximums();
+            }
+        }
+
+        /// <summary>
+        /// Reconciles current health/mana with their (possibly changed) maximums: a vital that was full
+        /// stays full at the new max (spawning with Vitalidade, equipping a +HP item at full health);
+        /// otherwise it keeps its value, clamped down if the max shrank (buff expired, item unequipped).
+        /// Not refilling a partially-damaged bar avoids an equip/unequip heal exploit.
+        /// </summary>
+        private void RefreshVitalMaximums()
+        {
+            float maxHealth = MaxHealth;
+            if (!Mathf.Approximately(maxHealth, _lastMaxHealth))
+            {
+                bool wasFull = _currentHealth >= _lastMaxHealth - 0.001f;
+                _lastMaxHealth = maxHealth;
+                SetHealth(wasFull && !IsDead ? maxHealth : _currentHealth);
+            }
+
+            float maxMana = MaxMana;
+            if (!Mathf.Approximately(maxMana, _lastMaxMana))
+            {
+                bool wasFull = _currentMana >= _lastMaxMana - 0.001f;
+                _lastMaxMana = maxMana;
+                SetMana(wasFull ? maxMana : _currentMana);
+            }
         }
 
         private void Update()
@@ -348,19 +427,12 @@ namespace Rapadura.Gameplay.Player
                 return;
             }
 
-            if (!Mathf.Approximately(Curve.GetMaxHealth(levelBefore), Curve.GetMaxHealth(Level)))
-            {
-                SetHealth(CurrentHealth);
-            }
+            // Health/mana go through the same reconciliation as buff changes (no-op if the max didn't move).
+            RefreshVitalMaximums();
 
             if (!Mathf.Approximately(Curve.GetMaxStamina(levelBefore), Curve.GetMaxStamina(Level)))
             {
                 SetStamina(CurrentStamina);
-            }
-
-            if (!Mathf.Approximately(Curve.GetMaxMana(levelBefore), Curve.GetMaxMana(Level)))
-            {
-                SetMana(CurrentMana);
             }
         }
 
@@ -430,6 +502,8 @@ namespace Rapadura.Gameplay.Player
             CurrentExperience = saveState.currentExperience;
             Level = saveState.level;
             IsDead = CurrentHealth <= 0f;
+            _lastMaxHealth = MaxHealth;
+            _lastMaxMana = MaxMana;
 
             EventBus.Publish(new PlayerHealthChangedEvent(CurrentHealth, MaxHealth));
             EventBus.Publish(new PlayerStaminaChangedEvent(CurrentStamina, MaxStamina));

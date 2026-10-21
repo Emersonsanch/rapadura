@@ -54,6 +54,29 @@ namespace Rapadura.UI.Menus
         public const string Waiting = "ui.settings.controls.waiting";
         public const string ColorblindPrefix = "ui.settings.accessibility.colorblind.";
         public const string HighFpsCombat = "ui.settings.graphics.high_fps_combat";
+        /// <summary>Prefix + lower-case <see cref="LanguageCode"/> name; each language is shown by its own name (autonym).</summary>
+        public const string LanguageNamePrefix = "ui.settings.language.name.";
+
+        // Static SettingsMenuView.uxml text, applied by UiDocumentLocalizer (class "loc" + view-data-key).
+        public const string Title = "ui.settings.title";
+        public const string Close = "ui.settings.close";
+        public const string TabGraphics = "ui.settings.tab.graphics";
+        public const string TabAudio = "ui.settings.tab.audio";
+        public const string TabControls = "ui.settings.tab.controls";
+        public const string TabLanguage = "ui.settings.tab.language";
+        public const string TabAccessibility = "ui.settings.tab.accessibility";
+        public const string GraphicsQuality = "ui.settings.graphics.quality";
+        public const string GraphicsFullscreen = "ui.settings.graphics.fullscreen";
+        public const string AudioMaster = "ui.settings.audio.master";
+        public const string AudioMusic = "ui.settings.audio.music";
+        public const string AudioSfx = "ui.settings.audio.sfx";
+        public const string AudioUi = "ui.settings.audio.ui";
+        public const string LanguageLabel = "ui.settings.language.label";
+        public const string AccessibilityFontScale = "ui.settings.accessibility.font_scale";
+        public const string AccessibilityHighContrast = "ui.settings.accessibility.high_contrast";
+        public const string AccessibilityColorblind = "ui.settings.accessibility.colorblind";
+        public const string AccessibilityScreenShake = "ui.settings.accessibility.screen_shake";
+        public const string AccessibilityReduceFlash = "ui.settings.accessibility.reduce_flash";
 
         /// <summary>Rows shown in the "Controles" tab, in display order.</summary>
         public static readonly IReadOnlyList<RebindRowDefinition> Rows = new[]
@@ -127,6 +150,28 @@ namespace Rapadura.UI.Menus
             new LocalizationEntry(ColorblindPrefix + "protanopia", "Protanopia (red)", "Protanopia (vermelho)"),
             new LocalizationEntry(ColorblindPrefix + "deuteranopia", "Deuteranopia (green)", "Deuteranopia (verde)"),
             new LocalizationEntry(ColorblindPrefix + "tritanopia", "Tritanopia (blue)", "Tritanopia (azul)"),
+
+            new LocalizationEntry(Title, "Settings", "Configurações"),
+            new LocalizationEntry(Close, "Close", "Fechar"),
+            new LocalizationEntry(TabGraphics, "Graphics", "Gráficos"),
+            new LocalizationEntry(TabAudio, "Audio", "Áudio"),
+            new LocalizationEntry(TabControls, "Controls", "Controles"),
+            new LocalizationEntry(TabLanguage, "Language", "Idioma"),
+            new LocalizationEntry(TabAccessibility, "Accessibility", "Acessibilidade"),
+            new LocalizationEntry(GraphicsQuality, "Quality", "Qualidade"),
+            new LocalizationEntry(GraphicsFullscreen, "Fullscreen", "Tela Cheia"),
+            new LocalizationEntry(AudioMaster, "Master volume", "Volume Geral"),
+            new LocalizationEntry(AudioMusic, "Music", "Música"),
+            new LocalizationEntry(AudioSfx, "Effects", "Efeitos"),
+            new LocalizationEntry(AudioUi, "Interface", "Interface"),
+            new LocalizationEntry(LanguageLabel, "Language", "Idioma"),
+            new LocalizationEntry(AccessibilityFontScale, "Font size", "Tamanho da Fonte"),
+            new LocalizationEntry(AccessibilityHighContrast, "High contrast", "Alto Contraste"),
+            new LocalizationEntry(AccessibilityColorblind, "Colorblind mode", "Modo Daltonismo"),
+            new LocalizationEntry(AccessibilityScreenShake, "Screen shake", "Tremor de Tela"),
+            new LocalizationEntry(AccessibilityReduceFlash, "Reduce flashes", "Reduzir Flashes"),
+            new LocalizationEntry(LanguageNamePrefix + "en", "English", "English"),
+            new LocalizationEntry(LanguageNamePrefix + "ptbr", "Português (Brasil)", "Português (Brasil)"),
         };
 
         private static Dictionary<string, string> _fallbackByKey;
@@ -186,6 +231,17 @@ namespace Rapadura.UI.Menus
             }
 
             return key != null && _fallbackByKey.TryGetValue(key, out string text) ? text : null;
+        }
+
+        public static string LanguageNameKey(LanguageCode language)
+        {
+            return LanguageNamePrefix + language.ToString().ToLowerInvariant();
+        }
+
+        /// <summary>Display name of <paramref name="language"/> in that language ("English", "Português (Brasil)").</summary>
+        public static string LanguageName(LocalizationManager manager, LanguageCode language)
+        {
+            return Get(manager, LanguageNameKey(language));
         }
 
         public static string ColorblindKey(ColorblindMode mode)

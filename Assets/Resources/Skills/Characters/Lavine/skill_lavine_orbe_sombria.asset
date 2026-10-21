@@ -19,7 +19,7 @@ MonoBehaviour:
   _skillType: 0
   _category: 0
   _element: 9
-  _cooldownSeconds: 3.5
+  _cooldownSeconds: 4
   _manaCost: 14
   _energyCost: 0
   _castTimeSeconds: 0.3

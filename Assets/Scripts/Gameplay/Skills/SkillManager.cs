@@ -52,6 +52,8 @@ namespace Rapadura.Gameplay.Skills
         [Header("Optional References")]
         [SerializeField] private Animator _animator;
         [SerializeField] private BuffController _buffController;
+        [Tooltip("Crit tuning shared with the basic attack. Left empty, the shipped Resources/Balance/PlayerCombatBalance asset is used.")]
+        [SerializeField] private PlayerCombatBalance _combatBalance;
 
         private readonly Dictionary<string, SkillInstance> _learnedSkills = new Dictionary<string, SkillInstance>();
         private Dictionary<string, SkillDefinition> _skillDatabase;
@@ -70,6 +72,11 @@ namespace Rapadura.Gameplay.Skills
         public int AvailableSkillPoints { get; private set; }
 
         public event Action OnSkillPointsChanged;
+
+        /// <summary>Uniform [0, 1] sampler for skill crit rolls. Null = Unity's global RNG; tests inject a fixed value.</summary>
+        public Func<float> CriticalRoll { get; set; }
+
+        private bool _combatBalanceLookupDone;
 
         private bool _initialized;
 
@@ -650,20 +657,13 @@ namespace Rapadura.Gameplay.Skills
 
         private void ApplyDamageAndDebuffs(SkillDefinition skill, int level, Vector3 aimPoint, GameObject explicitTarget)
         {
-            float damage = skill.GetDamageForLevel(level);
-
-            // Player-level damage growth from the progression curve (1x with the default curve).
+            // Shared attacker pipeline (same as PlayerBasicAttack): player-level damage growth from the
+            // progression curve (1x with the default curve), AttackDamage buffs — including the
+            // DamageMultiplier bonus from a completed combo — and one crit roll per cast (Destreza).
             Rapadura.Gameplay.Player.ProgressionCurve curve = ResolveProgressionCurve();
-            if (damage > 0f && curve != null)
-            {
-                damage *= curve.GetDamageMultiplier(_lastKnownPlayerLevel);
-            }
-
-            // Applies AttackDamage buffs — including the DamageMultiplier bonus from a completed combo.
-            if (damage > 0f && _buffController != null)
-            {
-                damage = _buffController.GetModifiedValue(StatType.AttackDamage, damage);
-            }
+            float levelMultiplier = curve != null ? curve.GetDamageMultiplier(_lastKnownPlayerLevel) : 1f;
+            float damage = OutgoingDamage.Resolve(skill.GetDamageForLevel(level), levelMultiplier, _buffController,
+                ResolveCombatBalance(), CriticalRoll, out bool isCritical);
 
             if (damage <= 0f && skill.Debuffs.Length == 0)
             {
@@ -672,7 +672,7 @@ namespace Rapadura.Gameplay.Skills
 
             if (explicitTarget != null)
             {
-                ApplyToTarget(explicitTarget, skill, damage);
+                ApplyToTarget(explicitTarget, skill, damage, isCritical);
                 return;
             }
 
@@ -686,7 +686,7 @@ namespace Rapadura.Gameplay.Skills
                     continue;
                 }
 
-                ApplyToTarget(hit.gameObject, skill, damage);
+                ApplyToTarget(hit.gameObject, skill, damage, isCritical);
 
                 if (skill.ImpactVfxPrefab != null)
                 {
@@ -696,7 +696,18 @@ namespace Rapadura.Gameplay.Skills
             }
         }
 
-        private void ApplyToTarget(GameObject targetObject, SkillDefinition skill, float damage)
+        private PlayerCombatBalance ResolveCombatBalance()
+        {
+            if (_combatBalance == null && !_combatBalanceLookupDone)
+            {
+                _combatBalanceLookupDone = true;
+                _combatBalance = PlayerCombatBalance.LoadDefault();
+            }
+
+            return _combatBalance;
+        }
+
+        private void ApplyToTarget(GameObject targetObject, SkillDefinition skill, float damage, bool isCritical)
         {
             if (!targetObject.TryGetComponent(out ICombatTarget target) || !target.IsAlive)
             {
@@ -705,7 +716,7 @@ namespace Rapadura.Gameplay.Skills
 
             if (damage > 0f)
             {
-                target.ApplyDamage(damage, skill.Element, gameObject);
+                OutgoingDamage.DeliverDamage(target, damage, skill.Element, gameObject, isCritical);
             }
 
             if (skill.Debuffs.Length > 0 && targetObject.TryGetComponent(out BuffController targetBuffs))

@@ -14,13 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
   _enemyName: "Guardi\xE3o da Ru\xEDna"
   _isBoss: 1
-  _maxHealth: 200
+  _maxHealth: 160
   _contactDamage: 16
-  _experienceReward: 10
+  _experienceReward: 18
   _lootItem: {fileID: 11400000, guid: 214ad08bc7a3def4cbeb45bedcc4524c, type: 2}
   _lootDropChance: 0.6
   _lootQuantityMin: 1
   _lootQuantityMax: 3
+  _bossExperienceMultiplier: 8
   _visualPrefab: {fileID: 0}
   _visualLocalPosition: {x: 0, y: -0.5, z: 0}
   _visualLocalEulerAngles: {x: -90, y: 0, z: 0}

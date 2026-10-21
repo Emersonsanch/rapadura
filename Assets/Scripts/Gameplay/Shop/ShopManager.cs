@@ -28,7 +28,7 @@ namespace Rapadura.Gameplay.Shop
     ///   RegisterManager(ShopManager);
     /// plus a public <c>ShopManager</c> property, mirroring CraftingManager/DialogueManager.
     /// </summary>
-    public class ShopManager : IManager
+    public class ShopManager : IManager, IResettable
     {
         private const string LogCategory = "Shop";
 
@@ -42,6 +42,15 @@ namespace Rapadura.Gameplay.Shop
         }
 
         public void Shutdown()
+        {
+            if (IsOpen)
+            {
+                CloseShop();
+            }
+        }
+
+        /// <summary>New game / load: drops the open shop session (its buyer inventory belongs to the old session's player).</summary>
+        public void ResetForNewSession()
         {
             if (IsOpen)
             {

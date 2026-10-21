@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rapadura.Core.Events;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Enemies;
+using Rapadura.Gameplay.Flow;
 using Rapadura.Gameplay.Skills;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.Gameplay.World.Map;
@@ -30,17 +31,26 @@ namespace Rapadura.Tests.PlayMode
         {
             yield return LoadScene(WorldMapSceneName);
 
+            // Pick the hero the way the game does: on WorldMap.unity, through the title flow when
+            // GameFrontEndController is in the scene (Novo jogo -> hero -> map; the map controller
+            // stays disabled, not even Started, until then), else directly. Choosing it up front also
+            // makes the arena scene skip its own select screen, so time is not frozen there.
+            // SelectHero also re-enables the picker (if WorldMap has one) so it closes itself and
+            // releases its GameplayPause — the picker doesn't react to a hero chosen through the API.
+            GameFlowService flow = GetService<GameFlowService>();
+            yield return SelectHero(CharacterId.Lavine, requireCharacterSelect: false);
+            Assert.AreEqual(GameFlowState.World, flow.State, "Choosing a hero did not hand control to the world map.");
+            Assert.AreEqual(1f, Time.timeScale, "World map still paused after the hero was chosen.");
+
             WorldMapController map = FindInScene<WorldMapController>();
             Assert.IsNotNull(map, "WorldMap.unity has no WorldMapController.");
+            yield return WaitUntilOrFail(() => map.isActiveAndEnabled && map.Progress != null,
+                "WorldMapController to be enabled and started once a hero is chosen");
             Assert.IsNotNull(map.Encounters, "WorldMapController built no RandomEncounterSystem.");
 
             SceneTransitionService transition = GetService<SceneTransitionService>();
             WorldMapProgress progress = GetService<WorldMapProgress>();
             Assert.AreSame(progress, map.Progress, "WorldMapController is not using the GameManager's WorldMapProgress (nothing it does would be saved).");
-
-            // The hero is normally picked on Main.unity's character select; choosing it up front makes
-            // the arena scene skip that screen (as on any re-entry) so time isn't frozen at 0.
-            GetService<CharacterSelectionState>().Select(CharacterId.Lavine);
 
             BiomeType region = progress.CurrentRegion;
             BiomeDefinition biome = BiomeRegistry.Get(region);
@@ -67,7 +77,7 @@ namespace Rapadura.Tests.PlayMode
                 EventBus.Unsubscribe(onSpawned);
             }
 
-            LogAssert.NoUnexpectedReceived();
+            // Unexpected Error/Exception logs already fail the test (LogAssert default).
         }
 
         private static IEnumerator RunEncounter(SceneTransitionService transition, WorldMapProgress progress, EncounterPayload payload,

@@ -6,6 +6,7 @@ using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.Skills;
 using Rapadura.UI.Achievements;
+using Rapadura.UI.Common;
 using Rapadura.UI.Crafting;
 using Rapadura.UI.Inventory;
 using Rapadura.UI.Menus;
@@ -156,6 +157,8 @@ namespace Rapadura.UI.HUD
         private readonly EventCallback<PointerDownEvent>[] _skillSlotPressedCallbacks = new EventCallback<PointerDownEvent>[SkillSlotCount];
         private IVisualElementScheduledItem _skillHotbarRefresh;
         private HotbarLoadout _subscribedLoadout;
+        private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
+        private int _displayedLevel = 1;
 
         private void Awake()
         {
@@ -175,6 +178,7 @@ namespace Rapadura.UI.HUD
             BindElements();
             ApplyAdaptiveLayout();
             RegisterCallbacks();
+            _localizer.Attach(_uiDocument.rootVisualElement, UpdateLevelLabel);
             InitializeFromCurrentStats();
         }
 
@@ -185,6 +189,8 @@ namespace Rapadura.UI.HUD
             // at runtime), which left the bars reading 0/0 (invisible fill) until the first
             // stat-change event. Re-reading here, once every object's Awake has definitely run,
             // fixes that first-frame empty-bar bug without needing explicit script execution order.
+            // LocalizationManager may only be registered by now (GameManager.Awake ordering).
+            _localizer.Refresh();
             InitializeFromCurrentStats();
             RefreshSkillHotbar();
             TryBindShortcuts();
@@ -192,6 +198,7 @@ namespace Rapadura.UI.HUD
 
         private void OnDisable()
         {
+            _localizer.Detach();
             UnregisterCallbacks();
         }
 
@@ -812,9 +819,15 @@ namespace Rapadura.UI.HUD
         {
             SetBarFill(_xpFill, _xpValueLabel, current, toNextLevel);
 
+            _displayedLevel = level;
+            UpdateLevelLabel();
+        }
+
+        private void UpdateLevelLabel()
+        {
             if (_levelLabel != null)
             {
-                _levelLabel.text = $"Nv. {level}";
+                _levelLabel.text = UiTexts.Format(_localizer.Manager, UiTexts.HudLevel, _displayedLevel);
             }
         }
 

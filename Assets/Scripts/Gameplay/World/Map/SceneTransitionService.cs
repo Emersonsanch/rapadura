@@ -135,6 +135,19 @@ namespace Rapadura.Gameplay.World.Map
             return true;
         }
 
+        /// <summary>
+        /// Forgets the pending encounter and the last outcome without resolving them — no victory
+        /// recorded, no <see cref="EncounterEndedEvent"/>, no auto-save. For leaving the session
+        /// altogether (pause menu "Menu principal" → GameFlowService.ReturnToTitle), so the next
+        /// session neither resumes the old arena nor shows its "Vitória"/"Fugiu!" on the map.
+        /// </summary>
+        public void AbandonPendingEncounter()
+        {
+            PendingEncounter = null;
+            LastOutcome = null;
+            DeferDefeatResolution = false;
+        }
+
         /// <summary>Loads the world map without any encounter bookkeeping (e.g. from a "Mapa" menu button in Main.unity).</summary>
         public void ReturnToWorldMap()
         {

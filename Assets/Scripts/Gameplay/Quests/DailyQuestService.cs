@@ -46,7 +46,7 @@ namespace Rapadura.Gameplay.Quests
     ///
     /// Restores after QuestManager (<see cref="IRestoreOrder"/>) because a rollover mutates QuestManager's state.
     /// </summary>
-    public class DailyQuestService : IManager, ISaveable, IRestoreOrder
+    public class DailyQuestService : IManager, ISaveable, IRestoreOrder, IResettable
     {
         private const string LogCategory = "Quests";
 
@@ -126,6 +126,17 @@ namespace Rapadura.Gameplay.Quests
             _poolById.Clear();
             _todayQuestIds.Clear();
             _dayKey = null;
+        }
+
+        /// <summary>
+        /// New game / load: forgets the rotation and picks today's set again on the (already reset)
+        /// QuestManager — registered after it in NewSessionReset for exactly that reason.
+        /// </summary>
+        public void ResetForNewSession()
+        {
+            _todayQuestIds.Clear();
+            _dayKey = null;
+            Refresh();
         }
 
         // ------------------------------------------------------------------

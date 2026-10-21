@@ -22,6 +22,7 @@ namespace Rapadura.Tests
         [SetUp]
         public void SetUp()
         {
+            TestSaveRoot.Enter();
             ServiceLocator.Clear();
 
             _saveManager = new SaveManager();
@@ -45,6 +46,7 @@ namespace Rapadura.Tests
             _checkpointManager.Shutdown();
             Object.DestroyImmediate(_spawnGo);
             ServiceLocator.Clear();
+            TestSaveRoot.Exit();
         }
 
         [Test]

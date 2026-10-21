@@ -52,7 +52,7 @@ namespace Rapadura.Gameplay.Characters
     /// this existed the choice lived only in the character select screen's local state, so loading a
     /// save brought back stats/skills/inventory but not the hero they belonged to.
     /// </summary>
-    public class CharacterSelectionState : IManager, ISaveable, IRestoreOrder
+    public class CharacterSelectionState : IManager, ISaveable, IRestoreOrder, IResettable
     {
         public const string Key = "SelectedCharacter";
 
@@ -86,6 +86,8 @@ namespace Rapadura.Gameplay.Characters
         {
             Selected = null;
         }
+
+        public void ResetForNewSession() => Clear();
 
         public object CaptureState()
         {

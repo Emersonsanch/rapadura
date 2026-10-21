@@ -1,3 +1,6 @@
+using Rapadura.Core.Localization;
+using Rapadura.UI.Common;
+
 namespace Rapadura.UI.Menus
 {
     /// <summary>
@@ -5,6 +8,7 @@ namespace Rapadura.UI.Menus
     /// (<see cref="SaveLoadMenuController"/>). Kept separate from the controller — same reasoning as
     /// <c>Rapadura.UI.HUD.HudBarMath</c> — so slot-state rules (label text, which buttons should be
     /// enabled) are covered by EditMode tests without needing a real <c>UIDocument</c>.
+    /// Labels come from <see cref="UiTexts"/> (<c>ui.saveload.*</c>); without a manager they are pt-BR.
     /// </summary>
     public static class SaveSlotPresenter
     {
@@ -21,14 +25,14 @@ namespace Rapadura.UI.Menus
         }
 
         /// <summary>Human-readable slot name, 1-based for display ("Slot 1") regardless of the underlying 0-based index.</summary>
-        public static string GetSlotTitle(int slotIndex)
+        public static string GetSlotTitle(int slotIndex, LocalizationManager localization = null)
         {
-            return $"Slot {slotIndex + 1}";
+            return UiTexts.Format(localization, UiTexts.SaveLoadSlot, slotIndex + 1);
         }
 
-        public static string GetStatusLabel(bool slotExists)
+        public static string GetStatusLabel(bool slotExists, LocalizationManager localization = null)
         {
-            return slotExists ? "Salvo" : "Vazio";
+            return UiTexts.Get(localization, slotExists ? UiTexts.SaveLoadSaved : UiTexts.SaveLoadEmpty);
         }
 
         /// <summary>Save is always allowed — saving into an occupied slot overwrites it (with SaveManager's own backup safety net).</summary>
@@ -50,14 +54,14 @@ namespace Rapadura.UI.Menus
         }
 
         /// <summary>Label for the slot's primary action button, which flips meaning between the Save and Load screens.</summary>
-        public static string GetPrimaryActionLabel(bool isSaveMode, bool slotExists)
+        public static string GetPrimaryActionLabel(bool isSaveMode, bool slotExists, LocalizationManager localization = null)
         {
             if (isSaveMode)
             {
-                return slotExists ? "Sobrescrever" : "Salvar";
+                return UiTexts.Get(localization, slotExists ? UiTexts.SaveLoadOverwrite : UiTexts.SaveLoadSave);
             }
 
-            return slotExists ? "Carregar" : "Vazio";
+            return UiTexts.Get(localization, slotExists ? UiTexts.SaveLoadLoad : UiTexts.SaveLoadEmpty);
         }
 
         /// <summary>Whether the slot's primary action button should be interactable, given the current screen mode.</summary>

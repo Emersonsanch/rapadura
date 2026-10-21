@@ -4,11 +4,11 @@
         <ui:VisualElement name="main-menu-panel" class="main-menu-panel">
             <ui:Label text="Rapadura" class="main-menu-title" />
             <ui:VisualElement name="main-menu-button-list" class="main-menu-button-list">
-                <ui:Button name="new-game-button" text="Novo Jogo" focusable="true" class="main-menu-button" />
-                <ui:Button name="continue-button" text="Continuar" focusable="true" class="main-menu-button" />
-                <ui:Button name="settings-button" text="Configurações" focusable="true" class="main-menu-button" />
-                <ui:Button name="credits-button" text="Créditos" focusable="true" class="main-menu-button" />
-                <ui:Button name="quit-button" text="Sair" focusable="true" class="main-menu-button" />
+                <ui:Button name="new-game-button" text="Iniciar Jogo" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.start" />
+                <ui:Button name="continue-button" text="Continuar" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.continue" />
+                <ui:Button name="settings-button" text="Configurações" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.settings" />
+                <ui:Button name="credits-button" text="Créditos" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.credits" />
+                <ui:Button name="quit-button" text="Sair" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.quit" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

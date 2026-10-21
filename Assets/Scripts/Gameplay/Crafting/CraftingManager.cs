@@ -31,7 +31,7 @@ namespace Rapadura.Gameplay.Crafting
     /// Constructed and registered in <c>GameManager.BuildManagers()</c> alongside the other
     /// top-level managers.
     /// </summary>
-    public class CraftingManager : IManager, ISaveable
+    public class CraftingManager : IManager, ISaveable, IResettable
     {
         public const string Key = "CraftingManager";
 
@@ -59,6 +59,13 @@ namespace Rapadura.Gameplay.Crafting
         public void Shutdown()
         {
             _knownRecipeIds.Clear();
+        }
+
+        /// <summary>New game: only the KnownByDefault recipes.</summary>
+        public void ResetForNewSession()
+        {
+            _knownRecipeIds.Clear();
+            AddDefaultRecipes();
         }
 
         // ---------------------------------------------------------------

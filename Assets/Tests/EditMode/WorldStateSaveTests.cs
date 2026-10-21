@@ -63,6 +63,7 @@ namespace Rapadura.Tests
         [SetUp]
         public void SetUp()
         {
+            TestSaveRoot.Enter();
             EventBus.Clear();
             DeleteSlotFiles(TestSlot);
             DeleteSlotFiles(LegacySlot);
@@ -85,6 +86,7 @@ namespace Rapadura.Tests
             }
 
             _toDestroy.Clear();
+            TestSaveRoot.Exit();
         }
 
         // ---------------------------------------------------------------
@@ -380,7 +382,7 @@ namespace Rapadura.Tests
             return manager;
         }
 
-        private static string SlotPath(int slot) => Path.Combine(Application.persistentDataPath, "Saves", $"slot_{slot}.json");
+        private static string SlotPath(int slot) => TestSaveRoot.SlotPath(slot);
 
         private static void WriteLegacySave(int slot, string version, int value)
         {

@@ -86,6 +86,40 @@ namespace Rapadura.Core.Localization
             return systemLanguage == UnityEngine.SystemLanguage.English ? LanguageCode.en : LanguageCode.ptBR;
         }
 
+        /// <summary>PlayerPrefs key holding the language the player picked in Configurações → Idioma.</summary>
+        public const string LanguagePrefsKey = "Localization.Language";
+
+        /// <summary>
+        /// Startup language with the player's saved choice taken into account: a valid
+        /// <paramref name="savedLanguage"/> (a <see cref="LanguageCode"/> name, as written by
+        /// <see cref="SaveLanguagePreference"/>) always wins; otherwise falls back to
+        /// <see cref="ResolveStartupLanguage(UnityEngine.SystemLanguage)"/>.
+        /// </summary>
+        public static LanguageCode ResolveStartupLanguage(UnityEngine.SystemLanguage systemLanguage, string savedLanguage)
+        {
+            if (!string.IsNullOrEmpty(savedLanguage)
+                && System.Enum.TryParse(savedLanguage, out LanguageCode saved)
+                && System.Enum.IsDefined(typeof(LanguageCode), saved))
+            {
+                return saved;
+            }
+
+            return ResolveStartupLanguage(systemLanguage);
+        }
+
+        /// <summary>The persisted language choice (raw <see cref="LanguageCode"/> name), or null when the player never picked one.</summary>
+        public static string LoadSavedLanguage()
+        {
+            return UnityEngine.PlayerPrefs.HasKey(LanguagePrefsKey) ? UnityEngine.PlayerPrefs.GetString(LanguagePrefsKey) : null;
+        }
+
+        /// <summary>Persists <paramref name="language"/> so the next launch starts in it (see GameManager.BuildManagers).</summary>
+        public static void SaveLanguagePreference(LanguageCode language)
+        {
+            UnityEngine.PlayerPrefs.SetString(LanguagePrefsKey, language.ToString());
+            UnityEngine.PlayerPrefs.Save();
+        }
+
         public void SetLanguage(LanguageCode language)
         {
             if (CurrentLanguage == language)
@@ -94,7 +128,8 @@ namespace Rapadura.Core.Localization
             }
 
             CurrentLanguage = language;
-            GameLogger.Info(LogCategory, $"Language changed to {language}.");
+            // Debug, not Info: GameManager sets the startup language on every boot.
+            GameLogger.Debug(LogCategory, $"Language changed to {language}.");
             LanguageChanged?.Invoke(language);
         }
 

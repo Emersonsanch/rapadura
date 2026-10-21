@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Inventory;
@@ -52,6 +53,9 @@ namespace Rapadura.UI.Crafting
         private IVisualElementScheduledItem _feedbackClearItem;
 
         private readonly List<RecipeDefinition> _recipes = new List<RecipeDefinition>();
+        private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
+
+        private LocalizationManager Localization => _localizer.Manager;
 
         public bool IsOpen => _isOpen;
 
@@ -64,11 +68,13 @@ namespace Rapadura.UI.Crafting
         {
             BindElements();
             RegisterCallbacks();
+            _localizer.Attach(_uiDocument.rootVisualElement, OnLanguageChanged);
             Close();
         }
 
         private void OnDisable()
         {
+            _localizer.Detach();
             UnregisterCallbacks();
             GameplayPause.Release(this);
         }
@@ -136,6 +142,7 @@ namespace Rapadura.UI.Crafting
             _inventory = inventory != null ? inventory : ResolvePlayerInventory();
             _nearbyStation = nearbyStation;
             _isOpen = true;
+            _localizer.Refresh();
 
             if (_root != null)
             {
@@ -172,6 +179,14 @@ namespace Rapadura.UI.Crafting
             else
             {
                 Open();
+            }
+        }
+
+        private void OnLanguageChanged()
+        {
+            if (_isOpen)
+            {
+                RefreshDetails();
             }
         }
 
@@ -268,7 +283,7 @@ namespace Rapadura.UI.Crafting
 
             if (_recipeNameLabel != null) _recipeNameLabel.text = recipe != null ? recipe.DisplayName : string.Empty;
             if (_recipeDescriptionLabel != null) _recipeDescriptionLabel.text = recipe != null ? recipe.Description : string.Empty;
-            if (_resultLabel != null) _resultLabel.text = CraftingRecipePresenter.FormatResult(recipe);
+            if (_resultLabel != null) _resultLabel.text = CraftingRecipePresenter.FormatResult(recipe, Localization);
 
             if (_ingredientListContainer != null)
             {
@@ -293,7 +308,7 @@ namespace Rapadura.UI.Crafting
             }
 
             string blockReason = recipe != null
-                ? CraftingRecipePresenter.GetCraftBlockReason(_craftingManager, recipe, _inventory, _nearbyStation)
+                ? CraftingRecipePresenter.GetCraftBlockReason(_craftingManager, recipe, _inventory, _nearbyStation, Localization)
                 : string.Empty;
 
             if (_blockReasonLabel != null)
@@ -317,12 +332,12 @@ namespace Rapadura.UI.Crafting
 
             if (crafted)
             {
-                SetFeedback(CraftingRecipePresenter.FormatSuccessMessage(_selectedRecipe), true);
+                SetFeedback(CraftingRecipePresenter.FormatSuccessMessage(_selectedRecipe, Localization), true);
                 UiFeedbackUtility.Pulse(_craftButton, SuccessFlashColor);
             }
             else
             {
-                SetFeedback("Não foi possível criar (sem espaço no inventário?)", false);
+                SetFeedback(UiTexts.Get(Localization, UiTexts.CraftingFailed), false);
                 UiFeedbackUtility.Pulse(_craftButton, FailureFlashColor);
             }
 

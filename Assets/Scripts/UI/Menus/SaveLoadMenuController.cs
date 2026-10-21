@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using Rapadura.Core.DI;
+using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
 using Rapadura.Save;
+using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -41,6 +43,7 @@ namespace Rapadura.UI.Menus
         private ScreenMode _mode = ScreenMode.Save;
 
         private readonly List<SlotRow> _slotRows = new List<SlotRow>();
+        private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
 
         private struct SlotRow
         {
@@ -62,12 +65,14 @@ namespace Rapadura.UI.Menus
 
             BindElements();
             RegisterCallbacks();
+            _localizer.Attach(_uiDocument.rootVisualElement, OnLanguageChanged);
             BuildSlotRows();
             Hide();
         }
 
         private void OnDisable()
         {
+            _localizer.Detach();
             UnregisterCallbacks();
             GameplayPause.Release(this);
         }
@@ -122,7 +127,7 @@ namespace Rapadura.UI.Menus
                 primaryButton.clicked += () => OnPrimaryActionClicked(slotIndex);
                 row.Add(primaryButton);
 
-                var deleteButton = new Button { name = "slot-delete-button", text = "Excluir", focusable = true };
+                var deleteButton = new Button { name = "slot-delete-button", text = UiTexts.Get(_localizer.Manager, UiTexts.SaveLoadDelete), focusable = true };
                 deleteButton.AddToClassList("save-slot-delete-button");
                 deleteButton.clicked += () => OnDeleteClicked(slotIndex);
                 row.Add(deleteButton);
@@ -147,9 +152,11 @@ namespace Rapadura.UI.Menus
                 bool exists = _saveManager != null && _saveManager.SlotExists(row.SlotIndex);
                 bool isSaveMode = _mode == ScreenMode.Save;
 
-                row.TitleLabel.text = SaveSlotPresenter.GetSlotTitle(row.SlotIndex);
-                row.StatusLabel.text = SaveSlotPresenter.GetStatusLabel(exists);
-                row.PrimaryButton.text = SaveSlotPresenter.GetPrimaryActionLabel(isSaveMode, exists);
+                LocalizationManager localization = _localizer.Manager;
+                row.TitleLabel.text = SaveSlotPresenter.GetSlotTitle(row.SlotIndex, localization);
+                row.StatusLabel.text = SaveSlotPresenter.GetStatusLabel(exists, localization);
+                row.PrimaryButton.text = SaveSlotPresenter.GetPrimaryActionLabel(isSaveMode, exists, localization);
+                row.DeleteButton.text = UiTexts.Get(localization, UiTexts.SaveLoadDelete);
                 row.PrimaryButton.SetEnabled(SaveSlotPresenter.IsPrimaryActionEnabled(isSaveMode, exists));
                 row.DeleteButton.SetEnabled(SaveSlotPresenter.CanDelete(exists));
             }
@@ -200,11 +207,8 @@ namespace Rapadura.UI.Menus
             }
 
             _mode = mode;
-
-            if (_titleLabel != null)
-            {
-                _titleLabel.text = mode == ScreenMode.Save ? "Salvar Jogo" : "Carregar Jogo";
-            }
+            _localizer.Refresh();
+            UpdateTitle();
 
             if (_root != null)
             {
@@ -219,6 +223,20 @@ namespace Rapadura.UI.Menus
             {
                 _slotRows[0].PrimaryButton.Focus();
             }
+        }
+
+        private void UpdateTitle()
+        {
+            if (_titleLabel != null)
+            {
+                _titleLabel.text = UiTexts.Get(_localizer.Manager, _mode == ScreenMode.Save ? UiTexts.SaveLoadTitleSave : UiTexts.SaveLoadTitleLoad);
+            }
+        }
+
+        private void OnLanguageChanged()
+        {
+            UpdateTitle();
+            RefreshSlots();
         }
 
         public void Hide()

@@ -20,7 +20,7 @@ MonoBehaviour:
   _category: 5
   _element: 9
   _cooldownSeconds: 11
-  _manaCost: 22
+  _manaCost: 16
   _energyCost: 0
   _castTimeSeconds: 0.4
   _recoverySeconds: 0.2

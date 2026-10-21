@@ -122,6 +122,8 @@ namespace Rapadura.UI.Death
                 _transition.DeferDefeatResolution = false;
                 _transition = null;
             }
+
+            GameplayPause.Release(this);
         }
 
         private void BindElements()
@@ -350,6 +352,9 @@ namespace Rapadura.UI.Death
                 stats.Revive();
             }
 
+            // Keep the arena frozen while the world map loads (async): a revived player must not
+            // be hit — and die again — by enemies still alive in it. Released on scene unload (OnDisable).
+            GameplayPause.Acquire(this);
             _transition.CompleteEncounter(EncounterOutcome.Defeat);
         }
 

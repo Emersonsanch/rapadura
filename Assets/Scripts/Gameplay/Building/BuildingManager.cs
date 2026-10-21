@@ -24,7 +24,7 @@ namespace Rapadura.Gameplay.Building
     /// Constructed and registered in <c>GameManager.BuildManagers()</c> alongside the other
     /// top-level managers.
     /// </summary>
-    public class BuildingManager : IManager, ISaveable
+    public class BuildingManager : IManager, ISaveable, IResettable
     {
         public const string Key = "BuildingManager";
 
@@ -51,6 +51,12 @@ namespace Rapadura.Gameplay.Building
         {
             _placedStructures.Clear();
             _structureDatabase.Clear();
+        }
+
+        /// <summary>New game: no placed structures. Registered definitions are content, not save state, so they stay.</summary>
+        public void ResetForNewSession()
+        {
+            _placedStructures.Clear();
         }
 
         /// <summary>Registers a structure definition so it can later be resolved by id (e.g. from save data).</summary>
