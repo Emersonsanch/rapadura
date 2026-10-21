@@ -31,6 +31,7 @@ namespace Rapadura.Gameplay.Enemies
         private Transform _root;
         private Vector3 _restLocalPosition;
         private Quaternion _restLocalRotation;
+        private bool _hasRestPose;
 
         private Vector3 _lastRootPosition;
         private float _bobPhase;
@@ -47,12 +48,44 @@ namespace Rapadura.Gameplay.Enemies
 
             _restLocalPosition = _visualRoot.localPosition;
             _restLocalRotation = _visualRoot.localRotation;
+            _hasRestPose = true;
             _lastRootPosition = _root.position;
         }
+
+        public Transform VisualRoot => _visualRoot;
 
         private void Update()
         {
             Tick(Time.deltaTime);
+        }
+
+        /// <summary>
+        /// Re-targets which transform receives the bob/lean/sway — used by <see cref="EnemyVisualSwapper"/>
+        /// after replacing the enemy's visual. Recaptures the rest pose from the new root's current
+        /// local transform; the outgoing visual is first put back at its own rest pose so it isn't
+        /// left mid-bob (it may be re-activated later, e.g. a pooled enemy going back to the shared
+        /// prefab visual). Null falls back to this transform (same as an unassigned field in Awake).
+        /// </summary>
+        public void SetVisualRoot(Transform visualRoot)
+        {
+            if (_root == null)
+            {
+                _root = transform.parent != null ? transform.parent : transform;
+                _lastRootPosition = _root.position;
+            }
+
+            Transform next = visualRoot != null ? visualRoot : transform;
+
+            if (_hasRestPose && _visualRoot != null && _visualRoot != next)
+            {
+                _visualRoot.localPosition = _restLocalPosition;
+                _visualRoot.localRotation = _restLocalRotation;
+            }
+
+            _visualRoot = next;
+            _restLocalPosition = _visualRoot.localPosition;
+            _restLocalRotation = _visualRoot.localRotation;
+            _hasRestPose = true;
         }
 
         /// <summary>
@@ -64,7 +97,7 @@ namespace Rapadura.Gameplay.Enemies
         /// </summary>
         public void Tick(float deltaTime)
         {
-            if (deltaTime <= 0f)
+            if (deltaTime <= 0f || _visualRoot == null || _root == null)
             {
                 return;
             }

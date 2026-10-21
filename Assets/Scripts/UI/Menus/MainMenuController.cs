@@ -1,4 +1,5 @@
 using Rapadura.Core.DI;
+using Rapadura.Core.Performance;
 using Rapadura.Save;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,7 +8,7 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.Menus
 {
     /// <summary>
-    /// Drives the Main Menu screen (Novo Jogo / Continuar / Configurações / Sair), built with
+    /// Drives the Main Menu screen (Novo Jogo / Continuar / Configurações / Créditos / Sair), built with
     /// UI Toolkit following the same pattern as <c>SkillTreeController</c>/<c>HudController</c>:
     /// a single <see cref="UIDocument"/>, elements resolved once via <c>Q&lt;T&gt;()</c>, no heavy
     /// business logic here.
@@ -25,6 +26,7 @@ namespace Rapadura.UI.Menus
     {
         [Header("Panels")]
         [SerializeField] private SettingsMenuController _settingsMenu;
+        [SerializeField] private CreditsController _creditsMenu;
 
         [Header("Continue Slot")]
         [Tooltip("Manual slot checked (in addition to the auto-save slot) to decide if 'Continuar' should be enabled.")]
@@ -40,9 +42,11 @@ namespace Rapadura.UI.Menus
         private Button _newGameButton;
         private Button _continueButton;
         private Button _settingsButton;
+        private Button _creditsButton;
         private Button _quitButton;
 
         private SaveManager _saveManager;
+        private FrameRateManager _frameRateManager;
 
         private void Awake()
         {
@@ -57,11 +61,24 @@ namespace Rapadura.UI.Menus
             RegisterCallbacks();
             RefreshContinueAvailability();
             FocusFirstElement();
+            NotifyMenuOpen(IsVisible());
+        }
+
+        /// <summary>Start runs after every Awake, so GameManager's FrameRateManager is registered by now even if OnEnable missed it.</summary>
+        private void Start()
+        {
+            NotifyMenuOpen(IsVisible());
+        }
+
+        private bool IsVisible()
+        {
+            return _root == null || _root.style.display.value != DisplayStyle.None;
         }
 
         private void OnDisable()
         {
             UnregisterCallbacks();
+            NotifyMenuOpen(false);
         }
 
         private void BindElements()
@@ -72,6 +89,7 @@ namespace Rapadura.UI.Menus
             _newGameButton = rootVisualElement.Q<Button>("new-game-button");
             _continueButton = rootVisualElement.Q<Button>("continue-button");
             _settingsButton = rootVisualElement.Q<Button>("settings-button");
+            _creditsButton = rootVisualElement.Q<Button>("credits-button");
             _quitButton = rootVisualElement.Q<Button>("quit-button");
         }
 
@@ -80,6 +98,8 @@ namespace Rapadura.UI.Menus
             if (_newGameButton != null) _newGameButton.clicked += OnNewGameClicked;
             if (_continueButton != null) _continueButton.clicked += OnContinueClicked;
             if (_settingsButton != null) _settingsButton.clicked += OnSettingsClicked;
+            if (_creditsButton != null) _creditsButton.clicked += OnCreditsClicked;
+            if (_creditsMenu != null) _creditsMenu.Closed += OnCreditsClosed;
             if (_quitButton != null) _quitButton.clicked += OnQuitClicked;
         }
 
@@ -88,6 +108,8 @@ namespace Rapadura.UI.Menus
             if (_newGameButton != null) _newGameButton.clicked -= OnNewGameClicked;
             if (_continueButton != null) _continueButton.clicked -= OnContinueClicked;
             if (_settingsButton != null) _settingsButton.clicked -= OnSettingsClicked;
+            if (_creditsButton != null) _creditsButton.clicked -= OnCreditsClicked;
+            if (_creditsMenu != null) _creditsMenu.Closed -= OnCreditsClosed;
             if (_quitButton != null) _quitButton.clicked -= OnQuitClicked;
         }
 
@@ -133,6 +155,31 @@ namespace Rapadura.UI.Menus
             _settingsMenu?.Show();
         }
 
+        private void OnCreditsClicked()
+        {
+            _creditsMenu?.Show();
+        }
+
+        /// <summary>Credits is a separate UIDocument overlay — give focus back to the button that opened it.</summary>
+        private void OnCreditsClosed()
+        {
+            _creditsButton?.Focus();
+        }
+
+        /// <summary>
+        /// Tells <see cref="FrameRateManager"/> the main menu is up (mobile drops to 30 fps). Resolved
+        /// lazily: OnEnable can run before GameManager.Awake has registered managers.
+        /// </summary>
+        private void NotifyMenuOpen(bool open)
+        {
+            if (_frameRateManager == null)
+            {
+                ServiceLocator.TryGet(out _frameRateManager);
+            }
+
+            _frameRateManager?.SetMenuOpen(open);
+        }
+
         private void OnQuitClicked()
         {
             OnQuitRequested?.Invoke();
@@ -153,6 +200,7 @@ namespace Rapadura.UI.Menus
 
             RefreshContinueAvailability();
             FocusFirstElement();
+            NotifyMenuOpen(true);
         }
 
         public void Hide()
@@ -161,6 +209,8 @@ namespace Rapadura.UI.Menus
             {
                 _root.style.display = DisplayStyle.None;
             }
+
+            NotifyMenuOpen(false);
         }
     }
 }

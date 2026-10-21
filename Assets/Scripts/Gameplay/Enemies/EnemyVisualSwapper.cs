@@ -1,0 +1,363 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Rapadura.Gameplay.Enemies
+{
+    /// <summary>Primitive used for an enemy's placeholder body when it has no model (see <see cref="EnemyVisualSwapper"/>).</summary>
+    public enum EnemyPlaceholderShape
+    {
+        Capsule = 0,
+        Cube = 1,
+        Sphere = 2,
+        Cylinder = 3,
+    }
+
+    /// <summary>Where the visual of a spawned enemy comes from.</summary>
+    public enum EnemyVisualSource
+    {
+        /// <summary>Keep whatever visual the shared enemy prefab already has (today: the Wolf model inside Enemy_Encounter).</summary>
+        SharedPrefab = 0,
+
+        /// <summary>Instantiate <see cref="EnemyDefinition.VisualPrefab"/>.</summary>
+        DefinitionPrefab = 1,
+
+        /// <summary>Build a tinted primitive placeholder from the definition's placeholder settings.</summary>
+        Placeholder = 2,
+    }
+
+    /// <summary>
+    /// Data-driven enemy visuals. Every spawner reuses one shared enemy prefab (EnemyController +
+    /// Health + capsule collider + EnemyProceduralAnimator) and reconfigures it per
+    /// <see cref="EnemyDefinition"/> through <c>EnemyController.ResetForSpawn</c>; until this existed
+    /// the prefab's hard-wired Wolf model was kept for everything, so a scorpion looked like a wolf.
+    /// <see cref="Apply"/> swaps the enemy's <c>EnemyVisual</c> child to match the definition:
+    ///
+    ///   1. <see cref="EnemyDefinition.VisualPrefab"/> set → that model, placed with the definition's
+    ///      visual position/rotation/scale;
+    ///   2. otherwise, if <see cref="EnemyDefinition.UsePlaceholderVisual"/> (default) → a collider-less
+    ///      primitive (shape/scale/tint per definition, tint auto-derived from the asset name when not
+    ///      authored) with a darker "snout" cube marking the front, base resting on the capsule bottom;
+    ///   3. otherwise (or a null definition) → the shared prefab's own visual.
+    ///
+    /// The prefab's original visual is only deactivated, never destroyed, so a pooled enemy can go
+    /// back to it; visuals built here carry an <see cref="EnemyVisualMarker"/> and are rebuilt only
+    /// when the definition changes. The root's <see cref="EnemyProceduralAnimator"/> (if any) is
+    /// re-targeted to the new visual.
+    /// </summary>
+    public static class EnemyVisualSwapper
+    {
+        public const string VisualName = "EnemyVisual";
+        public const string SnoutName = "Snout";
+
+        /// <summary>Local y of the enemy's feet when the root has no CapsuleCollider (the shared prefab uses a 2 m capsule centred on the root).</summary>
+        public const float DefaultFootHeight = -1f;
+
+        private static readonly Dictionary<Color32, Material> PlaceholderMaterials = new Dictionary<Color32, Material>();
+
+        /// <summary>Decides which visual a definition gets. Pure, so it is unit tested directly.</summary>
+        public static EnemyVisualSource ResolveSource(EnemyDefinition definition)
+        {
+            if (definition == null)
+            {
+                return EnemyVisualSource.SharedPrefab;
+            }
+
+            if (definition.VisualPrefab != null)
+            {
+                return EnemyVisualSource.DefinitionPrefab;
+            }
+
+            return definition.UsePlaceholderVisual ? EnemyVisualSource.Placeholder : EnemyVisualSource.SharedPrefab;
+        }
+
+        /// <summary>
+        /// Placeholder tint: the authored <see cref="EnemyDefinition.PlaceholderColor"/> (forced
+        /// opaque) when its alpha is above 0, otherwise a stable hue hashed from the definition id
+        /// so two un-authored enemies still get different colors.
+        /// </summary>
+        public static Color GetPlaceholderColor(EnemyDefinition definition)
+        {
+            if (definition == null)
+            {
+                return Color.gray;
+            }
+
+            Color authored = definition.PlaceholderColor;
+            if (authored.a > 0f)
+            {
+                authored.a = 1f;
+                return authored;
+            }
+
+            string id = DefeatedEnemyRegistry.GetId(definition);
+            if (string.IsNullOrEmpty(id))
+            {
+                id = definition.EnemyName ?? string.Empty;
+            }
+
+            float hue = (StableHash(id) % 360u) / 360f;
+            return Color.HSVToRGB(hue, 0.65f, 0.85f);
+        }
+
+        /// <summary>
+        /// Makes <paramref name="enemyRoot"/>'s visual match <paramref name="definition"/> (see class
+        /// summary). Returns the now-active visual transform, or null when the shared prefab visual
+        /// was requested but the prefab has none.
+        /// </summary>
+        public static Transform Apply(GameObject enemyRoot, EnemyDefinition definition)
+        {
+            if (enemyRoot == null)
+            {
+                return null;
+            }
+
+            Transform root = enemyRoot.transform;
+            EnemyProceduralAnimator animator = enemyRoot.GetComponent<EnemyProceduralAnimator>();
+            FindVisuals(root, animator, out Transform original, out EnemyVisualMarker built);
+
+            EnemyVisualSource source = ResolveSource(definition);
+
+            if (source == EnemyVisualSource.SharedPrefab)
+            {
+                if (built != null)
+                {
+                    Discard(built.gameObject);
+                }
+
+                if (original != null)
+                {
+                    original.gameObject.SetActive(true);
+                }
+
+                Retarget(animator, original);
+                return original;
+            }
+
+            if (built != null && built.Source == definition && built.Kind == source)
+            {
+                built.gameObject.SetActive(true);
+                if (original != null)
+                {
+                    original.gameObject.SetActive(false);
+                }
+
+                Retarget(animator, built.transform);
+                return built.transform;
+            }
+
+            if (built != null)
+            {
+                Discard(built.gameObject);
+            }
+
+            if (original != null)
+            {
+                original.gameObject.SetActive(false);
+            }
+
+            GameObject visual = source == EnemyVisualSource.DefinitionPrefab
+                ? BuildModel(root, definition)
+                : BuildPlaceholder(root, definition);
+
+            visual.AddComponent<EnemyVisualMarker>().Set(definition, source);
+            Retarget(animator, visual.transform);
+            return visual.transform;
+        }
+
+        private static GameObject BuildModel(Transform root, EnemyDefinition definition)
+        {
+            GameObject visual = Object.Instantiate(definition.VisualPrefab, root, false);
+            visual.name = VisualName;
+            visual.transform.localPosition = definition.VisualLocalPosition;
+            visual.transform.localEulerAngles = definition.VisualLocalEulerAngles;
+            visual.transform.localScale = Vector3.one * Mathf.Max(0.0001f, definition.VisualScale);
+            return visual;
+        }
+
+        private static GameObject BuildPlaceholder(Transform root, EnemyDefinition definition)
+        {
+            EnemyPlaceholderShape shape = definition.PlaceholderShape;
+            Vector3 scale = SanitizeScale(definition.PlaceholderScale);
+            Color color = GetPlaceholderColor(definition);
+
+            GameObject body = CreateColliderlessPrimitive(ToPrimitive(shape));
+            body.name = VisualName;
+            body.transform.SetParent(root, false);
+            body.transform.localRotation = Quaternion.identity;
+            body.transform.localScale = scale;
+
+            float halfHeight = GetPrimitiveHalfHeight(shape);
+            body.transform.localPosition = new Vector3(0f, GetFootHeight(root) + halfHeight * scale.y, 0f);
+            Tint(body, color);
+
+            // Small darker cube on the front face (+Z, the direction EnemyController faces) so the
+            // heading reads; sized in world units by undoing the body's (possibly non-uniform) scale.
+            GameObject snout = CreateColliderlessPrimitive(PrimitiveType.Cube);
+            snout.name = SnoutName;
+            snout.transform.SetParent(body.transform, false);
+            const float snoutSize = 0.25f;
+            snout.transform.localScale = new Vector3(snoutSize / scale.x, snoutSize / scale.y, snoutSize / scale.z);
+            snout.transform.localPosition = new Vector3(0f, halfHeight * 0.35f, 0.5f);
+            Tint(snout, new Color(color.r * 0.4f, color.g * 0.4f, color.b * 0.4f, 1f));
+
+            return body;
+        }
+
+        private static void FindVisuals(Transform root, EnemyProceduralAnimator animator, out Transform original, out EnemyVisualMarker built)
+        {
+            original = null;
+            built = null;
+
+            for (int i = 0; i < root.childCount; i++)
+            {
+                Transform child = root.GetChild(i);
+                EnemyVisualMarker marker = child.GetComponent<EnemyVisualMarker>();
+
+                if (marker != null)
+                {
+                    built ??= marker;
+                }
+                else if (original == null && child.name == VisualName)
+                {
+                    original = child;
+                }
+            }
+
+            // A differently named original visual is still found through the animator wiring.
+            if (original == null && animator != null)
+            {
+                Transform animated = animator.VisualRoot;
+                if (animated != null && animated != root && animated.parent == root && animated.GetComponent<EnemyVisualMarker>() == null)
+                {
+                    original = animated;
+                }
+            }
+        }
+
+        private static void Retarget(EnemyProceduralAnimator animator, Transform visual)
+        {
+            if (animator != null && visual != null && animator.VisualRoot != visual)
+            {
+                animator.SetVisualRoot(visual);
+            }
+        }
+
+        private static void Discard(GameObject visual)
+        {
+            // Deactivate and unparent first: Destroy() only takes effect at the end of the frame (same
+            // reasoning as PlayerVisualSwapper), and the next FindVisuals must not see it.
+            visual.SetActive(false);
+            visual.transform.SetParent(null);
+
+            if (Application.isPlaying)
+            {
+                Object.Destroy(visual);
+            }
+            else
+            {
+                Object.DestroyImmediate(visual);
+            }
+        }
+
+        private static GameObject CreateColliderlessPrimitive(PrimitiveType type)
+        {
+            GameObject primitive = GameObject.CreatePrimitive(type);
+            Collider collider = primitive.GetComponent<Collider>();
+            if (collider != null)
+            {
+                // Immediate: a stray collider would block the enemy's own capsule/hurtbox for a frame.
+                Object.DestroyImmediate(collider);
+            }
+
+            return primitive;
+        }
+
+        private static void Tint(GameObject target, Color color)
+        {
+            Renderer renderer = target.GetComponent<Renderer>();
+            if (renderer == null)
+            {
+                return;
+            }
+
+            // A shared material per color (not a MaterialPropertyBlock) because EnemyDeathVfx fades
+            // from renderer.sharedMaterial.color — a property block tint would flash to the default
+            // material color while the enemy sinks.
+            Color32 key = color;
+            if (!PlaceholderMaterials.TryGetValue(key, out Material material) || material == null)
+            {
+                Material template = renderer.sharedMaterial;
+                if (template == null)
+                {
+                    Shader shader = Shader.Find("Universal Render Pipeline/Lit");
+                    if (shader == null)
+                    {
+                        return;
+                    }
+
+                    template = new Material(shader);
+                }
+
+                material = new Material(template) { name = $"EnemyPlaceholder_{key.r:X2}{key.g:X2}{key.b:X2}" };
+                material.color = color;
+                PlaceholderMaterials[key] = material;
+            }
+
+            renderer.sharedMaterial = material;
+        }
+
+        private static float GetFootHeight(Transform root)
+        {
+            CapsuleCollider capsule = root.GetComponent<CapsuleCollider>();
+            if (capsule == null || capsule.direction != 1)
+            {
+                return DefaultFootHeight;
+            }
+
+            float height = Mathf.Max(capsule.height, capsule.radius * 2f);
+            return capsule.center.y - height * 0.5f;
+        }
+
+        /// <summary>Half the height of Unity's built-in primitive mesh at scale 1.</summary>
+        public static float GetPrimitiveHalfHeight(EnemyPlaceholderShape shape)
+        {
+            return shape == EnemyPlaceholderShape.Capsule || shape == EnemyPlaceholderShape.Cylinder ? 1f : 0.5f;
+        }
+
+        public static PrimitiveType ToPrimitive(EnemyPlaceholderShape shape)
+        {
+            switch (shape)
+            {
+                case EnemyPlaceholderShape.Cube:
+                    return PrimitiveType.Cube;
+                case EnemyPlaceholderShape.Sphere:
+                    return PrimitiveType.Sphere;
+                case EnemyPlaceholderShape.Cylinder:
+                    return PrimitiveType.Cylinder;
+                default:
+                    return PrimitiveType.Capsule;
+            }
+        }
+
+        private static Vector3 SanitizeScale(Vector3 scale)
+        {
+            return new Vector3(
+                scale.x > 0f ? scale.x : 1f,
+                scale.y > 0f ? scale.y : 1f,
+                scale.z > 0f ? scale.z : 1f);
+        }
+
+        /// <summary>FNV-1a; string.GetHashCode is not guaranteed stable across runtimes/sessions.</summary>
+        private static uint StableHash(string value)
+        {
+            uint hash = 2166136261u;
+            foreach (char c in value)
+            {
+                hash ^= c;
+                hash *= 16777619u;
+            }
+
+            return hash;
+        }
+    }
+}

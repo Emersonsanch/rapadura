@@ -26,7 +26,7 @@ namespace Rapadura.Gameplay.World.Map
         private const string PlayerTag = "Player";
 
         [Header("Spawning")]
-        [Tooltip("Enemy prefab with EnemyController + Health (+ Hitbox). Reconfigured per rolled EnemyDefinition.")]
+        [Tooltip("Enemy prefab with EnemyController + Health (+ Hitbox). Reconfigured per rolled EnemyDefinition; its visual is swapped by EnemyVisualSwapper (definition model > placeholder > this prefab's own).")]
         [SerializeField] private GameObject _enemyPrefab;
         [Tooltip("Where rolled enemies appear (cycled if there are more enemies than points). Falls back to this transform.")]
         [SerializeField] private Transform[] _enemySpawnPoints = new Transform[0];
@@ -125,6 +125,7 @@ namespace Rapadura.Gameplay.World.Map
             }
 
             List<EnemyDefinition> enemies = payload.ResolveEnemies();
+            FilterDefeatedUniqueEnemies(enemies);
             for (int i = 0; i < enemies.Count; i++)
             {
                 SpawnEnemy(enemies[i], i);
@@ -160,8 +161,30 @@ namespace Rapadura.Gameplay.World.Map
                 GameLogger.Warning(LogCategory, $"Enemy prefab '{_enemyPrefab.name}' has no EnemyController; '{definition.name}' will not fight back.");
             }
 
+            // The shared prefab only provides behaviour; the look comes from the definition
+            // (its model, else a per-enemy placeholder, else the prefab's own visual).
+            EnemyVisualSwapper.Apply(instance, definition);
+
             _spawned.Add(instance);
             EventBus.Publish(new EnemySpawnedEvent(instance));
+        }
+
+        /// <summary>
+        /// Drops unique enemies already in <see cref="DefeatedEnemyRegistry"/> (the map's rolls are
+        /// filtered too, but a payload can be stale or come from JSON). No registry = no filtering.
+        /// </summary>
+        private static void FilterDefeatedUniqueEnemies(List<EnemyDefinition> enemies)
+        {
+            if (!ServiceLocator.TryGet(out DefeatedEnemyRegistry defeated))
+            {
+                return;
+            }
+
+            int removed = enemies.RemoveAll(defeated.ShouldSkipSpawn);
+            if (removed > 0)
+            {
+                GameLogger.Info(LogCategory, $"Skipped {removed} already-defeated boss(es) from the encounter.");
+            }
         }
 
         private Vector3 GetSpawnPosition(int index)

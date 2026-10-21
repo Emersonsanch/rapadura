@@ -46,15 +46,28 @@ namespace Rapadura.Gameplay.Dialogue
         /// </summary>
         public string AutoAdvanceToNodeId;
 
+        /// <summary>
+        /// Optional conditional jumps checked when this node is entered (before its line is shown):
+        /// the first <see cref="DialogueRedirect"/> whose conditions all pass moves straight on to
+        /// its target node. Typical use: a quest-giver start node that routes to "offer" /
+        /// "in progress" / "turn in" / "epilogue" by quest state, or to a per-hero line by
+        /// <see cref="DialogueConditionType.ActiveCharacter"/>. If none passes, this node is shown.
+        /// </summary>
+        public List<DialogueRedirect> Redirects = new List<DialogueRedirect>();
+
+        /// <summary>Actions run when this node is actually shown (not when it's only passed through by a redirect).</summary>
+        public List<DialogueAction> OnEnterActions = new List<DialogueAction>();
+
         public bool IsTerminal => Choices.Count == 0 && string.IsNullOrEmpty(AutoAdvanceToNodeId);
     }
 
     /// <summary>
     /// One branch out of a <see cref="DialogueNode"/>: the text shown on the choice button and the
     /// id of the node it leads to. <see cref="ConditionFlag"/> is an optional, deliberately simple
-    /// gate (a boolean flag by string key, checked against <see cref="DialogueManager.SetFlag"/>)
-    /// so quest/relationship gating can be layered on later (Fase 8 — Quests) without this class
-    /// needing to know about the quest system.
+    /// gate (a boolean flag by string key, checked against <see cref="DialogueManager.SetFlag"/>);
+    /// quest/hero gating is layered on top through <see cref="Conditions"/> and quest side effects
+    /// through <see cref="Actions"/>, both evaluated by <see cref="DialogueManager"/> via its
+    /// <see cref="IDialogueContext"/> so this class still knows nothing about the quest system.
     /// </summary>
     [Serializable]
     public class DialogueChoice
@@ -75,5 +88,14 @@ namespace Rapadura.Gameplay.Dialogue
 
         /// <summary>When true, the condition is satisfied by the flag being ABSENT/false instead of present/true.</summary>
         public bool NegateCondition;
+
+        /// <summary>
+        /// Extra data-driven gates (quest state, objective done, active hero, flags), AND-ed with
+        /// <see cref="ConditionFlag"/>. Empty = no extra gate.
+        /// </summary>
+        public List<DialogueCondition> Conditions = new List<DialogueCondition>();
+
+        /// <summary>Side effects run when this choice is picked, before moving to <see cref="NextNodeId"/> (e.g. StartQuest, SetQuestFlag).</summary>
+        public List<DialogueAction> Actions = new List<DialogueAction>();
     }
 }

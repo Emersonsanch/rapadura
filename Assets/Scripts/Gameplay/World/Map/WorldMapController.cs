@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Logging;
+using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.Save;
 using UnityEngine;
@@ -81,6 +82,12 @@ namespace Rapadura.Gameplay.World.Map
             if (!ServiceLocator.TryGet(out _transition))
             {
                 GameLogger.Warning(LogCategory, "No SceneTransitionService registered; encounters will be rolled but cannot load the combat scene.");
+            }
+
+            // Defeated unique bosses are never rolled again (no registry = standalone scene, no filtering).
+            if (ServiceLocator.TryGet(out DefeatedEnemyRegistry defeatedEnemies))
+            {
+                _encounters.EnemyFilter = defeatedEnemies.CanSpawn;
             }
 
             _graph.ApplyUnlocks(_progress);

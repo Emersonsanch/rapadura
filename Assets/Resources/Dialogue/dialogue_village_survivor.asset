@@ -13,8 +13,32 @@ MonoBehaviour:
   m_Name: dialogue_village_survivor
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Dialogue.DialogueDefinition
   _dialogueId: dialogue_village_survivor
-  _startNodeId: greeting
+  _startNodeId: hub
   _nodes:
+  - Id: hub
+    TextKey: 
+    SpeakerId: npc_village_survivor
+    SpeakerNameKey: dialogue.village_survivor.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects:
+    - Conditions:
+      - Type: 1
+        Key: quest_joaquim_echoes_of_home
+        Value: 
+        QuestState: 4
+        Negate: 0
+      TargetNodeId: completed
+    - Conditions:
+      - Type: 1
+        Key: quest_joaquim_echoes_of_home
+        Value: 
+        QuestState: 2
+        Negate: 0
+      TargetNodeId: active
+    - Conditions: []
+      TargetNodeId: greeting
+    OnEnterActions: []
   - Id: greeting
     TextKey: dialogue.village_survivor.greeting
     SpeakerId: npc_village_survivor
@@ -24,27 +48,82 @@ MonoBehaviour:
       NextNodeId: destruction
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     - TextKey: dialogue.village_survivor.choice_ask_joaquim
       NextNodeId: about_joaquim
       ConditionFlag: 
       NegateCondition: 0
+      Conditions:
+      - Type: 3
+        Key: Joaquim
+        Value: 
+        QuestState: 0
+        Negate: 1
+      Actions: []
     - TextKey: dialogue.common.choice_goodbye
       NextNodeId: 
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
   - Id: destruction
     TextKey: dialogue.village_survivor.destruction
     SpeakerId: npc_village_survivor
     SpeakerNameKey: dialogue.village_survivor.name
     Choices: []
-    AutoAdvanceToNodeId: offer_help
+    AutoAdvanceToNodeId: recognize
+    Redirects: []
+    OnEnterActions: []
   - Id: about_joaquim
     TextKey: dialogue.village_survivor.about_joaquim
     SpeakerId: npc_village_survivor
     SpeakerNameKey: dialogue.village_survivor.name
     Choices: []
+    AutoAdvanceToNodeId: recognize
+    Redirects: []
+    OnEnterActions: []
+  - Id: recognize
+    TextKey: dialogue.village_survivor.recognize_cousin
+    SpeakerId: npc_village_survivor
+    SpeakerNameKey: dialogue.village_survivor.name
+    Choices: []
     AutoAdvanceToNodeId: offer_help
+    Redirects:
+    - Conditions:
+      - Type: 3
+        Key: Joaquim
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: recognize_joaquim
+    - Conditions:
+      - Type: 3
+        Key: Maria
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: recognize_maria
+    OnEnterActions: []
+  - Id: recognize_joaquim
+    TextKey: dialogue.village_survivor.recognize_joaquim
+    SpeakerId: npc_village_survivor
+    SpeakerNameKey: dialogue.village_survivor.name
+    Choices: []
+    AutoAdvanceToNodeId: offer_help
+    Redirects: []
+    OnEnterActions: []
+  - Id: recognize_maria
+    TextKey: dialogue.village_survivor.recognize_maria
+    SpeakerId: npc_village_survivor
+    SpeakerNameKey: dialogue.village_survivor.name
+    Choices: []
+    AutoAdvanceToNodeId: offer_help
+    Redirects: []
+    OnEnterActions: []
   - Id: offer_help
     TextKey: dialogue.village_survivor.offer_help
     SpeakerId: npc_village_survivor
@@ -54,20 +133,98 @@ MonoBehaviour:
       NextNodeId: accept
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions:
+      - Type: 2
+        Key: quest_joaquim_echoes_of_home
     - TextKey: dialogue.village_survivor.choice_decline
       NextNodeId: decline
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
   - Id: accept
     TextKey: dialogue.village_survivor.accept
     SpeakerId: npc_village_survivor
     SpeakerNameKey: dialogue.village_survivor.name
     Choices: []
     AutoAdvanceToNodeId: 
+    Redirects:
+    - Conditions:
+      - Type: 3
+        Key: Joaquim
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: accept_joaquim
+    OnEnterActions: []
+  - Id: accept_joaquim
+    TextKey: dialogue.village_survivor.accept_joaquim
+    SpeakerId: npc_village_survivor
+    SpeakerNameKey: dialogue.village_survivor.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
   - Id: decline
     TextKey: dialogue.village_survivor.decline
     SpeakerId: npc_village_survivor
     SpeakerNameKey: dialogue.village_survivor.name
     Choices: []
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: active
+    TextKey: dialogue.village_survivor.active
+    SpeakerId: npc_village_survivor
+    SpeakerNameKey: dialogue.village_survivor.name
+    Choices:
+    - TextKey: dialogue.village_survivor.choice_ask_destruction
+      NextNodeId: destruction_again
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions: []
+    - TextKey: dialogue.common.choice_goodbye
+      NextNodeId: 
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: destruction_again
+    TextKey: dialogue.village_survivor.destruction
+    SpeakerId: npc_village_survivor
+    SpeakerNameKey: dialogue.village_survivor.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: completed
+    TextKey: dialogue.village_survivor.completed_cousin
+    SpeakerId: npc_village_survivor
+    SpeakerNameKey: dialogue.village_survivor.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects:
+    - Conditions:
+      - Type: 3
+        Key: Joaquim
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: completed_joaquim
+    OnEnterActions: []
+  - Id: completed_joaquim
+    TextKey: dialogue.village_survivor.completed_joaquim
+    SpeakerId: npc_village_survivor
+    SpeakerNameKey: dialogue.village_survivor.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []

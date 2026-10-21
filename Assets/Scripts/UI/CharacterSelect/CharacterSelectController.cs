@@ -1,6 +1,11 @@
+using System;
+using System.Globalization;
+using Rapadura.Core.DI;
+using Rapadura.Core.Events;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
+using Rapadura.Save;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -15,6 +20,13 @@ namespace Rapadura.UI.CharacterSelect
     /// selected, then hides itself and resumes time. Follows the same UI Toolkit pattern as
     /// <c>MainMenuController</c>/<c>HudController</c>: one <see cref="UIDocument"/>, elements
     /// resolved once via <c>Q&lt;T&gt;()</c>.
+    ///
+    /// The chosen hero is recorded in <see cref="CharacterSelectionState"/> (saved with the game).
+    /// Whenever a hero is already chosen — a save containing one was loaded (see
+    /// <see cref="CharacterSelectionRestoredEvent"/>), or this scene was re-entered after picking —
+    /// the screen re-applies that hero to the player and closes itself instead of asking again. The
+    /// optional "continue-saved-button" offers exactly that from the most recent save among
+    /// <see cref="_continueSlots"/>.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class CharacterSelectController : MonoBehaviour
@@ -29,8 +41,14 @@ namespace Rapadura.UI.CharacterSelect
         [Tooltip("RenderTexture the preview camera renders into — assigned to the detail-preview Image element on bind.")]
         [SerializeField] private RenderTexture _previewRenderTexture;
 
+        [Header("Continue")]
+        [Tooltip("Save slots checked for the 'Continuar com <herói>' shortcut; the most recently saved one that has a chosen hero wins. -1 is SaveManager.AutoSaveSlot.")]
+        [SerializeField] private int[] _continueSlots = { SaveManager.AutoSaveSlot, 0 };
+
         [Header("Events")]
         public UnityEvent<CharacterId> OnCharacterSelected;
+
+        private const int NoContinueSlot = int.MinValue;
 
         private UIDocument _uiDocument;
         private VisualElement _root;
@@ -40,13 +58,26 @@ namespace Rapadura.UI.CharacterSelect
         private Label _classRoleLabel;
         private Label _loreLabel;
         private Button _confirmButton;
+        private Button _continueButton;
 
         private CharacterId? _hovered;
+        private int _continueSlot = NoContinueSlot;
         private bool _isBound;
+        private bool _deactivatePending;
 
         private void Awake()
         {
             _uiDocument = GetComponent<UIDocument>();
+
+            // Subscribed for the whole lifetime (not OnEnable/OnDisable): a restore usually arrives
+            // while this screen is already hidden (loading from the pause menu), and the player
+            // still needs its hero's visual/passive/skills re-applied then.
+            EventBus.Subscribe<CharacterSelectionRestoredEvent>(OnCharacterSelectionRestored);
+        }
+
+        private void OnDestroy()
+        {
+            EventBus.Unsubscribe<CharacterSelectionRestoredEvent>(OnCharacterSelectionRestored);
         }
 
         // Element binding happens in OnEnable rather than Awake: UIDocument builds its
@@ -56,8 +87,44 @@ namespace Rapadura.UI.CharacterSelect
         // convention already used by HudController/MainMenuController for the same reason).
         private void OnEnable()
         {
+            // A hero was already chosen this session (e.g. Main.unity re-entered from the world map;
+            // GameManager and its CharacterSelectionState persist across scenes): re-apply it to
+            // this scene's fresh player instead of asking again. Fresh player, so grant the skills.
+            if (ServiceLocator.TryGet(out CharacterSelectionState state) && state.Selected is CharacterId chosen)
+            {
+                ApplyCharacter(chosen, grantSkills: true);
+
+                // SetActive(false) can't be called while this object is still being activated
+                // (Unity rejects it from inside OnEnable) — hide now, deactivate next Update.
+                Time.timeScale = 1f;
+                SetRootVisible(false);
+                _deactivatePending = true;
+                return;
+            }
+
+            SetRootVisible(true);
             Time.timeScale = 0f;
             BindElementsIfNeeded();
+            RefreshContinueOption();
+        }
+
+        private void SetRootVisible(bool visible)
+        {
+            VisualElement root = _uiDocument != null ? _uiDocument.rootVisualElement : null;
+
+            if (root != null)
+            {
+                root.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+        }
+
+        private void Update()
+        {
+            if (_deactivatePending)
+            {
+                _deactivatePending = false;
+                gameObject.SetActive(false);
+            }
         }
 
         private void BindElementsIfNeeded()
@@ -75,6 +142,7 @@ namespace Rapadura.UI.CharacterSelect
             _classRoleLabel = _root.Q<Label>("detail-class-role");
             _loreLabel = _root.Q<Label>("detail-lore");
             _confirmButton = _root.Q<Button>("confirm-button");
+            _continueButton = _root.Q<Button>("continue-saved-button");
 
             if (_previewImage != null && _previewRenderTexture != null)
             {
@@ -95,6 +163,11 @@ namespace Rapadura.UI.CharacterSelect
             {
                 _confirmButton.SetEnabled(false);
                 _confirmButton.clicked += ConfirmSelection;
+            }
+
+            if (_continueButton != null)
+            {
+                _continueButton.clicked += ContinueFromSave;
             }
 
             _isBound = true;
@@ -141,6 +214,24 @@ namespace Rapadura.UI.CharacterSelect
                 return;
             }
 
+            if (ServiceLocator.TryGet(out CharacterSelectionState state))
+            {
+                state.Select(id);
+            }
+
+            ApplyCharacter(id, grantSkills: true);
+            Close();
+        }
+
+        /// <summary>
+        /// Applies a hero to the player: passive, signature skill set, placeholder tint and
+        /// <see cref="OnCharacterSelected"/> (wired to PlayerVisualSwapper.SwapTo in Main.unity).
+        /// With <paramref name="grantSkills"/> false (restoring a save) the skills are only
+        /// registered — the save's own SkillManager entry, restored right after, decides what is
+        /// learned/equipped; likewise PlayerStats/AttributeSet overwrite the passive's heal/mana.
+        /// </summary>
+        private void ApplyCharacter(CharacterId id, bool grantSkills)
+        {
             PlayableCharacter character = CharacterRegistry.Get(id);
 
             if (_playerStats != null)
@@ -151,7 +242,14 @@ namespace Rapadura.UI.CharacterSelect
                 // the 4 actives are learned + equipped right away, the Ultimate unlocks later.
                 if (_playerStats.TryGetComponent(out SkillManager skillManager))
                 {
-                    CharacterSkillSet.GrantTo(skillManager, id, _playerStats.Level);
+                    if (grantSkills)
+                    {
+                        CharacterSkillSet.GrantTo(skillManager, id, _playerStats.Level);
+                    }
+                    else
+                    {
+                        skillManager.RegisterSkills(CharacterSkillSet.GetSkills(id));
+                    }
                 }
             }
 
@@ -167,10 +265,94 @@ namespace Rapadura.UI.CharacterSelect
             }
 
             OnCharacterSelected?.Invoke(id);
+        }
 
+        private void Close()
+        {
             _previewController?.Clear();
             Time.timeScale = 1f;
             gameObject.SetActive(false);
+        }
+
+        /// <summary>A loaded save brought its hero back: re-apply it, and skip this screen if it is open.</summary>
+        private void OnCharacterSelectionRestored(CharacterSelectionRestoredEvent evt)
+        {
+            ApplyCharacter(evt.CharacterId, grantSkills: false);
+
+            if (gameObject.activeSelf)
+            {
+                Close();
+            }
+        }
+
+        /// <summary>Shows "Continuar com &lt;herói&gt;" only when one of <see cref="_continueSlots"/> holds a save with a chosen hero.</summary>
+        private void RefreshContinueOption()
+        {
+            if (_continueButton == null)
+            {
+                return;
+            }
+
+            _continueSlot = NoContinueSlot;
+            CharacterId? savedHero = null;
+            DateTime newest = DateTime.MinValue;
+
+            if (ServiceLocator.TryGet(out SaveManager saveManager) && _continueSlots != null)
+            {
+                foreach (int slot in _continueSlots)
+                {
+                    if (!saveManager.SlotExists(slot)
+                        || !TryReadSavedHero(saveManager.PeekSlot(slot), out CharacterId hero, out DateTime savedAt))
+                    {
+                        continue;
+                    }
+
+                    if (savedHero == null || savedAt > newest)
+                    {
+                        savedHero = hero;
+                        newest = savedAt;
+                        _continueSlot = slot;
+                    }
+                }
+            }
+
+            _continueButton.style.display = savedHero.HasValue ? DisplayStyle.Flex : DisplayStyle.None;
+
+            if (savedHero.HasValue)
+            {
+                _continueButton.text = $"Continuar com {CharacterRegistry.Get(savedHero.Value).DisplayName}";
+            }
+        }
+
+        /// <summary>
+        /// Reads the hero stored in a peeked save (see <see cref="SaveManager.PeekSlot"/>). False for
+        /// saves without one — older saves (schema &lt; 2) or ones written before a hero was picked.
+        /// </summary>
+        public static bool TryReadSavedHero(SaveData saveData, out CharacterId hero, out DateTime savedAtUtc)
+        {
+            hero = default;
+            savedAtUtc = DateTime.MinValue;
+
+            if (!SaveManager.TryGetEntryState(saveData, CharacterSelectionState.Key, out CharacterSelectionSaveState state)
+                || !state.hasSelection
+                || !CharacterSelectionState.TryParse(state.characterId, out hero))
+            {
+                return false;
+            }
+
+            DateTime.TryParse(saveData.lastSavedAtIso8601, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out savedAtUtc);
+            return true;
+        }
+
+        /// <summary>Loads the save picked by <see cref="RefreshContinueOption"/>; its restored hero closes this screen via <see cref="OnCharacterSelectionRestored"/>.</summary>
+        private void ContinueFromSave()
+        {
+            if (_continueSlot == NoContinueSlot || !ServiceLocator.TryGet(out SaveManager saveManager))
+            {
+                return;
+            }
+
+            saveManager.Load(_continueSlot);
         }
 
         public void SetPlayerStats(PlayerStats playerStats)

@@ -13,8 +13,49 @@ MonoBehaviour:
   m_Name: dialogue_windtrail_scholar
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Dialogue.DialogueDefinition
   _dialogueId: dialogue_windtrail_scholar
-  _startNodeId: greeting
+  _startNodeId: hub
   _nodes:
+  - Id: hub
+    TextKey: 
+    SpeakerId: npc_windtrail_scholar
+    SpeakerNameKey: dialogue.windtrail_scholar.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects:
+    - Conditions:
+      - Type: 1
+        Key: quest_maithe_windtrail
+        Value: 
+        QuestState: 4
+        Negate: 0
+      TargetNodeId: completed
+    - Conditions:
+      - Type: 1
+        Key: quest_maithe_windtrail
+        Value: 
+        QuestState: 2
+        Negate: 0
+      - Type: 2
+        Key: quest_maithe_windtrail
+        Value: fell_stone_golems
+        QuestState: 0
+        Negate: 0
+      - Type: 2
+        Key: quest_maithe_windtrail
+        Value: gather_marked_ore
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: ready
+    - Conditions:
+      - Type: 1
+        Key: quest_maithe_windtrail
+        Value: 
+        QuestState: 2
+        Negate: 0
+      TargetNodeId: active
+    - Conditions: []
+      TargetNodeId: greeting
+    OnEnterActions: []
   - Id: greeting
     TextKey: dialogue.windtrail_scholar.greeting
     SpeakerId: npc_windtrail_scholar
@@ -24,15 +65,28 @@ MonoBehaviour:
       NextNodeId: glyphs
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     - TextKey: dialogue.windtrail_scholar.choice_ask_maithe
       NextNodeId: about_maithe
       ConditionFlag: 
       NegateCondition: 0
+      Conditions:
+      - Type: 3
+        Key: Maithe
+        Value: 
+        QuestState: 0
+        Negate: 1
+      Actions: []
     - TextKey: dialogue.common.choice_goodbye
       NextNodeId: 
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
   - Id: glyphs
     TextKey: dialogue.windtrail_scholar.glyphs
     SpeakerId: npc_windtrail_scholar
@@ -42,20 +96,181 @@ MonoBehaviour:
       NextNodeId: warning
       ConditionFlag: 
       NegateCondition: 0
-    - TextKey: dialogue.common.choice_goodbye
-      NextNodeId: 
-      ConditionFlag: 
-      NegateCondition: 0
+      Conditions: []
+      Actions: []
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
   - Id: warning
     TextKey: dialogue.windtrail_scholar.warning
     SpeakerId: npc_windtrail_scholar
     SpeakerNameKey: dialogue.windtrail_scholar.name
     Choices: []
-    AutoAdvanceToNodeId: 
+    AutoAdvanceToNodeId: offer
+    Redirects: []
+    OnEnterActions: []
   - Id: about_maithe
     TextKey: dialogue.windtrail_scholar.about_maithe
     SpeakerId: npc_windtrail_scholar
     SpeakerNameKey: dialogue.windtrail_scholar.name
     Choices: []
+    AutoAdvanceToNodeId: offer
+    Redirects: []
+    OnEnterActions: []
+  - Id: offer
+    TextKey: dialogue.windtrail_scholar.offer_cousin
+    SpeakerId: npc_windtrail_scholar
+    SpeakerNameKey: dialogue.windtrail_scholar.name
+    Choices:
+    - TextKey: dialogue.windtrail_scholar.choice_accept
+      NextNodeId: accepted
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions:
+      - Type: 2
+        Key: quest_maithe_windtrail
+    - TextKey: dialogue.windtrail_scholar.choice_decline
+      NextNodeId: declined
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions: []
     AutoAdvanceToNodeId: 
+    Redirects:
+    - Conditions:
+      - Type: 3
+        Key: Maithe
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: offer_maithe
+    - Conditions:
+      - Type: 3
+        Key: Icaro
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: offer_icaro
+    OnEnterActions: []
+  - Id: offer_maithe
+    TextKey: dialogue.windtrail_scholar.offer_maithe
+    SpeakerId: npc_windtrail_scholar
+    SpeakerNameKey: dialogue.windtrail_scholar.name
+    Choices:
+    - TextKey: dialogue.windtrail_scholar.choice_accept_maithe
+      NextNodeId: accepted
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions:
+      - Type: 2
+        Key: quest_maithe_windtrail
+    - TextKey: dialogue.windtrail_scholar.choice_decline
+      NextNodeId: declined
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: offer_icaro
+    TextKey: dialogue.windtrail_scholar.offer_icaro
+    SpeakerId: npc_windtrail_scholar
+    SpeakerNameKey: dialogue.windtrail_scholar.name
+    Choices:
+    - TextKey: dialogue.windtrail_scholar.choice_accept_icaro
+      NextNodeId: accepted
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions:
+      - Type: 2
+        Key: quest_maithe_windtrail
+    - TextKey: dialogue.windtrail_scholar.choice_decline
+      NextNodeId: declined
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: accepted
+    TextKey: dialogue.windtrail_scholar.accepted
+    SpeakerId: npc_windtrail_scholar
+    SpeakerNameKey: dialogue.windtrail_scholar.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: declined
+    TextKey: dialogue.windtrail_scholar.declined
+    SpeakerId: npc_windtrail_scholar
+    SpeakerNameKey: dialogue.windtrail_scholar.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: active
+    TextKey: dialogue.windtrail_scholar.active
+    SpeakerId: npc_windtrail_scholar
+    SpeakerNameKey: dialogue.windtrail_scholar.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: ready
+    TextKey: dialogue.windtrail_scholar.ready
+    SpeakerId: npc_windtrail_scholar
+    SpeakerNameKey: dialogue.windtrail_scholar.name
+    Choices:
+    - TextKey: dialogue.windtrail_scholar.choice_decode
+      NextNodeId: decoded
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions:
+      - Type: 4
+        Key: maithe_decoded_glyphs
+    - TextKey: dialogue.common.choice_goodbye
+      NextNodeId: 
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: decoded
+    TextKey: dialogue.windtrail_scholar.decoded_cousin
+    SpeakerId: npc_windtrail_scholar
+    SpeakerNameKey: dialogue.windtrail_scholar.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects:
+    - Conditions:
+      - Type: 3
+        Key: Maithe
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: decoded_maithe
+    OnEnterActions: []
+  - Id: decoded_maithe
+    TextKey: dialogue.windtrail_scholar.decoded_maithe
+    SpeakerId: npc_windtrail_scholar
+    SpeakerNameKey: dialogue.windtrail_scholar.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: completed
+    TextKey: dialogue.windtrail_scholar.completed
+    SpeakerId: npc_windtrail_scholar
+    SpeakerNameKey: dialogue.windtrail_scholar.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []

@@ -5,9 +5,13 @@ using Rapadura.Core.Audio;
 using Rapadura.Core.DI;
 using Rapadura.Core.Interfaces;
 using Rapadura.Core.Localization;
+using Rapadura.Core.Performance;
+using Rapadura.Gameplay.Achievements;
 using Rapadura.Gameplay.Building;
+using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Dialogue;
+using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Quests;
@@ -46,6 +50,10 @@ namespace Rapadura.Core.Managers
         public ShopManager ShopManager { get; private set; }
         public WorldMapProgress WorldMapProgress { get; private set; }
         public SceneTransitionService SceneTransitionService { get; private set; }
+        public FrameRateManager FrameRateManager { get; private set; }
+        public CharacterSelectionState CharacterSelectionState { get; private set; }
+        public DefeatedEnemyRegistry DefeatedEnemyRegistry { get; private set; }
+        public AchievementManager AchievementManager { get; private set; }
 
         private bool _managersBuilt;
 
@@ -101,6 +109,10 @@ namespace Rapadura.Core.Managers
             ShopManager = new ShopManager();
             WorldMapProgress = new WorldMapProgress();
             SceneTransitionService = new SceneTransitionService(WorldMapProgress);
+            FrameRateManager = new FrameRateManager();
+            CharacterSelectionState = new CharacterSelectionState();
+            DefeatedEnemyRegistry = new DefeatedEnemyRegistry();
+            AchievementManager = new AchievementManager();
 
             RegisterManager(SaveManager);
             RegisterManager(CheckpointManager);
@@ -115,9 +127,22 @@ namespace Rapadura.Core.Managers
             RegisterManager(ShopManager);
             RegisterManager(WorldMapProgress);
             RegisterManager(SceneTransitionService);
+            RegisterManager(FrameRateManager);
+            RegisterManager(CharacterSelectionState);
+            RegisterManager(DefeatedEnemyRegistry);
+            RegisterManager(AchievementManager);
 
             SaveManager.Register(QuestManager);
             SaveManager.Register(WorldMapProgress);
+
+            // World state that used to be lost on load. CharacterSelectionState implements
+            // IRestoreOrder (First), so the chosen hero's passive/skill set is re-applied before
+            // PlayerStats/AttributeSet/SkillManager restore their saved values on top of it.
+            SaveManager.Register(CharacterSelectionState);
+            SaveManager.Register(BuildingManager);
+            SaveManager.Register(CraftingManager);
+            SaveManager.Register(DefeatedEnemyRegistry);
+            SaveManager.Register(AchievementManager);
 
             // InventoryManager/SkillManager/ComboTracker/BuffController are MonoBehaviours living
             // directly on the scene's Player object (not IManager/ServiceLocator-registered) —

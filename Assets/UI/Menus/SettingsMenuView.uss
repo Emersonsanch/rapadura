@@ -90,3 +90,89 @@
     color: rgb(150, 150, 160);
     white-space: normal;
 }
+
+/* ---- Controles (rebind) ---- */
+
+.settings-rebind-list {
+    max-height: 250px;
+    margin-bottom: 6px;
+}
+
+.settings-rebind-row {
+    flex-direction: row;
+    align-items: center;
+    min-height: 32px;
+    margin-bottom: 2px;
+}
+
+.settings-rebind-row--header {
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+    margin-bottom: 4px;
+}
+
+.settings-rebind-action-label {
+    flex-grow: 1;
+    flex-basis: 0;
+    font-size: 13px;
+    color: rgb(220, 220, 225);
+    -unity-text-align: middle-left;
+}
+
+.settings-rebind-column-label {
+    width: 140px;
+    font-size: 12px;
+    color: rgb(150, 150, 160);
+    -unity-text-align: middle-center;
+}
+
+.settings-rebind-button {
+    width: 140px;
+    height: 30px;
+    margin: 0 2px;
+    font-size: 13px;
+}
+
+.settings-rebind-button--overridden {
+    color: rgb(255, 210, 90);
+}
+
+.settings-rebind-button--listening {
+    color: rgb(90, 170, 255);
+    border-color: rgb(90, 170, 255);
+}
+
+.settings-rebind-button:disabled {
+    opacity: 0.4;
+}
+
+.settings-rebind-reset-button {
+    width: 80px;
+    height: 30px;
+    font-size: 11px;
+}
+
+.settings-rebind-reset-spacer {
+    width: 84px;
+}
+
+.settings-rebind-status {
+    min-height: 18px;
+    font-size: 12px;
+    color: rgb(190, 190, 198);
+    white-space: normal;
+    margin-bottom: 6px;
+}
+
+.settings-rebind-status--warning {
+    color: rgb(255, 170, 60);
+}
+
+.settings-rebind-footer {
+    flex-direction: row;
+    align-items: center;
+}
+
+.settings-rebind-footer-button {
+    padding: 4px 14px;
+}

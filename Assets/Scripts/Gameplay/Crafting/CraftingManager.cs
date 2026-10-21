@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
@@ -5,6 +6,13 @@ using Rapadura.Gameplay.Inventory;
 
 namespace Rapadura.Gameplay.Crafting
 {
+    /// <summary>JSON-serializable snapshot of <see cref="CraftingManager"/>: every recipe id unlocked at runtime (KnownByDefault recipes are re-derived on restore, not stored).</summary>
+    [Serializable]
+    public class CraftingManagerSaveState
+    {
+        public string[] unlockedRecipeIds = Array.Empty<string>();
+    }
+
     /// <summary>
     /// Central runtime authority over crafting: which recipes are known, whether a recipe can
     /// currently be crafted (ingredients present, player level, nearby station) and consuming
@@ -23,11 +31,21 @@ namespace Rapadura.Gameplay.Crafting
     /// Constructed and registered in <c>GameManager.BuildManagers()</c> alongside the other
     /// top-level managers.
     /// </summary>
-    public class CraftingManager : IManager
+    public class CraftingManager : IManager, ISaveable
     {
+        public const string Key = "CraftingManager";
+
         private readonly HashSet<string> _knownRecipeIds = new HashSet<string>();
 
+        /// <summary>Registered with SaveManager by GameManager.BuildManagers() (recipe unlocks used to be lost on load).</summary>
+        public string SaveKey => Key;
+
         public void Initialize()
+        {
+            AddDefaultRecipes();
+        }
+
+        private void AddDefaultRecipes()
         {
             foreach (RecipeDefinition recipe in RecipeDatabase.GetAll())
             {
@@ -172,6 +190,42 @@ namespace Rapadura.Gameplay.Crafting
 
             EventBus.Publish(new RecipeCraftedEvent(recipe));
             return true;
+        }
+
+        // ---------------------------------------------------------------
+        // Persistence
+        // ---------------------------------------------------------------
+
+        public object CaptureState()
+        {
+            var ids = new List<string>(_knownRecipeIds);
+            ids.Sort(StringComparer.Ordinal);
+            return new CraftingManagerSaveState { unlockedRecipeIds = ids.ToArray() };
+        }
+
+        /// <summary>Replaces the known set with the defaults plus every saved unlock. Ids whose recipe asset no longer exists are kept (harmless, and they come back if the asset does).</summary>
+        public void RestoreState(object state)
+        {
+            if (state is not CraftingManagerSaveState saveState)
+            {
+                return;
+            }
+
+            _knownRecipeIds.Clear();
+            AddDefaultRecipes();
+
+            if (saveState.unlockedRecipeIds == null)
+            {
+                return;
+            }
+
+            foreach (string recipeId in saveState.unlockedRecipeIds)
+            {
+                if (!string.IsNullOrEmpty(recipeId))
+                {
+                    _knownRecipeIds.Add(recipeId);
+                }
+            }
         }
     }
 }

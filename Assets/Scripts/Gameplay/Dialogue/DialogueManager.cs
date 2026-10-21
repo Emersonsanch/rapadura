@@ -3,6 +3,7 @@ using Rapadura.Core.Audio;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
+using Rapadura.Core.Localization;
 using Rapadura.Core.Logging;
 
 namespace Rapadura.Gameplay.Dialogue
@@ -26,6 +27,14 @@ namespace Rapadura.Gameplay.Dialogue
     /// <see cref="AudioManager"/> via <see cref="ServiceLocator.TryGet{TService}"/> (never a hard
     /// reference) and calls its existing public <c>DuckMusic(amount, duration)</c> API — that API
     /// already exists in AudioManager.cs and is not modified here.
+    ///
+    /// Quest-givers: choices/nodes carry data-driven <see cref="DialogueCondition"/>s,
+    /// <see cref="DialogueRedirect"/>s and <see cref="DialogueAction"/>s (start/hand in a quest,
+    /// raise a quest custom flag, branch on quest state / objective progress / selected hero). They
+    /// are evaluated through <see cref="Context"/> (<see cref="QuestDialogueContext"/> by default),
+    /// so the quest system keeps publishing its own existing events and no new EventBus event is
+    /// needed. Quest-giver line texts live in <see cref="QuestGiverTexts"/> and are merged into
+    /// LocalizationManager on <see cref="Initialize"/>/<see cref="StartDialogue"/>.
     /// </summary>
     public class DialogueManager : IManager
     {
@@ -38,17 +47,34 @@ namespace Rapadura.Gameplay.Dialogue
         /// so the duck holds for as long as the dialogue is open (see <see cref="RefreshDuck"/>).</summary>
         private const float DialogueDuckHoldDuration = 3f;
 
+        /// <summary>Guards against redirect cycles in badly authored data (A → B → A ...).</summary>
+        private const int MaxRedirectHops = 16;
+
         private readonly Dictionary<string, bool> _flags = new Dictionary<string, bool>();
+
+        private IDialogueContext _context;
+
+        /// <summary>
+        /// Source of quest/hero state for conditions and target of quest actions. Defaults to a
+        /// <see cref="QuestDialogueContext"/> resolving QuestManager/CharacterSelectionState from the
+        /// ServiceLocator; tests (or a bootstrap) can assign their own. Setting null restores the default.
+        /// </summary>
+        public IDialogueContext Context
+        {
+            get => _context ??= new QuestDialogueContext();
+            set => _context = value;
+        }
 
         public DialogueDefinition ActiveDialogue { get; private set; }
         public DialogueNode CurrentNode { get; private set; }
         public bool IsActive => ActiveDialogue != null && CurrentNode != null;
 
-        /// <summary>Choices currently offered, already filtered by <see cref="DialogueChoice.ConditionFlag"/>.</summary>
+        /// <summary>Choices currently offered, already filtered by <see cref="DialogueChoice.ConditionFlag"/> and <see cref="DialogueChoice.Conditions"/>.</summary>
         public IReadOnlyList<DialogueChoice> AvailableChoices { get; private set; } = new List<DialogueChoice>();
 
         public void Initialize()
         {
+            EnsureQuestGiverTextsLoaded();
             GameLogger.Info(LogCategory, "DialogueManager initialized.");
         }
 
@@ -106,6 +132,9 @@ namespace Rapadura.Gameplay.Dialogue
                 return;
             }
 
+            EnsureQuestGiverTextsLoaded();
+
+            startNode = ResolveRedirects(dialogue, startNode);
             ActiveDialogue = dialogue;
             SetCurrentNode(startNode);
 
@@ -131,6 +160,7 @@ namespace Rapadura.Gameplay.Dialogue
             }
 
             DialogueChoice choice = AvailableChoices[index];
+            RunActions(choice.Actions);
             AdvanceTo(choice.NextNodeId);
         }
 
@@ -168,6 +198,7 @@ namespace Rapadura.Gameplay.Dialogue
                 return;
             }
 
+            nextNode = ResolveRedirects(ActiveDialogue, nextNode);
             SetCurrentNode(nextNode);
             RefreshDuck();
 
@@ -193,10 +224,62 @@ namespace Rapadura.Gameplay.Dialogue
             EventBus.Publish(new DialogueEndedEvent(dialogueId));
         }
 
+        /// <summary>Runs the node's <see cref="DialogueNode.OnEnterActions"/> first, so choices filtered right after already see their effects.</summary>
         private void SetCurrentNode(DialogueNode node)
         {
             CurrentNode = node;
+            RunActions(node.OnEnterActions);
             AvailableChoices = FilterAvailableChoices(node.Choices);
+        }
+
+        /// <summary>
+        /// Follows <see cref="DialogueNode.Redirects"/> from <paramref name="node"/>: the first redirect
+        /// whose conditions all pass (and whose target exists) replaces the node, repeatedly, up to
+        /// <see cref="MaxRedirectHops"/>. Returns the node that should actually be shown.
+        /// </summary>
+        private DialogueNode ResolveRedirects(DialogueDefinition dialogue, DialogueNode node)
+        {
+            for (int hop = 0; hop < MaxRedirectHops; hop++)
+            {
+                DialogueNode target = FindRedirectTarget(dialogue, node);
+
+                if (target == null || target == node)
+                {
+                    return node;
+                }
+
+                node = target;
+            }
+
+            GameLogger.Warning(LogCategory, $"Dialogue '{dialogue.DialogueId}' exceeded {MaxRedirectHops} redirect hops (cycle?); stopping at '{node.Id}'.");
+            return node;
+        }
+
+        private DialogueNode FindRedirectTarget(DialogueDefinition dialogue, DialogueNode node)
+        {
+            if (node.Redirects == null)
+            {
+                return null;
+            }
+
+            foreach (DialogueRedirect redirect in node.Redirects)
+            {
+                if (redirect == null || string.IsNullOrEmpty(redirect.TargetNodeId) || !AreConditionsMet(redirect.Conditions))
+                {
+                    continue;
+                }
+
+                DialogueNode target = dialogue.GetNode(redirect.TargetNodeId);
+
+                if (target != null)
+                {
+                    return target;
+                }
+
+                GameLogger.Warning(LogCategory, $"Dialogue '{dialogue.DialogueId}' node '{node.Id}' redirects to missing node '{redirect.TargetNodeId}'; ignoring.");
+            }
+
+            return null;
         }
 
         private List<DialogueChoice> FilterAvailableChoices(List<DialogueChoice> choices)
@@ -216,13 +299,116 @@ namespace Rapadura.Gameplay.Dialogue
 
         private bool IsChoiceAvailable(DialogueChoice choice)
         {
-            if (string.IsNullOrEmpty(choice.ConditionFlag))
+            if (!string.IsNullOrEmpty(choice.ConditionFlag))
+            {
+                bool flagIsSet = HasFlag(choice.ConditionFlag);
+
+                if (choice.NegateCondition ? flagIsSet : !flagIsSet)
+                {
+                    return false;
+                }
+            }
+
+            return AreConditionsMet(choice.Conditions);
+        }
+
+        // ------------------------------------------------------------------
+        // Data-driven conditions/actions (quest-givers, per-hero lines).
+        // ------------------------------------------------------------------
+
+        /// <summary>True if every condition passes (AND). Null/empty lists always pass.</summary>
+        public bool AreConditionsMet(IReadOnlyList<DialogueCondition> conditions)
+        {
+            if (conditions == null)
             {
                 return true;
             }
 
-            bool flagIsSet = HasFlag(choice.ConditionFlag);
-            return choice.NegateCondition ? !flagIsSet : flagIsSet;
+            foreach (DialogueCondition condition in conditions)
+            {
+                if (condition != null && !IsConditionMet(condition))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool IsConditionMet(DialogueCondition condition)
+        {
+            if (condition == null)
+            {
+                return true;
+            }
+
+            bool result;
+
+            switch (condition.Type)
+            {
+                case DialogueConditionType.Flag:
+                    result = HasFlag(condition.Key);
+                    break;
+                case DialogueConditionType.QuestState:
+                    result = DialogueCondition.MatchesQuestState(condition.QuestState, Context.GetQuestState(condition.Key));
+                    break;
+                case DialogueConditionType.QuestObjectiveComplete:
+                    result = Context.IsQuestObjectiveComplete(condition.Key, condition.Value);
+                    break;
+                case DialogueConditionType.ActiveCharacter:
+                    string active = Context.ActiveCharacterId;
+                    result = !string.IsNullOrEmpty(active) && string.Equals(active, condition.Key, System.StringComparison.OrdinalIgnoreCase);
+                    break;
+                default:
+                    result = false;
+                    break;
+            }
+
+            return condition.Negate ? !result : result;
+        }
+
+        /// <summary>Executes actions in order. Quest actions go through <see cref="Context"/>.</summary>
+        public void RunActions(IReadOnlyList<DialogueAction> actions)
+        {
+            if (actions == null)
+            {
+                return;
+            }
+
+            foreach (DialogueAction action in actions)
+            {
+                if (action == null)
+                {
+                    continue;
+                }
+
+                switch (action.Type)
+                {
+                    case DialogueActionType.SetFlag:
+                        SetFlag(action.Key, true);
+                        break;
+                    case DialogueActionType.ClearFlag:
+                        SetFlag(action.Key, false);
+                        break;
+                    case DialogueActionType.StartQuest:
+                        Context.StartQuest(action.Key);
+                        break;
+                    case DialogueActionType.CompleteQuest:
+                        Context.CompleteQuest(action.Key);
+                        break;
+                    case DialogueActionType.SetQuestFlag:
+                        Context.SetQuestFlag(action.Key);
+                        break;
+                }
+            }
+        }
+
+        private static void EnsureQuestGiverTextsLoaded()
+        {
+            if (ServiceLocator.TryGet(out LocalizationManager localization))
+            {
+                QuestGiverTexts.EnsureLoaded(localization);
+            }
         }
 
         // ------------------------------------------------------------------

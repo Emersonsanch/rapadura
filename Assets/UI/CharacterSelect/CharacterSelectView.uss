@@ -91,3 +91,9 @@
     background-color: rgb(120, 40, 40);
     color: rgb(255, 240, 220);
 }
+
+/* "Continuar com <herói>" — only shown when a save with a chosen hero exists (CharacterSelectController.RefreshContinueOption). */
+.character-select__continue {
+    margin-top: 8px;
+    background-color: rgb(40, 90, 60);
+}

@@ -24,8 +24,10 @@ namespace Rapadura.Gameplay.Building
     /// Constructed and registered in <c>GameManager.BuildManagers()</c> alongside the other
     /// top-level managers.
     /// </summary>
-    public class BuildingManager : IManager
+    public class BuildingManager : IManager, ISaveable
     {
+        public const string Key = "BuildingManager";
+
         [Serializable]
         public class BuildingManagerSaveState
         {
@@ -38,6 +40,8 @@ namespace Rapadura.Gameplay.Building
         public float GridCellSize { get; set; } = 1f;
 
         public IReadOnlyList<PlacedStructure> PlacedStructures => _placedStructures;
+
+        public string SaveKey => Key;
 
         public void Initialize()
         {
@@ -227,9 +231,14 @@ namespace Rapadura.Gameplay.Building
         }
 
         // ---------------------------------------------------------------
-        // Persistence (plain snapshot helpers — wiring into ISaveable/SaveManager is left to
-        // whichever MonoBehaviour host ends up owning world-state save, same as other IManagers
-        // that aren't MonoBehaviours don't implement ISaveable themselves).
+        // Persistence — registered with SaveManager by GameManager.BuildManagers(), the same way
+        // QuestManager/WorldMapProgress (also plain IManagers) are. The earlier note here assumed
+        // only MonoBehaviours implement ISaveable, which stopped being true; the typed
+        // CaptureState/RestoreState below stay public for direct callers/tests, and the ISaveable
+        // members are explicit wrappers around them (C# can't overload on return type alone).
+        // Structures are stored by id/grid data only, so a save never depends on a
+        // StructureDefinition asset being loaded; unknown ids just fall back to a 1x1 footprint
+        // in CanPlaceAt until their definition is registered again.
         // ---------------------------------------------------------------
 
         public BuildingManagerSaveState CaptureState()
@@ -246,7 +255,23 @@ namespace Rapadura.Gameplay.Building
                 return;
             }
 
-            _placedStructures.AddRange(state.structures);
+            foreach (PlacedStructure structure in state.structures)
+            {
+                if (structure != null && !string.IsNullOrEmpty(structure.structureId))
+                {
+                    _placedStructures.Add(structure);
+                }
+            }
+        }
+
+        object ISaveable.CaptureState() => CaptureState();
+
+        void ISaveable.RestoreState(object state)
+        {
+            if (state is BuildingManagerSaveState saveState)
+            {
+                RestoreState(saveState);
+            }
         }
     }
 }

@@ -13,38 +13,196 @@ MonoBehaviour:
   m_Name: dialogue_temple_acolyte
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Dialogue.DialogueDefinition
   _dialogueId: dialogue_temple_acolyte
-  _startNodeId: greeting
+  _startNodeId: hub
   _nodes:
+  - Id: hub
+    TextKey: 
+    SpeakerId: npc_temple_acolyte
+    SpeakerNameKey: dialogue.temple_acolyte.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects:
+    - Conditions:
+      - Type: 1
+        Key: quest_maria_fading_light
+        Value: 
+        QuestState: 4
+        Negate: 0
+      TargetNodeId: completed
+    - Conditions:
+      - Type: 1
+        Key: quest_maria_fading_light
+        Value: 
+        QuestState: 2
+        Negate: 0
+      TargetNodeId: active
+    - Conditions:
+      - Type: 3
+        Key: Maria
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: intro_maria
+    - Conditions:
+      - Type: 3
+        Key: Joaquim
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: intro_joaquim
+    - Conditions: []
+      TargetNodeId: intro_cousin
+    OnEnterActions: []
+  - Id: intro_maria
+    TextKey: dialogue.temple_acolyte.intro_maria
+    SpeakerId: npc_temple_acolyte
+    SpeakerNameKey: dialogue.temple_acolyte.name
+    Choices: []
+    AutoAdvanceToNodeId: crystals
+    Redirects: []
+    OnEnterActions: []
+  - Id: intro_joaquim
+    TextKey: dialogue.temple_acolyte.intro_joaquim
+    SpeakerId: npc_temple_acolyte
+    SpeakerNameKey: dialogue.temple_acolyte.name
+    Choices: []
+    AutoAdvanceToNodeId: crystals
+    Redirects: []
+    OnEnterActions: []
+  - Id: intro_cousin
+    TextKey: dialogue.temple_acolyte.intro_cousin
+    SpeakerId: npc_temple_acolyte
+    SpeakerNameKey: dialogue.temple_acolyte.name
+    Choices: []
+    AutoAdvanceToNodeId: crystals
+    Redirects: []
+    OnEnterActions: []
+  - Id: crystals
+    TextKey: dialogue.temple_acolyte.crystals
+    SpeakerId: npc_temple_acolyte
+    SpeakerNameKey: dialogue.temple_acolyte.name
+    Choices: []
+    AutoAdvanceToNodeId: offer
+    Redirects: []
+    OnEnterActions: []
+  - Id: offer
+    TextKey: dialogue.temple_acolyte.offer
+    SpeakerId: npc_temple_acolyte
+    SpeakerNameKey: dialogue.temple_acolyte.name
+    Choices:
+    - TextKey: dialogue.temple_acolyte.choice_accept
+      NextNodeId: accepted
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions:
+      - Type: 2
+        Key: quest_maria_fading_light
+    - TextKey: dialogue.temple_acolyte.choice_decline
+      NextNodeId: declined
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: accepted
+    TextKey: dialogue.temple_acolyte.accepted_cousin
+    SpeakerId: npc_temple_acolyte
+    SpeakerNameKey: dialogue.temple_acolyte.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects:
+    - Conditions:
+      - Type: 3
+        Key: Maria
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: accepted_maria
+    OnEnterActions: []
+  - Id: accepted_maria
+    TextKey: dialogue.temple_acolyte.accepted_maria
+    SpeakerId: npc_temple_acolyte
+    SpeakerNameKey: dialogue.temple_acolyte.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: declined
+    TextKey: dialogue.temple_acolyte.declined
+    SpeakerId: npc_temple_acolyte
+    SpeakerNameKey: dialogue.temple_acolyte.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: active
+    TextKey: dialogue.temple_acolyte.active
+    SpeakerId: npc_temple_acolyte
+    SpeakerNameKey: dialogue.temple_acolyte.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: completed
+    TextKey: dialogue.temple_acolyte.completed_cousin
+    SpeakerId: npc_temple_acolyte
+    SpeakerNameKey: dialogue.temple_acolyte.name
+    Choices: []
+    AutoAdvanceToNodeId: offer_join
+    Redirects:
+    - Conditions:
+      - Type: 3
+        Key: Maria
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: greeting
+    OnEnterActions: []
   - Id: greeting
     TextKey: dialogue.temple_acolyte.greeting
     SpeakerId: npc_temple_acolyte
     SpeakerNameKey: dialogue.temple_acolyte.name
     Choices:
     - TextKey: dialogue.temple_acolyte.choice_ask_crystals
-      NextNodeId: crystals
+      NextNodeId: crystals_after
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     - TextKey: dialogue.temple_acolyte.choice_ask_maria
       NextNodeId: about_maria
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     - TextKey: dialogue.common.choice_goodbye
       NextNodeId: 
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     AutoAdvanceToNodeId: 
-  - Id: crystals
+    Redirects: []
+    OnEnterActions: []
+  - Id: crystals_after
     TextKey: dialogue.temple_acolyte.crystals
     SpeakerId: npc_temple_acolyte
     SpeakerNameKey: dialogue.temple_acolyte.name
     Choices: []
     AutoAdvanceToNodeId: offer_join
+    Redirects: []
+    OnEnterActions: []
   - Id: about_maria
     TextKey: dialogue.temple_acolyte.about_maria
     SpeakerId: npc_temple_acolyte
     SpeakerNameKey: dialogue.temple_acolyte.name
     Choices: []
     AutoAdvanceToNodeId: offer_join
+    Redirects: []
+    OnEnterActions: []
   - Id: offer_join
     TextKey: dialogue.temple_acolyte.offer_join
     SpeakerId: npc_temple_acolyte
@@ -54,20 +212,30 @@ MonoBehaviour:
       NextNodeId: pledge
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     - TextKey: dialogue.temple_acolyte.choice_stay_watchful
       NextNodeId: watchful
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
   - Id: pledge
     TextKey: dialogue.temple_acolyte.pledge
     SpeakerId: npc_temple_acolyte
     SpeakerNameKey: dialogue.temple_acolyte.name
     Choices: []
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
   - Id: watchful
     TextKey: dialogue.temple_acolyte.watchful
     SpeakerId: npc_temple_acolyte
     SpeakerNameKey: dialogue.temple_acolyte.name
     Choices: []
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []

@@ -1,0 +1,66 @@
+/*
+ * Shared accessibility theme, added at runtime to every UIDocument root by
+ * UiAccessibilityApplier (loaded via Resources.Load("UI/AccessibilityTheme")).
+ * The applier toggles these classes on each root from AccessibilitySettings:
+ *   .a11y-root                     always
+ *   .a11y-high-contrast            AccessibilitySettings.HighContrast
+ *   .a11y-colorblind-protanopia    ColorblindMode.Protanopia
+ *   .a11y-colorblind-deuteranopia  ColorblindMode.Deuteranopia
+ *   .a11y-colorblind-tritanopia    ColorblindMode.Tritanopia
+ * Font scale is applied inline per text element (USS has no relative font units).
+ * Item-rarity colors set from code use ColorblindPaletteMap directly; rules here cover
+ * colors that only exist in USS (HUD bars). Descendant selectors out-rank each screen's
+ * single-class rules, so screens don't need any change.
+ */
+
+/* ---- Protanopia / Deuteranopia: avoid red vs green/yellow; lean on blue/orange/yellow ---- */
+.a11y-colorblind-protanopia .hud-bar-fill--health,
+.a11y-colorblind-deuteranopia .hud-bar-fill--health {
+    background-color: rgb(235, 120, 30);
+}
+
+.a11y-colorblind-protanopia .hud-bar-fill--stamina,
+.a11y-colorblind-deuteranopia .hud-bar-fill--stamina {
+    background-color: rgb(250, 230, 90);
+}
+
+.a11y-colorblind-protanopia .hud-bar-fill--mana,
+.a11y-colorblind-deuteranopia .hud-bar-fill--mana {
+    background-color: rgb(40, 110, 230);
+}
+
+.a11y-colorblind-protanopia .hud-bar-fill--xp,
+.a11y-colorblind-deuteranopia .hud-bar-fill--xp {
+    background-color: rgb(200, 160, 245);
+}
+
+/* ---- Tritanopia: avoid blue vs yellow; lean on red/teal/pink ---- */
+.a11y-colorblind-tritanopia .hud-bar-fill--health {
+    background-color: rgb(220, 40, 60);
+}
+
+.a11y-colorblind-tritanopia .hud-bar-fill--stamina {
+    background-color: rgb(240, 240, 240);
+}
+
+.a11y-colorblind-tritanopia .hud-bar-fill--mana {
+    background-color: rgb(30, 175, 175);
+}
+
+.a11y-colorblind-tritanopia .hud-bar-fill--xp {
+    background-color: rgb(240, 110, 170);
+}
+
+/* ---- High contrast: brighter text and visible focus on every screen ---- */
+.a11y-high-contrast Label {
+    color: rgb(255, 255, 255);
+}
+
+.a11y-high-contrast Button {
+    border-width: 2px;
+    border-color: rgb(255, 255, 255);
+}
+
+.a11y-high-contrast Button:focus {
+    border-color: rgb(255, 220, 0);
+}

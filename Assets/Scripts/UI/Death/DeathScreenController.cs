@@ -58,6 +58,10 @@ namespace Rapadura.UI.Death
         private CheckpointManager _checkpointManager;
         private PlayerInput _pausedPlayerInput;
 
+        /// <summary>Last whole second written to the countdown label (-1 = blank) — RefreshWidgets runs every
+        /// frame while the screen is up, so the label string is only rebuilt when the shown second changes.</summary>
+        private int _lastCountdownSecond = int.MinValue;
+
         public bool IsOpen => _flow != null && _flow.IsActive;
 
         private void Awake()
@@ -219,7 +223,12 @@ namespace Rapadura.UI.Death
             if (_countdownLabel != null)
             {
                 float remaining = _flow.AutoContinueRemaining;
-                _countdownLabel.text = remaining >= 0f ? $"Continuando em {Mathf.CeilToInt(remaining)}s" : string.Empty;
+                int second = remaining >= 0f ? Mathf.CeilToInt(remaining) : -1;
+                if (second != _lastCountdownSecond)
+                {
+                    _lastCountdownSecond = second;
+                    _countdownLabel.text = second >= 0 ? $"Continuando em {second}s" : string.Empty;
+                }
             }
         }
 

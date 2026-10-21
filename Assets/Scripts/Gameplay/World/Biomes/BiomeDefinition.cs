@@ -88,6 +88,10 @@ namespace Rapadura.Gameplay.World.Biomes
         [Header("Loot Table — Items")]
         [SerializeField] private List<BiomeLootEntry> _loot = new List<BiomeLootEntry>();
 
+        [Header("Weather Table (optional)")]
+        [Tooltip("Weighted weather states for WeatherSystem. Leave empty to use WeatherTable's per-biome defaults.")]
+        [SerializeField] private List<BiomeWeatherEntry> _weather = new List<BiomeWeatherEntry>();
+
         public BiomeType Type => _type;
         public string NameLocalizationKey => _nameLocalizationKey;
         public string NarrativeDescription => _narrativeDescription;
@@ -99,6 +103,7 @@ namespace Rapadura.Gameplay.World.Biomes
 
         public IReadOnlyList<BiomeEnemySpawnEntry> Enemies => _enemies;
         public IReadOnlyList<BiomeLootEntry> Loot => _loot;
+        public IReadOnlyList<BiomeWeatherEntry> Weather => _weather;
 
         /// <summary>
         /// Picks one enemy from <see cref="Enemies"/> using weighted random selection. Deterministic
@@ -110,7 +115,33 @@ namespace Rapadura.Gameplay.World.Biomes
             return RollWeighted(_enemies, entry => entry.Weight, entry => entry.Enemy, random);
         }
 
-        /// <summary>Picks one loot item from <see cref="Loot"/> using weighted random selection. See <see cref="RollEnemy"/>.</summary>
+        /// <summary>
+        /// Same as <see cref="RollEnemy(System.Random)"/>, but only entries whose enemy passes
+        /// <paramref name="isAllowed"/> take part (e.g. <c>DefeatedEnemyRegistry.CanSpawn</c>, so a
+        /// defeated unique boss is never rolled again); weights are renormalized over what remains.
+        /// A null filter behaves exactly like the unfiltered overload (same RNG consumption and
+        /// result). Returns null if nothing passes the filter.
+        /// </summary>
+        public EnemyDefinition RollEnemy(System.Random random, Predicate<EnemyDefinition> isAllowed)
+        {
+            if (isAllowed == null)
+            {
+                return RollEnemy(random);
+            }
+
+            var allowed = new List<BiomeEnemySpawnEntry>(_enemies.Count);
+            foreach (BiomeEnemySpawnEntry entry in _enemies)
+            {
+                if (entry != null && entry.Enemy != null && isAllowed(entry.Enemy))
+                {
+                    allowed.Add(entry);
+                }
+            }
+
+            return RollWeighted(allowed, entry => entry.Weight, entry => entry.Enemy, random);
+        }
+
+        /// <summary>Picks one loot item from <see cref="Loot"/> using weighted random selection. See <see cref="RollEnemy(System.Random)"/>.</summary>
         public ItemDefinition RollLoot(System.Random random)
         {
             return RollWeighted(_loot, entry => entry.Weight, entry => entry.Item, random);
@@ -135,6 +166,12 @@ namespace Rapadura.Gameplay.World.Biomes
             _ambientMusicCueId = ambientMusicCueId;
             _enemies = enemies ?? new List<BiomeEnemySpawnEntry>();
             _loot = loot ?? new List<BiomeLootEntry>();
+        }
+
+        /// <summary>EditMode test hook for the optional weather table (kept separate so SetDataForTests' signature is unchanged).</summary>
+        public void SetWeatherForTests(List<BiomeWeatherEntry> weather)
+        {
+            _weather = weather ?? new List<BiomeWeatherEntry>();
         }
 
         private static TResult RollWeighted<TEntry, TResult>(

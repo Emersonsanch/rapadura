@@ -727,6 +727,8 @@ namespace Rapadura.Gameplay.Skills
                 return;
             }
 
+            EnsureInitialized();
+
             _learnedSkills.Clear();
             Array.Clear(_equippedSlots, 0, _equippedSlots.Length);
 
@@ -734,8 +736,18 @@ namespace Rapadura.Gameplay.Skills
             {
                 if (!_skillDatabase.TryGetValue(entry.skillId, out SkillDefinition definition))
                 {
-                    Debug.LogWarning($"[SkillManager] Unknown skill id '{entry.skillId}' in save data. Skipping.");
-                    continue;
+                    // Character signature skills are only registered once a hero is applied, which
+                    // may not have happened yet (save restored before/without the character select
+                    // screen) — resolve them straight from Resources/Skills/Characters instead.
+                    definition = Rapadura.Gameplay.Characters.CharacterSkillSet.FindSkill(entry.skillId);
+
+                    if (definition == null)
+                    {
+                        Debug.LogWarning($"[SkillManager] Unknown skill id '{entry.skillId}' in save data. Skipping.");
+                        continue;
+                    }
+
+                    _skillDatabase[definition.SkillId] = definition;
                 }
 
                 var instance = new SkillInstance(definition);

@@ -57,7 +57,9 @@ namespace Rapadura.Gameplay.Player
 
             Color color = _ringColor;
             color.a = _ringColor.a * t;
-            _ringRenderer.material.color = color;
+            // sharedMaterial: BuildRing already creates a material owned solely by this ring, so going
+            // through .material would silently clone it (leaking the original) on first access.
+            _ringRenderer.sharedMaterial.color = color;
 
             if (_pulseTimeRemaining <= 0f)
             {

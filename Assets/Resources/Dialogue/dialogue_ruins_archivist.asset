@@ -13,8 +13,148 @@ MonoBehaviour:
   m_Name: dialogue_ruins_archivist
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Dialogue.DialogueDefinition
   _dialogueId: dialogue_ruins_archivist
-  _startNodeId: greeting
+  _startNodeId: hub
   _nodes:
+  - Id: hub
+    TextKey: 
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects:
+    - Conditions:
+      - Type: 1
+        Key: quest_icaro_ancient_gears
+        Value: 
+        QuestState: 4
+        Negate: 0
+      TargetNodeId: completed
+    - Conditions:
+      - Type: 1
+        Key: quest_icaro_ancient_gears
+        Value: 
+        QuestState: 2
+        Negate: 0
+      - Type: 2
+        Key: quest_icaro_ancient_gears
+        Value: defeat_ruin_guardian
+        QuestState: 0
+        Negate: 0
+      - Type: 2
+        Key: quest_icaro_ancient_gears
+        Value: recover_tech_fragment
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: ready
+    - Conditions:
+      - Type: 1
+        Key: quest_icaro_ancient_gears
+        Value: 
+        QuestState: 2
+        Negate: 0
+      TargetNodeId: active
+    - Conditions:
+      - Type: 3
+        Key: Icaro
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: intro_icaro
+    - Conditions:
+      - Type: 3
+        Key: Maithe
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: intro_maithe
+    - Conditions: []
+      TargetNodeId: intro_cousin
+    OnEnterActions: []
+  - Id: intro_icaro
+    TextKey: dialogue.ruins_archivist.intro_icaro
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices: []
+    AutoAdvanceToNodeId: offer
+    Redirects: []
+    OnEnterActions: []
+  - Id: intro_maithe
+    TextKey: dialogue.ruins_archivist.intro_maithe
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices: []
+    AutoAdvanceToNodeId: offer
+    Redirects: []
+    OnEnterActions: []
+  - Id: intro_cousin
+    TextKey: dialogue.ruins_archivist.intro_cousin
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices: []
+    AutoAdvanceToNodeId: offer
+    Redirects: []
+    OnEnterActions: []
+  - Id: offer
+    TextKey: dialogue.ruins_archivist.offer
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices:
+    - TextKey: dialogue.ruins_archivist.choice_accept
+      NextNodeId: accepted
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions:
+      - Type: 2
+        Key: quest_icaro_ancient_gears
+    - TextKey: dialogue.ruins_archivist.choice_decline
+      NextNodeId: declined
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: accepted
+    TextKey: dialogue.ruins_archivist.accepted
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: declined
+    TextKey: dialogue.ruins_archivist.declined
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: active
+    TextKey: dialogue.ruins_archivist.active
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: ready
+    TextKey: dialogue.ruins_archivist.ready_cousin
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices: []
+    AutoAdvanceToNodeId: fragment
+    Redirects:
+    - Conditions:
+      - Type: 3
+        Key: Icaro
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: greeting
+    OnEnterActions: []
   - Id: greeting
     TextKey: dialogue.ruins_archivist.greeting
     SpeakerId: npc_ruins_archivist
@@ -24,15 +164,23 @@ MonoBehaviour:
       NextNodeId: fragment
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     - TextKey: dialogue.ruins_archivist.choice_ask_icaro
       NextNodeId: about_icaro
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     - TextKey: dialogue.common.choice_goodbye
       NextNodeId: 
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
   - Id: fragment
     TextKey: dialogue.ruins_archivist.fragment
     SpeakerId: npc_ruins_archivist
@@ -42,26 +190,62 @@ MonoBehaviour:
       NextNodeId: share
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions:
+      - Type: 4
+        Key: icaro_decoded_fragment
     - TextKey: dialogue.ruins_archivist.choice_withhold_secret
       NextNodeId: withhold
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions:
+      - Type: 4
+        Key: icaro_decoded_fragment
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
   - Id: about_icaro
     TextKey: dialogue.ruins_archivist.about_icaro
     SpeakerId: npc_ruins_archivist
     SpeakerNameKey: dialogue.ruins_archivist.name
-    Choices: []
+    Choices:
+    - TextKey: dialogue.ruins_archivist.choice_ask_fragment
+      NextNodeId: fragment
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions: []
+    - TextKey: dialogue.common.choice_goodbye
+      NextNodeId: 
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions: []
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
   - Id: share
     TextKey: dialogue.ruins_archivist.share
     SpeakerId: npc_ruins_archivist
     SpeakerNameKey: dialogue.ruins_archivist.name
     Choices: []
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
   - Id: withhold
     TextKey: dialogue.ruins_archivist.withhold
     SpeakerId: npc_ruins_archivist
     SpeakerNameKey: dialogue.ruins_archivist.name
     Choices: []
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: completed
+    TextKey: dialogue.ruins_archivist.completed
+    SpeakerId: npc_ruins_archivist
+    SpeakerNameKey: dialogue.ruins_archivist.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []

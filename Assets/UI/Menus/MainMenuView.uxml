@@ -7,6 +7,7 @@
                 <ui:Button name="new-game-button" text="Novo Jogo" focusable="true" class="main-menu-button" />
                 <ui:Button name="continue-button" text="Continuar" focusable="true" class="main-menu-button" />
                 <ui:Button name="settings-button" text="Configurações" focusable="true" class="main-menu-button" />
+                <ui:Button name="credits-button" text="Créditos" focusable="true" class="main-menu-button" />
                 <ui:Button name="quit-button" text="Sair" focusable="true" class="main-menu-button" />
             </ui:VisualElement>
         </ui:VisualElement>

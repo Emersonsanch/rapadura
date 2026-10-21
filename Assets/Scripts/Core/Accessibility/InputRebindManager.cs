@@ -10,8 +10,8 @@ namespace Rapadura.Core.Accessibility
     /// (<see cref="InputActionRebindingExtensions.PerformInteractiveRebinding"/> and
     /// <see cref="InputActionRebindingExtensions.SaveBindingOverridesAsJson"/> /
     /// <see cref="InputActionRebindingExtensions.LoadBindingOverridesFromJson"/>) so UI code
-    /// (the future Fase 6 "Controles" settings screen — see <c>SettingsMenuController.cs</c>,
-    /// which today has the controles tab as a documented placeholder) can offer interactive
+    /// (the "Controles" tab of <c>SettingsMenuController.cs</c>, with
+    /// <see cref="InputBindingUtility"/> for display/conflict logic) can offer interactive
     /// rebinding without touching the Input System API directly.
     ///
     /// Not an <see cref="Rapadura.Core.Interfaces.IManager"/>: it has no per-frame state of its
@@ -31,6 +31,9 @@ namespace Rapadura.Core.Accessibility
         private const string LogCategory = "InputRebind";
         private const string PlayerPrefsKeyPrefix = "Accessibility.InputBindings.";
 
+        /// <summary>Control that aborts an interactive rebind by default.</summary>
+        public const string DefaultCancelPath = "<Keyboard>/escape";
+
         private readonly InputActionAsset _actions;
         private InputActionRebindingExtensions.RebindingOperation _activeRebind;
 
@@ -48,8 +51,16 @@ namespace Rapadura.Core.Accessibility
         /// several (e.g. composite parts, or one binding per control scheme) — pass 0 for a
         /// simple single-binding action. Excludes mouse/pointer motion by default so a rebind
         /// doesn't get immediately satisfied by the player's mouse jiggling.
+        ///
+        /// <paramref name="requiredPathPrefixes"/> (e.g. <c>{"&lt;Keyboard&gt;"}</c> or
+        /// <c>{"&lt;Gamepad&gt;"}</c>, see <see cref="InputBindingUtility.GetRebindPathPrefixes"/>)
+        /// restricts which controls are accepted, so the keyboard column of the settings UI can't
+        /// be satisfied by a gamepad button and vice-versa. <paramref name="cancelPath"/> aborts
+        /// the rebind (the Input System only adds Esc-to-cancel by itself for non-button actions,
+        /// so it is added explicitly here); pass null to disable.
         /// </summary>
-        public void PerformInteractiveRebind(InputAction action, int bindingIndex, Action onComplete = null, Action onCancel = null)
+        public void PerformInteractiveRebind(InputAction action, int bindingIndex, Action onComplete = null, Action onCancel = null,
+            string[] requiredPathPrefixes = null, string cancelPath = DefaultCancelPath)
         {
             if (action == null)
             {
@@ -65,9 +76,27 @@ namespace Rapadura.Core.Accessibility
 
             action.Disable();
 
-            _activeRebind = action.PerformInteractiveRebinding(bindingIndex)
+            InputActionRebindingExtensions.RebindingOperation rebind = action.PerformInteractiveRebinding(bindingIndex)
                 .WithControlsExcluding("Mouse")
-                .OnMatchWaitForAnother(0.1f)
+                .OnMatchWaitForAnother(0.1f);
+
+            if (requiredPathPrefixes != null)
+            {
+                foreach (string prefix in requiredPathPrefixes)
+                {
+                    if (!string.IsNullOrEmpty(prefix))
+                    {
+                        rebind.WithControlsHavingToMatchPath(prefix);
+                    }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(cancelPath))
+            {
+                rebind.WithCancelingThrough(cancelPath);
+            }
+
+            _activeRebind = rebind
                 .OnComplete(operation =>
                 {
                     CleanUpRebind(operation, action);

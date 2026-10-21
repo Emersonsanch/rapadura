@@ -54,6 +54,10 @@ MonoBehaviour:
       NextNodeId: group_unites
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions:
+      - Type: 4
+        Key: convergence_five_heroes_agreed
     - TextKey: dialogue.convergence_first_meeting.choice_hesitate
       NextNodeId: group_hesitates
       ConditionFlag: 

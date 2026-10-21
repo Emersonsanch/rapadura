@@ -26,7 +26,7 @@ namespace Rapadura.Save
     {
         /// <summary>Current save schema version. Bump this whenever SaveData's shape changes in a
         /// way older saves need migrating for, and add the corresponding step to <see cref="Migrations"/>.</summary>
-        public const int CurrentSaveVersion = 1;
+        public const int CurrentSaveVersion = 2;
 
         /// <summary>Reserved slot number used by <see cref="AutoSave"/> / <see cref="LoadAutoSave"/> so
         /// automatic saves never collide with player-chosen manual save slots (which are &gt;= 0).</summary>
@@ -47,6 +47,7 @@ namespace Rapadura.Save
         private static readonly Action<SaveData>[] Migrations =
         {
             MigrateV0ToV1,
+            MigrateV1ToV2,
         };
 
         private string SaveFolderPath => Path.Combine(Application.persistentDataPath, SaveFolderName);
@@ -189,7 +190,7 @@ namespace Rapadura.Save
 
             MigrateToCurrentVersion(saveData);
 
-            foreach (SaveEntry entry in saveData.entries)
+            foreach (SaveEntry entry in GetEntriesInRestoreOrder(saveData))
             {
                 if (!_saveables.TryGetValue(entry.key, out ISaveable saveable))
                 {
@@ -215,6 +216,79 @@ namespace Rapadura.Save
 
             EventBus.Publish(new GameLoadedEvent());
             return true;
+        }
+
+        /// <summary>
+        /// Orders entries by their saveable's <see cref="IRestoreOrder.RestoreOrder"/> (lower first,
+        /// <see cref="RestoreOrders.Default"/> when not implemented/unregistered). Stable, so equal
+        /// orders keep the order they were written in — i.e. exactly the old behavior when nobody
+        /// opts in.
+        /// </summary>
+        private List<SaveEntry> GetEntriesInRestoreOrder(SaveData saveData)
+        {
+            var ordered = new List<SaveEntry>(saveData.entries);
+            var originalIndex = new Dictionary<SaveEntry, int>();
+
+            for (int i = 0; i < ordered.Count; i++)
+            {
+                originalIndex[ordered[i]] = i;
+            }
+
+            ordered.Sort((a, b) =>
+            {
+                int byOrder = GetRestoreOrder(a.key).CompareTo(GetRestoreOrder(b.key));
+                return byOrder != 0 ? byOrder : originalIndex[a].CompareTo(originalIndex[b]);
+            });
+
+            return ordered;
+        }
+
+        private int GetRestoreOrder(string key)
+        {
+            return key != null && _saveables.TryGetValue(key, out ISaveable saveable) && saveable is IRestoreOrder ordered
+                ? ordered.RestoreOrder
+                : RestoreOrders.Default;
+        }
+
+        /// <summary>
+        /// Reads (and migrates) a slot without applying it to any saveable — for UI that needs to
+        /// preview a save before loading it (e.g. "Continuar com &lt;herói&gt;" on character select).
+        /// Falls back to the backup file like <see cref="Load"/>. Returns null if neither is readable.
+        /// </summary>
+        public SaveData PeekSlot(int slot)
+        {
+            SaveData saveData = LoadValidOrBackup(slot, out _);
+
+            if (saveData != null)
+            {
+                MigrateToCurrentVersion(saveData);
+            }
+
+            return saveData;
+        }
+
+        /// <summary>Deserializes one entry of a peeked <see cref="SaveData"/> by key. False if the key is absent (e.g. an older save) or of another type.</summary>
+        public static bool TryGetEntryState<TState>(SaveData saveData, string key, out TState state) where TState : class
+        {
+            state = null;
+            SaveEntry entry = saveData?.entries?.Find(e => e.key == key);
+
+            if (entry == null || string.IsNullOrEmpty(entry.json))
+            {
+                return false;
+            }
+
+            try
+            {
+                state = JsonUtility.FromJson<TState>(entry.json);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[SaveManager] Failed to read entry '{key}': {e.Message}");
+                return false;
+            }
+
+            return state != null;
         }
 
         /// <summary>Loads the reserved auto-save slot, if one exists.</summary>
@@ -308,6 +382,19 @@ namespace Rapadura.Save
         private static void MigrateV0ToV1(SaveData saveData)
         {
             // No-op placeholder: v0 and v1 share the same entry format.
+        }
+
+        /// <summary>
+        /// Schema 1 -&gt; 2: adds new, purely additive world-state slices — the selected character
+        /// ("SelectedCharacter"), placed structures ("BuildingManager"), unlocked recipes
+        /// ("CraftingManager") and defeated bosses ("DefeatedEnemies"). Nothing to rewrite: an older
+        /// save simply has no entry for them, and Load never touches a saveable whose key is absent,
+        /// so those systems keep their current (new-game) state. Kept as an explicit step so the
+        /// version bump is documented where the pipeline lives.
+        /// </summary>
+        private static void MigrateV1ToV2(SaveData saveData)
+        {
+            // No-op: v2 only adds optional entries.
         }
 
         private static void SafeDelete(string path)

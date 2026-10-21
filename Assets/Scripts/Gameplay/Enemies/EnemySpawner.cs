@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Logging;
 using UnityEngine;
@@ -18,6 +19,8 @@ namespace Rapadura.Gameplay.Enemies
         [SerializeField] private EnemyDefinition _bossDefinition;
         [SerializeField] private Transform[] _spawnPoints;
         [SerializeField] private Transform[] _waypoints;
+        [Tooltip("Swap each spawned enemy's visual to match its EnemyDefinition (model, else placeholder). See EnemyVisualSwapper.")]
+        [SerializeField] private bool _applyDefinitionVisuals = true;
 
         private EnemyPool _pool;
         private readonly WaveTracker _waveTracker = new WaveTracker();
@@ -62,12 +65,21 @@ namespace Rapadura.Gameplay.Enemies
             }
         }
 
-        /// <summary>Spawns a single boss-configured enemy as its own one-enemy "wave".</summary>
+        /// <summary>
+        /// Spawns a single boss-configured enemy as its own one-enemy "wave". Returns null (no wave
+        /// started) if that unique boss was already defeated according to <see cref="DefeatedEnemyRegistry"/>.
+        /// </summary>
         public GameObject SpawnBoss()
         {
             if (_pool == null || _bossDefinition == null)
             {
                 GameLogger.Warning("Enemy", "EnemySpawner.SpawnBoss called without a valid pool/boss definition.");
+                return null;
+            }
+
+            if (ServiceLocator.TryGet(out DefeatedEnemyRegistry defeated) && defeated.ShouldSkipSpawn(_bossDefinition))
+            {
+                GameLogger.Info("Enemy", $"Boss '{_bossDefinition.name}' was already defeated; not respawning it.");
                 return null;
             }
 
@@ -89,6 +101,11 @@ namespace Rapadura.Gameplay.Enemies
             if (controller != null)
             {
                 controller.ResetForSpawn(definition, position, _waypoints);
+            }
+
+            if (_applyDefinitionVisuals)
+            {
+                EnemyVisualSwapper.Apply(instance, definition);
             }
 
             _spawnedThisWave.Add(instance);

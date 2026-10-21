@@ -13,8 +13,49 @@ MonoBehaviour:
   m_Name: dialogue_hermit_mystic
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Dialogue.DialogueDefinition
   _dialogueId: dialogue_hermit_mystic
-  _startNodeId: greeting
+  _startNodeId: hub
   _nodes:
+  - Id: hub
+    TextKey: 
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects:
+    - Conditions:
+      - Type: 1
+        Key: quest_lavine_redtide
+        Value: 
+        QuestState: 4
+        Negate: 0
+      TargetNodeId: completed
+    - Conditions:
+      - Type: 1
+        Key: quest_lavine_redtide
+        Value: 
+        QuestState: 2
+        Negate: 0
+      - Type: 2
+        Key: quest_lavine_redtide
+        Value: cull_corrupted_swarm
+        QuestState: 0
+        Negate: 0
+      - Type: 2
+        Key: quest_lavine_redtide
+        Value: resist_the_whispers
+        QuestState: 0
+        Negate: 1
+      TargetNodeId: ready
+    - Conditions:
+      - Type: 1
+        Key: quest_lavine_redtide
+        Value: 
+        QuestState: 2
+        Negate: 0
+      TargetNodeId: active
+    - Conditions: []
+      TargetNodeId: greeting
+    OnEnterActions: []
   - Id: greeting
     TextKey: dialogue.hermit_mystic.greeting
     SpeakerId: npc_hermit_mystic
@@ -24,21 +65,36 @@ MonoBehaviour:
       NextNodeId: eclipse
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     - TextKey: dialogue.hermit_mystic.choice_ask_lavine
       NextNodeId: about_lavine
       ConditionFlag: 
       NegateCondition: 0
+      Conditions:
+      - Type: 3
+        Key: Lavine
+        Value: 
+        QuestState: 0
+        Negate: 1
+      Actions: []
     - TextKey: dialogue.common.choice_goodbye
       NextNodeId: 
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
   - Id: eclipse
     TextKey: dialogue.hermit_mystic.eclipse
     SpeakerId: npc_hermit_mystic
     SpeakerNameKey: dialogue.hermit_mystic.name
     Choices: []
-    AutoAdvanceToNodeId: about_lavine
+    AutoAdvanceToNodeId: offer
+    Redirects: []
+    OnEnterActions: []
   - Id: about_lavine
     TextKey: dialogue.hermit_mystic.about_lavine
     SpeakerId: npc_hermit_mystic
@@ -48,20 +104,172 @@ MonoBehaviour:
       NextNodeId: trust
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     - TextKey: dialogue.hermit_mystic.choice_voice_doubt
       NextNodeId: doubt
       ConditionFlag: 
       NegateCondition: 0
+      Conditions: []
+      Actions: []
     AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
   - Id: trust
     TextKey: dialogue.hermit_mystic.trust
     SpeakerId: npc_hermit_mystic
     SpeakerNameKey: dialogue.hermit_mystic.name
     Choices: []
-    AutoAdvanceToNodeId: 
+    AutoAdvanceToNodeId: offer
+    Redirects: []
+    OnEnterActions: []
   - Id: doubt
     TextKey: dialogue.hermit_mystic.doubt
     SpeakerId: npc_hermit_mystic
     SpeakerNameKey: dialogue.hermit_mystic.name
     Choices: []
+    AutoAdvanceToNodeId: offer
+    Redirects: []
+    OnEnterActions: []
+  - Id: offer
+    TextKey: dialogue.hermit_mystic.offer_cousin
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices:
+    - TextKey: dialogue.hermit_mystic.choice_accept
+      NextNodeId: accepted
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions:
+      - Type: 2
+        Key: quest_lavine_redtide
+    - TextKey: dialogue.hermit_mystic.choice_decline
+      NextNodeId: declined
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions: []
     AutoAdvanceToNodeId: 
+    Redirects:
+    - Conditions:
+      - Type: 3
+        Key: Lavine
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: offer_lavine
+    OnEnterActions: []
+  - Id: offer_lavine
+    TextKey: dialogue.hermit_mystic.offer_lavine
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices:
+    - TextKey: dialogue.hermit_mystic.choice_accept_lavine
+      NextNodeId: accepted
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions:
+      - Type: 2
+        Key: quest_lavine_redtide
+    - TextKey: dialogue.hermit_mystic.choice_decline
+      NextNodeId: declined
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: accepted
+    TextKey: dialogue.hermit_mystic.accepted
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: declined
+    TextKey: dialogue.hermit_mystic.declined
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: active
+    TextKey: dialogue.hermit_mystic.active
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: ready
+    TextKey: dialogue.hermit_mystic.ready_cousin
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices:
+    - TextKey: dialogue.hermit_mystic.choice_resist
+      NextNodeId: resisted
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions:
+      - Type: 4
+        Key: lavine_resisted_whispers
+    - TextKey: dialogue.common.choice_goodbye
+      NextNodeId: 
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions: []
+    AutoAdvanceToNodeId: 
+    Redirects:
+    - Conditions:
+      - Type: 3
+        Key: Lavine
+        Value: 
+        QuestState: 0
+        Negate: 0
+      TargetNodeId: ready_lavine
+    OnEnterActions: []
+  - Id: ready_lavine
+    TextKey: dialogue.hermit_mystic.ready_lavine
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices:
+    - TextKey: dialogue.hermit_mystic.choice_resist_lavine
+      NextNodeId: resisted
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions:
+      - Type: 4
+        Key: lavine_resisted_whispers
+    - TextKey: dialogue.common.choice_goodbye
+      NextNodeId: 
+      ConditionFlag: 
+      NegateCondition: 0
+      Conditions: []
+      Actions: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: resisted
+    TextKey: dialogue.hermit_mystic.resisted
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []
+  - Id: completed
+    TextKey: dialogue.hermit_mystic.completed
+    SpeakerId: npc_hermit_mystic
+    SpeakerNameKey: dialogue.hermit_mystic.name
+    Choices: []
+    AutoAdvanceToNodeId: 
+    Redirects: []
+    OnEnterActions: []

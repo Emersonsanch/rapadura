@@ -1,0 +1,87 @@
+.credits-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(6, 7, 10, 0.92);
+}
+
+.credits-panel {
+    width: 90%;
+    max-width: 560px;
+    max-height: 90%;
+    background-color: rgba(18, 20, 27, 0.98);
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.08);
+    padding: 16px;
+    align-items: stretch;
+}
+
+.credits-title {
+    font-size: 28px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: rgb(240, 240, 245);
+}
+
+.credits-version {
+    font-size: 13px;
+    -unity-text-align: middle-center;
+    color: rgb(150, 152, 165);
+    margin-bottom: 12px;
+}
+
+.credits-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 160px;
+}
+
+.credits-content {
+    padding: 4px 8px;
+}
+
+.credits-section {
+    margin-bottom: 18px;
+    align-items: center;
+}
+
+.credits-section-title {
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: rgb(240, 196, 110);
+    margin-bottom: 6px;
+}
+
+.credits-line {
+    font-size: 15px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    color: rgb(225, 225, 232);
+    margin-bottom: 4px;
+}
+
+/* Touch-first: 48px tall target, full width of the panel. */
+.credits-back-button {
+    height: 48px;
+    margin-top: 12px;
+    font-size: 16px;
+    background-color: rgba(30, 32, 40, 0.9);
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgb(230, 230, 235);
+}
+
+.credits-back-button:hover {
+    background-color: rgba(50, 54, 66, 0.95);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.credits-back-button:focus {
+    border-color: rgb(90, 170, 255);
+    border-width: 3px;
+}

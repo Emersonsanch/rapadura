@@ -43,6 +43,26 @@ namespace Rapadura.Gameplay.Enemies
         [Min(1f)]
         [SerializeField] private float _bossExperienceMultiplier = 1f;
 
+        [Header("Visual (see EnemyVisualSwapper)")]
+        [Tooltip("Optional model/prefab instantiated as this enemy's 'EnemyVisual' child under the shared enemy prefab (e.g. Assets/Models/Enemies/Scorpion/Scorpion.fbx). Leave null to use the placeholder below (or the shared prefab's own visual if the placeholder is disabled).")]
+        [SerializeField] private GameObject _visualPrefab;
+        [Tooltip("Local position of the visual under the enemy root (Meshy models sit at y = -0.5 under the 2 m enemy capsule).")]
+        [SerializeField] private Vector3 _visualLocalPosition = new Vector3(0f, -0.5f, 0f);
+        [Tooltip("Local rotation of the visual. Meshy FBX exports need -90 on X to stand upright.")]
+        [SerializeField] private Vector3 _visualLocalEulerAngles = new Vector3(-90f, 0f, 0f);
+        [Tooltip("Uniform scale of the visual (Meshy FBX exports are in centimetres: ~0.0145 matches the scene's Wolf/Spider).")]
+        [Min(0.0001f)]
+        [SerializeField] private float _visualScale = 0.0145f;
+
+        [Header("Placeholder Visual (used when Visual Prefab is null)")]
+        [Tooltip("Build a primitive placeholder so model-less enemies are still distinguishable. Off = keep the shared prefab's own visual.")]
+        [SerializeField] private bool _usePlaceholderVisual = true;
+        [SerializeField] private EnemyPlaceholderShape _placeholderShape = EnemyPlaceholderShape.Capsule;
+        [Tooltip("Body tint. Fully transparent (alpha 0, the default) = auto color derived from the asset name, so every enemy still differs.")]
+        [SerializeField] private Color _placeholderColor = new Color(0f, 0f, 0f, 0f);
+        [Tooltip("Body scale of the primitive. It is placed so its base rests at the bottom of the enemy's capsule collider.")]
+        [SerializeField] private Vector3 _placeholderScale = Vector3.one;
+
         [Header("Movement")]
         [SerializeField] private float _patrolSpeed = 2f;
         [SerializeField] private float _chaseSpeed = 4f;
@@ -79,6 +99,16 @@ namespace Rapadura.Gameplay.Enemies
         public ItemDefinition BossBonusDropItem => _bossBonusDropItem;
         public ItemRarity BossBonusDropRarity => _bossBonusDropRarity;
         public float BossExperienceMultiplier => _bossExperienceMultiplier;
+
+        public GameObject VisualPrefab => _visualPrefab;
+        public Vector3 VisualLocalPosition => _visualLocalPosition;
+        public Vector3 VisualLocalEulerAngles => _visualLocalEulerAngles;
+        public float VisualScale => _visualScale;
+
+        public bool UsePlaceholderVisual => _usePlaceholderVisual;
+        public EnemyPlaceholderShape PlaceholderShape => _placeholderShape;
+        public Color PlaceholderColor => _placeholderColor;
+        public Vector3 PlaceholderScale => _placeholderScale;
 
         public float PatrolSpeed => _patrolSpeed;
         public float ChaseSpeed => _chaseSpeed;

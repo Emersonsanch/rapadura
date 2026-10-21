@@ -98,6 +98,26 @@ namespace Rapadura.Gameplay.World.Map
 
         public int StepsSinceLastEncounter { get; private set; }
         public bool Enabled { get; set; } = true;
+
+        /// <summary>
+        /// External scale on each step's chance (e.g. night = slightly more fights). Defaults to
+        /// TimeOfDayManager.EncounterChanceMultiplier when one is registered, else 1; set to null for exactly 1.
+        /// </summary>
+        public Func<float> ChanceMultiplierProvider { get; set; } = DefaultChanceMultiplier;
+
+        public float ChanceMultiplier => Mathf.Max(0f, ChanceMultiplierProvider?.Invoke() ?? 1f);
+
+        private static float DefaultChanceMultiplier() =>
+            Rapadura.Core.DI.ServiceLocator.TryGet(out Rapadura.Gameplay.Environment.TimeOfDayManager time) && time != null
+                ? time.EncounterChanceMultiplier
+                : 1f;
+
+        /// <summary>
+        /// Optional gate applied to every enemy roll (see <see cref="BiomeDefinition.RollEnemy(System.Random, Predicate{EnemyDefinition})"/>).
+        /// WorldMapController sets it to <c>DefeatedEnemyRegistry.CanSpawn</c> so defeated unique bosses
+        /// never show up again. Null (default) = every spawn-table entry is eligible, unchanged rolls.
+        /// </summary>
+        public Predicate<EnemyDefinition> EnemyFilter { get; set; }
         public RandomEncounterSettings Settings => _settings;
 
         public bool IsInGracePeriod => StepsSinceLastEncounter < _settings.GraceSteps;
@@ -186,7 +206,7 @@ namespace Rapadura.Gameplay.World.Map
 
             StepsSinceLastEncounter++;
 
-            float chance = GetChanceForStep(StepsSinceLastEncounter);
+            float chance = Mathf.Min(1f, GetChanceForStep(StepsSinceLastEncounter) * ChanceMultiplier);
             if (chance <= 0f || _random.NextDouble() >= chance)
             {
                 return false;
@@ -215,7 +235,7 @@ namespace Rapadura.Gameplay.World.Map
 
             for (int i = 0; i < count; i++)
             {
-                EnemyDefinition enemy = biome.RollEnemy(_random);
+                EnemyDefinition enemy = biome.RollEnemy(_random, EnemyFilter);
                 if (enemy != null)
                 {
                     enemies.Add(enemy);

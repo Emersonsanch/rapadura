@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7fe309d8334becbc1f92b69454b59e, type: 3}
+  m_Name: ach_first_blood
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Achievements.AchievementDefinition
+  _achievementId: ach_first_blood
+  _titleKey: achievement.ach_first_blood.title
+  _descriptionKey: achievement.ach_first_blood.description
+  _icon: {fileID: 0}
+  _conditionType: 0
+  _targetValue: 1
+  _targetIds: []
+  _hidden: 0
+  _sortOrder: 0

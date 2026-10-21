@@ -21,6 +21,14 @@ MonoBehaviour:
   _lootDropChance: 0.6
   _lootQuantityMin: 1
   _lootQuantityMax: 3
+  _visualPrefab: {fileID: 0}
+  _visualLocalPosition: {x: 0, y: -0.5, z: 0}
+  _visualLocalEulerAngles: {x: -90, y: 0, z: 0}
+  _visualScale: 0.0145
+  _usePlaceholderVisual: 1
+  _placeholderShape: 1
+  _placeholderColor: {r: 0.5, g: 0.5, b: 0.52, a: 1}
+  _placeholderScale: {x: 1.2, y: 1.4, z: 1}
   _patrolSpeed: 1.2
   _chaseSpeed: 2.5
   _fleeSpeed: 0

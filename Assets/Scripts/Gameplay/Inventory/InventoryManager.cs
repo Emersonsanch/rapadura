@@ -26,6 +26,16 @@ namespace Rapadura.Gameplay.Inventory
             public EquipmentSlot slot;
             public string itemId;
             public float durability;
+
+            // Procedural data of the equipped item (mirrors InventorySlotData's generated* fields).
+            // Before these existed, equipping a generated item and saving/loading turned it back
+            // into a plain base item (affixes, generated name and rolled rarity were all dropped).
+            // Old saves simply lack these keys: JsonUtility leaves them null/empty/Common, which
+            // InventorySlotData already treats as "plain item" - so old saves load unchanged.
+            public string[] generatedAffixIds;
+            public float[] generatedAffixValues;
+            public string generatedName;
+            public ItemRarity generatedRarity;
         }
     }
 
@@ -187,7 +197,9 @@ namespace Rapadura.Gameplay.Inventory
                         break;
                     }
 
-                    if (slot.itemId != item.ItemId || slot.quantity >= item.MaxStack)
+                    // Never stack into a slot holding a generated item: the plain items would
+                    // inherit (or, when later split/removed, be confused with) that roll's affixes.
+                    if (slot.itemId != item.ItemId || slot.quantity >= item.MaxStack || slot.HasGeneratedData)
                     {
                         continue;
                     }
@@ -313,6 +325,27 @@ namespace Rapadura.Gameplay.Inventory
             EnsureSlotsInitialized();
             int remaining = quantity;
 
+            // Two passes: plain stacks first, generated (affixed/named) items only if still short.
+            // Callers that remove "by id" (crafting/building ingredients, the shop's buy rollback)
+            // don't care which instance goes, so a single first-match pass used to happily eat a
+            // player's Rare/Epic roll while an identical plain copy sat in a later slot - and in
+            // ShopManager.BuyItem's rollback it would remove the generated item instead of the
+            // plain one that was just added.
+            remaining = RemoveByIdPass(itemId, remaining, generatedPass: false);
+            remaining = RemoveByIdPass(itemId, remaining, generatedPass: true);
+
+            bool success = remaining <= 0;
+
+            if (success)
+            {
+                EventBus.Publish(new InventoryChangedEvent());
+            }
+
+            return success;
+        }
+
+        private int RemoveByIdPass(string itemId, int remaining, bool generatedPass)
+        {
             foreach (InventorySlotData slot in _slots)
             {
                 if (remaining <= 0)
@@ -320,7 +353,7 @@ namespace Rapadura.Gameplay.Inventory
                     break;
                 }
 
-                if (slot.itemId != itemId)
+                if (slot.itemId != itemId || slot.HasGeneratedData != generatedPass)
                 {
                     continue;
                 }
@@ -335,14 +368,7 @@ namespace Rapadura.Gameplay.Inventory
                 }
             }
 
-            bool success = remaining <= 0;
-
-            if (success)
-            {
-                EventBus.Publish(new InventoryChangedEvent());
-            }
-
-            return success;
+            return remaining;
         }
 
         public int GetTotalCount(string itemId)
@@ -372,8 +398,11 @@ namespace Rapadura.Gameplay.Inventory
                 _slots[toIndex] = from;
                 _slots[fromIndex] = InventorySlotData.Empty();
             }
-            else if (to.itemId == from.itemId)
+            else if (to.itemId == from.itemId && !to.HasGeneratedData && !from.HasGeneratedData)
             {
+                // Merging is only safe between plain stacks: merging a generated item into (or
+                // with) another stack of the same base id would keep just one side's
+                // affixes/name/rarity and silently discard the other's. Generated items swap below.
                 ItemDefinition item = ItemDatabase.GetById(from.itemId);
                 int maxStack = item != null ? item.MaxStack : int.MaxValue;
                 int spaceInStack = maxStack - to.quantity;
@@ -416,6 +445,7 @@ namespace Rapadura.Gameplay.Inventory
             _slots[emptySlotIndex].itemId = source.itemId;
             _slots[emptySlotIndex].quantity = amount;
             _slots[emptySlotIndex].currentDurability = source.currentDurability;
+            _slots[emptySlotIndex].CopyGeneratedDataFrom(source);
 
             source.quantity -= amount;
 
@@ -465,36 +495,62 @@ namespace Rapadura.Gameplay.Inventory
                 return false;
             }
 
-            UnequipSlot(item.EquipSlot);
+            // Deep copy (affixes, generated name, rolled rarity, durability) captured BEFORE
+            // RemoveFromSlot below — InventorySlotData is a class, so `slot` and
+            // `_slots[slotIndex]` are the same object, and RemoveFromSlot's Clear() (once quantity
+            // hits 0) wipes the generated fields on that shared instance.
+            InventorySlotData equippedData = slot.CloneWithQuantity(1);
 
-            // Captured before RemoveFromSlot below — InventorySlotData is a class, so `slot` and
-            // `_slots[slotIndex]` are the same object; RemoveFromSlot's Clear() (once quantity
-            // hits 0) wipes generatedAffixIds/Values/Name on that shared instance. Reading them
-            // from `slot` afterward silently returned null/empty, which is exactly why the fix
-            // below (added in this same change) initially appeared to do nothing — any equip
-            // always saw zero affixes regardless of what was actually rolled.
-            string[] generatedAffixIds = slot.generatedAffixIds;
-            float[] generatedAffixValues = slot.generatedAffixValues;
-            string generatedName = slot.generatedName;
-            ItemRarity generatedRarity = slot.generatedRarity;
-
-            var equippedData = new InventorySlotData
-            {
-                itemId = slot.itemId,
-                quantity = 1,
-                currentDurability = slot.currentDurability,
-                generatedAffixIds = generatedAffixIds,
-                generatedAffixValues = generatedAffixValues,
-                generatedName = generatedName,
-                generatedRarity = generatedRarity,
-            };
-
-            _equipped[item.EquipSlot] = equippedData;
+            // Take the new item out of the inventory FIRST, then return whatever was equipped in
+            // that slot. This makes a swap work even with a full inventory (the old item lands in
+            // the slot the new one just freed). It used to be the other way round, ignoring
+            // UnequipSlot's result: with no free slot the old item was never returned to the
+            // inventory and was then silently overwritten in _equipped below — destroyed.
             RemoveFromSlot(slotIndex, 1);
 
-            if (_buffController != null && item.EquipStatModifiers.Length > 0)
+            if (_equipped.ContainsKey(item.EquipSlot) && !UnequipSlot(item.EquipSlot))
             {
-                _buffController.ApplyEffects(item.EquipStatModifiers.Select(WithPermanentDuration), GetEquipSourceKey(item.EquipSlot));
+                // Couldn't make room for the previously equipped item — put the new one back
+                // exactly as it was (including its generated data) and abort.
+                InventorySlotData source = _slots[slotIndex];
+
+                if (source.IsEmpty)
+                {
+                    _slots[slotIndex] = equippedData;
+                }
+                else
+                {
+                    source.quantity += 1;
+                }
+
+                EventBus.Publish(new InventoryChangedEvent());
+                return false;
+            }
+
+            _equipped[item.EquipSlot] = equippedData;
+            ApplyEquipEffects(item, equippedData, item.EquipSlot);
+
+            EventBus.Publish(new InventoryChangedEvent());
+            return true;
+        }
+
+        /// <summary>
+        /// Applies an equipped item's base <see cref="ItemDefinition.EquipStatModifiers"/> plus its
+        /// procedurally-rolled affixes as permanent buffs under the slot's source key. Shared by
+        /// <see cref="EquipFromSlot"/> and <see cref="RestoreState"/> — the latter used to re-apply
+        /// only the base modifiers, so a generated item equipped across a save/load lost its
+        /// affix bonuses even when its data survived.
+        /// </summary>
+        private void ApplyEquipEffects(ItemDefinition item, InventorySlotData equippedData, EquipmentSlot equipSlot)
+        {
+            if (_buffController == null || item == null)
+            {
+                return;
+            }
+
+            if (item.EquipStatModifiers.Length > 0)
+            {
+                _buffController.ApplyEffects(item.EquipStatModifiers.Select(WithPermanentDuration), GetEquipSourceKey(equipSlot));
             }
 
             // Procedurally-rolled affixes (ProceduralItemGenerator/GeneratedItemInstance) were
@@ -503,7 +559,10 @@ namespace Rapadura.Gameplay.Inventory
             // Legendary item's rolled affixes only ever showed up in its generated display name
             // ("Espada Flamejante da Fúria"), with zero actual gameplay effect once equipped, same
             // stats as a plain Common item. Mirrors the EquipStatModifiers path above exactly.
-            if (_buffController != null && generatedAffixIds != null && generatedAffixIds.Length > 0)
+            string[] generatedAffixIds = equippedData.generatedAffixIds;
+            float[] generatedAffixValues = equippedData.generatedAffixValues ?? Array.Empty<float>();
+
+            if (generatedAffixIds != null && generatedAffixIds.Length > 0)
             {
                 // Grouped by (stat, application) and summed before calling ApplyEffects: each call
                 // to BuffController.ApplyEffect removes any existing effect for the same
@@ -534,15 +593,14 @@ namespace Rapadura.Gameplay.Inventory
                     value = kvp.Value,
                 });
 
-                _buffController.ApplyEffects(generatedModifiers.Select(WithPermanentDuration), GetEquipSourceKey(item.EquipSlot));
+                _buffController.ApplyEffects(generatedModifiers.Select(WithPermanentDuration), GetEquipSourceKey(equipSlot));
             }
-
-            EventBus.Publish(new InventoryChangedEvent());
-            return true;
         }
 
         public bool UnequipSlot(EquipmentSlot equipSlot)
         {
+            EnsureSlotsInitialized();
+
             if (!_equipped.TryGetValue(equipSlot, out InventorySlotData equippedData))
             {
                 return false;
@@ -550,20 +608,49 @@ namespace Rapadura.Gameplay.Inventory
 
             ItemDefinition item = ItemDatabase.GetById(equippedData.itemId);
 
-            if (item != null)
+            if (item != null && !ReturnToInventory(item, equippedData))
             {
-                int leftover = AddItem(item, 1, equippedData.currentDurability);
-
-                if (leftover > 0)
-                {
-                    // No inventory space to receive the unequipped item back — abort unequip.
-                    return false;
-                }
+                // No inventory space to receive the unequipped item back — abort unequip.
+                return false;
             }
 
             _buffController?.RemoveEffectsBySource(GetEquipSourceKey(equipSlot));
             _equipped.Remove(equipSlot);
 
+            EventBus.Publish(new InventoryChangedEvent());
+            return true;
+        }
+
+        /// <summary>
+        /// Puts a single previously-existing item (e.g. one being unequipped) back into the
+        /// inventory without losing anything about it. Plain items go through
+        /// <see cref="AddItem(ItemDefinition,int,float?)"/> as before (may stack, keeps
+        /// durability). Generated items used to go through that same AddItem too, which only
+        /// knows the base ItemDefinition — so unequipping a Rare/Epic/Legendary roll turned it
+        /// into a plain base item (affixes, generated name and rarity gone). They now go, as a
+        /// deep copy, into an empty slot of their own (never stacked), subject to the same weight
+        /// limit AddItem enforces.
+        /// </summary>
+        private bool ReturnToInventory(ItemDefinition item, InventorySlotData data)
+        {
+            if (!data.HasGeneratedData)
+            {
+                return AddItem(item, 1, data.currentDurability) == 0;
+            }
+
+            if (!HasWeightCapacityFor(item, 1))
+            {
+                return false;
+            }
+
+            int emptySlotIndex = Array.FindIndex(_slots, s => s.IsEmpty);
+
+            if (emptySlotIndex < 0)
+            {
+                return false;
+            }
+
+            _slots[emptySlotIndex] = data.CloneWithQuantity(1);
             EventBus.Publish(new InventoryChangedEvent());
             return true;
         }
@@ -646,7 +733,11 @@ namespace Rapadura.Gameplay.Inventory
             {
                 slot = pair.Key,
                 itemId = pair.Value.itemId,
-                durability = pair.Value.currentDurability
+                durability = pair.Value.currentDurability,
+                generatedAffixIds = pair.Value.generatedAffixIds,
+                generatedAffixValues = pair.Value.generatedAffixValues,
+                generatedName = pair.Value.generatedName,
+                generatedRarity = pair.Value.generatedRarity
             }).ToArray();
 
             return new InventorySaveState
@@ -675,19 +766,21 @@ namespace Rapadura.Gameplay.Inventory
 
             foreach (InventorySaveState.EquippedEntry entry in saveState.equipped)
             {
-                _equipped[entry.slot] = new InventorySlotData
+                // Old saves (before EquippedEntry carried generated data) deserialize the generated
+                // fields as null/empty/Common, which InventorySlotData treats as a plain item.
+                var equippedData = new InventorySlotData
                 {
                     itemId = entry.itemId,
                     quantity = 1,
-                    currentDurability = entry.durability
+                    currentDurability = entry.durability,
+                    generatedAffixIds = entry.generatedAffixIds,
+                    generatedAffixValues = entry.generatedAffixValues,
+                    generatedName = entry.generatedName,
+                    generatedRarity = entry.generatedRarity
                 };
+                _equipped[entry.slot] = equippedData;
 
-                ItemDefinition item = ItemDatabase.GetById(entry.itemId);
-
-                if (item != null && _buffController != null && item.EquipStatModifiers.Length > 0)
-                {
-                    _buffController.ApplyEffects(item.EquipStatModifiers.Select(WithPermanentDuration), GetEquipSourceKey(entry.slot));
-                }
+                ApplyEquipEffects(ItemDatabase.GetById(entry.itemId), equippedData, entry.slot);
             }
 
             EventBus.Publish(new InventoryChangedEvent());

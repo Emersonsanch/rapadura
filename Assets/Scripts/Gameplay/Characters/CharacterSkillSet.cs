@@ -83,6 +83,32 @@ namespace Rapadura.Gameplay.Characters
             return learnedCount;
         }
 
+        /// <summary>
+        /// Finds a character signature skill by <see cref="SkillDefinition.SkillId"/> across every
+        /// hero's set (null if none matches). Lets <see cref="SkillManager.RestoreState"/> resolve
+        /// character skills from a save even when no hero has been applied/registered yet.
+        /// </summary>
+        public static SkillDefinition FindSkill(string skillId)
+        {
+            if (string.IsNullOrEmpty(skillId))
+            {
+                return null;
+            }
+
+            foreach (CharacterId id in (CharacterId[])Enum.GetValues(typeof(CharacterId)))
+            {
+                foreach (SkillDefinition skill in GetSkills(id))
+                {
+                    if (skill != null && skill.SkillId == skillId)
+                    {
+                        return skill;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         private static int FindFreeSlot(SkillManager skillManager)
         {
             IReadOnlyList<SkillInstance> slots = skillManager.EquippedSlots;

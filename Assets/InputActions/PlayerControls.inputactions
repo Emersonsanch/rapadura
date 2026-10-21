@@ -366,7 +366,7 @@
                 },
                 {
                     "name": "",
-                    "id": "6f2b6c6a-2b2e-4b8a-8b3e-1a1a1a1a1a31",
+                    "id": "6f2b6c6a-2b2e-4b8a-8b3e-1a1a1a1a1a36",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
@@ -377,7 +377,7 @@
                 },
                 {
                     "name": "",
-                    "id": "6f2b6c6a-2b2e-4b8a-8b3e-1a1a1a1a1a32",
+                    "id": "6f2b6c6a-2b2e-4b8a-8b3e-1a1a1a1a1a37",
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",

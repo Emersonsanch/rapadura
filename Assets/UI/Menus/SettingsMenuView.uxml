@@ -13,12 +13,14 @@
                 <ui:Button name="tab-audio-button" text="Áudio" focusable="true" class="settings-tab-button" />
                 <ui:Button name="tab-controls-button" text="Controles" focusable="true" class="settings-tab-button" />
                 <ui:Button name="tab-language-button" text="Idioma" focusable="true" class="settings-tab-button" />
+                <ui:Button name="tab-accessibility-button" text="Acessibilidade" focusable="true" class="settings-tab-button" />
             </ui:VisualElement>
 
             <ui:VisualElement name="settings-content" class="settings-content">
                 <ui:VisualElement name="panel-graphics" class="settings-panel">
                     <ui:DropdownField name="quality-dropdown" label="Qualidade" focusable="true" class="settings-field" />
                     <ui:Toggle name="fullscreen-toggle" label="Tela Cheia" focusable="true" class="settings-field" />
+                    <ui:Toggle name="high-fps-combat-toggle" label="60 FPS em combate" focusable="true" class="settings-field" />
                 </ui:VisualElement>
 
                 <ui:VisualElement name="panel-audio" class="settings-panel">
@@ -29,12 +31,31 @@
                 </ui:VisualElement>
 
                 <ui:VisualElement name="panel-controls" class="settings-panel">
-                    <ui:Label text="Remapeamento de teclas/gamepad ainda não implementado." class="settings-placeholder-label" />
-                    <ui:Label text="TODO: usar InputActionRebindingExtensions sobre PlayerControls.inputactions em runtime (Fase 6 / Acessibilidade)." class="settings-placeholder-note" />
+                    <ui:VisualElement name="controls-header-row" class="settings-rebind-row settings-rebind-row--header">
+                        <ui:Label name="controls-header-action" text="Ação" class="settings-rebind-action-label" />
+                        <ui:Label name="controls-header-keyboard" text="Teclado" class="settings-rebind-column-label" />
+                        <ui:Label name="controls-header-gamepad" text="Controle" class="settings-rebind-column-label" />
+                        <ui:VisualElement class="settings-rebind-reset-spacer" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:ScrollView name="controls-rows" mode="Vertical" class="settings-rebind-list" />
+                    <ui:Label name="controls-status-label" text="" class="settings-rebind-status" />
+                    <ui:VisualElement class="settings-rebind-footer">
+                        <ui:Button name="controls-cancel-button" text="Cancelar" focusable="true" class="settings-rebind-footer-button" />
+                        <ui:VisualElement class="settings-header-spacer" picking-mode="Ignore" />
+                        <ui:Button name="controls-reset-all-button" text="Restaurar tudo" focusable="true" class="settings-rebind-footer-button" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
 
                 <ui:VisualElement name="panel-language" class="settings-panel">
                     <ui:DropdownField name="language-dropdown" label="Idioma" focusable="true" class="settings-field" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="panel-accessibility" class="settings-panel">
+                    <ui:Slider name="font-scale-slider" label="Tamanho da Fonte" low-value="0.75" high-value="2" show-input-field="false" focusable="true" class="settings-field" />
+                    <ui:Toggle name="high-contrast-toggle" label="Alto Contraste" focusable="true" class="settings-field" />
+                    <ui:DropdownField name="colorblind-dropdown" label="Modo Daltonismo" focusable="true" class="settings-field" />
+                    <ui:Slider name="screen-shake-slider" label="Tremor de Tela" low-value="0" high-value="1" focusable="true" class="settings-field" />
+                    <ui:Toggle name="reduce-flash-toggle" label="Reduzir Flashes" focusable="true" class="settings-field" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

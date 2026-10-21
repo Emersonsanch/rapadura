@@ -10,6 +10,7 @@
                 <ui:Label name="detail-class-role" text="" class="character-select__detail-role" focusable="true" />
                 <ui:Label name="detail-lore" text="Selecione um personagem para ver a história." class="character-select__detail-lore" focusable="true" />
                 <ui:Button name="confirm-button" text="Confirmar" class="character-select__confirm" focusable="true" />
+                <ui:Button name="continue-saved-button" text="Continuar" class="character-select__confirm character-select__continue" focusable="true" style="display: none;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

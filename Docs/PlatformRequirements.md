@@ -60,6 +60,35 @@ Recomendado em ambas as plataformas: dobrar RAM (16 GB) e usar SSD para tempos d
 
 ---
 
+## Orçamento de performance
+
+> Metas de engenharia para o protótipo atual (URP, Forward, câmera isométrica fixa). Ainda não são medições — validar com Unity Profiler/Frame Debugger e Android GPU Inspector/Xcode Instruments no aparelho mínimo e ajustar após a Fase 10. A política de frame rate é aplicada em runtime por `FrameRateManager` (`Assets/Scripts/Core/Performance/`), e o roteiro de verificação está em `Docs/QAChecklist.md` (seção 11).
+
+| Métrica | Android/iOS mínimo | Android/iOS recomendado | PC mínimo |
+|---|---|---|---|
+| FPS alvo em combate | 30 estável (opção "60 FPS em combate" desligada) | 60 (padrão) | Taxa do monitor (vSync) |
+| FPS em menus / mapa mundi / pausa | 30 (pausa renderiza a 15) | 30 (pausa renderiza a 15) | Taxa do monitor (vSync) |
+| Frame time em combate (CPU main + render) | ≤ 33 ms | ≤ 16,6 ms | ≤ 16,6 ms |
+| Draw calls (SetPass/batches) por frame | ≤ 150 | ≤ 250 | ≤ 1000 |
+| Triângulos visíveis por frame | ≤ 150 k | ≤ 300 k | ≤ 1,5 M |
+| Inimigos ativos simultâneos | ≤ 8 | ≤ 15 | ≤ 30 |
+| Memória total do app (RSS) | ≤ 1,0 GB (aparelho de 3 GB) | ≤ 1,5 GB | ≤ 3 GB |
+| Memória de texturas | ≤ 300 MB | ≤ 500 MB | ≤ 1,5 GB |
+| GC alloc por frame em gameplay | 0 B ideal, ≤ 1 KB | idem | idem |
+| Tamanho do download | APK/AAB ≤ 150 MB (limite base do Play) | — | ≤ 2 GB |
+| Load mapa ⇄ combate | ≤ 5 s | ≤ 3 s | ≤ 3 s |
+| Temperatura / bateria (30 min de combate) | sem throttling severo, ≤ ~12% de bateria | idem | — |
+
+Diretrizes que sustentam o orçamento:
+- **Modelos:** heróis/inimigos Meshy ≤ ~10 k triângulos no LOD0 em mobile; árvores já usam LOD (`MeshDecimator`, LOD0 18 k / LOD1 3 k vértices) — nada de malha Meshy crua (300–800 k vértices) em cena.
+- **Batching:** SRP Batcher ligado; GPU instancing em vegetação/rochas repetidas; materiais compartilhados (evitar `.material` em runtime, que clona).
+- **Iluminação:** 1 luz direcional com sombra, luzes adicionais por vértice ou desligadas no tier mínimo; sem pós-processamento caro (bloom leve no máximo) no mínimo.
+- **Texturas:** ASTC 6x6 (Android/iOS), máx. 1024² para personagens/ambiente no mobile, mipmaps ligados.
+- **Código:** nada de `Find*`/`GetComponent`/LINQ/alocação de string em `Update`; cachear em `Awake`/`Start`, pooling (`GenericObjectPool`, `EnemyPool`) para inimigos/projéteis/VFX.
+- **UI Toolkit:** atualizar labels só quando o valor muda; evitar reconstruir hierarquias por frame.
+
+---
+
 ## Público-alvo
 
 - **Faixa etária primária:** 13–30 anos, jogadores de RPG de ação/fantasia (referência de gênero: hack-and-slash com progressão de personagem, multi-personagem jogável).

@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Menus/CreditsView.uss" />
+    <ui:VisualElement name="credits-root" class="credits-root">
+        <ui:VisualElement name="credits-panel" class="credits-panel">
+            <ui:Label text="Créditos" class="credits-title" />
+            <ui:Label name="credits-version" text="Rapadura" class="credits-version" />
+            <ui:ScrollView name="credits-scroll" mode="Vertical" class="credits-scroll">
+                <!-- Filled at runtime by CreditsController from CreditsContent.Sections. -->
+                <ui:VisualElement name="credits-content" class="credits-content" />
+            </ui:ScrollView>
+            <ui:Button name="credits-back-button" text="Voltar" focusable="true" class="credits-back-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
