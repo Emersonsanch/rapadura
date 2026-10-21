@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Rapadura.Core.Events;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
+using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -42,6 +43,7 @@ namespace Rapadura.UI.SkillTree
         private Label _detailStatsLabel;
         private Button _detailActionButton;
 
+        private TooltipController _tooltip;
         private SkillTreeDefinition _activeTree;
         private SkillTreeNodeData _selectedNode;
         private readonly Dictionary<string, VisualElement> _nodeElementsBySkillId = new Dictionary<string, VisualElement>();
@@ -53,6 +55,8 @@ namespace Rapadura.UI.SkillTree
 
         private void OnEnable()
         {
+            // Hover (mouse) / long-press (touch) / focus tooltips on skill nodes — see TooltipTrigger.
+            _tooltip = TooltipController.GetOrAdd(gameObject);
             BindElements();
             RegisterCallbacks();
 
@@ -132,6 +136,7 @@ namespace Rapadura.UI.SkillTree
 
         public void Hide()
         {
+            _tooltip?.Hide();
             _root.style.display = DisplayStyle.None;
         }
 
@@ -179,7 +184,14 @@ namespace Rapadura.UI.SkillTree
 
         private void BuildTree()
         {
+            _tooltip?.Hide();
             _nodeLayer.Clear();
+
+            if (_tooltip == null)
+            {
+                // ShowTree() may be called by another script before this component's OnEnable.
+                _tooltip = TooltipController.GetOrAdd(gameObject);
+            }
             _nodeElementsBySkillId.Clear();
 
             if (_activeTree == null)
@@ -221,8 +233,16 @@ namespace Rapadura.UI.SkillTree
             button.Add(levelLabel);
 
             button.clicked += () => SelectNode(node);
+            TooltipTrigger.Bind(button, _tooltip, () => BuildNodeTooltip(node));
 
             return button;
+        }
+
+        private TooltipContent BuildNodeTooltip(SkillTreeNodeData node)
+        {
+            SkillInstance instance = _skillManager != null ? _skillManager.GetLearnedSkill(node.skill.SkillId) : null;
+            int level = instance != null ? instance.Level : 0;
+            return TooltipContentBuilder.ForSkill(node.skill, level, TooltipController.GetLocalizer());
         }
 
         private void SelectNode(SkillTreeNodeData node)

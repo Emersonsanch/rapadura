@@ -5,6 +5,7 @@ using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Shop;
+using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -34,6 +35,7 @@ namespace Rapadura.UI.Shop
         private Button _closeButton;
 
         private ShopManager _shopManager;
+        private TooltipController _tooltip;
         private readonly List<VisualElement> _spawnedBuyRows = new List<VisualElement>();
         private readonly List<VisualElement> _spawnedSellRows = new List<VisualElement>();
 
@@ -44,6 +46,8 @@ namespace Rapadura.UI.Shop
 
         private void OnEnable()
         {
+            // Hover (mouse) / long-press (touch) / focus tooltips on buy & sell rows — see TooltipTrigger.
+            _tooltip = TooltipController.GetOrAdd(gameObject);
             BindElements();
             ResolveShopManager();
             RegisterCallbacks();
@@ -164,6 +168,9 @@ namespace Rapadura.UI.Shop
                 return;
             }
 
+            // Rows are rebuilt below; drop any tooltip anchored to an old row.
+            _tooltip?.Hide();
+
             ShopDefinition shop = _shopManager.ActiveShop;
             InventoryManager buyer = _shopManager.BuyerInventory;
 
@@ -209,6 +216,11 @@ namespace Rapadura.UI.Shop
                 row.AddToClassList("shop-row-button");
                 row.SetEnabled(entry.HasStockFor(1) && buyer.GetTotalCount(shop.CurrencyItemId) >= entry.Price);
 
+                ItemDefinition tooltipItem = entry.Item;
+                int tooltipPrice = entry.Price;
+                TooltipTrigger.Bind(row, _tooltip, () => TooltipContentBuilder.ForItem(
+                    tooltipItem, null, TooltipController.GetLocalizer(), buyPrice: tooltipPrice));
+
                 _buyListContainer.Add(row);
                 _spawnedBuyRows.Add(row);
             }
@@ -248,6 +260,10 @@ namespace Rapadura.UI.Shop
                 var row = new Button(() => OnSellClicked(slotIndex)) { text = label };
                 row.AddToClassList("shop-row-button");
 
+                InventorySlotData tooltipSlot = slot;
+                TooltipTrigger.Bind(row, _tooltip, () => TooltipContentBuilder.ForItem(
+                    item, tooltipSlot, TooltipController.GetLocalizer(), sellPrice: payout));
+
                 _sellListContainer.Add(row);
                 _spawnedSellRows.Add(row);
             }
@@ -280,6 +296,8 @@ namespace Rapadura.UI.Shop
 
         private void ClearRows()
         {
+            // Rows are about to be destroyed — a tooltip anchored to one of them would be left dangling.
+            _tooltip?.Hide();
             ClearRows(_buyListContainer, _spawnedBuyRows);
             ClearRows(_sellListContainer, _spawnedSellRows);
         }

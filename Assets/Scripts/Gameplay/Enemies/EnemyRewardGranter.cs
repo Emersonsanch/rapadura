@@ -44,7 +44,8 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
-            killerStats.AddExperience(enemy.Definition.ExperienceReward);
+            // Bosses may multiply this (EnemyDefinition.BossExperienceMultiplier) — see BossBonusRules.
+            killerStats.AddExperience(BossBonusRules.GetExperienceReward(enemy.Definition));
         }
     }
 }

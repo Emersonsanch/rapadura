@@ -1,6 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="/Assets/UI/Common/TooltipView.uss" />
     <ui:VisualElement name="tooltip-root" class="tooltip-root" picking-mode="Ignore">
+        <ui:Label name="tooltip-title" text="" class="tooltip-title" picking-mode="Ignore" />
+        <ui:Label name="tooltip-subtitle" text="" class="tooltip-subtitle" picking-mode="Ignore" />
+        <ui:Label name="tooltip-stats" text="" class="tooltip-stats" picking-mode="Ignore" />
+        <ui:Label name="tooltip-description" text="" class="tooltip-description" picking-mode="Ignore" />
         <ui:Label name="tooltip-label" text="" class="tooltip-label" picking-mode="Ignore" />
     </ui:VisualElement>
 </ui:UXML>

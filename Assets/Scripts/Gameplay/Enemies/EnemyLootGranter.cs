@@ -1,6 +1,8 @@
 using Rapadura.Core.Events;
+using Rapadura.Core.Logging;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Inventory;
+using Rapadura.Gameplay.Items.Procedural;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Enemies
@@ -12,11 +14,11 @@ namespace Rapadura.Gameplay.Enemies
     /// <see cref="EnemyRewardGranter"/>'s event wiring — both listen to the same
     /// <see cref="CombatTargetDiedEvent"/> already published by the real combat pipeline.
     ///
-    /// Deliberately does not roll procedural affixes (<see cref="Rapadura.Gameplay.Items.Procedural.ProceduralItemGenerator"/>):
-    /// <see cref="InventoryManager.AddItem"/> only stores a base <c>ItemDefinition</c> + quantity/durability,
-    /// with no slot for a rolled affix list, so an affixed drop would have nowhere to persist its
-    /// affixes today. Base-item loot (potions, materials, gold) already gives real drops without
-    /// needing that larger inventory-format change.
+    /// The base loot never rolls procedural affixes. Bosses add on top of it (see
+    /// <see cref="BossBonusRules"/>): their base loot is guaranteed, and an optional
+    /// <see cref="EnemyDefinition.BossBonusDropItem"/> is rolled through
+    /// <see cref="ProceduralItemGenerator"/> and stored with its affixes via
+    /// <see cref="InventoryManager.AddGeneratedItem"/>.
     /// </summary>
     public class EnemyLootGranter : MonoBehaviour
     {
@@ -38,12 +40,7 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             EnemyController enemy = evt.Target.GetComponent<EnemyController>();
-            if (enemy == null || enemy.Definition == null || enemy.Definition.LootItem == null)
-            {
-                return;
-            }
-
-            if (Random.value > enemy.Definition.LootDropChance)
+            if (enemy == null || enemy.Definition == null)
             {
                 return;
             }
@@ -54,13 +51,22 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
-            int quantity = Random.Range(enemy.Definition.LootQuantityMin, enemy.Definition.LootQuantityMax + 1);
-            if (quantity <= 0)
+            EnemyDefinition definition = enemy.Definition;
+
+            if (BossBonusRules.ShouldDropLoot(definition, Random.value))
             {
-                return;
+                int quantity = Random.Range(definition.LootQuantityMin, definition.LootQuantityMax + 1);
+                if (quantity > 0)
+                {
+                    inventory.AddItem(definition.LootItem, quantity);
+                }
             }
 
-            inventory.AddItem(enemy.Definition.LootItem, quantity);
+            GeneratedItemInstance bonusDrop = BossBonusRules.RollBonusDrop(definition);
+            if (bonusDrop != null && !inventory.AddGeneratedItem(bonusDrop))
+            {
+                GameLogger.Warning("Enemy", $"Boss bonus drop '{bonusDrop.GeneratedName}' lost: killer inventory has no empty slot.");
+            }
         }
     }
 }

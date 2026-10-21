@@ -267,6 +267,7 @@ namespace Rapadura.Gameplay.Inventory
                 slot.generatedAffixIds = instance.AffixIds;
                 slot.generatedAffixValues = instance.AffixValues;
                 slot.generatedName = instance.GeneratedName;
+                slot.generatedRarity = instance.Rarity;
 
                 EventBus.Publish(new InventoryChangedEvent());
                 return true;
@@ -475,6 +476,7 @@ namespace Rapadura.Gameplay.Inventory
             string[] generatedAffixIds = slot.generatedAffixIds;
             float[] generatedAffixValues = slot.generatedAffixValues;
             string generatedName = slot.generatedName;
+            ItemRarity generatedRarity = slot.generatedRarity;
 
             var equippedData = new InventorySlotData
             {
@@ -484,6 +486,7 @@ namespace Rapadura.Gameplay.Inventory
                 generatedAffixIds = generatedAffixIds,
                 generatedAffixValues = generatedAffixValues,
                 generatedName = generatedName,
+                generatedRarity = generatedRarity,
             };
 
             _equipped[item.EquipSlot] = equippedData;

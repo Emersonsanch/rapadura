@@ -32,6 +32,17 @@ namespace Rapadura.Gameplay.Enemies
         [SerializeField] private int _lootQuantityMin = 1;
         [SerializeField] private int _lootQuantityMax = 1;
 
+        [Header("Boss Bonuses (only used when Is Boss is set — see BossBonusRules)")]
+        [Tooltip("Boss always drops its Loot Item, ignoring Loot Drop Chance.")]
+        [SerializeField] private bool _bossGuaranteedLoot = true;
+        [Tooltip("Optional equippable base item rolled through ProceduralItemGenerator (affixes) and given to the killer on top of the normal loot. Leave null for none.")]
+        [SerializeField] private ItemDefinition _bossBonusDropItem;
+        [Tooltip("Rarity the bonus drop is rolled at (drives how many affixes it gets).")]
+        [SerializeField] private ItemRarity _bossBonusDropRarity = ItemRarity.Rare;
+        [Tooltip("Multiplier applied to Experience Reward for bosses. 1 = no extra XP. Values below 1 are treated as 1.")]
+        [Min(1f)]
+        [SerializeField] private float _bossExperienceMultiplier = 1f;
+
         [Header("Movement")]
         [SerializeField] private float _patrolSpeed = 2f;
         [SerializeField] private float _chaseSpeed = 4f;
@@ -63,6 +74,11 @@ namespace Rapadura.Gameplay.Enemies
         public float LootDropChance => _lootDropChance;
         public int LootQuantityMin => _lootQuantityMin;
         public int LootQuantityMax => _lootQuantityMax;
+
+        public bool BossGuaranteedLoot => _bossGuaranteedLoot;
+        public ItemDefinition BossBonusDropItem => _bossBonusDropItem;
+        public ItemRarity BossBonusDropRarity => _bossBonusDropRarity;
+        public float BossExperienceMultiplier => _bossExperienceMultiplier;
 
         public float PatrolSpeed => _patrolSpeed;
         public float ChaseSpeed => _chaseSpeed;
