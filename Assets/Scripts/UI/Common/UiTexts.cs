@@ -30,6 +30,10 @@ namespace Rapadura.UI.Common
         public const string HudInventory = "ui.hud.inventory";
         public const string HudSkills = "ui.hud.skills";
         public const string HudMenu = "ui.hud.menu";
+        // Touch-only HUD controls (shown only with a touchscreen, see HudController).
+        public const string HudAttack = "ui.hud.attack";
+        public const string HudCameraLeft = "ui.hud.camera_left";
+        public const string HudCameraRight = "ui.hud.camera_right";
 
         // -- Shop --
         public const string ShopGold = "ui.shop.gold";
@@ -127,6 +131,9 @@ namespace Rapadura.UI.Common
             new LocalizationEntry(HudInventory, "Backpack", "Mochila"),
             new LocalizationEntry(HudSkills, "Skills", "Skills"),
             new LocalizationEntry(HudMenu, "Menu", "Menu"),
+            new LocalizationEntry(HudAttack, "Attack", "Atacar"),
+            new LocalizationEntry(HudCameraLeft, "‹ Turn", "‹ Girar"),
+            new LocalizationEntry(HudCameraRight, "Turn ›", "Girar ›"),
 
             new LocalizationEntry(ShopGold, "Gold:", "Ouro:"),
             new LocalizationEntry(ShopBuy, "Buy", "Comprar"),

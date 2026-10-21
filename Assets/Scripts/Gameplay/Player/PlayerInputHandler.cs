@@ -7,9 +7,13 @@ namespace Rapadura.Gameplay.Player
     /// <summary>
     /// Thin adapter over the New Input System's <see cref="PlayerInput"/> component.
     /// Exposes plain, per-frame input state (no events) so gameplay code can simply read
-    /// values instead of wiring callbacks. Works uniformly across keyboard/mouse, gamepad,
-    /// and touch (virtual joystick via OnScreenStick + on-screen buttons), since all three
-    /// control schemes are bound to the same abstract actions in PlayerControls.inputactions.
+    /// values instead of wiring callbacks. Keyboard/mouse and gamepad come from the abstract actions
+    /// in PlayerControls.inputactions; touch is tap/hold-to-move (MoveClick on
+    /// &lt;Touchscreen&gt;/primaryTouch/press) plus the UI Toolkit HUD (HudController), which writes
+    /// the Touch* properties below — an optional virtual joystick (<see cref="TouchMoveInput"/>), and
+    /// Run/Jump/Atacar buttons. Deliberately no uGUI OnScreenStick/OnScreenButton: those feed a
+    /// virtual Gamepad, which makes PlayerInput switch to the Gamepad scheme and unpair the
+    /// Touchscreen (tap-to-move and pinch then stop working).
     /// </summary>
     [RequireComponent(typeof(PlayerInput))]
     public class PlayerInputHandler : MonoBehaviour
@@ -30,7 +34,15 @@ namespace Rapadura.Gameplay.Player
         public const int SkillActionCount = 5;
         private readonly InputAction[] _skillActions = new InputAction[SkillActionCount];
 
+        /// <summary>Gameplay move vector: the Move action combined with <see cref="TouchMoveInput"/>, magnitude clamped to 1.</summary>
         public Vector2 MoveInput { get; private set; }
+
+        /// <summary>
+        /// Written by the HUD's virtual joystick (HudController), already dead-zoned and clamped to
+        /// the unit circle; zero when released. Combined into <see cref="MoveInput"/> every frame, the
+        /// same way <see cref="TouchRunHeld"/> is OR'd into <see cref="IsRunHeld"/>.
+        /// </summary>
+        public Vector2 TouchMoveInput { get; set; }
         public Vector2 LookInput { get; private set; }
         public bool IsRunHeld { get; private set; }
 
@@ -52,10 +64,28 @@ namespace Rapadura.Gameplay.Player
         public bool TouchJumpRequested { get; set; }
         public bool InteractPressedThisFrame { get; private set; }
         public bool AttackPressedThisFrame { get; private set; }
+
+        /// <summary>
+        /// Set by the HUD's "Atacar" button press (one-shot, like <see cref="TouchJumpRequested"/>):
+        /// consumed the next Update into <see cref="AttackPressedThisFrame"/>. Only the pause gate
+        /// applies to it — the "pointer over UI" gate exists to stop UI clicks from swinging, and
+        /// this press IS a UI press.
+        /// </summary>
+        public bool TouchAttackRequested { get; set; }
         /// <summary>True the frame the click/tap-to-move button was pressed (MU Online-style point-and-click).</summary>
         public bool MoveClickPressedThisFrame { get; private set; }
         /// <summary>Current pointer (mouse/touch) position in screen space, for raycasting the click-to-move target.</summary>
         public Vector2 PointerPosition { get; private set; }
+
+        /// <summary>
+        /// True while the pointer that produced an accepted <see cref="MoveClickPressedThisFrame"/>
+        /// (on the ground, not UI) is still held — <see cref="PlayerClickToMove"/> re-aims the walk at
+        /// the pointer while this is set (MU-style hold-to-walk). Ends on release, pause, or a pinch.
+        /// </summary>
+        public bool IsMoveClickHeld { get; private set; }
+
+        /// <summary>True the frame a second world finger turned the current hold/tap into a camera pinch.</summary>
+        public bool MoveHoldCancelledByPinchThisFrame { get; private set; }
 
         private void Awake()
         {
@@ -126,9 +156,50 @@ namespace Rapadura.Gameplay.Player
             }
         }
 
+        /// <summary>
+        /// <see cref="GatePresses(ref bool, ref bool, ref bool, ref bool, bool, bool)"/> plus the touch
+        /// rules (EditMode-testable): the HUD Atacar press survives the pointer-over-UI gate (it is a UI
+        /// press by design) but not a pause, and MoveClick is dropped while a camera pinch is latched
+        /// (two world fingers, until every finger lifts — see <c>TouchGestureTracker</c>).
+        /// </summary>
+        public static void GatePresses(ref bool jump, ref bool interact, ref bool attack, ref bool moveClick, bool touchAttack, bool paused, bool pointerOverUi, bool pinchLatched)
+        {
+            GatePresses(ref jump, ref interact, ref attack, ref moveClick, paused, pointerOverUi);
+
+            if (touchAttack && !paused)
+            {
+                attack = true;
+            }
+
+            if (pinchLatched)
+            {
+                moveClick = false;
+            }
+        }
+
+        /// <summary>
+        /// Pure hold-to-walk state step (EditMode-testable): an accepted press starts a hold; it lasts
+        /// while the button/finger stays down, and ends on release, pause or pinch.
+        /// </summary>
+        public static bool NextMoveHoldState(bool wasHeld, bool acceptedPressThisFrame, bool stillPressed, bool paused, bool pinchLatched)
+        {
+            if (paused || pinchLatched || !stillPressed)
+            {
+                return false;
+            }
+
+            return acceptedPressThisFrame || wasHeld;
+        }
+
+        /// <summary>Pure combine of the Move action with the HUD joystick: summed, magnitude clamped to 1.</summary>
+        public static Vector2 CombineMove(Vector2 actionMove, Vector2 touchMove)
+        {
+            return Vector2.ClampMagnitude(actionMove + touchMove, 1f);
+        }
+
         private void Update()
         {
-            MoveInput = _moveAction.ReadValue<Vector2>();
+            MoveInput = CombineMove(_moveAction.ReadValue<Vector2>(), TouchMoveInput);
             LookInput = _lookAction.ReadValue<Vector2>();
             IsRunHeld = _runAction.IsPressed() || TouchRunHeld;
             IsCrouchHeld = _crouchAction.IsPressed();
@@ -138,11 +209,20 @@ namespace Rapadura.Gameplay.Player
             TouchJumpRequested = false;
             bool interact = _interactAction.WasPressedThisFrame();
             bool attack = _attackAction.WasPressedThisFrame();
+            bool touchAttack = TouchAttackRequested;
+            TouchAttackRequested = false;
             bool moveClick = _moveClickAction.WasPressedThisFrame();
             bool paused = IsGameplayInputBlocked;
             // Picking UI panels isn't free — only ask when a pointer press actually happened.
             bool pointerOverUi = !paused && (attack || moveClick) && UiPointerQuery.IsPointerOverUi(PointerPosition);
-            GatePresses(ref jump, ref interact, ref attack, ref moveClick, paused, pointerOverUi);
+
+            TouchGestureTracker.Refresh();
+            bool pinchLatched = TouchGestureTracker.IsPinchLatched;
+            GatePresses(ref jump, ref interact, ref attack, ref moveClick, touchAttack, paused, pointerOverUi, pinchLatched);
+
+            bool wasHeld = IsMoveClickHeld;
+            IsMoveClickHeld = NextMoveHoldState(wasHeld, moveClick, _moveClickAction.IsPressed(), paused, pinchLatched);
+            MoveHoldCancelledByPinchThisFrame = wasHeld && pinchLatched;
 
             JumpPressedThisFrame = jump;
             InteractPressedThisFrame = interact;

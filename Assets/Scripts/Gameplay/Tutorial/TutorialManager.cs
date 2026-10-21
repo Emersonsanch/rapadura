@@ -64,6 +64,9 @@ namespace Rapadura.Gameplay.Tutorial
         private bool _subscribed;
         private bool _profileLoaded;
         private TutorialStepDefinition _lastNotifiedHint;
+        private float _nextCraftableCheck = float.NegativeInfinity;
+        // Player's inventory for the default probe, cached until its scene unloads (Unity-null then).
+        private InventoryManager _cachedInventory;
 
         /// <summary>Where the tutorial profile lives right now (honours <see cref="SaveManager.SaveRootOverride"/>).</summary>
         public static string ProfileFilePath => Path.Combine(SaveManager.SaveFolderPath, ProfileFileName);
@@ -80,6 +83,16 @@ namespace Rapadura.Gameplay.Tutorial
         /// lookup; tests replace it (null disables the step).
         /// </summary>
         public Func<bool> CraftableRecipeProbe { get; set; }
+
+        /// <summary>
+        /// Minimum real seconds between two <see cref="CraftableRecipeProbe"/> runs triggered by
+        /// <see cref="InventoryChangedEvent"/> (loot bursts publish several in one frame, and the default
+        /// probe scans every recipe). A <see cref="RecipeUnlockedEvent"/> always probes. 0 = every change.
+        /// </summary>
+        public float CraftableCheckIntervalSeconds { get; set; } = 1f;
+
+        /// <summary>Clock for <see cref="CraftableCheckIntervalSeconds"/>; defaults to <see cref="Time.unscaledTime"/>.</summary>
+        public Func<float> Clock { get; set; } = () => Time.unscaledTime;
 
         public IReadOnlyList<TutorialStepDefinition> Steps => _steps;
 
@@ -128,6 +141,7 @@ namespace Rapadura.Gameplay.Tutorial
             }
 
             _subscribed = true;
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
             EventBus.Subscribe<GameFlowStateChangedEvent>(OnFlowStateChanged);
             EventBus.Subscribe<EnemySpawnedEvent>(OnEnemySpawned);
             EventBus.Subscribe<EnemyDiedEvent>(OnEnemyDied);
@@ -155,6 +169,7 @@ namespace Rapadura.Gameplay.Tutorial
             if (_subscribed)
             {
                 _subscribed = false;
+                UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
                 EventBus.Unsubscribe<GameFlowStateChangedEvent>(OnFlowStateChanged);
                 EventBus.Unsubscribe<EnemySpawnedEvent>(OnEnemySpawned);
                 EventBus.Unsubscribe<EnemyDiedEvent>(OnEnemyDied);
@@ -175,7 +190,11 @@ namespace Rapadura.Gameplay.Tutorial
             _completed.Clear();
             HintsEnabled = true;
             _lastNotifiedHint = null;
+            _cachedInventory = null;
+            _nextCraftableCheck = float.NegativeInfinity;
         }
+
+        private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode) => _cachedInventory = null;
 
         // ------------------------------------------------------------------
         // Queries
@@ -373,18 +392,28 @@ namespace Rapadura.Gameplay.Tutorial
                 Trigger(TutorialSteps.Loot);
             }
 
-            CheckCraftable();
+            CheckCraftable(force: false);
         }
 
-        private void OnRecipeUnlocked(RecipeUnlockedEvent evt) => CheckCraftable();
+        private void OnRecipeUnlocked(RecipeUnlockedEvent evt) => CheckCraftable(force: true);
 
-        private void CheckCraftable()
+        private void CheckCraftable(bool force)
         {
             if (!HintsEnabled || IsFrontEnd || CraftableRecipeProbe == null ||
                 IsCompleted(TutorialSteps.Crafting) || IsPending(TutorialSteps.Crafting) || GetStep(TutorialSteps.Crafting) == null)
             {
                 return;
             }
+
+            // Throttled: a skipped change is picked up by the next one after the interval (the hint
+            // is "first time it happens", a second of delay is harmless).
+            float now = Clock != null ? Clock() : Time.unscaledTime;
+            if (!force && now < _nextCraftableCheck)
+            {
+                return;
+            }
+
+            _nextCraftableCheck = now + Mathf.Max(0f, CraftableCheckIntervalSeconds);
 
             if (CraftableRecipeProbe())
             {
@@ -419,15 +448,20 @@ namespace Rapadura.Gameplay.Tutorial
 
         private void OnGameLoaded(GameLoadedEvent evt) => _enemyDefeatedThisSession = false;
 
-        private static bool DefaultCraftableRecipeProbe()
+        private bool DefaultCraftableRecipeProbe()
         {
             if (!ServiceLocator.TryGet(out CraftingManager crafting))
             {
                 return false;
             }
 
-            GameObject player = GameObject.FindGameObjectWithTag(PlayerTag);
-            InventoryManager inventory = player != null ? player.GetComponent<InventoryManager>() : null;
+            if (_cachedInventory == null)
+            {
+                GameObject player = GameObject.FindGameObjectWithTag(PlayerTag);
+                _cachedInventory = player != null ? player.GetComponent<InventoryManager>() : null;
+            }
+
+            InventoryManager inventory = _cachedInventory;
             if (inventory == null)
             {
                 return false;

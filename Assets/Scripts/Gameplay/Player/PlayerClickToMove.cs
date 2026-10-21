@@ -1,4 +1,5 @@
 using System;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Combat;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,6 +16,12 @@ namespace Rapadura.Gameplay.Player
     ///
     /// Manual movement (WASD/joystick) always takes priority and immediately cancels any pending
     /// click destination, so the two input styles never fight each other in the same frame.
+    ///
+    /// Hold-to-walk (MU-style): while the press that set the destination stays held
+    /// (<see cref="PlayerInputHandler.IsMoveClickHeld"/>), the destination is re-aimed at the pointer
+    /// every <see cref="HoldToWalkTimer.Interval"/> seconds (skipped while the pointer is over UI). A
+    /// second world finger turns the gesture into a camera pinch and drops the destination that
+    /// gesture's first finger had set.
     /// </summary>
     [RequireComponent(typeof(PlayerInputHandler))]
     public class PlayerClickToMove : MonoBehaviour
@@ -26,8 +33,12 @@ namespace Rapadura.Gameplay.Player
         [Tooltip("How close to walk when the click lands on an enemy, so the player stops at melee range instead of walking into it. Should roughly match PlayerBasicAttack's range.")]
         [SerializeField] private float _attackStoppingDistance = 2f;
 
+        [Tooltip("Hold-to-walk: seconds between re-aims of the destination while the pointer stays held on the ground.")]
+        [SerializeField, Range(0.05f, 0.5f)] private float _holdReaimInterval = HoldToWalkTimer.DefaultInterval;
+
         private PlayerInputHandler _input;
         private Camera _camera;
+        private HoldToWalkTimer _holdTimer;
 
         public bool HasDestination { get; private set; }
         public Vector3 Destination { get; private set; }
@@ -50,6 +61,7 @@ namespace Rapadura.Gameplay.Player
         private void Awake()
         {
             _input = GetComponent<PlayerInputHandler>();
+            _holdTimer = new HoldToWalkTimer(_holdReaimInterval);
         }
 
         private void Update()
@@ -57,27 +69,46 @@ namespace Rapadura.Gameplay.Player
             if (_input.MoveInput.sqrMagnitude > 0.01f)
             {
                 // Manual movement always wins — abandon any pending click destination immediately.
-                if (HasDestination)
+                AbandonDestination();
+                _holdTimer.Tick(false, 0f);
+                return;
+            }
+
+            if (_input.MoveHoldCancelledByPinchThisFrame)
+            {
+                // The first finger of a pinch landed as a tap-to-move: that wasn't a walk request.
+                AbandonDestination();
+            }
+
+            if (_input.MoveClickPressedThisFrame)
+            {
+                _holdTimer.Restart();
+
+                if (!IsPointerOverUi())
                 {
-                    HasDestination = false;
-                    AttackTarget = null;
-                    DestinationCleared?.Invoke();
+                    TrySetDestinationFromScreenPoint(_input.PointerPosition);
                 }
 
                 return;
             }
 
-            if (!_input.MoveClickPressedThisFrame)
+            if (_holdTimer.Tick(_input.IsMoveClickHeld, Time.deltaTime)
+                && !UiPointerQuery.IsPointerOverUi(_input.PointerPosition))
+            {
+                TrySetDestinationFromScreenPoint(_input.PointerPosition);
+            }
+        }
+
+        private void AbandonDestination()
+        {
+            if (!HasDestination)
             {
                 return;
             }
 
-            if (IsPointerOverUi())
-            {
-                return;
-            }
-
-            TrySetDestinationFromScreenPoint(_input.PointerPosition);
+            HasDestination = false;
+            AttackTarget = null;
+            DestinationCleared?.Invoke();
         }
 
         private bool IsPointerOverUi()

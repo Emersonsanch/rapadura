@@ -5,7 +5,9 @@ using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Tutorial;
 using Rapadura.UI.Common;
 using Rapadura.UI.HUD;
+using Rapadura.UI.WorldMap;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace Rapadura.UI.Tutorial
@@ -14,7 +16,9 @@ namespace Rapadura.UI.Tutorial
     /// Shows <see cref="TutorialManager.CurrentHint"/> as a small non-blocking bubble
     /// (Resources/UI/TutorialHintView.uxml/.uss) with an "Entendi!" button, plus an optional static
     /// outline around the HUD element the hint talks about (<see cref="TutorialStepDefinition.HighlightElement"/>,
-    /// looked up by name in the scene's <see cref="HudController"/> document). Everything but the
+    /// looked up by name in the scene's <see cref="HudController"/> document, or its "wm-" counterpart
+    /// in <see cref="WorldMapHudController"/>'s on the map — no counterpart, no highlight; the lookup
+    /// runs once per scene/new hint, see <see cref="TutorialHighlightCache"/>). Everything but the
     /// button has picking-mode Ignore, so the game stays playable under it. A step flagged
     /// <see cref="TutorialStepDefinition.PausesGameplay"/> would hold a <see cref="GameplayPause"/>
     /// until acknowledged (no built-in step uses it); every other hint acknowledges itself after
@@ -55,6 +59,8 @@ namespace Rapadura.UI.Tutorial
         private LocalizationManager _localization;
         private AccessibilitySettings _accessibility;
         private UIDocument _hudDocument;
+        private bool _hudIsWorldMap;
+        private readonly TutorialHighlightCache _highlightCache = new TutorialHighlightCache();
         private TutorialStepDefinition _shown;
         private float _shownAt;
         private bool _dirty = true;
@@ -96,16 +102,20 @@ namespace Rapadura.UI.Tutorial
             }
 
             _uiDocument.sortingOrder = SortingOrder;
+            // Self-bootstrapped document: outside UiClickSoundBinder's per-scene scans.
+            Rapadura.Audio.UiClickSoundBinder.Register(_uiDocument);
         }
 
         private void OnEnable()
         {
             _root = null;
             _dirty = true;
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         private void OnDisable()
         {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
             Hide();
             SetManager(null);
             _localizer.Detach();
@@ -115,6 +125,7 @@ namespace Rapadura.UI.Tutorial
         private void OnDestroy()
         {
             GameplayPause.Release(this);
+            Rapadura.Audio.UiClickSoundBinder.Unregister(_uiDocument);
             if (_instance == this)
             {
                 _instance = null;
@@ -172,6 +183,13 @@ namespace Rapadura.UI.Tutorial
         }
 
         private void OnHintChanged() => _dirty = true;
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            _hudDocument = null;
+            _hudIsWorldMap = false;
+            _highlightCache.InvalidateScene();
+        }
 
         /// <summary>Gives the document a panel (borrowed PanelSettings) and clones the view into it once. False until it can render.</summary>
         private bool EnsureBound()
@@ -291,6 +309,11 @@ namespace Rapadura.UI.Tutorial
             if (isNew)
             {
                 _shownAt = Time.unscaledTime;
+                // One more HUD lookup per new hint covers a HUD that came up after the scene loaded.
+                if (_hudDocument == null)
+                {
+                    _highlightCache.RequestLookup();
+                }
             }
 
             if (_accessibility == null)
@@ -343,6 +366,8 @@ namespace Rapadura.UI.Tutorial
             {
                 _highlight.style.display = DisplayStyle.None;
             }
+
+            _highlightCache.ForgetRect();
         }
 
         private void Acknowledge()
@@ -368,11 +393,20 @@ namespace Rapadura.UI.Tutorial
             VisualElement target = FindHighlightTarget(_shown != null ? _shown.HighlightElement : null);
             if (target == null)
             {
-                _highlight.style.display = DisplayStyle.None;
+                if (_highlightCache.TryHide())
+                {
+                    _highlight.style.display = DisplayStyle.None;
+                }
+
                 return;
             }
 
             Rect bounds = target.worldBound;
+            if (!_highlightCache.TryApply(bounds))
+            {
+                return;
+            }
+
             Vector2 topLeft = _root.WorldToLocal(bounds.position);
             _highlight.style.left = topLeft.x - HighlightPadding;
             _highlight.style.top = topLeft.y - HighlightPadding;
@@ -388,10 +422,20 @@ namespace Rapadura.UI.Tutorial
                 return null;
             }
 
-            if (_hudDocument == null)
+            if (_hudDocument == null && _highlightCache.NeedsHudLookup)
             {
+                // Once per scene (and per new hint): WorldMap has no HudController, and repeating a
+                // failed FindFirstObjectByType every frame for the hint's whole lifetime is wasteful.
+                _highlightCache.MarkHudLookedUp();
                 HudController hud = FindFirstObjectByType<HudController>();
                 _hudDocument = hud != null ? hud.GetComponent<UIDocument>() : null;
+                _hudIsWorldMap = false;
+                if (_hudDocument == null)
+                {
+                    WorldMapHudController mapHud = FindFirstObjectByType<WorldMapHudController>();
+                    _hudDocument = mapHud != null ? mapHud.GetComponent<UIDocument>() : null;
+                    _hudIsWorldMap = _hudDocument != null;
+                }
             }
 
             if (_hudDocument == null || !_hudDocument.isActiveAndEnabled || _hudDocument.rootVisualElement == null)
@@ -399,7 +443,8 @@ namespace Rapadura.UI.Tutorial
                 return null;
             }
 
-            VisualElement target = _hudDocument.rootVisualElement.Q<VisualElement>(elementName);
+            string lookupName = _hudIsWorldMap ? TutorialHighlightCache.WorldMapElementName(elementName) : elementName;
+            VisualElement target = lookupName != null ? _hudDocument.rootVisualElement.Q<VisualElement>(lookupName) : null;
             if (target == null || target.panel == null || target.resolvedStyle.display == DisplayStyle.None ||
                 target.worldBound.width <= 0f || float.IsNaN(target.worldBound.width))
             {

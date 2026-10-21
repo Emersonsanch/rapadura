@@ -402,6 +402,7 @@ namespace Rapadura.Tests
 
             EventBus.Publish(new GameFlowStateChangedEvent(GameFlowState.Boot, GameFlowState.MainMenu));
             Assert.AreEqual(MusicContext.Title, _music.CurrentContext);
+            Assert.IsTrue(_music.FlushPendingBakes(), "title loop bakes in the background");
             Assert.IsNotNull(_music.CurrentClip, "procedural title loop");
 
             EventBus.Publish(new GameFlowStateChangedEvent(GameFlowState.CharacterSelect, GameFlowState.World));
@@ -418,6 +419,54 @@ namespace Rapadura.Tests
             Assert.AreEqual(MusicContext.Boss, _music.CurrentContext);
 
             Assert.IsFalse(_music.SetContext(MusicContext.Boss, "caves"), "same context is a no-op (no restart)");
+        }
+
+        [Test]
+        public void Music_ProceduralLoop_BakesOffMainThread_PlaysWhenReady_AndCachesAtMostTwo()
+        {
+            _audio = new AudioManager();
+            _audio.Initialize();
+            _music = new MusicDirector(_audio, Track(SfxEventMap.CreateDefault()));
+            _music.Initialize();
+
+            Assert.IsTrue(_music.SetContext(MusicContext.Title));
+            Assert.IsNull(_music.CurrentClip, "SetContext must not bake synchronously");
+            Assert.IsTrue(_music.IsWaitingForBake);
+            Assert.AreEqual(1, _music.PendingBakeCount);
+            Assert.IsNull(_audio.ActiveMusicSourceForTests.clip, "nothing starts until the samples are ready");
+
+            Assert.IsTrue(_music.FlushPendingBakes(), "bake completes");
+            Assert.IsFalse(_music.IsWaitingForBake);
+            Assert.IsNotNull(_music.CurrentClip);
+            Assert.AreSame(_music.CurrentClip, _audio.ActiveMusicSourceForTests.clip, "the baked loop is handed to AudioManager");
+            Assert.Greater(_music.CurrentClip.samples, 1000);
+
+            var contexts = new (MusicContext context, string variant)[]
+            {
+                (MusicContext.WorldMap, null),
+                (MusicContext.Encounter, "desert"),
+                (MusicContext.Boss, "caves"),
+                (MusicContext.Encounter, "forest"),
+                (MusicContext.Title, null),
+            };
+
+            foreach (var (context, variant) in contexts)
+            {
+                AudioClip previous = _music.CurrentClip;
+                Assert.IsTrue(_music.SetContext(context, variant));
+                Assert.IsTrue(_music.FlushPendingBakes(), $"{context}/{variant} bakes");
+                Assert.IsNotNull(_music.CurrentClip, $"{context}/{variant}");
+                Assert.AreNotSame(previous, _music.CurrentClip);
+                Assert.LessOrEqual(_music.CachedProceduralClipCount, MusicDirector.MaxCachedProceduralClips, "only current + previous are kept");
+            }
+
+            // Re-entering the previous context reuses its clip without a new bake.
+            AudioClip title = _music.CurrentClip;
+            _music.SetContext(MusicContext.Encounter, "forest");
+            Assert.AreEqual(0, _music.PendingBakeCount, "previous track is still cached");
+            Assert.IsNotNull(_music.CurrentClip);
+            _music.SetContext(MusicContext.Title);
+            Assert.AreSame(title, _music.CurrentClip);
         }
 
         [Test]

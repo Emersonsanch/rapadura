@@ -246,17 +246,6 @@
                 },
                 {
                     "name": "",
-                    "id": "6f2b6c6a-2b2e-4b8a-8b3e-1a1a1a1a1a16",
-                    "path": "<OnScreenStick>/stick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "6f2b6c6a-2b2e-4b8a-8b3e-1a1a1a1a1a17",
                     "path": "<Mouse>/delta",
                     "interactions": "",
@@ -390,7 +379,7 @@
                 {
                     "name": "",
                     "id": "6f2b6c6a-2b2e-4b8a-8b3e-1a1a1a1a1a34",
-                    "path": "<Touchscreen>/primaryTouch/tap",
+                    "path": "<Touchscreen>/primaryTouch/press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

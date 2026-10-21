@@ -291,7 +291,14 @@ namespace Rapadura.Audio
 
         private void PruneVoices(float now)
         {
-            _voices.RemoveAll(v => v.Value <= now);
+            // Backwards loop instead of RemoveAll(lambda): this runs on every played cue.
+            for (int i = _voices.Count - 1; i >= 0; i--)
+            {
+                if (_voices[i].Value <= now)
+                {
+                    _voices.RemoveAt(i);
+                }
+            }
         }
 
         private int CountVoices(string cueId)
@@ -443,8 +450,8 @@ namespace Rapadura.Audio
         private void OnSkillCast(SkillCastEvent evt)
         {
             SkillVfxCategory category = SkillVfxClassifier.Classify(evt.Skill);
-            string element = evt.Skill != null ? SfxEventMap.Normalize(evt.Skill.Element.ToString()) : null;
-            string categoryKey = SfxEventMap.Normalize(category.ToString());
+            string element = evt.Skill != null ? VariantKey.Of(evt.Skill.Element) : null;
+            string categoryKey = VariantKey.Of(category);
             Vector3? position = PositionOf(evt.Caster);
 
             if (category == SkillVfxCategory.Ultimate)
@@ -495,7 +502,7 @@ namespace Rapadura.Audio
 
         private void OnEncounterStarted(EncounterStartedEvent evt)
         {
-            string biome = evt.Payload != null ? SfxEventMap.Normalize(evt.Payload.biome.ToString()) : null;
+            string biome = evt.Payload != null ? VariantKey.Of(evt.Payload.biome) : null;
             Trigger(SfxTrigger.EncounterStart, biome);
         }
 
@@ -513,13 +520,13 @@ namespace Rapadura.Audio
         {
             if (_flowAllowsAmbience)
             {
-                Trigger(SfxTrigger.TimeOfDayPhase, SfxEventMap.Normalize(evt.CurrentPhase.ToString()));
+                Trigger(SfxTrigger.TimeOfDayPhase, VariantKey.Of(evt.CurrentPhase));
             }
         }
 
         private void OnWeatherChanged(WeatherChangedEvent evt)
         {
-            string cueId = _map != null ? _map.ResolveFirst(SfxTrigger.WeatherLoop, SfxEventMap.Normalize(evt.CurrentWeather.ToString())) : null;
+            string cueId = _map != null ? _map.ResolveFirst(SfxTrigger.WeatherLoop, VariantKey.Of(evt.CurrentWeather)) : null;
             SetAmbience(cueId);
         }
 
@@ -537,5 +544,32 @@ namespace Rapadura.Audio
         public void Bind(SfxEventRouter owner) => _owner = owner;
 
         private void Update() => _owner?.Tick(Time.unscaledDeltaTime);
+    }
+
+    /// <summary>
+    /// Cached <c>SfxEventMap.Normalize(value.ToString())</c> per enum value, so per-event variant keys
+    /// (skill element/category on every cast, biome, phase, weather) don't allocate after the first use.
+    /// Main-thread only, like the EventBus handlers that use it.
+    /// </summary>
+    internal static class VariantKey<T> where T : struct, Enum
+    {
+        private static readonly Dictionary<T, string> Cache = new Dictionary<T, string>();
+
+        public static string Of(T value)
+        {
+            if (!Cache.TryGetValue(value, out string key))
+            {
+                key = SfxEventMap.Normalize(value.ToString());
+                Cache[value] = key;
+            }
+
+            return key;
+        }
+    }
+
+    /// <summary>Type-inferring entry point for <see cref="VariantKey{T}"/>.</summary>
+    internal static class VariantKey
+    {
+        public static string Of<T>(T value) where T : struct, Enum => VariantKey<T>.Of(value);
     }
 }

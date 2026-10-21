@@ -35,6 +35,9 @@ namespace Rapadura.UI.Menus
     ///   (<see cref="InputBindingUtility.FindConflicts"/>), per-row and global reset. Every change is
     ///   persisted immediately via <see cref="InputRebindManager.SaveBindingOverrides"/> (PlayerPrefs);
     ///   <see cref="InputRebindBootstrap"/> re-applies saved overrides on scene load.
+    ///   On touch-first devices (<see cref="ResolveRebindColumns"/>) the keyboard column is hidden
+    ///   (and the gamepad one too unless a gamepad is connected), replaced by a short touch hint;
+    ///   the "Joystick virtual" toggle (<see cref="TouchControlsSettingsSection"/>) is appended below.
     /// - Acessibilidade: font scale / high contrast / colorblind mode / screen shake / reduce
     ///   flashes, written to <see cref="AccessibilitySettings"/>; <see cref="UiAccessibilityApplier"/>
     ///   applies the visual ones to every UIDocument.
@@ -58,6 +61,7 @@ namespace Rapadura.UI.Menus
         private const string RebindButtonListeningClass = "settings-rebind-button--listening";
         private const string RebindResetButtonClass = "settings-rebind-reset-button";
         private const string RebindStatusWarningClass = "settings-rebind-status--warning";
+        private const string RebindCancelButtonClass = "settings-rebind-cancel-button";
 
         [Tooltip("Fallback actions asset (PlayerControls.inputactions) used when no PlayerInput is active, e.g. in the main menu.")]
         [SerializeField] private InputActionAsset _inputActions;
@@ -99,9 +103,14 @@ namespace Rapadura.UI.Menus
         private readonly TutorialSettingsSection _tutorialSection = new TutorialSettingsSection();
         // "Vibração", appended after the tutorial rows.
         private readonly HapticsSettingsSection _hapticsSection = new HapticsSettingsSection();
+        // "Joystick virtual", appended in code to the Controles panel.
+        private readonly TouchControlsSettingsSection _touchControlsSection = new TouchControlsSettingsSection();
 
         // Controls (rebind)
         private ScrollView _controlsRowsContainer;
+        private VisualElement _controlsHeaderRow;
+        private bool _showKeyboardColumn = true;
+        private bool _showGamepadColumn = true;
         private Label _controlsHeaderAction;
         private Label _controlsHeaderKeyboard;
         private Label _controlsHeaderGamepad;
@@ -128,8 +137,15 @@ namespace Rapadura.UI.Menus
         /// <summary>Read by PauseMenuController.HandleBack (Esc/Start closes this before the pause menu).</summary>
         public bool IsOpen => _root != null && _root.style.display == DisplayStyle.Flex;
 
-        /// <summary>True while a key/button rebind is listening — Esc then belongs to the rebind (cancel), not to "back".</summary>
-        public bool IsRebinding => _rebindManager != null && _rebindManager.IsRebinding;
+        /// <summary>
+        /// True while a key/button rebind is listening — Esc then belongs to the rebind (cancel), not to
+        /// "back". Also true for the rest of the frame the rebind ended: the Esc that cancelled it may
+        /// still reach a "back" handler later that frame (HudController polls Esc/Android Back in its
+        /// own Update, in no guaranteed order relative to this component's), and must not also close
+        /// the Settings screen.
+        /// </summary>
+        public bool IsRebinding => (_rebindManager != null && _rebindManager.IsRebinding) || _rebindEndedFrame == Time.frameCount;
+        private int _rebindEndedFrame = -1;
         private RebindRowView _listeningRow;
         private BindingDeviceKind _listeningKind;
 
@@ -166,6 +182,7 @@ namespace Rapadura.UI.Menus
             _localizer.Attach(_uiDocument.rootVisualElement, null, SettingsMenuTexts.Get);
             _tutorialSection.Attach(_panelAccessibility);
             _hapticsSection.Attach(_panelAccessibility);
+            _touchControlsSection.Attach(_panelControls);
             RegisterCallbacks();
             InitializeGraphicsPanel();
             InitializeAudioPanel();
@@ -187,6 +204,7 @@ namespace Rapadura.UI.Menus
             _localizer.Detach();
             _tutorialSection.Detach();
             _hapticsSection.Detach();
+            _touchControlsSection.Detach();
             GameplayPause.Release(this);
         }
 
@@ -235,11 +253,13 @@ namespace Rapadura.UI.Menus
             _languageDropdown = rootVisualElement.Q<DropdownField>("language-dropdown");
 
             _controlsRowsContainer = rootVisualElement.Q<ScrollView>("controls-rows");
+            _controlsHeaderRow = rootVisualElement.Q<VisualElement>("controls-header-row");
             _controlsHeaderAction = rootVisualElement.Q<Label>("controls-header-action");
             _controlsHeaderKeyboard = rootVisualElement.Q<Label>("controls-header-keyboard");
             _controlsHeaderGamepad = rootVisualElement.Q<Label>("controls-header-gamepad");
             _controlsStatusLabel = rootVisualElement.Q<Label>("controls-status-label");
             _controlsCancelButton = rootVisualElement.Q<Button>("controls-cancel-button");
+            _controlsCancelButton?.AddToClassList(RebindCancelButtonClass);
             _controlsResetAllButton = rootVisualElement.Q<Button>("controls-reset-all-button");
 
             _fontScaleSlider = rootVisualElement.Q<Slider>("font-scale-slider");
@@ -521,9 +541,64 @@ namespace Rapadura.UI.Menus
                 _controlsResetAllButton.SetEnabled(_rebindManager != null);
             }
 
+            ResolveRebindColumns(TouchControlsPreferences.HasTouchscreen, Keyboard.current != null, Gamepad.current != null,
+                Application.isMobilePlatform, out _showKeyboardColumn, out _showGamepadColumn);
+
             BuildControlsRows();
+            ApplyRebindColumnVisibility();
             UpdateRebindModeVisuals();
-            SetStatus(_rebindManager == null ? Text(SettingsMenuTexts.StatusUnavailable) : string.Empty, warning: false);
+            _touchControlsSection.Refresh();
+
+            string status = string.Empty;
+            if (_rebindManager == null)
+            {
+                status = Text(SettingsMenuTexts.StatusUnavailable);
+            }
+            else if (!_showKeyboardColumn && !_showGamepadColumn)
+            {
+                status = TouchControlsTexts.Get(_localizationManager, TouchControlsTexts.StatusTouchOnly);
+            }
+
+            SetStatus(status, warning: false);
+        }
+
+        /// <summary>
+        /// Which rebind columns make sense on this device (EditMode-testable). A touch-first device —
+        /// a touchscreen with no keyboard, or any phone/tablet (Android always exposes a Keyboard
+        /// device for its Back key, so "has a keyboard" alone can't tell) — hides the keyboard column,
+        /// and the gamepad column unless a gamepad is connected. Desktop (even with a touchscreen and
+        /// a keyboard) keeps both.
+        /// </summary>
+        public static void ResolveRebindColumns(bool hasTouchscreen, bool hasKeyboard, bool hasGamepad, bool isMobilePlatform,
+            out bool showKeyboard, out bool showGamepad)
+        {
+            bool touchFirst = hasTouchscreen && (!hasKeyboard || isMobilePlatform);
+            showKeyboard = !touchFirst;
+            showGamepad = !touchFirst || hasGamepad;
+        }
+
+        private void ApplyRebindColumnVisibility()
+        {
+            bool anyColumn = _showKeyboardColumn || _showGamepadColumn;
+            SetDisplayed(_controlsHeaderRow, anyColumn);
+            SetDisplayed(_controlsRowsContainer, anyColumn);
+            SetDisplayed(_controlsResetAllButton, anyColumn);
+            SetDisplayed(_controlsHeaderKeyboard, _showKeyboardColumn);
+            SetDisplayed(_controlsHeaderGamepad, _showGamepadColumn);
+
+            foreach (RebindRowView view in _rebindRows)
+            {
+                SetDisplayed(view.KeyboardButton, _showKeyboardColumn);
+                SetDisplayed(view.GamepadButton, _showGamepadColumn);
+            }
+        }
+
+        private static void SetDisplayed(VisualElement element, bool displayed)
+        {
+            if (element != null)
+            {
+                element.style.display = displayed ? DisplayStyle.Flex : DisplayStyle.None;
+            }
         }
 
         private void BuildControlsRows()
@@ -706,6 +781,11 @@ namespace Rapadura.UI.Menus
 
         private void ClearListening()
         {
+            if (_listeningRow != null)
+            {
+                _rebindEndedFrame = Time.frameCount;
+            }
+
             _listeningRow = null;
             UpdateRebindModeVisuals();
         }
@@ -887,6 +967,7 @@ namespace Rapadura.UI.Menus
             InitializeColorblindChoices();
             _tutorialSection.Refresh();
             _hapticsSection.Refresh();
+            _touchControlsSection.Refresh();
             InitializeControlsPanel();
         }
 

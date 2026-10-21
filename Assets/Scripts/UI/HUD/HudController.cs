@@ -2,6 +2,7 @@ using System;
 using Rapadura.Core.Accessibility;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Gameplay.Cameras;
 using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Shop;
@@ -37,7 +38,7 @@ namespace Rapadura.UI.HUD
     /// SCREENS: the top-right cluster (Missões / Mochila / Ficha / Skills / Menu) and the keyboard/gamepad
     /// shortcuts (QuestLog J, Inventory I / Select, CharacterSheet C, SkillTree K, Pause Esc / Start — actions in
     /// PlayerControls.inputactions, read from the player's PlayerInput like PlayerInputHandler does,
-    /// but via <c>performed</c> callbacks so the HUD still needs no Update()) all go through a
+    /// but via <c>performed</c> callbacks so the HUD needs no per-frame polling beyond the Esc/Android Back check) all go through a
     /// <see cref="ScreenExclusivityCoordinator"/>: opening a screen closes the other ones (including
     /// Conquistas/Criação, which are opened from the Pause menu). Pausing gameplay stays each
     /// screen's own business (GameplayPause.Acquire/Release); the HUD only ignores screen
@@ -52,6 +53,23 @@ namespace Rapadura.UI.HUD
     /// nor the scene has one, the HUD creates it on Start (own GameObject in the HUD's scene, a
     /// UIDocument sharing this HUD's PanelSettings at sort order 10). The "Ficha" button carries a
     /// small badge with the unspent attribute points (<see cref="AttributeSet.OnAttributesChanged"/>).
+    ///
+    /// TOUCH: tap/hold the ground to move stays the primary touch control (PlayerClickToMove). With a
+    /// touchscreen the HUD also shows Atacar (one-shot <see cref="PlayerInputHandler.TouchAttackRequested"/>),
+    /// two camera-rotate buttons (<see cref="CameraController.RotateLeft"/>/<see cref="CameraController.RotateRight"/>,
+    /// hidden when the camera preset locks rotation) and, if enabled in Settings
+    /// (<see cref="TouchControlsPreferences.VirtualJoystickEnabled"/>, default off), a UI Toolkit virtual
+    /// joystick writing <see cref="PlayerInputHandler.TouchMoveInput"/> — never the uGUI OnScreenStick,
+    /// which would pair a virtual Gamepad and unpair the Touchscreen. Every press-driven button registers
+    /// in the TrickleDown phase: Button's Clickable handles (and stops) PointerDown/Up at the target, so
+    /// bubble-phase callbacks on it are not guaranteed to run. Held buttons also release on
+    /// PointerCancel/PointerCaptureOut (OS gesture, app switch) so Run can't stay stuck on.
+    /// Crouch has no touch button on purpose (desktop/gamepad only): the bottom-right row would need a
+    /// 4th button next to the hotbar, and crouching has no touch-relevant use yet (no stealth/cover).
+    ///
+    /// Android Back arrives as Keyboard.escapeKey, but the Keyboard isn't paired to the PlayerInput
+    /// user under the Touch control scheme, so the Pause action never sees it: <see cref="Update"/>
+    /// polls Esc directly (deduped per frame with the Pause action), like WorldMapHudController does.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class HudController : MonoBehaviour
@@ -130,6 +148,17 @@ namespace Rapadura.UI.HUD
         private Button _questsButton;
         private Button _characterSheetButton;
         private Label _characterSheetBadge;
+        private Button _attackButton;
+        private VisualElement _cameraCluster;
+        private Button _cameraLeftButton;
+        private Button _cameraRightButton;
+        private VisualElement _joystick;
+        private VisualElement _joystickKnob;
+        private int _joystickPointerId = NoPointer;
+        private CameraController _cameraController;
+        private float _nextCameraLookup;
+        private int _pauseShortcutFrame = -1;
+        private const int NoPointer = -1;
         private AttributeSet _attributeSet;
         private float _nextAttributeSetLookup;
         private bool _createdCharacterSheet;
@@ -147,6 +176,16 @@ namespace Rapadura.UI.HUD
         public const string CharacterSheetButtonName = "character-sheet-button";
         public const string CharacterSheetBadgeName = "character-sheet-badge";
         public const string BadgeHiddenClass = "hud-menu-badge--hidden";
+        public const string AttackButtonName = "attack-button";
+        public const string CameraClusterName = "hud-camera-cluster";
+        public const string CameraLeftButtonName = "camera-left-button";
+        public const string CameraRightButtonName = "camera-right-button";
+        public const string JoystickName = "virtual-joystick";
+        public const string JoystickKnobName = "virtual-joystick-knob";
+        /// <summary>display:none for the touch-only controls; removed by <see cref="ApplyTouchControlsVisibility"/>.</summary>
+        public const string HiddenClass = "hud-hidden";
+        private const string JoystickActiveClass = "hud-joystick--active";
+        private const string TouchButtonActiveClass = "hud-touch-button--active";
 
         // Action names in PlayerControls.inputactions (Player map).
         public const string QuestLogActionName = "QuestLog";
@@ -204,6 +243,7 @@ namespace Rapadura.UI.HUD
             // CharacterSheetTexts.Get covers the "Ficha" button key and defers every other key to UiTexts.Get.
             _localizer.Attach(_uiDocument.rootVisualElement, UpdateLevelLabel, CharacterSheetTexts.Get);
             InitializeFromCurrentStats();
+            ApplyTouchControlsVisibility();
         }
 
         private void Start()
@@ -263,6 +303,12 @@ namespace Rapadura.UI.HUD
             _questsButton = rootVisualElement.Q<Button>("quests-button");
             _characterSheetButton = rootVisualElement.Q<Button>(CharacterSheetButtonName);
             _characterSheetBadge = rootVisualElement.Q<Label>(CharacterSheetBadgeName);
+            _attackButton = rootVisualElement.Q<Button>(AttackButtonName);
+            _cameraCluster = rootVisualElement.Q<VisualElement>(CameraClusterName);
+            _cameraLeftButton = rootVisualElement.Q<Button>(CameraLeftButtonName);
+            _cameraRightButton = rootVisualElement.Q<Button>(CameraRightButtonName);
+            _joystick = rootVisualElement.Q<VisualElement>(JoystickName);
+            _joystickKnob = rootVisualElement.Q<VisualElement>(JoystickKnobName);
 
             for (int i = 0; i < SkillSlotCount; i++)
             {
@@ -292,18 +338,48 @@ namespace Rapadura.UI.HUD
                 // Not the Button's Click event on purpose — Click only fires on release, but Run
                 // needs to stay held for as long as the finger/pointer stays down (a "sprint"
                 // toggle, not a one-shot action), so PointerDown/Up + PointerLeave (finger sliding
-                // off the button without a clean release) drive it directly instead.
-                _runButton.RegisterCallback<PointerDownEvent>(OnRunButtonPressed);
-                _runButton.RegisterCallback<PointerUpEvent>(OnRunButtonPointerUp);
+                // off the button without a clean release) + PointerCancel/CaptureOut (the OS took
+                // the touch) drive it directly instead. TrickleDown: see the class summary.
+                _runButton.RegisterCallback<PointerDownEvent>(OnRunButtonPressed, TrickleDown.TrickleDown);
+                _runButton.RegisterCallback<PointerUpEvent>(OnRunButtonPointerUp, TrickleDown.TrickleDown);
                 _runButton.RegisterCallback<PointerLeaveEvent>(OnRunButtonPointerLeave);
+                _runButton.RegisterCallback<PointerCancelEvent>(OnRunButtonPointerCancel, TrickleDown.TrickleDown);
+                _runButton.RegisterCallback<PointerCaptureOutEvent>(OnRunButtonCaptureOut);
             }
 
             if (_jumpButton != null)
             {
                 // One-shot like the physical Jump key, so PointerDown (not Click, which waits for
                 // release) — same responsiveness reasoning as the run button.
-                _jumpButton.RegisterCallback<PointerDownEvent>(OnJumpButtonPressed);
+                _jumpButton.RegisterCallback<PointerDownEvent>(OnJumpButtonPressed, TrickleDown.TrickleDown);
             }
+
+            if (_attackButton != null)
+            {
+                // One-shot, same pattern as Jump; PlayerInputHandler gates it on pause only.
+                _attackButton.RegisterCallback<PointerDownEvent>(OnAttackButtonPressed, TrickleDown.TrickleDown);
+            }
+
+            if (_cameraLeftButton != null)
+            {
+                _cameraLeftButton.clicked += OnCameraLeftClicked;
+            }
+
+            if (_cameraRightButton != null)
+            {
+                _cameraRightButton.clicked += OnCameraRightClicked;
+            }
+
+            if (_joystick != null)
+            {
+                _joystick.RegisterCallback<PointerDownEvent>(OnJoystickPointerDown);
+                _joystick.RegisterCallback<PointerMoveEvent>(OnJoystickPointerMove);
+                _joystick.RegisterCallback<PointerUpEvent>(OnJoystickPointerUp);
+                _joystick.RegisterCallback<PointerCancelEvent>(OnJoystickPointerCancel);
+                _joystick.RegisterCallback<PointerCaptureOutEvent>(OnJoystickCaptureOut);
+            }
+
+            TouchControlsPreferences.Changed += ApplyTouchControlsVisibility;
 
             if (_skillsButton != null)
             {
@@ -336,7 +412,7 @@ namespace Rapadura.UI.HUD
             for (int i = 0; i < SkillSlotCount; i++)
             {
                 // PointerDown (not Click) for the same one-shot responsiveness as the jump button.
-                _skillSlotButtons[i]?.RegisterCallback(_skillSlotPressedCallbacks[i]);
+                _skillSlotButtons[i]?.RegisterCallback(_skillSlotPressedCallbacks[i], TrickleDown.TrickleDown);
             }
 
             if (_root != null)
@@ -360,15 +436,46 @@ namespace Rapadura.UI.HUD
 
             if (_runButton != null)
             {
-                _runButton.UnregisterCallback<PointerDownEvent>(OnRunButtonPressed);
-                _runButton.UnregisterCallback<PointerUpEvent>(OnRunButtonPointerUp);
+                _runButton.UnregisterCallback<PointerDownEvent>(OnRunButtonPressed, TrickleDown.TrickleDown);
+                _runButton.UnregisterCallback<PointerUpEvent>(OnRunButtonPointerUp, TrickleDown.TrickleDown);
                 _runButton.UnregisterCallback<PointerLeaveEvent>(OnRunButtonPointerLeave);
+                _runButton.UnregisterCallback<PointerCancelEvent>(OnRunButtonPointerCancel, TrickleDown.TrickleDown);
+                _runButton.UnregisterCallback<PointerCaptureOutEvent>(OnRunButtonCaptureOut);
             }
 
             if (_jumpButton != null)
             {
-                _jumpButton.UnregisterCallback<PointerDownEvent>(OnJumpButtonPressed);
+                _jumpButton.UnregisterCallback<PointerDownEvent>(OnJumpButtonPressed, TrickleDown.TrickleDown);
             }
+
+            if (_attackButton != null)
+            {
+                _attackButton.UnregisterCallback<PointerDownEvent>(OnAttackButtonPressed, TrickleDown.TrickleDown);
+            }
+
+            if (_cameraLeftButton != null)
+            {
+                _cameraLeftButton.clicked -= OnCameraLeftClicked;
+            }
+
+            if (_cameraRightButton != null)
+            {
+                _cameraRightButton.clicked -= OnCameraRightClicked;
+            }
+
+            // Before unregistering: releasing capture raises PointerCaptureOut on the joystick.
+            ReleaseJoystick();
+
+            if (_joystick != null)
+            {
+                _joystick.UnregisterCallback<PointerDownEvent>(OnJoystickPointerDown);
+                _joystick.UnregisterCallback<PointerMoveEvent>(OnJoystickPointerMove);
+                _joystick.UnregisterCallback<PointerUpEvent>(OnJoystickPointerUp);
+                _joystick.UnregisterCallback<PointerCancelEvent>(OnJoystickPointerCancel);
+                _joystick.UnregisterCallback<PointerCaptureOutEvent>(OnJoystickCaptureOut);
+            }
+
+            TouchControlsPreferences.Changed -= ApplyTouchControlsVisibility;
 
             if (_skillsButton != null)
             {
@@ -402,7 +509,7 @@ namespace Rapadura.UI.HUD
 
             for (int i = 0; i < SkillSlotCount; i++)
             {
-                _skillSlotButtons[i]?.UnregisterCallback(_skillSlotPressedCallbacks[i]);
+                _skillSlotButtons[i]?.UnregisterCallback(_skillSlotPressedCallbacks[i], TrickleDown.TrickleDown);
             }
 
             _skillHotbarRefresh?.Pause();
@@ -410,9 +517,19 @@ namespace Rapadura.UI.HUD
             UnsubscribeFromLoadout();
             UnbindShortcuts();
 
-            if (_playerInput != null)
+            ReleaseRunButton();
+        }
+
+        private void Update()
+        {
+            // Android Back = Keyboard.escapeKey, unseen by the Pause action under the Touch scheme
+            // (Keyboard not paired to the PlayerInput user) — poll it directly. Deduped per frame
+            // with the Pause action, which already fires for Esc on desktop. Skipped while the player's
+            // input is deactivated (death screen: PlayerInput.DeactivateInput disables the actions).
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame && (_pauseAction == null || _pauseAction.enabled))
             {
-                _playerInput.TouchRunHeld = false;
+                HandlePauseShortcutOncePerFrame();
             }
         }
 
@@ -421,6 +538,158 @@ namespace Rapadura.UI.HUD
             if (_playerInput != null)
             {
                 _playerInput.TouchJumpRequested = true;
+            }
+        }
+
+        private void OnAttackButtonPressed(PointerDownEvent evt)
+        {
+            if (_playerInput != null)
+            {
+                _playerInput.TouchAttackRequested = true;
+            }
+        }
+
+        // ---------------------------------------------------------------
+        // Touch-only controls (Atacar, camera rotate, virtual joystick)
+        // ---------------------------------------------------------------
+
+        /// <summary>
+        /// Shows the touch-only controls only when a touchscreen exists (re-checked on the hotbar
+        /// refresh tick, so a device plugged in later is picked up), the camera buttons only when the
+        /// camera allows rotation, and the joystick only when also enabled in Settings.
+        /// </summary>
+        private void ApplyTouchControlsVisibility()
+        {
+            bool touch = TouchControlsPreferences.ShouldShowTouchControls(TouchControlsPreferences.HasTouchscreen);
+            bool joystick = TouchControlsPreferences.ShouldShowVirtualJoystick(touch, TouchControlsPreferences.VirtualJoystickEnabled);
+            bool cameraRotates = !touch || !ResolveCameraController() || _cameraController.AllowsRotation;
+
+            _attackButton?.EnableInClassList(HiddenClass, !touch);
+            _cameraCluster?.EnableInClassList(HiddenClass, !(touch && cameraRotates));
+
+            if (_joystick != null)
+            {
+                _joystick.EnableInClassList(HiddenClass, !joystick);
+                if (!joystick)
+                {
+                    ReleaseJoystick();
+                }
+            }
+        }
+
+        private bool ResolveCameraController()
+        {
+            if (_cameraController == null && Time.unscaledTime >= _nextCameraLookup)
+            {
+                _nextCameraLookup = Time.unscaledTime + ShortcutBindRetrySeconds;
+                _cameraController = FindFirstObjectByType<CameraController>();
+            }
+
+            return _cameraController != null;
+        }
+
+        private void OnCameraLeftClicked()
+        {
+            if (ResolveCameraController())
+            {
+                _cameraController.RotateLeft();
+            }
+        }
+
+        private void OnCameraRightClicked()
+        {
+            if (ResolveCameraController())
+            {
+                _cameraController.RotateRight();
+            }
+        }
+
+        private void OnJoystickPointerDown(PointerDownEvent evt)
+        {
+            if (_joystick == null || _joystickPointerId != NoPointer)
+            {
+                return;
+            }
+
+            // Capture: the thumb keeps steering after sliding off the base, and Move/Up keep coming here.
+            _joystickPointerId = evt.pointerId;
+            _joystick.CapturePointer(evt.pointerId);
+            _joystick.AddToClassList(JoystickActiveClass);
+            UpdateJoystick(evt.localPosition);
+            evt.StopPropagation();
+        }
+
+        private void OnJoystickPointerMove(PointerMoveEvent evt)
+        {
+            if (evt.pointerId == _joystickPointerId)
+            {
+                UpdateJoystick(evt.localPosition);
+            }
+        }
+
+        private void OnJoystickPointerUp(PointerUpEvent evt)
+        {
+            if (evt.pointerId == _joystickPointerId)
+            {
+                ReleaseJoystick();
+            }
+        }
+
+        private void OnJoystickPointerCancel(PointerCancelEvent evt)
+        {
+            if (evt.pointerId == _joystickPointerId)
+            {
+                ReleaseJoystick();
+            }
+        }
+
+        private void OnJoystickCaptureOut(PointerCaptureOutEvent evt) => ReleaseJoystick();
+
+        private void UpdateJoystick(Vector2 localPosition)
+        {
+            Rect layout = _joystick.layout;
+            float baseRadius = Mathf.Min(layout.width, layout.height) * 0.5f;
+            float knobRadius = _joystickKnob != null ? Mathf.Min(_joystickKnob.layout.width, _joystickKnob.layout.height) * 0.5f : 0f;
+            Vector2 offset = localPosition - new Vector2(layout.width, layout.height) * 0.5f;
+
+            if (_playerInput != null)
+            {
+                _playerInput.TouchMoveInput = VirtualJoystickMath.ComputeMove(offset, baseRadius);
+            }
+
+            if (_joystickKnob != null)
+            {
+                Vector2 knob = VirtualJoystickMath.ClampKnobOffset(offset, Mathf.Max(0f, baseRadius - knobRadius));
+                _joystickKnob.style.translate = new Translate(knob.x, knob.y);
+            }
+        }
+
+        /// <summary>Re-entrant safe: releasing the capture raises PointerCaptureOut, which calls back here.</summary>
+        private void ReleaseJoystick()
+        {
+            int pointerId = _joystickPointerId;
+            _joystickPointerId = NoPointer;
+
+            if (_playerInput != null)
+            {
+                _playerInput.TouchMoveInput = Vector2.zero;
+            }
+
+            if (_joystick == null)
+            {
+                return;
+            }
+
+            _joystick.RemoveFromClassList(JoystickActiveClass);
+
+            if (_joystickKnob != null)
+            {
+                _joystickKnob.style.translate = new Translate(0f, 0f);
+            }
+
+            if (pointerId != NoPointer && _joystick.HasPointerCapture(pointerId))
+            {
+                _joystick.ReleasePointer(pointerId);
             }
         }
 
@@ -495,6 +764,7 @@ namespace Rapadura.UI.HUD
             // Cheap retry: the player (and its PlayerInput) may spawn after the HUD.
             TryBindShortcuts();
             TryResolveAttributeSet();
+            ApplyTouchControlsVisibility();
 
             int charsPerLine = SkillSlotDisplayMath.SlotNameCharsPerLine(CurrentFontScale());
 
@@ -845,7 +1115,15 @@ namespace Rapadura.UI.HUD
         /// <summary>ShopUIController shows itself on the same event; this only closes the other screens.</summary>
         private void OnShopOpened(ShopOpenedEvent evt) => _screens.Open(ShopScreenId);
 
-        private void OnGamePaused(GamePausedEvent evt) => _gamePaused = true;
+        private void OnGamePaused(GamePausedEvent evt)
+        {
+            _gamePaused = true;
+
+            // A modal/pause menu now covers the HUD: a thumb still on the joystick/Run must not keep
+            // walking/sprinting the player once the game resumes.
+            ReleaseJoystick();
+            ReleaseRunButton();
+        }
         private void OnGameResumed(GameResumedEvent evt) => _gamePaused = false;
 
         // ---------------------------------------------------------------
@@ -916,7 +1194,19 @@ namespace Rapadura.UI.HUD
         private void OnInventoryActionPerformed(InputAction.CallbackContext context) => ToggleScreen(InventoryScreenId);
         private void OnSkillTreeActionPerformed(InputAction.CallbackContext context) => ToggleScreen(SkillTreeScreenId);
         private void OnCharacterSheetActionPerformed(InputAction.CallbackContext context) => ToggleScreen(CharacterSheetScreenId);
-        private void OnPauseActionPerformed(InputAction.CallbackContext context) => OnPauseShortcut();
+        private void OnPauseActionPerformed(InputAction.CallbackContext context) => HandlePauseShortcutOncePerFrame();
+
+        /// <summary>The Pause action and the Esc/Android-Back poll in <see cref="Update"/> can both fire for one press.</summary>
+        private void HandlePauseShortcutOncePerFrame()
+        {
+            if (_pauseShortcutFrame == Time.frameCount)
+            {
+                return;
+            }
+
+            _pauseShortcutFrame = Time.frameCount;
+            OnPauseShortcut();
+        }
 
         private void OnRunButtonPressed(PointerDownEvent evt)
         {
@@ -925,11 +1215,13 @@ namespace Rapadura.UI.HUD
                 _playerInput.TouchRunHeld = true;
             }
 
-            _runButton?.AddToClassList("hud-touch-button--active");
+            _runButton?.AddToClassList(TouchButtonActiveClass);
         }
 
         private void OnRunButtonPointerUp(PointerUpEvent evt) => ReleaseRunButton();
         private void OnRunButtonPointerLeave(PointerLeaveEvent evt) => ReleaseRunButton();
+        private void OnRunButtonPointerCancel(PointerCancelEvent evt) => ReleaseRunButton();
+        private void OnRunButtonCaptureOut(PointerCaptureOutEvent evt) => ReleaseRunButton();
 
         private void ReleaseRunButton()
         {
@@ -938,7 +1230,7 @@ namespace Rapadura.UI.HUD
                 _playerInput.TouchRunHeld = false;
             }
 
-            _runButton?.RemoveFromClassList("hud-touch-button--active");
+            _runButton?.RemoveFromClassList(TouchButtonActiveClass);
         }
 
         private void InitializeFromCurrentStats()

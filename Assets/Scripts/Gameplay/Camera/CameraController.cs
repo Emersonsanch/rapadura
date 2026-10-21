@@ -99,10 +99,13 @@ namespace Rapadura.Gameplay.Cameras
         {
         }
 
-        /// <summary>Manually requests a Q/E-style rotation step; wire to UI buttons on touch if needed.</summary>
+        /// <summary>False when the preset locks the yaw (<see cref="CameraSettings.allowRotation"/>) — the HUD then hides its rotate buttons.</summary>
+        public bool AllowsRotation => _settings != null && _settings.allowRotation;
+
+        /// <summary>Manually requests a Q/E-style rotation step (also the HUD's touch rotate buttons).</summary>
         public void RotateLeft() => _rotation?.RotateLeft();
 
-        /// <summary>Manually requests a Q/E-style rotation step; wire to UI buttons on touch if needed.</summary>
+        /// <summary>Manually requests a Q/E-style rotation step (also the HUD's touch rotate buttons).</summary>
         public void RotateRight() => _rotation?.RotateRight();
 
         public void SetTarget(Transform target)

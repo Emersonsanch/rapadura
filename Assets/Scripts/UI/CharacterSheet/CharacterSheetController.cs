@@ -90,6 +90,8 @@ namespace Rapadura.UI.CharacterSheet
         private void Awake()
         {
             _uiDocument = GetComponent<UIDocument>();
+            // Created at runtime, possibly after UiClickSoundBinder's per-scene scans.
+            Rapadura.Audio.UiClickSoundBinder.Register(_uiDocument);
 
             if (_uiDocument.visualTreeAsset == null)
             {
@@ -154,6 +156,7 @@ namespace Rapadura.UI.CharacterSheet
         private void OnDestroy()
         {
             GameplayPause.Release(this);
+            Rapadura.Audio.UiClickSoundBinder.Unregister(_uiDocument);
         }
 
         private void BindElements()

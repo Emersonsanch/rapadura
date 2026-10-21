@@ -4,6 +4,7 @@ using System.Linq;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
+using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Items.Procedural;
@@ -494,16 +495,24 @@ namespace Rapadura.Gameplay.Inventory
         /// Pure sort used by <see cref="SortInventory"/> (static so EditMode tests can feed it any
         /// resolver). Returns a new array of the same length: occupied slots first, ordered by item type
         /// (<see cref="SortTypeOrder"/>), then rarity (highest first; a generated item counts at its
-        /// rolled rarity, like the tooltip shows it), then the on-screen name (generated name when present,
-        /// else the localized item name, so the order matches the current language),
-        /// then item id; empty slots at the end. Plain stackable items of the same id are merged into
+        /// rolled rarity, like the tooltip shows it), then the on-screen name — exactly what the UI shows,
+        /// <see cref="GeneratedItemName.Compose(ItemDefinition, InventorySlotData, LocalizationManager, Func{string, ItemAffixDefinition})"/>
+        /// in the current language (<paramref name="localization"/>, default the registered manager), not the
+        /// pt-BR <see cref="InventorySlotData.generatedName"/> stored at roll time — then item id; empty slots at the end. Plain stackable items of the same id are merged into
         /// as few stacks as <see cref="ItemDefinition.MaxStack"/> allows. Generated items
         /// (<see cref="InventorySlotData.HasGeneratedData"/>) and items with durability are never merged
         /// — they're carried over as the same slot objects, so affixes/name/rarity/durability survive.
         /// Ids the resolver doesn't know are kept unchanged after every known item.
         /// </summary>
-        public static InventorySlotData[] BuildSortedSlots(IReadOnlyList<InventorySlotData> slots, Func<string, ItemDefinition> resolveItem)
+        /// <param name="resolveAffix">Affix lookup for generated names; defaults to <see cref="AffixDatabase.GetById"/>.</param>
+        public static InventorySlotData[] BuildSortedSlots(
+            IReadOnlyList<InventorySlotData> slots,
+            Func<string, ItemDefinition> resolveItem,
+            LocalizationManager localization = null,
+            Func<string, ItemAffixDefinition> resolveAffix = null)
         {
+            localization = localization ?? ContentText.CurrentManager;
+
             if (slots == null)
             {
                 return Array.Empty<InventorySlotData>();
@@ -550,7 +559,7 @@ namespace Rapadura.Gameplay.Inventory
                 .OrderBy(e => e.item == null ? 1 : 0)
                 .ThenBy(e => GetSortTypeRank(e.item))
                 .ThenByDescending(e => (int)GetSortRarity(e.item, e.slot))
-                .ThenBy(e => GetSortName(e.item, e.slot), StringComparer.InvariantCultureIgnoreCase)
+                .ThenBy(e => GetSortName(e.item, e.slot, localization, resolveAffix), StringComparer.InvariantCultureIgnoreCase)
                 .ThenBy(e => e.slot.itemId, StringComparer.Ordinal)
                 .ThenByDescending(e => e.slot.quantity)
                 .ThenBy(e => e.order)
@@ -584,14 +593,15 @@ namespace Rapadura.Gameplay.Inventory
             return slot.HasGeneratedAffixes && slot.generatedRarity > baseRarity ? slot.generatedRarity : baseRarity;
         }
 
-        private static string GetSortName(ItemDefinition item, InventorySlotData slot)
+        /// <summary>The name the inventory UI shows for this slot (composed + localized for generated items).</summary>
+        private static string GetSortName(ItemDefinition item, InventorySlotData slot, LocalizationManager localization, Func<string, ItemAffixDefinition> resolveAffix)
         {
-            if (slot.HasGeneratedAffixes && !string.IsNullOrEmpty(slot.generatedName))
+            if (item == null)
             {
-                return slot.generatedName;
+                return slot.itemId ?? string.Empty;
             }
 
-            return item != null ? item.LocalizedName() ?? string.Empty : slot.itemId ?? string.Empty;
+            return GeneratedItemName.Compose(item, slot, localization, resolveAffix) ?? string.Empty;
         }
 
         // ---------------------------------------------------------------

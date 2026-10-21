@@ -76,6 +76,8 @@ namespace Rapadura.Audio
         [SerializeField] private List<MusicEntry> _music = new List<MusicEntry>();
 
         private Dictionary<string, Cue> _cueLookup;
+        // (trigger, normalized variant) -> cue id; first binding wins, like the old linear scan.
+        private Dictionary<(SfxTrigger, string), string> _bindingLookup;
 
         public int MaxVoices => Mathf.Max(1, _maxVoices);
         public float MusicCrossfadeSeconds => Mathf.Max(0f, _musicCrossfadeSeconds);
@@ -86,20 +88,77 @@ namespace Rapadura.Audio
         public IReadOnlyList<MusicEntry> Music => _music;
 
         /// <summary>Exact (trigger, variant) lookup. A found binding with an empty cue id means "silent on purpose".</summary>
+        /// <remarks>
+        /// Runs on every hit/cast, so it is a dictionary probe built once from the bindings (variants
+        /// pre-normalized) instead of a scan that re-normalizes every entry. The query is only
+        /// normalized (allocating) when it is not already trimmed lower-case, which callers pass.
+        /// </remarks>
         public bool TryResolve(SfxTrigger trigger, string variant, out string cueId)
         {
-            string key = Normalize(variant);
+            Dictionary<(SfxTrigger, string), string> lookup = GetBindingLookup();
+            string key = variant ?? string.Empty;
 
+            if (lookup.TryGetValue((trigger, key), out cueId))
+            {
+                return true;
+            }
+
+            if (NeedsNormalize(key) && lookup.TryGetValue((trigger, Normalize(key)), out cueId))
+            {
+                return true;
+            }
+
+            cueId = null;
+            return false;
+        }
+
+        private Dictionary<(SfxTrigger, string), string> GetBindingLookup()
+        {
+            if (_bindingLookup != null)
+            {
+                return _bindingLookup;
+            }
+
+            var lookup = new Dictionary<(SfxTrigger, string), string>(_bindings.Count);
             foreach (Binding binding in _bindings)
             {
-                if (binding != null && binding.trigger == trigger && Normalize(binding.variant) == key)
+                if (binding == null)
                 {
-                    cueId = binding.cueId ?? string.Empty;
+                    continue;
+                }
+
+                var key = (binding.trigger, Normalize(binding.variant));
+                if (!lookup.ContainsKey(key))
+                {
+                    lookup.Add(key, binding.cueId ?? string.Empty);
+                }
+            }
+
+            _bindingLookup = lookup;
+            return lookup;
+        }
+
+        /// <summary>True when <see cref="Normalize"/> would change <paramref name="value"/> (edge whitespace or upper-case). No allocation.</summary>
+        private static bool NeedsNormalize(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            if (char.IsWhiteSpace(value[0]) || char.IsWhiteSpace(value[value.Length - 1]))
+            {
+                return true;
+            }
+
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (char.ToLowerInvariant(value[i]) != value[i])
+                {
                     return true;
                 }
             }
 
-            cueId = null;
             return false;
         }
 
@@ -170,6 +229,7 @@ namespace Rapadura.Audio
         public void AddBinding(SfxTrigger trigger, string variant, string cueId)
         {
             _bindings.Add(new Binding { trigger = trigger, variant = Normalize(variant), cueId = cueId ?? string.Empty });
+            _bindingLookup = null;
         }
 
         public void AddCue(Cue cue)
@@ -198,6 +258,14 @@ namespace Rapadura.Audio
             _maxVoices = maxVoices;
             _proceduralSfx = proceduralSfx;
             _proceduralMusic = proceduralMusic;
+            InvalidateLookups();
+        }
+
+        /// <summary>Drops the cached cue/binding lookups (after editing the lists in place).</summary>
+        public void InvalidateLookups()
+        {
+            _cueLookup = null;
+            _bindingLookup = null;
         }
 
         /// <summary>Resources/Audio/SfxEventMap, or the in-code default table when the asset is missing.</summary>
@@ -211,7 +279,7 @@ namespace Rapadura.Audio
 
         private void OnValidate()
         {
-            _cueLookup = null;
+            InvalidateLookups();
         }
     }
 }

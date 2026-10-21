@@ -107,6 +107,86 @@
     border-color: rgb(200, 255, 200);
 }
 
+/* Touch-only controls (Atacar, camera rotate, virtual joystick) start hidden; HudController removes
+   this class only when a touchscreen exists (and, for the joystick, when it's enabled in Settings). */
+.hud-hidden {
+    display: none;
+}
+
+/* ---- Bottom-right action row: [Atacar] [Pular] [Correr], under the skill hotbar ----
+   Atacar sits left of Pular (Correr keeps the corner, where the thumb rests while sprinting). It
+   grows to the LEFT when UiAccessibilityApplier scales its text (right-anchored, width auto), where
+   the row has free space: the whole row is ~290px wide at scale 1 vs the ~360px hotbar above it.
+   Hotbar starts 132px from the bottom, so the 76px button (bottom 32) leaves a 24px gap. */
+.hud-attack-button {
+    right: 212px;
+    bottom: 32px;
+    min-width: 76px;
+    width: auto;
+    height: 76px;
+    border-radius: 38px;
+    padding: 0 10px;
+    font-size: 15px;
+    white-space: nowrap;
+    background-color: rgba(120, 40, 36, 0.6);
+    border-color: rgba(255, 190, 170, 0.55);
+}
+
+/* ---- Camera rotate (CameraController.RotateLeft/Right; Q/E on keyboard) ----
+   Right-aligned under the top-right menu cluster (which ends ~100px from the top; its buttons only
+   grow sideways with font scale, so a fixed top is safe). 48px tall pills: above the 44px minimum
+   touch target, smaller than the menu buttons since they're used less. */
+.hud-camera-cluster {
+    position: absolute;
+    top: 116px;
+    right: 32px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.hud-camera-button {
+    position: relative;
+    min-width: 64px;
+    width: auto;
+    height: 48px;
+    border-radius: 24px;
+    margin: 0 0 0 12px;
+    padding: 0 12px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* ---- Optional virtual joystick (Settings > Controles > Joystick virtual, touch only) ----
+   Bottom-left, above the XP bar (bottom 24px, ~18px tall) and far below the vitals panel. 150px base
+   / 64px knob; HudController moves the knob with translate and writes PlayerInputHandler.TouchMoveInput.
+   The base draws a background, so UiPointerQuery treats it as UI (no tap-to-move under the thumb). */
+.hud-joystick {
+    position: absolute;
+    left: 40px;
+    bottom: 64px;
+    width: 150px;
+    height: 150px;
+    border-radius: 75px;
+    background-color: rgba(40, 44, 56, 0.35);
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.3);
+    align-items: center;
+    justify-content: center;
+}
+
+.hud-joystick-knob {
+    width: 64px;
+    height: 64px;
+    border-radius: 32px;
+    background-color: rgba(230, 230, 240, 0.55);
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.hud-joystick--active {
+    border-color: rgb(200, 255, 200);
+}
+
 .hud-xp-panel {
     position: absolute;
     left: 24px;

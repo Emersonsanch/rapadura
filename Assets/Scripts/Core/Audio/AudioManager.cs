@@ -54,6 +54,10 @@ namespace Rapadura.Core.Audio
         private float _crossfadeDuration;
         private float _musicBaseVolume = 1f;
 
+        // Fade-out state (StopMusic): the active source ramps from its current volume to silence.
+        private bool _isFadingOut;
+        private float _fadeOutStartVolume;
+
         // Ducking state.
         private float _duckMultiplier = 1f;
         private float _duckTargetMultiplier = 1f;
@@ -220,6 +224,9 @@ namespace Rapadura.Core.Audio
             _crossfadeDuration = Mathf.Max(0.01f, crossfadeDuration);
             _crossfadeElapsed = 0f;
             _isCrossfading = true;
+            // A pending StopMusic fade is superseded: its source becomes the crossfade's outgoing
+            // side and keeps ramping down from wherever it was.
+            _isFadingOut = false;
             _musicIsUsingSourceA = !_musicIsUsingSourceA;
 
             EventBus.Publish(new MusicTrackChangedEvent(clip.name));
@@ -231,18 +238,48 @@ namespace Rapadura.Core.Audio
             }
         }
 
+        /// <summary>
+        /// Fades the currently audible track out over <paramref name="fadeOutDuration"/> seconds,
+        /// then stops it and clears its clip. The other (inactive) source is stopped and cleared
+        /// immediately, which also cancels any crossfade in progress.
+        /// </summary>
         public void StopMusic(float fadeOutDuration = DefaultMusicCrossfadeDuration)
         {
+            if (_musicSourceA == null || _musicSourceB == null)
+            {
+                return;
+            }
+
+            AudioSource active = ActiveMusicSource;
+            AudioSource inactive = InactiveMusicSource;
+
+            inactive.Stop();
+            inactive.clip = null;
+            inactive.volume = 0f;
+            _isCrossfading = false;
+
+            if (active.clip == null)
+            {
+                active.Stop();
+                active.volume = 0f;
+                _isFadingOut = false;
+                return;
+            }
+
+            _fadeOutStartVolume = active.volume;
             _crossfadeDuration = Mathf.Max(0.01f, fadeOutDuration);
             _crossfadeElapsed = 0f;
-            _isCrossfading = true;
-            // Both targets fade to 0 by pointing "incoming" at silence: reuse Tick logic by
-            // clearing the clip on whichever source is about to become "incoming".
-            _musicIsUsingSourceA = !_musicIsUsingSourceA;
-            AudioSource incoming = _musicIsUsingSourceA ? _musicSourceB : _musicSourceA;
-            incoming.Stop();
-            incoming.clip = null;
+            _isFadingOut = true;
         }
+
+        private AudioSource ActiveMusicSource => _musicIsUsingSourceA ? _musicSourceA : _musicSourceB;
+        private AudioSource InactiveMusicSource => _musicIsUsingSourceA ? _musicSourceB : _musicSourceA;
+
+        /// <summary>True while a <see cref="StopMusic"/> fade-out is still ramping the active track down.</summary>
+        public bool IsMusicFadingOut => _isFadingOut;
+
+        /// <summary>True while a <see cref="PlayMusic"/> crossfade is in progress.</summary>
+        public bool IsMusicCrossfading => _isCrossfading;
 
         /// <summary>
         /// Advances crossfade/ducking timers by <paramref name="deltaTime"/> seconds. Called every
@@ -252,6 +289,7 @@ namespace Rapadura.Core.Audio
         public void Tick(float deltaTime)
         {
             TickCrossfade(deltaTime);
+            TickFadeOut(deltaTime);
             TickDuck(deltaTime);
             ApplyActiveMusicVolume();
         }
@@ -262,7 +300,7 @@ namespace Rapadura.Core.Audio
         /// </summary>
         private void ApplyActiveMusicVolume()
         {
-            if (_isCrossfading || _musicSourceA == null || _musicSourceB == null)
+            if (_isCrossfading || _isFadingOut || _musicSourceA == null || _musicSourceB == null)
             {
                 return;
             }
@@ -296,6 +334,28 @@ namespace Rapadura.Core.Audio
                 _isCrossfading = false;
                 outgoing.Stop();
                 outgoing.volume = 0f;
+            }
+        }
+
+        private void TickFadeOut(float deltaTime)
+        {
+            if (!_isFadingOut)
+            {
+                return;
+            }
+
+            _crossfadeElapsed += deltaTime;
+            float t = Mathf.Clamp01(_crossfadeElapsed / _crossfadeDuration);
+
+            AudioSource active = ActiveMusicSource;
+            active.volume = Mathf.Lerp(_fadeOutStartVolume, 0f, t);
+
+            if (t >= 1f)
+            {
+                _isFadingOut = false;
+                active.Stop();
+                active.clip = null;
+                active.volume = 0f;
             }
         }
 
@@ -477,6 +537,8 @@ namespace Rapadura.Core.Audio
         // Exposed mainly for EditMode tests to inspect pool state; gameplay code should not need these.
         public AudioSourcePool SfxPoolForTests => _sfxPool;
         public AudioSourcePool UiPoolForTests => _uiPool;
+        public AudioSource ActiveMusicSourceForTests => _musicSourceA == null ? null : ActiveMusicSource;
+        public AudioSource InactiveMusicSourceForTests => _musicSourceA == null ? null : InactiveMusicSource;
     }
 
     /// <summary>
@@ -499,7 +561,9 @@ namespace Rapadura.Core.Audio
 
         private void Update()
         {
-            _owner?.Tick(Time.deltaTime);
+            // Unscaled: GameplayPause holds timeScale at 0 on the title/hero picker and in modals,
+            // which would otherwise freeze music crossfades and ducking there.
+            _owner?.Tick(Time.unscaledDeltaTime);
         }
     }
 }

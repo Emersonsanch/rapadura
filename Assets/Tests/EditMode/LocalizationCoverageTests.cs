@@ -39,7 +39,7 @@ namespace Rapadura.Tests
     /// Coverage audit for every localized text source (see Docs/Localization.md): the core
     /// <see cref="LocalizationManager.DefaultEntries"/> table plus the runtime-merged *Texts helpers
     /// (QuestLogTexts, QuestGiverTexts, DailyQuestTexts, AchievementTexts, TooltipLocalization,
-    /// SettingsMenuTexts, UiTexts, ReturnToTitleTexts, ContentTexts, TutorialTexts, HapticsTexts, CharacterSheetTexts). Checks that every key referenced by ScriptableObject assets or built in
+    /// SettingsMenuTexts, UiTexts, ReturnToTitleTexts, ContentTexts, TutorialTexts, HapticsTexts, TouchControlsTexts, CharacterSheetTexts). Checks that every key referenced by ScriptableObject assets or built in
     /// code exists with both en and pt-BR text, that no key is defined twice with different text,
     /// that helpers never shadow a core key, and that {0}-style placeholders match per language.
     /// Also covers every <c>class="loc"</c> + <c>view-data-key</c> marker in Assets/UI/**/*.uxml
@@ -67,6 +67,7 @@ namespace Rapadura.Tests
             yield return Source(nameof(ContentTexts), ContentTexts.Entries);
             yield return Source(nameof(TutorialTexts), TutorialTexts.Entries);
             yield return Source(nameof(HapticsTexts), HapticsTexts.Entries);
+            yield return Source(nameof(TouchControlsTexts), TouchControlsTexts.Entries);
             yield return Source(nameof(CharacterSheetTexts), CharacterSheetTexts.Entries);
             yield return Source(nameof(BossTexts), BossTexts.Entries);
         }
@@ -260,6 +261,7 @@ namespace Rapadura.Tests
             CharacterSheetTexts.EnsureRegistered(manager);
             BossTexts.EnsureRegistered(manager);
             HapticsTexts.EnsureRegistered(manager);
+            TouchControlsTexts.EnsureRegistered(manager);
 
             foreach (KeyValuePair<string, string> pair in external)
             {

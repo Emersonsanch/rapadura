@@ -79,6 +79,8 @@ namespace Rapadura.UI.Encounter
             }
 
             _uiDocument.sortingOrder = SortingOrder;
+            // Self-bootstrapped document: outside UiClickSoundBinder's per-scene scans.
+            Rapadura.Audio.UiClickSoundBinder.Register(_uiDocument);
         }
 
         private void OnEnable()
@@ -96,6 +98,7 @@ namespace Rapadura.UI.Encounter
 
         private void OnDestroy()
         {
+            Rapadura.Audio.UiClickSoundBinder.Unregister(_uiDocument);
             if (_instance == this)
             {
                 _instance = null;

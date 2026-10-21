@@ -192,4 +192,15 @@
 
 .settings-rebind-footer-button {
     padding: 4px 14px;
+    /* 44px: minimum comfortable touch target (Cancelar / Restaurar tudo are tapped on phones too). */
+    min-height: 44px;
+}
+
+/* "Cancelar" only shows while a rebind is listening (SettingsMenuController.UpdateRebindModeVisuals):
+   accent-coloured so it reads as the way out, next to the "press a key/button" status. */
+.settings-rebind-cancel-button {
+    min-width: 120px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(150, 60, 50);
+    border-color: rgb(255, 170, 140);
 }

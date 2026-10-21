@@ -1,6 +1,6 @@
+using Rapadura.Core.Systems;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
 
 namespace Rapadura.Gameplay.Cameras
 {
@@ -43,45 +43,17 @@ namespace Rapadura.Gameplay.Cameras
 
         private void ReadInput()
         {
-            // Touchscreen.touches is a fixed-size slot array (its Count is the device's max touch
-            // capacity, not how many fingers are actually down) — indexing [0]/[1] unconditionally
-            // read stale/inactive slots and fed pinch-zoom garbage deltas any time a touchscreen
-            // device merely existed, even with zero fingers on it. Only count touches actually
-            // pressed right now.
-            int activeTouchCount = 0;
-            TouchControl activeTouch0 = null;
-            TouchControl activeTouch1 = null;
+            // Only fingers that started on the world count (TouchGestureTracker): thumbs resting on
+            // the virtual joystick / Atacar / hotbar never pinch-zoom. The tracker also only counts
+            // touches actually pressed right now — Touchscreen.touches is a fixed-size slot array
+            // (device capacity, not fingers down), and indexing [0]/[1] unconditionally used to feed
+            // pinch-zoom garbage deltas whenever a touchscreen merely existed.
+            TouchGestureTracker.Refresh();
 
-            if (Touchscreen.current != null)
+            if (TouchGestureTracker.IsPinching)
             {
-                foreach (TouchControl touch in Touchscreen.current.touches)
-                {
-                    if (!touch.press.isPressed)
-                    {
-                        continue;
-                    }
-
-                    if (activeTouchCount == 0)
-                    {
-                        activeTouch0 = touch;
-                    }
-                    else if (activeTouchCount == 1)
-                    {
-                        activeTouch1 = touch;
-                    }
-
-                    activeTouchCount++;
-                    if (activeTouchCount >= 2)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            if (activeTouchCount >= 2)
-            {
-                Vector2 touch0 = activeTouch0.position.ReadValue();
-                Vector2 touch1 = activeTouch1.position.ReadValue();
+                Vector2 touch0 = TouchGestureTracker.WorldTouch0;
+                Vector2 touch1 = TouchGestureTracker.WorldTouch1;
                 float currentPinchDistance = Vector2.Distance(touch0, touch1);
 
                 if (_previousPinchDistance > 0f)
