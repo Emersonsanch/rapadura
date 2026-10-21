@@ -205,6 +205,28 @@ namespace Rapadura.Gameplay.Quests
             return true;
         }
 
+        /// <summary>
+        /// Forgets a <see cref="QuestType.Daily"/> quest entirely — drops it from the active and the
+        /// completed sets, no events, no rewards — so <see cref="StartQuest"/> accepts it again.
+        /// Used by <c>DailyQuestService</c> on day rollover; every other quest stays one-shot
+        /// (StartQuest keeps refusing completed quests). Refuses anything whose registered
+        /// definition isn't Daily, so a story/side quest can never be reset by mistake.
+        /// </summary>
+        public bool ResetDailyQuest(string questId)
+        {
+            if (string.IsNullOrEmpty(questId)
+                || !_definitionsById.TryGetValue(questId, out QuestDefinition definition)
+                || definition == null
+                || definition.QuestType != QuestType.Daily)
+            {
+                return false;
+            }
+
+            bool wasActive = _activeQuests.Remove(questId);
+            bool wasCompleted = _completedQuestIds.Remove(questId);
+            return wasActive || wasCompleted;
+        }
+
         // ------------------------------------------------------------------
         // Objective progression
         // ------------------------------------------------------------------

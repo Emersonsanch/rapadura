@@ -118,6 +118,7 @@ namespace Rapadura.Gameplay.World.Map
         /// never show up again. Null (default) = every spawn-table entry is eligible, unchanged rolls.
         /// </summary>
         public Predicate<EnemyDefinition> EnemyFilter { get; set; }
+
         public RandomEncounterSettings Settings => _settings;
 
         public bool IsInGracePeriod => StepsSinceLastEncounter < _settings.GraceSteps;

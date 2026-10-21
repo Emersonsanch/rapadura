@@ -48,6 +48,8 @@ namespace Rapadura.Gameplay.Skills
         [SerializeField] private AudioClip _castSound;
         [SerializeField] private GameObject _castParticlesPrefab;
         [SerializeField] private GameObject _impactVfxPrefab;
+        [Tooltip("Optional SkillVfxLibrary preset id that overrides the element/category-resolved procedural VFX preset. Leave empty to resolve automatically.")]
+        [SerializeField] private string _vfxPresetId = string.Empty;
 
         [Header("Progression")]
         [SerializeField] private int _maxLevel = 5;
@@ -81,6 +83,7 @@ namespace Rapadura.Gameplay.Skills
         public AudioClip CastSound => _castSound;
         public GameObject CastParticlesPrefab => _castParticlesPrefab;
         public GameObject ImpactVfxPrefab => _impactVfxPrefab;
+        public string VfxPresetId => _vfxPresetId;
 
         public int MaxLevel => _maxLevel;
         public int ExperienceToUnlock => _experienceToUnlock;

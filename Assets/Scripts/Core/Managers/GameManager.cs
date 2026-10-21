@@ -11,6 +11,7 @@ using Rapadura.Gameplay.Building;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Dialogue;
+using Rapadura.Gameplay.Environment;
 using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Player;
@@ -54,6 +55,8 @@ namespace Rapadura.Core.Managers
         public CharacterSelectionState CharacterSelectionState { get; private set; }
         public DefeatedEnemyRegistry DefeatedEnemyRegistry { get; private set; }
         public AchievementManager AchievementManager { get; private set; }
+        public TimeOfDayManager TimeOfDayManager { get; private set; }
+        public WeatherSystem WeatherSystem { get; private set; }
 
         private bool _managersBuilt;
 
@@ -113,6 +116,8 @@ namespace Rapadura.Core.Managers
             CharacterSelectionState = new CharacterSelectionState();
             DefeatedEnemyRegistry = new DefeatedEnemyRegistry();
             AchievementManager = new AchievementManager();
+            TimeOfDayManager = new TimeOfDayManager();
+            WeatherSystem = new WeatherSystem();
 
             RegisterManager(SaveManager);
             RegisterManager(CheckpointManager);
@@ -131,6 +136,8 @@ namespace Rapadura.Core.Managers
             RegisterManager(CharacterSelectionState);
             RegisterManager(DefeatedEnemyRegistry);
             RegisterManager(AchievementManager);
+            RegisterManager(TimeOfDayManager);
+            RegisterManager(WeatherSystem);
 
             SaveManager.Register(QuestManager);
             SaveManager.Register(WorldMapProgress);
@@ -143,6 +150,8 @@ namespace Rapadura.Core.Managers
             SaveManager.Register(CraftingManager);
             SaveManager.Register(DefeatedEnemyRegistry);
             SaveManager.Register(AchievementManager);
+            SaveManager.Register(TimeOfDayManager);
+            SaveManager.Register(WeatherSystem);
 
             // InventoryManager/SkillManager/ComboTracker/BuffController are MonoBehaviours living
             // directly on the scene's Player object (not IManager/ServiceLocator-registered) —
