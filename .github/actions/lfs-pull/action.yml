@@ -1,0 +1,21 @@
+name: Git LFS com cache
+description: Baixa os objetos Git LFS do commit atual reaproveitando o cache de .git/lfs entre execucoes.
+
+runs:
+  using: composite
+  steps:
+    - name: Calcular hash da lista de objetos LFS
+      id: lfs-id
+      shell: bash
+      run: echo "hash=$(git lfs ls-files -l | cut -d' ' -f1 | sort | sha256sum | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+
+    - name: Restaurar cache do LFS
+      uses: actions/cache@v4
+      with:
+        path: .git/lfs
+        key: lfs-${{ steps.lfs-id.outputs.hash }}
+        restore-keys: lfs-
+
+    - name: git lfs pull
+      shell: bash
+      run: git lfs pull

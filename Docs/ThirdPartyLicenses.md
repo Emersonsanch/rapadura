@@ -67,7 +67,7 @@
 ## 6. Pendências para o usuário antes do release
 
 1. **Plano da Meshy** em cada geração (pago = uso comercial sem atribuição; gratuito = CC BY 4.0 com restrições). Se algum asset foi gerado no plano gratuito, regenerar em plano pago ou manter atribuição nos Créditos.
-2. **`com.coplaydev.unity-mcp`**: garantir que não entra na build de release; fixar versão.
+2. **`com.coplaydev.unity-mcp`**: garantir que não entra na build de release; fixar versão. Hoje o assembly `MCPForUnity.Runtime` (todas as plataformas, `autoReferenced`) **entra** nos builds; o CI resolve o pacote pelo commit travado em `packages-lock.json` e os builds de desenvolvimento do CI o incluem. Decidir: remover do manifest no branch de release ou fixar tag/commit (ver `Docs/CI.md` §5).
 3. **Plano da Unity** (Personal/Pro) e regras da splash screen.
 4. Origem de `Tex_HeroCloth.png`.
 5. Remover modelos não usados (`Joaquim/`, `Joaquim_Child/`, `*_Rigged.fbx` sem sufixo `_1` se forem duplicatas) para reduzir tamanho e superfície de licença.

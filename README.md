@@ -63,7 +63,7 @@ Unity -batchmode -projectPath . -runTests -testPlatform EditMode -testResults re
 Unity -batchmode -projectPath . -runTests -testPlatform PlayMode -testResults results-playmode.xml
 ```
 
-O CI (`.github/workflows/ci.yml`, branch `master`) roda a suíte EditMode via game-ci e precisa do secret `UNITY_LICENSE` configurado no GitHub.
+O CI (`.github/workflows/ci.yml`, branch `master`) roda EditMode e PlayMode via game-ci e, em push/manual, gera builds Windows e Android. Sem os secrets da licença Unity os jobs ficam pulados; veja [`Docs/CI.md`](Docs/CI.md) para configurar.
 
 ## Requisitos
 

@@ -1,3 +1,12 @@
+# CI do Rapadura - documentacao completa em Docs/CI.md.
+#
+# Secrets (Settings > Secrets and variables > Actions):
+#   UNITY_LICENSE + UNITY_EMAIL + UNITY_PASSWORD  (licenca Personal)
+#   ou UNITY_SERIAL + UNITY_EMAIL + UNITY_PASSWORD (licenca Plus/Pro)
+#   Opcionais (assinatura Android): ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASS,
+#   ANDROID_KEYALIAS_NAME, ANDROID_KEYALIAS_PASS
+# Sem licenca, os jobs Unity sao pulados (cinza) com um aviso, em vez de falhar.
+
 name: CI
 
 on:
@@ -5,27 +14,146 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+
+env:
+  # Mantenha igual a ProjectSettings/ProjectVersion.txt (m_EditorVersion).
+  UNITY_VERSION: 6000.3.22f1
 
 jobs:
-  test:
-    name: Run EditMode Tests
+  precheck:
+    name: Verificar licenca Unity
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      has-license: ${{ steps.check.outputs.has-license }}
+    steps:
+      - id: check
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          if [ -n "$UNITY_EMAIL" ] && [ -n "$UNITY_PASSWORD" ] && { [ -n "$UNITY_LICENSE" ] || [ -n "$UNITY_SERIAL" ]; }; then
+            echo "has-license=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has-license=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Unity CI desativado::Secrets de licenca ausentes (UNITY_LICENSE ou UNITY_SERIAL, mais UNITY_EMAIL e UNITY_PASSWORD). Testes e builds foram pulados. Veja Docs/CI.md."
+          fi
+
+  test:
+    name: Testes ${{ matrix.testMode }}
+    needs: precheck
+    if: needs.precheck.outputs.has-license == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        testMode: [EditMode, PlayMode]
     steps:
       - uses: actions/checkout@v4
         with:
-          lfs: true
+          lfs: false
+
+      - uses: ./.github/actions/lfs-pull
 
       - uses: actions/cache@v4
         with:
           path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: Library-
+          key: Library-test-${{ matrix.testMode }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-test-${{ matrix.testMode }}-
+            Library-test-
 
-      # Requires repo secrets: UNITY_LICENSE (or UNITY_EMAIL/UNITY_PASSWORD/UNITY_SERIAL)
-      # See https://game.ci/docs/github/getting-started for setup.
       - uses: game-ci/unity-test-runner@v4
+        id: tests
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          testMode: EditMode
+          unityVersion: ${{ env.UNITY_VERSION }}
+          testMode: ${{ matrix.testMode }}
+          artifactsPath: test-results/${{ matrix.testMode }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Resultados ${{ matrix.testMode }}
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.testMode }}
+          path: ${{ steps.tests.outputs.artifactsPath }}
+          if-no-files-found: ignore
+          retention-days: 14
+
+  build:
+    name: Build ${{ matrix.targetPlatform }}
+    needs: [precheck, test]
+    if: needs.precheck.outputs.has-license == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ matrix.timeout }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - targetPlatform: StandaloneWindows64
+            timeout: 90
+          - targetPlatform: Android
+            timeout: 120
+    steps:
+      - name: Liberar espaco em disco (Android)
+        if: matrix.targetPlatform == 'Android'
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          large-packages: false
+
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 0 # versionamento semantico do unity-builder precisa do historico
+
+      - uses: ./.github/actions/lfs-pull
+
+      - uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-build-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-build-${{ matrix.targetPlatform }}-
+
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: ${{ env.UNITY_VERSION }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          buildName: Rapadura
+          customParameters: -Development
+          androidExportType: androidPackage
+          # Assinatura opcional: sem ANDROID_KEYSTORE_BASE64 o APK sai com a chave de debug.
+          androidKeystoreName: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && 'rapadura.keystore' || '' }}
+          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
+          androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Rapadura-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
+          if-no-files-found: error
+          retention-days: 14
