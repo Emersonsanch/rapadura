@@ -20,6 +20,7 @@ namespace Rapadura.Gameplay.World.Map
         [Tooltip("If false, this region never auto-unlocks (starting region, or unlocked by a quest/script).")]
         [SerializeField] private bool _hasUnlockRule = true;
         [SerializeField] private BiomeType _unlockRequiresVictoriesIn = BiomeType.Forest;
+        [Tooltip("Victories needed in the required region before its boss fight is offered. Beating that boss is what unlocks this region.")]
         [SerializeField] [Min(0)] private int _victoriesRequired = WorldMapGraph.DefaultVictoriesToUnlock;
 
         [Header("Presentation (optional)")]
