@@ -6,7 +6,7 @@ namespace Rapadura.UI.HUD
     /// <summary>
     /// Pure (MonoBehaviour-free) "only one gameplay screen at a time" rule used by
     /// <see cref="HudController"/> for the screens it can open (Skills, Mochila, Missões and the
-    /// pause-menu-only Conquistas/Criação): opening one closes every other registered screen, so
+    /// pause-menu-only Conquistas/Criação, plus the NPC-opened Loja): opening one closes every other registered screen, so
     /// two full-screen overlays never stack on top of each other on a small phone screen.
     ///
     /// Screens are registered as delegates rather than concrete controller types so the controllers
@@ -78,7 +78,16 @@ namespace Rapadura.UI.HUD
         }
 
         /// <summary>Opens <paramref name="id"/> and closes every other open screen. Returns false for an unknown id.</summary>
-        public bool Open(string id)
+        public bool Open(string id) => Open(id, null);
+
+        /// <summary>
+        /// Like <see cref="Open(string)"/>, but opens via <paramref name="openOverride"/> instead of the
+        /// registered delegate — for callers that need parameters (a crafting bancada passing its
+        /// station). When given, the override always runs, even if the screen is already open, so a
+        /// second station re-opens the window with its own context. Returns false for an unknown id
+        /// (the override is then NOT run; the caller decides on a fallback).
+        /// </summary>
+        public bool Open(string id, Action openOverride)
         {
             Entry entry = Find(id);
 
@@ -90,7 +99,11 @@ namespace Rapadura.UI.HUD
             // Open first, then close the rest (same frame, so nothing renders in between): a screen
             // holding a GameplayPause is released only after the new one acquired it, so switching
             // screens never briefly un-pauses the game / fires a resumed+paused event pair.
-            if (!entry.IsOpen())
+            if (openOverride != null)
+            {
+                openOverride();
+            }
+            else if (!entry.IsOpen())
             {
                 entry.Open();
             }

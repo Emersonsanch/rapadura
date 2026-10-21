@@ -1,7 +1,9 @@
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.World;
+using Rapadura.Gameplay.World.Map;
 using Rapadura.UI.Menus;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -21,6 +23,13 @@ namespace Rapadura.UI.Death
     /// opens the shared <see cref="SaveLoadMenuController"/> in Load mode; a successful load
     /// (<see cref="GameLoadedEvent"/>) ends the flow without a checkpoint respawn. The timing rules
     /// live in the pure <see cref="DeathScreenFlow"/> (unit tested separately).
+    ///
+    /// During a world-map encounter (<see cref="SceneTransitionService.HasPendingEncounter"/>) this
+    /// screen owns the defeat: it claims <see cref="SceneTransitionService.DeferDefeatResolution"/> so
+    /// the arena doesn't run its own timed return underneath, and "Continuar" (or the timeout) revives
+    /// the player and ends the encounter as <see cref="EncounterOutcome.Defeat"/> — back to the world
+    /// map — instead of a checkpoint respawn inside the arena. A load from here also leaves the arena.
+    /// Pausing goes through <see cref="GameplayPause"/> like every other modal screen.
     ///
     /// If this component is absent or disabled, CheckpointManager keeps its original instant respawn.
     /// </summary>
@@ -45,6 +54,8 @@ namespace Rapadura.UI.Death
         [Header("Text")]
         [SerializeField] private string _title = "Você caiu...";
         [SerializeField] private string _message = "O sertão não perdoa, mas a jornada continua.";
+        [Tooltip("'Continuar' label while dying in a world-map encounter (it returns to the map).")]
+        [SerializeField] private string _encounterContinueText = "Voltar ao mapa";
 
         private UIDocument _uiDocument;
         private VisualElement _root;
@@ -56,6 +67,8 @@ namespace Rapadura.UI.Death
 
         private DeathScreenFlow _flow;
         private CheckpointManager _checkpointManager;
+        private SceneTransitionService _transition;
+        private string _defaultContinueText;
         private PlayerInput _pausedPlayerInput;
 
         /// <summary>Last whole second written to the countdown label (-1 = blank) — RefreshWidgets runs every
@@ -75,6 +88,7 @@ namespace Rapadura.UI.Death
             BindElements();
             RegisterCallbacks();
             ClaimCheckpointManager();
+            ClaimEncounterDefeat();
             ApplyVisibility(false);
         }
 
@@ -84,6 +98,7 @@ namespace Rapadura.UI.Death
             // not have registered CheckpointManager yet when OnEnable ran. Every scene object's
             // Awake has run by the time any Start runs, so retrying here is enough.
             ClaimCheckpointManager();
+            ClaimEncounterDefeat();
         }
 
         private void OnDisable()
@@ -101,6 +116,12 @@ namespace Rapadura.UI.Death
                 _checkpointManager.DeferRespawn = false;
                 _checkpointManager = null;
             }
+
+            if (_transition != null)
+            {
+                _transition.DeferDefeatResolution = false;
+                _transition = null;
+            }
         }
 
         private void BindElements()
@@ -113,6 +134,11 @@ namespace Rapadura.UI.Death
             _countdownLabel = rootVisualElement.Q<Label>("death-countdown");
             _continueButton = rootVisualElement.Q<Button>("death-continue-button");
             _loadButton = rootVisualElement.Q<Button>("death-load-button");
+
+            if (_continueButton != null && _defaultContinueText == null)
+            {
+                _defaultContinueText = _continueButton.text;
+            }
         }
 
         private void RegisterCallbacks()
@@ -146,9 +172,25 @@ namespace Rapadura.UI.Death
             }
         }
 
+        private void ClaimEncounterDefeat()
+        {
+            if (_transition != null)
+            {
+                return;
+            }
+
+            if (ServiceLocator.TryGet(out _transition))
+            {
+                _transition.DeferDefeatResolution = true;
+            }
+        }
+
+        private bool IsInEncounter => _transition != null && _transition.HasPendingEncounter;
+
         private void OnPlayerDied(PlayerDiedEvent gameEvent)
         {
             ClaimCheckpointManager();
+            ClaimEncounterDefeat();
 
             // If CheckpointManager was only claimed just now, its own handler may already have run
             // the old instant respawn this frame — nothing to show in that case.
@@ -166,6 +208,7 @@ namespace Rapadura.UI.Death
             if (_titleLabel != null) _titleLabel.text = _title;
             if (_messageLabel != null) _messageLabel.text = _message;
             if (_loadButton != null) _loadButton.style.display = _saveLoadMenu != null ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_continueButton != null) _continueButton.text = IsInEncounter ? _encounterContinueText : _defaultContinueText;
 
             PauseGameplay();
             ApplyVisibility(true);
@@ -181,9 +224,9 @@ namespace Rapadura.UI.Death
 
             // HitStopController restores its own "previous" timeScale after the lethal hit's
             // freeze-frame, which would otherwise un-pause gameplay underneath this screen.
-            if (_controlsTimeScale && Time.timeScale != 0f)
+            if (_controlsTimeScale)
             {
-                Time.timeScale = 0f;
+                GameplayPause.Enforce();
             }
 
             if (_flow.State == DeathScreenState.LoadMenuOpen)
@@ -267,6 +310,15 @@ namespace Rapadura.UI.Death
             // PlayerStats.RestoreState sets IsDead from the saved health; a save taken at 0 HP would
             // otherwise leave the player dead with no screen up — fall back to a checkpoint respawn.
             PlayerStats stats = FindPlayerStats();
+
+            if (IsInEncounter)
+            {
+                // The arena stopped resolving on its own (defeat was deferred to this screen) — a load
+                // from here leaves the arena the same way "Continuar" does.
+                ReturnToMapAsDefeat(stats);
+                return;
+            }
+
             if (stats != null && stats.IsDead)
             {
                 RespawnViaCheckpoint(stats);
@@ -277,7 +329,28 @@ namespace Rapadura.UI.Death
         {
             ApplyVisibility(false);
             ResumeGameplay();
+
+            if (IsInEncounter)
+            {
+                ReturnToMapAsDefeat(FindPlayerStats());
+                return;
+            }
+
             RespawnViaCheckpoint(FindPlayerStats());
+        }
+
+        /// <summary>
+        /// Encounter defeat: revive first (CompleteEncounter auto-saves, and the player state carried
+        /// into the next encounter must not be a corpse), then hand the result back to the world map.
+        /// </summary>
+        private void ReturnToMapAsDefeat(PlayerStats stats)
+        {
+            if (stats != null && stats.IsDead)
+            {
+                stats.Revive();
+            }
+
+            _transition.CompleteEncounter(EncounterOutcome.Defeat);
         }
 
         private void RespawnViaCheckpoint(PlayerStats fallbackStats)
@@ -293,34 +366,39 @@ namespace Rapadura.UI.Death
             }
         }
 
+        /// <summary>Freezes gameplay through <see cref="GameplayPause"/> (which publishes <see cref="GamePausedEvent"/>) and blocks player input.</summary>
         private void PauseGameplay()
         {
             if (_controlsTimeScale)
             {
-                Time.timeScale = 0f;
+                GameplayPause.Acquire(this);
+            }
+            else
+            {
+                EventBus.Publish(new GamePausedEvent());
             }
 
             GameObject player = GameObject.FindGameObjectWithTag(PlayerTag);
             _pausedPlayerInput = player != null ? player.GetComponent<PlayerInput>() : null;
             _pausedPlayerInput?.DeactivateInput();
-
-            EventBus.Publish(new GamePausedEvent());
         }
 
         private void ResumeGameplay()
         {
-            if (_controlsTimeScale)
-            {
-                Time.timeScale = 1f;
-            }
-
             if (_pausedPlayerInput != null)
             {
                 _pausedPlayerInput.ActivateInput();
                 _pausedPlayerInput = null;
             }
 
-            EventBus.Publish(new GameResumedEvent());
+            if (_controlsTimeScale)
+            {
+                GameplayPause.Release(this);
+            }
+            else
+            {
+                EventBus.Publish(new GameResumedEvent());
+            }
         }
 
         private bool IsSaveLoadMenuVisible()

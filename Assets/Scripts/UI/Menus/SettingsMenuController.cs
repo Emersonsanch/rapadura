@@ -577,7 +577,7 @@ namespace Rapadura.UI.Menus
 
             bool listening = _listeningRow == view && _listeningKind == kind;
             button.text = listening ? Text(SettingsMenuTexts.Waiting) : InputBindingUtility.GetFormattedDisplay(view.Action, bindingIndex);
-            button.SetEnabled(_rebindManager != null && view.Action != null && bindingIndex >= 0);
+            button.SetEnabled(_rebindManager != null && view.Action != null && bindingIndex >= 0 && !IsLocked(view, kind));
             button.EnableInClassList(RebindButtonListeningClass, listening);
             button.EnableInClassList(RebindButtonOverriddenClass, InputBindingUtility.IsOverridden(view.Action, bindingIndex));
         }
@@ -590,7 +590,7 @@ namespace Rapadura.UI.Menus
             }
 
             int bindingIndex = kind == BindingDeviceKind.Keyboard ? view.KeyboardIndex : view.GamepadIndex;
-            if (bindingIndex < 0)
+            if (bindingIndex < 0 || IsLocked(view, kind))
             {
                 return;
             }
@@ -615,6 +615,12 @@ namespace Rapadura.UI.Menus
                 onComplete: () => OnRebindComplete(view, action, bindingIndex, previousOverride, actionLabel),
                 onCancel: OnRebindCancelled,
                 requiredPathPrefixes: InputBindingUtility.GetRebindPathPrefixes(kind));
+        }
+
+        /// <summary>Pause's keyboard column is fixed to Esc (see <see cref="RebindRowDefinition.KeyboardLocked"/>).</summary>
+        private static bool IsLocked(RebindRowView view, BindingDeviceKind kind)
+        {
+            return kind == BindingDeviceKind.Keyboard && view.Definition.KeyboardLocked;
         }
 
         private void OnRebindComplete(RebindRowView view, InputAction action, int bindingIndex, string previousOverride, string actionLabel)

@@ -38,7 +38,8 @@ namespace Rapadura.UI.CharacterSelect
         {
             if (_currentInstance != null)
             {
-                _currentInstance.transform.Rotate(Vector3.up, _rotationSpeedDegPerSec * Time.deltaTime, Space.World);
+                // Unscaled: the select screen pauses gameplay (timeScale 0) while this turntable spins.
+                _currentInstance.transform.Rotate(Vector3.up, _rotationSpeedDegPerSec * Time.unscaledDeltaTime, Space.World);
             }
         }
 

@@ -12,12 +12,18 @@ namespace Rapadura.UI.Menus
         /// <summary>Composite part name (e.g. "up" of Move's WASD composite), or null for a plain action binding.</summary>
         public readonly string PartName;
         public readonly string LabelKey;
+        /// <summary>
+        /// The keyboard column is shown but can't be rebound (see Pause: Esc is also the rebind
+        /// cancel key and the universal "back" key, so moving it could lock the player out of menus).
+        /// </summary>
+        public readonly bool KeyboardLocked;
 
-        public RebindRowDefinition(string actionName, string partName, string labelKey)
+        public RebindRowDefinition(string actionName, string partName, string labelKey, bool keyboardLocked = false)
         {
             ActionName = actionName;
             PartName = partName;
             LabelKey = labelKey;
+            KeyboardLocked = keyboardLocked;
         }
     }
 
@@ -66,6 +72,14 @@ namespace Rapadura.UI.Menus
             new RebindRowDefinition("Skill3", null, "ui.settings.controls.action.skill3"),
             new RebindRowDefinition("Skill4", null, "ui.settings.controls.action.skill4"),
             new RebindRowDefinition("Skill5", null, "ui.settings.controls.action.skill5"),
+            new RebindRowDefinition("QuestLog", null, "ui.settings.controls.action.quest_log"),
+            new RebindRowDefinition("Inventory", null, "ui.settings.controls.action.inventory"),
+            new RebindRowDefinition("SkillTree", null, "ui.settings.controls.action.skill_tree"),
+            // Keyboard Pause stays on Esc: Esc is InputRebindManager.DefaultCancelPath (and the
+            // SettingsMenuController.Update backup cancel), so a rebind of Pause's keyboard binding
+            // could never be confirmed with Esc anyway, and moving Pause off Esc would leave Esc as
+            // "cancel" in Settings but not "pause/back" in gameplay. Gamepad Start stays rebindable.
+            new RebindRowDefinition("Pause", null, "ui.settings.controls.action.pause", keyboardLocked: true),
         };
 
         public static readonly List<LocalizationEntry> Entries = new List<LocalizationEntry>
@@ -85,6 +99,10 @@ namespace Rapadura.UI.Menus
             new LocalizationEntry("ui.settings.controls.action.skill3", "Skill 3", "Habilidade 3"),
             new LocalizationEntry("ui.settings.controls.action.skill4", "Skill 4", "Habilidade 4"),
             new LocalizationEntry("ui.settings.controls.action.skill5", "Skill 5", "Habilidade 5"),
+            new LocalizationEntry("ui.settings.controls.action.quest_log", "Quest log", "Missões"),
+            new LocalizationEntry("ui.settings.controls.action.inventory", "Inventory", "Mochila"),
+            new LocalizationEntry("ui.settings.controls.action.skill_tree", "Skill tree", "Árvore de habilidades"),
+            new LocalizationEntry("ui.settings.controls.action.pause", "Pause / back", "Pausar / voltar"),
 
             new LocalizationEntry(HeaderAction, "Action", "Ação"),
             new LocalizationEntry(HeaderKeyboard, "Keyboard", "Teclado"),

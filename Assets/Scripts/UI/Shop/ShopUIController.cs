@@ -33,6 +33,7 @@ namespace Rapadura.UI.Shop
         private VisualElement _buyListContainer;
         private VisualElement _sellListContainer;
         private Button _closeButton;
+        private bool _isShown;
 
         private ShopManager _shopManager;
         private TooltipController _tooltip;
@@ -315,12 +316,57 @@ namespace Rapadura.UI.Shop
             spawned.Clear();
         }
 
+        // ---------------------------------------------------------------
+        // Public open/close (HUD screen-exclusivity rule)
+        // ---------------------------------------------------------------
+
+        /// <summary>Whether the shop window is currently shown. Read by the HUD's screen-exclusivity rule.</summary>
+        public bool IsOpen => _isShown;
+
+        /// <summary>
+        /// Shows the window for the session <see cref="ShopManager"/> already has open (a shop is
+        /// always started by an NPC via <see cref="ShopManager.OpenShop"/>, which publishes
+        /// <see cref="ShopOpenedEvent"/> — that path still works on its own). Without an active
+        /// session there is nothing to show, so this stays hidden and returns false.
+        /// </summary>
+        public bool Open()
+        {
+            ResolveShopManager();
+
+            if (_shopManager == null || !_shopManager.IsOpen)
+            {
+                return false;
+            }
+
+            if (!_isShown)
+            {
+                Show();
+                RefreshAll();
+            }
+
+            return _isShown;
+        }
+
+        /// <summary>
+        /// Ends the shop session (same as the Fechar button: <see cref="ShopManager.CloseShop"/>,
+        /// whose <see cref="ShopClosedEvent"/> hides the window) and hides the window even if no
+        /// session/manager is around, so the coordinator never sees a stale "open" shop.
+        /// </summary>
+        public void Close()
+        {
+            ResolveShopManager();
+            _shopManager?.CloseShop();
+            Hide();
+        }
+
         private void Show()
         {
             if (_root != null)
             {
                 _root.style.display = DisplayStyle.Flex;
             }
+
+            _isShown = _root != null;
         }
 
         private void Hide()
@@ -330,6 +376,7 @@ namespace Rapadura.UI.Shop
                 _root.style.display = DisplayStyle.None;
             }
 
+            _isShown = false;
             ClearRows();
         }
     }

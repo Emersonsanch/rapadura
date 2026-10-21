@@ -2,9 +2,13 @@ using System;
 using System.Globalization;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Core.Logging;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Characters;
+using Rapadura.Gameplay.Flow;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
+using Rapadura.Gameplay.World.Map;
 using Rapadura.Save;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,6 +31,14 @@ namespace Rapadura.UI.CharacterSelect
     /// the screen re-applies that hero to the player and closes itself instead of asking again. The
     /// optional "continue-saved-button" offers exactly that from the most recent save among
     /// <see cref="_continueSlots"/>.
+    ///
+    /// Game flow: the real place to pick a hero is WorldMap.unity, opened by "Novo jogo" on the title
+    /// screen (<c>GameFrontEndController</c> / <see cref="GameFlowService"/>); without a player there
+    /// it only records the choice. The copy in Main.unity is a dev convenience for opening that scene
+    /// directly in the Editor — <see cref="GameFlowMachine.DecideCombatSceneSelect"/> guarantees it
+    /// never shows during an encounter. Pausing goes through <see cref="GameplayPause"/> (the old
+    /// direct Time.timeScale = 0 was undone by PauseMenuController.OnEnable, letting enemies attack
+    /// behind this screen).
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class CharacterSelectController : MonoBehaviour
@@ -90,22 +102,45 @@ namespace Rapadura.UI.CharacterSelect
             // A hero was already chosen this session (e.g. Main.unity re-entered from the world map;
             // GameManager and its CharacterSelectionState persist across scenes): re-apply it to
             // this scene's fresh player instead of asking again. Fresh player, so grant the skills.
-            if (ServiceLocator.TryGet(out CharacterSelectionState state) && state.Selected is CharacterId chosen)
-            {
-                ApplyCharacter(chosen, grantSkills: true);
+            ServiceLocator.TryGet(out CharacterSelectionState state);
+            SceneTransitionService transition = ServiceLocator.TryGet(out SceneTransitionService service) ? service : null;
+            bool encounterPending = transition != null && transition.HasPendingEncounter;
 
-                // SetActive(false) can't be called while this object is still being activated
-                // (Unity rejects it from inside OnEnable) — hide now, deactivate next Update.
-                Time.timeScale = 1f;
-                SetRootVisible(false);
-                _deactivatePending = true;
-                return;
+            switch (GameFlowMachine.DecideCombatSceneSelect(state != null && state.HasSelection, encounterPending))
+            {
+                case CharacterSelectDecision.ReapplyAndSkip:
+                    ApplyCharacter(state.Selected.Value, grantSkills: true);
+                    HideAndDeactivateNextFrame();
+                    return;
+
+                case CharacterSelectDecision.AbortEncounter:
+                    // Unreachable through the normal flow (the title screen forces a hero before the
+                    // map). Never show the picker over a live arena: back out to the map, whose
+                    // front-end routes a hero-less session to the picker there.
+                    GameLogger.Error("CharacterSelect", "Encounter started without a chosen hero; returning to the world map to pick one.");
+                    HideAndDeactivateNextFrame();
+                    transition.CompleteEncounter(EncounterOutcome.Fled);
+                    return;
             }
 
             SetRootVisible(true);
-            Time.timeScale = 0f;
+            GameplayPause.Acquire(this);
             BindElementsIfNeeded();
             RefreshContinueOption();
+        }
+
+        private void OnDisable()
+        {
+            GameplayPause.Release(this);
+        }
+
+        private void HideAndDeactivateNextFrame()
+        {
+            // SetActive(false) can't be called while this object is still being activated
+            // (Unity rejects it from inside OnEnable) — hide now, deactivate next Update.
+            GameplayPause.Release(this);
+            SetRootVisible(false);
+            _deactivatePending = true;
         }
 
         private void SetRootVisible(bool visible)
@@ -270,7 +305,7 @@ namespace Rapadura.UI.CharacterSelect
         private void Close()
         {
             _previewController?.Clear();
-            Time.timeScale = 1f;
+            GameplayPause.Release(this);
             gameObject.SetActive(false);
         }
 
