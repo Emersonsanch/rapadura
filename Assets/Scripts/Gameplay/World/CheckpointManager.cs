@@ -48,7 +48,31 @@ namespace Rapadura.Gameplay.World
             }
         }
 
+        /// <summary>
+        /// When true, <see cref="PlayerDiedEvent"/> no longer respawns the player instantly — some
+        /// other system (the Death screen, <c>Rapadura.UI.Death.DeathScreenController</c>) owns the
+        /// "when" and calls <see cref="RespawnPlayer"/> itself after the player confirms (or a
+        /// timeout elapses). Defaults to false so scenes/tests without a Death screen keep the
+        /// original instant-respawn contract unchanged.
+        /// </summary>
+        public bool DeferRespawn { get; set; }
+
         private void OnPlayerDied(PlayerDiedEvent gameEvent)
+        {
+            if (DeferRespawn)
+            {
+                return;
+            }
+
+            RespawnPlayer();
+        }
+
+        /// <summary>
+        /// Moves the Player-tagged object to the active checkpoint (if any) and revives it. Called
+        /// automatically on <see cref="PlayerDiedEvent"/> unless <see cref="DeferRespawn"/> is set,
+        /// in which case the Death screen calls it when the player picks "Continuar".
+        /// </summary>
+        public void RespawnPlayer()
         {
             GameObject player = GameObject.FindGameObjectWithTag(PlayerTag);
 
@@ -57,8 +81,6 @@ namespace Rapadura.Gameplay.World
                 return;
             }
 
-            // TODO(Fase 2): trocar por uma tela de morte/fade + delay real via corrotina quando
-            // o combate e a UI de HUD existirem. Por enquanto o respawn é instantâneo.
             if (_activeCheckpoint != null)
             {
                 player.transform.SetPositionAndRotation(_activeCheckpoint.Position, _activeCheckpoint.Rotation);

@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Death/DeathScreenView.uss" />
+    <ui:VisualElement name="death-screen-root" class="death-screen-root">
+        <ui:VisualElement name="death-screen-panel" class="death-screen-panel">
+            <ui:Label name="death-title" text="Você caiu..." class="death-title" />
+            <ui:Label name="death-message" text="O sertão não perdoa, mas a jornada continua." class="death-message" />
+            <ui:VisualElement name="death-button-list" class="death-button-list">
+                <ui:Button name="death-continue-button" text="Continuar" focusable="true" class="death-button death-button--primary" />
+                <ui:Button name="death-load-button" text="Carregar jogo" focusable="true" class="death-button" />
+            </ui:VisualElement>
+            <ui:Label name="death-countdown" text="" class="death-countdown" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

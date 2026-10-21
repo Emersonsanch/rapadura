@@ -1,0 +1,32 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Crafting/CraftingView.uss" />
+    <ui:VisualElement name="crafting-root" class="crafting-root">
+        <ui:VisualElement name="crafting-window" class="crafting-window">
+            <ui:VisualElement name="crafting-header" class="crafting-header">
+                <ui:Label name="crafting-title" text="Criação" class="crafting-title" />
+                <ui:Button name="crafting-close-button" text="X" class="crafting-close-button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="crafting-panels" class="crafting-panels">
+                <ui:VisualElement class="crafting-panel crafting-panel--list">
+                    <ui:Label text="Receitas" class="crafting-panel-title" />
+                    <ui:ScrollView name="crafting-recipe-scroll" class="crafting-scroll">
+                        <ui:VisualElement name="crafting-recipe-list" class="crafting-list" />
+                        <ui:Label name="crafting-empty" text="Nenhuma receita conhecida." class="crafting-empty" />
+                    </ui:ScrollView>
+                </ui:VisualElement>
+                <ui:VisualElement class="crafting-panel crafting-panel--details">
+                    <ui:Label name="crafting-recipe-name" text="" class="crafting-recipe-name" />
+                    <ui:Label name="crafting-recipe-description" text="" class="crafting-recipe-description" />
+                    <ui:Label text="Materiais" class="crafting-panel-title" />
+                    <ui:ScrollView name="crafting-ingredient-scroll" class="crafting-scroll">
+                        <ui:VisualElement name="crafting-ingredient-list" class="crafting-list" />
+                    </ui:ScrollView>
+                    <ui:Label name="crafting-result" text="" class="crafting-result" />
+                    <ui:Label name="crafting-block-reason" text="" class="crafting-block-reason" />
+                    <ui:Button name="crafting-craft-button" text="Criar" focusable="true" class="crafting-craft-button" />
+                    <ui:Label name="crafting-feedback" text="" class="crafting-feedback" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
