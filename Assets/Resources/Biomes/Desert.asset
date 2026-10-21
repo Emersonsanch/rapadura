@@ -20,7 +20,11 @@ MonoBehaviour:
   _minTemperatureCelsius: 8
   _maxTemperatureCelsius: 42
   _ambientMusicCueId: music.biome.desert
-  _enemies: []
+  _enemies:
+  - _enemy: {fileID: 11400000, guid: 1077a43cce517604e9a038418c5f6c5e, type: 2}
+    _weight: 5
+  - _enemy: {fileID: 11400000, guid: 2da7a39a915d6f14093eeb35b6de0cc6, type: 2}
+    _weight: 1
   _loot:
   - _item: {fileID: 11400000, guid: 2891a210ab06ca34e8b5647862436de9, type: 2}
     _weight: 6

@@ -20,7 +20,11 @@ MonoBehaviour:
   _minTemperatureCelsius: 10
   _maxTemperatureCelsius: 16
   _ambientMusicCueId: music.biome.caves
-  _enemies: []
+  _enemies:
+  - _enemy: {fileID: 11400000, guid: 03dff4876bb44684cb1aad560c7ac4e6, type: 2}
+    _weight: 6
+  - _enemy: {fileID: 11400000, guid: 7efb32f2511d97143a56508bd0838774, type: 2}
+    _weight: 1
   _loot:
   - _item: {fileID: 11400000, guid: cd94a946f8299c04893b92f91853aede, type: 2}
     _weight: 8

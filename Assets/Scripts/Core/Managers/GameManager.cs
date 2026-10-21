@@ -13,8 +13,10 @@ using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.World;
+using Rapadura.Gameplay.World.Map;
 using Rapadura.Save;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Rapadura.Core.Managers
 {
@@ -42,6 +44,8 @@ namespace Rapadura.Core.Managers
         public DialogueManager DialogueManager { get; private set; }
         public QuestManager QuestManager { get; private set; }
         public ShopManager ShopManager { get; private set; }
+        public WorldMapProgress WorldMapProgress { get; private set; }
+        public SceneTransitionService SceneTransitionService { get; private set; }
 
         private bool _managersBuilt;
 
@@ -55,6 +59,7 @@ namespace Rapadura.Core.Managers
             }
 
             EnsureManagersBuilt();
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         /// <summary>
@@ -94,6 +99,8 @@ namespace Rapadura.Core.Managers
             DialogueManager = new DialogueManager();
             QuestManager = new QuestManager();
             ShopManager = new ShopManager();
+            WorldMapProgress = new WorldMapProgress();
+            SceneTransitionService = new SceneTransitionService(WorldMapProgress);
 
             RegisterManager(SaveManager);
             RegisterManager(CheckpointManager);
@@ -106,8 +113,11 @@ namespace Rapadura.Core.Managers
             RegisterManager(DialogueManager);
             RegisterManager(QuestManager);
             RegisterManager(ShopManager);
+            RegisterManager(WorldMapProgress);
+            RegisterManager(SceneTransitionService);
 
             SaveManager.Register(QuestManager);
+            SaveManager.Register(WorldMapProgress);
 
             // InventoryManager/SkillManager/ComboTracker/BuffController are MonoBehaviours living
             // directly on the scene's Player object (not IManager/ServiceLocator-registered) —
@@ -132,6 +142,23 @@ namespace Rapadura.Core.Managers
 
         private void Start()
         {
+            RegisterInitialCheckpoint();
+            RegisterQuestRewardTargets();
+        }
+
+        /// <summary>
+        /// GameManager persists across scene loads (WorldMap.unity ⇄ Main.unity for encounters, see
+        /// SceneTransitionService), but Start only runs once — so without this, a Main.unity loaded
+        /// after the world map never had its fresh Player/SpawnPoint wired into QuestManager/
+        /// CheckpointManager. Both calls are idempotent, so also running on the first scene is harmless.
+        /// </summary>
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (Instance != this)
+            {
+                return;
+            }
+
             RegisterInitialCheckpoint();
             RegisterQuestRewardTargets();
         }
@@ -182,6 +209,8 @@ namespace Rapadura.Core.Managers
 
         protected override void OnDestroy()
         {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+
             if (Instance == this)
             {
                 foreach (IManager manager in _managers)

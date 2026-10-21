@@ -20,7 +20,13 @@ MonoBehaviour:
   _minTemperatureCelsius: 15
   _maxTemperatureCelsius: 26
   _ambientMusicCueId: music.biome.forest
-  _enemies: []
+  _enemies:
+  - _enemy: {fileID: 11400000, guid: a0aecf3b7dda37243b8e5e616aa3dde2, type: 2}
+    _weight: 5
+  - _enemy: {fileID: 11400000, guid: d3afbc304ddb06b438d94aa0057a80b5, type: 2}
+    _weight: 3
+  - _enemy: {fileID: 11400000, guid: 7fa4d8b696bb1d84a99178292d71332c, type: 2}
+    _weight: 1
   _loot:
   - _item: {fileID: 11400000, guid: c9bcdd9f33ac04a458fd22b23d3347ac, type: 2}
     _weight: 10

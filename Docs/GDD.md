@@ -36,8 +36,24 @@ Ordem de idade, do mais velho para o mais novo:
 
 Essa relação de parentesco é canônica e deve informar diálogos, quests e lore futuros — os personagens se conhecem a vida inteira como família, não são aliados recém-formados.
 
+### Habilidades de assinatura
+Cada herói tem 5 habilidades próprias (4 ativas + 1 Ultimate) como `SkillDefinition` em `Assets/Resources/Skills/Characters/<CharacterId>/`, na mesma ordem de `PlayableCharacter.AbilityNames`, mais uma árvore própria em `Assets/Resources/SkillTrees/tree_<id>.asset`. Ao confirmar o herói na seleção, `CharacterSkillSet.GrantTo` aprende e equipa as 4 ativas; a Ultimate exige nível 10 e a primeira habilidade, e é comprada na árvore. Todas usam só os mecanismos já existentes (dano/cura/área, buffs no próprio herói, debuffs/DoT nos alvos).
+- **Maithe** (Vento/Físico, crítico e alcance): Flecha Precisa · Chuva de Flechas · Disparo Explosivo · Passo do Vento · *Tempestade de Mil Flechas*. A prima mais velha, protetora de todos; o Disparo Explosivo usa uma bombinha inventada pelo irmão Ícaro.
+- **Maria** (Sagrado, cura e proteção): Cura Divina · Benção da Vida · Escudo Sagrado · Purificação · *Milagre Celestial*. Aprendeu o Escudo Sagrado de tanto ver o irmão Joaquim se jogar no perigo; a Purificação é a luz com que acalma a prima Lavine.
+- **Joaquim** (Terra, defesa e provocação): Muralha de Pedra · Provocação Heroica · Escudo das Raízes · Terremoto · *Última Resistência*. O "protetor" teimoso da família, que não cai enquanto houver um primo atrás dele.
+- **Ícaro** (Elétrico, torretas/drones e controle): Torreta Automática · Granada Elétrica · Drone de Ataque · Campo Magnético · *Exército Mecânico*. O drone é pintado com as cores do arco de Maithe, para impressionar a irmã mais velha.
+- **Lavine** (Trevas/Arcano, dano mágico e controle de multidão): Orbe Sombria · Correntes das Trevas · Névoa da Ilusão · Explosão Arcana · *Eclipse Eterno*. A caçula que quer ser levada a sério; o Eclipse Eterno revive a Noite Rubra em que nasceu, agora usado para proteger.
+
 ## Loop de Gameplay (macro)
 Explorar → combater/coletar recursos → craftar/equipar → evoluir personagem (skills/atributos) → avançar no mundo/enfrentar bosses → repetir com poder crescente.
+
+## Mapa mundi e encontros
+Estrutura estilo Final Fantasy clássico: um **mapa mundi** visto de cima, onde o jogador move um token entre as regiões dos 4 biomas (Floresta → Deserto → Montanha → Cavernas), com **encontros aleatórios** enquanto anda. O combate em si continua **em tempo real** (Hitbox/Health/SkillManager), sem turnos/ATB.
+
+- **Decisão técnica (2026-10-21): o mapa mundi é uma Scene separada (`Assets/Scenes/WorldMap.unity`)**, não um modo dentro da `Main.unity`. Motivo: câmera, iluminação, input e UI do mapa ficam isolados, sem ligar/desligar metade da cena de combate. A `Main.unity` passa a ser a área de combate.
+- **Fluxo:** `WorldMapController` (cena do mapa) → `RandomEncounterSystem` sorteia o encontro (chance por passo/tempo, com período de graça; inimigos via `BiomeDefinition.RollEnemy`) → `SceneTransitionService.BeginEncounter` guarda o `EncounterPayload` (bioma + ids dos inimigos) e carrega a `Main.unity` → `EncounterArenaController` spawna os inimigos e, ao fim (vitória / fuga / derrota), chama `CompleteEncounter`, que registra a vitória, faz auto-save e volta para o mapa.
+- **Progresso persistido** (`WorldMapProgress`, chave de save `"WorldMap"`): região atual, regiões desbloqueadas e vitórias por região. Uma região abre depois de N vitórias na anterior (padrão 3, configurável por nó do mapa).
+- `SceneTransitionService` e `WorldMapProgress` são managers do `GameManager` (que sobrevive à troca de cena), por isso o payload atravessa o carregamento da cena em memória.
 
 ## Referências / Inspirações
 - [ ] Preencher com jogos de referência (gênero, combate, arte) conforme forem definidos.

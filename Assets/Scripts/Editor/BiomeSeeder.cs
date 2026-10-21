@@ -100,10 +100,11 @@ namespace Rapadura.Editor
             so.FindProperty("_maxTemperatureCelsius").floatValue = seed.maxTemperatureCelsius;
             so.FindProperty("_ambientMusicCueId").stringValue = seed.ambientMusicCueId;
 
-            // Enemy spawn table: left empty pending a real EnemyDefinition seeder. Each intended
-            // entry is documented above in BuildSeeds() as a commented enemy id + weight.
-            SerializedProperty enemiesProp = so.FindProperty("_enemies");
-            enemiesProp.ClearArray();
+            // Enemy spawn table: intentionally NOT touched here. It is owned by EnemyDatabaseSeeder
+            // (Rapadura > Seed Example Enemies appends real EnemyDefinition references) and by
+            // hand-authored edits; clearing it here used to wipe that wiring whenever biomes were
+            // re-seeded after enemies, leaving RollEnemy (and so the world map's random encounters)
+            // with nothing to pick. The commented ids in BuildSeeds() remain as design notes.
 
             SerializedProperty lootProp = so.FindProperty("_loot");
             lootProp.ClearArray();
