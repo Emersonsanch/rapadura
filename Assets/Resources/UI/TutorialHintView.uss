@@ -6,20 +6,23 @@
     height: 100%;
     align-items: center;
     justify-content: flex-start;
-    padding-top: 16%;
+    /* Top strip, clear of the screen centre where combat happens (and of the HUD vitals row). */
+    padding-top: 72px;
     padding-left: 16px;
     padding-right: 16px;
 }
 
 .tutorial-hint {
-    width: 90%;
-    max-width: 540px;
-    padding: 14px 20px 14px 20px;
+    width: 70%;
+    max-width: 460px;
+    padding: 8px 14px 8px 14px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
     background-color: rgba(34, 22, 12, 0.95);
-    border-radius: 14px;
-    border-width: 3px;
+    border-radius: 12px;
+    border-width: 2px;
     border-color: rgb(240, 178, 70);
-    align-items: stretch;
     display: none;
     opacity: 0;
     translate: 0 -24px;
@@ -40,32 +43,36 @@
 }
 
 .tutorial-hint-header {
-    font-size: 14px;
+    font-size: 12px;
     color: rgb(240, 178, 70);
     -unity-font-style: bold;
-    margin-bottom: 2px;
+    margin-right: 8px;
 }
 
 .tutorial-hint-title {
-    font-size: 22px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 17px;
     color: rgb(255, 248, 235);
     -unity-font-style: bold;
     white-space: normal;
-    margin-bottom: 4px;
 }
 
 .tutorial-hint-body {
-    font-size: 18px;
+    width: 100%;
+    font-size: 15px;
     color: rgb(240, 230, 215);
     white-space: normal;
-    margin-bottom: 10px;
+    margin-top: 2px;
+    margin-bottom: 6px;
 }
 
+/* Touch target stays >= 44px tall even in the compact bubble. */
 .tutorial-hint-ok {
-    align-self: flex-end;
-    min-width: 140px;
-    min-height: 48px;
-    font-size: 18px;
+    margin-left: auto;
+    min-width: 112px;
+    min-height: 44px;
+    font-size: 16px;
     -unity-font-style: bold;
     color: rgb(34, 22, 12);
     background-color: rgb(240, 178, 70);

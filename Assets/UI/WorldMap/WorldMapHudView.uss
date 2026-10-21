@@ -277,6 +277,40 @@
     background-color: rgb(200, 200, 210);
 }
 
+/* Cleared marker: green badge with a check drawn by two borders of a rotated box (no glyph needed). */
+.wm-cleared-icon {
+    display: none;
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    border-radius: 8px;
+    background-color: rgb(70, 160, 90);
+    align-items: center;
+    justify-content: center;
+}
+
+.wm-region-label--cleared .wm-cleared-icon {
+    display: flex;
+}
+
+.wm-cleared-check {
+    width: 5px;
+    height: 9px;
+    margin-bottom: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-color: rgb(245, 250, 240);
+    rotate: 45deg;
+}
+
+.wm-region-label--cleared {
+    border-color: rgba(110, 200, 130, 0.85);
+}
+
+.wm-region-label--current.wm-region-label--cleared {
+    border-color: rgb(255, 210, 90);
+}
+
 /* ---- Mochila summary (modal) ---- */
 .wm-backpack-overlay {
     display: none;
@@ -287,13 +321,13 @@
     height: 100%;
     align-items: center;
     justify-content: center;
-    background-color: rgba(6, 7, 10, 0.75);
+    background-color: rgba(6, 7, 10, 0.88);
 }
 
 .wm-backpack-panel {
     width: 360px;
     padding: 20px;
-    background-color: rgba(20, 22, 30, 0.97);
+    background-color: rgb(20, 22, 30);
     border-radius: 10px;
     border-width: 2px;
     border-color: rgba(255, 255, 255, 0.08);

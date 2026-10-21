@@ -164,5 +164,62 @@ namespace Rapadura.Tests
             Assert.IsTrue(received.HasValue);
             Assert.AreEqual(_stats.CurrentMana, received.Value.CurrentMana);
         }
+
+        [Test]
+        public void LevelUp_RefillsHealthAndMana()
+        {
+            _stats.ApplyDamage(30f);
+            _stats.ConsumeMana(40f);
+            Assert.Less(_stats.CurrentHealth, _stats.MaxHealth);
+            Assert.Less(_stats.CurrentMana, _stats.MaxMana);
+
+            _stats.AddExperience(_stats.GetExperienceToNextLevel());
+
+            Assert.AreEqual(2, _stats.Level);
+            Assert.AreEqual(_stats.MaxHealth, _stats.CurrentHealth, 0.001f, "Level-up should refill health to the new max.");
+            Assert.AreEqual(_stats.MaxMana, _stats.CurrentMana, 0.001f, "Level-up should refill mana to the new max.");
+        }
+
+        [Test]
+        public void LevelUp_PublishesFullVitals()
+        {
+            _stats.ApplyDamage(30f);
+            _stats.ConsumeMana(40f);
+            PlayerHealthChangedEvent? health = null;
+            PlayerManaChangedEvent? mana = null;
+            EventBus.Subscribe<PlayerHealthChangedEvent>(evt => health = evt);
+            EventBus.Subscribe<PlayerManaChangedEvent>(evt => mana = evt);
+
+            _stats.AddExperience(_stats.GetExperienceToNextLevel());
+
+            Assert.IsTrue(health.HasValue);
+            Assert.AreEqual(health.Value.MaxHealth, health.Value.CurrentHealth, 0.001f);
+            Assert.IsTrue(mana.HasValue);
+            Assert.AreEqual(mana.Value.MaxMana, mana.Value.CurrentMana, 0.001f);
+        }
+
+        [Test]
+        public void ExperienceWithoutLevelUp_DoesNotHeal()
+        {
+            _stats.ApplyDamage(30f);
+            float damaged = _stats.CurrentHealth;
+
+            _stats.AddExperience(1);
+
+            Assert.AreEqual(1, _stats.Level);
+            Assert.AreEqual(damaged, _stats.CurrentHealth, 0.001f);
+        }
+
+        [Test]
+        public void LevelUp_WhileDead_DoesNotRevive()
+        {
+            _stats.ApplyDamage(_stats.MaxHealth * 10f);
+            Assert.IsTrue(_stats.IsDead);
+
+            _stats.AddExperience(_stats.GetExperienceToNextLevel());
+
+            Assert.IsTrue(_stats.IsDead);
+            Assert.AreEqual(0f, _stats.CurrentHealth, 0.001f);
+        }
     }
 }

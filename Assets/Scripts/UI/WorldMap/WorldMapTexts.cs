@@ -37,6 +37,16 @@ namespace Rapadura.UI.WorldMap
         /// <summary>Victories done but the region is still gated (boss challenge): {0} = region to unlock, {1} = region whose boss must fall.</summary>
         public const string VictoriesBoss = "ui.worldmap.victories_boss";
         public const string AllUnlocked = "ui.worldmap.all_unlocked";
+        /// <summary>Boss-gated goal in the current region: {0} = victories, {1} = required (wins only open the boss fight).</summary>
+        public const string VictoriesToBoss = "ui.worldmap.victories_to_boss";
+        /// <summary>Boss-gated goal in another region: {0} = victories, {1} = required, {2} = region to win them in.</summary>
+        public const string VictoriesToBossIn = "ui.worldmap.victories_to_boss_in";
+        /// <summary>Victories done in the current region, its boss is next: {0} = region the boss unlocks.</summary>
+        public const string VictoriesBossHere = "ui.worldmap.victories_boss_here";
+        /// <summary>The current region's boss is beaten: {0} = region, {1} = the next goal's text.</summary>
+        public const string RegionDoneNext = "ui.worldmap.region_done_next";
+        /// <summary>The current region's boss is beaten and nothing else is left: {0} = region.</summary>
+        public const string RegionDoneAll = "ui.worldmap.region_done_all";
 
         // -- Region labels --
         public const string LabelHere = "ui.worldmap.label.here";
@@ -45,6 +55,10 @@ namespace Rapadura.UI.WorldMap
         public const string LabelLocked = "ui.worldmap.label.locked";
         /// <summary>Locked label once the victories are done (boss gate): {0} = region whose boss must fall.</summary>
         public const string LabelBoss = "ui.worldmap.label.boss";
+        /// <summary>Locked label behind a boss gate: {0} = victories required, {1} = region (battles + its boss), {2} = victories so far.</summary>
+        public const string LabelLockedBoss = "ui.worldmap.label.locked_boss";
+        /// <summary>Status line of a region whose boss is beaten (shown when no "aqui"/"viajar" hint applies).</summary>
+        public const string LabelCleared = "ui.worldmap.label.cleared";
 
         // -- Region boss challenge --
         /// <summary>"Enfrentar o chefe" button (shown while RegionBossProgress.CanChallengeBoss holds for the current region).</summary>
@@ -78,10 +92,17 @@ namespace Rapadura.UI.WorldMap
             new LocalizationEntry(VictoriesIn, "Victories in {3}: {0}/{1} to unlock {2}", "Vitórias em {3}: {0}/{1} para desbloquear {2}"),
             new LocalizationEntry(VictoriesBoss, "Beat the {1} boss to unlock {0}", "Derrote o chefe de {1} para desbloquear {0}"),
             new LocalizationEntry(AllUnlocked, "Every region unlocked", "Todas as regiões desbloqueadas"),
+            new LocalizationEntry(VictoriesToBoss, "Victories: {0}/{1} to face the boss", "Vitórias: {0}/{1} para enfrentar o chefe"),
+            new LocalizationEntry(VictoriesToBossIn, "Win {1} battles in {2} to face the boss ({0}/{1})", "Vença {1} batalhas em {2} para enfrentar o chefe ({0}/{1})"),
+            new LocalizationEntry(VictoriesBossHere, "Beat the boss to unlock {0}", "Derrote o chefe para desbloquear {0}"),
+            new LocalizationEntry(RegionDoneNext, "{0} cleared! Next: {1}", "Região {0} concluída! Próximo: {1}"),
+            new LocalizationEntry(RegionDoneAll, "{0} cleared! Every region unlocked", "Região {0} concluída! Todas as regiões desbloqueadas"),
             new LocalizationEntry(LabelHere, "You are here", "Você está aqui"),
             new LocalizationEntry(LabelTravel, "Tap to travel", "Toque para viajar"),
             new LocalizationEntry(LabelLocked, "Win {0} battles in {1} ({2}/{0})", "Vença {0} batalhas em {1} ({2}/{0})"),
             new LocalizationEntry(LabelBoss, "Beat the {0} boss", "Derrote o chefe de {0}"),
+            new LocalizationEntry(LabelLockedBoss, "Win {0} battles in {1}, then beat its boss ({2}/{0})", "Vença {0} batalhas em {1} e derrote o chefe ({2}/{0})"),
+            new LocalizationEntry(LabelCleared, "Cleared", "Concluída"),
             new LocalizationEntry(LabelLockedGeneric, "Locked", "Bloqueado"),
             new LocalizationEntry(BossChallenge, "Face the boss", "Enfrentar o chefe"),
             new LocalizationEntry(BackpackItems, "Items: {0} ({1}/{2} slots)", "Itens: {0} ({1}/{2} espaços)"),

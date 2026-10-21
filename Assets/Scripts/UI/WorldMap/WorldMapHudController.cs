@@ -22,7 +22,7 @@ namespace Rapadura.UI.WorldMap
     /// <summary>
     /// In-game UI of WorldMap.unity once a hero is in play (WorldMapHudView.uxml/.uss):
     /// <list type="bullet">
-    /// <item>Top bar: hero name + level, current region, "Vitórias: 2/3 para desbloquear Deserto",
+    /// <item>Top bar: hero name + level, current region, "Vitórias: 2/3 para enfrentar o chefe" (or "Região Floresta concluída! Próximo: ..."),
     /// weather badge/text and the in-game clock (TimeOfDay/Weather events, never polled).</item>
     /// <item>Buttons Missões / Mochila / Conquistas / Menu. Missões and Conquistas reuse
     /// <see cref="QuestLogController"/>/<see cref="AchievementListController"/> (their managers are
@@ -59,6 +59,7 @@ namespace Rapadura.UI.WorldMap
         private const string LabelCurrentClass = "wm-region-label--current";
         private const string LabelTravelableClass = "wm-region-label--travelable";
         private const string LabelLockedClass = "wm-region-label--locked";
+        private const string LabelClearedClass = "wm-region-label--cleared";
         private const string BossButtonVisibleClass = "wm-boss-button--visible";
 
         [Header("Scene references (auto-resolved when empty)")]
@@ -85,6 +86,7 @@ namespace Rapadura.UI.WorldMap
             public Label Name;
             public Label Status;
             public RegionLabelStatus State = (RegionLabelStatus)(-1);
+            public bool Cleared;
             // Hidden until the first projection places it (no flash at the panel's top-left corner).
             public bool OnScreen;
             public Vector2 LastPosition = new Vector2(float.NaN, float.NaN);
@@ -119,6 +121,7 @@ namespace Rapadura.UI.WorldMap
         private bool _labelsBuilt;
         private bool _progressSeen;
         private bool _wasTraveling;
+        private bool _labelsHiddenByModal;
         private float _nextLabelUpdate;
         private string _weatherIconClass;
 
@@ -214,6 +217,10 @@ namespace Rapadura.UI.WorldMap
                 HandleBack();
             }
 
+            // Region labels sit in this low-sort-order HUD; any modal (quest log, achievements, pause,
+            // the Mochila summary...) freezes gameplay, so hide them instead of letting them show through.
+            SetLabelsHiddenByModal(ShouldHideRegionLabels(GameplayPause.IsPaused));
+
             if (Time.unscaledTime < _nextLabelUpdate)
             {
                 return;
@@ -271,6 +278,7 @@ namespace Rapadura.UI.WorldMap
             // Labels are rebuilt for the (possibly new) tree after a re-enable.
             _labels.Clear();
             _labelsBuilt = false;
+            _labelsHiddenByModal = false;
         }
 
         private void RegisterCallbacks()
@@ -326,7 +334,23 @@ namespace Rapadura.UI.WorldMap
             return _pauseMenu != null;
         }
 
+        /// <summary>Region labels are hidden while any modal screen (or the pause menu) freezes gameplay.</summary>
+        public static bool ShouldHideRegionLabels(bool gameplayPaused) => gameplayPaused;
+
+        private void SetLabelsHiddenByModal(bool hidden)
+        {
+            if (hidden == _labelsHiddenByModal || _labelsLayer == null)
+            {
+                return;
+            }
+
+            _labelsHiddenByModal = hidden;
+            _labelsLayer.style.display = hidden ? DisplayStyle.None : DisplayStyle.Flex;
+        }
+
         private WorldMapProgress Progress => _worldMap != null ? _worldMap.Progress : null;
+
+        private RegionBossProgress Bosses => _worldMap != null ? _worldMap.RegionBosses : null;
 
         private WorldMapGraph Graph => _worldMap != null ? _worldMap.Graph : null;
 
@@ -428,8 +452,7 @@ namespace Rapadura.UI.WorldMap
 
             LocalizationManager localization = Localization;
             SetText(_regionNameLabel, WorldMapHudPresenter.RegionName(localization, progress.CurrentRegion));
-            UnlockGoal goal = WorldMapHudPresenter.FindNextUnlock(Graph, progress);
-            SetText(_victoriesLabel, WorldMapHudPresenter.VictoriesText(localization, goal, progress.CurrentRegion));
+            SetText(_victoriesLabel, WorldMapHudPresenter.GoalText(localization, Graph, progress, Bosses));
             RefreshBossButton();
         }
 
@@ -568,7 +591,15 @@ namespace Rapadura.UI.WorldMap
                 label.Status = new Label { pickingMode = PickingMode.Ignore };
                 label.Status.AddToClassList("wm-region-label-status");
 
+                // Cleared marker: a check mark drawn with two borders (no glyph: the default font has no ✓).
+                var clearedIcon = new VisualElement { pickingMode = PickingMode.Ignore };
+                clearedIcon.AddToClassList("wm-cleared-icon");
+                var check = new VisualElement { pickingMode = PickingMode.Ignore };
+                check.AddToClassList("wm-cleared-check");
+                clearedIcon.Add(check);
+
                 header.Add(lockIcon);
+                header.Add(clearedIcon);
                 header.Add(label.Name);
                 label.Root.Add(header);
                 label.Root.Add(label.Status);
@@ -603,6 +634,7 @@ namespace Rapadura.UI.WorldMap
 
             WorldMapProgress progress = Progress;
             WorldMapGraph graph = Graph;
+            RegionBossProgress bosses = Bosses;
             bool traveling = _worldMap != null && _worldMap.IsTraveling;
             LocalizationManager localization = null;
             bool localizationResolved = false;
@@ -610,9 +642,10 @@ namespace Rapadura.UI.WorldMap
             foreach (RegionLabel label in _labels)
             {
                 RegionLabelStatus status = WorldMapHudPresenter.GetLabelStatus(graph, progress, label.Node.Region, traveling);
+                bool cleared = WorldMapHudPresenter.IsCleared(progress, bosses, label.Node.Region);
 
                 // Locked labels show live victory counts, so they always refresh.
-                if (status == label.State && status != RegionLabelStatus.Locked)
+                if (status == label.State && cleared == label.Cleared && status != RegionLabelStatus.Locked)
                 {
                     continue;
                 }
@@ -624,13 +657,15 @@ namespace Rapadura.UI.WorldMap
                 }
 
                 label.State = status;
+                label.Cleared = cleared;
                 label.Name.text = WorldMapHudPresenter.RegionName(localization, label.Node.Region);
-                string statusText = WorldMapHudPresenter.LabelStatusText(localization, graph, progress, label.Node.Region, status);
+                string statusText = WorldMapHudPresenter.LabelStatusText(localization, graph, progress, label.Node.Region, status, bosses);
                 label.Status.text = statusText;
                 label.Status.style.display = string.IsNullOrEmpty(statusText) ? DisplayStyle.None : DisplayStyle.Flex;
                 label.Root.EnableInClassList(LabelCurrentClass, status == RegionLabelStatus.Current);
                 label.Root.EnableInClassList(LabelTravelableClass, status == RegionLabelStatus.Travelable);
                 label.Root.EnableInClassList(LabelLockedClass, status == RegionLabelStatus.Locked);
+                label.Root.EnableInClassList(LabelClearedClass, cleared);
             }
         }
 

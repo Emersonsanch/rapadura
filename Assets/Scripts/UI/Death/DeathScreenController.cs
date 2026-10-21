@@ -3,10 +3,12 @@ using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Player;
+using Rapadura.Gameplay.Tutorial;
 using Rapadura.Gameplay.World;
 using Rapadura.Gameplay.World.Map;
 using Rapadura.UI.Common;
 using Rapadura.UI.Menus;
+using Rapadura.UI.Tutorial;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -34,6 +36,10 @@ namespace Rapadura.UI.Death
     /// Pausing goes through <see cref="GameplayPause"/> like every other modal screen.
     ///
     /// If this component is absent or disabled, CheckpointManager keeps its original instant respawn.
+    ///
+    /// The first-death tutorial tip (<see cref="TutorialSteps.Death"/>) is shown inside this panel
+    /// ("death-tip") rather than as the floating hint bubble, which steps aside while a modal holds a
+    /// pause; closing the screen counts as having read it.
     ///
     /// Text goes through <see cref="UiTexts"/> (<c>ui.death.*</c>; static UXML via
     /// <see cref="UiDocumentLocalizer"/>). The serialized title/message/encounter strings are only used
@@ -75,6 +81,10 @@ namespace Rapadura.UI.Death
         private Label _countdownLabel;
         private Button _continueButton;
         private Button _loadButton;
+        private VisualElement _tipBox;
+        private Label _tipTitleLabel;
+        private Label _tipBodyLabel;
+        private bool _tipShown;
 
         private DeathScreenFlow _flow;
         private CheckpointManager _checkpointManager;
@@ -150,6 +160,9 @@ namespace Rapadura.UI.Death
             _countdownLabel = rootVisualElement.Q<Label>("death-countdown");
             _continueButton = rootVisualElement.Q<Button>("death-continue-button");
             _loadButton = rootVisualElement.Q<Button>("death-load-button");
+            _tipBox = rootVisualElement.Q<VisualElement>("death-tip");
+            _tipTitleLabel = rootVisualElement.Q<Label>("death-tip-title");
+            _tipBodyLabel = rootVisualElement.Q<Label>("death-tip-body");
         }
 
         private void RegisterCallbacks()
@@ -217,6 +230,7 @@ namespace Rapadura.UI.Death
             }
 
             _localizer.Refresh();
+            _tipShown = ShouldShowDeathTip();
             ApplyTexts();
             if (_loadButton != null) _loadButton.style.display = _saveLoadMenu != null ? DisplayStyle.Flex : DisplayStyle.None;
 
@@ -238,7 +252,60 @@ namespace Rapadura.UI.Death
                     : UiTexts.Get(localization, UiTexts.DeathContinue);
             }
 
+            ApplyDeathTip(localization);
             _lastCountdownSecond = int.MinValue;
+        }
+
+        /// <summary>
+        /// Queues the first-death tip (idempotent: the manager's own PlayerDiedEvent handler may not
+        /// have run yet) and reports whether it is still unread — false when already done or hints are off.
+        /// </summary>
+        private static bool ShouldShowDeathTip()
+        {
+            if (!ServiceLocator.TryGet(out TutorialManager tutorial) || !tutorial.HintsEnabled)
+            {
+                return false;
+            }
+
+            tutorial.Trigger(TutorialSteps.Death);
+            return tutorial.IsPending(TutorialSteps.Death);
+        }
+
+        private void ApplyDeathTip(LocalizationManager localization)
+        {
+            if (_tipBox == null)
+            {
+                return;
+            }
+
+            _tipBox.style.display = _tipShown ? DisplayStyle.Flex : DisplayStyle.None;
+            if (!_tipShown)
+            {
+                return;
+            }
+
+            if (_tipTitleLabel != null) _tipTitleLabel.text = TutorialTexts.Get(localization, TutorialSteps.TitleKey(TutorialSteps.Death));
+            if (_tipBodyLabel != null) _tipBodyLabel.text = TutorialTexts.Get(localization, TutorialSteps.BodyKey(TutorialSteps.Death));
+        }
+
+        /// <summary>The screen closed with the tip on it: it was read (marks the step done, saves the profile).</summary>
+        private void AcknowledgeDeathTip()
+        {
+            if (!_tipShown)
+            {
+                return;
+            }
+
+            _tipShown = false;
+            if (_tipBox != null)
+            {
+                _tipBox.style.display = DisplayStyle.None;
+            }
+
+            if (ServiceLocator.TryGet(out TutorialManager tutorial))
+            {
+                tutorial.Acknowledge(TutorialSteps.Death);
+            }
         }
 
         /// <summary>The Inspector override when it was changed from the pt-BR default, else the key's text.</summary>
@@ -348,6 +415,7 @@ namespace Rapadura.UI.Death
 
             _saveLoadMenu?.Hide();
             ApplyVisibility(false);
+            AcknowledgeDeathTip();
             ResumeGameplay();
 
             // PlayerStats.RestoreState sets IsDead from the saved health; a save taken at 0 HP would
@@ -371,6 +439,7 @@ namespace Rapadura.UI.Death
         private void FinishWithRespawn()
         {
             ApplyVisibility(false);
+            AcknowledgeDeathTip();
             ResumeGameplay();
 
             if (IsInEncounter)

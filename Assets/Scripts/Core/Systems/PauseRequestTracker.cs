@@ -26,6 +26,12 @@ namespace Rapadura.Core.Systems
         public bool IsHeldBy(object owner) => owner != null && _owners.Contains(owner);
 
         /// <summary>
+        /// Gameplay is frozen by someone other than <paramref name="owner"/> (another modal screen or
+        /// an external pause) — e.g. overlays such as tutorial hints step aside while a modal is up.
+        /// </summary>
+        public bool IsPausedByOthers(object owner) => ExternalPaused || _owners.Count > (IsHeldBy(owner) ? 1 : 0);
+
+        /// <summary>
         /// Adds <paramref name="owner"/>. True only when this call took gameplay from fully running to
         /// paused — the caller must then freeze time and announce the pause. Acquiring twice with the
         /// same owner is a no-op (each owner counts once).

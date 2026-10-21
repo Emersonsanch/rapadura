@@ -99,8 +99,11 @@ namespace Rapadura.Tests
             Assert.AreEqual(BiomeType.Forest, goal.RequiredRegion);
             Assert.AreEqual(2, goal.Victories);
             Assert.AreEqual(3, goal.Required);
-            Assert.AreEqual("Vitórias: 2/3 para desbloquear Deserto", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest));
-            Assert.AreEqual("Victories: 2/3 to unlock Desert", WorldMapHudPresenter.VictoriesText(English(), goal, BiomeType.Forest));
+            // Victories only open the boss fight; the boss unlocks the next region.
+            Assert.AreEqual("Vitórias: 2/3 para enfrentar o chefe", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest));
+            Assert.AreEqual("Victories: 2/3 to face the boss", WorldMapHudPresenter.VictoriesText(English(), goal, BiomeType.Forest));
+            // A region without a boss still unlocks the next one on victories alone.
+            Assert.AreEqual("Vitórias: 2/3 para desbloquear Deserto", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest, bossGated: false));
         }
 
         [Test]
@@ -112,7 +115,9 @@ namespace Rapadura.Tests
             UnlockGoal goal = WorldMapHudPresenter.FindNextUnlock(WorldMapGraph.CreateDefault(), progress);
 
             Assert.AreEqual(BiomeType.Mountain, goal.Target);
-            Assert.AreEqual("Vitórias em Deserto: 1/3 para desbloquear Montanha", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest));
+            Assert.AreEqual("Vença 3 batalhas em Deserto para enfrentar o chefe (1/3)", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest));
+            Assert.AreEqual("Win 3 battles in Desert to face the boss (1/3)", WorldMapHudPresenter.VictoriesText(English(), goal, BiomeType.Forest));
+            Assert.AreEqual("Vitórias em Deserto: 1/3 para desbloquear Montanha", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest, bossGated: false));
         }
 
         [Test]
@@ -170,9 +175,9 @@ namespace Rapadura.Tests
             WorldMapProgress locked = Progress();
             Win(locked, BiomeType.Forest, 2);
 
-            Assert.AreEqual("Vença 3 batalhas em Floresta (2/3)",
+            Assert.AreEqual("Vença 3 batalhas em Floresta e derrote o chefe (2/3)",
                 WorldMapHudPresenter.LabelStatusText(null, graph, locked, BiomeType.Desert, RegionLabelStatus.Locked));
-            Assert.AreEqual("Win 3 battles in Forest (2/3)",
+            Assert.AreEqual("Win 3 battles in Forest, then beat its boss (2/3)",
                 WorldMapHudPresenter.LabelStatusText(English(), graph, locked, BiomeType.Desert, RegionLabelStatus.Locked));
             Assert.AreEqual("Bloqueado",
                 WorldMapHudPresenter.LabelStatusText(null, graph, locked, BiomeType.Caves, RegionLabelStatus.Locked), "no rule");
@@ -193,10 +198,88 @@ namespace Rapadura.Tests
 
             UnlockGoal goal = WorldMapHudPresenter.FindNextUnlock(graph, progress);
             Assert.AreEqual(3, goal.Victories, "capped at the requirement");
-            Assert.AreEqual("Derrote o chefe de Floresta para desbloquear Deserto", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest));
-            Assert.AreEqual("Beat the Forest boss to unlock Desert", WorldMapHudPresenter.VictoriesText(English(), goal, BiomeType.Forest));
+            Assert.AreEqual("Derrote o chefe para desbloquear Deserto", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest));
+            Assert.AreEqual("Beat the boss to unlock Desert", WorldMapHudPresenter.VictoriesText(English(), goal, BiomeType.Forest));
+            Assert.AreEqual("Derrote o chefe de Floresta para desbloquear Deserto", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Desert), "goal in another region names it");
+            Assert.AreEqual("Beat the Forest boss to unlock Desert", WorldMapHudPresenter.VictoriesText(English(), goal, BiomeType.Desert));
             Assert.AreEqual("Derrote o chefe de Floresta",
                 WorldMapHudPresenter.LabelStatusText(null, graph, progress, BiomeType.Desert, RegionLabelStatus.Locked));
+        }
+
+        [Test]
+        public void GoalText_BeforeAndAfterTheBossFightIsOffered()
+        {
+            WorldMapGraph graph = WorldMapGraph.CreateDefault();
+            WorldMapProgress progress = Progress();
+
+            Assert.AreEqual("Vitórias: 0/3 para enfrentar o chefe", WorldMapHudPresenter.GoalText(null, graph, progress));
+            Win(progress, BiomeType.Forest, 3);
+            Assert.AreEqual("Derrote o chefe para desbloquear Deserto", WorldMapHudPresenter.GoalText(null, graph, progress));
+            Assert.AreEqual("Beat the boss to unlock Desert", WorldMapHudPresenter.GoalText(English(), graph, progress));
+            Assert.AreEqual(string.Empty, WorldMapHudPresenter.GoalText(null, graph, null));
+        }
+
+        [Test]
+        public void GoalText_ClearedRegion_SaysSoAndNamesTheNextGoal()
+        {
+            WorldMapGraph graph = WorldMapGraph.CreateDefault();
+            WorldMapProgress progress = Progress(BiomeType.Desert);
+            Win(progress, BiomeType.Forest, 3);
+            progress.MarkRegionCleared(BiomeType.Forest);
+
+            // Still standing in Forest: no bare "Vitórias em Deserto: 0/3 para desbloquear Montanha".
+            Assert.AreEqual("Região Floresta concluída! Próximo: Vença 3 batalhas em Deserto para enfrentar o chefe (0/3)",
+                WorldMapHudPresenter.GoalText(null, graph, progress));
+            Assert.AreEqual("Forest cleared! Next: Win 3 battles in Desert to face the boss (0/3)",
+                WorldMapHudPresenter.GoalText(English(), graph, progress));
+
+            // Walking into Desert, the goal is local again.
+            progress.SetCurrentRegion(BiomeType.Desert);
+            Win(progress, BiomeType.Desert, 1);
+            Assert.AreEqual("Vitórias: 1/3 para enfrentar o chefe", WorldMapHudPresenter.GoalText(null, graph, progress));
+        }
+
+        [Test]
+        public void GoalText_LastRegion_ShowsItsOwnBoss_ThenAllDone()
+        {
+            WorldMapGraph graph = WorldMapGraph.CreateDefault();
+            WorldMapProgress progress = Progress(BiomeType.Desert, BiomeType.Mountain, BiomeType.Caves);
+            progress.SetCurrentRegion(BiomeType.Caves);
+            Win(progress, BiomeType.Caves, 1);
+
+            // Caves gates nothing, but its boss is still the goal (not "Todas as regiões desbloqueadas").
+            Assert.AreEqual("Vitórias: 1/3 para enfrentar o chefe", WorldMapHudPresenter.GoalText(null, graph, progress));
+            Win(progress, BiomeType.Caves, 2);
+            Assert.AreEqual("Derrote o chefe de Cavernas", WorldMapHudPresenter.GoalText(null, graph, progress));
+
+            progress.MarkRegionCleared(BiomeType.Caves);
+            Assert.AreEqual("Região Cavernas concluída! Todas as regiões desbloqueadas", WorldMapHudPresenter.GoalText(null, graph, progress));
+            Assert.AreEqual("Caves cleared! Every region unlocked", WorldMapHudPresenter.GoalText(English(), graph, progress));
+        }
+
+        [Test]
+        public void LabelStatusText_ClearedRegion_IsMarked()
+        {
+            WorldMapGraph graph = WorldMapGraph.CreateDefault();
+            WorldMapProgress progress = Progress(BiomeType.Desert, BiomeType.Mountain);
+            progress.MarkRegionCleared(BiomeType.Forest);
+            progress.SetCurrentRegion(BiomeType.Mountain);
+
+            Assert.IsTrue(WorldMapHudPresenter.IsCleared(progress, null, BiomeType.Forest));
+            Assert.IsFalse(WorldMapHudPresenter.IsCleared(progress, null, BiomeType.Desert));
+            Assert.AreEqual(RegionLabelStatus.None, WorldMapHudPresenter.GetLabelStatus(graph, progress, BiomeType.Forest, false));
+            Assert.AreEqual("Concluída", WorldMapHudPresenter.LabelStatusText(null, graph, progress, BiomeType.Forest, RegionLabelStatus.None));
+            Assert.AreEqual("Cleared", WorldMapHudPresenter.LabelStatusText(English(), graph, progress, BiomeType.Forest, RegionLabelStatus.None));
+            Assert.AreEqual(string.Empty, WorldMapHudPresenter.LabelStatusText(null, graph, progress, BiomeType.Desert, RegionLabelStatus.None));
+            // The "aqui"/"viajar" hints still win on a cleared region (its marker is the label's check badge).
+            Assert.AreEqual("Você está aqui", WorldMapHudPresenter.LabelStatusText(null, graph, progress, BiomeType.Forest, RegionLabelStatus.Current));
+        }
+
+        [Test]
+        public void RegionLabels_HideWhileAModalPausesGameplay()
+        {
+            Assert.IsTrue(WorldMapHudController.ShouldHideRegionLabels(true));
+            Assert.IsFalse(WorldMapHudController.ShouldHideRegionLabels(false));
         }
 
         // ------------------------------------------------------------------

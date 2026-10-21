@@ -52,38 +52,58 @@ namespace Rapadura.Tests
 
         private const string CoreSourceName = "LocalizationManager.DefaultEntries";
 
-        private static IEnumerable<KeyValuePair<string, IReadOnlyList<LocalizationEntry>>> Sources()
+        /// <summary>
+        /// One localized text source: its entries plus the runtime merge it performs into a live
+        /// <see cref="LocalizationManager"/> (null for the core table, which the manager owns).
+        /// Registering the merge here means <see cref="RuntimeMerge_HelpersDoNotOverrideExistingKeys"/>
+        /// automatically exercises every helper listed in <see cref="Sources"/>.
+        /// </summary>
+        private sealed class TextSource
         {
-            yield return Source(CoreSourceName, LocalizationManager.DefaultEntries.All);
-            yield return Source(nameof(QuestLogTexts), QuestLogTexts.All);
-            yield return Source(nameof(QuestGiverTexts), QuestGiverTexts.All);
-            yield return Source(nameof(DailyQuestTexts), DailyQuestTexts.All);
-            yield return Source(nameof(AchievementTexts), AchievementTexts.All);
-            yield return Source(nameof(TooltipLocalization), TooltipLocalization.Entries);
-            yield return Source(nameof(SettingsMenuTexts), SettingsMenuTexts.Entries);
-            yield return Source(nameof(UiTexts), UiTexts.Entries);
-            yield return Source(nameof(ReturnToTitleTexts), ReturnToTitleTexts.Entries);
-            yield return Source(nameof(WorldMapTexts), WorldMapTexts.Entries);
-            yield return Source(nameof(ContentTexts), ContentTexts.Entries);
-            yield return Source(nameof(TutorialTexts), TutorialTexts.Entries);
-            yield return Source(nameof(HapticsTexts), HapticsTexts.Entries);
-            yield return Source(nameof(TouchControlsTexts), TouchControlsTexts.Entries);
-            yield return Source(nameof(CharacterSheetTexts), CharacterSheetTexts.Entries);
-            yield return Source(nameof(BossTexts), BossTexts.Entries);
+            public readonly string Name;
+            public readonly IReadOnlyList<LocalizationEntry> Entries;
+            public readonly Action<LocalizationManager> Merge;
+
+            public TextSource(string name, IReadOnlyList<LocalizationEntry> entries, Action<LocalizationManager> merge)
+            {
+                Name = name;
+                Entries = entries;
+                Merge = merge;
+            }
         }
 
-        private static KeyValuePair<string, IReadOnlyList<LocalizationEntry>> Source(string name, IReadOnlyList<LocalizationEntry> entries)
+        private static IEnumerable<TextSource> Sources()
         {
-            return new KeyValuePair<string, IReadOnlyList<LocalizationEntry>>(name, entries);
+            yield return Source(CoreSourceName, LocalizationManager.DefaultEntries.All, null);
+            yield return Source(nameof(QuestLogTexts), QuestLogTexts.All, QuestLogTexts.EnsureLoaded);
+            yield return Source(nameof(QuestGiverTexts), QuestGiverTexts.All, QuestGiverTexts.EnsureLoaded);
+            yield return Source(nameof(DailyQuestTexts), DailyQuestTexts.All, DailyQuestTexts.EnsureLoaded);
+            yield return Source(nameof(AchievementTexts), AchievementTexts.All, AchievementTexts.EnsureLoaded);
+            yield return Source(nameof(TooltipLocalization), TooltipLocalization.Entries, TooltipLocalization.EnsureRegistered);
+            yield return Source(nameof(SettingsMenuTexts), SettingsMenuTexts.Entries, SettingsMenuTexts.EnsureRegistered);
+            yield return Source(nameof(UiTexts), UiTexts.Entries, UiTexts.EnsureRegistered);
+            yield return Source(nameof(ReturnToTitleTexts), ReturnToTitleTexts.Entries, ReturnToTitleTexts.EnsureRegistered);
+            yield return Source(nameof(WorldMapTexts), WorldMapTexts.Entries, WorldMapTexts.EnsureRegistered);
+            yield return Source(nameof(ContentTexts), ContentTexts.Entries, ContentTexts.EnsureRegistered);
+            yield return Source(nameof(TutorialTexts), TutorialTexts.Entries, TutorialTexts.EnsureRegistered);
+            yield return Source(nameof(HapticsTexts), HapticsTexts.Entries, HapticsTexts.EnsureRegistered);
+            yield return Source(nameof(TouchControlsTexts), TouchControlsTexts.Entries, TouchControlsTexts.EnsureRegistered);
+            yield return Source(nameof(CharacterSheetTexts), CharacterSheetTexts.Entries, CharacterSheetTexts.EnsureRegistered);
+            yield return Source(nameof(BossTexts), BossTexts.Entries, BossTexts.EnsureRegistered);
+        }
+
+        private static TextSource Source(string name, IReadOnlyList<LocalizationEntry> entries, Action<LocalizationManager> merge)
+        {
+            return new TextSource(name, entries, merge);
         }
 
         private static IEnumerable<(string Source, LocalizationEntry Entry)> AllEntries()
         {
-            foreach (KeyValuePair<string, IReadOnlyList<LocalizationEntry>> source in Sources())
+            foreach (TextSource source in Sources())
             {
-                foreach (LocalizationEntry entry in source.Value)
+                foreach (LocalizationEntry entry in source.Entries)
                 {
-                    yield return (source.Key, entry);
+                    yield return (source.Name, entry);
                 }
             }
         }
@@ -239,29 +259,21 @@ namespace Rapadura.Tests
 
             // Simulate an external CSV/LocalizationTable that already defines one key of every helper.
             var external = new Dictionary<string, string>();
-            foreach (KeyValuePair<string, IReadOnlyList<LocalizationEntry>> source in Sources().Where(s => s.Key != CoreSourceName))
+            foreach (TextSource source in Sources().Where(s => s.Name != CoreSourceName))
             {
-                LocalizationEntry first = source.Value.First();
+                Assert.IsNotNull(source.Merge, $"{source.Name} has no runtime merge registered in Sources().");
+                LocalizationEntry first = source.Entries.First();
                 external[first.Key] = "EXTERNAL";
             }
 
             manager.LoadEntries(external.Select(pair => new LocalizationEntry(pair.Key, pair.Value, pair.Value)));
 
-            QuestLogTexts.EnsureLoaded(manager);
-            QuestGiverTexts.EnsureLoaded(manager);
-            DailyQuestTexts.EnsureLoaded(manager);
-            AchievementTexts.EnsureLoaded(manager);
-            TooltipLocalization.EnsureRegistered(manager);
-            SettingsMenuTexts.EnsureRegistered(manager);
-            UiTexts.EnsureRegistered(manager);
-            ReturnToTitleTexts.EnsureRegistered(manager);
-            WorldMapTexts.EnsureRegistered(manager);
-            ContentTexts.EnsureRegistered(manager);
-            TutorialTexts.EnsureRegistered(manager);
-            CharacterSheetTexts.EnsureRegistered(manager);
-            BossTexts.EnsureRegistered(manager);
-            HapticsTexts.EnsureRegistered(manager);
-            TouchControlsTexts.EnsureRegistered(manager);
+            // Driven by the same registry as the coverage checks, so a helper added to Sources()
+            // is merged here too (no hand-maintained list to forget).
+            foreach (TextSource source in Sources().Where(s => s.Merge != null))
+            {
+                source.Merge(manager);
+            }
 
             foreach (KeyValuePair<string, string> pair in external)
             {
@@ -491,7 +503,7 @@ namespace Rapadura.Tests
         public void HelperKeyConstants_AllLocalized()
         {
             var references = new List<(string, string)>();
-            foreach (Type type in new[] { typeof(QuestLogTexts), typeof(QuestLogPresenter), typeof(AchievementTexts), typeof(SettingsMenuTexts), typeof(UiTexts), typeof(WorldMapTexts), typeof(TutorialTexts), typeof(HapticsTexts), typeof(CharacterSheetTexts) })
+            foreach (Type type in new[] { typeof(QuestLogTexts), typeof(QuestLogPresenter), typeof(AchievementTexts), typeof(SettingsMenuTexts), typeof(UiTexts), typeof(WorldMapTexts), typeof(TutorialTexts), typeof(HapticsTexts), typeof(CharacterSheetTexts), typeof(BossTexts) })
             {
                 foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
                 {

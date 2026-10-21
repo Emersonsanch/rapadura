@@ -24,6 +24,10 @@ namespace Rapadura.UI.Encounter
     /// UIDocument). The view is built in code, has picking-mode Ignore everywhere (never blocks
     /// combat input) and disappears after <see cref="_displaySeconds"/> of real time. With
     /// "Reduzir Flashes" on it appears/disappears without the fade.
+    ///
+    /// The same banner plays the encounter intro (<see cref="EncounterIntroEvent"/>) for normal
+    /// encounters: "Prepare-se!" over a 2… 1… countdown (real time) matching the grace during which
+    /// the enemies hold their aggro, then "Já!" briefly. Boss encounters keep the boss banner.
     /// </summary>
     public class BossIntroBannerController : MonoBehaviour
     {
@@ -44,6 +48,20 @@ namespace Rapadura.UI.Encounter
 
         /// <summary>The boss currently announced (null when hidden).</summary>
         public EnemyDefinition ShownBoss { get; private set; }
+
+        /// <summary>True while the "Prepare-se!" intro countdown is on screen.</summary>
+        public bool IsShowingPrepare { get; private set; }
+
+        private const float GoDisplaySeconds = 0.6f;
+        private IVisualElementScheduledItem _countdownItem;
+        private float _countdownEndsAt;
+        private int _lastCountdownValue;
+
+        /// <summary>
+        /// Number shown by the intro countdown with <paramref name="remainingSeconds"/> left: whole
+        /// seconds rounded up ("2", "1"), 0 once the grace is over (the "Já!" frame).
+        /// </summary>
+        public static int CountdownValue(float remainingSeconds) => remainingSeconds <= 0f ? 0 : Mathf.CeilToInt(remainingSeconds);
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
@@ -87,11 +105,13 @@ namespace Rapadura.UI.Encounter
         {
             _root = null;
             EventBus.Subscribe<BossEncounterIntroEvent>(OnBossIntro);
+            EventBus.Subscribe<EncounterIntroEvent>(OnEncounterIntro);
         }
 
         private void OnDisable()
         {
             EventBus.Unsubscribe<BossEncounterIntroEvent>(OnBossIntro);
+            EventBus.Unsubscribe<EncounterIntroEvent>(OnEncounterIntro);
             Hide();
             _root = null;
         }
@@ -110,6 +130,74 @@ namespace Rapadura.UI.Encounter
             Show(evt.Boss);
         }
 
+        private void OnEncounterIntro(EncounterIntroEvent evt)
+        {
+            if (!evt.HasBoss)
+            {
+                ShowPrepare(evt.GraceSeconds);
+            }
+        }
+
+        /// <summary>"Prepare-se!" + countdown for <paramref name="seconds"/> of real time, then "Já!".</summary>
+        public void ShowPrepare(float seconds)
+        {
+            if (seconds <= 0f || !EnsureBound())
+            {
+                return;
+            }
+
+            ServiceLocator.TryGet(out LocalizationManager localization);
+            _titleLabel.text = BossTexts.Get(localization, BossTexts.PrepareTitle);
+            ShownBoss = null;
+            IsShowingPrepare = true;
+            _countdownEndsAt = Time.unscaledTime + seconds;
+            _lastCountdownValue = int.MinValue;
+            UpdateCountdown(localization);
+
+            ServiceLocator.TryGet(out AccessibilitySettings accessibility);
+            bool noMotion = accessibility != null && accessibility.ReduceFlashEffects;
+            SetFade(noMotion ? 0f : FadeSeconds * 0.5f);
+            _banner.style.display = DisplayStyle.Flex;
+            _banner.style.opacity = 1f;
+            UiAccessibilityApplier.RequestRefresh();
+
+            _hideItem?.Pause();
+            _hideItem = null;
+            _countdownItem?.Pause();
+            _countdownItem = _banner.schedule.Execute(() => TickCountdown(noMotion)).Every(100);
+        }
+
+        private void TickCountdown(bool noMotion)
+        {
+            if (!IsShowingPrepare || _banner == null)
+            {
+                _countdownItem?.Pause();
+                return;
+            }
+
+            ServiceLocator.TryGet(out LocalizationManager localization);
+            UpdateCountdown(localization);
+
+            if (Time.unscaledTime >= _countdownEndsAt + GoDisplaySeconds)
+            {
+                _countdownItem?.Pause();
+                _countdownItem = null;
+                FadeOut(noMotion);
+            }
+        }
+
+        private void UpdateCountdown(LocalizationManager localization)
+        {
+            int value = CountdownValue(_countdownEndsAt - Time.unscaledTime);
+            if (value == _lastCountdownValue)
+            {
+                return;
+            }
+
+            _lastCountdownValue = value;
+            _nameLabel.text = value > 0 ? value.ToString(System.Globalization.CultureInfo.InvariantCulture) : BossTexts.Get(localization, BossTexts.PrepareGo);
+        }
+
         /// <summary>Announces <paramref name="boss"/> (no-op for null or when no panel can be borrowed yet).</summary>
         public void Show(EnemyDefinition boss)
         {
@@ -122,6 +210,9 @@ namespace Rapadura.UI.Encounter
             _titleLabel.text = BossTexts.Get(localization, BossTexts.BannerTitle);
             _nameLabel.text = boss.LocalizedName(localization);
             ShownBoss = boss;
+            IsShowingPrepare = false;
+            _countdownItem?.Pause();
+            _countdownItem = null;
 
             ServiceLocator.TryGet(out AccessibilitySettings accessibility);
             bool noMotion = accessibility != null && accessibility.ReduceFlashEffects;
@@ -167,8 +258,11 @@ namespace Rapadura.UI.Encounter
         private void Hide()
         {
             ShownBoss = null;
+            IsShowingPrepare = false;
             _hideItem?.Pause();
             _hideItem = null;
+            _countdownItem?.Pause();
+            _countdownItem = null;
 
             if (_banner != null)
             {
@@ -225,7 +319,8 @@ namespace Rapadura.UI.Encounter
             _root.style.position = Position.Absolute;
             _root.style.left = 0;
             _root.style.right = 0;
-            _root.style.top = Length.Percent(18);
+            // Below the compact tutorial hint strip at the top of the screen.
+            _root.style.top = Length.Percent(26);
             _root.style.alignItems = Align.Center;
 
             _banner = new VisualElement { name = "boss-intro-banner", pickingMode = PickingMode.Ignore };

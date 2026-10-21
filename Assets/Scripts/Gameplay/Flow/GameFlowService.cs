@@ -51,6 +51,9 @@ namespace Rapadura.Gameplay.Flow
 
         public bool HasHero => _selection != null && _selection.HasSelection;
 
+        /// <summary>False while the hero picker was opened by "Novo jogo" (see <see cref="GameFlowMachine.OffersSavedContinueInSelect"/>).</summary>
+        public bool OffersSavedContinueInSelect => _machine.OffersSavedContinueInSelect;
+
         /// <param name="sessionReset">Run on "Novo jogo" (null = only the hero and the carried player state are cleared).</param>
         /// <param name="transitions">Used by <see cref="ReturnToTitle"/> to drop the pending encounter and load the world map (null = state change only, e.g. tests).</param>
         public GameFlowService(CharacterSelectionState selection, SaveManager saveManager, NewSessionReset sessionReset = null, SceneTransitionService transitions = null)

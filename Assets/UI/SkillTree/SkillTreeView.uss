@@ -1,9 +1,14 @@
 .skill-tree-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
     flex-grow: 1;
     flex-direction: column;
     /* Near-opaque: in linear colour space 0.94 still let the world (and its bright grass) bleed
        through behind the node canvas. */
-    background-color: rgba(12, 14, 20, 0.985);
+    background-color: rgb(12, 14, 20);
 }
 
 .skill-tree-header {

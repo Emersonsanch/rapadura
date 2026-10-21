@@ -448,7 +448,10 @@ namespace Rapadura.UI.CharacterSelect
             }
         }
 
-        /// <summary>Shows "Continuar com &lt;herói&gt;" only when one of <see cref="_continueSlots"/> holds a save with a chosen hero.</summary>
+        /// <summary>
+        /// Shows "Continuar com &lt;herói&gt;" only when one of <see cref="_continueSlots"/> holds a save with a
+        /// chosen hero and the picker was not opened by "Novo jogo".
+        /// </summary>
         private void RefreshContinueOption()
         {
             if (_continueButton == null)
@@ -460,7 +463,10 @@ namespace Rapadura.UI.CharacterSelect
             CharacterId? savedHero = null;
             DateTime newest = DateTime.MinValue;
 
-            if (ServiceLocator.TryGet(out SaveManager saveManager) && _continueSlots != null)
+            // "Novo jogo" means start over: never offer to load the old save from this screen.
+            bool offerContinue = !ServiceLocator.TryGet(out GameFlowService flow) || flow.OffersSavedContinueInSelect;
+
+            if (offerContinue && ServiceLocator.TryGet(out SaveManager saveManager) && _continueSlots != null)
             {
                 foreach (int slot in _continueSlots)
                 {

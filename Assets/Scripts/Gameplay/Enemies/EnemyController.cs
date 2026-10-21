@@ -34,6 +34,7 @@ namespace Rapadura.Gameplay.Enemies
         private CharacterController _characterController;
         private int _currentWaypointIndex;
         private bool _hasSpottedTarget;
+        private float _aggroHoldRemaining;
 
         public EnemyDefinition Definition => _definition;
         public Health Health { get; private set; }
@@ -41,6 +42,14 @@ namespace Rapadura.Gameplay.Enemies
         public Hitbox Hitbox => _hitbox;
         public StateMachine<EnemyController> StateMachine => _stateMachine;
         public bool IsBoss => _definition != null && _definition.IsBoss;
+
+        /// <summary>
+        /// True while <see cref="HoldAggro"/>'s grace is running: the AI stands still (no chase, no
+        /// attacks) and only turns to face its target. Damage <i>to</i> the enemy is unaffected.
+        /// </summary>
+        public bool IsHoldingAggro => _aggroHoldRemaining > 0f;
+
+        public float AggroHoldRemaining => _aggroHoldRemaining;
 
         public Transform[] Waypoints => _waypoints;
         public int CurrentWaypointIndex
@@ -95,22 +104,73 @@ namespace Rapadura.Gameplay.Enemies
 
         private void Update()
         {
-            if (Health != null && Health.IsDead)
+            TickBrain(Time.deltaTime);
+        }
+
+        private void FixedUpdate()
+        {
+            if ((Health != null && Health.IsDead) || IsHoldingAggro)
             {
                 return;
             }
 
-            _stateMachine.Tick(Time.deltaTime);
+            _stateMachine.FixedTick(Time.fixedDeltaTime);
         }
 
-        private void FixedUpdate()
+        /// <summary>
+        /// One AI step (what <c>Update</c> runs): nothing while dead; while an aggro hold is running it
+        /// only counts the hold down and faces the target; otherwise ticks the state machine.
+        /// </summary>
+        public void TickBrain(float deltaTime)
         {
             if (Health != null && Health.IsDead)
             {
                 return;
             }
 
-            _stateMachine.FixedTick(Time.fixedDeltaTime);
+            if (IsHoldingAggro)
+            {
+                _aggroHoldRemaining = Mathf.Max(0f, _aggroHoldRemaining - deltaTime);
+                FaceTarget(deltaTime);
+                return;
+            }
+
+            _stateMachine.Tick(deltaTime);
+        }
+
+        /// <summary>
+        /// Keeps the AI idle for <paramref name="seconds"/> (encounter intro / "Prepare-se!"): no chase
+        /// and no attacks until it runs out. Never shortens a longer hold already running.
+        /// </summary>
+        public void HoldAggro(float seconds)
+        {
+            if (seconds > _aggroHoldRemaining)
+            {
+                _aggroHoldRemaining = seconds;
+            }
+        }
+
+        /// <summary>Ends an <see cref="HoldAggro"/> grace early.</summary>
+        public void ReleaseAggro()
+        {
+            _aggroHoldRemaining = 0f;
+        }
+
+        private void FaceTarget(float deltaTime)
+        {
+            if (Target == null)
+            {
+                return;
+            }
+
+            Vector3 direction = Target.position - transform.position;
+            direction.y = 0f;
+            if (direction.sqrMagnitude < 0.0001f)
+            {
+                return;
+            }
+
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(direction, Vector3.up), _turnSpeedDegPerSec * deltaTime);
         }
 
         /// <summary>Resets transient AI state so a pooled instance behaves like a fresh spawn.</summary>
@@ -125,6 +185,7 @@ namespace Rapadura.Gameplay.Enemies
 
             _currentWaypointIndex = 0;
             _hasSpottedTarget = false;
+            _aggroHoldRemaining = 0f;
 
             if (Health == null)
             {

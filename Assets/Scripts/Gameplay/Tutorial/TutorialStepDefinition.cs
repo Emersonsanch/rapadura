@@ -42,10 +42,17 @@ namespace Rapadura.Gameplay.Tutorial
         /// <summary>Position in <see cref="TutorialSteps.All"/>: when several hints are pending, the lowest is shown first.</summary>
         public int Order { get; }
 
-        public TutorialStepDefinition(string id, int order, TutorialContext context, string highlightElement = null, bool pausesGameplay = false)
+        /// <summary>
+        /// Jumps the queue: shown ahead of any older pending hint as soon as it triggers (the death hint
+        /// must be read on the death screen, not after the still-pending encounter tips).
+        /// </summary>
+        public bool Interrupts { get; }
+
+        public TutorialStepDefinition(string id, int order, TutorialContext context, string highlightElement = null, bool pausesGameplay = false, bool interrupts = false)
         {
             Id = id;
             Order = order;
+            Interrupts = interrupts;
             Context = context;
             HighlightElement = highlightElement;
             PausesGameplay = pausesGameplay;
@@ -89,7 +96,7 @@ namespace Rapadura.Gameplay.Tutorial
             new TutorialStepDefinition(Loot, 3, TutorialContext.Any, "inventory-button"),
             new TutorialStepDefinition(Quest, 4, TutorialContext.Any, "quests-button"),
             new TutorialStepDefinition(LevelUp, 5, TutorialContext.Any, "character-sheet-button"),
-            new TutorialStepDefinition(Death, 6, TutorialContext.Any),
+            new TutorialStepDefinition(Death, 6, TutorialContext.Any, interrupts: true),
             new TutorialStepDefinition(Night, 7, TutorialContext.Any),
             new TutorialStepDefinition(Crafting, 8, TutorialContext.Any),
         };

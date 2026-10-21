@@ -26,7 +26,9 @@ namespace Rapadura.UI.Tutorial
     ///
     /// Self-bootstrapping like <see cref="UiAccessibilityApplier"/>: one DontDestroyOnLoad host is
     /// created after the first scene loads (no scene wiring), borrows the PanelSettings of any other
-    /// UIDocument in the scene and draws above it (<see cref="SortingOrder"/>). Because it is a regular
+    /// UIDocument in the scene and draws above the HUD/windows but below the death screen (<see cref="SortingOrder"/>);
+    /// while a modal screen (death screen, menus, dialogue...) pauses gameplay the bubble is hidden
+    /// and its auto-dismiss clock stops, so it comes back when the modal closes. Because it is a regular
     /// active UIDocument, UiAccessibilityApplier scales its fonts / applies high contrast like any
     /// screen. With "Reduzir Flashes" on, the bubble appears without fade/slide; the highlight is
     /// never animated in any mode. The hint queue lives in the manager, so a hint survives the
@@ -34,7 +36,12 @@ namespace Rapadura.UI.Tutorial
     /// </summary>
     public class TutorialHintController : MonoBehaviour
     {
-        public const float SortingOrder = 900f;
+        /// <summary>
+        /// Above the HUD (0), map HUD (5) and windows (10-30), below the death screen (50) and toasts (60):
+        /// a hint must never cover a modal's buttons. It also steps aside entirely while any other
+        /// screen holds a <see cref="GameplayPause"/> (see <see cref="ShouldDefer"/>).
+        /// </summary>
+        public const float SortingOrder = 40f;
         private const string ViewResourcePath = "UI/TutorialHintView";
         private const string VisibleClass = "tutorial-hint--visible";
         private const string NoMotionClass = "tutorial-hint--no-motion";
@@ -64,9 +71,19 @@ namespace Rapadura.UI.Tutorial
         private TutorialStepDefinition _shown;
         private float _shownAt;
         private bool _dirty = true;
+        private bool _deferred;
 
-        /// <summary>The step on screen right now (null when hidden).</summary>
-        public TutorialStepDefinition ShownStep => _shown;
+        /// <summary>The step on screen right now (null when hidden or deferred behind a modal).</summary>
+        public TutorialStepDefinition ShownStep => _deferred ? null : _shown;
+
+        /// <summary>True while the current hint is held back because a modal screen is up.</summary>
+        public bool IsDeferred => _deferred;
+
+        /// <summary>
+        /// Whether a hint must stay hidden right now: another screen (death screen, pause menu, dialogue,
+        /// any GameplayPause owner other than the hint itself) is freezing gameplay.
+        /// </summary>
+        public static bool ShouldDefer(bool pausedByOthers) => pausedByOthers;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
@@ -145,6 +162,13 @@ namespace Rapadura.UI.Tutorial
                 return;
             }
 
+            bool deferred = ShouldDefer(GameplayPause.IsPausedByOthers(this));
+            if (deferred != _deferred)
+            {
+                _deferred = deferred;
+                _dirty = true;
+            }
+
             if (_dirty)
             {
                 _dirty = false;
@@ -153,6 +177,13 @@ namespace Rapadura.UI.Tutorial
 
             if (_shown == null)
             {
+                return;
+            }
+
+            if (_deferred)
+            {
+                // Hidden behind a modal: the time it spends there doesn't count towards auto-dismiss.
+                _shownAt += Time.unscaledDeltaTime;
                 return;
             }
 
@@ -316,6 +347,12 @@ namespace Rapadura.UI.Tutorial
                 }
             }
 
+            if (_deferred)
+            {
+                HideVisuals();
+                return;
+            }
+
             if (_accessibility == null)
             {
                 ServiceLocator.TryGet(out _accessibility);
@@ -355,7 +392,12 @@ namespace Rapadura.UI.Tutorial
         {
             _shown = null;
             GameplayPause.Release(this);
+            HideVisuals();
+        }
 
+        /// <summary>Takes the bubble and outline off screen without forgetting which hint is current.</summary>
+        private void HideVisuals()
+        {
             if (_hint != null)
             {
                 _hint.RemoveFromClassList(VisibleClass);

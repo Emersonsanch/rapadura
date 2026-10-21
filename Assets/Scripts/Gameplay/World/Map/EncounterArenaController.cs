@@ -20,6 +20,14 @@ namespace Rapadura.Gameplay.World.Map
     ///
     /// Without a pending encounter (Main.unity played directly) it does nothing, so the existing
     /// standalone combat sandbox keeps working.
+    ///
+    /// Placement: with <see cref="_spawnOnRingAroundPlayer"/> (default) enemies stand on an arc
+    /// <see cref="_spawnMinRadius"/>-<see cref="_spawnMaxRadius"/> m in front of the player
+    /// (<see cref="EncounterSpawnLayout"/>), clamped inside <see cref="_spawnArenaRadius"/> and dropped
+    /// onto the ground with a raycast; the scene's spawn points are the fallback (no player found).
+    /// Intro: for <see cref="_introGraceSeconds"/> every spawned enemy holds its aggro
+    /// (<see cref="EnemyController.HoldAggro"/>: no chase, no attacks — damage to them still lands)
+    /// while <see cref="EncounterIntroEvent"/> drives the "Prepare-se!" countdown.
     /// </summary>
     public class EncounterArenaController : MonoBehaviour
     {
@@ -35,6 +43,22 @@ namespace Rapadura.Gameplay.World.Map
         [SerializeField] private Transform[] _enemyWaypoints;
         [Tooltip("Optional: where the player is placed when the encounter starts.")]
         [SerializeField] private SpawnPoint _playerSpawn;
+        [Tooltip("Place enemies on an arc in front of the player (spawn points become the fallback). Off = the old fixed spawn points.")]
+        [SerializeField] private bool _spawnOnRingAroundPlayer = true;
+        [Tooltip("Closest an enemy spawns to the player (m).")]
+        [SerializeField] [Min(1f)] private float _spawnMinRadius = EncounterSpawnLayout.DefaultMinRadius;
+        [Tooltip("Farthest an enemy spawns from the player (m).")]
+        [SerializeField] [Min(1f)] private float _spawnMaxRadius = EncounterSpawnLayout.DefaultMaxRadius;
+        [Tooltip("Width of the arc in front of the player the enemies are spread over (degrees).")]
+        [SerializeField] [Range(0f, 360f)] private float _spawnArcDegrees = EncounterSpawnLayout.DefaultArcDegrees;
+        [Tooltip("Spawns are kept within this distance of the arena centre (this transform). Keep it below the flee radius. 0 = no clamp.")]
+        [SerializeField] [Min(0f)] private float _spawnArenaRadius = 18f;
+        [Tooltip("Layers the spawn ground raycast may land on.")]
+        [SerializeField] private LayerMask _groundMask = ~0;
+
+        [Header("Intro")]
+        [Tooltip("Seconds after spawning during which enemies hold their aggro (no chase/attacks) while \"Prepare-se!\" plays. 0 = fight at once.")]
+        [SerializeField] [Min(0f)] private float _introGraceSeconds = 1.75f;
 
         [Header("Scene cleanup")]
         [Tooltip("Objects disabled while an encounter is active (e.g. the sandbox EnemySpawner or pre-placed test enemies).")]
@@ -57,6 +81,10 @@ namespace Rapadura.Gameplay.World.Map
 
         public bool IsEncounterActive => _active && !_resolved;
         public int AliveEnemies => _tracker.AliveCount;
+        public float IntroGraceSeconds => _introGraceSeconds;
+
+        /// <summary>Highest a ground hit may sit above the player's feet before it counts as a prop top (tree, rock).</summary>
+        private const float MaxGroundStepUp = 2.5f;
 
         private void OnEnable()
         {
@@ -133,7 +161,7 @@ namespace Rapadura.Gameplay.World.Map
             FilterDefeatedUniqueEnemies(enemies);
             for (int i = 0; i < enemies.Count; i++)
             {
-                SpawnEnemy(enemies[i], i);
+                SpawnEnemy(enemies[i], i, enemies.Count);
             }
 
             _active = true;
@@ -153,6 +181,12 @@ namespace Rapadura.Gameplay.World.Map
             {
                 EventBus.Publish(new BossEncounterIntroEvent(payload, boss));
             }
+
+            // "Prepare-se!" — the enemies were told to hold their aggro for the same grace in SpawnEnemy.
+            if (_introGraceSeconds > 0f)
+            {
+                EventBus.Publish(new EncounterIntroEvent(payload, _introGraceSeconds, boss != null));
+            }
         }
 
         private BiomeArenaDressing ResolveBiomeDressing()
@@ -169,10 +203,21 @@ namespace Rapadura.Gameplay.World.Map
             return _biomeDressing;
         }
 
-        private void SpawnEnemy(EnemyDefinition definition, int index)
+        private void SpawnEnemy(EnemyDefinition definition, int index, int count)
         {
-            Vector3 position = GetSpawnPosition(index);
-            GameObject instance = Instantiate(_enemyPrefab, position, Quaternion.identity);
+            Vector3 position = GetSpawnPosition(index, count);
+            Quaternion rotation = Quaternion.identity;
+            if (_player != null)
+            {
+                Vector3 toPlayer = _player.position - position;
+                toPlayer.y = 0f;
+                if (toPlayer.sqrMagnitude > 0.0001f)
+                {
+                    rotation = Quaternion.LookRotation(toPlayer, Vector3.up);
+                }
+            }
+
+            GameObject instance = Instantiate(_enemyPrefab, position, rotation);
             instance.name = $"{_enemyPrefab.name}_{definition.name}_{index}";
 
             EnemyController controller = instance.GetComponent<EnemyController>();
@@ -183,6 +228,8 @@ namespace Rapadura.Gameplay.World.Map
                 {
                     controller.Target = _player;
                 }
+
+                controller.HoldAggro(_introGraceSeconds);
             }
             else
             {
@@ -215,7 +262,49 @@ namespace Rapadura.Gameplay.World.Map
             }
         }
 
-        private Vector3 GetSpawnPosition(int index)
+        private Vector3 GetSpawnPosition(int index, int count)
+        {
+            if (_spawnOnRingAroundPlayer && _player != null)
+            {
+                Vector3 ring = EncounterSpawnLayout.RingPoint(_player.position, _player.forward, index, count,
+                    _spawnMinRadius, _spawnMaxRadius, _spawnArcDegrees);
+                ring = EncounterSpawnLayout.ClampToArena(ring, transform.position, _spawnArenaRadius);
+                return SnapToGround(ring, _player.position.y);
+            }
+
+            return GetFixedSpawnPosition(index);
+        }
+
+        /// <summary>
+        /// Drops a ring point onto the arena floor. Hits far above the player's feet are prop tops
+        /// (trees, rocks) and are ignored; no hit keeps the player's height.
+        /// </summary>
+        private Vector3 SnapToGround(Vector3 point, float referenceHeight)
+        {
+            const float castHeight = 20f;
+            Vector3 from = new Vector3(point.x, referenceHeight + castHeight, point.z);
+            RaycastHit[] hits = Physics.RaycastAll(from, Vector3.down, castHeight * 2f, _groundMask, QueryTriggerInteraction.Ignore);
+
+            float bestY = float.NegativeInfinity;
+            foreach (RaycastHit hit in hits)
+            {
+                if (hit.collider == null || (_player != null && hit.collider.transform.IsChildOf(_player)))
+                {
+                    continue;
+                }
+
+                float y = hit.point.y;
+                if (y <= referenceHeight + MaxGroundStepUp && y > bestY)
+                {
+                    bestY = y;
+                }
+            }
+
+            point.y = float.IsNegativeInfinity(bestY) ? referenceHeight : bestY;
+            return point;
+        }
+
+        private Vector3 GetFixedSpawnPosition(int index)
         {
             if (_enemySpawnPoints == null || _enemySpawnPoints.Length == 0)
             {

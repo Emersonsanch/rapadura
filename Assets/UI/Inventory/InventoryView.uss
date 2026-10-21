@@ -9,7 +9,7 @@
     display: none;
     /* Modal backdrop: dims the world + HUD behind the window (the HUD's top-right buttons otherwise
        read as part of the window's header on 20:9 phones). */
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.85);
 }
 
 .inventory-window {
@@ -20,7 +20,7 @@
     min-height: 380px;
     max-height: 92%;
     /* 0.97: in the project's linear colour space 0.92 let the grass show through strongly. */
-    background-color: rgba(12, 14, 20, 0.97);
+    background-color: rgb(12, 14, 20);
     border-radius: 10px;
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.14);

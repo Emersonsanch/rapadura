@@ -43,6 +43,15 @@ namespace Rapadura.Gameplay.Flow
 
         public GameFlowState State { get; private set; } = GameFlowState.Boot;
 
+        /// <summary>True while the hero picker was opened by "Novo jogo" (cleared on any other entry).</summary>
+        public bool IsNewGameSelection { get; private set; }
+
+        /// <summary>
+        /// Whether the hero picker may offer its "Continuar com &lt;herói&gt;" shortcut: not when the
+        /// player just chose "Novo jogo" (that would silently load the old save they meant to replace).
+        /// </summary>
+        public bool OffersSavedContinueInSelect => !(State == GameFlowState.CharacterSelect && IsNewGameSelection);
+
         /// <summary>
         /// The world map's front-end (re)entered. From Boot this opens the title screen; on the map
         /// without a hero (e.g. a bailed-out encounter) it forces the hero picker. Otherwise unchanged.
@@ -71,7 +80,13 @@ namespace Rapadura.Gameplay.Flow
         /// <summary>"Novo jogo" on the title screen.</summary>
         public bool StartNewGame()
         {
-            return State == GameFlowState.MainMenu && Set(GameFlowState.CharacterSelect);
+            if (State != GameFlowState.MainMenu || !Set(GameFlowState.CharacterSelect))
+            {
+                return false;
+            }
+
+            IsNewGameSelection = true;
+            return true;
         }
 
         /// <summary>"Continuar" loaded a save: straight to the map if it had a hero, else pick one.</summary>
@@ -164,6 +179,7 @@ namespace Rapadura.Gameplay.Flow
             }
 
             State = next;
+            IsNewGameSelection = false;
             return true;
         }
     }

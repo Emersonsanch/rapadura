@@ -4,6 +4,11 @@
         <ui:VisualElement name="death-screen-panel" class="death-screen-panel">
             <ui:Label name="death-title" text="Você caiu..." class="death-title loc" view-data-key="ui.death.title" />
             <ui:Label name="death-message" text="O sertão não perdoa, mas a jornada continua." class="death-message loc" view-data-key="ui.death.message" />
+            <!-- First-death tutorial tip ("Não desista!"), filled and shown by DeathScreenController. -->
+            <ui:VisualElement name="death-tip" class="death-tip" style="display: none;">
+                <ui:Label name="death-tip-title" text="" class="death-tip-title" />
+                <ui:Label name="death-tip-body" text="" class="death-tip-body" />
+            </ui:VisualElement>
             <ui:VisualElement name="death-button-list" class="death-button-list">
                 <ui:Button name="death-continue-button" text="Continuar" focusable="true" class="death-button death-button--primary loc" view-data-key="ui.death.continue" />
                 <ui:Button name="death-load-button" text="Carregar jogo" focusable="true" class="death-button loc" view-data-key="ui.death.load" />

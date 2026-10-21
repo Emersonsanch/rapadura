@@ -64,8 +64,12 @@ namespace Rapadura.UI.WorldMap
     /// <summary>
     /// Pure formatting/decision logic behind <see cref="WorldMapHudController"/> (no UIDocument, no
     /// scene), so it is EditMode-testable: hero/level, region and clock/weather text, the
-    /// "Vitórias: 2/3 para desbloquear Deserto" goal, region label status and the Mochila summary
-    /// built from SaveManager's carried JSON.
+    /// "Vitórias: 2/3 para enfrentar o chefe" / "Derrote o chefe para desbloquear Deserto" goal
+    /// (<see cref="GoalText"/>), region label status (with a cleared marker) and the Mochila summary
+    /// built from SaveManager's carried JSON. Victories only open a region's boss fight; beating the
+    /// boss unlocks the next region (<see cref="RegionBossProgress"/>). Every method taking an
+    /// optional <see cref="RegionBossProgress"/> treats null as "every region is boss-gated" and
+    /// reads cleared regions from <see cref="WorldMapProgress.IsRegionCleared"/>.
     /// </summary>
     public static class WorldMapHudPresenter
     {
@@ -210,7 +214,27 @@ namespace Rapadura.UI.WorldMap
             return best;
         }
 
-        public static string VictoriesText(LocalizationManager manager, UnlockGoal goal, BiomeType currentRegion)
+        /// <summary>Whether <paramref name="region"/>'s victories only open a boss fight (null bosses = always).</summary>
+        public static bool IsBossGated(RegionBossProgress bosses, BiomeType region) => bosses == null || bosses.HasBoss(region);
+
+        /// <summary>The region's boss is beaten (via <paramref name="bosses"/> when given, else the progress flag).</summary>
+        public static bool IsCleared(WorldMapProgress progress, RegionBossProgress bosses, BiomeType region)
+        {
+            if (bosses != null)
+            {
+                return bosses.IsRegionCleared(region);
+            }
+
+            return progress != null && progress.IsRegionCleared(region);
+        }
+
+        /// <summary>
+        /// Text for one unlock goal. With the boss gate (<paramref name="bossGated"/>, the game's rule)
+        /// victories lead to the boss: "Vitórias: 1/3 para enfrentar o chefe", then "Derrote o chefe
+        /// para desbloquear Deserto"; goals in another region name it. Without it (a region with no
+        /// boss) the victories open the target directly: "Vitórias: 1/3 para desbloquear Deserto".
+        /// </summary>
+        public static string VictoriesText(LocalizationManager manager, UnlockGoal goal, BiomeType currentRegion, bool bossGated = true)
         {
             if (!goal.HasGoal)
             {
@@ -218,16 +242,63 @@ namespace Rapadura.UI.WorldMap
             }
 
             string target = RegionName(manager, goal.Target);
+            bool here = goal.RequiredRegion == currentRegion;
 
             // Victories done but still locked: the region boss gate (RegionBossProgress) is what's left.
             if (goal.Victories >= goal.Required)
             {
-                return WorldMapTexts.Format(manager, WorldMapTexts.VictoriesBoss, target, RegionName(manager, goal.RequiredRegion));
+                return here
+                    ? WorldMapTexts.Format(manager, WorldMapTexts.VictoriesBossHere, target)
+                    : WorldMapTexts.Format(manager, WorldMapTexts.VictoriesBoss, target, RegionName(manager, goal.RequiredRegion));
             }
 
-            return goal.RequiredRegion == currentRegion
+            if (bossGated)
+            {
+                return here
+                    ? WorldMapTexts.Format(manager, WorldMapTexts.VictoriesToBoss, goal.Victories, goal.Required)
+                    : WorldMapTexts.Format(manager, WorldMapTexts.VictoriesToBossIn, goal.Victories, goal.Required, RegionName(manager, goal.RequiredRegion));
+            }
+
+            return here
                 ? WorldMapTexts.Format(manager, WorldMapTexts.Victories, goal.Victories, goal.Required, target)
                 : WorldMapTexts.Format(manager, WorldMapTexts.VictoriesIn, goal.Victories, goal.Required, target, RegionName(manager, goal.RequiredRegion));
+        }
+
+        /// <summary>
+        /// The HUD's goal line for where the player stands. A cleared current region says so first
+        /// ("Região Floresta concluída! Próximo: Vença 3 batalhas em Deserto para enfrentar o chefe (0/3)")
+        /// instead of a bare goal about another region; an uncleared region whose boss is the only thing
+        /// left (the last region, which gates nothing) shows its own boss progress; otherwise
+        /// <see cref="VictoriesText"/> for <see cref="FindNextUnlock"/>.
+        /// </summary>
+        public static string GoalText(LocalizationManager manager, WorldMapGraph graph, WorldMapProgress progress, RegionBossProgress bosses = null)
+        {
+            if (progress == null)
+            {
+                return string.Empty;
+            }
+
+            BiomeType current = progress.CurrentRegion;
+            UnlockGoal goal = FindNextUnlock(graph, progress);
+
+            if (IsCleared(progress, bosses, current))
+            {
+                return goal.HasGoal
+                    ? WorldMapTexts.Format(manager, WorldMapTexts.RegionDoneNext, RegionName(manager, current),
+                        VictoriesText(manager, goal, current, IsBossGated(bosses, goal.RequiredRegion)))
+                    : WorldMapTexts.Format(manager, WorldMapTexts.RegionDoneAll, RegionName(manager, current));
+            }
+
+            if (graph != null && IsBossGated(bosses, current) && (!goal.HasGoal || goal.RequiredRegion != current))
+            {
+                int needed = graph.GetVictoriesToChallengeBoss(current);
+                int victories = Mathf.Min(progress.GetVictories(current), needed);
+                return victories >= needed
+                    ? WorldMapTexts.Format(manager, WorldMapTexts.LabelBoss, RegionName(manager, current))
+                    : WorldMapTexts.Format(manager, WorldMapTexts.VictoriesToBoss, victories, needed);
+            }
+
+            return VictoriesText(manager, goal, current, IsBossGated(bosses, goal.RequiredRegion));
         }
 
         // ------------------------------------------------------------------
@@ -258,7 +329,12 @@ namespace Rapadura.UI.WorldMap
                 : RegionLabelStatus.None;
         }
 
-        public static string LabelStatusText(LocalizationManager manager, WorldMapGraph graph, WorldMapProgress progress, BiomeType region, RegionLabelStatus status)
+        /// <summary>
+        /// Status line under a region label: "Você está aqui", "Toque para viajar", the unlock requirement
+        /// of a locked region ("Vença 3 batalhas em Floresta e derrote o chefe (1/3)", then "Derrote o
+        /// chefe de Floresta"), or "Concluída" for a cleared region with no other hint.
+        /// </summary>
+        public static string LabelStatusText(LocalizationManager manager, WorldMapGraph graph, WorldMapProgress progress, BiomeType region, RegionLabelStatus status, RegionBossProgress bosses = null)
         {
             switch (status)
             {
@@ -270,17 +346,18 @@ namespace Rapadura.UI.WorldMap
                     if (graph != null && progress != null && graph.TryGetUnlockRule(region, out BiomeType required, out int needed))
                     {
                         int victories = Mathf.Min(progress.GetVictories(required), needed);
-                        if (victories >= needed)
+                        bool gated = IsBossGated(bosses, required);
+                        if (gated && victories >= needed)
                         {
                             return WorldMapTexts.Format(manager, WorldMapTexts.LabelBoss, RegionName(manager, required));
                         }
 
-                        return WorldMapTexts.Format(manager, WorldMapTexts.LabelLocked, needed, RegionName(manager, required), victories);
+                        return WorldMapTexts.Format(manager, gated ? WorldMapTexts.LabelLockedBoss : WorldMapTexts.LabelLocked, needed, RegionName(manager, required), victories);
                     }
 
                     return WorldMapTexts.Get(manager, WorldMapTexts.LabelLockedGeneric);
                 default:
-                    return string.Empty;
+                    return IsCleared(progress, bosses, region) ? WorldMapTexts.Get(manager, WorldMapTexts.LabelCleared) : string.Empty;
             }
         }
 

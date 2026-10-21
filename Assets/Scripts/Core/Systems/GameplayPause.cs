@@ -39,6 +39,9 @@ namespace Rapadura.Core.Systems
 
         public static bool IsHeldBy(object owner) => Tracker.IsHeldBy(owner);
 
+        /// <summary>A modal screen other than <paramref name="owner"/> (or the pause menu) is freezing gameplay.</summary>
+        public static bool IsPausedByOthers(object owner) => Tracker.IsPausedByOthers(owner);
+
         public static void Acquire(object owner)
         {
             if (Tracker.Acquire(owner))

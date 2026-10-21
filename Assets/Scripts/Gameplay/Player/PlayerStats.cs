@@ -410,6 +410,7 @@ namespace Rapadura.Gameplay.Player
             if (Level != levelBefore)
             {
                 PublishVitalsIfCurveGrew(levelBefore);
+                RefillVitalsOnLevelUp();
             }
 
             EventBus.Publish(new PlayerExperienceChangedEvent(CurrentExperience, experienceToNextLevel, Level));
@@ -440,6 +441,24 @@ namespace Rapadura.Gameplay.Player
             {
                 SetStamina(CurrentStamina);
             }
+        }
+
+        /// <summary>
+        /// Usual RPG reward: a level-up fully restores health and mana (at the new, possibly larger,
+        /// maximums already reconciled by <see cref="RefreshVitalMaximums"/>). Skipped while dead so
+        /// XP granted on the killing blow can't revive the player behind the death screen.
+        /// </summary>
+        private void RefillVitalsOnLevelUp()
+        {
+            if (IsDead)
+            {
+                return;
+            }
+
+            _lastMaxHealth = MaxHealth;
+            _lastMaxMana = MaxMana;
+            SetHealth(MaxHealth);
+            SetMana(MaxMana);
         }
 
         private void SetHealth(float value)

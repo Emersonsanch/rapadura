@@ -15,9 +15,17 @@ namespace Rapadura.UI.Encounter
         /// <summary>Small line above the boss name on the arena banner.</summary>
         public const string BannerTitle = "ui.boss.banner.title";
 
+        /// <summary>Encounter intro banner title while enemies hold their aggro (EncounterIntroEvent).</summary>
+        public const string PrepareTitle = "ui.encounter.prepare.title";
+
+        /// <summary>Shown when the intro countdown reaches zero.</summary>
+        public const string PrepareGo = "ui.encounter.prepare.go";
+
         public static readonly List<LocalizationEntry> Entries = new List<LocalizationEntry>
         {
             new LocalizationEntry(BannerTitle, "Region boss", "Chefe da região"),
+            new LocalizationEntry(PrepareTitle, "Get ready!", "Prepare-se!"),
+            new LocalizationEntry(PrepareGo, "Go!", "Já!"),
         };
 
         private static Dictionary<string, string> _fallbackByKey;

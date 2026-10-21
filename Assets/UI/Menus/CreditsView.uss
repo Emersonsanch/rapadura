@@ -6,7 +6,7 @@
     bottom: 0;
     align-items: center;
     justify-content: center;
-    background-color: rgba(6, 7, 10, 0.92);
+    background-color: rgb(6, 7, 10);
 }
 
 .credits-panel {

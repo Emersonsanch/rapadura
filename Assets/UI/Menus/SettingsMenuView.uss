@@ -1,8 +1,13 @@
 .settings-menu-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
     flex-grow: 1;
     align-items: center;
     justify-content: center;
-    background-color: rgba(6, 7, 10, 0.85);
+    background-color: rgba(6, 7, 10, 0.9);
 }
 
 .settings-menu-panel {
@@ -11,7 +16,7 @@
     max-width: 94%;
     max-height: 96%;
     min-height: 380px;
-    background-color: rgba(18, 20, 27, 0.98);
+    background-color: rgb(18, 20, 27);
     border-radius: 10px;
     border-width: 2px;
     border-color: rgba(255, 255, 255, 0.08);

@@ -60,6 +60,25 @@ namespace Rapadura.Gameplay.World.Map
     }
 
     /// <summary>
+    /// Raised by <see cref="EncounterArenaController"/> once an encounter's enemies are spawned: for
+    /// <see cref="GraceSeconds"/> they hold their aggro (no chase/attacks) while the "Prepare-se!"
+    /// countdown plays (<c>BossIntroBannerController</c>; boss encounters show the boss banner instead).
+    /// </summary>
+    public readonly struct EncounterIntroEvent : IGameEvent
+    {
+        public readonly EncounterPayload Payload;
+        public readonly float GraceSeconds;
+        public readonly bool HasBoss;
+
+        public EncounterIntroEvent(EncounterPayload payload, float graceSeconds, bool hasBoss)
+        {
+            Payload = payload;
+            GraceSeconds = graceSeconds;
+            HasBoss = hasBoss;
+        }
+    }
+
+    /// <summary>
     /// Raised by <see cref="EncounterArenaController"/> right after it spawns an encounter that has a
     /// boss (<see cref="EnemyDefinition.IsBoss"/>), so the boss banner can introduce it.
     /// </summary>

@@ -80,6 +80,46 @@ namespace Rapadura.Tests
         }
 
         [Test]
+        public void Machine_NewGameSelection_HidesSavedContinue()
+        {
+            var machine = new GameFlowMachine();
+            machine.EnterFrontEnd(false);
+            Assert.IsTrue(machine.OffersSavedContinueInSelect, "Title screen: no restriction.");
+
+            machine.StartNewGame();
+            Assert.IsTrue(machine.IsNewGameSelection);
+            Assert.IsFalse(machine.OffersSavedContinueInSelect, "Novo jogo must not offer 'Continuar com <herói>'.");
+
+            // Backing out to the title and in through a hero-less Continue offers it again.
+            machine.CancelCharacterSelect();
+            Assert.IsFalse(machine.IsNewGameSelection);
+            machine.CompleteContinue(hasHero: false);
+            Assert.AreEqual(GameFlowState.CharacterSelect, machine.State);
+            Assert.IsTrue(machine.OffersSavedContinueInSelect);
+        }
+
+        [Test]
+        public void Machine_NewGameSelection_ClearsOnceAHeroIsChosen()
+        {
+            var machine = new GameFlowMachine();
+            machine.EnterFrontEnd(false);
+            machine.StartNewGame();
+
+            machine.HeroChosen();
+
+            Assert.IsFalse(machine.IsNewGameSelection);
+            Assert.IsTrue(machine.OffersSavedContinueInSelect);
+        }
+
+        [Test]
+        public void Machine_BootSelect_StillOffersSavedContinue()
+        {
+            // Main.unity opened directly in the Editor shows the picker from Boot.
+            var machine = new GameFlowMachine();
+            Assert.IsTrue(machine.OffersSavedContinueInSelect);
+        }
+
+        [Test]
         public void Machine_Continue_WithHero_GoesStraightToWorld()
         {
             var machine = new GameFlowMachine();
@@ -200,6 +240,7 @@ namespace Rapadura.Tests
                 Assert.IsTrue(service.StartNewGame());
                 Assert.IsFalse(selection.HasSelection, "Novo jogo must forget the previous hero so the picker shows.");
                 Assert.AreEqual(GameFlowState.CharacterSelect, service.State);
+                Assert.IsFalse(service.OffersSavedContinueInSelect, "The Novo jogo picker must hide 'Continuar com <herói>'.");
 
                 selection.Select(CharacterId.Maithe); // CharacterSelectController.ConfirmSelection
                 Assert.AreEqual(GameFlowState.World, service.State);

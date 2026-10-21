@@ -214,7 +214,10 @@ namespace Rapadura.Gameplay.Tutorial
         /// <summary>The flow state hints are gated on (title/hero screens show nothing).</summary>
         public GameFlowState FlowState => _flowState;
 
-        /// <summary>Pending hint to show right now (lowest <see cref="TutorialStepDefinition.Order"/> allowed in the current context), or null.</summary>
+        /// <summary>
+        /// Pending hint to show right now (an <see cref="TutorialStepDefinition.Interrupts"/> step first, else the
+        /// lowest <see cref="TutorialStepDefinition.Order"/> allowed in the current context), or null.
+        /// </summary>
         public TutorialStepDefinition CurrentHint
         {
             get
@@ -227,7 +230,7 @@ namespace Rapadura.Gameplay.Tutorial
                 TutorialStepDefinition best = null;
                 foreach (TutorialStepDefinition step in _pending)
                 {
-                    if (IsAllowedNow(step) && (best == null || step.Order < best.Order))
+                    if (IsAllowedNow(step) && (best == null || Precedes(step, best)))
                     {
                         best = step;
                     }
@@ -235,6 +238,17 @@ namespace Rapadura.Gameplay.Tutorial
 
                 return best;
             }
+        }
+
+        /// <summary>An interrupting step beats any other; otherwise the lower <see cref="TutorialStepDefinition.Order"/> wins.</summary>
+        private static bool Precedes(TutorialStepDefinition step, TutorialStepDefinition other)
+        {
+            if (step.Interrupts != other.Interrupts)
+            {
+                return step.Interrupts;
+            }
+
+            return step.Order < other.Order;
         }
 
         private bool IsAllowedNow(TutorialStepDefinition step)
