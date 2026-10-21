@@ -118,6 +118,37 @@ namespace Rapadura.Gameplay.Skills
             }
         }
 
+        /// <summary>
+        /// Adds skills to the lookup database at runtime (on top of the serialized
+        /// <see cref="_availableSkills"/>), so skills granted after scene setup — e.g. the selected
+        /// character's signature set from <c>CharacterSkillSet</c> — can still be resolved by id when
+        /// a save file is restored. Already-known ids are simply overwritten with the same asset.
+        /// </summary>
+        public void RegisterSkills(IEnumerable<SkillDefinition> definitions)
+        {
+            EnsureInitialized();
+
+            if (definitions == null)
+            {
+                return;
+            }
+
+            foreach (SkillDefinition definition in definitions)
+            {
+                if (definition != null)
+                {
+                    _skillDatabase[definition.SkillId] = definition;
+                }
+            }
+        }
+
+        /// <summary>True if a skill with this id is known to this manager (serialized or registered at runtime).</summary>
+        public bool IsSkillRegistered(string skillId)
+        {
+            EnsureInitialized();
+            return _skillDatabase.ContainsKey(skillId);
+        }
+
         private void Start()
         {
             if (Rapadura.Core.DI.ServiceLocator.TryGet(out Rapadura.Save.SaveManager saveManager))
@@ -503,6 +534,17 @@ namespace Rapadura.Gameplay.Skills
             ApplyHealingToSelf(skill, instance.Level);
 
             return true;
+        }
+
+        /// <summary>
+        /// Read-only version of the cost check <see cref="TryCast"/> runs (including any
+        /// ResourceCostReduction buff), so UI such as the HUD skill hotbar can grey out a slot the
+        /// caster can't currently pay for without duplicating the cost math.
+        /// </summary>
+        public bool CanAffordSkill(SkillDefinition skill)
+        {
+            EnsureInitialized();
+            return skill != null && CanAffordCost(skill);
         }
 
         private bool CanAffordCost(SkillDefinition skill)

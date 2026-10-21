@@ -6,8 +6,9 @@ namespace Rapadura.Gameplay.Characters
     /// <summary>
     /// Base class for every playable character in the roster (Joaquim, Maria, Maithe, Icaro,
     /// Lavine). Holds identity/lore data, class/role classification, the primary attribute
-    /// that drives the character's scaling, and the list of ability names (Fase 4 wires these
-    /// to real <see cref="Rapadura.Gameplay.Skills.SkillDefinition"/> assets). Concrete
+    /// that drives the character's scaling, and the list of ability names (each backed by a real
+    /// <see cref="Rapadura.Gameplay.Skills.SkillDefinition"/> asset, resolved via
+    /// <see cref="CharacterSkillSet"/>). Concrete
     /// characters override <see cref="ApplyPassive"/> with their own starting-stat behavior.
     /// </summary>
     public abstract class PlayableCharacter

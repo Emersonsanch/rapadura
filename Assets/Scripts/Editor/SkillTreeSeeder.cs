@@ -43,7 +43,9 @@ namespace Rapadura.Editor
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
                 var skill = AssetDatabase.LoadAssetAtPath<SkillDefinition>(path);
-                if (skill == null)
+                // FindAssets is recursive: skip the per-character signature skills under
+                // Resources/Skills/Characters — they live in their own tree_<character> assets.
+                if (skill == null || path.StartsWith("Assets/Resources/Skills/Characters/"))
                 {
                     continue;
                 }

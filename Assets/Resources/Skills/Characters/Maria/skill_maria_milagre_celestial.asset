@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a8b17b009cb9e740885872d5c9085b4, type: 3}
+  m_Name: skill_maria_milagre_celestial
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
+  _skillId: skill_maria_milagre_celestial
+  _displayName: Milagre Celestial
+  _description: "Ultimate: Maria pede um milagre aos cristais sagrados e \xE9 envolvida por uma luz que cura quase todos os ferimentos, protege e continua curando por alguns segundos."
+  _icon: {fileID: 0}
+  _skillType: 2
+  _category: 2
+  _element: 8
+  _cooldownSeconds: 75
+  _manaCost: 80
+  _energyCost: 0
+  _castTimeSeconds: 1.5
+  _recoverySeconds: 0.2
+  _baseDamage: 0
+  _baseHealing: 120
+  _range: 5
+  _areaRadius: 0
+  _damagePerLevel: 0
+  _healingPerLevel: 30
+  _buffs:
+  - displayName: "Gra\xE7a Celestial"
+    affectedStat: 8
+    application: 1
+    value: 0.3
+    durationSeconds: 8
+    isDebuff: 0
+    ticksOverTime: 0
+    tickIntervalSeconds: 1
+    tickDamageOrHeal: 0
+  - displayName: Luz Restauradora
+    affectedStat: 1
+    application: 0
+    value: 0
+    durationSeconds: 8
+    isDebuff: 0
+    ticksOverTime: 1
+    tickIntervalSeconds: 1
+    tickDamageOrHeal: 6
+  _debuffs: []
+  _animationTrigger: CastCelestialMiracle
+  _castSound: {fileID: 0}
+  _castParticlesPrefab: {fileID: 0}
+  _impactVfxPrefab: {fileID: 0}
+  _maxLevel: 3
+  _experienceToUnlock: 100
+  _requirement:
+    minimumPlayerLevel: 10
+    requiredSkills:
+    - {fileID: 11400000, guid: 0c49a222a2c3487bbfabc2de43484304, type: 2}
+    requiredSkillLevel: 1
+    requiredClassOrSpecialization: Maria

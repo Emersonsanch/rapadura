@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5cb51771aae57a4c9f7a26ca59f9900, type: 3}
+  m_Name: tree_maria
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillTreeDefinition
+  _treeId: tree_maria
+  _displayName: "\xC1rvore de Maria"
+  _description: "As 5 habilidades de assinatura de Maria: 4 ativas e a Ultimate, que exige n\xEDvel 10 e a primeira habilidade aprendida."
+  _nodes:
+  - skill: {fileID: 11400000, guid: 0c49a222a2c3487bbfabc2de43484304, type: 2}
+    gridPosition: {x: 0, y: 0}
+  - skill: {fileID: 11400000, guid: 47ddffff1cf2492b81e3797e5db32af0, type: 2}
+    gridPosition: {x: 1, y: 0}
+  - skill: {fileID: 11400000, guid: 6a566aff1ee045199297e0badbc2a438, type: 2}
+    gridPosition: {x: 2, y: 0}
+  - skill: {fileID: 11400000, guid: 5afe30794fde4334b48aaa2301dbb1a9, type: 2}
+    gridPosition: {x: 3, y: 0}
+  - skill: {fileID: 11400000, guid: e1bfe515f55e48f98eeac5ad27442edb, type: 2}
+    gridPosition: {x: 0, y: 1}

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5cb51771aae57a4c9f7a26ca59f9900, type: 3}
+  m_Name: tree_maithe
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillTreeDefinition
+  _treeId: tree_maithe
+  _displayName: "\xC1rvore de Maithe"
+  _description: "As 5 habilidades de assinatura de Maithe: 4 ativas e a Ultimate, que exige n\xEDvel 10 e a primeira habilidade aprendida."
+  _nodes:
+  - skill: {fileID: 11400000, guid: 8254725d2344427aad0ce291a19620be, type: 2}
+    gridPosition: {x: 0, y: 0}
+  - skill: {fileID: 11400000, guid: 859e1bccb68545edb3407b69a2edbe0a, type: 2}
+    gridPosition: {x: 1, y: 0}
+  - skill: {fileID: 11400000, guid: 28a931002bc2469eb0d84ebed6826bb2, type: 2}
+    gridPosition: {x: 2, y: 0}
+  - skill: {fileID: 11400000, guid: 775f941eae384d15a72b431db3961dd9, type: 2}
+    gridPosition: {x: 3, y: 0}
+  - skill: {fileID: 11400000, guid: 45c0c06b000c47dd8bbcce702eca7ecf, type: 2}
+    gridPosition: {x: 0, y: 1}

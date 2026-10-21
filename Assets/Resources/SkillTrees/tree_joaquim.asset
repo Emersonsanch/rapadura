@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5cb51771aae57a4c9f7a26ca59f9900, type: 3}
+  m_Name: tree_joaquim
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillTreeDefinition
+  _treeId: tree_joaquim
+  _displayName: "\xC1rvore de Joaquim"
+  _description: "As 5 habilidades de assinatura de Joaquim: 4 ativas e a Ultimate, que exige n\xEDvel 10 e a primeira habilidade aprendida."
+  _nodes:
+  - skill: {fileID: 11400000, guid: 495143dc4c74477d89bb73eb7a7013c0, type: 2}
+    gridPosition: {x: 0, y: 0}
+  - skill: {fileID: 11400000, guid: a505d7981f31420eb345ecfb78efb38a, type: 2}
+    gridPosition: {x: 1, y: 0}
+  - skill: {fileID: 11400000, guid: c906a83990164fde8a8257b01488fa64, type: 2}
+    gridPosition: {x: 2, y: 0}
+  - skill: {fileID: 11400000, guid: 87a4d3deb28b41a284c9575554f5ec1c, type: 2}
+    gridPosition: {x: 3, y: 0}
+  - skill: {fileID: 11400000, guid: 350d23d156f14501b5b8890db1832e2a, type: 2}
+    gridPosition: {x: 0, y: 1}

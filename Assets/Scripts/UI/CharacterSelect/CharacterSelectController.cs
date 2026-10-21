@@ -1,5 +1,6 @@
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Player;
+using Rapadura.Gameplay.Skills;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -145,6 +146,13 @@ namespace Rapadura.UI.CharacterSelect
             if (_playerStats != null)
             {
                 character.ApplyPassive(_playerStats);
+
+                // Each hero brings their own 5 signature skills (Resources/Skills/Characters/<Id>):
+                // the 4 actives are learned + equipped right away, the Ultimate unlocks later.
+                if (_playerStats.TryGetComponent(out SkillManager skillManager))
+                {
+                    CharacterSkillSet.GrantTo(skillManager, id, _playerStats.Level);
+                }
             }
 
             if (_playerVisualRenderer != null && !character.HasDedicatedModel)

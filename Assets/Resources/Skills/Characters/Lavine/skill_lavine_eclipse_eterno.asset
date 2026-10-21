@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a8b17b009cb9e740885872d5c9085b4, type: 3}
+  m_Name: skill_lavine_eclipse_eterno
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
+  _skillId: skill_lavine_eclipse_eterno
+  _displayName: Eclipse Eterno
+  _description: "Ultimate: o c\xE9u escurece como na Noite Rubra em que Lavine nasceu. Uma onda de trevas fere todos os inimigos ao redor e os deixa lentos e indefesos. \xC9 a prova de que a ca\xE7ula da fam\xEDlia pode usar esse poder para proteger."
+  _icon: {fileID: 0}
+  _skillType: 2
+  _category: 0
+  _element: 9
+  _cooldownSeconds: 70
+  _manaCost: 90
+  _energyCost: 0
+  _castTimeSeconds: 1.8
+  _recoverySeconds: 0.2
+  _baseDamage: 65
+  _baseHealing: 0
+  _range: 12
+  _areaRadius: 8
+  _damagePerLevel: 16
+  _healingPerLevel: 0
+  _buffs: []
+  _debuffs:
+  - displayName: Eclipsado
+    affectedStat: 6
+    application: 1
+    value: -0.5
+    durationSeconds: 5
+    isDebuff: 1
+    ticksOverTime: 0
+    tickIntervalSeconds: 1
+    tickDamageOrHeal: 0
+  - displayName: Alma Exposta
+    affectedStat: 8
+    application: 1
+    value: -0.3
+    durationSeconds: 5
+    isDebuff: 1
+    ticksOverTime: 0
+    tickIntervalSeconds: 1
+    tickDamageOrHeal: 0
+  _animationTrigger: CastEternalEclipse
+  _castSound: {fileID: 0}
+  _castParticlesPrefab: {fileID: 0}
+  _impactVfxPrefab: {fileID: 0}
+  _maxLevel: 3
+  _experienceToUnlock: 100
+  _requirement:
+    minimumPlayerLevel: 10
+    requiredSkills:
+    - {fileID: 11400000, guid: 55f6665632224f9aa6987ae33a2c3195, type: 2}
+    requiredSkillLevel: 1
+    requiredClassOrSpecialization: Lavine

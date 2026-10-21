@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a8b17b009cb9e740885872d5c9085b4, type: 3}
+  m_Name: skill_maithe_tempestade_de_mil_flechas
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
+  _skillId: skill_maithe_tempestade_de_mil_flechas
+  _displayName: Tempestade de Mil Flechas
+  _description: "Ultimate: Maithe esvazia a aljava num redemoinho de vento e flechas que cobre o campo de batalha, ferindo e desorientando tudo ao redor. \xC9 o que a prima mais velha faz quando decide que ningu\xE9m da fam\xEDlia vai se machucar hoje."
+  _icon: {fileID: 0}
+  _skillType: 2
+  _category: 0
+  _element: 7
+  _cooldownSeconds: 60
+  _manaCost: 70
+  _energyCost: 0
+  _castTimeSeconds: 1.2
+  _recoverySeconds: 0.2
+  _baseDamage: 55
+  _baseHealing: 0
+  _range: 20
+  _areaRadius: 7
+  _damagePerLevel: 14
+  _healingPerLevel: 0
+  _buffs: []
+  _debuffs:
+  - displayName: Desorientado
+    affectedStat: 6
+    application: 1
+    value: -0.4
+    durationSeconds: 4
+    isDebuff: 1
+    ticksOverTime: 0
+    tickIntervalSeconds: 1
+    tickDamageOrHeal: 0
+  _animationTrigger: CastThousandArrows
+  _castSound: {fileID: 0}
+  _castParticlesPrefab: {fileID: 0}
+  _impactVfxPrefab: {fileID: 0}
+  _maxLevel: 3
+  _experienceToUnlock: 100
+  _requirement:
+    minimumPlayerLevel: 10
+    requiredSkills:
+    - {fileID: 11400000, guid: 8254725d2344427aad0ce291a19620be, type: 2}
+    requiredSkillLevel: 1
+    requiredClassOrSpecialization: Maithe

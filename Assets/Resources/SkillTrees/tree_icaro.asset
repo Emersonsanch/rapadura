@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5cb51771aae57a4c9f7a26ca59f9900, type: 3}
+  m_Name: tree_icaro
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillTreeDefinition
+  _treeId: tree_icaro
+  _displayName: "\xC1rvore de \xCDcaro"
+  _description: "As 5 habilidades de assinatura de \xCDcaro: 4 ativas e a Ultimate, que exige n\xEDvel 10 e a primeira habilidade aprendida."
+  _nodes:
+  - skill: {fileID: 11400000, guid: fa89bf4d4db444608525ddeff74f125f, type: 2}
+    gridPosition: {x: 0, y: 0}
+  - skill: {fileID: 11400000, guid: 2d4ef8cec0e24ac0a68ef16c1fa64643, type: 2}
+    gridPosition: {x: 1, y: 0}
+  - skill: {fileID: 11400000, guid: c6ad38dd37804b4187767210bd01ca8a, type: 2}
+    gridPosition: {x: 2, y: 0}
+  - skill: {fileID: 11400000, guid: ce664bb153b84011b65019e1af10e90d, type: 2}
+    gridPosition: {x: 3, y: 0}
+  - skill: {fileID: 11400000, guid: 5777187c455e41ab9239dd7c2d7fab1a, type: 2}
+    gridPosition: {x: 0, y: 1}
