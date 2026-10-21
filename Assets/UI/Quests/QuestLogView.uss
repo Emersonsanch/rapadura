@@ -1,0 +1,299 @@
+.quest-log-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.55);
+    display: none;
+}
+
+.quest-log-window {
+    width: 82%;
+    min-width: 560px;
+    max-width: 1100px;
+    height: 82%;
+    min-height: 380px;
+    background-color: rgba(12, 14, 20, 0.95);
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.14);
+    padding: 16px 20px;
+}
+
+.quest-log-header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.quest-log-title {
+    flex-grow: 1;
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: rgb(255, 210, 90);
+}
+
+.quest-log-close-button {
+    min-width: 96px;
+    min-height: 44px;
+    font-size: 15px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    color: rgb(230, 230, 235);
+}
+
+.quest-log-tabs {
+    flex-direction: row;
+    margin-bottom: 10px;
+    border-bottom-width: 2px;
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.quest-log-tab {
+    min-width: 140px;
+    min-height: 44px;
+    margin: 0 8px 0 0;
+    font-size: 15px;
+    color: rgb(170, 170, 180);
+    background-color: rgba(255, 255, 255, 0.04);
+    border-width: 0;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.quest-log-tab--selected {
+    color: rgb(255, 220, 120);
+    -unity-font-style: bold;
+    background-color: rgba(255, 210, 90, 0.14);
+}
+
+.quest-log-body {
+    flex-grow: 1;
+    flex-direction: row;
+}
+
+.quest-list-scroll {
+    width: 38%;
+    min-width: 220px;
+    margin-right: 14px;
+}
+
+.quest-list-empty-label {
+    font-size: 13px;
+    color: rgb(150, 150, 160);
+    white-space: normal;
+    margin: 10px 4px;
+}
+
+.quest-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 56px;
+    margin: 0 0 6px 0;
+    padding: 8px 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.08);
+    border-left-width: 4px;
+    border-radius: 6px;
+    -unity-text-align: middle-left;
+}
+
+.quest-list-item--main {
+    border-left-color: rgb(255, 195, 60);
+}
+
+.quest-list-item--side {
+    border-left-color: rgb(90, 170, 255);
+}
+
+.quest-list-item--daily {
+    border-left-color: rgb(90, 220, 130);
+}
+
+.quest-list-item--selected {
+    background-color: rgba(255, 210, 90, 0.16);
+    border-color: rgba(255, 210, 90, 0.6);
+}
+
+.quest-list-item--completed {
+    opacity: 0.7;
+}
+
+.quest-list-item-title {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 245);
+    white-space: normal;
+}
+
+.quest-list-item-subtitle {
+    font-size: 12px;
+    color: rgb(160, 160, 170);
+    margin-top: 2px;
+}
+
+.quest-list-item-tracked {
+    font-size: 11px;
+    color: rgb(255, 210, 90);
+    margin-top: 2px;
+}
+
+.quest-detail-scroll {
+    flex-grow: 1;
+    padding: 4px 8px;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+}
+
+.quest-detail {
+    padding: 8px 6px;
+}
+
+.quest-detail-title-row {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.quest-detail-title {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 245);
+    margin-right: 10px;
+    white-space: normal;
+}
+
+.quest-detail-type {
+    font-size: 11px;
+    color: rgb(20, 20, 26);
+    background-color: rgb(255, 210, 90);
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+
+.quest-detail-description {
+    font-size: 14px;
+    color: rgb(200, 200, 210);
+    white-space: normal;
+    margin-top: 8px;
+}
+
+.quest-detail-section {
+    margin-top: 14px;
+}
+
+.quest-detail-section-header {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: rgb(255, 210, 90);
+    margin-bottom: 6px;
+}
+
+.quest-detail-journal {
+    font-size: 13px;
+    -unity-font-style: italic;
+    color: rgb(185, 180, 200);
+    white-space: normal;
+    padding-left: 10px;
+    border-left-width: 2px;
+    border-left-color: rgba(255, 255, 255, 0.14);
+}
+
+.quest-objective-row {
+    margin-bottom: 8px;
+}
+
+.quest-objective-header {
+    flex-direction: row;
+    align-items: center;
+}
+
+.quest-objective-check {
+    width: 10px;
+    height: 10px;
+    margin-right: 8px;
+    flex-shrink: 0;
+    border-width: 2px;
+    border-color: rgb(120, 120, 130);
+    border-radius: 2px;
+}
+
+.quest-objective-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 14px;
+    color: rgb(225, 225, 230);
+    white-space: normal;
+}
+
+.quest-objective-progress {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: rgb(150, 200, 255);
+    margin-left: 8px;
+}
+
+.quest-objective-bar-track {
+    height: 4px;
+    margin: 4px 0 0 18px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.quest-objective-bar-fill {
+    height: 100%;
+    background-color: rgb(90, 170, 255);
+    border-radius: 2px;
+}
+
+.quest-objective-row--complete .quest-objective-check {
+    border-color: rgb(90, 220, 130);
+    background-color: rgb(90, 220, 130);
+}
+
+.quest-objective-row--complete .quest-objective-text {
+    color: rgb(150, 150, 160);
+}
+
+.quest-objective-row--complete .quest-objective-progress {
+    color: rgb(90, 220, 130);
+}
+
+.quest-objective-row--complete .quest-objective-bar-fill {
+    background-color: rgb(90, 220, 130);
+}
+
+.quest-detail-rewards {
+    font-size: 14px;
+    color: rgb(255, 220, 120);
+    white-space: normal;
+}
+
+.quest-detail-track-button {
+    margin-top: 16px;
+    align-self: flex-start;
+    min-width: 180px;
+    min-height: 48px;
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: rgb(20, 20, 26);
+    background-color: rgb(255, 210, 90);
+    border-width: 0;
+    border-radius: 6px;
+}
+
+.quest-detail-track-button--tracking {
+    color: rgb(255, 220, 120);
+    background-color: rgba(255, 210, 90, 0.14);
+    border-width: 1px;
+    border-color: rgba(255, 210, 90, 0.6);
+}

@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Quests/QuestTrackerView.uss" />
+    <ui:VisualElement name="quest-tracker-root" class="quest-tracker-root" picking-mode="Ignore">
+        <ui:VisualElement name="quest-tracker-card" class="quest-tracker-card">
+            <ui:Label name="quest-tracker-title" text="" class="quest-tracker-title" picking-mode="Ignore" />
+            <ui:VisualElement name="quest-tracker-objectives" class="quest-tracker-objectives" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:Label name="quest-tracker-toast" text="" class="quest-tracker-toast" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

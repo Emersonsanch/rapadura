@@ -1,0 +1,76 @@
+.quest-tracker-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Right edge, below the HUD's Skills/Menu buttons (top: 32px) so it never covers them. */
+.quest-tracker-card {
+    position: absolute;
+    right: 24px;
+    top: 130px;
+    width: 260px;
+    padding: 8px 12px;
+    background-color: rgba(12, 14, 20, 0.72);
+    border-radius: 8px;
+    border-left-width: 3px;
+    border-left-color: rgb(255, 195, 60);
+    display: none;
+}
+
+.quest-tracker-card--pulse {
+    background-color: rgba(255, 210, 90, 0.28);
+}
+
+.quest-tracker-title {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: rgb(255, 220, 120);
+    white-space: normal;
+    margin-bottom: 4px;
+}
+
+.quest-tracker-objective {
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 2px;
+}
+
+.quest-tracker-objective-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 12px;
+    color: rgb(225, 225, 230);
+    white-space: normal;
+}
+
+.quest-tracker-objective-progress {
+    font-size: 12px;
+    -unity-font-style: bold;
+    color: rgb(150, 200, 255);
+    margin-left: 6px;
+}
+
+.quest-tracker-objective--complete .quest-tracker-objective-text {
+    color: rgb(140, 140, 150);
+}
+
+.quest-tracker-objective--complete .quest-tracker-objective-progress {
+    color: rgb(90, 220, 130);
+}
+
+.quest-tracker-toast {
+    position: absolute;
+    top: 18%;
+    left: 0;
+    right: 0;
+    -unity-text-align: middle-center;
+    font-size: 26px;
+    -unity-font-style: bold;
+    color: rgb(255, 220, 120);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(0, 0, 0, 0.8);
+    display: none;
+}

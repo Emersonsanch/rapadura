@@ -1,0 +1,43 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Quests/QuestLogView.uss" />
+    <ui:VisualElement name="quest-log-root" class="quest-log-root">
+        <ui:VisualElement name="quest-log-window" class="quest-log-window">
+            <ui:VisualElement name="quest-log-header" class="quest-log-header">
+                <ui:Label name="quest-log-title" text="Missões" class="quest-log-title" />
+                <ui:Button name="quest-log-close-button" text="Fechar" class="quest-log-close-button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="quest-log-tabs" class="quest-log-tabs">
+                <ui:Button name="quest-tab-active" text="Ativas" class="quest-log-tab quest-log-tab--selected" />
+                <ui:Button name="quest-tab-completed" text="Concluídas" class="quest-log-tab" />
+            </ui:VisualElement>
+            <ui:VisualElement name="quest-log-body" class="quest-log-body">
+                <ui:ScrollView name="quest-list-scroll" class="quest-list-scroll" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="quest-list" class="quest-list" />
+                    <ui:Label name="quest-list-empty-label" text="" class="quest-list-empty-label" />
+                </ui:ScrollView>
+                <ui:ScrollView name="quest-detail-scroll" class="quest-detail-scroll" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="quest-detail" class="quest-detail">
+                        <ui:VisualElement class="quest-detail-title-row">
+                            <ui:Label name="quest-detail-title" text="Selecione uma missão" class="quest-detail-title" />
+                            <ui:Label name="quest-detail-type" text="" class="quest-detail-type" />
+                        </ui:VisualElement>
+                        <ui:Label name="quest-detail-description" text="" class="quest-detail-description" />
+                        <ui:VisualElement name="quest-detail-journal-section" class="quest-detail-section">
+                            <ui:Label name="quest-detail-journal-header" text="Diário" class="quest-detail-section-header" />
+                            <ui:Label name="quest-detail-journal" text="" class="quest-detail-journal" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="quest-detail-objectives-section" class="quest-detail-section">
+                            <ui:Label name="quest-detail-objectives-header" text="Objetivos" class="quest-detail-section-header" />
+                            <ui:VisualElement name="quest-detail-objectives" class="quest-detail-objectives" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="quest-detail-rewards-section" class="quest-detail-section">
+                            <ui:Label name="quest-detail-rewards-header" text="Recompensas" class="quest-detail-section-header" />
+                            <ui:Label name="quest-detail-rewards" text="" class="quest-detail-rewards" />
+                        </ui:VisualElement>
+                        <ui:Button name="quest-detail-track-button" text="Acompanhar" class="quest-detail-track-button" />
+                    </ui:VisualElement>
+                </ui:ScrollView>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
