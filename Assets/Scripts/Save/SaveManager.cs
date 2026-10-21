@@ -129,6 +129,16 @@ namespace Rapadura.Save
         /// <summary>Whether state for <paramref name="key"/> is waiting for a saveable to register (see <see cref="RestoreCarriedState"/>).</summary>
         public bool HasCarriedState(string key) => key != null && _carried.ContainsKey(key);
 
+        /// <summary>
+        /// Read-only peek at the carried JSON for <paramref name="key"/> (the world map HUD shows the
+        /// absent Player's level/Mochila from it). False when nothing is carried for that key.
+        /// </summary>
+        public bool TryGetCarriedJson(string key, out string json)
+        {
+            json = key != null && _carried.TryGetValue(key, out SaveEntry entry) ? entry?.json : null;
+            return !string.IsNullOrEmpty(json);
+        }
+
         /// <summary>"Novo jogo": forget the previous run's carried player state so the new hero starts fresh.</summary>
         public void ClearCarriedState()
         {

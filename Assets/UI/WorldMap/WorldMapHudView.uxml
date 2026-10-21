@@ -1,0 +1,48 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/WorldMap/WorldMapHudView.uss" />
+    <!-- World map HUD (WorldMapHudController). Static captions are localized by UiDocumentLocalizer
+         (class "loc" + view-data-key); the readouts are filled in code from WorldMapTexts. -->
+    <ui:VisualElement name="wm-hud-root" class="wm-hud-root" picking-mode="Ignore">
+        <!-- Region labels are created in code, one per WorldMapRegionNode, under this layer. -->
+        <ui:VisualElement name="wm-labels-layer" class="wm-labels-layer" picking-mode="Ignore" />
+
+        <ui:VisualElement name="wm-top-bar" class="wm-top-bar">
+            <ui:VisualElement name="wm-hero-block" class="wm-top-block wm-hero-block" picking-mode="Ignore">
+                <ui:Label name="wm-hero-name-label" text="Herói" class="wm-hero-name" picking-mode="Ignore" />
+                <ui:Label name="wm-hero-level-label" text="Nv. 1" class="wm-hero-level" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="wm-top-separator" picking-mode="Ignore" />
+            <ui:VisualElement name="wm-region-block" class="wm-top-block wm-region-block" picking-mode="Ignore">
+                <ui:Label name="wm-region-name-label" text="Floresta" class="wm-region-name" picking-mode="Ignore" />
+                <ui:Label name="wm-victories-label" text="Vitórias: 0/3 para desbloquear Deserto" class="wm-victories" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="wm-top-separator" picking-mode="Ignore" />
+            <ui:VisualElement name="wm-env-block" class="wm-top-block wm-env-block" picking-mode="Ignore">
+                <ui:VisualElement name="wm-weather-row" class="wm-weather-row" picking-mode="Ignore">
+                    <ui:VisualElement name="wm-weather-icon" class="wm-weather-icon wm-weather-icon--clear" picking-mode="Ignore" />
+                    <ui:Label name="wm-weather-label" text="Céu limpo" class="wm-weather-label" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:Label name="wm-clock-label" text="Dia 1 · 08h · Dia" class="wm-clock" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="wm-button-cluster" class="wm-button-cluster" picking-mode="Ignore">
+            <ui:Button name="wm-quests-button" text="Missões" class="wm-menu-button wm-menu-button--first loc" view-data-key="ui.hud.quests" />
+            <ui:Button name="wm-inventory-button" text="Mochila" class="wm-menu-button loc" view-data-key="ui.hud.inventory" />
+            <ui:Button name="wm-achievements-button" text="Conquistas" class="wm-menu-button loc" view-data-key="ui.pause.achievements" />
+            <ui:Button name="wm-menu-button" text="Menu" class="wm-menu-button loc" view-data-key="ui.hud.menu" />
+        </ui:VisualElement>
+
+        <!-- Read-only Mochila summary: the inventory lives on the Player (Main.unity); here it is read
+             from SaveManager's carried state. Modal: holds GameplayPause while open. -->
+        <ui:VisualElement name="wm-backpack-overlay" class="wm-backpack-overlay">
+            <ui:VisualElement name="wm-backpack-panel" class="wm-backpack-panel">
+                <ui:Label text="Mochila" class="wm-backpack-title loc" view-data-key="ui.hud.inventory" />
+                <ui:Label name="wm-backpack-hero-label" text="Herói · Nv. 1" class="wm-backpack-hero" />
+                <ui:VisualElement name="wm-backpack-lines" class="wm-backpack-lines" />
+                <ui:Label text="Os itens são usados e organizados durante as aventuras." class="wm-backpack-hint loc" view-data-key="ui.worldmap.backpack.hint" />
+                <ui:Button name="wm-backpack-close-button" text="Fechar" focusable="true" class="wm-backpack-close loc" view-data-key="ui.worldmap.close" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

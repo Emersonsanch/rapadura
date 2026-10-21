@@ -1,3 +1,4 @@
+using Rapadura.Audio;
 using Rapadura.Core.Audio;
 using Rapadura.Core.DI;
 using Rapadura.Core.Logging;
@@ -49,6 +50,13 @@ namespace Rapadura.UI.Common
 
         private static void PlayCue(string cueId)
         {
+            // Preferred path: the event-driven router (SfxEventMap cue + cooldown + procedural placeholder).
+            if (ServiceLocator.TryGet(out SfxEventRouter router) && router != null && router.IsInitialized)
+            {
+                router.PlayCue(cueId);
+                return;
+            }
+
             if (!ServiceLocator.TryGet(out AudioManager audioManager) || audioManager == null)
             {
                 GameLogger.Warning("UI", $"UiSoundHooks: AudioManager not registered, skipping cue '{cueId}'.");

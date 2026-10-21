@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Logging;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.Save;
@@ -62,6 +63,14 @@ namespace Rapadura.Gameplay.World.Map
         public RandomEncounterSystem Encounters => _encounters;
         public WorldMapRegionNode CurrentNode => _currentNode;
         public bool IsTraveling => _targetNode != null;
+        public IReadOnlyList<WorldMapRegionNode> Nodes => _nodes;
+
+        /// <summary>
+        /// Optional screen-space filter for map clicks (bottom-left origin, like <c>Mouse.position</c>):
+        /// return true to swallow the click, e.g. when it lands on the world map HUD (WorldMap.unity
+        /// has no EventSystem, so UI Toolkit hits are not seen by <c>IsPointerOverGameObject</c>).
+        /// </summary>
+        public System.Func<Vector2, bool> PointerBlocker { get; set; }
 
         private void Awake()
         {
@@ -178,13 +187,19 @@ namespace Rapadura.Gameplay.World.Map
 
         private void HandleClick()
         {
-            if (_encounterInProgress || IsTraveling)
+            // A modal screen (pause menu, quest log...) holds GameplayPause: never walk behind it.
+            if (_encounterInProgress || IsTraveling || GameplayPause.IsPaused)
             {
                 return;
             }
 
             Mouse mouse = Mouse.current;
             if (mouse == null || !mouse.leftButton.wasPressedThisFrame)
+            {
+                return;
+            }
+
+            if (PointerBlocker != null && PointerBlocker(mouse.position.ReadValue()))
             {
                 return;
             }

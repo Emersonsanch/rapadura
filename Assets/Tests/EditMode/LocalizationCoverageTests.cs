@@ -18,12 +18,14 @@ using Rapadura.Gameplay.Items.Procedural;
 using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.Skills;
+using Rapadura.Gameplay.Tutorial;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.UI.Achievements;
 using Rapadura.UI.Common;
 using Rapadura.UI.Crafting;
 using Rapadura.UI.Menus;
 using Rapadura.UI.Quests;
+using Rapadura.UI.Tutorial;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -34,7 +36,7 @@ namespace Rapadura.Tests
     /// Coverage audit for every localized text source (see Docs/Localization.md): the core
     /// <see cref="LocalizationManager.DefaultEntries"/> table plus the runtime-merged *Texts helpers
     /// (QuestLogTexts, QuestGiverTexts, DailyQuestTexts, AchievementTexts, TooltipLocalization,
-    /// SettingsMenuTexts, UiTexts, ReturnToTitleTexts, ContentTexts). Checks that every key referenced by ScriptableObject assets or built in
+    /// SettingsMenuTexts, UiTexts, ReturnToTitleTexts, ContentTexts, TutorialTexts, HapticsTexts). Checks that every key referenced by ScriptableObject assets or built in
     /// code exists with both en and pt-BR text, that no key is defined twice with different text,
     /// that helpers never shadow a core key, and that {0}-style placeholders match per language.
     /// Also covers every <c>class="loc"</c> + <c>view-data-key</c> marker in Assets/UI/**/*.uxml
@@ -59,6 +61,8 @@ namespace Rapadura.Tests
             yield return Source(nameof(UiTexts), UiTexts.Entries);
             yield return Source(nameof(ReturnToTitleTexts), ReturnToTitleTexts.Entries);
             yield return Source(nameof(ContentTexts), ContentTexts.Entries);
+            yield return Source(nameof(TutorialTexts), TutorialTexts.Entries);
+            yield return Source(nameof(HapticsTexts), HapticsTexts.Entries);
         }
 
         private static KeyValuePair<string, IReadOnlyList<LocalizationEntry>> Source(string name, IReadOnlyList<LocalizationEntry> entries)
@@ -245,6 +249,7 @@ namespace Rapadura.Tests
             UiTexts.EnsureRegistered(manager);
             ReturnToTitleTexts.EnsureRegistered(manager);
             ContentTexts.EnsureRegistered(manager);
+            TutorialTexts.EnsureRegistered(manager);
 
             foreach (KeyValuePair<string, string> pair in external)
             {
@@ -474,7 +479,7 @@ namespace Rapadura.Tests
         public void HelperKeyConstants_AllLocalized()
         {
             var references = new List<(string, string)>();
-            foreach (Type type in new[] { typeof(QuestLogTexts), typeof(QuestLogPresenter), typeof(AchievementTexts), typeof(SettingsMenuTexts), typeof(UiTexts) })
+            foreach (Type type in new[] { typeof(QuestLogTexts), typeof(QuestLogPresenter), typeof(AchievementTexts), typeof(SettingsMenuTexts), typeof(UiTexts), typeof(TutorialTexts), typeof(HapticsTexts) })
             {
                 foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
                 {
@@ -500,6 +505,12 @@ namespace Rapadura.Tests
             foreach (LanguageCode language in Enum.GetValues(typeof(LanguageCode)))
             {
                 references.Add((SettingsMenuTexts.LanguageNameKey(language), "SettingsMenuTexts.LanguageNameKey"));
+            }
+
+            foreach (TutorialStepDefinition step in TutorialSteps.All)
+            {
+                references.Add((step.TitleKey, $"TutorialSteps[{step.Id}].TitleKey"));
+                references.Add((step.BodyKey, $"TutorialSteps[{step.Id}].BodyKey"));
             }
 
             foreach (CraftingStationType station in Enum.GetValues(typeof(CraftingStationType)))

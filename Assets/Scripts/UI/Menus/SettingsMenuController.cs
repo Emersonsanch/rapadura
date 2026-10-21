@@ -6,6 +6,7 @@ using Rapadura.Core.Localization;
 using Rapadura.Core.Performance;
 using Rapadura.Core.Systems;
 using Rapadura.UI.Common;
+using Rapadura.UI.Tutorial;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -94,6 +95,10 @@ namespace Rapadura.UI.Menus
         private static readonly LanguageCode[] LanguageChoiceOrder = { LanguageCode.ptBR, LanguageCode.en };
         private readonly List<LanguageCode> _languageChoiceCodes = new List<LanguageCode>();
         private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
+        // "Mostrar dicas" / "Reiniciar tutorial", appended in code to the Acessibilidade panel.
+        private readonly TutorialSettingsSection _tutorialSection = new TutorialSettingsSection();
+        // "Vibração", appended after the tutorial rows.
+        private readonly HapticsSettingsSection _hapticsSection = new HapticsSettingsSection();
 
         // Controls (rebind)
         private ScrollView _controlsRowsContainer;
@@ -159,6 +164,8 @@ namespace Rapadura.UI.Menus
 
             BindElements();
             _localizer.Attach(_uiDocument.rootVisualElement, null, SettingsMenuTexts.Get);
+            _tutorialSection.Attach(_panelAccessibility);
+            _hapticsSection.Attach(_panelAccessibility);
             RegisterCallbacks();
             InitializeGraphicsPanel();
             InitializeAudioPanel();
@@ -178,6 +185,8 @@ namespace Rapadura.UI.Menus
             UnregisterCallbacks();
             UnsubscribeLocalization();
             _localizer.Detach();
+            _tutorialSection.Detach();
+            _hapticsSection.Detach();
             GameplayPause.Release(this);
         }
 
@@ -784,6 +793,8 @@ namespace Rapadura.UI.Menus
             _highContrastToggle?.SetValueWithoutNotify(_accessibility != null && _accessibility.HighContrast);
             _screenShakeSlider?.SetValueWithoutNotify(_accessibility != null ? _accessibility.ScreenShakeIntensity : 1f);
             _reduceFlashToggle?.SetValueWithoutNotify(_accessibility != null && _accessibility.ReduceFlashEffects);
+            _tutorialSection.Refresh();
+            _hapticsSection.Refresh();
 
             InitializeColorblindChoices();
         }
@@ -874,6 +885,8 @@ namespace Rapadura.UI.Menus
         {
             InitializeGraphicsPanel();
             InitializeColorblindChoices();
+            _tutorialSection.Refresh();
+            _hapticsSection.Refresh();
             InitializeControlsPanel();
         }
 

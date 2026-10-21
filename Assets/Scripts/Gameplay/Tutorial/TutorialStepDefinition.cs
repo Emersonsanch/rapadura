@@ -32,8 +32,10 @@ namespace Rapadura.Gameplay.Tutorial
         public TutorialContext Context { get; }
 
         /// <summary>
-        /// Freezes gameplay (GameplayPause) while the hint is on screen. Only the very first combat
-        /// hint does this — a kid reading "how to move/attack" shouldn't be hit meanwhile.
+        /// Freezes gameplay (GameplayPause) while the hint is on screen, until "Entendi". Supported by
+        /// the hint UI but off for every built-in step: hints are meant to be non-blocking, and a
+        /// pause on the first enemy spawn would also stall the PlayMode smoke tests (fresh profile
+        /// per run) that wait for gameplay to run.
         /// </summary>
         public bool PausesGameplay { get; }
 
@@ -59,7 +61,7 @@ namespace Rapadura.Gameplay.Tutorial
 
         /// <summary>First time on the world map (GameFlowState.World): how to travel.</summary>
         public const string WorldMap = "world_map";
-        /// <summary>First enemy spawned in an encounter: move/attack. Pauses gameplay until "Entendi".</summary>
+        /// <summary>First enemy spawned in an encounter: move/attack.</summary>
         public const string Encounter = "encounter";
         /// <summary>First skill learned/equipped: the hotbar.</summary>
         public const string Skills = "skills";
@@ -82,7 +84,7 @@ namespace Rapadura.Gameplay.Tutorial
         public static readonly IReadOnlyList<TutorialStepDefinition> All = new List<TutorialStepDefinition>
         {
             new TutorialStepDefinition(WorldMap, 0, TutorialContext.World),
-            new TutorialStepDefinition(Encounter, 1, TutorialContext.Encounter, pausesGameplay: true),
+            new TutorialStepDefinition(Encounter, 1, TutorialContext.Encounter),
             new TutorialStepDefinition(Skills, 2, TutorialContext.Encounter, "skill-slot-0"),
             new TutorialStepDefinition(Loot, 3, TutorialContext.Any, "inventory-button"),
             new TutorialStepDefinition(Quest, 4, TutorialContext.Any, "quests-button"),

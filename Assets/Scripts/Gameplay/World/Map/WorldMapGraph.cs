@@ -77,6 +77,21 @@ namespace Rapadura.Gameplay.World.Map
             _unlockRules[region] = new UnlockRule(requiredRegion, victoriesRequired < 0 ? 0 : victoriesRequired);
         }
 
+        /// <summary>Reads <paramref name="region"/>'s unlock rule (see <see cref="SetUnlockRule"/>). False when it has none.</summary>
+        public bool TryGetUnlockRule(BiomeType region, out BiomeType requiredRegion, out int victoriesRequired)
+        {
+            if (_unlockRules.TryGetValue(region, out UnlockRule rule))
+            {
+                requiredRegion = rule.RequiredRegion;
+                victoriesRequired = rule.VictoriesRequired;
+                return true;
+            }
+
+            requiredRegion = default;
+            victoriesRequired = 0;
+            return false;
+        }
+
         /// <summary>Unlocks every still-locked region whose rule is now satisfied. Returns the regions newly unlocked by this call.</summary>
         public List<BiomeType> ApplyUnlocks(WorldMapProgress progress)
         {

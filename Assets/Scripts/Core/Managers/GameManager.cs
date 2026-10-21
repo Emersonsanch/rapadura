@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Rapadura.Audio;
 using Rapadura.Core.Accessibility;
 using Rapadura.Core.Analytics;
 using Rapadura.Core.Audio;
@@ -19,6 +20,7 @@ using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.Shop;
+using Rapadura.Gameplay.Tutorial;
 using Rapadura.Gameplay.World;
 using Rapadura.Gameplay.World.Map;
 using Rapadura.Save;
@@ -46,6 +48,9 @@ namespace Rapadura.Core.Managers
         public CraftingManager CraftingManager { get; private set; }
         public BuildingManager BuildingManager { get; private set; }
         public AudioManager AudioManager { get; private set; }
+        public SfxEventRouter SfxEventRouter { get; private set; }
+        public MusicDirector MusicDirector { get; private set; }
+        public HapticsService HapticsService { get; private set; }
         public AccessibilitySettings AccessibilitySettings { get; private set; }
         public AnalyticsManager AnalyticsManager { get; private set; }
         public DialogueManager DialogueManager { get; private set; }
@@ -62,6 +67,7 @@ namespace Rapadura.Core.Managers
         public WeatherSystem WeatherSystem { get; private set; }
         public GameFlowService GameFlowService { get; private set; }
         public NewSessionReset NewSessionReset { get; private set; }
+        public TutorialManager TutorialManager { get; private set; }
 
         private bool _managersBuilt;
 
@@ -118,6 +124,9 @@ namespace Rapadura.Core.Managers
             CraftingManager = new CraftingManager();
             BuildingManager = new BuildingManager();
             AudioManager = new AudioManager();
+            SfxEventRouter = new SfxEventRouter(AudioManager);
+            MusicDirector = new MusicDirector(AudioManager);
+            HapticsService = new HapticsService();
             AccessibilitySettings = new AccessibilitySettings();
             AnalyticsManager = new AnalyticsManager();
             DialogueManager = new DialogueManager();
@@ -135,12 +144,18 @@ namespace Rapadura.Core.Managers
             NewSessionReset = new NewSessionReset();
             GameFlowService = new GameFlowService(CharacterSelectionState, SaveManager, NewSessionReset, SceneTransitionService);
 
+            // First-time hints; per profile (Saves/tutorial.json), deliberately not session-resettable.
+            TutorialManager = new TutorialManager();
+
             RegisterManager(SaveManager);
             RegisterManager(CheckpointManager);
             RegisterManager(LocalizationManager);
             RegisterManager(CraftingManager);
             RegisterManager(BuildingManager);
             RegisterManager(AudioManager);
+            RegisterManager(SfxEventRouter);
+            RegisterManager(MusicDirector);
+            RegisterManager(HapticsService);
             RegisterManager(AccessibilitySettings);
             RegisterManager(AnalyticsManager);
             RegisterManager(DialogueManager);
@@ -156,6 +171,7 @@ namespace Rapadura.Core.Managers
             RegisterManager(TimeOfDayManager);
             RegisterManager(WeatherSystem);
             RegisterManager(GameFlowService);
+            RegisterManager(TutorialManager);
 
             SaveManager.Register(QuestManager);
             SaveManager.Register(DailyQuestService);

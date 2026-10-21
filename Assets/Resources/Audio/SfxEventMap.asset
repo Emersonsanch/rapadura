@@ -1,0 +1,743 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc069898509649f89e361a2c3b9798ac, type: 3}
+  m_Name: SfxEventMap
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Audio.SfxEventMap
+  _maxVoices: 12
+  _musicCrossfadeSeconds: 1.5
+  _proceduralSfx: 1
+  _proceduralMusic: 1
+  _bindings:
+  - trigger: 0
+    variant: 
+    cueId: combat.hit
+  - trigger: 1
+    variant: 
+    cueId: combat.crit
+  - trigger: 2
+    variant: 
+    cueId: combat.player_hurt
+  - trigger: 3
+    variant: 
+    cueId: combat.enemy_death
+  - trigger: 4
+    variant: 
+    cueId: combat.boss_death
+  - trigger: 5
+    variant: 
+    cueId: player.death
+  - trigger: 6
+    variant: 
+    cueId: player.level_up
+  - trigger: 7
+    variant: 
+    cueId: skill.cast
+  - trigger: 7
+    variant: physical
+    cueId: skill.cast.physical
+  - trigger: 7
+    variant: fire
+    cueId: skill.cast.fire
+  - trigger: 7
+    variant: ice
+    cueId: skill.cast.ice
+  - trigger: 7
+    variant: lightning
+    cueId: skill.cast.lightning
+  - trigger: 7
+    variant: poison
+    cueId: skill.cast.poison
+  - trigger: 7
+    variant: earth
+    cueId: skill.cast.earth
+  - trigger: 7
+    variant: wind
+    cueId: skill.cast.wind
+  - trigger: 7
+    variant: holy
+    cueId: skill.cast.holy
+  - trigger: 7
+    variant: dark
+    cueId: skill.cast.dark
+  - trigger: 7
+    variant: arcane
+    cueId: skill.cast.arcane
+  - trigger: 7
+    variant: heal
+    cueId: skill.cast.heal
+  - trigger: 7
+    variant: buff
+    cueId: skill.cast.buff
+  - trigger: 7
+    variant: ultimate
+    cueId: skill.cast.ultimate
+  - trigger: 8
+    variant: 
+    cueId: item.pickup
+  - trigger: 9
+    variant: 
+    cueId: shop.purchase
+  - trigger: 10
+    variant: 
+    cueId: shop.sell
+  - trigger: 11
+    variant: 
+    cueId: craft.complete
+  - trigger: 12
+    variant: 
+    cueId: quest.started
+  - trigger: 13
+    variant: 
+    cueId: quest.completed
+  - trigger: 14
+    variant: 
+    cueId: achievement.unlocked
+  - trigger: 15
+    variant: 
+    cueId: ui.open
+  - trigger: 16
+    variant: 
+    cueId: ui.close
+  - trigger: 17
+    variant: 
+    cueId: ui.click
+  - trigger: 18
+    variant: 
+    cueId: ui.hover
+  - trigger: 19
+    variant: 
+    cueId: ui.error
+  - trigger: 20
+    variant: 
+    cueId: encounter.start
+  - trigger: 21
+    variant: 
+    cueId: encounter.victory
+  - trigger: 22
+    variant: 
+    cueId: encounter.defeat
+  - trigger: 23
+    variant: 
+    cueId: encounter.fled
+  - trigger: 24
+    variant: dawn
+    cueId: ambience.dawn
+  - trigger: 24
+    variant: day
+    cueId: ambience.day
+  - trigger: 24
+    variant: dusk
+    cueId: ambience.dusk
+  - trigger: 24
+    variant: night
+    cueId: ambience.night
+  - trigger: 25
+    variant: rain
+    cueId: ambience.rain
+  - trigger: 25
+    variant: sandstorm
+    cueId: ambience.wind
+  - trigger: 25
+    variant: snow
+    cueId: ambience.wind_soft
+  - trigger: 25
+    variant: fog
+    cueId: 
+  - trigger: 25
+    variant: clear
+    cueId: 
+  _cues:
+  - id: combat.hit
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.55
+    cooldown: 0.05
+    maxVoices: 4
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 4
+    frequency: 180
+  - id: combat.crit
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.8
+    cooldown: 0.08
+    maxVoices: 3
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 5
+    frequency: 260
+  - id: combat.player_hurt
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.7
+    cooldown: 0.2
+    maxVoices: 2
+    pausable: 1
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 4
+    frequency: 110
+  - id: combat.enemy_death
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.7
+    cooldown: 0.1
+    maxVoices: 3
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 6
+    frequency: 320
+  - id: combat.boss_death
+    clip: {fileID: 0}
+    category: 2
+    volume: 1
+    cooldown: 1
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 1
+    preset: 13
+    frequency: 80
+  - id: player.death
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.9
+    cooldown: 2
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 1
+    preset: 10
+    frequency: 220
+  - id: player.level_up
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.9
+    cooldown: 0.5
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 1
+    preset: 11
+    frequency: 523.25
+  - id: skill.cast
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.6
+    cooldown: 0.08
+    maxVoices: 3
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 8
+    frequency: 400
+  - id: skill.cast.physical
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.6
+    cooldown: 0.08
+    maxVoices: 3
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 8
+    frequency: 250
+  - id: skill.cast.fire
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.65
+    cooldown: 0.08
+    maxVoices: 3
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 5
+    frequency: 200
+  - id: skill.cast.ice
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.6
+    cooldown: 0.08
+    maxVoices: 3
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 12
+    frequency: 1200
+  - id: skill.cast.lightning
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.65
+    cooldown: 0.08
+    maxVoices: 3
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 6
+    frequency: 900
+  - id: skill.cast.poison
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.55
+    cooldown: 0.08
+    maxVoices: 3
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 2
+    frequency: 180
+  - id: skill.cast.earth
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.7
+    cooldown: 0.1
+    maxVoices: 2
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 13
+    frequency: 70
+  - id: skill.cast.wind
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.55
+    cooldown: 0.08
+    maxVoices: 3
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 8
+    frequency: 650
+  - id: skill.cast.holy
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.6
+    cooldown: 0.08
+    maxVoices: 3
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 9
+    frequency: 880
+  - id: skill.cast.dark
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.6
+    cooldown: 0.08
+    maxVoices: 3
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 10
+    frequency: 180
+  - id: skill.cast.arcane
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.6
+    cooldown: 0.08
+    maxVoices: 3
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 12
+    frequency: 700
+  - id: skill.cast.heal
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.6
+    cooldown: 0.15
+    maxVoices: 2
+    pausable: 1
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 9
+    frequency: 660
+  - id: skill.cast.buff
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.55
+    cooldown: 0.15
+    maxVoices: 2
+    pausable: 1
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 14
+    frequency: 330
+  - id: skill.cast.ultimate
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.95
+    cooldown: 0.5
+    maxVoices: 1
+    pausable: 1
+    spatial: 0
+    loop: 0
+    ducksMusic: 1
+    preset: 13
+    frequency: 90
+  - id: item.pickup
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.5
+    cooldown: 0.15
+    maxVoices: 2
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 2
+    frequency: 880
+  - id: shop.purchase
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.7
+    cooldown: 0.1
+    maxVoices: 2
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 12
+    frequency: 1000
+  - id: shop.sell
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.6
+    cooldown: 0.1
+    maxVoices: 2
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 2
+    frequency: 660
+  - id: craft.complete
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.7
+    cooldown: 0.2
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 9
+    frequency: 523.25
+  - id: quest.started
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.7
+    cooldown: 0.3
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 9
+    frequency: 440
+  - id: quest.completed
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.85
+    cooldown: 0.3
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 1
+    preset: 11
+    frequency: 392
+  - id: achievement.unlocked
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.85
+    cooldown: 0.3
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 1
+    preset: 12
+    frequency: 660
+  - id: ui.open
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.45
+    cooldown: 0.12
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 2
+    frequency: 600
+  - id: ui.close
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.4
+    cooldown: 0.12
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 3
+    frequency: 500
+  - id: ui.click
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.45
+    cooldown: 0.04
+    maxVoices: 2
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 1
+    frequency: 1200
+  - id: ui.hover
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.2
+    cooldown: 0.05
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 1
+    frequency: 1800
+  - id: ui.error
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.5
+    cooldown: 0.15
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 7
+    frequency: 140
+  - id: encounter.start
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.85
+    cooldown: 1
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 1
+    preset: 15
+    frequency: 110
+  - id: encounter.victory
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.9
+    cooldown: 1
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 1
+    preset: 11
+    frequency: 523.25
+  - id: encounter.defeat
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.85
+    cooldown: 1
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 1
+    preset: 10
+    frequency: 196
+  - id: encounter.fled
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.6
+    cooldown: 1
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 8
+    frequency: 500
+  - id: ambience.dawn
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.35
+    cooldown: 5
+    maxVoices: 1
+    pausable: 1
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 16
+    frequency: 2400
+  - id: ambience.day
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.25
+    cooldown: 5
+    maxVoices: 1
+    pausable: 1
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 14
+    frequency: 330
+  - id: ambience.dusk
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.3
+    cooldown: 5
+    maxVoices: 1
+    pausable: 1
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 15
+    frequency: 196
+  - id: ambience.night
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.3
+    cooldown: 5
+    maxVoices: 1
+    pausable: 1
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 17
+    frequency: 4000
+  - id: ambience.rain
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.35
+    cooldown: 0
+    maxVoices: 1
+    pausable: 1
+    spatial: 0
+    loop: 1
+    ducksMusic: 0
+    preset: 18
+    frequency: 1200
+  - id: ambience.wind
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.35
+    cooldown: 0
+    maxVoices: 1
+    pausable: 1
+    spatial: 0
+    loop: 1
+    ducksMusic: 0
+    preset: 19
+    frequency: 500
+  - id: ambience.wind_soft
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.22
+    cooldown: 0
+    maxVoices: 1
+    pausable: 1
+    spatial: 0
+    loop: 1
+    ducksMusic: 0
+    preset: 19
+    frequency: 300
+  _music:
+  - context: 1
+    variant: 
+    clip: {fileID: 0}
+    volume: 0.3
+    rootFrequency: 220
+    minor: 0
+    bpm: 72
+  - context: 2
+    variant: 
+    clip: {fileID: 0}
+    volume: 0.3
+    rootFrequency: 196
+    minor: 0
+    bpm: 90
+  - context: 3
+    variant: 
+    clip: {fileID: 0}
+    volume: 0.32
+    rootFrequency: 174.61
+    minor: 1
+    bpm: 112
+  - context: 3
+    variant: forest
+    clip: {fileID: 0}
+    volume: 0.32
+    rootFrequency: 220
+    minor: 1
+    bpm: 108
+  - context: 3
+    variant: desert
+    clip: {fileID: 0}
+    volume: 0.32
+    rootFrequency: 207.65
+    minor: 1
+    bpm: 100
+  - context: 3
+    variant: mountain
+    clip: {fileID: 0}
+    volume: 0.32
+    rootFrequency: 164.81
+    minor: 1
+    bpm: 96
+  - context: 3
+    variant: caves
+    clip: {fileID: 0}
+    volume: 0.32
+    rootFrequency: 146.83
+    minor: 1
+    bpm: 88
+  - context: 4
+    variant: 
+    clip: {fileID: 0}
+    volume: 0.36
+    rootFrequency: 110
+    minor: 1
+    bpm: 140

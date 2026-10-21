@@ -1,0 +1,541 @@
+using System;
+using System.Collections.Generic;
+using Rapadura.Core.Audio;
+using Rapadura.Core.Events;
+using Rapadura.Core.Interfaces;
+using Rapadura.Core.Logging;
+using Rapadura.Core.Systems;
+using Rapadura.Gameplay.Achievements;
+using Rapadura.Gameplay.Combat;
+using Rapadura.Gameplay.Crafting;
+using Rapadura.Gameplay.Enemies;
+using Rapadura.Gameplay.Environment;
+using Rapadura.Gameplay.Flow;
+using Rapadura.Gameplay.Quests;
+using Rapadura.Gameplay.Shop;
+using Rapadura.Gameplay.Skills;
+using Rapadura.Gameplay.Skills.Vfx;
+using Rapadura.Gameplay.World.Map;
+using Rapadura.UI.Menus;
+using UnityEngine;
+
+namespace Rapadura.Audio
+{
+    /// <summary>
+    /// Event-driven SFX: listens to the EventBus (combat, skills, progression, quests, shop, UI pause,
+    /// encounters, time of day, weather) and plays the cue <see cref="SfxEventMap"/> assigns to each
+    /// happening — gameplay code never references audio. Playback goes through
+    /// <see cref="AudioManager"/>'s pooled sources, so the Master/Music/SFX/UI volume settings apply
+    /// unchanged. On top of that this class adds what the raw pool lacks:
+    /// <list type="bullet">
+    /// <item><description>per-cue cooldown (a 10-hit combo doesn't stack 10 identical thuds in one frame);</description></item>
+    /// <item><description>per-cue and global voice caps (<see cref="SfxEventMap.MaxVoices"/>), skipping instead of cutting older sounds;</description></item>
+    /// <item><description>pause: cues flagged <c>pausable</c> are dropped while <see cref="GameplayPause"/> is active and the weather loop pauses;</description></item>
+    /// <item><description>a looping ambience bed (rain/wind) with fades, outside the one-shot pool so it is never stolen;</description></item>
+    /// <item><description>procedural placeholder clips (<see cref="ProceduralSfxSynth"/>) for every cue without a real clip.</description></item>
+    /// </list>
+    /// Time comes from an injectable clock (unscaled time by default, so UI sounds work while paused).
+    /// </summary>
+    public class SfxEventRouter : IManager
+    {
+        private const string LogCategory = "Audio";
+        private const float AmbienceFadeSeconds = 2f;
+        private const float PickupSuppressAfterTradeSeconds = 0.3f;
+        private const float MinAudibleVolume = 0.001f;
+
+        private readonly AudioManager _audio;
+        private readonly Func<float> _clock;
+        private readonly Func<bool> _isGameplayPaused;
+        private readonly Func<int> _inventoryCount;
+        private SfxEventMap _map;
+
+        private readonly Dictionary<string, float> _lastPlayTime = new Dictionary<string, float>(StringComparer.Ordinal);
+        private readonly Dictionary<string, AudioClip> _clipCache = new Dictionary<string, AudioClip>(StringComparer.Ordinal);
+        private readonly List<KeyValuePair<string, float>> _voices = new List<KeyValuePair<string, float>>();
+        private readonly HashSet<string> _warnedUnknown = new HashSet<string>(StringComparer.Ordinal);
+        private readonly LevelUpDetector _levelUp = new LevelUpDetector();
+
+        private GameObject _root;
+        private AudioSource _ambienceSource;
+        private SfxEventMap.Cue _ambienceCue;
+        private float _ambienceFade;
+        private float _ambienceFadeTarget;
+        private bool _ambiencePaused;
+        private bool _flowAllowsAmbience = true;
+        private string _requestedAmbienceCueId;
+        private int _lastInventoryCount = -1;
+        private float _lastTradeTime = float.NegativeInfinity;
+
+        public bool IsInitialized { get; private set; }
+
+        public SfxEventMap Map => _map;
+
+        /// <summary>Last cue that actually played (null if none). Diagnostics/tests.</summary>
+        public string LastPlayedCueId { get; private set; }
+
+        public int PlayedCount { get; private set; }
+
+        /// <summary>Cue id of the active (or fading-in) ambience loop, null when none.</summary>
+        public string CurrentAmbienceCueId => _ambienceFadeTarget > 0f ? _requestedAmbienceCueId : null;
+
+        public bool IsAmbiencePaused => _ambiencePaused;
+
+        /// <param name="audio">Volumes + pooled playback. May be null (tests) — cues are then tracked but not heard.</param>
+        /// <param name="map">Defaults to <see cref="SfxEventMap.LoadOrDefault"/>.</param>
+        /// <param name="clock">Seconds; defaults to <see cref="Time.unscaledTime"/>.</param>
+        /// <param name="isGameplayPaused">Defaults to <see cref="GameplayPause.IsPaused"/>.</param>
+        /// <param name="inventoryCount">Total player item units; defaults to <see cref="AudioEventHelpers.CountPlayerItems"/>.</param>
+        public SfxEventRouter(AudioManager audio, SfxEventMap map = null, Func<float> clock = null, Func<bool> isGameplayPaused = null, Func<int> inventoryCount = null)
+        {
+            _audio = audio;
+            _map = map;
+            _clock = clock ?? (() => Time.unscaledTime);
+            _isGameplayPaused = isGameplayPaused ?? (() => GameplayPause.IsPaused);
+            _inventoryCount = inventoryCount ?? AudioEventHelpers.CountPlayerItems;
+        }
+
+        public void Initialize()
+        {
+            if (IsInitialized)
+            {
+                return;
+            }
+
+            if (_map == null)
+            {
+                _map = SfxEventMap.LoadOrDefault();
+            }
+
+            _root = new GameObject("SfxEventRouter");
+            if (Application.isPlaying)
+            {
+                UnityEngine.Object.DontDestroyOnLoad(_root);
+                _root.AddComponent<SfxEventRouterDriver>().Bind(this);
+                _root.AddComponent<UiClickSoundBinder>();
+            }
+
+            _ambienceSource = _root.AddComponent<AudioSource>();
+            _ambienceSource.playOnAwake = false;
+            _ambienceSource.loop = true;
+            _ambienceSource.spatialBlend = 0f;
+            _ambienceSource.volume = 0f;
+
+            Subscribe(true);
+            IsInitialized = true;
+        }
+
+        public void Shutdown()
+        {
+            if (!IsInitialized)
+            {
+                return;
+            }
+
+            Subscribe(false);
+
+            if (_root != null)
+            {
+                if (Application.isPlaying) UnityEngine.Object.Destroy(_root);
+                else UnityEngine.Object.DestroyImmediate(_root);
+                _root = null;
+            }
+
+            foreach (AudioClip clip in _clipCache.Values)
+            {
+                if (clip != null)
+                {
+                    if (Application.isPlaying) UnityEngine.Object.Destroy(clip);
+                    else UnityEngine.Object.DestroyImmediate(clip);
+                }
+            }
+
+            _clipCache.Clear();
+            _voices.Clear();
+            _lastPlayTime.Clear();
+            IsInitialized = false;
+        }
+
+        private void Subscribe(bool on)
+        {
+            Toggle<DamageAppliedEvent>(on, OnDamageApplied);
+            Toggle<EnemyDiedEvent>(on, OnEnemyDied);
+            Toggle<PlayerDiedEvent>(on, OnPlayerDied);
+            Toggle<PlayerExperienceChangedEvent>(on, OnExperienceChanged);
+            Toggle<GameLoadedEvent>(on, OnGameLoaded);
+            Toggle<NewSessionResetEvent>(on, OnNewSession);
+            Toggle<SkillCastEvent>(on, OnSkillCast);
+            Toggle<InventoryChangedEvent>(on, OnInventoryChanged);
+            Toggle<ItemPurchasedEvent>(on, OnItemPurchased);
+            Toggle<ItemSoldEvent>(on, OnItemSold);
+            Toggle<RecipeCraftedEvent>(on, OnRecipeCrafted);
+            Toggle<QuestStartedEvent>(on, OnQuestStarted);
+            Toggle<QuestCompletedEvent>(on, OnQuestCompleted);
+            Toggle<AchievementUnlockedEvent>(on, OnAchievementUnlocked);
+            Toggle<GamePausedEvent>(on, OnGamePaused);
+            Toggle<GameResumedEvent>(on, OnGameResumed);
+            Toggle<ShopOpenedEvent>(on, OnShopOpened);
+            Toggle<ShopClosedEvent>(on, OnShopClosed);
+            Toggle<EncounterStartedEvent>(on, OnEncounterStarted);
+            Toggle<EncounterEndedEvent>(on, OnEncounterEnded);
+            Toggle<TimeOfDayPhaseChangedEvent>(on, OnPhaseChanged);
+            Toggle<WeatherChangedEvent>(on, OnWeatherChanged);
+            Toggle<GameFlowStateChangedEvent>(on, OnFlowStateChanged);
+        }
+
+        private static void Toggle<TEvent>(bool on, Action<TEvent> handler) where TEvent : IGameEvent
+        {
+            if (on) EventBus.Subscribe(handler);
+            else EventBus.Unsubscribe(handler);
+        }
+
+        // ------------------------------------------------------------------
+        // Playback
+        // ------------------------------------------------------------------
+
+        /// <summary>Resolves trigger + variants through the map and plays the cue. False when silent, unmapped or limited.</summary>
+        public bool Trigger(SfxTrigger trigger, Vector3? position, params string[] variants)
+        {
+            string cueId = _map != null ? _map.ResolveFirst(trigger, variants) : null;
+            return !string.IsNullOrEmpty(cueId) && PlayCue(cueId, position);
+        }
+
+        public bool Trigger(SfxTrigger trigger, params string[] variants) => Trigger(trigger, null, variants);
+
+        /// <summary>
+        /// Plays one cue by id, applying pause, volume, cooldown and voice limits. Also the entry point
+        /// for <c>UiSoundHooks</c> (ui.click / ui.hover / ui.error).
+        /// </summary>
+        public bool PlayCue(string cueId, Vector3? position = null)
+        {
+            if (_map == null || !_map.TryGetCue(cueId, out SfxEventMap.Cue cue))
+            {
+                if (cueId != null && _warnedUnknown.Add(cueId))
+                {
+                    GameLogger.Warning(LogCategory, $"SfxEventRouter: unknown cue id '{cueId}'.");
+                }
+
+                return false;
+            }
+
+            if (cue.loop)
+            {
+                SetAmbience(cueId);
+                return true;
+            }
+
+            if (cue.pausable && _isGameplayPaused())
+            {
+                return false;
+            }
+
+            if (EffectiveVolume(cue) <= MinAudibleVolume)
+            {
+                return false;
+            }
+
+            float now = _clock();
+            if (_lastPlayTime.TryGetValue(cueId, out float last) && now - last < cue.cooldown)
+            {
+                return false;
+            }
+
+            PruneVoices(now);
+            if (_voices.Count >= _map.MaxVoices || CountVoices(cueId) >= Mathf.Max(1, cue.maxVoices))
+            {
+                return false;
+            }
+
+            AudioClip clip = ResolveClip(cue);
+            if (clip == null)
+            {
+                return false;
+            }
+
+            if (_audio != null)
+            {
+                if (cue.spatial && position.HasValue)
+                {
+                    _audio.PlaySfxAtPosition(clip, position.Value, cue.volume, cue.category);
+                }
+                else
+                {
+                    _audio.PlaySfx(clip, cue.volume, cue.category);
+                }
+
+                if (cue.ducksMusic)
+                {
+                    _audio.DuckMusic(0.35f, Mathf.Clamp(clip.length, 0.5f, 2f));
+                }
+            }
+
+            _lastPlayTime[cueId] = now;
+            _voices.Add(new KeyValuePair<string, float>(cueId, now + Mathf.Max(0.02f, clip.length)));
+            LastPlayedCueId = cueId;
+            PlayedCount++;
+            return true;
+        }
+
+        public int ActiveVoiceCount
+        {
+            get
+            {
+                PruneVoices(_clock());
+                return _voices.Count;
+            }
+        }
+
+        private float EffectiveVolume(SfxEventMap.Cue cue)
+        {
+            return cue.volume * (_audio != null ? _audio.GetEffectiveVolume(cue.category) : 1f);
+        }
+
+        private void PruneVoices(float now)
+        {
+            _voices.RemoveAll(v => v.Value <= now);
+        }
+
+        private int CountVoices(string cueId)
+        {
+            int count = 0;
+            foreach (KeyValuePair<string, float> voice in _voices)
+            {
+                if (voice.Key == cueId) count++;
+            }
+
+            return count;
+        }
+
+        /// <summary>The cue's assigned clip, else a cached procedural placeholder (when enabled in the map).</summary>
+        public AudioClip ResolveClip(SfxEventMap.Cue cue)
+        {
+            if (cue == null)
+            {
+                return null;
+            }
+
+            if (cue.clip != null)
+            {
+                return cue.clip;
+            }
+
+            if (_map == null || !_map.ProceduralSfx || cue.preset == ProceduralSfxPreset.None)
+            {
+                return null;
+            }
+
+            if (!_clipCache.TryGetValue(cue.id, out AudioClip clip) || clip == null)
+            {
+                clip = ProceduralSfxSynth.CreateClip("proc_" + cue.id, cue.preset, cue.frequency);
+                _clipCache[cue.id] = clip;
+            }
+
+            return clip;
+        }
+
+        // ------------------------------------------------------------------
+        // Ambience loop (weather)
+        // ------------------------------------------------------------------
+
+        /// <summary>Fades to the given looping cue (null/empty = fade out).</summary>
+        public void SetAmbience(string cueId)
+        {
+            if (string.IsNullOrEmpty(cueId) || _map == null || !_map.TryGetCue(cueId, out SfxEventMap.Cue cue))
+            {
+                _ambienceFadeTarget = 0f;
+                return;
+            }
+
+            _requestedAmbienceCueId = cueId;
+            _ambienceFadeTarget = 1f;
+
+            if (_ambienceCue == cue && _ambienceSource != null && _ambienceSource.clip != null)
+            {
+                return;
+            }
+
+            _ambienceCue = cue;
+            _ambienceFade = 0f;
+
+            if (_ambienceSource != null)
+            {
+                _ambienceSource.clip = ResolveClip(cue);
+                _ambienceSource.volume = 0f;
+                if (_ambienceSource.clip != null && Application.isPlaying)
+                {
+                    _ambienceSource.Play();
+                }
+            }
+        }
+
+        /// <summary>Advances ambience fades / pause / volume. Called each frame by the driver; public for EditMode tests.</summary>
+        public void Tick(float deltaTime)
+        {
+            bool shouldPause = _ambienceCue != null && _ambienceCue.pausable && _isGameplayPaused();
+            if (shouldPause != _ambiencePaused)
+            {
+                _ambiencePaused = shouldPause;
+                if (_ambienceSource != null && Application.isPlaying)
+                {
+                    if (shouldPause) _ambienceSource.Pause();
+                    else _ambienceSource.UnPause();
+                }
+            }
+
+            float target = _flowAllowsAmbience ? _ambienceFadeTarget : 0f;
+            _ambienceFade = Mathf.MoveTowards(_ambienceFade, target, deltaTime / AmbienceFadeSeconds);
+
+            if (_ambienceSource != null && _ambienceCue != null)
+            {
+                _ambienceSource.volume = _ambienceFade * EffectiveVolume(_ambienceCue);
+                if (_ambienceFade <= 0f && target <= 0f && _ambienceSource.isPlaying)
+                {
+                    _ambienceSource.Stop();
+                }
+                else if (target > 0f && !_ambienceSource.isPlaying && !_ambiencePaused && _ambienceSource.clip != null && Application.isPlaying)
+                {
+                    _ambienceSource.Play();
+                }
+            }
+        }
+
+        /// <summary>Current ambience gain before category volumes (0..1). Tests.</summary>
+        public float AmbienceFade => _ambienceFade;
+
+        // ------------------------------------------------------------------
+        // Event handlers
+        // ------------------------------------------------------------------
+
+        private static Vector3? PositionOf(GameObject go) => go != null ? go.transform.position : (Vector3?)null;
+
+        private void OnDamageApplied(DamageAppliedEvent evt)
+        {
+            if (AudioEventHelpers.IsPlayer(evt.Target))
+            {
+                Trigger(SfxTrigger.PlayerHurt, PositionOf(evt.Target));
+                return;
+            }
+
+            Trigger(evt.IsCritical ? SfxTrigger.CritHit : SfxTrigger.Hit, PositionOf(evt.Target));
+        }
+
+        private void OnEnemyDied(EnemyDiedEvent evt) => Trigger(evt.WasBoss ? SfxTrigger.BossDeath : SfxTrigger.EnemyDeath, PositionOf(evt.Enemy));
+
+        private void OnPlayerDied(PlayerDiedEvent evt) => Trigger(SfxTrigger.PlayerDeath);
+
+        private void OnExperienceChanged(PlayerExperienceChangedEvent evt)
+        {
+            if (_levelUp.Observe(evt.Level))
+            {
+                Trigger(SfxTrigger.LevelUp);
+            }
+        }
+
+        private void OnGameLoaded(GameLoadedEvent evt) => ResetBaselines();
+
+        private void OnNewSession(NewSessionResetEvent evt) => ResetBaselines();
+
+        private void ResetBaselines()
+        {
+            _levelUp.Reset();
+            _lastInventoryCount = -1;
+        }
+
+        private void OnSkillCast(SkillCastEvent evt)
+        {
+            SkillVfxCategory category = SkillVfxClassifier.Classify(evt.Skill);
+            string element = evt.Skill != null ? SfxEventMap.Normalize(evt.Skill.Element.ToString()) : null;
+            string categoryKey = SfxEventMap.Normalize(category.ToString());
+            Vector3? position = PositionOf(evt.Caster);
+
+            if (category == SkillVfxCategory.Ultimate)
+            {
+                Trigger(SfxTrigger.SkillCast, position, categoryKey, element);
+            }
+            else
+            {
+                Trigger(SfxTrigger.SkillCast, position, element, categoryKey);
+            }
+        }
+
+        private void OnInventoryChanged(InventoryChangedEvent evt)
+        {
+            int count = _inventoryCount();
+            bool gained = _lastInventoryCount >= 0 && count > _lastInventoryCount;
+            _lastInventoryCount = count;
+
+            if (gained && _clock() - _lastTradeTime > PickupSuppressAfterTradeSeconds)
+            {
+                Trigger(SfxTrigger.ItemPickup);
+            }
+        }
+
+        private void MarkTrade() => _lastTradeTime = _clock();
+
+        private void OnItemPurchased(ItemPurchasedEvent evt) { MarkTrade(); Trigger(SfxTrigger.ItemPurchased); }
+
+        private void OnItemSold(ItemSoldEvent evt) { MarkTrade(); Trigger(SfxTrigger.ItemSold); }
+
+        private void OnRecipeCrafted(RecipeCraftedEvent evt) { MarkTrade(); Trigger(SfxTrigger.RecipeCrafted); }
+
+        private void OnQuestStarted(QuestStartedEvent evt) => Trigger(SfxTrigger.QuestStarted);
+
+        private void OnQuestCompleted(QuestCompletedEvent evt) => Trigger(SfxTrigger.QuestCompleted);
+
+        private void OnAchievementUnlocked(AchievementUnlockedEvent evt) => Trigger(SfxTrigger.AchievementUnlocked);
+
+        // Almost every full-screen menu (inventory, shop, settings, pause, death...) holds a
+        // GameplayPause, so the first acquire / last release is the "screen opened / closed" signal.
+        private void OnGamePaused(GamePausedEvent evt) => Trigger(SfxTrigger.UiOpen);
+
+        private void OnGameResumed(GameResumedEvent evt) => Trigger(SfxTrigger.UiClose);
+
+        private void OnShopOpened(ShopOpenedEvent evt) => Trigger(SfxTrigger.UiOpen);
+
+        private void OnShopClosed(ShopClosedEvent evt) => Trigger(SfxTrigger.UiClose);
+
+        private void OnEncounterStarted(EncounterStartedEvent evt)
+        {
+            string biome = evt.Payload != null ? SfxEventMap.Normalize(evt.Payload.biome.ToString()) : null;
+            Trigger(SfxTrigger.EncounterStart, biome);
+        }
+
+        private void OnEncounterEnded(EncounterEndedEvent evt)
+        {
+            switch (evt.Outcome)
+            {
+                case EncounterOutcome.Victory: Trigger(SfxTrigger.EncounterVictory); break;
+                case EncounterOutcome.Defeat: Trigger(SfxTrigger.EncounterDefeat); break;
+                default: Trigger(SfxTrigger.EncounterFled); break;
+            }
+        }
+
+        private void OnPhaseChanged(TimeOfDayPhaseChangedEvent evt)
+        {
+            if (_flowAllowsAmbience)
+            {
+                Trigger(SfxTrigger.TimeOfDayPhase, SfxEventMap.Normalize(evt.CurrentPhase.ToString()));
+            }
+        }
+
+        private void OnWeatherChanged(WeatherChangedEvent evt)
+        {
+            string cueId = _map != null ? _map.ResolveFirst(SfxTrigger.WeatherLoop, SfxEventMap.Normalize(evt.CurrentWeather.ToString())) : null;
+            SetAmbience(cueId);
+        }
+
+        private void OnFlowStateChanged(GameFlowStateChangedEvent evt)
+        {
+            _flowAllowsAmbience = evt.Current == GameFlowState.World || evt.Current == GameFlowState.Encounter;
+        }
+    }
+
+    /// <summary>Per-frame driver for <see cref="SfxEventRouter.Tick"/> (unscaled, so fades run while paused).</summary>
+    internal class SfxEventRouterDriver : MonoBehaviour
+    {
+        private SfxEventRouter _owner;
+
+        public void Bind(SfxEventRouter owner) => _owner = owner;
+
+        private void Update() => _owner?.Tick(Time.unscaledDeltaTime);
+    }
+}

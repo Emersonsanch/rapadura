@@ -193,10 +193,7 @@ namespace Rapadura.Core.Audio
 
         private void ApplyVolumesToActiveSources()
         {
-            if (_musicSourceA != null)
-            {
-                _musicSourceA.volume = _musicSourceA.isPlaying ? _musicBaseVolume * GetEffectiveVolume(AudioCategory.Music) : _musicSourceA.volume;
-            }
+            ApplyActiveMusicVolume();
 
             // Pooled one-shots re-read effective volume at play time, so nothing to update here.
         }
@@ -256,6 +253,25 @@ namespace Rapadura.Core.Audio
         {
             TickCrossfade(deltaTime);
             TickDuck(deltaTime);
+            ApplyActiveMusicVolume();
+        }
+
+        /// <summary>
+        /// Keeps the current track at base * Master * Music * duck outside crossfades, so volume
+        /// slider changes and ducking reach whichever of the two music sources is active.
+        /// </summary>
+        private void ApplyActiveMusicVolume()
+        {
+            if (_isCrossfading || _musicSourceA == null || _musicSourceB == null)
+            {
+                return;
+            }
+
+            AudioSource active = _musicIsUsingSourceA ? _musicSourceA : _musicSourceB;
+            if (active.clip != null)
+            {
+                active.volume = _musicBaseVolume * GetEffectiveVolume(AudioCategory.Music);
+            }
         }
 
         private void TickCrossfade(float deltaTime)
