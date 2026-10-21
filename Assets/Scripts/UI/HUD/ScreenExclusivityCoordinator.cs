@@ -15,8 +15,8 @@ namespace Rapadura.UI.HUD
     /// <c>isOpen</c>, so screens closed by their own Fechar button (or opened by something else,
     /// e.g. a crafting workbench) are still handled correctly.
     ///
-    /// Like the screens themselves (Inventory/SkillTree/Shop don't touch Time.timeScale), this does
-    /// not pause or block gameplay — only the Pause menu does that.
+    /// It never pauses or blocks gameplay itself: freezing the game is each screen's own concern
+    /// (GameplayPause.Acquire/Release), so closing one screen and opening the next stays consistent.
     /// </summary>
     public sealed class ScreenExclusivityCoordinator
     {
@@ -77,7 +77,7 @@ namespace Rapadura.UI.HUD
             }
         }
 
-        /// <summary>Closes every other open screen, then opens <paramref name="id"/>. Returns false for an unknown id.</summary>
+        /// <summary>Opens <paramref name="id"/> and closes every other open screen. Returns false for an unknown id.</summary>
         public bool Open(string id)
         {
             Entry entry = Find(id);
@@ -87,13 +87,15 @@ namespace Rapadura.UI.HUD
                 return false;
             }
 
-            CloseAll(exceptId: id);
-
+            // Open first, then close the rest (same frame, so nothing renders in between): a screen
+            // holding a GameplayPause is released only after the new one acquired it, so switching
+            // screens never briefly un-pauses the game / fires a resumed+paused event pair.
             if (!entry.IsOpen())
             {
                 entry.Open();
             }
 
+            CloseAll(exceptId: id);
             return true;
         }
 

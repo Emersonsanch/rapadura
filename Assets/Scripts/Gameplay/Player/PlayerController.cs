@@ -28,8 +28,10 @@ namespace Rapadura.Gameplay.Player
     [RequireComponent(typeof(PlayerInputHandler))]
     [RequireComponent(typeof(PlayerMotor))]
     [RequireComponent(typeof(PlayerStats))]
-    public class PlayerController : MonoBehaviour, ISaveable
+    public class PlayerController : MonoBehaviour, ISaveable, ISceneLocalSaveable
     {
+        // ISceneLocalSaveable: the saved position belongs to the scene it was captured in — carrying
+        // it into the next Main.unity load would override the encounter arena's player spawn.
         [SerializeField] private Animator _animator;
         [SerializeField] private Rapadura.Gameplay.Cameras.CameraController _playerCamera;
         [SerializeField] private Transform _cameraLookTransform;

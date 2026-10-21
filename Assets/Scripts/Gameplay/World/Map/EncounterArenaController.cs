@@ -231,10 +231,21 @@ namespace Rapadura.Gameplay.World.Map
 
         private void OnPlayerDied(PlayerDiedEvent evt)
         {
-            if (IsEncounterActive)
+            if (!IsEncounterActive)
             {
-                Resolve(EncounterOutcome.Defeat);
+                return;
             }
+
+            if (_transition != null && _transition.DeferDefeatResolution)
+            {
+                // The death screen owns this moment (its "Continuar" completes the encounter as
+                // Defeat). Just stop the flee check; no timed return racing the paused screen.
+                _resolved = true;
+                GameLogger.Info(LogCategory, "Player died; defeat handed to the death screen.");
+                return;
+            }
+
+            Resolve(EncounterOutcome.Defeat);
         }
 
         private void Resolve(EncounterOutcome outcome)

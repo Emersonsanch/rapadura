@@ -31,6 +31,22 @@ namespace Rapadura.Gameplay.Characters
     }
 
     /// <summary>
+    /// Raised by <see cref="CharacterSelectionState.Select"/> when the player confirms a hero on the
+    /// character select screen (not on a save restore — that is <see cref="CharacterSelectionRestoredEvent"/>).
+    /// Lets the game flow leave the select screen and hero-specific UI (skill tree, quest tracker)
+    /// switch to the new hero without holding a reference to the select screen.
+    /// </summary>
+    public readonly struct CharacterSelectedEvent : IGameEvent
+    {
+        public readonly CharacterId CharacterId;
+
+        public CharacterSelectedEvent(CharacterId characterId)
+        {
+            CharacterId = characterId;
+        }
+    }
+
+    /// <summary>
     /// Which hero the player picked. A top-level manager built by GameManager (so it survives the
     /// WorldMap/Main scene swaps) and registered with SaveManager under <see cref="SaveKey"/>. Before
     /// this existed the choice lived only in the character select screen's local state, so loading a
@@ -62,6 +78,7 @@ namespace Rapadura.Gameplay.Characters
         public void Select(CharacterId id)
         {
             Selected = id;
+            EventBus.Publish(new CharacterSelectedEvent(id));
         }
 
         /// <summary>Back to "no hero chosen" (e.g. a future "Novo Jogo").</summary>

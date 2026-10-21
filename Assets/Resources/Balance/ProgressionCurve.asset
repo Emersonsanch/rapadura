@@ -1,0 +1,426 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c6257d58051ec04690c82af97cb21b4, type: 3}
+  m_Name: ProgressionCurve
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Player.ProgressionCurve
+  _baseExperienceToLevel: 100
+  _experienceCurveMultiplier: 1.25
+  _baseMaxHealth: 100
+  _maxHealthPerLevel: 0
+  _baseMaxMana: 100
+  _maxManaPerLevel: 0
+  _baseMaxStamina: 100
+  _maxStaminaPerLevel: 0
+  _damageMultiplierPerLevel: 0
+  _attributePointsPerLevel: 2
+  _skillPointsPerLevel: 1
+  _levels:
+  - level: 1
+    experienceToNext: 100
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 0
+    skillPoints: 0
+  - level: 2
+    experienceToNext: 125
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 3
+    experienceToNext: 156
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 4
+    experienceToNext: 195
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 5
+    experienceToNext: 244
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 6
+    experienceToNext: 305
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 7
+    experienceToNext: 381
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 8
+    experienceToNext: 477
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 9
+    experienceToNext: 596
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 10
+    experienceToNext: 745
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 11
+    experienceToNext: 931
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 12
+    experienceToNext: 1164
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 13
+    experienceToNext: 1455
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 14
+    experienceToNext: 1819
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 15
+    experienceToNext: 2274
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 16
+    experienceToNext: 2842
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 17
+    experienceToNext: 3553
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 18
+    experienceToNext: 4441
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 19
+    experienceToNext: 5551
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 20
+    experienceToNext: 6939
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 21
+    experienceToNext: 8674
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 22
+    experienceToNext: 10842
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 23
+    experienceToNext: 13553
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 24
+    experienceToNext: 16941
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 25
+    experienceToNext: 21176
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 26
+    experienceToNext: 26470
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 27
+    experienceToNext: 33087
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 28
+    experienceToNext: 41359
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 29
+    experienceToNext: 51699
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 30
+    experienceToNext: 64623
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 31
+    experienceToNext: 80779
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 32
+    experienceToNext: 100974
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 33
+    experienceToNext: 126218
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 34
+    experienceToNext: 157772
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 35
+    experienceToNext: 197215
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 36
+    experienceToNext: 246519
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 37
+    experienceToNext: 308149
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 38
+    experienceToNext: 385186
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 39
+    experienceToNext: 481482
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 40
+    experienceToNext: 601853
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 41
+    experienceToNext: 752316
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 42
+    experienceToNext: 940396
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 43
+    experienceToNext: 1175494
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 44
+    experienceToNext: 1469368
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 45
+    experienceToNext: 1836710
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 46
+    experienceToNext: 2295888
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 47
+    experienceToNext: 2869859
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 48
+    experienceToNext: 3587324
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 49
+    experienceToNext: 4484155
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1
+  - level: 50
+    experienceToNext: 5605194
+    maxHealth: 100
+    maxMana: 100
+    maxStamina: 100
+    damageMultiplier: 1
+    attributePoints: 2
+    skillPoints: 1

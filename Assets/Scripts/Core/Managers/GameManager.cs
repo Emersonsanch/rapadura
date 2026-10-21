@@ -6,12 +6,14 @@ using Rapadura.Core.DI;
 using Rapadura.Core.Interfaces;
 using Rapadura.Core.Localization;
 using Rapadura.Core.Performance;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Achievements;
 using Rapadura.Gameplay.Building;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Dialogue;
 using Rapadura.Gameplay.Environment;
+using Rapadura.Gameplay.Flow;
 using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Player;
@@ -58,6 +60,7 @@ namespace Rapadura.Core.Managers
         public AchievementManager AchievementManager { get; private set; }
         public TimeOfDayManager TimeOfDayManager { get; private set; }
         public WeatherSystem WeatherSystem { get; private set; }
+        public GameFlowService GameFlowService { get; private set; }
 
         private bool _managersBuilt;
 
@@ -72,6 +75,13 @@ namespace Rapadura.Core.Managers
 
             EnsureManagersBuilt();
             SceneManager.sceneLoaded += OnSceneLoaded;
+
+            // Per-frame half of GameplayPause (modal screens freeze gameplay) — lives on this
+            // persistent object so no scene needs wiring for it.
+            if (GetComponent<GameplayPauseDriver>() == null)
+            {
+                gameObject.AddComponent<GameplayPauseDriver>();
+            }
         }
 
         /// <summary>
@@ -121,6 +131,7 @@ namespace Rapadura.Core.Managers
             AchievementManager = new AchievementManager();
             TimeOfDayManager = new TimeOfDayManager();
             WeatherSystem = new WeatherSystem();
+            GameFlowService = new GameFlowService(CharacterSelectionState, SaveManager);
 
             RegisterManager(SaveManager);
             RegisterManager(CheckpointManager);
@@ -142,6 +153,7 @@ namespace Rapadura.Core.Managers
             RegisterManager(AchievementManager);
             RegisterManager(TimeOfDayManager);
             RegisterManager(WeatherSystem);
+            RegisterManager(GameFlowService);
 
             SaveManager.Register(QuestManager);
             SaveManager.Register(DailyQuestService);
@@ -200,6 +212,19 @@ namespace Rapadura.Core.Managers
 
             RegisterInitialCheckpoint();
             RegisterQuestRewardTargets();
+            StartCoroutine(RestoreCarriedStateAfterSceneStart());
+        }
+
+        /// <summary>
+        /// Hands the player state carried across the scene swap (see SaveManager.RestoreCarriedState —
+        /// e.g. level/inventory/skills after "Continuar" on the world map, or after the previous
+        /// encounter) to the fresh Player. Waits one frame so every scene object's Start — where the
+        /// player components register with SaveManager, and where the hero is re-applied — has run.
+        /// </summary>
+        private System.Collections.IEnumerator RestoreCarriedStateAfterSceneStart()
+        {
+            yield return null;
+            SaveManager?.RestoreCarriedState();
         }
 
         /// <summary>

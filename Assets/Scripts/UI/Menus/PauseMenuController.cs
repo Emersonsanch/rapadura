@@ -26,9 +26,9 @@ namespace Rapadura.UI.Menus
     /// "Conquistas" and "Criação" live here instead of on the HUD: they're rarely-used, full-screen
     /// screens and the top-right HUD cluster (Missões/Mochila/Skills/Menu) is already at the limit
     /// of what fits next to the vitals panel on a 20:9 phone with a notch. Both close the pause menu
-    /// (resuming the game) and then open their screen — they're non-pausing overlays everywhere else
-    /// (like Inventory/SkillTree), and stacking them over the pause dim would hide them depending on
-    /// UIDocument sort order. Crafting also keeps its in-world workbench trigger.
+    /// and then open their screen — they behave the same as when opened anywhere else (whether they
+    /// freeze gameplay is their own GameplayPause concern), and stacking them over the pause dim
+    /// would hide them depending on UIDocument sort order. Crafting also keeps its in-world workbench trigger.
     ///
     /// <see cref="HandleBack"/> is the Esc / gamepad Start behaviour (driven by HudController):
     /// close an open sub-screen first (Settings — unless a rebind is listening —, Save/Load), else resume.

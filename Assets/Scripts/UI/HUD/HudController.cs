@@ -33,10 +33,10 @@ namespace Rapadura.UI.HUD
     /// PlayerControls.inputactions, read from the player's PlayerInput like PlayerInputHandler does,
     /// but via <c>performed</c> callbacks so the HUD still needs no Update()) all go through a
     /// <see cref="ScreenExclusivityCoordinator"/>: opening a screen closes the other ones (including
-    /// Conquistas/Criação, which are opened from the Pause menu). Like the screens themselves this
-    /// does not pause gameplay; only the Pause menu (and death screen) do, and while the game is
-    /// paused screen buttons/shortcuts are ignored — Esc/Start then means "back" in the pause menu.
-    /// Opening Pause closes any open screen first.
+    /// Conquistas/Criação, which are opened from the Pause menu). Pausing gameplay stays each
+    /// screen's own business (GameplayPause.Acquire/Release); the HUD only ignores screen
+    /// buttons/shortcuts while the pause menu or death screen own the screen — Esc/Start then
+    /// means "back" in the pause menu. Opening Pause closes any open screen first.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class HudController : MonoBehaviour
@@ -574,10 +574,25 @@ namespace Rapadura.UI.HUD
             return _pauseMenuController != null;
         }
 
-        /// <summary>Toggles a screen exclusively. Ignored while paused (pause menu / death screen own the screen then).</summary>
+        /// <summary>
+        /// True when something other than one of our screens froze the game — the pause menu or the
+        /// death screen. Modal screens may themselves hold a pause (GameplayPause.Acquire), so
+        /// "paused while one of our screens is open" is NOT treated as blocked.
+        /// </summary>
+        private bool IsBlockedByForeignPause()
+        {
+            if (ResolvePauseMenu() && _pauseMenuController.IsOpen)
+            {
+                return true;
+            }
+
+            return _gamePaused && !_screens.IsAnyOpen;
+        }
+
+        /// <summary>Toggles a screen exclusively. Ignored while the pause menu / death screen own the screen.</summary>
         private void ToggleScreen(string screenId)
         {
-            if (_gamePaused)
+            if (IsBlockedByForeignPause())
             {
                 return;
             }
@@ -602,14 +617,15 @@ namespace Rapadura.UI.HUD
                 return;
             }
 
-            if (_gamePaused)
+            if (IsBlockedByForeignPause())
             {
                 // Paused by something else (death screen): don't stack the pause menu on top of it.
                 return;
             }
 
-            _screens.CloseAll();
+            // Show first so a screen holding a GameplayPause releases it only once the menu paused.
             _pauseMenuController.Show();
+            _screens.CloseAll();
         }
 
         /// <summary>Esc / gamepad Start: back out of the pause menu, else close the open screen, else pause.</summary>
@@ -621,7 +637,7 @@ namespace Rapadura.UI.HUD
                 return;
             }
 
-            if (_gamePaused || _screens.CloseAll() > 0)
+            if (_screens.CloseAll() > 0 || _gamePaused)
             {
                 return;
             }

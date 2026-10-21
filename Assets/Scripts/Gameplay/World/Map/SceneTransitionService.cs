@@ -54,6 +54,15 @@ namespace Rapadura.Gameplay.World.Map
         /// <summary>Outcome of the most recently completed encounter (null until one completes) — lets the map show "Fugiu!"/"Vitória" on return.</summary>
         public EncounterOutcome? LastOutcome { get; private set; }
 
+        /// <summary>
+        /// Set by the death screen while it is active (same claim pattern as
+        /// <c>CheckpointManager.DeferRespawn</c>): the player's death in an encounter is then resolved
+        /// by that screen's "Continuar" (<see cref="CompleteEncounter"/> with Defeat) instead of
+        /// <see cref="EncounterArenaController"/>'s own timed return — which used to count down
+        /// underneath the paused death screen and race it.
+        /// </summary>
+        public bool DeferDefeatResolution { get; set; }
+
         public SceneTransitionService(WorldMapProgress progress, ISceneLoader sceneLoader = null)
         {
             _progress = progress;

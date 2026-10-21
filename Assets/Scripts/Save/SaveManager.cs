@@ -40,6 +40,19 @@ namespace Rapadura.Save
         private readonly Dictionary<string, ISaveable> _saveables = new Dictionary<string, ISaveable>();
 
         /// <summary>
+        /// State of saveables that are not registered right now, keyed by save key — the "carried"
+        /// session state. Player-scoped saveables (PlayerStats, InventoryManager, SkillManager, ...)
+        /// live on the Player in Main.unity and unregister when it unloads, and a save is often loaded
+        /// in WorldMap.unity where no Player exists. Without this, a "Continuar" from the title screen
+        /// silently dropped the player's level/inventory/skills, every encounter started with a fresh
+        /// level-1 player, and any save written on the world map lost the player entries entirely.
+        /// Filled by <see cref="Load"/> (entries nobody registered for) and <see cref="Unregister"/>
+        /// (last captured state), written back by every save, and applied to the next scene's fresh
+        /// saveables by <see cref="RestoreCarriedState"/> (GameManager calls it after each scene load).
+        /// </summary>
+        private readonly Dictionary<string, SaveEntry> _carried = new Dictionary<string, SaveEntry>();
+
+        /// <summary>
         /// Incremental migration steps. Entry at index N mutates a <see cref="SaveData"/> in place
         /// from schema version N to N+1. <see cref="MigrateToCurrentVersion"/> walks this array
         /// starting at the save's own version until it reaches <see cref="CurrentSaveVersion"/>.
@@ -63,6 +76,7 @@ namespace Rapadura.Save
         public void Shutdown()
         {
             _saveables.Clear();
+            _carried.Clear();
         }
 
         /// <summary>Registers a system so its state is included in future save/load operations.</summary>
@@ -71,9 +85,88 @@ namespace Rapadura.Save
             _saveables[saveable.SaveKey] = saveable;
         }
 
+        /// <summary>
+        /// Stops tracking a system. Its current state is kept as carried session state (see
+        /// <see cref="_carried"/>) so it survives the scene unload and is applied again by
+        /// <see cref="RestoreCarriedState"/> once a new instance registers.
+        /// </summary>
         public void Unregister(ISaveable saveable)
         {
-            _saveables.Remove(saveable.SaveKey);
+            if (saveable == null)
+            {
+                return;
+            }
+
+            if (_saveables.TryGetValue(saveable.SaveKey, out ISaveable registered) && ReferenceEquals(registered, saveable))
+            {
+                SaveEntry entry = CaptureEntry(saveable.SaveKey, saveable);
+
+                if (entry != null)
+                {
+                    _carried[entry.key] = entry;
+                }
+
+                _saveables.Remove(saveable.SaveKey);
+            }
+        }
+
+        /// <summary>Whether state for <paramref name="key"/> is waiting for a saveable to register (see <see cref="RestoreCarriedState"/>).</summary>
+        public bool HasCarriedState(string key) => key != null && _carried.ContainsKey(key);
+
+        /// <summary>"Novo jogo": forget the previous run's carried player state so the new hero starts fresh.</summary>
+        public void ClearCarriedState()
+        {
+            _carried.Clear();
+        }
+
+        /// <summary>
+        /// Applies carried state to every saveable registered since it was carried (in
+        /// <see cref="IRestoreOrder"/> order, like <see cref="Load"/>) and drops it from the carry.
+        /// <see cref="ISceneLocalSaveable"/>s are skipped (their live state wins). Publishes
+        /// <see cref="GameLoadedEvent"/> when anything was restored so UI refreshes. Returns how many
+        /// saveables were restored.
+        /// </summary>
+        public int RestoreCarriedState()
+        {
+            if (_carried.Count == 0)
+            {
+                return 0;
+            }
+
+            var pending = new List<SaveEntry>();
+
+            foreach (SaveEntry entry in _carried.Values)
+            {
+                if (_saveables.ContainsKey(entry.key))
+                {
+                    pending.Add(entry);
+                }
+            }
+
+            int restored = 0;
+
+            foreach (SaveEntry entry in SortByRestoreOrder(pending))
+            {
+                _carried.Remove(entry.key);
+                ISaveable saveable = _saveables[entry.key];
+
+                if (saveable is ISceneLocalSaveable)
+                {
+                    continue;
+                }
+
+                if (TryRestoreEntry(saveable, entry))
+                {
+                    restored++;
+                }
+            }
+
+            if (restored > 0)
+            {
+                EventBus.Publish(new GameLoadedEvent());
+            }
+
+            return restored;
         }
 
         private string GetSlotPath(int slot) => Path.Combine(SaveFolderPath, $"slot_{slot}{SaveFileExtension}");
@@ -120,19 +213,22 @@ namespace Rapadura.Save
 
             foreach (KeyValuePair<string, ISaveable> pair in _saveables)
             {
-                object state = pair.Value.CaptureState();
+                SaveEntry entry = CaptureEntry(pair.Key, pair.Value);
 
-                if (state == null)
+                if (entry != null)
                 {
-                    continue;
+                    saveData.entries.Add(entry);
                 }
+            }
 
-                saveData.entries.Add(new SaveEntry
+            // Saveables not alive right now (e.g. the Player while on the world map) keep their last
+            // known state in the file instead of vanishing from it.
+            foreach (KeyValuePair<string, SaveEntry> pair in _carried)
+            {
+                if (!_saveables.ContainsKey(pair.Key))
                 {
-                    key = pair.Key,
-                    typeName = state.GetType().AssemblyQualifiedName,
-                    json = JsonUtility.ToJson(state)
-                });
+                    saveData.entries.Add(pair.Value);
+                }
             }
 
             string json = JsonUtility.ToJson(saveData, prettyPrint: true);
@@ -190,23 +286,24 @@ namespace Rapadura.Save
 
             MigrateToCurrentVersion(saveData);
 
+            // The loaded file replaces the whole session, carried state included.
+            _carried.Clear();
+
             foreach (SaveEntry entry in GetEntriesInRestoreOrder(saveData))
             {
                 if (!_saveables.TryGetValue(entry.key, out ISaveable saveable))
                 {
+                    // Nobody alive for it yet (e.g. player data loaded on the world map): carry it
+                    // until its owner registers in a later scene (see RestoreCarriedState).
+                    if (!string.IsNullOrEmpty(entry.key))
+                    {
+                        _carried[entry.key] = entry;
+                    }
+
                     continue;
                 }
 
-                Type stateType = Type.GetType(entry.typeName);
-
-                if (stateType == null)
-                {
-                    Debug.LogWarning($"[SaveManager] Could not resolve type '{entry.typeName}' for save key '{entry.key}'. Skipping.");
-                    continue;
-                }
-
-                object state = JsonUtility.FromJson(entry.json, stateType);
-                saveable.RestoreState(state);
+                TryRestoreEntry(saveable, entry);
             }
 
             if (usedBackup)
@@ -226,7 +323,12 @@ namespace Rapadura.Save
         /// </summary>
         private List<SaveEntry> GetEntriesInRestoreOrder(SaveData saveData)
         {
-            var ordered = new List<SaveEntry>(saveData.entries);
+            return SortByRestoreOrder(saveData.entries);
+        }
+
+        private List<SaveEntry> SortByRestoreOrder(List<SaveEntry> entries)
+        {
+            var ordered = new List<SaveEntry>(entries);
             var originalIndex = new Dictionary<SaveEntry, int>();
 
             for (int i = 0; i < ordered.Count; i++)
@@ -241,6 +343,48 @@ namespace Rapadura.Save
             });
 
             return ordered;
+        }
+
+        private static SaveEntry CaptureEntry(string key, ISaveable saveable)
+        {
+            object state;
+
+            try
+            {
+                state = saveable.CaptureState();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[SaveManager] CaptureState failed for '{key}': {e.Message}");
+                return null;
+            }
+
+            if (state == null)
+            {
+                return null;
+            }
+
+            return new SaveEntry
+            {
+                key = key,
+                typeName = state.GetType().AssemblyQualifiedName,
+                json = JsonUtility.ToJson(state)
+            };
+        }
+
+        private static bool TryRestoreEntry(ISaveable saveable, SaveEntry entry)
+        {
+            Type stateType = Type.GetType(entry.typeName);
+
+            if (stateType == null)
+            {
+                Debug.LogWarning($"[SaveManager] Could not resolve type '{entry.typeName}' for save key '{entry.key}'. Skipping.");
+                return false;
+            }
+
+            object state = JsonUtility.FromJson(entry.json, stateType);
+            saveable.RestoreState(state);
+            return true;
         }
 
         private int GetRestoreOrder(string key)
