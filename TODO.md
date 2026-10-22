@@ -4,6 +4,21 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-10-22 (madrugada — CI completo, build 358→192 MB, pool de inimigos, toque e revisões)
+- 🏁 **Resumo**: commits `fda092d`..`4fbee22` (7 commits). Suítes: **EditMode 1300/1300** (eram 1159) e **PlayMode 14/14**. O item 🚧 de polimento de gameplay da entrada anterior foi concluído.
+- 🛠️ **CI** (`fda092d`): `.github/workflows/ci.yml` com job `precheck` (fica pulado, cinza, sem a licença Unity em vez de falhar), matriz EditMode + PlayMode com cache de `Library` e LFS (`.github/actions/lfs-pull`), builds de desenvolvimento Windows x64 e Android em push/manual, assinatura Android opcional. Secrets explicados em `Docs/CI.md`.
+- ⚔️ **Início de combate justo** (`4bc1665`): inimigos nascem em arco a 6-9 m e seguram o ataque 1.75s com contagem "Prepare-se/Já!" (`EncounterSpawnLayout`); antes nasciam a 1 m e tiravam 34 HP em 2s. Fundos de modais opacos, textos do mapa refletem o chefe de região, subir de nível recupera vida e mana.
+- ♻️ **`EnemyPool` sobre `GenericObjectPool`** (`990247d`): 🐛 inimigo reutilizado voltava invisível/sem colisão, e o afundar da morte desativava um inimigo já re-spawnado. Em `4fbee22`: cadáver só volta ao pool depois de afundar, `Get` incrementa a geração e trocar o prefab não destrói inimigos vivos.
+- 📊 **Overlay de debug** (`990247d`, `Core/Debug/DebugOverlay*`): só no Editor e em Development build; FPS, frame time, GC por frame, memória, inimigos, estado do fluxo, pausa, bioma/clima. F1/crase ou toque com 3 dedos. Sem log rolante (falta hook no `GameLogger`).
+- 📱 **Toque, rodada 2** (`af0eb74`): trava de pinça só enquanto há dedo no mundo (Correr/joystick não bloqueiam mais o tocar-para-andar), pinça por id e pausada em modais; joystick/Correr soltos ao trocar de app; contagem "Prepare-se" em tempo de jogo; `UiPointerQuery` com cache de `UIDocument` (zero alocação por consulta); hotbar segue a troca de idioma.
+- 🎯 **Skills miram o inimigo mais próximo** (`49b91fa`, `SkillTargeting`): alvo mais próximo num cone de 70° (ou no alcance). 🐛 Skills de área não davam dano em colliders de objetos filhos; agora acertam uma vez só. 🐛 Inimigo ganhava golpe grátis depois de qualquer pausa.
+- 🌧️ **Clima e mapa** (`49b91fa`): chuva/neve/areia como riscos finos seguindo o jogador (antes um quad esticado); rótulos do mapa sem sobreposição; Configurações com aba ativa sublinhada e nomes traduzidos; Mochila separa ouro de itens.
+- 🖥️ **Build Windows x64 OK, 0 erros** (`49b91fa`).
+- 📦 **Build 358 MB → 192 MB sem perda visual** (`d63a8db`): malhas com compressão Medium (High em árvores), não legíveis, animação Optimal; texturas de personagens/inimigos 1024 com crunch, ambiente 512, override Android ASTC; a base color embutida das árvores (2048 sem compressão, 36 MB) virou PNG 512 com mipmaps. Antes/depois em `Assets/Screenshots/size_*`. APIs obsoletas trocadas (`style.scale`, `FindObjectsByType`).
+- 🐛 **Inimigos enterrados** (`4fbee22`): o pivô do inimigo de encontro fica no centro da cápsula, então todo inimigo de encontro nascia 1 m abaixo do chão (invisível). Agora o spawn sobe meia altura e o modelo é assentado pela bounds da malha. NPCs da vila desligados durante encontros (eram as "cápsulas" vistas), aranhas da Main no chão, inimigos não nascem uns em cima dos outros (1.6 m).
+- 🧍 **Pedestal do Joaquim** (`4fbee22`): preview da seleção usa a malha sem pedestal e a malha limpa foi recortada sem o disco.
+- 🔍 **Playtest rodada 4** em 2400x1080: 9/9 passos OK (`Assets/Screenshots/r4_*`), e mais duas revisões de código (3ª revisão + correções do playtest r4).
+
 ### 2026-10-21 (noite — fluxo completo, localização, toque e duas revisões de código)
 - 🏁 **Resumo**: commits `139354e`..`814d3d1` (6 commits). Suítes: **EditMode 1159/1159** (eram 819) e **PlayMode 14/14**. Todos os itens 🚧 da entrada anterior foram concluídos e commitados.
 - 🧭 **Fluxo completo do jogo** (`139354e`): menu principal → seleção de herói → mapa ⇄ encontro (`GameFlowService`, `GameFrontEndController` na `WorldMap.unity`). `GameplayPause` único, com contagem de donos, em todas as telas modais. Nível, inventário e skills não se perdem mais entre cenas. Derrota no encontro passa pela tela de morte e volta ao mapa.
@@ -35,25 +50,27 @@
 - ✅ **Concluído depois (ver entrada da noite acima)**, estava em andamento no fechamento: correção do bug de atributos + rebalanceamento (`PlayerCombatBalance`, `OutgoingDamage`), localização dos textos fixos em UXML/C# (`UiTexts`, `UiDocumentLocalizer`), voltar ao título com reset de sessão, ligação de cenas rodada 2 (menu principal/seleção na WorldMap, UI de conquistas, NPCs de quest na cena).
 - 📌 **Dependem de decisão do usuário**: ver "Próximos passos" logo abaixo.
 
-### 🔜 Próximos passos (após 2026-10-21, noite)
+### 🔜 Próximos passos (após 2026-10-22, madrugada)
 **Código (próximos itens):**
-1. 🚧 Agente de polimento de gameplay em andamento: distância mínima e carência ao gerar encontros, telas modais sobrepostas, textos do mapa e reposição de vida/mana ao subir de nível.
-2. Ultimate com recurso próprio (carga), se esse design for confirmado; hoje a ultimate só exige nível 10.
-3. Terreno/cena real por bioma (hoje a arena é única, só decorada por bioma); `EnemyPool` migrado para `GenericObjectPool`.
-4. Debug overlay na cena + log rolante; Addressables/LOD/occlusion quando houver build mobile.
-5. CI rodando PlayMode e gerando build (depende do secret abaixo).
+1. Decimar as malhas de heróis e inimigos (cerca de 300k vértices hoje), só depois de revisão visual lado a lado.
+2. Deduplicar as malhas rigadas e as limpas sem pedestal (cerca de 18 MB repetidos no build).
+3. Addressables (e LOD/occlusion) quando houver build mobile para medir.
+4. Ultimate com recurso próprio (carga), se esse design for confirmado; hoje a ultimate só exige nível 10.
+5. Terreno/cena real por bioma (hoje a arena é única, só decorada por bioma).
+6. Log rolante no overlay de debug (precisa de hook no `GameLogger`).
 
 **Decisões do usuário (bloqueiam itens abertos):**
+- Instalar o módulo **Android Build Support** no Unity Hub (sem ele não há build Android local nem medição real do tamanho mobile).
+- Bundle id do app: hoje é o padrão derivado `com.EngenhoEstdio.Rapadura` (o "ú" de "Engenho Estúdio" some); sugestão `com.engenhoestudio.rapadura`. Definir antes da primeira build de loja, porque não muda depois de publicado. Ícone do app junto.
+- Ícones de skills e itens por geração de imagem (precisa do OK do usuário antes de gastar créditos).
+- Áudio real (música e SFX) no lugar dos placeholders procedurais, conforme `Docs/Audio.md`.
 - Rig Humanoid da Maithe: retomar no Meshy gasta cerca de 5 créditos por tentativa, ou usar Mixamo.
-- Secret `UNITY_LICENSE` (ou email/senha/serial) no GitHub, para o CI rodar de verdade.
-- Testes em aparelho físico (toque, vibração, desempenho), builds de loja (Android/iOS/Steam) e contas de desenvolvedor.
+- Secrets do CI (`UNITY_LICENSE` ou `UNITY_EMAIL`/`UNITY_PASSWORD`, assinatura Android opcional) no GitHub, conforme `Docs/CI.md`. Sem eles os jobs ficam pulados.
 - Licença do plano Meshy para uso comercial dos modelos gerados.
 - `com.coplaydev.unity-mcp` está no `manifest.json` apontando para `#main`: fixar uma versão e/ou excluir dos builds de release.
 - Origem de `Assets/Textures/Characters/Tex_HeroCloth.png` (marcado "[VERIFICAR origem]" em `Docs/ThirdPartyLicenses.md`).
 - Pastas de modelo não usadas `Assets/Models/Characters/Joaquim/` e `Joaquim_Child/` (o jogo usa `Joaquim_RO`): apagar ou manter?
-- Ícones de skills e itens por geração de imagem (precisa do OK do usuário antes de gastar créditos).
-- Áudio real (música e SFX) no lugar dos placeholders procedurais, conforme `Docs/Audio.md`.
-- Ícone do app e bundle id (identidade de loja).
+- Testes em aparelho físico (toque, vibração, desempenho), builds de loja (Android/iOS/Steam) e contas de desenvolvedor.
 - Escopo de multiplayer (Fase 12), marketing (Fase 13) e live ops (Fase 14).
 
 
@@ -905,12 +922,12 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Definir público-alvo e classificação indicativa (ESRB/PEGI) — `Docs/PlatformRequirements.md` (recomendação: ESRB Teen / PEGI 12, sujeito à submissão oficial)
 
 ### Requisitos específicos de Mobile (obrigatório, não opcional)
-- [x] Controles em tela — botões de Correr/Pular na HUD (2026-08-25 continuações 11/12); desde 2026-10-21 (`814d3d1`): tocar e segurar para andar (`MoveClick` agora usa `<Touchscreen>/primaryTouch/press` + `HoldToWalkTimer`; o `tap` antigo falhava com dedo parado >0.2s), joystick virtual opcional (`VirtualJoystickMath`, Configurações > Controles), botão Atacar, botões de girar câmera e Voltar do Android abrindo a pausa.
+- [x] Controles em tela — botões de Correr/Pular na HUD (2026-08-25 continuações 11/12); desde 2026-10-21 (`814d3d1`): tocar e segurar para andar (`MoveClick` agora usa `<Touchscreen>/primaryTouch/press` + `HoldToWalkTimer`; o `tap` antigo falhava com dedo parado >0.2s), joystick virtual opcional (`VirtualJoystickMath`, Configurações > Controles), botão Atacar, botões de girar câmera e Voltar do Android abrindo a pausa. Rodada 2 (2026-10-22, `af0eb74`): trava de pinça só com dedo no mundo (Correr/joystick não bloqueiam o tocar-para-andar), pinça por id e pausada em modais, joystick/Correr soltos ao trocar de app, `UiPointerQuery` sem alocação.
 - [x] Câmera: pinch-to-zoom já implementado em `CameraZoom.cs`, bug real de contagem de dedos corrigido (2026-08-25 continuação 7).
 - [ ] Performance: testar em dispositivo de referência low/mid-end, não só no Editor — continua pendente, sem device físico disponível neste ambiente. 🙋 **decisão do usuário**: testar em aparelho físico (roteiro em `Docs/QAChecklist.md`, metas em `Docs/PlatformRequirements.md` → "Orçamento de performance").
 - [x] UI escalável pra diferentes resoluções/aspect ratios: `PanelSettings` corrigido pra `ScaleWithScreenSize` de verdade (2026-08-25 continuação 6) + safe area/notch aplicado na HUD (continuação 13, lógica correta mas não testável sem device físico com notch).
 - [ ] Build Android (`.apk`/`.aab`) e iOS testados cedo, não só no fim do projeto (evita retrabalho) — 🙋 **decisão do usuário**: exige aparelho físico e contas de loja. Build Settings já tem WorldMap (0) + Main (1) desde 2026-10-21.
-- [ ] Tamanho de build/downloads dentro do limite de lojas mobile (Addressables ajuda aqui) — limite de tamanho documentado no orçamento de `Docs/PlatformRequirements.md`; medir de verdade depende da primeira build Android/iOS.
+- [~] Tamanho de build/downloads dentro do limite de lojas mobile (Addressables ajuda aqui) — limite documentado no orçamento de `Docs/PlatformRequirements.md`. Desde 2026-10-22 (`d63a8db`) o build caiu de 358 MB para 192 MB sem perda visual (compressão de malhas, texturas 1024/512 com crunch, override Android ASTC, textura das árvores extraída para 512; comparação em `Assets/Screenshots/size_*`). Medir o tamanho Android de verdade depende do módulo Android Build Support (🙋 **decisão do usuário**). Próximos ganhos: decimar heróis/inimigos (~300k vértices) e deduplicar malhas rigadas vs. limpas (~18 MB).
 - [x] Bateria/thermal: evitar Update() caro rodando sempre a 60fps sem necessidade — `Core/Performance/FrameRateManager.cs` + `FrameRatePolicy.cs` (30 fps fora de combate, 60 fps opcional em combate, toggle nas Configurações), `EnvironmentTickRunner` atualiza dia/noite a cada 0.25s em vez de todo frame (2026-10-21). Validação térmica real continua dependendo de aparelho físico.
 
 ### Infraestrutura de Projeto
@@ -1299,7 +1316,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 ## 🚀 FASE 10 — Polimento
 
 ### Performance
-- [~] Object Pooling — `Core/Pooling/GenericObjectPool.cs` pronto e reutilizável; `EnemyPool.cs` ainda não migrado para usá-lo
+- [x] Object Pooling — `Core/Pooling/GenericObjectPool.cs` reutilizável; `EnemyPool.cs` migrado para ele em 2026-10-22 (`990247d`, robustez extra em `4fbee22`), também usado por `SkillVfxManager`
 - [ ] Addressables
 - [ ] Occlusion Culling
 - [ ] LODs
@@ -1309,14 +1326,14 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 ### Qualidade
 - [~] Sistema de Analytics (retenção, funil, eventos de gameplay) — `Core/Analytics/AnalyticsManager.cs` registrado em `GameManager` (ouve eventos reais do EventBus, buffer em memória + log); falta backend real (decisão de produto/legal)
 - [x] Sistema de Logs — `Core/Logging/GameLogger.cs` (já existia)
-- [~] Debug Overlay — `Core/Debug/DebugOverlayController.cs` (FPS/memória prontos); falta log rolante (precisa de hook novo em `GameLogger.cs`) e colocar o `UIDocument` numa Scene
-- [x] Testes automatizados (cobertura de sistemas críticos: save, combate, inventário) — 1159 testes EditMode + 14 testes PlayMode verdes no Unity Editor real (2026-10-21, `814d3d1`). (Nota antiga "projeto nunca aberto" estava obsoleta.)
+- [x] Debug Overlay — `Core/Debug/DebugOverlay{Controller,Model,Presenter,ToggleGesture}.cs` (2026-10-22, `990247d`): se cria sozinho só no Editor/Development build (não precisa estar numa Scene), FPS, frame time, GC por frame, memória, inimigos, fluxo, pausa, bioma/clima; F1/crase ou toque com 3 dedos. Pendente menor: log rolante (precisa de hook novo em `GameLogger.cs`).
+- [x] Testes automatizados (cobertura de sistemas críticos: save, combate, inventário) — 1300 testes EditMode + 14 testes PlayMode verdes no Unity Editor real (2026-10-22, `4fbee22`; eram 1159 em `814d3d1`). (Nota antiga "projeto nunca aberto" estava obsoleta.)
 - [ ] Playtesting estruturado com usuários externos + coleta de feedback
 - [x] QA pass dedicado (checklist de regressão antes de cada release) — `Docs/QAChecklist.md` (2026-10-21); executar em aparelho físico é **decisão do usuário**.
 
 ### Build
 - [x] Git — repositório ativo (`master`) com LFS
-- [~] CI/CD — `.github/workflows/ci.yml` corrigido para `master` (2026-10-21); 🙋 **decisão do usuário**: secret `UNITY_LICENSE` no GitHub
+- [x] CI/CD — `.github/workflows/ci.yml` (2026-10-22, `fda092d`): `precheck` da licença, testes EditMode + PlayMode em matriz com cache e LFS, builds de desenvolvimento Windows x64 e Android em push/manual, assinatura Android opcional; configuração em `Docs/CI.md`. 🙋 **decisão do usuário**: cadastrar os secrets da licença Unity no GitHub (sem eles os jobs ficam pulados).
 - [ ] Steam Build — 🙋 **decisão do usuário** (conta Steamworks, escopo PC)
 - [ ] Android Build — 🙋 **decisão do usuário** (aparelho físico, conta Google Play, keystore)
 - [ ] iOS Build — 🙋 **decisão do usuário** (Mac/Xcode, conta Apple Developer)
@@ -1395,7 +1412,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Loot raro — raridades + afixos procedurais; bosses têm loot garantido e drop raro com afixos (`BossBonusRules`, 2026-10-21)
 - [ ] Bosses mundiais
 - [x] Ciclo dia/noite — `TimeOfDayManager` + `DayNightLighting` (salvo, pausa junto com o jogo, noite aumenta encontros) — 2026-10-21
-- [x] Clima dinâmico — `WeatherSystem` + `WeatherVisuals` (chuva, neblina, tempestade de areia, neve por bioma, partículas em pool com limites para mobile) — 2026-10-21
+- [x] Clima dinâmico — `WeatherSystem` + `WeatherVisuals` (chuva, neblina, tempestade de areia, neve por bioma, partículas em pool com limites para mobile) — 2026-10-21; em 2026-10-22 (`49b91fa`) chuva/neve/areia viraram riscos finos que seguem o jogador (antes um quad esticado)
 - [ ] Segredos e áreas ocultas
 - [ ] New Game+
 - [ ] Sistema de temporadas
@@ -1415,7 +1432,7 @@ O jogo só pode sair da fase MVP quando tiver:
 - [x] Save/Load funcionando — slots manuais + auto save, save do mundo v2
 - [x] HUD completa — vida/stamina/mana/XP, hotbar de skills, rastreador de missão, grupo de botões, botões de toque
 - [ ] 30 minutos de gameplay contínuo sem bugs críticos
-- [ ] Build assinada rodando fora do Editor (standalone), sem depender do Unity Editor
+- [~] Build assinada rodando fora do Editor (standalone), sem depender do Unity Editor — build Windows x64 gerada com 0 erros em 2026-10-22 (`49b91fa`); falta assinatura e rodada completa fora do Editor.
 
 ---
 

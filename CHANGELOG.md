@@ -29,7 +29,11 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 - `BuildVersion` (`Core/Versioning`): helper SemVer em runtime sobre `Application.version`.
 - Tela de Créditos (UI Toolkit, `CreditsView.uxml/.uss` + `CreditsController`), aberta pelo botão "Créditos" do menu principal.
 - `Docs/ThirdPartyLicenses.md`, `Docs/QAChecklist.md`, `Docs/Audio.md` e seção "Orçamento de performance" em `Docs/PlatformRequirements.md`.
-- 14 smoke tests PlayMode (cenas, telas de UI, encontro e XP no encontro); suíte EditMode com 1159 testes.
+- 14 smoke tests PlayMode (cenas, telas de UI, encontro e XP no encontro); suíte EditMode com 1300 testes.
+- CI completo (`.github/workflows/ci.yml`): `precheck` da licença Unity (jobs ficam pulados sem os secrets), testes EditMode + PlayMode com cache e LFS, builds de desenvolvimento Windows x64 e Android em push/manual, assinatura Android opcional; configuração em `Docs/CI.md`.
+- Overlay de debug (só Editor/Development build): FPS, frame time, GC por frame, memória, inimigos, fluxo, pausa, bioma/clima; F1 ou toque com 3 dedos (`Core/Debug/DebugOverlay*`).
+- Contagem "Prepare-se/Já!" no início do encontro: inimigos nascem em arco a 6-9 m e seguram o ataque por 1.75s (`EncounterSpawnLayout`).
+- Skills miram o inimigo mais próximo num cone de 70° ou no alcance (`SkillTargeting`).
 
 ### Alterado
 - Rebalanceamento por dados: curva de XP 1.25→1.10, +8 HP por nível, XP por bioma 10/18/28/40, chefes x8, ultimates ~2.5x e skills fracas reforçadas (tabelas em `Docs/Balance/README.md`).
@@ -38,6 +42,12 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 - Música procedural gerada em thread separada (sem engasgo), com cache de 2 clipes; `StopMusic` esmaece em vez de cortar.
 - Tela de morte só reconstrói o texto da contagem regressiva quando o segundo exibido muda (antes alocava uma string por frame).
 - Anel do clique-para-mover usa `sharedMaterial` (antes `.material` clonava o material criado em runtime no primeiro pulso).
+- Build de 358 MB para 192 MB sem perda visual: malhas com compressão Medium (High em árvores) e não legíveis, animação Optimal, texturas de personagens/inimigos 1024 com crunch e de ambiente 512, override Android ASTC, base color das árvores extraída do glTF para PNG 512 com mipmaps.
+- `EnemyPool` passa a usar `GenericObjectPool`.
+- Chuva, neve e areia desenhadas como riscos finos que seguem o jogador.
+- Subir de nível recupera vida e mana; fundos de telas modais opacos; textos do mapa refletem o chefe de região.
+- Configurações com aba ativa sublinhada e nomes traduzidos; Mochila separa ouro de itens; herói selecionado destacado.
+- `UiPointerQuery` com cache de `UIDocument` (zero alocação por consulta); APIs obsoletas trocadas (`style.scale`, `FindObjectsByType`).
 
 ### Corrigido
 - Matar inimigo no fluxo real (mapa → encontro) não dava XP, loot, números de dano nem VFX: o `GameManager` duplicado era destruído junto com os componentes de recompensa (`SingletonBehaviour` agora remove só o componente duplicado).
@@ -53,6 +63,13 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 - Menu principal e seleção de herói ficavam sem música; a música do mapa continuava depois de voltar ao título.
 - Tocar para andar falhava se o dedo demorasse mais de 0.2s ou se mexesse 5px; pinça virava tap-to-move; Correr ficava preso depois de gesto do sistema.
 - Preview da seleção de herói (heróis rigados apareciam deitados), ordem de camadas das telas e textos ilegíveis nas configurações e barras da HUD.
+- Inimigos de encontro nasciam 1 m abaixo do chão (invisíveis): o pivô fica no centro da cápsula; NPCs da vila apareciam como cápsulas durante encontros; inimigos nasciam uns sobre os outros.
+- Inimigo reutilizado do pool voltava invisível/sem colisão; o afundar da morte desativava um inimigo já re-spawnado; trocar o prefab destruía inimigos vivos.
+- Inimigos nasciam a 1 m e tiravam 34 HP em 2s; inimigo ganhava golpe grátis depois de qualquer pausa.
+- Skills de área não davam dano em colliders de objetos filhos.
+- Toque: Correr/joystick bloqueavam o tocar-para-andar; joystick e Correr ficavam presos ao trocar de app; Esc pausava sem estar ligado ao menu de pausa.
+- Rótulos do mapa sobrepostos; dica de loot disparava ao carregar save; dica do tutorial vazava sobre a tela de morte e modais.
+- Pedestal visível no preview do Joaquim.
 
 ## [0.1.0] - 2026-10-21
 
@@ -81,7 +98,7 @@ Primeira versão rastreada: protótipo jogável (vertical slice de sistemas) em 
 - **Ferramentas de editor:** seeders de dados (itens, skills, inimigos, quests, diálogos, receitas, lojas, biomas), editores de itens/skills, bootstrapper da cena principal, decimador de malha.
 - **Qualidade:** suíte de testes EditMode (Unity Test Framework) e CI no GitHub Actions.
 
-### Modificado
+### Alterado
 - Pipeline migrado de Built-in para URP; color space de Gamma para Linear.
 - UI escala com a tela (`ScaleWithScreenSize`) em vez de tamanho físico constante.
 

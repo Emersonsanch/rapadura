@@ -30,7 +30,7 @@ Namespaces `Rapadura.*`, organizados em:
 
 Managers seguem o padrão `IManager` registrado via `ServiceLocator` a partir de `Core/Managers/GameManager.cs`; comunicação entre sistemas usa o `EventBus` (`Core/EventBus`).
 
-## Estado atual (2026-10-21)
+## Estado atual (2026-10-22)
 
 O projeto roda no Unity Editor (6000.3) com duas cenas no Build Settings: `WorldMap.unity` (0) e `Main.unity` (1). Fluxo de jogo: menu principal → seleção de herói → mapa mundi ⇄ encontro aleatório → combate em tempo real na arena → volta ao mapa.
 
@@ -46,14 +46,16 @@ Já funciona:
 - **Mobile**: tocar e segurar para andar, joystick virtual opcional, botões de atacar/correr/pular/girar câmera, botão Voltar do Android.
 - **Save**: slots manuais + auto save, save do mundo (herói, construções, receitas, bosses, hora/clima, estoque da loja), formato v2 compatível com saves v1, escrita atômica com backup.
 - **Configurações**: áudio, gráficos, idioma (pt-BR/en, toda a UI e o conteúdo traduzidos, idioma salvo), rebind de controles, navegação por gamepad/teclado, acessibilidade (escala de fonte, daltonismo, alto contraste, reduzir flashes/shake), limite de FPS para poupar bateria.
+- **Build**: Windows x64 gerada sem erros, com cerca de 192 MB (era 358 MB, antes da compressão de malhas/texturas e do override Android ASTC). Build Android local depende do módulo Android Build Support no Unity Hub.
+- **Debug**: overlay de FPS, memória, GC e estado do jogo (só Editor/Development build), F1 ou toque com 3 dedos.
 
-Em andamento: polimento de gameplay (distância e carência dos encontros, telas modais sobrepostas, textos do mapa, reposição ao subir de nível). Pendências que dependem de decisão do usuário (rig da Maithe, secret `UNITY_LICENSE` do CI, aparelho físico e builds de loja, licenças, áudio e ícones reais) estão em `TODO.md` → "Próximos passos".
+Próximos itens de código: decimar malhas de heróis/inimigos, deduplicar malhas rigadas e limpas, Addressables, carga de ultimate e terreno real por bioma. Pendências que dependem de decisão do usuário (módulo Android, bundle id e ícone do app, rig da Maithe, secrets do CI, aparelho físico e builds de loja, licenças, áudio e ícones reais) estão em `TODO.md` → "Próximos passos".
 
 ## Testes
 
 No Unity Editor: **Window → General → Test Runner**.
 
-- **EditMode** (`Assets/Tests/EditMode`, 1159 testes): aba *EditMode* → *Run All*. Os testes de save usam uma pasta temporária isolada e não tocam nos saves reais.
+- **EditMode** (`Assets/Tests/EditMode`, 1300 testes): aba *EditMode* → *Run All*. Os testes de save usam uma pasta temporária isolada e não tocam nos saves reais.
 - **PlayMode** (`Assets/Tests/PlayMode`, 14 smoke tests das cenas `Main`/`WorldMap`, das telas de UI e do encontro com XP): aba *PlayMode* → *Run All*. As cenas precisam estar no Build Settings (já estão).
 
 Pela linha de comando (o Editor precisa estar fechado):
