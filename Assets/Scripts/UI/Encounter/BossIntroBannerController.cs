@@ -399,7 +399,9 @@ namespace Rapadura.UI.Encounter
             _banner.style.paddingBottom = 12;
             _banner.style.maxWidth = Length.Percent(90);
             _banner.style.alignItems = Align.Center;
-            _banner.style.backgroundColor = new Color(0.08f, 0.03f, 0.02f, 0.82f);
+            // UI Toolkit blends in linear space: 0.82 (even 0.92) alpha still read washed out over the bright
+            // Desert sand / Mountain snow, so the plate is nearly opaque and the text gets a shadow.
+            _banner.style.backgroundColor = new Color(0.08f, 0.03f, 0.02f, 0.97f);
             Color border = new Color(0.85f, 0.62f, 0.22f, 1f);
             _banner.style.borderTopWidth = 2;
             _banner.style.borderBottomWidth = 2;
@@ -413,6 +415,7 @@ namespace Rapadura.UI.Encounter
             _titleLabel.style.color = border;
             _titleLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
             _titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+            _titleLabel.style.textShadow = TextShadowStyle;
 
             _nameLabel = new Label { name = "boss-intro-name", pickingMode = PickingMode.Ignore };
             _nameLabel.style.fontSize = 36;
@@ -420,12 +423,20 @@ namespace Rapadura.UI.Encounter
             _nameLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
             _nameLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
             _nameLabel.style.whiteSpace = WhiteSpace.Normal;
+            _nameLabel.style.textShadow = TextShadowStyle;
 
             _banner.Add(_titleLabel);
             _banner.Add(_nameLabel);
             _root.Add(_banner);
             documentRoot.Add(_root);
         }
+
+        private static TextShadow TextShadowStyle => new TextShadow
+        {
+            offset = new Vector2(1.5f, 1.5f),
+            blurRadius = 2f,
+            color = new Color(0f, 0f, 0f, 0.9f),
+        };
 
         private PanelSettings FindPanelSettings()
         {

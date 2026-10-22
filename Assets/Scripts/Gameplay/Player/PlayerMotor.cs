@@ -1,3 +1,4 @@
+using Rapadura.Gameplay.Skills;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Player
@@ -37,6 +38,27 @@ namespace Rapadura.Gameplay.Player
         public Vector3 HorizontalVelocity { get; private set; }
         public bool IsCrouching => _isCrouching;
         public float VerticalVelocity => _verticalVelocity;
+
+        private BuffController _buffController;
+
+        /// <summary>
+        /// Sibling BuffController's movement multiplier (<see cref="BuffController.GetMoveSpeedMultiplier"/>:
+        /// Passo do Vento +50%, dash +150%, slows, 0 while rooted), 1 without one. Applied to every
+        /// horizontal move, so <see cref="HorizontalVelocity"/> — and the Animator "Speed" fed from it by
+        /// <see cref="PlayerAnimatorSpeedDriver"/> — reflects the real, buffed speed.
+        /// </summary>
+        public float SpeedMultiplier
+        {
+            get
+            {
+                if (_buffController == null)
+                {
+                    _buffController = GetComponent<BuffController>();
+                }
+
+                return _buffController != null ? _buffController.GetMoveSpeedMultiplier() : 1f;
+            }
+        }
 
         private void Awake()
         {
@@ -189,7 +211,8 @@ namespace Rapadura.Gameplay.Player
 
             IsGrounded = controller.isGrounded;
 
-            HorizontalVelocity = desiredDirection * speed;
+            float multiplier = speed > 0f ? SpeedMultiplier : 1f;
+            HorizontalVelocity = desiredDirection * (speed * multiplier);
 
             if (desiredDirection.sqrMagnitude > 0.0001f)
             {

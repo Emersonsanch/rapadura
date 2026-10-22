@@ -49,7 +49,41 @@ namespace Rapadura.Gameplay.Combat
         /// <summary>Optional — absence means no resistance/immunity to any element (see <see cref="ElementResistance"/>).</summary>
         private ElementResistance _elementResistance;
 
+        /// <summary>Optional sibling (enemies get one from <c>EnemyController</c>); resolved lazily — see <see cref="Buffs"/>.</summary>
+        private BuffController _buffController;
+
         private float _currentHealth;
+
+        /// <summary>
+        /// Sibling BuffController, looked up on demand because EditMode tests and EnemyController add it
+        /// after this component. Its Defense modifiers (skill debuffs such as Drone -20%, Eclipse -30%,
+        /// or a boss's own buffs) feed <see cref="DamageCalculator"/> on every hit.
+        /// </summary>
+        private BuffController Buffs
+        {
+            get
+            {
+                if (_buffController == null)
+                {
+                    _buffController = GetComponent<BuffController>();
+                }
+
+                return _buffController;
+            }
+        }
+
+        /// <summary>Base (inspector) flat defense before any modifier.</summary>
+        public float BaseDefense => _defense;
+
+        /// <summary>Damage-taken multiplier from this actor's base defense + active Defense modifiers (1 = unmitigated).</summary>
+        public float DefenseMultiplier
+        {
+            get
+            {
+                DamageCalculator.GetDefense(Buffs, _defense, out float flat, out float percent);
+                return DamageCalculator.GetDefenseMultiplier(flat, percent, _balanceConfig);
+            }
+        }
 
         public float CurrentHealth
         {
@@ -212,7 +246,8 @@ namespace Rapadura.Gameplay.Combat
                 return;
             }
 
-            float finalDamage = DamageCalculator.ComputeDamage(info, _defense, _balanceConfig, _elementResistance);
+            DamageCalculator.GetDefense(Buffs, _defense, out float flatDefense, out float percentDefense);
+            float finalDamage = DamageCalculator.ComputeDamage(info, flatDefense, percentDefense, _balanceConfig, _elementResistance);
             SetHealth(CurrentHealth - finalDamage);
             StartChannelWindow(sourceId, info.Channel);
 

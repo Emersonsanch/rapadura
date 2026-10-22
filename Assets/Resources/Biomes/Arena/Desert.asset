@@ -72,5 +72,5 @@ MonoBehaviour:
     _secondaryColor: {r: 0.88, g: 0.72, b: 0.5, a: 1}
     _minScale: 0.7
     _maxScale: 1.6
-  _scatterInnerRadius: 9
+  _scatterInnerRadius: 11
   _scatterOuterRadius: 26

@@ -147,8 +147,8 @@ namespace Rapadura.Gameplay.World.Biomes
 
         [Header("Procedural props")]
         [SerializeField] private List<BiomeArenaPropSpawn> _props = new List<BiomeArenaPropSpawn>();
-        [Tooltip("Props are scattered on a ring around the arena centre, clear of the fight in the middle.")]
-        [SerializeField] [Min(0f)] private float _scatterInnerRadius = 9f;
+        [Tooltip("Props are scattered on a ring around the arena centre, clear of the fight in the middle. Never below BiomeArenaRules.MinPropClearRadius (enemies spawn 6-9 m out; a 9 m inner edge let a rock land on a spawn point).")]
+        [SerializeField] [Min(0f)] private float _scatterInnerRadius = BiomeArenaRules.MinPropClearRadius;
         [SerializeField] [Min(0f)] private float _scatterOuterRadius = 26f;
 
         public BiomeType Biome => _biome;

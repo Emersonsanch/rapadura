@@ -205,6 +205,81 @@ namespace Rapadura.Gameplay.Skills
             return (baseValue + flatTotal) * (1f + percentTotal);
         }
 
+        /// <summary>Lowest movement multiplier stacked slows can reach without a root (Congelado's -90% lands exactly here).</summary>
+        public const float MinMoveSpeedMultiplier = 0.1f;
+
+        /// <summary>Highest movement multiplier stacked haste can reach (Impulso / skill_dash's +150% lands exactly here).</summary>
+        public const float MaxMoveSpeedMultiplier = 2.5f;
+
+        /// <summary>
+        /// True while a single MoveSpeed effect is -100% or lower (PercentAdditive value &lt;= -1): the
+        /// owner is rooted and <see cref="GetMoveSpeedMultiplier"/> returns 0. Several partial slows
+        /// stacking past -100% do NOT root — they stop at <see cref="MinMoveSpeedMultiplier"/> — so
+        /// chaining two slows (Correntes -70% + Eclipse -50%) can't pin a boss in place.
+        /// </summary>
+        public bool IsRooted
+        {
+            get
+            {
+                foreach (ActiveStatEffect effect in _activeEffects)
+                {
+                    if (effect.Definition.affectedStat == StatType.MoveSpeed
+                        && effect.Definition.application == ModifierApplication.PercentAdditive
+                        && effect.Definition.value <= -1f)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Multiplier for the owner's movement speed (PlayerMotor walk/run/crouch/slide/click-to-move and
+        /// EnemyController patrol/chase/flee): <c>GetModifiedValue(MoveSpeed, 1)</c> clamped to
+        /// [<see cref="MinMoveSpeedMultiplier"/>, <see cref="MaxMoveSpeedMultiplier"/>], or 0 while
+        /// <see cref="IsRooted"/>. Skills express MoveSpeed as PercentAdditive (-0.5 = half speed).
+        /// MoveSpeed used to be applied by ~15 skills/affixes but read by nothing.
+        /// </summary>
+        public float GetMoveSpeedMultiplier()
+        {
+            return ClampMoveSpeedMultiplier(GetModifiedValue(StatType.MoveSpeed, 1f), IsRooted);
+        }
+
+        /// <summary>Pure clamp behind <see cref="GetMoveSpeedMultiplier"/> (rooted → 0).</summary>
+        public static float ClampMoveSpeedMultiplier(float rawMultiplier, bool rooted)
+        {
+            return rooted ? 0f : Mathf.Clamp(rawMultiplier, MinMoveSpeedMultiplier, MaxMoveSpeedMultiplier);
+        }
+
+        /// <summary>Sum of the active <see cref="ModifierApplication.Flat"/> modifiers on a stat (e.g. armor points from affixes).</summary>
+        public float GetFlatTotal(StatType stat)
+        {
+            return GetTotal(stat, ModifierApplication.Flat);
+        }
+
+        /// <summary>Sum of the active <see cref="ModifierApplication.PercentAdditive"/> modifiers on a stat (+0.25 = +25%).</summary>
+        public float GetPercentTotal(StatType stat)
+        {
+            return GetTotal(stat, ModifierApplication.PercentAdditive);
+        }
+
+        private float GetTotal(StatType stat, ModifierApplication application)
+        {
+            float total = 0f;
+
+            foreach (ActiveStatEffect effect in _activeEffects)
+            {
+                if (effect.Definition.affectedStat == stat && effect.Definition.application == application)
+                {
+                    total += effect.Definition.value;
+                }
+            }
+
+            return total;
+        }
+
         /// <summary>
         /// Sum of every active modifier value (flat AND percent) for a stat that is itself a 0-based
         /// fraction — <see cref="StatType.CriticalChance"/>, <see cref="StatType.CriticalDamage"/>.

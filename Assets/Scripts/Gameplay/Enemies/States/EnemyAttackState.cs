@@ -49,13 +49,16 @@ namespace Rapadura.Gameplay.Enemies.States
 
         private static void PerformAttack(EnemyController context, EnemyDefinition definition)
         {
+            // AttackDamage debuffs (Provocação Heroica, Névoa da Ilusão, Purificação) weaken the swing.
+            float damage = context.EffectiveAttackDamage;
+
             if (context.Hitbox != null)
             {
-                context.Hitbox.Damage = definition.AttackDamage;
+                context.Hitbox.Damage = damage;
                 context.Hitbox.ResetHitTargets();
             }
 
-            context.ApplyDamageToTarget(definition.AttackDamage);
+            context.ApplyDamageToTarget(damage);
         }
 
         public void FixedTick(EnemyController context, float fixedDeltaTime)

@@ -3,6 +3,7 @@ using Rapadura.Core.Events;
 using Rapadura.Core.StateMachine;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Enemies.States;
+using Rapadura.Gameplay.Skills;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Enemies
@@ -126,7 +127,63 @@ namespace Rapadura.Gameplay.Enemies
         {
             Health = GetComponent<Health>();
             _characterController = GetComponent<CharacterController>();
+
+            // Skill debuffs (slows, Defense/AttackDamage debuffs, DoTs) land through the target's
+            // BuffController (SkillManager.ApplyToTarget) — no enemy prefab/scene object had one, so
+            // every enemy-side debuff of every skill was silently dropped. Added at runtime so the
+            // shared prefab and the scene don't need editing.
+            if (!TryGetComponent(out _buffController))
+            {
+                _buffController = gameObject.AddComponent<BuffController>();
+            }
+
             BuildStateMachine();
+        }
+
+        private BuffController _buffController;
+
+        /// <summary>This enemy's BuffController (added in Awake; looked up lazily for EditMode tests). May be null.</summary>
+        public BuffController Buffs
+        {
+            get
+            {
+                if (_buffController == null)
+                {
+                    _buffController = GetComponent<BuffController>();
+                }
+
+                return _buffController;
+            }
+        }
+
+        /// <summary>Movement multiplier from MoveSpeed effects (slows, roots), 1 without a BuffController.</summary>
+        public float MoveSpeedMultiplier
+        {
+            get
+            {
+                BuffController buffs = Buffs;
+                return buffs != null ? buffs.GetMoveSpeedMultiplier() : 1f;
+            }
+        }
+
+        /// <summary>
+        /// Damage of one attack: <see cref="EnemyDefinition.AttackDamage"/> through this enemy's
+        /// AttackDamage modifiers (Provocação Heroica -25%, Névoa da Ilusão -30%, Purificação -20%), never
+        /// below 0. 0 without a definition.
+        /// </summary>
+        public float EffectiveAttackDamage
+        {
+            get
+            {
+                if (_definition == null)
+                {
+                    return 0f;
+                }
+
+                BuffController buffs = Buffs;
+                float damage = buffs != null ? buffs.GetModifiedValue(StatType.AttackDamage, _definition.AttackDamage) : _definition.AttackDamage;
+                return Mathf.Max(0f, damage);
+            }
         }
 
         private void OnEnable()
@@ -333,6 +390,14 @@ namespace Rapadura.Gameplay.Enemies
                 Health = GetComponent<Health>();
             }
 
+            // A pooled instance must not carry the last life's slows/debuffs/DoTs into the new one.
+            BuffController buffs = Buffs;
+            if (buffs != null)
+            {
+                buffs.ClearAllEffects();
+                buffs.ClearStun();
+            }
+
             ApplyDefinitionToHealth();
             if (Health != null)
             {
@@ -406,7 +471,13 @@ namespace Rapadura.Gameplay.Enemies
         [Tooltip("Degrees/sec the enemy turns to face its movement direction. Instant snapping (very high values) reads as janky/robotic, especially on rig-free mesh visuals.")]
         [SerializeField] private float _turnSpeedDegPerSec = 360f;
 
-        /// <summary>Moves toward (or away from, with a negative-facing direction) a point on the XZ plane. No NavMesh required.</summary>
+        /// <summary>
+        /// Moves toward (or away from, with a negative-facing direction) a point on the XZ plane. No NavMesh required.
+        /// <paramref name="speed"/> is the state's base speed (patrol/chase/flee); it is scaled here by
+        /// <see cref="MoveSpeedMultiplier"/> so every state honours slows/roots. A rooted enemy still turns
+        /// to face <paramref name="direction"/>. EnemyProceduralAnimator measures real displacement, so
+        /// the walk bob follows the slowed speed on its own.
+        /// </summary>
         public void MoveInDirection(Vector3 direction, float speed, float deltaTime)
         {
             if (direction == Vector3.zero || speed <= 0f)
@@ -414,7 +485,8 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
-            Vector3 delta = direction.normalized * speed * deltaTime;
+            float effectiveSpeed = speed * MoveSpeedMultiplier;
+            Vector3 delta = direction.normalized * effectiveSpeed * deltaTime;
 
             if (_characterController != null && _characterController.enabled)
             {

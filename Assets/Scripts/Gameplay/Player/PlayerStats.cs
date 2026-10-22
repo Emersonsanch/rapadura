@@ -43,6 +43,10 @@ namespace Rapadura.Gameplay.Player
         [SerializeField] private float _maxMana = 100f;
         [SerializeField] private float _manaRegenPerSecond = 5f;
 
+        [Header("Defense")]
+        [Tooltip("Flat armor points before modifiers (affixes add more). Goes through DamageCalculator's armor curve; percent Defense buffs/debuffs from skills stack on top.")]
+        [SerializeField] private float _baseDefense = 0f;
+
         [Header("Experience")]
         [Tooltip("Level curve (XP per level, vitals growth). Left empty, the shipped Resources/Balance/ProgressionCurve asset is used; the two fields below are only a fallback if that asset is missing.")]
         [SerializeField] private ProgressionCurve _progressionCurve;
@@ -96,7 +100,38 @@ namespace Rapadura.Gameplay.Player
         // buffs. Those modifiers used to be applied but never read here, so the attributes did nothing.
         public float MaxMana => ApplyStatModifiers(StatType.MaxMana, _maxMana + (Curve != null ? Curve.GetMaxManaBonus(Level) : 0f));
         public float MaxHealth => ApplyStatModifiers(StatType.MaxHealth, _maxHealth + (Curve != null ? Curve.GetMaxHealthBonus(Level) : 0f));
-        public float MaxStamina => _maxStamina + (Curve != null ? Curve.GetMaxStaminaBonus(Level) : 0f);
+        public float MaxStamina => ApplyStatModifiers(StatType.MaxStamina, _maxStamina + (Curve != null ? Curve.GetMaxStaminaBonus(Level) : 0f));
+
+        // Regeneration per second through the matching *Regen modifiers (item affixes' Flat +HP/s,
+        // future buffs). Tick-over-time effects (DoT/HoT) also use HealthRegen with value 0, so they add
+        // nothing here — their damage/heal comes from BuffController's ticks. Never below 0. These
+        // stats (and MaxStamina above) were applied by item affixes but read by nothing before.
+        public float HealthRegenPerSecond => ApplyRegenModifiers(StatType.HealthRegen, _healthRegenPerSecond);
+        public float ManaRegenPerSecond => ApplyRegenModifiers(StatType.ManaRegen, _manaRegenPerSecond);
+        public float StaminaRegenPerSecond => ApplyRegenModifiers(StatType.StaminaRegen, _staminaRegenPerSecond);
+
+        /// <summary>Flat armor points (base + Flat Defense modifiers such as item affixes).</summary>
+        public float FlatDefense
+        {
+            get
+            {
+                DamageCalculator.GetDefense(Buffs, _baseDefense, out float flat, out _);
+                return flat;
+            }
+        }
+
+        /// <summary>
+        /// Damage-taken multiplier from defense (see <see cref="DamageCalculator.GetDefenseMultiplier"/>):
+        /// 1 = unmitigated, 0.75 under Campo Magnético (+25%), 1.3 under Berserk's -30% Defense.
+        /// </summary>
+        public float DefenseMultiplier
+        {
+            get
+            {
+                DamageCalculator.GetDefense(Buffs, _baseDefense, out float flat, out float percent);
+                return DamageCalculator.GetDefenseMultiplier(flat, percent, null);
+            }
+        }
 
         /// <summary>
         /// Sibling BuffController (optional), resolved lazily because EditMode tests and runtime setup
@@ -130,6 +165,12 @@ namespace Rapadura.Gameplay.Player
             BuffController buffs = Buffs;
             // Never below 1 so a big percent debuff can't produce a zero/negative max (division in HUD bars).
             return buffs != null ? Mathf.Max(1f, buffs.GetModifiedValue(stat, baseValue)) : baseValue;
+        }
+
+        private float ApplyRegenModifiers(StatType stat, float baseValue)
+        {
+            BuffController buffs = Buffs;
+            return buffs != null ? Mathf.Max(0f, buffs.GetModifiedValue(stat, baseValue)) : baseValue;
         }
 
         /// <summary>The level curve in use (inspector reference, else the shipped Resources asset; may be null).</summary>
@@ -224,6 +265,13 @@ namespace Rapadura.Gameplay.Player
                 _lastMaxMana = maxMana;
                 SetMana(wasFull ? maxMana : _currentMana);
             }
+
+            // Stamina regenerates in seconds, so a lost MaxStamina bonus only needs the clamp (and the
+            // HUD refresh); a gained one refills on its own.
+            if (_currentStamina > MaxStamina)
+            {
+                SetStamina(_currentStamina);
+            }
         }
 
         private void Update()
@@ -278,7 +326,7 @@ namespace Rapadura.Gameplay.Player
         {
             if (CurrentMana < MaxMana)
             {
-                SetMana(CurrentMana + _manaRegenPerSecond * deltaTime);
+                SetMana(CurrentMana + ManaRegenPerSecond * deltaTime);
             }
         }
 
@@ -307,7 +355,7 @@ namespace Rapadura.Gameplay.Player
         {
             if (CurrentStamina < MaxStamina)
             {
-                SetStamina(CurrentStamina + _staminaRegenPerSecond * deltaTime);
+                SetStamina(CurrentStamina + StaminaRegenPerSecond * deltaTime);
             }
         }
 
@@ -320,7 +368,7 @@ namespace Rapadura.Gameplay.Player
         {
             if (!IsDead && CurrentHealth < MaxHealth)
             {
-                SetHealth(CurrentHealth + _healthRegenPerSecond * deltaTime);
+                SetHealth(CurrentHealth + HealthRegenPerSecond * deltaTime);
             }
         }
 
@@ -334,6 +382,10 @@ namespace Rapadura.Gameplay.Player
         /// point and <see cref="ICombatTarget"/>'s. Also publishes <see cref="DamageAppliedEvent"/>
         /// so the player benefits from the same audio/analytics hooks as <see cref="Health"/>-based
         /// targets (which previously only fired for enemies/NPCs, never the player).
+        /// Defense (base armor + affixes + skill buffs/debuffs) is applied here, so every way of hurting
+        /// the player is mitigated: <c>amount × DamageCalculator.GetDefenseMultiplier</c>. Unlike
+        /// <see cref="Health"/> there is no rounding/minimum-damage floor, so an unbuffed player (multiplier
+        /// exactly 1) takes exactly the same damage as before Defense was wired in.
         /// </summary>
         private void ApplyDamageInternal(float amount, ElementType element, GameObject source, bool isCritical)
         {
@@ -341,6 +393,8 @@ namespace Rapadura.Gameplay.Player
             {
                 return;
             }
+
+            amount *= DefenseMultiplier;
 
             SetHealth(CurrentHealth - amount);
             GrantInvulnerability(_invulnerabilityDuration);
@@ -366,9 +420,8 @@ namespace Rapadura.Gameplay.Player
         void ICombatTarget.ApplyDamage(float amount, ElementType element, GameObject source)
         {
             // Applies the optional ElementResistance table (see Gameplay/Combat/ElementResistance.cs)
-            // as a simple percentage multiplier; PlayerStats has no flat-defense mitigation curve of
-            // its own (that lives in DamageCalculator, used by hitboxes targeting Health-based actors),
-            // so this only layers elemental resistance/immunity on top of the raw amount.
+            // as a simple percentage multiplier; Defense (DamageCalculator's armor curve + percent
+            // modifiers) is applied afterwards in ApplyDamageInternal, for every damage entry point.
             if (_elementResistance != null)
             {
                 float resistanceFraction = _elementResistance.GetResistance(element);

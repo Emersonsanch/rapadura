@@ -245,6 +245,24 @@ namespace Rapadura.Tests
             Assert.AreEqual(0, none.Count);
         }
 
+        [Test]
+        public void PropInnerRadius_KeepsPropsClearOfTheEnemySpawnRing()
+        {
+            // Enemies spawn 6-9 m from the arena centre (EncounterSpawnLayout defaults); a rock of up
+            // to ~1.4 m radius plus an enemy capsule must not reach that ring.
+            Assert.GreaterOrEqual(BiomeArenaRules.MinPropClearRadius,
+                Rapadura.Gameplay.World.Map.EncounterSpawnLayout.DefaultMaxRadius + 1.9f);
+            Assert.AreEqual(BiomeArenaRules.MinPropClearRadius, BiomeArenaRules.PropInnerRadius(9f), 1e-4f);
+            Assert.AreEqual(14f, BiomeArenaRules.PropInnerRadius(14f), 1e-4f);
+
+            foreach (BiomeType biome in new[] { BiomeType.Desert, BiomeType.Mountain, BiomeType.Caves, BiomeType.Forest })
+            {
+                BiomeArenaProfile profile = BiomeArenaProfiles.Get(biome);
+                Assert.IsNotNull(profile, biome.ToString());
+                Assert.GreaterOrEqual(profile.ScatterInnerRadius, BiomeArenaRules.MinPropClearRadius, biome.ToString());
+            }
+        }
+
         // ---------------------------------------------------------------
         // Component (Edit Mode objects, no Play Mode)
         // ---------------------------------------------------------------

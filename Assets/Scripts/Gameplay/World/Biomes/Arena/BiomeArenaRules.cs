@@ -132,6 +132,17 @@ namespace Rapadura.Gameplay.World.Biomes
             }
         }
 
+        /// <summary>
+        /// Innermost radius (from the arena centre) a procedural prop may be scattered at. Encounter
+        /// enemies spawn on a 6-9 m ring around the player, who starts on the arena centre; the biggest
+        /// props (rocks up to ~1.4 m radius) plus an enemy capsule need ~2 m on top of that, so props
+        /// start at 11 m — with the old 9 m inner edge a golem could spawn inside a rock.
+        /// </summary>
+        public const float MinPropClearRadius = 11f;
+
+        /// <summary>Scatter inner radius actually used: the profile's, but never inside <see cref="MinPropClearRadius"/>.</summary>
+        public static float PropInnerRadius(float profileInnerRadius) => Mathf.Max(profileInnerRadius, MinPropClearRadius);
+
         /// <summary>Stable per-spawn-entry seed so two entries of one profile don't land on the same ring slots.</summary>
         public static int SeedForEntry(int encounterSeed, int entryIndex)
         {

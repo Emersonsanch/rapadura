@@ -560,7 +560,8 @@ namespace Rapadura.Gameplay.World.Biomes
 
                 int entrySeed = BiomeArenaRules.SeedForEntry(seed, entry);
                 _scatter.Clear();
-                BiomeArenaRules.ScatterOnRing(entrySeed, spawn.Count, profile.ScatterInnerRadius, profile.ScatterOuterRadius, _scatter);
+                BiomeArenaRules.ScatterOnRing(entrySeed, spawn.Count, BiomeArenaRules.PropInnerRadius(profile.ScatterInnerRadius),
+                    profile.ScatterOuterRadius, _scatter);
                 var random = new System.Random(entrySeed ^ 0x5bd1e995);
 
                 for (int i = 0; i < _scatter.Count; i++)
