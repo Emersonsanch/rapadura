@@ -325,7 +325,7 @@ namespace Rapadura.Core.Managers
         /// </summary>
         private void RegisterInitialCheckpoint()
         {
-            foreach (SpawnPoint spawnPoint in FindObjectsOfType<SpawnPoint>())
+            foreach (SpawnPoint spawnPoint in FindObjectsByType<SpawnPoint>(FindObjectsSortMode.None))
             {
                 if (spawnPoint.IsInitialSpawn)
                 {

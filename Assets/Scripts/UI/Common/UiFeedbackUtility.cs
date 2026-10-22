@@ -57,7 +57,7 @@ namespace Rapadura.UI.Common
 
         /// <summary>
         /// Briefly scales <paramref name="element"/> up then back to 1x — a generic "pop" for
-        /// clicked buttons/skill nodes. Uses <c>experimental.animation</c> directly since transform
+        /// clicked buttons/skill nodes. Uses <c>experimental.animation</c> directly since style
         /// scale has no USS transition-friendly single value to toggle here.
         /// </summary>
         public static void PulseScale(VisualElement element, float scaleAmount = 1.15f, float duration = DefaultDuration)
@@ -71,12 +71,12 @@ namespace Rapadura.UI.Common
 
             element.experimental.animation.Start(1f, scaleAmount, (int)(duration * 500f), (e, v) =>
             {
-                e.transform.scale = new Vector3(v, v, 1f);
+                e.style.scale = new StyleScale(new Scale(new Vector2(v, v)));
             }).OnCompleted(() =>
             {
                 element.experimental.animation.Start(scaleAmount, 1f, (int)(duration * 500f), (e, v) =>
                 {
-                    e.transform.scale = new Vector3(v, v, 1f);
+                    e.style.scale = new StyleScale(new Scale(new Vector2(v, v)));
                 });
             });
         }

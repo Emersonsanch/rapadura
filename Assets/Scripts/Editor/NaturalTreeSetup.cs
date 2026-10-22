@@ -19,6 +19,7 @@ namespace Rapadura.Editor
     {
         private const string TreesSourceFolder = "Assets/Models/Environment/Trees";
         private const string GeneratedFolder = "Assets/Models/Environment/Generated";
+        private const string TreeMaterialsFolder = "Assets/Models/Environment/Trees/Materials";
         private const string PrefabFolder = "Assets/Prefabs/Environment";
 
         private static readonly string[] SpeciesFiles =
@@ -176,6 +177,16 @@ namespace Rapadura.Editor
 
             Mesh sourceMesh = sourceMeshFilter.sharedMesh;
 
+            // The glb importer (glTFast) embeds its base-colour texture uncompressed (2048 RGB24,
+            // ~12 MB per tree in a build). A standalone material + extracted, compressed PNG lives in
+            // TreeMaterialsFolder; prefer it when present so regenerating trees keeps the small build.
+            Material[] treeMaterials = sourceRenderer.sharedMaterials;
+            var extractedMaterial = AssetDatabase.LoadAssetAtPath<Material>($"{TreeMaterialsFolder}/{Path.GetFileNameWithoutExtension(sourceFile)}.mat");
+            if (extractedMaterial != null)
+            {
+                treeMaterials = new[] { extractedMaterial };
+            }
+
             // Two LOD tiers: LOD0 keeps enough detail to read correctly up close (the grid-clustering
             // decimator in MeshDecimator.cs leaves faint seams at very aggressive ratios — confirmed
             // negligible at normal gameplay camera distance, but LOD0 stays gentler for whenever the
@@ -207,14 +218,14 @@ namespace Rapadura.Editor
             var lod0Filter = lod0Go.AddComponent<MeshFilter>();
             lod0Filter.sharedMesh = lod0;
             var lod0Renderer = lod0Go.AddComponent<MeshRenderer>();
-            lod0Renderer.sharedMaterials = sourceRenderer.sharedMaterials;
+            lod0Renderer.sharedMaterials = treeMaterials;
 
             GameObject lod1Go = new GameObject("LOD1");
             lod1Go.transform.SetParent(lodHolder.transform, worldPositionStays: false);
             var lod1Filter = lod1Go.AddComponent<MeshFilter>();
             lod1Filter.sharedMesh = lod1;
             var lod1Renderer = lod1Go.AddComponent<MeshRenderer>();
-            lod1Renderer.sharedMaterials = sourceRenderer.sharedMaterials;
+            lod1Renderer.sharedMaterials = treeMaterials;
 
             var lodGroup = root.AddComponent<LODGroup>();
             lodGroup.SetLODs(new[]
@@ -224,7 +235,7 @@ namespace Rapadura.Editor
             });
             lodGroup.RecalculateBounds();
 
-            foreach (Material material in sourceRenderer.sharedMaterials)
+            foreach (Material material in treeMaterials)
             {
                 if (material != null)
                 {

@@ -1443,7 +1443,7 @@ namespace Rapadura.UI.HUD
                 return;
             }
 
-            _root.transform.scale = new Vector3(_hudScale, _hudScale, 1f);
+            _root.style.scale = new StyleScale(new Scale(new Vector2(_hudScale, _hudScale)));
 
             Vector4 safeInset = ComputeSafeAreaInset();
 
