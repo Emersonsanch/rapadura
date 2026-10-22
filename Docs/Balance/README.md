@@ -321,5 +321,73 @@ o jogador — o que só deixa os bosses mais fáceis que o "nível esperado" da 
   lento (os bosses ficam mais fáceis conforme o jogador passa do nível esperado, só pela vida).
 - Purificação (Maria) e Terremoto (Joaquim) seguem abaixo da mediana; são skills de suporte/controle.
 
+---
+
+## 4. Defesa, velocidade e stats mortos (bug, não balanceamento)
+
+Até aqui **nenhum código lia `StatType.Defense` nem `StatType.MoveSpeed`**, e os inimigos nem tinham
+`BuffController` — então ~20 skills (Campo Magnético, Granada, Drone, Escudo das Raízes, Muralha,
+Provocação, Última Resistência, Terremoto, Escudo Sagrado, Milagre, Correntes, Eclipse, Névoa, Chuva de
+Flechas, Passo do Vento, Tempestade, shield, thorns, berserk, dash, freeze, ice_shard, invisibility)
+tinham metade do efeito (ou todo) jogado fora. **Todo debuff em inimigo** (lentidão, defesa, dano e as
+DoTs de Drone/Torreta/Exército/Disparo Explosivo/fireball/poison) era descartado.
+
+### 4.1 Fórmula de defesa (`DamageCalculator`, jogador e inimigos)
+
+Os dados usam Defense de dois jeitos, e cada um tem seu termo:
+
+- **Flat** (só os afixos `affix_sturdy` +2..5 e `affix_reinforced` +6..10, mais `Health._defense` /
+  `PlayerStats._baseDefense`, hoje 0 em todo lugar) = pontos de armadura na curva que já existia:
+  `armadura = 1 − def / (def + 100)` (100 pontos = metade do dano).
+- **PercentAdditive** (todas as skills — teste `EverySkillExpressesDefenseAndMoveSpeedAsPercent`) =
+  mudança direta do dano recebido: `+0,25` = 25% a menos, `−0,2` = 20% a mais. As fontes somam e a
+  soma é limitada a **[−1; +0,8]**: buffs empilhados nunca passam de 80% de redução (Última
+  Resistência sozinha já chega lá), debuffs empilhados no máximo **dobram** o dano.
+
+```
+dano_recebido = dano × (1 − def/(def+100)) × (1 − clamp(Σ%Defense, −1, 0,8))
+```
+
+- Inimigos/`Health`: dentro de `ComputeDamage` (depois vem resistência elemental, crítico, arredondamento
+  e dano mínimo 1, como antes).
+- Jogador/`PlayerStats`: em `ApplyDamageInternal` (todas as entradas de dano), **sem** arredondar nem
+  dano mínimo — sem defesa o multiplicador é exatamente 1 e nada muda.
+
+Exemplos: Campo Magnético → jogador recebe ×0,75; Muralha ×0,4; Última Resistência ×0,2; Drone no
+inimigo → ×1,2; Eclipse + Correntes + Drone → ×1,65; Berserk "Exposto" → ×1,3 nos alvos.
+
+### 4.2 Velocidade (`BuffController.GetMoveSpeedMultiplier`)
+
+`mult = GetModifiedValue(MoveSpeed, 1)` limitado a **[0,1; 2,5]**; aplicado a toda movimentação do
+`PlayerMotor` (andar/correr/agachar/slide/clique-para-mover/auto-run) e a patrulha/perseguição/fuga do
+`EnemyController` (`MoveInDirection`). O "Speed" do Animator (via `HorizontalVelocity`) e o
+`EnemyProceduralAnimator` (deslocamento real) seguem a velocidade efetiva.
+
+- 0,1 é o "Congelado" do `skill_freeze` (−90%); 2,5 é o dash (+150%).
+- **Enraizado** (`IsRooted`, mult 0): só quando **um único** efeito tem MoveSpeed ≤ −100%. Lentidões
+  parciais empilhadas (Correntes −70% + Eclipse −50%) param em 0,1 e não prendem o boss para sempre.
+  Enraizado ainda gira no lugar. Nenhuma skill atual enraíza.
+
+### 4.3 Outros stats ligados nesta passada
+
+| Stat | Antes | Agora |
+|---|---|---|
+| `AttackDamage` (inimigo) | debuffs de Provocação −25%, Névoa −30%, Purificação −20% ignorados | `EnemyController.EffectiveAttackDamage` no golpe |
+| `HealthRegen` / `ManaRegen` / `StaminaRegen` | afixo `affix_of_vigor` (+0,5..1,5 HP/s) ignorado | `PlayerStats.*RegenPerSecond` (as DoT/HoT usam HealthRegen com valor 0 e não mudam a regen) |
+| `MaxStamina` | afixo `affix_of_stamina` (+8..18) ignorado | `PlayerStats.MaxStamina` |
+
+`EnemyController.Awake` agora adiciona um `BuffController` (sem editar prefab/cena) e `ResetForSpawn`
+limpa efeitos/stun da vida anterior (pool).
+
+### 4.4 Impacto no balanceamento
+
+As invariantes de `BalanceInvariantsTests` (corrida de DPS só com ataque básico, sem skills) **não
+mudam**: inimigos e jogador continuam com defesa base 0, então o multiplicador é 1 nesse modelo.
+Tudo o que entrou é margem extra a favor do jogador — buffs de defesa reduzem o DPS dos bosses
+(Senhor da Guerra 15,4 → 11,5 DPS sob Campo Magnético, → 6,2 sob Muralha), debuffs de defesa e as DoTs
+que agora funcionam aceleram o TTK, lentidões dão espaço para fugir/kitar. Nenhum dado foi alterado.
+Se os bosses ficarem fáceis demais no playtest, as alavancas são: o teto de 0,8 (`DamageCalculator.MaxPercentDefense`)
+e o piso de −1 (`MinPercentDefense`), o 0,1 de `MinMoveSpeedMultiplier`, ou `_defense` base nos bosses.
+
 Depois de qualquer mudança em inimigos/skills: **Rapadura > Balance > Export Enemy and Skill
 CSVs** e confira os números de novo nesta análise (e rode `BalanceInvariantsTests`).
