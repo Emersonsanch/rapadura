@@ -35,8 +35,8 @@ namespace Rapadura.Tests
         private static readonly List<EnemySeed> Seeds = new List<EnemySeed>
         {
             new EnemySeed { id = "enemy_forest_wolf", name = "Lobo da Mata", isBoss = false, biome = BiomeType.Forest, maxHealth = 70f, attackDamage = 7f },
-            new EnemySeed { id = "enemy_forest_alpha_wolf", name = "Lobo Alfa", isBoss = true, biome = BiomeType.Forest, maxHealth = 430f, attackDamage = 18f },
-            new EnemySeed { id = "enemy_desert_scorpion", name = "Escorpião das Dunas", isBoss = false, biome = BiomeType.Desert, maxHealth = 85f, attackDamage = 9f },
+            new EnemySeed { id = "enemy_forest_alpha_wolf", name = "Lobo Alfa", isBoss = true, biome = BiomeType.Forest, maxHealth = 430f, attackDamage = 14f },
+            new EnemySeed { id = "enemy_desert_scorpion", name = "Escorpião das Dunas", isBoss = false, biome = BiomeType.Desert, maxHealth = 85f, attackDamage = 11f },
             new EnemySeed { id = "enemy_desert_ruin_guardian", name = "Guardião da Ruína", isBoss = true, biome = BiomeType.Desert, maxHealth = 505f, attackDamage = 22f },
             new EnemySeed { id = "enemy_mountain_stone_golem", name = "Golem de Pedra", isBoss = false, biome = BiomeType.Mountain, maxHealth = 100f, attackDamage = 13f },
             new EnemySeed { id = "enemy_mountain_warlord", name = "Senhor da Guerra da Montanha", isBoss = true, biome = BiomeType.Mountain, maxHealth = 580f, attackDamage = 16f },

@@ -35,7 +35,7 @@ MonoBehaviour:
   _waypointArrivalThreshold: 0.25
   _detectionRadius: 9
   _loseTargetRadius: 13
-  _attackRange: 1.1
+  _attackRange: 1.5
   _attackCooldown: 0.7
   _attackDamage: 7
   _fleeHealthThreshold: 0.2

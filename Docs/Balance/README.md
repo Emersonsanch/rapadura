@@ -515,3 +515,53 @@ nesse intervalo (um abate ou recompensa de missão nos primeiros frames) era apa
 guarda o XP recebido enquanto ainda existe estado carregado pendente para ele e o reaplica por cima
 do estado restaurado (subindo de nível a partir do nível restaurado). Um `Load` de slot continua
 deixando o arquivo vencer. Testes: `CarriedStateExperienceTests`.
+
+## 6. r7 — ajuste fino
+
+### 6.1 O que o playtest r7 mediu
+
+Mesmo protocolo do r6 (5 heróis × 4 biomas), já com os números da §5:
+
+- **Lutas normais: 4,3–7,4 s** em média; **bosses: 15–22 s**. As duas faixas batem com a meta da §5.3.
+- **Floresta matou heróis frágeis**: o Lobo Alfa (18 de dano a cada 2,4 s = 7,5 DPS) derrubava um
+  jogador de nível 2 (108 HP) em ~14 s, rápido demais para o primeiro boss (a alavanca já prevista na §5.3).
+- **Cavernas: os morcegos não conseguiam atacar.** O Enxame paira ~0,92 m acima do herói; o teste de
+  alcance usava distância 3D, que nunca ficava abaixo de ~1,2 m, então com `_attackRange` 1,1 o
+  inimigo orbitava sem nunca entrar no estado de ataque (bug, não balanceamento).
+
+### 6.2 Mudanças aplicadas (antes → depois)
+
+| Onde | Campo | Antes | Depois |
+|---|---|---|---|
+| `EnemyDetectionUtility.IsWithinAttackRange` (código) | teste de alcance | distância 3D | **distância horizontal (XZ)** com tolerância vertical de 2 m (`AttackVerticalTolerance`) |
+| Enxame de Morcegos | `_attackRange` | 1,1 | **1,5** |
+| Lobo Alfa (boss Floresta) | `_attackDamage` | 18 | **14** (DPS 7,5 → 5,83) |
+| Escorpião das Dunas | `_attackDamage` | 9 | **11** (DPS 6,92 → 8,46) |
+| Cura Divina (Maria) | `_cooldownSeconds` | 6 | **9** |
+
+Por quê:
+- **Alcance horizontal.** Inimigos de chão se comportam igual (mesma altura = mesma distância); quem
+  voa/paira passa a atacar independente da altura. A tolerância vertical evita golpes através de
+  andares/plataformas muito acima ou abaixo. O alcance 1,5 dos morcegos fica como dado para o enxame
+  não precisar encostar no herói.
+- **Lobo Alfa 18 → 14.** O boss passa a matar um jogador parado de nível 2 em **18,5 s** (era 14,4 s),
+  perto da meta de ~20 s; sob Muralha, 37,0 s. Só no ataque básico o jogador ainda precisa de 21,1 s,
+  então o boss continua vencendo quem não usa skills/defesa (21,1 > 1,05 × 18,5 = 19,4).
+- **Escorpião 9 → 11.** Recomendação do r7: mais pressão no comum do Deserto, para a dificuldade
+  não afrouxar depois de a Floresta ser aliviada.
+- **Cura Divina 6 → 9 s.** Recomendação do r7: com as lutas agora mais longas, a cura da Maria em
+  cooldown curto vira um estado permanente; com 9 s ela continua forte, mas passa a ser uma decisão
+  de tempo junto do Escudo Sagrado.
+
+Espelhos atualizados: `EnemyDatabaseSeeder` e `EnemyDatabaseSeederTests` (as skills de herói não têm
+seeder). `enemies.csv` e `skills.csv` regenerados com as fórmulas do `BalanceCsvMenu`.
+
+### 6.3 Invariantes
+
+Recalculado à mão o modelo do `BalanceInvariantsTests` (§5.3/§5.4): nenhuma faixa muda. O único boss
+alterado é o Lobo Alfa — 18,5 s para matar o jogador (faixa 12–40 s), 21,1 s só no básico (> 19,4 s),
+11,4–18,8 s com o kit (faixa 10–35 s, inalterado), todo herói vence sob Muralha (19,8 s < 37,0 s) e a
+Maithe vence sem defender (11,4 s < 18,5 s). Escorpião e morcegos só entram nas regras de HP dos comuns
+(inalteradas); a Cura Divina não causa dano, então não entra no kit. Teste novo de código:
+`EnemyDetectionUtilityTests.IsWithinAttackRange_FlyingEnemyHoveringAboveTarget_StillInRange` e
+`IsWithinAttackRange_FalseWhenHorizontallyTooFar_OrBeyondVerticalTolerance`.

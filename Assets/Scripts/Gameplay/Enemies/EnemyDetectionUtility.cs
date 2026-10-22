@@ -86,9 +86,33 @@ namespace Rapadura.Gameplay.Enemies
             return !IsWithinRadius(selfPosition, targetPosition, loseTargetRadius);
         }
 
+        /// <summary>
+        /// Height difference (m) between enemy and target pivots that still counts as "in reach" for an
+        /// attack. Flying enemies (cave bats hover ~0.92 m above the hero) used to never satisfy a 3D
+        /// distance check, so they orbited without ever attacking.
+        /// </summary>
+        public const float AttackVerticalTolerance = 2f;
+
+        /// <summary>
+        /// True when the target is within <paramref name="attackRange"/> on the horizontal (XZ) plane and
+        /// no more than <see cref="AttackVerticalTolerance"/> above/below. Ground enemies behave as before
+        /// (same height = same distance); flying/hovering enemies can now attack regardless of hover height.
+        /// </summary>
         public static bool IsWithinAttackRange(Vector3 selfPosition, Vector3 targetPosition, float attackRange)
         {
-            return IsWithinRadius(selfPosition, targetPosition, attackRange);
+            if (attackRange <= 0f)
+            {
+                return false;
+            }
+
+            if (Mathf.Abs(targetPosition.y - selfPosition.y) > AttackVerticalTolerance)
+            {
+                return false;
+            }
+
+            float dx = targetPosition.x - selfPosition.x;
+            float dz = targetPosition.z - selfPosition.z;
+            return dx * dx + dz * dz <= attackRange * attackRange;
         }
 
         /// <summary>Direction from origin to target flattened on the XZ plane, normalized. Returns Vector3.zero when the points coincide.</summary>

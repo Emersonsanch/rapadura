@@ -227,7 +227,7 @@ namespace Rapadura.Editor
                     loseTargetRadius = 18f,
                     attackRange = 1.8f,
                     attackCooldown = 2.4f,
-                    attackDamage = 18f,
+                    attackDamage = 14f,
                     fleeHealthThreshold = 0f,
                 },
 
@@ -248,7 +248,7 @@ namespace Rapadura.Editor
                     loseTargetRadius = 10f,
                     attackRange = 1.4f,
                     attackCooldown = 1.3f,
-                    attackDamage = 9f,
+                    attackDamage = 11f,
                 },
                 new EnemySeed
                 {
@@ -325,7 +325,7 @@ namespace Rapadura.Editor
                     fleeSpeed = 6f,
                     detectionRadius = 9f,
                     loseTargetRadius = 13f,
-                    attackRange = 1.1f,
+                    attackRange = 1.5f,
                     attackCooldown = 0.7f,
                     attackDamage = 7f,
                 },

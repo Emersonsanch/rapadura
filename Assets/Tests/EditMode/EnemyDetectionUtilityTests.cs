@@ -94,6 +94,24 @@ namespace Rapadura.Tests
         }
 
         [Test]
+        public void IsWithinAttackRange_FlyingEnemyHoveringAboveTarget_StillInRange()
+        {
+            // Cave bats hover ~0.92 m above the hero: 1.2 m horizontally + 0.92 m up is ~1.51 m in 3D,
+            // which a 3D check with range 1.5 rejected forever. Horizontal distance (1.2) is what counts.
+            Vector3 bat = new Vector3(1.2f, 0.92f, 0f);
+            Assert.IsTrue(EnemyDetectionUtility.IsWithinAttackRange(bat, Vector3.zero, 1.5f));
+            Assert.IsTrue(EnemyDetectionUtility.IsWithinAttackRange(new Vector3(0f, 0.92f, 1.0f), Vector3.zero, 1.1f));
+        }
+
+        [Test]
+        public void IsWithinAttackRange_FalseWhenHorizontallyTooFar_OrBeyondVerticalTolerance()
+        {
+            Assert.IsFalse(EnemyDetectionUtility.IsWithinAttackRange(new Vector3(1.6f, 0.92f, 0f), Vector3.zero, 1.5f));
+            Assert.IsFalse(EnemyDetectionUtility.IsWithinAttackRange(Vector3.zero, new Vector3(0.5f, EnemyDetectionUtility.AttackVerticalTolerance + 0.5f, 0f), 1.5f));
+            Assert.IsFalse(EnemyDetectionUtility.IsWithinAttackRange(Vector3.zero, Vector3.zero, 0f));
+        }
+
+        [Test]
         public void DirectionTowards_PointsFromOriginToTarget_IgnoringY()
         {
             Vector3 direction = EnemyDetectionUtility.DirectionTowards(Vector3.zero, new Vector3(0f, 5f, 10f));
