@@ -133,12 +133,14 @@
 }
 
 /* ---- Camera rotate (CameraController.RotateLeft/Right; Q/E on keyboard) ----
-   Right-aligned under the top-right menu cluster (which ends ~100px from the top; its buttons only
-   grow sideways with font scale, so a fixed top is safe). 48px tall pills: above the 44px minimum
-   touch target, smaller than the menu buttons since they're used less. */
+   Bottom-right, right-aligned just above the skill hotbar (hotbar bottom 132px + 64px slots = 196px,
+   so bottom 208px leaves a 12px gap). It used to sit under the top-right menu cluster (top 116px),
+   where it covered the QuestTracker card's title (right edge, top 130px) at 2400 and 1920 widths;
+   down here the only neighbours are the hotbar/action row, which never grow upward. 48px tall
+   pills: above the 44px minimum touch target, smaller than the menu buttons since they're used less. */
 .hud-camera-cluster {
     position: absolute;
-    top: 116px;
+    bottom: 208px;
     right: 32px;
     flex-direction: row;
     align-items: center;
@@ -367,6 +369,17 @@
 
 .hud-skill-button--cooldown {
     border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* While cooling down the centered countdown (.hud-skill-cooldown-label) owns the slot: the
+   fallback name would print right under the digits, so it's hidden (visibility keeps the layout)
+   and the icon dims behind the number. */
+.hud-skill-button--cooldown .hud-skill-name {
+    visibility: hidden;
+}
+
+.hud-skill-button--cooldown .hud-skill-icon {
+    opacity: 0.45;
 }
 
 /* Not enough mana/energy to pay the skill's cost right now. */

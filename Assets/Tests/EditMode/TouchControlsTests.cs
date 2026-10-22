@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 using Rapadura.Core.Systems;
@@ -191,19 +192,57 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void PinchLatch_HoldsUntilEveryFingerLifts()
+        public void PinchLatch_HoldsUntilEveryWorldFingerLifts()
         {
-            bool latched = TouchGestureTracker.NextPinchLatch(false, worldTouchCount: 2, activeTouchCount: 2);
+            bool latched = TouchGestureTracker.NextPinchLatch(false, worldTouchCount: 2);
             Assert.IsTrue(latched);
 
-            latched = TouchGestureTracker.NextPinchLatch(latched, worldTouchCount: 1, activeTouchCount: 1);
+            latched = TouchGestureTracker.NextPinchLatch(latched, worldTouchCount: 1);
             Assert.IsTrue(latched, "One finger of the pinch still down: a primaryTouch re-press must not walk.");
 
-            latched = TouchGestureTracker.NextPinchLatch(latched, 0, 0);
-            Assert.IsFalse(latched, "Screen empty: next tap walks again.");
+            latched = TouchGestureTracker.NextPinchLatch(latched, 0);
+            Assert.IsFalse(latched, "No world finger left: next tap walks again.");
 
-            Assert.IsFalse(TouchGestureTracker.NextPinchLatch(false, worldTouchCount: 1, activeTouchCount: 2),
+            Assert.IsFalse(TouchGestureTracker.NextPinchLatch(false, worldTouchCount: 1),
                 "Joystick thumb (UI) + one world finger is not a pinch.");
+        }
+
+        [Test]
+        public void PinchLatch_UiFingerStillDown_DoesNotKeepTheLatch()
+        {
+            // Thumb on Correr/joystick (UI, not counted as world) + a two-finger pinch on the ground.
+            bool latched = TouchGestureTracker.NextPinchLatch(false, worldTouchCount: 2);
+            Assert.IsTrue(latched);
+
+            // Both pinch fingers lift; the thumb stays on Correr: worldTouchCount drops to 0.
+            latched = TouchGestureTracker.NextPinchLatch(latched, worldTouchCount: 0);
+            Assert.IsFalse(latched, "Holding Correr after a pinch must not block the next tap-to-move.");
+        }
+
+        [Test]
+        public void PinchPair_StaysOnTheSameIds_WhenAThirdFingerComesAndGoes()
+        {
+            int id0 = TouchGestureTracker.NoTouch, id1 = TouchGestureTracker.NoTouch;
+
+            Assert.IsTrue(TouchGestureTracker.SelectPinchPair(new List<int> { 3, 5 }, ref id0, ref id1), "Pinch starts: new pair.");
+            Assert.AreEqual(3, id0);
+            Assert.AreEqual(5, id1);
+
+            // A third finger joins before the pair in slot order, then lifts: pair unchanged.
+            Assert.IsFalse(TouchGestureTracker.SelectPinchPair(new List<int> { 7, 3, 5 }, ref id0, ref id1));
+            Assert.AreEqual(3, id0);
+            Assert.AreEqual(5, id1);
+            Assert.IsFalse(TouchGestureTracker.SelectPinchPair(new List<int> { 5, 3 }, ref id0, ref id1), "Slot order swapped: same pair.");
+
+            // One pair finger lifts while two others remain: the pair re-forms (and reports it).
+            Assert.IsTrue(TouchGestureTracker.SelectPinchPair(new List<int> { 7, 5 }, ref id0, ref id1));
+            Assert.AreEqual(7, id0);
+            Assert.AreEqual(5, id1);
+
+            Assert.IsTrue(TouchGestureTracker.SelectPinchPair(new List<int> { 5 }, ref id0, ref id1), "Below two fingers: pair cleared.");
+            Assert.AreEqual(TouchGestureTracker.NoTouch, id0);
+            Assert.AreEqual(TouchGestureTracker.NoTouch, id1);
+            Assert.IsFalse(TouchGestureTracker.SelectPinchPair(new List<int>(), ref id0, ref id1));
         }
 
         // ------------------------------------------------------------------

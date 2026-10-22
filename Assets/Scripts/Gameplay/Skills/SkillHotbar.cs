@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Gameplay.Combat;
+using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Player;
 using Rapadura.Save;
 using UnityEngine;
@@ -30,6 +33,13 @@ namespace Rapadura.Gameplay.Skills
         [Tooltip("Optional — resolved from this GameObject if left empty.")]
         [SerializeField] private PlayerInputHandler _input;
 
+        [Header("Soft Targeting")]
+        [Tooltip("Half-angle (degrees) of the forward cone preferred when picking the nearest living enemy to aim a cast at.")]
+        [SerializeField] private float _softTargetConeHalfAngle = SkillTargeting.DefaultConeHalfAngle;
+
+        [Tooltip("Snap the caster's facing (yaw only) toward the soft target when a targeted cast fires.")]
+        [SerializeField] private bool _faceSoftTarget = true;
+
         private SkillManager _skillManager;
         private HotbarLoadout _loadout;
         private SaveManager _saveManager;
@@ -45,6 +55,15 @@ namespace Rapadura.Gameplay.Skills
         }
 
         public int SlotCount => Loadout.SlotCount;
+
+        /// <summary>Soft target picked by the last successful cast (null for self casts / nothing in reach). For HUD/tutorial hooks.</summary>
+        public ICombatTarget LastCastTarget { get; private set; }
+
+        /// <summary>
+        /// Overrides where soft-target candidates come from (tests). Null = every enabled
+        /// <see cref="EnemyController"/>'s <see cref="Health"/>.
+        /// </summary>
+        public Func<IEnumerable<ICombatTarget>> TargetCandidatesProvider { get; set; }
 
         private void Awake()
         {
@@ -162,16 +181,67 @@ namespace Rapadura.Gameplay.Skills
                 return false;
             }
 
-            return SkillManager.TryCast(instance, ComputeAimPoint(instance.Definition));
+            SkillAim aim = ComputeAim(instance.Definition);
+
+            // Single-target skills hit the soft target directly (explicit target) so collider
+            // placement/size can't make a correctly aimed cast whiff; area skills overlap at the aim point.
+            GameObject explicitTarget = aim.Mode == SkillAimMode.SingleTarget && aim.HasTarget ? aim.Target.Transform.gameObject : null;
+
+            if (!SkillManager.TryCast(instance, aim.Point, explicitTarget))
+            {
+                return false;
+            }
+
+            LastCastTarget = aim.Target;
+
+            if (_faceSoftTarget && aim.HasTarget)
+            {
+                FaceToward(aim.Target.Transform.position);
+            }
+
+            return true;
         }
 
         /// <summary>
-        /// No explicit target selection exists yet, so skills are aimed straight ahead at their
-        /// range (self-centred when Range is 0, e.g. buffs/heals/point-blank AoEs).
+        /// Soft target selection (see <see cref="SkillTargeting"/>): self buffs/heals at the caster,
+        /// area/single-target skills at the nearest living enemy in reach (forward cone preferred),
+        /// otherwise straight ahead at Range.
         /// </summary>
-        private Vector3 ComputeAimPoint(SkillDefinition skill)
+        public SkillAim ComputeAim(SkillDefinition skill)
         {
-            return transform.position + transform.forward * Mathf.Max(0f, skill.Range);
+            return SkillTargeting.ResolveAim(skill, transform.position, transform.forward, CollectCandidates(), _softTargetConeHalfAngle);
+        }
+
+        private IEnumerable<ICombatTarget> CollectCandidates()
+        {
+            if (TargetCandidatesProvider != null)
+            {
+                return TargetCandidatesProvider();
+            }
+
+            return EnemyHealthCandidates();
+        }
+
+        private static IEnumerable<ICombatTarget> EnemyHealthCandidates()
+        {
+            foreach (EnemyController enemy in EnemyController.EnabledEnemies)
+            {
+                if (enemy != null && enemy.Health != null)
+                {
+                    yield return enemy.Health;
+                }
+            }
+        }
+
+        private void FaceToward(Vector3 worldPoint)
+        {
+            Vector3 toTarget = worldPoint - transform.position;
+            toTarget.y = 0f;
+
+            if (toTarget.sqrMagnitude > 0.0001f)
+            {
+                transform.rotation = Quaternion.LookRotation(toTarget, Vector3.up);
+            }
         }
 
         // ---------------------------------------------------------------

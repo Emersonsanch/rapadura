@@ -6,8 +6,10 @@
     height: 100%;
     align-items: center;
     justify-content: flex-start;
-    /* Top strip, clear of the screen centre where combat happens (and of the HUD vitals row). */
-    padding-top: 72px;
+    /* Below the HUD top row (vitals / top-right buttons, ~100px) and the world map top bar, which
+       grows to ~140px once a region is cleared ("Próximo: ..." + boss button): at 72px the hint
+       covered the right half of that bar. Still clear of the screen centre where combat happens. */
+    padding-top: 168px;
     padding-left: 16px;
     padding-right: 16px;
 }
@@ -19,7 +21,8 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    background-color: rgba(34, 22, 12, 0.95);
+    /* Fully opaque: at 0.95 the map's region labels showed through the bubble. */
+    background-color: rgb(34, 22, 12);
     border-radius: 12px;
     border-width: 2px;
     border-color: rgb(240, 178, 70);

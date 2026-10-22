@@ -2,6 +2,7 @@ using System;
 using Rapadura.Core.Accessibility;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Cameras;
 using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Player;
@@ -63,13 +64,16 @@ namespace Rapadura.UI.HUD
     /// which would pair a virtual Gamepad and unpair the Touchscreen. Every press-driven button registers
     /// in the TrickleDown phase: Button's Clickable handles (and stops) PointerDown/Up at the target, so
     /// bubble-phase callbacks on it are not guaranteed to run. Held buttons also release on
-    /// PointerCancel/PointerCaptureOut (OS gesture, app switch) so Run can't stay stuck on.
+    /// PointerCancel/PointerCaptureOut (OS gesture, app switch) so Run can't stay stuck on; Android
+    /// Home / app switch may deliver none of those, so OnApplicationFocus/OnApplicationPause and an
+    /// Update check (held with no finger and no mouse button down) release the joystick and Run too.
     /// Crouch has no touch button on purpose (desktop/gamepad only): the bottom-right row would need a
     /// 4th button next to the hotbar, and crouching has no touch-relevant use yet (no stealth/cover).
     ///
     /// Android Back arrives as Keyboard.escapeKey, but the Keyboard isn't paired to the PlayerInput
     /// user under the Touch control scheme, so the Pause action never sees it: <see cref="Update"/>
-    /// polls Esc directly (deduped per frame with the Pause action), like WorldMapHudController does.
+    /// polls Esc directly (deduped per frame with the Pause action), like WorldMapHudController does —
+    /// only under the Touch scheme or while Esc is still bound to Pause, so a desktop rebind sticks.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class HudController : MonoBehaviour
@@ -193,6 +197,9 @@ namespace Rapadura.UI.HUD
         public const string SkillTreeActionName = "SkillTree";
         public const string CharacterSheetActionName = "CharacterSheet";
         public const string PauseActionName = "Pause";
+        /// <summary>PlayerControls.inputactions control scheme of phones/tablets (Android Back never reaches the Pause action there).</summary>
+        public const string TouchControlScheme = "Touch";
+        public const string EscapeBindingPath = "<Keyboard>/escape";
 
         private readonly ScreenExclusivityCoordinator _screens = new ScreenExclusivityCoordinator();
         private bool _gamePaused;
@@ -202,6 +209,7 @@ namespace Rapadura.UI.HUD
         private InputAction _skillTreeAction;
         private InputAction _characterSheetAction;
         private InputAction _pauseAction;
+        private PlayerInput _playerInputComponent;
         private bool _shortcutsBound;
         private float _nextShortcutBindAttempt;
         private const float ShortcutBindRetrySeconds = 1f;
@@ -241,7 +249,7 @@ namespace Rapadura.UI.HUD
             ApplyAdaptiveLayout();
             RegisterCallbacks();
             // CharacterSheetTexts.Get covers the "Ficha" button key and defers every other key to UiTexts.Get.
-            _localizer.Attach(_uiDocument.rootVisualElement, UpdateLevelLabel, CharacterSheetTexts.Get);
+            _localizer.Attach(_uiDocument.rootVisualElement, OnLanguageChanged, CharacterSheetTexts.Get);
             InitializeFromCurrentStats();
             ApplyTouchControlsVisibility();
         }
@@ -525,12 +533,110 @@ namespace Rapadura.UI.HUD
             // Android Back = Keyboard.escapeKey, unseen by the Pause action under the Touch scheme
             // (Keyboard not paired to the PlayerInput user) — poll it directly. Deduped per frame
             // with the Pause action, which already fires for Esc on desktop. Skipped while the player's
-            // input is deactivated (death screen: PlayerInput.DeactivateInput disables the actions).
+            // input is deactivated (death screen: PlayerInput.DeactivateInput disables the actions),
+            // and on desktop once Pause was rebound away from Esc (Settings > Controles), so Esc
+            // doesn't stay a hidden second Pause key.
             Keyboard keyboard = Keyboard.current;
-            if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame && (_pauseAction == null || _pauseAction.enabled))
+            if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame && (_pauseAction == null || _pauseAction.enabled)
+                && ShouldPollEscapeForPause(_pauseAction != null, _playerInputComponent != null ? _playerInputComponent.currentControlScheme : null, IsEscapeBoundTo(_pauseAction)))
             {
                 HandlePauseShortcutOncePerFrame();
             }
+
+            ReleaseStuckTouchControls();
+        }
+
+        /// <summary>
+        /// Pure rule for the Esc/Android-Back poll (EditMode-testable): always without a Pause action
+        /// to defer to; under the Touch control scheme (Android Back never reaches the action); or
+        /// while Esc is still bound to Pause (the poll then only dedups with the action). A desktop
+        /// player who rebound Pause to another key no longer gets Esc as a hidden second binding.
+        /// </summary>
+        public static bool ShouldPollEscapeForPause(bool hasPauseAction, string controlScheme, bool escapeBoundToPause)
+        {
+            if (!hasPauseAction)
+            {
+                return true;
+            }
+
+            return string.Equals(controlScheme, TouchControlScheme, StringComparison.Ordinal) || escapeBoundToPause;
+        }
+
+        /// <summary>Whether any of <paramref name="action"/>'s bindings (overrides included) is Keyboard Esc.</summary>
+        public static bool IsEscapeBoundTo(InputAction action)
+        {
+            if (action == null)
+            {
+                return false;
+            }
+
+            foreach (InputBinding binding in action.bindings)
+            {
+                if (string.Equals(binding.effectivePath, EscapeBindingPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Pure rule (EditMode-testable): a held joystick / Correr with no finger and no mouse button
+        /// down anymore is stuck — its release never reached the panel (Home / app switch, OS gesture).
+        /// </summary>
+        public static bool IsTouchControlStuck(bool held, int activeTouchCount, bool mouseButtonPressed)
+        {
+            return held && activeTouchCount <= 0 && !mouseButtonPressed;
+        }
+
+        private void ReleaseStuckTouchControls()
+        {
+            bool joystickHeld = _joystickPointerId != NoPointer;
+            bool runHeld = _playerInput != null && _playerInput.TouchRunHeld;
+            if (!joystickHeld && !runHeld)
+            {
+                return;
+            }
+
+            TouchGestureTracker.Refresh();
+            int touches = TouchGestureTracker.ActiveTouchCount;
+            Mouse mouse = Mouse.current;
+            bool mousePressed = mouse != null && (mouse.leftButton.isPressed || mouse.rightButton.isPressed || mouse.middleButton.isPressed);
+
+            if (IsTouchControlStuck(joystickHeld, touches, mousePressed))
+            {
+                ReleaseJoystick();
+            }
+
+            if (IsTouchControlStuck(runHeld, touches, mousePressed))
+            {
+                ReleaseRunButton();
+            }
+        }
+
+        // Android Home / app switch: the panel never sees the PointerUp, so a thumb that was on the
+        // joystick or Correr would keep walking/sprinting when the game comes back.
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (!hasFocus)
+            {
+                ReleaseTouchControls();
+            }
+        }
+
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus)
+            {
+                ReleaseTouchControls();
+            }
+        }
+
+        private void ReleaseTouchControls()
+        {
+            ReleaseJoystick();
+            ReleaseRunButton();
         }
 
         private void OnJumpButtonPressed(PointerDownEvent evt)
@@ -772,7 +878,7 @@ namespace Rapadura.UI.HUD
             {
                 // Font scale changed in Settings: re-format every slot name for the new width budget.
                 _skillSlotNameCharsPerLine = charsPerLine;
-                Array.Clear(_skillSlotShownSkill, 0, _skillSlotShownSkill.Length);
+                InvalidateSkillSlotNames();
             }
 
             for (int i = 0; i < SkillSlotCount; i++)
@@ -817,6 +923,22 @@ namespace Rapadura.UI.HUD
                 button.EnableInClassList("hud-skill-button--cooldown", onCooldown);
                 button.EnableInClassList("hud-skill-button--no-mana", cannotAfford);
             }
+        }
+
+        /// <summary>
+        /// Live language switch: the hotbar only re-applies a slot when its skill changes, so the
+        /// cached names would stay in the old language — forget them and rebuild.
+        /// </summary>
+        private void OnLanguageChanged()
+        {
+            UpdateLevelLabel();
+            InvalidateSkillSlotNames();
+            RefreshSkillHotbar();
+        }
+
+        private void InvalidateSkillSlotNames()
+        {
+            Array.Clear(_skillSlotShownSkill, 0, _skillSlotShownSkill.Length);
         }
 
         private void ApplySlotSkill(int slotIndex, SkillDefinition skill)
@@ -1151,6 +1273,7 @@ namespace Rapadura.UI.HUD
             }
 
             PlayerInput playerInput = _playerInput != null ? _playerInput.GetComponent<PlayerInput>() : null;
+            _playerInputComponent = playerInput;
             InputActionAsset actions = playerInput != null ? playerInput.actions : null;
 
             if (actions == null)
@@ -1186,6 +1309,7 @@ namespace Rapadura.UI.HUD
             _skillTreeAction = null;
             _characterSheetAction = null;
             _pauseAction = null;
+            _playerInputComponent = null;
             _shortcutsBound = false;
             _nextShortcutBindAttempt = 0f;
         }

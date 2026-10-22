@@ -95,6 +95,16 @@ namespace Rapadura.Save
             _carried.Clear();
         }
 
+        private int _restoreDepth;
+
+        /// <summary>
+        /// True while <see cref="Load"/> (session reset included) or <see cref="RestoreCarriedState"/>
+        /// is applying state, i.e. before their <see cref="GameLoadedEvent"/>. Events raised meanwhile
+        /// (e.g. InventoryChangedEvent from InventoryManager.RestoreState) are restores, not gameplay —
+        /// the tutorial's loot hint ignores them.
+        /// </summary>
+        public bool IsRestoring => _restoreDepth > 0;
+
         /// <summary>Registers a system so its state is included in future save/load operations.</summary>
         public void Register(ISaveable saveable)
         {
@@ -181,7 +191,10 @@ namespace Rapadura.Save
             }
 
             int restored = 0;
+            _restoreDepth++;
 
+            try
+            {
             foreach (SaveEntry entry in SortByRestoreOrder(pending))
             {
                 ISaveable saveable = _saveables[entry.key];
@@ -199,6 +212,11 @@ namespace Rapadura.Save
                     _carried.Remove(entry.key);
                     restored++;
                 }
+            }
+            }
+            finally
+            {
+                _restoreDepth--;
             }
 
             if (restored > 0)
@@ -361,6 +379,10 @@ namespace Rapadura.Save
 
             MigrateToCurrentVersion(saveData);
 
+            _restoreDepth++;
+
+            try
+            {
             // The loaded file replaces the whole session, carried state included — and so does
             // anything the file doesn't mention (see SessionReset).
             SessionReset?.ResetAll();
@@ -381,6 +403,11 @@ namespace Rapadura.Save
                 }
 
                 TryRestoreEntry(saveable, entry);
+            }
+            }
+            finally
+            {
+                _restoreDepth--;
             }
 
             if (usedBackup)

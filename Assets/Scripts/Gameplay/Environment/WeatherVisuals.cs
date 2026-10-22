@@ -1,5 +1,6 @@
 using System;
 using Rapadura.Core.DI;
+using Rapadura.Gameplay.Skills.Vfx;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -42,17 +43,27 @@ namespace Rapadura.Gameplay.Environment
     /// Fog colour is darkened at night via <see cref="TimeOfDayManager.DaylightFactor"/>.
     ///
     /// Scene wiring: add one to any object in Main/WorldMap. The emitter box follows
-    /// <see cref="_followTarget"/> (falls back to Camera.main). Assign <see cref="_particleMaterial"/>
-    /// for art-directed particles; otherwise a Sprites/Default material (always included) is used.
+    /// <see cref="_followTarget"/>, else the object tagged Player, else the ground point Camera.main
+    /// looks at -- never the camera itself: centring the rain column on the camera made drops fall
+    /// right past the lens, where a single stretched billboard filled the screen as a big pale quad
+    /// (playtest, map + arena). Assign <see cref="_particleMaterial"/> for art-directed particles;
+    /// otherwise the shared soft-dot particle material (<see cref="SkillVfxManager.GetSharedParticleMaterial"/>)
+    /// is used, so drops are soft-edged thin streaks rather than solid untextured rectangles.
     /// </summary>
     public class WeatherVisuals : MonoBehaviour
     {
         private const int WeatherTypeCount = 5;
+        private const string PlayerTag = "Player";
+
+        /// <summary>Cap on a single particle's on-screen size (fraction of the viewport) so a drop that does get close to the camera stays a speck.</summary>
+        public const float MaxParticleScreenSize = 0.02f;
 
         [SerializeField] private Transform _followTarget;
         [SerializeField] private Vector3 _emitterOffset = new Vector3(0f, 12f, 0f);
         [SerializeField] private Vector2 _emitterArea = new Vector2(24f, 24f);
         [SerializeField] [Min(0.02f)] private float _updateInterval = 0.1f;
+        [Tooltip("Without a follow target or Player, the emitter centres on the ground point Camera.main looks at (plane at this height).")]
+        [SerializeField] private float _fallbackGroundHeight = 0f;
         [SerializeField] private Material _particleMaterial;
         [Tooltip("Fog colour multiplier at full night.")]
         [SerializeField] private Color _nightFogTint = new Color(0.25f, 0.28f, 0.4f, 1f);
@@ -64,7 +75,7 @@ namespace Rapadura.Gameplay.Environment
         private WeatherSystem _weather;
         private TimeOfDayManager _time;
         private Transform _root;
-        private Material _runtimeMaterial;
+        private Transform _player;
         private float _timer;
 
         private bool _capturedFog;
@@ -110,14 +121,6 @@ namespace Rapadura.Gameplay.Environment
             }
         }
 
-        private void OnDestroy()
-        {
-            if (_runtimeMaterial != null)
-            {
-                Destroy(_runtimeMaterial);
-            }
-        }
-
         private void OnValidate()
         {
             BuildProfileLookup();
@@ -125,16 +128,9 @@ namespace Rapadura.Gameplay.Environment
 
         private void LateUpdate()
         {
-            Transform target = _followTarget;
-            if (target == null)
+            if (_root != null && TryResolveAnchor(out Vector3 anchor))
             {
-                Camera cam = Camera.main;
-                target = cam != null ? cam.transform : null;
-            }
-
-            if (target != null && _root != null)
-            {
-                _root.position = target.position + _emitterOffset;
+                _root.position = anchor + _emitterOffset;
             }
 
             _timer += Time.unscaledDeltaTime;
@@ -147,9 +143,62 @@ namespace Rapadura.Gameplay.Environment
             Apply();
         }
 
+        private bool TryResolveAnchor(out Vector3 anchor)
+        {
+            Transform target = _followTarget != null ? _followTarget : _player;
+
+            if (target != null)
+            {
+                anchor = target.position;
+                return true;
+            }
+
+            Camera cam = Camera.main;
+            if (cam == null)
+            {
+                anchor = default;
+                return false;
+            }
+
+            anchor = ResolveCameraGroundPoint(cam.transform.position, cam.transform.forward, _fallbackGroundHeight);
+            return true;
+        }
+
+        /// <summary>
+        /// Where a camera at <paramref name="cameraPosition"/> looking along <paramref name="cameraForward"/>
+        /// meets the horizontal plane at <paramref name="groundHeight"/> (capped at 60m); for a camera not
+        /// looking down, a point 6m ahead dropped to that plane. Keeps the rain column around what the
+        /// player sees instead of around the lens.
+        /// </summary>
+        public static Vector3 ResolveCameraGroundPoint(Vector3 cameraPosition, Vector3 cameraForward, float groundHeight)
+        {
+            const float MaxDistance = 60f;
+            const float FlatLookAhead = 6f;
+
+            if (cameraForward.y < -0.05f && cameraPosition.y > groundHeight)
+            {
+                float distance = Mathf.Min((cameraPosition.y - groundHeight) / -cameraForward.y, MaxDistance);
+                Vector3 hit = cameraPosition + cameraForward * distance;
+                hit.y = groundHeight;
+                return hit;
+            }
+
+            Vector3 ahead = cameraPosition + cameraForward * FlatLookAhead;
+            ahead.y = groundHeight;
+            return ahead;
+        }
+
         /// <summary>Re-samples the weather blend and pushes fog/particle values now.</summary>
         public void Apply()
         {
+            // Throttled with the rest of Apply (not per frame), and only while unresolved:
+            // the player can spawn after this object, and the world map has none.
+            if (_followTarget == null && _player == null)
+            {
+                GameObject player = GameObject.FindGameObjectWithTag(PlayerTag);
+                _player = player != null ? player.transform : null;
+            }
+
             if (_weather == null && !ServiceLocator.TryGet(out _weather))
             {
                 return;
@@ -274,7 +323,6 @@ namespace Rapadura.Gameplay.Environment
             main.maxParticles = Mathf.Max(1, profile.MaxParticles);
             main.simulationSpace = ParticleSystemSimulationSpace.World;
             main.startColor = profile.ParticleColor;
-            main.scalingMode = ParticleSystemScalingMode.Hierarchy;
 
             ParticleSystem.ShapeModule shape = system.shape;
             shape.enabled = true;
@@ -285,26 +333,45 @@ namespace Rapadura.Gameplay.Environment
             emission.rateOverTime = 0f;
 
             var renderer = go.GetComponent<ParticleSystemRenderer>();
-            renderer.sharedMaterial = GetMaterial();
+            renderer.sharedMaterial = _particleMaterial != null ? _particleMaterial : SkillVfxManager.GetSharedParticleMaterial(false);
+            ConfigurePrecipitation(weather, system, renderer);
+
+            return system;
+        }
+
+        /// <summary>
+        /// Per-weather particle look. Rain = thin stretched streaks (2.5cm wide, ~0.8m long at fall
+        /// speed), snow = small soft billboards, sand = short thin streaks. All ignore parent scale
+        /// (<see cref="ParticleSystemScalingMode.Local"/>; Hierarchy let a scaled parent blow drops up
+        /// into big quads) and are capped on screen by <see cref="MaxParticleScreenSize"/>.
+        /// </summary>
+        public static void ConfigurePrecipitation(WeatherType weather, ParticleSystem system, ParticleSystemRenderer renderer)
+        {
+            ParticleSystem.MainModule main = system.main;
+            main.scalingMode = ParticleSystemScalingMode.Local;
+
             renderer.shadowCastingMode = ShadowCastingMode.Off;
             renderer.receiveShadows = false;
             renderer.alignment = ParticleSystemRenderSpace.View;
+            renderer.minParticleSize = 0f;
+            renderer.maxParticleSize = MaxParticleScreenSize;
 
             switch (weather)
             {
                 case WeatherType.Rain:
                     main.startLifetime = 0.9f;
                     main.startSpeed = 16f;
-                    main.startSize = 0.06f;
+                    main.startSize = 0.025f;
                     renderer.renderMode = ParticleSystemRenderMode.Stretch;
+                    renderer.cameraVelocityScale = 0f;
                     renderer.lengthScale = 1f;
-                    renderer.velocityScale = 0.06f;
+                    renderer.velocityScale = 0.05f;
                     break;
 
                 case WeatherType.Snow:
                     main.startLifetime = 7f;
                     main.startSpeed = new ParticleSystem.MinMaxCurve(1.2f, 2.2f);
-                    main.startSize = new ParticleSystem.MinMaxCurve(0.08f, 0.16f);
+                    main.startSize = new ParticleSystem.MinMaxCurve(0.06f, 0.12f);
                     renderer.renderMode = ParticleSystemRenderMode.Billboard;
                     AddDrift(system, 0.6f, 0.4f);
                     break;
@@ -312,8 +379,9 @@ namespace Rapadura.Gameplay.Environment
                 case WeatherType.Sandstorm:
                     main.startLifetime = 2.5f;
                     main.startSpeed = new ParticleSystem.MinMaxCurve(2f, 5f);
-                    main.startSize = new ParticleSystem.MinMaxCurve(0.05f, 0.14f);
+                    main.startSize = new ParticleSystem.MinMaxCurve(0.02f, 0.05f);
                     renderer.renderMode = ParticleSystemRenderMode.Stretch;
+                    renderer.cameraVelocityScale = 0f;
                     renderer.lengthScale = 2f;
                     renderer.velocityScale = 0.03f;
                     AddDrift(system, 9f, 1.5f);
@@ -323,10 +391,9 @@ namespace Rapadura.Gameplay.Environment
                     main.startLifetime = 3f;
                     main.startSpeed = 2f;
                     main.startSize = 0.1f;
+                    renderer.renderMode = ParticleSystemRenderMode.Billboard;
                     break;
             }
-
-            return system;
         }
 
         private static void AddDrift(ParticleSystem system, float sideways, float jitter)
@@ -337,30 +404,6 @@ namespace Rapadura.Gameplay.Environment
             velocity.x = new ParticleSystem.MinMaxCurve(sideways - jitter, sideways + jitter);
             velocity.y = new ParticleSystem.MinMaxCurve(0f, 0f);
             velocity.z = new ParticleSystem.MinMaxCurve(-jitter, jitter);
-        }
-
-        private Material GetMaterial()
-        {
-            if (_particleMaterial != null)
-            {
-                return _particleMaterial;
-            }
-
-            if (_runtimeMaterial == null)
-            {
-                Shader shader = Shader.Find("Sprites/Default");
-                if (shader == null)
-                {
-                    shader = Shader.Find("Universal Render Pipeline/Particles/Unlit");
-                }
-
-                if (shader != null)
-                {
-                    _runtimeMaterial = new Material(shader) { name = "WeatherParticles (runtime)" };
-                }
-            }
-
-            return _runtimeMaterial;
         }
 
         private WeatherVisualProfile GetProfile(WeatherType weather)

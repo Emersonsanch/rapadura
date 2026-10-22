@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace Rapadura.Core.Systems
@@ -9,9 +11,92 @@ namespace Rapadura.Core.Systems
     /// (Attack, MoveClick). Covers uGUI via <see cref="EventSystem.IsPointerOverGameObject()"/> and
     /// UI Toolkit by picking every active <see cref="UIDocument"/> panel directly — scenes without an
     /// EventSystem (WorldMap.unity) never report UI Toolkit hits through the EventSystem.
+    ///
+    /// The documents are cached, not searched per call (hold-to-walk re-aims every 0.15 s, every
+    /// press and every new touch ask): a <c>FindObjectsByType</c> scan (inactive included, so a
+    /// screen enabled later is already known) runs lazily right after each sceneLoaded and again
+    /// <see cref="RescanDelays"/> later for documents a controller creates a moment after the load,
+    /// plus <see cref="Register"/> for self-bootstrapped DontDestroyOnLoad documents (forwarded by
+    /// <c>UiClickSoundBinder.Register</c>). Each query then only walks the cached list, skipping
+    /// disabled/destroyed entries — no allocation per call.
     /// </summary>
     public static class UiPointerQuery
     {
+        /// <summary>Seconds after a sceneLoaded (or <see cref="InvalidateDocumentCache"/>) at which the next query rescans the scene.</summary>
+        public static readonly float[] RescanDelays = { 0f, 0.5f, 2f };
+
+        private static readonly List<UIDocument> Documents = new List<UIDocument>();
+        private static readonly HashSet<UIDocument> KnownDocuments = new HashSet<UIDocument>();
+        private static readonly List<float> ScanTimes = new List<float>();
+        private static bool _subscribed;
+
+        /// <summary>Number of scene scans done so far (diagnostics/tests).</summary>
+        public static int ScanCount { get; private set; }
+
+        /// <summary>Documents currently cached (destroyed ones are dropped on the next scan).</summary>
+        public static int CachedDocumentCount => Documents.Count;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            Documents.Clear();
+            KnownDocuments.Clear();
+            ScanCount = 0;
+            _subscribed = false;
+            EnsureSubscribed();
+        }
+
+        private static void EnsureSubscribed()
+        {
+            if (_subscribed)
+            {
+                return;
+            }
+
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            _subscribed = true;
+            InvalidateDocumentCache();
+        }
+
+        private static void OnSceneLoaded(Scene scene, LoadSceneMode mode) => InvalidateDocumentCache();
+
+        /// <summary>Schedules the scene rescans (now, and after each <see cref="RescanDelays"/>); the scans themselves run lazily on the next queries.</summary>
+        public static void InvalidateDocumentCache()
+        {
+            float now = Time.unscaledTime;
+            ScanTimes.Clear();
+            foreach (float delay in RescanDelays)
+            {
+                ScanTimes.Add(now + delay);
+            }
+        }
+
+        /// <summary>Scene rescans still scheduled (diagnostics/tests).</summary>
+        public static int PendingRescanCount => ScanTimes.Count;
+
+        /// <summary>Drops the scheduled rescans (tests that measure the steady-state query path).</summary>
+        public static void CancelScheduledRescans() => ScanTimes.Clear();
+
+        /// <summary>Makes <paramref name="document"/> known right away (self-bootstrapped documents created outside the scans). Null-safe, idempotent.</summary>
+        public static void Register(UIDocument document)
+        {
+            if (document != null && KnownDocuments.Add(document))
+            {
+                Documents.Add(document);
+            }
+        }
+
+        public static void Unregister(UIDocument document)
+        {
+            if (document != null && KnownDocuments.Remove(document))
+            {
+                Documents.Remove(document);
+            }
+        }
+
+        public static bool IsCached(UIDocument document) => document != null && KnownDocuments.Contains(document);
+
         /// <param name="screenPosition">Screen space, bottom-left origin (like <c>Mouse.position</c>).</param>
         public static bool IsPointerOverUi(Vector2 screenPosition)
         {
@@ -20,8 +105,11 @@ namespace Rapadura.Core.Systems
                 return true;
             }
 
-            foreach (UIDocument document in Object.FindObjectsByType<UIDocument>(FindObjectsSortMode.None))
+            RescanIfDue();
+
+            for (int i = 0; i < Documents.Count; i++)
             {
+                UIDocument document = Documents[i];
                 if (document == null || !document.isActiveAndEnabled)
                 {
                     continue;
@@ -42,6 +130,50 @@ namespace Rapadura.Core.Systems
             }
 
             return false;
+        }
+
+        private static void RescanIfDue()
+        {
+            // EditMode / statics never initialised by SubsystemRegistration: behave like a fresh load
+            // (keeps documents registered before the first query).
+            EnsureSubscribed();
+
+            float now = Time.unscaledTime;
+            bool due = false;
+            for (int i = ScanTimes.Count - 1; i >= 0; i--)
+            {
+                if (now >= ScanTimes[i])
+                {
+                    ScanTimes.RemoveAt(i);
+                    due = true;
+                }
+            }
+
+            if (due)
+            {
+                ScanScene();
+            }
+        }
+
+        /// <summary>Adds every UIDocument in the loaded scenes (inactive included) and drops destroyed ones. Allocates; runs only on the scheduled rescans.</summary>
+        public static void ScanScene()
+        {
+            ScanCount++;
+
+            for (int i = Documents.Count - 1; i >= 0; i--)
+            {
+                if (Documents[i] == null)
+                {
+                    Documents.RemoveAt(i);
+                }
+            }
+
+            KnownDocuments.RemoveWhere(d => d == null);
+
+            foreach (UIDocument document in Object.FindObjectsByType<UIDocument>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                Register(document);
+            }
         }
 
         /// <summary>

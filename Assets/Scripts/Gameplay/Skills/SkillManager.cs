@@ -693,14 +693,22 @@ namespace Rapadura.Gameplay.Skills
             float radius = Mathf.Max(skill.AreaRadius, _minimumAreaRadius);
             Collider[] hits = Physics.OverlapSphere(aimPoint, radius, _targetLayerMask, QueryTriggerInteraction.Collide);
 
+            // Resolve each collider to its owning ICombatTarget (enemy colliders often live on child
+            // meshes, and CharacterController + hurtbox gives several per enemy) so a correctly aimed
+            // area hits every target exactly once — the old hit.gameObject lookup silently skipped
+            // child colliders, and the caster's own child colliders are excluded the same way.
+            var alreadyHit = new HashSet<ICombatTarget>();
+
             foreach (Collider hit in hits)
             {
-                if (hit.gameObject == gameObject)
+                ICombatTarget target = hit.GetComponentInParent<ICombatTarget>();
+
+                if (target == null || target.Transform == transform || !alreadyHit.Add(target))
                 {
                     continue;
                 }
 
-                ApplyToTarget(hit.gameObject, skill, damage, isCritical);
+                ApplyToTarget(target.Transform.gameObject, skill, damage, isCritical);
 
                 if (skill.ImpactVfxPrefab != null)
                 {

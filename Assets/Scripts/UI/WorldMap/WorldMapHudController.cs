@@ -60,6 +60,10 @@ namespace Rapadura.UI.WorldMap
         private const string LabelTravelableClass = "wm-region-label--travelable";
         private const string LabelLockedClass = "wm-region-label--locked";
         private const string LabelClearedClass = "wm-region-label--cleared";
+        private const string LabelCompactClass = "wm-region-label--compact";
+
+        /// <summary>Minimum panel-space gap (px) kept between region labels by the overlap avoidance.</summary>
+        private const float LabelGap = 4f;
         private const string BossButtonVisibleClass = "wm-boss-button--visible";
 
         [Header("Scene references (auto-resolved when empty)")]
@@ -87,6 +91,8 @@ namespace Rapadura.UI.WorldMap
             public Label Status;
             public RegionLabelStatus State = (RegionLabelStatus)(-1);
             public bool Cleared;
+            public bool FullCard = true;
+            public int Priority = 3;
             // Hidden until the first projection places it (no flash at the panel's top-left corner).
             public bool OnScreen;
             public Vector2 LastPosition = new Vector2(float.NaN, float.NaN);
@@ -95,6 +101,13 @@ namespace Rapadura.UI.WorldMap
         private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
         private readonly ScreenExclusivityCoordinator _screens = new ScreenExclusivityCoordinator();
         private readonly List<RegionLabel> _labels = new List<RegionLabel>();
+
+        // Overlap-avoidance scratch buffers, sized with _labels (no per-update allocation).
+        private Rect[] _labelRects = new Rect[0];
+        private Vector2[] _labelAnchors = new Vector2[0];
+        private int[] _labelPriorities = new int[0];
+        private float[] _labelOffsets = new float[0];
+        private int[] _labelOrder = new int[0];
 
         private UIDocument _uiDocument;
         private VisualElement _root;
@@ -611,6 +624,13 @@ namespace Rapadura.UI.WorldMap
                 _labels.Add(label);
             }
 
+            int count = _labels.Count;
+            _labelRects = new Rect[count];
+            _labelAnchors = new Vector2[count];
+            _labelPriorities = new int[count];
+            _labelOffsets = new float[count];
+            _labelOrder = new int[count];
+
             ForceLabelTextRefresh();
         }
 
@@ -656,12 +676,18 @@ namespace Rapadura.UI.WorldMap
                     localizationResolved = true;
                 }
 
+                bool fullCard = WorldMapHudPresenter.ShowFullLabel(graph, progress, label.Node.Region, status);
+
                 label.State = status;
                 label.Cleared = cleared;
+                label.FullCard = fullCard;
+                label.Priority = WorldMapHudPresenter.LabelPriority(status, fullCard);
                 label.Name.text = WorldMapHudPresenter.RegionName(localization, label.Node.Region);
                 string statusText = WorldMapHudPresenter.LabelStatusText(localization, graph, progress, label.Node.Region, status, bosses);
                 label.Status.text = statusText;
-                label.Status.style.display = string.IsNullOrEmpty(statusText) ? DisplayStyle.None : DisplayStyle.Flex;
+                // Far regions collapse to a name chip so cards don't stack over each other.
+                label.Status.style.display = !fullCard || string.IsNullOrEmpty(statusText) ? DisplayStyle.None : DisplayStyle.Flex;
+                label.Root.EnableInClassList(LabelCompactClass, !fullCard);
                 label.Root.EnableInClassList(LabelCurrentClass, status == RegionLabelStatus.Current);
                 label.Root.EnableInClassList(LabelTravelableClass, status == RegionLabelStatus.Travelable);
                 label.Root.EnableInClassList(LabelLockedClass, status == RegionLabelStatus.Locked);
@@ -669,10 +695,14 @@ namespace Rapadura.UI.WorldMap
             }
         }
 
-        /// <summary>Projects every node onto the panel. Struct-only math and style writes: no allocation.</summary>
+        /// <summary>
+        /// Projects every node onto the panel, then nudges overlapping labels apart vertically
+        /// (<see cref="WorldMapHudPresenter.ResolveLabelOverlaps"/>: current/travelable labels keep
+        /// their spot, lower-priority ones move). Struct-only math and style writes: no allocation.
+        /// </summary>
         private void UpdateLabelPositions()
         {
-            if (_labels.Count == 0 || _root == null)
+            if (_labels.Count == 0 || _root == null || _labelRects.Length != _labels.Count)
             {
                 return;
             }
@@ -692,9 +722,14 @@ namespace Rapadura.UI.WorldMap
                 }
             }
 
-            for (int i = 0; i < _labels.Count; i++)
+            int count = _labels.Count;
+
+            for (int i = 0; i < count; i++)
             {
                 RegionLabel label = _labels[i];
+                _labelRects[i] = default;
+                _labelPriorities[i] = label.Priority;
+
                 if (label.Node == null)
                 {
                     continue;
@@ -714,7 +749,28 @@ namespace Rapadura.UI.WorldMap
                     continue;
                 }
 
-                Vector2 position = RuntimePanelUtils.CameraTransformWorldToPanel(panel, world, _camera);
+                Vector2 anchor = RuntimePanelUtils.CameraTransformWorldToPanel(panel, world, _camera);
+                _labelAnchors[i] = anchor;
+
+                // USS anchors the label's bottom-centre on the point (translate: -50% -100%). Before
+                // the first layout pass the size is NaN/0 and the label simply isn't avoided yet.
+                Rect layout = label.Root.layout;
+                float width = float.IsNaN(layout.width) ? 0f : layout.width;
+                float height = float.IsNaN(layout.height) ? 0f : layout.height;
+                _labelRects[i] = new Rect(anchor.x - width * 0.5f, anchor.y - height, width, height);
+            }
+
+            WorldMapHudPresenter.ResolveLabelOverlaps(_labelRects, _labelPriorities, count, LabelGap, _labelOffsets, _labelOrder);
+
+            for (int i = 0; i < count; i++)
+            {
+                RegionLabel label = _labels[i];
+                if (label.Node == null || !label.OnScreen)
+                {
+                    continue;
+                }
+
+                Vector2 position = _labelAnchors[i] + new Vector2(0f, _labelOffsets[i]);
                 if ((position - label.LastPosition).sqrMagnitude < 0.25f)
                 {
                     continue;

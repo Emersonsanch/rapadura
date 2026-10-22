@@ -2,6 +2,7 @@ using Rapadura.Core.Accessibility;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.World.Map;
@@ -22,19 +23,25 @@ namespace Rapadura.UI.Encounter
     /// Self-bootstrapping like <c>TutorialHintController</c>: one DontDestroyOnLoad host created after
     /// the first scene loads (no scene wiring), borrowing the PanelSettings of the HUD (or any other
     /// UIDocument). The view is built in code, has picking-mode Ignore everywhere (never blocks
-    /// combat input) and disappears after <see cref="_displaySeconds"/> of real time. With
+    /// combat input) and disappears after <see cref="_displaySeconds"/> of game time. With
     /// "Reduzir Flashes" on it appears/disappears without the fade.
     ///
     /// The same banner plays the encounter intro (<see cref="EncounterIntroEvent"/>) for normal
-    /// encounters: "Prepare-se!" over a 2… 1… countdown (real time) matching the grace during which
-    /// the enemies hold their aggro, then "Já!" briefly. Boss encounters keep the boss banner.
+    /// encounters: "Prepare-se!" over a 2… 1… countdown matching the grace during which the enemies
+    /// hold their aggro, then "Já!" briefly. Boss encounters keep the boss banner.
+    ///
+    /// Timing runs on scaled time (<see cref="Time.deltaTime"/>), like the enemies' aggro hold in
+    /// EnemyController, so pausing mid-countdown can't let the number reach "Já!" while the enemies
+    /// still wait (or the other way round). While <see cref="GameplayPause.IsPaused"/> the banner is
+    /// hidden and its clock held: its document sorts above the HUD (<see cref="SortingOrder"/>), and
+    /// the pause menu / modals sort lower, so it would otherwise draw over them.
     /// </summary>
     public class BossIntroBannerController : MonoBehaviour
     {
         public const float SortingOrder = 850f;
         private const float FadeSeconds = 0.35f;
 
-        [Tooltip("Seconds the banner stays fully visible (real time).")]
+        [Tooltip("Seconds the banner stays fully visible (game time; held while paused).")]
         [SerializeField, Min(0.5f)] private float _displaySeconds = 2.5f;
 
         private static BossIntroBannerController _instance;
@@ -44,7 +51,11 @@ namespace Rapadura.UI.Encounter
         private VisualElement _banner;
         private Label _titleLabel;
         private Label _nameLabel;
-        private IVisualElementScheduledItem _hideItem;
+        private float _bossVisibleRemaining;
+        private bool _fadingOut;
+        private bool _noMotion;
+        private bool _hiddenForPause;
+        private IVisualElementScheduledItem _fadeHideItem;
 
         /// <summary>The boss currently announced (null when hidden).</summary>
         public EnemyDefinition ShownBoss { get; private set; }
@@ -53,8 +64,8 @@ namespace Rapadura.UI.Encounter
         public bool IsShowingPrepare { get; private set; }
 
         private const float GoDisplaySeconds = 0.6f;
-        private IVisualElementScheduledItem _countdownItem;
-        private float _countdownEndsAt;
+        // Scaled seconds left of the grace countdown (negative down to -GoDisplaySeconds while "Já!" shows).
+        private float _countdownRemaining;
         private int _lastCountdownValue;
 
         /// <summary>
@@ -62,6 +73,17 @@ namespace Rapadura.UI.Encounter
         /// seconds rounded up ("2", "1"), 0 once the grace is over (the "Já!" frame).
         /// </summary>
         public static int CountdownValue(float remainingSeconds) => remainingSeconds <= 0f ? 0 : Mathf.CeilToInt(remainingSeconds);
+
+        /// <summary>
+        /// One frame of the banner clock (EditMode-testable): held while <paramref name="paused"/>,
+        /// otherwise reduced by the scaled <paramref name="deltaTime"/> (timeScale 0 / hit-stop slow it
+        /// exactly like the enemies' aggro hold).
+        /// </summary>
+        public static float AdvanceClock(float remainingSeconds, float deltaTime, bool paused) =>
+            paused ? remainingSeconds : remainingSeconds - Mathf.Max(0f, deltaTime);
+
+        /// <summary>Pure visibility rule: an active banner is hidden while gameplay is paused (pause menu / modals sort below it).</summary>
+        public static bool ShouldDisplay(bool active, bool paused) => active && !paused;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
@@ -138,7 +160,7 @@ namespace Rapadura.UI.Encounter
             }
         }
 
-        /// <summary>"Prepare-se!" + countdown for <paramref name="seconds"/> of real time, then "Já!".</summary>
+        /// <summary>"Prepare-se!" + countdown for <paramref name="seconds"/> of game (scaled) time, then "Já!".</summary>
         public void ShowPrepare(float seconds)
         {
             if (seconds <= 0f || !EnsureBound())
@@ -150,45 +172,80 @@ namespace Rapadura.UI.Encounter
             _titleLabel.text = BossTexts.Get(localization, BossTexts.PrepareTitle);
             ShownBoss = null;
             IsShowingPrepare = true;
-            _countdownEndsAt = Time.unscaledTime + seconds;
+            _countdownRemaining = seconds;
             _lastCountdownValue = int.MinValue;
             UpdateCountdown(localization);
 
             ServiceLocator.TryGet(out AccessibilitySettings accessibility);
-            bool noMotion = accessibility != null && accessibility.ReduceFlashEffects;
-            SetFade(noMotion ? 0f : FadeSeconds * 0.5f);
-            _banner.style.display = DisplayStyle.Flex;
+            _noMotion = accessibility != null && accessibility.ReduceFlashEffects;
+            SetFade(_noMotion ? 0f : FadeSeconds * 0.5f);
+            BeginShowing();
             _banner.style.opacity = 1f;
             UiAccessibilityApplier.RequestRefresh();
-
-            _hideItem?.Pause();
-            _hideItem = null;
-            _countdownItem?.Pause();
-            _countdownItem = _banner.schedule.Execute(() => TickCountdown(noMotion)).Every(100);
         }
 
-        private void TickCountdown(bool noMotion)
+        private void Update()
         {
-            if (!IsShowingPrepare || _banner == null)
+            if (_banner == null || (!IsShowingPrepare && ShownBoss == null))
             {
-                _countdownItem?.Pause();
                 return;
             }
 
-            ServiceLocator.TryGet(out LocalizationManager localization);
-            UpdateCountdown(localization);
+            bool paused = GameplayPause.IsPaused;
+            ApplyPauseVisibility(paused);
 
-            if (Time.unscaledTime >= _countdownEndsAt + GoDisplaySeconds)
+            if (paused || _fadingOut)
             {
-                _countdownItem?.Pause();
-                _countdownItem = null;
-                FadeOut(noMotion);
+                return;
             }
+
+            float deltaTime = Time.deltaTime;
+
+            if (IsShowingPrepare)
+            {
+                _countdownRemaining = AdvanceClock(_countdownRemaining, deltaTime, paused);
+                ServiceLocator.TryGet(out LocalizationManager localization);
+                UpdateCountdown(localization);
+
+                if (_countdownRemaining <= -GoDisplaySeconds)
+                {
+                    FadeOut(_noMotion);
+                }
+
+                return;
+            }
+
+            _bossVisibleRemaining = AdvanceClock(_bossVisibleRemaining, deltaTime, paused);
+            if (_bossVisibleRemaining <= 0f)
+            {
+                FadeOut(_noMotion);
+            }
+        }
+
+        private void ApplyPauseVisibility(bool paused)
+        {
+            if (paused == _hiddenForPause)
+            {
+                return;
+            }
+
+            _hiddenForPause = paused;
+            _banner.style.display = ShouldDisplay(true, paused) ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        /// <summary>Shared start of both banners: visible now (Update hides it again if gameplay is paused).</summary>
+        private void BeginShowing()
+        {
+            _fadingOut = false;
+            _hiddenForPause = false;
+            _fadeHideItem?.Pause();
+            _fadeHideItem = null;
+            _banner.style.display = DisplayStyle.Flex;
         }
 
         private void UpdateCountdown(LocalizationManager localization)
         {
-            int value = CountdownValue(_countdownEndsAt - Time.unscaledTime);
+            int value = CountdownValue(_countdownRemaining);
             if (value == _lastCountdownValue)
             {
                 return;
@@ -211,14 +268,14 @@ namespace Rapadura.UI.Encounter
             _nameLabel.text = boss.LocalizedName(localization);
             ShownBoss = boss;
             IsShowingPrepare = false;
-            _countdownItem?.Pause();
-            _countdownItem = null;
+            _bossVisibleRemaining = Mathf.Max(0.5f, _displaySeconds);
 
             ServiceLocator.TryGet(out AccessibilitySettings accessibility);
             bool noMotion = accessibility != null && accessibility.ReduceFlashEffects;
+            _noMotion = noMotion;
             SetFade(noMotion ? 0f : FadeSeconds);
 
-            _banner.style.display = DisplayStyle.Flex;
+            BeginShowing();
             if (noMotion)
             {
                 _banner.style.opacity = 1f;
@@ -231,11 +288,6 @@ namespace Rapadura.UI.Encounter
             }
 
             UiAccessibilityApplier.RequestRefresh();
-
-            _hideItem?.Pause();
-            long visibleMs = (long)(Mathf.Max(0.5f, _displaySeconds) * 1000f);
-            _hideItem = _banner.schedule.Execute(() => FadeOut(noMotion));
-            _hideItem.ExecuteLater(visibleMs);
         }
 
         private void FadeOut(bool noMotion)
@@ -245,6 +297,7 @@ namespace Rapadura.UI.Encounter
                 return;
             }
 
+            _fadingOut = true;
             _banner.style.opacity = 0f;
             if (noMotion)
             {
@@ -252,17 +305,20 @@ namespace Rapadura.UI.Encounter
                 return;
             }
 
-            _banner.schedule.Execute(Hide).ExecuteLater((long)(FadeSeconds * 1000f));
+            // The fade itself is cosmetic (real time is fine); while paused Update keeps it hidden.
+            _fadeHideItem?.Pause();
+            _fadeHideItem = _banner.schedule.Execute(Hide);
+            _fadeHideItem.ExecuteLater((long)(FadeSeconds * 1000f));
         }
 
         private void Hide()
         {
             ShownBoss = null;
             IsShowingPrepare = false;
-            _hideItem?.Pause();
-            _hideItem = null;
-            _countdownItem?.Pause();
-            _countdownItem = null;
+            _fadingOut = false;
+            _hiddenForPause = false;
+            _fadeHideItem?.Pause();
+            _fadeHideItem = null;
 
             if (_banner != null)
             {

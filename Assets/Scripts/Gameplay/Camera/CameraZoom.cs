@@ -18,6 +18,8 @@ namespace Rapadura.Gameplay.Cameras
         private float _currentDistance;
         private float _velocity;
         private float _previousPinchDistance = -1f;
+        private int _pinchId0 = TouchGestureTracker.NoTouch;
+        private int _pinchId1 = TouchGestureTracker.NoTouch;
 
         public CameraZoom(CameraSettings settings)
         {
@@ -27,6 +29,9 @@ namespace Rapadura.Gameplay.Cameras
         }
 
         public float CurrentDistance => _currentDistance;
+
+        /// <summary>Distance the smoothing is heading to (after clamping).</summary>
+        public float TargetDistance => _targetDistance;
 
         /// <summary>Call once per frame with real input; advances the smoothed distance.</summary>
         public void Tick(float deltaTime)
@@ -50,32 +55,58 @@ namespace Rapadura.Gameplay.Cameras
             // pinch-zoom garbage deltas whenever a touchscreen merely existed.
             TouchGestureTracker.Refresh();
 
-            if (TouchGestureTracker.IsPinching)
-            {
-                Vector2 touch0 = TouchGestureTracker.WorldTouch0;
-                Vector2 touch1 = TouchGestureTracker.WorldTouch1;
-                float currentPinchDistance = Vector2.Distance(touch0, touch1);
+            float scroll = Mouse.current != null ? Mouse.current.scroll.ReadValue().y : 0f;
+            ApplyInput(GameplayPause.IsPaused, TouchGestureTracker.IsPinching,
+                TouchGestureTracker.PinchId0, TouchGestureTracker.PinchId1,
+                TouchGestureTracker.WorldTouch0, TouchGestureTracker.WorldTouch1,
+                scroll, Time.deltaTime);
+        }
 
-                if (_previousPinchDistance > 0f)
+        /// <summary>
+        /// One frame of zoom input (EditMode-testable). Nothing zooms while gameplay is paused — the
+        /// pause menu and full-screen modals don't block a world pinch through UI picking. The pinch
+        /// is measured between the pair <paramref name="pinchId0"/>/<paramref name="pinchId1"/>: when
+        /// that pair changes (a third finger lifted, the pair re-formed) the distance is re-baselined
+        /// instead of producing a zoom jump.
+        /// </summary>
+        public void ApplyInput(bool paused, bool pinching, int pinchId0, int pinchId1, Vector2 touch0, Vector2 touch1, float scroll, float deltaTime)
+        {
+            if (paused)
+            {
+                EndPinch();
+                return;
+            }
+
+            if (pinching)
+            {
+                float currentPinchDistance = Vector2.Distance(touch0, touch1);
+                bool samePair = (pinchId0 == _pinchId0 && pinchId1 == _pinchId1) || (pinchId0 == _pinchId1 && pinchId1 == _pinchId0);
+
+                if (_previousPinchDistance > 0f && samePair)
                 {
                     float pinchDelta = currentPinchDistance - _previousPinchDistance;
                     SetTargetDistance(_targetDistance - pinchDelta * 0.02f);
                 }
 
                 _previousPinchDistance = currentPinchDistance;
+                _pinchId0 = pinchId0;
+                _pinchId1 = pinchId1;
                 return;
             }
 
-            _previousPinchDistance = -1f;
+            EndPinch();
 
-            if (Mouse.current != null)
+            if (Mathf.Abs(scroll) > 0.01f)
             {
-                float scroll = Mouse.current.scroll.ReadValue().y;
-                if (Mathf.Abs(scroll) > 0.01f)
-                {
-                    SetTargetDistance(_targetDistance - scroll * _settings.zoomSpeed * Time.deltaTime);
-                }
+                SetTargetDistance(_targetDistance - scroll * _settings.zoomSpeed * deltaTime);
             }
+        }
+
+        private void EndPinch()
+        {
+            _previousPinchDistance = -1f;
+            _pinchId0 = TouchGestureTracker.NoTouch;
+            _pinchId1 = TouchGestureTracker.NoTouch;
         }
     }
 }

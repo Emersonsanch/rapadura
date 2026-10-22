@@ -65,6 +65,8 @@ namespace Rapadura.Gameplay.Tutorial
         private bool _profileLoaded;
         private TutorialStepDefinition _lastNotifiedHint;
         private float _nextCraftableCheck = float.NegativeInfinity;
+        // An inventory change was skipped by the throttle: probe once the interval elapses (Tick or the next change).
+        private bool _craftableCheckPending;
         // Player's inventory for the default probe, cached until its scene unloads (Unity-null then).
         private InventoryManager _cachedInventory;
 
@@ -93,6 +95,12 @@ namespace Rapadura.Gameplay.Tutorial
 
         /// <summary>Clock for <see cref="CraftableCheckIntervalSeconds"/>; defaults to <see cref="Time.unscaledTime"/>.</summary>
         public Func<float> Clock { get; set; } = () => Time.unscaledTime;
+
+        /// <summary>
+        /// True while a save is being applied (<see cref="SaveManager.IsRestoring"/>): inventory
+        /// changes then are restores, not loot. Defaults to a ServiceLocator lookup; tests replace it.
+        /// </summary>
+        public Func<bool> IsRestoringSave { get; set; } = DefaultIsRestoringSave;
 
         public IReadOnlyList<TutorialStepDefinition> Steps => _steps;
 
@@ -192,6 +200,7 @@ namespace Rapadura.Gameplay.Tutorial
             _lastNotifiedHint = null;
             _cachedInventory = null;
             _nextCraftableCheck = float.NegativeInfinity;
+            _craftableCheckPending = false;
         }
 
         private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode) => _cachedInventory = null;
@@ -360,6 +369,13 @@ namespace Rapadura.Gameplay.Tutorial
         {
             _flowState = evt.Current;
 
+            // Back on the title / hero select (return-to-title): the next session's first inventory
+            // change (a Continuar restore) must not inherit this session's "enemy defeated".
+            if (IsFrontEnd)
+            {
+                _enemyDefeatedThisSession = false;
+            }
+
             if (evt.Current == GameFlowState.World)
             {
                 Trigger(TutorialSteps.WorldMap);
@@ -401,7 +417,9 @@ namespace Rapadura.Gameplay.Tutorial
         private void OnInventoryChanged(InventoryChangedEvent evt)
         {
             // Starting gear / save restores also change the inventory: only loot after a fight counts.
-            if (_enemyDefeatedThisSession)
+            // A restore (Continuar / carried state) publishes InventoryChangedEvent before its
+            // GameLoadedEvent resets the flag, so changes during it never count as loot.
+            if (_enemyDefeatedThisSession && !IsRestoringNow())
             {
                 Trigger(TutorialSteps.Loot);
             }
@@ -411,22 +429,47 @@ namespace Rapadura.Gameplay.Tutorial
 
         private void OnRecipeUnlocked(RecipeUnlockedEvent evt) => CheckCraftable(force: true);
 
+        /// <summary>Whether a throttled inventory change still awaits its trailing crafting probe.</summary>
+        public bool HasPendingCraftableCheck => _craftableCheckPending;
+
+        /// <summary>
+        /// Cheap per-frame hook (TutorialHintController.Update): runs the trailing crafting probe of a
+        /// throttled burst once the interval has elapsed, so the last change of a burst (the one that
+        /// completed a recipe's materials) is never lost when no further change follows.
+        /// </summary>
+        public void Tick()
+        {
+            if (!_craftableCheckPending)
+            {
+                return;
+            }
+
+            float now = Clock != null ? Clock() : Time.unscaledTime;
+            if (now >= _nextCraftableCheck)
+            {
+                CheckCraftable(force: false);
+            }
+        }
+
         private void CheckCraftable(bool force)
         {
             if (!HintsEnabled || IsFrontEnd || CraftableRecipeProbe == null ||
                 IsCompleted(TutorialSteps.Crafting) || IsPending(TutorialSteps.Crafting) || GetStep(TutorialSteps.Crafting) == null)
             {
+                _craftableCheckPending = false;
                 return;
             }
 
-            // Throttled: a skipped change is picked up by the next one after the interval (the hint
-            // is "first time it happens", a second of delay is harmless).
+            // Throttled: a change inside the interval is remembered and probed once the interval
+            // elapses (Tick, or the next change) — trailing edge, so a burst's last change counts.
             float now = Clock != null ? Clock() : Time.unscaledTime;
             if (!force && now < _nextCraftableCheck)
             {
+                _craftableCheckPending = true;
                 return;
             }
 
+            _craftableCheckPending = false;
             _nextCraftableCheck = now + Mathf.Max(0f, CraftableCheckIntervalSeconds);
 
             if (CraftableRecipeProbe())
@@ -461,6 +504,17 @@ namespace Rapadura.Gameplay.Tutorial
         private void OnNewSession(NewSessionResetEvent evt) => _enemyDefeatedThisSession = false;
 
         private void OnGameLoaded(GameLoadedEvent evt) => _enemyDefeatedThisSession = false;
+
+        private bool IsRestoringNow()
+        {
+            Func<bool> probe = IsRestoringSave;
+            return probe != null && probe();
+        }
+
+        private static bool DefaultIsRestoringSave()
+        {
+            return ServiceLocator.TryGet(out SaveManager saveManager) && saveManager.IsRestoring;
+        }
 
         private bool DefaultCraftableRecipeProbe()
         {

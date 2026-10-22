@@ -205,6 +205,19 @@
     border-color: rgba(255, 255, 255, 0.2);
 }
 
+/* Far regions (not current, travelable or the adjacent locked goal) collapse to a name chip so
+   cards don't pile up; WorldMapHudController also nudges overlapping labels apart vertically. */
+.wm-region-label--compact {
+    min-width: 0;
+    padding: 3px 8px;
+    border-radius: 8px;
+    opacity: 0.85;
+}
+
+.wm-region-label--compact .wm-region-label-name {
+    font-size: 13px;
+}
+
 .wm-region-label--current {
     border-color: rgb(255, 210, 90);
     background-color: rgba(40, 34, 14, 0.82);

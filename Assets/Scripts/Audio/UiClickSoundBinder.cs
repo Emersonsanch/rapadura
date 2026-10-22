@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Rapadura.Core.Systems;
 using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -48,6 +49,10 @@ namespace Rapadura.Audio
         /// </summary>
         public static void Register(UIDocument document)
         {
+            // Same registry need as the pointer-over-UI cache: self-bootstrapped documents are
+            // outside its per-scene scans too.
+            UiPointerQuery.Register(document);
+
             if (document == null || !Registered.Add(document))
             {
                 return;
@@ -63,6 +68,8 @@ namespace Rapadura.Audio
         /// <summary>Stops tracking a registered document (its current root is unhooked).</summary>
         public static void Unregister(UIDocument document)
         {
+            UiPointerQuery.Unregister(document);
+
             if (document == null || !Registered.Remove(document))
             {
                 return;

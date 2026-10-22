@@ -157,6 +157,9 @@ namespace Rapadura.UI.Tutorial
                 SetManager(manager);
             }
 
+            // Trailing crafting probe of a throttled inventory burst (a bool check when idle).
+            _manager?.Tick();
+
             if (!EnsureBound())
             {
                 return;

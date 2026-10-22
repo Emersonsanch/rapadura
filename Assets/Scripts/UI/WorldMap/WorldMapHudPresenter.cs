@@ -330,6 +330,149 @@ namespace Rapadura.UI.WorldMap
         }
 
         /// <summary>
+        /// Whether a region label shows its full card (name + status line) or only the compact name
+        /// chip. Full only for the current region, travelable neighbours and a locked region adjacent
+        /// to the current one (its unlock requirement is the next goal); far regions stay compact so
+        /// cards don't pile up on each other (playtest: Montanha's card covered Deserto/Cavernas).
+        /// </summary>
+        public static bool ShowFullLabel(WorldMapGraph graph, WorldMapProgress progress, BiomeType region, RegionLabelStatus status)
+        {
+            switch (status)
+            {
+                case RegionLabelStatus.Current:
+                case RegionLabelStatus.Travelable:
+                    return true;
+                case RegionLabelStatus.Locked:
+                    return graph != null && progress != null && graph.AreConnected(progress.CurrentRegion, region);
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>Placement priority of a label for <see cref="ResolveLabelOverlaps"/> (lower = placed first, never moved).</summary>
+        public static int LabelPriority(RegionLabelStatus status, bool fullCard)
+        {
+            switch (status)
+            {
+                case RegionLabelStatus.Current:
+                    return 0;
+                case RegionLabelStatus.Travelable:
+                    return 1;
+                default:
+                    return fullCard ? 2 : 3;
+            }
+        }
+
+        /// <summary>
+        /// Simple screen-space overlap avoidance for region labels. <paramref name="rects"/> are the
+        /// desired panel-space rects (y down) of <paramref name="count"/> labels; labels are placed in
+        /// <paramref name="priorities"/> order (lower first, ties by index) and each later one is
+        /// nudged up or down — whichever is the smaller move — until it clears every placed label by
+        /// <paramref name="gap"/>. Writes the vertical shift per label into <paramref name="yOffsets"/>.
+        /// Labels with an empty rect (not laid out / off screen) are ignored. No allocation.
+        /// </summary>
+        public static void ResolveLabelOverlaps(Rect[] rects, int[] priorities, int count, float gap, float[] yOffsets, int[] orderBuffer)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                yOffsets[i] = 0f;
+                orderBuffer[i] = i;
+            }
+
+            // Insertion sort by (priority, index): stable and allocation-free for a handful of labels.
+            for (int i = 1; i < count; i++)
+            {
+                int current = orderBuffer[i];
+                int j = i - 1;
+
+                while (j >= 0 && priorities[orderBuffer[j]] > priorities[current])
+                {
+                    orderBuffer[j + 1] = orderBuffer[j];
+                    j--;
+                }
+
+                orderBuffer[j + 1] = current;
+            }
+
+            for (int placedCount = 0; placedCount < count; placedCount++)
+            {
+                int index = orderBuffer[placedCount];
+                Rect rect = rects[index];
+
+                if (rect.width <= 0f || rect.height <= 0f)
+                {
+                    continue;
+                }
+
+                // Candidate spots: where it wants to be, or just above / just below any placed label.
+                // Take the free one closest to the desired spot (the spot below the lowest placed
+                // label is always free, so this always terminates with a clear position).
+                float bestShift = 0f;
+                bool found = IsFree(rect, 0f, rects, yOffsets, orderBuffer, placedCount, gap);
+
+                for (int k = 0; k < placedCount && !(found && bestShift == 0f); k++)
+                {
+                    int other = orderBuffer[k];
+                    Rect placed = rects[other];
+                    placed.y += yOffsets[other];
+
+                    if (placed.width <= 0f || placed.height <= 0f)
+                    {
+                        continue;
+                    }
+
+                    // Small epsilon so float rounding can't make an exactly-touching spot count as overlapping.
+                    float above = placed.yMin - gap - rect.yMax - 0.01f;
+                    float below = placed.yMax + gap - rect.yMin + 0.01f;
+
+                    TryCandidate(above, ref found, ref bestShift, rect, rects, yOffsets, orderBuffer, placedCount, gap);
+                    TryCandidate(below, ref found, ref bestShift, rect, rects, yOffsets, orderBuffer, placedCount, gap);
+                }
+
+                yOffsets[index] = bestShift;
+            }
+        }
+
+        private static void TryCandidate(float shift, ref bool found, ref float bestShift, Rect rect, Rect[] rects, float[] yOffsets,
+            int[] orderBuffer, int placedCount, float gap)
+        {
+            if (found && Mathf.Abs(shift) >= Mathf.Abs(bestShift))
+            {
+                return;
+            }
+
+            if (IsFree(rect, shift, rects, yOffsets, orderBuffer, placedCount, gap))
+            {
+                found = true;
+                bestShift = shift;
+            }
+        }
+
+        private static bool IsFree(Rect rect, float shift, Rect[] rects, float[] yOffsets, int[] orderBuffer, int placedCount, float gap)
+        {
+            rect.y += shift;
+
+            for (int k = 0; k < placedCount; k++)
+            {
+                int other = orderBuffer[k];
+                Rect placed = rects[other];
+                placed.y += yOffsets[other];
+
+                if (placed.width > 0f && placed.height > 0f && OverlapsWithGap(rect, placed, gap))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool OverlapsWithGap(Rect a, Rect b, float gap)
+        {
+            return a.xMin < b.xMax + gap && a.xMax + gap > b.xMin && a.yMin < b.yMax + gap && a.yMax + gap > b.yMin;
+        }
+
+        /// <summary>
         /// Status line under a region label: "Você está aqui", "Toque para viajar", the unlock requirement
         /// of a locked region ("Vença 3 batalhas em Floresta e derrote o chefe (1/3)", then "Derrote o
         /// chefe de Floresta"), or "Concluída" for a cleared region with no other hint.
