@@ -63,6 +63,8 @@ namespace Rapadura.UI.WorldMap
         // -- Region boss challenge --
         /// <summary>"Enfrentar o chefe" button (shown while RegionBossProgress.CanChallengeBoss holds for the current region).</summary>
         public const string BossChallenge = "ui.worldmap.boss_challenge";
+        /// <summary>"Explorar" button: starts a normal encounter in the current region (WorldMapController.TryExplore).</summary>
+        public const string Explore = "ui.worldmap.explore";
         public const string LabelLockedGeneric = "ui.worldmap.label.locked_generic";
 
         // -- Mochila (read-only summary) --
@@ -98,7 +100,7 @@ namespace Rapadura.UI.WorldMap
             new LocalizationEntry(VictoriesBossHere, "Beat the boss to unlock {0}", "Derrote o chefe para desbloquear {0}"),
             new LocalizationEntry(RegionDoneNext, "{0} cleared! Next: {1}", "Região {0} concluída! Próximo: {1}"),
             new LocalizationEntry(RegionDoneAll, "{0} cleared! Every region unlocked", "Região {0} concluída! Todas as regiões desbloqueadas"),
-            new LocalizationEntry(LabelHere, "You are here", "Você está aqui"),
+            new LocalizationEntry(LabelHere, "You are here · tap to explore", "Você está aqui · toque para explorar"),
             new LocalizationEntry(LabelTravel, "Tap to travel", "Toque para viajar"),
             new LocalizationEntry(LabelLocked, "Win {0} battles in {1} ({2}/{0})", "Vença {0} batalhas em {1} ({2}/{0})"),
             new LocalizationEntry(LabelBoss, "Beat the {0} boss", "Derrote o chefe de {0}"),
@@ -106,6 +108,7 @@ namespace Rapadura.UI.WorldMap
             new LocalizationEntry(LabelCleared, "Cleared", "Concluída"),
             new LocalizationEntry(LabelLockedGeneric, "Locked", "Bloqueado"),
             new LocalizationEntry(BossChallenge, "Face the boss", "Enfrentar o chefe"),
+            new LocalizationEntry(Explore, "Explore", "Explorar"),
             new LocalizationEntry(BackpackItems, "Items: {0}", "Itens: {0}"),
             new LocalizationEntry(BackpackGold, "Gold: {0}", "Ouro: {0}"),
             new LocalizationEntry(BackpackSlots, "Slots used: {0}/{1}", "Espaços usados: {0}/{1}"),

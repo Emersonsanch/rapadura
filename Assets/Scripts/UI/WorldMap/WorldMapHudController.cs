@@ -124,6 +124,7 @@ namespace Rapadura.UI.WorldMap
         private Button _achievementsButton;
         private Button _menuButton;
         private Button _bossButton;
+        private Button _exploreButton;
         private VisualElement _backpackOverlay;
         private Label _backpackHeroLabel;
         private VisualElement _backpackLines;
@@ -283,6 +284,7 @@ namespace Rapadura.UI.WorldMap
             _achievementsButton = root.Q<Button>("wm-achievements-button");
             _menuButton = root.Q<Button>("wm-menu-button");
             _bossButton = root.Q<Button>("wm-boss-button");
+            _exploreButton = root.Q<Button>("wm-explore-button");
             _backpackOverlay = root.Q<VisualElement>("wm-backpack-overlay");
             _backpackHeroLabel = root.Q<Label>("wm-backpack-hero-label");
             _backpackLines = root.Q<VisualElement>("wm-backpack-lines");
@@ -301,6 +303,7 @@ namespace Rapadura.UI.WorldMap
             if (_achievementsButton != null) _achievementsButton.clicked += OnAchievementsClicked;
             if (_menuButton != null) _menuButton.clicked += OnMenuClicked;
             if (_bossButton != null) _bossButton.clicked += OnBossClicked;
+            if (_exploreButton != null) _exploreButton.clicked += OnExploreClicked;
             if (_backpackCloseButton != null) _backpackCloseButton.clicked += CloseBackpack;
         }
 
@@ -311,6 +314,7 @@ namespace Rapadura.UI.WorldMap
             if (_achievementsButton != null) _achievementsButton.clicked -= OnAchievementsClicked;
             if (_menuButton != null) _menuButton.clicked -= OnMenuClicked;
             if (_bossButton != null) _bossButton.clicked -= OnBossClicked;
+            if (_exploreButton != null) _exploreButton.clicked -= OnExploreClicked;
             if (_backpackCloseButton != null) _backpackCloseButton.clicked -= CloseBackpack;
         }
 
@@ -823,6 +827,16 @@ namespace Rapadura.UI.WorldMap
 
             _worldMap.TryChallengeBoss();
             RefreshBossButton();
+        }
+
+        private void OnExploreClicked()
+        {
+            if (!_visible || GameplayPause.IsPaused || _worldMap == null || !_worldMap.isActiveAndEnabled)
+            {
+                return;
+            }
+
+            _worldMap.TryExplore();
         }
 
         private void OnInventoryClicked() => ToggleScreen(BackpackScreenId);

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rapadura.Core.Interfaces;
 using Rapadura.Core.Localization;
@@ -181,7 +181,7 @@ namespace Rapadura.Tests
                 WorldMapHudPresenter.LabelStatusText(English(), graph, locked, BiomeType.Desert, RegionLabelStatus.Locked));
             Assert.AreEqual("Bloqueado",
                 WorldMapHudPresenter.LabelStatusText(null, graph, locked, BiomeType.Caves, RegionLabelStatus.Locked), "no rule");
-            Assert.AreEqual("Você está aqui", WorldMapHudPresenter.LabelStatusText(null, graph, locked, BiomeType.Forest, RegionLabelStatus.Current));
+            Assert.AreEqual("Você está aqui · toque para explorar", WorldMapHudPresenter.LabelStatusText(null, graph, locked, BiomeType.Forest, RegionLabelStatus.Current));
             Assert.AreEqual("Toque para viajar", WorldMapHudPresenter.LabelStatusText(null, graph, locked, BiomeType.Desert, RegionLabelStatus.Travelable));
             Assert.AreEqual(string.Empty, WorldMapHudPresenter.LabelStatusText(null, graph, locked, BiomeType.Desert, RegionLabelStatus.None));
         }
@@ -272,7 +272,7 @@ namespace Rapadura.Tests
             Assert.AreEqual("Cleared", WorldMapHudPresenter.LabelStatusText(English(), graph, progress, BiomeType.Forest, RegionLabelStatus.None));
             Assert.AreEqual(string.Empty, WorldMapHudPresenter.LabelStatusText(null, graph, progress, BiomeType.Desert, RegionLabelStatus.None));
             // The "aqui"/"viajar" hints still win on a cleared region (its marker is the label's check badge).
-            Assert.AreEqual("Você está aqui", WorldMapHudPresenter.LabelStatusText(null, graph, progress, BiomeType.Forest, RegionLabelStatus.Current));
+            Assert.AreEqual("Você está aqui · toque para explorar", WorldMapHudPresenter.LabelStatusText(null, graph, progress, BiomeType.Forest, RegionLabelStatus.Current));
         }
 
         [Test]

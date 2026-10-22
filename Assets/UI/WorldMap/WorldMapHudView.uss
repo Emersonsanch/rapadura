@@ -99,6 +99,43 @@
     display: flex;
 }
 
+.wm-action-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.wm-action-row > .wm-boss-button {
+    margin-left: 8px;
+}
+
+.wm-explore-button {
+    align-self: flex-start;
+    min-height: 44px;
+    margin: 6px 0 0 0;
+    padding: 4px 18px;
+    border-radius: 22px;
+    border-width: 2px;
+    border-color: rgb(150, 210, 120);
+    background-color: rgb(36, 96, 44);
+    color: rgb(240, 250, 235);
+    font-size: 14px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.wm-explore-button:hover {
+    background-color: rgb(46, 120, 56);
+}
+
+.wm-explore-button:active {
+    background-color: rgb(28, 76, 34);
+}
+
+.wm-explore-button:disabled {
+    opacity: 0.5;
+}
+
 .wm-weather-row {
     flex-direction: row;
     align-items: center;

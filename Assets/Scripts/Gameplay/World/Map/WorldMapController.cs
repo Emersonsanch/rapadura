@@ -194,6 +194,13 @@ namespace Rapadura.Gameplay.World.Map
                 return false;
             }
 
+            // Tapping the region the token is already on explores it: at the start only Forest is
+            // unlocked, so without this there is nowhere to walk and no encounter can ever happen.
+            if (node == _currentNode)
+            {
+                return TryExplore();
+            }
+
             if (!_graph.CanTravel(_progress, node.Region))
             {
                 return false;
@@ -314,6 +321,31 @@ namespace Rapadura.Gameplay.World.Map
             {
                 saveManager.AutoSave();
             }
+        }
+
+        /// <summary>True when "Explorar" can start a fight in the current region (idle token, no encounter pending).</summary>
+        public bool CanExplore =>
+            _currentNode != null && _encounters != null && !_encounterInProgress && !IsTraveling;
+
+        /// <summary>
+        /// "Explorar": rolls a normal encounter in the current region right away (same enemy table and
+        /// boss filter as random encounters while walking). False when not possible or nothing rolls.
+        /// </summary>
+        public bool TryExplore()
+        {
+            if (!CanExplore || GameplayPause.IsPaused)
+            {
+                return false;
+            }
+
+            EncounterPayload payload = _encounters.BuildPayload(BiomeRegistry.Get(_currentNode.Region));
+            if (payload == null)
+            {
+                return false;
+            }
+
+            TriggerEncounter(_currentNode, payload);
+            return true;
         }
 
         /// <summary>
