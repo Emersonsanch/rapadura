@@ -84,6 +84,9 @@ namespace Rapadura.UI.CharacterSelect
         private Button _continueButton;
 
         private readonly Dictionary<CharacterId, Button> _rosterButtons = new Dictionary<CharacterId, Button>();
+
+        /// <summary>USS class on the roster button of the hero currently shown in the detail panel.</summary>
+        public const string RosterSelectedClass = "character-select__roster-button--selected";
         private CharacterId? _hovered;
         private CharacterId? _continueHero;
         private int _continueSlot = NoContinueSlot;
@@ -257,6 +260,26 @@ namespace Rapadura.UI.CharacterSelect
                 _rosterContainer.Add(button);
                 _rosterButtons[character.Id] = button;
             }
+
+            ApplyRosterSelection(_rosterButtons, _hovered);
+        }
+
+        /// <summary>
+        /// Marks the roster button of <paramref name="selected"/> with <see cref="RosterSelectedClass"/>
+        /// (and clears it from every other one), so the picked hero stays visibly selected — before,
+        /// only :hover changed the look and nothing showed which hero "Confirmar" would pick.
+        /// </summary>
+        public static void ApplyRosterSelection(IReadOnlyDictionary<CharacterId, Button> buttons, CharacterId? selected)
+        {
+            if (buttons == null)
+            {
+                return;
+            }
+
+            foreach (KeyValuePair<CharacterId, Button> pair in buttons)
+            {
+                pair.Value?.EnableInClassList(RosterSelectedClass, selected.HasValue && pair.Key == selected.Value);
+            }
         }
 
         /// <summary>The localizer's manager (resolved from the ServiceLocator on attach), or the live one; null means pt-BR asset text.</summary>
@@ -328,6 +351,7 @@ namespace Rapadura.UI.CharacterSelect
         {
             _hovered = character.Id;
 
+            ApplyRosterSelection(_rosterButtons, _hovered);
             ApplyDetailTexts(character);
 
             _previewController?.ShowCharacter(character.Id);

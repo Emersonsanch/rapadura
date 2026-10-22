@@ -349,6 +349,45 @@ namespace Rapadura.UI.Menus
             SetTabSelected(_tabControlsButton, active == TabControls);
             SetTabSelected(_tabLanguageButton, active == TabLanguage);
             SetTabSelected(_tabAccessibilityButton, active == TabAccessibility);
+
+            MoveTabFocusToActive(active);
+        }
+
+        /// <summary>
+        /// Show()'s initial Focus() left keyboard/gamepad focus on Gráficos while touch/mouse picked
+        /// another tab, so Gráficos kept its focus underline next to the real (gold) active tab. When
+        /// focus is on a tab, it follows the active one; focus inside a panel is left alone.
+        /// </summary>
+        private void MoveTabFocusToActive(string active)
+        {
+            Button activeButton = GetTabButton(active);
+            Focusable focused = _root?.focusController?.focusedElement;
+
+            if (activeButton == null || focused == null || focused == activeButton || !IsTabButton(focused))
+            {
+                return;
+            }
+
+            activeButton.Focus();
+        }
+
+        private Button GetTabButton(string tab)
+        {
+            switch (tab)
+            {
+                case TabGraphics: return _tabGraphicsButton;
+                case TabAudio: return _tabAudioButton;
+                case TabControls: return _tabControlsButton;
+                case TabLanguage: return _tabLanguageButton;
+                case TabAccessibility: return _tabAccessibilityButton;
+                default: return null;
+            }
+        }
+
+        private bool IsTabButton(Focusable element)
+        {
+            return element == _tabGraphicsButton || element == _tabAudioButton || element == _tabControlsButton
+                || element == _tabLanguageButton || element == _tabAccessibilityButton;
         }
 
         private static void SetPanelVisible(VisualElement panel, bool visible)
@@ -384,7 +423,14 @@ namespace Rapadura.UI.Menus
         {
             if (_qualityDropdown != null)
             {
-                _qualityDropdown.choices = new System.Collections.Generic.List<string>(QualitySettings.names);
+                // Localized level names ("Medium" → "Média"); the index still maps 1:1 to QualitySettings.names.
+                var qualityChoices = new System.Collections.Generic.List<string>(QualitySettings.names.Length);
+                foreach (string qualityName in QualitySettings.names)
+                {
+                    qualityChoices.Add(SettingsMenuTexts.QualityName(_localizationManager, qualityName));
+                }
+
+                _qualityDropdown.choices = qualityChoices;
                 int currentIndex = Mathf.Clamp(QualitySettings.GetQualityLevel(), 0, _qualityDropdown.choices.Count - 1);
 
                 if (_qualityDropdown.choices.Count > 0)
@@ -504,6 +550,12 @@ namespace Rapadura.UI.Menus
         private string Text(string key)
         {
             return SettingsMenuTexts.Get(_localizationManager, key);
+        }
+
+        /// <summary>Binding slot text with the Input System's English control names localized ("Left Stick Press" → "Analógico Esq. (L3)").</summary>
+        private string BindingDisplay(InputAction action, int bindingIndex)
+        {
+            return InputBindingUtility.GetFormattedDisplay(action, bindingIndex, name => SettingsMenuTexts.BindingName(_localizationManager, name));
         }
 
         /// <summary>The live actions asset: the active PlayerInput's (so overrides affect the real player), else the serialized fallback.</summary>
@@ -677,7 +729,7 @@ namespace Rapadura.UI.Menus
             }
 
             bool listening = _listeningRow == view && _listeningKind == kind;
-            button.text = listening ? Text(SettingsMenuTexts.Waiting) : InputBindingUtility.GetFormattedDisplay(view.Action, bindingIndex);
+            button.text = listening ? Text(SettingsMenuTexts.Waiting) : BindingDisplay(view.Action, bindingIndex);
             button.SetEnabled(_rebindManager != null && view.Action != null && bindingIndex >= 0 && !IsLocked(view, kind));
             button.EnableInClassList(RebindButtonListeningClass, listening);
             button.EnableInClassList(RebindButtonOverriddenClass, InputBindingUtility.IsOverridden(view.Action, bindingIndex));
@@ -739,7 +791,7 @@ namespace Rapadura.UI.Menus
             _rebindManager?.SaveBindingOverrides();
             RefreshRebindRows();
 
-            string display = InputBindingUtility.GetFormattedDisplay(action, bindingIndex);
+            string display = BindingDisplay(action, bindingIndex);
             List<BindingConflict> conflicts = InputBindingUtility.FindConflicts(action, bindingIndex);
             if (conflicts.Count > 0)
             {

@@ -62,12 +62,15 @@
     color: rgb(230, 230, 235);
 }
 
+/* Focus (keyboard/gamepad) is a soft tint, never an underline: the underline belongs to the active
+   tab only, and a focus underline left on Gráficos read as a second active tab (playtest). */
 .settings-tab-button:focus {
-    border-bottom-width: 3px;
-    border-bottom-color: rgb(90, 170, 255);
+    background-color: rgba(90, 170, 255, 0.16);
+    border-bottom-width: 0;
 }
 
-.settings-tab-button--selected {
+.settings-tab-button--selected,
+.settings-tab-button--selected:focus {
     color: rgb(255, 210, 90);
     border-bottom-width: 3px;
     border-bottom-color: rgb(255, 210, 90);
@@ -94,6 +97,19 @@
     font-size: 14px;
     min-width: 170px;
     -unity-text-align: middle-left;
+}
+
+/* Toggle rows keep one checkbox column: a longer label ("Vibração (só no celular/tablet)") wraps
+   inside the 170px label column instead of pushing its checkbox out of line with the others. */
+.settings-field.unity-toggle > .unity-base-field__label {
+    width: 170px;
+    max-width: 170px;
+    flex-shrink: 0;
+    white-space: normal;
+}
+
+.settings-field.unity-toggle {
+    align-items: center;
 }
 
 .settings-field .unity-base-slider__dragger {

@@ -609,8 +609,11 @@ namespace Rapadura.UI.WorldMap
                 return lines;
             }
 
-            lines.Add(WorldMapTexts.Format(manager, WorldMapTexts.BackpackItems, summary.TotalItems, summary.UsedSlots, summary.TotalSlots));
+            // Gold is shown on its own line and never counted as an item; the slot line is the real
+            // occupancy (a gold stack does take a slot). Was "Itens: 0 (1/30 espaços)" with only gold.
+            lines.Add(WorldMapTexts.Format(manager, WorldMapTexts.BackpackItems, summary.TotalItems));
             lines.Add(WorldMapTexts.Format(manager, WorldMapTexts.BackpackGold, summary.Gold));
+            lines.Add(WorldMapTexts.Format(manager, WorldMapTexts.BackpackSlots, summary.UsedSlots, summary.TotalSlots));
             lines.Add(WorldMapTexts.Format(manager, WorldMapTexts.BackpackEquipped, summary.Equipped));
 
             int shown = Mathf.Min(Mathf.Max(0, maxItems), summary.Items.Count);

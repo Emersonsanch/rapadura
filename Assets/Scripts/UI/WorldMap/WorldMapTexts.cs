@@ -68,6 +68,7 @@ namespace Rapadura.UI.WorldMap
         // -- Mochila (read-only summary) --
         public const string BackpackItems = "ui.worldmap.backpack.items";
         public const string BackpackGold = "ui.worldmap.backpack.gold";
+        public const string BackpackSlots = "ui.worldmap.backpack.slots";
         public const string BackpackEquipped = "ui.worldmap.backpack.equipped";
         public const string BackpackItemRow = "ui.worldmap.backpack.item_row";
         public const string BackpackMore = "ui.worldmap.backpack.more";
@@ -105,8 +106,9 @@ namespace Rapadura.UI.WorldMap
             new LocalizationEntry(LabelCleared, "Cleared", "Concluída"),
             new LocalizationEntry(LabelLockedGeneric, "Locked", "Bloqueado"),
             new LocalizationEntry(BossChallenge, "Face the boss", "Enfrentar o chefe"),
-            new LocalizationEntry(BackpackItems, "Items: {0} ({1}/{2} slots)", "Itens: {0} ({1}/{2} espaços)"),
+            new LocalizationEntry(BackpackItems, "Items: {0}", "Itens: {0}"),
             new LocalizationEntry(BackpackGold, "Gold: {0}", "Ouro: {0}"),
+            new LocalizationEntry(BackpackSlots, "Slots used: {0}/{1}", "Espaços usados: {0}/{1}"),
             new LocalizationEntry(BackpackEquipped, "Equipped: {0}", "Equipados: {0}"),
             new LocalizationEntry(BackpackItemRow, "{0} ×{1}", "{0} ×{1}"),
             new LocalizationEntry(BackpackMore, "+{0} more", "+{0} outros"),

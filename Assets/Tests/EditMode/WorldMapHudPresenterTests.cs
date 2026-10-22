@@ -411,8 +411,9 @@ namespace Rapadura.Tests
 
             CollectionAssert.AreEqual(new[]
             {
-                "Itens: 6 (4/6 espaços)",
+                "Itens: 6",
                 "Ouro: 50",
+                "Espaços usados: 4/6",
                 "Equipados: 1",
                 "Fibra Vegetal ×5",
                 "+1 outros",
@@ -420,6 +421,26 @@ namespace Rapadura.Tests
 
             List<string> custom = WorldMapHudPresenter.BackpackLines(null, summary, 5, id => id.ToUpperInvariant());
             CollectionAssert.Contains(custom, "ITEM_AXE ×1");
+        }
+
+        [Test]
+        public void BackpackLines_OnlyGold_ShowsZeroItemsAndGoldSeparately()
+        {
+            var state = new InventorySaveState
+            {
+                slots = new[]
+                {
+                    new InventorySlotData { itemId = WorldMapHudPresenter.DefaultCurrencyItemId, quantity = 30 },
+                    new InventorySlotData(),
+                    new InventorySlotData(),
+                },
+            };
+
+            List<string> lines = WorldMapHudPresenter.BackpackLines(null, WorldMapHudPresenter.Summarize(state));
+
+            Assert.AreEqual("Itens: 0", lines[0], "no '(1/30 espaços)' next to zero items");
+            Assert.AreEqual("Ouro: 30", lines[1]);
+            Assert.AreEqual("Espaços usados: 1/3", lines[2]);
         }
 
         [Test]

@@ -185,6 +185,33 @@ namespace Rapadura.Tests
         }
 
         [Test]
+        public void Paused_ZeroDeltaTicks_NeverChaseOrAttack_EvenInAttackRange()
+        {
+            // Playtest: a pausing hint showed while the player went 100 -> 76 -> dead. With
+            // timeScale 0 the AI still ticked (deltaTime 0): Patrol -> Chase -> Attack transitions
+            // ran and AttackState.Enter's zeroed cooldown landed a hit behind the pause.
+            _controller.ResetForSpawn(CreateDefinition(), Vector3.zero);
+            Health targetHealth = _targetGameObject.AddComponent<Health>();
+            _targetGameObject.transform.position = new Vector3(1f, 0f, 0f); // inside attack range
+            float before = targetHealth.CurrentHealth;
+
+            for (int i = 0; i < 10; i++)
+            {
+                _controller.TickBrain(0f);
+            }
+
+            Assert.AreEqual(before, targetHealth.CurrentHealth, "no attack while frozen");
+            Assert.IsTrue(_controller.StateMachine.IsInState<EnemyPatrolState>(), "no state change while frozen");
+
+            for (int i = 0; i < 3; i++)
+            {
+                _controller.TickBrain(0.1f);
+            }
+
+            Assert.Less(targetHealth.CurrentHealth, before, "the fight resumes once time runs again");
+        }
+
+        [Test]
         public void HoldAggro_DoesNotBlockDamageToTheEnemy()
         {
             _controller.ResetForSpawn(CreateDefinition(), Vector3.zero);

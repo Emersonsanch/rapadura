@@ -191,12 +191,58 @@ namespace Rapadura.Core.Accessibility
         /// <summary>Display-ready text for one binding slot (index -1 shows "—").</summary>
         public static string GetFormattedDisplay(InputAction action, int bindingIndex)
         {
+            return GetFormattedDisplay(action, bindingIndex, null);
+        }
+
+        /// <summary>
+        /// <see cref="GetFormattedDisplay(InputAction, int)"/> with the Input System's English control
+        /// names ("Left Stick Press", "D-Pad/Up") passed through <paramref name="translateName"/> first
+        /// (see <see cref="LocalizeDisplay"/>), before the override suffix is appended.
+        /// </summary>
+        public static string GetFormattedDisplay(InputAction action, int bindingIndex, Func<string, string> translateName)
+        {
             if (action == null || bindingIndex < 0 || bindingIndex >= action.bindings.Count)
             {
                 return EmptyBindingText;
             }
 
-            return FormatBindingDisplay(action.GetBindingDisplayString(bindingIndex), IsOverridden(action, bindingIndex));
+            string raw = LocalizeDisplay(action.GetBindingDisplayString(bindingIndex), translateName);
+            return FormatBindingDisplay(raw, IsOverridden(action, bindingIndex));
+        }
+
+        /// <summary>
+        /// Translates an Input System display string: the whole string first ("Left Stick Press"),
+        /// else each "/"-separated part ("D-Pad/Up" → "Direcional/Cima"). <paramref name="translateName"/>
+        /// returns null for names it doesn't know, which are kept as-is (single letters, F1...).
+        /// </summary>
+        public static string LocalizeDisplay(string display, Func<string, string> translateName)
+        {
+            if (translateName == null || string.IsNullOrEmpty(display))
+            {
+                return display;
+            }
+
+            string trimmed = display.Trim();
+            string whole = translateName(trimmed);
+            if (!string.IsNullOrEmpty(whole))
+            {
+                return whole;
+            }
+
+            if (trimmed.IndexOf('/') < 0)
+            {
+                return display;
+            }
+
+            string[] parts = trimmed.Split('/');
+            for (int i = 0; i < parts.Length; i++)
+            {
+                string part = parts[i].Trim();
+                string translated = translateName(part);
+                parts[i] = string.IsNullOrEmpty(translated) ? part : translated;
+            }
+
+            return string.Join("/", parts);
         }
 
         /// <summary>Case-insensitive equality of two control paths; empty paths never conflict.</summary>

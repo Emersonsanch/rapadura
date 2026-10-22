@@ -195,24 +195,24 @@ namespace Rapadura.Save
 
             try
             {
-            foreach (SaveEntry entry in SortByRestoreOrder(pending))
-            {
-                ISaveable saveable = _saveables[entry.key];
-
-                if (saveable is ISceneLocalSaveable)
+                foreach (SaveEntry entry in SortByRestoreOrder(pending))
                 {
-                    _carried.Remove(entry.key);
-                    continue;
-                }
+                    ISaveable saveable = _saveables[entry.key];
 
-                // Dropped from the carry only once applied: an entry whose restore threw stays carried,
-                // so it is still written to the next save instead of being lost with the scene.
-                if (TryRestoreEntry(saveable, entry))
-                {
-                    _carried.Remove(entry.key);
-                    restored++;
+                    if (saveable is ISceneLocalSaveable)
+                    {
+                        _carried.Remove(entry.key);
+                        continue;
+                    }
+
+                    // Dropped from the carry only once applied: an entry whose restore threw stays carried,
+                    // so it is still written to the next save instead of being lost with the scene.
+                    if (TryRestoreEntry(saveable, entry))
+                    {
+                        _carried.Remove(entry.key);
+                        restored++;
+                    }
                 }
-            }
             }
             finally
             {
@@ -383,27 +383,27 @@ namespace Rapadura.Save
 
             try
             {
-            // The loaded file replaces the whole session, carried state included — and so does
-            // anything the file doesn't mention (see SessionReset).
-            SessionReset?.ResetAll();
-            _carried.Clear();
+                // The loaded file replaces the whole session, carried state included — and so does
+                // anything the file doesn't mention (see SessionReset).
+                SessionReset?.ResetAll();
+                _carried.Clear();
 
-            foreach (SaveEntry entry in GetEntriesInRestoreOrder(saveData))
-            {
-                if (!_saveables.TryGetValue(entry.key, out ISaveable saveable))
+                foreach (SaveEntry entry in GetEntriesInRestoreOrder(saveData))
                 {
-                    // Nobody alive for it yet (e.g. player data loaded on the world map): carry it
-                    // until its owner registers in a later scene (see RestoreCarriedState).
-                    if (!string.IsNullOrEmpty(entry.key))
+                    if (!_saveables.TryGetValue(entry.key, out ISaveable saveable))
                     {
-                        _carried[entry.key] = entry;
+                        // Nobody alive for it yet (e.g. player data loaded on the world map): carry it
+                        // until its owner registers in a later scene (see RestoreCarriedState).
+                        if (!string.IsNullOrEmpty(entry.key))
+                        {
+                            _carried[entry.key] = entry;
+                        }
+
+                        continue;
                     }
 
-                    continue;
+                    TryRestoreEntry(saveable, entry);
                 }
-
-                TryRestoreEntry(saveable, entry);
-            }
             }
             finally
             {

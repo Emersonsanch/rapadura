@@ -7,7 +7,9 @@
     bottom: 0;
     align-items: center;
     justify-content: center;
-    background-color: rgba(6, 7, 10, 0.6);
+    /* Opaque full-screen backdrop: at 0.6 the taller pause panel behind it peeked out above and
+       below this dialog's panel (playtest), reading as two stacked menus. */
+    background-color: rgb(6, 7, 10);
     display: none;
 }
 

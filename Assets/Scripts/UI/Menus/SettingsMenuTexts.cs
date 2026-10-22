@@ -54,6 +54,10 @@ namespace Rapadura.UI.Menus
         public const string Waiting = "ui.settings.controls.waiting";
         public const string ColorblindPrefix = "ui.settings.accessibility.colorblind.";
         public const string HighFpsCombat = "ui.settings.graphics.high_fps_combat";
+        /// <summary>Prefix + <see cref="Slug"/> of a Unity QualitySettings level name ("Medium" → "...quality_level.medium").</summary>
+        public const string QualityLevelPrefix = "ui.settings.graphics.quality_level.";
+        /// <summary>Prefix + <see cref="Slug"/> of an Input System control display name ("Left Stick Press").</summary>
+        public const string BindingNamePrefix = "ui.settings.controls.binding.";
         /// <summary>Prefix + lower-case <see cref="LanguageCode"/> name; each language is shown by its own name (autonym).</summary>
         public const string LanguageNamePrefix = "ui.settings.language.name.";
 
@@ -174,6 +178,55 @@ namespace Rapadura.UI.Menus
             new LocalizationEntry(AccessibilityReduceFlash, "Reduce flashes", "Reduzir Flashes"),
             new LocalizationEntry(LanguageNamePrefix + "en", "English", "English"),
             new LocalizationEntry(LanguageNamePrefix + "ptbr", "Português (Brasil)", "Português (Brasil)"),
+
+            // Unity QualitySettings level names (ProjectSettings/QualitySettings.asset).
+            new LocalizationEntry(QualityLevelPrefix + "very_low", "Very Low", "Muito Baixa"),
+            new LocalizationEntry(QualityLevelPrefix + "low", "Low", "Baixa"),
+            new LocalizationEntry(QualityLevelPrefix + "medium", "Medium", "Média"),
+            new LocalizationEntry(QualityLevelPrefix + "high", "High", "Alta"),
+            new LocalizationEntry(QualityLevelPrefix + "very_high", "Very High", "Muito Alta"),
+            new LocalizationEntry(QualityLevelPrefix + "ultra", "Ultra", "Ultra"),
+
+            // Input System control display names (InputBindingUtility.LocalizeDisplay; whole names
+            // first, then each "/" part). Single letters / F-keys are left as the Input System shows them.
+            new LocalizationEntry(BindingNamePrefix + "left_stick_press", "Left Stick Press", "Analógico Esq. (L3)"),
+            new LocalizationEntry(BindingNamePrefix + "right_stick_press", "Right Stick Press", "Analógico Dir. (R3)"),
+            new LocalizationEntry(BindingNamePrefix + "left_stick", "Left Stick", "Analógico Esq."),
+            new LocalizationEntry(BindingNamePrefix + "right_stick", "Right Stick", "Analógico Dir."),
+            new LocalizationEntry(BindingNamePrefix + "d_pad", "D-Pad", "Direcional"),
+            new LocalizationEntry(BindingNamePrefix + "up", "Up", "Cima"),
+            new LocalizationEntry(BindingNamePrefix + "down", "Down", "Baixo"),
+            new LocalizationEntry(BindingNamePrefix + "left", "Left", "Esquerda"),
+            new LocalizationEntry(BindingNamePrefix + "right", "Right", "Direita"),
+            new LocalizationEntry(BindingNamePrefix + "left_shoulder", "Left Shoulder", "Bumper Esq. (LB)"),
+            new LocalizationEntry(BindingNamePrefix + "right_shoulder", "Right Shoulder", "Bumper Dir. (RB)"),
+            new LocalizationEntry(BindingNamePrefix + "left_trigger", "Left Trigger", "Gatilho Esq. (LT)"),
+            new LocalizationEntry(BindingNamePrefix + "right_trigger", "Right Trigger", "Gatilho Dir. (RT)"),
+            new LocalizationEntry(BindingNamePrefix + "button_south", "Button South", "Botão Sul"),
+            new LocalizationEntry(BindingNamePrefix + "button_north", "Button North", "Botão Norte"),
+            new LocalizationEntry(BindingNamePrefix + "button_east", "Button East", "Botão Leste"),
+            new LocalizationEntry(BindingNamePrefix + "button_west", "Button West", "Botão Oeste"),
+            new LocalizationEntry(BindingNamePrefix + "start", "Start", "Start"),
+            new LocalizationEntry(BindingNamePrefix + "select", "Select", "Select"),
+            new LocalizationEntry(BindingNamePrefix + "space", "Space", "Espaço"),
+            new LocalizationEntry(BindingNamePrefix + "enter", "Enter", "Enter"),
+            new LocalizationEntry(BindingNamePrefix + "escape", "Escape", "Esc"),
+            new LocalizationEntry(BindingNamePrefix + "backspace", "Backspace", "Backspace"),
+            new LocalizationEntry(BindingNamePrefix + "left_shift", "Left Shift", "Shift Esq."),
+            new LocalizationEntry(BindingNamePrefix + "right_shift", "Right Shift", "Shift Dir."),
+            new LocalizationEntry(BindingNamePrefix + "left_ctrl", "Left Ctrl", "Ctrl Esq."),
+            new LocalizationEntry(BindingNamePrefix + "right_ctrl", "Right Ctrl", "Ctrl Dir."),
+            new LocalizationEntry(BindingNamePrefix + "left_alt", "Left Alt", "Alt Esq."),
+            new LocalizationEntry(BindingNamePrefix + "up_arrow", "Up Arrow", "Seta para Cima"),
+            new LocalizationEntry(BindingNamePrefix + "down_arrow", "Down Arrow", "Seta para Baixo"),
+            new LocalizationEntry(BindingNamePrefix + "left_arrow", "Left Arrow", "Seta Esquerda"),
+            new LocalizationEntry(BindingNamePrefix + "right_arrow", "Right Arrow", "Seta Direita"),
+            new LocalizationEntry(BindingNamePrefix + "left_button", "Left Button", "Botão Esq. do Mouse"),
+            new LocalizationEntry(BindingNamePrefix + "right_button", "Right Button", "Botão Dir. do Mouse"),
+            new LocalizationEntry(BindingNamePrefix + "middle_button", "Middle Button", "Botão do Meio"),
+            new LocalizationEntry(BindingNamePrefix + "lmb", "LMB", "Botão Esq. do Mouse"),
+            new LocalizationEntry(BindingNamePrefix + "rmb", "RMB", "Botão Dir. do Mouse"),
+            new LocalizationEntry(BindingNamePrefix + "mmb", "MMB", "Botão do Meio"),
         };
 
         private static Dictionary<string, string> _fallbackByKey;
@@ -244,6 +297,66 @@ namespace Rapadura.UI.Menus
         public static string LanguageName(LocalizationManager manager, LanguageCode language)
         {
             return Get(manager, LanguageNameKey(language));
+        }
+
+        /// <summary>Lower-case key fragment of a display name: letters/digits kept, anything else → "_" (collapsed). "D-Pad" → "d_pad".</summary>
+        public static string Slug(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return string.Empty;
+            }
+
+            var builder = new System.Text.StringBuilder(text.Length);
+            bool pendingSeparator = false;
+
+            foreach (char c in text.Trim())
+            {
+                if (char.IsLetterOrDigit(c))
+                {
+                    if (pendingSeparator && builder.Length > 0)
+                    {
+                        builder.Append('_');
+                    }
+
+                    builder.Append(char.ToLowerInvariant(c));
+                    pendingSeparator = false;
+                }
+                else
+                {
+                    pendingSeparator = true;
+                }
+            }
+
+            return builder.ToString();
+        }
+
+        /// <summary>Localized Unity quality level name ("Medium" → "Média"); unknown names are shown as Unity names them.</summary>
+        public static string QualityName(LocalizationManager manager, string unityName)
+        {
+            return TryGetKnown(manager, QualityLevelPrefix + Slug(unityName)) ?? unityName;
+        }
+
+        /// <summary>Localized Input System control name, or null when it isn't one we translate (for <see cref="InputBindingUtility.LocalizeDisplay"/>).</summary>
+        public static string BindingName(LocalizationManager manager, string englishName)
+        {
+            string slug = Slug(englishName);
+            return slug.Length == 0 ? null : TryGetKnown(manager, BindingNamePrefix + slug);
+        }
+
+        /// <summary><see cref="Get"/> restricted to keys this table (or the live manager) actually has; null otherwise.</summary>
+        private static string TryGetKnown(LocalizationManager manager, string key)
+        {
+            if (manager != null)
+            {
+                EnsureRegistered(manager);
+                if (manager.HasKey(key))
+                {
+                    return manager.Get(key);
+                }
+            }
+
+            return GetFallback(key);
         }
 
         public static string ColorblindKey(ColorblindMode mode)

@@ -165,6 +165,14 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
+            // Frozen (GameplayPause → timeScale 0 → deltaTime 0): no AI step at all. Ticking with 0
+            // still ran state transitions, and EnemyAttackState.Enter zeroes its cooldown, so an enemy
+            // reaching attack range hit the player behind a pausing hint/modal.
+            if (deltaTime <= 0f)
+            {
+                return;
+            }
+
             if (IsHoldingAggro)
             {
                 _aggroHoldRemaining = Mathf.Max(0f, _aggroHoldRemaining - deltaTime);
