@@ -42,6 +42,7 @@
 | `Assets/Models/Enemies/{Wolf,Scorpion,Spider}` | Meshy (texto→3D, sem rig) | Idem |
 | `Assets/Models/Environment/Trees/Tree_{Broadleaf,Pine,Gnarled}_RO.glb` (+ LODs decimados em `Assets/Resources/CleanedMeshes`) | Meshy (texto→3D), decimados pelo `MeshDecimator.cs` do projeto | Idem |
 | Rochas, chão, detalhes de vegetação | Geometria procedural do próprio projeto (`ProceduralRockGenerator.cs`, `GroundDetailScatter.cs`) | Próprio |
+| `Assets/Animations/Mocap/Mocap_*.anim` (clipes Humanoid gerados por `tools/mocap`) e `tools/mocap/cmu/*.bvh` | **CMU Graphics Lab Motion Capture Database** (mocap.cs.cmu.edu, financiado por NSF EIA-0196217), na conversão BVH "MotionBuilder-friendly" de Bruce Hahne (cgspeed), via espelho github.com/una-dinosauria/cmu-mocap. Lista de trials em `tools/mocap/cmu/SOURCES.md` | FAQ do CMU: *"The motion capture data may be copied, modified, or redistributed without permission."*; texto citado no READMEFIRST da conversão: *"This data is free for use in research and commercial projects worldwide."* A conversão cgspeed não acrescenta restrições. Crédito não é obrigatório, mas é pedido/apreciado: incluir "Motion capture data from mocap.cs.cmu.edu (NSF EIA-0196217)" nos Créditos |
 | **Mixamo (Adobe)** | **Não usado até agora.** Foi considerado no `TODO.md` como alternativa de auto-rig, mas os rigs atuais vieram da Meshy. Se for usado no futuro: animações e personagens Mixamo são livres de royalties para uso comercial em jogos (termos Adobe), mas não podem ser redistribuídos como assets avulsos | — |
 
 ## 4. Texturas, fontes e áudio
@@ -61,6 +62,7 @@
 | Meshy | Geração de modelos 3D e rigs | Termos de Serviço Meshy (ver seção 3) |
 | FBX2glTF (Meta/Facebook) | Conversão FBX→GLB antes do rig | BSD 3-Clause |
 | MCP for Unity (Coplay) | Automação do Editor | MIT **[VERIFICAR]** |
+| `tools/mocap` (Python: numpy, scipy, pytest) | Pré-processamento de BVH → clipes Humanoid (`Docs/Mocap.md`) | numpy/scipy: BSD 3-Clause; pytest: MIT |
 | Claude Code (Anthropic) | Assistência no desenvolvimento | Termos Anthropic (código gerado pertence ao usuário) |
 | GitHub Actions | CI | Termos GitHub |
 

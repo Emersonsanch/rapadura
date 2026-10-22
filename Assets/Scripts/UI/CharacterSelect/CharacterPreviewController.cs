@@ -102,6 +102,16 @@ namespace Rapadura.UI.CharacterSelect
             _currentId = null;
         }
 
+        /// <summary>The preview entry (model prefab + placement) for <paramref name="id"/> — reused by the world-map hero token.</summary>
+        public bool TryGetEntry(CharacterId id, out CharacterPreviewEntry entry)
+        {
+            entry = Array.Find(_entries, e => e.characterId == id);
+            return entry != null && entry.modelPrefab != null;
+        }
+
+        /// <summary>World-space bounds of <paramref name="root"/>'s renderers, using rigged meshes' real bind-pose bounds (see <see cref="TryGetBounds"/>).</summary>
+        public static bool TryGetModelBounds(Transform root, out Bounds bounds) => TryGetBounds(root, out bounds);
+
         private Transform EnsurePivot()
         {
             if (_pivot == null)

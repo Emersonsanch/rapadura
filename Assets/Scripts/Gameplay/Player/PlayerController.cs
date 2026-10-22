@@ -69,6 +69,13 @@ namespace Rapadura.Gameplay.Player
             ClickToMove = GetComponent<PlayerClickToMove>();
             _buffController = GetComponent<BuffController>();
 
+            // Plays the hero's one-shot clips (attack/cast/hit/death) when the controller has them;
+            // a no-op otherwise. Added here so no scene wiring is needed.
+            if (GetComponent<PlayerActionAnimator>() == null)
+            {
+                gameObject.AddComponent<PlayerActionAnimator>();
+            }
+
             BuildStateMachine();
         }
 

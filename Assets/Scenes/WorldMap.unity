@@ -580,8 +580,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 263784984}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.53729963, y: 0, z: 0, w: 0.8433914}
-  m_LocalPosition: {x: 15, y: 30, z: -12}
+  m_LocalRotation: {x: 0.43837115, y: 0, z: 0, w: 0.89879405}
+  m_LocalPosition: {x: 15, y: 19, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1046,7 +1046,7 @@ MonoBehaviour:
   _achievementList: {fileID: 1553575759}
   _camera: {fileID: 263784985}
   _labelUpdateInterval: 0.1
-  _labelHeightOffset: 1.6
+  _labelHeightOffset: 4.4
   _backpackMaxItems: 6
 --- !u!114 &1070952912
 MonoBehaviour:
@@ -2924,6 +2924,7 @@ GameObject:
   - component: {fileID: 2104295328}
   - component: {fileID: 2104295330}
   - component: {fileID: 2104295329}
+  - component: {fileID: 2104295331}
   m_Layer: 0
   m_Name: PlayerToken
   m_TagString: Untagged
@@ -3003,6 +3004,23 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2104295327}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2104295331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2104295327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 053b7f73867ca3c4e88fa12b7c0f416f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.UI.WorldMap.WorldMapHeroToken
+  _heroHeight: 3.6
+  _heroMaxWidth: 3.2
+  _groundOffset: 0.5
+  _hopHeight: 0.12
+  _hopFrequency: 3.5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

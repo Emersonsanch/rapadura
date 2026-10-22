@@ -34,10 +34,17 @@ namespace Rapadura.Gameplay.Player
         [Tooltip("Degrees/sec the player turns to face a pursued enemy before/while auto-attacking it. Instant snapping reads as janky, same reasoning as EnemyController's turn speed.")]
         [SerializeField] private float _turnSpeedDegPerSec = 540f;
 
+        [Header("Timing")]
+        [Tooltip("Seconds between the swing starting and the damage landing, when the hero has no attack clip. With clips, the Animator's baked AttackStrikeTime is used so the hit lands on the fastest frame of the swing.")]
+        [SerializeField, Min(0f)] private float _strikeDelayFallback = HeroActionTiming.StrikeDelay;
+
         private PlayerInputHandler _input;
         private PlayerClickToMove _clickToMove;
+        private PlayerActionAnimator _actions;
+        private PlayerStats _stats;
         private ICombatTarget _self;
         private float _cooldownRemaining;
+        private float _pendingStrike = -1f;
         private readonly Collider[] _hitBuffer = new Collider[16];
         private bool _balanceLookupDone;
 
@@ -48,8 +55,27 @@ namespace Rapadura.Gameplay.Player
         {
             _input = GetComponent<PlayerInputHandler>();
             _clickToMove = GetComponent<PlayerClickToMove>();
+            _actions = GetComponent<PlayerActionAnimator>();
+            _stats = GetComponent<PlayerStats>();
             _self = GetComponent<ICombatTarget>();
         }
+
+        /// <summary>Seconds from the swing starting to the hit landing (the clip's fastest-hand frame when there is one).</summary>
+        public float StrikeDelay
+        {
+            get
+            {
+                if (_actions == null)
+                {
+                    _actions = GetComponent<PlayerActionAnimator>();
+                }
+
+                return _actions != null && _actions.HasClipActions ? _actions.AttackStrikeDelay : _strikeDelayFallback;
+            }
+        }
+
+        /// <summary>A swing has started and its damage has not landed yet.</summary>
+        public bool IsStrikePending => _pendingStrike >= 0f;
 
         private PlayerCombatBalance Balance
         {
@@ -87,6 +113,8 @@ namespace Rapadura.Gameplay.Player
             {
                 _cooldownRemaining -= Time.deltaTime;
             }
+
+            TickPendingStrike(Time.deltaTime);
 
             if (_input.AttackPressedThisFrame && _cooldownRemaining <= 0f)
             {
@@ -149,10 +177,51 @@ namespace Rapadura.Gameplay.Player
             }
         }
 
+        /// <summary>
+        /// Starts a swing: the animation (and everyone listening to the event) begins now, the
+        /// damage lands <see cref="StrikeDelay"/> seconds later in <see cref="TickPendingStrike"/>,
+        /// on the frame the swing is fastest. A swing in flight when the hero dies is dropped.
+        /// </summary>
         private void PerformAttack()
         {
+            // Read the delay before the event: PlayerActionAnimator alternates the swing variant
+            // when it handles the event, and the delay belongs to the variant about to play.
+            float delay = StrikeDelay;
             EventBus.Publish(new PlayerAttackPerformedEvent(gameObject));
+            if (delay <= 0f)
+            {
+                _pendingStrike = -1f;
+                LandStrike();
+                return;
+            }
 
+            _pendingStrike = delay;
+        }
+
+        private void TickPendingStrike(float deltaTime)
+        {
+            if (_pendingStrike < 0f)
+            {
+                return;
+            }
+
+            if (_stats != null && _stats.IsDead)
+            {
+                _pendingStrike = -1f;
+                return;
+            }
+
+            _pendingStrike -= deltaTime;
+            if (_pendingStrike <= 0f)
+            {
+                _pendingStrike = -1f;
+                LandStrike();
+            }
+        }
+
+        /// <summary>Applies the swing's damage in front of the hero (its facing at this moment, so a turn during the windup is honoured).</summary>
+        private void LandStrike()
+        {
             Vector3 origin = transform.position + Vector3.up + transform.forward * (_range * 0.5f);
             int hitCount = Physics.OverlapSphereNonAlloc(origin, _radius, _hitBuffer, _targetMask, QueryTriggerInteraction.Collide);
 
@@ -171,6 +240,12 @@ namespace Rapadura.Gameplay.Player
                 OutgoingDamage.DeliverDamage(target, damage, ElementType.Physical, gameObject, isCritical);
             }
         }
+
+#if UNITY_EDITOR
+        /// <summary>Test-only: start a swing and advance it without Update/input.</summary>
+        public void PerformAttackForTests() => PerformAttack();
+        public void TickPendingStrikeForTests(float deltaTime) => TickPendingStrike(deltaTime);
+#endif
 
         private void OnDrawGizmosSelected()
         {

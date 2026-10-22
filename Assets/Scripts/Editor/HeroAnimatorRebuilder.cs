@@ -31,7 +31,7 @@ namespace Rapadura.Editor
     /// </list>
     /// Safe to run repeatedly.
     /// </summary>
-    public static class HeroAnimatorRebuilder
+    public static partial class HeroAnimatorRebuilder
     {
         private const string CharactersRoot = "Assets/Models/Characters";
         private const string MocapIdlePath = "Assets/Animations/Mocap/Mocap_Idle.anim";
@@ -43,9 +43,28 @@ namespace Rapadura.Editor
         private const float IdleEnterBlend = 0.03f;
         private const float IdleExitBlend = 0.06f;
 
+        /// <summary>
+        /// When true, <see cref="RebuildAll"/> also wires the Mocap_*.anim action clips (see
+        /// HeroAnimatorRebuilder.Actions.cs). Off by default: the CMU retarget still produces
+        /// out-of-range muscles (Mocap_Idle lifts a leg, the death clips twist ±2.8), which left the
+        /// heroes deformed/invisible in play. Use the "(with mocap actions)" menu once the clips
+        /// pass MocapClipSanity.
+        /// </summary>
+        public static bool IncludeMocapActions;
+
         [MenuItem("Rapadura/Animation/Rebuild Hero Animators")]
         public static void RebuildAllMenu()
         {
+            IncludeMocapActions = false;
+            string report = RebuildAll();
+            Debug.Log(report);
+            EditorUtility.DisplayDialog("Rebuild Hero Animators", report, "OK");
+        }
+
+        [MenuItem("Rapadura/Animation/Rebuild Hero Animators (with mocap actions)")]
+        public static void RebuildAllWithActionsMenu()
+        {
+            IncludeMocapActions = true;
             string report = RebuildAll();
             Debug.Log(report);
             EditorUtility.DisplayDialog("Rebuild Hero Animators", report, "OK");
@@ -119,14 +138,18 @@ namespace Rapadura.Editor
             }
 
             bool humanoid = walk.humanMotion;
-            AnimationClip mocapIdle = humanoid ? AssetDatabase.LoadAssetAtPath<AnimationClip>(MocapIdlePath) : null;
+            AnimationClip mocapIdle = humanoid && IncludeMocapActions ? AssetDatabase.LoadAssetAtPath<AnimationClip>(MocapIdlePath) : null;
 
             // 3) Controller.
             RebuildController(controller, walk, run, idlePose, mocapIdle, walkMeasure.GroundSpeed, runMeasure.GroundSpeed);
 
+            // 4) One-shot mocap actions (attack/cast/hit/jump/death), see HeroAnimatorRebuilder.Actions.cs.
+            string actionsReport = AddActions(controller, hero, walkPath, humanoid && IncludeMocapActions);
+            AssetDatabase.SaveAssets();
+
             return $"{hero}: Walk '{walkName}' {walkMeasure.GroundSpeed:0.###} u/s, Run '{runName}' {runMeasure.GroundSpeed:0.###} u/s (model units, ×model scale at runtime), "
                    + $"idle pose @ {walkMeasure.StandingTime:0.###}s{(idlePose == null ? " (MISSING)" : string.Empty)}, "
-                   + $"{(humanoid ? "Humanoid" : "Generic")}{(mocapIdle != null ? ", Idle state = Mocap_Idle" : string.Empty)}.";
+                   + $"{(humanoid ? "Humanoid" : "Generic")}{(mocapIdle != null ? ", Idle state = Mocap_Idle" : string.Empty)}; {actionsReport}.";
         }
 
         // ------------------------------------------------------------------

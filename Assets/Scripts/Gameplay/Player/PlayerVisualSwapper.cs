@@ -72,6 +72,12 @@ namespace Rapadura.Gameplay.Player
                 _speedDriver.SetAnimator(animator);
             }
 
+            PlayerActionAnimator actions = _speedDriver != null ? _speedDriver.GetComponent<PlayerActionAnimator>() : GetComponentInParent<PlayerActionAnimator>();
+            if (actions != null)
+            {
+                actions.SetAnimator(animator);
+            }
+
             if (_proceduralAnimator != null)
             {
                 _proceduralAnimator.SetVisualRoot(_currentInstance.transform);

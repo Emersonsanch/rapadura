@@ -135,6 +135,7 @@ namespace Rapadura.Gameplay.Player
         private MaterialPropertyBlock _propertyBlock;
 
         private PlayerStats _stats;
+        private PlayerActionAnimator _actions;
         private PlayerClickToMove _clickToMove;
 
         // Kinematics
@@ -158,6 +159,8 @@ namespace Rapadura.Gameplay.Player
         private bool _strikeLeft;
         private Vector3 _hitShakeSeed;
         private float _flinchRollSign = 1f;
+
+        private bool _restCaptured;
 
         // Death
         private bool _wasDead;
@@ -195,8 +198,10 @@ namespace Rapadura.Gameplay.Player
             ClearFlash();
 
             // Leave the previous root (e.g. the scene's PlayerVisual container) at its rest pose,
-            // not frozen mid-lean/shake.
-            if (_visualRoot != null && _visualRoot != visualRoot)
+            // not frozen mid-lean/shake. Only if that pose was actually captured: the swapper can
+            // call this before Awake (hero restored from carried state on scene load), and the
+            // default rest scale is zero — that collapsed the whole hero to nothing.
+            if (_restCaptured && _visualRoot != null && _visualRoot != visualRoot)
             {
                 _visualRoot.localPosition = _restLocalPosition;
                 _visualRoot.localRotation = _restLocalRotation;
@@ -226,6 +231,7 @@ namespace Rapadura.Gameplay.Player
             _restLocalPosition = visualRoot.localPosition;
             _restLocalRotation = visualRoot.localRotation;
             _restLocalScale = visualRoot.localScale;
+            _restCaptured = true;
 
             _renderers = visualRoot.GetComponentsInChildren<Renderer>(true);
             if (_renderers.Length == 0 && _renderer != null)
@@ -338,6 +344,34 @@ namespace Rapadura.Gameplay.Player
         }
 
         private bool IsDead => _stats != null && _stats.IsDead;
+
+        /// <summary>The Animator plays real attack/cast clips: the procedural arm whip and cast pose stand down (lean, head look, flinch and flash stay).</summary>
+        private bool ClipActions
+        {
+            get
+            {
+                if (_actions == null)
+                {
+                    _actions = GetComponent<PlayerActionAnimator>();
+                }
+
+                return _actions != null && _actions.HasClipActions;
+            }
+        }
+
+        /// <summary>The Animator plays a real death clip: no procedural topple, only the delayed sink into the ground.</summary>
+        private bool ClipDeath
+        {
+            get
+            {
+                if (_actions == null)
+                {
+                    _actions = GetComponent<PlayerActionAnimator>();
+                }
+
+                return _actions != null && _actions.HasDeathClip;
+            }
+        }
 
         private void OnDamageApplied(DamageAppliedEvent evt)
         {
@@ -522,7 +556,10 @@ namespace Rapadura.Gameplay.Player
             if (dead)
             {
                 _deathTime += deltaTime;
-                _deathFall = Mathf.Max(_deathFall, LocomotionMath.FallProgress(_deathTime, _deathFallDuration));
+                if (!(_rigMode && ClipDeath))
+                {
+                    _deathFall = Mathf.Max(_deathFall, LocomotionMath.FallProgress(_deathTime, _deathFallDuration));
+                }
                 _deathSink = Mathf.Clamp01((_deathTime - _deathSinkDelay) / _deathSinkDuration);
                 _deathSink = Mathf.SmoothStep(0f, 1f, _deathSink);
             }
@@ -563,11 +600,14 @@ namespace Rapadura.Gameplay.Player
             float breath = Mathf.Sin(_idleClock * Mathf.PI * 2f * _breathRate) * _breathDegrees * idle;
             float weightShift = Mathf.Sin(_idleClock * Mathf.PI * 2f * _breathRate * 0.37f) * _weightShiftDegrees * idle;
 
+            // With real attack/cast clips on the Animator, the bone-level strike and cast poses would
+            // fight the clip (double swing); keep only a trace of torso twist for punch.
+            float procedural = ClipActions ? 0f : 1f;
             float strikeU = _attackTime >= 0f ? _attackTime / _strikeDuration : -1f;
-            float strikeArm = LocomotionMath.AttackArmSwing(strikeU);
-            float strikeTwist = LocomotionMath.AttackTwist(strikeU) * _strikeTwistDegrees * (_strikeLeft ? -1f : 1f);
+            float strikeArm = LocomotionMath.AttackArmSwing(strikeU) * procedural;
+            float strikeTwist = LocomotionMath.AttackTwist(strikeU) * _strikeTwistDegrees * (_strikeLeft ? -1f : 1f) * Mathf.Max(procedural, 0.25f);
 
-            float cast = _castTime >= 0f ? LocomotionMath.Envelope(_castTime, _castRise, _castHold, _castRelease) : 0f;
+            float cast = (_castTime >= 0f ? LocomotionMath.Envelope(_castTime, _castRise, _castHold, _castRelease) : 0f) * procedural;
             float flinch = _hitTime >= 0f ? LocomotionMath.Envelope(_hitTime, 0.04f, 0f, Mathf.Max(0.01f, _flinchDuration - 0.04f)) : 0f;
 
             float alive = 1f - _deathFall;

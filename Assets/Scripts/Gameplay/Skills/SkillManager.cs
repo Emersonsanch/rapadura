@@ -674,7 +674,11 @@ namespace Rapadura.Gameplay.Skills
 
         private void PlayPresentation(SkillDefinition skill)
         {
-            if (_animator != null && !string.IsNullOrEmpty(skill.AnimationTrigger))
+            // Per-skill triggers (CastQuake, CastFireball...) only when the controller declares them;
+            // the generic cast clip is fired from SkillCastEvent by PlayerActionAnimator. A SetTrigger
+            // on a missing parameter logs a warning on every cast.
+            if (_animator != null && !string.IsNullOrEmpty(skill.AnimationTrigger)
+                && Rapadura.Gameplay.Player.States.PlayerAnimatorHashes.HasParameter(_animator, Animator.StringToHash(skill.AnimationTrigger)))
             {
                 _animator.SetTrigger(skill.AnimationTrigger);
             }
