@@ -16,7 +16,7 @@ namespace Rapadura.Gameplay.Player.States
 
         public void Enter(PlayerController context)
         {
-            context.Animator.Play(PlayerAnimatorHashes.Slide);
+            PlayerAnimatorHashes.TryPlay(context.Animator, PlayerAnimatorHashes.Slide);
             context.Motor.SetCrouching(true);
             _elapsed = 0f;
         }

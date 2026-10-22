@@ -42,6 +42,27 @@ namespace Rapadura.Gameplay.Enemies
         }
     }
 
+    /// <summary>
+    /// Raised by <see cref="EnemyProceduralAnimator"/> on each heavy footfall (Heavy archetype: golem,
+    /// guardian, warlord, cave dweller) — walking stomps, the alert landing and the attack slam. Timed by
+    /// the procedural gait (scaled time), independent of the camera. Intended for a footstep/thud SFX or
+    /// a tiny camera shake; nothing listens yet (no "footstep" cue exists in the SFX map).
+    /// </summary>
+    public readonly struct EnemyFootstepEvent : IGameEvent
+    {
+        public readonly GameObject Enemy;
+        public readonly Vector3 Position;
+        /// <summary>0..1: walking steps scale with speed, the attack slam is 1.</summary>
+        public readonly float Intensity;
+
+        public EnemyFootstepEvent(GameObject enemy, Vector3 position, float intensity)
+        {
+            Enemy = enemy;
+            Position = position;
+            Intensity = intensity;
+        }
+    }
+
     /// <summary>Raised when an enemy's health drops below its flee threshold and it starts fleeing.</summary>
     public readonly struct EnemyFleeingEvent : IGameEvent
     {

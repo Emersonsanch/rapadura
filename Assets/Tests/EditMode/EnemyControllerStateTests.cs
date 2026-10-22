@@ -165,7 +165,17 @@ namespace Rapadura.Tests
             _targetGameObject.transform.position = new Vector3(1f, 0f, 0f);
 
             float healthBefore = targetHealth.CurrentHealth;
+
+            // Telegraphed: nothing lands during the windup (>= 0.35 s)...
             _controller.StateMachine.Tick(0.1f);
+            Assert.AreEqual(healthBefore, targetHealth.CurrentHealth, "no damage during the windup");
+            Assert.IsTrue(_controller.IsWindingUp);
+
+            // ...then the strike lands once the windup has elapsed.
+            for (int i = 0; i < 6; i++)
+            {
+                _controller.StateMachine.Tick(0.1f);
+            }
 
             Assert.Less(targetHealth.CurrentHealth, healthBefore);
         }

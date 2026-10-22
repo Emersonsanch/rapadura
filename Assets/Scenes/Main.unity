@@ -9530,13 +9530,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
   _visualRoot: {fileID: 572421671}
-  _bobAmplitude: 0.22
-  _bobFrequency: 10
-  _leanDegrees: 22
-  _poseSmoothing: 12
-  _referenceSpeed: 2
-  _swayAmplitude: 0.09
-  _yawWagDegrees: 10
+  _intensity: 1
+  _speedSmoothing: 10
+  _maxPlausibleSpeed: 25
 --- !u!43 &388629145
 Mesh:
   m_ObjectHideFlags: 0
@@ -17444,13 +17440,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
   _visualRoot: {fileID: 126321070}
-  _bobAmplitude: 0.22
-  _bobFrequency: 10
-  _leanDegrees: 22
-  _poseSmoothing: 12
-  _referenceSpeed: 2
-  _swayAmplitude: 0.09
-  _yawWagDegrees: 10
+  _intensity: 1
+  _speedSmoothing: 10
+  _maxPlausibleSpeed: 25
 --- !u!43 &664696158
 Mesh:
   m_ObjectHideFlags: 0
@@ -21002,13 +20994,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
   _visualRoot: {fileID: 924627206}
-  _bobAmplitude: 0.22
-  _bobFrequency: 10
-  _leanDegrees: 22
-  _poseSmoothing: 12
-  _referenceSpeed: 2
-  _swayAmplitude: 0.09
-  _yawWagDegrees: 10
+  _intensity: 1
+  _speedSmoothing: 10
+  _maxPlausibleSpeed: 25
 --- !u!1 &785822723
 GameObject:
   m_ObjectHideFlags: 0
@@ -21472,6 +21460,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Player.PlayerAnimatorSpeedDriver
   _motor: {fileID: 0}
   _animator: {fileID: 0}
+  _blendSmoothTime: 0.1
+  _playbackSmoothTime: 0.08
+  _minPlayback: 0.6
+  _maxPlayback: 1.9
+  _fallbackWalkClipSpeed: 2.5
+  _fallbackRunClipSpeed: 5.5
+  _strideTuning: 1
+  _disableRootMotion: 1
 --- !u!1 &805839156
 GameObject:
   m_ObjectHideFlags: 0
@@ -36229,13 +36225,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
   _visualRoot: {fileID: 812907436}
-  _bobAmplitude: 0.22
-  _bobFrequency: 10
-  _leanDegrees: 22
-  _poseSmoothing: 12
-  _referenceSpeed: 2
-  _swayAmplitude: 0.09
-  _yawWagDegrees: 10
+  _intensity: 1
+  _speedSmoothing: 10
+  _maxPlausibleSpeed: 25
 --- !u!1 &1393795896
 GameObject:
   m_ObjectHideFlags: 0
@@ -40537,6 +40529,7 @@ MonoBehaviour:
   _animator: {fileID: 1560329231}
   _playerCamera: {fileID: 676800760}
   _cameraLookTransform: {fileID: 1211246096}
+  _moveEveryFrame: 1
 --- !u!95 &1560329231
 Animator:
   serializedVersion: 7
@@ -40594,6 +40587,7 @@ MonoBehaviour:
   _minStaminaToRun: 5
   _maxMana: 100
   _manaRegenPerSecond: 5
+  _baseDefense: 0
   _progressionCurve: {fileID: 0}
   _baseExperienceToLevel: 100
   _experienceCurveMultiplier: 1.25
@@ -40613,7 +40607,42 @@ MonoBehaviour:
   _walkSpeed: 2.5
   _runSpeed: 5.5
   _crouchSpeed: 1.4
-  _rotationSmoothing: 12
+  _accelerationTime: 0.16
+  _decelerationTime: 0.12
+  _accelerationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1.6
+      inSlope: 0
+      outSlope: -1.2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.55
+      inSlope: -0.6
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _directionTurnSpeed: 900
+  _reversalAngle: 150
+  _reversalSpeedKept: 0.35
+  _turnSpeedMoving: 720
+  _turnSpeedStopped: 1000
+  _destinationSmoothing: 0.12
+  _destinationSnapAngle: 70
+  _arrivalDeceleration: 10
+  _minArrivalSpeed: 0.7
+  _passedArrivalTolerance: 0.45
   _jumpHeight: 1.2
   _gravity: -18
   _groundedStickForce: -2
@@ -40761,9 +40790,23 @@ MonoBehaviour:
   _motor: {fileID: 0}
   _renderer: {fileID: 801356548}
   _bobAmplitude: 0.02
-  _bobFrequency: 12
   _leanDegrees: 16
   _poseSmoothing: 12
+  _stepLength: 0.6
+  _footfallSquash: 0.05
+  _swayDegrees: 3
+  _accelLeanGain: 1.2
+  _turnLeanGain: 0.8
+  _maxLeanPitch: 12
+  _maxLeanRoll: 10
+  _runLeanDegrees: 4
+  _breathDegrees: 1.6
+  _breathRate: 0.28
+  _breathScale: 0.012
+  _weightShiftDegrees: 1.2
+  _headLookMaxYaw: 65
+  _headLookSharpness: 8
+  _headLookTargetRange: 14
   _attackLungeDistance: 0.3
   _attackSquash: 0.15
   _attackDuration: 0.18
@@ -40791,10 +40834,27 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _strikeDuration: 0.36
+  _strikeArmDegrees: 115
+  _strikeTwistDegrees: 22
+  _castArmDegrees: 100
+  _castArchDegrees: 7
+  _castRise: 0.1
+  _castHold: 0.16
+  _castRelease: 0.26
+  _castHop: 0.08
   _hitShakeMagnitude: 0.1
   _hitShakeDuration: 0.25
   _hitFlashDuration: 0.2
   _hitFlashColor: {r: 1, g: 0.15, b: 0.15, a: 1}
+  _flinchDegrees: 11
+  _flinchDuration: 0.28
+  _deathFallDegrees: 80
+  _deathFallDuration: 0.6
+  _deathSinkDelay: 1.1
+  _deathSinkDepth: 0.25
+  _deathSinkDuration: 1.4
+  _reviveBlendTime: 0.3
 --- !u!114 &1560329242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40832,6 +40892,12 @@ MonoBehaviour:
     localPosition: {x: 0, y: -12.37737, z: 0}
     localEulerAngles: {x: 0, y: 0, z: 0}
     uniformScale: 1.339324
+  - characterId: 2
+    modelPrefab: {fileID: 919132149155446097, guid: 7f5731fa981aa6d4bb61a96f7a821f90, type: 3}
+    animatorController: {fileID: 0}
+    localPosition: {x: 0, y: 22.4, z: 0}
+    localEulerAngles: {x: -90, y: 0, z: 0}
+    uniformScale: 1.1
   _visualRoot: {fileID: 801356549}
   _speedDriver: {fileID: 801356551}
   _proceduralAnimator: {fileID: 1560329241}
@@ -46312,13 +46378,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyProceduralAnimator
   _visualRoot: {fileID: 286139677}
-  _bobAmplitude: 0.22
-  _bobFrequency: 10
-  _leanDegrees: 22
-  _poseSmoothing: 12
-  _referenceSpeed: 2
-  _swayAmplitude: 0.09
-  _yawWagDegrees: 10
+  _intensity: 1
+  _speedSmoothing: 10
+  _maxPlausibleSpeed: 25
 --- !u!1 &1778062292
 GameObject:
   m_ObjectHideFlags: 0

@@ -248,6 +248,8 @@ namespace Rapadura.Gameplay.Enemies
         {
             if (Health != null && Health.IsDead)
             {
+                _velocity = Vector3.zero;
+                CancelAttackWindup();
                 return;
             }
 
@@ -259,9 +261,12 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
+            _movedThisTick = false;
+
             if (IsHoldingAggro)
             {
                 _aggroHoldRemaining = Mathf.Max(0f, _aggroHoldRemaining - deltaTime);
+                Coast(deltaTime, 1f);
                 FaceTarget(deltaTime);
                 if (_aggroHoldRemaining <= 0f && _forceAggroWhenHoldEnds)
                 {
@@ -272,6 +277,13 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             _stateMachine.Tick(deltaTime);
+
+            // Patrol pauses, state changes etc.: nobody drove the enemy this tick, so it decelerates
+            // instead of stopping dead (acceleration/deceleration smoothing, see MoveInDirection).
+            if (!_movedThisTick)
+            {
+                Coast(deltaTime, 1f);
+            }
         }
 
         /// <summary>
@@ -350,23 +362,6 @@ namespace Rapadura.Gameplay.Enemies
             }
         }
 
-        private void FaceTarget(float deltaTime)
-        {
-            if (Target == null)
-            {
-                return;
-            }
-
-            Vector3 direction = Target.position - transform.position;
-            direction.y = 0f;
-            if (direction.sqrMagnitude < 0.0001f)
-            {
-                return;
-            }
-
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(direction, Vector3.up), _turnSpeedDegPerSec * deltaTime);
-        }
-
         /// <summary>Resets transient AI state so a pooled instance behaves like a fresh spawn.</summary>
         public void ResetForSpawn(EnemyDefinition definition, Vector3 position, Transform[] waypoints = null)
         {
@@ -384,6 +379,9 @@ namespace Rapadura.Gameplay.Enemies
             _aggroLocked = false;
             _fleeExhausted = false;
             _spawnGeneration++;
+            _velocity = Vector3.zero;
+            _yawVelocity = 0f;
+            CancelAttackWindup();
 
             if (Health == null)
             {
@@ -453,6 +451,7 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             _hasSpottedTarget = true;
+            _alertSequence++;
             EventBus.Publish(new EnemyTargetSpottedEvent(gameObject, Target != null ? Target.gameObject : null));
         }
 
@@ -468,26 +467,185 @@ namespace Rapadura.Gameplay.Enemies
         }
 
         [Header("Movement Feel")]
-        [Tooltip("Degrees/sec the enemy turns to face its movement direction. Instant snapping (very high values) reads as janky/robotic, especially on rig-free mesh visuals.")]
+        [Tooltip("Scales the archetype's max turn speed (EnemyMotionProfile.MaxTurnSpeed); 360 = as tuned. Instant snapping (very high values) reads as janky/robotic, especially on rig-free mesh visuals.")]
         [SerializeField] private float _turnSpeedDegPerSec = 360f;
 
-        /// <summary>
-        /// Moves toward (or away from, with a negative-facing direction) a point on the XZ plane. No NavMesh required.
-        /// <paramref name="speed"/> is the state's base speed (patrol/chase/flee); it is scaled here by
-        /// <see cref="MoveSpeedMultiplier"/> so every state honours slows/roots. A rooted enemy still turns
-        /// to face <paramref name="direction"/>. EnemyProceduralAnimator measures real displacement, so
-        /// the walk bob follows the slowed speed on its own.
-        /// </summary>
-        public void MoveInDirection(Vector3 direction, float speed, float deltaTime)
+        /// <summary>Braking multiplier on the archetype deceleration while planted for an attack.</summary>
+        private const float AttackBrakeMultiplier = 2.5f;
+
+        private Vector3 _velocity;
+        private float _yawVelocity;
+        private bool _movedThisTick;
+        private EnemyMotionProfile _motion = EnemyMotionProfile.Quadruped;
+        private EnemyDefinition _motionResolvedFor;
+        private bool _motionResolved;
+
+        private int _attackSequence;
+        private int _strikeSequence;
+        private int _attackCancelSequence;
+        private int _alertSequence;
+        private bool _isWindingUp;
+        private float _attackWindupDuration;
+
+        /// <summary>Planar movement velocity (m/s) after acceleration/deceleration smoothing.</summary>
+        public Vector3 Velocity => _velocity;
+
+        /// <summary>Tuning for this enemy's archetype (<see cref="EnemyDefinition.MotionArchetype"/>), cached per definition.</summary>
+        public EnemyMotionProfile Motion
         {
-            if (direction == Vector3.zero || speed <= 0f)
+            get
+            {
+                if (!_motionResolved || !ReferenceEquals(_motionResolvedFor, _definition))
+                {
+                    _motion = EnemyMotionProfile.For(EnemyMotionArchetypes.Resolve(_definition));
+                    _motionResolvedFor = _definition;
+                    _motionResolved = true;
+                }
+
+                return _motion;
+            }
+        }
+
+        /// <summary>Windup used by <see cref="EnemyAttackState"/> for this enemy (≥ <see cref="EnemyMotionMath.MinTelegraph"/>).</summary>
+        public float ResolvedAttackWindup => EnemyMotionMath.ResolveWindup(Motion.BaseWindup, _definition != null ? _definition.AttackCooldown : 0f);
+
+        // Animation hand-off counters: EnemyProceduralAnimator polls these (no delegates/allocations,
+        // and a pooled/disabled animator can never miss-subscribe). Each bump = one event.
+        public int AttackSequence => _attackSequence;
+        public int StrikeSequence => _strikeSequence;
+        public int AttackCancelSequence => _attackCancelSequence;
+        public int AlertSequence => _alertSequence;
+        public bool IsWindingUp => _isWindingUp;
+        public float AttackWindupDuration => _attackWindupDuration;
+
+        /// <summary>Called by <see cref="EnemyAttackState"/> when a telegraphed windup starts; damage lands <paramref name="duration"/> s later.</summary>
+        public void NotifyAttackWindup(float duration)
+        {
+            _isWindingUp = true;
+            _attackWindupDuration = duration;
+            _attackSequence++;
+        }
+
+        /// <summary>Called by <see cref="EnemyAttackState"/> at the damage moment.</summary>
+        public void NotifyAttackStrike()
+        {
+            _isWindingUp = false;
+            _strikeSequence++;
+        }
+
+        /// <summary>A windup that never struck (target left reach, state change, death, re-spawn).</summary>
+        public void CancelAttackWindup()
+        {
+            if (!_isWindingUp)
             {
                 return;
             }
 
-            float effectiveSpeed = speed * MoveSpeedMultiplier;
-            Vector3 delta = direction.normalized * effectiveSpeed * deltaTime;
+            _isWindingUp = false;
+            _attackCancelSequence++;
+        }
 
+        /// <summary>
+        /// Moves toward (or away from, with a negative-facing direction) a point on the XZ plane. No NavMesh required.
+        /// <paramref name="speed"/> is the state's base speed (patrol/chase/flee); it is scaled here by
+        /// <see cref="MoveSpeedMultiplier"/> so every state honours slows/roots. The actual velocity eases
+        /// toward that target with the archetype's acceleration/deceleration (never above the target
+        /// speed, so the flee cap holds), and heading turns with a critically damped yaw (no snapping or
+        /// jitter when the direction flips). A rooted enemy stops dead but still turns. EnemyProceduralAnimator
+        /// measures real displacement, so the gait follows the smoothed speed on its own.
+        /// </summary>
+        public void MoveInDirection(Vector3 direction, float speed, float deltaTime)
+        {
+            if (direction == Vector3.zero || speed <= 0f || deltaTime <= 0f)
+            {
+                return;
+            }
+
+            _movedThisTick = true;
+            direction.y = 0f;
+            if (direction.sqrMagnitude < 0.000001f)
+            {
+                return;
+            }
+
+            float multiplier = MoveSpeedMultiplier;
+            Vector3 desired = direction.normalized * (speed * multiplier);
+            if (multiplier <= 0f)
+            {
+                _velocity = Vector3.zero; // rooted: hard stop, no coasting through the root
+            }
+            else
+            {
+                EnemyMotionProfile motion = Motion;
+                float rate = desired.sqrMagnitude >= _velocity.sqrMagnitude ? motion.Acceleration : motion.Deceleration;
+                _velocity = Vector3.MoveTowards(_velocity, desired, rate * deltaTime);
+            }
+
+            Displace(_velocity * deltaTime, deltaTime);
+            TurnTowards(direction, deltaTime);
+        }
+
+        /// <summary>Brakes hard (attack stance) instead of coasting; marks the enemy as handled this tick.</summary>
+        public void StopMoving(float deltaTime)
+        {
+            _movedThisTick = true;
+            Coast(deltaTime, AttackBrakeMultiplier);
+        }
+
+        /// <summary>Chase speed capped so the enemy eases into attack range instead of skidding through it.</summary>
+        public float GetArriveSpeed(float speed, float remainingDistance)
+        {
+            return EnemyMotionMath.ArriveSpeed(speed, remainingDistance, Motion.Deceleration);
+        }
+
+        /// <summary>Smoothly turns to face the target (attack stance / aggro hold).</summary>
+        public void FaceTarget(float deltaTime)
+        {
+            if (Target == null)
+            {
+                return;
+            }
+
+            TurnTowards(Target.position - transform.position, deltaTime);
+        }
+
+        private void TurnTowards(Vector3 direction, float deltaTime)
+        {
+            direction.y = 0f;
+            if (direction.sqrMagnitude < 0.0001f || deltaTime <= 0f)
+            {
+                return;
+            }
+
+            EnemyMotionProfile motion = Motion;
+            float maxSpeed = motion.MaxTurnSpeed * Mathf.Max(0.1f, _turnSpeedDegPerSec / 360f);
+            float targetYaw = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            float yaw = transform.eulerAngles.y;
+            float newYaw = Mathf.SmoothDampAngle(yaw, targetYaw, ref _yawVelocity, motion.TurnSmoothTime, maxSpeed, deltaTime);
+            transform.rotation = Quaternion.Euler(0f, newYaw, 0f);
+        }
+
+        /// <summary>No state moved the enemy this tick: decelerate and drift to a stop.</summary>
+        private void Coast(float deltaTime, float brakeMultiplier)
+        {
+            if (_velocity.sqrMagnitude < 0.000001f || deltaTime <= 0f)
+            {
+                _velocity = Vector3.zero;
+                return;
+            }
+
+            if (MoveSpeedMultiplier <= 0f)
+            {
+                _velocity = Vector3.zero;
+                return;
+            }
+
+            _velocity = Vector3.MoveTowards(_velocity, Vector3.zero, Motion.Deceleration * brakeMultiplier * deltaTime);
+            Displace(_velocity * deltaTime, deltaTime);
+        }
+
+        private void Displace(Vector3 delta, float deltaTime)
+        {
             if (_characterController != null && _characterController.enabled)
             {
                 _characterController.Move(delta + Physics.gravity * deltaTime);
@@ -495,12 +653,6 @@ namespace Rapadura.Gameplay.Enemies
             else
             {
                 transform.position += delta;
-            }
-
-            if (direction.sqrMagnitude > 0.0001f)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _turnSpeedDegPerSec * deltaTime);
             }
         }
 

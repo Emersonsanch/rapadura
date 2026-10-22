@@ -7,7 +7,7 @@ namespace Rapadura.Gameplay.Player.States
     {
         public void Enter(PlayerController context)
         {
-            context.Animator.Play(PlayerAnimatorHashes.Jump);
+            PlayerAnimatorHashes.TryPlay(context.Animator, PlayerAnimatorHashes.Jump);
 
             if (context.Motor.IsGrounded)
             {

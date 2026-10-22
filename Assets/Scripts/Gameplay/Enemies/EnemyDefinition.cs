@@ -68,6 +68,8 @@ namespace Rapadura.Gameplay.Enemies
         [SerializeField] private float _chaseSpeed = 4f;
         [SerializeField] private float _fleeSpeed = 5f;
         [SerializeField] private float _waypointArrivalThreshold = 0.25f;
+        [Tooltip("Body plan driving acceleration/turning and the procedural gait/attack poses (EnemyProceduralAnimator). Auto = guessed from the asset/enemy name (wolf → Quadruped, spider/scorpion → Arthropod, bat → Flyer, golem/guardian/warlord/dweller → Heavy).")]
+        [SerializeField] private EnemyMotionArchetype _motionArchetype = EnemyMotionArchetype.Auto;
 
         [Header("Detection")]
         [SerializeField] private float _detectionRadius = 8f;
@@ -114,6 +116,12 @@ namespace Rapadura.Gameplay.Enemies
         public float ChaseSpeed => _chaseSpeed;
         public float FleeSpeed => _fleeSpeed;
         public float WaypointArrivalThreshold => _waypointArrivalThreshold;
+
+        /// <summary>The serialized value (may be <see cref="EnemyMotionArchetype.Auto"/>).</summary>
+        public EnemyMotionArchetype AuthoredMotionArchetype => _motionArchetype;
+
+        /// <summary>Concrete archetype: the authored one, or the name-based default when Auto.</summary>
+        public EnemyMotionArchetype MotionArchetype => EnemyMotionArchetypes.Resolve(this);
 
         public float DetectionRadius => _detectionRadius;
         public float LoseTargetRadius => _loseTargetRadius;

@@ -236,7 +236,7 @@ namespace Rapadura.Tests
             // Grace runs out, then the normal Patrol -> Chase -> Attack chain resumes.
             _controller.TickBrain(0.1f);
             Assert.IsFalse(_controller.IsHoldingAggro);
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 8; i++) // patrol -> chase -> attack, then the telegraphed windup
             {
                 _controller.TickBrain(0.1f);
             }
@@ -263,7 +263,7 @@ namespace Rapadura.Tests
             Assert.AreEqual(before, targetHealth.CurrentHealth, "no attack while frozen");
             Assert.IsTrue(_controller.StateMachine.IsInState<EnemyPatrolState>(), "no state change while frozen");
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 8; i++) // patrol -> chase -> attack, then the telegraphed windup
             {
                 _controller.TickBrain(0.1f);
             }

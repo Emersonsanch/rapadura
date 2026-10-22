@@ -43,8 +43,13 @@ namespace Rapadura.Gameplay.Enemies.States
                 return;
             }
 
+            // Ease in over the last stretch (aiming slightly inside attack range) so the smoothed
+            // velocity has bled off on arrival instead of coasting into the target.
             Vector3 direction = EnemyDetectionUtility.DirectionTowards(selfPosition, targetPosition);
-            context.MoveInDirection(direction, definition.ChaseSpeed, deltaTime);
+            Vector3 toTarget = targetPosition - selfPosition;
+            toTarget.y = 0f;
+            float remaining = toTarget.magnitude - definition.AttackRange * 0.8f;
+            context.MoveInDirection(direction, context.GetArriveSpeed(definition.ChaseSpeed, remaining), deltaTime);
         }
 
         public void FixedTick(EnemyController context, float fixedDeltaTime)

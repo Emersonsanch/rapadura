@@ -7,7 +7,7 @@ namespace Rapadura.Gameplay.Player.States
     {
         public void Enter(PlayerController context)
         {
-            context.Animator.Play(PlayerAnimatorHashes.Crouch);
+            PlayerAnimatorHashes.TryPlay(context.Animator, PlayerAnimatorHashes.Crouch);
             context.Motor.SetCrouching(true);
         }
 

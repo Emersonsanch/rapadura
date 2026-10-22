@@ -36,6 +36,9 @@ namespace Rapadura.Gameplay.Player
         [SerializeField] private Rapadura.Gameplay.Cameras.CameraController _playerCamera;
         [SerializeField] private Transform _cameraLookTransform;
 
+        [Tooltip("Run the states' movement step (FixedTick) every rendered frame instead of on the fixed physics step. CharacterController has no interpolation, so moving it at 50 Hz on a 60/120 Hz screen made the hero visibly judder against the smoothly-following camera. Off = legacy FixedUpdate movement.")]
+        [SerializeField] private bool _moveEveryFrame = true;
+
         public PlayerInputHandler Input { get; private set; }
         public PlayerMotor Motor { get; private set; }
         public PlayerStats Stats { get; private set; }
@@ -115,6 +118,13 @@ namespace Rapadura.Gameplay.Player
             if (!IsStunned)
             {
                 StateMachine.Tick(Time.deltaTime);
+
+                if (_moveEveryFrame)
+                {
+                    // PlayerMotor integrates with Time.deltaTime, so the same FixedTick code is
+                    // frame-rate independent here too (see _moveEveryFrame).
+                    StateMachine.FixedTick(Time.deltaTime);
+                }
             }
 
             if (_playerCamera != null && Input.LookInput.sqrMagnitude > 0.0001f)
@@ -126,7 +136,7 @@ namespace Rapadura.Gameplay.Player
 
         private void FixedUpdate()
         {
-            if (IsStunned)
+            if (IsStunned || _moveEveryFrame)
             {
                 return;
             }

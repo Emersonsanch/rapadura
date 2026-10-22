@@ -329,17 +329,18 @@ namespace Rapadura.Tests
             Vector3 far = new Vector3(100f, 0f, 0f);
 
             motor.MoveToward(far, isRunning: false);
-            float baseSpeed = motor.HorizontalVelocity.magnitude;
+            // The motor now accelerates (no instant start): compare the speed it is driving toward.
+            float baseSpeed = motor.TargetHorizontalSpeed;
             Assert.Greater(baseSpeed, 0f, "precondition: walking");
 
             buffs.ApplyEffects(LoadSkill("Characters/Icaro/skill_icaro_granada_eletrica").Debuffs, "granada"); // -35%
             motor.MoveToward(far, isRunning: false);
-            Assert.AreEqual(baseSpeed * 0.65f, motor.HorizontalVelocity.magnitude, 0.0001f);
+            Assert.AreEqual(baseSpeed * 0.65f, motor.TargetHorizontalSpeed, 0.0001f);
 
             buffs.ClearAllEffects();
             buffs.ApplyEffects(LoadSkill("Characters/Maithe/skill_maithe_passo_do_vento").Buffs, "passo"); // +50%
             motor.MoveToward(far, isRunning: false);
-            Assert.AreEqual(baseSpeed * 1.5f, motor.HorizontalVelocity.magnitude, 0.0001f);
+            Assert.AreEqual(baseSpeed * 1.5f, motor.TargetHorizontalSpeed, 0.0001f);
         }
 
         [Test]

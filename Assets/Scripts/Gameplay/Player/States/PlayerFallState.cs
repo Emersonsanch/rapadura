@@ -11,7 +11,7 @@ namespace Rapadura.Gameplay.Player.States
     {
         public void Enter(PlayerController context)
         {
-            context.Animator.Play(PlayerAnimatorHashes.Fall);
+            PlayerAnimatorHashes.TryPlay(context.Animator, PlayerAnimatorHashes.Fall);
         }
 
         public void Tick(PlayerController context, float deltaTime)

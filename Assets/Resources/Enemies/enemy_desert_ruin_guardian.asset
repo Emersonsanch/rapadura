@@ -34,6 +34,7 @@ MonoBehaviour:
   _chaseSpeed: 3.8
   _fleeSpeed: 0
   _waypointArrivalThreshold: 0.25
+  _motionArchetype: 4
   _detectionRadius: 14
   _loseTargetRadius: 20
   _attackRange: 2
