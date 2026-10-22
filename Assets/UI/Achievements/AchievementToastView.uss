@@ -6,7 +6,9 @@
     height: 100%;
     align-items: center;
     justify-content: flex-start;
-    padding-top: 24px;
+    /* Below the HUD's top-right menu cluster (top 32px + 68px buttons = ~100px): at 24px a 560px
+       toast centred on a ~1460px-wide phone panel covered the Missoes button (playtest r6). */
+    padding-top: 112px;
 }
 
 .achievement-toast {

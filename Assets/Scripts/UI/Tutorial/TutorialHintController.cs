@@ -4,6 +4,7 @@ using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Tutorial;
 using Rapadura.UI.Common;
+using Rapadura.UI.Encounter;
 using Rapadura.UI.HUD;
 using Rapadura.UI.WorldMap;
 using UnityEngine;
@@ -81,9 +82,11 @@ namespace Rapadura.UI.Tutorial
 
         /// <summary>
         /// Whether a hint must stay hidden right now: another screen (death screen, pause menu, dialogue,
-        /// any GameplayPause owner other than the hint itself) is freezing gameplay.
+        /// any GameplayPause owner other than the hint itself) is freezing gameplay, or the encounter
+        /// intro banner ("Prepare-se!" countdown through "Já!", or a boss banner) is on screen — the
+        /// first-encounter hint used to pop up on top of the countdown. It shows once the banner is gone.
         /// </summary>
-        public static bool ShouldDefer(bool pausedByOthers) => pausedByOthers;
+        public static bool ShouldDefer(bool pausedByOthers, bool introBannerShowing = false) => pausedByOthers || introBannerShowing;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
@@ -165,7 +168,7 @@ namespace Rapadura.UI.Tutorial
                 return;
             }
 
-            bool deferred = ShouldDefer(GameplayPause.IsPausedByOthers(this));
+            bool deferred = ShouldDefer(GameplayPause.IsPausedByOthers(this), BossIntroBannerController.IsAnyShowing);
             if (deferred != _deferred)
             {
                 _deferred = deferred;

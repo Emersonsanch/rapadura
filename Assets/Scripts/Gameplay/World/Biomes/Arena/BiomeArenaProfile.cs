@@ -266,27 +266,30 @@ namespace Rapadura.Gameplay.World.Biomes
 
                 case BiomeType.Mountain:
                 {
-                    var stone = new Color(0.82f, 0.85f, 0.90f, 0.55f);
+                    // Snow-bound: flat blue-white ground (the grass texture read as green), snow-dusted
+                    // rocks and pines, no grass tufts, plus snow-capped rocks and snow mounds.
+                    var stone = new Color(0.90f, 0.93f, 0.98f, 0.8f);
                     profile.SetDataForTests(
                         biome,
                         new List<BiomeArenaPropRule>
                         {
                             BiomeArenaPropRule.Hide("Tree_Broadleaf"),
                             BiomeArenaPropRule.Hide("Twig"),
-                            BiomeArenaPropRule.Recolor("Tree_Pine", new Color(0.75f, 0.85f, 0.85f, 0.35f)),
-                            BiomeArenaPropRule.Recolor("Tree_Gnarled", new Color(0.80f, 0.82f, 0.85f, 0.4f)),
-                            BiomeArenaPropRule.Recolor("Tuft", new Color(0.75f, 0.80f, 0.70f, 0.5f)),
-                            BiomeArenaPropRule.Recolor("GrassTuft", new Color(0.75f, 0.80f, 0.70f, 0.5f)),
+                            BiomeArenaPropRule.Recolor("Tree_Pine", new Color(0.80f, 0.88f, 0.92f, 0.5f)),
+                            BiomeArenaPropRule.Recolor("Tree_Gnarled", new Color(0.85f, 0.88f, 0.93f, 0.6f)),
+                            BiomeArenaPropRule.Hide("Tuft"),
+                            BiomeArenaPropRule.Hide("GrassTuft"),
                             BiomeArenaPropRule.Recolor("Rock", stone),
                             BiomeArenaPropRule.Recolor("ProceduralRock", stone),
                             BiomeArenaPropRule.Recolor("Pebble", stone),
                         },
                         new List<BiomeArenaPropSpawn>
                         {
-                            new BiomeArenaPropSpawn(BiomeArenaPropKind.SnowyRock, 8, new Color(0.45f, 0.47f, 0.50f, 1f), new Color(0.95f, 0.97f, 1f, 1f), 0.8f, 1.8f),
+                            new BiomeArenaPropSpawn(BiomeArenaPropKind.SnowyRock, 16, new Color(0.52f, 0.55f, 0.60f, 1f), new Color(0.95f, 0.97f, 1f, 1f), 0.8f, 1.8f),
+                            new BiomeArenaPropSpawn(BiomeArenaPropKind.Boulder, 6, new Color(0.92f, 0.95f, 1f, 1f), new Color(0.85f, 0.89f, 0.95f, 1f), 0.6f, 1.4f),
                         });
-                    profile.SetGroundForTests(true, new Color(0.88f, 0.92f, 0.95f, 0.6f), false);
-                    profile.SetAtmosphereForTests(true, new Color(0.82f, 0.86f, 0.92f, 1f), 0.02f, new Color(0.92f, 0.97f, 1.08f, 1f), 0.95f);
+                    profile.SetGroundForTests(true, new Color(0.74f, 0.78f, 0.85f, 1f), true);
+                    profile.SetAtmosphereForTests(true, new Color(0.84f, 0.88f, 0.94f, 1f), 0.02f, new Color(0.92f, 0.97f, 1.08f, 1f), 0.95f);
                     profile.SetSkyForTests(true, new Color(0.60f, 0.70f, 0.85f, 1f), new Color(0.75f, 0.78f, 0.82f, 1f), 1.2f);
                     break;
                 }
@@ -313,7 +316,7 @@ namespace Rapadura.Gameplay.World.Biomes
                             new BiomeArenaPropSpawn(BiomeArenaPropKind.Boulder, 4, new Color(0.25f, 0.24f, 0.27f, 1f), new Color(0.30f, 0.29f, 0.32f, 1f), 0.8f, 1.8f),
                         });
                     profile.SetGroundForTests(true, new Color(0.28f, 0.25f, 0.24f, 1f), true);
-                    profile.SetAtmosphereForTests(true, new Color(0.08f, 0.08f, 0.11f, 1f), 0.045f, new Color(0.45f, 0.45f, 0.60f, 1f), 0.25f);
+                    profile.SetAtmosphereForTests(true, new Color(0.035f, 0.035f, 0.05f, 1f), 0.05f, new Color(0.40f, 0.40f, 0.54f, 1f), 0.25f);
                     profile.SetSkyForTests(true, new Color(0.05f, 0.05f, 0.07f, 1f), new Color(0.05f, 0.05f, 0.06f, 1f), 0.25f);
                     break;
                 }

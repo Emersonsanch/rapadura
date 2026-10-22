@@ -46,12 +46,25 @@ namespace Rapadura.Gameplay.Characters
         /// requirements are already met at <paramref name="casterLevel"/>. At level 1 that is the 4
         /// actives; the Ultimate stays registered but locked until its level/prerequisite are reached
         /// and it is bought in the skill tree. Returns how many skills were newly learned.
+        ///
+        /// Any OTHER hero's signature skills still on the manager (switching hero mid-session) are
+        /// revoked first (<see cref="RevokeFrom"/>) and, if any were, the <see cref="SkillHotbar"/>
+        /// loadout is reset so it shows only the new hero's skills.
         /// </summary>
         public static int GrantTo(SkillManager skillManager, CharacterId id, int casterLevel)
         {
             if (skillManager == null)
             {
                 return 0;
+            }
+
+            int revoked = 0;
+            foreach (CharacterId other in (CharacterId[])Enum.GetValues(typeof(CharacterId)))
+            {
+                if (other != id)
+                {
+                    revoked += RevokeFrom(skillManager, other);
+                }
             }
 
             IReadOnlyList<SkillDefinition> skills = GetSkills(id);
@@ -80,7 +93,73 @@ namespace Rapadura.Gameplay.Characters
                 }
             }
 
+            if (revoked > 0 && skillManager.TryGetComponent(out SkillHotbar hotbar))
+            {
+                hotbar.ResetLoadout();
+            }
+
             return learnedCount;
+        }
+
+        /// <summary>
+        /// Takes hero <paramref name="id"/>'s signature skills away from <paramref name="skillManager"/>:
+        /// unlearns (and unequips) each learned one and unregisters the set. Skill points spent on them
+        /// come back - every extra level, plus the unlock point of a skill that had to be bought
+        /// (anything but a <see cref="IsStarterSkill"/>, which <see cref="GrantTo"/> hands out for free).
+        /// Returns how many skills were unlearned.
+        /// </summary>
+        public static int RevokeFrom(SkillManager skillManager, CharacterId id)
+        {
+            if (skillManager == null)
+            {
+                return 0;
+            }
+
+            IReadOnlyList<SkillDefinition> skills = GetSkills(id);
+            int revoked = 0;
+
+            foreach (SkillDefinition skill in skills)
+            {
+                SkillInstance instance = skill != null ? skillManager.GetLearnedSkill(skill.SkillId) : null;
+                if (instance == null)
+                {
+                    continue;
+                }
+
+                int refund = instance.Level - (IsStarterSkill(skill) ? 1 : 0);
+                if (skillManager.ForgetSkill(skill.SkillId, refund))
+                {
+                    revoked++;
+                }
+            }
+
+            skillManager.UnregisterSkills(skills);
+            return revoked;
+        }
+
+        /// <summary>A skill with no level gate and no prerequisite: <see cref="GrantTo"/> learns it for free.</summary>
+        public static bool IsStarterSkill(SkillDefinition skill)
+        {
+            if (skill == null)
+            {
+                return false;
+            }
+
+            SkillRequirement requirement = skill.Requirement;
+            if (requirement.minimumPlayerLevel > 1)
+            {
+                return false;
+            }
+
+            foreach (SkillDefinition required in requirement.requiredSkills)
+            {
+                if (required != null)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>

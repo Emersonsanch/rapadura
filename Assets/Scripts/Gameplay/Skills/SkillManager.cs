@@ -151,6 +151,29 @@ namespace Rapadura.Gameplay.Skills
             }
         }
 
+        /// <summary>
+        /// Reverse of <see cref="RegisterSkills"/>: drops runtime-registered ids from the lookup database
+        /// (e.g. the previous hero's signature set on a hero switch). Skills from the serialized
+        /// <see cref="_availableSkills"/> stay known.
+        /// </summary>
+        public void UnregisterSkills(IEnumerable<SkillDefinition> definitions)
+        {
+            EnsureInitialized();
+
+            if (definitions == null)
+            {
+                return;
+            }
+
+            foreach (SkillDefinition definition in definitions)
+            {
+                if (definition != null && Array.IndexOf(_availableSkills, definition) < 0)
+                {
+                    _skillDatabase.Remove(definition.SkillId);
+                }
+            }
+        }
+
         /// <summary>True if a skill with this id is known to this manager (serialized or registered at runtime).</summary>
         public bool IsSkillRegistered(string skillId)
         {
@@ -468,7 +491,31 @@ namespace Rapadura.Gameplay.Skills
             return false;
         }
 
+        /// <summary>
+        /// Unlearns <paramref name="skillId"/> without <see cref="RespecSkill"/>'s dependency check and
+        /// refunds exactly <paramref name="pointsToRefund"/> (skills granted for free must not turn into
+        /// free points). Unequips it, removes its passive buff and publishes <see cref="SkillRespecEvent"/>
+        /// (so <see cref="SkillHotbar"/> prunes it). Used when the selected hero changes.
+        /// </summary>
+        public bool ForgetSkill(string skillId, int pointsToRefund)
+        {
+            EnsureInitialized();
+
+            if (string.IsNullOrEmpty(skillId) || !_learnedSkills.TryGetValue(skillId, out SkillInstance instance))
+            {
+                return false;
+            }
+
+            RefundAndRemove(instance, Mathf.Max(0, pointsToRefund));
+            return true;
+        }
+
         private void RefundAndRemove(SkillInstance instance)
+        {
+            RefundAndRemove(instance, instance.Level);
+        }
+
+        private void RefundAndRemove(SkillInstance instance, int refund)
         {
             SkillDefinition definition = instance.Definition;
 
@@ -485,7 +532,6 @@ namespace Rapadura.Gameplay.Skills
                 _buffController.RemoveEffectsBySource(PassiveSourceKey(definition.SkillId));
             }
 
-            int refund = instance.Level;
             _learnedSkills.Remove(definition.SkillId);
 
             AvailableSkillPoints += refund;
@@ -738,12 +784,15 @@ namespace Rapadura.Gameplay.Skills
 
             if (damage > 0f)
             {
-                OutgoingDamage.DeliverDamage(target, damage, skill.Element, gameObject, isCritical);
+                // Per-skill channel: Health only blocks a repeat of THIS skill within its short window,
+                // so a skill cast right after a basic attack/other skill still lands.
+                OutgoingDamage.DeliverDamage(target, damage, skill.Element, gameObject, isCritical, DamageChannel.ForSkill(skill.SkillId));
             }
 
             if (skill.Debuffs.Length > 0 && targetObject.TryGetComponent(out BuffController targetBuffs))
             {
-                targetBuffs.ApplyEffects(skill.Debuffs, DebuffSourceKey(skill.SkillId));
+                // Caster as instigator: DoT ticks are credited to the player (kill XP/loot, damage numbers).
+                targetBuffs.ApplyEffects(skill.Debuffs, DebuffSourceKey(skill.SkillId), gameObject);
             }
         }
 

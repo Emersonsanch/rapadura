@@ -422,6 +422,12 @@ namespace Rapadura.UI.CharacterSelect
 
             if (_playerStats != null)
             {
+                // Hero switch: only the current hero's innate attribute talent may remain.
+                if (_playerStats.TryGetComponent(out AttributeSet attributeSet))
+                {
+                    attributeSet.ClearCharacterPassiveBonuses();
+                }
+
                 character.ApplyPassive(_playerStats);
 
                 // Each hero brings their own 5 signature skills (Resources/Skills/Characters/<Id>):

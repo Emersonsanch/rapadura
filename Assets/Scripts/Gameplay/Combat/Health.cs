@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Rapadura.Core.Events;
 using Rapadura.Gameplay.Skills;
 using UnityEngine;
@@ -11,11 +12,15 @@ namespace Rapadura.Gameplay.Combat
     /// Implements <see cref="ICombatTarget"/> so hitboxes, skills and AI can all damage/heal it
     /// through the same contract regardless of concrete type.
     ///
-    /// Owns invulnerability frames: after taking damage the target is briefly immune to further
-    /// damage (<see cref="_invulnerabilityDuration"/>), which is standard game-feel to avoid a
-    /// single overlapping hitbox instantly deleting a health bar across several trigger frames.
+    /// Anti-double-hit windows are per damage <b>channel</b> (attacker + <see cref="DamageInfo.Channel"/>),
+    /// not global: after a hit, only that same source's same attack/skill is ignored for
+    /// <see cref="_sameChannelHitWindow"/> seconds, which stops one cast's overlapping checks counting
+    /// twice. A global 0.5 s window used to equal the basic-attack cooldown, so any skill cast within
+    /// 0.5 s of a hit (or a DoT tick) dealt nothing — ~40% of ranged heroes' skill casts were wasted.
+    /// Whole-target immunity is still available explicitly via <see cref="GrantInvulnerability"/>;
+    /// the player's own post-hit i-frames live in <c>PlayerStats</c>.
     /// </summary>
-    public class Health : MonoBehaviour, ICombatTarget, ICriticalAwareTarget
+    public class Health : MonoBehaviour, ICombatTarget, ICriticalAwareTarget, IChanneledDamageTarget
     {
         [Header("Vitals")]
         [SerializeField] private float _maxHealth = 50f;
@@ -25,10 +30,20 @@ namespace Rapadura.Gameplay.Combat
         [SerializeField] private DamageBalanceConfig _balanceConfig;
 
         [Header("Invulnerability")]
-        [Tooltip("Seconds of damage immunity granted right after taking a hit.")]
-        [SerializeField] private float _invulnerabilityDuration = 0.5f;
+        [Tooltip("Seconds the SAME source's SAME damage channel (basic attack / one skill / one DoT) is ignored after it lands. Other channels and other attackers still hit.")]
+        [SerializeField] private float _sameChannelHitWindow = 0.2f;
 
+        /// <summary>Explicit whole-target immunity (<see cref="GrantInvulnerability"/>); hits never start it.</summary>
         private float _invulnerabilityTimer;
+
+        private struct ChannelWindow
+        {
+            public int SourceId;
+            public int Channel;
+            public float Remaining;
+        }
+
+        private readonly List<ChannelWindow> _channelWindows = new List<ChannelWindow>(4);
         private bool _initialized;
 
         /// <summary>Optional — absence means no resistance/immunity to any element (see <see cref="ElementResistance"/>).</summary>
@@ -49,6 +64,7 @@ namespace Rapadura.Gameplay.Combat
         public float MaxHealth => _maxHealth;
         public bool IsDead { get; private set; }
         public bool IsAlive => !IsDead;
+        /// <summary>Whole-target immunity from <see cref="GrantInvulnerability"/> (not from regular hits — see <see cref="IsChannelOnCooldown"/>).</summary>
         public bool IsInvulnerable => _invulnerabilityTimer > 0f;
         public Transform Transform => transform;
 
@@ -82,10 +98,65 @@ namespace Rapadura.Gameplay.Combat
 
         private void Update()
         {
+            TickInvulnerability(Time.deltaTime);
+        }
+
+        /// <summary>Advances the whole-target and per-channel windows (Update drives it; tests call it directly).</summary>
+        public void TickInvulnerability(float deltaTime)
+        {
             if (_invulnerabilityTimer > 0f)
             {
-                _invulnerabilityTimer -= Time.deltaTime;
+                _invulnerabilityTimer -= deltaTime;
             }
+
+            for (int i = _channelWindows.Count - 1; i >= 0; i--)
+            {
+                ChannelWindow window = _channelWindows[i];
+                window.Remaining -= deltaTime;
+
+                if (window.Remaining <= 0f)
+                {
+                    _channelWindows.RemoveAt(i);
+                }
+                else
+                {
+                    _channelWindows[i] = window;
+                }
+            }
+        }
+
+        /// <summary>True while <paramref name="source"/>'s <paramref name="channel"/> hit this target too recently to land again.</summary>
+        public bool IsChannelOnCooldown(GameObject source, int channel)
+        {
+            return FindChannelWindow(SourceIdOf(source), channel) >= 0;
+        }
+
+        private static int SourceIdOf(GameObject source)
+        {
+            return source != null ? source.GetInstanceID() : 0;
+        }
+
+        private int FindChannelWindow(int sourceId, int channel)
+        {
+            for (int i = 0; i < _channelWindows.Count; i++)
+            {
+                if (_channelWindows[i].SourceId == sourceId && _channelWindows[i].Channel == channel)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private void StartChannelWindow(int sourceId, int channel)
+        {
+            if (_sameChannelHitWindow <= 0f)
+            {
+                return;
+            }
+
+            _channelWindows.Add(new ChannelWindow { SourceId = sourceId, Channel = channel, Remaining = _sameChannelHitWindow });
         }
 
         /// <summary>Grants temporary damage immunity, refreshing/extending any window already in progress.</summary>
@@ -94,10 +165,11 @@ namespace Rapadura.Gameplay.Combat
             _invulnerabilityTimer = Mathf.Max(_invulnerabilityTimer, duration);
         }
 
-        /// <summary>Immediately ends any active invulnerability window.</summary>
+        /// <summary>Immediately ends any active invulnerability window, whole-target and per-channel.</summary>
         public void ClearInvulnerability()
         {
             _invulnerabilityTimer = 0f;
+            _channelWindows.Clear();
         }
 
         /// <summary>Applies a fully-resolved damage instance (post mitigation), honoring i-frames and raising events.</summary>
@@ -116,6 +188,15 @@ namespace Rapadura.Gameplay.Combat
             ApplyDamageInternal(DamageInfo.Simple(amount, element, source), displayAsCritical: true);
         }
 
+        /// <summary>
+        /// <see cref="IChanneledDamageTarget"/>: an already-resolved amount (crit folded in by
+        /// <see cref="OutgoingDamage.Resolve"/>) tagged with the attacker's damage channel.
+        /// </summary>
+        public void ApplyChanneledDamage(float amount, ElementType element, GameObject source, bool isCritical, int channel)
+        {
+            ApplyDamageInternal(DamageInfo.Simple(amount, element, source, channel), displayAsCritical: isCritical);
+        }
+
         private void ApplyDamageInternal(DamageInfo info, bool displayAsCritical)
         {
             EnsureInitialized();
@@ -125,9 +206,15 @@ namespace Rapadura.Gameplay.Combat
                 return;
             }
 
+            int sourceId = SourceIdOf(info.Source);
+            if (FindChannelWindow(sourceId, info.Channel) >= 0)
+            {
+                return;
+            }
+
             float finalDamage = DamageCalculator.ComputeDamage(info, _defense, _balanceConfig, _elementResistance);
             SetHealth(CurrentHealth - finalDamage);
-            GrantInvulnerability(_invulnerabilityDuration);
+            StartChannelWindow(sourceId, info.Channel);
 
             EventBus.Publish(new DamageAppliedEvent(gameObject, info.Source, finalDamage, info.Element, displayAsCritical));
 

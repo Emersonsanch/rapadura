@@ -45,6 +45,89 @@ namespace Rapadura.Gameplay.Player
             _controller.height = _standingHeight;
         }
 
+        /// <summary>Edit Mode guard: AddComponent doesn't run Awake outside Play Mode (same as SkillManager).</summary>
+        private CharacterController Controller
+        {
+            get
+            {
+                if (_controller == null)
+                {
+                    _controller = GetComponent<CharacterController>();
+                }
+
+                return _controller;
+            }
+        }
+
+        /// <summary>
+        /// One physics step with no horizontal movement: integrates gravity (or the grounded stick
+        /// force) and refreshes <see cref="IsGrounded"/>. Every grounded state that isn't moving calls
+        /// this so the character can never hang in the air.
+        /// </summary>
+        public void ApplyGravityOnly()
+        {
+            MoveInDirection(Vector3.zero, 0f);
+        }
+
+        /// <summary>
+        /// Teleports the character (CharacterController overrides transform writes while enabled, so it
+        /// is toggled around the move) and resets vertical motion.
+        /// </summary>
+        public void Teleport(Vector3 position, Quaternion rotation)
+        {
+            CharacterController controller = Controller;
+            bool wasEnabled = controller != null && controller.enabled;
+            if (wasEnabled)
+            {
+                controller.enabled = false;
+            }
+
+            transform.SetPositionAndRotation(position, rotation);
+
+            if (wasEnabled)
+            {
+                controller.enabled = true;
+            }
+
+            _verticalVelocity = 0f;
+        }
+
+        /// <summary>
+        /// Drops the character's feet (pivot) onto the ground right below it (probing from
+        /// <paramref name="probeUp"/> above, so a spawn slightly sunk in also resolves), ignoring its
+        /// own colliders and triggers. Returns false (no move) when nothing is below.
+        /// </summary>
+        public bool SnapToGround(LayerMask groundMask, float probeUp = 1f, float probeDown = 50f)
+        {
+            Physics.SyncTransforms();
+            Vector3 position = transform.position;
+            Vector3 origin = position + Vector3.up * probeUp;
+            RaycastHit[] hits = Physics.RaycastAll(origin, Vector3.down, probeUp + probeDown, groundMask, QueryTriggerInteraction.Ignore);
+
+            float bestDistance = float.PositiveInfinity;
+            float groundY = 0f;
+            foreach (RaycastHit hit in hits)
+            {
+                if (hit.collider.transform.IsChildOf(transform) || hit.distance >= bestDistance)
+                {
+                    continue;
+                }
+
+                bestDistance = hit.distance;
+                groundY = hit.point.y;
+            }
+
+            if (float.IsPositiveInfinity(bestDistance))
+            {
+                return false;
+            }
+
+            Teleport(new Vector3(position.x, groundY, position.z), transform.rotation);
+            _verticalVelocity = _groundedStickForce;
+            IsGrounded = true;
+            return true;
+        }
+
         private void Update()
         {
             UpdateCrouchHeight();
@@ -98,7 +181,13 @@ namespace Rapadura.Gameplay.Player
         /// <summary>Shared movement integration: rotates toward, accelerates along, and physically moves along a world-space direction.</summary>
         private void MoveInDirection(Vector3 desiredDirection, float speed)
         {
-            IsGrounded = _controller.isGrounded;
+            CharacterController controller = Controller;
+            if (controller == null || !controller.enabled)
+            {
+                return;
+            }
+
+            IsGrounded = controller.isGrounded;
 
             HorizontalVelocity = desiredDirection * speed;
 
@@ -111,7 +200,7 @@ namespace Rapadura.Gameplay.Player
             ApplyGravity();
 
             Vector3 finalVelocity = HorizontalVelocity + Vector3.up * _verticalVelocity;
-            _controller.Move(finalVelocity * Time.deltaTime);
+            controller.Move(finalVelocity * Time.deltaTime);
         }
 
         private void ApplyGravity()

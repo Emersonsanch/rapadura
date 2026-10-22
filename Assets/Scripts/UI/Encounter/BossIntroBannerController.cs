@@ -63,6 +63,18 @@ namespace Rapadura.UI.Encounter
         /// <summary>True while the "Prepare-se!" intro countdown is on screen.</summary>
         public bool IsShowingPrepare { get; private set; }
 
+        /// <summary>True while either banner (countdown through "Já!", or the boss name) is up, fade-out included.</summary>
+        public bool IsShowing => IsActive(IsShowingPrepare, ShownBoss != null);
+
+        /// <summary>
+        /// Whether the live banner instance is showing anything — <c>TutorialHintController</c> holds its
+        /// hint back meanwhile ("Dica: Prepare-se para lutar!" overlapped the countdown).
+        /// </summary>
+        public static bool IsAnyShowing => _instance != null && _instance.IsShowing;
+
+        /// <summary>Pure rule behind <see cref="IsShowing"/>.</summary>
+        public static bool IsActive(bool showingPrepare, bool showingBoss) => showingPrepare || showingBoss;
+
         private const float GoDisplaySeconds = 0.6f;
         // Scaled seconds left of the grace countdown (negative down to -GoDisplaySeconds while "Já!" shows).
         private float _countdownRemaining;

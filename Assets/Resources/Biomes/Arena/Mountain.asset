@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.World.Biomes.BiomeArenaProfile
   _biome: 2
   _tintGround: 1
-  _groundTint: {r: 0.88, g: 0.92, b: 0.95, a: 0.6}
-  _replaceGroundTexture: 0
+  _groundTint: {r: 0.74, g: 0.78, b: 0.85, a: 1}
+  _replaceGroundTexture: 1
   _groundTexture: {fileID: 0}
   _propRules:
   - _namePrefix: Tree_Broadleaf
@@ -29,33 +29,33 @@ MonoBehaviour:
   - _namePrefix: Tree_Pine
     _tag: 
     _action: 1
-    _tint: {r: 0.75, g: 0.85, b: 0.85, a: 0.35}
+    _tint: {r: 0.8, g: 0.88, b: 0.92, a: 0.5}
   - _namePrefix: Tree_Gnarled
     _tag: 
     _action: 1
-    _tint: {r: 0.8, g: 0.82, b: 0.85, a: 0.4}
+    _tint: {r: 0.85, g: 0.88, b: 0.93, a: 0.6}
   - _namePrefix: Tuft
     _tag: 
-    _action: 1
-    _tint: {r: 0.75, g: 0.8, b: 0.7, a: 0.5}
+    _action: 0
+    _tint: {r: 1, g: 1, b: 1, a: 1}
   - _namePrefix: GrassTuft
     _tag: 
-    _action: 1
-    _tint: {r: 0.75, g: 0.8, b: 0.7, a: 0.5}
+    _action: 0
+    _tint: {r: 1, g: 1, b: 1, a: 1}
   - _namePrefix: Rock
     _tag: 
     _action: 1
-    _tint: {r: 0.82, g: 0.85, b: 0.9, a: 0.55}
+    _tint: {r: 0.9, g: 0.93, b: 0.98, a: 0.8}
   - _namePrefix: ProceduralRock
     _tag: 
     _action: 1
-    _tint: {r: 0.82, g: 0.85, b: 0.9, a: 0.55}
+    _tint: {r: 0.9, g: 0.93, b: 0.98, a: 0.8}
   - _namePrefix: Pebble
     _tag: 
     _action: 1
-    _tint: {r: 0.82, g: 0.85, b: 0.9, a: 0.55}
+    _tint: {r: 0.9, g: 0.93, b: 0.98, a: 0.8}
   _overrideFog: 1
-  _fogColor: {r: 0.82, g: 0.86, b: 0.92, a: 1}
+  _fogColor: {r: 0.84, g: 0.88, b: 0.94, a: 1}
   _fogDensity: 0.02
   _ambientTint: {r: 0.92, g: 0.97, b: 1.08, a: 1}
   _sunIntensityMultiplier: 0.95
@@ -65,10 +65,16 @@ MonoBehaviour:
   _skyExposure: 1.2
   _props:
   - _kind: 2
-    _count: 8
-    _primaryColor: {r: 0.45, g: 0.47, b: 0.5, a: 1}
+    _count: 16
+    _primaryColor: {r: 0.52, g: 0.55, b: 0.6, a: 1}
     _secondaryColor: {r: 0.95, g: 0.97, b: 1, a: 1}
     _minScale: 0.8
     _maxScale: 1.8
+  - _kind: 3
+    _count: 6
+    _primaryColor: {r: 0.92, g: 0.95, b: 1, a: 1}
+    _secondaryColor: {r: 0.85, g: 0.89, b: 0.95, a: 1}
+    _minScale: 0.6
+    _maxScale: 1.4
   _scatterInnerRadius: 9
   _scatterOuterRadius: 26

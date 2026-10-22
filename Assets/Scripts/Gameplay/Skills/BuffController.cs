@@ -53,7 +53,7 @@ namespace Rapadura.Gameplay.Skills
 
                 if (shouldTick && _combatTarget != null)
                 {
-                    ApplyTick(effect.Definition);
+                    ApplyTick(effect);
                 }
 
                 if (expired)
@@ -86,13 +86,19 @@ namespace Rapadura.Gameplay.Skills
             _stunTimer = 0f;
         }
 
-        private void ApplyTick(StatModifierDefinition definition)
+        private void ApplyTick(ActiveStatEffect effect)
         {
+            StatModifierDefinition definition = effect.Definition;
+
             if (definition.tickDamageOrHeal > 0f)
             {
                 if (definition.isDebuff)
                 {
-                    _combatTarget.ApplyDamage(definition.tickDamageOrHeal, ElementType.None, gameObject);
+                    // Source = whoever applied the debuff (falls back to self), on the effect's own channel:
+                    // ticks used to come from the victim itself, so a DoT kill granted no XP/loot, and each
+                    // tick opened a global i-frame window that swallowed the caster's next hit.
+                    GameObject source = effect.Instigator != null ? effect.Instigator : gameObject;
+                    OutgoingDamage.DeliverDamage(_combatTarget, definition.tickDamageOrHeal, ElementType.None, source, false, effect.DamageChannel);
                 }
                 else
                 {
@@ -111,21 +117,22 @@ namespace Rapadura.Gameplay.Skills
         /// <see cref="ModifierApplication"/> is part of the identity too: a Flat and a Percent bonus on
         /// the same stat from one source are different effects, not a refresh of each other.
         /// </summary>
-        public void ApplyEffect(StatModifierDefinition definition, string sourceKey = null)
+        public void ApplyEffect(StatModifierDefinition definition, string sourceKey = null, GameObject instigator = null)
         {
             _activeEffects.RemoveAll(e => e.Definition.affectedStat == definition.affectedStat
                                           && e.Definition.isDebuff == definition.isDebuff
                                           && e.Definition.application == definition.application
                                           && e.SourceKey == sourceKey);
-            _activeEffects.Add(new ActiveStatEffect(definition, sourceKey));
+            _activeEffects.Add(new ActiveStatEffect(definition, sourceKey, instigator));
             OnModifiersChanged?.Invoke();
         }
 
-        public void ApplyEffects(IEnumerable<StatModifierDefinition> definitions, string sourceKey = null)
+        /// <param name="instigator">Who applied them (DoT tick damage source, see <see cref="ActiveStatEffect.Instigator"/>).</param>
+        public void ApplyEffects(IEnumerable<StatModifierDefinition> definitions, string sourceKey = null, GameObject instigator = null)
         {
             foreach (StatModifierDefinition definition in definitions)
             {
-                ApplyEffect(definition, sourceKey);
+                ApplyEffect(definition, sourceKey, instigator);
             }
         }
 

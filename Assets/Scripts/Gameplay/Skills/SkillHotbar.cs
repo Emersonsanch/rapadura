@@ -248,6 +248,17 @@ namespace Rapadura.Gameplay.Skills
         // Default fill
         // ---------------------------------------------------------------
 
+        /// <summary>
+        /// Clears every slot and default-fills again from <see cref="SkillManager"/> (equipped slots
+        /// first) - e.g. after the selected hero changed, so the new hero's skills sit in slot order
+        /// instead of filling whatever gaps the previous hero's left behind.
+        /// </summary>
+        public void ResetLoadout()
+        {
+            Loadout.ClearAll();
+            FillDefaults();
+        }
+
         /// <summary>Prunes slots whose skill is no longer learned, then (if enabled) default-fills empty slots.</summary>
         public void RefreshFromSkillManager()
         {

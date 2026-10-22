@@ -19,7 +19,7 @@ namespace Rapadura.Gameplay.Enemies.States
                 return;
             }
 
-            if (context.Health != null && EnemyDetectionUtility.ShouldFlee(context.Health.CurrentHealth, context.Health.MaxHealth, definition.FleeHealthThreshold))
+            if (context.CanFlee && context.Health != null && EnemyDetectionUtility.ShouldFlee(context.Health.CurrentHealth, context.Health.MaxHealth, definition.FleeHealthThreshold))
             {
                 context.PublishFleeing();
                 context.StateMachine.ChangeState<EnemyFleeState>();
@@ -29,7 +29,8 @@ namespace Rapadura.Gameplay.Enemies.States
             Vector3 selfPosition = context.transform.position;
             Vector3 targetPosition = context.Target.position;
 
-            if (EnemyDetectionUtility.IsTargetLost(selfPosition, targetPosition, definition.LoseTargetRadius))
+            // Encounter enemies are aggro-locked: the arena fight never "loses" the hero.
+            if (!context.IsAggroLocked && EnemyDetectionUtility.IsTargetLost(selfPosition, targetPosition, definition.LoseTargetRadius))
             {
                 context.MarkTargetLost();
                 context.StateMachine.ChangeState<EnemyPatrolState>();

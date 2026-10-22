@@ -320,6 +320,26 @@ namespace Rapadura.Tests
         }
 
         [Test]
+        public void Apply_BossWithModel_GetsTintedMaterialCopy_RegularEnemyKeepsTheShared()
+        {
+            GameObject prefab = MakeMeshModelPrefab("Wolf", new Vector3(70f, 100f, 50f));
+            Material shared = prefab.GetComponentInChildren<Renderer>().sharedMaterial;
+            Color sharedColor = shared.color;
+
+            EnemyDefinition wolf = MakeEnemy("enemy_forest_wolf", prefab);
+            EnemyDefinition alpha = MakeEnemy("enemy_forest_alpha_wolf", prefab);
+            SetField(alpha, "_isBoss", true);
+
+            Renderer wolfRenderer = EnemyVisualSwapper.Apply(MakeEnemyRoot(out _), wolf).GetComponentInChildren<Renderer>();
+            Renderer alphaRenderer = EnemyVisualSwapper.Apply(MakeEnemyRoot(out _), alpha).GetComponentInChildren<Renderer>();
+
+            Assert.AreSame(shared, wolfRenderer.sharedMaterial, "a regular enemy keeps the model's own material");
+            Assert.AreNotSame(shared, alphaRenderer.sharedMaterial, "a boss gets a tinted copy");
+            Assert.AreEqual(shared.color * EnemyVisualSwapper.BossModelTint, alphaRenderer.sharedMaterial.color);
+            Assert.AreEqual(sharedColor, shared.color, "the shared source material is not modified");
+        }
+
+        [Test]
         public void ShippedModelEnemies_ResolveToTheirModel_AndStandOnTheGroundWhenSpawnedOnIt()
         {
             foreach (string id in ModelEnemyIds)

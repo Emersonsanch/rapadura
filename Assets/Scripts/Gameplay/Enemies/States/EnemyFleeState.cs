@@ -3,11 +3,20 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.Enemies.States
 {
-    /// <summary>Runs directly away from the target while health is critical; returns to patrolling once safely clear or health has recovered.</summary>
+    /// <summary>
+    /// Runs directly away from the target while health is critical, at most at
+    /// <see cref="EnemyDetectionUtility.MaxFleeSpeed"/>; returns to patrolling once safely clear or
+    /// health has recovered, and tires after <see cref="EnemyDetectionUtility.FleeMaxDurationSeconds"/>,
+    /// turning back to chase. Either way the flee is spent for this life
+    /// (<see cref="EnemyController.MarkFleeExhausted"/>), so a low-HP enemy can't kite the hero forever.
+    /// </summary>
     public class EnemyFleeState : IState<EnemyController>
     {
+        private float _elapsed;
+
         public void Enter(EnemyController context)
         {
+            _elapsed = 0f;
         }
 
         public void Tick(EnemyController context, float deltaTime)
@@ -35,13 +44,29 @@ namespace Rapadura.Gameplay.Enemies.States
             // once either condition alone is enough to feel safe.
             if (recovered || safeDistance)
             {
+                context.MarkFleeExhausted();
+                if (context.IsAggroLocked)
+                {
+                    context.StateMachine.ChangeState<EnemyChaseState>();
+                    return;
+                }
+
                 context.MarkTargetLost();
                 context.StateMachine.ChangeState<EnemyPatrolState>();
                 return;
             }
 
+            _elapsed += deltaTime;
+            if (EnemyDetectionUtility.IsFleeExhausted(_elapsed, EnemyDetectionUtility.FleeMaxDurationSeconds))
+            {
+                // Tired: turn back and fight to the end instead of dragging the fight out.
+                context.MarkFleeExhausted();
+                context.StateMachine.ChangeState<EnemyChaseState>();
+                return;
+            }
+
             Vector3 direction = EnemyDetectionUtility.DirectionAwayFrom(selfPosition, targetPosition);
-            context.MoveInDirection(direction, definition.FleeSpeed, deltaTime);
+            context.MoveInDirection(direction, EnemyDetectionUtility.GetEffectiveFleeSpeed(definition.FleeSpeed), deltaTime);
         }
 
         public void FixedTick(EnemyController context, float fixedDeltaTime)

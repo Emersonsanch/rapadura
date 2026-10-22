@@ -62,7 +62,11 @@ namespace Rapadura.Gameplay.Player.States
                 {
                     context.ClickToMove.ClearDestination();
                 }
+
+                return;
             }
+
+            context.Motor.ApplyGravityOnly();
         }
 
         public void Exit(PlayerController context)

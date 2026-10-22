@@ -234,13 +234,18 @@ namespace Rapadura.Gameplay.Environment
                 (0.74f, new Color(1.00f, 0.60f, 0.30f)),
                 (0.85f, new Color(0.35f, 0.42f, 0.65f)));
 
+            // Night ambient is the only light after dusk (the sun is below the horizon, so its
+            // "moonlight" intensity lights nothing): bright enough that dark enemies (wolves) stay
+            // readable on a phone, still clearly night-blue. Was 0.10/0.12/0.22, which only looked
+            // "barely darker" because a stray full-intensity directional light (the character
+            // preview stage's) was lighting the arena too; with that fixed it went near black.
             _ambientColor = MakeGradient(
-                (0.00f, new Color(0.10f, 0.12f, 0.22f)),
+                (0.00f, new Color(0.26f, 0.30f, 0.48f)),
                 (0.23f, new Color(0.45f, 0.38f, 0.40f)),
                 (0.35f, new Color(0.55f, 0.60f, 0.70f)),
                 (0.70f, new Color(0.55f, 0.60f, 0.70f)),
                 (0.78f, new Color(0.50f, 0.35f, 0.32f)),
-                (0.86f, new Color(0.10f, 0.12f, 0.22f)));
+                (0.86f, new Color(0.26f, 0.30f, 0.48f)));
 
             // Low "moonlight" at night so the scene is never pitch black on a phone screen.
             _sunIntensity = new AnimationCurve(

@@ -36,6 +36,9 @@ namespace Rapadura.Gameplay.Enemies
         private int _currentWaypointIndex;
         private bool _hasSpottedTarget;
         private float _aggroHoldRemaining;
+        private bool _forceAggroWhenHoldEnds;
+        private bool _aggroLocked;
+        private bool _fleeExhausted;
         private int _spawnGeneration;
 
         private static readonly HashSet<EnemyController> Enabled = new HashSet<EnemyController>();
@@ -95,6 +98,22 @@ namespace Rapadura.Gameplay.Enemies
         public bool IsHoldingAggro => _aggroHoldRemaining > 0f;
 
         public float AggroHoldRemaining => _aggroHoldRemaining;
+
+        /// <summary>
+        /// Set by <see cref="ForceAggro"/> (encounter enemies): the AI always pursues its target - patrol
+        /// re-acquires it regardless of <see cref="EnemyDefinition.DetectionRadius"/> and chase never
+        /// drops it for <see cref="EnemyDefinition.LoseTargetRadius"/>. Cleared by <see cref="ResetForSpawn"/>.
+        /// </summary>
+        public bool IsAggroLocked => _aggroLocked;
+
+        /// <summary>False once this life's flee was spent (tired or reached safety) - it then fights to the end.</summary>
+        public bool CanFlee => !_fleeExhausted;
+
+        /// <summary>Called by <see cref="EnemyFleeState"/> when a flee ends; see <see cref="CanFlee"/>.</summary>
+        public void MarkFleeExhausted()
+        {
+            _fleeExhausted = true;
+        }
 
         public Transform[] Waypoints => _waypoints;
         public int CurrentWaypointIndex
@@ -187,6 +206,11 @@ namespace Rapadura.Gameplay.Enemies
             {
                 _aggroHoldRemaining = Mathf.Max(0f, _aggroHoldRemaining - deltaTime);
                 FaceTarget(deltaTime);
+                if (_aggroHoldRemaining <= 0f && _forceAggroWhenHoldEnds)
+                {
+                    ForceAggro();
+                }
+
                 return;
             }
 
@@ -197,18 +221,76 @@ namespace Rapadura.Gameplay.Enemies
         /// Keeps the AI idle for <paramref name="seconds"/> (encounter intro / "Prepare-se!"): no chase
         /// and no attacks until it runs out. Never shortens a longer hold already running.
         /// </summary>
-        public void HoldAggro(float seconds)
+        /// <param name="forceAggroWhenHoldEnds">
+        /// Encounters: once the grace ends (or <see cref="ReleaseAggro"/>), <see cref="ForceAggro"/> on the
+        /// target - spiders/scorpions (7-8 m detection) spawned 8-9 m away otherwise never engaged.
+        /// With <paramref name="seconds"/> &lt;= 0 (no grace) aggro is forced at once.
+        /// </param>
+        public void HoldAggro(float seconds, bool forceAggroWhenHoldEnds = false)
         {
             if (seconds > _aggroHoldRemaining)
             {
                 _aggroHoldRemaining = seconds;
             }
+
+            _forceAggroWhenHoldEnds |= forceAggroWhenHoldEnds;
+            if (_forceAggroWhenHoldEnds && _aggroHoldRemaining <= 0f)
+            {
+                ForceAggro();
+            }
         }
 
-        /// <summary>Ends an <see cref="HoldAggro"/> grace early.</summary>
+        /// <summary>Ends an <see cref="HoldAggro"/> grace early (forcing aggro if that hold asked for it).</summary>
         public void ReleaseAggro()
         {
             _aggroHoldRemaining = 0f;
+            if (_forceAggroWhenHoldEnds)
+            {
+                ForceAggro();
+            }
+        }
+
+        /// <summary>
+        /// Engages the target right now regardless of detection radius and keeps chasing it
+        /// (<see cref="IsAggroLocked"/>). Finds the target by tag when none is assigned; no-op when dead
+        /// or no target exists.
+        /// </summary>
+        public void ForceAggro()
+        {
+            _forceAggroWhenHoldEnds = false;
+
+            if (Health != null && Health.IsDead)
+            {
+                return;
+            }
+
+            if (Target == null && !string.IsNullOrEmpty(_targetTag))
+            {
+                GameObject found = GameObject.FindGameObjectWithTag(_targetTag);
+                if (found != null)
+                {
+                    Target = found.transform;
+                }
+            }
+
+            if (Target == null)
+            {
+                return;
+            }
+
+            _aggroLocked = true;
+            _aggroHoldRemaining = 0f;
+            MarkTargetSpotted();
+
+            if (_stateMachine == null)
+            {
+                BuildStateMachine();
+            }
+
+            if (_stateMachine.IsInState<EnemyPatrolState>())
+            {
+                _stateMachine.ChangeState<EnemyChaseState>();
+            }
         }
 
         private void FaceTarget(float deltaTime)
@@ -241,6 +323,9 @@ namespace Rapadura.Gameplay.Enemies
             _currentWaypointIndex = 0;
             _hasSpottedTarget = false;
             _aggroHoldRemaining = 0f;
+            _forceAggroWhenHoldEnds = false;
+            _aggroLocked = false;
+            _fleeExhausted = false;
             _spawnGeneration++;
 
             if (Health == null)

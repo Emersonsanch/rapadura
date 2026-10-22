@@ -23,7 +23,7 @@ namespace Rapadura.Gameplay.Enemies.States
                 return;
             }
 
-            if (context.Health != null && EnemyDetectionUtility.ShouldFlee(context.Health.CurrentHealth, context.Health.MaxHealth, definition.FleeHealthThreshold))
+            if (context.CanFlee && context.Health != null && EnemyDetectionUtility.ShouldFlee(context.Health.CurrentHealth, context.Health.MaxHealth, definition.FleeHealthThreshold))
             {
                 context.PublishFleeing();
                 context.StateMachine.ChangeState<EnemyFleeState>();

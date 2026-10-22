@@ -265,6 +265,19 @@ namespace Rapadura.Gameplay.Player
         /// its own primary attribute. Intended to be called once from
         /// <see cref="Characters.PlayableCharacter.ApplyPassive"/> right after the character spawns.
         /// </summary>
+        /// <summary>Removes every hero passive bonus (hero switch: the previous hero's talent must not stay).</summary>
+        public void ClearCharacterPassiveBonuses()
+        {
+            EnsureInitialized();
+            foreach (AttributeType type in AllTypes)
+            {
+                _passiveBonus[type] = 0;
+            }
+
+            ApplyAllDerivedEffects();
+            OnAttributesChanged?.Invoke();
+        }
+
         public void ApplyCharacterPassiveBonus(AttributeType type, int bonus = CharacterPassiveBonusPoints)
         {
             EnsureInitialized();

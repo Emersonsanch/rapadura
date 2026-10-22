@@ -33,12 +33,36 @@ namespace Rapadura.Gameplay.Player
         [Tooltip("How close to walk when the click lands on an enemy, so the player stops at melee range instead of walking into it. Should roughly match PlayerBasicAttack's range.")]
         [SerializeField] private float _attackStoppingDistance = 2f;
 
+        [Tooltip("Pursuing a clicked enemy farther than this (m) runs instead of walking, so a fleeing enemy can be caught.")]
+        [SerializeField, Min(0f)] private float _autoRunDistance = DefaultAutoRunDistance;
+
+        [Tooltip("A pursued enemy farther than this (m) is given up on. 0 = never.")]
+        [SerializeField, Min(0f)] private float _maxPursuitDistance = 25f;
+
         [Tooltip("Hold-to-walk: seconds between re-aims of the destination while the pointer stays held on the ground.")]
         [SerializeField, Range(0.05f, 0.5f)] private float _holdReaimInterval = HoldToWalkTimer.DefaultInterval;
+
+        /// <summary>Default <see cref="_autoRunDistance"/>: beyond ~4 m a walking (2.5 m/s) hero never closed on a fleeing enemy.</summary>
+        public const float DefaultAutoRunDistance = 4f;
+
+        /// <summary>How far past the stopping distance the target may drift before the pursuit destination is re-aimed.</summary>
+        private const float RepursueSlack = 0.4f;
 
         private PlayerInputHandler _input;
         private Camera _camera;
         private HoldToWalkTimer _holdTimer;
+
+        /// <summary>
+        /// True while pursuing <see cref="AttackTarget"/> from farther than <see cref="_autoRunDistance"/>:
+        /// the walk state then moves at run speed (click-to-move otherwise always walks).
+        /// </summary>
+        public bool WantsAutoRun { get; private set; }
+
+        /// <summary>Pure rule behind <see cref="WantsAutoRun"/> (EditMode-testable).</summary>
+        public static bool ShouldAutoRun(float distanceToTarget, float autoRunDistance)
+        {
+            return autoRunDistance > 0f && distanceToTarget > autoRunDistance;
+        }
 
         public bool HasDestination { get; private set; }
         public Vector3 Destination { get; private set; }
@@ -70,6 +94,7 @@ namespace Rapadura.Gameplay.Player
             {
                 // Manual movement always wins — abandon any pending click destination immediately.
                 AbandonDestination();
+                WantsAutoRun = false;
                 _holdTimer.Tick(false, 0f);
                 return;
             }
@@ -79,6 +104,8 @@ namespace Rapadura.Gameplay.Player
                 // The first finger of a pinch landed as a tap-to-move: that wasn't a walk request.
                 AbandonDestination();
             }
+
+            TrackAttackTarget();
 
             if (_input.MoveClickPressedThisFrame)
             {
@@ -96,6 +123,60 @@ namespace Rapadura.Gameplay.Player
                 && !UiPointerQuery.IsPointerOverUi(_input.PointerPosition))
             {
                 TrySetDestinationFromScreenPoint(_input.PointerPosition);
+            }
+        }
+
+        /// <summary>
+        /// Keeps pursuing a clicked enemy that moved (e.g. one fleeing at low HP): re-aims the
+        /// destination at its stopping-distance point whenever it drifts out of reach, and flags
+        /// <see cref="WantsAutoRun"/> while it is far. The click-time destination used to stay fixed,
+        /// so the hero walked to where the enemy had been and stood there.
+        /// </summary>
+        private void TrackAttackTarget()
+        {
+            WantsAutoRun = false;
+            ICombatTarget target = AttackTarget;
+
+            if (target == null)
+            {
+                return;
+            }
+
+            if (target is UnityEngine.Object unityObject && unityObject == null)
+            {
+                // Destroyed (scene unload / despawn) — the interface reference outlives the object.
+                AttackTarget = null;
+                return;
+            }
+
+            if (!target.IsAlive)
+            {
+                // PlayerBasicAttack clears it (it also stops auto-attacking).
+                return;
+            }
+
+            Vector3 toTarget = target.Transform.position - transform.position;
+            toTarget.y = 0f;
+            float distance = toTarget.magnitude;
+
+            if (_maxPursuitDistance > 0f && distance > _maxPursuitDistance)
+            {
+                AbandonDestination();
+                AttackTarget = null;
+                return;
+            }
+
+            WantsAutoRun = ShouldAutoRun(distance, _autoRunDistance);
+
+            if (distance > _attackStoppingDistance + RepursueSlack)
+            {
+                bool wasMoving = HasDestination;
+                Destination = transform.position + toTarget.normalized * (distance - _attackStoppingDistance);
+                HasDestination = true;
+                if (!wasMoving)
+                {
+                    DestinationSet?.Invoke(Destination);
+                }
             }
         }
 

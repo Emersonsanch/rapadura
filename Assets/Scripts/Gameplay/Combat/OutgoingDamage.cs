@@ -102,12 +102,22 @@ namespace Rapadura.Gameplay.Combat
         /// <summary>
         /// Hands a resolved amount to a target, forwarding the crit flag when the target can display it
         /// (<see cref="ICriticalAwareTarget"/>: <see cref="Health"/>, <c>PlayerStats</c>); any other
-        /// <see cref="ICombatTarget"/> just gets the plain amount.
+        /// <see cref="ICombatTarget"/> just gets the plain amount. <paramref name="channel"/>
+        /// (<see cref="DamageChannel"/>) reaches targets that key their anti-double-hit window by it
+        /// (<see cref="IChanneledDamageTarget"/>: <see cref="Health"/>), so a skill landing right after a
+        /// basic attack or another skill is not swallowed.
         /// </summary>
-        public static void DeliverDamage(ICombatTarget target, float amount, ElementType element, GameObject source, bool isCritical)
+        public static void DeliverDamage(ICombatTarget target, float amount, ElementType element, GameObject source, bool isCritical,
+            int channel = DamageChannel.Default)
         {
             if (target == null)
             {
+                return;
+            }
+
+            if (target is IChanneledDamageTarget channeled)
+            {
+                channeled.ApplyChanneledDamage(amount, element, source, isCritical, channel);
                 return;
             }
 
@@ -129,5 +139,15 @@ namespace Rapadura.Gameplay.Combat
     public interface ICriticalAwareTarget
     {
         void ApplyResolvedCriticalDamage(float amount, ElementType element, GameObject source);
+    }
+
+    /// <summary>
+    /// Optional companion to <see cref="ICombatTarget"/> for targets whose post-hit window is per damage
+    /// channel (<see cref="DamageInfo.Channel"/>). Like <see cref="ICriticalAwareTarget"/>, the amount is
+    /// already resolved (crit included) and must not be multiplied again.
+    /// </summary>
+    public interface IChanneledDamageTarget
+    {
+        void ApplyChanneledDamage(float amount, ElementType element, GameObject source, bool isCritical, int channel);
     }
 }

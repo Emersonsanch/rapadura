@@ -91,7 +91,7 @@ namespace Rapadura.Gameplay.Environment
                 new WeatherVisualProfile(WeatherType.Clear, 0f, Color.gray, 0f, 1, Color.white),
                 new WeatherVisualProfile(WeatherType.Rain, 0.025f, new Color(0.45f, 0.5f, 0.55f), 220f, 300, new Color(0.75f, 0.82f, 0.95f, 0.55f)),
                 new WeatherVisualProfile(WeatherType.Fog, 0.06f, new Color(0.7f, 0.72f, 0.74f), 0f, 1, Color.white),
-                new WeatherVisualProfile(WeatherType.Sandstorm, 0.045f, new Color(0.78f, 0.62f, 0.4f), 160f, 250, new Color(0.85f, 0.7f, 0.45f, 0.5f)),
+                new WeatherVisualProfile(WeatherType.Sandstorm, 0.045f, new Color(0.78f, 0.62f, 0.4f), 300f, 1000, new Color(1f, 0.95f, 0.82f, 0.9f)),
                 new WeatherVisualProfile(WeatherType.Snow, 0.03f, new Color(0.82f, 0.86f, 0.92f), 70f, 200, new Color(1f, 1f, 1f, 0.9f)),
             };
         }
@@ -377,14 +377,20 @@ namespace Rapadura.Gameplay.Environment
                     break;
 
                 case WeatherType.Sandstorm:
-                    main.startLifetime = 2.5f;
-                    main.startSpeed = new ParticleSystem.MinMaxCurve(2f, 5f);
-                    main.startSize = new ParticleSystem.MinMaxCurve(0.02f, 0.05f);
+                    // Pale streaks skimming ~3 m above the floor, blown sideways across the view, so
+                    // the storm reads as blowing sand and not just a tint (playtest r6). Falling from
+                    // the shared 12 m emitter, sand-coloured, they were above the camera / blown out
+                    // of frame and the same colour as the ground: invisible. The emitter is dropped
+                    // to just above the ground and moved upwind so the streaks cross the arena.
+                    system.transform.localPosition = new Vector3(-10f, -9f, 0f);
+                    main.startLifetime = 3.5f;
+                    main.startSpeed = new ParticleSystem.MinMaxCurve(0.4f, 1.4f);
+                    main.startSize = new ParticleSystem.MinMaxCurve(0.03f, 0.06f);
                     renderer.renderMode = ParticleSystemRenderMode.Stretch;
                     renderer.cameraVelocityScale = 0f;
-                    renderer.lengthScale = 2f;
-                    renderer.velocityScale = 0.03f;
-                    AddDrift(system, 9f, 1.5f);
+                    renderer.lengthScale = 3f;
+                    renderer.velocityScale = 0.08f;
+                    AddDrift(system, 6.5f, 1.5f);
                     break;
 
                 default:

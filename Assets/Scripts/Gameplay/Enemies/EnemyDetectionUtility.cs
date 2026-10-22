@@ -10,6 +10,34 @@ namespace Rapadura.Gameplay.Enemies
     /// </summary>
     public static class EnemyDetectionUtility
     {
+        /// <summary>Hero run speed (<c>PlayerMotor._runSpeed</c> default) that flee speeds are measured against.</summary>
+        public const float HeroRunSpeed = 5.5f;
+
+        /// <summary>Fleeing enemies never outrun more than this fraction of <see cref="HeroRunSpeed"/>, so a chasing hero catches them.</summary>
+        public const float MaxFleeSpeedFractionOfHeroRun = 0.8f;
+
+        /// <summary>Seconds an enemy keeps fleeing before it tires and turns back to fight (it won't flee again this life).</summary>
+        public const float FleeMaxDurationSeconds = 3f;
+
+        /// <summary>Highest speed an enemy may flee at (0.8 x hero run = 4.4).</summary>
+        public static float MaxFleeSpeed => HeroRunSpeed * MaxFleeSpeedFractionOfHeroRun;
+
+        /// <summary>
+        /// The speed a flee actually runs at: the definition's, capped at <see cref="MaxFleeSpeed"/>.
+        /// Bats (6.0), wolves (5.0) and scorpions (4.5) used to outrun a walking (2.5) or even running
+        /// (5.5) hero, dragging fights out to 20+ s.
+        /// </summary>
+        public static float GetEffectiveFleeSpeed(float definitionFleeSpeed)
+        {
+            return Mathf.Clamp(definitionFleeSpeed, 0f, MaxFleeSpeed);
+        }
+
+        /// <summary>True once a flee has lasted <paramref name="maxDurationSeconds"/> (0 or less = never tires).</summary>
+        public static bool IsFleeExhausted(float fleeElapsedSeconds, float maxDurationSeconds)
+        {
+            return maxDurationSeconds > 0f && fleeElapsedSeconds >= maxDurationSeconds;
+        }
+
         public static float SqrDistance(Vector3 a, Vector3 b)
         {
             Vector3 delta = a - b;

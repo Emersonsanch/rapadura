@@ -53,6 +53,17 @@ namespace Rapadura.Gameplay.Enemies
         public const float DefaultFootHeight = -1f;
 
         private static readonly Dictionary<Color32, Material> PlaceholderMaterials = new Dictionary<Color32, Material>();
+        private static readonly Dictionary<Material, Material> BossModelMaterials = new Dictionary<Material, Material>();
+        private static readonly List<Renderer> RendererBuffer = new List<Renderer>();
+
+        /// <summary>
+        /// Multiplied onto a boss model's material colour so a boss that reuses a regular enemy's
+        /// model (Lobo Alfa = the wolf mesh) reads apart at a glance. Components above 1 on purpose:
+        /// the wolf texture is near-black, so only an over-bright multiply can lift it to a
+        /// red-brown coat (keeping the fur detail). No emission: no project material uses the
+        /// _EMISSION keyword, so that URP Lit variant would be stripped from builds.
+        /// </summary>
+        public static readonly Color BossModelTint = new Color(3.8f, 1.7f, 1.2f, 1f);
 
         /// <summary>Decides which visual a definition gets. Pure, so it is unit tested directly.</summary>
         public static EnemyVisualSource ResolveSource(EnemyDefinition definition)
@@ -172,6 +183,11 @@ namespace Rapadura.Gameplay.Enemies
             visual.transform.localEulerAngles = definition.VisualLocalEulerAngles;
             visual.transform.localScale = Vector3.one * Mathf.Max(0.0001f, definition.VisualScale);
             GroundModel(root, visual.transform);
+            if (definition.IsBoss)
+            {
+                TintBossModel(visual);
+            }
+
             return visual;
         }
 
@@ -340,6 +356,55 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             return primitive;
+        }
+
+        /// <summary>
+        /// Swaps every renderer's materials under <paramref name="visual"/> for cached copies tinted by
+        /// <see cref="BossModelTint"/>. Shared material copies (not a MaterialPropertyBlock) for the same
+        /// reason as <see cref="Tint"/>: EnemyDeathVfx fades from sharedMaterial.color.
+        /// </summary>
+        public static void TintBossModel(GameObject visual)
+        {
+            if (visual == null)
+            {
+                return;
+            }
+
+            visual.GetComponentsInChildren(true, RendererBuffer);
+            foreach (Renderer renderer in RendererBuffer)
+            {
+                Material[] materials = renderer.sharedMaterials;
+                bool changed = false;
+                for (int i = 0; i < materials.Length; i++)
+                {
+                    Material source = materials[i];
+                    if (source == null)
+                    {
+                        continue;
+                    }
+
+                    if (!BossModelMaterials.TryGetValue(source, out Material tinted) || tinted == null)
+                    {
+                        tinted = new Material(source) { name = source.name + "_Boss" };
+                        if (tinted.HasProperty("_BaseColor") || tinted.HasProperty("_Color"))
+                        {
+                            tinted.color = source.color * BossModelTint;
+                        }
+
+                        BossModelMaterials[source] = tinted;
+                    }
+
+                    materials[i] = tinted;
+                    changed = true;
+                }
+
+                if (changed)
+                {
+                    renderer.sharedMaterials = materials;
+                }
+            }
+
+            RendererBuffer.Clear();
         }
 
         private static void Tint(GameObject target, Color color)

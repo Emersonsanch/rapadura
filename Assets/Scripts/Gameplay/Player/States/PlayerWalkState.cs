@@ -58,13 +58,19 @@ namespace Rapadura.Gameplay.Player.States
 
             if (context.ClickToMove != null && context.ClickToMove.HasDestination)
             {
-                bool arrived = context.Motor.MoveToward(context.ClickToMove.Destination, isRunning: false);
+                // Chasing a clicked enemy that is far away (WantsAutoRun) moves at run speed.
+                bool arrived = context.Motor.MoveToward(context.ClickToMove.Destination, isRunning: context.ClickToMove.WantsAutoRun);
 
                 if (arrived)
                 {
                     context.ClickToMove.ClearDestination();
                 }
+
+                return;
             }
+
+            // No move this step (intent just ended): still integrate gravity / refresh grounding.
+            context.Motor.ApplyGravityOnly();
         }
 
         public void Exit(PlayerController context)

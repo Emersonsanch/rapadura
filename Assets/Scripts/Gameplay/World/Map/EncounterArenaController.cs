@@ -4,6 +4,7 @@ using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Logging;
 using Rapadura.Gameplay.Enemies;
+using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.World.Biomes;
 using UnityEngine;
 
@@ -161,6 +162,14 @@ namespace Rapadura.Gameplay.World.Map
                 MovePlayer(_player, _playerSpawn);
             }
 
+            if (_player != null && _player.TryGetComponent(out PlayerMotor motor))
+            {
+                // The spawn point (or the carried-over position) can sit above the re-dressed biome
+                // floor (Mountain: 1.08 m) - stand the hero on it before the enemies are placed
+                // relative to the player's feet.
+                motor.SnapToGround(_groundMask);
+            }
+
             if (_enemyPrefab == null)
             {
                 GameLogger.Error(LogCategory, "No enemy prefab assigned; cannot spawn the encounter. Returning to the map.");
@@ -242,7 +251,9 @@ namespace Rapadura.Gameplay.World.Map
                     controller.Target = _player;
                 }
 
-                controller.HoldAggro(_introGraceSeconds);
+                // Force aggro once "Ja!" ends the grace: short-detection enemies (spiders/scorpions,
+                // 7-8 m) spawned 8-9 m away never noticed the hero otherwise.
+                controller.HoldAggro(_introGraceSeconds, forceAggroWhenHoldEnds: true);
             }
             else
             {

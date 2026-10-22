@@ -7,16 +7,28 @@ namespace Rapadura.Gameplay.Skills
         public float TimeRemaining { get; private set; }
         /// <summary>Optional identifier of what applied this effect (e.g. an equipped item id), used for targeted removal.</summary>
         public string SourceKey { get; }
+
+        /// <summary>
+        /// Who applied the effect (e.g. the casting player), used as the damage source of DoT ticks so a
+        /// DoT kill credits the caster (XP/loot) instead of the victim itself. May be null.
+        /// </summary>
+        public UnityEngine.GameObject Instigator { get; }
+
+        /// <summary>Damage channel of this effect's ticks (<see cref="Rapadura.Gameplay.Combat.DamageChannel.ForDamageOverTime"/>), precomputed so ticking never allocates.</summary>
+        public int DamageChannel { get; }
+
         private float _tickTimer;
 
         /// <summary>An effect whose definition has a duration &lt;= 0 never expires on its own (e.g. passive skill bonuses) — it only goes away via explicit removal (<see cref="BuffController.RemoveEffectsBySource"/>).</summary>
         public bool IsPermanent => Definition.durationSeconds <= 0f;
 
-        public ActiveStatEffect(StatModifierDefinition definition, string sourceKey = null)
+        public ActiveStatEffect(StatModifierDefinition definition, string sourceKey = null, UnityEngine.GameObject instigator = null)
         {
             Definition = definition;
             TimeRemaining = definition.durationSeconds;
             SourceKey = sourceKey;
+            Instigator = instigator;
+            DamageChannel = Rapadura.Gameplay.Combat.DamageChannel.ForDamageOverTime(sourceKey, definition.affectedStat);
         }
 
         /// <summary>Advances the effect's clock. Returns true once per elapsed tick interval (for damage/heal over time).</summary>

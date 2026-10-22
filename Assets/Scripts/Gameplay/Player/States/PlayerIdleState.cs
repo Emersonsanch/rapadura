@@ -44,6 +44,10 @@ namespace Rapadura.Gameplay.Player.States
 
         public void FixedTick(PlayerController context, float fixedDeltaTime)
         {
+            // Idle used to skip the motor entirely, so IsGrounded was never refreshed and no gravity
+            // ran: a hero teleported slightly above the ground (Mountain arena spawn, 1.08 m) hovered
+            // there forever. Gravity-only move: falls/sticks to the ground and updates IsGrounded.
+            context.Motor.ApplyGravityOnly();
         }
 
         public void Exit(PlayerController context)

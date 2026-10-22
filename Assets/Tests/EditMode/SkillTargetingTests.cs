@@ -177,9 +177,9 @@ namespace Rapadura.Tests
             skillManager.LearnSkill(blast, 1, force: true);
             Assert.IsTrue(hotbar.AssignSlot(0, blast.SkillId));
 
-            // No i-frames, so a double hit from the second collider would show up as a second event.
+            // No same-channel hit window, so a double hit from the second collider would show up as a second event.
             var so = new SerializedObject(enemy);
-            so.FindProperty("_invulnerabilityDuration").floatValue = 0f;
+            so.FindProperty("_sameChannelHitWindow").floatValue = 0f;
             so.ApplyModifiedPropertiesWithoutUndo();
 
             int hits = 0;

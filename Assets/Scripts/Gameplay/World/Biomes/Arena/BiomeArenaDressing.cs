@@ -205,6 +205,11 @@ namespace Rapadura.Gameplay.World.Biomes
                 _weatherBiomeChanged = true;
                 _previousWeatherBiome = weather.CurrentBiome;
                 weather.SetBiome(biome);
+
+                // SetBiome blends over ~12 s, so the map's weather (e.g. grey Fog/Rain fog) used to
+                // wash a freshly loaded arena — Caves started as a bright grey field. The arena is a
+                // new place: show its biome's weather at once.
+                weather.ForceWeather(weather.CurrentWeather, instant: true);
             }
 
             AmbientVfx ambient = FindAnyObjectByType<AmbientVfx>();
