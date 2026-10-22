@@ -11,6 +11,12 @@ namespace Rapadura.Gameplay.Enemies
     /// wave begins and <see cref="WaveCompletedEvent"/> once every enemy spawned in that wave has died
     /// (tracked via <see cref="EnemyDiedEvent"/>), following the same EventBus-driven decoupling used
     /// elsewhere in the project (see CombatEvents/GameEvents).
+    /// <para>
+    /// A dead enemy counts towards the wave at once, but goes back to the pool only once its corpse is
+    /// gone: <see cref="EnemyDeathVfx"/> sinks/fades it and deactivates it when done, so the release
+    /// waits for that (or <see cref="_corpseReleaseTimeout"/> when nothing deactivates it). Releasing on
+    /// the death event itself parked — SetActive(false) — the enemy instantly, skipping the death sink.
+    /// </para>
     /// </summary>
     [RequireComponent(typeof(EnemyPool))]
     public class EnemySpawner : MonoBehaviour
@@ -21,6 +27,22 @@ namespace Rapadura.Gameplay.Enemies
         [SerializeField] private Transform[] _waypoints;
         [Tooltip("Swap each spawned enemy's visual to match its EnemyDefinition (model, else placeholder). See EnemyVisualSwapper.")]
         [SerializeField] private bool _applyDefinitionVisuals = true;
+        [Tooltip("Longest a dead enemy waits for its death sink/fade (EnemyDeathVfx deactivates the corpse when done) before going back to the pool. Keep above EnemyDeathVfx's sink duration.")]
+        [SerializeField] [Min(0f)] private float _corpseReleaseTimeout = 2f;
+
+        private readonly struct PendingCorpse
+        {
+            public readonly GameObject Enemy;
+            public readonly float ReleaseAt;
+
+            public PendingCorpse(GameObject enemy, float releaseAt)
+            {
+                Enemy = enemy;
+                ReleaseAt = releaseAt;
+            }
+        }
+
+        private readonly List<PendingCorpse> _pendingCorpses = new List<PendingCorpse>();
 
         private EnemyPool _pool;
         private readonly WaveTracker _waveTracker = new WaveTracker();
@@ -28,6 +50,9 @@ namespace Rapadura.Gameplay.Enemies
         private int _nextWaveIndex;
 
         public WaveTracker CurrentWave => _waveTracker;
+
+        /// <summary>Dead enemies waiting for their death sink to finish before going back to the pool.</summary>
+        public int PendingCorpseCount => _pendingCorpses.Count;
 
         private void Awake()
         {
@@ -42,6 +67,45 @@ namespace Rapadura.Gameplay.Enemies
         private void OnDisable()
         {
             EventBus.Unsubscribe<EnemyDiedEvent>(OnEnemyDied);
+            // Nothing will tick the pending list while disabled; don't strand corpses out of the pool.
+            ReleaseFinishedCorpses(float.PositiveInfinity);
+        }
+
+        private void Update()
+        {
+            if (_pendingCorpses.Count > 0)
+            {
+                ReleaseFinishedCorpses(Time.time);
+            }
+        }
+
+        /// <summary>
+        /// Returns to the pool every pending corpse whose death sink is over (deactivated by
+        /// <see cref="EnemyDeathVfx"/>) or whose timeout passed at <paramref name="now"/>. Destroyed ones
+        /// are dropped. Called from Update; public so it can be driven directly.
+        /// </summary>
+        public void ReleaseFinishedCorpses(float now)
+        {
+            for (int i = _pendingCorpses.Count - 1; i >= 0; i--)
+            {
+                PendingCorpse corpse = _pendingCorpses[i];
+                if (corpse.Enemy == null)
+                {
+                    _pendingCorpses.RemoveAt(i);
+                    continue;
+                }
+
+                if (corpse.Enemy.activeSelf && now < corpse.ReleaseAt)
+                {
+                    continue;
+                }
+
+                _pendingCorpses.RemoveAt(i);
+                if (_pool != null)
+                {
+                    _pool.Release(corpse.Enemy);
+                }
+            }
         }
 
         /// <summary>Spawns a regular wave of <paramref name="enemyCount"/> enemies distributed across the configured spawn points.</summary>
@@ -127,10 +191,7 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
-            if (_pool != null)
-            {
-                _pool.Release(evt.Enemy);
-            }
+            _pendingCorpses.Add(new PendingCorpse(evt.Enemy, Time.time + _corpseReleaseTimeout));
 
             bool waveJustCompleted = _waveTracker.RegisterDeath();
             if (waveJustCompleted)

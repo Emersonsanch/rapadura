@@ -65,11 +65,21 @@ namespace Rapadura.Gameplay.Enemies
         }
 
         /// <summary>
-        /// Bumped by every <see cref="ResetForSpawn"/>. Lets effects that outlive a death (e.g.
-        /// <see cref="EnemyDeathVfx"/>'s sink coroutine) notice that a pooled instance was re-spawned
-        /// and stop touching it.
+        /// Bumped by every <see cref="ResetForSpawn"/> and every <see cref="EnemyPool.Get"/> (see
+        /// <see cref="MarkReused"/>). Lets effects that outlive a death (e.g. <see cref="EnemyDeathVfx"/>'s
+        /// sink coroutine) notice that a pooled instance was handed out again and stop touching it.
         /// </summary>
         public int SpawnGeneration => _spawnGeneration;
+
+        /// <summary>
+        /// Invalidates anything still tracking this instance's previous life (bumps
+        /// <see cref="SpawnGeneration"/>). Called by <see cref="EnemyPool.Get"/>, which can hand a corpse
+        /// out without <see cref="ResetForSpawn"/>.
+        /// </summary>
+        public void MarkReused()
+        {
+            _spawnGeneration++;
+        }
 
         public EnemyDefinition Definition => _definition;
         public Health Health { get; private set; }

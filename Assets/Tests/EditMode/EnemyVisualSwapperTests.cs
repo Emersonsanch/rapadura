@@ -241,6 +241,128 @@ namespace Rapadura.Tests
             Assert.IsNull(EnemyVisualSwapper.Apply(null, null));
         }
 
+        // ------------------------------------------------------------------
+        // Standing on the ground (regression: encounter enemies were buried).
+        // The shared prefab's pivot is its capsule centre; EncounterArenaController used to put
+        // that pivot on the raycast ground point, sinking the capsule bottom — and every model
+        // resting on it — a full metre under the floor.
+        // ------------------------------------------------------------------
+
+        private static readonly string[] ModelEnemyIds =
+        {
+            "enemy_forest_wolf", "enemy_forest_alpha_wolf", "enemy_forest_spider", "enemy_desert_scorpion",
+        };
+
+        private static readonly string[] PlaceholderEnemyIds =
+        {
+            "enemy_cave_bat_swarm", "enemy_cave_dweller", "enemy_desert_ruin_guardian",
+            "enemy_mountain_stone_golem", "enemy_mountain_warlord",
+        };
+
+        private GameObject MakeMeshModelPrefab(string name, Vector3 meshScale)
+        {
+            // Collider-less cube mesh under a child, like an imported FBX (root + mesh node).
+            var model = new GameObject(name);
+            _created.Add(model);
+            GameObject mesh = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            Object.DestroyImmediate(mesh.GetComponent<Collider>());
+            mesh.transform.SetParent(model.transform, false);
+            mesh.transform.localScale = meshScale;
+            return model;
+        }
+
+        private static float MeshBottomInRootSpace(GameObject root, Transform visual)
+        {
+            Assert.IsTrue(EnemyVisualSwapper.TryGetMeshBoundsInRootSpace(root.transform, visual, out Bounds bounds), "visual has no mesh");
+            return bounds.min.y;
+        }
+
+        [Test]
+        public void GetFootHeight_IsCapsuleBottom_AndStandOnGroundLiftsThePivotByIt()
+        {
+            GameObject root = MakeEnemyRoot(out _);
+            Assert.AreEqual(-1f, EnemyVisualSwapper.GetFootHeight(root.transform), 0.0001f, "2 m capsule centred on the pivot");
+
+            CapsuleCollider capsule = root.GetComponent<CapsuleCollider>();
+            capsule.center = new Vector3(0f, 0.5f, 0f);
+            capsule.height = 1f;
+            Assert.AreEqual(0f, EnemyVisualSwapper.GetFootHeight(root.transform), 0.0001f, "pivot already at the feet");
+
+            Object.DestroyImmediate(capsule);
+            Assert.AreEqual(EnemyVisualSwapper.DefaultFootHeight, EnemyVisualSwapper.GetFootHeight(root.transform));
+
+            Vector3 standing = Rapadura.Gameplay.World.Map.EncounterSpawnLayout.StandOnGround(new Vector3(3f, 0.25f, 4f), -1f);
+            Assert.AreEqual(new Vector3(3f, 1.25f, 4f), standing, "pivot must sit one capsule half-height above the ground hit");
+        }
+
+        [Test]
+        public void Apply_WithModel_RestsMeshBottomOnCapsuleBottom_WhateverTheAuthoredHeight()
+        {
+            // Authored y/scale that would bury the model (alpha wolf case: scale raised, y kept).
+            GameObject root = MakeEnemyRoot(out _);
+            EnemyDefinition alpha = MakeEnemy("enemy_forest_alpha_wolf", MakeMeshModelPrefab("Wolf", new Vector3(70f, 100f, 50f)));
+            SetField(alpha, "_visualLocalPosition", new Vector3(0.1f, -0.5f, 0.2f));
+            SetField(alpha, "_visualLocalEulerAngles", new Vector3(-90f, 0f, 0f));
+            SetField(alpha, "_visualScale", 0.019f);
+
+            Transform visual = EnemyVisualSwapper.Apply(root, alpha);
+
+            Assert.AreEqual(-1f, MeshBottomInRootSpace(root, visual), 0.001f);
+            Assert.AreEqual(0.1f, visual.localPosition.x, 0.0001f, "only the height is corrected");
+            Assert.AreEqual(0.2f, visual.localPosition.z, 0.0001f);
+
+            // And a floating one (spider case) comes down.
+            GameObject root2 = MakeEnemyRoot(out _);
+            EnemyDefinition spider = MakeEnemy("enemy_forest_spider", MakeMeshModelPrefab("Spider", new Vector3(100f, 70f, 60f)));
+            SetField(spider, "_visualLocalPosition", new Vector3(0f, 0.3f, 0f));
+            SetField(spider, "_visualScale", 0.0145f);
+            Assert.AreEqual(-1f, MeshBottomInRootSpace(root2, EnemyVisualSwapper.Apply(root2, spider)), 0.001f);
+        }
+
+        [Test]
+        public void ShippedModelEnemies_ResolveToTheirModel_AndStandOnTheGroundWhenSpawnedOnIt()
+        {
+            foreach (string id in ModelEnemyIds)
+            {
+                EnemyDefinition definition = Resources.Load<EnemyDefinition>("Enemies/" + id);
+                Assert.IsNotNull(definition, id);
+                Assert.IsNotNull(definition.VisualPrefab, $"{id}: model reference must load (else it falls back to a capsule placeholder)");
+                Assert.AreEqual(EnemyVisualSource.DefinitionPrefab, EnemyVisualSwapper.ResolveSource(definition), id);
+
+                GameObject root = MakeEnemyRoot(out Transform original);
+                root.transform.position = Rapadura.Gameplay.World.Map.EncounterSpawnLayout.StandOnGround(
+                    new Vector3(2f, 0f, 5f), EnemyVisualSwapper.GetFootHeight(root.transform));
+
+                Transform visual = EnemyVisualSwapper.Apply(root, definition);
+
+                Assert.IsFalse(original.gameObject.activeSelf, id);
+                Assert.AreEqual(EnemyVisualSource.DefinitionPrefab, visual.GetComponent<EnemyVisualMarker>().Kind, id);
+                Assert.IsNotNull(visual.GetComponentInChildren<MeshRenderer>(), id);
+                Assert.IsNull(visual.Find(EnemyVisualSwapper.SnoutName), $"{id}: a model enemy must not also get a placeholder");
+                Assert.AreEqual(1, root.GetComponentsInChildren<EnemyVisualMarker>(true).Length, id);
+
+                // Mesh bottom on the capsule bottom, i.e. on the ground (world y 0).
+                Assert.AreEqual(-1f, MeshBottomInRootSpace(root, visual), 0.01f, id);
+                Assert.Greater(root.transform.position.y, 0.5f, $"{id}: pivot must be lifted above the ground point");
+            }
+        }
+
+        [Test]
+        public void ShippedPlaceholderEnemies_StandOnTheGroundWhenSpawnedOnIt()
+        {
+            foreach (string id in PlaceholderEnemyIds)
+            {
+                EnemyDefinition definition = Resources.Load<EnemyDefinition>("Enemies/" + id);
+                Assert.IsNotNull(definition, id);
+                Assert.AreEqual(EnemyVisualSource.Placeholder, EnemyVisualSwapper.ResolveSource(definition), id);
+
+                GameObject root = MakeEnemyRoot(out _);
+                Transform visual = EnemyVisualSwapper.Apply(root, definition);
+
+                Assert.AreEqual(-1f, MeshBottomInRootSpace(root, visual), 0.01f, id);
+            }
+        }
+
         [Test]
         public void Apply_RetargetsProceduralAnimatorToNewVisual()
         {

@@ -16,9 +16,14 @@ namespace Rapadura.Gameplay.Enemies
     ///   - <see cref="Get"/> undoes what <see cref="EnemyDeathVfx"/> did to a corpse: colliders it
     ///     disabled go back to the state they had when the instance was created, and the faded
     ///     renderer property blocks are cleared.
+    ///   - <see cref="Get"/> also bumps <see cref="EnemyController.SpawnGeneration"/>, so a death sink
+    ///     still running from the instance's previous life stops touching it.
     ///   - Cleanup: every instance this pool ever created is destroyed in <see cref="OnDestroy"/>
     ///     (scene unload), so instances parented elsewhere (custom container, DontDestroyOnLoad) never
     ///     leak into the next scene. <see cref="Clear"/> does the same on demand.
+    ///   - <see cref="Configure"/> with a new prefab destroys only the parked old-prefab instances;
+    ///     ones still alive in a wave are "retired" — they keep fighting (so their death still raises
+    ///     EnemyDiedEvent and completes the wave) and are destroyed when released.
     ///
     /// The public surface (<see cref="Configure"/>, <see cref="Prewarm"/>, <see cref="Get"/>,
     /// <see cref="Release"/>, <see cref="ReleaseAll"/>, counts, <see cref="Prefab"/>) is unchanged.
@@ -34,6 +39,12 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>Every instance created by this pool, with the collider enabled-states it was born with.</summary>
         private readonly Dictionary<GameObject, ColliderDefaults> _created = new Dictionary<GameObject, ColliderDefaults>();
 
+        /// <summary>Instances currently parked (inactive, ready for reuse).</summary>
+        private readonly HashSet<GameObject> _parked = new HashSet<GameObject>();
+
+        /// <summary>Old-prefab instances still in play after a <see cref="Configure"/> swap; destroyed on release.</summary>
+        private readonly HashSet<GameObject> _retired = new HashSet<GameObject>();
+
         public int InactiveCount => _pool != null ? _pool.InactiveCount : 0;
         public int ActiveCount => _pool != null ? _pool.ActiveCount : 0;
 
@@ -42,12 +53,17 @@ namespace Rapadura.Gameplay.Enemies
 
         public GameObject Prefab => _prefab;
 
+        /// <summary>Old-prefab instances still alive after a prefab swap (see <see cref="Configure"/>).</summary>
+        public int RetiredCount => _retired.Count;
+
         public void Configure(GameObject prefab, Transform container = null)
         {
             if (prefab != _prefab && _pool != null)
             {
-                // Pooled instances of the old prefab must not be handed out for the new one.
-                Clear();
+                // Pooled instances of the old prefab must not be handed out for the new one — but
+                // destroying the ACTIVE ones would remove live wave enemies without an EnemyDiedEvent,
+                // so the wave could never complete. Parked ones go now; active ones retire.
+                RetireOldPrefabInstances();
             }
 
             _prefab = prefab;
@@ -84,7 +100,8 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>
         /// Takes an instance out of the pool (or creates one), restores its pooled-corpse state and
-        /// activates it at the given pose. Does not touch AI/health/visuals — use <see cref="Spawn"/> for
+        /// activates it at the given pose (bumping <see cref="EnemyController.SpawnGeneration"/>, so a death
+        /// sink left over from its previous life lets go of it). Does not touch AI/health/visuals — use <see cref="Spawn"/> for
         /// a full fresh-spawn reset. Returns null when no prefab is configured.
         /// </summary>
         public GameObject Get(Vector3 position, Quaternion rotation)
@@ -114,6 +131,7 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             GameObject go = instance.gameObject;
+            _parked.Remove(go);
             RestorePooledState(go);
             instance.SetPositionAndRotation(position, rotation);
             go.SetActive(true);
@@ -149,7 +167,18 @@ namespace Rapadura.Gameplay.Enemies
 
         public void Release(GameObject instance)
         {
-            if (instance == null || _pool == null)
+            if (instance == null)
+            {
+                return;
+            }
+
+            if (_retired.Remove(instance))
+            {
+                DestroyInstance(instance);
+                return;
+            }
+
+            if (_pool == null)
             {
                 return;
             }
@@ -170,23 +199,59 @@ namespace Rapadura.Gameplay.Enemies
         {
             foreach (GameObject instance in _created.Keys)
             {
+                DestroyInstance(instance);
+            }
+
+            foreach (GameObject instance in _retired)
+            {
+                DestroyInstance(instance);
+            }
+
+            _created.Clear();
+            _parked.Clear();
+            _retired.Clear();
+            _pool = null;
+        }
+
+        private void RetireOldPrefabInstances()
+        {
+            foreach (GameObject instance in _created.Keys)
+            {
                 if (instance == null)
                 {
                     continue;
                 }
 
-                if (Application.isPlaying)
+                if (_parked.Contains(instance))
                 {
-                    Destroy(instance);
+                    DestroyInstance(instance);
                 }
                 else
                 {
-                    DestroyImmediate(instance);
+                    _retired.Add(instance);
                 }
             }
 
             _created.Clear();
+            _parked.Clear();
             _pool = null;
+        }
+
+        private static void DestroyInstance(GameObject instance)
+        {
+            if (instance == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(instance);
+            }
+            else
+            {
+                DestroyImmediate(instance);
+            }
         }
 
         private GenericObjectPool<Transform> EnsurePool()
@@ -224,6 +289,7 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             instance.gameObject.SetActive(false);
+            _parked.Add(instance.gameObject);
             if (_container != null && instance.parent != _container)
             {
                 instance.SetParent(_container, worldPositionStays: false);
@@ -233,6 +299,11 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>Undoes <see cref="EnemyDeathVfx"/> on a reused corpse (colliders off, renderers faded out).</summary>
         private void RestorePooledState(GameObject instance)
         {
+            if (instance.TryGetComponent(out EnemyController controller))
+            {
+                controller.MarkReused();
+            }
+
             if (_created.TryGetValue(instance, out ColliderDefaults defaults))
             {
                 defaults.Restore();

@@ -171,7 +171,77 @@ namespace Rapadura.Gameplay.Enemies
             visual.transform.localPosition = definition.VisualLocalPosition;
             visual.transform.localEulerAngles = definition.VisualLocalEulerAngles;
             visual.transform.localScale = Vector3.one * Mathf.Max(0.0001f, definition.VisualScale);
+            GroundModel(root, visual.transform);
             return visual;
+        }
+
+        /// <summary>
+        /// Rests a model's mesh bottom on the enemy's feet (<see cref="GetFootHeight"/>) by adjusting
+        /// only its local y. The definitions' hand-tuned <c>VisualLocalPosition.y</c> was authored
+        /// against one scale; a different <see cref="EnemyDefinition.VisualScale"/> (alpha wolf 0.019,
+        /// scorpion 0.018) or a different mesh (spider) left the model sunk into or floating above the
+        /// floor. Uses the meshes' own bounds (not <c>Renderer.bounds</c>, which can be stale on the frame
+        /// of instantiation and is padded for skinned meshes), measured in the root's space so the root's
+        /// rotation/position don't matter. No mesh → the authored position is kept.
+        /// </summary>
+        public static void GroundModel(Transform root, Transform visual)
+        {
+            if (root == null || visual == null || !TryGetMeshBoundsInRootSpace(root, visual, out Bounds bounds))
+            {
+                return;
+            }
+
+            Vector3 local = visual.localPosition;
+            local.y += GetFootHeight(root) - bounds.min.y;
+            visual.localPosition = local;
+        }
+
+        /// <summary>Axis-aligned box (in <paramref name="root"/>'s local space) around every mesh under <paramref name="visual"/>.</summary>
+        public static bool TryGetMeshBoundsInRootSpace(Transform root, Transform visual, out Bounds bounds)
+        {
+            bounds = default;
+            bool found = false;
+            Matrix4x4 worldToRoot = root.worldToLocalMatrix;
+
+            foreach (MeshFilter filter in visual.GetComponentsInChildren<MeshFilter>(true))
+            {
+                if (filter.sharedMesh != null)
+                {
+                    Encapsulate(ref bounds, ref found, worldToRoot * filter.transform.localToWorldMatrix, filter.sharedMesh.bounds);
+                }
+            }
+
+            foreach (SkinnedMeshRenderer skinned in visual.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+            {
+                if (skinned.sharedMesh != null)
+                {
+                    Encapsulate(ref bounds, ref found, worldToRoot * skinned.transform.localToWorldMatrix, skinned.sharedMesh.bounds);
+                }
+            }
+
+            return found;
+        }
+
+        private static void Encapsulate(ref Bounds bounds, ref bool found, Matrix4x4 toRoot, Bounds local)
+        {
+            Vector3 c = local.center;
+            Vector3 e = local.extents;
+            for (int i = 0; i < 8; i++)
+            {
+                Vector3 corner = toRoot.MultiplyPoint3x4(c + new Vector3(
+                    (i & 1) == 0 ? -e.x : e.x,
+                    (i & 2) == 0 ? -e.y : e.y,
+                    (i & 4) == 0 ? -e.z : e.z));
+                if (!found)
+                {
+                    bounds = new Bounds(corner, Vector3.zero);
+                    found = true;
+                }
+                else
+                {
+                    bounds.Encapsulate(corner);
+                }
+            }
         }
 
         private static GameObject BuildPlaceholder(Transform root, EnemyDefinition definition)
@@ -306,7 +376,12 @@ namespace Rapadura.Gameplay.Enemies
             renderer.sharedMaterial = material;
         }
 
-        private static float GetFootHeight(Transform root)
+        /// <summary>
+        /// Local y of the enemy's feet: the bottom of the root's vertical CapsuleCollider (the shared
+        /// prefab's pivot is the capsule centre, so this is -1 for its 2 m capsule), else
+        /// <see cref="DefaultFootHeight"/>. Spawners lift the root by its negation to stand on the ground.
+        /// </summary>
+        public static float GetFootHeight(Transform root)
         {
             CapsuleCollider capsule = root.GetComponent<CapsuleCollider>();
             if (capsule == null || capsule.direction != 1)

@@ -10,7 +10,9 @@ namespace Rapadura.Gameplay.Characters
     /// them have gradual bottom geometry that could just be a robe). This only swaps in a pre-baked
     /// cleaned <c>Mesh</c> asset if one exists for the given character under
     /// <c>Assets/Resources/CleanedMeshes/{CharacterId}_NoPedestal.asset</c> — call right after
-    /// instantiating a character's model prefab. Safe no-op for characters without one.
+    /// instantiating a character's model prefab. Rigged models get it on their SkinnedMeshRenderer;
+    /// static models (MeshFilter only) get it too, re-oriented — see <see cref="ApplyToStaticMesh"/>.
+    /// Safe no-op for characters without one.
     /// </summary>
     public static class PedestalMeshUtility
     {
@@ -22,18 +24,58 @@ namespace Rapadura.Gameplay.Characters
             }
 
             SkinnedMeshRenderer smr = instanceRoot.GetComponentInChildren<SkinnedMeshRenderer>();
-            if (smr == null)
+            MeshFilter filter = smr == null ? instanceRoot.GetComponentInChildren<MeshFilter>() : null;
+            if (smr == null && (filter == null || filter.sharedMesh == null))
             {
                 return;
             }
 
-            Mesh cleaned = Resources.Load<Mesh>("CleanedMeshes/" + characterId + "_NoPedestal");
+            Mesh cleaned = LoadCleanedMesh(characterId);
             if (cleaned == null)
             {
                 return;
             }
 
-            smr.sharedMesh = cleaned;
+            if (smr != null)
+            {
+                smr.sharedMesh = cleaned;
+                return;
+            }
+
+            ApplyToStaticMesh(filter, cleaned);
+        }
+
+        public static Mesh LoadCleanedMesh(CharacterId characterId)
+        {
+            return Resources.Load<Mesh>("CleanedMeshes/" + characterId + "_NoPedestal");
+        }
+
+        /// <summary>
+        /// Static (non-rigged) Meshy FBX — e.g. the character-select preview's Joaquim_RO — rendered by
+        /// a MeshFilter. The cleaned mesh was cut from the rigged export, which is Y-up, while the static
+        /// export is Z-up and stood up by its import's -90° X node rotation; so when the original mesh's
+        /// tallest axis is Z and the cleaned one's is Y, the node gets the matching +90° X turn to keep
+        /// the hero upright and facing the same way (checked on Joaquim: same texture atlas, same facing).
+        /// </summary>
+        public static void ApplyToStaticMesh(MeshFilter filter, Mesh cleaned)
+        {
+            if (filter == null || cleaned == null)
+            {
+                return;
+            }
+
+            Mesh original = filter.sharedMesh;
+            filter.sharedMesh = cleaned;
+
+            if (original != null && IsZUp(original.bounds) && !IsZUp(cleaned.bounds))
+            {
+                filter.transform.localRotation *= Quaternion.Euler(90f, 0f, 0f);
+            }
+        }
+
+        private static bool IsZUp(Bounds bounds)
+        {
+            return bounds.extents.z > bounds.extents.y;
         }
     }
 }

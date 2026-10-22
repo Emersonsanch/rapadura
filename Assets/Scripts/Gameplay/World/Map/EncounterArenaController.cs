@@ -60,6 +60,8 @@ namespace Rapadura.Gameplay.World.Map
         [SerializeField] [Range(0f, 360f)] private float _spawnArcDegrees = EncounterSpawnLayout.DefaultArcDegrees;
         [Tooltip("Spawns are kept within this distance of the arena centre (this transform). Keep it below the flee radius. 0 = no clamp.")]
         [SerializeField] [Min(0f)] private float _spawnArenaRadius = 18f;
+        [Tooltip("Minimum XZ gap between two spawned enemies; ring points squeezed together by the arena clamp are slid apart.")]
+        [SerializeField] [Min(0f)] private float _spawnMinSpacing = EncounterSpawnLayout.DefaultMinSpacing;
         [Tooltip("Layers the spawn ground raycast may land on.")]
         [SerializeField] private LayerMask _groundMask = ~0;
 
@@ -81,6 +83,9 @@ namespace Rapadura.Gameplay.World.Map
 
         private readonly WaveTracker _tracker = new WaveTracker();
         private readonly HashSet<GameObject> _spawned = new HashSet<GameObject>();
+
+        /// <summary>Ground points already used by this encounter's spawns (for <see cref="_spawnMinSpacing"/>).</summary>
+        private readonly List<Vector3> _spawnGroundPoints = new List<Vector3>();
         private SceneTransitionService _transition;
         private Transform _player;
         private bool _active;
@@ -166,6 +171,7 @@ namespace Rapadura.Gameplay.World.Map
 
             List<EnemyDefinition> enemies = payload.ResolveEnemies();
             FilterDefeatedUniqueEnemies(enemies);
+            _spawnGroundPoints.Clear();
             for (int i = 0; i < enemies.Count; i++)
             {
                 SpawnEnemy(enemies[i], i, enemies.Count);
@@ -269,22 +275,38 @@ namespace Rapadura.Gameplay.World.Map
             }
         }
 
+        /// <summary>
+        /// Root position for enemy <paramref name="index"/>: a ground point (ring around the player,
+        /// raycast down; or a fixed spawn point, authored at floor level) lifted by the prefab's
+        /// pivot-to-feet distance so the capsule — and the visual resting on its bottom — stands on it.
+        /// </summary>
         private Vector3 GetSpawnPosition(int index, int count)
         {
+            Vector3 ground;
             if (_spawnOnRingAroundPlayer && _player != null)
             {
                 Vector3 ring = EncounterSpawnLayout.RingPoint(_player.position, _player.forward, index, count,
                     _spawnMinRadius, _spawnMaxRadius, _spawnArcDegrees);
                 ring = EncounterSpawnLayout.ClampToArena(ring, transform.position, _spawnArenaRadius);
-                return SnapToGround(ring, _player.position.y);
+                ring = EncounterSpawnLayout.KeepApart(ring, _spawnGroundPoints, _spawnMinSpacing,
+                    _player.position, transform.position, _spawnArenaRadius);
+                ground = SnapToGround(ring, _player.position.y);
+            }
+            else
+            {
+                ground = GetFixedSpawnPosition(index);
             }
 
-            return GetFixedSpawnPosition(index);
+            _spawnGroundPoints.Add(ground);
+
+            float footHeight = EnemyVisualSwapper.GetFootHeight(_enemyPrefab.transform) * _enemyPrefab.transform.localScale.y;
+            return EncounterSpawnLayout.StandOnGround(ground, footHeight);
         }
 
         /// <summary>
         /// Drops a ring point onto the arena floor. Hits far above the player's feet are prop tops
-        /// (trees, rocks) and are ignored; no hit keeps the player's height.
+        /// (trees, rocks) and are ignored, as are the player and other enemies (an earlier spawn's
+        /// capsule is not floor — landing on it stacked enemies); no hit keeps the player's height.
         /// </summary>
         private Vector3 SnapToGround(Vector3 point, float referenceHeight)
         {
@@ -295,7 +317,7 @@ namespace Rapadura.Gameplay.World.Map
             float bestY = float.NegativeInfinity;
             foreach (RaycastHit hit in hits)
             {
-                if (hit.collider == null || (_player != null && hit.collider.transform.IsChildOf(_player)))
+                if (!EncounterSpawnLayout.IsGroundCandidate(hit.collider, _player))
                 {
                     continue;
                 }

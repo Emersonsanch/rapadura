@@ -8000,12 +8000,28 @@ MonoBehaviour:
   - {fileID: 1126949485}
   _enemyWaypoints: []
   _playerSpawn: {fileID: 88203691}
+  _spawnOnRingAroundPlayer: 1
+  _spawnMinRadius: 6
+  _spawnMaxRadius: 9
+  _spawnArcDegrees: 120
+  _spawnArenaRadius: 18
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  _introGraceSeconds: 1.75
   _disableDuringEncounter:
   - {fileID: 382757305}
   - {fileID: 662899601}
   - {fileID: 784470028}
   - {fileID: 1386918386}
   - {fileID: 1758323693}
+  - {fileID: 1713992393}
+  - {fileID: 160806343}
+  - {fileID: 392294710}
+  - {fileID: 1666057342}
+  - {fileID: 40436484}
+  - {fileID: 1786614458}
+  - {fileID: 697018899}
   _biomeDressing: {fileID: 0}
   _fleeRadius: 30
   _returnDelaySeconds: 1.5
@@ -12863,6 +12879,7 @@ MonoBehaviour:
   _achievementListController: {fileID: 1530136885}
   _craftingController: {fileID: 1491199035}
   _shopController: {fileID: 563311945}
+  _characterSheetController: {fileID: 0}
   _skillHotbar: {fileID: 1560329248}
   _skillHotbarRefreshMs: 100
   _hudScale: 1
@@ -20929,7 +20946,7 @@ Transform:
   m_GameObject: {fileID: 784470028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 0.6, z: -6}
+  m_LocalPosition: {x: 4, y: 0.5, z: -6}
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -21550,7 +21567,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b973d68849992ef458dcf4c00f3e6e41, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.365
+      value: -0.5266397
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b973d68849992ef458dcf4c00f3e6e41, type: 3}
       propertyPath: m_LocalPosition.z
@@ -23878,7 +23895,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b973d68849992ef458dcf4c00f3e6e41, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.365
+      value: -0.5266397
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b973d68849992ef458dcf4c00f3e6e41, type: 3}
       propertyPath: m_LocalPosition.z
@@ -36156,7 +36173,7 @@ Transform:
   m_GameObject: {fileID: 1386918386}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: 0.6, z: -8}
+  m_LocalPosition: {x: -4, y: 0.5, z: -8}
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -40689,6 +40706,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   _maxRayDistance: 200
   _attackStoppingDistance: 2
+  _holdReaimInterval: 0.15
 --- !u!114 &1560329241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40898,6 +40916,8 @@ MonoBehaviour:
   _slotCount: 5
   _autoFillEmptySlots: 1
   _input: {fileID: 0}
+  _softTargetConeHalfAngle: 70
+  _faceSoftTarget: 1
 --- !u!1 &1562616009
 GameObject:
   m_ObjectHideFlags: 0

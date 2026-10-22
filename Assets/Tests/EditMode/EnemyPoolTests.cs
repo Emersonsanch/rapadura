@@ -270,17 +270,62 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void Configure_WithADifferentPrefab_DestroysInstancesOfTheOldOne()
+        public void Configure_WithADifferentPrefab_DestroysParkedOldInstances_ButKeepsLiveOnesUntilReleased()
         {
-            GameObject old = _pool.Get(Vector3.zero, Quaternion.identity);
+            GameObject live = _pool.Get(Vector3.zero, Quaternion.identity);
+            GameObject parked = _pool.Get(Vector3.zero, Quaternion.identity);
+            _pool.Release(parked);
             var otherPrefab = new GameObject("OtherEnemyPrefab_Test");
             otherPrefab.SetActive(false);
             _created.Add(otherPrefab);
 
             _pool.Configure(otherPrefab, _container);
 
-            Assert.IsTrue(old == null);
+            Assert.IsTrue(parked == null, "parked old-prefab instances must not be handed out for the new prefab");
+            Assert.IsTrue(live != null, "a live wave enemy must survive (destroying it would skip its EnemyDiedEvent)");
+            Assert.IsTrue(live.activeSelf);
             Assert.AreEqual(0, _pool.CreatedCount);
+            Assert.AreEqual(1, _pool.RetiredCount);
+
+            // The new prefab is what Get hands out now.
+            GameObject fresh = _pool.Get(Vector3.zero, Quaternion.identity);
+            Assert.AreNotSame(live, fresh);
+            Assert.AreEqual("OtherEnemyPrefab_Test(Clone)", fresh.name);
+
+            // Releasing the retired one destroys it instead of parking it.
+            _pool.Release(live);
+            Assert.IsTrue(live == null);
+            Assert.AreEqual(0, _pool.RetiredCount);
+            Assert.AreEqual(0, _pool.InactiveCount);
+        }
+
+        [Test]
+        public void Clear_AlsoDestroysRetiredInstances()
+        {
+            GameObject live = _pool.Get(Vector3.zero, Quaternion.identity);
+            var otherPrefab = new GameObject("OtherEnemyPrefab_Test");
+            otherPrefab.SetActive(false);
+            _created.Add(otherPrefab);
+            _pool.Configure(otherPrefab, _container);
+
+            _pool.Clear();
+
+            Assert.IsTrue(live == null);
+            Assert.AreEqual(0, _pool.RetiredCount);
+        }
+
+        [Test]
+        public void Get_BumpsSpawnGeneration_SoALingeringDeathSinkLetsGo()
+        {
+            GameObject enemy = _pool.Get(Vector3.zero, Quaternion.identity);
+            EnemyController controller = enemy.GetComponent<EnemyController>();
+            KillAndRelease(enemy);
+            int generationAtDeath = controller.SpawnGeneration; // what EnemyDeathVfx's coroutine captured
+
+            GameObject reused = _pool.Get(Vector3.one, Quaternion.identity); // plain Get, no ResetForSpawn
+
+            Assert.AreSame(enemy, reused);
+            Assert.AreNotEqual(generationAtDeath, controller.SpawnGeneration);
         }
 
         [Test]

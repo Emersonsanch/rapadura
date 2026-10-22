@@ -123,6 +123,66 @@ namespace Rapadura.Tests
         }
 
         [Test]
+        public void KeepApart_RingPointsSqueezedByTheArenaClamp_EndUpSpacedAndInsideTheArena()
+        {
+            // Player near the arena edge, facing out: the whole arc gets clamped onto the rim.
+            Vector3 center = Vector3.zero;
+            const float arenaRadius = 10f;
+            Vector3 player = new Vector3(0f, 0f, 8f);
+            var taken = new System.Collections.Generic.List<Vector3>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                Vector3 ring = EncounterSpawnLayout.RingPoint(player, Vector3.forward, i, 5, 6f, 9f, 40f);
+                ring = EncounterSpawnLayout.ClampToArena(ring, center, arenaRadius);
+                ring = EncounterSpawnLayout.KeepApart(ring, taken, EncounterSpawnLayout.DefaultMinSpacing, player, center, arenaRadius);
+
+                Assert.LessOrEqual(EncounterSpawnLayout.FlatDistance(ring, center), arenaRadius + 0.001f, $"enemy {i} left the arena");
+                foreach (Vector3 other in taken)
+                {
+                    Assert.GreaterOrEqual(EncounterSpawnLayout.FlatDistance(ring, other), EncounterSpawnLayout.DefaultMinSpacing - 0.001f, $"enemy {i} overlaps");
+                }
+
+                taken.Add(ring);
+            }
+        }
+
+        [Test]
+        public void KeepApart_AlreadySpacedPoint_IsUntouched()
+        {
+            var taken = new System.Collections.Generic.List<Vector3> { new Vector3(5f, 0f, 0f) };
+            Vector3 point = new Vector3(-5f, 1f, 0f);
+
+            Assert.AreEqual(point, EncounterSpawnLayout.KeepApart(point, taken, 1.6f, Vector3.zero, Vector3.zero, 18f));
+            Assert.AreEqual(point, EncounterSpawnLayout.KeepApart(point, null, 1.6f, Vector3.zero, Vector3.zero, 18f));
+        }
+
+        [Test]
+        public void IsGroundCandidate_RejectsPlayerAndEnemyColliders()
+        {
+            var ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            var player = new GameObject("Player");
+            var playerBody = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            playerBody.transform.SetParent(player.transform);
+            CapsuleCollider enemyCapsule = _enemyGameObject.AddComponent<CapsuleCollider>();
+            var enemyChild = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            enemyChild.transform.SetParent(_enemyGameObject.transform);
+            try
+            {
+                Assert.IsTrue(EncounterSpawnLayout.IsGroundCandidate(ground.GetComponent<Collider>(), player.transform));
+                Assert.IsFalse(EncounterSpawnLayout.IsGroundCandidate(playerBody.GetComponent<Collider>(), player.transform));
+                Assert.IsFalse(EncounterSpawnLayout.IsGroundCandidate(enemyCapsule, player.transform), "an earlier enemy's capsule is not floor");
+                Assert.IsFalse(EncounterSpawnLayout.IsGroundCandidate(enemyChild.GetComponent<Collider>(), player.transform));
+                Assert.IsFalse(EncounterSpawnLayout.IsGroundCandidate(null, player.transform));
+            }
+            finally
+            {
+                Object.DestroyImmediate(ground);
+                Object.DestroyImmediate(player);
+            }
+        }
+
+        [Test]
         public void ArenaDefaults_SpawnFarEnoughFromThePlayer()
         {
             Assert.GreaterOrEqual(EncounterSpawnLayout.DefaultMinRadius, 6f);
