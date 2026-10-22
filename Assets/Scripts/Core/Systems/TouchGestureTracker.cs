@@ -16,9 +16,15 @@ namespace Rapadura.Core.Systems
     /// (<see cref="UiPointerQuery.IsPointerOverUi"/> at its start position — picking panels isn't free,
     /// so never per frame), and remembered by touch id until the finger lifts.
     ///
-    /// <see cref="IsPinchLatched"/> stays true from the moment a pinch starts until every finger is
-    /// up: lifting one finger of a pinch leaves the other on the glass, and the Input System's
-    /// primaryTouch may then report a fresh press that must not turn into a tap-to-move.
+    /// <see cref="IsPinchLatched"/> stays true from the moment a pinch starts until every <em>world</em>
+    /// finger is up: lifting one finger of a pinch leaves the other on the glass, and the Input
+    /// System's primaryTouch may then report a fresh press that must not turn into a tap-to-move.
+    /// Fingers on the HUD (a thumb holding Correr or the joystick) don't keep the latch, or the next
+    /// tap on the ground would be swallowed until every finger lifted.
+    ///
+    /// The pinch pair (<see cref="PinchId0"/>/<see cref="PinchId1"/>, positions in
+    /// <see cref="WorldTouch0"/>/<see cref="WorldTouch1"/>) is tracked by touch id, not by slot
+    /// order: a third world finger lifting must not swap the pair under the camera zoom.
     /// </summary>
     public static class TouchGestureTracker
     {
@@ -26,6 +32,8 @@ namespace Rapadura.Core.Systems
         private static readonly Dictionary<int, bool> StartedOverUiById = new Dictionary<int, bool>();
         private static readonly List<int> ActiveIds = new List<int>();
         private static readonly List<int> StaleIds = new List<int>();
+        private static readonly List<int> WorldIds = new List<int>();
+        private static readonly List<Vector2> WorldPositions = new List<Vector2>();
 
         /// <summary>Fingers currently down, anywhere.</summary>
         public static int ActiveTouchCount { get; private set; }
@@ -33,9 +41,18 @@ namespace Rapadura.Core.Systems
         /// <summary>Fingers currently down that started on the world (not on UI).</summary>
         public static int WorldTouchCount { get; private set; }
 
-        /// <summary>Screen position of the first / second world touch (valid when <see cref="WorldTouchCount"/> is at least 1 / 2).</summary>
+        /// <summary>
+        /// Screen position of the first / second world touch (valid when <see cref="WorldTouchCount"/>
+        /// is at least 1 / 2). While pinching these are the pinch pair (<see cref="PinchId0"/>/<see cref="PinchId1"/>).
+        /// </summary>
         public static Vector2 WorldTouch0 { get; private set; }
         public static Vector2 WorldTouch1 { get; private set; }
+
+        /// <summary>Touch ids of the current pinch pair (-1 when not pinching). Stable while both fingers stay down.</summary>
+        public static int PinchId0 { get; private set; } = NoTouch;
+        public static int PinchId1 { get; private set; } = NoTouch;
+
+        public const int NoTouch = -1;
 
         /// <summary>Two or more world fingers are down right now (camera pinch).</summary>
         public static bool IsPinching => IsPinch(WorldTouchCount);
@@ -50,6 +67,10 @@ namespace Rapadura.Core.Systems
             StartedOverUiById.Clear();
             ActiveIds.Clear();
             StaleIds.Clear();
+            WorldIds.Clear();
+            WorldPositions.Clear();
+            PinchId0 = NoTouch;
+            PinchId1 = NoTouch;
             ActiveTouchCount = 0;
             WorldTouchCount = 0;
             IsPinchLatched = false;
@@ -59,17 +80,43 @@ namespace Rapadura.Core.Systems
         public static bool IsPinch(int worldTouchCount) => worldTouchCount >= 2;
 
         /// <summary>
-        /// Pure latch rule (EditMode-testable): set by a pinch, kept while any finger is still down,
-        /// cleared once the screen is empty.
+        /// Pure latch rule (EditMode-testable): set by a pinch, kept while a world finger (one left
+        /// over from the pinch) is still down, cleared once no world finger remains — fingers on UI
+        /// (Correr, joystick) never hold it.
         /// </summary>
-        public static bool NextPinchLatch(bool latched, int worldTouchCount, int activeTouchCount)
+        public static bool NextPinchLatch(bool latched, int worldTouchCount)
         {
             if (IsPinch(worldTouchCount))
             {
                 return true;
             }
 
-            return activeTouchCount > 0 && latched;
+            return worldTouchCount > 0 && latched;
+        }
+
+        /// <summary>
+        /// Pure pinch-pair rule (EditMode-testable): keeps <paramref name="id0"/>/<paramref name="id1"/>
+        /// while both are still among <paramref name="worldIds"/>; otherwise picks the first two world
+        /// touches (or clears the pair below two). Returns true when the pair changed.
+        /// </summary>
+        public static bool SelectPinchPair(List<int> worldIds, ref int id0, ref int id1)
+        {
+            if (worldIds == null || !IsPinch(worldIds.Count))
+            {
+                bool hadPair = id0 != NoTouch || id1 != NoTouch;
+                id0 = NoTouch;
+                id1 = NoTouch;
+                return hadPair;
+            }
+
+            if (id0 != NoTouch && id1 != NoTouch && id0 != id1 && worldIds.Contains(id0) && worldIds.Contains(id1))
+            {
+                return false;
+            }
+
+            id0 = worldIds[0];
+            id1 = worldIds[1];
+            return true;
         }
 
         /// <summary>Re-reads the touchscreen at most once per frame; every reader calls this first.</summary>
@@ -83,8 +130,9 @@ namespace Rapadura.Core.Systems
 
             _lastRefreshFrame = frame;
             ActiveIds.Clear();
+            WorldIds.Clear();
+            WorldPositions.Clear();
             int active = 0;
-            int world = 0;
 
             Touchscreen touchscreen = Touchscreen.current;
             if (touchscreen != null)
@@ -113,24 +161,33 @@ namespace Rapadura.Core.Systems
                         continue;
                     }
 
-                    if (world == 0)
-                    {
-                        WorldTouch0 = touch.position.ReadValue();
-                    }
-                    else if (world == 1)
-                    {
-                        WorldTouch1 = touch.position.ReadValue();
-                    }
-
-                    world++;
+                    WorldIds.Add(id);
+                    WorldPositions.Add(touch.position.ReadValue());
                 }
             }
 
             ForgetLiftedTouches();
 
+            int world = WorldIds.Count;
             ActiveTouchCount = active;
             WorldTouchCount = world;
-            IsPinchLatched = NextPinchLatch(IsPinchLatched, world, active);
+            IsPinchLatched = NextPinchLatch(IsPinchLatched, world);
+
+            int pinchId0 = PinchId0;
+            int pinchId1 = PinchId1;
+            SelectPinchPair(WorldIds, ref pinchId0, ref pinchId1);
+            PinchId0 = pinchId0;
+            PinchId1 = pinchId1;
+
+            if (pinchId0 != NoTouch)
+            {
+                WorldTouch0 = WorldPositions[WorldIds.IndexOf(pinchId0)];
+                WorldTouch1 = WorldPositions[WorldIds.IndexOf(pinchId1)];
+            }
+            else if (world == 1)
+            {
+                WorldTouch0 = WorldPositions[0];
+            }
         }
 
         private static void ForgetLiftedTouches()

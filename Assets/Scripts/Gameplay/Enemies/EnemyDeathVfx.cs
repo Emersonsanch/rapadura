@@ -48,11 +48,15 @@ namespace Rapadura.Gameplay.Enemies
                 collider.enabled = false;
             }
 
-            StartCoroutine(SinkAndDeactivate(evt.Target));
+            StartCoroutine(SinkAndDeactivate(evt.Target, enemy));
         }
 
-        private IEnumerator SinkAndDeactivate(GameObject enemy)
+        private IEnumerator SinkAndDeactivate(GameObject enemy, EnemyController controller)
         {
+            // A pooled enemy (EnemyPool) can be released and re-spawned before the sink finishes;
+            // from then on it is a new, live enemy this coroutine must leave alone.
+            int generation = controller.SpawnGeneration;
+
             Transform enemyTransform = enemy.transform;
             Vector3 startPosition = enemyTransform.position;
             Vector3 endPosition = startPosition + Vector3.down * _sinkDistance;
@@ -64,7 +68,7 @@ namespace Rapadura.Gameplay.Enemies
             while (elapsed < _sinkDuration)
             {
                 // The enemy can be destroyed mid-sink (scene unload, pool cleanup).
-                if (enemy == null)
+                if (enemy == null || controller == null || controller.SpawnGeneration != generation)
                 {
                     yield break;
                 }
@@ -89,7 +93,7 @@ namespace Rapadura.Gameplay.Enemies
                 yield return null;
             }
 
-            if (enemy != null)
+            if (enemy != null && controller != null && controller.SpawnGeneration == generation)
             {
                 enemy.SetActive(false);
             }

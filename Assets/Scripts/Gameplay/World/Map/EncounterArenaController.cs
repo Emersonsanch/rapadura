@@ -28,6 +28,13 @@ namespace Rapadura.Gameplay.World.Map
     /// Intro: for <see cref="_introGraceSeconds"/> every spawned enemy holds its aggro
     /// (<see cref="EnemyController.HoldAggro"/>: no chase, no attacks — damage to them still lands)
     /// while <see cref="EncounterIntroEvent"/> drives the "Prepare-se!" countdown.
+    ///
+    /// Why enemies are Instantiated here and not taken from <see cref="EnemyPool"/>: Main.unity is
+    /// loaded fresh for every encounter and unloaded on return to the map, so a pool would never get
+    /// to reuse anything (it dies with the scene, same as these instances), and corpses must stay in
+    /// the scene after death for <see cref="EnemyDeathVfx"/>'s sink/fade and the Victory return delay
+    /// — releasing them into a pool on death would cut that short. All spawned enemies go away with
+    /// the scene unload. Revisit if encounters ever chain inside one scene load.
     /// </summary>
     public class EncounterArenaController : MonoBehaviour
     {

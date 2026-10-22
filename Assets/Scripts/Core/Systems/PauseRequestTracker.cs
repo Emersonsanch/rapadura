@@ -62,6 +62,20 @@ namespace Rapadura.Core.Systems
             return !IsPaused;
         }
 
+        /// <summary>Appends the current owners to <paramref name="buffer"/> (diagnostics: the debug overlay lists them).</summary>
+        public void CopyOwnersTo(List<object> buffer)
+        {
+            if (buffer == null)
+            {
+                return;
+            }
+
+            foreach (object owner in _owners)
+            {
+                buffer.Add(owner);
+            }
+        }
+
         public void SetExternalPaused(bool paused)
         {
             ExternalPaused = paused;

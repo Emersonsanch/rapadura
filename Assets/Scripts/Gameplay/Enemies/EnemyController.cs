@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Rapadura.Core.Events;
 using Rapadura.Core.StateMachine;
 using Rapadura.Gameplay.Combat;
@@ -35,6 +36,40 @@ namespace Rapadura.Gameplay.Enemies
         private int _currentWaypointIndex;
         private bool _hasSpottedTarget;
         private float _aggroHoldRemaining;
+        private int _spawnGeneration;
+
+        private static readonly HashSet<EnemyController> Enabled = new HashSet<EnemyController>();
+
+        /// <summary>Enemies currently enabled in any loaded scene (alive or dying). Read-only view for diagnostics (debug overlay).</summary>
+        public static IReadOnlyCollection<EnemyController> EnabledEnemies => Enabled;
+
+        /// <summary>Enabled enemies that are not dead.</summary>
+        public static int CountAlive()
+        {
+            int alive = 0;
+            foreach (EnemyController enemy in Enabled)
+            {
+                if (enemy != null && (enemy.Health == null || !enemy.Health.IsDead))
+                {
+                    alive++;
+                }
+            }
+
+            return alive;
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            Enabled.Clear();
+        }
+
+        /// <summary>
+        /// Bumped by every <see cref="ResetForSpawn"/>. Lets effects that outlive a death (e.g.
+        /// <see cref="EnemyDeathVfx"/>'s sink coroutine) notice that a pooled instance was re-spawned
+        /// and stop touching it.
+        /// </summary>
+        public int SpawnGeneration => _spawnGeneration;
 
         public EnemyDefinition Definition => _definition;
         public Health Health { get; private set; }
@@ -67,11 +102,13 @@ namespace Rapadura.Gameplay.Enemies
 
         private void OnEnable()
         {
+            Enabled.Add(this);
             EventBus.Subscribe<CombatTargetDiedEvent>(OnCombatTargetDied);
         }
 
         private void OnDisable()
         {
+            Enabled.Remove(this);
             EventBus.Unsubscribe<CombatTargetDiedEvent>(OnCombatTargetDied);
         }
 
@@ -186,6 +223,7 @@ namespace Rapadura.Gameplay.Enemies
             _currentWaypointIndex = 0;
             _hasSpottedTarget = false;
             _aggroHoldRemaining = 0f;
+            _spawnGeneration++;
 
             if (Health == null)
             {
@@ -193,6 +231,11 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             ApplyDefinitionToHealth();
+            if (Health != null)
+            {
+                // A reused corpse may still carry the post-hit immunity window from its last life.
+                Health.ClearInvulnerability();
+            }
 
             if (_stateMachine == null)
             {

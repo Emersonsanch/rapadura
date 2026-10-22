@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Rapadura.Core.Events;
 using Rapadura.UI.Menus;
 using UnityEngine;
@@ -36,6 +37,15 @@ namespace Rapadura.Core.Systems
 
         /// <summary>At least one modal screen holds a pause (excludes the pause menu).</summary>
         public static bool HasRequests => Tracker.HasOwners;
+
+        /// <summary>Number of modal screens currently holding a pause.</summary>
+        public static int OwnerCount => Tracker.OwnerCount;
+
+        /// <summary>The pause menu (tracked only through its events) is currently pausing.</summary>
+        public static bool IsExternallyPaused => Tracker.ExternalPaused;
+
+        /// <summary>Appends the current pause owners to <paramref name="buffer"/> (diagnostics only).</summary>
+        public static void CopyOwnersTo(List<object> buffer) => Tracker.CopyOwnersTo(buffer);
 
         public static bool IsHeldBy(object owner) => Tracker.IsHeldBy(owner);
 

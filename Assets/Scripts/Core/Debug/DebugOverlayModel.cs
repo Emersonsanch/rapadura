@@ -8,7 +8,10 @@ namespace Rapadura.Core.Debug
     /// binding) so the FPS smoothing and text formatting can be unit-tested in EditMode without
     /// a live scene, a UIDocument, or a running Update loop.
     ///
-    /// KNOWN LIMITATION: this overlay shows FPS and memory only. The task also asked for a
+    /// The full multi-line overlay text (frame time, GC/frame, enemies, flow, pause, world) is built by
+    /// <see cref="DebugOverlayPresenter"/> from a <see cref="DebugOverlaySnapshot"/>.
+    ///
+    /// KNOWN LIMITATION: this overlay does not show a log tail. The task also asked for a
     /// rolling log of the last N `GameLogger` messages, but `GameLogger` (Core/Logging/GameLogger.cs)
     /// exposes no event/hook fired on new messages (and was intentionally left unedited — it's
     /// out of scope here). Without such a hook there is no way to observe log messages from
@@ -24,9 +27,24 @@ namespace Rapadura.Core.Debug
 
         private float _smoothedFps;
         private bool _hasSample;
+        private float _peakDeltaSeconds;
 
         /// <summary>Current exponentially-smoothed FPS estimate.</summary>
         public float SmoothedFps => _smoothedFps;
+
+        /// <summary>Frame time implied by <see cref="SmoothedFps"/>, in milliseconds (0 before the first sample).</summary>
+        public float SmoothedFrameMilliseconds => _smoothedFps > 0f ? 1000f / _smoothedFps : 0f;
+
+        /// <summary>Longest frame seen since the last <see cref="ConsumePeakFrameMilliseconds"/>, in milliseconds.</summary>
+        public float PeakFrameMilliseconds => _peakDeltaSeconds * 1000f;
+
+        /// <summary>Returns <see cref="PeakFrameMilliseconds"/> and starts a new peak window (call once per overlay refresh).</summary>
+        public float ConsumePeakFrameMilliseconds()
+        {
+            float peak = PeakFrameMilliseconds;
+            _peakDeltaSeconds = 0f;
+            return peak;
+        }
 
         /// <summary>
         /// Feeds one frame's delta time into the smoothing average. Call once per frame with
@@ -40,6 +58,10 @@ namespace Rapadura.Core.Debug
             }
 
             float instantFps = 1f / deltaTimeSeconds;
+            if (deltaTimeSeconds > _peakDeltaSeconds)
+            {
+                _peakDeltaSeconds = deltaTimeSeconds;
+            }
 
             if (!_hasSample)
             {
@@ -59,6 +81,7 @@ namespace Rapadura.Core.Debug
         {
             _smoothedFps = 0f;
             _hasSample = false;
+            _peakDeltaSeconds = 0f;
         }
 
         /// <summary>Formats the current smoothed FPS as display text, e.g. "FPS: 59.6".</summary>

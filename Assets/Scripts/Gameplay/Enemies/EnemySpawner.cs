@@ -95,17 +95,13 @@ namespace Rapadura.Gameplay.Enemies
         private GameObject SpawnOne(EnemyDefinition definition, int spawnIndex)
         {
             Vector3 position = GetSpawnPosition(spawnIndex);
-            GameObject instance = _pool.Get(position, Quaternion.identity);
-
-            EnemyController controller = instance.GetComponent<EnemyController>();
-            if (controller != null)
+            // Spawn = Get + ResetForSpawn (health/AI/aggro hold) + visual swap, so a reused pooled
+            // enemy always comes back as a fresh one.
+            GameObject instance = _pool.Spawn(definition, position, Quaternion.identity, _waypoints, _applyDefinitionVisuals);
+            if (instance == null)
             {
-                controller.ResetForSpawn(definition, position, _waypoints);
-            }
-
-            if (_applyDefinitionVisuals)
-            {
-                EnemyVisualSwapper.Apply(instance, definition);
+                GameLogger.Warning("Enemy", "EnemySpawner: the pool has no prefab configured; nothing spawned.");
+                return null;
             }
 
             _spawnedThisWave.Add(instance);
