@@ -29,11 +29,13 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 - `BuildVersion` (`Core/Versioning`): helper SemVer em runtime sobre `Application.version`.
 - Tela de Créditos (UI Toolkit, `CreditsView.uxml/.uss` + `CreditsController`), aberta pelo botão "Créditos" do menu principal.
 - `Docs/ThirdPartyLicenses.md`, `Docs/QAChecklist.md`, `Docs/Audio.md` e seção "Orçamento de performance" em `Docs/PlatformRequirements.md`.
-- 14 smoke tests PlayMode (cenas, telas de UI, encontro e XP no encontro); suíte EditMode com 1300 testes.
+- 14 smoke tests PlayMode (cenas, telas de UI, encontro e XP no encontro); suíte EditMode com 1372 testes.
 - CI completo (`.github/workflows/ci.yml`): `precheck` da licença Unity (jobs ficam pulados sem os secrets), testes EditMode + PlayMode com cache e LFS, builds de desenvolvimento Windows x64 e Android em push/manual, assinatura Android opcional; configuração em `Docs/CI.md`.
 - Overlay de debug (só Editor/Development build): FPS, frame time, GC por frame, memória, inimigos, fluxo, pausa, bioma/clima; F1 ou toque com 3 dedos (`Core/Debug/DebugOverlay*`).
 - Contagem "Prepare-se/Já!" no início do encontro: inimigos nascem em arco a 6-9 m e seguram o ataque por 1.75s (`EncounterSpawnLayout`).
 - Skills miram o inimigo mais próximo num cone de 70° ou no alcance (`SkillTargeting`).
+- Defesa funcional para herói e inimigos: % de skills reduz/aumenta o dano (teto 80% / 2x) e defesa plana pela curva de armadura; Velocidade como multiplicador [0.1, 2.5] no movimento do herói e dos inimigos (fórmulas em `Docs/Balance/README.md` §4).
+- Herói corre sozinho ao perseguir um alvo distante; encontros forçam o aggro dos inimigos depois da contagem.
 
 ### Alterado
 - Rebalanceamento por dados: curva de XP 1.25→1.10, +8 HP por nível, XP por bioma 10/18/28/40, chefes x8, ultimates ~2.5x e skills fracas reforçadas (tabelas em `Docs/Balance/README.md`).
@@ -48,6 +50,11 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 - Subir de nível recupera vida e mana; fundos de telas modais opacos; textos do mapa refletem o chefe de região.
 - Configurações com aba ativa sublinhada e nomes traduzidos; Mochila separa ouro de itens; herói selecionado destacado.
 - `UiPointerQuery` com cache de `UIDocument` (zero alocação por consulta); APIs obsoletas trocadas (`style.scale`, `FindObjectsByType`).
+- Rebalanceamento r6/r7 (playtests automatizados 5 heróis × 4 biomas): comuns com cerca de 2x vida, chefes 430/505/580/700 HP com ataques mais lentos e pesados, dano do herói +2% por nível, Purificação 24/5, Muralha 0.5 / 16 s, Lobo Alfa 18→14, Escorpião 9→11, Cura Divina 6→9 s. Lutas comuns de 4.3-7.4 s e de chefe de 15-22 s (`Docs/Balance/README.md` §5–§6).
+- Inimigo foge no máximo 3s a 0.8x da corrida do herói e volta.
+- Visual dos biomas: Montanha nevada, Caverna escura, noite legível, tempestade de areia visível, Lobo Alfa avermelhado; banners, card de missão e pulso do rastreador opacos sobre areia/neve.
+- Objetos de teste da `Main` num root `Sandbox` desligado em encontros; props procedurais começam a 11 m do centro.
+- Dica do tutorial espera o "Prepare-se/Já!"; trocar de herói revoga as skills do anterior.
 
 ### Corrigido
 - Matar inimigo no fluxo real (mapa → encontro) não dava XP, loot, números de dano nem VFX: o `GameManager` duplicado era destruído junto com os componentes de recompensa (`SingletonBehaviour` agora remove só o componente duplicado).
@@ -70,6 +77,14 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 - Toque: Correr/joystick bloqueavam o tocar-para-andar; joystick e Correr ficavam presos ao trocar de app; Esc pausava sem estar ligado ao menu de pausa.
 - Rótulos do mapa sobrepostos; dica de loot disparava ao carregar save; dica do tutorial vazava sobre a tela de morte e modais.
 - Pedestal visível no preview do Joaquim.
+- Skills lançadas logo depois do ataque básico não causavam dano (cerca de 40% eram engolidas pela invulnerabilidade do inimigo, agora por atacante + canal); DoT agora credita quem aplicou (XP/loot).
+- Inimigos não tinham `BuffController`: debuffs, lentidão e dano contínuo de skills eram ignorados. `AttackDamage` de inimigo, regen de vida/mana/stamina e `MaxStamina` de afixos não eram lidos.
+- Defesa e Velocidade (`Defense`/`MoveSpeed`) não tinham efeito.
+- Morcegos nunca atacavam: o alcance 3D não fechava porque pairam acima do herói (alcance agora horizontal, com tolerância vertical de 2 m).
+- XP ganho logo depois de entrar na `Main`, antes da restauração do estado carregado, era perdido.
+- Herói flutuava na Montanha (gravidade no idle e snap ao chão no spawn).
+- Luz direcional da prévia de heróis iluminava a arena inteira (noite e caverna claras); virou spot.
+- Bancada de teste abria o crafting e paredes de teste travavam a luta durante encontros; rochas nasciam sobre o spawn do golem.
 
 ## [0.1.0] - 2026-10-21
 

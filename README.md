@@ -39,7 +39,7 @@ Já funciona:
 - **Fluxo completo**: menu principal → seleção de herói → mapa ⇄ encontro → volta ao mapa, com pausa, voltar ao título (reset de sessão) e tutorial de primeira vez.
 - **5 heróis jogáveis**, cada um com 5 skills próprias (25 no total), árvore de skills por herói e hotbar (teclas 1-5, gamepad ou toque na HUD). Ficha do personagem para gastar pontos de atributo.
 - **Mapa mundi** com 4 regiões (Floresta, Deserto, Montanha, Cavernas), HUD própria, encontros aleatórios, arena decorada por bioma e chefe de região que desbloqueia a próxima região.
-- **Combate**: ataque básico, clique no inimigo para atacar, acerto crítico, buffs/debuffs, XP, loot com raridade e afixos, bônus de chefe, tela de morte com respawn. Balanceamento por dados em `Docs/Balance`.
+- **Combate**: ataque básico, clique no inimigo para atacar, acerto crítico, defesa e velocidade, buffs/debuffs (também nos inimigos), XP, loot com raridade e afixos, bônus de chefe, tela de morte com respawn. Balanceamento por dados em `Docs/Balance`, ajustado em três playtests automatizados (r5–r7, 5 heróis × 4 biomas): lutas comuns de 4–7 s e de chefe de 15–22 s, com risco real de morte para quem não usa skills nem defesa.
 - **RPG**: Mochila (inventário + equipamentos) com arrastar e soltar, Organizar e tooltips; crafting com bancada, loja com estoque salvo, diálogos ramificados com NPCs que dão quests, log de missões + rastreador, missões diárias, conquistas.
 - **Mundo**: ciclo dia/noite, clima por bioma, VFX de skills e de ambiente.
 - **Áudio**: sons por evento e música por contexto (placeholders procedurais, ver `Docs/Audio.md`) e vibração no celular.
@@ -49,13 +49,13 @@ Já funciona:
 - **Build**: Windows x64 gerada sem erros, com cerca de 192 MB (era 358 MB, antes da compressão de malhas/texturas e do override Android ASTC). Build Android local depende do módulo Android Build Support no Unity Hub.
 - **Debug**: overlay de FPS, memória, GC e estado do jogo (só Editor/Development build), F1 ou toque com 3 dedos.
 
-Próximos itens de código: decimar malhas de heróis/inimigos, deduplicar malhas rigadas e limpas, Addressables, carga de ultimate e terreno real por bioma. Pendências que dependem de decisão do usuário (módulo Android, bundle id e ícone do app, rig da Maithe, secrets do CI, aparelho físico e builds de loja, licenças, áudio e ícones reais) estão em `TODO.md` → "Próximos passos".
+Próximos itens de código: decimar malhas de heróis/inimigos, deduplicar malhas rigadas e limpas, Addressables, carga de ultimate, terreno real por bioma, uso do atordoamento e modelos para os 5 inimigos que ainda são primitivas. Pendências que dependem de decisão do usuário (módulo Android, bundle id e ícone do app, rig da Maithe, modelos de inimigos via Meshy, secrets do CI, aparelho físico e builds de loja, licenças, áudio e ícones reais) estão em `TODO.md` → "Próximos passos".
 
 ## Testes
 
 No Unity Editor: **Window → General → Test Runner**.
 
-- **EditMode** (`Assets/Tests/EditMode`, 1300 testes): aba *EditMode* → *Run All*. Os testes de save usam uma pasta temporária isolada e não tocam nos saves reais.
+- **EditMode** (`Assets/Tests/EditMode`, 1372 testes): aba *EditMode* → *Run All*. Os testes de save usam uma pasta temporária isolada e não tocam nos saves reais.
 - **PlayMode** (`Assets/Tests/PlayMode`, 14 smoke tests das cenas `Main`/`WorldMap`, das telas de UI e do encontro com XP): aba *PlayMode* → *Run All*. As cenas precisam estar no Build Settings (já estão).
 
 Pela linha de comando (o Editor precisa estar fechado):

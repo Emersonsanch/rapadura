@@ -4,6 +4,18 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-10-22 (manhã — combate justo, Defesa/Velocidade de verdade, biomas legíveis e rebalanceamento r5→r7)
+- 🏁 **Resumo**: commits `541946f`..`1a390e2` (5 commits), mais a correção `4fbee22` que fechou a madrugada. Suítes: **EditMode 1372/1372** (eram 1300) e **PlayMode 14/14**.
+- 🐛 **Inimigos debaixo do chão e cápsulas** (`4fbee22`, já descrito na entrada anterior): o spawn de encontro sobe meia altura da cápsula e o modelo é assentado pela bounds da malha; NPCs da vila (as "cápsulas") desligados durante encontros.
+- ⚔️ **Combate justo** (`541946f`): invulnerabilidade do inimigo agora é por atacante + canal (0.2s), então skills lançadas logo depois do ataque básico causam dano (antes cerca de 40% eram engolidas); DoT credita quem aplicou (XP/loot). Inimigo foge no máximo 3s a 0.8x da corrida do herói e volta (cansa); encontros forçam aggro depois da contagem; herói corre sozinho ao perseguir alvo distante; gravidade no idle e snap ao chão no spawn (o herói flutuava na Montanha). Dica do tutorial espera o "Prepare-se/Já!" e trocar de herói revoga as skills antigas.
+- 🧪 **Sandbox fora dos encontros** (`541946f`): objetos de teste da `Main.unity` foram para um root `Sandbox` desligado em encontros (a bancada abria crafting e paredes travavam a luta). Props procedurais começam a 11 m e duas rochas saíram do anel de spawn (`636d964`).
+- 💡 **Luz da prévia de heróis** (`541946f`): a luz direcional da prévia iluminava a arena inteira (noite clara, caverna clara); virou spot. Conferido em `636d964`: os 5 heróis bem iluminados nas duas cenas.
+- 🏔️ **Visual dos biomas** (`541946f`): Montanha nevada, Caverna escura, noite legível, tempestade de areia visível, Lobo Alfa avermelhado. **HUD legível** sobre areia/neve: banner "Prepare-se"/chefe a 0.97 com sombra, card de missão a 0.95 e pulso opaco (`636d964`).
+- 🛡️ **Defesa e Velocidade funcionam** (`4813037`): 🐛 inimigos não tinham `BuffController`, então todo debuff, lentidão e DoT de skill (drone, torreta, bola de fogo, veneno...) era ignorado em silêncio; o `EnemyController` adiciona o componente em runtime. Defesa: % de skills reduz/aumenta dano (teto 80% / 2x) e defesa plana pela curva de armadura, para herói e inimigos. Velocidade: multiplicador [0.1, 2.5] no `PlayerMotor` e no `EnemyController` (raiz só com efeito único de -100%). `AttackDamage` de inimigo, regen de vida/mana/stamina e `MaxStamina` de afixos passaram a ser lidos. Fórmulas em `Docs/Balance/README.md` §4.
+- ⚖️ **Playtests r5/r6/r7 e rebalanceamento** (`b70812a`, `1a390e2`): com tudo funcionando, o r6 mostrou o jogo fácil demais (chefes em 3-11 s, 0 mortes). r6: comuns cerca de 2x vida (Lobo/Aranha 70, Escorpião 85, Golem 100, Morcegos 80/7), chefes 430/505/580/700 HP com ataques mais lentos e pesados, Purificação 24/5, Muralha 0.5 / 16 s, dano do herói +2% por nível (`damage_mult`). r7: Lobo Alfa 18→14, Escorpião 9→11, Cura Divina 6→9 s; medido 4.3-7.4 s nas lutas comuns e 15-22 s nos chefes. `BalanceInvariantsTests` reescrito em faixas. Números em `Docs/Balance/README.md` §5–§6; capturas em `Assets/Screenshots/r5_*`.
+- 🐛 **XP perdido ao entrar na Main** (`b70812a`): XP ganho antes da restauração do estado carregado (um frame depois do `sceneLoaded`) era apagado; agora é reaplicado por cima (`CarriedStateExperienceTests`).
+- 🦇 **Morcegos não atacavam** (`1a390e2`): pairam 0.92 m acima e o alcance 3D nunca ficava abaixo de 1.1 m. `EnemyDetectionUtility.IsWithinAttackRange` agora usa distância horizontal (XZ) com tolerância vertical de 2 m; morcegos com alcance 1.5.
+
 ### 2026-10-22 (madrugada — CI completo, build 358→192 MB, pool de inimigos, toque e revisões)
 - 🏁 **Resumo**: commits `fda092d`..`4fbee22` (7 commits). Suítes: **EditMode 1300/1300** (eram 1159) e **PlayMode 14/14**. O item 🚧 de polimento de gameplay da entrada anterior foi concluído.
 - 🛠️ **CI** (`fda092d`): `.github/workflows/ci.yml` com job `precheck` (fica pulado, cinza, sem a licença Unity em vez de falhar), matriz EditMode + PlayMode com cache de `Library` e LFS (`.github/actions/lfs-pull`), builds de desenvolvimento Windows x64 e Android em push/manual, assinatura Android opcional. Secrets explicados em `Docs/CI.md`.
@@ -50,19 +62,24 @@
 - ✅ **Concluído depois (ver entrada da noite acima)**, estava em andamento no fechamento: correção do bug de atributos + rebalanceamento (`PlayerCombatBalance`, `OutgoingDamage`), localização dos textos fixos em UXML/C# (`UiTexts`, `UiDocumentLocalizer`), voltar ao título com reset de sessão, ligação de cenas rodada 2 (menu principal/seleção na WorldMap, UI de conquistas, NPCs de quest na cena).
 - 📌 **Dependem de decisão do usuário**: ver "Próximos passos" logo abaixo.
 
-### 🔜 Próximos passos (após 2026-10-22, madrugada)
+### 🔜 Próximos passos (após 2026-10-22, manhã)
 **Código (próximos itens):**
 1. Decimar as malhas de heróis e inimigos (cerca de 300k vértices hoje), só depois de revisão visual lado a lado.
 2. Deduplicar as malhas rigadas e as limpas sem pedestal (cerca de 18 MB repetidos no build).
 3. Addressables (e LOD/occlusion) quando houver build mobile para medir.
 4. Ultimate com recurso próprio (carga), se esse design for confirmado; hoje a ultimate só exige nível 10.
 5. Terreno/cena real por bioma (hoje a arena é única, só decorada por bioma).
-6. Log rolante no overlay de debug (precisa de hook no `GameLogger`).
+6. Atordoamento sem uso: `BuffController.ApplyStun` existe, mas nada no jogo o chama (nenhuma skill atordoa).
+7. `StatType` não tem `Thorns` nem `AttackSpeed`: afixos/skills desse tipo não são possíveis hoje.
+8. `EnemyDefinition._contactDamage` é semeado e exportado no CSV, mas não é usado em combate: ligar ou remover.
+9. 5 inimigos ainda são primitivas placeholder (`_visualPrefab` vazio): Enxame de Morcegos, Habitante Ancestral, Guardião da Ruína, Golem de Pedra e Senhor da Guerra. Precisam de modelo (ver decisões).
+10. Log rolante no overlay de debug (precisa de hook no `GameLogger`).
 
 **Decisões do usuário (bloqueiam itens abertos):**
 - Instalar o módulo **Android Build Support** no Unity Hub (sem ele não há build Android local nem medição real do tamanho mobile).
 - Bundle id do app: hoje é o padrão derivado `com.EngenhoEstdio.Rapadura` (o "ú" de "Engenho Estúdio" some); sugestão `com.engenhoestudio.rapadura`. Definir antes da primeira build de loja, porque não muda depois de publicado. Ícone do app junto.
 - Ícones de skills e itens por geração de imagem (precisa do OK do usuário antes de gastar créditos).
+- Modelos 3D dos 5 inimigos placeholder via Meshy (pago, gasta créditos): OK antes de gerar.
 - Áudio real (música e SFX) no lugar dos placeholders procedurais, conforme `Docs/Audio.md`.
 - Rig Humanoid da Maithe: retomar no Meshy gasta cerca de 5 créditos por tentativa, ou usar Mixamo.
 - Secrets do CI (`UNITY_LICENSE` ou `UNITY_EMAIL`/`UNITY_PASSWORD`, assinatura Android opcional) no GitHub, conforme `Docs/CI.md`. Sem eles os jobs ficam pulados.
@@ -1078,11 +1095,11 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 
 ### Sistema Base
 - [x] Sistema de vida — `Combat/Health.cs` (genérico, para não-players) + `PlayerStats.cs` (player); ver nota abaixo
-- [x] Sistema de dano (com fórmula documentada e balanceável via dados externos) — `Combat/DamageInfo.cs`, `Combat/DamageCalculator.cs` (fórmula documentada em XML doc), `Combat/DamageBalanceConfig.cs` (ScriptableObject tunável)
+- [x] Sistema de dano (com fórmula documentada e balanceável via dados externos) — `Combat/DamageInfo.cs`, `Combat/DamageCalculator.cs` (fórmula documentada em XML doc), `Combat/DamageBalanceConfig.cs` (ScriptableObject tunável). Defesa (% de skills com teto 80%/2x + defesa plana pela curva de armadura) passou a valer para herói e inimigos em 2026-10-22 (`4813037`, `Docs/Balance/README.md` §4).
 - [x] Hitboxes — `Combat/Hitbox.cs`
 - [x] Hurtboxes — `Combat/Hurtbox.cs`
 - [x] Knockback — `Combat/KnockbackReceiver.cs`
-- [x] Invulnerability Frames — timer em `Combat/Health.cs` (`GrantInvulnerability`/`ClearInvulnerability`)
+- [x] Invulnerability Frames — timer em `Combat/Health.cs` (`GrantInvulnerability`/`ClearInvulnerability`). Desde 2026-10-22 (`541946f`) a invulnerabilidade do inimigo é por atacante + canal (0.2s): skills logo após o ataque básico não são mais engolidas.
 - [x] Hit-stop / Game Feel (frame freeze, screen shake no impacto) — `Combat/HitStopController.cs` + `Combat/CombatCameraShakeRelay.cs` (chama `PlayerCamera.Shake()` via evento)
 
 > ⚠️ Nota: `PlayerStats` continua implementando `ICombatTarget` diretamente em vez de compor `Health` (decisão mantida: o player precisa de stamina/mana/XP que `Health` não tem). I-frames já existiam. Corrigido nesta sessão: `PlayerStats` agora publica `DamageAppliedEvent` (som de hit em `AudioManager`) e `CombatTargetDiedEvent` (analytics/quests) além do `PlayerDiedEvent` já usado pelo `CheckpointManager` — antes esses dois eventos só disparavam para alvos baseados em `Health` (inimigos/NPCs), então o player tomar dano/morrer não acionava som de combate nem tracking. Hit-stop/camera shake já funcionavam para o player (disparados direto pelo `Hitbox`, independente do tipo de alvo). Ainda não validado em Play Mode nesta sessão (sem acesso ao Unity MCP aqui) — só via testes EditMode; `PlayerStatsTests.cs` cobre os fluxos de dano/i-frames, mas não os dois eventos novos.
@@ -1101,8 +1118,8 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] IA básica (Behaviour Tree ou State Machine reutilizando `Core/StateMachine`) — `Enemies/EnemyController.cs` + estados em `Enemies/States/`
 - [x] Patrulha — `EnemyPatrolState.cs`
 - [x] Perseguição — `EnemyChaseState.cs`
-- [x] Ataque — `EnemyAttackState.cs` (usa `Hitbox`/`ICombatTarget`)
-- [x] Fuga — `EnemyFleeState.cs`
+- [x] Ataque — `EnemyAttackState.cs` (usa `Hitbox`/`ICombatTarget`). 🐛 Corrigido em `1a390e2`: alcance agora horizontal (XZ) com tolerância vertical de 2 m; os morcegos, que pairam, nunca atacavam.
+- [x] Fuga — `EnemyFleeState.cs`. Desde `541946f` a fuga dura no máximo 3s a 0.8x da corrida do herói (o inimigo cansa e volta) e os encontros forçam aggro depois da contagem.
 - [x] Boss inicial — `EnemyDefinition.IsBoss` (config via ScriptableObject, sem exigir prefab dedicado)
 - [x] Sistema de spawn/wave (pooling de inimigos) — `EnemyPool.cs` + `EnemySpawner.cs` + `WaveTracker.cs`
 
@@ -1110,11 +1127,11 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 
 ### Efeitos
 - [x] Buffs — `BuffController`/`ActiveStatEffect`/`StatModifierDefinition` completos (modificadores flat/percent, duração)
-- [x] Debuffs — mesma engine, flag de debuff em `BuffController.cs`
+- [x] Debuffs — mesma engine, flag de debuff em `BuffController.cs`. 🐛 Corrigido em `4813037`: inimigos não tinham `BuffController`, então todo debuff, lentidão e DoT de skill era ignorado; o `EnemyController` adiciona o componente em runtime. Velocidade (`MoveSpeed`, multiplicador [0.1, 2.5]) passou a valer no `PlayerMotor` e no `EnemyController`.
 - [x] Veneno — seedado em `SkillDatabaseSeeder.cs` (DoT via `BuffController`)
 - [x] Queimadura — `skill_fireball` ganhou o debuff "Queimando" (DoT, mesmo padrão de `skill_poison_dart`/"Envenenado": 5 de dano/seg por 4s), reseedado no asset real via `Rapadura/Seed Example Skills` (2026-08-26)
 - [x] Congelamento — seedado em `SkillDatabaseSeeder.cs` (slow)
-- [x] Atordoamento (stun) — `BuffController.IsStunned`/`ApplyStun`, `PlayerController` bloqueia `Tick`/`FixedTick` enquanto atordoado (câmera continua livre)
+- [~] Atordoamento (stun) — `BuffController.IsStunned`/`ApplyStun`, `PlayerController` bloqueia `Tick`/`FixedTick` enquanto atordoado (câmera continua livre). ⚠️ Verificado em 2026-10-22: nada no jogo chama `ApplyStun` (nenhuma skill atordoa), então o efeito existe mas não é usado.
 - [x] Sistema de resistências/imunidades por tipo de dano — `Combat/ElementResistance.cs` + overload de `DamageCalculator.ComputeDamage`, 100% = imune
 
 ---
@@ -1144,7 +1161,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Níveis — `PlayerStats.Level`
 - [x] Atributos — `Player/AttributeSet.cs` (Vitalidade/Espírito/Destreza/Inteligência/Poder Arcano, pontos por level-up, fórmulas documentadas), `PlayableCharacter.ApplyPassive` implementado nos 5 personagens. 🐛 Corrigido em `139354e`: Vitalidade/Espírito/Destreza não faziam nada; agora somam com buffs e há crítico 1.5x. Ficha do personagem para gastar pontos (`UI/CharacterSheet/*`, atalho C, `a0e1430`).
 - [~] Talentos — se sobrepõe à skill tree da Fase 4; não há sistema de "talento" separado de skill
-- [x] Curva de balanceamento documentada em planilha (fonte única de verdade) — `Gameplay/Player/ProgressionCurve.cs` (ScriptableObject em `Resources/Balance/ProgressionCurve.asset`, mesmos valores da fórmula antiga) + `ProgressionCsv.cs` + menu de exportar/importar CSV (`Editor/BalanceCsvMenu.cs`) + `Docs/Balance/{progression,enemies,skills}.csv` e `Docs/Balance/README.md` — 2026-10-21 (`21fc798`). Rebalanceamento por dados concluído em `139354e` (`PlayerCombatBalance`, `OutgoingDamage`, tabelas antes/depois em `Docs/Balance/README.md`).
+- [x] Curva de balanceamento documentada em planilha (fonte única de verdade) — `Gameplay/Player/ProgressionCurve.cs` (ScriptableObject em `Resources/Balance/ProgressionCurve.asset`, mesmos valores da fórmula antiga) + `ProgressionCsv.cs` + menu de exportar/importar CSV (`Editor/BalanceCsvMenu.cs`) + `Docs/Balance/{progression,enemies,skills}.csv` e `Docs/Balance/README.md` — 2026-10-21 (`21fc798`). Rebalanceamento por dados concluído em `139354e` (`PlayerCombatBalance`, `OutgoingDamage`, tabelas antes/depois em `Docs/Balance/README.md`). Rodadas r6/r7 (playtests automatizados 5 heróis × 4 biomas) em `b70812a`/`1a390e2`: chefes 430–700 HP, `damage_mult` +2%/nível, `BalanceInvariantsTests` em faixas; §5–§6 do mesmo README.
 
 ---
 
@@ -1425,7 +1442,7 @@ O jogo só pode sair da fase MVP quando tiver:
 - [~] Player completo — movimento, combate, skills, stats e seleção de herói prontos; falta modelo/rig definitivo (rig da Maithe é decisão do usuário) e prefab do Player
 - [x] Mapa jogável — `WorldMap.unity` + `Main.unity` (arena de encontro)
 - [x] Combate funcional — ataque básico, clique no inimigo, skills pela hotbar, XP/loot, morte/respawn
-- [x] 3 inimigos diferentes — 8 inimigos (2 por bioma, incluindo boss) com visual próprio (`EnemyVisualSwapper`)
+- [x] 3 inimigos diferentes — 9 definições de inimigo em `Resources/Enemies` (5 comuns + 4 chefes de região) com visual próprio (`EnemyVisualSwapper`); 5 delas (morcegos, Habitante Ancestral, Guardião da Ruína, Golem, Senhor da Guerra) ainda são primitivas placeholder sem modelo.
 - [x] Inventário funcional — backend + tela Mochila/equipamentos
 - [x] 10 itens — 19 itens + recursos + itens gerados com afixos
 - [x] 5 habilidades — 25 skills de assinatura (5 por herói)
