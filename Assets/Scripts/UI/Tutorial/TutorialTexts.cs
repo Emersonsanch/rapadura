@@ -29,10 +29,10 @@ namespace Rapadura.UI.Tutorial
             new LocalizationEntry(SettingsReset, "Restart tutorial", "Reiniciar tutorial"),
             new LocalizationEntry(SettingsResetDone, "The tips will show up again.", "As dicas vão aparecer de novo."),
 
-            Title(TutorialSteps.WorldMap, "Time to travel!", "Hora de viajar!"),
+            Title(TutorialSteps.WorldMap, "Time for adventure!", "Hora da aventura!"),
             Body(TutorialSteps.WorldMap,
-                "Tap a region connected to yours to walk there. Enemies may show up on the way!",
-                "Toque numa região ligada à sua para caminhar até lá. Inimigos podem aparecer no caminho!"),
+                "Tap Explore to look for enemies here. Win fights to open new regions, then tap a connected region to walk there.",
+                "Toque em Explorar para procurar inimigos aqui. Vença lutas para abrir novas regiões e toque numa região ligada para ir até lá."),
 
             Title(TutorialSteps.Encounter, "Get ready to fight!", "Prepare-se para lutar!"),
             Body(TutorialSteps.Encounter,

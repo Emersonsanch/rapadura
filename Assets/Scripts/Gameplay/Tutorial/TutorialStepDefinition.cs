@@ -66,7 +66,7 @@ namespace Rapadura.Gameplay.Tutorial
     {
         public const string KeyPrefix = "ui.tutorial.";
 
-        /// <summary>First time on the world map (GameFlowState.World): how to travel.</summary>
+        /// <summary>First time on the world map (GameFlowState.World): press "Explorar" (outlined), then travel.</summary>
         public const string WorldMap = "world_map";
         /// <summary>First enemy spawned in an encounter: move/attack.</summary>
         public const string Encounter = "encounter";
@@ -90,7 +90,7 @@ namespace Rapadura.Gameplay.Tutorial
 
         public static readonly IReadOnlyList<TutorialStepDefinition> All = new List<TutorialStepDefinition>
         {
-            new TutorialStepDefinition(WorldMap, 0, TutorialContext.World),
+            new TutorialStepDefinition(WorldMap, 0, TutorialContext.World, "wm-explore-button"),
             new TutorialStepDefinition(Encounter, 1, TutorialContext.Encounter),
             new TutorialStepDefinition(Skills, 2, TutorialContext.Encounter, "skill-slot-0"),
             new TutorialStepDefinition(Loot, 3, TutorialContext.Any, "inventory-button"),

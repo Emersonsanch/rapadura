@@ -226,6 +226,14 @@ namespace Rapadura.UI.Tutorial
             _hudDocument = null;
             _hudIsWorldMap = false;
             _highlightCache.InvalidateScene();
+
+            // InvalidateScene forgets the applied rect, so the next UpdateHighlight's TryHide would
+            // report "already hidden": hide the overlay here, or a hint carried across the
+            // Main -> WorldMap swap keeps outlining where the old scene's button was.
+            if (_highlight != null)
+            {
+                _highlight.style.display = DisplayStyle.None;
+            }
         }
 
         /// <summary>Gives the document a panel (borrowed PanelSettings) and clones the view into it once. False until it can render.</summary>
