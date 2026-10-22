@@ -24,11 +24,11 @@ MonoBehaviour:
   _energyCost: 0
   _castTimeSeconds: 0.3
   _recoverySeconds: 0.2
-  _baseDamage: 15
+  _baseDamage: 24
   _baseHealing: 10
   _range: 6
   _areaRadius: 4
-  _damagePerLevel: 4
+  _damagePerLevel: 5
   _healingPerLevel: 3
   _buffs: []
   _debuffs:

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
   _enemyName: Lobo Alfa
   _isBoss: 1
-  _maxHealth: 120
+  _maxHealth: 430
   _contactDamage: 14
   _experienceReward: 10
   _lootItem: {fileID: 11400000, guid: 214ad08bc7a3def4cbeb45bedcc4524c, type: 2}
@@ -37,7 +37,7 @@ MonoBehaviour:
   _detectionRadius: 12
   _loseTargetRadius: 18
   _attackRange: 1.8
-  _attackCooldown: 1.1
+  _attackCooldown: 2.4
   _attackDamage: 18
   _fleeHealthThreshold: 0
   _fleeSafeDistance: 10

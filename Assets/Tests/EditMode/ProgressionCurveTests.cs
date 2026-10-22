@@ -118,7 +118,8 @@ namespace Rapadura.Tests
                 Assert.AreEqual(expected.maxHealth, actual.maxHealth, $"Max health at level {level}");
                 Assert.AreEqual(expected.maxMana, actual.maxMana, $"Max mana at level {level}");
                 Assert.AreEqual(expected.maxStamina, actual.maxStamina, $"Max stamina at level {level}");
-                Assert.AreEqual(expected.damageMultiplier, actual.damageMultiplier, $"Damage multiplier at level {level}");
+                // Tolerance: the asset's serialized float can differ from the formula by one ULP.
+                Assert.AreEqual(expected.damageMultiplier, actual.damageMultiplier, 1e-5f, $"Damage multiplier at level {level}");
                 Assert.AreEqual(expected.attributePoints, actual.attributePoints, $"Attribute points at level {level}");
                 Assert.AreEqual(expected.skillPoints, actual.skillPoints, $"Skill points at level {level}");
             }

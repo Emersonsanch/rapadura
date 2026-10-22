@@ -19,7 +19,7 @@ MonoBehaviour:
   _skillType: 0
   _category: 1
   _element: 6
-  _cooldownSeconds: 12
+  _cooldownSeconds: 16
   _manaCost: 18
   _energyCost: 0
   _castTimeSeconds: 0.2
@@ -34,7 +34,7 @@ MonoBehaviour:
   - displayName: Muralha de Pedra
     affectedStat: 8
     application: 1
-    value: 0.6
+    value: 0.5
     durationSeconds: 5
     isDebuff: 0
     ticksOverTime: 0

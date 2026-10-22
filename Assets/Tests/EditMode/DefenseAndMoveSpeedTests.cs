@@ -232,7 +232,7 @@ namespace Rapadura.Tests
             buffs.ApplyEffects(LoadSkill("Characters/Joaquim/skill_joaquim_muralha_de_pedra").Buffs, "a");
             buffs.ApplyEffects(LoadSkill("Characters/Joaquim/skill_joaquim_ultima_resistencia").Buffs, "b");
 
-            // 0.6 + 0.8 = 1.4 → capped at 80% reduction, never immune.
+            // 0.5 + 0.8 = 1.3 → capped at 80% reduction, never immune.
             Assert.AreEqual(1f - DamageCalculator.MaxPercentDefense, stats.DefenseMultiplier, 0.0001f);
             Assert.AreEqual(10f, DamageTaken(stats, 50f), 0.0001f);
         }

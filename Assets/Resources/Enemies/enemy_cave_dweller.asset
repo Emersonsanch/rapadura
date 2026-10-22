@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
   _enemyName: Habitante Ancestral
   _isBoss: 1
-  _maxHealth: 200
+  _maxHealth: 700
   _contactDamage: 15
   _experienceReward: 40
   _lootItem: {fileID: 11400000, guid: 214ad08bc7a3def4cbeb45bedcc4524c, type: 2}
@@ -37,7 +37,7 @@ MonoBehaviour:
   _detectionRadius: 10
   _loseTargetRadius: 15
   _attackRange: 1.9
-  _attackCooldown: 1.4
-  _attackDamage: 20
+  _attackCooldown: 3
+  _attackDamage: 18
   _fleeHealthThreshold: 0
   _fleeSafeDistance: 10

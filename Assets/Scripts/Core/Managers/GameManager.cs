@@ -284,6 +284,8 @@ namespace Rapadura.Core.Managers
         /// e.g. level/inventory/skills after "Continuar" on the world map, or after the previous
         /// encounter) to the fresh Player. Waits one frame so every scene object's Start — where the
         /// player components register with SaveManager, and where the hero is re-applied — has run.
+        /// Gameplay that grants XP during that frame (an early kill, a quest reward) is not lost:
+        /// PlayerStats re-applies XP earned while its carried state was pending on top of the restore.
         /// </summary>
         private System.Collections.IEnumerator RestoreCarriedStateAfterSceneStart()
         {

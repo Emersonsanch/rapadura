@@ -30,7 +30,7 @@ de crítico base (ver §3). Apagar esse asset volta o ataque básico ao valor do
 | `xp_to_next` | XP para sair deste nível para o próximo (> 0) | `PlayerStats.GetExperienceToNextLevel` |
 | `xp_total` | XP acumulado para **chegar** neste nível. Informativo, **ignorado** no import | — |
 | `hp` / `mana` / `stamina` | Máximo no nível. Só a **diferença para o nível 1** é somada à base do inspector de `PlayerStats` | `PlayerStats.MaxHealth/MaxMana/MaxStamina` |
-| `damage_mult` | Multiplicador de dano de skill por nível do jogador (1 = sem bônus) | `SkillManager` (dano de skills) |
+| `damage_mult` | Multiplicador de dano por nível do jogador (1 = sem bônus) | `SkillManager` (skills) e `PlayerBasicAttack` (ataque básico) |
 | `attribute_points` | Pontos de atributo ganhos ao **chegar** neste nível | `AttributeSet` |
 | `skill_points` | Pontos de skill ganhos ao **chegar** neste nível | `SkillManager` |
 
@@ -51,10 +51,11 @@ Outros menus:
 
 Comportamento atual: o asset usa `_experienceCurveMultiplier` = **1,10** e `_maxHealthPerLevel` =
 **8** (`round(100 × 1.10^(nível-1))`, vida 100 + 8 por nível, 2 pontos de atributo e 1 de skill por
-nível, sem bônus de dano), e a tabela é exatamente a gerada por esses parâmetros
+nível e, desde o r6 (§5), `_damageMultiplierPerLevel` = **0,02** — `damage_mult` = 1 + 0,02 × (nível-1)),
+e a tabela é exatamente a gerada por esses parâmetros
 (`ProgressionCurveTests.ShippedResourcesCurve_TableMatchesItsOwnFormulaParameters`). Os padrões **do
 código** (instância nova do ScriptableObject) continuam sendo a fórmula antiga (1,25, vida fixa) —
-para reverter, basta voltar os dois parâmetros do asset, rodar *Regenerate Progression Table From
+para reverter, basta voltar esses parâmetros do asset, rodar *Regenerate Progression Table From
 Formula* e *Export Progression CSV*. Acima do nível 50 (fim da tabela) a fórmula continua valendo. Se
 o asset não existir, `PlayerStats`/`AttributeSet`/`SkillManager` usam os campos antigos do inspector
 como fallback.
@@ -391,3 +392,126 @@ e o piso de −1 (`MinPercentDefense`), o 0,1 de `MinMoveSpeedMultiplier`, ou `_
 
 Depois de qualquer mudança em inimigos/skills: **Rapadura > Balance > Export Enemy and Skill
 CSVs** e confira os números de novo nesta análise (e rode `BalanceInvariantsTests`).
+
+---
+
+## 5. r6 → rebalanceamento (combate fácil demais depois das correções)
+
+> As §2–§4 ficam como histórico. Os exemplos da §4 que citam a Muralha (×0,4, "→ 6,2 DPS sob
+> Muralha") usam o valor antigo de 0,6; desde o r6 a Muralha dá ×0,5 (ver abaixo).
+
+### 5.1 O que o playtest r6 mediu
+
+Com Defesa/Velocidade/debuffs funcionando (§4) e as skills deixando de ser engolidas, o playtest
+automatizado r6 (5 heróis × 4 biomas, níveis 2/5/8/11, luta normal = 2 comuns, luta de boss = boss + 1
+lacaio) mostrou o combate **fácil demais**:
+
+| Bioma | Luta | Tempo médio r5 → r6 | Vida perdida média r5 → r6 | Pior vida mínima r6 | Mortes |
+|---|---|---|---|---|---|
+| Floresta | normal / boss | 7,5 → 2,1 s / 10,1 → **4,0 s** | 9% → 3% / 67% → 28% | 94% / 68% | 0/10 |
+| Deserto | normal / boss | 26,6 → 3,7 s / 18,9 → **7,5 s** | 10% → 4% / 78% → 42% | 95% / 56% | 0/10 |
+| Montanha | normal / boss | 9,2 → 5,5 s / 14,0 → **8,4 s** | 30% → 21% / 87% → 59% | 74% / 43% | 0/10 |
+| Cavernas | normal / boss | 7,3 → 2,0 s / 13,4 → **7,0 s** | 7% → 0% / 63% → 32% | 100% / 68% | 0/10 |
+
+Bosses caíam em 3–11,5 s, as lutas normais duravam 2–5,5 s em média e ninguém morreu: as skills
+defensivas (Muralha, Escudo, curas) não tinham o que defender.
+
+### 5.2 Mudanças aplicadas (antes → depois)
+
+| Onde | Campo | Antes | Depois |
+|---|---|---|---|
+| Lobo da Mata / Aranha da Floresta | HP | 30 | **70** |
+| Escorpião das Dunas | HP | 45 | **85** |
+| Golem de Pedra | HP | 75 | **100** |
+| Enxame de Morcegos | HP / dano | 28 / 5 | **80 / 7** |
+| Lobo Alfa (boss Floresta) | HP / `_attackCooldown` | 120 / 1,1 | **430 / 2,4** |
+| Guardião da Ruína (boss Deserto) | HP / `_attackCooldown` | 160 / 1,5 | **505 / 3,3** |
+| Senhor da Guerra (boss Montanha) | HP / dano / `_attackCooldown` | 170 / 20 / 1,3 | **580 / 16 / 2,6** |
+| Habitante Ancestral (boss Cavernas) | HP / dano / `_attackCooldown` | 200 / 20 / 1,4 | **700 / 18 / 3,0** |
+| Purificação (Maria) | dano base / por nível | 15 / 4 | **24 / 5** |
+| Muralha de Pedra (Joaquim) | buff de Defense / cooldown | 0,6 / 12 s | **0,5 / 16 s** |
+| `ProgressionCurve.asset` | `_damageMultiplierPerLevel` (coluna `damage_mult`) | 0 (1,00 em todo nível) | **0,02** (1,02 no nível 2 … 1,18 no 10 … 1,98 no 50) |
+
+Os HP/dano/cooldown dos inimigos também estão no `EnemyDatabaseSeeder` (a Aranha não é semeada por
+ele) e no espelho de `EnemyDatabaseSeederTests`. As skills de herói não têm seeder (só os assets).
+`enemies.csv`, `skills.csv` e `progression.csv` foram regenerados com as mesmas colunas/fórmulas do
+`BalanceCsvMenu`; a tabela do `ProgressionCurve.asset` continua sendo exatamente a gerada pelos
+parâmetros (`ShippedResourcesCurve_TableMatchesItsOwnFormulaParameters`) e igual à planilha
+(`DocsSpreadsheet_MatchesShippedCurve`).
+
+Por quê:
+- **Bosses: ~3,2–3,6× o HP, menos da metade do DPS.** O boss precisa durar o bastante para o kit inteiro
+  (incluindo as skills de 10–16 s de cooldown) entrar em jogo. Cortar o DPS pela metade, sobretudo
+  pelo cooldown, deixa cada golpe ainda pesado (16–22) mas legível e esquivável, e mantém o tempo
+  para o boss matar o jogador acima de ~14 s.
+- **Comuns: +33–186% de HP.** Deixam de morrer numa única rotação de skills; os morcegos (que vêm em
+  bando) ganham 7 de dano para continuarem uma ameaça.
+- **Purificação 15 → 24.** Era a pior skill de dano por mana entre as de herói (0,83); agora 1,33,
+  perto da mediana, para a Maria não ficar só no ataque básico (87% do dano dela no r6).
+- **Muralha 0,6/12 s → 0,5/16 s.** O Joaquim passou 100% das lutas sob Muralha no r6 (uptime de
+  5 s a cada 12 s com cast curto, mais a Última Resistência). Com 16 s o uptime cai para ~31% e a
+  Muralha passa a ser uma resposta aos golpes do boss, não um estado permanente.
+- **`damage_mult` +2%/nível** (a alavanca da §3.4). Com bosses de 430–700 HP, sem crescimento de
+  dano o fim do jogo ficaria lento: no nível 10 o jogador bate 18% mais forte e, no 50, 98% mais.
+  Vale para ataque básico e skills (`PlayerBasicAttack`, `SkillManager`).
+
+### 5.3 Análise depois das mudanças
+
+Mesmo modelo da §3.3 (nível esperado 2/4/6/8, sem esquiva/crítico/dano de contato), agora com o kit:
+ataque básico = 10 × `damage_mult` a cada 0,5 s; kit = Σ (dano + DoT) / max(cooldown, cast +
+recuperação) das skills ativas de dano do herói, limitado pela mana de uma luta de 20 s (100 + 5/s) —
+Maithe 16,9 DPS, Lavine 11,6, Ícaro 8,9, Joaquim 2,5, Maria 1,5 → 2,4 (×`damage_mult`).
+
+| Bioma (nível) | HP do boss | DPS do boss | Boss mata o jogador em | Só ataque básico | Com o kit (pior–melhor herói) | Jogador sob Muralha morre em |
+|---|---|---|---|---|---|---|
+| Floresta (2) | 120 → **430** | 16,4 → 7,5 | 6,6 → **14,4 s** | 6,0 → 21,1 s | 3,3–5,6 → **11,4–18,8 s** | 16,5 → 28,8 s |
+| Deserto (4) | 160 → **505** | 14,7 → 6,7 | 8,5 → **18,6 s** | 8,0 → 23,8 s | 4,3–7,4 → **12,9–21,3 s** | 21,1 → 37,2 s |
+| Montanha (6) | 170 → **580** | 15,4 → 6,2 | 9,1 → **22,8 s** | 8,5 → 26,4 s | 4,6–7,9 → **14,3–23,5 s** | 22,8 → 45,5 s |
+| Cavernas (8) | 200 → **700** | 14,3 → 6,0 | 10,9 → **26,0 s** | 10,0 → 30,7 s | 5,4–9,3 → **16,7–27,4 s** | 27,3 → 52,0 s |
+
+Comuns (só ataque básico → com o melhor kit): Lobo/Aranha 1,5 → **3,4 s** (0,8 → 1,9 s), Escorpião
+2,2 → **4,0 s** (1,2 → 2,2 s), Golem 3,8 → **4,5 s** (2,0 → 2,5 s), Morcegos 1,4 → **3,5 s**
+(0,8 → 1,9 s).
+
+Leituras:
+- **Só no ataque básico, todo boss vence** (21–31 s para matá-lo contra 14–26 s para ele matar o
+  jogador): sem skills nem defesa existe risco real de morte. Antes do r6 era o contrário.
+- **Com o kit, uma luta de boss dura ~11–27 s.** Maithe/Lavine (dano) ganham a corrida sem defender;
+  Joaquim e Maria (18,8–27,4 s) perdem a corrida pura e dependem de Muralha/Escudo/curas/esquiva —
+  com a redução da Muralha qualquer herói vence com folga.
+- No jogo real os tempos são maiores que o modelo (deslocamento, golpes que erram, lacaio junto), e o
+  playtest r6 rodou em níveis acima do esperado (5/8/11 em vez de 4/6/8); rode o playtest de novo
+  para conferir.
+- A Floresta é o boss mais agressivo em relação à vida do jogador (14,4 s para matar um jogador de
+  nível 2 parado, abaixo da meta de ~20 s): é o primeiro boss e o jogador ainda está aprendendo a
+  esquivar. Se ficar duro demais, a alavanca é `_attackCooldown` do Lobo Alfa (2,4 → 3,0 dá 18 s).
+
+### 5.4 Invariantes (`BalanceInvariantsTests`)
+
+A antiga "corrida de DPS só com ataque básico, o jogador tem que vencer" foi substituída (com os
+números do r6 ela falharia de propósito: o boss **deve** vencer quem só usa o ataque básico). Agora,
+sempre em faixas:
+
+| Teste | Faixa / regra |
+|---|---|
+| `BossHealth_IsWithinItsBiomeBand` | Floresta 350–550, Deserto 400–650, Montanha 450–750, Cavernas 550–900 |
+| `Boss_KillsAnUndefendedPlayerInAFewRotations_NotInstantly` | vida do jogador no nível esperado ÷ DPS do boss em 12–40 s |
+| `Boss_WithTheFullKit_IsATenToThirtyFiveSecondFight_ForEveryHero` | HP do boss ÷ (básico + kit) em 10–35 s, para os 5 heróis |
+| `Boss_OutlastsABasicAttackOnlyPlayer_SoSkillsAndDefenseMatter` | só no ataque básico o jogador precisa de > 1,05× o tempo que o boss leva para matá-lo |
+| `Boss_IsWinnableByEveryHero_WithDefensivePlay` | com a redução de dano da Muralha (lida do asset), todo herói vence com ≥ 5% de margem |
+| `Boss_CanBeOutDamagedWithoutDefense_ByTheBestDamageHero` | o herói de maior DPS vence a corrida sem defender |
+| `CommonEnemies_TakeSeveralSwings_AndAreNeverOneShotByTheKit` | comuns: 2,5–8 s só no básico, ≥ 1,5 s com o melhor kit |
+
+Continuam valendo: XP até o nível 10/50, vida crescendo por nível, XP por bioma, XP de boss ≥ 5× a
+dos comuns, HP de boss não cai entre biomas, DPS do Senhor da Guerra < 20, ultimates ≥ 2× a melhor
+ativa e ataque básico < 30 DPS.
+
+### 5.5 Bug corrigido junto: XP perdido logo depois de entrar na Main
+
+O `GameManager` aplica o estado carregado entre cenas (`SaveManager.RestoreCarriedState`) **um frame
+depois** do `sceneLoaded`, para os `Start` da cena registrarem os componentes do jogador. XP ganho
+nesse intervalo (um abate ou recompensa de missão nos primeiros frames) era apagado: o
+`PlayerStats.RestoreState` sobrescrevia nível/XP com o estado da cena anterior. Agora o `PlayerStats`
+guarda o XP recebido enquanto ainda existe estado carregado pendente para ele e o reaplica por cima
+do estado restaurado (subindo de nível a partir do nível restaurado). Um `Load` de slot continua
+deixando o arquivo vencer. Testes: `CarriedStateExperienceTests`.

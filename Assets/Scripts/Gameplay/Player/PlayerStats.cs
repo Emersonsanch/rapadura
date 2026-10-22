@@ -1,8 +1,10 @@
 using System;
+using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Skills;
+using Rapadura.Save;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Player
@@ -59,6 +61,15 @@ namespace Rapadura.Gameplay.Player
 
         private float _invulnerabilityTimer;
         private bool _initialized;
+
+        /// <summary>
+        /// XP granted while the previous scene's carried PlayerStats state was still waiting to be
+        /// applied (see <see cref="IsAwaitingCarriedState"/>). GameManager restores carried state one
+        /// frame after a scene load, so a kill/quest reward in Main.unity's first frames used to be
+        /// wiped by <see cref="RestoreState"/> overwriting level/XP. The XP is applied immediately (the
+        /// bar still moves) and re-applied on top of the restored state by <see cref="RestoreState"/>.
+        /// </summary>
+        private int _experienceAwaitingCarriedRestore;
 
         /// <summary>Optional — absence means no resistance/immunity to any element (see <see cref="ElementResistance"/>).</summary>
         private ElementResistance _elementResistance;
@@ -449,6 +460,27 @@ namespace Rapadura.Gameplay.Player
                 return;
             }
 
+            if (IsAwaitingCarriedState())
+            {
+                _experienceAwaitingCarriedRestore += amount;
+            }
+
+            ApplyExperience(amount);
+        }
+
+        /// <summary>
+        /// True while the SaveManager still holds carried state for this save key, i.e. a scene hop
+        /// happened and <c>SaveManager.RestoreCarriedState</c> hasn't applied it to this fresh instance
+        /// yet (inside that restore the entry is only dropped after <see cref="RestoreState"/> returns).
+        /// Never true during a slot <c>Load</c>: it clears the carry and applies registered saveables directly.
+        /// </summary>
+        private bool IsAwaitingCarriedState()
+        {
+            return ServiceLocator.TryGet(out SaveManager saveManager) && saveManager != null && saveManager.HasCarriedState(SaveKey);
+        }
+
+        private void ApplyExperience(int amount)
+        {
             CurrentExperience += amount;
             int levelBefore = Level;
             int experienceToNextLevel = GetExperienceToNextLevel();
@@ -574,6 +606,10 @@ namespace Rapadura.Gameplay.Player
                 return;
             }
 
+            // Carried restore (scene hop): keep XP earned since this instance spawned. Slot load: the file wins.
+            int experienceEarnedBeforeRestore = IsAwaitingCarriedState() ? _experienceAwaitingCarriedRestore : 0;
+            _experienceAwaitingCarriedRestore = 0;
+
             CurrentHealth = saveState.currentHealth;
             CurrentStamina = saveState.currentStamina;
             CurrentMana = saveState.currentMana;
@@ -587,6 +623,11 @@ namespace Rapadura.Gameplay.Player
             EventBus.Publish(new PlayerStaminaChangedEvent(CurrentStamina, MaxStamina));
             EventBus.Publish(new PlayerManaChangedEvent(CurrentMana, MaxMana));
             EventBus.Publish(new PlayerExperienceChangedEvent(CurrentExperience, GetExperienceToNextLevel(), Level));
+
+            if (experienceEarnedBeforeRestore > 0)
+            {
+                ApplyExperience(experienceEarnedBeforeRestore);
+            }
         }
     }
 }
