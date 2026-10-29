@@ -32,6 +32,9 @@ namespace Rapadura.Gameplay.Quests
     {
         public List<QuestProgress> ActiveQuests = new List<QuestProgress>();
         public List<string> CompletedQuestIds = new List<string>();
+
+        /// <summary>Completed quests whose rewards are still owed (completed while no Player existed, e.g. on the world map).</summary>
+        public List<string> PendingRewardQuestIds = new List<string>();
     }
 
     /// <summary>
@@ -68,6 +71,7 @@ namespace Rapadura.Gameplay.Quests
         private readonly Dictionary<string, QuestProgress> _activeQuests = new Dictionary<string, QuestProgress>();
         private readonly HashSet<string> _completedQuestIds = new HashSet<string>();
         private readonly HashSet<string> _customFlags = new HashSet<string>();
+        private readonly List<string> _pendingRewardQuestIds = new List<string>();
 
         private InventoryManager _rewardInventory;
         private PlayerStats _rewardStats;
@@ -75,6 +79,15 @@ namespace Rapadura.Gameplay.Quests
         public string SaveKey => "Quests";
 
         public IReadOnlyCollection<string> CompletedQuestIds => _completedQuestIds;
+
+        /// <summary>Completed quests whose rewards wait for a live Player (see <see cref="DeliverPendingRewards"/>).</summary>
+        public IReadOnlyList<string> PendingRewardQuestIds => _pendingRewardQuestIds;
+
+        /// <summary>
+        /// True when some reward target is set and alive (Unity's == null also catches the destroyed Player
+        /// of a scene that was unloaded). False on the world map, where no Player exists.
+        /// </summary>
+        public bool HasRewardTargets => _rewardInventory != null || _rewardStats != null;
 
         public void Initialize()
         {
@@ -97,6 +110,7 @@ namespace Rapadura.Gameplay.Quests
             _activeQuests.Clear();
             _completedQuestIds.Clear();
             _customFlags.Clear();
+            _pendingRewardQuestIds.Clear();
         }
 
         /// <summary>
@@ -108,6 +122,7 @@ namespace Rapadura.Gameplay.Quests
             _activeQuests.Clear();
             _completedQuestIds.Clear();
             _customFlags.Clear();
+            _pendingRewardQuestIds.Clear();
         }
 
         /// <summary>Registers a quest's definition so it can be looked up by id later (StartQuest, prerequisite checks, save/load restore).</summary>
@@ -394,10 +409,55 @@ namespace Rapadura.Gameplay.Quests
             return true;
         }
 
+        /// <summary>
+        /// Grants the rewards of quests completed while no live Player existed (the world map has none:
+        /// the hero's InventoryManager/PlayerStats live in Main.unity), then re-checks CollectItem
+        /// objectives against the now-live inventory (items already held never raise an
+        /// InventoryChangedEvent). No-op without live reward targets. Call once the scene's Player has
+        /// its carried state restored — GameManager does, right after SaveManager.RestoreCarriedState,
+        /// so the restore doesn't overwrite what was just granted.
+        /// </summary>
+        public void DeliverPendingRewards()
+        {
+            if (!HasRewardTargets)
+            {
+                return;
+            }
+
+            if (_pendingRewardQuestIds.Count > 0)
+            {
+                List<string> pending = new List<string>(_pendingRewardQuestIds);
+                _pendingRewardQuestIds.Clear();
+
+                foreach (string questId in pending)
+                {
+                    GrantRewards(questId);
+                }
+            }
+
+            foreach (QuestProgress progress in _activeQuests.Values.ToList())
+            {
+                EvaluateCollectItemObjectives(progress);
+            }
+        }
+
         private void GrantRewards(string questId)
         {
             if (!_definitionsById.TryGetValue(questId, out QuestDefinition definition) || definition == null)
             {
+                return;
+            }
+
+            bool hasRewards = definition.RewardExperience > 0 || definition.RewardItems.Any(r => r?.Item != null && r.Quantity > 0);
+            if (hasRewards && !HasRewardTargets)
+            {
+                // No live Player right now (world map): owe the rewards instead of dropping them.
+                if (!_pendingRewardQuestIds.Contains(questId))
+                {
+                    _pendingRewardQuestIds.Add(questId);
+                }
+
+                GameLogger.Info(LogCategory, $"Quest '{questId}' completed without a live Player; rewards queued until one exists.");
                 return;
             }
 
@@ -513,7 +573,8 @@ namespace Rapadura.Gameplay.Quests
             return new QuestSaveState
             {
                 ActiveQuests = _activeQuests.Values.Select(CloneProgress).ToList(),
-                CompletedQuestIds = _completedQuestIds.ToList()
+                CompletedQuestIds = _completedQuestIds.ToList(),
+                PendingRewardQuestIds = _pendingRewardQuestIds.ToList()
             };
         }
 
@@ -521,10 +582,16 @@ namespace Rapadura.Gameplay.Quests
         {
             _activeQuests.Clear();
             _completedQuestIds.Clear();
+            _pendingRewardQuestIds.Clear();
 
             if (state is not QuestSaveState saveState)
             {
                 return;
+            }
+
+            if (saveState.PendingRewardQuestIds != null)
+            {
+                _pendingRewardQuestIds.AddRange(saveState.PendingRewardQuestIds.Where(id => !string.IsNullOrEmpty(id)).Distinct());
             }
 
             foreach (QuestProgress progress in saveState.ActiveQuests)

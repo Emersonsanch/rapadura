@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/Resources/UI/StoryPanelView.uss" />
+    <!-- Campaign story panels (StoryPanelController): prologue, interludes and ending. Lives in
+         Resources so the self-bootstrapped controller loads it without scene wiring. The backdrop
+         catches every tap/click (tap anywhere = next panel), so nothing reaches the map below.
+         Title/body/progress are set in code from StoryTexts; the buttons use the UiDocumentLocalizer
+         convention (pt-BR here is the fallback shown without a LocalizationManager). -->
+    <ui:VisualElement name="story-root" class="story-root">
+        <ui:VisualElement name="story-card" class="story-card">
+            <ui:Label name="story-title" text="" class="story-title" />
+            <ui:Label name="story-body" text="" class="story-body" />
+            <ui:VisualElement class="story-footer">
+                <ui:Label name="story-progress" text="" class="story-progress" />
+                <ui:Label name="story-tap-hint" text="Toque na tela para continuar" class="story-tap-hint loc" view-data-key="story.ui.tap_hint" />
+                <ui:Button name="story-skip" text="Pular" focusable="true" class="story-button story-button--skip loc" view-data-key="story.ui.skip" />
+                <ui:Button name="story-next" text="Continuar" focusable="true" class="story-button story-button--next" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

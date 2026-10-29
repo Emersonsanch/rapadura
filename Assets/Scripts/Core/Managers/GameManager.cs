@@ -20,6 +20,7 @@ using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.Shop;
+using Rapadura.Gameplay.Story;
 using Rapadura.Gameplay.Tutorial;
 using Rapadura.Gameplay.World;
 using Rapadura.Gameplay.World.Map;
@@ -58,6 +59,7 @@ namespace Rapadura.Core.Managers
         public DailyQuestService DailyQuestService { get; private set; }
         public ShopManager ShopManager { get; private set; }
         public WorldMapProgress WorldMapProgress { get; private set; }
+        public StoryProgress StoryProgress { get; private set; }
         public SceneTransitionService SceneTransitionService { get; private set; }
         public FrameRateManager FrameRateManager { get; private set; }
         public CharacterSelectionState CharacterSelectionState { get; private set; }
@@ -134,6 +136,7 @@ namespace Rapadura.Core.Managers
             DailyQuestService = new DailyQuestService(QuestManager);
             ShopManager = new ShopManager();
             WorldMapProgress = new WorldMapProgress();
+            StoryProgress = new StoryProgress(WorldMapProgress);
             SceneTransitionService = new SceneTransitionService(WorldMapProgress);
             FrameRateManager = new FrameRateManager();
             CharacterSelectionState = new CharacterSelectionState();
@@ -163,6 +166,7 @@ namespace Rapadura.Core.Managers
             RegisterManager(DailyQuestService);
             RegisterManager(ShopManager);
             RegisterManager(WorldMapProgress);
+            RegisterManager(StoryProgress);
             RegisterManager(SceneTransitionService);
             RegisterManager(FrameRateManager);
             RegisterManager(CharacterSelectionState);
@@ -176,6 +180,7 @@ namespace Rapadura.Core.Managers
             SaveManager.Register(QuestManager);
             SaveManager.Register(DailyQuestService);
             SaveManager.Register(WorldMapProgress);
+            SaveManager.Register(StoryProgress);
 
             // World state that used to be lost on load. CharacterSelectionState implements
             // IRestoreOrder (First), so the chosen hero's passive/skill set is re-applied before
@@ -226,6 +231,7 @@ namespace Rapadura.Core.Managers
             NewSessionReset.Register(DailyQuestService);
             NewSessionReset.Register(ShopManager);
             NewSessionReset.Register(WorldMapProgress);
+            NewSessionReset.Register(StoryProgress);
             NewSessionReset.Register(CharacterSelectionState);
             NewSessionReset.Register(DefeatedEnemyRegistry);
             NewSessionReset.Register(TimeOfDayManager);
@@ -291,6 +297,9 @@ namespace Rapadura.Core.Managers
         {
             yield return null;
             SaveManager?.RestoreCarriedState();
+            // Rewards of quests completed on the world map (no Player there) land now, after the
+            // restore, so the carried inventory/XP doesn't overwrite them.
+            QuestManager?.DeliverPendingRewards();
         }
 
         /// <summary>
@@ -308,6 +317,9 @@ namespace Rapadura.Core.Managers
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player == null)
             {
+                // No Player in this scene (WorldMap.unity): drop the previous scene's destroyed one so
+                // quests completed here queue their rewards (QuestManager.DeliverPendingRewards).
+                QuestManager?.SetRewardTargets(null, null);
                 return;
             }
 

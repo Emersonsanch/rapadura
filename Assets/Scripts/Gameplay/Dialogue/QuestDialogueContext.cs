@@ -151,7 +151,10 @@ namespace Rapadura.Gameplay.Dialogue
 
         private static QuestDefinition LoadDefinitionFromResources(string questId)
         {
-            return Resources.Load<QuestDefinition>(QuestResourcesFolder + questId);
+            QuestDefinition asset = Resources.Load<QuestDefinition>(QuestResourcesFolder + questId);
+
+            // Region side quests are defined in code (RegionQuestCatalog), not as Resources assets.
+            return asset != null ? asset : RegionQuestCatalog.GetQuest(questId);
         }
 
         private static string ResolveActiveCharacterFromServices()

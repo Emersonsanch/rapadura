@@ -419,6 +419,7 @@ namespace Rapadura.Gameplay.Dialogue
             if (ServiceLocator.TryGet(out LocalizationManager localization))
             {
                 QuestGiverTexts.EnsureLoaded(localization);
+                Rapadura.Gameplay.Quests.RegionQuestTexts.EnsureLoaded(localization);
             }
         }
 

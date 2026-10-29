@@ -18,6 +18,7 @@ using Rapadura.Gameplay.Items.Procedural;
 using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.Skills;
+using Rapadura.Gameplay.Story;
 using Rapadura.Gameplay.Tutorial;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.UI.Achievements;
@@ -77,6 +78,7 @@ namespace Rapadura.Tests
             yield return Source(CoreSourceName, LocalizationManager.DefaultEntries.All, null);
             yield return Source(nameof(QuestLogTexts), QuestLogTexts.All, QuestLogTexts.EnsureLoaded);
             yield return Source(nameof(QuestGiverTexts), QuestGiverTexts.All, QuestGiverTexts.EnsureLoaded);
+            yield return Source(nameof(RegionQuestTexts), RegionQuestTexts.All, RegionQuestTexts.EnsureLoaded);
             yield return Source(nameof(DailyQuestTexts), DailyQuestTexts.All, DailyQuestTexts.EnsureLoaded);
             yield return Source(nameof(AchievementTexts), AchievementTexts.All, AchievementTexts.EnsureLoaded);
             yield return Source(nameof(TooltipLocalization), TooltipLocalization.Entries, TooltipLocalization.EnsureRegistered);
@@ -90,6 +92,7 @@ namespace Rapadura.Tests
             yield return Source(nameof(TouchControlsTexts), TouchControlsTexts.Entries, TouchControlsTexts.EnsureRegistered);
             yield return Source(nameof(CharacterSheetTexts), CharacterSheetTexts.Entries, CharacterSheetTexts.EnsureRegistered);
             yield return Source(nameof(BossTexts), BossTexts.Entries, BossTexts.EnsureRegistered);
+            yield return Source(nameof(StoryTexts), StoryTexts.Entries, StoryTexts.EnsureRegistered);
         }
 
         private static TextSource Source(string name, IReadOnlyList<LocalizationEntry> entries, Action<LocalizationManager> merge)

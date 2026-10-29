@@ -111,7 +111,7 @@ Para cada item da tabela, crie um GameObject com componente `UIDocument` + o con
 | `SettingsMenu` | `Assets/UI/Menus/SettingsMenuView.uxml` | `SettingsMenuController` | `settings-menu-root` |
 | `SaveLoadMenu` | `Assets/UI/Menus/SaveLoadMenuView.uxml` | `SaveLoadMenuController` | `save-load-menu-root` |
 | `SkillTree` | `Assets/UI/SkillTree/SkillTreeView.uxml` | `SkillTreeController` | `skill-tree-root` |
-| `Dialogue` | `Assets/UI/Dialogue/DialogueView.uxml` | `DialogueUIController` | `dialogue-root` |
+| `Dialogue` | `Assets/Resources/UI/DialogueView.uxml` (em Resources para o mapa mundi carregar em runtime) | `DialogueUIController` | `dialogue-root` |
 | `Shop` | `Assets/UI/Shop/ShopView.uxml` | `ShopUIController` | `shop-root` |
 | `Tooltip` | `Assets/UI/Common/TooltipView.uxml` | `TooltipController` | `tooltip-root` |
 

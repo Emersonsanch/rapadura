@@ -47,11 +47,21 @@ namespace Rapadura.UI.Quests
             if (_localization == null && ServiceLocator.TryGet(out _localization))
             {
                 QuestLogTexts.EnsureLoaded(_localization);
+                RegionQuestTexts.EnsureLoaded(_localization);
             }
 
             if (_definitions.Count == 0)
             {
                 _definitions.AddRange(Resources.LoadAll<QuestDefinition>(ResourcesFolder).Where(d => d != null && !string.IsNullOrEmpty(d.QuestId)));
+
+                // Region side quests live in code (RegionQuestCatalog), not in Resources/Quests.
+                foreach (QuestDefinition regionQuest in RegionQuestCatalog.GetAllQuests())
+                {
+                    if (regionQuest != null && _definitions.All(d => d.QuestId != regionQuest.QuestId))
+                    {
+                        _definitions.Add(regionQuest);
+                    }
+                }
             }
 
             if (_questManager != null)

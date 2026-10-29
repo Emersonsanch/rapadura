@@ -82,6 +82,10 @@ namespace Rapadura.UI.Achievements
             Description("ach_cousin_of_all", "Finish all five personal quests. Lavine always knew her cousins would make it.", "Conclua as cinco missões pessoais. A Lavine sempre soube que os primos iam conseguir."),
             Title("ach_family_reunited", "Together, or Not at All", "Juntos, ou Nada Feito"),
             Description("ach_family_reunited", "Answer Maria's call and reunite the whole family.", "Atenda ao chamado da Maria e reúna a família inteira."),
+
+            // Campaign (StoryProgress raises CampaignCompletedEvent when the Cavernas boss falls).
+            Title("ach_campaign_complete", "The Light Comes Home", "A Luz Volta para Casa"),
+            Description("ach_campaign_complete", "Beat the boss of the Caves and bring the light back to the village. Grandma Zefa knew you would.", "Vença o chefe das Cavernas e devolva a luz à vila. A Vó Zefa sabia que vocês iam conseguir."),
         };
 
         private static LocalizationEntry Title(string id, string en, string ptBR) => new LocalizationEntry($"achievement.{id}.title", en, ptBR);

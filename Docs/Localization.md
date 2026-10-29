@@ -166,7 +166,7 @@ Quando não sobrescreve, é texto fixo em pt-BR.
 | `CharacterSelect/CharacterSelectView.uxml` | ✅ localizado (`ui.character_select.title/confirm`) | dica sem herói (`ui.character_select.prompt`), "Continuar com {0}" (`ui.character_select.continue_with`); nome/classe/papel/lore do herói por `character.*` (`ContentText`) |
 | `Menus/SaveLoadMenuView.uxml`, `Menus/CreditsView.uxml` | ✅ localizado (`ui.saveload.*`, `ui.credits.*`) | título, slots (`ui.saveload.*`), versão |
 | `Quests/QuestLogView.uxml`, `Achievements/*.uxml`, `Inventory/InventoryView.uxml` | — | tudo pelos helpers (UXML é só placeholder) |
-| `Dialogue/DialogueView.uxml` | — | placeholder em inglês ("Speaker", "Line text goes here.") sempre sobrescrito |
+| `Resources/UI/DialogueView.uxml` | — | placeholder em inglês ("Speaker", "Line text goes here.") sempre sobrescrito |
 
 ## 3. Política
 

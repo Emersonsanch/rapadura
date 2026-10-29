@@ -9,6 +9,7 @@ using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.Skills;
+using Rapadura.Gameplay.Story;
 using Rapadura.Gameplay.World.Map;
 using Rapadura.Save;
 using UnityEngine;
@@ -158,6 +159,7 @@ namespace Rapadura.Gameplay.Achievements
             EventBus.Subscribe<ComboCompletedEvent>(OnComboCompleted);
             EventBus.Subscribe<WorldMapRegionUnlockedEvent>(OnRegionUnlocked);
             EventBus.Subscribe<ItemSoldEvent>(OnItemSold);
+            EventBus.Subscribe<CampaignCompletedEvent>(OnCampaignCompleted);
         }
 
         public void Shutdown()
@@ -180,6 +182,7 @@ namespace Rapadura.Gameplay.Achievements
                 EventBus.Unsubscribe<ComboCompletedEvent>(OnComboCompleted);
                 EventBus.Unsubscribe<WorldMapRegionUnlockedEvent>(OnRegionUnlocked);
                 EventBus.Unsubscribe<ItemSoldEvent>(OnItemSold);
+                EventBus.Unsubscribe<CampaignCompletedEvent>(OnCampaignCompleted);
             }
 
             ClearProgress();
@@ -450,6 +453,9 @@ namespace Rapadura.Gameplay.Achievements
 
         private void OnItemSold(ItemSoldEvent evt) =>
             RecordProgress(AchievementConditionType.GoldEarned, evt.TotalPayout, evt.ItemId);
+
+        private void OnCampaignCompleted(CampaignCompletedEvent evt) =>
+            RecordProgress(AchievementConditionType.CampaignCompleted, 1);
 
         private void OnGameSaving(GameSavingEvent evt) => SaveProfile();
 

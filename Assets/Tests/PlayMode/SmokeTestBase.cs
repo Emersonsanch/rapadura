@@ -11,6 +11,7 @@ using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Flow;
 using Rapadura.Save;
 using Rapadura.UI.CharacterSelect;
+using Rapadura.UI.Story;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
@@ -50,6 +51,9 @@ namespace Rapadura.Tests.PlayMode
         {
             RedirectSaveFolder();
             Time.timeScale = 1f;
+
+            // The campaign prologue would hold GameplayPause over the first world map; smoke tests drive the map directly.
+            StoryPanelController.AutoPresent = false;
             yield return null;
         }
 
@@ -92,6 +96,7 @@ namespace Rapadura.Tests.PlayMode
             ServiceLocator.Clear();
             GameplayPause.Reset();
             Time.timeScale = 1f;
+            StoryPanelController.AutoPresent = true;
 
             RestoreSaveFolder();
         }

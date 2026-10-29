@@ -33,5 +33,8 @@ namespace Rapadura.Gameplay.Achievements
 
         /// <summary>Skill combos completed by the player (<c>ComboCompletedEvent</c>). Target ids = combo ids.</summary>
         CombosCompleted = 8,
+
+        /// <summary>Campaign finished — the final region boss beaten (<c>CampaignCompletedEvent</c> from <c>StoryProgress</c>).</summary>
+        CampaignCompleted = 9,
     }
 }
