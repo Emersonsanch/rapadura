@@ -40,6 +40,8 @@ namespace Rapadura.UI.CharacterSheet
         public const string StatCritMultiplier = "ui.sheet.stat.crit_multiplier";
         public const string StatCooldownReduction = "ui.sheet.stat.cooldown_reduction";
         public const string StatSkillDamage = "ui.sheet.stat.skill_damage";
+        public const string StatAttackSpeed = "ui.sheet.stat.attack_speed";
+        public const string StatThorns = "ui.sheet.stat.thorns";
 
         public const string PreviewVitality = "ui.sheet.preview.vitality";
         public const string PreviewSpirit = "ui.sheet.preview.spirit";
@@ -105,6 +107,8 @@ namespace Rapadura.UI.CharacterSheet
             new LocalizationEntry(StatCritMultiplier, "Crit damage", "Dano crítico"),
             new LocalizationEntry(StatCooldownReduction, "Cooldown reduction", "Redução de recarga"),
             new LocalizationEntry(StatSkillDamage, "Skill damage", "Dano de habilidade"),
+            new LocalizationEntry(StatAttackSpeed, "Attack speed", "Velocidade de ataque"),
+            new LocalizationEntry(StatThorns, "Thorns", "Espinhos"),
 
             new LocalizationEntry(HudButton, "Sheet", "Ficha"),
         };

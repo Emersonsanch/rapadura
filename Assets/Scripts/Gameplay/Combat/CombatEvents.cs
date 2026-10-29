@@ -23,6 +23,23 @@ namespace Rapadura.Gameplay.Combat
         }
     }
 
+    /// <summary>
+    /// Raised by <see cref="BuffController.ApplyStun"/> when a stun actually lands (after the target's
+    /// <see cref="IStunDurationModifier"/>, e.g. the boss 50% reduction). <see cref="CombatFxManager"/>
+    /// shows the "Atordoado!" cue from it.
+    /// </summary>
+    public readonly struct StunAppliedEvent : IGameEvent
+    {
+        public readonly GameObject Target;
+        public readonly float DurationSeconds;
+
+        public StunAppliedEvent(GameObject target, float durationSeconds)
+        {
+            Target = target;
+            DurationSeconds = durationSeconds;
+        }
+    }
+
     /// <summary>Raised once when a <see cref="Health"/> component's value reaches zero.</summary>
     public readonly struct CombatTargetDiedEvent : IGameEvent
     {

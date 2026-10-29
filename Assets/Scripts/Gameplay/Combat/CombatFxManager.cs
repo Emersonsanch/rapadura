@@ -1,4 +1,5 @@
 using Rapadura.Core.Events;
+using Rapadura.Gameplay.Content;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Combat
@@ -23,12 +24,29 @@ namespace Rapadura.Gameplay.Combat
         {
             EventBus.Subscribe<DamageAppliedEvent>(OnDamageApplied);
             EventBus.Subscribe<CombatTargetDiedEvent>(OnTargetDied);
+            EventBus.Subscribe<StunAppliedEvent>(OnStunApplied);
         }
 
         private void OnDisable()
         {
             EventBus.Unsubscribe<DamageAppliedEvent>(OnDamageApplied);
             EventBus.Unsubscribe<CombatTargetDiedEvent>(OnTargetDied);
+            EventBus.Unsubscribe<StunAppliedEvent>(OnStunApplied);
+        }
+
+        /// <summary>Stun cue: a pale-blue spark ring above the head and a floating "Atordoado!" (localized).</summary>
+        private void OnStunApplied(StunAppliedEvent evt)
+        {
+            if (evt.Target == null)
+            {
+                return;
+            }
+
+            Vector3 position = evt.Target.transform.position + Vector3.up * 2f;
+            var stunColor = new Color(0.55f, 0.8f, 1f);
+            SpawnHitSpark(position, stunColor, 0.8f, burstCount: 12);
+            string text = ContentText.Resolve(ContentText.CurrentManager, "combat.stunned", "Atordoado!");
+            SpawnFloatingText(position + Vector3.up * 0.3f, text, 0.1f, stunColor);
         }
 
         private void OnDamageApplied(DamageAppliedEvent evt)
@@ -109,16 +127,22 @@ namespace Rapadura.Gameplay.Combat
 
         private static void SpawnDamageNumber(Vector3 position, float damage, bool isCritical)
         {
+            SpawnFloatingText(position + new Vector3(Random.Range(-0.25f, 0.25f), 0f, 0f), Mathf.RoundToInt(damage).ToString(),
+                isCritical ? 0.18f : 0.12f, isCritical ? new Color(1f, 0.5f, 0.1f) : Color.white);
+        }
+
+        private static void SpawnFloatingText(Vector3 position, string text, float characterSize, Color color)
+        {
             var go = new GameObject("DamageNumber_FX");
-            go.transform.position = position + new Vector3(Random.Range(-0.25f, 0.25f), 0f, 0f);
+            go.transform.position = position;
 
             var textMesh = go.AddComponent<TextMesh>();
-            textMesh.text = Mathf.RoundToInt(damage).ToString();
-            textMesh.characterSize = isCritical ? 0.18f : 0.12f;
+            textMesh.text = text;
+            textMesh.characterSize = characterSize;
             textMesh.fontSize = 64;
             textMesh.anchor = TextAnchor.MiddleCenter;
             textMesh.alignment = TextAlignment.Center;
-            textMesh.color = isCritical ? new Color(1f, 0.5f, 0.1f) : Color.white;
+            textMesh.color = color;
             if (_sharedFont == null)
             {
                 _sharedFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");

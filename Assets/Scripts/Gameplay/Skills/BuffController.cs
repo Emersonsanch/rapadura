@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Rapadura.Core.Events;
 using Rapadura.Gameplay.Combat;
 using UnityEngine;
 
@@ -39,10 +40,7 @@ namespace Rapadura.Gameplay.Skills
 
         private void Update()
         {
-            if (_stunTimer > 0f)
-            {
-                _stunTimer -= Time.deltaTime;
-            }
+            TickStun(Time.deltaTime);
 
             bool anyExpired = false;
 
@@ -69,15 +67,40 @@ namespace Rapadura.Gameplay.Skills
             }
         }
 
-        /// <summary>Applies (or refreshes/extends) a stun, preventing the owner from acting for the given duration.</summary>
-        public void ApplyStun(float durationSeconds)
+        /// <summary>
+        /// Applies (or refreshes/extends) a stun, preventing the owner from acting for the given duration
+        /// (PlayerController and EnemyController both stop moving/attacking while <see cref="IsStunned"/>).
+        /// The duration is first scaled by the owner's <see cref="IStunDurationModifier"/> when it has one
+        /// (bosses: <see cref="StunRules.BossStunDurationMultiplier"/>, so they can't be stun-locked).
+        /// A stun never shortens one already running. Returns the duration actually applied (0 = none).
+        /// </summary>
+        public float ApplyStun(float durationSeconds)
         {
-            if (durationSeconds <= 0f)
+            float scaled = StunRules.ScaleDuration(durationSeconds, ResolveStunMultiplier());
+            if (scaled <= 0f)
             {
-                return;
+                return 0f;
             }
 
-            _stunTimer = Mathf.Max(_stunTimer, durationSeconds);
+            _stunTimer = Mathf.Max(_stunTimer, scaled);
+            EventBus.Publish(new StunAppliedEvent(gameObject, scaled));
+            return scaled;
+        }
+
+        /// <summary>Counts the stun down without the rest of <c>Update</c> (EditMode tests, and Update itself).</summary>
+        public void TickStun(float deltaTime)
+        {
+            if (_stunTimer > 0f && deltaTime > 0f)
+            {
+                _stunTimer -= deltaTime;
+            }
+        }
+
+        private float ResolveStunMultiplier()
+        {
+            // Looked up per stun (rare event) instead of cached in Awake: EditMode tests never run Awake,
+            // and an EnemyController's boss flag can change when a pooled instance is re-spawned.
+            return TryGetComponent(out IStunDurationModifier modifier) ? modifier.StunDurationMultiplier : 1f;
         }
 
         /// <summary>Immediately ends any active stun (e.g. cleansed by a purify effect).</summary>

@@ -515,6 +515,17 @@ namespace Rapadura.UI.CharacterSheet
             AddStatRow(manager, CharacterSheetTexts.StatCritMultiplier, CharacterSheetPresenter.FormatMultiplier(stats.CriticalMultiplier, manager));
             AddStatRow(manager, CharacterSheetTexts.StatCooldownReduction, CharacterSheetPresenter.FormatPercent(stats.CooldownReduction, manager));
             AddStatRow(manager, CharacterSheetTexts.StatSkillDamage, "+" + CharacterSheetPresenter.FormatPercent(stats.SkillDamageBonus, manager));
+            // Gear-only stats: shown once an affix grants them, so the base sheet stays short.
+            if (Mathf.Abs(stats.AttackSpeedBonus) > 0.0001f)
+            {
+                string sign = stats.AttackSpeedBonus > 0f ? "+" : string.Empty;
+                AddStatRow(manager, CharacterSheetTexts.StatAttackSpeed, sign + CharacterSheetPresenter.FormatPercent(stats.AttackSpeedBonus, manager));
+            }
+
+            if (stats.Thorns > 0.0001f)
+            {
+                AddStatRow(manager, CharacterSheetTexts.StatThorns, CharacterSheetPresenter.FormatPercent(stats.Thorns, manager));
+            }
         }
 
         private void AddStatRow(LocalizationManager manager, string labelKey, string value)

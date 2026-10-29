@@ -16,7 +16,7 @@ namespace Rapadura.Gameplay.Enemies
     /// components; this class only drives movement/state decisions.
     /// </summary>
     [RequireComponent(typeof(Health))]
-    public class EnemyController : MonoBehaviour
+    public class EnemyController : MonoBehaviour, IStunDurationModifier
     {
         [Header("Configuration")]
         [SerializeField] private EnemyDefinition _definition;
@@ -91,6 +91,19 @@ namespace Rapadura.Gameplay.Enemies
         public Hitbox Hitbox => _hitbox;
         public StateMachine<EnemyController> StateMachine => _stateMachine;
         public bool IsBoss => _definition != null && _definition.IsBoss;
+
+        /// <summary>Bosses take <see cref="StunRules.BossStunDurationMultiplier"/> of every stun (anti stun-lock), others 1.</summary>
+        public float StunDurationMultiplier => StunRules.MultiplierFor(IsBoss);
+
+        /// <summary>True while a stun from a skill (Correntes das Trevas, Granada Elétrica, Terremoto) is running.</summary>
+        public bool IsStunned
+        {
+            get
+            {
+                BuffController buffs = Buffs;
+                return buffs != null && buffs.IsStunned;
+            }
+        }
 
         /// <summary>
         /// True while <see cref="HoldAggro"/>'s grace is running: the AI stands still (no chase, no
@@ -232,7 +245,7 @@ namespace Rapadura.Gameplay.Enemies
 
         private void FixedUpdate()
         {
-            if ((Health != null && Health.IsDead) || IsHoldingAggro)
+            if ((Health != null && Health.IsDead) || IsHoldingAggro || IsStunned)
             {
                 return;
             }
@@ -263,6 +276,12 @@ namespace Rapadura.Gameplay.Enemies
 
             _movedThisTick = false;
 
+            if (IsStunned)
+            {
+                TickStunned();
+                return;
+            }
+
             if (IsHoldingAggro)
             {
                 _aggroHoldRemaining = Mathf.Max(0f, _aggroHoldRemaining - deltaTime);
@@ -283,6 +302,25 @@ namespace Rapadura.Gameplay.Enemies
             if (!_movedThisTick)
             {
                 Coast(deltaTime, 1f);
+            }
+        }
+
+        /// <summary>
+        /// Stunned step: no movement (hard stop, no coasting), no turning, no state tick (so no attack).
+        /// A windup in progress is cancelled and the attack stance dropped, so once the stun ends the
+        /// enemy re-enters attack range through <see cref="EnemyAttackState.Enter"/> and telegraphs the
+        /// whole windup again instead of striking instantly with the time left over.
+        /// </summary>
+        private void TickStunned()
+        {
+            _velocity = Vector3.zero;
+            _yawVelocity = 0f;
+            _movedThisTick = true;
+            CancelAttackWindup();
+
+            if (_stateMachine != null && _stateMachine.IsInState<EnemyAttackState>())
+            {
+                _stateMachine.ChangeState<EnemyChaseState>();
             }
         }
 
@@ -669,7 +707,17 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
-            combatTarget.ApplyDamage(amount, Rapadura.Gameplay.Skills.ElementType.Physical, gameObject);
+            // Every enemy attack is melee (no ranged enemies yet): a melee-aware target (the hero) can
+            // reflect Thorns back at this enemy. A future ranged attack must use plain ApplyDamage.
+            if (combatTarget is IMeleeDamageTarget meleeTarget)
+            {
+                meleeTarget.ApplyMeleeDamage(amount, Rapadura.Gameplay.Skills.ElementType.Physical, gameObject);
+            }
+            else
+            {
+                combatTarget.ApplyDamage(amount, Rapadura.Gameplay.Skills.ElementType.Physical, gameObject);
+            }
+
             EventBus.Publish(new EnemyAttackedEvent(gameObject, Target.gameObject, amount));
         }
 

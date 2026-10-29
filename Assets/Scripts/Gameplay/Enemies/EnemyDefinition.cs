@@ -18,7 +18,9 @@ namespace Rapadura.Gameplay.Enemies
 
         [Header("Vitals")]
         [SerializeField] private float _maxHealth = 30f;
-        [SerializeField] private float _contactDamage = 10f;
+        // No contact damage on purpose: the old _contactDamage field was seeded but never read, and
+        // wiring it would add untelegraphed hits on top of the windup-based attack (EnemyAttackState),
+        // see Docs/Balance/README.md §2. Assets still carrying the YAML key just ignore it.
 
         [Header("Rewards")]
         [Tooltip("Experience granted to the killer's PlayerStats when this enemy dies. See EnemyRewardGranter.")]
@@ -89,7 +91,6 @@ namespace Rapadura.Gameplay.Enemies
         public bool IsBoss => _isBoss;
 
         public float MaxHealth => _maxHealth;
-        public float ContactDamage => _contactDamage;
         public int ExperienceReward => _experienceReward;
 
         public ItemDefinition LootItem => _lootItem;

@@ -62,6 +62,8 @@ namespace Rapadura.UI.Common
             new LocalizationEntry("ui.tooltip.stat.critical_damage", "Critical damage", "Dano crítico"),
             new LocalizationEntry("ui.tooltip.stat.cooldown_reduction", "Cooldown reduction", "Redução de recarga"),
             new LocalizationEntry("ui.tooltip.stat.resource_cost_reduction", "Resource cost reduction", "Redução de custo"),
+            new LocalizationEntry("ui.tooltip.stat.attack_speed", "Attack speed", "Velocidade de ataque"),
+            new LocalizationEntry("ui.tooltip.stat.thorns", "Thorns (damage reflected)", "Espinhos (dano refletido)"),
 
             // -- Element (skills) --
             new LocalizationEntry("ui.tooltip.element.physical", "Physical", "Físico"),
@@ -94,6 +96,7 @@ namespace Rapadura.UI.Common
             new LocalizationEntry("ui.tooltip.skill_mana_cost", "Mana cost: {0}", "Custo de mana: {0}"),
             new LocalizationEntry("ui.tooltip.skill_energy_cost", "Energy cost: {0}", "Custo de energia: {0}"),
             new LocalizationEntry("ui.tooltip.skill_cooldown", "Cooldown: {0}s", "Recarga: {0}s"),
+            new LocalizationEntry("ui.tooltip.skill_stun", "Stuns for {0}s (bosses: half)", "Atordoa por {0}s (chefes: metade)"),
             new LocalizationEntry("ui.tooltip.equipped", "Equipped", "Equipado"),
             new LocalizationEntry("ui.tooltip.empty_slot", "Empty", "Vazio"),
 

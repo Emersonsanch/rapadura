@@ -29,7 +29,7 @@ namespace Rapadura.Gameplay.Player
     /// Also implements ICombatTarget so skills and future combat/AI systems can damage or
     /// heal the player without depending on this concrete class.
     /// </summary>
-    public class PlayerStats : MonoBehaviour, ISaveable, IRestoreOrder, ICombatTarget, ISkillResourceProvider
+    public class PlayerStats : MonoBehaviour, ISaveable, IRestoreOrder, ICombatTarget, ISkillResourceProvider, IMeleeDamageTarget
     {
         [Header("Health")]
         [SerializeField] private float _maxHealth = 100f;
@@ -398,11 +398,12 @@ namespace Rapadura.Gameplay.Player
         /// <see cref="Health"/> there is no rounding/minimum-damage floor, so an unbuffed player (multiplier
         /// exactly 1) takes exactly the same damage as before Defense was wired in.
         /// </summary>
-        private void ApplyDamageInternal(float amount, ElementType element, GameObject source, bool isCritical)
+        /// <returns>The damage actually taken (0 when dead, invulnerable or a non-positive amount).</returns>
+        private float ApplyDamageInternal(float amount, ElementType element, GameObject source, bool isCritical)
         {
             if (IsDead || IsInvulnerable || amount <= 0f)
             {
-                return;
+                return 0f;
             }
 
             amount *= DefenseMultiplier;
@@ -416,6 +417,8 @@ namespace Rapadura.Gameplay.Player
             {
                 Die(source);
             }
+
+            return amount;
         }
 
         public void Heal(float amount)
@@ -430,6 +433,24 @@ namespace Rapadura.Gameplay.Player
 
         void ICombatTarget.ApplyDamage(float amount, ElementType element, GameObject source)
         {
+            ApplyResistedDamage(amount, element, source);
+        }
+
+        /// <summary>
+        /// A melee hit (every enemy attack, see <see cref="IMeleeDamageTarget"/>): same mitigation as
+        /// <see cref="ICombatTarget.ApplyDamage"/>, then <see cref="ThornsRules.TryReflect"/> sends
+        /// Σ Thorns × the damage actually taken back to <paramref name="attacker"/> — even when the hit
+        /// was lethal (the spines are still there). Returns the damage taken.
+        /// </summary>
+        public float ApplyMeleeDamage(float amount, ElementType element, GameObject attacker)
+        {
+            float taken = ApplyResistedDamage(amount, element, attacker);
+            ThornsRules.TryReflect(gameObject, attacker, taken);
+            return taken;
+        }
+
+        private float ApplyResistedDamage(float amount, ElementType element, GameObject source)
+        {
             // Applies the optional ElementResistance table (see Gameplay/Combat/ElementResistance.cs)
             // as a simple percentage multiplier; Defense (DamageCalculator's armor curve + percent
             // modifiers) is applied afterwards in ApplyDamageInternal, for every damage entry point.
@@ -439,13 +460,13 @@ namespace Rapadura.Gameplay.Player
 
                 if (resistanceFraction >= 1f)
                 {
-                    return;
+                    return 0f;
                 }
 
                 amount *= (1f - resistanceFraction);
             }
 
-            ApplyDamageInternal(amount, element, source, isCritical: false);
+            return ApplyDamageInternal(amount, element, source, isCritical: false);
         }
 
         void ICombatTarget.ApplyHealing(float amount, GameObject source)

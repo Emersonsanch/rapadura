@@ -41,6 +41,7 @@ MonoBehaviour:
     ticksOverTime: 0
     tickIntervalSeconds: 1
     tickDamageOrHeal: 0
+  _stunDurationSeconds: 0.6
   _animationTrigger: CastShockGrenade
   _castSound: {fileID: 0}
   _castParticlesPrefab: {fileID: 0}

@@ -151,7 +151,7 @@ namespace Rapadura.Editor
             }
 
             var sb = new StringBuilder();
-            sb.Append(Row("id", "name", "biome", "spawn_weight", "is_boss", "max_health", "contact_damage", "attack_damage",
+            sb.Append(Row("id", "name", "biome", "spawn_weight", "is_boss", "max_health", "attack_damage",
                 "attack_cooldown", "attack_dps", "attack_range", "experience_reward", "boss_xp_multiplier",
                 "chase_speed", "detection_radius", "loot_drop_chance"));
 
@@ -160,7 +160,7 @@ namespace Rapadura.Editor
                 biomeByEnemy.TryGetValue(enemy, out (string biome, int weight) spawn);
                 double dps = enemy.AttackCooldown > 0f ? enemy.AttackDamage / (double)enemy.AttackCooldown : 0d;
                 sb.Append(Row(enemy.name, enemy.EnemyName, spawn.biome ?? string.Empty, spawn.weight.ToString(Invariant),
-                    enemy.IsBoss ? "1" : "0", F(enemy.MaxHealth), F(enemy.ContactDamage), F(enemy.AttackDamage),
+                    enemy.IsBoss ? "1" : "0", F(enemy.MaxHealth), F(enemy.AttackDamage),
                     F(enemy.AttackCooldown), R2(dps), F(enemy.AttackRange), enemy.ExperienceReward.ToString(Invariant),
                     F(enemy.BossExperienceMultiplier), F(enemy.ChaseSpeed), F(enemy.DetectionRadius), F(enemy.LootDropChance)));
             }
@@ -202,7 +202,7 @@ namespace Rapadura.Editor
             sb.Append(Row("id", "name", "hero", "type", "category", "element", "min_player_level", "cooldown", "mana_cost",
                 "energy_cost", "cast_time", "recovery", "base_damage", "damage_per_level", "dot_damage",
                 "base_healing", "healing_per_level", "hot_healing", "range", "area_radius", "max_level", "buffs",
-                "debuffs", "dps_lv1", "damage_per_mana_lv1", "dps_max", "damage_per_mana_max"));
+                "debuffs", "stun_seconds", "dps_lv1", "damage_per_mana_lv1", "dps_max", "damage_per_mana_max"));
 
             IEnumerable<SkillDefinition> skills = LoadAll<SkillDefinition>(SkillFolder)
                 .OrderBy(skill => HeroOf(skill).Length == 0)
@@ -223,7 +223,7 @@ namespace Rapadura.Editor
                     F(skill.BaseDamage), F(skill.GetDamageForLevel(2) - skill.GetDamageForLevel(1)), F(dot),
                     F(skill.BaseHealing), F(skill.GetHealingForLevel(2) - skill.GetHealingForLevel(1)), F(hot),
                     F(skill.Range), F(skill.AreaRadius), skill.MaxLevel.ToString(Invariant),
-                    skill.Buffs.Length.ToString(Invariant), skill.Debuffs.Length.ToString(Invariant),
+                    skill.Buffs.Length.ToString(Invariant), skill.Debuffs.Length.ToString(Invariant), F(skill.StunDurationSeconds),
                     R2(cycle > 0 ? hit / cycle : 0), R2(skill.ManaCost > 0 ? hit / skill.ManaCost : 0),
                     R2(cycle > 0 ? maxHit / cycle : 0), R2(skill.ManaCost > 0 ? maxHit / skill.ManaCost : 0)));
             }

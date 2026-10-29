@@ -19,10 +19,22 @@ namespace Rapadura.UI.CharacterSheet
         public readonly float CooldownReduction;
         /// <summary>Percent bonus on outgoing skill/attack damage from AttackDamage modifiers (0.05 = +5%).</summary>
         public readonly float SkillDamageBonus;
+        /// <summary>Basic-attack speed bonus (Σ AttackSpeed, clamped like PlayerBasicAttack.ResolveCooldown; 0.1 = +10%).</summary>
+        public readonly float AttackSpeedBonus;
+        /// <summary>Share of melee damage taken reflected to the attacker (ThornsRules.GetFraction; 0.1 = 10%).</summary>
+        public readonly float Thorns;
 
         public CharacterDerivedStats(float maxHealth, float maxMana, float maxStamina, float criticalChance,
             float criticalMultiplier, float cooldownReduction, float skillDamageBonus)
+            : this(maxHealth, maxMana, maxStamina, criticalChance, criticalMultiplier, cooldownReduction, skillDamageBonus, 0f, 0f)
         {
+        }
+
+        public CharacterDerivedStats(float maxHealth, float maxMana, float maxStamina, float criticalChance,
+            float criticalMultiplier, float cooldownReduction, float skillDamageBonus, float attackSpeedBonus, float thorns)
+        {
+            AttackSpeedBonus = attackSpeedBonus;
+            Thorns = thorns;
             MaxHealth = maxHealth;
             MaxMana = maxMana;
             MaxStamina = maxStamina;
@@ -102,7 +114,11 @@ namespace Rapadura.UI.CharacterSheet
                 OutgoingDamage.GetCriticalChance(buffs, balance),
                 OutgoingDamage.GetCriticalMultiplier(buffs, balance),
                 cooldownReduction,
-                skillDamageBonus);
+                skillDamageBonus,
+                buffs != null
+                    ? Mathf.Clamp(buffs.GetAdditiveFractionTotal(StatType.AttackSpeed), PlayerBasicAttack.MinAttackSpeedBonus, PlayerBasicAttack.MaxAttackSpeedBonus)
+                    : 0f,
+                ThornsRules.GetFraction(buffs));
         }
 
         public static bool CanSpend(int availablePoints) => availablePoints > 0;

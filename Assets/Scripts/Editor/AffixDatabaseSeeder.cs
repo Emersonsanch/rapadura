@@ -102,6 +102,13 @@ namespace Rapadura.Editor
                 new AffixSeed { id = "affix_of_the_executioner", fallbackText = "do Executor", slotKind = AffixSlotKind.Suffix,
                     stat = StatType.CriticalDamage, application = ModifierApplication.PercentAdditive, min = 0.1f, max = 0.25f,
                     weight = 15, requiredSlot = EquipmentSlot.MainHand },
+                // Weapon attack speed (StatType.AttackSpeed, fraction: 0.1 = swings 10% faster, see PlayerBasicAttack.ResolveCooldown).
+                new AffixSeed { id = "affix_nimble", fallbackText = "Ágil", slotKind = AffixSlotKind.Prefix,
+                    stat = StatType.AttackSpeed, application = ModifierApplication.PercentAdditive, min = 0.06f, max = 0.12f,
+                    weight = 45, requiredSlot = EquipmentSlot.MainHand },
+                new AffixSeed { id = "affix_of_frenzy", fallbackText = "do Frenesi", slotKind = AffixSlotKind.Suffix,
+                    stat = StatType.AttackSpeed, application = ModifierApplication.PercentAdditive, min = 0.13f, max = 0.2f,
+                    weight = 12, requiredSlot = EquipmentSlot.MainHand },
 
                 // Armor prefixes (Chest/Legs/Head/Boots) — health and defense.
                 new AffixSeed { id = "affix_sturdy", fallbackText = "Resistente", slotKind = AffixSlotKind.Prefix,
@@ -116,6 +123,13 @@ namespace Rapadura.Editor
                 new AffixSeed { id = "affix_of_vigor", fallbackText = "do Vigor", slotKind = AffixSlotKind.Suffix,
                     stat = StatType.HealthRegen, application = ModifierApplication.Flat, min = 0.5f, max = 1.5f,
                     weight = 50, requiredSlot = EquipmentSlot.Chest },
+                // Armor thorns (StatType.Thorns, fraction of melee damage taken reflected, see ThornsRules).
+                new AffixSeed { id = "affix_thorned", fallbackText = "Espinhosa", slotKind = AffixSlotKind.Prefix,
+                    stat = StatType.Thorns, application = ModifierApplication.PercentAdditive, min = 0.05f, max = 0.1f,
+                    weight = 40, requiredSlot = EquipmentSlot.Chest },
+                new AffixSeed { id = "affix_of_the_mandacaru", fallbackText = "do Mandacaru", slotKind = AffixSlotKind.Suffix,
+                    stat = StatType.Thorns, application = ModifierApplication.PercentAdditive, min = 0.11f, max = 0.18f,
+                    weight = 12, requiredSlot = EquipmentSlot.Chest },
 
                 // Boots — move speed.
                 new AffixSeed { id = "affix_swift", fallbackText = "Ligeiras", slotKind = AffixSlotKind.Prefix,

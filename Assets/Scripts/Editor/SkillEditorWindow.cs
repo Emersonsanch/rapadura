@@ -145,6 +145,7 @@ namespace Rapadura.Editor
             DrawSection("Power", "_baseDamage", "_damagePerLevel", "_baseHealing", "_healingPerLevel", "_range", "_areaRadius");
             DrawBuffDebuffSection("Buffs", "_buffs");
             DrawBuffDebuffSection("Debuffs", "_debuffs");
+            DrawSection("Crowd Control", "_stunDurationSeconds");
             DrawSection("Presentation", "_animationTrigger", "_castSound", "_castParticlesPrefab", "_impactVfxPrefab");
             DrawSection("Progression", "_maxLevel", "_experienceToUnlock", "_requirement");
 

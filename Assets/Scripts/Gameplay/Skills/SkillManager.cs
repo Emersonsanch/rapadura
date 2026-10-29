@@ -729,7 +729,7 @@ namespace Rapadura.Gameplay.Skills
             float damage = OutgoingDamage.Resolve(skill.GetDamageForLevel(level), levelMultiplier, _buffController,
                 ResolveCombatBalance(), CriticalRoll, out bool isCritical);
 
-            if (damage <= 0f && skill.Debuffs.Length == 0)
+            if (damage <= 0f && skill.Debuffs.Length == 0 && skill.StunDurationSeconds <= 0f)
             {
                 return;
             }
@@ -797,6 +797,12 @@ namespace Rapadura.Gameplay.Skills
             {
                 // Caster as instigator: DoT ticks are credited to the player (kill XP/loot, damage numbers).
                 targetBuffs.ApplyEffects(skill.Debuffs, DebuffSourceKey(skill.SkillId), gameObject);
+            }
+
+            // After the damage: a hit that killed the target must not stun the corpse.
+            if (skill.StunDurationSeconds > 0f && target.IsAlive && targetObject.TryGetComponent(out BuffController stunTarget))
+            {
+                stunTarget.ApplyStun(skill.StunDurationSeconds);
             }
         }
 

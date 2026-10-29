@@ -15,7 +15,6 @@ MonoBehaviour:
   _enemyName: Habitante Ancestral
   _isBoss: 1
   _maxHealth: 700
-  _contactDamage: 15
   _experienceReward: 40
   _lootItem: {fileID: 11400000, guid: 214ad08bc7a3def4cbeb45bedcc4524c, type: 2}
   _lootDropChance: 0.6

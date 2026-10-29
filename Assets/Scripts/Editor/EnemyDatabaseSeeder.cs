@@ -38,7 +38,6 @@ namespace Rapadura.Editor
             public int spawnWeight;
 
             public float maxHealth;
-            public float contactDamage;
 
             public float patrolSpeed;
             public float chaseSpeed;
@@ -106,7 +105,6 @@ namespace Rapadura.Editor
             so.FindProperty("_isBoss").boolValue = seed.isBoss;
 
             so.FindProperty("_maxHealth").floatValue = seed.maxHealth;
-            so.FindProperty("_contactDamage").floatValue = seed.contactDamage;
 
             so.FindProperty("_patrolSpeed").floatValue = seed.patrolSpeed;
             so.FindProperty("_chaseSpeed").floatValue = seed.chaseSpeed;
@@ -201,7 +199,6 @@ namespace Rapadura.Editor
                     biome = BiomeType.Forest,
                     spawnWeight = 5,
                     maxHealth = 70f,
-                    contactDamage = 8f,
                     patrolSpeed = 2f,
                     chaseSpeed = 4.5f,
                     fleeSpeed = 5f,
@@ -219,7 +216,6 @@ namespace Rapadura.Editor
                     biome = BiomeType.Forest,
                     spawnWeight = 1,
                     maxHealth = 430f,
-                    contactDamage = 14f,
                     patrolSpeed = 2.2f,
                     chaseSpeed = 5.5f,
                     fleeSpeed = 0f,
@@ -240,7 +236,6 @@ namespace Rapadura.Editor
                     biome = BiomeType.Desert,
                     spawnWeight = 5,
                     maxHealth = 85f,
-                    contactDamage = 9f,
                     patrolSpeed = 1.6f,
                     chaseSpeed = 3.5f,
                     fleeSpeed = 4.5f,
@@ -258,7 +253,6 @@ namespace Rapadura.Editor
                     biome = BiomeType.Desert,
                     spawnWeight = 1,
                     maxHealth = 505f,
-                    contactDamage = 16f,
                     patrolSpeed = 1.8f,
                     chaseSpeed = 3.8f,
                     fleeSpeed = 0f,
@@ -279,7 +273,6 @@ namespace Rapadura.Editor
                     biome = BiomeType.Mountain,
                     spawnWeight = 4,
                     maxHealth = 100f,
-                    contactDamage = 12f,
                     patrolSpeed = 1.2f,
                     chaseSpeed = 2.5f,
                     fleeSpeed = 0f,
@@ -298,7 +291,6 @@ namespace Rapadura.Editor
                     biome = BiomeType.Mountain,
                     spawnWeight = 1,
                     maxHealth = 580f,
-                    contactDamage = 18f,
                     patrolSpeed = 2f,
                     chaseSpeed = 4f,
                     fleeSpeed = 0f,
@@ -319,7 +311,6 @@ namespace Rapadura.Editor
                     biome = BiomeType.Caves,
                     spawnWeight = 6,
                     maxHealth = 80f,
-                    contactDamage = 5f,
                     patrolSpeed = 2.5f,
                     chaseSpeed = 5f,
                     fleeSpeed = 6f,
@@ -337,7 +328,6 @@ namespace Rapadura.Editor
                     biome = BiomeType.Caves,
                     spawnWeight = 1,
                     maxHealth = 700f,
-                    contactDamage = 15f,
                     patrolSpeed = 1.5f,
                     chaseSpeed = 3.2f,
                     fleeSpeed = 0f,

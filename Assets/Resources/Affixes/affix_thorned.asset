@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d9a84a3e36279a4b82e1ca76b1fc78b, type: 3}
+  m_Name: affix_thorned
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.Procedural.ItemAffixDefinition
+  _affixId: affix_thorned
+  _nameLocalizationKey: affix.affix_thorned
+  _fallbackDisplayText: Espinhosa
+  _slotKind: 0
+  _affectedStat: 14
+  _application: 1
+  _minValue: 0.05
+  _maxValue: 0.1
+  _rarityWeight: 40
+  _requiredEquipSlot: 2

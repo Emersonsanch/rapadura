@@ -229,6 +229,11 @@ namespace Rapadura.UI.Common
             AppendTimedModifiers(skill.Buffs, lines, localize);
             AppendTimedModifiers(skill.Debuffs, lines, localize);
 
+            if (skill.StunDurationSeconds > 0f)
+            {
+                lines.Add(Format(localize, "ui.tooltip.skill_stun", Number(skill.StunDurationSeconds)));
+            }
+
             return content;
         }
 
@@ -270,6 +275,8 @@ namespace Rapadura.UI.Common
                 case StatType.CriticalDamage:
                 case StatType.CooldownReduction:
                 case StatType.ResourceCostReduction:
+                case StatType.AttackSpeed:
+                case StatType.Thorns:
                     return true;
                 default:
                     return false;

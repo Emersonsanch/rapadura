@@ -368,6 +368,13 @@ namespace Rapadura.Core.Localization
                 new LocalizationEntry("affix.affix_of_the_scholar", "of the Scholar", "do Estudioso"),
                 new LocalizationEntry("affix.affix_of_the_wind", "of the Wind", "do Vento"),
                 new LocalizationEntry("affix.affix_of_vigor", "of Vigor", "do Vigor"),
+                new LocalizationEntry("affix.affix_nimble", "Nimble", "Ágil"),
+                new LocalizationEntry("affix.affix_of_frenzy", "of Frenzy", "do Frenesi"),
+                new LocalizationEntry("affix.affix_thorned", "Thorned", "Espinhosa"),
+                new LocalizationEntry("affix.affix_of_the_mandacaru", "of the Mandacaru", "do Mandacaru"),
+
+                // -- Combat cues (CombatFxManager floating text) --
+                new LocalizationEntry("combat.stunned", "Stunned!", "Atordoado!"),
             };
         }
     }

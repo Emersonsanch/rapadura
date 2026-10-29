@@ -42,6 +42,9 @@ namespace Rapadura.Gameplay.Skills
         [Header("Status Effects")]
         [SerializeField] private StatModifierDefinition[] _buffs = System.Array.Empty<StatModifierDefinition>();
         [SerializeField] private StatModifierDefinition[] _debuffs = System.Array.Empty<StatModifierDefinition>();
+        [Tooltip("Seconds every target hit is stunned (BuffController.ApplyStun: no movement, no attacks, windup cancelled). Bosses take half (StunRules). 0 = no stun.")]
+        [Min(0f)]
+        [SerializeField] private float _stunDurationSeconds = 0f;
 
         [Header("Presentation")]
         [SerializeField] private string _animationTrigger = string.Empty;
@@ -78,6 +81,8 @@ namespace Rapadura.Gameplay.Skills
 
         public StatModifierDefinition[] Buffs => _buffs;
         public StatModifierDefinition[] Debuffs => _debuffs;
+        /// <summary>Stun applied to each target hit (before the target's own scaling, e.g. bosses ×0.5). 0 = none.</summary>
+        public float StunDurationSeconds => _stunDurationSeconds;
 
         public string AnimationTrigger => _animationTrigger;
         public AudioClip CastSound => _castSound;

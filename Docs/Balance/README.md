@@ -68,6 +68,8 @@ como fallback.
 - `damage_per_mana_lv1` = (`base_damage` + `dot_damage`) / `mana_cost`.
 - `*_max` = o mesmo no nível máximo da skill (`base + damage_per_level × (max_level-1)`).
 - Não inclui buffs de `AttackDamage`, crítico, cura nem efeitos de controle (CC).
+- `stun_seconds` = `SkillDefinition._stunDurationSeconds` (atordoamento por alvo atingido, antes da
+  redução de boss; ver §7.1).
 
 ---
 
@@ -565,3 +567,94 @@ Maithe vence sem defender (11,4 s < 18,5 s). Escorpião e morcegos só entram na
 (inalteradas); a Cura Divina não causa dano, então não entra no kit. Teste novo de código:
 `EnemyDetectionUtilityTests.IsWithinAttackRange_FlyingEnemyHoveringAboveTarget_StillInRange` e
 `IsWithinAttackRange_FalseWhenHorizontallyTooFar_OrBeyondVerticalTolerance`.
+
+---
+
+## 7. Atordoamento, velocidade de ataque, espinhos e dano de contato (2026-10-29)
+
+Lacunas de combate fechadas (código + dados). Nenhum número de inimigo mudou, então as invariantes
+da §5.4/§6.3 continuam valendo: atordoamento, velocidade de ataque e espinhos são margem extra para o
+jogador, e o dano de contato removido nunca tinha sido aplicado.
+
+### 7.1 Atordoamento (`StunRules`, `BuffController.ApplyStun`)
+
+```
+aplicado = skill._stunDurationSeconds × (boss ? 0,5 : 1)      // nunca encurta um stun em andamento
+```
+
+- Inimigo atordoado (`EnemyController.TickStunned`): não anda (parada seca, sem deslizar), não gira,
+  não ataca e **cancela o golpe em preparação**. Ele sai da postura de ataque, então, quando o stun
+  acaba, o próximo golpe telegrafa a preparação inteira de novo, em vez de bater na hora com o tempo
+  que sobrou.
+- Bosses levam 50% (`StunRules.BossStunDurationMultiplier`, via `IStunDurationModifier`): com 3 heróis
+  atordoando não dá para travar um boss em cadeia.
+- Um golpe que mata não atordoa o corpo. Sinal visual: faíscas azul-claras + "Atordoado!" flutuando
+  (`StunAppliedEvent` → `CombatFxManager`).
+
+| Skill | Herói | Recarga | Stun (comum) | Stun (boss) | % do ciclo travado (comum) |
+|---|---|---|---|---|---|
+| Correntes das Trevas | Lavine | 11 s | **1,0 s** | 0,5 s | 9% |
+| Terremoto | Joaquim | 12 s | **0,8 s** | 0,4 s | 7% |
+| Granada Elétrica | Ícaro | 8 s | **0,6 s** | 0,3 s | 8% |
+
+Lavine (controle de multidão) tem o stun mais longo; a Granada, que tem a menor recarga, tem o mais curto.
+Num boss com `attack_cooldown` de 1,5–3 s, 0,3–0,5 s de stun atrasa no máximo um golpe por conjuração.
+
+### 7.2 Velocidade de ataque (`StatType.AttackSpeed`, `PlayerBasicAttack.ResolveCooldown`)
+
+```
+bônus    = clamp(Σ AttackSpeed, -0,5, +1,0)      // Flat e PercentAdditive somam igual (0,1 = +10%)
+recarga  = max(0,5 s / (1 + bônus), golpe_pendente)
+```
+
+O piso no golpe pendente (0,22 s sem clipe, ou o `AttackStrikeDelay` do clipe) impede começar um
+golpe novo antes de o anterior acertar. Sem ele, o golpe pendente seria sobrescrito e perdido, e
+atacar mais rápido daria **menos** dano. Com o básico de 15 de dano (30 DPS a cada 0,5 s): +10% →
+0,455 s (33 DPS); +20% (teto do `affix_of_frenzy`) → 0,417 s (36 DPS). Ágil + Frenesi na mesma arma
+chegam a +32% → 0,379 s (39,6 DPS). O teto de +100% (0,25 s) fica como trava de segurança.
+
+### 7.3 Espinhos (`StatType.Thorns`, `ThornsRules`)
+
+```
+fração   = clamp(Σ Thorns, 0, 0,5)
+refletido = dano_tomado_após_defesa × fração     // volta para quem bateu, no canal "thorns"
+```
+
+- Só golpe corpo a corpo: `EnemyController.ApplyDamageToTarget` (todo ataque de inimigo é corpo a corpo
+  hoje) chama `IMeleeDamageTarget.ApplyMeleeDamage` no herói. Dano de outra origem (DoT, skill) não reflete.
+- Sem recursão: o refletido entra por `OutgoingDamage.DeliverDamage` (nunca é "corpo a corpo"), e
+  `ThornsRules.IsReflecting` ignora qualquer espinho disparado durante uma reflexão.
+- O refletido passa pela defesa do inimigo (`Health`), credita o herói (XP/loot se matar) e usa canal
+  próprio, então não engole o próximo ataque básico no mesmo inimigo.
+- Exemplo: o Senhor da Guerra (16 de dano) num herói com Espinhosa 10% leva 1,6 por golpe. Com o teto de 50% ele leva 8.
+
+### 7.4 Afixos novos (`AffixDatabaseSeeder`, 16 → 20)
+
+| Afixo | Tipo | Slot | Stat | Faixa | Peso |
+|---|---|---|---|---|---|
+| `affix_nimble` (Ágil / Nimble) | prefixo | Mão principal | AttackSpeed | +6–12% | 45 |
+| `affix_of_frenzy` (do Frenesi / of Frenzy) | sufixo | Mão principal | AttackSpeed | +13–20% | 12 |
+| `affix_thorned` (Espinhosa / Thorned) | prefixo | Peito | Thorns | 5–10% | 40 |
+| `affix_of_the_mandacaru` (do Mandacaru / of the Mandacaru) | sufixo | Peito | Thorns | 11–18% | 12 |
+
+Os assets já estão em `Resources/Affixes` (gerados com os mesmos valores do seeder). Tooltip:
+"+10% Velocidade de ataque" e "+15% Espinhos (dano refletido)". A Ficha mostra as linhas
+"Velocidade de ataque" e "Espinhos" só quando algum item concede esses stats.
+
+### 7.5 Dano de contato: removido
+
+`EnemyDefinition._contactDamage` era semeado e exportado, mas nunca foi lido. **Foi removido em vez de
+ligado** porque:
+1. Todo ataque de inimigo já é corpo a corpo e telegrafado (`EnemyAttackState`: preparação ≥ 0,35 s e
+   sair do alcance cancela, que é a janela de esquiva). Dano por encostar seria um golpe sem aviso
+   em cima disso e quebraria a promessa de legibilidade do combate.
+2. Os valores semeados (5–18) são do tamanho do `attack_damage`. Ligar isso a cada 1 s quase dobraria
+   o DPS de todo inimigo e invalidaria as faixas de TTK das §5–§6, que não contam dano de contato.
+3. No celular o herói anda por toque/clique-para-mover e encosta nos inimigos o tempo todo. O ataque
+   básico de todo herói é corpo a corpo (2,5 m), então todos seriam punidos por jogar do jeito certo.
+
+Removido de `EnemyDefinition`, `EnemyDatabaseSeeder`, `BalanceCsvMenu` (coluna `contact_damage`) e dos
+9 assets de inimigo. `enemies.csv` foi atualizado sem a coluna, e `skills.csv` ganhou `stun_seconds`.
+
+Testes: `StunThornsAttackSpeedTests` (stun bloqueia o inimigo, cancela a preparação, redução de boss,
+skill que atordoa, matemática da velocidade de ataque, espinhos sem recursão, remoção do dano de contato).

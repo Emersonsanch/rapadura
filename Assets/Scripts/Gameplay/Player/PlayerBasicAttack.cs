@@ -74,6 +74,58 @@ namespace Rapadura.Gameplay.Player
             }
         }
 
+        /// <summary>Fastest the attack-speed bonus can make the swing (+100% = cooldown halved).</summary>
+        public const float MaxAttackSpeedBonus = 1f;
+
+        /// <summary>Slowest an attack-speed malus can make it (-50% = cooldown doubled).</summary>
+        public const float MinAttackSpeedBonus = -0.5f;
+
+        /// <summary>Base seconds between swings (inspector), before <see cref="StatType.AttackSpeed"/>.</summary>
+        public float BaseCooldown => _cooldownSeconds;
+
+        /// <summary>
+        /// Pure swing-cooldown formula (see Docs/Balance/README.md, "Velocidade de ataque"):
+        /// <code>
+        /// bonus    = clamp(Σ AttackSpeed, MinAttackSpeedBonus, MaxAttackSpeedBonus)
+        /// cooldown = max(baseCooldown / (1 + bonus), strikeDelay)
+        /// </code>
+        /// The floor at <paramref name="strikeDelay"/> keeps a new swing from starting while the previous
+        /// one's damage is still pending: <see cref="PerformAttack"/> would overwrite the pending strike
+        /// and that hit would be lost, so faster-than-the-animation attacks would deal LESS damage.
+        /// </summary>
+        public static float ResolveCooldown(float baseCooldown, float attackSpeedBonus, float strikeDelay)
+        {
+            float bonus = Mathf.Clamp(attackSpeedBonus, MinAttackSpeedBonus, MaxAttackSpeedBonus);
+            float cooldown = Mathf.Max(0f, baseCooldown) / (1f + bonus);
+            return Mathf.Max(cooldown, Mathf.Max(0f, strikeDelay));
+        }
+
+        /// <summary>Σ AttackSpeed modifiers on this hero (affixes Ágil / do Frenesi), 0 without a BuffController.</summary>
+        public float AttackSpeedBonus
+        {
+            get
+            {
+                BuffController buffs = GetComponent<BuffController>();
+                return buffs != null ? buffs.GetAdditiveFractionTotal(StatType.AttackSpeed) : 0f;
+            }
+        }
+
+        /// <summary>Seconds between swings right now (<see cref="ResolveCooldown"/> with this hero's bonus and strike delay).</summary>
+        public float EffectiveCooldown => ResolveCooldown(_cooldownSeconds, AttackSpeedBonus, StrikeDelay);
+
+        /// <summary>Seconds until the next swing may start (0 or less = ready).</summary>
+        public float CooldownRemaining => _cooldownRemaining;
+
+        /// <summary>
+        /// Arms the cooldown right after <see cref="PerformAttack"/>. The floor is the swing actually in
+        /// flight (<c>_pendingStrike</c>), not <see cref="StrikeDelay"/>: the animator alternates swing
+        /// variants, so StrikeDelay already describes the NEXT swing at this point.
+        /// </summary>
+        private void StartCooldown()
+        {
+            _cooldownRemaining = ResolveCooldown(_cooldownSeconds, AttackSpeedBonus, Mathf.Max(0f, _pendingStrike));
+        }
+
         /// <summary>A swing has started and its damage has not landed yet.</summary>
         public bool IsStrikePending => _pendingStrike >= 0f;
 
@@ -119,7 +171,7 @@ namespace Rapadura.Gameplay.Player
             if (_input.AttackPressedThisFrame && _cooldownRemaining <= 0f)
             {
                 PerformAttack();
-                _cooldownRemaining = _cooldownSeconds;
+                StartCooldown();
                 return;
             }
 
@@ -173,7 +225,7 @@ namespace Rapadura.Gameplay.Player
             if (_cooldownRemaining <= 0f)
             {
                 PerformAttack();
-                _cooldownRemaining = _cooldownSeconds;
+                StartCooldown();
             }
         }
 
@@ -244,6 +296,12 @@ namespace Rapadura.Gameplay.Player
 #if UNITY_EDITOR
         /// <summary>Test-only: start a swing and advance it without Update/input.</summary>
         public void PerformAttackForTests() => PerformAttack();
+        /// <summary>Test-only: a swing exactly as Update fires it (swing + cooldown armed).</summary>
+        public void PerformAttackWithCooldownForTests()
+        {
+            PerformAttack();
+            StartCooldown();
+        }
         public void TickPendingStrikeForTests(float deltaTime) => TickPendingStrike(deltaTime);
 #endif
 

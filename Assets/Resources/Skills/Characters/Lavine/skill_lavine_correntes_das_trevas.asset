@@ -50,6 +50,7 @@ MonoBehaviour:
     ticksOverTime: 0
     tickIntervalSeconds: 1
     tickDamageOrHeal: 0
+  _stunDurationSeconds: 1
   _animationTrigger: CastDarkChains
   _castSound: {fileID: 0}
   _castParticlesPrefab: {fileID: 0}

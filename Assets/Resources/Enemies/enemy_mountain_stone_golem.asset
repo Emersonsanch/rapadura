@@ -15,7 +15,6 @@ MonoBehaviour:
   _enemyName: Golem de Pedra
   _isBoss: 0
   _maxHealth: 100
-  _contactDamage: 12
   _experienceReward: 28
   _lootItem: {fileID: 11400000, guid: 214ad08bc7a3def4cbeb45bedcc4524c, type: 2}
   _lootDropChance: 0.6
