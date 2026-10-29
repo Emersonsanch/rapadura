@@ -22,6 +22,7 @@ namespace Rapadura.Editor
         private class ResourceSeed
         {
             public string id, name, description;
+            public ItemType type = ItemType.Material;
             public ItemCategory category;
             public float weight;
             public int value;
@@ -62,7 +63,7 @@ namespace Rapadura.Editor
             so.FindProperty("_itemId").stringValue = seed.id;
             so.FindProperty("_displayName").stringValue = seed.name;
             so.FindProperty("_description").stringValue = seed.description;
-            so.FindProperty("_type").enumValueIndex = (int)ItemType.Material;
+            so.FindProperty("_type").enumValueIndex = (int)seed.type;
             so.FindProperty("_category").enumValueIndex = (int)seed.category;
             so.FindProperty("_rarity").enumValueIndex = (int)ItemRarity.Common;
             so.FindProperty("_weight").floatValue = seed.weight;
@@ -77,10 +78,10 @@ namespace Rapadura.Editor
         {
             return new List<ResourceSeed>
             {
-                new ResourceSeed { id = "item_wood", name = "Madeira", description = "Tora de madeira coletada de árvores. Usada em construção e crafting.", category = ItemCategory.Wood, weight = 1.5f, value = 2, maxStack = 99 },
-                new ResourceSeed { id = "item_stone", name = "Pedra", description = "Pedra bruta coletada de rochas. Usada em construção e crafting.", category = ItemCategory.Stone, weight = 2f, value = 1, maxStack = 99 },
-                new ResourceSeed { id = "item_iron", name = "Ferro", description = "Barra de ferro forjada a partir de minério. Usada em construção e crafting avançado.", category = ItemCategory.Metal, weight = 3f, value = 8, maxStack = 99 },
-                new ResourceSeed { id = "item_gold", name = "Ouro", description = "Pepita de ouro bruto. Usada em crafting de itens raros/lendários.", category = ItemCategory.Gold, weight = 2f, value = 20, maxStack = 99 },
+                new ResourceSeed { id = "item_wood", name = "Madeira", description = "Tora de madeira coletada de árvores. Usada em construção e crafting.", category = ItemCategory.Wood, weight = 0.5f, value = 2, maxStack = 99 },
+                new ResourceSeed { id = "item_stone", name = "Pedra", description = "Pedra bruta coletada de rochas. Usada em construção e crafting.", category = ItemCategory.Stone, weight = 1f, value = 1, maxStack = 99 },
+                new ResourceSeed { id = "item_iron", name = "Ferro", description = "Barra de ferro forjada a partir de minério. Usada em construção e crafting avançado.", category = ItemCategory.Metal, weight = 1.5f, value = 8, maxStack = 99 },
+                new ResourceSeed { id = "item_gold", name = "Ouro", description = "Pepita de ouro bruto. Usada em crafting de itens raros/lendários.", type = ItemType.Currency, category = ItemCategory.Gold, weight = 0f, value = 20, maxStack = 9999 },
             };
         }
     }

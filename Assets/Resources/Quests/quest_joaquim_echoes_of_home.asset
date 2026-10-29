@@ -19,8 +19,8 @@ MonoBehaviour:
   _objectives:
   - ObjectiveId: clear_ruin_dwellers
     Type: 0
-    TargetId: enemy_cave_dweller
-    RequiredAmount: 6
+    TargetId: enemy_forest_spider
+    RequiredAmount: 5
     DescriptionKey: quest.joaquim_echoes.obj_clear_ruin_dwellers
     CurrentAmount: 0
   - ObjectiveId: recover_relic_blade

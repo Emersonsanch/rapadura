@@ -769,8 +769,8 @@ Lutas ≈ quantidade ÷ "por luta". `EnemyLootTableTests` exige no máximo 12 lu
 | `quest_joaquim_echoes_of_home` | 1 espada de ferro | Cavernas | drop raro (~12,5); caminhos principais: forjar (4 minério + 3 madeira), bônus Épico do Habitante Ancestral ou recompensa da 2ª missão da Montanha |
 | `quest_region_desert_crossing_reserve` | 12 ouro | Deserto | **~6,7** |
 
-Peso: minério pesa 3 e o inventário aguenta 100. Umas 20 lutas na Montanha sem vender nem fundir
-enchem a mochila. O que não cabe é perdido com aviso no log (`EnemyLootGranter`).
+Peso: ver §9 (mochila cheia). Antes o minério pesava 3 e umas 18 lutas na Montanha enchiam a mochila;
+hoje são ~43, e o que não cabe nunca some em silêncio.
 
 ### 8.5 Testes
 
@@ -780,3 +780,48 @@ drops; todo insumo de receita obtenível; teto de lutas. Também cobre as regras
 determinismo por semente, faixa de quantidade, chance 0, equipamento procedural com piso de raridade,
 chefe com 4 rolagens garantidas e bônus Épico, e o loot da arena levado ao mapa com os afixos pelo
 estado carregado do `SaveManager`.
+
+## 9. Mochila cheia (2026-10-29)
+
+O inventário aguenta **100 de peso e 30 espaços**. Não existe atributo Força (os atributos são
+Vitalidade, Espírito, Destreza, Inteligência e Poder Arcano), então não há teto que cresça com atributo.
+
+### 9.1 Pesos (antes → depois)
+
+| Item | Antes | Depois | Por quê |
+|---|---|---|---|
+| `item_iron_ore` | 3 | **1** | material bruto mais comum de 3 biomas; era o que enchia a mochila |
+| `item_iron` (lingote) | 3 | **1,5** | fundir comprime: 2 minério + 1 madeira (2,5) viram 1,5 |
+| `item_stone` | 2 | **1** | mesmo raciocínio |
+| `item_wood` | 1,5 | **0,5** | perto de fibra (0,1) e erva (0,2) |
+| `item_gold`, `item_gold_coin` | 0 | 0 | moeda não pesa (`Currency_IsWeightless`) |
+
+Equipamento não mudou (espada de ferro 3, couro 1–2,5). O `ResourceItemSeeder` regravava o ouro como
+Material de peso 2 e pilha 99; agora grava Moeda, peso 0, pilha 9999.
+
+Peso esperado por luta (1,5 inimigo comum, tabelas da §8.2) e lutas até encher 100 sem vender, usar nem fundir:
+
+| Bioma | Antes | Lutas | Depois | Lutas |
+|---|---|---|---|---|
+| Floresta | 2,52 | ~40 | 1,22 | ~82 |
+| Deserto | 3,65 | ~27 | 1,49 | ~67 |
+| Montanha | 5,54 | ~18 | 2,31 | **~43** |
+| Cavernas | 3,96 | ~25 | 1,75 | ~57 |
+
+Espaços: a Montanha solta ~0,22 equipamento por luta (cada peça ocupa um espaço); em 43 lutas são ~10
+peças mais ~6 pilhas, abaixo dos 30. `LootOverflowTests.EveryBiome_TakesAtLeast40Fights_ToFillTheBag`
+trava o mínimo de 40.
+
+### 9.2 Regras de entrega (`LootGrantRules`, chamado por `EnemyLootGranter`)
+
+1. Entrada normal (`AddItem`): pilhas, depois espaços livres, limitada pelo peso.
+2. O que o peso recusou entra **acima do limite** (`AddItemIgnoringWeight`) quando é moeda ou quando uma
+   missão ativa ainda precisa: `QuestManager.GetOutstandingCollectAmount` = maior quantidade pedida
+   entre os objetivos de coleta abertos daquele item menos o que já está na mochila. Espaço nunca é
+   ignorado. Acima do peso, `AddItem` recusa qualquer coisa que pese até o jogador vender, usar ou fabricar.
+3. O resto é perdido e avisado: `LootOverflowEvent` → `BagFullToastController` mostra "Mochila cheia"
+   (o que ficou para trás e a dica de vender/usar/fabricar na vila) e um texto laranja "Sem espaço: 2
+   Minério de Ferro" sobe do corpo. O "+N" dourado mostra só o que entrou de fato.
+
+Equipamento procedural (`AddGeneratedItem`) só precisa de um espaço livre, como antes.
+

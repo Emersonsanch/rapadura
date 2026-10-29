@@ -165,6 +165,14 @@ namespace Rapadura.Gameplay.Inventory
             return GetTotalWeight() + item.Weight * quantity <= _maxWeight;
         }
 
+        /// <summary>
+        /// True once the carried weight is past <see cref="MaxWeight"/>. Only reachable through
+        /// <see cref="AddItemIgnoringWeight"/> (quest items let past a full bag) or generated gear
+        /// (<see cref="AddGeneratedItem"/> only needs a free slot); <see cref="AddItem(ItemDefinition,int)"/>
+        /// then refuses anything that weighs until something is sold, used or crafted away.
+        /// </summary>
+        public bool IsOverWeightLimit => GetTotalWeight() > _maxWeight + 0.0001f;
+
         // ---------------------------------------------------------------
         // Add / Remove
         // ---------------------------------------------------------------
@@ -183,6 +191,21 @@ namespace Rapadura.Gameplay.Inventory
         /// (preserveDurability == null) still starts at MaxDurability as before.
         /// </summary>
         public int AddItem(ItemDefinition item, int quantity, float? preserveDurability)
+        {
+            return AddItemCore(item, quantity, preserveDurability, ignoreWeight: false);
+        }
+
+        /// <summary>
+        /// Like <see cref="AddItem(ItemDefinition,int)"/> but past the weight limit: still needs a stack with room
+        /// or an empty slot. Reserved for what must never be lost to a heavy bag — the units an active quest still
+        /// needs (<c>QuestManager.GetOutstandingCollectAmount</c>, used by <c>EnemyLootGranter</c>). Returns the leftover.
+        /// </summary>
+        public int AddItemIgnoringWeight(ItemDefinition item, int quantity)
+        {
+            return AddItemCore(item, quantity, null, ignoreWeight: true);
+        }
+
+        private int AddItemCore(ItemDefinition item, int quantity, float? preserveDurability, bool ignoreWeight)
         {
             EnsureSlotsInitialized();
 
@@ -210,7 +233,7 @@ namespace Rapadura.Gameplay.Inventory
                     }
 
                     int spaceInStack = item.MaxStack - slot.quantity;
-                    int amountToAdd = Mathf.Min(spaceInStack, remaining, GetWeightAffordableAmount(item, remaining));
+                    int amountToAdd = Mathf.Min(spaceInStack, remaining, ignoreWeight ? remaining : GetWeightAffordableAmount(item, remaining));
                     slot.quantity += amountToAdd;
                     remaining -= amountToAdd;
                 }
@@ -228,7 +251,7 @@ namespace Rapadura.Gameplay.Inventory
                     continue;
                 }
 
-                int amountToAdd = Mathf.Min(item.MaxStack, remaining, GetWeightAffordableAmount(item, remaining));
+                int amountToAdd = Mathf.Min(item.MaxStack, remaining, ignoreWeight ? remaining : GetWeightAffordableAmount(item, remaining));
 
                 if (amountToAdd <= 0)
                 {

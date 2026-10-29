@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
+using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Logging;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Inventory;
+using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.World.Biomes;
 using UnityEngine;
 
@@ -23,6 +26,10 @@ namespace Rapadura.Gameplay.Enemies
     /// the inventory goes back to the world map with the rest of the player state
     /// (<c>SaveManager</c>'s carried state), so collect quests progress across the map ⇄ encounter loop.
     /// A short "+2 Madeira" text floats over the corpse for each drop (<see cref="CombatFxManager"/>).
+    ///
+    /// A full bag never eats loot silently (<see cref="LootGrantRules"/>, Docs/Balance/README.md §9): currency and
+    /// the units an active quest still needs go in past the weight limit, and whatever is really lost raises
+    /// <see cref="LootOverflowEvent"/> (the arena's "Mochila cheia" toast + a warning text over the corpse).
     /// </summary>
     public class EnemyLootGranter : MonoBehaviour
     {
@@ -64,11 +71,27 @@ namespace Rapadura.Gameplay.Enemies
             List<LootDrop> drops = EnemyLootRoller.Roll(definition, biome, _random);
 
             Vector3 labelPosition = evt.Target.transform.position + Vector3.up * 1.8f;
+            Func<string, int, int> outstanding = ResolveQuestNeeds();
+            List<LootGrantResult> overflow = null;
+            int line = 0;
+
             for (int i = 0; i < drops.Count; i++)
             {
-                if (Grant(inventory, drops[i]))
+                LootGrantResult result = LootGrantRules.Grant(inventory, drops[i], outstanding);
+                if (result.Granted > 0)
                 {
-                    CombatFxManager.SpawnLootText(labelPosition + Vector3.up * (0.35f * i), DescribeDrop(drops[i]));
+                    CombatFxManager.SpawnLootText(labelPosition + Vector3.up * (0.35f * line++), DescribeDrop(drops[i], result.Granted));
+                }
+
+                if (result.Lost > 0)
+                {
+                    string what = drops[i].IsGenerated ? drops[i].Generated.GeneratedName : drops[i].Item.ItemId;
+                    GameLogger.Warning("Enemy", $"Loot '{what}' x{result.Lost} lost: killer inventory is full or over its weight limit.");
+                }
+
+                if (result.Lost > 0 || result.KeptOverWeight > 0)
+                {
+                    (overflow ??= new List<LootGrantResult>()).Add(result);
                 }
             }
 
@@ -76,33 +99,17 @@ namespace Rapadura.Gameplay.Enemies
             {
                 EventBus.Publish(new EnemyLootDroppedEvent(evt.Target, inventory.gameObject, drops));
             }
+
+            if (overflow != null)
+            {
+                EventBus.Publish(new LootOverflowEvent(labelPosition + Vector3.up * (0.35f * line), overflow));
+            }
         }
 
-        private static bool Grant(InventoryManager inventory, LootDrop drop)
+        /// <summary>The live quest manager's "units still needed" query, or null outside a game session.</summary>
+        private static Func<string, int, int> ResolveQuestNeeds()
         {
-            if (drop.IsGenerated)
-            {
-                if (inventory.AddGeneratedItem(drop.Generated))
-                {
-                    return true;
-                }
-
-                GameLogger.Warning("Enemy", $"Loot '{drop.Generated.GeneratedName}' lost: killer inventory has no empty slot.");
-                return false;
-            }
-
-            if (drop.Item == null || drop.Quantity <= 0)
-            {
-                return false;
-            }
-
-            int leftover = inventory.AddItem(drop.Item, drop.Quantity);
-            if (leftover > 0)
-            {
-                GameLogger.Warning("Enemy", $"Loot '{drop.Item.ItemId}' x{leftover} lost: killer inventory is full or over its weight limit.");
-            }
-
-            return leftover < drop.Quantity;
+            return ServiceLocator.TryGet(out QuestManager quests) && quests != null ? quests.GetOutstandingCollectAmount : null;
         }
 
         /// <summary>
@@ -121,7 +128,7 @@ namespace Rapadura.Gameplay.Enemies
             return player != null ? player.GetComponent<InventoryManager>() : null;
         }
 
-        private static string DescribeDrop(LootDrop drop)
+        private static string DescribeDrop(LootDrop drop, int quantity)
         {
             if (drop.IsGenerated)
             {
@@ -129,7 +136,7 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             string name = drop.Item.LocalizedName();
-            return drop.Quantity > 1 ? $"+{drop.Quantity} {name}" : "+ " + name;
+            return quantity > 1 ? $"+{quantity} {name}" : "+ " + name;
         }
     }
 }

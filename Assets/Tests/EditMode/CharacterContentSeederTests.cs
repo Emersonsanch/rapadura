@@ -39,8 +39,8 @@ namespace Rapadura.Tests
             Assert.AreEqual(3, quest.Objectives.Count);
 
             Assert.AreEqual(QuestObjectiveType.KillEnemyType, quest.Objectives[0].Type);
-            Assert.AreEqual("enemy_cave_dweller", quest.Objectives[0].TargetId);
-            Assert.AreEqual(6, quest.Objectives[0].RequiredAmount);
+            Assert.AreEqual("enemy_forest_spider", quest.Objectives[0].TargetId);
+            Assert.AreEqual(5, quest.Objectives[0].RequiredAmount);
 
             Assert.AreEqual(QuestObjectiveType.CollectItem, quest.Objectives[1].Type);
             Assert.AreEqual(QuestObjectiveType.TalkToNpc, quest.Objectives[2].Type);
@@ -217,7 +217,7 @@ namespace Rapadura.Tests
 
             var objectives = new List<QuestObjective>
             {
-                new QuestObjective { ObjectiveId = "clear_ruin_dwellers", Type = QuestObjectiveType.KillEnemyType, TargetId = "enemy_cave_dweller", RequiredAmount = 6, DescriptionKey = "quest.joaquim_echoes.obj_clear_ruin_dwellers" },
+                new QuestObjective { ObjectiveId = "clear_ruin_dwellers", Type = QuestObjectiveType.KillEnemyType, TargetId = "enemy_forest_spider", RequiredAmount = 5, DescriptionKey = "quest.joaquim_echoes.obj_clear_ruin_dwellers" },
                 new QuestObjective { ObjectiveId = "recover_relic_blade", Type = QuestObjectiveType.CollectItem, TargetId = "item_iron_sword", RequiredAmount = 1, DescriptionKey = "quest.joaquim_echoes.obj_recover_relic_blade" },
                 new QuestObjective { ObjectiveId = "talk_to_survivor", Type = QuestObjectiveType.TalkToNpc, TargetId = "npc_village_survivor", RequiredAmount = 1, DescriptionKey = "quest.joaquim_echoes.obj_talk_to_survivor" }
             };

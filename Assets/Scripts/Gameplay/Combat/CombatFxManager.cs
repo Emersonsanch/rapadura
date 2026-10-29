@@ -142,6 +142,20 @@ namespace Rapadura.Gameplay.Combat
             SpawnFloatingText(position, text, 0.09f, new Color(1f, 0.85f, 0.35f));
         }
 
+        /// <summary>Warning colour of <see cref="SpawnLootWarningText"/> (orange-red, apart from the loot gold).</summary>
+        public static readonly Color LootWarningColor = new Color(1f, 0.42f, 0.25f);
+
+        /// <summary>Same floating text as <see cref="SpawnLootText"/>, in <see cref="LootWarningColor"/>: loot that did not fit ("Mochila cheia").</summary>
+        public static void SpawnLootWarningText(Vector3 position, string text)
+        {
+            if (string.IsNullOrEmpty(text) || !Application.isPlaying)
+            {
+                return;
+            }
+
+            SpawnFloatingText(position, text, 0.1f, LootWarningColor);
+        }
+
         private static void SpawnFloatingText(Vector3 position, string text, float characterSize, Color color)
         {
             var go = new GameObject("DamageNumber_FX");

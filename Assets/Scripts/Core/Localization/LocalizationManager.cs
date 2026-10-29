@@ -225,7 +225,7 @@ namespace Rapadura.Core.Localization
                 // -- Joaquim: quest_joaquim_echoes_of_home ("Ecos da Vila Perdida") --
                 new LocalizationEntry("quest.joaquim_echoes.title", "Echoes of Home", "Ecos da Vila Perdida"),
                 new LocalizationEntry("quest.joaquim_echoes.description", "Dark creatures razed Joaquim's village long ago. The same breed now nests in its ruins — he means to clear them out, recover what he can of what was lost, and find out if anyone survived.", "Criaturas sombrias destruíram a vila de Joaquim há muito tempo. A mesma laia agora se esconde nas ruínas — ele pretende expulsá-las, recuperar o que restou do que foi perdido e descobrir se alguém sobreviveu."),
-                new LocalizationEntry("quest.joaquim_echoes.obj_clear_ruin_dwellers", "Clear the creatures nesting in the village ruins (0/6)", "Expulse as criaturas que se escondem nas ruínas da vila (0/6)"),
+                new LocalizationEntry("quest.joaquim_echoes.obj_clear_ruin_dwellers", "Clear the shadow spiders nesting in the village ruins (0/5)", "Expulse as aranhas sombrias que se aninham nas ruínas da vila (0/5)"),
                 new LocalizationEntry("quest.joaquim_echoes.obj_recover_relic_blade", "Recover the old guardian's blade from the wreckage", "Recupere a lâmina do antigo guardião entre os escombros"),
                 new LocalizationEntry("quest.joaquim_echoes.obj_talk_to_survivor", "Speak with the survivor near the ruins", "Fale com a sobrevivente perto das ruínas"),
 

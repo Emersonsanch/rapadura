@@ -5,7 +5,8 @@ using Rapadura.Core.Localization;
 namespace Rapadura.UI.Encounter
 {
     /// <summary>
-    /// Localization keys (en + pt-BR) for the arena's boss intro banner (<see cref="BossIntroBannerController"/>);
+    /// Localization keys (en + pt-BR) for the arena's boss intro banner (<see cref="BossIntroBannerController"/>) and
+    /// bag-full loot toast (<see cref="BagFullToastController"/>);
     /// the map's "Enfrentar o chefe" caption lives in <c>WorldMapTexts.BossChallenge</c>. Same self-contained pattern as <c>HapticsTexts</c>/<c>TutorialTexts</c>:
     /// merged into the live <see cref="LocalizationManager"/> on first use (keys it already has win),
     /// pt-BR fallback otherwise. Boss names themselves come from <c>ContentText</c> (<c>enemy.&lt;asset&gt;.name</c>).
@@ -21,11 +22,31 @@ namespace Rapadura.UI.Encounter
         /// <summary>Shown when the intro countdown reaches zero.</summary>
         public const string PrepareGo = "ui.encounter.prepare.go";
 
+        /// <summary>Arena toast title when loot did not fit (<see cref="BagFullToastController"/>).</summary>
+        public const string BagFullTitle = "ui.loot.bag_full.title";
+
+        /// <summary>Toast line listing what was lost; {0} = "2 Minério de Ferro, Espada de Ferro".</summary>
+        public const string BagFullLost = "ui.loot.bag_full.lost";
+
+        /// <summary>Toast line when quest items went in over the weight limit.</summary>
+        public const string BagFullKeptQuest = "ui.loot.bag_full.kept_quest";
+
+        /// <summary>Toast hint on how to make room.</summary>
+        public const string BagFullHint = "ui.loot.bag_full.hint";
+
+        /// <summary>Warning text floating over the corpse; {0} = "2 Minério de Ferro".</summary>
+        public const string LootNoRoom = "ui.loot.no_room";
+
         public static readonly List<LocalizationEntry> Entries = new List<LocalizationEntry>
         {
             new LocalizationEntry(BannerTitle, "Region boss", "Chefe da região"),
             new LocalizationEntry(PrepareTitle, "Get ready!", "Prepare-se!"),
             new LocalizationEntry(PrepareGo, "Go!", "Já!"),
+            new LocalizationEntry(BagFullTitle, "Bag full", "Mochila cheia"),
+            new LocalizationEntry(BagFullLost, "Left behind: {0}", "Ficou para trás: {0}"),
+            new LocalizationEntry(BagFullKeptQuest, "Quest items kept over the weight limit", "Itens de missão guardados acima do peso"),
+            new LocalizationEntry(BagFullHint, "Sell, use or craft items in the village to make room", "Venda, use ou fabrique itens na vila para abrir espaço"),
+            new LocalizationEntry(LootNoRoom, "No room: {0}", "Sem espaço: {0}"),
         };
 
         private static Dictionary<string, string> _fallbackByKey;

@@ -21,7 +21,7 @@ MonoBehaviour:
   _type: 0
   _category: 0
   _rarity: 0
-  _weight: 1.5
+  _weight: 0.5
   _value: 2
   _maxStack: 99
   _hasDurability: 0

@@ -129,8 +129,8 @@ namespace Rapadura.Editor
                 {
                     ObjectiveId = "clear_ruin_dwellers",
                     Type = QuestObjectiveType.KillEnemyType,
-                    TargetId = "enemy_cave_dweller",
-                    RequiredAmount = 6,
+                    TargetId = "enemy_forest_spider",
+                    RequiredAmount = 5,
                     DescriptionKey = "quest.joaquim_echoes.obj_clear_ruin_dwellers"
                 },
                 new QuestObjective

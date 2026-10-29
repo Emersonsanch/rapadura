@@ -96,9 +96,9 @@ namespace Rapadura.Editor
             return new List<ItemSeed>
             {
                 // Materials
-                new ItemSeed { id = "item_wood", name = "Madeira", description = "Tora de madeira coletada de árvores. Usada em construção e crafting.", type = ItemType.Material, category = ItemCategory.Wood, weight = 1.5f, value = 2, maxStack = 99 },
-                new ItemSeed { id = "item_stone", name = "Pedra", description = "Pedra bruta coletada de rochas. Usada em construção e crafting.", type = ItemType.Material, category = ItemCategory.Stone, weight = 2f, value = 1, maxStack = 99 },
-                new ItemSeed { id = "item_iron_ore", name = "Minério de Ferro", description = "Minério bruto extraído de veios rochosos. Pode ser fundido em barras.", type = ItemType.Material, category = ItemCategory.Metal, weight = 3f, value = 5, maxStack = 50 },
+                new ItemSeed { id = "item_wood", name = "Madeira", description = "Tora de madeira coletada de árvores. Usada em construção e crafting.", type = ItemType.Material, category = ItemCategory.Wood, weight = 0.5f, value = 2, maxStack = 99 },
+                new ItemSeed { id = "item_stone", name = "Pedra", description = "Pedra bruta coletada de rochas. Usada em construção e crafting.", type = ItemType.Material, category = ItemCategory.Stone, weight = 1f, value = 1, maxStack = 99 },
+                new ItemSeed { id = "item_iron_ore", name = "Minério de Ferro", description = "Minério bruto extraído de veios rochosos. Pode ser fundido em barras.", type = ItemType.Material, category = ItemCategory.Metal, weight = 1f, value = 5, maxStack = 50 },
                 new ItemSeed { id = "item_herb", name = "Erva Medicinal", description = "Planta com propriedades curativas, usada em poções.", type = ItemType.Material, category = ItemCategory.Herb, weight = 0.2f, value = 3, maxStack = 50 },
                 new ItemSeed { id = "item_fiber", name = "Fibra Vegetal", description = "Fibras retiradas de plantas, usadas em cordas e tecidos.", type = ItemType.Material, category = ItemCategory.Fiber, weight = 0.1f, value = 1, maxStack = 99 },
 

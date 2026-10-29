@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
 using Rapadura.Core.Logging;
@@ -89,12 +90,22 @@ namespace Rapadura.Gameplay.Quests
         /// </summary>
         public bool HasRewardTargets => _rewardInventory != null || _rewardStats != null;
 
+        /// <summary>
+        /// Whether a unique enemy (a region boss, keyed by its <c>EnemyDefinition</c> asset name) was already
+        /// defeated. Null = the <see cref="DefeatedEnemyRegistry"/> registered in the ServiceLocator. Used to
+        /// credit a KillEnemyType objective on a boss that died before the quest was taken: a boss is fought
+        /// once (<c>RegionBossProgress</c>), so without this the Guardião da Ruína (Ícaro) and the Senhor da
+        /// Guerra (convergence) could never be counted once their region was cleared.
+        /// </summary>
+        public Func<string, bool> DefeatedUniqueEnemyLookup { get; set; }
+
         public void Initialize()
         {
             EventBus.Subscribe<CombatTargetDiedEvent>(OnCombatTargetDied);
             EventBus.Subscribe<RecipeCraftedEvent>(OnRecipeCrafted);
             EventBus.Subscribe<InventoryChangedEvent>(OnInventoryChanged);
             EventBus.Subscribe<DialogueEndedEvent>(OnDialogueEnded);
+            EventBus.Subscribe<GameLoadedEvent>(OnGameLoaded);
 
             GameLogger.Info(LogCategory, "QuestManager initialized.");
         }
@@ -105,6 +116,7 @@ namespace Rapadura.Gameplay.Quests
             EventBus.Unsubscribe<RecipeCraftedEvent>(OnRecipeCrafted);
             EventBus.Unsubscribe<InventoryChangedEvent>(OnInventoryChanged);
             EventBus.Unsubscribe<DialogueEndedEvent>(OnDialogueEnded);
+            EventBus.Unsubscribe<GameLoadedEvent>(OnGameLoaded);
 
             _definitionsById.Clear();
             _activeQuests.Clear();
@@ -134,6 +146,11 @@ namespace Rapadura.Gameplay.Quests
             }
 
             _definitionsById[definition.QuestId] = definition;
+
+            if (_activeQuests.TryGetValue(definition.QuestId, out QuestProgress progress))
+            {
+                SyncProgressWithDefinition(progress, definition);
+            }
         }
 
         /// <summary>Sets which inventory/stats receive rewards and satisfy CollectItem checks. Call once the player's components exist (Scene bootstrap).</summary>
@@ -215,6 +232,12 @@ namespace Rapadura.Gameplay.Quests
             // player already carries the required item) — evaluate CollectItem immediately so the
             // quest doesn't demand the player drop and re-pick-up the item.
             EvaluateCollectItemObjectives(progress);
+
+            // Same idea for a boss that already fell (it never respawns): count it now.
+            if (IsActive(definition.QuestId))
+            {
+                CreditDefeatedUniqueEnemies(progress);
+            }
 
             return true;
         }
@@ -346,6 +369,161 @@ namespace Rapadura.Gameplay.Quests
         public void ReportLocationReached(string locationId)
         {
             UpdateObjectiveProgress(QuestObjectiveType.ReachLocation, locationId, 1);
+        }
+
+        /// <summary>
+        /// How many more units of <paramref name="itemId"/> the active quests still need while the hero holds
+        /// <paramref name="currentlyHeld"/>: the largest RequiredAmount among unfinished CollectItem objectives on
+        /// that item, minus what is held (CollectItem counts what the bag holds, so one stack serves every quest at
+        /// once). 0 when no active quest wants it. <c>EnemyLootGranter</c> lets this much past the weight limit, so
+        /// a full bag never eats a quest item (Docs/Balance/README.md §9).
+        /// </summary>
+        public int GetOutstandingCollectAmount(string itemId, int currentlyHeld)
+        {
+            if (string.IsNullOrEmpty(itemId))
+            {
+                return 0;
+            }
+
+            int required = 0;
+            foreach (QuestProgress progress in _activeQuests.Values)
+            {
+                foreach (QuestObjective objective in progress.Objectives)
+                {
+                    if (objective.Type == QuestObjectiveType.CollectItem && !objective.IsComplete && objective.TargetId == itemId)
+                    {
+                        required = Math.Max(required, Math.Max(1, objective.RequiredAmount));
+                    }
+                }
+            }
+
+            return Math.Max(0, required - Math.Max(0, currentlyHeld));
+        }
+
+        /// <summary>
+        /// Credits every unfinished KillEnemyType objective of <paramref name="progress"/> whose target is a unique
+        /// enemy already defeated (<see cref="DefeatedUniqueEnemyLookup"/>) and still at 0. Idempotent; a boss counts
+        /// once, which is why boss objectives must ask for 1 kill (<c>QuestReachabilityTests</c>).
+        /// </summary>
+        private void CreditDefeatedUniqueEnemies(QuestProgress progress)
+        {
+            if (progress == null)
+            {
+                return;
+            }
+
+            bool credited = false;
+            foreach (QuestObjective objective in progress.Objectives)
+            {
+                if (objective.Type != QuestObjectiveType.KillEnemyType || objective.IsComplete || objective.CurrentAmount > 0
+                    || !IsUniqueEnemyDefeated(objective.TargetId))
+                {
+                    continue;
+                }
+
+                objective.CurrentAmount = 1;
+                credited = true;
+                EventBus.Publish(new QuestObjectiveUpdatedEvent(
+                    progress.QuestId, objective.ObjectiveId, objective.CurrentAmount, objective.RequiredAmount, objective.IsComplete));
+            }
+
+            if (credited && progress.AllObjectivesComplete)
+            {
+                CompleteQuest(progress.QuestId);
+            }
+        }
+
+        private bool IsUniqueEnemyDefeated(string enemyId)
+        {
+            if (string.IsNullOrEmpty(enemyId))
+            {
+                return false;
+            }
+
+            if (DefeatedUniqueEnemyLookup != null)
+            {
+                return DefeatedUniqueEnemyLookup(enemyId);
+            }
+
+            return ServiceLocator.TryGet(out DefeatedEnemyRegistry registry) && registry != null && registry.IsDefeated(enemyId);
+        }
+
+        /// <summary>
+        /// A save keeps each active quest's objectives as they were when it was taken. When the definition changed
+        /// since (quest_joaquim_echoes_of_home once asked for 6 kills of a boss that is fought once), the saved copy
+        /// would stay unfinishable. Rebuilds the objectives from <paramref name="definition"/>, keeping the progress
+        /// of every objective whose id, type and target are unchanged (clamped to the new amount). No-op when they match.
+        /// </summary>
+        private static void SyncProgressWithDefinition(QuestProgress progress, QuestDefinition definition)
+        {
+            if (progress == null || definition == null || definition.Objectives == null || definition.Objectives.Count == 0)
+            {
+                return;
+            }
+
+            bool same = progress.Objectives != null && progress.Objectives.Count == definition.Objectives.Count;
+            for (int i = 0; same && i < definition.Objectives.Count; i++)
+            {
+                QuestObjective saved = progress.Objectives[i];
+                QuestObjective authored = definition.Objectives[i];
+                same = saved != null && authored != null
+                       && saved.ObjectiveId == authored.ObjectiveId
+                       && saved.Type == authored.Type
+                       && saved.TargetId == authored.TargetId
+                       && saved.RequiredAmount == Math.Max(1, authored.RequiredAmount)
+                       && saved.DescriptionKey == authored.DescriptionKey;
+            }
+
+            if (same)
+            {
+                return;
+            }
+
+            var savedById = new Dictionary<string, QuestObjective>();
+            foreach (QuestObjective saved in progress.Objectives ?? new List<QuestObjective>())
+            {
+                if (saved != null && !string.IsNullOrEmpty(saved.ObjectiveId) && !savedById.ContainsKey(saved.ObjectiveId))
+                {
+                    savedById[saved.ObjectiveId] = saved;
+                }
+            }
+
+            var rebuilt = new List<QuestObjective>();
+            foreach (QuestObjective authored in definition.Objectives)
+            {
+                if (authored == null)
+                {
+                    continue;
+                }
+
+                QuestObjective copy = authored.Clone();
+                if (!string.IsNullOrEmpty(copy.ObjectiveId) && savedById.TryGetValue(copy.ObjectiveId, out QuestObjective saved)
+                    && saved.Type == copy.Type && saved.TargetId == copy.TargetId)
+                {
+                    copy.CurrentAmount = Math.Min(copy.RequiredAmount, Math.Max(0, saved.CurrentAmount));
+                }
+
+                rebuilt.Add(copy);
+            }
+
+            progress.Objectives = rebuilt;
+            GameLogger.Info(LogCategory, $"Quest '{progress.QuestId}': saved objectives updated to the current definition.");
+        }
+
+        private void OnGameLoaded(GameLoadedEvent evt)
+        {
+            foreach (QuestProgress progress in _activeQuests.Values.ToList())
+            {
+                if (_definitionsById.TryGetValue(progress.QuestId, out QuestDefinition definition))
+                {
+                    SyncProgressWithDefinition(progress, definition);
+                }
+
+                if (IsActive(progress.QuestId))
+                {
+                    CreditDefeatedUniqueEnemies(progress);
+                }
+            }
         }
 
         private void EvaluateCollectItemObjectives(QuestProgress progress)
@@ -601,7 +779,13 @@ namespace Rapadura.Gameplay.Quests
                     continue;
                 }
 
-                _activeQuests[progress.QuestId] = CloneProgress(progress);
+                QuestProgress restored = CloneProgress(progress);
+                if (_definitionsById.TryGetValue(restored.QuestId, out QuestDefinition definition))
+                {
+                    SyncProgressWithDefinition(restored, definition);
+                }
+
+                _activeQuests[restored.QuestId] = restored;
             }
 
             foreach (string questId in saveState.CompletedQuestIds)
