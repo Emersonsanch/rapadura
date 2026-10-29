@@ -255,8 +255,8 @@ namespace Rapadura.UI.WorldMap
             _button.style.display = DisplayStyle.None;
         }
 
-        /// <summary>Creates the dialogue box for this scene if it has none (WorldMap.unity ships without one).</summary>
-        private void EnsureDialogueView()
+        /// <summary>Creates the dialogue box for this scene if it has none (WorldMap.unity ships without one). Also used by <see cref="VillageHubButton"/>.</summary>
+        public void EnsureDialogueView()
         {
             if (FindFirstObjectByType<DialogueUIController>(FindObjectsInactive.Include) != null)
             {

@@ -318,6 +318,15 @@ namespace Rapadura.UI.WorldMap
             if (_backpackCloseButton != null) _backpackCloseButton.clicked -= CloseBackpack;
         }
 
+        /// <summary>
+        /// Lets a map add-on (e.g. <see cref="VillageHubButton"/>) join this HUD's screens: one open at a
+        /// time, and Esc / gamepad Start closes it before opening the pause menu.
+        /// </summary>
+        public void RegisterScreen(string id, System.Func<bool> isOpen, System.Action open, System.Action close)
+        {
+            _screens.Register(id, isOpen, open, close);
+        }
+
         private void RegisterScreens()
         {
             _screens.Register(QuestLogScreenId,

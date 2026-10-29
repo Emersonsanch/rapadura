@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <!-- World map copy of the Shop window (VillageHubButton loads it from Resources): instances the very
+         same Assets/UI/Shop/ShopView.uxml Main.unity uses, so there is one layout to maintain. -->
+    <ui:Template name="ShopView" src="/Assets/UI/Shop/ShopView.uxml" />
+    <ui:Instance template="ShopView" name="village-shop-instance" picking-mode="Ignore" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;" />
+</ui:UXML>

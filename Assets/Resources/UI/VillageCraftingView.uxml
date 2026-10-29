@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <!-- World map copy of the Crafting window (VillageHubButton loads it from Resources): instances the very
+         same Assets/UI/Crafting/CraftingView.uxml Main.unity uses, so there is one layout to maintain. -->
+    <ui:Template name="CraftingView" src="/Assets/UI/Crafting/CraftingView.uxml" />
+    <ui:Instance template="CraftingView" name="village-crafting-instance" picking-mode="Ignore" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;" />
+</ui:UXML>
