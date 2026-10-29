@@ -4,6 +4,12 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-10-29 (sessão multiagente — campanha com começo e fim, missões regionais, atordoamento/espinhos/velocidade de ataque)
+- 📖 **Campanha** (`Gameplay/Story`): prólogo no Novo jogo (sítio da Vó Zefa, o Cristal do Sol apagado, painel do primo escolhido), interlúdios após Lobo Alfa / Guardião da Ruína / Senhor da Guerra, epílogo ao vencer o Habitante Ancestral → créditos → mapa (pós-jogo). `StoryProgress` (chave "Story": `campaignComplete` + beats vistos) deduz o próximo beat das regiões limpas, então sobrevive a sair do jogo entre o chefe e o mapa. Conquista `ach_campaign_complete`. 🐛 O `.meta` do `StoryPanelView.uxml/.uss` veio com o guid do próprio asset no importer: a view não importava e o painel se desligava; corrigido no playtest e guardado por `AssetMetaIntegrityTests`. Conferido no Editor: prólogo aparece no mapa depois da seleção (Lavine).
+- 💬 **Missões regionais** no mapa (as NPCs da `Main.unity` são inalcançáveis no loop mapa → encontro → mapa): botão "Conversar com…" no HUD do mapa, 4 NPCs, 8 missões encadeadas (kill de inimigos comuns da região + ouro), falas por primo com a condição `ActiveCharacter` que já existia. 🐛 Recompensa de missão concluída no mapa agora fica na fila e é entregue no próximo encontro.
+- 💾 **Continuar/Carregar**: "Continuar" pega o save mais recente (auto-save + slots 0–2); botão "Carregar" no título; Salvar/Carregar com `FocusNavigator`. Campos de cena `_continueSlot(s)` removidos (valores antigos nas cenas são ignorados).
+- ⚔️ **Combate** (fecha os itens 6, 7 e 8): atordoamento em 3 skills (chefes ×0,5), `AttackSpeed` e `Thorns` com 4 afixos, `_contactDamage` removido (justificativa no CHANGELOG). Nada atordoa o herói ainda (`PlayerBasicAttack`/skills não checam stun — só importa se inimigos ganharem stun).
+
 ### 2026-10-29 (sessão multiagente — log de debug e 2 bugs do fluxo principal)
 - 🛠️ **Log rolante no overlay** (item 10 concluído): `GameLogger.MessageLogged` → `LogRingBuffer` (50 entradas, thread-safe, sem alocar) via `DebugLogHistory` (só Editor/Development Build, com exceções não tratadas); o overlay mostra as 12 mais recentes, F2 liga/desliga, e escondido não faz trabalho.
 - 🐛 **Load no mapa** deixava o `WorldMapController` na região antiga; agora ressincroniza no `GameLoadedEvent` (`SyncWithProgress`).
@@ -76,20 +82,16 @@
 - ✅ **Concluído depois (ver entrada da noite acima)**, estava em andamento no fechamento: correção do bug de atributos + rebalanceamento (`PlayerCombatBalance`, `OutgoingDamage`), localização dos textos fixos em UXML/C# (`UiTexts`, `UiDocumentLocalizer`), voltar ao título com reset de sessão, ligação de cenas rodada 2 (menu principal/seleção na WorldMap, UI de conquistas, NPCs de quest na cena).
 - 📌 **Dependem de decisão do usuário**: ver "Próximos passos" logo abaixo.
 
-### 🔜 Próximos passos (após 2026-10-22, manhã)
+### 🔜 Próximos passos (após 2026-10-29)
 **Código (próximos itens):**
-0. Fechar a sessão do meio-dia: rebuild dos Animators com as ações de mocap, rodar as suítes, playtest de vento/pedras/golpe e commit (ver entrada 2026-10-22 meio-dia).
 1. Decimar as malhas de heróis e inimigos (cerca de 300k vértices hoje), só depois de revisão visual lado a lado.
 2. Deduplicar as malhas rigadas e as limpas sem pedestal (cerca de 18 MB repetidos no build).
 3. Addressables (e LOD/occlusion) quando houver build mobile para medir.
 4. Ultimate com recurso próprio (carga), se esse design for confirmado; hoje a ultimate só exige nível 10.
 5. Terreno/cena real por bioma (hoje a arena é única, só decorada por bioma).
-6. Atordoamento sem uso: `BuffController.ApplyStun` existe, mas nada no jogo o chama (nenhuma skill atordoa).
-7. `StatType` não tem `Thorns` nem `AttackSpeed`: afixos/skills desse tipo não são possíveis hoje.
-8. `EnemyDefinition._contactDamage` é semeado e exportado no CSV, mas não é usado em combate: ligar ou remover.
 9. 5 inimigos ainda são primitivas placeholder (`_visualPrefab` vazio): Enxame de Morcegos, Habitante Ancestral, Guardião da Ruína, Golem de Pedra e Senhor da Guerra. Precisam de modelo (ver decisões).
-10. "Continuar" no título só considera o auto-save e o slot 0 (`GameFlowService.DefaultContinueSlots`); saves manuais nos slots 1 e 2 só carregam de dentro do jogo.
-11. Recompensas de quest concluídas no mapa mundi se perdem: `GameManager.RegisterQuestRewardTargets` sai cedo sem Player na cena e o `QuestManager` fica com o Player destruído da Main.
+12. NPCs de história pessoal e de convergência (Main.unity) não são alcançáveis no loop normal; podem reusar o botão "Conversar" do mapa.
+13. Inimigos de encontro só soltam `item_gold` (as tabelas de loot do `BiomeDefinition` nunca são usadas e a loja está na Main): objetivos de coleta de minério/madeira/fibra (missões pessoais de Maria e Ícaro, várias diárias) não se completam.
 
 **Decisões do usuário (bloqueiam itens abertos):**
 - Instalar o módulo **Android Build Support** no Unity Hub (sem ele não há build Android local nem medição real do tamanho mobile).

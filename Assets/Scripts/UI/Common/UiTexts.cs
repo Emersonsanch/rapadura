@@ -56,6 +56,8 @@ namespace Rapadura.UI.Common
         public const string MenuQuit = "ui.menu.quit";
         public const string MenuContinue = "ui.menu.continue";
         public const string MenuCredits = "ui.menu.credits";
+        /// <summary>Title screen "Carregar": opens the Save/Load screen in Load mode.</summary>
+        public const string MenuLoad = "ui.menu.load";
         /// <summary>"Novo jogo" (the title screen also has "Continuar", so not the core "Iniciar Jogo" of <see cref="MenuStart"/>).</summary>
         public const string MenuNewGame = "ui.menu.new_game";
 
@@ -148,6 +150,7 @@ namespace Rapadura.UI.Common
 
             new LocalizationEntry(MenuContinue, "Continue", "Continuar"),
             new LocalizationEntry(MenuCredits, "Credits", "Créditos"),
+            new LocalizationEntry(MenuLoad, "Load", "Carregar"),
             new LocalizationEntry(MenuNewGame, "New game", "Novo jogo"),
 
             new LocalizationEntry(CraftingTitle, "Crafting", "Criação"),

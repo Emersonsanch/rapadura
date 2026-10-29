@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Rapadura.Core.DI;
 using Rapadura.Core.Localization;
@@ -12,10 +13,14 @@ namespace Rapadura.UI.Menus
     /// <summary>
     /// Drives the Save/Load screen: a simple list of numbered slots, each backed by
     /// <see cref="SaveManager.Save"/>/<see cref="SaveManager.Load"/>/<see cref="SaveManager.SlotExists"/>.
-    /// Reused from both the Pause menu ("Salvar", opened in <see cref="ScreenMode.Save"/>) and a
-    /// future in-game Load flow (<see cref="ScreenMode.Load"/>) — same panel, the mode only changes
-    /// which action each slot's primary button performs (see <see cref="SaveSlotPresenter"/> for the
-    /// pure label/enabled-state rules, unit tested separately from this UIDocument-driven class).
+    /// Reused from the Pause menu ("Salvar", opened in <see cref="ScreenMode.Save"/>), the death
+    /// screen and the title screen's "Carregar" (<see cref="ScreenMode.Load"/>) — same panel, the mode
+    /// only changes which action each slot's primary button performs (see <see cref="SaveSlotPresenter"/>
+    /// for the pure label/enabled-state rules, unit tested separately from this UIDocument-driven class).
+    /// A caller may pass its own load handler to <see cref="Show(ScreenMode, Func{int, bool}, Action)"/>
+    /// (the title screen routes the load through GameFlowService so the flow leaves the title); the
+    /// panel closes itself once that handler reports success. Gamepad/keyboard: <see cref="FocusNavigator"/>
+    /// (D-pad between rows, A acts, B closes).
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class SaveLoadMenuController : MonoBehaviour
@@ -28,7 +33,7 @@ namespace Rapadura.UI.Menus
 
         [Header("Slots")]
         [Tooltip("Number of manual save slots offered (slot indices 0..Count-1; SaveManager.AutoSaveSlot is separate and not listed here).")]
-        [SerializeField] private int _slotCount = 3;
+        [SerializeField] private int _slotCount = SaveManager.ManualSlotCount;
 
         private UIDocument _uiDocument;
         private VisualElement _root;
@@ -41,6 +46,9 @@ namespace Rapadura.UI.Menus
 
         private SaveManager _saveManager;
         private ScreenMode _mode = ScreenMode.Save;
+        private Func<int, bool> _loadHandler;
+        private Action _onClosed;
+        private FocusNavigator _focusNavigator;
 
         private readonly List<SlotRow> _slotRows = new List<SlotRow>();
         private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
@@ -67,11 +75,14 @@ namespace Rapadura.UI.Menus
             RegisterCallbacks();
             _localizer.Attach(_uiDocument.rootVisualElement, OnLanguageChanged);
             BuildSlotRows();
+            _focusNavigator = FocusNavigator.Attach(_root, () => IsOpen, Hide, FirstEnabledPrimaryButton);
             Hide();
         }
 
         private void OnDisable()
         {
+            _focusNavigator?.Detach();
+            _focusNavigator = null;
             _localizer.Detach();
             UnregisterCallbacks();
             GameplayPause.Release(this);
@@ -175,7 +186,18 @@ namespace Rapadura.UI.Menus
             }
             else if (_saveManager.SlotExists(slotIndex))
             {
-                _saveManager.Load(slotIndex);
+                if (_loadHandler != null)
+                {
+                    if (_loadHandler(slotIndex))
+                    {
+                        Hide();
+                        return;
+                    }
+                }
+                else
+                {
+                    _saveManager.Load(slotIndex);
+                }
             }
 
             RefreshSlots();
@@ -192,7 +214,9 @@ namespace Rapadura.UI.Menus
             RefreshSlots();
         }
 
-        public void Show(ScreenMode mode)
+        /// <param name="loadHandler">Load mode only: replaces <see cref="SaveManager.Load"/> for the chosen slot; returning true closes the panel. Null = load directly (in-game behaviour).</param>
+        /// <param name="onClosed">Run once when this opening of the panel closes (e.g. to give focus back to the button that opened it).</param>
+        public void Show(ScreenMode mode, Func<int, bool> loadHandler = null, Action onClosed = null)
         {
             // Same class of bug as ShopUIController/DialogueUIController (fixed earlier this
             // session): OnEnable's ServiceLocator.TryGet(out _saveManager) runs once at scene
@@ -207,6 +231,8 @@ namespace Rapadura.UI.Menus
             }
 
             _mode = mode;
+            _loadHandler = mode == ScreenMode.Load ? loadHandler : null;
+            _onClosed = onClosed;
             _localizer.Refresh();
             UpdateTitle();
 
@@ -219,10 +245,28 @@ namespace Rapadura.UI.Menus
 
             RefreshSlots();
 
-            if (_slotRows.Count > 0)
+            if (_focusNavigator != null)
             {
-                _slotRows[0].PrimaryButton.Focus();
+                _focusNavigator.FocusInitial();
             }
+            else
+            {
+                FirstEnabledPrimaryButton()?.Focus();
+            }
+        }
+
+        /// <summary>First slot whose primary action is available (in Load mode, the first saved slot), else Fechar.</summary>
+        private VisualElement FirstEnabledPrimaryButton()
+        {
+            foreach (SlotRow row in _slotRows)
+            {
+                if (row.PrimaryButton.enabledSelf)
+                {
+                    return row.PrimaryButton;
+                }
+            }
+
+            return _closeButton;
         }
 
         private void UpdateTitle()
@@ -241,12 +285,25 @@ namespace Rapadura.UI.Menus
 
         public void Hide()
         {
+            bool wasOpen = IsOpen;
+
             if (_root != null)
             {
                 _root.style.display = DisplayStyle.None;
             }
 
             GameplayPause.Release(this);
+
+            if (!wasOpen)
+            {
+                return;
+            }
+
+            _focusNavigator?.ReleaseFocus();
+            _loadHandler = null;
+            Action onClosed = _onClosed;
+            _onClosed = null;
+            onClosed?.Invoke();
         }
     }
 }

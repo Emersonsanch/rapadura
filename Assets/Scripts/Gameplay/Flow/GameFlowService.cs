@@ -38,8 +38,14 @@ namespace Rapadura.Gameplay.Flow
     {
         private const string LogCategory = "GameFlow";
 
-        /// <summary>Slots "Continuar" considers — the newest one wins (auto-save, then manual slot 0).</summary>
-        public static readonly int[] DefaultContinueSlots = { SaveManager.AutoSaveSlot, 0 };
+        /// <summary>
+        /// Slots "Continuar" considers — the auto-save plus every manual slot the Save/Load screen
+        /// offers (0..<see cref="SaveManager.ManualSlotCount"/>-1); the most recently saved one wins.
+        /// </summary>
+        public static readonly int[] DefaultContinueSlots = BuildSlotList(includeAutoSave: true);
+
+        /// <summary>The manual slots only (what the title screen's "Carregar" lists).</summary>
+        public static readonly int[] ManualSlots = BuildSlotList(includeAutoSave: false);
 
         private readonly GameFlowMachine _machine = new GameFlowMachine();
         private readonly CharacterSelectionState _selection;
@@ -138,6 +144,9 @@ namespace Rapadura.Gameplay.Flow
             return Apply(() => _machine.CompleteContinue(HasHero));
         }
 
+        /// <summary>Title screen "Carregar": loads exactly <paramref name="slot"/>, then the same transition as <see cref="Continue"/>.</summary>
+        public bool LoadFromTitle(int slot) => Continue(new[] { slot });
+
         public bool CancelCharacterSelect() => Apply(_machine.CancelCharacterSelect);
 
         /// <summary>
@@ -165,9 +174,17 @@ namespace Rapadura.Gameplay.Flow
             return true;
         }
 
-        private int FindContinueSlot(int[] slots)
+        private int FindContinueSlot(int[] slots) => FindNewestSaveSlot(_saveManager, slots);
+
+        /// <summary>
+        /// The most recently saved readable slot among <paramref name="slots"/> (default
+        /// <see cref="DefaultContinueSlots"/>), by each file's <c>lastSavedAtIso8601</c>; a slot whose
+        /// file (and backup) can't be read is skipped. <see cref="GameFlowMachine.NoSlot"/> when none.
+        /// Shared by "Continuar" and the title screen's button states (MainMenuPresenter).
+        /// </summary>
+        public static int FindNewestSaveSlot(SaveManager saveManager, IEnumerable<int> slots = null)
         {
-            if (_saveManager == null)
+            if (saveManager == null)
             {
                 return GameFlowMachine.NoSlot;
             }
@@ -176,12 +193,12 @@ namespace Rapadura.Gameplay.Flow
 
             foreach (int slot in slots ?? DefaultContinueSlots)
             {
-                if (!_saveManager.SlotExists(slot))
+                if (!saveManager.SlotExists(slot))
                 {
                     continue;
                 }
 
-                SaveData data = _saveManager.PeekSlot(slot);
+                SaveData data = saveManager.PeekSlot(slot);
 
                 if (data == null)
                 {
@@ -193,6 +210,23 @@ namespace Rapadura.Gameplay.Flow
             }
 
             return GameFlowMachine.PickNewestSlot(candidates);
+        }
+
+        private static int[] BuildSlotList(bool includeAutoSave)
+        {
+            var slots = new List<int>(SaveManager.ManualSlotCount + 1);
+
+            if (includeAutoSave)
+            {
+                slots.Add(SaveManager.AutoSaveSlot);
+            }
+
+            for (int i = 0; i < SaveManager.ManualSlotCount; i++)
+            {
+                slots.Add(i);
+            }
+
+            return slots.ToArray();
         }
 
         private void OnEncounterStarted(EncounterStartedEvent evt) => Apply(_machine.EncounterStarted);

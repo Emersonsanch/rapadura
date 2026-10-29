@@ -34,7 +34,8 @@ namespace Rapadura.UI.CharacterSelect
     /// <see cref="CharacterSelectionRestoredEvent"/>), or this scene was re-entered after picking —
     /// the screen re-applies that hero to the player and closes itself instead of asking again. The
     /// optional "continue-saved-button" offers exactly that from the most recent save among
-    /// <see cref="_continueSlots"/>.
+    /// <see cref="GameFlowService.DefaultContinueSlots"/> (auto-save + every manual slot; code-defined,
+    /// so a stale <c>_continueSlots</c> value still serialized in a scene is ignored).
     ///
     /// Game flow: the real place to pick a hero is WorldMap.unity, opened by "Novo jogo" on the title
     /// screen (<c>GameFrontEndController</c> / <see cref="GameFlowService"/>); without a player there
@@ -63,10 +64,6 @@ namespace Rapadura.UI.CharacterSelect
         [SerializeField] private CharacterPreviewController _previewController;
         [Tooltip("RenderTexture the preview camera renders into — assigned to the detail-preview Image element on bind.")]
         [SerializeField] private RenderTexture _previewRenderTexture;
-
-        [Header("Continue")]
-        [Tooltip("Save slots checked for the 'Continuar com <herói>' shortcut; the most recently saved one that has a chosen hero wins. -1 is SaveManager.AutoSaveSlot.")]
-        [SerializeField] private int[] _continueSlots = { SaveManager.AutoSaveSlot, 0 };
 
         [Header("Events")]
         public UnityEvent<CharacterId> OnCharacterSelected;
@@ -479,7 +476,7 @@ namespace Rapadura.UI.CharacterSelect
         }
 
         /// <summary>
-        /// Shows "Continuar com &lt;herói&gt;" only when one of <see cref="_continueSlots"/> holds a save with a
+        /// Shows "Continuar com &lt;herói&gt;" only when one of <see cref="GameFlowService.DefaultContinueSlots"/> holds a save with a
         /// chosen hero and the picker was not opened by "Novo jogo".
         /// </summary>
         private void RefreshContinueOption()
@@ -496,9 +493,9 @@ namespace Rapadura.UI.CharacterSelect
             // "Novo jogo" means start over: never offer to load the old save from this screen.
             bool offerContinue = !ServiceLocator.TryGet(out GameFlowService flow) || flow.OffersSavedContinueInSelect;
 
-            if (offerContinue && ServiceLocator.TryGet(out SaveManager saveManager) && _continueSlots != null)
+            if (offerContinue && ServiceLocator.TryGet(out SaveManager saveManager))
             {
-                foreach (int slot in _continueSlots)
+                foreach (int slot in GameFlowService.DefaultContinueSlots)
                 {
                     if (!saveManager.SlotExists(slot)
                         || !TryReadSavedHero(saveManager.PeekSlot(slot), out CharacterId hero, out DateTime savedAt))

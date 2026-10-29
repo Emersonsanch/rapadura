@@ -44,7 +44,13 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 
 - Log rolante no overlay de debug (Editor e Development Build): `GameLogger.MessageLogged` alimenta um buffer circular de 50 entradas (`LogRingBuffer`/`DebugLogHistory`, também com exceções não tratadas); o overlay mostra as 12 mais recentes e F2 liga/desliga só o log.
 
+- Campanha com começo e fim: prólogo dos cinco primos no Novo jogo (com um painel do herói escolhido), interlúdio depois de cada chefe de região e epílogo ao vencer o Habitante Ancestral, seguido dos créditos e da volta ao mapa para o pós-jogo (`Gameplay/Story`, `UI/Story/StoryPanelController`; chave de save "Story"; saves antigos não repetem o que já ficou para trás). Conquista "A Luz Volta para Casa".
+- Missões regionais no mapa mundi: botão "Conversar com…" (com "(!)") abre a personagem da região — Dona Cida (Floresta), Seu Bento (Deserto), Mestre Tonho (Montanha) e Benedita das Lamparinas (Cavernas) — com 8 missões secundárias encadeadas, saudação própria para cada primo, fala de aceite especial, dica antes do chefe e agradecimento quando a região é limpa (`RegionQuestCatalog`, `RegionNpcDialogues`, `RegionQuestTexts`).
+- Atordoamento: Correntes das Trevas (1 s), Terremoto (0,8 s) e Granada Elétrica (0,6 s) atordoam; o inimigo para, não ataca e perde o golpe que preparava; chefes levam metade (`StunRules`); faíscas azuis + "Atordoado!".
+- `StatType.AttackSpeed` (recarga do ataque básico `0,5 s / (1 + bônus)`, sem começar um golpe antes do anterior acertar) e `StatType.Thorns` (devolve até 50% do dano corpo a corpo tomado, sem recursão), com 4 afixos novos: Ágil, do Frenesi, Espinhosa e do Mandacaru (16 → 20). Fórmulas em `Docs/Balance/README.md` §7.
+- Botão "Carregar" no menu principal (abre Salvar/Carregar em modo carregamento; desabilitado sem save manual) e navegação por controle/teclado na tela de Salvar/Carregar.
 ### Alterado
+- "Continuar" carrega o save mais recente entre o auto-save e os slots 0–2 (pela data gravada; ignora slot ausente ou corrompido), em vez de só auto-save/slot 0.
 - `PlayerProceduralAnimator`: com clipes reais de ataque/magia/morte, a camada procedural para de girar os braços e de tombar o corpo (evitando golpe duplo) e mantém só inclinação, olhar, recuo, flash e afundar.
 - `SkillManager` só dispara o trigger por skill (`CastQuake` etc.) se o controller o declarar — antes cada conjuração logava "Parameter does not exist".
 - Rebalanceamento por dados: curva de XP 1.25→1.10, +8 HP por nível, XP por bioma 10/18/28/40, chefes x8, ultimates ~2.5x e skills fracas reforçadas (tabelas em `Docs/Balance/README.md`).
@@ -65,7 +71,11 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 - Objetos de teste da `Main` num root `Sandbox` desligado em encontros; props procedurais começam a 11 m do centro.
 - Dica do tutorial espera o "Prepare-se/Já!"; trocar de herói revoga as skills do anterior.
 
+- Removido `EnemyDefinition._contactDamage` (semeado mas nunca usado): todo ataque de inimigo já é corpo a corpo e telegrafado; dano por encostar dobraria o DPS e puniria o tocar-para-andar.
+
 ### Corrigido
+- Missões concluídas no mapa mundi (sem Player na cena) perdiam a recompensa; agora ela fica na fila (salva) e é entregue no próximo encontro (`QuestManager.DeliverPendingRewards`).
+- `.meta` de UXML/USS escrito à mão com o guid do próprio asset no importer fazia a tela sumir em silêncio; guardado por `AssetMetaIntegrityTests`.
 - Carregar um save pelo menu de pausa no mapa mundi deixava região, token e visuais da sessão anterior (Explorar e o desafio de chefe usavam e salvavam a região errada); o `WorldMapController` agora ressincroniza no `GameLoadedEvent`.
 - Vencer um encontro e morrer nos 1,5 s antes da volta ao mapa fazia a tela de morte concluir como Derrota, perdendo a vitória (e, no chefe, a liberação da próxima região); a vitória decidida pela arena prevalece (`SceneTransitionService.DecideOutcome`).
 - Matar inimigo no fluxo real (mapa → encontro) não dava XP, loot, números de dano nem VFX: o `GameManager` duplicado era destruído junto com os componentes de recompensa (`SingletonBehaviour` agora remove só o componente duplicado).

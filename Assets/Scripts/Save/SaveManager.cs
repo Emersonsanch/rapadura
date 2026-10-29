@@ -34,6 +34,10 @@ namespace Rapadura.Save
         /// automatic saves never collide with player-chosen manual save slots (which are &gt;= 0).</summary>
         public const int AutoSaveSlot = -1;
 
+        /// <summary>Manual slots the game offers (0..ManualSlotCount-1): listed by the Save/Load screen and
+        /// considered, with <see cref="AutoSaveSlot"/>, by the title screen's "Continuar".</summary>
+        public const int ManualSlotCount = 3;
+
         private const string SaveFolderName = "Saves";
         private const string SaveFileExtension = ".json";
         private const string BackupFileExtension = ".bak";

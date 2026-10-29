@@ -6,6 +6,7 @@
             <ui:VisualElement name="main-menu-button-list" class="main-menu-button-list">
                 <ui:Button name="new-game-button" text="Novo jogo" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.new_game" />
                 <ui:Button name="continue-button" text="Continuar" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.continue" />
+                <ui:Button name="load-button" text="Carregar" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.load" />
                 <ui:Button name="settings-button" text="Configurações" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.settings" />
                 <ui:Button name="credits-button" text="Créditos" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.credits" />
                 <ui:Button name="quit-button" text="Sair" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.quit" />

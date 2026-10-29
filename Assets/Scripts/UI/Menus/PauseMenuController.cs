@@ -218,7 +218,11 @@ namespace Rapadura.UI.Menus
 
         private void OnSaveClicked()
         {
-            _saveLoadMenu?.Show(SaveLoadMenuController.ScreenMode.Save);
+            // B/Esc inside the Save/Load screen closes it on its own (FocusNavigator): focus back here.
+            _saveLoadMenu?.Show(SaveLoadMenuController.ScreenMode.Save, onClosed: () =>
+            {
+                if (_isOpen) _saveButton?.Focus();
+            });
         }
 
         /// <summary>

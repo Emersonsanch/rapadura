@@ -1,3 +1,4 @@
+using System;
 using Rapadura.Core.DI;
 using Rapadura.Core.Performance;
 using Rapadura.Save;
@@ -9,7 +10,7 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.Menus
 {
     /// <summary>
-    /// Drives the Main Menu screen (Novo Jogo / Continuar / Configurações / Créditos / Sair), built with
+    /// Drives the Main Menu screen (Novo Jogo / Continuar / Carregar / Configurações / Créditos / Sair), built with
     /// UI Toolkit following the same pattern as <c>SkillTreeController</c>/<c>HudController</c>:
     /// a single <see cref="UIDocument"/>, elements resolved once via <c>Q&lt;T&gt;()</c>, no heavy
     /// business logic here.
@@ -18,9 +19,14 @@ namespace Rapadura.UI.Menus
     /// scene-loading/bootstrap system yet (TODO.md Fase 1: "Main.unity" doesn't exist), so
     /// "Novo Jogo"/"Continuar" only decide *whether* the action is currently valid and raise a
     /// <see cref="UnityEvent"/> a future bootstrap script can hook up (e.g. to call
-    /// SceneManager.LoadScene). "Continuar" is only enabled when a save actually exists, checked via
-    /// <see cref="SaveManager.HasAutoSave"/>/<see cref="SaveManager.SlotExists"/> resolved from the
-    /// <see cref="ServiceLocator"/> (mirrors how GameManager registers/resolves every other manager).
+    /// SceneManager.LoadScene). "Continuar" is only enabled when a readable save exists in the
+    /// auto-save or any manual slot (GameFrontEndController then loads the newest one), and "Carregar"
+    /// opens the shared <see cref="SaveLoadMenuController"/> in Load mode, enabled only when a manual
+    /// slot holds a save — rules in <see cref="MainMenuPresenter"/>; <see cref="SaveManager"/> is
+    /// resolved from the <see cref="ServiceLocator"/> (mirrors how GameManager registers/resolves
+    /// every other manager). Nothing here needs scene wiring: the Save/Load screen is found in the
+    /// scene when <see cref="_saveLoadMenu"/> is empty ("Carregar" is hidden when there is none), and
+    /// the slot list comes from code (<see cref="SaveManager.ManualSlotCount"/>).
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class MainMenuController : MonoBehaviour
@@ -28,20 +34,26 @@ namespace Rapadura.UI.Menus
         [Header("Panels")]
         [SerializeField] private SettingsMenuController _settingsMenu;
         [SerializeField] private CreditsController _creditsMenu;
-
-        [Header("Continue Slot")]
-        [Tooltip("Manual slot checked (in addition to the auto-save slot) to decide if 'Continuar' should be enabled.")]
-        [SerializeField] private int _continueSlot = 0;
+        [Tooltip("Optional: the Save/Load screen 'Carregar' opens. Found in the scene (inactive objects included) when empty.")]
+        [SerializeField] private SaveLoadMenuController _saveLoadMenu;
 
         [Header("Events")]
         public UnityEvent OnNewGameRequested;
         public UnityEvent OnContinueRequested;
         public UnityEvent OnQuitRequested;
 
+        /// <summary>
+        /// "Carregar" picked a slot: load it and leave the title (GameFrontEndController routes it
+        /// through GameFlowService). True when it loaded, which closes the Save/Load screen. Null =
+        /// plain <see cref="SaveManager.Load"/>.
+        /// </summary>
+        public Func<int, bool> LoadSlotHandler { get; set; }
+
         private UIDocument _uiDocument;
         private VisualElement _root;
         private Button _newGameButton;
         private Button _continueButton;
+        private Button _loadButton;
         private Button _settingsButton;
         private Button _creditsButton;
         private Button _quitButton;
@@ -53,6 +65,11 @@ namespace Rapadura.UI.Menus
         private void Awake()
         {
             _uiDocument = GetComponent<UIDocument>();
+
+            if (_saveLoadMenu == null)
+            {
+                _saveLoadMenu = FindFirstObjectByType<SaveLoadMenuController>(FindObjectsInactive.Include);
+            }
         }
 
         private void OnEnable()
@@ -93,6 +110,7 @@ namespace Rapadura.UI.Menus
             _root = rootVisualElement.Q<VisualElement>("main-menu-root");
             _newGameButton = rootVisualElement.Q<Button>("new-game-button");
             _continueButton = rootVisualElement.Q<Button>("continue-button");
+            _loadButton = rootVisualElement.Q<Button>("load-button");
             _settingsButton = rootVisualElement.Q<Button>("settings-button");
             _creditsButton = rootVisualElement.Q<Button>("credits-button");
             _quitButton = rootVisualElement.Q<Button>("quit-button");
@@ -102,6 +120,7 @@ namespace Rapadura.UI.Menus
         {
             if (_newGameButton != null) _newGameButton.clicked += OnNewGameClicked;
             if (_continueButton != null) _continueButton.clicked += OnContinueClicked;
+            if (_loadButton != null) _loadButton.clicked += OnLoadClicked;
             if (_settingsButton != null) _settingsButton.clicked += OnSettingsClicked;
             if (_creditsButton != null) _creditsButton.clicked += OnCreditsClicked;
             if (_creditsMenu != null) _creditsMenu.Closed += OnCreditsClosed;
@@ -112,6 +131,7 @@ namespace Rapadura.UI.Menus
         {
             if (_newGameButton != null) _newGameButton.clicked -= OnNewGameClicked;
             if (_continueButton != null) _continueButton.clicked -= OnContinueClicked;
+            if (_loadButton != null) _loadButton.clicked -= OnLoadClicked;
             if (_settingsButton != null) _settingsButton.clicked -= OnSettingsClicked;
             if (_creditsButton != null) _creditsButton.clicked -= OnCreditsClicked;
             if (_creditsMenu != null) _creditsMenu.Closed -= OnCreditsClosed;
@@ -126,18 +146,24 @@ namespace Rapadura.UI.Menus
 
         private void RefreshContinueAvailability()
         {
-            bool canContinue = HasAnySave();
-            _continueButton?.SetEnabled(canContinue);
+            // OnEnable can run before GameManager.Awake has registered SaveManager.
+            if (_saveManager == null)
+            {
+                ServiceLocator.TryGet(out _saveManager);
+            }
+
+            _continueButton?.SetEnabled(MainMenuPresenter.IsContinueEnabled(_saveManager));
+
+            if (_loadButton != null)
+            {
+                _loadButton.style.display = _saveLoadMenu != null ? DisplayStyle.Flex : DisplayStyle.None;
+                _loadButton.SetEnabled(MainMenuPresenter.IsLoadEnabled(_saveManager, _saveLoadMenu != null));
+            }
         }
 
         private bool HasAnySave()
         {
-            if (_saveManager == null)
-            {
-                return false;
-            }
-
-            return _saveManager.HasAutoSave() || _saveManager.SlotExists(_continueSlot);
+            return MainMenuPresenter.IsContinueEnabled(_saveManager);
         }
 
         private void OnNewGameClicked()
@@ -153,6 +179,46 @@ namespace Rapadura.UI.Menus
             }
 
             OnContinueRequested?.Invoke();
+        }
+
+        private void OnLoadClicked()
+        {
+            if (_saveLoadMenu == null || !MainMenuPresenter.IsLoadEnabled(_saveManager, true))
+            {
+                return;
+            }
+
+            _saveLoadMenu.Show(SaveLoadMenuController.ScreenMode.Load, LoadSlot, OnLoadMenuClosed);
+        }
+
+        private bool LoadSlot(int slot)
+        {
+            if (LoadSlotHandler != null)
+            {
+                return LoadSlotHandler(slot);
+            }
+
+            return _saveManager != null && _saveManager.Load(slot);
+        }
+
+        /// <summary>Back from the Save/Load screen without loading (or a slot was deleted there): re-check the buttons and give focus back.</summary>
+        private void OnLoadMenuClosed()
+        {
+            if (!isActiveAndEnabled)
+            {
+                return; // a load left the title screen
+            }
+
+            RefreshContinueAvailability();
+
+            if (_loadButton != null && _loadButton.enabledSelf)
+            {
+                _loadButton.Focus();
+            }
+            else
+            {
+                FocusFirstElement();
+            }
         }
 
         private void OnSettingsClicked()

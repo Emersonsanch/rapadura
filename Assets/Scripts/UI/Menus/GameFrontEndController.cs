@@ -52,6 +52,7 @@ namespace Rapadura.UI.Menus
             {
                 _mainMenu.OnNewGameRequested.AddListener(OnNewGameRequested);
                 _mainMenu.OnContinueRequested.AddListener(OnContinueRequested);
+                _mainMenu.LoadSlotHandler = OnLoadSlotRequested;
             }
 
             // Every Awake runs before any Start: keep the map from starting (its Start reads
@@ -82,6 +83,7 @@ namespace Rapadura.UI.Menus
             {
                 _mainMenu.OnNewGameRequested.RemoveListener(OnNewGameRequested);
                 _mainMenu.OnContinueRequested.RemoveListener(OnContinueRequested);
+                _mainMenu.LoadSlotHandler = null;
             }
         }
 
@@ -115,6 +117,18 @@ namespace Rapadura.UI.Menus
             {
                 GameLogger.Warning(LogCategory, "Continuar failed; staying on the title screen.");
             }
+        }
+
+        /// <summary>"Carregar" on the title: same flow as "Continuar", for the slot the player picked.</summary>
+        private bool OnLoadSlotRequested(int slot)
+        {
+            if (_flow == null || !_flow.LoadFromTitle(slot))
+            {
+                GameLogger.Warning(LogCategory, $"Carregar slot {slot} failed; staying on the title screen.");
+                return false;
+            }
+
+            return true;
         }
 
         private void OnFlowStateChanged(GameFlowStateChangedEvent evt)
