@@ -36,6 +36,9 @@ namespace Rapadura.Gameplay.World.Map
         public int VictoriesRequired => _victoriesRequired;
         public Vector3 Position => transform.position;
 
+        /// <summary>Authored locked marker (may be null). The world-map dressing hides its renderers and shows its own fog instead.</summary>
+        public GameObject LockedVisual => _lockedVisual;
+
         public void RefreshVisuals(bool isUnlocked, bool isCurrent)
         {
             if (_lockedVisual != null)

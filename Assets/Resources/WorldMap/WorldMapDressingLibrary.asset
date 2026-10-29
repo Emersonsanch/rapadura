@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9619b532d01d4240a2b2b7e9d7ec3861, type: 3}
+  m_Name: WorldMapDressingLibrary
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.World.Map.Dressing.WorldMapDressingLibrary
+  _forestTrees:
+  - {fileID: 3515405860374827497, guid: eab7748eee71ea7438e5e5354adae7d7, type: 3}
+  - {fileID: 6486168130448805322, guid: d20e9722cad67734eabbb604981b4767, type: 3}
+  _mountainTrees:
+  - {fileID: 6690026671515161898, guid: 50966a60c26caca4b8407337d41e1c37, type: 3}
+  _baseMaterial: {fileID: 2100000, guid: 427502f7c151a3441b86524c75cd0748, type: 2}
