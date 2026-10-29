@@ -22,6 +22,7 @@ namespace Rapadura.Tests
     public class FrontEndThemeTests
     {
         private const string ReduceFlashKey = "Accessibility.ReduceFlashEffects";
+        private const string ReduceMotionKey = "Accessibility.ReduceMotion";
 
         // ---------------------------------------------------------------
         // Family
@@ -157,18 +158,24 @@ namespace Rapadura.Tests
         // ---------------------------------------------------------------
 
         [Test]
-        public void ReducedMotion_FollowsReduzirFlashes()
+        public void ReducedMotion_FollowsReduzirMovimento_AndReduzirFlashes()
         {
             bool hadKey = PlayerPrefs.HasKey(ReduceFlashKey);
             int previous = PlayerPrefs.GetInt(ReduceFlashKey, 0);
+            bool hadMotionKey = PlayerPrefs.HasKey(ReduceMotionKey);
+            int previousMotion = PlayerPrefs.GetInt(ReduceMotionKey, 0);
             try
             {
                 Assert.IsFalse(UiMotionPreferences.IsReducedMotion(null));
 
                 var settings = new AccessibilitySettings();
                 settings.Initialize();
+                settings.SetReduceFlashEffects(false);
+                settings.SetReduceMotion(true);
+                Assert.IsTrue(UiMotionPreferences.IsReducedMotion(settings), "Reduzir Movimento");
+                settings.SetReduceMotion(false);
                 settings.SetReduceFlashEffects(true);
-                Assert.IsTrue(UiMotionPreferences.IsReducedMotion(settings));
+                Assert.IsTrue(UiMotionPreferences.IsReducedMotion(settings), "Reduzir Flashes still calms the UI");
                 settings.SetReduceFlashEffects(false);
                 Assert.IsFalse(UiMotionPreferences.IsReducedMotion(settings));
 
@@ -182,6 +189,8 @@ namespace Rapadura.Tests
             {
                 if (hadKey) PlayerPrefs.SetInt(ReduceFlashKey, previous);
                 else PlayerPrefs.DeleteKey(ReduceFlashKey);
+                if (hadMotionKey) PlayerPrefs.SetInt(ReduceMotionKey, previousMotion);
+                else PlayerPrefs.DeleteKey(ReduceMotionKey);
             }
         }
 

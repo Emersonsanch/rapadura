@@ -34,7 +34,7 @@ namespace Rapadura.UI.Story
     ///
     /// Self-bootstrapping like <c>TutorialHintController</c>: one DontDestroyOnLoad host created after
     /// the first scene loads (no scene wiring), borrowing the PanelSettings of another UIDocument in the
-    /// scene. Fonts/contrast follow <see cref="UiAccessibilityApplier"/>; with "Reduzir Flashes" the text
+    /// scene. Fonts/contrast follow <see cref="UiAccessibilityApplier"/>; with "Reduzir Movimento" (or "Reduzir Flashes") the text
     /// swaps instantly instead of fading in. <see cref="AutoPresent"/> lets PlayMode smoke tests keep the
     /// map free of story overlays.
     /// </summary>
@@ -407,7 +407,7 @@ namespace Rapadura.UI.Story
             _bodyLabel.text = StoryTexts.Get(_localization, _sequence.CurrentKey);
 
             ServiceLocator.TryGet(out AccessibilitySettings accessibility);
-            bool noMotion = accessibility != null && accessibility.ReduceFlashEffects;
+            bool noMotion = accessibility != null && accessibility.SuppressUiMotion;
             _bodyLabel.EnableInClassList(NoMotionClass, noMotion);
 
             if (animate && !noMotion)

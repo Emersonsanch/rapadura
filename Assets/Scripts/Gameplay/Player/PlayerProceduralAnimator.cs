@@ -40,8 +40,8 @@ namespace Rapadura.Gameplay.Player
     /// squash-stretch on footfalls, breathing, lunge, cast hop, recoil.</para>
     ///
     /// <para>Both modes: subtle volume-preserving squash &amp; stretch (takeoff crouch → stretch, air
-    /// stretch, landing squash by fall speed; ≤ <see cref="MotionFeelMath.MaxSquash"/>, halved with
-    /// "Reduzir Flashes"), death collapse (fall around the feet + settle bounce + sink, no ragdoll)
+    /// stretch, landing squash by fall speed; ≤ <see cref="MotionFeelMath.MaxSquash"/>; squash, overlap
+    /// and bob halved with "Reduzir Movimento"), death collapse (fall around the feet + settle bounce + sink, no ragdoll)
     /// while <see cref="PlayerStats.IsDead"/>, blending back out on revive. Whole-body rotations pivot
     /// at the player's feet, so models with offset pivots don't swing around.</para>
     /// </summary>
@@ -107,8 +107,8 @@ namespace Rapadura.Gameplay.Player
         [Tooltip("Spring of the whole-body squash: low damping = a little bounce after landings (follow-through).")]
         [SerializeField] private float _squashFrequency = 4f;
         [SerializeField] private float _squashDamping = 0.45f;
-        [Tooltip("Multiplier on squash and overlap with the accessibility option \"Reduzir Flashes\" on.")]
-        [SerializeField, Range(0f, 1f)] private float _reducedMotionScale = 0.5f;
+        [Tooltip("Multiplier on squash, overlap and bob with the accessibility option \"Reduzir Movimento\" on.")]
+        [SerializeField, Range(0f, 1f)] private float _reducedMotionScale = AccessibilitySettings.ReducedMotionScale;
 
         [Header("Death (no ragdoll)")]
         [SerializeField] private float _deathFallDegrees = 80f;
@@ -547,8 +547,8 @@ namespace Rapadura.Gameplay.Player
 
         private bool IsDead => _stats != null && _stats.IsDead;
 
-        /// <summary>1, or the reduced-motion scale while the accessibility "Reduzir Flashes" option is on.</summary>
-        private float MotionScale => _accessibility != null && _accessibility.ReduceFlashEffects ? _reducedMotionScale : 1f;
+        /// <summary>1, or the reduced-motion scale while the accessibility "Reduzir Movimento" option is on.</summary>
+        private float MotionScale => AccessibilitySettings.MotionScaleFor(_accessibility, _reducedMotionScale);
 
         private float SpringFrequency => Mathf.Max(0.2f, _profile.springFrequency);
 
@@ -1138,7 +1138,7 @@ namespace Rapadura.Gameplay.Player
             float moving = Mathf.Clamp01(_currentSpeedFactor * 3f);
 
             // Lowest at full stride spread (double support), highest passing the feet — the physical walk bob.
-            float bob = -Mathf.Abs(_stride) * _profile.bobAmplitude * moving;
+            float bob = -Mathf.Abs(_stride) * _profile.bobAmplitude * moving * MotionScale;
             Vector3 offset = transform.right * (shiftWave * _profile.weightShiftHip * idle)
                              + Vector3.up * (bob + _dip * MotionScale);
             _footIk.BodyOffset = offset * alive;
@@ -1173,7 +1173,7 @@ namespace Rapadura.Gameplay.Player
                 float hop = Mathf.Abs(stepWave);
                 float footfall = 1f - hop; // 1 at contact
                 float bobScale = Mathf.Lerp(0.8f, 1.2f, Mathf.InverseLerp(0.5f, 1.5f, _profile.weight));
-                worldOffset += Vector3.up * (hop * _bobAmplitude * bobScale * (0.3f + _currentSpeedFactor) * Mathf.Clamp01(_currentSpeedFactor * 4f));
+                worldOffset += Vector3.up * (hop * _bobAmplitude * bobScale * (0.3f + _currentSpeedFactor) * Mathf.Clamp01(_currentSpeedFactor * 4f) * MotionScale);
 
                 pitch += (_currentSpeedFactor * _leanDegrees + _leanPitch) * alive + _overlap.x * 0.3f * MotionScale;
                 roll += (_leanRoll + stepWave * _swayDegrees * _currentSpeedFactor) * alive + _overlap.y * 0.3f * MotionScale;

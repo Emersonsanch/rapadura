@@ -81,6 +81,7 @@ namespace Rapadura.UI.Menus
         public const string AccessibilityColorblind = "ui.settings.accessibility.colorblind";
         public const string AccessibilityScreenShake = "ui.settings.accessibility.screen_shake";
         public const string AccessibilityReduceFlash = "ui.settings.accessibility.reduce_flash";
+        public const string AccessibilityReduceMotion = "ui.settings.accessibility.reduce_motion";
 
         /// <summary>Rows shown in the "Controles" tab, in display order.</summary>
         public static readonly IReadOnlyList<RebindRowDefinition> Rows = new[]
@@ -176,6 +177,7 @@ namespace Rapadura.UI.Menus
             new LocalizationEntry(AccessibilityColorblind, "Colorblind mode", "Modo Daltonismo"),
             new LocalizationEntry(AccessibilityScreenShake, "Screen shake", "Tremor de Tela"),
             new LocalizationEntry(AccessibilityReduceFlash, "Reduce flashes", "Reduzir Flashes"),
+            new LocalizationEntry(AccessibilityReduceMotion, "Reduce motion", "Reduzir Movimento"),
             new LocalizationEntry(LanguageNamePrefix + "en", "English", "English"),
             new LocalizationEntry(LanguageNamePrefix + "ptbr", "Português (Brasil)", "Português (Brasil)"),
 

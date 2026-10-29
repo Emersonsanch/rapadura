@@ -7,7 +7,8 @@ namespace Rapadura.Gameplay.Player
     /// principles: anticipation, follow-through/overlap, ease, squash &amp; stretch, secondary
     /// action), kept out of the MonoBehaviours so it is EditMode-testable: damped springs for
     /// overlap, the turn-brake rule, volume-preserving squash, landing/takeoff squash, the attack
-    /// anticipation timeline, idle glances and the foot-IK ground offsets. Companion of
+    /// anticipation timeline, idle glances and the foot-IK ground offsets. Also used by the enemies'
+    /// <c>EnemyProceduralAnimator</c> (springs, squash, glances). Companion of
     /// <see cref="LocomotionMath"/> (which owns the gameplay-side locomotion numbers).
     /// </summary>
     public static class MotionFeelMath
@@ -76,6 +77,39 @@ namespace Rapadura.Gameplay.Player
             position = new Vector2(x, y);
             velocity = new Vector2(vx, vy);
             return position;
+        }
+
+        /// <summary>
+        /// Initial velocity to give a spring resting at its target so its first excursion, integrated by
+        /// <see cref="StepSpring(ref float, ref float, float, float, float, float, float)"/>, peaks at
+        /// <paramref name="peak"/> (same units): a "kick" whose size reads the same whatever the spring's
+        /// stiffness or damping. The response is linear in the velocity, so a unit kick is integrated with
+        /// the very same sub-steps (≤ 1.5 s, allocation-free) and its peak measured: the semi-implicit
+        /// integrator damps a little more than the analytic spring, and this stays exact for it.
+        /// <paramref name="frequencyHz"/> ≤ 0 → 0 (a snapping spring never moves).
+        /// </summary>
+        public static float SpringVelocityForPeak(float peak, float frequencyHz, float dampingRatio)
+        {
+            if (frequencyHz <= 0f || peak == 0f)
+            {
+                return 0f;
+            }
+
+            float x = 0f, v = 1f, best = 0f;
+            for (int i = 0; i < 180 && v > 0f; i++)
+            {
+                StepSpring(ref x, ref v, 0f, frequencyHz, dampingRatio, MaxSpringStep);
+                best = Mathf.Max(best, x);
+            }
+
+            return peak / Mathf.Max(1e-6f, best);
+        }
+
+        /// <summary>Spring frequency (Hz) of a critically damped spring that covers ~90 % of a step in <paramref name="easeTime"/> s (ease-in/out without overshoot). ≤ 0 → 0 (snap).</summary>
+        public static float EaseFrequency(float easeTime)
+        {
+            // Step response 1 − (1 + ωt)e^(−ωt) reaches 0.9 at ωt ≈ 3.89.
+            return easeTime > 0f ? 3.89f / (2f * Mathf.PI * easeTime) : 0f;
         }
 
         // ------------------------------------------------------------------

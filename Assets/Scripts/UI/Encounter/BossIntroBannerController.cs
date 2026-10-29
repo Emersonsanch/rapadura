@@ -24,7 +24,7 @@ namespace Rapadura.UI.Encounter
     /// the first scene loads (no scene wiring), borrowing the PanelSettings of the HUD (or any other
     /// UIDocument). The view is built in code, has picking-mode Ignore everywhere (never blocks
     /// combat input) and disappears after <see cref="_displaySeconds"/> of game time. With
-    /// "Reduzir Flashes" on it appears/disappears without the fade.
+    /// "Reduzir Movimento" (or "Reduzir Flashes") on it appears/disappears without the fade.
     ///
     /// The same banner plays the encounter intro (<see cref="EncounterIntroEvent"/>) for normal
     /// encounters: "Prepare-se!" over a 2… 1… countdown matching the grace during which the enemies
@@ -189,7 +189,7 @@ namespace Rapadura.UI.Encounter
             UpdateCountdown(localization);
 
             ServiceLocator.TryGet(out AccessibilitySettings accessibility);
-            _noMotion = accessibility != null && accessibility.ReduceFlashEffects;
+            _noMotion = accessibility != null && accessibility.SuppressUiMotion;
             SetFade(_noMotion ? 0f : FadeSeconds * 0.5f);
             BeginShowing();
             _banner.style.opacity = 1f;
@@ -283,7 +283,7 @@ namespace Rapadura.UI.Encounter
             _bossVisibleRemaining = Mathf.Max(0.5f, _displaySeconds);
 
             ServiceLocator.TryGet(out AccessibilitySettings accessibility);
-            bool noMotion = accessibility != null && accessibility.ReduceFlashEffects;
+            bool noMotion = accessibility != null && accessibility.SuppressUiMotion;
             _noMotion = noMotion;
             SetFade(noMotion ? 0f : FadeSeconds);
 

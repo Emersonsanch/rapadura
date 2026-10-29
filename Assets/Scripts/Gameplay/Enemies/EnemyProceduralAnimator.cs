@@ -1,6 +1,9 @@
 using System;
+using Rapadura.Core.Accessibility;
+using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Gameplay.Combat;
+using Rapadura.Gameplay.Player;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Enemies
@@ -9,24 +12,35 @@ namespace Rapadura.Gameplay.Enemies
     /// Rig-free animation for enemy visuals. None of the enemy models has a skeleton (Wolf/Spider/Scorpion
     /// are static Meshy FBX, the rest are primitives — Meshy's rigging API only supports bipeds), so the
     /// whole body is posed procedurally on the visual root (the "EnemyVisual" child, never the collider
-    /// root) as local offsets/rotations/squash on top of its rest pose:
+    /// root) as local offsets/rotations/squash on top of its rest pose. The feel comes from the archetype's
+    /// <see cref="EnemyMotionProfile"/> scaled for the real body (<see cref="EnemyMotionProfile.ScaledForBody"/>:
+    /// bigger or boss = heavier, slower springs and eases):
     ///
     ///  * gait per <see cref="EnemyMotionArchetype"/> driven by the root's measured planar speed
-    ///    (displacement / dt, so slows, roots and collisions are honoured): quadruped trot → gallop with
-    ///    pitch rock and stretch/squash; arthropod low high-frequency skitter with yaw wiggle; flyer hover
-    ///    bob + flutter + banking; heavy stomping steps (publishes <see cref="EnemyFootstepEvent"/> per footfall);
-    ///  * behaviour poses: idle breathing/sniff, alert hop on aggro, telegraphed attack
-    ///    (windup → lunge peaking at the damage moment → recover, timed by <see cref="EnemyController"/>'s
-    ///    attack counters), hit recoil away from the attacker + squash (<see cref="DamageAppliedEvent"/>),
-    ///    death topple during the first <see cref="EnemyMotionMath.ToppleDuration"/> s of
-    ///    <see cref="EnemyDeathVfx"/>'s sink (that moves the root, this only the visual — they compose),
-    ///    spawn pop-in rising from the ground.
+    ///    (displacement / dt, so slows, roots and collisions are honoured), eased in/out by a critically
+    ///    damped spring: quadruped trot → gallop with pitch rock and stretch/squash; arthropod low
+    ///    high-frequency skitter with yaw wiggle; flyer hover bob + flutter + banking; heavy stomping steps
+    ///    (publishes <see cref="EnemyFootstepEvent"/> per footfall);
+    ///  * inertia: lean and surge springs follow acceleration and turns (lean into starts, lean back to
+    ///    brake, rear back and crouch braking into sharp turns, overshoot forward after a stop);
+    ///  * behaviour poses: idle breathing + personality (wolf sniffs and looks around, arthropods twitch,
+    ///    separate leg objects flick, bats drift and tilt, heavies heave), alert hop on aggro, telegraphed
+    ///    attack timed by <see cref="EnemyController"/>'s counters (anticipation crouch with squash → stretched
+    ///    lunge peaking exactly at the damage moment → follow-through → recovery; the gameplay windup is
+    ///    only read, never changed), hit spring kick away from the attacker (<see cref="DamageAppliedEvent"/>),
+    ///    death topple + impact bounce during the first moments of <see cref="EnemyDeathVfx"/>'s sink (that
+    ///    moves the root, this only the visual — they compose), spawn emerge with overshoot.
     ///
+    /// Squash is volume-preserving and capped at <see cref="MotionFeelMath.MaxSquash"/>. With the
+    /// accessibility option "Reduzir Movimento" squash, overlap (spring overshoot), bob, bounce and
+    /// overshoot are scaled by <see cref="MotionScale"/>; the attack telegraph and the topple stay readable.
     /// One LateUpdate per enemy, scaled time (frozen while paused), no per-frame allocations. The pure
     /// math lives in <see cref="EnemyMotionMath"/> (EditMode-tested).
     /// </summary>
     public class EnemyProceduralAnimator : MonoBehaviour
     {
+        private const int MaxLegs = 8;
+
         [SerializeField] private Transform _visualRoot;
 
         [Tooltip("Global multiplier on every procedural pose (gait, idle, attack, recoil). 0 = rest pose only (topple/spawn still play).")]
@@ -39,12 +53,17 @@ namespace Rapadura.Gameplay.Enemies
         [Tooltip("Displacements faster than this (m/s) are teleports (spawn, pool reuse) and ignored.")]
         [SerializeField] private float _maxPlausibleSpeed = 25f;
 
+        [Tooltip("Multiplier on squash, overlap, bob, bounces and overshoot with the accessibility option \"Reduzir Movimento\" on.")]
+        [SerializeField, Range(0f, 1f)] private float _reducedMotionScale = AccessibilitySettings.ReducedMotionScale;
+
         private const float PhaseWrap = 1000f;
 
         private Transform _root;
         private EnemyController _controller;
         private Health _health;
         private bool _initialized;
+        private AccessibilitySettings _accessibility;
+        private float _accessibilityRetry;
 
         // Rest pose (captured when the visual is assigned).
         private Vector3 _restLocalPosition;
@@ -55,6 +74,9 @@ namespace Rapadura.Gameplay.Enemies
         private Vector3 _bodyExtents = new Vector3(0.5f, 0.5f, 0.5f);
         private float _footHeight = -1f;
         private int _upAxis = 1;
+        private readonly Transform[] _legs = new Transform[MaxLegs];
+        private readonly Quaternion[] _legRest = new Quaternion[MaxLegs];
+        private int _legCount;
 
         // Measurement.
         private Vector3 _lastRootPosition;
@@ -62,6 +84,14 @@ namespace Rapadura.Gameplay.Enemies
         private float _speed;
         private float _acceleration;
         private float _yawRate;
+
+        // Eased gait speed and inertia springs.
+        private float _easedSpeed;
+        private float _easedSpeedVelocity;
+        private Vector2 _lean;
+        private Vector2 _leanVelocity;
+        private float _surge;
+        private float _surgeVelocity;
 
         // Gait.
         private float _phase;
@@ -76,15 +106,21 @@ namespace Rapadura.Gameplay.Enemies
         private int _seenCancel;
         private int _seenAlert;
 
-        // Behaviour timers (negative = inactive).
+        // Behaviour timers (negative = inactive) and reaction springs.
         private EnemyAttackVisualPhase _attackPhase;
         private float _attackTime;
         private float _attackWindup;
         private EnemyPose _cancelPose;
         private float _cancelTime = -1f;
         private float _alertTime = -1f;
-        private float _hitTime = -1f;
-        private float _hitStrength;
+        private Vector2 _hitOffset;
+        private Vector2 _hitOffsetVelocity;
+        private Vector2 _hitTilt;
+        private Vector2 _hitTiltVelocity;
+        private float _squashSpring;
+        private float _squashVelocity;
+        private bool _pendingHit;
+        private float _pendingHitStrength;
         private Vector3 _hitDirection = Vector3.back;
         private bool _dead;
         private float _deathTime;
@@ -95,13 +131,32 @@ namespace Rapadura.Gameplay.Enemies
 
         public Transform VisualRoot => _visualRoot;
 
-        /// <summary>Smoothed measured planar speed (m/s) driving the gait.</summary>
+        /// <summary>Smoothed measured planar speed (m/s) of the root.</summary>
         public float MeasuredSpeed => _speed;
+
+        /// <summary>Gait speed (m/s) after the profile's ease (lags <see cref="MeasuredSpeed"/> on starts and stops; heavier = slower).</summary>
+        public float EasedSpeed => _easedSpeed;
 
         /// <summary>Gait phase in cycles (continuous).</summary>
         public float GaitPhase => _phase;
 
         public EnemyAttackVisualPhase AttackPhase => _attackPhase;
+
+        /// <summary>Separate leg objects found under the visual (named leg/perna/pata), twitched while idle.</summary>
+        public int LegCount => _legCount;
+
+        /// <summary>1, or the reduced-motion scale while the accessibility "Reduzir Movimento" option is on.</summary>
+        public float MotionScale => AccessibilitySettings.MotionScaleFor(_accessibility, _reducedMotionScale);
+
+        /// <summary>The archetype profile scaled for this visual's real size (what the poses use).</summary>
+        public EnemyMotionProfile CurrentProfile
+        {
+            get
+            {
+                EnemyMotionProfile profile = _controller != null ? _controller.Motion : EnemyMotionProfile.Quadruped;
+                return profile.ScaledForBody(SizeScale(profile), _controller != null && _controller.IsBoss);
+            }
+        }
 
         private void Awake()
         {
@@ -113,6 +168,7 @@ namespace Rapadura.Gameplay.Enemies
             EnsureInitialized();
             _onDamageApplied ??= OnDamageApplied;
             EventBus.Subscribe(_onDamageApplied);
+            _accessibilityRetry = 0f;
             BeginLife();
         }
 
@@ -206,6 +262,45 @@ namespace Rapadura.Gameplay.Enemies
                 _bodyExtents = new Vector3(0.5f, 0.5f, 0.5f);
                 _footHeight = _restLocalPosition.y - 0.5f;
             }
+
+            CaptureLegs();
+        }
+
+        /// <summary>Separate leg objects (only if the model has them: today's Meshy enemies are one mesh). Allocates once, here.</summary>
+        private void CaptureLegs()
+        {
+            _legCount = 0;
+            if (_visualRoot == null || _visualRoot == _root)
+            {
+                return;
+            }
+
+            foreach (Transform child in _visualRoot.GetComponentsInChildren<Transform>(true))
+            {
+                if (_legCount >= MaxLegs)
+                {
+                    break;
+                }
+
+                if (child != _visualRoot && IsLegName(child.name))
+                {
+                    _legs[_legCount] = child;
+                    _legRest[_legCount] = child.localRotation;
+                    _legCount++;
+                }
+            }
+        }
+
+        /// <summary>Leg object naming (English/Portuguese): "leg", "perna", "pata".</summary>
+        public static bool IsLegName(string objectName)
+        {
+            if (string.IsNullOrEmpty(objectName))
+            {
+                return false;
+            }
+
+            string s = objectName.ToLowerInvariant();
+            return s.Contains("leg") || s.Contains("perna") || s.Contains("pata");
         }
 
         private void RestoreRestPose()
@@ -217,6 +312,13 @@ namespace Rapadura.Gameplay.Enemies
 
             _visualRoot.SetLocalPositionAndRotation(_restLocalPosition, _restLocalRotation);
             _visualRoot.localScale = _restLocalScale;
+            for (int i = 0; i < _legCount; i++)
+            {
+                if (_legs[i] != null)
+                {
+                    _legs[i].localRotation = _legRest[i];
+                }
+            }
         }
 
         private void ResetMeasurement()
@@ -231,16 +333,28 @@ namespace Rapadura.Gameplay.Enemies
             _speed = 0f;
             _acceleration = 0f;
             _yawRate = 0f;
+            _easedSpeed = 0f;
+            _easedSpeedVelocity = 0f;
+            _lean = Vector2.zero;
+            _leanVelocity = Vector2.zero;
+            _surge = 0f;
+            _surgeVelocity = 0f;
         }
 
-        /// <summary>Fresh spawn / pool reuse: clear every reaction and play the pop-in rise.</summary>
+        /// <summary>Fresh spawn / pool reuse: clear every reaction and play the emerge.</summary>
         private void BeginLife()
         {
             ResetMeasurement();
             _attackPhase = EnemyAttackVisualPhase.None;
             _cancelTime = -1f;
             _alertTime = -1f;
-            _hitTime = -1f;
+            _hitOffset = Vector2.zero;
+            _hitOffsetVelocity = Vector2.zero;
+            _hitTilt = Vector2.zero;
+            _hitTiltVelocity = Vector2.zero;
+            _squashSpring = 0f;
+            _squashVelocity = 0f;
+            _pendingHit = false;
             _dead = false;
             _deathTime = 0f;
             _spawnTime = 0f;
@@ -266,12 +380,17 @@ namespace Rapadura.Gameplay.Enemies
             Vector3 sourcePosition = hasSource ? evt.Source.transform.position : Vector3.zero;
             _hitDirection = EnemyMotionMath.RecoilDirectionLocal(_root.position, _root.rotation, hasSource, sourcePosition);
             float maxHealth = _health != null ? Mathf.Max(1f, _health.MaxHealth) : 100f;
-            _hitStrength = Mathf.Clamp(0.45f + 3f * evt.FinalDamage / maxHealth, 0.45f, 1f);
-            _hitTime = 0f;
+            _pendingHitStrength = Mathf.Max(_pendingHit ? _pendingHitStrength : 0f, Mathf.Clamp(0.45f + 3f * evt.FinalDamage / maxHealth, 0.45f, 1f));
+            _pendingHit = true; // kicked on the next Tick, with the profile scaled for this body
             if (!_dead)
             {
                 _deathPush = _hitDirection;
             }
+        }
+
+        private float SizeScale(in EnemyMotionProfile profile)
+        {
+            return Mathf.Clamp(_bodyExtents.y * 2f / Mathf.Max(0.05f, profile.ReferenceHeight), 0.6f, 1.8f);
         }
 
         /// <summary>
@@ -286,10 +405,13 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
+            ResolveAccessibility(deltaTime);
             SyncWithController();
 
-            EnemyMotionProfile profile = _controller != null ? _controller.Motion : EnemyMotionProfile.Quadruped;
-            float size = Mathf.Clamp(_bodyExtents.y * 2f / Mathf.Max(0.05f, profile.ReferenceHeight), 0.6f, 1.8f);
+            EnemyMotionProfile archetype = _controller != null ? _controller.Motion : EnemyMotionProfile.Quadruped;
+            float size = SizeScale(archetype);
+            EnemyMotionProfile profile = archetype.ScaledForBody(size, _controller != null && _controller.IsBoss);
+            float motion = MotionScale;
 
             Measure(deltaTime);
             _time += deltaTime;
@@ -298,6 +420,7 @@ namespace Rapadura.Gameplay.Enemies
                 _time -= PhaseWrap;
             }
 
+            float previousDeathTime = _deathTime;
             if (_dead)
             {
                 _deathTime += deltaTime;
@@ -306,10 +429,14 @@ namespace Rapadura.Gameplay.Enemies
             float deathK = _dead ? EnemyMotionMath.Topple01(_deathTime) : 0f;
             float alive = 1f - Mathf.Clamp01(deathK);
 
+            // --- Eased gait speed: ease-in on start, ease-out on stop (critically damped, heavier = slower) ---
+            MotionFeelMath.StepSpring(ref _easedSpeed, ref _easedSpeedVelocity, _speed, MotionFeelMath.EaseFrequency(profile.GaitEaseTime), 1f, deltaTime);
+            float speed = Mathf.Max(0f, _easedSpeed);
+
             // --- Gait ---
-            float speedFactor = EnemyMotionMath.SpeedFactor(profile, _speed);
-            float gallop = EnemyMotionMath.GallopBlend(profile, _speed);
-            _phase += EnemyMotionMath.StrideFrequency(profile, _speed, size) * deltaTime * alive;
+            float speedFactor = EnemyMotionMath.SpeedFactor(profile, speed);
+            float gallop = EnemyMotionMath.GallopBlend(profile, speed);
+            _phase += EnemyMotionMath.StrideFrequency(profile, speed, size) * deltaTime * alive;
             if (_phase > PhaseWrap)
             {
                 _phase -= PhaseWrap;
@@ -317,6 +444,9 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             EnemyPose pose = EnemyMotionMath.SampleGait(profile, _phase, speedFactor, gallop);
+            float hover = profile.Archetype == EnemyMotionArchetype.Flyer ? profile.HoverHeight : 0f;
+            pose.Offset.y = hover + (pose.Offset.y - hover) * motion; // bob reduced, hover height kept
+            pose.Squash *= motion;
             pose.Offset *= size;
             pose.Scale(alive);
 
@@ -330,13 +460,24 @@ namespace Rapadura.Gameplay.Enemies
                 }
             }
 
-            // Lean into acceleration / braking and bank into turns.
-            float turnWeight = profile.Archetype == EnemyMotionArchetype.Flyer ? 1f : speedFactor;
-            pose.Euler.x += Mathf.Clamp(_acceleration * 1.2f, -6f, 6f) * alive;
-            pose.Euler.z += Mathf.Clamp(-_yawRate * 0.06f, -profile.BankDegrees, profile.BankDegrees) * turnWeight * alive;
+            // --- Inertia: lean into starts, lean back to brake, bank into turns; springs add the follow-through ---
+            Vector2 leanTarget = EnemyMotionMath.LeanTarget(profile, _acceleration, _yawRate, speedFactor) * alive;
+            MotionFeelMath.StepSpring(ref _lean, ref _leanVelocity, leanTarget, profile.LeanSpringHz, profile.LeanSpringDamping, deltaTime, Vector2.zero);
+            float surgeTarget = EnemyMotionMath.SurgeTarget(profile, _acceleration) * size * alive;
+            MotionFeelMath.StepSpring(ref _surge, ref _surgeVelocity, surgeTarget, profile.LeanSpringHz, profile.LeanSpringDamping, deltaTime);
+            Vector2 lean = leanTarget + (_lean - leanTarget) * motion; // overlap (overshoot) reduced, the lean itself kept
+            pose.Euler.x += lean.x;
+            pose.Euler.z += lean.y;
+            pose.Offset.z += (surgeTarget + (_surge - surgeTarget) * motion);
+
+            float brake = EnemyMotionMath.TurnBrake01(profile, _yawRate, speedFactor) * alive;
+            pose.Squash += 0.03f * brake * motion; // plants and crouches into the pivot
+            pose.Offset.y -= 0.02f * brake * size;
 
             // --- Idle / alert ---
             EnemyPose idle = EnemyMotionMath.SampleIdle(profile, _time, _seed, speedFactor);
+            idle.Offset *= size * motion;
+            idle.Squash *= motion;
             idle.Scale(alive);
             pose.Add(idle);
 
@@ -344,6 +485,7 @@ namespace Rapadura.Gameplay.Enemies
             {
                 EnemyPose alert = EnemyMotionMath.SampleAlert(profile, _alertTime);
                 alert.Offset *= size;
+                alert.Squash *= motion;
                 pose.Add(alert);
                 _alertTime += deltaTime;
                 if (_alertTime >= EnemyMotionMath.AlertDuration)
@@ -356,37 +498,74 @@ namespace Rapadura.Gameplay.Enemies
                 }
             }
 
-            // --- Attack ---
-            pose.Add(TickAttack(profile, deltaTime));
+            // --- Attack (the telegraph itself is gameplay information: only its squash is reduced) ---
+            EnemyPose attack = TickAttack(profile, deltaTime);
+            attack.Squash *= motion;
+            pose.Add(attack);
 
-            // --- Hit recoil ---
-            if (_hitTime >= 0f)
-            {
-                pose.Add(EnemyMotionMath.SampleRecoil(profile, _hitDirection, _hitTime, _hitStrength));
-                _hitTime += deltaTime;
-                if (_hitTime >= profile.RecoilDuration)
-                {
-                    _hitTime = -1f;
-                }
-            }
+            // --- Hit spring kick, squash wobble ---
+            TickReactions(profile, deltaTime, previousDeathTime);
+            pose.Offset += new Vector3(_hitOffset.x, 0f, _hitOffset.y) * motion;
+            pose.Euler.x += _hitTilt.x * motion;
+            pose.Euler.z += _hitTilt.y * motion;
+            pose.Squash += _squashSpring * motion;
 
             pose.Scale(_intensity);
 
-            // --- Spawn rise (not scaled by intensity: it is a placement, not a flourish) ---
+            // --- Spawn emerge (not scaled by intensity: it is a placement, not a flourish) ---
             if (_spawnTime >= 0f)
             {
-                float rise = EnemyMotionMath.SpawnRise01(_spawnTime);
+                float rise = EnemyMotionMath.SpawnRise01(_spawnTime, profile.SpawnOvershoot * motion);
                 float depth = _bodyExtents.y * 1.8f + profile.HoverHeight * size;
                 pose.Offset.y -= (1f - rise) * depth;
-                pose.Squash -= 0.15f * Mathf.Clamp01(1f - rise);
+                // Stretched while pushing out of the ground...
+                pose.Squash -= MotionFeelMath.MaxSquash * Mathf.Sin(Mathf.PI * Mathf.Clamp01(_spawnTime / EnemyMotionMath.SpawnRiseDuration)) * motion;
                 _spawnTime += deltaTime;
                 if (_spawnTime >= EnemyMotionMath.SpawnRiseDuration)
                 {
                     _spawnTime = -1f;
+                    KickSquash(profile, 0.04f); // ...and a squash wobble as the weight settles
                 }
             }
 
-            Apply(pose, profile, deathK);
+            Apply(pose, profile, deathK, size, motion);
+            ApplyLegs(profile, speedFactor, alive, motion);
+        }
+
+        private void TickReactions(in EnemyMotionProfile profile, float deltaTime, float previousDeathTime)
+        {
+            if (_pendingHit)
+            {
+                _pendingHit = false;
+                EnemyHitKick kick = EnemyMotionMath.HitKick(profile, _hitDirection, _pendingHitStrength);
+                _hitOffsetVelocity += kick.OffsetVelocity;
+                _hitTiltVelocity += kick.TiltVelocity;
+                _squashVelocity += kick.SquashVelocity;
+            }
+
+            if (_dead)
+            {
+                // Impact: the body hits the ground at the end of the topple (squash), and again after the first bounce.
+                float impact = EnemyMotionMath.ToppleDuration;
+                float second = impact + EnemyMotionMath.FirstBounceDuration;
+                if (previousDeathTime < impact && _deathTime >= impact)
+                {
+                    KickSquash(profile, MotionFeelMath.MaxSquash);
+                }
+                else if (previousDeathTime < second && _deathTime >= second)
+                {
+                    KickSquash(profile, MotionFeelMath.MaxSquash * EnemyMotionMath.SecondBounceHeight);
+                }
+            }
+
+            MotionFeelMath.StepSpring(ref _hitOffset, ref _hitOffsetVelocity, Vector2.zero, profile.HitSpringHz, profile.HitSpringDamping, deltaTime, Vector2.zero);
+            MotionFeelMath.StepSpring(ref _hitTilt, ref _hitTiltVelocity, Vector2.zero, profile.HitSpringHz, profile.HitSpringDamping, deltaTime, Vector2.zero);
+            MotionFeelMath.StepSpring(ref _squashSpring, ref _squashVelocity, 0f, profile.SquashSpringHz, profile.SquashSpringDamping, deltaTime);
+        }
+
+        private void KickSquash(in EnemyMotionProfile profile, float peak)
+        {
+            _squashVelocity += MotionFeelMath.SpringVelocityForPeak(peak, profile.SquashSpringHz, profile.SquashSpringDamping);
         }
 
         private EnemyPose TickAttack(in EnemyMotionProfile profile, float deltaTime)
@@ -429,7 +608,7 @@ namespace Rapadura.Gameplay.Enemies
                 BeginLife();
             }
 
-            EnemyMotionProfile profile = _controller.Motion;
+            EnemyMotionProfile profile = CurrentProfile;
 
             if (_controller.AlertSequence != _seenAlert)
             {
@@ -440,10 +619,12 @@ namespace Rapadura.Gameplay.Enemies
             if (_controller.AttackSequence != _seenAttack)
             {
                 _seenAttack = _controller.AttackSequence;
+                // A new windup while the last recovery still plays: fade that out instead of popping to the coil.
+                StartCancelBlend(profile);
                 _attackPhase = EnemyAttackVisualPhase.Windup;
                 _attackTime = 0f;
+                // The gameplay windup, read as-is: the lunge peaks exactly when EnemyAttackState deals damage.
                 _attackWindup = Mathf.Max(0.05f, _controller.AttackWindupDuration);
-                _cancelTime = -1f;
             }
 
             if (_controller.StrikeSequence != _seenStrike)
@@ -489,6 +670,22 @@ namespace Rapadura.Gameplay.Enemies
             _attackPhase = EnemyAttackVisualPhase.None;
         }
 
+        private void ResolveAccessibility(float deltaTime)
+        {
+            if (_accessibility != null)
+            {
+                return;
+            }
+
+            // Not registered yet (boot order, tests): look again about once a second, never every frame.
+            _accessibilityRetry -= deltaTime;
+            if (_accessibilityRetry <= 0f)
+            {
+                _accessibilityRetry = 1f;
+                ServiceLocator.TryGet(out _accessibility);
+            }
+        }
+
         private void Measure(float deltaTime)
         {
             Vector3 position = _root.position;
@@ -512,26 +709,52 @@ namespace Rapadura.Gameplay.Enemies
             _yawRate = Mathf.Lerp(_yawRate, rawYawRate, EnemyMotionMath.Damp(8f, deltaTime));
         }
 
-        private void Apply(in EnemyPose pose, in EnemyMotionProfile profile, float deathK)
+        private void Apply(in EnemyPose pose, in EnemyMotionProfile profile, float deathK, float size, float motion)
         {
             Quaternion r = Quaternion.Euler(pose.Euler);
             Vector3 position = _bodyCenter + r * (_restLocalPosition - _bodyCenter) + pose.Offset;
             Quaternion rotation = r * _restLocalRotation;
 
-            float squash = Mathf.Clamp(pose.Squash, -0.3f, 0.3f);
-            // Keep the feet planted while flattening/stretching about the visual's own pivot.
-            position.y -= squash * (_restLocalPosition.y - _footHeight);
+            // Volume-preserving squash (+ = flatten), capped like the heroes'; the feet stay planted.
+            Vector3 squash = MotionFeelMath.SquashScale(-pose.Squash);
+            float stretch = squash.y - 1f;
+            position.y += stretch * (_restLocalPosition.y - _footHeight);
 
             if (_dead && deathK > 0f)
             {
                 ApplyTopple(ref position, ref rotation, profile, deathK);
+                position.y += EnemyMotionMath.ImpactBounce01(_deathTime - EnemyMotionMath.ToppleDuration) * profile.DeathBounce * size * motion;
             }
 
             _visualRoot.SetLocalPositionAndRotation(position, rotation);
 
-            Vector3 scale = _restLocalScale * (1f + 0.5f * squash);
-            scale[_upAxis] = _restLocalScale[_upAxis] * (1f - squash);
+            Vector3 scale = _restLocalScale * squash.x;
+            scale[_upAxis] = _restLocalScale[_upAxis] * squash.y;
             _visualRoot.localScale = scale;
+        }
+
+        /// <summary>Separate legs: flick on their own rhythm while idle, scurry with the gait while moving (arthropods only).</summary>
+        private void ApplyLegs(in EnemyMotionProfile profile, float speedFactor, float alive, float motion)
+        {
+            if (_legCount == 0 || profile.Archetype != EnemyMotionArchetype.Arthropod)
+            {
+                return;
+            }
+
+            float rest = 1f - speedFactor;
+            float k = alive * _intensity * motion;
+            for (int i = 0; i < _legCount; i++)
+            {
+                Transform leg = _legs[i];
+                if (leg == null)
+                {
+                    continue;
+                }
+
+                float twitch = EnemyMotionMath.LegTwitch(_time, i, _seed) * profile.IdleFidgetDegrees * 2f * rest;
+                float scurry = Mathf.Sin((_phase * 2f + i * 0.5f) * Mathf.PI * 2f) * 15f * speedFactor;
+                leg.localRotation = _legRest[i] * Quaternion.AngleAxis((twitch + scurry) * k, Vector3.right);
+            }
         }
 
         private void ApplyTopple(ref Vector3 position, ref Quaternion rotation, in EnemyMotionProfile profile, float k)

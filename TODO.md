@@ -95,7 +95,7 @@
 5. Terreno/cena real por bioma (hoje a arena é única, só decorada por bioma).
 9. 5 inimigos ainda são primitivas placeholder (`_visualPrefab` vazio): Enxame de Morcegos, Habitante Ancestral, Guardião da Ruína, Golem de Pedra e Senhor da Guerra. Precisam de modelo (ver decisões).
 
-14. Peso/aterrissagem nos inimigos (`EnemyProceduralAnimator`) e opção de acessibilidade "Reduzir movimento" separada de "Reduzir Flashes".
+14. Conferir no Play Mode a leitura do ataque de cada arquétipo de inimigo (perfis em `Docs/Animation.md` §7) e ajustar; contração de pernas só aparece com modelos de pernas separadas.
 
 15. Migrar as demais telas (painel da Vila, HUD, Mochila, Loja, Bancada, pausa, diálogo, história) para o `RapaduraTheme.uss`.
 16. `quest_joaquim_echoes_of_home` pede 6 mortes de um chefe único (em correção) e a mochila cheia perde loot em silêncio (em correção).

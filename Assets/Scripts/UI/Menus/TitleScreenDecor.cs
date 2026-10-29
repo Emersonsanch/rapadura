@@ -15,7 +15,7 @@ namespace Rapadura.UI.Menus
     /// <see cref="EnteringClass"/> and removing it a frame later so the USS transitions run;</item>
     /// <item>drifts the clouds slowly across the sky.</item>
     /// </list>
-    /// With "Reduzir Flashes" on (<see cref="UiMotionPreferences"/>) there is no entrance and no drift:
+    /// With "Reduzir Movimento" or "Reduzir Flashes" on (<see cref="UiMotionPreferences"/>) there is no entrance and no drift:
     /// the screen appears in its final state and stays still. The rules are the public statics, so
     /// EditMode tests can check them without a panel.
     /// </summary>

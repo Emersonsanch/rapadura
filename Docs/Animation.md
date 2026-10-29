@@ -112,7 +112,7 @@ do herói no `PlayerVisualSwapper`. Durante o Play Mode, a cópia viva aparece n
 | Peso por herói | perfil acima |
 | Secundário | molas de *overlap* em cabeça, pescoço, peito e braços. Ossos de cabelo, capa, arma etc. são detectados pelo nome se um dia existirem. Piscar só funciona se houver blendshape "blink" |
 | Pés firmes | casamento de passada, pés presos com passo de reposição ao girar e IK no chão |
-| Acessibilidade | com "Reduzir Flashes" ligado, o *squash* e o *overlap* ficam pela metade (`_reducedMotionScale`) |
+| Acessibilidade | com "Reduzir Movimento" ligado (aba Acessibilidade), o *squash*, o *overlap* e o balanço do passo ficam pela metade (`_reducedMotionScale`, padrão `AccessibilitySettings.ReducedMotionScale` = 0,5). "Reduzir Flashes" não mexe mais na animação |
 
 ## 5. Limitações conhecidas
 
@@ -134,3 +134,56 @@ do herói no `PlayerVisualSwapper`. Durante o Play Mode, a cópia viva aparece n
 4. No `PlayerFootIK` (que fica no objeto do Animator do herói) ficam os ajustes do IK: raio de
    reposição (`_lockMaxDrift`), torção máxima (`_lockMaxTwist`) e duração e altura do passo.
 5. Testes: `HeroMotionFeelTests` e `HeroLocomotionTests` (EditMode).
+
+## 7. Inimigos: mesmo peso, sem rig
+
+Os inimigos não têm esqueleto. `EnemyProceduralAnimator` posa o objeto visual inteiro (`EnemyVisual`) e lê
+o perfil do arquétipo (`EnemyMotionProfile`, em `Gameplay/Enemies/EnemyMotion.cs`). O perfil é escalado
+pelo tamanho real do modelo (altura ÷ `ReferenceHeight`) com `ScaledForBody`: inércia = √tamanho (×1,15
+para chefes). Corpo maior tem mais massa (tamanho³, ×1,5 para chefe), molas mais lentas, *ease* e
+recuperação mais longos, empurrão menor e menos *overshoot* ao surgir. **Os campos de jogabilidade nunca
+são escalados** (aceleração, giro e `BaseWindup`), e `EnemyController.Motion` continua entregando os
+valores do arquétipo.
+
+| Campo | Lobo (Quadruped) | Aranha/Escorpião (Arthropod) | Morcego (Flyer) | Pesado/chefe (Heavy) |
+|---|---|---|---|---|
+| `Mass` (referência) | 1 | 0,4 | 0,25 | 4 |
+| `GaitEaseTime` (s) | 0,18 | 0,08 | 0,30 | 0,40 |
+| mola de inclinação (Hz / amortecimento) | 2,6 / 0,45 | 4,5 / 0,6 | 1,6 / 0,35 | 1,3 / 0,6 |
+| inclinação por aceleração (°/(m/s²) / máx.) | 1,2 / 7 | 0,8 / 5 | 2,0 / 14 | 1,0 / 5 |
+| *surge* (m/(m/s²) / máx. m) | 0,01 / 0,06 | 0,005 / 0,03 | 0,02 / 0,10 | 0,015 / 0,08 |
+| freada em curva (°) | 8 | 4 | 0 (inclina na curva) | 5 |
+| antecipação: *squash* / agachar (m) / recuo (m) | 0,05 / −0,05 / 0,15 | 0,04 / −0,03 / 0,10 | 0,035 / +0,30 (sobe) / 0,20 | 0,05 / −0,06 / 0,12 |
+| golpe: *stretch* / avanço (m) / *follow-through* | 0,05 / 0,50 / 15 % | 0,04 / 0,42 / 10 % | 0,05 / 0,60 / 20 % | 0,035 / 0,35 / 8 % |
+| *windup* de jogo (s, inalterado) | 0,42 | 0,40 | 0,36 | 0,65 |
+| impacto: mola (Hz / amort.) / empurrão (m) / inclinação (°) | 3,2 / 0,38 / 0,22 / 14 | 4,5 / 0,42 / 0,20 / 12 | 2,6 / 0,30 / 0,30 / 20 | 2,2 / 0,50 / 0,08 / 6 |
+| mola de *squash* (Hz / amort.) | 4 / 0,35 | 6 / 0,4 | 3,5 / 0,3 | 2,4 / 0,45 |
+| quique da morte (m) / *overshoot* ao surgir | 0,08 / 1,7 | 0,06 / 2,0 | 0,12 / 1,4 | 0,05 / 1,1 |
+| respiração (Hz / *squash*) | 0,45 / 0,02 | 0,6 / 0,012 | 0,3 / 0,015 | 0,25 / 0,03 |
+| olhada (intervalo s / ° / duração s) | 4,5 / 22 / 0,9 | 3 / 10 / 0,25 | 5 / 12 / 0,6 | 7 / 15 / 1,4 |
+| personalidade (`IdleFidgetDegrees`) | fareja (6°) e levanta o focinho ao olhar | tremidas (7°); pernas separadas dão piparotes | deriva lenta e inclina a cabeça (5°) | peito arfando e ombros rolando (1,5°) |
+
+- **Partida, parada e curva:** a velocidade do passo segue a real por uma mola criticamente amortecida
+  (`GaitEaseTime`). Molas de inclinação e *surge* fazem o corpo inclinar para a frente ao arrancar, ficar
+  para trás do colisor, inclinar para trás ao frear e passar um pouco do ponto ao parar. Numa curva fechada
+  em movimento (`TurnBrake01`), o corpo empina para trás e agacha no pivô.
+- **Ataque:** o *windup* vem do `EnemyController` (a mesma duração e a mesma janela de esquiva de antes).
+  Os primeiros 60 % da parte antes do golpe juntam a antecipação (agachar ou subir, recuar, inclinar para trás,
+  *squash*), e o resto treme. O golpe ocupa os últimos `StrikeDuration` (no máximo metade do *windup*), acelera
+  e chega ao pico esticado **exatamente** no momento do dano. Se o aviso do golpe atrasar um frame, o pico
+  fica parado. A recuperação passa do pico (*follow-through*) e volta passando um pouco do repouso.
+- **Impacto:** uma mola recebe um chute para longe do atacante, com o pico calibrado
+  (`MotionFeelMath.SpringVelocityForPeak`), e volta passando um pouco do ponto.
+- **Morte:** o tombo existente; ao bater no chão, *squash* e dois quiques (`ImpactBounce01`). O afundar
+  continua no `EnemyDeathVfx`.
+- **Surgir:** sobe esticado, passa do ponto (`SpawnRise01` com `SpawnOvershoot`) e acomoda com *squash*.
+- **Squash:** preserva o volume e vai até 6 % (`MotionFeelMath.SquashScale`), igual ao dos heróis.
+- **Pernas separadas:** filhos chamados `leg`, `perna` ou `pata` (até 8) tremem no idle e correm com o
+  passo, só nos artrópodes. Os modelos atuais da Meshy são uma malha só, então isso só passa a valer em
+  modelos futuros.
+- **"Reduzir Movimento":** reduz pela metade o *squash*, o *overlap* (o quanto as molas passam do alvo; a
+  inclinação em si fica), o balanço do passo, os quiques e o *overshoot*. O aviso do ataque e o tombo
+  continuam legíveis. A mesma opção corta pela metade o tremor de câmera (`ScaleShakeMagnitude`) e, junto com
+  "Reduzir Flashes", desliga as animações de entrada do título, da história, do chefe e do tutorial
+  (`AccessibilitySettings.SuppressUiMotion` / `UiMotionPreferences`).
+- Testes: `EnemyMotionFeelTests` e `EnemyProceduralMotionTests` (EditMode).

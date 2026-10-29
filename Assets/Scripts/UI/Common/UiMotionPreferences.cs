@@ -5,10 +5,11 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.Common
 {
     /// <summary>
-    /// Reduced-motion rule for UI animation (entrance fades, drifting backdrop, button scale): the
-    /// game has no separate "reduce motion" option, so the accessibility toggle "Reduzir Flashes"
-    /// (<see cref="AccessibilitySettings.ReduceFlashEffects"/>) also calms UI movement, the same way
-    /// <c>PlayerProceduralAnimator</c> and the ambient VFX read it. Screens that use
+    /// Reduced-motion rule for UI animation (entrance fades, drifting backdrop, button scale): on with
+    /// the accessibility toggle "Reduzir Movimento" (<see cref="AccessibilitySettings.ReduceMotion"/>),
+    /// and still with "Reduzir Flashes", which calmed UI movement before the motion option existed
+    /// (<see cref="AccessibilitySettings.SuppressUiMotion"/>, shared with the story, boss and tutorial
+    /// overlays). Screens that use
     /// <c>Common/RapaduraTheme.uss</c> toggle <see cref="ReducedMotionClass"/> on their root, which
     /// makes every themed transition instant.
     /// </summary>
@@ -17,8 +18,8 @@ namespace Rapadura.UI.Common
         /// <summary>USS class (see RapaduraTheme.uss) that zeroes the themed transitions under it.</summary>
         public const string ReducedMotionClass = "rap-reduced-motion";
 
-        /// <summary>True when <paramref name="settings"/> asks for fewer flashes/less motion; null settings = full motion.</summary>
-        public static bool IsReducedMotion(AccessibilitySettings settings) => settings != null && settings.ReduceFlashEffects;
+        /// <summary>True when <paramref name="settings"/> asks for less motion (or fewer flashes); null settings = full motion.</summary>
+        public static bool IsReducedMotion(AccessibilitySettings settings) => settings != null && settings.SuppressUiMotion;
 
         /// <summary><see cref="IsReducedMotion(AccessibilitySettings)"/> for the live settings in the <see cref="ServiceLocator"/>.</summary>
         public static bool IsReducedMotion()

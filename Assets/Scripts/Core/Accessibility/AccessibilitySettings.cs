@@ -7,7 +7,7 @@ namespace Rapadura.Core.Accessibility
 {
     /// <summary>
     /// Top-level manager for accessibility preferences: font scale, high contrast, active
-    /// colorblind palette, screen-shake/flash reduction multipliers. Follows the same pattern as
+    /// colorblind palette, screen-shake/flash/motion reduction multipliers. Follows the same pattern as
     /// <see cref="Rapadura.Core.Localization.LocalizationManager"/> / <see cref="Rapadura.Core.Audio.AudioManager"/>:
     /// a plain C# class implementing <see cref="IManager"/>, meant to be constructed and
     /// registered with the <see cref="Rapadura.Core.DI.ServiceLocator"/> by
@@ -49,6 +49,7 @@ namespace Rapadura.Core.Accessibility
         private const string ColorblindModeKey = "Accessibility.ColorblindMode";
         private const string ScreenShakeIntensityKey = "Accessibility.ScreenShakeIntensity";
         private const string ReduceFlashEffectsKey = "Accessibility.ReduceFlashEffects";
+        private const string ReduceMotionKey = "Accessibility.ReduceMotion";
 
         public const float MinFontScale = 0.75f;
         public const float MaxFontScale = 2f;
@@ -57,6 +58,13 @@ namespace Rapadura.Core.Accessibility
         private const ColorblindMode DefaultColorblindMode = ColorblindMode.None;
         private const float DefaultScreenShakeIntensity = 1f;
         private const bool DefaultReduceFlashEffects = false;
+        private const bool DefaultReduceMotion = false;
+
+        /// <summary>Multiplier on procedural flourishes (squash, overlap, bob, bounces) while <see cref="ReduceMotion"/> is on.</summary>
+        public const float ReducedMotionScale = 0.5f;
+
+        /// <summary>Extra camera-shake multiplier while <see cref="ReduceMotion"/> is on (on top of <see cref="ScreenShakeIntensity"/>).</summary>
+        public const float ReducedMotionShakeScale = 0.5f;
 
         public bool IsInitialized { get; private set; }
 
@@ -68,6 +76,21 @@ namespace Rapadura.Core.Accessibility
         public float ScreenShakeIntensity { get; private set; } = DefaultScreenShakeIntensity;
 
         public bool ReduceFlashEffects { get; private set; } = DefaultReduceFlashEffects;
+
+        /// <summary>
+        /// "Reduzir Movimento": softer procedural animation (heroes and enemies: squash, overlap, bob),
+        /// weaker camera shake and no UI entrance slides. Independent of <see cref="ReduceFlashEffects"/>.
+        /// </summary>
+        public bool ReduceMotion { get; private set; } = DefaultReduceMotion;
+
+        /// <summary>1, or <see cref="ReducedMotionScale"/> while <see cref="ReduceMotion"/> is on.</summary>
+        public float MotionScale => MotionScaleFor(this);
+
+        /// <summary>
+        /// True when UI entrance animations (slides, pops, fades) should be skipped: with "Reduzir
+        /// Movimento", and also with "Reduzir Flashes", which already did so before the motion option existed.
+        /// </summary>
+        public bool SuppressUiMotion => ReduceMotion || ReduceFlashEffects;
 
         /// <summary>Raised whenever any setting changes, so UI/gameplay can react (e.g. re-apply font scale to open panels).</summary>
         public event Action SettingsChanged;
@@ -84,9 +107,10 @@ namespace Rapadura.Core.Accessibility
             ActiveColorblindMode = ParseColorblindMode(PlayerPrefs.GetInt(ColorblindModeKey, (int)DefaultColorblindMode));
             ScreenShakeIntensity = Mathf.Clamp01(PlayerPrefs.GetFloat(ScreenShakeIntensityKey, DefaultScreenShakeIntensity));
             ReduceFlashEffects = PlayerPrefs.GetInt(ReduceFlashEffectsKey, DefaultReduceFlashEffects ? 1 : 0) != 0;
+            ReduceMotion = PlayerPrefs.GetInt(ReduceMotionKey, DefaultReduceMotion ? 1 : 0) != 0;
 
             IsInitialized = true;
-            GameLogger.Info(LogCategory, $"AccessibilitySettings initialized (fontScale={FontScale}, highContrast={HighContrast}, colorblind={ActiveColorblindMode}, shake={ScreenShakeIntensity}, reduceFlash={ReduceFlashEffects}).");
+            GameLogger.Info(LogCategory, $"AccessibilitySettings initialized (fontScale={FontScale}, highContrast={HighContrast}, colorblind={ActiveColorblindMode}, shake={ScreenShakeIntensity}, reduceFlash={ReduceFlashEffects}, reduceMotion={ReduceMotion}).");
         }
 
         public void Shutdown()
@@ -129,11 +153,28 @@ namespace Rapadura.Core.Accessibility
             RaiseChanged();
         }
 
+        public void SetReduceMotion(bool enabled)
+        {
+            ReduceMotion = enabled;
+            PlayerPrefs.SetInt(ReduceMotionKey, enabled ? 1 : 0);
+            RaiseChanged();
+        }
+
         /// <summary>Convenience helper for callers about to invoke PlayerCamera.Shake: returns the
-        /// magnitude already scaled by ScreenShakeIntensity (0 when a caller wants shake fully off).</summary>
+        /// magnitude already scaled by ScreenShakeIntensity (0 when a caller wants shake fully off),
+        /// and by <see cref="ReducedMotionShakeScale"/> while <see cref="ReduceMotion"/> is on.</summary>
         public float ScaleShakeMagnitude(float rawMagnitude)
         {
-            return rawMagnitude * ScreenShakeIntensity;
+            return rawMagnitude * ScreenShakeIntensity * (ReduceMotion ? ReducedMotionShakeScale : 1f);
+        }
+
+        /// <summary>
+        /// Motion multiplier for procedural animators: 1 without settings (tests, boot) or with the option
+        /// off, <paramref name="reducedScale"/> (default <see cref="ReducedMotionScale"/>) with "Reduzir Movimento" on.
+        /// </summary>
+        public static float MotionScaleFor(AccessibilitySettings settings, float reducedScale = ReducedMotionScale)
+        {
+            return settings != null && settings.ReduceMotion ? Mathf.Clamp01(reducedScale) : 1f;
         }
 
         private static ColorblindMode ParseColorblindMode(int rawValue)

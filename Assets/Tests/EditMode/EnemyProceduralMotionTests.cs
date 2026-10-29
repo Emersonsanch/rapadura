@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Enemies.States;
+using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
 using UnityEngine;
 
@@ -280,21 +281,31 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void RecoilPose_ShovesAndTiltsAway_ThenSettles()
+        public void HitKick_ShovesAndTiltsAway_OvershootsBack_ThenSettles()
         {
             EnemyMotionProfile p = EnemyMotionProfile.Quadruped;
-            EnemyPose hitFromFront = EnemyMotionMath.SampleRecoil(p, Vector3.back, 0.05f, 1f);
-            Assert.Less(hitFromFront.Offset.z, 0f);
-            Assert.Less(hitFromFront.Euler.x, 0f, "top tilts back (nose up)");
-            Assert.Greater(hitFromFront.Squash, 0f, "short squash");
+            EnemyHitKick hitFromFront = EnemyMotionMath.HitKick(p, Vector3.back, 1f);
+            Assert.Less(hitFromFront.OffsetVelocity.y, 0f, "shoved back (local -Z)");
+            Assert.Less(hitFromFront.TiltVelocity.x, 0f, "top tilts back (nose up)");
+            Assert.Greater(hitFromFront.SquashVelocity, 0f, "short squash");
 
-            EnemyPose pushedRight = EnemyMotionMath.SampleRecoil(p, Vector3.right, 0.05f, 1f);
-            Assert.Greater(pushedRight.Offset.x, 0f);
-            Assert.Less(pushedRight.Euler.z, 0f, "top tilts toward +X");
+            EnemyHitKick pushedRight = EnemyMotionMath.HitKick(p, Vector3.right, 1f);
+            Assert.Greater(pushedRight.OffsetVelocity.x, 0f);
+            Assert.Less(pushedRight.TiltVelocity.y, 0f, "top tilts toward +X");
 
-            Assert.AreEqual(0f, EnemyMotionMath.RecoilEnvelope(0f, 0.3f), 1e-5f);
-            Assert.AreEqual(1f, EnemyMotionMath.RecoilEnvelope(0.04f, 0.3f), 0.05f);
-            Assert.AreEqual(0f, EnemyMotionMath.RecoilEnvelope(0.3f, 0.3f), 1e-5f);
+            // Integrate the shove spring the way the animator does: peaks at RecoilDistance, swings back past rest, settles.
+            float x = 0f, v = hitFromFront.OffsetVelocity.y, min = 0f, max = 0f;
+            for (int i = 0; i < 120; i++)
+            {
+                MotionFeelMath.StepSpring(ref x, ref v, 0f, p.HitSpringHz, p.HitSpringDamping, 1f / 60f);
+                min = Mathf.Min(min, x);
+                max = Mathf.Max(max, x);
+            }
+
+            Assert.AreEqual(-p.RecoilDistance, min, 0.01f, "first excursion = RecoilDistance away from the attacker");
+            Assert.Greater(max, 0.005f, "overshoots back toward the attacker (spring follow-through)");
+            Assert.AreEqual(0f, x, 0.005f, "settled after 2 s");
+            Assert.AreEqual(Vector2.zero, EnemyMotionMath.HitKick(p, Vector3.back, 0f).OffsetVelocity, "zero strength, no kick");
         }
 
         [Test]

@@ -31,7 +31,7 @@ namespace Rapadura.UI.Tutorial
     /// while a modal screen (death screen, menus, dialogue...) pauses gameplay the bubble is hidden
     /// and its auto-dismiss clock stops, so it comes back when the modal closes. Because it is a regular
     /// active UIDocument, UiAccessibilityApplier scales its fonts / applies high contrast like any
-    /// screen. With "Reduzir Flashes" on, the bubble appears without fade/slide; the highlight is
+    /// screen. With "Reduzir Movimento" (or "Reduzir Flashes") on, the bubble appears without fade/slide; the highlight is
     /// never animated in any mode. The hint queue lives in the manager, so a hint survives the
     /// WorldMap ⇄ Main scene swap.
     /// </summary>
@@ -372,7 +372,7 @@ namespace Rapadura.UI.Tutorial
                 ServiceLocator.TryGet(out _accessibility);
             }
 
-            bool noMotion = _accessibility != null && _accessibility.ReduceFlashEffects;
+            bool noMotion = _accessibility != null && _accessibility.SuppressUiMotion;
             if (_hint != null)
             {
                 _hint.EnableInClassList(NoMotionClass, noMotion);

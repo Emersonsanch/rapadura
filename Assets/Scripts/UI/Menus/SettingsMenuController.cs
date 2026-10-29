@@ -39,7 +39,7 @@ namespace Rapadura.UI.Menus
     ///   (and the gamepad one too unless a gamepad is connected), replaced by a short touch hint;
     ///   the "Joystick virtual" toggle (<see cref="TouchControlsSettingsSection"/>) is appended below.
     /// - Acessibilidade: font scale / high contrast / colorblind mode / screen shake / reduce
-    ///   flashes, written to <see cref="AccessibilitySettings"/>; <see cref="UiAccessibilityApplier"/>
+    ///   flashes / reduce motion, written to <see cref="AccessibilitySettings"/>; <see cref="UiAccessibilityApplier"/>
     ///   applies the visual ones to every UIDocument.
     /// Labels created from code use <see cref="SettingsMenuTexts"/> (LocalizationManager with pt-BR fallback).
     /// </summary>
@@ -155,6 +155,7 @@ namespace Rapadura.UI.Menus
         private DropdownField _colorblindDropdown;
         private Slider _screenShakeSlider;
         private Toggle _reduceFlashToggle;
+        private Toggle _reduceMotionToggle;
         private readonly List<ColorblindMode> _colorblindChoiceModes = new List<ColorblindMode>();
 
         private readonly MenuNavigationStack _tabStack = new MenuNavigationStack();
@@ -267,6 +268,7 @@ namespace Rapadura.UI.Menus
             _colorblindDropdown = rootVisualElement.Q<DropdownField>("colorblind-dropdown");
             _screenShakeSlider = rootVisualElement.Q<Slider>("screen-shake-slider");
             _reduceFlashToggle = rootVisualElement.Q<Toggle>("reduce-flash-toggle");
+            _reduceMotionToggle = rootVisualElement.Q<Toggle>("reduce-motion-toggle");
         }
 
         private void RegisterCallbacks()
@@ -298,6 +300,7 @@ namespace Rapadura.UI.Menus
             if (_colorblindDropdown != null) _colorblindDropdown.RegisterValueChangedCallback(OnColorblindModeChanged);
             if (_screenShakeSlider != null) _screenShakeSlider.RegisterValueChangedCallback(OnScreenShakeChanged);
             if (_reduceFlashToggle != null) _reduceFlashToggle.RegisterValueChangedCallback(OnReduceFlashChanged);
+            if (_reduceMotionToggle != null) _reduceMotionToggle.RegisterValueChangedCallback(OnReduceMotionChanged);
         }
 
         private void UnregisterCallbacks()
@@ -317,6 +320,7 @@ namespace Rapadura.UI.Menus
             if (_colorblindDropdown != null) _colorblindDropdown.UnregisterValueChangedCallback(OnColorblindModeChanged);
             if (_screenShakeSlider != null) _screenShakeSlider.UnregisterValueChangedCallback(OnScreenShakeChanged);
             if (_reduceFlashToggle != null) _reduceFlashToggle.UnregisterValueChangedCallback(OnReduceFlashChanged);
+            if (_reduceMotionToggle != null) _reduceMotionToggle.UnregisterValueChangedCallback(OnReduceMotionChanged);
         }
 
         // ------------------------------------------------------------------
@@ -925,6 +929,7 @@ namespace Rapadura.UI.Menus
             _highContrastToggle?.SetValueWithoutNotify(_accessibility != null && _accessibility.HighContrast);
             _screenShakeSlider?.SetValueWithoutNotify(_accessibility != null ? _accessibility.ScreenShakeIntensity : 1f);
             _reduceFlashToggle?.SetValueWithoutNotify(_accessibility != null && _accessibility.ReduceFlashEffects);
+            _reduceMotionToggle?.SetValueWithoutNotify(_accessibility != null && _accessibility.ReduceMotion);
             _tutorialSection.Refresh();
             _hapticsSection.Refresh();
 
@@ -983,6 +988,11 @@ namespace Rapadura.UI.Menus
         private void OnReduceFlashChanged(ChangeEvent<bool> evt)
         {
             _accessibility?.SetReduceFlashEffects(evt.newValue);
+        }
+
+        private void OnReduceMotionChanged(ChangeEvent<bool> evt)
+        {
+            _accessibility?.SetReduceMotion(evt.newValue);
         }
 
         // ------------------------------------------------------------------
