@@ -1,7 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
     <Style src="/Assets/UI/Death/DeathScreenView.uss" />
-    <ui:VisualElement name="death-screen-root" class="death-screen-root">
-        <ui:VisualElement name="death-screen-panel" class="death-screen-panel">
+    <ui:VisualElement name="death-screen-root" class="death-screen-root rap-theme">
+        <ui:VisualElement name="death-screen-panel" class="death-screen-panel rap-panel">
             <ui:Label name="death-title" text="Você caiu..." class="death-title loc" view-data-key="ui.death.title" />
             <ui:Label name="death-message" text="O sertão não perdoa, mas a jornada continua." class="death-message loc" view-data-key="ui.death.message" />
             <!-- First-death tutorial tip ("Não desista!"), filled and shown by DeathScreenController. -->
@@ -10,8 +11,8 @@
                 <ui:Label name="death-tip-body" text="" class="death-tip-body" />
             </ui:VisualElement>
             <ui:VisualElement name="death-button-list" class="death-button-list">
-                <ui:Button name="death-continue-button" text="Continuar" focusable="true" class="death-button death-button--primary loc" view-data-key="ui.death.continue" />
-                <ui:Button name="death-load-button" text="Carregar jogo" focusable="true" class="death-button loc" view-data-key="ui.death.load" />
+                <ui:Button name="death-continue-button" text="Continuar" focusable="true" class="death-button death-button--primary loc rap-button rap-button--primary" view-data-key="ui.death.continue" />
+                <ui:Button name="death-load-button" text="Carregar jogo" focusable="true" class="death-button loc rap-button" view-data-key="ui.death.load" />
             </ui:VisualElement>
             <ui:Label name="death-countdown" text="" class="death-countdown" />
         </ui:VisualElement>

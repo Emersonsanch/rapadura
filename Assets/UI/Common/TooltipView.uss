@@ -1,13 +1,15 @@
+/* Item / skill tooltip in the Rapadura theme (palette from Common/RapaduraTheme.uss). Opaque so
+   the text never mixes with the slot grid underneath. */
 .tooltip-root {
     position: absolute;
     left: 0;
     top: 0;
-    max-width: 280px;
-    background-color: rgba(12, 14, 20, 0.92);
-    border-radius: 6px;
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.15);
-    padding: 6px 10px;
+    max-width: 300px;
+    background-color: rgb(40, 23, 13);
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: var(--rap-caramel);
+    padding: 8px 12px;
     display: none;
     opacity: 0;
     transition-property: opacity;
@@ -21,36 +23,39 @@
 }
 
 .tooltip-label {
-    font-size: 12px;
-    color: rgb(235, 235, 240);
+    font-size: 13px;
+    color: var(--rap-cream);
     white-space: normal;
 }
 
 .tooltip-title {
-    font-size: 14px;
+    font-size: 15px;
     -unity-font-style: bold;
-    color: rgb(240, 240, 245);
+    color: var(--rap-gold-light);
     white-space: normal;
     margin-bottom: 1px;
 }
 
 .tooltip-subtitle {
-    font-size: 11px;
+    font-size: 12px;
     -unity-font-style: italic;
-    color: rgb(170, 172, 185);
+    color: var(--rap-cream-dim);
     white-space: normal;
     margin-bottom: 4px;
 }
 
 .tooltip-stats {
-    font-size: 12px;
-    color: rgb(140, 210, 255);
+    font-size: 13px;
+    color: rgb(190, 222, 130);
     white-space: normal;
     margin-bottom: 4px;
+    padding-top: 4px;
+    border-top-width: 1px;
+    border-top-color: rgba(244, 196, 88, 0.3);
 }
 
 .tooltip-description {
-    font-size: 11px;
-    color: rgb(205, 205, 212);
+    font-size: 12px;
+    color: var(--rap-cream-dim);
     white-space: normal;
 }

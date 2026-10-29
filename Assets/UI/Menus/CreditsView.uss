@@ -1,3 +1,5 @@
+/* Credits. Palette, panel, heading and the Voltar button come from Common/RapaduraTheme.uss. */
+
 .credits-root {
     position: absolute;
     left: 0;
@@ -6,32 +8,27 @@
     bottom: 0;
     align-items: center;
     justify-content: center;
-    background-color: rgb(6, 7, 10);
+    background-color: var(--rap-brown-night); /* opaque: the title / map is behind */
 }
 
 .credits-panel {
     width: 90%;
     max-width: 560px;
     max-height: 90%;
-    background-color: rgba(18, 20, 27, 0.98);
-    border-radius: 10px;
-    border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.08);
-    padding: 16px;
+    background-color: var(--rap-brown-deep);
+    padding: 18px;
     align-items: stretch;
 }
 
 .credits-title {
-    font-size: 28px;
-    -unity-font-style: bold;
+    font-size: 34px;
     -unity-text-align: middle-center;
-    color: rgb(240, 240, 245);
 }
 
 .credits-version {
     font-size: 13px;
     -unity-text-align: middle-center;
-    color: rgb(150, 152, 165);
+    color: var(--rap-cream-dim);
     margin-bottom: 12px;
 }
 
@@ -53,7 +50,7 @@
 .credits-section-title {
     font-size: 18px;
     -unity-font-style: bold;
-    color: rgb(240, 196, 110);
+    color: var(--rap-gold);
     margin-bottom: 6px;
 }
 
@@ -61,27 +58,13 @@
     font-size: 15px;
     white-space: normal;
     -unity-text-align: middle-center;
-    color: rgb(225, 225, 232);
+    color: var(--rap-cream);
     margin-bottom: 4px;
 }
 
 /* Touch-first: 48px tall target, full width of the panel. */
 .credits-back-button {
     height: 48px;
-    margin-top: 12px;
-    font-size: 16px;
-    background-color: rgba(30, 32, 40, 0.9);
-    border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.1);
-    color: rgb(230, 230, 235);
-}
-
-.credits-back-button:hover {
-    background-color: rgba(50, 54, 66, 0.95);
-    border-color: rgba(255, 255, 255, 0.25);
-}
-
-.credits-back-button:focus {
-    border-color: rgb(90, 170, 255);
-    border-width: 3px;
+    margin: 12px 0 0 0;
+    font-size: 18px;
 }

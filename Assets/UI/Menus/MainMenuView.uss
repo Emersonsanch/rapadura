@@ -39,7 +39,8 @@
 .main-menu-sun-glow {
     position: absolute;
     left: 56%;
-    top: 14%;
+    /* 6% (was 14%): the sun sits above the far hill's slope instead of sinking behind it. */
+    top: 6%;
     width: 520px;
     height: 520px;
     border-radius: 260px;
@@ -94,34 +95,42 @@
     background-color: rgba(250, 196, 150, 0.3);
 }
 
+/* Hills are circles (px size, radius = half the size) stretched into soft ellipses with `scale`:
+   UI Toolkit has no elliptical border-radius, and a percentage-sized box with 50% radii only gets
+   its corners rounded, which read as a flat rectangular block (playtest: the right-hand hill
+   covered the sun). Positions are px from the bottom so the engenho always stands on its hill.
+   Panel space is ~1306x735 at 16:9 and ~1461x657 at 20:9 (1200x800 reference, match 0.5). */
 .main-menu-hill {
     position: absolute;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
 }
 
-/* Hazy hills on the horizon. */
+/* Hazy hill on the right horizon; the sun sets onto its left slope, never behind a block. */
 .main-menu-hill--far {
-    left: 30%;
-    width: 110%;
-    bottom: 26%;
-    height: 34%;
+    right: -320px;
+    bottom: -110px;
+    width: 560px;
+    height: 560px;
+    border-radius: 280px;
+    scale: 2.2 0.7;
     background-color: rgb(140, 78, 72);
 }
 
-/* Brown-sugar hill carrying the engenho. */
+/* Brown-sugar hill carrying the engenho (left). Visual top ~435px above the screen bottom. */
 .main-menu-hill--mid {
-    left: -25%;
-    width: 85%;
-    bottom: 14%;
-    height: 38%;
+    left: -180px;
+    bottom: -40px;
+    width: 500px;
+    height: 500px;
+    border-radius: 250px;
+    scale: 2 0.9;
     background-color: rgb(112, 60, 38);
 }
 
+/* On the mid hill's crest (its surface is ~431px up at the engenho's centre). */
 .main-menu-engenho {
     position: absolute;
-    left: 12%;
-    bottom: 44%;
+    left: 100px;
+    bottom: 424px;
     width: 120px;
     height: 110px;
 }
@@ -154,12 +163,15 @@
     background-color: rgb(58, 28, 20);
 }
 
-/* The canavial (sugar-cane field) in front. */
+/* The canavial (sugar-cane field) in front: a long, gentle rise centred on the screen. */
 .main-menu-hill--near {
-    left: -10%;
-    width: 120%;
-    bottom: -12%;
-    height: 34%;
+    left: 50%;
+    margin-left: -300px;
+    bottom: -260px;
+    width: 600px;
+    height: 600px;
+    border-radius: 300px;
+    scale: 2.8 0.55;
     background-color: rgb(88, 98, 40);
 }
 
@@ -176,8 +188,11 @@
 
 /* ---------------------------------------------------------------- menu column */
 
+/* 500px: the 80px logo ("Rapadura" ~390px wide with its outline) fits inside the plaque with room
+   to spare; at 400px / 96px it spilled ~130px over the border (playtest). */
 .main-menu-panel {
-    width: 400px;
+    width: 500px;
+    max-width: 94%;
     align-items: center;
     padding: 26px 30px 18px 30px;
     border-radius: 24px;
@@ -197,11 +212,15 @@
 .main-menu-title {
     margin: 0;
     padding: 0;
+    font-size: 80px;
+    letter-spacing: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* Caramel bar under the logo, like the paper band around a block of rapadura. */
 .main-menu-logo-ribbon {
-    width: 260px;
+    width: 300px;
     height: 10px;
     margin-top: 2px;
     border-radius: 5px;
@@ -222,6 +241,7 @@
 
 .main-menu-button-list {
     width: 100%;
+    max-width: 380px;
     flex-direction: column;
     transition-property: translate;
     transition-duration: 0.6s;

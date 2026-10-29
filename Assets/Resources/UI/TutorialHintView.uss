@@ -22,10 +22,12 @@
     flex-wrap: wrap;
     align-items: center;
     /* Fully opaque: at 0.95 the map's region labels showed through the bubble. */
-    background-color: rgb(34, 22, 12);
-    border-radius: 12px;
+    background-color: rgb(46, 27, 16);
+    border-radius: 14px;
     border-width: 2px;
-    border-color: rgb(240, 178, 70);
+    border-color: var(--rap-gold);
+    border-bottom-width: 4px;
+    border-bottom-color: var(--rap-caramel);
     display: none;
     opacity: 0;
     translate: 0 -24px;
@@ -47,7 +49,10 @@
 
 .tutorial-hint-header {
     font-size: 12px;
-    color: rgb(240, 178, 70);
+    color: rgb(60, 30, 8);
+    background-color: var(--rap-gold);
+    border-radius: 6px;
+    padding: 1px 8px;
     -unity-font-style: bold;
     margin-right: 8px;
 }
@@ -56,7 +61,7 @@
     flex-grow: 1;
     flex-shrink: 1;
     font-size: 17px;
-    color: rgb(255, 248, 235);
+    color: var(--rap-gold-light);
     -unity-font-style: bold;
     white-space: normal;
 }
@@ -64,33 +69,21 @@
 .tutorial-hint-body {
     width: 100%;
     font-size: 15px;
-    color: rgb(240, 230, 215);
+    color: var(--rap-cream);
     white-space: normal;
     margin-top: 2px;
     margin-bottom: 6px;
 }
 
 /* Touch target stays >= 44px tall even in the compact bubble. */
+/* Look from .rap-button / .rap-button--primary (RapaduraTheme.uss). */
 .tutorial-hint-ok {
     margin-left: auto;
     min-width: 112px;
+    height: auto;
     min-height: 44px;
     font-size: 16px;
-    -unity-font-style: bold;
-    color: rgb(34, 22, 12);
-    background-color: rgb(240, 178, 70);
-    border-radius: 10px;
-    border-width: 0;
     margin: 0;
-}
-
-.tutorial-hint-ok:hover {
-    background-color: rgb(250, 200, 100);
-}
-
-.tutorial-hint-ok:focus {
-    border-width: 3px;
-    border-color: rgb(255, 248, 235);
 }
 
 /* Static outline around the HUD element a hint talks about: never animated/blinking. */
@@ -98,7 +91,7 @@
     position: absolute;
     display: none;
     border-width: 4px;
-    border-color: rgb(240, 178, 70);
+    border-color: var(--rap-gold);
     border-radius: 12px;
-    background-color: rgba(240, 178, 70, 0.12);
+    background-color: rgba(244, 196, 88, 0.12);
 }

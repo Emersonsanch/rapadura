@@ -1,11 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
     <Style src="/Assets/UI/Menus/SettingsMenuView.uss" />
-    <ui:VisualElement name="settings-menu-root" class="settings-menu-root">
-        <ui:VisualElement name="settings-menu-panel" class="settings-menu-panel">
+    <ui:VisualElement name="settings-menu-root" class="settings-menu-root rap-theme">
+        <ui:VisualElement name="settings-menu-panel" class="settings-menu-panel rap-panel">
             <ui:VisualElement name="settings-header" class="settings-header">
-                <ui:Label text="Configurações" class="settings-title loc" view-data-key="ui.settings.title" />
+                <ui:Label text="Configurações" class="settings-title loc rap-heading" view-data-key="ui.settings.title" />
                 <ui:VisualElement class="settings-header-spacer" picking-mode="Ignore" />
-                <ui:Button name="close-button" text="Fechar" focusable="true" class="settings-close-button loc" view-data-key="ui.settings.close" />
+                <ui:Button name="close-button" text="Fechar" focusable="true" class="settings-close-button loc rap-button" view-data-key="ui.settings.close" />
             </ui:VisualElement>
 
             <ui:VisualElement name="settings-tab-bar" class="settings-tab-bar">
@@ -40,9 +41,9 @@
                     <ui:ScrollView name="controls-rows" mode="Vertical" class="settings-rebind-list" />
                     <ui:Label name="controls-status-label" text="" class="settings-rebind-status" />
                     <ui:VisualElement class="settings-rebind-footer">
-                        <ui:Button name="controls-cancel-button" text="Cancelar" focusable="true" class="settings-rebind-footer-button" />
+                        <ui:Button name="controls-cancel-button" text="Cancelar" focusable="true" class="settings-rebind-footer-button rap-button" />
                         <ui:VisualElement class="settings-header-spacer" picking-mode="Ignore" />
-                        <ui:Button name="controls-reset-all-button" text="Restaurar tudo" focusable="true" class="settings-rebind-footer-button" />
+                        <ui:Button name="controls-reset-all-button" text="Restaurar tudo" focusable="true" class="settings-rebind-footer-button rap-button" />
                     </ui:VisualElement>
                 </ui:VisualElement>
 

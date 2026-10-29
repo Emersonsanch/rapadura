@@ -13,22 +13,25 @@
     top: 130px;
     width: 260px;
     padding: 8px 12px;
-    /* UI Toolkit blends in linear space: 0.72 (and 0.9) read washed out over Desert sand / Mountain snow. */
-    background-color: rgba(12, 14, 20, 0.95);
-    border-radius: 8px;
-    border-left-width: 3px;
-    border-left-color: rgb(255, 195, 60);
+    /* UI Toolkit blends in linear space: 0.72 (and 0.9) read washed out over Desert sand / Mountain snow.
+       Rapadura theme (Common/RapaduraTheme.uss): brown-sugar card, caramel frame, gold title. */
+    background-color: rgba(46, 27, 16, 0.96);
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: rgba(150, 96, 48, 0.8);
+    border-left-width: 4px;
+    border-left-color: var(--rap-gold);
     display: none;
 }
 
 .quest-tracker-card--pulse {
-    background-color: rgba(70, 58, 26, 0.92);
+    background-color: rgba(128, 78, 40, 0.96);
 }
 
 .quest-tracker-title {
     font-size: 14px;
     -unity-font-style: bold;
-    color: rgb(255, 220, 120);
+    color: var(--rap-gold-light);
     white-space: normal;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
     margin-bottom: 4px;
@@ -44,7 +47,7 @@
     flex-grow: 1;
     flex-shrink: 1;
     font-size: 12px;
-    color: rgb(225, 225, 230);
+    color: var(--rap-cream);
     white-space: normal;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
 }
@@ -52,17 +55,17 @@
 .quest-tracker-objective-progress {
     font-size: 12px;
     -unity-font-style: bold;
-    color: rgb(150, 200, 255);
+    color: var(--rap-gold-light);
     margin-left: 6px;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
 }
 
 .quest-tracker-objective--complete .quest-tracker-objective-text {
-    color: rgb(140, 140, 150);
+    color: var(--rap-cream-dim);
 }
 
 .quest-tracker-objective--complete .quest-tracker-objective-progress {
-    color: rgb(90, 220, 130);
+    color: rgb(190, 226, 130);
 }
 
 .quest-tracker-toast {
@@ -71,10 +74,11 @@
     left: 0;
     right: 0;
     -unity-text-align: middle-center;
-    font-size: 26px;
+    font-size: 28px;
     -unity-font-style: bold;
-    color: rgb(255, 220, 120);
-    -unity-text-outline-width: 1px;
-    -unity-text-outline-color: rgba(0, 0, 0, 0.8);
+    color: var(--rap-gold-light);
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: rgb(74, 36, 12);
+    text-shadow: 2px 3px 0px rgba(36, 16, 6, 0.8);
     display: none;
 }

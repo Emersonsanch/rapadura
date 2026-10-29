@@ -1,10 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
     <Style src="/Assets/UI/Quests/QuestLogView.uss" />
-    <ui:VisualElement name="quest-log-root" class="quest-log-root">
-        <ui:VisualElement name="quest-log-window" class="quest-log-window">
+    <ui:VisualElement name="quest-log-root" class="quest-log-root rap-theme">
+        <ui:VisualElement name="quest-log-window" class="quest-log-window rap-panel">
             <ui:VisualElement name="quest-log-header" class="quest-log-header">
-                <ui:Label name="quest-log-title" text="Missões" class="quest-log-title" />
-                <ui:Button name="quest-log-close-button" text="Fechar" class="quest-log-close-button" />
+                <ui:Label name="quest-log-title" text="Missões" class="quest-log-title rap-heading" />
+                <ui:Button name="quest-log-close-button" text="Fechar" class="quest-log-close-button rap-button" />
             </ui:VisualElement>
             <ui:VisualElement name="quest-log-tabs" class="quest-log-tabs">
                 <ui:Button name="quest-tab-active" text="Ativas" class="quest-log-tab quest-log-tab--selected" />
@@ -34,7 +35,7 @@
                             <ui:Label name="quest-detail-rewards-header" text="Recompensas" class="quest-detail-section-header" />
                             <ui:Label name="quest-detail-rewards" text="" class="quest-detail-rewards" />
                         </ui:VisualElement>
-                        <ui:Button name="quest-detail-track-button" text="Acompanhar" class="quest-detail-track-button" />
+                        <ui:Button name="quest-detail-track-button" text="Acompanhar" class="quest-detail-track-button rap-button rap-button--primary" />
                     </ui:VisualElement>
                 </ui:ScrollView>
             </ui:VisualElement>

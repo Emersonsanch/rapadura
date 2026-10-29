@@ -1,3 +1,7 @@
+/* Workbench (Criação). Palette, window panel, heading and the Criar / close buttons come from
+   Common/RapaduraTheme.uss (rap-theme on the root); recipe and ingredient rows are created in
+   code by CraftingUIController and themed on their own classes here. */
+
 .crafting-root {
     position: absolute;
     left: 0;
@@ -8,7 +12,7 @@
     align-items: center;
     display: none;
     /* Modal backdrop, matching the quest log / achievements windows. */
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(20, 10, 4, 0.86);
 }
 
 .crafting-window {
@@ -19,10 +23,7 @@
     height: 80%;
     min-height: 380px;
     max-height: 92%;
-    background-color: rgb(12, 14, 20);
-    border-radius: 10px;
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.14);
+    background-color: var(--rap-brown-deep);
     padding: 16px 20px;
 }
 
@@ -33,9 +34,7 @@
 }
 
 .crafting-title {
-    font-size: 20px;
-    -unity-font-style: bold;
-    color: rgb(255, 210, 90);
+    font-size: 26px;
     flex-grow: 1;
 }
 
@@ -43,16 +42,12 @@
     /* 44px: same touch target as the inventory/shop close buttons. */
     width: 44px;
     height: 44px;
+    margin: 0;
     padding: 0;
-    background-color: rgba(255, 255, 255, 0.08);
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.18);
-    border-radius: 6px;
-    color: rgb(235, 235, 240);
 }
 
 .crafting-close-button:hover {
-    background-color: rgba(255, 80, 80, 0.35);
+    background-color: var(--rap-clay-red);
 }
 
 .crafting-panels {
@@ -74,16 +69,18 @@
 }
 
 .crafting-panel-title {
-    font-size: 15px;
+    font-size: 16px;
     -unity-font-style: bold;
-    color: rgb(235, 235, 240);
+    color: var(--rap-gold-light);
     margin-bottom: 6px;
 }
 
 .crafting-scroll {
     flex-grow: 1;
-    background-color: rgba(255, 255, 255, 0.04);
-    border-radius: 6px;
+    background-color: var(--rap-brown-night);
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: rgba(150, 96, 48, 0.6);
 }
 
 .crafting-list {
@@ -92,7 +89,7 @@
 }
 
 .crafting-empty {
-    color: rgb(160, 160, 170);
+    color: var(--rap-cream-dim);
     padding: 8px;
     display: none;
 }
@@ -101,35 +98,42 @@
     margin: 3px 0;
     padding: 10px;
     min-height: 44px;
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: var(--rap-brown);
     border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.18);
-    border-radius: 6px;
-    color: rgb(200, 200, 208);
+    border-color: rgba(226, 158, 70, 0.45);
+    border-radius: 8px;
+    color: var(--rap-cream-dim);
+    font-size: 14px;
     -unity-text-align: middle-left;
 }
 
 .crafting-recipe-button:hover {
-    background-color: rgba(255, 255, 255, 0.16);
+    background-color: var(--rap-brown-light);
+}
+
+.crafting-recipe-button:focus {
+    border-color: var(--rap-focus);
 }
 
 .crafting-recipe-button--craftable {
-    color: rgb(150, 230, 150);
+    color: rgb(196, 230, 140);
+    -unity-font-style: bold;
 }
 
 .crafting-recipe-button--selected {
-    border-color: rgb(255, 210, 90);
-    background-color: rgba(255, 210, 90, 0.14);
+    border-width: 2px;
+    border-color: var(--rap-gold);
+    background-color: rgba(196, 122, 44, 0.5);
 }
 
 .crafting-recipe-name {
-    font-size: 18px;
+    font-size: 20px;
     -unity-font-style: bold;
-    color: rgb(255, 220, 120);
+    color: var(--rap-gold-light);
 }
 
 .crafting-recipe-description {
-    color: rgb(200, 200, 205);
+    color: var(--rap-cream-dim);
     white-space: normal;
     margin-bottom: 10px;
 }
@@ -139,12 +143,12 @@
     justify-content: space-between;
     padding: 6px 8px;
     margin: 2px 0;
-    border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    background-color: rgba(86, 50, 26, 0.6);
 }
 
 .crafting-ingredient-name {
-    color: rgb(235, 235, 240);
+    color: var(--rap-cream);
 }
 
 .crafting-ingredient-count {
@@ -152,7 +156,7 @@
 }
 
 .crafting-ingredient-row--ok .crafting-ingredient-count {
-    color: rgb(130, 220, 130);
+    color: rgb(190, 226, 130);
 }
 
 .crafting-ingredient-row--missing .crafting-ingredient-count {
@@ -161,7 +165,7 @@
 
 .crafting-result {
     margin-top: 10px;
-    color: rgb(235, 235, 240);
+    color: var(--rap-cream);
 }
 
 .crafting-block-reason {
@@ -171,22 +175,8 @@
 
 .crafting-craft-button {
     height: 52px;
-    margin-top: 6px;
-    font-size: 17px;
-    -unity-font-style: bold;
-    background-color: rgba(70, 150, 80, 0.85);
-    border-width: 1px;
-    border-color: rgba(150, 230, 150, 0.5);
-    border-radius: 8px;
-    color: rgb(245, 245, 245);
-}
-
-.crafting-craft-button:hover {
-    background-color: rgba(85, 175, 95, 0.95);
-}
-
-.crafting-craft-button:disabled {
-    opacity: 0.4;
+    margin: 6px 0 0 0;
+    font-size: 19px;
 }
 
 .crafting-feedback {
@@ -196,7 +186,7 @@
 }
 
 .crafting-feedback--success {
-    color: rgb(150, 235, 150);
+    color: rgb(196, 230, 140);
     -unity-font-style: bold;
 }
 

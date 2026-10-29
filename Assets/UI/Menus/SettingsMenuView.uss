@@ -1,3 +1,7 @@
+/* Settings. Palette, panel, heading and the Fechar / footer buttons come from
+   Common/RapaduraTheme.uss (rap-theme on the root); tabs, fields and the rebind rows (created in
+   code by SettingsMenuController) are themed on their own classes here. */
+
 .settings-menu-root {
     position: absolute;
     left: 0;
@@ -7,7 +11,7 @@
     flex-grow: 1;
     align-items: center;
     justify-content: center;
-    background-color: rgba(6, 7, 10, 0.9);
+    background-color: rgba(20, 10, 4, 0.9);
 }
 
 .settings-menu-panel {
@@ -16,11 +20,8 @@
     max-width: 94%;
     max-height: 96%;
     min-height: 380px;
-    background-color: rgb(18, 20, 27);
-    border-radius: 10px;
-    border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.08);
-    padding: 16px;
+    background-color: var(--rap-brown-deep);
+    padding: 16px 18px;
 }
 
 .settings-header {
@@ -30,9 +31,7 @@
 }
 
 .settings-title {
-    font-size: 20px;
-    -unity-font-style: bold;
-    color: rgb(240, 240, 245);
+    font-size: 26px;
 }
 
 .settings-header-spacer {
@@ -40,40 +39,52 @@
 }
 
 .settings-close-button {
-    padding: 4px 14px;
+    height: 44px;
+    margin: 0;
+    padding: 0 16px;
+    font-size: 16px;
 }
 
 .settings-tab-bar {
     flex-direction: row;
     margin-bottom: 12px;
     border-bottom-width: 2px;
-    border-bottom-color: rgba(255, 255, 255, 0.08);
+    border-bottom-color: var(--rap-panel-border);
 }
 
 .settings-tab-button {
     flex-grow: 1;
-    height: 34px;
+    height: 38px;
+    margin: 0 2px;
+    font-size: 14px;
     background-color: transparent;
     border-width: 0;
-    color: rgb(190, 190, 198);
+    border-radius: 8px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    color: var(--rap-cream-dim);
 }
 
 .settings-tab-button:hover {
-    color: rgb(230, 230, 235);
+    color: var(--rap-cream);
+    background-color: rgba(128, 78, 40, 0.5);
 }
 
 /* Focus (keyboard/gamepad) is a soft tint, never an underline: the underline belongs to the active
    tab only, and a focus underline left on Gráficos read as a second active tab (playtest). */
 .settings-tab-button:focus {
-    background-color: rgba(90, 170, 255, 0.16);
+    color: var(--rap-cream);
+    background-color: rgba(196, 122, 44, 0.4);
     border-bottom-width: 0;
 }
 
 .settings-tab-button--selected,
 .settings-tab-button--selected:focus {
-    color: rgb(255, 210, 90);
+    color: var(--rap-gold-light);
+    -unity-font-style: bold;
+    background-color: rgba(128, 78, 40, 0.7);
     border-bottom-width: 3px;
-    border-bottom-color: rgb(255, 210, 90);
+    border-bottom-color: var(--rap-gold);
 }
 
 .settings-content {
@@ -93,7 +104,7 @@
    (Qualidade / Tela Cheia / Volume... measured at ~rgb(27,27,27) on rgb(21,24,30)). */
 .settings-field > .unity-base-field__label,
 .settings-field .unity-toggle__text {
-    color: rgb(220, 220, 228);
+    color: var(--rap-cream);
     font-size: 14px;
     min-width: 170px;
     -unity-text-align: middle-left;
@@ -113,19 +124,41 @@
 }
 
 .settings-field .unity-base-slider__dragger {
-    background-color: rgb(255, 210, 90);
+    background-color: var(--rap-gold);
+    border-color: rgb(110, 58, 16);
+}
+
+.settings-field .unity-base-slider__tracker {
+    background-color: var(--rap-brown-night);
+    border-color: var(--rap-caramel);
+}
+
+.settings-field .unity-toggle__checkmark {
+    background-color: var(--rap-brown-night);
+    border-color: var(--rap-caramel-light);
+}
+
+.settings-field .unity-base-popup-field__input {
+    background-color: var(--rap-brown);
+    border-color: var(--rap-caramel);
+    color: var(--rap-cream);
+}
+
+.settings-field:focus .unity-base-popup-field__input,
+.settings-field:focus .unity-toggle__checkmark {
+    border-color: var(--rap-focus);
 }
 
 .settings-placeholder-label {
     font-size: 14px;
-    color: rgb(220, 220, 225);
+    color: var(--rap-cream);
     white-space: normal;
     margin-bottom: 8px;
 }
 
 .settings-placeholder-note {
-    font-size: 11px;
-    color: rgb(150, 150, 160);
+    font-size: 12px;
+    color: var(--rap-cream-dim);
     white-space: normal;
 }
 
@@ -145,7 +178,7 @@
 
 .settings-rebind-row--header {
     border-bottom-width: 1px;
-    border-bottom-color: rgba(255, 255, 255, 0.08);
+    border-bottom-color: rgba(244, 196, 88, 0.3);
     margin-bottom: 4px;
 }
 
@@ -153,31 +186,56 @@
     flex-grow: 1;
     flex-basis: 0;
     font-size: 13px;
-    color: rgb(220, 220, 225);
+    color: var(--rap-cream);
     -unity-text-align: middle-left;
 }
 
 .settings-rebind-column-label {
     width: 140px;
     font-size: 12px;
-    color: rgb(150, 150, 160);
+    -unity-font-style: bold;
+    color: var(--rap-gold);
     -unity-text-align: middle-center;
+}
+
+.settings-rebind-button,
+.settings-rebind-reset-button {
+    height: 32px;
+    color: var(--rap-cream);
+    background-color: var(--rap-brown);
+    border-width: 1px;
+    border-color: rgba(226, 158, 70, 0.6);
+    border-bottom-color: rgb(52, 28, 12);
+    border-radius: 8px;
+}
+
+.settings-rebind-button:hover,
+.settings-rebind-reset-button:hover {
+    background-color: var(--rap-brown-light);
+}
+
+.settings-rebind-button:focus,
+.settings-rebind-reset-button:focus {
+    border-width: 2px;
+    border-color: var(--rap-focus);
 }
 
 .settings-rebind-button {
     width: 140px;
-    height: 30px;
     margin: 0 2px;
     font-size: 13px;
 }
 
 .settings-rebind-button--overridden {
-    color: rgb(255, 210, 90);
+    color: var(--rap-gold-light);
+    -unity-font-style: bold;
 }
 
+/* Listening for a key: a different fill AND border, not just a hue change. */
 .settings-rebind-button--listening {
-    color: rgb(90, 170, 255);
-    border-color: rgb(90, 170, 255);
+    color: rgb(60, 30, 8);
+    background-color: var(--rap-gold);
+    border-color: rgb(255, 250, 220);
 }
 
 .settings-rebind-button:disabled {
@@ -186,8 +244,7 @@
 
 .settings-rebind-reset-button {
     width: 80px;
-    height: 30px;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .settings-rebind-reset-spacer {
@@ -196,14 +253,14 @@
 
 .settings-rebind-status {
     min-height: 18px;
-    font-size: 12px;
-    color: rgb(190, 190, 198);
+    font-size: 13px;
+    color: var(--rap-cream-dim);
     white-space: normal;
     margin-bottom: 6px;
 }
 
 .settings-rebind-status--warning {
-    color: rgb(255, 170, 60);
+    color: rgb(255, 176, 90);
 }
 
 .settings-rebind-footer {
@@ -213,7 +270,10 @@
 
 .settings-rebind-footer-button {
     padding: 4px 14px;
+    margin: 0;
+    font-size: 15px;
     /* 44px: minimum comfortable touch target (Cancelar / Restaurar tudo are tapped on phones too). */
+    height: auto;
     min-height: 44px;
 }
 
@@ -221,7 +281,7 @@
    accent-coloured so it reads as the way out, next to the "press a key/button" status. */
 .settings-rebind-cancel-button {
     min-width: 120px;
-    color: rgb(255, 255, 255);
-    background-color: rgb(150, 60, 50);
-    border-color: rgb(255, 170, 140);
+    color: rgb(255, 250, 240);
+    background-color: var(--rap-clay-red);
+    border-color: rgb(244, 160, 120);
 }

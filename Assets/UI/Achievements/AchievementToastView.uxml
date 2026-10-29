@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
     <Style src="/Assets/UI/Achievements/AchievementToastView.uss" />
-    <ui:VisualElement name="achievement-toast-root" class="achievement-toast-root" picking-mode="Ignore">
+    <ui:VisualElement name="achievement-toast-root" class="achievement-toast-root rap-theme" picking-mode="Ignore">
         <ui:VisualElement name="achievement-toast" class="achievement-toast" picking-mode="Ignore">
             <ui:VisualElement name="achievement-toast-icon" class="achievement-toast-icon achievement-toast-icon--placeholder" picking-mode="Ignore" />
             <ui:VisualElement name="achievement-toast-body" class="achievement-toast-body" picking-mode="Ignore">

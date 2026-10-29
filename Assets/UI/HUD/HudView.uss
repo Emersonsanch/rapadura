@@ -12,8 +12,12 @@
     top: 24px;
     width: 260px;
     flex-direction: column;
-    background-color: rgba(12, 14, 20, 0.8);
-    border-radius: 8px;
+    /* Rapadura theme (Common/RapaduraTheme.uss): brown-sugar panel, near-opaque so the labels stay
+       readable over desert sand / snow (playtest r6). */
+    background-color: rgba(46, 27, 16, 0.9);
+    border-radius: 12px;
+    border-width: 2px;
+    border-color: var(--rap-panel-border);
     padding: 10px 12px;
 }
 
@@ -25,14 +29,39 @@
     /* Darker glass + shadowed label: the 0.55 grey glass nearly vanished over the bright desert
        sand / snow (playtest r6; UI blends in linear space, so 0.55 over white lands at ~70% grey).
        0.8 still reads as glass over the dark caves/night arenas. */
-    background-color: rgba(24, 27, 36, 0.8);
+    background-color: rgba(46, 27, 16, 0.88);
     border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.45);
-    color: rgb(240, 240, 240);
+    border-color: var(--rap-caramel-light);
+    border-bottom-color: rgb(52, 28, 12);
+    color: var(--rap-cream);
     font-size: 16px;
     -unity-text-align: middle-center;
     -unity-font-style: bold;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+    text-shadow: 1px 1px 2px rgba(20, 8, 2, 0.95);
+    transition-property: background-color, border-color, scale;
+    transition-duration: 0.12s, 0.12s, 0.12s;
+}
+
+.hud-touch-button:hover {
+    background-color: rgba(86, 50, 26, 0.92);
+    border-color: var(--rap-gold);
+}
+
+.hud-touch-button:focus {
+    border-color: var(--rap-focus);
+}
+
+.hud-touch-button:active {
+    background-color: rgba(196, 122, 44, 0.92);
+    scale: 0.96 0.96;
+}
+
+.rap-reduced-motion .hud-touch-button {
+    transition-duration: 0s;
+}
+
+.rap-reduced-motion .hud-touch-button:active {
+    scale: 1 1;
 }
 
 .hud-run-button {
@@ -94,8 +123,8 @@
     padding: 0 6px;
     border-radius: 12px;
     border-width: 2px;
-    border-color: rgb(255, 245, 225);
-    background-color: rgb(220, 60, 50);
+    border-color: var(--rap-cream);
+    background-color: var(--rap-clay-red);
     color: rgb(255, 255, 255);
     font-size: 12px;
     -unity-font-style: bold;
@@ -107,8 +136,8 @@
 }
 
 .hud-touch-button--active {
-    background-color: rgba(90, 160, 90, 0.75);
-    border-color: rgb(200, 255, 200);
+    background-color: rgba(196, 122, 44, 0.92);
+    border-color: var(--rap-gold-light);
 }
 
 /* Touch-only controls (Atacar, camera rotate, virtual joystick) start hidden; HudController removes
@@ -132,8 +161,8 @@
     padding: 0 10px;
     font-size: 15px;
     white-space: nowrap;
-    background-color: rgba(120, 40, 36, 0.75);
-    border-color: rgba(255, 190, 170, 0.6);
+    background-color: rgba(150, 52, 28, 0.9);
+    border-color: rgb(244, 160, 110);
 }
 
 /* ---- Camera rotate (CameraController.RotateLeft/Right; Q/E on keyboard) ----
@@ -173,9 +202,9 @@
     width: 150px;
     height: 150px;
     border-radius: 75px;
-    background-color: rgba(40, 44, 56, 0.35);
+    background-color: rgba(46, 27, 16, 0.4);
     border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(226, 158, 70, 0.6);
     align-items: center;
     justify-content: center;
 }
@@ -184,13 +213,13 @@
     width: 64px;
     height: 64px;
     border-radius: 32px;
-    background-color: rgba(230, 230, 240, 0.55);
+    background-color: rgba(255, 242, 216, 0.6);
     border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.8);
+    border-color: var(--rap-gold-light);
 }
 
 .hud-joystick--active {
-    border-color: rgb(200, 255, 200);
+    border-color: var(--rap-gold-light);
 }
 
 .hud-xp-panel {
@@ -200,8 +229,10 @@
     width: 400px;
     flex-direction: column;
     /* Same dark backing as the vitals panel, so "Nv. X" doesn't sit straight on sand/snow. */
-    background-color: rgba(12, 14, 20, 0.8);
-    border-radius: 8px;
+    background-color: rgba(46, 27, 16, 0.9);
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: var(--rap-panel-border);
     padding: 4px 8px;
 }
 
@@ -218,14 +249,14 @@
 .hud-bar-label {
     width: 56px;
     font-size: 11px;
-    color: rgb(220, 220, 225);
+    color: var(--rap-cream);
     -unity-font-style: bold;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.95);
+    text-shadow: 1px 1px 1px rgba(20, 8, 2, 0.95);
 }
 
 .hud-level-label {
     width: 44px;
-    color: rgb(255, 210, 90);
+    color: var(--rap-gold);
     -unity-text-outline-width: 0.6px;
     -unity-text-outline-color: rgba(30, 18, 0, 1);
 }
@@ -234,9 +265,9 @@
     flex-grow: 1;
     height: 16px;
     border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(28, 16, 10, 0.85);
     border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.12);
+    border-color: rgba(244, 196, 88, 0.35);
     overflow: hidden;
     position: relative;
 }
@@ -276,7 +307,7 @@
     bottom: 0;
     -unity-text-align: middle-center;
     font-size: 10px;
-    color: rgb(240, 240, 245);
+    color: rgb(255, 250, 236);
     -unity-font-style: bold;
     /* White on the yellow stamina fill was unreadable at phone DPI; a dark drop shadow keeps the
        value legible on every fill colour. */
@@ -329,7 +360,7 @@
     font-size: 9px;
     -unity-text-align: middle-center;
     -unity-font-style: bold;
-    color: rgb(240, 240, 240);
+    color: var(--rap-cream);
     /* nowrap: HudController pre-formats the name (SkillSlotDisplayMath.FormatSlotName) into short
        whole-word lines joined by explicit newlines, so UI Toolkit never breaks a word mid-way
        ("Explosiv / o"). overflow: hidden is a last-resort clip under extreme font scaling. */
@@ -349,7 +380,7 @@
     right: 0;
     bottom: 0;
     height: 0;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(28, 16, 10, 0.7);
 }
 
 .hud-skill-cooldown-label {
@@ -361,7 +392,8 @@
     -unity-text-align: middle-center;
     font-size: 18px;
     -unity-font-style: bold;
-    color: rgb(255, 255, 255);
+    color: var(--rap-gold-light);
+    text-shadow: 1px 1px 1px rgba(20, 8, 2, 0.95);
 }
 
 .hud-skill-key-hint {
@@ -371,7 +403,7 @@
     right: 0;
     -unity-text-align: upper-center;
     font-size: 9px;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 242, 216, 0.75);
 }
 
 .hud-skill-button--empty {
@@ -379,7 +411,7 @@
 }
 
 .hud-skill-button--cooldown {
-    border-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(150, 96, 48, 0.5);
 }
 
 /* While cooling down the centered countdown (.hud-skill-cooldown-label) owns the slot: the

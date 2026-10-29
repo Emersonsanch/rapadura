@@ -1,16 +1,17 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
     <Style src="/Assets/Resources/UI/ReturnToTitleDialog.uss" />
     <!-- Confirm dialog of the pause menu's "Menu Principal" button (PauseMenuController). Lives in
          Resources so the controller can load it without inspector wiring. Texts are set in code
          from ReturnToTitleTexts (pt-BR here is the fallback shown without a LocalizationManager). -->
-    <ui:VisualElement name="return-title-dialog" class="return-title-dialog">
-        <ui:VisualElement name="return-title-panel" class="return-title-panel">
-            <ui:Label name="return-title-title" text="Voltar ao menu?" class="return-title-title" />
+    <ui:VisualElement name="return-title-dialog" class="return-title-dialog rap-theme">
+        <ui:VisualElement name="return-title-panel" class="return-title-panel rap-panel">
+            <ui:Label name="return-title-title" text="Voltar ao menu?" class="return-title-title rap-heading" />
             <ui:Label name="return-title-message" text="Progresso não salvo será perdido." class="return-title-message" />
             <ui:VisualElement class="return-title-button-list">
-                <ui:Button name="return-title-save-button" text="Salvar e sair" focusable="true" class="return-title-button return-title-button--primary" />
-                <ui:Button name="return-title-quit-button" text="Sair sem salvar" focusable="true" class="return-title-button return-title-button--danger" />
-                <ui:Button name="return-title-cancel-button" text="Cancelar" focusable="true" class="return-title-button" />
+                <ui:Button name="return-title-save-button" text="Salvar e sair" focusable="true" class="return-title-button return-title-button--primary rap-button rap-button--primary" />
+                <ui:Button name="return-title-quit-button" text="Sair sem salvar" focusable="true" class="return-title-button return-title-button--danger rap-button" />
+                <ui:Button name="return-title-cancel-button" text="Cancelar" focusable="true" class="return-title-button rap-button" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

@@ -1,16 +1,17 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
     <Style src="/Assets/Resources/UI/TutorialHintView.uss" />
     <!-- First-time hint bubble (TutorialHintController). Lives in Resources so the self-bootstrapped
          controller can load it without scene wiring. Everything ignores picking except the "Entendi"
          button, so the bubble never blocks touches on the HUD/world underneath. Title/body are set
          in code from TutorialTexts; the button uses the UiDocumentLocalizer convention. -->
-    <ui:VisualElement name="tutorial-hint-root" class="tutorial-hint-root" picking-mode="Ignore">
+    <ui:VisualElement name="tutorial-hint-root" class="tutorial-hint-root rap-theme" picking-mode="Ignore">
         <ui:VisualElement name="tutorial-highlight" class="tutorial-highlight" picking-mode="Ignore" />
         <ui:VisualElement name="tutorial-hint" class="tutorial-hint" picking-mode="Ignore">
             <ui:Label name="tutorial-hint-header" text="Dica" class="tutorial-hint-header loc" view-data-key="ui.tutorial.header" picking-mode="Ignore" />
             <ui:Label name="tutorial-hint-title" text="" class="tutorial-hint-title" picking-mode="Ignore" />
             <ui:Label name="tutorial-hint-body" text="" class="tutorial-hint-body" picking-mode="Ignore" />
-            <ui:Button name="tutorial-hint-ok" text="Entendi!" focusable="true" class="tutorial-hint-ok loc" view-data-key="ui.tutorial.got_it" />
+            <ui:Button name="tutorial-hint-ok" text="Entendi!" focusable="true" class="tutorial-hint-ok loc rap-button rap-button--primary" view-data-key="ui.tutorial.got_it" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

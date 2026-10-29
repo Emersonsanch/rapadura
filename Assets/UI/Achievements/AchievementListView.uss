@@ -1,3 +1,7 @@
+/* Conquistas. Rapadura theme (Common/RapaduraTheme.uss, imported first in the UXML): rap-theme on
+   the root gives the palette, rap-panel / rap-heading / rap-button the window, title and Fechar.
+   The rows are created in code by AchievementListController and themed on their classes here. */
+
 .achievement-list-root {
     position: absolute;
     left: 0;
@@ -6,7 +10,7 @@
     height: 100%;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(20, 10, 4, 0.86);
     display: none;
 }
 
@@ -16,10 +20,7 @@
     max-width: 900px;
     height: 82%;
     min-height: 380px;
-    background-color: rgb(12, 14, 20);
-    border-radius: 10px;
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.14);
+    background-color: var(--rap-brown-deep);
     padding: 16px 20px;
 }
 
@@ -29,7 +30,7 @@
     margin-bottom: 12px;
     padding-bottom: 10px;
     border-bottom-width: 2px;
-    border-bottom-color: rgba(255, 255, 255, 0.08);
+    border-bottom-color: var(--rap-panel-border);
 }
 
 .achievement-list-header-texts {
@@ -37,25 +38,19 @@
 }
 
 .achievement-list-title {
-    font-size: 22px;
-    -unity-font-style: bold;
-    color: rgb(255, 210, 90);
+    font-size: 28px;
 }
 
 .achievement-list-summary {
     font-size: 14px;
-    color: rgb(170, 170, 180);
+    color: var(--rap-cream-dim);
 }
 
 .achievement-list-close-button {
     min-width: 96px;
-    min-height: 44px;
-    font-size: 15px;
-    background-color: rgba(255, 255, 255, 0.08);
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.18);
-    border-radius: 6px;
-    color: rgb(230, 230, 235);
+    height: 44px;
+    margin: 0;
+    font-size: 16px;
 }
 
 .achievement-list-scroll {
@@ -64,7 +59,7 @@
 
 .achievement-list-empty-label {
     font-size: 15px;
-    color: rgb(170, 170, 180);
+    color: var(--rap-cream-dim);
     -unity-text-align: middle-center;
     margin-top: 24px;
     display: none;
@@ -76,23 +71,24 @@
     min-height: 72px;
     margin-bottom: 8px;
     padding: 10px 12px;
-    background-color: rgba(255, 255, 255, 0.04);
-    border-radius: 8px;
+    background-color: rgba(86, 50, 26, 0.5);
+    border-radius: 10px;
     border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.08);
-    opacity: 0.75;
+    border-color: rgba(150, 96, 48, 0.5);
+    opacity: 0.8;
 }
 
 /* Gamepad/keyboard focus (FocusNavigator steps through the rows). */
 .achievement-item:focus {
-    border-color: rgb(255, 210, 90);
+    border-width: 2px;
+    border-color: var(--rap-focus);
     opacity: 1;
 }
 
 .achievement-item--unlocked {
     opacity: 1;
-    background-color: rgba(255, 210, 90, 0.1);
-    border-color: rgba(255, 210, 90, 0.45);
+    background-color: var(--rap-brown);
+    border-color: var(--rap-gold);
 }
 
 .achievement-item-icon {
@@ -100,19 +96,19 @@
     height: 52px;
     margin-right: 14px;
     flex-shrink: 0;
-    border-radius: 8px;
+    border-radius: 10px;
     -unity-background-scale-mode: scale-to-fit;
 }
 
 .achievement-item-icon--placeholder {
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(28, 16, 10, 0.8);
     border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.16);
+    border-color: rgba(150, 96, 48, 0.6);
 }
 
 .achievement-item--unlocked .achievement-item-icon--placeholder {
-    background-color: rgba(255, 210, 90, 0.25);
-    border-color: rgba(255, 210, 90, 0.7);
+    background-color: var(--rap-caramel);
+    border-color: var(--rap-gold-light);
 }
 
 .achievement-item-body {
@@ -130,34 +126,34 @@
     flex-shrink: 1;
     font-size: 16px;
     -unity-font-style: bold;
-    color: rgb(235, 235, 240);
+    color: var(--rap-cream);
     white-space: normal;
 }
 
 .achievement-item--unlocked .achievement-item-title {
-    color: rgb(255, 220, 120);
+    color: var(--rap-gold-light);
 }
 
 .achievement-item--masked .achievement-item-title,
 .achievement-item--masked .achievement-item-description {
     -unity-font-style: italic;
-    color: rgb(150, 150, 160);
+    color: rgb(196, 176, 150);
 }
 
 .achievement-item-progress {
     font-size: 13px;
-    color: rgb(190, 190, 200);
+    color: var(--rap-cream-dim);
     margin-left: 10px;
 }
 
 .achievement-item--unlocked .achievement-item-progress {
-    color: rgb(255, 210, 90);
+    color: var(--rap-gold);
     -unity-font-style: bold;
 }
 
 .achievement-item-description {
     font-size: 13px;
-    color: rgb(190, 190, 200);
+    color: var(--rap-cream-dim);
     white-space: normal;
     margin-top: 2px;
 }
@@ -165,7 +161,7 @@
 .achievement-item-bar-track {
     height: 6px;
     margin-top: 6px;
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: var(--rap-brown-night);
     border-radius: 3px;
     overflow: hidden;
 }
@@ -173,6 +169,6 @@
 .achievement-item-bar-fill {
     height: 100%;
     width: 0;
-    background-color: rgb(255, 190, 70);
+    background-color: var(--rap-caramel-light);
     border-radius: 3px;
 }

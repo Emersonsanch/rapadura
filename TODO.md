@@ -7,6 +7,7 @@
 ### 2026-10-29 (sessão multiagente — campanha com começo e fim, missões regionais, atordoamento/espinhos/velocidade de ataque)
 - 📖 **Campanha** (`Gameplay/Story`): prólogo no Novo jogo (sítio da Vó Zefa, o Cristal do Sol apagado, painel do primo escolhido), interlúdios após Lobo Alfa / Guardião da Ruína / Senhor da Guerra, epílogo ao vencer o Habitante Ancestral → créditos → mapa (pós-jogo). `StoryProgress` (chave "Story": `campaignComplete` + beats vistos) deduz o próximo beat das regiões limpas, então sobrevive a sair do jogo entre o chefe e o mapa. Conquista `ach_campaign_complete`. 🐛 O `.meta` do `StoryPanelView.uxml/.uss` veio com o guid do próprio asset no importer: a view não importava e o painel se desligava; corrigido no playtest e guardado por `AssetMetaIntegrityTests`. Conferido no Editor: prólogo aparece no mapa depois da seleção (Lavine).
 - 💬 **Missões regionais** no mapa (as NPCs da `Main.unity` são inalcançáveis no loop mapa → encontro → mapa): botão "Conversar com…" no HUD do mapa, 4 NPCs, 8 missões encadeadas (kill de inimigos comuns da região + ouro), falas por primo com a condição `ActiveCharacter` que já existia. 🐛 Recompensa de missão concluída no mapa agora fica na fila e é entregue no próximo encontro.
+- 👾 **Modelos dos 5 inimigos** (`b5d9322`, fecha o item 9, sem créditos Meshy; bake rodado e conferido no Editor) e 🎨 **tema em todas as telas** (fecha o item 15). O "mapa esbranquiçado" foi investigado: nenhuma camada de tela cheia; é artefato da captura do MCP (que também não pega a UI com o jogo pausado). Banner de chefe e aviso "Mochila cheia" seguem com estilo inline (já próximos do tema).
 - 🧭 **Missões, mochila, dicas e arena** (`164a4ef`, `0e65b3c`, `ccfbe19`): todas as missões completáveis (auditoria automatizada), mochila cheia com aviso, 4 dicas novas, terreno por bioma na arena (fecha o item 5; Deserto conferido no Editor). Ideia registrada: "Baú da Vó Zefa" (em construção).
 - 🎁 **Loot por bioma** (fecha o item 13; `fc2c5b1`): coletas de missão e insumos de receita obteníveis em 2–7 lutas.
 - 🏘️ **Vila no mapa** (fecha o item 12; `53c4e47`): moradores, Loja e Bancada pelo botão "Vila". O painel ainda usa o estilo cinza padrão.
@@ -93,11 +94,9 @@
 2. Deduplicar as malhas rigadas e as limpas sem pedestal (cerca de 18 MB repetidos no build).
 3. Addressables (e LOD/occlusion) quando houver build mobile para medir.
 4. Ultimate com recurso próprio (carga), se esse design for confirmado; hoje a ultimate só exige nível 10.
-9. 5 inimigos ainda são primitivas placeholder (`_visualPrefab` vazio): Enxame de Morcegos, Habitante Ancestral, Guardião da Ruína, Golem de Pedra e Senhor da Guerra. Precisam de modelo (ver decisões).
 
 14. Conferir no Play Mode a leitura do ataque de cada arquétipo de inimigo (perfis em `Docs/Animation.md` §7) e ajustar; contração de pernas só aparece com modelos de pernas separadas.
 
-15. Migrar as demais telas (painel da Vila, HUD, Mochila, Loja, Bancada, pausa, diálogo, história) para o `RapaduraTheme.uss`.
 
 **Decisões do usuário (bloqueiam itens abertos):**
 - Instalar o módulo **Android Build Support** no Unity Hub (sem ele não há build Android local nem medição real do tamanho mobile).

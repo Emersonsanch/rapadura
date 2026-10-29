@@ -1,4 +1,6 @@
-/* Campaign story panels (StoryPanelController). Same warm palette as TutorialHintView.uss. */
+/* Campaign story panels (StoryPanelController). Rapadura theme (Common/RapaduraTheme.uss, imported
+   first in the UXML): rap-theme on the root, rap-panel card, rap-heading title, rap-button
+   Pular / rap-button--primary Continuar. Same warm palette as TutorialHintView.uss. */
 .story-root {
     position: absolute;
     left: 0;
@@ -9,7 +11,7 @@
     justify-content: center;
     padding: 24px;
     /* Dimmed, not black: the map stays faintly visible behind the story. */
-    background-color: rgba(12, 8, 4, 0.88);
+    background-color: rgba(20, 10, 4, 0.88);
     display: none;
 }
 
@@ -17,24 +19,22 @@
     width: 86%;
     max-width: 640px;
     padding: 20px 24px 16px 24px;
-    background-color: rgb(34, 22, 12);
+    background-color: var(--rap-brown-deep);
     border-radius: 14px;
     border-width: 3px;
     /* Overridden in code with the chosen hero's accent colour. */
-    border-color: rgb(240, 178, 70);
+    border-color: var(--rap-gold);
 }
 
 .story-title {
-    font-size: 15px;
-    -unity-font-style: bold;
-    color: rgb(240, 178, 70);
+    font-size: 20px;
     white-space: normal;
     margin-bottom: 10px;
 }
 
 .story-body {
     font-size: 19px;
-    color: rgb(255, 248, 235);
+    color: var(--rap-cream);
     white-space: normal;
     /* Room for 3-5 lines so the card does not jump between panels. */
     min-height: 120px;
@@ -65,16 +65,16 @@
 }
 
 .story-progress {
-    font-size: 13px;
-    color: rgb(200, 180, 150);
+    font-size: 14px;
+    color: var(--rap-cream-dim);
     margin-right: 10px;
 }
 
 .story-tap-hint {
     flex-grow: 1;
     flex-shrink: 1;
-    font-size: 13px;
-    color: rgb(200, 180, 150);
+    font-size: 14px;
+    color: var(--rap-cream-dim);
     -unity-font-style: italic;
     white-space: normal;
 }
@@ -82,36 +82,9 @@
 /* Touch targets >= 44px tall; min-height so labels grow with the accessibility font scale. */
 .story-button {
     min-width: 112px;
-    min-height: 44px;
-    font-size: 16px;
-    -unity-font-style: bold;
-    border-radius: 10px;
+    height: auto;
+    min-height: 46px;
+    font-size: 17px;
     margin: 4px 0 4px 8px;
     white-space: normal;
-}
-
-.story-button--skip {
-    color: rgb(240, 230, 215);
-    background-color: rgba(70, 50, 30, 0.9);
-    border-width: 2px;
-    border-color: rgba(240, 178, 70, 0.35);
-}
-
-.story-button--skip:hover {
-    background-color: rgba(95, 70, 42, 0.95);
-}
-
-.story-button--next {
-    color: rgb(34, 22, 12);
-    background-color: rgb(240, 178, 70);
-    border-width: 0;
-}
-
-.story-button--next:hover {
-    background-color: rgb(250, 200, 100);
-}
-
-.story-button:focus {
-    border-width: 3px;
-    border-color: rgb(255, 248, 235);
 }

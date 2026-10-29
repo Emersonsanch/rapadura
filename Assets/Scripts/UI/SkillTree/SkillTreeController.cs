@@ -394,7 +394,8 @@ namespace Rapadura.UI.SkillTree
                     Vector2 to = new Vector2(toElement.style.left.value.value, toElement.style.top.value.value) + new Vector2(NodeRadius, NodeRadius);
 
                     bool requiredIsLearned = _skillManager != null && _skillManager.IsSkillLearned(required.SkillId);
-                    Color color = requiredIsLearned ? new Color(0.35f, 0.85f, 0.5f) : new Color(0.4f, 0.4f, 0.45f);
+                    // Rapadura theme: cane green once the prerequisite is learned, dim caramel-brown otherwise.
+                    Color color = requiredIsLearned ? new Color(0.67f, 0.82f, 0.43f) : new Color(0.45f, 0.33f, 0.24f);
 
                     lines.Add((from, to, color));
                 }

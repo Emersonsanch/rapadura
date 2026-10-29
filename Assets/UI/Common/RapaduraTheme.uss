@@ -8,8 +8,13 @@
  *   <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
  *   <ui:VisualElement class="my-screen-root rap-theme"> ... <ui:Button class="rap-button" /> ...
  *
- * Used today by the title screen (MainMenuView) and hero select (CharacterSelectView); the other
- * screens keep their own look until they are migrated.
+ * Used by every screen: title, hero select, world-map HUD (+ the code-built village hub), encounter
+ * HUD, Mochila + tooltip, shop, crafting, quest log / tracker, character sheet, skill tree,
+ * achievements (list + toast), pause, settings, save/load, credits, death screen, return-to-title
+ * dialog, dialogue box, story panel and tutorial hint (ThemeAdoptionTests keeps the list). Screens
+ * whose rows are created in code style those rows on their own classes with the variables below.
+ * HUD pieces over the 3D world stay >= 0.85 opaque (UI blends in linear space: lighter panels wash
+ * out over desert sand / snow).
  *
  * Accessibility: `rap-reduced-motion` (added to the root from AccessibilitySettings.ReduceFlashEffects,
  * "Reduzir Flashes", see UiMotionPreferences) turns every transition below into an instant change.

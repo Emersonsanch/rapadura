@@ -46,6 +46,9 @@ namespace Rapadura.UI.WorldMap
     {
         public const string ButtonName = "wm-village-button";
         public const string OverlayName = "wm-village-overlay";
+        /// <summary>USS classes (WorldMapHudView.uss) of the hub's section headers and option buttons.</summary>
+        public const string VillageSectionClass = "wm-village-section";
+        public const string VillageOptionClass = "wm-village-option";
         public const string HubScreenId = "village";
         public const string ShopScreenId = "village_shop";
         public const string CraftingScreenId = "village_crafting";
@@ -305,13 +308,8 @@ namespace Rapadura.UI.WorldMap
             _button = new Button { name = ButtonName, focusable = true };
             _button.AddToClassList("wm-explore-button");
             _button.AddToClassList(ButtonName);
+            // Colours come from .wm-village-button in WorldMapHudView.uss (Rapadura theme), not inline.
             _button.style.marginLeft = 8f;
-            _button.style.backgroundColor = new Color(0.50f, 0.30f, 0.12f);
-            var border = new Color(0.95f, 0.75f, 0.45f);
-            _button.style.borderTopColor = border;
-            _button.style.borderBottomColor = border;
-            _button.style.borderLeftColor = border;
-            _button.style.borderRightColor = border;
             _button.style.display = DisplayStyle.None;
             _button.clicked += OnButtonClicked;
             row.Add(_button);
@@ -376,19 +374,23 @@ namespace Rapadura.UI.WorldMap
             _overlay?.RemoveFromHierarchy();
             _npcButtons.Clear();
 
-            // Same look as the HUD's Mochila summary (WorldMapHudView.uss), a bit wider for two columns.
+            // Same Rapadura-theme look as the HUD's Mochila summary (WorldMapHudView.uss, under the
+            // HUD root's rap-theme), a bit wider for two columns; .wm-village-* rules add the section
+            // headers and the themed option buttons.
             _overlay = new VisualElement { name = OverlayName };
             _overlay.AddToClassList("wm-backpack-overlay");
             _overlay.style.display = DisplayStyle.None;
 
             var panel = new VisualElement { name = "wm-village-panel" };
+            panel.AddToClassList("rap-panel");
             panel.AddToClassList("wm-backpack-panel");
-            panel.style.width = 480f;
+            panel.AddToClassList("wm-village-panel");
             _overlay.Add(panel);
 
             _titleLabel = AddLabel(panel, "wm-backpack-title");
             _subtitleLabel = AddLabel(panel, "wm-backpack-hint");
             _talkHeader = AddLabel(panel, "wm-backpack-hero");
+            _talkHeader.AddToClassList(VillageSectionClass);
 
             VisualElement npcGrid = AddGrid(panel);
             foreach (VillageNpcSpec npc in VillageNpcCatalog.Npcs)
@@ -399,12 +401,14 @@ namespace Rapadura.UI.WorldMap
             }
 
             _servicesHeader = AddLabel(panel, "wm-backpack-hero");
-            _servicesHeader.style.marginTop = 6f;
+            _servicesHeader.AddToClassList(VillageSectionClass);
             VisualElement servicesGrid = AddGrid(panel);
             _shopButton = AddGridButton(servicesGrid, "wm-village-shop-button", OnShopClicked);
             _craftingButton = AddGridButton(servicesGrid, "wm-village-crafting-button", OnCraftingClicked);
 
             _closeButton = new Button(CloseHub) { name = "wm-village-close-button", focusable = true };
+            _closeButton.AddToClassList("rap-button");
+            _closeButton.AddToClassList("rap-button--primary");
             _closeButton.AddToClassList("wm-backpack-close");
             _closeButton.style.marginTop = 8f;
             panel.Add(_closeButton);
@@ -434,12 +438,8 @@ namespace Rapadura.UI.WorldMap
         private static Button AddGridButton(VisualElement grid, string name, System.Action onClick)
         {
             var button = new Button(onClick) { name = name, focusable = true };
-            button.AddToClassList("wm-backpack-close");
-            button.style.width = Length.Percent(49f);
-            button.style.marginBottom = 6f;
-            button.style.marginLeft = 0f;
-            button.style.marginRight = 0f;
-            button.style.whiteSpace = WhiteSpace.Normal;
+            button.AddToClassList("rap-button");
+            button.AddToClassList(VillageOptionClass);
             grid.Add(button);
             return button;
         }

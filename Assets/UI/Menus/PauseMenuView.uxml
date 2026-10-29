@@ -1,15 +1,16 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
     <Style src="/Assets/UI/Menus/PauseMenuView.uss" />
-    <ui:VisualElement name="pause-menu-root" class="pause-menu-root">
-        <ui:VisualElement name="pause-menu-panel" class="pause-menu-panel">
-            <ui:Label text="Pausado" class="pause-menu-title loc" view-data-key="ui.pause.title" />
+    <ui:VisualElement name="pause-menu-root" class="pause-menu-root rap-theme">
+        <ui:VisualElement name="pause-menu-panel" class="pause-menu-panel rap-panel">
+            <ui:Label text="Pausado" class="pause-menu-title loc rap-heading" view-data-key="ui.pause.title" />
             <ui:VisualElement name="pause-menu-button-list" class="pause-menu-button-list">
-                <ui:Button name="resume-button" text="Continuar" focusable="true" class="pause-menu-button loc" view-data-key="ui.pause.resume" />
-                <ui:Button name="settings-button" text="Configurações" focusable="true" class="pause-menu-button loc" view-data-key="ui.menu.settings" />
-                <ui:Button name="save-button" text="Salvar" focusable="true" class="pause-menu-button loc" view-data-key="ui.pause.save" />
-                <ui:Button name="achievements-button" text="Conquistas" focusable="true" class="pause-menu-button loc" view-data-key="ui.pause.achievements" />
-                <ui:Button name="crafting-button" text="Criação" focusable="true" class="pause-menu-button loc" view-data-key="ui.pause.crafting" />
-                <ui:Button name="main-menu-button" text="Menu Principal" focusable="true" class="pause-menu-button loc" view-data-key="ui.pause.main_menu" />
+                <ui:Button name="resume-button" text="Continuar" focusable="true" class="pause-menu-button loc rap-button rap-button--primary" view-data-key="ui.pause.resume" />
+                <ui:Button name="settings-button" text="Configurações" focusable="true" class="pause-menu-button loc rap-button" view-data-key="ui.menu.settings" />
+                <ui:Button name="save-button" text="Salvar" focusable="true" class="pause-menu-button loc rap-button" view-data-key="ui.pause.save" />
+                <ui:Button name="achievements-button" text="Conquistas" focusable="true" class="pause-menu-button loc rap-button" view-data-key="ui.pause.achievements" />
+                <ui:Button name="crafting-button" text="Criação" focusable="true" class="pause-menu-button loc rap-button" view-data-key="ui.pause.crafting" />
+                <ui:Button name="main-menu-button" text="Menu Principal" focusable="true" class="pause-menu-button loc rap-button" view-data-key="ui.pause.main_menu" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

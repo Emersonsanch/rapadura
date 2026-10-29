@@ -1,13 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
     <Style src="/Assets/UI/Achievements/AchievementListView.uss" />
-    <ui:VisualElement name="achievement-list-root" class="achievement-list-root">
-        <ui:VisualElement name="achievement-list-window" class="achievement-list-window">
+    <ui:VisualElement name="achievement-list-root" class="achievement-list-root rap-theme">
+        <ui:VisualElement name="achievement-list-window" class="achievement-list-window rap-panel">
             <ui:VisualElement name="achievement-list-header" class="achievement-list-header">
                 <ui:VisualElement class="achievement-list-header-texts">
-                    <ui:Label name="achievement-list-title" text="Conquistas" class="achievement-list-title" />
+                    <ui:Label name="achievement-list-title" text="Conquistas" class="achievement-list-title rap-heading" />
                     <ui:Label name="achievement-list-summary" text="" class="achievement-list-summary" />
                 </ui:VisualElement>
-                <ui:Button name="achievement-list-close-button" text="Fechar" class="achievement-list-close-button" />
+                <ui:Button name="achievement-list-close-button" text="Fechar" class="achievement-list-close-button rap-button" />
             </ui:VisualElement>
             <ui:ScrollView name="achievement-list-scroll" class="achievement-list-scroll" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
                 <ui:VisualElement name="achievement-list" class="achievement-list" />

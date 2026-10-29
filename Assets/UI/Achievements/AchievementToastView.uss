@@ -1,3 +1,6 @@
+/* "Conquista desbloqueada!" toast in the Rapadura theme (Common/RapaduraTheme.uss, rap-theme on
+   the root): opaque brown-sugar card with a gold frame so it reads over sand and snow. */
+
 .achievement-toast-root {
     position: absolute;
     left: 0;
@@ -17,10 +20,12 @@
     min-width: 320px;
     max-width: 560px;
     padding: 12px 18px;
-    background-color: rgba(12, 14, 20, 0.94);
-    border-radius: 10px;
+    background-color: rgb(46, 27, 16);
+    border-radius: 14px;
     border-width: 2px;
-    border-color: rgb(255, 210, 90);
+    border-color: var(--rap-gold);
+    border-bottom-width: 4px;
+    border-bottom-color: var(--rap-caramel);
     opacity: 0;
     translate: 0 -40px;
     transition-property: opacity, translate;
@@ -33,19 +38,24 @@
     translate: 0 0;
 }
 
+/* Reduced motion (UiMotionPreferences): fade only, no slide. */
+.rap-reduced-motion .achievement-toast {
+    translate: 0 0;
+}
+
 .achievement-toast-icon {
     width: 56px;
     height: 56px;
     margin-right: 14px;
     flex-shrink: 0;
     -unity-background-scale-mode: scale-to-fit;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 .achievement-toast-icon--placeholder {
-    background-color: rgba(255, 210, 90, 0.22);
+    background-color: var(--rap-caramel);
     border-width: 2px;
-    border-color: rgba(255, 210, 90, 0.6);
+    border-color: var(--rap-gold-light);
 }
 
 .achievement-toast-body {
@@ -55,20 +65,20 @@
 
 .achievement-toast-header {
     font-size: 13px;
-    color: rgb(255, 210, 90);
+    color: var(--rap-gold);
     -unity-font-style: bold;
     margin-bottom: 2px;
 }
 
 .achievement-toast-title {
-    font-size: 18px;
-    color: rgb(245, 245, 250);
+    font-size: 19px;
+    color: var(--rap-cream);
     -unity-font-style: bold;
     white-space: normal;
 }
 
 .achievement-toast-description {
     font-size: 13px;
-    color: rgb(190, 190, 200);
+    color: var(--rap-cream-dim);
     white-space: normal;
 }

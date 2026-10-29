@@ -59,6 +59,8 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 - Arena com terreno próprio por bioma (`BiomeArenaTerrain`): o plano verde da `Main.unity` é trocado em runtime por chão procedural com colisor igual ao visual, círculo de combate plano e borda por bioma (linha de árvores; dunas e mesas; neve e penhascos; paredes, estalagmites e estalactites).
 - 4 dicas de primeira vez: Conversar com moradores, Vila, materiais e atordoamento; nenhuma dica aparece sobre painel de história, painel da Vila ou conversa.
 - Aviso "Mochila cheia" e "Sem espaço: …" sobre o corpo quando o loot não cabe; moeda e itens pedidos por missão ativa entram mesmo acima do limite de peso.
+- Modelos low-poly procedurais para Enxame de Morcegos, Golem de Pedra, Senhor da Guerra, Guardião da Ruína e Habitante Ancestral (antes primitivas), com um material de paleta e partes animadas (`ProceduralEnemyRig`); bake em *Rapadura ▸ Enemies ▸ Build Procedural Enemy Models*.
+- Tema "fim de tarde no engenho" em todas as telas (HUD do mapa e do encontro, Vila, Mochila, loja, bancada, missões, ficha, árvore, conquistas, menus, diálogo, história e dicas); HUD com opacidade ≥ 0,85 sobre areia e neve.
 ### Alterado
 - Materiais mais leves: minério 3→1, pedra 2→1, madeira 1,5→0,5, lingote 3→1,5 (a Montanha leva ~43 lutas para encher a mochila, antes ~18).
 - "Continuar" carrega o save mais recente entre o auto-save e os slots 0–2 (pela data gravada; ignora slot ausente ou corrompido), em vez de só auto-save/slot 0.
@@ -85,6 +87,7 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 - Removido `EnemyDefinition._contactDamage` (semeado mas nunca usado): todo ataque de inimigo já é corpo a corpo e telegrafado; dano por encostar dobraria o DPS e puniria o tocar-para-andar.
 
 ### Corrigido
+- Título: o logo voltou a caber na placa e as colinas viraram elipses (a da direita não cobre mais o sol como um bloco).
 - Missão pessoal do Joaquim pedia 6 mortes do chefe final (único); agora 5 Aranhas da Floresta. Chefe derrotado antes de aceitar a missão passa a contar (convergência e Ícaro travavam). `QuestReachabilityTests` audita todos os objetivos.
 - Missões concluídas no mapa mundi (sem Player na cena) perdiam a recompensa; agora ela fica na fila (salva) e é entregue no próximo encontro (`QuestManager.DeliverPendingRewards`).
 - `.meta` de UXML/USS escrito à mão com o guid do próprio asset no importer fazia a tela sumir em silêncio; guardado por `AssetMetaIntegrityTests`.

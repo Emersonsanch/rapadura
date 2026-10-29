@@ -177,13 +177,9 @@ namespace Rapadura.UI.WorldMap
             _button = new Button { name = ButtonName, focusable = true };
             _button.AddToClassList("wm-explore-button");
             _button.AddToClassList(ButtonClass);
+            // Colours come from .wm-talk-button in WorldMapHudView.uss (Rapadura theme), not inline,
+            // so hover / focus / press states and the high-contrast theme still apply.
             _button.style.marginLeft = 8f;
-            _button.style.backgroundColor = new Color(0.16f, 0.32f, 0.55f);
-            var border = new Color(0.55f, 0.75f, 0.95f);
-            _button.style.borderTopColor = border;
-            _button.style.borderBottomColor = border;
-            _button.style.borderLeftColor = border;
-            _button.style.borderRightColor = border;
             _button.style.display = DisplayStyle.None;
             _button.clicked += OnTalkClicked;
             row.Add(_button);

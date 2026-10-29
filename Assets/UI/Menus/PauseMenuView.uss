@@ -1,3 +1,6 @@
+/* Pause menu. Palette, panel, heading and buttons come from Common/RapaduraTheme.uss (imported
+   first in the UXML; rap-theme on the root): this sheet only sizes and lays them out. */
+
 .pause-menu-root {
     position: absolute;
     left: 0;
@@ -7,23 +10,18 @@
     flex-grow: 1;
     align-items: center;
     justify-content: center;
-    background-color: rgba(6, 7, 10, 0.88);
+    background-color: rgba(20, 10, 4, 0.88);
 }
 
 .pause-menu-panel {
-    width: 320px;
+    width: 340px;
     align-items: center;
-    padding: 20px;
-    background-color: rgb(20, 22, 30);
-    border-radius: 10px;
-    border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.08);
+    padding: 22px 24px 14px 24px;
+    background-color: var(--rap-brown-deep);
 }
 
 .pause-menu-title {
-    font-size: 24px;
-    -unity-font-style: bold;
-    color: rgb(240, 240, 245);
+    font-size: 30px;
     margin-bottom: 18px;
 }
 
@@ -35,22 +33,9 @@
 .pause-menu-button {
     width: 100%;
     /* min-height (not height) so the label can grow with the accessibility font scale. */
-    min-height: 44px;
+    height: auto;
+    min-height: 48px;
     white-space: normal;
     margin-bottom: 8px;
-    font-size: 14px;
-    background-color: rgba(35, 38, 48, 0.9);
-    border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.1);
-    color: rgb(230, 230, 235);
-}
-
-.pause-menu-button:hover {
-    background-color: rgba(55, 59, 72, 0.95);
-    border-color: rgba(255, 255, 255, 0.25);
-}
-
-.pause-menu-button:focus {
-    border-color: rgb(90, 170, 255);
-    border-width: 3px;
+    font-size: 17px;
 }

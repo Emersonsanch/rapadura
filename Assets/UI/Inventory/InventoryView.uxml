@@ -1,12 +1,13 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
     <Style src="/Assets/UI/Inventory/InventoryView.uss" />
-    <ui:VisualElement name="inventory-root" class="inventory-root">
-        <ui:VisualElement name="inventory-window" class="inventory-window">
+    <ui:VisualElement name="inventory-root" class="inventory-root rap-theme">
+        <ui:VisualElement name="inventory-window" class="inventory-window rap-panel">
             <ui:VisualElement name="inventory-header" class="inventory-header">
-                <ui:Label name="inventory-title" text="Mochila" class="inventory-title" />
-                <ui:Label name="inventory-weight" text="" class="inventory-weight" />
-                <ui:Button name="inventory-sort-button" text="Organizar" class="inventory-sort-button" focusable="true" />
-                <ui:Button name="inventory-close-button" text="X" class="inventory-close-button" focusable="true" />
+                <ui:Label name="inventory-title" text="Mochila" class="inventory-title rap-heading" />
+                <ui:Label name="inventory-weight" text="" class="inventory-weight rap-chip" />
+                <ui:Button name="inventory-sort-button" text="Organizar" class="inventory-sort-button rap-button" focusable="true" />
+                <ui:Button name="inventory-close-button" text="X" class="inventory-close-button rap-button" focusable="true" />
             </ui:VisualElement>
             <ui:VisualElement name="inventory-panels" class="inventory-panels">
                 <ui:VisualElement class="inventory-panel inventory-panel--equipment">

@@ -1,4 +1,6 @@
-/* World map HUD (WorldMapHudController). Same look as HudView.uss: dark translucent panels,
+/* World map HUD (WorldMapHudController). Same look as HudView.uss: Rapadura theme (brown-sugar
+   panels with caramel borders and cream text, palette from Common/RapaduraTheme.uss imported first),
+   near-opaque so it reads over sand and snow,
    68px round touch buttons in a flex row top-right so accessibility text scaling only widens them.
    Budget at 2400x1080 (panel ~1461x657 with the 1200x800 reference): the top bar is ~700px wide
    at scale 1 (left), the button cluster ~380px (right), leaving room for the notch safe area. */
@@ -28,10 +30,10 @@
     flex-direction: row;
     align-items: center;
     padding: 8px 14px;
-    background-color: rgba(12, 14, 20, 0.62);
-    border-radius: 8px;
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(46, 27, 16, 0.9);
+    border-radius: 12px;
+    border-width: 2px;
+    border-color: var(--rap-panel-border);
 }
 
 .wm-top-block {
@@ -44,30 +46,30 @@
     width: 1px;
     height: 34px;
     margin: 0 14px;
-    background-color: rgba(255, 255, 255, 0.18);
+    background-color: rgba(244, 196, 88, 0.35);
 }
 
 .wm-hero-name {
     font-size: 16px;
     -unity-font-style: bold;
-    color: rgb(240, 240, 245);
+    color: var(--rap-cream);
 }
 
 .wm-hero-level {
     font-size: 12px;
     -unity-font-style: bold;
-    color: rgb(255, 210, 90);
+    color: var(--rap-gold);
 }
 
 .wm-region-name {
     font-size: 16px;
     -unity-font-style: bold;
-    color: rgb(170, 225, 160);
+    color: var(--rap-gold-light);
 }
 
 .wm-victories {
     font-size: 12px;
-    color: rgb(215, 215, 222);
+    color: var(--rap-cream-dim);
     white-space: normal;
 }
 
@@ -79,20 +81,26 @@
     padding: 4px 16px;
     border-radius: 22px;
     border-width: 2px;
-    border-color: rgb(218, 158, 56);
-    background-color: rgb(120, 32, 22);
-    color: rgb(250, 240, 220);
+    border-color: var(--rap-gold);
+    border-bottom-color: rgb(70, 20, 10);
+    border-bottom-width: 3px;
+    background-color: rgb(140, 44, 24);
+    color: var(--rap-cream);
     font-size: 14px;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
 }
 
 .wm-boss-button:hover {
-    background-color: rgb(150, 44, 30);
+    background-color: rgb(170, 60, 32);
+}
+
+.wm-boss-button:focus {
+    border-color: var(--rap-focus);
 }
 
 .wm-boss-button:active {
-    background-color: rgb(96, 24, 16);
+    background-color: rgb(110, 32, 16);
 }
 
 .wm-boss-button--visible {
@@ -116,20 +124,27 @@
     padding: 4px 18px;
     border-radius: 22px;
     border-width: 2px;
-    border-color: rgb(150, 210, 120);
-    background-color: rgb(36, 96, 44);
-    color: rgb(240, 250, 235);
+    border-color: var(--rap-gold);
+    border-bottom-color: rgb(110, 58, 16);
+    border-bottom-width: 3px;
+    background-color: var(--rap-caramel);
+    color: rgb(255, 252, 240);
+    text-shadow: 1px 1px 0px rgba(60, 26, 6, 0.8);
     font-size: 14px;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
 }
 
 .wm-explore-button:hover {
-    background-color: rgb(46, 120, 56);
+    background-color: var(--rap-caramel-light);
+}
+
+.wm-explore-button:focus {
+    border-color: var(--rap-focus);
 }
 
 .wm-explore-button:active {
-    background-color: rgb(28, 76, 34);
+    background-color: rgb(150, 86, 30);
 }
 
 .wm-explore-button:disabled {
@@ -143,12 +158,12 @@
 
 .wm-weather-label {
     font-size: 13px;
-    color: rgb(230, 230, 235);
+    color: var(--rap-cream);
 }
 
 .wm-clock {
     font-size: 12px;
-    color: rgb(200, 200, 210);
+    color: var(--rap-cream-dim);
 }
 
 /* Weather icon: a small USS-drawn badge (no font glyph dependency), tinted per weather. */
@@ -209,10 +224,12 @@
     white-space: nowrap;
     -unity-text-align: middle-center;
     -unity-font-style: bold;
-    color: rgb(240, 240, 240);
-    background-color: rgba(40, 44, 56, 0.6);
+    color: var(--rap-cream);
+    background-color: rgba(46, 27, 16, 0.88);
     border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.35);
+    border-color: var(--rap-caramel-light);
+    border-bottom-color: rgb(52, 28, 12);
+    text-shadow: 1px 1px 2px rgba(20, 8, 2, 0.95);
 }
 
 .wm-menu-button--first {
@@ -220,12 +237,17 @@
 }
 
 .wm-menu-button:hover {
-    background-color: rgba(60, 66, 82, 0.75);
+    background-color: rgba(86, 50, 26, 0.92);
+    border-color: var(--rap-gold);
+}
+
+.wm-menu-button:focus {
+    border-color: var(--rap-focus);
 }
 
 .wm-menu-button:active {
-    background-color: rgba(90, 160, 90, 0.75);
-    border-color: rgb(200, 255, 200);
+    background-color: rgba(196, 122, 44, 0.92);
+    border-color: var(--rap-gold-light);
 }
 
 /* ---- Region labels (one per WorldMapRegionNode, positioned in code) ---- */
@@ -236,10 +258,10 @@
     min-width: 96px;
     align-items: center;
     padding: 6px 12px;
-    background-color: rgba(14, 16, 24, 0.72);
+    background-color: rgba(46, 27, 16, 0.88);
     border-radius: 10px;
     border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(226, 158, 70, 0.55);
 }
 
 /* Far regions (not current, travelable or the adjacent locked goal) collapse to a name chip so
@@ -248,7 +270,7 @@
     min-width: 0;
     padding: 3px 8px;
     border-radius: 8px;
-    opacity: 0.85;
+    opacity: 0.9;
 }
 
 .wm-region-label--compact .wm-region-label-name {
@@ -256,17 +278,17 @@
 }
 
 .wm-region-label--current {
-    border-color: rgb(255, 210, 90);
-    background-color: rgba(40, 34, 14, 0.82);
+    border-color: var(--rap-gold);
+    background-color: rgba(86, 50, 26, 0.92);
 }
 
 .wm-region-label--travelable {
-    border-color: rgba(170, 225, 160, 0.85);
+    border-color: rgb(170, 200, 110);
 }
 
 .wm-region-label--locked {
-    background-color: rgba(20, 20, 24, 0.7);
-    border-color: rgba(150, 150, 160, 0.4);
+    background-color: rgba(28, 16, 10, 0.85);
+    border-color: rgba(150, 120, 96, 0.55);
 }
 
 .wm-region-label-header {
@@ -277,23 +299,23 @@
 .wm-region-label-name {
     font-size: 15px;
     -unity-font-style: bold;
-    color: rgb(240, 240, 245);
+    color: var(--rap-cream);
 }
 
 .wm-region-label--locked .wm-region-label-name {
-    color: rgb(170, 170, 180);
+    color: rgb(206, 186, 160);
 }
 
 .wm-region-label-status {
     font-size: 11px;
-    color: rgb(210, 210, 218);
+    color: var(--rap-cream-dim);
     -unity-text-align: middle-center;
     white-space: normal;
     max-width: 220px;
 }
 
 .wm-region-label--current .wm-region-label-status {
-    color: rgb(255, 220, 120);
+    color: var(--rap-gold-light);
     -unity-font-style: bold;
 }
 
@@ -315,7 +337,7 @@
     height: 7px;
     border-width: 2px;
     border-bottom-width: 0;
-    border-color: rgb(200, 200, 210);
+    border-color: rgb(210, 190, 166);
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
@@ -324,7 +346,7 @@
     width: 14px;
     height: 9px;
     border-radius: 2px;
-    background-color: rgb(200, 200, 210);
+    background-color: rgb(210, 190, 166);
 }
 
 /* Cleared marker: green badge with a check drawn by two borders of a rotated box (no glyph needed). */
@@ -334,7 +356,7 @@
     height: 16px;
     margin-right: 6px;
     border-radius: 8px;
-    background-color: rgb(70, 160, 90);
+    background-color: var(--rap-cane-green);
     align-items: center;
     justify-content: center;
 }
@@ -354,11 +376,11 @@
 }
 
 .wm-region-label--cleared {
-    border-color: rgba(110, 200, 130, 0.85);
+    border-color: rgb(140, 176, 80);
 }
 
 .wm-region-label--current.wm-region-label--cleared {
-    border-color: rgb(255, 210, 90);
+    border-color: var(--rap-gold);
 }
 
 /* ---- Mochila summary (modal) ---- */
@@ -371,29 +393,31 @@
     height: 100%;
     align-items: center;
     justify-content: center;
-    background-color: rgba(6, 7, 10, 0.88);
+    background-color: rgba(20, 10, 4, 0.86);
 }
 
 .wm-backpack-panel {
-    width: 360px;
+    width: 380px;
     padding: 20px;
-    background-color: rgb(20, 22, 30);
-    border-radius: 10px;
+    background-color: var(--rap-brown-deep);
+    border-radius: 14px;
     border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--rap-panel-border);
 }
 
 .wm-backpack-title {
-    font-size: 22px;
+    font-size: 24px;
     -unity-font-style: bold;
-    color: rgb(240, 240, 245);
+    color: var(--rap-gold-light);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(74, 36, 12);
     -unity-text-align: middle-center;
     margin-bottom: 4px;
 }
 
 .wm-backpack-hero {
     font-size: 13px;
-    color: rgb(255, 210, 90);
+    color: var(--rap-gold);
     -unity-text-align: middle-center;
     margin-bottom: 12px;
 }
@@ -405,24 +429,82 @@
 
 .wm-backpack-line {
     font-size: 14px;
-    color: rgb(225, 225, 232);
+    color: var(--rap-cream);
     white-space: normal;
     margin-bottom: 4px;
 }
 
 .wm-backpack-hint {
-    font-size: 11px;
-    color: rgb(160, 162, 172);
+    font-size: 12px;
+    color: var(--rap-cream-dim);
     white-space: normal;
     margin-bottom: 14px;
 }
 
+/* Look from .rap-button / .rap-button--primary (RapaduraTheme.uss). */
 .wm-backpack-close {
-    min-height: 44px;
+    min-height: 48px;
+    margin: 0;
+}
+
+/* ---- Map add-on buttons injected into .wm-action-row (VillageHubButton / RegionNpcTalkButton) ----
+   They carry .wm-explore-button for size and shape; these rules give each its own colour. */
+.wm-village-button {
+    background-color: var(--rap-brown);
+    border-color: var(--rap-caramel-light);
+    border-bottom-color: rgb(52, 28, 12);
+}
+
+.wm-village-button:hover {
+    background-color: var(--rap-brown-light);
+}
+
+.wm-village-button:active {
+    background-color: rgb(70, 40, 20);
+}
+
+.wm-talk-button {
+    background-color: rgb(52, 92, 104);
+    border-color: rgb(170, 214, 210);
+    border-bottom-color: rgb(20, 40, 46);
+}
+
+.wm-talk-button:hover {
+    background-color: rgb(66, 114, 126);
+}
+
+.wm-talk-button:active {
+    background-color: rgb(36, 70, 80);
+}
+
+.wm-village-button:focus,
+.wm-talk-button:focus {
+    border-color: var(--rap-focus);
+}
+
+/* ---- Vila da Vó Zefa hub (VillageHubButton, built in code on top of the Mochila overlay) ---- */
+.wm-village-panel {
+    width: 500px;
+    padding: 22px 24px;
+}
+
+.wm-village-section {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
     font-size: 14px;
-    background-color: rgba(35, 38, 48, 0.9);
-    border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.1);
-    color: rgb(230, 230, 235);
-    border-radius: 6px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-left;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(244, 196, 88, 0.35);
+}
+
+.wm-village-option {
+    width: 49%;
+    height: auto;
+    min-height: 48px;
+    margin: 0 0 8px 0;
+    padding: 4px 10px;
+    font-size: 15px;
+    white-space: normal;
 }

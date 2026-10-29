@@ -1,14 +1,15 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
     <Style src="/Assets/UI/Shop/ShopView.uss" />
-    <ui:VisualElement name="shop-root" class="shop-root">
-        <ui:VisualElement name="shop-window" class="shop-window">
+    <ui:VisualElement name="shop-root" class="shop-root rap-theme">
+        <ui:VisualElement name="shop-window" class="shop-window rap-panel">
             <ui:VisualElement name="shop-header" class="shop-header">
-                <ui:Label name="shop-name" text="Loja" class="shop-name" />
-                <ui:VisualElement class="shop-currency">
+                <ui:Label name="shop-name" text="Loja" class="shop-name rap-heading" />
+                <ui:VisualElement class="shop-currency rap-chip">
                     <ui:Label text="Ouro:" class="shop-currency-label loc" view-data-key="ui.shop.gold" />
                     <ui:Label name="shop-currency-amount" text="0" class="shop-currency-amount" />
                 </ui:VisualElement>
-                <ui:Button name="shop-close-button" text="X" class="shop-close-button" />
+                <ui:Button name="shop-close-button" text="X" class="shop-close-button rap-button" />
             </ui:VisualElement>
             <ui:VisualElement name="shop-panels" class="shop-panels">
                 <ui:VisualElement class="shop-panel">

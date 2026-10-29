@@ -1,3 +1,7 @@
+/* Quest log (Missões). Palette, window panel, heading and the Fechar / Acompanhar buttons come
+   from Common/RapaduraTheme.uss (rap-theme on the root); list items and objective rows are
+   created in code by QuestLogController and themed on their own classes here. */
+
 .quest-log-root {
     position: absolute;
     left: 0;
@@ -6,7 +10,7 @@
     height: 100%;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(20, 10, 4, 0.86);
     display: none;
 }
 
@@ -16,10 +20,7 @@
     max-width: 1100px;
     height: 82%;
     min-height: 380px;
-    background-color: rgb(12, 14, 20);
-    border-radius: 10px;
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.14);
+    background-color: var(--rap-brown-deep);
     padding: 16px 20px;
 }
 
@@ -31,27 +32,21 @@
 
 .quest-log-title {
     flex-grow: 1;
-    font-size: 22px;
-    -unity-font-style: bold;
-    color: rgb(255, 210, 90);
+    font-size: 28px;
 }
 
 .quest-log-close-button {
     min-width: 96px;
-    min-height: 44px;
-    font-size: 15px;
-    background-color: rgba(255, 255, 255, 0.08);
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.18);
-    border-radius: 6px;
-    color: rgb(230, 230, 235);
+    height: 44px;
+    margin: 0;
+    font-size: 16px;
 }
 
 .quest-log-tabs {
     flex-direction: row;
     margin-bottom: 10px;
     border-bottom-width: 2px;
-    border-bottom-color: rgba(255, 255, 255, 0.08);
+    border-bottom-color: var(--rap-panel-border);
 }
 
 .quest-log-tab {
@@ -59,8 +54,8 @@
     min-height: 44px;
     margin: 0 8px 0 0;
     font-size: 15px;
-    color: rgb(170, 170, 180);
-    background-color: rgba(255, 255, 255, 0.04);
+    color: var(--rap-cream-dim);
+    background-color: rgba(86, 50, 26, 0.6);
     border-width: 0;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
@@ -68,10 +63,27 @@
     border-bottom-right-radius: 0;
 }
 
+.quest-log-tab:hover {
+    color: var(--rap-cream);
+    background-color: var(--rap-brown-light);
+}
+
+.quest-log-tab:focus {
+    color: var(--rap-cream);
+    border-width: 2px;
+    border-bottom-width: 0;
+    border-color: var(--rap-focus);
+}
+
 .quest-log-tab--selected {
-    color: rgb(255, 220, 120);
+    color: rgb(60, 30, 8);
     -unity-font-style: bold;
-    background-color: rgba(255, 210, 90, 0.14);
+    background-color: var(--rap-gold);
+}
+
+.quest-log-tab--selected:hover {
+    color: rgb(60, 30, 8);
+    background-color: var(--rap-gold-light);
 }
 
 .quest-log-body {
@@ -86,8 +98,8 @@
 }
 
 .quest-list-empty-label {
-    font-size: 13px;
-    color: rgb(150, 150, 160);
+    font-size: 14px;
+    color: var(--rap-cream-dim);
     white-space: normal;
     margin: 10px 4px;
 }
@@ -98,29 +110,39 @@
     min-height: 56px;
     margin: 0 0 6px 0;
     padding: 8px 12px;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: var(--rap-brown);
     border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.08);
-    border-left-width: 4px;
-    border-radius: 6px;
+    border-color: rgba(226, 158, 70, 0.4);
+    border-left-width: 5px;
+    border-radius: 8px;
     -unity-text-align: middle-left;
 }
 
+.quest-list-item:hover {
+    background-color: var(--rap-brown-light);
+}
+
+.quest-list-item:focus {
+    border-color: var(--rap-focus);
+}
+
 .quest-list-item--main {
-    border-left-color: rgb(255, 195, 60);
+    border-left-color: var(--rap-gold);
 }
 
 .quest-list-item--side {
-    border-left-color: rgb(90, 170, 255);
+    border-left-color: rgb(110, 176, 220);
 }
 
 .quest-list-item--daily {
-    border-left-color: rgb(90, 220, 130);
+    border-left-color: rgb(150, 196, 90);
 }
 
 .quest-list-item--selected {
-    background-color: rgba(255, 210, 90, 0.16);
-    border-color: rgba(255, 210, 90, 0.6);
+    background-color: rgba(196, 122, 44, 0.55);
+    border-top-color: var(--rap-gold);
+    border-right-color: var(--rap-gold);
+    border-bottom-color: var(--rap-gold);
 }
 
 .quest-list-item--completed {
@@ -130,27 +152,29 @@
 .quest-list-item-title {
     font-size: 15px;
     -unity-font-style: bold;
-    color: rgb(240, 240, 245);
+    color: var(--rap-cream);
     white-space: normal;
 }
 
 .quest-list-item-subtitle {
     font-size: 12px;
-    color: rgb(160, 160, 170);
+    color: var(--rap-cream-dim);
     margin-top: 2px;
 }
 
 .quest-list-item-tracked {
-    font-size: 11px;
-    color: rgb(255, 210, 90);
+    font-size: 12px;
+    color: var(--rap-gold-light);
     margin-top: 2px;
 }
 
 .quest-detail-scroll {
     flex-grow: 1;
     padding: 4px 8px;
-    background-color: rgba(255, 255, 255, 0.03);
-    border-radius: 6px;
+    background-color: var(--rap-brown-night);
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: rgba(150, 96, 48, 0.6);
 }
 
 .quest-detail {
@@ -164,24 +188,25 @@
 }
 
 .quest-detail-title {
-    font-size: 20px;
+    font-size: 22px;
     -unity-font-style: bold;
-    color: rgb(240, 240, 245);
+    color: var(--rap-gold-light);
     margin-right: 10px;
     white-space: normal;
 }
 
 .quest-detail-type {
-    font-size: 11px;
-    color: rgb(20, 20, 26);
-    background-color: rgb(255, 210, 90);
+    font-size: 12px;
+    -unity-font-style: bold;
+    color: rgb(60, 30, 8);
+    background-color: var(--rap-gold);
     padding: 2px 8px;
     border-radius: 8px;
 }
 
 .quest-detail-description {
-    font-size: 14px;
-    color: rgb(200, 200, 210);
+    font-size: 15px;
+    color: var(--rap-cream);
     white-space: normal;
     margin-top: 8px;
 }
@@ -191,20 +216,20 @@
 }
 
 .quest-detail-section-header {
-    font-size: 13px;
+    font-size: 14px;
     -unity-font-style: bold;
-    color: rgb(255, 210, 90);
+    color: var(--rap-gold);
     margin-bottom: 6px;
 }
 
 .quest-detail-journal {
-    font-size: 13px;
+    font-size: 14px;
     -unity-font-style: italic;
-    color: rgb(185, 180, 200);
+    color: var(--rap-cream-dim);
     white-space: normal;
     padding-left: 10px;
-    border-left-width: 2px;
-    border-left-color: rgba(255, 255, 255, 0.14);
+    border-left-width: 3px;
+    border-left-color: var(--rap-caramel);
 }
 
 .quest-objective-row {
@@ -222,7 +247,7 @@
     margin-right: 8px;
     flex-shrink: 0;
     border-width: 2px;
-    border-color: rgb(120, 120, 130);
+    border-color: var(--rap-cream-dim);
     border-radius: 2px;
 }
 
@@ -230,70 +255,65 @@
     flex-grow: 1;
     flex-shrink: 1;
     font-size: 14px;
-    color: rgb(225, 225, 230);
+    color: var(--rap-cream);
     white-space: normal;
 }
 
 .quest-objective-progress {
     font-size: 14px;
     -unity-font-style: bold;
-    color: rgb(150, 200, 255);
+    color: var(--rap-gold-light);
     margin-left: 8px;
 }
 
 .quest-objective-bar-track {
-    height: 4px;
+    height: 6px;
     margin: 4px 0 0 18px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
+    background-color: rgba(86, 50, 26, 0.9);
+    border-radius: 3px;
     overflow: hidden;
 }
 
 .quest-objective-bar-fill {
     height: 100%;
-    background-color: rgb(90, 170, 255);
-    border-radius: 2px;
+    background-color: var(--rap-caramel-light);
+    border-radius: 3px;
 }
 
 .quest-objective-row--complete .quest-objective-check {
-    border-color: rgb(90, 220, 130);
-    background-color: rgb(90, 220, 130);
+    border-color: rgb(170, 210, 110);
+    background-color: var(--rap-cane-green);
 }
 
 .quest-objective-row--complete .quest-objective-text {
-    color: rgb(150, 150, 160);
+    color: var(--rap-cream-dim);
 }
 
 .quest-objective-row--complete .quest-objective-progress {
-    color: rgb(90, 220, 130);
+    color: rgb(190, 226, 130);
 }
 
 .quest-objective-row--complete .quest-objective-bar-fill {
-    background-color: rgb(90, 220, 130);
+    background-color: rgb(150, 196, 90);
 }
 
 .quest-detail-rewards {
-    font-size: 14px;
-    color: rgb(255, 220, 120);
+    font-size: 15px;
+    color: var(--rap-gold-light);
     white-space: normal;
 }
 
 .quest-detail-track-button {
-    margin-top: 16px;
+    margin: 16px 0 0 0;
     align-self: flex-start;
     min-width: 180px;
-    min-height: 48px;
-    font-size: 15px;
-    -unity-font-style: bold;
-    color: rgb(20, 20, 26);
-    background-color: rgb(255, 210, 90);
-    border-width: 0;
-    border-radius: 6px;
+    font-size: 17px;
 }
 
+/* Already tracked: quieter brown button (no longer the call to action). */
 .quest-detail-track-button--tracking {
-    color: rgb(255, 220, 120);
-    background-color: rgba(255, 210, 90, 0.14);
-    border-width: 1px;
-    border-color: rgba(255, 210, 90, 0.6);
+    color: var(--rap-gold-light);
+    background-color: var(--rap-brown);
+    border-color: var(--rap-caramel);
+    border-bottom-color: rgb(52, 28, 12);
 }
