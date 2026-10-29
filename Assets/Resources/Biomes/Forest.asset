@@ -30,11 +30,24 @@ MonoBehaviour:
   _loot:
   - _item: {fileID: 11400000, guid: c9bcdd9f33ac04a458fd22b23d3347ac, type: 2}
     _weight: 10
+    _quantityMin: 1
+    _quantityMax: 3
   - _item: {fileID: 11400000, guid: bbeb2208ac84f4c42893bf59cf396ed2, type: 2}
     _weight: 8
+    _quantityMin: 1
+    _quantityMax: 3
   - _item: {fileID: 11400000, guid: e9ac32dea3c97e94db317af9a4dc5a85, type: 2}
-    _weight: 6
+    _weight: 8
+    _quantityMin: 1
+    _quantityMax: 3
   - _item: {fileID: 11400000, guid: 6d43b4edc15cc8743885ddb16aa931fd, type: 2}
     _weight: 3
+    _quantityMin: 1
+    _quantityMax: 2
   - _item: {fileID: 11400000, guid: a056307241789b44cb9191b6ae23cbe4, type: 2}
     _weight: 1
+    _quantityMin: 1
+    _quantityMax: 1
+  _lootDropChance: 0.65
+  _lootRollsPerKill: 2
+  _bossLootRolls: 4

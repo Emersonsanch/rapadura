@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Rapadura.Core.Events;
 using UnityEngine;
 
@@ -119,6 +120,24 @@ namespace Rapadura.Gameplay.Enemies
         public EnemySpawnedEvent(GameObject enemy)
         {
             Enemy = enemy;
+        }
+    }
+
+    /// <summary>
+    /// Raised by <see cref="EnemyLootGranter"/> after an enemy's loot went into <see cref="Receiver"/>'s
+    /// inventory (drops that didn't fit are still listed). For loot toasts/SFX; nothing in gameplay depends on it.
+    /// </summary>
+    public readonly struct EnemyLootDroppedEvent : IGameEvent
+    {
+        public readonly GameObject Enemy;
+        public readonly GameObject Receiver;
+        public readonly IReadOnlyList<LootDrop> Drops;
+
+        public EnemyLootDroppedEvent(GameObject enemy, GameObject receiver, IReadOnlyList<LootDrop> drops)
+        {
+            Enemy = enemy;
+            Receiver = receiver;
+            Drops = drops;
         }
     }
 }

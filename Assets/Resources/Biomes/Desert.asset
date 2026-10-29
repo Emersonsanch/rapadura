@@ -26,13 +26,34 @@ MonoBehaviour:
   - _enemy: {fileID: 11400000, guid: 2da7a39a915d6f14093eeb35b6de0cc6, type: 2}
     _weight: 1
   _loot:
-  - _item: {fileID: 11400000, guid: 2891a210ab06ca34e8b5647862436de9, type: 2}
-    _weight: 6
   - _item: {fileID: 11400000, guid: cd94a946f8299c04893b92f91853aede, type: 2}
-    _weight: 8
+    _weight: 10
+    _quantityMin: 1
+    _quantityMax: 2
+  - _item: {fileID: 11400000, guid: bbeb2208ac84f4c42893bf59cf396ed2, type: 2}
+    _weight: 5
+    _quantityMin: 1
+    _quantityMax: 2
+  - _item: {fileID: 11400000, guid: b3ef5d7014acbfe408ec88662838c2d6, type: 2}
+    _weight: 2
+    _quantityMin: 1
+    _quantityMax: 1
+  - _item: {fileID: 11400000, guid: 2891a210ab06ca34e8b5647862436de9, type: 2}
+    _weight: 3
+    _quantityMin: 1
+    _quantityMax: 1
   - _item: {fileID: 11400000, guid: 021f75a38249d8c4c9fedbf88a0bf4b9, type: 2}
     _weight: 6
+    _quantityMin: 2
+    _quantityMax: 5
   - _item: {fileID: 11400000, guid: 47cd62fe9f7229c4188140ad8d04c26b, type: 2}
     _weight: 3
+    _quantityMin: 1
+    _quantityMax: 1
   - _item: {fileID: 11400000, guid: 319288639657769449123b703f2720ed, type: 2}
     _weight: 1
+    _quantityMin: 1
+    _quantityMax: 1
+  _lootDropChance: 0.6
+  _lootRollsPerKill: 2
+  _bossLootRolls: 4

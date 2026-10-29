@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Rapadura.Gameplay.Enemies;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Biomes
@@ -51,6 +52,32 @@ namespace Rapadura.Gameplay.World.Biomes
         {
             EnsureLoaded();
             return _biomesByType.Values;
+        }
+
+        /// <summary>
+        /// The biome whose spawn table lists <paramref name="enemy"/> (first match in <see cref="BiomeType"/>
+        /// order), or null. Every enemy asset belongs to exactly one biome (checked by
+        /// <c>EnemyLootTableTests</c>), so this is how a kill finds the loot table it drops from — in the
+        /// encounter arena and in the standalone Main.unity sandbox alike.
+        /// </summary>
+        public static BiomeDefinition FindBiomeOf(EnemyDefinition enemy)
+        {
+            if (enemy == null)
+            {
+                return null;
+            }
+
+            EnsureLoaded();
+            BiomeDefinition found = null;
+            foreach (BiomeDefinition biome in _biomesByType.Values)
+            {
+                if (biome != null && biome.ContainsEnemy(enemy) && (found == null || biome.Type < found.Type))
+                {
+                    found = biome;
+                }
+            }
+
+            return found;
         }
 
         /// <summary>Forces the registry to re-scan Resources/Biomes. Call after generating/removing biome assets in the editor.</summary>

@@ -131,6 +131,17 @@ namespace Rapadura.Gameplay.Combat
                 isCritical ? 0.18f : 0.12f, isCritical ? new Color(1f, 0.5f, 0.1f) : Color.white);
         }
 
+        /// <summary>Floating loot label ("+2 Madeira") over a corpse, used by <c>EnemyLootGranter</c>.</summary>
+        public static void SpawnLootText(Vector3 position, string text)
+        {
+            if (string.IsNullOrEmpty(text) || !Application.isPlaying)
+            {
+                return;
+            }
+
+            SpawnFloatingText(position, text, 0.09f, new Color(1f, 0.85f, 0.35f));
+        }
+
         private static void SpawnFloatingText(Vector3 position, string text, float characterSize, Color color)
         {
             var go = new GameObject("DamageNumber_FX");

@@ -109,8 +109,9 @@ namespace Rapadura.Gameplay.Quests
     /// <item>Kill targets are <c>EnemyDefinition</c> asset names (<c>enemy_*</c>, what <c>QuestManager</c> matches)
     /// of <b>non-boss</b> enemies in that region's spawn table — a boss is fought once, so a quest taken after
     /// the boss fell could never finish.</item>
-    /// <item>Collect targets are items those enemies actually drop (the encounter loop only grants
-    /// <c>EnemyDefinition.LootItem</c>, which is <c>item_gold</c> today).</item>
+    /// <item>Collect targets are items those enemies actually drop: their <c>EnemyDefinition.LootItem</c>
+    /// (<c>item_gold</c>) or the region's biome loot table (<c>EnemyLootRoller</c>; checked for every
+    /// quest by <c>EnemyLootTableTests</c>).</item>
     /// <item>No TalkToNpc/CustomFlag objectives: quests auto-complete on their last objective, and only in
     /// Main.unity (the arena) are the hero's inventory/stats live to receive the reward. Every objective
     /// here progresses in combat, so rewards always land.</item>

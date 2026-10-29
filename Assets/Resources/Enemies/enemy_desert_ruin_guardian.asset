@@ -18,8 +18,11 @@ MonoBehaviour:
   _experienceReward: 18
   _lootItem: {fileID: 11400000, guid: 214ad08bc7a3def4cbeb45bedcc4524c, type: 2}
   _lootDropChance: 0.6
-  _lootQuantityMin: 1
-  _lootQuantityMax: 3
+  _lootQuantityMin: 6
+  _lootQuantityMax: 10
+  _bossGuaranteedLoot: 1
+  _bossBonusDropItem: {fileID: 11400000, guid: 3abe34506ef064245a3eedf04844f4ed, type: 2}
+  _bossBonusDropRarity: 2
   _bossExperienceMultiplier: 8
   _visualPrefab: {fileID: 0}
   _visualLocalPosition: {x: 0, y: -0.5, z: 0}

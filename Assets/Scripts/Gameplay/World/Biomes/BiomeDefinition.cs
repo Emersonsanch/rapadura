@@ -33,15 +33,24 @@ namespace Rapadura.Gameplay.World.Biomes
         }
     }
 
-    /// <summary>A single weighted entry in a biome's typical loot table.</summary>
+    /// <summary>
+    /// A single weighted entry in a biome's loot table, rolled by <c>EnemyLootRoller</c> each time an
+    /// enemy of that biome dies: <see cref="Weight"/> picks the entry, then a quantity in
+    /// [<see cref="QuantityMin"/>, <see cref="QuantityMax"/>] is granted (equipment always comes as one
+    /// procedurally rolled piece, see <c>EnemyLootRoller</c>).
+    /// </summary>
     [Serializable]
     public class BiomeLootEntry
     {
         [SerializeField] private ItemDefinition _item;
         [SerializeField] [Min(0)] private int _weight = 1;
+        [SerializeField] [Min(1)] private int _quantityMin = 1;
+        [SerializeField] [Min(1)] private int _quantityMax = 1;
 
         public ItemDefinition Item => _item;
         public int Weight => _weight;
+        public int QuantityMin => Mathf.Max(1, _quantityMin);
+        public int QuantityMax => Mathf.Max(QuantityMin, _quantityMax);
 
         public BiomeLootEntry()
         {
@@ -49,9 +58,17 @@ namespace Rapadura.Gameplay.World.Biomes
 
         /// <summary>Plain-C# construction path for EditMode tests.</summary>
         public BiomeLootEntry(ItemDefinition item, int weight)
+            : this(item, weight, 1, 1)
+        {
+        }
+
+        /// <summary>Plain-C# construction path for EditMode tests, with a quantity range.</summary>
+        public BiomeLootEntry(ItemDefinition item, int weight, int quantityMin, int quantityMax)
         {
             _item = item;
             _weight = weight;
+            _quantityMin = quantityMin;
+            _quantityMax = quantityMax;
         }
     }
 
@@ -87,6 +104,12 @@ namespace Rapadura.Gameplay.World.Biomes
 
         [Header("Loot Table — Items")]
         [SerializeField] private List<BiomeLootEntry> _loot = new List<BiomeLootEntry>();
+        [Tooltip("Chance (0..1) that each loot roll of a common enemy of this biome yields an entry of the table. Bosses always succeed.")]
+        [SerializeField] [Range(0f, 1f)] private float _lootDropChance = 0.75f;
+        [Tooltip("Loot table rolls per common enemy killed.")]
+        [SerializeField] [Min(0)] private int _lootRollsPerKill = 1;
+        [Tooltip("Loot table rolls per boss killed (each one guaranteed).")]
+        [SerializeField] [Min(0)] private int _bossLootRolls = 4;
 
         [Header("Weather Table (optional)")]
         [Tooltip("Weighted weather states for WeatherSystem. Leave empty to use WeatherTable's per-biome defaults.")]
@@ -103,6 +126,9 @@ namespace Rapadura.Gameplay.World.Biomes
 
         public IReadOnlyList<BiomeEnemySpawnEntry> Enemies => _enemies;
         public IReadOnlyList<BiomeLootEntry> Loot => _loot;
+        public float LootDropChance => Mathf.Clamp01(_lootDropChance);
+        public int LootRollsPerKill => Mathf.Max(0, _lootRollsPerKill);
+        public int BossLootRolls => Mathf.Max(0, _bossLootRolls);
         public IReadOnlyList<BiomeWeatherEntry> Weather => _weather;
 
         /// <summary>
@@ -145,6 +171,42 @@ namespace Rapadura.Gameplay.World.Biomes
         public ItemDefinition RollLoot(System.Random random)
         {
             return RollWeighted(_loot, entry => entry.Weight, entry => entry.Item, random);
+        }
+
+        /// <summary>Same weighted pick as <see cref="RollLoot"/>, but returns the whole entry (quantity range included).</summary>
+        public BiomeLootEntry RollLootEntry(System.Random random)
+        {
+            return RollWeighted(_loot, entry => entry != null && entry.Item != null ? entry.Weight : 0, entry => entry, random);
+        }
+
+        /// <summary>
+        /// True if <paramref name="enemy"/> appears in this biome's spawn table (any weight). Used to find
+        /// which biome's loot table an enemy drops from (<see cref="BiomeRegistry.FindBiomeOf"/>).
+        /// </summary>
+        public bool ContainsEnemy(EnemyDefinition enemy)
+        {
+            if (enemy == null)
+            {
+                return false;
+            }
+
+            foreach (BiomeEnemySpawnEntry entry in _enemies)
+            {
+                if (entry != null && entry.Enemy == enemy)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>EditMode test hook for the loot roll settings (kept separate so SetDataForTests' signature is unchanged).</summary>
+        public void SetLootRollsForTests(float lootDropChance, int lootRollsPerKill, int bossLootRolls)
+        {
+            _lootDropChance = lootDropChance;
+            _lootRollsPerKill = lootRollsPerKill;
+            _bossLootRolls = bossLootRolls;
         }
 
         /// <summary>Plain-C# construction path for EditMode tests, which can't rely on AssetDatabase/CreateAsset (mirrors DialogueDefinition.SetDataForTests).</summary>

@@ -26,13 +26,30 @@ MonoBehaviour:
   - _enemy: {fileID: 11400000, guid: 65c2dae5d2f75004b8ea5bce9befafcd, type: 2}
     _weight: 1
   _loot:
-  - _item: {fileID: 11400000, guid: 2891a210ab06ca34e8b5647862436de9, type: 2}
-    _weight: 10
   - _item: {fileID: 11400000, guid: cd94a946f8299c04893b92f91853aede, type: 2}
-    _weight: 10
-  - _item: {fileID: 11400000, guid: 43cd5bf92f7b4c84aa7bac331b1dea78, type: 2}
+    _weight: 12
+    _quantityMin: 1
+    _quantityMax: 2
+  - _item: {fileID: 11400000, guid: b3ef5d7014acbfe408ec88662838c2d6, type: 2}
     _weight: 2
-  - _item: {fileID: 11400000, guid: c0ddd06c08ed2ad459d28fdb62702fcb, type: 2}
-    _weight: 2
+    _quantityMin: 1
+    _quantityMax: 1
+  - _item: {fileID: 11400000, guid: 2891a210ab06ca34e8b5647862436de9, type: 2}
+    _weight: 4
+    _quantityMin: 1
+    _quantityMax: 1
   - _item: {fileID: 11400000, guid: 0e4da8196b28d0e4ea2413d80ccd102f, type: 2}
     _weight: 3
+    _quantityMin: 1
+    _quantityMax: 1
+  - _item: {fileID: 11400000, guid: c0ddd06c08ed2ad459d28fdb62702fcb, type: 2}
+    _weight: 2
+    _quantityMin: 1
+    _quantityMax: 1
+  - _item: {fileID: 11400000, guid: 43cd5bf92f7b4c84aa7bac331b1dea78, type: 2}
+    _weight: 1
+    _quantityMin: 1
+    _quantityMax: 1
+  _lootDropChance: 0.6
+  _lootRollsPerKill: 2
+  _bossLootRolls: 4

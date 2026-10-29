@@ -29,11 +29,15 @@ namespace Rapadura.Editor
         {
             public string itemId;
             public int weight;
+            public int quantityMin;
+            public int quantityMax;
 
-            public LootSeed(string itemId, int weight)
+            public LootSeed(string itemId, int weight, int quantityMin = 1, int quantityMax = 1)
             {
                 this.itemId = itemId;
                 this.weight = weight;
+                this.quantityMin = quantityMin;
+                this.quantityMax = quantityMax;
             }
         }
 
@@ -60,6 +64,10 @@ namespace Rapadura.Editor
             public string ambientMusicCueId;
             public List<EnemySeed> enemies = new List<EnemySeed>();
             public List<LootSeed> loot = new List<LootSeed>();
+            // Loot rolls per kill (EnemyLootRoller; numbers in Docs/Balance/README.md §8).
+            public float lootDropChance = 0.6f;
+            public int lootRollsPerKill = 2;
+            public int bossLootRolls = 4;
         }
 
         [MenuItem("Rapadura/Seed Example Biomes")]
@@ -122,8 +130,14 @@ namespace Rapadura.Editor
                 SerializedProperty entry = lootProp.GetArrayElementAtIndex(index);
                 entry.FindPropertyRelative("_item").objectReferenceValue = item;
                 entry.FindPropertyRelative("_weight").intValue = lootSeed.weight;
+                entry.FindPropertyRelative("_quantityMin").intValue = lootSeed.quantityMin;
+                entry.FindPropertyRelative("_quantityMax").intValue = lootSeed.quantityMax;
                 index++;
             }
+
+            so.FindProperty("_lootDropChance").floatValue = seed.lootDropChance;
+            so.FindProperty("_lootRollsPerKill").intValue = seed.lootRollsPerKill;
+            so.FindProperty("_bossLootRolls").intValue = seed.bossLootRolls;
 
             so.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(biome);
@@ -152,12 +166,13 @@ namespace Rapadura.Editor
                     },
                     loot = new List<LootSeed>
                     {
-                        new LootSeed("item_wood", 10),
-                        new LootSeed("item_fiber", 8),
-                        new LootSeed("item_herb", 6),
-                        new LootSeed("item_cooked_meat", 3),
+                        new LootSeed("item_wood", 10, 1, 3),
+                        new LootSeed("item_fiber", 8, 1, 3),
+                        new LootSeed("item_herb", 8, 1, 3),
+                        new LootSeed("item_cooked_meat", 3, 1, 2),
                         new LootSeed("item_wooden_sword", 1),
                     },
+                    lootDropChance = 0.65f,
                 },
                 new BiomeSeed
                 {
@@ -178,12 +193,15 @@ namespace Rapadura.Editor
                     },
                     loot = new List<LootSeed>
                     {
-                        new LootSeed("item_stone", 6),
-                        new LootSeed("item_iron_ore", 8),
-                        new LootSeed("item_gold_coin", 6),
+                        new LootSeed("item_iron_ore", 10, 1, 2),
+                        new LootSeed("item_fiber", 5, 1, 2),
+                        new LootSeed("item_iron", 2),
+                        new LootSeed("item_stone", 3),
+                        new LootSeed("item_gold_coin", 6, 2, 5),
                         new LootSeed("item_health_potion", 3),
                         new LootSeed("item_hunting_bow", 1),
                     },
+                    lootDropChance = 0.6f,
                 },
                 new BiomeSeed
                 {
@@ -204,12 +222,14 @@ namespace Rapadura.Editor
                     },
                     loot = new List<LootSeed>
                     {
-                        new LootSeed("item_stone", 10),
-                        new LootSeed("item_iron_ore", 10),
-                        new LootSeed("item_pickaxe", 2),
-                        new LootSeed("item_leather_boots", 2),
+                        new LootSeed("item_iron_ore", 12, 1, 2),
+                        new LootSeed("item_iron", 2),
+                        new LootSeed("item_stone", 4),
                         new LootSeed("item_mana_potion", 3),
+                        new LootSeed("item_leather_boots", 2),
+                        new LootSeed("item_pickaxe", 1),
                     },
+                    lootDropChance = 0.6f,
                 },
                 new BiomeSeed
                 {
@@ -230,12 +250,13 @@ namespace Rapadura.Editor
                     },
                     loot = new List<LootSeed>
                     {
-                        new LootSeed("item_iron_ore", 8),
-                        new LootSeed("item_stone", 6),
-                        new LootSeed("item_herb", 4),
+                        new LootSeed("item_iron_ore", 8, 1, 2),
+                        new LootSeed("item_herb", 8, 1, 2),
+                        new LootSeed("item_stone", 3),
                         new LootSeed("item_health_potion", 2),
                         new LootSeed("item_iron_sword", 1),
                     },
+                    lootDropChance = 0.6f,
                 },
             };
         }

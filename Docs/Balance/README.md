@@ -658,3 +658,125 @@ Removido de `EnemyDefinition`, `EnemyDatabaseSeeder`, `BalanceCsvMenu` (coluna `
 
 Testes: `StunThornsAttackSpeedTests` (stun bloqueia o inimigo, cancela a preparação, redução de boss,
 skill que atordoa, matemática da velocidade de ataque, espinhos sem recursão, remoção do dano de contato).
+
+---
+
+## 8. Loot de encontro: materiais por bioma (2026-10-29)
+
+Antes, inimigo só soltava o próprio `EnemyDefinition.LootItem` (`item_gold`). As tabelas `_loot` dos
+`BiomeDefinition` existiam mas nunca eram roladas. Por isso nenhum objetivo CollectItem de madeira, fibra,
+erva ou minério fechava (missões pessoais de Maria, Ícaro e Maithe e as diárias), e as receitas de
+`Resources/Recipes` não tinham insumo.
+
+### 8.1 Como uma morte rola loot (`EnemyLootRoller`, chamado por `EnemyLootGranter`)
+
+1. **Loot base**: `LootItem` com `LootDropChance` e `LootQuantityMin..Max`, como antes. Chefe: garantido (`BossBonusRules`).
+2. **Tabela do bioma**: o bioma é aquele cujo spawn table lista o inimigo (`BiomeRegistry.FindBiomeOf`;
+   cada inimigo está em exatamente um). Inimigo comum: `_lootRollsPerKill` rolagens, cada uma com
+   `_lootDropChance` de sair algo. Chefe: `_bossLootRolls` rolagens, **todas garantidas**. Cada rolagem
+   escolhe uma entrada pelo `_weight` e dá `_quantityMin.._quantityMax` unidades.
+   Equipamento (equipável e não empilhável) vira **uma** peça procedural (`ProceduralItemGenerator`)
+   com raridade sorteada e nunca abaixo da raridade do item base:
+   comum Comum 65 / Incomum 28 / Raro 7; chefe Incomum 45 / Raro 40 / Épico 15.
+3. **Bônus de chefe**: `_bossBonusDropItem` na raridade `_bossBonusDropRarity`, com afixos.
+
+Tudo cai direto no inventário de quem matou (ou do Player, se a morte veio de DoT ou invocação). Um
+texto "+2 Madeira" sobe do corpo e sai `EnemyLootDroppedEvent`. O inventário volta ao mapa pelo estado
+carregado do `SaveManager`, então a coleta continua entre mapa e encontro. A RNG é injetável:
+mesma semente, mesmos drops.
+
+### 8.2 Tabelas (`Assets/Resources/Biomes/*.asset`, espelhadas no `BiomeSeeder`)
+
+Todos os biomas usam `_lootRollsPerKill` 2 e `_bossLootRolls` 4. `_lootDropChance` é 0,65 na Floresta e
+0,60 nos outros. "% por rolagem" = chance × peso / peso total. "Por luta" considera 1,5 inimigo comum por
+encontro (`WorldMap.unity`: 1–2; encontros aleatórios nunca trazem o chefe). "Chefe" é o esperado das 4 rolagens garantidas.
+
+**Floresta** (Lobo da Mata, Aranha da Floresta; chefe Lobo Alfa), peso total 30
+
+| Item | Peso | Qtd | % por rolagem | Por morte | Por luta | Chefe |
+|---|---|---|---|---|---|---|
+| `item_wood` | 10 | 1–3 | 21,7% | 0,87 | 1,30 | 2,67 |
+| `item_fiber` | 8 | 1–3 | 17,3% | 0,69 | 1,04 | 2,13 |
+| `item_herb` | 8 | 1–3 | 17,3% | 0,69 | 1,04 | 2,13 |
+| `item_cooked_meat` | 3 | 1–2 | 6,5% | 0,20 | 0,29 | 0,60 |
+| `item_wooden_sword` (procedural) | 1 | 1 | 2,2% | 0,04 | 0,07 | 0,13 |
+
+**Deserto** (Escorpião das Dunas; chefe Guardião da Ruína), peso total 30
+
+| Item | Peso | Qtd | % por rolagem | Por morte | Por luta | Chefe |
+|---|---|---|---|---|---|---|
+| `item_iron_ore` | 10 | 1–2 | 20,0% | 0,60 | 0,90 | 2,00 |
+| `item_fiber` (sisal) | 5 | 1–2 | 10,0% | 0,30 | 0,45 | 1,00 |
+| `item_iron` (fragmento das ruínas) | 2 | 1 | 4,0% | 0,08 | 0,12 | 0,27 |
+| `item_stone` | 3 | 1 | 6,0% | 0,12 | 0,18 | 0,40 |
+| `item_gold_coin` | 6 | 2–5 | 12,0% | 0,84 | 1,26 | 2,80 |
+| `item_health_potion` | 3 | 1 | 6,0% | 0,12 | 0,18 | 0,40 |
+| `item_hunting_bow` (procedural) | 1 | 1 | 2,0% | 0,04 | 0,06 | 0,13 |
+
+**Montanha** (Golem de Pedra; chefe Senhor da Guerra da Montanha), peso total 24
+
+| Item | Peso | Qtd | % por rolagem | Por morte | Por luta | Chefe |
+|---|---|---|---|---|---|---|
+| `item_iron_ore` | 12 | 1–2 | 30,0% | 0,90 | 1,35 | 3,00 |
+| `item_iron` | 2 | 1 | 5,0% | 0,10 | 0,15 | 0,33 |
+| `item_stone` | 4 | 1 | 10,0% | 0,20 | 0,30 | 0,67 |
+| `item_mana_potion` | 3 | 1 | 7,5% | 0,15 | 0,22 | 0,50 |
+| `item_leather_boots` (procedural) | 2 | 1 | 5,0% | 0,10 | 0,15 | 0,33 |
+| `item_pickaxe` (procedural) | 1 | 1 | 2,5% | 0,05 | 0,07 | 0,17 |
+
+**Cavernas** (Enxame de Morcegos; chefe Habitante Ancestral), peso total 22
+
+| Item | Peso | Qtd | % por rolagem | Por morte | Por luta | Chefe |
+|---|---|---|---|---|---|---|
+| `item_iron_ore` (cristal) | 8 | 1–2 | 21,8% | 0,65 | 0,98 | 2,18 |
+| `item_herb` (cogumelo) | 8 | 1–2 | 21,8% | 0,65 | 0,98 | 2,18 |
+| `item_stone` | 3 | 1 | 8,2% | 0,16 | 0,25 | 0,55 |
+| `item_health_potion` | 2 | 1 | 5,5% | 0,11 | 0,16 | 0,36 |
+| `item_iron_sword` (procedural) | 1 | 1 | 2,7% | 0,05 | 0,08 | 0,18 |
+
+**Chefes** (loot base garantido + 4 rolagens + bônus):
+
+| Chefe | Ouro (antes 1–3, 60%) | Bônus procedural |
+|---|---|---|
+| Lobo Alfa | 4–8 | `item_hunting_bow` Raro |
+| Guardião da Ruína | 6–10 | `item_leather_helmet` Raro |
+| Senhor da Guerra da Montanha | 8–14 | `item_leather_chest` Épico |
+| Habitante Ancestral | 10–16 | `item_iron_sword` Épico |
+
+Inimigos comuns continuam soltando `item_gold` 1–3 com 60% (1,2 por morte).
+
+### 8.3 Receitas
+
+| Receita | Insumos | De onde vêm |
+|---|---|---|
+| `recipe_health_potion` | 3 `item_herb` | Floresta, Cavernas |
+| `recipe_iron_ingot` | 2 `item_iron_ore` + 1 `item_wood` | Montanha/Deserto/Cavernas + Floresta |
+| `recipe_iron_sword` | 2 `item_iron` + 1 `item_wood` | lingote (receita, ou drop no Deserto/Montanha) + Floresta |
+
+### 8.4 Lutas esperadas por objetivo de coleta (melhor bioma)
+
+Lutas ≈ quantidade ÷ "por luta". `EnemyLootTableTests` exige no máximo 12 lutas por objetivo que cai direto.
+
+| Missão | Objetivo | Melhor bioma | Lutas |
+|---|---|---|---|
+| `quest_daily_family_campfire` | 6 madeira + 4 fibra | Floresta | ~4,6 (madeira) / ~3,8 (fibra), **~5** juntas |
+| `quest_daily_icaro_ore_tinkering` | 4 minério + 1 lingote | Montanha | ~3 (minério); +2 minério e 1 madeira para fundir: **~4,5** |
+| `quest_daily_maria_herb_basket` | 5 ervas + 1 poção | Floresta | ~4,8; com a poção feita de 3 ervas, **~7,7** |
+| `quest_daily_maria_visit_survivor` | 2 carne assada | Floresta | **~6,9** |
+| `quest_maithe_windtrail` | 3 minério | Montanha | ~2,2 (os 4 golens já pedem ~2,7) |
+| `quest_maria_fading_light` | 2 minério | Cavernas | ~2 (os 5 morcegos já pedem ~3,3) |
+| `quest_icaro_ancient_gears` | 1 lingote | Deserto | drop direto ~8,3; fundindo (2 minério + 1 madeira) **~2,2**; o Guardião da Ruína (objetivo da mesma missão) dá em média 2 minérios |
+| `quest_joaquim_echoes_of_home` | 1 espada de ferro | Cavernas | drop raro (~12,5); caminhos principais: forjar (4 minério + 3 madeira), bônus Épico do Habitante Ancestral ou recompensa da 2ª missão da Montanha |
+| `quest_region_desert_crossing_reserve` | 12 ouro | Deserto | **~6,7** |
+
+Peso: minério pesa 3 e o inventário aguenta 100. Umas 20 lutas na Montanha sem vender nem fundir
+enchem a mochila. O que não cabe é perdido com aviso no log (`EnemyLootGranter`).
+
+### 8.5 Testes
+
+`EnemyLootTableTests` cobre o conteúdo real: todo inimigo em um só bioma; todo objetivo CollectItem
+(pessoais, diárias e `RegionQuestCatalog`) obtenível por drop de inimigo comum ou por receita feita de
+drops; todo insumo de receita obtenível; teto de lutas. Também cobre as regras com RNG injetada:
+determinismo por semente, faixa de quantidade, chance 0, equipamento procedural com piso de raridade,
+chefe com 4 rolagens garantidas e bônus Épico, e o loot da arena levado ao mapa com os afixos pelo
+estado carregado do `SaveManager`.
