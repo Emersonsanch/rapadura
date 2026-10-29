@@ -118,6 +118,8 @@ namespace Rapadura.Gameplay.World.Biomes
         [SerializeField] private BiomeType _biome = BiomeType.Forest;
 
         [Header("Ground")]
+        [Tooltip("Swap the authored ground plane for the biome's generated terrain + backdrop (BiomeArenaTerrainGenerator). The Ground tint below then only applies when this is off.")]
+        [SerializeField] private bool _proceduralTerrain = true;
         [SerializeField] private bool _tintGround;
         [Tooltip("Ground colour. Alpha is the blend strength over the authored colour.")]
         [SerializeField] private Color _groundTint = Color.white;
@@ -153,6 +155,7 @@ namespace Rapadura.Gameplay.World.Biomes
 
         public BiomeType Biome => _biome;
 
+        public bool ProceduralTerrain => _proceduralTerrain;
         public bool TintGround => _tintGround;
         public Color GroundTint => _groundTint;
         public bool ReplaceGroundTexture => _replaceGroundTexture;
@@ -175,7 +178,11 @@ namespace Rapadura.Gameplay.World.Biomes
         public float ScatterInnerRadius => Mathf.Min(_scatterInnerRadius, _scatterOuterRadius);
         public float ScatterOuterRadius => Mathf.Max(_scatterInnerRadius, _scatterOuterRadius);
 
-        /// <summary>True when applying this profile changes nothing visual (e.g. Forest, the arena's authored look).</summary>
+        /// <summary>
+        /// True when applying this profile changes nothing besides the generated terrain (e.g. Forest, the
+        /// arena's authored look): no tint, atmosphere, sky or props. <see cref="ProceduralTerrain"/> is
+        /// applied regardless.
+        /// </summary>
         public bool IsNeutral =>
             !_tintGround && !_overrideFog && !_tintSkybox
             && (_propRules == null || _propRules.Count == 0)
@@ -197,6 +204,11 @@ namespace Rapadura.Gameplay.World.Biomes
             _tintGround = tint;
             _groundTint = groundTint;
             _replaceGroundTexture = replaceTexture;
+        }
+
+        public void SetTerrainForTests(bool proceduralTerrain)
+        {
+            _proceduralTerrain = proceduralTerrain;
         }
 
         /// <summary>Atmosphere setup used by <see cref="CreateBuiltInDefault"/> (and tests).</summary>

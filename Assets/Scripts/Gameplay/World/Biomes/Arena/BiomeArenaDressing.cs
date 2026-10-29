@@ -18,6 +18,9 @@ namespace Rapadura.Gameplay.World.Biomes
     /// <item>ground plane recoloured (optionally texture swapped) through a MaterialPropertyBlock;</item>
     /// <item>fog/ambient/sun baseline via <see cref="EnvironmentOverrides"/> (honoured by WeatherVisuals and DayNightLighting), plus RenderSettings directly when those presenters are absent;</item>
     /// <item>optional procedural-skybox tint on a runtime copy of the skybox material;</item>
+    /// <item>a procedural ground + backdrop per biome (<see cref="BiomeArenaTerrain"/>, meshes cached in
+    /// <see cref="BiomeArenaTerrainCache"/>): the authored "Ground" plane's renderer and collider are
+    /// disabled and a flat-centred, vertex-coloured terrain (with its own MeshCollider) takes its place;</item>
     /// <item>a few pooled primitive props (<see cref="BiomeArenaPropFactory"/>) scattered on a ring around the arena;</item>
     /// <item>WeatherSystem/AmbientVfx switched to the encounter biome.</item>
     /// </list>
@@ -46,6 +49,10 @@ namespace Rapadura.Gameplay.World.Biomes
         [SerializeField] private string[] _groundObjectNames = { "Ground" };
         [Tooltip("Optional explicit profiles (take precedence). Empty = Resources/Biomes/Arena, then built-in defaults.")]
         [SerializeField] private BiomeArenaProfile[] _profileOverrides = new BiomeArenaProfile[0];
+
+        [Header("Procedural terrain")]
+        [Tooltip("Replace the authored ground plane with the biome's generated ground + backdrop (when the profile allows it).")]
+        [SerializeField] private bool _proceduralTerrain = true;
 
         [Header("Procedural props")]
         [SerializeField] private bool _propColliders = true;
@@ -76,6 +83,17 @@ namespace Rapadura.Gameplay.World.Biomes
         private readonly List<BiomeArenaPropFactory.Prop> _activeProps = new List<BiomeArenaPropFactory.Prop>();
         private readonly List<Vector2> _scatter = new List<Vector2>();
         private readonly List<GameObject> _roots = new List<GameObject>();
+        private readonly List<SavedGround> _disabledGround = new List<SavedGround>();
+
+        private sealed class SavedGround
+        {
+            public Renderer Renderer;
+            public bool RendererEnabled;
+            public Collider Collider;
+            public bool ColliderEnabled;
+        }
+
+        private BiomeArenaTerrain _terrain;
 
         private BiomeArenaPropFactory _factory;
         private Transform _propRoot;
@@ -108,6 +126,10 @@ namespace Rapadura.Gameplay.World.Biomes
         public int HiddenCount => _hidden.Count;
         public int TintedRendererCount => _savedBlocks.Count;
         public int ActivePropCount => _activeProps.Count;
+        public bool IsTerrainShown => _terrain != null && _terrain.IsShown;
+
+        /// <summary>The generated terrain (null until the first terrain apply).</summary>
+        public BiomeArenaTerrain Terrain => _terrain;
 
         /// <summary>Profile used for <paramref name="biome"/>: inspector override, else <see cref="BiomeArenaProfiles.Get"/>.</summary>
         public BiomeArenaProfile ResolveProfile(BiomeType biome)
@@ -138,10 +160,12 @@ namespace Rapadura.Gameplay.World.Biomes
             _appliedProfile = profile;
 
             SyncEnvironmentBiome(profile.Biome);
+            Vector3 center = ResolveCenter(fallbackCenter);
+            ApplyTerrain(profile, seed, center);
 
             if (profile.IsNeutral)
             {
-                GameLogger.Info(LogCategory, $"Arena kept as authored for {profile.Biome}.");
+                GameLogger.Info(LogCategory, $"Arena kept as authored for {profile.Biome} (terrain: {IsTerrainShown}).");
                 return;
             }
 
@@ -149,11 +173,11 @@ namespace Rapadura.Gameplay.World.Biomes
             ApplyGround(profile);
             ApplyAtmosphere(profile);
             ApplySkybox(profile);
-            SpawnProps(profile, seed, ResolveCenter(fallbackCenter));
+            SpawnProps(profile, seed, center);
 
             GameLogger.Info(
                 LogCategory,
-                $"Arena dressed as {profile.Biome}: {_hidden.Count} hidden, {_savedBlocks.Count} renderers recoloured, {_activeProps.Count} props.");
+                $"Arena dressed as {profile.Biome}: {_hidden.Count} hidden, {_savedBlocks.Count} renderers recoloured, {_activeProps.Count} props, terrain {IsTerrainShown}.");
         }
 
         /// <summary>Undoes everything <see cref="Apply(BiomeArenaProfile, int, Vector3?)"/> did. Safe to call repeatedly.</summary>
@@ -185,6 +209,9 @@ namespace Rapadura.Gameplay.World.Biomes
 
         private void OnDestroy()
         {
+            // Terrain meshes belong to BiomeArenaTerrainCache (reused by the next encounter); only the GameObjects go.
+            _terrain?.Dispose();
+            _terrain = null;
             _factory?.Dispose();
             _factory = null;
             if (_propRoot != null)
@@ -245,7 +272,7 @@ namespace Rapadura.Gameplay.World.Biomes
 
         private void Visit(Transform node, IReadOnlyList<BiomeArenaPropRule> rules, bool readTag)
         {
-            if (node == _propRoot)
+            if (node == _propRoot || (_terrain != null && node == _terrain.Root))
             {
                 return;
             }
@@ -381,7 +408,8 @@ namespace Rapadura.Gameplay.World.Biomes
 
         private void ApplyGround(BiomeArenaProfile profile)
         {
-            if (!profile.TintGround)
+            // The generated terrain carries its own biome colours; the authored plane is hidden.
+            if (!profile.TintGround || IsTerrainShown)
             {
                 return;
             }
@@ -425,6 +453,68 @@ namespace Rapadura.Gameplay.World.Biomes
             }
 
             _roots.Clear();
+        }
+
+        // ---------------------------------------------------------------
+        // Procedural terrain
+        // ---------------------------------------------------------------
+
+        private void ApplyTerrain(BiomeArenaProfile profile, int seed, Vector3 center)
+        {
+            if (!_proceduralTerrain || !profile.ProceduralTerrain)
+            {
+                return;
+            }
+
+            // Stand the terrain where the authored floor is (Main.unity: y = 0), then take that floor away.
+            CollectGroundRenderers();
+            center.y = ProbeGroundHeight(center, center.y);
+            DisableAuthoredGround();
+
+            _terrain ??= new BiomeArenaTerrain(gameObject.scene);
+            _terrain.Show(profile.Biome, BiomeArenaTerrainGenerator.VariantFor(seed), center);
+        }
+
+        private void DisableAuthoredGround()
+        {
+            for (int i = 0; i < _groundBuffer.Count; i++)
+            {
+                Renderer ground = _groundBuffer[i];
+                if (ground == null)
+                {
+                    continue;
+                }
+
+                var saved = new SavedGround { Renderer = ground, RendererEnabled = ground.enabled };
+                ground.enabled = false;
+                if (ground.TryGetComponent(out Collider collider))
+                {
+                    saved.Collider = collider;
+                    saved.ColliderEnabled = collider.enabled;
+                    collider.enabled = false;
+                }
+
+                _disabledGround.Add(saved);
+            }
+        }
+
+        private void RestoreAuthoredGround()
+        {
+            for (int i = 0; i < _disabledGround.Count; i++)
+            {
+                SavedGround saved = _disabledGround[i];
+                if (saved.Renderer != null)
+                {
+                    saved.Renderer.enabled = saved.RendererEnabled;
+                }
+
+                if (saved.Collider != null)
+                {
+                    saved.Collider.enabled = saved.ColliderEnabled;
+                }
+            }
+
+            _disabledGround.Clear();
         }
 
         // ---------------------------------------------------------------
@@ -592,6 +682,11 @@ namespace Rapadura.Gameplay.World.Biomes
             float best = float.NegativeInfinity;
 
             // Probe only the ground's own colliders so rocks/enemies/the player never lift a prop.
+            if (IsTerrainShown && _terrain.GroundCollider != null && _terrain.GroundCollider.Raycast(ray, out RaycastHit terrainHit, maxDistance))
+            {
+                best = terrainHit.point.y;
+            }
+
             for (int i = 0; i < _groundBuffer.Count; i++)
             {
                 Renderer ground = _groundBuffer[i];
@@ -633,6 +728,9 @@ namespace Rapadura.Gameplay.World.Biomes
             _savedBlocks.Clear();
             _touchedRenderers.Clear();
             _groundBuffer.Clear();
+
+            _terrain?.Hide();
+            RestoreAuthoredGround();
 
             if (_factory != null)
             {

@@ -27,6 +27,10 @@ namespace Rapadura.Tests
                 Object.DestroyImmediate(props);
             }
 
+            // Every Apply now also builds the procedural terrain (inactive after Restore).
+            BiomeArenaTerrainTests.DestroyTerrainRoots();
+            BiomeArenaTerrainCache.Clear();
+
             foreach (Object created in _created)
             {
                 if (created != null)
