@@ -149,7 +149,8 @@ namespace Rapadura.Tests
         public void Apply_WithoutModel_BuildsColliderlessPlaceholderRestingOnCapsuleBottom()
         {
             GameObject root = MakeEnemyRoot(out Transform original);
-            EnemyDefinition golem = MakeEnemy("enemy_mountain_stone_golem");
+            // Any id without a procedural model (the shipped golem has one: see ProceduralEnemyModelsTests).
+            EnemyDefinition golem = MakeEnemy("enemy_test_golem");
             SetField(golem, "_placeholderShape", EnemyPlaceholderShape.Cube);
             SetField(golem, "_placeholderScale", new Vector3(1.2f, 1.4f, 1f));
 
@@ -173,8 +174,8 @@ namespace Rapadura.Tests
         {
             GameObject rootA = MakeEnemyRoot(out _);
             GameObject rootB = MakeEnemyRoot(out _);
-            EnemyDefinition bats = MakeEnemy("enemy_cave_bat_swarm");
-            EnemyDefinition dweller = MakeEnemy("enemy_cave_dweller");
+            EnemyDefinition bats = MakeEnemy("enemy_test_bats");
+            EnemyDefinition dweller = MakeEnemy("enemy_test_dweller");
 
             Renderer a = EnemyVisualSwapper.Apply(rootA, bats).GetComponent<Renderer>();
             Renderer b = EnemyVisualSwapper.Apply(rootB, dweller).GetComponent<Renderer>();
@@ -253,7 +254,8 @@ namespace Rapadura.Tests
             "enemy_forest_wolf", "enemy_forest_alpha_wolf", "enemy_forest_spider", "enemy_desert_scorpion",
         };
 
-        private static readonly string[] PlaceholderEnemyIds =
+        /// <summary>The enemies without a Meshy model: built in code (ProceduralEnemyModels), or baked prefabs of it.</summary>
+        private static readonly string[] ProceduralEnemyIds =
         {
             "enemy_cave_bat_swarm", "enemy_cave_dweller", "enemy_desert_ruin_guardian",
             "enemy_mountain_stone_golem", "enemy_mountain_warlord",
@@ -368,17 +370,21 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void ShippedPlaceholderEnemies_StandOnTheGroundWhenSpawnedOnIt()
+        public void ShippedProceduralEnemies_GetTheirLowPolyModel_AndStandOnTheGroundWhenSpawnedOnIt()
         {
-            foreach (string id in PlaceholderEnemyIds)
+            foreach (string id in ProceduralEnemyIds)
             {
                 EnemyDefinition definition = Resources.Load<EnemyDefinition>("Enemies/" + id);
                 Assert.IsNotNull(definition, id);
-                Assert.AreEqual(EnemyVisualSource.Placeholder, EnemyVisualSwapper.ResolveSource(definition), id);
+                EnemyVisualSource source = EnemyVisualSwapper.ResolveSource(definition);
+                Assert.That(source == EnemyVisualSource.Procedural || source == EnemyVisualSource.DefinitionPrefab,
+                    $"{id}: expected the procedural model (runtime or baked), got {source}");
 
                 GameObject root = MakeEnemyRoot(out _);
                 Transform visual = EnemyVisualSwapper.Apply(root, definition);
 
+                Assert.IsNotNull(visual.GetComponent<Rapadura.Gameplay.Enemies.Visuals.ProceduralEnemyRig>(), $"{id}: not the procedural model");
+                Assert.IsNull(visual.Find(EnemyVisualSwapper.SnoutName), $"{id}: must not fall back to a placeholder");
                 Assert.AreEqual(-1f, MeshBottomInRootSpace(root, visual), 0.01f, id);
             }
         }

@@ -20,10 +20,10 @@ MonoBehaviour:
   _lootDropChance: 0.6
   _lootQuantityMin: 1
   _lootQuantityMax: 3
-  _visualPrefab: {fileID: 0}
-  _visualLocalPosition: {x: 0, y: -0.5, z: 0}
-  _visualLocalEulerAngles: {x: -90, y: 0, z: 0}
-  _visualScale: 0.0145
+  _visualPrefab: {fileID: 5733055187420069182, guid: 24abec60edf6fa24dbe3847de96efe3f, type: 3}
+  _visualLocalPosition: {x: 0, y: 0, z: 0}
+  _visualLocalEulerAngles: {x: 0, y: 0, z: 0}
+  _visualScale: 1
   _usePlaceholderVisual: 1
   _placeholderShape: 1
   _placeholderColor: {r: 0.5, g: 0.5, b: 0.52, a: 1}

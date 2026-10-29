@@ -24,10 +24,10 @@ MonoBehaviour:
   _bossBonusDropItem: {fileID: 11400000, guid: 3abe34506ef064245a3eedf04844f4ed, type: 2}
   _bossBonusDropRarity: 2
   _bossExperienceMultiplier: 8
-  _visualPrefab: {fileID: 0}
-  _visualLocalPosition: {x: 0, y: -0.5, z: 0}
-  _visualLocalEulerAngles: {x: -90, y: 0, z: 0}
-  _visualScale: 0.0145
+  _visualPrefab: {fileID: 3363085270812195167, guid: d233ce852d7c28b4b8bd083cc9d4e178, type: 3}
+  _visualLocalPosition: {x: 0, y: 0, z: 0}
+  _visualLocalEulerAngles: {x: 0, y: 0, z: 0}
+  _visualScale: 1
   _usePlaceholderVisual: 1
   _placeholderShape: 1
   _placeholderColor: {r: 0.85, g: 0.7, b: 0.45, a: 1}

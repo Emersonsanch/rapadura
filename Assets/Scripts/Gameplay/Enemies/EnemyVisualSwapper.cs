@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Rapadura.Gameplay.Enemies.Visuals;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Enemies
@@ -23,6 +24,9 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>Build a tinted primitive placeholder from the definition's placeholder settings.</summary>
         Placeholder = 2,
+
+        /// <summary>Instantiate the cached code-built low-poly model of <see cref="ProceduralEnemyModels"/> (no Meshy model needed).</summary>
+        Procedural = 3,
     }
 
     /// <summary>
@@ -34,10 +38,13 @@ namespace Rapadura.Gameplay.Enemies
     ///
     ///   1. <see cref="EnemyDefinition.VisualPrefab"/> set → that model, placed with the definition's
     ///      visual position/rotation/scale;
-    ///   2. otherwise, if <see cref="EnemyDefinition.UsePlaceholderVisual"/> (default) → a collider-less
+    ///   2. otherwise, if <see cref="EnemyDefinition.UsePlaceholderVisual"/> (default) and the enemy has a
+    ///      code-built model (<see cref="ProceduralEnemyModels.KindFor(EnemyDefinition)"/>: bat swarm, golem,
+    ///      warlord, ruin guardian, ancient dweller) → that model (shared cached meshes/material);
+    ///   3. otherwise, if <see cref="EnemyDefinition.UsePlaceholderVisual"/> → a collider-less
     ///      primitive (shape/scale/tint per definition, tint auto-derived from the asset name when not
     ///      authored) with a darker "snout" cube marking the front, base resting on the capsule bottom;
-    ///   3. otherwise (or a null definition) → the shared prefab's own visual.
+    ///   4. otherwise (or a null definition) → the shared prefab's own visual.
     ///
     /// The prefab's original visual is only deactivated, never destroyed, so a pooled enemy can go
     /// back to it; visuals built here carry an <see cref="EnemyVisualMarker"/> and are rebuilt only
@@ -78,7 +85,14 @@ namespace Rapadura.Gameplay.Enemies
                 return EnemyVisualSource.DefinitionPrefab;
             }
 
-            return definition.UsePlaceholderVisual ? EnemyVisualSource.Placeholder : EnemyVisualSource.SharedPrefab;
+            if (!definition.UsePlaceholderVisual)
+            {
+                return EnemyVisualSource.SharedPrefab;
+            }
+
+            return ProceduralEnemyModels.KindFor(definition) != ProceduralEnemyKind.None
+                ? EnemyVisualSource.Procedural
+                : EnemyVisualSource.Placeholder;
         }
 
         /// <summary>
@@ -168,7 +182,9 @@ namespace Rapadura.Gameplay.Enemies
 
             GameObject visual = source == EnemyVisualSource.DefinitionPrefab
                 ? BuildModel(root, definition)
-                : BuildPlaceholder(root, definition);
+                : source == EnemyVisualSource.Procedural
+                    ? BuildProcedural(root, definition)
+                    : BuildPlaceholder(root, definition);
 
             visual.AddComponent<EnemyVisualMarker>().Set(definition, source);
             Retarget(animator, visual.transform);
@@ -183,11 +199,24 @@ namespace Rapadura.Gameplay.Enemies
             visual.transform.localEulerAngles = definition.VisualLocalEulerAngles;
             visual.transform.localScale = Vector3.one * Mathf.Max(0.0001f, definition.VisualScale);
             GroundModel(root, visual.transform);
-            if (definition.IsBoss)
+
+            // Baked procedural models (ProceduralEnemyRig) already carry their own boss palette.
+            if (definition.IsBoss && visual.GetComponent<ProceduralEnemyRig>() == null)
             {
                 TintBossModel(visual);
             }
 
+            return visual;
+        }
+
+        /// <summary>The cached code-built model, feet on the capsule bottom; never boss-tinted (its palette has the accents).</summary>
+        private static GameObject BuildProcedural(Transform root, EnemyDefinition definition)
+        {
+            GameObject visual = ProceduralEnemyModels.Instantiate(ProceduralEnemyModels.KindFor(definition), root);
+            visual.name = VisualName;
+            visual.transform.SetLocalPositionAndRotation(new Vector3(0f, GetFootHeight(root), 0f), Quaternion.identity);
+            visual.transform.localScale = Vector3.one;
+            GroundModel(root, visual.transform);
             return visual;
         }
 
