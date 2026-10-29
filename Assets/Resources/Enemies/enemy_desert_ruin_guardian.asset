@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
   _enemyName: "Guardi\xE3o da Ru\xEDna"
   _isBoss: 1
-  _maxHealth: 505
+  _maxHealth: 780
   _experienceReward: 18
   _lootItem: {fileID: 11400000, guid: 214ad08bc7a3def4cbeb45bedcc4524c, type: 2}
   _lootDropChance: 0.6
@@ -41,6 +41,6 @@ MonoBehaviour:
   _loseTargetRadius: 20
   _attackRange: 2
   _attackCooldown: 3.3
-  _attackDamage: 22
+  _attackDamage: 32
   _fleeHealthThreshold: 0
   _fleeSafeDistance: 10

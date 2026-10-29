@@ -825,3 +825,184 @@ trava o mínimo de 40.
 
 Equipamento procedural (`AddGeneratedItem`) só precisa de um espaço livre, como antes.
 
+
+---
+
+## 9. r8 — progressão real: missões regionais, equipamento, atributos e atordoamento (2026-10-29)
+
+### 9.1 Método
+
+Os playtests r5–r7 foram rodadas automatizadas dentro do Editor (Unity MCP). Esta rodada **não usou o
+Editor**: o modelo das §5.3/§5.4 foi portado para Python puro em `tools/balance/` e estendido. Ele lê os
+dados direto do projeto (`.asset` YAML de inimigos, biomas, itens, afixos e skills de herói,
+`RegionQuestCatalog.cs`, `progression.csv`, `PlayerCombatBalance.asset`), sem Unity:
+
+```
+python -I tools/balance/run_r8.py                      # relatório completo (as tabelas abaixo saem dele)
+python -I tools/balance/run_r8.py --stun reset         # com o atordoamento como era antes do r8
+python -I tools/balance/run_r8.py --candidate x.json   # testa um retune em memória antes de editar assets
+```
+
+O que o modelo faz (`balance_model.py`):
+- **Luta em passos de 20 ms** (não mais uma razão de DPS): inimigos golpeiam a cada `attack_cooldown`
+  depois de telegrafar (`EnemyAttackState`, preparação por arquétipo de `EnemyMotion`); skills de dano
+  por prioridade, com custo de mana, recarga e **cast + recuperação bloqueando** o ataque básico; skills
+  de área ≥ 2,5 m acertam todos os inimigos da luta; o básico acerta um alvo.
+- **Atordoamento**: `StunRules` (chefe ×0,5); o inimigo atordoado não golpeia. O relatório conta os
+  golpes do chefe com e sem stun.
+- **Equipamento**: Monte Carlo (3 000 campanhas) das tabelas de loot dos biomas, raridades do
+  `EnemyLootRoller`, 4 rolagens garantidas + bônus do chefe e sorteio de afixos sem reposição pelos pesos
+  do `ProceduralItemGenerator`; o herói equipa a melhor peça por slot. Velocidade de ataque, espinhos,
+  crítico, dano plano/percentual, defesa plana e vida entram no combate. Itens-base de recompensa de
+  missão (sem afixos) não dão stat nenhum: `_weaponDamage`/`_armorDefense` só são lidos por
+  `MeleeWeapon`/`RangedWeapon`, não pelo `PlayerBasicAttack`, e `_equipStatModifiers` está vazio em todos.
+- **XP por rota**: "só chefes" = as 3 vitórias que liberam o chefe + chefe (com 1 lacaio); "missões
+  regionais" = lutas até cumprir as duas missões da região em sequência (abates no ritmo do peso de
+  spawn, 1,5 inimigo por encontro) + chefe. Missões pessoais/convergência/diárias ficam de fora: as NPCs
+  delas estão na `Main.unity`, fora do laço mapa → encontro.
+- **Atributos e pontos de skill** (novos no modelo): 1 Vitalidade + 1 Poder Arcano por nível; 1 ponto de
+  skill por nível na skill de dano com maior ganho de DPS (máx. 5), ultimate aprendida no nível 10.
+- **Calibração**: com os dados e o protocolo do r7 (níveis 2/5/8/11, sem equipamento, atributos, pontos
+  nem stun), "2 comuns" dá 1,9–4,7 s e "chefe + lacaio" 17,9–22,9 s de média, contra 4,3–7,4 s e 15–22 s
+  medidos no r7. Fatores jogo/modelo: **comuns ×1,73** (aproximação, fuga e golpes perdidos), **chefes
+  ×0,89**. Os tempos "no jogo" abaixo são o modelo × esse fator.
+
+Fora do modelo (como no r5–r7): esquiva, buffs/debuffs de % Defesa e de dano do inimigo, curas.
+
+### 9.2 Diagnóstico (dados do r7 com a progressão de hoje)
+
+| Rota | Região | Lutas | XP abates / missões / chefe | Nível no chefe | Chefe no jogo (média dos 5) | 2 comuns no jogo (média) |
+|---|---|---|---|---|---|---|
+| só chefes | Floresta | 3 | 45 / 0 / 90 | 1,4 | 15,8 s | 5,2 s |
+| só chefes | Deserto | 3 | 81 / 0 / 162 | 3,0 | 13,1 s | 5,1 s |
+| só chefes | Montanha | 3 | 126 / 0 / 252 | 5,3 | 13,2 s | 4,9 s |
+| só chefes | Cavernas | 3 | 180 / 0 / 360 | 7,9 | 14,4 s | 2,4 s |
+| missões | Floresta | 12,4 | 187 / **350** / 90 | **5,5** | 11,6 s | 4,1 s |
+| missões | Deserto | 5,3 | 144 / **580** / 162 | **10,0** | 9,5 s | 1,7 s |
+| missões | Montanha | 6,7 | 280 / **840** / 252 | **14,5** | 8,2 s | 1,5 s |
+| missões | Cavernas | 9,3 | 560 / **1 140** / 360 | **19,0** | 8,3 s | 0,4 s |
+
+- **As missões regionais eram o maior salto de poder**: 2 910 XP, mais que todas as lutas que elas pedem
+  somadas aos 4 chefes (~2 000). Quem as fazia chegava aos chefes nos níveis 5,5 / 10 / 14,5 / 19 (o r7
+  supunha 2 / 4 / 6 / 8) e encontrava chefes de 8–12 s e comuns que morriam na primeira rotação.
+- **Mesmo sem missões**, atributos e pontos de skill (que o r7 não contava) já tiravam os chefes da meta
+  (13–16 s).
+- **Morte sem skills nem defesa**: só no ataque básico, o jogador da rota com missões vencia todos os
+  chefes, então a regra "risco real sem skills/defesa" não valia mais.
+- **Equipamento**: na média pesa pouco (+3 de dano plano a partir do Deserto, +2% de velocidade de ataque,
+  3% de espinhos nas Cavernas), mas a cauda é grande: Brutal 6–12 + Afiada 2–5 somam até +17 num básico
+  de 10. Os 10% com mais sorte (+9,7 de dano plano) matavam os chefes em 12,7–15,3 s.
+- **Atordoamento**: no código do r7 o stun tirava o inimigo do estado de ataque e o `Enter` rearmava o
+  golpe uma preparação depois do fim do stun. Num chefe de 2,4–3,3 s de recarga com 0,3–0,5 s de stun,
+  isso **adiantava** o próximo golpe: com a Granada do Ícaro (recarga 8 s) o Lobo Alfa dava 9 golpes numa
+  luta em vez de 7. Bug de fórmula, corrigido em código (§9.3).
+
+### 9.3 Mudanças aplicadas (antes → depois)
+
+| Onde | Campo | Antes | Depois |
+|---|---|---|---|
+| `RegionQuestCatalog` | XP de `forest_howling_trail` / `forest_spider_webs` | 150 / 200 | **60 / 80** |
+| `RegionQuestCatalog` | XP de `desert_stinger_road` / `desert_crossing_reserve` | 260 / 320 | **100 / 130** |
+| `RegionQuestCatalog` | XP de `mountain_walking_stones` / `mountain_mine_pass` | 380 / 460 | **150 / 180** |
+| `RegionQuestCatalog` | XP de `caves_dark_lamps` / `caves_last_lantern` | 520 / 620 | **200 / 240** |
+| Lobo Alfa | HP / dano | 430 / 14 | **520 / 15** (DPS 5,83 → 6,25) |
+| Escorpião das Dunas | HP | 85 | **110** |
+| Guardião da Ruína | HP / dano | 505 / 22 | **780 / 32** (DPS 6,67 → 9,70) |
+| Golem de Pedra | HP | 100 | **140** |
+| Senhor da Guerra da Montanha | HP / dano | 580 / 16 | **900 / 30** (DPS 6,15 → 11,54) |
+| Enxame de Morcegos | HP | 80 | **170** |
+| Habitante Ancestral | HP / dano | 700 / 18 | **1 180 / 42** (DPS 6 → 14) |
+| `affix_sharp` (Afiada) | AttackDamage plano | 2–5 | **1–3** |
+| `affix_brutal` (Brutal) | AttackDamage plano | 6–12 | **3–6** |
+| `EnemyController` / `EnemyAttackState` (código) | golpe depois de stun ou de sair/voltar ao alcance | próximo golpe 1 preparação depois | **a recarga que faltava continua valendo** (congelada durante o stun); a preparação inteira sempre telegrafa |
+
+Sem mudança: recargas dos inimigos, XP por inimigo, tabelas de loot, chances de drop, raridades,
+durações de stun (no chefe elas atrasam ~1 golpe por luta; o valor delas é cortar uma preparação na hora
+certa, o que o modelo não mede), afixos de velocidade de ataque e espinhos (na média dão +2% e 3%), XP das
+missões pessoais/convergência/diárias.
+
+Espelhos: `EnemyDatabaseSeeder` + `EnemyDatabaseSeederTests`, `AffixDatabaseSeeder`, `enemies.csv`. Nos
+`.asset` de inimigo só as linhas `_maxHealth`/`_attackDamage` mudaram.
+
+Por quê:
+- **XP das missões a ~40%**. Cada missão continua valendo 0,75–2,4× o XP dos próprios abates (antes até
+  3×) e a rota com missões ainda chega ~2,5–7 níveis acima da rota só de chefes. A ultimate (nível 10)
+  chega na Montanha para quem faz as missões e no fim das Cavernas para quem só enfrenta chefes.
+- **Inimigos re-baseados no nível da rota com missões** (3 / 7 / 10 / 15 no chefe): os chefes ganham
+  +21% / +54% / +55% / +69% de HP e o dano por golpe sobe para que, parado e sem defesa, o herói morra em
+  21–25 s, antes de matar o chefe só no ataque básico (24–40 s). O golpe continua lento e telegrafado
+  (recargas iguais). O Lobo Alfa só ganhou +1 de dano: é o chefe tutorial.
+- **Comuns**: Escorpião +29%, Golem +40%, Morcegos +113%. Os morcegos eram o caso pior: no nível 13
+  qualquer skill de área matava os dois na abertura.
+- **Afixos de dano plano pela metade**: o básico tem 10 de dano; dois afixos na mesma arma agora somam no
+  máximo +9 (antes +17). O p90 de sorte passa a encurtar o chefe em ~15% (antes ~27%).
+
+### 9.4 Resultado (r7 → r8)
+
+Tempos "no jogo" = modelo × fator de calibração (§9.1); pior / **média** / melhor dos 5 heróis. Meta:
+lutas comuns 4–7 s, chefes 15–22 s, morte possível sem skills nem defesa.
+
+| Bioma | Rota | Nível no chefe r7 → r8 | 2 comuns: média r7 → r8 (pior / **média** / melhor) | Chefe: média r7 → r8 (pior / **média** / melhor) | Só básico, r8: mata o chefe / morre em |
+|---|---|---|---|---|---|
+| Floresta | missões | 5,5 → **4,0** | 4,1 → 7,5 / **4,8** / 1,8 s | 11,6 → 20,0 / **16,5** / 12,3 s | 24,0 / 22,2 s |
+| Deserto | missões | 10,0 → **7,1** | 1,7 → 8,7 / **6,1** / 3,8 s | 9,5 → 22,8 / **18,2** / 12,7 s | 28,0 / 20,6 s |
+| Montanha | missões | 14,5 → **10,9** | 1,5 → 10,4 / **6,4** / 3,8 s | 8,2 → 24,6 / **18,4** / 12,0 s | 29,5 / 21,6 s |
+| Cavernas | missões | 19,0 → **15,0** | 0,4 → 12,2 / **4,6** / 0,0 s | 8,3 → 27,1 / **20,0** / 13,0 s | 33,5 / 24,8 s |
+| Floresta | só chefes | 1,4 | 5,2 → **5,2** s | 15,8 → **19,3** s | 25,5 / 14,9 s |
+| Deserto | só chefes | 3,0 | 5,1 → **8,5** s | 13,1 → **22,5** s | 31,5 / 13,9 s |
+| Montanha | só chefes | 5,3 | 4,9 → **9,8** s | 13,2 → **22,9** s | 34,0 / 13,7 s |
+| Cavernas | só chefes | 7,9 | 2,4 → **10,0** s | 14,4 → **28,2** s | 41,0 / 15,7 s |
+
+- **Rota com missões (a de referência)**: todas as médias dentro da meta (comuns 4,6–6,4 s, chefes
+  16,5–20,0 s), e só no ataque básico o chefe mata primeiro em todos os biomas.
+- **Rota só de chefes**: fica mais difícil de propósito (2,5–7 níveis abaixo). Chefes de 19–28 s e comuns
+  de 8,5–10 s; sem defesa o chefe mata em 14–16 s, então vencer pede Muralha/Escudo/curas/esquiva ou
+  algumas lutas a mais. Derrota volta ao mapa sem perda.
+- **Os mesmos dados do r8 no protocolo do r7** (níveis 2/4/6/8, sem atributos, pontos nem equipamento)
+  dariam chefes de 19–42 s: o r8 assume que o jogador gasta atributos e pontos de skill. Um playtest no
+  Editor deve usar o nível e os pontos da rota com missões.
+
+**Tempo para subir de nível** (rota com missões; encontro ≈ luta comum + 20 s de mapa/introdução):
+
+| Região | XP por encontro | Nível típico r7 → r8 | XP para o próximo | Encontros por nível (só abates) | Min/nível só abates | Min/nível com missões |
+|---|---|---|---|---|---|---|
+| Floresta | 15 | 3 → 2 | 121 → 110 | 8,1 → 7,3 | 3,1 → 2,9 | 1,1 → 1,6 |
+| Deserto | 27 | 8 → 5 | 195 → 146 | 7,2 → 5,4 | 2,7 → 2,3 | 0,5 → 0,9 |
+| Montanha | 42 | 12 → 9 | 285 → 214 | 6,8 → 5,1 | 2,4 → 2,2 | 0,6 → 1,0 |
+| Cavernas | 60 | 17 → 13 | 459 → 314 | 7,7 → 5,2 | 2,6 → 2,1 | 0,9 → 1,2 |
+
+**Poder na entrada de cada região** (rota com missões, r8; equipamento médio do Monte Carlo):
+
+| Região | Nível | Vida | Ataque básico | Kit Maithe / Joaquim | Equipamento médio | Chefe da região mata o herói parado em |
+|---|---|---|---|---|---|---|
+| Floresta | 1 | 100 | 20,0 DPS | 17,3 / 2,5 DPS | nada | 16,0 s |
+| Deserto | 4 | 154 | 26,0 DPS | 26,5 / 4,8 DPS | +1,6 dano plano, +2% vel., +1% crítico | 15,9 s |
+| Montanha | 8 | 226 | 29,4 DPS | 35,0 / 6,2 DPS | +1,7 dano plano, +2% vel., +2,5% crítico | 19,6 s |
+| Cavernas | 11 | 286 | 31,8 DPS | 43,0 / 6,7 DPS | idem + 3% espinhos, +3,6 defesa, +6 vida | 21,2 s |
+
+(r7, mesma rota: níveis 1 / 6 / 10,7 / 15,2, básico 20 / 30,4 / 34,4 / 38,6 DPS, chefe matava em
+17 / 28,5 / 42,6 / 61,8 s.)
+
+**Sorte no loot** (p90 do dano plano, rota com missões): Deserto +4,8 → chefe 18,2 → 15,4 s; Montanha
++4,9 → 18,4 → 15,5 s; Cavernas +5,1 → 20,0 → 17,4 s (antes: +9,7 → 12,7 s no Deserto).
+
+**Atordoamento nos chefes** (golpes do chefe numa luta: sem stun → código r7 → r8): Granada do Ícaro no
+Lobo Alfa 7 → 9 → 7; Correntes da Lavine no Guardião 5 → 6 → 5 e na Habitante 6 → 7 → 6. Com a correção o
+stun nunca adianta um golpe; no chefe custa 0–1 golpe por luta, nos comuns (0,6–1,0 s contra recargas de
+0,7–1,6 s) cerca de 1 golpe por conjuração.
+
+### 9.5 Testes
+
+`BalanceInvariantsTests` re-baseado no r8 (justificativa nos comentários do teste):
+- nível esperado por bioma 2/4/6/8 → **3/7/10/15** (o chefe da rota com missões), com atributos
+  (Vitalidade/Poder Arcano) e pontos de skill gulosos no modelo analítico;
+- faixas de HP de chefe: Floresta 450–650, Deserto 650–950, Montanha 750–1100, Cavernas 1000–1400;
+- as outras regras não mudaram: chefe mata o jogador parado em 12–40 s, luta com kit 10–35 s para os 5
+  heróis, só no básico o chefe vence, com defesa todos vencem, a Maithe vence sem defender, comuns 2,5–8 s
+  só no básico e ≥ 1,5 s com o melhor kit (r8: 21–25 s, 12–33 s, 24–40 s contra 21–25 s, 3,3–5,8 s);
+- novos: `RegionQuestRoute_ReachesTheExpectedBossLevels` (a economia de XP real leva aos níveis acima),
+  `BossRushRoute_IsBelowTheQuestRoute`, `RegionQuestXp_StaysInProportionToTheKillsItAsksFor` (total
+  800–1 500; cada missão 0,5–2,5× o XP dos próprios abates) e `FlatAttackDamageAffixes_NeverDoubleTheBasicAttack`.
+
+`StunThornsAttackSpeedTests.StunRightAfterAStrike_DelaysTheNextSwing_InsteadOfReArmingItEarly` cobre a
+correção do atordoamento. `EnemyDatabaseSeederTests` espelha os novos HP/dano.

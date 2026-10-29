@@ -171,6 +171,52 @@ namespace Rapadura.Tests
         }
 
         [Test]
+        public void StunRightAfterAStrike_DelaysTheNextSwing_InsteadOfReArmingItEarly()
+        {
+            // r8 (Docs/Balance/README.md §9): before, the stun dropped the enemy out of the attack state
+            // and EnemyAttackState.Enter re-armed the next swing one windup after the stun ended, so a
+            // stun right after a 1 s-cooldown swing brought the next one in 0.3 + 0.42 s instead of 1.3 s.
+            (EnemyController enemy, BuffController buffs, _) = CreateEnemy(isBoss: false);
+            Health target = CreateTarget(enemy, new Vector3(1f, 0f, 0f));
+            float full = target.CurrentHealth;
+            int strikes = enemy.StrikeSequence;
+
+            for (int i = 0; i < 60 && enemy.StrikeSequence == strikes; i++)
+            {
+                enemy.TickBrain(0.05f);
+            }
+
+            Assert.AreEqual(strikes + 1, enemy.StrikeSequence, "setup: the first strike landed");
+            Assert.Less(target.CurrentHealth, full);
+            Assert.AreEqual(1f, enemy.AttackCooldownRemaining, 0.06f, "a strike arms the full cooldown");
+
+            buffs.ApplyStun(0.3f);
+            for (int i = 0; i < 6; i++)
+            {
+                enemy.TickBrain(0.05f);
+                buffs.TickStun(0.05f);
+            }
+
+            buffs.TickStun(0.01f); // float residue of 6 × 0.05 against 0.3
+            Assert.IsFalse(enemy.IsStunned);
+            Assert.AreEqual(1f, enemy.AttackCooldownRemaining, 0.06f, "the cooldown is frozen while stunned");
+
+            for (int i = 0; i < 16; i++) // 0.8 s after the stun: the old code had already struck at ~0.45 s
+            {
+                enemy.TickBrain(0.05f);
+            }
+
+            Assert.AreEqual(strikes + 1, enemy.StrikeSequence, "no early swing after the stun");
+
+            for (int i = 0; i < 8; i++) // 1.2 s after the stun: the frozen second of cooldown has run out
+            {
+                enemy.TickBrain(0.05f);
+            }
+
+            Assert.AreEqual(strikes + 2, enemy.StrikeSequence, "the swing lands once the cooldown left runs out");
+        }
+
+        [Test]
         public void SkillWithStun_StunsTheTargetHit_BossForHalf()
         {
             SkillDefinition skill = CreateSkill(damage: 5f, stunSeconds: 1f);

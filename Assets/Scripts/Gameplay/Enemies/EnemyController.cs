@@ -278,9 +278,13 @@ namespace Rapadura.Gameplay.Enemies
 
             if (IsStunned)
             {
+                // The swing cooldown is frozen while stunned: a stun costs the enemy time, it never
+                // re-arms an early swing (see AttackCooldownRemaining).
                 TickStunned();
                 return;
             }
+
+            _attackCooldownRemaining = Mathf.Max(0f, _attackCooldownRemaining - deltaTime);
 
             if (IsHoldingAggro)
             {
@@ -419,6 +423,7 @@ namespace Rapadura.Gameplay.Enemies
             _spawnGeneration++;
             _velocity = Vector3.zero;
             _yawVelocity = 0f;
+            _attackCooldownRemaining = 0f;
             CancelAttackWindup();
 
             if (Health == null)
@@ -524,6 +529,7 @@ namespace Rapadura.Gameplay.Enemies
         private int _alertSequence;
         private bool _isWindingUp;
         private float _attackWindupDuration;
+        private float _attackCooldownRemaining;
 
         /// <summary>Planar movement velocity (m/s) after acceleration/deceleration smoothing.</summary>
         public Vector3 Velocity => _velocity;
@@ -556,6 +562,16 @@ namespace Rapadura.Gameplay.Enemies
         public bool IsWindingUp => _isWindingUp;
         public float AttackWindupDuration => _attackWindupDuration;
 
+        /// <summary>
+        /// Seconds before this enemy may strike again, counted down by <see cref="TickBrain"/> except while
+        /// stunned. Set at every strike to max(<see cref="EnemyDefinition.AttackCooldown"/>, windup) and read by
+        /// <see cref="EnemyAttackState.Enter"/>: re-entering attack range (after a stun, a dodge or a chase)
+        /// no longer re-arms the swing after just one windup. Before r8 a stun dropped the enemy out of the
+        /// attack state and the next swing came one windup after the stun ended, so stunning a boss right
+        /// after its swing (2.4-3.3 s cooldown, 0.3-0.5 s stun) made it hit back sooner (Docs/Balance/README.md §9).
+        /// </summary>
+        public float AttackCooldownRemaining => _attackCooldownRemaining;
+
         /// <summary>Called by <see cref="EnemyAttackState"/> when a telegraphed windup starts; damage lands <paramref name="duration"/> s later.</summary>
         public void NotifyAttackWindup(float duration)
         {
@@ -569,6 +585,7 @@ namespace Rapadura.Gameplay.Enemies
         {
             _isWindingUp = false;
             _strikeSequence++;
+            _attackCooldownRemaining = Mathf.Max(_definition != null ? _definition.AttackCooldown : 0f, ResolvedAttackWindup);
         }
 
         /// <summary>A windup that never struck (target left reach, state change, death, re-spawn).</summary>

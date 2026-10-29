@@ -88,10 +88,10 @@ namespace Rapadura.Editor
             {
                 // Weapon prefixes (MainHand) — flat attack damage, common to rare tiers.
                 new AffixSeed { id = "affix_sharp", fallbackText = "Afiada", slotKind = AffixSlotKind.Prefix,
-                    stat = StatType.AttackDamage, application = ModifierApplication.Flat, min = 2f, max = 5f,
+                    stat = StatType.AttackDamage, application = ModifierApplication.Flat, min = 1f, max = 3f,
                     weight = 100, requiredSlot = EquipmentSlot.MainHand },
                 new AffixSeed { id = "affix_brutal", fallbackText = "Brutal", slotKind = AffixSlotKind.Prefix,
-                    stat = StatType.AttackDamage, application = ModifierApplication.Flat, min = 6f, max = 12f,
+                    stat = StatType.AttackDamage, application = ModifierApplication.Flat, min = 3f, max = 6f,
                     weight = 40, requiredSlot = EquipmentSlot.MainHand },
                 new AffixSeed { id = "affix_devastating", fallbackText = "Devastadora", slotKind = AffixSlotKind.Prefix,
                     stat = StatType.AttackDamage, application = ModifierApplication.PercentAdditive, min = 0.1f, max = 0.2f,

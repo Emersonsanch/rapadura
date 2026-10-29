@@ -18,7 +18,7 @@ MonoBehaviour:
   _slotKind: 0
   _affectedStat: 7
   _application: 0
-  _minValue: 2
-  _maxValue: 5
+  _minValue: 1
+  _maxValue: 3
   _rarityWeight: 100
   _requiredEquipSlot: 5

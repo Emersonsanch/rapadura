@@ -14,12 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
   _enemyName: Golem de Pedra
   _isBoss: 0
-  _maxHealth: 100
+  _maxHealth: 140
   _experienceReward: 28
   _lootItem: {fileID: 11400000, guid: 214ad08bc7a3def4cbeb45bedcc4524c, type: 2}
   _lootDropChance: 0.6
   _lootQuantityMin: 1
   _lootQuantityMax: 3
+  _bossGuaranteedLoot: 1
+  _bossBonusDropItem: {fileID: 0}
+  _bossBonusDropRarity: 2
+  _bossExperienceMultiplier: 1
   _visualPrefab: {fileID: 5733055187420069182, guid: 24abec60edf6fa24dbe3847de96efe3f, type: 3}
   _visualLocalPosition: {x: 0, y: 0, z: 0}
   _visualLocalEulerAngles: {x: 0, y: 0, z: 0}

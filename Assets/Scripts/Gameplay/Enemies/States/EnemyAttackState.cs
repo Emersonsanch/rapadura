@@ -34,9 +34,11 @@ namespace Rapadura.Gameplay.Enemies.States
 
         public void Enter(EnemyController context)
         {
-            // Attack as soon as the telegraph allows on entering range, then respect the cooldown.
+            // Attack as soon as the telegraph allows on entering range, but never before the cooldown
+            // left from the last strike (frozen during a stun): leaving and re-entering reach, or being
+            // stunned, must not re-arm an early swing. The full windup is always telegraphed.
             _windup = context.ResolvedAttackWindup;
-            _timeToStrike = _windup;
+            _timeToStrike = Mathf.Max(_windup, context.AttackCooldownRemaining);
             _windingUp = false;
         }
 

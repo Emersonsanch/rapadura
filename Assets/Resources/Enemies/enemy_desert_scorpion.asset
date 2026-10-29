@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
   _enemyName: "Escorpi\xE3o das Dunas"
   _isBoss: 0
-  _maxHealth: 85
+  _maxHealth: 110
   _experienceReward: 18
   _lootItem: {fileID: 11400000, guid: 214ad08bc7a3def4cbeb45bedcc4524c, type: 2}
   _lootDropChance: 0.6
