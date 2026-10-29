@@ -11,15 +11,8 @@ namespace Rapadura.Core.Debug
     /// The full multi-line overlay text (frame time, GC/frame, enemies, flow, pause, world) is built by
     /// <see cref="DebugOverlayPresenter"/> from a <see cref="DebugOverlaySnapshot"/>.
     ///
-    /// KNOWN LIMITATION: this overlay does not show a log tail. The task also asked for a
-    /// rolling log of the last N `GameLogger` messages, but `GameLogger` (Core/Logging/GameLogger.cs)
-    /// exposes no event/hook fired on new messages (and was intentionally left unedited — it's
-    /// out of scope here). Without such a hook there is no way to observe log messages from
-    /// outside `Debug.Log` itself, short of registering an `Application.logMessageReceived`
-    /// callback, which would capture *all* Unity log output rather than specifically the
-    /// GameLogger-formatted category/message pairs the task asked for. Wiring GameLogger with a
-    /// proper `OnMessageLogged` event (or having this overlay subscribe to
-    /// `Application.logMessageReceived` directly) is the natural follow-up once that decision is made.
+    /// The rolling log of recent GameLogger messages lives in <see cref="DebugLogHistory"/> (fed by
+    /// <c>GameLogger.MessageLogged</c>) and is drawn under the stats by the controller.
     /// </summary>
     public class DebugOverlayModel
     {

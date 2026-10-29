@@ -4,6 +4,12 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-10-29 (sessão multiagente — log de debug e 2 bugs do fluxo principal)
+- 🛠️ **Log rolante no overlay** (item 10 concluído): `GameLogger.MessageLogged` → `LogRingBuffer` (50 entradas, thread-safe, sem alocar) via `DebugLogHistory` (só Editor/Development Build, com exceções não tratadas); o overlay mostra as 12 mais recentes, F2 liga/desliga, e escondido não faz trabalho.
+- 🐛 **Load no mapa** deixava o `WorldMapController` na região antiga; agora ressincroniza no `GameLoadedEvent` (`SyncWithProgress`).
+- 🐛 **Vitória virando derrota**: morrer durante o atraso de 1,5 s pós-vitória (a tela de morte pausa e congela o atraso) concluía como Derrota; `SceneTransitionService.DecideOutcome` faz a primeira decisão valer.
+- ✅ EditMode **1453/1453** no Editor (Unity MCP). Testes novos: `LogRingBufferTests` (9), `MainFlowRegressionTests` (4).
+
 ### 2026-10-22 (meio-dia — vento, pedras reativas e clipes de mocap nas ações do herói)
 - 🏁 **Resumo**: sessão em paralelo à de animação (`7950892`), sem tocar nos scripts de inimigo. Arquivos novos em `Gameplay/Environment/Wind`, `Gameplay/Environment/Impact`, `Gameplay/Player/{HeroActionTiming,PlayerActionAnimator}.cs`, `Editor/HeroAnimatorRebuilder.Actions.cs`; testes `WindAndGroundImpactTests` (15) e `HeroActionTimingTests` (6). Commitado em 2026-10-29 após checagem de compilação (Roslyn com os .rsp do Bee: Runtime, Editor, EditMode e PlayMode sem erros); suítes ainda não rodadas no Unity.
 - 🌬️ **Vento**: `WindSystem` (no `[Environment]` criado pelo bootstrap) lê o `WeatherSystem` (limpo 0.3, neblina 0.18, neve 0.55, chuva 0.7, tempestade 1.0, com a transição do clima) e aplica `WindSway` a cada frame num único loop. Campo de vento = direção que vira ±45° ao longo de minutos + banda de rajada Perlin que viaja a 4 m/s (vizinhos balançam juntos) + turbulência cruzada. Perfis Tree (3.5°, lento), Grass (22°, rápido, flutter 6°), Shrub (1.5°). Rotação sobre o pivô na base, sem shader, instancing intacto, pausa congela. Anexado por nome (`Tree_*` com LODGroup, malha `GrassTuft`, `ArenaProp_Cactus*`) em `EnvironmentPropAttacher`, chamado na carga da cena e no `BiomeArenaDressing` depois de posicionar cada prop do pool (recaptura a pose de repouso).
@@ -82,7 +88,8 @@
 7. `StatType` não tem `Thorns` nem `AttackSpeed`: afixos/skills desse tipo não são possíveis hoje.
 8. `EnemyDefinition._contactDamage` é semeado e exportado no CSV, mas não é usado em combate: ligar ou remover.
 9. 5 inimigos ainda são primitivas placeholder (`_visualPrefab` vazio): Enxame de Morcegos, Habitante Ancestral, Guardião da Ruína, Golem de Pedra e Senhor da Guerra. Precisam de modelo (ver decisões).
-10. Log rolante no overlay de debug (precisa de hook no `GameLogger`).
+10. "Continuar" no título só considera o auto-save e o slot 0 (`GameFlowService.DefaultContinueSlots`); saves manuais nos slots 1 e 2 só carregam de dentro do jogo.
+11. Recompensas de quest concluídas no mapa mundi se perdem: `GameManager.RegisterQuestRewardTargets` sai cedo sem Player na cena e o `QuestManager` fica com o Player destruído da Main.
 
 **Decisões do usuário (bloqueiam itens abertos):**
 - Instalar o módulo **Android Build Support** no Unity Hub (sem ele não há build Android local nem medição real do tamanho mobile).

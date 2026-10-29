@@ -94,6 +94,16 @@ namespace Rapadura.Gameplay.World.Map
             _challengeRandom = new System.Random(unchecked(seed * 31 + 7));
         }
 
+        private void OnEnable()
+        {
+            EventBus.Subscribe<GameLoadedEvent>(OnGameLoaded);
+        }
+
+        private void OnDisable()
+        {
+            EventBus.Unsubscribe<GameLoadedEvent>(OnGameLoaded);
+        }
+
         private void Start()
         {
             if (!ServiceLocator.TryGet(out _progress))
@@ -114,6 +124,27 @@ namespace Rapadura.Gameplay.World.Map
             _bosses = new RegionBossProgress(_graph, _progress, BiomeRegistry.Get, defeatedEnemies);
             _encounters.EnemyFilter = _bosses.CanRollInNormalEncounter;
 
+            SyncWithProgress();
+        }
+
+        /// <summary>
+        /// Puts the per-visit state (current node, token, node visuals, unlocks, boss button) back in
+        /// line with <see cref="WorldMapProgress"/>. Run by Start, and again on every
+        /// <see cref="GameLoadedEvent"/>: a save loaded from the pause menu while on the map
+        /// (SaveLoadMenuController in WorldMap.unity) restores WorldMapProgress in place, and without
+        /// this the token, <see cref="CurrentNode"/> (which Explore/boss challenge use) and the
+        /// locked/unlocked visuals kept the previous session's region until the scene reloaded.
+        /// </summary>
+        public void SyncWithProgress()
+        {
+            // Before Start (no progress yet) or while the combat scene is loading: nothing to sync.
+            if (_progress == null || _bosses == null || _encounterInProgress)
+            {
+                return;
+            }
+
+            _targetNode = null;
+
             // Old saves: a boss beaten before the challenge existed counts as cleared.
             _bosses.SyncClearedFromDefeatedBosses();
             _graph.ApplyUnlocks(_progress, _bosses.IsUnlockGateSatisfied);
@@ -131,6 +162,8 @@ namespace Rapadura.Gameplay.World.Map
             RefreshNodeVisuals();
             PublishBossChallengeState();
         }
+
+        private void OnGameLoaded(GameLoadedEvent evt) => SyncWithProgress();
 
         private void Update()
         {

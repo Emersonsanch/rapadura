@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Rapadura.Core.DI;
+using Rapadura.Core.Logging;
 using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Environment;
@@ -36,6 +37,11 @@ namespace Rapadura.Core.Debug
     ///
     /// All smoothing/formatting lives in <see cref="DebugOverlayModel"/> / <see cref="DebugOverlayPresenter"/>
     /// so it is unit-tested without a UIDocument.
+    ///
+    /// Rolling log: below the stats, the newest <see cref="LogLines"/> entries of
+    /// <see cref="DebugLogHistory"/> (GameLogger messages + uncaught exceptions, captured even while the
+    /// overlay is hidden). F2 shows/hides just the log section. The log text is rebuilt only on a refresh
+    /// tick where the ring's <see cref="LogRingBuffer.Version"/> changed.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class DebugOverlayController : MonoBehaviour
@@ -46,6 +52,12 @@ namespace Rapadura.Core.Debug
         private const float RefreshIntervalSeconds = 0.25f;
         private const string GcAllocatedInFrameCounter = "GC Allocated In Frame";
 
+        /// <summary>How many of the newest log entries the overlay shows.</summary>
+        public const int LogLines = 12;
+
+        /// <summary>Shows/hides only the rolling-log section (the overlay itself toggles with F1 / backquote).</summary>
+        public const Key LogToggleKey = Key.F2;
+
         [SerializeField] private bool _startVisible;
 
         private static DebugOverlayController _instance;
@@ -55,16 +67,22 @@ namespace Rapadura.Core.Debug
         private readonly StringBuilder _text = new StringBuilder(256);
         private readonly List<object> _pauseOwners = new List<object>();
         private readonly List<string> _pauseOwnerNames = new List<string>();
+        private readonly List<LogEntry> _logEntries = new List<LogEntry>(LogLines);
+        private readonly StringBuilder _logText = new StringBuilder(LogLines * 64);
 
         private UIDocument _document;
         private VisualElement _root;
         private Label _label;
+        private Label _logLabel;
+        private bool _logVisible = true;
+        private long _shownLogVersion = -1;
         private ProfilerRecorder _gcRecorder;
         private float _timeSinceRefresh;
         private bool _visible;
 
         public DebugOverlayModel Model => _model;
         public bool IsVisible => _visible;
+        public bool IsLogVisible => _logVisible;
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -132,6 +150,12 @@ namespace Rapadura.Core.Debug
                 return;
             }
 
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard != null && keyboard[LogToggleKey].wasPressedThisFrame)
+            {
+                SetLogVisible(!_logVisible);
+            }
+
             _model.RegisterFrame(Time.unscaledDeltaTime);
             _timeSinceRefresh += Time.unscaledDeltaTime;
 
@@ -169,6 +193,17 @@ namespace Rapadura.Core.Debug
         public void Toggle()
         {
             SetVisible(!_visible);
+        }
+
+        /// <summary>Shows/hides the rolling-log section under the stats.</summary>
+        public void SetLogVisible(bool visible)
+        {
+            _logVisible = visible;
+            _shownLogVersion = -1; // rebuild on the next refresh
+            if (_logLabel != null)
+            {
+                _logLabel.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            }
         }
 
         private bool PollToggle()
@@ -223,6 +258,36 @@ namespace Rapadura.Core.Debug
 
             DebugOverlaySnapshot snapshot = Sample();
             _label.text = DebugOverlayPresenter.Format(snapshot, _text);
+            RefreshLog();
+        }
+
+        private void RefreshLog()
+        {
+            if (!_logVisible || _logLabel == null)
+            {
+                return;
+            }
+
+            LogRingBuffer ring = DebugLogHistory.Entries;
+            long version = ring.Version;
+            if (version == _shownLogVersion)
+            {
+                return;
+            }
+
+            _shownLogVersion = version;
+            ring.CopyNewest(_logEntries, LogLines);
+            _logText.Clear();
+            if (_logEntries.Count == 0)
+            {
+                _logText.Append("log vazio");
+            }
+            else
+            {
+                DebugLogHistory.AppendLines(_logText, _logEntries);
+            }
+
+            _logLabel.text = _logText.ToString();
         }
 
         private DebugOverlaySnapshot Sample()
@@ -364,7 +429,23 @@ namespace Rapadura.Core.Debug
             _label.style.paddingTop = 0;
             _label.style.paddingBottom = 0;
 
+            _logLabel = new Label { name = "debug-overlay-log", pickingMode = PickingMode.Ignore, text = string.Empty };
+            _logLabel.style.fontSize = 10;
+            _logLabel.style.color = new Color(0.85f, 0.95f, 0.85f, 1f);
+            _logLabel.style.whiteSpace = WhiteSpace.NoWrap;
+            _logLabel.style.marginLeft = 0;
+            _logLabel.style.marginRight = 0;
+            _logLabel.style.marginTop = 4;
+            _logLabel.style.marginBottom = 0;
+            _logLabel.style.paddingLeft = 0;
+            _logLabel.style.paddingRight = 0;
+            _logLabel.style.paddingTop = 0;
+            _logLabel.style.paddingBottom = 0;
+            _logLabel.style.display = _logVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            _shownLogVersion = -1;
+
             _root.Add(_label);
+            _root.Add(_logLabel);
             documentRoot.Add(_root);
         }
 

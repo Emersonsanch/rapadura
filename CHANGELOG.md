@@ -42,6 +42,8 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 - Clipes de mocap de ações (ataque espada/soco alternados, conjurar, reação a dano, pulo, morte para frente/trás) ligados aos heróis Humanoid: camada "Actions" com máscara de tronco (pernas continuam andando) e estados Jump/Death na base, montados por `Rapadura/Animation/Rebuild Hero Animators` (`HeroAnimatorRebuilder.Actions.cs`), disparados por `PlayerActionAnimator` a partir dos eventos de jogo. Cada clipe é acelerado para que o pico (mão mais rápida) caia em 0,22 s (`HeroActionTiming`).
 - Ataque básico com preparo: o dano cai 0,22 s depois do input, no quadro do golpe (`PlayerBasicAttack.StrikeDelay`, usa o `AttackStrikeTime` gravado no controller quando há clipe); a virada durante o preparo é respeitada e um golpe em voo some se o herói morrer.
 
+- Log rolante no overlay de debug (Editor e Development Build): `GameLogger.MessageLogged` alimenta um buffer circular de 50 entradas (`LogRingBuffer`/`DebugLogHistory`, também com exceções não tratadas); o overlay mostra as 12 mais recentes e F2 liga/desliga só o log.
+
 ### Alterado
 - `PlayerProceduralAnimator`: com clipes reais de ataque/magia/morte, a camada procedural para de girar os braços e de tombar o corpo (evitando golpe duplo) e mantém só inclinação, olhar, recuo, flash e afundar.
 - `SkillManager` só dispara o trigger por skill (`CastQuake` etc.) se o controller o declarar — antes cada conjuração logava "Parameter does not exist".
@@ -64,6 +66,8 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 - Dica do tutorial espera o "Prepare-se/Já!"; trocar de herói revoga as skills do anterior.
 
 ### Corrigido
+- Carregar um save pelo menu de pausa no mapa mundi deixava região, token e visuais da sessão anterior (Explorar e o desafio de chefe usavam e salvavam a região errada); o `WorldMapController` agora ressincroniza no `GameLoadedEvent`.
+- Vencer um encontro e morrer nos 1,5 s antes da volta ao mapa fazia a tela de morte concluir como Derrota, perdendo a vitória (e, no chefe, a liberação da próxima região); a vitória decidida pela arena prevalece (`SceneTransitionService.DecideOutcome`).
 - Matar inimigo no fluxo real (mapa → encontro) não dava XP, loot, números de dano nem VFX: o `GameManager` duplicado era destruído junto com os componentes de recompensa (`SingletonBehaviour` agora remove só o componente duplicado).
 - Vitalidade, Espírito, Destreza e o afixo `affix_vital` não tinham efeito; buffs de fontes diferentes (ou sem fonte) no mesmo atributo se substituíam em vez de somar.
 - Nível, inventário e skills do jogador se perdiam a cada encontro.

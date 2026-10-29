@@ -63,6 +63,12 @@ namespace Rapadura.Gameplay.World.Map
         /// </summary>
         public bool DeferDefeatResolution { get; set; }
 
+        /// <summary>
+        /// The outcome the arena already decided for the pending encounter (see <see cref="DecideOutcome"/>),
+        /// while it waits out its return delay; null when undecided.
+        /// </summary>
+        public EncounterOutcome? DecidedOutcome { get; private set; }
+
         public SceneTransitionService(WorldMapProgress progress, ISceneLoader sceneLoader = null)
         {
             _progress = progress;
@@ -76,6 +82,7 @@ namespace Rapadura.Gameplay.World.Map
         public void Shutdown()
         {
             PendingEncounter = null;
+            DecidedOutcome = null;
         }
 
         /// <summary>
@@ -98,6 +105,7 @@ namespace Rapadura.Gameplay.World.Map
             }
 
             PendingEncounter = payload;
+            DecidedOutcome = null;
             EventBus.Publish(new EncounterStartedEvent(payload));
             _sceneLoader.LoadScene(CombatSceneName);
             return true;
@@ -116,8 +124,18 @@ namespace Rapadura.Gameplay.World.Map
                 return false;
             }
 
+            // A victory already decided by the arena sticks: the player can die during the arena's
+            // return delay (last hit traded in the same frame as the kill), and the death screen —
+            // which pauses gameplay and so freezes that delay — then completes the encounter as a
+            // Defeat, which used to throw away the win (and, for a boss challenge, the region clear).
+            if (DecidedOutcome == EncounterOutcome.Victory)
+            {
+                outcome = EncounterOutcome.Victory;
+            }
+
             EncounterPayload payload = PendingEncounter;
             PendingEncounter = null;
+            DecidedOutcome = null;
             LastOutcome = outcome;
 
             if (outcome == EncounterOutcome.Victory)
@@ -149,9 +167,24 @@ namespace Rapadura.Gameplay.World.Map
         /// altogether (pause menu "Menu principal" → GameFlowService.ReturnToTitle), so the next
         /// session neither resumes the old arena nor shows its "Vitória"/"Fugiu!" on the map.
         /// </summary>
+        /// <summary>
+        /// Records the outcome the arena reached for the pending encounter before it actually returns
+        /// to the map (<see cref="EncounterArenaController"/> waits a short delay first). The first
+        /// decision wins; a decided <see cref="EncounterOutcome.Victory"/> overrides a later
+        /// <see cref="CompleteEncounter"/> request. No-op without a pending encounter.
+        /// </summary>
+        public void DecideOutcome(EncounterOutcome outcome)
+        {
+            if (HasPendingEncounter && !DecidedOutcome.HasValue)
+            {
+                DecidedOutcome = outcome;
+            }
+        }
+
         public void AbandonPendingEncounter()
         {
             PendingEncounter = null;
+            DecidedOutcome = null;
             LastOutcome = null;
             DeferDefeatResolution = false;
         }

@@ -415,6 +415,10 @@ namespace Rapadura.Gameplay.World.Map
             _resolved = true;
             GameLogger.Info(LogCategory, $"Encounter resolved: {outcome}.");
 
+            // Decided now, completed after the delay: a death during that delay (death screen →
+            // CompleteEncounter(Defeat)) must not undo a victory.
+            _transition?.DecideOutcome(outcome);
+
             if (_returnDelaySeconds > 0f && isActiveAndEnabled)
             {
                 StartCoroutine(CompleteAfterDelay(outcome));
