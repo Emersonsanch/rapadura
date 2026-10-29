@@ -52,8 +52,11 @@ namespace Rapadura.UI.WorldMap
         public const string HubScreenId = "village";
         public const string ShopScreenId = "village_shop";
         public const string CraftingScreenId = "village_crafting";
+        public const string ChestScreenId = "village_chest";
         public const string ShopViewResourcePath = "UI/VillageShopView";
         public const string CraftingViewResourcePath = "UI/VillageCraftingView";
+        /// <summary>"Baú da Vó Zefa" window (<see cref="VillageChestUIController"/>).</summary>
+        public const string ChestViewResourcePath = "UI/VillageChestView";
         public const string ShopResourcePath = "Shops/shop_general_store";
         public const CraftingStationType Station = CraftingStationType.Workbench;
         public const int ServiceSortingOrder = 14;
@@ -71,6 +74,7 @@ namespace Rapadura.UI.WorldMap
         private Label _servicesHeader;
         private Button _shopButton;
         private Button _craftingButton;
+        private Button _chestButton;
         private Button _closeButton;
         private readonly List<Button> _npcButtons = new List<Button>();
         private bool _hubOpen;
@@ -80,6 +84,7 @@ namespace Rapadura.UI.WorldMap
 
         private ShopUIController _shopUI;
         private CraftingUIController _craftingUI;
+        private VillageChestUIController _chestUI;
         private CarriedInventorySession _session;
         private readonly QuestDialogueContext _questContext = new QuestDialogueContext();
 
@@ -175,7 +180,13 @@ namespace Rapadura.UI.WorldMap
         /// <summary>Whether the live map inventory can be handed back to the carry (no service window uses it).</summary>
         public static bool ShouldEndInventorySession(bool sessionOpen, bool shopOpen, bool craftingOpen)
         {
-            return sessionOpen && !shopOpen && !craftingOpen;
+            return ShouldEndInventorySession(sessionOpen, shopOpen, craftingOpen, false);
+        }
+
+        /// <summary>Same, counting the "Baú da Vó Zefa" window, which also works on the live map inventory.</summary>
+        public static bool ShouldEndInventorySession(bool sessionOpen, bool shopOpen, bool craftingOpen, bool chestOpen)
+        {
+            return sessionOpen && !shopOpen && !craftingOpen && !chestOpen;
         }
 
         /// <summary>"Sobrevivente da Vila · Joaquim" (+ " (!)"), the villager's name and whose story it is.</summary>
@@ -194,6 +205,7 @@ namespace Rapadura.UI.WorldMap
 
         private bool ShopOpen => _shopUI != null && _shopUI.IsOpen;
         private bool CraftingOpen => _craftingUI != null && _craftingUI.IsOpen;
+        private bool ChestOpen => _chestUI != null && _chestUI.IsOpen;
 
         private void RegisterScreens()
         {
@@ -205,6 +217,7 @@ namespace Rapadura.UI.WorldMap
             _hud.RegisterScreen(HubScreenId, () => _hubOpen, OpenHub, CloseHub);
             _hud.RegisterScreen(ShopScreenId, () => ShopOpen, OpenShop, () => { if (_shopUI != null) _shopUI.Close(); });
             _hud.RegisterScreen(CraftingScreenId, () => CraftingOpen, OpenCrafting, () => { if (_craftingUI != null) _craftingUI.Close(); });
+            _hud.RegisterScreen(ChestScreenId, () => ChestOpen, OpenChest, () => { if (_chestUI != null) _chestUI.Close(); });
             _screensRegistered = true;
         }
 
@@ -219,7 +232,7 @@ namespace Rapadura.UI.WorldMap
             ServiceLocator.TryGet(out DialogueManager dialogue);
             bool dialogueActive = dialogue != null && dialogue.IsActive;
 
-            if (ShouldEndInventorySession(_session != null && _session.IsOpen, ShopOpen, CraftingOpen))
+            if (ShouldEndInventorySession(_session != null && _session.IsOpen, ShopOpen, CraftingOpen, ChestOpen))
             {
                 EndInventorySession();
             }
@@ -231,7 +244,7 @@ namespace Rapadura.UI.WorldMap
 
             // Decided once the conversation/window is over: back to the panel, or (something else took
             // over) forget it.
-            bool serviceOpen = ShopOpen || CraftingOpen;
+            bool serviceOpen = ShopOpen || CraftingOpen || ChestOpen;
             if (_returnToHub && !serviceOpen && !dialogueActive)
             {
                 bool back = ShouldReturnToHub(_returnToHub, serviceOpen, dialogueActive, GameplayPause.IsPaused, hudVisible);
@@ -405,6 +418,7 @@ namespace Rapadura.UI.WorldMap
             VisualElement servicesGrid = AddGrid(panel);
             _shopButton = AddGridButton(servicesGrid, "wm-village-shop-button", OnShopClicked);
             _craftingButton = AddGridButton(servicesGrid, "wm-village-crafting-button", OnCraftingClicked);
+            _chestButton = AddGridButton(servicesGrid, "wm-village-chest-button", OnChestClicked);
 
             _closeButton = new Button(CloseHub) { name = "wm-village-close-button", focusable = true };
             _closeButton.AddToClassList("rap-button");
@@ -458,6 +472,7 @@ namespace Rapadura.UI.WorldMap
             SetText(_servicesHeader, VillageHubTexts.Get(localization, VillageHubTexts.ServicesHeader));
             SetText(_shopButton, VillageHubTexts.Get(localization, VillageHubTexts.Shop));
             SetText(_craftingButton, VillageHubTexts.Get(localization, VillageHubTexts.Crafting));
+            SetText(_chestButton, VillageChestTexts.Get(localization, VillageChestTexts.HubButton));
             SetText(_closeButton, VillageHubTexts.Get(localization, VillageHubTexts.Close));
 
             for (int i = 0; i < _npcButtons.Count && i < VillageNpcCatalog.Npcs.Count; i++)
@@ -565,6 +580,34 @@ namespace Rapadura.UI.WorldMap
             _craftingUI.Open(BeginInventorySession(), Station);
         }
 
+        // ------------------------------------------------------------------
+        // Baú
+        // ------------------------------------------------------------------
+
+        private void OnChestClicked()
+        {
+            OpenChest();
+            if (ChestOpen)
+            {
+                CloseHub();
+                _returnToHub = true;
+            }
+        }
+
+        private void OpenChest()
+        {
+            _chestUI = _chestUI != null ? _chestUI : EnsureServiceView<VillageChestUIController>(ChestViewResourcePath);
+            if (_chestUI == null)
+            {
+                Debug.LogWarning($"[VillageHubButton] Cannot open the chest (Resources/{ChestViewResourcePath}.uxml missing).");
+                return;
+            }
+
+            VillageChestStorage chest = VillageChestStorage.ResolveShared();
+            ServiceLocator.TryGet(out Rapadura.Gameplay.Quests.QuestManager quests);
+            _chestUI.Open(BeginInventorySession(), chest, quests != null ? quests.GetOutstandingCollectAmount : (System.Func<string, int, int>)null);
+        }
+
         private InventoryManager BeginInventorySession()
         {
             if (_session == null)
@@ -594,7 +637,7 @@ namespace Rapadura.UI.WorldMap
 
         private void OnShopClosed(ShopClosedEvent evt)
         {
-            if (!CraftingOpen)
+            if (!CraftingOpen && !ChestOpen)
             {
                 EndInventorySession();
             }

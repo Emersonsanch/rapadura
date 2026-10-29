@@ -87,6 +87,7 @@ namespace Rapadura.Tests
             yield return Source(nameof(ReturnToTitleTexts), ReturnToTitleTexts.Entries, ReturnToTitleTexts.EnsureRegistered);
             yield return Source(nameof(WorldMapTexts), WorldMapTexts.Entries, WorldMapTexts.EnsureRegistered);
             yield return Source(nameof(VillageHubTexts), VillageHubTexts.Entries, VillageHubTexts.EnsureRegistered);
+            yield return Source(nameof(VillageChestTexts), VillageChestTexts.Entries, VillageChestTexts.EnsureRegistered);
             yield return Source(nameof(ContentTexts), ContentTexts.Entries, ContentTexts.EnsureRegistered);
             yield return Source(nameof(TutorialTexts), TutorialTexts.Entries, TutorialTexts.EnsureRegistered);
             yield return Source(nameof(HapticsTexts), HapticsTexts.Entries, HapticsTexts.EnsureRegistered);
@@ -507,7 +508,7 @@ namespace Rapadura.Tests
         public void HelperKeyConstants_AllLocalized()
         {
             var references = new List<(string, string)>();
-            foreach (Type type in new[] { typeof(QuestLogTexts), typeof(QuestLogPresenter), typeof(AchievementTexts), typeof(SettingsMenuTexts), typeof(UiTexts), typeof(WorldMapTexts), typeof(VillageHubTexts), typeof(TutorialTexts), typeof(HapticsTexts), typeof(CharacterSheetTexts), typeof(BossTexts) })
+            foreach (Type type in new[] { typeof(QuestLogTexts), typeof(QuestLogPresenter), typeof(AchievementTexts), typeof(SettingsMenuTexts), typeof(UiTexts), typeof(WorldMapTexts), typeof(VillageHubTexts), typeof(VillageChestTexts), typeof(TutorialTexts), typeof(HapticsTexts), typeof(CharacterSheetTexts), typeof(BossTexts) })
             {
                 foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
                 {

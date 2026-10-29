@@ -46,6 +46,7 @@ namespace Rapadura.Tests
             "Resources/UI/DialogueView.uxml",
             "Resources/UI/StoryPanelView.uxml",
             "Resources/UI/TutorialHintView.uxml",
+            "Resources/UI/VillageChestView.uxml",
         };
 
         [Test]

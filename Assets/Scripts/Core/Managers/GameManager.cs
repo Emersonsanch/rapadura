@@ -58,6 +58,7 @@ namespace Rapadura.Core.Managers
         public QuestManager QuestManager { get; private set; }
         public DailyQuestService DailyQuestService { get; private set; }
         public ShopManager ShopManager { get; private set; }
+        public VillageChestStorage VillageChest { get; private set; }
         public WorldMapProgress WorldMapProgress { get; private set; }
         public StoryProgress StoryProgress { get; private set; }
         public SceneTransitionService SceneTransitionService { get; private set; }
@@ -135,6 +136,7 @@ namespace Rapadura.Core.Managers
             QuestManager = new QuestManager();
             DailyQuestService = new DailyQuestService(QuestManager);
             ShopManager = new ShopManager();
+            VillageChest = new VillageChestStorage();
             WorldMapProgress = new WorldMapProgress();
             StoryProgress = new StoryProgress(WorldMapProgress);
             SceneTransitionService = new SceneTransitionService(WorldMapProgress);
@@ -165,6 +167,7 @@ namespace Rapadura.Core.Managers
             RegisterManager(QuestManager);
             RegisterManager(DailyQuestService);
             RegisterManager(ShopManager);
+            RegisterManager(VillageChest);
             RegisterManager(WorldMapProgress);
             RegisterManager(StoryProgress);
             RegisterManager(SceneTransitionService);
@@ -190,6 +193,8 @@ namespace Rapadura.Core.Managers
             SaveManager.Register(CraftingManager);
             SaveManager.Register(DefeatedEnemyRegistry);
             SaveManager.Register(ShopManager);
+            // "Baú da Vó Zefa" (village hub on the map); older saves have no entry and load an empty chest.
+            SaveManager.Register(VillageChest);
 
             // Only reads achievements out of slots written before they moved to the profile file
             // (Saves/profile.json); AchievementManager.CaptureState returns null so slots no longer carry them.
@@ -230,6 +235,7 @@ namespace Rapadura.Core.Managers
             NewSessionReset.Register(QuestManager);
             NewSessionReset.Register(DailyQuestService);
             NewSessionReset.Register(ShopManager);
+            NewSessionReset.Register(VillageChest);
             NewSessionReset.Register(WorldMapProgress);
             NewSessionReset.Register(StoryProgress);
             NewSessionReset.Register(CharacterSelectionState);

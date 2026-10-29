@@ -1,0 +1,57 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <!-- "Bau da Vo Zefa" (VillageHubButton loads it from Resources; VillageChestUIController fills it).
+         Tiles reuse the Mochila look (InventoryView.uss: inventory-slot, rarity accents, quantity, drag ghost);
+         VillageChestView.uss lays out the two panes. Texts are set from VillageChestTexts. -->
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
+    <Style src="/Assets/UI/Inventory/InventoryView.uss" />
+    <Style src="/Assets/UI/Village/VillageChestView.uss" />
+    <ui:VisualElement name="village-chest-root" class="village-chest-root rap-theme" picking-mode="Ignore">
+        <ui:VisualElement name="village-chest-backdrop" class="village-chest-backdrop">
+            <ui:VisualElement name="village-chest-window" class="village-chest-window rap-panel">
+                <ui:VisualElement class="village-chest-header">
+                    <ui:VisualElement class="village-chest-heading">
+                        <ui:Label name="village-chest-title" text="" class="village-chest-title rap-heading" />
+                        <ui:Label name="village-chest-subtitle" text="" class="village-chest-subtitle rap-subtle" />
+                    </ui:VisualElement>
+                    <ui:Button name="village-chest-close-button" text="X" class="village-chest-close-button rap-button" focusable="true" />
+                </ui:VisualElement>
+                <ui:VisualElement class="village-chest-panes">
+                    <ui:VisualElement name="village-chest-bag-pane" class="village-chest-pane">
+                        <ui:VisualElement class="village-chest-pane-header">
+                            <ui:Label name="village-chest-bag-title" text="" class="village-chest-pane-title" />
+                            <ui:Label name="village-chest-bag-weight" text="" class="village-chest-chip rap-chip" />
+                        </ui:VisualElement>
+                        <ui:ScrollView name="village-chest-bag-scroll" class="village-chest-scroll" touch-scroll-type="Clamped">
+                            <ui:VisualElement name="village-chest-bag-grid" class="inventory-grid village-chest-grid" />
+                        </ui:ScrollView>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="village-chest-chest-pane" class="village-chest-pane village-chest-pane--chest">
+                        <ui:VisualElement class="village-chest-pane-header">
+                            <ui:Label name="village-chest-chest-title" text="" class="village-chest-pane-title" />
+                            <ui:Label name="village-chest-chest-slots" text="" class="village-chest-chip rap-chip" />
+                        </ui:VisualElement>
+                        <ui:Label name="village-chest-empty" text="" class="village-chest-empty rap-subtle" />
+                        <ui:ScrollView name="village-chest-chest-scroll" class="village-chest-scroll" touch-scroll-type="Clamped">
+                            <ui:VisualElement name="village-chest-chest-grid" class="inventory-grid village-chest-grid" />
+                        </ui:ScrollView>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="village-chest-amount-bar" class="village-chest-amount-bar">
+                    <ui:Label name="village-chest-amount-label" text="" class="village-chest-amount-label" />
+                    <ui:Button name="village-chest-amount-minus" text="-" class="village-chest-amount-step rap-button" focusable="true" />
+                    <ui:Label name="village-chest-amount-value" text="" class="village-chest-amount-value" />
+                    <ui:Button name="village-chest-amount-plus" text="+" class="village-chest-amount-step rap-button" focusable="true" />
+                    <ui:Button name="village-chest-amount-all" text="" class="village-chest-amount-button rap-button" focusable="true" />
+                    <ui:Button name="village-chest-amount-move" text="" class="village-chest-amount-button rap-button rap-button--primary" focusable="true" />
+                    <ui:Button name="village-chest-amount-cancel" text="" class="village-chest-amount-button rap-button" focusable="true" />
+                </ui:VisualElement>
+                <ui:VisualElement class="village-chest-actions">
+                    <ui:Button name="village-chest-store-materials-button" text="" class="village-chest-action rap-button" focusable="true" />
+                    <ui:Button name="village-chest-take-quests-button" text="" class="village-chest-action rap-button rap-button--primary" focusable="true" />
+                </ui:VisualElement>
+                <ui:Label name="village-chest-status" text="" class="village-chest-status" />
+                <ui:Label name="village-chest-hint" text="" class="village-chest-hint" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,211 @@
+/* "Bau da Vo Zefa" (Resources/UI/VillageChestView.uxml, VillageChestUIController). Palette, panel, heading,
+   chips and buttons come from Common/RapaduraTheme.uss; the item tiles from Inventory/InventoryView.uss
+   (inventory-slot / inventory-row--<rarity> / inventory-slot-quantity / inventory-drag-ghost), so the chest
+   looks like the Mochila. Only the two-pane layout and the chest-specific states live here. */
+
+.village-chest-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+/* Modal backdrop: catches every tap outside the window (the root itself is not pickable). */
+.village-chest-backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(20, 10, 4, 0.86);
+}
+
+.village-chest-window {
+    width: 86%;
+    min-width: 560px;
+    max-width: 1100px;
+    height: 84%;
+    min-height: 400px;
+    max-height: 96%;
+    background-color: var(--rap-brown-deep);
+    padding: 14px 18px;
+}
+
+.village-chest-header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.village-chest-heading {
+    flex-grow: 1;
+}
+
+.village-chest-title {
+    font-size: 26px;
+}
+
+.village-chest-subtitle {
+    font-size: 14px;
+    -unity-font-style: italic;
+}
+
+/* Touch-first: 44px+ hit targets. */
+.village-chest-close-button {
+    width: 44px;
+    height: 44px;
+    margin: 0;
+    padding: 0;
+}
+
+.village-chest-close-button:hover {
+    background-color: var(--rap-clay-red);
+}
+
+.village-chest-panes {
+    flex-direction: row;
+    flex-grow: 1;
+    min-height: 0;
+}
+
+.village-chest-pane {
+    flex-grow: 1;
+    flex-basis: 0;
+    margin: 0 6px;
+    padding: 4px;
+    border-radius: 12px;
+    border-width: 2px;
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.village-chest-pane--chest {
+    flex-grow: 1.4;
+}
+
+/* A drag hovering the pane it would land in. */
+.village-chest-pane--drop {
+    border-color: rgb(90, 200, 110);
+    background-color: rgba(90, 200, 110, 0.18);
+}
+
+.village-chest-pane-header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.village-chest-pane-title {
+    flex-grow: 1;
+    font-size: 17px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+}
+
+.village-chest-chip {
+    margin: 0;
+}
+
+.village-chest-empty {
+    margin: 2px 4px 6px 4px;
+    font-size: 13px;
+    white-space: normal;
+}
+
+.village-chest-scroll {
+    flex-grow: 1;
+    background-color: var(--rap-brown-night);
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: rgba(150, 96, 48, 0.6);
+}
+
+.village-chest-grid {
+    padding: 6px;
+}
+
+/* Gamepad/keyboard focus and the stack chosen for the amount bar. */
+.village-chest-grid .inventory-slot:focus {
+    border-color: var(--rap-focus);
+    background-color: rgba(196, 122, 44, 0.45);
+}
+
+.village-chest-slot--selected {
+    border-color: var(--rap-gold);
+    border-width: 2px;
+    border-bottom-width: 4px;
+    background-color: rgba(244, 196, 88, 0.3);
+}
+
+.village-chest-amount-bar {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background-color: rgba(128, 78, 40, 0.55);
+    display: none;
+}
+
+.village-chest-amount-label {
+    flex-grow: 1;
+    font-size: 15px;
+    color: var(--rap-cream);
+    white-space: normal;
+}
+
+.village-chest-amount-step {
+    width: 48px;
+    margin: 0 4px;
+    padding: 0;
+    font-size: 22px;
+}
+
+.village-chest-amount-value {
+    min-width: 64px;
+    font-size: 18px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: var(--rap-gold-light);
+}
+
+.village-chest-amount-button {
+    margin: 0 4px;
+    font-size: 16px;
+}
+
+.village-chest-actions {
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.village-chest-action {
+    flex-grow: 1;
+    flex-basis: 0;
+    margin: 0 6px;
+    font-size: 16px;
+    white-space: normal;
+}
+
+.village-chest-status {
+    margin-top: 2px;
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    display: none;
+}
+
+.village-chest-hint {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--rap-cream-dim);
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
