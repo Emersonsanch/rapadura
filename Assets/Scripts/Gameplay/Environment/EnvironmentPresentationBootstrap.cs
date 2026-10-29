@@ -1,12 +1,16 @@
 using Rapadura.Core.DI;
+using Rapadura.Gameplay.Environment.Impact;
+using Rapadura.Gameplay.Environment.Wind;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Rapadura.Gameplay.Environment
 {
     /// <summary>
-    /// Adds a scene-local "[Environment]" object with <see cref="DayNightLighting"/> and
-    /// <see cref="WeatherVisuals"/> (+ <see cref="AmbientVfx"/>) to every loaded scene that doesn't already contain them, as long
+    /// Adds a scene-local "[Environment]" object with <see cref="DayNightLighting"/>,
+    /// <see cref="WeatherVisuals"/>, <see cref="AmbientVfx"/>, <see cref="WindSystem"/> and
+    /// <see cref="GroundImpactSystem"/> to every loaded scene that doesn't already contain them, and
+    /// attaches wind/impact behaviour to the scene's props (<see cref="EnvironmentPropAttacher"/>), as long
     /// as GameManager registered a <see cref="TimeOfDayManager"/>. Same self-registering pattern as
     /// InputRebindBootstrap — no scene wiring required. Placing either component in a scene by hand
     /// (to tune gradients/profiles or assign the sun/material) suppresses the auto-created one;
@@ -39,10 +43,16 @@ namespace Rapadura.Gameplay.Environment
                 return;
             }
 
+            // Props are scanned on every load (prefab trees, scattered tufts/rocks); the scan is a
+            // no-op for objects that already carry their component.
+            EnvironmentPropAttacher.AttachAll();
+
             bool hasLighting = Object.FindAnyObjectByType<DayNightLighting>() != null;
             bool hasWeather = Object.FindAnyObjectByType<WeatherVisuals>() != null;
             bool hasAmbient = Object.FindAnyObjectByType<AmbientVfx>() != null;
-            if (hasLighting && hasWeather && hasAmbient)
+            bool hasWind = Object.FindAnyObjectByType<WindSystem>() != null;
+            bool hasImpact = Object.FindAnyObjectByType<GroundImpactSystem>() != null;
+            if (hasLighting && hasWeather && hasAmbient && hasWind && hasImpact)
             {
                 return;
             }
@@ -61,6 +71,16 @@ namespace Rapadura.Gameplay.Environment
             if (!hasAmbient)
             {
                 go.AddComponent<AmbientVfx>();
+            }
+
+            if (!hasWind)
+            {
+                go.AddComponent<WindSystem>();
+            }
+
+            if (!hasImpact)
+            {
+                go.AddComponent<GroundImpactSystem>();
             }
         }
     }

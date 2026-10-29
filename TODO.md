@@ -4,6 +4,14 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-10-22 (meio-dia — vento, pedras reativas e clipes de mocap nas ações do herói)
+- 🏁 **Resumo**: sessão em paralelo à de animação (`7950892`), sem tocar nos scripts de inimigo. Arquivos novos em `Gameplay/Environment/Wind`, `Gameplay/Environment/Impact`, `Gameplay/Player/{HeroActionTiming,PlayerActionAnimator}.cs`, `Editor/HeroAnimatorRebuilder.Actions.cs`; testes `WindAndGroundImpactTests` (15) e `HeroActionTimingTests` (6). Commitado em 2026-10-29 após checagem de compilação (Roslyn com os .rsp do Bee: Runtime, Editor, EditMode e PlayMode sem erros); suítes ainda não rodadas no Unity.
+- 🌬️ **Vento**: `WindSystem` (no `[Environment]` criado pelo bootstrap) lê o `WeatherSystem` (limpo 0.3, neblina 0.18, neve 0.55, chuva 0.7, tempestade 1.0, com a transição do clima) e aplica `WindSway` a cada frame num único loop. Campo de vento = direção que vira ±45° ao longo de minutos + banda de rajada Perlin que viaja a 4 m/s (vizinhos balançam juntos) + turbulência cruzada. Perfis Tree (3.5°, lento), Grass (22°, rápido, flutter 6°), Shrub (1.5°). Rotação sobre o pivô na base, sem shader, instancing intacto, pausa congela. Anexado por nome (`Tree_*` com LODGroup, malha `GrassTuft`, `ArenaProp_Cactus*`) em `EnvironmentPropAttacher`, chamado na carga da cena e no `BiomeArenaDressing` depois de posicionar cada prop do pool (recaptura a pose de repouso).
+- 🪨 **Pedras**: `GroundImpactSystem` escuta `SkillCastEvent` (Terra + área → raio = área + 2 m), `EnemyFootstepEvent` (intensidade ≥ 0.95 = pisada/slam dos pesados, raio 4 m) e `EnemyDiedEvent` (chefe, raio 8 m). Boulders balançam 4° a 7 Hz com decaimento quadrático; pedrinhas/gravetos pulam 18 cm, giram e deslizam 12 cm para longe. Sensibilidade cai com a escala (rocha de 3 m mal se mexe).
+- 🥋 **Mocap nas ações**: os 16 clipes Humanoid gerados pela outra sessão (`Assets/Animations/Mocap/`, ainda untracked) passam a ser usados: `HeroAnimatorRebuilder.AddActions` cria a camada "Actions" (máscara `Assets/Animations/Masks/HeroUpperBody.mask`, Write Defaults off para a pose vazia não virar T-pose), estados AttackA/AttackB/Cast/HitReact entrando por Any State e saindo após pico + 0.45 s, Jump → Locomotion por exit time, Death/DeathBack (variante aleatória) com volta por `Revive`. O pico de cada clipe é medido amostrando as mãos (`HeroActionTiming.PeakSpeedSample`), o clipe é acelerado (1x–6x) para o pico cair em 0.22 s (ataque) / 0.25 s (cast) e o tempo real é gravado em `AttackStrikeTime` (espada) e `AttackStrikeTimeB` (soco), lidos por variante em `PlayerActionAnimator.AttackStrikeDelay`.
+- ⚔️ **Dano no quadro do golpe**: `PlayerBasicAttack` publica o evento no input e entrega o dano 0.22 s depois (ou o `AttackStrikeTime` do controller). Hit-stop/lunge procedural continuam no início do golpe. `PlayerActionAnimator` é adicionado ao Player em runtime pelo `PlayerController` e re-apontado pelo `PlayerVisualSwapper`.
+- 📌 **Para fechar (manual, no Editor)**: (1) clicar no Unity para compilar; (2) `Rapadura ▸ Animation ▸ Rebuild Hero Animators` para gerar camada/estados nos 4 controllers Humanoid (Maria é Generic: continua procedural; Maithe não tem rig); (3) Test Runner EditMode (esperado 1420 + 21) e PlayMode; (4) jogar um encontro e conferir vento, pedras no Terremoto, golpe/magia/dano/morte; (5) commitar junto com `Assets/Animations/Mocap/*.anim` e o `.mask` gerado.
+
 ### 2026-10-22 (manhã — combate justo, Defesa/Velocidade de verdade, biomas legíveis e rebalanceamento r5→r7)
 - 🏁 **Resumo**: commits `541946f`..`1a390e2` (5 commits), mais a correção `4fbee22` que fechou a madrugada. Suítes: **EditMode 1372/1372** (eram 1300) e **PlayMode 14/14**.
 - 🐛 **Inimigos debaixo do chão e cápsulas** (`4fbee22`, já descrito na entrada anterior): o spawn de encontro sobe meia altura da cápsula e o modelo é assentado pela bounds da malha; NPCs da vila (as "cápsulas") desligados durante encontros.
@@ -64,6 +72,7 @@
 
 ### 🔜 Próximos passos (após 2026-10-22, manhã)
 **Código (próximos itens):**
+0. Fechar a sessão do meio-dia: rebuild dos Animators com as ações de mocap, rodar as suítes, playtest de vento/pedras/golpe e commit (ver entrada 2026-10-22 meio-dia).
 1. Decimar as malhas de heróis e inimigos (cerca de 300k vértices hoje), só depois de revisão visual lado a lado.
 2. Deduplicar as malhas rigadas e as limpas sem pedestal (cerca de 18 MB repetidos no build).
 3. Addressables (e LOD/occlusion) quando houver build mobile para medir.

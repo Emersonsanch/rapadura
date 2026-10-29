@@ -577,6 +577,9 @@ namespace Rapadura.Gameplay.World.Biomes
                     Transform t = prop.Root.transform;
                     t.SetPositionAndRotation(position, Quaternion.Euler(tilt, yaw, 0f));
                     t.localScale = Vector3.one * scale;
+                    // Cacti sway in the wind, rocks/stalagmites rattle on ground impacts; the rest
+                    // pose is (re)captured here, after placement, since props come from a pool.
+                    EnvironmentPropAttacher.Attach(prop.Root);
                     _activeProps.Add(prop);
                 }
             }

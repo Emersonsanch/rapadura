@@ -37,7 +37,14 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 - Defesa funcional para herói e inimigos: % de skills reduz/aumenta o dano (teto 80% / 2x) e defesa plana pela curva de armadura; Velocidade como multiplicador [0.1, 2.5] no movimento do herói e dos inimigos (fórmulas em `Docs/Balance/README.md` §4).
 - Herói corre sozinho ao perseguir um alvo distante; encontros forçam o aggro dos inimigos depois da contagem.
 
+- Vento: árvores, tufos de grama e cactos balançam com rajadas que atravessam o campo (`Environment/Wind`: `WindSystem` + `WindSway`, força pelo clima — brisa no céu limpo, forte na chuva/neve, máxima na tempestade de areia — e direção que vira devagar). Puro transform, sem shader nem rig; anexado automaticamente na carga da cena por `EnvironmentPropAttacher` (regras de nome em `EnvironmentPropRules`).
+- Pedras reagem a impactos no chão (`Environment/Impact`: `GroundImpactSystem` + `GroundImpactShaker`): skills de Terra com área (Terremoto, Muralha de Pedra) chacoalham as rochas ao redor e fazem pedrinhas/gravetos pularem; pisada pesada de golem/senhor da guerra e queda de chefe também.
+- Clipes de mocap de ações (ataque espada/soco alternados, conjurar, reação a dano, pulo, morte para frente/trás) ligados aos heróis Humanoid: camada "Actions" com máscara de tronco (pernas continuam andando) e estados Jump/Death na base, montados por `Rapadura/Animation/Rebuild Hero Animators` (`HeroAnimatorRebuilder.Actions.cs`), disparados por `PlayerActionAnimator` a partir dos eventos de jogo. Cada clipe é acelerado para que o pico (mão mais rápida) caia em 0,22 s (`HeroActionTiming`).
+- Ataque básico com preparo: o dano cai 0,22 s depois do input, no quadro do golpe (`PlayerBasicAttack.StrikeDelay`, usa o `AttackStrikeTime` gravado no controller quando há clipe); a virada durante o preparo é respeitada e um golpe em voo some se o herói morrer.
+
 ### Alterado
+- `PlayerProceduralAnimator`: com clipes reais de ataque/magia/morte, a camada procedural para de girar os braços e de tombar o corpo (evitando golpe duplo) e mantém só inclinação, olhar, recuo, flash e afundar.
+- `SkillManager` só dispara o trigger por skill (`CastQuake` etc.) se o controller o declarar — antes cada conjuração logava "Parameter does not exist".
 - Rebalanceamento por dados: curva de XP 1.25→1.10, +8 HP por nível, XP por bioma 10/18/28/40, chefes x8, ultimates ~2.5x e skills fracas reforçadas (tabelas em `Docs/Balance/README.md`).
 - Pausa única com contagem de donos (`GameplayPause`) em todas as telas modais e no menu de pausa.
 - Estoque da loja salvo por save e reposto ao amanhecer; conquistas em arquivo de perfil próprio.

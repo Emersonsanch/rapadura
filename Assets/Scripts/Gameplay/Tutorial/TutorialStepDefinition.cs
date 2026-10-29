@@ -9,7 +9,11 @@ namespace Rapadura.Gameplay.Tutorial
         Any = 0,
         /// <summary>Only while walking the world map.</summary>
         World = 1,
-        /// <summary>Only inside an encounter (Main.unity).</summary>
+        /// <summary>
+        /// Only inside an encounter (Main.unity). The hint stays hidden while the intro banner
+        /// ("Prepare-se!" countdown or boss banner) is on screen and shows once it is gone
+        /// (see <c>TutorialHintController.ShouldDefer</c>).
+        /// </summary>
         Encounter = 2,
     }
 
@@ -76,7 +80,12 @@ namespace Rapadura.Gameplay.Tutorial
         public const string Loot = "loot";
         /// <summary>First quest started: Missões.</summary>
         public const string Quest = "quest";
-        /// <summary>First time at level 2+: attribute/skill points (outlines the HUD "Ficha" button, where attribute points are spent).</summary>
+        /// <summary>
+        /// First time at level 2+: attribute/skill points (outlines the HUD "Ficha" button, where attribute
+        /// points are spent). Encounter-only: the world map's Ficha is a read-only summary (the
+        /// AttributeSet lives on the Player in Main.unity), so the tip waits for the next fight, where
+        /// "Ficha" can actually spend the points.
+        /// </summary>
         public const string LevelUp = "level_up";
         /// <summary>First player death: the death screen.</summary>
         public const string Death = "death";
@@ -95,7 +104,7 @@ namespace Rapadura.Gameplay.Tutorial
             new TutorialStepDefinition(Skills, 2, TutorialContext.Encounter, "skill-slot-0"),
             new TutorialStepDefinition(Loot, 3, TutorialContext.Any, "inventory-button"),
             new TutorialStepDefinition(Quest, 4, TutorialContext.Any, "quests-button"),
-            new TutorialStepDefinition(LevelUp, 5, TutorialContext.Any, "character-sheet-button"),
+            new TutorialStepDefinition(LevelUp, 5, TutorialContext.Encounter, "character-sheet-button"),
             new TutorialStepDefinition(Death, 6, TutorialContext.Any, interrupts: true),
             new TutorialStepDefinition(Night, 7, TutorialContext.Any),
             new TutorialStepDefinition(Crafting, 8, TutorialContext.Any),
