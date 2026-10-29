@@ -93,6 +93,22 @@ namespace Rapadura.Gameplay.Tutorial
         public const string Night = "night";
         /// <summary>First time a known recipe has all its ingredients in the inventory: crafting / bancada.</summary>
         public const string Crafting = "crafting";
+        /// <summary>
+        /// First time the world-map token stands idle in a region whose quest-giver can be talked to
+        /// (the HUD's "Conversar com…" button is on screen; outlines it). Reported by the hint UI
+        /// through <see cref="TutorialManager.NotifyWorldMapIdle"/>.
+        /// </summary>
+        public const string RegionNpc = "region_npc";
+        /// <summary>First time idle in the Floresta with the "Vila" button on screen, after the prologue (outlines it).</summary>
+        public const string Village = "village";
+        /// <summary>First biome material dropped by an enemy (EnemyLootDroppedEvent): what materials are for.</summary>
+        public const string Materials = "materials";
+        /// <summary>First stun the hero lands on an enemy (StunAppliedEvent on an EnemyController).</summary>
+        public const string Stun = "stun";
+
+        /// <summary>World-map HUD element names outlined by <see cref="RegionNpc"/>/<see cref="Village"/> (RegionNpcTalkButton.ButtonName / VillageHubButton.ButtonName).</summary>
+        public const string TalkButtonElement = "wm-talk-button";
+        public const string VillageButtonElement = "wm-village-button";
 
         public static string TitleKey(string stepId) => KeyPrefix + stepId + ".title";
         public static string BodyKey(string stepId) => KeyPrefix + stepId + ".body";
@@ -108,6 +124,11 @@ namespace Rapadura.Gameplay.Tutorial
             new TutorialStepDefinition(Death, 6, TutorialContext.Any, interrupts: true),
             new TutorialStepDefinition(Night, 7, TutorialContext.Any),
             new TutorialStepDefinition(Crafting, 8, TutorialContext.Any),
+            // Appended (2026-10-29): ids and orders of the steps above are persisted / relied on.
+            new TutorialStepDefinition(RegionNpc, 9, TutorialContext.World, TalkButtonElement),
+            new TutorialStepDefinition(Village, 10, TutorialContext.World, VillageButtonElement),
+            new TutorialStepDefinition(Materials, 11, TutorialContext.Any, "inventory-button"),
+            new TutorialStepDefinition(Stun, 12, TutorialContext.Encounter),
         };
     }
 }

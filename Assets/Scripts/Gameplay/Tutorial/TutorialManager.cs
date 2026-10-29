@@ -12,6 +12,7 @@ using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Environment;
 using Rapadura.Gameplay.Flow;
 using Rapadura.Gameplay.Inventory;
+using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.Skills;
 using Rapadura.Save;
@@ -164,6 +165,8 @@ namespace Rapadura.Gameplay.Tutorial
             EventBus.Subscribe<TimeOfDayPhaseChangedEvent>(OnPhaseChanged);
             EventBus.Subscribe<NewSessionResetEvent>(OnNewSession);
             EventBus.Subscribe<GameLoadedEvent>(OnGameLoaded);
+            EventBus.Subscribe<EnemyLootDroppedEvent>(OnEnemyLootDropped);
+            EventBus.Subscribe<StunAppliedEvent>(OnStunApplied);
         }
 
         public void Shutdown()
@@ -192,6 +195,8 @@ namespace Rapadura.Gameplay.Tutorial
                 EventBus.Unsubscribe<TimeOfDayPhaseChangedEvent>(OnPhaseChanged);
                 EventBus.Unsubscribe<NewSessionResetEvent>(OnNewSession);
                 EventBus.Unsubscribe<GameLoadedEvent>(OnGameLoaded);
+                EventBus.Unsubscribe<EnemyLootDroppedEvent>(OnEnemyLootDropped);
+                EventBus.Unsubscribe<StunAppliedEvent>(OnStunApplied);
             }
 
             _pending.Clear();
@@ -500,6 +505,80 @@ namespace Rapadura.Gameplay.Tutorial
                 Trigger(TutorialSteps.Night);
             }
         }
+
+        private void OnEnemyLootDropped(EnemyLootDroppedEvent evt)
+        {
+            if (!IsFrontEnd && !IsRestoringNow() && ContainsMaterial(evt.Drops))
+            {
+                Trigger(TutorialSteps.Materials);
+            }
+        }
+
+        /// <summary>Whether any drop is a crafting/quest material (<see cref="ItemType.Material"/>), the "+2 Madeira" kind.</summary>
+        public static bool ContainsMaterial(IReadOnlyList<LootDrop> drops)
+        {
+            if (drops == null)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < drops.Count; i++)
+            {
+                ItemDefinition item = drops[i].Item;
+                if (item != null && item.Type == ItemType.Material && drops[i].Quantity > 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void OnStunApplied(StunAppliedEvent evt)
+        {
+            // Only stuns the hero lands: StunAppliedEvent has no source, but only enemies carry EnemyController.
+            Func<GameObject, bool> isEnemy = IsEnemyTarget;
+            if (!IsFrontEnd && evt.Target != null && isEnemy != null && isEnemy(evt.Target))
+            {
+                Trigger(TutorialSteps.Stun);
+            }
+        }
+
+        /// <summary>"Is this stun target an enemy (so the hero stunned it)?" Defaults to an <see cref="EnemyController"/> check; tests may replace it.</summary>
+        public Func<GameObject, bool> IsEnemyTarget { get; set; } = target => target != null && target.GetComponent<EnemyController>() != null;
+
+        /// <summary>
+        /// Reported by the hint UI (TutorialHintController) while the world-map token stands idle with
+        /// the HUD up: whether the region's "Conversar com…" button and the Floresta's "Vila" button
+        /// are on screen. Queues <see cref="TutorialSteps.RegionNpc"/> / <see cref="TutorialSteps.Village"/>
+        /// the first time each is available; the Vila tip waits until the prologue has been seen
+        /// (<paramref name="prologueSeen"/>) so it never competes with the opening story. Ignored
+        /// outside the world map (title/hero screens, encounters).
+        /// </summary>
+        public void NotifyWorldMapIdle(bool regionNpcAvailable, bool villageAvailable, bool prologueSeen)
+        {
+            if (_flowState != GameFlowState.World && _flowState != GameFlowState.Boot)
+            {
+                return;
+            }
+
+            if (regionNpcAvailable)
+            {
+                Trigger(TutorialSteps.RegionNpc);
+            }
+
+            if (villageAvailable && prologueSeen)
+            {
+                Trigger(TutorialSteps.Village);
+            }
+        }
+
+        /// <summary>True when a world-map idle report could still queue something (lets the UI skip its HUD probe).</summary>
+        public bool WantsWorldMapIdleReports =>
+            HintsEnabled && (_flowState == GameFlowState.World || _flowState == GameFlowState.Boot) &&
+            (IsUntriggered(TutorialSteps.RegionNpc) || IsUntriggered(TutorialSteps.Village));
+
+        private bool IsUntriggered(string stepId) => GetStep(stepId) != null && !IsCompleted(stepId) && !IsPending(stepId);
 
         private void OnNewSession(NewSessionResetEvent evt) => _enemyDefeatedThisSession = false;
 

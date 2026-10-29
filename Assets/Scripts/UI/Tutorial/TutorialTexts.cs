@@ -73,6 +73,26 @@ namespace Rapadura.UI.Tutorial
             Body(TutorialSteps.Crafting,
                 "You have the materials for a recipe. Open Crafting in the menu or walk up to a workbench.",
                 "Você tem os materiais de uma receita. Abra Criação no menu ou chegue perto de uma bancada."),
+
+            Title(TutorialSteps.RegionNpc, "Someone to talk to", "Tem gente para conversar"),
+            Body(TutorialSteps.RegionNpc,
+                "Talk to the locals! Tap \"Talk to…\": they have quests, rewards and good advice about the region's boss.",
+                "Converse com os moradores! Toque em \"Conversar com…\": eles têm missões, recompensas e bons conselhos sobre o chefe da região."),
+
+            Title(TutorialSteps.Village, "Grandma Zefa's village", "A vila da Vó Zefa"),
+            Body(TutorialSteps.Village,
+                "Tap Village to visit the family: chat with the villagers, buy at the Shop and craft at the Workbench.",
+                "Toque em Vila para visitar a família: converse com os moradores, compre na Loja e crie itens na Bancada."),
+
+            Title(TutorialSteps.Materials, "Materials!", "Materiais!"),
+            Body(TutorialSteps.Materials,
+                "Wood, fiber, ore... each region drops its own. Keep them in your Backpack: they build items at the Village Workbench and finish gathering quests.",
+                "Madeira, fibra, minério... cada região dá os seus. Guarde na Mochila: eles viram itens na Bancada da Vila e completam missões de coleta."),
+
+            Title(TutorialSteps.Stun, "Stunned!", "Atordoado!"),
+            Body(TutorialSteps.Stun,
+                "A stunned enemy stops and loses its attack. Hit hard while it's dizzy! Bosses shake it off twice as fast.",
+                "Inimigo atordoado para e perde o ataque. Aproveite para bater enquanto ele está tonto! Chefes se recuperam na metade do tempo."),
         };
 
         private static LocalizationEntry Title(string stepId, string en, string ptBR) => new LocalizationEntry(TutorialSteps.TitleKey(stepId), en, ptBR);

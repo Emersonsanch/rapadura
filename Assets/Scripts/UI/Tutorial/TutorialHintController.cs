@@ -2,10 +2,14 @@ using Rapadura.Core.Accessibility;
 using Rapadura.Core.DI;
 using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
+using Rapadura.Gameplay.Dialogue;
+using Rapadura.Gameplay.Flow;
+using Rapadura.Gameplay.Story;
 using Rapadura.Gameplay.Tutorial;
 using Rapadura.UI.Common;
 using Rapadura.UI.Encounter;
 using Rapadura.UI.HUD;
+using Rapadura.UI.Story;
 using Rapadura.UI.WorldMap;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -34,6 +38,12 @@ namespace Rapadura.UI.Tutorial
     /// screen. With "Reduzir Movimento" (or "Reduzir Flashes") on, the bubble appears without fade/slide; the highlight is
     /// never animated in any mode. The hint queue lives in the manager, so a hint survives the
     /// WorldMap ⇄ Main scene swap.
+    ///
+    /// On the world map it also reports to <see cref="TutorialManager.NotifyWorldMapIdle"/> (a few
+    /// times a second, only while one of those steps can still fire) whether the HUD's
+    /// "Conversar com…" (<see cref="RegionNpcTalkButton"/>) and "Vila" (<see cref="VillageHubButton"/>)
+    /// buttons are on screen — both only show while the token is idle and nothing is open — so the
+    /// map tips are triggered by what the player actually sees.
     /// </summary>
     public class TutorialHintController : MonoBehaviour
     {
@@ -47,6 +57,7 @@ namespace Rapadura.UI.Tutorial
         private const string VisibleClass = "tutorial-hint--visible";
         private const string NoMotionClass = "tutorial-hint--no-motion";
         private const float HighlightPadding = 6f;
+        private const float WorldMapProbeInterval = 0.25f;
 
         [Tooltip("Seconds a non-pausing hint stays up before it counts as read (real time). 0 = until \"Entendi\".")]
         [SerializeField, Min(0f)] private float _autoDismissSeconds = 20f;
@@ -73,6 +84,10 @@ namespace Rapadura.UI.Tutorial
         private float _shownAt;
         private bool _dirty = true;
         private bool _deferred;
+        private WorldMapHudController _mapHud;
+        private VillageHubButton _villageHub;
+        private bool _mapHudLookedUp;
+        private float _nextWorldMapProbe;
 
         /// <summary>The step on screen right now (null when hidden or deferred behind a modal).</summary>
         public TutorialStepDefinition ShownStep => _deferred ? null : _shown;
@@ -85,8 +100,40 @@ namespace Rapadura.UI.Tutorial
         /// any GameplayPause owner other than the hint itself) is freezing gameplay, or the encounter
         /// intro banner ("Prepare-se!" countdown through "Já!", or a boss banner) is on screen — the
         /// first-encounter hint used to pop up on top of the countdown. It shows once the banner is gone.
+        /// Also while a story panel is up or about to start (<see cref="StoryPanelController"/>: a beat
+        /// pending on the world map opens after a short delay, and a hint must not flash in that gap),
+        /// and while a world-map overlay is open (the Vila panel, a region NPC conversation) even in the
+        /// frames where its own GameplayPause is not held.
         /// </summary>
-        public static bool ShouldDefer(bool pausedByOthers, bool introBannerShowing = false) => pausedByOthers || introBannerShowing;
+        public static bool ShouldDefer(bool pausedByOthers, bool introBannerShowing = false, bool storyPanelShowing = false, bool worldOverlayOpen = false) =>
+            pausedByOthers || introBannerShowing || storyPanelShowing || worldOverlayOpen;
+
+        /// <summary>
+        /// A story beat will open on the world map any moment now (<see cref="StoryPanelController"/>
+        /// presents pending beats only there, unless <see cref="StoryPanelController.AutoPresent"/> is off).
+        /// </summary>
+        public static bool IsStoryAboutToShow(bool autoPresent, GameFlowState flowState, StoryBeat pendingBeat) =>
+            autoPresent && flowState == GameFlowState.World && pendingBeat != StoryBeat.None;
+
+        /// <summary>Whether a HUD element is really on screen (attached, displayed, laid out).</summary>
+        public static bool IsOnScreen(VisualElement element)
+        {
+            if (element == null || element.panel == null)
+            {
+                return false;
+            }
+
+            for (VisualElement e = element; e != null; e = e.parent)
+            {
+                if (e.resolvedStyle.display == DisplayStyle.None || e.style.display == DisplayStyle.None)
+                {
+                    return false;
+                }
+            }
+
+            Rect bounds = element.worldBound;
+            return bounds.width > 0f && !float.IsNaN(bounds.width);
+        }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
@@ -168,7 +215,13 @@ namespace Rapadura.UI.Tutorial
                 return;
             }
 
-            bool deferred = ShouldDefer(GameplayPause.IsPausedByOthers(this), BossIntroBannerController.IsAnyShowing);
+            ProbeWorldMap();
+
+            bool deferred = ShouldDefer(
+                GameplayPause.IsPausedByOthers(this),
+                BossIntroBannerController.IsAnyShowing,
+                StoryPanelController.IsShowing || IsStoryPending(),
+                IsWorldOverlayOpen());
             if (deferred != _deferred)
             {
                 _deferred = deferred;
@@ -202,6 +255,72 @@ namespace Rapadura.UI.Tutorial
             UpdateHighlight();
         }
 
+        private bool IsStoryPending()
+        {
+            if (_manager == null || !ServiceLocator.TryGet(out StoryProgress story))
+            {
+                return false;
+            }
+
+            return IsStoryAboutToShow(StoryPanelController.AutoPresent, _manager.FlowState, story.GetPendingBeat());
+        }
+
+        /// <summary>The Vila panel or a dialogue (region NPC, villager) is open.</summary>
+        private bool IsWorldOverlayOpen()
+        {
+            if (_villageHub != null && _villageHub.IsHubOpen)
+            {
+                return true;
+            }
+
+            return ServiceLocator.TryGet(out DialogueManager dialogue) && dialogue.IsActive;
+        }
+
+        /// <summary>Throttled: tells the manager which map buttons are up, while a map tip can still fire.</summary>
+        private void ProbeWorldMap()
+        {
+            if (_manager == null || Time.unscaledTime < _nextWorldMapProbe)
+            {
+                return;
+            }
+
+            _nextWorldMapProbe = Time.unscaledTime + WorldMapProbeInterval;
+            if (_mapHud == null && !_mapHudLookedUp)
+            {
+                // Once per scene: Main.unity has no map HUD.
+                _mapHudLookedUp = true;
+                _mapHud = FindFirstObjectByType<WorldMapHudController>();
+            }
+
+            if (_mapHud != null && _villageHub == null)
+            {
+                // Added by VillageHubButton's own bootstrap after the scene loads.
+                _villageHub = _mapHud.GetComponent<VillageHubButton>();
+            }
+
+            if (!_manager.WantsWorldMapIdleReports || _mapHud == null || !_mapHud.isActiveAndEnabled)
+            {
+                return;
+            }
+
+            UIDocument document = _mapHud.GetComponent<UIDocument>();
+            VisualElement root = document != null ? document.rootVisualElement : null;
+            if (root == null)
+            {
+                return;
+            }
+
+            bool talk = IsOnScreen(root.Q<VisualElement>(RegionNpcTalkButton.ButtonName));
+            bool village = IsOnScreen(root.Q<VisualElement>(VillageHubButton.ButtonName));
+            if (!talk && !village)
+            {
+                return;
+            }
+
+            bool prologueSeen = !ServiceLocator.TryGet(out StoryProgress story) || story.HasSeen(StoryBeat.Prologue);
+            _manager.NotifyWorldMapIdle(talk, village, prologueSeen);
+        }
+
         private void SetManager(TutorialManager manager)
         {
             if (_manager != null)
@@ -225,6 +344,9 @@ namespace Rapadura.UI.Tutorial
         {
             _hudDocument = null;
             _hudIsWorldMap = false;
+            _mapHud = null;
+            _villageHub = null;
+            _mapHudLookedUp = false;
             _highlightCache.InvalidateScene();
 
             // InvalidateScene forgets the applied rect, so the next UpdateHighlight's TryHide would
