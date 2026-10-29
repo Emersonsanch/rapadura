@@ -1,15 +1,42 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
     <Style src="/Assets/UI/Menus/MainMenuView.uss" />
-    <ui:VisualElement name="main-menu-root" class="main-menu-root">
+    <ui:VisualElement name="main-menu-root" class="main-menu-root rap-theme">
+        <!-- Illustrated backdrop (look only, never picks input): dusk sky gradient (TitleScreenDecor),
+             sun, drifting clouds, layered hills, the engenho's silhouette and the cane field. -->
+        <ui:VisualElement name="main-menu-backdrop" class="main-menu-backdrop" picking-mode="Ignore">
+            <ui:VisualElement name="main-menu-sky" class="main-menu-sky" picking-mode="Ignore" />
+            <ui:VisualElement class="main-menu-sun-glow" picking-mode="Ignore">
+                <ui:VisualElement class="main-menu-sun-halo" picking-mode="Ignore">
+                    <ui:VisualElement class="main-menu-sun" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="main-menu-cloud main-menu-cloud--a" picking-mode="Ignore" />
+            <ui:VisualElement class="main-menu-cloud main-menu-cloud--b" picking-mode="Ignore" />
+            <ui:VisualElement class="main-menu-cloud main-menu-cloud--c" picking-mode="Ignore" />
+            <ui:VisualElement class="main-menu-hill main-menu-hill--far" picking-mode="Ignore" />
+            <ui:VisualElement class="main-menu-hill main-menu-hill--mid" picking-mode="Ignore" />
+            <ui:VisualElement class="main-menu-engenho" picking-mode="Ignore">
+                <ui:VisualElement class="main-menu-engenho-chimney" picking-mode="Ignore" />
+                <ui:VisualElement class="main-menu-engenho-roof" picking-mode="Ignore" />
+                <ui:VisualElement class="main-menu-engenho-house" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="main-menu-hill main-menu-hill--near" picking-mode="Ignore" />
+            <ui:VisualElement class="main-menu-cane" picking-mode="Ignore" />
+        </ui:VisualElement>
         <ui:VisualElement name="main-menu-panel" class="main-menu-panel">
-            <ui:Label text="Rapadura" class="main-menu-title" />
-            <ui:VisualElement name="main-menu-button-list" class="main-menu-button-list">
-                <ui:Button name="new-game-button" text="Novo jogo" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.new_game" />
-                <ui:Button name="continue-button" text="Continuar" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.continue" />
-                <ui:Button name="load-button" text="Carregar" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.load" />
-                <ui:Button name="settings-button" text="Configurações" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.settings" />
-                <ui:Button name="credits-button" text="Créditos" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.credits" />
-                <ui:Button name="quit-button" text="Sair" focusable="true" class="main-menu-button loc" view-data-key="ui.menu.quit" />
+            <ui:VisualElement name="main-menu-logo" class="main-menu-logo rap-animated">
+                <ui:Label text="Rapadura" class="main-menu-title rap-logo" />
+                <ui:VisualElement class="main-menu-logo-ribbon" picking-mode="Ignore" />
+                <ui:Label text="Uma aventura de família pelo sertão" class="main-menu-tagline loc" view-data-key="ui.menu.tagline" />
+            </ui:VisualElement>
+            <ui:VisualElement name="main-menu-button-list" class="main-menu-button-list rap-animated">
+                <ui:Button name="new-game-button" text="Novo jogo" focusable="true" class="main-menu-button loc rap-button rap-button--primary" view-data-key="ui.menu.new_game" />
+                <ui:Button name="continue-button" text="Continuar" focusable="true" class="main-menu-button loc rap-button" view-data-key="ui.menu.continue" />
+                <ui:Button name="load-button" text="Carregar" focusable="true" class="main-menu-button loc rap-button" view-data-key="ui.menu.load" />
+                <ui:Button name="settings-button" text="Configurações" focusable="true" class="main-menu-button loc rap-button" view-data-key="ui.menu.settings" />
+                <ui:Button name="credits-button" text="Créditos" focusable="true" class="main-menu-button loc rap-button" view-data-key="ui.menu.credits" />
+                <ui:Button name="quit-button" text="Sair" focusable="true" class="main-menu-button loc rap-button" view-data-key="ui.menu.quit" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

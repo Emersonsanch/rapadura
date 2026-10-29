@@ -51,6 +51,12 @@ namespace Rapadura.UI.CharacterSelect
     /// A language switch while the screen is open re-labels the roster buttons and the highlighted
     /// hero's name/class — role/lore in place (no rebuild, so selection, focus and the pause are
     /// untouched); the pure text rules are the public static <c>Build*Text</c> helpers.
+    ///
+    /// Look (Common/RapaduraTheme.uss): each roster button carries the hero's accent stripe + medal and
+    /// role; the detail panel shows the 3D turntable framed in the accent colour, age and family line
+    /// (<see cref="HeroFamily"/>), lore and the 5 skills. The screen never opens empty: a hero is
+    /// highlighted on open (<see cref="ChooseDefaultHighlight"/>) and moving focus through the roster
+    /// previews each one.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class CharacterSelectController : MonoBehaviour
@@ -64,6 +70,8 @@ namespace Rapadura.UI.CharacterSelect
         [SerializeField] private CharacterPreviewController _previewController;
         [Tooltip("RenderTexture the preview camera renders into — assigned to the detail-preview Image element on bind.")]
         [SerializeField] private RenderTexture _previewRenderTexture;
+        [Tooltip("Clear colour given to the preview camera (the one rendering into the RenderTexture) so the turntable sits on the screen's warm brown instead of the camera's own navy.")]
+        [SerializeField] private Color _previewBackgroundColor = new Color(0.17f, 0.11f, 0.07f, 1f);
 
         [Header("Events")]
         public UnityEvent<CharacterId> OnCharacterSelected;
@@ -77,13 +85,32 @@ namespace Rapadura.UI.CharacterSelect
         private Label _nameLabel;
         private Label _classRoleLabel;
         private Label _loreLabel;
+        private Label _ageLabel;
+        private Label _familyLabel;
+        private VisualElement _skillsContainer;
+        private VisualElement _previewFrame;
+        private VisualElement _accentBar;
         private Button _confirmButton;
         private Button _continueButton;
+        private Texture2D _backdropTexture;
 
         private readonly Dictionary<CharacterId, Button> _rosterButtons = new Dictionary<CharacterId, Button>();
+        private readonly Dictionary<CharacterId, Label> _rosterNameLabels = new Dictionary<CharacterId, Label>();
+        private readonly Dictionary<CharacterId, Label> _rosterRoleLabels = new Dictionary<CharacterId, Label>();
+        private readonly Dictionary<CharacterId, Label> _rosterMedals = new Dictionary<CharacterId, Label>();
 
         /// <summary>USS class on the roster button of the hero currently shown in the detail panel.</summary>
         public const string RosterSelectedClass = "character-select__roster-button--selected";
+        public const string SkillClass = "character-select__skill";
+        public const string UltimateSkillClass = "character-select__skill--ultimate";
+
+        /// <summary>Hero select backdrop, top to bottom: night brown into warm caramel at the floor.</summary>
+        private static readonly Color[] BackdropStops =
+        {
+            new Color32(34, 20, 14, 255),
+            new Color32(72, 40, 22, 255),
+            new Color32(128, 70, 30, 255),
+        };
         private CharacterId? _hovered;
         private CharacterId? _continueHero;
         private int _continueSlot = NoContinueSlot;
@@ -112,6 +139,8 @@ namespace Rapadura.UI.CharacterSelect
         {
             EventBus.Unsubscribe<CharacterSelectionRestoredEvent>(OnCharacterSelectionRestored);
             EventBus.Unsubscribe<CharacterSelectedEvent>(OnCharacterSelectedElsewhere);
+            UiGradientTexture.Release(_backdropTexture);
+            _backdropTexture = null;
         }
 
         // Element binding happens in OnEnable rather than Awake: UIDocument builds its
@@ -154,6 +183,55 @@ namespace Rapadura.UI.CharacterSelect
             // screen was hidden (localizer detached) would leave stale hero labels.
             OnLanguageChanged();
             RefreshContinueOption();
+            UiMotionPreferences.ApplyTo(_root?.Q<VisualElement>("character-select-root"), UiMotionPreferences.IsReducedMotion());
+            HighlightDefault();
+        }
+
+        /// <summary>
+        /// Never open on an empty detail panel (the old screen showed a blank preview square until a
+        /// click): highlight the hero picked last time this session, else the saved hero "Continuar"
+        /// offers, else the first in the roster — and give its button focus so the D-pad starts there.
+        /// </summary>
+        private void HighlightDefault()
+        {
+            CharacterId? id = ChooseDefaultHighlight(_rosterButtons.Keys, _hovered, _continueHero);
+            if (id is not CharacterId target)
+            {
+                return;
+            }
+
+            ShowDetail(CharacterRegistry.Get(target));
+            if (_rosterButtons.TryGetValue(target, out Button button))
+            {
+                button.Focus();
+            }
+        }
+
+        /// <summary>
+        /// Hero highlighted when the screen opens: <paramref name="current"/> (still in the roster), else
+        /// <paramref name="savedHero"/>, else the first roster entry; null only for an empty roster.
+        /// </summary>
+        public static CharacterId? ChooseDefaultHighlight(IEnumerable<CharacterId> roster, CharacterId? current, CharacterId? savedHero)
+        {
+            if (roster == null)
+            {
+                return null;
+            }
+
+            CharacterId? first = null;
+            bool hasSaved = false;
+            foreach (CharacterId id in roster)
+            {
+                first ??= id;
+                if (current.HasValue && id == current.Value)
+                {
+                    return id;
+                }
+
+                hasSaved |= savedHero.HasValue && id == savedHero.Value;
+            }
+
+            return hasSaved ? savedHero : first;
         }
 
         private void OnDisable()
@@ -208,6 +286,18 @@ namespace Rapadura.UI.CharacterSelect
             _loreLabel = _root.Q<Label>("detail-lore");
             _confirmButton = _root.Q<Button>("confirm-button");
             _continueButton = _root.Q<Button>("continue-saved-button");
+            _ageLabel = _root.Q<Label>("detail-age");
+            _familyLabel = _root.Q<Label>("detail-family");
+            _skillsContainer = _root.Q<VisualElement>("detail-skills");
+            _previewFrame = _root.Q<VisualElement>("detail-preview-frame");
+            _accentBar = _root.Q<VisualElement>("detail-accent-bar");
+
+            if (_backdropTexture == null)
+            {
+                _backdropTexture = UiGradientTexture.ApplyVertical(_root.Q<VisualElement>("character-select-backdrop"), BackdropStops);
+            }
+
+            TintPreviewCamera();
 
             if (_previewImage != null && _previewRenderTexture != null)
             {
@@ -248,18 +338,102 @@ namespace Rapadura.UI.CharacterSelect
 
             _rosterContainer.Clear();
             _rosterButtons.Clear();
+            _rosterNameLabels.Clear();
+            _rosterRoleLabels.Clear();
+            _rosterMedals.Clear();
 
             foreach (PlayableCharacter character in CharacterRegistry.GetAll())
             {
-                var button = new Button { text = BuildRosterButtonText(character, Manager), name = $"character-{character.Id}" };
+                // Medal (accent colour + initial) | name over role. The button's own text stays empty:
+                // the labels carry it so the role can sit under the name.
+                var button = new Button { text = string.Empty, name = $"character-{character.Id}" };
                 button.AddToClassList("character-select__roster-button");
+                button.style.borderLeftColor = character.AccentColor;
+
+                var medal = new Label { pickingMode = PickingMode.Ignore };
+                medal.AddToClassList("character-select__roster-medal");
+                medal.style.backgroundColor = character.AccentColor;
+                medal.style.color = MedalTextColor(character.AccentColor);
+
+                var text = new VisualElement { pickingMode = PickingMode.Ignore };
+                text.AddToClassList("character-select__roster-text");
+                var nameLabel = new Label { pickingMode = PickingMode.Ignore };
+                nameLabel.AddToClassList("character-select__roster-name");
+                var roleLabel = new Label { pickingMode = PickingMode.Ignore };
+                roleLabel.AddToClassList("character-select__roster-role");
+                text.Add(nameLabel);
+                text.Add(roleLabel);
+
+                button.Add(medal);
+                button.Add(text);
                 button.clicked += () => ShowDetail(character);
+                // Gamepad/keyboard: moving through the roster previews each hero (Confirmar picks the one shown).
+                button.RegisterCallback<FocusInEvent>(_ => ShowDetail(character));
                 _rosterContainer.Add(button);
                 _rosterButtons[character.Id] = button;
+                _rosterNameLabels[character.Id] = nameLabel;
+                _rosterRoleLabels[character.Id] = roleLabel;
+                _rosterMedals[character.Id] = medal;
             }
 
+            RefreshRosterTexts();
             ApplyRosterSelection(_rosterButtons, _hovered);
+            UiAccessibilityApplier.RequestRefresh();
         }
+
+        /// <summary>Readable initial on the accent medal: dark brown on light accents (Maria's gold), cream on dark ones.</summary>
+        public static Color MedalTextColor(Color accent)
+        {
+            float luminance = 0.2126f * accent.r + 0.7152f * accent.g + 0.0722f * accent.b;
+            return luminance > 0.5f ? new Color32(46, 27, 16, 255) : new Color32(255, 246, 228, 255);
+        }
+
+        /// <summary>Initial shown on the roster medal ("M", "Í"…), from the localized name.</summary>
+        public static string BuildMedalText(PlayableCharacter character, LocalizationManager manager)
+        {
+            string name = BuildRosterButtonText(character, manager);
+            return string.IsNullOrEmpty(name) ? string.Empty : name.Substring(0, 1).ToUpperInvariant();
+        }
+
+        /// <summary>
+        /// The 5 skill lines of the detail panel, in <see cref="PlayableCharacter.AbilityNames"/> order:
+        /// each one's localized name when its <see cref="SkillDefinition"/> is among <paramref name="skills"/>
+        /// (matched by display name), else the authored name; the last (the Ultimate) is tagged via
+        /// <see cref="UiTexts.CharacterSelectUltimate"/>.
+        /// </summary>
+        public static List<string> BuildSkillLines(PlayableCharacter character, IReadOnlyList<SkillDefinition> skills, LocalizationManager manager)
+        {
+            var lines = new List<string>();
+            string[] names = character?.AbilityNames;
+            if (names == null)
+            {
+                return lines;
+            }
+
+            for (int i = 0; i < names.Length; i++)
+            {
+                string line = names[i];
+                if (skills != null)
+                {
+                    foreach (SkillDefinition skill in skills)
+                    {
+                        if (skill != null && skill.DisplayName == names[i])
+                        {
+                            line = skill.LocalizedName(manager);
+                            break;
+                        }
+                    }
+                }
+
+                lines.Add(i == names.Length - 1 ? UiTexts.Format(manager, UiTexts.CharacterSelectUltimate, line) : line);
+            }
+
+            return lines;
+        }
+
+        /// <summary>"14 anos" / "14 years old".</summary>
+        public static string BuildAgeText(PlayableCharacter character, LocalizationManager manager) =>
+            character == null ? string.Empty : UiTexts.Format(manager, UiTexts.CharacterSelectAge, character.Age);
 
         /// <summary>
         /// Marks the roster button of <paramref name="selected"/> with <see cref="RosterSelectedClass"/>
@@ -296,18 +470,88 @@ namespace Rapadura.UI.CharacterSelect
 
         private void RefreshRosterTexts()
         {
-            foreach (KeyValuePair<CharacterId, Button> pair in _rosterButtons)
+            foreach (CharacterId id in _rosterButtons.Keys)
             {
-                pair.Value.text = BuildRosterButtonText(CharacterRegistry.Get(pair.Key), Manager);
+                PlayableCharacter character = CharacterRegistry.Get(id);
+                if (_rosterNameLabels.TryGetValue(id, out Label nameLabel)) nameLabel.text = BuildRosterButtonText(character, Manager);
+                if (_rosterRoleLabels.TryGetValue(id, out Label roleLabel)) roleLabel.text = character.LocalizedRole(Manager);
+                if (_rosterMedals.TryGetValue(id, out Label medal)) medal.text = BuildMedalText(character, Manager);
             }
         }
 
-        /// <summary>Name, class — role and lore of <paramref name="character"/>; text only (no preview/confirm side effects).</summary>
+        /// <summary>Name, class — role, age, family line, skills and lore of <paramref name="character"/>; text only (no preview/confirm side effects).</summary>
         private void ApplyDetailTexts(PlayableCharacter character)
         {
             if (_nameLabel != null) _nameLabel.text = BuildRosterButtonText(character, Manager);
             if (_classRoleLabel != null) _classRoleLabel.text = BuildClassRoleText(character, Manager);
             if (_loreLabel != null) _loreLabel.text = BuildLoreText(character, Manager);
+            if (_ageLabel != null) _ageLabel.text = BuildAgeText(character, Manager);
+            if (_familyLabel != null) _familyLabel.text = character == null ? string.Empty : HeroFamily.BuildFamilyLine(character.Id, Manager);
+            ApplySkillList(character);
+        }
+
+        private void ApplySkillList(PlayableCharacter character)
+        {
+            if (_skillsContainer == null)
+            {
+                return;
+            }
+
+            _skillsContainer.Clear();
+            if (character == null)
+            {
+                return;
+            }
+
+            List<string> lines = BuildSkillLines(character, CharacterSkillSet.GetSkills(character.Id), Manager);
+            for (int i = 0; i < lines.Count; i++)
+            {
+                var label = new Label(lines[i]);
+                label.AddToClassList(SkillClass);
+                label.EnableInClassList(UltimateSkillClass, i == lines.Count - 1);
+                _skillsContainer.Add(label);
+            }
+
+            UiAccessibilityApplier.RequestRefresh();
+        }
+
+        /// <summary>The shown hero's accent on the preview frame and the bar under the name.</summary>
+        private void ApplyAccent(PlayableCharacter character)
+        {
+            if (character == null)
+            {
+                return;
+            }
+
+            if (_previewFrame != null)
+            {
+                _previewFrame.style.borderTopColor = character.AccentColor;
+                _previewFrame.style.borderRightColor = character.AccentColor;
+                _previewFrame.style.borderBottomColor = character.AccentColor;
+                _previewFrame.style.borderLeftColor = character.AccentColor;
+            }
+
+            if (_accentBar != null)
+            {
+                _accentBar.style.backgroundColor = character.AccentColor;
+            }
+        }
+
+        /// <summary>Gives the camera rendering into <see cref="_previewRenderTexture"/> the screen's warm clear colour (no scene edit needed).</summary>
+        private void TintPreviewCamera()
+        {
+            if (_previewRenderTexture == null)
+            {
+                return;
+            }
+
+            foreach (Camera previewCamera in Camera.allCameras)
+            {
+                if (previewCamera.targetTexture == _previewRenderTexture && previewCamera.clearFlags == CameraClearFlags.SolidColor)
+                {
+                    previewCamera.backgroundColor = _previewBackgroundColor;
+                }
+            }
         }
 
         /// <summary>The "pick a hero" hint in the lore area, only while no hero is highlighted (lore is content, not a key).</summary>
@@ -350,6 +594,7 @@ namespace Rapadura.UI.CharacterSelect
 
             ApplyRosterSelection(_rosterButtons, _hovered);
             ApplyDetailTexts(character);
+            ApplyAccent(character);
 
             _previewController?.ShowCharacter(character.Id);
 

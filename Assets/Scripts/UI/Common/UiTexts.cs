@@ -60,6 +60,8 @@ namespace Rapadura.UI.Common
         public const string MenuLoad = "ui.menu.load";
         /// <summary>"Novo jogo" (the title screen also has "Continuar", so not the core "Iniciar Jogo" of <see cref="MenuStart"/>).</summary>
         public const string MenuNewGame = "ui.menu.new_game";
+        /// <summary>Line under the "Rapadura" logo on the title screen.</summary>
+        public const string MenuTagline = "ui.menu.tagline";
 
         // -- Crafting --
         public const string CraftingTitle = "ui.crafting.title";
@@ -120,6 +122,11 @@ namespace Rapadura.UI.Common
         public const string CharacterSelectPrompt = "ui.character_select.prompt";
         public const string CharacterSelectConfirm = "ui.character_select.confirm";
         public const string CharacterSelectContinueWith = "ui.character_select.continue_with";
+        public const string CharacterSelectSkills = "ui.character_select.skills";
+        public const string CharacterSelectUltimate = "ui.character_select.ultimate";
+        public const string CharacterSelectAge = "ui.character_select.age";
+        /// <summary>Prefix of the family-line keys (see <c>HeroFamily</c>): sibling relation + birth rank.</summary>
+        public const string CharacterSelectFamilyPrefix = "ui.character_select.family.";
 
         public static readonly List<LocalizationEntry> Entries = new List<LocalizationEntry>
         {
@@ -152,6 +159,7 @@ namespace Rapadura.UI.Common
             new LocalizationEntry(MenuCredits, "Credits", "Créditos"),
             new LocalizationEntry(MenuLoad, "Load", "Carregar"),
             new LocalizationEntry(MenuNewGame, "New game", "Novo jogo"),
+            new LocalizationEntry(MenuTagline, "A family adventure through the sertão", "Uma aventura de família pelo sertão"),
 
             new LocalizationEntry(CraftingTitle, "Crafting", "Criação"),
             new LocalizationEntry(CraftingRecipes, "Recipes", "Receitas"),
@@ -209,6 +217,25 @@ namespace Rapadura.UI.Common
             new LocalizationEntry(CharacterSelectPrompt, "Select a character to see their story.", "Selecione um personagem para ver a história."),
             new LocalizationEntry(CharacterSelectConfirm, "Confirm", "Confirmar"),
             new LocalizationEntry(CharacterSelectContinueWith, "Continue as {0}", "Continuar com {0}"),
+            new LocalizationEntry(CharacterSelectSkills, "Skills", "Habilidades"),
+            new LocalizationEntry(CharacterSelectUltimate, "{0} (Ultimate)", "{0} (Ultimate)"),
+            new LocalizationEntry(CharacterSelectAge, "{0} years old", "{0} anos"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "sister_of.m", "{0}'s sister", "Irmã do {0}"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "sister_of.f", "{0}'s sister", "Irmã da {0}"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "brother_of.m", "{0}'s brother", "Irmão do {0}"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "brother_of.f", "{0}'s brother", "Irmão da {0}"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "cousin.f", "Cousin to everyone", "Prima de todos"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "cousin.m", "Cousin to everyone", "Primo de todos"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "rank.1.f", "the eldest", "a mais velha"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "rank.1.m", "the eldest", "o mais velho"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "rank.2.f", "the second eldest", "a segunda mais velha"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "rank.2.m", "the second eldest", "o segundo mais velho"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "rank.3.f", "the middle one", "a do meio"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "rank.3.m", "the middle one", "o do meio"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "rank.4.f", "the second youngest", "a penúltima"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "rank.4.m", "the second youngest", "o penúltimo"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "rank.5.f", "the youngest", "a caçula"),
+            new LocalizationEntry(CharacterSelectFamilyPrefix + "rank.5.m", "the youngest", "o caçula"),
         };
 
         private static Dictionary<string, string> _fallbackByKey;

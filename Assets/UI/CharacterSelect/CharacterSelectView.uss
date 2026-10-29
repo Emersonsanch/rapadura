@@ -1,27 +1,38 @@
+/* Hero select. Palette, heading, panel, chip and button styles come from Common/RapaduraTheme.uss
+   (imported first in CharacterSelectView.uxml). Per-hero accent colours (roster stripe + medal,
+   preview frame, accent bar under the name) are set inline by CharacterSelectController. */
+
 .character-select__root {
     position: absolute;
     left: 0;
     top: 0;
     right: 0;
     bottom: 0;
-    background-color: rgb(10, 10, 18); /* opaque: the world map renders behind the front-end */
+    background-color: rgb(46, 27, 16); /* opaque: the world map renders behind the front-end */
     align-items: center;
     justify-content: center;
     padding: 24px;
 }
 
+/* Warm dusk gradient painted by CharacterSelectController (USS has no gradients). */
+.character-select__backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
 .character-select__title {
-    font-size: 32px;
-    color: rgb(230, 220, 190);
-    -unity-font-style: bold;
     margin-bottom: 16px;
     flex-shrink: 0;
 }
 
 .character-select__body {
     flex-direction: row;
-    width: 90%;
-    max-width: 1000px;
+    width: 92%;
+    max-width: 1060px;
     /* Fill the space left under the title instead of a fixed 60% — on landscape phones (≈660 logical px
        tall) a fixed percentage left the detail column shorter than its content, so the story ran into
        the Confirmar button. */
@@ -31,48 +42,135 @@
     min-height: 0;
 }
 
+/* ---------------------------------------------------------------- roster */
+
 .character-select__roster {
-    width: 200px;
-    margin-right: 20px;
+    width: 230px;
+    margin-right: 18px;
     flex-shrink: 0;
 }
 
 .character-select__roster-button {
-    height: 48px;
-    margin-bottom: 8px;
-    font-size: 18px;
-    background-color: rgb(40, 36, 60);
-    color: rgb(230, 220, 190);
-    border-width: 1px;
-    border-color: rgb(90, 80, 120);
+    flex-direction: row;
+    align-items: center;
+    height: 64px;
+    margin: 0 0 10px 0;
+    padding: 0 12px 0 10px;
+    border-radius: 12px;
+    background-color: rgba(70, 42, 22, 0.94);
+    border-width: 2px;
+    border-color: rgb(120, 76, 40);
+    border-left-width: 7px; /* colour = the hero's accent, set inline */
+    -unity-text-align: middle-left;
+    transition-property: background-color, border-color, translate;
+    transition-duration: 0.12s, 0.12s, 0.12s;
 }
 
 .character-select__roster-button:hover {
-    background-color: rgb(70, 60, 100);
+    background-color: rgb(104, 64, 32);
+    border-top-color: rgb(226, 158, 70);
+    border-right-color: rgb(226, 158, 70);
+    border-bottom-color: rgb(226, 158, 70);
+}
+
+.character-select__roster-button:focus {
+    border-top-color: rgb(255, 224, 140);
+    border-right-color: rgb(255, 224, 140);
+    border-bottom-color: rgb(255, 224, 140);
+    translate: 4px 0;
+}
+
+.character-select__roster-button:active {
+    background-color: rgb(130, 78, 34);
+    translate: 2px 1px;
 }
 
 /* The hero shown in the detail panel (what "Confirmar" picks): gold frame, lit background. */
 .character-select__roster-button--selected,
 .character-select__roster-button--selected:hover {
-    background-color: rgb(92, 74, 40);
-    color: rgb(255, 236, 180);
+    background-color: rgb(150, 92, 36);
     border-width: 3px;
-    border-color: rgb(255, 210, 90);
-    -unity-font-style: bold;
+    border-left-width: 9px;
+    border-top-color: rgb(255, 210, 90);
+    border-right-color: rgb(255, 210, 90);
+    border-bottom-color: rgb(255, 210, 90);
 }
+
+.rap-reduced-motion .character-select__roster-button {
+    transition-duration: 0s;
+    translate: 0 0;
+}
+
+/* Round badge with the hero's initial, filled with their accent colour (inline). */
+.character-select__roster-medal {
+    width: 38px;
+    height: 38px;
+    border-radius: 19px;
+    margin-right: 10px;
+    flex-shrink: 0;
+    border-width: 2px;
+    border-color: rgba(255, 236, 190, 0.85);
+    font-size: 20px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    padding: 0;
+}
+
+.character-select__roster-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.character-select__roster-name {
+    font-size: 19px;
+    -unity-font-style: bold;
+    color: rgb(255, 242, 216);
+    padding: 0;
+    margin: 0;
+}
+
+.character-select__roster-role {
+    font-size: 13px;
+    color: rgb(232, 204, 160);
+    padding: 0;
+    margin: 0;
+    white-space: normal;
+}
+
+.character-select__roster-button--selected .character-select__roster-name {
+    color: rgb(255, 250, 230);
+}
+
+/* ---------------------------------------------------------------- detail */
 
 .character-select__detail {
     flex-grow: 1;
     flex-shrink: 1;
     min-width: 0;
-    min-height: 302px;
-    background-color: rgba(30, 26, 46, 0.85);
+    min-height: 312px;
     padding: 20px;
-    /* Landscape layout: the 3D preview is pinned to the left column (absolute), text + buttons
+    /* Landscape layout: preview + skills are pinned to the left column (absolute), text + buttons
        flow in the right column. */
-    padding-left: 304px;
-    border-width: 1px;
-    border-color: rgb(90, 80, 120);
+    padding-left: 312px;
+}
+
+.character-select__left-column {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    bottom: 20px;
+    width: 276px;
+}
+
+/* Frame colour = the shown hero's accent (inline). */
+.character-select__preview-frame {
+    padding: 6px;
+    border-radius: 16px;
+    border-width: 3px;
+    border-color: rgb(196, 122, 44);
+    background-color: rgb(40, 24, 14);
+    flex-shrink: 0;
 }
 
 .character-select__detail-preview {
@@ -81,25 +179,83 @@
     min-height: 260px;
     flex-shrink: 0;
     flex-grow: 0;
-    position: absolute;
-    left: 20px;
-    top: 20px;
-    background-color: rgba(0, 0, 0, 0.25);
-    border-width: 1px;
-    border-color: rgb(90, 80, 120);
+    border-radius: 10px;
+    background-color: rgb(43, 28, 18);
     -unity-background-scale-mode: scale-to-fit;
 }
 
-.character-select__detail-name {
-    font-size: 28px;
-    color: rgb(255, 240, 200);
+.character-select__skills-title {
+    margin-top: 10px;
+    margin-bottom: 4px;
+    font-size: 14px;
     -unity-font-style: bold;
+    letter-spacing: 2px;
+    color: rgb(244, 196, 88);
+    flex-shrink: 0;
+}
+
+.character-select__skills {
+    flex-shrink: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.character-select__skill {
+    font-size: 14px;
+    color: rgb(255, 242, 216);
+    padding: 3px 8px;
+    margin-bottom: 3px;
+    border-radius: 8px;
+    background-color: rgba(128, 78, 40, 0.45);
+    border-left-width: 3px;
+    border-left-color: rgb(196, 122, 44);
+    white-space: normal;
+}
+
+.character-select__skill--ultimate {
+    -unity-font-style: bold;
+    color: rgb(255, 224, 140);
+    background-color: rgba(196, 122, 44, 0.42);
+    border-left-color: rgb(255, 224, 140);
+}
+
+.character-select__detail-name {
+    font-size: 34px;
+    color: rgb(255, 232, 170);
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(74, 36, 12);
+    text-shadow: 2px 3px 0px rgba(30, 14, 4, 0.75);
+    margin: 0;
+    padding: 0;
+}
+
+/* Accent colour (inline) under the hero's name. */
+.character-select__accent-bar {
+    width: 120px;
+    height: 5px;
+    border-radius: 3px;
+    margin-top: 2px;
+    margin-bottom: 6px;
+    background-color: rgb(196, 122, 44);
+    flex-shrink: 0;
 }
 
 .character-select__detail-role {
-    font-size: 16px;
-    color: rgb(200, 190, 220);
-    margin-bottom: 12px;
+    font-size: 17px;
+    color: rgb(240, 214, 170);
+    margin-bottom: 8px;
+}
+
+.character-select__facts {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    margin-bottom: 6px;
+}
+
+.character-select__fact--family {
+    -unity-font-style: italic;
 }
 
 /* Story text scrolls inside the remaining space so it can never push into the buttons. */
@@ -111,22 +267,25 @@
 
 .character-select__detail-lore {
     font-size: 15px;
-    color: rgb(220, 215, 230);
+    color: rgb(236, 222, 200);
     white-space: normal;
     padding-right: 6px;
 }
 
 .character-select__confirm {
-    height: 44px;
+    height: 50px;
     flex-shrink: 0;
-    font-size: 18px;
+    font-size: 20px;
     margin-top: 12px;
-    background-color: rgb(120, 40, 40);
-    color: rgb(255, 240, 220);
+    margin-bottom: 0;
 }
 
 /* "Continuar com <herói>" — only shown when a save with a chosen hero exists (CharacterSelectController.RefreshContinueOption). */
 .character-select__continue {
     margin-top: 8px;
-    background-color: rgb(40, 90, 60);
+    height: 44px;
+    font-size: 17px;
+    border-left-color: rgb(112, 146, 62);
+    border-right-color: rgb(112, 146, 62);
+    border-top-color: rgb(150, 186, 90);
 }

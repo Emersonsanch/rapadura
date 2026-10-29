@@ -13,7 +13,8 @@ namespace Rapadura.UI.Menus
     /// Drives the Main Menu screen (Novo Jogo / Continuar / Carregar / Configurações / Créditos / Sair), built with
     /// UI Toolkit following the same pattern as <c>SkillTreeController</c>/<c>HudController</c>:
     /// a single <see cref="UIDocument"/>, elements resolved once via <c>Q&lt;T&gt;()</c>, no heavy
-    /// business logic here.
+    /// business logic here. The look (illustrated backdrop, entrance animation honouring "Reduzir
+    /// Flashes") lives in <see cref="TitleScreenDecor"/> and Common/RapaduraTheme.uss.
     ///
     /// This screen deliberately does not load scenes or start gameplay itself — the project has no
     /// scene-loading/bootstrap system yet (TODO.md Fase 1: "Main.unity" doesn't exist), so
@@ -61,6 +62,7 @@ namespace Rapadura.UI.Menus
         private SaveManager _saveManager;
         private FrameRateManager _frameRateManager;
         private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
+        private readonly TitleScreenDecor _decor = new TitleScreenDecor();
 
         private void Awake()
         {
@@ -79,6 +81,7 @@ namespace Rapadura.UI.Menus
             BindElements();
             RegisterCallbacks();
             _localizer.Attach(_uiDocument.rootVisualElement);
+            _decor.Attach(_uiDocument.rootVisualElement, _root, UiMotionPreferences.IsReducedMotion());
             RefreshContinueAvailability();
             FocusFirstElement();
             NotifyMenuOpen(IsVisible());
@@ -88,6 +91,7 @@ namespace Rapadura.UI.Menus
         private void Start()
         {
             _localizer.Refresh();
+            _decor.RefreshMotion(UiMotionPreferences.IsReducedMotion());
             NotifyMenuOpen(IsVisible());
         }
 
@@ -99,6 +103,7 @@ namespace Rapadura.UI.Menus
         private void OnDisable()
         {
             _localizer.Detach();
+            _decor.Detach();
             UnregisterCallbacks();
             NotifyMenuOpen(false);
         }
@@ -269,6 +274,8 @@ namespace Rapadura.UI.Menus
                 _root.style.display = DisplayStyle.Flex;
             }
 
+            _decor.RefreshMotion(UiMotionPreferences.IsReducedMotion());
+            _decor.PlayEntrance();
             RefreshContinueAvailability();
             FocusFirstElement();
             NotifyMenuOpen(true);

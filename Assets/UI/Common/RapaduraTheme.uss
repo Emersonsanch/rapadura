@@ -1,0 +1,186 @@
+/*
+ * Rapadura shared theme — warm "engenho de rapadura" palette (caramel, brown sugar, cane gold,
+ * cream) and the themed controls built on it. Screens opt in by importing this sheet in their
+ * UXML BEFORE their own USS and adding `rap-theme` to their root (the custom properties below
+ * are declared on that class, not on :root, because a sheet attached through UXML only styles
+ * its own subtree):
+ *
+ *   <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
+ *   <ui:VisualElement class="my-screen-root rap-theme"> ... <ui:Button class="rap-button" /> ...
+ *
+ * Used today by the title screen (MainMenuView) and hero select (CharacterSelectView); the other
+ * screens keep their own look until they are migrated.
+ *
+ * Accessibility: `rap-reduced-motion` (added to the root from AccessibilitySettings.ReduceFlashEffects,
+ * "Reduzir Flashes", see UiMotionPreferences) turns every transition below into an instant change.
+ * The high-contrast / colorblind rules in Resources/UI/AccessibilityTheme.uss still apply on top.
+ */
+
+.rap-theme {
+    --rap-brown-night: rgb(28, 16, 10);
+    --rap-brown-deep: rgb(46, 27, 16);
+    --rap-brown: rgb(86, 50, 26);
+    --rap-brown-light: rgb(128, 78, 40);
+    --rap-caramel: rgb(196, 122, 44);
+    --rap-caramel-light: rgb(226, 158, 70);
+    --rap-gold: rgb(244, 196, 88);
+    --rap-gold-light: rgb(255, 224, 140);
+    --rap-cream: rgb(255, 242, 216);
+    --rap-cream-dim: rgb(222, 200, 166);
+    --rap-cane-green: rgb(112, 146, 62);
+    --rap-clay-red: rgb(178, 72, 40);
+    --rap-panel-bg: rgba(46, 27, 16, 0.92);
+    --rap-panel-border: rgb(150, 96, 48);
+    --rap-focus: rgb(255, 224, 140);
+    color: var(--rap-cream);
+}
+
+/* ---- Logo / headings ---- */
+
+.rap-logo {
+    font-size: 96px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: var(--rap-gold);
+    letter-spacing: 4px;
+    -unity-text-outline-width: 3px;
+    -unity-text-outline-color: rgb(74, 36, 12);
+    text-shadow: 4px 6px 0px rgba(36, 16, 6, 0.85);
+}
+
+.rap-heading {
+    font-size: 34px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: rgb(74, 36, 12);
+    text-shadow: 2px 3px 0px rgba(36, 16, 6, 0.8);
+}
+
+.rap-subtle {
+    color: var(--rap-cream-dim);
+    font-size: 15px;
+}
+
+/* ---- Panels / chips ---- */
+
+.rap-panel {
+    background-color: var(--rap-panel-bg);
+    border-width: 2px;
+    border-color: var(--rap-panel-border);
+    border-radius: 14px;
+}
+
+.rap-chip {
+    padding: 3px 10px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: rgba(244, 196, 88, 0.45);
+    background-color: rgba(128, 78, 40, 0.55);
+    color: var(--rap-cream);
+    font-size: 14px;
+}
+
+/* ---- Buttons ----
+ * Mouse = :hover, gamepad/keyboard (FocusNavigator / UI Toolkit navigation) = :focus,
+ * press on any device (mouse, touch, Submit) = :active. Every state changes colour AND border so
+ * the state never relies on hue alone. */
+
+.rap-button {
+    height: 48px;
+    margin: 0 0 10px 0;
+    padding: 0 18px;
+    font-size: 18px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: var(--rap-cream);
+    background-color: var(--rap-brown);
+    border-width: 2px;
+    border-radius: 12px;
+    border-top-color: var(--rap-caramel-light);
+    border-left-color: var(--rap-caramel);
+    border-right-color: var(--rap-caramel);
+    border-bottom-color: rgb(52, 28, 12);
+    border-bottom-width: 4px;
+    text-shadow: 1px 2px 0px rgba(30, 14, 4, 0.8);
+    transition-property: background-color, border-color, scale, translate, color;
+    transition-duration: 0.12s, 0.12s, 0.12s, 0.12s, 0.12s;
+    transition-timing-function: ease-out, ease-out, ease-out, ease-out, ease-out;
+}
+
+.rap-button:hover {
+    background-color: var(--rap-brown-light);
+    border-top-color: var(--rap-gold);
+    border-left-color: var(--rap-caramel-light);
+    border-right-color: var(--rap-caramel-light);
+    color: rgb(255, 250, 236);
+}
+
+.rap-button:focus {
+    background-color: var(--rap-caramel);
+    border-color: var(--rap-focus);
+    border-bottom-color: rgb(120, 66, 20);
+    color: rgb(255, 252, 244);
+    scale: 1.03 1.03;
+}
+
+.rap-button:active,
+.rap-button:hover:active,
+.rap-button:focus:active {
+    background-color: rgb(150, 86, 30);
+    border-bottom-width: 2px;
+    translate: 0 2px;
+    scale: 0.98 0.98;
+}
+
+.rap-button:disabled {
+    opacity: 0.45;
+    background-color: rgb(70, 48, 34);
+    border-color: rgb(96, 70, 50);
+    scale: 1 1;
+}
+
+/* Main call to action (Confirmar / Novo jogo): gold instead of brown. */
+.rap-button--primary {
+    background-color: var(--rap-caramel);
+    border-top-color: var(--rap-gold-light);
+    border-left-color: var(--rap-gold);
+    border-right-color: var(--rap-gold);
+    border-bottom-color: rgb(110, 58, 16);
+    color: rgb(255, 252, 240);
+}
+
+.rap-button--primary:hover {
+    background-color: var(--rap-caramel-light);
+    border-top-color: rgb(255, 240, 190);
+}
+
+.rap-button--primary:focus {
+    background-color: var(--rap-gold);
+    border-color: rgb(255, 250, 220);
+    border-bottom-color: rgb(140, 80, 20);
+    color: rgb(60, 30, 8);
+    text-shadow: 0px 1px 0px rgba(255, 240, 200, 0.6);
+}
+
+.rap-button--primary:active,
+.rap-button--primary:hover:active,
+.rap-button--primary:focus:active {
+    background-color: rgb(200, 128, 40);
+    color: rgb(255, 252, 240);
+}
+
+/* ---- Reduced motion ("Reduzir Flashes") ---- */
+
+.rap-reduced-motion .rap-button,
+.rap-reduced-motion .rap-animated {
+    transition-duration: 0s;
+}
+
+.rap-reduced-motion .rap-button:focus,
+.rap-reduced-motion .rap-button:active {
+    scale: 1 1;
+    translate: 0 0;
+}

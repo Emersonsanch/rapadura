@@ -1,3 +1,7 @@
+/* Title screen. Palette, logo and button styles come from Common/RapaduraTheme.uss (imported first
+   in MainMenuView.uxml); this sheet only lays out the illustrated backdrop and the menu column.
+   TitleScreenDecor paints the sky gradient, drifts the clouds and plays the entrance. */
+
 .main-menu-root {
     position: absolute;
     left: 0;
@@ -7,50 +11,243 @@
     flex-grow: 1;
     align-items: center;
     justify-content: center;
-    background-color: rgb(10, 11, 16); /* opaque: the world map renders behind the front-end */
+    overflow: hidden;
+    background-color: rgb(46, 27, 16); /* opaque: the world map renders behind the front-end */
 }
 
-.main-menu-panel {
-    width: 360px;
+/* ---------------------------------------------------------------- backdrop */
+
+.main-menu-backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.main-menu-sky {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(176, 92, 60); /* until the gradient texture is applied */
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.main-menu-sun-glow {
+    position: absolute;
+    left: 56%;
+    top: 14%;
+    width: 520px;
+    height: 520px;
+    border-radius: 260px;
+    background-color: rgba(255, 214, 130, 0.16);
     align-items: center;
-    padding: 24px;
+    justify-content: center;
+}
+
+.main-menu-sun-halo {
+    width: 340px;
+    height: 340px;
+    border-radius: 170px;
+    background-color: rgba(255, 220, 140, 0.28);
+    align-items: center;
+    justify-content: center;
+}
+
+.main-menu-sun {
+    width: 200px;
+    height: 200px;
+    border-radius: 100px;
+    background-color: rgb(255, 222, 140);
+    border-width: 4px;
+    border-color: rgba(255, 244, 200, 0.8);
+}
+
+.main-menu-cloud {
+    position: absolute;
+    height: 40px;
+    border-radius: 20px;
+    background-color: rgba(255, 228, 200, 0.42);
+}
+
+.main-menu-cloud--a {
+    top: 9%;
+    width: 300px;
+}
+
+.main-menu-cloud--b {
+    top: 19%;
+    width: 220px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: rgba(255, 210, 180, 0.32);
+}
+
+.main-menu-cloud--c {
+    top: 30%;
+    width: 360px;
+    height: 46px;
+    border-radius: 23px;
+    background-color: rgba(250, 196, 150, 0.3);
+}
+
+.main-menu-hill {
+    position: absolute;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+}
+
+/* Hazy hills on the horizon. */
+.main-menu-hill--far {
+    left: 30%;
+    width: 110%;
+    bottom: 26%;
+    height: 34%;
+    background-color: rgb(140, 78, 72);
+}
+
+/* Brown-sugar hill carrying the engenho. */
+.main-menu-hill--mid {
+    left: -25%;
+    width: 85%;
+    bottom: 14%;
+    height: 38%;
+    background-color: rgb(112, 60, 38);
+}
+
+.main-menu-engenho {
+    position: absolute;
+    left: 12%;
+    bottom: 44%;
+    width: 120px;
+    height: 110px;
+}
+
+.main-menu-engenho-house {
+    position: absolute;
+    left: 10px;
+    bottom: 0;
+    width: 96px;
+    height: 52px;
+    background-color: rgb(64, 32, 22);
+}
+
+.main-menu-engenho-roof {
+    position: absolute;
+    left: 24px;
+    bottom: 22px;
+    width: 68px;
+    height: 68px;
+    rotate: 45deg;
+    background-color: rgb(64, 32, 22);
+}
+
+.main-menu-engenho-chimney {
+    position: absolute;
+    left: 86px;
+    bottom: 30px;
+    width: 14px;
+    height: 80px;
+    background-color: rgb(58, 28, 20);
+}
+
+/* The canavial (sugar-cane field) in front. */
+.main-menu-hill--near {
+    left: -10%;
+    width: 120%;
+    bottom: -12%;
+    height: 34%;
+    background-color: rgb(88, 98, 40);
+}
+
+.main-menu-cane {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 11%;
+    background-color: rgb(52, 58, 24);
+    border-top-width: 3px;
+    border-top-color: rgb(120, 136, 54);
+}
+
+/* ---------------------------------------------------------------- menu column */
+
+.main-menu-panel {
+    width: 400px;
+    align-items: center;
+    padding: 26px 30px 18px 30px;
+    border-radius: 24px;
+    background-color: rgba(36, 20, 10, 0.62);
+    border-width: 2px;
+    border-color: rgba(226, 158, 70, 0.55);
+}
+
+.main-menu-logo {
+    align-items: center;
+    margin-bottom: 22px;
+    transition-property: opacity, translate;
+    transition-duration: 0.7s, 0.7s;
+    transition-timing-function: ease-out-cubic, ease-out-cubic;
 }
 
 .main-menu-title {
-    font-size: 36px;
-    -unity-font-style: bold;
-    color: rgb(240, 240, 245);
-    margin-bottom: 32px;
+    margin: 0;
+    padding: 0;
+}
+
+/* Caramel bar under the logo, like the paper band around a block of rapadura. */
+.main-menu-logo-ribbon {
+    width: 260px;
+    height: 10px;
+    margin-top: 2px;
+    border-radius: 5px;
+    background-color: rgb(196, 122, 44);
+    border-width: 2px;
+    border-color: rgb(244, 196, 88);
+}
+
+.main-menu-tagline {
+    margin-top: 10px;
+    font-size: 17px;
+    -unity-font-style: italic;
+    -unity-text-align: middle-center;
+    color: rgb(255, 236, 200);
+    text-shadow: 1px 2px 0px rgba(30, 14, 4, 0.8);
+    white-space: normal;
 }
 
 .main-menu-button-list {
     width: 100%;
     flex-direction: column;
+    transition-property: translate;
+    transition-duration: 0.6s;
+    transition-timing-function: ease-out-cubic;
 }
 
 .main-menu-button {
     width: 100%;
-    height: 44px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    background-color: rgba(30, 32, 40, 0.9);
-    border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.1);
-    color: rgb(230, 230, 235);
+    /* Hover/focus/press feedback (first five) stays quick; opacity is the staggered entrance
+       (TitleScreenDecor sets each button's transition-delay in this same order). */
+    transition-property: background-color, border-color, scale, translate, color, opacity;
+    transition-duration: 0.12s, 0.12s, 0.12s, 0.12s, 0.12s, 0.45s;
+    transition-timing-function: ease-out, ease-out, ease-out, ease-out, ease-out, ease-out;
 }
 
-.main-menu-button:hover {
-    background-color: rgba(50, 54, 66, 0.95);
-    border-color: rgba(255, 255, 255, 0.25);
+/* ---------------------------------------------------------------- entrance */
+
+.main-menu--entering .main-menu-logo {
+    opacity: 0;
+    translate: 0 -28px;
 }
 
-/* Visible focus indicator so keyboard/gamepad-only navigation is never ambiguous about
-   which control is currently selected (see TODO.md Fase 6 > UX > navegação 100% por controle). */
-.main-menu-button:focus {
-    border-color: rgb(90, 170, 255);
-    border-width: 3px;
+.main-menu--entering .main-menu-button-list {
+    translate: 0 26px;
 }
 
-.main-menu-button:disabled {
-    opacity: 0.4;
+.main-menu--entering .main-menu-button {
+    opacity: 0;
 }

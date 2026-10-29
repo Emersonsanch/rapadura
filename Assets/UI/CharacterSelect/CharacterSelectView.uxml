@@ -1,18 +1,31 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
     <Style src="CharacterSelectView.uss" />
-    <ui:VisualElement name="character-select-root" class="character-select__root" focusable="false">
-        <ui:Label text="Escolha seu Herói" class="character-select__title loc" view-data-key="ui.character_select.title" />
+    <ui:VisualElement name="character-select-root" class="character-select__root rap-theme" focusable="false">
+        <ui:VisualElement name="character-select-backdrop" class="character-select__backdrop" picking-mode="Ignore" />
+        <ui:Label text="Escolha seu Herói" class="character-select__title rap-heading loc" view-data-key="ui.character_select.title" />
         <ui:VisualElement class="character-select__body">
             <ui:VisualElement name="roster-container" class="character-select__roster" />
-            <ui:VisualElement class="character-select__detail">
-                <ui:Image name="detail-preview" class="character-select__detail-preview" focusable="false" />
+            <ui:VisualElement class="character-select__detail rap-panel">
+                <ui:VisualElement name="detail-left-column" class="character-select__left-column">
+                    <ui:VisualElement name="detail-preview-frame" class="character-select__preview-frame">
+                        <ui:Image name="detail-preview" class="character-select__detail-preview" focusable="false" />
+                    </ui:VisualElement>
+                    <ui:Label name="detail-skills-title" text="Habilidades" class="character-select__skills-title loc" view-data-key="ui.character_select.skills" />
+                    <ui:VisualElement name="detail-skills" class="character-select__skills" />
+                </ui:VisualElement>
                 <ui:Label name="detail-name" text="" class="character-select__detail-name" focusable="true" />
+                <ui:VisualElement name="detail-accent-bar" class="character-select__accent-bar" picking-mode="Ignore" />
                 <ui:Label name="detail-class-role" text="" class="character-select__detail-role" focusable="true" />
+                <ui:VisualElement class="character-select__facts">
+                    <ui:Label name="detail-age" text="" class="character-select__fact rap-chip" />
+                    <ui:Label name="detail-family" text="" class="character-select__fact character-select__fact--family rap-chip" focusable="true" />
+                </ui:VisualElement>
                 <ui:ScrollView name="detail-lore-scroll" class="character-select__detail-lore-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" focusable="false">
                     <ui:Label name="detail-lore" text="Selecione um personagem para ver a história." class="character-select__detail-lore" focusable="true" />
                 </ui:ScrollView>
-                <ui:Button name="confirm-button" text="Confirmar" class="character-select__confirm loc" focusable="true" view-data-key="ui.character_select.confirm" />
-                <ui:Button name="continue-saved-button" text="Continuar" class="character-select__confirm character-select__continue" focusable="true" style="display: none;" />
+                <ui:Button name="confirm-button" text="Confirmar" class="character-select__confirm rap-button rap-button--primary loc" focusable="true" view-data-key="ui.character_select.confirm" />
+                <ui:Button name="continue-saved-button" text="Continuar" class="character-select__confirm character-select__continue rap-button" focusable="true" style="display: none;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
