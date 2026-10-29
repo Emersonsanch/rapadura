@@ -56,7 +56,11 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 - Mapa mundi como ilha low-poly gerada por semente (`WorldMapDressing`): chão e props por região, marcos (vilinha, ruína, acampamento no pico, boca da caverna), estradas pelo grafo de viagem, rio com ponte, praia, mar e nuvens; neblina em região bloqueada e bandeira em região limpa.
 - Inimigos com peso e personalidade (`EnemyMotionProfile` por arquétipo, escalado pelo tamanho/massa): ease ao arrancar/parar, inclinação e freada nas curvas, antecipação com squash e golpe esticado no frame do dano (windup e janela de esquiva inalterados), empurrão de mola ao apanhar, quique na morte, overshoot ao surgir e idle com personalidade.
 - Opção de acessibilidade "Reduzir Movimento": metade do squash/overlap/balanço de heróis e inimigos, metade do tremor de câmera e entradas instantâneas no título, história, chefe e tutorial. "Reduzir Flashes" deixa de alterar a animação dos heróis.
+- Arena com terreno próprio por bioma (`BiomeArenaTerrain`): o plano verde da `Main.unity` é trocado em runtime por chão procedural com colisor igual ao visual, círculo de combate plano e borda por bioma (linha de árvores; dunas e mesas; neve e penhascos; paredes, estalagmites e estalactites).
+- 4 dicas de primeira vez: Conversar com moradores, Vila, materiais e atordoamento; nenhuma dica aparece sobre painel de história, painel da Vila ou conversa.
+- Aviso "Mochila cheia" e "Sem espaço: …" sobre o corpo quando o loot não cabe; moeda e itens pedidos por missão ativa entram mesmo acima do limite de peso.
 ### Alterado
+- Materiais mais leves: minério 3→1, pedra 2→1, madeira 1,5→0,5, lingote 3→1,5 (a Montanha leva ~43 lutas para encher a mochila, antes ~18).
 - "Continuar" carrega o save mais recente entre o auto-save e os slots 0–2 (pela data gravada; ignora slot ausente ou corrompido), em vez de só auto-save/slot 0.
 - `PlayerProceduralAnimator`: com clipes reais de ataque/magia/morte, a camada procedural para de girar os braços e de tombar o corpo (evitando golpe duplo) e mantém só inclinação, olhar, recuo, flash e afundar.
 - `SkillManager` só dispara o trigger por skill (`CastQuake` etc.) se o controller o declarar — antes cada conjuração logava "Parameter does not exist".
@@ -81,6 +85,7 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 - Removido `EnemyDefinition._contactDamage` (semeado mas nunca usado): todo ataque de inimigo já é corpo a corpo e telegrafado; dano por encostar dobraria o DPS e puniria o tocar-para-andar.
 
 ### Corrigido
+- Missão pessoal do Joaquim pedia 6 mortes do chefe final (único); agora 5 Aranhas da Floresta. Chefe derrotado antes de aceitar a missão passa a contar (convergência e Ícaro travavam). `QuestReachabilityTests` audita todos os objetivos.
 - Missões concluídas no mapa mundi (sem Player na cena) perdiam a recompensa; agora ela fica na fila (salva) e é entregue no próximo encontro (`QuestManager.DeliverPendingRewards`).
 - `.meta` de UXML/USS escrito à mão com o guid do próprio asset no importer fazia a tela sumir em silêncio; guardado por `AssetMetaIntegrityTests`.
 - Carregar um save pelo menu de pausa no mapa mundi deixava região, token e visuais da sessão anterior (Explorar e o desafio de chefe usavam e salvavam a região errada); o `WorldMapController` agora ressincroniza no `GameLoadedEvent`.
