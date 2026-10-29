@@ -16,6 +16,10 @@ namespace Rapadura.Gameplay.Player
     /// baked by the editor tool into the <c>WalkClipSpeed</c>/<c>RunClipSpeed</c> parameter defaults
     /// (model units/s, scaled here by the model's world scale), else the tunable fallbacks below.</item>
     /// </list>
+    /// <item><c>Speed</c> (m/s, damped by <see cref="_speedDampTime"/>), <c>TurnAngle</c> (signed facing →
+    /// wanted direction, damped), <c>IsGrounded</c> and <c>VerticalSpeed</c> (holding the touchdown
+    /// speed briefly so the controller's Fall → Land can tell a hard landing) — the rebuilt
+    /// controller's Jump/Fall/Land transitions read these; a clip can drop into those states later.</item>
     /// The legacy <c>Speed</c> float (raw m/s) is still written whenever the controller has it, so
     /// the old 3-state controllers keep working until the rebuild runs. Safe on a visual without an
     /// Animator (does nothing).
@@ -42,6 +46,16 @@ namespace Rapadura.Gameplay.Player
         [Tooltip("Hand-tuning multiplier on the clip ground speeds (>1 = longer stride = slower legs).")]
         [SerializeField, Min(0.1f)] private float _strideTuning = 1f;
 
+        [Header("State parameters")]
+        [Tooltip("Animator dampTime (s) of Speed.")]
+        [SerializeField, Min(0f)] private float _speedDampTime = 0.1f;
+        [Tooltip("Animator dampTime (s) of TurnAngle.")]
+        [SerializeField, Min(0f)] private float _turnDampTime = 0.12f;
+        [Tooltip("Animator dampTime (s) of VerticalSpeed while airborne.")]
+        [SerializeField, Min(0f)] private float _verticalDampTime = 0.05f;
+        [Tooltip("Seconds VerticalSpeed holds the touchdown speed after landing.")]
+        [SerializeField, Min(0f)] private float _landingHold = 0.12f;
+
         [Tooltip("The motor owns movement: clips that translate the body must not also move the model (root motion).")]
         [SerializeField] private bool _disableRootMotion = true;
 
@@ -49,6 +63,12 @@ namespace Rapadura.Gameplay.Player
         private bool _hasSpeed;
         private bool _hasBlend;
         private bool _hasMultiplier;
+        private bool _hasTurn;
+        private bool _hasGrounded;
+        private bool _hasVertical;
+        private bool _wasGrounded = true;
+        private float _airVelocity;
+        private float _sinceLanding = 10f;
         private float _bakedWalkClipSpeed;
         private float _bakedRunClipSpeed;
 
@@ -90,7 +110,7 @@ namespace Rapadura.Gameplay.Player
         private void CacheParameters()
         {
             _cachedController = _animator.runtimeAnimatorController;
-            _hasSpeed = _hasBlend = _hasMultiplier = false;
+            _hasSpeed = _hasBlend = _hasMultiplier = _hasTurn = _hasGrounded = _hasVertical = false;
             _bakedWalkClipSpeed = _bakedRunClipSpeed = 0f;
 
             if (_disableRootMotion)
@@ -100,13 +120,27 @@ namespace Rapadura.Gameplay.Player
 
             foreach (AnimatorControllerParameter parameter in _animator.parameters)
             {
+                int hash = parameter.nameHash;
+                if (parameter.type == AnimatorControllerParameterType.Bool && hash == PlayerAnimatorHashes.IsGrounded)
+                {
+                    _hasGrounded = true;
+                    continue;
+                }
+
                 if (parameter.type != AnimatorControllerParameterType.Float)
                 {
                     continue;
                 }
 
-                int hash = parameter.nameHash;
-                if (hash == PlayerAnimatorHashes.Speed)
+                if (hash == PlayerAnimatorHashes.TurnAngle)
+                {
+                    _hasTurn = true;
+                }
+                else if (hash == PlayerAnimatorHashes.VerticalSpeed)
+                {
+                    _hasVertical = true;
+                }
+                else if (hash == PlayerAnimatorHashes.Speed)
                 {
                     _hasSpeed = true;
                 }
@@ -129,6 +163,53 @@ namespace Rapadura.Gameplay.Player
             }
         }
 
+        private void UpdateStateParameters(float deltaTime)
+        {
+            if (deltaTime <= 0f)
+            {
+                return;
+            }
+
+            bool grounded = _motor.IsGrounded;
+            float vertical = _motor.VerticalVelocity;
+            if (!grounded)
+            {
+                _airVelocity = vertical;
+                _sinceLanding = 0f;
+            }
+            else if (_wasGrounded)
+            {
+                _sinceLanding += deltaTime;
+            }
+
+            _wasGrounded = grounded;
+
+            if (_hasGrounded)
+            {
+                _animator.SetBool(PlayerAnimatorHashes.IsGrounded, grounded);
+            }
+
+            if (_hasVertical)
+            {
+                float value = MotionFeelMath.AnimatorVerticalSpeed(grounded, vertical, _airVelocity, _sinceLanding, _landingHold);
+                if (grounded)
+                {
+                    // Not damped on the ground: the held touchdown speed must be readable on the landing frame.
+                    _animator.SetFloat(PlayerAnimatorHashes.VerticalSpeed, value);
+                }
+                else
+                {
+                    _animator.SetFloat(PlayerAnimatorHashes.VerticalSpeed, value, _verticalDampTime, deltaTime);
+                }
+            }
+
+            if (_hasTurn)
+            {
+                float turn = MotionFeelMath.SignedTurnAngle(_motor.transform.forward, _motor.DesiredDirection);
+                _animator.SetFloat(PlayerAnimatorHashes.TurnAngle, turn, _turnDampTime, deltaTime);
+            }
+        }
+
         private void Update()
         {
             if (_animator == null || _motor == null || _animator.runtimeAnimatorController == null)
@@ -146,8 +227,18 @@ namespace Rapadura.Gameplay.Player
 
             if (_hasSpeed)
             {
-                _animator.SetFloat(PlayerAnimatorHashes.Speed, speed);
+                // Rebuilt controllers read a damped Speed; the legacy 3-state ones keep the raw value they transition on.
+                if (_hasGrounded)
+                {
+                    _animator.SetFloat(PlayerAnimatorHashes.Speed, speed, _speedDampTime, deltaTime);
+                }
+                else
+                {
+                    _animator.SetFloat(PlayerAnimatorHashes.Speed, speed);
+                }
             }
+
+            UpdateStateParameters(deltaTime);
 
             if (!_hasBlend)
             {

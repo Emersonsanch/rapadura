@@ -14,6 +14,8 @@ namespace Rapadura.Gameplay.Player
         public Vector3 localPosition = Vector3.zero;
         public Vector3 localEulerAngles = Vector3.zero;
         public float uniformScale = 1f;
+        [Tooltip("Optional authored motion profile; empty = the hero's code defaults (HeroMotionProfile.For).")]
+        public HeroMotionProfileAsset motionProfile;
     }
 
     /// <summary>
@@ -80,6 +82,9 @@ namespace Rapadura.Gameplay.Player
 
             if (_proceduralAnimator != null)
             {
+                _proceduralAnimator.SetMotionProfile(entry.motionProfile != null && entry.motionProfile.profile != null
+                    ? entry.motionProfile.profile
+                    : HeroMotionProfile.For(id));
                 _proceduralAnimator.SetVisualRoot(_currentInstance.transform);
             }
         }

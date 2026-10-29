@@ -141,7 +141,7 @@ namespace Rapadura.Editor
             AnimationClip mocapIdle = humanoid && IncludeMocapActions ? AssetDatabase.LoadAssetAtPath<AnimationClip>(MocapIdlePath) : null;
 
             // 3) Controller.
-            RebuildController(controller, walk, run, idlePose, mocapIdle, walkMeasure.GroundSpeed, runMeasure.GroundSpeed);
+            RebuildController(controller, walk, run, idlePose, mocapIdle, walkMeasure.GroundSpeed, runMeasure.GroundSpeed, humanoid);
 
             // 4) One-shot mocap actions (attack/cast/hit/jump/death), see HeroAnimatorRebuilder.Actions.cs.
             string actionsReport = AddActions(controller, hero, walkPath, humanoid && IncludeMocapActions);
@@ -360,7 +360,100 @@ namespace Rapadura.Editor
         // Controller
         // ------------------------------------------------------------------
 
-        private static void RebuildController(AnimatorController controller, AnimationClip walk, AnimationClip run, AnimationClip idlePose, AnimationClip mocapIdle, float walkClipSpeed, float runClipSpeed)
+        /// <summary>Locomotion → Jump: airborne going up faster than this (m/s).</summary>
+        private const float JumpEnterSpeed = 1f;
+        /// <summary>Locomotion → Fall: airborne and already falling faster than this (m/s) — about 0.1 s off a ledge, so slopes/steps that unground for a frame or two don't flicker into Fall.</summary>
+        private const float FallEnterSpeed = -4f;
+        /// <summary>Fall/Jump → Land only for touchdowns faster than this (m/s); softer ones go straight back to Locomotion.</summary>
+        private const float LandSpeed = -5f;
+        /// <summary>Seconds the Land state holds before handing back to Locomotion (exit by time).</summary>
+        private const float LandHoldSeconds = 0.18f;
+
+        /// <summary>
+        /// Base-layer airborne chain, driven only by parameters (no Play() from code): Jump (takeoff) →
+        /// Fall (loop) → Land (short, exit by time) → Locomotion; Land only when the touchdown was hard
+        /// (VerticalSpeed holds the touchdown speed for a moment after IsGrounded flips). No dedicated
+        /// clips exist yet, so the three states hold <paramref name="placeholder"/> (the idle pose) and
+        /// <see cref="PlayerProceduralAnimator"/>/<see cref="PlayerFootIK"/> do the crouch, tuck, arc
+        /// and landing squash; a real clip can be dropped into a state's Motion later without touching
+        /// any code. Timings:
+        /// <list type="bullet">
+        /// <item>into Jump 0.08 s, into Fall 0.15 s, into Land 0.08 s, Land → Locomotion 0.15 s, soft
+        /// touchdown → Locomotion 0.12 s; all fixed-duration, no exit time except Land.</item>
+        /// <item>Interruption source: ground → Jump/Fall "Destination" (next state) (a jump that lands at once can leave
+        /// through Jump's own exits mid-blend), Jump → Fall "Source" (current state) (re-grounding mid-blend wins) —
+        /// input never waits for a blend to finish.</item>
+        /// </list>
+        /// </summary>
+        private static void AddAirborneStates(AnimatorStateMachine machine, AnimatorState locomotion, AnimatorState idle, AnimationClip placeholder)
+        {
+            AnimatorState jump = machine.AddState(PlayerAnimatorHashes.JumpStateName, new Vector3(600f, 0f, 0f));
+            AnimatorState fall = machine.AddState(PlayerAnimatorHashes.FallStateName, new Vector3(600f, 100f, 0f));
+            AnimatorState land = machine.AddState(PlayerAnimatorHashes.LandStateName, new Vector3(600f, 200f, 0f));
+            foreach (AnimatorState state in new[] { jump, fall, land })
+            {
+                state.motion = placeholder;
+                state.writeDefaultValues = true;
+            }
+
+            // A 1-frame placeholder would end at once: stretch it to the Land hold.
+            land.speed = placeholder != null && placeholder.length > 0f ? Mathf.Clamp(placeholder.length / LandHoldSeconds, 0.01f, 1f) : 1f;
+
+            foreach (AnimatorState ground in new[] { locomotion, idle })
+            {
+                if (ground == null)
+                {
+                    continue;
+                }
+
+                AnimatorStateTransition toJump = Transition(ground, jump, 0.08f, TransitionInterruptionSource.Destination);
+                toJump.AddCondition(AnimatorConditionMode.IfNot, 0f, PlayerAnimatorHashes.IsGroundedName);
+                toJump.AddCondition(AnimatorConditionMode.Greater, JumpEnterSpeed, PlayerAnimatorHashes.VerticalSpeedName);
+
+                AnimatorStateTransition toFall = Transition(ground, fall, 0.15f, TransitionInterruptionSource.Destination);
+                toFall.AddCondition(AnimatorConditionMode.IfNot, 0f, PlayerAnimatorHashes.IsGroundedName);
+                toFall.AddCondition(AnimatorConditionMode.Less, FallEnterSpeed, PlayerAnimatorHashes.VerticalSpeedName);
+            }
+
+            AnimatorStateTransition apex = Transition(jump, fall, 0.15f, TransitionInterruptionSource.Source);
+            apex.AddCondition(AnimatorConditionMode.Less, 0f, PlayerAnimatorHashes.VerticalSpeedName);
+
+            foreach (AnimatorState air in new[] { jump, fall })
+            {
+                // Order matters: the hard-landing check first, the soft one second (mutually exclusive anyway).
+                AnimatorStateTransition hard = Transition(air, land, 0.08f, TransitionInterruptionSource.None);
+                hard.AddCondition(AnimatorConditionMode.If, 0f, PlayerAnimatorHashes.IsGroundedName);
+                hard.AddCondition(AnimatorConditionMode.Less, LandSpeed, PlayerAnimatorHashes.VerticalSpeedName);
+
+                AnimatorStateTransition soft = Transition(air, locomotion, 0.12f, TransitionInterruptionSource.None);
+                soft.AddCondition(AnimatorConditionMode.If, 0f, PlayerAnimatorHashes.IsGroundedName);
+                soft.AddCondition(AnimatorConditionMode.Greater, LandSpeed, PlayerAnimatorHashes.VerticalSpeedName);
+            }
+
+            AnimatorStateTransition recover = land.AddTransition(locomotion);
+            recover.hasExitTime = true;
+            recover.exitTime = 0.9f;
+            recover.hasFixedDuration = true;
+            recover.duration = 0.15f;
+
+            // Leaving the ground again during Land (a quick re-jump) must not wait for the exit time.
+            AnimatorStateTransition rejump = Transition(land, jump, 0.08f, TransitionInterruptionSource.None);
+            rejump.AddCondition(AnimatorConditionMode.IfNot, 0f, PlayerAnimatorHashes.IsGroundedName);
+            rejump.AddCondition(AnimatorConditionMode.Greater, JumpEnterSpeed, PlayerAnimatorHashes.VerticalSpeedName);
+        }
+
+        private static AnimatorStateTransition Transition(AnimatorState from, AnimatorState to, float duration, TransitionInterruptionSource interruption)
+        {
+            AnimatorStateTransition transition = from.AddTransition(to);
+            transition.hasExitTime = false;
+            transition.hasFixedDuration = true;
+            transition.duration = duration;
+            transition.interruptionSource = interruption;
+            transition.orderedInterruption = true;
+            return transition;
+        }
+
+        private static void RebuildController(AnimatorController controller, AnimationClip walk, AnimationClip run, AnimationClip idlePose, AnimationClip mocapIdle, float walkClipSpeed, float runClipSpeed, bool humanoid)
         {
             string path = AssetDatabase.GetAssetPath(controller);
 
@@ -375,6 +468,9 @@ namespace Rapadura.Editor
             controller.AddParameter(PlayerAnimatorHashes.MoveSpeedMultiplierName, AnimatorControllerParameterType.Float);
             controller.AddParameter(PlayerAnimatorHashes.WalkClipSpeedName, AnimatorControllerParameterType.Float);
             controller.AddParameter(PlayerAnimatorHashes.RunClipSpeedName, AnimatorControllerParameterType.Float);
+            controller.AddParameter(PlayerAnimatorHashes.TurnAngleName, AnimatorControllerParameterType.Float);
+            controller.AddParameter(PlayerAnimatorHashes.IsGroundedName, AnimatorControllerParameterType.Bool);
+            controller.AddParameter(PlayerAnimatorHashes.VerticalSpeedName, AnimatorControllerParameterType.Float);
 
             AnimatorControllerParameter[] parameters = controller.parameters;
             foreach (AnimatorControllerParameter parameter in parameters)
@@ -382,6 +478,7 @@ namespace Rapadura.Editor
                 if (parameter.name == PlayerAnimatorHashes.MoveSpeedMultiplierName) parameter.defaultFloat = 1f;
                 else if (parameter.name == PlayerAnimatorHashes.WalkClipSpeedName) parameter.defaultFloat = walkClipSpeed;
                 else if (parameter.name == PlayerAnimatorHashes.RunClipSpeedName) parameter.defaultFloat = runClipSpeed;
+                else if (parameter.name == PlayerAnimatorHashes.IsGroundedName) parameter.defaultBool = true;
             }
 
             controller.parameters = parameters;
@@ -390,6 +487,12 @@ namespace Rapadura.Editor
             {
                 controller.AddLayer("Base Layer");
             }
+
+            // IK Pass on the base layer for Humanoid rigs: PlayerFootIK plants the feet in OnAnimatorIK
+            // (never called without it). Generic rigs (Maria) have no humanoid IK goals.
+            AnimatorControllerLayer[] layers = controller.layers;
+            layers[0].iKPass = humanoid;
+            controller.layers = layers;
 
             AnimatorStateMachine machine = controller.layers[0].stateMachine;
             foreach (ChildAnimatorState child in machine.states.ToArray())
@@ -462,18 +565,22 @@ namespace Rapadura.Editor
                 idle.writeDefaultValues = true;
                 machine.defaultState = idle;
 
+                // Between locomotion states: 0.2-0.25 s (settling into idle is slower than leaving it).
                 AnimatorStateTransition toIdle = locomotion.AddTransition(idle);
                 toIdle.hasExitTime = false;
                 toIdle.hasFixedDuration = true;
                 toIdle.duration = 0.25f;
                 toIdle.AddCondition(AnimatorConditionMode.Less, IdleEnterBlend, PlayerAnimatorHashes.MoveBlendName);
+                toIdle.AddCondition(AnimatorConditionMode.If, 0f, PlayerAnimatorHashes.IsGroundedName);
 
                 AnimatorStateTransition toLocomotion = idle.AddTransition(locomotion);
                 toLocomotion.hasExitTime = false;
                 toLocomotion.hasFixedDuration = true;
-                toLocomotion.duration = 0.15f;
+                toLocomotion.duration = 0.2f;
                 toLocomotion.AddCondition(AnimatorConditionMode.Greater, IdleExitBlend, PlayerAnimatorHashes.MoveBlendName);
             }
+
+            AddAirborneStates(machine, locomotion, machine.defaultState != locomotion ? machine.defaultState : null, idlePose != null ? idlePose : walk);
 
             EditorUtility.SetDirty(tree);
             EditorUtility.SetDirty(controller);

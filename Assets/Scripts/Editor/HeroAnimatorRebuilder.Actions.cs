@@ -157,7 +157,15 @@ namespace Rapadura.Editor
             AnimatorState locomotion = FindState(baseMachine, LocomotionStateName);
             AnimatorState idle = FindState(baseMachine, IdleStateName) ?? locomotion;
 
-            if (jump != null && locomotion != null)
+            // The parameter-driven Jump state (RebuildController -> AddAirborneStates) already exists with
+            // the idle-pose placeholder: drop the mocap clip into it, keeping its transitions.
+            AnimatorState existingJump = FindState(baseMachine, PlayerAnimatorHashes.JumpStateName);
+            if (jump != null && existingJump != null)
+            {
+                existingJump.motion = jump;
+                existingJump.speed = Mathf.Clamp(jump.length / 0.9f, 1f, 3f);
+            }
+            else if (jump != null && locomotion != null)
             {
                 AnimatorState jumpState = baseMachine.AddState(PlayerAnimatorHashes.JumpStateName, new Vector3(600f, 100f, 0f));
                 jumpState.motion = jump;

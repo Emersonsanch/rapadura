@@ -20,6 +20,11 @@ namespace Rapadura.Gameplay.Player.States
         public const string MoveSpeedMultiplierName = "MoveSpeedMul";
         public const string WalkClipSpeedName = "WalkClipSpeed";
         public const string RunClipSpeedName = "RunClipSpeed";
+        public const string TurnAngleName = "TurnAngle";
+        public const string IsGroundedName = "IsGrounded";
+        public const string VerticalSpeedName = "VerticalSpeed";
+        public const string FallStateName = "Fall";
+        public const string LandStateName = "Land";
 
         // One-shot action clips (mocap), built by Rapadura/Animation/Rebuild Hero Animators.
         public const string AttackName = "Attack";
@@ -59,6 +64,15 @@ namespace Rapadura.Gameplay.Player.States
 
         /// <summary>Locomotion state speed multiplier (stride matching), bound as the state's speed parameter.</summary>
         public static readonly int MoveSpeedMultiplier = Animator.StringToHash(MoveSpeedMultiplierName);
+
+        /// <summary>Signed angle (deg, + = right) between the facing and the wanted direction, damped — lean/pivot clips can blend on it.</summary>
+        public static readonly int TurnAngle = Animator.StringToHash(TurnAngleName);
+
+        /// <summary>Bool: the motor is on the ground. Drives Locomotion ↔ Jump/Fall/Land in the rebuilt controller.</summary>
+        public static readonly int IsGrounded = Animator.StringToHash(IsGroundedName);
+
+        /// <summary>Vertical speed (m/s, + = up); on touchdown it briefly holds the landing speed (see <see cref="MotionFeelMath.AnimatorVerticalSpeed"/>).</summary>
+        public static readonly int VerticalSpeed = Animator.StringToHash(VerticalSpeedName);
 
         /// <summary>Read-only "data" parameters baked by the Rebuild Hero Animators editor tool: each clip's ground speed in model units/s at playback 1.</summary>
         public static readonly int WalkClipSpeed = Animator.StringToHash(WalkClipSpeedName);
@@ -124,6 +138,13 @@ namespace Rapadura.Gameplay.Player.States
             }
 
             if (!animator.HasState(0, stateHash))
+            {
+                return false;
+            }
+
+            // A rebuilt controller transitions on IsGrounded/VerticalSpeed by itself (with blend times);
+            // a hard Play() here would pop the pose and fight those transitions.
+            if (HasParameter(animator, IsGrounded))
             {
                 return false;
             }

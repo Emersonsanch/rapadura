@@ -7,6 +7,7 @@
 ### 2026-10-29 (sessão multiagente — campanha com começo e fim, missões regionais, atordoamento/espinhos/velocidade de ataque)
 - 📖 **Campanha** (`Gameplay/Story`): prólogo no Novo jogo (sítio da Vó Zefa, o Cristal do Sol apagado, painel do primo escolhido), interlúdios após Lobo Alfa / Guardião da Ruína / Senhor da Guerra, epílogo ao vencer o Habitante Ancestral → créditos → mapa (pós-jogo). `StoryProgress` (chave "Story": `campaignComplete` + beats vistos) deduz o próximo beat das regiões limpas, então sobrevive a sair do jogo entre o chefe e o mapa. Conquista `ach_campaign_complete`. 🐛 O `.meta` do `StoryPanelView.uxml/.uss` veio com o guid do próprio asset no importer: a view não importava e o painel se desligava; corrigido no playtest e guardado por `AssetMetaIntegrityTests`. Conferido no Editor: prólogo aparece no mapa depois da seleção (Lavine).
 - 💬 **Missões regionais** no mapa (as NPCs da `Main.unity` são inalcançáveis no loop mapa → encontro → mapa): botão "Conversar com…" no HUD do mapa, 4 NPCs, 8 missões encadeadas (kill de inimigos comuns da região + ouro), falas por primo com a condição `ActiveCharacter` que já existia. 🐛 Recompensa de missão concluída no mapa agora fica na fila e é entregue no próximo encontro.
+- 🏃 **Locomoção com peso** (`HeroMotionProfile`, `MotionFeelMath`, `PlayerFootIK`, `Docs/Animation.md`): perfil por herói (tabela no doc), IK de pé + passos de reposição, freada de curva no `PlayerMotor`, Jump/Fall/Land no Animator (reconstruído pelo Rebuild Hero Animators nesta sessão). Limites: os modelos Meshy só têm os 24 ossos humanoides (sem cabelo/roupa/rosto/blendshapes), Maria é Generic (sem IK de pé), Maithe sem rig, inimigos não mudaram. Sem opção de "reduzir movimento": usa "Reduzir Flashes" (metade do squash/overlap). Sugestão do agente: incluir `StrikeDelay` no `PlayerAttackPerformedEvent` quando o mocap de ataque voltar.
 - 💾 **Continuar/Carregar**: "Continuar" pega o save mais recente (auto-save + slots 0–2); botão "Carregar" no título; Salvar/Carregar com `FocusNavigator`. Campos de cena `_continueSlot(s)` removidos (valores antigos nas cenas são ignorados).
 - ⚔️ **Combate** (fecha os itens 6, 7 e 8): atordoamento em 3 skills (chefes ×0,5), `AttackSpeed` e `Thorns` com 4 afixos, `_contactDamage` removido (justificativa no CHANGELOG). Nada atordoa o herói ainda (`PlayerBasicAttack`/skills não checam stun — só importa se inimigos ganharem stun).
 
@@ -92,6 +93,8 @@
 9. 5 inimigos ainda são primitivas placeholder (`_visualPrefab` vazio): Enxame de Morcegos, Habitante Ancestral, Guardião da Ruína, Golem de Pedra e Senhor da Guerra. Precisam de modelo (ver decisões).
 12. NPCs de história pessoal e de convergência (Main.unity) não são alcançáveis no loop normal; podem reusar o botão "Conversar" do mapa.
 13. Inimigos de encontro só soltam `item_gold` (as tabelas de loot do `BiomeDefinition` nunca são usadas e a loja está na Main): objetivos de coleta de minério/madeira/fibra (missões pessoais de Maria e Ícaro, várias diárias) não se completam.
+
+14. Peso/aterrissagem nos inimigos (`EnemyProceduralAnimator`) e opção de acessibilidade "Reduzir movimento" separada de "Reduzir Flashes".
 
 **Decisões do usuário (bloqueiam itens abertos):**
 - Instalar o módulo **Android Build Support** no Unity Hub (sem ele não há build Android local nem medição real do tamanho mobile).

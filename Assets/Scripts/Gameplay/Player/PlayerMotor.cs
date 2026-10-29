@@ -31,6 +31,10 @@ namespace Rapadura.Gameplay.Player
         [Tooltip("Direction changes sharper than this (deg) snap instead of arcing (a reversal), keeping only part of the speed.")]
         [SerializeField, Range(90f, 180f)] private float _reversalAngle = 150f;
         [SerializeField, Range(0f, 1f)] private float _reversalSpeedKept = 0.35f;
+        [Tooltip("Direction changes sharper than this (deg, below the reversal angle) brake briefly before pivoting — weight transfer instead of an instant whip-round. ≥ reversal angle = off.")]
+        [SerializeField, Range(60f, 180f)] private float _turnBrakeAngle = 110f;
+        [Tooltip("Fraction of the speed kept at the sharpest braked turn (eases from 1 at the brake angle).")]
+        [SerializeField, Range(0f, 1f)] private float _turnBrakeSpeedKept = 0.6f;
 
         [Header("Turning (body facing)")]
         [Tooltip("Facing turn rate (deg/s) while moving at full speed.")]
@@ -86,6 +90,9 @@ namespace Rapadura.Gameplay.Player
 
         /// <summary>Base run speed (m/s, before buffs) — the Animator blend maps it to 1.</summary>
         public float RunSpeed => _runSpeed;
+
+        /// <summary>0..1 how hard the current direction change is braking (0 = not braking) — the procedural layer plants and leans on it.</summary>
+        public float TurnBrake { get; private set; }
 
         public bool IsCrouching => _isCrouching;
         public float VerticalVelocity => _verticalVelocity;
@@ -320,10 +327,22 @@ namespace Rapadura.Gameplay.Player
                 float target = hasIntent ? Mathf.Min(speed * multiplier * inputMagnitude, speedCap) : 0f;
                 TargetHorizontalSpeed = target;
 
+                TurnBrake = 0f;
                 if (hasIntent)
                 {
                     Vector3 desired = desiredDirection.normalized;
-                    bool reversal = _moveDirection.sqrMagnitude > 1e-6f && Vector3.Angle(_moveDirection, desired) > _reversalAngle;
+                    float turnAngle = _moveDirection.sqrMagnitude > 1e-6f ? Vector3.Angle(_moveDirection, desired) : 0f;
+                    bool reversal = _moveDirection.sqrMagnitude > 1e-6f && turnAngle > _reversalAngle;
+
+                    // Sharp (not reversing) turn: lower the target for the frames the direction is still
+                    // swinging round — the normal deceleration then reads as a brief brake + pivot.
+                    if (!reversal && MotionFeelMath.ShouldTurnBrake(turnAngle, _turnBrakeAngle, _currentSpeed, _walkSpeed * 0.5f))
+                    {
+                        float factor = MotionFeelMath.TurnBrakeFactor(turnAngle, _turnBrakeAngle, _reversalAngle, _turnBrakeSpeedKept);
+                        target *= factor;
+                        TargetHorizontalSpeed = target;
+                        TurnBrake = 1f - factor;
+                    }
                     _moveDirection = LocomotionMath.StepDirection(_moveDirection, desired, _directionTurnSpeed, deltaTime, _reversalAngle);
 
                     if (reversal)
@@ -376,6 +395,32 @@ namespace Rapadura.Gameplay.Player
             {
                 _verticalVelocity += _gravity * Time.deltaTime;
             }
+        }
+
+        /// <summary>
+        /// Applies a hero's <see cref="HeroMotionProfile"/> (acceleration/braking times and ramp, direction
+        /// and facing turn rates, turn braking): heavier heroes start and stop slower and turn wider. Speeds
+        /// themselves are untouched (they are balance, not feel). Null restores nothing.
+        /// </summary>
+        public void ApplyMotionProfile(HeroMotionProfile profile)
+        {
+            if (profile == null)
+            {
+                return;
+            }
+
+            _accelerationTime = Mathf.Max(0.01f, profile.accelerationTime);
+            _decelerationTime = Mathf.Max(0.01f, profile.decelerationTime);
+            if (profile.accelerationCurve != null && profile.accelerationCurve.length > 0)
+            {
+                _accelerationCurve = profile.accelerationCurve;
+            }
+
+            _directionTurnSpeed = Mathf.Max(1f, profile.directionTurnSpeed);
+            _turnSpeedMoving = Mathf.Max(1f, profile.turnSpeedMoving);
+            _turnSpeedStopped = Mathf.Max(1f, profile.turnSpeedStopped);
+            _turnBrakeAngle = Mathf.Clamp(profile.turnBrakeAngle, 60f, 180f);
+            _turnBrakeSpeedKept = Mathf.Clamp01(profile.turnBrakeSpeedKept);
         }
 
         /// <summary>Applies an instantaneous upward velocity to achieve the configured jump height.</summary>
