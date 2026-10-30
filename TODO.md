@@ -1441,6 +1441,13 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [ ] Anti-cheat: validação de velocidade, cooldown, alcance e dano no servidor; loot e ouro gerados só no servidor; logs de economia.
 - [ ] Ambiente de testes: bots headless (reaproveitar o autopiloto do teste de resistência de 30 min), teste de carga com N jogadores simulados, testes de latência e perda de pacote.
 
+### 12.3a Cidades e zonas seguras (decisão do usuário, 2026-10-29)
+- [ ] **Todo mapa/região tem uma cidade.** Floresta: a Vila da Vó Zefa; Deserto, Montanha e Cavernas ganham a sua (nomes e NPCs próprios, loja local, missões da região, casas para comprar).
+- [ ] **Dentro da cidade ninguém luta:** bichos não atacam e não entram (param na divisa e voltam), jogadores não atacam bichos nem outros jogadores (nem a si mesmos: skills de dano ficam desabilitadas, só movimento, conversa, troca, loja e casa). Área marcada no chão/mapa e aviso "Você está em zona segura".
+- [ ] Regras numa classe pura (`SafeZoneRules`: pode atacar? pode receber dano? inimigo pode perseguir até aqui?) usada pelo combate offline agora e pelo servidor no online.
+- [ ] Ao morrer, renasce na cidade da região; viagem rápida entre cidades já visitadas.
+- [ ] Quem sai da cidade em combate não pode voltar para se esconder no meio da luta sem perder o alvo (evitar abuso), e debuffs param ao entrar.
+
 ### 12.3 Funcionalidades estilo MU Online
 - [ ] Cidade-hub compartilhada (a Vila da Vó Zefa) com outros jogadores, NPCs, loja, Baú e Fogão.
 - [ ] Mapas abertos por região, com inimigos que reaparecem (respawn) em vez das arenas isoladas; níveis mínimos por mapa.
