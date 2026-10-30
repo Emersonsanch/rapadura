@@ -51,6 +51,8 @@ namespace Rapadura.Gameplay.Player
         private PlayerInputHandler _input;
         private Camera _camera;
         private HoldToWalkTimer _holdTimer;
+        private PlayerMotor _motor;
+        private readonly BlockedMoveDetector _blocked = new BlockedMoveDetector();
 
         /// <summary>
         /// True while pursuing <see cref="AttackTarget"/> from farther than <see cref="_autoRunDistance"/>:
@@ -86,6 +88,7 @@ namespace Rapadura.Gameplay.Player
         {
             _input = GetComponent<PlayerInputHandler>();
             _holdTimer = new HoldToWalkTimer(_holdReaimInterval);
+            _motor = GetComponent<PlayerMotor>();
         }
 
         private void Update()
@@ -106,6 +109,7 @@ namespace Rapadura.Gameplay.Player
             }
 
             TrackAttackTarget();
+            TickBlockedDestination();
 
             if (_input.MoveClickPressedThisFrame)
             {
@@ -180,6 +184,28 @@ namespace Rapadura.Gameplay.Player
             }
         }
 
+        /// <summary>
+        /// Gives up a ground destination the hero has been pushing into a solid prop (trunk, rock,
+        /// bench) without getting closer — MU-style stop instead of running in place. Not while the
+        /// pointer is held (hold-to-walk keeps re-aiming) or pursuing an enemy. See Docs/Collision.md.
+        /// </summary>
+        private void TickBlockedDestination()
+        {
+            if (!HasDestination || AttackTarget != null || _input.IsMoveClickHeld)
+            {
+                _blocked.Reset();
+                return;
+            }
+
+            Vector3 toDestination = Destination - transform.position;
+            toDestination.y = 0f;
+            bool pushing = _motor != null && _motor.TargetHorizontalSpeed > 0.1f;
+            if (_blocked.Tick(Destination, toDestination.magnitude, pushing, Time.deltaTime))
+            {
+                AbandonDestination();
+            }
+        }
+
         private void AbandonDestination()
         {
             if (!HasDestination)
@@ -245,6 +271,18 @@ namespace Rapadura.Gameplay.Player
                 HasDestination = true;
                 DestinationSet?.Invoke(Destination);
             }
+        }
+
+        /// <summary>
+        /// Walks to <paramref name="destination"/> exactly as a tap on the ground there would (no attack target): the
+        /// movement states take it from here. Used by scripted walks (the walkable-city PlayMode tests, guided paths).
+        /// </summary>
+        public void SetDestination(Vector3 destination)
+        {
+            AttackTarget = null;
+            Destination = destination;
+            HasDestination = true;
+            DestinationSet?.Invoke(Destination);
         }
 
         /// <summary>

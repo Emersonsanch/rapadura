@@ -14,7 +14,8 @@ namespace Rapadura.Gameplay.Environment
     /// as GameManager registered a <see cref="TimeOfDayManager"/>. Same self-registering pattern as
     /// InputRebindBootstrap — no scene wiring required. Placing either component in a scene by hand
     /// (to tune gradients/profiles or assign the sun/material) suppresses the auto-created one;
-    /// set <see cref="AutoCreate"/> to false to opt out entirely.
+    /// set <see cref="AutoCreate"/> to false to opt out entirely. Independently of that, every load
+    /// runs the solid-collider pass (<see cref="SolidPropBinder.BindAll"/>, Docs/Collision.md).
     /// </summary>
     public static class EnvironmentPresentationBootstrap
     {
@@ -25,6 +26,7 @@ namespace Rapadura.Gameplay.Environment
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneLoaded += OnSceneLoaded;
+            SolidPropBinder.BindAllIfEnabled();
             EnsurePresentation();
         }
 
@@ -32,6 +34,8 @@ namespace Rapadura.Gameplay.Environment
         {
             if (mode == LoadSceneMode.Single)
             {
+                // Collision doesn't depend on the day/night stack: props are made solid on every load.
+                SolidPropBinder.BindAllIfEnabled();
                 EnsurePresentation();
             }
         }

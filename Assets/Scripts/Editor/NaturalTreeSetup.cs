@@ -150,6 +150,11 @@ namespace Rapadura.Editor
                 }
             }
 
+            // Prefab instances carry the trunk collider; this binds any that predate it and opens or
+            // seals gaps between close trunks (Docs/Collision.md).
+            SolidPropBinder.Report solid = SolidPropBinder.BindHierarchy(parent.transform, refit: true);
+            Debug.Log($"[NaturalTreeSetup] Solid colliders: {solid}");
+
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
             Debug.Log($"[NaturalTreeSetup] Removed {removed} placeholder tree(s), scattered {basePositions.Length} real trees across {prefabs.Count} species in '{scene.name}'.");
@@ -243,6 +248,10 @@ namespace Rapadura.Editor
                     EditorUtility.SetDirty(material);
                 }
             }
+
+            // Trunk-only capsule (measured from the lowest band of the mesh, never the canopy) so the
+            // hero can't walk through the tree; every scattered/spawned instance inherits it.
+            SolidPropBinder.Bind(root, refit: true);
 
             string prefabPath = $"{PrefabFolder}/{speciesName}.prefab";
             GameObject prefab = PrefabUtility.SaveAsPrefabAsset(root, prefabPath);

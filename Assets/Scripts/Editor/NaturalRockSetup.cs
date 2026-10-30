@@ -4,6 +4,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Rapadura.Environment;
+using Rapadura.Gameplay.Environment;
 
 namespace Rapadura.Editor
 {
@@ -120,14 +121,18 @@ namespace Rapadura.Editor
             Mesh mesh = ProceduralRockGenerator.BuildRockMesh(seedBase, subdivisions, noiseStrength, squashY: 1f);
             meshFilter.sharedMesh = mesh;
 
-            var collider = rock.GetComponent<SphereCollider>();
-            if (collider != null)
+            // Any collider left from the placeholder (SphereCollider, or a MeshCollider still pointing
+            // at the old "Sphere" mesh — half the size of the new rock, so the hero walked through it)
+            // no longer matches the visual: drop it and fit a hull to the new mesh (Docs/Collision.md).
+            foreach (Collider stale in rock.GetComponents<Collider>())
             {
-                Object.DestroyImmediate(collider);
-                var meshCollider = rock.AddComponent<MeshCollider>();
-                meshCollider.sharedMesh = mesh;
-                meshCollider.convex = true;
+                if (!stale.isTrigger)
+                {
+                    Object.DestroyImmediate(stale);
+                }
             }
+
+            SolidPropBinder.Bind(rock, refit: true);
 
             if (material != null)
             {
@@ -232,9 +237,8 @@ namespace Rapadura.Editor
                     meshRenderer.sharedMaterial = material;
                 }
 
-                var meshCollider = go.AddComponent<MeshCollider>();
-                meshCollider.sharedMesh = meshFilter.sharedMesh;
-                meshCollider.convex = true;
+                // Fitted hull (or none for pebble-sized ones), same rules as every other prop.
+                SolidPropBinder.Bind(go, refit: true);
             }
         }
 

@@ -275,6 +275,9 @@ namespace Rapadura.Gameplay.World.Map.Dressing
             }
 
             _root = transform;
+            // The map token travels on straight lines (no CharacterController) and map trees must
+            // not swallow node clicks: keep the whole dressing out of the solid-prop pass.
+            NonSolidPropZone.Ensure(gameObject);
             _root.SetPositionAndRotation(new Vector3(0f, baseY, 0f), Quaternion.identity);
             _root.localScale = Vector3.one;
 

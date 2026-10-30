@@ -670,6 +670,13 @@ namespace Rapadura.Gameplay.World.Biomes
                     // Cacti sway in the wind, rocks/stalagmites rattle on ground impacts; the rest
                     // pose is (re)captured here, after placement, since props come from a pool.
                     EnvironmentPropAttacher.Attach(prop.Root);
+                    if (_propColliders)
+                    {
+                        // Factory parts already carry fitted primitives (trusted, no-op); any new
+                        // kind without one gets the shared solid-prop collider (Docs/Collision.md).
+                        SolidPropBinder.Bind(prop.Root);
+                    }
+
                     _activeProps.Add(prop);
                 }
             }

@@ -187,6 +187,10 @@ Assets/
    import formal (naming convention completa, escala, pivot padronizado) fica para
    a FASE 11 quando houver artista/pipeline de arte real — aqui só fixamos onde
    cada tipo de arquivo mora.
+6. **Nome de prop define a colisão.** Árvores `Tree_*`, pedras `Rock*`, bancos/
+   barracas/carroças/casas/cercas e cactos ficam sólidos automaticamente pelo
+   `SolidPropBinder` (tufos `Tuft_*`, `Pebble_*`, `Twig_*` nunca); veja
+   [`Collision.md`](Collision.md) antes de nomear um prop novo ou pôr collider à mão.
 
 ---
 
