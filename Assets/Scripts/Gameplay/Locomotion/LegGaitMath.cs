@@ -184,10 +184,18 @@ namespace Rapadura.Gameplay.Locomotion
             return Mathf.Sin(Mathf.PI * Mathf.Pow(t, 0.8f));
         }
 
+        /// <summary>Horizontal travel (0..1) along a swing: leaves the ground briskly, eases onto the landing.</summary>
+        public static float SwingTravel(float t)
+        {
+            t = Mathf.Clamp01(t);
+            float easeOut = 1f - (1f - t) * (1f - t);
+            return 0.5f * (SmoothStep01(t) + easeOut);
+        }
+
         /// <summary>Foot position during a swing: eased travel from <paramref name="from"/> to <paramref name="to"/> plus the lift arc.</summary>
         public static Vector3 SwingPosition(Vector3 from, Vector3 to, float t, float height)
         {
-            float travel = SmoothStep01(t);
+            float travel = SwingTravel(t);
             Vector3 p = Vector3.LerpUnclamped(from, to, travel);
             p.y += height * SwingLift(t);
             return p;

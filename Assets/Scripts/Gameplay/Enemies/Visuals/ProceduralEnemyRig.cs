@@ -10,7 +10,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
     /// Secondary, per-part motion of a procedural enemy model (on its visual root, next to nothing
     /// else). <see cref="EnemyProceduralAnimator"/> poses the whole visual root (gait, hover, attack,
     /// recoil, topple); this only moves the named children it built, so the two never fight:
-    /// bats orbit the swarm centre and flap, the golem's and guardian's arms sway, the warlord's cape
+    /// bats orbit the swarm centre and flap (power downstroke, glides that grow with travel speed), the golem's and guardian's arms sway, the warlord's cape
     /// swings, the guardian's head and fists float with their rune ring turning, and the dweller's
     /// head breathes, its ears droop and the stolen light pulses. Honours "Reduzir Movimento"
     /// (<see cref="AccessibilitySettings.MotionScaleFor"/>) and stops (back to rest) once the enemy dies.

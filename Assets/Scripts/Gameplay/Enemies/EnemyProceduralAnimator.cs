@@ -11,8 +11,8 @@ using UnityEngine;
 namespace Rapadura.Gameplay.Enemies
 {
     /// <summary>
-    /// Rig-free animation for enemy visuals. None of the enemy models has a skeleton (Wolf/Spider/Scorpion
-    /// are static Meshy FBX, the rest are primitives — Meshy's rigging API only supports bipeds), so the
+    /// Rig-free animation for enemy visuals. None of the enemy models has a skeleton (the code-built ones
+    /// are jointed parts; the old Meshy Wolf/Spider/Scorpion FBX are single static meshes), so the
     /// whole body is posed procedurally on the visual root (the "EnemyVisual" child, never the collider
     /// root) as local offsets/rotations/squash on top of its rest pose. The feel comes from the archetype's
     /// <see cref="EnemyMotionProfile"/> scaled for the real body (<see cref="EnemyMotionProfile.ScaledForBody"/>:
@@ -559,7 +559,7 @@ namespace Rapadura.Gameplay.Enemies
             if (AdvanceLegs(profile, deltaTime, size, gallop, motion))
             {
                 EnemyPose stepped = default;
-                stepped.Offset.y = _legRig.BodyBob + profile.MoveCrouch * speedFactor * size - EnemyLegGait.KneeBendDrop * _legRig.MeanLegLength;
+                stepped.Offset.y = _legRig.BodyBob + profile.MoveCrouch * speedFactor * size - _legRig.KneeBendDrop(speedFactor);
                 stepped.Euler.x = _legRig.BodySway.x;
                 stepped.Euler.y = pose.Euler.y * 0.35f;
                 stepped.Euler.z = _legRig.BodySway.y;
@@ -654,6 +654,12 @@ namespace Rapadura.Gameplay.Enemies
                     _spawnTime = -1f;
                     KickSquash(profile, 0.04f); // ...and a squash wobble as the weight settles
                 }
+            }
+
+            if (_legsLive && _legRig.HasLegs)
+            {
+                // Never lift the hips beyond the planted feet's reach (bob, alert hop, hit kick): no dragged feet.
+                pose.Offset.y = Mathf.Min(pose.Offset.y, _legRig.BodyHeightLimit + (1f - _legWeight));
             }
 
             Apply(pose, profile, deathK, size, motion);

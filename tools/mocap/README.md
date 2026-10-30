@@ -55,6 +55,9 @@ cd tools\mocap
 | `in_place` | Tira a deriva XZ início→fim da raiz (o balanço do corpo continua) |
 | `facing` | `start` usa o quadril nos primeiros frames; `travel` usa a direção do deslocamento. Nos dois casos o clipe é virado para +Z |
 | `root_motion` | Não "assa" a rotação/XZ no pose (ex.: virada de 90° usada com *Apply Root Motion*) |
+| `per_hero` | O Unity grava o clipe também no Avatar de cada herói Humanoid (`Assets/Animations/Mocap/<Herói>/`). Usado na locomoção |
+| `joint_map` | Nomes das juntas de origem: `cmu` (padrão), `mixamo`, `rokoko`, `humanoid` ou um JSON (ver `joint_maps.py` e `Docs/Mocap.md` §7) |
+| `unit_scale`, `tpose_frame0` | Unidade → metros (padrão CMU 0,05644; cm = 0,01) e se o frame 0 é uma T-pose (falso para BVH que não vem do cgspeed) |
 
 ## Arquivos
 
@@ -63,11 +66,14 @@ cd tools\mocap
 | `bvh.py` | Lê/grava BVH e faz FK (numpy/scipy) |
 | `prep.py` | Escala para metros, reamostragem (slerp), corte, orientação para +Z, pés no chão e detecção de loop (`find_loop`) |
 | `bvh_prep.py` | Linha de comando (um clipe ou o conjunto `--set`) |
+| `joint_maps.py` | Renomeia esqueletos Mixamo/Rokoko/Humanoid/JSON para os nomes CMU (`--joint-map`) |
 | `fetch_cmu.py` | Busca no índice e download de trials do espelho GitHub |
-| `clips.json` | Conjunto curado de 16 clipes |
+| `clips.json` | Conjunto curado de 18 clipes |
 | `cmu/` | BVH brutos, `SOURCES.md` (trials, descrições, licença) e o índice CMU |
 | `out/` | Saída processada, que é a entrada do importador Unity |
 | `tests/test_prep.py` | pytest: loop em sinal sintético, reamostragem, orientação, ida e volta de escrita/leitura, escala do CMU |
+| `tests/test_joint_maps.py` | pytest: mapas Mixamo/Rokoko, colisão de nomes, JSON próprio |
 
-O importador Unity fica em `Assets/Scripts/Editor/Mocap/`. A matemática testável está em `MocapMath.cs`,
+O importador Unity fica em `Assets/Scripts/Editor/Mocap/`. A matemática testável está em `MocapMath.cs`
+(o retarget de um frame em `MocapRetargetRig.cs`),
 e os testes EditMode em `Assets/Tests/EditMode/Mocap/`.

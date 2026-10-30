@@ -9,8 +9,11 @@
 1. **PlayerMotor** (jogabilidade): aceleração, frenagem, curvas e frenagem em curva fechada. Os
    tempos vêm do perfil do herói (`ApplyMotionProfile`). As velocidades (andar/correr) continuam
    sendo balanceamento e não mudam com o perfil.
-2. **Animator** (clipes Walk/Run da Meshy): blend tree de locomoção com a velocidade do clipe casada
-   à velocidade real, para o pé não patinar.
+2. **Animator**: blend tree de locomoção com a velocidade do clipe casada à velocidade real, para o pé
+   não patinar. Ícaro, Joaquim e Lavine usam mocap do CMU gravado no próprio Avatar (`Mocap_WalkKid`,
+   `Mocap_Jog`, `Mocap_Run`, `Mocap_Idle`; chave **Rapadura ▸ Animation ▸ Use Mocap Locomotion**, ver
+   `Docs/Mocap.md` §5). Maria (Generic) e Maithe usam os clipes Walk/Run da Meshy, que também são o
+   fallback quando a chave está desligada ou um clipe mocap falta ou sai da faixa.
 3. **PlayerFootIK** (só Humanoid: Ícaro, Joaquim, Lavine): pés seguindo o chão, pés presos ao parar
    ou girar no lugar (com passo de reposição), joelhos dobrando no ar e pelve com balanço, mergulho
    na aterrissagem e troca de peso sem tirar o pé do chão.
@@ -31,6 +34,7 @@ frame no herói).
 | `MoveBlend` | float | idem | 0 parado, 0,5 andar, 1 correr (SmoothDamp 0,1 s) |
 | `MoveSpeedMul` | float | idem | velocidade do estado Locomotion (casamento de passada) |
 | `WalkClipSpeed` / `RunClipSpeed` | float | rebuilder (dado) | velocidade medida de cada clipe |
+| `JogClipSpeed` | float | rebuilder (dado) | só com a locomoção mocap: velocidade do `Mocap_Jog` (filho 0,75 do blend tree) |
 | `TurnAngle` | float | driver | ângulo com sinal (+ = direita) entre a frente e a direção desejada, dampTime 0,12 s |
 | `IsGrounded` | bool | driver | motor no chão |
 | `VerticalSpeed` | float | driver | m/s (+ = sobe), dampTime 0,05 s no ar; ao tocar o chão segura a velocidade do impacto por 0,12 s |
@@ -38,7 +42,7 @@ frame no herói).
 ### Estados da camada base
 
 ```
-Locomotion (blend 1D: IdlePose 0 / Walk 0,5 / Run 1)
+Locomotion (blend 1D: IdlePose 0 / Walk 0,5 / [Jog 0,75, só mocap] / Run 1)
    │  !IsGrounded && VerticalSpeed > 1      (0,08 s, interrupção: Destination)
    ├──────────────► Jump ──VerticalSpeed < 0 (0,15 s, interrupção: Source)──► Fall (loop)
    │  !IsGrounded && VerticalSpeed < -4      (0,15 s, interrupção: Destination)       │
@@ -56,7 +60,9 @@ Land: !IsGrounded && VerticalSpeed > 1 ──(0,08 s)──► Jump             
 - **IK Pass** fica ligado na camada base dos controllers Humanoid (Maria é Generic e fica sem IK).
 - O código não chama mais `Animator.Play` nesses estados. `PlayerAnimatorHashes.TryPlay` não faz nada
   quando o controller tem `IsGrounded`, porque são as transições que decidem.
-- A camada de ações do mocap CMU continua **desligada** (`IncludeMocapActions`), porque os clipes deformam os heróis.
+- A camada de ações do mocap CMU continua **desligada** (`IncludeMocapActions`). A causa da deformação foi corrigida
+  no importador (`Docs/Mocap.md` §1), mas as ações ainda são gravadas só no Ícaro. Reimporte o conjunto e confira
+  no Console (`MocapClipSanity`) antes de usar o menu "(with mocap actions)".
 
 ## 3. Perfil de movimento (`HeroMotionProfile`)
 
@@ -76,6 +82,7 @@ do herói no `PlayerVisualSwapper`. Durante o Play Mode, a cópia viva aparece n
 | `turnBrakeAngle` (°) / velocidade mantida | 100 / 0,45 | 105 / 0,55 | 120 / 0,75 | 110 / 0,65 | 110 / 0,65 | 110 / 0,6 |
 | inclinação máx. por aceleração (°) | 9 | 9 | 13 | 11 | 12 | 12 |
 | `bobAmplitude` (m) | 0,035 | 0,022 | 0,03 | 0,028 | 0,03 | 0,025 |
+| `strideScale` (passada; < 1 = passos mais curtos e rápidos, com deslize de 1 − valor) | 1 | 1 | 1 | 1 | 1 | 1 |
 | respiração (Hz / °) | 0,22 / 2,0 | 0,24 / 1,4 | 0,30 / 1,4 | 0,30 / 1,6 | 0,36 / 1,8 | 0,28 / 1,6 |
 | troca de peso (° / m / período s) | 1,6 / 0,02 / 6,5 | 1,0 / 0,012 / 7,5 | 1,0 / 0,012 / 4,5 | 1,4 / 0,016 / 4,0 | 1,8 / 0,018 / 3,2 | 1,2 / 0,015 / 5 |
 | micro-movimento (° / ritmo) | 0,8 / 0,4 | 0,6 / 0,35 | 1,0 / 0,6 | 1,8 / 0,9 | 2,2 / 1,1 | 1,0 / 0,6 |
@@ -178,12 +185,68 @@ valores do arquétipo.
   continua no `EnemyDeathVfx`.
 - **Surgir:** sobe esticado, passa do ponto (`SpawnRise01` com `SpawnOvershoot`) e acomoda com *squash*.
 - **Squash:** preserva o volume e vai até 6 % (`MotionFeelMath.SquashScale`), igual ao dos heróis.
-- **Pernas separadas:** filhos chamados `leg`, `perna` ou `pata` (até 8) tremem no idle e correm com o
-  passo, só nos artrópodes. Os modelos atuais da Meshy são uma malha só, então isso só passa a valer em
-  modelos futuros.
+- **Pernas separadas (modelos antigos):** filhos chamados `leg`, `perna` ou `pata` (até 8) tremem no
+  idle e correm com o passo, só nos artrópodes e só quando não há pernas articuladas (abaixo).
 - **"Reduzir Movimento":** reduz pela metade o *squash*, o *overlap* (o quanto as molas passam do alvo; a
   inclinação em si fica), o balanço do passo, os quiques e o *overshoot*. O aviso do ataque e o tombo
   continuam legíveis. A mesma opção corta pela metade o tremor de câmera (`ScaleShakeMagnitude`) e, junto com
   "Reduzir Flashes", desliga as animações de entrada do título, da história, do chefe e do tutorial
   (`AccessibilitySettings.SuppressUiMotion` / `UiMotionPreferences`).
 - Testes: `EnemyMotionFeelTests` e `EnemyProceduralMotionTests` (EditMode).
+
+### 7.1 Pernas de verdade (passos procedurais)
+
+O lobo, a aranha e o escorpião da Meshy eram uma malha estática só (sem esqueleto, FBX de 19 a 28 MB),
+então foram trocados por modelos low-poly feitos em código (`WolfRecipe` com o Lobo Alfa ×1,35,
+`SpiderRecipe`, `ScorpionRecipe`), com articulações de verdade, como os outros inimigos procedurais. O
+golem, o Senhor da Guerra, o Guardião da Ruína e o Habitante Ancestral ganharam joelho e tornozelo.
+Convenção de nomes (genérica, serve para o Caramelo ou outro bicho): quadril `Leg_<id>` → joelho
+`Shin_<id>` → pé `Foot_<id>` (bípedes `L`/`R`, quadrúpedes `FL`/`FR`/`HL`/`HR`, artrópodes `L0..R3`).
+*Follow-through*: `Tail` → `Tail_1..` → `Stinger`, `Head`, `Ear_L/R`, `Abdomen`, `Claw_L/R`.
+
+- **Motor** (`Gameplay/Locomotion`, sem nada de inimigo): `LegGaitMath` (matemática pura),
+  `LegGaitSolver` (máquina de estados por perna, sem transforms) e `ProceduralLegLocomotion` (liga os
+  transforms, faz raycast e escreve as rotações). O `EnemyProceduralAnimator` o adiciona sozinho no
+  visual que tem pernas articuladas e converte o perfil do arquétipo com `EnemyLegGait`.
+- **Pé plantado:** o pé no chão nunca se mexe no mundo. Ele só levanta na janela do seu passo (fase do
+  relógio + defasagem do *gait*) e se já se afastou do ponto de repouso sob o quadril. Fora do alcance,
+  pisa na hora (giro, empurrão, investida). O pé cai onde o quadril vai estar no meio do apoio: a
+  previsão usa velocidade, giro e meio apoio. IK de dois ossos dobra o joelho para o lado da pose de
+  repouso (aranha para cima, jarrete do lobo para trás, joelho do golem para frente). O pé fica rente ao
+  chão e inclina com a rampa.
+- **Gaits:** quadrúpede anda (sequência lateral) → trota (diagonais juntas) → galopa (transverso),
+  misturando pela velocidade. Aranha e escorpião usam tetrápode alternado com onda de trás para frente.
+  Bípedes alternam e passam de andar (apoio duplo) para correr (fase de voo). A passada cresce com a
+  velocidade e a cadência sobe com ela. Perna curta pisa mais rápido e perna longa mais devagar
+  (pêndulo, √comprimento). Ao correr, o corpo agacha mais e o pé ganha alcance.
+- **Corpo:** o balanço, a rolagem e o *pitch* vêm dos pés levantados (o corpo sobe no meio do passo e
+  rola para o lado do apoio), em molas. O quadril nunca sobe além do alcance dos pés plantados (*clamp*
+  da pelve): pulo de alerta, quique e golpe não arrastam pé. Pisada pesada publica `EnemyFootstepEvent`
+  no pé que desceu, com *squash*.
+- **Girar no lugar:** parado e girando acima de ~20–30 °/s, o relógio anda na cadência de repouso e os
+  pés vão se reposicionando. Ao parar, os pés acomodam sob o corpo e o relógio para.
+- **Ataque:** a antecipação continua do `EnemyController`/`EnemyAttackWindupEvent`. O agachamento com
+  os pés plantados dobra os joelhos, e a investida dá um passo de reação se passar do alcance.
+- **Cauda, orelhas, cabeça, abdômen, pinças:** molas de `MotionFeelMath` seguem o giro, o quique
+  vertical e a velocidade. A cabeça compensa o *pitch* do corpo (olhar estável). Peças que o
+  `ProceduralEnemyRig` já anima (cabeça do golem e do guardião, cabeça e orelhas do habitante) ficam com
+  ele.
+- **Morcegos:** sem pernas. A asa tem batida de força rápida e recuperação lenta, com planeios de asa
+  aberta que ficam mais frequentes quando o enxame viaja (`ProceduralEnemyRig.BatWingAngle`).
+- **Desempenho (celular):** só há raycast quando um passo começa (e um de novo no meio do balanço), com
+  teto global de 40 raycasts por frame (`ProceduralLegLocomotion.MaxRaycastsPerFrame`). Sem orçamento,
+  usa o plano dos pés. LOD: a mais de 24 m da câmera (`_legsLodDistance`, com histerese de 3 m), fora da
+  tela, surgindo do chão ou morto, as pernas voltam ao repouso em 0,25 s e o passo antigo do corpo
+  inteiro volta. Ao reativar, os pés são replantados onde o inimigo está, o que funciona com o *pool*.
+  Nada aloca por frame.
+- **"Reduzir Movimento":** reduz o balanço, a rolagem e o *follow-through*. O passo em si não muda,
+  porque é ele que impede o pé de patinar.
+- **Rebake obrigatório:** **Rapadura ▸ Enemies ▸ Build Procedural Enemy Models** gera os novos prefabs
+  (Wolf, AlphaWolf, Spider, Scorpion) e refaz os quatro bípedes com joelho. Também liga cada prefab ao
+  `_visualPrefab` do seu `EnemyDefinition`. Sem o bake, o lobo, a aranha e o escorpião continuam com a
+  malha da Meshy, e os bípedes já assados usam pernas de um osso só, que balançam até o pé. Para voltar à
+  Meshy, recoloque o FBX no `_visualPrefab`.
+- Testes: `LegGaitTests` (fases, *duty*, cadência, gatilho do passo, previsão, IK, invariante de "pé
+  plantado não desliza" andando, galopando, correndo como aranha, pisando, parando e girando),
+  `ProceduralLegLocomotionTests` (modelos reais, IK segurando o pé, animador de ponta a ponta, morte e
+  *respawn*) e `ProceduralEnemyModelsTests` (cadeias `Leg_`/`Shin_`/`Foot_`).

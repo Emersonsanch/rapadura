@@ -8,8 +8,9 @@ namespace Rapadura.Tests
 {
     /// <summary>
     /// EditMode tests for the code-built low-poly enemy models (<see cref="ProceduralEnemyModels"/>):
-    /// determinism, the part names the animators look for, mobile triangle budgets, sane bounds for
-    /// ground seating, and every shipped model-less enemy ending up with a non-empty visual.
+    /// determinism, the part names the animators look for (including the jointed Leg_ → Shin_ → Foot_
+    /// chains the stepping legs need), mobile triangle budgets, sane bounds for ground seating, and every
+    /// shipped model-less enemy ending up with a non-empty visual.
     /// </summary>
     public class ProceduralEnemyModelsTests
     {
@@ -49,14 +50,62 @@ namespace Rapadura.Tests
         {
             { ProceduralEnemyKind.BatSwarm, new[] { ProceduralEnemyParts.Swarm, "Bat_0", ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight } },
             { ProceduralEnemyKind.StoneGolem, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight,
-                ProceduralEnemyParts.FistLeft, ProceduralEnemyParts.FistRight, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight } },
+                ProceduralEnemyParts.FistLeft, ProceduralEnemyParts.FistRight, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight,
+                ProceduralEnemyParts.ShinLeft, ProceduralEnemyParts.ShinRight, ProceduralEnemyParts.FootLeft, ProceduralEnemyParts.FootRight } },
             { ProceduralEnemyKind.Warlord, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Cape, ProceduralEnemyParts.ArmLeft,
-                ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.Weapon, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight } },
+                ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.Weapon, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight,
+                ProceduralEnemyParts.ShinLeft, ProceduralEnemyParts.ShinRight, ProceduralEnemyParts.FootLeft, ProceduralEnemyParts.FootRight } },
             { ProceduralEnemyKind.RuinGuardian, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Runes, ProceduralEnemyParts.ArmLeft,
-                ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.FistLeft, ProceduralEnemyParts.FistRight, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight } },
+                ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.FistLeft, ProceduralEnemyParts.FistRight, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight,
+                ProceduralEnemyParts.ShinLeft, ProceduralEnemyParts.ShinRight, ProceduralEnemyParts.FootLeft, ProceduralEnemyParts.FootRight } },
             { ProceduralEnemyKind.AncientDweller, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.EarLeft, ProceduralEnemyParts.EarRight,
-                ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.StolenLight, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight } },
+                ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.StolenLight, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight,
+                ProceduralEnemyParts.ShinLeft, ProceduralEnemyParts.ShinRight, ProceduralEnemyParts.FootLeft, ProceduralEnemyParts.FootRight } },
+            { ProceduralEnemyKind.Wolf, WolfParts },
+            { ProceduralEnemyKind.AlphaWolf, WolfParts },
+            { ProceduralEnemyKind.Spider, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Abdomen, "Leg_L0", "Shin_L0", "Foot_L0", "Leg_R3", "Shin_R3", "Foot_R3" } },
+            { ProceduralEnemyKind.Scorpion, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.ClawLeft, ProceduralEnemyParts.ClawRight, ProceduralEnemyParts.Tail,
+                "Tail_1", "Tail_2", "Tail_3", ProceduralEnemyParts.Stinger, "Leg_L0", "Shin_L0", "Foot_L0", "Leg_R3", "Shin_R3", "Foot_R3" } },
         };
+
+        private static readonly string[] WolfParts =
+        {
+            ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.EarLeft, ProceduralEnemyParts.EarRight, ProceduralEnemyParts.Tail, "Tail_1",
+            "Leg_FL", "Shin_FL", "Foot_FL", "Leg_FR", "Shin_FR", "Foot_FR", "Leg_HL", "Shin_HL", "Foot_HL", "Leg_HR", "Shin_HR", "Foot_HR",
+        };
+
+        /// <summary>Legs per kind; every one a Leg_ (hip) → Shin_ (knee) → Foot_ chain for ProceduralLegLocomotion.</summary>
+        private static readonly Dictionary<ProceduralEnemyKind, int> LegCounts = new Dictionary<ProceduralEnemyKind, int>
+        {
+            { ProceduralEnemyKind.BatSwarm, 0 }, { ProceduralEnemyKind.StoneGolem, 2 }, { ProceduralEnemyKind.Warlord, 2 },
+            { ProceduralEnemyKind.RuinGuardian, 2 }, { ProceduralEnemyKind.AncientDweller, 2 }, { ProceduralEnemyKind.Wolf, 4 },
+            { ProceduralEnemyKind.AlphaWolf, 4 }, { ProceduralEnemyKind.Spider, 8 }, { ProceduralEnemyKind.Scorpion, 8 },
+        };
+
+        [Test]
+        public void EveryWalker_HasJointedLegChains([ValueSource(nameof(Kinds))] ProceduralEnemyKind kind)
+        {
+            GameObject visual = ProceduralEnemyModels.Instantiate(kind, null);
+            _created.Add(visual);
+            int legs = 0;
+            foreach (Transform t in visual.GetComponentsInChildren<Transform>(true))
+            {
+                if (!t.name.StartsWith(ProceduralEnemyParts.LegPrefix))
+                {
+                    continue;
+                }
+
+                legs++;
+                string id = t.name.Substring(ProceduralEnemyParts.LegPrefix.Length);
+                Transform shin = t.Find(ProceduralEnemyParts.ShinPrefix + id);
+                Assert.IsNotNull(shin, $"{kind}: {t.name} has no knee");
+                Transform foot = shin.Find(ProceduralEnemyParts.FootPrefix + id);
+                Assert.IsNotNull(foot, $"{kind}: {t.name} has no foot");
+                Assert.Greater(t.position.y, foot.position.y, $"{kind}: {t.name} hip above its foot");
+            }
+
+            Assert.AreEqual(LegCounts[kind], legs, kind.ToString());
+        }
 
         [Test]
         public void EveryKind_IsDeterministic([ValueSource(nameof(Kinds))] ProceduralEnemyKind kind)
@@ -106,7 +155,7 @@ namespace Rapadura.Tests
             // No other part may accidentally match the leg rule (it would be twitched like a leg).
             foreach (Transform t in visual.GetComponentsInChildren<Transform>(true))
             {
-                if (t != visual.transform && t.name != ProceduralEnemyParts.LegLeft && t.name != ProceduralEnemyParts.LegRight)
+                if (t != visual.transform && !t.name.StartsWith(ProceduralEnemyParts.LegPrefix))
                 {
                     Assert.IsFalse(EnemyProceduralAnimator.IsLegName(t.name), $"{kind}: '{t.name}' reads as a leg");
                 }
@@ -183,11 +232,17 @@ namespace Rapadura.Tests
             Assert.IsTrue(EnemyVisualSwapper.TryGetMeshBoundsInRootSpace(root.transform, visual.transform, out Bounds bounds));
             Assert.That(bounds.min.y, Is.InRange(-0.15f, kind == ProceduralEnemyKind.BatSwarm ? 0.9f : 0.15f), $"{kind}: feet at {bounds.min.y}");
             Assert.That(bounds.size.y, Is.InRange(0.6f, 4f), $"{kind}: height {bounds.size.y}");
-            Assert.That(bounds.size.x, Is.InRange(0.5f, 3.5f), $"{kind}: width {bounds.size.x}");
+            bool lean = kind == ProceduralEnemyKind.Wolf || kind == ProceduralEnemyKind.AlphaWolf;
+            Assert.That(bounds.size.x, Is.InRange(lean ? 0.3f : 0.5f, 3.5f), $"{kind}: width {bounds.size.x}");
             Assert.That(bounds.size.z, Is.InRange(0.4f, 3.5f), $"{kind}: depth {bounds.size.z}");
             Assert.That(Mathf.Abs(bounds.center.x), Is.LessThan(0.3f), $"{kind}: model must be centred on the pivot");
 
-            if (ProceduralEnemyModels.IsBoss(kind))
+            if (kind == ProceduralEnemyKind.AlphaWolf)
+            {
+                // A four-legged boss reads by bulk, not height: clearly bigger than a pack wolf.
+                Assert.Greater(bounds.size.y, 1.25f, "alpha wolf height");
+            }
+            else if (ProceduralEnemyModels.IsBoss(kind))
             {
                 Assert.Greater(bounds.size.y, 2.4f, $"{kind}: a boss must stand taller than the 2 m capsule");
             }
@@ -240,14 +295,18 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void KindFor_MapsTheFiveModellessEnemies_AndNothingElse()
+        public void KindFor_MapsTheProceduralEnemies_AndTheJointedAnimals_AndNothingElse()
         {
             Assert.AreEqual(ProceduralEnemyKind.BatSwarm, ProceduralEnemyModels.KindFor("enemy_cave_bat_swarm"));
             Assert.AreEqual(ProceduralEnemyKind.AncientDweller, ProceduralEnemyModels.KindFor("enemy_cave_dweller"));
             Assert.AreEqual(ProceduralEnemyKind.RuinGuardian, ProceduralEnemyModels.KindFor("enemy_desert_ruin_guardian"));
             Assert.AreEqual(ProceduralEnemyKind.StoneGolem, ProceduralEnemyModels.KindFor("enemy_mountain_stone_golem"));
             Assert.AreEqual(ProceduralEnemyKind.Warlord, ProceduralEnemyModels.KindFor("enemy_mountain_warlord"));
-            Assert.AreEqual(ProceduralEnemyKind.None, ProceduralEnemyModels.KindFor("enemy_forest_wolf"));
+            Assert.AreEqual(ProceduralEnemyKind.Wolf, ProceduralEnemyModels.KindFor("enemy_forest_wolf"));
+            Assert.AreEqual(ProceduralEnemyKind.AlphaWolf, ProceduralEnemyModels.KindFor("enemy_forest_alpha_wolf"));
+            Assert.AreEqual(ProceduralEnemyKind.Spider, ProceduralEnemyModels.KindFor("enemy_forest_spider"));
+            Assert.AreEqual(ProceduralEnemyKind.Scorpion, ProceduralEnemyModels.KindFor("enemy_desert_scorpion"));
+            Assert.AreEqual(ProceduralEnemyKind.None, ProceduralEnemyModels.KindFor("enemy_unknown_thing"));
             Assert.AreEqual(ProceduralEnemyKind.None, ProceduralEnemyModels.KindFor((string)null));
 
             foreach (KeyValuePair<string, ProceduralEnemyKind> entry in ProceduralEnemyModels.KindsById)

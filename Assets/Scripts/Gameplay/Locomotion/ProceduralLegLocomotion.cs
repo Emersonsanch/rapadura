@@ -55,6 +55,7 @@ namespace Rapadura.Gameplay.Locomotion
             public Vector3 PoleLocal;
             public Vector3 EndInHip;
             public Vector3 RestInSpace;
+            public Vector3 HipInSpace;
             public float Length;
             public int Side;
         }
@@ -76,6 +77,12 @@ namespace Rapadura.Gameplay.Locomotion
         [SerializeField] private bool _selfDriven;
 
         [SerializeField] private LegGaitSettings _settings = LegGaitSettings.Default(LegGaitStyle.Quadruped);
+
+        [Tooltip("How much lower than its rest pose (fraction of the leg) the owner rides the body while stepping slowly, so the knees stay bent.")]
+        [SerializeField, Range(0f, 0.3f)] private float _kneeBend = 0.08f;
+
+        [Tooltip("Crouch (fraction of the leg) at full speed: deeper knees give the feet a longer reach, like a runner.")]
+        [SerializeField, Range(0f, 0.4f)] private float _runKneeBend = 0.2f;
 
         private static int _budgetFrame = -1;
         private static int _budgetUsed;
@@ -100,6 +107,10 @@ namespace Rapadura.Gameplay.Locomotion
         private Vector3 _lastBodyPosition;
         private bool _hasLastBody;
         private float _bodyVerticalSpeed;
+        private float _bodyLimit = BodyLimitSlack;
+        private Vector3 _bodyShift;
+        private const float BodyLimitSlack = 1f;
+        private const float BodyLimitRiseSpeed = 1.5f;
         private Vector3 _selfLastPosition;
         private float _selfLastYaw;
         private bool _selfPrimed;
@@ -137,6 +148,16 @@ namespace Rapadura.Gameplay.Locomotion
 
         /// <summary>Mean leg length (m) of the bound chains, 0 without legs.</summary>
         public float MeanLegLength { get; private set; }
+
+        /// <summary>How far (m) the owner should lower the body below its rest pose while the legs step at <paramref name="speed01"/> (0..1 of full gait speed).</summary>
+        public float KneeBendDrop(float speed01) => Mathf.Lerp(_kneeBend, Mathf.Max(_kneeBend, _runKneeBend), Mathf.Clamp01(speed01)) * MeanLegLength;
+
+        /// <summary>
+        /// Highest body offset (m, up, relative to the rest pose) at which every planted foot is still within
+        /// reach of its hip — clamp the body's vertical pose to it so bobs, hops and lunges never drag a
+        /// planted foot (the classic pelvis-height clamp). Drops at once, recovers smoothly; large when no foot is down.
+        /// </summary>
+        public float BodyHeightLimit => _bodyLimit;
 
         /// <summary>Gait style picked from the leg count by <see cref="Bind"/> (2 biped, 4 quadruped, more arthropod).</summary>
         public LegGaitStyle DetectedStyle { get; private set; }
@@ -181,6 +202,7 @@ namespace Rapadura.Gameplay.Locomotion
             }
 
             SortChains();
+            NormalizeTailGains();
             DetectedStyle = _chainCount <= 2 ? LegGaitStyle.Biped : _chainCount == 4 ? LegGaitStyle.Quadruped : LegGaitStyle.Arthropod;
 
             // Rest targets live in the root's yaw frame, unscaled (world metres), like the solver.
@@ -194,13 +216,17 @@ namespace Rapadura.Gameplay.Locomotion
 
             for (int i = 0; i < _chainCount; i++)
             {
-                ref Chain c = ref _chains[i];
-                int front = DetectedStyle == LegGaitStyle.Biped || halfDepth < 0.01f ? 0 : (c.RestInSpace.z > halfDepth * 0.25f ? 1 : (c.RestInSpace.z < -halfDepth * 0.25f ? -1 : 0));
-                _solver.AddLeg(c.RestInSpace, groundY, c.Length, c.Side, front);
-                total += c.Length;
+                total += _chains[i].Length;
             }
 
             MeanLegLength = _chainCount > 0 ? total / _chainCount : 0f;
+            for (int i = 0; i < _chainCount; i++)
+            {
+                ref Chain c = ref _chains[i];
+                int front = DetectedStyle == LegGaitStyle.Biped || halfDepth < 0.01f ? 0 : (c.RestInSpace.z > halfDepth * 0.25f ? 1 : (c.RestInSpace.z < -halfDepth * 0.25f ? -1 : 0));
+                _solver.AddLeg(c.RestInSpace, groundY, c.Length, c.Side, front, GeometricReach(c, KneeBendDrop(1f)));
+            }
+
             _solver.Settings = _settings;
             _solver.Probe = ProbeGround;
             ResetState();
@@ -227,7 +253,7 @@ namespace Rapadura.Gameplay.Locomotion
             {
                 end = foot.position;
                 c.Length = Vector3.Distance(hip.position, knee.position) + Vector3.Distance(knee.position, foot.position);
-                c.FootInSpace = Quaternion.Inverse(_space.rotation) * foot.rotation;
+                c.FootInSpace = Quaternion.Inverse(YawOnly(_space.rotation)) * foot.rotation;
 
                 // Bend direction = where the rest knee sits off the hip → foot line (spiders: up, dogs' hocks: back).
                 Vector3 line = end - hip.position;
@@ -252,9 +278,26 @@ namespace Rapadura.Gameplay.Locomotion
                 c.Length = Mathf.Max(0.05f, Vector3.Distance(hip.position, end));
             }
 
-            c.RestInSpace = Quaternion.Inverse(YawOnly(_space.rotation)) * (end - _space.position);
+            Quaternion toSpace = Quaternion.Inverse(YawOnly(_space.rotation));
+            c.RestInSpace = toSpace * (end - _space.position);
+            c.HipInSpace = toSpace * (hip.position - _space.position);
             c.Side = c.RestInSpace.x < 0f ? -1 : 1;
             _chains[_chainCount++] = c;
+        }
+
+        /// <summary>
+        /// How far (m) the foot may drift from its rest point and still be reached with the hip lowered by
+        /// <paramref name="drop"/>: the worst case is straight away from the hip, so the reach is the leg's
+        /// horizontal span at that height minus the rest's own horizontal offset (spiders' feet are far out).
+        /// </summary>
+        private static float GeometricReach(in Chain c, float drop)
+        {
+            Vector3 hipToFoot = c.RestInSpace - c.HipInSpace;
+            float height = Mathf.Max(0.01f, -hipToFoot.y - drop);
+            float span = c.Length * 0.97f;
+            float horizontal = span > height ? Mathf.Sqrt(span * span - height * height) : 0f;
+            float offset = new Vector2(hipToFoot.x, hipToFoot.z).magnitude;
+            return Mathf.Max(c.Length * 0.08f, horizontal - offset);
         }
 
         private void AddFollow(Transform t, string n)
@@ -296,6 +339,55 @@ namespace Rapadura.Gameplay.Locomotion
             }
 
             _follow.Add(new Follow { Transform = t, Rest = t.localRotation, Kind = kind, Gain = gain });
+        }
+
+        /// <summary>Horizontal offset of the posed hips from their rest places on the root (lunge, surge, recoil).</summary>
+        private Vector3 HipShift()
+        {
+            if (_chainCount == 0)
+            {
+                return Vector3.zero;
+            }
+
+            Quaternion yaw = YawOnly(_space.rotation);
+            Vector3 sum = Vector3.zero;
+            for (int i = 0; i < _chainCount; i++)
+            {
+                ref Chain c = ref _chains[i];
+                if (c.Hip != null)
+                {
+                    sum += c.Hip.position - (_space.position + yaw * c.HipInSpace);
+                }
+            }
+
+            sum /= _chainCount;
+            return new Vector3(sum.x, 0f, sum.z);
+        }
+
+        /// <summary>A long tail (scorpion: five joints) shares the swing so the whole chain curls about as much as a short one.</summary>
+        private void NormalizeTailGains()
+        {
+            int segments = 0;
+            foreach (Follow f in _follow)
+            {
+                segments += f.Kind == FollowKind.Tail ? 1 : 0;
+            }
+
+            if (segments <= 2)
+            {
+                return;
+            }
+
+            float scale = 2f / segments;
+            for (int i = 0; i < _follow.Count; i++)
+            {
+                Follow f = _follow[i];
+                if (f.Kind == FollowKind.Tail)
+                {
+                    f.Gain *= scale;
+                    _follow[i] = f;
+                }
+            }
         }
 
         private static Transform FindChild(Transform parent, string childName)
@@ -345,6 +437,8 @@ namespace Rapadura.Gameplay.Locomotion
         {
             _sway = _swayVelocity = Vector2.zero;
             _bob = _bobVelocity = 0f;
+            _bodyLimit = BodyLimitSlack;
+            _bodyShift = Vector3.zero;
             _hasLastBody = false;
             _selfPrimed = false;
             for (int i = 0; i < _follow.Count; i++)
@@ -397,7 +491,10 @@ namespace Rapadura.Gameplay.Locomotion
             _yawRate = yawRateDeg;
             if (_chainCount > 0)
             {
-                _solver.Step(deltaTime, _space.position, YawOnly(_space.rotation), velocity, yawRateDeg);
+                // The feet follow where the posed body actually is (lunges, recoil shoves: a reactive step),
+                // as of the last Solve; the vertical pose is the body-height clamp's business.
+                _solver.Step(deltaTime, _space.position + _bodyShift, YawOnly(_space.rotation), velocity, yawRateDeg);
+                UpdateBodyLimit(deltaTime);
             }
 
             // Sway: underdamped springs → the body settles onto each footfall with a little follow-through.
@@ -406,6 +503,31 @@ namespace Rapadura.Gameplay.Locomotion
             Vector2 swayTarget = new Vector2(_solver.Pitch, _solver.Roll) * k;
             MotionFeelMath.StepSpring(ref _sway, ref _swayVelocity, swayTarget, hz, 0.45f, deltaTime, Vector2.zero);
             MotionFeelMath.StepSpring(ref _bob, ref _bobVelocity, _solver.Bob * k, hz * 1.4f, 0.5f, deltaTime);
+        }
+
+        private void UpdateBodyLimit(float deltaTime)
+        {
+            Quaternion yaw = YawOnly(_space.rotation);
+            Vector3 origin = _space.position + _bodyShift;
+            float limit = BodyLimitSlack;
+            for (int i = 0; i < _chainCount; i++)
+            {
+                if (_solver.IsSwinging(i))
+                {
+                    continue;
+                }
+
+                ref Chain c = ref _chains[i];
+                Vector3 hip = origin + yaw * c.HipInSpace;
+                Vector3 foot = _solver.FootPosition(i);
+                float span = c.Length * 0.96f; // slack for the body pitch/roll the clamp does not model
+                float d = LegGaitMath.PlanarDistance(hip, foot);
+                float highest = d < span ? Mathf.Sqrt(span * span - d * d) : 0f;
+                limit = Mathf.Min(limit, highest - (hip.y - foot.y));
+            }
+
+            limit = Mathf.Max(limit, -0.3f * MeanLegLength); // a foot that far behind steps next frame anyway
+            _bodyLimit = limit < _bodyLimit ? limit : Mathf.MoveTowards(_bodyLimit, limit, BodyLimitRiseSpeed * deltaTime);
         }
 
         /// <summary>
@@ -421,6 +543,7 @@ namespace Rapadura.Gameplay.Locomotion
             }
 
             float w = Mathf.Clamp01(weight);
+            _bodyShift = HipShift() * w;
             for (int i = 0; i < _chainCount; i++)
             {
                 SolveChain(ref _chains[i], i, w);

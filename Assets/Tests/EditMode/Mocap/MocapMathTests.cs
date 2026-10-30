@@ -95,6 +95,17 @@ Frame Time: 0.0333333
         }
 
         [Test]
+        public void OnlyArmsAreNormalizedToTheIdealTPose()
+        {
+            // Clavicles, spine, legs and feet differ in joint placement between CMU and the Meshy rigs: rest-to-rest.
+            Assert.IsTrue(MocapMath.NormalizesRestDirection(HumanBodyBones.LeftUpperArm));
+            Assert.IsTrue(MocapMath.NormalizesRestDirection(HumanBodyBones.RightLowerArm));
+            foreach (var bone in new[] { HumanBodyBones.LeftShoulder, HumanBodyBones.Spine, HumanBodyBones.Neck,
+                                         HumanBodyBones.LeftUpperLeg, HumanBodyBones.RightLowerLeg, HumanBodyBones.LeftFoot })
+                Assert.IsFalse(MocapMath.NormalizesRestDirection(bone), bone.ToString());
+        }
+
+        [Test]
         public void Retarget_TransfersRelativeRotationBetweenDifferentRests()
         {
             // Source bone rest along +X, target bone rest with an arbitrary local frame; a 90° source swing

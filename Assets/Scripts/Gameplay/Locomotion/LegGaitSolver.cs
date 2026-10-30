@@ -100,6 +100,7 @@ namespace Rapadura.Gameplay.Locomotion
             public Vector3 RestLocal;   // foot rest position in body space (body = root, yaw only)
             public float Sole;          // foot point height above the ground
             public float Length;        // leg length (m)
+            public float MaxReach;      // geometric limit of the drift from the rest target (m)
             public int Side;            // -1 left, +1 right
             public int Front;           // +1 front half, -1 hind half, 0 middle / biped
 
@@ -157,9 +158,11 @@ namespace Rapadura.Gameplay.Locomotion
         /// <summary>
         /// Adds a leg (call in the leg order convention of <see cref="LegGaitMath"/>). <paramref name="restLocal"/>
         /// is the foot point in body space, <paramref name="groundLocalY"/> the body-space height of the
-        /// ground under the feet (so the sole height is their difference).
+        /// ground under the feet (so the sole height is their difference). <paramref name="maxReach"/>
+        /// caps how far the planted foot may drift from its rest target before stepping (what the leg's
+        /// geometry allows with the hip at its riding height; see <see cref="ProceduralLegLocomotion"/>).
         /// </summary>
-        public void AddLeg(Vector3 restLocal, float groundLocalY, float length, int side, int front)
+        public void AddLeg(Vector3 restLocal, float groundLocalY, float length, int side, int front, float maxReach = float.MaxValue)
         {
             if (_count >= MaxLegs)
             {
@@ -172,6 +175,7 @@ namespace Rapadura.Gameplay.Locomotion
                 RestLocal = restLocal,
                 Sole = Mathf.Max(0f, restLocal.y - groundLocalY),
                 Length = Mathf.Max(0.02f, length),
+                MaxReach = Mathf.Max(0.02f, maxReach),
                 Side = side,
                 Front = front,
                 Normal = Vector3.up,
@@ -182,7 +186,7 @@ namespace Rapadura.Gameplay.Locomotion
 
         public Vector3 RestTarget(int leg, Vector3 bodyPosition, Quaternion bodyRotation) => bodyPosition + bodyRotation * _legs[leg].RestLocal;
 
-        public float Reach(int leg) => _legs[leg].Length * Mathf.Max(0.05f, Settings.ReachFraction);
+        public float Reach(int leg) => Mathf.Min(_legs[leg].Length * Mathf.Max(0.05f, Settings.ReachFraction), _legs[leg].MaxReach);
 
         /// <summary>Re-plants every foot on its rest target (spawn, pool reuse, teleport, LOD wake-up).</summary>
         public void Reset(Vector3 bodyPosition, Quaternion bodyRotation)
@@ -217,7 +221,7 @@ namespace Rapadura.Gameplay.Locomotion
             Vector3 from = l.From, to = l.To;
             float top = Mathf.Max(from.y, to.y);
             Vector3 p = LegGaitMath.SwingPosition(from, to, t, height);
-            p.y += (top - Mathf.Lerp(from.y, to.y, LegGaitMath.SmoothStep01(t))) * LegGaitMath.SwingLift(t); // clear a step up
+            p.y += (top - Mathf.Lerp(from.y, to.y, LegGaitMath.SwingTravel(t))) * LegGaitMath.SwingLift(t); // clear a step up
             return p;
         }
 
