@@ -1558,6 +1558,19 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [ ] **Queda ao morrer: 9% de chance** de cair um item aleatório da mochila (nunca equipados, ouro, itens de história, relíquias ou itens vinculados). Offline: aviso na tela de morte e o item vai para os "Achados e Perdidos" da Vó Zefa, para comprar de volta por uma taxa conforme a raridade.
 - [ ] Online (decisão do usuário, 2026-10-29): o item cai no chão onde a pessoa morreu e **qualquer jogador pode pegar**, como no MU Online.
 
+### Fases de implementação da casa (de `Docs/Housing.md` §13)
+> Catálogos prontos: **580 itens de casa** (`Docs/Housing/CatalogoCasa.md`: 225 comuns, 149 incomuns, 126 raros, 64 épicos, 16 lendários) e **234 roupas/acessórios/tinturas/skins** (`Docs/Housing/CatalogoRoupas.md`). São o conjunto inicial; temporadas e eventos acrescentam itens com IDs novos.
+- [ ] H0 — Dados: `HouseItemDefinition` + enums, importador lendo o catálogo, textos en/pt-BR, testes de IDs/nomes únicos e origens válidas.
+- [ ] H1 — Casa de madeira (nível 1) offline na Vila: modelo modular, modo "Arrumar a casa" (piso/parede/teto/superfície/quintal), baú da casa, cama, missão "Um Cantinho Seu", botão "Minha casa", save `House`.
+- [ ] H2 — Cidades e lojas: as 4 cidades como zona segura, lojas novas com NPC e rotação diária (em andamento pelo agente de cidades).
+- [ ] H3 — Fontes: itens de casa no loot dos bichos (troféu garantido na 1ª vitória contra chefe, proteção de azar), missões, conquistas, receitas.
+- [ ] H4 — Melhorias da casa (madeira com varanda → taipa e telha → alvenaria → casarão) sem perder nada na troca.
+- [ ] H5 — Guarda-roupa: aparências, tinturas, skins de arma, trajes salvos.
+- [ ] H6 — Vida na casa: conforto e "Descansado", conjuntos, parede de troféus, vitrine de relíquias, estante do Caderno, caminha do Caramelo, livro de visitas, plantas, boneco de treino.
+- [ ] H7 — Eventos sazonais e prendas.
+- [ ] H8 — Online: casas instanciadas, convites e permissões, desfazer vandalismo, correio, leilão, conta da lenha, sede do clã.
+- [ ] 🙋 Decisões do usuário (lista em `Docs/Housing.md` §14): custos das melhorias (150/400/1.000/2.500 ouro), casa por conta ou por personagem, quem da lista entra com o dono offline, conta da lenha ligada ou não, ajudante que vende offline, venda de casa entre jogadores, nomes das 3 cidades novas, moeda de evento "prendas" e loja paga só cosmética.
+
 ### Equipamento e aparência do personagem
 - [ ] Conjuntos de armadura/roupa por primo em vários níveis de raridade, acessórios (chapéu de couro, lenço, alpargatas…) e skins de arma.
 
