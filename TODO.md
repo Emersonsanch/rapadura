@@ -9,6 +9,10 @@
 - 🔊 **Áudio** (`cbd1e8f`): 16 sons procedurais novos (atordoamento, espinhos, baú, missão, pulo/aterrissagem, aviso de ataque inimigo…), música própria dos painéis de história, grilos e brisa no título.
 - 🎬 **Créditos e overlays** (`916ca19`): créditos bilíngues com rolagem automática (toque para fechar) e atribuição do CMU; banner de chefe e "Mochila cheia" no tema. Teste PlayMode `CampaignPlaythroughTests` (`[Category("Campaign")]`) joga a campanha inteira com a Maithe, com save/load no meio.
 - ✅ EditMode **1781/1781**. PlayMode não inicializou dentro do tempo nesta rodada (repetir).
+- 🐛 **Redução de recarga percentual não fazia nada** (`affix_of_haste` 3–8% era ignorado): CDR e redução de custo agora somam plano + percentual (`GetAdditiveFractionTotal`); Ficha usa o mesmo cálculo. `ZeroBaseFractionStatTests`, Balance §7.6.
+- ⚖️ **Pilha de poder (r9)** (`tools/balance/power_stack.py`): melhor refeição + relíquias + buff de evento na NG+0/NG+1. Ajuste: Canivete do Vô Chico +2 → +1 de dano, Cantoria +15% → +8%, Rapadura +25% → +12% de velocidade de ataque; chefes 16–22% mais rápidos com tudo empilhado (antes 26–34%). Balance renumerado (§9 Mochila … §14 Pilha de poder).
+- [ ] NG+ com escala por região/nível do herói (hoje a NG+1 é trivial na Floresta e longa nas Cavernas) — Balance §14.4 (em andamento).
+- [ ] Rodar `power_stack.py` quando o golpe em dupla e as lojas novas entrarem (Montanha já no limite de −22%).
 - 🤖 **Em andamento (agentes)**: New Game+ ("Nova Jornada+"), Caderno da Vó Zefa (bestiário), eventos aleatórios no mapa, Caramelo (pet), segredos e Relíquias do Sertão, teste de resistência de 30 min + relatório de falhas local + Definition of Done, cozinha da Vó Zefa, modo foto.
 
 ### 2026-10-29 (sessão multiagente — campanha com começo e fim, missões regionais, atordoamento/espinhos/velocidade de ataque)

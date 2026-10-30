@@ -1,6 +1,6 @@
 """Balance round r8 report: python -I tools/balance/run_r8.py [--stun reset|pause] [--candidate file.json]
 
-Prints markdown tables (Docs/Balance/README.md §9 was written from this output):
+Prints markdown tables (Docs/Balance/README.md §10 was written from this output):
   1. calibration against the r7 in-editor playtest (same protocol: levels 2/5/8/11, no gear, no stun);
   2. the r7 reference model (expected levels 2/4/6/8, no gear/quests);
   3. XP routes (rush / region quests): level at each region entry and boss, time-to-level;

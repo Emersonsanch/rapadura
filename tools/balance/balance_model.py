@@ -1,4 +1,4 @@
-"""Rapadura balance model, round r8 (Docs/Balance/README.md §9).
+"""Rapadura balance model, round r8 (Docs/Balance/README.md §10; power stacking on top of it: §14, power_stack.py).
 
 Pure Python port of the analytic model of BalanceInvariantsTests (§5.3/§5.4), extended with what
 the game gained after r7:
@@ -35,6 +35,7 @@ BASIC_COOLDOWN = 0.5
 BASIC_STRIKE_DELAY = 0.22
 ATTACK_SPEED_MIN, ATTACK_SPEED_MAX = -0.5, 1.0
 THORNS_MAX = 0.5
+MAX_PERCENT_DEFENSE = 0.8  # DamageCalculator.MaxPercentDefense
 MANA_POOL = 100.0
 MANA_REGEN = 5.0
 BOSS_STUN_MULTIPLIER = 0.5
@@ -67,6 +68,11 @@ class Gear:
     regen: float = 0.0
     cdr: float = 0.0
     max_mana: float = 0.0
+    # Not rolled by affixes; used by the power-stacking sources (power_stack.py: meals, relics, events).
+    defense_pct: float = 0.0  # PercentAdditive Defense (DamageCalculator: x (1 - clamp(pct, -1, 0.8)))
+    max_hp_pct: float = 0.0  # PercentAdditive MaxHealth: (base + flat) x (1 + pct)
+    rcr: float = 0.0  # ResourceCostReduction (0..1 fraction)
+    mana_regen_pct: float = 0.0  # PercentAdditive ManaRegen
 
     STAT_FIELDS = {
         "AttackDamage": None, "CriticalChance": "crit", "CriticalDamage": "crit_dmg", "AttackSpeed": "attack_speed",
@@ -105,6 +111,9 @@ class Build:
     gear: Gear = field(default_factory=Gear)
     attributes: bool = True
     skill_points: bool = True
+    # A timed opening buff (meal "Rapadura": AttackSpeed +25% for the first 20 s of the fight).
+    opening_attack_speed: float = 0.0
+    opening_seconds: float = 0.0
 
 
 @dataclass
@@ -121,6 +130,10 @@ class PlayerStats:
     regen: float
     cdr: float
     skills: list  # [(Skill, level)]
+    mana_regen: float = 5.0
+    rcr: float = 0.0
+    opening_interval: float = 0.0  # basic interval while t < opening_seconds (0 = no opening buff)
+    opening_seconds: float = 0.0
 
     def hit(self, base: float) -> float:
         return (base * self.damage_mult + self.ad_flat) * (1 + self.ad_pct) * self.crit_ev
@@ -191,8 +204,10 @@ class Model:
         arcane = (build.level - 1) if build.attributes else 0
         crit = min(1.0, gear.crit)
         defense_mult = 1 - gear.defense / (gear.defense + 100) if gear.defense > 0 else 1.0
+        defense_mult *= 1 - min(max(gear.defense_pct, -1.0), MAX_PERCENT_DEFENSE)
+        opening = build.opening_seconds > 0 and build.opening_attack_speed != 0
         return PlayerStats(
-            hp=row["hp"] + vitality * VITALITY_HP + gear.max_hp,
+            hp=(row["hp"] + vitality * VITALITY_HP + gear.max_hp) * (1 + gear.max_hp_pct),
             mana=row["mana"] + gear.max_mana,
             damage_mult=row["damage_mult"],
             ad_flat=gear.ad_flat,
@@ -204,6 +219,10 @@ class Model:
             regen=gear.regen,
             cdr=min(max(gear.cdr, 0.0), 1.0),
             skills=self.skill_levels(build),
+            mana_regen=MANA_REGEN * (1 + gear.mana_regen_pct),
+            rcr=min(max(gear.rcr, 0.0), 1.0),
+            opening_interval=resolve_cooldown(gear.attack_speed + build.opening_attack_speed) if opening else 0.0,
+            opening_seconds=build.opening_seconds if opening else 0.0,
         )
 
     # -- fight
@@ -266,10 +285,10 @@ class Model:
         while alive() and t < max_time:
             # player: skills (highest damage ready first), then the basic swing
             if use_skills and t >= busy_until:
-                ready = [(s, lv) for s, lv in p.skills if cooldowns[s.id] <= t and mana >= s.mana]
+                ready = [(s, lv) for s, lv in p.skills if cooldowns[s.id] <= t and mana >= s.mana * (1 - p.rcr)]
                 ready.sort(key=lambda x: -(x[0].damage(x[1]) + x[0].dot_total))
                 for skill, lv in ready[:1]:
-                    mana -= skill.mana
+                    mana -= skill.mana * (1 - p.rcr)
                     busy_until = t + skill.cast + skill.recovery
                     cooldowns[skill.id] = t + skill.cycle * (1 - p.cdr)
                     targets = alive() if skill.area >= AOE_RADIUS else [focus()]
@@ -280,7 +299,7 @@ class Model:
             target = focus()
             if target is not None and t >= next_basic and t >= busy_until:
                 damage(target, p.hit(BASIC_BASE[0]))
-                next_basic = t + p.basic_interval
+                next_basic = t + (p.opening_interval if t < p.opening_seconds else p.basic_interval)
             # enemies
             for f in alive():
                 if f["stun_until"] > t:
@@ -295,7 +314,7 @@ class Model:
                         damage(f, hit * p.thorns)
                     f["next"] = t + max(f["e"].attack_cooldown, f["e"].windup)
             hp = min(p.hp, hp + p.regen * DT)
-            mana = min(p.mana, mana + MANA_REGEN * DT)
+            mana = min(p.mana, mana + p.mana_regen * DT)
             min_hp = min(min_hp, hp)
             if death_time is None and hp <= 0:
                 death_time = t
@@ -410,20 +429,23 @@ def region_fights(model: Model, biome: str, route: str) -> float:
     return max(float(VICTORIES_TO_CHALLENGE), fights)
 
 
-def route_xp(model: Model, route: str, quest_xp_scale: dict | None = None) -> list:
+def route_xp(model: Model, route: str, quest_xp_scale: dict | None = None, start_xp: float = 0.0,
+             kill_xp_mult: float = 1.0) -> list:
+    """XP along a route. `start_xp`/`kill_xp_mult` model a Nova Jornada+ cycle (level kept, kill and
+    boss XP x NewGamePlusRules.ExperienceMultiplier, quest XP unscaled)."""
     visits = []
-    xp = 0.0
+    xp = start_xp
     for biome in rd.BIOME_ORDER:
         fights = region_fights(model, biome, route)
         commons = model.biome_commons(biome)
         total_weight = sum(w for _, w in commons)
-        avg_xp = sum(e.xp_reward * w for e, w in commons) / total_weight
+        avg_xp = sum(e.xp_reward * w for e, w in commons) / total_weight * kill_xp_mult
         kills = fights * COMMONS_PER_ENCOUNTER
         quest_xp = sum(q.xp for q in model.data.region_quests if q.region == biome) if route == "quests" else 0.0
         boss = model.biome_boss(biome)
         entry = xp
         before_boss = xp + kills * avg_xp + quest_xp
-        boss_total = boss.xp_reward + BOSS_MINIONS * avg_xp
+        boss_total = boss.xp_reward * kill_xp_mult + BOSS_MINIONS * avg_xp
         xp = before_boss + boss_total
         visits.append(RegionVisit(biome, fights, kills, kills * avg_xp, quest_xp, boss_total, entry, before_boss, xp))
     return visits

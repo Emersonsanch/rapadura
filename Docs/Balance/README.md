@@ -14,6 +14,22 @@ Outros dados de balanceamento (editados direto no Inspector, sem planilha):
 `Assets/Resources/Balance/PlayerCombatBalance.asset` — dano base do ataque básico, chance e multiplicador
 de crítico base (ver §3). Apagar esse asset volta o ataque básico ao valor do Inspector da cena (15).
 
+**Seções** (cada sistema novo acrescenta a sua no fim, com o próximo número livre; cite como "Balance §N"):
+
+| § | Assunto |
+|---|---|
+| 1 | Como editar a curva |
+| 2–3 | Análise de sanidade e o primeiro rebalanceamento (bug dos atributos mortos) |
+| 4 | Defesa, velocidade e stats mortos |
+| 5–6 | Rodadas r6 e r7 (playtests no Editor) |
+| 7 | Atordoamento, velocidade de ataque, espinhos, dano de contato; **7.6** stats de fração com base 0 |
+| 8–9 | Loot de encontro por bioma; mochila cheia |
+| 10 | r8: progressão real e o modelo em Python (`tools/balance/`) |
+| 11 | Nova Jornada+ |
+| 12 | Cozinha da Vó Zefa (refeições) |
+| 13 | Eventos aleatórios do mapa |
+| 14 | Pilha de poder: refeição + relíquias + evento + carinho, NG+0 e NG+1 (r9) |
+
 ---
 
 ## 1. Como editar a curva
@@ -659,6 +675,28 @@ Removido de `EnemyDefinition`, `EnemyDatabaseSeeder`, `BalanceCsvMenu` (coluna `
 Testes: `StunThornsAttackSpeedTests` (stun bloqueia o inimigo, cancela a preparação, redução de boss,
 skill que atordoa, matemática da velocidade de ataque, espinhos sem recursão, remoção do dano de contato).
 
+### 7.6 Stats de fração com base 0: percentual não pode sumir (bug, 2026-10-29)
+
+`BuffController.GetModifiedValue(stat, base)` = (base + Σ plano) × (1 + Σ percentual). Com base 0, todo
+modificador PercentAdditive some: (0 + 0) × 1,05 = 0. Por isso os stats que já são frações de 0 a 1 são
+lidos com `BuffController.GetAdditiveFractionTotal` (plano e percentual somam igual, "+0,05 = 5%"):
+
+| Stat | Leitor | Antes | Fontes PercentAdditive afetadas |
+|---|---|---|---|
+| CriticalChance / CriticalDamage | `OutgoingDamage` | já somava | `affix_lucky` |
+| AttackSpeed | `PlayerBasicAttack`, Ficha | já somava | `affix_nimble`, `affix_of_frenzy`, Rapadura |
+| Thorns | `ThornsRules` | já somava | `affix_thorned`, `affix_of_the_mandacaru`, Queijo coalho |
+| **CooldownReduction** | `SkillManager.ResolveCooldownReduction`, Ficha | **`GetModifiedValue(CDR, 0)`** | **`affix_of_haste` (3–8%) não fazia nada**; e um plano ainda era multiplicado pelo percentual |
+| **ResourceCostReduction** | `SkillManager.ResolveResourceCostReduction` | **`GetModifiedValue(RCR, 0)`** | nenhuma hoje (combo, afixo e relíquia são planos); latente |
+
+Os outros stats têm base > 0 e o percentual funciona como percentual: MaxHealth/MaxMana/MaxStamina
+(curva), HealthRegen 1/s, ManaRegen 5/s, StaminaRegen 10/s, MoveSpeed (multiplicador base 1),
+AttackDamage (dano do golpe); Defense separa plano e percentual (`DamageCalculator.GetDefense`, §4).
+A Ficha (`CharacterSheetPresenter`) usa o mesmo `ResolveCooldownReduction`. Afixo, refeição e relíquia
+continuam autorados como estavam (CDR plano na Cozinha e nas relíquias); os dois jeitos valem agora.
+Testes: `ZeroBaseFractionStatTests` (cada stat de fração conta plano e percentual; todo afixo de fração
+de `Resources/Affixes` tem efeito no mínimo da rolagem; Ficha = recarga real).
+
 ---
 
 ## 8. Loot de encontro: materiais por bioma (2026-10-29)
@@ -828,9 +866,9 @@ Equipamento procedural (`AddGeneratedItem`) só precisa de um espaço livre, com
 
 ---
 
-## 9. r8 — progressão real: missões regionais, equipamento, atributos e atordoamento (2026-10-29)
+## 10. r8 — progressão real: missões regionais, equipamento, atributos e atordoamento (2026-10-29)
 
-### 9.1 Método
+### 10.1 Método
 
 Os playtests r5–r7 foram rodadas automatizadas dentro do Editor (Unity MCP). Esta rodada **não usou o
 Editor**: o modelo das §5.3/§5.4 foi portado para Python puro em `tools/balance/` e estendido. Ele lê os
@@ -869,7 +907,7 @@ O que o modelo faz (`balance_model.py`):
 
 Fora do modelo (como no r5–r7): esquiva, buffs/debuffs de % Defesa e de dano do inimigo, curas.
 
-### 9.2 Diagnóstico (dados do r7 com a progressão de hoje)
+### 10.2 Diagnóstico (dados do r7 com a progressão de hoje)
 
 | Rota | Região | Lutas | XP abates / missões / chefe | Nível no chefe | Chefe no jogo (média dos 5) | 2 comuns no jogo (média) |
 |---|---|---|---|---|---|---|
@@ -895,9 +933,9 @@ Fora do modelo (como no r5–r7): esquiva, buffs/debuffs de % Defesa e de dano d
 - **Atordoamento**: no código do r7 o stun tirava o inimigo do estado de ataque e o `Enter` rearmava o
   golpe uma preparação depois do fim do stun. Num chefe de 2,4–3,3 s de recarga com 0,3–0,5 s de stun,
   isso **adiantava** o próximo golpe: com a Granada do Ícaro (recarga 8 s) o Lobo Alfa dava 9 golpes numa
-  luta em vez de 7. Bug de fórmula, corrigido em código (§9.3).
+  luta em vez de 7. Bug de fórmula, corrigido em código (§10.3).
 
-### 9.3 Mudanças aplicadas (antes → depois)
+### 10.3 Mudanças aplicadas (antes → depois)
 
 | Onde | Campo | Antes | Depois |
 |---|---|---|---|
@@ -937,9 +975,9 @@ Por quê:
 - **Afixos de dano plano pela metade**: o básico tem 10 de dano; dois afixos na mesma arma agora somam no
   máximo +9 (antes +17). O p90 de sorte passa a encurtar o chefe em ~15% (antes ~27%).
 
-### 9.4 Resultado (r7 → r8)
+### 10.4 Resultado (r7 → r8)
 
-Tempos "no jogo" = modelo × fator de calibração (§9.1); pior / **média** / melhor dos 5 heróis. Meta:
+Tempos "no jogo" = modelo × fator de calibração (§10.1); pior / **média** / melhor dos 5 heróis. Meta:
 lutas comuns 4–7 s, chefes 15–22 s, morte possível sem skills nem defesa.
 
 | Bioma | Rota | Nível no chefe r7 → r8 | 2 comuns: média r7 → r8 (pior / **média** / melhor) | Chefe: média r7 → r8 (pior / **média** / melhor) | Só básico, r8: mata o chefe / morre em |
@@ -991,7 +1029,7 @@ Lobo Alfa 7 → 9 → 7; Correntes da Lavine no Guardião 5 → 6 → 5 e na Hab
 stun nunca adianta um golpe; no chefe custa 0–1 golpe por luta, nos comuns (0,6–1,0 s contra recargas de
 0,7–1,6 s) cerca de 1 golpe por conjuração.
 
-### 9.5 Testes
+### 10.5 Testes
 
 `BalanceInvariantsTests` re-baseado no r8 (justificativa nos comentários do teste):
 - nível esperado por bioma 2/4/6/8 → **3/7/10/15** (o chefe da rota com missões), com atributos
@@ -1009,7 +1047,7 @@ correção do atordoamento. `EnemyDatabaseSeederTests` espelha os novos HP/dano.
 
 ---
 
-## 10. Nova Jornada+ (New Game+) (2026-10-29)
+## 11. Nova Jornada+ (New Game+) (2026-10-29)
 
 Depois do epílogo e dos créditos, o botão **Nova Jornada+** aparece na Vila (Floresta) do mapa
 (`NewGamePlusHud`). Ele recomeça a campanha com o mesmo herói: **mantém** nível, atributos, skills,
@@ -1018,7 +1056,7 @@ Floresta liberada), os chefes (`DefeatedEnemyRegistry`) e as 8 missões regionai
 Missões pessoais, de convergência e diárias, construções, receitas, relógio e clima ficam como estão. O
 ciclo é salvo na chave `NewGamePlus` (`NewGamePlusProgress`); save antigo, sem a chave, carrega como ciclo 0.
 
-### 10.1 Regras (`NewGamePlusRules`, testadas em `NewGamePlusTests`)
+### 11.1 Regras (`NewGamePlusRules`, testadas em `NewGamePlusTests`)
 
 Ciclo `c` = 0 na primeira campanha, 1 na Nova Jornada+ 1, ... teto **5** (jornadas depois da 5ª usam os
 números da 5ª). Com `c = 0` todo multiplicador é exatamente 1 e o `EnemyLootRoller` não sorteia nenhum
@@ -1035,9 +1073,9 @@ número a mais (mesma semente, mesmos drops de antes).
 Não escalam: XP/recompensas de missões, chance de drop e quantidades da tabela do bioma, o bônus de chefe
 (`_bossBonusDropRarity` fixa), recargas e velocidade dos inimigos.
 
-### 10.2 Por que esses números (estimativa; não passou pelo modelo do r8)
+### 11.2 Por que esses números (estimativa; o modelo rodou depois, §14.4)
 
-- Quem termina a campanha pela rota com missões chega ao chefe das Cavernas no nível ~15 (§9.4) e entra na
+- Quem termina a campanha pela rota com missões chega ao chefe das Cavernas no nível ~15 (§10.4) e entra na
   NG+1 por volta do 16, com o equipamento das Cavernas. Sem escala, a Floresta morreria na primeira rotação.
 - **NG+1 Floresta ≈ Montanha do 1º ciclo.** Lobo Alfa NG+1 = 936 de vida / 22,5 de dano (Senhor da Guerra
   no ciclo 0: 900 / 30, enfrentado no nível ~11). Para um herói de nível ~16 a luta deve cair perto da
@@ -1049,25 +1087,27 @@ Não escalam: XP/recompensas de missões, chance de drop e quantidades da tabela
 - XP ×1,5 por ciclo compensa a curva (`xp_to_next` cresce 10% por nível): sem isso, a NG+1 inteira daria
   poucos níveis. O ouro e a chance de raridade são a recompensa visível de jogar de novo.
 
-**Playtest pendente**: rodar `tools/balance/run_r8.py` com os inimigos multiplicados pelo ciclo e o herói no
-nível/equipamento do fim do r8 para confirmar as faixas acima antes de mexer nos coeficientes (todos são
-`const` em `NewGamePlusRules`).
+**Modelo rodado (§14.4)**: `tools/balance/power_stack.py` multiplica os inimigos pelo ciclo e leva o herói
+do fim do r8 (nível ~16, equipamento das Cavernas) pela rota com missões da NG+1. Resultado: a NG+1 é fácil
+na Floresta (chefe 14 s, comuns 2 s) e longa nas Cavernas (chefe 33 s), porque o multiplicador é o mesmo em
+todas as regiões e o herói sobe de 16 para 22 durante o ciclo. Os coeficientes ficaram como estão: o
+conserto é de forma (escala por região/nível), não de número.
 
-### 10.3 Testes
+### 11.3 Testes
 
 `NewGamePlusTests`: ciclo 0 não muda nada (nem arredonda), os números do NG+1 batem com a tabela, todos
 crescem até o teto e param, XP/loot nunca ficam abaixo da base, o dano nunca cresce mais que a vida, o loot
 do ciclo 0 é idêntico ao de antes com a mesma semente, a NG+5 dá mais ouro e equipamento melhor no chefe da
 Montanha, o reset/manutenção do estado, save/load, save antigo = ciclo 0 e a conquista `ach_new_journey_plus`.
 
-## 10. Cozinha da Vó Zefa: refeições do fogão a lenha (2026-10-29)
+## 12. Cozinha da Vó Zefa: refeições do fogão a lenha (2026-10-29)
 
 Serviço novo da Vila no mapa (Vila → Serviços → **Fogão a lenha**). O primo cozinha um prato com materiais
 de bioma + "mantimentos da venda" (pagos em `item_gold`, a moeda da loja) e come na hora. Dados em
 `MealCatalog`, regras em `CookingRules` (puras, `CookingTests`), estado salvo por slot em `MealService`
 (chave `VillageKitchen`), efeito aplicado na arena por `MealEffectApplier`.
 
-### 10.1 Regras
+### 12.1 Regras
 
 - **Uma refeição por vez.** Mesmo prato de novo → volta para a duração cheia (não soma). Outro prato →
   substitui o anterior. Cozinhar que falha (falta ingrediente/ouro) não gasta nada.
@@ -1082,7 +1122,7 @@ de bioma + "mantimentos da venda" (pagos em `item_gold`, a moeda da loja) e come
   (qualquer primo) **ou** a Vó ensina ao primo que ama o prato quando ele abre o fogão, se a região já
   estiver aberta. Save antigo sabe o que as missões já concluídas ensinam.
 
-### 10.2 Pratos
+### 12.2 Pratos
 
 Ouro por luta ≈ 1,8 (1,5 inimigo × 60% × 1–3 de `item_gold`, §8). Cada prato custa ~1–2 lutas de ouro
 e dura 3–4 lutas, então comer sempre custa ~⅓–½ do ouro que a luta rende. Os ingredientes são os
@@ -1093,17 +1133,18 @@ materiais comuns de §8 (madeira é a lenha; a loja também vende madeira e pedr
 | Cuscuz | StaminaRegen +30% (10 → 13/s) | 3 | madeira 1, erva 1 | 2 ouro | início |
 | Café coado | CooldownReduction +0,06 (Flat) | 3 | madeira 1, fibra 1 | 2 ouro | início |
 | Pamonha | MaxHealth +10% | 3 | madeira 2, fibra 2 | 3 ouro | `quest_region_forest_howling_trail` / Vó → Maria |
-| Rapadura | AttackSpeed +25% **nos primeiros 20 s** | 4 | madeira 2, pedra 1 | 3 ouro | `quest_region_desert_stinger_road` / Vó → Ícaro (Deserto aberto) |
+| Rapadura | AttackSpeed +12% **nos primeiros 20 s** (era +25%, §14.3) | 4 | madeira 2, pedra 1 | 3 ouro | `quest_region_desert_stinger_road` / Vó → Ícaro (Deserto aberto) |
 | Baião de dois | Defense +10% (percentual) | 3 | madeira 2, erva 2, carne assada 1 | 4 ouro | `quest_region_mountain_walking_stones` / Vó → Joaquim (Montanha aberta) |
 | Queijo coalho assado | Thorns 8% | 3 | madeira 1, minério 1, erva 1 | 4 ouro | `quest_region_caves_dark_lamps` / Vó → Lavine (Cavernas abertas) |
 
 Por que esses números: cada efeito fica na faixa de **um afixo incomum** (afixos de §7: velocidade de
 ataque +6–12%, espinhos 5–10%; café ≈ 15 pontos de Inteligência a 0,4%), porque a refeição ocupa um
-"espaço" que todo herói tem, sem raridade. A Rapadura tem o maior número mas só nos primeiros 20 s (o
-"Prepare-se!" dura 1,75 s e um comum morre em 2,5–8 s, §9.5), por isso dura uma luta a mais. Com chefe
-(21–40 s) ela cobre metade da luta.
+"espaço" que todo herói tem, sem raridade. A Rapadura vale só nos primeiros 20 s (o "Prepare-se!" dura
+1,75 s e um comum morre em 2,5–8 s, §10.5), por isso dura uma luta a mais. Ela começou com +25%, acima de
+qualquer afixo incomum: com chefe de 15–20 s cobria a luta inteira e era a melhor refeição para quase
+todo herói na pilha de poder (§14); ficou em +12%, o teto do `affix_nimble`.
 
-### 10.3 Favoritos (bônus extra e fala da Vó)
+### 12.3 Favoritos (bônus extra e fala da Vó)
 
 | Primo | Prato | Bônus extra |
 |---|---|---|
@@ -1115,21 +1156,21 @@ ataque +6–12%, espinhos 5–10%; café ≈ 15 pontos de Inteligência a 0,4%),
 
 O bônus é decidido pelo herói que está na arena, não por quem cozinhou. Cuscuz é de todo mundo e de ninguém.
 
-### 10.4 Testes
+### 12.4 Testes
 
 `CookingTests`: catálogo (2 iniciais, cada primo com exatamente um favorito, ingredientes existem em
 `Resources/Items`, CDR em Flat, burst com duração), validação e consumo (falha não gasta), empilhamento
 (renova sem somar, troca substitui), contagem por luta (vitória/fuga/derrota), aprender por missão/lição
 com trava de região, save JSON, efeitos no `BuffController` e textos do painel/HUD.
 
-## 11. Eventos aleatórios do mapa (2026-10-29)
+## 13. Eventos aleatórios do mapa (2026-10-29)
 
 Cartas de evento que aparecem **no meio de uma viagem** entre regiões do mapa-múndi. Dados em
 `WorldEventCatalog` (código, como `RegionQuestCatalog`), regras puras em `WorldEventRules` /
 `WorldEventDirector` (`WorldEventTests`), estado salvo por slot em `WorldEventState` (chave `WorldEvents`),
 carta em `WorldEventCardController`, efeitos de luta aplicados na arena por `WorldEventArenaHooks`.
 
-### 11.1 Frequência (`WorldEventSettings`)
+### 13.1 Frequência (`WorldEventSettings`)
 
 - **Um sorteio por viagem**, não por passo: uma viagem tem ~10 passos de encontro (nós a 10 m, 1 passo/m,
   carência de 8), então um sorteio por passo cairia quase sempre no fim do caminho. A carta abre entre 30% e
@@ -1143,7 +1184,7 @@ carta em `WorldEventCardController`, efeitos de luta aplicados na arena por `Wor
 - **Desligado no prólogo/tutorial:** precisa do prólogo visto, nenhuma cena de história pendente, **1 vitória**
   (a primeira luta é o tutorial), HUD visível, nada pausado e nenhuma conversa aberta.
 
-### 11.2 Eventos e pesos
+### 13.2 Eventos e pesos
 
 Peso relativo entre os elegíveis na região/hora. Noite = fase `Night` do `TimeOfDayManager` (20h–5h).
 
@@ -1153,7 +1194,7 @@ Peso relativo entre os elegíveis na região/hora. Noite = fase `Night` do `Time
 | Chuva de caju | Floresta, Deserto, de dia | 8 | cura 35% da vida no início da próxima luta | +3 vida/s na próxima luta |
 | Romeiros na estrada | todas, de dia | 8 | -1 Poção de Vida → +8 ouro, +15 XP* | +10% defesa na próxima luta |
 | Emboscada de elite | todas, qualquer hora | 6 (×1,5 à noite) | luta com elite + 1 comum | +1 h no relógio |
-| Cantoria ao pé da fogueira | todas, **só à noite** | 10 | +15% dano na próxima luta, +1 h | cura 25% na próxima luta |
+| Cantoria ao pé da fogueira | todas, **só à noite** | 10 | +8% dano na próxima luta, +1 h (era +15%, §14.3) | cura 25% na próxima luta |
 | Tempestade de areia | Deserto | 12 | viagem 50% mais lenta até chegar | +2 h no relógio |
 | Neblina na serra | Montanha | 12 | +3 h no relógio | viagem 40% mais lenta, +2 minério de ferro |
 | Eco na caverna | Cavernas | 12 | luta comum agora, +20 XP* nela | +5% crítico na próxima luta |
@@ -1168,7 +1209,7 @@ herói, que senão sobrescreveria vida/XP). Buffs usam a fonte `world_event/<sta
 inteira) e empilham com refeição, skills e equipamento; o mesmo stat de dois eventos não soma (substitui).
 Curas somam até 100%.
 
-### 11.3 Emboscada de elite (`WorldEventElite`)
+### 13.3 Emboscada de elite (`WorldEventElite`)
 
 | | Valor |
 |---|---|
@@ -1180,10 +1221,117 @@ Curas somam até 100%.
 
 Ou seja: o elite vale ~3 inimigos de XP e ~3× o loot de um comum, por uma luta ~2× mais longa contra ele.
 
-### 11.4 Testes
+### 13.4 Testes
 
 `WorldEventTests`: travas (prólogo, cena pendente, 0 vitórias, modal, conversa), elegibilidade por
 região/hora, peso noturno, distribuição dos pesos, sem repetição, recarga/azar acumulado/teto, semente
 reproduzível, frequência média 4–6 viagens, conteúdo (itens existem, B grátis, ids únicos), efeitos na mochila
 real (custo recusado não muda nada), fila de bônus aplicada em `PlayerStats`/`BuffController`, elite (grupo,
 vida/dano/tamanho), save (ida e volta, save antigo, novo jogo, registro no GameManager) e textos nos dois idiomas.
+
+## 14. Pilha de poder: refeição + relíquias + evento + carinho, NG+0 e NG+1 (r9, 2026-10-29)
+
+Depois do r8 entraram cinco fontes de poder, todas modificadores no mesmo `BuffController`, cada uma
+balanceada sozinha: refeições (§12), relíquias (`RelicDefinition`/`RelicPassiveApplier`), buffs de evento
+da estrada (§13), o carinho no Caramelo (`CarameloCuddle`) e a Nova Jornada+ (§11). O bestiário não dá
+poder. Golpe em dupla e as lojas novas ainda estavam sendo escritos e ficaram de fora desta rodada.
+
+### 14.1 Método (`tools/balance/power_stack.py`)
+
+```
+python -I tools/balance/power_stack.py                    # relatório (as tabelas abaixo saem dele)
+uv run --no-project --with pytest python -m pytest -q -p no:cacheprovider tools/balance   # testes do modelo
+```
+
+- Os números de cada fonte são lidos do C# (`MealCatalog`, `RelicDefinition`, `WorldEventCatalog`,
+  `CarameloCuddle`, `NewGamePlusRules`), então o relatório acompanha o código.
+- Herói de referência: o do r8 (rota com missões, nível, atributos, pontos de skill e equipamento médio do
+  Monte Carlo, §10.1), com os mesmos fatores de calibração jogo/modelo.
+- **Pilha completa** = a melhor refeição para aquele herói e luta (com o bônus de favorito) + todas as
+  relíquias das regiões já abertas (3 / 6 / 9 / 12 na NG+0; as 12 na NG+1; ×2 para o dono) + o melhor buff
+  de evento + o carinho (só MoveSpeed: 0 em combate). Na prática o evento escolhido é sempre a Cantoria.
+  Toda refeição do `MealCatalog` entra na disputa, inclusive as da pesca (tilápia: ManaRegen +25%; caldo
+  de piaba: +1,5 HP/s), tratadas como disponíveis desde o início.
+- **NG+1**: inimigos ×1,8 de vida e ×1,5 de dano, XP de abate ×1,5, missões regionais de novo (XP sem
+  escala); o herói começa com o nível do fim da NG+0 e o equipamento das Cavernas (drops novos ignorados:
+  conservador).
+- O modelo ganhou: Defense e MaxHealth percentuais, ResourceCostReduction, ManaRegen percentual e um bônus
+  de velocidade de ataque só no começo da luta. Sem nenhuma dessas fontes ele dá exatamente a saída do r8.
+- Limite: o passo de 20 ms arredonda o intervalo do básico, então +2% e +3% de velocidade de ataque dão o
+  mesmo resultado.
+
+### 14.2 Diagnóstico (antes do ajuste)
+
+Média dos 5 heróis, segundos "no jogo". Meta do r8: comuns 4–7 s, chefes 15–22 s.
+
+| Ciclo | Bioma | Chefe: r8 → pilha | Comuns: r8 → pilha | Só básico com a pilha: mata / chefe mata em |
+|---|---|---|---|---|
+| NG+0 | Floresta | 16,5 → **12,2** (−26%) | 4,8 → 3,4 | 17,4 / 21,8 |
+| NG+0 | Deserto | 18,2 → **12,4** (−32%) | 6,1 → 3,4 | 16,8 / 23,0 |
+| NG+0 | Montanha | 18,4 → **12,2** (−34%) | 6,4 → 3,9 | 18,0 / 25,2 |
+| NG+0 | Cavernas | 20,0 → **13,2** (−34%) | 4,6 → 2,7 | 20,9 / 29,6 |
+| NG+1 | Floresta | 14,3 → 9,4 (−34%) | 2,2 → 1,0 | 16,0 / 50,0 |
+| NG+1 | Cavernas | 33,4 → 23,3 (−30%) | 7,4 → 4,9 | 35,3 / 25,9 |
+
+- A pilha deixava **todo chefe abaixo de 15 s** e quem só usava o ataque básico vencia com folga (a regra
+  do r8 "só no básico o chefe mata primeiro" caía em todos os biomas).
+- Três peças faziam quase tudo (efeito sozinho no chefe da NG+0): **Canivete do Vô Chico** +2 de dano
+  plano (−10 a −13%: num básico de 10, +2 é +20%), **Cantoria** +15% de dano (−12 a −14%) e **Rapadura**
+  +25% de velocidade de ataque por 20 s (−11 a −13%: cobre a luta inteira de um chefe). As outras
+  relíquias somadas pesam ~4%; café, pamonha, baião e cuscuz quase nada no tempo para matar.
+- O lado defensivo não quebra nada: com a pilha mais defensiva (baião/pamonha + chuva de caju/romeiros)
+  o chefe leva 37–66 s para matar o herói parado, mas é exatamente para isso que defesa serve.
+
+### 14.3 Orçamento e mudanças aplicadas (antes → depois)
+
+Orçamento da pilha completa (`power_stack.violations`, travado no pytest): no máximo **~22% mais rápida**
+contra chefes e **~30%** contra comuns do que o herói do r8 (o p90 de sorte no loot já dá ~15%, §10.4); na
+NG+0, quem só usa o básico vence no máximo "por um fio" (mata em ≥ 90% do tempo que o chefe leva para matá-lo);
+o chefe mata o herói parado em 12–40 s.
+
+| Onde | Campo | Antes | Depois |
+|---|---|---|---|
+| `RelicDefinition` (`relic_canivete_vo_chico`) | AttackDamage plano | +2 | **+1** (o mínimo de um afixo Afiada) |
+| `WorldEventCatalog` (Cantoria ao pé da fogueira) | AttackDamage % na próxima luta | +15% | **+8%** |
+| `MealCatalog` (Rapadura) | AttackSpeed nos primeiros 20 s | +25% | **+12%** (o teto do `affix_nimble`) |
+
+Sem mudança: as outras 11 relíquias e o ×2 do dono, as outras refeições e favoritos, os outros eventos
+(crítico +5% do eco só existe nas Cavernas e perde para a Cantoria), o carinho, os coeficientes da NG+
+(§14.4) e todos os inimigos (as invariantes do r8 continuam valendo sem pilha). Textos: `SecretTexts`,
+`KitchenTexts`; o texto da carta do evento sai do valor. Testes: `WorldEventTests` ("+8% de dano").
+
+### 14.4 Resultado (depois)
+
+**Orçamento de poder** (média dos 5 heróis, segundos "no jogo"; pilha = melhor refeição + relíquias + Cantoria):
+
+| Ciclo | Bioma (níveis comuns / chefe) | Relíquias | Chefe: r8 → só relíquias → pilha | Comuns: r8 → pilha | Só básico com a pilha: mata / chefe mata em | Refeição mais usada |
+|---|---|---|---|---|---|---|
+| NG+0 | Floresta (2 / 3) | 3 | 16,5 → 15,3 → **13,8** (−16%) | 4,8 → **3,8** (−22%) | 19,9 / 21,8 | café coado |
+| NG+0 | Deserto (5 / 7) | 6 | 18,2 → 17,3 → **14,9** (−18%) | 6,1 → **4,8** (−22%) | 22,4 / 23,0 | rapadura |
+| NG+0 | Montanha (9 / 10) | 9 | 18,4 → 16,6 → **14,4** (−22%) | 6,4 → **4,9** (−24%) | 23,4 / 25,2 | rapadura |
+| NG+0 | Cavernas (13 / 15) | 12 | 20,0 → 18,4 → **16,2** (−19%) | 4,6 → **3,5** (−24%) | 27,4 / 29,6 | rapadura |
+| NG+1 | Floresta (16 / 17) | 12 | 14,3 → 12,6 → **11,5** (−20%) | 2,2 → **1,7** | 21,0 / 50,0 | rapadura |
+| NG+1 | Deserto (17 / 18) | 12 | 23,0 → 20,4 → **18,2** (−21%) | 4,6 → **3,7** | 30,5 / 32,6 | queijo coalho |
+| NG+1 | Montanha (19 / 20) | 12 | 25,9 → 23,2 → **20,9** (−19%) | 6,7 → **4,8** (−29%) | 34,0 / 29,4 | rapadura |
+| NG+1 | Cavernas (21 / 22) | 12 | 33,4 → 30,0 → **26,6** (−20%) | 7,4 → **6,1** | 42,7 / 25,9 | queijo coalho |
+
+- **NG+0**: a pilha completa vale −16 a −22% no chefe e −22 a −24% nos comuns, dentro do orçamento. Os
+  chefes ficam em 13,8–16,2 s (a meta absoluta é 15–22 s para o herói sem pilha; quem junta tudo fica um
+  pouco abaixo, como quem tira uma arma de sorte). Só no básico, o herói com tudo vence por um fio (mata em
+  92–97% do tempo que o chefe leva) em vez de folgado (71–80% antes). A Montanha fica a 0,5 pp do teto
+  do orçamento: a próxima fonte de dano precisa sair de algum lugar.
+- **NG+1**: a pilha também fica em −19 a −21%. O que sai da meta é da própria NG+, com ou sem pilha:
+  multiplicador igual em todas as regiões, herói subindo de 16 para 22 durante o ciclo. Floresta trivial
+  (chefe 14 s, comuns 2 s, chefe leva 45–50 s para matar o herói parado) e Cavernas longa (chefe 27–33 s).
+  Fica para uma rodada de forma (escala da NG+ por região ou pelo nível do herói), não de coeficiente.
+- Golpe em dupla e lojas novas: rodar `power_stack.py` de novo quando entrarem. Uma fonte nova de dano
+  plano ou percentual deve caber no orçamento acima (o pytest falha se não couber).
+
+### 14.5 Testes
+
+`tools/balance/test_power_stack.py` (pytest, via `uv`): fontes lidas do C# (6 refeições, 12 relíquias,
+dono ×2, eventos, NG+), os valores do ajuste, carinho sem stat de combate, frações com base 0 (§7.6),
+vida/defesa percentuais, bônus de abertura só nos seus segundos, relíquias por região e bônus do dono,
+refeições por região, escala de inimigos da NG+, a pilha nunca alonga uma luta, **orçamento da pilha na
+NG+0 e na NG+1**, chefe com a pilha ≥ 13,5 s na NG+0 e NG+1 mais difícil que NG+0 do Deserto em diante.
+C#: `ZeroBaseFractionStatTests` (§7.6) e `WorldEventTests` com o novo texto da Cantoria.
