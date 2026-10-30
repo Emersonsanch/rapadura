@@ -84,6 +84,38 @@ namespace Rapadura.UI.Story
         /// <summary>True while a story beat (or the credits it opened) is on screen.</summary>
         public static bool IsShowing => _instance != null && (_instance._sequence != null || _instance._credits != null);
 
+        /// <summary>Panel index / count of the beat on screen (-1 / 0 when idle), e.g. for the PlayMode campaign test.</summary>
+        public static int ShowingPanelIndex => _instance != null && _instance._sequence != null ? _instance._sequence.Index : -1;
+
+        public static int ShowingPanelCount => _instance != null && _instance._sequence != null ? _instance._sequence.Count : 0;
+
+        /// <summary>
+        /// Same as tapping / "Continuar" / Space on the beat on screen (the double-tap cooldown applies,
+        /// so call it at most every <see cref="AdvanceCooldownSeconds"/> of real time). False when no beat is up.
+        /// </summary>
+        public static bool AdvanceShowing()
+        {
+            if (_instance == null || _instance._sequence == null)
+            {
+                return false;
+            }
+
+            _instance.Advance();
+            return true;
+        }
+
+        /// <summary>Same as "Pular" / cancel on the beat on screen: ends it, still counted as seen. False when no beat is up.</summary>
+        public static bool SkipShowing()
+        {
+            if (_instance == null || _instance._sequence == null)
+            {
+                return false;
+            }
+
+            _instance.Skip();
+            return true;
+        }
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
         {

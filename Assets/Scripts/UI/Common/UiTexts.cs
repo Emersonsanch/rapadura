@@ -108,6 +108,38 @@ namespace Rapadura.UI.Common
         public const string CreditsSectionTools = "ui.credits.section.tools";
         public const string CreditsSectionThirdParty = "ui.credits.section.third_party";
         public const string CreditsSectionThanks = "ui.credits.section.thanks";
+        public const string CreditsSectionCast = "ui.credits.section.cast";
+        public const string CreditsSectionClosing = "ui.credits.section.closing";
+        /// <summary>Prefix of the credits body lines (<c>ui.credits.line.*</c>, listed in CreditsContent).</summary>
+        public const string CreditsLinePrefix = "ui.credits.line.";
+        public const string CreditsLineStudio = CreditsLinePrefix + "studio";
+        public const string CreditsLineCreator = CreditsLinePrefix + "creator";
+        public const string CreditsLineMaithe = CreditsLinePrefix + "cast.maithe";
+        public const string CreditsLineMaria = CreditsLinePrefix + "cast.maria";
+        public const string CreditsLineJoaquim = CreditsLinePrefix + "cast.joaquim";
+        public const string CreditsLineIcaro = CreditsLinePrefix + "cast.icaro";
+        public const string CreditsLineLavine = CreditsLinePrefix + "cast.lavine";
+        public const string CreditsLineUnity = CreditsLinePrefix + "tools.unity";
+        public const string CreditsLineUnityPackages = CreditsLinePrefix + "tools.unity_packages";
+        public const string CreditsLineMeshyTool = CreditsLinePrefix + "tools.meshy";
+        public const string CreditsLineMocapTool = CreditsLinePrefix + "tools.mocap";
+        public const string CreditsLineFbx2Gltf = CreditsLinePrefix + "tools.fbx2gltf";
+        public const string CreditsLineMcpForUnity = CreditsLinePrefix + "tools.mcp_for_unity";
+        public const string CreditsLineClaudeCode = CreditsLinePrefix + "tools.claude_code";
+        public const string CreditsLineCmuDatabase = CreditsLinePrefix + "third_party.cmu";
+        public const string CreditsLineCmuAttribution = CreditsLinePrefix + "third_party.cmu_attribution";
+        public const string CreditsLineCmuConversion = CreditsLinePrefix + "third_party.cmu_conversion";
+        public const string CreditsLineMeshyAssets = CreditsLinePrefix + "third_party.meshy";
+        public const string CreditsLineUnityLicense = CreditsLinePrefix + "third_party.unity_companion";
+        public const string CreditsLineGltfast = CreditsLinePrefix + "third_party.gltfast";
+        public const string CreditsLineNewtonsoft = CreditsLinePrefix + "third_party.newtonsoft";
+        public const string CreditsLineTextures = CreditsLinePrefix + "third_party.textures";
+        public const string CreditsLineFonts = CreditsLinePrefix + "third_party.fonts";
+        public const string CreditsLineFullList = CreditsLinePrefix + "third_party.full_list";
+        public const string CreditsLineThanksCousins = CreditsLinePrefix + "thanks.cousins";
+        public const string CreditsLineThanksPlayer = CreditsLinePrefix + "thanks.player";
+        public const string CreditsLineClosing = CreditsLinePrefix + "closing";
+        public const string CreditsSkipHint = "ui.credits.skip_hint";
 
         // -- Death screen --
         public const string DeathTitle = "ui.death.title";
@@ -205,6 +237,38 @@ namespace Rapadura.UI.Common
             new LocalizationEntry(CreditsSectionTools, "Tools", "Ferramentas"),
             new LocalizationEntry(CreditsSectionThirdParty, "Third-party libraries and licenses", "Bibliotecas e licenças de terceiros"),
             new LocalizationEntry(CreditsSectionThanks, "Thanks", "Agradecimentos"),
+            new LocalizationEntry(CreditsSectionCast, "The cousins", "Os primos"),
+            new LocalizationEntry(CreditsSectionClosing, "Until next time", "Até a próxima"),
+            new LocalizationEntry(CreditsLineStudio, "A game by Engenho Estúdio", "Um jogo do Engenho Estúdio"),
+            new LocalizationEntry(CreditsLineCreator, "Emerson Leandro Sanches — creator, design and programming", "Emerson Leandro Sanches — criação, design e programação"),
+            new LocalizationEntry(CreditsLineMaithe, "Maithe — the Wind Archer, the eldest", "Maithe — a Arqueira dos Ventos, a mais velha"),
+            new LocalizationEntry(CreditsLineMaria, "Maria — the Healer of Light", "Maria — a Curandeira da Luz"),
+            new LocalizationEntry(CreditsLineJoaquim, "Joaquim — the Guardian of the Roots", "Joaquim — o Guardião das Raízes"),
+            new LocalizationEntry(CreditsLineIcaro, "Ícaro — the Master of Machines", "Ícaro — o Mestre das Máquinas"),
+            new LocalizationEntry(CreditsLineLavine, "Lavine — the Shadow Sorceress, the youngest", "Lavine — a Feiticeira das Sombras, a caçula"),
+            new LocalizationEntry(CreditsLineUnity, "Made with Unity 6 — Universal Render Pipeline (URP) and UI Toolkit", "Feito em Unity 6 — Universal Render Pipeline (URP) e UI Toolkit"),
+            new LocalizationEntry(CreditsLineUnityPackages, "Input System, Addressables and TextMesh Pro (Unity)", "Input System, Addressables e TextMesh Pro (Unity)"),
+            new LocalizationEntry(CreditsLineMeshyTool, "Meshy — AI-generated 3D models and rigs", "Meshy — modelos 3D e rigs gerados por IA"),
+            new LocalizationEntry(CreditsLineMocapTool, "Mocap pipeline in Python (numpy, scipy)", "Pipeline de mocap em Python (numpy, scipy)"),
+            new LocalizationEntry(CreditsLineFbx2Gltf, "FBX2glTF (Meta) — model conversion", "FBX2glTF (Meta) — conversão de modelos"),
+            new LocalizationEntry(CreditsLineMcpForUnity, "MCP for Unity (Coplay) — Editor automation", "MCP for Unity (Coplay) — automação do Editor"),
+            new LocalizationEntry(CreditsLineClaudeCode, "Made with Claude Code (Anthropic)", "Feito com Claude Code (Anthropic)"),
+            new LocalizationEntry(CreditsLineCmuDatabase, "Hero animations: CMU Graphics Lab Motion Capture Database", "Animações dos heróis: CMU Graphics Lab Motion Capture Database"),
+            new LocalizationEntry(CreditsLineCmuAttribution, "Motion capture data from mocap.cs.cmu.edu (NSF EIA-0196217)", "Dados de captura de movimento de mocap.cs.cmu.edu (NSF EIA-0196217)"),
+            new LocalizationEntry(CreditsLineCmuConversion, "BVH conversion by Bruce Hahne (cgspeed)", "Conversão BVH de Bruce Hahne (cgspeed)"),
+            new LocalizationEntry(CreditsLineMeshyAssets, "Heroes, enemies and trees generated with Meshy — under the Meshy Terms of Service", "Heróis, inimigos e árvores gerados com Meshy — conforme os Termos de Serviço da Meshy"),
+            new LocalizationEntry(CreditsLineUnityLicense, "Unity packages (URP, Input System, Addressables, uGUI, TextMesh Pro) — Unity Companion License", "Pacotes Unity (URP, Input System, Addressables, uGUI, TextMesh Pro) — Unity Companion License"),
+            new LocalizationEntry(CreditsLineGltfast, "glTFast (com.unity.cloud.gltfast) — Apache License 2.0", "glTFast (com.unity.cloud.gltfast) — Apache License 2.0"),
+            new LocalizationEntry(CreditsLineNewtonsoft, "Json.NET (Newtonsoft, James Newton-King) — MIT License", "Json.NET (Newtonsoft, James Newton-King) — Licença MIT"),
+            new LocalizationEntry(CreditsLineTextures, "Textures, rocks and ground detail — procedurally generated for the game", "Texturas, rochas e detalhes do chão — gerados proceduralmente para o jogo"),
+            new LocalizationEntry(CreditsLineFonts, "Font: the Unity UI Toolkit default", "Fonte: a padrão do UI Toolkit da Unity"),
+            new LocalizationEntry(CreditsLineFullList, "Full list: Docs/ThirdPartyLicenses.md", "Lista completa: Docs/ThirdPartyLicenses.md"),
+            new LocalizationEntry(CreditsLineThanksCousins, "To Maithe, Maria, Joaquim, Ícaro and Lavine, who carried this story on their backs.", "A Maithe, Maria, Joaquim, Ícaro e Lavine, que carregam esta história nas costas."),
+            new LocalizationEntry(CreditsLineThanksPlayer, "And to you, for walking the sertão with them. Thank you for playing!", "E a você, por caminhar com eles pelo sertão. Obrigado por jogar!"),
+            new LocalizationEntry(CreditsLineClosing,
+                "On Grandma Zefa's porch there is still corn cake, a full jar of rapadura and a seat saved for you.",
+                "Na varanda da Vó Zefa ainda tem bolo de milho, o pote de rapadura cheio e um lugar guardado para você."),
+            new LocalizationEntry(CreditsSkipHint, "Tap or press Esc / B to close", "Toque ou aperte Esc / B para fechar"),
 
             new LocalizationEntry(DeathTitle, "You fell...", "Você caiu..."),
             new LocalizationEntry(DeathMessage, "The sertão shows no mercy, but the journey goes on.", "O sertão não perdoa, mas a jornada continua."),

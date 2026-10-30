@@ -24,7 +24,10 @@ namespace Rapadura.UI.Encounter
     /// the first scene loads (no scene wiring), borrowing the PanelSettings of the HUD (or any other
     /// UIDocument). The view is built in code, has picking-mode Ignore everywhere (never blocks
     /// combat input) and disappears after <see cref="_displaySeconds"/> of game time. With
-    /// "Reduzir Movimento" (or "Reduzir Flashes") on it appears/disappears without the fade.
+    /// "Reduzir Movimento" (or "Reduzir Flashes") on it appears/disappears without the fade. The look
+    /// (theme palette, plate, borders, fonts, fade durations) lives in Resources/UI/EncounterOverlays.uss,
+    /// attached at runtime by <see cref="EncounterOverlayStyles"/>; code only toggles display / opacity
+    /// and the fade-speed classes (<see cref="QuickFadeClass"/>, <see cref="InstantFadeClass"/>).
     ///
     /// The same banner plays the encounter intro (<see cref="EncounterIntroEvent"/>) for normal
     /// encounters: "Prepare-se!" over a 2… 1… countdown matching the grace during which the enemies
@@ -39,7 +42,19 @@ namespace Rapadura.UI.Encounter
     public class BossIntroBannerController : MonoBehaviour
     {
         public const float SortingOrder = 850f;
+        // Must match .boss-intro-banner transition-duration in EncounterOverlays.uss (the hide waits for the fade).
         private const float FadeSeconds = 0.35f;
+
+        public const string RootName = "boss-intro-root";
+        public const string RootClass = "boss-intro-root";
+        public const string BannerName = "boss-intro-banner";
+        public const string BannerClass = "boss-intro-banner";
+        public const string TitleName = "boss-intro-title";
+        public const string NameLabelName = "boss-intro-name";
+        /// <summary>Half-length fade, used by the "Prepare-se!" countdown.</summary>
+        public const string QuickFadeClass = "boss-intro-banner--quick";
+        /// <summary>No fade (reduced motion / flashes).</summary>
+        public const string InstantFadeClass = "boss-intro-banner--instant";
 
         [Tooltip("Seconds the banner stays fully visible (game time; held while paused).")]
         [SerializeField, Min(0.5f)] private float _displaySeconds = 2.5f;
@@ -190,7 +205,7 @@ namespace Rapadura.UI.Encounter
 
             ServiceLocator.TryGet(out AccessibilitySettings accessibility);
             _noMotion = accessibility != null && accessibility.SuppressUiMotion;
-            SetFade(_noMotion ? 0f : FadeSeconds * 0.5f);
+            SetFade(_noMotion ? FadeMode.Instant : FadeMode.Quick);
             BeginShowing();
             _banner.style.opacity = 1f;
             UiAccessibilityApplier.RequestRefresh();
@@ -285,7 +300,7 @@ namespace Rapadura.UI.Encounter
             ServiceLocator.TryGet(out AccessibilitySettings accessibility);
             bool noMotion = accessibility != null && accessibility.SuppressUiMotion;
             _noMotion = noMotion;
-            SetFade(noMotion ? 0f : FadeSeconds);
+            SetFade(noMotion ? FadeMode.Instant : FadeMode.Normal);
 
             BeginShowing();
             if (noMotion)
@@ -339,10 +354,14 @@ namespace Rapadura.UI.Encounter
             }
         }
 
-        private void SetFade(float seconds)
+        private enum FadeMode { Normal, Quick, Instant }
+
+        /// <summary>Picks the fade length through USS classes (the durations are in EncounterOverlays.uss).</summary>
+        private void SetFade(FadeMode mode)
         {
-            _banner.style.transitionProperty = new StyleList<StylePropertyName>(new System.Collections.Generic.List<StylePropertyName> { new StylePropertyName("opacity") });
-            _banner.style.transitionDuration = new StyleList<TimeValue>(new System.Collections.Generic.List<TimeValue> { new TimeValue(seconds, TimeUnit.Second) });
+            _banner.EnableInClassList(QuickFadeClass, mode == FadeMode.Quick);
+            _banner.EnableInClassList(InstantFadeClass, mode == FadeMode.Instant);
+            UiMotionPreferences.ApplyTo(_root, mode == FadeMode.Instant);
         }
 
         /// <summary>Gives the document a panel (borrowed PanelSettings) and builds the view once. False until it can render.</summary>
@@ -383,60 +402,39 @@ namespace Rapadura.UI.Encounter
 
         private void BuildView(VisualElement documentRoot)
         {
-            _root = new VisualElement { name = "boss-intro-root", pickingMode = PickingMode.Ignore };
-            _root.style.position = Position.Absolute;
-            _root.style.left = 0;
-            _root.style.right = 0;
-            // Below the compact tutorial hint strip at the top of the screen.
-            _root.style.top = Length.Percent(26);
-            _root.style.alignItems = Align.Center;
-
-            _banner = new VisualElement { name = "boss-intro-banner", pickingMode = PickingMode.Ignore };
-            _banner.AddToClassList("boss-intro-banner");
-            _banner.style.paddingLeft = 32;
-            _banner.style.paddingRight = 32;
-            _banner.style.paddingTop = 10;
-            _banner.style.paddingBottom = 12;
-            _banner.style.maxWidth = Length.Percent(90);
-            _banner.style.alignItems = Align.Center;
-            // UI Toolkit blends in linear space: 0.82 (even 0.92) alpha still read washed out over the bright
-            // Desert sand / Mountain snow, so the plate is nearly opaque and the text gets a shadow.
-            _banner.style.backgroundColor = new Color(0.08f, 0.03f, 0.02f, 0.97f);
-            Color border = new Color(0.85f, 0.62f, 0.22f, 1f);
-            _banner.style.borderTopWidth = 2;
-            _banner.style.borderBottomWidth = 2;
-            _banner.style.borderTopColor = border;
-            _banner.style.borderBottomColor = border;
-            _banner.style.display = DisplayStyle.None;
-            _banner.style.opacity = 0f;
-
-            _titleLabel = new Label { name = "boss-intro-title", pickingMode = PickingMode.Ignore };
-            _titleLabel.style.fontSize = 18;
-            _titleLabel.style.color = border;
-            _titleLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
-            _titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-            _titleLabel.style.textShadow = TextShadowStyle;
-
-            _nameLabel = new Label { name = "boss-intro-name", pickingMode = PickingMode.Ignore };
-            _nameLabel.style.fontSize = 36;
-            _nameLabel.style.color = new Color(0.98f, 0.94f, 0.86f, 1f);
-            _nameLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
-            _nameLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-            _nameLabel.style.whiteSpace = WhiteSpace.Normal;
-            _nameLabel.style.textShadow = TextShadowStyle;
-
-            _banner.Add(_titleLabel);
-            _banner.Add(_nameLabel);
-            _root.Add(_banner);
+            _root = CreateView(UiMotionPreferences.IsReducedMotion());
+            _banner = _root.Q<VisualElement>(BannerName);
+            _titleLabel = _root.Q<Label>(TitleName);
+            _nameLabel = _root.Q<Label>(NameLabelName);
             documentRoot.Add(_root);
         }
 
-        private static TextShadow TextShadowStyle => new TextShadow
+        /// <summary>
+        /// The banner tree (root → plate → title + name), hidden, picking-mode Ignore throughout, themed via
+        /// <see cref="EncounterOverlayStyles"/>. No inline look: everything visual is a USS class. EditMode-testable.
+        /// </summary>
+        public static VisualElement CreateView(bool reducedMotion)
         {
-            offset = new Vector2(1.5f, 1.5f),
-            blurRadius = 2f,
-            color = new Color(0f, 0f, 0f, 0.9f),
-        };
+            var root = new VisualElement { name = RootName, pickingMode = PickingMode.Ignore };
+            root.AddToClassList(RootClass);
+            EncounterOverlayStyles.ApplyTo(root, reducedMotion);
+
+            var banner = new VisualElement { name = BannerName, pickingMode = PickingMode.Ignore };
+            banner.AddToClassList(BannerClass);
+            banner.style.display = DisplayStyle.None;
+            banner.style.opacity = 0f;
+
+            var title = new Label { name = TitleName, pickingMode = PickingMode.Ignore };
+            title.AddToClassList(TitleName);
+
+            var nameLabel = new Label { name = NameLabelName, pickingMode = PickingMode.Ignore };
+            nameLabel.AddToClassList(NameLabelName);
+
+            banner.Add(title);
+            banner.Add(nameLabel);
+            root.Add(banner);
+            return root;
+        }
 
         private PanelSettings FindPanelSettings()
         {

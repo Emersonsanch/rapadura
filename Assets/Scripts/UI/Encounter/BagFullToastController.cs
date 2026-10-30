@@ -7,6 +7,7 @@ using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Enemies;
+using Rapadura.UI.Common;
 using Rapadura.UI.HUD;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -23,11 +24,19 @@ namespace Rapadura.UI.Encounter
     /// Self-bootstrapping like <see cref="BossIntroBannerController"/>: one DontDestroyOnLoad host, PanelSettings
     /// borrowed from the HUD, view built in code with picking-mode Ignore (never blocks input). A new overflow while
     /// the toast is up merges into it and restarts its timer. Real time (the toast is information, not gameplay);
-    /// hidden while <see cref="GameplayPause.IsPaused"/> because it sorts above the pause menu.
+    /// hidden while <see cref="GameplayPause.IsPaused"/> because it sorts above the pause menu. The look (theme
+    /// palette, warning border, fonts) lives in Resources/UI/EncounterOverlays.uss, attached at runtime by
+    /// <see cref="EncounterOverlayStyles"/>; the toast has no animation, so reduced motion changes nothing here.
     /// </summary>
     public class BagFullToastController : MonoBehaviour
     {
         public const float SortingOrder = 840f;
+
+        public const string RootName = "bag-full-root";
+        public const string ToastName = "bag-full-toast";
+        public const string TitleName = "bag-full-title";
+        public const string LostName = "bag-full-lost";
+        public const string HintName = "bag-full-hint";
 
         [Tooltip("Seconds the toast stays up after the last overflow (real time).")]
         [SerializeField, Min(0.5f)] private float _displaySeconds = 3.5f;
@@ -245,63 +254,39 @@ namespace Rapadura.UI.Encounter
 
         private void BuildView(VisualElement documentRoot)
         {
-            _root = new VisualElement { name = "bag-full-root", pickingMode = PickingMode.Ignore };
-            _root.style.position = Position.Absolute;
-            _root.style.left = 0;
-            _root.style.right = 0;
-            // Above the skill bar / joystick row, clear of the boss banner (26% from the top).
-            _root.style.bottom = Length.Percent(24);
-            _root.style.alignItems = Align.Center;
-
-            Color warning = CombatFxManager.LootWarningColor;
-            _toast = new VisualElement { name = "bag-full-toast", pickingMode = PickingMode.Ignore };
-            _toast.AddToClassList("bag-full-toast");
-            _toast.style.paddingLeft = 22;
-            _toast.style.paddingRight = 22;
-            _toast.style.paddingTop = 8;
-            _toast.style.paddingBottom = 10;
-            _toast.style.maxWidth = Length.Percent(80);
-            _toast.style.alignItems = Align.Center;
-            _toast.style.backgroundColor = new Color(0.10f, 0.04f, 0.03f, 0.95f);
-            _toast.style.borderTopWidth = 2;
-            _toast.style.borderBottomWidth = 2;
-            _toast.style.borderLeftWidth = 2;
-            _toast.style.borderRightWidth = 2;
-            _toast.style.borderTopColor = warning;
-            _toast.style.borderBottomColor = warning;
-            _toast.style.borderLeftColor = warning;
-            _toast.style.borderRightColor = warning;
-            _toast.style.borderTopLeftRadius = 8;
-            _toast.style.borderTopRightRadius = 8;
-            _toast.style.borderBottomLeftRadius = 8;
-            _toast.style.borderBottomRightRadius = 8;
-            _toast.style.display = DisplayStyle.None;
-
-            _titleLabel = MakeLabel("bag-full-title", 24, warning, FontStyle.Bold);
-            _lostLabel = MakeLabel("bag-full-lost", 17, new Color(0.98f, 0.94f, 0.86f, 1f), FontStyle.Normal);
-            _hintLabel = MakeLabel("bag-full-hint", 14, new Color(0.85f, 0.80f, 0.72f, 1f), FontStyle.Italic);
-
-            _toast.Add(_titleLabel);
-            _toast.Add(_lostLabel);
-            _toast.Add(_hintLabel);
-            _root.Add(_toast);
+            _root = CreateView(UiMotionPreferences.IsReducedMotion());
+            _toast = _root.Q<VisualElement>(ToastName);
+            _titleLabel = _root.Q<Label>(TitleName);
+            _lostLabel = _root.Q<Label>(LostName);
+            _hintLabel = _root.Q<Label>(HintName);
             documentRoot.Add(_root);
         }
 
-        private static Label MakeLabel(string name, int fontSize, Color color, FontStyle style)
+        /// <summary>
+        /// The toast tree (root → plate → title, lost items, hint), hidden, picking-mode Ignore throughout, themed
+        /// via <see cref="EncounterOverlayStyles"/>. No inline look: everything visual is a USS class. EditMode-testable.
+        /// </summary>
+        public static VisualElement CreateView(bool reducedMotion)
+        {
+            var root = new VisualElement { name = RootName, pickingMode = PickingMode.Ignore };
+            root.AddToClassList(RootName);
+            EncounterOverlayStyles.ApplyTo(root, reducedMotion);
+
+            var toast = new VisualElement { name = ToastName, pickingMode = PickingMode.Ignore };
+            toast.AddToClassList(ToastName);
+            toast.style.display = DisplayStyle.None;
+
+            toast.Add(MakeLabel(TitleName));
+            toast.Add(MakeLabel(LostName));
+            toast.Add(MakeLabel(HintName));
+            root.Add(toast);
+            return root;
+        }
+
+        private static Label MakeLabel(string name)
         {
             var label = new Label { name = name, pickingMode = PickingMode.Ignore };
-            label.style.fontSize = fontSize;
-            label.style.color = color;
-            label.style.unityTextAlign = TextAnchor.MiddleCenter;
-            label.style.unityFontStyleAndWeight = style;
-            label.style.whiteSpace = WhiteSpace.Normal;
-            label.style.textShadow = new TextShadow
-            {
-                offset = new Vector2(1.5f, 1.5f),
-                blurRadius = 2f,
-                color = new Color(0f, 0f, 0f, 0.9f),
-            };
+            label.AddToClassList(name);
             return label;
         }
 

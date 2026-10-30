@@ -49,6 +49,25 @@ namespace Rapadura.Tests
             "Resources/UI/VillageChestView.uxml",
         };
 
+        /// <summary>
+        /// Assets-relative USS of code-built views with no UXML (loaded from Resources at runtime and attached
+        /// to a root that gets <c>rap-theme</c> in code, see EncounterOverlayStyles / CreditsRollTests).
+        /// They pull the theme in with <c>@import</c> instead of a UXML &lt;Style&gt;.
+        /// </summary>
+        private static readonly string[] CodeThemedSheets =
+        {
+            "Resources/UI/EncounterOverlays.uss",
+        };
+
+        [Test]
+        public void CodeThemedSheets_ImportTheTheme()
+        {
+            foreach (string path in CodeThemedSheets)
+            {
+                StringAssert.Contains($"@import url(\"{ThemePath}\")", Read(path), $"{path} does not import the theme");
+            }
+        }
+
         [Test]
         public void EveryScreen_ImportsTheThemeFirst_AndMarksItsRoot()
         {
@@ -95,7 +114,7 @@ namespace Rapadura.Tests
         public void UssUsingThemeVariables_BelongsToAThemedScreen()
         {
             // A var() outside a rap-theme subtree resolves to nothing (transparent / default colour).
-            var themedSheets = new HashSet<string>();
+            var themedSheets = new HashSet<string>(CodeThemedSheets);
             foreach (string path in ThemedScreens)
             {
                 foreach (Match style in Regex.Matches(Read(path), "<Style src=\"/Assets/(?<src>[^\"]+)\""))

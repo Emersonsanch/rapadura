@@ -11,7 +11,9 @@
  * Used by every screen: title, hero select, world-map HUD (+ the code-built village hub), encounter
  * HUD, Mochila + tooltip, shop, crafting, quest log / tracker, character sheet, skill tree,
  * achievements (list + toast), pause, settings, save/load, credits, death screen, return-to-title
- * dialog, dialogue box, story panel and tutorial hint (ThemeAdoptionTests keeps the list). Screens
+ * dialog, dialogue box, story panel and tutorial hint (ThemeAdoptionTests keeps the list), plus the
+ * code-built arena overlays (boss banner, bag-full toast) through Resources/UI/EncounterOverlays.uss,
+ * which @imports this sheet. Screens
  * whose rows are created in code style those rows on their own classes with the variables below.
  * HUD pieces over the 3D world stay >= 0.85 opaque (UI blends in linear space: lighter panels wash
  * out over desert sand / snow).
@@ -34,6 +36,7 @@
     --rap-cream-dim: rgb(222, 200, 166);
     --rap-cane-green: rgb(112, 146, 62);
     --rap-clay-red: rgb(178, 72, 40);
+    --rap-warning: rgb(255, 107, 64); /* = CombatFxManager.LootWarningColor ("Sem espaço", "Mochila cheia") */
     --rap-panel-bg: rgba(46, 27, 16, 0.92);
     --rap-panel-border: rgb(150, 96, 48);
     --rap-focus: rgb(255, 224, 140);

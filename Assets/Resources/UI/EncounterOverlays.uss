@@ -1,0 +1,106 @@
+/*
+ * Arena overlays built in code: the boss / "Prepare-se!" banner (BossIntroBannerController) and the
+ * "Mochila cheia" toast (BagFullToastController). Loaded at runtime from Resources by
+ * EncounterOverlayStyles, which also puts `rap-theme` on the overlay root so the palette below resolves.
+ * Both sit over the 3D arena: their plates are opaque (UI blends in linear space, lighter or
+ * translucent plates wash out over desert sand / mountain snow) and the text gets a shadow.
+ * The overlay roots themselves have no background (full-width strips over the scene).
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+/* ---- Boss intro / encounter countdown banner ---- */
+
+.boss-intro-root {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 26%; /* below the compact tutorial hint strip at the top of the screen */
+    align-items: center;
+}
+
+.boss-intro-banner {
+    padding: 10px 32px 12px 32px;
+    max-width: 90%;
+    align-items: center;
+    background-color: var(--rap-brown-night);
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-top-color: var(--rap-gold);
+    border-bottom-color: var(--rap-gold);
+    transition-property: opacity;
+    transition-duration: 0.35s;
+}
+
+/* "Prepare-se!" countdown: half the boss fade. */
+.boss-intro-banner--quick {
+    transition-duration: 0.175s;
+}
+
+/* "Reduzir Movimento" / "Reduzir Flashes": appears and disappears without the fade. */
+.boss-intro-banner--instant,
+.rap-reduced-motion .boss-intro-banner {
+    transition-duration: 0s;
+}
+
+.boss-intro-title {
+    font-size: 18px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: var(--rap-gold);
+    text-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.9);
+}
+
+.boss-intro-name {
+    font-size: 36px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    color: var(--rap-cream);
+    text-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.9);
+}
+
+/* ---- "Mochila cheia" toast ---- */
+
+.bag-full-root {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 24%; /* above the skill bar / joystick row, clear of the boss banner */
+    align-items: center;
+}
+
+.bag-full-toast {
+    padding: 8px 22px 10px 22px;
+    max-width: 80%;
+    align-items: center;
+    background-color: var(--rap-brown-night);
+    border-width: 2px;
+    border-color: var(--rap-warning);
+    border-radius: 8px;
+}
+
+.bag-full-title,
+.bag-full-lost,
+.bag-full-hint {
+    -unity-text-align: middle-center;
+    white-space: normal;
+    text-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.9);
+}
+
+.bag-full-title {
+    font-size: 24px;
+    -unity-font-style: bold;
+    color: var(--rap-warning);
+}
+
+.bag-full-lost {
+    font-size: 17px;
+    color: var(--rap-cream);
+}
+
+.bag-full-hint {
+    font-size: 14px;
+    -unity-font-style: italic;
+    color: var(--rap-cream-dim);
+}

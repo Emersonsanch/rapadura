@@ -9,6 +9,7 @@
                 <!-- Filled at runtime by CreditsController from CreditsContent.Sections. -->
                 <ui:VisualElement name="credits-content" class="credits-content" />
             </ui:ScrollView>
+            <ui:Label name="credits-skip-hint" text="Toque ou aperte Esc / B para fechar" class="credits-skip-hint loc rap-subtle" view-data-key="ui.credits.skip_hint" />
             <ui:Button name="credits-back-button" text="Voltar" focusable="true" class="credits-back-button loc rap-button rap-button--primary" view-data-key="ui.credits.back" />
         </ui:VisualElement>
     </ui:VisualElement>

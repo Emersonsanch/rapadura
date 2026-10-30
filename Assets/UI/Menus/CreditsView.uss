@@ -62,6 +62,24 @@
     margin-bottom: 4px;
 }
 
+/* Last words of the roll (Vó Zefa's porch): a bit larger, warm gold, extra room above. */
+.credits-section--closing {
+    margin-top: 18px;
+    margin-bottom: 36px;
+}
+
+.credits-section--closing .credits-line {
+    font-size: 18px;
+    -unity-font-style: italic;
+    color: var(--rap-gold-light);
+}
+
+.credits-skip-hint {
+    font-size: 13px;
+    -unity-text-align: middle-center;
+    margin-top: 8px;
+}
+
 /* Touch-first: 48px tall target, full width of the panel. */
 .credits-back-button {
     height: 48px;

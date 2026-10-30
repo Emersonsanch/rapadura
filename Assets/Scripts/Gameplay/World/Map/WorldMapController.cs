@@ -86,10 +86,16 @@ namespace Rapadura.Gameplay.World.Map
         /// </summary>
         public System.Func<Vector2, bool> PointerBlocker { get; set; }
 
+        /// <summary>
+        /// When set, every map seeds its encounter/boss-minion RNGs with this instead of the clock (or
+        /// the inspector's fixed seed): reproducible rolls for PlayMode tests. Null (default) in the game.
+        /// </summary>
+        public static int? SeedOverride { get; set; }
+
         private void Awake()
         {
             _graph = BuildGraph(_nodes, _nodesByRegion);
-            int seed = _useFixedSeed ? _seed : System.Environment.TickCount;
+            int seed = SeedOverride ?? (_useFixedSeed ? _seed : System.Environment.TickCount);
             _encounters = new RandomEncounterSystem(_encounterSettings, seed) { Enabled = _encountersEnabled };
             _challengeRandom = new System.Random(unchecked(seed * 31 + 7));
         }
