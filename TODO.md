@@ -4,6 +4,11 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-10-30 (manhã — decisões do usuário e nova leva de agentes)
+- 🙋 **Decisões do usuário:** item perdido ao morrer **não se recupera** (sai o Achados e Perdidos); ao morrer, **9% de chance de cair 1 item** da mochila (de uma pilha cai só 1 unidade; nunca o que está vestido); **boneco de treino serve para testar os poderes** (dano por golpe, crítico, dano por segundo) e **não dá XP**; **Seu Zé Caçador e o dono do Haras são pessoas diferentes** (o do Haras passa a ser o Seu Tonico).
+- 🛠️ `tools/ci/compile_check.sh`: compilação offline de todos os assemblies com o Roslyn do Unity (usa os `.rsp` do Bee, mas compila os `.cs` que estão no disco).
+- 🤖 **Em andamento (agentes):** decisões acima, montarias M3 (terrestres), casa H3 (fontes) e H5 (guarda-roupa), lojas novas da Vila com rotação e Bornal de couro, evolução de classe e nível de mestre, durabilidade/conserto e itens excelentes, viagem rápida e Festa Junina, blend trees/eventos de passo/IK nos pés.
+
 ### 2026-10-30 (madrugada — leva grande de agentes: cidades, casa, montarias, refino, noite e mais; `3efdfc8`)
 - 🏙️ **Cidades nas 4 regiões** (Vila da Vó Zefa, Povoado de Areia Branca, Vila da Serra Alta, Vila das Lamparinas) com zona segura no mapa (`SafeZoneRules`), lojas temáticas com estoque que gira, renascer na cidade e carro de boi (2 ouro por estrada). `Docs/Cities.md`.
 - 🎒 **Mochila em grade 8×8 estilo MU** (API única `CanFit`), saves antigos migram sem perda; **9% de queda ao morrer** com Achados e Perdidos; **perda de 5% de XP** (nunca desce de nível), **Bênção da Romaria** e **Patuá da Vó Zefa**.
@@ -25,7 +30,7 @@
 - ✅ EditMode **1781/1781**. PlayMode não inicializou dentro do tempo nesta rodada (repetir).
 - 🐛 **Redução de recarga percentual não fazia nada** (`affix_of_haste` 3–8% era ignorado): CDR e redução de custo agora somam plano + percentual (`GetAdditiveFractionTotal`); Ficha usa o mesmo cálculo. `ZeroBaseFractionStatTests`, Balance §7.6.
 - ⚖️ **Pilha de poder (r9)** (`tools/balance/power_stack.py`): melhor refeição + relíquias + buff de evento na NG+0/NG+1. Ajuste: Canivete do Vô Chico +2 → +1 de dano, Cantoria +15% → +8%, Rapadura +25% → +12% de velocidade de ataque; chefes 16–22% mais rápidos com tudo empilhado (antes 26–34%). Balance renumerado (§9 Mochila … §14 Pilha de poder).
-- [ ] NG+ com escala por região/nível do herói (hoje a NG+1 é trivial na Floresta e longa nas Cavernas) — Balance §14.4 (em andamento).
+- [x] NG+ com escala por região/nível do herói (hoje a NG+1 é trivial na Floresta e longa nas Cavernas) — Balance §14.4 (em andamento).
 - [ ] Rodar `power_stack.py` quando o golpe em dupla e as lojas novas entrarem (Montanha já no limite de −22%).
 - 🤖 **Em andamento (agentes)**: New Game+ ("Nova Jornada+"), Caderno da Vó Zefa (bestiário), eventos aleatórios no mapa, Caramelo (pet), segredos e Relíquias do Sertão, teste de resistência de 30 min + relatório de falhas local + Definition of Done, cozinha da Vó Zefa, modo foto.
 
@@ -1005,10 +1010,10 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 
 ### Qualidade de Engenharia
 - [x] Testes automatizados (Unity Test Framework) — **1159 testes EditMode** em `Assets/Tests/EditMode` (100% verdes em 2026-10-21 à noite, eram 819 de manhã, inclusive `LocalizationCoverageTests`) + **14 testes PlayMode** + assembly **PlayMode** `Assets/Tests/PlayMode/Rapadura.Tests.PlayMode.asmdef` com smoke tests (`MainSceneSmokeTests`, `UiScreensSmokeTests`, `WorldMapEncounterSmokeTests`, base `SmokeTestBase`). Os testes de save usam uma pasta isolada (`SaveManager.SaveRootOverride` + `TestSaveRoot`) e não tocam mais nos saves reais do desenvolvedor.
-- [ ] Definir "Definition of Done" por feature (código + teste + review + doc)
+- [x] Definir "Definition of Done" por feature (código + teste + review + doc)
 - [ ] Processo de code review (PR obrigatório, sem push direto na main)
 - [x] Sistema de logging estruturado (`GameLogger.cs`) — níveis Debug/Info/Warning/Error/Exception, `Debug` compila fora de builds não-development via `[Conditional]`, prefixo `[Categoria]` consistente. Já em uso extensivo pelo projeto (managers, quests, inventário, etc).
-- [ ] Error/crash reporting (Sentry, Unity Cloud Diagnostics ou similar)
+- [x] Error/crash reporting (Sentry, Unity Cloud Diagnostics ou similar)
 
 ---
 
@@ -1529,8 +1534,8 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Sistema de pets
 - [ ] Montarias (pedido do usuário, 2026-10-29) — design e catálogo em `Docs/Mounts.md` (em escrita): pônei, unicórnio, cachorro grande, tigre, mamute e cerca de 20 animais mitológicos (mitologia mundial + folclore brasileiro), cada um com habilidade especial própria e atributos diferentes (velocidade, defesa, vida, fôlego). Comuns compradas em lojas, médias dropadas por bichos, muito raras de chefes/eventos com chance mínima. Estábulo na casa própria, alimentação com ingredientes da cozinha, primo favorito com bônus. Online: velocidade limitada no servidor.
   - Catálogo pronto: **30 montarias** em `Docs/Mounts.md` (6 comuns, 8 incomuns, 8 raras, 5 épicas, 3 lendárias; 21 terrestres, 5 voadoras, 2 aquáticas, 2 escavadoras), cada uma com habilidade única; primo favorito: Maithe — Hipogrifo Ventania, Maria — Unicórnio, Joaquim — Mamute, Ícaro — Tatu-Bola, Lavine — Pônei Pé-de-Pano.
-  - [ ] M1 (offline): regras puras + controlador (assobio, subir/descer, galope com fôlego), 3 montarias iniciais procedurais (Pônei Pé-de-Pano, Cachorrão Paçoca, Jegue Carregador), loja Haras da Vila, missão "Primeira Sela", save.
-  - [ ] M2: comida/saciedade, nível 1–20, afeição, Caderno de Montarias, selas e mantas, estábulo na casa.
+  - [x] M1 (offline): regras puras + controlador (assobio, subir/descer, galope com fôlego), 3 montarias iniciais procedurais (Pônei Pé-de-Pano, Cachorrão Paçoca, Jegue Carregador), loja Haras da Vila, missão "Primeira Sela", save.
+  - [x] M2: comida/saciedade, nível 1–20, afeição, Caderno de Montarias, selas e mantas, estábulo na casa.
   - [ ] M3: as outras 27 em ondas (terrestres → nado/túnel/teleporte → voadoras), drops de chefes com proteção de azar "Fitas do Laço", missões e eventos.
   - [ ] M4 (online): sincronização, teto de velocidade no servidor, combate montado nos mapas abertos.
   - [ ] 🙋 Decisões (`Docs/Mounts.md` §14): combate montado ou só viagem, chances de drop, montaria por conta ou por personagem, regras de troca, nada de montaria com atributo vendida por dinheiro real.
@@ -1540,20 +1545,20 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Loot raro — raridades + afixos procedurais; bosses têm loot garantido e drop raro com afixos (`BossBonusRules`, 2026-10-21)
 - [ ] Bosses mundiais
 - [x] Ciclo dia/noite — `TimeOfDayManager` + `DayNightLighting` (salvo, pausa junto com o jogo, noite aumenta encontros) — 2026-10-21
-- [ ] **Bichos diferentes de dia e de noite** (pedido do usuário, 2026-10-29; em andamento): tabela de bichos por região e por período (madrugada/dia/tarde/noite), respawn em ondas durante o encontro, noite mais perigosa (ondas maiores e mais rápidas, bichos com mais vida/dano e mais bravos, mas com loot e XP melhores) e aviso no HUD. Primeiro com variantes noturnas dos bichos atuais (olhos brilhando, tom escuro); depois espécies só da noite do folclore (coruja-rasga-mortalha, morcego-vampiro gigante, enxame de vaga-lumes-de-fogo, porcos-do-mato da Caipora, Lobisomem-do-sertão como mini-chefe raro). Design em `Docs/DayNight.md`. **Noite com menos visão** (pedido do usuário): ambiente mais escuro, neblina e alcance de visão menor em volta do herói, olhos dos bichos brilhando no escuro, luz de lamparina em volta do herói (que pode crescer com itens/montarias), nunca breu total; opção "Noite mais clara" na Acessibilidade.
+- [x] **Bichos diferentes de dia e de noite** (pedido do usuário, 2026-10-29; em andamento): tabela de bichos por região e por período (madrugada/dia/tarde/noite), respawn em ondas durante o encontro, noite mais perigosa (ondas maiores e mais rápidas, bichos com mais vida/dano e mais bravos, mas com loot e XP melhores) e aviso no HUD. Primeiro com variantes noturnas dos bichos atuais (olhos brilhando, tom escuro); depois espécies só da noite do folclore (coruja-rasga-mortalha, morcego-vampiro gigante, enxame de vaga-lumes-de-fogo, porcos-do-mato da Caipora, Lobisomem-do-sertão como mini-chefe raro). Design em `Docs/DayNight.md`. **Noite com menos visão** (pedido do usuário): ambiente mais escuro, neblina e alcance de visão menor em volta do herói, olhos dos bichos brilhando no escuro, luz de lamparina em volta do herói (que pode crescer com itens/montarias), nunca breu total; opção "Noite mais clara" na Acessibilidade.
 - [x] Clima dinâmico — `WeatherSystem` + `WeatherVisuals` (chuva, neblina, tempestade de areia, neve por bioma, partículas em pool com limites para mobile) — 2026-10-21; em 2026-10-22 (`49b91fa`) chuva/neve/areia viraram riscos finos que seguem o jogador (antes um quad esticado)
 - [x] Segredos e áreas ocultas
 - [x] New Game+
 - [ ] Sistema de temporadas
 
 ### 💡 Novas ideias (2026-10-29)
-- [ ] 🍳 **Cozinha da Vó Zefa**: pratos do sertão (cuscuz, pamonha, rapadura, baião de dois) feitos com materiais dos biomas dão buffs temporários antes da viagem; receitas aprendidas em missões (em andamento).
-- [ ] 📷 **Modo foto**: pausa, câmera livre limitada, filtros (sépia de cordel, xilogravura), poses dos primos e esconder HUD (em andamento).
-- [ ] 🗣️ **Conversas entre primos na estrada**: falas curtas no mapa entre o primo ativo e os outros (via "rádio" de lembranças), que mudam com o progresso da campanha e reforçam quem é irmão de quem.
+- [x] 🍳 **Cozinha da Vó Zefa**: pratos do sertão (cuscuz, pamonha, rapadura, baião de dois) feitos com materiais dos biomas dão buffs temporários antes da viagem; receitas aprendidas em missões (em andamento).
+- [x] 📷 **Modo foto**: pausa, câmera livre limitada, filtros (sépia de cordel, xilogravura), poses dos primos e esconder HUD (em andamento).
+- [x] 🗣️ **Conversas entre primos na estrada**: falas curtas no mapa entre o primo ativo e os outros (via "rádio" de lembranças), que mudam com o progresso da campanha e reforçam quem é irmão de quem.
 - [ ] 🎉 **Festa Junina sazonal** (primeiro passo do "Sistema de temporadas"): em junho a vila ganha bandeirinhas, fogueira, quadrilha como minijogo de ritmo e prendas.
-- [ ] 🎣 **Pesca no açude** da Floresta: minijogo curto com peixes por horário e clima, ingredientes para a cozinha.
+- [x] 🎣 **Pesca no açude** da Floresta: minijogo curto com peixes por horário e clima, ingredientes para a cozinha.
 - [ ] 🧭 **Viagem rápida** pelas estradas já percorridas (carro de boi da vila), liberada depois de cada chefe.
-- [ ] 🤝 **Golpe em dupla**: ao trocar de primo na vila, o anterior aparece como assistente num golpe especial por luta (dupla de irmãos com animação própria).
+- [x] 🤝 **Golpe em dupla**: ao trocar de primo na vila, o anterior aparece como assistente num golpe especial por luta (dupla de irmãos com animação própria).
 
 ---
 
@@ -1565,32 +1570,32 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [ ] Estoque com rotação diária/semanal e itens por nível de reputação ou progresso da campanha.
 
 ### Casa própria
-- [ ] Cada jogador ganha um terreno da Vó Zefa e uma casa própria. **Todos começam com uma casa de madeira** (decisão do usuário, 2026-10-29), que evolui por melhorias (madeira → madeira com varanda → taipa e telha → alvenaria → casarão).
+- [x] Cada jogador ganha um terreno da Vó Zefa e uma casa própria. **Todos começam com uma casa de madeira** (decisão do usuário, 2026-10-29), que evolui por melhorias (madeira → madeira com varanda → taipa e telha → alvenaria → casarão).
 - [ ] Modelo 3D da casa por nível, em peças modulares low-poly (paredes, telhado, varanda, janelas, portas): a melhoria troca peças em vez do modelo inteiro. Especificação em `Docs/Housing.md`.
 - [ ] **Casa trancada:** só o dono entra. Pode convidar outra pessoa (por visita ou lista de amigos, revogável), com permissões (visitar, mexer na decoração, usar a bancada). Visitante nunca abre o baú; o dono pode expulsar.
-- [ ] Decoração em grade (piso, parede, teto, quintal), com rotação e limite de itens por nível da casa.
-- [ ] **Baú da casa** com capacidade por melhoria (convive com o Baú da Vó Zefa).
+- [x] Decoração em grade (piso, parede, teto, quintal), com rotação e limite de itens por nível da casa.
+- [x] **Baú da casa** com capacidade por melhoria (convive com o Baú da Vó Zefa).
 - [ ] **Guarda-roupa:** trocar de roupa e usar a aparência de qualquer peça já desbloqueada, separada dos atributos; tinturas.
-- [ ] Parede de troféus dos chefes, estante de relíquias e do Caderno, caminha do Caramelo, livro de visitas.
-- [ ] Pontos de conforto pela decoração dão um pequeno bônus de XP descansado; conjuntos de móveis dão bônus de conjunto.
+- [x] Parede de troféus dos chefes, estante de relíquias e do Caderno, caminha do Caramelo, livro de visitas.
+- [x] Pontos de conforto pela decoração dão um pequeno bônus de XP descansado; conjuntos de móveis dão bônus de conjunto.
 - [ ] Itens de casa com raridade, vindos de loja, drop dos bichos (tabela por inimigo/chefe), missões regionais e diárias, conquistas, eventos sazonais e crafting.
 - [ ] Online: casas instanciadas, salvas no servidor, convites pela lista de amigos, proteção contra vandalismo.
 
 ### Mochila em grade e queda de item ao morrer (pedido do usuário, 2026-10-29)
-- [ ] **Mochila em grade estilo MU Online** (em andamento): 8×8 células, cada item ocupa seu tamanho (poção 1×1, espada 1×3, armadura 2×3, escudo 2×2, arco 2×4…), empilháveis por célula; o limite da mochila passa a ser o espaço da grade. Arrastar e soltar no PC, tocar para pegar/colocar no celular, prévia vermelha onde não cabe, botão "Organizar". Saves antigos: itens arrumados sozinhos; o que não couber vai para o Baú da Vó Zefa.
+- [x] **Mochila em grade estilo MU Online**: 8×8 células, cada item ocupa seu tamanho (poção 1×1, espada 1×3, armadura 2×3, escudo 2×2, arco 2×4…), empilháveis por célula; o limite da mochila passa a ser o espaço da grade. Arrastar e soltar no PC, tocar para pegar/colocar no celular, prévia vermelha onde não cabe, botão "Organizar". Saves antigos: itens arrumados sozinhos; o que não couber vai para o Baú da Vó Zefa.
 - [ ] Bornal de couro (expansão de +2 linhas) vendido em loja.
-- [ ] **Queda ao morrer: 9% de chance** de cair um item aleatório da mochila (nunca equipados, ouro, itens de história, relíquias ou itens vinculados). Offline: aviso na tela de morte e o item vai para os "Achados e Perdidos" da Vó Zefa, para comprar de volta por uma taxa conforme a raridade.
+- [x] **Queda ao morrer: 9% de chance** de cair **1 item** aleatório (de uma pilha, só 1 unidade; sem recuperação — decisão do usuário, 2026-10-30) da mochila (nunca equipados, ouro, itens de história, relíquias ou itens vinculados). Offline: aviso na tela de morte e o item vai para os "Achados e Perdidos" da Vó Zefa, para comprar de volta por uma taxa conforme a raridade.
 - [ ] Online (decisão do usuário, 2026-10-29): o item cai no chão onde a pessoa morreu e **qualquer jogador pode pegar**, como no MU Online.
 
 ### Fases de implementação da casa (de `Docs/Housing.md` §13)
 > Catálogos prontos: **580 itens de casa** (`Docs/Housing/CatalogoCasa.md`: 225 comuns, 149 incomuns, 126 raros, 64 épicos, 16 lendários) e **234 roupas/acessórios/tinturas/skins** (`Docs/Housing/CatalogoRoupas.md`). São o conjunto inicial; temporadas e eventos acrescentam itens com IDs novos.
-- [ ] H0 — Dados: `HouseItemDefinition` + enums, importador lendo o catálogo, textos en/pt-BR, testes de IDs/nomes únicos e origens válidas.
-- [ ] H1 — Casa de madeira (nível 1) offline na Vila: modelo modular, modo "Arrumar a casa" (piso/parede/teto/superfície/quintal), baú da casa, cama, missão "Um Cantinho Seu", botão "Minha casa", save `House`.
-- [ ] H2 — Cidades e lojas: as 4 cidades como zona segura, lojas novas com NPC e rotação diária (em andamento pelo agente de cidades).
+- [x] H0 — Dados: `HouseItemDefinition` + enums, importador lendo o catálogo, textos en/pt-BR, testes de IDs/nomes únicos e origens válidas.
+- [x] H1 — Casa de madeira (nível 1) offline na Vila: modelo modular, modo "Arrumar a casa" (piso/parede/teto/superfície/quintal), baú da casa, cama, missão "Um Cantinho Seu", botão "Minha casa", save `House`.
+- [x] H2 — Cidades e lojas: as 4 cidades como zona segura, lojas novas com NPC e rotação diária (em andamento pelo agente de cidades).
 - [ ] H3 — Fontes: itens de casa no loot dos bichos (troféu garantido na 1ª vitória contra chefe, proteção de azar), missões, conquistas, receitas.
-- [ ] H4 — Melhorias da casa (madeira com varanda → taipa e telha → alvenaria → casarão) sem perder nada na troca.
+- [x] H4 — Melhorias da casa (madeira com varanda → taipa e telha → alvenaria → casarão) sem perder nada na troca.
 - [ ] H5 — Guarda-roupa: aparências, tinturas, skins de arma, trajes salvos.
-- [ ] H6 — Vida na casa: conforto e "Descansado", conjuntos, parede de troféus, vitrine de relíquias, estante do Caderno, caminha do Caramelo, livro de visitas, plantas, boneco de treino.
+- [x] H6 — Vida na casa: conforto e "Descansado", conjuntos, parede de troféus, vitrine de relíquias, estante do Caderno, caminha do Caramelo, livro de visitas, plantas, boneco de treino.
 - [ ] H7 — Eventos sazonais e prendas.
 - [ ] H8 — Online: casas instanciadas, convites e permissões, desfazer vandalismo, correio, leilão, conta da lenha, sede do clã.
 - ✅ Decisões do usuário (2026-10-29): **uma casa por conta**; **com o dono offline ninguém entra** (a casa fica trancada, mesmo para a lista de convidados); **pode vender a casa** para outro jogador (online, com proteções); preços das melhorias ficam para depois (valores atuais do doc são provisórios).
@@ -1607,17 +1612,17 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 ### Do MU Online
 - [ ] Evolução de classe por missão (2–3 graduações por primo, skill e visual novos) e nível de mestre depois do máximo.
 - [ ] Combo de skills da classe e buffs de suporte para o grupo.
-- [ ] Refino de item +0 a +15 com "Pedras do Sertão" (Bênção, Alma, Vida, Caos); falha sem destruir o item.
+- [x] Refino de item +0 a +15 com "Pedras do Sertão" (Bênção, Alma, Vida, Caos); falha sem destruir o item.
 - [ ] Itens excelentes, conjuntos antigos com bônus por peça, opção de sorte, engaste de soquetes.
 - [ ] Durabilidade e conserto no ferreiro.
-- [ ] Asas (níveis 1–4) e "Tacho Encantado" para combinar itens com chance (asas, montarias, refino alto).
+- [x] Asas (níveis 1–4) e "Tacho Encantado" para combinar itens com chance (asas, montarias, refino alto).
 - [ ] Caixas de tesouro "Baú do Cangaço +1…+5" em invasões; frutas de atributo; barra de poções e poção automática.
 - [ ] Eventos de sala com horário: Torre do Engenho Velho, Terreiro das Assombrações, Corrida do Caos, Pega-Bandeira da Romaria; invasões no mapa; defesa de fortaleza do servidor; moedas da sorte; mapa de alto nível com chave.
 - [ ] Facções do servidor, sistema de "fora da lei" (a decidir), duelo com placar, cerco ao castelo de guilda, nível mínimo por mapa.
 - [ ] Caça automática limitada (a decidir), selos de bônus só por jogo, coleção de mascotes pequenos.
 
 ### Do Tibia
-- [ ] Bênção da Romaria e Patuá da Vó Zefa contra a perda ao morrer (zera os 9% de queda); perda pequena de XP (a decidir).
+- [x] Bênção da Romaria e Patuá da Vó Zefa contra a perda ao morrer (zera os 9% de queda); perda pequena de XP (a decidir).
 - [ ] Habilidades que sobem pelo uso; fôlego diário (bônus nas primeiras horas, ajuda contra vício); roda de talentos.
 - [ ] Pontos do Caderno para "amuletos" de bônus por tipo de bicho; bosstiário; presa do dia; tarefas de caça; bicho destaque do dia; invasões agendadas; coleta automática de loot.
 - [ ] Encantamento temporário com partes dos bichos; forja de fusão de itens; runas fabricadas pelos magos; ferramentas (corda, pá, picareta, machado) que abrem caminhos.
