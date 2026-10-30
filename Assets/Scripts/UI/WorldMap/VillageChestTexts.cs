@@ -5,7 +5,7 @@ using Rapadura.Core.Localization;
 namespace Rapadura.UI.WorldMap
 {
     /// <summary>
-    /// Localization keys (en + pt-BR) for "Baú da Vó Zefa" (<see cref="VillageChestUIController"/>), the village hub's
+    /// Localization keys (en + pt-BR) for "Baú da Vó Edna" (<see cref="VillageChestUIController"/>), the village hub's
     /// storage chest. Same self-contained pattern as <see cref="VillageHubTexts"/>: merged into the live
     /// <see cref="LocalizationManager"/> on first use (keys it already has win), pt-BR fallback without a manager.
     /// </summary>
@@ -52,7 +52,7 @@ namespace Rapadura.UI.WorldMap
         public static readonly List<LocalizationEntry> Entries = new List<LocalizationEntry>
         {
             new LocalizationEntry(HubButton, "Chest", "Baú"),
-            new LocalizationEntry(Title, "Grandma Zefa's chest", "Baú da Vó Zefa"),
+            new LocalizationEntry(Title, "Grandma Edna's chest", "Baú da Vó Edna"),
             new LocalizationEntry(Subtitle, "Grandma's chest keeps everything — except secrets.", "O baú da Vó guarda tudo — menos segredo."),
             new LocalizationEntry(BagPane, "Backpack", "Mochila"),
             new LocalizationEntry(ChestPane, "Chest", "Baú"),

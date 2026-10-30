@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fish_tilapia
   _displayName: "Til\xE1pia"
-  _description: "Peixe de a\xE7ude, carne branca e firme. Vai bem na brasa."
+  _description: "Peixe de remanso, carne branca e firme. Vai bem na brasa."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

@@ -7,7 +7,7 @@ namespace Rapadura.Gameplay.Pets
 {
     /// <summary>
     /// "Fazer carinho" (world map button, <c>CarameloCuddleButton</c>): what petting Caramelo does. The
-    /// first time ever Vó Zefa introduces him (<see cref="CompanionPreferences.Introduced"/>); after that each
+    /// first time ever Vó Edna introduces him (<see cref="CompanionPreferences.Introduced"/>); after that each
     /// cuddle shows the next line of the current cousin (<see cref="CarameloTexts.CuddleLineKey"/>). Either
     /// way it arms a tiny buff, <see cref="Buff"/> (+5% movement speed for <see cref="BuffSeconds"/> s), which
     /// <see cref="CarameloCompanion"/> applies to the hero at the start of the next encounter: the map has no
@@ -80,7 +80,7 @@ namespace Rapadura.Gameplay.Pets
         }
 
         /// <summary>The buff applied to the hero: MoveSpeed +5% (PercentAdditive), <see cref="BuffSeconds"/> s.</summary>
-        public static StatModifierDefinition Buff(string displayName = "Carinho do Caramelo")
+        public static StatModifierDefinition Buff(string displayName = "Carinho do Ari")
         {
             return new StatModifierDefinition
             {

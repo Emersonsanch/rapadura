@@ -15,7 +15,7 @@ namespace Rapadura.Gameplay.Cooking
     [Serializable]
     public class MealSaveState
     {
-        /// <summary>Recipes learned from quests or Vó Zefa's lessons (starters are implicit).</summary>
+        /// <summary>Recipes learned from quests or Vó Edna's lessons (starters are implicit).</summary>
         public string[] learnedRecipeIds = Array.Empty<string>();
         public string activeRecipeId;
         public int encountersRemaining;
@@ -58,7 +58,7 @@ namespace Rapadura.Gameplay.Cooking
     }
 
     /// <summary>
-    /// "Cozinha da Vó Zefa": which dishes are known and which meal is active. Per save slot, like
+    /// "Forno da Vó Edna": which dishes are known and which meal is active. Per save slot, like
     /// <see cref="VillageChestStorage"/>: a GameManager-built manager registered with <c>SaveManager</c> under
     /// <see cref="Key"/> and with <c>NewSessionReset</c>; a save from before the stove loads with the starters, what
     /// its completed quests teach and no meal.
@@ -176,7 +176,7 @@ namespace Rapadura.Gameplay.Cooking
         }
 
         /// <summary>
-        /// At the stove with <paramref name="hero"/>: Vó Zefa teaches the cousin's favourite if
+        /// At the stove with <paramref name="hero"/>: Vó Edna teaches the cousin's favourite if
         /// <see cref="CookingRules.ShouldTeachFavourite"/> says so. Returns the dish taught, or null.
         /// </summary>
         public MealRecipeSpec TryTeachFavourite(CharacterId? hero)

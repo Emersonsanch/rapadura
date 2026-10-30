@@ -11,9 +11,9 @@ namespace Rapadura.Gameplay.World.Cities
     public enum CityShopPurchaseEffect
     {
         None = 0,
-        /// <summary>A Bornal de couro grew the Mochila (<see cref="CityShopPurchaseAppliedEvent.Value"/> = rows).</summary>
+        /// <summary>A Alforje de Feltro grew the Mochila (<see cref="CityShopPurchaseAppliedEvent.Value"/> = rows).</summary>
         BagExpanded = 1,
-        /// <summary>A Bornal de couro was bought but the bag was already at its cap: it stays in the bag.</summary>
+        /// <summary>A Alforje de Feltro was bought but the bag was already at its cap: it stays in the bag.</summary>
         BagAlreadyFull = 2,
         /// <summary>A house item went to the house depot (<see cref="CityShopPurchaseAppliedEvent.Value"/> = quantity).</summary>
         HouseItemToDepot = 3,
@@ -43,7 +43,7 @@ namespace Rapadura.Gameplay.World.Cities
     /// <see cref="ItemPurchasedEvent"/>):
     /// <list type="bullet">
     /// <item>Freguesia: the gold spent at a themed counter becomes points of that shop (<see cref="ShopReputation"/>).</item>
-    /// <item>Bornal de couro: the buyer's Mochila gets <see cref="CityShopCatalog.BornalRows"/> rows for good
+    /// <item>Alforje de Feltro: the buyer's Mochila gets <see cref="CityShopCatalog.BornalRows"/> rows for good
     /// (<see cref="InventoryManager.AddBagRows"/>, saved in the bag) and the satchel leaves the bag, like a mount whistle.</item>
     /// <item>House items: the bag only carried the purchase for a moment; they go to the house depot
     /// (<see cref="HouseLayout.GrantToDepot"/>, never lost) and leave the bag.</item>

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.Mounts
 {
-    /// <summary>One food a mount eats (Docs/Mounts.md §4.2): paid with bag items or as one of Vó Zefa's dishes.</summary>
+    /// <summary>One food a mount eats (Docs/Mounts.md §4.2): paid with bag items or as one of Vó Edna's dishes.</summary>
     public sealed class MountFoodSpec
     {
         public readonly string FoodId;
@@ -43,7 +43,7 @@ namespace Rapadura.Gameplay.Mounts
     /// <item><b>Hunger</b>: satiety 0..100, −1 per minute mounted (never in the stable); below 30 the mount walks at
     /// ×1.15 and does not gallop (it never stops).</item>
     /// <item><b>Food</b> (§4.2): capim (2 fibras), Ração do Haras, erva fresca, carne assada (carnivores) and three of
-    /// Vó Zefa's dishes (cuscuz, rapadura — the favourite treat, +5 affection — and baião de dois), with diets.</item>
+    /// Vó Edna's dishes (cuscuz, rapadura — the favourite treat, +5 affection — and baião de dois), with diets.</item>
     /// <item><b>Level 1–20</b>: next = 60 + 20 × level; 1 XP per 20 m ridden, food XP, +5 per fight won with the mount
     /// waiting. Level raises health (+5%/level, <see cref="MountRules.MaxHealthAt"/>), stamina (+1) and shortens the
     /// cooldown (−0.5%/level); never speed nor defense.</item>

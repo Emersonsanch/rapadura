@@ -29,7 +29,7 @@ namespace Rapadura.Gameplay.World.Cities
     }
 
     /// <summary>
-    /// Per-save state of the cities: which ones the cousins already walked to (the carro de boi stops there) and the
+    /// Per-save state of the cities: which ones the cousins already walked to (the Barcas de Luz stops there) and the
     /// last rotation period each themed shop showed. A GameManager-built manager registered with SaveManager under
     /// <see cref="Key"/> and with NewSessionReset; a save written before cities existed has no entry and loads with
     /// only the starting city visited — plus, derived, every region the cousins already won a fight in (they have been
@@ -139,7 +139,7 @@ namespace Rapadura.Gameplay.World.Cities
             return region == _map.StartingRegion || _map.GetVictories(region) > 0;
         }
 
-        /// <summary>Records a visit; true the first time (a new stop for the carro de boi).</summary>
+        /// <summary>Records a visit; true the first time (a new stop for the Barcas de Luz).</summary>
         public bool MarkVisited(BiomeType region)
         {
             if (!CityCatalog.HasCity(region))
@@ -191,7 +191,7 @@ namespace Rapadura.Gameplay.World.Cities
         }
 
         // ---------------------------------------------------------------
-        // Freguesia (shop reputation) and the Bornal de couro
+        // Freguesia (shop reputation) and the Alforje de Feltro
         // ---------------------------------------------------------------
 
         public int ReputationPoints(string shopId)
@@ -218,7 +218,7 @@ namespace Rapadura.Gameplay.World.Cities
         /// <summary>How many Bornais de couro were bought (0 or 1: the bag grows once).</summary>
         public int BornaisBought => _bornaisBought;
 
-        /// <summary>The Bornal de couro is on a counter only until one was bought.</summary>
+        /// <summary>The Alforje de Feltro is on a counter only until one was bought.</summary>
         public bool CanBuyBornal => _bornaisBought < 1;
 
         public void RecordBornal() => _bornaisBought++;

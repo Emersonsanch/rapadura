@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_runa_cura
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_runa_cura
-  _displayName: Runa da Cura
-  _description: Cartinha de cordel com um verso de cura, desenhada por Lavine ou Maria. Ao ler, cura 60 de vida.
+  _displayName: "Runa da Cura"
+  _description: "Cartinha iluminada com um verso de cura, desenhada por Lavine ou Maria. Ao ler, cura 60 de vida."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 1

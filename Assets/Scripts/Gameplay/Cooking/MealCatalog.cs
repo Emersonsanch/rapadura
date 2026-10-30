@@ -20,7 +20,7 @@ namespace Rapadura.Gameplay.Cooking
     }
 
     /// <summary>
-    /// A dish of Vó Zefa's "Fogão a lenha", as plain data. Its effects are ordinary
+    /// A dish of Vó Edna's "Forno da Vó" (the tandir), as plain data. Its effects are ordinary
     /// <see cref="StatModifierDefinition"/>s applied to the hero's <see cref="BuffController"/> during an
     /// encounter (<see cref="MealEffectApplier"/>), so they go through the same stat plumbing as skills,
     /// attributes and equipment.
@@ -48,12 +48,12 @@ namespace Rapadura.Gameplay.Cooking
         /// <summary>Completing this quest teaches the recipe (any cousin), or null.</summary>
         public readonly string UnlockQuestId;
         /// <summary>
-        /// Region whose unlocking lets Vó Zefa teach the dish to <see cref="FavouriteOf"/> at the stove (null = no
+        /// Region whose unlocking lets Vó Edna teach the dish to <see cref="FavouriteOf"/> at the stove (null = no
         /// gate). Keeps the lesson in step with the quest route: the dish's ingredients and its quest belong there.
         /// </summary>
         public readonly BiomeType? LessonRegion;
         /// <summary>
-        /// Fish whose first catch at "Pesca no açude" teaches the dish (any cousin), or null. Such dishes have no quest
+        /// Fish whose first catch at "Pesca no Remanso de Faro" teaches the dish (any cousin), or null. Such dishes have no quest
         /// and no favourite: the açude is their lesson.
         /// </summary>
         public readonly string TaughtByCatchItemId;
@@ -86,15 +86,15 @@ namespace Rapadura.Gameplay.Cooking
     }
 
     /// <summary>
-    /// "Cozinha da Vó Zefa": the dishes of the village's wood stove (<c>VillageKitchenController</c>, reached from the
+    /// "Forno da Vó Edna": the dishes of the village's clay oven (tandir) (<c>VillageKitchenController</c>, reached from the
     /// map's village hub). Defined in code like <see cref="RegionQuestCatalog"/>, so no asset/seeder is needed.
     /// Numbers and the reasoning behind them: <c>Docs/Balance/README.md</c> §12 (budget with the other power sources: §14).
     /// <list type="bullet">
     /// <item>Two dishes are known from the start (<see cref="MealRecipeSpec.Starter"/>); every other one is taught by
-    /// the first region quest of its region, or by Vó Zefa herself at the stove to the cousin who loves it once that
+    /// the first region quest of its region, or by Vó Edna herself at the stove to the cousin who loves it once that
     /// region is open.</item>
     /// <item>Each cousin has a favourite (<see cref="MealRecipeSpec.FavouriteOf"/>): a small extra bonus and a line of
-    /// Vó's when they cook it. Maithe's (café coado) is a starter; cuscuz is everyone's and nobody's.</item>
+    /// Vó's when they cook it. Maithe's (Chá de Karkadé) is a starter; the Nan do Tandir is everyone's and nobody's.</item>
     /// <item>Stats used: only <see cref="StatType"/>s some system reads (PlayerStats regen/max, DamageCalculator
     /// defense, SkillManager cooldowns, PlayerBasicAttack speed, ThornsRules, OutgoingDamage crit), each in the
     /// application its reader expects (CooldownReduction/AttackSpeed/Thorns/CriticalChance as fractions).</item>
@@ -128,52 +128,52 @@ namespace Rapadura.Gameplay.Cooking
 
         public static readonly IReadOnlyList<MealRecipeSpec> Recipes = new List<MealRecipeSpec>
         {
-            // Cuscuz: flocão steamed on the stove — the stamina to run all day.
+            // Nan do Tandir: round bread baked on the wall of the tandir — the stamina to run all day.
             new MealRecipeSpec(Cuscuz,
                 new[] { new MealIngredientSpec(Wood, 1), new MealIngredientSpec(Herb, 1) }, 2, 3,
-                new[] { Effect("Cuscuz", StatType.StaminaRegen, ModifierApplication.PercentAdditive, 0.30f) }, null,
+                new[] { Effect("Nan do Tandir", StatType.StaminaRegen, ModifierApplication.PercentAdditive, 0.30f) }, null,
                 null, null, false,
                 starter: true, unlockQuestId: null, lessonRegion: null),
 
-            // Café coado: strained through the cloth (fibre) — skills come back sooner. Maithe's: +crit.
+            // Chá de Karkadé: red hibiscus tea steeped through the cloth (fibre) — skills come back sooner. Maithe's: +crit.
             new MealRecipeSpec(CafeCoado,
                 new[] { new MealIngredientSpec(Wood, 1), new MealIngredientSpec(Fiber, 1) }, 2, 3,
-                new[] { Effect("Café coado", StatType.CooldownReduction, ModifierApplication.Flat, 0.06f) }, null,
-                CharacterId.Maithe, new[] { Effect("Café da Maithe", StatType.CriticalChance, ModifierApplication.Flat, 0.03f) }, false,
+                new[] { Effect("Chá de Karkadé", StatType.CooldownReduction, ModifierApplication.Flat, 0.06f) }, null,
+                CharacterId.Maithe, new[] { Effect("Chá da Maithe", StatType.CriticalChance, ModifierApplication.Flat, 0.03f) }, false,
                 starter: true, unlockQuestId: null, lessonRegion: null),
 
-            // Pamonha: wrapped in corn husk (fibre) — more health. Maria's: +HP/s.
+            // Pão de Tâmara: date bread wrapped in a cloth (fibre) — more health. Maria's: +HP/s.
             new MealRecipeSpec(Pamonha,
                 new[] { new MealIngredientSpec(Wood, 2), new MealIngredientSpec(Fiber, 2) }, 3, 3,
-                new[] { Effect("Pamonha", StatType.MaxHealth, ModifierApplication.PercentAdditive, 0.10f) }, null,
-                CharacterId.Maria, new[] { Effect("Pamonha da Maria", StatType.HealthRegen, ModifierApplication.Flat, 1f) }, false,
+                new[] { Effect("Pão de Tâmara", StatType.MaxHealth, ModifierApplication.PercentAdditive, 0.10f) }, null,
+                CharacterId.Maria, new[] { Effect("Pão de Tâmara da Maria", StatType.HealthRegen, ModifierApplication.Flat, 1f) }, false,
                 starter: false, unlockQuestId: RegionQuestCatalog.ForestFirst, lessonRegion: BiomeType.Forest),
 
-            // Rapadura: cane boiled in the tacho over a lot of wood, the stone of the mill — a sugar rush at the
+            // Torrão Dourado: honey and cane boiled down over a lot of wood, pressed under a stone — a sugar rush at the
             // start of the fight. Ícaro's: runs faster during the rush. One more encounter: the effect is short.
             // +12% (was +25%, Balance §14): the top of an uncommon attack-speed affix, like the other meals.
             new MealRecipeSpec(Rapadura,
                 new[] { new MealIngredientSpec(Wood, 2), new MealIngredientSpec(Stone, 1) }, 3, 4,
-                null, new[] { Effect("Rapadura", StatType.AttackSpeed, ModifierApplication.PercentAdditive, 0.12f, RapaduraBurstSeconds) },
-                CharacterId.Icaro, new[] { Effect("Rapadura do Ícaro", StatType.MoveSpeed, ModifierApplication.PercentAdditive, 0.08f, RapaduraBurstSeconds) }, true,
+                null, new[] { Effect("Torrão Dourado", StatType.AttackSpeed, ModifierApplication.PercentAdditive, 0.12f, RapaduraBurstSeconds) },
+                CharacterId.Icaro, new[] { Effect("Torrão do Ícaro", StatType.MoveSpeed, ModifierApplication.PercentAdditive, 0.08f, RapaduraBurstSeconds) }, true,
                 starter: false, unlockQuestId: RegionQuestCatalog.DesertFirst, lessonRegion: BiomeType.Desert),
 
-            // Baião de dois: rice, beans, carne de sol and coentro — sturdier. Joaquim's: +max health.
+            // Plov da Vó: rice, carrot and meat in the big pot — sturdier. Joaquim's: +max health.
             new MealRecipeSpec(BaiaoDeDois,
                 new[] { new MealIngredientSpec(Wood, 2), new MealIngredientSpec(Herb, 2), new MealIngredientSpec(CookedMeat, 1) }, 4, 3,
-                new[] { Effect("Baião de dois", StatType.Defense, ModifierApplication.PercentAdditive, 0.10f) }, null,
-                CharacterId.Joaquim, new[] { Effect("Baião do Joaquim", StatType.MaxHealth, ModifierApplication.PercentAdditive, 0.05f) }, false,
+                new[] { Effect("Plov da Vó", StatType.Defense, ModifierApplication.PercentAdditive, 0.10f) }, null,
+                CharacterId.Joaquim, new[] { Effect("Plov do Joaquim", StatType.MaxHealth, ModifierApplication.PercentAdditive, 0.05f) }, false,
                 starter: false, unlockQuestId: RegionQuestCatalog.MountainFirst, lessonRegion: BiomeType.Mountain),
 
-            // Queijo coalho assado: on an iron skewer over the coals, with oregano — whoever bites, gets burnt
+            // Samsa Assada: pastry baked on the tandir wall with an iron hook, with herbs — whoever bites, gets burnt
             // (thorns-lite). Lavine's: +mana regen.
             new MealRecipeSpec(QueijoCoalho,
                 new[] { new MealIngredientSpec(Wood, 1), new MealIngredientSpec(IronOre, 1), new MealIngredientSpec(Herb, 1) }, 4, 3,
-                new[] { Effect("Queijo coalho assado", StatType.Thorns, ModifierApplication.PercentAdditive, 0.08f) }, null,
-                CharacterId.Lavine, new[] { Effect("Queijo da Lavine", StatType.ManaRegen, ModifierApplication.PercentAdditive, 0.20f) }, false,
+                new[] { Effect("Samsa Assada", StatType.Thorns, ModifierApplication.PercentAdditive, 0.08f) }, null,
+                CharacterId.Lavine, new[] { Effect("Samsa da Lavine", StatType.ManaRegen, ModifierApplication.PercentAdditive, 0.20f) }, false,
                 starter: false, unlockQuestId: RegionQuestCatalog.CavesFirst, lessonRegion: BiomeType.Caves),
 
-            // -- From "Pesca no açude" (taught by the first catch of their fish, see TaughtByCatchItemId) --
+            // -- From "Pesca no Remanso de Faro" (taught by the first catch of their fish, see TaughtByCatchItemId) --
 
             // Tilápia na brasa: on the coals with a pinch of herbs — a clear head, mana comes back faster.
             new MealRecipeSpec(TilapiaNaBrasa,
@@ -182,10 +182,10 @@ namespace Rapadura.Gameplay.Cooking
                 null, null, false,
                 starter: false, unlockQuestId: null, lessonRegion: null, taughtByCatchItemId: Fishing.FishCatalog.Tilapia),
 
-            // Caldo de piaba: a pot of tiny fish simmered with herbs — warm belly, health trickles back.
+            // Caldo de peixinho: a pot of tiny fish simmered with herbs — warm belly, health trickles back.
             new MealRecipeSpec(CaldoDePiaba,
                 new[] { new MealIngredientSpec(Wood, 1), new MealIngredientSpec(Fishing.FishCatalog.Piaba, 3), new MealIngredientSpec(Herb, 1) }, 1, 3,
-                new[] { Effect("Caldo de piaba", StatType.HealthRegen, ModifierApplication.Flat, 1.5f) }, null,
+                new[] { Effect("Caldo de peixinho", StatType.HealthRegen, ModifierApplication.Flat, 1.5f) }, null,
                 null, null, false,
                 starter: false, unlockQuestId: null, lessonRegion: null, taughtByCatchItemId: Fishing.FishCatalog.Piaba),
         };

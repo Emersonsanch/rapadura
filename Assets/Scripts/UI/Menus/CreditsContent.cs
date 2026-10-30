@@ -59,7 +59,7 @@ namespace Rapadura.UI.Menus
     /// Text shown by <see cref="CreditsController"/>, kept as plain data (not in the UXML) so it can be
     /// unit-tested and kept in sync with Docs/ThirdPartyLicenses.md in one place. When an entry is
     /// added/removed in ThirdPartyLicenses.md, mirror it in <see cref="ThirdPartySection"/> (and add the
-    /// en + pt-BR line to <see cref="UiTexts"/>). The roll ends on the family back on Vó Zefa's porch,
+    /// en + pt-BR line to <see cref="UiTexts"/>). The roll ends on the family back on Vó Edna's porch,
     /// right after the campaign epilogue (<c>story.ending.4</c>).
     /// </summary>
     public static class CreditsContent
@@ -119,7 +119,7 @@ namespace Rapadura.UI.Menus
             UiTexts.CreditsLineThanksCousins,
             UiTexts.CreditsLineThanksPlayer);
 
-        /// <summary>Last words of the roll: the family on Vó Zefa's porch, as in the epilogue.</summary>
+        /// <summary>Last words of the roll: the family on Vó Edna's porch, as in the epilogue.</summary>
         public static readonly CreditsSection ClosingSection = new CreditsSection(
             UiTexts.CreditsSectionClosing,
             "Até a próxima",

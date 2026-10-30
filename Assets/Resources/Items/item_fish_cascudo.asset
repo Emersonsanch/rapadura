@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_fish_cascudo
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fish_cascudo
-  _displayName: Cascudo
-  _description: "Peixe de coura\xE7a que vive grudado nas pedras."
+  _displayName: "Esturj\xE3o-mi\xFAdo"
+  _description: "Esturj\xE3o pequeno, de placas de osso, que vive grudado nas pedras."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

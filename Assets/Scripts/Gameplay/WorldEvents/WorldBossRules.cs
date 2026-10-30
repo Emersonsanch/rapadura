@@ -14,7 +14,7 @@ namespace Rapadura.Gameplay.WorldEvents
         /// <summary>A region's world boss ("chefe do mundo").</summary>
         WorldBoss = 1,
 
-        /// <summary>"Invasão do Cangaço": themed waves + the Capitão of the bando.</summary>
+        /// <summary>"Invasão de Āz": themed waves + Āz, the bando's Capitã.</summary>
         Invasion = 2,
     }
 
@@ -154,16 +154,16 @@ namespace Rapadura.Gameplay.WorldEvents
         public static readonly IReadOnlyList<WorldBossDefinition> All = new[]
         {
             new WorldBossDefinition(BossForestId, BiomeType.Forest, "enemy_forest_wolf", "enemy_forest_werewolf",
-                "Saklas, the Enchanted Maned Wolf", "Saklas, o Lobo-Guará Encantado", "Saklas, Werewolf King of the Woods", "Saklas, o Lobisomem-Rei da Mata",
+                "Saklas, the Ash Wolf", "Saklas, o Lobo de Cinzas", "Saklas, the Mardagayl King", "Saklas, o Rei Mardagayl",
                 offsetMinutes: 0, minLevel: 3, MountWaveCatalog.LightJaguar, 0.02f, 0.04f, MountDropRules.AlphaWolf),
             new WorldBossDefinition(BossDesertId, BiomeType.Desert, "enemy_desert_scorpion", "enemy_desert_scorpion",
                 "Namrael, the Scorpion King", "Namrael, o Escorpião-Rei", "Namrael of the Full Moon", "Namrael da Lua Cheia",
                 offsetMinutes: 45, minLevel: 6, MountWaveCatalog.FireRhea, 0.015f, 0.03f, MountDropRules.RuinGuardian),
             new WorldBossDefinition(BossMountainId, BiomeType.Mountain, "enemy_mountain_stone_golem", "enemy_mountain_stone_golem",
-                "Mazan, Giant of the Serra", "Mazan, o Gigante da Serra", "Mazan, the Moonstone Giant", "Mazan, o Gigante da Pedra da Lua",
+                "Mazan, Giant of the Range", "Mazan, o Gigante da Serra", "Mazan, the Moonstone Giant", "Mazan, o Gigante da Pedra-Lua",
                 offsetMinutes: 90, minLevel: 9, MountWaveCatalog.SnowTiger, 0.02f, 0.04f, MountDropRules.MountainWarlord),
             new WorldBossDefinition(BossCavesId, BiomeType.Caves, "enemy_cave_bat_swarm", "enemy_cave_vampire_bat",
-                "Prince of Darkness, King of the Flock", "Príncipe das Trevas, Rei da Revoada", "Prince of Darkness, the Vampire Bat King", "Príncipe das Trevas, o Morcegão-Vampiro",
+                "Mahaway, King of the Flock", "Mahaway, o Rei da Revoada", "Mahaway, the Great Bat of Darkness", "Mahaway, o Morcegão da Treva",
                 offsetMinutes: 135, minLevel: 13, MountWaveCatalog.Kirin, 0.008f, 0.016f, MountDropRules.CaveDweller),
         };
 

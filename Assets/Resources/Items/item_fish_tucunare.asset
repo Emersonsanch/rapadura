@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_fish_tucunare
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fish_tucunare
-  _displayName: "Tucunar\xE9"
-  _description: "Peixe valente de olho no rabo. S\xF3 ataca a isca com o c\xE9u limpo."
+  _displayName: "Perca-do-Nilo"
+  _description: "Peixe grande e valente, de olho que brilha. S\xF3 ataca a isca com o c\xE9u limpo."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_fish_peixe_dourado
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fish_peixe_dourado
-  _displayName: "Peixe-Dourado do A\xE7ude"
-  _description: "A lenda do V\xF4 Chico: s\xF3 aparece de madrugada ou ao entardecer, e mais ainda na chuva."
+  _displayName: "Peixe-Dourado do Remanso"
+  _description: "A lenda do V\xF4 Jorge: s\xF3 aparece de madrugada ou ao entardecer, e mais ainda na chuva."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

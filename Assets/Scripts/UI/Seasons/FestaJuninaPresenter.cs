@@ -6,7 +6,7 @@ using Rapadura.Gameplay.World.Cities;
 
 namespace Rapadura.UI.Seasons
 {
-    /// <summary>One prize row of the Barraca de Prendas.</summary>
+    /// <summary>One prize row of the Tenda das Oferendas.</summary>
     public readonly struct PrizeRow
     {
         public readonly string ItemId;
@@ -29,7 +29,7 @@ namespace Rapadura.UI.Seasons
         public bool CanBuy => Check == PrendaBuyCheck.Ok;
     }
 
-    /// <summary>Texts and small rules of the "Arraiá" window (<see cref="FestaJuninaPanel"/>), Unity-free and tested. Null manager = pt-BR.</summary>
+    /// <summary>Texts and small rules of the "Bema" window (<see cref="FestaJuninaPanel"/>), Unity-free and tested. Null manager = pt-BR.</summary>
     public static class FestaJuninaPresenter
     {
         /// <summary>Seconds of music the track shows ahead of the hit zone.</summary>
@@ -38,7 +38,7 @@ namespace Rapadura.UI.Seasons
         public const float HitZonePercent = 12f;
         public const float TrackEndPercent = 96f;
 
-        /// <summary>The "Arraiá" button: festa on, idle token inside the Vila da Vó Edna, nothing modal open.</summary>
+        /// <summary>The "Bema" button: Bema on, idle token inside the Vila da Vó Edna, nothing modal open.</summary>
         public static bool ShouldShowButton(bool festaActive, bool hudVisible, bool tokenIdle, bool paused, bool dialogueActive,
             BiomeType? region, bool inSafeZone)
         {

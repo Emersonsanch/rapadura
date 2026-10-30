@@ -10,11 +10,13 @@ namespace Rapadura.Gameplay.World.Cities
     /// palette swatches, <see cref="WorldMapTerrain"/> geometry) so it shares its single material:
     /// <list type="bullet">
     /// <item><see cref="AppendSafeRing"/> — the city limit painted on the ground: a dashed gold ring of
-    /// <see cref="SafeZoneRules.MapCityRadius"/> around the node, open where each road leaves, with a pair of gate posts
-    /// (porteira) on every road. Inside it is the zona segura.</item>
-    /// <item><see cref="AppendTown"/> — a small cluster of regional houses next to the node (adobe and a juazeiro in the
-    /// Deserto, stone with snowy roofs in the Montanha, lamp-lit houses in the Cavernas; the Floresta's landmark already
-    /// is Vó Zefa's village, so it only gets a signpost).</item>
+    /// <see cref="SafeZoneRules.MapCityRadius"/> around the node, open where each road leaves, with a pair of adobe
+    /// pillars (the city's portal, world bible §3.22) on every road. Inside it is the zona segura.</item>
+    /// <item><see cref="AppendTown"/> — a small cluster of houses next to the node in the region's signature form (bible
+    /// §2.5): Qocho's rose taipa with a lattice-walled grape-drying house, a cistern dome and a tamarisk in the Areias
+    /// Flamejantes; Litema's rondavels with litema bands, a curved dry-stone wall, aloes and a baobab in the Serra de
+    /// Kaggen; doors and round windows cut in pink tuff with lamp posts in the Grutas do Limiar. The Bosque do
+    /// Zarafshan's landmark already is the Vila da Vó Edna, so it only gets a signpost and an apricot tree.</item>
     /// <item><see cref="TownSpot"/> — where that cluster goes: the back side of the node, clear of roads, river and the
     /// region landmark. Pure geometry, EditMode-tested.</item>
     /// </list>
@@ -186,8 +188,11 @@ namespace Rapadura.Gameplay.World.Cities
                 {
                     Vector2 d = Direction(road + side);
                     var at = new Vector3(d.x * radius, 0f, d.y * radius);
-                    b.Box(at + new Vector3(0f, 0.24f, 0f), new Vector3(0.11f, 0.48f, 0.11f), WorldMapSwatch.Wood, road, WorldMapSwatch.WoodDark);
-                    b.Box(at + new Vector3(0f, 0.52f, 0f), new Vector3(0.15f, 0.08f, 0.15f), WorldMapSwatch.Gold, road);
+                    // An adobe pillar on an ochre foot, a lime cap and a thin gold band (the portal).
+                    b.Box(at + new Vector3(0f, 0.03f, 0f), new Vector3(0.2f, 0.06f, 0.2f), WorldMapSwatch.AdobeDark, road);
+                    b.Box(at + new Vector3(0f, 0.3f, 0f), new Vector3(0.15f, 0.5f, 0.15f), WorldMapSwatch.Adobe, road, WorldMapSwatch.AdobeDark);
+                    b.Box(at + new Vector3(0f, 0.44f, 0f), new Vector3(0.16f, 0.035f, 0.16f), WorldMapSwatch.Gold, road);
+                    b.Box(at + new Vector3(0f, 0.58f, 0f), new Vector3(0.19f, 0.06f, 0.19f), WorldMapSwatch.Wall, road);
                 }
             }
         }
@@ -198,57 +203,86 @@ namespace Rapadura.Gameplay.World.Cities
             switch (region)
             {
                 case BiomeType.Desert:
-                    AppendHouse(b, new Vector3(-0.2f, 0f, 0.1f), -10f, 0.55f, WorldMapSwatch.SandRock, WorldMapSwatch.Ruin, flatRoof: true);
-                    AppendHouse(b, new Vector3(0.3f, 0f, -0.2f), 15f, 0.42f, WorldMapSwatch.Wall, WorldMapSwatch.SandRock, flatRoof: true);
-                    // The juazeiro: an evergreen of the caatinga, shade for whoever passes.
-                    b.Cylinder(new Vector3(0.35f, 0f, 0.35f), 0.05f, 0.04f, 0.45f, 5, WorldMapSwatch.Trunk);
-                    b.Blob(new Vector3(0.35f, 0.55f, 0.35f), new Vector3(0.45f, 0.3f, 0.45f), WorldMapSwatch.LeafDark, coarse: true);
+                    // Oásis de Qocho: rose taipa houses, a grape-drying house with lattice walls, a cistern dome, a tamarisk.
+                    WorldMapPropMeshes.AppendAdobeHouse(b, new Vector3(-0.2f, 0f, 0.1f), -10f, 0.55f, WorldMapSwatch.SandRock, WorldMapSwatch.Ruin, iwan: false);
+                    AppendDryingHouse(b, new Vector3(0.3f, 0f, -0.2f), 15f, 0.42f);
+                    b.Cylinder(new Vector3(-0.05f, 0f, -0.32f), 0.16f, 0.16f, 0.08f, 8, WorldMapSwatch.Ruin);
+                    b.Blob(new Vector3(-0.05f, 0.08f, -0.32f), new Vector3(0.3f, 0.26f, 0.3f), WorldMapSwatch.Ruin);
+                    WorldMapPropMeshes.AppendTamarisk(b, new Vector3(0.38f, 0f, 0.35f), 0.4f);
                     break;
                 case BiomeType.Mountain:
-                    AppendHouse(b, new Vector3(-0.2f, 0f, 0.1f), 8f, 0.55f, WorldMapSwatch.Rock, WorldMapSwatch.Snow);
-                    AppendHouse(b, new Vector3(0.32f, 0f, -0.18f), -18f, 0.42f, WorldMapSwatch.RockDark, WorldMapSwatch.Snow);
-                    b.Box(new Vector3(0.38f, 0.15f, 0.32f), new Vector3(0.28f, 0.3f, 0.2f), WorldMapSwatch.WoodDark, 20f, WorldMapSwatch.Snow);
+                    // Vila de Litema: rondavels with painted bands, a curved dry-stone wall, aloes and a baobab.
+                    AppendRondavel(b, new Vector3(-0.2f, 0f, 0.12f), 0.55f);
+                    AppendRondavel(b, new Vector3(0.3f, 0f, -0.15f), 0.42f);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        float a = (200f + i * 22f) * Mathf.Deg2Rad;
+                        b.Box(new Vector3(Mathf.Cos(a) * 0.55f, 0.06f, Mathf.Sin(a) * 0.55f + 0.05f), new Vector3(0.2f, 0.12f, 0.08f), i % 2 == 0 ? WorldMapSwatch.Rock : WorldMapSwatch.RockDark,
+                            -(200f + i * 22f) + 90f, WorldMapSwatch.RockDark);
+                    }
+
+                    WorldMapPropMeshes.AppendBaobab(b, new Vector3(0.4f, 0f, 0.36f), 0.5f);
+                    WorldMapPropMeshes.AppendAloe(b, new Vector3(0.05f, 0f, -0.45f), 0.5f);
+                    WorldMapPropMeshes.AppendAloe(b, new Vector3(0.55f, 0f, 0.05f), 0.4f);
                     break;
                 case BiomeType.Caves:
-                    AppendHouse(b, new Vector3(-0.2f, 0f, 0.1f), -6f, 0.5f, WorldMapSwatch.CaveStone, WorldMapSwatch.CaveDark);
-                    AppendHouse(b, new Vector3(0.3f, 0f, -0.15f), 22f, 0.4f, WorldMapSwatch.CaveStone, WorldMapSwatch.RockDark);
+                    // Vila das Lamparinas: doors and round windows cut in pink tuff, lamps lit at the doors.
+                    AppendTuffHouse(b, new Vector3(-0.2f, 0f, 0.1f), -6f, 0.55f);
+                    AppendTuffHouse(b, new Vector3(0.3f, 0f, -0.15f), 22f, 0.42f);
                     AppendLampPost(b, new Vector3(0.45f, 0f, 0.3f));
                     AppendLampPost(b, new Vector3(-0.5f, 0f, -0.3f));
                     break;
                 default:
                     AppendSignpost(b, new Vector3(0f, 0f, 0f));
+                    WorldMapPropMeshes.AppendApricot(b, new Vector3(0.35f, 0f, 0.2f), 0.45f);
                     return;
             }
 
             AppendSignpost(b, new Vector3(-0.45f, 0f, -0.4f));
         }
 
-        private static void AppendHouse(WorldMapMeshBuilder b, Vector3 at, float yaw, float size, WorldMapSwatch wall, WorldMapSwatch roof,
-            bool flatRoof = false)
+        /// <summary>A Turfan grape-drying house: a tall taipa box whose walls are open brick lattice (dark holes in a checker).</summary>
+        private static void AppendDryingHouse(WorldMapMeshBuilder b, Vector3 at, float yaw, float size)
         {
             Matrix4x4 saved = b.Matrix;
             b.Matrix = saved * Matrix4x4.TRS(at, Quaternion.Euler(0f, yaw, 0f), Vector3.one * size);
-            b.Box(new Vector3(0f, 0.35f, 0f), new Vector3(1f, 0.7f, 0.8f), wall);
-            if (flatRoof)
+            b.Box(new Vector3(0f, 0.45f, 0f), new Vector3(0.9f, 0.9f, 0.75f), WorldMapSwatch.Ruin, top: WorldMapSwatch.RuinDark);
+            for (int row = 0; row < 3; row++)
             {
-                b.Box(new Vector3(0f, 0.74f, 0f), new Vector3(1.1f, 0.08f, 0.9f), roof);
-            }
-            else
-            {
-                var l0 = new Vector3(-0.6f, 0.68f, -0.52f);
-                var r0 = new Vector3(0.6f, 0.68f, -0.52f);
-                var l1 = new Vector3(-0.6f, 0.68f, 0.52f);
-                var r1 = new Vector3(0.6f, 0.68f, 0.52f);
-                var lt = new Vector3(-0.6f, 1.15f, 0f);
-                var rt = new Vector3(0.6f, 1.15f, 0f);
-                b.Quad(l0, lt, rt, r0, roof);
-                b.Quad(r1, rt, lt, l1, roof);
-                b.Triangle(new Vector3(-0.5f, 0.7f, -0.4f), new Vector3(-0.5f, 0.7f, 0.4f), new Vector3(-0.5f, 1.1f, 0f), wall);
-                b.Triangle(new Vector3(0.5f, 0.7f, 0.4f), new Vector3(0.5f, 0.7f, -0.4f), new Vector3(0.5f, 1.1f, 0f), wall);
+                for (int col = 0; col < 4; col++)
+                {
+                    if ((row + col) % 2 != 0) continue;
+                    var hole = new Vector3(-0.3f + col * 0.2f, 0.25f + row * 0.22f, -0.38f);
+                    b.Box(hole, new Vector3(0.1f, 0.1f, 0.02f), WorldMapSwatch.Black);
+                    b.Box(new Vector3(0.455f, hole.y, -0.25f + col * 0.17f), new Vector3(0.02f, 0.1f, 0.1f), WorldMapSwatch.Black);
+                }
             }
 
-            b.Box(new Vector3(-0.15f, 0.24f, -0.41f), new Vector3(0.26f, 0.42f, 0.04f), WorldMapSwatch.WoodDark);
-            b.Box(new Vector3(0.24f, 0.42f, -0.41f), new Vector3(0.2f, 0.18f, 0.04f), WorldMapSwatch.Lantern);
+            b.Matrix = saved;
+        }
+
+        /// <summary>A Litema rondavel: a round clay house with a painted band, a dark door and a conical thatch roof.</summary>
+        private static void AppendRondavel(WorldMapMeshBuilder b, Vector3 at, float size)
+        {
+            b.Cylinder(at, 0.42f * size, 0.42f * size, 0.62f * size, 9, WorldMapSwatch.Wall);
+            b.Cylinder(at + Vector3.up * 0.12f * size, 0.43f * size, 0.43f * size, 0.12f * size, 9, WorldMapSwatch.Roof);
+            b.Cylinder(at + Vector3.up * 0.3f * size, 0.43f * size, 0.43f * size, 0.04f * size, 9, WorldMapSwatch.Banner);
+            b.Box(at + new Vector3(0f, 0.22f, -0.41f) * size, new Vector3(0.18f, 0.36f, 0.04f) * size, WorldMapSwatch.Black);
+            b.Cylinder(at + Vector3.up * 0.6f * size, 0.56f * size, 0f, 0.55f * size, 9, WorldMapSwatch.Sand);
+            b.Cylinder(at + Vector3.up * 1.05f * size, 0.12f * size, 0f, 0.14f * size, 6, WorldMapSwatch.Snow);
+        }
+
+        /// <summary>A Lamparinas tuff house: a rounded pink rock mass with a door, a round window and a little lamp niche.</summary>
+        private static void AppendTuffHouse(WorldMapMeshBuilder b, Vector3 at, float yaw, float size)
+        {
+            Matrix4x4 saved = b.Matrix;
+            b.Matrix = saved * Matrix4x4.TRS(at, Quaternion.Euler(0f, yaw, 0f), Vector3.one * size);
+            b.Blob(new Vector3(0f, 0.45f, 0.1f), new Vector3(1.1f, 1.05f, 0.9f), WorldMapSwatch.Tamarisk, 0f, true);
+            b.Box(new Vector3(0f, 0.3f, -0.33f), new Vector3(0.9f, 0.6f, 0.12f), WorldMapSwatch.Tamarisk, top: WorldMapSwatch.CaveStone);
+            b.Box(new Vector3(-0.15f, 0.21f, -0.4f), new Vector3(0.22f, 0.36f, 0.03f), WorldMapSwatch.WoodDark);
+            b.Box(new Vector3(-0.15f, 0.41f, -0.4f), new Vector3(0.26f, 0.05f, 0.04f), WorldMapSwatch.CaveStone);
+            b.Blob(new Vector3(0.22f, 0.42f, -0.39f), new Vector3(0.14f, 0.14f, 0.03f), WorldMapSwatch.Lantern, 0f, true);
+            b.Box(new Vector3(0.22f, 0.15f, -0.41f), new Vector3(0.08f, 0.08f, 0.02f), WorldMapSwatch.Lantern);
             b.Matrix = saved;
         }
 

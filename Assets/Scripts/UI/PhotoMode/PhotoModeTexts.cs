@@ -61,19 +61,19 @@ namespace Rapadura.UI.PhotoMode
                 "Analógico esq.: mover · Analógico dir.: girar · Gatilhos: zoom · LB/RB: inclinar · Direcional: filtro/pose · A: foto · Y: painel · B: sair"),
 
             new LocalizationEntry("ui.photo.filter.none", "None", "Nenhum"),
-            new LocalizationEntry("ui.photo.filter.cordel", "Cordel", "Cordel"),
-            new LocalizationEntry("ui.photo.filter.xilogravura", "Woodcut", "Xilogravura"),
+            new LocalizationEntry("ui.photo.filter.cordel", "Illumination", "Iluminura"),
+            new LocalizationEntry("ui.photo.filter.xilogravura", "Paper cut", "Papel recortado"),
             new LocalizationEntry("ui.photo.filter.entardecer", "Sunset", "Entardecer"),
-            new LocalizationEntry("ui.photo.filter.sao_joao", "St. John's Night", "Noite de São João"),
+            new LocalizationEntry("ui.photo.filter.sao_joao", "Bema Night", "Noite do Bema"),
 
             new LocalizationEntry("ui.photo.pose.neutral", "Natural", "Natural"),
             new LocalizationEntry("ui.photo.pose.wave", "Wave", "Acenar"),
             new LocalizationEntry("ui.photo.pose.victory", "Victory", "Vitória"),
             new LocalizationEntry("ui.photo.pose.sit", "Sit", "Sentar"),
             new LocalizationEntry("ui.photo.pose.signature.maithe", "Drawn bow", "Arco tenso"),
-            new LocalizationEntry("ui.photo.pose.signature.maria", "Blessing of Light", "Bênção da Luz"),
+            new LocalizationEntry("ui.photo.pose.signature.maria", "Warmth of Light", "Calor da Luz"),
             new LocalizationEntry("ui.photo.pose.signature.joaquim", "Guard of the Roots", "Guarda das Raízes"),
-            new LocalizationEntry("ui.photo.pose.signature.icaro", "Gadget", "Engenhoca"),
+            new LocalizationEntry("ui.photo.pose.signature.icaro", "Light Engine", "Engenho da Luz"),
             new LocalizationEntry("ui.photo.pose.signature.lavine", "Veil of Shadows", "Véu de Sombras"),
         };
 

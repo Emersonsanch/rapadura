@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.Characters
 {
-    /// <summary>Maithe — A Arqueira dos Ventos. DPS à distância.</summary>
+    /// <summary>Maithe — A Arqueira dos Ventos (elemento Vento Vivo). DPS à distância.</summary>
     public class Maithe : PlayableCharacter
     {
         public override CharacterId Id => CharacterId.Maithe;

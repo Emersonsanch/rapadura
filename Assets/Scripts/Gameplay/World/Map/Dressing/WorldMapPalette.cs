@@ -9,6 +9,9 @@ namespace Rapadura.Gameplay.World.Map.Dressing
         Sand, SandRock, Rock, RockDark, Snow, CaveStone, CaveDark, Crystal,
         Roof, Wall, Wood, WoodDark, Ruin, RuinDark, Gold, Banner,
         Cloud, CloudShade, Fog, DeepWater, Black, Lantern, PineLeaf, Pebble,
+        // Row 5 (Ilha da Aurora, world bible §2): Sogdian adobe and ochre, tugai poplar (green and autumn gold),
+        // tamarisk pink, saxaul grey-green, apricot, turquoise tile (detail only).
+        Adobe, AdobeDark, Poplar, PoplarGold, Tamarisk, Saxaul, Apricot, Turquoise,
     }
 
     /// <summary>
@@ -20,7 +23,7 @@ namespace Rapadura.Gameplay.World.Map.Dressing
     public static class WorldMapPalette
     {
         public const int Columns = 8;
-        public const int Rows = 4;
+        public const int Rows = 5;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -57,6 +60,14 @@ namespace Rapadura.Gameplay.World.Map.Dressing
             new Color(1f, 0.72f, 0.3f),      // Lantern
             new Color(0.2f, 0.45f, 0.3f),    // PineLeaf
             new Color(0.68f, 0.66f, 0.62f),  // Pebble
+            new Color(0.85f, 0.63f, 0.4f),   // Adobe #D9A066
+            new Color(0.72f, 0.47f, 0.25f),  // AdobeDark (ochre #B7793F)
+            new Color(0.5f, 0.65f, 0.31f),   // Poplar #7FA650
+            new Color(0.88f, 0.72f, 0.26f),  // PoplarGold (autumn leaves)
+            new Color(0.85f, 0.55f, 0.65f),  // Tamarisk
+            new Color(0.56f, 0.6f, 0.44f),   // Saxaul
+            new Color(0.95f, 0.62f, 0.3f),   // Apricot
+            new Color(0.25f, 0.65f, 0.64f),  // Turquoise #3FA7A3
         };
 
         public static Color ColorOf(WorldMapSwatch swatch) => Colors[(int)swatch];

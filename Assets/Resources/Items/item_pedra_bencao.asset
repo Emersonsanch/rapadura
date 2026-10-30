@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_pedra_bencao
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_pedra_bencao
-  _displayName: "Pedra da B\xEAn\xE7\xE3o"
-  _description: "Pedra lisa benzida na capela do povoado. Refina um equipamento de +0 at\xE9 +6 e nunca falha."
+  _displayName: "Pedra-Fa\xEDsca"
+  _description: "Pedrinha lisa com uma fa\xEDsca de luz presa dentro. Refina um equipamento de +0 at\xE9 +6 e nunca falha."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

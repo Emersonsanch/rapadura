@@ -24,7 +24,7 @@ namespace Rapadura.Gameplay.WorldEvents
     }
 
     /// <summary>
-    /// Localization keys (en + pt-BR) of the world bosses and the Invasão do Cangaço: boss names (<c>world_boss.*</c>),
+    /// Localization keys (en + pt-BR) of the world bosses (the arcontes, Docs/WorldBible_Maniqueismo.md §3.4) and the Invasão de Āz: boss names (<c>world_boss.*</c>),
     /// region phrases, the world-map pill and buttons (<c>ui.world_boss.map.*</c>), the fight HUD and results
     /// (<c>ui.world_boss.hud.*</c>, <c>ui.world_boss.result.*</c>) and one line per cousin per moment
     /// (<c>world_boss.line.*</c>). Same self-contained pattern as <c>EventRoomTexts</c>: merged into the live
@@ -137,42 +137,42 @@ namespace Rapadura.Gameplay.WorldEvents
             var entries = new List<LocalizationEntry>
             {
                 new LocalizationEntry(WorldBossTitle, "World boss", "Chefe do mundo"),
-                new LocalizationEntry(InvasionTitle, "Cangaço Invasion", "Invasão do Cangaço"),
-                new LocalizationEntry(CaptainName, "Az, captain of the gang", "Az, capitão do bando"),
-                new LocalizationEntry(BanditName, "{0} of the gang", "{0} do bando"),
-                new LocalizationEntry(ChestName, "Cangaço Chest +{0}", "Baú do Cangaço +{0}"),
+                new LocalizationEntry(InvasionTitle, "Āz's Raid", "Invasão de Āz"),
+                new LocalizationEntry(CaptainName, "Āz, the Greedy Captain", "Āz, a Capitã Cobiçosa"),
+                new LocalizationEntry(BanditName, "{0} of Āz's band", "{0} do bando de Āz"),
+                new LocalizationEntry(ChestName, "Rescued Chest +{0}", "Arca Resgatada +{0}"),
 
-                new LocalizationEntry(RegionKey(BiomeType.Forest), "in the Forest", "na Floresta"),
-                new LocalizationEntry(RegionKey(BiomeType.Desert), "in the Desert", "no Deserto"),
-                new LocalizationEntry(RegionKey(BiomeType.Mountain), "on the Mountain", "na Montanha"),
-                new LocalizationEntry(RegionKey(BiomeType.Caves), "in the Caves", "nas Cavernas"),
+                new LocalizationEntry(RegionKey(BiomeType.Forest), "in the Zarafshan Woods", "no Bosque do Zarafshan"),
+                new LocalizationEntry(RegionKey(BiomeType.Desert), "in the Flaming Sands", "nas Areias Flamejantes"),
+                new LocalizationEntry(RegionKey(BiomeType.Mountain), "in the Kaggen Range", "na Serra de Kaggen"),
+                new LocalizationEntry(RegionKey(BiomeType.Caves), "in the Threshold Caves", "nas Grutas do Limiar"),
 
                 new LocalizationEntry(MapBossOpen, "World boss: {0} is {1}! Leaves in {2}", "Chefe do mundo: {0} está {1}! Vai embora em {2}"),
                 new LocalizationEntry(MapBossNext, "Next world boss: {0} {1}, in {2}", "Próximo chefe do mundo: {0} {1}, em {2}"),
-                new LocalizationEntry(MapInvasionOpen, "The Cangaço gang took over {0}! Ends in {1}", "O bando do Cangaço tomou conta {0}! Acaba em {1}"),
-                new LocalizationEntry(MapInvasionNext, "Next Cangaço Invasion: {0}, in {1}", "Próxima Invasão do Cangaço: {0}, em {1}"),
+                new LocalizationEntry(MapInvasionOpen, "Āz and her band are raiding {0}! Ends in {1}", "Āz e o bando dela estão {0}! Acaba em {1}"),
+                new LocalizationEntry(MapInvasionNext, "Next raid of Āz: {0}, in {1}", "Próxima Invasão de Āz: {0}, em {1}"),
                 new LocalizationEntry(MapFightButton, "Face: {0}", "Enfrentar: {0}"),
-                new LocalizationEntry(MapDefendButton, "Defend from the Cangaço", "Defender do Cangaço"),
+                new LocalizationEntry(MapDefendButton, "Defend from Āz", "Defender de Āz"),
                 new LocalizationEntry(MapNeedLevel, "You need level {0} for this one.", "Precisa do nível {0} para esse."),
                 new LocalizationEntry(MapAlreadyDone, "You already won this time. Come back next time!", "Vocês já venceram desta vez. Voltem na próxima!"),
                 new LocalizationEntry(MapClosedNow, "It's gone already. Watch the next countdown!", "Já foi embora. Fiquem de olho na próxima contagem!"),
                 new LocalizationEntry(MapNightTag, "(night form)", "(forma da noite)"),
 
                 new LocalizationEntry(HudGoalBoss, "Beat {0} before it leaves!", "Vençam {0} antes que vá embora!"),
-                new LocalizationEntry(HudGoalWave, "Gang wave {0} of {1}", "Onda {0} de {1} do bando"),
-                new LocalizationEntry(HudGoalCaptain, "Beat Az, the gang's captain!", "Derrotem Az, o capitão do bando!"),
-                new LocalizationEntry(HudPoints, "Points: {0} · Chest +{1}", "Pontos: {0} · Baú +{1}"),
-                new LocalizationEntry(HudRage, "{0} got furious and called for help!", "{0} ficou furioso e chamou ajuda!"),
+                new LocalizationEntry(HudGoalWave, "Band wave {0} of {1}", "Onda {0} de {1} do bando"),
+                new LocalizationEntry(HudGoalCaptain, "Beat Āz, the band's captain!", "Derrotem Āz, a capitã do bando!"),
+                new LocalizationEntry(HudPoints, "Points: {0} · Chest +{1}", "Pontos: {0} · Arca +{1}"),
+                new LocalizationEntry(HudRage, "{0} got furious and called for help!", "{0} se enfureceu e chamou ajuda!"),
                 new LocalizationEntry(HudMinions, "{0} called its friends!", "{0} chamou os amigos!"),
-                new LocalizationEntry(HudCaptainArrives, "Az, the gang's captain, is here!", "Az, o capitão do bando, chegou!"),
-                new LocalizationEntry(HudWaveIncoming, "Here comes gang wave {0}!", "Lá vem a onda {0} do bando!"),
+                new LocalizationEntry(HudCaptainArrives, "Āz, the band's captain, is here!", "Āz, a capitã do bando, chegou!"),
+                new LocalizationEntry(HudWaveIncoming, "Here comes band wave {0}!", "Lá vem a onda {0} do bando!"),
 
-                new LocalizationEntry(ResultBossWin, "{0} defeated!", "{0} vencido!"),
+                new LocalizationEntry(ResultBossWin, "{0} defeated! The spark is free!", "Vitória sobre {0}! A faísca está livre!"),
                 new LocalizationEntry(ResultBossLeft, "{0} went away...", "{0} foi embora..."),
-                new LocalizationEntry(ResultInvasionWin, "The region is free from the Cangaço!", "A região está livre do Cangaço!"),
+                new LocalizationEntry(ResultInvasionWin, "The region is free from Āz!", "A região está livre de Āz!"),
                 new LocalizationEntry(ResultInvasionEnded, "The invasion is over", "A invasão acabou"),
                 new LocalizationEntry(ResultPoints, "Points: {0}", "Pontos: {0}"),
-                new LocalizationEntry(ResultNoChest, "No chest this time. Defeat more of the gang!", "Sem baú desta vez. Derrotem mais gente do bando!"),
+                new LocalizationEntry(ResultNoChest, "No chest this time. Free more of the band!", "Sem arca desta vez. Libertem mais bichos do bando!"),
                 new LocalizationEntry(ResultAlreadyPaid, "This time's prize was already received.", "O prêmio desta vez já foi recebido."),
                 new LocalizationEntry(ResultRewards, "+{0} XP · +{1} gold", "+{0} XP · +{1} de ouro"),
                 new LocalizationEntry(ResultStones, "+{0} {1}", "+{0} {1}"),
@@ -207,7 +207,7 @@ namespace Rapadura.Gameplay.WorldEvents
             {
                 (CharacterId.Maithe, "At night it's even bigger. Ícaro, light the lamp!", "De noite ele fica ainda maior. Ícaro, acende a lamparina!"),
                 (CharacterId.Icaro, "Glowing eyes in the dark... my sister goes first, right?", "Olhos brilhando no escuro... minha irmã vai na frente, né?"),
-                (CharacterId.Joaquim, "Vô Jorge faced worse on moonlit nights. So can we.", "O Vô Jorge enfrentou coisa pior em noite de lua. A gente também consegue."),
+                (CharacterId.Joaquim, "In Vô Jorge's stories they faced worse on moonlit nights. So can we.", "Nas histórias do Vô Jorge, enfrentaram coisa pior em noite de lua. A gente também consegue."),
                 (CharacterId.Maria, "Stay close, everyone. In the dark, we hold hands.", "Fiquem pertinho. No escuro, a gente se dá as mãos."),
                 (CharacterId.Lavine, "I'm not scared! ...Just a tiny bit. Okay, let's go!", "Eu não tô com medo! ...Só um tiquinho. Tá, vamos!"),
             });
@@ -215,9 +215,9 @@ namespace Rapadura.Gameplay.WorldEvents
             {
                 (CharacterId.Maithe, "Got it! Ícaro, tell everyone your sister did it!", "Conseguimos! Ícaro, conta pra todo mundo que foi a sua irmã!"),
                 (CharacterId.Icaro, "Plan worked! I'll write it down before I forget.", "O plano funcionou! Vou anotar antes que eu esqueça."),
-                (CharacterId.Joaquim, "The crown fell off. The forest is calm again.", "A coroa caiu. A mata ficou calma de novo."),
+                (CharacterId.Joaquim, "The crown fell off and the spark went up. Everything is calm again.", "A coroa caiu e a faísca subiu. Ficou tudo calmo de novo."),
                 (CharacterId.Maria, "Everyone's fine! Joaquim, you can stop flexing now.", "Todo mundo bem! Joaquim, pode parar de fazer muque."),
-                (CharacterId.Lavine, "We beat the king! Vó Edna will make cake, right?", "A gente venceu o rei! A Vó Edna vai fazer bolo, né?"),
+                (CharacterId.Lavine, "We beat the king! Vó Edna will make apricot cake, right?", "A gente venceu o rei! A Vó Edna vai fazer bolo de damasco, né?"),
             });
             AddLines(entries, WorldEventMoment.BossLose, new[]
             {
@@ -229,32 +229,32 @@ namespace Rapadura.Gameplay.WorldEvents
             });
             AddLines(entries, WorldEventMoment.InvasionAppears, new[]
             {
-                (CharacterId.Maithe, "Leather hats on the road! The Cangaço gang is back.", "Chapéu de couro na estrada! O bando do Cangaço voltou."),
-                (CharacterId.Icaro, "They enchanted the bichos with hats. That's actually clever... and very rude!", "Eles enfeitiçaram os bichos com chapéu. Até que é esperto... e muito mal-educado!"),
-                (CharacterId.Joaquim, "Az and his gang again. Let's protect the people there.", "O Az e o bando dele de novo. Vamos proteger o povo de lá."),
-                (CharacterId.Maria, "Vô Jorge told stories about this gang. Now it's our turn.", "O Vô Jorge contava histórias desse bando. Agora é a nossa vez."),
-                (CharacterId.Lavine, "If we win, there's a treasure chest! I want the +5!", "Se a gente ganhar, tem baú de tesouro! Eu quero o +5!"),
+                (CharacterId.Maithe, "Little gold crowns on the road! Āz and her band are back.", "Coroinha dourada na estrada! A Āz e o bando dela voltaram."),
+                (CharacterId.Icaro, "She enchanted the bichos with tin crowns. That's actually clever... and very rude!", "Ela enfeitiçou os bichos com coroinha de lata. Até que é esperto... e muito mal-educado!"),
+                (CharacterId.Joaquim, "Āz and her band again. Let's protect the people there.", "A Āz e o bando dela de novo. Vamos proteger o povo de lá."),
+                (CharacterId.Maria, "Vô Jorge told stories about Āz, who wants everything that shines. Now it's our turn.", "O Vô Jorge contava da Āz, que quer tudo o que brilha. Agora é a nossa vez."),
+                (CharacterId.Lavine, "If we win, we rescue the chest she hid! I want the +5!", "Se a gente ganhar, resgata a arca que ela escondeu! Eu quero a +5!"),
             });
             AddLines(entries, WorldEventMoment.InvasionStart, new[]
             {
-                (CharacterId.Maithe, "Knock the hats off and the bichos go back to normal. Go!", "Derruba o chapéu que o bicho volta ao normal. Vai!"),
+                (CharacterId.Maithe, "Knock the crowns off and the bichos remember who they are. Go!", "Derruba a coroinha que o bicho lembra quem é. Vai!"),
                 (CharacterId.Icaro, "Wave after wave... good thing I brought snacks.", "Onda atrás de onda... ainda bem que eu trouxe merenda."),
                 (CharacterId.Joaquim, "Maria, behind me. Nobody passes the roots!", "Maria, atrás de mim. Ninguém passa pelas raízes!"),
                 (CharacterId.Maria, "My brother in front, me healing. Like always!", "Meu irmão na frente e eu curando. Como sempre!"),
-                (CharacterId.Lavine, "Hey, gang! This region has owners: us!", "Ei, bando! Essa região tem dono: a gente!"),
+                (CharacterId.Lavine, "Hey, Āz! Not everything that shines is yours!", "Ei, Āz! Nem tudo o que brilha é seu!"),
             });
             AddLines(entries, WorldEventMoment.InvasionWin, new[]
             {
-                (CharacterId.Maithe, "Az ran off without his hat! Let's open the chest.", "O Az fugiu sem o chapéu! Bora abrir o baú."),
-                (CharacterId.Icaro, "Chest opened! I'm keeping the hinge for an invention.", "Baú aberto! A dobradiça eu guardo pra uma invenção."),
+                (CharacterId.Maithe, "Āz ran off without her crown! Let's open the chest.", "A Āz fugiu sem a coroinha! Bora abrir a arca."),
+                (CharacterId.Icaro, "Chest opened! I'm keeping the hinge for an invention.", "Arca aberta! A dobradiça eu guardo pra uma invenção."),
                 (CharacterId.Joaquim, "The region is free. That's what a guardian does.", "A região está livre. É isso que guardião faz."),
-                (CharacterId.Maria, "Look at the bichos! Without the hats they're so sweet.", "Olha os bichos! Sem o chapéu eles são tão bonzinhos."),
-                (CharacterId.Lavine, "Treasure! I'll show it to Vó Edna and Vô Jorge!", "Tesouro! Vou mostrar pra Vó Edna e pro Vô Jorge!"),
+                (CharacterId.Maria, "Look at the bichos! Without the crowns they're so sweet.", "Olha os bichos! Sem a coroinha eles são tão bonzinhos."),
+                (CharacterId.Lavine, "Treasure! I'll show Vó Edna. Vô Jorge would have loved this!", "Tesouro! Vou mostrar pra Vó Edna. O Vô Jorge ia adorar isso!"),
             });
             AddLines(entries, WorldEventMoment.InvasionLose, new[]
             {
-                (CharacterId.Maithe, "The gang was strong today. We regroup and come back.", "O bando estava forte hoje. A gente se junta e volta."),
-                (CharacterId.Icaro, "Too many hats, not enough plans. I'll fix that.", "Chapéu demais e plano de menos. Vou resolver isso."),
+                (CharacterId.Maithe, "The band was strong today. We regroup and come back.", "O bando estava forte hoje. A gente se junta e volta."),
+                (CharacterId.Icaro, "Too many crowns, not enough plans. I'll fix that.", "Coroinha demais e plano de menos. Vou resolver isso."),
                 (CharacterId.Joaquim, "We held the line as long as we could. Next time, longer.", "Seguramos o quanto deu. Da próxima, seguramos mais."),
                 (CharacterId.Maria, "Nobody got really hurt. That already is a victory.", "Ninguém se machucou de verdade. Isso já é uma vitória."),
                 (CharacterId.Lavine, "Next invasion I'll bring my biggest spell!", "Na próxima invasão eu trago o meu feitiço maior!"),

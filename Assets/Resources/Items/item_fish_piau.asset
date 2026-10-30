@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_fish_piau
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fish_piau
-  _displayName: Piau
-  _description: "Peixe listrado que gosta da neblina da madrugada."
+  _displayName: "Truta-do-Tian-Shan"
+  _description: "Truta pintadinha que gosta da neblina da madrugada."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

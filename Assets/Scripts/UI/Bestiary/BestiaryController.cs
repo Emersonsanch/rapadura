@@ -17,10 +17,10 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.Bestiary
 {
     /// <summary>
-    /// "Caderno da Vó Zefa", the bestiary window (Resources/UI/BestiaryView.uxml/.uss): a page per enemy
+    /// "Caderno da Vó Edna", the bestiary window (Resources/UI/BestiaryView.uxml/.uss): a page per enemy
     /// type and boss of <see cref="BestiaryCatalog"/>, grouped by region, unlocked on the first defeat
     /// (<see cref="BestiaryProgress"/>). Locked pages are a dark silhouette with "???"; unlocked ones show the
-    /// name, region, kill count, health/hit, Vó Zefa's lore, tips and drops derived from the enemy data, and
+    /// name, region, kill count, health/hit, Vó Edna's lore, tips and drops derived from the enemy data, and
     /// a one-liner from the cousin being played (texts in <see cref="BestiaryTexts"/>, built by
     /// <see cref="BestiaryPresenter"/>).
     /// <list type="bullet">

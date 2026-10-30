@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_runa_couro
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_runa_couro
-  _displayName: Runa do Couro Duro
-  _description: Verso que endurece a pele feito couro curtido: +15% de defesa por 15 segundos.
+  _displayName: "Runa do Couro Duro"
+  _description: "Verso que endurece a pele feito couro curtido: +15% de defesa por 15 segundos."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 1

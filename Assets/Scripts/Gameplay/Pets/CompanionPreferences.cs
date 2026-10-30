@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Rapadura.Gameplay.Pets
 {
     /// <summary>
-    /// Player-facing options of the companion (Caramelo, Vó Zefa's mutt), persisted in PlayerPrefs like
+    /// Player-facing options of the companion (Caramelo, shown as Ari: Vó Edna's dog), persisted in PlayerPrefs like
     /// <c>TouchControlsPreferences</c> (device-wide: a "no dog on screen" preference is about the player,
     /// not the save slot). Written by the Settings "Acessibilidade" tab (<c>CompanionSettingsSection</c>)
     /// and read by <see cref="CarameloCompanion"/>, which listens to <see cref="Changed"/> to leave or come
@@ -14,7 +14,7 @@ namespace Rapadura.Gameplay.Pets
     {
         public const string CarameloEnabledKey = "Pets.Caramelo.Enabled";
         public const bool CarameloEnabledDefault = true;
-        /// <summary>Set once Vó Zefa introduced Caramelo on the world map (first "Fazer carinho").</summary>
+        /// <summary>Set once Vó Edna introduced Caramelo on the world map (first "Fazer carinho").</summary>
         public const string IntroducedKey = "Pets.Caramelo.Introduced";
 
         /// <summary>Raised after any option changes.</summary>

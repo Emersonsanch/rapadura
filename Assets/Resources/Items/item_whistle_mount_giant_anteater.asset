@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_whistle_mount_giant_anteater
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_whistle_mount_giant_anteater
-  _displayName: "Apito do Tamandu\xE1-Bandeira Gigante"
-  _description: "Apito de taquara. Quem compra leva o Tamandu\xE1-Bandeira Gigante para casa."
+  _displayName: "Apito do Porco-Formigueiro Gigante"
+  _description: "Apito de junco. Quem compra leva o Porco-Formigueiro Gigante para casa."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

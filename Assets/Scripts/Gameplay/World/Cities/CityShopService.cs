@@ -80,7 +80,7 @@ namespace Rapadura.Gameplay.World.Cities
 
         /// <summary>
         /// Whether a line can be sold right now (pure, given the facts): house items need the house, outfits need wardrobe
-        /// data, the Bornal de couro is sold once.
+        /// data, the Alforje de Feltro is sold once.
         /// </summary>
         public static bool IsAvailable(CityShopEntry entry, bool hasHouse, bool canBuyBornal, Func<string, bool> outfitExists)
         {
@@ -188,7 +188,7 @@ namespace Rapadura.Gameplay.World.Cities
             public int _gridHeight;
         }
 
-        /// <summary>Regions where Seu Bento can be today: the ones open on the map (all, without a map).</summary>
+        /// <summary>Regions where Ammo can be today: the ones open on the map (all, without a map).</summary>
         public static List<BiomeType> MascateCandidates(WorldMapProgress map)
         {
             var candidates = new List<BiomeType>();

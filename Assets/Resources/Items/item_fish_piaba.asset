@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: item_fish_piaba
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fish_piaba
-  _displayName: Piaba
+  _displayName: "Alburno"
   _description: "Peixinho mi\xFAdo que vive em todo canto d'\xE1gua. Bom pra caldo."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}

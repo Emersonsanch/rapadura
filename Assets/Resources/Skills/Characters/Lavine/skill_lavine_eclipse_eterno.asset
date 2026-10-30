@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: skill_lavine_eclipse_eterno
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_lavine_eclipse_eterno
-  _displayName: Eclipse Eterno
-  _description: "Ultimate: o c\xE9u escurece como na Noite Rubra em que Lavine nasceu. Uma onda de trevas fere todos os inimigos ao redor e os deixa lentos e indefesos. \xC9 a prova de que a ca\xE7ula da fam\xEDlia pode usar esse poder para proteger."
+  _displayName: "C\xE9u da Noite Rubra"
+  _description: "Ultimate: o c\xE9u fica quieto e vermelho como na Noite Rubra em que Lavine nasceu. Uma onda de ar sereno e estrelado fere todos os inimigos ao redor e os deixa lentos e indefesos. \xC9 a prova de que a ca\xE7ula da fam\xEDlia pode usar esse poder para proteger."
   _icon: {fileID: 0}
   _skillType: 2
   _category: 0

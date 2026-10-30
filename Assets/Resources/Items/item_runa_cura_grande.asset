@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_runa_cura_grande
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_runa_cura_grande
-  _displayName: Runa da Cura Grande
-  _description: Cordel inteiro de cura, com asa de morcego no lacre. Ao ler, cura 120 de vida.
+  _displayName: "Runa da Cura Grande"
+  _description: "Rolo inteiro de cura, iluminado a ouro, com asa de morcego no lacre. Ao ler, cura 120 de vida."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 1

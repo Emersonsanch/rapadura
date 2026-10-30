@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_whistle_mount_capybara
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_whistle_mount_capybara
-  _displayName: "Apito da Capivara Gigante"
-  _description: "Apito de taquara. Quem compra leva a Capivara Gigante para casa."
+  _displayName: "Apito da Hipopotinha de Taweret"
+  _description: "Apito de junco. Quem compra leva a Hipopotinha de Taweret para casa."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

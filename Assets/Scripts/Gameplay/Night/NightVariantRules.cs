@@ -9,7 +9,7 @@ namespace Rapadura.Gameplay.Night
     {
         Normal = 0,
 
-        /// <summary>"Lobo da Mata (noturno)": darker, glowing eyes, a bit bigger, tougher, better rewards.</summary>
+        /// <summary>"Lobo do Tugai (da noite)": darker, glowing eyes, a bit bigger, tougher, better rewards.</summary>
         Variant = 1,
 
         /// <summary>A night-only creature (<see cref="NightSpecies"/>): its own definition and model, with the species' stat multipliers.</summary>
@@ -21,7 +21,7 @@ namespace Rapadura.Gameplay.Night
     /// (<see cref="BaseEnemyId"/>, e.g. <c>enemy_forest_werewolf</c>) and procedural model: the definition holds the
     /// home region's common baseline (so loot table, XP tier, bestiary page and quest kill are its own) and drives the
     /// AI/attack; this adds the name and the stat/reward multipliers of Docs/DayNight.md (×5 health for the
-    /// Lobisomem, …), a <see cref="Tint"/> (white = none) and <see cref="EyeColor"/> (clear = the model's own glowing
+    /// Mardagayl, …), a <see cref="Tint"/> (white = none) and <see cref="EyeColor"/> (clear = the model's own glowing
     /// eyes, no extra spheres). <see cref="HomeRegion"/> is where its definition lives; it may also show up in
     /// another region's table as a visitor, scaled to that region (<see cref="NightVariantRules.Resolve(NightForm, NightSpecies, BiomeType?)"/>).
     /// </summary>
@@ -122,7 +122,7 @@ namespace Rapadura.Gameplay.Night
     /// Pure rules of the night variants and the playable night species (EditMode-tested in <c>NightVariantRulesTests</c>).
     /// A variant is the same enemy at night: tinted <see cref="VariantTint"/> (darker, moonlit blue), two glowing
     /// <see cref="VariantEyeColor"/> eyes (unlit, so they read in the dark as a warning), <see cref="VariantScale"/>
-    /// bigger and the stats/rewards of <see cref="NightDangerRules.VariantStats"/>; its name gets the "(noturno)"
+    /// bigger and the stats/rewards of <see cref="NightDangerRules.VariantStats"/>; its name gets the "(da noite)"
     /// suffix. Applied in the arena by <see cref="NightVariantTag"/>, like the road event's elite.
     /// </summary>
     public static class NightVariantRules
@@ -162,49 +162,49 @@ namespace Rapadura.Gameplay.Night
         public static readonly Color ModelEyes = Color.clear;
 
         /// <summary>
-        /// Lobisomem-do-sertão: the rare Forest night mini-boss, its own shaggy model that rears up to strike. Not a
+        /// Mardagayl (id <c>lobisomem_do_sertao</c>): the rare Forest night mini-boss, its own shaggy model that rears up to strike. Not a
         /// region boss (no IsBoss, not unique, no banner): just a big scary-but-fair night fight. ×5 health, +60% damage.
         /// </summary>
         public static readonly NightSpecies Lobisomem = new NightSpecies(
-            SpeciesLobisomem, WerewolfEnemyId, "Sertão Werewolf", "Lobisomem-do-sertão",
+            SpeciesLobisomem, WerewolfEnemyId, "Mardagayl, the Seven-Night Wolf", "Mardagayl, o Lobo-das-Sete-Noites",
             NoTint, ModelEyes,
             scaleMultiplier: 1f, healthMultiplier: 5f, damageBonus: 0.6f, aggroRadiusMultiplier: 1.6f,
             experienceMultiplier: 5f, extraLootRolls: 3, maxPerWave: 1, homeRegion: BiomeType.Forest);
 
-        /// <summary>Morcego-vampiro gigante: Caves night species, one big maroon bat (its own model).</summary>
+        /// <summary>Ubır, the Light-Drinker Bat (id <c>morcego_vampiro_gigante</c>): Caves night species, one big maroon bat (its own model).</summary>
         public static readonly NightSpecies MorcegoVampiro = new NightSpecies(
-            SpeciesMorcegoVampiro, VampireBatEnemyId, "Giant Vampire Bat", "Morcego-vampiro gigante",
+            SpeciesMorcegoVampiro, VampireBatEnemyId, "Ubır, the Light-Drinker Bat", "Ubır, o Morcegão Bebe-Luz",
             NoTint, ModelEyes,
             scaleMultiplier: 1f, healthMultiplier: 1.8f, damageBonus: 0.3f, aggroRadiusMultiplier: 1.5f,
             experienceMultiplier: 1.8f, extraLootRolls: 1, maxPerWave: 2, homeRegion: BiomeType.Caves);
 
-        /// <summary>Coruja-rasga-mortalha: Forest owl that swoops; also visits the Mountain at night (scaled to it).</summary>
+        /// <summary>Coruja-de-Fumaça (id <c>coruja_rasga_mortalha</c>): Forest owl that swoops; also visits the Mountain at night (scaled to it).</summary>
         public static readonly NightSpecies RasgaMortalha = new NightSpecies(
-            SpeciesRasgaMortalha, ShroudOwlEnemyId, "Shroud-tearer Owl", "Coruja-rasga-mortalha",
+            SpeciesRasgaMortalha, ShroudOwlEnemyId, "Smoke Owl", "Coruja-de-Fumaça",
             NoTint, ModelEyes,
             scaleMultiplier: 1f, healthMultiplier: 0.8f, damageBonus: 0.2f, aggroRadiusMultiplier: 1.5f,
             experienceMultiplier: 1.5f, extraLootRolls: 1, maxPerWave: 2, homeRegion: BiomeType.Forest);
 
         /// <summary>
-        /// Enxame de vaga-lumes-de-fogo: Desert swarm (dusk and night), also over the Forest at night. Three fireflies'
+        /// Enxame de Faíscas Presas (id <c>vaga_lume_de_fogo</c>): Desert swarm (dusk and night), also over the Forest at night. Three fireflies'
         /// worth of health in one enemy (3 × 0.35), weak bites (×0.4).
         /// </summary>
         public static readonly NightSpecies VagaLume = new NightSpecies(
-            SpeciesVagaLume, FireflySwarmEnemyId, "Fire-firefly Swarm", "Enxame de vaga-lumes-de-fogo",
+            SpeciesVagaLume, FireflySwarmEnemyId, "Swarm of Trapped Sparks", "Enxame de Faíscas Presas",
             NoTint, ModelEyes,
             scaleMultiplier: 1f, healthMultiplier: 1.05f, damageBonus: -0.6f, aggroRadiusMultiplier: 1.3f,
             experienceMultiplier: 1.3f, extraLootRolls: 1, maxPerWave: 1, homeRegion: BiomeType.Desert, comesAtDusk: true);
 
-        /// <summary>Porcos-do-mato da Caipora (queixadas): Forest herd of 2–3 fast chargers.</summary>
+        /// <summary>Javali do Lodo (id <c>queixada_da_caipora</c>): Forest herd of 2–3 fast chargers.</summary>
         public static readonly NightSpecies Queixada = new NightSpecies(
-            SpeciesQueixada, PeccaryEnemyId, "Caipora's Peccary", "Queixada da Caipora",
+            SpeciesQueixada, PeccaryEnemyId, "Mire Boar", "Javali do Lodo",
             NoTint, ModelEyes,
             scaleMultiplier: 1f, healthMultiplier: 1.3f, damageBonus: 0.3f, aggroRadiusMultiplier: 1.4f,
             experienceMultiplier: 1.3f, extraLootRolls: 0, maxPerWave: 3, homeRegion: BiomeType.Forest, packMin: 2, packMax: 3);
 
-        /// <summary>Mãe-da-lua (urutau): rare Mountain ambusher on its branch; frail, notices you late, pays well.</summary>
+        /// <summary>Ave-Graveto de Omöl (id <c>mae_da_lua</c>, a potoo): rare Mountain ambusher on its branch; frail, notices you late, pays well.</summary>
         public static readonly NightSpecies MaeDaLua = new NightSpecies(
-            SpeciesMaeDaLua, PotooEnemyId, "Moon-mother Potoo", "Mãe-da-lua",
+            SpeciesMaeDaLua, PotooEnemyId, "Omöl's Twig-Bird", "Ave-Graveto de Omöl",
             NoTint, ModelEyes,
             scaleMultiplier: 1f, healthMultiplier: 0.6f, damageBonus: -0.3f, aggroRadiusMultiplier: 1f,
             experienceMultiplier: 2f, extraLootRolls: 1, maxPerWave: 1, homeRegion: BiomeType.Mountain);
@@ -316,15 +316,15 @@ namespace Rapadura.Gameplay.Night
         }
 
         /// <summary>
-        /// Name shown for the spawned enemy: the base name for a normal one, "{base} (noturno)" for a variant
-        /// (<paramref name="variantFormat"/> = localized "{0} (noturno)"), the species name for a species.
+        /// Name shown for the spawned enemy: the base name for a normal one, "{base} (da noite)" for a variant
+        /// (<paramref name="variantFormat"/> = localized "{0} (da noite)"), the species name for a species.
         /// </summary>
         public static string DisplayName(string baseName, NightLook look, string variantFormat, string speciesName)
         {
             switch (look.Form)
             {
                 case NightForm.Variant:
-                    return string.Format(string.IsNullOrEmpty(variantFormat) ? "{0} (noturno)" : variantFormat, baseName ?? string.Empty);
+                    return string.Format(string.IsNullOrEmpty(variantFormat) ? "{0} (da noite)" : variantFormat, baseName ?? string.Empty);
                 case NightForm.Species:
                     return string.IsNullOrEmpty(speciesName) ? baseName ?? string.Empty : speciesName;
                 default:

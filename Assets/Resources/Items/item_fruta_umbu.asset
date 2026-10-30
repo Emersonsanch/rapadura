@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_fruta_umbu
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fruta_umbu
-  _displayName: "Fruta do Umbu"
-  _description: "Umbu azedinho do Tacho. Coma numa aventura: 1 ponto volta do seu atributo mais alto para voc\xEA distribuir de novo."
+  _displayName: "Rom\xE3 do Recome\xE7o"
+  _description: "Rom\xE3 azedinha da Uasamonga. Coma numa aventura: 1 ponto volta do seu atributo mais alto para voc\xEA distribuir de novo."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 1

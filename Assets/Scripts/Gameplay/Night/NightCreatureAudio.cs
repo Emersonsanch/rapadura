@@ -84,7 +84,7 @@ namespace Rapadura.Gameplay.Night
                 Cue(WerewolfGrowl, ProceduralSfxPreset.Bark, 170f, 0.4f, 0.8f, 0.08f),
                 Cue(VampireBatScreech, ProceduralSfxPreset.Chirp, 2600f, 0.3f, 2f, 0.1f),
                 Cue(VampireBatBite, ProceduralSfxPreset.Zap, 1700f, 0.32f, 0.5f, 0.08f),
-                // "Rasga mortalha": the torn-cloth screech, a falling hiss.
+                // Coruja-de-Fumaça: the torn-cloth screech, a falling hiss.
                 Cue(OwlScreech, ProceduralSfxPreset.Zap, 2300f, 0.34f, 3f, 0.1f),
                 Cue(OwlSwoop, ProceduralSfxPreset.Whoosh, 700f, 0.36f, 0.6f, 0.08f),
                 Cue(FireflyHum, ProceduralSfxPreset.Buzz, 520f, 0.18f, 2f, 0.12f),

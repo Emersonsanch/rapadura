@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: skill_maria_milagre_celestial
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_maria_milagre_celestial
-  _displayName: Milagre Celestial
-  _description: "Ultimate: Maria pede um milagre aos cristais sagrados e \xE9 envolvida por uma luz que cura quase todos os ferimentos, protege e continua curando por alguns segundos."
+  _displayName: "Coluna de Luz"
+  _description: "Ultimate: Maria chama a luz do Cristal do Sol e \xE9 envolvida por uma coluna de luz que cura quase todos os ferimentos, protege e continua curando por alguns segundos."
   _icon: {fileID: 0}
   _skillType: 2
   _category: 2

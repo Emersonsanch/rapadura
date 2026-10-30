@@ -363,6 +363,10 @@ namespace Rapadura.Tests
         {
             PlayerMotor motor = NewPlayerAboveGround(3f, out GameObject ground);
             ground.transform.position = new Vector3(500f, 0f, 0f);
+            // Probe far from the world origin: editor-only DontSave objects (e.g. the
+            // Rapadura/Cities "Preview Walkable Town" menu, whose town ground spans the origin)
+            // survive the Test Runner's fresh scene and would be "something below".
+            motor.transform.position = new Vector3(-9000f, 3f, 9000f);
             Vector3 before = motor.transform.position;
 
             Assert.IsFalse(motor.SnapToGround(~0));

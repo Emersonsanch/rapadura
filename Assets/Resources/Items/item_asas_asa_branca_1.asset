@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_asas_asa_branca_1
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_asas_asa_branca_1
-  _displayName: "Asas de Asa-branca"
-  _description: "Asas brancas da ave da can\xE7\xE3o antiga. O \xCDcaro jura que dessa vez ele voa de verdade."
+  _displayName: "Asas de Bronze de Kurdal\xE6gon"
+  _description: "Asas de placas de metal claro, como as que o ferreiro do c\xE9u dos contos forjava. O \xCDcaro jura que dessa vez ele voa de verdade."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 3

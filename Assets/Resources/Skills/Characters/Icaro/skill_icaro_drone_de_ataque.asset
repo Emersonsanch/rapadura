@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: skill_icaro_drone_de_ataque
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_icaro_drone_de_ataque
-  _displayName: Drone de Ataque
-  _description: "Um pequeno drone pintado com as cores do arco de Maithe (pra impressionar a irm\xE3) persegue um alvo, disparando contra ele e expondo suas defesas."
+  _displayName: "Drone Senmurv"
+  _description: "Um pequeno drone com asas de Senmurv, o p\xE1ssaro dos contos, pintado com as cores do arco de Maithe (pra impressionar a irm\xE3), persegue um alvo, disparando contra ele e expondo suas defesas."
   _icon: {fileID: 0}
   _skillType: 0
   _category: 4

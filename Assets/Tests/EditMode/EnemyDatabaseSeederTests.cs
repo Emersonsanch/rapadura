@@ -34,14 +34,14 @@ namespace Rapadura.Tests
 
         private static readonly List<EnemySeed> Seeds = new List<EnemySeed>
         {
-            new EnemySeed { id = "enemy_forest_wolf", name = "Lobo da Mata", isBoss = false, biome = BiomeType.Forest, maxHealth = 70f, attackDamage = 7f },
-            new EnemySeed { id = "enemy_forest_alpha_wolf", name = "Lobo Alfa", isBoss = true, biome = BiomeType.Forest, maxHealth = 520f, attackDamage = 15f },
-            new EnemySeed { id = "enemy_desert_scorpion", name = "Escorpião das Dunas", isBoss = false, biome = BiomeType.Desert, maxHealth = 110f, attackDamage = 11f },
-            new EnemySeed { id = "enemy_desert_ruin_guardian", name = "Guardião da Ruína", isBoss = true, biome = BiomeType.Desert, maxHealth = 780f, attackDamage = 32f },
-            new EnemySeed { id = "enemy_mountain_stone_golem", name = "Golem de Pedra", isBoss = false, biome = BiomeType.Mountain, maxHealth = 140f, attackDamage = 13f },
-            new EnemySeed { id = "enemy_mountain_warlord", name = "Senhor da Guerra da Montanha", isBoss = true, biome = BiomeType.Mountain, maxHealth = 900f, attackDamage = 30f },
-            new EnemySeed { id = "enemy_cave_bat_swarm", name = "Enxame de Morcegos", isBoss = false, biome = BiomeType.Caves, maxHealth = 170f, attackDamage = 7f },
-            new EnemySeed { id = "enemy_cave_dweller", name = "Habitante Ancestral", isBoss = true, biome = BiomeType.Caves, maxHealth = 1180f, attackDamage = 42f },
+            new EnemySeed { id = "enemy_forest_wolf", name = "Lobo do Tugai", isBoss = false, biome = BiomeType.Forest, maxHealth = 70f, attackDamage = 7f },
+            new EnemySeed { id = "enemy_forest_alpha_wolf", name = "Kök-Böri, o Lobo Celeste", isBoss = true, biome = BiomeType.Forest, maxHealth = 520f, attackDamage = 15f },
+            new EnemySeed { id = "enemy_desert_scorpion", name = "Escorpião das Areias Flamejantes", isBoss = false, biome = BiomeType.Desert, maxHealth = 110f, attackDamage = 11f },
+            new EnemySeed { id = "enemy_desert_ruin_guardian", name = "O Grande Ushabti", isBoss = true, biome = BiomeType.Desert, maxHealth = 780f, attackDamage = 32f },
+            new EnemySeed { id = "enemy_mountain_stone_golem", name = "Ushabti de Pedra", isBoss = false, biome = BiomeType.Mountain, maxHealth = 140f, attackDamage = 13f },
+            new EnemySeed { id = "enemy_mountain_warlord", name = "Hahya, o Gigante Guerreiro", isBoss = true, biome = BiomeType.Mountain, maxHealth = 900f, attackDamage = 30f },
+            new EnemySeed { id = "enemy_cave_bat_swarm", name = "Enxame de Morcegos do Limiar", isBoss = false, biome = BiomeType.Caves, maxHealth = 170f, attackDamage = 7f },
+            new EnemySeed { id = "enemy_cave_dweller", name = "Tages, o Habitante Ancestral", isBoss = true, biome = BiomeType.Caves, maxHealth = 1180f, attackDamage = 42f },
         };
 
         private readonly List<Object> _created = new List<Object>();

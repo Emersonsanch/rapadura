@@ -358,11 +358,11 @@ namespace Rapadura.Tests
             Assert.AreEqual("75", VillageRefinePanel.Percent(0.75f));
             var safe = new RefinePreview(null, null, 3, 0, RefineStone.Blessing, 1, 0, 0, 0, 0, 1f, false, 3, RefineCheck.Ok, RefineCheck.Ok);
             Assert.AreEqual("Nunca falha.", VillageRefinePanel.FailureLine(safe, null));
-            Assert.AreEqual("Custo: 1 Pedra da Bênção", VillageRefinePanel.CostLine(safe, null));
+            Assert.AreEqual("Custo: 1 Pedra-Faísca", VillageRefinePanel.CostLine(safe, null));
 
             var risky = new RefinePreview(null, null, 10, 0, RefineStone.Soul, 1, 30, 50, 0, 0, 0.45f, true, 9, RefineCheck.Ok, RefineCheck.Ok);
             Assert.AreEqual("Se falhar: volta para +9 (o item nunca some).", VillageRefinePanel.FailureLine(risky, null));
-            Assert.AreEqual("Custo: 1 Pedra da Alma + 30 de ouro", VillageRefinePanel.CostLine(risky, null));
+            Assert.AreEqual("Custo: 1 Pedra da Alma Viva + 30 de ouro", VillageRefinePanel.CostLine(risky, null));
             Assert.AreEqual("Falta ouro: custa 30.", VillageRefinePanel.CheckLine(RefineCheck.NotEnoughGold, risky, null));
 
             Assert.AreEqual("Deu certo! Agora é Espada +11.",

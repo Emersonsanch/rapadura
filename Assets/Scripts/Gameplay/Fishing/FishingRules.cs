@@ -124,7 +124,7 @@ namespace Rapadura.Gameplay.Fishing
     }
 
     /// <summary>
-    /// The rules of "Pesca no açude", pure and Unity-free (tested by <c>FishingTests</c>). Every random number comes
+    /// The rules of "Pesca no remanso", pure and Unity-free (tested by <c>FishingTests</c>). Every random number comes
     /// from a <see cref="FishingRandom"/>, so a seed replays a whole trip.
     /// <list type="bullet">
     /// <item><b>Catch table</b>: a species bites at a spot it lives in, in a phase it allows. Its weight is the base

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_fish_pacu
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fish_pacu
-  _displayName: Pacu
-  _description: "Peixe redondo e forte, gosta do sol do meio-dia."
+  _displayName: "Carpa-espelho"
+  _description: "Peixe redondo e forte, de escamas grandes que brilham feito espelho no sol do meio-dia."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

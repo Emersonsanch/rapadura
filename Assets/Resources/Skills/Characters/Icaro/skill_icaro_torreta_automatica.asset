@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: skill_icaro_torreta_automatica
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_icaro_torreta_automatica
-  _displayName: "Torreta Autom\xE1tica"
-  _description: "\xCDcaro monta \xE0s pressas uma torreta feita de sucata da civiliza\xE7\xE3o perdida, que atira sem parar nos inimigos da \xE1rea por alguns segundos."
+  _displayName: "Torreta Ushabti"
+  _description: "\xCDcaro remonta \xE0s pressas uma torreta com pe\xE7as de um ushabti, o guardi\xE3o \"que responde\" dos Art\xEDfices, e ela atira sem parar nos inimigos da \xE1rea por alguns segundos."
   _icon: {fileID: 0}
   _skillType: 0
   _category: 4

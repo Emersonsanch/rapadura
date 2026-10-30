@@ -62,8 +62,8 @@ MonoBehaviour:
   _props:
   - _kind: 0
     _count: 7
-    _primaryColor: {r: 0.35, g: 0.55, b: 0.3, a: 1}
-    _secondaryColor: {r: 0.95, g: 0.75, b: 0.4, a: 1}
+    _primaryColor: {r: 0.52, g: 0.6, b: 0.4, a: 1}
+    _secondaryColor: {r: 0.7, g: 0.6, b: 0.48, a: 1}
     _minScale: 0.8
     _maxScale: 1.4
   - _kind: 3

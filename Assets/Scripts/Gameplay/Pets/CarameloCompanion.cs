@@ -18,7 +18,7 @@ using UnityEngine.SceneManagement;
 namespace Rapadura.Gameplay.Pets
 {
     /// <summary>
-    /// Caramelo, Vó Zefa's caramel vira-lata, trotting along with the hero in Main.unity (the encounter
+    /// Caramelo (visible name: Ari), Vó Edna's caramel-coloured dog, trotting along with the hero in Main.unity (the encounter
     /// arenas and the standalone sandbox). Purely friendly and kid-safe: no collider, no hurtbox, nothing
     /// can target or damage him, and he never deals damage either. What he does, by priority
     /// (<see cref="CompanionMath.ChooseMode"/>):
@@ -31,7 +31,7 @@ namespace Rapadura.Gameplay.Pets
     /// points at the threat; gameplay is untouched.</item>
     /// <item><b>Fetch</b>: loot already goes straight into the bag (<see cref="EnemyLootGranter"/>), so this is
     /// presentation only: after <see cref="EnemyLootDroppedEvent"/> he runs to the corpse, picks up a coin
-    /// (gold) or a little bundle (materials), brings it to the hero and drops it with a "Caramelo trouxe!".</item>
+    /// (gold) or a little bundle (materials), brings it to the hero and drops it with a "Ari trouxe!".</item>
     /// <item><b>Follow</b>: behind and beside the hero (<see cref="CompanionMath.FollowSlot"/>), eased arrival,
     /// catch-up boost, teleport when far (arena placement); sits after a moment still, sniffs around.</item>
     /// </list>

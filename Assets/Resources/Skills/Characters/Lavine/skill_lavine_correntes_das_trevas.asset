@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: skill_lavine_correntes_das_trevas
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_lavine_correntes_das_trevas
-  _displayName: Correntes das Trevas
-  _description: "Correntes de sombra brotam do ch\xE3o e prendem os inimigos da \xE1rea, quase imobilizando-os e deixando-os mais vulner\xE1veis."
+  _displayName: "Correntes de Ar"
+  _description: "Correntes de ar quieto descem do c\xE9u da noite e prendem os inimigos da \xE1rea, quase imobilizando-os e deixando-os mais vulner\xE1veis."
   _icon: {fileID: 0}
   _skillType: 0
   _category: 5

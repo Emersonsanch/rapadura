@@ -326,7 +326,7 @@ namespace Rapadura.Gameplay.Daily
         // ------------------------------------------------------------------
 
         /// <summary>
-        /// The "Hora de descansar, a Vó Zefa chamou para o café" reminder: on entering the tired tier, then every
+        /// The "Hora de descansar, a Vó Edna chamou para o chá" reminder: on entering the tired tier, then every
         /// <see cref="TiredReminderRepeatSeconds"/> of active play while still tired.
         /// </summary>
         public static bool ShouldRemindTired(StaminaTier previous, StaminaTier current, double activeSecondsSinceLastReminder)

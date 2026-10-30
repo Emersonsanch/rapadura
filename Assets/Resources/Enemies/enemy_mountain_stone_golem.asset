@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b870b858bb0be4583f94be3707b8a3, type: 3}
   m_Name: enemy_mountain_stone_golem
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
-  _enemyName: Golem de Pedra
+  _enemyName: Ushabti de Pedra
   _isBoss: 0
   _maxHealth: 140
   _experienceReward: 28

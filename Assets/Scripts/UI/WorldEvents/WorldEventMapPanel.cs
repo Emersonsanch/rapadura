@@ -19,10 +19,10 @@ namespace Rapadura.UI.WorldEvents
     /// added to the <see cref="WorldMapHudController"/>'s GameObject after every scene load, it injects
     /// <list type="bullet">
     /// <item>a countdown pill (under the event-room pill): the world boss that is up now ("…está na Floresta! Vai embora
-    /// em 12:04") or the next one, and the Invasão do Cangaço now or next — all from the real clock
+    /// em 12:04") or the next one, and the Invasão de Āz now or next — all from the real clock
     /// (<see cref="WorldEventCalendar"/>), so it is the same for everyone;</item>
     /// <item>a cousin's announcement line for a few seconds when a window opens while the map is up;</item>
-    /// <item>"Enfrentar: …" / "Defender do Cangaço" in the HUD's <c>wm-action-row</c> while the hero stands in the
+    /// <item>"Enfrentar: …" / "Defender de Āz" in the HUD's <c>wm-action-row</c> while the hero stands in the
     /// region where it is happening and this window's prize is not taken yet. Click: level check (carried
     /// PlayerStats), then the fight through <see cref="WorldMapController.TryStartEventRoom"/> (directed payload).</item>
     /// </list>

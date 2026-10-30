@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_capa_vaqueiro_2
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_capa_vaqueiro_2
-  _displayName: "Capa de Vaqueiro Encantada II"
-  _description: "Capa de couro com fivela dourada que esvoa\xE7a sozinha. Protege como gib\xE3o de vaqueiro: o Joaquim aprova. N\xEDvel 2: mais fortes e j\xE1 absorvem um pouco do dano."
+  _displayName: "Capa de Feltro dos Nartes II"
+  _description: "Capa de feltro grosso com fivela dourada que esvoa\xE7a sozinha. Protege como a capa dos her\xF3is nartes dos contos: o Joaquim aprova. N\xEDvel 2: mais fortes e j\xE1 absorvem um pouco do dano."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 3

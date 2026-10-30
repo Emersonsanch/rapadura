@@ -7,7 +7,7 @@ namespace Rapadura.Gameplay.World.Biomes
 {
     /// <summary>
     /// Builds and pools the cheap procedural arena props used by <see cref="BiomeArenaDressing"/>:
-    /// stacked Unity primitives (cacti, stalagmites) and <see cref="ProceduralRockGenerator"/> rocks
+    /// stacked Unity primitives (saxauls, stalagmites) and <see cref="ProceduralRockGenerator"/> rocks
     /// (boulders, snow-capped rocks). Every part keeps the primitive's default (pipeline) material
     /// and is coloured through a MaterialPropertyBlock, so no material is ever created or modified.
     /// Only the main part keeps a collider. Props are built once per kind on demand and reused
@@ -128,15 +128,17 @@ namespace Rapadura.Gameplay.World.Biomes
             switch (kind)
             {
                 case BiomeArenaPropKind.Cactus:
-                    Part(prop, PrimitiveType.Cylinder, new Vector3(0f, 1.4f, 0f), Vector3.zero, new Vector3(0.55f, 1.4f, 0.55f), true, main: true);
-                    Part(prop, PrimitiveType.Sphere, new Vector3(0f, 2.8f, 0f), Vector3.zero, new Vector3(0.55f, 0.55f, 0.55f), true);
-                    Part(prop, PrimitiveType.Cylinder, new Vector3(0.45f, 1.3f, 0f), new Vector3(0f, 0f, 90f), new Vector3(0.3f, 0.25f, 0.3f), true);
-                    Part(prop, PrimitiveType.Cylinder, new Vector3(0.65f, 1.75f, 0f), Vector3.zero, new Vector3(0.3f, 0.5f, 0.3f), true);
-                    Part(prop, PrimitiveType.Sphere, new Vector3(0.65f, 2.25f, 0f), Vector3.zero, new Vector3(0.3f, 0.3f, 0.3f), true);
-                    Part(prop, PrimitiveType.Cylinder, new Vector3(-0.4f, 1.0f, 0f), new Vector3(0f, 0f, 90f), new Vector3(0.26f, 0.22f, 0.26f), true);
-                    Part(prop, PrimitiveType.Cylinder, new Vector3(-0.58f, 1.35f, 0f), Vector3.zero, new Vector3(0.26f, 0.4f, 0.26f), true);
-                    Part(prop, PrimitiveType.Sphere, new Vector3(-0.58f, 1.75f, 0f), Vector3.zero, new Vector3(0.26f, 0.26f, 0.26f), true);
-                    Part(prop, PrimitiveType.Sphere, new Vector3(0f, 3.08f, 0f), Vector3.zero, new Vector3(0.22f, 0.12f, 0.22f), false);
+                    // The saxaul of the Flaming Sands (kind id kept for saved profiles): a short gnarled pale trunk
+                    // (secondary colour) forking into crooked branches, with sparse flat grey-green crowns (primary).
+                    Part(prop, PrimitiveType.Cylinder, new Vector3(0f, 0.6f, 0f), new Vector3(0f, 0f, 6f), new Vector3(0.3f, 0.6f, 0.3f), false, main: true);
+                    Part(prop, PrimitiveType.Sphere, new Vector3(0.05f, 0.1f, 0f), Vector3.zero, new Vector3(0.6f, 0.3f, 0.55f), false);
+                    Part(prop, PrimitiveType.Cylinder, new Vector3(0.38f, 1.5f, 0f), new Vector3(0f, 0f, -32f), new Vector3(0.17f, 0.5f, 0.17f), false);
+                    Part(prop, PrimitiveType.Cylinder, new Vector3(-0.32f, 1.45f, 0.12f), new Vector3(18f, 0f, 30f), new Vector3(0.15f, 0.45f, 0.15f), false);
+                    Part(prop, PrimitiveType.Cylinder, new Vector3(0.02f, 1.6f, -0.2f), new Vector3(-24f, 0f, 4f), new Vector3(0.12f, 0.42f, 0.12f), false);
+                    Part(prop, PrimitiveType.Sphere, new Vector3(0.72f, 2.0f, 0f), Vector3.zero, new Vector3(1.15f, 0.5f, 0.95f), true);
+                    Part(prop, PrimitiveType.Sphere, new Vector3(-0.62f, 1.9f, 0.28f), new Vector3(0f, 30f, 0f), new Vector3(1.0f, 0.45f, 0.85f), true);
+                    Part(prop, PrimitiveType.Sphere, new Vector3(0.05f, 2.2f, -0.45f), new Vector3(0f, 60f, 0f), new Vector3(0.9f, 0.45f, 0.8f), true);
+                    Part(prop, PrimitiveType.Sphere, new Vector3(0.1f, 2.45f, 0.1f), Vector3.zero, new Vector3(0.6f, 0.32f, 0.6f), true);
                     break;
 
                 case BiomeArenaPropKind.Stalagmite:

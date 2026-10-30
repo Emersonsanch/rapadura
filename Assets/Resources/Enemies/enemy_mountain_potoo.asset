@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b870b858bb0be4583f94be3707b8a3, type: 3}
   m_Name: enemy_mountain_potoo
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
-  _enemyName: "M\xE3e-da-lua"
+  _enemyName: "Ave-Graveto de Om\xF6l"
   _isBoss: 0
   _maxHealth: 140
   _experienceReward: 28

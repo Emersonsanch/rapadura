@@ -10,7 +10,7 @@ namespace Rapadura.Editor
     /// <summary>
     /// One-shot editor tool that generates a starter set of example EnemyDefinition assets under
     /// Assets/Resources/Enemies, covering the four example biomes already seeded by
-    /// <see cref="BiomeSeeder"/> (Floresta, Deserto, Montanha, Cavernas — see TODO.md Fase 8
+    /// <see cref="BiomeSeeder"/> (Floresta/Bosque do Zarafshan, Deserto/Areias Flamejantes, Montanha/Serra de Kaggen, Cavernas/Grutas do Limiar — see TODO.md Fase 8
     /// "Biomas"), with one common enemy and one boss-flagged mini-boss per biome. The enemy ids
     /// used here match the ones <see cref="BiomeSeeder"/> already documents by comment (e.g.
     /// "enemy_forest_wolf"), so re-running <c>Rapadura &gt; Seed Example Biomes</c> after this
@@ -190,11 +190,11 @@ namespace Rapadura.Editor
         {
             return new List<EnemySeed>
             {
-                // Floresta
+                // Floresta (Bosque do Zarafshan)
                 new EnemySeed
                 {
                     id = "enemy_forest_wolf",
-                    name = "Lobo da Mata",
+                    name = "Lobo do Tugai",
                     isBoss = false,
                     biome = BiomeType.Forest,
                     spawnWeight = 5,
@@ -211,7 +211,7 @@ namespace Rapadura.Editor
                 new EnemySeed
                 {
                     id = "enemy_forest_alpha_wolf",
-                    name = "Lobo Alfa",
+                    name = "Kök-Böri, o Lobo Celeste",
                     isBoss = true,
                     biome = BiomeType.Forest,
                     spawnWeight = 1,
@@ -227,11 +227,11 @@ namespace Rapadura.Editor
                     fleeHealthThreshold = 0f,
                 },
 
-                // Deserto
+                // Deserto (Areias Flamejantes)
                 new EnemySeed
                 {
                     id = "enemy_desert_scorpion",
-                    name = "Escorpião das Dunas",
+                    name = "Escorpião das Areias Flamejantes",
                     isBoss = false,
                     biome = BiomeType.Desert,
                     spawnWeight = 5,
@@ -248,7 +248,7 @@ namespace Rapadura.Editor
                 new EnemySeed
                 {
                     id = "enemy_desert_ruin_guardian",
-                    name = "Guardião da Ruína",
+                    name = "O Grande Ushabti",
                     isBoss = true,
                     biome = BiomeType.Desert,
                     spawnWeight = 1,
@@ -264,11 +264,11 @@ namespace Rapadura.Editor
                     fleeHealthThreshold = 0f,
                 },
 
-                // Montanha
+                // Montanha (Serra de Kaggen)
                 new EnemySeed
                 {
                     id = "enemy_mountain_stone_golem",
-                    name = "Golem de Pedra",
+                    name = "Ushabti de Pedra",
                     isBoss = false,
                     biome = BiomeType.Mountain,
                     spawnWeight = 4,
@@ -286,7 +286,7 @@ namespace Rapadura.Editor
                 new EnemySeed
                 {
                     id = "enemy_mountain_warlord",
-                    name = "Senhor da Guerra da Montanha",
+                    name = "Hahya, o Gigante Guerreiro",
                     isBoss = true,
                     biome = BiomeType.Mountain,
                     spawnWeight = 1,
@@ -302,11 +302,11 @@ namespace Rapadura.Editor
                     fleeHealthThreshold = 0f,
                 },
 
-                // Cavernas
+                // Cavernas (Grutas do Limiar)
                 new EnemySeed
                 {
                     id = "enemy_cave_bat_swarm",
-                    name = "Enxame de Morcegos",
+                    name = "Enxame de Morcegos do Limiar",
                     isBoss = false,
                     biome = BiomeType.Caves,
                     spawnWeight = 6,
@@ -323,7 +323,7 @@ namespace Rapadura.Editor
                 new EnemySeed
                 {
                     id = "enemy_cave_dweller",
-                    name = "Habitante Ancestral",
+                    name = "Tages, o Habitante Ancestral",
                     isBoss = true,
                     biome = BiomeType.Caves,
                     spawnWeight = 1,

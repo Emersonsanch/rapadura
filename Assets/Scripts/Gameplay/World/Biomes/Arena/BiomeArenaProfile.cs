@@ -267,7 +267,7 @@ namespace Rapadura.Gameplay.World.Biomes
                         },
                         new List<BiomeArenaPropSpawn>
                         {
-                            new BiomeArenaPropSpawn(BiomeArenaPropKind.Cactus, 7, new Color(0.35f, 0.55f, 0.30f, 1f), new Color(0.95f, 0.75f, 0.40f, 1f), 0.8f, 1.4f),
+                            new BiomeArenaPropSpawn(BiomeArenaPropKind.Cactus, 7, new Color(0.52f, 0.60f, 0.40f, 1f), new Color(0.70f, 0.60f, 0.48f, 1f), 0.8f, 1.4f),
                             new BiomeArenaPropSpawn(BiomeArenaPropKind.Boulder, 5, new Color(0.80f, 0.62f, 0.42f, 1f), new Color(0.88f, 0.72f, 0.50f, 1f), 0.7f, 1.6f),
                         });
                     profile.SetGroundForTests(true, new Color(0.93f, 0.80f, 0.58f, 1f), true);

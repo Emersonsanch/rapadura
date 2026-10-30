@@ -16,7 +16,7 @@ namespace Rapadura.Gameplay.World.Cities
     /// <see cref="SafeZoneRules.MapCityRadius"/> of a region node no random encounter or road event happens, and keeps
     /// <see cref="CityUnderToken"/> up to date for the HUD's "Você está em zona segura".</item>
     /// <item>Visits: the token idle on a node means the cousins are in that city; the first time it becomes a stop of
-    /// the carro de boi (<see cref="CityProgress.MarkVisited"/>, <see cref="NewCityVisited"/>).</item>
+    /// the Barcas de Luz (<see cref="CityProgress.MarkVisited"/>, <see cref="NewCityVisited"/>).</item>
     /// <item>Landmark: once the <see cref="WorldMapDressing"/> is built, adds the city limit ring with its gates and the
     /// town houses (<see cref="WorldMapCityDressing"/>) under the dressing, with its palette material.</item>
     /// </list>

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_chave_engenho
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_chave_engenho
-  _displayName: "Chave do Engenho"
-  _description: "Chave de ferro velho da Torre do Engenho Velho. Abre a torre uma vez, na hora em que ela abre."
+  _displayName: "Chave da Torre"
+  _description: "Chave de bronze velho da Torre da Roda das Doze Jarras. Abre a torre uma vez, na hora em que ela abre."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 5

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b870b858bb0be4583f94be3707b8a3, type: 3}
   m_Name: enemy_cave_bat_swarm
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
-  _enemyName: Enxame de Morcegos
+  _enemyName: Enxame de Morcegos do Limiar
   _isBoss: 0
   _maxHealth: 170
   _experienceReward: 40

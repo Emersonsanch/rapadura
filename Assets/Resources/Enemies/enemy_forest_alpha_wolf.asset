@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b870b858bb0be4583f94be3707b8a3, type: 3}
   m_Name: enemy_forest_alpha_wolf
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
-  _enemyName: Lobo Alfa
+  _enemyName: "K\xF6k-B\xF6ri, o Lobo Celeste"
   _isBoss: 1
   _maxHealth: 520
   _experienceReward: 10

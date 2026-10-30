@@ -334,7 +334,7 @@ namespace Rapadura.Gameplay.Housing.Visuals
                 default:
                     if (key.StartsWith("boss_head_", System.StringComparison.Ordinal) && int.TryParse(key.Substring(10), out int index))
                     {
-                        // A carved wooden head in the carranca style (§11.10), tinted by the boss's region.
+                        // A little carved walnut head (§11.10; Sogdian woodcarving, no longer the carranca), tinted by the boss's region.
                         HouseSwatch tone = BossTones[Mathf.Clamp(index, 0, BossTones.Length - 1)];
                         b.Blob(Vector3.zero, new Vector3(0.1f, 0.11f, 0.06f), HouseSwatch.WoodRaw);
                         b.Blob(new Vector3(0f, 0.045f, -0.005f), new Vector3(0.11f, 0.04f, 0.05f), tone);

@@ -58,7 +58,7 @@ namespace Rapadura.Gameplay.WorldEvents
     }
 
     /// <summary>
-    /// The real-time calendar of the world bosses and the Invasão do Cangaço (Docs/WorldEvents.md §2). Pure and
+    /// The real-time calendar of the world bosses and the Invasão de Āz (Docs/WorldEvents.md §2). Pure and
     /// deterministic: every window is a function of the UTC instant and <see cref="ServerUtcOffsetHours"/> (the server's
     /// fixed time zone, Brasília), never of the device's locale, so every client and the future server agree on what is
     /// open, where and in which form. The injectable <see cref="UtcNow"/> is the only clock (tests set it; online it is

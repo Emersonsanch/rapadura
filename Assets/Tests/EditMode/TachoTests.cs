@@ -521,7 +521,7 @@ namespace Rapadura.Tests
             int index = AddSword(4);
             TachoRecipe recipe = TachoRules.Get(TachoRules.CreateWingsId(WingStyle.Carcara));
             TachoPreview preview = TachoService.Preview(_bag, recipe, RefineTarget.Bag(index));
-            StringAssert.StartsWith("Custo: 1 Pedra do Caos", VillageTachoPanel.CostLine(preview, null));
+            StringAssert.StartsWith("Custo: 1 Pedra da Mistura", VillageTachoPanel.CostLine(preview, null));
             StringAssert.Contains("60 de ouro", VillageTachoPanel.CostLine(preview, null));
             Assert.AreEqual("Se falhar: os materiais se gastam, Espada de Ferro +4 fica com você.",
                 VillageTachoPanel.FailureLine(preview, "Espada de Ferro +4", null));
@@ -530,8 +530,8 @@ namespace Rapadura.Tests
             var failed = new TachoOutcome(recipe.Id, recipe.Kind, 0.5f, 0.9, false, 0, 0, null);
             StringAssert.Contains("continua com você", VillageTachoPanel.ResultLine(failed, "Espada de Ferro +4", null, false, null));
             var made = new TachoOutcome(recipe.Id, recipe.Kind, 0.5f, 0.1, true, 0, 1, "item_asas_carcara_1");
-            Assert.AreEqual("Deu certo! Asas de Carcará saiu do tacho! (A mochila estava cheia: foi para o Baú da Vó.)",
-                VillageTachoPanel.ResultLine(made, "Espada", "Asas de Carcará", true, null));
+            Assert.AreEqual("Deu certo! Asas de Huma saiu da Uasamonga! (A mochila estava cheia: foi para o Baú da Vó.)",
+                VillageTachoPanel.ResultLine(made, "Espada", "Asas de Huma", true, null));
         }
     }
 }

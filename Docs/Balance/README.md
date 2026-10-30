@@ -26,7 +26,7 @@ de crítico base (ver §3). Apagar esse asset volta o ataque básico ao valor do
 | 8–9 | Loot de encontro por bioma; mochila cheia |
 | 10 | r8: progressão real e o modelo em Python (`tools/balance/`) |
 | 11 | Nova Jornada+ |
-| 12 | Cozinha da Vó Zefa (refeições) |
+| 12 | Forno da Vó Edna (refeições) |
 | 13 | Eventos aleatórios do mapa |
 | 14 | Pilha de poder: refeição + relíquias + evento + carinho, NG+0 e NG+1 (r9) |
 
@@ -684,8 +684,8 @@ lidos com `BuffController.GetAdditiveFractionTotal` (plano e percentual somam ig
 | Stat | Leitor | Antes | Fontes PercentAdditive afetadas |
 |---|---|---|---|
 | CriticalChance / CriticalDamage | `OutgoingDamage` | já somava | `affix_lucky` |
-| AttackSpeed | `PlayerBasicAttack`, Ficha | já somava | `affix_nimble`, `affix_of_frenzy`, Rapadura |
-| Thorns | `ThornsRules` | já somava | `affix_thorned`, `affix_of_the_mandacaru`, Queijo coalho |
+| AttackSpeed | `PlayerBasicAttack`, Ficha | já somava | `affix_nimble`, `affix_of_frenzy`, Torrão Dourado |
+| Thorns | `ThornsRules` | já somava | `affix_thorned`, `affix_of_the_mandacaru`, Samsa Assada |
 | **CooldownReduction** | `SkillManager.ResolveCooldownReduction`, Ficha | **`GetModifiedValue(CDR, 0)`** | **`affix_of_haste` (3–8%) não fazia nada**; e um plano ainda era multiplicado pelo percentual |
 | **ResourceCostReduction** | `SkillManager.ResolveResourceCostReduction` | **`GetModifiedValue(RCR, 0)`** | nenhuma hoje (combo, afixo e relíquia são planos); latente |
 
@@ -1051,7 +1051,7 @@ correção do atordoamento. `EnemyDatabaseSeederTests` espelha os novos HP/dano.
 
 Depois do epílogo e dos créditos, o botão **Nova Jornada+** aparece na Vila (Floresta) do mapa
 (`NewGamePlusHud`). Ele recomeça a campanha com o mesmo herói: **mantém** nível, atributos, skills,
-equipamento, mochila, ouro e o Baú da Vó Zefa; **recomeçam** a história (`StoryProgress`), o mapa (só a
+equipamento, mochila, ouro e o Baú da Vó Edna; **recomeçam** a história (`StoryProgress`), o mapa (só a
 Floresta liberada), os chefes (`DefeatedEnemyRegistry`) e as 8 missões regionais (`RegionQuestCatalog`).
 Missões pessoais, de convergência e diárias, construções, receitas, relógio e clima ficam como estão. O
 ciclo é salvo na chave `NewGamePlus` (`NewGamePlusProgress`); save antigo, sem a chave, carrega como ciclo 0.
@@ -1105,10 +1105,10 @@ iniciais sempre escalam mais, cada chefe é achado na região certa pelo `BiomeR
 do ciclo 0 é idêntico ao de antes com a mesma semente, a NG+5 dá mais ouro e equipamento melhor no chefe da
 Montanha, o reset/manutenção do estado, save/load, save antigo = ciclo 0 e a conquista `ach_new_journey_plus`.
 
-## 12. Cozinha da Vó Zefa: refeições do fogão a lenha (2026-10-29)
+## 12. Forno da Vó Edna: refeições do tandir (2026-10-29)
 
-Serviço novo da Vila no mapa (Vila → Serviços → **Fogão a lenha**). O primo cozinha um prato com materiais
-de bioma + "mantimentos da venda" (pagos em `item_gold`, a moeda da loja) e come na hora. Dados em
+Serviço novo da Vila no mapa (Vila → Serviços → **Forno da Vó**). O primo cozinha um prato com materiais
+de bioma + "mantimentos do bazar" (pagos em `item_gold`, a moeda da loja) e come na hora. Dados em
 `MealCatalog`, regras em `CookingRules` (puras, `CookingTests`), estado salvo por slot em `MealService`
 (chave `VillageKitchen`), efeito aplicado na arena por `MealEffectApplier`.
 
@@ -1123,29 +1123,29 @@ de bioma + "mantimentos da venda" (pagos em `item_gold`, a moeda da loja) e come
   some quando a cena da arena descarrega) e `meal/burst` (uma vez por luta, com duração própria). Fontes
   diferentes empilham com skills, atributos e equipamento; refeição nunca empilha com refeição. Os tetos
   existentes continuam valendo (defesa % ≤ 80%, velocidade de ataque ≤ +100%, espinhos ≤ 50%, recarga ≤ 100%).
-- **Aprender.** Cuscuz e café coado desde o começo. Os outros: a 1ª missão regional da região do prato
-  (qualquer primo) **ou** a Vó ensina ao primo que ama o prato quando ele abre o fogão, se a região já
+- **Aprender.** Nan do Tandir e Chá de Karkadé desde o começo. Os outros: a 1ª missão regional da região do prato
+  (qualquer primo) **ou** a Vó ensina ao primo que ama o prato quando ele abre o forno, se a região já
   estiver aberta. Save antigo sabe o que as missões já concluídas ensinam.
 
 ### 12.2 Pratos
 
 Ouro por luta ≈ 1,8 (1,5 inimigo × 60% × 1–3 de `item_gold`, §8). Cada prato custa ~1–2 lutas de ouro
 e dura 3–4 lutas, então comer sempre custa ~⅓–½ do ouro que a luta rende. Os ingredientes são os
-materiais comuns de §8 (madeira é a lenha; a loja também vende madeira e pedra).
+materiais comuns de §8 (madeira é a lenha do forno; a loja também vende madeira e pedra).
 
 | Prato | Efeito (luta inteira) | Lutas | Ingredientes | Mantimentos | Aprende com |
 |---|---|---|---|---|---|
-| Cuscuz | StaminaRegen +30% (10 → 13/s) | 3 | madeira 1, erva 1 | 2 ouro | início |
-| Café coado | CooldownReduction +0,06 (Flat) | 3 | madeira 1, fibra 1 | 2 ouro | início |
-| Pamonha | MaxHealth +10% | 3 | madeira 2, fibra 2 | 3 ouro | `quest_region_forest_howling_trail` / Vó → Maria |
-| Rapadura | AttackSpeed +12% **nos primeiros 20 s** (era +25%, §14.3) | 4 | madeira 2, pedra 1 | 3 ouro | `quest_region_desert_stinger_road` / Vó → Ícaro (Deserto aberto) |
-| Baião de dois | Defense +10% (percentual) | 3 | madeira 2, erva 2, carne assada 1 | 4 ouro | `quest_region_mountain_walking_stones` / Vó → Joaquim (Montanha aberta) |
-| Queijo coalho assado | Thorns 8% | 3 | madeira 1, minério 1, erva 1 | 4 ouro | `quest_region_caves_dark_lamps` / Vó → Lavine (Cavernas abertas) |
+| Nan do Tandir | StaminaRegen +30% (10 → 13/s) | 3 | madeira 1, erva 1 | 2 ouro | início |
+| Chá de Karkadé | CooldownReduction +0,06 (Flat) | 3 | madeira 1, fibra 1 | 2 ouro | início |
+| Pão de Tâmara | MaxHealth +10% | 3 | madeira 2, fibra 2 | 3 ouro | `quest_region_forest_howling_trail` / Vó → Maria |
+| Torrão Dourado | AttackSpeed +12% **nos primeiros 20 s** (era +25%, §14.3) | 4 | madeira 2, pedra 1 | 3 ouro | `quest_region_desert_stinger_road` / Vó → Ícaro (Deserto aberto) |
+| Plov da Vó | Defense +10% (percentual) | 3 | madeira 2, erva 2, carne assada 1 | 4 ouro | `quest_region_mountain_walking_stones` / Vó → Joaquim (Montanha aberta) |
+| Samsa Assada | Thorns 8% | 3 | madeira 1, minério 1, erva 1 | 4 ouro | `quest_region_caves_dark_lamps` / Vó → Lavine (Cavernas abertas) |
 
 Por que esses números: cada efeito fica na faixa de **um afixo incomum** (afixos de §7: velocidade de
-ataque +6–12%, espinhos 5–10%; café ≈ 15 pontos de Inteligência a 0,4%), porque a refeição ocupa um
-"espaço" que todo herói tem, sem raridade. A Rapadura vale só nos primeiros 20 s (o "Prepare-se!" dura
-1,75 s e um comum morre em 2,5–8 s, §10.5), por isso dura uma luta a mais. Ela começou com +25%, acima de
+ataque +6–12%, espinhos 5–10%; chá ≈ 15 pontos de Inteligência a 0,4%), porque a refeição ocupa um
+"espaço" que todo herói tem, sem raridade. O Torrão Dourado vale só nos primeiros 20 s (o "Prepare-se!" dura
+1,75 s e um comum morre em 2,5–8 s, §10.5), por isso dura uma luta a mais. Ele começou com +25%, acima de
 qualquer afixo incomum: com chefe de 15–20 s cobria a luta inteira e era a melhor refeição para quase
 todo herói na pilha de poder (§14); ficou em +12%, o teto do `affix_nimble`.
 
@@ -1153,13 +1153,13 @@ todo herói na pilha de poder (§14); ficou em +12%, o teto do `affix_nimble`.
 
 | Primo | Prato | Bônus extra |
 |---|---|---|
-| Maithe | Café coado | CriticalChance +3% |
-| Maria | Pamonha | HealthRegen +1 HP/s (a base é 1) |
-| Joaquim | Baião de dois | MaxHealth +5% |
-| Ícaro | Rapadura | MoveSpeed +8% durante o embalo de 20 s |
-| Lavine | Queijo coalho assado | ManaRegen +20% (5 → 6/s) |
+| Maithe | Chá de Karkadé | CriticalChance +3% |
+| Maria | Pão de Tâmara | HealthRegen +1 HP/s (a base é 1) |
+| Joaquim | Plov da Vó | MaxHealth +5% |
+| Ícaro | Torrão Dourado | MoveSpeed +8% durante o embalo de 20 s |
+| Lavine | Samsa Assada | ManaRegen +20% (5 → 6/s) |
 
-O bônus é decidido pelo herói que está na arena, não por quem cozinhou. Cuscuz é de todo mundo e de ninguém.
+O bônus é decidido pelo herói que está na arena, não por quem cozinhou. O Nan do Tandir é de todo mundo e de ninguém.
 
 ### 12.4 Testes
 
@@ -1238,7 +1238,7 @@ vida/dano/tamanho), save (ida e volta, save antigo, novo jogo, registro no GameM
 
 Depois do r8 entraram cinco fontes de poder, todas modificadores no mesmo `BuffController`, cada uma
 balanceada sozinha: refeições (§12), relíquias (`RelicDefinition`/`RelicPassiveApplier`), buffs de evento
-da estrada (§13), o carinho no Caramelo (`CarameloCuddle`) e a Nova Jornada+ (§11). O bestiário não dá
+da estrada (§13), o carinho no Ari (`CarameloCuddle`) e a Nova Jornada+ (§11). O bestiário não dá
 poder. Golpe em dupla e as lojas novas ainda estavam sendo escritos e ficaram de fora desta rodada.
 
 ### 14.1 Método (`tools/balance/power_stack.py`)
@@ -1256,7 +1256,7 @@ uv run --no-project --with pytest python -m pytest -q -p no:cacheprovider tools/
   relíquias das regiões já abertas (3 / 6 / 9 / 12 na NG+0; as 12 na NG+1; ×2 para o dono) + o melhor buff
   de evento + o carinho (só MoveSpeed: 0 em combate). Na prática o evento escolhido é sempre a Cantoria.
   Toda refeição do `MealCatalog` entra na disputa, inclusive as da pesca (tilápia: ManaRegen +25%; caldo
-  de piaba: +1,5 HP/s), tratadas como disponíveis desde o início.
+  de peixinho: +1,5 HP/s), tratadas como disponíveis desde o início.
 - **NG+1**: inimigos com a escala por região do §11.1 (lida de `NewGamePlusRules`), XP de abate ×1,5,
   missões regionais de novo (XP sem escala); o herói começa com o nível do fim da NG+0 e o equipamento das
   Cavernas (drops novos ignorados: conservador).
@@ -1280,11 +1280,11 @@ Média dos 5 heróis, segundos "no jogo". Meta do r8: comuns 4–7 s, chefes 15�
 
 - A pilha deixava **todo chefe abaixo de 15 s** e quem só usava o ataque básico vencia com folga (a regra
   do r8 "só no básico o chefe mata primeiro" caía em todos os biomas).
-- Três peças faziam quase tudo (efeito sozinho no chefe da NG+0): **Canivete do Vô Chico** +2 de dano
-  plano (−10 a −13%: num básico de 10, +2 é +20%), **Cantoria** +15% de dano (−12 a −14%) e **Rapadura**
+- Três peças faziam quase tudo (efeito sozinho no chefe da NG+0): **Canivete do Vô Jorge** +2 de dano
+  plano (−10 a −13%: num básico de 10, +2 é +20%), **Cantoria** +15% de dano (−12 a −14%) e **Torrão Dourado**
   +25% de velocidade de ataque por 20 s (−11 a −13%: cobre a luta inteira de um chefe). As outras
-  relíquias somadas pesam ~4%; café, pamonha, baião e cuscuz quase nada no tempo para matar.
-- O lado defensivo não quebra nada: com a pilha mais defensiva (baião/pamonha + chuva de caju/romeiros)
+  relíquias somadas pesam ~4%; chá, pão de tâmara, plov e nan quase nada no tempo para matar.
+- O lado defensivo não quebra nada: com a pilha mais defensiva (plov/pão de tâmara + chuva de caju/romeiros)
   o chefe leva 37–66 s para matar o herói parado, mas é exatamente para isso que defesa serve.
 
 ### 14.3 Orçamento e mudanças aplicadas (antes → depois)
@@ -1298,7 +1298,7 @@ o chefe mata o herói parado em 12–40 s.
 |---|---|---|---|
 | `RelicDefinition` (`relic_canivete_vo_chico`) | AttackDamage plano | +2 | **+1** (o mínimo de um afixo Afiada) |
 | `WorldEventCatalog` (Cantoria ao pé da fogueira) | AttackDamage % na próxima luta | +15% | **+8%** |
-| `MealCatalog` (Rapadura) | AttackSpeed nos primeiros 20 s | +25% | **+12%** (o teto do `affix_nimble`) |
+| `MealCatalog` (Torrão Dourado) | AttackSpeed nos primeiros 20 s | +25% | **+12%** (o teto do `affix_nimble`) |
 
 Sem mudança: as outras 11 relíquias e o ×2 do dono, as outras refeições e favoritos, os outros eventos
 (crítico +5% do eco só existe nas Cavernas e perde para a Cantoria), o carinho, os coeficientes da NG+
@@ -1311,14 +1311,14 @@ Sem mudança: as outras 11 relíquias e o ×2 do dono, as outras refeições e f
 
 | Ciclo | Bioma (níveis comuns / chefe) | Relíquias | Chefe: r8 → só relíquias → pilha | Comuns: r8 → pilha | Só básico com a pilha: mata / chefe mata em | Refeição mais usada |
 |---|---|---|---|---|---|---|
-| NG+0 | Floresta (2 / 3) | 3 | 16,5 → 15,3 → **13,8** (−16%) | 4,8 → **3,8** (−22%) | 19,9 / 21,8 | café coado |
-| NG+0 | Deserto (5 / 7) | 6 | 18,2 → 17,3 → **14,9** (−18%) | 6,1 → **4,8** (−22%) | 22,4 / 23,0 | rapadura |
-| NG+0 | Montanha (9 / 10) | 9 | 18,4 → 16,6 → **14,4** (−22%) | 6,4 → **4,9** (−24%) | 23,4 / 25,2 | rapadura |
-| NG+0 | Cavernas (13 / 15) | 12 | 20,0 → 18,4 → **16,2** (−19%) | 4,6 → **3,5** (−24%) | 27,4 / 29,6 | rapadura |
-| NG+1 | Floresta (16 / 17) | 12 | 18,5 → 16,4 → **14,6** (−21%) | 3,3 → **2,5** | 25,0 / 26,7 | queijo coalho |
-| NG+1 | Deserto (17 / 18) | 12 | 18,5 → 16,4 → **14,5** (−22%) | 3,6 → **2,9** | 24,7 / 26,9 | rapadura |
-| NG+1 | Montanha (19 / 20) | 12 | 18,5 → 16,4 → **14,5** (−22%) | 4,1 → **2,9** (−29%) | 24,6 / 27,5 | rapadura |
-| NG+1 | Cavernas (21 / 22) | 12 | 19,8 → 17,9 → **15,9** (−20%) | 4,0 → **2,9** | 26,8 / 26,9 | rapadura |
+| NG+0 | Floresta (2 / 3) | 3 | 16,5 → 15,3 → **13,8** (−16%) | 4,8 → **3,8** (−22%) | 19,9 / 21,8 | chá de karkadé |
+| NG+0 | Deserto (5 / 7) | 6 | 18,2 → 17,3 → **14,9** (−18%) | 6,1 → **4,8** (−22%) | 22,4 / 23,0 | torrão dourado |
+| NG+0 | Montanha (9 / 10) | 9 | 18,4 → 16,6 → **14,4** (−22%) | 6,4 → **4,9** (−24%) | 23,4 / 25,2 | torrão dourado |
+| NG+0 | Cavernas (13 / 15) | 12 | 20,0 → 18,4 → **16,2** (−19%) | 4,6 → **3,5** (−24%) | 27,4 / 29,6 | torrão dourado |
+| NG+1 | Floresta (16 / 17) | 12 | 18,5 → 16,4 → **14,6** (−21%) | 3,3 → **2,5** | 25,0 / 26,7 | samsa assada |
+| NG+1 | Deserto (17 / 18) | 12 | 18,5 → 16,4 → **14,5** (−22%) | 3,6 → **2,9** | 24,7 / 26,9 | torrão dourado |
+| NG+1 | Montanha (19 / 20) | 12 | 18,5 → 16,4 → **14,5** (−22%) | 4,1 → **2,9** (−29%) | 24,6 / 27,5 | torrão dourado |
+| NG+1 | Cavernas (21 / 22) | 12 | 19,8 → 17,9 → **15,9** (−20%) | 4,0 → **2,9** | 26,8 / 26,9 | torrão dourado |
 
 NG+1 com a NG+ do r8 (×1,8 / ×1,5 em todo lugar), para comparar: chefe sem pilha 14,3 / 23,0 / 25,9 / 33,4 s,
 comuns 2,2 / 4,6 / 6,7 / 7,4 s, herói parado morre em 45 / 30 / 27 / 24 s.

@@ -9,10 +9,10 @@ namespace Rapadura.Gameplay.WorldEvents
     /// Code-built low-poly props that mark the scheduled-event enemies, drawn with the procedural enemies' own
     /// <see cref="EnemyMeshBuilder"/> and palette material (one shared material, no new texture):
     /// <list type="bullet">
-    /// <item><b>Coroa de mandacaru</b> (world bosses): a gold band with five spikes alternating gold and cactus green,
+    /// <item><b>Coroa do arconte</b> (world bosses): a gold band with five spikes alternating gold and smoke (the Treva),
     /// a glowing crystal at each spike's foot (emissive palette cell: it reads at night).</item>
-    /// <item><b>Chapéu de couro</b> (Invasão do Cangaço): the cangaceiro's leather half-moon hat — dome, the big folded-up
-    /// front and back brims and a gold star with coins on the front. The Capitão's is bigger.</item>
+    /// <item><b>Coroinha de lata dourada</b> (Invasão de Āz, Docs/WorldBible_Maniqueismo.md §3.4): the small crooked tin
+    /// crown Āz jams on every critter she enchants, with a stolen spark on the front. The Capitã's is bigger.</item>
     /// </list>
     /// Parented to the model's <c>Head</c> part (it nods with the gait and the attack) or to the top of the model when it
     /// has none (the bat swarm). Meshes are built once and shared. Models face +Z with the pivot at the base.
@@ -61,7 +61,7 @@ namespace Rapadura.Gameplay.WorldEvents
             {
                 float angle = i * 72f * Mathf.Deg2Rad;
                 var at = new Vector3(Mathf.Sin(angle) * 0.47f, 0.12f, Mathf.Cos(angle) * 0.47f);
-                EnemySwatch spike = i % 2 == 0 ? EnemySwatch.Gold : EnemySwatch.CaveMoss;
+                EnemySwatch spike = i % 2 == 0 ? EnemySwatch.Gold : EnemySwatch.Shadow;
                 b.Cylinder(at, 0.11f, 0f, i == 0 ? 0.42f : 0.32f, 4, spike);
                 b.Crystal(at + new Vector3(0f, -0.06f, 0f) + at.normalized * 0.06f, 0.05f, 0.1f, EnemySwatch.Crystal);
             }
@@ -71,34 +71,30 @@ namespace Rapadura.Gameplay.WorldEvents
             return mesh;
         }
 
-        /// <summary>Cangaceiro hat 1 m wide at scale 1 (brims ear to ear along X).</summary>
+        /// <summary>
+        /// Āz's little tin crown, 1 m wide at scale 1: a thin dented gold band, six uneven points with a bead on each tip
+        /// and a stolen spark (glowing <see cref="EnemySwatch.StolenLight"/>) stuck on the front ("tudo o que brilha é
+        /// meu"). Sits a bit crooked, like it was jammed on in a hurry.
+        /// </summary>
         public static Mesh BuildHat()
         {
             var b = new EnemyMeshBuilder();
-            b.Blob(new Vector3(0f, 0.14f, 0f), new Vector3(0.52f, 0.34f, 0.5f), EnemySwatch.Leather);
-            b.Cylinder(Vector3.zero, 0.3f, 0.3f, 0.06f, 8, EnemySwatch.Black);
-
-            var halfMoon = new List<Vector2>();
-            for (int i = 0; i <= 8; i++)
-            {
-                float a = Mathf.PI * i / 8f;
-                halfMoon.Add(new Vector2(Mathf.Cos(a) * 0.55f, Mathf.Sin(a) * 0.36f));
-            }
-
-            // Front and back brims: half discs standing up (the "meia-lua"), tilted back a little.
             Matrix4x4 saved = b.Matrix;
-            b.Matrix = Matrix4x4.TRS(new Vector3(0f, 0.02f, 0.2f), Quaternion.Euler(-12f, -90f, 0f), Vector3.one);
-            b.Plate(halfMoon, 0.025f, EnemySwatch.Leather, EnemySwatch.Gold);
-            b.Matrix = Matrix4x4.TRS(new Vector3(0f, 0.02f, -0.2f), Quaternion.Euler(12f, -90f, 0f), Vector3.one);
-            b.Plate(halfMoon, 0.025f, EnemySwatch.Leather, EnemySwatch.Gold);
-            b.Matrix = saved;
+            b.Matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0f, 0f, 9f), Vector3.one);
 
-            // Star of the bando and three coins on the front brim.
-            b.Cylinder(new Vector3(0f, 0.2f, 0.215f), 0.1f, 0.1f, 0.03f, 5, EnemySwatch.Gold, rotation: Quaternion.Euler(80f, 0f, 0f));
-            for (int k = -1; k <= 1; k += 2)
+            b.Cylinder(Vector3.zero, 0.46f, 0.5f, 0.14f, 8, EnemySwatch.Gold, bottomCap: false);
+            for (int i = 0; i < 6; i++)
             {
-                b.Cylinder(new Vector3(0.24f * k, 0.12f, 0.22f), 0.045f, 0.045f, 0.025f, 6, EnemySwatch.Gold, rotation: Quaternion.Euler(80f, 0f, 0f));
+                float angle = (i * 60f + 30f) * Mathf.Deg2Rad;
+                var at = new Vector3(Mathf.Sin(angle) * 0.45f, 0.11f, Mathf.Cos(angle) * 0.45f);
+                float height = i % 2 == 0 ? 0.3f : 0.22f;
+                b.Cylinder(at, 0.1f, 0f, height, 4, EnemySwatch.Gold);
+                b.Cylinder(at + new Vector3(0f, height - 0.02f, 0f), 0.035f, 0.035f, 0.05f, 5, EnemySwatch.Gold);
             }
+
+            // The stolen spark on the front of the band.
+            b.Crystal(new Vector3(0f, 0.02f, 0.5f), 0.07f, 0.13f, EnemySwatch.StolenLight, rotation: Quaternion.Euler(80f, 0f, 0f));
+            b.Matrix = saved;
 
             Mesh mesh = b.ToMesh("WorldEvent_CangacoHat");
             mesh.hideFlags = HideFlags.DontSave;
@@ -108,8 +104,8 @@ namespace Rapadura.Gameplay.WorldEvents
         /// <summary>Puts the crown on <paramref name="enemy"/> (idempotent). <paramref name="widthOfHead"/>: crown diameter ÷ head width.</summary>
         public static GameObject AddCrown(GameObject enemy, float widthOfHead = 1.1f) => Add(enemy, CrownName, CrownMesh, widthOfHead, 0f);
 
-        /// <summary>Puts the cangaceiro hat on <paramref name="enemy"/> (idempotent).</summary>
-        public static GameObject AddHat(GameObject enemy, float widthOfHead = 1.5f) => Add(enemy, HatName, HatMesh, widthOfHead, 0.12f);
+        /// <summary>Puts Āz's tin crown on <paramref name="enemy"/> (idempotent). Ids (<see cref="HatName"/>, the mesh name) stay from the old hat.</summary>
+        public static GameObject AddHat(GameObject enemy, float widthOfHead = 0.95f) => Add(enemy, HatName, HatMesh, widthOfHead, 0.06f);
 
         private static GameObject Add(GameObject enemy, string name, Mesh mesh, float widthOfHead, float sink)
         {

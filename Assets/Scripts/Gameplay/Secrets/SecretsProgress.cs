@@ -78,7 +78,7 @@ namespace Rapadura.Gameplay.Secrets
 
     /// <summary>
     /// "Segredos e áreas ocultas" — per save slot: which world-map secrets were revealed / investigated, which
-    /// "Relíquias do Sertão" are owned, and the bonus gold still waiting for the Player's bag.
+    /// "Lembranças do Vô Jorge" (relics) are owned, and the bonus gold still waiting for the Player's bag.
     /// <list type="bullet">
     /// <item>A GameManager-built manager registered with <c>SaveManager</c> under <see cref="Key"/> and with
     /// <c>NewSessionReset</c>: "Novo jogo" and every load start empty, and a save written before secrets existed

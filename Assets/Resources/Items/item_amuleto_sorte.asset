@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_amuleto_sorte
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_amuleto_sorte
-  _displayName: Amuleto da Sorte
-  _description: Fitinha do Bonfim com uma figa de madeira. Aumenta a chance de um refino que pode falhar; gasta na tentativa.
+  _displayName: "Amuleto de Bes"
+  _description: "Um Bes de barro, o bochechudo que protege as casas e as crian\xE7as. Aumenta a chance de um refino que pode falhar; gasta na tentativa."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

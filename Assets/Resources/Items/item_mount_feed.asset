@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_mount_feed
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_mount_feed
-  _displayName: "Ra\xE7\xE3o do Haras"
-  _description: "Ra\xE7\xE3o de milho e capim do Seu Z\xE9. Toda montaria come: +40 de saciedade."
+  _displayName: "Ra\xE7\xE3o da Estrebaria"
+  _description: "Ra\xE7\xE3o de cevada e capim do Srosh. Toda montaria come: +40 de saciedade."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

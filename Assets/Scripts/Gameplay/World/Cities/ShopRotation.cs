@@ -150,7 +150,7 @@ namespace Rapadura.Gameplay.World.Cities
         }
 
         /// <summary>
-        /// Which city Seu Bento's mule is in on day <paramref name="dayIndex"/>: one of <paramref name="candidates"/>
+        /// Which city Ammo's caravan is in on day <paramref name="dayIndex"/>: one of <paramref name="candidates"/>
         /// (the regions open on the map), drawn by date. Null without candidates.
         /// </summary>
         public static BiomeType? MascateRegion(long dayIndex, IReadOnlyList<BiomeType> candidates)

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: skill_maria_cura_divina
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_maria_cura_divina
-  _displayName: Cura Divina
-  _description: "Maria canaliza a luz do Templo Solar e restaura a pr\xF3pria vida, como as sacerdotisas mais velhas lhe ensinaram."
+  _displayName: "Luz que Cura"
+  _description: "Maria chama a luz do Templo Solar e restaura a pr\xF3pria vida, como as curandeiras mais velhas lhe ensinaram."
   _icon: {fileID: 0}
   _skillType: 0
   _category: 2

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_gold_coin
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_gold_coin
-  _displayName: Moeda de Ouro
-  _description: A moeda corrente do mundo.
+  _displayName: Moeda Furada de Qocho
+  _description: "Moeda com furo quadrado, como as que corriam no bazar de Qocho. \xC9 a moeda corrente da ilha."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 6

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_fish_curimata
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fish_curimata
-  _displayName: "Curimat\xE3"
-  _description: "Sobe \xE0 flor d'\xE1gua quando chove."
+  _displayName: "Enguia"
+  _description: "Sai da lama e sobe \xE0 flor d'\xE1gua quando chove."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

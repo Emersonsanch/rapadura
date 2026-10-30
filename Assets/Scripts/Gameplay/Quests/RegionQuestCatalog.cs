@@ -134,7 +134,7 @@ namespace Rapadura.Gameplay.Quests
 
         public static readonly IReadOnlyList<RegionQuestSpec> Quests = new List<RegionQuestSpec>
         {
-            // -- Floresta (Dona Cida) --
+            // -- Floresta (Mariam, a Ervateira) --
             new RegionQuestSpec(ForestFirst, BiomeType.Forest, null, 60,
                 new[] { new RegionObjectiveSpec("hunt_scrub_wolves", QuestObjectiveType.KillEnemyType, "enemy_forest_wolf", 5) },
                 new[] { new RegionRewardSpec("item_health_potion", 2) }),
@@ -142,7 +142,7 @@ namespace Rapadura.Gameplay.Quests
                 new[] { new RegionObjectiveSpec("clear_forest_spiders", QuestObjectiveType.KillEnemyType, "enemy_forest_spider", 4) },
                 new[] { new RegionRewardSpec("item_leather_helmet", 1) }),
 
-            // -- Deserto (Seu Bento) --
+            // -- Deserto (Ammo, o Caravaneiro) --
             new RegionQuestSpec(DesertFirst, BiomeType.Desert, null, 100,
                 new[] { new RegionObjectiveSpec("chase_dune_scorpions", QuestObjectiveType.KillEnemyType, "enemy_desert_scorpion", 5) },
                 new[] { new RegionRewardSpec("item_health_potion", 2), new RegionRewardSpec("item_mana_potion", 1) }),
@@ -154,7 +154,7 @@ namespace Rapadura.Gameplay.Quests
                 },
                 new[] { new RegionRewardSpec("item_leather_boots", 1) }),
 
-            // -- Montanha (Mestre Tonho) --
+            // -- Montanha (Mestre Mihr) --
             new RegionQuestSpec(MountainFirst, BiomeType.Mountain, null, 150,
                 new[] { new RegionObjectiveSpec("topple_stone_golems", QuestObjectiveType.KillEnemyType, "enemy_mountain_stone_golem", 4) },
                 new[] { new RegionRewardSpec("item_mana_potion", 2), new RegionRewardSpec("item_gold", 15) }),
@@ -162,7 +162,7 @@ namespace Rapadura.Gameplay.Quests
                 new[] { new RegionObjectiveSpec("open_the_mine_pass", QuestObjectiveType.KillEnemyType, "enemy_mountain_stone_golem", 6) },
                 new[] { new RegionRewardSpec("item_iron_sword", 1) }),
 
-            // -- Cavernas (Benedita) --
+            // -- Cavernas (Parthenos) --
             new RegionQuestSpec(CavesFirst, BiomeType.Caves, null, 200,
                 new[] { new RegionObjectiveSpec("scatter_bat_swarms", QuestObjectiveType.KillEnemyType, "enemy_cave_bat_swarm", 6) },
                 new[] { new RegionRewardSpec("item_health_potion", 2), new RegionRewardSpec("item_mana_potion", 2) }),

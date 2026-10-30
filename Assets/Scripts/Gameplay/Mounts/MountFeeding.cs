@@ -14,7 +14,7 @@ namespace Rapadura.Gameplay.Mounts
 
     /// <summary>
     /// Paying for a mount's food from the bag (Docs/Mounts.md §4.2): plain items (2 fibras for the capim, the Ração do
-    /// Haras, an herb, roast meat) or one of Vó Zefa's dishes cooked for the mount — the dish must be known
+    /// Haras, an herb, roast meat) or one of Vó Edna's dishes cooked for the mount — the dish must be known
     /// (<c>MealService</c>) and its ingredients plus the "mantimentos" (gold) are paid, but it does not become the
     /// cousins' meal. Bag access goes through delegates so it is EditMode-testable and works on the map's carried bag.
     /// </summary>

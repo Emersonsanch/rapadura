@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: item_fish_traira
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fish_traira
-  _displayName: "Tra\xEDra"
+  _displayName: "L\xFAcio"
   _description: "Peixe de dente afiado que ca\xE7a no fim da tarde e de noite."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}

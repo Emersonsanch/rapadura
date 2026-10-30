@@ -8,10 +8,10 @@ using Rapadura.Gameplay.Characters;
 namespace Rapadura.Gameplay.Hunting
 {
     /// <summary>
-    /// Localization keys (en + pt-BR) of the hunting features: Seu Zé Caçador's board (tasks, "Presa do dia", points),
+    /// Localization keys (en + pt-BR) of the hunting features: Patig the Tracker's board (tasks, "Presa do dia", points),
     /// the quest-tracker line, the "Bicho destaque do dia" notices and the Caderno's "Amuletos" tab
     /// (<c>ui.hunting.*</c>), plus a name and an effect line per charm (<see cref="HuntingCharmSpec.NameKey"/>).
-    /// Seu Zé greets each cousin his own way (Maithe the eldest, sharp-eyed archer; Maria the healer who keeps an eye on
+    /// Patig greets each cousin his own way (Maithe the eldest, sharp-eyed archer; Maria the healer who keeps an eye on
     /// her brother Joaquim; Joaquim the stubborn shield; Ícaro the inventor, Maithe's little brother; Lavine the
     /// youngest cousin). Same self-contained pattern as <c>NightTexts</c>: merged into the live
     /// <see cref="LocalizationManager"/> on first use (keys it already has win), pt-BR fallback otherwise.
@@ -125,15 +125,15 @@ namespace Rapadura.Gameplay.Hunting
         {
             var entries = new List<LocalizationEntry>
             {
-                new LocalizationEntry(Title, "Zé the Hunter's stall", "Barraca do Seu Zé Caçador"),
-                new LocalizationEntry(Button, "Zé the Hunter", "Seu Zé Caçador"),
+                new LocalizationEntry(Title, "Patig the Tracker's stall", "Barraca do Patig, o Rastreador"),
+                new LocalizationEntry(Button, "Patig the Tracker", "Patig, o Rastreador"),
                 new LocalizationEntry(Close, "Close", "Fechar"),
-                new LocalizationEntry(GreetingNone, "\"Hunting tasks, prey of the day... pick and go, kid!\"", "\"Tarefa de caça, presa do dia... escolhe e vai, menino!\""),
-                new LocalizationEntry(GreetingKey(CharacterId.Maithe), "\"Maithe! Eyes like a hawk, just like your grandpa. Pick a task; your aim does the rest.\"", "\"Maithe! Olho de gavião, igualzinha ao seu avô. Escolhe a tarefa que a pontaria faz o resto.\""),
+                new LocalizationEntry(GreetingNone, "\"Hunting tasks, prey of the day... pick one, and walk soft: the creatures hear everything.\"", "\"Tarefa de caça, presa do dia... escolhe uma e pisa leve: os bichos escutam tudo.\""),
+                new LocalizationEntry(GreetingKey(CharacterId.Maithe), "\"Maithe! Eyes like a hawk, just like Grandpa Jorge. Pick a task; your aim and the wind do the rest.\"", "\"Maithe! Olho de gavião, igualzinha ao Vô Jorge. Escolhe a tarefa que a pontaria e o vento fazem o resto.\""),
                 new LocalizationEntry(GreetingKey(CharacterId.Maria), "\"Maria, you tend to everyone... and who tends to Joaquim? Take a task and keep him close.\"", "\"Maria, você cuida de todo mundo... e quem cuida do Joaquim? Pega uma tarefa e leva ele junto.\""),
                 new LocalizationEntry(GreetingKey(CharacterId.Joaquim), "\"Joaquim, stubborn as a mule! Good. A big task needs a hard head.\"", "\"Joaquim, teimoso que só mula! Ótimo. Tarefa grande pede cabeça dura.\""),
                 new LocalizationEntry(GreetingKey(CharacterId.Icaro), "\"Ícaro, no contraption hunts by itself. But go on, show Maithe what you can do.\"", "\"Ícaro, engenhoca nenhuma caça sozinha. Mas vai, mostra pra Maithe do que você é capaz.\""),
-                new LocalizationEntry(GreetingKey(CharacterId.Lavine), "\"Lavine! Small, but no one spots a track faster. Start with a little task, then go big.\"", "\"Lavine! Pequena, mas ninguém acha rastro mais rápido. Começa com uma tarefa pequena e depois vai na grande.\""),
+                new LocalizationEntry(GreetingKey(CharacterId.Lavine), "\"Lavine! No one spots a track faster than you. Start with a little task, then go big.\"", "\"Lavine! Ninguém acha rastro mais rápido que você. Começa com uma tarefa pequena e depois vai na grande.\""),
                 new LocalizationEntry(SectionTask, "Hunting task", "Tarefa de caça"),
                 new LocalizationEntry(SectionPrey, "Prey of the day", "Presa do dia"),
                 new LocalizationEntry(SectionPoints, "Points", "Pontos"),
@@ -145,7 +145,7 @@ namespace Rapadura.Gameplay.Hunting
                 new LocalizationEntry(TierLarge, "Large", "Grande"),
                 new LocalizationEntry(TaskReward, "Reward: {0} XP, {1} gold, {2} Hunt Points", "Recompensa: {0} de XP, {1} de ouro, {2} Pontos de Caça"),
                 new LocalizationEntry(TaskCancel, "Give up the task", "Desistir da tarefa"),
-                new LocalizationEntry(TaskCap, "That's enough for today: Zé gives out {0} tasks a day.", "Chega por hoje: o Seu Zé só dá {0} tarefas por dia."),
+                new LocalizationEntry(TaskCap, "That's enough for today: Patig gives out {0} tasks a day.", "Chega por hoje: o Patig só dá {0} tarefas por dia."),
                 new LocalizationEntry(TaskCompleted, "Hunting task done! +{0} XP, +{1} gold, +{2} Hunt Points", "Tarefa de caça concluída! +{0} de XP, +{1} de ouro, +{2} Pontos de Caça"),
                 new LocalizationEntry(TrackerTitle, "Hunting task", "Tarefa de caça"),
                 new LocalizationEntry(TrackerLine, "{0}: {1}/{2}", "{0}: {1}/{2}"),
@@ -163,11 +163,11 @@ namespace Rapadura.Gameplay.Hunting
                 new LocalizationEntry(BossesExcluded, "Bosses are another story: tasks, prey and charms never count against them.", "Chefe é outra conversa: tarefa, presa e amuleto não valem contra eles."),
                 new LocalizationEntry(HuntPoints, "Hunt Points: {0}", "Pontos de Caça: {0}"),
                 new LocalizationEntry(TradePoints, "Trade {0} Hunt Points for 1 Notebook Point", "Trocar {0} Pontos de Caça por 1 Ponto do Caderno"),
-                new LocalizationEntry(RankLine, "Zé calls you: {0}.", "O Seu Zé te chama de: {0}."),
-                new LocalizationEntry(RankKey(0), "Hunter's apprentice", "Aprendiz de caçador"),
-                new LocalizationEntry(RankKey(1), "Woodsman", "Mateiro"),
+                new LocalizationEntry(RankLine, "Patig calls you: {0}.", "O Patig te chama de: {0}."),
+                new LocalizationEntry(RankKey(0), "Tracker's apprentice", "Aprendiz de rastreador"),
+                new LocalizationEntry(RankKey(1), "Scout", "Batedor"),
                 new LocalizationEntry(RankKey(2), "Tracker", "Rastreador"),
-                new LocalizationEntry(RankKey(3), "Hunter of the Sertão", "Caçador do Sertão"),
+                new LocalizationEntry(RankKey(3), "Master Tracker of the Isle", "Mestre de Pegadas da Ilha"),
                 new LocalizationEntry(BoostedHud, "Highlight of the day: {0} (+{1}% XP and loot)", "Destaque do dia: {0} (+{1}% de XP e saque)"),
                 new LocalizationEntry(BoostedCaderno, "Today's highlighted creature: {0}. +{1}% XP and loot.", "Bicho destaque de hoje: {0}. +{1}% de XP e saque."),
                 new LocalizationEntry(DodgeFloat, "Dodged!", "Desviou!"),
@@ -198,19 +198,19 @@ namespace Rapadura.Gameplay.Hunting
             switch (id)
             {
                 case HuntingCharmCatalog.DenteDeOnca:
-                    return ("Jaguar Tooth", "Dente de Onça", "8% less damage from four-legged creatures (wolves).", "8% menos dano de bichos de quatro patas (lobos).");
+                    return ("Snow Leopard Tooth", "Dente de Leopardo-das-Neves", "8% less damage from four-legged creatures (wolves).", "8% menos dano de bichos de quatro patas (lobos).");
                 case HuntingCharmCatalog.CascaDeBesouro:
-                    return ("Beetle Shell", "Casca de Besouro", "8% less damage from many-legged creatures (spiders, scorpions).", "8% menos dano de bichos de muitas patas (aranhas, escorpiões).");
+                    return ("Faience Scarab", "Escaravelho de Faiança", "8% less damage from many-legged creatures (spiders, scorpions).", "8% menos dano de bichos de muitas patas (aranhas, escorpiões).");
                 case HuntingCharmCatalog.PenaDeCarcara:
-                    return ("Caracara Feather", "Pena de Carcará", "8% less damage from flying creatures (bats).", "8% menos dano de bichos que voam (morcegos).");
+                    return ("Stork Feather", "Pena de Cegonha", "8% less damage from flying creatures (bats).", "8% menos dano de bichos que voam (morcegos).");
                 case HuntingCharmCatalog.PedraDeCorisco:
-                    return ("Thunderstone", "Pedra de Corisco", "8% less damage from heavy creatures (cave dwellers).", "8% menos dano de bichos pesados (habitantes das cavernas).");
+                    return ("Vishap Pebble", "Seixo de Vishap", "8% less damage from heavy creatures (cave dwellers).", "8% menos dano de bichos pesados (habitantes das cavernas).");
                 case HuntingCharmCatalog.FigaDeGuine:
-                    return ("Guinea Figa", "Figa de Guiné", "3% chance to dodge a creature's hit.", "3% de chance de desviar do golpe de um bicho.");
+                    return ("Carnelian Bead", "Conta de Cornalina", "3% chance to dodge a creature's hit.", "3% de chance de desviar do golpe de um bicho.");
                 case HuntingCharmCatalog.RaminhoDeArruda:
-                    return ("Rue Sprig", "Raminho de Arruda", "Heals 2% of your health for each creature defeated.", "Cura 2% da vida a cada bicho vencido.");
+                    return ("Mint Sprig", "Raminho de Hortelã", "Heals 2% of your health for each creature defeated.", "Cura 2% da vida a cada bicho vencido.");
                 default:
-                    return ("Cowboy Knot", "Nó de Vaqueiro", "Your stuns on creatures last 10% longer.", "Seus atordoamentos nos bichos duram 10% a mais.");
+                    return ("Caravaneer's Knot", "Nó de Caravaneiro", "Your stuns on creatures last 10% longer.", "Seus atordoamentos nos bichos duram 10% a mais.");
             }
         }
 

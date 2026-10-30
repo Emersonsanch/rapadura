@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_maria_purificacao
   _displayName: "Purifica\xE7\xE3o"
-  _description: "Uma explos\xE3o de luz que fere criaturas corrompidas ao redor e enfraquece seus ataques, devolvendo um pouco de vida a Maria. \xC9 a mesma luz com que ela acalma a prima Lavine quando a escurid\xE3o aperta."
+  _description: "Uma explos\xE3o de luz que fere os bichos apagados ao redor e enfraquece seus ataques, devolvendo um pouco de vida a Maria. \xC9 a mesma luz com que ela acalma a prima Lavine quando a noite d\xE1 friozinho na barriga."
   _icon: {fileID: 0}
   _skillType: 0
   _category: 5

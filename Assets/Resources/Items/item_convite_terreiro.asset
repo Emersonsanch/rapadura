@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_convite_terreiro
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_convite_terreiro
-  _displayName: "Convite do Terreiro"
-  _description: "Convite pintado \xE0 m\xE3o para o Terreiro das Assombra\xE7\xF5es. Vale uma entrada quando o terreiro abre."
+  _displayName: "Convite do P\xE1tio"
+  _description: "Convite pintado \xE0 m\xE3o para o P\xE1tio dos Mazans. Vale uma entrada quando o p\xE1tio abre."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 5

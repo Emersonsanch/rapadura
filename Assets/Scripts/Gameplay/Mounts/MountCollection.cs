@@ -129,7 +129,7 @@ namespace Rapadura.Gameplay.Mounts
 
     /// <summary>
     /// The cousins' mounts, <b>one collection per save/account, shared by the five cousins</b> (Decisão 5 of
-    /// Docs/Mounts.md, offline proposal), like the Baú da Vó Zefa. A GameManager-built manager registered with
+    /// Docs/Mounts.md, offline proposal), like the Baú da Vó Edna. A GameManager-built manager registered with
     /// SaveManager under <see cref="Key"/> and with NewSessionReset; a save written before mounts existed has no entry
     /// and loads with no mount. Also:
     /// <list type="bullet">

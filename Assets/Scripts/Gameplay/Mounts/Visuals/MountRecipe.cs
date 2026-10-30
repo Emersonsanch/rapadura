@@ -112,8 +112,9 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                         LegLength = 0.52f, BodyLength = 1.05f, BodyThickness = 0.42f, BodyWidth = 0.4f,
                         NeckLength = 0.24f, NeckPitch = 35f, HeadLength = 0.3f, HeadSize = 0.3f, EarLength = 0.2f, FloppyEars = true,
                         TailLength = 0.42f, BushyTail = true, Collar = true,
-                        Coat = EnemySwatch.SandstoneDark, Dark = EnemySwatch.Leather, Light = EnemySwatch.SandstoneLight,
-                        Mane = EnemySwatch.SandstoneDark, Socks = EnemySwatch.SandstoneLight, Foot = EnemySwatch.Leather,
+                        // The fluffy alabai: cream coat, pale socks.
+                        Coat = EnemySwatch.Bone, Dark = EnemySwatch.SandstoneDark, Light = EnemySwatch.Fang,
+                        Mane = EnemySwatch.Bone, Socks = EnemySwatch.Fang, Foot = EnemySwatch.Leather,
                         Blanket = EnemySwatch.CaveMoss, Saddle = EnemySwatch.Leather, Trim = EnemySwatch.Gold,
                     };
                 case MountVisualRecipe.Donkey:

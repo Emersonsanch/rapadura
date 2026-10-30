@@ -280,7 +280,7 @@ namespace Rapadura.Tests
 
             PrizeRow row = FestaJuninaPresenter.BuildPrizeRow(FestaJuninaRules.StallItems[0], 0, true, false, null);
             Assert.IsFalse(row.CanBuy);
-            StringAssert.Contains("prendas", row.ButtonText);
+            StringAssert.Contains("oferendas", row.ButtonText);
         }
 
         [Test]

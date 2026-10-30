@@ -12,14 +12,16 @@ família oferece (tiers 1–2: um primo/irmão; tier 3: **Vó Edna**), o primo c
 
 | Primo | Graduação 1 (nv 8, Deserto, 15) | Graduação 2 (nv 14, Cavernas, 20) | Graduação 3 (nv 25, Montanha, 30) |
 |---|---|---|---|
-| Maithe | Rastreadora do Carcará — "Medidor de Vento" (Ícaro) | Flecheira da Ventania — "Três Meses e Onze Dias" (Maria) | Olho do Sertão — "O Arco de Goiabeira" (Vó Edna; o arco que o Vô Jorge entalhou) |
-| Maria | Rezadeira do Sol — "Quem Cuida do Guardião" (Joaquim) | Benzedeira da Aurora — "Luz e Sombra" (Lavine) | Candeia do Sertão — "A Medalhinha de Sol" (Vó Edna) |
-| Joaquim | Guardião das Raízes — "A Tampa de Barril" (Maria) | Guardião da Caatinga — "Saber Sair da Frente" (Lavine) | Mestre das Raízes — "O Escudo na Parede" (Vó Edna) |
-| Ícaro | Engenhoqueiro — "Não Conta pra Maithe" (Maithe) | Mestre das Máquinas — "O Aviso dos Antigos" (Joaquim) | Cientista do Sertão — "O Rádio do Vô Jorge" (Vó Edna) |
-| Lavine | Feiticeira da Noite Rubra — "Friozinho na Barriga" (Maithe) | Guardiã da Sombra Macia — "A Sombra Também É Macia" (Maria) | Lua do Sertão — "A Fita Vermelha" (Vó Edna) |
+| Maithe | Rastreadora do Falcão — "Medidor de Vento" (Ícaro) | Flecheira da Ventania — "Três Meses e Onze Dias" (Maria) | Olho de Liyongo — "O Arco de Damasqueiro" (Vó Edna; o arco que o Vô Jorge entalhou) |
+| Maria | Curandeira do Sol — "Quem Cuida do Guardião" (Joaquim) | Guardiã da Aurora — "Luz e Sombra" (Lavine) | Candeia da Glória — "A Medalhinha de Sol" (Vó Edna) |
+| Joaquim | Guardião das Raízes — "A Tampa de Barril" (Maria) | Guardião do Tugai — "Saber Sair da Frente" (Lavine) | Mestre das Raízes — "O Escudo na Parede" (Vó Edna) |
+| Ícaro | Artífice — "Não Conta pra Maithe" (Maithe) | Mestre das Máquinas — "O Aviso dos Artífices" (Joaquim) | Herdeiro de Kurdalægon — "O Rádio do Vô Jorge" (Vó Edna) |
+| Lavine | Feiticeira da Noite Rubra — "Friozinho na Barriga" (Maithe) | Guardiã da Sombra Macia — "A Sombra Também É Macia" (Maria) | Barqueira da Lua — "A Fita Vermelha" (Vó Edna) |
 
 Cada missão tem 4 falas (oferta do mentor, incentivo com a contagem, fala de entrega, resposta do primo) em en + pt-BR
-(`ClassEvolutionTexts`). Irmãos: Maithe↔Ícaro, Joaquim↔Maria; Lavine é prima de todos.
+(`ClassEvolutionTexts`). Irmãos: Maithe↔Ícaro, Joaquim↔Maria; Lavine é prima de todos. Os nomes seguem a bíblia do mundo
+(`Docs/WorldBible_Maniqueismo.md` §3.19) e o elemento de cada primo (§1.3): Maithe = Vento Vivo, Maria = Luz, Joaquim =
+Água Viva, Ícaro = Fogo Vivo (Engenhos da Luz), Lavine = Ar Sereno.
 
 Fluxo (`ClassEvolutionRules`): `Status` → `LevelTooLow` / `Available` / `InProgress` / `ReadyToTurnIn` / `AllDone`;
 `Accept` (nível mínimo), `RecordKill` (só abates na região da missão, via `BestiaryCatalog`; chefes contam 1; nunca passa
@@ -29,7 +31,7 @@ do alvo), `TurnIn` (tier + 1). `Sanitize` conserta saves ruins.
 
 Nada de modelo novo: `ClassEvolutionVisuals` aplica um **tingimento leve** da cor do tier (MaterialPropertyBlock por
 renderer, materiais compartilhados intactos; força 15/25/35%) e **um acessório low-poly de primitivas** por graduação
-(chapéu, lenço, pena, fita, faixa, bornal, resplendor), posicionado pelos bounds do modelo. As graduações empilham: no
+(gorro de feltro, lenço bordado, pena, fita, faixa, bornal, resplendor), posicionado pelos bounds do modelo. As graduações empilham: no
 tier 3 o primo usa os três.
 
 ## 2. Skills de graduação e buffs de grupo
@@ -38,8 +40,8 @@ tier 3 o primo usa os três.
 dano, atordoamento, cura, buff/debuff) que passa pelo `SkillManager` normal. `CharacterSkillSet.FindSkill` também
 resolve essas ids, então o save mantém o nível delas.
 
-- **Tier 1 = buff de grupo** (raio 10): Olhar do Carcará (+2% crítico), Bênção do Terreiro (+1 vida/s), Raiz que
-  Segura (−4% dano recebido), Engenhoca de Reforço (−4% recarga), Lua Guardiã (+10% mana). O conjurador ganha pela
+- **Tier 1 = buff de grupo** (raio 10): Olhar do Falcão (+2% crítico), Calor da Lâmpada (+1 vida/s), Raiz que
+  Segura (−4% dano recebido), Engenho de Reforço (−4% recarga), Lua Guardiã (+10% mana). O conjurador ganha pela
   própria skill; `ClassEvolutionProgress.SpreadGroupBuff` espalha a cópia para até **4 aliados vivos** no raio, os mais
   próximos primeiro (`PartySupportRules`, grupo de 5 como no MU). Hoje o herói joga sozinho (a dupla é silhueta), então só ele recebe.
 - **Tier 2 = skill da classe** que fecha o combo (alvo único ou área pequena, com lentidão/atordoamento).
@@ -54,6 +56,8 @@ ultimate no 5º) — as demais ficam aprendidas para trocar na árvore de skills
 `ClassComboSpec` + `ClassComboTracker` (puro, relógio explícito): duas skills da classe + a skill do tier 2, até 3 s entre
 cada; errar reinicia. Liberado na graduação 2. Bônus: Maithe/Lavine +4% dano por 5 s, Ícaro +3% por 6 s, Maria/Joaquim
 −10% custo de mana por 6 s.
+Nomes: Rastro, Chuva e Ventania (Maithe), Luz Completa (Maria), Muro d'Água (Joaquim), Experimento Completo (Ícaro),
+Noite Rubra (Lavine).
 
 ## 4. Nível de Mestre
 
@@ -65,13 +69,13 @@ normal (`EnemyRewardGranter` → `ClassEvolutionProgress.TryRouteMasterExperienc
 |---|---|---|---|
 | Couro Curtido: +1% vida/ponto | 5% | Pé no Chão: −0,6% dano recebido/ponto | 3% |
 | Mão Firme: +0,5% dano/ponto | 2,5% | Olho Vivo: +0,4% crítico/ponto | 2% |
-| Fôlego de Vaqueiro: +2% mana/ponto | 10% | Passo Ligeiro: +1% velocidade/ponto | 5% |
+| Fôlego de Caravaneiro: +2% mana/ponto | 10% | Passo Ligeiro: +1% velocidade/ponto | 5% |
 
 "Começar de novo" devolve todos os pontos. Modificadores aplicados no `BuffController` com a fonte `class_master_tree`.
 
 ## 5. Interface
 
-`ClassEvolutionPanel` (no HUD do mapa, botão **Graduação** na Vila, mesmo critério do Seu Zé): título e graduação do
+`ClassEvolutionPanel` (no HUD do mapa, botão **Graduação** na Vila, mesmo critério do Patig, o Rastreador): título e graduação do
 primo, a missão com as falas da família e **Aceitar**/**Entregar**, o combo da classe e a Árvore de Mestre (+1 ponto,
 começar de novo). Textos em `ClassEvolutionPresenter` (puro, testado). Skill, visual e bônus chegam ao herói quando a
 próxima cena de região carrega. Auto-save ao fechar.

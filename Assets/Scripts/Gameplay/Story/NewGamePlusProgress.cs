@@ -45,9 +45,9 @@ namespace Rapadura.Gameplay.Story
 
     /// <summary>
     /// "Nova Jornada+" (New Game+): once the campaign is complete (<see cref="NewGamePlusRules.CanOffer"/>),
-    /// Vó Zefa offers to start it over (<c>NewGamePlusHud</c> on the world map). <see cref="BeginNextCycle"/>
+    /// Vó Edna offers to start it over (<c>NewGamePlusHud</c> on the world map). <see cref="BeginNextCycle"/>
     /// keeps everything the hero carries — level, attributes, skills, equipment, backpack and gold (the
-    /// Player's carried save state, which nothing here touches) and the Baú da Vó Zefa — and resets the
+    /// Player's carried save state, which nothing here touches) and the Baú da Vó Edna — and resets the
     /// campaign: <see cref="StoryProgress"/> (beats, campaign flag), <see cref="WorldMapProgress"/> (back to the
     /// Floresta only), <see cref="DefeatedEnemyRegistry"/> (bosses alive again) and the region side quests of
     /// <see cref="RegionQuestCatalog"/>. Personal, convergence and daily quests, buildings, recipes, the clock

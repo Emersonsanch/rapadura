@@ -44,15 +44,15 @@ namespace Rapadura.Gameplay.WorldEvents
     }
 
     /// <summary>
-    /// Runs a world-boss fight or an Invasão do Cangaço inside Main.unity, self-bootstrapping like
+    /// Runs a world-boss fight or an Invasão de Āz inside Main.unity, self-bootstrapping like
     /// <c>EventRoomDirector</c> (no scene edit): after a scene load whose pending encounter is a world event
     /// (<see cref="EncounterPayload.IsWorldEvent"/>), a host is created in that scene and dies with it. The arena enters
     /// directed mode (<see cref="EncounterPayload.IsDirected"/>), dresses the floor and places the hero; this director
     /// spawns through <see cref="EncounterArenaController.SpawnDirected"/> and dresses each enemy with
-    /// <see cref="WorldEventEnemyTag"/> (stats via the event rooms' scaler, crown / cangaceiro hat, night recolour).
+    /// <see cref="WorldEventEnemyTag"/> (stats via the event rooms' scaler, crown / Āz's tin crown, night recolour).
     /// <list type="bullet">
     /// <item><b>World boss</b>: the boss alone, minions every 22 s, a "fúria" at half health; win = boss down; 5 min.</item>
-    /// <item><b>Invasão</b>: 4 waves of the region's commons in hats, then Az, the bando's captain; points → chest tier; 4 min.</item>
+    /// <item><b>Invasão</b>: 4 waves of the region's commons in tin crowns, then Āz, the bando's captain; points → chest tier; 4 min.</item>
     /// </list>
     /// Rewards are paid once per real-time window (<see cref="WorldEventProgress"/>) from a seeded roll
     /// (<see cref="WorldEventCalendar.RewardSeed"/>: window + player, no client RNG), then a results card, then

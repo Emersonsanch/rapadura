@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_pedra_alma
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_pedra_alma
-  _displayName: Pedra da Alma
-  _description: "Pedra azulada que dizem guardar o aboio dos vaqueiros antigos. Refina de +6 at\xE9 +15; pode falhar."
+  _displayName: "Pedra da Alma Viva"
+  _description: "Pedra azulada onde dizem que dorme um pouco da Alma Viva. Refina de +6 at\xE9 +15; pode falhar."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

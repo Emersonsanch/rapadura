@@ -420,7 +420,7 @@ namespace Rapadura.Tests
             var bag = Bag((MealCatalog.Wood, 1), (MealCatalog.Herb, 0), (MealCatalog.ProvisionsItemId, 7));
 
             KitchenRecipeRow row = KitchenPresenter.BuildRow(cuscuz, true, Count(bag), ActiveMeal.None, CharacterId.Lavine, null);
-            Assert.AreEqual("Cuscuz", row.Title);
+            Assert.AreEqual("Nan do Tandir", row.Title);
             Assert.IsFalse(row.CanCook);
             StringAssert.Contains("1/1", row.Ingredients);
             StringAssert.Contains("0/1", row.Ingredients);
@@ -437,8 +437,8 @@ namespace Rapadura.Tests
             Assert.IsFalse(locked.CanCook);
             StringAssert.Contains("Maria", locked.HowToLearn);
 
-            Assert.AreEqual("Cuscuz · 2", KitchenPresenter.HudBadgeText(new ActiveMeal(MealCatalog.Cuscuz, 2), null));
-            Assert.AreEqual("Cuscuz · última", KitchenPresenter.HudBadgeText(new ActiveMeal(MealCatalog.Cuscuz, 1), null));
+            Assert.AreEqual("Nan do Tandir · 2", KitchenPresenter.HudBadgeText(new ActiveMeal(MealCatalog.Cuscuz, 2), null));
+            Assert.AreEqual("Nan do Tandir · última", KitchenPresenter.HudBadgeText(new ActiveMeal(MealCatalog.Cuscuz, 1), null));
             Assert.IsNull(KitchenPresenter.HudBadgeText(ActiveMeal.None, null));
         }
 

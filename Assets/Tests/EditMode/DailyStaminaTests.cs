@@ -324,7 +324,7 @@ namespace Rapadura.Tests
             Assert.IsNotNull(meter.Q(DailyStaminaHud.TooltipName));
             Assert.AreEqual(DailyStaminaHud.TiredClass, DailyStaminaHud.TierClass(StaminaTier.Tired));
             StringAssert.Contains("+30%", DailyTexts.Tooltip(null, StaminaTier.Full, 2 * Hour));
-            StringAssert.Contains("Vó Zefa", DailyTexts.ReminderText(null, StaminaReminderKind.Tired, 0));
+            StringAssert.Contains("Vó Edna", DailyTexts.ReminderText(null, StaminaReminderKind.Tired, 0));
             Assert.AreEqual("2 h 05 min", DailyTexts.Duration(null, 2 * Hour + 4 * 60 + 1));
         }
     }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b870b858bb0be4583f94be3707b8a3, type: 3}
   m_Name: enemy_forest_werewolf
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
-  _enemyName: "Lobisomem-do-sert\xE3o"
+  _enemyName: Mardagayl, o Lobo-das-Sete-Noites
   _isBoss: 0
   _maxHealth: 70
   _experienceReward: 10

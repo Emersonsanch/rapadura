@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: skill_maria_escudo_sagrado
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_maria_escudo_sagrado
-  _displayName: Escudo Sagrado
+  _displayName: "Escudo Solar"
   _description: "Um escudo de luz dourada que reduz muito o dano recebido. Maria aprendeu a ergu\xEA-lo de tanto ver o irm\xE3o Joaquim se jogar na frente do perigo sem pensar."
   _icon: {fileID: 0}
   _skillType: 0

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_asas_beija_flor_1
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_asas_beija_flor_1
-  _displayName: "Asas de Beija-flor"
-  _description: "Asinhas verdes que zunem de t\xE3o r\xE1pidas. A Maria diz que elas cheiram a flor de mandacaru."
+  _displayName: "Asas de Aralez"
+  _description: "Asinhas verdes e macias, como as do aralez, o c\xE3o alado dos contos que lambia o machucado dos her\xF3is. A Maria diz que elas cheiram a hortel\xE3."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 3

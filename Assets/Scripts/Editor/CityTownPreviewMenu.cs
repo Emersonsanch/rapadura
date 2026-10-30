@@ -43,12 +43,27 @@ namespace Rapadura.Editor
             SceneView.RepaintAll();
         }
 
+        [InitializeOnLoadMethod]
+        private static void ClearBeforePlayMode()
+        {
+            EditorApplication.playModeStateChanged += state =>
+            {
+                if (state == PlayModeStateChange.ExitingEditMode)
+                {
+                    Clear();
+                }
+            };
+        }
+
         [MenuItem(Root + "Preview Walkable Town/Clear Preview", priority = 31)]
         private static void Clear()
         {
-            foreach (GameObject go in Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            // The preview root is DontSave and lives outside every scene, so FindObjectsByType misses it: a stale
+            // preview then survives Clear, sits on top of the arena in Play mode and renders magenta once
+            // TownMeshCache.Clear() below destroys its meshes/material. FindObjectsOfTypeAll sees it.
+            foreach (GameObject go in Resources.FindObjectsOfTypeAll<GameObject>())
             {
-                if (go != null && go.name == PreviewName)
+                if (go != null && go.transform.parent == null && go.name == PreviewName && !EditorUtility.IsPersistent(go))
                 {
                     Object.DestroyImmediate(go);
                 }

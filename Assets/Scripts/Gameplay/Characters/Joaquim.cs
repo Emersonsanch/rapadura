@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.Characters
 {
-    /// <summary>Joaquim — O Guardião das Raízes. Tanque/Defesa, protetor do grupo.</summary>
+    /// <summary>Joaquim — O Guardião das Raízes (elemento Água Viva). Tanque/Defesa, protetor do grupo.</summary>
     public class Joaquim : PlayableCharacter
     {
         public override CharacterId Id => CharacterId.Joaquim;
@@ -18,22 +18,22 @@ namespace Rapadura.Gameplay.Characters
         public override int Age => 12;
 
         public override string Lore =>
-            "Joaquim tem apenas 12 anos, mas cresceu ouvindo os anciãos de sua vila, cercada por florestas " +
-            "antigas, contarem como proteger os outros dos perigos que surgiam durante a noite — e decidiu " +
-            "que seria ele a fazer isso um dia. Quando criaturas sombrias vindas das profundezas do " +
-            "sertão destruíram a vila velha onde ele nasceu, a família foi morar perto da Vó Zefa, e o garoto " +
-            "jurou, com toda a teimosia de uma criança, proteger todos os inocentes. Carrega consigo o Escudo das Raízes Eternas, um artefato herdado de seus " +
-            "ancestrais — grande demais pra ele, mas que absorve parte do dano sofrido pelos aliados. Irmão " +
-            "mais novo de Maria e primo de Maithe, Ícaro e Lavine, é o mais velho entre os meninos da " +
-            "família e insiste em bancar o protetor também dos primos mais novos, Ícaro e Lavine, mesmo " +
-            "quando ninguém pediu.";
+            "Joaquim tem apenas 12 anos, mas cresceu ouvindo os mais velhos de sua vila, cercada por bosques antigos, " +
+            "contarem como proteger os outros dos perigos que surgiam durante a noite — e decidiu que seria ele a fazer " +
+            "isso um dia. Quando a sombra que escorre das Grutas apagou a vila velha onde ele nasceu, a família foi morar " +
+            "perto da Vó Edna, e o garoto jurou, com toda a teimosia de uma criança, proteger todos os inocentes. Carrega " +
+            "consigo o Escudo das Raízes Eternas, um artefato herdado de seus ancestrais — grande demais pra ele, mas que " +
+            "absorve parte do dano sofrido pelos aliados. As raízes bebem Água Viva, e o escudo é o rio que não deixa " +
+            "passar. Irmão mais novo de Maria e primo de Maithe, Ícaro e Lavine, é o mais velho entre os meninos da " +
+            "família e insiste em bancar o protetor também dos primos mais novos, Ícaro e Lavine, mesmo quando ninguém " +
+            "pediu.";
 
         public override string[] AbilityNames => new[]
         {
-            "Muralha de Pedra",
+            "Muralha da Maré",
             "Provocação Heroica",
             "Escudo das Raízes",
-            "Terremoto",
+            "Maremoto",
             "Última Resistência" // Ultimate
         };
 

@@ -8,7 +8,7 @@ using UnityEngine.Rendering;
 namespace Rapadura.Gameplay.EventRooms
 {
     /// <summary>
-    /// The old mill gate of the Torre do Engenho Velho: an <see cref="ICombatTarget"/> with a solid collider and HP, so
+    /// The Portão da Torre of the Torre da Roda das Doze Jarras: an <see cref="ICombatTarget"/> with a solid collider and HP, so
     /// the existing combat loop breaks it (tap → walk over → auto-attack), like <c>ArenaSecretObject</c>. Only the
     /// hero's hits count, and only while <see cref="AcceptsDamage"/> (phase "Quebrar o portão"). Not an
     /// EnemyController: skills' soft-targeting and the kill count ignore it.
@@ -106,7 +106,7 @@ namespace Rapadura.Gameplay.EventRooms
         }
     }
 
-    /// <summary>Slow spin + bob for the Moenda de Ouro while it waits on the floor.</summary>
+    /// <summary>Slow spin + bob for the Jarra de Ouro while it waits on the floor.</summary>
     public class EventRoomSpinner : MonoBehaviour
     {
         private Vector3 _base;
@@ -121,9 +121,9 @@ namespace Rapadura.Gameplay.EventRooms
     }
 
     /// <summary>
-    /// Builds the Torre do Engenho Velho's props from primitives (no assets, no scene edit), laid out on a line from
-    /// the hero toward the arena centre: Seu Malaquias at the entrance, the bridge barrier (sharp stakes that sink when
-    /// the bridge opens), the mill gate and, after the guardian, the Moenda de Ouro. Decorative parts have no collider;
+    /// Builds the Torre da Roda das Doze Jarras's props from primitives (no assets, no scene edit), laid out on a line from
+    /// the hero toward the arena centre: Adda (the tower keeper) at the entrance, the bridge barrier (sharp stakes that sink when
+    /// the bridge opens), the tower gate and, after Ullikummi, the Jarra de Ouro (prop names keep the old ids). Decorative parts have no collider;
     /// the gate has one solid box.
     /// </summary>
     public static class TorreProps
@@ -145,12 +145,14 @@ namespace Rapadura.Gameplay.EventRooms
         {
             GameObject root = Root("SeuMalaquias", position, lookAt);
             var block = new MaterialPropertyBlock();
-            Part(root.transform, PrimitiveType.Capsule, new Vector3(0f, 0.85f, 0f), Vector3.zero, new Vector3(0.6f, 0.85f, 0.6f), new Color(0.75f, 0.68f, 0.55f), block);
+            // Long robe in tower-keeper indigo with a pale sash.
+            Part(root.transform, PrimitiveType.Capsule, new Vector3(0f, 0.85f, 0f), Vector3.zero, new Vector3(0.6f, 0.85f, 0.6f), new Color(0.24f, 0.25f, 0.42f), block);
+            Part(root.transform, PrimitiveType.Cylinder, new Vector3(0f, 1.05f, 0f), Vector3.zero, new Vector3(0.64f, 0.05f, 0.64f), new Color(0.95f, 0.93f, 0.88f), block);
             Part(root.transform, PrimitiveType.Sphere, new Vector3(0f, 1.85f, 0f), Vector3.zero, Vector3.one * 0.42f, new Color(0.62f, 0.45f, 0.32f), block);
-            // Leather hat (chapéu de couro): brim + crown.
-            Part(root.transform, PrimitiveType.Cylinder, new Vector3(0f, 2.06f, 0f), Vector3.zero, new Vector3(0.8f, 0.03f, 0.8f), new Color(0.5f, 0.32f, 0.15f), block);
-            Part(root.transform, PrimitiveType.Cylinder, new Vector3(0f, 2.16f, 0f), Vector3.zero, new Vector3(0.4f, 0.1f, 0.4f), new Color(0.5f, 0.32f, 0.15f), block);
-            // Lantern on a stick, so the hero sees where to bring the Moenda.
+            // Tall white felt cap (no brim).
+            Part(root.transform, PrimitiveType.Cylinder, new Vector3(0f, 2.12f, 0f), Vector3.zero, new Vector3(0.36f, 0.16f, 0.36f), new Color(0.94f, 0.92f, 0.86f), block);
+            Part(root.transform, PrimitiveType.Sphere, new Vector3(0f, 2.28f, 0f), Vector3.zero, new Vector3(0.34f, 0.16f, 0.34f), new Color(0.94f, 0.92f, 0.86f), block);
+            // Lantern on a stick, so the hero sees where to bring the Golden Jar.
             Part(root.transform, PrimitiveType.Cylinder, new Vector3(0.5f, 1.2f, 0f), Vector3.zero, new Vector3(0.05f, 1.2f, 0.05f), DarkWood, block);
             Part(root.transform, PrimitiveType.Cube, new Vector3(0.5f, 2.45f, 0f), Vector3.zero, Vector3.one * 0.22f, new Color(1f, 0.85f, 0.45f), block);
             var light = new GameObject("Lantern").AddComponent<Light>();
@@ -234,7 +236,7 @@ namespace Rapadura.Gameplay.EventRooms
             return root;
         }
 
-        /// <summary>The small Moenda carried over the hero's head (no light, no spin).</summary>
+        /// <summary>The small Golden Jar carried over the hero's head (no light, no spin).</summary>
         public static GameObject BuildCarried(Transform hero)
         {
             var root = new GameObject("MoendaCarregada");
@@ -247,14 +249,11 @@ namespace Rapadura.Gameplay.EventRooms
 
         private static void BuildMoendaModel(Transform parent, MaterialPropertyBlock block)
         {
-            // Three upright rollers on a base: the sugar-cane press, all in gold.
-            Part(parent, PrimitiveType.Cube, new Vector3(0f, -0.35f, 0f), Vector3.zero, new Vector3(0.9f, 0.12f, 0.5f), Gold * 0.85f, block);
-            for (int i = -1; i <= 1; i++)
-            {
-                Part(parent, PrimitiveType.Cylinder, new Vector3(i * 0.28f, 0f, 0f), Vector3.zero, new Vector3(0.24f, 0.3f, 0.24f), Gold, block);
-            }
-
-            Part(parent, PrimitiveType.Cube, new Vector3(0f, 0.36f, 0f), Vector3.zero, new Vector3(0.9f, 0.08f, 0.4f), Gold * 0.9f, block);
+            // The Golden Jar (the twelfth jar of the wheel): foot, round belly, neck and lip, all in gold.
+            Part(parent, PrimitiveType.Cylinder, new Vector3(0f, -0.36f, 0f), Vector3.zero, new Vector3(0.34f, 0.05f, 0.34f), Gold * 0.85f, block);
+            Part(parent, PrimitiveType.Sphere, new Vector3(0f, -0.06f, 0f), Vector3.zero, new Vector3(0.62f, 0.56f, 0.62f), Gold, block);
+            Part(parent, PrimitiveType.Cylinder, new Vector3(0f, 0.26f, 0f), Vector3.zero, new Vector3(0.24f, 0.1f, 0.24f), Gold * 0.9f, block);
+            Part(parent, PrimitiveType.Cylinder, new Vector3(0f, 0.37f, 0f), Vector3.zero, new Vector3(0.34f, 0.03f, 0.34f), Gold * 0.85f, block);
         }
 
         private static GameObject Root(string name, Vector3 position, Vector3 lookAt)

@@ -261,14 +261,14 @@ namespace Rapadura.Tests
         [Test]
         public void HarasKeeper_IsSeuTonico_NotSeuZeCacador()
         {
-            // Seu Tonico (Vô Jorge's old road friend) keeps the Haras; Seu Zé Caçador (Hunting) is someone else.
+            // Srosh (resident id tonico_haras, Vô Jorge's old road friend) keeps the Haras; the hunter (Hunting) is someone else.
             CityResidentSpec keeper = CityCatalog.AllResidents().Single(r => r.ShopId == CityShopCatalog.HarasVila);
             Assert.AreEqual("tonico_haras", keeper.ResidentId);
             Assert.IsFalse(CityCatalog.AllResidents().Any(r => r.ResidentId == "ze_haras"));
 
             LocalizationEntry name = Rapadura.UI.WorldMap.CityTexts.Entries.Single(e => e.Key == keeper.NameKey);
-            Assert.AreEqual("Seu Tonico do Haras", name.PtBR);
-            Assert.AreEqual("Seu Tonico of the Haras", name.En);
+            Assert.AreEqual("Srosh, o Tratador", name.PtBR);
+            Assert.AreEqual("Srosh the Stablekeeper", name.En);
             Assert.IsFalse(Rapadura.UI.WorldMap.CityTexts.Entries.Any(e => e.Key.StartsWith("city.resident.ze_haras", System.StringComparison.Ordinal)));
             Assert.IsFalse(MountTexts.Entries.Any(e => (e.PtBR ?? string.Empty).Contains("Seu Zé") || (e.En ?? string.Empty).Contains("Seu Zé")), "mount texts name Seu Tonico");
         }

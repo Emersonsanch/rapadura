@@ -33,7 +33,7 @@ namespace Rapadura.UI.WorldMap
         {
             new LocalizationEntry(Button, "Village", "Vila"),
             new LocalizationEntry(ButtonNews, "Village (!)", "Vila (!)"),
-            new LocalizationEntry(Title, "Grandma Zefa's village", "Vila da Vó Zefa"),
+            new LocalizationEntry(Title, "Grandma Edna's village", "Vila da Vó Edna"),
             new LocalizationEntry(Subtitle, "Talk to the villagers, shop or use the workbench.", "Converse com os moradores, faça compras ou use a bancada."),
             new LocalizationEntry(TalkHeader, "Talk", "Conversar"),
             new LocalizationEntry(ServicesHeader, "Services", "Serviços"),

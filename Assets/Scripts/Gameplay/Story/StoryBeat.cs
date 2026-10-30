@@ -122,7 +122,7 @@ namespace Rapadura.Gameplay.Story
 
         /// <summary>
         /// The region the cousins last came back from: the region of the latest interlude (or the ending) seen; null
-        /// before the Forest interlude. Used by Vó Zefa's kitchen and Caramelo's cuddles (Docs/Narrative.md §9).
+        /// before the Forest interlude. Used by Vó Edna's kitchen and Ari's (Caramelo) cuddles (Docs/Narrative.md §9).
         /// </summary>
         public static BiomeType? LastRegionCleared(Func<StoryBeat, bool> seen) => RegionFor(LatestSeen(seen));
 

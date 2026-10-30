@@ -100,7 +100,7 @@ namespace Rapadura.Gameplay.Tacho
     }
 
     /// <summary>
-    /// Pure rules of the "Tacho Encantado da Vó Zefa" (FASE 16, MU Online's Chaos Machine with our names; Docs/Balance/README.md
+    /// Pure rules of the "Tacho Encantado da Vó Edna" (FASE 16, MU Online's Chaos Machine with our names; Docs/Balance/README.md
     /// "Tacho Encantado e asas"), unit-tested in <c>TachoTests</c>. No UnityEngine, no state: the window previews with them
     /// and, online (Fase 12), the server runs <see cref="Attempt"/> with its own seed; the client never rolls.
     /// <list type="bullet">

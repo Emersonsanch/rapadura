@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_parte_seda_aranha
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_parte_seda_aranha
-  _displayName: Seda de Aranha
-  _description: Fio forte e grudento da aranha da floresta. Deixa a arma mais ligeira e vira papel de runa.
+  _displayName: "Seda de Aranha"
+  _description: "Fio forte e grudento da aranha-tecel\xE3 do bosque. Deixa a arma mais ligeira e vira papel de runa."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

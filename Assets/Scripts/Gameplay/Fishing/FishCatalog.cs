@@ -15,10 +15,10 @@ namespace Rapadura.Gameplay.Fishing
         Legendary = 3,
     }
 
-    /// <summary>The three water spots of "Pesca no açude", one per region that has water.</summary>
+    /// <summary>The three water spots of "Pesca no remanso", one per region that has water.</summary>
     public enum FishingSpotId
     {
-        /// <summary>Vô Chico's açude, in the Floresta (next to the village).</summary>
+        /// <summary>Vô Jorge's Remanso de Faro, in the Floresta (next to the village).</summary>
         Acude = 0,
         /// <summary>The cold riacho coming down the Montanha.</summary>
         Riacho = 1,
@@ -123,7 +123,7 @@ namespace Rapadura.Gameplay.Fishing
     }
 
     /// <summary>
-    /// "Pesca no açude": the 14 species and the 3 spots, defined in code like <c>MealCatalog</c>. Each species is an
+    /// "Pesca no remanso": the 14 species and the 3 spots, defined in code like <c>MealCatalog</c>. Each species is an
     /// inventory item (<c>Resources/Items/item_fish_*.asset</c>, weight = a typical fish of its kind) and some are
     /// cooking ingredients (<c>MealCatalog.TilapiaNaBrasa</c>, <c>MealCatalog.CaldoDePiaba</c>).
     /// <list type="bullet">
@@ -226,7 +226,7 @@ namespace Rapadura.Gameplay.Fishing
             return null;
         }
 
-        /// <summary>The water spot of <paramref name="region"/>, or null (the Sertão has no water to fish in).</summary>
+        /// <summary>The water spot of <paramref name="region"/>, or null (the desert has no water to fish in).</summary>
         public static FishingSpotSpec SpotFor(BiomeType? region)
         {
             if (!region.HasValue)

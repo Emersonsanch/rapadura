@@ -11,7 +11,7 @@ namespace Rapadura.Gameplay.Story
     /// on first use (keys it already has win), pt-BR fallback when no manager is registered.
     ///
     /// Canon (Docs/Narrative.md): the five cousins in birth order Maithe, Maria, Joaquim, Ícaro, Lavine; siblings
-    /// Maithe &amp; Ícaro, Joaquim &amp; Maria; Lavine cousin to all. Grandparents Vó Edna (runs the farm by the vila) and
+    /// Maithe &amp; Ícaro, Joaquim &amp; Maria; Lavine cousin to all. Grandparents Vó Edna (keeps the orchard house by the Vila) and
     /// Vô Jorge (his rocking chair on the porch). Lines only cite what the "Todos sabem" column has unlocked at that
     /// point: the intro's seal hook is narrated (the cousins don't know about the seal yet).
     /// Mythic frame (Manichaean, kid-friendly, told as Vô Jorge's tale — not doctrine): Light vs Darkness, sparks of
@@ -38,7 +38,7 @@ namespace Rapadura.Gameplay.Story
             new LocalizationEntry("cutscene.speaker.icaro", "Ícaro", "Ícaro"),
             new LocalizationEntry("cutscene.speaker.lavine", "Lavine", "Lavine"),
 
-            // ---- Intro: arriving at Vó Edna's farm (before the prologue panels) ----
+            // ---- Intro: arriving at Vó Edna's house (before the prologue panels) ----
             new LocalizationEntry("cutscene.intro.title",
                 "The Call",
                 "O Chamado"),
@@ -55,14 +55,14 @@ namespace Rapadura.Gameplay.Story
                 "One, two, three, four, five. Everyone's here. Let's go.",
                 "Um, dois, três, quatro, cinco. Todo mundo aqui. Bora."),
             new LocalizationEntry("cutscene.intro.5",
-                "My grandchildren! Come in, come in — the coffee's made and the corn cake is coming out of the oven.",
-                "Meus netos! Entra, entra, que o café tá passado e o bolo de milho tá saindo do forno."),
+                "My grandchildren! Come in, come in — the tea is hot and the apricot cake is coming out of the tandir.",
+                "Meus netos! Entra, entra, que o chá tá quentinho e o bolo de damasco tá saindo do tandir."),
             new LocalizationEntry("cutscene.intro.6",
                 "Sis... isn't the Sun Crystal supposed to be glowing? It's completely dark.",
                 "Mana... o Cristal do Sol não devia estar brilhando? Tá apagadinho."),
             new LocalizationEntry("cutscene.intro.7",
-                "Deep in the Caves, a very old stone cracked. The Prince of Darkness's shadow seeped across the sertão and scattered the Crystal's light into a thousand sparks — trapped in animals, in stones, in guardians.",
-                "No fundo das Cavernas, uma pedra muito velha rachou. A sombra do Príncipe das Trevas escorreu pelo sertão e espalhou a luz do Cristal em mil faíscas — presas nos bichos, nas pedras, nos guardiões."),
+                "Deep in the Threshold Caves, a very old sealed door cracked. The Prince of Darkness's shadow seeped across Dawn Isle and scattered the Crystal's light into a thousand sparks — trapped in animals, in stones, in guardians.",
+                "No fundo das Grutas do Limiar, uma porta selada muito velha rachou. A sombra do Príncipe das Trevas escorreu pela Ilha da Aurora e espalhou a luz do Cristal em mil faíscas — presas nos bichos, nas pedras, nos guardiões."),
             new LocalizationEntry("cutscene.intro.8",
                 "I dreamed about this. Little sparks of light stuck in the dark, calling us... all the way over there.",
                 "Eu sonhei com isso. Faisquinhas de luz presas no escuro, chamando a gente... até lá."),
@@ -75,20 +75,20 @@ namespace Rapadura.Gameplay.Story
                 "The Column of Glory",
                 "A Coluna da Glória"),
             new LocalizationEntry("cutscene.outro.1",
-                "Spark by spark, the trapped light was set free. And it rose to the sky like a shining column — the Column of Glory, the one Grandpa Jorge pointed at on starry nights.",
-                "Faísca por faísca, a luz presa foi solta. E subiu pro céu feito uma coluna brilhante — a Coluna da Glória, que o Vô Jorge apontava nas noites de estrela."),
+                "Spark by spark, the trapped light was set free, and the cold shadow drew back behind the remade seal — pushed back, not defeated. The light rose to the sky like a shining column — the Column of Glory, the one Grandpa Jorge pointed at on starry nights.",
+                "Faísca por faísca, a luz presa foi solta, e a sombra fria recuou para trás do selo refeito — empurrada de volta, não vencida. A luz subiu pro céu feito uma coluna brilhante — a Coluna da Glória, que o Vô Jorge apontava nas noites de estrela."),
             new LocalizationEntry("cutscene.outro.2",
-                "Bye, Dweller! We'll come back to visit. With a lamp!",
-                "Tchau, Habitante! A gente volta pra te visitar. Com lamparina!"),
+                "Bye, Tages! We'll come back to visit, neighbour. With a lamp!",
+                "Tchau, Tages! A gente volta pra te visitar, vizinho. Com lamparina!"),
             new LocalizationEntry("cutscene.outro.3",
                 "Meter maxed out in every region. Scientific conclusion: it worked.",
                 "Medidor no máximo em todas as regiões. Conclusão científica: deu certo."),
             new LocalizationEntry("cutscene.outro.4",
-                "Does anyone smell corn cake? I do. I always do.",
-                "Alguém sentiu cheiro de bolo de milho? Eu senti. Eu sempre sinto."),
+                "Does anyone smell apricot cake? I do. I always do.",
+                "Alguém sentiu cheiro de bolo de damasco? Eu senti. Eu sempre sinto."),
             new LocalizationEntry("cutscene.outro.5",
-                "One, two, three, four, five. And Caramelo: six. Everyone's home.",
-                "Um, dois, três, quatro, cinco. E o Caramelo: seis. Todo mundo em casa."),
+                "One, two, three, four, five. And Ari: six. Everyone's home. ...Does his shadow on the wall have little wings?",
+                "Um, dois, três, quatro, cinco. E o Ari: seis. Todo mundo em casa. ...A sombra dele na parede tem asinha?"),
             new LocalizationEntry("cutscene.outro.6",
                 "Grandma... we heard the call. And we answered. All five of us, just like in the dream.",
                 "Vó... a gente ouviu o chamado. E respondeu. Os cinco, que nem no sonho."),
@@ -96,20 +96,20 @@ namespace Rapadura.Gameplay.Story
                 "I knew it. Now sit down — I want to hear this story from the very beginning.",
                 "Eu sabia. Agora senta, que essa história eu quero ouvir do começo."),
             new LocalizationEntry("cutscene.outro.8",
-                "On Grandma Edna's porch, Grandpa Jorge's rocking chair creaked softly. And up above, the Column of Glory shone, one spark at a time.",
-                "Na varanda da Vó Edna, a cadeira de balanço do Vô Jorge rangeu de leve. E lá em cima, a Coluna da Glória brilhava, uma faísca de cada vez."),
+                "On Grandma Edna's porch, the deep arched iwan, Grandpa Jorge's rocking chair creaked softly. And up above, the Column of Glory shone, one spark at a time.",
+                "Na varanda da Vó Edna, o iwan de arco fundo, a cadeira de balanço do Vô Jorge rangeu de leve. E lá em cima, a Coluna da Glória brilhava, uma faísca de cada vez."),
 
             // ---- Boss stingers (under the boss banner): the active cousin's quip, or the narrator without a hero ----
-            new LocalizationEntry("cutscene.stinger.forest", "Eyes glow in the dark of the woods.", "Olhos brilham no escuro da mata."),
+            new LocalizationEntry("cutscene.stinger.forest", "Eyes glow in the dark of the tugai.", "Olhos brilham no escuro do tugai."),
             new LocalizationEntry("cutscene.stinger.forest.maithe", "Fresh tracks. It's him. Nobody runs.", "Rastro fresco. É ele. Ninguém corre."),
             new LocalizationEntry("cutscene.stinger.forest.maria",
                 "Easy... there's a spark of light trapped in him. Let's set it free.",
                 "Calma... tem uma faísca de luz presa nele. A gente solta."),
             new LocalizationEntry("cutscene.stinger.forest.joaquim", "Bring it, big wolf! Shield up front!", "Pode vir, lobão! Escudo na frente!"),
-            new LocalizationEntry("cutscene.stinger.forest.icaro", "Three times a normal wolf. Noting it down: runs a LOT.", "Três vezes um lobo normal. Anotando: corre MUITO."),
+            new LocalizationEntry("cutscene.stinger.forest.icaro", "Three times a normal wolf. And blue. Noting it down: runs a LOT.", "Três vezes um lobo normal. E azul. Anotando: corre MUITO."),
             new LocalizationEntry("cutscene.stinger.forest.lavine", "He's big. And ugly. I'm saying it. I'm not scared.", "Ele é grande. E feio. Eu falo. Não tenho medo."),
 
-            new LocalizationEntry("cutscene.stinger.desert", "The sand shifts. Something old wakes up.", "A areia se mexe. Algo antigo acorda."),
+            new LocalizationEntry("cutscene.stinger.desert", "The red sand shifts. Something old and carved wakes up.", "A areia vermelha se mexe. Algo antigo e entalhado acorda."),
             new LocalizationEntry("cutscene.stinger.desert.maithe", "That's no animal. It's walking stone. Aim for the glow.", "Isso não é bicho. É pedra que anda. Mira no brilho."),
             new LocalizationEntry("cutscene.stinger.desert.maria", "Breathe, everyone. Breathe and go.", "Respira, gente. Respira e vai."),
             new LocalizationEntry("cutscene.stinger.desert.joaquim", "Big guy, huh? I'm bigger on the inside!", "Grandão, é? Eu sou maior por dentro!"),
@@ -120,7 +120,7 @@ namespace Rapadura.Gameplay.Story
             new LocalizationEntry("cutscene.stinger.mountain.maithe", "The wind is lying to the Eye. I'm trusting you all.", "O vento tá mentindo pro Olho. Vou confiar em vocês."),
             new LocalizationEntry("cutscene.stinger.mountain.maria", "He's fighting the shadow too. You can see it.", "Ele tá lutando contra a sombra também. Dá pra ver."),
             new LocalizationEntry("cutscene.stinger.mountain.joaquim", "This time... I know when to step aside.", "Dessa vez... eu sei a hora de sair da frente."),
-            new LocalizationEntry("cutscene.stinger.mountain.icaro", "Stone armour, attack angle... statistically, we win.", "Armadura de pedra, ângulo de ataque... estatisticamente, a gente ganha."),
+            new LocalizationEntry("cutscene.stinger.mountain.icaro", "Giant-sized stone armour, attack angle... statistically, we win.", "Armadura de pedra tamanho gigante, ângulo de ataque... estatisticamente, a gente ganha."),
             new LocalizationEntry("cutscene.stinger.mountain.lavine", "He shouts loud. I shout louder.", "Ele grita alto. Eu grito mais."),
 
             new LocalizationEntry("cutscene.stinger.caves",

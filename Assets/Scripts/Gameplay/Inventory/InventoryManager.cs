@@ -75,7 +75,7 @@ namespace Rapadura.Gameplay.Inventory
     /// (<see cref="SortInventory"/>), equipping/unequipping (applying equip stat bonuses through BuffController) and
     /// consuming consumables (healing/mana/stamina/buffs through PlayerStats). Persists itself to JSON through ISaveable,
     /// storing only item ids and cell positions; an old (pre-grid) save is auto-placed on load and anything that does not
-    /// fit goes to the Baú da Vó Zefa, never lost (<see cref="RestoreState"/>).
+    /// fit goes to the Baú da Vó Edna, never lost (<see cref="RestoreState"/>).
     /// </summary>
     public class InventoryManager : MonoBehaviour, ISaveable, IRestoreOrder
     {
@@ -1567,7 +1567,7 @@ namespace Rapadura.Gameplay.Inventory
         /// Rebuilds the bag from a save. Entries keep their saved index where it exists. A grid save
         /// (<see cref="InventorySaveState.gridVersion"/> &gt;= 1) keeps every valid position; an old pre-grid save (or an
         /// entry whose area became invalid, e.g. a footprint changed between versions) is auto-placed MU-style
-        /// (<see cref="BagGridRules.LayoutForRestore"/>). Whatever does not fit goes to the Baú da Vó Zefa
+        /// (<see cref="BagGridRules.LayoutForRestore"/>). Whatever does not fit goes to the Baú da Vó Edna
         /// (<see cref="VillageChestStorage.EnqueueOverflow"/>) — never lost — and is listed in <see cref="LastRestoreOverflow"/>.
         /// </summary>
         private void RestoreBagLayout(InventorySaveState saveState)
@@ -1630,7 +1630,7 @@ namespace Rapadura.Gameplay.Inventory
                 chest.EnqueueOverflow(copy);
             }
 
-            Debug.LogWarning($"[InventoryManager] {overflow.Count} item(s) did not fit the {Columns}x{Rows} backpack grid on load and went to the Baú da Vó Zefa.");
+            Debug.LogWarning($"[InventoryManager] {overflow.Count} item(s) did not fit the {Columns}x{Rows} backpack grid on load and went to the Baú da Vó Edna.");
         }
     }
 }

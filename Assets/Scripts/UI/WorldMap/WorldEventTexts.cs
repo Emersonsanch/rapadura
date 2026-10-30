@@ -71,56 +71,56 @@ namespace Rapadura.UI.WorldMap
             };
 
             Add(entries, WorldEventCatalog.Peddler,
-                ("Wandering peddler", "Mascate ambulante"),
-                ("A peddler with a donkey loaded with baskets waves from the roadside: \"Good, cheap potions, friend! Today only!\"",
-                    "Um mascate com o jumento carregado de balaios acena da beira da estrada: \"Poção boa e barata, freguês! Só hoje!\""),
+                ("Wandering caravan", "Caravana ambulante"),
+                ("A caravaneer leading a camel loaded with baskets waves from the roadside: \"Good, cheap potions, friend! Today only!\"",
+                    "Um caravaneiro puxando um camelo carregado de cestos acena da beira da estrada: \"Poção boa e barata, freguês! Só hoje!\""),
                 ("Buy the potions", "Comprar as poções"),
                 ("Thank him and move on", "Agradecer e seguir"),
-                ("The peddler wraps the potions in a cloth and wishes you a good trip.", "O mascate embrulha as poções num pano e ainda deseja boa viagem."),
-                ("\"Next time, then!\" The donkey brays goodbye.", "\"Fica pra próxima, freguês!\" O jumento zurra em despedida."),
+                ("The caravaneer wraps the potions in a silk cloth and wishes you a good road.", "O caravaneiro embrulha as poções num pano de seda e ainda deseja boa estrada."),
+                ("\"Next time, then! Good road!\" The camel grunts goodbye.", "\"Fica pra próxima, freguês! Boa estrada!\" O camelo resmunga em despedida."),
                 new[]
                 {
                     ("Half the village price? I'd take it. Someone always gets hurt.", "Pela metade do preço da Vila? Eu levaria. Alguém sempre se machuca."),
-                    ("Grandma Zefa would say to haggle a little more...", "A Vó Zefa ia mandar pechinchar mais um pouquinho..."),
+                    ("Grandma Edna would say to haggle a little more...", "A Vó Edna ia mandar pechinchar mais um pouquinho..."),
                     ("Buy them. Maria keeps saying I throw myself into danger.", "Compra. A Maria vive dizendo que eu me jogo no perigo."),
                     ("Wonder if he sells engine parts too? My drone is creaking.", "Será que ele vende peça de motor também? Meu drone tá rangendo."),
-                    ("He winked at the donkey. I saw it. I don't trust him.", "Ele piscou pro jumento. Eu vi. Não confio."),
+                    ("He winked at the camel. I saw it. I don't trust him.", "Ele piscou pro camelo. Eu vi. Não confio."),
                 });
 
             Add(entries, WorldEventCatalog.CashewRain,
-                ("Cashew rain", "Chuva de caju"),
-                ("A strong wind shakes a loaded cashew tree and ripe cashews tumble onto the road, sweet and fragrant.",
-                    "Um vento forte sacode um cajueiro carregado e os cajus maduros despencam pela estrada, doces e cheirosos."),
+                ("Apricot rain", "Chuva de damascos"),
+                ("A strong wind shakes a loaded apricot orchard and ripe apricots tumble onto the road, sweet and fragrant.",
+                    "Um vento forte sacode um pomar de damasqueiros carregado e os damascos maduros despencam pela estrada, doces e cheirosos."),
                 ("Eat them right there, in the shade", "Comer ali mesmo, na sombra"),
                 ("Make juice for the road", "Fazer suco para a viagem"),
-                ("Cashew juice runs down your chin. Your body thanks you.", "O caju escorre pelo queixo. O corpo agradece."),
+                ("Apricot juice runs down your chin. Your body thanks you.", "O damasco escorre pelo queixo. O corpo agradece."),
                 ("The gourd is full of juice. It'll keep you going in the next fight.", "A cabaça vai cheia de suco. Vai dar fôlego na próxima briga."),
                 new[]
                 {
-                    ("If Ícaro were here, he'd have burnt his mouth on the raw nut already.", "Se o Ícaro estivesse aqui, já tinha queimado a boca na castanha crua."),
-                    ("Cashews remind me of Grandma Zefa's yard. Joaquim climbed the tree and I picked them up below.",
-                        "Caju lembra o quintal da Vó Zefa. O Joaquim subia no pé e eu catava embaixo."),
+                    ("If Ícaro were here, he'd have cracked a tooth on a pit already.", "Se o Ícaro estivesse aqui, já tinha quebrado o dente num caroço."),
+                    ("Apricots remind me of Grandma Edna's orchard. Joaquim climbed the tree and I picked them up below.",
+                        "Damasco lembra o pomar da Vó Edna. O Joaquim subia no pé e eu catava embaixo."),
                     ("I could climb this tree with my eyes shut. Maria always held the basin.", "Eu subia nesse pé de olho fechado. A Maria que segurava a bacia."),
-                    ("Forty kilometres an hour, at least. You can measure it by the falling cashews!", "Vento de quarenta por hora, no mínimo. Dá pra medir pela queda dos cajus!"),
-                    ("It rained cashews! That counts as luck, right? Say it counts.", "Choveu caju! Isso conta como sorte, né? Diz que conta."),
+                    ("Forty kilometres an hour, at least. You can measure it by the falling apricots!", "Vento de quarenta por hora, no mínimo. Dá pra medir pela queda dos damascos!"),
+                    ("It rained apricots! That counts as luck, right? Say it counts.", "Choveu damasco! Isso conta como sorte, né? Diz que conta."),
                 });
 
             Add(entries, WorldEventCatalog.Pilgrims,
-                ("Pilgrims on the road", "Romeiros na estrada"),
-                ("A line of straw-hatted pilgrims walks by singing hymns. An old woman asks for help: her grandson twisted his ankle.",
-                    "Uma fila de romeiros de chapéu de palha passa cantando benditos. Uma senhora pede ajuda: o neto torceu o pé."),
+                ("Singers on the road", "Cantores na estrada"),
+                ("A little caravan of singers in felt caps walks by, singing old songs of the road. An old woman asks for help: her grandson twisted his ankle.",
+                    "Uma caravaninha de cantores de gorro de feltro passa cantando canções antigas da estrada. Uma senhora pede ajuda: o neto torceu o pé."),
                 ("Give a Health Potion", "Dar uma Poção de Vida"),
-                ("Pray with them and move on", "Rezar com eles e seguir"),
-                ("The boy walks steady again. The pilgrims pool some coins and share stories of the road.",
-                    "O menino já pisa firme. Os romeiros juntam umas moedas e contam histórias da estrada."),
-                ("The woman blesses your forehead with a sprig: \"Go with God, He'll keep you.\"", "A senhora benze sua testa com um raminho: \"Vai com Deus, que Ele te guarda.\""),
+                ("Sing a verse with them and move on", "Cantar um verso com eles e seguir"),
+                ("The boy walks steady again. The singers pool some coins and share stories of the road.",
+                    "O menino já pisa firme. Os cantores juntam umas moedas e contam histórias da estrada."),
+                ("The woman lights a little lamp for you: \"Come back with light, child. Good road.\"", "A senhora acende uma lamparininha para você: \"Volta com luz, criança. Boa estrada.\""),
                 new[]
                 {
-                    ("Mom always helped the pilgrims who passed our door. I do the same.", "Mamãe sempre ajudava os romeiros que passavam na porta. Eu faço igual."),
+                    ("Mom always helped the travellers who passed our door. I do the same.", "Mamãe sempre ajudava os viajantes que passavam na porta. Eu faço igual."),
                     ("Let me look at that ankle. Light heals, but kindness helps too.", "Deixa eu ver esse pé. A luz cura, mas um carinho ajuda também."),
                     ("I'd carry the boy on my back to the next village if I had to.", "Eu levava o menino nas costas até a próxima vila, se precisasse."),
                     ("You walk all that way? I'd build you a motor cart.", "Vocês andam tudo isso a pé? Eu fazia um carrinho com motor pra vocês."),
-                    ("Do you think they'd pray for me too? I was born on the Noite Rubra...", "Será que eles rezam por mim também? Eu nasci na Noite Rubra..."),
+                    ("Do you think they'd sing one for me too? I was born on the Noite Rubra...", "Será que eles cantam uma pra mim também? Eu nasci na Noite Rubra..."),
                 });
 
             Add(entries, WorldEventCatalog.EliteAmbush,
@@ -141,30 +141,30 @@ namespace Rapadura.UI.WorldMap
                 });
 
             Add(entries, WorldEventCatalog.Campfire,
-                ("Singing by the campfire", "Cantoria ao pé da fogueira"),
-                ("A campfire crackles by the road. Cowhands play the viola and start a repente, calling you to join the circle.",
-                    "Uma fogueira estala na beira da estrada. Vaqueiros tocam viola e puxam um repente, chamando para a roda."),
-                ("Sing along until late", "Cantar junto até tarde"),
+                ("Ananse stories by the fire", "Histórias de Ananse na fogueira"),
+                ("A campfire crackles by the road. Aso the Storyteller is telling tales of Ananse, the clever spider, and calls you to join the circle.",
+                    "Uma fogueira estala na beira da estrada. Aso, a Contadora, conta histórias de Ananse, a aranha esperta, e chama para a roda."),
+                ("Tell a story of your own until late", "Contar uma história também até tarde"),
                 ("Rest by the fire", "Descansar perto do fogo"),
-                ("The whole circle claps for your verse. You leave with your chest puffed out.", "A roda inteira bate palma pro seu verso. Você sai de peito estufado."),
-                ("The fire's warmth and a mug of coffee soothe your tired body.", "O calor do fogo e uma caneca de café acalmam o corpo cansado."),
+                ("The whole circle laughs and claps for your story. You leave with your chest puffed out.", "A roda inteira ri e bate palma pra sua história. Você sai de peito estufado."),
+                ("The fire's warmth and a cup of tea soothe your tired body.", "O calor do fogo e uma caneca de chá acalmam o corpo cansado."),
                 new[]
                 {
                     ("Ícaro used to sing off-key on purpose just to make me laugh. I miss it.", "O Ícaro desafinava de propósito só pra me ver rir. Que saudade."),
-                    ("Grandma Zefa sang this one to put us to sleep.", "A Vó Zefa cantava essa pra gente dormir."),
-                    ("I don't sing. ...Fine, just the chorus.", "Eu não canto. ...Tá bom, só o refrão."),
-                    ("Hook that viola to a lightning amp and the whole backlands will hear the party!", "Liga essa viola num amplificador de raio e o sertão inteiro escuta a festa!"),
-                    ("Sometimes the night gives me a chill... but by the fire and the music, it goes away.", "Às vezes a noite me dá um friozinho na barriga... mas perto do fogo e da música, passa."),
+                    ("Grandma Edna told this one to put us to sleep.", "A Vó Edna contava essa pra gente dormir."),
+                    ("I don't tell stories. ...Fine, just the ending.", "Eu não conto história. ...Tá bom, só o final."),
+                    ("Hook Aso's voice to a lightning amp and the whole island will hear about Ananse!", "Liga a voz da Aso num amplificador de raio e a ilha inteira escuta o Ananse!"),
+                    ("Sometimes the night gives me a chill... but by the fire and the stories, it goes away.", "Às vezes a noite me dá um friozinho na barriga... mas perto do fogo e das histórias, passa."),
                 });
 
             Add(entries, WorldEventCatalog.Sandstorm,
                 ("Sandstorm", "Tempestade de areia"),
-                ("The sky turns clay-coloured and a wall of sand rolls across the desert, swallowing the road.",
-                    "O céu fica cor de barro e uma parede de areia avança pelo deserto, engolindo a estrada."),
+                ("The sky turns clay-coloured and a wall of sand rolls across the Flaming Sands, swallowing the road.",
+                    "O céu fica cor de barro e uma parede de areia avança pelas Areias Flamejantes, engolindo a estrada."),
                 ("Push on with a scarf over your face", "Seguir com o lenço no rosto"),
                 ("Shelter among the rocks", "Abrigar-se entre as pedras"),
                 ("Step by step, eyes half shut. The trip will take a while.", "Passo a passo, de olho semicerrado. A viagem vai demorar."),
-                ("You wait out the storm, huddled behind a rock slab.", "Você espera a tempestade passar, encolhido atrás de um lajedo."),
+                ("You wait out the storm, huddled behind a rock slab.", "Você espera a tempestade passar, encolhido atrás de uma laje de pedra."),
                 new[]
                 {
                     ("In this wind, not even an arrow flies straight. Better take it slow.", "Com esse vento, nem flecha voa reto. Melhor ir com calma."),
@@ -175,12 +175,12 @@ namespace Rapadura.UI.WorldMap
                 });
 
             Add(entries, WorldEventCatalog.MountainFog,
-                ("Mountain fog", "Neblina na serra"),
-                ("A white fog rolls down the mountain, so thick the trail vanishes two steps ahead.",
-                    "Uma neblina branca desce a serra, tão espessa que a trilha some a dois passos."),
+                ("Fog of the Ruinous Wind", "Neblina do Vento Ruim"),
+                ("The Ruinous Wind pushes a white fog down the Kaggen Range, so thick the trail vanishes two steps ahead.",
+                    "O Vento Ruim empurra uma neblina branca pela Serra de Kaggen, tão espessa que a trilha some a dois passos."),
                 ("Wait for the fog to lift", "Esperar a neblina baixar"),
                 ("Feel your way along the trail", "Tatear pela trilha"),
-                ("Hours later, the sun opens up the mountain again.", "Horas depois, o sol abre a serra de novo."),
+                ("Hours later, the Living Wind blows and the sun opens up the range again.", "Horas depois, o Vento Vivo sopra e o sol abre a serra de novo."),
                 ("Slowly, hand on the rock. In a bank, a few chunks of ore glint.", "Devagar, mão na rocha. Num barranco, uns pedaços de minério brilham."),
                 new[]
                 {
@@ -203,7 +203,7 @@ namespace Rapadura.UI.WorldMap
                 {
                     ("One true shot in the dark is worth ten in daylight.", "Um tiro certeiro no escuro vale mais que dez no claro."),
                     ("Let the light go first. I'm not afraid of what it shows.", "Que a luz vá na frente. Eu não tenho medo do que ela mostra."),
-                    ("Want a fight? Then come on! HEY!", "Quer briga? Então vem! Ô DE CASA!"),
+                    ("Want a fight? Then come on! HEY!", "Quer briga? Então vem! TEM ALGUÉM AÍ?"),
                     ("Half-second echo... the gallery is about eighty metres deep. Or it's a creature.", "Eco de meio segundo... a galeria tem uns oitenta metros. Ou é bicho."),
                     ("Darkness doesn't scare me, I was born in it. ...But that echo copied my voice.", "O escuro não me assusta, eu nasci nele. ...Mas esse eco imitou minha voz."),
                 });

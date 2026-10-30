@@ -103,7 +103,7 @@ namespace Rapadura.Tests.EditMode
                 Assert.IsFalse(string.IsNullOrEmpty(CityTexts.GetFallback(ShopReputation.TierNameKey(tier))), "tier " + tier);
             }
 
-            Assert.AreEqual("Bornal de couro", CityTexts.GetFallback("item." + CityShopCatalog.BornalItemId + ".name"));
+            Assert.AreEqual("Alforje de Feltro", CityTexts.GetFallback("item." + CityShopCatalog.BornalItemId + ".name"));
 
             // House items on a counter get an item.* name, so the shop UI shows the furniture's name.
             CityShopEntry chair = CityShopCatalog.Get(CityShopCatalog.MarcenariaDamiao).Entries.First(e => e.Kind == CityShopEntryKind.HouseItem);
@@ -324,12 +324,12 @@ namespace Rapadura.Tests.EditMode
                 CityShopCatalog.BornalItemId, CityShopPurchaseEffect.BagExpanded, 2), null);
             Assert.IsNotNull(bornal);
             StringAssert.Contains("2 linhas", bornal.Body);
-            Assert.AreEqual("Armarinho da Dona Cida", bornal.Title);
+            Assert.AreEqual("Bazar de Linhas da Mariam", bornal.Title);
 
             var rep = CityShopToastRelay.For(new CityShopPurchaseAppliedEvent(CityShopCatalog.FerrariaSeverino, "item_iron",
                 CityShopPurchaseEffect.ReputationUp, ShopReputation.Compadre), null);
-            StringAssert.Contains("Compadre", rep.Body);
-            StringAssert.Contains("Ferraria do Seu Severino", rep.Body);
+            StringAssert.Contains("Companheiro de Caravana", rep.Body);
+            StringAssert.Contains("Ferraria do Mestre Adamas", rep.Body);
 
             Assert.IsNull(CityShopToastRelay.For(new CityShopPurchaseAppliedEvent(CityShopCatalog.FeiraLivre, "item_herb",
                 CityShopPurchaseEffect.None, 0), null));

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_whistle_mount_pack_donkey
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_whistle_mount_pack_donkey
-  _displayName: "Apito do Jegue Carregador"
-  _description: "Apito de taquara do Haras do Seu Z\xE9. Quem compra leva o Jegue Carregador para casa."
+  _displayName: "Apito do Asno de Caravana"
+  _description: "Apito de junco da Estrebaria do Srosh. Quem compra leva o Asno de Caravana para casa."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

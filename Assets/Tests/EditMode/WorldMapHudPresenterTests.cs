@@ -103,7 +103,7 @@ namespace Rapadura.Tests
             Assert.AreEqual("Vitórias: 2/3 para enfrentar o chefe", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest));
             Assert.AreEqual("Victories: 2/3 to face the boss", WorldMapHudPresenter.VictoriesText(English(), goal, BiomeType.Forest));
             // A region without a boss still unlocks the next one on victories alone.
-            Assert.AreEqual("Vitórias: 2/3 para desbloquear Deserto", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest, bossGated: false));
+            Assert.AreEqual("Vitórias: 2/3 para desbloquear Areias Flamejantes", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest, bossGated: false));
         }
 
         [Test]
@@ -115,9 +115,9 @@ namespace Rapadura.Tests
             UnlockGoal goal = WorldMapHudPresenter.FindNextUnlock(WorldMapGraph.CreateDefault(), progress);
 
             Assert.AreEqual(BiomeType.Mountain, goal.Target);
-            Assert.AreEqual("Vença 3 batalhas em Deserto para enfrentar o chefe (1/3)", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest));
-            Assert.AreEqual("Win 3 battles in Desert to face the boss (1/3)", WorldMapHudPresenter.VictoriesText(English(), goal, BiomeType.Forest));
-            Assert.AreEqual("Vitórias em Deserto: 1/3 para desbloquear Montanha", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest, bossGated: false));
+            Assert.AreEqual("Vença 3 batalhas em Areias Flamejantes para enfrentar o chefe (1/3)", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest));
+            Assert.AreEqual("Win 3 battles in Flaming Sands to face the boss (1/3)", WorldMapHudPresenter.VictoriesText(English(), goal, BiomeType.Forest));
+            Assert.AreEqual("Vitórias em Areias Flamejantes: 1/3 para desbloquear Serra de Kaggen", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest, bossGated: false));
         }
 
         [Test]
@@ -175,9 +175,9 @@ namespace Rapadura.Tests
             WorldMapProgress locked = Progress();
             Win(locked, BiomeType.Forest, 2);
 
-            Assert.AreEqual("Vença 3 batalhas em Floresta e derrote o chefe (2/3)",
+            Assert.AreEqual("Vença 3 batalhas em Bosque do Zarafshan e derrote o chefe (2/3)",
                 WorldMapHudPresenter.LabelStatusText(null, graph, locked, BiomeType.Desert, RegionLabelStatus.Locked));
-            Assert.AreEqual("Win 3 battles in Forest, then beat its boss (2/3)",
+            Assert.AreEqual("Win 3 battles in Zarafshan Woods, then beat its boss (2/3)",
                 WorldMapHudPresenter.LabelStatusText(English(), graph, locked, BiomeType.Desert, RegionLabelStatus.Locked));
             Assert.AreEqual("Bloqueado",
                 WorldMapHudPresenter.LabelStatusText(null, graph, locked, BiomeType.Caves, RegionLabelStatus.Locked), "no rule");
@@ -198,11 +198,11 @@ namespace Rapadura.Tests
 
             UnlockGoal goal = WorldMapHudPresenter.FindNextUnlock(graph, progress);
             Assert.AreEqual(3, goal.Victories, "capped at the requirement");
-            Assert.AreEqual("Derrote o chefe para desbloquear Deserto", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest));
-            Assert.AreEqual("Beat the boss to unlock Desert", WorldMapHudPresenter.VictoriesText(English(), goal, BiomeType.Forest));
-            Assert.AreEqual("Derrote o chefe de Floresta para desbloquear Deserto", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Desert), "goal in another region names it");
-            Assert.AreEqual("Beat the Forest boss to unlock Desert", WorldMapHudPresenter.VictoriesText(English(), goal, BiomeType.Desert));
-            Assert.AreEqual("Derrote o chefe de Floresta",
+            Assert.AreEqual("Derrote o chefe para desbloquear Areias Flamejantes", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Forest));
+            Assert.AreEqual("Beat the boss to unlock Flaming Sands", WorldMapHudPresenter.VictoriesText(English(), goal, BiomeType.Forest));
+            Assert.AreEqual("Derrote o chefe de Bosque do Zarafshan para desbloquear Areias Flamejantes", WorldMapHudPresenter.VictoriesText(null, goal, BiomeType.Desert), "goal in another region names it");
+            Assert.AreEqual("Beat the Zarafshan Woods boss to unlock Flaming Sands", WorldMapHudPresenter.VictoriesText(English(), goal, BiomeType.Desert));
+            Assert.AreEqual("Derrote o chefe de Bosque do Zarafshan",
                 WorldMapHudPresenter.LabelStatusText(null, graph, progress, BiomeType.Desert, RegionLabelStatus.Locked));
         }
 
@@ -214,8 +214,8 @@ namespace Rapadura.Tests
 
             Assert.AreEqual("Vitórias: 0/3 para enfrentar o chefe", WorldMapHudPresenter.GoalText(null, graph, progress));
             Win(progress, BiomeType.Forest, 3);
-            Assert.AreEqual("Derrote o chefe para desbloquear Deserto", WorldMapHudPresenter.GoalText(null, graph, progress));
-            Assert.AreEqual("Beat the boss to unlock Desert", WorldMapHudPresenter.GoalText(English(), graph, progress));
+            Assert.AreEqual("Derrote o chefe para desbloquear Areias Flamejantes", WorldMapHudPresenter.GoalText(null, graph, progress));
+            Assert.AreEqual("Beat the boss to unlock Flaming Sands", WorldMapHudPresenter.GoalText(English(), graph, progress));
             Assert.AreEqual(string.Empty, WorldMapHudPresenter.GoalText(null, graph, null));
         }
 
@@ -227,10 +227,10 @@ namespace Rapadura.Tests
             Win(progress, BiomeType.Forest, 3);
             progress.MarkRegionCleared(BiomeType.Forest);
 
-            // Still standing in Forest: no bare "Vitórias em Deserto: 0/3 para desbloquear Montanha".
-            Assert.AreEqual("Região Floresta concluída! Próximo: Vença 3 batalhas em Deserto para enfrentar o chefe (0/3)",
+            // Still standing in Forest: no bare "Vitórias em Areias Flamejantes: 0/3 para desbloquear Serra de Kaggen".
+            Assert.AreEqual("Região Bosque do Zarafshan concluída! Próximo: Vença 3 batalhas em Areias Flamejantes para enfrentar o chefe (0/3)",
                 WorldMapHudPresenter.GoalText(null, graph, progress));
-            Assert.AreEqual("Forest cleared! Next: Win 3 battles in Desert to face the boss (0/3)",
+            Assert.AreEqual("Zarafshan Woods cleared! Next: Win 3 battles in Flaming Sands to face the boss (0/3)",
                 WorldMapHudPresenter.GoalText(English(), graph, progress));
 
             // Walking into Desert, the goal is local again.
@@ -250,11 +250,11 @@ namespace Rapadura.Tests
             // Caves gates nothing, but its boss is still the goal (not "Todas as regiões desbloqueadas").
             Assert.AreEqual("Vitórias: 1/3 para enfrentar o chefe", WorldMapHudPresenter.GoalText(null, graph, progress));
             Win(progress, BiomeType.Caves, 2);
-            Assert.AreEqual("Derrote o chefe de Cavernas", WorldMapHudPresenter.GoalText(null, graph, progress));
+            Assert.AreEqual("Derrote o chefe de Grutas do Limiar", WorldMapHudPresenter.GoalText(null, graph, progress));
 
             progress.MarkRegionCleared(BiomeType.Caves);
-            Assert.AreEqual("Região Cavernas concluída! Todas as regiões desbloqueadas", WorldMapHudPresenter.GoalText(null, graph, progress));
-            Assert.AreEqual("Caves cleared! Every region unlocked", WorldMapHudPresenter.GoalText(English(), graph, progress));
+            Assert.AreEqual("Região Grutas do Limiar concluída! Todas as regiões desbloqueadas", WorldMapHudPresenter.GoalText(null, graph, progress));
+            Assert.AreEqual("Threshold Caves cleared! Every region unlocked", WorldMapHudPresenter.GoalText(English(), graph, progress));
         }
 
         [Test]
@@ -294,9 +294,9 @@ namespace Rapadura.Tests
             Assert.AreEqual("Nv. 3", WorldMapHudPresenter.LevelText(null, 3));
             Assert.AreEqual("Nv. 1", WorldMapHudPresenter.LevelText(null, 0));
 
-            Assert.AreEqual("Floresta", WorldMapHudPresenter.RegionName(null, BiomeType.Forest));
-            Assert.AreEqual("Cavernas", WorldMapHudPresenter.RegionName(null, BiomeType.Caves));
-            Assert.AreEqual("Mountain", WorldMapHudPresenter.RegionName(English(), BiomeType.Mountain));
+            Assert.AreEqual("Bosque do Zarafshan", WorldMapHudPresenter.RegionName(null, BiomeType.Forest));
+            Assert.AreEqual("Grutas do Limiar", WorldMapHudPresenter.RegionName(null, BiomeType.Caves));
+            Assert.AreEqual("Kaggen Range", WorldMapHudPresenter.RegionName(English(), BiomeType.Mountain));
         }
 
         [Test]
@@ -488,7 +488,7 @@ namespace Rapadura.Tests
         public void Texts_ResolveUiAndCoreKeysForTheDocumentLocalizer()
         {
             Assert.AreEqual("Missões", WorldMapTexts.Get(null, Rapadura.UI.Common.UiTexts.HudQuests));
-            Assert.AreEqual("Deserto", WorldMapTexts.Get(null, "biome.desert.name"));
+            Assert.AreEqual("Areias Flamejantes", WorldMapTexts.Get(null, "biome.desert.name"));
             Assert.AreEqual("Fechar", WorldMapTexts.Get(null, WorldMapTexts.Close));
             Assert.AreEqual("Close", WorldMapTexts.Get(English(), WorldMapTexts.Close));
             Assert.AreEqual("Quests", WorldMapTexts.Get(English(), Rapadura.UI.Common.UiTexts.HudQuests));

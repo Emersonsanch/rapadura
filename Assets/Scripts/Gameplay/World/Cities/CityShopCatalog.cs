@@ -17,9 +17,9 @@ namespace Rapadura.Gameplay.World.Cities
         Speciality,
         /// <summary>The roaming peddler.</summary>
         Mascate,
-        /// <summary>Wooden house furniture (Marcenaria do Mestre Damião).</summary>
+        /// <summary>Wooden house furniture (Marcenaria do Mestre Omóforo).</summary>
         Marcenaria,
-        /// <summary>Clothes and cloth for the house (Costureira Dona Fátima).</summary>
+        /// <summary>Clothes and cloth for the house (Costureira Mestra Narisah).</summary>
         Costureira,
     }
 
@@ -160,7 +160,7 @@ namespace Rapadura.Gameplay.World.Cities
     /// The themed shops of the cities (FASE 15 "Lojas"). Only existing items (<c>Resources/Items</c>); prices stay within
     /// 80–125% of each item's <c>ItemDefinition.Value</c> (Docs/Balance/README.md, "Cidades"): the speciality of a city sells
     /// its theme ~10% cheaper, the peddler ~20% dearer. Names follow Docs/Housing/CatalogoCasa.md (Armarinho da Dona
-    /// Cida, Mercearia do Seu Lázaro, Feira livre, Forja do Mestre Tonho, Lamparinas da Benedita, Mascate Seu Bento).
+    /// Cida, Mercearia do Zaku, Bazar da Nana, Forja do Mestre Mihr, Lamparinas da Parthenos, Mascate Ammo).
     /// <see cref="GeneralStore"/> is the old <c>Resources/Shops/shop_general_store</c> asset, kept as is.
     /// </summary>
     public static class CityShopCatalog
@@ -174,22 +174,22 @@ namespace Rapadura.Gameplay.World.Cities
         public const string LamparinasBenedita = "shop_lamparinas_benedita";
         public const string MascateBento = "shop_mascate_bento";
 
-        /// <summary>"Haras da Vila" (Seu Tonico, Docs/Mounts.md §3): sells the mount whistles; buying one redeems it (<c>MountCollection</c>).</summary>
+        /// <summary>"Estrebaria do Srosh" (Srosh, Docs/Mounts.md §3): sells the mount whistles; buying one redeems it (<c>MountCollection</c>).</summary>
         public const string HarasVila = "shop_haras_vila";
 
-        /// <summary>Ferraria do Seu Severino: the Vila's own blacksmith (tools, iron, the first refining stones).</summary>
+        /// <summary>Ferraria do Mestre Adamas: the Vila's own blacksmith (tools, iron, the first refining stones).</summary>
         public const string FerrariaSeverino = "shop_ferraria_severino";
 
-        /// <summary>Marcenaria do Mestre Damião (Docs/Housing.md §8.1): the wooden furniture of CatalogoCasa.md.</summary>
+        /// <summary>Marcenaria do Mestre Omóforo (Docs/Housing.md §8.1): the wooden furniture of CatalogoCasa.md.</summary>
         public const string MarcenariaDamiao = "shop_marcenaria_damiao";
 
-        /// <summary>Costureira Dona Fátima (Docs/Housing.md §8.1): cloth for the house and the looks of CatalogoRoupas.md.</summary>
+        /// <summary>Costureira Mestra Narisah (Docs/Housing.md §8.1): cloth for the house and the looks of CatalogoRoupas.md.</summary>
         public const string CostureiraFatima = "shop_costureira_fatima";
 
-        /// <summary>"Bornal de couro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
+        /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
-        /// <summary>Rows one Bornal de couro adds (the bag's cap, <c>InventoryManager.MaxExtraRows</c>, is 2: one bornal per save).</summary>
+        /// <summary>Rows one Alforje de Feltro adds (the bag's cap, <c>InventoryManager.MaxExtraRows</c>, is 2: one bornal per save).</summary>
         public const int BornalRows = 2;
 
         /// <summary>Asset path (under Resources) of shops that are not in <see cref="Shops"/>.</summary>
@@ -197,7 +197,7 @@ namespace Rapadura.Gameplay.World.Cities
 
         public static readonly IReadOnlyList<CityShopSpec> Shops = new List<CityShopSpec>
         {
-            // ---- Vila da Vó Zefa (Floresta) ----
+            // ---- Vila da Vó Edna (Floresta) ----
             new CityShopSpec(MerceariaLazaro, ShopTheme.Mercearia, BiomeType.Forest, ShopRotationPeriod.Daily, 2, WithHouse(MerceariaLazaro, new List<CityShopEntry>
             {
                 new CityShopEntry("item_cooked_meat", 6, 10),
@@ -215,7 +215,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_leather_chest", 20, 1, rotating: true),
                 new CityShopEntry("item_herb", 3, 10, rotating: true),
                 new CityShopEntry("item_hunting_bow", 38, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
-                // Bornal de couro (+2 rows of the Mochila, once): for a regular of Dona Cida (freguesia tier 1).
+                // Alforje de Feltro (+2 rows of the Mochila, once): for a regular of Mariam (freguesia tier 1).
                 new CityShopEntry(BornalItemId, 150, 1, unlock: ShopUnlock.Reputation(ShopReputation.Regular)),
             }), houseSlots: 2),
             new CityShopSpec(FeiraLivre, ShopTheme.Feira, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(FeiraLivre, new List<CityShopEntry>
@@ -228,7 +228,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_iron_ore", 6, 5, rotating: true, unlock: ShopUnlock.Unlocked(BiomeType.Mountain)),
             }), houseSlots: 3),
 
-            // ---- Povoado de Areia Branca (Deserto): couro de vaqueiro ----
+            // ---- Oásis de Qocho (Deserto): couro de vaqueiro ----
             new CityShopSpec(SelariaVava, ShopTheme.Speciality, BiomeType.Desert, ShopRotationPeriod.Weekly, 2, new List<CityShopEntry>
             {
                 new CityShopEntry("item_leather_boots", 9, 3),
@@ -242,7 +242,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_whistle_mount_rhea", 75, -1),
             }),
 
-            // ---- Vila da Serra Alta (Montanha): ferreiro ----
+            // ---- Vila de Litema (Montanha): ferreiro ----
             new CityShopSpec(ForjaTonho, ShopTheme.Ferreiro, BiomeType.Mountain, ShopRotationPeriod.Weekly, 2, WithHouse(ForjaTonho, new List<CityShopEntry>
             {
                 new CityShopEntry("item_iron", 7, 20),
@@ -275,7 +275,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_whistle_mount_giant_anteater", 140, -1, unlock: ShopUnlock.Cleared(BiomeType.Desert)),
             }), houseSlots: 2),
 
-            // ---- Ferraria do Seu Severino (Vila): the village blacksmith ----
+            // ---- Ferraria do Mestre Adamas (Vila): the village blacksmith ----
             new CityShopSpec(FerrariaSeverino, ShopTheme.Ferreiro, BiomeType.Forest, ShopRotationPeriod.Weekly, 2, new List<CityShopEntry>
             {
                 new CityShopEntry("item_iron", 8, 10),
@@ -286,11 +286,11 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_wooden_sword", 10, 1, rotating: true),
                 new CityShopEntry("item_iron_ore", 5, 10, rotating: true),
                 new CityShopEntry("item_pedra_alma", 38, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Desert)),
-                // The week's special: Severino's best blade, for a freguês de casa.
+                // The week's special: Adamas's best blade, for a freguês de casa.
                 new CityShopEntry("item_iron_sword", 48, 1, rotating: true, unlock: ShopUnlock.Reputation(ShopReputation.HouseRegular), pool: ShopPool.Weekly),
             }, weeklySlots: 1),
 
-            // ---- Marcenaria do Mestre Damião (Vila): house furniture, 10 a day, 1 Epic a week (Housing.md §8.1) ----
+            // ---- Marcenaria do Mestre Omóforo (Vila): house furniture, 10 a day, 1 Epic a week (Housing.md §8.1) ----
             new CityShopSpec(MarcenariaDamiao, ShopTheme.Marcenaria, BiomeType.Forest, ShopRotationPeriod.Daily, 1, WithHouse(MarcenariaDamiao, new List<CityShopEntry>
             {
                 new CityShopEntry("item_wood", 2, 30),
@@ -298,13 +298,13 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_axe", 18, 1, rotating: true),
             }), houseSlots: 10, weeklySlots: 1),
 
-            // ---- Costureira Dona Fátima (Vila): 6 looks + 6 cloth house items a day (Housing.md §8.1) ----
+            // ---- Costureira Mestra Narisah (Vila): 6 looks + 6 cloth house items a day (Housing.md §8.1) ----
             new CityShopSpec(CostureiraFatima, ShopTheme.Costureira, BiomeType.Forest, ShopRotationPeriod.Daily, 6, WithHouse(CostureiraFatima, new List<CityShopEntry>
             {
                 new CityShopEntry("item_fiber", 1, 30),
                 new CityShopEntry("item_leather_helmet", 12, 2, rotating: true),
                 new CityShopEntry("item_leather_boots", 10, 2, rotating: true),
-                // Looks of Docs/Housing/CatalogoRoupas.md ("Loja: Costureira Dona Fátima"): placeholders until the
+                // Looks of Docs/Housing/CatalogoRoupas.md ("Loja: Costureira Mestra Narisah"): placeholders until the
                 // wardrobe exposes them (CityShopService.OutfitResolver); until then they never take a slot.
                 Outfit("roupa_maithe_001", 21, 5),
                 Outfit("roupa_maithe_002", 23, 5),
@@ -346,7 +346,7 @@ namespace Rapadura.Gameplay.World.Cities
                 Outfit("acess_035", 55, 3, ShopUnlock.Cleared(BiomeType.Forest)),
             }), houseSlots: 6),
 
-            // ---- Haras da Vila (Seu Tonico): the starter mounts' whistles (Docs/Mounts.md §3.1, phase M1) ----
+            // ---- Estrebaria do Srosh (Srosh): the starter mounts' whistles (Docs/Mounts.md §3.1, phase M1) ----
             new CityShopSpec(HarasVila, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Weekly, 0, new List<CityShopEntry>
             {
                 new CityShopEntry("item_whistle_mount_pony", 40, -1),
@@ -358,7 +358,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_mount_feed", 3, -1),
             }),
 
-            // ---- Mascate Seu Bento (one city a day) ----
+            // ---- Mascate Ammo (one city a day) ----
             new CityShopSpec(MascateBento, ShopTheme.Mascate, null, ShopRotationPeriod.Daily, 3, WithHouse(MascateBento, new List<CityShopEntry>
             {
                 new CityShopEntry("item_health_potion", 18, 3, rotating: true),
@@ -373,9 +373,9 @@ namespace Rapadura.Gameplay.World.Cities
                 // Event room entries (EventRoomRules): also a rare drop.
                 new CityShopEntry("item_convite_terreiro", 36, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
                 new CityShopEntry("item_chave_engenho", 54, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Desert)),
-                // Patuá da Vó Zefa (DeathPenaltyService): pricey on purpose; also Vó Zefa's gift for each region boss.
+                // Patuá da Vó Edna (DeathPenaltyService): pricey on purpose; also Vó Edna's gift for each region boss.
                 new CityShopEntry("item_patua_vo_zefa", 120, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
-                // Bornal de couro: dearer than at Dona Cida's, but no freguesia needed.
+                // Alforje de Feltro: dearer than at Mariam's, but no freguesia needed.
                 new CityShopEntry(BornalItemId, 180, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
             }), houseSlots: 2, weeklySlots: 1),
         };

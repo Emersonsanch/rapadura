@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.Housing.Visuals
 {
-    /// <summary>Flat colours of the house palette texture (one 4 px cell each, 8 × 5), Housing.md §3.3.</summary>
+    /// <summary>Flat colours of the house palette texture (one 4 px cell each, 8 × 6), Housing.md §3.3.</summary>
     public enum HouseSwatch
     {
         WoodRaw, WoodJoint, WoodDark, FloorBoard, Zinc, ZincDark, Straw, Dirt,
@@ -13,6 +13,9 @@ namespace Rapadura.Gameplay.Housing.Visuals
         // Row 5 (H4 kits N2–N5, §3.3): taipa ocre, reboco, telha escura do casarão, cimento, ladrilho hidráulico,
         // madeira envernizada, cunhal de pedra, tábua verde-água.
         Taipa, Plaster, RoofTileDark, Concrete, Ladrilho, Varnish, Quoin, PaintTeal,
+        // Row 6 (Vila da Vo Edna style, world bible 2.1): apricot adobe, ochre, walnut joinery, turquoise tile (detail
+        // only), reed mat, beaten copper, grapes, poplar green.
+        Adobe, Ochre, Walnut, Turquoise, Reed, Copper, Grape, Poplar,
     }
 
     /// <summary>
@@ -23,7 +26,7 @@ namespace Rapadura.Gameplay.Housing.Visuals
     public static class HousePalette
     {
         public const int Columns = 8;
-        public const int Rows = 5;
+        public const int Rows = 6;
         private const int CellPixels = 4;
 
         private static readonly Color32[] Colors =
@@ -33,6 +36,7 @@ namespace Rapadura.Gameplay.Housing.Visuals
             Hex(0x3F7D4E), Hex(0xE1B23C), Hex(0xD98C9A), Hex(0xEDE6D6), Hex(0xF4EFE3), Hex(0x4A4F57), Hex(0xE8B84A), Hex(0xFFD58A),
             Hex(0xE07AA0), Hex(0x1E1A17), Hex(0x6FD38A), Hex(0xE05050), Hex(0x5AA0C8), Hex(0xB9D8E0), Hex(0x6B4C8A), Hex(0xF7F1DC),
             Hex(0xC7955A), Hex(0xE2CBA4), Hex(0xA84B2A), Hex(0xBDB6A8), Hex(0x3F7F8F), Hex(0x4A3222), Hex(0x8E8A80), Hex(0x8FC1B5),
+            Hex(0xD9A066), Hex(0xB7793F), Hex(0x6B4226), Hex(0x3FA7A3), Hex(0xC8B27A), Hex(0xB06B3A), Hex(0x5B3A6E), Hex(0x7FA650),
         };
 
         private static Material _material;

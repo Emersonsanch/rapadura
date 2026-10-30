@@ -13,6 +13,7 @@ namespace Rapadura.Gameplay.World.Map.Dressing
         Bush,
 
         // Deserto
+        /// <summary>The desert shrub: saxaul, every third one a tamarisk (id kept from the old cactus).</summary>
         Cactus,
         DesertRock,
 

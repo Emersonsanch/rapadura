@@ -25,7 +25,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         LampHouse = 3,
         /// <summary>The stable (Srosh's): long building with stall doors, paddock beside it.</summary>
         Stable = 4,
-        /// <summary>Feira livre: market stalls (barracas) instead of a building.</summary>
+        /// <summary>Bazar da Nana: market stalls (barracas) instead of a building.</summary>
         Market = 5,
         /// <summary>Cais da Barca (world bible §3.16): a short pier over a groove of light; its trigger opens the Barcas de Luz on the map.</summary>
         ShipDock = 6,

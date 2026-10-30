@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_asas_carcara_1
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_asas_carcara_1
-  _displayName: "Asas de Carcar\xE1"
-  _description: "Asas marrons de penas firmes, feitas no Tacho Encantado. O carcar\xE1 enxerga longe: a Maithe adora."
+  _displayName: "Asas de Huma"
+  _description: "Asas cor de areia de penas firmes, feitas na Uasamonga. Diz o conto que a Huma nunca pousa e que a sombra dela d\xE1 sorte: a Maithe adora."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 3

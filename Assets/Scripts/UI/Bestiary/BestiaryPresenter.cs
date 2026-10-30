@@ -33,7 +33,7 @@ namespace Rapadura.UI.Bestiary
     }
 
     /// <summary>
-    /// Pure text building for "Caderno da Vó Zefa" (<see cref="BestiaryController"/>): list labels and page
+    /// Pure text building for "Caderno da Vó Edna" (<see cref="BestiaryController"/>): list labels and page
     /// contents from a <see cref="BestiaryEntry"/>, the unlock state and the selected cousin. Locked pages show
     /// "???" and only the region (regions are no secret on the world map); nothing about the enemy itself.
     /// A null <see cref="LocalizationManager"/> means pt-BR fallback texts (EditMode tests).

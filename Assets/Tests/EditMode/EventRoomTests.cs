@@ -18,7 +18,7 @@ using UnityEngine.UIElements;
 
 namespace Rapadura.Tests.EditMode
 {
-    /// <summary>Timed event rooms (Terreiro das Assombrações / Torre do Engenho Velho): rules, progress, content.</summary>
+    /// <summary>Timed event rooms (Pátio dos Mazans / Torre da Roda das Doze Jarras): rules, progress, content.</summary>
     public class EventRoomTests
     {
         private readonly List<Object> _created = new List<Object>();
@@ -565,7 +565,7 @@ namespace Rapadura.Tests.EditMode
             EventRoomWindow open = EventRoomRules.WindowAt(EventRoomRules.TerreiroSchedule, 1, 16.5f);
             StringAssert.Contains("ABERTO até 17:00", EventRoomMapButton.PillLine(null, EventRoomKind.Terreiro, open, false));
             StringAssert.Contains("20:00", EventRoomMapButton.PillLine(null, EventRoomKind.Terreiro, EventRoomRules.WindowAt(EventRoomRules.TerreiroSchedule, 1, 17.5f), false));
-            StringAssert.Contains("Convite do Terreiro", EventRoomMapButton.BlockMessage(null, EventRoomEntryBlock.NoItem, EventRoomKind.Terreiro));
+            StringAssert.Contains("Convite do Pátio", EventRoomMapButton.BlockMessage(null, EventRoomEntryBlock.NoItem, EventRoomKind.Terreiro));
             StringAssert.Contains("6", EventRoomMapButton.BlockMessage(null, EventRoomEntryBlock.Level, EventRoomKind.Torre));
         }
 
@@ -588,10 +588,10 @@ namespace Rapadura.Tests.EditMode
             };
 
             List<string> lines = EventRoomHud.ResultLines(null, result);
-            StringAssert.Contains("Torre do Engenho Velho", lines[0]);
+            StringAssert.Contains("Torre da Roda das Doze Jarras", lines[0]);
             StringAssert.Contains("Ouro", lines[1]);
             Assert.IsTrue(lines.Any(l => l.Contains("Nova melhor marca")));
-            Assert.IsTrue(lines.Any(l => l.Contains("Pedra da Bênção")));
+            Assert.IsTrue(lines.Any(l => l.Contains("Pedra-Faísca")));
             StringAssert.Contains("Oi", lines.Last());
 
             VisualElementCheck();

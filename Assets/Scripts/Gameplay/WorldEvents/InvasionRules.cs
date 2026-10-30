@@ -6,7 +6,7 @@ using Rapadura.Gameplay.World.Biomes;
 
 namespace Rapadura.Gameplay.WorldEvents
 {
-    /// <summary>What one "Baú do Cangaço +N" holds (before the bag decides what fits).</summary>
+    /// <summary>What one "Arca Resgatada +N" (id: <c>CangacoChest</c>) holds (before the bag decides what fits).</summary>
     public readonly struct CangacoChest
     {
         /// <summary>+1 … +5 (0 = no chest).</summary>
@@ -38,10 +38,10 @@ namespace Rapadura.Gameplay.WorldEvents
     }
 
     /// <summary>
-    /// "Invasão do Cangaço" (Docs/WorldEvents.md §4; MU Online's Golden Invasion + Box of Kundun, Tibia's raids): every
-    /// 4 real hours the bando of Az (a Manichaean dark figure) takes one region for 30 minutes. The bando are the region's own
-    /// animals wearing enchanted leather cangaceiro hats (code-built, <see cref="WorldEventRegalia"/>): four waves, then
-    /// the captain (Az). Participation points pay one "Baú do Cangaço +1…+5" per window. Pure and EditMode-tested.
+    /// "Invasão de Āz" (Docs/WorldEvents.md §4; MU Online's Golden Invasion + Box of Kundun, Tibia's raids): every
+    /// 4 real hours the bando of Āz (Greed, the arconte captain; always female) takes one region for 30 minutes. The bando are
+    /// the region's own animals wearing her enchanted little tin crowns (code-built, <see cref="WorldEventRegalia"/>): four
+    /// waves, then the captain (Āz). Participation points pay one "Arca Resgatada +1…+5" per window (what Āz hid, given back). Pure and EditMode-tested.
     /// Online (FASE 12): the waves become shared on the region map; points stay per player (kills to the killer, wave and
     /// Capitão bonuses to everyone present) and the server rolls every chest with the same seed.
     /// </summary>
@@ -69,7 +69,7 @@ namespace Rapadura.Gameplay.WorldEvents
 
         public const float FightSeconds = 240f;
 
-        /// <summary>Wave sizes ("batedores", "bando", "bando grande", "o bando todo"), then the captain (Az).</summary>
+        /// <summary>Wave sizes ("batedores", "bando", "bando grande", "o bando todo"), then the captain (Āz).</summary>
         public static readonly IReadOnlyList<int> WaveSizes = new[] { 3, 4, 5, 6 };
 
         public const float WaveIntervalSeconds = 25f;
@@ -94,7 +94,7 @@ namespace Rapadura.Gameplay.WorldEvents
         /// <summary>A bandit: the region's common in a hat, a bit tougher (health/XP ×1,2, +10% damage).</summary>
         public static readonly EventRoomEnemyScale BanditScale = new EventRoomEnemyScale(1.2f, 0.1f, 1.2f, 1.05f);
 
-        /// <summary>Az, the bando's captain: the region world boss's day base, ×6 health/XP, +35% damage, ×1,5 size.</summary>
+        /// <summary>Āz, the bando's captain: the region world boss's day base, ×6 health/XP, +35% damage, ×1,5 size.</summary>
         public static readonly EventRoomEnemyScale CaptainScale = new EventRoomEnemyScale(6f, 0.35f, 6f, 1.5f);
 
         /// <summary>Whether the next wave comes now (same rule as the event rooms: field almost clear or the interval passed).</summary>
@@ -118,13 +118,13 @@ namespace Rapadura.Gameplay.WorldEvents
         public const int KillPoints = 10;
         public const int CaptainPoints = 80;
 
-        /// <summary>Defeating the captain (Az) "frees the region".</summary>
+        /// <summary>Defeating the captain (Āz) "frees the region".</summary>
         public const int ClearBonus = 40;
 
         /// <summary>At the clear: 1 point per 2 whole seconds left.</summary>
         public const int SecondsPerTimePoint = 2;
 
-        /// <summary>Points for +1, +2, +3, +4, +5. +4 needs the captain (Az); +5 needs him with about a minute to spare.</summary>
+        /// <summary>Points for +1, +2, +3, +4, +5. +4 needs the captain (Āz); +5 needs her with about a minute to spare.</summary>
         public static readonly IReadOnlyList<int> TierThresholds = new[] { 30, 90, 160, 260, 330 };
 
         public const int MaxTier = 5;
@@ -178,7 +178,7 @@ namespace Rapadura.Gameplay.WorldEvents
         }
 
         /// <summary>
-        /// The "Baú do Cangaço +<paramref name="tier"/>" of one window for one player. <paramref name="seed"/> =
+        /// The "Arca Resgatada +<paramref name="tier"/>" of one window for one player. <paramref name="seed"/> =
         /// <see cref="WorldEventCalendar.RewardSeed"/>; two draws in a fixed order (house item, then mount).
         /// <paramref name="alreadyOwnsMount"/>: the Cavalo Pampa is not given twice (that roll pays nothing extra).
         /// </summary>

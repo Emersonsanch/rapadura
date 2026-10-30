@@ -1,6 +1,8 @@
 /*
- * Festa Junina, built in code: the "Arraiá" window (FestaJuninaPanel, on top of the Mochila overlay classes
- * .wm-backpack-overlay / .wm-backpack-panel) with the quadrilha rhythm game and the Barraca de Prendas. Loaded at
+ * The Bema (file and classes keep the old Festa Junina name), built in code: the "Bema" window (FestaJuninaPanel,
+ * on top of the Mochila overlay classes .wm-backpack-overlay / .wm-backpack-panel) with the Bema Hymns call-and-response
+ * rhythm game and the Tenda das Oferendas. Colours of the calls = the five lights (Docs/WorldBible_Maniqueismo.md §1.3):
+ * Luz gold, Vento blue-white, Agua aqua, Fogo copper-orange; a perfect answer shines Pure Air lilac. Loaded at
  * runtime from Resources and attached to the window root, which sits under the HUD's `rap-theme` root (wm-hud-root),
  * where the palette below resolves.
  */
@@ -30,7 +32,7 @@
     padding: 6px 10px;
     margin-bottom: 8px;
     border-left-width: 3px;
-    border-left-color: var(--rap-clay-red);
+    border-left-color: rgb(186, 160, 226);
     background-color: var(--rap-brown-night);
     border-radius: 6px;
 }
@@ -64,7 +66,7 @@
     margin-bottom: 6px;
 }
 
-/* ---- Quadrilha ---- */
+/* ---- Hinos do Bema (call and response) ---- */
 
 .festa-track {
     height: 64px;
@@ -104,10 +106,11 @@
     background-color: var(--rap-cream);
 }
 
-.festa-note--anarrie { background-color: rgb(206, 72, 60); color: var(--rap-cream); }
-.festa-note--balance { background-color: var(--rap-gold); }
-.festa-note--cobra { background-color: rgb(96, 170, 214); }
-.festa-note--caminho { background-color: var(--rap-cane-green); color: var(--rap-cream); }
+/* Luz (gold), Vento (blue-white), Agua (aqua), Fogo (copper-orange): the class names keep the old move ids. */
+.festa-note--anarrie { background-color: rgb(246, 210, 110); }
+.festa-note--balance { background-color: rgb(214, 230, 248); }
+.festa-note--cobra { background-color: rgb(92, 196, 186); }
+.festa-note--caminho { background-color: rgb(222, 118, 52); color: var(--rap-cream); }
 
 .festa-call {
     font-size: 20px;
@@ -125,7 +128,7 @@
     color: var(--rap-cream);
 }
 
-.festa-judge--perfect { color: var(--rap-gold); }
+.festa-judge--perfect { color: rgb(196, 170, 236); }
 .festa-judge--good { color: var(--rap-cane-green); }
 .festa-judge--miss { color: var(--rap-warning); }
 
@@ -161,7 +164,7 @@
     margin-bottom: 6px;
 }
 
-/* ---- Barraca de Prendas ---- */
+/* ---- Tenda das Oferendas ---- */
 
 .festa-tasks {
     font-size: 12px;

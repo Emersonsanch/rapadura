@@ -9,7 +9,7 @@ namespace Rapadura.Gameplay.Inventory
     /// "Na pressa, você deixou cair…": the 9% death drop (Docs/Balance/README.md, "Queda de item ao morrer"). Pure and
     /// seeded (a <see cref="Random"/> is passed in), EditMode-tested.
     /// <list type="bullet">
-    /// <item>Each unprotected player death rolls <see cref="DropChance"/> once (the Patuá da Vó Zefa and the Bênção da
+    /// <item>Each unprotected player death rolls <see cref="DropChance"/> once (the Patuá da Vó Edna and the Bênção da
     /// Romaria turn it into 0%, <see cref="DeathPenaltyRules.AllowsItemDrop"/>).</item>
     /// <item>On success <b>exactly one unit</b> of one random eligible backpack entry falls: a stack of 6 potions loses 1
     /// and keeps 5 (<see cref="DropQuantity"/>). Equipped gear is never touched (it is not in the backpack grid).</item>

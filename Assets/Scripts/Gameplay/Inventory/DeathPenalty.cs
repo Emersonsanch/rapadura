@@ -13,7 +13,7 @@ namespace Rapadura.Gameplay.Inventory
     /// level, so the bar can drop to empty but the level number never goes down.</item>
     /// <item>No loss while the hero is below <see cref="GraceLevel"/> (the first fights / tutorial) nor in a region boss
     /// challenge of the first campaign (<c>NewGamePlus</c> cycle 0): bosses are the wall kids retry most.</item>
-    /// <item>Bênção da Romaria cuts the loss by <see cref="BlessingReduction"/> (60%); the Patuá da Vó Zefa cancels it.</item>
+    /// <item>Bênção da Romaria cuts the loss by <see cref="BlessingReduction"/> (60%); the Patuá da Vó Edna cancels it.</item>
     /// </list>
     /// </summary>
     public static class DeathXpLossRules
@@ -70,7 +70,7 @@ namespace Rapadura.Gameplay.Inventory
         None = 0,
         /// <summary>Bênção da Romaria: −60% XP loss, 0% item drop; ends on this death.</summary>
         Blessing = 1,
-        /// <summary>Patuá da Vó Zefa: no XP loss, no item drop; one is used up from the bag.</summary>
+        /// <summary>Patuá da Vó Edna: no XP loss, no item drop; one is used up from the bag.</summary>
         Patua = 2,
     }
 

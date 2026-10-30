@@ -100,7 +100,7 @@ namespace Rapadura.UI.Mounts
             OnNotice(MountTexts.Format(localization, key, MountTexts.MountName(localization, MountCatalog.Get(evt.MountId))));
         }
 
-        /// <summary>"Primeira Sela": Vó Zefa hands over the pony, Lavine names him, Maithe pretends not to care, then the how-to.</summary>
+        /// <summary>"Primeira Sela": Vó Edna hands over the pony, Lavine names him, Maithe pretends not to care, then the how-to.</summary>
         private void OnFirstSaddle(FirstSaddleCompletedEvent evt)
         {
             ServiceLocator.TryGet(out LocalizationManager localization);

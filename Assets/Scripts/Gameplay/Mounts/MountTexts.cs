@@ -6,8 +6,8 @@ namespace Rapadura.Gameplay.Mounts
 {
     /// <summary>
     /// Localization (en + pt-BR) of the mounts (phase M1): the three starters and their abilities, the HUD captions and
-    /// refusals, the Haras da Vila and the "Primeira Sela" mission with its little scene (Vó Zefa, Seu Tonico, Lavine naming
-    /// the pony, Maithe pretending not to care). Same self-contained pattern as <c>DuoTexts</c>: merged into the live
+    /// refusals, the Estrebaria do Srosh (shop id <c>shop_haras_vila</c>) and the "Primeira Sela" mission with its little scene
+    /// (Vó Edna, Srosh the Stablekeeper, Lavine naming the pony, Maithe pretending not to care). Same self-contained pattern as <c>DuoTexts</c>: merged into the live
     /// <see cref="LocalizationManager"/> on first use (keys it already has win), pt-BR fallback otherwise.
     /// </summary>
     public static class MountTexts
@@ -104,7 +104,7 @@ namespace Rapadura.Gameplay.Mounts
             new LocalizationEntry(HudAbilityWait, "{0} {1}s", "{0} {1}s"),
             new LocalizationEntry(HudStamina, "Stamina", "Fôlego"),
 
-            new LocalizationEntry(RefusedNoMount, "You have no mount yet. Visit the Haras da Vila!", "Vocês ainda não têm montaria. Passem no Haras da Vila!"),
+            new LocalizationEntry(RefusedNoMount, "You have no mount yet. Visit Srosh's Stable!", "Vocês ainda não têm montaria. Passem na Estrebaria do Srosh!"),
             new LocalizationEntry(RefusedTired, "{0} is resting at home ({1} more fights).", "{0} está descansando em casa (mais {1} lutas)."),
             new LocalizationEntry(RefusedInCombat, "Too much commotion! Wait 5 s without fighting.", "Muita confusão! Espere 5 s sem lutar."),
             new LocalizationEntry(RefusedRecall, "Wait {0}s to whistle again.", "Espere {0}s para assobiar de novo."),
@@ -113,14 +113,14 @@ namespace Rapadura.Gameplay.Mounts
             new LocalizationEntry(WhistleBroken, "The whistle broke off!", "O assobio parou no meio!"),
             new LocalizationEntry(TiredToast, "{0} got tired and trotted home to rest. Nobody got hurt!", "{0} cansou e voltou trotando para casa descansar. Ninguém se machucou!"),
             new LocalizationEntry(GrantedToast, "{0} is yours now!", "{0} agora é de vocês!"),
-            new LocalizationEntry(AbilityNoSecrets, "Paçoca sniffed around… nothing here.", "O Paçoca farejou tudo… nada por aqui."),
-            new LocalizationEntry(AbilitySecretsFound, "Paçoca smells something hidden nearby! ({0})", "O Paçoca sentiu cheiro de coisa escondida por perto! ({0})"),
+            new LocalizationEntry(AbilityNoSecrets, "The Alabai sniffed around… nothing here.", "O Alabai farejou tudo… nada por aqui."),
+            new LocalizationEntry(AbilitySecretsFound, "The Alabai smells something hidden nearby! ({0})", "O Alabai sentiu cheiro de coisa escondida por perto! ({0})"),
             new LocalizationEntry(AbilityScared, "Hee-haw! {0} critters ran off.", "Ió-ió! {0} bichos saíram correndo."),
             new LocalizationEntry(SafeZoneNoAbility, "No tricks inside the town.", "Na cidade não tem gracinha."),
-            new LocalizationEntry(AbilityBrayMap, "Hee-haw! The whole road heard the donkey.", "Ió-ió! A estrada inteira ouviu o jegue."),
+            new LocalizationEntry(AbilityBrayMap, "Hee-haw! The whole road heard the donkey.", "Ió-ió! A estrada inteira ouviu o asno."),
             new LocalizationEntry(AbilityDashMap, "Off we go!", "Lá vamos nós!"),
 
-            new LocalizationEntry(HarasShopName, "Haras da Vila (Seu Tonico)", "Haras da Vila (Seu Tonico)"),
+            new LocalizationEntry(HarasShopName, "Srosh's Stable", "Estrebaria do Srosh"),
 
             new LocalizationEntry(StableButton, "Mounts", "Montarias"),
             new LocalizationEntry(StableTitle, "Stable and Mount Notebook", "Estábulo e Caderno de Montarias"),
@@ -138,15 +138,15 @@ namespace Rapadura.Gameplay.Mounts
             new LocalizationEntry(SetActive, "Ride this one", "Usar esta"),
             new LocalizationEntry(Cuddle, "Pet", "Fazer carinho"),
             new LocalizationEntry(Feed, "Give {0}", "Dar {0}"),
-            new LocalizationEntry(StallsLine, "Stalls at home: {0} · the rest stay at the Haras", "Baias na casa: {0} · as outras ficam no Haras"),
-            new LocalizationEntry(NoHouse, "No house yet: they all stay at Seu Tonico's Haras.", "Sem casa ainda: todas ficam no Haras do Seu Tonico."),
+            new LocalizationEntry(StallsLine, "Stalls at home: {0} · the rest stay at Srosh's Stable", "Baias na casa: {0} · as outras ficam na Estrebaria"),
+            new LocalizationEntry(NoHouse, "No house yet: they all stay at Srosh's Stable.", "Sem casa ainda: todas ficam na Estrebaria do Srosh."),
             new LocalizationEntry(SaddleLine, "Saddle: {0}", "Sela: {0}"),
             new LocalizationEntry(BlanketLine, "Blanket: {0}", "Manta: {0}"),
             new LocalizationEntry(NoneCosmetic, "plain", "simples"),
             new LocalizationEntry(Change, "Change", "Trocar"),
             new LocalizationEntry(Buy, "Buy ({0} gold)", "Comprar ({0} ouro)"),
             new LocalizationEntry(Owned, "Yours", "Já é sua"),
-            new LocalizationEntry(SaddleryClosed, "The saddlery is at the Haras da Vila.", "A Selaria fica no Haras da Vila."),
+            new LocalizationEntry(SaddleryClosed, "The saddlery is at Srosh's Stable.", "A Selaria fica na Estrebaria do Srosh."),
             new LocalizationEntry(CodexCount, "{0}/{1} mounts", "{0}/{1} montarias"),
             new LocalizationEntry(CodexUnknown, "???", "???"),
             new LocalizationEntry(CodexSoon, "(coming in a later update)", "(chega numa próxima versão)"),
@@ -155,7 +155,7 @@ namespace Rapadura.Gameplay.Mounts
             new LocalizationEntry(Fed, "{0} ate {1}! (+{2} fed)", "{0} comeu {1}! (+{2} de saciedade)"),
             new LocalizationEntry(CantEat, "{0} won't eat that.", "{0} não come isso."),
             new LocalizationEntry(NoFood, "Not enough in the backpack for {0}.", "Falta coisa na mochila para {0}."),
-            new LocalizationEntry(UnknownDish, "Vó Zefa hasn't taught {0} yet.", "A Vó Zefa ainda não ensinou {0}."),
+            new LocalizationEntry(UnknownDish, "Vó Edna hasn't taught {0} yet.", "A Vó Edna ainda não ensinou {0}."),
             new LocalizationEntry(LevelUp, "{0} reached level {1}!", "{0} subiu para o nível {1}!"),
             new LocalizationEntry(Cuddled, "{0} loved the petting!", "{0} adorou o carinho!"),
             new LocalizationEntry(CuddleWait, "Let {0} breathe a little.", "Deixa {0} respirar um pouquinho."),
@@ -166,33 +166,33 @@ namespace Rapadura.Gameplay.Mounts
             new LocalizationEntry("mount.rider_line.maithe", "Maithe: Come on, let's see how fast you are.", "Maithe: Bora, quero ver se você é rápido mesmo."),
             new LocalizationEntry("mount.rider_line.maria", "Maria: Easy now. We take care of each other.", "Maria: Calma. A gente cuida um do outro."),
             new LocalizationEntry("mount.rider_line.joaquim", "Joaquim: Steady, friend. Nobody falls behind.", "Joaquim: Firme, amigo. Ninguém fica pra trás."),
-            new LocalizationEntry("mount.rider_line.icaro", "Ícaro: Engine on! Well… legs on.", "Ícaro: Motor ligado! Quer dizer… pernas ligadas."),
+            new LocalizationEntry("mount.rider_line.icaro", "Ícaro: Engine on! Well… legs on. See? Science.", "Ícaro: Motor ligado! Quer dizer… pernas ligadas. Viu? Ciência."),
             new LocalizationEntry("mount.rider_line.lavine", "Lavine: Let's go, let's go, let's gooo!", "Lavine: Vamos, vamos, vamooos!"),
 
             new LocalizationEntry("mount.food.capim.name", "a hay bundle (2 fibre)", "feixe de capim (2 fibras)"),
-            new LocalizationEntry("mount.food.racao.name", "Haras feed", "Ração do Haras"),
+            new LocalizationEntry("mount.food.racao.name", "stable feed", "Ração da Estrebaria"),
             new LocalizationEntry("mount.food.erva.name", "fresh herb", "erva fresca"),
             new LocalizationEntry("mount.food.carne.name", "roast meat", "carne assada"),
-            new LocalizationEntry("mount.food.cuscuz.name", "Vó's cuscuz", "cuscuz da Vó"),
-            new LocalizationEntry("mount.food.rapadura.name", "rapadura", "rapadura"),
-            new LocalizationEntry("mount.food.baiao.name", "baião de dois", "baião de dois"),
+            new LocalizationEntry("mount.food.cuscuz.name", "tandir bread", "nan do tandir"),
+            new LocalizationEntry("mount.food.rapadura.name", "golden brick", "torrão dourado"),
+            new LocalizationEntry("mount.food.baiao.name", "Grandma's plov", "plov da Vó"),
 
-            new LocalizationEntry("mount.cosmetic.saddle_tropeiro.name", "Drover's rawhide saddle", "Sela de couro cru do tropeiro"),
-            new LocalizationEntry("mount.cosmetic.saddle_chita.name", "Embroidered chita saddle", "Sela bordada de chita"),
-            new LocalizationEntry("mount.cosmetic.saddle_vaqueiro_estrelas.name", "Cowboy saddle with stars", "Sela de vaqueiro com estrelas"),
-            new LocalizationEntry("mount.cosmetic.blanket_chita_florida.name", "Flowery chita blanket", "Manta de chita florida"),
-            new LocalizationEntry("mount.cosmetic.blanket_xadrez_quadrilha.name", "Quadrilha plaid blanket", "Manta xadrez de quadrilha"),
-            new LocalizationEntry("mount.cosmetic.blanket_la_pico.name", "Pico wool blanket", "Manta de lã do Pico Nevado"),
+            new LocalizationEntry("mount.cosmetic.saddle_tropeiro.name", "Caravan rawhide saddle", "Sela de couro cru de caravana"),
+            new LocalizationEntry("mount.cosmetic.saddle_chita.name", "Embroidered suzani saddle", "Sela bordada de suzani"),
+            new LocalizationEntry("mount.cosmetic.saddle_vaqueiro_estrelas.name", "Steppe saddle with stars", "Sela da estepe com estrelas"),
+            new LocalizationEntry("mount.cosmetic.blanket_chita_florida.name", "Flowery silk blanket", "Manta de seda florida"),
+            new LocalizationEntry("mount.cosmetic.blanket_xadrez_quadrilha.name", "Litema striped blanket", "Manta listrada de Litema"),
+            new LocalizationEntry("mount.cosmetic.blanket_la_pico.name", "Kaggen Range wool blanket", "Manta de lã da Serra de Kaggen"),
 
             new LocalizationEntry(QuestTitle, "First Saddle", "Primeira Sela"),
             new LocalizationEntry(QuestDescription,
-                "After the Lobo Alfa, Vó Zefa wants to take the cousins to the Haras of Seu Tonico, Vô Jorge's old road friend.",
-                "Depois do Lobo Alfa, a Vó Zefa quer levar os primos ao Haras do Seu Tonico, velho amigo de estrada do Vô Jorge."),
-            new LocalizationEntry(QuestObjective, "Visit the Haras da Vila", "Visitar o Haras da Vila"),
-            new LocalizationEntry(SceneLine1, "Vó Zefa: Seu Tonico kept this one for you five. Vô Jorge would have loved it.",
-                "Vó Zefa: O Seu Tonico guardou esse aqui pra vocês cinco. O Vô Jorge ia adorar."),
-            new LocalizationEntry(SceneLine2, "Lavine: Look at his white feet! His name is Pé-de-Pano!",
-                "Lavine: Olha os pezinhos brancos dele! O nome dele é Pé-de-Pano!"),
+                "After Kök-Böri, Vó Edna wants to take the cousins to the stable of Srosh the Stablekeeper, Vô Jorge's old road friend.",
+                "Depois do Kök-Böri, a Vó Edna quer levar os primos à estrebaria do Srosh, o Tratador, velho amigo de estrada do Vô Jorge."),
+            new LocalizationEntry(QuestObjective, "Visit Srosh's Stable", "Visitar a Estrebaria do Srosh"),
+            new LocalizationEntry(SceneLine1, "Vó Edna: Srosh kept this one for you five. Vô Jorge would have loved it.",
+                "Vó Edna: O Srosh guardou esse aqui pra vocês cinco. O Vô Jorge ia adorar."),
+            new LocalizationEntry(SceneLine2, "Lavine: Look at his white feet! His name is Socks!",
+                "Lavine: Olha os pezinhos brancos dele! O nome dele é Meia-Branca!"),
             new LocalizationEntry(SceneLine3, "Maithe: Whatever. A pony is a pony… Can I ride him first?",
                 "Maithe: Tanto faz. Pônei é pônei… Posso montar primeiro?"),
             new LocalizationEntry(SceneLine4, "Hold the Mount button (H) for a moment to whistle for him.",
@@ -202,17 +202,18 @@ namespace Rapadura.Gameplay.Mounts
         // id → (en name, pt name, en desc, pt desc, en source, pt source)
         private static readonly (string Id, string NameEn, string NamePt, string DescEn, string DescPt, string SourceEn, string SourcePt)[] Mounts =
         {
-            ("mount_pony", "Pé-de-Pano Pony", "Pônei Pé-de-Pano",
-                "A small, steady bay pony with white socks. Lavine named him.", "Um pônei baio pequeno e firme, de meias brancas. Foi a Lavine que deu o nome.",
-                "Gift from Vó Zefa (First Saddle) or Haras da Vila.", "Presente da Vó Zefa (Primeira Sela) ou no Haras da Vila."),
-            ("mount_big_dog", "Paçoca the Big Dog", "Cachorrão Paçoca",
-                "Caramelo's big nephew. Fast, cheerful, and Caramelo still bosses him around.",
-                "O sobrinho grandalhão do Caramelo. Rápido, alegre, e o Caramelo ainda manda nele.",
-                "Haras da Vila.", "Haras da Vila."),
-            ("mount_pack_donkey", "Pack Donkey", "Jegue Carregador",
-                "A sturdy grey donkey with a cowbell. Slow, but nothing tires him out.",
-                "Um jegue cinza parrudo, de chocalho no pescoço. Devagar, mas nada cansa ele.",
-                "Haras da Vila (later: Feira de Bichos do Oásis).", "Haras da Vila (depois: Feira de Bichos do Oásis)."),
+            ("mount_pony", "Steppe Pony", "Pônei das Estepes",
+                "A small, steady bay pony of the steppes, with white socks. Lavine named him Socks.",
+                "Um pônei baio das estepes, pequeno e firme, de meias brancas. Foi a Lavine que deu o nome: Meia-Branca.",
+                "Gift from Vó Edna (First Saddle) or Srosh's Stable.", "Presente da Vó Edna (Primeira Sela) ou na Estrebaria do Srosh."),
+            ("mount_big_dog", "Fluffy Alabai", "Alabai Fofão",
+                "A big, fluffy alabai, the shepherd dog of the caravans, and Ari's big nephew. Fast, cheerful, and Ari still bosses him around.",
+                "Um alabai grandão e fofo, o cão pastor das caravanas, sobrinho do Ari. Rápido, alegre, e o Ari ainda manda nele.",
+                "Srosh's Stable.", "Estrebaria do Srosh."),
+            ("mount_pack_donkey", "Caravan Donkey", "Asno de Caravana",
+                "A sturdy grey caravan donkey with a bell on its neck. Slow, but nothing tires him out.",
+                "Um asno de caravana cinza e parrudo, de sininho no pescoço. Devagar, mas nada cansa ele.",
+                "Srosh's Stable (later: Qocho Caravanserai).", "Estrebaria do Srosh (depois: Caravançará de Qocho)."),
         };
 
         private static readonly (string Id, string NameEn, string NamePt, string DescEn, string DescPt)[] Abilities =
@@ -239,14 +240,14 @@ namespace Rapadura.Gameplay.Mounts
             }
 
             // The Haras's items (Resources/Items): pt-BR = the asset text, like RefineTexts / TachoTexts do for theirs.
-            entries.Add(new LocalizationEntry(Content.ContentText.ItemNameKey(MountCareRules.FeedItemId), "Haras Feed", "Ração do Haras"));
+            entries.Add(new LocalizationEntry(Content.ContentText.ItemNameKey(MountCareRules.FeedItemId), "Stable Feed", "Ração da Estrebaria"));
             entries.Add(new LocalizationEntry(Content.ContentText.ItemDescriptionKey(MountCareRules.FeedItemId),
-                "Seu Tonico's corn-and-grass feed. Every mount eats it: +40 fullness.", "Ração de milho e capim do Seu Tonico. Toda montaria come: +40 de saciedade."));
-            AddWhistle(entries, MountCatalog.PonyWhistle, "Pé-de-Pano Pony Whistle", "Apito do Pônei Pé-de-Pano", "Pé-de-Pano Pony", "Pônei Pé-de-Pano");
-            AddWhistle(entries, MountCatalog.BigDogWhistle, "Paçoca the Big Dog Whistle", "Apito do Cachorrão Paçoca", "Paçoca the Big Dog", "Cachorrão Paçoca");
-            AddWhistle(entries, MountCatalog.PackDonkeyWhistle, "Pack Donkey Whistle", "Apito do Jegue Carregador", "the Pack Donkey", "Jegue Carregador");
+                "Srosh's barley-and-grass feed. Every mount eats it: +40 fullness.", "Ração de cevada e capim do Srosh. Toda montaria come: +40 de saciedade."));
+            AddWhistle(entries, MountCatalog.PonyWhistle, "Steppe Pony Whistle", "Apito do Pônei das Estepes", "the Steppe Pony", "o Pônei das Estepes");
+            AddWhistle(entries, MountCatalog.BigDogWhistle, "Fluffy Alabai Whistle", "Apito do Alabai Fofão", "the Fluffy Alabai", "o Alabai Fofão");
+            AddWhistle(entries, MountCatalog.PackDonkeyWhistle, "Caravan Donkey Whistle", "Apito do Asno de Caravana", "the Caravan Donkey", "o Asno de Caravana");
 
-            entries.Add(new LocalizationEntry("mount.mount_pony.favorite_line", "Pé-de-Pano, run, Maithe is watching!", "Pé-de-Pano, corre que a Maithe tá olhando!"));
+            entries.Add(new LocalizationEntry("mount.mount_pony.favorite_line", "Socks, run, Maithe is watching!", "Meia-Branca, corre que a Maithe tá olhando!"));
             foreach (var a in Abilities)
             {
                 entries.Add(new LocalizationEntry("mount.ability." + a.Id + ".name", a.NameEn, a.NamePt));
@@ -260,8 +261,8 @@ namespace Rapadura.Gameplay.Mounts
         {
             entries.Add(new LocalizationEntry(Content.ContentText.ItemNameKey(itemId), nameEn, namePt));
             entries.Add(new LocalizationEntry(Content.ContentText.ItemDescriptionKey(itemId),
-                $"Bamboo whistle from Seu Tonico's Haras. Whoever buys it takes {mountEn} home.",
-                $"Apito de taquara do Haras do Seu Tonico. Quem compra leva o {mountPt} para casa."));
+                $"Reed whistle from Srosh's Stable. Whoever buys it takes {mountEn} home.",
+                $"Apito de junco da Estrebaria do Srosh. Quem compra leva {mountPt} para casa."));
         }
 
         private static Dictionary<string, string> _fallbackByKey;

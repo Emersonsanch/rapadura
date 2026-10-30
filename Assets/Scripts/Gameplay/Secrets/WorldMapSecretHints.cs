@@ -177,40 +177,56 @@ namespace Rapadura.Gameplay.Secrets
             switch (kind)
             {
                 case SecretHintKind.FlourHouseRuin:
-                    // Broken walls, a fallen roof beam and the old millstone.
-                    b.Box(new Vector3(-0.35f, 0.3f, 0f), new Vector3(0.16f, 0.6f, 1.1f), WorldMapSwatch.Ruin);
-                    b.Box(new Vector3(0.1f, 0.22f, 0.5f), new Vector3(0.9f, 0.44f, 0.16f), WorldMapSwatch.RuinDark);
-                    b.Box(new Vector3(0.45f, 0.14f, -0.15f), new Vector3(0.16f, 0.28f, 0.6f), WorldMapSwatch.Ruin);
+                    // "Moinho velho do Vô": the broken adobe walls of Grandpa Jorge's orchard mill, a fallen beam, the
+                    // cracked millstone and what is left of its little water wheel by the aryk.
+                    b.Box(new Vector3(-0.35f, 0.3f, 0f), new Vector3(0.16f, 0.6f, 1.1f), WorldMapSwatch.Adobe, 0f, WorldMapSwatch.AdobeDark);
+                    b.Box(new Vector3(0.1f, 0.22f, 0.5f), new Vector3(0.9f, 0.44f, 0.16f), WorldMapSwatch.AdobeDark, 0f, WorldMapSwatch.Adobe);
+                    b.Box(new Vector3(0.45f, 0.14f, -0.15f), new Vector3(0.16f, 0.28f, 0.6f), WorldMapSwatch.Adobe);
                     b.Box(new Vector3(0.05f, 0.5f, 0.05f), new Vector3(1.2f, 0.08f, 0.1f), WorldMapSwatch.WoodDark, 28f);
-                    b.Cylinder(new Vector3(0.05f, 0f, -0.2f), 0.26f, 0.26f, 0.12f, 10, WorldMapSwatch.Rock, WorldMapSwatch.RockDark);
+                    b.Cylinder(new Vector3(0.05f, 0f, -0.2f), 0.26f, 0.26f, 0.12f, 10, WorldMapSwatch.Wall, WorldMapSwatch.Rock);
+                    b.Box(new Vector3(-0.62f, 0.02f, -0.1f), new Vector3(0.18f, 0.04f, 1.2f), WorldMapSwatch.DeepWater);
+                    {
+                        // The wheel stands on edge in the channel (axis along x), one paddle broken off.
+                        Matrix4x4 saved = b.Matrix;
+                        b.Matrix = saved * Matrix4x4.TRS(new Vector3(-0.62f, 0.3f, -0.1f), Quaternion.Euler(0f, 0f, 90f), Vector3.one);
+                        b.Cylinder(new Vector3(0f, -0.04f, 0f), 0.28f, 0.28f, 0.08f, 8, WorldMapSwatch.Wood, WorldMapSwatch.WoodDark, 0f, true);
+                        b.Box(new Vector3(0f, 0f, 0f), new Vector3(0.07f, 0.12f, 0.7f), WorldMapSwatch.WoodDark);
+                        b.Matrix = saved;
+                    }
+
                     break;
 
                 case SecretHintKind.HollowTree:
-                    // A wide old jatobá with a dark hollow in the trunk.
-                    b.Cylinder(Vector3.zero, 0.42f, 0.3f, 1.2f, 8, WorldMapSwatch.Trunk);
-                    b.Box(new Vector3(0f, 0.45f, -0.34f), new Vector3(0.26f, 0.34f, 0.08f), WorldMapSwatch.Black);
-                    b.Blob(new Vector3(0f, 1.55f, 0f), new Vector3(1.7f, 1.0f, 1.6f), WorldMapSwatch.LeafDark);
-                    b.Blob(new Vector3(0.35f, 1.85f, 0.2f), new Vector3(0.9f, 0.7f, 0.9f), WorldMapSwatch.Leaf);
+                    // "Choupo oco": an old tugai poplar, wide gnarled trunk with a dark hollow, gold-flecked crown.
+                    b.Cylinder(Vector3.zero, 0.42f, 0.28f, 1.2f, 8, WorldMapSwatch.Trunk);
+                    b.Box(new Vector3(0f, 0.45f, -0.33f), new Vector3(0.26f, 0.34f, 0.08f), WorldMapSwatch.Black);
+                    b.Blob(new Vector3(0f, 1.85f, 0f), new Vector3(1.25f, 1.6f, 1.15f), WorldMapSwatch.Poplar);
+                    b.Blob(new Vector3(0.3f, 2.2f, -0.15f), new Vector3(0.7f, 0.9f, 0.7f), WorldMapSwatch.PoplarGold, 30f);
+                    b.Blob(new Vector3(-0.35f, 1.55f, -0.2f), new Vector3(0.55f, 0.6f, 0.55f), WorldMapSwatch.PoplarGold, 70f, true);
                     break;
 
                 case SecretHintKind.MandacaruChest:
-                    // A tall mandacaru with two arms and a chest corner poking out of the sand.
-                    b.Cylinder(Vector3.zero, 0.16f, 0.14f, 1.5f, 6, WorldMapSwatch.Cactus);
-                    b.Cylinder(new Vector3(0.28f, 0.6f, 0f), 0.09f, 0.08f, 0.55f, 6, WorldMapSwatch.CactusDark);
-                    b.Box(new Vector3(0.17f, 0.62f, 0f), new Vector3(0.24f, 0.12f, 0.12f), WorldMapSwatch.CactusDark);
-                    b.Cylinder(new Vector3(-0.26f, 0.85f, 0f), 0.08f, 0.07f, 0.4f, 6, WorldMapSwatch.Cactus);
-                    b.Box(new Vector3(-0.17f, 0.86f, 0f), new Vector3(0.2f, 0.1f, 0.1f), WorldMapSwatch.Cactus);
+                    // "Baú sob o saxaul": a big saxaul, the wind has blown the sand off its roots and a chest corner shows.
+                    WorldMapPropMeshes.AppendSaxaul(b, Vector3.zero, 1.35f);
                     b.Blob(new Vector3(0.1f, 0f, -0.45f), new Vector3(0.9f, 0.3f, 0.6f), WorldMapSwatch.Sand, 0f, true);
                     b.Box(new Vector3(0.12f, 0.1f, -0.5f), new Vector3(0.34f, 0.18f, 0.24f), WorldMapSwatch.Wood, 20f, WorldMapSwatch.Gold);
                     break;
 
                 case SecretHintKind.DryWell:
-                    // Stone ring, dark mouth and a wooden frame.
-                    b.Cylinder(Vector3.zero, 0.42f, 0.4f, 0.32f, 10, WorldMapSwatch.SandRock, WorldMapSwatch.SandRock);
-                    b.Cylinder(new Vector3(0f, 0.3f, 0f), 0.3f, 0.3f, 0.03f, 10, WorldMapSwatch.Black, WorldMapSwatch.Black);
-                    b.Box(new Vector3(-0.38f, 0.5f, 0f), new Vector3(0.07f, 0.7f, 0.07f), WorldMapSwatch.Wood);
-                    b.Box(new Vector3(0.38f, 0.5f, 0f), new Vector3(0.07f, 0.7f, 0.07f), WorldMapSwatch.Wood);
-                    b.Box(new Vector3(0f, 0.84f, 0f), new Vector3(0.86f, 0.07f, 0.07f), WorldMapSwatch.WoodDark);
+                    // "Poço de karez seco": a karez shaft (ring of dug earth round a dark mouth, a wooden windlass) and the
+                    // next shafts of the line behind it.
+                    b.Cylinder(Vector3.zero, 0.5f, 0.34f, 0.2f, 10, WorldMapSwatch.SandRock, WorldMapSwatch.RuinDark);
+                    b.Cylinder(new Vector3(0f, 0.19f, 0f), 0.24f, 0.24f, 0.02f, 10, WorldMapSwatch.Black, WorldMapSwatch.Black);
+                    b.Box(new Vector3(-0.33f, 0.38f, 0f), new Vector3(0.07f, 0.45f, 0.07f), WorldMapSwatch.Wood);
+                    b.Box(new Vector3(0.33f, 0.38f, 0f), new Vector3(0.07f, 0.45f, 0.07f), WorldMapSwatch.Wood);
+                    b.Box(new Vector3(0f, 0.58f, 0f), new Vector3(0.76f, 0.08f, 0.08f), WorldMapSwatch.WoodDark);
+                    b.Box(new Vector3(0f, 0.58f, 0f), new Vector3(0.2f, 0.13f, 0.13f), WorldMapSwatch.Wood);
+                    foreach (Vector3 shaft in new[] { new Vector3(0.55f, 0f, 0.6f), new Vector3(1.0f, 0f, 1.15f) })
+                    {
+                        b.Cylinder(shaft, 0.3f, 0.2f, 0.12f, 8, WorldMapSwatch.SandRock, WorldMapSwatch.RuinDark);
+                        b.Cylinder(shaft + new Vector3(0f, 0.11f, 0f), 0.12f, 0.12f, 0.02f, 8, WorldMapSwatch.Black, WorldMapSwatch.Black);
+                    }
+
                     break;
 
                 case SecretHintKind.WaterfallCave:
@@ -222,12 +238,16 @@ namespace Rapadura.Gameplay.Secrets
                     break;
 
                 case SecretHintKind.TropeiroCairn:
-                    // Stacked stones with a little bell on a stick.
+                    // "Marco das caravanas": the caravans' stone cairn, a pole with faded cloth strips and a little camel bell.
                     b.Blob(new Vector3(0f, 0.16f, 0f), new Vector3(0.75f, 0.36f, 0.7f), WorldMapSwatch.Rock, 0f, true);
                     b.Blob(new Vector3(0.04f, 0.44f, 0f), new Vector3(0.55f, 0.3f, 0.5f), WorldMapSwatch.RockDark, 40f, true);
                     b.Blob(new Vector3(-0.02f, 0.66f, 0.02f), new Vector3(0.36f, 0.22f, 0.34f), WorldMapSwatch.Pebble, 80f, true);
-                    b.Box(new Vector3(0.05f, 0.95f, 0f), new Vector3(0.05f, 0.5f, 0.05f), WorldMapSwatch.Wood);
-                    b.Cylinder(new Vector3(0.05f, 1.0f, -0.06f), 0.09f, 0.04f, 0.14f, 6, WorldMapSwatch.Gold);
+                    b.Box(new Vector3(0.05f, 1.05f, 0f), new Vector3(0.05f, 0.7f, 0.05f), WorldMapSwatch.Wood);
+                    b.Card(new Vector3(0.08f, 1.38f, 0f), new Vector3(0.08f, 1.32f, 0f), new Vector3(0.42f, 1.18f, 0f), new Vector3(0.4f, 1.26f, 0f),
+                        WorldMapSwatch.Turquoise, new Vector3(0f, 0.3f, -1f));
+                    b.Card(new Vector3(0.08f, 1.26f, 0f), new Vector3(0.08f, 1.2f, 0f), new Vector3(0.34f, 1.06f, 0f), new Vector3(0.33f, 1.13f, 0f),
+                        WorldMapSwatch.Banner, new Vector3(0f, 0.3f, -1f));
+                    b.Cylinder(new Vector3(0.05f, 0.98f, -0.06f), 0.09f, 0.04f, 0.14f, 6, WorldMapSwatch.Gold);
                     break;
 
                 case SecretHintKind.ForgottenWorkshop:

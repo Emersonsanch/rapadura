@@ -10,7 +10,7 @@ namespace Rapadura.Gameplay.Story
     /// chose; without a hero that panel is simply left out. Pure data, so tests can check every key exists.
     ///
     /// On a "Nova Jornada+" (<see cref="NewGamePlusProgress.Cycle"/> 1+) the prologue plays its
-    /// new-journey variant instead (<c>story.new_journey.*</c>: Vó Zefa sees the Cristal do Sol flicker
+    /// new-journey variant instead (<c>story.new_journey.*</c>: Vó Edna sees the Cristal do Sol flicker
     /// again); every other beat is the same in every cycle.
     /// </summary>
     public static class StoryScript

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_whistle_mount_big_dog
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_whistle_mount_big_dog
-  _displayName: "Apito do Cachorr\xE3o Pa\xE7oca"
-  _description: "Apito de taquara do Haras do Seu Z\xE9. Quem compra leva o Cachorr\xE3o Pa\xE7oca para casa."
+  _displayName: "Apito do Alabai Fof\xE3o"
+  _description: "Apito de junco da Estrebaria do Srosh. Quem compra leva o Alabai Fof\xE3o para casa."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

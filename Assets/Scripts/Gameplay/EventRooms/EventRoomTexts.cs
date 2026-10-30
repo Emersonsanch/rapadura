@@ -97,10 +97,10 @@ namespace Rapadura.Gameplay.EventRooms
         public const string KeyDescriptionKey = "item.item_chave_engenho.description";
 
         /// <summary>pt-BR names/descriptions of the entry items, also the asset text (kept in sync by EventRoomTests).</summary>
-        public const string TicketNamePt = "Convite do Terreiro";
-        public const string TicketDescriptionPt = "Convite pintado à mão para o Terreiro das Assombrações. Vale uma entrada quando o terreiro abre.";
-        public const string KeyNamePt = "Chave do Engenho";
-        public const string KeyDescriptionPt = "Chave de ferro velho da Torre do Engenho Velho. Abre a torre uma vez, na hora em que ela abre.";
+        public const string TicketNamePt = "Convite do Pátio";
+        public const string TicketDescriptionPt = "Convite pintado à mão para o Pátio dos Mazans. Vale uma entrada quando o pátio abre.";
+        public const string KeyNamePt = "Chave da Torre";
+        public const string KeyDescriptionPt = "Chave de bronze velho da Torre da Roda das Doze Jarras. Abre a torre uma vez, na hora em que ela abre.";
 
         public static readonly List<LocalizationEntry> Entries = BuildEntries();
 
@@ -132,8 +132,8 @@ namespace Rapadura.Gameplay.EventRooms
         {
             var entries = new List<LocalizationEntry>
             {
-                new LocalizationEntry(TerreiroName, "Spook Yard", "Terreiro das Assombrações"),
-                new LocalizationEntry(TorreName, "Old Mill Tower", "Torre do Engenho Velho"),
+                new LocalizationEntry(TerreiroName, "Mazan Yard", "Pátio dos Mazans"),
+                new LocalizationEntry(TorreName, "Tower of the Twelve-Jar Wheel", "Torre da Roda das Doze Jarras"),
 
                 new LocalizationEntry(MapOpen, "{0}: OPEN until {1}!", "{0}: ABERTO até {1}!"),
                 new LocalizationEntry(MapClosed, "{0}: opens at {1}", "{0}: abre às {1}"),
@@ -149,13 +149,13 @@ namespace Rapadura.Gameplay.EventRooms
                 new LocalizationEntry(HudCombo, "Combo {0} ({1})", "Combo {0} ({1})"),
                 new LocalizationEntry(HudGoalTerreiro, "Hold out until the end!", "Aguente até o fim!"),
                 new LocalizationEntry(HudGoalBridge, "Defeat creatures to lower the bridge: {0}/{1}", "Derrote bichos para baixar a ponte: {0}/{1}"),
-                new LocalizationEntry(HudGoalGate, "Break the old mill gate!", "Quebre o portão do engenho!"),
-                new LocalizationEntry(HudGoalGuardian, "Beat the Tower Guardian!", "Vença o Guardião da Torre!"),
-                new LocalizationEntry(HudGoalPickUp, "Grab the Golden Cane Press!", "Pegue a Moenda de Ouro!"),
-                new LocalizationEntry(HudGoalDeliver, "Take the Golden Cane Press to Mr. Malaquias!", "Leve a Moenda de Ouro até Seu Malaquias!"),
+                new LocalizationEntry(HudGoalGate, "Break the Tower Gate!", "Quebre o Portão da Torre!"),
+                new LocalizationEntry(HudGoalGuardian, "Beat Ullikummi, the Diorite Giant!", "Vença Ullikummi, o Gigante de Diorito!"),
+                new LocalizationEntry(HudGoalPickUp, "Grab the Golden Jar!", "Pegue a Jarra de Ouro!"),
+                new LocalizationEntry(HudGoalDeliver, "Take the Golden Jar to Adda, the Tower Keeper!", "Leve a Jarra de Ouro até o Adda, o Vigia da Torre!"),
                 new LocalizationEntry(HudBridgeOpen, "The bridge is down!", "A ponte baixou!"),
                 new LocalizationEntry(HudGateBroken, "The gate broke!", "O portão quebrou!"),
-                new LocalizationEntry(HudGuardianAppears, "The Tower Guardian woke up!", "O Guardião da Torre acordou!"),
+                new LocalizationEntry(HudGuardianAppears, "Ullikummi, the Diorite Giant, woke up!", "Ullikummi, o Gigante de Diorito, acordou!"),
                 new LocalizationEntry(HudMoendaTaken, "Got it! Now run to the entrance!", "Peguei! Agora corre pra entrada!"),
 
                 new LocalizationEntry(ResultTitleCleared, "{0}: cleared!", "{0}: vencido!"),
@@ -176,34 +176,34 @@ namespace Rapadura.Gameplay.EventRooms
                 new LocalizationEntry(TierMestre, "Master", "Mestre"),
                 new LocalizationEntry(TierNone, "None", "Nenhuma"),
 
-                new LocalizationEntry(GuardianName, "Tower Guardian", "Guardião da Torre"),
-                new LocalizationEntry(KeeperName, "Mr. Malaquias, the mill keeper", "Seu Malaquias, o vigia do engenho"),
-                new LocalizationEntry(MoendaName, "Golden Cane Press", "Moenda de Ouro"),
-                new LocalizationEntry(GateName, "Old Mill Gate", "Portão do Engenho"),
-                new LocalizationEntry(StoneBlessing, "Blessing Stone", "Pedra da Bênção"),
-                new LocalizationEntry(StoneSoul, "Soul Stone", "Pedra da Alma"),
+                new LocalizationEntry(GuardianName, "Ullikummi, the Diorite Giant", "Ullikummi, o Gigante de Diorito"),
+                new LocalizationEntry(KeeperName, "Adda, the Tower Keeper", "Adda, o Vigia da Torre"),
+                new LocalizationEntry(MoendaName, "Golden Jar", "Jarra de Ouro"),
+                new LocalizationEntry(GateName, "Tower Gate", "Portão da Torre"),
+                new LocalizationEntry(StoneBlessing, "Spark Stone", "Pedra-Faísca"),
+                new LocalizationEntry(StoneSoul, "Living Soul Stone", "Pedra da Alma Viva"),
 
-                new LocalizationEntry(TicketNameKey, "Spook Yard Invitation", TicketNamePt),
-                new LocalizationEntry(TicketDescriptionKey, "A hand-painted invitation to the Spook Yard. Good for one entry while the yard is open.", TicketDescriptionPt),
-                new LocalizationEntry(KeyNameKey, "Old Mill Key", KeyNamePt),
-                new LocalizationEntry(KeyDescriptionKey, "An old iron key to the Old Mill Tower. Opens the tower once, while it is open.", KeyDescriptionPt),
+                new LocalizationEntry(TicketNameKey, "Yard Invitation", TicketNamePt),
+                new LocalizationEntry(TicketDescriptionKey, "A hand-painted invitation to the Mazan Yard. Good for one entry while the yard is open.", TicketDescriptionPt),
+                new LocalizationEntry(KeyNameKey, "Tower Key", KeyNamePt),
+                new LocalizationEntry(KeyDescriptionKey, "An old bronze key to the Tower of the Twelve-Jar Wheel. Opens the tower once, while it is open.", KeyDescriptionPt),
 
             };
 
             AddLines(entries, EventRoomKind.Terreiro, EventRoomMoment.Start, new[]
             {
-                (CharacterId.Maithe, "Eye of the Wind open. Bring on the spooks, I can see them all!", "Olho do Vento aberto. Pode vir assombração, eu vejo todas!"),
-                (CharacterId.Icaro, "I did the math: no spook can handle a good gadget!", "Calculei tudo: assombração não aguenta engenhoca boa!"),
-                (CharacterId.Joaquim, "Stay behind my shield. The yard is ours today!", "Fiquem atrás do meu escudo. O Terreiro hoje é nosso!"),
-                (CharacterId.Maria, "One blessing for courage and one for luck. Let's go!", "Uma bênção pra coragem e outra pra sorte. Vamos!"),
-                (CharacterId.Lavine, "Spooks? I've got magic tickles for them!", "Assombração? Eu tenho é cócegas de magia pra elas!"),
+                (CharacterId.Maithe, "Eye of the Wind open. Bring on the mazans, I can see them all!", "Olho do Vento aberto. Pode vir mazan, eu vejo todos!"),
+                (CharacterId.Icaro, "I did the math: no dimmed creature can handle a good gadget!", "Calculei tudo: bicho apagado não aguenta engenhoca boa!"),
+                (CharacterId.Joaquim, "Stay behind my shield. The yard is ours today!", "Fiquem atrás do meu escudo. O Pátio hoje é nosso!"),
+                (CharacterId.Maria, "One lamp for courage and one for luck. Let's go!", "Uma lâmpada pra coragem e outra pra sorte. Vamos!"),
+                (CharacterId.Lavine, "Mazans? I've got magic tickles for them!", "Mazan? Eu tenho é cócegas de magia pra eles!"),
             });
             AddLines(entries, EventRoomKind.Terreiro, EventRoomMoment.Win, new[]
             {
                 (CharacterId.Maithe, "Nothing got past my aim. Ícaro will be jealous!", "Nada passou pela minha mira. O Ícaro vai ficar com inveja!"),
                 (CharacterId.Icaro, "It worked! I wrote every combo down in my invention notebook.", "Funcionou! Anotei cada combo no meu caderno de invenções."),
                 (CharacterId.Joaquim, "Nobody knocked the Root Shield down. Maria will be proud!", "Ninguém derrubou o Escudo das Raízes. A Maria vai ficar orgulhosa!"),
-                (CharacterId.Maria, "Everyone in one piece! Grandma Zefa will bake a cake.", "Todo mundo inteiro! A Vó Zefa vai fazer um bolo pra comemorar."),
+                (CharacterId.Maria, "Everyone in one piece! Grandma Edna will bake a cake.", "Todo mundo inteiro! A Vó Edna vai fazer um bolo pra comemorar."),
                 (CharacterId.Lavine, "I did so many combos! Did you see? Did you?!", "Fiz um monte de combo! Vocês viram? Viram?!"),
             });
             AddLines(entries, EventRoomKind.Terreiro, EventRoomMoment.Lose, new[]
@@ -212,23 +212,23 @@ namespace Rapadura.Gameplay.EventRooms
                 (CharacterId.Icaro, "Hmm... I need a new gadget. One that handles more creatures!", "Hum... preciso de uma engenhoca nova. Uma que aguente mais bicho!"),
                 (CharacterId.Joaquim, "I fell, but I fell standing tall. The shield comes back stronger.", "Caí, mas caí firme. O escudo volta mais forte."),
                 (CharacterId.Maria, "Breathe... we patch up and come back.", "Respira... a gente cuida dos machucados e volta."),
-                (CharacterId.Lavine, "Too many spooks... but I wasn't scared. Almost.", "Ai, foi assombração demais... mas eu não fiquei com medo. Quase."),
+                (CharacterId.Lavine, "Too many mazans... but I wasn't scared. Almost.", "Ai, foi mazan demais... mas eu não fiquei com medo. Quase."),
             });
             AddLines(entries, EventRoomKind.Torre, EventRoomMoment.Start, new[]
             {
-                (CharacterId.Maithe, "The cane press is up top. Bridge, gate, guardian: one arrow at a time.", "A moenda está lá no alto. Ponte, portão, guardião: uma flecha de cada vez."),
-                (CharacterId.Icaro, "An old mill gate? Leave it to me, I know where it creaks.", "Um portão de engenho velho? Deixa comigo, eu sei onde ele range."),
+                (CharacterId.Maithe, "The Golden Jar is up top. Bridge, gate, giant: one arrow at a time.", "A Jarra de Ouro está lá no alto. Ponte, portão, gigante: uma flecha de cada vez."),
+                (CharacterId.Icaro, "An old tower gate? Leave it to me, I know where it creaks.", "Um portão de torre velho? Deixa comigo, eu sei onde ele range."),
                 (CharacterId.Joaquim, "A thick gate? My shield is thicker.", "Portão grosso? Meu escudo é mais."),
-                (CharacterId.Maria, "The tower is dark, but the blessing's light goes first.", "A torre é escura, mas a luz da bênção vai na frente."),
-                (CharacterId.Lavine, "I'm small, but my magic climbs towers super fast!", "Eu sou pequena, mas a minha magia sobe torre rapidinho!"),
+                (CharacterId.Maria, "The tower is dark, but the lamp's light goes first.", "A torre é escura, mas a luz da lâmpada vai na frente."),
+                (CharacterId.Lavine, "I may be the youngest, but my magic climbs towers super fast!", "Posso ser a caçula, mas a minha magia sobe torre rapidinho!"),
             });
             AddLines(entries, EventRoomKind.Torre, EventRoomMoment.Win, new[]
             {
-                (CharacterId.Maithe, "Cane press delivered, Mr. Malaquias! The mill will sing again.", "Moenda entregue, Seu Malaquias! O engenho vai cantar de novo."),
-                (CharacterId.Icaro, "A golden cane press! Could we build a motorized rapadura maker?", "Moenda de Ouro! Será que dá pra fazer uma rapadura motorizada?"),
+                (CharacterId.Maithe, "Jar delivered, Adda! The wheel will turn again!", "Jarra entregue, Adda! A roda vai girar de novo!"),
+                (CharacterId.Icaro, "The twelfth jar! Could we hook the wheel up to a motor?", "A 12ª jarra! Será que dá pra ligar a roda num motor?"),
                 (CharacterId.Joaquim, "Guarded and delivered. Guardian mission complete!", "Guardada e entregue. Missão de guardião cumprida!"),
-                (CharacterId.Maria, "It shines like the sun! Mr. Malaquias even teared up.", "Ela brilha que nem sol! Seu Malaquias até se emocionou."),
-                (CharacterId.Lavine, "I delivered it! Can I have a piece of rapadura now?", "Entreguei a moenda! Posso ganhar um pedaço de rapadura agora?"),
+                (CharacterId.Maria, "It shines like the sun! Adda even teared up.", "Ela brilha que nem sol! O Adda até chorou de alegria."),
+                (CharacterId.Lavine, "I delivered it! Can I have a Golden Nugget now?", "Entreguei a jarra! Posso ganhar um Torrão Dourado agora?"),
             });
             AddLines(entries, EventRoomKind.Torre, EventRoomMoment.Lose, new[]
             {

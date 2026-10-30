@@ -28,7 +28,7 @@
             <ui:VisualElement name="main-menu-logo" class="main-menu-logo rap-animated">
                 <ui:Label text="Rapadura" class="main-menu-title rap-logo" />
                 <ui:VisualElement class="main-menu-logo-ribbon" picking-mode="Ignore" />
-                <ui:Label text="Uma aventura de família pelo sertão" class="main-menu-tagline loc" view-data-key="ui.menu.tagline" />
+                <ui:Label text="Uma aventura de família pela Ilha da Aurora" class="main-menu-tagline loc" view-data-key="ui.menu.tagline" />
             </ui:VisualElement>
             <ui:VisualElement name="main-menu-button-list" class="main-menu-button-list rap-animated">
                 <ui:Button name="new-game-button" text="Novo jogo" focusable="true" class="main-menu-button loc rap-button rap-button--primary" view-data-key="ui.menu.new_game" />

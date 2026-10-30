@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b870b858bb0be4583f94be3707b8a3, type: 3}
   m_Name: enemy_desert_scorpion
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
-  _enemyName: "Escorpi\xE3o das Dunas"
+  _enemyName: "Escorpi\xE3o das Areias Flamejantes"
   _isBoss: 0
   _maxHealth: 110
   _experienceReward: 18

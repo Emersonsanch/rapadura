@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: skill_icaro_exercito_mecanico
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_icaro_exercito_mecanico
-  _displayName: "Ex\xE9rcito Mec\xE2nico"
-  _description: "Ultimate: \xCDcaro despeja todas as suas inven\xE7\xF5es de uma vez, um pequeno ex\xE9rcito de m\xE1quinas que varre a \xE1rea com descargas el\xE9tricas. Enquanto elas lutam, ele j\xE1 est\xE1 recarregando as pr\xF3ximas."
+  _displayName: "Ex\xE9rcito de Ushabtis"
+  _description: "Ultimate: \xCDcaro chama todas as suas inven\xE7\xF5es de uma vez, um pequeno ex\xE9rcito de ushabtis remontados que respondem juntos e varrem a \xE1rea com descargas de fa\xEDscas. Enquanto eles lutam, ele j\xE1 est\xE1 recarregando os pr\xF3ximos."
   _icon: {fileID: 0}
   _skillType: 2
   _category: 4

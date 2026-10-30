@@ -23,7 +23,7 @@ namespace Rapadura.Gameplay.Pets.Visuals
     }
 
     /// <summary>
-    /// Caramelo, Vó Zefa's vira-lata, about 0.55 m at the shoulder: a caramel mutt with a darker saddle
+    /// Caramelo (visible name: Ari), Vó Edna's dog, about 0.55 m at the shoulder: a caramel mutt with a darker saddle
     /// and floppy ears, cream muzzle, belly, "socks" and tail tip, a red collar with a little gold tag.
     /// Built with the enemies' <see cref="EnemyMeshBuilder"/> on their shared palette
     /// (<see cref="EnemyModelPalette"/>: SandstoneDark = caramel, Leather = saddle/ears, SandstoneLight =

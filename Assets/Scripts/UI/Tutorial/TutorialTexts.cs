@@ -66,8 +66,8 @@ namespace Rapadura.UI.Tutorial
 
             Title(TutorialSteps.Night, "Night has fallen", "A noite chegou"),
             Body(TutorialSteps.Night,
-                "At night the sertão gets dark and the critters get fiercer: more of them come, in bigger and faster waves, and some have glowing eyes. They are tougher, but give more XP and loot. Your lamp lights the way; the sun will be back soon!",
-                "À noite o sertão fica escuro e os bichos ficam mais bravos: vêm mais, em ondas maiores e mais rápidas, e alguns têm olhos brilhando. São mais fortes, mas dão mais XP e mais saque. Sua lamparina ilumina o caminho; logo o sol volta!"),
+                "At night Dawn Isle gets dark and the critters get fiercer: more of them come, in bigger and faster waves, and some have glowing eyes. They are tougher, but give more XP and loot. Your lamp lights the way; the sun will be back soon!",
+                "À noite a Ilha da Aurora fica escura e os bichos ficam mais bravos: vêm mais, em ondas maiores e mais rápidas, e alguns têm olhos brilhando. São mais fortes, mas dão mais XP e mais saque. Sua lamparina ilumina o caminho; logo o sol volta!"),
 
             Title(TutorialSteps.Crafting, "You can craft something!", "Dá para criar algo!"),
             Body(TutorialSteps.Crafting,
@@ -79,7 +79,7 @@ namespace Rapadura.UI.Tutorial
                 "Talk to the locals! Tap \"Talk to…\": they have quests, rewards and good advice about the region's boss.",
                 "Converse com os moradores! Toque em \"Conversar com…\": eles têm missões, recompensas e bons conselhos sobre o chefe da região."),
 
-            Title(TutorialSteps.Village, "Grandma Zefa's village", "A vila da Vó Zefa"),
+            Title(TutorialSteps.Village, "Grandma Edna's village", "A vila da Vó Edna"),
             Body(TutorialSteps.Village,
                 "Tap Village to visit the family: chat with the villagers, buy at the Shop and craft at the Workbench.",
                 "Toque em Vila para visitar a família: converse com os moradores, compre na Loja e crie itens na Bancada."),

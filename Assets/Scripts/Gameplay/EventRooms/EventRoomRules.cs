@@ -12,10 +12,10 @@ namespace Rapadura.Gameplay.EventRooms
     {
         None = 0,
 
-        /// <summary>"Terreiro das Assombrações" (Devil Square-like): timed waves, score by kills and combos.</summary>
+        /// <summary>"Pátio dos Mazans" (Devil Square-like): timed waves, score by kills and combos.</summary>
         Terreiro = 1,
 
-        /// <summary>"Torre do Engenho Velho" (Blood Castle-like): bridge → gate → guardian → deliver the Moenda de Ouro.</summary>
+        /// <summary>"Torre da Roda das Doze Jarras" (Blood Castle-like): bridge → gate → Ullikummi → deliver the Jarra de Ouro.</summary>
         Torre = 2,
     }
 
@@ -29,22 +29,22 @@ namespace Rapadura.Gameplay.EventRooms
         Mestre = 4,
     }
 
-    /// <summary>Phases of the Torre do Engenho Velho, in order.</summary>
+    /// <summary>Phases of the Torre da Roda das Doze Jarras, in order.</summary>
     public enum TorrePhase
     {
         /// <summary>Defeat <see cref="EventRoomRules.TorreKillsToOpenBridge"/> enemies to lower the bridge.</summary>
         OpenBridge = 0,
 
-        /// <summary>Break the old mill gate (a destructible object with HP).</summary>
+        /// <summary>Break the tower gate (a destructible object with HP).</summary>
         BreakGate = 1,
 
         /// <summary>Beat the tower's guardian (mini-boss).</summary>
         Guardian = 2,
 
-        /// <summary>Pick up the Moenda de Ouro the guardian left behind.</summary>
+        /// <summary>Pick up the Jarra de Ouro the guardian left behind.</summary>
         PickUpMoenda = 3,
 
-        /// <summary>Carry it back to Seu Malaquias at the entrance.</summary>
+        /// <summary>Carry it back to Adda at the entrance.</summary>
         Deliver = 4,
 
         /// <summary>Delivered: the room is cleared.</summary>
@@ -158,10 +158,10 @@ namespace Rapadura.Gameplay.EventRooms
         public readonly int Experience;
         public readonly int Gold;
 
-        /// <summary>"Pedra da Bênção" (refino), granted only if the refining item exists.</summary>
+        /// <summary>"Pedra-Faísca" (refino), granted only if the refining item exists.</summary>
         public readonly int BlessingStones;
 
-        /// <summary>"Pedra da Alma" (refino), granted only if the refining item exists.</summary>
+        /// <summary>"Pedra da Alma Viva" (refino), granted only if the refining item exists.</summary>
         public readonly int SoulStones;
 
         public EventRoomReward(EventRoomTier tier, int experience, int gold, int blessingStones, int soulStones)
@@ -417,7 +417,7 @@ namespace Rapadura.Gameplay.EventRooms
         public const float GuardianExtraDamageBonus = 0.25f;
         public const float GuardianVisualScale = 1.5f;
 
-        /// <summary>Asset name of the enemy the guardian is built from ("Golem de Pedra", a regular enemy: no boss bookkeeping).</summary>
+        /// <summary>Asset name of the enemy the guardian is built from ("Ushabti de Pedra", shown as Ullikummi; a regular enemy: no boss bookkeeping).</summary>
         public const string GuardianEnemyId = "enemy_mountain_stone_golem";
 
         public static EventRoomEnemyScale GuardianScale(int nativeTier, EventRoomBracket bracket)
@@ -532,7 +532,7 @@ namespace Rapadura.Gameplay.EventRooms
         public static int HighScoreAchievementTarget => TierThresholds[TierThresholds.Count - 1];
 
         /// <summary>
-        /// Tier of a finished run. The Torre without the Moenda delivered caps at Bronze (Blood Castle: no weapon, no
+        /// Tier of a finished run. The Torre without the Jarra delivered caps at Bronze (Blood Castle: no weapon, no
         /// prize); the Terreiro has no cap (dying just ends it earlier).
         /// </summary>
         public static EventRoomTier TierFor(int score, EventRoomKind kind, bool cleared)
@@ -577,11 +577,11 @@ namespace Rapadura.Gameplay.EventRooms
             return new EventRoomReward(tier, experience, gold, TierBlessingStones[t], TierSoulStones[t]);
         }
 
-        /// <summary>Item ids of the refining stones (FASE 16 "Pedras do Sertão"); skipped while the items do not exist.</summary>
+        /// <summary>Item ids of the refining stones (FASE 16 "Pedras da Luz Presa"); skipped while the items do not exist.</summary>
         public const string BlessingStoneItemId = "item_pedra_bencao";
         public const string SoulStoneItemId = "item_pedra_alma";
 
-        /// <summary>Whether a run cleared the room: Terreiro = alive at the end of the timer; Torre = Moenda delivered.</summary>
+        /// <summary>Whether a run cleared the room: Terreiro = alive at the end of the timer; Torre = Jarra delivered.</summary>
         public static bool IsCleared(EventRoomKind kind, bool survivedToTimer, bool moendaDelivered)
         {
             return kind == EventRoomKind.Torre ? moendaDelivered : kind == EventRoomKind.Terreiro && survivedToTimer;
@@ -627,7 +627,7 @@ namespace Rapadura.Gameplay.EventRooms
             return 6f * TierHealth[reference] * Mathf.Max(1f, bracket.ExtraMultiplier);
         }
 
-        /// <summary>Distance (m) at which the hero picks up the Moenda / hands it to Seu Malaquias.</summary>
+        /// <summary>Distance (m) at which the hero picks up the Jarra / hands it to Adda.</summary>
         public const float PickUpRadius = 1.8f;
         public const float DeliverRadius = 2.6f;
     }

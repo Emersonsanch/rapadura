@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.WorldEvents
 {
     /// <summary>
-    /// Fight HUD of the world bosses and the Invasão do Cangaço: title (boss name / "Invasão do Cangaço"), timer, the
+    /// Fight HUD of the world bosses and the Invasão de Āz: title (boss name / "Invasão de Āz"), timer, the
     /// boss's (or the Capitão's) health bar, points and chest tier so far, the objective, a banner (cousin lines, waves,
     /// "fúria") and the results card. Self-bootstrapping like <c>EventRoomHud</c>: one DontDestroyOnLoad host whose
     /// UIDocument borrows the HUD's PanelSettings; it polls <see cref="WorldEventDirector.Current"/> and hides itself when

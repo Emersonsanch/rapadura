@@ -74,7 +74,7 @@ namespace Rapadura.Gameplay.Night
             return tag;
         }
 
-        /// <summary>The name for this enemy: "Lobo da Mata (noturno)" or the species name.</summary>
+        /// <summary>The name for this enemy: "Lobo do Tugai (da noite)" or the species name.</summary>
         public static string DisplayNameFor(EnemyDefinition definition, NightLook look, LocalizationManager localization)
         {
             string baseName = definition != null ? definition.LocalizedName(localization) : string.Empty;

@@ -7,9 +7,9 @@ using Rapadura.Gameplay.World.Biomes;
 namespace Rapadura.Gameplay.Pets
 {
     /// <summary>
-    /// Localization keys (en + pt-BR) of Caramelo, Vó Zefa's caramel mutt: the settings toggle, the world
-    /// map "Fazer carinho" button, Vó Zefa's introduction (the small village beat that explains why he
-    /// joins the cousins), two cuddle lines per cousin, the buff note and the "Caramelo trouxe!" fetch
+    /// Localization keys (en + pt-BR) of Caramelo (visible name: Ari), Vó Edna's caramel-coloured dog: the settings toggle, the world
+    /// map "Fazer carinho" button, Vó Edna's introduction (the small village beat that explains why he
+    /// joins the cousins), two cuddle lines per cousin, the buff note and the "Ari trouxe!" fetch
     /// text. Same self-contained pattern as <c>TouchControlsTexts</c>: merged into the live
     /// <see cref="LocalizationManager"/> on first use (keys it already has win), pt-BR fallback otherwise.
     /// </summary>
@@ -18,7 +18,7 @@ namespace Rapadura.Gameplay.Pets
         public const string Name = "pet.caramelo.name";
         public const string SettingsToggle = "ui.settings.accessibility.companion_caramelo";
         public const string CuddleButton = "ui.pet.caramelo.cuddle_button";
-        /// <summary>Before Vó Zefa introduced him: "Caramelo (!)".</summary>
+        /// <summary>Before Vó Edna introduced him: "Quem é esse? (!)".</summary>
         public const string CuddleButtonNew = "ui.pet.caramelo.cuddle_button_new";
         public const string Intro = "pet.caramelo.intro";
         public const string BuffNote = "pet.caramelo.buff_note";
@@ -30,16 +30,16 @@ namespace Rapadura.Gameplay.Pets
 
         public static readonly List<LocalizationEntry> Entries = new List<LocalizationEntry>
         {
-            new LocalizationEntry(Name, "Caramelo", "Caramelo"),
-            new LocalizationEntry(SettingsToggle, "Caramelo (companion in encounters)", "Caramelo (companheiro nos encontros)"),
-            new LocalizationEntry(CuddleButton, "Pet Caramelo", "Fazer carinho"),
-            new LocalizationEntry(CuddleButtonNew, "Caramelo (!)", "Caramelo (!)"),
+            new LocalizationEntry(Name, "Ari", "Ari"),
+            new LocalizationEntry(SettingsToggle, "Ari (companion in encounters)", "Ari (companheiro nos encontros)"),
+            new LocalizationEntry(CuddleButton, "Pet Ari", "Fazer carinho"),
+            new LocalizationEntry(CuddleButtonNew, "Who's this? (!)", "Quem é esse? (!)"),
             new LocalizationEntry(Intro,
-                "Grandma Zefa: \"This mutt showed up at the gate the day the Crystal went dark and never left. That's Caramelo. He barks before any danger, so take him with you.\"",
-                "Vó Zefa: \"Esse vira-lata apareceu na porteira no dia em que o Cristal apagou e não arredou mais o pé. É o Caramelo. Ele late antes de qualquer perigo, então levem ele com vocês.\""),
-            new LocalizationEntry(BuffNote, "Caramelo's cuddle: +5% speed in the next encounter", "Carinho do Caramelo: +5% de velocidade no próximo encontro"),
-            new LocalizationEntry(BuffName, "Caramelo's cuddle", "Carinho do Caramelo"),
-            new LocalizationEntry(Fetched, "Caramelo brought it!", "Caramelo trouxe!"),
+                "Grandma Edna: \"This caramel-coloured pup showed up at the orchard gate the day the Crystal went dark, and he never left. He still has no name.\" Lavine: \"He looks like an Ari.\" Grandma Edna: \"Ari it is, then. He barks before any danger, so take him with you.\"",
+                "Vó Edna: \"Esse cachorrinho cor de caramelo apareceu no portão do pomar no dia em que o Cristal apagou e não foi mais embora. Ainda nem tem nome.\" Lavine: \"Ele tem cara de Ari.\" Vó Edna: \"Então é Ari. Ele late antes de qualquer perigo, então levem ele com vocês.\""),
+            new LocalizationEntry(BuffNote, "Ari's cuddle: +5% speed in the next encounter", "Carinho do Ari: +5% de velocidade no próximo encontro"),
+            new LocalizationEntry(BuffName, "Ari's cuddle", "Carinho do Ari"),
+            new LocalizationEntry(Fetched, "Ari brought it!", "Ari trouxe!"),
 
             // Maithe: the eldest, Eye of the Wind; Ícaro's big sister.
             new LocalizationEntry(CuddlePrefix + "maithe.0",
@@ -60,8 +60,8 @@ namespace Rapadura.Gameplay.Pets
                 "Joaquim: \"I go in front, you come right behind. Team of two!\"",
                 "Joaquim: \"Eu vou na frente, você vem logo atrás. Time de dois!\""),
             new LocalizationEntry(CuddlePrefix + "joaquim.1",
-                "Joaquim: \"Nobody messes with Caramelo. Not lizards, not bats, not even Maria when he eats her rapadura.\"",
-                "Joaquim: \"Ninguém mexe com o Caramelo. Nem lagarto, nem morcego, nem a Maria quando ele come a rapadura dela.\""),
+                "Joaquim: \"Nobody messes with Ari. Not lizards, not bats, not even Maria when he eats her Golden Brick.\"",
+                "Joaquim: \"Ninguém mexe com o Ari. Nem lagarto, nem morcego, nem a Maria quando ele come o Torrão Dourado dela.\""),
             // Ícaro: the little scientist; Maithe's little brother.
             new LocalizationEntry(CuddlePrefix + "icaro.0",
                 "Ícaro: \"Tail wags per minute: a lot. Scientific conclusion: you are happy.\"",
@@ -69,10 +69,10 @@ namespace Rapadura.Gameplay.Pets
             new LocalizationEntry(CuddlePrefix + "icaro.1",
                 "Ícaro: \"Your nose works better than my light meter. Don't tell Maithe.\"",
                 "Ícaro: \"Seu faro funciona melhor que o meu medidor de luz. Não conta pra Maithe.\""),
-            // Lavine: the youngest, cousin to all, born on the Noite Rubra.
+            // Lavine: the youngest, cousin to all; she gave Ari his name.
             new LocalizationEntry(CuddlePrefix + "lavine.0",
-                "Lavine: \"You're family too, right, Caramelo? Just like me.\"",
-                "Lavine: \"Você também é da família, né, Caramelo? Igualzinho a mim.\""),
+                "Lavine: \"You're family too, right, Ari? Just like me. And I picked your name, so you're a little bit more mine.\"",
+                "Lavine: \"Você também é da família, né, Ari? Igualzinho a mim. E fui eu que dei o seu nome, então você é um pouquinho mais meu.\""),
             new LocalizationEntry(CuddlePrefix + "lavine.1",
                 "Lavine: \"When the shadow gets cold, you lean on me. Thank you.\"",
                 "Lavine: \"Quando a sombra esfria, você encosta em mim. Obrigada.\""),
@@ -81,29 +81,29 @@ namespace Rapadura.Gameplay.Pets
                 "Maithe: \"You sniffed out the golden sand before I did. Are you competing with me?\"",
                 "Maithe: \"Você farejou a areia dourada antes de mim. Tá competindo comigo, é?\""),
             new LocalizationEntry(CuddlePrefix + "maithe.after_desert",
-                "Maithe: \"Built guardians, a cracking seal... and all you want is a belly rub. Fine, here.\"",
-                "Maithe: \"Guardião construído, selo rachando... e você só quer coçar a barriga. Tá bom, toma.\""),
+                "Maithe: \"A giant ushabti, a cracking seal... and all you want is a belly rub. Fine, here.\"",
+                "Maithe: \"Um ushabti gigante, selo rachando... e você só quer coçar a barriga. Tá bom, toma.\""),
             new LocalizationEntry(CuddlePrefix + "maithe.after_mountain",
                 "Maithe: \"Up there the wind fooled my Eye, but your nose didn't. Good boy.\"",
                 "Maithe: \"Lá em cima o vento enganou o meu Olho, mas o seu nariz não. Bom garoto.\""),
             new LocalizationEntry(CuddlePrefix + "maithe.after_caves",
-                "Maithe: \"Go ahead and run in front, Caramelo. Today I'm not counting anyone. ...Okay, just once.\"",
-                "Maithe: \"Pode correr na frente, Caramelo. Hoje eu não conto ninguém. ...Tá, só uma vez.\""),
+                "Maithe: \"Go ahead and run in front, Ari. Today I'm not counting anyone. ...Okay, just once.\"",
+                "Maithe: \"Pode correr na frente, Ari. Hoje eu não conto ninguém. ...Tá, só uma vez.\""),
             new LocalizationEntry(CuddlePrefix + "maria.after_forest",
-                "Maria: \"The Wolf had a dark little stone on his collar, you know? Good thing yours is just leather.\"",
-                "Maria: \"O Lobo tinha uma pedrinha escura na coleira, sabia? Ainda bem que a sua é só de couro.\""),
+                "Maria: \"The Sky Wolf had a dark little stone on his collar, you know? Good thing yours is just felt.\"",
+                "Maria: \"O Lobo Celeste tinha uma pedrinha escura na coleira, sabia? Ainda bem que a sua é só de feltro.\""),
             new LocalizationEntry(CuddlePrefix + "maria.after_desert",
-                "Maria: \"The ancients left guardians to keep watch. We have you.\"",
-                "Maria: \"Os antigos deixaram guardiões vigiando. A gente tem você.\""),
+                "Maria: \"The Artificers left ushabtis to keep watch. We have you.\"",
+                "Maria: \"Os Artífices deixaram ushabtis vigiando. A gente tem você.\""),
             new LocalizationEntry(CuddlePrefix + "maria.after_mountain",
-                "Maria: \"I saved you another little piece of rapadura from the campfire. Don't tell Joaquim.\"",
-                "Maria: \"Guardei mais um pedacinho de rapadura da fogueira pra você. Não conta pro Joaquim.\""),
+                "Maria: \"I saved you another little piece of Golden Brick from the campfire. Don't tell Joaquim.\"",
+                "Maria: \"Guardei mais um pedacinho de Torrão Dourado da fogueira pra você. Não conta pro Joaquim.\""),
             new LocalizationEntry(CuddlePrefix + "maria.after_caves",
-                "Maria: \"In my dream there were five cousins and one caramel dog. Everybody came back.\"",
-                "Maria: \"No meu sonho tinha cinco primos e um cachorro caramelo. Voltou todo mundo.\""),
+                "Maria: \"In my dream there were five cousins and one caramel-coloured dog. Everybody came back.\"",
+                "Maria: \"No meu sonho tinha cinco primos e um cachorro cor de caramelo. Voltou todo mundo.\""),
             new LocalizationEntry(CuddlePrefix + "joaquim.after_forest",
-                "Joaquim: \"See how the Alpha Wolf calmed down? It was the shield. And a little bit you, okay.\"",
-                "Joaquim: \"Viu como o Lobo Alfa sossegou? Foi o escudo. E um pouquinho você, tá.\""),
+                "Joaquim: \"See how the Sky Wolf calmed down? It was the shield. And a little bit you, okay.\"",
+                "Joaquim: \"Viu como o Lobo Celeste sossegou? Foi o escudo. E um pouquinho você, tá.\""),
             new LocalizationEntry(CuddlePrefix + "joaquim.after_desert",
                 "Joaquim: \"You sneezed sand on me the whole trip. Team of two, but I get the side without sand.\"",
                 "Joaquim: \"Você espirrou areia em mim a viagem inteira. Time de dois, mas eu fico com o lado sem areia.\""),
@@ -114,29 +114,29 @@ namespace Rapadura.Gameplay.Pets
                 "Joaquim: \"Shield on the wall, belly full, dog on my lap. Now that's a victory.\"",
                 "Joaquim: \"Escudo encostado, barriga cheia, cachorro no colo. Isso é que é vitória.\""),
             new LocalizationEntry(CuddlePrefix + "icaro.after_forest",
-                "Ícaro: \"You barked three seconds before the Wolf showed up. I'm calling it the Caramelo radar.\"",
-                "Ícaro: \"Você latiu três segundos antes do Lobo aparecer. Vou chamar isso de radar Caramelo.\""),
+                "Ícaro: \"You barked three seconds before the Sky Wolf showed up. I'm calling it the Ari radar.\"",
+                "Ícaro: \"Você latiu três segundos antes do Lobo Celeste aparecer. Vou chamar isso de radar Ari.\""),
             new LocalizationEntry(CuddlePrefix + "icaro.after_desert",
-                "Ícaro: \"The ancients' panel talked about guardians. Scientific hypothesis: you're a furry guardian.\"",
-                "Ícaro: \"O painel dos antigos falava de guardiões. Hipótese científica: você é um guardião peludo.\""),
+                "Ícaro: \"The Artificers' panel talked about guardians that answer. Scientific hypothesis: you're a furry ushabti.\"",
+                "Ícaro: \"O painel dos Artífices falava de guardiões que respondem. Hipótese científica: você é um ushabti peludo.\""),
             new LocalizationEntry(CuddlePrefix + "icaro.after_mountain",
-                "Ícaro: \"Experiment: rapadura in the left hand, rapadura in the right. Result: you ate both.\"",
-                "Ícaro: \"Experimento: rapadura na mão esquerda, rapadura na direita. Resultado: você comeu as duas.\""),
+                "Ícaro: \"Experiment: Golden Brick in the left hand, Golden Brick in the right. Result: you ate both.\"",
+                "Ícaro: \"Experimento: Torrão Dourado na mão esquerda, Torrão Dourado na direita. Resultado: você comeu os dois.\""),
             new LocalizationEntry(CuddlePrefix + "icaro.after_caves",
                 "Ícaro: \"The light meter is maxed out. So is the tail-wag meter.\"",
                 "Ícaro: \"O medidor de luz tá no máximo. E o medidor de abanadas também.\""),
             new LocalizationEntry(CuddlePrefix + "lavine.after_forest",
-                "Lavine: \"The Forest night gave me the shivers. You slept leaning on me. That was on purpose, wasn't it?\"",
-                "Lavine: \"A noite na Floresta deu friozinho. Você dormiu encostado em mim. Foi de propósito, né?\""),
+                "Lavine: \"The night in the Woods gave me the shivers. You slept leaning on me. That was on purpose, wasn't it?\"",
+                "Lavine: \"A noite no Bosque deu friozinho. Você dormiu encostado em mim. Foi de propósito, né?\""),
             new LocalizationEntry(CuddlePrefix + "lavine.after_desert",
                 "Lavine: \"In the sandstorm I couldn't see anything. But I heard you. That was enough.\"",
                 "Lavine: \"Na tempestade de areia eu não vi nada. Mas ouvi você. Foi o suficiente.\""),
             new LocalizationEntry(CuddlePrefix + "lavine.after_mountain",
-                "Lavine: \"It's really dark down in the Caves, Caramelo. We go together, okay? I hold the ribbon, you hold the courage.\"",
-                "Lavine: \"Lá embaixo nas Cavernas é bem escuro, Caramelo. A gente vai junto, tá? Eu seguro a fita, você segura a coragem.\""),
+                "Lavine: \"It's really dark down in the Threshold Caves, Ari. We go together, okay? I hold the ribbon, you hold the courage.\"",
+                "Lavine: \"Lá embaixo nas Grutas é bem escuro, Ari. A gente vai junto, tá? Eu seguro a fita, você segura a coragem.\""),
             new LocalizationEntry(CuddlePrefix + "lavine.after_caves",
-                "Lavine: \"You're not afraid of the dark anymore either, right, Caramelo?\"",
-                "Lavine: \"Você também não tem mais medo do escuro, né, Caramelo?\""),
+                "Lavine: \"You're not afraid of the dark anymore either, right, Ari?\"",
+                "Lavine: \"Você também não tem mais medo do escuro, né, Ari?\""),
         };
 
         private static Dictionary<string, string> _fallbackByKey;

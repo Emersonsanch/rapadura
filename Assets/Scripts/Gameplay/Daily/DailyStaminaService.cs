@@ -22,7 +22,7 @@ namespace Rapadura.Gameplay.Daily
 
     public enum StaminaReminderKind
     {
-        /// <summary>"Hora de descansar, a Vó Zefa chamou para o café" (tired tier).</summary>
+        /// <summary>"Hora de descansar, a Vó Edna chamou para o chá" (tired tier).</summary>
         Tired,
 
         /// <summary>The parental "Lembrete de tempo de jogo" (every N minutes, Configurações → Acessibilidade).</summary>

@@ -82,7 +82,7 @@ namespace Rapadura.Gameplay.EventRooms
     }
 
     /// <summary>
-    /// Per-save state of the timed event rooms ("Terreiro das Assombrações", "Torre do Engenho Velho"): personal bests,
+    /// Per-save state of the timed event rooms ("Pátio dos Mazans", "Torre da Roda das Doze Jarras"): personal bests,
     /// clears, the window each room was last entered in (one entry per opening) and the schedule in force. Plain C#
     /// (EditMode-testable), built by GameManager, registered with SaveManager under <see cref="Key"/> and with
     /// NewSessionReset; a save from before the rooms has no entry and loads with the default schedule and no records.

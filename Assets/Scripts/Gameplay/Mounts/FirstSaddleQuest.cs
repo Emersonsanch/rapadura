@@ -21,7 +21,7 @@ namespace Rapadura.Gameplay.Mounts
     }
 
     /// <summary>
-    /// "Primeira Sela" (Docs/Mounts.md §8): after the Lobo Alfa (the Floresta cleared), Vó Zefa takes the cousins to Seu
+    /// "Primeira Sela" (Docs/Mounts.md §8): after the Lobo Alfa (the Floresta cleared), Vó Edna takes the cousins to Seu
     /// Tonico's Haras and gives the five of them a pony; Lavine names him Pé-de-Pano. A side quest built in code (like
     /// <c>RegionQuestCatalog</c>) with one <see cref="QuestObjectiveType.CustomFlag"/> objective, "visit the Haras",
     /// set when the Haras shop opens (<see cref="HarasShopId"/>) or when the cousins stand in the Vila on the map
@@ -145,7 +145,7 @@ namespace Rapadura.Gameplay.Mounts
             }
         }
 
-        /// <summary>The cousins are in the Vila da Vó Zefa on the map: counts as the visit to the Haras.</summary>
+        /// <summary>The cousins are in the Vila da Vó Edna on the map: counts as the visit to the Haras.</summary>
         public static void ReportVisitedVillage()
         {
             if (_installedOn != null && _installedOn.IsActive(QuestId))
@@ -186,7 +186,7 @@ namespace Rapadura.Gameplay.Mounts
                 return;
             }
 
-            // The gift becomes the active mount: it is the one Vó Zefa just handed over.
+            // The gift becomes the active mount: it is the one Vó Edna just handed over.
             _collection.SetActive(pony.guid);
             EventBus.Publish(new FirstSaddleCompletedEvent(pony.guid));
         }

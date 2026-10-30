@@ -7,7 +7,7 @@ namespace Rapadura.Gameplay.Crafting.Advanced
 {
     /// <summary>
     /// en + pt-BR text of the advanced crafting (FASE 16): creature parts and runes (<c>item.&lt;id&gt;.name/.description</c>,
-    /// pt-BR = the asset text), the material qualities, the enchantments of Vô Jorge, the fusion forge of Adamas and the
+    /// pt-BR = the asset text), the material qualities, the blade secrets of Vô Jorge, the fusion forge of Mestre Adamas and the
     /// result/check lines (<c>ui.craft.*</c>). Same self-contained pattern as <c>RefineTexts</c>: merged into the live
     /// <see cref="LocalizationManager"/> on first use (keys it already has win), pt-BR fallback without one.
     /// </summary>
@@ -63,40 +63,40 @@ namespace Rapadura.Gameplay.Crafting.Advanced
         {
             // -- Creature parts (Resources/Items; pt-BR = the asset's text) --
             ItemName(CreatureParts.WolfFang, "Wolf Fang", "Presa de Lobo"),
-            ItemDesc(CreatureParts.WolfFang, "A sharp fang from a forest wolf. Vô Jorge rubs it on the blade for a keener edge.",
-                "Presa afiada de lobo da mata. Vô Jorge esfrega na lâmina para dar mais corte."),
+            ItemDesc(CreatureParts.WolfFang, "A sharp fang from a Tugai wolf. Vô Jorge used to rub one on the blade for a keener edge.",
+                "Presa afiada de lobo do tugai. O Vô Jorge esfregava na lâmina para dar mais corte."),
             ItemName(CreatureParts.SpiderSilk, "Spider Silk", "Seda de Aranha"),
-            ItemDesc(CreatureParts.SpiderSilk, "Strong, sticky thread from the forest spider. Makes a weapon quicker and becomes rune paper.",
-                "Fio forte e grudento da aranha da floresta. Deixa a arma mais ligeira e vira papel de runa."),
+            ItemDesc(CreatureParts.SpiderSilk, "Strong, sticky thread from the weaver spider of the woods. Makes a weapon quicker and becomes rune paper.",
+                "Fio forte e grudento da aranha-tecelã do bosque. Deixa a arma mais ligeira e vira papel de runa."),
             ItemName(CreatureParts.ScorpionStinger, "Scorpion Stinger", "Ferrão de Escorpião"),
-            ItemDesc(CreatureParts.ScorpionStinger, "A dune stinger, still venomous. Helps a weapon find the creature's weak spot.",
-                "Ferrão das dunas, ainda com veneno. Ajuda a arma a achar o ponto fraco do bicho."),
-            ItemName(CreatureParts.GolemShard, "Golem Shard", "Lasca de Golem"),
-            ItemDesc(CreatureParts.GolemShard, "A chip of living stone from the hills. Hardens leather and blade.",
-                "Lasca de pedra viva da serra. Endurece o couro e a lâmina."),
+            ItemDesc(CreatureParts.ScorpionStinger, "A stinger from the Flaming Sands, still venomous. Helps a weapon find the creature's weak spot.",
+                "Ferrão das Areias Flamejantes, ainda com veneno. Ajuda a arma a achar o ponto fraco do bicho."),
+            ItemName(CreatureParts.GolemShard, "Ushabti Shard", "Lasca de Ushabti"),
+            ItemDesc(CreatureParts.GolemShard, "A chip of stone from a ushabti of the range, the old guardians that answer. Hardens leather and blade.",
+                "Lasca de pedra de um ushabti da serra, os guardiões antigos que respondem. Endurece o couro e a lâmina."),
             ItemName(CreatureParts.BatWing, "Bat Wing", "Asa de Morcego"),
-            ItemDesc(CreatureParts.BatWing, "A thin wing from the caves. They say it lets a fighter drink a little of their strength back.",
-                "Asa fina das cavernas. Dizem que faz quem luta beber um pouco da própria força de volta."),
+            ItemDesc(CreatureParts.BatWing, "A thin wing from the Threshold Caves. They say it lets a fighter drink a little of their strength back.",
+                "Asa fina das Grutas do Limiar. Dizem que faz quem luta beber um pouco da própria força de volta."),
             ItemName(CreatureParts.BeastTrophy, "Beast Trophy", "Troféu da Fera"),
-            ItemDesc(CreatureParts.BeastTrophy, "A piece of a defeated boss. Raises a recipe's quality or the fusion forge's chance.",
-                "Pedaço de um chefe derrotado. Melhora a qualidade de uma receita ou a chance da forja de fusão."),
+            ItemDesc(CreatureParts.BeastTrophy, "A keepsake from a guardian whose spark was set free. Raises a recipe's quality or the fusion forge's chance.",
+                "Lembrança de um guardião que teve a faísca libertada. Melhora a qualidade de uma receita ou a chance da forja de fusão."),
 
             // -- Runes --
             ItemName(RuneItems.Healing, "Healing Rune", "Runa da Cura"),
-            ItemDesc(RuneItems.Healing, "A little cordel card with a healing verse, drawn by Lavine or Maria. Reading it heals 60 health.",
-                "Cartinha de cordel com um verso de cura, desenhada por Lavine ou Maria. Ao ler, cura 60 de vida."),
+            ItemDesc(RuneItems.Healing, "A little illuminated card with a healing verse, drawn by Lavine or Maria. Reading it heals 60 health.",
+                "Cartinha iluminada com um verso de cura, desenhada por Lavine ou Maria. Ao ler, cura 60 de vida."),
             ItemName(RuneItems.Clarity, "Clarity Rune", "Runa da Clareza"),
-            ItemDesc(RuneItems.Clarity, "A cordel verse that clears the head. Reading it restores 60 mana.",
-                "Verso de cordel que clareia a cabeça. Ao ler, devolve 60 de mana."),
+            ItemDesc(RuneItems.Clarity, "An illuminated verse that clears the head. Reading it restores 60 mana.",
+                "Verso iluminado que clareia a cabeça. Ao ler, devolve 60 de mana."),
             ItemName(RuneItems.Hide, "Tough Hide Rune", "Runa do Couro Duro"),
             ItemDesc(RuneItems.Hide, "A verse that toughens the skin like tanned leather: +15% defense for 15 seconds.",
                 "Verso que endurece a pele feito couro curtido: +15% de defesa por 15 segundos."),
             ItemName(RuneItems.Wind, "Wind Rune", "Runa do Vento"),
-            ItemDesc(RuneItems.Wind, "A verse that calls the sertão wind at your back: +20% speed for 12 seconds.",
-                "Verso que chama o vento do sertão nas costas: +20% de velocidade por 12 segundos."),
+            ItemDesc(RuneItems.Wind, "A verse that calls the Living Wind at your back: +20% speed for 12 seconds.",
+                "Verso que chama o Vento Vivo nas costas: +20% de velocidade por 12 segundos."),
             ItemName(RuneItems.GreatHealing, "Great Healing Rune", "Runa da Cura Grande"),
-            ItemDesc(RuneItems.GreatHealing, "A whole healing cordel, sealed with a bat wing. Reading it heals 120 health.",
-                "Cordel inteiro de cura, com asa de morcego no lacre. Ao ler, cura 120 de vida."),
+            ItemDesc(RuneItems.GreatHealing, "A whole healing scroll, illuminated in gold and sealed with a bat wing. Reading it heals 120 health.",
+                "Rolo inteiro de cura, iluminado a ouro, com asa de morcego no lacre. Ao ler, cura 120 de vida."),
 
             // -- Crafting bench --
             new LocalizationEntry(Title, "Advanced crafting", "Crafting avançado"),
@@ -119,13 +119,13 @@ namespace Rapadura.Gameplay.Crafting.Advanced
             new LocalizationEntry(NoRoom, "No room in the backpack for the result.", "Não cabe o resultado na mochila."),
 
             // -- Vô Jorge's weapon enchantments --
-            new LocalizationEntry(ImbueTitle, "Vô Jorge's blade blessing", "Benzedura de arma do Vô Jorge"),
-            new LocalizationEntry(ImbueGrandpa, "Give me that blade and the creature's part. An old cowboy knows: the bush teaches the iron.",
-                "Me dá essa lâmina e a parte do bicho. Vaqueiro velho sabe: o mato ensina o ferro."),
+            new LocalizationEntry(ImbueTitle, "Vô Jorge's blade secret", "Segredo de lâmina do Vô Jorge"),
+            new LocalizationEntry(ImbueGrandpa, "Grandpa Jorge used to say: give the blade a piece of the creature, and the road teaches the iron.",
+                "O Vô Jorge dizia: dá pra lâmina um pedaço do bicho, que a estrada ensina o ferro."),
             new LocalizationEntry(ImbueActive, "On the weapon: {0} ({1} fights left)", "Na arma: {0} (faltam {1} lutas)"),
-            new LocalizationEntry(ImbueNone, "No blessing on the weapon.", "Nenhuma benzedura na arma."),
-            new LocalizationEntry(ImbuePaused, "A road blessing already helps this fight: the weapon blessing waits for the next one.",
-                "Uma bênção da estrada já ajuda nesta luta: a benzedura da arma espera a próxima."),
+            new LocalizationEntry(ImbueNone, "No secret on the weapon.", "Nenhum segredo do Vô na arma."),
+            new LocalizationEntry(ImbuePaused, "A road boon already helps this fight: the blade secret waits for the next one.",
+                "Um reforço da estrada já ajuda nesta luta: o segredo da lâmina espera a próxima."),
             new LocalizationEntry(ImbueExpired, "{0} wore off the weapon.", "{0} saiu da arma."),
             new LocalizationEntry(MissingParts, "Missing creature parts.", "Faltam partes de bicho."),
             new LocalizationEntry(ImbueCatalog.Get(ImbueCatalog.WolfFang).NameKey, "Fang Edge", "Fio da Presa"),
@@ -140,7 +140,7 @@ namespace Rapadura.Gameplay.Crafting.Advanced
             new LocalizationEntry(ImbueCatalog.Get(ImbueCatalog.BatWing).EffectKey, "+2 health per second", "+2 de vida por segundo"),
 
             // -- Adamas's fusion forge --
-            new LocalizationEntry(FusionTitle, "Adamas's fusion forge", "Forja de fusão de Adamas"),
+            new LocalizationEntry(FusionTitle, "Master Adamas's fusion forge", "Forja de fusão do Mestre Adamas"),
             new LocalizationEntry(FusionKeeper, "Two or three of the same piece, and the fire picks the best. If it fails, the best one comes back whole.",
                 "Duas ou três peças iguais, e o fogo escolhe a melhor. Se falhar, a melhor volta inteira."),
             new LocalizationEntry(FusionChance, "{0} pieces · chance {1}%", "{0} peças · chance de {1}%"),

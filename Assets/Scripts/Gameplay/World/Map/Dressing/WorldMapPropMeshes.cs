@@ -114,42 +114,141 @@ namespace Rapadura.Gameplay.World.Map.Dressing
             b.Blob(at + new Vector3(0f, 0.05f, 0f), new Vector3(0.6f, 0.2f, 0.5f) * size, WorldMapSwatch.CaveDark);
         }
 
-        /// <summary>Simple conifer/round tree for when the tree prefabs are not available.</summary>
+        /// <summary>Simple conifer / tugai poplar for when the tree prefabs are not available.</summary>
         public static void AppendFallbackTree(WorldMapMeshBuilder b, bool pine, float height)
         {
-            float trunk = height * 0.28f;
-            b.Cylinder(Vector3.zero, 0.14f, 0.1f, trunk, 5, WorldMapSwatch.Trunk);
             if (pine)
             {
+                float trunk = height * 0.28f;
+                b.Cylinder(Vector3.zero, 0.14f, 0.1f, trunk, 5, WorldMapSwatch.Trunk);
                 b.Cylinder(new Vector3(0f, trunk * 0.8f, 0f), 0.75f, 0f, height * 0.5f, 7, WorldMapSwatch.PineLeaf);
                 b.Cylinder(new Vector3(0f, trunk * 0.8f + height * 0.3f, 0f), 0.55f, 0f, height * 0.45f, 7, WorldMapSwatch.PineLeaf);
             }
             else
             {
-                b.Blob(new Vector3(0f, trunk + height * 0.3f, 0f), new Vector3(1.4f, 1.2f, 1.3f) * (height / 2.6f), WorldMapSwatch.Leaf);
-                b.Blob(new Vector3(0.3f, trunk + height * 0.5f, 0.2f), new Vector3(0.8f, 0.7f, 0.8f) * (height / 2.6f), WorldMapSwatch.LeafDark);
+                AppendPoplar(b, Vector3.zero, height, false);
             }
+        }
+
+        // ---------------------------------------------------------------
+        // Ilha da Aurora vegetation (world bible §2): tugai poplar, apricot, saxaul, tamarisk, baobab, aloe.
+        // Pivot at the base; small helpers shared by the town clusters and the secret hints.
+        // ---------------------------------------------------------------
+
+        /// <summary>A tugai poplar: pale trunk and a tall narrow crown, gold-flecked (or all gold in autumn).</summary>
+        public static void AppendPoplar(WorldMapMeshBuilder b, Vector3 at, float height, bool gold)
+        {
+            float trunk = height * 0.3f;
+            float k = height / 2.6f;
+            b.Cylinder(at, 0.12f * k, 0.08f * k, trunk, 5, WorldMapSwatch.Trunk);
+            b.Blob(at + new Vector3(0f, trunk + height * 0.32f, 0f), new Vector3(0.75f, 1.75f, 0.7f) * k, gold ? WorldMapSwatch.PoplarGold : WorldMapSwatch.Poplar);
+            b.Blob(at + new Vector3(0.12f * k, trunk + height * 0.5f, -0.1f * k), new Vector3(0.45f, 0.9f, 0.45f) * k, gold ? WorldMapSwatch.Gold : WorldMapSwatch.PoplarGold, 30f, coarse: true);
+        }
+
+        /// <summary>An orchard apricot tree: short crooked trunk, round crown dotted with fruit (the Vila da Vó Edna orchard).</summary>
+        public static void AppendApricot(WorldMapMeshBuilder b, Vector3 at, float size)
+        {
+            b.Cylinder(at, 0.08f * size, 0.06f * size, 0.45f * size, 5, WorldMapSwatch.Trunk, yaw: 15f);
+            b.Blob(at + new Vector3(0f, 0.72f, 0f) * size, new Vector3(0.95f, 0.65f, 0.9f) * size, WorldMapSwatch.Leaf);
+            b.Blob(at + new Vector3(0.18f, 0.85f, -0.1f) * size, new Vector3(0.5f, 0.4f, 0.5f) * size, WorldMapSwatch.LeafDark, 40f, coarse: true);
+            Vector3[] fruit = { new Vector3(-0.3f, 0.62f, -0.32f), new Vector3(0.25f, 0.55f, -0.36f), new Vector3(0.05f, 0.9f, -0.38f), new Vector3(0.38f, 0.78f, 0.1f) };
+            foreach (Vector3 f in fruit)
+            {
+                b.Blob(at + f * size, Vector3.one * 0.09f * size, WorldMapSwatch.Apricot, 0f, true);
+            }
+        }
+
+        /// <summary>A saxaul of the Flaming Sands: a gnarled pale trunk forking into crooked branches with flat grey-green crowns.</summary>
+        public static void AppendSaxaul(WorldMapMeshBuilder b, Vector3 at, float size)
+        {
+            Matrix4x4 saved = b.Matrix;
+            b.Matrix = saved * Matrix4x4.TRS(at, Quaternion.identity, Vector3.one * size);
+            b.Blob(new Vector3(0.02f, 0.06f, 0f), new Vector3(0.36f, 0.14f, 0.32f), WorldMapSwatch.RuinDark, 0f, true);
+            b.Cylinder(Vector3.zero, 0.11f, 0.08f, 0.55f, 5, WorldMapSwatch.RuinDark, yaw: 20f);
+            Vector3 a = Branch(b, new Vector3(0.02f, 0.5f, 0f), -28f, 8f, 0.62f, 0.06f);
+            Vector3 c = Branch(b, new Vector3(0f, 0.48f, 0f), 26f, -14f, 0.55f, 0.055f);
+            Vector3 d = Branch(b, new Vector3(0f, 0.52f, 0f), 6f, 30f, 0.6f, 0.05f);
+            b.Blob(a, new Vector3(0.5f, 0.24f, 0.44f), WorldMapSwatch.Saxaul, 10f);
+            b.Blob(c + new Vector3(0f, 0.04f, 0f), new Vector3(0.46f, 0.22f, 0.42f), WorldMapSwatch.Saxaul, 50f);
+            b.Blob(d, new Vector3(0.42f, 0.2f, 0.4f), WorldMapSwatch.LeafDark, 80f, coarse: true);
+            b.Blob(new Vector3(0.05f, 1.12f, -0.02f), new Vector3(0.42f, 0.2f, 0.4f), WorldMapSwatch.Saxaul, 25f, coarse: true);
+            b.Matrix = saved;
+        }
+
+        /// <summary>A crooked branch from <paramref name="from"/> (in the current frame), leaning by the two angles; returns its tip.</summary>
+        private static Vector3 Branch(WorldMapMeshBuilder b, Vector3 from, float tiltZ, float tiltX, float length, float radius)
+        {
+            Quaternion lean = Quaternion.Euler(tiltX, 0f, tiltZ);
+            Matrix4x4 local = b.Matrix;
+            b.Matrix = local * Matrix4x4.TRS(from, lean, Vector3.one);
+            b.Cylinder(Vector3.zero, radius, radius * 0.6f, length, 4, WorldMapSwatch.RuinDark);
+            b.Matrix = local;
+            return from + lean * Vector3.up * length;
+        }
+
+        /// <summary>A tamarisk: a fan of thin stems with feathery pink plumes over a grey-green skirt.</summary>
+        public static void AppendTamarisk(WorldMapMeshBuilder b, Vector3 at, float size)
+        {
+            Matrix4x4 saved = b.Matrix;
+            b.Matrix = saved * Matrix4x4.TRS(at, Quaternion.identity, Vector3.one * size);
+            b.Blob(new Vector3(0f, 0.25f, 0f), new Vector3(0.75f, 0.45f, 0.7f), WorldMapSwatch.Saxaul, 0f, true);
+            float[] angles = { 0f, 72f, 144f, 216f, 288f };
+            for (int i = 0; i < angles.Length; i++)
+            {
+                float rad = angles[i] * Mathf.Deg2Rad;
+                Vector3 tip = Branch(b, new Vector3(0f, 0.05f, 0f), Mathf.Cos(rad) * 22f, Mathf.Sin(rad) * 22f, 0.85f + (i % 2) * 0.25f, 0.035f);
+                b.Blob(tip, new Vector3(0.3f, 0.55f, 0.3f), i % 3 == 0 ? WorldMapSwatch.Flower : WorldMapSwatch.Tamarisk, angles[i]);
+            }
+
+            b.Matrix = saved;
+        }
+
+        /// <summary>A baobab (African highlands, Litema): a fat bottle trunk with a few stubby branches and small crowns.</summary>
+        public static void AppendBaobab(WorldMapMeshBuilder b, Vector3 at, float size)
+        {
+            b.Cylinder(at, 0.34f * size, 0.26f * size, 0.75f * size, 7, WorldMapSwatch.SandRock, WorldMapSwatch.RuinDark);
+            b.Cylinder(at + Vector3.up * 0.75f * size, 0.26f * size, 0.12f * size, 0.2f * size, 7, WorldMapSwatch.SandRock);
+            Vector3 top = at + Vector3.up * 0.92f * size;
+            for (int i = 0; i < 4; i++)
+            {
+                float a = (i * 90f + 20f) * Mathf.Deg2Rad;
+                var dir = new Vector3(Mathf.Cos(a), 0f, Mathf.Sin(a));
+                Vector3 tip = top + (dir * 0.32f + Vector3.up * 0.18f) * size;
+                b.Box((top + tip) * 0.5f, new Vector3(0.08f + Mathf.Abs(dir.x) * 0.3f, 0.14f, 0.08f + Mathf.Abs(dir.z) * 0.3f) * size, WorldMapSwatch.SandRock);
+                b.Blob(tip + Vector3.up * 0.05f * size, new Vector3(0.36f, 0.2f, 0.36f) * size, i % 2 == 0 ? WorldMapSwatch.Leaf : WorldMapSwatch.LeafDark, i * 30f, coarse: true);
+            }
+        }
+
+        /// <summary>An aloe in flower (Kaggen Range): a rosette of spiky leaves and a red flower spike.</summary>
+        public static void AppendAloe(WorldMapMeshBuilder b, Vector3 at, float size)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                float a = i * 72f * Mathf.Deg2Rad;
+                b.Cylinder(at + new Vector3(Mathf.Cos(a), 0f, Mathf.Sin(a)) * 0.08f * size, 0.06f * size, 0f, 0.3f * size, 4, i % 2 == 0 ? WorldMapSwatch.Cactus : WorldMapSwatch.CactusDark, yaw: i * 40f);
+            }
+
+            b.Cylinder(at, 0.015f * size, 0.012f * size, 0.5f * size, 4, WorldMapSwatch.CactusDark);
+            b.Cylinder(at + Vector3.up * 0.42f * size, 0.05f * size, 0f, 0.22f * size, 5, WorldMapSwatch.Banner);
         }
 
         // ---------------------------------------------------------------
         // Swaying props (their own objects, one shared mesh each)
         // ---------------------------------------------------------------
 
-        /// <summary>Saguaro cactus, pivot at the base (built once, shared by every cactus object).</summary>
+        /// <summary>
+        /// The desert's main swaying shrub, pivot at the base (built once, shared): a saxaul. The kind keeps its old
+        /// "Cactus" id and object prefix so saved layouts and the shrub sway still find it.
+        /// </summary>
         public static void AppendCactus(WorldMapMeshBuilder b)
         {
-            b.Cylinder(Vector3.zero, 0.22f, 0.2f, 1.45f, 7, WorldMapSwatch.Cactus, WorldMapSwatch.CactusDark);
-            b.Blob(new Vector3(0f, 1.45f, 0f), new Vector3(0.4f, 0.32f, 0.4f), WorldMapSwatch.Cactus);
-            // Right arm.
-            b.Box(new Vector3(0.32f, 0.7f, 0f), new Vector3(0.4f, 0.22f, 0.22f), WorldMapSwatch.CactusDark);
-            b.Cylinder(new Vector3(0.45f, 0.7f, 0f), 0.12f, 0.11f, 0.5f, 6, WorldMapSwatch.Cactus);
-            b.Blob(new Vector3(0.45f, 1.2f, 0f), new Vector3(0.22f, 0.18f, 0.22f), WorldMapSwatch.Cactus);
-            // Left arm.
-            b.Box(new Vector3(-0.3f, 0.5f, 0f), new Vector3(0.36f, 0.2f, 0.2f), WorldMapSwatch.CactusDark);
-            b.Cylinder(new Vector3(-0.42f, 0.5f, 0f), 0.11f, 0.1f, 0.36f, 6, WorldMapSwatch.Cactus);
-            b.Blob(new Vector3(-0.42f, 0.86f, 0f), new Vector3(0.2f, 0.16f, 0.2f), WorldMapSwatch.Cactus);
-            // Flower on top.
-            b.Blob(new Vector3(0f, 1.62f, 0f), new Vector3(0.16f, 0.1f, 0.16f), WorldMapSwatch.Banner);
+            AppendSaxaul(b, Vector3.zero, 1.15f);
+        }
+
+        /// <summary>The desert's second swaying shrub (every third "Cactus" placement): a tamarisk.</summary>
+        public static void AppendDesertTamarisk(WorldMapMeshBuilder b)
+        {
+            AppendTamarisk(b, Vector3.zero, 1f);
         }
 
         /// <summary>A clump of crossed-quad grass tufts (the mesh must be named "GrassTuft" so wind finds it).</summary>
@@ -196,45 +295,61 @@ namespace Rapadura.Gameplay.World.Map.Dressing
             }
         }
 
-        private static void AppendHut(WorldMapMeshBuilder b, Vector3 at, float yaw, float size)
+        /// <summary>
+        /// A Sogdian adobe house (world bible §2.1), pivot at the base centre, front facing -z: adobe walls on an ochre
+        /// plinth, flat earth roof with a parapet and beam ends, and either an iwan (deep arched porch on two carved posts)
+        /// or a plain door and lit window. Shared by the map landmark and the town clusters.
+        /// </summary>
+        public static void AppendAdobeHouse(WorldMapMeshBuilder b, Vector3 at, float yaw, float size, WorldMapSwatch wall, WorldMapSwatch roof, bool iwan)
         {
             Matrix4x4 saved = b.Matrix;
             b.Matrix = saved * Matrix4x4.TRS(at, Quaternion.Euler(0f, yaw, 0f), Vector3.one * size);
-            b.Box(new Vector3(0f, 0.35f, 0f), new Vector3(1f, 0.7f, 0.85f), WorldMapSwatch.Wall);
-            b.Box(new Vector3(0f, 0.04f, 0f), new Vector3(1.1f, 0.08f, 0.95f), WorldMapSwatch.WoodDark);
+            b.Box(new Vector3(0f, 0.04f, 0f), new Vector3(1.1f, 0.08f, 0.95f), WorldMapSwatch.AdobeDark);
+            b.Box(new Vector3(0f, 0.38f, 0f), new Vector3(1f, 0.62f, 0.85f), wall);
+            // Flat roof slab with its parapet (four strips) and the beam ends under it.
+            b.Box(new Vector3(0f, 0.72f, 0f), new Vector3(1.06f, 0.06f, 0.91f), wall, top: roof);
+            b.Box(new Vector3(0f, 0.8f, -0.43f), new Vector3(1.06f, 0.1f, 0.05f), wall);
+            b.Box(new Vector3(0f, 0.8f, 0.43f), new Vector3(1.06f, 0.1f, 0.05f), wall);
+            b.Box(new Vector3(-0.505f, 0.8f, 0f), new Vector3(0.05f, 0.1f, 0.81f), wall);
+            b.Box(new Vector3(0.505f, 0.8f, 0f), new Vector3(0.05f, 0.1f, 0.81f), wall);
+            for (int i = 0; i < 5; i++)
+            {
+                b.Box(new Vector3(-0.4f + i * 0.2f, 0.64f, -0.46f), new Vector3(0.05f, 0.05f, 0.08f), WorldMapSwatch.WoodDark);
+            }
 
-            // Gabled roof: ridge along x, overhanging the walls.
-            var l0 = new Vector3(-0.62f, 0.68f, -0.55f);
-            var r0 = new Vector3(0.62f, 0.68f, -0.55f);
-            var l1 = new Vector3(-0.62f, 0.68f, 0.55f);
-            var r1 = new Vector3(0.62f, 0.68f, 0.55f);
-            var lt = new Vector3(-0.62f, 1.2f, 0f);
-            var rt = new Vector3(0.62f, 1.2f, 0f);
-            b.Quad(l0, lt, rt, r0, WorldMapSwatch.Roof);
-            b.Quad(r1, rt, lt, l1, WorldMapSwatch.Roof);
-            b.Triangle(new Vector3(-0.5f, 0.7f, -0.43f), new Vector3(-0.5f, 0.7f, 0.43f), new Vector3(-0.5f, 1.12f, 0f), WorldMapSwatch.Wall);
-            b.Triangle(new Vector3(0.5f, 0.7f, 0.43f), new Vector3(0.5f, 0.7f, -0.43f), new Vector3(0.5f, 1.12f, 0f), WorldMapSwatch.Wall);
+            if (iwan)
+            {
+                // The iwan: a dark bay with a pointed head, two thin carved posts, a step, a turquoise line (detail only).
+                b.Box(new Vector3(-0.12f, 0.33f, -0.425f), new Vector3(0.5f, 0.42f, 0.02f), WorldMapSwatch.Black);
+                b.Triangle(new Vector3(-0.37f, 0.54f, -0.436f), new Vector3(-0.12f, 0.66f, -0.436f), new Vector3(0.13f, 0.54f, -0.436f), WorldMapSwatch.Black);
+                b.Box(new Vector3(-0.34f, 0.33f, -0.46f), new Vector3(0.04f, 0.42f, 0.04f), WorldMapSwatch.Wood);
+                b.Box(new Vector3(0.1f, 0.33f, -0.46f), new Vector3(0.04f, 0.42f, 0.04f), WorldMapSwatch.Wood);
+                b.Box(new Vector3(-0.12f, 0.12f, -0.47f), new Vector3(0.6f, 0.06f, 0.08f), WorldMapSwatch.Wall);
+                b.Box(new Vector3(0.34f, 0.44f, -0.43f), new Vector3(0.16f, 0.16f, 0.04f), WorldMapSwatch.Lantern);
+                b.Box(new Vector3(0f, 0.6f, -0.44f), new Vector3(1.0f, 0.03f, 0.02f), WorldMapSwatch.Turquoise);
+            }
+            else
+            {
+                b.Box(new Vector3(-0.15f, 0.27f, -0.43f), new Vector3(0.24f, 0.4f, 0.04f), WorldMapSwatch.WoodDark);
+                b.Box(new Vector3(0.24f, 0.44f, -0.43f), new Vector3(0.18f, 0.16f, 0.04f), WorldMapSwatch.Lantern);
+            }
 
-            // Door and window on the front.
-            b.Box(new Vector3(-0.15f, 0.25f, -0.43f), new Vector3(0.26f, 0.42f, 0.04f), WorldMapSwatch.WoodDark);
-            b.Box(new Vector3(0.25f, 0.42f, -0.43f), new Vector3(0.2f, 0.18f, 0.04f), WorldMapSwatch.Lantern);
-            // Chimney.
-            b.Box(new Vector3(0.3f, 1.15f, 0.2f), new Vector3(0.14f, 0.3f, 0.14f), WorldMapSwatch.RockDark);
             b.Matrix = saved;
         }
 
+        /// <summary>The Vila da Vó Edna landmark: two adobe houses (one with its iwan), poplars behind, the apricot, a low adobe wall and the tandir.</summary>
         private static void AppendVillage(WorldMapMeshBuilder b)
         {
-            AppendHut(b, new Vector3(0.1f, 0f, 0.15f), -8f, 1f);
-            AppendHut(b, new Vector3(-0.85f, 0f, 0.75f), 24f, 0.75f);
-            // Fence posts in front and a hay bale.
-            for (int i = 0; i < 4; i++)
-            {
-                b.Box(new Vector3(-0.9f + i * 0.4f, 0.15f, -0.75f), new Vector3(0.07f, 0.3f, 0.07f), WorldMapSwatch.Wood);
-            }
-
-            b.Box(new Vector3(-0.3f, 0.22f, -0.75f), new Vector3(1.3f, 0.05f, 0.04f), WorldMapSwatch.Wood);
-            b.Cylinder(new Vector3(0.85f, 0f, -0.35f), 0.2f, 0.2f, 0.28f, 7, WorldMapSwatch.Flower);
+            AppendAdobeHouse(b, new Vector3(0.1f, 0f, 0.15f), -8f, 1f, WorldMapSwatch.Adobe, WorldMapSwatch.SandRock, iwan: true);
+            AppendAdobeHouse(b, new Vector3(-0.85f, 0f, 0.75f), 24f, 0.75f, WorldMapSwatch.Adobe, WorldMapSwatch.SandRock, iwan: false);
+            AppendPoplar(b, new Vector3(0.85f, 0f, 0.75f), 1.9f, false);
+            AppendPoplar(b, new Vector3(-0.2f, 0f, 1.05f), 1.6f, true);
+            AppendApricot(b, new Vector3(0.95f, 0f, -0.2f), 0.6f);
+            // Low adobe garden wall (duval) in front, open at the path.
+            b.Box(new Vector3(-0.75f, 0.1f, -0.75f), new Vector3(0.7f, 0.2f, 0.1f), WorldMapSwatch.Adobe, top: WorldMapSwatch.AdobeDark);
+            b.Box(new Vector3(0.45f, 0.1f, -0.75f), new Vector3(0.35f, 0.2f, 0.1f), WorldMapSwatch.Adobe, top: WorldMapSwatch.AdobeDark);
+            // Tandir: the round clay oven.
+            b.Cylinder(new Vector3(0.85f, 0f, -0.6f), 0.16f, 0.1f, 0.22f, 7, WorldMapSwatch.AdobeDark, WorldMapSwatch.Black);
         }
 
         private static void AppendRuin(WorldMapMeshBuilder b)
@@ -259,6 +374,11 @@ namespace Rapadura.Gameplay.World.Map.Dressing
             b.Matrix = saved;
             b.Box(new Vector3(-1.05f, 0.12f, -0.6f), new Vector3(0.3f, 0.24f, 0.26f), WorldMapSwatch.RuinDark, 30f);
             b.Box(new Vector3(1.1f, 0.1f, 0.2f), new Vector3(0.24f, 0.2f, 0.3f), WorldMapSwatch.Ruin, -15f);
+
+            // A small steep pyramid of the Artificers (Meroe style) behind, with its little chapel in front.
+            b.Cylinder(new Vector3(1.05f, 0.18f, 0.75f), 0.45f, 0f, 1.35f, 4, WorldMapSwatch.RuinDark, yaw: 45f);
+            b.Box(new Vector3(1.05f, 0.32f, 0.3f), new Vector3(0.34f, 0.3f, 0.22f), WorldMapSwatch.Ruin, top: WorldMapSwatch.Sand);
+            b.Box(new Vector3(1.05f, 0.28f, 0.185f), new Vector3(0.12f, 0.2f, 0.02f), WorldMapSwatch.Black);
         }
 
         private void AppendPeakCamp(WorldMapMeshBuilder b)

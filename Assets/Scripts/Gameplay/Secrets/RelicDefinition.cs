@@ -13,7 +13,7 @@ namespace Rapadura.Gameplay.Secrets
     }
 
     /// <summary>
-    /// One of the "Relíquias do Sertão": a unique keepsake of the family (Vô Chico, Vó Zefa and the five cousins)
+    /// One of the "Lembranças do Vô Jorge": a unique keepsake of the family (Vô Jorge, Vó Edna and the five cousins)
     /// hidden around the island. Cosmetic/lore first, plus one small permanent passive applied to whichever hero
     /// is playing (<see cref="RelicPassiveApplier"/>) through the same <see cref="BuffController"/> modifiers the
     /// equipment uses. Texts live in <see cref="SecretTexts"/> under <c>relic.&lt;id&gt;.*</c>.
@@ -77,8 +77,8 @@ namespace Rapadura.Gameplay.Secrets
     }
 
     /// <summary>
-    /// The 12 "Relíquias do Sertão". Story glue: Vô Chico (the late grandfather, a tropeiro who later ran the
-    /// casa de farinha) hid keepsakes of the family around the island for the grandchildren to find one day.
+    /// The 12 "Lembranças do Vô Jorge". Story glue: Vô Jorge (the grandfather, who travelled with the caravans and
+    /// told the old tales in the iwan) hid keepsakes of the family around the island for the grandchildren to find one day.
     /// Eight sit behind world-map secrets (<see cref="WorldSecretCatalog"/>, two per region), four inside
     /// breakable arena secrets (one per biome, <see cref="ArenaRelicFor"/>). Ids are persisted: never rename.
     /// Passive sizes stay below a single affix roll (see Resources/Affixes): a full collection is a nice edge,

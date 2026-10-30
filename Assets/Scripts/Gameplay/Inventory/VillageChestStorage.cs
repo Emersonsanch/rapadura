@@ -28,7 +28,7 @@ namespace Rapadura.Gameplay.Inventory
     }
 
     /// <summary>
-    /// "Baú da Vó Zefa": the village's storage chest, reached from the world map's village hub
+    /// "Baú da Vó Edna": the village's storage chest, reached from the world map's village hub
     /// (<c>VillageHubButton</c> → <c>VillageChestUIController</c>). <see cref="DefaultSlotCount"/> slots, no weight
     /// limit, stacks like the bag (plain stacks merge up to <see cref="ItemDefinition.MaxStack"/>; generated or
     /// non-stackable pieces take a slot each, affixes and durability kept).

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.Procedural.ItemAffixDefinition
   _affixId: affix_of_the_mandacaru
   _nameLocalizationKey: affix.affix_of_the_mandacaru
-  _fallbackDisplayText: do Mandacaru
+  _fallbackDisplayText: do Saxaul
   _slotKind: 1
   _affectedStat: 14
   _application: 1

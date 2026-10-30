@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_runa_clareza
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_runa_clareza
-  _displayName: Runa da Clareza
-  _description: Verso de cordel que clareia a cabeça. Ao ler, devolve 60 de mana.
+  _displayName: "Runa da Clareza"
+  _description: "Verso iluminado que clareia a cabe\xE7a. Ao ler, devolve 60 de mana."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 1

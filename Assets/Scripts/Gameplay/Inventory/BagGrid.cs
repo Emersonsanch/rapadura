@@ -477,7 +477,7 @@ namespace Rapadura.Gameplay.Inventory
         /// <paramref name="keepPositions"/> (a save written by the grid bag): entries whose saved area is valid stay put,
         /// in index order. Everything else — every entry of an old pre-grid save — is auto-placed MU-style, currency and
         /// quest items first, then the biggest pieces first (fewest leftovers), ties by index. The caller sends the
-        /// leftovers to the Baú da Vó Zefa (<see cref="VillageChestStorage.EnqueueOverflow"/>), never loses them.
+        /// leftovers to the Baú da Vó Edna (<see cref="VillageChestStorage.EnqueueOverflow"/>), never loses them.
         /// </summary>
         public static List<int> LayoutForRestore(int columns, int rows, IReadOnlyList<InventorySlotData> slots, Func<string, ItemDefinition> resolve, bool keepPositions)
         {

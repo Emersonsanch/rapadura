@@ -312,12 +312,12 @@ namespace Rapadura.Tests.EditMode
             var progress = new WorldEventProgress();
             string open = WorldEventMapPanel.BossLine(null, Brt(2026, 10, 30, 9, 10), progress);
             StringAssert.Contains("Saklas", open);
-            StringAssert.Contains("na Floresta", open);
+            StringAssert.Contains("no Bosque do Zarafshan", open);
             StringAssert.Contains("20:00", open);
 
             string next = WorldEventMapPanel.BossLine(null, Brt(2026, 10, 30, 9, 35), progress);
             StringAssert.Contains("Próximo", next);
-            StringAssert.Contains("no Deserto", next);
+            StringAssert.Contains("nas Areias Flamejantes", next);
             StringAssert.Contains("10:00", next);
 
             StringAssert.Contains("Acaba em", WorldEventMapPanel.InvasionLine(null, Brt(2026, 10, 30, 2, 10), progress));
@@ -334,7 +334,7 @@ namespace Rapadura.Tests.EditMode
 
             var result = new WorldEventResult { Kind = WorldEventKind.Invasion, Won = true, Paid = true, ChestTier = 5, Points = 340, Gold = 45, Experience = 220, BlessingStones = 2, CousinLine = "Oba!" };
             List<string> lines = WorldEventHud.ResultLines(null, result);
-            Assert.AreEqual("Baú do Cangaço +5", lines[1]);
+            Assert.AreEqual("Arca Resgatada +5", lines[1]);
             StringAssert.StartsWith("“", lines[lines.Count - 1]);
         }
 

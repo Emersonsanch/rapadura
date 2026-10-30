@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_pedra_caos
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_pedra_caos
-  _displayName: Pedra do Caos
-  _description: "Pedra que muda de cor sozinha. A V\xF3 guarda essas para o Tacho Encantado."
+  _displayName: "Pedra da Mistura"
+  _description: "Luz e sombra misturadas numa pedra s\xF3, por isso ela muda de cor sozinha. A V\xF3 guarda essas para a Uasamonga."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

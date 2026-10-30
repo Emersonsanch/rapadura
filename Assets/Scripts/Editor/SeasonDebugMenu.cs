@@ -5,14 +5,14 @@ using UnityEngine;
 namespace Rapadura.Editor
 {
     /// <summary>
-    /// Debug toggle of the "Sistema de temporadas" (Docs/Seasons.md): force the Festa Junina outside June
+    /// Debug toggle of the "Sistema de temporadas" (Docs/Seasons.md): force the Bema (id FestaJunina) outside June
     /// (<see cref="SeasonCalendar.DebugForceFestaJunina"/>). Kept in EditorPrefs and re-applied after every domain
-    /// reload (so it holds when entering Play), plus a play-mode helper that hands out prendas. Never used by the game.
+    /// reload (so it holds when entering Play), plus a play-mode helper that hands out offerings. Never used by the game.
     /// </summary>
     public static class SeasonDebugMenu
     {
         public const string ForcePrefKey = "Rapadura.Debug.ForceFestaJunina";
-        private const string ForceMenu = "Rapadura/Debug/Festa Junina: forçar (fora de junho)";
+        private const string ForceMenu = "Rapadura/Debug/Bema: forçar (fora de junho)";
 
         [InitializeOnLoadMethod]
         private static void Apply()
@@ -26,7 +26,7 @@ namespace Rapadura.Editor
             bool value = !EditorPrefs.GetBool(ForcePrefKey, false);
             EditorPrefs.SetBool(ForcePrefKey, value);
             SeasonCalendar.DebugForceFestaJunina = value;
-            Debug.Log("[SeasonDebugMenu] Festa Junina forced: " + value);
+            Debug.Log("[SeasonDebugMenu] Bema forced: " + value);
         }
 
         [MenuItem(ForceMenu, true)]
@@ -36,7 +36,7 @@ namespace Rapadura.Editor
             return true;
         }
 
-        [MenuItem("Rapadura/Debug/Festa Junina: +50 prendas (play mode)")]
+        [MenuItem("Rapadura/Debug/Bema: +50 oferendas (play mode)")]
         private static void GivePrendas()
         {
             if (!Application.isPlaying)
@@ -47,7 +47,7 @@ namespace Rapadura.Editor
 
             FestaJuninaProgress progress = FestaJuninaProgress.ResolveShared();
             progress.Earn(50);
-            Debug.Log("[SeasonDebugMenu] Prendas: " + progress.Prendas);
+            Debug.Log("[SeasonDebugMenu] Offerings: " + progress.Prendas);
         }
     }
 }

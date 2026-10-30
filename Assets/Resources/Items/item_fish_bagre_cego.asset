@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: item_fish_bagre_cego
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fish_bagre_cego
-  _displayName: Bagre-cego da Gruta
+  _displayName: "Bagre-cego do Limiar"
   _description: "Nunca viu a luz do sol. Sente a isca pelo tremor da \xE1gua."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}

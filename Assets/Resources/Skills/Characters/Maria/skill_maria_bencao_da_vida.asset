@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: skill_maria_bencao_da_vida
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_maria_bencao_da_vida
-  _displayName: "Ben\xE7\xE3o da Vida"
-  _description: "Uma b\xEAn\xE7\xE3o de energia vital que regenera a vida aos poucos por v\xE1rios segundos e aumenta a vida m\xE1xima enquanto dura."
+  _displayName: "Brilho da Vida"
+  _description: "Um brilho morno de energia vital que regenera a vida aos poucos por v\xE1rios segundos e aumenta a vida m\xE1xima enquanto dura."
   _icon: {fileID: 0}
   _skillType: 0
   _category: 2

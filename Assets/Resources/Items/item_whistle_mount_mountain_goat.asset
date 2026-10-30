@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_whistle_mount_mountain_goat
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_whistle_mount_mountain_goat
-  _displayName: "Apito do Bode Saltador"
-  _description: "Apito de taquara. Quem compra leva o Bode Saltador para casa."
+  _displayName: "Apito do \xCDbex-da-Walia"
+  _description: "Apito de junco. Quem compra leva o \xCDbex-da-Walia para casa."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

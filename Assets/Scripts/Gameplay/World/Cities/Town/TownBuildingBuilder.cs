@@ -286,9 +286,12 @@ namespace Rapadura.Gameplay.World.Cities.Town
         // ------------------------------------------------------------------
 
         /// <summary>
-        /// The lamp house at the head of the plaza (Ramrat's guardian lamp, world bible §3.1): a plastered block with a
-        /// tall pishtaq portal framed in turquoise tile, a turquoise dome with a gold finial, lamps glowing in arched
-        /// niches, two bronze lanterns at the door, and the slender lamp tower on its left.
+        /// The lamp house at the head of the plaza (Ramrat's guardian lamp, world bible §3.1), built as a secular
+        /// caravanserai gatehouse, never a shrine (bible §0): a flat-roofed plastered block whose front is a broad
+        /// square-headed gate between two stout tapering buttress towers, a timber gallery over the gate hung with bronze
+        /// lanterns, an open lantern pavilion on the roof (four carved columns, a big lamp and a ring of lanterns under a
+        /// low four-sided copper roof), lamps in niches along the sides, and a squat rammed-earth beacon tower on its left
+        /// with an open fire cage on top (a Silk Road signal tower, not a slender spire). No dome, no pointed portal.
         /// </summary>
         private static void BuildLampHouse(TownMeshBuilder b, TownBuildingSpec spec)
         {
@@ -299,20 +302,17 @@ namespace Rapadura.Gameplay.World.Cities.Town
             b.BoxMinMax(new Vector3(-hw, FloorY, -hd), new Vector3(hw, top, hd), spec.WallColor);
             TownKit.PlasterBand(b, -hw, hw, -hd, hd, FloorY, TownSwatch.LimeWhite);
             TownKit.FlatRoof(b, -hw, hw, -hd, hd, top, TownSwatch.Mud, spec.WallColor, TownSwatch.LimeWhite, spec.JoineryColor, false);
-            TownKit.Dome(b, new Vector3(0f, top, hd * 0.15f), Mathf.Min(spec.Width, spec.Depth) * 0.36f, spec.WallColor, spec.RoofColor, TownSwatch.Gold);
+            LanternPavilion(b, new Vector3(0f, top, hd * 0.1f), Mathf.Min(spec.Width, spec.Depth) * 0.36f, spec);
 
             b.With(new Vector3(0f, 0f, -hd), 0f, () =>
             {
-                TownKit.Pishtaq(b, 0f, 3.2f, top + 1.1f, spec.WallColor, spec.TrimColor, TownSwatch.Gold);
-                TownKit.Door(b, 0f, FloorY, 1.4f, 2.5f, spec.JoineryColor, TownSwatch.Gold, spec.TrimColor, arched: true);
+                GateFront(b, top, spec);
                 for (int i = 0; i < 2; i++)
                 {
-                    float x = i == 0 ? -hw + 0.7f : hw - 0.7f;
-                    TownKit.LampNiche(b, x, FloorY + 1.4f);
-                    TownKit.Lantern(b, new Vector3(i == 0 ? -1.15f : 1.15f, FloorY + 2.1f, -0.25f), 0.85f);
+                    TownKit.LampNiche(b, i == 0 ? -hw + 0.4f : hw - 0.4f, FloorY + 2.6f);
                 }
 
-                // Steps in front of the portal.
+                // Steps in front of the gate.
                 b.BoxMinMax(new Vector3(-1.4f, 0f, -0.75f), new Vector3(1.4f, 0.12f, 0f), TownSwatch.Stone);
             });
 
@@ -325,7 +325,146 @@ namespace Rapadura.Gameplay.World.Cities.Town
             }
 
             Vector2 tower = TowerLocalCenter(spec.Width, spec.Depth);
-            TownKit.LampTower(b, new Vector3(tower.x, 0f, tower.y), TowerSize, 8.2f, spec.WallColor, spec.TrimColor, spec.RoofColor);
+            BeaconTower(b, new Vector3(tower.x, 0f, tower.y), TowerSize, spec);
+        }
+
+        /// <summary>Caravanserai gate (face frame): a square-headed timber gateway between two tapering buttress towers, a lantern gallery above.</summary>
+        private static void GateFront(TownMeshBuilder b, float top, TownBuildingSpec spec)
+        {
+            const float gateW = 1.6f;
+            const float gateH = 2.6f;
+            // Shallow gate block standing proud of the facade, below the parapet (no tall portal).
+            b.BoxMinMax(new Vector3(-1.45f, FloorY, -0.3f), new Vector3(1.45f, top - 0.2f, 0f), spec.WallColor);
+            b.BoxMinMax(new Vector3(-1.5f, top - 0.2f, -0.36f), new Vector3(1.5f, top - 0.08f, 0.02f), TownSwatch.LimeWhite);
+            b.With(new Vector3(0f, 0f, -0.3f), 0f, () => TownKit.Door(b, 0f, FloorY, gateW, gateH, spec.JoineryColor, TownSwatch.WoodDark, spec.TrimColor, arched: false));
+            // Heavy timber lintel, with a turquoise tile line under it (detail only).
+            b.BoxMinMax(new Vector3(-gateW * 0.5f - 0.35f, FloorY + gateH + 0.16f, -0.44f), new Vector3(gateW * 0.5f + 0.35f, FloorY + gateH + 0.42f, -0.3f), spec.JoineryColor);
+            b.BoxMinMax(new Vector3(-gateW * 0.5f - 0.2f, FloorY + gateH + 0.05f, -0.4f), new Vector3(gateW * 0.5f + 0.2f, FloorY + gateH + 0.16f, -0.3f), spec.TrimColor);
+
+            // Two stout buttress towers (round, tapering, crenellated) flanking the gate, like a caravanserai's.
+            foreach (float x in new[] { -1.55f, 1.55f })
+            {
+                var foot = new Vector3(x, 0f, -0.2f);
+                b.Cylinder(foot, 0.62f, 0.62f, FloorY + 0.05f, 8, spec.PlinthColor, spec.PlinthColor);
+                b.Cylinder(foot + Vector3.up * (FloorY + 0.05f), 0.55f, 0.44f, top + 0.3f - FloorY - 0.05f, 8, spec.WallColor);
+                b.Cylinder(foot + Vector3.up * (top + 0.3f), 0.5f, 0.5f, 0.08f, 8, TownSwatch.LimeWhite, TownSwatch.Mud);
+                for (int k = 0; k < 4; k++)
+                {
+                    float a = (k * 90f + 45f) * Mathf.Deg2Rad;
+                    b.Box(foot + new Vector3(Mathf.Cos(a) * 0.34f, top + 0.52f, Mathf.Sin(a) * 0.34f), new Vector3(0.2f, 0.28f, 0.2f), spec.WallColor, k * 90f + 45f, TownSwatch.LimeWhite);
+                }
+
+                b.Cylinder(foot + Vector3.up * (FloorY + 0.5f), 0.565f, 0.56f, 0.12f, 8, spec.TrimColor);
+            }
+
+            // Timber gallery over the gate: deck on beam ends, a low rail, lanterns hanging under it.
+            float gy = FloorY + gateH + 0.48f;
+            b.BoxMinMax(new Vector3(-1.0f, gy, -0.85f), new Vector3(1.0f, gy + 0.1f, -0.3f), spec.JoineryColor);
+            for (int i = 0; i < 5; i++)
+            {
+                float x = -0.8f + i * 0.4f;
+                b.Box(new Vector3(x, gy - 0.08f, -0.6f), new Vector3(0.1f, 0.1f, 0.6f), TownSwatch.WoodDark);
+                b.Box(new Vector3(x, gy + 0.32f, -0.82f), new Vector3(0.05f, 0.45f, 0.05f), spec.JoineryColor);
+            }
+
+            b.BoxMinMax(new Vector3(-1.0f, gy + 0.52f, -0.86f), new Vector3(1.0f, gy + 0.58f, -0.78f), spec.JoineryColor);
+            foreach (float x in new[] { -0.75f, 0.75f })
+            {
+                TownKit.Lantern(b, new Vector3(x, gy - 0.6f, -0.72f), 0.75f);
+            }
+        }
+
+        /// <summary>The open lantern pavilion on the roof: four carved columns on a low dais, the big lamp, a ring of lanterns, a low copper pyramid roof.</summary>
+        private static void LanternPavilion(TownMeshBuilder b, Vector3 baseCenter, float r, TownBuildingSpec spec)
+        {
+            float cx = baseCenter.x, cz = baseCenter.z;
+            b.BoxMinMax(new Vector3(cx - r, baseCenter.y, cz - r), new Vector3(cx + r, baseCenter.y + 0.2f, cz + r), TownSwatch.Stone);
+            float y0 = baseCenter.y + 0.2f;
+            const float columnH = 1.6f;
+            foreach (Vector2 c in new[] { new Vector2(-1, -1), new Vector2(1, -1), new Vector2(-1, 1), new Vector2(1, 1) })
+            {
+                TownKit.CarvedColumn(b, new Vector3(cx + c.x * (r - 0.25f), y0, cz + c.y * (r - 0.25f)), columnH, spec.JoineryColor, TownSwatch.Stone);
+            }
+
+            float beamY = y0 + columnH;
+            b.BoxMinMax(new Vector3(cx - r, beamY, cz - r), new Vector3(cx + r, beamY + 0.16f, cz - r + 0.18f), spec.JoineryColor);
+            b.BoxMinMax(new Vector3(cx - r, beamY, cz + r - 0.18f), new Vector3(cx + r, beamY + 0.16f, cz + r), spec.JoineryColor);
+            b.BoxMinMax(new Vector3(cx - r, beamY, cz - r), new Vector3(cx - r + 0.18f, beamY + 0.16f, cz + r), spec.JoineryColor);
+            b.BoxMinMax(new Vector3(cx + r - 0.18f, beamY, cz - r), new Vector3(cx + r, beamY + 0.16f, cz + r), spec.JoineryColor);
+            b.BoxMinMax(new Vector3(cx - r - 0.04f, beamY + 0.04f, cz - r - 0.05f), new Vector3(cx + r + 0.04f, beamY + 0.13f, cz - r), spec.TrimColor);
+
+            // The light itself: a big lamp in a copper bowl on a stand, and four small lanterns hanging from the beams.
+            var lamp = new Vector3(cx, y0, cz);
+            b.Cylinder(lamp, 0.3f, 0.12f, 0.5f, 8, TownSwatch.Copper, TownSwatch.Copper);
+            b.Cylinder(lamp + Vector3.up * 0.5f, 0.32f, 0.48f, 0.14f, 8, TownSwatch.Copper, TownSwatch.Copper);
+            b.Blob(lamp + Vector3.up * 0.92f, new Vector3(0.5f, 0.75f, 0.5f), TownSwatch.LampGlow);
+            foreach (Vector2 c in new[] { new Vector2(0, -1), new Vector2(1, 0), new Vector2(0, 1), new Vector2(-1, 0) })
+            {
+                TownKit.Lantern(b, new Vector3(cx + c.x * (r - 0.1f), beamY - 0.5f, cz + c.y * (r - 0.1f)), 0.6f);
+            }
+
+            // A low four-sided copper roof with wide eaves and a small knob: a pavilion hat, not a dome.
+            const float root2 = 1.4142f;
+            var roofBase = new Vector3(cx, beamY + 0.16f, cz);
+            float eave = (r + 0.4f) * root2;
+            b.Cylinder(roofBase, eave, eave, 0.1f, 4, TownSwatch.WoodDark, null, 0.5f);
+            b.Cylinder(roofBase + Vector3.up * 0.1f, eave, 0.16f, 0.8f, 4, TownSwatch.Copper, TownSwatch.Copper, 0.5f);
+            b.Box(roofBase + Vector3.up * 0.95f, new Vector3(0.2f, 0.16f, 0.2f), TownSwatch.Gold, 45f);
+        }
+
+        /// <summary>
+        /// The beacon tower: a stout tapering square of rammed earth with timber courses and a ladder up the front, crowned
+        /// by an open fire cage (four posts, a copper fire bowl, a small hat roof). Stays inside its <paramref name="size"/> square.
+        /// </summary>
+        private static void BeaconTower(TownMeshBuilder b, Vector3 foot, float size, TownBuildingSpec spec)
+        {
+            const float root2 = 1.4142f;
+            float h = size * 0.5f;
+            TownKit.Plinth(b, foot.x - h, foot.x + h, foot.z - h, foot.z + h, TownSwatch.Stone);
+            const float shaftH = 4.0f;
+            float y0 = FloorY + 0.05f;
+            float shaftTop = y0 + shaftH;
+            // Square frustum (4 sides, phase 0.5: faces along the axes).
+            b.Cylinder(new Vector3(foot.x, y0, foot.z), h * 0.92f * root2, h * 0.7f * root2, shaftH, 4, spec.WallColor, TownSwatch.Mud, 0.5f);
+            foreach (float t in new[] { 0.3f, 0.65f })
+            {
+                float y = y0 + shaftH * t;
+                float half = Mathf.Lerp(h * 0.92f, h * 0.7f, t) + 0.03f;
+                b.BoxMinMax(new Vector3(foot.x - half, y, foot.z - half), new Vector3(foot.x + half, y + 0.1f, foot.z + half), TownSwatch.WoodDark);
+            }
+
+            // Ladder leaning on the front face.
+            float zBottom = foot.z - h * 0.92f - 0.12f;
+            float zTop = foot.z - h * 0.7f - 0.06f;
+            foreach (float x in new[] { -0.22f, 0.22f })
+            {
+                b.Log(new Vector3(foot.x + x, 0.05f, zBottom), new Vector3(foot.x + x, shaftTop, zTop), 0.035f, TownSwatch.WoodWeathered, 4);
+            }
+
+            for (int i = 1; i < 9; i++)
+            {
+                float t = i / 9f;
+                b.Box(new Vector3(foot.x, Mathf.Lerp(0.05f, shaftTop, t), Mathf.Lerp(zBottom, zTop, t)), new Vector3(0.44f, 0.04f, 0.05f), TownSwatch.WoodWeathered);
+            }
+
+            // Top deck with a lime rim, four posts of the fire cage.
+            float deck = h * 0.78f;
+            b.BoxMinMax(new Vector3(foot.x - deck, shaftTop, foot.z - deck), new Vector3(foot.x + deck, shaftTop + 0.14f, foot.z + deck), TownSwatch.LimeWhite);
+            foreach (Vector2 c in new[] { new Vector2(-1, -1), new Vector2(1, -1), new Vector2(-1, 1), new Vector2(1, 1) })
+            {
+                var p = new Vector3(foot.x + c.x * (deck - 0.12f), shaftTop + 0.14f, foot.z + c.y * (deck - 0.12f));
+                b.Box(p + Vector3.up * 0.65f, new Vector3(0.12f, 1.3f, 0.12f), spec.JoineryColor);
+            }
+
+            // Fire bowl on a short stand, the flame (glows at night) and the small hat roof.
+            var bowl = new Vector3(foot.x, shaftTop + 0.14f, foot.z);
+            b.Cylinder(bowl, 0.16f, 0.12f, 0.35f, 6, TownSwatch.Copper);
+            b.Cylinder(bowl + Vector3.up * 0.35f, 0.22f, 0.45f, 0.25f, 8, TownSwatch.Copper, TownSwatch.Ember);
+            b.Blob(bowl + Vector3.up * 0.82f, new Vector3(0.55f, 0.6f, 0.55f), TownSwatch.LampGlow);
+            var hat = bowl + Vector3.up * 1.3f;
+            float hatR = (deck + 0.12f) * root2;
+            b.Cylinder(hat, hatR, hatR, 0.08f, 4, spec.JoineryColor, null, 0.5f);
+            b.Cylinder(hat + Vector3.up * 0.08f, hatR, 0.08f, 0.45f, 4, TownSwatch.Copper, TownSwatch.Copper, 0.5f);
         }
 
         /// <summary>Litema rondavel: round clay walls with painted bands, a conical thatch roof (walls fit inside the lot rect).</summary>

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_whistle_mount_pony
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_whistle_mount_pony
-  _displayName: "Apito do P\xF4nei P\xE9-de-Pano"
-  _description: "Apito de taquara do Haras do Seu Z\xE9. Quem compra leva o P\xF4nei P\xE9-de-Pano para casa."
+  _displayName: "Apito do P\xF4nei das Estepes"
+  _description: "Apito de junco da Estrebaria do Srosh. Quem compra leva o P\xF4nei das Estepes para casa."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

@@ -11,20 +11,20 @@ namespace Rapadura.Gameplay.World.Chatter
     /// </summary>
     public enum RoadChatterStage
     {
-        /// <summary>Prologue seen, Lobo Alfa not beaten yet.</summary>
+        /// <summary>Prologue seen, Kök-Böri (Forest boss) not beaten yet.</summary>
         Forest = 0,
-        /// <summary>"A Floresta respira de novo" seen: on the way through the Desert.</summary>
+        /// <summary>"O Bosque respira de novo" seen: on the way through the Desert.</summary>
         Desert = 1,
         /// <summary>"Segredos na areia" seen: on the way up the Mountain.</summary>
         Mountain = 2,
-        /// <summary>"No alto da Montanha" seen: going down to the Caves.</summary>
+        /// <summary>"No alto da Serra" seen: going down to the Caves.</summary>
         Caves = 3,
         /// <summary>The epilogue seen: post-game, back home.</summary>
         Home = 4,
     }
 
     /// <summary>
-    /// <see cref="Radio"/>: the other cousin answers on one of the battery radios Ícaro built from Vó Zefa's old
+    /// <see cref="Radio"/>: the other cousin answers on one of the battery radios Ícaro built from Vó Edna's old
     /// one (prologue). <see cref="Memory"/>: the active cousin remembers something the other one said.
     /// </summary>
     public enum RoadChatterKind
@@ -122,19 +122,19 @@ namespace Rapadura.Gameplay.World.Chatter
                 "Testing, testing... Maithe, can you hear me? Over!", "Testando, testando... Maithe, tá me ouvindo? Câmbio!",
                 "Loud and clear. Too loud. Turn it down, pest. Over.", "Alto e claro. Alto demais. Abaixa esse volume, pestinha. Câmbio."),
             C("maithe_icaro_light_meter", Maithe, Icaro, Radio, Forest, Desert, 0,
-                "Is your light meter still pointing at the Caves?", "Teu medidor de luz ainda aponta pras Cavernas?",
+                "Is your light meter still pointing at the Caves?", "Teu medidor de luz ainda aponta pras Grutas?",
                 "Always. Either science is right, or I taped the needle on backwards.", "Sempre. Ou a ciência tá certa, ou eu colei a agulha do lado errado."),
             C("maithe_icaro_caja_machine", Maithe, Icaro, Memory, Forest, Home, 0,
-                "That clatter of gears reminds me of Ícaro's cajá-peeling machine...", "Esse barulho de engrenagem me lembra a máquina de descascar cajá do Ícaro...",
+                "That clatter of gears reminds me of Ícaro's pomegranate-peeling machine...", "Esse barulho de engrenagem me lembra a máquina de descascar romã do Ícaro...",
                 "\"Maithe, step back! ...Okay, it only exploded a little.\"", "\"Maithe, sai de perto! ...Tá, ela só explodiu um pouquinho.\""),
             C("maithe_icaro_impressed", Icaro, Maithe, Radio, Desert, Caves, 0,
                 "My drone got three scorpions in a row. Go on, say you're impressed.", "Meu drone acertou três escorpiões seguidos. Pode falar que impressionou.",
                 "Impressed. Now stop narrating and watch your back.", "Impressionada. Agora para de narrar e olha pra trás."),
             C("maithe_icaro_panel", Icaro, Maithe, Radio, Mountain, Mountain, 0,
-                "Sis, I've almost cracked the Guardian's panel. The ancients had awful handwriting!", "Mana, eu tô quase decifrando o painel do Guardião. Os antigos escreviam torto!",
+                "Sis, I've almost cracked the Great Ushabti's panel. The Artificers had awful handwriting!", "Mana, eu tô quase decifrando o painel do Grande Ushabti. Os Artífices escreviam torto!",
                 "Decode it while you walk. A cracking seal won't wait for your notebook.", "Decifra andando. Selo rachando não espera ninguém terminar o caderno."),
             C("maithe_icaro_mountain_wind", Maithe, Icaro, Radio, Mountain, Caves, 0,
-                "The mountain wind keeps lying to the Eye of the Wind. Don't trust anything that flies.", "O vento da serra vive mentindo pro Olho do Vento. Não confia em nada que voa.",
+                "The Kaggen wind keeps lying to the Eye of the Wind. Don't trust anything that flies.", "O vento da Serra de Kaggen vive mentindo pro Olho do Vento. Não confia em nada que voa.",
                 "Not even my drone? ...I withdraw the question.", "Nem no meu drone? ...Retiro a pergunta."),
             C("maithe_icaro_last_page", Icaro, Maithe, Radio, Home, Home, 0,
                 "Maithe, did you read the last page of my notebook?", "Maithe, você leu a última página do meu caderno?",
@@ -148,23 +148,23 @@ namespace Rapadura.Gameplay.World.Chatter
                 "Joaquim, you're out in front again, aren't you? I can feel it from here.", "Joaquim, você tá na frente de novo, né? Eu sinto daqui.",
                 "Someone has to see the road first, sis!", "Alguém tem que ver o caminho primeiro, mana!"),
             C("maria_joaquim_dream", Joaquim, Maria, Radio, Forest, Forest, 0,
-                "Sis, did your dream say whether we beat the Alpha Wolf?", "Mana, o teu sonho dizia se a gente ganha do Lobo Alfa?",
+                "Sis, did your dream say whether we beat the Sky Wolf?", "Mana, o teu sonho dizia se a gente ganha do Lobo Celeste?",
                 "It said we'd go together. The rest is up to you not running off.", "Dizia que a gente ia junto. O resto depende de você não sair correndo."),
             C("maria_joaquim_spinning_top", Joaquim, Maria, Memory, Forest, Home, 0,
                 "This packed-dirt road would be perfect for spinning a top...", "Esse chão de terra batida ia ser perfeito pra rodar pião...",
                 "\"I won again, little brother. You can cry quietly.\"", "\"Ganhei de novo, maninho. Pode chorar baixinho.\""),
             C("maria_joaquim_wolf_light", Maria, Joaquim, Radio, Desert, Mountain, 0,
-                "I keep thinking about the Alpha Wolf. He wasn't bad, Joaquim.", "Eu não paro de pensar no Lobo Alfa. Ele não era mau, Joaquim.",
+                "I keep thinking about Kök-Böri. He wasn't bad, Joaquim.", "Eu não paro de pensar no Kök-Böri. Ele não era mau, Joaquim.",
                 "I know. That's why I only hit him with the shield.", "Eu sei. Por isso eu só bati com o escudo."),
             C("maria_joaquim_baiao", Joaquim, Maria, Radio, Desert, Caves, 0,
-                "Sis, when we get home, will Grandma make baião de dois?", "Mana, quando a gente voltar, a Vó faz baião de dois?",
+                "Sis, when we get home, will Grandma make her plov?", "Mana, quando a gente voltar, a Vó faz plov?",
                 "She will. And you'll have seconds three times, like always.", "Faz. E você vai repetir três vezes, como sempre."),
             C("maria_joaquim_taller", Joaquim, Maria, Radio, Mountain, Home, 0,
                 "Sis, have you noticed I'm taller than you now?", "Mana, já reparou que eu tô mais alto que você?",
                 "I have. You're still my little brother.", "Reparei. Continua sendo meu irmão mais novo."),
             C("maria_joaquim_step_aside", Joaquim, Maria, Radio, Caves, Caves, 0,
                 "Up on the mountain I learned that protecting also means stepping aside. That's so hard, sis.", "Lá na serra eu aprendi que proteger também é saber sair da frente. Que coisa difícil, mana.",
-                "I know, little brother. That's why I pray for you every single day.", "Eu sei, maninho. Por isso eu rezo por você todo santo dia."),
+                "I know, little brother. That's why I light a little lamp for you every single day.", "Eu sei, maninho. Por isso eu acendo uma lamparininha por você todo dia."),
             C("maria_joaquim_hammock", Maria, Joaquim, Radio, Home, Home, 0,
                 "You admitted you were tired, Joaquim. I heard you.", "Você admitiu que tava cansado, Joaquim. Eu ouvi.",
                 "That was the wind. Nobody can prove anything.", "Foi o vento. Ninguém prova nada."),
@@ -180,7 +180,7 @@ namespace Rapadura.Gameplay.World.Chatter
                 "Your dream and my Eye of the Wind point at the same place, Maria.", "O teu sonho e o meu Olho do Vento apontam pro mesmo lugar, Maria.",
                 "Then for once we agree without arguing. Someone write that down!", "Então pela primeira vez a gente concorda sem brigar. Alguém anota isso!"),
             C("maithe_maria_light_first", Maria, Maithe, Radio, Caves, Caves, 0,
-                "In the Caves, let me go first with the light. Just this once.", "Nas Cavernas, deixa eu ir na frente com a luz. Só dessa vez.",
+                "In the Caves, let me go first with the light. Just this once.", "Nas Grutas, deixa eu ir na frente com a luz. Só dessa vez.",
                 "Deal, cousin. But I'll be right behind you, arrow ready.", "Combinado, prima. Mas eu vou logo atrás, com a flecha pronta."),
             C("maithe_maria_sliver", Maithe, Maria, Radio, Forest, Mountain, 1,
                 "Did your crystal sliver really go cold?", "A tua lasquinha de cristal esfriou mesmo?",
@@ -191,7 +191,7 @@ namespace Rapadura.Gameplay.World.Chatter
                 "Maithe, let me go first this time!", "Maithe, deixa eu ir na frente dessa vez!",
                 "Go on. I'll hit whatever bites you before it bites.", "Pode ir. Eu acerto o que for te morder antes de morder."),
             C("maithe_joaquim_stubborn", Maithe, Joaquim, Radio, Desert, Mountain, 0,
-                "Old Bento says you're as stubborn as Grandpa Chico.", "O Seu Bento diz que você é teimoso igual ao Vô Chico.",
+                "Ammo the Caravaneer says you're as stubborn as Grandpa Jorge.", "O tio Ammo, o caravaneiro, diz que você é teimoso igual ao Vô Jorge.",
                 "That's a compliment, right? I'll pretend it's a compliment.", "Isso é elogio, né? Vou fingir que é elogio."),
             C("maithe_joaquim_counting", Joaquim, Maithe, Radio, Caves, Home, 0,
                 "Why do you keep counting us all the time?", "Por que você fica contando a gente toda hora?",
@@ -206,13 +206,13 @@ namespace Rapadura.Gameplay.World.Chatter
                 "I'm not little. I'm the youngest. That's different.", "Eu não sou pequena. Eu sou a mais nova. É diferente."),
             C("maithe_lavine_shadow", Lavine, Maithe, Radio, Desert, Caves, 0,
                 "Maithe, can your Eye of the Wind see inside my shadow?", "Maithe, o teu Olho do Vento consegue ver a minha sombra por dentro?",
-                "It can. There's only courage in there. And a bit of mess.", "Consegue. Lá dentro só tem coragem. E um pouco de bagunça."),
+                "It can. There's only courage in there. And a bit of mess. My wind knows.", "Consegue. Lá dentro só tem coragem. E um pouco de bagunça. O meu vento sabe."),
             C("maithe_lavine_shoulder", Lavine, Maithe, Radio, Caves, Caves, 0,
                 "Sorry I fell asleep on your shoulder by the campfire.", "Desculpa ter dormido no teu ombro na fogueira.",
                 "Nothing to be sorry for. That's what an eldest cousin's shoulder is for.", "Desculpa nada. Ombro de prima mais velha serve pra isso."),
             C("maithe_lavine_promise", Maithe, Lavine, Radio, Home, Home, 0,
                 "Nobody's calling you little anymore. I promise.", "Ninguém mais vai te chamar de pequena. Prometo.",
-                "You can, once in a while. Only you.", "Você pode, de vez em quando. Só você."),
+                "You can, once in a while. Only you. ...And Kaggen, because the moon is his shoe.", "Você pode, de vez em quando. Só você. ...E o Kaggen, porque a lua é o sapato dele."),
 
             // ================= Maria & Ícaro (cousins) =================
             C("maria_icaro_crackle", Maria, Icaro, Radio, Forest, Home, 0,
@@ -222,8 +222,8 @@ namespace Rapadura.Gameplay.World.Chatter
                 "Maria, how many watts is your light?", "Maria, a tua luz tem quantos watts?",
                 "Just enough to heal you when your drone lands on your head.", "O suficiente pra te curar quando o teu drone cai na tua cabeça."),
             C("maria_icaro_lanterns", Maria, Icaro, Radio, Caves, Caves, 0,
-                "They'll need your pocket lanterns down in the Caves.", "Lá nas Cavernas vão precisar das tuas lanternas de bolso.",
-                "I already left a few with Master Tonho. Scientific forecast, cousin.", "Já deixei umas com o Mestre Tonho. Previsão científica, prima."),
+                "They'll need your pocket lanterns down in the Caves.", "Lá nas Grutas vão precisar das tuas lanternas de bolso.",
+                "I already left a few with Master Mihr. Scientific forecast, cousin.", "Já deixei umas com o Mestre Mihr. Previsão científica, prima."),
 
             // ================= Maria & Lavine (cousins) =================
             C("maria_lavine_cold", Lavine, Maria, Radio, Forest, Desert, 0,
@@ -247,8 +247,8 @@ namespace Rapadura.Gameplay.World.Chatter
                 "Joaquim, I don't need you protecting me all the time.", "Joaquim, eu não preciso que você me proteja o tempo todo.",
                 "I know. But I'm the oldest of the boys. It's in the contract.", "Eu sei. Mas eu sou o mais velho dos meninos. Tá no contrato."),
             C("joaquim_icaro_roots", Joaquim, Icaro, Radio, Mountain, Caves, 0,
-                "Stone golem against the Shield of Roots. Want to bet?", "Golem de pedra contra o Escudo das Raízes. Aposta?",
-                "I'm betting on the roots. Statistically, roots crack stone.", "Aposto na raiz. Estatisticamente, raiz racha pedra."),
+                "Stone ushabti against the Shield of Roots. Want to bet?", "Ushabti de pedra contra o Escudo das Raízes. Aposta?",
+                "I'm betting on the roots. Statistically, roots crack stone. And yours drink Living Water.", "Aposto na raiz. Estatisticamente, raiz racha pedra. E a tua ainda bebe Água Viva."),
 
             // ================= Joaquim & Lavine (cousins) =================
             C("joaquim_lavine_behind", Joaquim, Lavine, Radio, Forest, Desert, 0,
@@ -269,8 +269,8 @@ namespace Rapadura.Gameplay.World.Chatter
                 "Ícaro, why are you the only cousin who doesn't treat me like a baby?", "Ícaro, por que você é o único primo que não me trata como bebê?",
                 "Because you're two years younger, not ten. Basic maths.", "Porque você é dois anos mais nova, não dez. Matemática básica."),
             C("icaro_lavine_first_customer", Lavine, Icaro, Radio, Home, Home, 0,
-                "The Dweller said he liked the lantern you sent him.", "O Habitante disse que gostou da lanterna que você mandou.",
-                "My first customer from the bottom of the caves. I'm opening a branch.", "Primeiro freguês do fundo da caverna. Vou abrir filial."),
+                "Tages said he liked the lantern you sent him.", "O Tages disse que gostou da lanterna que você mandou.",
+                "My first customer from the bottom of the caves. I'm opening a branch.", "Primeiro freguês do fundo da gruta. Vou abrir filial."),
             C("icaro_lavine_partner", Icaro, Lavine, Radio, Forest, Home, 1,
                 "Lavine, want to be my assistant for experiment number two?", "Lavine, quer ser minha assistente no experimento número dois?",
                 "Not assistant. Partner.", "Assistente, não. Sócia."),

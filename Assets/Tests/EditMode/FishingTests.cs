@@ -808,7 +808,7 @@ namespace Rapadura.Tests.EditMode
             FishSpec golden = FishCatalog.Get(FishCatalog.PeixeDourado);
             var outcome = new FishCatchOutcome(golden.Id, 5400, true, true, 0);
             string landed = FishingPresenter.ResultText(null, FishingResult.Landed, golden, outcome, FishBagStatus.Added, CharacterId.Lavine);
-            StringAssert.Contains("Peixe-Dourado do Açude", landed);
+            StringAssert.Contains("Peixe-Dourado do Remanso", landed);
             StringAssert.Contains("lendário", landed);
             StringAssert.Contains("5,40 kg", landed);
             StringAssert.Contains(FishingTexts.GetFallback(FishingTexts.NewSpecies), landed);
@@ -828,7 +828,7 @@ namespace Rapadura.Tests.EditMode
             Assert.AreEqual(1, rows.Count(r => r.Caught));
             StringAssert.Contains("1,50 kg", rows.First(r => r.FishId == FishCatalog.Tilapia).Title);
             StringAssert.StartsWith("???", rows.First(r => r.FishId == FishCatalog.Surubim).Title);
-            StringAssert.Contains("Riacho da Serra", rows.First(r => r.FishId == FishCatalog.Surubim).Where);
+            StringAssert.Contains("Riacho do Tugai", rows.First(r => r.FishId == FishCatalog.Surubim).Where);
             StringAssert.Contains("(1/14)", FishingPresenter.CollectionButton(null, progress));
         }
 

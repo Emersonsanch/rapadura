@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: skill_icaro_campo_magnetico
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_icaro_campo_magnetico
-  _displayName: "Campo Magn\xE9tico"
-  _description: "\xCDcaro liga um gerador port\xE1til que cria um campo magn\xE9tico ao redor: inimigos ficam presos e lentos enquanto estilha\xE7os met\xE1licos s\xE3o desviados dele."
+  _displayName: "Campo do Engenho"
+  _description: "\xCDcaro liga um Engenho da Luz port\xE1til que cria um campo magn\xE9tico ao redor: inimigos ficam presos e lentos enquanto estilha\xE7os met\xE1licos s\xE3o desviados dele."
   _icon: {fileID: 0}
   _skillType: 0
   _category: 5

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: skill_joaquim_terremoto
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_joaquim_terremoto
-  _displayName: Terremoto
-  _description: "Joaquim bate o escudo no ch\xE3o com toda a for\xE7a, fazendo a terra tremer ao redor e desequilibrando os inimigos atingidos."
+  _displayName: "Maremoto"
+  _description: "Joaquim bate o escudo no ch\xE3o com toda a for\xE7a e solta ao redor uma onda de \xC1gua Viva que desequilibra os inimigos atingidos."
   _icon: {fileID: 0}
   _skillType: 0
   _category: 0

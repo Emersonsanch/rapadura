@@ -127,7 +127,7 @@ namespace Rapadura.Editor
                 new AffixSeed { id = "affix_thorned", fallbackText = "Espinhosa", slotKind = AffixSlotKind.Prefix,
                     stat = StatType.Thorns, application = ModifierApplication.PercentAdditive, min = 0.05f, max = 0.1f,
                     weight = 40, requiredSlot = EquipmentSlot.Chest },
-                new AffixSeed { id = "affix_of_the_mandacaru", fallbackText = "do Mandacaru", slotKind = AffixSlotKind.Suffix,
+                new AffixSeed { id = "affix_of_the_mandacaru", fallbackText = "do Saxaul", slotKind = AffixSlotKind.Suffix,
                     stat = StatType.Thorns, application = ModifierApplication.PercentAdditive, min = 0.11f, max = 0.18f,
                     weight = 12, requiredSlot = EquipmentSlot.Chest },
 

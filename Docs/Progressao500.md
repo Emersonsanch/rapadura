@@ -461,6 +461,13 @@ servidor valida o teto pelo nível do personagem e o Despertar pelos mesmos núm
 
 ## 9. Decisões para o usuário
 
+**Decidido pelo usuário em 2026-10-30:** curva como proposta (~45 h até o 100, ~860 h até o 500); teto da montaria
+`⌊2·√herói⌋` (20 no herói 100); renascer **só nas cidades** (posto avançado nunca é respawn); perda de XP diminui por
+faixa (5% → 2%). Itens 3, 4 e 6 ficam com a proposta (4 Despertares; G4 no 150, G5 no 350, Mestre no 500; online 90 s
+de prioridade e 5 min no chão) até o usuário dizer o contrário.
+
+Perguntas originais:
+
 1. **Curva:** ~45 h até o 100 e ~860 h até o 500 de jogo ativo. Está bom, mais rápido (público infantil) ou mais
    "MU" (mais lento)? O botão é o expoente da cúbica (3) e a parede `W(n)`.
 2. **Teto da montaria:** `⌊2·√herói⌋` (20 no herói 100) ou linear (`1 + ⌊herói/5⌋`, 20 no herói 95, mais lento no

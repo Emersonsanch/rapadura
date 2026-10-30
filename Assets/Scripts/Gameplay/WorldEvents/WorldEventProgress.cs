@@ -34,7 +34,7 @@ namespace Rapadura.Gameplay.WorldEvents
 
     /// <summary>
     /// Per-save state of the scheduled world events (Docs/WorldEvents.md): world-boss defeats and the window each boss
-    /// last paid in, and the Baú do Cangaço record (one chest per invasion window). Plain C# (EditMode-testable), built
+    /// last paid in, and the Arca Resgatada record (one chest per invasion window). Plain C# (EditMode-testable), built
     /// by GameManager, registered with SaveManager under <see cref="Key"/> and with NewSessionReset; a save from before
     /// the events has no entry and loads empty. The calendar itself is not saved: it comes from the real clock
     /// (<see cref="WorldEventCalendar"/>), so it is the same for everyone.

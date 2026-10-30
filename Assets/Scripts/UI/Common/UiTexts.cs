@@ -48,7 +48,7 @@ namespace Rapadura.UI.Common
         public const string PauseSave = "ui.pause.save";
         public const string PauseAchievements = "ui.pause.achievements";
         public const string PauseCrafting = "ui.pause.crafting";
-        /// <summary>"Caderno da Vó Zefa" (bestiary) button, on the pause menu and the world map HUD.</summary>
+        /// <summary>"Caderno da Vó Edna" (bestiary) button, on the pause menu and the world map HUD.</summary>
         public const string PauseBestiary = "ui.pause.bestiary";
         public const string PauseMainMenu = "ui.pause.main_menu";
 
@@ -201,7 +201,7 @@ namespace Rapadura.UI.Common
             new LocalizationEntry(MenuCredits, "Credits", "Créditos"),
             new LocalizationEntry(MenuLoad, "Load", "Carregar"),
             new LocalizationEntry(MenuNewGame, "New game", "Novo jogo"),
-            new LocalizationEntry(MenuTagline, "A family adventure through the sertão", "Uma aventura de família pelo sertão"),
+            new LocalizationEntry(MenuTagline, "A family adventure across Dawn Isle", "Uma aventura de família pela Ilha da Aurora"),
 
             new LocalizationEntry(CraftingTitle, "Crafting", "Criação"),
             new LocalizationEntry(CraftingRecipes, "Recipes", "Receitas"),
@@ -274,20 +274,20 @@ namespace Rapadura.UI.Common
             new LocalizationEntry(CreditsLineFonts, "Font: the Unity UI Toolkit default", "Fonte: a padrão do UI Toolkit da Unity"),
             new LocalizationEntry(CreditsLineFullList, "Full list: Docs/ThirdPartyLicenses.md", "Lista completa: Docs/ThirdPartyLicenses.md"),
             new LocalizationEntry(CreditsLineThanksCousins, "To Maithe, Maria, Joaquim, Ícaro and Lavine, who carried this story on their backs.", "A Maithe, Maria, Joaquim, Ícaro e Lavine, que carregam esta história nas costas."),
-            new LocalizationEntry(CreditsLineThanksPlayer, "And to you, for walking the sertão with them. Thank you for playing!", "E a você, por caminhar com eles pelo sertão. Obrigado por jogar!"),
+            new LocalizationEntry(CreditsLineThanksPlayer, "And to you, for walking across Dawn Isle with them. Thank you for playing!", "E a você, por caminhar com eles pela Ilha da Aurora. Obrigado por jogar!"),
             new LocalizationEntry(CreditsLineClosing,
-                "On Grandma Zefa's porch there is still corn cake, a full jar of rapadura and a seat saved for you.",
-                "Na varanda da Vó Zefa ainda tem bolo de milho, o pote de rapadura cheio e um lugar guardado para você."),
+                "On Grandma Edna's porch there is still apricot cake, a full jar of Golden Brick and a seat saved for you.",
+                "Na varanda da Vó Edna ainda tem bolo de damasco, o pote de Torrão Dourado cheio e um lugar guardado para você."),
             new LocalizationEntry(CreditsSkipHint, "Tap or press Esc / B to close", "Toque ou aperte Esc / B para fechar"),
 
             new LocalizationEntry(DeathTitle, "You fell...", "Você caiu..."),
-            new LocalizationEntry(DeathMessage, "The sertão shows no mercy, but the journey goes on.", "O sertão não perdoa, mas a jornada continua."),
+            new LocalizationEntry(DeathMessage, "Everyone falls sometimes. Get up, the journey goes on.", "Todo mundo cai às vezes. Levanta, que a jornada continua."),
             new LocalizationEntry(DeathContinue, "Continue", "Continuar"),
             new LocalizationEntry(DeathLoad, "Load game", "Carregar jogo"),
             new LocalizationEntry(DeathReturnToMap, "Back to the map", "Voltar ao mapa"),
             new LocalizationEntry(DeathCountdown, "Continuing in {0}s", "Continuando em {0}s"),
             new LocalizationEntry(DeathDropped, "In the rush, you dropped: {0}", "Na pressa, você deixou cair: {0}"),
-            new LocalizationEntry(DeathDroppedLost, "It is lost for good. Grandma Edna's Patuá or the Pilgrimage Blessing would have kept it safe.", "Perdeu de vez. Um Patuá da Vó Edna ou a Bênção da Romaria teria guardado."),
+            new LocalizationEntry(DeathDroppedLost, "It is lost for good. Grandma Edna's Tumar or the Guardian Lamp would have kept it safe.", "Perdeu de vez. Um Tumar da Vó Edna ou a Lâmpada Guardiã teria guardado."),
 
             new LocalizationEntry(CharacterSelectTitle, "Choose your Hero", "Escolha seu Herói"),
             new LocalizationEntry(CharacterSelectPrompt, "Select a character to see their story.", "Selecione um personagem para ver a história."),

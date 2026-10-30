@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: skill_joaquim_muralha_de_pedra
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_joaquim_muralha_de_pedra
-  _displayName: Muralha de Pedra
-  _description: "Joaquim finca o Escudo das Ra\xEDzes Eternas no ch\xE3o e ergue uma muralha de pedra \xE0 sua frente, aumentando muito a defesa por alguns segundos."
+  _displayName: "Muralha da Mar\xE9"
+  _description: "Joaquim finca o Escudo das Ra\xEDzes Eternas no ch\xE3o e ergue \xE0 sua frente uma muralha de \xC1gua Viva, o rio que n\xE3o deixa passar, aumentando muito a defesa por alguns segundos."
   _icon: {fileID: 0}
   _skillType: 0
   _category: 1

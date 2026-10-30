@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_fish_piaba_lanterna
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fish_piaba_lanterna
-  _displayName: Piaba-lanterna
-  _description: "Brilha no escuro do lago subterr\xE2neo, mais forte de noite."
+  _displayName: "Peixe-lanterna"
+  _description: "Brilha no escuro do Lago do Limiar, mais forte de noite."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

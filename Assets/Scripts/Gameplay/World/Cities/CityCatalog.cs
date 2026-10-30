@@ -25,7 +25,7 @@ namespace Rapadura.Gameplay.World.Cities
             _nameKey = nameKey;
         }
 
-        /// <summary>Own key, or a shared one (Dona Cida, Mestre Tonho... are also region quest-givers: same name).</summary>
+        /// <summary>Own key, or a shared one (Mariam, Mestre Mihr... are also region quest-givers: same name).</summary>
         public string NameKey => _nameKey ?? KeyBase + ".name";
 
         public string KeyBase => "city.resident." + ResidentId;
@@ -47,7 +47,7 @@ namespace Rapadura.Gameplay.World.Cities
         public readonly IReadOnlyList<string> ShopIds;
 
         /// <summary>
-        /// Baú da Vó Zefa and Fogão a lenha: only in her village (they are her chest and her stove; the carro de boi
+        /// Baú da Vó Edna and forno (tandir): only in her village (they are her chest and her stove; the Barcas de Luz
         /// brings the cousins back cheaply). See Docs/Cities.md.
         /// </summary>
         public readonly bool HasGrandmaServices;
@@ -75,7 +75,7 @@ namespace Rapadura.Gameplay.World.Cities
     }
 
     /// <summary>
-    /// Every region has a city (TODO.md 12.3a). The Floresta keeps the Vila da Vó Zefa (story villagers, the old
+    /// Every region has a city (TODO.md 12.3a). The Floresta keeps the Vila da Vó Edna (story villagers, the old
     /// general store, Baú and Fogão); the Deserto, the Montanha and the Cavernas get their own town, residents and
     /// local shop. Content as code, like <c>RegionQuestCatalog</c>/<c>MealCatalog</c>; texts in <c>CityTexts</c>.
     /// </summary>
@@ -94,8 +94,8 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("cida", CityShopCatalog.ArmarinhoCida, "dialogue.forest_rezadeira.name"),
                     new CityResidentSpec("lazaro", CityShopCatalog.MerceariaLazaro),
                     new CityResidentSpec("nenem", CityShopCatalog.FeiraLivre),
-                    // Seu Tonico of the Haras (Docs/Mounts.md §3), Vô Jorge's old road friend: keeps the mount whistles.
-                    // Not Seu Zé Caçador (Hunting): two different people. Was "ze_haras" before 2026-10-30; resident ids
+                    // Srosh of the Haras (Docs/Mounts.md §3), Vô Jorge's old road friend: keeps the mount whistles.
+                    // Not Patig, the Tracker (Hunting): two different people. Was "ze_haras" before 2026-10-30; resident ids
                     // are not saved anywhere (only localization keys), so the rename needs no migration.
                     new CityResidentSpec("tonico_haras", CityShopCatalog.HarasVila),
                     // The new Vila shops (Docs/Cities.md §4): blacksmith, carpenter and seamstress.
@@ -136,7 +136,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new List<string> { CityShopCatalog.LamparinasBenedita }),
         };
 
-        /// <summary>Seu Bento, the peddler: not a resident of one city, he is wherever his mule is today (<see cref="ShopRotation.MascateRegion"/>).</summary>
+        /// <summary>Ammo, the peddler: not a resident of one city, he is wherever his mule is today (<see cref="ShopRotation.MascateRegion"/>).</summary>
         public static readonly CityResidentSpec Mascate = new CityResidentSpec("bento", CityShopCatalog.MascateBento, "dialogue.desert_tropeiro.name");
 
         public static CitySpec Get(string cityId) => Cities.FirstOrDefault(c => c.CityId == cityId);

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_bornal_couro
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_bornal_couro
-  _displayName: Bornal de couro
-  _description: "Bornal de couro de boi costurado para a estrada. Ao comprar, a mochila ganha 2 linhas para sempre."
+  _displayName: "Alforje de Feltro"
+  _description: "Alforje de feltro dos n\xF4mades da estepe, costurado para a estrada. Ao comprar, a mochila ganha 2 linhas para sempre."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

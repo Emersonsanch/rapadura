@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.Characters
 {
-    /// <summary>Ícaro — O Mestre das Máquinas. Controle/Dano Tecnológico.</summary>
+    /// <summary>Ícaro — O Mestre das Máquinas (elemento Fogo Vivo; remonta os Engenhos da Luz). Controle/Dano Tecnológico.</summary>
     public class Icaro : PlayableCharacter
     {
         public override CharacterId Id => CharacterId.Icaro;
@@ -17,26 +17,26 @@ namespace Rapadura.Gameplay.Characters
         public override int Age => 11;
 
         public override string Lore =>
-            "Com 11 anos, Ícaro já acredita que a tecnologia pode mudar o mundo. Enquanto as outras " +
-            "crianças brincavam, ele desmontava e remontava tudo que encontrava. Depois de achar " +
-            "fragmentos de uma civilização perdida num terreno baldio perto de casa, começou a montar " +
-            "pequenos equipamentos capazes de surpreender até os magos adultos do sertão. Seu sonho é " +
-            "desvendar os segredos da antiga tecnologia que pode salvar ou destruir o sertão. Irmão mais " +
-            "novo de Maithe e primo mais velho de Lavine, vive tentando impressionar a irmã mais velha com " +
-            "suas invenções.";
+            "Com 11 anos, Ícaro já acredita que a tecnologia pode mudar o mundo. Enquanto as outras crianças brincavam, " +
+            "ele desmontava e remontava tudo que encontrava. Depois de achar peças dos Engenhos da Luz, as máquinas antigas " +
+            "dos Artífices, num terreno baldio perto de casa, começou a montar pequenos equipamentos que respondem quando " +
+            "ele chama, capazes de surpreender até os magos adultos da ilha. Sonha em ser herdeiro de Kurdalægon, o " +
+            "ferreiro do céu dos contos, e desvendar os segredos da tecnologia antiga que pode acender de novo a Ilha da " +
+            "Aurora. Irmão mais novo de Maithe e primo mais velho de Lavine, vive tentando impressionar a irmã mais velha " +
+            "com suas invenções.";
 
         public override string[] AbilityNames => new[]
         {
-            "Torreta Automática",
-            "Granada Elétrica",
-            "Drone de Ataque",
-            "Campo Magnético",
-            "Exército Mecânico" // Ultimate
+            "Torreta Ushabti",
+            "Granada de Faísca",
+            "Drone Senmurv",
+            "Campo do Engenho",
+            "Exército de Ushabtis" // Ultimate
         };
 
         public override void ApplyPassive(PlayerStats stats)
         {
-            // Inventor da tecnologia perdida: talento inato reforça Inteligência (seu Atributo
+            // Inventor dos Engenhos da Luz: talento inato reforça Inteligência (seu Atributo
             // Principal), que aumenta a redução de recarga de habilidades (ver
             // AttributeSet.IntelligenceCooldownReductionPerPoint).
             AttributeSet attributeSet = stats.GetComponent<AttributeSet>();

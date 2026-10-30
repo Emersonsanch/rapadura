@@ -9,7 +9,7 @@ namespace Rapadura.Gameplay.World.Cities
         Ok,
         /// <summary>Already in that city.</summary>
         SameCity,
-        /// <summary>The carro de boi only stops at cities the cousins already walked to.</summary>
+        /// <summary>The Barcas de Luz only stops at cities the cousins already walked to.</summary>
         NotVisited,
         /// <summary>The region is locked on the map (e.g. after starting a Nova Jornada+).</summary>
         Locked,
@@ -24,7 +24,7 @@ namespace Rapadura.Gameplay.World.Cities
     }
 
     /// <summary>
-    /// "Carro de boi": instant trip between cities already visited, for a little gold per road (pure, tested). The
+    /// "Cais da Barca": instant trip between cities already visited, for a little gold per road (pure, tested). The
     /// cart follows the roads, so the price is <see cref="GoldPerRoad"/> per edge of the map graph between the two
     /// cities (Vila → Lamparinas = 3 roads = 6 ouro ≈ 3 fights of gold, Docs/Balance/README.md, "Cidades"). No encounter, no
     /// road event on the way.

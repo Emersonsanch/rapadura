@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: skill_lavine_explosao_arcana
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_lavine_explosao_arcana
-  _displayName: "Explos\xE3o Arcana"
-  _description: "Lavine concentra o poder arcano que mal consegue controlar e o libera de uma vez numa explos\xE3o de alto dano em \xE1rea."
+  _displayName: "Explos\xE3o de Estrelas"
+  _description: "Lavine junta o Ar Sereno que mal consegue controlar e solta tudo de uma vez numa explos\xE3o de estrelinhas prateadas, de alto dano em \xE1rea."
   _icon: {fileID: 0}
   _skillType: 0
   _category: 0

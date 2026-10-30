@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_parte_presa_lobo
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_parte_presa_lobo
-  _displayName: Presa de Lobo
-  _description: Presa afiada de lobo da mata. Vô Jorge esfrega na lâmina para dar mais corte.
+  _displayName: "Presa de Lobo"
+  _description: "Presa afiada de lobo do tugai. O V\xF4 Jorge esfregava na l\xE2mina para dar mais corte."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

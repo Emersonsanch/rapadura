@@ -21,7 +21,7 @@ namespace Rapadura.Gameplay.WorldEvents
     /// Dresses one spawned scheduled-event enemy, a frame after spawn like <c>NightVariantTag</c> (EnemyController.Start
     /// re-applies the definition's health first): stats through the event rooms' <see cref="EventRoomEnemyScaler"/>
     /// (health, damage buff, kill-XP scaler, size), then the code-built prop (<see cref="WorldEventRegalia"/>: crown for the
-    /// boss, cangaceiro hat for the bando), the night recolour + glowing eyes of a recoloured night form
+    /// boss, Āz's tin crown for her bando), the night recolour + glowing eyes of a recoloured night form
     /// (<see cref="NightVariantTag.TintModel"/> / <see cref="NightVariantTag.AddEyes"/>) and the floating name.
     /// The enemy keeps its own model, gait and AI: the boss is a giant wolf/scorpion/golem/bat that walks and strikes
     /// with the systems it already has.
@@ -86,7 +86,7 @@ namespace Rapadura.Gameplay.WorldEvents
                     WorldEventRegalia.AddHat(gameObject);
                     break;
                 case WorldEventEnemyRole.Captain:
-                    WorldEventRegalia.AddHat(gameObject, 1.9f);
+                    WorldEventRegalia.AddHat(gameObject, 1.25f);
                     break;
             }
 

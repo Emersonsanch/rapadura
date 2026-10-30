@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_parte_trofeu_fera
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_parte_trofeu_fera
-  _displayName: Troféu da Fera
-  _description: Pedaço de um chefe derrotado. Melhora a qualidade de uma receita ou a chance da forja de fusão.
+  _displayName: "Trof\xE9u da Fera"
+  _description: "Lembran\xE7a de um guardi\xE3o que teve a fa\xEDsca libertada. Melhora a qualidade de uma receita ou a chance da forja de fus\xE3o."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

@@ -7,7 +7,7 @@ using Rapadura.Gameplay.Story;
 namespace Rapadura.UI.WorldMap
 {
     /// <summary>
-    /// Localization keys (en + pt-BR) for "Nova Jornada+" (<see cref="NewGamePlusHud"/>: the offer button, Vó Zefa's
+    /// Localization keys (en + pt-BR) for "Nova Jornada+" (<see cref="NewGamePlusHud"/>: the offer button, Vó Edna's
     /// confirmation panel and the small cycle badge on the world-map HUD and the title's "Continuar"). The story panel
     /// of the new journey lives in <see cref="StoryTexts"/> (<c>story.new_journey.*</c>). Same self-contained pattern as
     /// <see cref="VillageChestTexts"/>: merged into the live <see cref="LocalizationManager"/> on first use (keys it
@@ -26,7 +26,7 @@ namespace Rapadura.UI.WorldMap
         public const string MaxCycle = "ui.ngplus.max_cycle";
         public const string Start = "ui.ngplus.start";
         public const string Cancel = "ui.ngplus.cancel";
-        /// <summary>Vó Zefa's line when no hero is known; per hero: <see cref="ZefaPrefix"/> + <see cref="StoryScript.HeroId"/>.</summary>
+        /// <summary>Vó Edna's line when no hero is known; per hero: <see cref="ZefaPrefix"/> + <see cref="StoryScript.HeroId"/>.</summary>
         public const string ZefaDefault = "ui.ngplus.zefa.default";
         public const string ZefaPrefix = "ui.ngplus.zefa.";
 
@@ -35,35 +35,35 @@ namespace Rapadura.UI.WorldMap
             new LocalizationEntry(Button, "New Journey+", "Nova Jornada+"),
             new LocalizationEntry(Badge, "NG+{0}", "Jornada+{0}"),
             new LocalizationEntry(Title, "New Journey+ {0}", "Nova Jornada+ {0}"),
-            new LocalizationEntry(Keeps, "You keep: level, attributes, skills, equipment, backpack, gold and Grandma Zefa's chest.", "Você mantém: nível, atributos, skills, equipamentos, mochila, ouro e o Baú da Vó Zefa."),
+            new LocalizationEntry(Keeps, "You keep: level, attributes, skills, equipment, backpack, gold and Grandma Edna's chest.", "Você mantém: nível, atributos, skills, equipamentos, mochila, ouro e o Baú da Vó Edna."),
             new LocalizationEntry(Resets, "Starting over: the story, the region quests and the bosses. Enemies get tougher (HP ×{0}, damage ×{1}) and give more XP (×{2}) and loot.", "Recomeçam: a história, as missões das regiões e os chefes. Os inimigos ficam mais fortes (vida ×{0}, dano ×{1}) e dão mais XP (×{2}) e loot."),
             new LocalizationEntry(MaxCycle, "This is already the hardest journey: enemies won't get any tougher.", "Esta já é a jornada mais difícil: os inimigos não ficam mais fortes que isso."),
             new LocalizationEntry(Start, "Set off again", "Partir de novo"),
             new LocalizationEntry(Cancel, "Not now", "Agora não"),
             new LocalizationEntry(ZefaDefault,
-                "\"The Sun Crystal is flickering again, my dears. Will you light it up one more time?\" — Grandma Zefa",
-                "\"O Cristal do Sol tá piscando de novo, meus netos. Vocês topam acender ele mais uma vez?\" — Vó Zefa"),
+                "\"The Sun Crystal is flickering again, my dears. Will you light it up one more time?\" — Grandma Edna",
+                "\"O Cristal do Sol tá piscando de novo, meus netos. Vocês topam acender ele mais uma vez?\" — Vó Edna"),
             new LocalizationEntry(ZefaPrefix + "maithe",
-                "\"Maithe, my eldest, the Sun Crystal is flickering again. Will you gather your cousins and light it once more?\" — Grandma Zefa",
-                "\"Maithe, minha mais velha, o Cristal do Sol tá piscando de novo. Junta os primos e acende ele mais uma vez?\" — Vó Zefa"),
+                "\"Maithe, my eldest, the Sun Crystal is flickering again. Will you gather your cousins and light it once more?\" — Grandma Edna",
+                "\"Maithe, minha mais velha, o Cristal do Sol tá piscando de novo. Junta os primos e acende ele mais uma vez?\" — Vó Edna"),
             new LocalizationEntry(ZefaPrefix + "maria",
-                "\"Maria, that dream of yours came back, didn't it? The Sun Crystal is dimming again. Will you fetch the light one more time?\" — Grandma Zefa",
-                "\"Maria, aquele seu sonho voltou, né? O Cristal do Sol tá apagando de novo. Vai buscar a luz mais uma vez, minha neta?\" — Vó Zefa"),
+                "\"Maria, that dream of yours came back, didn't it? The Sun Crystal is dimming again. Will you fetch the light one more time?\" — Grandma Edna",
+                "\"Maria, aquele seu sonho voltou, né? O Cristal do Sol tá apagando de novo. Vai buscar a luz mais uma vez, minha neta?\" — Vó Edna"),
             new LocalizationEntry(ZefaPrefix + "joaquim",
-                "\"Joaquim, keep that shield close: the Sun Crystal is flickering again. Will you lead the way once more?\" — Grandma Zefa",
-                "\"Joaquim, deixa esse escudo por perto: o Cristal do Sol tá piscando de novo. Vai na frente mais uma vez, meu neto?\" — Vó Zefa"),
+                "\"Joaquim, keep that shield close: the Sun Crystal is flickering again. Will you lead the way once more?\" — Grandma Edna",
+                "\"Joaquim, deixa esse escudo por perto: o Cristal do Sol tá piscando de novo. Vai na frente mais uma vez, meu neto?\" — Vó Edna"),
             new LocalizationEntry(ZefaPrefix + "icaro",
-                "\"Ícaro, your meter isn't broken: the Sun Crystal really is dimming again. Up for one more experiment?\" — Grandma Zefa",
-                "\"Ícaro, teu medidor não tá quebrado, não: o Cristal do Sol tá apagando de novo. Topa mais um experimento?\" — Vó Zefa"),
+                "\"Ícaro, your meter isn't broken: the Sun Crystal really is dimming again. Up for one more experiment?\" — Grandma Edna",
+                "\"Ícaro, seu medidor não tá quebrado, não: o Cristal do Sol tá apagando de novo. Topa mais um experimento?\" — Vó Edna"),
             new LocalizationEntry(ZefaPrefix + "lavine",
-                "\"Lavine, my youngest, the chill is back and the Sun Crystal is flickering again. This time nobody leaves you at home.\" — Grandma Zefa",
-                "\"Lavine, minha caçula, o frio voltou e o Cristal do Sol tá piscando de novo. Desta vez ninguém te deixa em casa.\" — Vó Zefa"),
+                "\"Lavine, my youngest, the chill is back and the Sun Crystal is flickering again. This time nobody leaves you at home.\" — Grandma Edna",
+                "\"Lavine, minha caçula, o frio voltou e o Cristal do Sol tá piscando de novo. Desta vez ninguém te deixa em casa.\" — Vó Edna"),
         };
 
         private static Dictionary<string, string> _fallbackByKey;
         private static LocalizationManager _mergedInto;
 
-        /// <summary>Vó Zefa's offer line for <paramref name="hero"/> (the generic one without a hero).</summary>
+        /// <summary>Vó Edna's offer line for <paramref name="hero"/> (the generic one without a hero).</summary>
         public static string ZefaKey(CharacterId? hero) => hero.HasValue ? ZefaPrefix + StoryScript.HeroId(hero.Value) : ZefaDefault;
 
         /// <summary>Merges <see cref="Entries"/> into <paramref name="manager"/>, skipping keys it already has. Safe to call repeatedly.</summary>

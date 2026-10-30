@@ -52,7 +52,7 @@ namespace Rapadura.Gameplay.Daily
     /// "Recompensa diária em sequência": plain-C# <see cref="IManager"/> + <see cref="ISaveable"/> ("DailyLogin" slice,
     /// registered in GameManager like every other per-save system) + <see cref="IResettable"/> (new game → day 1).
     /// Rules in <see cref="DailyLoginRules"/>; the world map's popup (<c>DailyLoginPopup</c>) asks <see cref="Offer"/> and
-    /// calls <see cref="Claim"/> with the live bag (a <c>CarriedInventorySession</c>) and the Baú da Vó Zefa.
+    /// calls <see cref="Claim"/> with the live bag (a <c>CarriedInventorySession</c>) and the Baú da Vó Edna.
     ///
     /// Items go in through the bag's shared grid fit API (<see cref="InventoryManager.GetFittableAmount"/> /
     /// <see cref="InventoryManager.TryAddCopy"/>); whatever does not fit goes to the village chest, so a full Mochila

@@ -263,7 +263,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             return r;
         }
 
-        /// <summary>Seu Bento's stall in the plaza (south-east), on the days his mule is in this city.</summary>
+        /// <summary>Ammo's stall in the plaza (south-east), on the days his mule is in this city.</summary>
         private static void AddMascate(CityTownRecipe r)
         {
             // South-east of the plaza, between the South and East street mouths, facing north (axis-aligned: tight AABB).

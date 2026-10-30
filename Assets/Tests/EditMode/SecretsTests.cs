@@ -644,19 +644,19 @@ namespace Rapadura.Tests
             Assert.IsFalse(SecretsMapButtons.ShouldShowInvestigate(true, true, true, false));
             Assert.IsFalse(SecretsMapButtons.ShouldShowInvestigate(true, true, false, true));
 
-            Assert.AreEqual("Investigar: Casa de farinha abandonada",
+            Assert.AreEqual("Investigar: Moinho velho do Vô",
                 SecretsMapButtons.BuildInvestigateLabel(WorldSecretCatalog.Get(WorldSecretCatalog.CasaDeFarinha), null));
-            Assert.AreEqual("Investigar: Cacimba seca (tem guarda!)",
+            Assert.AreEqual("Investigar: Poço de karez seco (tem guarda!)",
                 SecretsMapButtons.BuildInvestigateLabel(WorldSecretCatalog.Get(WorldSecretCatalog.CacimbaSeca), null));
 
             var english = new LocalizationManager();
             english.SetLanguage(LanguageCode.en);
-            Assert.AreEqual("Investigate: Dry cacimba (guarded!)",
+            Assert.AreEqual("Investigate: Dry karez well (guarded!)",
                 SecretsMapButtons.BuildInvestigateLabel(WorldSecretCatalog.Get(WorldSecretCatalog.CacimbaSeca), english));
 
             SecretsProgress secrets = NewSecrets();
             secrets.AddRelic(RelicCatalog.PiaoIrmaos);
-            Assert.AreEqual("Relíquias (1/12)", SecretsMapButtons.BuildRelicsEntryLabel(secrets, null));
+            Assert.AreEqual("Lembranças (1/12)", SecretsMapButtons.BuildRelicsEntryLabel(secrets, null));
         }
 
         [Test]
@@ -667,7 +667,7 @@ namespace Rapadura.Tests
             StringAssert.Contains("vaga-lumes", reveal.Body);
 
             SecretToastController.Message relic = SecretToastController.ForRelic(RelicCatalog.ArcoMaithe, 3, null);
-            Assert.AreEqual("Relíquia encontrada!", relic.Title);
+            Assert.AreEqual("Lembrança encontrada!", relic.Title);
             StringAssert.Contains("Primeiro arco da Maithe (3/12)", relic.Body);
             StringAssert.Contains("+1% de chance de crítico", relic.Body);
             StringAssert.DoesNotContain(SecretTexts.Get(null, SecretTexts.ToastCollectionDone), relic.Body);
@@ -721,9 +721,9 @@ namespace Rapadura.Tests
             var localization = new LocalizationManager();
             SecretTexts.EnsureRegistered(localization);
             localization.SetLanguage(LanguageCode.ptBR);
-            Assert.AreEqual("Relíquias do Sertão", localization.Get(SecretTexts.PanelTitle));
+            Assert.AreEqual("Lembranças do Vô Jorge", localization.Get(SecretTexts.PanelTitle));
             localization.SetLanguage(LanguageCode.en);
-            Assert.AreEqual("Relics of the Sertão", localization.Get(SecretTexts.PanelTitle));
+            Assert.AreEqual("Grandpa Jorge's Keepsakes", localization.Get(SecretTexts.PanelTitle));
         }
     }
 }

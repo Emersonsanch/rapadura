@@ -6,7 +6,7 @@ using Rapadura.Core.DI;
 namespace Rapadura.Gameplay.Fishing
 {
     /// <summary>
-    /// The procedural sounds of "Pesca no açude", played by id through <see cref="SfxEventRouter.PlayCue"/> (no
+    /// The procedural sounds of "Pesca no remanso", played by id through <see cref="SfxEventRouter.PlayCue"/> (no
     /// <see cref="SfxTrigger"/> of their own). The cues are added to the live <see cref="SfxEventMap"/> the first time
     /// the panel opens (<see cref="EnsureCues"/>, only ids the map does not have yet: a cue authored in
     /// <c>Resources/Audio/SfxEventMap.asset</c> — e.g. with a real clip — always wins), so the shared table needs no

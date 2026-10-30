@@ -51,11 +51,12 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                 case MountVisualRecipe.Capybara:
                     shape = new QuadrupedShape
                     {
-                        LegLength = 0.34f, BodyLength = 1.05f, BodyThickness = 0.5f, BodyWidth = 0.5f,
-                        NeckLength = 0.12f, NeckPitch = 15f, HeadLength = 0.3f, HeadSize = 0.32f, EarLength = 0.06f,
-                        TailLength = 0.06f, LegGirth = 1.3f,
-                        Coat = EnemySwatch.SandstoneDark, Dark = EnemySwatch.SandstoneDark, Light = EnemySwatch.Sandstone,
-                        Mane = EnemySwatch.SandstoneDark, Socks = EnemySwatch.Leather, Foot = EnemySwatch.Leather,
+                        // Taweret's pygmy hippo (Docs/WorldBible_Maniqueismo.md §3.17): barrel body, big head, grey-brown with a pink belly.
+                        LegLength = 0.34f, BodyLength = 1.05f, BodyThickness = 0.54f, BodyWidth = 0.56f,
+                        NeckLength = 0.12f, NeckPitch = 15f, HeadLength = 0.32f, HeadSize = 0.36f, EarLength = 0.05f,
+                        TailLength = 0.06f, LegGirth = 1.4f,
+                        Coat = EnemySwatch.WolfFurDark, Dark = EnemySwatch.WolfFurDark, Light = EnemySwatch.Pink,
+                        Mane = EnemySwatch.WolfFurDark, Socks = EnemySwatch.WolfFurDark, Foot = EnemySwatch.Shadow,
                         Blanket = EnemySwatch.CaveMoss, Saddle = EnemySwatch.Leather, Trim = EnemySwatch.Gold,
                     };
                     return true;
@@ -65,13 +66,13 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                         LegLength = 0.55f, BodyLength = 0.95f, BodyThickness = 0.42f, BodyWidth = 0.38f,
                         NeckLength = 0.3f, NeckPitch = 45f, HeadLength = 0.34f, HeadSize = 0.22f, EarLength = 0.14f,
                         TailLength = 0.14f, BushyTail = true, Hooves = true, Horns = MountHornStyle.Goat, Beard = true,
-                        Coat = EnemySwatch.Bone, Dark = EnemySwatch.GolemStone, Light = EnemySwatch.Fang,
-                        Mane = EnemySwatch.Bone, Socks = EnemySwatch.GolemStone, Foot = EnemySwatch.IronDark,
+                        Coat = EnemySwatch.WolfFur, Dark = EnemySwatch.WolfFurDark, Light = EnemySwatch.WolfBelly,
+                        Mane = EnemySwatch.WolfFur, Socks = EnemySwatch.WolfFurDark, Foot = EnemySwatch.IronDark,
                         Blanket = EnemySwatch.WarCape, Saddle = EnemySwatch.Leather, Trim = EnemySwatch.Gold, Accent = EnemySwatch.Horn,
                     };
                     return true;
                 case MountVisualRecipe.Rhea:
-                    shape = Bird(EnemySwatch.GolemStone, EnemySwatch.GolemStoneDark, EnemySwatch.Horn, EnemySwatch.Sandstone);
+                    shape = Bird(EnemySwatch.Shadow, EnemySwatch.Black, EnemySwatch.Pink, EnemySwatch.Sandstone); // the ostrich
                     return true;
                 case MountVisualRecipe.FireRhea:
                     shape = Bird(EnemySwatch.WarCape, EnemySwatch.Shadow, EnemySwatch.Gold, EnemySwatch.Leather);
@@ -84,10 +85,11 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                     {
                         LegLength = 0.72f, BodyLength = 1.25f, BodyThickness = 0.5f, BodyWidth = 0.44f,
                         NeckLength = 0.5f, NeckPitch = 50f, HeadLength = 0.5f, HeadSize = 0.26f, EarLength = 0.14f,
-                        TailLength = 0.65f, Hooves = true, Pattern = MountCoatPattern.Patches, PatternSwatch = EnemySwatch.Leather,
-                        Coat = EnemySwatch.Fang, Dark = EnemySwatch.Fang, Light = EnemySwatch.Bone,
-                        Mane = EnemySwatch.Shadow, Socks = EnemySwatch.Fang, Foot = EnemySwatch.Black,
-                        Blanket = EnemySwatch.WarCape, Saddle = EnemySwatch.Leather, Trim = EnemySwatch.Steel,
+                        // The golden heavenly horse of Ferghana: plain golden coat, darker mane (no pinto patches any more).
+                        TailLength = 0.65f, Hooves = true,
+                        Coat = EnemySwatch.Sandstone, Dark = EnemySwatch.SandstoneDark, Light = EnemySwatch.SandstoneLight,
+                        Mane = EnemySwatch.Leather, Socks = EnemySwatch.Sandstone, Foot = EnemySwatch.Black,
+                        Blanket = EnemySwatch.WarCape, Saddle = EnemySwatch.Leather, Trim = EnemySwatch.Gold,
                     };
                     return true;
                 case MountVisualRecipe.EnchantedDonkey:
@@ -95,20 +97,21 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                     {
                         LegLength = 0.62f, BodyLength = 1.12f, BodyThickness = 0.5f, BodyWidth = 0.46f,
                         NeckLength = 0.34f, NeckPitch = 38f, HeadLength = 0.42f, HeadSize = 0.27f, EarLength = 0.36f,
-                        TailLength = 0.5f, UprightMane = true, Hooves = true, Cowbell = true, Jewel = true, Accent = EnemySwatch.Rune,
-                        Coat = EnemySwatch.Sandstone, Dark = EnemySwatch.SandstoneDark, Light = EnemySwatch.SandstoneLight,
-                        Mane = EnemySwatch.SandstoneDark, Socks = EnemySwatch.Sandstone, Foot = EnemySwatch.IronDark,
+                        TailLength = 0.5f, UprightMane = true, Hooves = true, Cowbell = true, Jewel = true, Accent = EnemySwatch.Gold,
+                        Coat = EnemySwatch.Fang, Dark = EnemySwatch.Bone, Light = EnemySwatch.Fang,
+                        Mane = EnemySwatch.Bone, Socks = EnemySwatch.Fang, Foot = EnemySwatch.Gold,
                         Blanket = EnemySwatch.CaveMoss, Saddle = EnemySwatch.Leather, Trim = EnemySwatch.Gold,
                     };
                     return true;
                 case MountVisualRecipe.ManedWolf:
                     shape = new QuadrupedShape
                     {
-                        LegLength = 0.78f, BodyLength = 1.0f, BodyThickness = 0.4f, BodyWidth = 0.36f,
-                        NeckLength = 0.3f, NeckPitch = 40f, HeadLength = 0.32f, HeadSize = 0.26f, EarLength = 0.24f,
-                        TailLength = 0.45f, BushyTail = true, UprightMane = true,
-                        Coat = EnemySwatch.OwlBuff, Dark = EnemySwatch.Black, Light = EnemySwatch.Bone,
-                        Mane = EnemySwatch.Black, Socks = EnemySwatch.Black, Foot = EnemySwatch.Black,
+                        // Wepwawet's jackal: lean, tall ears, dark grey coat, golden trim.
+                        LegLength = 0.68f, BodyLength = 1.0f, BodyThickness = 0.38f, BodyWidth = 0.34f,
+                        NeckLength = 0.3f, NeckPitch = 42f, HeadLength = 0.34f, HeadSize = 0.25f, EarLength = 0.24f,
+                        TailLength = 0.45f, BushyTail = true,
+                        Coat = EnemySwatch.WolfFurDark, Dark = EnemySwatch.Black, Light = EnemySwatch.WolfFur,
+                        Mane = EnemySwatch.Shadow, Socks = EnemySwatch.Shadow, Foot = EnemySwatch.Black,
                         Blanket = EnemySwatch.WarCape, Saddle = EnemySwatch.Leather, Trim = EnemySwatch.Gold,
                     };
                     return true;
@@ -119,29 +122,32 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                         NeckLength = 0.14f, NeckPitch = 10f, HeadLength = 0.42f, HeadSize = 0.3f, EarLength = 0.1f,
                         TailLength = 0.08f, Hooves = true, UprightMane = true,
                         Pattern = MountCoatPattern.Leaves, PatternSwatch = EnemySwatch.CaveMoss, Accent = EnemySwatch.Lichen,
-                        Coat = EnemySwatch.PeccaryFur, Dark = EnemySwatch.Shadow, Light = EnemySwatch.Bone,
-                        Mane = EnemySwatch.Shadow, Socks = EnemySwatch.PeccaryFur, Foot = EnemySwatch.Black,
+                        Coat = EnemySwatch.WolfFur, Dark = EnemySwatch.Shadow, Light = EnemySwatch.WolfBelly,
+                        Mane = EnemySwatch.WolfFurDark, Socks = EnemySwatch.WolfFur, Foot = EnemySwatch.Black,
                         Blanket = EnemySwatch.CaveMoss, Saddle = EnemySwatch.Bark, Trim = EnemySwatch.Lichen,
                     };
                     return true;
                 case MountVisualRecipe.Anteater:
                     shape = new QuadrupedShape
                     {
-                        LegLength = 0.5f, BodyLength = 1.2f, BodyThickness = 0.5f, BodyWidth = 0.42f,
-                        NeckLength = 0.3f, NeckPitch = 5f, HeadLength = 0.6f, HeadSize = 0.2f, EarLength = 0.06f,
-                        TailLength = 0.8f, BushyTail = true, LegGirth = 1.2f,
-                        Pattern = MountCoatPattern.Band, PatternSwatch = EnemySwatch.Black,
-                        Coat = EnemySwatch.WolfFur, Dark = EnemySwatch.Black, Light = EnemySwatch.WolfBelly,
-                        Mane = EnemySwatch.WolfFurDark, Socks = EnemySwatch.WolfBelly, Foot = EnemySwatch.Black,
+                        // The giant aardvark: arched back, long snout, tall ears, thick tapering tail, pinkish tan.
+                        LegLength = 0.5f, BodyLength = 1.2f, BodyThickness = 0.55f, BodyWidth = 0.42f,
+                        NeckLength = 0.22f, NeckPitch = 5f, HeadLength = 0.55f, HeadSize = 0.22f, EarLength = 0.24f,
+                        TailLength = 0.6f, LegGirth = 1.3f,
+                        Coat = EnemySwatch.SandstoneDark, Dark = EnemySwatch.Leather, Light = EnemySwatch.Sandstone,
+                        Mane = EnemySwatch.SandstoneDark, Socks = EnemySwatch.Leather, Foot = EnemySwatch.Black,
                         Blanket = EnemySwatch.Sandstone, Saddle = EnemySwatch.Leather, Trim = EnemySwatch.Gold,
                     };
                     return true;
                 case MountVisualRecipe.SnowTiger:
-                    shape = Cat(EnemySwatch.GolemSnow, EnemySwatch.Fang, MountCoatPattern.Stripes, EnemySwatch.Shadow, EnemySwatch.Iron, EnemySwatch.Steel);
+                    shape = Cat(EnemySwatch.GolemSnow, EnemySwatch.Fang, MountCoatPattern.Rosettes, EnemySwatch.GolemStoneDark, EnemySwatch.Iron, EnemySwatch.Steel); // Irbis
                     return true;
                 case MountVisualRecipe.LightJaguar:
-                    shape = Cat(EnemySwatch.Gold, EnemySwatch.SandstoneLight, MountCoatPattern.Rosettes, EnemySwatch.Shadow, EnemySwatch.CaveMoss,
+                    // Apedemak's lion of light: plain golden coat and a darker mane ridge (no jaguar rosettes).
+                    shape = Cat(EnemySwatch.Gold, EnemySwatch.SandstoneLight, MountCoatPattern.None, EnemySwatch.Shadow, EnemySwatch.CaveMoss,
                         EnemySwatch.StolenLight);
+                    shape.UprightMane = true;
+                    shape.Mane = EnemySwatch.SandstoneDark;
                     return true;
                 case MountVisualRecipe.Mammoth:
                     shape = new QuadrupedShape
@@ -171,8 +177,8 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                         LegLength = 0.55f, BodyLength = 1.0f, BodyThickness = 0.44f, BodyWidth = 0.4f,
                         NeckLength = 0.26f, NeckPitch = 38f, HeadLength = 0.26f, HeadSize = 0.3f, EarLength = 0.28f,
                         TailLength = 0.6f, BushyTail = true, Jewel = true, Accent = EnemySwatch.WarEye,
-                        Coat = EnemySwatch.CaveBelly, Dark = EnemySwatch.CaveSkin, Light = EnemySwatch.Fang,
-                        Mane = EnemySwatch.CaveBelly, Socks = EnemySwatch.CaveSkin, Foot = EnemySwatch.CaveSkinDark,
+                        Coat = EnemySwatch.OwlBuff, Dark = EnemySwatch.Leather, Light = EnemySwatch.Fang,
+                        Mane = EnemySwatch.OwlBuff, Socks = EnemySwatch.Leather, Foot = EnemySwatch.Shadow,
                         Blanket = EnemySwatch.Crystal, Saddle = EnemySwatch.Leather, Trim = EnemySwatch.Gold,
                     };
                     return true;
@@ -206,8 +212,8 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                         NeckLength = 0.22f, NeckPitch = 20f, HeadLength = 0.4f, HeadSize = 0.4f, EarLength = 0.14f,
                         TailLength = 0.6f, Hooves = true, LegGirth = 1.5f, Horns = MountHornStyle.Bull, Accent = EnemySwatch.Horn,
                         Pattern = MountCoatPattern.Stars, PatternSwatch = EnemySwatch.Gold,
-                        Coat = EnemySwatch.Shadow, Dark = EnemySwatch.Shadow, Light = EnemySwatch.Fang,
-                        Mane = EnemySwatch.Shadow, Socks = EnemySwatch.Shadow, Foot = EnemySwatch.Black,
+                        Coat = EnemySwatch.Bone, Dark = EnemySwatch.GolemStone, Light = EnemySwatch.Fang,
+                        Mane = EnemySwatch.GolemStone, Socks = EnemySwatch.GolemStone, Foot = EnemySwatch.Black,
                         Blanket = EnemySwatch.WarCape, Saddle = EnemySwatch.Gold, Trim = EnemySwatch.Gold,
                     };
                     return true;

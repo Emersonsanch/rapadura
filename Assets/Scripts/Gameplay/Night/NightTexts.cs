@@ -5,7 +5,7 @@ using Rapadura.Core.Localization;
 namespace Rapadura.Gameplay.Night
 {
     /// <summary>
-    /// Localization keys (en + pt-BR) of the day/night danger feature: the HUD night indicator, the "(noturno)" name
+    /// Localization keys (en + pt-BR) of the day/night danger feature: the HUD night indicator, the "(da noite)" name
     /// suffix, the reinforcement call-out and the playable night species' names. Same self-contained pattern as
     /// <c>BossTexts</c>: merged into the live <see cref="LocalizationManager"/> on first use (keys it already has win),
     /// pt-BR fallback otherwise. The "Noite mais clara" accessibility label lives in <c>SettingsMenuTexts</c>.
@@ -34,7 +34,7 @@ namespace Rapadura.Gameplay.Night
             var entries = new List<LocalizationEntry>
             {
                 new LocalizationEntry(HudNight, "Night — the critters are fiercer", "Noite — os bichos estão mais bravos"),
-                new LocalizationEntry(VariantName, "{0} (nocturnal)", "{0} (noturno)"),
+                new LocalizationEntry(VariantName, "{0} (night)", "{0} (da noite)"),
                 new LocalizationEntry(WaveIncoming, "More critters coming!", "Vem mais bicho!"),
                 new LocalizationEntry(WaveIncomingNight, "More critters coming out of the dark!", "Vem mais bicho do escuro!"),
             };

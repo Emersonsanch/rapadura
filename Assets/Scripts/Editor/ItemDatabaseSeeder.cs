@@ -123,7 +123,7 @@ namespace Rapadura.Editor
                 new ItemSeed { id = "item_hammer", name = "Martelo de Construção", description = "Ferramenta usada para construir e reparar estruturas.", type = ItemType.Tool, category = ItemCategory.BuildingTool, rarity = ItemRarity.Common, weight = 2f, value = 15, maxStack = 1, hasDurability = true, maxDurability = 100f, equipSlot = EquipmentSlot.Tool },
 
                 // Misc
-                new ItemSeed { id = "item_gold_coin", name = "Moeda de Ouro", description = "A moeda corrente do mundo.", type = ItemType.Currency, category = ItemCategory.Currency, weight = 0f, value = 1, maxStack = 9999 },
+                new ItemSeed { id = "item_gold_coin", name = "Moeda Furada de Qocho", description = "Moeda com furo quadrado, como as que corriam no bazar de Qocho. É a moeda corrente da ilha.", type = ItemType.Currency, category = ItemCategory.Currency, weight = 0f, value = 1, maxStack = 9999 },
             };
         }
     }

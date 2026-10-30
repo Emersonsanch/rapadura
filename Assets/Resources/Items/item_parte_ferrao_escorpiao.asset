@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_parte_ferrao_escorpiao
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_parte_ferrao_escorpiao
-  _displayName: Ferrão de Escorpião
-  _description: Ferrão das dunas, ainda com veneno. Ajuda a arma a achar o ponto fraco do bicho.
+  _displayName: "Ferr\xE3o de Escorpi\xE3o"
+  _description: "Ferr\xE3o das Areias Flamejantes, ainda com veneno. Ajuda a arma a achar o ponto fraco do bicho."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

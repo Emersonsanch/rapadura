@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: skill_lavine_orbe_sombria
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_lavine_orbe_sombria
-  _displayName: Orbe Sombria
-  _description: "Lavine lan\xE7a uma pequena esfera de energia sombria que causa dano m\xE1gico ao atingir o alvo."
+  _displayName: "Orbe do Ar Sereno"
+  _description: "Lavine lan\xE7a uma pequena esfera lil\xE1s e prateada de Ar Sereno que causa dano m\xE1gico ao atingir o alvo."
   _icon: {fileID: 0}
   _skillType: 0
   _category: 0

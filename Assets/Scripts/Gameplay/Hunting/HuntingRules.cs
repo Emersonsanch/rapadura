@@ -6,7 +6,7 @@ using Rapadura.Gameplay.Enemies;
 
 namespace Rapadura.Gameplay.Hunting
 {
-    /// <summary>Size of a "Tarefa de caça" from Seu Zé Caçador (kills and rewards in <see cref="HuntingRules"/>).</summary>
+    /// <summary>Size of a "Tarefa de caça" from Patig, o Rastreador (kills and rewards in <see cref="HuntingRules"/>).</summary>
     public enum HuntingTaskTier
     {
         /// <summary>"Pequena".</summary>
@@ -88,7 +88,7 @@ namespace Rapadura.Gameplay.Hunting
     /// Pure rules of the Tibia-inspired hunting features (Docs/Balance/README.md § "Caça"), kept free of Unity and of
     /// the EventBus so EditMode tests cover them with plain data:
     /// <list type="bullet">
-    /// <item><b>Tarefas de caça</b> (Seu Zé Caçador): kill N of one creature, sized Pequena / Média / Grande;
+    /// <item><b>Tarefas de caça</b> (Patig, o Rastreador): kill N of one creature, sized Pequena / Média / Grande;
     /// rewards are bonus XP (a fraction of the kills' own XP), gold and "Pontos de Caça".</item>
     /// <item><b>Presa do dia</b>: each day 3 creatures are offered, each with a bonus (XP, loot or damage); the
     /// chosen one lasts until the day turns. No hunting bonus raises the hero's damage (§ "Caça"). One reroll a day, for gold.</item>
@@ -125,10 +125,10 @@ namespace Rapadura.Gameplay.Hunting
         /// <summary>Anti-farm: tasks that can be finished per day (a new one can't be taken after that).</summary>
         public const int MaxTasksPerDay = 5;
 
-        /// <summary>Most creatures Seu Zé offers tasks for at once (the eligible ones, in Caderno order).</summary>
+        /// <summary>Most creatures Patig offers tasks for at once (the eligible ones, in Caderno order).</summary>
         public const int MaxTaskCreatures = 6;
 
-        /// <summary>"Pontos de Caça" Seu Zé takes for one "Ponto do Caderno".</summary>
+        /// <summary>"Pontos de Caça" Patig takes for one "Ponto do Caderno".</summary>
         public const int HuntPointsPerCadernoPoint = 5;
 
         // ------------------------------------------------------------------ prey / highlight
@@ -152,7 +152,7 @@ namespace Rapadura.Gameplay.Hunting
         public static readonly int[] KillMilestones = { 10, 50, 200 };
         public static readonly int[] MilestonePoints = { 1, 2, 3 };
 
-        /// <summary>Total "Pontos de Caça" ever earned for each hunter rank (0 = Aprendiz, 1 = Mateiro, 2 = Rastreador, 3 = Caçador do Sertão).</summary>
+        /// <summary>Total "Pontos de Caça" ever earned for each hunter rank (0 = Aprendiz, 1 = Batedor, 2 = Rastreador, 3 = Mestre de Pegadas).</summary>
         public static readonly int[] RankThresholds = { 0, 5, 20, 50 };
 
         public static int KillsFor(HuntingTaskTier tier)

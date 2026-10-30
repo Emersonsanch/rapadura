@@ -238,7 +238,7 @@ namespace Rapadura.Tests
             }
 
             CityResidentSpec tiao = CityCatalog.Get(CityCatalog.AreiaBranca).Residents.First(r => r.ResidentId == "tiao");
-            StringAssert.StartsWith("Tião das Cabras: “", CityTexts.ResidentSpeech(null, tiao, CharacterId.Lavine));
+            StringAssert.StartsWith("Uzzai, o Pastor: “", CityTexts.ResidentSpeech(null, tiao, CharacterId.Lavine));
         }
 
         // ------------------------------------------------------------------
@@ -512,9 +512,9 @@ namespace Rapadura.Tests
             FastTravelRow serra = CityFastTravelPanel.BuildRow(CityCatalog.ForRegion(BiomeType.Mountain), BiomeType.Forest, true, visited, unlocked, graph.GetNeighbours, 3, null);
             Assert.AreEqual(FastTravelCheck.NotEnoughGold, serra.Check);
             Assert.AreEqual(4, serra.Cost);
-            Assert.AreEqual("Falta ouro (4)", serra.Status);
-            Assert.AreEqual("Viajar (4 ouro)", serra.ButtonText);
-            Assert.AreEqual("Vila da Serra Alta", serra.Name);
+            Assert.AreEqual("Falta ouro para a passagem (4)", serra.Status);
+            Assert.AreEqual("Embarcar (passagem: 4 ouro)", serra.ButtonText);
+            Assert.AreEqual("Vila de Litema", serra.Name);
 
             FastTravelRow juazeiro = CityFastTravelPanel.BuildRow(CityCatalog.ForRegion(BiomeType.Desert), BiomeType.Forest, true, visited, unlocked, graph.GetNeighbours, 3, null);
             Assert.AreEqual(FastTravelCheck.NotVisited, juazeiro.Check);
@@ -640,7 +640,7 @@ namespace Rapadura.Tests
         {
             Assert.AreEqual("Vila", VillageHubButton.BuildButtonLabel(CityCatalog.ForRegion(BiomeType.Forest), false, null));
             Assert.AreEqual("Vila (!)", VillageHubButton.BuildButtonLabel(CityCatalog.ForRegion(BiomeType.Forest), true, null));
-            Assert.AreEqual("Areia Branca", VillageHubButton.BuildButtonLabel(CityCatalog.ForRegion(BiomeType.Desert), false, null));
+            Assert.AreEqual("Qocho", VillageHubButton.BuildButtonLabel(CityCatalog.ForRegion(BiomeType.Desert), false, null));
             Assert.IsNotEmpty(VillageHubButton.StoryVillagersOf(CityCatalog.ForRegion(BiomeType.Forest)));
             Assert.IsEmpty(VillageHubButton.StoryVillagersOf(CityCatalog.ForRegion(BiomeType.Caves)), "story villagers live in the Vila");
             Assert.AreEqual(3, VillageHubButton.ResidentsOf(CityCatalog.ForRegion(BiomeType.Desert), new List<string> { CityShopCatalog.SelariaVava }).Count);
@@ -655,7 +655,7 @@ namespace Rapadura.Tests
             var manager = new LocalizationManager();
             manager.Initialize();
             manager.SetLanguage(LanguageCode.en);
-            Assert.AreEqual("You are in a safe zone · White Sand Hamlet", CitySafeZoneHud.IndicatorText(CityCatalog.ForRegion(BiomeType.Desert), manager));
+            Assert.AreEqual("You are in a safe zone · Qocho Oasis", CitySafeZoneHud.IndicatorText(CityCatalog.ForRegion(BiomeType.Desert), manager));
         }
 
         // ------------------------------------------------------------------

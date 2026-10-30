@@ -14,7 +14,7 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.Seasons
 {
     /// <summary>
-    /// "Arraiá" on the world map during the Festa Junina: a small, separate entry, self-bootstrapping like
+    /// "Bema" on the world map during the Bema (id FestaJunina): a small, separate entry, self-bootstrapping like
     /// <c>FishingSpotButton</c> (no scene edit, no change to the village hub): added to the
     /// <see cref="WorldMapHudController"/>'s GameObject after every scene load, it injects one button into the HUD's
     /// <c>wm-action-row</c>, shown while <see cref="FestaJuninaPresenter.ShouldShowButton"/> (festa on, the token idle

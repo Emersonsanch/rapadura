@@ -133,8 +133,8 @@ namespace Rapadura.Tests
         {
             CreditsSection last = CreditsContent.Sections[CreditsContent.Sections.Count - 1];
             Assert.AreEqual(UiTexts.CreditsSectionClosing, last.TitleKey);
-            StringAssert.Contains("varanda da Vó Zefa", last.Lines[last.Lines.Count - 1]);
-            StringAssert.Contains("Grandma Zefa's porch", last.GetLine(English(), last.Lines.Count - 1));
+            StringAssert.Contains("varanda da Vó Edna", last.Lines[last.Lines.Count - 1]);
+            StringAssert.Contains("Grandma Edna's porch", last.GetLine(English(), last.Lines.Count - 1));
         }
 
         [Test]

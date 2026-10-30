@@ -12,7 +12,7 @@ using UnityEngine.UIElements;
 
 namespace Rapadura.UI.WorldMap
 {
-    /// <summary>One destination row of the carro de boi window (pure, tested).</summary>
+    /// <summary>One destination row of the Barcas de Luz window (pure, tested).</summary>
     public readonly struct FastTravelRow
     {
         public readonly CitySpec City;
@@ -38,9 +38,9 @@ namespace Rapadura.UI.WorldMap
     }
 
     /// <summary>
-    /// "Carro de boi" of the city hub (<see cref="VillageHubButton"/> → Serviços): one row per city with where it is, what
+    /// "Cais da Barca" of the city hub (<see cref="VillageHubButton"/> → Serviços): one row per city with where it is, what
     /// the trip costs and why it cannot go yet (<see cref="FastTravelRules"/>). Built in code on the map HUD's document
-    /// like the Fogão a lenha, with <c>Resources/UI/CityHub.uss</c>; pays from the hub's live
+    /// like the forno (tandir), with <c>Resources/UI/CityHub.uss</c>; pays from the hub's live
     /// <see cref="CarriedInventorySession"/> bag and hands the destination back to the hub, which moves the token.
     /// </summary>
     [DisallowMultipleComponent]

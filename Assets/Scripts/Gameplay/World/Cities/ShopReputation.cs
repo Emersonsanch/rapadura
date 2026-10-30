@@ -5,21 +5,21 @@ namespace Rapadura.Gameplay.World.Cities
     /// <summary>
     /// "Freguesia": the standing of the cousins with one shopkeeper, earned by buying at that counter (1 point per gold
     /// spent there). Pure rules, no Unity: the online server keeps the same points per account and shop. Tiers gate
-    /// counter lines (<see cref="ShopUnlockKind.Reputation"/>, e.g. the Bornal de couro at Dona Cida's), the points are
+    /// counter lines (<see cref="ShopUnlockKind.Reputation"/>, e.g. the Alforje de Feltro at Mariam's), the points are
     /// saved per shop in <see cref="CityProgress"/>. See Docs/Cities.md §4.
     /// </summary>
     public static class ShopReputation
     {
-        /// <summary>0 = Freguês novo (new customer).</summary>
+        /// <summary>0 = Visitante (new customer).</summary>
         public const int NewCustomer = 0;
 
         /// <summary>1 = Freguês (regular).</summary>
         public const int Regular = 1;
 
-        /// <summary>2 = Freguês de casa (house regular).</summary>
+        /// <summary>2 = Amigo da Casa (house regular).</summary>
         public const int HouseRegular = 2;
 
-        /// <summary>3 = Compadre (family friend).</summary>
+        /// <summary>3 = Companheiro de Caravana (caravan companion).</summary>
         public const int Compadre = 3;
 
         /// <summary>Points needed for each tier (index = tier).</summary>

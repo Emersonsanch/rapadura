@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_parte_lasca_golem
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_parte_lasca_golem
-  _displayName: Lasca de Golem
-  _description: Lasca de pedra viva da serra. Endurece o couro e a lâmina.
+  _displayName: "Lasca de Ushabti"
+  _description: "Lasca de pedra de um ushabti da serra, os guardi\xF5es antigos que respondem. Endurece o couro e a l\xE2mina."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

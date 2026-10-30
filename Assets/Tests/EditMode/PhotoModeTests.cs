@@ -393,7 +393,7 @@ namespace Rapadura.Tests
 
             Assert.AreEqual("Modo foto", PhotoModeTexts.Get(null, PhotoModeTexts.Title));
             Assert.AreEqual("Foto salva em C:/x.png", PhotoModeTexts.Format(null, PhotoModeTexts.Saved, "C:/x.png"));
-            Assert.AreEqual("Noite de São João", PhotoModeTexts.Get(null, PhotoFilterPresets.LabelKey(PhotoFilter.SaoJoaoNight)));
+            Assert.AreEqual("Noite do Bema", PhotoModeTexts.Get(null, PhotoFilterPresets.LabelKey(PhotoFilter.SaoJoaoNight)));
         }
     }
 }

@@ -72,7 +72,7 @@ namespace Rapadura.Gameplay.Hunting
     }
 
     /// <summary>
-    /// The hunting features (Tibia-inspired, our names): "Tarefas de caça" from Seu Zé Caçador, "Presa do dia",
+    /// The hunting features (Tibia-inspired, our names): "Tarefas de caça" from Patig, o Rastreador, "Presa do dia",
     /// "Bicho destaque do dia" and the "Amuletos do Caderno". Plain C# like <see cref="BestiaryProgress"/>: built by
     /// GameManager, registered with SaveManager under <see cref="Key"/> and with NewSessionReset. Rules live in
     /// <see cref="HuntingRules"/> / <see cref="HuntingCharmCatalog"/> (pure, tested); this class keeps the state and
@@ -82,11 +82,11 @@ namespace Rapadura.Gameplay.Hunting
     /// bonus XP to the killer, gold into the bag through its grid fit, "Pontos de Caça"), heals with the
     /// Raminho de Arruda.</item>
     /// <item>Installs <see cref="EnemyRewardHooks"/> (prey/highlight XP and extra loot rolls) and
-    /// <see cref="CombatModifierHooks"/> (prey/charm protection, Figa dodge, Nó de Vaqueiro stun) while initialized.</item>
+    /// <see cref="CombatModifierHooks"/> (prey/charm protection, Cornalina dodge, Nó de Caravaneiro stun) while initialized.</item>
     /// <item>Day rollover (<see cref="Refresh"/>, on init, load and every in-game hour, like <c>DailyQuestService</c>):
     /// new prey offers, pick and reroll cleared, the task cap reset. The running task stays.</item>
     /// <item>"Pontos do Caderno" are not stored: they are the Caderno's kill milestones (<see cref="BestiaryProgress"/>)
-    /// plus the ones traded with Seu Zé, minus the unlocked charms' cost, so an old save gets its points at once.</item>
+    /// plus the ones traded with Patig, minus the unlocked charms' cost, so an old save gets its points at once.</item>
     /// </list>
     /// A save written before this existed has no "Hunting" entry and loads with no task, no charms and today's offers.
     /// </summary>
@@ -178,7 +178,7 @@ namespace Rapadura.Gameplay.Hunting
 
         public List<HuntingCreature> EligibleCreatures() => HuntingRules.EligibleCreatures(Creatures, IsUnlocked);
 
-        /// <summary>Creatures Seu Zé offers tasks for (eligible ones, Caderno order, at most <see cref="HuntingRules.MaxTaskCreatures"/>).</summary>
+        /// <summary>Creatures Patig offers tasks for (eligible ones, Caderno order, at most <see cref="HuntingRules.MaxTaskCreatures"/>).</summary>
         public List<HuntingCreature> TaskCreatures() => EligibleCreatures().Take(HuntingRules.MaxTaskCreatures).ToList();
 
         public int CadernoPointsFromMilestones => HuntingRules.TotalMilestonePoints(Creatures.Select(c => GetKills(c.Id)));
@@ -447,7 +447,7 @@ namespace Rapadura.Gameplay.Hunting
 
         public bool CanTradeHuntPoints => _state.huntPointsAvailable >= HuntingRules.HuntPointsPerCadernoPoint;
 
-        /// <summary>Seu Zé's trade: <see cref="HuntingRules.HuntPointsPerCadernoPoint"/> "Pontos de Caça" → 1 "Ponto do Caderno".</summary>
+        /// <summary>Patig's trade: <see cref="HuntingRules.HuntPointsPerCadernoPoint"/> "Pontos de Caça" → 1 "Ponto do Caderno".</summary>
         public bool TradeHuntPoints()
         {
             if (!CanTradeHuntPoints)

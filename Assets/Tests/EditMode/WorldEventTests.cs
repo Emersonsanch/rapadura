@@ -589,9 +589,9 @@ namespace Rapadura.Tests
             var portuguese = new LocalizationManager();
             portuguese.SetLanguage(LanguageCode.ptBR);
 
-            Assert.AreEqual("Wandering peddler", WorldEventTexts.Get(english, peddler.TitleKey));
-            Assert.AreEqual("Mascate ambulante", WorldEventTexts.Get(portuguese, peddler.TitleKey));
-            Assert.AreEqual("Mascate ambulante", WorldEventTexts.Get(null, peddler.TitleKey), "pt-BR without a manager");
+            Assert.AreEqual("Wandering caravan", WorldEventTexts.Get(english, peddler.TitleKey));
+            Assert.AreEqual("Caravana ambulante", WorldEventTexts.Get(portuguese, peddler.TitleKey));
+            Assert.AreEqual("Caravana ambulante", WorldEventTexts.Get(null, peddler.TitleKey), "pt-BR without a manager");
 
             string ptLine = WorldEventCardController.BuildHeroLine(peddler, CharacterId.Lavine, portuguese);
             StringAssert.Contains("Não confio", ptLine);

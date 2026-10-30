@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_parte_asa_morcego
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_parte_asa_morcego
-  _displayName: Asa de Morcego
-  _description: Asa fina das cavernas. Dizem que faz quem luta beber um pouco da própria força de volta.
+  _displayName: "Asa de Morcego"
+  _description: "Asa fina das Grutas do Limiar. Dizem que faz quem luta beber um pouco da pr\xF3pria for\xE7a de volta."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

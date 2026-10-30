@@ -43,6 +43,44 @@ namespace Rapadura.Gameplay.Wardrobe
 
         public const string SecondForestQuestId = "quest_region_forest_spider_webs";
 
+        // Ilha da Aurora re-theme (WorldBible_Maniqueismo §3.1–§3.3, §3.15, §3.20): the catalog shows the new names, the ids
+        // stay the ones the old sertão names resolved to (save files, shops and drop tables keep working).
+
+        /// <summary>Renamed set names → their original set ids (the other sets still use <c>"conjunto_" + Slug(name)</c>).</summary>
+        public static readonly IReadOnlyDictionary<string, string> LegacySetIds = new Dictionary<string, string>
+        {
+            { "Cantora do Bema", "conjunto_rainha_arraia_mata" }, { "Curandeira Aprendiz", "conjunto_rezadeira_aprendiz" },
+            { "Portadora da Lâmpada", "conjunto_pastorinha_cordao_azul" }, { "Menino do Pomar", "conjunto_guri_roca" },
+            { "Cavaleirinho da Estepe", "conjunto_vaqueirinho" }, { "Casca de Choupo", "conjunto_casca_ipe" },
+            { "Dançarino das Fitas", "conjunto_caboclo_lanca_mirim" }, { "Inventor do Bema", "conjunto_inventor_arraia" },
+            { "Estrelinha das Lanternas", "conjunto_estrelinha_reisado" },
+        };
+
+        /// <summary>Shop names shown in "Loja: …" → shop ids (others fall back to <c>HouseCatalogImport.ShopIdOf</c>).</summary>
+        public static readonly IReadOnlyDictionary<string, string> ShopIds = new Dictionary<string, string>
+        {
+            { "Costureira Mestra Narisah", "shop_costureira_fatima" }, { "Forja do Mestre Mihr", "shop_forja_tonho" },
+            { "Caravana do Ammo", "shop_mascate_bento" }, { "Bazar da Nana", "shop_feira_livre" },
+            { "Viveiro da Nana", "shop_viveiro_nenem" }, { "Bazar de Linhas da Mariam", "shop_armarinho_cida" },
+            { "Lamparinas da Parthenos", "shop_lamparinas_benedita" }, { "Mercearia do Zaku", "shop_mercearia_lazaro" },
+            { "Olaria da Náfsha", "shop_olaria_rosa" }, { "Marcenaria do Mestre Omóforo", "shop_marcenaria_damiao" },
+        };
+
+        /// <summary>Creature names shown in "Drop: …" → enemy ids (others fall back to <c>HouseCatalogImport.EnemyIds</c>).</summary>
+        public static readonly IReadOnlyDictionary<string, string> EnemyIds = new Dictionary<string, string>
+        {
+            { "Kök-Böri (chefe)", "enemy_forest_alpha_wolf" }, { "Hahya, o Gigante Guerreiro (chefe)", "enemy_mountain_warlord" },
+            { "Tages, o Habitante Ancestral (chefe)", "enemy_cave_dweller" }, { "O Grande Ushabti (chefe)", "enemy_desert_ruin_guardian" },
+            { "Escorpião das Areias Flamejantes", "enemy_desert_scorpion" }, { "Enxame de Morcegos do Limiar", "enemy_cave_bat_swarm" },
+            { "Aranha-Tecelã Apagada", "enemy_forest_spider" }, { "Ushabti de Pedra", "enemy_mountain_stone_golem" },
+        };
+
+        /// <summary>Festival names shown in "Evento: …" → event ids (others fall back to <c>HouseCatalogImport.Events</c>).</summary>
+        public static readonly IReadOnlyDictionary<string, string> EventIds = new Dictionary<string, string>
+        {
+            { "Bema", "event_festa_junina" }, { "Noite de Yalda", "event_natal_sertanejo" }, { "Festa das Lanternas", "event_carnaval" },
+        };
+
         /// <summary>RGB of each dye colour named in the catalog (the art reference for the tint, §9.4).</summary>
         public static readonly IReadOnlyDictionary<string, string> DyeColors = new Dictionary<string, string>
         {
@@ -51,7 +89,7 @@ namespace Rapadura.Gameplay.Wardrobe
             { "Verde-folha", "4C9A2A" }, { "Dourado-palha", "C9A44A" }, { "Rosa", "D9708F" }, { "Branco", "F2EFE6" },
             { "Ocre", "C2862F" }, { "Dourado-areia", "D8B26A" }, { "Azul-cristal", "5FC6E8" }, { "Verde-musgo", "5B6B2E" },
             { "Azul-celeste", "7FB7E6" }, { "Rosa-choque", "E8338B" }, { "Cobre", "B8733A" }, { "Lilás", "A98BD6" },
-            { "Cinza-pedra", "8A8A84" }, { "Preto", "1A1A1A" }, { "Estampa de chita (multicor)", "E04F7A" },
+            { "Cinza-pedra", "8A8A84" }, { "Preto", "1A1A1A" }, { "Estampa de ikat (multicor)", "E04F7A" },
             { "Vermelho-escuro com brilho", "7A0F26" }, { "Dourado brilhante", "F2C230" },
         };
 
@@ -124,7 +162,11 @@ namespace Rapadura.Gameplay.Wardrobe
                 gold, prendas, color ?? string.Empty, colorHex ?? string.Empty);
         }
 
-        public static string SetIdOf(string setName) => string.IsNullOrEmpty(setName) ? string.Empty : "conjunto_" + HouseCatalogImport.Slug(setName);
+        public static string SetIdOf(string setName)
+        {
+            if (string.IsNullOrEmpty(setName)) return string.Empty;
+            return LegacySetIds.TryGetValue(setName, out string legacy) ? legacy : "conjunto_" + HouseCatalogImport.Slug(setName);
+        }
 
         private static CharacterId CousinOfId(string id, int line)
         {
@@ -147,6 +189,7 @@ namespace Rapadura.Gameplay.Wardrobe
                 case "Acessório": return AppearanceSlot.Accessory;
                 case "Rosto/Pescoço": return AppearanceSlot.FaceNeck;
                 case "Costas": return AppearanceSlot.Back;
+                case "Ari":
                 case "Caramelo": return AppearanceSlot.Caramelo;
                 default: throw new FormatException($"CatalogoRoupas.md line {line}: unknown slot '{text}'.");
             }
@@ -178,8 +221,12 @@ namespace Rapadura.Gameplay.Wardrobe
         {
             if (text == "—") return (0, 0);
             if (int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out int gold)) return (gold, 0);
-            if (text.StartsWith("— (", StringComparison.Ordinal) && text.EndsWith(" prendas)", StringComparison.Ordinal)
-                && int.TryParse(text.Substring(3, text.Length - 3 - " prendas)".Length), NumberStyles.Integer, CultureInfo.InvariantCulture, out int prendas)) return (0, prendas);
+            foreach (string unit in new[] { " oferendas)", " prendas)" })
+            {
+                if (text.StartsWith("— (", StringComparison.Ordinal) && text.EndsWith(unit, StringComparison.Ordinal)
+                    && int.TryParse(text.Substring(3, text.Length - 3 - unit.Length), NumberStyles.Integer, CultureInfo.InvariantCulture, out int prendas)) return (0, prendas);
+            }
+
             throw new FormatException($"CatalogoRoupas.md line {line}: unknown price '{text}'.");
         }
 
@@ -192,11 +239,12 @@ namespace Rapadura.Gameplay.Wardrobe
         private static (WardrobeSourceType, string) SourceOf(string origin, int line)
         {
             if (origin == "Desbloqueado desde o começo") return (WardrobeSourceType.Starter, string.Empty);
-            if (TryAfter(origin, "Loja: ", out string shop)) return (WardrobeSourceType.Shop, HouseCatalogImport.ShopIdOf(shop));
+            if (TryAfter(origin, "Loja: ", out string shop))
+                return (WardrobeSourceType.Shop, ShopIds.TryGetValue(shop, out string shopId) ? shopId : HouseCatalogImport.ShopIdOf(shop));
             if (TryAfter(origin, "Drop: ", out string enemy))
             {
                 if (enemy.StartsWith("inimigos comuns", StringComparison.Ordinal)) return (WardrobeSourceType.Drop, WardrobeEntry.CommonDropRef);
-                if (HouseCatalogImport.EnemyIds.TryGetValue(enemy, out string enemyId)) return (WardrobeSourceType.Drop, enemyId);
+                if (EnemyIds.TryGetValue(enemy, out string enemyId) || HouseCatalogImport.EnemyIds.TryGetValue(enemy, out enemyId)) return (WardrobeSourceType.Drop, enemyId);
             }
 
             if (TryAfter(origin, "Missão da Casa: ", out string houseQuest)) return (WardrobeSourceType.HouseQuest, HouseCatalogImport.HouseQuestIdOf(houseQuest));
@@ -219,13 +267,17 @@ namespace Rapadura.Gameplay.Wardrobe
 
             if (TryAfter(origin, "Conquista: ", out string achievement) && HouseCatalogImport.AchievementIds.TryGetValue(StripParen(achievement), out string achievementId))
                 return (WardrobeSourceType.Achievement, achievementId);
-            if (TryAfter(origin, "Evento: ", out string evt) && HouseCatalogImport.Events.TryGetValue(StripParen(evt), out (string Id, HouseSeason Season) found))
-                return (WardrobeSourceType.Event, found.Id);
+            if (TryAfter(origin, "Evento: ", out string evt))
+            {
+                if (EventIds.TryGetValue(StripParen(evt), out string eventId)) return (WardrobeSourceType.Event, eventId);
+                if (HouseCatalogImport.Events.TryGetValue(StripParen(evt), out (string Id, HouseSeason Season) found)) return (WardrobeSourceType.Event, found.Id);
+            }
+
             if (TryAfter(origin, "Crafting: ", out string station))
             {
                 if (station == "Bancada") return (WardrobeSourceType.Craft, "workbench");
                 if (station == "Forja") return (WardrobeSourceType.Craft, "forge");
-                if (station == "Fogão a lenha") return (WardrobeSourceType.Craft, "stove");
+                if (station == "Tandir" || station == "Fogão a lenha") return (WardrobeSourceType.Craft, "stove");
                 if (station.StartsWith("Tear de mestre", StringComparison.Ordinal)) return (WardrobeSourceType.Craft, "master_loom");
                 if (station.StartsWith("Tear", StringComparison.Ordinal)) return (WardrobeSourceType.Craft, "loom");
                 if (station.StartsWith("Forja (", StringComparison.Ordinal)) return (WardrobeSourceType.Craft, "forge_boss");

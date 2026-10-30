@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_pedra_vida
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_pedra_vida
-  _displayName: Pedra da Vida
-  _description: "Pedra verde e quentinha, como semente de mandacaru. D\xE1 mais for\xE7a \xE0 op\xE7\xE3o extra de um equipamento."
+  _displayName: "Pedra da \xC1gua Viva"
+  _description: "Pedra verde e fresquinha, clara como \xE1gua de fonte. D\xE1 mais for\xE7a \xE0 op\xE7\xE3o extra de um equipamento."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

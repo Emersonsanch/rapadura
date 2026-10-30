@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_whistle_mount_rhea
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_whistle_mount_rhea
-  _displayName: "Apito da Ema Corredora"
-  _description: "Apito de taquara. Quem compra leva a Ema Corredora para casa."
+  _displayName: "Apito da Avestruz Corredora"
+  _description: "Apito de junco. Quem compra leva a Avestruz Corredora para casa."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

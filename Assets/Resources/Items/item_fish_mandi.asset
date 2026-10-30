@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_fish_mandi
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fish_mandi
-  _displayName: Mandi
-  _description: "Bagrinho de ferr\xE3o que sai de noite. Cuidado ao tirar do anzol!"
+  _displayName: "Bagre-chiador"
+  _description: "Bagrinho de espinho que chia e sai de noite. Cuidado ao tirar do anzol!"
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

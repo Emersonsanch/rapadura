@@ -493,7 +493,7 @@ namespace Rapadura.Tests.EditMode
             Assert.AreEqual("Lobo: 3/10", HuntingPresenter.TrackerLine(null, new HuntingTask { progress = 3, required = 10 }, "Lobo"));
             Assert.AreEqual("Destaque do dia: Lobo (+50% de XP e saque)", HuntingPresenter.BoostedHudText(null, "Lobo"));
             Assert.IsNull(HuntingPresenter.BoostedHudText(null, null));
-            Assert.AreEqual("Mateiro", HuntingTexts.GetFallback(HuntingTexts.RankKey(1)));
+            Assert.AreEqual("Batedor", HuntingTexts.GetFallback(HuntingTexts.RankKey(1)));
         }
     }
 }

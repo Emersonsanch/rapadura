@@ -104,7 +104,7 @@ namespace Rapadura.Gameplay.Daily
         public const string HerbItemId = "item_herb";
 
         /// <summary>
-        /// The event-room invite of day 5: the "Convite do Terreiro" of the scheduled event rooms
+        /// The event-room invite of day 5: the "Convite do Pátio" of the scheduled event rooms
         /// (<c>EventRoomRules.TerreiroTicketItemId</c>, Resources/Items/item_convite_terreiro.asset). Kept as a literal so
         /// the streak does not depend on the event-room code; if the item is ever missing from the ItemDatabase, day 5 pays
         /// the fallback (<see cref="EventInviteFallbackGold"/> gold) instead.

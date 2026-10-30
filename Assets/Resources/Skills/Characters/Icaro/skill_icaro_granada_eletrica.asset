@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: skill_icaro_granada_eletrica
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Skills.SkillDefinition
   _skillId: skill_icaro_granada_eletrica
-  _displayName: "Granada El\xE9trica"
-  _description: "Uma granada caseira que solta uma descarga el\xE9trica em \xE1rea, causando dano e deixando os inimigos eletrocutados e lentos."
+  _displayName: "Granada de Fa\xEDsca"
+  _description: "Uma granada caseira que solta uma chuva de fa\xEDscas de Fogo Vivo em \xE1rea, causando dano e deixando os inimigos eletrocutados e lentos."
   _icon: {fileID: 0}
   _skillType: 0
   _category: 0

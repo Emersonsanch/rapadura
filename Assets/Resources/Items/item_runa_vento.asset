@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_runa_vento
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_runa_vento
-  _displayName: Runa do Vento
-  _description: Verso que chama o vento do sertão nas costas: +20% de velocidade por 12 segundos.
+  _displayName: "Runa do Vento"
+  _description: "Verso que chama o Vento Vivo nas costas: +20% de velocidade por 12 segundos."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 1

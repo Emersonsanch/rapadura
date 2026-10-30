@@ -24,7 +24,7 @@ namespace Rapadura.UI.Mounts
     /// blanket (cycle through the owned ones), "Usar esta" (active mount), "Fazer carinho" and the foods it eats
     /// (paid from the carried bag through <see cref="MountFeeding"/>); plus the house's stalls (<see cref="MountStable"/>).</item>
     /// <item><b>Caderno</b>: the 30 species of <see cref="MountCodex"/>, "???" + hint for the ones not seen yet.</item>
-    /// <item><b>Selaria</b>: saddles and blankets for gold, only while the cousins are in the Vila (Haras do Seu Tonico).</item>
+    /// <item><b>Selaria</b>: saddles and blankets for gold, only while the cousins are in the Vila (Haras do Srosh).</item>
     /// </list>
     /// While open it holds GameplayPause and a live <see cref="CarriedInventorySession"/>, handed back on close.
     /// </summary>

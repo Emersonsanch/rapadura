@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace Rapadura.Gameplay.Seasons
 {
-    /// <summary>The four calls of the marcador (each one a direction: arrow keys / WASD / the four buttons).</summary>
+    /// <summary>The four calls of Master Xroshtag in the Bema Hymns (each one a direction: arrow keys / WASD / the four buttons). Enum names kept from the old quadrilha.</summary>
     public enum QuadrilhaMove
     {
-        /// <summary>"Anarriê!" — everyone steps back (left).</summary>
+        /// <summary>"Luz!" / "Light!" (left).</summary>
         Anarrie,
-        /// <summary>"Balancê!" — swing in place (up).</summary>
+        /// <summary>"Vento!" / "Wind!" (up).</summary>
         Balance,
-        /// <summary>"Olha a cobra!" — jump (down).</summary>
+        /// <summary>"Água!" / "Water!" (down).</summary>
         Cobra,
-        /// <summary>"Caminho da roça!" — the line walks on (right).</summary>
+        /// <summary>"Fogo!" / "Fire!" (right).</summary>
         CaminhoDaRoca,
     }
 
@@ -25,7 +25,7 @@ namespace Rapadura.Gameplay.Seasons
         Miss,
     }
 
-    /// <summary>One call of the dance: when it lands and which step it asks for.</summary>
+    /// <summary>One call of the hymn: when it lands and which answer it asks for.</summary>
     public sealed class QuadrilhaStep
     {
         public readonly int Index;
@@ -44,12 +44,13 @@ namespace Rapadura.Gameplay.Seasons
     }
 
     /// <summary>
-    /// The quadrilha of the Festa Junina as a small rhythm game (pure, deterministic, EditMode-tested): the marcador
+    /// The Bema Hymns (call and response; the class keeps its old quadrilha name) as a small rhythm game (pure,
+    /// deterministic, EditMode-tested): Master Xroshtag
     /// calls <see cref="StepCount"/> steps, one every <see cref="Beat"/> seconds after a <see cref="LeadIn"/>; each one
     /// must be answered with the right move within <see cref="GoodWindow"/> seconds of its beat (<see cref="PerfectWindow"/>
     /// for a perfect). A wrong move or a step let past is a miss. The order of the calls comes from the seed only
     /// (the panel uses the day, so a day's dance is the same on every replay), never three of the same in a row.
-    /// "Dança tranquila" (or Reduzir Movimento) widens both windows and slows the beat.
+    /// "Hino tranquilo" (or Reduzir Movimento) widens both windows and slows the beat.
     /// </summary>
     public sealed class QuadrilhaSession
     {

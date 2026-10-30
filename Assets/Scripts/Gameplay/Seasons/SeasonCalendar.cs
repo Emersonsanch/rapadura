@@ -3,18 +3,18 @@ using Rapadura.Gameplay.Quests;
 
 namespace Rapadura.Gameplay.Seasons
 {
-    /// <summary>The seasonal events of the "Sistema de temporadas" (Docs/Seasons.md). Only the Festa Junina for now.</summary>
+    /// <summary>The seasonal events of the "Sistema de temporadas" (Docs/Seasons.md). Only the Bema (id FestaJunina) for now.</summary>
     public enum SeasonalEventId
     {
         None,
-        /// <summary>June: bandeirinhas and fogueira in the Vila, the quadrilha and the Barraca de Prendas.</summary>
+        /// <summary>June: the Bema in the Vila (lanterns, the empty seat on five steps), the Bema Hymns and the Tenda das Oferendas.</summary>
         FestaJunina,
     }
 
     /// <summary>
-    /// Which seasonal event is on, from the date alone (pure, deterministic: no server, no random): June is the Festa
-    /// Junina, every day of it, any year. <see cref="Clock"/> is the device clock by default and a fixed clock in tests;
-    /// <see cref="DebugForceFestaJunina"/> turns the festa on outside June (Editor menu "Rapadura/Debug/Festa Junina").
+    /// Which seasonal event is on, from the date alone (pure, deterministic: no server, no random): June is the Bema
+    /// (id FestaJunina), every day of it, any year. <see cref="Clock"/> is the device clock by default and a fixed clock in tests;
+    /// <see cref="DebugForceFestaJunina"/> turns the Bema on outside June (Editor menu "Rapadura/Debug/Bema").
     /// Unity-free so the online server can run the same calendar.
     /// </summary>
     public static class SeasonCalendar

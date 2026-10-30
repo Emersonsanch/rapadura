@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_fish_lambari
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fish_lambari
-  _displayName: Lambari
-  _description: "Prateado e ligeiro, vive nas corredeiras do riacho."
+  _displayName: "Barbo"
+  _description: "Bigodudo e ligeiro, vive nas corredeiras do riacho."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

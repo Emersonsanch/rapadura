@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_fish_surubim
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fish_surubim
-  _displayName: Surubim
-  _description: "Peixe-gato pintado, enorme. Prefere a noite e a chuva."
+  _displayName: "Peixe-gato-do-Nilo"
+  _description: "Peixe-gato bigodudo, enorme. Prefere a noite e a chuva."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

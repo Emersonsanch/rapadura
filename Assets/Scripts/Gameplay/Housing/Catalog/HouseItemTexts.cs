@@ -10,7 +10,7 @@ namespace Rapadura.Gameplay.Housing
     /// Localization (en + pt-BR) of the house catalog: <c>house.&lt;id&gt;.name</c> and <c>house.&lt;id&gt;.desc</c> for all
     /// 580 items, built from <see cref="HouseCatalog"/>. Names: pt-BR from the catalog; English from the optional
     /// translation table (<c>Docs/Housing/CatalogoCasa.en.tsv</c>), else the pt-BR name (TODO: translate).
-    /// Descriptions are generated: "Móveis de sala · Comum · Loja: Marcenaria do Mestre Damião".
+    /// Descriptions are generated: "Móveis de sala · Comum · Loja: Marcenaria do Mestre Omóforo".
     /// Same self-contained pattern as the other *Texts helpers: merged into the live manager on first use.
     /// </summary>
     public static class HouseItemTexts

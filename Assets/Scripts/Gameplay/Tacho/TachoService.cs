@@ -45,7 +45,7 @@ namespace Rapadura.Gameplay.Tacho
     public readonly struct TachoCombinedEvent : IGameEvent
     {
         public readonly TachoOutcome Outcome;
-        /// <summary>The item made did not fit the Mochila and went to the Baú da Vó Zefa.</summary>
+        /// <summary>The item made did not fit the Mochila and went to the Baú da Vó Edna.</summary>
         public readonly bool SentToChest;
 
         public TachoCombinedEvent(TachoOutcome outcome, bool sentToChest)
@@ -61,7 +61,7 @@ namespace Rapadura.Gameplay.Tacho
     /// <list type="bullet">
     /// <item>Wings made/upgraded: the main item is consumed only on success (bag entry, or the equipped slot through
     /// <see cref="InventoryManager.RemoveEquipped"/>), the new wing goes to the bag (an equipped wing is re-equipped at
-    /// its new level) and, if it does not fit the grid, to the Baú da Vó Zefa, never lost.</item>
+    /// its new level) and, if it does not fit the grid, to the Baú da Vó Edna, never lost.</item>
     /// <item>Proteção do Caos: writes the refine level in place, like the forge (<see cref="RefineService"/>).</item>
     /// <item>Fruits: the fruit goes to the bag (or the Baú).</item>
     /// <item>Failure: the spent materials are gone, the main item is untouched (kid-friendly rule).</item>

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_patua_vo_zefa
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_patua_vo_zefa
-  _displayName: "Patu\xE1 da V\xF3 Zefa"
-  _description: "Saquinho de pano costurado pela V\xF3 Zefa. Gasta-se ao cair: voc\xEA n\xE3o perde XP nem deixa cair nada."
+  _displayName: "Tumar da V\xF3 Edna"
+  _description: "Tri\xE2ngulo de pano bordado costurado pela V\xF3 Edna. Gasta-se ao cair: voc\xEA n\xE3o perde XP nem deixa cair nada."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 0

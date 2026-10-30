@@ -262,12 +262,12 @@ namespace Rapadura.Tests
         public void Importer_RejectsMalformedRows()
         {
             const string header = "| ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |\n|---|---|---|---|---|---|---|---|\n";
-            Assert.Throws<System.FormatException>(() => HouseCatalogImport.Parse(header + "| `casa_sala_999` | X | Mítico | Loja: Feira livre | 10 | 1 | — | Piso |\n"));
+            Assert.Throws<System.FormatException>(() => HouseCatalogImport.Parse(header + "| `casa_sala_999` | X | Mítico | Loja: Bazar da Nana | 10 | 1 | — | Piso |\n"));
             Assert.Throws<System.FormatException>(() => HouseCatalogImport.Parse(header + "| `casa_sala_999` | X | Comum | Achado na rua | 10 | 1 | — | Piso |\n"));
-            Assert.Throws<System.FormatException>(() => HouseCatalogImport.Parse(header + "| `casa_sala_999` | X | Comum | Loja: Feira livre | 10 | 1 | — | Telhado |\n"));
-            Assert.Throws<System.FormatException>(() => HouseCatalogImport.Parse(header + "| `casa_xyz_001` | X | Comum | Loja: Feira livre | 10 | 1 | — | Piso |\n"));
+            Assert.Throws<System.FormatException>(() => HouseCatalogImport.Parse(header + "| `casa_sala_999` | X | Comum | Loja: Bazar da Nana | 10 | 1 | — | Telhado |\n"));
+            Assert.Throws<System.FormatException>(() => HouseCatalogImport.Parse(header + "| `casa_xyz_001` | X | Comum | Loja: Bazar da Nana | 10 | 1 | — | Piso |\n"));
 
-            HouseItemDefinition ok = HouseCatalogImport.Parse(header + "| `casa_sazonal_999` | Y | Raro | Evento: Carnaval | — (40 prendas) | 5 | Frevo e Maracatu | Quintal |\n").Single();
+            HouseItemDefinition ok = HouseCatalogImport.Parse(header + "| `casa_sazonal_999` | Y | Raro | Evento: Festa das Lanternas | — (40 oferendas) | 5 | Festa das Lanternas | Quintal |\n").Single();
             Assert.AreEqual(40, ok.EventPrice);
             Assert.AreEqual(HouseSeason.Carnaval, ok.Seasonal);
             Assert.AreEqual("set_frevo_maracatu", ok.SetId);
@@ -278,11 +278,20 @@ namespace Rapadura.Tests
         public void Importer_ShopIds_FollowTheCityShopConvention()
         {
             Assert.AreEqual("shop_general_store", HouseCatalogImport.ShopIdOf("Armazém Geral"));
-            Assert.AreEqual("shop_armarinho_cida", HouseCatalogImport.ShopIdOf("Armarinho da Dona Cida"));
-            Assert.AreEqual("shop_forja_tonho", HouseCatalogImport.ShopIdOf("Forja do Mestre Tonho"));
+            Assert.AreEqual("shop_armarinho_cida", HouseCatalogImport.ShopIdOf("Bazar de Linhas da Mariam"));
+            Assert.AreEqual("shop_forja_tonho", HouseCatalogImport.ShopIdOf("Forja do Mestre Mihr"));
+            Assert.AreEqual("shop_mascate_bento", HouseCatalogImport.ShopIdOf("Caravana do Ammo"));
+            Assert.AreEqual("shop_viveiro_nenem", HouseCatalogImport.ShopIdOf("Viveiro da Nana"));
+            Assert.AreEqual("shop_marcenaria_damiao", HouseCatalogImport.ShopIdOf("Marcenaria do Mestre Omóforo"));
+            Assert.AreEqual("set_varanda_vo_zefa", HouseCatalogImport.SetIdOf("Iwan da Vó Edna"));
+            Assert.AreEqual("set_arraia", HouseCatalogImport.SetIdOf("Bema"));
+            Assert.AreEqual("set_cristal_sol", HouseCatalogImport.SetIdOf("Cristal do Sol"), "kept names still slug to their id");
+            // The pre-re-theme labels keep resolving (the wardrobe catalog reuses these tables).
             Assert.AreEqual("shop_mascate_bento", HouseCatalogImport.ShopIdOf("Mascate Seu Bento"));
-            Assert.AreEqual("shop_viveiro_nenem", HouseCatalogImport.ShopIdOf("Viveiro da Comadre Neném"));
             Assert.AreEqual("set_varanda_vo_zefa", HouseCatalogImport.SetIdOf("Varanda da Vó Zefa"));
+            Assert.AreEqual("enemy_forest_alpha_wolf", HouseCatalogImport.EnemyIds["Kök-Böri, o Lobo Celeste (chefe)"]);
+            Assert.AreEqual("enemy_forest_alpha_wolf", HouseCatalogImport.EnemyIds["Lobo Alfa (chefe)"]);
+            Assert.AreEqual(HouseSeason.Natal, HouseCatalogImport.Events["Noite de Yalda"].Season);
         }
 
         // ------------------------------------------------------------------
@@ -304,8 +313,8 @@ namespace Rapadura.Tests
                 Assert.IsFalse(desc.PtBR.Contains("`"), $"{item.DescKey}: designer ids stay out of the text");
             }
 
-            Assert.AreEqual("Sofá de palhinha da varanda", HouseItemTexts.Get(null, "house.casa_sala_001.name"));
-            Assert.AreEqual("Móveis de sala · Comum · Loja: Marcenaria do Mestre Damião", HouseItemTexts.Get(null, "house.casa_sala_001.desc"));
+            Assert.AreEqual("Sofá de vime do iwan", HouseItemTexts.Get(null, "house.casa_sala_001.name"));
+            Assert.AreEqual("Móveis de sala · Comum · Loja: Marcenaria do Mestre Omóforo", HouseItemTexts.Get(null, "house.casa_sala_001.desc"));
             StringAssert.StartsWith("Living room · Common · Shop: ", HouseItemTexts.Entries.First(e => e.Key == "house.casa_sala_001.desc").En);
         }
     }

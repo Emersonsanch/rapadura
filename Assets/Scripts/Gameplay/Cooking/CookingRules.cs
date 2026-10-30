@@ -45,7 +45,7 @@ namespace Rapadura.Gameplay.Cooking
     }
 
     /// <summary>
-    /// The rules of Vó Zefa's stove, pure and Unity-free (tested by <c>CookingTests</c>):
+    /// The rules of Vó Edna's stove, pure and Unity-free (tested by <c>CookingTests</c>):
     /// <list type="bullet">
     /// <item><b>Validation</b>: the dish must exist and be learned; every ingredient and the provisions must be in the
     /// bag (checked before anything is taken, so a failed cook never eats half the ingredients).</item>
@@ -202,7 +202,7 @@ namespace Rapadura.Gameplay.Cooking
             return effects;
         }
 
-        /// <summary>Effects applied once as the fight starts, for their own duration (Rapadura, plus Ícaro's bonus).</summary>
+        /// <summary>Effects applied once as the fight starts, for their own duration (Torrão Dourado, plus Ícaro's bonus).</summary>
         public static List<StatModifierDefinition> BuildOpeningBurst(MealRecipeSpec recipe, CharacterId? hero)
         {
             var effects = new List<StatModifierDefinition>();
@@ -240,7 +240,7 @@ namespace Rapadura.Gameplay.Cooking
         }
 
         /// <summary>
-        /// Whether Vó Zefa teaches <paramref name="recipe"/> at the stove to <paramref name="hero"/>: it is that cousin's
+        /// Whether Vó Edna teaches <paramref name="recipe"/> at the stove to <paramref name="hero"/>: it is that cousin's
         /// favourite, not known yet, and its region is open (<paramref name="isRegionUnlocked"/>).
         /// </summary>
         public static bool ShouldTeachFavourite(MealRecipeSpec recipe, CharacterId? hero, bool alreadyKnown, Func<World.Biomes.BiomeType, bool> isRegionUnlocked)

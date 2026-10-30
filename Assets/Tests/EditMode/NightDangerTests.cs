@@ -365,15 +365,15 @@ namespace Rapadura.Tests
         [Test]
         public void DisplayName_AddsTheNocturnalSuffix_OrUsesTheSpeciesName()
         {
-            Assert.AreEqual("Lobo da Mata (noturno)", NightVariantRules.DisplayName("Lobo da Mata", NightVariantRules.Resolve(NightForm.Variant), "{0} (noturno)", null));
-            Assert.AreEqual("Wolf (nocturnal)", NightVariantRules.DisplayName("Wolf", NightVariantRules.Resolve(NightForm.Variant), "{0} (nocturnal)", null));
-            Assert.AreEqual("Lobo da Mata (noturno)", NightVariantRules.DisplayName("Lobo da Mata", NightVariantRules.Resolve(NightForm.Variant), null, null), "fallback pattern");
-            Assert.AreEqual("Lobisomem-do-sertão", NightVariantRules.DisplayName("Lobo da Mata", NightVariantRules.Resolve(NightForm.Species, NightVariantRules.Lobisomem), "{0} (noturno)", "Lobisomem-do-sertão"));
-            Assert.AreEqual("Lobo da Mata", NightVariantRules.DisplayName("Lobo da Mata", NightVariantRules.Resolve(NightForm.Normal), "{0} (noturno)", null));
+            Assert.AreEqual("Lobo do Tugai (da noite)", NightVariantRules.DisplayName("Lobo do Tugai", NightVariantRules.Resolve(NightForm.Variant), "{0} (da noite)", null));
+            Assert.AreEqual("Wolf (night)", NightVariantRules.DisplayName("Wolf", NightVariantRules.Resolve(NightForm.Variant), "{0} (night)", null));
+            Assert.AreEqual("Lobo do Tugai (da noite)", NightVariantRules.DisplayName("Lobo do Tugai", NightVariantRules.Resolve(NightForm.Variant), null, null), "fallback pattern");
+            Assert.AreEqual("Mardagayl, o Lobo-das-Sete-Noites", NightVariantRules.DisplayName("Lobo do Tugai", NightVariantRules.Resolve(NightForm.Species, NightVariantRules.Lobisomem), "{0} (da noite)", "Mardagayl, o Lobo-das-Sete-Noites"));
+            Assert.AreEqual("Lobo do Tugai", NightVariantRules.DisplayName("Lobo do Tugai", NightVariantRules.Resolve(NightForm.Normal), "{0} (da noite)", null));
 
-            Assert.AreEqual("{0} (noturno)", NightTexts.GetFallback(NightTexts.VariantName));
+            Assert.AreEqual("{0} (da noite)", NightTexts.GetFallback(NightTexts.VariantName));
             Assert.AreEqual("Noite — os bichos estão mais bravos", NightTexts.GetFallback(NightTexts.HudNight));
-            Assert.AreEqual("Lobisomem-do-sertão", NightTexts.GetFallback(NightVariantRules.Lobisomem.NameKey));
+            Assert.AreEqual("Mardagayl, o Lobo-das-Sete-Noites", NightTexts.GetFallback(NightVariantRules.Lobisomem.NameKey));
         }
 
         [Test]

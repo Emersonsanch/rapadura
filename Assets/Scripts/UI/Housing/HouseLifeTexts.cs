@@ -186,7 +186,7 @@ namespace Rapadura.UI.Housing
                 E(UpgradeTitle, "Improve the house", "Melhorar a casa"),
                 E(UpgradeNext, "{0} → {1}", "{0} → {1}"),
                 E(UpgradeMax, "Your house is already a manor! There's nothing left to build — just to enjoy.", "Sua casa já é um casarão! Não falta mais nada pra construir — só aproveitar."),
-                E(UpgradeNoHouse, "First Vó Zefa has to hand you the key.", "Primeiro a Vó Zefa precisa te entregar a chave."),
+                E(UpgradeNoHouse, "First Vó Edna has to hand you the key.", "Primeiro a Vó Edna precisa te entregar a chave."),
                 E(ReqLevel, "Cousin at level {0} (now {1})", "Primo no nível {0} (agora {1})"),
                 E(ReqBoss, "{0} set free", "{0} libertado"),
                 E(ReqItem, "{0}: {1}/{2}", "{0}: {1}/{2}"),
@@ -209,7 +209,7 @@ namespace Rapadura.UI.Housing
                 E(SceneKey(2), "Joaquim carried the boards, Maria brought water for everyone and Lavine painted the porch door green.", "O Joaquim carregou as tábuas, a Maria trouxe água pra todo mundo e a Lavine pintou a porta da varanda de verde."),
                 E(SceneKey(3), "Joaquim carried brick by brick, Ícaro \"optimized\" the clay mixer and Maithe climbed up to lay the roof tiles.", "O Joaquim carregou tijolo por tijolo, o Ícaro \"otimizou\" a betoneira de barro e a Maithe subiu no telhado pra pôr as telhas."),
                 E(SceneKey(4), "Ícaro's mixer only exploded once, Maria served water and Lavine painted the stripe at the bottom of the walls.", "A betoneira do Ícaro só explodiu uma vez, a Maria serviu água e a Lavine pintou o barrado das paredes."),
-                E(SceneKey(5), "The whole family came: Joaquim with the bricks, Ícaro with the mixer, Maithe on the roof, Maria with the water and Lavine painting the big door. Vó Zefa cried a little.", "A família inteira veio: o Joaquim com os tijolos, o Ícaro com a betoneira, a Maithe no telhado, a Maria com a água e a Lavine pintando a porta grande. A Vó Zefa chorou um pouquinho."),
+                E(SceneKey(5), "The whole family came: Joaquim with the bricks, Ícaro with the mixer, Maithe on the roof, Maria with the water and Lavine painting the big door. Vó Edna cried a little.", "A família inteira veio: o Joaquim com os tijolos, o Ícaro com a betoneira, a Maithe no telhado, a Maria com a água e a Lavine pintando a porta grande. A Vó Edna chorou um pouquinho."),
 
                 E(LifeTitle, "Life at home", "Vida na casa"),
                 E(ComfortLine, "Comfort {0} — {1}", "Conforto {0} — {1}"),
@@ -264,12 +264,12 @@ namespace Rapadura.UI.Housing
                 E(CousinsSigned, "Cousins who signed: {0}/{1}", "Primos que assinaram: {0}/{1}"),
 
                 E(TrophyStatus, "Trophy wall: {0} of {1} bosses set free.", "Parede de troféus: {0} de {1} chefes libertados."),
-                E(RelicTitle, "Showcase of the twelve relics", "Vitrine das doze relíquias"),
-                E(RelicStatus, "{0} of {1} relics found. Each one lights up when you find it.", "{0} de {1} relíquias achadas. Cada uma acende quando é achada."),
+                E(RelicTitle, "Showcase of Keepsakes", "Vitrine das Lembranças"),
+                E(RelicStatus, "{0} of {1} keepsakes found. Each one lights up when you find it.", "{0} de {1} lembranças achadas. Cada uma acende quando é achada."),
                 E(RelicMissing, "??? (still hidden somewhere)", "??? (ainda escondida por aí)"),
                 E(ShelfOpening, "Opening Vó's Notebook…", "Abrindo o Caderno da Vó…"),
                 E(ShelfUnavailable, "The Notebook can't open right now.", "O Caderno não abre agora."),
-                E(PetNap, "Caramelo is taking a nap. Zzz… His tail still wags.", "O Caramelo está tirando uma soneca. Zzz… O rabo ainda abana."),
+                E(PetNap, "Ari is taking a nap. Zzz… His tail still wags.", "O Ari está tirando uma soneca. Zzz… O rabo ainda abana."),
                 E(Dummy, "A straw training dummy. Test your powers on it: it gives no XP, only the numbers.", "Um boneco de treino de palha. Teste seus poderes nele: não dá XP, só mostra os números."),
                 E(DummyTitle, "Straw training dummy", "Boneco de treino de palha"),
                 E(DummyHero, "{0}, level {1}", "{0}, nível {1}"),
@@ -304,10 +304,10 @@ namespace Rapadura.UI.Housing
 
         private static void AddBosses(List<LocalizationEntry> list)
         {
-            list.Add(E(BossKey("enemy_forest_alpha_wolf"), "Alpha Wolf", "Lobo Alfa"));
-            list.Add(E(BossKey("enemy_desert_ruin_guardian"), "Ruin Guardian", "Guardião da Ruína"));
-            list.Add(E(BossKey("enemy_mountain_warlord"), "Mountain Warlord", "Senhor da Guerra da Montanha"));
-            list.Add(E(BossKey("enemy_cave_dweller"), "Ancient Dweller", "Habitante Ancestral"));
+            list.Add(E(BossKey("enemy_forest_alpha_wolf"), "Kök-Böri, the Sky Wolf", "Kök-Böri, o Lobo Celeste"));
+            list.Add(E(BossKey("enemy_desert_ruin_guardian"), "The Great Ushabti", "O Grande Ushabti"));
+            list.Add(E(BossKey("enemy_mountain_warlord"), "Hahya the Giant Warrior", "Hahya, o Gigante Guerreiro"));
+            list.Add(E(BossKey("enemy_cave_dweller"), "Tages the Ancient Dweller", "Tages, o Habitante Ancestral"));
         }
 
         private static void AddMaterials(List<LocalizationEntry> list)
@@ -324,27 +324,27 @@ namespace Rapadura.UI.Housing
         {
             (string id, string enName, string ptName, string enTitle, string ptTitle)[] sets =
             {
-                ("set_varanda_vo_zefa", "Vó Zefa's Porch", "Varanda da Vó Zefa", "Grandma's porch", "Varanda de Vó"),
-                ("set_tropeiro_vo_chico", "Vô Chico the Drover", "Tropeiro do Vô Chico", "Drover's house", "Casa de tropeiro"),
-                ("set_casa_farinha", "Flour House", "Casa de Farinha", "Flour-house folk", "Gente da casa de farinha"),
-                ("set_cozinha_vo", "Vó's Kitchen", "Cozinha da Vó", "Best kitchen around", "Cozinha mais gostosa do sertão"),
+                ("set_varanda_vo_zefa", "Vó Edna's Iwan", "Iwan da Vó Edna", "Grandma's iwan", "Iwan de Vó"),
+                ("set_tropeiro_vo_chico", "Vô Jorge's Caravan", "Caravana do Vô Jorge", "Caravaneer's house", "Casa de caravaneiro"),
+                ("set_casa_farinha", "Orchard Mill", "Moinho do Pomar", "Millstone folk", "Gente do moinho"),
+                ("set_cozinha_vo", "Vó's Kitchen", "Cozinha da Vó", "Best kitchen around", "Cozinha mais gostosa da ilha"),
                 ("set_oficina_icaro", "Ícaro's Workshop", "Oficina do Ícaro", "Crazy workshop", "Oficina maluca"),
                 ("set_ventania_maithe", "Maithe's Gale", "Ventania da Maithe", "Windy house", "Casa dos ventos"),
                 ("set_luz_maria", "Maria's Light", "Luz da Maria", "House of light", "Casa de luz"),
                 ("set_raizes_joaquim", "Joaquim's Roots", "Raízes do Joaquim", "Deep-rooted house", "Casa de raiz"),
                 ("set_noite_rubra_lavine", "Lavine's Crimson Night", "Noite Rubra da Lavine", "Starry house", "Casa estrelada"),
-                ("set_cantinho_caramelo", "Caramelo's Corner", "Cantinho do Caramelo", "Caramelo's palace", "Palácio do Caramelo"),
-                ("set_mata_fechada", "Deep Woods", "Mata Fechada", "Forest house", "Casa da mata"),
-                ("set_duna_dourada", "Golden Dune", "Duna Dourada", "Desert house", "Casa do deserto"),
-                ("set_pico_nevado", "Snowy Peak", "Pico Nevado", "Mountain house", "Casa da serra"),
-                ("set_cristal_cavernas", "Cave Crystal", "Cristal das Cavernas", "Crystal house", "Casa de cristal"),
-                ("set_feira_livre", "Street Market", "Feira Livre", "Market stall", "Barraca de feira"),
-                ("set_cordel_xilogravura", "Cordel and Woodcut", "Cordel e Xilogravura", "Cordel house", "Casa de cordel"),
-                ("set_horta_caprichada", "Tidy Garden", "Horta Caprichada", "Green thumbs", "Mão boa pra planta"),
+                ("set_cantinho_caramelo", "Ari's Corner", "Cantinho do Ari", "Ari's palace", "Palácio do Ari"),
+                ("set_mata_fechada", "Zarafshan Tugai", "Tugai do Zarafshan", "Riverwood house", "Casa do tugai"),
+                ("set_duna_dourada", "Flaming Sands", "Areias Flamejantes", "Oasis house", "Casa do oásis"),
+                ("set_pico_nevado", "Litema Peaks", "Picos de Litema", "Mountain house", "Casa da serra"),
+                ("set_cristal_cavernas", "Rose Tuff of the Lamps", "Tufo Rosa das Lamparinas", "Lamplit house", "Casa das lamparinas"),
+                ("set_feira_livre", "Nana's Bazaar", "Bazar da Nana", "Bazaar stall", "Banca de bazar"),
+                ("set_cordel_xilogravura", "Illuminations and Paper Cuts", "Iluminuras e Papel Recortado", "Illuminated house", "Casa iluminada"),
+                ("set_horta_caprichada", "Melon Garden", "Horta dos Melões", "Green thumbs", "Mão boa pra planta"),
                 ("set_cristal_sol", "Sun Crystal", "Cristal do Sol", "Sunlit house", "Casa do sol"),
-                ("set_arraia", "Arraiá", "Arraiá", "June-party house", "Casa de São João"),
-                ("set_natal_sertanejo", "Backland Christmas", "Natal Sertanejo", "Christmas house", "Casa de Natal"),
-                ("set_frevo_maracatu", "Frevo and Maracatu", "Frevo e Maracatu", "Carnival house", "Casa de carnaval"),
+                ("set_arraia", "Bema", "Bema", "Festival house", "Casa do Bema"),
+                ("set_natal_sertanejo", "Yalda Night", "Noite de Yalda", "Longest-night house", "Casa de Yalda"),
+                ("set_frevo_maracatu", "Lantern Festival", "Festa das Lanternas", "Lantern house", "Casa das lanternas"),
             };
 
             foreach ((string id, string enName, string ptName, string enTitle, string ptTitle) in sets)
@@ -365,7 +365,7 @@ namespace Rapadura.UI.Housing
             }
 
             Quest(HouseQuestChain.AguaFresca, "Fresh Water", "Água Fresca", "Bring 10 stone and 5 wood for a stone well.", "Traga 10 pedras e 5 madeiras pra um poço de pedra.");
-            Quest(HouseQuestChain.FogoNaCozinha, "Fire in the Kitchen", "Fogo na Cozinha", "After the Alpha Wolf: bring 3 roast meat and 8 wood for a wood stove.", "Depois do Lobo Alfa: traga 3 carnes assadas e 8 madeiras pra um fogão a lenha.");
+            Quest(HouseQuestChain.FogoNaCozinha, "Fire in the Kitchen", "Fogo na Cozinha", "After Kök-Böri: bring 3 roast meat and 8 wood for a tandir, the clay oven.", "Depois do Kök-Böri: traga 3 carnes assadas e 8 madeiras pra um tandir, o forno de barro.");
             Quest(HouseQuestChain.ParedeDeBarro, "Clay Walls", "Parede de Barro", "Improve the house to rammed earth and tiles.", "Melhore a casa pra taipa e telha.");
             Quest(HouseQuestChain.TijoloPorTijolo, "Brick by Brick", "Tijolo por Tijolo", "Improve the house to brick.", "Melhore a casa pra alvenaria.");
             Quest(HouseQuestChain.CasaCheia, "Full House", "Casa Cheia", "Have the manor and four cousins sign the guest book.", "Tenha o casarão e quatro primos assinando o livro de visitas.");
@@ -379,8 +379,8 @@ namespace Rapadura.UI.Housing
                     new[] { "Look at that — {0}! Nice taste, cousin.", "I came running from the woods just to see the house.", "If you need a lookout on the roof, call me." },
                     new[] { "Olha só — {0}! Bom gosto, primo.", "Vim correndo da mata só pra ver a casa.", "Se precisar de vigia no telhado, me chama." }),
                 ("Maria", "Maria", "Maria",
-                    new[] { "I prayed a little for {0}. Things last longer that way.", "I brought herb tea. Drink it before it gets cold!", "This house smells like a hug." },
-                    new[] { "Rezei um pouquinho pro(a) {0}. Assim dura mais.", "Trouxe chá de erva. Bebe antes de esfriar!", "Esta casa tem cheiro de abraço." }),
+                    new[] { "I lit a little lamp for {0}. Things last longer that way.", "I brought herb tea. Drink it before it gets cold!", "This house smells like a hug." },
+                    new[] { "Acendi uma lamparininha pro(a) {0}. Assim dura mais.", "Trouxe chá de erva. Bebe antes de esfriar!", "Esta casa tem cheiro de abraço." }),
                 ("Joaquim", "Joaquim", "Joaquim",
                     new[] { "{0}? I'd have made it stronger. But it's pretty.", "Anything heavy to carry? I'm here.", "Did you see my numbers on the dummy? Nobody hits harder. For real." },
                     new[] { "{0}? Eu faria mais forte. Mas tá bonito.", "Tem coisa pesada pra carregar? Tô aqui.", "Viu meus números no boneco? Ninguém bate mais forte. Sério." }),
@@ -390,21 +390,21 @@ namespace Rapadura.UI.Housing
                 ("Lavine", "Lavine", "Lavine",
                     new[] { "{0} looks beautiful under the moon.", "I drew the house in my notebook. With stars.", "At night the shadows here are soft. I like it." },
                     new[] { "{0} fica lindo(a) debaixo da lua.", "Desenhei a casa no meu caderno. Com estrelas.", "De noite as sombras daqui são macias. Gosto." }),
-                (HouseVisitRules.VoZefa, "Vó Zefa", "Vó Zefa",
-                    new[] { "Oh, {0}! Just like the one I had when I was a girl.", "Your grandpa would be proud of this house.", "I left a pot of rapadura in the kitchen. Don't tell the others." },
-                    new[] { "Ai, {0}! Igualzinho ao que eu tinha quando era menina.", "Seu avô ia ter orgulho desta casa.", "Deixei um pote de rapadura na cozinha. Não conta pros outros." }),
-                (HouseVisitRules.DonaCida, "Dona Cida", "Dona Cida",
-                    new[] { "I blessed {0} with rue. Now it's protected.", "A house with plants is a house with good luck.", "Come by the haberdashery, I've got new lace." },
-                    new[] { "Benzi o(a) {0} com arruda. Agora tá protegido(a).", "Casa com planta é casa com sorte.", "Passa no armarinho, chegou renda nova." }),
-                (HouseVisitRules.SeuBento, "Seu Bento", "Seu Bento",
-                    new[] { "On my travels I never saw a {0} like this one.", "I stopped my mule at the gate. She liked the yard.", "From Areia Branca to here — it was worth the trip." },
-                    new[] { "Nas minhas viagens nunca vi {0} igual.", "Parei a mula na porteira. Ela gostou do quintal.", "De Areia Branca até aqui — valeu a viagem." }),
-                (HouseVisitRules.MestreTonho, "Mestre Tonho", "Mestre Tonho",
+                (HouseVisitRules.VoZefa, "Vó Edna", "Vó Edna",
+                    new[] { "Oh, {0}! Just like the one I had when I was a girl.", "Your grandpa would be proud of this house.", "I left a pot of Golden Brick in the kitchen. Don't tell the others." },
+                    new[] { "Ai, {0}! Igualzinho ao que eu tinha quando era menina.", "Seu avô ia ter orgulho desta casa.", "Deixei um pote de Torrão Dourado na cozinha. Não conta pros outros." }),
+                (HouseVisitRules.DonaCida, "Mariam the Herbalist", "Mariam, a Ervateira",
+                    new[] { "I tucked a sprig of mint by {0}. Now it smells like a garden.", "A house with plants is a house with good luck.", "Come by the thread bazaar, I've got new silk." },
+                    new[] { "Pus um raminho de hortelã perto do(a) {0}. Agora tem cheiro de jardim.", "Casa com planta é casa com sorte.", "Passa no bazar de linhas, chegou seda nova." }),
+                (HouseVisitRules.SeuBento, "Ammo the Caravaneer", "Ammo, o Caravaneiro",
+                    new[] { "On my travels I never saw a {0} like this one.", "I stopped my camel at the orchard gate. She liked the yard.", "From Qocho Oasis to here — it was worth the trip." },
+                    new[] { "Nas minhas viagens nunca vi {0} igual.", "Parei a camela no portão do pomar. Ela gostou do quintal.", "Do Oásis de Qocho até aqui — valeu a viagem." }),
+                (HouseVisitRules.MestreTonho, "Master Mihr the Miner", "Mestre Mihr, o Mineiro",
                     new[] { "{0}: good work. Solid.", "These walls will stand a hundred years.", "If you need a hinge, the forge is open." },
                     new[] { "{0}: trabalho bom. Firme.", "Essas paredes aguentam cem anos.", "Se precisar de dobradiça, a forja tá aberta." }),
-                (HouseVisitRules.Benedita, "Benedita", "Benedita",
-                    new[] { "{0} would look even prettier with a lamp beside it.", "Your house shines from far away, like a lamp in the cave.", "I brought a candle for the window." },
-                    new[] { "{0} ia ficar mais bonito(a) com uma lamparina do lado.", "Sua casa brilha de longe, que nem lamparina na caverna.", "Trouxe uma vela pra janela." }),
+                (HouseVisitRules.Benedita, "Parthenos of the Lamps", "Parthenos, a das Lamparinas",
+                    new[] { "{0} would look even prettier with a lamp beside it.", "Your house shines from far away, like a lamp in the cave.", "I brought a little lamp for the window." },
+                    new[] { "{0} ia ficar mais bonito(a) com uma lamparina do lado.", "Sua casa brilha de longe, que nem lamparina na caverna.", "Trouxe uma lamparininha pra janela." }),
             };
 
             foreach ((string id, string en, string pt, string[] enLines, string[] ptLines) in visitors)

@@ -462,12 +462,12 @@ namespace Rapadura.Tests
         public void TalkButton_Label_UsesShortNameInBothLanguagesAndPtBRWithoutManager()
         {
             RegionNpcSpec npc = RegionQuestCatalog.NpcFor(BiomeType.Forest);
-            Assert.AreEqual("Conversar com Dona Cida", RegionNpcTalkButton.BuildLabel(npc, false, null));
-            Assert.AreEqual("Conversar com Dona Cida (!)", RegionNpcTalkButton.BuildLabel(npc, true, null));
+            Assert.AreEqual("Conversar com Mariam", RegionNpcTalkButton.BuildLabel(npc, false, null));
+            Assert.AreEqual("Conversar com Mariam (!)", RegionNpcTalkButton.BuildLabel(npc, true, null));
 
             LocalizationManager localization = LoadedManager();
             localization.SetLanguage(LanguageCode.en);
-            Assert.AreEqual("Talk to Dona Cida", RegionNpcTalkButton.BuildLabel(npc, false, localization));
+            Assert.AreEqual("Talk to Mariam", RegionNpcTalkButton.BuildLabel(npc, false, localization));
         }
 
         // ------------------------------------------------------------------

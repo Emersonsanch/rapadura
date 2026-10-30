@@ -38,9 +38,9 @@ namespace Rapadura.UI.Achievements
             new LocalizationEntry(EmptyKey, "No achievements available.", "Nenhuma conquista disponível."),
 
             // General progression.
-            Title("ach_first_blood", "First Blood", "Primeiro Sangue"),
-            Description("ach_first_blood", "Defeat your first enemy.", "Derrote seu primeiro inimigo."),
-            Title("ach_monster_hunter", "Backlands Hunter", "Caçador do Sertão"),
+            Title("ach_first_blood", "First Spark", "Primeira Faísca"),
+            Description("ach_first_blood", "Defeat your first enemy and set its spark free.", "Derrote seu primeiro inimigo e liberte a faísca dele."),
+            Title("ach_monster_hunter", "Dawn Isle Hunter", "Caçador da Ilha da Aurora"),
             Description("ach_monster_hunter", "Defeat 100 enemies.", "Derrote 100 inimigos."),
             Title("ach_boss_slayer", "Giant Felled", "Gigante Tombado"),
             Description("ach_boss_slayer", "Defeat a boss.", "Derrote um chefe."),
@@ -57,7 +57,7 @@ namespace Rapadura.UI.Achievements
             Title("ach_first_combo", "In Sync", "Em Sintonia"),
             Description("ach_first_combo", "Complete a skill combo.", "Complete um combo de habilidades."),
             Title("ach_explorer", "Trailblazer", "Desbravador"),
-            Description("ach_explorer", "Unlock 3 regions on the world map.", "Desbloqueie 3 regiões no mapa-múndi."),
+            Description("ach_explorer", "Unlock 3 regions on the island map.", "Desbloqueie 3 regiões no mapa da ilha."),
             Title("ach_merchant", "Shrewd Trader", "Bom de Negócio"),
             Description("ach_merchant", "Earn 1000 gold selling to merchants.", "Ganhe 1000 de ouro vendendo aos mercadores."),
 
@@ -65,11 +65,11 @@ namespace Rapadura.UI.Achievements
             Title("ach_hero_maithe", "Eye of the Wind", "Olho do Vento"),
             Description("ach_hero_maithe", "Finish Maithe's personal quest — the eldest of the cousins always finds the trail.", "Conclua a missão pessoal da Maithe — a mais velha dos primos sempre acha a trilha."),
             Title("ach_hero_maria", "Light That Won't Fade", "Luz que Não se Apaga"),
-            Description("ach_hero_maria", "Finish Maria's personal quest and bring the crystals back to life.", "Conclua a missão pessoal da Maria e devolva a vida aos cristais."),
+            Description("ach_hero_maria", "Finish Maria's personal quest and light the crystals up again.", "Conclua a missão pessoal da Maria e acenda os cristais de novo."),
             Title("ach_hero_joaquim", "Echoes of Home", "Ecos de Casa"),
             Description("ach_hero_joaquim", "Finish Joaquim's personal quest — and still be home before the lanterns are lit.", "Conclua a missão pessoal do Joaquim — e ainda volte antes de acenderem as lanternas."),
             Title("ach_hero_icaro", "Ancient Gears", "Engrenagens Antigas"),
-            Description("ach_hero_icaro", "Finish Ícaro's personal quest and decipher the guardian's inscriptions.", "Conclua a missão pessoal do Ícaro e decifre as inscrições do guardião."),
+            Description("ach_hero_icaro", "Finish Ícaro's personal quest and decipher the Great Ushabti's inscriptions.", "Conclua a missão pessoal do Ícaro e decifre as inscrições do Grande Ushabti."),
             Title("ach_hero_lavine", "The Youngest's Courage", "Coragem da Caçula"),
             Description("ach_hero_lavine", "Finish Lavine's personal quest — brave on her own, at last.", "Conclua a missão pessoal da Lavine — corajosa sozinha, enfim."),
 
@@ -85,41 +85,41 @@ namespace Rapadura.UI.Achievements
 
             // Campaign (StoryProgress raises CampaignCompletedEvent when the Cavernas boss falls).
             Title("ach_campaign_complete", "The Light Comes Home", "A Luz Volta para Casa"),
-            Description("ach_campaign_complete", "Beat the boss of the Caves and bring the light back to the village. Grandma Zefa knew you would.", "Vença o chefe das Cavernas e devolva a luz à vila. A Vó Zefa sabia que vocês iam conseguir."),
+            Description("ach_campaign_complete", "Beat the guardian of the Threshold Caves and bring the light back to the village. Grandma Edna knew you would.", "Vença o guardião das Grutas do Limiar e devolva a luz à vila. A Vó Edna sabia que vocês iam conseguir."),
 
             // Nova Jornada+ (NewGamePlusProgress raises NewGamePlusCycleCompletedEvent when a NG+ campaign is finished).
             Title("ach_new_journey_plus", "Lighting It Up Again", "Acender de Novo"),
-            Description("ach_new_journey_plus", "Finish New Journey+ 1: relight the Sun Crystal a second time. Grandma Zefa already has the rapadura jar ready.", "Conclua a Nova Jornada+ 1: acenda o Cristal do Sol pela segunda vez. A Vó Zefa já deixou o pote de rapadura pronto."),
+            Description("ach_new_journey_plus", "Finish New Journey+ 1: relight the Sun Crystal a second time. Grandma Edna already has the jar of Golden Brick ready.", "Conclua a Nova Jornada+ 1: acenda o Cristal do Sol pela segunda vez. A Vó Edna já deixou o pote de Torrão Dourado pronto."),
 
             // Bestiary (BestiaryProgress raises BestiaryCompletedEvent when the last page unlocks).
             Title("ach_bestiary_complete", "Grandma's Notebook, Cover to Cover", "Caderno da Vó, de Capa a Capa"),
-            Description("ach_bestiary_complete", "Defeat every kind of creature and boss so Grandma Zefa can fill in every page of her notebook.", "Vença todo tipo de bicho e chefe para a Vó Zefa preencher todas as páginas do caderno."),
-            Title("ach_relics_all", "Relics of the Sertão", "Relíquias do Sertão"),
-            Description("ach_relics_all", "Find all 12 family relics Grandpa Chico hid around the island.", "Encontre as 12 relíquias da família que o Vô Chico escondeu pela ilha."),
+            Description("ach_bestiary_complete", "Defeat every kind of creature and boss so Grandma Edna can fill in every page of her notebook.", "Vença todo tipo de bicho e chefe para a Vó Edna preencher todas as páginas do caderno."),
+            Title("ach_relics_all", "Grandpa Jorge's Keepsakes", "Lembranças do Vô Jorge"),
+            Description("ach_relics_all", "Find all 12 family keepsakes Grandpa Jorge hid around Dawn Isle.", "Encontre as 12 lembranças da família que o Vô Jorge escondeu pela Ilha da Aurora."),
 
             // Fishing (FishingProgress feeds every new species through RecordProgress).
-            Title("ach_fish_all", "Master of the Pond", "Mestre do Açude"),
-            Description("ach_fish_all", "Catch all 14 kinds of fish in the pond, the mountain stream and the underground lake.", "Pesque as 14 espécies de peixe do açude, do riacho da serra e do lago subterrâneo."),
-            Title("ach_fish_golden", "Grandpa Chico's Legend", "A Lenda do Vô Chico"),
-            Description("ach_fish_golden", "Catch the Golden Fish of the Pond. It only bites at dawn or dusk.", "Pesque o Peixe-Dourado do Açude. Ele só morde de madrugada ou ao entardecer."),
+            Title("ach_fish_all", "Master of the Waters", "Mestre das Águas"),
+            Description("ach_fish_all", "Catch all 14 kinds of fish in Faro's Pool, the Tugai Stream and the Threshold Lake.", "Pesque as 14 espécies de peixe do Remanso de Faro, do Riacho do Tugai e do Lago do Limiar."),
+            Title("ach_fish_golden", "Grandpa Jorge's Legend", "A Lenda do Vô Jorge"),
+            Description("ach_fish_golden", "Catch the Golden Fish of Faro's Pool. It only bites at dawn or dusk.", "Pesque o Peixe-Dourado do Remanso de Faro. Ele só morde de madrugada ou ao entardecer."),
 
             // Night (the rare Forest night mini-boss).
             Title("ach_night_werewolf", "Full Moon, Full Courage", "Lua Cheia, Coragem Cheia"),
-            Description("ach_night_werewolf", "Defeat the Sertão Werewolf, the rare night visitor of the Forest. When it howls, dodge!", "Vença o Lobisomem-do-sertão, o raro visitante das noites da Floresta. Quando ele uivar, esquive!"),
+            Description("ach_night_werewolf", "Defeat Mardagayl, the Seven-Night Wolf, the rare night visitor of the Zarafshan Woods, and break its spell. When it howls, dodge!", "Vença o Mardagayl, o Lobo-das-Sete-Noites, raro visitante das noites do Bosque do Zarafshan, e desfaça o encanto. Quando ele uivar, esquive!"),
 
             // Timed event rooms (EventRoomProgress feeds clears and the best score).
             Title("ach_room_terreiro_clear", "Nobody Spooks Us", "Ninguém Assusta a Gente"),
-            Description("ach_room_terreiro_clear", "Hold out in the Spook Yard until the timer ends.", "Aguente no Terreiro das Assombrações até o tempo acabar."),
-            Title("ach_room_torre_clear", "The Mill Sings Again", "O Engenho Canta de Novo"),
-            Description("ach_room_torre_clear", "Take the Golden Cane Press back to Mr. Malaquias in the Old Mill Tower.", "Leve a Moenda de Ouro até Seu Malaquias na Torre do Engenho Velho."),
+            Description("ach_room_terreiro_clear", "Hold out in the Mazan Yard until the timer ends.", "Aguente no Pátio dos Mazans até o tempo acabar."),
+            Title("ach_room_torre_clear", "The Wheel Turns Again", "A Roda Gira de Novo"),
+            Description("ach_room_torre_clear", "Take the Golden Jar back to Adda the Tower Keeper in the Tower of the Twelve-Jar Wheel.", "Leve a Jarra de Ouro até Adda, o Vigia da Torre, na Torre da Roda das Doze Jarras."),
             Title("ach_room_master", "Master of the Rooms", "Mestre das Salas"),
-            Description("ach_room_master", "Score 7000 points in the Spook Yard or the Old Mill Tower.", "Faça 7000 pontos no Terreiro das Assombrações ou na Torre do Engenho Velho."),
+            Description("ach_room_master", "Score 7000 points in the Mazan Yard or the Tower of the Jars.", "Faça 7000 pontos no Pátio dos Mazans ou na Torre das Jarras."),
 
             // Tacho Encantado (TachoService feeds wings made and the highest wing level).
             Title("ach_wings_first", "Up and Away", "Bateu Asas"),
-            Description("ach_wings_first", "Make your first pair of wings in Grandma Zefa's Enchanted Cauldron.", "Faça o primeiro par de asas no Tacho Encantado da Vó Zefa."),
-            Title("ach_wings_level3", "Above the Sertão", "Por Cima do Sertão"),
-            Description("ach_wings_level3", "Strengthen a pair of wings up to level 3 in the Enchanted Cauldron.", "Fortaleça um par de asas até o nível 3 no Tacho Encantado."),
+            Description("ach_wings_first", "Make your first pair of wings in Grandma Edna's Uasamonga.", "Faça o primeiro par de asas na Uasamonga da Vó Edna."),
+            Title("ach_wings_level3", "Above Dawn Isle", "Por Cima da Ilha da Aurora"),
+            Description("ach_wings_level3", "Strengthen a pair of wings up to level 3 in the Uasamonga.", "Fortaleça um par de asas até o nível 3 na Uasamonga."),
         };
 
         private static LocalizationEntry Title(string id, string en, string ptBR) => new LocalizationEntry($"achievement.{id}.title", en, ptBR);

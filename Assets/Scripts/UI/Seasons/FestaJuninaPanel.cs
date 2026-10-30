@@ -14,10 +14,10 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.Seasons
 {
     /// <summary>
-    /// The "Arraiá da Vó Edna" window of the Festa Junina (opened by <see cref="FestaJuninaButton"/> in the Vila): two
-    /// pages, the <b>quadrilha</b> (the rhythm game of <see cref="QuadrilhaSession"/>: notes slide to the hit zone,
-    /// answer with ←↑↓→ / WASD / d-pad or the four buttons) and the <b>Barraca de Prendas</b> (the festa's house items
-    /// for prendas, <see cref="FestaJuninaProgress.TryBuy"/>). The selected cousin comments at the top
+    /// The "O Bema da Vó Edna" window of the Bema (the class keeps its old Festa Junina name; opened by <see cref="FestaJuninaButton"/> in the Vila): two
+    /// pages, the <b>Hinos do Bema</b> (Master Xroshtag calls, the player answers: the rhythm game of <see cref="QuadrilhaSession"/>: notes slide to the hit zone,
+    /// answer with ←↑↓→ / WASD / d-pad or the four buttons) and the <b>Tenda das Oferendas</b> (the Bema's house items
+    /// for offerings, <see cref="FestaJuninaProgress.TryBuy"/>). The selected cousin comments at the top
     /// (<see cref="FestaJuninaTexts.CousinLine"/>). Built in code on the map HUD's document with
     /// <c>Resources/UI/FestaJunina.uss</c>, on unscaled time, holding <see cref="GameplayPause"/> while open.
     /// </summary>
@@ -110,7 +110,7 @@ namespace Rapadura.UI.Seasons
 
             if (_session != null && !_session.IsFinished)
             {
-                // Walking away from the dance: no prendas for half a quadrilha.
+                // Walking away from the hymn: no offerings for half a hymn.
                 _session = null;
             }
 
@@ -207,7 +207,7 @@ namespace Rapadura.UI.Seasons
             _start.style.alignSelf = Align.Center;
             _dancePage.Add(_start);
 
-            // Barraca de Prendas page.
+            // Tenda das Oferendas page.
             _stallPage = new VisualElement { name = "wm-festa-stall" };
             _stallPage.AddToClassList("festa-page");
             panel.Add(_stallPage);

@@ -25,7 +25,7 @@ namespace Rapadura.Gameplay.Inventory
         public static int Price(int level) => Math.Min(MaxPrice, BasePrice + PricePerLevel * Math.Max(1, level));
     }
 
-    /// <summary>"Patuá da Vó Zefa": the consumable that cancels the whole death penalty (a 1×1 bag item).</summary>
+    /// <summary>"Patuá da Vó Edna": the consumable that cancels the whole death penalty (a 1×1 bag item).</summary>
     public static class PatuaRules
     {
         public const string ItemId = "item_patua_vo_zefa";
@@ -111,7 +111,7 @@ namespace Rapadura.Gameplay.Inventory
         }
     }
 
-    /// <summary>Raised when Vó Zefa leaves a Patuá for the cousins (<see cref="InChest"/>: it went to her Baú, bag full).</summary>
+    /// <summary>Raised when Vó Edna leaves a Patuá for the cousins (<see cref="InChest"/>: it went to her Baú, bag full).</summary>
     public readonly struct PatuaGiftedEvent : IGameEvent
     {
         public readonly bool InChest;
@@ -134,7 +134,7 @@ namespace Rapadura.Gameplay.Inventory
     /// <summary>
     /// Per-save death-protection state: whether the Bênção da Romaria is on (it lasts until the next death) and a few
     /// counters. Built by GameManager, registered with SaveManager under <see cref="Key"/> and with NewSessionReset (old
-    /// saves have no entry and load unblessed). Also hands out Vó Zefa's reward: the first time each region's boss
+    /// saves have no entry and load unblessed). Also hands out Vó Edna's reward: the first time each region's boss
     /// falls (<see cref="WorldMapRegionClearedEvent"/>, once per campaign cycle) she gives one Patuá — into the hero's
     /// bag when it fits (<see cref="InventoryManager.CanFit"/>, 1×1), else into her Baú, so it is never lost.
     /// </summary>
@@ -217,7 +217,7 @@ namespace Rapadura.Gameplay.Inventory
         }
 
         // ---------------------------------------------------------------
-        // Vó Zefa's Patuá (region boss reward)
+        // Vó Edna's Patuá (region boss reward)
         // ---------------------------------------------------------------
 
         private void OnRegionCleared(WorldMapRegionClearedEvent evt)

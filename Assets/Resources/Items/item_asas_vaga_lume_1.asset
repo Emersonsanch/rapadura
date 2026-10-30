@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_asas_vaga_lume_1
   _displayName: "Asas de Vaga-lume"
-  _description: "Asinhas escuras com pontas que brilham no escuro. A Lavine n\xE3o tem mais medo da noite."
+  _description: "Asinhas escuras com pontas que brilham feito fa\xEDsca. A Lavine n\xE3o tem mais medo da noite."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 3

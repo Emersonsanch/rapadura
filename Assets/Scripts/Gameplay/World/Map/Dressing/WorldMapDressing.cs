@@ -20,7 +20,7 @@ namespace Rapadura.Gameplay.World.Map.Dressing
     /// connected nodes (the token's straight travel lines), a river with a bridge, beach, shallow
     /// water and open sea;</item>
     /// <item>per-region props laid out by <see cref="WorldMapDressingLayout"/> (seeded): the arena's
-    /// tree prefabs, grass tufts and cacti (named so <see cref="EnvironmentPropAttacher"/> gives them
+    /// tree prefabs, grass tufts and desert shrubs: saxaul and tamarisk (named so <see cref="EnvironmentPropAttacher"/> gives them
     /// wind sway), plus rocks, snowy rocks, peaks, stalagmites and crystals merged into one static
     /// mesh;</item>
     /// <item>a landmark per node (village, desert ruin, peak camp, cave mouth) replacing the old
@@ -591,7 +591,10 @@ namespace Rapadura.Gameplay.World.Map.Dressing
         {
             var builder = new WorldMapMeshBuilder();
             WorldMapPropMeshes.AppendCactus(builder);
-            Mesh cactus = Own(builder.ToMesh("WorldMapCactus"));
+            Mesh cactus = Own(builder.ToMesh("WorldMapSaxaul"));
+            builder.Clear();
+            WorldMapPropMeshes.AppendDesertTamarisk(builder);
+            Mesh tamarisk = Own(builder.ToMesh("WorldMapTamarisk"));
             builder.Clear();
             WorldMapPropMeshes.AppendGrassClump(builder);
             // Named like the scattered tufts so EnvironmentPropRules gives it grass sway.
@@ -619,7 +622,8 @@ namespace Rapadura.Gameplay.World.Map.Dressing
                         break;
                     case WorldMapPropKind.Cactus:
                         // "ArenaProp_Cactus" prefix = shrub sway (EnvironmentPropRules).
-                        go = SpawnMesh("ArenaProp_Cactus_Map" + i, cactus, parent, position, rotation, prop.Scale, _castShadows);
+                        // Saxaul, with a tamarisk every third spot (both shared meshes).
+                        go = SpawnMesh("ArenaProp_Cactus_Map" + i, i % 3 == 2 ? tamarisk : cactus, parent, position, rotation, prop.Scale, _castShadows);
                         break;
                     case WorldMapPropKind.GrassClump:
                         go = SpawnMesh("GrassTuft_Map" + i, grass, parent, position, rotation, prop.Scale * 1.3f, false);

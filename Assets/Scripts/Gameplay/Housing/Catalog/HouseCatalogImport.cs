@@ -167,16 +167,39 @@ namespace Rapadura.Gameplay.Housing
         {
             if (text == "—") return (0, 0);
             if (int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out int gold)) return (gold, 0);
-            if (text.StartsWith("— (", StringComparison.Ordinal) && text.EndsWith(" prendas)", StringComparison.Ordinal))
+            // Event currency: "— (40 oferendas)" (the Bema offerings); the old "— (40 prendas)" still parses.
+            foreach (string suffix in EventPriceSuffixes)
             {
-                string number = text.Substring(3, text.Length - 3 - " prendas)".Length);
-                if (int.TryParse(number, NumberStyles.Integer, CultureInfo.InvariantCulture, out int prendas)) return (0, prendas);
+                if (!text.StartsWith("— (", StringComparison.Ordinal) || !text.EndsWith(suffix, StringComparison.Ordinal)) continue;
+                string number = text.Substring(3, text.Length - 3 - suffix.Length);
+                if (int.TryParse(number, NumberStyles.Integer, CultureInfo.InvariantCulture, out int offerings)) return (0, offerings);
             }
 
             throw new FormatException($"CatalogoCasa.md line {line}: unknown price '{text}'.");
         }
 
-        public static string SetIdOf(string text) => text == "—" || string.IsNullOrEmpty(text) ? string.Empty : "set_" + Slug(text);
+        private static readonly string[] EventPriceSuffixes = { " oferendas)", " prendas)" };
+
+        /// <summary>
+        /// Set names of the Dawn Isle re-theme (WorldBible_Maniqueismo.md §3.20) → the set ids, which never change. Names not
+        /// listed here (kept ones like "Oficina do Ícaro", and the old names) fall back to "set_" + slug.
+        /// </summary>
+        public static readonly IReadOnlyDictionary<string, string> SetIds = new Dictionary<string, string>
+        {
+            { "Iwan da Vó Edna", "set_varanda_vo_zefa" }, { "Caravana do Vô Jorge", "set_tropeiro_vo_chico" },
+            { "Moinho do Pomar", "set_casa_farinha" }, { "Cantinho do Ari", "set_cantinho_caramelo" },
+            { "Tugai do Zarafshan", "set_mata_fechada" }, { "Areias Flamejantes", "set_duna_dourada" },
+            { "Picos de Litema", "set_pico_nevado" }, { "Tufo Rosa das Lamparinas", "set_cristal_cavernas" },
+            { "Bazar da Nana", "set_feira_livre" }, { "Iluminuras e Papel Recortado", "set_cordel_xilogravura" },
+            { "Horta dos Melões", "set_horta_caprichada" }, { "Bema", "set_arraia" },
+            { "Noite de Yalda", "set_natal_sertanejo" }, { "Festa das Lanternas", "set_frevo_maracatu" },
+        };
+
+        public static string SetIdOf(string text)
+        {
+            if (text == "—" || string.IsNullOrEmpty(text)) return string.Empty;
+            return SetIds.TryGetValue(text, out string id) ? id : "set_" + Slug(text);
+        }
 
         private static HousePlacement PlacementOf(string slot, HouseItemCategory category, string firstWord, string name, int line)
         {
@@ -209,11 +232,18 @@ namespace Rapadura.Gameplay.Housing
             { "Guardião da Ruína (chefe)", "enemy_desert_ruin_guardian" }, { "Golem de Pedra", "enemy_mountain_stone_golem" },
             { "Senhor da Guerra da Montanha (chefe)", "enemy_mountain_warlord" }, { "Enxame de Morcegos", "enemy_cave_bat_swarm" },
             { "Habitante Ancestral (chefe)", "enemy_cave_dweller" },
+            // Dawn Isle names (WorldBible_Maniqueismo.md §3.2–3.3); the old names above stay so older tables still resolve.
+            { "Lobo do Tugai", "enemy_forest_wolf" }, { "Aranha-Tecelã Apagada", "enemy_forest_spider" },
+            { "Kök-Böri, o Lobo Celeste (chefe)", "enemy_forest_alpha_wolf" }, { "Escorpião das Areias Flamejantes", "enemy_desert_scorpion" },
+            { "O Grande Ushabti (chefe)", "enemy_desert_ruin_guardian" }, { "Ushabti de Pedra", "enemy_mountain_stone_golem" },
+            { "Hahya, o Gigante Guerreiro (chefe)", "enemy_mountain_warlord" }, { "Enxame de Morcegos do Limiar", "enemy_cave_bat_swarm" },
+            { "Tages, o Habitante Ancestral (chefe)", "enemy_cave_dweller" },
         };
 
         public static readonly IReadOnlyDictionary<string, string> RegionQuestIds = new Dictionary<string, string>
         {
             { "Uivos na Trilha", "quest_region_forest_howling_trail" }, { "Teias no Roçado", "quest_region_forest_spider_webs" },
+            { "Teias na Horta de Ervas", "quest_region_forest_spider_webs" },
             { "Ferrões no Caminho", "quest_region_desert_stinger_road" }, { "Reserva pra Travessia", "quest_region_desert_crossing_reserve" },
             { "Pedras que Andam", "quest_region_mountain_walking_stones" }, { "A Passagem da Mina", "quest_region_mountain_mine_pass" },
             { "Lamparinas Apagadas", "quest_region_caves_dark_lamps" }, { "A Última Lamparina", "quest_region_caves_last_lantern" },
@@ -236,6 +266,9 @@ namespace Rapadura.Gameplay.Housing
             { "Coragem da Caçula", "ach_hero_lavine" }, { "Vento e Engrenagem", "ach_siblings_wind_gears" }, { "Escudo e Luz", "ach_siblings_shield_light" },
             { "Prima de Todos", "ach_cousin_of_all" }, { "Juntos, ou Nada Feito", "ach_family_reunited" }, { "A Luz Volta para Casa", "ach_campaign_complete" },
             { "Acender de Novo", "ach_new_journey_plus" }, { "Caderno da Vó, de Capa a Capa", "ach_bestiary_complete" },
+            // Dawn Isle titles (the old ones above stay).
+            { "Primeira Faísca", "ach_first_blood" }, { "Caçador da Ilha da Aurora", "ach_monster_hunter" },
+            { "Lembranças do Vô Jorge", "ach_relics_all" },
         };
 
         public static readonly IReadOnlyDictionary<string, (string Id, HouseSeason Season)> Events = new Dictionary<string, (string, HouseSeason)>
@@ -243,6 +276,10 @@ namespace Rapadura.Gameplay.Housing
             { "Festa Junina", ("event_festa_junina", HouseSeason.Junina) },
             { "Natal Sertanejo", ("event_natal_sertanejo", HouseSeason.Natal) },
             { "Carnaval", ("event_carnaval", HouseSeason.Carnaval) },
+            // Dawn Isle festivals (§3.15, §3.20): same event ids and HouseSeason values, new names.
+            { "Bema", ("event_festa_junina", HouseSeason.Junina) },
+            { "Noite de Yalda", ("event_natal_sertanejo", HouseSeason.Natal) },
+            { "Festa das Lanternas", ("event_carnaval", HouseSeason.Carnaval) },
         };
 
         public static readonly IReadOnlyDictionary<string, string> CraftStations = new Dictionary<string, string>
@@ -253,14 +290,35 @@ namespace Rapadura.Gameplay.Housing
         private static readonly HashSet<string> Honorifics = new HashSet<string> { "mestre", "dona", "seu", "comadre" };
 
         /// <summary>
-        /// Shop id, same convention as the city shops (<c>CityShopCatalog</c>: "Armarinho da Dona Cida" →
-        /// <c>shop_armarinho_cida</c>); the Armazém is the existing <c>shop_general_store</c>.
+        /// Dawn Isle shop names (CityTexts / CityShopTexts, WorldBible_Maniqueismo.md §3.1) → the shop ids, which never change.
+        /// </summary>
+        public static readonly IReadOnlyDictionary<string, string> ShopIds = new Dictionary<string, string>
+        {
+            { "Armazém Geral", GeneralStoreShopId },
+            { "Mercearia do Zaku", "shop_mercearia_lazaro" }, { "Bazar de Linhas da Mariam", "shop_armarinho_cida" },
+            { "Bazar da Nana", "shop_feira_livre" }, { "Viveiro da Nana", "shop_viveiro_nenem" },
+            { "Selaria do Vandak", "shop_selaria_vava" }, { "Forja do Mestre Mihr", "shop_forja_tonho" },
+            { "Lamparinas da Parthenos", "shop_lamparinas_benedita" }, { "Caravana do Ammo", "shop_mascate_bento" },
+            { "Estrebaria do Srosh", "shop_haras_vila" }, { "Ferraria do Mestre Adamas", "shop_ferraria_severino" },
+            { "Marcenaria do Mestre Omóforo", "shop_marcenaria_damiao" }, { "Costureira Mestra Narisah", "shop_costureira_fatima" },
+            { "Casa de Música do Mestre Xroshtag", "shop_casa_musica_bene" }, { "Olaria da Náfsha", "shop_olaria_rosa" },
+        };
+
+        /// <summary>
+        /// Shop id: the Dawn Isle names map through <see cref="ShopIds"/>; any other name follows the old city-shop convention
+        /// (<c>CityShopCatalog</c>: "Armarinho da Dona Cida" → <c>shop_armarinho_cida</c>), so the old labels still resolve.
         /// </summary>
         public static string ShopIdOf(string shopName)
         {
-            if (shopName == "Armazém Geral") return GeneralStoreShopId;
+            if (shopName != null && ShopIds.TryGetValue(shopName, out string id)) return id;
             return "shop_" + string.Join("_", Slug(shopName).Split('_').Where(w => !Honorifics.Contains(w)));
         }
+
+        /// <summary>"Segredo do mapa (…)" places renamed in the re-theme → their unchanged secret ids.</summary>
+        public static readonly IReadOnlyDictionary<string, string> SecretIds = new Dictionary<string, string>
+        {
+            { "moinho do pomar do Vô Jorge", "secret_casa_farinha_vo_chico" },
+        };
 
         public static string HouseQuestIdOf(string title) => "house_quest_" + Slug(title);
 
@@ -300,7 +358,7 @@ namespace Rapadura.Gameplay.Housing
             {
                 int open = origin.IndexOf('(');
                 string where = open >= 0 ? origin.Substring(open + 1).TrimEnd(')') : "mapa";
-                return new HouseItemSource(HouseItemSourceType.Secret, "secret_" + Slug(where), 1);
+                return new HouseItemSource(HouseItemSourceType.Secret, SecretIds.TryGetValue(where, out string secretId) ? secretId : "secret_" + Slug(where), 1);
             }
 
             throw new FormatException($"CatalogoCasa.md line {line}: unknown origin '{origin}'.");
@@ -332,7 +390,7 @@ namespace Rapadura.Gameplay.Housing
         private static readonly HashSet<string> RugWords = new HashSet<string> { "Tapete", "Passadeira", "Esteira", "Capacho" };
         private static readonly HashSet<string> OutdoorFloorWords = new HashSet<string> { "Banco", "Tora", "Tronco" };
         private static readonly HashSet<string> BedWords = new HashSet<string> { "Cama", "Cama-forte", "Cama-oficina", "Beliche", "Catre", "Colchão" };
-        private static readonly HashSet<string> BigYardWords = new HashSet<string> { "Chafariz", "Carro", "Curral", "Palco" };
+        private static readonly HashSet<string> BigYardWords = new HashSet<string> { "Chafariz", "Carro", "Curral", "Palco", "Barquinha" };
 
         private static readonly Dictionary<string, (int, int)> FloorSizes = new Dictionary<string, (int, int)>
         {
@@ -348,6 +406,8 @@ namespace Rapadura.Gameplay.Housing
             { "Estátua", (2, 2) }, { "Televisão", (2, 1) }, { "Tora", (2, 1) }, { "Tronco", (2, 1) }, { "Cesto", (1, 1) }, { "Jarro", (1, 1) },
             { "Talha", (1, 1) }, { "Pilão", (1, 1) }, { "Tigela", (1, 1) }, { "Penico", (1, 1) }, { "Bola", (1, 1) }, { "Bolinha", (1, 1) },
             { "Árvore", (2, 2) }, { "Ipê-roxo", (2, 2) }, { "Mandacaru", (2, 2) }, { "Costela-de-adão", (2, 2) },
+            // Dawn Isle first words (same sizes as the words they replaced).
+            { "Tandir", (3, 2) }, { "Saxaul", (2, 2) }, { "Romãzeira-anã", (2, 2) }, { "Choupo-turanga", (2, 2) },
         };
 
         private static readonly Dictionary<string, (int, int)> RugSizes = new Dictionary<string, (int, int)>
@@ -362,12 +422,13 @@ namespace Rapadura.Gameplay.Housing
             { "Tapeçaria", (3, 2) }, { "Mapa", (3, 2) }, { "Mural", (4, 2) }, { "Estandarte", (2, 3) }, { "Bandeira", (2, 2) }, { "Oratório", (2, 2) },
             { "Medalha", (1, 1) }, { "Meia", (1, 1) }, { "Colher", (1, 1) }, { "Fita", (1, 1) }, { "Cabide", (1, 1) }, { "Arandela", (1, 1) },
             { "Tocha", (1, 1) }, { "Carta", (1, 1) }, { "Pegada", (1, 1) }, { "Chapéu", (1, 1) }, { "Máscara", (1, 1) }, { "Cabeça", (2, 2) },
+            { "Nicho", (2, 2) },
         };
 
         private static readonly Dictionary<string, (int, int)> CeilingSizes = new Dictionary<string, (int, int)>
         {
             { "Lustre", (2, 2) }, { "Varal", (6, 1) }, { "Bandeirinhas", (6, 1) }, { "Pisca-pisca", (6, 1) }, { "Serpentinas", (6, 1) },
-            { "Mosquiteiro", (4, 3) }, { "Sombrinhas", (3, 2) },
+            { "Mosquiteiro", (4, 3) }, { "Sombrinhas", (3, 2) }, { "Cordão", (6, 1) },
         };
 
         private static readonly Dictionary<string, (int, int)> YardSizes = new Dictionary<string, (int, int)>
@@ -378,6 +439,7 @@ namespace Rapadura.Gameplay.Housing
             { "Coqueiro", (2, 2) }, { "Bananeira", (2, 2) }, { "Forja", (2, 2) }, { "Forno", (2, 1) }, { "Cerca", (4, 1) }, { "Caminho", (1, 3) },
             { "Varal", (3, 1) }, { "Rede", (3, 1) }, { "Balanço", (2, 1) }, { "Mesa", (2, 2) }, { "Banco", (2, 1) }, { "Baia", (2, 2) },
             { "Manjedoura", (2, 1) }, { "Cocho", (2, 1) }, { "Tanque", (2, 1) }, { "Mastro", (1, 1) }, { "Porteira", (2, 1) },
+            { "Figueira", (2, 2) }, { "Tamareira", (2, 2) }, { "Portão", (2, 1) }, { "Barquinha", (3, 2) },
         };
 
         private static (int, int) FootprintOf(HouseLayer layer, HouseItemCategory category, string firstWord, string name)
@@ -435,7 +497,7 @@ namespace Rapadura.Gameplay.Housing
 
         private static readonly Dictionary<string, int> WallSurfaceSlots = new Dictionary<string, int>
         {
-            { "Prateleira", 3 }, { "Estante", 6 }, { "Oratório", 1 },
+            { "Prateleira", 3 }, { "Estante", 6 }, { "Oratório", 1 }, { "Nicho", 1 },
         };
 
         private static int SurfaceSlotsOf(HouseLayer layer, string firstWord)
@@ -446,7 +508,7 @@ namespace Rapadura.Gameplay.Housing
             return 0;
         }
 
-        /// <summary>"Itens grandes (chafariz, carro de boi) pedem N3+" (§12.1).</summary>
+        /// <summary>"Itens grandes (chafariz, barquinha de luz) pedem N3+" (§12.1).</summary>
         private static int MinLevelOf(string firstWord) => BigYardWords.Contains(firstWord) ? 3 : 1;
 
         public static string FirstWord(string name)

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: item_fruta_mandacaru
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_fruta_mandacaru
-  _displayName: "Fruta do Mandacaru"
-  _description: "Fruta rosada do mandacaru, cozida no Tacho Encantado. Coma numa aventura: +1 ponto de atributo para distribuir (at\xE9 2 por jornada)."
+  _displayName: "Mel\xE3o de Luz"
+  _description: "Fatia de mel\xE3o cozida na Uasamonga. O V\xF4 Jorge dizia que mel\xE3o guarda muita luz. Coma numa aventura: +1 ponto de atributo para distribuir (at\xE9 2 por jornada)."
   _icon: {fileID: 0}
   _worldModelPrefab: {fileID: 0}
   _type: 1

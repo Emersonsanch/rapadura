@@ -10,7 +10,7 @@ namespace Rapadura.Gameplay.Wardrobe
     /// Localization (en + pt-BR) of the wardrobe catalog: <c>wardrobe.&lt;id&gt;.name</c> / <c>.desc</c> for all 234 entries.
     /// Names: pt-BR from <c>CatalogoRoupas.md</c>; English from the optional <c>CatalogoRoupas.en.tsv</c>, else the pt-BR
     /// name (translation TODO, same as the house catalog). Descriptions are generated: "Peito · Raro · Conjunto Pena de
-    /// Gavião · Drop: Lobo Alfa (chefe)". Self-contained like <see cref="HouseItemTexts"/>.
+    /// Gavião · Drop: Kök-Böri (chefe)". Self-contained like <see cref="HouseItemTexts"/>.
     /// </summary>
     public static class WardrobeTexts
     {
@@ -52,7 +52,7 @@ namespace Rapadura.Gameplay.Wardrobe
                 case AppearanceSlot.Accessory: return ptBR ? "Acessório" : "Accessory";
                 case AppearanceSlot.FaceNeck: return ptBR ? "Rosto/Pescoço" : "Face/Neck";
                 case AppearanceSlot.Back: return ptBR ? "Costas" : "Back";
-                case AppearanceSlot.Caramelo: return ptBR ? "Caramelo" : "Caramelo";
+                case AppearanceSlot.Caramelo: return ptBR ? "Ari" : "Ari";
                 default: return ptBR ? "Arma" : "Weapon";
             }
         }
@@ -60,9 +60,9 @@ namespace Rapadura.Gameplay.Wardrobe
         private static readonly (string Pt, string En)[] OriginPrefixes =
         {
             ("Loja: ", "Shop: "), ("Missão da Casa: ", "House quest: "), ("Missão pessoal da ", "Personal quest of "),
-            ("Missão pessoal do ", "Personal quest of "), ("Missão regional da Floresta (2ª)", "Second Forest region quest"),
+            ("Missão pessoal do ", "Personal quest of "), ("Missão regional da Floresta (2ª)", "Second Zarafshan Woods region quest"),
             ("Missão: ", "Quest: "), ("Diária: ", "Daily: "), ("Conquista: ", "Achievement: "), ("Evento: ", "Event: "),
-            ("Crafting: ", "Crafting: "), ("Drop: inimigos comuns da Floresta e do Deserto", "Drop: common enemies of the Forest and the Desert"),
+            ("Crafting: ", "Crafting: "), ("Drop: inimigos comuns da Floresta e do Deserto", "Drop: common enemies of the Zarafshan Woods and the Flaming Sands"),
             ("Drop: ", "Drop: "), ("Segredo do mapa", "Map secret"), ("Desbloqueado desde o começo", "Unlocked from the start"),
         };
 

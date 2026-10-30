@@ -1,9 +1,9 @@
 # English names for Docs/Housing/CatalogoRoupas.md: id<TAB>English name. Not consumed by code yet.
 roupa_maithe_001	Short-brim straw hat
-roupa_maithe_002	Raw cotton jerkin
+roupa_maithe_002	Raw cotton chapan
 roupa_maithe_003	Patched denim trousers
 roupa_maithe_004	Rope espadrilles
-roupa_maithe_005	Moss-green headscarf
+roupa_maithe_005	Moss-green suzani headscarf
 roupa_maithe_006	Leather vest with arrow holder
 roupa_maithe_007	Canvas trail shorts
 roupa_maithe_008	Short trail boots
@@ -19,17 +19,17 @@ roupa_maithe_017	Storm-cloud crown
 roupa_maithe_018	Thunder-feather cuirass
 roupa_maithe_019	Lightning culottes
 roupa_maithe_020	Gale boots
-roupa_maithe_021	Straw hat with wildflowers
-roupa_maithe_022	Green gingham ruffle dress
-roupa_maithe_023	Quadrilha lace petticoat
+roupa_maithe_021	Apricot-blossom crown
+roupa_maithe_022	Green ikat dress with ribbons
+roupa_maithe_023	Bema lace petticoat
 roupa_maithe_024	Flowery cloth flats
 roupa_maria_001	White linen cap
 roupa_maria_002	Bleached cotton blouse
 roupa_maria_003	Raw linen skirt
 roupa_maria_004	Rawhide sandals
-roupa_maria_005	Bobbin-lace veil
-roupa_maria_006	Golden fuxico shawl
-roupa_maria_007	Yellow chita twirl skirt
+roupa_maria_005	Suzani-embroidered linen veil
+roupa_maria_006	Golden Sogdian silk shawl
+roupa_maria_007	Yellow ikat twirl skirt
 roupa_maria_008	Braided leather slippers
 roupa_maria_009	Polished brass diadem
 roupa_maria_010	Golden satin tunic
@@ -43,20 +43,20 @@ roupa_maria_017	Crown of morning stars
 roupa_maria_018	Celestial Miracle robes
 roupa_maria_019	Dawn skirt
 roupa_maria_020	Steps of heavenly light
-roupa_maria_021	Pastoril shepherdess hat with ribbon
-roupa_maria_022	Blue pastoril bodice
+roupa_maria_021	Felt cap with a Yalda ribbon
+roupa_maria_022	Blue lamp-bearer's bodice
 roupa_maria_023	Blue tulle skirt
 roupa_maria_024	Blue satin flats
-roupa_joaquim_001	Battered leather hat
+roupa_joaquim_001	Battered felt cap
 roupa_joaquim_002	Plaid flannel shirt
 roupa_joaquim_003	Denim trousers with knee patches
-roupa_joaquim_004	Farm work boots
-roupa_joaquim_005	Vaqueiro hat with chin strap
-roupa_joaquim_006	Vaqueiro's leather jerkin
+roupa_joaquim_004	Orchard work boots
+roupa_joaquim_005	Rider's felt cap with chin strap
+roupa_joaquim_006	Rider's leather chapan
 roupa_joaquim_007	Rawhide chaps
-roupa_joaquim_008	Spurless vaqueiro boots
-roupa_joaquim_009	Ipê-bark helm
-roupa_joaquim_010	Ipê-plank breastplate
+roupa_joaquim_008	Spurless riding boots
+roupa_joaquim_009	Poplar-bark helm
+roupa_joaquim_010	Poplar-plank breastplate
 roupa_joaquim_011	Hardwood cuisses
 roupa_joaquim_012	Packed-root boots
 roupa_joaquim_013	Polished granite helm
@@ -67,7 +67,7 @@ roupa_joaquim_017	Eternal Root helm
 roupa_joaquim_018	Eternal Roots armor
 roupa_joaquim_019	Thousand-year trunk greaves
 roupa_joaquim_020	Boots that never budge
-roupa_joaquim_021	Caboclo ribbon hat
+roupa_joaquim_021	Lantern ribbon hat
 roupa_joaquim_022	Sequined collar
 roupa_joaquim_023	Striped satin trousers
 roupa_joaquim_024	Ribbon-trimmed sneakers
@@ -90,13 +90,13 @@ roupa_icaro_016	Magnetic levitation boots
 roupa_icaro_017	Machine Commander helm
 roupa_icaro_018	Copper-and-steam exo-armor
 roupa_icaro_019	Assisted mechanical legs
-roupa_icaro_020	Rapadura-powered jet boots
+roupa_icaro_020	Golden-brick jet boots
 roupa_icaro_021	Straw hat with antenna
-roupa_icaro_022	Light-bulb plaid shirt
+roupa_icaro_022	Light-bulb ikat shirt
 roupa_icaro_023	Trousers with a circuit patch
 roupa_icaro_024	Blinking-light boots
 roupa_lavine_001	Purple ribbon bow
-roupa_lavine_002	Little purple chita dress
+roupa_lavine_002	Little purple ikat dress
 roupa_lavine_003	Striped tights
 roupa_lavine_004	Patent-leather shoes
 roupa_lavine_005	Pointy tissue-paper hat
@@ -108,128 +108,128 @@ roupa_lavine_010	Twilight tunic
 roupa_lavine_011	Mist skirt
 roupa_lavine_012	Silent slippers
 roupa_lavine_013	Red-moon tiara
-roupa_lavine_014	Noite Rubra mantle
+roupa_lavine_014	Red Night mantle
 roupa_lavine_015	Eclipse skirt
 roupa_lavine_016	Cold-ember boots
 roupa_lavine_017	Eternal Eclipse crown
 roupa_lavine_018	Hidden Moon robes
 roupa_lavine_019	Skirt of the darkened horizon
 roupa_lavine_020	Midnight steps
-roupa_lavine_021	Reisado crown with little mirrors
-roupa_lavine_022	Reisado blouse with ribbons
+roupa_lavine_021	Lantern crown with little mirrors
+roupa_lavine_022	Yalda blouse with ribbons
 roupa_lavine_023	Red satin trousers
 roupa_lavine_024	Sequined flats
-roupa_comum_001	Short-sleeved chita shirt
-roupa_comum_002	Twirly chita dress
-roupa_comum_003	"I Love Rapadura" T-shirt
+roupa_comum_001	Short-sleeved ikat shirt
+roupa_comum_002	Twirly suzani dress
+roupa_comum_003	"I Love Dawn Isle" T-shirt
 roupa_comum_004	Village football club jersey
 roupa_comum_005	Denim overalls with kangaroo pocket
 roupa_comum_006	Little-lamb flannel pajamas
 roupa_comum_007	Yellow button-up raincoat
-roupa_comum_008	Renascença lace blouse
-roupa_comum_009	Grown-up vaqueiro's leather jerkin, way too big
+roupa_comum_008	Suzani-embroidered blouse
+roupa_comum_009	Grown-up caravaneer's leather chapan, way too big
 roupa_comum_010	Grandma Edna's knitted sweater
 roupa_comum_011	White linen party shirt
-roupa_comum_012	Drover's vest with road embroidery
+roupa_comum_012	Caravaneer's vest with road embroidery
 roupa_comum_013	Mountain wool jumper
 roupa_comum_014	Grandma Edna's kitchen apron
 roupa_comum_015	Colorful nylon shorts
 roupa_comum_016	Striped pajama pants
-roupa_comum_017	Chita skirt with pockets
-roupa_comum_018	Market-day denim trousers
-roupa_comum_019	Ruffled quadrilha skirt
+roupa_comum_017	Ikat skirt with pockets
+roupa_comum_018	Bazaar-day denim trousers
+roupa_comum_019	Ruffled Bema skirt
 roupa_comum_020	Mountain plaid wool trousers
 roupa_comum_021	Blue canvas espadrilles
 roupa_comum_022	Rubber flip-flops
 roupa_comum_023	Leather strap sandals
-roupa_comum_024	Caramel puppy slippers
+roupa_comum_024	Ari puppy slippers
 roupa_comum_025	Green rain boots
-roupa_comum_026	Drover's leather boots
-roupa_comum_027	Market-day wooden clogs
+roupa_comum_026	Caravaneer's leather boots
+roupa_comum_027	Bazaar wooden clogs
 roupa_comum_028	Bare, dirt-dusted feet
-acess_001	Turned-brim leather hat
-acess_002	Replica of Grandpa Jorge's leather hat
-acess_003	Half-moon leather hat
+acess_001	Turned-brim felt cap
+acess_002	Replica of Grandpa Jorge's felt cap
+acess_003	Half-moon felt hat
 acess_004	Frayed straw hat
 acess_005	Backwards cap
-acess_006	Ipê flower crown
-acess_007	Passion-flower headband
+acess_006	Pomegranate-blossom crown
+acess_007	Almond-blossom headband
 acess_008	Wool beanie with pompom
-acess_009	Vaqueiro's red neckerchief
-acess_010	Cashew-print silk scarf
+acess_009	Caravaneer's red neckerchief
+acess_010	Pomegranate-print silk scarf
 acess_011	Round wire-rim glasses
-acess_012	Açaí-seed necklace
-acess_013	Cave-crystal bead necklace
+acess_012	Apricot-stone necklace
+acess_013	Grotto-crystal bead necklace
 acess_014	Grandma Edna's little brass medal
-acess_015	Fake quadrilha mustache
+acess_015	Fake Bema mustache
 acess_016	Charcoal-painted freckles
-acess_017	Papier-mâché papangu mask
-acess_018	Rawhide satchel
+acess_017	Papier-mâché lion mask
+acess_018	Rawhide saddlebag
 acess_019	Patched canvas backpack
 acess_020	Gourd canteen across the shoulder
 acess_021	Bath-towel superhero cape
-acess_022	Crepe-paper wings
-acess_023	Frevo umbrella on the back
-acess_024	Hammock rolled on the back
-acess_025	Plush Caramelo in the backpack
-acess_026	Colorful wish-ribbon bracelet
+acess_022	Silk-paper wings
+acess_023	Fish lantern on the back
+acess_024	Silk hammock rolled on the back
+acess_025	Plush Ari in the backpack
+acess_026	Colorful ribbon bracelet
 acess_027	Wind-up wristwatch
 acess_028	Bottle-cap ring
-acess_029	Golden rapadura brooch
+acess_029	Golden-brick brooch
 acess_030	Little belt lantern
-acess_031	Caramelo's red neckerchief
+acess_031	Ari's red neckerchief
 acess_032	Leather collar with name tag
-acess_033	Caramelo's little straw hat
-acess_034	Caramelo's Santa hat
-acess_035	Caramelo's yellow raincoat
-acess_036	Caramelo's gear bandana
+acess_033	Ari's little straw hat
+acess_034	Ari's Yalda cap
+acess_035	Ari's yellow raincoat
+acess_036	Ari's gear bandana
 tinta_001	Indigo dye
-tinta_002	Annatto dye
-tinta_003	Turmeric dye
-tinta_004	Jenipapo dye
+tinta_002	Madder dye
+tinta_003	Saffron dye
+tinta_004	Oak-gall dye
 tinta_005	Red clay dye
-tinta_006	Stove-charcoal dye
-tinta_007	Cashew-bark dye
-tinta_008	Brazilwood dye
-tinta_009	Mango-leaf dye
+tinta_006	Tandir-charcoal dye
+tinta_007	Walnut-husk dye
+tinta_008	Pomegranate dye
+tinta_009	Mulberry-leaf dye
 tinta_010	Onion-skin dye
 tinta_011	Beet dye
 tinta_012	Lime-white dye
-tinta_013	Mountain ochre dye
+tinta_013	Litema ochre dye
 tinta_014	Golden sand dye
-tinta_015	Blue cave-crystal dye
-tinta_016	Forest moss-green dye
-tinta_017	Pastoril blue dye
-tinta_018	Quadrilha pink dye
+tinta_015	Grotto turquoise dye
+tinta_016	Tugai moss-green dye
+tinta_017	Yalda blue dye
+tinta_018	Bema pink dye
 tinta_019	Polished copper dye
 tinta_020	Twilight lilac dye
 tinta_021	Stone gray dye
 tinta_022	Night black dye
-tinta_023	Chita rainbow dye
-tinta_024	Lua Rubra dye
+tinta_023	Ikat rainbow dye
+tinta_024	Red Moon dye
 tinta_025	Rising sun dye
 visual_arma_maithe_001	Kite-bamboo bow
-visual_arma_maithe_002	Guava-branch bow
-visual_arma_maithe_003	Flowering mandacaru bow
+visual_arma_maithe_002	Apricot-branch bow
+visual_arma_maithe_003	Flowering saxaul bow
 visual_arma_maithe_004	Singing-wind bow
 visual_arma_maithe_005	Sun Crystal bow
-visual_arma_maria_001	Rue-branch staff
+visual_arma_maria_001	Tamarisk-branch staff
 visual_arma_maria_002	Oil-lamp staff
 visual_arma_maria_003	Sunflower staff
-visual_arma_maria_004	Stained-glass staff
+visual_arma_maria_004	Coloured-glass staff
 visual_arma_maria_005	Dawn staff
 visual_arma_joaquim_001	Pot-lid shield
 visual_arma_joaquim_002	Wagon-wheel shield
-visual_arma_joaquim_003	Vine-mandala shield
+visual_arma_joaquim_003	Wicker-mandala shield
 visual_arma_joaquim_004	Carved soapstone shield
 visual_arma_joaquim_005	Golden Eternal Root shield
 visual_arma_icaro_001	Toy wrench
 visual_arma_icaro_002	Soda-bottle launcher
 visual_arma_icaro_003	Brass gear wrench
 visual_arma_icaro_004	Tin electric coil
-visual_arma_icaro_005	Rapadura confetti cannon
+visual_arma_icaro_005	Golden-brick confetti cannon
 visual_arma_lavine_001	School-notebook grimoire
 visual_arma_lavine_002	Soap-bubble orb
-visual_arma_lavine_003	Enchanted cordel book
-visual_arma_lavine_004	Lua Rubra orb
+visual_arma_lavine_003	Enchanted illuminated book
+visual_arma_lavine_004	Red Moon orb
 visual_arma_lavine_005	Eternal Eclipse grimoire
