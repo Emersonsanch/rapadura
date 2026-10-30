@@ -1493,7 +1493,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Sistema de conquistas — `Gameplay/Achievements/AchievementManager.cs` (orientado a eventos, salvo), 20 conquistas em `Resources/Achievements` (9 ligadas à história dos heróis), toast + tela de lista (`UI/Achievements/*`) — 2026-10-21. Lista de conquistas na `Main.unity` e na `WorldMap.unity`; progresso em arquivo de perfil próprio (`d03a7c3`).
 - [x] Missões diárias — `Gameplay/Quests/DailyQuestService.cs` (3 por dia, escolha determinística pela data), 8 missões em `Resources/Quests/Daily` ligadas aos heróis — 2026-10-21
 - [ ] Sistema de pets
-- [ ] Montarias
+- [ ] Montarias (pedido do usuário, 2026-10-29) — design e catálogo em `Docs/Mounts.md` (em escrita): pônei, unicórnio, cachorro grande, tigre, mamute e cerca de 20 animais mitológicos (mitologia mundial + folclore brasileiro), cada um com habilidade especial própria e atributos diferentes (velocidade, defesa, vida, fôlego). Comuns compradas em lojas, médias dropadas por bichos, muito raras de chefes/eventos com chance mínima. Estábulo na casa própria, alimentação com ingredientes da cozinha, primo favorito com bônus. Online: velocidade limitada no servidor.
 - [ ] Crafting avançado
 - [ ] Sistema de ranking
 - [ ] Eventos aleatórios
