@@ -13,12 +13,12 @@
 - 🙋 **Decisões do usuário:** item perdido ao morrer **não se recupera** (sai o Achados e Perdidos); ao morrer, **9% de chance de cair 1 item** da mochila (de uma pilha cai só 1 unidade; nunca o que está vestido); **boneco de treino serve para testar os poderes** (dano por golpe, crítico, dano por segundo) e **não dá XP**; **Seu Zé Caçador e o dono do Haras são pessoas diferentes** (o do Haras passa a ser o Seu Tonico).
 - 🛠️ `tools/ci/compile_check.sh`: compilação offline de todos os assemblies com o Roslyn do Unity (usa os `.rsp` do Bee, mas compila os `.cs` que estão no disco).
 - 🙋 **Direção do usuário:** **toda a história passa a se basear no maniqueísmo** (Luz × Trevas, partículas de luz presas na matéria, o Chamado e a Resposta, a Coluna da Glória, o Príncipe das Trevas e seus arcontes); **nomes de NPC vêm da mitologia maniqueísta** (Mariam, Adamas, Omóforo, Narisah, Zaku, Sisin, Ammo, Srosh, Patig…); avós passam a ser **Vó Edna** e **Vô Jorge**.
-- [ ] Trocar em todo o jogo e nos docs: Vó Zefa → Vó Edna, Vô Chico → Vô Jorge, NPCs antigos → nomes maniqueístas (ids internos ficam).
-- [ ] Revisar `Docs/Narrative.md` e os textos de história para o tema maniqueísta, mantendo os 5 primos e os avós no centro (tom de mito para criança, não doutrina).
+- [x] Trocar em todo o jogo e nos docs: Vó Zefa → Vó Edna, Vô Chico → Vô Jorge, NPCs antigos → nomes maniqueístas (ids internos ficam). — feito (`e96c2bb`, `da11efe`).
+- [x] Revisar `Docs/Narrative.md` e os textos de história para o tema maniqueísta, mantendo os 5 primos e os avós no centro (tom de mito para criança, não doutrina). — feito (`e96c2bb`, `da11efe`).
 - [ ] 📈 **Nível máximo 500** (estilo MU), com desenvolvimento agora até o nível 100: curva de XP, pontos, graduações e nível de mestre reposicionados, monstros escalando — `Docs/Progressao500.md` (em escrita).
-- [ ] 🐎 **Montarias evoluem com o herói:** limite 20, o teto da montaria sobe com o nível do herói; "Despertar" nos marcos do herói (100/200/300/500) sem passar do 20.
+- [x] 🐎 **Montarias evoluem com o herói:** limite 20, o teto da montaria sobe com o nível do herói; "Despertar" nos marcos do herói (100/200/300/500) sem passar do 20. — feito (`e96c2bb`, `da11efe`).
 - [ ] 🗺️ **100 mapas** descritos em `Docs/Mapas100.md` (níveis 1–500, cada um com cidade ou posto seguro), construídos aos poucos; primeiro os do escopo até o nível 100.
-- [ ] ⚰️ **Renascer sempre na cidade** da região (praça), nunca no lugar nem em checkpoint da arena.
+- [x] ⚰️ **Renascer sempre na cidade** da região (praça), nunca no lugar nem em checkpoint da arena. — feito (`e96c2bb`, `da11efe`).
 - [x] 🧱 **Colisão do cenário (prioridade alta, `cf20b7f`):** medido no Play — árvores sem colisor nenhum, pedras `Rock_*` com colisor da metade do tamanho, bancada sem colisor; o herói atravessa. Correção em andamento (regras puras + aplicação em tudo que nasce na arena + teste PlayMode empurrando o herói).
 - [ ] 🏘️ **Cidades 3D andáveis** com kit modular low-poly (paredes com portas/janelas, telhados, varandas, barracas, capela, poço, calçamento): Vila da Vó Edna primeiro, depois Areia Branca, Serra Alta e Lamparinas; integradas a NPCs/lojas, zona segura, renascer, carro de boi, dia/noite e clima; testes de passagem e capturas das 4 cidades.
 - 🤖 **Em andamento (agentes):** decisões acima, montarias M3 (terrestres), casa H3 (fontes) e H5 (guarda-roupa), lojas novas da Vila com rotação e Bornal de couro, evolução de classe e nível de mestre, durabilidade/conserto e itens excelentes, viagem rápida e Festa Junina, blend trees/eventos de passo/IK nos pés.
@@ -1633,28 +1633,28 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 
 ### 🎒 Finalização da Integração de Carga & Peso (Encumbrance)
 > As regras puras já foram escritas em `EncumbranceRules.cs` e `ItemWeightRules.cs`. Falta conectar à HUD e ao motor de locomoção:
-- [ ] **Integração no PlayerMotor (`Assets/Scripts/Gameplay/Player/PlayerMotor.cs`)**:
+- [x] **Integração no PlayerMotor (`Assets/Scripts/Gameplay/Player/PlayerMotor.cs`)**: — feito em `da11efe` (`EncumbranceTracker`, barra na mochila e "Alforjes" montado, `EncumbranceTests`).
   - Adicionar cálculo de penalidade de velocidade no loop de locomoção:
     `float loadFactor = EncumbranceRules.HeroSpeedFactor(loadRatio);`
     `currentSpeedMultiplier *= loadFactor;`
   - Garantir que raízes e stuns tenham precedência e que a velocidade mínima respeite `EncumbranceRules.HeroMinFactor` (0.6x).
-- [ ] **Integração na HUD (`Assets/Scripts/UI/HUD/HudController.cs`)**:
+- [x] **Integração na HUD (`Assets/Scripts/UI/HUD/HudController.cs`)**: — feito em `da11efe` (`EncumbranceTracker`, barra na mochila e "Alforjes" montado, `EncumbranceTests`).
   - Adicionar label de peso e barra de carga visual na mochila (`hud-weight-label`: "42.5 / 60.0 kg").
   - Mudar cor do texto dinamicamente conforme `EncumbranceRules.Band()`: Verde (Light), Amarelo (Heavy), Vermelho pulsante (Overloaded).
-- [ ] **Notificação de Sobrecarga (Toast / Banner)**:
+- [x] **Notificação de Sobrecarga (Toast / Banner)**: — feito em `da11efe` (`EncumbranceTracker`, barra na mochila e "Alforjes" montado, `EncumbranceTests`).
   - Disparar aviso visual *"Mochila Sobrecarregada! Sua velocidade foi reduzida"* ao ultrapassar 100% da capacidade.
-- [ ] **Suíte de Testes EditMode (`Assets/Tests/EditMode/Inventory/EncumbranceRulesTests.cs`)**:
+- [x] **Suíte de Testes EditMode (`Assets/Tests/EditMode/Inventory/EncumbranceRulesTests.cs`)**: — feito em `da11efe` (`EncumbranceTracker`, barra na mochila e "Alforjes" montado, `EncumbranceTests`).
   - Testar faixas de peso, cálculo de capacidade por Vitalidade e velocidade montada vs a pé.
 
 ---
 
 ### 🗣️ Migração e Padronização de Nomes Maniqueístas (Strings & Localização)
-- [ ] Atualizar arquivos de tradução em `Assets/Resources/Localization/`:
+- [x] Atualizar arquivos de tradução em `Assets/Resources/Localization/`: — feito: os textos vivem nos `*Texts.cs` (en + pt-BR), trocados em `e96c2bb`/`da11efe`.
   - `Strings_pt-BR.json` e `Strings_en.json`:
     - Trocar "Vó Zefa" por "Vó Edna" e "Vô Chico" por "Vô Jorge" em todas as chaves de narrativa, itens e receitas.
     - Trocar nomes de NPCs nos diálogos: Cida → Mariam, Severino → Adamas, Bento → Ammo, Benedita → Parthenos.
     - Atualizar nomes das cidades nas telas de mapa: Vila da Vó Edna, Oásis de Qocho, Vila de Litema, Vila das Lamparinas.
-- [ ] Rodar teste de integridade `Assets/Tests/EditMode/Localization/LocalizationIntegrityTests.cs` para garantir que nenhuma chave ficou órfã ou retornando string vazia.
+- [x] Rodar teste de integridade `Assets/Tests/EditMode/Localization/LocalizationIntegrityTests.cs` para garantir que nenhuma chave ficou órfã ou retornando string vazia. — `LocalizationCoverageTests` verde (EditMode 2880/2880).
 
 ---
 
@@ -1819,10 +1819,10 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 
 ### Animação
 - [ ] Rig padrão para personagens (humanoide/genérico) — Maria/Ícaro/Lavine/Joaquim já importados riggados (`*_RO`, 2026-08-25). 🙋 **decisão do usuário**: rig da Maithe (cerca de 5 créditos Meshy por tentativa, `.glb` pronto em `Assets/Models/Characters/Maithe_RO/glb/`, ou Mixamo). Também decidir se as pastas não usadas `Assets/Models/Characters/Joaquim/` e `Joaquim_Child/` podem ser apagadas.
-- [ ] Animator Controllers com blend trees (locomoção fluida)
-- [ ] Animation Events (sincronizar hit de arma, passos, efeitos sonoros)
-- [ ] Root Motion vs. Motor-driven (decisão documentada e consistente)
-- [ ] IK (Inverse Kinematics) para pés/mãos, se necessário
+- [x] Animator Controllers com blend trees (locomoção fluida) — feito (blend tree com pés em fase, passos, IK dos pés; decisão em `Docs/Animation.md` §2.2).
+- [x] Animation Events (sincronizar hit de arma, passos, efeitos sonoros) — feito (blend tree com pés em fase, passos, IK dos pés; decisão em `Docs/Animation.md` §2.2).
+- [x] Root Motion vs. Motor-driven (decisão documentada e consistente) — feito (blend tree com pés em fase, passos, IK dos pés; decisão em `Docs/Animation.md` §2.2).
+- [x] IK (Inverse Kinematics) para pés/mãos, se necessário — feito (blend tree com pés em fase, passos, IK dos pés; decisão em `Docs/Animation.md` §2.2).
 
 ### Cinemáticas e Narrativa
 - [ ] Cutscenes (Timeline do Unity)
