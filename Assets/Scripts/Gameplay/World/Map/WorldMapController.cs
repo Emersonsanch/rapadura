@@ -197,7 +197,18 @@ namespace Rapadura.Gameplay.World.Map
             PublishBossChallengeState();
         }
 
-        private void OnGameLoaded(GameLoadedEvent evt) => SyncWithProgress();
+        private void OnGameLoaded(GameLoadedEvent evt)
+        {
+            // A bag opened on the map mid-trip (road event card, daily reward claim: CarriedInventorySession) restores
+            // the carried inventory and raises this too. That is not a save load: the map progress did not change, so
+            // the trip goes on instead of snapping the token back to where it left (it would never arrive).
+            if (evt.FromCarriedState && IsTraveling)
+            {
+                return;
+            }
+
+            SyncWithProgress();
+        }
 
         private void Update()
         {

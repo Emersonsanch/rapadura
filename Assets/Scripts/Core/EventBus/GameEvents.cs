@@ -69,6 +69,17 @@ namespace Rapadura.Core.Events
     /// <summary>Raised right after a load operation reads data from disk, so systems can apply state.</summary>
     public readonly struct GameLoadedEvent : IGameEvent
     {
+        /// <summary>
+        /// True when raised by <c>SaveManager.RestoreCarriedState</c>: state carried across a scene swap was handed
+        /// to freshly registered saveables (a scene load, or a <c>CarriedInventorySession</c> opening the bag on the
+        /// world map), not a save read from disk. Session-wide state (map progress, the trip in course) did not change.
+        /// </summary>
+        public readonly bool FromCarriedState;
+
+        public GameLoadedEvent(bool fromCarriedState)
+        {
+            FromCarriedState = fromCarriedState;
+        }
     }
 
     /// <summary>Raised whenever an item is added to or removed from the inventory.</summary>

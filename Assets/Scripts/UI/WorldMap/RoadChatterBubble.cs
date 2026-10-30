@@ -109,6 +109,12 @@ namespace Rapadura.UI.WorldMap
 
         private void OnGameLoaded(GameLoadedEvent evt)
         {
+            // A bag opened mid-trip (road event card) restores carried state: not a load, the trip goes on.
+            if (evt.FromCarriedState)
+            {
+                return;
+            }
+
             // A save loaded from the pause menu resets the token: this trip is gone.
             _tripActive = false;
             _pendingThisTrip = false;

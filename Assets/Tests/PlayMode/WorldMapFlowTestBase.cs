@@ -5,7 +5,10 @@ using System.Linq;
 using NUnit.Framework;
 using Rapadura.Core.Systems;
 using Rapadura.Gameplay.World.Biomes;
+using Rapadura.Gameplay.World.Events;
 using Rapadura.Gameplay.World.Map;
+using Rapadura.UI.Daily;
+using Rapadura.UI.WorldMap;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,12 +29,16 @@ namespace Rapadura.Tests.PlayMode
 
         private static int _restartCounter;
 
-        /// <summary>Waits for the (possibly freshly reloaded) world map to be started, idle and unpaused, and turns off random step rolls.</summary>
+        /// <summary>
+        /// Waits for the (possibly freshly reloaded) world map to be started, idle and unpaused, and turns off random step rolls.
+        /// The map's own popups (daily reward, road event card) are answered on the way, see <see cref="HandleMapPopups"/>.
+        /// </summary>
         protected static IEnumerator WaitForMap(Action<WorldMapController> found, float timeoutSeconds = SceneLoadTimeoutSeconds)
         {
             WorldMapController map = null;
             yield return WaitUntilOrFail(() =>
             {
+                HandleMapPopups();
                 if (SceneManager.GetActiveScene().name != WorldMapSceneName || !SceneManager.GetActiveScene().isLoaded)
                 {
                     return false;
@@ -64,14 +71,71 @@ namespace Rapadura.Tests.PlayMode
                 Assert.IsNotNull(node, $"WorldMap.unity has no node for {hop}.");
                 Assert.IsTrue(map.TryTravelTo(node), $"The map refused to travel from {map.Progress.CurrentRegion} to {hop}.");
 
+                // The daily reward popup and road event cards hold GameplayPause (timeScale 0): the token stands still
+                // until they are answered, like a player would.
                 WorldMapController traveling = map;
-                yield return WaitFast(() => !traveling.IsTraveling && traveling.Progress.CurrentRegion == hop,
+                yield return WaitFast(() =>
+                    {
+                        HandleMapPopups();
+                        return !traveling.IsTraveling && traveling.Progress.CurrentRegion == hop;
+                    },
                     $"the token to arrive in {hop}", TravelTimeoutSeconds, fastTimeScale);
                 RestoreTimeScale();
             }
 
             Assert.AreEqual(destination, map.Progress.CurrentRegion);
             Assert.AreEqual(destination, map.CurrentNode.Region);
+        }
+
+        /// <summary>
+        /// Answers the world map's self-opening modals the way a player would, so they never hold GameplayPause (and
+        /// the token, the story panels, "Explorar") for good: closes the daily reward popup ("Fechar", it opens by
+        /// itself on the map ~1.5 s after the HUD shows, once per map scene while today's reward is unclaimed) and
+        /// answers a road event card (<see cref="WorldEventCardController"/>, it pops mid-trip) with the choice that
+        /// starts no fight — choice B never costs anything — then "Seguir viagem". Returns true when it did anything.
+        /// Never touches story panels or the credits.
+        /// </summary>
+        protected static bool HandleMapPopups()
+        {
+            bool handled = false;
+
+            foreach (DailyLoginMapPopup popup in UnityEngine.Object.FindObjectsByType<DailyLoginMapPopup>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+            {
+                if (popup.IsOpen)
+                {
+                    popup.Close();
+                    handled = true;
+                }
+            }
+
+            foreach (WorldEventCardController card in UnityEngine.Object.FindObjectsByType<WorldEventCardController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+            {
+                if (!card.IsOpen)
+                {
+                    continue;
+                }
+
+                if (!card.HasResult)
+                {
+                    WorldEventSpec spec = card.CurrentEvent;
+                    int choice = PeacefulChoice(spec);
+                    Assert.IsTrue(card.Choose(choice), $"Could not answer the road event '{spec?.Id}' with its choice {(choice == 0 ? "A" : "B")}.");
+                }
+
+                Assert.IsTrue(card.Continue(), $"The road event card '{card.CurrentEvent?.Id}' has no \"Seguir viagem\" after a choice.");
+                Assert.IsFalse(card.IsOpen, "The road event card stayed open after \"Seguir viagem\".");
+                handled = true;
+            }
+
+            return handled;
+        }
+
+        /// <summary>B (free by the catalog's rule) unless it starts a fight; then A when that one doesn't.</summary>
+        private static int PeacefulChoice(WorldEventSpec spec)
+        {
+            WorldEventChoiceSpec b = spec?.Choice(1);
+            WorldEventChoiceSpec a = spec?.Choice(0);
+            return b != null && b.StartsEncounter && a != null && !a.StartsEncounter ? 0 : 1;
         }
 
         /// <summary>Shortest hop list (excluding <paramref name="from"/>) through unlocked regions, or null when unreachable.</summary>

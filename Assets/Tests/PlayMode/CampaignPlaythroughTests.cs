@@ -218,7 +218,7 @@ namespace Rapadura.Tests.PlayMode
             Assert.IsTrue(GameplayPause.IsPaused, "The credits do not pause the map behind them.");
 
             credits.Hide(); // "Voltar"
-            yield return WaitUntilOrFail(() => !credits.IsOpen && !StoryPanelController.IsShowing && !GameplayPause.IsPaused,
+            yield return WaitUntilOrFail(() => !HandleMapPopups() && !credits.IsOpen && !StoryPanelController.IsShowing && !GameplayPause.IsPaused,
                 "the credits to close and release the map", 5f);
             yield return WaitFrames(2);
 
@@ -327,7 +327,17 @@ namespace Rapadura.Tests.PlayMode
             StoryPanelController.AutoPresent = true;
             try
             {
-                yield return WaitUntilOrFail(() => StoryPanelController.ShowingBeat == beat,
+                // A beat never starts over another modal: the daily reward popup opening first would hold it off.
+                yield return WaitUntilOrFail(() =>
+                    {
+                        if (StoryPanelController.ShowingBeat == beat)
+                        {
+                            return true;
+                        }
+
+                        HandleMapPopups();
+                        return false;
+                    },
                     $"StoryPanelController to present {beat} on the world map", BeatStartTimeoutSeconds);
             }
             finally
@@ -368,7 +378,7 @@ namespace Rapadura.Tests.PlayMode
 
             if (!expectCredits)
             {
-                yield return WaitUntilOrFail(() => !GameplayPause.IsPaused && !StoryPanelController.IsShowing,
+                yield return WaitUntilOrFail(() => !HandleMapPopups() && !GameplayPause.IsPaused && !StoryPanelController.IsShowing,
                     $"the map to be released after {beat}", 5f);
             }
         }

@@ -183,6 +183,15 @@ namespace Rapadura.UI.WorldMap
 
         private void OnGameLoaded(GameLoadedEvent evt)
         {
+            // The card's own bag (Show opens a CarriedInventorySession, which restores the carried inventory) raises
+            // this too: not a load, the trip and the card go on. Cancelling here used to close the card from inside
+            // Show, which then put it on screen holding GameplayPause with no event behind it: no choice worked and
+            // the map stayed frozen for good.
+            if (evt.FromCarriedState)
+            {
+                return;
+            }
+
             // A save loaded from the pause menu resets the token (SyncWithProgress): this trip and its card are gone.
             Cancel();
             _tripActive = false;
@@ -440,6 +449,36 @@ namespace Rapadura.UI.WorldMap
 
             Button first = _choiceButtons[0].enabledSelf ? _choiceButtons[0] : _choiceButtons[1];
             first.Focus();
+            return true;
+        }
+
+        /// <summary>A choice was picked and its result is on screen, waiting for <see cref="Continue"/>.</summary>
+        public bool HasResult => IsOpen && _outcome != null;
+
+        /// <summary>
+        /// Presses choice <paramref name="index"/> (0 = A, 1 = B), exactly like its button (gamepad/test entry point).
+        /// False when the card is closed, a choice was already made or the bag can't pay for it.
+        /// </summary>
+        public bool Choose(int index)
+        {
+            if (!IsOpen || _outcome != null || index < 0 || index > 1)
+            {
+                return false;
+            }
+
+            OnChoiceClicked(index);
+            return _outcome != null;
+        }
+
+        /// <summary>Presses "Seguir viagem" / "Lutar!" under the result. False when no choice was made yet.</summary>
+        public bool Continue()
+        {
+            if (!HasResult)
+            {
+                return false;
+            }
+
+            OnContinueClicked();
             return true;
         }
 

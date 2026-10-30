@@ -225,7 +225,7 @@ namespace Rapadura.Save
 
             if (restored > 0)
             {
-                EventBus.Publish(new GameLoadedEvent());
+                EventBus.Publish(new GameLoadedEvent(fromCarriedState: true));
             }
 
             return restored;
