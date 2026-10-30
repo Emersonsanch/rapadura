@@ -4,6 +4,20 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-10-30 (madrugada — leva grande de agentes: cidades, casa, montarias, refino, noite e mais; `3efdfc8`)
+- 🏙️ **Cidades nas 4 regiões** (Vila da Vó Zefa, Povoado de Areia Branca, Vila da Serra Alta, Vila das Lamparinas) com zona segura no mapa (`SafeZoneRules`), lojas temáticas com estoque que gira, renascer na cidade e carro de boi (2 ouro por estrada). `Docs/Cities.md`.
+- 🎒 **Mochila em grade 8×8 estilo MU** (API única `CanFit`), saves antigos migram sem perda; **9% de queda ao morrer** com Achados e Perdidos; **perda de 5% de XP** (nunca desce de nível), **Bênção da Romaria** e **Patuá da Vó Zefa**.
+- 🏠 **Casa própria H0/H1/H4/H6**: catálogo de 580 itens no código (com nomes em inglês), casa de madeira modular, "Arrumar a casa", baú, cama, melhorias N1→N5 sem perder nada, conforto e "Descansado" (+2/2/3/3/3%), 21 conjuntos, parede de troféus, vitrine de relíquias, Caramelo cochilando, plantas, livro de visitas, Missões da Casa 1–6.
+- 🐴 **Montarias M1/M2**: Pônei Pé-de-Pano, Cachorrão Paçoca, Jegue Carregador; assobio (H), habilidade (G), galope com fôlego, Haras da Vila, "Primeira Sela", fome, nível 1–20, carinho, selas e mantas, estábulo ligado à casa.
+- ⚒️ **Refino +0..+15** com Pedras do Sertão (falha volta um nível acima de +6) e **Tacho Encantado da Vó**: asas de 5 estilos (slot Costas/Asas), Proteção do Caos, Frutas do Mandacaru e do Umbu.
+- 🌙 **Dia e noite**: ondas que renascem, noite mais perigosa e com menos visão (lamparina, "Noite mais clara"), 6 espécies noturnas com modelo próprio (Lobisomem, Morcego-vampiro, Coruja-rasga-mortalha, Vaga-lumes, Queixadas, Mãe-da-lua).
+- 🎣 Pesca (14 peixes), 🤝 golpe em dupla (10 combos), 🗣️ 46 conversas entre primos na estrada, 🎯 tarefas de caça/presa do dia/bicho destaque/amuletos do Caderno, 🏰 salas de evento (Terreiro das Assombrações, Torre do Engenho Velho), ☕ fôlego diário e presente do dia, lembrete de tempo para os pais.
+- 📖 Narrativa revisada (`Docs/Narrative.md`): irmãos/primos corrigidos, Convocação termina no Habitante Ancestral, "Rapadura" é o título, a Vó comenta de onde o primo voltou.
+- ⚖️ Balanço r9: pilha de poder (`tools/balance/power_stack.py`), NG+ por região, bug da redução de recarga percentual corrigido.
+- 🐾 Bichos com patas de verdade (motor de marcha procedural) e heróis com andar de mocap ajustado a cada esqueleto: modelos rebakeados e animators refeitos no Editor.
+- ✅ EditMode: 2520 testes, 15 falhas em correção. Falta conferir tudo jogando.
+- 🙋 Decisões pendentes: ritmo de XP do fôlego cheio (hoje = XP atual), preços de recuperar item (10/25/60/150/400), pilha inteira cai ao morrer, prioridade do dono no online (10 s) e 2 min no chão, Feira/Mascate fixos vs. por dia da semana, "Descansado" menor que o doc, boneco de treino só enfeite.
+
 ### 2026-10-29 (noite — build menor, áudio dos sistemas novos, créditos e nova leva de agentes)
 - 📦 **Build menor** (`4512d34`): menus "Rapadura ▸ Build ▸ Apply Mesh Import Settings" (compressão Medium, Read/Write off, tangentes só onde o material usa normal map) e "Dedupe Hero Meshes" (prefabs variantes do rigged com a malha limpa em `Assets/Prefabs/Characters`). `Joaquim_NoPedestal` 29 → 15,6 MB. 🐛 `EditorUtility.CopySerialized` não substituía os vértices de um Mesh salvo; a compactação agora reescreve pela API do Mesh. Testes de orçamento em `Rapadura.Tests.EditorTools`. Fecha o item 2 dos próximos passos.
 - 🔊 **Áudio** (`cbd1e8f`): 16 sons procedurais novos (atordoamento, espinhos, baú, missão, pulo/aterrissagem, aviso de ataque inimigo…), música própria dos painéis de história, grilos e brisa no título.
@@ -1512,7 +1526,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 ## ⭐ Recursos que aumentam MUITO a retenção
 - [x] Sistema de conquistas — `Gameplay/Achievements/AchievementManager.cs` (orientado a eventos, salvo), 20 conquistas em `Resources/Achievements` (9 ligadas à história dos heróis), toast + tela de lista (`UI/Achievements/*`) — 2026-10-21. Lista de conquistas na `Main.unity` e na `WorldMap.unity`; progresso em arquivo de perfil próprio (`d03a7c3`).
 - [x] Missões diárias — `Gameplay/Quests/DailyQuestService.cs` (3 por dia, escolha determinística pela data), 8 missões em `Resources/Quests/Daily` ligadas aos heróis — 2026-10-21
-- [ ] Sistema de pets
+- [x] Sistema de pets
 - [ ] Montarias (pedido do usuário, 2026-10-29) — design e catálogo em `Docs/Mounts.md` (em escrita): pônei, unicórnio, cachorro grande, tigre, mamute e cerca de 20 animais mitológicos (mitologia mundial + folclore brasileiro), cada um com habilidade especial própria e atributos diferentes (velocidade, defesa, vida, fôlego). Comuns compradas em lojas, médias dropadas por bichos, muito raras de chefes/eventos com chance mínima. Estábulo na casa própria, alimentação com ingredientes da cozinha, primo favorito com bônus. Online: velocidade limitada no servidor.
   - Catálogo pronto: **30 montarias** em `Docs/Mounts.md` (6 comuns, 8 incomuns, 8 raras, 5 épicas, 3 lendárias; 21 terrestres, 5 voadoras, 2 aquáticas, 2 escavadoras), cada uma com habilidade única; primo favorito: Maithe — Hipogrifo Ventania, Maria — Unicórnio, Joaquim — Mamute, Ícaro — Tatu-Bola, Lavine — Pônei Pé-de-Pano.
   - [ ] M1 (offline): regras puras + controlador (assobio, subir/descer, galope com fôlego), 3 montarias iniciais procedurais (Pônei Pé-de-Pano, Cachorrão Paçoca, Jegue Carregador), loja Haras da Vila, missão "Primeira Sela", save.
@@ -1522,14 +1536,14 @@ frontal + lateral + traseira de cada personagem para servir como referência par
   - [ ] 🙋 Decisões (`Docs/Mounts.md` §14): combate montado ou só viagem, chances de drop, montaria por conta ou por personagem, regras de troca, nada de montaria com atributo vendida por dinheiro real.
 - [ ] Crafting avançado
 - [ ] Sistema de ranking
-- [ ] Eventos aleatórios
+- [x] Eventos aleatórios
 - [x] Loot raro — raridades + afixos procedurais; bosses têm loot garantido e drop raro com afixos (`BossBonusRules`, 2026-10-21)
 - [ ] Bosses mundiais
 - [x] Ciclo dia/noite — `TimeOfDayManager` + `DayNightLighting` (salvo, pausa junto com o jogo, noite aumenta encontros) — 2026-10-21
 - [ ] **Bichos diferentes de dia e de noite** (pedido do usuário, 2026-10-29; em andamento): tabela de bichos por região e por período (madrugada/dia/tarde/noite), respawn em ondas durante o encontro, noite mais perigosa (ondas maiores e mais rápidas, bichos com mais vida/dano e mais bravos, mas com loot e XP melhores) e aviso no HUD. Primeiro com variantes noturnas dos bichos atuais (olhos brilhando, tom escuro); depois espécies só da noite do folclore (coruja-rasga-mortalha, morcego-vampiro gigante, enxame de vaga-lumes-de-fogo, porcos-do-mato da Caipora, Lobisomem-do-sertão como mini-chefe raro). Design em `Docs/DayNight.md`. **Noite com menos visão** (pedido do usuário): ambiente mais escuro, neblina e alcance de visão menor em volta do herói, olhos dos bichos brilhando no escuro, luz de lamparina em volta do herói (que pode crescer com itens/montarias), nunca breu total; opção "Noite mais clara" na Acessibilidade.
 - [x] Clima dinâmico — `WeatherSystem` + `WeatherVisuals` (chuva, neblina, tempestade de areia, neve por bioma, partículas em pool com limites para mobile) — 2026-10-21; em 2026-10-22 (`49b91fa`) chuva/neve/areia viraram riscos finos que seguem o jogador (antes um quad esticado)
-- [ ] Segredos e áreas ocultas
-- [ ] New Game+
+- [x] Segredos e áreas ocultas
+- [x] New Game+
 - [ ] Sistema de temporadas
 
 ### 💡 Novas ideias (2026-10-29)
