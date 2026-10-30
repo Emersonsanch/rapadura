@@ -1451,10 +1451,26 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 ### 12.3 Funcionalidades estilo MU Online
 - [ ] Cidade-hub compartilhada (a Vila da Vó Zefa) com outros jogadores, NPCs, loja, Baú e Fogão.
 - [ ] Mapas abertos por região, com inimigos que reaparecem (respawn) em vez das arenas isoladas; níveis mínimos por mapa.
-- [ ] Grupo (party) de até 5: XP e loot divididos, bônus por grupo com os 5 primos diferentes ("Família Completa").
+- [ ] **Grupo (party)** — pedido do usuário (2026-10-29):
+  - [ ] Convidar/aceitar/recusar/sair/expulsar; líder do grupo (passa a liderança); até 5 membros.
+  - [ ] XP dividida por proximidade (só quem está perto ganha) com bônus por membro; regras de loot escolhidas pelo líder (livre, rodízio, por necessidade, o líder distribui).
+  - [ ] Bônus "Família Completa" com os 5 primos diferentes e "Laço de Irmãos" com Maithe+Ícaro ou Joaquim+Maria no mesmo grupo; o Golpe em dupla usa um membro real do grupo.
+  - [ ] Barras de vida dos membros no HUD, marcador no mapa, chat de grupo, procurar grupo (lista de quem quer grupo por região/nível).
+  - [ ] Sem fogo amigo; reviver companheiro caído; entrar junto nas lutas de chefe e nos eventos.
 - [ ] Chat (geral, grupo, clã, sussurro) com filtro de palavras e denúncia; emotes para o mobile.
-- [ ] Troca entre jogadores com confirmação dupla, e mercado/leilão (casa de leilões na Vila).
-- [ ] Clãs (guildas) com brasão, banco do clã e guerra de clãs.
+- [ ] **Troca entre jogadores** — pedido do usuário (2026-10-29):
+  - [ ] Janela de troca cara a cara (só na cidade/zona segura ou perto um do outro): cada lado põe itens e ouro, os dois confirmam, qualquer mudança desfaz a confirmação, confirmação final com resumo.
+  - [ ] Itens "vinculados" que não podem ser trocados (recompensas de história, relíquias da família, itens de conquista); aviso de item raro.
+  - [ ] Tudo validado e registrado no servidor (log de trocas, proteção contra duplicação de item, limite para contas novas contra golpe).
+  - [ ] Barraca de venda na cidade (vender enquanto está parado/offline) e casa de leilões com taxa (dreno de ouro).
+- [ ] **Guildas (clãs)** — pedido do usuário (2026-10-29):
+  - [ ] Criar guilda (custo em ouro, nível mínimo, nome único com filtro de palavras), brasão personalizável e lema.
+  - [ ] Cargos com permissões (líder, vice, oficiais, membros, recrutas), convite, saída, expulsão, transferência de liderança.
+  - [ ] Chat da guilda, mural de avisos, lista de membros online, mensagem do dia.
+  - [ ] Banco/baú da guilda com registro de quem tirou o quê e limites por cargo; contribuição de ouro.
+  - [ ] Nível da guilda com bônus pequenos para os membros; missões semanais da guilda.
+  - [ ] Sede da guilda (casa grande na cidade, ver Fase 15) com convites automáticos para os membros.
+  - [ ] Alianças entre guildas e guerra de guildas declarada (só PvP consentido entre as duas, placar, regras claras); depois, disputa de território/castelo por temporada.
 - [ ] PvP: duelo consentido, arena ranqueada, áreas PvP marcadas; nada de PvP forçado nas regiões iniciais.
 - [ ] Eventos agendados no espírito de Blood Castle/Devil Square, com tema sertanejo: "Noite do Lobisomem" (sobreviver a ondas), "Cerco ao Engenho" (defender a vila), "Caçada ao Habitante Ancestral" (chefe mundial com várias pessoas), e a Festa Junina como evento sazonal.
 - [ ] Chefes mundiais com reaparecimento por horário e loot por contribuição.
