@@ -234,4 +234,15 @@ namespace Rapadura.Gameplay.WorldEvents
             }
 
             _lastChestWindow = Math.Max(-1, saved.lastChestWindow);
-            _bestChestTier = Math.Max(0, Math.Min(saved.bestChestTier, InvasionRules.MaxTier))
+            _bestChestTier = Math.Max(0, Math.Min(saved.bestChestTier, InvasionRules.MaxTier));
+            _invasionsDefended = Math.Max(0, saved.invasionsDefended);
+            if (saved.chestsByTier != null)
+            {
+                for (int i = 0; i < _chests.Length && i < saved.chestsByTier.Count; i++)
+                {
+                    _chests[i] = Math.Max(0, saved.chestsByTier[i]);
+                }
+            }
+        }
+    }
+}

@@ -151,7 +151,7 @@
 
 .talent-quadrant-label {
     position: absolute;
-    width: 120px;
+    width: 100px;
     font-size: 15px;
     color: var(--rap-gold-light);
     -unity-font-style: bold;

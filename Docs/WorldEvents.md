@@ -19,7 +19,7 @@ maniqueísta, sem "Seu/Dona"); os avós são Vó Edna e Vô Jorge.
 |---|---|---|---|---|
 | Floresta | **Saklas, o Lobo-Guará Encantado** (lobo) | **Saklas, o Lobisomem-Rei da Mata** (lobisomem) | 3 | Onça de Luz 2% / 4% |
 | Deserto | **Namrael, o Escorpião-Rei** (escorpião) | **Namrael da Lua Cheia** (escorpião recolorido) | 6 | Ema de Fogo 1,5% / 3% |
-| Montanha | **Nebroel, o Gigante da Serra** (golem) | **Nebroel, o Gigante da Pedra da Lua** (golem recolorido) | 9 | Tigre-das-Neves 2% / 4% |
+| Montanha | **Mazan, o Gigante da Serra** (golem) | **Mazan, o Gigante da Pedra da Lua** (golem recolorido) | 9 | Tigre-das-Neves 2% / 4% |
 | Cavernas | **Príncipe das Trevas, Rei da Revoada** (enxame) | **Príncipe das Trevas, o Morcegão-Vampiro** (morcego-vampiro) | 13 | Kirin 0,8% / 1,6% |
 
 ## 2. Calendário (relógio real, igual para todo mundo)
@@ -112,4 +112,5 @@ mesma região e 6 invasões por dia, uma vez cada) — da ordem das salas de eve
   jogador com o mesmo seed (o servidor rola); a invasão vira ondas no mapa aberto da região, pontos por jogador
   (abate para quem matou, ondas/Az para todos presentes). O servidor é dono do relógio (anti-trapaça de relógio do
   aparelho, que offline ainda dá para adiantar).
-- Ainda não feito: golpes próprios dos che
+- Ainda não feito: golpes próprios dos chefes (só a IA do bicho base, maior), placar/ranking por janela, conquistas,
+  o baú como item guardável, efeito da invasão nos encontros comuns da região, som próprio do anúncio.

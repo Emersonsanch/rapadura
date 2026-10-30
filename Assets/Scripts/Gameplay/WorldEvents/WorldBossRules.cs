@@ -160,7 +160,7 @@ namespace Rapadura.Gameplay.WorldEvents
                 "Namrael, the Scorpion King", "Namrael, o Escorpião-Rei", "Namrael of the Full Moon", "Namrael da Lua Cheia",
                 offsetMinutes: 45, minLevel: 6, MountWaveCatalog.FireRhea, 0.015f, 0.03f, MountDropRules.RuinGuardian),
             new WorldBossDefinition(BossMountainId, BiomeType.Mountain, "enemy_mountain_stone_golem", "enemy_mountain_stone_golem",
-                "Nebroel, Giant of the Serra", "Nebroel, o Gigante da Serra", "Nebroel, the Moonstone Giant", "Nebroel, o Gigante da Pedra da Lua",
+                "Mazan, Giant of the Serra", "Mazan, o Gigante da Serra", "Mazan, the Moonstone Giant", "Mazan, o Gigante da Pedra da Lua",
                 offsetMinutes: 90, minLevel: 9, MountWaveCatalog.SnowTiger, 0.02f, 0.04f, MountDropRules.MountainWarlord),
             new WorldBossDefinition(BossCavesId, BiomeType.Caves, "enemy_cave_bat_swarm", "enemy_cave_vampire_bat",
                 "Prince of Darkness, King of the Flock", "Príncipe das Trevas, Rei da Revoada", "Prince of Darkness, the Vampire Bat King", "Príncipe das Trevas, o Morcegão-Vampiro",

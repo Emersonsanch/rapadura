@@ -2432,3 +2432,91 @@ tudo-ou-nada, save) e `ItemOptionTests` (sementes reproduzíveis, frequências d
 conjuntos por peças que funcionam, sorte no refino, engaste respeitando arma/armadura, linhas verdes do tooltip, save
 antigo = peça comum). `LocalizationCoverageTests` cobre `DurabilityTexts` e `ItemOptionTexts`. Online: desgaste,
 sorteio das opções, conserto e engaste rodam no servidor com os mesmos números; o cliente só mostra.
+
+---
+
+## 26. Crafting avançado: níveis de ofício, partes dos bichos, benzedura de arma, forja de fusão e runas (2026-10-30)
+
+Código: `Assets/Scripts/Gameplay/Crafting/Advanced/` (regras puras, RNG passada por quem chama — online roda no
+servidor). Modelo: `python -I tools/balance/crafting_stack.py` (+ `test_crafting_stack.py`). Testes:
+`AdvancedCraftingTests` (EditMode). Textos en + pt-BR: `CraftingTexts`. Ainda sem janela (a UI fica para depois:
+`AdvancedCraftingService` já expõe checar / fazer / fundir / benzer na mochila viva).
+
+### 26.1 Partes dos bichos (`CreatureParts`, `CreaturePartDrops`)
+
+Quinta fonte de loot, rolada **por último** em `EnemyLootGranter` (sementes antigas repetem os mesmos drops). Comum:
+**30%** de 1 parte (+5 pp por ciclo de NG+); chefe: **3** partes garantidas + **50%** de 1 Troféu da Fera.
+
+| Parte | Raridade | Quem solta |
+|---|---|---|
+| Presa de Lobo | Incomum | comuns e chefe da Floresta (menos a aranha) |
+| Seda de Aranha | Incomum | Aranha da Floresta |
+| Ferrão de Escorpião | Incomum | Deserto |
+| Lasca de Golem | Incomum | Montanha |
+| Asa de Morcego | Incomum | Cavernas |
+| Troféu da Fera | Raro | só chefes (50%) |
+
+### 26.2 Nível de ofício e qualidade do material (`CraftTierRules`, `AdvancedRecipeCatalog`)
+
+- **Nível de ofício** = 1 + região mais funda aberta (Floresta 1 … Cavernas 4); NG+ abre os 4. Receita/benzedura de
+  nível acima fica bloqueada.
+- **Qualidade** = raridade média das matérias-primas (ponderada pela quantidade): < 0,25 Rústico, < 0,6 Bom, < 1,0
+  Fino, senão Primoroso; o Troféu da Fera (opcional, gasto) sobe um degrau.
+- Peça feita rola a raridade por qualidade (C/I/R/É): Rústico 60/30/10/0, Bom 30/45/22/3, Fino 0/45/40/15, Primoroso
+  0/20/50/30 — **nunca abaixo do item base e nunca acima do teto do nível: Incomum, Incomum, Incomum, Raro**. Afixos
+  por `ProceduralItemGenerator` (semente tirada da RNG). Peça feita **não tem opção MU** (excelente/sorte/antigo).
+- 6 receitas de equipamento (chapéu e botas nível 1; gibão e arco 2; espada de ferro 3 e 4) e 5 de runas.
+
+### 26.3 Benzedura de arma do Vô Jorge (`ImbueCatalog`, `ImbueRules`, `ImbueEffectApplier`)
+
+4 partes + ouro → um bônus na arma da mão por **8 lutas**. Uma de cada vez (nova substitui). **Divide a vaga da bênção
+da estrada**: luta que já tem bênção (`world_event`) pausa a benzedura, e luta sem arma na mão também; só conta luta
+em que ela valeu (salvo no `CraftingManager`).
+
+| Benzedura | Nível | Parte | Ouro | Efeito |
+|---|---|---|---|---|
+| Fio da Presa | 1 | Presa de Lobo ×4 | 10 | dano +6% |
+| Ligeireza da Aranha | 1 | Seda ×4 | 10 | velocidade de ataque +6% |
+| Veneno do Ferrão | 2 | Ferrão ×4 | 20 | crítico +4 pp |
+| Casca de Pedra | 3 | Lasca ×4 | 30 | defesa +10% |
+| Sede do Morcego | 4 | Asa ×4 | 40 | +2 de vida/s ("roubo de vida" do Tibia, como regeneração) |
+
+### 26.4 Forja de fusão de Adamas (`FusionRules`)
+
+2 ou 3 cópias do **mesmo** item (da mochila, sem opção MU) → a melhor (raridade, depois refino) sobe **um degrau** com
+afixos novos e mantém o refino. Chance: 2 peças 50%, 3 peças 75%; −15 pp para Épico; Troféu +15 pp; teto 90%. Ouro:
+15 × raridade-alvo. **Nunca perde tudo**: se falhar, a melhor volta igual e cada cópia derretida vira 2 de ferro.
+Mesmo teto de raridade do 26.2.
+
+### 26.5 Runas (Lavine e Maria)
+
+Consumíveis comuns (`Resources/Items/item_runa_*`, usados da mochila como poção por qualquer primo); **só Lavine e
+Maria desenham** (`AdvancedRecipeSpec.Crafters`). Cura 60 · Cura Grande 120 (nível 4) · Clareza 60 de mana · Couro Duro
+defesa +15% por 15 s (nível 2) · Vento velocidade +20% por 12 s (nível 3). Nenhuma runa ofensiva: consumível sem
+recarga empilharia sem limite e o modelo de TTK não as vê (como as poções).
+
+### 26.6 Orçamento (`crafting_stack.py`)
+
+- **Benzedura**: entra como mais uma candidata da vaga do evento em **todas** as regiões (limite superior). Nenhuma
+  supera a Cantoria (dano +8%), então a pilha do §14 não muda em nada.
+- **Peças feitas/fundidas**: limite superior = ao chegar em cada região o herói ganha uma peça no teto do nível em
+  cada slot das receitas (arma, chapéu, peito, botas), como se toda fusão desse certo, por cima do Monte Carlo do r8.
+  Orçamentos: sozinho ≥ 92% do r8 no chefe / 80% nos comuns; a pilha do §14 no herói com as peças; pilha + feitas +
+  refino ≥ 12 s; e **tudo** (pilha + refino + asas + frutas + peças excelentes perfeitas + peças da forja nos slots que
+  sobram — slot é excelente *ou* forjado) dentro do orçamento global das opções (≥ 66% do r8, ≥ 12 s).
+- Tetos testados: Raro/Raro/Épico/Épico e Incomum/Incomum/Raro/Raro estouram (Montanha e NG+1: chefe < 92% / tudo < 12 s);
+  **Incomum/Incomum/Incomum/Raro** fica dentro. Ou seja: a forja é piso confiável, não teto novo — o melhor ainda vem
+  do chefe.
+
+| Ciclo | Bioma | Chefe: r8 → pilha → pilha c/ benzedura | Chefe: r8 → r8 c/ peças feitas → pilha+feitas+refino | 2 comuns: r8 → pilha c/ benzedura → r8 c/ feitas |
+|---|---|---|---|---|
+| NG+0 | Floresta | 16,5 → 13,8 → **13,8** s | 16,5 → 15,6 → **13,2** s | 4,8 → 3,7 → 4,5 s |
+| NG+0 | Deserto | 18,2 → 14,9 → **14,9** s | 18,2 → 17,6 → **13,8** s | 6,1 → 4,7 → 5,6 s |
+| NG+0 | Montanha | 18,4 → 14,4 → **14,4** s | 18,4 → 17,2 → **13,4** s | 6,4 → 4,9 → 6,3 s |
+| NG+0 | Cavernas | 20,0 → 16,2 → **16,2** s | 20,0 → 19,0 → **14,5** s | 4,6 → 3,4 → 4,0 s |
+| NG+1 | Floresta | 18,5 → 14,6 → **14,6** s | 18,5 → 17,1 → **12,9** s | 3,3 → 2,5 → 3,3 s |
+| NG+1 | Deserto | 18,5 → 14,5 → **14,5** s | 18,5 → 17,2 → **13,0** s | 3,6 → 2,8 → 3,3 s |
+| NG+1 | Montanha | 18,5 → 14,5 → **14,5** s | 18,5 → 17,4 → **13,0** s | 4,1 → 2,9 → 4,0 s |
+| NG+1 | Cavernas | 19,8 → 15,9 → **15,9** s | 19,8 → 18,8 → **14,0** s | 4,0 → 2,9 → 4,0 s |
+
+Resultado: **dentro do orçamento**; `pytest tools/balance` verde (51).

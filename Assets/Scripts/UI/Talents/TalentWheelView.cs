@@ -239,7 +239,7 @@ namespace Rapadura.UI.Talents
                 Label label = NewLabel("talent-quadrant-label");
                 label.userData = quadrant;
                 Vector2 at = TalentWheelPresenter.LabelCenter(quadrant);
-                label.style.left = at.x - 60f;
+                label.style.left = at.x - TalentWheelPresenter.LabelWidth / 2f;
                 label.style.top = at.y - 10f;
                 _wheel.Add(label);
             }

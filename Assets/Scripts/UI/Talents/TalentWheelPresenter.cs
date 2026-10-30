@@ -27,7 +27,10 @@ namespace Rapadura.UI.Talents
         public const float Ring1Radius = 70f;
         public const float Ring2Radius = 130f;
         public const float KeystoneRadius = 180f;
-        public const float LabelRadius = 112f;
+        public const float LabelRadius = 205f;
+        /// <summary>The label sits on the rim, this far counter-clockwise from the quadrant's middle (clear of every node).</summary>
+        public const float LabelOffsetDegrees = 40f;
+        public const float LabelWidth = 100f;
         public const float Ring2SpreadDegrees = 22f;
 
         /// <summary>Middle of the quadrant, in degrees clockwise from straight up.</summary>
@@ -55,8 +58,13 @@ namespace Rapadura.UI.Talents
             return Polar(angle, radius);
         }
 
-        /// <summary>Where the quadrant's name sits: between the rings, on the side away from the nodes' ring-2 pair.</summary>
-        public static Vector2 LabelCenter(TalentQuadrant quadrant) => Polar(QuadrantAngle(quadrant), LabelRadius);
+        /// <summary>Where the quadrant's name sits: on the rim, between its first ring-2 node and the previous quadrant, kept inside the box.</summary>
+        public static Vector2 LabelCenter(TalentQuadrant quadrant)
+        {
+            Vector2 at = Polar(QuadrantAngle(quadrant) - LabelOffsetDegrees, LabelRadius);
+            float half = LabelWidth / 2f;
+            return new Vector2(Mathf.Clamp(at.x, half, WheelSize - half), Mathf.Clamp(at.y, 10f, WheelSize - 10f));
+        }
 
         public static Vector2 Polar(float degreesClockwiseFromUp, float radius)
         {
