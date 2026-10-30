@@ -65,7 +65,7 @@ Estrutura estilo Final Fantasy clássico: um **mapa mundi** visto de cima, onde 
 - [ ] Preencher com jogos de referência (gênero, combate, arte) conforme forem definidos.
 
 ## Escopo fora do MVP
-Multiplayer, live-ops, DLC e conteúdo de temporada são explicitamente pós-lançamento (ver Fases 12–14 do `TODO.md`) e não bloqueiam o MVP.
+**Decisão de 2026-10-29: o jogo é multiplayer online no estilo MU Online** (mundo compartilhado, grupos, troca, PvP, eventos agendados). O roteiro e as decisões em aberto estão na Fase 12 do `TODO.md`. A campanha single-player atual é a base de conteúdo e de regras que o servidor vai assumir. Live-ops, DLC e conteúdo de temporada continuam pós-lançamento (Fases 13–14).
 
 ---
 *Ver `TODO.md` na raiz do projeto para o roadmap de desenvolvimento fase a fase.*

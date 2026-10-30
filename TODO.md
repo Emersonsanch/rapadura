@@ -118,7 +118,7 @@
 - Origem de `Assets/Textures/Characters/Tex_HeroCloth.png` (marcado "[VERIFICAR origem]" em `Docs/ThirdPartyLicenses.md`).
 - Pastas de modelo não usadas `Assets/Models/Characters/Joaquim/` e `Joaquim_Child/` (o jogo usa `Joaquim_RO`): apagar ou manter?
 - Testes em aparelho físico (toque, vibração, desempenho), builds de loja (Android/iOS/Steam) e contas de desenvolvedor.
-- Escopo de multiplayer (Fase 12), marketing (Fase 13) e live ops (Fase 14).
+- ~~Escopo de multiplayer~~ — decidido em 2026-10-29: **online estilo MU Online** (Fase 12, com as decisões que faltam em 12.1). Marketing (Fase 13) e live ops (Fase 14) continuam em aberto.
 
 
 ### 2026-09-11 (fim da sessão automática agendada 3h — resumo)
@@ -1418,16 +1418,50 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 
 ---
 
-## 🌐 FASE 12 — Multiplayer (opcional — só se estiver no escopo)
-> 🙋 **Decisão do usuário** (2026-10-21): o escopo de multiplayer, marketing (Fase 13) e live ops (Fase 14) ainda não foi definido; nenhum item dessas fases foi tocado.
-- [ ] Definir se o jogo é single-player, co-op ou multiplayer competitivo
-- [ ] Netcode (Unity Netcode for GameObjects, Mirror, Photon, etc.)
-- [ ] Sincronização de estado (posição, combate, inventário)
-- [ ] Matchmaking/lobby
-- [ ] Anti-cheat básico (validação server-side de ações críticas)
-- [ ] Testes de latência/rollback
+## 🌐 FASE 12 — Multiplayer online (estilo MU Online)
+> ✅ **Decisão do usuário (2026-10-29): o jogo é multiplayer online, no estilo MU Online.** Vários jogadores no mesmo mundo, grupos, troca, PvP e eventos agendados. A campanha single-player atual vira a base de conteúdo (mapas, inimigos, itens, skills, história dos primos) que o servidor passa a controlar.
 
----
+### 12.1 Decisões que ainda dependem do usuário
+- [ ] Os 5 primos no online: cada jogador escolhe um primo como "classe" (vários Joaquins no mesmo servidor), ou cria um personagem próprio e os primos viram NPCs/heróis da história?
+- [ ] Escala: MMO com mundo persistente e centenas de pessoas por servidor, ou salas de 4–8 jogadores (co-op + PvP) com cidade compartilhada? Muda custo e tecnologia.
+- [ ] Plataformas com cross-play (PC + Android + iOS?) e se o mobile entra no primeiro lançamento.
+- [ ] Modelo de negócio: pago, free-to-play com loja só cosmética, ou passe de temporada. Evitar "pay-to-win".
+- [ ] Hospedagem e orçamento mensal de servidor; região (Brasil primeiro).
+- [ ] Progressão: mantém o single-player offline (campanha) separado do online, ou tudo vira online?
+
+### 12.2 Fundação técnica
+- [ ] Escolher a stack de rede, com protótipo comparativo. **Servidor dedicado autoritativo** com Unity headless + Netcode for GameObjects, FishNet ou Mirror; contas e dados com backend próprio ou Nakama/PlayFab/UGS. Registrar a decisão em `Docs/Network.md`.
+- [ ] Separar a lógica de jogo da apresentação. Combate, dano, loot, XP, missões e IA precisam rodar no servidor; o cliente só envia intenções (andar, atacar, usar skill). Muitas regras já são classes puras testadas (`StunRules`, `ThornsRules`, `EnemyLootRoller`, `LootGrantRules`…), e isso ajuda.
+- [ ] Revisar o que hoje assume um jogador só: singletons de gameplay, `Time.timeScale`/`GameplayPause` (online não pausa o mundo; pausa, modo foto e tutorial viram locais), save local em arquivo (vira banco de dados no servidor), seeds de aleatoriedade no cliente, "encontros aleatórios" em arena isolada (viram mapas compartilhados ou instâncias).
+- [ ] Contas e login: e-mail/Google/Apple, recuperação de senha, personagens por conta, LGPD (dados pessoais, exclusão de conta, termos de uso e política de privacidade).
+- [ ] Banco de dados do personagem: atributos, inventário, Baú, missões, conquistas, Caderno, relíquias. Migração do save local para a conta (opcional).
+- [ ] Interest management (cada cliente só recebe o que está perto), compressão de estado e taxa de ticks fixa; meta de banda para 4G.
+- [ ] Movimento com predição no cliente e reconciliação; clique-para-andar já combina com o modelo do MU (o servidor valida o caminho).
+- [ ] Combate com compensação de latência: o servidor confirma acertos; telegraphs e janelas de esquiva toleram 150–200 ms.
+- [ ] Anti-cheat: validação de velocidade, cooldown, alcance e dano no servidor; loot e ouro gerados só no servidor; logs de economia.
+- [ ] Ambiente de testes: bots headless (reaproveitar o autopiloto do teste de resistência de 30 min), teste de carga com N jogadores simulados, testes de latência e perda de pacote.
+
+### 12.3 Funcionalidades estilo MU Online
+- [ ] Cidade-hub compartilhada (a Vila da Vó Zefa) com outros jogadores, NPCs, loja, Baú e Fogão.
+- [ ] Mapas abertos por região, com inimigos que reaparecem (respawn) em vez das arenas isoladas; níveis mínimos por mapa.
+- [ ] Grupo (party) de até 5: XP e loot divididos, bônus por grupo com os 5 primos diferentes ("Família Completa").
+- [ ] Chat (geral, grupo, clã, sussurro) com filtro de palavras e denúncia; emotes para o mobile.
+- [ ] Troca entre jogadores com confirmação dupla, e mercado/leilão (casa de leilões na Vila).
+- [ ] Clãs (guildas) com brasão, banco do clã e guerra de clãs.
+- [ ] PvP: duelo consentido, arena ranqueada, áreas PvP marcadas; nada de PvP forçado nas regiões iniciais.
+- [ ] Eventos agendados no espírito de Blood Castle/Devil Square, com tema sertanejo: "Noite do Lobisomem" (sobreviver a ondas), "Cerco ao Engenho" (defender a vila), "Caçada ao Habitante Ancestral" (chefe mundial com várias pessoas), e a Festa Junina como evento sazonal.
+- [ ] Chefes mundiais com reaparecimento por horário e loot por contribuição.
+- [ ] Ranking (nível, PvP, eventos) e temporadas.
+- [ ] Sistema de reset/renascimento estilo MU (pode substituir ou conviver com o New Game+ single-player).
+- [ ] Moderação: denúncias, bloqueio de jogador, ferramentas de GM (teleporte, banimento, logs).
+
+### 12.4 Impacto nos recursos em andamento (revisar ao entrar no online)
+- New Game+ → reset/renascimento por personagem no servidor.
+- Eventos aleatórios do mapa → eventos por jogador ou por mapa, decididos no servidor.
+- Caramelo (pet) → pet por personagem, sincronizado e só visual para os outros.
+- Modo foto → local, sem pausar o mundo.
+- Segredos/Relíquias, Caderno, Cozinha → progresso salvo na conta.
+- Teste de resistência → vira base dos bots de carga.
 
 ## 📣 FASE 13 — Marketing e Comunidade
 - [ ] Página de loja (Steam/App Store) com capturas e trailer
