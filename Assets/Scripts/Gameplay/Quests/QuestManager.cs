@@ -276,6 +276,37 @@ namespace Rapadura.Gameplay.Quests
             return wasActive || wasCompleted;
         }
 
+        /// <summary>
+        /// Forgets the given quests (active and completed, no events, no rewards) so they can be taken
+        /// again — "Nova Jornada+" replays the region side quests (<c>NewGamePlusProgress</c>). Rewards
+        /// still waiting for a live Player (<see cref="PendingRewardQuestIds"/>) stay owed. Returns how many were forgotten.
+        /// </summary>
+        public int ForgetQuests(IEnumerable<string> questIds)
+        {
+            int forgotten = 0;
+            if (questIds == null)
+            {
+                return forgotten;
+            }
+
+            foreach (string questId in questIds)
+            {
+                if (string.IsNullOrEmpty(questId))
+                {
+                    continue;
+                }
+
+                bool wasActive = _activeQuests.Remove(questId);
+                bool wasCompleted = _completedQuestIds.Remove(questId);
+                if (wasActive || wasCompleted)
+                {
+                    forgotten++;
+                }
+            }
+
+            return forgotten;
+        }
+
         // ------------------------------------------------------------------
         // Objective progression
         // ------------------------------------------------------------------

@@ -130,5 +130,7 @@ namespace Rapadura.Audio
         SackThump = 29,
         /// <summary>Loop: crickets over a soft evening breeze.</summary>
         CountrysideLoop = 30,
+        /// <summary>One short dog "woof" (falling voiced tone + breathy onset); higher frequency = a happy yip.</summary>
+        Bark = 31,
     }
 }

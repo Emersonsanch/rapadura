@@ -36,5 +36,18 @@ namespace Rapadura.Gameplay.Achievements
 
         /// <summary>Campaign finished — the final region boss beaten (<c>CampaignCompletedEvent</c> from <c>StoryProgress</c>).</summary>
         CampaignCompleted = 9,
+
+        /// <summary>Every page of "Caderno da Vó Zefa" unlocked (<c>BestiaryCompletedEvent</c> from <c>BestiaryProgress</c>).</summary>
+        BestiaryCompleted = 10,
+
+        /// <summary>Highest "Nova Jornada+" cycle finished (<c>NewGamePlusCycleCompletedEvent.Cycle</c> from <c>NewGamePlusProgress</c>; max, not a sum).</summary>
+        NewGamePlusCompleted = 11,
+
+        /// <summary>
+        /// "Relíquias do Sertão" collected (fed directly by <c>SecretsProgress.AddRelic</c> through
+        /// <see cref="AchievementManager.RecordProgress"/>, distinct ids). Target ids = relic ids. Kept apart
+        /// from the values above so features added in parallel can take the next numbers without clashing.
+        /// </summary>
+        RelicsCollected = 20,
     }
 }

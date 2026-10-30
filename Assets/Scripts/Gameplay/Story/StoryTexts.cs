@@ -131,6 +131,33 @@ namespace Rapadura.Gameplay.Story
             new LocalizationEntry("story.ending.5",
                 "The end... for now. There are still corners of the map to explore, and these cousins never say no to an adventure.",
                 "Fim... por enquanto. Ainda tem canto do mapa para explorar, e esses primos nunca dizem não para uma aventura."),
+
+            // ---- Nova Jornada+: replaces the prologue from the second campaign on (StoryScript.NewJourneyId) ----
+            new LocalizationEntry("story.new_journey.title", "New Journey: The Crystal Flickers Again", "Nova Jornada: o Cristal pisca de novo"),
+            new LocalizationEntry("story.new_journey.1",
+                "One late afternoon, a few days after the party, Grandma Zefa called the five of them to the porch. The Sun Crystal was flickering, weak as a candle in the wind. \"Some old shadows never learned to share,\" she said, stirring her coffee.",
+                "Num fim de tarde, poucos dias depois da festa, a Vó Zefa chamou os cinco na varanda. O Cristal do Sol piscava fraquinho, como vela no vento. \"Tem sombra velha que nunca aprendeu a dividir\", disse ela, mexendo o café."),
+            new LocalizationEntry("story.new_journey.2",
+                "From the Caves, the Ancient Dweller sent a message with a firefly: older, stronger shadows had woken up to the noise of the light coming back. The beasts, the ruins and the mountains were fiercer than the first time.",
+                "Lá das Cavernas, o Habitante Ancestral mandou um recado por um vaga-lume: sombras mais antigas e mais fortes acordaram com o barulho da luz voltando. Os bichos, as ruínas e as montanhas estavam mais bravos que da primeira vez."),
+            new LocalizationEntry("story.new_journey.hero.maithe",
+                "Maithe opened the Eye of the Wind and saw the thread of light unravelling towards the Caves again. \"Last time I counted my cousins three times,\" she said. \"This time I'll count four.\"",
+                "Maithe abriu o Olho do Vento e viu o fio de luz se desfiando outra vez rumo às Cavernas. \"Da primeira vez eu contei os primos três vezes\", disse ela. \"Desta vez eu conto quatro.\""),
+            new LocalizationEntry("story.new_journey.hero.maria",
+                "The sliver of crystal in Maria's pocket had gone cold. \"It's not the end of the light,\" she said, squeezing her brother Joaquim's hand. \"It's just a reminder to go together again.\"",
+                "A lasquinha de cristal no bolso da Maria tinha esfriado. \"Não é o fim da luz\", disse ela, apertando a mão do irmão, Joaquim. \"É só um aviso para a gente ir junto de novo.\""),
+            new LocalizationEntry("story.new_journey.hero.joaquim",
+                "Once again, Joaquim had his backpack on before anyone else. \"Now I know the way,\" he said, knocking on the Shield of Roots. Maria laughed: \"That's what you said the first time.\"",
+                "De novo, Joaquim estava de mochila nas costas antes de todo mundo. \"Agora eu conheço o caminho\", disse, batendo no Escudo das Raízes. Maria riu: \"Foi o que você disse da primeira vez.\""),
+            new LocalizationEntry("story.new_journey.hero.icaro",
+                "Ícaro took the light meter out of the drawer and the needle trembled, pointing at the Caves. He opened his notebook on a fresh page and wrote: \"Experiment number two.\" His big sister Maithe just shook her head.",
+                "Ícaro tirou o medidor de luz da gaveta e a agulha tremeu, apontando para as Cavernas. Abriu o caderno numa página nova e escreveu: \"Experimento número dois.\" A irmã, Maithe, só balançou a cabeça."),
+            new LocalizationEntry("story.new_journey.hero.lavine",
+                "Lavine felt the chill come back, deeper than the first time. But the youngest wasn't afraid anymore: \"If the shadow grew, so did we,\" she said, and was the first one through the farm gate.",
+                "Lavine sentiu o frio voltar, mais fundo que da primeira vez. Mas a caçula não tinha mais medo: \"Se a sombra cresceu, a gente também cresceu\", disse, e foi a primeira a passar pela porteira."),
+            new LocalizationEntry("story.new_journey.3",
+                "Grandma filled the rapadura jar again and gave each of them the same kiss on the forehead. \"You already know the way. Now light it up again — and come back in one piece.\" And the five cousins set off once more, into the Forest.",
+                "A Vó encheu o pote de rapadura de novo e deu o mesmo beijo na testa de cada um. \"Vocês já sabem o caminho. Agora é acender de novo — e voltar inteiros.\" E os cinco primos partiram outra vez, Floresta adentro."),
         };
 
         private static Dictionary<string, string> _fallbackByKey;

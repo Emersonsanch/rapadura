@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Rapadura.Editor.Mocap;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Player.States;
 using UnityEditor;
@@ -28,6 +29,12 @@ namespace Rapadura.Editor
     /// Run 1) with its speed bound to <c>MoveSpeedMul</c>; plus, for humanoid heroes, a separate
     /// "Idle" state playing <c>Assets/Animations/Mocap/Mocap_Idle.anim</c> when that baked mocap clip
     /// exists (a long idle inside a synced blend tree would distort the walk cycle timing).</item>
+    /// <item>Mocap locomotion (switch <see cref="UseMocapLocomotion"/>, menu <c>Rapadura/Animation/Use Mocap
+    /// Locomotion</c>, on by default): Humanoid heroes get the CMU clips baked on their own avatar
+    /// (<c>Assets/Animations/Mocap/&lt;Hero&gt;/</c>, else the shared Ícaro bake) — Walk = <see cref="MocapWalkClip"/>,
+    /// Jog (threshold 0.75) = <see cref="MocapJogClip"/>, Run = <see cref="MocapRunClip"/> and the Idle state =
+    /// <see cref="MocapIdleClip"/> — each measured the same way and checked by <see cref="MocapClipSanity"/>. A missing
+    /// or out-of-range clip falls back to the Meshy Walk/Run, as do the Generic (Maria) and rig-less (Maithe) heroes.</item>
     /// </list>
     /// Safe to run repeatedly.
     /// </summary>
@@ -51,6 +58,39 @@ namespace Rapadura.Editor
         /// pass MocapClipSanity.
         /// </summary>
         public static bool IncludeMocapActions;
+
+        /// <summary>Mocap locomotion clips (names of the baked <c>.anim</c>, see tools/mocap/clips.json).</summary>
+        public const string MocapWalkClip = "Mocap_WalkKid";
+        public const string MocapJogClip = "Mocap_Jog";
+        public const string MocapRunClip = "Mocap_Run";
+        public const string MocapIdleClip = "Mocap_Idle";
+
+        private const string UseMocapLocomotionPrefKey = "Rapadura.HeroAnimators.MocapLocomotion";
+        private const string UseMocapLocomotionMenu = "Rapadura/Animation/Use Mocap Locomotion";
+
+        /// <summary>
+        /// The single switch between CMU mocap locomotion (true, default) and the Meshy Walk/Run clips for the
+        /// Humanoid heroes. Stored per machine (EditorPrefs); takes effect on the next Rebuild Hero Animators.
+        /// </summary>
+        public static bool UseMocapLocomotion
+        {
+            get => EditorPrefs.GetBool(UseMocapLocomotionPrefKey, true);
+            set => EditorPrefs.SetBool(UseMocapLocomotionPrefKey, value);
+        }
+
+        [MenuItem(UseMocapLocomotionMenu, false, 40)]
+        private static void ToggleMocapLocomotion()
+        {
+            UseMocapLocomotion = !UseMocapLocomotion;
+            Debug.Log($"[HeroAnimatorRebuilder] Mocap locomotion {(UseMocapLocomotion ? "ON" : "OFF (Meshy Walk/Run)")} — run Rapadura/Animation/Rebuild Hero Animators to apply.");
+        }
+
+        [MenuItem(UseMocapLocomotionMenu, true)]
+        private static bool ToggleMocapLocomotionValidate()
+        {
+            Menu.SetChecked(UseMocapLocomotionMenu, UseMocapLocomotion);
+            return true;
+        }
 
         [MenuItem("Rapadura/Animation/Rebuild Hero Animators")]
         public static void RebuildAllMenu()
@@ -140,16 +180,104 @@ namespace Rapadura.Editor
             bool humanoid = walk.humanMotion;
             AnimationClip mocapIdle = humanoid && IncludeMocapActions ? AssetDatabase.LoadAssetAtPath<AnimationClip>(MocapIdlePath) : null;
 
+            // 2b) Mocap locomotion (Humanoid only): replaces Walk/Run, adds Jog and the Idle state.
+            string locomotionNote = humanoid ? "Meshy locomotion (mocap switch off)" : "Meshy locomotion (Generic rig)";
+            AnimationClip jog = null;
+            float jogSpeed = 0f;
+            if (humanoid && UseMocapLocomotion)
+            {
+                MocapLocomotion mocap = LoadMocapLocomotion(hero, walkPath, out locomotionNote);
+                if (mocap != null)
+                {
+                    walk = mocap.Walk;
+                    run = mocap.Run;
+                    jog = mocap.Jog;
+                    walkMeasure.GroundSpeed = mocap.WalkSpeed;
+                    runMeasure.GroundSpeed = mocap.RunSpeed;
+                    jogSpeed = mocap.JogSpeed;
+                    walkName = walk.name;
+                    runName = run.name;
+                    if (mocap.Idle != null)
+                    {
+                        mocapIdle = mocap.Idle;
+                    }
+                }
+            }
+
             // 3) Controller.
-            RebuildController(controller, walk, run, idlePose, mocapIdle, walkMeasure.GroundSpeed, runMeasure.GroundSpeed, humanoid);
+            RebuildController(controller, walk, run, jog, idlePose, mocapIdle, walkMeasure.GroundSpeed, runMeasure.GroundSpeed, jogSpeed, humanoid);
 
             // 4) One-shot mocap actions (attack/cast/hit/jump/death), see HeroAnimatorRebuilder.Actions.cs.
             string actionsReport = AddActions(controller, hero, walkPath, humanoid && IncludeMocapActions);
             AssetDatabase.SaveAssets();
 
-            return $"{hero}: Walk '{walkName}' {walkMeasure.GroundSpeed:0.###} u/s, Run '{runName}' {runMeasure.GroundSpeed:0.###} u/s (model units, ×model scale at runtime), "
+            return $"{hero}: {locomotionNote}; Walk '{walkName}' {walkMeasure.GroundSpeed:0.###} u/s, "
+                   + (jog != null ? $"Jog '{jog.name}' {jogSpeed:0.###} u/s, " : string.Empty)
+                   + $"Run '{runName}' {runMeasure.GroundSpeed:0.###} u/s (model units, ×model scale at runtime), "
                    + $"idle pose @ {walkMeasure.StandingTime:0.###}s{(idlePose == null ? " (MISSING)" : string.Empty)}, "
-                   + $"{(humanoid ? "Humanoid" : "Generic")}{(mocapIdle != null ? ", Idle state = Mocap_Idle" : string.Empty)}; {actionsReport}.";
+                   + $"{(humanoid ? "Humanoid" : "Generic")}{(mocapIdle != null ? $", Idle state = {AssetDatabase.GetAssetPath(mocapIdle)}" : string.Empty)}; {actionsReport}.";
+        }
+
+        // ------------------------------------------------------------------
+        // Mocap locomotion
+        // ------------------------------------------------------------------
+
+        private sealed class MocapLocomotion
+        {
+            public AnimationClip Walk, Jog, Run, Idle;
+            public float WalkSpeed, JogSpeed, RunSpeed;
+        }
+
+        /// <summary>
+        /// The hero's mocap Walk/Jog/Run/Idle (own-avatar bake preferred), measured on <paramref name="modelPath"/>
+        /// like the Meshy clips. Null (with the reason in <paramref name="note"/>) when Walk or Run is missing,
+        /// unmeasurable or fails <see cref="MocapClipSanity"/>; a bad Jog/Idle is just left out.
+        /// </summary>
+        private static MocapLocomotion LoadMocapLocomotion(string hero, string modelPath, out string note)
+        {
+            AnimationClip walk = MocapClipBuilder.LoadForHero(hero, MocapWalkClip);
+            AnimationClip run = MocapClipBuilder.LoadForHero(hero, MocapRunClip);
+            if (walk == null || run == null)
+            {
+                note = $"Meshy locomotion ({MocapWalkClip}/{MocapRunClip} not baked — run Rapadura/Animation/Import CMU Mocap Set)";
+                return null;
+            }
+
+            foreach (AnimationClip clip in new[] { walk, run })
+            {
+                if (!MocapClipSanity.IsHealthy(clip))
+                {
+                    note = $"Meshy locomotion ({AssetDatabase.GetAssetPath(clip)}{MocapClipSanity.Describe(clip)})";
+                    return null;
+                }
+            }
+
+            var result = new MocapLocomotion
+            {
+                Walk = walk,
+                Run = run,
+                WalkSpeed = Measure(walk, modelPath).GroundSpeed,
+                RunSpeed = Measure(run, modelPath).GroundSpeed,
+            };
+            if (result.WalkSpeed <= 0f || result.RunSpeed <= 0f)
+            {
+                note = "Meshy locomotion (mocap stride could not be measured)";
+                return null;
+            }
+
+            AnimationClip jog = MocapClipBuilder.LoadForHero(hero, MocapJogClip);
+            if (MocapClipSanity.IsHealthy(jog))
+            {
+                result.JogSpeed = Measure(jog, modelPath).GroundSpeed;
+                result.Jog = result.JogSpeed > 0f ? jog : null;
+            }
+
+            AnimationClip idle = MocapClipBuilder.LoadForHero(hero, MocapIdleClip);
+            result.Idle = MocapClipSanity.IsHealthy(idle) ? idle : null;
+
+            bool own = AssetDatabase.GetAssetPath(walk).StartsWith(MocapClipBuilder.HeroFolder(hero) + "/", StringComparison.Ordinal);
+            note = $"Mocap locomotion ({(own ? "baked on " + hero : "shared Ícaro bake")})";
+            return result;
         }
 
         // ------------------------------------------------------------------
@@ -170,14 +298,15 @@ namespace Rapadura.Editor
                     {
                         foreach (ChildMotion motion in tree.children)
                         {
-                            if (motion.motion is AnimationClip clip)
+                            // Only the hero's own FBX clips: the mocap .anim children are re-chosen by LoadMocapLocomotion.
+                            if (motion.motion is AnimationClip clip && IsModelClip(clip))
                             {
                                 if (Mathf.Approximately(motion.threshold, 0.5f)) walk = clip;
                                 else if (Mathf.Approximately(motion.threshold, 1f)) run = clip;
                             }
                         }
                     }
-                    else if (state.motion is AnimationClip clip)
+                    else if (state.motion is AnimationClip clip && IsModelClip(clip))
                     {
                         if (state.name == "Walk") walk = clip;
                         else if (state.name == "Run") run = clip;
@@ -187,6 +316,11 @@ namespace Rapadura.Editor
 
             walk = walk != null ? walk : FirstClip($"{folder}/{hero}_Walk_1.fbx") ?? FirstClip($"{folder}/{hero}_Walk.fbx");
             run = run != null ? run : FirstClip($"{folder}/{hero}_Run_1.fbx") ?? FirstClip($"{folder}/{hero}_Run.fbx");
+        }
+
+        private static bool IsModelClip(AnimationClip clip)
+        {
+            return AssetDatabase.GetAssetPath(clip).EndsWith(".fbx", StringComparison.OrdinalIgnoreCase);
         }
 
         private static AnimationClip FirstClip(string fbxPath)
@@ -453,7 +587,8 @@ namespace Rapadura.Editor
             return transition;
         }
 
-        private static void RebuildController(AnimatorController controller, AnimationClip walk, AnimationClip run, AnimationClip idlePose, AnimationClip mocapIdle, float walkClipSpeed, float runClipSpeed, bool humanoid)
+        private static void RebuildController(AnimatorController controller, AnimationClip walk, AnimationClip run, AnimationClip jog, AnimationClip idlePose, AnimationClip mocapIdle,
+                                              float walkClipSpeed, float runClipSpeed, float jogClipSpeed, bool humanoid)
         {
             string path = AssetDatabase.GetAssetPath(controller);
 
@@ -468,6 +603,10 @@ namespace Rapadura.Editor
             controller.AddParameter(PlayerAnimatorHashes.MoveSpeedMultiplierName, AnimatorControllerParameterType.Float);
             controller.AddParameter(PlayerAnimatorHashes.WalkClipSpeedName, AnimatorControllerParameterType.Float);
             controller.AddParameter(PlayerAnimatorHashes.RunClipSpeedName, AnimatorControllerParameterType.Float);
+            if (jog != null)
+            {
+                controller.AddParameter(PlayerAnimatorHashes.JogClipSpeedName, AnimatorControllerParameterType.Float);
+            }
             controller.AddParameter(PlayerAnimatorHashes.TurnAngleName, AnimatorControllerParameterType.Float);
             controller.AddParameter(PlayerAnimatorHashes.IsGroundedName, AnimatorControllerParameterType.Bool);
             controller.AddParameter(PlayerAnimatorHashes.VerticalSpeedName, AnimatorControllerParameterType.Float);
@@ -478,6 +617,7 @@ namespace Rapadura.Editor
                 if (parameter.name == PlayerAnimatorHashes.MoveSpeedMultiplierName) parameter.defaultFloat = 1f;
                 else if (parameter.name == PlayerAnimatorHashes.WalkClipSpeedName) parameter.defaultFloat = walkClipSpeed;
                 else if (parameter.name == PlayerAnimatorHashes.RunClipSpeedName) parameter.defaultFloat = runClipSpeed;
+                else if (parameter.name == PlayerAnimatorHashes.JogClipSpeedName) parameter.defaultFloat = jogClipSpeed;
                 else if (parameter.name == PlayerAnimatorHashes.IsGroundedName) parameter.defaultBool = true;
             }
 
@@ -535,6 +675,11 @@ namespace Rapadura.Editor
             }
 
             tree.AddChild(walk, 0.5f);
+            if (jog != null)
+            {
+                tree.AddChild(jog, LocomotionMath.JogBlend);
+            }
+
             tree.AddChild(run, 1f);
 
             // The blend tree syncs normalized time across children by their duration: give the

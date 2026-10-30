@@ -231,6 +231,9 @@ namespace Rapadura.Gameplay.Player
         /// <summary>True when bone layers are active (a rig was found on the visual).</summary>
         public bool IsRigMode => _rigMode;
 
+        /// <summary>The transform being animated (the swapped hero model) — the photo mode poses it.</summary>
+        public Transform VisualRoot => _visualRoot;
+
         /// <summary>The live profile (a copy; edits don't touch the source asset).</summary>
         public HeroMotionProfile Profile => _profile;
 

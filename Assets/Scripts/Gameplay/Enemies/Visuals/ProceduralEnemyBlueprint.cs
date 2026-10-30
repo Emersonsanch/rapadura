@@ -4,7 +4,11 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.Enemies.Visuals
 {
-    /// <summary>The five enemies without a Meshy model, built from code (see <see cref="ProceduralEnemyModels"/>).</summary>
+    /// <summary>
+    /// The enemies built from code (see <see cref="ProceduralEnemyModels"/>): the five that never had a
+    /// Meshy model, plus jointed low-poly animals replacing the static Meshy wolf, spider and scorpion so
+    /// their legs can step (<see cref="Rapadura.Gameplay.Locomotion.ProceduralLegLocomotion"/>).
+    /// </summary>
     public enum ProceduralEnemyKind
     {
         None = 0,
@@ -13,6 +17,10 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         Warlord = 3,
         RuinGuardian = 4,
         AncientDweller = 5,
+        Wolf = 6,
+        AlphaWolf = 7,
+        Spider = 8,
+        Scorpion = 9,
     }
 
     /// <summary>
@@ -41,10 +49,14 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         private readonly Dictionary<string, Mesh> _meshByKey = new Dictionary<string, Mesh>(StringComparer.Ordinal);
         private readonly EnemyMeshBuilder _builder = new EnemyMeshBuilder();
 
-        public ProceduralEnemyBlueprint(ProceduralEnemyKind kind, bool isBoss)
+        private readonly string _meshNamePrefix;
+
+        /// <param name="meshNamePrefix">Prefix of the mesh names; default "ProcEnemy_&lt;kind&gt;_" (the pet model passes its own).</param>
+        public ProceduralEnemyBlueprint(ProceduralEnemyKind kind, bool isBoss, string meshNamePrefix = null)
         {
             Kind = kind;
             IsBoss = isBoss;
+            _meshNamePrefix = meshNamePrefix ?? "ProcEnemy_" + kind + "_";
         }
 
         public ProceduralEnemyKind Kind { get; }
@@ -103,7 +115,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             {
                 _builder.Clear();
                 draw(_builder);
-                mesh = _builder.ToMesh("ProcEnemy_" + Kind + "_" + key);
+                mesh = _builder.ToMesh(_meshNamePrefix + key);
                 _meshByKey[key] = mesh;
                 _meshes.Add(mesh);
             }

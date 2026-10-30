@@ -6,7 +6,8 @@ namespace Rapadura.Editor.Mocap
     /// <summary>
     /// One retarget link: the BVH joint whose world rotation drives a Unity humanoid bone, plus the
     /// "child" on each side used to measure the bone's direction when normalizing both rest poses to an
-    /// ideal T-pose (see <see cref="MocapMath.TPoseDirection"/>).
+    /// ideal T-pose (see <see cref="MocapMath.TPoseDirection"/>; only bones with
+    /// <see cref="MocapMath.NormalizesRestDirection"/> are normalized).
     /// </summary>
     public readonly struct RetargetLink
     {
@@ -92,6 +93,32 @@ namespace Rapadura.Editor.Mocap
                     return new Vector3(0f, -0.35f, 1f).normalized;
                 default:
                     return null;
+            }
+        }
+
+        /// <summary>
+        /// Whether a bone's rest is normalized to <see cref="TPoseDirection"/> before retargeting. Only the
+        /// arms: they are the one place where a bind pose can legitimately differ from the T-pose (an A-pose rig),
+        /// and shoulder→elbow→wrist is the same anatomy on every skeleton.
+        /// <para>Every other bone is retargeted rest-to-rest (the BVH T-pose maps onto the avatar's own bind pose).
+        /// Normalizing them copied the CMU skeleton's geometry onto the hero instead: the CMU clavicle rises ~25°
+        /// from the sternum, its "ankle→toe" points 13° down where the Meshy ankle→toe points 35–68° down, the Meshy
+        /// knee→ankle leans 22–40° back and the spines curve differently. Forcing those to the same world direction
+        /// left the T-pose frame 12–55° off the avatar's rest (shrugged shoulders, Arm Down-Up −1.1 and Shoulder
+        /// Front-Back 1.23 in every frame of Mocap_Walk, knees over-straightened to Lower Leg Stretch 1.34, the
+        /// knee hinge then faked with ±2–3 of Upper Leg Twist in the run/death clips). See MocapRetargetTests.</para>
+        /// </summary>
+        public static bool NormalizesRestDirection(HumanBodyBones bone)
+        {
+            switch (bone)
+            {
+                case HumanBodyBones.LeftUpperArm:
+                case HumanBodyBones.LeftLowerArm:
+                case HumanBodyBones.RightUpperArm:
+                case HumanBodyBones.RightLowerArm:
+                    return true;
+                default:
+                    return false;
             }
         }
 

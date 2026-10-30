@@ -7,6 +7,7 @@ using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Quests;
+using Rapadura.Gameplay.Story;
 using Rapadura.Gameplay.World.Biomes;
 using UnityEngine;
 
@@ -68,7 +69,7 @@ namespace Rapadura.Gameplay.Enemies
 
             EnemyDefinition definition = enemy.Definition;
             BiomeDefinition biome = BiomeRegistry.FindBiomeOf(definition);
-            List<LootDrop> drops = EnemyLootRoller.Roll(definition, biome, _random);
+            List<LootDrop> drops = EnemyLootRoller.Roll(definition, biome, _random, newGamePlusCycle: NewGamePlusProgress.ResolveCurrentCycle());
 
             Vector3 labelPosition = evt.Target.transform.position + Vector3.up * 1.8f;
             Func<string, int, int> outstanding = ResolveQuestNeeds();

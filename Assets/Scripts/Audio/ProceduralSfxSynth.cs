@@ -350,6 +350,23 @@ namespace Rapadura.Audio
                     MakeLoop(ref s, sampleRate / 10);
                     break;
                 }
+                case ProceduralSfxPreset.Bark:
+                {
+                    // One "woof": a falling voiced tone (a few harmonics) with a breathy noise onset.
+                    // Caramelo barks at ~420 Hz; the same preset an octave up is his happy "yip".
+                    s = Buffer(0.17f, sampleRate);
+                    float phase = 0f, lp = 0f, a = Coef(f * 3f, sampleRate);
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        float t = T(i, sampleRate), p = (float)i / s.Length;
+                        phase += TwoPi * f * Mathf.Lerp(1.35f, 0.8f, Mathf.Sqrt(p)) / sampleRate;
+                        float voice = Mathf.Sin(phase) + 0.6f * Mathf.Sin(phase * 2f) + 0.35f * Mathf.Sin(phase * 3f) + 0.15f * Mathf.Sin(phase * 5f);
+                        lp += a * (Noise(rng) - lp);
+                        s[i] = (voice * 0.7f + lp * 1.2f * Mathf.Exp(-t * 40f)) * Mathf.Clamp01(t * 120f) * Mathf.Exp(-t * 14f);
+                    }
+
+                    break;
+                }
                 default:
                     return Array.Empty<float>();
             }

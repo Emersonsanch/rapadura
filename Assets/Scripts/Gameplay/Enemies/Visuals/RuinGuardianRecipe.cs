@@ -8,7 +8,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
     /// slow ring of rune tablets, and its arms are broken temple columns hovering beside the torso,
     /// each ending in a loose floating chunk. Boss accent: turquoise runes + gold. Hierarchy:
     /// <c>Body</c> → <c>Head</c> → <c>Runes</c>; <c>Arm_L</c>/<c>Arm_R</c> (shoulder pivot) →
-    /// <c>Fist_L</c>/<c>Fist_R</c>; <c>Leg_L</c>/<c>Leg_R</c> (hip pivot) under the root.
+    /// <c>Fist_L</c>/<c>Fist_R</c>; <c>Leg_L</c>/<c>Leg_R</c> (hip pivot) under the root → <c>Shin_L</c>/<c>Shin_R</c>
+    /// (knee, at the rune band) → <c>Foot_L</c>/<c>Foot_R</c> (pivot at the sole), so the legs step with knee IK.
     /// </summary>
     public static class RuinGuardianRecipe
     {
@@ -28,8 +29,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     new Vector3(1.0f * side, 1.18f, 0.02f), b => DrawColumn(b, side), Quaternion.Euler(-6f, 0f, 5f * side));
                 bp.Mesh(right ? ProceduralEnemyParts.FistRight : ProceduralEnemyParts.FistLeft, arm,
                     new Vector3(0f, -1.6f, 0.04f), b => DrawFragment(b, side), Quaternion.Euler(12f, 25f * side, 8f));
-                bp.Mesh(right ? ProceduralEnemyParts.LegRight : ProceduralEnemyParts.LegLeft, -1,
+                int leg = bp.Mesh(right ? ProceduralEnemyParts.LegRight : ProceduralEnemyParts.LegLeft, -1,
                     new Vector3(0.36f * side, 1.0f, 0f), b => DrawLeg(b, side));
+                int shin = bp.Mesh(right ? ProceduralEnemyParts.ShinRight : ProceduralEnemyParts.ShinLeft, leg,
+                    new Vector3(0f, -0.54f, 0.05f), b => DrawShin(b, side));
+                bp.Node(right ? ProceduralEnemyParts.FootRight : ProceduralEnemyParts.FootLeft, shin, new Vector3(0f, -0.44f, -0.03f));
             }
         }
 
@@ -134,7 +138,13 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             b.Matrix = Matrix4x4.Scale(new Vector3(side, 1f, 1f));
             b.Box(new Vector3(0f, -0.26f, 0f), new Vector3(0.42f, 0.5f, 0.46f), EnemySwatch.Sandstone, Quaternion.Euler(0f, 4f, 0f));
             b.Box(new Vector3(0f, -0.52f, 0f), new Vector3(0.45f, 0.05f, 0.49f), EnemySwatch.Rune);
-            b.Box(new Vector3(0f, -0.78f, 0.06f), new Vector3(0.52f, 0.44f, 0.62f), EnemySwatch.SandstoneDark, top: EnemySwatch.Sandstone);
+            b.Matrix = Matrix4x4.identity;
+        }
+
+        private static void DrawShin(EnemyMeshBuilder b, float side)
+        {
+            b.Matrix = Matrix4x4.Scale(new Vector3(side, 1f, 1f));
+            b.Box(new Vector3(0f, -0.24f, 0.01f), new Vector3(0.52f, 0.44f, 0.62f), EnemySwatch.SandstoneDark, top: EnemySwatch.Sandstone);
             b.Matrix = Matrix4x4.identity;
         }
     }

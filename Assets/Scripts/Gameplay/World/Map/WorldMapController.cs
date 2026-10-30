@@ -77,6 +77,18 @@ namespace Rapadura.Gameplay.World.Map
             _bosses != null && _currentNode != null && !_encounterInProgress && !IsTraveling && _bosses.CanChallengeBoss(_currentNode.Region);
         public WorldMapRegionNode CurrentNode => _currentNode;
         public bool IsTraveling => _targetNode != null;
+
+        /// <summary>Where the token is walking to (null when idle).</summary>
+        public WorldMapRegionNode TargetNode => _targetNode;
+
+        /// <summary>Scales the token speed (road events: a sandstorm slows the trip). Reset to 1 by whoever set it.</summary>
+        public float TravelSpeedMultiplier { get; set; } = 1f;
+
+        /// <summary>
+        /// Raised every travel frame that did not end in an encounter or arrival: trip progress (0..1) and the
+        /// region the token is closest to. WorldEventCardController pops road events from here.
+        /// </summary>
+        public event System.Action<float, BiomeType> TravelProgressed;
         public IReadOnlyList<WorldMapRegionNode> Nodes => _nodes;
 
         /// <summary>
@@ -323,7 +335,7 @@ namespace Rapadura.Gameplay.World.Map
 
             Vector3 before = _playerToken.position;
             Vector3 destination = TokenPositionFor(_targetNode);
-            _playerToken.position = Vector3.MoveTowards(before, destination, _tokenSpeed * deltaTime);
+            _playerToken.position = Vector3.MoveTowards(before, destination, _tokenSpeed * Mathf.Max(0.05f, TravelSpeedMultiplier) * deltaTime);
 
             Vector3 flatDirection = destination - before;
             flatDirection.y = 0f;
@@ -345,7 +357,35 @@ namespace Rapadura.Gameplay.World.Map
             if (_encounters.Advance(moved, deltaTime, biome, out EncounterPayload payload))
             {
                 TriggerEncounter(underToken, payload);
+                return;
             }
+
+            if (TravelProgressed != null && _currentNode != null)
+            {
+                float total = Vector3.Distance(TokenPositionFor(_currentNode), destination);
+                float progress = total > 0.0001f ? 1f - Vector3.Distance(_playerToken.position, destination) / total : 1f;
+                TravelProgressed(Mathf.Clamp01(progress), underToken.Region);
+            }
+        }
+
+        /// <summary>
+        /// Starts an encounter rolled outside the normal travel/explore rolls (road events: an ambush), through the
+        /// same hand-off. Mid-trip it happens in the region the token is closest to. False when an encounter is
+        /// already in progress or the map is not ready.
+        /// </summary>
+        public bool TryStartEventEncounter(EncounterPayload payload)
+        {
+            if (payload == null || payload.EnemyCount == 0 || _encounterInProgress || _currentNode == null || _progress == null)
+            {
+                return false;
+            }
+
+            WorldMapRegionNode regionNode = IsTraveling && _playerToken != null
+                ? NearestOf(_currentNode, _targetNode, _playerToken.position)
+                : _currentNode;
+            _encounters?.ResetGrace();
+            TriggerEncounter(regionNode, payload);
+            return true;
         }
 
         private void ArriveAt(WorldMapRegionNode node)

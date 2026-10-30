@@ -103,6 +103,8 @@ namespace Rapadura.UI.Menus
         private readonly TutorialSettingsSection _tutorialSection = new TutorialSettingsSection();
         // "Vibração", appended after the tutorial rows.
         private readonly HapticsSettingsSection _hapticsSection = new HapticsSettingsSection();
+        // "Caramelo (companheiro nos encontros)", appended after the vibration row.
+        private readonly CompanionSettingsSection _companionSection = new CompanionSettingsSection();
         // "Joystick virtual", appended in code to the Controles panel.
         private readonly TouchControlsSettingsSection _touchControlsSection = new TouchControlsSettingsSection();
 
@@ -183,6 +185,7 @@ namespace Rapadura.UI.Menus
             _localizer.Attach(_uiDocument.rootVisualElement, null, SettingsMenuTexts.Get);
             _tutorialSection.Attach(_panelAccessibility);
             _hapticsSection.Attach(_panelAccessibility);
+            _companionSection.Attach(_panelAccessibility);
             _touchControlsSection.Attach(_panelControls);
             RegisterCallbacks();
             InitializeGraphicsPanel();
@@ -205,6 +208,7 @@ namespace Rapadura.UI.Menus
             _localizer.Detach();
             _tutorialSection.Detach();
             _hapticsSection.Detach();
+            _companionSection.Detach();
             _touchControlsSection.Detach();
             GameplayPause.Release(this);
         }
@@ -932,6 +936,7 @@ namespace Rapadura.UI.Menus
             _reduceMotionToggle?.SetValueWithoutNotify(_accessibility != null && _accessibility.ReduceMotion);
             _tutorialSection.Refresh();
             _hapticsSection.Refresh();
+            _companionSection.Refresh();
 
             InitializeColorblindChoices();
         }
@@ -1029,6 +1034,7 @@ namespace Rapadura.UI.Menus
             InitializeColorblindChoices();
             _tutorialSection.Refresh();
             _hapticsSection.Refresh();
+            _companionSection.Refresh();
             _touchControlsSection.Refresh();
             InitializeControlsPanel();
         }

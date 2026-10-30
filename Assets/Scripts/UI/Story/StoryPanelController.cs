@@ -263,7 +263,8 @@ namespace Rapadura.UI.Story
             }
 
             ServiceLocator.TryGet(out CharacterSelectionState selection);
-            Begin(new StoryPanelSequence(pending, selection != null ? selection.Selected : null), selection != null ? selection.Selected : null);
+            CharacterId? hero = selection != null ? selection.Selected : null;
+            Begin(new StoryPanelSequence(pending, hero, NewGamePlusProgress.ResolveCurrentCycle()), hero);
         }
 
         private WorldMapController FindMap()

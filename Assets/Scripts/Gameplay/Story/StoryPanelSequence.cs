@@ -59,11 +59,12 @@ namespace Rapadura.Gameplay.Story
         public bool IsLastPanel => Index >= Count - 1;
         public string CurrentKey => Count > 0 && !IsFinished ? _panelKeys[Index] : null;
 
-        public StoryPanelSequence(StoryBeat beat, CharacterId? hero)
+        /// <param name="newGamePlusCycle">Current Nova Jornada+ cycle: 1+ plays the new-journey prologue (<see cref="StoryScript.ScriptId"/>).</param>
+        public StoryPanelSequence(StoryBeat beat, CharacterId? hero, int newGamePlusCycle = 0)
         {
             Beat = beat;
-            TitleKey = StoryScript.TitleKey(beat);
-            _panelKeys = StoryScript.GetPanelKeys(beat, hero);
+            TitleKey = StoryScript.TitleKey(beat, newGamePlusCycle);
+            _panelKeys = StoryScript.GetPanelKeys(beat, hero, newGamePlusCycle);
             IsFinished = _panelKeys.Count == 0;
             if (!IsFinished)
             {

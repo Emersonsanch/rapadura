@@ -191,6 +191,31 @@ namespace Rapadura.Gameplay.Player
                 : Mathf.Lerp(walkClipSpeed, runClipSpeed, (blend - 0.5f) / 0.5f);
         }
 
+        /// <summary>Blend-tree threshold of the optional Jog child (between Walk 0.5 and Run 1).</summary>
+        public const float JogBlend = 0.75f;
+
+        /// <summary>
+        /// <see cref="BlendNaturalSpeed(float,float,float)"/> with a Jog child at <see cref="JogBlend"/>:
+        /// 0.5..0.75 crossfades walk→jog, 0.75..1 jog→run. <paramref name="jogClipSpeed"/> ≤ 0 = no jog child.
+        /// </summary>
+        public static float BlendNaturalSpeed(float blend, float walkClipSpeed, float jogClipSpeed, float runClipSpeed)
+        {
+            if (jogClipSpeed <= 0f)
+            {
+                return BlendNaturalSpeed(blend, walkClipSpeed, runClipSpeed);
+            }
+
+            blend = Mathf.Clamp01(blend);
+            if (blend <= 0.5f)
+            {
+                return walkClipSpeed * (blend / 0.5f);
+            }
+
+            return blend <= JogBlend
+                ? Mathf.Lerp(walkClipSpeed, jogClipSpeed, (blend - 0.5f) / (JogBlend - 0.5f))
+                : Mathf.Lerp(jogClipSpeed, runClipSpeed, (blend - JogBlend) / (1f - JogBlend));
+        }
+
         /// <summary>
         /// Animator playback multiplier that makes the feet cover exactly the ground the body does
         /// (no foot sliding): actual / natural clip speed, clamped. 1 when (nearly) standing still.

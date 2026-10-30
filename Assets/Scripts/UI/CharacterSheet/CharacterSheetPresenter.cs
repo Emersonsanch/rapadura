@@ -100,7 +100,7 @@ namespace Rapadura.UI.CharacterSheet
         /// <summary>Reads every derived stat from live components. Any of them may be null (missing component → base values).</summary>
         public static CharacterDerivedStats BuildDerivedStats(PlayerStats stats, BuffController buffs, PlayerCombatBalance balance)
         {
-            float cooldownReduction = buffs != null ? Mathf.Clamp01(buffs.GetModifiedValue(StatType.CooldownReduction, 0f)) : 0f;
+            float cooldownReduction = SkillManager.ResolveCooldownReduction(buffs);
             // GetModifiedValue = (base + flat) × (1 + percent), so f(1) − f(0) = 1 + percent: the percent
             // part alone, unaffected by any flat AttackDamage from gear (which isn't a "%").
             float skillDamageBonus = buffs != null

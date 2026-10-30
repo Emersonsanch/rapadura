@@ -47,6 +47,7 @@ namespace Rapadura.Tests
             "Resources/UI/StoryPanelView.uxml",
             "Resources/UI/TutorialHintView.uxml",
             "Resources/UI/VillageChestView.uxml",
+            "Resources/UI/BestiaryView.uxml",
         };
 
         /// <summary>
@@ -57,6 +58,9 @@ namespace Rapadura.Tests
         private static readonly string[] CodeThemedSheets =
         {
             "Resources/UI/EncounterOverlays.uss",
+            "Resources/UI/VillageKitchen.uss",
+            "Resources/UI/SecretsOverlay.uss",
+            "Resources/UI/PhotoMode.uss",
         };
 
         [Test]

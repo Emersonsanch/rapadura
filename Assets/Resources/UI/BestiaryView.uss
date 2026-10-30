@@ -1,0 +1,228 @@
+/* "Caderno da Vo Zefa" (BestiaryController). Rapadura theme (Common/RapaduraTheme.uss, imported first
+   in the UXML): rap-theme on the root, rap-panel card, rap-heading title, rap-chip counters,
+   rap-button Fechar. List rows and tip/drop lines are created in code and styled here. */
+.bestiary-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background-color: rgba(20, 10, 4, 0.88);
+    display: none;
+}
+
+.bestiary-card {
+    width: 94%;
+    max-width: 1080px;
+    height: 92%;
+    max-height: 720px;
+    padding: 16px 20px 16px 20px;
+    background-color: var(--rap-brown-deep);
+}
+
+.bestiary-header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.bestiary-header-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.bestiary-title {
+    font-size: 28px;
+    white-space: normal;
+}
+
+.bestiary-subtitle {
+    white-space: normal;
+}
+
+.bestiary-progress {
+    margin: 0 12px 0 8px;
+    font-size: 15px;
+    white-space: normal;
+    max-width: 260px;
+}
+
+/* Touch target >= 44px; min-height so the label grows with the accessibility font scale. */
+.bestiary-close {
+    height: auto;
+    min-height: 46px;
+    min-width: 110px;
+    margin: 0;
+}
+
+.bestiary-body {
+    flex-grow: 1;
+    flex-direction: row;
+    min-height: 0;
+}
+
+/* ---- Page list (left) ---- */
+.bestiary-list {
+    width: 34%;
+    min-width: 200px;
+    margin-right: 14px;
+    padding-right: 4px;
+}
+
+.bestiary-region-header {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+    margin: 8px 0 4px 2px;
+}
+
+.bestiary-list-item {
+    height: auto;
+    min-height: 46px;
+    margin: 0 0 6px 0;
+    padding: 4px 12px;
+    font-size: 16px;
+    -unity-text-align: middle-left;
+    white-space: normal;
+}
+
+.bestiary-list-item--boss {
+    border-left-width: 6px;
+    border-left-color: var(--rap-gold);
+}
+
+/* Locked page: a dark "silhouette" row, same shape so the list never jumps when it unlocks. */
+.bestiary-list-item--locked {
+    color: var(--rap-cream-dim);
+    background-color: var(--rap-brown-night);
+    -unity-font-style: italic;
+}
+
+.bestiary-list-item--selected {
+    background-color: var(--rap-caramel);
+    border-top-color: var(--rap-gold-light);
+    border-left-color: var(--rap-gold-light);
+    border-right-color: var(--rap-gold-light);
+}
+
+/* ---- Page contents (right) ---- */
+.bestiary-page {
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding: 4px 8px 4px 4px;
+}
+
+.bestiary-page-head {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.bestiary-portrait {
+    width: 84px;
+    height: 84px;
+    border-radius: 42px;
+    border-width: 3px;
+    border-color: var(--rap-panel-border);
+    background-color: var(--rap-brown-light);
+    align-items: center;
+    justify-content: center;
+    margin-right: 14px;
+    flex-shrink: 0;
+}
+
+.bestiary-portrait--boss {
+    border-color: var(--rap-gold);
+}
+
+/* Silhouette: almost black disc with a faint "?" until the enemy is beaten. */
+.bestiary-portrait--locked {
+    background-color: var(--rap-brown-night);
+    border-color: var(--rap-brown);
+}
+
+.bestiary-portrait-glyph {
+    font-size: 40px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: var(--rap-cream);
+}
+
+.bestiary-portrait--locked .bestiary-portrait-glyph {
+    color: var(--rap-brown-light);
+}
+
+.bestiary-page-head-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.bestiary-name {
+    font-size: 24px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+    white-space: normal;
+}
+
+.bestiary-meta {
+    font-size: 15px;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+    margin-bottom: 4px;
+}
+
+.bestiary-chips {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.bestiary-lore {
+    font-size: 17px;
+    color: var(--rap-cream);
+    white-space: normal;
+    margin-bottom: 12px;
+}
+
+.bestiary-section {
+    margin-bottom: 10px;
+}
+
+.bestiary-section-title {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+    margin-bottom: 4px;
+}
+
+.bestiary-line {
+    font-size: 15px;
+    color: var(--rap-cream);
+    white-space: normal;
+    margin: 0 0 3px 8px;
+}
+
+/* The selected cousin's one-liner; the border takes the hero's accent colour in code. */
+.bestiary-comment {
+    margin-top: 4px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border-width: 2px;
+    border-color: var(--rap-panel-border);
+    background-color: rgba(128, 78, 40, 0.35);
+}
+
+.bestiary-comment-header {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+}
+
+.bestiary-comment-text {
+    font-size: 16px;
+    -unity-font-style: italic;
+    color: var(--rap-cream);
+    white-space: normal;
+}

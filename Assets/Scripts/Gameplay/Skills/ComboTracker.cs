@@ -173,8 +173,8 @@ namespace Rapadura.Gameplay.Skills
                     break;
 
                 case ComboBonusType.CostReduction:
-                    // SkillManager reads ResourceCostReduction the same way it reads CooldownReduction:
-                    // as a flat 0..1 fraction against a base value of 0, so this must be Flat, not PercentAdditive.
+                    // ResourceCostReduction is a 0-based 0..1 fraction (SkillManager.ResolveResourceCostReduction
+                    // sums Flat and PercentAdditive alike); authored Flat like every other fraction source.
                     ApplyTemporaryBuff(StatType.ResourceCostReduction, ModifierApplication.Flat, combo);
                     break;
 

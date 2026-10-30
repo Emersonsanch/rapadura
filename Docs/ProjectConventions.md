@@ -1,8 +1,8 @@
 # Rapadura — Convenções de Projeto
 
-> Documento vivo. Cobre três decisões da FASE 0 → "Infraestrutura de Projeto" do `TODO.md`
-> que não dependem do Unity Editor: estratégia de branches, Company/Product Name, e
-> estrutura de pastas definitiva. Não duplica `CONTRIBUTING.md` — só referencia e detalha
+> Documento vivo. Cobre quatro decisões da FASE 0 do `TODO.md` que não dependem do Unity
+> Editor: estratégia de branches, Company/Product Name, estrutura de pastas definitiva e a
+> Definition of Done por feature (§4). Não duplica `CONTRIBUTING.md` — só referencia e detalha
 > o que lá está resumido.
 
 ---
@@ -190,5 +190,46 @@ Assets/
 
 ---
 
-*Ver `TODO.md` para o roadmap geral e `CONTRIBUTING.md` para processo de PR, commits e
-Definition of Done.*
+## 4. Definition of Done (por feature)
+
+Como o projeto trabalha de fato: commits pequenos e frequentes direto no `master` (o fluxo de
+PR do §1 vale quando houver mais de uma pessoa), boa parte do código escrito sem o Editor aberto
+e conferido por testes. Um item do `TODO.md` só vira `[x]` quando **todos** os pontos abaixo
+valem para a mudança:
+
+1. **Código** no lugar certo (§3: `Rapadura.<Camada>.<Subsistema>` espelhando a pasta), no
+   estilo do código vizinho (`_camelCase`, `IManager`/`ISaveable`, `ServiceLocator`, comentários
+   só do "porquê"). Regras de jogo ficam em classes puras/estáticas (`*Rules`, `*Math`,
+   `*Presenter`, `*Flow`) e o `MonoBehaviour` só liga eventos e UI — é isso que torna o item
+   testável fora do Play Mode.
+2. **Testes EditMode** em `Assets/Tests/EditMode` cobrindo a regra nova: caminho feliz + pelo
+   menos um caso de borda, e um teste de regressão para todo bug corrigido. Fluxo que só existe
+   com cenas reais (mapa ⇄ encontro, save/load de ponta a ponta) ganha caso PlayMode em
+   `Assets/Tests/PlayMode` (`SmokeTestBase`/`WorldMapFlowTestBase`). Testes nunca tocam os saves
+   do desenvolvedor (`TestSaveRoot` / pasta temporária do `SmokeTestBase`).
+3. **Compila sem erros nem warnings novos** nos quatro assemblies (`Rapadura.Runtime`,
+   `Rapadura.Editor`, `Rapadura.Tests.EditMode`, `Rapadura.Tests.PlayMode`) — no Console do
+   Editor ou, sem Editor, com a checagem offline via Roslyn (`csc` do Editor com os `.rsp` de
+   `Library/Bee`). A suíte EditMode continua verde; o CI (`Docs/CI.md`) roda EditMode e PlayMode
+   em todo push.
+4. **Assets íntegros**: todo arquivo novo tem `.meta` com GUID único (gerado pelo Editor ou
+   escrito à mão no formato padrão; `AssetMetaIntegrityTests` confere), cenas `.unity` só são
+   alteradas pelo Editor, e textos visíveis passam pela localização (chaves en + pt-BR num
+   `*Texts`/`DefaultEntries`, cobertas por `LocalizationCoverageTests`).
+5. **Documentação**: o `<summary>` da classe explica o papel dela e o porquê das decisões; o
+   doc de `Docs/` do sistema (Audio, Balance, Localization, CI, QAChecklist, GDD...) é atualizado
+   quando a mudança muda o que ele descreve; item novo de regressão manual vai para
+   `Docs/QAChecklist.md`.
+6. **Changelog e roadmap**: uma linha em `CHANGELOG.md` → `[Não lançado]` (o que o jogador ou o
+   time percebe, não o diff) e o item marcado no `TODO.md`, com subitens novos quando o trabalho
+   revelou pendências.
+7. **Commit** pequeno, mensagem curta no imperativo dizendo o porquê (ver `CONTRIBUTING.md`),
+   feito logo depois de cada mudança completa — não acumular várias features num commit.
+
+Fora do DoD por feature, mas obrigatório antes de uma release: `Docs/QAChecklist.md` inteiro e
+o teste de resistência (`SoakPlaythroughTests`, categoria `Soak`, ver `Docs/CI.md`).
+
+---
+
+*Ver `TODO.md` para o roadmap geral e `CONTRIBUTING.md` para processo de PR e commits; a
+Definition of Done completa é a do §4 acima.*

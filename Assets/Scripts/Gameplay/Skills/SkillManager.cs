@@ -663,13 +663,31 @@ namespace Rapadura.Gameplay.Skills
 
         private float GetCooldownReductionPercent()
         {
-            return _buffController != null ? Mathf.Clamp01(_buffController.GetModifiedValue(StatType.CooldownReduction, 0f)) : 0f;
+            return ResolveCooldownReduction(_buffController);
         }
 
         /// <summary>Percent (0..1) taken off mana/energy costs, e.g. from a completed <see cref="ComboDefinition"/> CostReduction bonus.</summary>
         private float GetResourceCostReductionPercent()
         {
-            return _buffController != null ? Mathf.Clamp01(_buffController.GetModifiedValue(StatType.ResourceCostReduction, 0f)) : 0f;
+            return ResolveResourceCostReduction(_buffController);
+        }
+
+        /// <summary>
+        /// Fraction (0..1) taken off skill cooldowns. CooldownReduction is a 0-based fraction stat, so it is
+        /// summed with <see cref="BuffController.GetAdditiveFractionTotal"/> (Flat and PercentAdditive both
+        /// mean "+0.05 = 5%"), like crit/thorns/attack speed. It used to be read as
+        /// <c>GetModifiedValue(CooldownReduction, 0)</c> = (0 + flat) × (1 + percent), which silently dropped
+        /// the PercentAdditive affix_of_haste (Balance §7.6). Shared with the character sheet.
+        /// </summary>
+        public static float ResolveCooldownReduction(BuffController buffs)
+        {
+            return buffs != null ? Mathf.Clamp01(buffs.GetAdditiveFractionTotal(StatType.CooldownReduction)) : 0f;
+        }
+
+        /// <summary>Fraction (0..1) taken off mana/energy costs; same 0-based fraction rule as <see cref="ResolveCooldownReduction"/>.</summary>
+        public static float ResolveResourceCostReduction(BuffController buffs)
+        {
+            return buffs != null ? Mathf.Clamp01(buffs.GetAdditiveFractionTotal(StatType.ResourceCostReduction)) : 0f;
         }
 
         private void PlayPresentation(SkillDefinition skill)

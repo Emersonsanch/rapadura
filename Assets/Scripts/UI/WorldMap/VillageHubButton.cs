@@ -37,6 +37,8 @@ namespace Rapadura.UI.WorldMap
     /// created on first use from <c>Resources/UI/Village*View.uxml</c> (instances of the Main.unity views),
     /// working on a live <see cref="CarriedInventorySession"/> that hands the inventory back to the carry
     /// as soon as both windows are closed.</item>
+    /// <item>Fogão a lenha: <see cref="VillageKitchenController"/> (built in code on this HUD's document), on the
+    /// same live inventory session.</item>
     /// <item>Closing a conversation or service window returns to the panel, unless something else (pause
     /// menu) took over meanwhile.</item>
     /// </list>
@@ -53,6 +55,8 @@ namespace Rapadura.UI.WorldMap
         public const string ShopScreenId = "village_shop";
         public const string CraftingScreenId = "village_crafting";
         public const string ChestScreenId = "village_chest";
+        /// <summary>"Fogão a lenha" window (<see cref="VillageKitchenController"/>).</summary>
+        public const string KitchenScreenId = "village_kitchen";
         public const string ShopViewResourcePath = "UI/VillageShopView";
         public const string CraftingViewResourcePath = "UI/VillageCraftingView";
         /// <summary>"Baú da Vó Zefa" window (<see cref="VillageChestUIController"/>).</summary>
@@ -75,6 +79,7 @@ namespace Rapadura.UI.WorldMap
         private Button _shopButton;
         private Button _craftingButton;
         private Button _chestButton;
+        private Button _kitchenButton;
         private Button _closeButton;
         private readonly List<Button> _npcButtons = new List<Button>();
         private bool _hubOpen;
@@ -85,6 +90,7 @@ namespace Rapadura.UI.WorldMap
         private ShopUIController _shopUI;
         private CraftingUIController _craftingUI;
         private VillageChestUIController _chestUI;
+        private VillageKitchenController _kitchenUI;
         private CarriedInventorySession _session;
         private readonly QuestDialogueContext _questContext = new QuestDialogueContext();
 
@@ -206,6 +212,7 @@ namespace Rapadura.UI.WorldMap
         private bool ShopOpen => _shopUI != null && _shopUI.IsOpen;
         private bool CraftingOpen => _craftingUI != null && _craftingUI.IsOpen;
         private bool ChestOpen => _chestUI != null && _chestUI.IsOpen;
+        private bool KitchenOpen => _kitchenUI != null && _kitchenUI.IsOpen;
 
         private void RegisterScreens()
         {
@@ -218,6 +225,7 @@ namespace Rapadura.UI.WorldMap
             _hud.RegisterScreen(ShopScreenId, () => ShopOpen, OpenShop, () => { if (_shopUI != null) _shopUI.Close(); });
             _hud.RegisterScreen(CraftingScreenId, () => CraftingOpen, OpenCrafting, () => { if (_craftingUI != null) _craftingUI.Close(); });
             _hud.RegisterScreen(ChestScreenId, () => ChestOpen, OpenChest, () => { if (_chestUI != null) _chestUI.Close(); });
+            _hud.RegisterScreen(KitchenScreenId, () => KitchenOpen, OpenKitchen, () => { if (_kitchenUI != null) _kitchenUI.Close(); });
             _screensRegistered = true;
         }
 
@@ -232,7 +240,7 @@ namespace Rapadura.UI.WorldMap
             ServiceLocator.TryGet(out DialogueManager dialogue);
             bool dialogueActive = dialogue != null && dialogue.IsActive;
 
-            if (ShouldEndInventorySession(_session != null && _session.IsOpen, ShopOpen, CraftingOpen, ChestOpen))
+            if (ShouldEndInventorySession(_session != null && _session.IsOpen, ShopOpen, CraftingOpen, ChestOpen || KitchenOpen))
             {
                 EndInventorySession();
             }
@@ -244,7 +252,7 @@ namespace Rapadura.UI.WorldMap
 
             // Decided once the conversation/window is over: back to the panel, or (something else took
             // over) forget it.
-            bool serviceOpen = ShopOpen || CraftingOpen || ChestOpen;
+            bool serviceOpen = ShopOpen || CraftingOpen || ChestOpen || KitchenOpen;
             if (_returnToHub && !serviceOpen && !dialogueActive)
             {
                 bool back = ShouldReturnToHub(_returnToHub, serviceOpen, dialogueActive, GameplayPause.IsPaused, hudVisible);
@@ -419,6 +427,7 @@ namespace Rapadura.UI.WorldMap
             _shopButton = AddGridButton(servicesGrid, "wm-village-shop-button", OnShopClicked);
             _craftingButton = AddGridButton(servicesGrid, "wm-village-crafting-button", OnCraftingClicked);
             _chestButton = AddGridButton(servicesGrid, "wm-village-chest-button", OnChestClicked);
+            _kitchenButton = AddGridButton(servicesGrid, "wm-village-kitchen-button", OnKitchenClicked);
 
             _closeButton = new Button(CloseHub) { name = "wm-village-close-button", focusable = true };
             _closeButton.AddToClassList("rap-button");
@@ -473,6 +482,7 @@ namespace Rapadura.UI.WorldMap
             SetText(_shopButton, VillageHubTexts.Get(localization, VillageHubTexts.Shop));
             SetText(_craftingButton, VillageHubTexts.Get(localization, VillageHubTexts.Crafting));
             SetText(_chestButton, VillageChestTexts.Get(localization, VillageChestTexts.HubButton));
+            SetText(_kitchenButton, KitchenTexts.Get(localization, KitchenTexts.HubButton));
             SetText(_closeButton, VillageHubTexts.Get(localization, VillageHubTexts.Close));
 
             for (int i = 0; i < _npcButtons.Count && i < VillageNpcCatalog.Npcs.Count; i++)
@@ -608,6 +618,27 @@ namespace Rapadura.UI.WorldMap
             _chestUI.Open(BeginInventorySession(), chest, quests != null ? quests.GetOutstandingCollectAmount : (System.Func<string, int, int>)null);
         }
 
+        // ------------------------------------------------------------------
+        // Fogão a lenha
+        // ------------------------------------------------------------------
+
+        private void OnKitchenClicked()
+        {
+            OpenKitchen();
+            if (KitchenOpen)
+            {
+                CloseHub();
+                _returnToHub = true;
+            }
+        }
+
+        private void OpenKitchen()
+        {
+            // Built in code on this HUD's document (no UXML), so it lives on the HUD's GameObject.
+            _kitchenUI = _kitchenUI != null ? _kitchenUI : (GetComponent<VillageKitchenController>() ?? gameObject.AddComponent<VillageKitchenController>());
+            _kitchenUI.Open(BeginInventorySession());
+        }
+
         private InventoryManager BeginInventorySession()
         {
             if (_session == null)
@@ -637,7 +668,7 @@ namespace Rapadura.UI.WorldMap
 
         private void OnShopClosed(ShopClosedEvent evt)
         {
-            if (!CraftingOpen && !ChestOpen)
+            if (!CraftingOpen && !ChestOpen && !KitchenOpen)
             {
                 EndInventorySession();
             }

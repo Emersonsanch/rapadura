@@ -59,12 +59,20 @@ namespace Rapadura.Core.Managers
         public DailyQuestService DailyQuestService { get; private set; }
         public ShopManager ShopManager { get; private set; }
         public VillageChestStorage VillageChest { get; private set; }
+        /// <summary>World map road events ("Eventos aleatórios"): trip cooldown, last event, boons for the next fight.</summary>
+        public Rapadura.Gameplay.World.Events.WorldEventState WorldEvents { get; private set; }
+        /// <summary>"Cozinha da Vó Zefa": known dishes and the active meal (village hub on the map).</summary>
+        public Rapadura.Gameplay.Cooking.MealService Meals { get; private set; }
+        /// <summary>"Segredos e áreas ocultas": revealed/investigated map secrets and the "Relíquias do Sertão" owned.</summary>
+        public Rapadura.Gameplay.Secrets.SecretsProgress Secrets { get; private set; }
         public WorldMapProgress WorldMapProgress { get; private set; }
         public StoryProgress StoryProgress { get; private set; }
+        public NewGamePlusProgress NewGamePlusProgress { get; private set; }
         public SceneTransitionService SceneTransitionService { get; private set; }
         public FrameRateManager FrameRateManager { get; private set; }
         public CharacterSelectionState CharacterSelectionState { get; private set; }
         public DefeatedEnemyRegistry DefeatedEnemyRegistry { get; private set; }
+        public BestiaryProgress BestiaryProgress { get; private set; }
         public AchievementManager AchievementManager { get; private set; }
         public TimeOfDayManager TimeOfDayManager { get; private set; }
         public WeatherSystem WeatherSystem { get; private set; }
@@ -137,12 +145,18 @@ namespace Rapadura.Core.Managers
             DailyQuestService = new DailyQuestService(QuestManager);
             ShopManager = new ShopManager();
             VillageChest = new VillageChestStorage();
+            WorldEvents = new Rapadura.Gameplay.World.Events.WorldEventState();
+            Meals = new Rapadura.Gameplay.Cooking.MealService();
+            Secrets = new Rapadura.Gameplay.Secrets.SecretsProgress();
             WorldMapProgress = new WorldMapProgress();
             StoryProgress = new StoryProgress(WorldMapProgress);
             SceneTransitionService = new SceneTransitionService(WorldMapProgress);
             FrameRateManager = new FrameRateManager();
             CharacterSelectionState = new CharacterSelectionState();
             DefeatedEnemyRegistry = new DefeatedEnemyRegistry();
+            // After the managers whose campaign state "Nova Jornada+" resets.
+            NewGamePlusProgress = new NewGamePlusProgress(StoryProgress, WorldMapProgress, DefeatedEnemyRegistry, QuestManager);
+            BestiaryProgress = new BestiaryProgress(DefeatedEnemyRegistry);
             AchievementManager = new AchievementManager();
             TimeOfDayManager = new TimeOfDayManager();
             WeatherSystem = new WeatherSystem();
@@ -168,12 +182,17 @@ namespace Rapadura.Core.Managers
             RegisterManager(DailyQuestService);
             RegisterManager(ShopManager);
             RegisterManager(VillageChest);
+            RegisterManager(WorldEvents);
+            RegisterManager(Meals);
+            RegisterManager(Secrets);
             RegisterManager(WorldMapProgress);
             RegisterManager(StoryProgress);
+            RegisterManager(NewGamePlusProgress);
             RegisterManager(SceneTransitionService);
             RegisterManager(FrameRateManager);
             RegisterManager(CharacterSelectionState);
             RegisterManager(DefeatedEnemyRegistry);
+            RegisterManager(BestiaryProgress);
             RegisterManager(AchievementManager);
             RegisterManager(TimeOfDayManager);
             RegisterManager(WeatherSystem);
@@ -184,6 +203,8 @@ namespace Rapadura.Core.Managers
             SaveManager.Register(DailyQuestService);
             SaveManager.Register(WorldMapProgress);
             SaveManager.Register(StoryProgress);
+            // "Nova Jornada+" cycle; older saves have no entry and load as cycle 0 (first campaign).
+            SaveManager.Register(NewGamePlusProgress);
 
             // World state that used to be lost on load. CharacterSelectionState implements
             // IRestoreOrder (First), so the chosen hero's passive/skill set is re-applied before
@@ -192,9 +213,17 @@ namespace Rapadura.Core.Managers
             SaveManager.Register(BuildingManager);
             SaveManager.Register(CraftingManager);
             SaveManager.Register(DefeatedEnemyRegistry);
+            // "Caderno da Vó Zefa" (bestiary); older saves have no entry and load an empty notebook.
+            SaveManager.Register(BestiaryProgress);
             SaveManager.Register(ShopManager);
             // "Baú da Vó Zefa" (village hub on the map); older saves have no entry and load an empty chest.
             SaveManager.Register(VillageChest);
+            // Road events on the map; older saves have no entry and load with no cooldown and no boons.
+            SaveManager.Register(WorldEvents);
+            // Fogão a lenha: older saves have no entry and load with the starter dishes and no meal.
+            SaveManager.Register(Meals);
+            // Secrets and relics; older saves have no entry and load with nothing revealed and no relics.
+            SaveManager.Register(Secrets);
 
             // Only reads achievements out of slots written before they moved to the profile file
             // (Saves/profile.json); AchievementManager.CaptureState returns null so slots no longer carry them.
@@ -236,10 +265,15 @@ namespace Rapadura.Core.Managers
             NewSessionReset.Register(DailyQuestService);
             NewSessionReset.Register(ShopManager);
             NewSessionReset.Register(VillageChest);
+            NewSessionReset.Register(WorldEvents);
+            NewSessionReset.Register(Meals);
+            NewSessionReset.Register(Secrets);
             NewSessionReset.Register(WorldMapProgress);
             NewSessionReset.Register(StoryProgress);
+            NewSessionReset.Register(NewGamePlusProgress);
             NewSessionReset.Register(CharacterSelectionState);
             NewSessionReset.Register(DefeatedEnemyRegistry);
+            NewSessionReset.Register(BestiaryProgress);
             NewSessionReset.Register(TimeOfDayManager);
             NewSessionReset.Register(WeatherSystem);
 

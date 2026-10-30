@@ -4,6 +4,7 @@ using Rapadura.Core.StateMachine;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Enemies.States;
 using Rapadura.Gameplay.Skills;
+using Rapadura.Gameplay.Story;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Enemies
@@ -180,7 +181,8 @@ namespace Rapadura.Gameplay.Enemies
         }
 
         /// <summary>
-        /// Damage of one attack: <see cref="EnemyDefinition.AttackDamage"/> through this enemy's
+        /// Damage of one attack: <see cref="EnemyDefinition.AttackDamage"/> (scaled by the save's
+        /// "Nova Jornada+" cycle, <see cref="NewGamePlusRules.ScaleDamage"/>) through this enemy's
         /// AttackDamage modifiers (Provocação Heroica -25%, Névoa da Ilusão -30%, Purificação -20%), never
         /// below 0. 0 without a definition.
         /// </summary>
@@ -194,7 +196,8 @@ namespace Rapadura.Gameplay.Enemies
                 }
 
                 BuffController buffs = Buffs;
-                float damage = buffs != null ? buffs.GetModifiedValue(StatType.AttackDamage, _definition.AttackDamage) : _definition.AttackDamage;
+                float baseDamage = NewGamePlusRules.ScaleDamage(_definition.AttackDamage, NewGamePlusProgress.ResolveCurrentCycle());
+                float damage = buffs != null ? buffs.GetModifiedValue(StatType.AttackDamage, baseDamage) : baseDamage;
                 return Mathf.Max(0f, damage);
             }
         }
@@ -469,7 +472,8 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>
         /// Bridges data-driven config onto the existing <see cref="Health"/> component: the same
         /// shared prefab/controller can be reused for a tougher "boss" variant purely by swapping
-        /// the <see cref="EnemyDefinition"/> asset, via <see cref="Health.ConfigureMaxHealth"/>.
+        /// the <see cref="EnemyDefinition"/> asset, via <see cref="Health.ConfigureMaxHealth"/>. HP and hitbox
+        /// damage are scaled by the save's "Nova Jornada+" cycle (<see cref="NewGamePlusRules"/>; ×1 on the first campaign).
         /// </summary>
         private void ApplyDefinitionToHealth()
         {
@@ -478,11 +482,12 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
-            Health.ConfigureMaxHealth(_definition.MaxHealth);
+            int cycle = NewGamePlusProgress.ResolveCurrentCycle();
+            Health.ConfigureMaxHealth(NewGamePlusRules.ScaleHealth(_definition.MaxHealth, cycle));
 
             if (_hitbox != null)
             {
-                _hitbox.Damage = _definition.AttackDamage;
+                _hitbox.Damage = NewGamePlusRules.ScaleDamage(_definition.AttackDamage, cycle);
             }
         }
 

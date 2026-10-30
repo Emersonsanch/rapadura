@@ -116,6 +116,19 @@ namespace Rapadura.Gameplay.Story
             _awaitingLoadCheck = true;
         }
 
+        /// <summary>
+        /// "Nova Jornada+" (<see cref="NewGamePlusProgress.BeginNextCycle"/>): the campaign starts over in a
+        /// live session — nothing seen, not complete — so the prologue (its new-journey variant, see
+        /// <see cref="StoryScript"/>), the interludes and the ending play again. Unlike
+        /// <see cref="ResetForNewSession"/> this is not a load, so the legacy-save check stays off.
+        /// </summary>
+        public void BeginNewJourney()
+        {
+            _seen.Clear();
+            CampaignComplete = false;
+            _awaitingLoadCheck = false;
+        }
+
         public bool HasSeen(StoryBeat beat) => _seen.Contains(beat);
 
         /// <summary>

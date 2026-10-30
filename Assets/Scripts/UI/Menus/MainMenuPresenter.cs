@@ -1,4 +1,5 @@
 using Rapadura.Gameplay.Flow;
+using Rapadura.Gameplay.Story;
 using Rapadura.Save;
 
 namespace Rapadura.UI.Menus
@@ -26,6 +27,23 @@ namespace Rapadura.UI.Menus
         public static bool IsContinueEnabled(SaveManager saveManager)
         {
             return GetContinueSlot(saveManager) != GameFlowMachine.NoSlot;
+        }
+
+        /// <summary>
+        /// "Nova Jornada+" cycle of the save "Continuar" would load (for its small badge); 0 without a save or for a
+        /// save written before Nova Jornada+ existed (no "NewGamePlus" entry).
+        /// </summary>
+        public static int GetContinueCycle(SaveManager saveManager)
+        {
+            int slot = GetContinueSlot(saveManager);
+            if (slot == GameFlowMachine.NoSlot)
+            {
+                return 0;
+            }
+
+            return SaveManager.TryGetEntryState(saveManager.PeekSlot(slot), NewGamePlusProgress.Key, out NewGamePlusSaveState state)
+                ? NewGamePlusRules.ClampCycle(state.cycle)
+                : 0;
         }
 
         public static bool IsLoadEnabled(SaveManager saveManager, bool hasLoadMenu)

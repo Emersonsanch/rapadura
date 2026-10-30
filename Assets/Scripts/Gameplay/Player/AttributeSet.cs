@@ -314,9 +314,9 @@ namespace Rapadura.Gameplay.Player
                 AttributeType.Vitality => (StatType.MaxHealth, ModifierApplication.Flat, VitalityHealthPerPoint, "Vitalidade"),
                 AttributeType.Spirit => (StatType.MaxMana, ModifierApplication.Flat, SpiritManaPerPoint, "Espírito"),
                 // Flat, not PercentAdditive: CriticalChance/CooldownReduction are already pure
-                // 0..1 fractions, not "a percent of some base value" — every real caller
-                // (SkillManager.GetCooldownReductionPercent, this class's own formula-doc tests)
-                // reads them via GetModifiedValue(stat, 0f), and BuffController.GetModifiedValue's
+                // 0..1 fractions, not "a percent of some base value". The gameplay readers now sum
+                // them with BuffController.GetAdditiveFractionTotal (Balance §7.6), so either works,
+                // but historically they read GetModifiedValue(stat, 0f), and BuffController.GetModifiedValue's
                 // PercentAdditive branch computes (baseValue + flat) * (1 + percent), which is
                 // always exactly 0 when baseValue is 0 no matter the bonus. Flat sidesteps that
                 // entirely (mirrors how the combo system's CostReduction bonus on

@@ -7,7 +7,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
     /// up-facing face, glowing molten cracks, a small head sunk between the shoulders and long arms
     /// ending in boulder fists that almost drag on the ground. Hierarchy: <c>Body</c> → <c>Head</c>,
     /// <c>Arm_L</c>/<c>Arm_R</c> (shoulder pivot) → <c>Fist_L</c>/<c>Fist_R</c>; <c>Leg_L</c>/<c>Leg_R</c>
-    /// (hip pivot) under the root.
+    /// (hip pivot) under the root → <c>Shin_L</c>/<c>Shin_R</c> (knee, bent slightly forward) →
+    /// <c>Foot_L</c>/<c>Foot_R</c> (ankle), so the legs step with knee IK.
     /// </summary>
     public static class StoneGolemRecipe
     {
@@ -24,8 +25,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     new Vector3(0.62f * side, 0.25f, 0.02f), b => DrawArm(b, side), Quaternion.Euler(-8f, 0f, 0f));
                 bp.Mesh(right ? ProceduralEnemyParts.FistRight : ProceduralEnemyParts.FistLeft, arm,
                     new Vector3(0.13f * side, -1.02f, 0.1f), b => DrawFist(b, side));
-                bp.Mesh(right ? ProceduralEnemyParts.LegRight : ProceduralEnemyParts.LegLeft, -1,
+                int leg = bp.Mesh(right ? ProceduralEnemyParts.LegRight : ProceduralEnemyParts.LegLeft, -1,
                     new Vector3(0.3f * side, 0.62f, -0.02f), b => DrawLeg(b, side));
+                int shin = bp.Mesh(right ? ProceduralEnemyParts.ShinRight : ProceduralEnemyParts.ShinLeft, leg,
+                    new Vector3(0f, -0.3f, 0.05f), b => DrawShin(b, side));
+                bp.Mesh(right ? ProceduralEnemyParts.FootRight : ProceduralEnemyParts.FootLeft, shin,
+                    new Vector3(0f, -0.22f, -0.03f), b => DrawFoot(b, side));
             }
         }
 
@@ -80,8 +85,22 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         private static void DrawLeg(EnemyMeshBuilder b, float side)
         {
             b.Matrix = Matrix4x4.Scale(new Vector3(side, 1f, 1f));
-            b.Rock(new Vector3(0f, -0.28f, 0f), new Vector3(0.44f, 0.62f, 0.46f), EnemySwatch.GolemStoneDark, 1);
-            b.Rock(new Vector3(0.02f, -0.52f, 0.07f), new Vector3(0.52f, 0.22f, 0.62f), EnemySwatch.GolemStone, 2, null, EnemySwatch.GolemSnow);
+            b.Rock(new Vector3(0f, -0.13f, 0f), new Vector3(0.44f, 0.38f, 0.46f), EnemySwatch.GolemStoneDark, 1);
+            b.Matrix = Matrix4x4.identity;
+        }
+
+        private static void DrawShin(EnemyMeshBuilder b, float side)
+        {
+            b.Matrix = Matrix4x4.Scale(new Vector3(side, 1f, 1f));
+            b.Rock(new Vector3(0f, -0.1f, -0.01f), new Vector3(0.4f, 0.32f, 0.42f), EnemySwatch.GolemStoneDark, 3);
+            b.Box(new Vector3(0.02f, -0.06f, 0.2f), new Vector3(0.04f, 0.16f, 0.04f), EnemySwatch.GolemCrack, Quaternion.Euler(0f, 0f, 12f));
+            b.Matrix = Matrix4x4.identity;
+        }
+
+        private static void DrawFoot(EnemyMeshBuilder b, float side)
+        {
+            b.Matrix = Matrix4x4.Scale(new Vector3(side, 1f, 1f));
+            b.Rock(new Vector3(0.02f, 0f, 0.05f), new Vector3(0.52f, 0.22f, 0.62f), EnemySwatch.GolemStone, 2, null, EnemySwatch.GolemSnow);
             b.Matrix = Matrix4x4.identity;
         }
     }

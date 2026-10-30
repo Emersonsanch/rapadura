@@ -8,7 +8,10 @@ namespace Rapadura.Editor.Mocap
     /// <summary>
     /// Editor UI for the BVH → Humanoid pipeline (see Docs/Mocap.md):
     ///  - "Rapadura/Animation/Import Mocap BVH…" — one file, all options exposed.
-    ///  - "Rapadura/Animation/Import CMU Mocap Set" — every clip listed in tools/mocap/out/manifest.json.
+    ///  - "Rapadura/Animation/Import CMU Mocap Set" — every clip listed in tools/mocap/out/manifest.json, baked on
+    ///    Ícaro into Assets/Animations/Mocap; clips marked <c>perHero</c> (the locomotion set) are also baked on each
+    ///    humanoid hero's own avatar into Assets/Animations/Mocap/&lt;Hero&gt;/ (exact on that hero: no cross-avatar
+    ///    muscle retarget between bind poses that differ by 20–50° per limb).
     /// </summary>
     public sealed class MocapImportWindow : EditorWindow
     {
@@ -98,7 +101,8 @@ namespace Rapadura.Editor.Mocap
             }
             var manifest = JsonUtility.FromJson<MocapManifest>(File.ReadAllText(manifestPath));
             string dir = Path.GetDirectoryName(manifestPath);
-            int ok = 0;
+            var heroes = MocapClipBuilder.HumanoidHeroModels();
+            int ok = 0, perHeroOk = 0;
             try
             {
                 for (int i = 0; i < manifest.clips.Length; i++)
@@ -117,8 +121,18 @@ namespace Rapadura.Editor.Mocap
                     try
                     {
                         var clip = MocapClipBuilder.ImportFile(Path.Combine(dir, c.file), model, opt);
-                        Debug.Log($"[Mocap] {c.name} (CMU {c.cmuTrial}, {c.description}): {clip.length:0.00}s loop={c.loop} → {AssetDatabase.GetAssetPath(clip)}");
+                        Debug.Log($"[Mocap] {c.name} (CMU {c.cmuTrial}, {c.description}): {clip.length:0.00}s loop={c.loop} → {AssetDatabase.GetAssetPath(clip)}{MocapClipSanity.Describe(clip)}");
                         ok++;
+                        if (c.perHero)
+                        {
+                            foreach (var (hero, heroModel) in heroes)
+                            {
+                                opt.OutputFolder = MocapClipBuilder.HeroFolder(hero);
+                                var heroClip = MocapClipBuilder.ImportFile(Path.Combine(dir, c.file), heroModel, opt);
+                                Debug.Log($"[Mocap]   {hero}: {AssetDatabase.GetAssetPath(heroClip)}{MocapClipSanity.Describe(heroClip)}");
+                                perHeroOk++;
+                            }
+                        }
                     }
                     catch (Exception e)
                     {
@@ -131,7 +145,8 @@ namespace Rapadura.Editor.Mocap
                 EditorUtility.ClearProgressBar();
             }
             AssetDatabase.Refresh();
-            Debug.Log($"[Mocap] Imported {ok}/{manifest.clips.Length} clips into {MocapClipBuilder.DefaultOutputFolder} using '{model.name}'.");
+            Debug.Log($"[Mocap] Imported {ok}/{manifest.clips.Length} clips into {MocapClipBuilder.DefaultOutputFolder} using '{model.name}', "
+                      + $"plus {perHeroOk} per-hero locomotion clips ({string.Join(", ", heroes.ConvertAll(h => h.hero))}).");
         }
 
         private static string ProjectRoot() => Directory.GetParent(Application.dataPath).FullName;
@@ -153,6 +168,7 @@ namespace Rapadura.Editor.Mocap
             public bool inPlace;
             public bool rootMotion;
             public bool tposeFrame0 = true;
+            public bool perHero;
             public string cmuTrial;
             public string description;
         }

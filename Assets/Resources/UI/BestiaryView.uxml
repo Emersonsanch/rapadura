@@ -1,0 +1,51 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
+    <Style src="/Assets/Resources/UI/BestiaryView.uss" />
+    <!-- "Caderno da Vo Zefa" (BestiaryController): one page per enemy type and boss. Lives in Resources
+         so the self-bootstrapped controller loads it without scene wiring. The page list (left, grouped
+         by region) and the page contents (right) are filled in code from BestiaryPresenter/BestiaryTexts;
+         static captions use the UiDocumentLocalizer convention (pt-BR here is the fallback). -->
+    <ui:VisualElement name="bestiary-root" class="bestiary-root rap-theme">
+        <ui:VisualElement name="bestiary-card" class="bestiary-card rap-panel">
+            <ui:VisualElement class="bestiary-header">
+                <ui:VisualElement class="bestiary-header-text">
+                    <ui:Label text="Caderno da Vó Zefa" class="bestiary-title rap-heading loc" view-data-key="ui.bestiary.title" />
+                    <ui:Label text="Cada bicho que vocês vencem, a Vó anota aqui." class="bestiary-subtitle rap-subtle loc" view-data-key="ui.bestiary.subtitle" />
+                </ui:VisualElement>
+                <ui:Label name="bestiary-progress" text="" class="bestiary-progress rap-chip" />
+                <ui:Button name="bestiary-close" text="Fechar" focusable="true" class="bestiary-close rap-button rap-button--primary loc" view-data-key="ui.bestiary.close" />
+            </ui:VisualElement>
+            <ui:VisualElement class="bestiary-body">
+                <ui:ScrollView name="bestiary-list" class="bestiary-list" />
+                <ui:ScrollView name="bestiary-page" class="bestiary-page">
+                    <ui:VisualElement class="bestiary-page-head">
+                        <ui:VisualElement name="bestiary-portrait" class="bestiary-portrait">
+                            <ui:Label name="bestiary-portrait-glyph" text="?" class="bestiary-portrait-glyph" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="bestiary-page-head-text">
+                            <ui:Label name="bestiary-name" text="" class="bestiary-name" />
+                            <ui:Label name="bestiary-meta" text="" class="bestiary-meta" />
+                            <ui:VisualElement class="bestiary-chips">
+                                <ui:Label name="bestiary-kills" text="" class="bestiary-chip rap-chip" />
+                                <ui:Label name="bestiary-stats" text="" class="bestiary-chip rap-chip" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Label name="bestiary-lore" text="" class="bestiary-lore" />
+                    <ui:VisualElement name="bestiary-tips-section" class="bestiary-section">
+                        <ui:Label text="Dicas da Vó" class="bestiary-section-title loc" view-data-key="ui.bestiary.tips_header" />
+                        <ui:VisualElement name="bestiary-tips" class="bestiary-lines" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="bestiary-drops-section" class="bestiary-section">
+                        <ui:Label text="O que deixa cair" class="bestiary-section-title loc" view-data-key="ui.bestiary.drops_header" />
+                        <ui:VisualElement name="bestiary-drops" class="bestiary-lines" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="bestiary-comment" class="bestiary-comment">
+                        <ui:Label name="bestiary-comment-header" text="" class="bestiary-comment-header" />
+                        <ui:Label name="bestiary-comment-text" text="" class="bestiary-comment-text" />
+                    </ui:VisualElement>
+                </ui:ScrollView>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

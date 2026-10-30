@@ -60,9 +60,28 @@ namespace Rapadura.Tests.PlayMode
         [UnityTearDown]
         public IEnumerator BaseTearDown()
         {
-            // 1) Swap to an empty scene first, so no scene object is left calling ServiceLocator in
-            //    Update after the GameManager (and with it every registration) is gone.
-            Scene empty = SceneManager.CreateScene("SmokeTestEmpty_" + (++_emptySceneCounter));
+            // 1) Empty scene, every other scene unloaded, 2) the persistent bootstrap killed so the next
+            //    test builds a fresh session.
+            yield return UnloadSession("SmokeTestEmpty_" + (++_emptySceneCounter));
+
+            StoryPanelController.AutoPresent = true;
+
+            RestoreSaveFolder();
+        }
+
+        // ------------------------------------------------------------------
+        // Scene helpers
+        // ------------------------------------------------------------------
+
+        /// <summary>
+        /// Ends the running session like quitting the app, minus the save folder: swaps to a new empty scene
+        /// named <paramref name="emptySceneName"/> first (so no scene object calls ServiceLocator in Update
+        /// after the GameManager and every registration are gone), unloads every other scene, destroys the
+        /// DontDestroyOnLoad GameManager, then clears the ServiceLocator, GameplayPause and timeScale.
+        /// </summary>
+        protected static IEnumerator UnloadSession(string emptySceneName)
+        {
+            Scene empty = SceneManager.CreateScene(emptySceneName);
             SceneManager.SetActiveScene(empty);
 
             var toUnload = new List<Scene>();
@@ -84,7 +103,6 @@ namespace Rapadura.Tests.PlayMode
                 }
             }
 
-            // 2) Kill the persistent bootstrap so the next test builds a fresh session.
             foreach (GameManager manager in UnityEngine.Object.FindObjectsByType<GameManager>(FindObjectsInactive.Include, FindObjectsSortMode.None))
             {
                 UnityEngine.Object.Destroy(manager.gameObject);
@@ -96,14 +114,7 @@ namespace Rapadura.Tests.PlayMode
             ServiceLocator.Clear();
             GameplayPause.Reset();
             Time.timeScale = 1f;
-            StoryPanelController.AutoPresent = true;
-
-            RestoreSaveFolder();
         }
-
-        // ------------------------------------------------------------------
-        // Scene helpers
-        // ------------------------------------------------------------------
 
         protected static IEnumerator LoadScene(string sceneName)
         {

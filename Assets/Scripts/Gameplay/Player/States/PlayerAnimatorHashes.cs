@@ -20,6 +20,7 @@ namespace Rapadura.Gameplay.Player.States
         public const string MoveSpeedMultiplierName = "MoveSpeedMul";
         public const string WalkClipSpeedName = "WalkClipSpeed";
         public const string RunClipSpeedName = "RunClipSpeed";
+        public const string JogClipSpeedName = "JogClipSpeed";
         public const string TurnAngleName = "TurnAngle";
         public const string IsGroundedName = "IsGrounded";
         public const string VerticalSpeedName = "VerticalSpeed";
@@ -79,6 +80,9 @@ namespace Rapadura.Gameplay.Player.States
 
         /// <inheritdoc cref="WalkClipSpeed"/>
         public static readonly int RunClipSpeed = Animator.StringToHash(RunClipSpeedName);
+
+        /// <summary>Same as <see cref="WalkClipSpeed"/> for the optional Jog child (mocap locomotion); absent/0 = Walk→Run only.</summary>
+        public static readonly int JogClipSpeed = Animator.StringToHash(JogClipSpeedName);
 
         /// <summary>
         /// Plays <paramref name="stateHash"/> on the base layer only if the controller actually has

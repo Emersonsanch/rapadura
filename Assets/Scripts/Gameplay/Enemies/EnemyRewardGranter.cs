@@ -1,6 +1,7 @@
 using Rapadura.Core.Events;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Player;
+using Rapadura.Gameplay.Story;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Enemies
@@ -44,8 +45,10 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
-            // Bosses may multiply this (EnemyDefinition.BossExperienceMultiplier) — see BossBonusRules.
-            killerStats.AddExperience(BossBonusRules.GetExperienceReward(enemy.Definition));
+            // Bosses may multiply this (EnemyDefinition.BossExperienceMultiplier) — see BossBonusRules —
+            // and a "Nova Jornada+" cycle multiplies the result (NewGamePlusRules, ×1 on the first campaign).
+            int reward = BossBonusRules.GetExperienceReward(enemy.Definition);
+            killerStats.AddExperience(NewGamePlusRules.ScaleExperience(reward, NewGamePlusProgress.ResolveCurrentCycle()));
         }
     }
 }

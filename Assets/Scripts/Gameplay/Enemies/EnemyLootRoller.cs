@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Items.Procedural;
+using Rapadura.Gameplay.Story;
 using Rapadura.Gameplay.World.Biomes;
 
 namespace Rapadura.Gameplay.Enemies
@@ -52,6 +53,9 @@ namespace Rapadura.Gameplay.Enemies
     /// (<see cref="BossBonusRules.RollBonusDrop"/>).</item>
     /// </list>
     /// Numbers and the expected fights per collect quest live in Docs/Balance/README.md §8.
+    /// On a "Nova Jornada+" (<c>newGamePlusCycle</c> 1+, <see cref="NewGamePlusRules"/>, §10) the base
+    /// loot quantity grows and each equipment piece may go up one rarity tier; cycle 0 draws exactly the same
+    /// random numbers as before, so seeds keep reproducing the same drops.
     /// </summary>
     public static class EnemyLootRoller
     {
@@ -81,7 +85,8 @@ namespace Rapadura.Gameplay.Enemies
             BiomeDefinition biome,
             Random random,
             IEnumerable<ItemAffixDefinition> affixPool = null,
-            Func<string, string> localizeName = null)
+            Func<string, string> localizeName = null,
+            int newGamePlusCycle = 0)
         {
             var drops = new List<LootDrop>();
             if (enemy == null || random == null)
@@ -93,6 +98,7 @@ namespace Rapadura.Gameplay.Enemies
             if (BossBonusRules.ShouldDropLoot(enemy, (float)random.NextDouble()))
             {
                 int quantity = random.Next(enemy.LootQuantityMin, Math.Max(enemy.LootQuantityMin, enemy.LootQuantityMax) + 1);
+                quantity = NewGamePlusRules.ScaleLootQuantity(quantity, newGamePlusCycle);
                 if (quantity > 0)
                 {
                     drops.Add(new LootDrop(enemy.LootItem, quantity));
@@ -120,6 +126,11 @@ namespace Rapadura.Gameplay.Enemies
                     if (IsRolledAsEquipment(entry.Item))
                     {
                         ItemRarity rarity = RollEquipmentRarity(entry.Item, enemy.IsBoss, random);
+                        if (NewGamePlusRules.ClampCycle(newGamePlusCycle) > 0)
+                        {
+                            rarity = NewGamePlusRules.UpgradeRarity(rarity, newGamePlusCycle, random.NextDouble());
+                        }
+
                         drops.Add(new LootDrop(ProceduralItemGenerator.Generate(entry.Item, rarity, random.Next(), localizeName, affixPool)));
                     }
                     else

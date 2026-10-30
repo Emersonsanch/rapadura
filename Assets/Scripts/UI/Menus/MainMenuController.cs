@@ -1,8 +1,10 @@
 using System;
 using Rapadura.Core.DI;
+using Rapadura.Core.Localization;
 using Rapadura.Core.Performance;
 using Rapadura.Save;
 using Rapadura.UI.Common;
+using Rapadura.UI.WorldMap;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -27,7 +29,8 @@ namespace Rapadura.UI.Menus
     /// resolved from the <see cref="ServiceLocator"/> (mirrors how GameManager registers/resolves
     /// every other manager). Nothing here needs scene wiring: the Save/Load screen is found in the
     /// scene when <see cref="_saveLoadMenu"/> is empty ("Carregar" is hidden when there is none), and
-    /// the slot list comes from code (<see cref="SaveManager.ManualSlotCount"/>).
+    /// the slot list comes from code (<see cref="SaveManager.ManualSlotCount"/>). After a crash in the
+    /// previous session a small <see cref="CrashNoticeBanner"/> sits at the bottom of the screen.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class MainMenuController : MonoBehaviour
@@ -58,11 +61,13 @@ namespace Rapadura.UI.Menus
         private Button _settingsButton;
         private Button _creditsButton;
         private Button _quitButton;
+        private Label _continueBadge;
 
         private SaveManager _saveManager;
         private FrameRateManager _frameRateManager;
         private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
         private readonly TitleScreenDecor _decor = new TitleScreenDecor();
+        private readonly CrashNoticeBanner _crashNotice = new CrashNoticeBanner();
 
         private void Awake()
         {
@@ -82,6 +87,7 @@ namespace Rapadura.UI.Menus
             RegisterCallbacks();
             _localizer.Attach(_uiDocument.rootVisualElement);
             _decor.Attach(_uiDocument.rootVisualElement, _root, UiMotionPreferences.IsReducedMotion());
+            _crashNotice.Attach(_root);
             RefreshContinueAvailability();
             FocusFirstElement();
             NotifyMenuOpen(IsVisible());
@@ -104,6 +110,7 @@ namespace Rapadura.UI.Menus
         {
             _localizer.Detach();
             _decor.Detach();
+            _crashNotice.Detach();
             UnregisterCallbacks();
             NotifyMenuOpen(false);
         }
@@ -158,6 +165,9 @@ namespace Rapadura.UI.Menus
             }
 
             _continueButton?.SetEnabled(MainMenuPresenter.IsContinueEnabled(_saveManager));
+            // Small "Jornada+N" badge when the save to continue is on a Nova Jornada+.
+            _continueBadge = NewGamePlusHud.ApplyBadge(_continueButton, _continueBadge, MainMenuPresenter.GetContinueCycle(_saveManager),
+                ServiceLocator.TryGet(out LocalizationManager localization) ? localization : null, corner: true);
 
             if (_loadButton != null)
             {

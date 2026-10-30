@@ -26,9 +26,9 @@ namespace Rapadura.UI.Menus
     /// sair" auto-saves first, both exits then call GameFlowService.ReturnToTitle (see
     /// <see cref="ReturnToTitleAction"/>) and raise <see cref="OnMainMenuRequested"/>.
     ///
-    /// "Conquistas" and "Criação" live here instead of on the HUD: they're rarely-used, full-screen
+    /// "Conquistas", "Caderno" (the bestiary, <c>BestiaryController</c>) and "Criação" live here instead of on the HUD: they're rarely-used, full-screen
     /// screens and the top-right HUD cluster (Missões/Mochila/Skills/Menu) is already at the limit
-    /// of what fits next to the vitals panel on a 20:9 phone with a notch. Both close the pause menu
+    /// of what fits next to the vitals panel on a 20:9 phone with a notch. They close the pause menu
     /// and then open their screen — they behave the same as when opened anywhere else (whether they
     /// freeze gameplay is their own GameplayPause concern), and stacking them over the pause dim
     /// would hide them depending on UIDocument sort order. Crafting also keeps its in-world workbench trigger.
@@ -75,6 +75,7 @@ namespace Rapadura.UI.Menus
         private Button _saveButton;
         private Button _achievementsButton;
         private Button _craftingButton;
+        private Button _bestiaryButton;
         private Button _mainMenuButton;
 
         private bool _isOpen;
@@ -112,6 +113,7 @@ namespace Rapadura.UI.Menus
             _saveButton = rootVisualElement.Q<Button>("save-button");
             _achievementsButton = rootVisualElement.Q<Button>("achievements-button");
             _craftingButton = rootVisualElement.Q<Button>("crafting-button");
+            _bestiaryButton = rootVisualElement.Q<Button>("bestiary-button");
             _mainMenuButton = rootVisualElement.Q<Button>("main-menu-button");
             BindReturnToTitleDialog();
         }
@@ -123,6 +125,7 @@ namespace Rapadura.UI.Menus
             if (_saveButton != null) _saveButton.clicked += OnSaveClicked;
             if (_achievementsButton != null) _achievementsButton.clicked += OnAchievementsClicked;
             if (_craftingButton != null) _craftingButton.clicked += OnCraftingClicked;
+            if (_bestiaryButton != null) _bestiaryButton.clicked += OnBestiaryClicked;
             if (_mainMenuButton != null) _mainMenuButton.clicked += OnMainMenuClicked;
             if (_returnSaveButton != null) _returnSaveButton.clicked += OnReturnSaveAndQuitClicked;
             if (_returnQuitButton != null) _returnQuitButton.clicked += OnReturnQuitWithoutSavingClicked;
@@ -136,6 +139,7 @@ namespace Rapadura.UI.Menus
             if (_saveButton != null) _saveButton.clicked -= OnSaveClicked;
             if (_achievementsButton != null) _achievementsButton.clicked -= OnAchievementsClicked;
             if (_craftingButton != null) _craftingButton.clicked -= OnCraftingClicked;
+            if (_bestiaryButton != null) _bestiaryButton.clicked -= OnBestiaryClicked;
             if (_mainMenuButton != null) _mainMenuButton.clicked -= OnMainMenuClicked;
             if (_returnSaveButton != null) _returnSaveButton.clicked -= OnReturnSaveAndQuitClicked;
             if (_returnQuitButton != null) _returnQuitButton.clicked -= OnReturnQuitWithoutSavingClicked;
@@ -270,6 +274,16 @@ namespace Rapadura.UI.Menus
             {
                 Hide();
                 _achievementList.Open();
+            }
+        }
+
+        /// <summary>"Caderno da Vó Zefa": same close-then-open as Conquistas; the notebook is self-bootstrapped (no scene ref).</summary>
+        private void OnBestiaryClicked()
+        {
+            if (Rapadura.UI.Bestiary.BestiaryController.CanOpen)
+            {
+                Hide();
+                Rapadura.UI.Bestiary.BestiaryController.OpenShared();
             }
         }
 

@@ -3,6 +3,8 @@ using Rapadura.Core.Accessibility;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Gameplay.Combat;
+using Rapadura.Gameplay.Enemies.Visuals;
+using Rapadura.Gameplay.Locomotion;
 using Rapadura.Gameplay.Player;
 using UnityEngine;
 
@@ -36,6 +38,13 @@ namespace Rapadura.Gameplay.Enemies
     /// overshoot are scaled by <see cref="MotionScale"/>; the attack telegraph and the topple stay readable.
     /// One LateUpdate per enemy, scaled time (frozen while paused), no per-frame allocations. The pure
     /// math lives in <see cref="EnemyMotionMath"/> (EditMode-tested).
+    ///
+    /// Models built from jointed parts (<c>Leg_*</c> → <c>Shin_*</c> → <c>Foot_*</c>, see
+    /// <see cref="ProceduralLegLocomotion"/>) get real legs on top of this: planted feet stepping in gait
+    /// order with knee IK, the body bob/roll/pitch taken from the footfalls instead of the sine gait, heavy
+    /// stomps published per actual landing, and tail/ear/head/abdomen follow-through. Far from the camera
+    /// (<c>_legsLodDistance</c>), off screen, while emerging or dead the legs blend back to the rest pose
+    /// and the cheap whole-body gait takes over again.
     /// </summary>
     public class EnemyProceduralAnimator : MonoBehaviour
     {
@@ -55,6 +64,18 @@ namespace Rapadura.Gameplay.Enemies
 
         [Tooltip("Multiplier on squash, overlap, bob, bounces and overshoot with the accessibility option \"Reduzir Movimento\" on.")]
         [SerializeField, Range(0f, 1f)] private float _reducedMotionScale = AccessibilitySettings.ReducedMotionScale;
+
+        [Tooltip("Step jointed legs (Leg_/Shin_/Foot_ parts) with planted feet and knee IK. Off = whole-body gait only.")]
+        [SerializeField] private bool _proceduralLegs = true;
+
+        [Tooltip("Beyond this distance (m) from the camera the legs rest and the cheap whole-body gait is used.")]
+        [SerializeField] private float _legsLodDistance = 24f;
+
+        [Tooltip("Ignore the distance/visibility LOD of the legs (cutscenes, photo mode, tests).")]
+        [SerializeField] private bool _alwaysAnimateLegs;
+
+        private const float LegsBlendTime = 0.25f;
+        private const float LegsLodHysteresis = 3f;
 
         private const float PhaseWrap = 1000f;
 
@@ -77,11 +98,17 @@ namespace Rapadura.Gameplay.Enemies
         private readonly Transform[] _legs = new Transform[MaxLegs];
         private readonly Quaternion[] _legRest = new Quaternion[MaxLegs];
         private int _legCount;
+        private ProceduralLegLocomotion _legRig;
+        private ProceduralEnemyRig _partRig;
+        private Renderer _bodyRenderer;
+        private float _legWeight;
+        private bool _legsLive;
 
         // Measurement.
         private Vector3 _lastRootPosition;
         private float _lastYaw;
         private float _speed;
+        private Vector3 _velocity;
         private float _acceleration;
         private float _yawRate;
 
@@ -142,8 +169,21 @@ namespace Rapadura.Gameplay.Enemies
 
         public EnemyAttackVisualPhase AttackPhase => _attackPhase;
 
-        /// <summary>Separate leg objects found under the visual (named leg/perna/pata), twitched while idle.</summary>
+        /// <summary>Separate leg objects found under the visual (named leg/perna/pata), twitched while idle (0 when they step instead).</summary>
         public int LegCount => _legCount;
+
+        /// <summary>The stepping-legs driver on the current visual (null for single-mesh models).</summary>
+        public ProceduralLegLocomotion LegRig => _legRig;
+
+        /// <summary>0..1 blend of the stepping legs (0 = whole-body gait: far, off screen, emerging or dead).</summary>
+        public float LegWeight => _legWeight;
+
+        /// <summary>Skip the distance/visibility LOD of the legs (cutscenes, photo mode, tests).</summary>
+        public bool AlwaysAnimateLegs
+        {
+            get => _alwaysAnimateLegs;
+            set => _alwaysAnimateLegs = value;
+        }
 
         /// <summary>1, or the reduced-motion scale while the accessibility "Reduzir Movimento" option is on.</summary>
         public float MotionScale => AccessibilitySettings.MotionScaleFor(_accessibility, _reducedMotionScale);
@@ -264,6 +304,59 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             CaptureLegs();
+            BindLegRig();
+        }
+
+        /// <summary>
+        /// Binds (adding it once, on the visual) the stepping-legs driver when the visual has jointed legs or
+        /// follow-through parts. Parts the model's own <see cref="ProceduralEnemyRig"/> already animates are
+        /// left to it. Stepping legs replace the idle leg twitch. Allocates only here.
+        /// </summary>
+        private void BindLegRig()
+        {
+            _legWeight = 0f;
+            _legsLive = false;
+            _partRig = null;
+            _bodyRenderer = null;
+            _legRig = null;
+            if (_visualRoot == null || _visualRoot == _root)
+            {
+                return;
+            }
+
+            _partRig = _visualRoot.GetComponent<ProceduralEnemyRig>();
+            _bodyRenderer = _visualRoot.GetComponentInChildren<Renderer>();
+            _legRig = _visualRoot.GetComponent<ProceduralLegLocomotion>();
+            if (_legRig == null && HasLocomotionParts(_visualRoot))
+            {
+                _legRig = _visualRoot.gameObject.AddComponent<ProceduralLegLocomotion>();
+            }
+
+            if (_legRig == null)
+            {
+                return;
+            }
+
+            _legRig.SelfDriven = false;
+            _legRig.Bind(_root, _visualRoot, _footHeight, _partRig != null ? ProceduralEnemyRig.PartsAnimatedBy(_partRig.Kind) : null);
+            if (_legRig.HasLegs)
+            {
+                _legCount = 0;
+            }
+        }
+
+        private static bool HasLocomotionParts(Transform visual)
+        {
+            foreach (Transform t in visual.GetComponentsInChildren<Transform>(true))
+            {
+                string n = t.name;
+                if (n.StartsWith(ProceduralLegLocomotion.HipPrefix) || n == "Tail" || n == "Abdomen")
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>Separate leg objects (only if the model has them: today's Meshy enemies are one mesh). Allocates once, here.</summary>
@@ -312,12 +405,23 @@ namespace Rapadura.Gameplay.Enemies
 
             _visualRoot.SetLocalPositionAndRotation(_restLocalPosition, _restLocalRotation);
             _visualRoot.localScale = _restLocalScale;
+            RestLegRig();
             for (int i = 0; i < _legCount; i++)
             {
                 if (_legs[i] != null)
                 {
                     _legs[i].localRotation = _legRest[i];
                 }
+            }
+        }
+
+        private void RestLegRig()
+        {
+            _legWeight = 0f;
+            _legsLive = false;
+            if (_legRig != null)
+            {
+                _legRig.RestoreRest();
             }
         }
 
@@ -331,6 +435,7 @@ namespace Rapadura.Gameplay.Enemies
             _lastRootPosition = _root.position;
             _lastYaw = _root.eulerAngles.y;
             _speed = 0f;
+            _velocity = Vector3.zero;
             _acceleration = 0f;
             _yawRate = 0f;
             _easedSpeed = 0f;
@@ -358,6 +463,7 @@ namespace Rapadura.Gameplay.Enemies
             _dead = false;
             _deathTime = 0f;
             _spawnTime = 0f;
+            RestLegRig(); // the feet are re-planted where the enemy actually stands once the emerge ends
 
             if (_controller != null)
             {
@@ -448,16 +554,38 @@ namespace Rapadura.Gameplay.Enemies
             pose.Offset.y = hover + (pose.Offset.y - hover) * motion; // bob reduced, hover height kept
             pose.Squash *= motion;
             pose.Offset *= size;
+
+            // --- Stepping legs: the body rides its footfalls instead of the sine gait ---
+            if (AdvanceLegs(profile, deltaTime, size, gallop, motion))
+            {
+                EnemyPose stepped = default;
+                stepped.Offset.y = _legRig.BodyBob + profile.MoveCrouch * speedFactor * size - EnemyLegGait.KneeBendDrop * _legRig.MeanLegLength;
+                stepped.Euler.x = _legRig.BodySway.x;
+                stepped.Euler.y = pose.Euler.y * 0.35f;
+                stepped.Euler.z = _legRig.BodySway.y;
+                pose.Scale(1f - _legWeight);
+                stepped.Scale(_legWeight);
+                pose.Add(stepped);
+            }
+
             pose.Scale(alive);
 
             int step = EnemyMotionMath.StepIndex(_phase);
             if (step != _lastStep)
             {
                 _lastStep = step;
-                if (profile.Archetype == EnemyMotionArchetype.Heavy && speedFactor > 0.15f && !_dead)
+                if (profile.Archetype == EnemyMotionArchetype.Heavy && speedFactor > 0.15f && !_dead && _legWeight < 0.5f)
                 {
                     PublishFootstep(Mathf.Clamp01(0.4f + speedFactor * 0.6f));
                 }
+            }
+
+            if (_legsLive && _legRig.Landings > 0 && profile.Archetype == EnemyMotionArchetype.Heavy && !_dead && _legWeight >= 0.5f)
+            {
+                // A stomp per real footfall, where the foot came down; the body settles into it.
+                float strength = _legRig.LandingStrength;
+                PublishFootstep(_legRig.LandingPoint, Mathf.Clamp01(0.35f + 0.65f * Mathf.Max(strength, speedFactor)));
+                KickSquash(profile, 0.02f * strength * motion);
             }
 
             // --- Inertia: lean into starts, lean back to brake, bank into turns; springs add the follow-through ---
@@ -529,7 +657,81 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             Apply(pose, profile, deathK, size, motion);
+            SolveLegs(deltaTime, alive, motion);
             ApplyLegs(profile, speedFactor, alive, motion);
+            if (_partRig != null)
+            {
+                _partRig.MoveSpeed01 = speedFactor * alive;
+            }
+        }
+
+        /// <summary>
+        /// LOD + blend of the stepping legs, then the feet step for this frame (before the body is posed).
+        /// Returns true while the legs contribute to the body pose (weight above 0).
+        /// </summary>
+        private bool AdvanceLegs(in EnemyMotionProfile profile, float deltaTime, float size, float gallop, float motion)
+        {
+            if (_legRig == null)
+            {
+                return false;
+            }
+
+            bool wanted = WantLegs();
+            if (wanted && !_legsLive)
+            {
+                _legsLive = true;
+                _legRig.ResetState(); // wake-up (emerge ended, back in range): plant the feet where the enemy stands
+            }
+
+            _legWeight = Mathf.MoveTowards(_legWeight, wanted ? 1f : 0f, deltaTime / LegsBlendTime);
+            if (!_legsLive)
+            {
+                return false;
+            }
+
+            if (_legRig.HasLegs)
+            {
+                _legRig.Settings = EnemyLegGait.SettingsFor(profile, _legRig.DetectedStyle, _legRig.MeanLegLength, size, gallop);
+            }
+
+            _legRig.Advance(deltaTime, _dead ? Vector3.zero : _velocity, _dead ? 0f : _yawRate, motion);
+            return _legRig.HasLegs && _legWeight > 0f;
+        }
+
+        private void SolveLegs(float deltaTime, float alive, float motion)
+        {
+            if (!_legsLive)
+            {
+                return;
+            }
+
+            _legRig.Solve(deltaTime, _legWeight * alive, motion * Mathf.Clamp01(_intensity));
+            if (_legWeight <= 0f && !WantLegs())
+            {
+                RestLegRig(); // fully faded out: back to the cheap path, legs at rest
+            }
+        }
+
+        /// <summary>Legs step only near the camera, on screen, alive and out of the ground (hysteresis on the distance).</summary>
+        private bool WantLegs()
+        {
+            if (!_proceduralLegs || _legRig == null || _dead || _spawnTime >= 0f || _intensity <= 0f)
+            {
+                return false;
+            }
+
+            if (_alwaysAnimateLegs)
+            {
+                return true;
+            }
+
+            float lod = _legsLive ? _legsLodDistance + LegsLodHysteresis : _legsLodDistance;
+            if (ProceduralLegLocomotion.SqrDistanceToCamera(_root.position) > lod * lod)
+            {
+                return false;
+            }
+
+            return _bodyRenderer == null || _bodyRenderer.isVisible;
         }
 
         private void TickReactions(in EnemyMotionProfile profile, float deltaTime, float previousDeathTime)
@@ -695,10 +897,14 @@ namespace Rapadura.Gameplay.Enemies
             _lastRootPosition = position;
 
             float raw = delta.magnitude / deltaTime;
+            Vector3 rawVelocity = delta / deltaTime;
             if (raw > _maxPlausibleSpeed || _dead)
             {
                 raw = _dead ? 0f : _speed; // teleport (spawn/pool) or corpse: ignore
+                rawVelocity = _dead ? Vector3.zero : _velocity;
             }
+
+            _velocity = Vector3.Lerp(_velocity, rawVelocity, EnemyMotionMath.Damp(_speedSmoothing, deltaTime));
 
             float yaw = _root.eulerAngles.y;
             float rawYawRate = Mathf.Clamp(Mathf.DeltaAngle(_lastYaw, yaw) / deltaTime, -720f, 720f);
@@ -737,7 +943,7 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>Separate legs: flick on their own rhythm while idle, scurry with the gait while moving (arthropods only).</summary>
         private void ApplyLegs(in EnemyMotionProfile profile, float speedFactor, float alive, float motion)
         {
-            if (_legCount == 0 || profile.Archetype != EnemyMotionArchetype.Arthropod)
+            if (_legCount == 0 || profile.Archetype != EnemyMotionArchetype.Arthropod || _legsLive)
             {
                 return;
             }
@@ -802,7 +1008,12 @@ namespace Rapadura.Gameplay.Enemies
         {
             Vector3 feet = _root.position;
             feet.y += _footHeight;
-            EventBus.Publish(new EnemyFootstepEvent(_root.gameObject, feet, intensity));
+            PublishFootstep(feet, intensity);
+        }
+
+        private void PublishFootstep(Vector3 position, float intensity)
+        {
+            EventBus.Publish(new EnemyFootstepEvent(_root.gameObject, position, intensity));
         }
     }
 }

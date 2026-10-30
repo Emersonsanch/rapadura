@@ -99,6 +99,13 @@ $unity = "C:\Program Files\Unity\Hub\Editor\6000.3.22f1\Editor\Unity.exe"
 
 (Não use `-quit` junto com `-runTests`; o Unity fecha sozinho ao terminar. Código de saída 0 = tudo passou.)
 
+**Teste de resistência (soak, `SoakPlaythroughTests`, categoria `Soak`):** fica **fora** do CI e do *Run All* (`[Explicit]`; o game-ci roda a suíte sem filtro, e testes explícitos só rodam quando selecionados por nome ou categoria). Um piloto automático joga o laço mapa ⇄ encontro por 30 min de tempo de jogo (timeScale 4, ~10–15 min reais): anda, ataca, usa skills, gasta pontos, equipa/descarta itens, abre e fecha telas, salva, reinicia e carrega, viaja, morre e volta ao mapa. Falha em qualquer Error/Exception no log, crescimento de GameObjects/objetos Unity/memória gerenciada no mapa ocioso ou estado travado; o relatório sai no log (`[Soak]`) e em `Logs/SoakReport.txt`. `Soak_QuickCheck_3Minutes` é a mesma rodada em 3 min de jogo. No Editor: Test Runner → PlayMode → `SoakPlaythroughTests` → clique direito → *Run*. Pela linha de comando:
+
+```powershell
+$env:RAPADURA_SOAK_MINUTES = "30"   # opcional; também _TIMESCALE, _STUCK_SECONDS, _MAX_MANAGED_MB, _MAX_GAMEOBJECTS, _MAX_UNITY_OBJECTS, _SEED, _HERO
+& $unity -batchmode -projectPath "D:\Projetos\rapadura" -runTests -testPlatform PlayMode -testCategory "Soak" -testResults "$env:TEMP\soak.xml" -logFile "$env:TEMP\soak.log"
+```
+
 **Builds locais:** `File → Build Profiles` → Windows ou Android → marque *Development Build* → *Build*.
 
 **Workflow inteiro localmente:** é possível com [`act`](https://github.com/nektos/act) + Docker passando os secrets por `--secret-file`, mas as imagens Unity têm vários GB; normalmente é mais prático usar o *Run workflow* manual no GitHub.

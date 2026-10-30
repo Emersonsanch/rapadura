@@ -191,6 +191,25 @@ namespace Rapadura.Gameplay.Skills
             }
         }
 
+        /// <summary>Whether any active effect carries <paramref name="sourceKey"/> (e.g. a meal's effects survived a carried-state restore).</summary>
+        public bool HasEffectsFromSource(string sourceKey)
+        {
+            if (string.IsNullOrEmpty(sourceKey))
+            {
+                return false;
+            }
+
+            foreach (ActiveStatEffect effect in _activeEffects)
+            {
+                if (effect.SourceKey == sourceKey)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void ClearAllEffects()
         {
             if (_activeEffects.Count == 0)
@@ -305,7 +324,9 @@ namespace Rapadura.Gameplay.Skills
 
         /// <summary>
         /// Sum of every active modifier value (flat AND percent) for a stat that is itself a 0-based
-        /// fraction — <see cref="StatType.CriticalChance"/>, <see cref="StatType.CriticalDamage"/>.
+        /// fraction — <see cref="StatType.CriticalChance"/>, <see cref="StatType.CriticalDamage"/>,
+        /// <see cref="StatType.AttackSpeed"/>, <see cref="StatType.Thorns"/>, <see cref="StatType.CooldownReduction"/>
+        /// and <see cref="StatType.ResourceCostReduction"/>.
         /// <see cref="GetModifiedValue"/> would drop the percent ones for these: (0 + flat) × (1 + percent)
         /// ignores a percent bonus on a zero base, and the procedural affixes (<c>AffixDatabaseSeeder</c>)
         /// roll crit as PercentAdditive while Destreza applies it as Flat. Here "+3%" means +0.03 either way.

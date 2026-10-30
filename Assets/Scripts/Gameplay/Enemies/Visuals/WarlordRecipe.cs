@@ -7,7 +7,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
     /// iron with a horned helmet, a red-crested visor with burning eyes, a fur collar, a long red cape
     /// and a double-bitted greataxe in the right hand. Boss accent: red cape/crest + gold trim.
     /// Hierarchy: <c>Body</c> (waist pivot) → <c>Head</c>, <c>Cape</c> (neck pivot), <c>Arm_L</c>/<c>Arm_R</c>
-    /// (shoulder pivot) → <c>Weapon</c> (in the right hand); <c>Leg_L</c>/<c>Leg_R</c> (hip pivot) under the root.
+    /// (shoulder pivot) → <c>Weapon</c> (in the right hand); <c>Leg_L</c>/<c>Leg_R</c> (hip pivot) under the root
+    /// → <c>Shin_L</c>/<c>Shin_R</c> (knee) → <c>Foot_L</c>/<c>Foot_R</c> (ankle), so the legs step with knee IK.
     /// </summary>
     public static class WarlordRecipe
     {
@@ -28,8 +29,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     bp.Mesh(ProceduralEnemyParts.Weapon, arm, new Vector3(0.06f, -0.86f, 0.14f), DrawAxe, Quaternion.Euler(18f, 0f, 0f));
                 }
 
-                bp.Mesh(right ? ProceduralEnemyParts.LegRight : ProceduralEnemyParts.LegLeft, -1,
+                int leg = bp.Mesh(right ? ProceduralEnemyParts.LegRight : ProceduralEnemyParts.LegLeft, -1,
                     new Vector3(0.2f * side, 1.06f, 0f), b => DrawLeg(b, side));
+                int shin = bp.Mesh(right ? ProceduralEnemyParts.ShinRight : ProceduralEnemyParts.ShinLeft, leg,
+                    new Vector3(0f, -0.5f, 0.05f), b => DrawShin(b, side));
+                bp.Mesh(right ? ProceduralEnemyParts.FootRight : ProceduralEnemyParts.FootLeft, shin,
+                    new Vector3(0f, -0.44f, -0.05f), b => DrawFoot(b, side));
             }
         }
 
@@ -152,10 +157,22 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         private static void DrawLeg(EnemyMeshBuilder b, float side)
         {
             b.Matrix = Matrix4x4.Scale(new Vector3(side, 1f, 1f));
-            b.Cylinder(new Vector3(0f, -0.5f, 0f), 0.13f, 0.16f, 0.52f, 6, EnemySwatch.IronDark);
-            b.Blob(new Vector3(0f, -0.52f, 0.09f), new Vector3(0.2f, 0.17f, 0.14f), EnemySwatch.Steel, coarse: true);
-            b.Cylinder(new Vector3(0f, -0.94f, 0f), 0.12f, 0.15f, 0.44f, 6, EnemySwatch.Iron);
-            b.Box(new Vector3(0f, -0.99f, 0.06f), new Vector3(0.25f, 0.15f, 0.38f), EnemySwatch.IronDark, top: EnemySwatch.Iron);
+            b.Cylinder(new Vector3(0f, -0.5f, 0.05f), 0.13f, 0.16f, 0.52f, 6, EnemySwatch.IronDark, rotation: Quaternion.Euler(-5f, 0f, 0f));
+            b.Matrix = Matrix4x4.identity;
+        }
+
+        private static void DrawShin(EnemyMeshBuilder b, float side)
+        {
+            b.Matrix = Matrix4x4.Scale(new Vector3(side, 1f, 1f));
+            b.Blob(new Vector3(0f, -0.02f, 0.08f), new Vector3(0.2f, 0.17f, 0.14f), EnemySwatch.Steel, coarse: true);
+            b.Segment(new Vector3(0f, -0.44f, -0.05f), new Vector3(0f, 0.02f, 0f), 0.12f, 0.15f, 6, EnemySwatch.Iron);
+            b.Matrix = Matrix4x4.identity;
+        }
+
+        private static void DrawFoot(EnemyMeshBuilder b, float side)
+        {
+            b.Matrix = Matrix4x4.Scale(new Vector3(side, 1f, 1f));
+            b.Box(new Vector3(0f, -0.045f, 0.06f), new Vector3(0.25f, 0.15f, 0.38f), EnemySwatch.IronDark, top: EnemySwatch.Iron);
             b.Matrix = Matrix4x4.identity;
         }
     }

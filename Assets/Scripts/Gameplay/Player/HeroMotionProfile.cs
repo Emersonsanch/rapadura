@@ -51,6 +51,9 @@ namespace Rapadura.Gameplay.Player
         public float torsoCounterTwist = 5f;
         [Tooltip("Extra arm swing (deg) opposite the legs at full stride.")]
         public float armSwingDegrees = 8f;
+        [Tooltip("Stride of the walk/run clips this hero takes (PlayerAnimatorSpeedDriver): < 1 = shorter, quicker steps for the same ground speed, " +
+                 "but the planted foot slides by (1 − value). 1 = exact stride matching. The child cadence itself comes from the clip (Mocap_WalkKid, ~200 steps/min).")]
+        [Range(0.8f, 1.2f)] public float strideScale = 1f;
 
         [Header("Idle (never fully still)")]
         [Tooltip("Breaths per second.")]

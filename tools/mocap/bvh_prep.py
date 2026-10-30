@@ -6,7 +6,10 @@ Uso (um clipe):
 Uso (conjunto inteiro definido em clips.json):
     python bvh_prep.py --set clips.json --out-dir out
 
-Etapas: separa o frame 0 (T-pose da conversao cgspeed) -> escala p/ metros -> corte (start/end em s, no
+Uso (BVH de outra ferramenta, ex. mocap de video exportado com nomes Mixamo, em cm, sem T-pose no frame 0):
+    python bvh_prep.py video.bvh --out out/Mocap_WalkVideo.bvh --joint-map mixamo --unit-scale 0.01 --no-tpose         --cycle --min-len 0.5 --max-len 1.4 --in-place --facing travel
+
+Etapas: renomeia as juntas para os nomes CMU (--joint-map, ver joint_maps.py) -> separa o frame 0 (T-pose da conversao cgspeed) -> escala p/ metros -> corte (start/end em s, no
 tempo original) -> velocidade -> reamostragem p/ 30 fps -> janela de loop (opcional) -> orienta p/ +Z ->
 pes no chao -> remove deslocamento XZ (in-place, opcional) -> recoloca a T-pose no frame 0 -> grava BVH.
 """
@@ -20,13 +23,17 @@ import sys
 import numpy as np
 
 import bvh
+import joint_maps
 import prep
 
 
 def process(src: str, out: str, *, start=None, end=None, fps=30.0, speed=1.0, cycle=False,
             min_len=0.8, max_len=2.0, in_place=False, facing="start", tpose_frame0=True,
-            unit_scale=prep.CMU_UNIT_TO_METERS) -> dict:
+            unit_scale=prep.CMU_UNIT_TO_METERS, joint_map="cmu") -> dict:
     m = bvh.parse(src)
+    missing = joint_maps.rename_joints(m, joint_maps.load_map(joint_map))
+    if "Hips" in missing:
+        raise ValueError(f"{src}: nenhuma junta virou 'Hips' com --joint-map {joint_map}; confira a HIERARCHY")
     m = prep.scale(m, unit_scale)
     if tpose_frame0:
         tpose, motion = m.slice(0, 1), m.slice(1, m.num_frames)
@@ -42,6 +49,8 @@ def process(src: str, out: str, *, start=None, end=None, fps=30.0, speed=1.0, cy
     motion = prep.resample(motion, fps)
 
     info = {"source_frames": int(m.num_frames)}
+    if missing:
+        info["missing_joints"] = missing  # o importador ignora esses ossos (ficam na pose de repouso)
     if cycle:
         i, j, cost = prep.find_loop(motion, min_len, max_len)
         motion = motion.slice(i, j + 1)
@@ -79,13 +88,17 @@ def run_set(cfg_path: str, out_dir: str) -> None:
         info = process(src, out, start=c.get("start"), end=c.get("end"), fps=cfg.get("fps", 30),
                        speed=c.get("speed", 1.0), cycle=c.get("cycle", False),
                        min_len=c.get("min_len", 0.8), max_len=c.get("max_len", 2.0),
-                       in_place=c.get("in_place", False), facing=c.get("facing", "start"))
+                       in_place=c.get("in_place", False), facing=c.get("facing", "start"),
+                       tpose_frame0=c.get("tpose_frame0", True),
+                       unit_scale=c.get("unit_scale", prep.CMU_UNIT_TO_METERS),
+                       joint_map=c.get("joint_map", "cmu"))
         entry = {
             "name": c["name"],
             "file": c["name"] + ".bvh",
             "loop": bool(c.get("loop", False)),
             "inPlace": bool(c.get("in_place", False)),
             "rootMotion": bool(c.get("root_motion", False)),
+            "perHero": bool(c.get("per_hero", False)),
             "tposeFrame0": True,
             "source": c["source"],
             "cmuTrial": c.get("cmu"),
@@ -118,6 +131,8 @@ def main(argv=None) -> int:
     ap.add_argument("--no-tpose", action="store_true", help="o frame 0 NAO e uma T-pose (BVH que nao e cgspeed)")
     ap.add_argument("--unit-scale", type=float, default=prep.CMU_UNIT_TO_METERS,
                     help="fator unidade->metros (CMU: 0.05644; BVH ja em cm: 0.01)")
+    ap.add_argument("--joint-map", default="cmu",
+                    help="nomes das juntas: cmu (padrao), mixamo, rokoko, humanoid ou um JSON {origem: nomeCMU}")
     a = ap.parse_args(argv)
     if a.set:
         run_set(a.set, a.out_dir)
@@ -126,7 +141,7 @@ def main(argv=None) -> int:
         ap.error("informe <src> e --out, ou --set clips.json")
     info = process(a.src, a.out, start=a.start, end=a.end, fps=a.fps, speed=a.speed, cycle=a.cycle,
                    min_len=a.min_len, max_len=a.max_len, in_place=a.in_place, facing=a.facing,
-                   tpose_frame0=not a.no_tpose, unit_scale=a.unit_scale)
+                   tpose_frame0=not a.no_tpose, unit_scale=a.unit_scale, joint_map=a.joint_map)
     print(json.dumps(info))
     return 0
 

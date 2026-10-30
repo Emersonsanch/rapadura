@@ -10,7 +10,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
     /// back, and both arms hugging a warm pile of stolen light against its belly. Boss accent: the
     /// warm golden light against the cool cave purples. Hierarchy: <c>Body</c> → <c>Head</c> →
     /// <c>Ear_L</c>/<c>Ear_R</c>; <c>Body</c> → <c>Arm_L</c>/<c>Arm_R</c>, <c>StolenLight</c>;
-    /// <c>Leg_L</c>/<c>Leg_R</c> under the root.
+    /// <c>Leg_L</c>/<c>Leg_R</c> under the root → <c>Shin_L</c>/<c>Shin_R</c> (knee) → <c>Foot_L</c>/<c>Foot_R</c>
+    /// (ankle), so the big soft feet step with knee IK.
     /// </summary>
     public static class AncientDwellerRecipe
     {
@@ -28,8 +29,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     new Vector3(0.42f * side, 0.14f, -0.05f), DrawEar, Quaternion.Euler(0f, 0f, 30f * side), meshKey: "Ear");
                 bp.Mesh(right ? ProceduralEnemyParts.ArmRight : ProceduralEnemyParts.ArmLeft, body,
                     new Vector3(0.92f * side, 1.0f, 0.2f), b => DrawArm(b, side));
-                bp.Mesh(right ? ProceduralEnemyParts.LegRight : ProceduralEnemyParts.LegLeft, -1,
+                int leg = bp.Mesh(right ? ProceduralEnemyParts.LegRight : ProceduralEnemyParts.LegLeft, -1,
                     new Vector3(0.52f * side, 0.8f, -0.15f), DrawLeg, meshKey: "Leg");
+                int shin = bp.Mesh(right ? ProceduralEnemyParts.ShinRight : ProceduralEnemyParts.ShinLeft, leg,
+                    new Vector3(0f, -0.42f, 0.05f), DrawShin, meshKey: "Shin");
+                bp.Mesh(right ? ProceduralEnemyParts.FootRight : ProceduralEnemyParts.FootLeft, shin,
+                    new Vector3(0f, -0.28f, -0.03f), DrawFoot, meshKey: "Foot");
             }
         }
 
@@ -117,11 +122,20 @@ namespace Rapadura.Gameplay.Enemies.Visuals
 
         private static void DrawLeg(EnemyMeshBuilder b)
         {
-            b.Blob(new Vector3(0f, -0.3f, 0f), new Vector3(0.62f, 0.85f, 0.66f), EnemySwatch.CaveSkinDark);
-            b.Blob(new Vector3(0f, -0.68f, 0.16f), new Vector3(0.62f, 0.26f, 0.78f), EnemySwatch.CaveSkinDark);
+            b.Blob(new Vector3(0f, -0.2f, 0f), new Vector3(0.62f, 0.62f, 0.66f), EnemySwatch.CaveSkinDark);
+        }
+
+        private static void DrawShin(EnemyMeshBuilder b)
+        {
+            b.Blob(new Vector3(0f, -0.1f, -0.02f), new Vector3(0.52f, 0.44f, 0.56f), EnemySwatch.CaveSkinDark);
+        }
+
+        private static void DrawFoot(EnemyMeshBuilder b)
+        {
+            b.Blob(new Vector3(0f, -0.02f, 0.14f), new Vector3(0.62f, 0.26f, 0.78f), EnemySwatch.CaveSkinDark);
             for (int k = -1; k <= 1; k++)
             {
-                b.Blob(new Vector3(k * 0.16f, -0.72f, 0.5f), new Vector3(0.14f, 0.12f, 0.14f), EnemySwatch.CaveBelly, coarse: true);
+                b.Blob(new Vector3(k * 0.16f, -0.06f, 0.48f), new Vector3(0.14f, 0.12f, 0.14f), EnemySwatch.CaveBelly, coarse: true);
             }
         }
     }

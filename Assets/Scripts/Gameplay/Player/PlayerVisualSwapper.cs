@@ -80,11 +80,18 @@ namespace Rapadura.Gameplay.Player
                 actions.SetAnimator(animator);
             }
 
+            HeroMotionProfile profile = entry.motionProfile != null && entry.motionProfile.profile != null
+                ? entry.motionProfile.profile
+                : HeroMotionProfile.For(id);
+
+            if (_speedDriver != null)
+            {
+                _speedDriver.HeroStrideScale = profile.strideScale;
+            }
+
             if (_proceduralAnimator != null)
             {
-                _proceduralAnimator.SetMotionProfile(entry.motionProfile != null && entry.motionProfile.profile != null
-                    ? entry.motionProfile.profile
-                    : HeroMotionProfile.For(id));
+                _proceduralAnimator.SetMotionProfile(profile);
                 _proceduralAnimator.SetVisualRoot(_currentInstance.transform);
             }
         }

@@ -15,6 +15,25 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>Legs contain "Leg", so <c>EnemyProceduralAnimator.IsLegName</c> already finds them.</summary>
         public const string LegLeft = "Leg_L";
         public const string LegRight = "Leg_R";
+        /// <summary>
+        /// Jointed legs (<c>ProceduralLegLocomotion</c> convention): hip pivot <c>Leg_&lt;id&gt;</c> → knee pivot
+        /// <c>Shin_&lt;id&gt;</c> → ankle/foot pivot <c>Foot_&lt;id&gt;</c>. Bipeds use the ids L/R, quadrupeds
+        /// FL/FR/HL/HR, arthropods L0..L3/R0..R3 (front to back).
+        /// </summary>
+        public const string LegPrefix = "Leg_";
+        public const string ShinPrefix = "Shin_";
+        public const string FootPrefix = "Foot_";
+        public const string ShinLeft = "Shin_L";
+        public const string ShinRight = "Shin_R";
+        public const string FootLeft = "Foot_L";
+        public const string FootRight = "Foot_R";
+        /// <summary>Follow-through parts (springs on turns and footfalls): tail chain <c>Tail</c> → <c>Tail_1</c>.. → <c>Stinger</c>, spider abdomen, scorpion claws.</summary>
+        public const string Tail = "Tail";
+        public const string TailSegmentPrefix = "Tail_";
+        public const string Stinger = "Stinger";
+        public const string Abdomen = "Abdomen";
+        public const string ClawLeft = "Claw_L";
+        public const string ClawRight = "Claw_R";
         public const string WingLeft = "Wing_L";
         public const string WingRight = "Wing_R";
         /// <summary>Bat swarm: the pivot every bat orbits (bats are "Bat_0".."Bat_n" under it).</summary>
@@ -32,8 +51,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
 
     /// <summary>
     /// Credit-free, stylized low-poly models for the enemies that have no Meshy model (bat swarm,
-    /// stone golem, warlord, ruin guardian, ancient dweller), generated in code from separate named
-    /// parts so they can be animated without a skeleton. Each kind is built once and cached (meshes and
+    /// stone golem, warlord, ruin guardian, ancient dweller) and for the animals whose Meshy model was a
+    /// single static mesh (wolf, alpha wolf, spider, scorpion: replaced so their legs can step),
+    /// generated in code from separate named parts so they can be animated without a skeleton. Each kind is built once and cached (meshes and
     /// the palette material are shared by every instance); <see cref="EnemyVisualSwapper"/> instantiates
     /// it when an <see cref="EnemyDefinition"/> has no <see cref="EnemyDefinition.VisualPrefab"/>, and
     /// the editor menu "Rapadura/Enemies/Build Procedural Enemy Models" bakes the same blueprints to
@@ -58,12 +78,17 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_mountain_warlord", ProceduralEnemyKind.Warlord },
             { "enemy_desert_ruin_guardian", ProceduralEnemyKind.RuinGuardian },
             { "enemy_cave_dweller", ProceduralEnemyKind.AncientDweller },
+            { "enemy_forest_wolf", ProceduralEnemyKind.Wolf },
+            { "enemy_forest_alpha_wolf", ProceduralEnemyKind.AlphaWolf },
+            { "enemy_forest_spider", ProceduralEnemyKind.Spider },
+            { "enemy_desert_scorpion", ProceduralEnemyKind.Scorpion },
         };
 
         public static readonly ProceduralEnemyKind[] AllKinds =
         {
             ProceduralEnemyKind.BatSwarm, ProceduralEnemyKind.StoneGolem, ProceduralEnemyKind.Warlord,
             ProceduralEnemyKind.RuinGuardian, ProceduralEnemyKind.AncientDweller,
+            ProceduralEnemyKind.Wolf, ProceduralEnemyKind.AlphaWolf, ProceduralEnemyKind.Spider, ProceduralEnemyKind.Scorpion,
         };
 
         public static ProceduralEnemyKind KindFor(string enemyId)
@@ -77,7 +102,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
 
         public static bool IsBoss(ProceduralEnemyKind kind)
         {
-            return kind == ProceduralEnemyKind.Warlord || kind == ProceduralEnemyKind.RuinGuardian || kind == ProceduralEnemyKind.AncientDweller;
+            return kind == ProceduralEnemyKind.Warlord || kind == ProceduralEnemyKind.RuinGuardian || kind == ProceduralEnemyKind.AncientDweller
+                || kind == ProceduralEnemyKind.AlphaWolf;
         }
 
         public static int TriangleBudget(ProceduralEnemyKind kind) => IsBoss(kind) ? BossTriangleBudget : CommonTriangleBudget;
@@ -105,6 +131,18 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.AncientDweller:
                     AncientDwellerRecipe.Build(blueprint);
+                    break;
+                case ProceduralEnemyKind.Wolf:
+                    WolfRecipe.Build(blueprint, false);
+                    break;
+                case ProceduralEnemyKind.AlphaWolf:
+                    WolfRecipe.Build(blueprint, true);
+                    break;
+                case ProceduralEnemyKind.Spider:
+                    SpiderRecipe.Build(blueprint);
+                    break;
+                case ProceduralEnemyKind.Scorpion:
+                    ScorpionRecipe.Build(blueprint);
                     break;
             }
 

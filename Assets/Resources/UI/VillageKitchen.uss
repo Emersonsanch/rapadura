@@ -1,0 +1,186 @@
+/*
+ * "Cozinha da Vó Zefa", built in code: the "Fogão a lenha" window (VillageKitchenController, on top of the
+ * map HUD's Mochila overlay classes .wm-backpack-overlay / .wm-backpack-panel) and the meal badge
+ * (MealHudBadge) on the map and arena HUDs. Loaded at runtime from Resources and attached to the window /
+ * badge root, both of which sit under a `rap-theme` HUD root (wm-hud-root / hud-root), where the palette
+ * below resolves. Plates are opaque: the arena badge sits over desert sand and mountain snow.
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+/* ---- Window ---- */
+
+.kitchen-panel {
+    width: 600px;
+    max-width: 94%;
+    max-height: 94%;
+    padding: 18px 22px;
+}
+
+.kitchen-grandma {
+    font-size: 14px;
+    -unity-font-style: italic;
+    color: var(--rap-cream);
+    white-space: normal;
+    padding: 6px 10px;
+    margin-bottom: 8px;
+    border-left-width: 3px;
+    border-left-color: var(--rap-caramel);
+    background-color: var(--rap-brown-night);
+    border-radius: 6px;
+}
+
+.kitchen-active {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+    -unity-text-align: middle-center;
+    margin-bottom: 8px;
+}
+
+.kitchen-list {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 160px;
+    margin-bottom: 8px;
+}
+
+.kitchen-recipe {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background-color: var(--rap-brown);
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: var(--rap-panel-border);
+}
+
+.kitchen-recipe--active {
+    border-color: var(--rap-gold);
+}
+
+.kitchen-recipe--favourite {
+    border-left-color: var(--rap-cane-green);
+    border-left-width: 6px;
+}
+
+.kitchen-recipe--locked {
+    background-color: var(--rap-brown-deep);
+    opacity: 0.75;
+}
+
+.kitchen-recipe-body {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.kitchen-recipe-title {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+}
+
+.kitchen-recipe-line {
+    font-size: 12px;
+    color: var(--rap-cream);
+    white-space: normal;
+}
+
+.kitchen-recipe-line--dim {
+    color: var(--rap-cream-dim);
+}
+
+.kitchen-recipe-line--favourite {
+    color: var(--rap-gold);
+    -unity-font-style: italic;
+}
+
+/* Look from .rap-button (RapaduraTheme.uss). */
+.kitchen-cook-button {
+    min-width: 120px;
+    min-height: 44px;
+    margin: 0;
+    font-size: 14px;
+    white-space: normal;
+}
+
+.kitchen-status {
+    font-size: 13px;
+    color: var(--rap-cream);
+    white-space: normal;
+    -unity-text-align: middle-center;
+    min-height: 18px;
+    margin-bottom: 6px;
+}
+
+/* ---- Dish icon (window rows and HUD badge) ---- */
+
+.meal-icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 18px;
+    border-width: 2px;
+    border-color: var(--rap-cream);
+    align-items: center;
+    justify-content: center;
+    background-color: var(--rap-caramel);
+}
+
+.meal-icon-label {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: var(--rap-cream);
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(46, 27, 16);
+    padding: 0;
+    margin: 0;
+}
+
+.meal-icon--locked {
+    background-color: var(--rap-brown-night);
+    border-color: var(--rap-cream-dim);
+}
+
+.meal-icon--cuscuz { background-color: rgb(232, 190, 64); }
+.meal-icon--cafe_coado { background-color: rgb(92, 56, 32); }
+.meal-icon--pamonha { background-color: rgb(140, 170, 70); }
+.meal-icon--rapadura { background-color: rgb(176, 98, 34); }
+.meal-icon--baiao_de_dois { background-color: rgb(150, 70, 44); }
+.meal-icon--queijo_coalho { background-color: rgb(240, 214, 150); }
+
+/* ---- HUD badge (MealHudBadge) ---- */
+
+.meal-badge {
+    flex-direction: row;
+    align-items: center;
+    align-self: flex-start;
+    margin-top: 6px;
+    padding: 3px 10px 3px 4px;
+    background-color: var(--rap-brown-night);
+    border-radius: 20px;
+    border-width: 1px;
+    border-color: var(--rap-caramel);
+}
+
+.meal-badge .meal-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 13px;
+}
+
+.meal-badge .meal-icon-label {
+    font-size: 13px;
+}
+
+.meal-badge-label {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+    margin-left: 6px;
+    padding: 0;
+}

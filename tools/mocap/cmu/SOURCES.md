@@ -42,6 +42,8 @@ O corte/janela final de cada clipe está em `../clips.json`. As durações abaix
 | Mocap_Idle | 137_28 | Normal Wait | janela automática em 0–9 | sim | 2,83 s |
 | Mocap_IdleCombat | 77_03 | ready stance | janela automática em 1,5–8 | sim | 2,70 s |
 | Mocap_Walk | 35_01 | walk | janela automática (1 ciclo) | sim, no lugar | 1,13 s |
+| Mocap_WalkKid | 142_14 | Rushed (Stylized Walks) | janela automática em 5,2–7,2 | sim, no lugar | 0,60 s |
+| Mocap_WalkHappy | 142_08 | Happy (Stylized Walks) | janela automática em 8,7–11,0 | sim, no lugar | 1,10 s |
 | Mocap_Jog | 35_17 | run/jog | janela automática (1 ciclo) | sim, no lugar | 0,77 s |
 | Mocap_Run | 09_02 | run | janela automática (1 ciclo) | sim, no lugar | 0,73 s |
 | Mocap_Strafe | 139_14 | Sneak Sideways | janela automática em 1–8 | sim, no lugar | 1,47 s |
@@ -56,7 +58,29 @@ O corte/janela final de cada clipe está em `../clips.json`. As durações abaix
 | Mocap_DeathForward | 90_16 | fall on face | 1,8–5,0 | não | 3,17 s |
 | Mocap_DeathBackward | 90_18 | RugPullFall | 0,0–2,6 | não | 2,57 s |
 
-São 16 arquivos brutos, cerca de 9 MB. Observações:
+São 18 arquivos brutos, cerca de 12 MB. `142_14` e `142_08` foram baixados em 2026-10-29 do mesmo espelho
+(`https://raw.githubusercontent.com/una-dinosauria/cmu-mocap/master/data/142/142_14.bvh` e `.../142_08.bvh`), mesma
+licença. O sujeito 142 anda em círculos; a janela (`start`/`end` em `clips.json`) pega um trecho reto (retidão 1,00).
+
+Candidatos medidos para o andar "de criança" (ciclo de loop, 30 fps; passos/min = 120 ÷ ciclo; velocidade na escala do ator):
+
+| Trial | Descrição | Passos/min | m/s | Balanço do quadril | Braço (vai e vem) | Custo do loop | Veredito |
+|---|---|---|---|---|---|---|---|
+| 35_01 | walk (o atual `Mocap_Walk`) | 106 | 1,28 | 2,7 cm | 16 cm | 0,07 | adulto, braço quase parado |
+| **142_14** | Rushed | **200** | 2,25 | 4,2 cm | 36 cm | 0,12 | **escolhido** (`Mocap_WalkKid`): passos curtos e rápidos, tronco reto, casa com os 2,5 m/s do jogo a ~1,1× |
+| 142_08 | Happy | 109 | 1,44 | 5,7 cm | 49 cm | 0,06 | alternativa (`Mocap_WalkHappy`): alegre, mas precisa de ~1,7× para 2,5 m/s |
+| 142_06 | Elated | 109 | 1,61 | 12,6 cm | 67 cm | 0,19 | muito saltitante; loop pior |
+| 142_09 | Joy | 109 | 1,48 | 11,1 cm | 49 cm | 0,25 | loop ruim |
+| 142_01 | Childish | 95 | 0,71 | 2,2 cm | 19 cm | 0,09 | lento demais (pantomima) |
+| 104_11 / 104_12 | HappyGoLuckWalk / ExcitedWalk | 200 / 212 | 0,75 / 1,90 | 17 / 11 cm | 37 / 54 cm | 0,52 | sem ciclo limpo |
+| 132_29 / 132_30 | Bouncy Walk | 90–92 | 1,0 | 12–13 cm | 11–19 cm | 0,10–0,11 | quique sem braço |
+| 137_20 | Gangly Teen Walk | 116 | 0,87 | 4,8 cm | 54 cm | 0,15 | lento |
+| 132_17 | Walk Fast | 144 | 1,91 | 3,7 cm | 19 cm | 0,23 | adulto apressado |
+| 16_35 / 16_36 / 35_22 | run / jog | 150–164 | 2,7–3,6 | 10–12 cm | 15–24 cm | 0,11–0,12 | iguais aos atuais Jog/Run |
+
+Só `142_14` e `142_08` ficaram no projeto; os outros foram baixados numa pasta temporária para medir e descartados.
+
+Observações:
 
 - O CMU não tem uma "reação a golpe" de verdade. O `Mocap_HitReact` é a esquiva/encolhida do 77_09,
   acelerada. Outras opções no índice são 91_59 "360 smallStumble", 85_07 "KickFlipStumble" e 104_13 "StumbleWalk".

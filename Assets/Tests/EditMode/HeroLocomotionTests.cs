@@ -173,6 +173,17 @@ namespace Rapadura.Tests
         }
 
         [Test]
+        public void StridePlayback_WithJogChild_IsPiecewise()
+        {
+            // Mocap locomotion: Walk 0.5 (2 m/s), Jog 0.75 (3 m/s), Run 1 (3.5 m/s).
+            Assert.AreEqual(1f, LocomotionMath.BlendNaturalSpeed(0.25f, 2f, 3f, 3.5f), 1e-4f, "below walk the idle pose shortens the stride as before");
+            Assert.AreEqual(2.5f, LocomotionMath.BlendNaturalSpeed(0.625f, 2f, 3f, 3.5f), 1e-4f);
+            Assert.AreEqual(3f, LocomotionMath.BlendNaturalSpeed(LocomotionMath.JogBlend, 2f, 3f, 3.5f), 1e-4f);
+            Assert.AreEqual(3.25f, LocomotionMath.BlendNaturalSpeed(0.875f, 2f, 3f, 3.5f), 1e-4f);
+            Assert.AreEqual(LocomotionMath.BlendNaturalSpeed(0.8f, 2f, 5f), LocomotionMath.BlendNaturalSpeed(0.8f, 2f, 0f, 5f), 1e-5f, "no jog child = old walk→run line");
+        }
+
+        [Test]
         public void DampParameter_ConvergesSmoothlyWithoutOvershoot()
         {
             float value = 0f;

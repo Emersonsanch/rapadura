@@ -48,6 +48,8 @@ namespace Rapadura.UI.Common
         public const string PauseSave = "ui.pause.save";
         public const string PauseAchievements = "ui.pause.achievements";
         public const string PauseCrafting = "ui.pause.crafting";
+        /// <summary>"Caderno da Vó Zefa" (bestiary) button, on the pause menu and the world map HUD.</summary>
+        public const string PauseBestiary = "ui.pause.bestiary";
         public const string PauseMainMenu = "ui.pause.main_menu";
 
         // -- Main menu (start/settings/quit are core keys) --
@@ -185,6 +187,7 @@ namespace Rapadura.UI.Common
             new LocalizationEntry(PauseSave, "Save", "Salvar"),
             new LocalizationEntry(PauseAchievements, "Achievements", "Conquistas"),
             new LocalizationEntry(PauseCrafting, "Crafting", "Criação"),
+            new LocalizationEntry(PauseBestiary, "Notebook", "Caderno"),
             new LocalizationEntry(PauseMainMenu, "Main Menu", "Menu Principal"),
 
             new LocalizationEntry(MenuContinue, "Continue", "Continuar"),

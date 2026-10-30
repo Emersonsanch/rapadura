@@ -271,3 +271,40 @@
 .main-menu--entering .main-menu-button {
     opacity: 0;
 }
+
+/* ---------------------------------------------------------------- crash notice */
+
+/* "O jogo fechou de forma inesperada da última vez" (CrashNoticeBanner, built in code): a small
+   panel pinned to the bottom-left corner, over the cane field, never covering the menu column. */
+.main-menu-crash-notice {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
+    max-width: 420px;
+    padding: 12px 16px;
+    flex-direction: column;
+}
+
+.main-menu-crash-notice__message {
+    color: var(--rap-cream);
+    font-size: 17px;
+    -unity-font-style: bold;
+    white-space: normal;
+}
+
+.main-menu-crash-notice__hint {
+    margin-top: 4px;
+    font-size: 13px;
+    white-space: normal;
+}
+
+.main-menu-crash-notice__actions {
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.main-menu-crash-notice__actions > .rap-button {
+    margin-right: 8px;
+    padding: 4px 12px;
+    font-size: 14px;
+}

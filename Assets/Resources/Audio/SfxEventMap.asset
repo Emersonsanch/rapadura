@@ -956,6 +956,62 @@ MonoBehaviour:
     frequency: 4200
     pitchJitter: 0
     volumeJitter: 0
+  - id: pet.bark
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.4
+    cooldown: 0.35
+    maxVoices: 1
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 31
+    frequency: 420
+    pitchJitter: 0.08
+    volumeJitter: 0.15
+  - id: pet.yip
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.35
+    cooldown: 0.3
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 31
+    frequency: 780
+    pitchJitter: 0.1
+    volumeJitter: 0.1
+  - id: pet.sniff
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.18
+    cooldown: 1
+    maxVoices: 1
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 28
+    frequency: 1400
+    pitchJitter: 0.12
+    volumeJitter: 0.2
+  - id: pet.fetch
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.3
+    cooldown: 0.3
+    maxVoices: 1
+    pausable: 1
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 21
+    frequency: 1500
+    pitchJitter: 0.08
+    volumeJitter: 0.15
   _music:
   - context: 1
     variant: 

@@ -508,3 +508,48 @@
     font-size: 15px;
     white-space: normal;
 }
+
+/* ---- Road event card (WorldEventCardController, built in code on top of the Mochila overlay) ---- */
+.wm-event-panel {
+    width: 480px;
+    padding: 20px 24px;
+}
+
+.wm-event-hero-line {
+    font-size: 13px;
+    -unity-font-style: italic;
+    color: var(--rap-gold);
+    white-space: normal;
+    margin-top: 4px;
+    margin-bottom: 12px;
+}
+
+.wm-event-choice {
+    height: auto;
+    min-height: 56px;
+    margin: 0 0 8px 0;
+    padding: 6px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.wm-event-choice-label {
+    font-size: 15px;
+    -unity-font-style: bold;
+    white-space: normal;
+}
+
+.wm-event-choice-fx {
+    font-size: 12px;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+    margin-top: 2px;
+}
+
+.wm-event-result {
+    font-size: 14px;
+    color: var(--rap-cream);
+    white-space: normal;
+    margin-bottom: 6px;
+}

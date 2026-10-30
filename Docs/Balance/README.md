@@ -1006,3 +1006,184 @@ stun nunca adianta um golpe; no chefe custa 0–1 golpe por luta, nos comuns (0,
 
 `StunThornsAttackSpeedTests.StunRightAfterAStrike_DelaysTheNextSwing_InsteadOfReArmingItEarly` cobre a
 correção do atordoamento. `EnemyDatabaseSeederTests` espelha os novos HP/dano.
+
+---
+
+## 10. Nova Jornada+ (New Game+) (2026-10-29)
+
+Depois do epílogo e dos créditos, o botão **Nova Jornada+** aparece na Vila (Floresta) do mapa
+(`NewGamePlusHud`). Ele recomeça a campanha com o mesmo herói: **mantém** nível, atributos, skills,
+equipamento, mochila, ouro e o Baú da Vó Zefa; **recomeçam** a história (`StoryProgress`), o mapa (só a
+Floresta liberada), os chefes (`DefeatedEnemyRegistry`) e as 8 missões regionais (`RegionQuestCatalog`).
+Missões pessoais, de convergência e diárias, construções, receitas, relógio e clima ficam como estão. O
+ciclo é salvo na chave `NewGamePlus` (`NewGamePlusProgress`); save antigo, sem a chave, carrega como ciclo 0.
+
+### 10.1 Regras (`NewGamePlusRules`, testadas em `NewGamePlusTests`)
+
+Ciclo `c` = 0 na primeira campanha, 1 na Nova Jornada+ 1, ... teto **5** (jornadas depois da 5ª usam os
+números da 5ª). Com `c = 0` todo multiplicador é exatamente 1 e o `EnemyLootRoller` não sorteia nenhum
+número a mais (mesma semente, mesmos drops de antes).
+
+| O quê | Fórmula | NG+1 | NG+2 | NG+3 | NG+5 | Onde |
+|---|---|---|---|---|---|---|
+| Vida dos inimigos (chefes inclusos) | 1 + 0,8·c | ×1,8 | ×2,6 | ×3,4 | ×5,0 | `EnemyController.ApplyDefinitionToHealth` (arredondada) |
+| Dano por golpe (antes de buffs/debuffs) | 1 + 0,5·c | ×1,5 | ×2,0 | ×2,5 | ×3,5 | `EnemyController.EffectiveAttackDamage` + hitbox |
+| XP por abate (depois do bônus de chefe) | 1 + 0,5·c | ×1,5 | ×2,0 | ×2,5 | ×3,5 | `EnemyRewardGranter` |
+| Quantidade do loot base (ouro) | 1 + 0,25·c | ×1,25 | ×1,5 | ×1,75 | ×2,25 | `EnemyLootRoller` (passo 1) |
+| Chance de cada peça de equipamento subir 1 raridade | 0,1·c | 10% | 20% | 30% | 50% | `EnemyLootRoller` (passo 2; nunca passa de Lendário) |
+
+Não escalam: XP/recompensas de missões, chance de drop e quantidades da tabela do bioma, o bônus de chefe
+(`_bossBonusDropRarity` fixa), recargas e velocidade dos inimigos.
+
+### 10.2 Por que esses números (estimativa; não passou pelo modelo do r8)
+
+- Quem termina a campanha pela rota com missões chega ao chefe das Cavernas no nível ~15 (§9.4) e entra na
+  NG+1 por volta do 16, com o equipamento das Cavernas. Sem escala, a Floresta morreria na primeira rotação.
+- **NG+1 Floresta ≈ Montanha do 1º ciclo.** Lobo Alfa NG+1 = 936 de vida / 22,5 de dano (Senhor da Guerra
+  no ciclo 0: 900 / 30, enfrentado no nível ~11). Para um herói de nível ~16 a luta deve cair perto da
+  meta de 15–22 s, um pouco mais fácil — a Floresta continua sendo a região de aquecimento.
+- **NG+1 Cavernas** = Habitante Ancestral com 2 124 de vida / 63 de dano: é o novo topo, para o nível ~20
+  que o XP ×1,5 dos abates leva até lá.
+- Dano cresce mais devagar que vida (0,5 contra 0,8 por ciclo) porque o herói ganha dano (nível, skills,
+  afixos) bem mais rápido do que ganha vida e defesa: a luta fica mais longa sem virar "um golpe e morre".
+- XP ×1,5 por ciclo compensa a curva (`xp_to_next` cresce 10% por nível): sem isso, a NG+1 inteira daria
+  poucos níveis. O ouro e a chance de raridade são a recompensa visível de jogar de novo.
+
+**Playtest pendente**: rodar `tools/balance/run_r8.py` com os inimigos multiplicados pelo ciclo e o herói no
+nível/equipamento do fim do r8 para confirmar as faixas acima antes de mexer nos coeficientes (todos são
+`const` em `NewGamePlusRules`).
+
+### 10.3 Testes
+
+`NewGamePlusTests`: ciclo 0 não muda nada (nem arredonda), os números do NG+1 batem com a tabela, todos
+crescem até o teto e param, XP/loot nunca ficam abaixo da base, o dano nunca cresce mais que a vida, o loot
+do ciclo 0 é idêntico ao de antes com a mesma semente, a NG+5 dá mais ouro e equipamento melhor no chefe da
+Montanha, o reset/manutenção do estado, save/load, save antigo = ciclo 0 e a conquista `ach_new_journey_plus`.
+
+## 10. Cozinha da Vó Zefa: refeições do fogão a lenha (2026-10-29)
+
+Serviço novo da Vila no mapa (Vila → Serviços → **Fogão a lenha**). O primo cozinha um prato com materiais
+de bioma + "mantimentos da venda" (pagos em `item_gold`, a moeda da loja) e come na hora. Dados em
+`MealCatalog`, regras em `CookingRules` (puras, `CookingTests`), estado salvo por slot em `MealService`
+(chave `VillageKitchen`), efeito aplicado na arena por `MealEffectApplier`.
+
+### 10.1 Regras
+
+- **Uma refeição por vez.** Mesmo prato de novo → volta para a duração cheia (não soma). Outro prato →
+  substitui o anterior. Cozinhar que falha (falta ingrediente/ouro) não gasta nada.
+- **Duração em lutas, não em tempo.** Todo encontro resolvido (vitória, derrota ou fuga) gasta 1, no
+  `EncounterEndedEvent` — antes do auto-save, então a contagem vai junto. Fugir também conta: a refeição
+  não é um jeito de pular lutas.
+- **Efeitos = modificadores comuns no `BuffController`.** Fonte `meal/effects` (duração 0 = a luta inteira,
+  some quando a cena da arena descarrega) e `meal/burst` (uma vez por luta, com duração própria). Fontes
+  diferentes empilham com skills, atributos e equipamento; refeição nunca empilha com refeição. Os tetos
+  existentes continuam valendo (defesa % ≤ 80%, velocidade de ataque ≤ +100%, espinhos ≤ 50%, recarga ≤ 100%).
+- **Aprender.** Cuscuz e café coado desde o começo. Os outros: a 1ª missão regional da região do prato
+  (qualquer primo) **ou** a Vó ensina ao primo que ama o prato quando ele abre o fogão, se a região já
+  estiver aberta. Save antigo sabe o que as missões já concluídas ensinam.
+
+### 10.2 Pratos
+
+Ouro por luta ≈ 1,8 (1,5 inimigo × 60% × 1–3 de `item_gold`, §8). Cada prato custa ~1–2 lutas de ouro
+e dura 3–4 lutas, então comer sempre custa ~⅓–½ do ouro que a luta rende. Os ingredientes são os
+materiais comuns de §8 (madeira é a lenha; a loja também vende madeira e pedra).
+
+| Prato | Efeito (luta inteira) | Lutas | Ingredientes | Mantimentos | Aprende com |
+|---|---|---|---|---|---|
+| Cuscuz | StaminaRegen +30% (10 → 13/s) | 3 | madeira 1, erva 1 | 2 ouro | início |
+| Café coado | CooldownReduction +0,06 (Flat) | 3 | madeira 1, fibra 1 | 2 ouro | início |
+| Pamonha | MaxHealth +10% | 3 | madeira 2, fibra 2 | 3 ouro | `quest_region_forest_howling_trail` / Vó → Maria |
+| Rapadura | AttackSpeed +25% **nos primeiros 20 s** | 4 | madeira 2, pedra 1 | 3 ouro | `quest_region_desert_stinger_road` / Vó → Ícaro (Deserto aberto) |
+| Baião de dois | Defense +10% (percentual) | 3 | madeira 2, erva 2, carne assada 1 | 4 ouro | `quest_region_mountain_walking_stones` / Vó → Joaquim (Montanha aberta) |
+| Queijo coalho assado | Thorns 8% | 3 | madeira 1, minério 1, erva 1 | 4 ouro | `quest_region_caves_dark_lamps` / Vó → Lavine (Cavernas abertas) |
+
+Por que esses números: cada efeito fica na faixa de **um afixo incomum** (afixos de §7: velocidade de
+ataque +6–12%, espinhos 5–10%; café ≈ 15 pontos de Inteligência a 0,4%), porque a refeição ocupa um
+"espaço" que todo herói tem, sem raridade. A Rapadura tem o maior número mas só nos primeiros 20 s (o
+"Prepare-se!" dura 1,75 s e um comum morre em 2,5–8 s, §9.5), por isso dura uma luta a mais. Com chefe
+(21–40 s) ela cobre metade da luta.
+
+### 10.3 Favoritos (bônus extra e fala da Vó)
+
+| Primo | Prato | Bônus extra |
+|---|---|---|
+| Maithe | Café coado | CriticalChance +3% |
+| Maria | Pamonha | HealthRegen +1 HP/s (a base é 1) |
+| Joaquim | Baião de dois | MaxHealth +5% |
+| Ícaro | Rapadura | MoveSpeed +8% durante o embalo de 20 s |
+| Lavine | Queijo coalho assado | ManaRegen +20% (5 → 6/s) |
+
+O bônus é decidido pelo herói que está na arena, não por quem cozinhou. Cuscuz é de todo mundo e de ninguém.
+
+### 10.4 Testes
+
+`CookingTests`: catálogo (2 iniciais, cada primo com exatamente um favorito, ingredientes existem em
+`Resources/Items`, CDR em Flat, burst com duração), validação e consumo (falha não gasta), empilhamento
+(renova sem somar, troca substitui), contagem por luta (vitória/fuga/derrota), aprender por missão/lição
+com trava de região, save JSON, efeitos no `BuffController` e textos do painel/HUD.
+
+## 11. Eventos aleatórios do mapa (2026-10-29)
+
+Cartas de evento que aparecem **no meio de uma viagem** entre regiões do mapa-múndi. Dados em
+`WorldEventCatalog` (código, como `RegionQuestCatalog`), regras puras em `WorldEventRules` /
+`WorldEventDirector` (`WorldEventTests`), estado salvo por slot em `WorldEventState` (chave `WorldEvents`),
+carta em `WorldEventCardController`, efeitos de luta aplicados na arena por `WorldEventArenaHooks`.
+
+### 11.1 Frequência (`WorldEventSettings`)
+
+- **Um sorteio por viagem**, não por passo: uma viagem tem ~10 passos de encontro (nós a 10 m, 1 passo/m,
+  carência de 8), então um sorteio por passo cairia quase sempre no fim do caminho. A carta abre entre 30% e
+  70% do trajeto.
+- Chance por viagem: **25%**, +10% a cada viagem elegível sem evento, teto **50%**.
+- **Recarga: 2 viagens** depois de um evento. Média medida (3000 viagens, semente fixa): **1 evento a cada
+  ~4,7 viagens**. Explorar (tocar a região atual) não é viagem e não sorteia.
+- Uma viagem cortada por um encontro antes da carta não gasta a recarga nem zera o "azar acumulado".
+- **Nunca o mesmo evento duas vezes seguidas** (se houver outro possível). Toda região, em toda hora do dia,
+  tem pelo menos 2 eventos possíveis (teste).
+- **Desligado no prólogo/tutorial:** precisa do prólogo visto, nenhuma cena de história pendente, **1 vitória**
+  (a primeira luta é o tutorial), HUD visível, nada pausado e nenhuma conversa aberta.
+
+### 11.2 Eventos e pesos
+
+Peso relativo entre os elegíveis na região/hora. Noite = fase `Night` do `TimeOfDayManager` (20h–5h).
+
+| Evento | Onde / quando | Peso | Escolha A | Escolha B (sempre grátis) |
+|---|---|---|---|---|
+| Mascate ambulante | todas, de dia | 10 | -18 ouro → +2 Poção de Vida (loja: 30) | nada |
+| Chuva de caju | Floresta, Deserto, de dia | 8 | cura 35% da vida no início da próxima luta | +3 vida/s na próxima luta |
+| Romeiros na estrada | todas, de dia | 8 | -1 Poção de Vida → +8 ouro, +15 XP* | +10% defesa na próxima luta |
+| Emboscada de elite | todas, qualquer hora | 6 (×1,5 à noite) | luta com elite + 1 comum | +1 h no relógio |
+| Cantoria ao pé da fogueira | todas, **só à noite** | 10 | +15% dano na próxima luta, +1 h | cura 25% na próxima luta |
+| Tempestade de areia | Deserto | 12 | viagem 50% mais lenta até chegar | +2 h no relógio |
+| Neblina na serra | Montanha | 12 | +3 h no relógio | viagem 40% mais lenta, +2 minério de ferro |
+| Eco na caverna | Cavernas | 12 | luta comum agora, +20 XP* nela | +5% crítico na próxima luta |
+
+\* XP × região, na mesma razão do XP dos inimigos (10/18/28/40): Floresta ×1, Deserto ×1,8, Montanha ×2,8,
+Cavernas ×4. Romeiros = 1,5 inimigo de XP, eco = 2. **Ouro não escala:** os inimigos soltam 1–3 de ouro em
+qualquer região (~1,8 por luta, §8), então 8 ouro ≈ 4 lutas e o desconto do mascate (12 ouro) ≈ 7 lutas.
+
+**"Próxima luta":** o mapa não tem `PlayerStats`/`BuffController` vivos, então XP, cura e buffs ficam na fila
+de `WorldEventState` (salva) e entram dois quadros depois que a Main carrega (depois do estado carregado do
+herói, que senão sobrescreveria vida/XP). Buffs usam a fonte `world_event/<stat>` com duração 0 (a luta
+inteira) e empilham com refeição, skills e equipamento; o mesmo stat de dois eventos não soma (substitui).
+Curas somam até 100%.
+
+### 11.3 Emboscada de elite (`WorldEventElite`)
+
+| | Valor |
+|---|---|
+| Grupo | 1 elite (comum da região, nunca chefe) + 1 comum |
+| Vida do elite | ×2 |
+| Dano do elite | +35% (AttackDamage percentual no `BuffController`) |
+| Tamanho | ×1,25 |
+| Bônus ao matar o elite | +10 ouro, +2 rolagens extras do loot dele (ouro + tabela do bioma), +20 XP × região |
+
+Ou seja: o elite vale ~3 inimigos de XP e ~3× o loot de um comum, por uma luta ~2× mais longa contra ele.
+
+### 11.4 Testes
+
+`WorldEventTests`: travas (prólogo, cena pendente, 0 vitórias, modal, conversa), elegibilidade por
+região/hora, peso noturno, distribuição dos pesos, sem repetição, recarga/azar acumulado/teto, semente
+reproduzível, frequência média 4–6 viagens, conteúdo (itens existem, B grátis, ids únicos), efeitos na mochila
+real (custo recusado não muda nada), fila de bônus aplicada em `PlayerStats`/`BuffController`, elite (grupo,
+vida/dano/tamanho), save (ida e volta, save antigo, novo jogo, registro no GameManager) e textos nos dois idiomas.

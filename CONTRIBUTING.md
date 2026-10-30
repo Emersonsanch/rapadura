@@ -10,6 +10,7 @@
 Mensagens curtas e no imperativo, descrevendo o "porquê" quando não for óbvio (ex: `fix: corrige stamina negativa ao correr sem fôlego`).
 
 ## Definition of Done (por feature)
+Resumo; a versão completa, como o projeto trabalha de fato, está em `Docs/ProjectConventions.md` §4.
 Uma tarefa do `TODO.md` só é marcada `[x]` quando:
 1. Código implementado e compilando sem warnings novos.
 2. Testado manualmente no Editor (Play Mode) cobrindo o caminho feliz e pelo menos um caso de borda.

@@ -160,6 +160,22 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             Matrix = saved;
         }
 
+        /// <summary>
+        /// A tapered limb segment from <paramref name="from"/> to <paramref name="to"/> (a frustum aimed
+        /// along the segment, both ends capped): leg bones between joint pivots, tail pieces.
+        /// </summary>
+        public void Segment(Vector3 from, Vector3 to, float fromRadius, float toRadius, int sides, EnemySwatch swatch, EnemySwatch? cap = null)
+        {
+            Vector3 along = to - from;
+            float length = along.magnitude;
+            if (length < 1e-5f)
+            {
+                return;
+            }
+
+            Cylinder(from, fromRadius, toRadius, length, sides, swatch, cap, Quaternion.FromToRotation(Vector3.up, along / length), bottomCap: true);
+        }
+
         /// <summary>Icosphere blob of diameter <paramref name="size"/> per axis: 80 faces, 20 when <paramref name="coarse"/>.</summary>
         public void Blob(Vector3 center, Vector3 size, EnemySwatch swatch, Quaternion? rotation = null, bool coarse = false)
         {

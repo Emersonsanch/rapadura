@@ -5,6 +5,7 @@
 ## 0. Build e automação (Bloqueante)
 - [ ] Projeto abre sem erros no Console (Unity 6000.3, sem `error CS`).
 - [ ] Suíte EditMode inteira verde (Test Runner) e CI do GitHub Actions verde no commit da release.
+- [ ] Teste de resistência verde no commit da release (`SoakPlaythroughTests`, categoria `Soak`, 30 min de jogo; ver `Docs/CI.md` §6) e `Logs/SoakReport.txt` anexado ao PR/issue da release.
 - [ ] `PlayerSettings.bundleVersion` = versão do `CHANGELOG.md`; `bundleVersionCode` (Android) / `buildNumber` (iOS) incrementados.
 - [ ] Seção `[Não lançado]` do CHANGELOG movida para a versão nova com data.
 - [ ] `Docs/ThirdPartyLicenses.md` revisado (nenhum asset/pacote novo sem origem); pacote `com.coplaydev.unity-mcp` fora da build de release.
@@ -88,6 +89,7 @@
 - [ ] Memória estável após 10 transições mapa ⇄ combate (Memory Profiler/overlay; sem crescimento contínuo).
 - [ ] Pausar com o app em segundo plano (home/trocar de app) e voltar: jogo pausado, sem perda de estado, áudio retoma.
 - [ ] Sem `Exception`/`Error` no logcat/Player.log durante o roteiro inteiro.
+- [ ] Relatório de falhas local: matar o app no meio de um encontro (Gerenciador de Tarefas / deslizar nos recentes **com o jogo em primeiro plano**) e reabrir → o título mostra "O jogo fechou de forma inesperada da última vez"; "Copiar relatório" põe o texto na área de transferência (versão, cena, estado, herói, aparelho, últimas linhas do log) **sem** nome de usuário, nome do aparelho, caminhos pessoais ou e-mail; "Fechar" some com o aviso e ele não volta na sessão. Fechar o jogo normalmente ou só mandá-lo para segundo plano não gera aviso. No máximo 5 relatórios em `persistentDataPath/CrashReports`.
 
 ## 12. Loja/Compliance (antes da submissão)
 - [ ] Classificação indicativa revisada (`Docs/PlatformRequirements.md`).

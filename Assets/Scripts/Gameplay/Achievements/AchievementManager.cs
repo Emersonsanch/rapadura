@@ -160,6 +160,8 @@ namespace Rapadura.Gameplay.Achievements
             EventBus.Subscribe<WorldMapRegionUnlockedEvent>(OnRegionUnlocked);
             EventBus.Subscribe<ItemSoldEvent>(OnItemSold);
             EventBus.Subscribe<CampaignCompletedEvent>(OnCampaignCompleted);
+            EventBus.Subscribe<NewGamePlusCycleCompletedEvent>(OnNewGamePlusCycleCompleted);
+            EventBus.Subscribe<BestiaryCompletedEvent>(OnBestiaryCompleted);
         }
 
         public void Shutdown()
@@ -183,6 +185,8 @@ namespace Rapadura.Gameplay.Achievements
                 EventBus.Unsubscribe<WorldMapRegionUnlockedEvent>(OnRegionUnlocked);
                 EventBus.Unsubscribe<ItemSoldEvent>(OnItemSold);
                 EventBus.Unsubscribe<CampaignCompletedEvent>(OnCampaignCompleted);
+                EventBus.Unsubscribe<NewGamePlusCycleCompletedEvent>(OnNewGamePlusCycleCompleted);
+                EventBus.Unsubscribe<BestiaryCompletedEvent>(OnBestiaryCompleted);
             }
 
             ClearProgress();
@@ -456,6 +460,12 @@ namespace Rapadura.Gameplay.Achievements
 
         private void OnCampaignCompleted(CampaignCompletedEvent evt) =>
             RecordProgress(AchievementConditionType.CampaignCompleted, 1);
+
+        private void OnNewGamePlusCycleCompleted(NewGamePlusCycleCompletedEvent evt) =>
+            RecordMax(AchievementConditionType.NewGamePlusCompleted, evt.Cycle);
+
+        private void OnBestiaryCompleted(BestiaryCompletedEvent evt) =>
+            RecordProgress(AchievementConditionType.BestiaryCompleted, 1);
 
         private void OnGameSaving(GameSavingEvent evt) => SaveProfile();
 

@@ -86,6 +86,16 @@ namespace Rapadura.UI.Achievements
             // Campaign (StoryProgress raises CampaignCompletedEvent when the Cavernas boss falls).
             Title("ach_campaign_complete", "The Light Comes Home", "A Luz Volta para Casa"),
             Description("ach_campaign_complete", "Beat the boss of the Caves and bring the light back to the village. Grandma Zefa knew you would.", "Vença o chefe das Cavernas e devolva a luz à vila. A Vó Zefa sabia que vocês iam conseguir."),
+
+            // Nova Jornada+ (NewGamePlusProgress raises NewGamePlusCycleCompletedEvent when a NG+ campaign is finished).
+            Title("ach_new_journey_plus", "Lighting It Up Again", "Acender de Novo"),
+            Description("ach_new_journey_plus", "Finish New Journey+ 1: relight the Sun Crystal a second time. Grandma Zefa already has the rapadura jar ready.", "Conclua a Nova Jornada+ 1: acenda o Cristal do Sol pela segunda vez. A Vó Zefa já deixou o pote de rapadura pronto."),
+
+            // Bestiary (BestiaryProgress raises BestiaryCompletedEvent when the last page unlocks).
+            Title("ach_bestiary_complete", "Grandma's Notebook, Cover to Cover", "Caderno da Vó, de Capa a Capa"),
+            Description("ach_bestiary_complete", "Defeat every kind of creature and boss so Grandma Zefa can fill in every page of her notebook.", "Vença todo tipo de bicho e chefe para a Vó Zefa preencher todas as páginas do caderno."),
+            Title("ach_relics_all", "Relics of the Sertão", "Relíquias do Sertão"),
+            Description("ach_relics_all", "Find all 12 family relics Grandpa Chico hid around the island.", "Encontre as 12 relíquias da família que o Vô Chico escondeu pela ilha."),
         };
 
         private static LocalizationEntry Title(string id, string en, string ptBR) => new LocalizationEntry($"achievement.{id}.title", en, ptBR);

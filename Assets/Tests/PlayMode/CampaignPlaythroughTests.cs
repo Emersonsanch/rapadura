@@ -50,26 +50,20 @@ namespace Rapadura.Tests.PlayMode
     /// one hero the other smoke tests never pick (and the only one on procedural animation).
     /// </summary>
     [Category("Campaign")]
-    public class CampaignPlaythroughTests : SmokeTestBase
+    public class CampaignPlaythroughTests : WorldMapFlowTestBase
     {
         private const CharacterId Hero = CharacterId.Maithe;
         private const int Seed = 20261029;
         private const int SaveSlot = 0;
         private const string CampaignAchievementId = "ach_campaign_complete";
 
-        /// <summary>Scaled-time multiplier while waiting on arena return delays and token travel.</summary>
-        private const float FastTimeScale = 4f;
-
         private const float EncounterTimeoutSeconds = 45f;
-        private const float TravelTimeoutSeconds = 45f;
         private const float BeatStartTimeoutSeconds = 10f;
 
         /// <summary>Real seconds between two "Continuar" presses (StoryPanelController's double-tap guard is 0.25 s).</summary>
         private const float AdvanceIntervalSeconds = 0.3f;
 
         private static readonly BiomeType[] RegionsInOrder = { BiomeType.Forest, BiomeType.Desert, BiomeType.Mountain, BiomeType.Caves };
-
-        private static int _restartCounter;
 
         private readonly List<GameObject> _spawned = new List<GameObject>();
         private readonly List<StoryPanelChangedEvent> _panelChanges = new List<StoryPanelChangedEvent>();
@@ -253,29 +247,6 @@ namespace Rapadura.Tests.PlayMode
         // Steps
         // ------------------------------------------------------------------
 
-        /// <summary>Waits for the (possibly freshly reloaded) world map to be started, idle and unpaused, and turns off random step rolls.</summary>
-        private static IEnumerator WaitForMap(Action<WorldMapController> found)
-        {
-            WorldMapController map = null;
-            yield return WaitUntilOrFail(() =>
-            {
-                if (SceneManager.GetActiveScene().name != WorldMapSceneName || !SceneManager.GetActiveScene().isLoaded)
-                {
-                    return false;
-                }
-
-                map = UnityEngine.Object.FindFirstObjectByType<WorldMapController>();
-                return map != null && map.isActiveAndEnabled && map.Progress != null && map.RegionBosses != null && map.CurrentNode != null
-                       && !GameplayPause.IsPaused;
-            }, "the world map to be running, idle and unpaused", SceneLoadTimeoutSeconds);
-
-            Assert.AreSame(GetService<WorldMapProgress>(), map.Progress, "WorldMapController is not using the GameManager's WorldMapProgress.");
-
-            // Walking between regions must not roll random fights: every encounter in this test is explicit.
-            map.Encounters.Enabled = false;
-            found(map);
-        }
-
         /// <summary>Starts an encounter from the map, wins it in Main.unity by killing every spawned enemy, and waits for the return.</summary>
         private IEnumerator RunEncounter(Func<bool> start, BiomeType region, EnemyDefinition boss, bool bossChallenge)
         {
@@ -338,65 +309,6 @@ namespace Rapadura.Tests.PlayMode
 
             Assert.IsFalse(transition.HasPendingEncounter, $"The {what} is still pending after returning to the map.");
             Assert.AreEqual(EncounterOutcome.Victory, transition.LastOutcome, $"The {what} was not resolved as a Victory.");
-        }
-
-        /// <summary>Walks the token to <paramref name="destination"/> hop by hop through unlocked regions (real travel, auto-save on arrival).</summary>
-        private static IEnumerator TravelTo(BiomeType destination)
-        {
-            WorldMapController map = null;
-            yield return WaitForMap(m => map = m);
-
-            List<BiomeType> path = FindPath(map.Graph, map.Progress, map.Progress.CurrentRegion, destination);
-            Assert.IsNotNull(path, $"No path of unlocked regions from {map.Progress.CurrentRegion} to {destination}.");
-
-            foreach (BiomeType hop in path)
-            {
-                WorldMapRegionNode node = map.Nodes.FirstOrDefault(n => n != null && n.Region == hop);
-                Assert.IsNotNull(node, $"WorldMap.unity has no node for {hop}.");
-                Assert.IsTrue(map.TryTravelTo(node), $"The map refused to travel from {map.Progress.CurrentRegion} to {hop}.");
-
-                WorldMapController traveling = map;
-                yield return WaitFast(() => !traveling.IsTraveling && traveling.Progress.CurrentRegion == hop,
-                    $"the token to arrive in {hop}", TravelTimeoutSeconds);
-                RestoreTimeScale();
-            }
-
-            Assert.AreEqual(destination, map.Progress.CurrentRegion);
-            Assert.AreEqual(destination, map.CurrentNode.Region);
-        }
-
-        private static List<BiomeType> FindPath(WorldMapGraph graph, WorldMapProgress progress, BiomeType from, BiomeType to)
-        {
-            var previous = new Dictionary<BiomeType, BiomeType> { [from] = from };
-            var queue = new Queue<BiomeType>();
-            queue.Enqueue(from);
-
-            while (queue.Count > 0)
-            {
-                BiomeType at = queue.Dequeue();
-                if (at == to)
-                {
-                    var path = new List<BiomeType>();
-                    for (BiomeType step = to; step != from; step = previous[step])
-                    {
-                        path.Add(step);
-                    }
-
-                    path.Reverse();
-                    return path;
-                }
-
-                foreach (BiomeType neighbour in graph.GetNeighbours(at))
-                {
-                    if (progress.IsUnlocked(neighbour) && !previous.ContainsKey(neighbour))
-                    {
-                        previous[neighbour] = at;
-                        queue.Enqueue(neighbour);
-                    }
-                }
-            }
-
-            return null;
         }
 
         /// <summary>
@@ -496,78 +408,6 @@ namespace Rapadura.Tests.PlayMode
             CollectionAssert.AreEqual(unlockedBefore, map.Progress.UnlockedRegions.OrderBy(r => r).ToList(), "The loaded save lost unlocked regions.");
             CollectionAssert.AreEqual(seenBefore, GetService<StoryProgress>().SeenBeats.OrderBy(b => b).ToList(), "The loaded save lost seen story beats.");
             Assert.IsFalse(GetService<StoryProgress>().CampaignComplete);
-        }
-
-        /// <summary>Like the base teardown, minus the save folder restore: the next boot must find this test's saves.</summary>
-        private static IEnumerator ColdRestart()
-        {
-            Scene empty = SceneManager.CreateScene("CampaignRestart_" + (++_restartCounter));
-            SceneManager.SetActiveScene(empty);
-
-            var toUnload = new List<Scene>();
-            for (int i = 0; i < SceneManager.sceneCount; i++)
-            {
-                Scene scene = SceneManager.GetSceneAt(i);
-                if (scene != empty && scene.isLoaded)
-                {
-                    toUnload.Add(scene);
-                }
-            }
-
-            foreach (Scene scene in toUnload)
-            {
-                AsyncOperation op = SceneManager.UnloadSceneAsync(scene);
-                while (op != null && !op.isDone)
-                {
-                    yield return null;
-                }
-            }
-
-            foreach (GameManager manager in UnityEngine.Object.FindObjectsByType<GameManager>(FindObjectsInactive.Include, FindObjectsSortMode.None))
-            {
-                UnityEngine.Object.Destroy(manager.gameObject);
-            }
-
-            yield return null;
-            yield return null;
-
-            ServiceLocator.Clear();
-            GameplayPause.Reset();
-            Time.timeScale = 1f;
-
-            yield return LoadScene(WorldMapSceneName);
-        }
-
-        // ------------------------------------------------------------------
-        // Time helpers
-        // ------------------------------------------------------------------
-
-        /// <summary>
-        /// <see cref="SmokeTestBase.WaitUntilOrFail"/> with scaled time sped up (arena return delay, token
-        /// travel). Only raises a running 1x clock: never unfreezes a pause and never fights a hit-stop.
-        /// </summary>
-        private static IEnumerator WaitFast(Func<bool> condition, string what, float timeoutSeconds)
-        {
-            float deadline = Time.realtimeSinceStartup + timeoutSeconds;
-            while (!condition() && Time.realtimeSinceStartup < deadline)
-            {
-                if (!GameplayPause.IsPaused && Time.timeScale >= 1f && Time.timeScale < FastTimeScale)
-                {
-                    Time.timeScale = FastTimeScale;
-                }
-
-                yield return null;
-            }
-
-            Assert.IsTrue(condition(), $"Timed out after {timeoutSeconds:0.#}s waiting for: {what}");
-        }
-
-        private static void RestoreTimeScale()
-        {
-            if (Time.timeScale > 1f)
-            {
-                Time.timeScale = 1f;
-            }
         }
     }
 }

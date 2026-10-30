@@ -7,7 +7,7 @@ namespace Rapadura.Gameplay.Player
     /// Bridges <see cref="PlayerMotor.HorizontalVelocity"/> to the rigged hero's <see cref="Animator"/>.
     ///
     /// With a rebuilt controller (menu <c>Rapadura/Animation/Rebuild Hero Animators</c>: one
-    /// "Locomotion" 1D blend tree Idle 0 → Walk 0.5 → Run 1) it drives:
+    /// "Locomotion" 1D blend tree Idle 0 → Walk 0.5 → Run 1, plus Jog 0.75 with mocap locomotion) it drives:
     /// <list type="bullet">
     /// <item><c>MoveBlend</c>: normalized speed (walk speed = 0.5, run speed = 1), critically damped
     /// so starts/stops/walk↔run crossfade smoothly.</item>
@@ -71,6 +71,8 @@ namespace Rapadura.Gameplay.Player
         private float _sinceLanding = 10f;
         private float _bakedWalkClipSpeed;
         private float _bakedRunClipSpeed;
+        private float _bakedJogClipSpeed;
+        private float _heroStrideScale = 1f;
 
         private float _blend;
         private float _blendVelocity;
@@ -96,6 +98,17 @@ namespace Rapadura.Gameplay.Player
             }
         }
 
+        /// <summary>
+        /// Per-hero stride (<see cref="HeroMotionProfile.strideScale"/>), on top of <see cref="_strideTuning"/>:
+        /// below 1 the legs cycle faster for the same ground speed (shorter, quicker child steps) at the cost of
+        /// that fraction of foot slide; 1 = exact stride matching.
+        /// </summary>
+        public float HeroStrideScale
+        {
+            get => _heroStrideScale;
+            set => _heroStrideScale = Mathf.Clamp(value, 0.5f, 1.5f);
+        }
+
         /// <summary>Re-targets which Animator gets the Speed parameter — used by <see cref="PlayerVisualSwapper"/> after swapping the visual model.</summary>
         public void SetAnimator(Animator animator)
         {
@@ -111,7 +124,7 @@ namespace Rapadura.Gameplay.Player
         {
             _cachedController = _animator.runtimeAnimatorController;
             _hasSpeed = _hasBlend = _hasMultiplier = _hasTurn = _hasGrounded = _hasVertical = false;
-            _bakedWalkClipSpeed = _bakedRunClipSpeed = 0f;
+            _bakedWalkClipSpeed = _bakedRunClipSpeed = _bakedJogClipSpeed = 0f;
 
             if (_disableRootMotion)
             {
@@ -159,6 +172,10 @@ namespace Rapadura.Gameplay.Player
                 else if (hash == PlayerAnimatorHashes.RunClipSpeed)
                 {
                     _bakedRunClipSpeed = parameter.defaultFloat;
+                }
+                else if (hash == PlayerAnimatorHashes.JogClipSpeed)
+                {
+                    _bakedJogClipSpeed = parameter.defaultFloat;
                 }
             }
         }
@@ -256,10 +273,12 @@ namespace Rapadura.Gameplay.Player
 
             // Baked clip speeds are in model space: convert with the model's world scale.
             float worldScale = Mathf.Abs(_animator.transform.lossyScale.y);
-            float walkClip = (_bakedWalkClipSpeed > 0f ? _bakedWalkClipSpeed * worldScale : _fallbackWalkClipSpeed) * _strideTuning;
-            float runClip = (_bakedRunClipSpeed > 0f ? _bakedRunClipSpeed * worldScale : _fallbackRunClipSpeed) * _strideTuning;
+            float stride = _strideTuning * _heroStrideScale;
+            float walkClip = (_bakedWalkClipSpeed > 0f ? _bakedWalkClipSpeed * worldScale : _fallbackWalkClipSpeed) * stride;
+            float runClip = (_bakedRunClipSpeed > 0f ? _bakedRunClipSpeed * worldScale : _fallbackRunClipSpeed) * stride;
+            float jogClip = _bakedJogClipSpeed * worldScale * stride; // 0 = no Jog child (Meshy controllers)
 
-            float natural = LocomotionMath.BlendNaturalSpeed(_blend, walkClip, runClip);
+            float natural = LocomotionMath.BlendNaturalSpeed(_blend, walkClip, jogClip, runClip);
             float targetPlayback = LocomotionMath.StridePlaybackSpeed(speed, natural, _minPlayback, _maxPlayback);
             _playback = LocomotionMath.DampParameter(_playback, targetPlayback, ref _playbackVelocity, _playbackSmoothTime, deltaTime);
             _animator.SetFloat(PlayerAnimatorHashes.MoveSpeedMultiplier, _playback);

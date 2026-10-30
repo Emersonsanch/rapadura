@@ -15,6 +15,7 @@ using Rapadura.Gameplay.Dialogue;
 using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Items.Procedural;
+using Rapadura.Gameplay.Pets;
 using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.Skills;
@@ -22,6 +23,7 @@ using Rapadura.Gameplay.Story;
 using Rapadura.Gameplay.Tutorial;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.UI.Achievements;
+using Rapadura.UI.Bestiary;
 using Rapadura.UI.CharacterSheet;
 using Rapadura.UI.Common;
 using Rapadura.UI.Crafting;
@@ -40,7 +42,7 @@ namespace Rapadura.Tests
     /// Coverage audit for every localized text source (see Docs/Localization.md): the core
     /// <see cref="LocalizationManager.DefaultEntries"/> table plus the runtime-merged *Texts helpers
     /// (QuestLogTexts, QuestGiverTexts, DailyQuestTexts, AchievementTexts, TooltipLocalization,
-    /// SettingsMenuTexts, UiTexts, ReturnToTitleTexts, ContentTexts, TutorialTexts, HapticsTexts, TouchControlsTexts, CharacterSheetTexts). Checks that every key referenced by ScriptableObject assets or built in
+    /// SettingsMenuTexts, UiTexts, ReturnToTitleTexts, CrashNoticeTexts, ContentTexts, TutorialTexts, HapticsTexts, TouchControlsTexts, CharacterSheetTexts). Checks that every key referenced by ScriptableObject assets or built in
     /// code exists with both en and pt-BR text, that no key is defined twice with different text,
     /// that helpers never shadow a core key, and that {0}-style placeholders match per language.
     /// Also covers every <c>class="loc"</c> + <c>view-data-key</c> marker in Assets/UI/**/*.uxml
@@ -85,9 +87,13 @@ namespace Rapadura.Tests
             yield return Source(nameof(SettingsMenuTexts), SettingsMenuTexts.Entries, SettingsMenuTexts.EnsureRegistered);
             yield return Source(nameof(UiTexts), UiTexts.Entries, UiTexts.EnsureRegistered);
             yield return Source(nameof(ReturnToTitleTexts), ReturnToTitleTexts.Entries, ReturnToTitleTexts.EnsureRegistered);
+            yield return Source(nameof(CrashNoticeTexts), CrashNoticeTexts.Entries, CrashNoticeTexts.EnsureRegistered);
             yield return Source(nameof(WorldMapTexts), WorldMapTexts.Entries, WorldMapTexts.EnsureRegistered);
             yield return Source(nameof(VillageHubTexts), VillageHubTexts.Entries, VillageHubTexts.EnsureRegistered);
             yield return Source(nameof(VillageChestTexts), VillageChestTexts.Entries, VillageChestTexts.EnsureRegistered);
+            yield return Source(nameof(WorldEventTexts), WorldEventTexts.Entries, WorldEventTexts.EnsureRegistered);
+            yield return Source(nameof(KitchenTexts), KitchenTexts.Entries, KitchenTexts.EnsureRegistered);
+            yield return Source(nameof(NewGamePlusTexts), NewGamePlusTexts.Entries, NewGamePlusTexts.EnsureRegistered);
             yield return Source(nameof(ContentTexts), ContentTexts.Entries, ContentTexts.EnsureRegistered);
             yield return Source(nameof(TutorialTexts), TutorialTexts.Entries, TutorialTexts.EnsureRegistered);
             yield return Source(nameof(HapticsTexts), HapticsTexts.Entries, HapticsTexts.EnsureRegistered);
@@ -95,6 +101,10 @@ namespace Rapadura.Tests
             yield return Source(nameof(CharacterSheetTexts), CharacterSheetTexts.Entries, CharacterSheetTexts.EnsureRegistered);
             yield return Source(nameof(BossTexts), BossTexts.Entries, BossTexts.EnsureRegistered);
             yield return Source(nameof(StoryTexts), StoryTexts.Entries, StoryTexts.EnsureRegistered);
+            yield return Source(nameof(BestiaryTexts), BestiaryTexts.Entries, BestiaryTexts.EnsureRegistered);
+            yield return Source(nameof(CarameloTexts), CarameloTexts.Entries, CarameloTexts.EnsureRegistered);
+            yield return Source(nameof(Rapadura.UI.PhotoMode.PhotoModeTexts), Rapadura.UI.PhotoMode.PhotoModeTexts.Entries, Rapadura.UI.PhotoMode.PhotoModeTexts.EnsureRegistered);
+            yield return Source(nameof(Rapadura.Gameplay.Secrets.SecretTexts), Rapadura.Gameplay.Secrets.SecretTexts.Entries, Rapadura.Gameplay.Secrets.SecretTexts.EnsureRegistered);
         }
 
         private static TextSource Source(string name, IReadOnlyList<LocalizationEntry> entries, Action<LocalizationManager> merge)
@@ -508,7 +518,7 @@ namespace Rapadura.Tests
         public void HelperKeyConstants_AllLocalized()
         {
             var references = new List<(string, string)>();
-            foreach (Type type in new[] { typeof(QuestLogTexts), typeof(QuestLogPresenter), typeof(AchievementTexts), typeof(SettingsMenuTexts), typeof(UiTexts), typeof(WorldMapTexts), typeof(VillageHubTexts), typeof(VillageChestTexts), typeof(TutorialTexts), typeof(HapticsTexts), typeof(CharacterSheetTexts), typeof(BossTexts) })
+            foreach (Type type in new[] { typeof(QuestLogTexts), typeof(QuestLogPresenter), typeof(AchievementTexts), typeof(SettingsMenuTexts), typeof(UiTexts), typeof(WorldMapTexts), typeof(VillageHubTexts), typeof(VillageChestTexts), typeof(KitchenTexts), typeof(NewGamePlusTexts), typeof(TutorialTexts), typeof(HapticsTexts), typeof(CharacterSheetTexts), typeof(BossTexts), typeof(Rapadura.Gameplay.Secrets.SecretTexts), typeof(Rapadura.UI.PhotoMode.PhotoModeTexts) })
             {
                 foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
                 {

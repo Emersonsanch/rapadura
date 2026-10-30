@@ -1,0 +1,156 @@
+/*
+ * Photo mode overlay (PhotoModeController), built in code and loaded from Resources at runtime.
+ * `rap-theme` sits on the root (palette from Common/RapaduraTheme.uss, imported below). The root is a
+ * transparent full-screen layer with picking-mode Ignore: drags on the scene reach the orbit camera,
+ * only the panel, the arrows/sliders/buttons and the "Mostrar painel" button take pointer input.
+ * Plates are opaque (UI blends in linear space; translucent plates wash out over snow / sand).
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+.photo-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* Shutter flash after a save (skipped with "Reduzir Flashes"). */
+.photo-flash {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(255, 248, 230);
+}
+
+.photo-top {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    top: 12px;
+    align-items: center;
+}
+
+.photo-title {
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(74, 36, 12);
+    text-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.9);
+}
+
+.photo-hint {
+    margin-top: 4px;
+    padding: 3px 12px;
+    max-width: 92%;
+    font-size: 13px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    color: var(--rap-cream);
+    background-color: var(--rap-brown-night);
+    border-radius: 8px;
+}
+
+.photo-toast {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 196px;
+    padding: 8px 18px;
+    font-size: 15px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    color: var(--rap-cream);
+    background-color: var(--rap-brown-night);
+    border-width: 2px;
+    border-color: var(--rap-gold);
+    border-radius: 8px;
+}
+
+.photo-panel {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    translate: -50% 0;
+    width: 760px;
+    max-width: 96%;
+    padding: 8px 12px 2px 12px;
+    background-color: var(--rap-brown-deep);
+}
+
+.photo-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+}
+
+.photo-row--disabled {
+    opacity: 0.55;
+}
+
+.photo-caption {
+    width: 72px;
+    font-size: 15px;
+    color: var(--rap-cream-dim);
+}
+
+.photo-value {
+    width: 200px;
+    font-size: 17px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: var(--rap-gold-light);
+}
+
+.photo-arrow {
+    width: 52px;
+    height: 40px;
+    margin: 0 4px;
+    padding: 0;
+    font-size: 22px;
+}
+
+.photo-slider {
+    flex-grow: 1;
+    min-width: 260px;
+    margin: 0 8px;
+}
+
+.photo-slider > .unity-base-field__label {
+    min-width: 110px;
+    color: var(--rap-cream);
+    font-size: 14px;
+}
+
+.photo-slider .unity-base-slider__dragger {
+    background-color: var(--rap-gold);
+    border-color: rgb(110, 58, 16);
+}
+
+.photo-slider .unity-base-slider__tracker {
+    background-color: var(--rap-brown-night);
+    border-color: var(--rap-caramel);
+}
+
+.photo-button {
+    /* min-height so labels can grow with the accessibility font scale. */
+    height: auto;
+    min-height: 44px;
+    margin: 0 4px 6px 4px;
+    font-size: 16px;
+}
+
+.photo-show-button {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    height: auto;
+    min-height: 44px;
+    font-size: 15px;
+}

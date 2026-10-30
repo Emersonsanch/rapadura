@@ -46,6 +46,28 @@ namespace Rapadura.Gameplay.Enemies.Visuals
 
         public ProceduralEnemyKind Kind => _kind;
 
+        /// <summary>0..1 how fast the enemy travels (set by <see cref="EnemyProceduralAnimator"/>): bats glide more between beats when flying.</summary>
+        public float MoveSpeed01 { get; set; }
+
+        private static readonly string[] GolemParts = { ProceduralEnemyParts.Head };
+        private static readonly string[] GuardianParts = { ProceduralEnemyParts.Head };
+        private static readonly string[] DwellerParts = { ProceduralEnemyParts.Head, ProceduralEnemyParts.EarLeft, ProceduralEnemyParts.EarRight };
+
+        /// <summary>
+        /// Follow-through parts this rig already animates for <paramref name="kind"/> (head bob/turn, ear
+        /// droop), so the stepping-legs driver leaves them alone; null = none.
+        /// </summary>
+        public static IList<string> PartsAnimatedBy(ProceduralEnemyKind kind)
+        {
+            switch (kind)
+            {
+                case ProceduralEnemyKind.StoneGolem: return GolemParts;
+                case ProceduralEnemyKind.RuinGuardian: return GuardianParts;
+                case ProceduralEnemyKind.AncientDweller: return DwellerParts;
+                default: return null;
+            }
+        }
+
         /// <summary>When false, arms/fists/wings are left alone (an external animator owns them).</summary>
         public bool DriveLimbs
         {
@@ -126,11 +148,13 @@ namespace Rapadura.Gameplay.Enemies.Visuals
 
                     if (_driveLimbs)
                     {
+                        float travel = Mathf.Clamp01(MoveSpeed01);
                         for (int i = 0; i < _wings.Count; i++)
                         {
                             Tracked wing = _parts[_wings[i]];
+                            int bat = i / 2;
                             float sign = wing.Transform.name == ProceduralEnemyParts.WingLeft ? -1f : 1f;
-                            float flap = Mathf.Sin(t * 15f * speed + (i / 2) * 1.3f) * 48f * Mathf.Max(k, 0.25f);
+                            float flap = BatWingAngle(t, bat, speed, travel) * Mathf.Max(k, 0.25f);
                             wing.Transform.localRotation = wing.Rotation * Quaternion.AngleAxis(flap * sign, Vector3.forward);
                         }
                     }
@@ -176,6 +200,25 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     Pulse(ProceduralEnemyParts.StolenLight, 1f + Mathf.Sin(t * 2.2f) * 0.05f * k);
                     break;
             }
+        }
+
+        /// <summary>
+        /// Wing angle (deg, + = up) of bat <paramref name="bat"/>: a fast power downstroke and a slower
+        /// recovery upstroke, broken by glides with the wings held out (more of them, and longer, while the
+        /// swarm travels: <paramref name="travel"/> 0..1). Each bat has its own rhythm.
+        /// </summary>
+        public static float BatWingAngle(float time, int bat, float rate, float travel)
+        {
+            float cycle = time * 2.4f * rate + bat * 0.37f;
+            float p = cycle - Mathf.Floor(cycle);
+            // Downstroke in the first 40 % (+1 → -1), recovery in the rest (-1 → +1).
+            float wave = p < 0.4f ? Mathf.Cos(Mathf.PI * p / 0.4f) : -Mathf.Cos(Mathf.PI * (p - 0.4f) / 0.6f);
+            float flap = 10f + wave * 46f;
+
+            // Glide windows: a slow per-bat wave above a threshold that drops as the swarm speeds up.
+            float glideWave = 0.5f + 0.5f * Mathf.Sin(time * (0.9f + 0.13f * bat) + bat * 2.1f);
+            float glide = Mathf.SmoothStep(0f, 1f, (glideWave - Mathf.Lerp(0.85f, 0.5f, Mathf.Clamp01(travel))) / 0.12f);
+            return Mathf.Lerp(flap, 14f, glide);
         }
 
         private void EnsureCached()

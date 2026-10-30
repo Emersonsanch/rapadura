@@ -137,6 +137,18 @@ semeado). Para trocar por arquivo real basta arrastar o `clip` no cue — o jitt
 | `hero.land` | `PlayerLandedEvent` (squash de aterrissagem ≥ 20%) — sutil | `Thud` grave → pé na terra batida/poeira, 100–150 ms. | Efeitos | 0,22 | 0,25 s / 1 | 8% / 20% |
 | `ambience.title` | **Loop** na tela de título e na seleção de herói (`MainMenu` / `CharacterSelect`), fade de 2,5 s | `CountrysideLoop`: grilos em grupos de três sobre brisa leve → entardecer no sertão (grilos, vento, um bem-te-vi distante), loop estéreo de 20–40 s. Não pausa. | Efeitos | 0,16 | — | — |
 
+### Caramelo, o vira-lata da Vó Zefa (2026-10-29)
+
+Tocados direto pelo id (`SfxEventRouter.PlayCue`) por `CarameloCompanion` / `CarameloCuddleButton`,
+sem gatilho próprio no `SfxTrigger`. Preset novo `Bark` (31): um "au" curto (tom vozeado que cai + sopro no ataque).
+
+| Cue id | Quando toca | Placeholder hoje → sugestão de som real | Vol. | Cooldown / vozes | Jitter |
+|---|---|---|---|---|---|
+| `pet.bark` | Caramelo late para o inimigo que vai atacar (até 3 latidos, 3D) | `Bark` 420 Hz → latido de vira-lata médio, amigável (nada de rosnado), 150–200 ms. Gravar 3–4. | 0,40 | 0,35 s / 1 | 8% / 15% |
+| `pet.yip` | "Fazer carinho" no mapa (não pausa) | `Bark` 780 Hz → ganido feliz/"auau" agudo curtinho. | 0,35 | 0,3 s / 1 | 10% / 10% |
+| `pet.sniff` | Fareja parado / pega o loot (3D, bem baixo) | `Inhale` 1,4 kHz → fungadas curtas de focinho. | 0,18 | 1 s / 1 | 12% / 20% |
+| `pet.fetch` | Entrega o loot buscado ao herói | `Clink` 1,5 kHz → moedinha caindo no chão + "plim". | 0,30 | 0,3 s / 1 | 8% / 15% |
+
 **Quem tocou a pausa:** `SfxEventRouter.ClassifyPauseOwners` olha os donos do `GameplayPause` no
 `GamePausedEvent`: Vila → `village.open`/`village.close`; painel de história → silêncio (os cues
 `story.*` falam por ele); caixa de diálogo → abre em silêncio (`npc.talk` já tocou) e fecha com
