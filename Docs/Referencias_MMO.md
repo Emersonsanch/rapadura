@@ -117,3 +117,6 @@
 - **Morrer perde XP** (pequena, reduzida pela Bênção da Romaria).
 - **Existe "fora da lei"** ao matar outro jogador fora de duelo, área PvP ou guerra de guilda.
 - **Sistema de Procurado, como no faroeste:** cartaz com recompensa que cresce a cada morte; quem derrota o procurado ganha a recompensa; guardas, lojas mais caras e queda de item maior enquanto procurado; a marca some com o tempo ou com fiança na cadeia da cidade; o servidor bloqueia recompensas combinadas entre amigos/mesma conta.
+- **Caça automática ("Ajudante de Caça"):** só com o jogo aberto, até 1 h/dia, mapas 10+ níveis abaixo, nunca chefes/eventos/PvP, metade da XP e do loot.
+- **Fôlego diário:** 3 h com +30%, até 5 h normal, depois −50% com lembrete; recupera descansando; nunca bloqueia.
+- **Facções:** Bandeirinhas do Sol × Vaga-lumes da Lua (nível 20, troca a cada 2 semanas), PvP só nas Terras de Disputa e em eventos.

@@ -1611,7 +1611,10 @@ frontal + lateral + traseira de cada personagem para servir como referência par
   - **Morrer perde XP** (porcentagem pequena do nível; a Bênção da Romaria reduz a perda).
   - **Existe "fora da lei"**: quem mata outro jogador sem ser em duelo/área PvP/guerra de guilda vira fora da lei.
 - [ ] **Sistema de Procurado (estilo faroeste)** — pedido do usuário: ao matar outro jogador, aparece um cartaz "PROCURADO" com o rosto e o nome nas cidades e no quadro de avisos, com uma recompensa em ouro que sobe a cada nova morte causada. Qualquer jogador (ou caçador de recompensa) que derrotar o procurado recebe a recompensa. Enquanto procurado: nome vermelho, guardas da cidade não deixam entrar na zona segura (ou o prendem por um tempo), lojas cobram mais, chance de queda de item maior que 9%. A marca some com o tempo jogado sem matar ninguém, ou pagando a fiança na delegacia/cadeia da cidade. Recompensa também pode ser oferecida por quem foi morto (tirando do próprio ouro). Tudo validado no servidor, com proteções contra "combinar" mortes para farmar recompensa (mesma conta, mesmo IP, amigos repetidos).
-- [ ] 🙋 Ainda em aberto: caça automática, fôlego diário, facções do servidor.
+- ✅ Decididas pelo Claude a pedido do usuário (2026-10-29):
+  - **Caça automática ("Ajudante de Caça") limitada:** só online e com o jogo aberto (nada de caçar offline); até 1 hora por dia; só em mapas pelo menos 10 níveis abaixo do jogador; nunca em chefes, eventos, segredos ou PvP; rende metade da XP e do loot; para sozinho se a mochila encher ou a vida ficar baixa.
+  - **Fôlego diário ligado:** as primeiras 3 horas do dia rendem +30% de XP e loot ("fôlego cheio"); de 3 a 5 horas fica normal; depois de 5 horas cai para −50%, com lembrete gentil "Hora de descansar, a Vó Zefa chamou para o café". O fôlego volta descansando (1 hora offline recupera 1 hora de fôlego cheio). Nunca bloqueia o jogo.
+  - **Duas facções do servidor, ligadas ao dia e à noite:** **Bandeirinhas do Sol** (dia, cores amarelo/vermelho, símbolo do Cristal do Sol) e **Vaga-lumes da Lua** (noite, azul/prata, símbolo da lua). Escolha a partir do nível 20 com a Vó Zefa; troca com espera de 2 semanas e perda dos pontos. Ranking semanal, recompensas cosméticas e títulos. PvP entre facções só em "Terras de Disputa" marcadas e em eventos próprios; nas cidades e mapas comuns todos são amigos.
 
 ---
 
