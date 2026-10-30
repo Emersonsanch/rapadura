@@ -46,13 +46,25 @@ namespace Rapadura.Editor
             string dir = Path.GetDirectoryName(sourcePath);
             string outPath = Path.Combine(dir, smr.sharedMesh.name + "_NoPedestal.asset").Replace('\\', '/');
 
+            // Overwrite in place when the asset exists: deleting and recreating it would give it a new
+            // GUID and break every prefab variant / scene override that points at the cleaned mesh.
             Mesh existing = AssetDatabase.LoadAssetAtPath<Mesh>(outPath);
             if (existing != null)
             {
-                AssetDatabase.DeleteAsset(outPath);
+                EditorUtility.CopySerialized(cleaned, existing);
+                Object.DestroyImmediate(cleaned);
+                cleaned = existing;
+            }
+            else
+            {
+                AssetDatabase.CreateAsset(cleaned, outPath);
             }
 
-            AssetDatabase.CreateAsset(cleaned, outPath);
+            // Ship state right away (the 29 MB Joaquim_NoPedestal of 2026-10 was saved uncompressed and
+            // readable: float32 position/normal/tangent/UV + skin weights for 304k vertices).
+            bool keepTangents = !(AssetImporter.GetAtPath(sourcePath) is ModelImporter sourceImporter)
+                || MeshImportSettingsApplier.ModelNeedsTangents(sourcePath, sourceImporter);
+            MeshImportSettingsApplier.FinalizeCleanedMesh(cleaned, keepTangents);
             AssetDatabase.SaveAssets();
 
             smr.sharedMesh = cleaned;
@@ -64,9 +76,8 @@ namespace Rapadura.Editor
         /// <summary>
         /// Removes triangles fully below <paramref name="heightThreshold"/> (mesh-local Y) and
         /// returns a new Mesh preserving vertices/normals/uvs/tangents/bone weights/bindposes so
-        /// skinning keeps working. Vertex buffers are left un-compacted (unused verts stay in the
-        /// buffer) since removing them would require remapping every index — the memory cost is
-        /// negligible next to the correctness risk.
+        /// skinning keeps working. Vertices no kept triangle uses are compacted out
+        /// (<see cref="MeshImportSettingsApplier.BuildCompacted"/> remaps every index and channel).
         /// </summary>
         public static Mesh RemovePedestal(Mesh source, float heightThreshold, out int removedTriangleCount)
         {
@@ -98,7 +109,9 @@ namespace Rapadura.Editor
                 return null;
             }
 
-            var mesh = new Mesh
+            // Build on a temporary copy with only the kept triangles, then compact: the old version kept
+            // every pedestal vertex in the buffer and wrote the asset uncompressed and readable.
+            var cut = new Mesh
             {
                 name = source.name + "_NoPedestal",
                 indexFormat = source.indexFormat,
@@ -111,9 +124,12 @@ namespace Rapadura.Editor
                 boneWeights = source.boneWeights,
                 bindposes = source.bindposes,
             };
-            mesh.triangles = keptTriangles.ToArray();
-            mesh.RecalculateBounds();
+            cut.triangles = keptTriangles.ToArray();
+            cut.RecalculateBounds();
 
+            Mesh mesh = MeshImportSettingsApplier.BuildCompacted(cut, dropTangents: false, out _);
+            Object.DestroyImmediate(cut);
+            mesh.RecalculateBounds();
             return mesh;
         }
     }

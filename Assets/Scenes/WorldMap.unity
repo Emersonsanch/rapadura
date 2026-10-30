@@ -1255,7 +1255,7 @@ MonoBehaviour:
   _playerVisualRenderer: {fileID: 0}
   _previewController: {fileID: 1424999788}
   _previewRenderTexture: {fileID: 8400000, guid: c6df6d68e55572a4b93e49f6957e8d93, type: 2}
-  _continueSlots: ffffffff00000000
+  _previewBackgroundColor: {r: 0.17, g: 0.11, b: 0.07, a: 1}
   OnCharacterSelected:
     m_PersistentCalls:
       m_Calls: []
@@ -1510,10 +1510,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.UI.CharacterSelect.CharacterPreviewController
   _entries:
   - characterId: 0
-    modelPrefab: {fileID: 919132149155446097, guid: bcda14cbe5dd98a46a52986bd1a0cfa8, type: 3}
+    modelPrefab: {fileID: 8039633478880223238, guid: a1c9c794ce4d54444a86b5a7d46c0afa, type: 3}
     localPosition: {x: 0, y: 0, z: 0}
-    localEulerAngles: {x: 270, y: 180, z: 0}
-    uniformScale: 0.014
+    localEulerAngles: {x: 0, y: 180, z: 0}
+    uniformScale: 1
   - characterId: 1
     modelPrefab: {fileID: 919132149155446097, guid: 0d43d9c3c90312148b59efba29bb89ca, type: 3}
     localPosition: {x: 0, y: 0, z: 0}
@@ -1525,7 +1525,7 @@ MonoBehaviour:
     localEulerAngles: {x: 270, y: 180, z: 0}
     uniformScale: 0.014
   - characterId: 3
-    modelPrefab: {fileID: 919132149155446097, guid: ad09499982b26e0479c5d5d108360e9e, type: 3}
+    modelPrefab: {fileID: 6563173805427650862, guid: 9b772624500f3fc4a9c20df47c6c0bce, type: 3}
     localPosition: {x: 0, y: 0, z: 0}
     localEulerAngles: {x: 0, y: 180, z: 0}
     uniformScale: 1
@@ -2264,7 +2264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.UI.Menus.MainMenuController
   _settingsMenu: {fileID: 618098915}
   _creditsMenu: {fileID: 2027440462}
-  _continueSlot: 0
+  _saveLoadMenu: {fileID: 0}
   OnNewGameRequested:
     m_PersistentCalls:
       m_Calls: []

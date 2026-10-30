@@ -9533,6 +9533,7 @@ MonoBehaviour:
   _intensity: 1
   _speedSmoothing: 10
   _maxPlausibleSpeed: 25
+  _reducedMotionScale: 0.5
 --- !u!43 &388629145
 Mesh:
   m_ObjectHideFlags: 0
@@ -17443,6 +17444,7 @@ MonoBehaviour:
   _intensity: 1
   _speedSmoothing: 10
   _maxPlausibleSpeed: 25
+  _reducedMotionScale: 0.5
 --- !u!43 &664696158
 Mesh:
   m_ObjectHideFlags: 0
@@ -20997,6 +20999,7 @@ MonoBehaviour:
   _intensity: 1
   _speedSmoothing: 10
   _maxPlausibleSpeed: 25
+  _reducedMotionScale: 0.5
 --- !u!1 &785822723
 GameObject:
   m_ObjectHideFlags: 0
@@ -21099,7 +21102,7 @@ MonoBehaviour:
   _playerVisualRenderer: {fileID: 801356548}
   _previewController: {fileID: 1094200195}
   _previewRenderTexture: {fileID: 8400000, guid: c6df6d68e55572a4b93e49f6957e8d93, type: 2}
-  _continueSlots: ffffffff00000000
+  _previewBackgroundColor: {r: 0.17, g: 0.11, b: 0.07, a: 1}
   OnCharacterSelected:
     m_PersistentCalls:
       m_Calls:
@@ -21423,6 +21426,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 1f8fe44976abdb04bba00e34906d5189, type: 2}
+    - target: {fileID: 8111781155169087978, guid: 004a5682395244b45b3aed3008427cba, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: 150eb22187989b4498d3840861052f5a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21467,6 +21474,10 @@ MonoBehaviour:
   _fallbackWalkClipSpeed: 2.5
   _fallbackRunClipSpeed: 5.5
   _strideTuning: 1
+  _speedDampTime: 0.1
+  _turnDampTime: 0.12
+  _verticalDampTime: 0.05
+  _landingHold: 0.12
   _disableRootMotion: 1
 --- !u!1 &805839156
 GameObject:
@@ -28772,10 +28783,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.UI.CharacterSelect.CharacterPreviewController
   _entries:
   - characterId: 0
-    modelPrefab: {fileID: 919132149155446097, guid: bcda14cbe5dd98a46a52986bd1a0cfa8, type: 3}
+    modelPrefab: {fileID: 8039633478880223238, guid: a1c9c794ce4d54444a86b5a7d46c0afa, type: 3}
     localPosition: {x: 0, y: 0, z: 0}
-    localEulerAngles: {x: 270, y: 180, z: 0}
-    uniformScale: 0.014
+    localEulerAngles: {x: 0, y: 180, z: 0}
+    uniformScale: 1
   - characterId: 1
     modelPrefab: {fileID: 919132149155446097, guid: 0d43d9c3c90312148b59efba29bb89ca, type: 3}
     localPosition: {x: 0, y: 0, z: 0}
@@ -28787,7 +28798,7 @@ MonoBehaviour:
     localEulerAngles: {x: 270, y: 180, z: 0}
     uniformScale: 0.014
   - characterId: 3
-    modelPrefab: {fileID: 919132149155446097, guid: ad09499982b26e0479c5d5d108360e9e, type: 3}
+    modelPrefab: {fileID: 6563173805427650862, guid: 9b772624500f3fc4a9c20df47c6c0bce, type: 3}
     localPosition: {x: 0, y: 0, z: 0}
     localEulerAngles: {x: 0, y: 180, z: 0}
     uniformScale: 1
@@ -36228,6 +36239,7 @@ MonoBehaviour:
   _intensity: 1
   _speedSmoothing: 10
   _maxPlausibleSpeed: 25
+  _reducedMotionScale: 0.5
 --- !u!1 &1393795896
 GameObject:
   m_ObjectHideFlags: 0
@@ -40636,6 +40648,8 @@ MonoBehaviour:
   _directionTurnSpeed: 900
   _reversalAngle: 150
   _reversalSpeedKept: 0.35
+  _turnBrakeAngle: 110
+  _turnBrakeSpeedKept: 0.6
   _turnSpeedMoving: 720
   _turnSpeedStopped: 1000
   _destinationSmoothing: 0.12
@@ -40754,6 +40768,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   _balance: {fileID: 0}
   _turnSpeedDegPerSec: 540
+  _strikeDelayFallback: 0.22
 --- !u!114 &1560329240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40789,54 +40804,207 @@ MonoBehaviour:
   _visualRoot: {fileID: 801356549}
   _motor: {fileID: 0}
   _renderer: {fileID: 801356548}
+  _profile:
+    label: Default
+    weight: 1
+    accelerationTime: 0.16
+    decelerationTime: 0.12
+    accelerationCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1.6
+        inSlope: 0
+        outSlope: -1.2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0.55
+        inSlope: -0.6
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    directionTurnSpeed: 900
+    turnSpeedMoving: 720
+    turnSpeedStopped: 1000
+    turnBrakeAngle: 110
+    turnBrakeSpeedKept: 0.6
+    leanByAcceleration:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 8
+        value: 5
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 30
+        value: 12
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    turnLeanGain: 0.8
+    bobAmplitude: 0.025
+    torsoCounterTwist: 5
+    armSwingDegrees: 8
+    breathRate: 0.28
+    breathDegrees: 1.6
+    weightShiftDegrees: 1.2
+    weightShiftHip: 0.015
+    weightShiftPeriod: 5
+    fidgetDegrees: 1
+    fidgetRate: 0.6
+    glanceInterval: 5
+    glanceYaw: 35
+    glanceHold: 0.9
+    attackArmCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.18
+        value: 0.25
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.4
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.5
+        value: 0.35
+        inSlope: -8
+        outSlope: -8
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.6
+        value: 0.12
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attackRecoverTime: 0.28
+    attackArmDegrees: 110
+    attackTwistDegrees: 22
+    attackLunge: 0.3
+    takeoffSquash: 0.04
+    landingSquash: 0.06
+    landingSquashByFallSpeed:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 2
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 5
+        value: 0.55
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 10
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    landingDip: 0.1
+    airTuck: 0.12
+    springFrequency: 2.8
+    springDamping: 0.55
+    overlapGain: 1
+    flinchScale: 1
+  _footIK: 1
   _bobAmplitude: 0.02
   _leanDegrees: 16
   _poseSmoothing: 12
   _stepLength: 0.6
   _footfallSquash: 0.05
   _swayDegrees: 3
-  _accelLeanGain: 1.2
-  _turnLeanGain: 0.8
   _maxLeanPitch: 12
   _maxLeanRoll: 10
   _runLeanDegrees: 4
-  _breathDegrees: 1.6
-  _breathRate: 0.28
+  _turnLeadDegrees: 12
   _breathScale: 0.012
-  _weightShiftDegrees: 1.2
   _headLookMaxYaw: 65
   _headLookSharpness: 8
   _headLookTargetRange: 14
-  _attackLungeDistance: 0.3
-  _attackSquash: 0.15
-  _attackDuration: 0.18
-  _attackCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _strikeDuration: 0.36
-  _strikeArmDegrees: 115
-  _strikeTwistDegrees: 22
   _castArmDegrees: 100
   _castArchDegrees: 7
   _castRise: 0.1
@@ -40849,6 +41017,10 @@ MonoBehaviour:
   _hitFlashColor: {r: 1, g: 0.15, b: 0.15, a: 1}
   _flinchDegrees: 11
   _flinchDuration: 0.28
+  _hitKickDegrees: 14
+  _squashFrequency: 4
+  _squashDamping: 0.45
+  _reducedMotionScale: 0.5
   _deathFallDegrees: 80
   _deathFallDuration: 0.6
   _deathSinkDelay: 1.1
@@ -40869,35 +41041,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Player.PlayerVisualSwapper
   _entries:
   - characterId: 0
-    modelPrefab: {fileID: 919132149155446097, guid: 004a5682395244b45b3aed3008427cba, type: 3}
+    modelPrefab: {fileID: 8039633478880223238, guid: a1c9c794ce4d54444a86b5a7d46c0afa, type: 3}
     animatorController: {fileID: 9100000, guid: 1f8fe44976abdb04bba00e34906d5189, type: 2}
     localPosition: {x: 0, y: 0.32, z: 0}
     localEulerAngles: {x: 0, y: 0, z: 0}
     uniformScale: 1.91
+    motionProfile: {fileID: 0}
   - characterId: 1
     modelPrefab: {fileID: 919132149155446097, guid: 0d43d9c3c90312148b59efba29bb89ca, type: 3}
     animatorController: {fileID: 9100000, guid: 4d4089e81fd133a45b19770383ea44de, type: 2}
     localPosition: {x: 0, y: -10.56876, z: 0}
     localEulerAngles: {x: 0, y: 0, z: 0}
     uniformScale: 1.292554
+    motionProfile: {fileID: 0}
   - characterId: 3
-    modelPrefab: {fileID: 919132149155446097, guid: ad09499982b26e0479c5d5d108360e9e, type: 3}
+    modelPrefab: {fileID: 6563173805427650862, guid: 9b772624500f3fc4a9c20df47c6c0bce, type: 3}
     animatorController: {fileID: 9100000, guid: 8cfd3f14ab8663143a17c60250aaca6d, type: 2}
     localPosition: {x: 0, y: -26.31708, z: 0}
     localEulerAngles: {x: 0, y: 0, z: 0}
     uniformScale: 1.498905
+    motionProfile: {fileID: 0}
   - characterId: 4
     modelPrefab: {fileID: 919132149155446097, guid: ded4cf3029bb17b448a895953a3d0273, type: 3}
     animatorController: {fileID: 9100000, guid: f22d921e6ac374740b8f71a1d1e1c3d1, type: 2}
     localPosition: {x: 0, y: -12.37737, z: 0}
     localEulerAngles: {x: 0, y: 0, z: 0}
     uniformScale: 1.339324
+    motionProfile: {fileID: 0}
   - characterId: 2
     modelPrefab: {fileID: 919132149155446097, guid: 7f5731fa981aa6d4bb61a96f7a821f90, type: 3}
     animatorController: {fileID: 0}
     localPosition: {x: 0, y: 22.4, z: 0}
     localEulerAngles: {x: -90, y: 0, z: 0}
     uniformScale: 1.1
+    motionProfile: {fileID: 0}
   _visualRoot: {fileID: 801356549}
   _speedDriver: {fileID: 801356551}
   _proceduralAnimator: {fileID: 1560329241}
@@ -46381,6 +46558,7 @@ MonoBehaviour:
   _intensity: 1
   _speedSmoothing: 10
   _maxPlausibleSpeed: 25
+  _reducedMotionScale: 0.5
 --- !u!1 &1778062292
 GameObject:
   m_ObjectHideFlags: 0
