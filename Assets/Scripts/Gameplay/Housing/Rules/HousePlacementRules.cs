@@ -88,9 +88,10 @@ namespace Rapadura.Gameplay.Housing
 
             int w = Math.Max(1, item.FootprintX);
             int h = Math.Max(1, item.FootprintY);
-            if (layer == HouseLayer.Yard && (item.Placement & HousePlacement.Yard) == 0)
+            if (layer == HouseLayer.Yard && (item.Placement & HousePlacement.Floor) != 0)
             {
-                // An indoor piece allowed outside: its 0.5 m footprint on 1 m cells.
+                // An indoor piece allowed outside (Floor | Yard: benches, log tables): its footprint is authored in
+                // 0.5 m interior cells, so it takes half as many 1 m yard cells. Yard-only pieces are authored in 1 m.
                 w = Math.Max(1, (w + 1) / 2);
                 h = Math.Max(1, (h + 1) / 2);
             }

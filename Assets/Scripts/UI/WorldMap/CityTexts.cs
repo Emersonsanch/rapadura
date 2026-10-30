@@ -89,6 +89,8 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.ForjaTonho, "Master Tonho's Forge", "Forja do Mestre Tonho"),
                 Shop(CityShopCatalog.LamparinasBenedita, "Benedita's Lamps", "Lamparinas da Benedita"),
                 Shop(CityShopCatalog.MascateBento, "Old Bento the Peddler", "Mascate Seu Bento"),
+                // Same text as MountTexts.HarasShopName (the mounts' own table registers it too).
+                Shop(CityShopCatalog.HarasVila, "Haras da Vila (Seu Zé)", "Haras da Vila (Seu Zé)"),
             };
 
             // ---- Cities ----
@@ -129,6 +131,14 @@ namespace Rapadura.UI.WorldMap
                 ("No, the scale doesn't need a motor, Ícaro. It has worked for forty years.", "Não, a balança não precisa de motor, Ícaro. Ela funciona há quarenta anos."),
                 ("Lavine, try this cajá. If you make a face, it's a good one.", "Lavine, prova esse cajá. Se fizer careta, é porque está bom."),
                 ("Today's market, today's prices: tomorrow the stall is different.", "Feira de hoje, preço de hoje: amanhã a barraca é outra."));
+
+            AddResident(entries, "ze_haras", "Seu Zé of the Haras", "Seu Zé do Haras",
+                ("A guardian needs a mount that doesn't spook. The big dog stands firm by your shield, Joaquim.", "Guardião precisa de montaria que não se assusta. O cachorrão fica firme do lado do seu escudo, Joaquim."),
+                ("Bless my pony, Maria? Your grandpa Chico rode with me for thirty years and never fell.", "Benze meu pônei, Maria? Seu avô Chico andou comigo trinta anos de estrada e nunca caiu."),
+                ("The eldest picks first, Maithe. Look at the legs, not the coat: that's how Chico taught me.", "A mais velha escolhe primeiro, Maithe. Olha as pernas, não o pelo: foi assim que o Chico me ensinou."),
+                ("No, Ícaro, a donkey doesn't need a motor. He has a temper, and that's enough.", "Não, Ícaro, jumento não precisa de motor. Ele tem é gênio, e isso já basta."),
+                ("Lavine, the pony likes rapadura as much as you do. Give him half and he's yours.", "Lavine, o pônei gosta de rapadura que nem você. Dá a metade e ele é seu."),
+                ("Pony, big dog or donkey: a good mount knows the road home on its own.", "Pônei, cachorrão ou jumento: montaria boa sabe sozinha o caminho de casa."));
 
             AddResident(entries, "bento", null, null,
                 ("A guardian among my customers! I've got things that can take a beating, son.", "Um guardião na minha freguesia! Tenho coisa que aguenta pancada, meu filho."),

@@ -126,10 +126,14 @@ namespace Rapadura.UI.WorldMap
         // Pure rules (tested)
         // ------------------------------------------------------------------
 
-        /// <summary>Whether the "Nova Jornada+" button should be on screen (same gating as the "Vila" button, plus the offer).</summary>
+        /// <summary>
+        /// Whether the "Nova Jornada+" button should be on screen: the city button's gating, plus the offer, and only in
+        /// Vó Zefa's village (she makes the offer; the other cities have a hub too but not her).
+        /// </summary>
         public static bool ShouldShowOffer(bool canBegin, bool hudVisible, bool tokenIdle, bool paused, bool dialogueActive, BiomeType? currentRegion)
         {
-            return canBegin && VillageHubButton.ShouldShow(hudVisible, tokenIdle, paused, dialogueActive, currentRegion);
+            return canBegin && VillageNpcCatalog.IsVillageRegion(currentRegion)
+                && VillageHubButton.ShouldShow(hudVisible, tokenIdle, paused, dialogueActive, currentRegion);
         }
 
         /// <summary>"Jornada+2" for a Nova Jornada+ cycle; null on the first campaign (no badge).</summary>

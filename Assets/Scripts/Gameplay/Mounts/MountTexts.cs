@@ -237,6 +237,14 @@ namespace Rapadura.Gameplay.Mounts
                 entries.Add(new LocalizationEntry("mount." + m.Id + ".source", m.SourceEn, m.SourcePt));
             }
 
+            // The Haras's items (Resources/Items): pt-BR = the asset text, like RefineTexts / TachoTexts do for theirs.
+            entries.Add(new LocalizationEntry(Content.ContentText.ItemNameKey(MountCareRules.FeedItemId), "Haras Feed", "Ração do Haras"));
+            entries.Add(new LocalizationEntry(Content.ContentText.ItemDescriptionKey(MountCareRules.FeedItemId),
+                "Seu Zé's corn-and-grass feed. Every mount eats it: +40 fullness.", "Ração de milho e capim do Seu Zé. Toda montaria come: +40 de saciedade."));
+            AddWhistle(entries, MountCatalog.PonyWhistle, "Pé-de-Pano Pony Whistle", "Apito do Pônei Pé-de-Pano", "Pé-de-Pano Pony", "Pônei Pé-de-Pano");
+            AddWhistle(entries, MountCatalog.BigDogWhistle, "Paçoca the Big Dog Whistle", "Apito do Cachorrão Paçoca", "Paçoca the Big Dog", "Cachorrão Paçoca");
+            AddWhistle(entries, MountCatalog.PackDonkeyWhistle, "Pack Donkey Whistle", "Apito do Jegue Carregador", "the Pack Donkey", "Jegue Carregador");
+
             entries.Add(new LocalizationEntry("mount.mount_pony.favorite_line", "Pé-de-Pano, run, Maithe is watching!", "Pé-de-Pano, corre que a Maithe tá olhando!"));
             foreach (var a in Abilities)
             {
@@ -245,6 +253,14 @@ namespace Rapadura.Gameplay.Mounts
             }
 
             return entries;
+        }
+
+        private static void AddWhistle(List<LocalizationEntry> entries, string itemId, string nameEn, string namePt, string mountEn, string mountPt)
+        {
+            entries.Add(new LocalizationEntry(Content.ContentText.ItemNameKey(itemId), nameEn, namePt));
+            entries.Add(new LocalizationEntry(Content.ContentText.ItemDescriptionKey(itemId),
+                $"Bamboo whistle from Seu Zé's Haras. Whoever buys it takes {mountEn} home.",
+                $"Apito de taquara do Haras do Seu Zé. Quem compra leva o {mountPt} para casa."));
         }
 
         private static Dictionary<string, string> _fallbackByKey;

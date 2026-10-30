@@ -284,7 +284,17 @@ namespace Rapadura.Tests
             foreach (CityShopSpec shop in CityShopCatalog.Shops)
             {
                 Assert.AreEqual(shop.Entries.Count, shop.Entries.Select(e => e.ItemId).Distinct().Count(), $"{shop.ShopId} lists an item twice");
-                Assert.That(shop.RotatingSlots, Is.InRange(1, shop.Entries.Count(e => e.Rotating)), shop.ShopId);
+                int rotatingEntries = shop.Entries.Count(e => e.Rotating);
+                if (rotatingEntries > 0)
+                {
+                    Assert.That(shop.RotatingSlots, Is.InRange(1, rotatingEntries), shop.ShopId);
+                }
+                else
+                {
+                    // A fixed catalog (the Haras da Vila: whistles + feed, Docs/Mounts.md §3) has nothing to rotate.
+                    Assert.AreEqual(0, shop.RotatingSlots, $"{shop.ShopId} has slots but nothing rotating");
+                }
+
                 foreach (CityShopEntry entry in shop.Entries)
                 {
                     ItemDefinition item = ItemDatabase.GetById(entry.ItemId);
@@ -293,7 +303,8 @@ namespace Rapadura.Tests
                     Assert.AreNotEqual("item_gold_coin", entry.ItemId);
                     Assert.That(entry.Price, Is.InRange(Mathf.FloorToInt(item.Value * 0.8f), Mathf.CeilToInt(item.Value * 1.25f)),
                         $"{shop.ShopId}: {entry.ItemId} at {entry.Price} vs value {item.Value} (Docs/Balance, Cidades)");
-                    Assert.Greater(entry.Stock, 0, "themed shops have a daily stock");
+                    // A daily/weekly stock, or -1 = never runs out (ShopInventoryItem): the Haras's whistles and feed.
+                    Assert.IsTrue(entry.Stock > 0 || entry.Stock == -1, $"{shop.ShopId}: {entry.ItemId} stock {entry.Stock}");
                 }
 
                 if (!shop.IsRoaming)

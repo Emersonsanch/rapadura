@@ -46,6 +46,13 @@ namespace Rapadura.Tests
 
         private static IEnumerable<ProceduralEnemyKind> Kinds() => ProceduralEnemyModels.AllKinds;
 
+        // Declared before RequiredParts: static fields initialise in text order (after it, the table got null).
+        private static readonly string[] WolfParts =
+        {
+            ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.EarLeft, ProceduralEnemyParts.EarRight, ProceduralEnemyParts.Tail, "Tail_1",
+            "Leg_FL", "Shin_FL", "Foot_FL", "Leg_FR", "Shin_FR", "Foot_FR", "Leg_HL", "Shin_HL", "Foot_HL", "Leg_HR", "Shin_HR", "Foot_HR",
+        };
+
         private static readonly Dictionary<ProceduralEnemyKind, string[]> RequiredParts = new Dictionary<ProceduralEnemyKind, string[]>
         {
             { ProceduralEnemyKind.BatSwarm, new[] { ProceduralEnemyParts.Swarm, "Bat_0", ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight } },
@@ -77,12 +84,6 @@ namespace Rapadura.Tests
                 ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_FR", "Shin_FR", "Foot_FR", "Leg_HL", "Shin_HL", "Foot_HL", "Leg_HR", "Shin_HR", "Foot_HR" } },
             { ProceduralEnemyKind.Potoo, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Branch,
                 ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight, ProceduralEnemyParts.Tail } },
-        };
-
-        private static readonly string[] WolfParts =
-        {
-            ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.EarLeft, ProceduralEnemyParts.EarRight, ProceduralEnemyParts.Tail, "Tail_1",
-            "Leg_FL", "Shin_FL", "Foot_FL", "Leg_FR", "Shin_FR", "Foot_FR", "Leg_HL", "Shin_HL", "Foot_HL", "Leg_HR", "Shin_HR", "Foot_HR",
         };
 
         /// <summary>Legs per kind; every one a Leg_ (hip) → Shin_ (knee) → Foot_ chain for ProceduralLegLocomotion.</summary>

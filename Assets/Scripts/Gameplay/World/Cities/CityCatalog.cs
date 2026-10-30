@@ -94,6 +94,8 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("cida", CityShopCatalog.ArmarinhoCida, "dialogue.forest_rezadeira.name"),
                     new CityResidentSpec("lazaro", CityShopCatalog.MerceariaLazaro),
                     new CityResidentSpec("nenem", CityShopCatalog.FeiraLivre),
+                    // Seu Zé of the Haras (Docs/Mounts.md §3), Vô Chico's old road friend: keeps the mount whistles.
+                    new CityResidentSpec("ze_haras", CityShopCatalog.HarasVila),
                 },
                 new List<string> { CityShopCatalog.GeneralStore, CityShopCatalog.MerceariaLazaro, CityShopCatalog.ArmarinhoCida, CityShopCatalog.FeiraLivre, CityShopCatalog.HarasVila },
                 hasGrandmaServices: true, hasStoryVillagers: true),

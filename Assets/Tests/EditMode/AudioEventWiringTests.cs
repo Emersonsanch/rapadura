@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Rapadura.Audio;
 using Rapadura.Core.Audio;
@@ -16,6 +17,7 @@ using Rapadura.Gameplay.World.Biomes;
 using Rapadura.Gameplay.World.Map;
 using Rapadura.UI.Menus;
 using UnityEngine;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
@@ -40,9 +42,27 @@ namespace Rapadura.Tests
 
         private static readonly string[] VolumeKeys = { "Audio.Volume.Master", "Audio.Volume.Music", "Audio.Volume.Sfx", "Audio.Volume.Ui" };
 
+        // These tests drive real AudioSources but only assert on routing logic, never on what reaches
+        // the speakers. On machines whose output device is asleep / switching, Unity's FMOD layer logs
+        // "FMOD failed to switch back to normal output ... Error initializing output device" from
+        // whichever test happens to touch audio. That one message is environmental and is ignored;
+        // every other error / assert / exception still fails the test (checked in TearDown).
+        private static readonly Regex FmodDeviceNoise = new Regex(@"^FMOD failed to switch back to normal output|Error initializing output device", RegexOptions.Compiled);
+        private readonly List<string> _unexpectedLogs = new List<string>();
+
+        private void OnLogThreaded(string message, string stackTrace, LogType type)
+        {
+            if (type != LogType.Error && type != LogType.Assert && type != LogType.Exception) return;
+            if (message != null && FmodDeviceNoise.IsMatch(message)) return;
+            lock (_unexpectedLogs) _unexpectedLogs.Add($"[{type}] {message}");
+        }
+
         [SetUp]
         public void SetUp()
         {
+            _unexpectedLogs.Clear();
+            Application.logMessageReceivedThreaded += OnLogThreaded;
+            LogAssert.ignoreFailingMessages = true;
             EventBus.Clear();
             foreach (string key in VolumeKeys) PlayerPrefs.DeleteKey(key);
             PlayerPrefs.DeleteKey(HapticsService.EnabledKey);
@@ -69,6 +89,13 @@ namespace Rapadura.Tests
             foreach (string key in VolumeKeys) PlayerPrefs.DeleteKey(key);
             PlayerPrefs.DeleteKey(HapticsService.EnabledKey);
             EventBus.Clear();
+
+            Application.logMessageReceivedThreaded -= OnLogThreaded;
+            string[] unexpected;
+            lock (_unexpectedLogs) unexpected = _unexpectedLogs.ToArray();
+            _unexpectedLogs.Clear();
+            if (unexpected.Length > 0)
+                Assert.Fail("Unhandled log message(s): " + string.Join(" | ", unexpected));
         }
 
         private SfxEventRouter CreateRouter(SfxEventMap map = null)

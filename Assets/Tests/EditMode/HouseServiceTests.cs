@@ -217,7 +217,9 @@ namespace Rapadura.Tests
         public void Screen_Helpers()
         {
             Assert.AreEqual(new Vector2Int(4, 5), HouseScreenController.CenteredOrigin(new Vector2Int(5, 5), 3, 1));
-            Assert.AreEqual(new Vector2Int(5, 4), HouseScreenController.CenteredOrigin(new Vector2Int(5, 5), 2, 2));
+            // Even sizes: the pointed cell is the lower-left of the central cells, on both axes alike.
+            Assert.AreEqual(new Vector2Int(5, 5), HouseScreenController.CenteredOrigin(new Vector2Int(5, 5), 2, 2));
+            Assert.AreEqual(new Vector2Int(4, 4), HouseScreenController.CenteredOrigin(new Vector2Int(5, 5), 4, 3));
             HouseItemDefinition bench = HouseCatalog.Get("casa_sala_002");
             Assert.AreEqual(HouseLayer.Yard, HouseScreenController.LayerFor(bench, HouseLayer.Yard), "a bench may go outside");
             Assert.AreEqual(HouseLayer.Floor, HouseScreenController.LayerFor(bench, HouseLayer.Wall));

@@ -298,13 +298,17 @@ namespace Rapadura.Gameplay.Refining
             }
         }
 
-        /// <summary>Resolves a roll already drawn: success when <c>roll &lt; chance</c>.</summary>
+        /// <summary>
+        /// Resolves a roll already drawn: success when <c>roll &lt; chance</c>. At the cap there is nothing to attempt
+        /// (<see cref="Check"/> answers <see cref="RefineCheck.MaxLevel"/>), so a stray call is a no-op, never a drop.
+        /// </summary>
         public static RefineAttempt Resolve(int level, bool withCharm, double roll)
         {
             level = ClampLevel(level);
             float chance = ChanceFor(level, withCharm);
-            bool success = level < MaxLevel && roll < chance;
-            int to = success ? level + 1 : FailureLevel(level);
+            bool atCap = level >= MaxLevel;
+            bool success = !atCap && roll < chance;
+            int to = success ? level + 1 : atCap ? level : FailureLevel(level);
             return new RefineAttempt(level, to, StoneFor(level), chance, GoldCostFor(level), withCharm && CanFail(level), roll, success);
         }
 

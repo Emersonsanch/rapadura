@@ -369,11 +369,15 @@ namespace Rapadura.Tests
             EnemyController enemy = NewEnemy("enemy_test_spider", out _);
             Assert.AreEqual(EnemyMotionArchetype.Arthropod, enemy.Definition.MotionArchetype);
             GameObject visual = Primitive(enemy.transform);
+            // "Leg_<id>" parts are jointed legs now: the stepping engine (ProceduralLegLocomotion) owns them and the
+            // idle twitch stands down (LegGaitTests / ProceduralLegLocomotionTests cover that). The twitch is for loose
+            // leg pieces under any other leg name ("perna", "pata", "leg" without the Leg_ prefix).
             GameObject leg = Primitive(visual.transform);
-            leg.name = "Leg_L1";
+            leg.name = "perna_L1";
             EnemyProceduralAnimator animator = enemy.gameObject.AddComponent<EnemyProceduralAnimator>();
             animator.SetVisualRoot(visual.transform);
             Assert.AreEqual(1, animator.LegCount);
+            Assert.IsNull(visual.GetComponent<Rapadura.Gameplay.Locomotion.ProceduralLegLocomotion>(), "no jointed legs, no stepping rig");
 
             Quaternion rest = leg.transform.localRotation;
             float maxAngle = 0f;

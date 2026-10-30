@@ -284,6 +284,17 @@ namespace Rapadura.Gameplay.Housing
                         displaced++;
                     }
                 }
+
+                // Back to the saved order (validation went parents-first), so capture → restore → capture is stable.
+                var savedOrder = new Dictionary<int, int>();
+                for (int i = 0; i < placed.Length; i++)
+                {
+                    if (placed[i] != null && !savedOrder.ContainsKey(placed[i].instanceId)) savedOrder[placed[i].instanceId] = i;
+                }
+
+                List<HousePlacedData> ordered = _placed.OrderBy(p => savedOrder.TryGetValue(p.instanceId, out int index) ? index : int.MaxValue).ToList();
+                _placed.Clear();
+                _placed.AddRange(ordered);
             }
 
             _nextInstanceId = Math.Max(Math.Max(1, nextInstanceId), maxId + 1);
