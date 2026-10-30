@@ -1516,6 +1516,7 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Loot raro — raridades + afixos procedurais; bosses têm loot garantido e drop raro com afixos (`BossBonusRules`, 2026-10-21)
 - [ ] Bosses mundiais
 - [x] Ciclo dia/noite — `TimeOfDayManager` + `DayNightLighting` (salvo, pausa junto com o jogo, noite aumenta encontros) — 2026-10-21
+- [ ] **Bichos diferentes de dia e de noite** (pedido do usuário, 2026-10-29; em andamento): tabela de bichos por região e por período (madrugada/dia/tarde/noite), respawn em ondas durante o encontro, noite mais perigosa (ondas maiores e mais rápidas, bichos com mais vida/dano e mais bravos, mas com loot e XP melhores) e aviso no HUD. Primeiro com variantes noturnas dos bichos atuais (olhos brilhando, tom escuro); depois espécies só da noite do folclore (coruja-rasga-mortalha, morcego-vampiro gigante, enxame de vaga-lumes-de-fogo, porcos-do-mato da Caipora, Lobisomem-do-sertão como mini-chefe raro). Design em `Docs/DayNight.md`.
 - [x] Clima dinâmico — `WeatherSystem` + `WeatherVisuals` (chuva, neblina, tempestade de areia, neve por bioma, partículas em pool com limites para mobile) — 2026-10-21; em 2026-10-22 (`49b91fa`) chuva/neve/areia viraram riscos finos que seguem o jogador (antes um quad esticado)
 - [ ] Segredos e áreas ocultas
 - [ ] New Game+
