@@ -4,6 +4,7 @@ using Rapadura.Environment;
 using Rapadura.Gameplay.Environment;
 using Rapadura.Gameplay.Player;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Rapadura.Tests
 {
@@ -260,7 +261,15 @@ namespace Rapadura.Tests
             var hull = colliders[0] as MeshCollider;
             Assert.IsNotNull(hull);
             Assert.IsTrue(hull.convex);
-            Assert.AreSame(rock.GetComponent<MeshFilter>().sharedMesh, hull.sharedMesh, "fitted to the visual mesh");
+            // Dense rocks are cooked from their extreme points (PhysX's 256-polygon hull limit), so the hull mesh is a
+            // reduced copy whose bounds still match the visual mesh.
+            Mesh visual = rock.GetComponent<MeshFilter>().sharedMesh;
+            Assert.IsNotNull(hull.sharedMesh);
+            Assert.LessOrEqual(hull.sharedMesh.vertexCount, 64, "hull cooked from a small point cloud");
+            Assert.AreEqual(visual.bounds.size.x, hull.sharedMesh.bounds.size.x, visual.bounds.size.x * 0.15f, "fitted to the visual mesh (x)");
+            Assert.AreEqual(visual.bounds.size.y, hull.sharedMesh.bounds.size.y, visual.bounds.size.y * 0.15f, "fitted to the visual mesh (y)");
+            Assert.AreEqual(visual.bounds.size.z, hull.sharedMesh.bounds.size.z, visual.bounds.size.z * 0.15f, "fitted to the visual mesh (z)");
+            LogAssert.NoUnexpectedReceived();
         }
 
         [Test]

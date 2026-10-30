@@ -273,7 +273,7 @@ namespace Rapadura.Gameplay.Environment
                 case SolidColliderShape.ConvexMesh:
                 {
                     MeshCollider hull = Only<MeshCollider>(child.gameObject);
-                    hull.sharedMesh = filters[0].sharedMesh;
+                    hull.sharedMesh = HullSourceFor(filters[0].sharedMesh);
                     hull.convex = true;
                     break;
                 }
@@ -770,6 +770,96 @@ namespace Rapadura.Gameplay.Environment
         // ------------------------------------------------------------------
         // Helpers
         // ------------------------------------------------------------------
+
+        /// <summary>Vertex budget under which a render mesh is cooked as-is into a convex hull.</summary>
+        private const int HullDirectVertexLimit = 64;
+
+        private static readonly Dictionary<Mesh, Mesh> HullSources = new Dictionary<Mesh, Mesh>();
+
+        /// <summary>
+        /// The mesh a convex <see cref="MeshCollider"/> is cooked from. Dense procedural rocks make PhysX exceed its
+        /// 256-polygon hull limit and log an error (which stops Play mode when the Console's Error Pause is on), so
+        /// above <see cref="HullDirectVertexLimit"/> vertices the hull is cooked from the mesh's extreme points in
+        /// 42 directions instead (at most 80 hull faces). Cached per source mesh.
+        /// </summary>
+        private static Mesh HullSourceFor(Mesh mesh)
+        {
+            if (mesh == null || !mesh.isReadable || mesh.vertexCount <= HullDirectVertexLimit)
+            {
+                return mesh;
+            }
+
+            if (HullSources.TryGetValue(mesh, out Mesh cached) && cached != null)
+            {
+                return cached;
+            }
+
+            Vector3[] vertices = mesh.vertices;
+            var picked = new List<Vector3>();
+            foreach (Vector3 dir in HullDirections())
+            {
+                int best = 0;
+                float bestDot = float.NegativeInfinity;
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    float dot = Vector3.Dot(vertices[i], dir);
+                    if (dot > bestDot)
+                    {
+                        bestDot = dot;
+                        best = i;
+                    }
+                }
+
+                if (!picked.Contains(vertices[best]))
+                {
+                    picked.Add(vertices[best]);
+                }
+            }
+
+            // PhysX builds the hull from the point cloud; the triangle list only has to be valid.
+            var triangles = new int[(picked.Count / 3) * 3];
+            for (int i = 0; i < triangles.Length; i++)
+            {
+                triangles[i] = i;
+            }
+
+            var hullMesh = new Mesh { name = mesh.name + "_Hull", hideFlags = HideFlags.DontSave };
+            hullMesh.SetVertices(picked);
+            hullMesh.SetTriangles(triangles, 0);
+            HullSources[mesh] = hullMesh;
+            return hullMesh;
+        }
+
+        /// <summary>12 icosahedron vertices + 30 edge midpoints, normalized: 42 well-spread directions.</summary>
+        private static List<Vector3> HullDirections()
+        {
+            float t = (1f + Mathf.Sqrt(5f)) * 0.5f;
+            var ico = new List<Vector3>
+            {
+                new Vector3(-1, t, 0), new Vector3(1, t, 0), new Vector3(-1, -t, 0), new Vector3(1, -t, 0),
+                new Vector3(0, -1, t), new Vector3(0, 1, t), new Vector3(0, -1, -t), new Vector3(0, 1, -t),
+                new Vector3(t, 0, -1), new Vector3(t, 0, 1), new Vector3(-t, 0, -1), new Vector3(-t, 0, 1),
+            };
+            var dirs = new List<Vector3>();
+            foreach (Vector3 v in ico)
+            {
+                dirs.Add(v.normalized);
+            }
+
+            float edge = (ico[0] - ico[1]).magnitude;
+            for (int a = 0; a < ico.Count; a++)
+            {
+                for (int b = a + 1; b < ico.Count; b++)
+                {
+                    if (Mathf.Abs((ico[a] - ico[b]).magnitude - edge) < 1e-3f)
+                    {
+                        dirs.Add((ico[a] + ico[b]).normalized);
+                    }
+                }
+            }
+
+            return dirs;
+        }
 
         /// <summary>The single collider of type T on <paramref name="go"/>, removing any other collider type there.</summary>
         private static T Only<T>(GameObject go) where T : Collider
