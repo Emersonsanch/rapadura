@@ -57,7 +57,7 @@ namespace Rapadura.Gameplay.PhotoMode
 
     /// <summary>
     /// The five photo poses of each cousin: Natural, Acenar, Vitória, Sentar and a signature ability pose
-    /// (Maithe "Arco tenso", Maria "Bênção da Luz", Joaquim "Guarda das Raízes", Ícaro "Engenhoca",
+    /// (Maithe "Arco tenso", Maria "Calor da Luz", Joaquim "Guarda das Raízes", Ícaro "Engenho da Luz",
     /// Lavine "Véu de Sombras"). Applied by <see cref="PhotoPoseRig"/>. Pure data, EditMode-tested.
     /// </summary>
     public static class PhotoPoseLibrary

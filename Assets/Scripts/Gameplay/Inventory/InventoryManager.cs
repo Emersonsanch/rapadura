@@ -67,8 +67,8 @@ namespace Rapadura.Gameplay.Inventory
     /// (<see cref="Columns"/> × <see cref="Rows"/>, 8 × 8 by default): every entry of <see cref="Slots"/> is one item
     /// (or stack) with a top-left cell (<see cref="InventorySlotData.gridX"/>/<see cref="InventorySlotData.gridY"/>) and a
     /// footprint from its category (<see cref="ItemFootprint"/>). The grid is the only capacity limit — an item fits only
-    /// when a free area of its footprint exists (or a plain stack of it has room). Weight is dormant data
-    /// (<see cref="GetTotalWeight"/> is informational). Everything that asks "does it fit?" goes through the shared fit API
+    /// when a free area of its footprint exists (or a plain stack of it has room). Weight never blocks a pickup: it
+    /// only slows the hero and the mount (<see cref="GetCarriedWeight"/>, <see cref="EncumbranceRules"/>). Everything that asks "does it fit?" goes through the shared fit API
     /// (<see cref="CanFit"/>, <see cref="GetFittableAmount"/>, <see cref="CanFitAll"/>, <see cref="CanFitCopy"/>), which
     /// simulates exactly what <see cref="AddItem(ItemDefinition,int)"/> would do (<see cref="BagFitSimulator"/>).
     /// Also: moving on the grid (<see cref="MoveItem"/>: move / merge / swap), splitting, "Organizar"
@@ -412,35 +412,24 @@ namespace Rapadura.Gameplay.Inventory
         }
 
         // ---------------------------------------------------------------
-        // Weight (dormant)
+        // Weight (carry load, EncumbranceRules)
         // ---------------------------------------------------------------
 
         /// <summary>
-        /// Total carried weight. Informational only since the grid bag: weight no longer limits anything (the data stays on
-        /// <see cref="ItemDefinition.Weight"/> for compatibility and a possible future encumbrance rule).
+        /// Weight of the backpack only (stacks per unit, <see cref="ItemWeightRules.UnitWeight(ItemDefinition)"/>). The grid
+        /// still decides what fits; weight only slows the hero/mount (<see cref="GetCarriedWeight"/>).
         /// </summary>
         public float GetTotalWeight()
         {
             EnsureSlotsInitialized();
-            float total = 0f;
-
-            foreach (InventorySlotData slot in _slots)
-            {
-                if (slot == null || slot.IsEmpty)
-                {
-                    continue;
-                }
-
-                ItemDefinition item = ResolveItem(slot.itemId);
-
-                if (item != null)
-                {
-                    total += item.Weight * slot.quantity;
-                }
-            }
-
-            return total;
+            return EncumbranceRules.WeightOf(_slots, ResolveItem);
         }
+
+        /// <summary>Weight of the equipped pieces.</summary>
+        public float GetEquippedWeight() => EncumbranceRules.WeightOf(_equipped.Values, ResolveItem);
+
+        /// <summary>The carry load: backpack + equipped (Tibia style; see <see cref="EncumbranceRules"/>).</summary>
+        public float GetCarriedWeight() => GetTotalWeight() + GetEquippedWeight();
 
         // ---------------------------------------------------------------
         // Add / Remove

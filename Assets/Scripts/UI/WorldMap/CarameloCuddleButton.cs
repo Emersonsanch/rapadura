@@ -15,15 +15,15 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.WorldMap
 {
     /// <summary>
-    /// "Fazer carinho" on the world map, in the village region (Vó Zefa's farm, where Caramelo lives
+    /// "Fazer carinho" on the world map, in the village region (Vó Edna's farm, where Caramelo lives
     /// between trips). Self-bootstrapping like <see cref="VillageHubButton"/>, no scene edit: added to the
     /// <see cref="WorldMapHudController"/>'s GameObject after every scene load, it injects one button into
     /// the HUD's <c>wm-action-row</c> and a small themed note under <c>wm-hud-root</c> (picking ignored).
     /// <list type="bullet">
     /// <item>Shown while the HUD is visible, the token is idle in the village, nothing holds GameplayPause, no
     /// conversation runs, and <see cref="CompanionPreferences.ShouldOfferCuddle"/> (option on, prologue seen).
-    /// Until Vó Zefa introduced him it reads "Caramelo (!)".</item>
-    /// <item>Click: <see cref="CarameloCuddle.Cuddle"/>: the first time Vó Zefa's introduction (the village beat
+    /// Until Vó Edna introduced him it reads "Ari (!)".</item>
+    /// <item>Click: <see cref="CarameloCuddle.Cuddle"/>: the first time Vó Edna's introduction (the village beat
     /// explaining why he goes with the cousins), then the current cousin's lines in turn; plus the tiny buff
     /// note (+5% speed in the next encounter) and his happy <c>pet.yip</c>.</item>
     /// </list>

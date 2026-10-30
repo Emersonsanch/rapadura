@@ -16,7 +16,7 @@ using UnityEngine;
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// "Cozinha da Vó Zefa" (<see cref="MealCatalog"/>, <see cref="CookingRules"/>, <see cref="MealService"/>,
+    /// "Forno da Vó Edna" (<see cref="MealCatalog"/>, <see cref="CookingRules"/>, <see cref="MealService"/>,
     /// <see cref="KitchenPresenter"/>): recipe validation, ingredient consumption, one meal at a time, the countdown
     /// per encounter, learning (starters, quests, Vó's lessons), save round trip and the effects on a BuffController.
     /// </summary>
@@ -67,7 +67,7 @@ namespace Rapadura.Tests
             foreach (MealRecipeSpec recipe in MealCatalog.Recipes.Where(r => !r.Starter && r.TaughtByCatchItemId == null))
             {
                 Assert.IsTrue(regionQuestIds.Contains(recipe.UnlockQuestId), $"{recipe.RecipeId}: unlock quest {recipe.UnlockQuestId} is not a region quest");
-                Assert.IsTrue(recipe.FavouriteOf.HasValue, $"{recipe.RecipeId}: no cousin to be taught by Vó Zefa");
+                Assert.IsTrue(recipe.FavouriteOf.HasValue, $"{recipe.RecipeId}: no cousin to be taught by Vó Edna");
                 Assert.IsTrue(recipe.LessonRegion.HasValue, $"{recipe.RecipeId}: lesson has no region gate");
                 RegionQuestSpec quest = RegionQuestCatalog.Quests.First(q => q.QuestId == recipe.UnlockQuestId);
                 Assert.AreEqual(recipe.LessonRegion.Value, quest.Region, $"{recipe.RecipeId}: quest and lesson open in different regions");

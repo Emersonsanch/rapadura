@@ -14,7 +14,7 @@ using UnityEngine.UIElements;
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// The credits roll (fully localized lines, CMU attribution, the closing on Vó Zefa's porch, auto-scroll
+    /// The credits roll (fully localized lines, CMU attribution, the closing on Vó Edna's porch, auto-scroll
     /// and tap-to-close rules) and the code-built arena overlays (boss banner, "Mochila cheia" toast) moved
     /// from inline colours to the theme through Resources/UI/EncounterOverlays.uss.
     /// </summary>

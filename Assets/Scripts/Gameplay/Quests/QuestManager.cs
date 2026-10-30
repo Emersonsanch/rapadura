@@ -684,7 +684,7 @@ namespace Rapadura.Gameplay.Quests
                         int leftover = _rewardInventory.AddItem(itemReward.Item, itemReward.Quantity);
                         if (leftover > 0)
                         {
-                            // No room on the Mochila's grid: the reward waits in the Baú da Vó Zefa instead of vanishing.
+                            // No room on the Mochila's grid: the reward waits in the Baú da Vó Edna instead of vanishing.
                             VillageChestStorage.ResolveShared().EnqueueOverflow(new InventorySlotData
                             {
                                 itemId = itemReward.Item.ItemId,

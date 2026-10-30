@@ -192,7 +192,7 @@ namespace Rapadura.Tests
             Assert.AreEqual(1, house.Layout.DepotCount("casa_sazonal_010"));
             Assert.AreEqual(PrendaBuyCheck.NotEnoughPrendas, progress.TryBuy("casa_sazonal_015"));
 
-            // Finish the tarefas do arraiá: 5 dances, a full combo (done), 6 different prizes.
+            // Finish the tarefas do Bema: 5 dances, a full combo (done), 6 different prizes.
             for (int i = 0; i < 3; i++)
             {
                 progress.RecordDance(32, 32, true);

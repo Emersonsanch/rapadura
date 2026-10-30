@@ -4,6 +4,11 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-10-30 (tarde — expansão de lore dos NPCs, ferramentas MCP e pipeline dos 100 mapas)
+- 📜 **História e Arcos dos NPCs da Ilha da Aurora**: catálogo completo de lore dos NPCs das 4 primeiras regiões (Vila da Vó Edna, Oásis de Qocho, Vila de Litema e Vila das Lamparinas) integrado ao TODO com suas histórias pessoais, personalidades, papéis de gameplay e conexão com os contos do Vô Jorge e acolhimento da Vó Edna.
+- 🛠️ **Ferramentas MCP para Construção de Cenas e Validação de NPCs**: diretrizes de uso do Unity MCP para criação, instanciação, configuração de diálogos e validação física de colisores e pontos de interação no Editor.
+- 🗺️ **Pipeline dos Próximos Mapas (Níveis 1–100, Mapas 01 a 42)**: detalhamento minucioso dos próximos 42 mapas a serem desenvolvidos, organizados por bioma, cidades de retorno, postos seguros, arquétipos de inimigos e variantes noturnas baseados em `Docs/Mapas100.md`.
+
 ### 2026-10-30 (manhã — decisões do usuário e nova leva de agentes)
 - 🙋 **Decisões do usuário:** item perdido ao morrer **não se recupera** (sai o Achados e Perdidos); ao morrer, **9% de chance de cair 1 item** da mochila (de uma pilha cai só 1 unidade; nunca o que está vestido); **boneco de treino serve para testar os poderes** (dano por golpe, crítico, dano por segundo) e **não dá XP**; **Seu Zé Caçador e o dono do Haras são pessoas diferentes** (o do Haras passa a ser o Seu Tonico).
 - 🛠️ `tools/ci/compile_check.sh`: compilação offline de todos os assemblies com o Roslyn do Unity (usa os `.rsp` do Bee, mas compila os `.cs` que estão no disco).
@@ -1346,7 +1351,56 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 
 ## 🌎 FASE 8 — Conteúdo
 
-### NPCs
+### 📜 NPCs e Worldbuilding da Ilha da Aurora
+> 📌 **Visão Narrativa (re-tema maniqueísta, `Docs/Narrative.md` e `Docs/WorldBible_Maniqueismo.md`):**
+> O mundo do jogo é a **Ilha da Aurora** (*Dawn Isle*). O tom é de **conto de fadas acolhedor e familiar** baseado na cosmologia maniqueísta (Luz × Trevas, as faíscas presas na matéria, o Chamado e a Resposta, a Coluna da Glória, as Barcas do Sol e da Lua). Não há doutrina nem pregações: os mitos são contos que o saudoso **Vô Jorge** contava no iwan (varanda) e que a **Vó Edna** recorda enquanto assa pães no tandir. Ninguém é inerentemente mau: os monstros e chefes estão **apagados** pela sombra; derrotá-los significa **libertar a faísca de luz e devolver sua memória**.
+> 
+> Os tratamentos antigos saem ("Seu/Dona"): os NPCs usam nomes de ofício ("Mestre/Mestra") ou epítetos ("Mariam, a Ervateira"). As crianças os tratam carinhosamente por "tio/tia".
+
+#### 1. Vila da Vó Edna (Bosque do Zarafshan — Luz e Acolhimento)
+* **Vó Edna (A Guardiã do Cristal)**: A âncora da família. Cuida do pomar de damascos e romãs, do tandir (forno de barro onde prepara o plov e pães), do Baú da família e do Caderno (bestiário). Recebe notícias dos netos pelo radinho de pilha montado por Ícaro.
+* **Vô Jorge (In Memoriam)**: Lembrado com carinho profundo (nunca luto pesado). Viajou as Areias com Ammo e a camela Teimosa; sua cadeira de balanço vazia repousa no iwan e é homenageada no Bema. Espalhou "Lembranças do Vô Jorge" pela ilha.
+* **Mariam, a Ervateira** (`cida`, `forest_rezadeira`): Anciã curandeira que cheira a hortelã e cidreira. Cuida do preparo de chás medicinais e elixires de estamina; acolhe os primos com carinho maternal e dá as missões iniciais de coleta de ervas do bosque.
+* **Mestre Adamas** (`severino`): O ferreiro lendário da vila. Homem forte de riso estrondoso, trata a marreta como "minha amiga". Responsável pela Forja, conserto de durabilidade e refino (+0 a +15 com as Pedras da Luz Presa).
+* **Mestre Omóforo** (`damiao`): O carpinteiro da vila. Carrega toras maciças nos ombros sem jamais reclamar do peso. Gerencia a expansão da Casa própria (Housing), produção de bancos, mesas e baús de madeira.
+* **Mestra Narisah** (`fatima`): Costureira refinada e vaidosa do bom gosto. Confecciona mantos, túnicas com bordados sogdianos e o primeiro Bornal de Couro (ampliação de mochila).
+* **Zaku, o Merceeiro** (`lazaro`): Comerciante metódico, econômico e precavido; confere cada moeda furada duas vezes. Vende provisões, sal, pavios e recipientes.
+* **Nana, a Feirante** (`nenem`): Tagarela, alegre e amante das flores. Comanda a feira livre e o viveiro de mudas de romã e damasco para o jardim da casa.
+* **Srosh, o Tratador** (`tonico_haras`): Mestre da Estrebaria da Vila. Fala baixo, quase sussurrado, porque prefere escutar o coração dos bichos. Concede a missão "A Primeira Sela" e cuida da alimentação e carinho das montarias.
+* **Patig, o Rastreador** (Barraca de Caça, `Gameplay/Hunting`): Caçador paciente que lê qualquer pegada na lama. Ensina que caçar é honrar a luz do animal e gerencia as Tarefas de Caça e Presas do Dia.
+* **Mestre Xroshtag & Padwaxtag**: Músicos da praça. Xroshtag tem voz de trovão (representa o "Chamado") e seu aprendiz Padwaxtag responde em coro fino e afinado (a "Resposta"), ensaiando os hinos da Festa do Bema.
+* **Ramrat, a Guardiã da Lâmpada** (`socorro_vila`): Zela pela Chama Protetora na praça da vila. É ela quem concede a Bênção da Romaria, protegendo as mochilas dos primos contra quedas severas de itens ao morrer.
+
+#### 2. Oásis de Qocho (Areias Flamejantes — Comércio e Engenhos Antigos)
+* **Ammo, o Caravaneiro** (`bento`, `desert_tropeiro`): Mascate itinerante e antigo parceiro de caravana do Vô Jorge. Cheio de causos sobre tempestades de areia, vende relíquias exóticas, especiarias e peças recuperadas dos Artífices.
+* **Náfsha, a Oleira**: Trabalha com as mãos cobertas de barro vermelho, cantando no compasso do torno de olaria. Fabrica jarras de água para travessia do deserto, potes de unguento e pisos cerâmicos.
+* **Vandak, o Seleiro** (`vava`): Mercador perspicaz que confecciona selas de couro reforçado para montarias de deserto (camelos e escaravelhos) e alforjes com isolamento térmico.
+* **Yardena, a da Cisterna**: Guardiã rigorosa do sistema de karez (canais subterrâneos de água). Prática e protetora, não tolera desperdício de água e zela pela lâmpada de alabastro do oásis.
+* **Uzzai, o Pastor** (`tiao`): Cuidador bem-humorado de cabras e camelos; imita com perfeição os sons das feras do deserto para alertar os viajantes sobre emboscadas.
+
+#### 3. Vila de Litema (Serra de Kaggen — Tradição de Pedra e Vento)
+* **Mestre Mihr, o Mineiro** (`tonho`, `mountain_miner`): Guardião das galerias de pedra seca e das forjas altas. Severo e de poucas palavras, mas de coração generoso. Auxilia na prospecção de minérios raros e desbloqueia ligas de bronze para armas pesadas.
+* **Coti, a Tecelã** (`graca`): Fiandeira que vive em um rondavel de pedra, conversando com o louva-a-deus pousado em seu tear. Produz mantas térmicas grossas indispensáveis para suportar a nevasca do cume.
+* **Innaios, o Tocador** (`quinzinho`): Músico animado que toca lira e tambores de pedra; desafina de propósito para espantar o frio e animar as noites dos montanheses.
+
+#### 4. Vila das Lamparinas (Grutas do Limiar — Coragem nas Profundezas)
+* **Parthenos, a das Lamparinas** (`benedita`, `caves_lampkeeper`): Jovem corajosa e serena, guardiã dos caminhos subterrâneos iluminados. Não teme as sombras e ensina os primos a manterem as lamparinas acesas para afastar os arcontes do escuro.
+* **Mihrshah, o Velho Mineiro** (`candinho`): Veterano aposentado que jura ter encontrado em sua juventude um jardim subterrâneo feito inteiramente de cristais de luz cintilantes.
+* **Aso, a Contadora** (`fia`): Guardiã da tradição oral que encanta as crianças da vila com as divertidas lendas de Ananse, a aranha astuta que superava monstros muito maiores que ela com inteligência.
+* **Gabryab, o do Pavio** (`zezinho`): Menino veloz encarregado de repor o óleo e aparar os pavios das centenas de lâmpadas suspensas nas pontes de corda; sonha em ser aceito no grupo de exploração de Lavine.
+
+---
+
+### 🛠️ Papel das Ferramentas MCP (Unity MCP) no Desenvolvimento Narrativo e de Cenas
+> O pacote `com.coplaydev.unity-mcp` conecta agentes de IA diretamente à sessão ativa do Unity Editor para automatizar a criação de conteúdo, validação de física e teste de quests:
+- [x] **Automação de Seeders e Diálogos**: Scripts de seed executados via MCP (`CharacterQuestSeeder`, `DialogueSeeder`, `BiomeSeeder`) para instanciar e linkar `DialogueDefinition`, `QuestDefinition` e nós ramificados em `Assets/Resources/` sem necessidade de preenchimento manual de centenas de campos.
+- [ ] **Instanciação e Posicionamento de NPCs com `manage_gameobject`**: Instanciar prefabs de NPCs nos pontos exatos das praças das cidades (`TownKit`), aplicar componentes `NpcInteractable`, ajustar o `SphereCollider` de detecção de aproximação e configurar orientações visuais.
+- [ ] **Inspeção de Colisão e Física via MCP (`manage_physics`, `find_gameobjects`)**: Validar se novos modelos de cenário (árvores, muralhas, tendas e bancadas) possuem `BoxCollider`/`CapsuleCollider` adequados vinculados a `SolidPropBinder`, impedindo que heróis ou NPCs atravessem o chão ou fiquem presos.
+- [ ] **Validação Dinâmica de Diálogo e Quest Runner**: Disparar PlayMode pelo MCP, simular a ativação de `NpcInteractable.Interact()` e confirmar pelo `read_console` se os eventos `QuestAcceptedEvent`, `DialogueNodeChangedEvent` e entregas de recompensas operam com zero NullReferenceExceptions.
+
+---
+
+### NPCs (Status de Implementação)
 - [x] Sistema de diálogo — `Gameplay/Dialogue/{DialogueNode,DialogueDefinition,DialogueManager}.cs` + `UI/Dialogue/DialogueUIController.cs`, NPCs na `Main.unity` desde 2026-09-10; desde 2026-10-21 com condições/ações/redirects por estado de quest e por herói (`DialogueCondition`, `DialogueAction`, `QuestDialogueContext`, `DialogueQuestActionsTests`)
 - [x] Lojas — `Gameplay/Shop/{ShopDefinition,ShopManager}.cs` + `UI/Shop/ShopUIController.cs`, NPC de loja na `Main.unity` desde 2026-09-10; desde 2026-10-21 a loja entra na exclusividade de telas e tem tooltips; 🐛 o estoque não altera mais o asset da loja, fica no save e é reposto ao amanhecer (`d03a7c3`)
 
@@ -1355,14 +1409,341 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 > ⚠️ `Docs/GDD.md` e os comentários de lore em `Assets/Scripts/Gameplay/Characters/*.cs` ainda não foram atualizados com a árvore genealógica da família — fazer isso na próxima leva de conteúdo.
 - [x] Missões (NPCs que dão quest) — `StartQuest` não tinha chamador nenhum até 2026-10-21; agora 5 NPCs oferecem as quests pessoais e a convergência pelo diálogo (`dialogue_*` em `Resources/Dialogue`, `QuestGiverTexts`), com os 5 NPCs posicionados na cena em `139354e`.
 
-### Quests
+### 📖 Quests, Narrativa & História Completa da Ilha da Aurora
+
+#### Status Técnico dos Sistemas:
 - [x] Principal — `QuestManager` + `QuestType.MainStory`, 5 quests pessoais + convergência autoradas, oferecidas por NPCs via diálogo (2026-10-21) e acompanhadas no log de missões + rastreador (`UI/Quests/QuestLogController.cs`, `QuestTrackerController.cs`)
 - [~] Secundárias — `QuestType.Side`, mesmo backend
 - [x] Diárias — `DailyQuestService` + 8 assets em `Resources/Quests/Daily` (2026-10-21)
 
 > ✅ `QuestManager` registrado em `GameManager.BuildManagers()` + `SaveManager.Register`. ~~Pendente: `SetRewardTargets`, conteúdo real, UI de log.~~ Tudo feito: `GameManager.RegisterQuestRewardTargets` (2026-09-10), quests de conteúdo em `Resources/Quests`, log de missões + rastreador (2026-10-21). Também corrigido em 2026-10-21: quests restauradas do save sem definição registrada não entregavam recompensa.
 
-### Biomas
+---
+
+#### 🌟 1. O Roteiro Canônico da Campanha Principal (Atos I a V)
+
+##### 🌅 Ato I — O Apagamento do Cristal & O Bosque do Zarafshan (Níveis 1–15)
+* **Tema Narrativo:** O susto familiar, a partida no pomar e as primeiras faíscas. A moral da família: *"Quando a luz chama, a gente responde"*.
+* **Missão 1.1: O Sonho da Maria e o Cristal Frio (`quest_main_01_awakening`)**
+  * *História:* As férias começam na casa da Vó Edna. Maria acorda agitada após sonhar que o sol despencava em mil cacos. Ao saírem no quintal, o grande Cristal do Sol sobre a praça da vila amanhece completamente escuro. A Vó Edna acolhe os netos, serve chá de hortelã quentinho e entrega o antigo Caderno de capa de couro e o Baú da família.
+  * *Objetivo:* Falar com a Vó Edna, equipar a primeira arma de madeira no baú, pegar o radinho de pilha com Ícaro e derrotar 3 Besouros de Luz na cerca do pomar.
+* **Missão 1.2: As Trilhas do Rio Dourado (`quest_main_02_golden_river`)**
+  * *História:* A escuridão faz os animais esquecerem quem são. Mariam, a Ervateira, relata que os lobos do tugai estão desorientados e agressivos perto do moinho d'água.
+  * *Objetivo:* Explorar o Tugai do Rio Dourado, derrotar 5 Lobos do Tugai apagados, coletar 3 Casulos de Seda e libertar as primeiras faíscas que voltam voando para o pomar.
+* **Missão 1.3: O Resgate do Lobo Celeste (`quest_main_03_kok_bori`)**
+  * *História:* Kök-Böri, o nobre lobo azul ancestral que durante gerações guiava viajantes perdidos na floresta, foi tomado pela sombra fria que escorreu das montanhas. Não é um monstro cruel — é um guardião sofrendo.
+  * *Objetivo:* Derrotar Kök-Böri na clareira sagrada. Ao vencer, a casca escura se desfaz, a grande faísca celeste é libertada e o lobo curva a cabeça em gratidão antes de sumir na mata.
+  * *Clímax:* O primeiro fio sutil de luz da **Coluna da Glória** ascende aos céus sobre a Vila da Vó Edna. O caminho para o Deserto é desbloqueado.
+
+##### 🏜️ Ato II — O Enigma dos Artífices & As Areias Flamejantes (Níveis 15–30)
+* **Tema Narrativo:** Tecnologia antiga, os amigos de viagem do Vô Jorge e a descoberta do Limiar.
+* **Missão 2.1: A Caravana do Tio Ammo (`quest_main_04_caravan_call`)**
+  * *História:* Ao chegarem às Areias Flamejantes, os primos encontram o velho Ammo, o Caravaneiro, com sua camela Teimosa atolada perto das dunas. Ele reconhece os netos de Jorge imediatamente e se emociona ao ver os radinhos de pilha parecidos com a gaita do velho amigo.
+  * *Objetivo:* Escoltar a carroça de suprimentos de Ammo pela Estrada das Caravanas, repelindo escorpiões da areia e recuperando 4 engrenagens roubadas.
+* **Missão 2.2: Os Construtos que Respondem (`quest_main_05_ushabti_mystery`)**
+  * *História:* Ícaro descobre nas ruínas de taipa que os guardiões de pedra chamados *Ushabtis* não foram criados pela escuridão: foram feitos por um povo milenar chamado **Artífices**. Os ushabtis foram programados para "responder ao chamado da luz", mas a sombra rompeu seus circuitos rúnicos.
+  * *Objetivo:* Coletar 5 Núcleos de Bronze Rúnico em torno das pirâmides de Meroé e ajudar Ícaro a remontar o primeiro protótipo da Torreta Ushabti.
+* **Missão 2.3: O Julgamento do Grande Ushabti (`quest_main_06_great_ushabti`)**
+  * *História:* No santuário central das pirâmides, o colossal Grande Ushabti vigia as inscrições antigas. Ele ataca como teste de dignidade para proteger o segredo do Limiar.
+  * *Objetivo:* Derrotar o Grande Ushabti no anfiteatro de pedra vermelha.
+  * *Revelação:* Ao libertar sua faísca, as pedras do peito do colosso se abrem revelando o aviso dos Artífices: *"O Limiar foi selado nas profundezas. Se o Cristal apagar, a sombra consome a memória de quem tem medo"*. O segundo feixe da Coluna da Glória acende.
+
+##### 🏔️ Ato III — A Provação dos Irmãos & A Serra de Kaggen (Níveis 30–50)
+* **Tema Narrativo:** O peso da responsabilidade, aprender a confiar no outro e o nevoeiro das ilusões.
+* **Missão 3.1: A Névoa do Vento Destruidor (`quest_main_07_kaggen_fog`)**
+  * *História:* Na subida da serra, o vento uiva em sons cortantes. Maithe tenta guiar os primos com seu artefato "Olho do Vento", mas a neblina densa mente para seus sentidos, gerando atritos com o irmão Ícaro e com Maria.
+  * *Objetivo:* Alcançar a Vila de Litema, conversar com a tecelã Coti para conseguir mantas de lã grossa e encontrar Mestre Mihr nas forjas de pedra seca.
+* **Missão 3.2: O Escudo e o Espaço (`quest_main_08_brothers_bond`)**
+  * *História:* Joaquim insiste em tomar a frente de todas as investidas de golens de seixo, quase se ferindo gravemente. Maria o repreende com ternura e severidade: *"Proteger não é virar uma parede onde todo mundo bate; é dar espaço para quem você ama poder lutar ao seu lado"*.
+  * *Objetivo:* Completar o teste de defesa nas Muralhas de Pedra Seca, aprendendo a usar o Golpe em Dupla com Maria ("Bastião Sagrado").
+* **Missão 3.3: Hahya, o Gigante Adormecido (`quest_main_09_hahya_colossus`)**
+  * *História:* Hahya, o gigante que guardava as nascentes das neves, está enfurecido pelas rajadas do Vento Destruidor que congelaram seu coração.
+  * *Objetivo:* Enfrentar Hahya no cume nevado. Vencer liberta a tempestade, faz o céu abrir em um azul cristalino e acende o terceiro feixe da Coluna da Glória.
+
+##### 🕳️ Ato IV — O Medo da Solidão & As Grutas do Limiar (Níveis 50–70)
+* **Tema Narrativo:** Compaixão em vez de ódio: ninguém é mau de verdade; o vilão é apenas a solidão e o medo.
+* **Missão 4.1: A Descida com as Lamparinas (`quest_main_10_threshold_descent`)**
+  * *História:* Os primos descem às profundezas das cavernas de tufo rosa. Parthenos os guia pelas vertiginosas pontes de corda esticadas sobre o abismo. Cada lamparina precisa ser mantida acesa para que as sombras não engulam a trilha.
+  * *Objetivo:* Escoltar Parthenos e Gabryab pelas pontes de corda, reabastecendo 4 postes de óleo rúnico e derrotando Ubīr, o morcego que tenta sugar a luz dos pavios.
+* **Missão 4.2: O Segredo de Tages (`quest_main_11_tages_secret`)**
+  * *História:* Ao chegarem diante do portal do Limiar, os primos descobrem a verdade que o Vô Jorge tentava transmitir nos contos: **Tages, o Habitante Ancestral**, tem a fisionomia de uma criança muito antiga. Quando a fresta do selo dos Artífices começou a trincar, ele viu a escuridão subir e entrou em pânico. Ele sugava a luz de tudo ao redor não por crueldade, mas porque tinha pavor de ficar sozinho no escuro.
+  * *Objetivo:* Descer ao Salão Central do Limiar e confrontar Tages em um combate onde ataques físicos apenas desgastam sua couraça de pedra, enquanto as habilidades de luz de Maria restauram sua lucidez.
+* **Missão 4.3: O Abraço da Luz e o Selo dos Artífices (`quest_main_12_resealing_the_gate`)**
+  * *História:* Lavine envolve Tages em sua névoa serena para que a luz não queime seus olhos desacostumados; Maria estende a mão e acalma seu choro antigo. Compreendendo que os primos são a "Resposta" ao seu pedido de socorro, Tages ajuda as cinco crianças a canalizarem seus cinco elementos de luz (Vento Vivo, Luz, Água Viva, Fogo Vivo e Ar Sereno) na grande fresta da porta.
+  * *Clímax:* A silhueta informe do **Príncipe das Trevas** ruge do outro lado do abismo, mas o selo é reconstituído com runas brilhantes inquebráveis, empurrando a sombra para as profundezas!
+
+##### 🎊 Ato V — A Coluna da Glória & A Festa do Bema (Epílogo & Nova Jornada+)
+* **Missão 5.1: O Despertar da Coluna (`quest_main_13_glory_column`)**
+  * *História:* Todas as faíscas libertadas durante a jornada sobem juntas pelo céu da Ilha da Aurora. O grande feixe da **Coluna da Glória** acende em toda a sua magnitude no centro da praça da Vila da Vó Edna.
+  * *Objetivo:* Retornar triunfalmente à Vila da Vó Edna, onde todos os moradores das quatro regiões se reuniram para recepcionar os netos.
+* **Missão 5.2: A Cadeira Vazia do Vô Jorge e o Banquete do Bema (`quest_main_14_the_bema_feast`)**
+  * *História:* A grande celebração da família e dos povos da ilha. No centro da praça, a cadeira de balanço do Vô Jorge é posicionada no alto de cinco degraus cobertos de flores, lanternas e tecidos bordados. Ninguém se senta nela: ela representa a gratidão por quem ensinou as histórias e partiu antes. Vó Edna abre os grandes caldeirões de plov, samsas e doces de romã.
+  * *Desfecho:* Os primos admitem seus aprendizados: Maithe deixa Joaquim carregar sua aljava; Joaquim agradece por ter os irmãos ao lado; Ícaro anota no caderno que sua melhor invenção é a família; Lavine ganha seu primeiro lugar de respeito na mesa de honra.
+* **Missão 5.3: As Barcas de Luz e o Novo Amanhecer (`quest_main_15_endgame_unlocks`)**
+  * *Desbloqueios:* Tages passa a visitar a praça como morador querido no pós-jogo; a Barca do Sol (dia) e a Barca da Lua (noite) ativam a viagem rápida instantânea; a lasquinha do Cristal que Maria guardou começa a esfriar, dando o gancho canônico para a **Nova Jornada+ (New Game+)**.
+
+---
+
+#### 👥 2. As 5 Cadeias de Missões Pessoais dos Primos
+
+Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidade e desbloqueia suas armas de família lendárias e a 5ª habilidade (Ultimate):
+
+##### 🛡️ Joaquim — "Ecos da Vila Perdida" (`quest_joaquim_echoes_of_home`)
+* **NPC Doador:** O Sobrevivente da Vila Velha (na praça).
+* **Arco Temático:** O trauma de infância de ver o antigo vilarejo onde ele e Maria nasceram ser evacuado por uma onda de sombras. A culpa de achar que não foi forte o suficiente para salvar o lar.
+* **Etapas:**
+  1. *A Tampa de Barril:* Relembrar o primeiro escudo improvisado aos 6 anos para salvar Maria dos gansos bravos do sítio.
+  2. *As Ruínas do Bosque Velho:* Visitar os alicerces abandonados da casa de infância tomada por ervas daninhas e espectros de lodo.
+  3. *O Resgate do Brasão da Família:* Derrotar o Arconte do Lodo que guardava a viga mestra da antiga casa.
+  4. *O Escudo das Raízes Eternas:* Mestre Adamas reforça o antigo brasão de ferro no escudo de Joaquim, despertando a habilidade *Última Resistência*.
+
+##### 🏹 Maithe — "Rastros do Vento" (`quest_maithe_windtrail`)
+* **NPC Doador:** O Erudito das Trilhas do Vento.
+* **Arco Temático:** A responsabilidade esmagadora de ser a primogênita (14 anos). Aprender que liderar não é carregar todo o peso sozinha nem sufocar o irmão Ícaro com superproteção.
+* **Etapas:**
+  1. *O Arco de Galho de Damasqueiro:* Lembrança do Vô Jorge talhando seu primeiro arco com uma lâmina de canivete.
+  2. *O Olho que Não Descansa:* Caçar os espectros que enganam a visão nos penhascos da serra.
+  3. *A Flecha com a Bombinha do Irmão:* Aceitar usar a pólvora rúnica instável criada por Ícaro para abrir uma passagem bloqueada.
+  4. *A Tempestade de Mil Flechas:* Maithe alcança a paz com o irmão e desbloqueia sua Ultimate lendária.
+
+##### ☀️ Maria — "O Brilho Que Se Apaga" (`quest_maria_fading_light`)
+* **NPC Doador:** O Acólito do Templo Solar.
+* **Arco Temático:** A menina sonhadora que se recusa a aceitar que alguém seja irremediavelmente mau. A dor de ver a luz dos animais se esvaindo.
+* **Etapas:**
+  1. *A Primeira Lâmpada:* Acender as candeias da sala de cura da vila para acolher os viajantes febris.
+  2. *O Chamado no Silêncio:* Maria escuta pela primeira vez o sussurro das partículas de luz presas nas pedras do rio.
+  3. *A Cura do Bicho Ferido:* Curar um jovem lobo ferido sem desembainhar arma, usando apenas *Bênção da Vida*.
+  4. *Milagre Celestial:* O despertar da sua Ultimate, permitindo ressuscitar aliados e dissipar debuffs massivos.
+
+##### ⚙️ Ícaro — "Engrenagens do Passado" (`quest_icaro_ancient_gears`)
+* **NPC Doador:** O Arquivista das Ruínas.
+* **Arco Temático:** O menino inventor (11 anos) que explode coisas querendo provar que a ciência pode proteger as pessoas tão bem quanto as espadas dos mais velhos.
+* **Etapas:**
+  1. *A Descascadora de Romã:* Lembrança cômica da primeira máquina aos 5 anos que explodiu melado de romã no teto da cozinha da Vó.
+  2. *A Linguagem dos Ushabtis:* Decifrar as tábuas de argila dos Artífices sobre como canalizar faíscas em metais condutores.
+  3. *O Voo do Senmurv:* Construir o primeiro Drone Senmurv pintado com as cores do arco de Maithe para surpreender a irmã.
+  4. *Exército Mecânico:* Finalizar a construção do núcleo autônomo que invoca múltiplos Ushabtis de combate simultâneos.
+
+##### 🌙 Lavine — "A Maré Rubra" (`quest_lavine_redtide`)
+* **NPC Doador:** O Místico Eremita.
+* **Arco Temático:** A caçula (9 anos) que nasceu sob a Noite Rubra (um eclipse lunar raro). Sofria preconceito infantil por dominar magia de névoa e sombras arcanas, temendo ser uma aberração.
+* **Etapas:**
+  1. *O Medo das Sombras Próprias:* Aprender que a névoa lilás não é escuridão má, mas o filtro que permite olhar para a luz sem queimar a vista.
+  2. *O Resgate de Ari:* Usar suas correntes de treva para segurar uma fera e salvar o cãozinho no portão do pomar.
+  3. *O Nome que Ela Mesma Escolheu:* Afirmar sua voz diante dos primos e exigir ser tratada como exploradora de verdade.
+  4. *Eclipse Eterno:* Dominar a noite para criar uma redoma de proteção que paralisa inimigos e protege os primos em combate.
+
+##### 🤝 A Grande Convergência — "A Resposta da Família" (`quest_convergence_the_gathering`)
+* **Pré-requisito:** Conclusão das 5 quests pessoais.
+* **História:** Diante da árvore mais antiga do pomar da Vó Edna, os cinco primos fincam suas armas no chão e fazem o juramento: *"Nenhum de nós fica para trás. Quando a luz chama, a família inteira responde"*. Libera os 10 combos do Golpe em Dupla com animações douradas e diálogos exclusivos.
+
+---
+
+#### 🏡 3. Missões Secundárias dos Moradores (World & Village Quests)
+
+* **O Segredo das Cartas de Kellis (Ammo):** Encontrar as cartas carinhosas que o Vô Jorge enviava do deserto para a Vó Edna, revelando trechos poéticos sobre o amor dos dois na juventude.
+* **O Forno Encantado (Vó Edna):** Coletar damascos doces, tâmaras de Qocho e farinha de painço para desbloquear receitas de samsas e o famoso Plov de domingo que concede buffs de atributos de 30 minutos.
+* **O Minério das Sete Noites (Mestre Adamas & Mestre Mihr):** Uma rota de mineração conectando a forja da vila com as profundezas de Litema para fundir a lendária liga de Bronze Estelar.
+* **As Marionetes de Ananse (Aso):** Coletar carapaças douradas de escaravelhos e fios de seda para montar o teatro de sombras na praça para as crianças.
+* **O Cão que Nunca Dorme (Ari):** Seguir as pegadas luminosas de Ari ao redor da vila para encontrar 12 baús escondidos de relíquias enterradas pelo Vô Jorge.
+
+---
+
+#### 📻 4. Diálogos de Estrada ("Conversas de Radinho")
+* Enquanto o jogador explora o mapa-múndi no overworld, os outros 4 primos conversam pelo radinho de pilha criado por Ícaro.
+* Mais de 46 diálogos autorados cobrindo:
+  * Piadas familiares (a briga de idade entre Maithe e Maria de 3 meses e 11 dias);
+  * A fome insaciável de Joaquim sonhando com o plov da Vó;
+  * As teorias científicas mirabolantes de Ícaro sobre o peso das montarias;
+  * Lavine zombando do medo de baratas de Joaquim;
+  * Comentários reativos sobre o clima da região (neve, tempestade de areia ou chuva fina).
+
+---
+
+### Biomas e Regiões Iniciais
+- [~] Floresta (Bosque do Zarafshan) — camada de dados pronta (`World/Biomes/BiomeDefinition.cs` + `BiomeSeeder.cs`) e, desde 2026-10-21, região do `WorldMap.unity` com encontros, clima e VFX ambiente próprios; terreno/Scene real bloqueado (exige Unity Editor)
+- [~] Deserto (Areias Flamejantes) — idem
+- [~] Montanha (Serra de Kaggen) — idem
+- [~] Cavernas (Grutas do Limiar) — idem
+
+> ✅ `Editor/EnemyDatabaseSeeder.cs` criado (8 inimigos, 2 por bioma incl. boss), ids batem com os já referenciados no `BiomeSeeder`. ~~Os assets ainda não existem neste checkout~~ — existem em `Assets/Resources/{Enemies,Biomes}/` e, desde 2026-10-21, as tabelas de inimigo dos biomas não são mais apagadas pelo `BiomeSeeder`. Cada bioma é uma região do `WorldMap.unity`; terreno/cena próprios por bioma continuam pendentes; desde `d03a7c3` a `EncounterArena` é decorada por bioma (`Gameplay/World/Biomes/Arena/BiomeArenaDressing.cs`: cactos, estalagmites, rochas com neve).
+
+---
+
+### 💀 Nova Masmorra: O Ossuário dos Artífices (Catacumbas de Marfim) — Tarefas de Implementação
+> 📌 **Visão de Design:** Masmorra clássica subterrânea no estilo *MU Online Dungeon* e *Tibia*. Corredores estreitos de pedra, nichos repletos de crânios com fogo-fátuo azul/verde, portas gradeadas trancadas por chaves de osso, sarcófagos com armadilhas e hordas de esqueletos e caveiras.
+
+#### 1. Infraestrutura C# e Objetos Interativos da Masmorra
+- [ ] `Assets/Scripts/Gameplay/Dungeon/LockedDungeonGate.cs`:
+  - Componente MonoBehaviour para portões de ferro gradeados.
+  - Campos serializados: `string requiredKeyItemId = "item_bone_key"`, `bool consumeKeyOnUnlock = true`, `Transform gateBarsTransform`, `float openHeight = 3.5f`, `float openDuration = 1.2f`.
+  - Método `TryUnlock(InventoryManager inventory)`: verifica `inventory.HasItem(requiredKeyItemId)`, remove se configurado, dispara som de engrenagem enferrujada (`AudioManager.PlaySfx`) e anima a elevação das grades via interpolação suave (sem alocação de corrotina).
+  - Estado salvo em `DungeonProgress` para persistir portas já abertas ao trocar de cena.
+- [ ] `Assets/Scripts/Gameplay/Dungeon/SarcophagusInteractable.cs`:
+  - Implementa `IInteractable` com `Outline` ou destaque luminoso ao aproximar.
+  - Ao interagir: a tampa de pedra desliza com som de atrito pesado (`Sfx_StoneSlide`).
+  - Lógica de sorteio: 70% de chance de entregar drop da tabela de loot da masmorra (`LootTable_Catacombs`); 30% de chance de acionar emboscada de 2x `enemy_floating_skull` com efeito sonoro de susto e fumaça roxa.
+  - Garante abertura única por sessão/save.
+- [ ] `Assets/Scripts/Gameplay/Dungeon/BreakableBoneWall.cs`:
+  - Parede de pedra rachada bloqueando salas secretas com baús lendários.
+  - Implementa `IDamageable` ou ouve `GroundImpactSystem`: quebra ao receber dano de impacto contundente (habilidade *Terremoto* de Joaquim ou explosão de granada de Ícaro).
+  - Instancia partículas de pedregulhos e pó de osso (`Vfx_WallCrumble`) e desativa o `NavMeshObstacle` para liberar a passagem.
+
+#### 2. Bestiário de Esqueletos & Inimigos da Masmorra
+- [ ] **Caveira Flutuante (`enemy_floating_skull`)**:
+  - `EnemyDefinition`: Vida baixa (40 HP), velocidade altíssima (7.5 m/s), dano moderado (18).
+  - IA / Comportamento: Movimento ondulante senoidal no eixo Y flutuando a 1.2m do chão. Ataque em mergulho rasante contra o herói com recuo rápido de 2m pós-golpe.
+  - Visual/VFX: Prefab de crânio com luz pontual suave azul-esverdeada (`Light` com intensidade 1.5, alcance 3m) e emissão de partículas de fogo-fátuo nas órbitas dos olhos.
+- [ ] **Guerreiro Esqueleto de Cobre (`enemy_skeleton_warrior`)**:
+  - `EnemyDefinition`: Vida média (180 HP), velocidade padrão (3.8 m/s), armadura alta (25% redução).
+  - Habilidade de Guarda com Escudo de Osso: a cada 6 segundos, assume postura defensiva por 2.5s, reduzindo dano frontal em 60% e refletindo 15% do dano de projéteis.
+  - Drop: Fragmentos de Osso Antigo, Moedas Furadas de Qocho e *Espada Enferrujada do Vigia*.
+- [ ] **Arqueiro Esqueleto do Fosso (`enemy_skeleton_archer`)**:
+  - `EnemyDefinition`: Vida baixa (95 HP), ataque à distância (alcance 14m), precisão alta.
+  - IA de Manutenção de Distância: se o herói se aproximar a menos de 4m, o arqueiro recua 3 passos enquanto prepara a próxima flecha.
+  - Projétil: Flecha de costela rúnica com rastro de fumaça roxa, aplicando debuff de *Lentidão* (-20% move speed por 3s).
+- [ ] **Feiticeiro das Ossadas (`enemy_bone_sorcerer`)**:
+  - `EnemyDefinition`: Vida média (220 HP), ataque mágico à distância com esferas espectrais.
+  - Habilidade *Erguer as Ossadas*: a cada 12 segundos, canaliza um encantamento de 2s e reanima até 2 esqueletos guerreiros derrotados na sala com 40% de vida máxima.
+  - Regra de Ouro anti-exploit: esqueletos reanimados recebem a flag `isReanimated = true` e NÃO concedem XP nem drop adicional ao serem mortos novamente.
+- [ ] **Chefe: O Colosso de Crânios (`boss_bone_colossus`)**:
+  - `EnemyDefinition`: Vida colossal (1400 HP), ataque lento e devastador, imunidade a empurrão.
+  - 3 Fases de Ataque:
+    * Fase 1 (100%-70% HP): Pancada de Clava de Ossos no chão com onda de choque radial (exige pular ou afastar 5m).
+    * Fase 2 (70%-30% HP): Arremesso de 3 Crânios Saltitantes que ricocheteiam nas paredes da sala da masmorra antes de explodir.
+    * Fase 3 (<30% HP): *Prisão de Costelas*: invoca uma jaula de ossos ao redor do herói que precisa ser golpeada 3 vezes para quebrar, enquanto o colosso prepara um ataque carregado.
+
+#### 3. Itens, Loot & Tabelas de Recompensa
+- [ ] Criar ScriptableObject `item_bone_key` em `Assets/Resources/Items/Keys/BoneKey.asset`:
+  - Nome: "Chave de Osso Rúnica" (en: *Runic Bone Key*), raridade Rara, peso 0.1, não perde durabilidade.
+- [ ] Conjunto de Armadura de Marfim dos Artífices:
+  - `armor_bone_chest`: Armadura Peitoral de Costelas (+Defesa, +Chance de Crítico).
+  - `armor_bone_helm`: Elmo Crânio de Cobre (+Resistência à Sombra, +Mana Máxima).
+  - Bônus de Conjunto (2 peças): *"Toque Espectral"* — golpes críticos têm 15% de chance de emitir um estilhaço de osso que atinge inimigos próximos.
+
+#### 4. Testes Automatizados da Masmorra
+- [ ] `Assets/Tests/EditMode/Dungeon/DungeonGateTests.cs`:
+  - `Gate_WithoutKey_RemainsLocked()`: garante que interagir sem a chave não altera estado.
+  - `Gate_WithKey_ConsumesKeyAndUnlocks()`: valida remoção correta do item no inventário e alteração de flag.
+  - `Gate_Unlocked_DoesNotRequireKeyAgain()`: valida persistência do estado aberto.
+- [ ] `Assets/Tests/EditMode/Dungeon/BoneSorcererAntiExploitTests.cs`:
+  - Valida que inimigos com `isReanimated = true` retornam 0 de experiência no evento de morte.
+
+---
+
+### 🎒 Finalização da Integração de Carga & Peso (Encumbrance)
+> As regras puras já foram escritas em `EncumbranceRules.cs` e `ItemWeightRules.cs`. Falta conectar à HUD e ao motor de locomoção:
+- [ ] **Integração no PlayerMotor (`Assets/Scripts/Gameplay/Player/PlayerMotor.cs`)**:
+  - Adicionar cálculo de penalidade de velocidade no loop de locomoção:
+    `float loadFactor = EncumbranceRules.HeroSpeedFactor(loadRatio);`
+    `currentSpeedMultiplier *= loadFactor;`
+  - Garantir que raízes e stuns tenham precedência e que a velocidade mínima respeite `EncumbranceRules.HeroMinFactor` (0.6x).
+- [ ] **Integração na HUD (`Assets/Scripts/UI/HUD/HudController.cs`)**:
+  - Adicionar label de peso e barra de carga visual na mochila (`hud-weight-label`: "42.5 / 60.0 kg").
+  - Mudar cor do texto dinamicamente conforme `EncumbranceRules.Band()`: Verde (Light), Amarelo (Heavy), Vermelho pulsante (Overloaded).
+- [ ] **Notificação de Sobrecarga (Toast / Banner)**:
+  - Disparar aviso visual *"Mochila Sobrecarregada! Sua velocidade foi reduzida"* ao ultrapassar 100% da capacidade.
+- [ ] **Suíte de Testes EditMode (`Assets/Tests/EditMode/Inventory/EncumbranceRulesTests.cs`)**:
+  - Testar faixas de peso, cálculo de capacidade por Vitalidade e velocidade montada vs a pé.
+
+---
+
+### 🗣️ Migração e Padronização de Nomes Maniqueístas (Strings & Localização)
+- [ ] Atualizar arquivos de tradução em `Assets/Resources/Localization/`:
+  - `Strings_pt-BR.json` e `Strings_en.json`:
+    - Trocar "Vó Zefa" por "Vó Edna" e "Vô Chico" por "Vô Jorge" em todas as chaves de narrativa, itens e receitas.
+    - Trocar nomes de NPCs nos diálogos: Cida → Mariam, Severino → Adamas, Bento → Ammo, Benedita → Parthenos.
+    - Atualizar nomes das cidades nas telas de mapa: Vila da Vó Edna, Oásis de Qocho, Vila de Litema, Vila das Lamparinas.
+- [ ] Rodar teste de integridade `Assets/Tests/EditMode/Localization/LocalizationIntegrityTests.cs` para garantir que nenhuma chave ficou órfã ou retornando string vazia.
+
+---
+
+### 🗺️ Metodologia de Níveis de Mapas (Estilo MU Online) & Compêndio de Raças
+> 📌 **Documento Mestre Detalhado:** Veja [`Docs/MetodologiaMapasERacas.md`](Docs/MetodologiaMapasERacas.md) para a metodologia completa de níveis, fórmulas de teleporte (M), penalidades de delta de nível de monstros, exigências de Asas/Montarias/Tochas e a enciclopédia das mais de 20 raças (Sogdianos, Nômades, San, Suaílis, Elfos-da-Mata, Altos-Elfos, Orcs do Tambor Rubro, Esqueletos de Marfim, Jhilpuris Védicos, Nagas, Vanaras, Gandharvas, Anões, Kobolds, Povo-Touro, Povo-do-Mar, Trols, Centauros, etc.).
+
+#### Tarefas de Implementação Técnica (Para o Claude / Agentes):
+- [ ] `Assets/Scripts/Gameplay/World/Map/MapDefinition.cs`:
+  - ScriptableObject para cada mapa: `int mapId`, `string mapNameKey`, `int walkLevelRequirement`, `int warpLevelRequirement`, `int baseWarpGoldFee`, `string specialRequirementTag` (ex: "WingsRequired", "TorchRequired", "SaddleRequired"), `string returnCityId`.
+- [ ] `Assets/Scripts/Gameplay/World/Map/MapAccessRules.cs`:
+  - Classe utilitária com lógica pura (testável fora da Unity):
+    * `CanWalkIntoMap(int playerLevel, int walkLevel, CharacterId heroId, string regionType)`: aplica -5 níveis para Ícaro em Ruínas e Maithe em Montanhas.
+    * `CanWarpToMap(int playerLevel, int warpLevel, int playerGold, int cost, out string failureReason)`.
+    * `CalculateWarpCost(int warpLevel, bool isOverloaded)`: $50 + (\text{warpLevel} \times 15)$, dobrado se sobrecarregado.
+    * `GetMonsterLevelDeltaPenalty(int playerLevel, int monsterLevel)`: retorna bônus de dano do monstro (+25% crítico em +10 níveis) e penalidade de hit rate (-40% acerto em +20 níveis).
+- [ ] `Assets/Scripts/UI/WorldMap/FastTravelWindowController.cs` & `FastTravelWindow.uxml`:
+  - Interface aberta pela tecla **M** ou botão de bússola na HUD mobile:
+    * Lista dinâmica dos 100 mapas agrupados por região.
+    * Mapas inacessíveis ficam acinzentados com cadeado e indicação: *"Exige Nível {warpLevel} (ou a pé nível {walkLevel}) - Barca: {cost} ouro"*.
+    * Botão "Mover" consome o ouro via `InventoryManager`, fecha a tela e chama `SceneTransitionService.TravelToMap()`.
+- [ ] `Assets/Scripts/Gameplay/Characters/RaceDefinition.cs`:
+  - ScriptableObject para catalogar as 25 raças da Ilha da Aurora e além, associando traços raciais cosméticos, sotaques/estilos de diálogo e NPCs correspondentes.
+- [ ] `Assets/Tests/EditMode/World/MapAccessRulesTests.cs`:
+  - Suíte completa de testes unitários para cálculo de custos, bônus de herói, validação de sobrecarga e penalidades de nível de monstro.
+
+---
+
+### 🗺️ Próximos Mapas para Desenvolver (Pipeline dos 100 Mapas — Escopo Níveis 1–100)
+> 📌 **Fundamentos de Design de Cenários (`Docs/Mapas100.md` e `Docs/Progressao500.md`):**
+> 1. **Zona Segura Obrigatória:** Todo mapa conta com uma **cidade completa** (respawn, ferreiro, lojas, estrebaria, barca) ou um **posto avançado seguro** (fogueira/lâmpada, baú de passagem, conserto básico).
+> 2. **Renascer Canônico:** O jogador **sempre renasce na cidade de retorno** da região (na praça com a Lâmpada de Ramrat); nunca no próprio ponto de morte ou na arena.
+> 3. **Construção Modular 3D:** Construídos usando o kit modular low-poly (`TownKit`, `TownStyles`), texturização em atlas de paleta 8×8 (sem shaders pesados) com landmarks visíveis na câmera isométrica.
+> 4. **Variante Noturna Obrigatória:** Cada mapa possui tabela de encontros noturnos (`NightVariantRules`), criaturas exclusivas da noite e restrição de visibilidade corrigida pela Lamparina.
+> 5. **Escopo Prioritário (★):** Desenvolvimento focado na progressão até o **nível 100** (mapas 01 ao 42), abrangendo 8 regiões marcantes.
+
+#### Catálogo dos Próximos 42 Mapas (Escopo ★):
+
+| # | Mapa (PT / EN) | Região / Bioma | Faixa de Nível | Assentamento no Mapa | Cidade de Retorno | Arquétipos de Monstros & Destaques |
+|---|---|---|---|---|---|---|
+| **01** | **Pomar da Vó Edna** / *Grandma Edna's Orchard* | Bosque do Zarafshan | 1–3 | **Cidade:** Vila da Vó Edna | Vila da Vó Edna | [rápido] Lobo do Tugai jovem, [enxame] Besouros de Luz. Tutorial de colheita e combate. |
+| **02** | **Tugai do Rio Dourado** / *Golden River Tugai* | Bosque do Zarafshan | 2–5 | Posto: Moinho do Pomar | Vila da Vó Edna | [rápido] Lobo do Tugai, [controle] Aranha-Tecelã Apagada. Travessia das pontes de madeira. |
+| **03** | **Brejo do Lodo Escuro** / *Dark Mire Marsh* | Bosque do Zarafshan | 16–22 | Posto: Ponte do Aryk | Vila da Vó Edna | [tanque] Sapos-Gulosos, [enxame] Mosquitos de Lama. Lama reduz velocidade sem botas especiais. |
+| **04** | **Bosque das Amoreiras de Seda** / *Silk Mulberry Grove* | Bosque do Zarafshan | 18–24 | Posto: Casa do Tear | Vila da Vó Edna | [distância] Tecelãs da Copa, [rápido] Gatos-do-Mato. Coleta de Casulos de Seda para Mestra Narisah. |
+| **05** | **Copas de Garajonay** / *Garajonay Canopy* | Bosque do Zarafshan | 20–26 | **Cidade de Raça:** Elfos-da-Mata | Copas de Garajonay | [elite] Arconte Menor da Mata, [distância] Caçadores Silvestres. Casas sobre plataformas nas copas. |
+| **06** | **Jardim Esquecido de Mihrshah** / *Mihrshah's Forgotten Garden* | Bosque do Zarafshan | 26–32 | Posto: Portão do Jardim | Copas de Garajonay | [mágico] Flores-Candeia Apagadas, [tanque] Guardiões de Poda. Ruínas de mármore e fontes secas. |
+| **07** | **Estrada das Caravanas** / *Caravan Road* | Areias Flamejantes | 5–7 | Posto: Caravançará do Ammo | Oásis de Qocho | [rápido] Lagartos-de-Chifre, [enxame] Escorpiões da Areia. Dunas baixas e trilhas marcadas por ossadas. |
+| **08** | **Ruínas dos Artífices** / *Artificers' Ruins* | Areias Flamejantes | 6–9 | Posto: Acampamento das Pirâmides | Oásis de Qocho | [tanque] Ushabtis de Pedra, [distância] Sentinelas de Cobre. Pirâmides de topo plano estilo Meroé. |
+| **09** | **Galerias do Karez** / *Karez Galleries* | Areias Flamejantes | 20–26 | Posto: Boca do Karez | Oásis de Qocho | [controle] Ratos-Toupeira, [enxame] Escorpiões-Dourados. Canais de água fresca em meio ao calor escaldante. |
+| **10** | **Dunas que Cantam** / *Singing Dunes* | Areias Flamejantes | 22–28 | Posto: Poço das Tamareiras | Oásis de Qocho | [rápido] Serpentes-Chocalho, [elite] Turbilhão de Areia. Vento sonoro que orienta o caminho. |
+| **11** | **Ermos do Tambor Rubro** / *Red Drum Badlands* | Areias Flamejantes | 24–32 | **Cidade de Raça:** Orcs do Deserto | Tambor Rubro | [tanque] Javalis-Blindados, [distância] Arremessadores de Lança. Fortaleza em cânion vermelho. |
+| **12** | **Trono de Namrael** / *Namrael's Throne* | Areias Flamejantes | 30–38 | Posto: Torre de Taipa | Tambor Rubro | [elite] Ninhada de Namrael, [tanque] Escorpiões-Gigantes. Domínio do Escorpião-Rei arconte. |
+| **13** | **Trilha dos Rondavéis** / *Rondavel Trail* | Serra de Kaggen | 9–11 | **Cidade:** Vila de Litema | Vila de Litema | [rápido] Cabras-da-Montanha Apagadas, [controle] Águias-da-Serra. Casas circulares e terraços agrícolas. |
+| **14** | **Passo do Hahya** / *Hahya's Pass* | Serra de Kaggen | 10–13 | Posto: Boca da Mina do Mihr | Vila de Litema | [tanque] Golens de Seixo, [distância] Arremessadores da Fenda. Desfiladeiro estreito com rajadas de vento. |
+| **15** | **Abrigos Pintados** / *Painted Shelters* | Serra de Kaggen | 26–32 | Posto: Abrigo do Eland | Vila de Litema | [rápido] Guepardos-da-Rocha, [mágico] Espíritos-Pintados. Cavernas rasas com arte rupestre de faíscas. |
+| **16** | **Muralhas de Pedra Seca** / *Drystone Walls* | Serra de Kaggen | 28–34 | Posto: Recinto Curvo | Vila de Litema | [tanque] Hienas-Gigantes, [elite] Vigias da Sombra. Antigas muralhas curvas de pedras encaixadas. |
+| **17** | **Salões de Bronze de Napirasu** / *Bronze Halls* | Serra de Kaggen | 30–38 | **Cidade de Raça:** Anões Forjadores | Salões de Bronze | [tanque] Forjados Mecânicos, [distância] Balistas Arcanas. Galerias escavadas com rios de metal fundido. |
+| **18** | **Cume dos Mazans** / *Mazan Summit* | Serra de Kaggen | 36–44 | Posto: Estela Alta | Salões de Bronze | [elite] Gigantes da Serra, [controle] Elementais de Gelo. Pico nevado sob neblina densa. |
+| **19** | **Lago do Limiar** / *Threshold Lake* | Grutas do Limiar | 13–15 | **Cidade:** Vila das Lamparinas | Vila das Lamparinas | [enxame] Morcegos Bebe-Luz, [controle] Aranhas-de-Goteira. Lago subterrâneo sereno e pontes de corda. |
+| **20** | **Salão de Tages** / *Tages' Hall* | Grutas do Limiar | 14–18 | Posto: Nicho da Ponte | Vila das Lamparinas | [tanque] Guardiões do Limiar, [mágico] Sombra Rastejante. Arena do Habitante Ancestral e o Selo. |
+| **21** | **Campo das Pedras-Dragão** / *Dragonstone Field* | Grutas do Limiar | 32–38 | Posto: Vishapakar Grande | Vila das Lamparinas | [tanque] Serpes das Fendas, [distância] Esporos de Cristal. Monólitos esculpidos antigos (Vishaps). |
+| **22** | **Mercado dos Túneis** / *Tunnel Market* | Grutas do Limiar | 34–42 | **Cidade de Raça:** Kobolds Mercadores | Mercado dos Túneis | [rápido] Escavadores Cobiçosos, [enxame] Ratos-Vigia. Feira subterrânea iluminada por fungos bioluminescentes. |
+| **23** | **Cânion da Roda** / *Wheel Canyon* | Grutas do Limiar | 38–46 | Posto: Torre das Jarras | Mercado dos Túneis | [mágico] Arcontes da Roda, [tanque] Construtos do Engenho. Grande abismo onde gira a Roda das Doze Jarras. |
+| **24** | **Ninho de Mahaway** / *Mahaway's Roost* | Grutas do Limiar | 42–50 | Posto: Última Ponte de Corda | Vila das Lamparinas | [elite] Mahaway Rei da Revoada, [distância] Harpias Bebe-Luz. Salão abobadado de teto vertiginoso. |
+| **25** | **Taa Pwani e o Recife** / *Taa Pwani and the Reef* | Costa das Monções | 45–50 | **Cidade:** Taa Pwani (Porto Suaíli) | Taa Pwani | [rápido] Caranguejos-Guerreiros, [distância] Gaivotas-Sombrias. Mercado de pérolas, dhows de vela triangular. |
+| **26** | **Savana dos Auroques** / *Aurochs Savanna* | Costa das Monções | 48–55 | **Cidade de Raça:** Povo-Touro (Aratta) | Aratta | [tanque] Auroques Apagados, [rápido] Chitas da Savana. Planície de grama dourada e acácias solitárias. |
+| **27** | **Pirâmides Altas de Meroé** / *High Pyramids* | Costa das Monções | 52–58 | Posto: Pátio dos Relevos | Aratta | [mágico] Sacerdotes Ushabti, [tanque] Leões-Alados de Pedra. Pirâmides íngremes de arenito avermelhado. |
+| **28** | **Cidade-Recife de Kirta** / *Kirta Reef City* | Costa das Monções | 55–62 | **Cidade de Raça:** Povo-do-Mar | Kirta | [rápido] Peixes-Espada Apagados, [controle] Polvos da Maré. Construções de conchas e corais respiráveis. |
+| **29** | **Kilwa Afundada** / *Sunken Kilwa* | Costa das Monções | 60–66 | Posto: Farol de Coral | Kirta | [tanque] Tubarões-Blindados, [mágico] Fantasmas do Recife. Palácio submerso com cúpulas de ar mágico. |
+| **30** | **Mangues de Liyongo** / *Liyongo Mangroves* | Costa das Monções | 64–72 | Posto: Cais das Dhows | Taa Pwani | [controle] Crocodilos do Lodo, [enxame] Mosquitos-da-Peste. Labirinto de raízes aéreas e névoa salgada. |
+| **31** | **Jhilpur, a Cidade nas Raízes** / *Jhilpur* | Delta de Jhilpur | 60–66 | **Capital (Água Viva):** Jhilpur | Jhilpur | [tanque] Tartarugas-Mundiais, [distância] Garças-Lança. Metrópole erguida em troncos de banyans colossais. |
+| **32** | **Pontes de Raiz Viva** / *Living Root Bridges* | Delta de Jhilpur | 64–70 | Posto: Plataforma das Garças | Jhilpur | [rápido] Macacos-Pescadores, [controle] Cobras-das-Águas. Pontes trançadas ao longo de séculos de raízes vivas. |
+| **33** | **Palafitas de Tarchon** / *Tarchon Stilts* | Delta de Jhilpur | 70–78 | **Cidade de Raça:** Trols dos Pântanos | Palafitas de Tarchon | [tanque] Trols do Lodo, [enxame] Rãs-Venenosas. Aldeia rústica suspensa sobre estacas no pântano fundo. |
+| **34** | **Charco do Ninki Nanka** / *Ninki Nanka Bog* | Delta de Jhilpur | 76–82 | Posto: Ilhota das Lanternas | Palafitas de Tarchon | [elite] Ninki Nanka (Dragão do Brejo), [controle] sanguessugas gigantes. Águas escuras cobertas de névoa densa. |
+| **35** | **Coração do Lodo** / *Heart of the Mire* | Delta de Jhilpur | 82–88 | Posto: Raiz-Mãe | Jhilpur | [tanque] Hidras da Lama, [mágico] Almas Afogadas. A nascente de todas as águas turvas do continente. |
+| **36** | **Sangkent, a Cidade-Escadaria** / *Sangkent* | Teto do Mundo | 70–76 | **Capital (As Cinco Luzes):** Sangkent | Sangkent | [rápido] Leopardos-da-Neve, [tanque] Iaques Gigantes. Cidade vertical em socalcos de montanha estilo Himalaia. |
+| **37** | **Calhas de Pedra** / *Stone Chutes* | Teto do Mundo | 74–80 | Posto: Estação da Calha Alta | Sangkent | [controle] Elementais de Granizo, [distância] Arqueiros da Geleira. Tobogãs e calhas antigas de minério no gelo. |
+| **38** | **Geleira do Teto do Mundo** / *Glacier* | Teto do Mundo | 80–86 | Posto: Cabana do Iaque | Sangkent | [tanque] Ursos-Polares Ancestrais, [elite] Mamute-Lanterneiro. Gelo azul profundo e fendas traiçoeiras. |
+| **39** | **Forte dos Ventos** / *Fort of the Winds* | Teto do Mundo | 84–92 | Posto: O Próprio Forte | Sangkent | [mágico] Vórtices do Vento Destruidor, [rápido] Grifos da Tempestade. Fortaleza desafiando o vendaval eterno. |
+| **40** | **Passo de Wakhan** / *Wakhan Pass* | Teto do Mundo | 90–98 | Posto: Caravançará de Pedra | Sangkent | [elite] Guardiões da Passagem, [tanque] Golens de Neve. Fronteira mais alta da ilha antes da grande planície. |
+| **41** | **Mingcheng, a Cidade dos Nove Anéis** / *Mingcheng* | Planície de Mingcheng | 90–96 | **Capital (Luz):** Mingcheng | Mingcheng | [tanque] Leões-de-Jade, [distância] Soldados-Espelho. Grande capital circular inspirada em Chang'an imperial. |
+| **42** | **Torres Brancas de Amanirenas** / *White Spires* | Planície de Mingcheng | 95–102 | **Cidade de Raça:** Altos-Elfos | Torres Brancas | [elite] Campeões da Luz Eterna, [mágico] Conjuradores do Sol. Pináculos de mármore branco e jardins suspensos. |
+
+#### Checklist de Produção de Cada Mapa (Passo a Passo Técnico):
+- [ ] **1. Setup Geométrico e Greybox:** Criar cena aditiva ou bounds de arena; montar terrenos, rios e pontes respeitando a escala padrão (P = 120×120m, M = 200×200m, G = 300×300m, GG = 400×400m).
+- [ ] **2. Aplicação do TownKit:** Montar a cidade ou posto seguro com as peças modulares do `TownStyles` e paleta de cores correspondente da região.
+- [ ] **3. Colisores com `SolidPropBinder`:** Adicionar colisores em todas as árvores, pedras, muros e tendas, testando com o script de validação de colisão para garantir zero travamentos de heróis/montarias.
+- [ ] **4. Spawners e Tabelas de Encontro:** Configurar pontos de spawn de monstros com cotas de nível corretas e arquétipos balanceados (rápido, tanque, enxame, distância, elite, controle).
+- [ ] **5. Variante Noturna e Iluminação:** Configurar transição de ciclo dia/noite (`NightVariantRules`), marcando quais espécies nascem apenas sob a lua e validando o cone de alcance da Lamparina do Herói.
+- [ ] **6. Registro no Sistema de Viagem e Cidades:** Registrar a cidade de retorno no `CheckpointManager`, cadastrar cais da Barca de Luz (`FastTravelService`) e validar fluxo de morte/respawn automático.
 - [~] Floresta — camada de dados pronta (`World/Biomes/BiomeDefinition.cs` + `BiomeSeeder.cs`) e, desde 2026-10-21, região do `WorldMap.unity` com encontros, clima e VFX ambiente próprios; terreno/Scene real bloqueado (exige Unity Editor)
 - [~] Deserto — idem
 - [~] Montanha — idem

@@ -13,7 +13,7 @@ namespace Rapadura.Gameplay.PhotoMode
         Woodcut = 2,
         /// <summary>"Entardecer": warm late-afternoon light.</summary>
         Sunset = 3,
-        /// <summary>"Noite de São João": cool night with the bonfire glow (bloom).</summary>
+        /// <summary>"Noite do Bema": cool night with the bonfire glow (bloom).</summary>
         SaoJoaoNight = 4,
     }
 

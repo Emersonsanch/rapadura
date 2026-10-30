@@ -64,7 +64,7 @@ namespace Rapadura.UI.WorldMap
     /// <summary>
     /// Pure formatting/decision logic behind <see cref="WorldMapHudController"/> (no UIDocument, no
     /// scene), so it is EditMode-testable: hero/level, region and clock/weather text, the
-    /// "Vitórias: 2/3 para enfrentar o chefe" / "Derrote o chefe para desbloquear Deserto" goal
+    /// "Vitórias: 2/3 para enfrentar o chefe" / "Derrote o chefe para desbloquear Areias Flamejantes" goal
     /// (<see cref="GoalText"/>), region label status (with a cleared marker) and the Mochila summary
     /// built from SaveManager's carried JSON. Victories only open a region's boss fight; beating the
     /// boss unlocks the next region (<see cref="RegionBossProgress"/>). Every method taking an
@@ -163,7 +163,7 @@ namespace Rapadura.UI.WorldMap
         public static IReadOnlyList<string> AllWeatherIconClasses => WeatherIconClasses;
 
         // ------------------------------------------------------------------
-        // Unlock goal ("Vitórias: 2/3 para desbloquear Deserto")
+        // Unlock goal ("Vitórias: 2/3 para desbloquear Areias Flamejantes")
         // ------------------------------------------------------------------
 
         /// <summary>
@@ -231,8 +231,8 @@ namespace Rapadura.UI.WorldMap
         /// <summary>
         /// Text for one unlock goal. With the boss gate (<paramref name="bossGated"/>, the game's rule)
         /// victories lead to the boss: "Vitórias: 1/3 para enfrentar o chefe", then "Derrote o chefe
-        /// para desbloquear Deserto"; goals in another region name it. Without it (a region with no
-        /// boss) the victories open the target directly: "Vitórias: 1/3 para desbloquear Deserto".
+        /// para desbloquear Areias Flamejantes"; goals in another region name it. Without it (a region with no
+        /// boss) the victories open the target directly: "Vitórias: 1/3 para desbloquear Areias Flamejantes".
         /// </summary>
         public static string VictoriesText(LocalizationManager manager, UnlockGoal goal, BiomeType currentRegion, bool bossGated = true)
         {
@@ -266,7 +266,7 @@ namespace Rapadura.UI.WorldMap
 
         /// <summary>
         /// The HUD's goal line for where the player stands. A cleared current region says so first
-        /// ("Região Floresta concluída! Próximo: Vença 3 batalhas em Deserto para enfrentar o chefe (0/3)")
+        /// ("Região Bosque do Zarafshan concluída! Próximo: Vença 3 batalhas em Areias Flamejantes para enfrentar o chefe (0/3)")
         /// instead of a bare goal about another region; an uncleared region whose boss is the only thing
         /// left (the last region, which gates nothing) shows its own boss progress; otherwise
         /// <see cref="VictoriesText"/> for <see cref="FindNextUnlock"/>.
@@ -474,7 +474,7 @@ namespace Rapadura.UI.WorldMap
 
         /// <summary>
         /// Status line under a region label: "Você está aqui", "Toque para viajar", the unlock requirement
-        /// of a locked region ("Vença 3 batalhas em Floresta e derrote o chefe (1/3)", then "Derrote o
+        /// of a locked region ("Vença 3 batalhas no Bosque do Zarafshan e derrote o chefe (1/3)", then "Derrote o
         /// chefe de Floresta"), or "Concluída" for a cleared region with no other hint.
         /// </summary>
         public static string LabelStatusText(LocalizationManager manager, WorldMapGraph graph, WorldMapProgress progress, BiomeType region, RegionLabelStatus status, RegionBossProgress bosses = null)

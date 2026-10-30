@@ -22,7 +22,7 @@ namespace Rapadura.UI.WorldMap
     /// <summary>
     /// In-game UI of WorldMap.unity once a hero is in play (WorldMapHudView.uxml/.uss):
     /// <list type="bullet">
-    /// <item>Top bar: hero name + level, current region, "Vitórias: 2/3 para enfrentar o chefe" (or "Região Floresta concluída! Próximo: ..."),
+    /// <item>Top bar: hero name + level, current region, "Vitórias: 2/3 para enfrentar o chefe" (or "Região Bosque do Zarafshan concluída! Próximo: ..."),
     /// weather badge/text and the in-game clock (TimeOfDay/Weather events, never polled).</item>
     /// <item>Buttons Missões / Mochila / Conquistas / Menu. Missões and Conquistas reuse
     /// <see cref="QuestLogController"/>/<see cref="AchievementListController"/> (their managers are

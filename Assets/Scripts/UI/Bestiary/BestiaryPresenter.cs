@@ -15,7 +15,7 @@ namespace Rapadura.UI.Bestiary
         public bool Locked;
         public bool IsBoss;
         public string Name;
-        /// <summary>"Vive em: Floresta" (+ " · Chefe").</summary>
+        /// <summary>"Vive em: Bosque do Zarafshan" (+ " · Chefe").</summary>
         public string Meta;
         /// <summary>"Vencidos: 3" (empty when locked).</summary>
         public string Kills;

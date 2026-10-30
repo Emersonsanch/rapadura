@@ -82,7 +82,7 @@ namespace Rapadura.Gameplay.Enemies
             // scale their plain stacks; generated gear and the refine stones below are untouched (StaminaLootRules).
             drops = Rapadura.Gameplay.Daily.StaminaLootRules.Apply(drops, Rapadura.Gameplay.Daily.DailyStaminaService.ResolveMultiplier(), _random);
 
-            // Pedras do Sertão (refine stones, Amuleto da Sorte): their own rare-drop table, rolled last (RefineStoneDrops).
+            // Pedras da Luz Presa (refine stones, Amuleto da Sorte): their own rare-drop table, rolled last (RefineStoneDrops).
             drops.AddRange(Rapadura.Gameplay.Refining.RefineStoneDrops.Roll(definition.IsBoss, biome != null ? biome.Type : (BiomeType?)null,
                 _random, NewGamePlusProgress.ResolveCurrentCycle()));
             // Partes dos bichos (crafting avançado): rolled after everything else so older seeds keep their drops (CreaturePartDrops).

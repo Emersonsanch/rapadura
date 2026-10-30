@@ -23,7 +23,7 @@ namespace Rapadura.UI.WorldMap
 {
     /// <summary>
     /// The city hub on the world map: every region has a city (<see cref="CityCatalog"/>) and they all open this same
-    /// panel with that city's residents and services. In the Floresta it is still the "Vila" of Vó Zefa: the village
+    /// panel with that city's residents and services. In the Floresta it is still the "Vila" of Vó Edna: the village
     /// services of Main.unity (personal-story villagers, Maria's gathering point, the shop and the workbench) are
     /// switched off during encounters, the only time that scene is loaded, so they are offered here instead.
     /// Self-bootstrapping like <see cref="RegionNpcTalkButton"/>, no scene edit:
@@ -33,7 +33,7 @@ namespace Rapadura.UI.WorldMap
     /// pointer blocker covers both. The panel and the service windows join the HUD's screens
     /// (<see cref="WorldMapHudController.RegisterScreen"/>): one at a time, Esc closes them.</item>
     /// <item>Button shown while the HUD is visible, the token is idle in a region with a city and nothing holds
-    /// GameplayPause; labelled with the city ("Vila", "Areia Branca"...), "(!)" when a story villager has a quest to give
+    /// GameplayPause; labelled with the city ("Vila", "Qocho"...), "(!)" when a story villager has a quest to give
     /// or hand in.</item>
     /// <item>Conversar: in the Vila, the same <c>Resources/Dialogue</c> graphs as Main.unity's NPCs, through
     /// <see cref="DialogueManager"/> (rewards of a quest finished here wait in
@@ -44,7 +44,7 @@ namespace Rapadura.UI.WorldMap
     /// counter); Bancada: <see cref="CraftingManager"/>. Their windows are created on first use from
     /// <c>Resources/UI/Village*View.uxml</c> (instances of the Main.unity views), working on a live
     /// <see cref="CarriedInventorySession"/> that hands the inventory back to the carry as soon as the windows close.</item>
-    /// <item>Baú da Vó Zefa and Fogão a lenha (<see cref="VillageKitchenController"/>): only in her village
+    /// <item>Baú da Vó Edna and Fogão a lenha (<see cref="VillageKitchenController"/>): only in her village
     /// (<see cref="CitySpec.HasGrandmaServices"/>).</item>
     /// <item>Carro de boi (<see cref="CityFastTravelPanel"/>): to another city already visited, for a little gold.</item>
     /// <item>Closing a conversation or service window returns to the panel, unless something else (pause
@@ -67,7 +67,7 @@ namespace Rapadura.UI.WorldMap
         public const string ChestScreenId = "village_chest";
         /// <summary>"Fogão a lenha" window (<see cref="VillageKitchenController"/>).</summary>
         public const string KitchenScreenId = "village_kitchen";
-        /// <summary>"Carro de boi" window (<see cref="CityFastTravelPanel"/>).</summary>
+        /// <summary>"Cais da Barca" window (<see cref="CityFastTravelPanel"/>).</summary>
         public const string FastTravelScreenId = "village_fast_travel";
         /// <summary>"Ferreiro: refinar" window (<see cref="VillageRefinePanel"/>).</summary>
         public const string RefineScreenId = "village_refine";
@@ -75,7 +75,7 @@ namespace Rapadura.UI.WorldMap
         public const string TachoScreenId = "village_tacho";
         public const string ShopViewResourcePath = "UI/VillageShopView";
         public const string CraftingViewResourcePath = "UI/VillageCraftingView";
-        /// <summary>"Baú da Vó Zefa" window (<see cref="VillageChestUIController"/>).</summary>
+        /// <summary>"Baú da Vó Edna" window (<see cref="VillageChestUIController"/>).</summary>
         public const string ChestViewResourcePath = "UI/VillageChestView";
         /// <summary>The Vila's old general store (still the asset it always was).</summary>
         public const string ShopResourcePath = "Shops/shop_general_store";
@@ -233,7 +233,7 @@ namespace Rapadura.UI.WorldMap
             return ShouldEndInventorySession(sessionOpen, shopOpen, craftingOpen, false);
         }
 
-        /// <summary>Same, counting the "Baú da Vó Zefa" window, which also works on the live map inventory.</summary>
+        /// <summary>Same, counting the "Baú da Vó Edna" window, which also works on the live map inventory.</summary>
         public static bool ShouldEndInventorySession(bool sessionOpen, bool shopOpen, bool craftingOpen, bool chestOpen)
         {
             return sessionOpen && !shopOpen && !craftingOpen && !chestOpen;
@@ -911,7 +911,7 @@ namespace Rapadura.UI.WorldMap
         }
 
         // ------------------------------------------------------------------
-        // Ferreiro: refinar (Pedras do Sertão)
+        // Ferreiro: refinar (Pedras da Luz Presa)
         // ------------------------------------------------------------------
 
         /// <summary>Oratório: buys the Bênção da Romaria from the carried bag; the keeper's answer replaces the speech line.</summary>
@@ -942,7 +942,7 @@ namespace Rapadura.UI.WorldMap
         }
 
         // ------------------------------------------------------------------
-        // Tacho Encantado da Vó (wings, Proteção do Caos, Frutas do Sertão)
+        // Tacho Encantado da Vó (wings, Proteção do Caos, Frutas de Luz)
         // ------------------------------------------------------------------
 
         private void OnTachoClicked()

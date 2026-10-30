@@ -9,8 +9,12 @@ using Rapadura.Gameplay.Items.Procedural;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Story;
 using Rapadura.Gameplay.Tutorial;
+using Rapadura.Gameplay.Mounts;
 using Rapadura.Gameplay.World;
+using Rapadura.Gameplay.World.Cities;
+using Rapadura.Gameplay.World.Cities.Town;
 using Rapadura.Gameplay.World.Map;
+using Rapadura.Save;
 using Rapadura.UI.Common;
 using Rapadura.UI.Menus;
 using Rapadura.UI.Tutorial;
@@ -37,7 +41,15 @@ namespace Rapadura.UI.Death
     /// screen owns the defeat: it claims <see cref="SceneTransitionService.DeferDefeatResolution"/> so
     /// the arena doesn't run its own timed return underneath, and "Continuar" (or the timeout) revives
     /// the player and ends the encounter as <see cref="EncounterOutcome.Defeat"/> — back to the world
-    /// map — instead of a checkpoint respawn inside the arena. A load from here also leaves the arena.
+    /// map, where <c>CityProgress</c> puts the token in the region's city — instead of a checkpoint respawn inside the
+    /// arena. A load from here also leaves the arena.
+    ///
+    /// Respawn always in the city (Docs/Progressao500.md §7): outside an encounter "Continuar" never revives in place nor
+    /// at a checkpoint. In the walkable city it wakes the hero at the plaza (<see cref="CityModeController.RespawnAtPlaza"/>);
+    /// anywhere else it applies the defeat to the region (<see cref="CityProgress.ApplyDefeatHere"/>) and loads that city in
+    /// respawn mode (<see cref="SceneTransitionService.BeginCityVisit"/> with <c>respawn</c>: the hero wakes at the plaza).
+    /// Reviving at the scene's checkpoint is only the safety net of test scenes (no <c>CityProgress</c> registered). A hero
+    /// who falls mounted leaves the mount tired (it walks home, Mounts.md §2.1) and wakes up on foot.
     /// Pausing goes through <see cref="GameplayPause"/> like every other modal screen.
     ///
     /// If this component is absent or disabled, CheckpointManager keeps its original instant respawn.
@@ -60,7 +72,7 @@ namespace Rapadura.UI.Death
     {
         private const string PlayerTag = "Player";
         private const string DefaultTitle = "Você caiu...";
-        private const string DefaultMessage = "O sertão não perdoa, mas a jornada continua.";
+        private const string DefaultMessage = "A Treva derruba, mas a luz sempre chama de volta.";
         private const string DefaultEncounterContinueText = "Voltar ao mapa";
 
         [Header("Panels")]
@@ -572,7 +584,74 @@ namespace Rapadura.UI.Death
                 return;
             }
 
-            RespawnViaCheckpoint(FindPlayerStats());
+            RespawnInCity(FindPlayerStats());
+        }
+
+        /// <summary>
+        /// A defeat outside an encounter: the plaza of the region's city. In the walkable city, the plaza of this city;
+        /// elsewhere the city of <see cref="CityProgress.CurrentRegion"/>, loaded in respawn mode. Falls back to the
+        /// scene checkpoint only without a registered <see cref="CityProgress"/> / <see cref="SceneTransitionService"/>.
+        /// </summary>
+        private void RespawnInCity(PlayerStats stats)
+        {
+            TireMountIfRiding();
+            bool hasCities = ServiceLocator.TryGet(out CityProgress cities);
+
+            CityModeController town = CityModeController.Current;
+            if (town != null && town.IsReady)
+            {
+                CitySpec here = CityCatalog.Get(town.CityId);
+                if (hasCities && here != null)
+                {
+                    cities.ApplyDefeatHere(here.Region);
+                    cities.ConsumeRespawnNotice();
+                }
+
+                stats?.Revive();
+                town.RespawnAtPlaza();
+                return;
+            }
+
+            if (hasCities && _transition != null && !_transition.HasPendingCityVisit && !_transition.HasPendingEncounter)
+            {
+                CitySpec city = cities.ApplyDefeatHere();
+                if (city != null)
+                {
+                    stats?.Revive();
+                    if (ServiceLocator.TryGet(out SaveManager saveManager))
+                    {
+                        saveManager.AutoSave();
+                    }
+
+                    // Frozen until the city loads (same reason as ReturnToMapAsDefeat); released on scene unload (OnDisable).
+                    GameplayPause.Acquire(this);
+                    if (_transition.BeginCityVisit(city.CityId, respawn: true))
+                    {
+                        return;
+                    }
+
+                    GameplayPause.Release(this);
+                }
+            }
+
+            RespawnViaCheckpoint(stats);
+        }
+
+        /// <summary>Falling while mounted tires the active mount (it never dies; it walks home to rest).</summary>
+        private static void TireMountIfRiding()
+        {
+            GameObject player = GameObject.FindGameObjectWithTag(PlayerTag);
+            MountController rider = player != null ? player.GetComponent<MountController>() : null;
+            if (rider == null || rider.Session == null || !rider.Session.IsMounted)
+            {
+                return;
+            }
+
+            MountCollection collection = MountCollection.ResolveShared();
+            if (collection.Active != null)
+            {
+                collection.SetHealth(collection.Active, 0f);
+            }
         }
 
         /// <summary>
@@ -581,6 +660,7 @@ namespace Rapadura.UI.Death
         /// </summary>
         private void ReturnToMapAsDefeat(PlayerStats stats)
         {
+            TireMountIfRiding();
             if (stats != null && stats.IsDead)
             {
                 stats.Revive();

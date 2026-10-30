@@ -110,7 +110,7 @@ namespace Rapadura.Gameplay.Tacho
     /// 6 ferro + 6 pedras + 150 gold, 35%. Level 4 (lendária) is documented only.</item>
     /// <item>Proteção do Caos: the normal refine (<see cref="RefineRules"/>: same stone, gold and chance, no charm) + 1 Pedra do
     /// Caos, only where a failure would lose a level (+7..+14); a failure keeps the level.</item>
-    /// <item>Frutas do Sertão: Mandacaru (+1 point, 60%) and Umbu (redistribute 1 point, 80%).</item>
+    /// <item>Frutas de Luz: Mandacaru (+1 point, 60%) and Umbu (redistribute 1 point, 80%).</item>
     /// <item>Failure, every recipe: the materials, stones and gold are spent; the main item is kept as it was.</item>
     /// </list>
     /// </summary>

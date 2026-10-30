@@ -33,8 +33,8 @@ namespace Rapadura.Gameplay.World.Cities
     /// Offline today (world map, <c>WorldMapCityPresence</c>): the city of a region is the circle of
     /// <see cref="MapCityRadius"/> around its map node; while the hero token is inside it no random encounter
     /// (<see cref="CanStartRandomEncounter"/>) and no road event (<see cref="CanTriggerRoadEvent"/>) starts, the HUD
-    /// says "Você está em zona segura", and a defeat sends the hero back to the city of the region it happened in
-    /// (<see cref="RespawnRegion"/>). The encounter arena (Main.unity) has no city: everything there is
+    /// says "Você está em zona segura", and every defeat sends the hero back to the plaza of the city of the region it
+    /// happened in (<see cref="RespawnRegion"/>, Docs/Progressao500.md §7). The encounter arena (Main.unity) has no city: everything there is
     /// <see cref="ZoneKind.Wilds"/>, where every rule answers exactly what combat already does, so nothing changes.
     /// </para>
     /// <para>
@@ -129,12 +129,28 @@ namespace Rapadura.Gameplay.World.Cities
         }
 
         /// <summary>
-        /// Where a defeated hero wakes up: the city of the region the defeat happened in, or <paramref name="fallback"/>
-        /// (the starting region) when that region has no city.
+        /// Where a defeated hero wakes up while the world is the 4 regions of today (Docs/Progressao500.md §7): the city of
+        /// the region the defeat happened in, or <paramref name="fallback"/> (the starting region) when that region has no
+        /// city. Every defeat goes through this (arena, event room, walkable city, open map): a hero never revives where
+        /// they fell nor at an arena checkpoint, and an outpost (safe zone without a city) is never a respawn point.
         /// </summary>
         public static BiomeType RespawnRegion(BiomeType defeatRegion, Func<BiomeType, bool> hasCity, BiomeType fallback)
         {
             return hasCity == null || hasCity(defeatRegion) ? defeatRegion : fallback;
         }
+
+        /// <summary>
+        /// The general form for the 100 maps (Docs/Mapas100.md): each map names its "cidade de retorno"
+        /// (<paramref name="returnCityOf"/>, map id → city id); a map without one (or an unknown map) wakes the hero in
+        /// <paramref name="fallbackCity"/> (the starting city). Pure, so the online server picks the very same city.
+        /// </summary>
+        public static string RespawnCity(string mapId, Func<string, string> returnCityOf, string fallbackCity)
+        {
+            string city = string.IsNullOrEmpty(mapId) || returnCityOf == null ? null : returnCityOf(mapId);
+            return string.IsNullOrEmpty(city) ? fallbackCity : city;
+        }
+
+        /// <summary>Only cities are respawn points: an outpost (safe zone without a city: rest, sell, repair) never is.</summary>
+        public static bool IsRespawnPoint(bool isCity, bool isOutpost) => isCity && !isOutpost;
     }
 }

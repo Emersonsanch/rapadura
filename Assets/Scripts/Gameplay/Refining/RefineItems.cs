@@ -1,7 +1,7 @@
 namespace Rapadura.Gameplay.Refining
 {
     /// <summary>
-    /// Item ids (<c>Resources/Items</c>) of the "Pedras do Sertão" and the Amuleto da Sorte. Stackable materials (1×1 on
+    /// Item ids (<c>Resources/Items</c>) of the "Pedras da Luz Presa" and the Amuleto da Sorte. Stackable materials (1×1 on
     /// the Mochila grid); their names/descriptions live in <see cref="RefineTexts"/> (<c>item.&lt;id&gt;.*</c>).
     /// </summary>
     public static class RefineItems

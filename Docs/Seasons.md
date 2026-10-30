@@ -1,23 +1,25 @@
 # Temporadas e Viagem rápida
 
 Dois sistemas pequenos que nasceram juntos: o **Sistema de temporadas** (eventos pelo calendário, começando pelo
-Bema, a antiga Festa Junina) e a **Viagem rápida** do carro de boi. Tudo é regra pura em C# (testável no EditMode e rodável no
+Bema, a antiga Festa Junina) e a **Viagem rápida** das Barcas de Luz. Tudo é regra pura em C# (testável no EditMode e rodável no
 servidor do online, ver `project_multiplayer_mu_online`), com a UI construída em código (UI Toolkit), sem edição de cena.
 
 Testes: `Assets/Tests/EditMode/SeasonsTests.cs`.
 
-## 1. Viagem rápida (carro de boi)
+## 1. Viagem rápida (Barcas de Luz)
 
-Não é um sistema novo: é o **carro de boi** que já existia (`CityFastTravelPanel`, `FastTravelRules`, Docs/Cities.md,
-2 ouro por estrada) com as regras novas:
+Não é um sistema novo: são as **Barcas de Luz** que já existiam, antes o carro de boi (`CityFastTravelPanel`,
+`FastTravelRules`, Docs/Cities.md, "passagem: 2 ouro por estrada"; Docs/WorldBible_Maniqueismo.md §3.16), com as regras
+novas. Botão/painel: **Cais da Barca**. A **Barca do Sol** corre no Dia/Amanhecer e a **Barca da Lua** no Entardecer/Noite
+(`TimeOfDayManager`), só no texto e na cor do fade; as regras são as mesmas:
 
 | Regra | Onde |
 |---|---|
 | Só vai para cidades **visitadas** e regiões desbloqueadas (já existia) | `FastTravelRules.Check` |
-| Só para numa região cujo **chefe já foi vencido**; a Vila (Floresta, `HomeRegion`) é a casa e está sempre aberta | `FastTravelRules.IsStopOpen`, `RegionBossProgress.IsRegionCleared` |
+| Só para numa região cujo **chefe já foi vencido**; a Vila (Bosque do Zarafshan, `HomeRegion`) é a casa e está sempre aberta | `FastTravelRules.IsStopOpen`, `RegionBossProgress.IsRegionCleared` |
 | **Bloqueado durante eventos**: carta de evento de estrada aberta, encontro pendente ou o token andando | `FastTravelRules.IsEventActive`, `CityFastTravelPanel.IsEventActive` |
 | Custo pequeno: `GoldPerRoad` (2) × estradas do caminho mais curto (BFS no grafo) | `FastTravelRules.Cost` |
-| Transição curta e só cosmética: tela escurece (0,35 s), "O carro de boi vai rangendo pela estrada até …" (0,6 s), clareia (0,35 s) | `FastTravelTransition` |
+| Transição curta e só cosmética: tela escurece (0,35 s), "A Barca do Sol desliza pelo rio de luz até …" / "A Barca da Lua desliza em silêncio até …" (0,6 s), clareia (0,35 s) | `FastTravelTransition` |
 
 Ordem das mensagens ao jogador: mesma cidade → evento acontecendo → fora da cidade → não visitada → bloqueada →
 chefe não vencido → sem rota → sem ouro.
@@ -27,8 +29,8 @@ trocada (`MapProgress.SetCurrentRegion`) e `WorldMapController.SyncWithProgress`
 sorteio de encontro, carta de evento de estrada (`WorldEventCardController`) nem falas de estrada. A transição segura
 `GameplayPause` durante o fade e roda em tempo não escalado; com "Reduzir Movimento" (ou sem HUD) a chegada é
 instantânea, então os testes de PlayMode (`WorldMapFlowTestBase`) não esperam animação. O bug antigo do congelamento
-(evento de estrada cancelando a viagem, `GameLoadedEvent.fromCarriedState`) não é tocado: o carro não sai enquanto há
-evento.
+(evento de estrada cancelando a viagem, `GameLoadedEvent.fromCarriedState`) não é tocado: a barca não sai enquanto há
+evento ("A barca não sai com encrenca na estrada.").
 
 ## 2. Sistema de temporadas
 

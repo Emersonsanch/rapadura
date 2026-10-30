@@ -544,6 +544,51 @@ namespace Rapadura.Gameplay.Enemies
         [Tooltip("Scales the archetype's max turn speed (EnemyMotionProfile.MaxTurnSpeed); 360 = as tuned. Instant snapping (very high values) reads as janky/robotic, especially on rig-free mesh visuals.")]
         [SerializeField] private float _turnSpeedDegPerSec = 360f;
 
+        [Header("Steering (Docs/Animation.md §7.3)")]
+        [Tooltip("Slide around trees, rocks and walls probed ahead (one SphereCast every few frames, staggered per enemy) instead of pushing into them, and ease off the speed when something is right ahead.")]
+        [SerializeField] private bool _avoidObstacles = true;
+        [Tooltip("Keep (own radius + neighbour radius) × this between enemy centres — a pack spreads out instead of stacking on one spot. 0 = off.")]
+        [SerializeField, Min(0f)] private float _separationScale = EnemySteering.DefaultSeparationScale;
+        [Tooltip("Per-enemy patrol/wander pace spread (±fraction of PatrolSpeed), seeded by the instance: no two creatures of a pack amble in lock-step. Chase and flee speeds are gameplay and stay exact. 0 = everyone at the definition speed.")]
+        [SerializeField, Range(0f, 0.3f)] private float _paceSpread = EnemySteering.DefaultPaceSpread;
+
+        /// <summary>Frames between obstacle probes per enemy (staggered by instance, so a pack of 20 costs ~3 casts/frame).</summary>
+        private const int ProbeInterval = 6;
+        /// <summary>Most neighbours a separation pass considers (nearest-first is not needed: the push is distance-weighted).</summary>
+        private const int MaxSeparationNeighbours = 12;
+        /// <summary>Ground/slope hits (normal mostly up) are not obstacles.</summary>
+        private const float WalkableNormalY = 0.6f;
+
+        private static readonly RaycastHit[] ProbeHits = new RaycastHit[8];
+
+        private float _probeHitDistance = -1f;
+        private Vector3 _probeHitNormal;
+        private float _probeLookAhead;
+        private float _paceMultiplier = 1f;
+        private bool _paceResolved;
+        private bool _prefersRight;
+
+        /// <summary>Latest obstacle probe: distance to the blocking hit ahead (−1 = clear), its planar normal and the probe length. Debug/tests.</summary>
+        public float ProbeHitDistance => _probeHitDistance;
+        public Vector3 ProbeHitNormal => _probeHitNormal;
+
+        /// <summary>This enemy's pace (1 ± <see cref="_paceSpread"/>), fixed per instance (<see cref="EnemySteering.PaceMultiplier"/>).</summary>
+        public float PaceMultiplier
+        {
+            get
+            {
+                if (!_paceResolved)
+                {
+                    int seed = GetInstanceID();
+                    _paceMultiplier = EnemySteering.PaceMultiplier(seed, _paceSpread);
+                    _prefersRight = EnemySteering.PrefersRight(seed);
+                    _paceResolved = true;
+                }
+
+                return _paceMultiplier;
+            }
+        }
+
         /// <summary>Braking multiplier on the archetype deceleration while planted for an attack.</summary>
         private const float AttackBrakeMultiplier = 2.5f;
 
@@ -655,7 +700,8 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             float multiplier = MoveSpeedMultiplier;
-            Vector3 desired = direction.normalized * (speed * multiplier);
+            Vector3 heading = Steer(direction.normalized, speed * multiplier, deltaTime, out float obstacleFactor);
+            Vector3 desired = heading * (speed * multiplier * obstacleFactor);
             if (multiplier <= 0f)
             {
                 _velocity = Vector3.zero; // rooted: hard stop, no coasting through the root
@@ -668,7 +714,126 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             Displace(_velocity * deltaTime, deltaTime);
-            TurnTowards(direction, deltaTime);
+            TurnTowards(heading, deltaTime);
+        }
+
+        /// <summary>
+        /// Bends the wanted <paramref name="direction"/> around the obstacle probed ahead and away from
+        /// crowding neighbours (<see cref="EnemySteering"/>); <paramref name="obstacleFactor"/> eases the speed
+        /// off near a blocking hit. Pure pass-through when both features are off.
+        /// </summary>
+        private Vector3 Steer(Vector3 direction, float speed, float deltaTime, out float obstacleFactor)
+        {
+            obstacleFactor = 1f;
+            Vector3 heading = direction;
+
+            if (_avoidObstacles)
+            {
+                ProbeObstacle(direction, speed);
+                if (_probeHitDistance >= 0f)
+                {
+                    heading = EnemySteering.AvoidanceDirection(direction, _probeHitNormal, _probeHitDistance, _probeLookAhead, _prefersRight);
+                    obstacleFactor = EnemySteering.ObstacleSlowdown(_probeHitDistance, _probeLookAhead);
+                }
+            }
+
+            if (_separationScale > 0f)
+            {
+                Vector3 push = Vector3.zero;
+                if (AccumulateNeighbourSeparation(ref push))
+                {
+                    heading = EnemySteering.Combine(heading, push);
+                }
+            }
+
+            return heading.sqrMagnitude > 1e-6f ? heading : direction;
+        }
+
+        /// <summary>
+        /// Sphere-casts ahead along the heading every <see cref="ProbeInterval"/> frames (staggered per enemy) and caches
+        /// the nearest blocking hit: static props and walls (Default layer, non-trigger). Own colliders, the target, other
+        /// enemies (separation handles those) and walkable ground/slopes are ignored.
+        /// </summary>
+        private void ProbeObstacle(Vector3 direction, float speed)
+        {
+            // Stagger: instance id spreads the probes over the interval.
+            if ((Time.frameCount + (GetInstanceID() & 0x7FFF)) % ProbeInterval != 0)
+            {
+                return;
+            }
+
+            float radius = _characterController != null ? _characterController.radius : 0.4f;
+            float height = _characterController != null ? Mathf.Max(_characterController.height, radius * 2f) : 1f;
+            Vector3 origin = transform.position + Vector3.up * Mathf.Max(radius * 1.05f, height * 0.45f);
+            float lookAhead = radius + EnemySteering.LookAhead(speed, Motion.Deceleration);
+            _probeLookAhead = Mathf.Max(0.01f, lookAhead - radius);
+            _probeHitDistance = -1f;
+
+            int count = Physics.SphereCastNonAlloc(origin, radius * 0.9f, direction, ProbeHits, lookAhead, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+            float best = float.PositiveInfinity;
+            for (int i = 0; i < count; i++)
+            {
+                RaycastHit hit = ProbeHits[i];
+                Collider collider = hit.collider;
+                if (collider == null || hit.distance >= best)
+                {
+                    continue;
+                }
+
+                Transform hitTransform = collider.transform;
+                if (hitTransform.IsChildOf(transform) || (Target != null && (hitTransform == Target || hitTransform.IsChildOf(Target))))
+                {
+                    continue;
+                }
+
+                if (hit.normal.y > WalkableNormalY || collider.GetComponentInParent<EnemyController>() != null)
+                {
+                    continue;
+                }
+
+                // Sphere already overlapping at the start: distance 0, normal is still usable.
+                best = hit.distance;
+                _probeHitNormal = hit.normal;
+            }
+
+            if (!float.IsPositiveInfinity(best))
+            {
+                _probeHitDistance = Mathf.Max(0f, best - radius * 0.1f);
+            }
+        }
+
+        /// <summary>Sums the push away from the enabled enemies crowding this one (see <see cref="EnemySteering.AccumulateSeparation"/>).</summary>
+        private bool AccumulateNeighbourSeparation(ref Vector3 push)
+        {
+            float ownRadius = _characterController != null ? _characterController.radius : 0.4f;
+            Vector3 self = transform.position;
+            bool any = false;
+            int considered = 0;
+
+            foreach (EnemyController other in Enabled)
+            {
+                if (other == null || ReferenceEquals(other, this) || (other.Health != null && other.Health.IsDead))
+                {
+                    continue;
+                }
+
+                float otherRadius = other._characterController != null ? other._characterController.radius : 0.4f;
+                float desired = (ownRadius + otherRadius) * _separationScale;
+                Vector3 delta = other.transform.position - self;
+                delta.y = 0f;
+                if (delta.sqrMagnitude >= desired * desired)
+                {
+                    continue;
+                }
+
+                any |= EnemySteering.AccumulateSeparation(ref push, self, other.transform.position, desired);
+                if (++considered >= MaxSeparationNeighbours)
+                {
+                    break;
+                }
+            }
+
+            return any;
         }
 
         /// <summary>Brakes hard (attack stance) instead of coasting; marks the enemy as handled this tick.</summary>

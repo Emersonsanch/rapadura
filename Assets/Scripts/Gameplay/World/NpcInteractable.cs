@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Rapadura.Core.DI;
 using Rapadura.Core.Logging;
 using Rapadura.Gameplay.Dialogue;
@@ -45,6 +46,21 @@ namespace Rapadura.Gameplay.World
         [SerializeField] private bool _interactOnTriggerEnter = true;
 
         private bool _playerInRange;
+
+        private static readonly System.Collections.Generic.HashSet<NpcInteractable> Active = new System.Collections.Generic.HashSet<NpcInteractable>();
+
+        /// <summary>Enabled NPC interactables in the loaded scenes — points of interest for the hero's head-look (<c>PlayerProceduralAnimator</c>).</summary>
+        public static IReadOnlyCollection<NpcInteractable> ActiveNpcs => Active;
+
+        private void OnEnable()
+        {
+            Active.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            Active.Remove(this);
+        }
 
         public DialogueDefinition Dialogue => _dialogue;
         public ShopDefinition Shop => _shop;

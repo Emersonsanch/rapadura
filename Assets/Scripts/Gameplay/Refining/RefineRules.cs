@@ -3,7 +3,7 @@ using Rapadura.Gameplay.Items;
 
 namespace Rapadura.Gameplay.Refining
 {
-    /// <summary>The "Pedras do Sertão" (MU Online's jewels, our names and theme).</summary>
+    /// <summary>The "Pedras da Luz Presa" (MU Online's jewels, our names and theme).</summary>
     public enum RefineStone
     {
         None = 0,

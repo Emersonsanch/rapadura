@@ -65,7 +65,7 @@ namespace Rapadura.Gameplay.Enemies.States
             }
 
             Vector3 direction = EnemyDetectionUtility.DirectionTowards(context.transform.position, waypoint.position);
-            context.MoveInDirection(direction, definition.PatrolSpeed, deltaTime);
+            context.MoveInDirection(direction, definition.PatrolSpeed * context.PaceMultiplier, deltaTime);
         }
 
         /// <summary>
@@ -93,8 +93,9 @@ namespace Rapadura.Gameplay.Enemies.States
                 return;
             }
 
+            // Each creature ambles at its own pace (EnemyController.PaceMultiplier): a pack never moves in lock-step.
             Vector3 direction = EnemyDetectionUtility.DirectionTowards(position, _wanderTarget);
-            context.MoveInDirection(direction, definition.PatrolSpeed, deltaTime);
+            context.MoveInDirection(direction, definition.PatrolSpeed * context.PaceMultiplier, deltaTime);
         }
 
         public void FixedTick(EnemyController context, float fixedDeltaTime)

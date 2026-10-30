@@ -71,7 +71,7 @@ namespace Rapadura.Gameplay.Fishing
     /// notebook.
     /// <list type="bullet">
     /// <item>Every new species is fed to <see cref="AchievementManager"/> (<see cref="AchievementConditionType.FishSpeciesCaught"/>,
-    /// distinct ids: "Pescador do Sertão" and "O Peixe-Dourado"); achievements are per profile, so after each load the
+    /// distinct ids: "Mestre das Águas" and "O Peixe-Dourado"); achievements are per profile, so after each load the
     /// save's species are fed again (distinct, no double counting).</item>
     /// <item>The first catch of a species teaches the dishes it is the key ingredient of
     /// (<see cref="MealCatalog.TaughtByCatch"/>, <see cref="MealLearnSource.Fishing"/>); re-checked after each load.</item>

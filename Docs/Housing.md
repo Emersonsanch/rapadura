@@ -20,44 +20,44 @@ Cada região do mapa tem **uma cidade que é zona segura**. Lá dentro:
 
 | Região | Cidade | Quem já mora lá (NPCs do jogo) | Lojas da cidade (§8) |
 |---|---|---|---|
-| Floresta | **Vila da Vó Zefa** (o sítio e a vila em volta) | Vó Zefa, Dona Cida (a rezadeira) | Armazém Geral (`shop_general_store`, já existe), Marcenaria, Armarinho, Mercearia, Costureira, Viveiro, Casa de Música, Feira livre (fim de semana), Casa de Leilões **[online]** |
-| Deserto | **Povoado de Areia Branca** **[proposto: nome]** | Seu Bento, o tropeiro | Filial do Armazém, Olaria da Dona Rosa, base do Mascate Seu Bento, Feira livre (quarta) |
-| Montanha | **Vila da Serra Alta** **[proposto: nome]** | Mestre Tonho, o mineiro | Filial do Armazém, Forja do Mestre Tonho, Feira livre (quinta) |
-| Cavernas | **Vila das Lamparinas** **[proposto: nome]** | Benedita das Lamparinas | Filial do Armazém, Lamparinas da Benedita, Feira livre (sexta) |
+| Bosque do Zarafshan | **Vila da Vó Edna** (o pomar e a vila em volta) | Vó Edna, Mariam (a ervateira) | Armazém Geral (`shop_general_store`, já existe), Marcenaria, Armarinho, Mercearia, Costureira, Viveiro, Casa de Música, Feira livre (fim de semana), Casa de Leilões **[online]** |
+| Areias Flamejantes | **Oásis de Qocho** **[proposto: nome]** | Ammo, o caravaneiro | Filial do Armazém, Olaria da Náfsha, base do Caravaneiro Ammo, Feira livre (quarta) |
+| Serra de Kaggen | **Vila de Litema** **[proposto: nome]** | Mestre Mihr, o mineiro | Filial do Armazém, Forja do Mestre Mihr, Feira livre (quinta) |
+| Grutas do Limiar | **Vila das Lamparinas** **[proposto: nome]** | Parthenos, a das Lamparinas | Filial do Armazém, Lamparinas da Parthenos, Feira livre (sexta) |
 
 Regras ligadas à casa:
 
-- **[offline]** a campanha tem uma casa só, na Vila da Vó Zefa. As outras cidades abrem conforme o chefe da região anterior cai (mesma regra de `WorldMapProgress`); nelas há lojas, mas não terreno.
-- **[online]** cada cidade tem uma **rua de terrenos** (ver o quadro de terrenos, §11.13). Cada conta tem **uma casa principal**; a mudança de cidade custa uma taxa (§10.4). O pé de cajá do terreno (§2.1) vai junto na mudança.
+- **[offline]** a campanha tem uma casa só, na Vila da Vó Edna. As outras cidades abrem conforme o chefe da região anterior cai (mesma regra de `WorldMapProgress`); nelas há lojas, mas não terreno.
+- **[online]** cada cidade tem uma **rua de terrenos** (ver o quadro de terrenos, §11.13). Cada conta tem **uma casa principal**; a mudança de cidade custa uma taxa (§10.4). O pé de damasco do terreno (§2.1) vai junto na mudança.
 - A cidade é o único lugar em que se entra na casa: no mapa mundi, o botão "Minha casa" aparece quando o token está parado no nó da cidade, igual ao "Enfrentar o chefe" de hoje.
 
 ---
 
 ## 2. A casa própria
 
-### 2.1 Como se ganha: o pé de cajá **[proposto]**
+### 2.1 Como se ganha: o pé de damasco **[proposto]**
 
 **[decidido]** Todo jogador começa com uma **casa de madeira**, que vai melhorando a partir daí.
 
-História (Missão da Casa 1, "Um Cantinho Seu"): logo depois do prólogo, na primeira volta à vila (depois das 3 primeiras vitórias na Floresta, antes do Lobo Alfa), a Vó Zefa leva o primo até o fundo do sítio:
+História (Missão da Casa 1, "Um Cantinho Seu"): logo depois do prólogo, na primeira volta à vila (depois das 3 primeiras vitórias no Bosque do Zarafshan, antes do Kök-Böri), a Vó Edna leva o primo até o fundo do pomar:
 
-> "O seu avô plantava um pé de cajá pra cada neto que nascia. Este aqui é o seu. A terra em volta dele é sua também — e a casinha de madeira que ele levantou pra descansar nas viagens de tropeiro agora é sua casa. Tem goteira, tem cupim, mas tem amor."
+> "O seu avô plantava um pé de damasco pra cada neto que nascia. Este aqui é o seu. A terra em volta dele é sua também — e a casinha de madeira que ele levantou pra descansar nas viagens de caravaneiro agora é sua casa. Tem goteira, tem cupim, mas tem amor."
 
-- O pé de cajá é decoração fixa do quintal (não sai do lugar, não conta no limite de itens). Ele cresce junto com a casa: muda em N1, árvore com frutas em N5.
+- O pé de damasco é decoração fixa do quintal (não sai do lugar, não conta no limite de itens). Ele cresce junto com a casa: muda em N1, árvore com frutas em N5.
 - **[offline]** a casa é "a casa dos primos": é do save, e os cinco moram nela. O primo ativo é quem aparece; os outros quatro aparecem como NPCs de visita (§4.6).
-- **[online]** quem não é um dos cinco primos (se o usuário escolher personagem próprio, ver Fase 12.1) é "neto de coração" da Vó Zefa: a fala troca para "Aqui todo mundo que chega vira família".
+- **[online]** quem não é um dos cinco primos (se o usuário escolher personagem próprio, ver Fase 12.1) é "neto de coração" da Vó Edna: a fala troca para "Aqui todo mundo que chega vira família".
 
-Recompensas da missão: a casa N1, `casa_util_001` Baú de madeira simples, `casa_util_006` Guarda-roupa de duas portas, `casa_quarto_016` Cama de vento dobrável, `casa_curral_001` Casinha de cachorro do Caramelo e o `casa_util_023` Livro de visitas.
+Recompensas da missão: a casa N1, `casa_util_001` Baú de madeira simples, `casa_util_006` Guarda-roupa de duas portas, `casa_quarto_016` Cama de vento dobrável, `casa_curral_001` Casinha de cachorro do Ari e o `casa_util_023` Livro de visitas.
 
 ### 2.2 Níveis da casa **[decidido: madeira = nível 1; escada proposta]**
 
 | Nível | Nome | Cômodos | Grade interna (células de 0,5 m) | Quintal (células de 1 m) | Limite de itens (dentro + quintal) | Baú da casa | Visitantes ao mesmo tempo **[online]** | Para subir |
 |---|---|---|---|---|---|---|---|---|
 | **N1** | Casa de madeira | 1 cômodo (sala-quarto-cozinha) + alpendre pequeno | 10 × 8 (5 × 4 m) | 8 × 8 | 40 + 15 | 20 espaços | 4 | começa com ela |
-| **N2** | Casa de madeira com varanda | sala, quarto, varanda na frente | 14 × 10 (7 × 5 m) + varanda 14 × 4 | 10 × 10 (+ horta) | 70 + 25 | 30 | 6 | nível 8, Lobo Alfa derrotado, **150 ouro** + 30 madeira + 15 fibra + 5 ferro |
-| **N3** | Casa de taipa e telha | sala, quarto, cozinha, varanda | 18 × 12 (9 × 6 m) | 12 × 12 (+ poço e curral) | 110 + 40 | 45 | 8 | nível 18, Guardião da Ruína derrotado, **400 ouro** + 40 madeira + 30 pedra + 20 fibra |
+| **N2** | Casa de madeira com varanda | sala, quarto, varanda na frente | 14 × 10 (7 × 5 m) + varanda 14 × 4 | 10 × 10 (+ horta) | 70 + 25 | 30 | 6 | nível 8, Kök-Böri derrotado, **150 ouro** + 30 madeira + 15 fibra + 5 ferro |
+| **N3** | Casa de taipa e telha | sala, quarto, cozinha, varanda | 18 × 12 (9 × 6 m) | 12 × 12 (+ poço e curral) | 110 + 40 | 45 | 8 | nível 18, Grande Ushabti derrotado, **400 ouro** + 40 madeira + 30 pedra + 20 fibra |
 | **N4** | Casa de alvenaria | sala, 2 quartos, cozinha, banheiro, oficina, varanda | 22 × 16 (11 × 8 m) | 14 × 14 | 160 + 60 | 60 | 10 | nível 28, Senhor da Guerra derrotado, **1.000 ouro** + 60 pedra + 20 ferro (lingote) + 30 madeira |
-| **N5** | Casarão / sede de fazenda | sala grande, 3 quartos, cozinha, banheiro, oficina, sala de troféus, varanda em L, sótão | 30 × 20 (15 × 10 m, em duas alas) | 18 × 18 (+ curral grande) | 240 + 90 | 90 | 12 | nível 38, Habitante Ancestral derrotado, **2.500 ouro** + 100 pedra + 40 ferro + 60 madeira + 1 lembrança de cada chefe |
+| **N5** | Casarão / sede de fazenda | sala grande, 3 quartos, cozinha, banheiro, oficina, sala de troféus, varanda em L, sótão | 30 × 20 (15 × 10 m, em duas alas) | 18 × 18 (+ curral grande) | 240 + 90 | 90 | 12 | nível 38, Tages, o Habitante Ancestral derrotado, **2.500 ouro** + 100 pedra + 40 ferro + 60 madeira + 1 lembrança de cada chefe |
 
 - "Lembrança de chefe" é o troféu-placa garantido na primeira vitória contra cada chefe (§7.2). Ele não é gasto: só precisa estar na casa.
 - A subida é instantânea, com uma cena curta da família ajudando (Joaquim carregando tijolo, Ícaro "otimizando" a betoneira, Maithe no telhado, Maria servindo água, Lavine pintando a porta). Na N3, N4 e N5 a cena é a Missão da Casa correspondente (§7.3).
@@ -71,8 +71,8 @@ Recompensas da missão: a casa N1, `casa_util_001` Baú de madeira simples, `cas
 - **Quintal:** grade externa de 1 m. Aceita só itens com encaixe Quintal ou Piso "de fora" (bancos, mesas de tora).
   - **Horta (N2+):** canteiros plantáveis (§11.9).
   - **Poço (N3+):** dá água para o regador e para a horta. Vem da Missão "Água Fresca".
-  - **Curral (N3+):** área cercada para os animais decorativos e para o Caramelo dormir fora no calor.
-  - **Galinheiro e pé de cajá:** o galinheiro é comprado; o cajá é fixo.
+  - **Curral (N3+):** área cercada para os animais decorativos e para o Ari dormir fora no calor.
+  - **Galinheiro e pé de damasco:** o galinheiro é comprado; o cajá é fixo.
 
 ### 2.4 Regras de encaixe
 
@@ -181,7 +181,7 @@ A proposta é um **`HouseMeshBuilder`** (irmão desses dois) que monta a casa a 
 |---|---|---|---|
 | Andar, sentar, deitar na rede, tocar instrumento, ver troféus e relíquias | ✓ | ✓ | ✓ |
 | Assinar o livro de visitas | ✓ | ✓ | ✓ |
-| Fazer carinho no Caramelo | ✓ | ✓ | ✓ |
+| Fazer carinho no Ari | ✓ | ✓ | ✓ |
 | Mover, girar e guardar **itens do dono** no Depósito | — | ✓ | — |
 | Colocar itens **do Depósito do dono** | — | ✓ | — |
 | Usar bancada, fogão, tear e forja **com os próprios materiais** | — | — | ✓ |
@@ -210,7 +210,7 @@ A proposta é um **`HouseMeshBuilder`** (irmão desses dois) que monta a casa a 
 ### 4.6 Sem internet (campanha) **[offline]**
 
 - Não há convite de verdade. A casa é do save.
-- **Visitas de NPC:** de vez em quando (1 por dia de jogo, no máximo), um dos quatro primos que não estão ativos, a Vó Zefa ou um NPC das missões regionais (Dona Cida, Seu Bento, Mestre Tonho, Benedita) aparece de visita. Eles sentam, comentam um item ("Essa rede é igualzinha à da Vó!") e **assinam o livro de visitas**. As falas mudam com o progresso da campanha, como as "conversas entre primos na estrada" do TODO.
+- **Visitas de NPC:** de vez em quando (1 por dia de jogo, no máximo), um dos quatro primos que não estão ativos, a Vó Edna ou um NPC das missões regionais (Mariam, Ammo, Mestre Mihr, Parthenos) aparece de visita. Eles sentam, comentam um item ("Essa rede é igualzinha à da Vó!") e **assinam o livro de visitas**. As falas mudam com o progresso da campanha, como as "conversas entre primos na estrada" do TODO.
 - Quando o online chegar, a casa do save pode ser importada para a conta (migração opcional, Fase 12.2).
 
 ### 4.7 Servidor **[online]**
@@ -226,22 +226,22 @@ A proposta é um **`HouseMeshBuilder`** (irmão desses dois) que monta a casa a 
 
 | Móvel | ID (catálogo) | O que faz |
 |---|---|---|
-| **Baú da casa** | `casa_util_001` (o primeiro vem com a casa) | Guarda itens comuns do jogo (não itens de casa). Sem peso, como o Baú da Vó Zefa. Capacidade pelo nível: 20/30/45/60/90. **Baús extras** somam espaços: couro `casa_util_002` +10, ferro `casa_util_003` +15, arca `casa_util_004` +20; no máximo 1 extra no N1–N2, 2 no N3–N4 e 3 no N5. Só o dono abre. |
-| **Baú-correio da Vó Zefa** | `casa_util_005` (Épico, Missão "Tijolo por Tijolo") | Abre o **Baú da Vó Zefa** (`VillageChestStorage`, 60 espaços, chave de save `"VillageChest"`) de dentro de casa, sem ir até a Vila. |
+| **Baú da casa** | `casa_util_001` (o primeiro vem com a casa) | Guarda itens comuns do jogo (não itens de casa). Sem peso, como o Baú da Vó Edna. Capacidade pelo nível: 20/30/45/60/90. **Baús extras** somam espaços: couro `casa_util_002` +10, ferro `casa_util_003` +15, arca `casa_util_004` +20; no máximo 1 extra no N1–N2, 2 no N3–N4 e 3 no N5. Só o dono abre. |
+| **Baú-correio da Vó Edna** | `casa_util_005` (Épico, Missão "Tijolo por Tijolo") | Abre o **Baú da Vó Edna** (`VillageChestStorage`, 60 espaços, chave de save `"VillageChest"`) de dentro de casa, sem ir até a Vila. |
 | **Guarda-roupa** | `casa_util_006`, `casa_util_007` | Abre a tela de aparência (§9). Também guarda até 3 trajes salvos (o de jacarandá guarda 6). |
 | **Espelho de provador / manequim** | `casa_util_010`, `casa_util_009` | O espelho mostra o primo de corpo inteiro com a câmera girando. O manequim expõe um traje para as visitas verem. |
 | **Bancada** | `casa_util_011`, `casa_util_012` | Mesma lógica das receitas de hoje (`CraftingManager`, `Resources/Recipes`) mais as receitas de móveis (§7.6). A de mestre artesão faz os móveis Épicos. |
-| **Fogão a lenha** | `casa_cozinha_001` | A **Cozinha da Vó Zefa que já existe** (`MealService`, `MealCatalog`: cuscuz, café coado, pamonha, rapadura, baião de dois, queijo coalho) também funciona de casa, com os mesmos pratos e buffs. |
+| **Tandir de barro** | `casa_cozinha_001` | O **Forno da Vó Edna que já existe** (`MealService`, `MealCatalog`: nan do tandir, chá de karkadé, pão de tâmara, torrão dourado, plov da Vó, samsa assada) também funciona de casa, com os mesmos pratos e buffs. |
 | **Forja de quintal / Tear / Mesa de alquimia** | `casa_util_013`, `casa_util_015`, `casa_util_014` | A forja faz receitas de ferro (`recipe_iron_ingot`, `recipe_iron_sword`) e peças de armadura metálica. O tear faz roupas e tintas. A mesa de alquimia faz poções (`recipe_health_potion`). |
 | **Bacia de tingimento** | `casa_util_016` | Aplica tintas em roupas e na fachada (§9.4). |
 | **Parede de troféus / Pedestal dos Gigantes Tombados** | `casa_util_022`, `casa_util_021` | Encaixes especiais onde os **troféus de chefe** (categoria Troféus) ficam com luz própria e uma plaquinha que mostra a data da primeira vitória e com qual primo. |
-| **Vitrine das doze relíquias** | `casa_util_020` (conquista das relíquias) | Mostra as 12 relíquias de `RelicCatalog` (Gaita do Vô Chico, Chapéu de couro…). Cada uma acende quando é achada, e tocar nela mostra a lore (`relic.<id>.lore`). A vitrine é só exposição: a relíquia continua dando o passivo normal. |
-| **Estante do Caderno da Vó** | `casa_util_019` | Abre o **Caderno da Vó Zefa** (o bestiário que já existe). Cada página completa põe um bichinho de madeira na estante. |
-| **Caminha / casinha do Caramelo** | `casa_curral_002`, `casa_curral_001` | Onde o **Caramelo** (`CarameloCompanion`) dorme quando o jogador está em casa. Com a tigela (`casa_curral_003`) cheia, o carinho (`CarameloCuddle`) ganha uma animação nova. As roupinhas do Caramelo ficam no guarda-roupa (catálogo de roupas). |
+| **Vitrine das doze relíquias** | `casa_util_020` (conquista das relíquias) | Mostra as 12 relíquias de `RelicCatalog` (Gaita do Vô Jorge, Chapéu de couro…). Cada uma acende quando é achada, e tocar nela mostra a lore (`relic.<id>.lore`). A vitrine é só exposição: a relíquia continua dando o passivo normal. |
+| **Estante do Caderno da Vó** | `casa_util_019` | Abre o **Caderno da Vó Edna** (o bestiário que já existe). Cada página completa põe um bichinho de madeira na estante. |
+| **Caminha / casinha do Ari** | `casa_curral_002`, `casa_curral_001` | Onde o **Ari** (`CarameloCompanion`) dorme quando o jogador está em casa. Com a tigela (`casa_curral_003`) cheia, o carinho (`CarameloCuddle`) ganha uma animação nova. As roupinhas do Ari ficam no guarda-roupa (catálogo de roupas). |
 | **Livro de visitas** | `casa_util_023` | Quem visita escreve uma linha. No online, o texto é escolhido de uma lista de frases prontas e emojis, mais uma frase livre com filtro de palavras (regra do chat, Fase 12.3). Guarda as últimas 100 assinaturas. |
 | **Cama** | qualquer cama da categoria Quarto | Dormir carrega o **descanso** (§6.1). **[online]** sair do jogo deitado é um logout seguro (§11.5). |
 | **Caixa de correio** | `casa_util_024` | Cartas e encomendas (§11.6) **[online]**. |
-| **Quadro de avisos da família** | `casa_util_027` | Mostra as 3 diárias do dia (`DailyQuestService`) e o estoque do Mascate. |
+| **Quadro de avisos da família** | `casa_util_027` | Mostra as 3 diárias do dia (`DailyQuestService`) e o estoque do Caravaneiro. |
 | **Sino da porteira** | `casa_util_026` | **[online]** Quem está de fora toca o sino para pedir para entrar, e o dono recebe o aviso. **[offline]** É assim que as visitas de NPC chegam. |
 | **Boneco de treino de palha** | `casa_quintal_037` | Testar os poderes: dano por golpe, crítico e DPS, sem XP (§11.8). |
 | **Poço** | `casa_quintal_001` | Água para a horta (§11.9). |
@@ -273,17 +273,17 @@ Cada item colocado soma os pontos de **Conforto** do catálogo (Comum 1–2, Inc
 
 ### 6.2 Conjuntos **[proposto]**
 
-São 21 conjuntos no catálogo, cada um com um tema (Varanda da Vó Zefa, Tropeiro do Vô Chico, Oficina do Ícaro, Noite Rubra da Lavine, Arraiá…). A lista e a contagem de peças estão no fim do `CatalogoCasa.md`.
+São 21 conjuntos no catálogo, cada um com um tema (Iwan da Vó Edna, Caravana do Vô Jorge, Oficina do Ícaro, Noite Rubra da Lavine, Bema…). A lista e a contagem de peças estão no fim do `CatalogoCasa.md`.
 
 | Peças do mesmo conjunto colocadas | Bônus |
 |---|---|
 | 3 | +5 de conforto |
-| 6 | +12 de conforto + **efeito de ambiente** (ex.: Arraiá toca forró baixinho; Noite Rubra põe vagalumes lilases à noite; Oficina do Ícaro faz faíscas na bancada; Cantinho do Caramelo deixa o Caramelo abanar o rabo mais) |
-| Todas | +25 de conforto + título no livro de visitas ("Casa de tropeiro", "Oficina maluca"…) e, em 4 conjuntos, um mimo pequeno: **Cozinha da Vó** faz os pratos do Fogão durarem +10%; **Horta Caprichada** dá +1 colheita por canteiro; **Oficina do Ícaro** tem 10% de chance de a bancada devolver 1 madeira; **Luz da Maria** faz o "Descansado" durar +5 lutas |
+| 6 | +12 de conforto + **efeito de ambiente** (ex.: Bema toca hinos baixinho; Noite Rubra põe vagalumes lilases à noite; Oficina do Ícaro faz faíscas na bancada; Cantinho do Ari deixa o Ari abanar o rabo mais) |
+| Todas | +25 de conforto + título no livro de visitas ("Casa de caravaneiro", "Oficina maluca"…) e, em 4 conjuntos, um mimo pequeno: **Cozinha da Vó** faz os pratos do Tandir durarem +10%; **Horta Caprichada** dá +1 colheita por canteiro; **Oficina do Ícaro** tem 10% de chance de a bancada devolver 1 madeira; **Luz da Maria** faz o "Descansado" durar +5 lutas |
 
 ### 6.3 Itens sazonais
 
-- Os itens sazonais vêm de três eventos: **Festa Junina** (junho, ligada à ideia "Festa Junina sazonal" do TODO), **Natal Sertanejo** (dezembro) e **Carnaval** (fevereiro/março). São 45 itens nos conjuntos Arraiá, Natal Sertanejo e Frevo e Maracatu, mais 3 Lendários de família.
+- Os itens sazonais vêm de três eventos: **Bema** (junho, ligada à ideia "Bema sazonal" do TODO), **Noite de Yalda** (dezembro) e **Festa das Lanternas** (fevereiro/março). São 45 itens nos conjuntos Bema, Noite de Yalda e Festa das Lanternas, mais 3 Lendários de família.
 - Só se **ganham** durante o evento, mas **ficam para sempre**. Opção "guardar enfeites sazonais fora de época": um toque manda tudo para o Depósito, e o mesmo toque traz de volta, na mesma posição.
 - O balão junino é de papel, **sem fogo** (o texto do item diz isso).
 - Na volta do evento no ano seguinte, os itens antigos voltam à barraca e entram 5 a 10 itens novos.
@@ -314,7 +314,7 @@ Ver §8. Os itens de loja **também caem de bicho**, só no bioma da cidade da l
 
 O sorteio de item de casa é uma **rolagem a mais**, separada do loot de hoje (`EnemyLootRoller`, Balance §8.1). Não mexe nas tabelas de material, ouro e equipamento.
 
-**Inimigo comum** (Lobo da Mata, Aranha da Floresta, Escorpião das Dunas, Golem de Pedra, Enxame de Morcegos):
+**Inimigo comum** (Lobo do Tugai, Aranha-Tecelã Apagada, Escorpião das Areias Flamejantes, Ushabti de Pedra, Enxame de Morcegos):
 
 | Passo | Valor |
 |---|---|
@@ -324,51 +324,51 @@ O sorteio de item de casa é uma **rolagem a mais**, separada do loot de hoje (`
 | Grupo sorteado | itens "Drop: <este inimigo>" do catálogo (peso 3 cada) + itens de loja da cidade do bioma, Comum a Raro (peso 1 cada) |
 | Sem item na raridade sorteada | cai um nível de raridade até achar |
 
-**Chefe** (Lobo Alfa, Guardião da Ruína, Senhor da Guerra da Montanha, Habitante Ancestral; a vitória no desafio do chefe):
+**Chefe** (Kök-Böri, Grande Ushabti, Hahya, o Gigante Guerreiro, Tages, o Habitante Ancestral; a vitória no desafio do chefe):
 
 | Passo | Valor |
 |---|---|
-| **Primeira vitória** | o troféu-placa garantido: "O Lobo Alfa voltou pra mata" `casa_trofeu_001`, "O Guardião descansa" `casa_trofeu_007`, "Obrigado, crianças" `casa_trofeu_013`, "Dá pra dividir" `casa_trofeu_019`. É a "lembrança" que a N5 pede. |
+| **Primeira vitória** | o troféu-placa garantido: "O Kök-Böri voltou pra mata" `casa_trofeu_001`, "O Guardião descansa" `casa_trofeu_007`, "Obrigado, crianças" `casa_trofeu_013`, "Dá pra dividir" `casa_trofeu_019`. É a "lembrança" que a N5 pede. |
 | Toda vitória | 1 rolagem garantida + 25% de uma segunda |
 | Raridade | Incomum 40 / Raro 37 / Épico 19 / Lendário 4 |
 | Proteção de azar | 25 vitórias seguidas sem Lendário daquele chefe → a próxima garante um |
 | **[online]** chefe mundial | os 50% que mais contribuíram ganham uma rolagem cada (Fase 12.3, loot por contribuição) |
 
-Quantos itens exclusivos cada inimigo tem, por raridade, está no fim do `CatalogoCasa.md`. Os chefes concentram os Épicos e Lendários. O Habitante Ancestral, último chefe, tem o maior grupo (17 itens, 3 Lendários).
+Quantos itens exclusivos cada inimigo tem, por raridade, está no fim do `CatalogoCasa.md`. Os chefes concentram os Épicos e Lendários. O Tages, o Habitante Ancestral, último chefe, tem o maior grupo (17 itens, 3 Lendários).
 
-**Entrega:** o item vai para o **Depósito da casa** como "encomenda", com um texto dourado "+ Encomenda: Coleira de couro do Lobo Alfa" e um aviso. Ele **nunca** concorre com a mochila e nunca some (mesma filosofia do `LootGrantRules`, Balance §9.2). O evento novo `HouseItemGrantedEvent` alimenta o toast e as conquistas.
+**Entrega:** o item vai para o **Depósito da casa** como "encomenda", com um texto dourado "+ Encomenda: Coleira de couro do Kök-Böri" e um aviso. Ele **nunca** concorre com a mochila e nunca some (mesma filosofia do `LootGrantRules`, Balance §9.2). O evento novo `HouseItemGrantedEvent` alimenta o toast e as conquistas.
 
 **Tom infantil:** os chefes não morrem; eles são libertados da sombra (texto da história). Por isso os troféus são lembranças, placas, estátuas em paz e **cabeças entalhadas em madeira**, no estilo das carrancas, e nunca bicho empalhado (§11.10).
 
 ### 7.3 Missões
 
-**Missões da Casa** (cadeia nova da Vó Zefa, **[proposto]**):
+**Missões da Casa** (cadeia nova da Vó Edna, **[proposto]**):
 
 | # | Missão | Quando | Objetivo | Recompensa |
 |---|---|---|---|---|
-| 1 | Um Cantinho Seu | 1ª volta à vila | conversar com a Vó Zefa e entrar na casa | Casa N1 + baú, guarda-roupa, cama de vento, casinha do Caramelo, livro de visitas |
+| 1 | Um Cantinho Seu | 1ª volta à vila | conversar com a Vó Edna e entrar na casa | Casa N1 + baú, guarda-roupa, cama de vento, casinha do Ari, livro de visitas |
 | 2 | Água Fresca | depois da 1 | 10 pedra + 5 madeira | `casa_quintal_001` Poço de pedra com sarilho |
-| 3 | Fogo na Cozinha | depois do Lobo Alfa | 3 carne assada + 8 madeira | `casa_cozinha_001` Fogão a lenha de tijolo + `casa_cozinha_002` Filtro de barro da Vó Zefa |
-| 4 | Parede de Barro | subir para a N3 | a subida | `casa_quarto_006` Colcha de retalhos da Vó Zefa + Suéter de tricô da Vó Zefa (roupa) |
-| 5 | Tijolo por Tijolo | subir para a N4 | a subida | `casa_familia_002` Rede onde a Vó Zefa embalou os cinco netos + `casa_util_005` Baú-correio |
-| 6 | Casa Cheia | subir para a N5 + receber 4 visitas que assinem o livro (offline: os 4 primos NPC) | — | `casa_familia_001` Retrato de casamento da Vó Zefa e do Vô Chico + Medalhinha de latão da Vó Zefa (acessório) |
+| 3 | Fogo na Cozinha | depois do Kök-Böri | 3 carne assada + 8 madeira | `casa_cozinha_001` Fogão a lenha de tijolo + `casa_cozinha_002` Filtro de barro da Vó Edna |
+| 4 | Parede de Barro | subir para a N3 | a subida | `casa_quarto_006` Colcha de retalhos da Vó Edna + Suéter de tricô da Vó Edna (roupa) |
+| 5 | Tijolo por Tijolo | subir para a N4 | a subida | `casa_familia_002` Rede onde a Vó Edna embalou os cinco netos + `casa_util_005` Baú-correio |
+| 6 | Casa Cheia | subir para a N5 + receber 4 visitas que assinem o livro (offline: os 4 primos NPC) | — | `casa_familia_001` Retrato de casamento da Vó Edna e do Vô Jorge + Medalhinha de latão da Vó Edna (acessório) |
 
 **Missões regionais que já existem** (`RegionQuestCatalog`): proposta de acrescentar 1 item de casa a cada recompensa atual, sem tirar nada.
 
 | Missão | Recompensa hoje | Item de casa a mais |
 |---|---|---|
-| Uivos na Trilha (`quest_region_forest_howling_trail`) | 2 poção de vida | `casa_regional_011` Placa da trilha da Floresta |
+| Uivos na Trilha (`quest_region_forest_howling_trail`) | 2 poção de vida | `casa_regional_011` Placa da trilha do Bosque do Zarafshan |
 | Teias no Roçado (`quest_region_forest_spider_webs`) | capacete de couro | `casa_regional_005` Tora com orelha-de-pau |
 | Ferrões no Caminho (`quest_region_desert_stinger_road`) | 2 vida + 1 mana | `casa_regional_022` Placa "Cuidado com os ferrões" |
-| Reserva pra Travessia (`quest_region_desert_crossing_reserve`) | botas de couro | `casa_regional_018` Cantil de couro do tropeiro |
+| Reserva pra Travessia (`quest_region_desert_crossing_reserve`) | botas de couro | `casa_regional_018` Cantil de couro do caravaneiro |
 | Pedras que Andam (`quest_region_mountain_walking_stones`) | 2 mana + 15 ouro | `casa_regional_025` Picaretas cruzadas do mineiro |
-| A Passagem da Mina (`quest_region_mountain_mine_pass`) | espada de ferro | `casa_luz_026` Lampião de mina do Mestre Tonho |
+| A Passagem da Mina (`quest_region_mountain_mine_pass`) | espada de ferro | `casa_luz_026` Lampião de mina do Mestre Mihr |
 | Lamparinas Apagadas (`quest_region_caves_dark_lamps`) | 2 vida + 2 mana | `casa_regional_040` Lamparina apagada reacesa |
-| A Última Lamparina (`quest_region_caves_last_lantern`) | peitoral de couro | `casa_luz_013` Lamparina da Benedita |
+| A Última Lamparina (`quest_region_caves_last_lantern`) | peitoral de couro | `casa_luz_013` Lamparina da Parthenos |
 
-**Missões pessoais e de convergência:** cada missão pessoal dá a cama-tema do primo (por exemplo, a Cama da Noite Rubra na da Lavine) e mais 1 ou 2 itens Épicos de família. "A Reunião" dá a Cadeira de balanço da Vó Zefa e a Mochila remendada da Maithe.
+**Missões pessoais e de convergência:** cada missão pessoal dá a cama-tema do primo (por exemplo, a Cama da Noite Rubra na da Lavine) e mais 1 ou 2 itens Épicos de família. "A Reunião" dá a Cadeira de balanço da Vó Edna e a Mochila remendada da Maithe.
 
-**Diárias** (`DailyQuestService`, 3 por dia): cada diária completa dá uma **"Caixinha da Vó"**, um item de casa aleatório da cidade da diária (Comum 80 / Incomum 18 / Raro 2). Quatro diárias também têm um item fixo na primeira vez, por exemplo "Um Prato Quente" → Livro de receitas escrito à mão da Vó Zefa.
+**Diárias** (`DailyQuestService`, 3 por dia): cada diária completa dá uma **"Caixinha da Vó"**, um item de casa aleatório da cidade da diária (Comum 80 / Incomum 18 / Raro 2). Quatro diárias também têm um item fixo na primeira vez, por exemplo "Um Prato Quente" → Livro de receitas escrito à mão da Vó Edna.
 
 ### 7.4 Conquistas
 
@@ -378,11 +378,11 @@ São 24 itens de casa, um para cada uma das 24 conquistas que já existem em `Re
 
 | Evento | Itens de casa | Como se ganha |
 |---|---|---|
-| Festa Junina | 18 + 1 Lendário | prendas ganhas na quadrilha (minijogo de ritmo do TODO), na pescaria e nas diárias juninas, gastas na **Barraca de Prendas** |
-| Natal Sertanejo | 14 + 1 Lendário | prendas do "Cerco ao Engenho" e do pastoril |
-| Carnaval | 13 + 1 Lendário | prendas do bloco "Primos na Folia" |
+| Bema | 18 + 1 Lendário | oferendas ganhas nos Hinos do Bema (minijogo de ritmo do TODO), na pescaria e nas diárias do Bema, gastas na **Tenda das Oferendas** |
+| Noite de Yalda | 14 + 1 Lendário | oferendas do "Cerco ao Engenho" e das Lanternas |
+| Carnaval | 13 + 1 Lendário | oferendas do bloco "Primos na Folia" |
 
-O Lendário de cada evento não se compra com prendas: vem de completar todas as tarefas do evento, ou do ranking do evento **[online]**.
+O Lendário de cada evento não se compra com oferendas: vem de completar todas as tarefas do evento, ou do ranking do evento **[online]**.
 
 ### 7.6 Crafting
 
@@ -400,16 +400,16 @@ O crafting usa a Bancada, a Forja e o Fogão com os **materiais reais dos biomas
 
 Toda receita de móvel conta para "Mestre Artesão".
 
-### 7.7 Mascate (estoque rotativo) **[proposto]**
+### 7.7 Caravaneiro (estoque rotativo) **[proposto]**
 
-- **Seu Bento, o tropeiro** (NPC da missão do Deserto) vira o Mascate depois de "Reserva pra Travessia". Ele **viaja entre as 4 cidades**: fica 2 dias de jogo em cada uma, na ordem Vila → Areia Branca → Serra Alta → Lamparinas.
-- Estoque de 6 itens por parada: 3 do grupo dele ("Loja: Mascate Seu Bento" no catálogo), 2 Raros sorteados de qualquer loja e, com 50% de chance, 1 Épico. Cada item tem 1 unidade por jogador.
+- **Ammo, o caravaneiro** (NPC da missão das Areias Flamejantes) vira o Caravaneiro depois de "Reserva pra Travessia". Ele **viaja entre as 4 cidades**: fica 2 dias de jogo em cada uma, na ordem Vila → Qocho → Litema → Lamparinas.
+- Estoque de 6 itens por parada: 3 do grupo dele ("Loja: Caravaneiro Ammo" no catálogo), 2 Raros sorteados de qualquer loja e, com 50% de chance, 1 Épico. Cada item tem 1 unidade por jogador.
 - O sorteio usa semente pela data, como o `DailyQuestService` faz hoje. **[online]** É o mesmo estoque para o servidor inteiro, com limite por conta.
 
 ### 7.8 Estado no código (H3 — Fontes) **[feito, 2026-10-30]**
 
 - **Drop de inimigo e chefe:** `HouseDropRules` (puro, RNG injetada, roda igual no servidor) + `HouseService.Sources.cs`. É uma **rolagem a mais**, separada do `EnemyLootRoller` (não mexe nas tabelas dele): o `HouseService` ouve o `EnemyDiedEvent` e sorteia com os números do §7.2 (4% / 5% à noite; grupo = "Drop: <inimigo>" peso 3 + lojas da cidade do bioma até Raro peso 1; raridade cai um nível até achar). Chefe: placa garantida na 1ª vitória (`BossTrophies`), 1 rolagem + 25% de outra, e proteção de azar de 25 vitórias sem Lendário (`HouseBossRecord.sinceLegendary`).
-- **Missões, diárias, conquistas:** `HouseRewardRules` lê a coluna "Origem" do catálogo (+ os 2 extras regionais da Floresta). Cada uma paga **uma vez por save** (`HouseSourceBook.Claim`); diária dá a "Caixinha da Vó" toda vez e o item fixo só na primeira.
+- **Missões, diárias, conquistas:** `HouseRewardRules` lê a coluna "Origem" do catálogo (+ os 2 extras regionais do Bosque do Zarafshan). Cada uma paga **uma vez por save** (`HouseSourceBook.Claim`); diária dá a "Caixinha da Vó" toda vez e o item fixo só na primeira.
 - **Crafting:** `HouseCraftRules` (15 receitas: as 7 do §7.6 com os números do doc, mais 5 da oficina do Ícaro/cortina/música e 3 entradas de guarda-roupa com números **propostos**). Painel `HouseWorkbenchPanel`, aberto ao tocar numa Bancada/Forja/Fogão montado na casa; paga da mochila + Baú da casa, tudo ou nada. A Lareira pede a Bancada de mestre e o Senhor da Guerra derrotado (a lembrança não é gasta). As receitas do **Tear** precisam de material de chefe que ainda não existe como item: ficam de fora.
 - **Entrega:** tudo vai para o **Depósito** (`HouseService.GrantItem`, nunca na mochila, nunca perdido), com o texto dourado "+ Encomenda: …" e o toast "Encomenda para a casa!" (`HouseGrantToastRelay`, reaproveita o `SecretToastController`). Evento `HouseItemGrantedEvent`; `HouseRecipeCraftedEvent` para o "Mestre Artesão".
 - **Save:** `HouseSaveState.sources` (versão 3); saves antigos carregam sem registro de chefe e sem nada pago.
@@ -425,19 +425,19 @@ Hoje existe **uma** loja: `shop_general_store` (Armazém Geral). Ela vende pelo 
 
 | Loja (NPC) | Cidade | Vende | Rotação de estoque | Libera |
 |---|---|---|---|---|
-| **Armazém Geral** (já existe) + filiais | todas | poções, comida, ferramentas; itens de casa básicos ("Loja: Armazém Geral"); cada filial vende 4 itens Comuns ou Incomuns do conjunto regional da sua cidade (Mata Fechada, Duna Dourada, Pico Nevado, Cristal das Cavernas) | fixo, com estoque que se repõe todo dia | já aberto |
-| **Marcenaria do Mestre Damião** **[proposto: NPC novo]** | Vila da Vó Zefa | móveis de madeira (sala, quarto, baús, guarda-roupas, bancada) | 10 itens por dia, sorteados por data; 1 Épico por semana | Comum já; Incomum depois do Lobo Alfa; Raro depois do Guardião; Épico depois do Senhor da Guerra |
-| **Armarinho da Dona Cida** | Vila da Vó Zefa | linhas, fitas, quadros, almofadas, crochê, tintas básicas, livro de visitas; coisas de rezadeira (sabonetes de arruda, mesa de alquimia) | 8 por dia | Dona Cida já é a rezadeira da missão da Floresta; o armarinho abre depois de "Teias no Roçado" |
-| **Mercearia do Seu Lázaro** **[proposto]** | Vila da Vó Zefa | ágata, potes, cozinha, comida de enfeite, tintas de cozinha (açafrão, cebola) | 8 por dia | já aberto |
-| **Costureira Dona Fátima** **[proposto]** | Vila da Vó Zefa | roupas Comuns, Incomuns e Raras de tecido, tapetes, cortinas, colchas, redes | 6 roupas + 6 de casa por dia; roupas por faixa de nível | Raro depois do Guardião |
-| **Viveiro da Comadre Neném** **[proposto]** | Vila da Vó Zefa | plantas, árvores de quintal, sementes, abelhas, regador | 8 por dia; flores mudam com o clima (`WeatherSystem`) | já aberto |
-| **Casa de Música do Seu Bené** **[proposto]** | Vila da Vó Zefa | instrumentos | fixo, com 1 instrumento Épico em rodízio semanal | depois do Lobo Alfa |
-| **Feira livre** | uma cidade por dia: Vila (sáb/dom), Areia Branca (qua), Serra Alta (qui), Lamparinas (sex) | itens "Loja: Feira livre" + 4 itens locais da cidade do dia + tintas naturais | todo dia muda | já aberta |
-| **Olaria da Dona Rosa** **[proposto]** | Areia Branca | barro: talha, moringa, filtro, pratos, azulejos, ladrilho | 8 por dia | Areia Branca aberta |
-| **Mascate Seu Bento** | itinerante (§7.7) | raros e curiosidades | 6 por parada | depois de "Reserva pra Travessia" |
-| **Forja do Mestre Tonho** | Serra Alta | ferragens, lampiões de ferro, baús reforçados, armaduras e roupas de metal (Joaquim e Ícaro), forja de quintal | 8 por dia | Mestre Tonho abre a forja depois de "A Passagem da Mina" |
-| **Lamparinas da Benedita** | Lamparinas | iluminação, cristais, cortinas de contas, tintas escuras | 8 por dia | depois de "Lamparinas Apagadas" |
-| **Barraca de Prendas** | Vila da Vó Zefa, só durante evento | itens sazonais por prendas | por evento | evento ativo |
+| **Armazém Geral** (já existe) + filiais | todas | poções, comida, ferramentas; itens de casa básicos ("Loja: Armazém Geral"); cada filial vende 4 itens Comuns ou Incomuns do conjunto regional da sua cidade (Mata Fechada, Duna Dourada, Pico Nevado, Cristal das Grutas do Limiar) | fixo, com estoque que se repõe todo dia | já aberto |
+| **Marcenaria do Mestre Omóforo** **[proposto: NPC novo]** | Vila da Vó Edna | móveis de madeira (sala, quarto, baús, guarda-roupas, bancada) | 10 itens por dia, sorteados por data; 1 Épico por semana | Comum já; Incomum depois do Kök-Böri; Raro depois do Guardião; Épico depois do Senhor da Guerra |
+| **Armarinho da Mariam** | Vila da Vó Edna | linhas, fitas, quadros, almofadas, crochê, tintas básicas, livro de visitas; coisas de ervateira (sabonetes de hortelã, mesa de alquimia) | 8 por dia | Mariam já é a ervateira da missão do Bosque do Zarafshan; o armarinho abre depois de "Teias no Roçado" |
+| **Mercearia do Zaku** **[proposto]** | Vila da Vó Edna | ágata, potes, cozinha, comida de enfeite, tintas de cozinha (açafrão, cebola) | 8 por dia | já aberto |
+| **Costureira Mestra Narisah** **[proposto]** | Vila da Vó Edna | roupas Comuns, Incomuns e Raras de tecido, tapetes, cortinas, colchas, redes | 6 roupas + 6 de casa por dia; roupas por faixa de nível | Raro depois do Guardião |
+| **Viveiro da Nana** **[proposto]** | Vila da Vó Edna | plantas, árvores de quintal, sementes, abelhas, regador | 8 por dia; flores mudam com o clima (`WeatherSystem`) | já aberto |
+| **Casa de Música do Mestre Xroshtag** **[proposto]** | Vila da Vó Edna | instrumentos | fixo, com 1 instrumento Épico em rodízio semanal | depois do Kök-Böri |
+| **Feira livre** | uma cidade por dia: Vila (sáb/dom), Qocho (qua), Litema (qui), Lamparinas (sex) | itens "Loja: Feira livre" + 4 itens locais da cidade do dia + tintas naturais | todo dia muda | já aberta |
+| **Olaria da Náfsha** **[proposto]** | Qocho | barro: talha, moringa, filtro, pratos, azulejos, ladrilho | 8 por dia | Qocho aberta |
+| **Caravaneiro Ammo** | itinerante (§7.7) | raros e curiosidades | 6 por parada | depois de "Reserva pra Travessia" |
+| **Forja do Mestre Mihr** | Litema | ferragens, lampiões de ferro, baús reforçados, armaduras e roupas de metal (Joaquim e Ícaro), forja de quintal | 8 por dia | Mestre Mihr abre a forja depois de "A Passagem da Mina" |
+| **Lamparinas da Parthenos** | Lamparinas | iluminação, cristais, cortinas de contas, tintas escuras | 8 por dia | depois de "Lamparinas Apagadas" |
+| **Tenda das Oferendas** | Vila da Vó Edna, só durante evento | itens sazonais por oferendas | por evento | evento ativo |
 | **Casa de Leilões** **[online]** | Vila (com um quadro em cada cidade) | itens que os jogadores põem à venda | — | nível 10 |
 
 Estoque diário: Comum 5 unidades, Incomum 3, Raro 1. A rotação usa o mesmo relógio injetável das diárias (`IDailyClock`), para dar para testar.
@@ -445,8 +445,8 @@ Estoque diário: Comum 5 unidades, Incomum 3, Raro 1. A rotação usa o mesmo re
 ### 8.2 Moedas
 
 - **Ouro** (`item_gold`): a moeda de tudo. Não pesa e empilha até 9999 (Balance §9.1).
-- **Moeda de ouro** (`item_gold_coin`, drop do Deserto): continua item vendável a 1 de valor. **[proposto]** O Mascate troca 2 moedas de ouro por 1 ouro.
-- **Prendas** **[proposto]**: moeda de evento.
+- **Moeda de ouro** (`item_gold_coin`, drop das Areias Flamejantes): continua item vendável a 1 de valor. **[proposto]** O Caravaneiro troca 2 moedas de ouro por 1 ouro.
+- **Oferendas** **[proposto]**: moeda de evento.
   - Ganha **só jogando** o evento.
   - Não se troca, não se vende e **não se compra com dinheiro real**.
   - Fica de um ano para o outro.
@@ -468,7 +468,7 @@ Este design **não tem moeda premium**. Se o usuário quiser uma loja paga só d
 
 Os slots de verdade são os do `EquipmentSlot`: `Head`, `Chest`, `Legs`, `Boots`, `MainHand`, `OffHand`, `Tool` e `Accessory`. Todos dão atributo.
 
-Três camadas novas são **só de aparência**: **Rosto/Pescoço** (lenço, óculos, máscara), **Costas** (bornal, mochila, asas, capa) e **Caramelo** (roupinha do cachorro).
+Três camadas novas são **só de aparência**: **Rosto/Pescoço** (lenço, óculos, máscara), **Costas** (bornal, mochila, asas, capa) e **Ari** (roupinha do cachorro).
 
 ### 9.2 Conjuntos por primo
 
@@ -477,11 +477,11 @@ Cada primo tem **6 conjuntos de 4 peças** (Cabeça, Peito, Pernas, Pés), um po
 | Raridade | Nível | De onde vem |
 |---|---|---|
 | Comum | 1–10 | Costureira / Armazém |
-| Incomum | 10–20 | Costureira ou Forja + drop da Floresta/Deserto + 2ª missão da Floresta |
-| Raro | 20–30 | loja + **chefe do primo** (Maithe → Lobo Alfa; Joaquim e Ícaro → Guardião da Ruína; Maria → Senhor da Guerra; Lavine → Habitante Ancestral) + diária do primo |
+| Incomum | 10–20 | Costureira ou Forja + drop do Bosque do Zarafshan/Areias Flamejantes + 2ª missão do Bosque do Zarafshan |
+| Raro | 20–30 | loja + **chefe do primo** (Maithe → Kök-Böri; Joaquim e Ícaro → Grande Ushabti; Maria → Senhor da Guerra; Lavine → Tages, o Habitante Ancestral) + diária do primo |
 | Épico | 30–40 | missão pessoal (cabeça) + drop de chefe + crafting na Forja/Tear com material de chefe |
-| Lendário | 40–50 | conquista do herói + Habitante Ancestral + Tear de mestre + Nova Jornada+ |
-| Festivo | qualquer | evento (Junina, Natal, Carnaval), cosmético puro |
+| Lendário | 40–50 | conquista do herói + Tages, o Habitante Ancestral + Tear de mestre + Nova Jornada+ |
+| Festivo | qualquer | evento (Bema, Noite de Yalda, Festa das Lanternas), cosmético puro |
 
 - Os nomes seguem quem cada um é. Maithe vai de "Batedora da Mata" até "Tempestade de Mil Flechas". O Joaquim vai de "Guri da Roça" até "Última Resistência", e o Ícaro, de "Aprendiz de Oficina" até "Exército Mecânico" (com "Botas a jato de rapadura").
 - Os conjuntos usam os nomes das habilidades de assinatura (GDD).
@@ -531,9 +531,9 @@ Está no catálogo, coluna "Origem". Resumo das 234 entradas:
 
 - **Dados:** `CatalogoRoupas.md` é a fonte. "Rapadura ▸ Housing ▸ Import Wardrobe Catalog" (`WardrobeCatalogImporter` + `WardrobeCatalogImport`) gera `WardrobeCatalogData.g.cs` (234 entradas), com nomes em inglês do `CatalogoRoupas.en.tsv`; o teste falha se a tabela gerada estiver velha. Textos: `WardrobeTexts` (nomes/descrições) e `WardrobeUiTexts` (tela).
 - **Regras:** `WardrobeBook` (puro): Coleção da conta (desbloqueio para sempre; "Pés descalços" já vem), aparência por primo e por camada (só visual desbloqueado, da mesma camada, e conjunto de primo só no dono), "esconder", tinta gasta por canal (principal/detalhe), sabão de coco grátis, 3 trajes por primo (6 com o `casa_util_007` montado). **Nada disso mexe em atributo**: o guarda-roupa não conhece a mochila nem o equipamento.
-- **Fontes** (`WardrobeSourceRules` + `WardrobeService`): missão/diária/conquista/relíquia (uma vez por save); chefe com 1 visual garantido na 1ª vitória e 35% depois (só o que falta; tinta sempre pode); inimigo comum 3% (o grupo "comuns da Floresta e do Deserto" só nesses biomas); **todo equipamento saqueado desbloqueia a aparência padrão** do primo (§9.3, ex.: Peito Raro na Maithe → "Túnica de linho verde bordada de vento"); Missões da Casa e receitas de guarda-roupa chegam pela lista `owedWardrobe` da casa; **lojas**: o `CityShopService.OutfitResolver` agora é do guarda-roupa (`WardrobeShopBridge`), então as linhas de roupa da Costureira (e das outras lojas) aparecem no balcão; comprar dá o visual (ou a tinta) e o "vale" sai da mochila na hora. Um visual que já está na Coleção sai do balcão. **Ainda sem fonte:** eventos (Junina/Natal/Carnaval) e o Tear; essas entradas ficam trancadas.
+- **Fontes** (`WardrobeSourceRules` + `WardrobeService`): missão/diária/conquista/relíquia (uma vez por save); chefe com 1 visual garantido na 1ª vitória e 35% depois (só o que falta; tinta sempre pode); inimigo comum 3% (o grupo "comuns do Bosque do Zarafshan e das Areias Flamejantes" só nesses biomas); **todo equipamento saqueado desbloqueia a aparência padrão** do primo (§9.3, ex.: Peito Raro na Maithe → "Túnica de linho verde bordada de vento"); Missões da Casa e receitas de guarda-roupa chegam pela lista `owedWardrobe` da casa; **lojas**: o `CityShopService.OutfitResolver` agora é do guarda-roupa (`WardrobeShopBridge`), então as linhas de roupa da Costureira (e das outras lojas) aparecem no balcão; comprar dá o visual (ou a tinta) e o "vale" sai da mochila na hora. Um visual que já está na Coleção sai do balcão. **Ainda sem fonte:** eventos (Bema/Noite de Yalda/Festa das Lanternas) e o Tear; essas entradas ficam trancadas.
 - **Tela:** `WardrobePanel`, ao tocar num guarda-roupa montado em "Minha casa": camadas com ◀ ▶ entre os visuais desbloqueados, esconder/mostrar, "Pintar principal/detalhe" com a tinta na mão, sabão de coco, pote de tintas e trajes. Toast "Visual novo no guarda-roupa!" pelo `HouseGrantToastRelay`.
-- **Arte (honesto):** os heróis são uma malha só (Meshy `*_RO`), sem peças separadas nem malhas modulares. A v1 (`WardrobeVisuals`, chamada pelo `PlayerVisualSwapper` ao trocar de herói e a cada `WardrobeChangedEvent`) faz só isto: o visual do **Peito** tinge o corpo (cor da tinta principal, senão uma cor por raridade) por `MaterialPropertyBlock`, por cima do tom da graduação quando houver; **Cabeça**, **Rosto/Pescoço** e **Costas** ganham um chapéu, lenço ou bornal low-poly de primitivas preso ao osso humanoide (cabeça/pescoço/peito), com a tinta de detalhe na aba. **Pernas, Pés, Acessório, Caramelo e visuais de arma** ficam registrados e aparecem na tela, mas ainda **sem mudança 3D** (os heróis não têm malha de arma separada; a v1 só tinge um filho com nome de arma, se existir). A v2 com malhas por conjunto continua na Fase 11.
+- **Arte (honesto):** os heróis são uma malha só (Meshy `*_RO`), sem peças separadas nem malhas modulares. A v1 (`WardrobeVisuals`, chamada pelo `PlayerVisualSwapper` ao trocar de herói e a cada `WardrobeChangedEvent`) faz só isto: o visual do **Peito** tinge o corpo (cor da tinta principal, senão uma cor por raridade) por `MaterialPropertyBlock`, por cima do tom da graduação quando houver; **Cabeça**, **Rosto/Pescoço** e **Costas** ganham um chapéu, lenço ou bornal low-poly de primitivas preso ao osso humanoide (cabeça/pescoço/peito), com a tinta de detalhe na aba. **Pernas, Pés, Acessório, Ari e visuais de arma** ficam registrados e aparecem na tela, mas ainda **sem mudança 3D** (os heróis não têm malha de arma separada; a v1 só tinge um filho com nome de arma, se existir). A v2 com malhas por conjunto continua na Fase 11.
 - **Save:** chave `"Wardrobe"` (`WardrobeSaveState`, versão 1), restaurada antes da casa; ids que somem do catálogo são descartados.
 - Testes: `WardrobeTests`.
 
@@ -545,16 +545,16 @@ Está no catálogo, coluna "Origem". Resumo das 234 entradas:
 
 - **Drop de ouro:** inimigo comum solta `item_gold` 1–3 com 60%, ou seja, 1,2 por morte (§8.2). Com 1,5 inimigo por luta, dá **~1,8 ouro por luta** só de ouro.
 - **Venda de material** a 50% (`_sellBackRate` 0,5) do `_value`: madeira 2, fibra 1, erva 3, carne assada 6, minério 5, ferro 8, pedra 1, poção 15, moeda de ouro 1.
-  - Floresta: 1,30 madeira + 1,04 fibra + 1,04 erva + 0,29 carne por luta ≈ **+4,2 ouro por luta**.
-  - Deserto: 0,90 minério + 0,45 fibra + 0,12 ferro + 0,18 pedra + 1,26 moeda + 0,18 poção ≈ **+4,8 ouro por luta**.
-- **Chefes:** 4–8 (Lobo Alfa), 6–10 (Guardião), 8–14 (Senhor da Guerra), 10–16 (Habitante).
+  - Bosque do Zarafshan: 1,30 madeira + 1,04 fibra + 1,04 erva + 0,29 carne por luta ≈ **+4,2 ouro por luta**.
+  - Areias Flamejantes: 0,90 minério + 0,45 fibra + 0,12 ferro + 0,18 pedra + 1,26 moeda + 0,18 poção ≈ **+4,8 ouro por luta**.
+- **Chefes:** 4–8 (Kök-Böri), 6–10 (Guardião), 8–14 (Senhor da Guerra), 10–16 (Habitante).
 - **Missões:** "Pedras que Andam" e "Reserva pra Travessia" (que pede juntar 12) giram em torno de 15 ouro.
 - **Renda de referência: ~6 ouro por luta**, vendendo tudo; ~2 se o jogador guarda os materiais.
 - **Preços de hoje para comparar:** poção 15, peitoral de couro 20, machado/picareta 18, espada de ferro 45.
 
 ### 10.2 Faixas de preço por raridade
 
-| Raridade | Preço de loja (ouro) | Lutas equivalentes (~6/luta) | Prendas (evento) | Recompra pela loja |
+| Raridade | Preço de loja (ouro) | Lutas equivalentes (~6/luta) | Oferendas (evento) | Recompra pela loja |
 |---|---|---|---|---|
 | Comum | 8–30 | 1–5 | 5–10 | 25% |
 | Incomum | 35–90 | 6–15 | 15–25 | 25% |
@@ -597,17 +597,17 @@ O casarão é meta longa, no espírito MU Online. Como as subidas também pedem 
 
 ## 11. Ideias inspiradas em MMOs clássicos **[proposto]**
 
-São mecânicas comuns em MMOs de casa do tipo que o usuário citou como inspiração. Aqui elas ganham regras próprias, ambientação sertaneja e tom infantil: nenhum nome, texto ou arte de outro jogo. Todas são **[proposto]**. A coluna "Precisa de online?" diz quais pressupõem multiplayer.
+São mecânicas comuns em MMOs de casa do tipo que o usuário citou como inspiração. Aqui elas ganham regras próprias, ambientação da Rota da Seda e tom infantil: nenhum nome, texto ou arte de outro jogo. Todas são **[proposto]**. A coluna "Precisa de online?" diz quais pressupõem multiplayer.
 
 | # | Ideia | Como funcionaria no Rapadura | Precisa de online? |
 |---|---|---|---|
-| 11.1 | **Conta da lenha** (taxa semanal) | Toda semana sai automaticamente do ouro guardado (Baú da Vó Zefa/banco): N1 0, N2 5, N3 10, N4 20, N5 40 ouro. Se faltar ouro por 3 semanas, a casa fica **"fechada para descanso"**: ninguém entra, e os itens vão com segurança para os "Guardados da casa", uma seção sem limite do Baú da Vó Zefa. **Nada se perde, nada é rebaixado.** Pagou, um botão "Desembrulhar tudo" põe cada item de volta no lugar. O jogo avisa 1 semana antes (carta da Vó Zefa). | Sim (offline, desligado) |
+| 11.1 | **Conta da lenha** (taxa semanal) | Toda semana sai automaticamente do ouro guardado (Baú da Vó Edna/banco): N1 0, N2 5, N3 10, N4 20, N5 40 ouro. Se faltar ouro por 3 semanas, a casa fica **"fechada para descanso"**: ninguém entra, e os itens vão com segurança para os "Guardados da casa", uma seção sem limite do Baú da Vó Edna. **Nada se perde, nada é rebaixado.** Pagou, um botão "Desembrulhar tudo" põe cada item de volta no lugar. O jogo avisa 1 semana antes (carta da Vó Edna). | Sim (offline, desligado) |
 | 11.2 | **Lista de convidados por porta** | Cada porta interna (quarto, oficina, sala de troféus) pode ter lista própria, que restringe mais que a da casa: ex.: "meu quarto só para a Maithe". A porta trancada aparece com um cadeado de lata e o nome da lista. | Sim |
 | 11.3 | **Co-dono** | O dono nomeia 1 co-dono (2 no casarão), por exemplo irmãos que dividem a casa. O co-dono convida, expulsa, decora e usa as bancadas. Ele **não** sobe de nível, não muda de cidade, não tira o dono e não abre o Baú da casa: tem um **baú próprio** de 20 espaços dentro da casa. Sair da sociedade não leva nenhum item do dono. | Sim |
 | 11.4 | **Móvel em kit (caixa de mudança)** | Todo móvel de loja vem numa caixa de papelão com o desenho do móvel. Desembrulhar dentro de casa põe o móvel em modo de colocação. **Embrulhar de novo** devolve a caixa ao Depósito, para levar na mudança ou para outra sala. A caixa é o item que aparece no correio e no leilão. É basicamente a apresentação do Depósito (§2.4). | Não (mas é o que permite troca no online) |
 | 11.5 | **Cama: dormir é sair com segurança** | Deitar na cama da própria casa → "Dormir até amanhã?" = logout seguro **[online]** ou salvar e sair **[offline]**, e carrega o "Descansado" (§6.1). A **cama de casal** (`casa_quarto_001`) deixa o co-dono dormir também, cada um com o próprio descanso. | Parcial (o descanso vale offline; o logout seguro é do online) |
-| 11.6 | **Caixa de correio** | Cartas e encomendas entre jogadores: carta de texto (frases prontas + texto filtrado) e encomenda de até 5 itens negociáveis ou ouro. A entrega leva "um dia de carroça" (1 hora real), o que freia troca suspeita. Item de conquista não vai pelo correio. A Vó Zefa também manda cartas (avisos do jogo). | Sim (offline: só cartas da Vó Zefa) |
-| 11.7 | **Ajudante da casa** | Um parente da vila ("primo de segundo grau" ou "comadre ajudante") fica no balcão (`casa_util_031`). Ele guarda até 10 itens negociáveis e **vende pelo preço que o dono marcar** para visitantes enquanto o dono está offline, com taxa de 5%. **Riscos para a economia:** vira mercado paralelo à Casa de Leilões, facilita lavagem de ouro de bots e pode esvaziar as lojas de NPC. **Freios:** preço mínimo = 25% de referência e máximo = 3× referência; 10 vendas por dia; só para quem tem acesso à casa; tudo registrado. Alternativa mais simples: o ajudante só põe os itens no leilão por você. | Sim |
+| 11.6 | **Caixa de correio** | Cartas e encomendas entre jogadores: carta de texto (frases prontas + texto filtrado) e encomenda de até 5 itens negociáveis ou ouro. A entrega leva "um dia de carroça" (1 hora real), o que freia troca suspeita. Item de conquista não vai pelo correio. A Vó Edna também manda cartas (avisos do jogo). | Sim (offline: só cartas da Vó Edna) |
+| 11.7 | **Ajudante da casa** | Um parente da vila ("primo de segundo grau" ou "tia ajudante") fica no balcão (`casa_util_031`). Ele guarda até 10 itens negociáveis e **vende pelo preço que o dono marcar** para visitantes enquanto o dono está offline, com taxa de 5%. **Riscos para a economia:** vira mercado paralelo à Casa de Leilões, facilita lavagem de ouro de bots e pode esvaziar as lojas de NPC. **Freios:** preço mínimo = 25% de referência e máximo = 3× referência; 10 vendas por dia; só para quem tem acesso à casa; tudo registrado. Alternativa mais simples: o ajudante só põe os itens no leilão por você. | Sim |
 | 11.8 | **Boneco de treino de palha** | **Decidido (2026-10-30): serve para testar os poderes, não dá XP.** Tocar no boneco em "Minha casa" abre o painel `TrainingDummyPanel`: o primo ativo escolhe o ataque básico ou um poder de ataque aprendido (no nível dele) e vê uma sessão de 10 s (`TrainingDummyRules.SessionSeconds`) com **dano por golpe** (normal e crítico), **críticos** (quantos, taxa e chance) e **dano por segundo**, usando as fórmulas reais (`OutgoingDamage`: nível, AttackDamage fixo e %, crítico; `DamageCalculator`: armadura do boneco = 0, arredondamento, mínimo 1). Com o herói vivo na cena, conta equipamento e buffs; no mapa, conta nível, Destreza/Poder Arcano e nível dos poderes do save. **Não dá XP, ouro, loot, nem gasta mana ou durabilidade** (`TrainingDummyRules.ExperienceGranted = 0`; a cidade é zona segura). Cada primo comenta o DPS (o Joaquim se gaba dos números). Regra pura e com semente (`TrainingDummyTests`). **[online]** o servidor pode rodar a mesma sessão; nada a proteger contra bot porque não rende nada. | Não |
 | 11.9 | **Plantas que pedem água** | Plantas e canteiros têm um "humor": felizes até 3 dias sem água, depois **murcham** (ficam caídas, perdem metade do conforto). **Nunca morrem nem somem.** Uma regada com o regador (água do poço) volta tudo na hora. A chuva do `WeatherSystem` rega o quintal sozinha. Canteiros regados dão colheita (erva, ingredientes da cozinha). | Não |
 | 11.10 | **Troféus de chefe na parede** | Em vez de bicho empalhado, **cabeças entalhadas em madeira** no estilo carranca, mais estátuas em paz e placas. Combina com a história (os chefes são libertados) e com o tom infantil. São 4 cabeças, uma por chefe, Épicas, no catálogo. | Não |
@@ -638,9 +638,9 @@ São mecânicas comuns em MMOs de casa do tipo que o usuário citou como inspira
 | `_comfort` | int | |
 | `_setId` | string | `set_varanda_vo_zefa` |
 | `_basePrice` | int | 0 = não se vende em loja |
-| `_eventPrice` | int | em prendas |
+| `_eventPrice` | int | em oferendas |
 | `_sellable`, `_tradeable`, `_accountBound` | bool | conquista → preso à conta |
-| `_minHouseLevel` | int | itens grandes (chafariz, carro de boi) pedem N3+ |
+| `_minHouseLevel` | int | itens grandes (chafariz, Barcas de Luz) pedem N3+ |
 | `_sources` | `HouseItemSource[]` | {tipo: Shop/Drop/Quest/Achievement/Event/Craft/Secret, refId, peso} |
 | `_seasonal` | `SeasonId` | None/Junina/Natal/Carnaval |
 | `_prefabKey`, `_icon` | string / Sprite | prefab com material de paleta |
@@ -673,7 +673,7 @@ As chaves seguem o padrão do `SaveManager` ("VillageChest", "WorldMap"…):
   - `upkeepPaidUntil`;
   - `houseQuestStep`.
 - **`"Wardrobe"`** → `unlockedLooks[]`, `outfits[]` por primo {slot → lookId + 2 tintas}, `dyeInventory` (ou tintas como item comum da mochila).
-- **Compatibilidade:** save antigo sem "House" → nasce a casa N1 se a Missão da Casa 1 já devia ter acontecido (vitórias na Floresta ≥ 3), mesmo padrão das migrações de hoje (relíquias, Caderno, Fogão).
+- **Compatibilidade:** save antigo sem "House" → nasce a casa N1 se a Missão da Casa 1 já devia ter acontecido (vitórias no Bosque do Zarafshan ≥ 3), mesmo padrão das migrações de hoje (relíquias, Caderno, Fogão).
 
 ### 12.3 Servidor **[online]**
 
@@ -704,12 +704,12 @@ Regras:
 |---|---|---|
 | **H0 — Dados** | `HouseItemDefinition` + enums; `HouseItemSeeder` lendo um CSV gerado do catálogo; textos en/pt-BR; `ShopDefinition` com cidade e rotação | IDs e nomes únicos, raridade válida, toda origem aponta para algo que existe (inimigo, missão, conquista), preço dentro da faixa da raridade |
 | **H1 — Casa N1 offline** | Cena ou área de instância da casa na Vila; `HouseMeshBuilder` com o kit N1; modo "Arrumar a casa" (piso/parede/teto/superfície/quintal) com `GridPlacementUtility`; Depósito; Baú da casa; cama; Missão da Casa 1; botão "Minha casa" no mapa | encaixe, rotação, sobreposição, *flood fill* das portas, limites, save/load do `"House"` e migração de save antigo |
-| **H2 — Cidades e lojas** | Cidades como zona segura (sem encontro e sem dano); 11 lojas com NPC e rotação diária; filiais do Armazém; Feira itinerante; Mascate | zona segura bloqueia dano/encontro; rotação determinística por data; travas de progresso |
+| **H2 — Cidades e lojas** | Cidades como zona segura (sem encontro e sem dano); 11 lojas com NPC e rotação diária; filiais do Armazém; Feira itinerante; Caravaneiro | zona segura bloqueia dano/encontro; rotação determinística por data; travas de progresso |
 | **H3 — Fontes** | Rolagem de item de casa no `EnemyLootRoller` (grupo por inimigo + loja do bioma; chefes com placa garantida e proteção de azar); `HouseItemGrantedEvent` + toast; itens nas missões regionais/pessoais/diárias; conquistas; receitas de móveis | chances com RNG injetada, entrega no Depósito sem tocar na mochila, garantia de 1ª vitória, contador de azar |
 | **H4 — Subidas N2–N5** | Kits de módulos N2–N5; custos e requisitos; cenas curtas da família; Missões da Casa 2–6 | nada se perde na subida; requisitos de chefe/nível |
-| **H5 — Guarda-roupa** | Coleção de aparências; camadas Rosto/Costas/Caramelo; aparência padrão dos itens procedurais; tintas; visuais de arma; trajes salvos; v1 de arte (cor + anexos em osso) | aparência não muda stat; desbloqueio permanente; tinta gasta |
-| **H6 — Vida na casa** | Conforto + "Descansado"; conjuntos e efeitos; parede de troféus; vitrine de relíquias; estante do Caderno; Caramelo em casa; livro de visitas; visitas de NPC; plantas e regador; boneco de treino | cálculo do conforto (limite de 2 cópias), faixas, recarga diária, sessão do boneco (dano/crítico/DPS, sem XP) |
-| **H7 — Eventos** | Prendas; Barraca de Prendas; enfeites sazonais com guardar/voltar | evento abre e fecha pelo relógio; item fica após o evento |
+| **H5 — Guarda-roupa** | Coleção de aparências; camadas Rosto/Costas/Ari; aparência padrão dos itens procedurais; tintas; visuais de arma; trajes salvos; v1 de arte (cor + anexos em osso) | aparência não muda stat; desbloqueio permanente; tinta gasta |
+| **H6 — Vida na casa** | Conforto + "Descansado"; conjuntos e efeitos; parede de troféus; vitrine de relíquias; estante do Caderno; Ari em casa; livro de visitas; visitas de NPC; plantas e regador; boneco de treino | cálculo do conforto (limite de 2 cópias), faixas, recarga diária, sessão do boneco (dano/crítico/DPS, sem XP) |
+| **H7 — Eventos** | Oferendas; Tenda das Oferendas; enfeites sazonais com guardar/voltar | evento abre e fecha pelo relógio; item fica após o evento |
 | **H8 — Online** | Casas instanciadas; convites, lista, permissões, expulsar, snapshot/desfazer, *log*; co-dono; listas por porta; correio; Casa de Leilões; ajudante (se aprovado); conta da lenha; quadro de terrenos; sede do clã; venda de casa | matriz de permissões (visitante nunca abre baú), validação no servidor, concorrência de edição, carga com N casas |
 
 ---
@@ -718,15 +718,15 @@ Regras:
 
 1. **Escada de níveis:** madeira → madeira com varanda → taipa e telha → alvenaria → casarão está bom? E os custos de 150 / 400 / 1.000 / 2.500 ouro?
 2. **Casa por conta ou por personagem** (online)? A proposta é **por conta**: os personagens da conta moram juntos, cada um com o próprio guarda-roupa.
-3. **Baú da Vó Zefa no online:** vira o banco da conta (compartilhado entre os personagens), e o Baú da casa fica da casa? É a proposta.
+3. **Baú da Vó Edna no online:** vira o banco da conta (compartilhado entre os personagens), e o Baú da casa fica da casa? É a proposta.
 4. **Lista da casa permanente:** amigo da lista entra **com o dono offline**, ou só com o dono online?
 5. **Bônus de conforto:** só XP descansado (proposta) ou também algo como regeneração fora de combate?
 6. **Conta da lenha** (§11.1): ligar no online? E os valores?
 7. **Ajudante que vende offline** (§11.7): ligar, ligar só como "põe no leilão por mim", ou não ligar?
 8. **Vender casa entre jogadores** (§11.12): permitir?
-9. **Nomes das cidades novas:** Povoado de Areia Branca, Vila da Serra Alta, Vila das Lamparinas.
-10. **NPCs novos:** Mestre Damião, Seu Lázaro, Dona Fátima, Comadre Neném, Seu Bené e Dona Rosa. Reaproveitar os NPCs que já existem (Dona Cida no Armarinho, Seu Bento como Mascate, Mestre Tonho na Forja, Benedita nas Lamparinas) está ok?
-11. **Moeda de evento (prendas)** e **loja paga só de cosméticos** (Fase 12.1).
+9. **Nomes das cidades novas:** Oásis de Qocho, Vila de Litema, Vila das Lamparinas.
+10. **NPCs novos:** Mestre Omóforo, Zaku, Mestra Narisah, Nana, Mestre Xroshtag e Náfsha. Reaproveitar os NPCs que já existem (Mariam no Armarinho, Ammo como Caravaneiro, Mestre Mihr na Forja, Parthenos nas Lamparinas) está ok?
+11. **Moeda de evento (oferendas)** e **loja paga só de cosméticos** (Fase 12.1).
 12. **Arte das roupas:** começar pela v1 (cor + anexos em osso) e deixar malhas modulares para depois?
 13. ~~**Boneco de treino:** dar XP lenta (proposta, com teto) ou ser só enfeite/animação?~~ **Decidido (2026-10-30):** nem um nem outro — serve para **testar os poderes** (dano por golpe, crítico, DPS) e **não dá XP** (§11.8).
 

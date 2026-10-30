@@ -20,7 +20,7 @@ using Object = UnityEngine.Object;
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// "Baú da Vó Zefa" (<see cref="VillageChestStorage"/>, <see cref="VillageChestTransfer"/>, opened from the map's
+    /// "Baú da Vó Edna" (<see cref="VillageChestStorage"/>, <see cref="VillageChestTransfer"/>, opened from the map's
     /// village hub): per-save persistence (old saves included), the bulk buttons against the quests' needs, the
     /// bag's grid limit (the weight limit is gone), the 60-slot cap, the carried-inventory lifecycle and the new-session reset.
     /// </summary>

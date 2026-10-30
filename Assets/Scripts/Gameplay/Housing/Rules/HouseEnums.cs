@@ -86,7 +86,7 @@ namespace Rapadura.Gameplay.Housing
         Helper,
         Bell,
         NoticeBoard,
-        /// <summary>"Baú-correio da Vó Zefa": opens the village chest from home (not in the doc's list; §5).</summary>
+        /// <summary>"Baú-correio da Vó Edna": opens the village chest from home (not in the doc's list; §5).</summary>
         VillageChestLink,
     }
 

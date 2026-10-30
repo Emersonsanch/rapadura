@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
     <Style src="/Assets/Resources/UI/BestiaryView.uss" />
-    <!-- "Caderno da Vo Zefa" (BestiaryController): one page per enemy type and boss. Lives in Resources
+    <!-- "Caderno da Vo Edna" (BestiaryController): one page per enemy type and boss. Lives in Resources
          so the self-bootstrapped controller loads it without scene wiring. The page list (left, grouped
          by region) and the page contents (right) are filled in code from BestiaryPresenter/BestiaryTexts;
          static captions use the UiDocumentLocalizer convention (pt-BR here is the fallback). -->
@@ -9,7 +9,7 @@
         <ui:VisualElement name="bestiary-card" class="bestiary-card rap-panel">
             <ui:VisualElement class="bestiary-header">
                 <ui:VisualElement class="bestiary-header-text">
-                    <ui:Label text="Caderno da Vó Zefa" class="bestiary-title rap-heading loc" view-data-key="ui.bestiary.title" />
+                    <ui:Label text="Caderno da Vó Edna" class="bestiary-title rap-heading loc" view-data-key="ui.bestiary.title" />
                     <ui:Label text="Cada bicho que vocês vencem, a Vó anota aqui." class="bestiary-subtitle rap-subtle loc" view-data-key="ui.bestiary.subtitle" />
                 </ui:VisualElement>
                 <ui:Label name="bestiary-progress" text="" class="bestiary-progress rap-chip" />

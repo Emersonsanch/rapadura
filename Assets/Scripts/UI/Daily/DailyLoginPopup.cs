@@ -26,7 +26,7 @@ namespace Rapadura.UI.Daily
     }
 
     /// <summary>
-    /// The themed "Presente do dia da Vó Zefa" popup: title, subtitle, the 7-day track (each day's rewards; days already
+    /// The themed "Presente do dia da Vó Edna" popup: title, subtitle, the 7-day track (each day's rewards; days already
     /// received ticked, today's highlighted), a note (stepped back / result / preview hint) and the buttons. Built in code
     /// (Resources/UI/DailyRewards.uss), shared by the map (<see cref="DailyLoginMapPopup"/>, can claim) and the title
     /// (<see cref="DailyLoginTitleBanner"/>, preview only).
@@ -199,7 +199,7 @@ namespace Rapadura.UI.Daily
     /// World map side of the daily login reward. Self-bootstrapping (joins the <see cref="WorldMapHudController"/>, no
     /// scene edit): when the map HUD is visible, nothing else holds the pause and today's reward is claimable, it opens
     /// the popup once. "Receber" gives the reward through a short <see cref="CarriedInventorySession"/> (the map has no
-    /// Player) — the bag's grid fit API decides what fits, the rest goes to the Baú da Vó Zefa — and shows what came.
+    /// Player) — the bag's grid fit API decides what fits, the rest goes to the Baú da Vó Edna — and shows what came.
     /// Registered as a HUD screen (Esc / Start closes it); holds <see cref="GameplayPause"/> while open.
     /// </summary>
     [DisallowMultipleComponent]

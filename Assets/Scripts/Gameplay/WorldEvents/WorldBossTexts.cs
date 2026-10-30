@@ -41,13 +41,13 @@ namespace Rapadura.Gameplay.WorldEvents
         /// <summary>{0} = +tier.</summary>
         public const string ChestName = "world_boss.invasion.chest";
 
-        /// <summary>{0} = boss, {1} = "na Floresta", {2} = countdown.</summary>
+        /// <summary>{0} = boss, {1} = "no Bosque do Zarafshan", {2} = countdown.</summary>
         public const string MapBossOpen = "ui.world_boss.map.boss_open";
-        /// <summary>{0} = boss, {1} = "na Floresta", {2} = countdown.</summary>
+        /// <summary>{0} = boss, {1} = "no Bosque do Zarafshan", {2} = countdown.</summary>
         public const string MapBossNext = "ui.world_boss.map.boss_next";
-        /// <summary>{0} = "na Floresta", {1} = countdown.</summary>
+        /// <summary>{0} = "no Bosque do Zarafshan", {1} = countdown.</summary>
         public const string MapInvasionOpen = "ui.world_boss.map.invasion_open";
-        /// <summary>{0} = "na Floresta", {1} = countdown.</summary>
+        /// <summary>{0} = "no Bosque do Zarafshan", {1} = countdown.</summary>
         public const string MapInvasionNext = "ui.world_boss.map.invasion_next";
         /// <summary>{0} = boss.</summary>
         public const string MapFightButton = "ui.world_boss.map.fight";

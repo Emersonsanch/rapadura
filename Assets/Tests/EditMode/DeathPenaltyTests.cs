@@ -15,8 +15,8 @@ namespace Rapadura.Tests
     /// <summary>
     /// "Morrer perde XP" with its two protections (<see cref="DeathXpLossRules"/>, <see cref="DeathPenaltyRules"/>,
     /// <see cref="DeathPenaltyService"/>, <see cref="DeathProtectionState"/>): the 5% loss, never de-levelling, the
-    /// grace/boss exemptions, Bênção da Romaria (−60% XP, no drop) vs Patuá da Vó Zefa (nothing lost, used first), the
-    /// oratory price and purchase, Vó Zefa's Patuá gift (1×1 in the bag, else her chest) and the save round trip.
+    /// grace/boss exemptions, Bênção da Romaria (−60% XP, no drop) vs Patuá da Vó Edna (nothing lost, used first), the
+    /// oratory price and purchase, Vó Edna's Patuá gift (1×1 in the bag, else her chest) and the save round trip.
     /// </summary>
     public class DeathPenaltyTests
     {
@@ -65,6 +65,27 @@ namespace Rapadura.Tests
             Assert.AreEqual(7, DeathXpLossRules.Compute(5, 100, 146, DeathProtection.None));   // 7.3
             Assert.AreEqual(12, DeathXpLossRules.Compute(10, 200, 236, DeathProtection.None)); // 11.8
             Assert.AreEqual(31, DeathXpLossRules.Compute(20, 500, 612, DeathProtection.None)); // 30.6
+        }
+
+        [Test]
+        public void Loss_FallsByLevelBand_FiveToTwoPercent()
+        {
+            // Docs/Progressao500.md §7.2: 5% up to 100, 4% 101–200, 3% 201–300, 2% above.
+            Assert.AreEqual(5, DeathXpLossRules.LossPercentFor(1));
+            Assert.AreEqual(5, DeathXpLossRules.LossPercentFor(100));
+            Assert.AreEqual(4, DeathXpLossRules.LossPercentFor(101));
+            Assert.AreEqual(4, DeathXpLossRules.LossPercentFor(200));
+            Assert.AreEqual(3, DeathXpLossRules.LossPercentFor(201));
+            Assert.AreEqual(3, DeathXpLossRules.LossPercentFor(300));
+            Assert.AreEqual(2, DeathXpLossRules.LossPercentFor(301));
+            Assert.AreEqual(2, DeathXpLossRules.LossPercentFor(500));
+            Assert.AreEqual(0.04f, DeathXpLossRules.LossFractionFor(150), 1e-6f);
+
+            Assert.AreEqual(500, DeathXpLossRules.Compute(100, 20000, 10000, DeathProtection.None));
+            Assert.AreEqual(400, DeathXpLossRules.Compute(150, 20000, 10000, DeathProtection.None));
+            Assert.AreEqual(300, DeathXpLossRules.Compute(250, 20000, 10000, DeathProtection.None));
+            Assert.AreEqual(200, DeathXpLossRules.Compute(400, 20000, 10000, DeathProtection.None));
+            Assert.AreEqual(50, DeathXpLossRules.Compute(400, 50, 10000, DeathProtection.None), "still never de-levels");
         }
 
         [Test]
@@ -198,7 +219,7 @@ namespace Rapadura.Tests
         }
 
         // ------------------------------------------------------------------
-        // Vó Zefa's Patuá (1×1, bag first, chest otherwise)
+        // Vó Edna's Patuá (1×1, bag first, chest otherwise)
         // ------------------------------------------------------------------
 
         [Test]

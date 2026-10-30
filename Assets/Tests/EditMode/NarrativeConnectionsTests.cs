@@ -17,7 +17,7 @@ namespace Rapadura.Tests
 {
     /// <summary>
     /// Docs/Narrative.md §9 connections: the <see cref="DialogueConditionType.StoryBeatSeen"/> condition and the village
-    /// "news from the road" (<see cref="VillageStoryNews"/>), Vó Zefa's kitchen remembering the region the cousins came
+    /// "news from the road" (<see cref="VillageStoryNews"/>), Vó Edna's kitchen remembering the region the cousins came
     /// back from, and Caramelo's cuddle lines by campaign stage.
     /// </summary>
     public class NarrativeConnectionsTests
@@ -267,7 +267,7 @@ namespace Rapadura.Tests
             Assert.AreEqual(CarameloTexts.StageLineKey(CharacterId.Lavine, BiomeType.Caves), CarameloTexts.CuddleLineKey(CharacterId.Lavine, 3, BiomeType.Caves));
             Assert.AreEqual(CarameloTexts.CuddleLineKey(CharacterId.Lavine, 2, BiomeType.Caves), CarameloTexts.CuddleLineKey(CharacterId.Lavine, -1, BiomeType.Caves), "negative index wraps");
 
-            Assert.AreEqual(CarameloTexts.Intro, CarameloCuddle.Cuddle(CharacterId.Maria, false, BiomeType.Desert), "Vó Zefa introduces him first");
+            Assert.AreEqual(CarameloTexts.Intro, CarameloCuddle.Cuddle(CharacterId.Maria, false, BiomeType.Desert), "Vó Edna introduces him first");
             Assert.AreEqual(CarameloTexts.StageLineKey(CharacterId.Maria, BiomeType.Desert), CarameloCuddle.Cuddle(CharacterId.Maria, true, BiomeType.Desert));
             Assert.AreEqual(CarameloTexts.CuddleLineKey(CharacterId.Maria, 0), CarameloCuddle.Cuddle(CharacterId.Maria, true, BiomeType.Desert));
             Assert.IsTrue(CarameloCuddle.BuffPending);

@@ -467,5 +467,54 @@ namespace Rapadura.Gameplay.Player
             float u = Mathf.Clamp01(t / duration);
             return u * u;
         }
+
+        /// <summary>
+        /// Speed factor for the ground under the feet: climbing a slope slows the hero (down to
+        /// 1 − <paramref name="uphillPenalty"/> at <paramref name="limitDegrees"/>), going down speeds it up a
+        /// little (up to 1 + <paramref name="downhillBonus"/>), flat ground or sideways along the slope = 1.
+        /// <paramref name="groundNormal"/> is the surface normal (Vector3.up on flat ground); the grade along
+        /// <paramref name="moveDirection"/> is the sine of the slope in that direction.
+        /// </summary>
+        public static float SlopeSpeedFactor(Vector3 groundNormal, Vector3 moveDirection, float uphillPenalty = 0.3f, float downhillBonus = 0.08f, float limitDegrees = 45f)
+        {
+            moveDirection.y = 0f;
+            if (moveDirection.sqrMagnitude < 1e-6f || groundNormal.sqrMagnitude < 1e-6f || limitDegrees <= 0f)
+            {
+                return 1f;
+            }
+
+            groundNormal.Normalize();
+            if (groundNormal.y <= 0.01f)
+            {
+                // A wall or an overhang is not ground: no slope factor.
+                return 1f;
+            }
+
+            moveDirection.Normalize();
+
+            // Downhill direction projected on the plane; its length is the sine of the slope angle.
+            Vector3 downhill = Vector3.ProjectOnPlane(Vector3.down, groundNormal);
+            float slopeSin = downhill.magnitude;
+            if (slopeSin < 1e-4f)
+            {
+                return 1f;
+            }
+
+            downhill /= slopeSin;
+            downhill.y = 0f;
+            if (downhill.sqrMagnitude < 1e-6f)
+            {
+                return 1f;
+            }
+
+            // Grade along the heading: +1 straight uphill, −1 straight downhill, 0 across the slope.
+            float along = -Vector3.Dot(moveDirection, downhill.normalized) * slopeSin;
+            float limitSin = Mathf.Sin(Mathf.Clamp(limitDegrees, 1f, 89f) * Mathf.Deg2Rad);
+            float grade = Mathf.Clamp(along / limitSin, -1f, 1f);
+
+            return grade >= 0f
+                ? 1f - Mathf.Clamp01(uphillPenalty) * grade
+                : 1f + Mathf.Max(0f, downhillBonus) * -grade;
+        }
     }
 }

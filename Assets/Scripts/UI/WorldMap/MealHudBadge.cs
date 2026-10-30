@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.WorldMap
 {
     /// <summary>
-    /// The active meal (<see cref="MealService"/>) as a small dish icon + "Cuscuz · 2" pill on the HUD: under the
+    /// The active meal (<see cref="MealService"/>) as a small dish icon + "Nan do Tandir · 2" pill on the HUD: under the
     /// hero's name on the world map (<c>wm-hero-block</c>) and under the vitals bars in the arena
     /// (<c>hud-vitals-panel</c>). Hidden with no meal. Self-bootstrapping, no scene or UXML edit: added to the
     /// <see cref="WorldMapHudController"/> / <see cref="HudController"/> GameObjects after every scene load; the

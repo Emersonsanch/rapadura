@@ -39,7 +39,7 @@ namespace Rapadura.Gameplay.Dialogue
     /// same <c>Resources/Dialogue</c> graphs the <c>NpcInteractable</c>s of Main.unity use. Main.unity only loads
     /// for encounters, with its village switched off, so these are reached from the world map instead: the
     /// "Vila" hub (<c>VillageHubButton</c>) is offered while the token stands in <see cref="VillageRegion"/>,
-    /// where Vó Zefa's farm and the village are in the story (<c>StoryTexts</c>).
+    /// where Vó Edna's farm and the village are in the story (<c>StoryTexts</c>).
     /// </summary>
     public static class VillageNpcCatalog
     {

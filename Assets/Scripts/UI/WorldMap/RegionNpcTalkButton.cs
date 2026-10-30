@@ -13,7 +13,7 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.WorldMap
 {
     /// <summary>
-    /// "Conversar com Dona Cida" on the world map: the region quest-givers (<see cref="RegionQuestCatalog.Npcs"/>)
+    /// "Conversar com Mariam" on the world map: the region quest-givers (<see cref="RegionQuestCatalog.Npcs"/>)
     /// live on the map, because Main.unity is only loaded for encounters (its village NPCs are switched off
     /// during them). Self-bootstrapping, no scene edit:
     /// <list type="bullet">

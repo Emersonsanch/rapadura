@@ -102,6 +102,12 @@ namespace Rapadura.UI.Mounts
 
         private static string F(string key, params object[] args) => MountTexts.Format(Localization, key, args);
 
+        private static string AwakeningNumeral(int awakening)
+        {
+            string[] numerals = { "I", "II", "III", "IV" };
+            return numerals[Mathf.Clamp(awakening, 1, numerals.Length) - 1];
+        }
+
         // ------------------------------------------------------------------
 
         public void Open(WorldMapController map)
@@ -196,6 +202,22 @@ namespace Rapadura.UI.Mounts
                 Add(card, mount.level >= MountRules.MaxLevel
                     ? F(MountTexts.LevelMax, mount.level)
                     : F(MountTexts.LevelLine, mount.level, mount.xp, MountCareRules.XpToNext(mount.level)), "mount-card-line");
+                // Growth with the rider (Docs/Progressao500.md §6.1): cap of this hero, Brilho, level it works at, Despertar.
+                int riderLevel = MountCollection.RiderLevel;
+                if (riderLevel > 0)
+                {
+                    Add(card, F(MountTexts.GrowthLine, MountGrowthRules.LevelCapFor(riderLevel), riderLevel, mount.glow, MountGrowthRules.MaxGlow), "mount-card-line");
+                    int worksAt = MountCollection.EffectiveLevelOf(mount);
+                    if (worksAt < mount.level)
+                    {
+                        Add(card, F(MountTexts.WorksAtLine, worksAt), "mount-card-line");
+                    }
+                }
+
+                if (mount.awakening > 0)
+                {
+                    Add(card, F(MountTexts.AwakeningLine, AwakeningNumeral(mount.awakening)), "mount-card-line");
+                }
                 Add(card, F(MountTexts.HeartsLine, mount.Hearts), "mount-card-line");
                 Add(card, F(MountTexts.SatietyLine, Mathf.RoundToInt(mount.satiety)) + (mount.IsHungry ? " " + T(MountTexts.HungryTag) : string.Empty), "mount-card-line");
                 Add(card, mount.IsTired

@@ -545,7 +545,7 @@ namespace Rapadura.Tests
                     Assert.IsNotNull(StoryTexts.GetFallback(key), $"StoryTexts has no '{key}'.");
                 }
 
-                Assert.IsNotNull(NewGamePlusTexts.GetFallback(NewGamePlusTexts.ZefaKey(hero)), $"No Vó Zefa offer line for {hero}.");
+                Assert.IsNotNull(NewGamePlusTexts.GetFallback(NewGamePlusTexts.ZefaKey(hero)), $"No Vó Edna offer line for {hero}.");
             }
 
             Assert.IsNotNull(NewGamePlusTexts.GetFallback(NewGamePlusTexts.ZefaKey(null)));
@@ -569,7 +569,7 @@ namespace Rapadura.Tests
             {
                 if (region != village)
                 {
-                    Assert.IsFalse(NewGamePlusHud.ShouldShowOffer(true, true, true, false, false, region), $"Only Vó Zefa's village offers it, not {region}.");
+                    Assert.IsFalse(NewGamePlusHud.ShouldShowOffer(true, true, true, false, false, region), $"Only Vó Edna's village offers it, not {region}.");
                 }
             }
         }

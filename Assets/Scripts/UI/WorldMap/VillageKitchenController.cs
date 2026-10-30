@@ -13,7 +13,7 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.WorldMap
 {
     /// <summary>
-    /// "Fogão a lenha" of the village hub (<see cref="VillageHubButton"/> → Serviços): Vó Zefa's line for the cousin at
+    /// "Fogão a lenha" of the village hub (<see cref="VillageHubButton"/> → Serviços): Vó Edna's line for the cousin at
     /// the stove, the meal in their belly and one row per dish of <see cref="MealCatalog"/> (ingredients against the
     /// bag, "Cozinhar"). Built in code on the map HUD's document like the hub panel, under <c>wm-hud-root</c> with
     /// the Mochila overlay classes plus <c>Resources/UI/VillageKitchen.uss</c>; the hub registers it as one of the
@@ -21,7 +21,7 @@ namespace Rapadura.UI.WorldMap
     /// <list type="bullet">
     /// <item>Works on the hub's live <see cref="CarriedInventorySession"/> bag, so cooked ingredients leave the
     /// carried inventory as soon as the window closes.</item>
-    /// <item>On open, Vó Zefa may teach the cousin their favourite (<see cref="MealService.TryTeachFavourite"/>).</item>
+    /// <item>On open, Vó Edna may teach the cousin their favourite (<see cref="MealService.TryTeachFavourite"/>).</item>
     /// <item>Rules (validation, consumption, one meal at a time) live in <see cref="CookingRules"/>; texts in
     /// <see cref="KitchenPresenter"/>.</item>
     /// </list>
@@ -47,7 +47,7 @@ namespace Rapadura.UI.WorldMap
         private InventoryManager _bag;
         private CharacterId? _hero;
         private MealRecipeSpec _taughtOnOpen;
-        // Region Vó Zefa remembers on this opening (KitchenPresenter.CameFromForVisit); visits counted per session.
+        // Region Vó Edna remembers on this opening (KitchenPresenter.CameFromForVisit); visits counted per session.
         private BiomeType? _cameFromOnOpen;
         private static int s_visits;
         private bool _open;

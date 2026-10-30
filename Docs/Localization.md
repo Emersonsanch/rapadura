@@ -25,7 +25,7 @@ As entradas vêm de duas camadas:
 | Helper | `UI/Menus/SettingsMenuTexts.cs` | ~59 (`ui.settings.*`, inclusive abas/rótulos do UXML e nomes dos idiomas) | `SettingsMenuController` |
 | Helper | `UI/Common/UiTexts.cs` | 73 (`ui.hud.*`, `ui.shop.*`, `ui.pause.*`, `ui.menu.*`, `ui.crafting.*`, `ui.skilltree.*`, `ui.saveload.*`, `ui.credits.*`, `ui.death.*`, `ui.character_select.*`) | `UiDocumentLocalizer` / controllers e presenters dessas telas |
 | Helper | `Gameplay/Content/ContentTexts.cs` | 181 (`item.*`, `skill.*`, `enemy.*`, `recipe.*`, `combo.*`, `tree.*`, `character.*`) | `ContentText.Resolve` na primeira consulta (ver 1.1) |
-| Helper | `UI/Bestiary/BestiaryTexts.cs` | 88 (`ui.bestiary.*`, `bestiary.<inimigo>.lore` e `bestiary.<inimigo>.comment.<primo>`) | `BestiaryController` (Caderno da Vó Zefa) |
+| Helper | `UI/Bestiary/BestiaryTexts.cs` | 88 (`ui.bestiary.*`, `bestiary.<inimigo>.lore` e `bestiary.<inimigo>.comment.<primo>`) | `BestiaryController` (Caderno da Vó Edna) |
 | Helper | `UI/PhotoMode/PhotoModeTexts.cs` | 32 (`ui.photo.*`: painel, dicas, toasts, nomes dos filtros e das poses) | `PhotoModeController` (Modo foto) |
 
 ### 1.1 Conteúdo de ScriptableObject (`ContentText`)

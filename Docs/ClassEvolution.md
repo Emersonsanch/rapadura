@@ -10,7 +10,7 @@ classe") + `tools/balance/test_class_stack.py`.
 Cada primo tem **3 graduações** (`ClassEvolutionCatalog.Graduations`). Cada uma é uma missão de história: um membro da
 família oferece (tiers 1–2: um primo/irmão; tier 3: **Vó Edna**), o primo caça bichos numa região, volta e entrega.
 
-| Primo | Graduação 1 (nv 8, Deserto, 15) | Graduação 2 (nv 14, Cavernas, 20) | Graduação 3 (nv 25, Montanha, 30) |
+| Primo | Graduação 1 (nv 8, Areias Flamejantes, 15) | Graduação 2 (nv 14, Grutas do Limiar, 20) | Graduação 3 (nv 25, Serra de Kaggen, 30) |
 |---|---|---|---|
 | Maithe | Rastreadora do Falcão — "Medidor de Vento" (Ícaro) | Flecheira da Ventania — "Três Meses e Onze Dias" (Maria) | Olho de Liyongo — "O Arco de Damasqueiro" (Vó Edna; o arco que o Vô Jorge entalhou) |
 | Maria | Curandeira do Sol — "Quem Cuida do Guardião" (Joaquim) | Guardiã da Aurora — "Luz e Sombra" (Lavine) | Candeia da Glória — "A Medalhinha de Sol" (Vó Edna) |
@@ -97,7 +97,7 @@ tier 2. A árvore de mestre cheia entra como teste de estresse no NG+1 (o nível
 | parado, chefe mata em | 12–40 s |
 | árvore de mestre cheia por cima | chefe ≥ 95% de sem ela |
 
-Resultado atual: dentro do orçamento (ex.: Cavernas NG+0 chefe 20,0 → 19,3 → 15,2 s; NG+1 Cavernas 19,8 → 18,6 → 14,7 s,
+Resultado atual: dentro do orçamento (ex.: Grutas do Limiar NG+0 chefe 20,0 → 19,3 → 15,2 s; NG+1 Grutas do Limiar 19,8 → 18,6 → 14,7 s,
 árvore cheia 14,5 s).
 
 ## 7. Servidor (FASE 12)

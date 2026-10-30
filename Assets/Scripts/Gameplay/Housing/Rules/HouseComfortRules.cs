@@ -8,7 +8,7 @@ namespace Rapadura.Gameplay.Housing
     public enum HouseSetAmbient
     {
         None,
-        /// <summary>Varanda da Vó Zefa: the warm lamp glows a little warmer (cheiro de café).</summary>
+        /// <summary>Varanda da Vó Edna: the warm lamp glows a little warmer (cheiro de café).</summary>
         WarmLamp,
         /// <summary>Oficina do Ícaro: sparks over the workbench.</summary>
         WorkshopSparks,
@@ -51,7 +51,7 @@ namespace Rapadura.Gameplay.Housing
         /// <summary>"set_varanda_vo_zefa" → "varanda_vo_zefa".</summary>
         public string ShortId => Id.StartsWith("set_", StringComparison.Ordinal) ? Id.Substring(4) : Id;
         public string NameKey => "ui.house_life.set." + ShortId;
-        /// <summary>The guest-book title a complete set gives the house ("Casa de tropeiro").</summary>
+        /// <summary>The guest-book title a complete set gives the house ("Casa de caravaneiro").</summary>
         public string TitleKey => "ui.house_life.set_title." + ShortId;
     }
 

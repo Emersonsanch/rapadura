@@ -83,6 +83,12 @@ namespace Rapadura.Gameplay.Player
         [SerializeField] private float _headLookMaxYaw = 65f;
         [SerializeField] private float _headLookSharpness = 8f;
         [SerializeField] private float _headLookTargetRange = 14f;
+        [Tooltip("Vertical look (deg) toward what the hero is looking at (a small creature, a slope). 0 = yaw only.")]
+        [SerializeField, Range(0f, 40f)] private float _headLookMaxPitch = 22f;
+        [Tooltip("Points of interest (nearby enemies, NPCs) catch the hero's eye within this range (m); 0 = off. Attack target and movement direction still win.")]
+        [SerializeField, Min(0f)] private float _interestRange = 9f;
+        [Tooltip("Seconds between scans for something new to look at (the pick is then held for a while, see MotionFeelMath.InterestTiming).")]
+        [SerializeField, Min(0.1f)] private float _interestScanInterval = 0.5f;
 
         [Header("Skill Cast")]
         [SerializeField] private float _castArmDegrees = 100f;
@@ -190,6 +196,15 @@ namespace Rapadura.Gameplay.Player
         private float _idleClock;
         private float _standTime;
         private float _headYaw;
+        private float _headPitch;
+
+        // Points of interest (head look): the thing currently holding the gaze, how long it still does,
+        // and the disinterest after it; scanned every _interestScanInterval, never per frame.
+        private Transform _interest;
+        private float _interestHold;
+        private float _interestCooldown;
+        private float _interestScanTimer;
+        private int _interestCount;
         private float _turnLead;
         private float _stride;
         private float _strideReference = 0.2f;
@@ -808,8 +823,12 @@ namespace Rapadura.Gameplay.Player
         private void TickHeadLook(float deltaTime, float speed)
         {
             float targetYaw = 0f;
+            float targetPitch = 0f;
             Vector3 lookDirection = Vector3.zero;
+            Vector3 lookPoint = Vector3.zero;
+            bool hasPoint = false;
             bool hasTarget = false;
+            Vector3 eye = EyePosition();
 
             ICombatTarget target = _clickToMove != null ? _clickToMove.AttackTarget : null;
             if (target != null && !(target is Object unityObject && unityObject == null) && target.IsAlive)
@@ -819,18 +838,50 @@ namespace Rapadura.Gameplay.Player
                 if (toTarget.sqrMagnitude < _headLookTargetRange * _headLookTargetRange)
                 {
                     lookDirection = toTarget;
+                    lookPoint = target.Transform.position + Vector3.up * 0.9f;
+                    hasPoint = true;
                     hasTarget = true;
                 }
             }
 
-            if (lookDirection.sqrMagnitude < 1e-4f && _motor != null)
+            // Turning hard: the eyes lead the body toward where it is going (overrides a casual interest).
+            Vector3 moveLead = _motor != null ? _motor.DesiredDirection : Vector3.zero;
+            bool turningHard = moveLead.sqrMagnitude > 1e-4f && Vector3.Angle(transform.forward, moveLead) > 30f;
+
+            if (!hasTarget && !turningHard && _interestRange > 0f)
             {
-                lookDirection = _motor.DesiredDirection;
+                TickInterest(deltaTime, eye);
+                if (_interest != null)
+                {
+                    Vector3 point = _interest.position + Vector3.up * 0.9f;
+                    Vector3 to = point - transform.position;
+                    to.y = 0f;
+                    if (to.sqrMagnitude > 1e-4f && Vector3.Angle(transform.forward, to) <= MotionFeelMath.InterestConeDegrees)
+                    {
+                        lookDirection = to;
+                        lookPoint = point;
+                        hasPoint = true;
+                    }
+                }
+            }
+            else
+            {
+                _interestScanTimer = 0f;
+            }
+
+            if (lookDirection.sqrMagnitude < 1e-4f)
+            {
+                lookDirection = moveLead;
             }
 
             if (lookDirection.sqrMagnitude > 1e-4f)
             {
                 targetYaw = Mathf.Clamp(Vector3.SignedAngle(transform.forward, lookDirection, Vector3.up), -_headLookMaxYaw, _headLookMaxYaw);
+            }
+
+            if (hasPoint && _headLookMaxPitch > 0f)
+            {
+                targetPitch = MotionFeelMath.LookPitch(eye, lookPoint, _headLookMaxPitch);
             }
 
             // Standing around with nothing to look at: the occasional glance.
@@ -841,7 +892,105 @@ namespace Rapadura.Gameplay.Player
                 targetYaw += MotionFeelMath.IdleGlanceYaw(_standTime, _profile.glanceInterval, _profile.glanceHold, _profile.glanceYaw, _seed);
             }
 
-            _headYaw = Mathf.Lerp(_headYaw, targetYaw, LocomotionMath.ExpBlend(_headLookSharpness, deltaTime));
+            float k = LocomotionMath.ExpBlend(_headLookSharpness, deltaTime);
+            _headYaw = Mathf.Lerp(_headYaw, targetYaw, k);
+            _headPitch = Mathf.Lerp(_headPitch, targetPitch, k * 0.7f);
+        }
+
+        /// <summary>Where the eyes are: the head bone when the rig has one, else 85 % of the way up the visual.</summary>
+        private Vector3 EyePosition()
+        {
+            if (_rigMode && _head != null && _head.Transform != null)
+            {
+                return _head.Transform.position;
+            }
+
+            if (_renderer != null)
+            {
+                Bounds b = _renderer.bounds;
+                return new Vector3(b.center.x, b.min.y + b.size.y * 0.85f, b.center.z);
+            }
+
+            return transform.position + Vector3.up * 1.6f;
+        }
+
+        /// <summary>
+        /// Points of interest: every <see cref="_interestScanInterval"/> s, with nothing holding the gaze and
+        /// no disinterest running, picks the nearby enemy or NPC that best catches the eye
+        /// (<see cref="MotionFeelMath.InterestScore"/>: close and in front) and holds it for a jittered while,
+        /// then looks away for a jittered while (<see cref="MotionFeelMath.InterestTiming"/>). A pick that
+        /// dies, is disabled or leaves the range/cone is dropped early. No allocations, no per-frame search.
+        /// </summary>
+        private void TickInterest(float deltaTime, Vector3 eye)
+        {
+            if (_interest != null)
+            {
+                _interestHold -= deltaTime;
+                bool gone = !_interest.gameObject.activeInHierarchy
+                            || MotionFeelMath.InterestScore(eye, transform.forward, _interest.position, _interestRange * 1.2f) <= 0f;
+                if (_interestHold <= 0f || gone)
+                {
+                    _interest = null;
+                }
+
+                return;
+            }
+
+            if (_interestCooldown > 0f)
+            {
+                _interestCooldown -= deltaTime;
+                return;
+            }
+
+            _interestScanTimer -= deltaTime;
+            if (_interestScanTimer > 0f)
+            {
+                return;
+            }
+
+            _interestScanTimer = _interestScanInterval;
+            Transform best = null;
+            float bestScore = 0f;
+            Vector3 forward = transform.forward;
+
+            foreach (Rapadura.Gameplay.Enemies.EnemyController enemy in Rapadura.Gameplay.Enemies.EnemyController.EnabledEnemies)
+            {
+                if (enemy == null || (enemy.Health != null && enemy.Health.IsDead))
+                {
+                    continue;
+                }
+
+                float score = MotionFeelMath.InterestScore(eye, forward, enemy.transform.position, _interestRange, enemy.IsBoss ? 1.6f : 1.2f);
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    best = enemy.transform;
+                }
+            }
+
+            foreach (Rapadura.Gameplay.World.NpcInteractable npc in Rapadura.Gameplay.World.NpcInteractable.ActiveNpcs)
+            {
+                if (npc == null)
+                {
+                    continue;
+                }
+
+                float score = MotionFeelMath.InterestScore(eye, forward, npc.transform.position, _interestRange, 1f);
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    best = npc.transform;
+                }
+            }
+
+            if (best == null)
+            {
+                return;
+            }
+
+            _interest = best;
+            _interestCount++;
+            MotionFeelMath.InterestTiming(_seed, _interestCount, _profile.glanceHold, out _interestHold, out _interestCooldown);
         }
 
         /// <summary>Takeoff (visual crouch → stretch, never delaying the jump), air stretch, landing squash/dip by fall speed.</summary>
@@ -1070,7 +1219,7 @@ namespace Rapadura.Gameplay.Player
             // Head: look (yaw), counter part of the lean so the eyes stay level, overlap lag, fidget,
             // flinch jerk, death droop.
             float headYaw = (_headYaw + fidgetYaw * idle) * alive - torsoYaw * 0.5f - counter * 0.5f + turnLag * 0.75f;
-            float headPitch = -pitch * 0.4f * alive + overlap.x * 0.8f + fidgetPitch * idle * alive - _flinchDegrees * 0.6f * flinch + 22f * _deathFall;
+            float headPitch = (_headPitch - pitch * 0.4f) * alive + overlap.x * 0.8f + fidgetPitch * idle * alive - _flinchDegrees * 0.6f * flinch + 22f * _deathFall;
             float headRoll = overlap.y * 0.8f;
             RotateChain(_neck, 0.4f, headPitch, headRoll, headYaw, right, forward, up);
             RotateChain(_head, 0.6f, headPitch, headRoll, headYaw, right, forward, up);

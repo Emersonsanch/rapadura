@@ -17,7 +17,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
     /// (<see cref="SceneTransitionService.BeginCityVisit"/>, the hub's "Andar pela cidade"), this hides the arena's
     /// scenery and the sandbox (enemies, test NPCs), builds the walkable town of that city (<see cref="CityTownView"/>),
     /// walks the hero in by the road from the map, makes the plaza the respawn point, switches weather and ambience to
-    /// the region and leaves the day/night cycle running. The gates and the Cais da Barca send the hero back
+    /// the region and leaves the day/night cycle running. A visit that is a respawn
+    /// (<see cref="SceneTransitionService.PendingCityRespawn"/>: the hero fell outside an encounter, Docs/Progressao500.md §7)
+    /// wakes the hero at the plaza instead of the road, and a death inside the town is resolved at the plaza too
+    /// (<see cref="RespawnAtPlaza"/>). The gates and the Cais da Barca send the hero back
     /// (<see cref="Leave"/>). Self-bootstrapping on scene load like <c>EventRoomDirector</c>: no scene edit. Without a
     /// pending visit nothing happens, so encounters and the sandbox are untouched.
     /// </summary>
@@ -41,6 +44,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
         /// <summary>True once the town is built and the hero stands at the arrival point.</summary>
         public bool IsReady { get; private set; }
+
+        /// <summary>This visit started as a respawn: the hero woke up at the plaza.</summary>
+        public bool IsRespawn { get; private set; }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
@@ -66,7 +72,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
             var host = new GameObject("[CityMode]");
             SceneManager.MoveGameObjectToScene(host, scene);
-            host.AddComponent<CityModeController>().CityId = transition.PendingCityVisit;
+            CityModeController controller = host.AddComponent<CityModeController>();
+            controller.CityId = transition.PendingCityVisit;
+            controller.IsRespawn = transition.PendingCityRespawn;
         }
 
         private void Awake()
@@ -104,7 +112,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
             if (ServiceLocator.TryGet(out CheckpointManager checkpoints))
             {
-                checkpoints.ActivateCheckpoint(Town.Respawn);
+                checkpoints.SetCityRespawn(Town.Respawn);
             }
 
             // The carried state (bag, level) is restored one frame after load; place the hero after it, twice to beat
@@ -119,7 +127,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
             {
                 ServiceLocator.TryGet(out LocalizationManager localization);
                 string name = CityTexts.CityName(localization, city);
-                CombatFxManager.SpawnLootText(player.transform.position + Vector3.up * 2.4f, string.Format(CityWalkTexts.Get(localization, CityWalkTexts.Arrived), name));
+                string key = IsRespawn ? CityWalkTexts.RespawnedAtPlaza : CityWalkTexts.Arrived;
+                if (IsRespawn)
+                {
+                    // Told here, at the plaza: the map HUD has nothing left to say about it.
+                    CityProgress.ResolveShared().ConsumeRespawnNotice();
+                }
+
+                CombatFxManager.SpawnLootText(player.transform.position + Vector3.up * 2.4f, string.Format(CityWalkTexts.Get(localization, key), name));
             }
 
             GameLogger.Info(LogCategory, $"Walkable {CityId}: {Layout.Lots.Count} lots, {Town.RendererCount} renderers, {Town.ColliderCount} colliders, {Town.TriangleCount} triangles.");
@@ -151,7 +166,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             }
         }
 
-        /// <summary>Stands the hero on the road in from the map, facing the plaza.</summary>
+        /// <summary>Stands the hero on the road in from the map, facing the plaza (at the plaza itself for a respawn).</summary>
         public void PlaceHero()
         {
             GameObject player = GameObject.FindGameObjectWithTag(PlayerTag);
@@ -160,7 +175,20 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 return;
             }
 
-            PlaceAt(player, Layout.Arrival, Layout.ArrivalFacing);
+            PlaceAt(player, IsRespawn ? Layout.Respawn : Layout.Arrival, Layout.ArrivalFacing);
+        }
+
+        /// <summary>A defeat while walking in the town: the hero wakes up at the plaza (<see cref="CityLayout.Respawn"/>). True when placed.</summary>
+        public bool RespawnAtPlaza()
+        {
+            GameObject player = GameObject.FindGameObjectWithTag(PlayerTag);
+            if (player == null || Layout == null)
+            {
+                return false;
+            }
+
+            PlaceAt(player, Layout.Respawn, Layout.ArrivalFacing);
+            return true;
         }
 
         /// <summary>Teleports the hero onto the town ground at <paramref name="ground"/> (tests use it to start walks at the plaza).</summary>

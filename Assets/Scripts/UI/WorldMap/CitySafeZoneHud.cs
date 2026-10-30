@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.WorldMap
 {
     /// <summary>
-    /// "Você está em zona segura · Povoado de Areia Branca" on the world map HUD, while the token is inside a city's limit
+    /// "Você está em zona segura · Oásis de Qocho" on the world map HUD, while the token is inside a city's limit
     /// (<see cref="WorldMapCityPresence.CityUnderToken"/>), plus a short notice line under it: a new carro de boi stop, the
     /// city the cousins woke up in after a defeat (<see cref="CityProgress.ConsumeRespawnNotice"/>), a finished ox-cart
     /// trip (<see cref="ShowNotice"/>). Self-bootstrapping on the <see cref="WorldMapHudController"/>'s GameObject like

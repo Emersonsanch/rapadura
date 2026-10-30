@@ -48,6 +48,15 @@ namespace Rapadura.Gameplay.Mounts
         public const string TabSaddlery = "ui.mount.stable.tab_saddlery";
         public const string LevelLine = "ui.mount.stable.level";
         public const string LevelMax = "ui.mount.stable.level_max";
+
+        /// <summary>Growth with the rider (Docs/Progressao500.md §6.1): {0} = cap for this hero, {1} = hero level, {2} = Brilho, {3} = max Brilho.</summary>
+        public const string GrowthLine = "ui.mount.stable.growth";
+
+        /// <summary>Saved level above the rider's cap: {0} = the level it works at.</summary>
+        public const string WorksAtLine = "ui.mount.stable.works_at";
+
+        /// <summary>Despertar reached (§6.4): {0} = I..IV.</summary>
+        public const string AwakeningLine = "ui.mount.stable.awakening";
         public const string HeartsLine = "ui.mount.stable.hearts";
         public const string SatietyLine = "ui.mount.stable.satiety";
         public const string HungryTag = "ui.mount.stable.hungry";
@@ -129,6 +138,9 @@ namespace Rapadura.Gameplay.Mounts
             new LocalizationEntry(TabSaddlery, "Saddlery", "Selaria"),
             new LocalizationEntry(LevelLine, "Level {0} · {1}/{2} XP", "Nível {0} · {1}/{2} XP"),
             new LocalizationEntry(LevelMax, "Level {0} (max)", "Nível {0} (máximo)"),
+            new LocalizationEntry(GrowthLine, "Grows up to level {0} with this hero (lv {1}) · Glow {2}/{3}", "Cresce até o nível {0} com este herói (nv {1}) · Brilho {2}/{3}"),
+            new LocalizationEntry(WorksAtLine, "Works at level {0} with this cousin", "Funciona no nível {0} com este primo"),
+            new LocalizationEntry(AwakeningLine, "Awakening {0}", "Despertar {0}"),
             new LocalizationEntry(HeartsLine, "Affection: {0}/5", "Afeição: {0}/5"),
             new LocalizationEntry(SatietyLine, "Fed {0}%", "Saciedade {0}%"),
             new LocalizationEntry(HungryTag, "(hungry: no gallop)", "(com fome: sem galope)"),

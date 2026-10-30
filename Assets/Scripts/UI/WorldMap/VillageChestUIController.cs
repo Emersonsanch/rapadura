@@ -17,7 +17,7 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.WorldMap
 {
     /// <summary>
-    /// "Baú da Vó Zefa" window (<c>Resources/UI/VillageChestView.uxml</c>, styled by <c>UI/Village/VillageChestView.uss</c>
+    /// "Baú da Vó Edna" window (<c>Resources/UI/VillageChestView.uxml</c>, styled by <c>UI/Village/VillageChestView.uss</c>
     /// on top of the shared theme and the Mochila's tile look): two panes, Mochila and Baú, one tile per slot.
     /// <list type="bullet">
     /// <item>Tap / click / A on a tile: a single item moves to the other side at once; a stack opens the amount bar

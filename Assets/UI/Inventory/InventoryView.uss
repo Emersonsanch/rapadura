@@ -327,3 +327,54 @@
     background-color: rgba(220, 70, 70, 0.32);
     border-color: rgb(220, 70, 70);
 }
+
+/* ---- Carry load (EncumbranceRules): label + bar under the header ---- */
+
+.inventory-load {
+    flex-direction: row;
+    align-items: center;
+    margin: -4px 0 10px 0;
+}
+
+.inventory-load-label {
+    font-size: 14px;
+    min-width: 150px;
+    margin-right: 10px;
+    color: var(--rap-cream);
+}
+
+.inventory-load-bar {
+    flex-grow: 1;
+    height: 10px;
+    background-color: rgba(20, 10, 4, 0.75);
+    border-width: 1px;
+    border-color: var(--rap-brown-light);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.inventory-load-fill {
+    height: 100%;
+    width: 0;
+    background-color: var(--rap-cane-green);
+}
+
+.inventory-load-mark {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: var(--rap-cream-dim);
+}
+
+.inventory-load--heavy .inventory-load-fill {
+    background-color: var(--rap-warning);
+}
+
+.inventory-load--over .inventory-load-fill {
+    background-color: var(--rap-clay-red);
+}
+
+.inventory-load--over .inventory-load-label {
+    color: var(--rap-clay-red);
+}

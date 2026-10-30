@@ -79,7 +79,7 @@ namespace Rapadura.Gameplay.Housing
         public const string Key = "House";
         /// <summary>1 = H1; 2 = H4/H6 (rested, plants, guest book, house quests, comfort cache); 3 = H3 sources. Older saves load as is.</summary>
         public const int SaveVersion = 3;
-        /// <summary>The Vila da Vó Zefa (<c>CityCatalog.VilaZefa</c>): offline the one house is always there (§1).</summary>
+        /// <summary>The Vila da Vó Edna (<c>CityCatalog.VilaZefa</c>): offline the one house is always there (§1).</summary>
         public const string DefaultCityId = "vila_zefa";
 
         private readonly Func<int> _forestVictories;
@@ -146,7 +146,7 @@ namespace Rapadura.Gameplay.Housing
         // Quest "Um Cantinho Seu"
         // ------------------------------------------------------------------
 
-        /// <summary>Vó Zefa hands over the house: N1 + the quest rewards and the starter set land in the depot. Once.</summary>
+        /// <summary>Vó Edna hands over the house: N1 + the quest rewards and the starter set land in the depot. Once.</summary>
         public bool GrantHouse()
         {
             if (HasHouse)

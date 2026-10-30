@@ -7,7 +7,7 @@ namespace Rapadura.UI.WorldMap
 {
     /// <summary>
     /// Localization keys (en + pt-BR) for the world map HUD (<see cref="WorldMapHudController"/>,
-    /// WorldMapHudView.uxml): clock/weather readout, "Vitórias: 2/3 para desbloquear Deserto",
+    /// WorldMapHudView.uxml): clock/weather readout, "Vitórias: 2/3 para desbloquear Areias Flamejantes",
     /// region labels and the read-only Mochila summary. Same self-contained pattern as
     /// <see cref="UiTexts"/>/<c>ReturnToTitleTexts</c>: merged into the live
     /// <see cref="LocalizationManager"/> on first use (keys it already has win), pt-BR fallback when

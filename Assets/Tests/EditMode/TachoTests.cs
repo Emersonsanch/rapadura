@@ -18,7 +18,7 @@ using UnityEngine;
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// Tacho Encantado da Vó Zefa (FASE 16, Docs/Balance/README.md "Tacho Encantado e asas"): the pure <see cref="TachoRules"/>
+    /// Tacho Encantado da Vó Edna (FASE 16, Docs/Balance/README.md "Tacho Encantado e asas"): the pure <see cref="TachoRules"/>
     /// (recipes, chances, checks, seeded rolls, failure keeps the main item), the wings (<see cref="WingCatalog"/>: items in the
     /// new "Costas/Asas" slot, stats per level, equip bonuses, save), <see cref="TachoService"/> on a live bag, the Frutas do
     /// Sertão on the <see cref="AttributeSet"/>, the procedural wing mesh / flap and the window's texts.

@@ -26,7 +26,7 @@ namespace Rapadura.Gameplay.Housing
             (ItemRarity.Common, 80), (ItemRarity.Uncommon, 18), (ItemRarity.Rare, 2),
         };
 
-        /// <summary>The house's city region offline (the Vila da Vó Zefa, Floresta): the shops the daily box draws from.</summary>
+        /// <summary>The house's city region offline (the Vila da Vó Edna, Floresta): the shops the daily box draws from.</summary>
         public const string DailyBoxRegion = "forest";
 
         /// <summary>House items a quest (regional, personal, convergence) adds to its reward.</summary>

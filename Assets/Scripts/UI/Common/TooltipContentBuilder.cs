@@ -187,6 +187,8 @@ namespace Rapadura.UI.Common
                 lines.Add(Format(localize, "ui.tooltip.quantity", slot.quantity.ToString(CultureInfo.InvariantCulture)));
             }
 
+            lines.Add(WeightLine(item, slot != null ? slot.quantity : 1));
+
             if (buyPrice.HasValue)
             {
                 lines.Add(Format(localize, "ui.tooltip.price", buyPrice.Value.ToString(CultureInfo.InvariantCulture)));
@@ -431,6 +433,25 @@ namespace Rapadura.UI.Common
         private static string Number(float value)
         {
             return value.ToString("0.#", CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>"Peso: 3", "Peso: 0.5 cada (20 = 10)" for a stack, "Não pesa nada" for coins (<see cref="ItemWeightRules"/>).</summary>
+        public static string WeightLine(ItemDefinition item, int quantity)
+        {
+            LocalizationManager manager = ContentText.CurrentManager;
+            float unit = ItemWeightRules.UnitWeight(item);
+            if (unit <= 0f)
+            {
+                return EncumbranceTexts.Get(manager, EncumbranceTexts.TooltipWeightless);
+            }
+
+            if (quantity > 1)
+            {
+                return EncumbranceTexts.Format(manager, EncumbranceTexts.TooltipStackWeight,
+                    EncumbranceTexts.Number(unit), quantity.ToString(CultureInfo.InvariantCulture), EncumbranceTexts.Number(unit * quantity));
+            }
+
+            return EncumbranceTexts.Format(manager, EncumbranceTexts.TooltipWeight, EncumbranceTexts.Number(unit));
         }
     }
 }

@@ -35,6 +35,9 @@ namespace Rapadura.UI.Mounts
         public const string MountedClass = "mount-button--mounted";
         public const string EmptyClass = "mount-button--empty";
         public const string TrotClass = "mount-stamina--trot";
+        public const string LoadName = "mount-load";
+        public const string LoadHeavyClass = "mount-load--heavy";
+        public const string LoadOverClass = "mount-load--over";
         public const float NoticeSeconds = 3.2f;
 
         private readonly VisualElement _layer;
@@ -49,6 +52,9 @@ namespace Rapadura.UI.Mounts
         private readonly VisualElement _staminaFill;
         private readonly Label _staminaCaption;
         private readonly VisualElement _healthFill;
+        private readonly Label _loadCaption;
+        private readonly VisualElement _loadBar;
+        private readonly VisualElement _loadFill;
         private readonly Label _notice;
         private float _noticeHideAt = -1f;
         private readonly System.Collections.Generic.Queue<string> _pending = new System.Collections.Generic.Queue<string>();
@@ -126,6 +132,11 @@ namespace Rapadura.UI.Mounts
             _bars.Add(_staminaCaption);
             _bars.Add(_staminaBar);
             _bars.Add(health);
+            // Saddlebags (EncumbranceTracker): "Alforjes 120/210" + a bar, amber past half, red over capacity.
+            _loadCaption = Text("mount-bar-caption");
+            _loadBar = Bar(LoadName, out _loadFill);
+            _bars.Add(_loadCaption);
+            _bars.Add(_loadBar);
 
             _notice = Text(NoticeName);
             _notice.style.display = DisplayStyle.None;
@@ -257,7 +268,28 @@ namespace Rapadura.UI.Mounts
                 SetText(_staminaCaption, MountTexts.Get(localization, trot ? MountTexts.HudTrot : session.IsGalloping ? MountTexts.HudGallop : MountTexts.HudStamina));
                 float max = MountCollection.MaxHealthOf(owned);
                 _healthFill.style.width = Length.Percent(max > 0f ? Mathf.Clamp01(MountCollection.HealthOf(owned) / max) * 100f : 0f);
+                RefreshLoad(localization);
             }
+        }
+
+        private void RefreshLoad(LocalizationManager localization)
+        {
+            bool show = Rapadura.Gameplay.Inventory.EncumbranceTracker.HasCurrent && Rapadura.Gameplay.Inventory.EncumbranceTracker.Current.Mounted;
+            DisplayStyle display = show ? DisplayStyle.Flex : DisplayStyle.None;
+            _loadCaption.style.display = display;
+            _loadBar.style.display = display;
+            if (!show)
+            {
+                return;
+            }
+
+            Rapadura.Gameplay.Inventory.EncumbranceSnapshot load = Rapadura.Gameplay.Inventory.EncumbranceTracker.Current;
+            SetText(_loadCaption, Rapadura.Gameplay.Inventory.EncumbranceTexts.Format(localization, Rapadura.Gameplay.Inventory.EncumbranceTexts.HudMountLoad,
+                Rapadura.Gameplay.Inventory.EncumbranceTexts.Number(load.Load), Rapadura.Gameplay.Inventory.EncumbranceTexts.Number(load.Capacity)));
+            _loadFill.style.width = Length.Percent(Mathf.Clamp01(load.Ratio) * 100f);
+            Rapadura.Gameplay.Inventory.LoadBand band = load.Band;
+            _loadBar.EnableInClassList(LoadHeavyClass, band == Rapadura.Gameplay.Inventory.LoadBand.Heavy);
+            _loadBar.EnableInClassList(LoadOverClass, band == Rapadura.Gameplay.Inventory.LoadBand.Overloaded);
         }
 
         private void SetVisible(bool visible)

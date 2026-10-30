@@ -186,7 +186,7 @@ def main():
     ctx = ps.load_context()
     print("## Benzeduras (lidas do ImbueCatalog.cs)\n")
     for imbue_id, tier, mod in load_imbues():
-        print(f"- {imbue_id} (nível {tier}): {mod.stat} +{mod.value:g}{'%' if mod.percent else ''} — mesma vaga da bênção da estrada")
+        print(f"- {imbue_id} (nível {tier}): {mod.stat} +{mod.value:g}{'%' if mod.percent else ''} — mesma vaga do reforço da estrada")
     print(f"\nTeto de raridade por nível de ofício: {', '.join(bm.RARITY_NAMES[c] for c in load_caps())}\n")
     res = run(ctx, args.runs)
     print(report(res))

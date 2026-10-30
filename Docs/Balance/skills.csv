@@ -1,28 +1,28 @@
 id,name,hero,type,category,element,min_player_level,cooldown,mana_cost,energy_cost,cast_time,recovery,base_damage,damage_per_level,dot_damage,base_healing,healing_per_level,hot_healing,range,area_radius,max_level,buffs,debuffs,stun_seconds,dps_lv1,damage_per_mana_lv1,dps_max,damage_per_mana_max
-skill_icaro_campo_magnetico,Campo Magnético,Icaro,Active,Utility,Lightning,1,15,25,0,0.3,0.2,0,0,0,0,0,0,4,5,5,1,1,0,0,0,0,0
-skill_icaro_drone_de_ataque,Drone de Ataque,Icaro,Active,Summon,Lightning,1,14,26,0,0.4,0.2,10,3,30,0,0,0,15,1.5,5,0,2,0,2.86,1.54,3.71,2
-skill_icaro_exercito_mecanico,Exército Mecânico,Icaro,Ultimate,Summon,Lightning,10,75,80,0,1.5,0.2,100,26,48,0,0,0,12,7,3,1,1,0,1.97,1.85,2.67,2.5
-skill_icaro_granada_eletrica,Granada Elétrica,Icaro,Active,Offensive,Lightning,1,8,20,0,0.3,0.2,26,6,0,0,0,0,14,3,5,0,1,0.6,3.25,1.3,6.25,2.5
-skill_icaro_torreta_automatica,Torreta Automática,Icaro,Active,Summon,Lightning,1,12,24,0,0.8,0.2,10,3,24,0,0,0,10,3,5,0,1,0,2.83,1.42,3.83,1.92
+skill_icaro_campo_magnetico,Campo do Engenho,Icaro,Active,Utility,Lightning,1,15,25,0,0.3,0.2,0,0,0,0,0,0,4,5,5,1,1,0,0,0,0,0
+skill_icaro_drone_de_ataque,Drone Senmurv,Icaro,Active,Summon,Lightning,1,14,26,0,0.4,0.2,10,3,30,0,0,0,15,1.5,5,0,2,0,2.86,1.54,3.71,2
+skill_icaro_exercito_mecanico,Exército de Ushabtis,Icaro,Ultimate,Summon,Lightning,10,75,80,0,1.5,0.2,100,26,48,0,0,0,12,7,3,1,1,0,1.97,1.85,2.67,2.5
+skill_icaro_granada_eletrica,Granada de Faísca,Icaro,Active,Offensive,Lightning,1,8,20,0,0.3,0.2,26,6,0,0,0,0,14,3,5,0,1,0.6,3.25,1.3,6.25,2.5
+skill_icaro_torreta_automatica,Torreta Ushabti,Icaro,Active,Summon,Lightning,1,12,24,0,0.8,0.2,10,3,24,0,0,0,10,3,5,0,1,0,2.83,1.42,3.83,1.92
 skill_joaquim_escudo_das_raizes,Escudo das Raízes,Joaquim,Active,Defensive,Earth,1,16,24,0,0.3,0.2,0,0,0,15,4,24,5,0,5,2,0,0,0,0,0,0
-skill_joaquim_muralha_de_pedra,Muralha de Pedra,Joaquim,Active,Defensive,Earth,1,16,18,0,0.2,0.2,0,0,0,0,0,0,5,0,5,1,0,0,0,0,0,0
+skill_joaquim_muralha_de_pedra,Muralha da Maré,Joaquim,Active,Defensive,Earth,1,16,18,0,0.2,0.2,0,0,0,0,0,0,5,0,5,1,0,0,0,0,0,0
 skill_joaquim_provocacao_heroica,Provocação Heroica,Joaquim,Active,Utility,Physical,1,10,12,0,0,0.2,0,0,0,0,0,0,6,6,5,1,1,0,0,0,0,0
-skill_joaquim_terremoto,Terremoto,Joaquim,Active,Offensive,Earth,1,12,28,0,0.6,0.2,30,7,0,0,0,0,3,5,5,0,1,0.8,2.5,1.07,4.83,2.07
+skill_joaquim_terremoto,Maremoto,Joaquim,Active,Offensive,Earth,1,12,28,0,0.6,0.2,30,7,0,0,0,0,3,5,5,0,1,0.8,2.5,1.07,4.83,2.07
 skill_joaquim_ultima_resistencia,Última Resistência,Joaquim,Ultimate,Defensive,Earth,10,90,50,0,0,0.2,0,0,0,60,15,0,5,0,3,2,0,0,0,0,0,0
-skill_lavine_correntes_das_trevas,Correntes das Trevas,Lavine,Active,Utility,Dark,1,11,16,0,0.4,0.2,12,3,0,0,0,0,12,2.5,5,0,2,1,1.09,0.75,2.18,1.5
-skill_lavine_eclipse_eterno,Eclipse Eterno,Lavine,Ultimate,Offensive,Dark,10,70,90,0,1.8,0.2,150,36,0,0,0,0,12,8,3,0,2,0,2.14,1.67,3.17,2.47
-skill_lavine_explosao_arcana,Explosão Arcana,Lavine,Active,Offensive,Arcane,1,10,30,0,0.6,0.2,40,9,0,0,0,0,10,3.5,5,0,0,0,4,1.33,7.6,2.53
+skill_lavine_correntes_das_trevas,Correntes de Ar,Lavine,Active,Utility,Dark,1,11,16,0,0.4,0.2,12,3,0,0,0,0,12,2.5,5,0,2,1,1.09,0.75,2.18,1.5
+skill_lavine_eclipse_eterno,Céu da Noite Rubra,Lavine,Ultimate,Offensive,Dark,10,70,90,0,1.8,0.2,150,36,0,0,0,0,12,8,3,0,2,0,2.14,1.67,3.17,2.47
+skill_lavine_explosao_arcana,Explosão de Estrelas,Lavine,Active,Offensive,Arcane,1,10,30,0,0.6,0.2,40,9,0,0,0,0,10,3.5,5,0,0,0,4,1.33,7.6,2.53
 skill_lavine_nevoa_da_ilusao,Névoa da Ilusão,Lavine,Active,Utility,Arcane,1,16,24,0,0.5,0.2,0,0,0,0,0,0,8,5,5,0,2,0,0,0,0,0
-skill_lavine_orbe_sombria,Orbe Sombria,Lavine,Active,Offensive,Dark,1,4,14,0,0.3,0.2,26,6,0,0,0,0,14,1,5,0,0,0,6.5,1.86,12.5,3.57
+skill_lavine_orbe_sombria,Orbe do Ar Sereno,Lavine,Active,Offensive,Dark,1,4,14,0,0.3,0.2,26,6,0,0,0,0,14,1,5,0,0,0,6.5,1.86,12.5,3.57
 skill_maithe_chuva_de_flechas,Chuva de Flechas,Maithe,Active,Offensive,Physical,1,8,22,0,0.5,0.2,26,6,0,0,0,0,16,4,5,0,1,0,3.25,1.18,6.25,2.27
 skill_maithe_disparo_explosivo,Disparo Explosivo,Maithe,Active,Offensive,Fire,1,10,25,0,0.4,0.2,35,7,12,0,0,0,18,2.5,5,0,1,0,4.7,1.88,7.5,3
 skill_maithe_flecha_precisa,Flecha Precisa,Maithe,Active,Offensive,Physical,1,3,15,0,0.2,0.2,28,6,0,0,0,0,20,0,5,1,0,0,9.33,1.87,17.33,3.47
 skill_maithe_passo_do_vento,Passo do Vento,Maithe,Active,Mobility,Wind,1,7,12,0,0,0.2,0,0,0,0,0,0,8,0,5,1,0,0,0,0,0,0
 skill_maithe_tempestade_de_mil_flechas,Tempestade de Mil Flechas,Maithe,Ultimate,Offensive,Wind,10,60,70,0,1.2,0.2,130,32,0,0,0,0,20,7,3,0,1,0,2.17,1.86,3.23,2.77
-skill_maria_bencao_da_vida,Benção da Vida,Maria,Active,Support,Holy,1,15,25,0,0.2,0.2,0,0,0,0,0,32,5,0,5,2,0,0,0,0,0,0
-skill_maria_cura_divina,Cura Divina,Maria,Active,Support,Holy,1,9,20,0,0.3,0.2,0,0,0,35,9,0,5,0,5,0,0,0,0,0,0,0
-skill_maria_escudo_sagrado,Escudo Sagrado,Maria,Active,Defensive,Holy,1,14,22,0,0,0.2,0,0,0,0,0,0,5,0,5,1,0,0,0,0,0,0
-skill_maria_milagre_celestial,Milagre Celestial,Maria,Ultimate,Support,Holy,10,75,80,0,1.5,0.2,0,0,0,120,30,48,5,0,3,2,0,0,0,0,0,0
+skill_maria_bencao_da_vida,Brilho da Vida,Maria,Active,Support,Holy,1,15,25,0,0.2,0.2,0,0,0,0,0,32,5,0,5,2,0,0,0,0,0,0
+skill_maria_cura_divina,Luz que Cura,Maria,Active,Support,Holy,1,9,20,0,0.3,0.2,0,0,0,35,9,0,5,0,5,0,0,0,0,0,0,0
+skill_maria_escudo_sagrado,Escudo Solar,Maria,Active,Defensive,Holy,1,14,22,0,0,0.2,0,0,0,0,0,0,5,0,5,1,0,0,0,0,0,0
+skill_maria_milagre_celestial,Coluna de Luz,Maria,Ultimate,Support,Holy,10,75,80,0,1.5,0.2,0,0,0,120,30,48,5,0,3,2,0,0,0,0,0,0
 skill_maria_purificacao,Purificação,Maria,Active,Utility,Holy,1,10,18,0,0.3,0.2,24,5,0,10,3,0,6,4,5,0,1,0,2.4,1.33,4.4,2.44
 skill_arrow,Flecha,,Active,Offensive,Physical,1,1.5,6,8,0,0.2,18,4,0,0,0,0,20,0,5,0,0,0,12,3,22.67,5.67
 skill_berserk,Berserk,,Ultimate,Offensive,Physical,1,45,20,0,0,0.2,0,0,0,0,0,0,5,0,3,1,1,0,0,0,0,0

@@ -56,8 +56,8 @@ no campo `clip` do cue correspondente em `Resources/Audio/SfxEventMap.asset`.
 | `combat.player_hurt` | Herói leva dano | Baque surdo + respiração/gemido curto (por herói, se possível). |
 | `combat.enemy_death` | Inimigo morre (3D) | Queda/dissipação curta, 300–500 ms. |
 | `combat.boss_death` | Chefe derrotado (abaixa a música) | Explosão/desmoronamento grave com cauda longa, 1–2 s. |
-| `player.death` | Herói cai | Acorde descendente melancólico (sanfona/viola), 1–1,5 s. |
-| `player.level_up` | Subiu de nível | Fanfarra curta e alegre (triângulo + sanfona), ~1 s. |
+| `player.death` | Herói cai | Acorde descendente melancólico (dutar/ney), 1–1,5 s. |
+| `player.level_up` | Subiu de nível | Fanfarra curta e alegre (dutar + tambor falante), ~1 s. |
 
 ### Skills (por elemento / categoria)
 
@@ -100,7 +100,7 @@ no campo `clip` do cue correspondente em `Resources/Audio/SfxEventMap.asset`.
 | Cue id | Quando toca | Sugestão de som |
 |---|---|---|
 | `encounter.start` | Encontro começa | Gongo/zabumba + pratos, 1 s. |
-| `encounter.victory` | Vitória | Fanfarra de forró curta (sanfona + triângulo), 1–2 s. |
+| `encounter.victory` | Vitória | Fanfarra curta de caravana (dutar + tambor falante), 1–2 s. |
 | `encounter.defeat` | Derrota | Acorde menor descendente. |
 | `encounter.fled` | Fuga | "Whoosh" + passos correndo. |
 | `ambience.dawn` | Amanhecer | Galo/passarinhos (canção curta). |
@@ -123,28 +123,28 @@ semeado). Para trocar por arquivo real basta arrastar o `clip` no cue — o jitt
 | `combat.stun` | `StunAppliedEvent` (3D no alvo) | `Dizzy`: tom que cai "ondulando" → "estrelinhas"/passarinhos girando, 300–400 ms. | Efeitos | 0,40 | 0,25 s / 2 | 6% / 10% |
 | `loot.drop` | `EnemyLootDroppedEvent` (substitui o `item.pickup` daquela morte) | `Clink`: dois "plins" de moeda na madeira → moedas/couro caindo na sacola, ~200 ms. | Efeitos | 0,35 | **0,3 s / 1** (anti-spam: AoE com várias mortes no mesmo frame = um som só) | 8% / 15% |
 | `loot.bag_full` | `LootOverflowEvent` ("Mochila cheia") | `SackThump`: baque abafado de saco cheio + pano → saco de estopa batendo cheio, 300 ms. Não é o `ui.error`, para não soar como erro. | Interface | 0,45 | 1,5 s / 1 | 3% / — |
-| `story.open` | `StoryPanelChangedEvent` Opened (1º painel) | `PageRustle` (2,4 kHz): farfalhar de papel → caderno/cordel abrindo, 300 ms. | Interface | 0,40 | 0,3 s / 1 | 5% / — |
+| `story.open` | `StoryPanelChangedEvent` Opened (1º painel) | `PageRustle` (2,4 kHz): farfalhar de papel → caderno/rolo de hinos abrindo, 300 ms. | Interface | 0,40 | 0,3 s / 1 | 5% / — |
 | `story.page` | `StoryPanelChangedEvent` Advanced | `PageRustle` (3 kHz): virada de página, 250–350 ms. Gravar 3–4 viradas. | Interface | 0,30 | 0,15 s / 2 | 10% / 20% |
 | `story.skip` | `StoryPanelChangedEvent` Skipped | `Whoosh` curto → folhas passando rápido (folhear). | Interface | 0,30 | 0,3 s / 1 | 5% / — |
 | `story.close` | `StoryPanelChangedEvent` Finished (fim lido, não é o final) | `PageRustle` (1,8 kHz): página fechando, mais grave. | Interface | 0,32 | 0,3 s / 1 | 5% / — |
 | `story.credits` | Final (`Ending`) lido ou pulado → créditos | `Chime` (Sol): sino suave → acorde de viola caipira se abrindo, ~1 s. | Interface | 0,45 | 2 s / 1 | — |
-| `campaign.completed` | `CampaignCompletedEvent`, **1,6 s depois** (deixa a fanfarra de vitória do mesmo frame tocar) | `ForroFlourish`: 2 compassos de baião (zabumba nos tempos 1 / "e" do 2, triângulo abafado/aberto) + arpejo maior → vinheta de forró pé-de-serra (zabumba + triângulo + sanfona), 2 s. Abaixa a música. | Interface | 0,75 | 5 s / 1 | — |
+| `campaign.completed` | `CampaignCompletedEvent`, **1,6 s depois** (deixa a fanfarra de vitória do mesmo frame tocar) | `ForroFlourish`: 2 compassos de tambor falante (nos tempos 1 / "e" do 2, abafado/aberto) + arpejo maior → vinheta de caravana (tambor falante + dutar + ney), 2 s. Abaixa a música. | Interface | 0,75 | 5 s / 1 | — |
 | `village.open` | Vila (`VillageHubButton`) pega a pausa | `WoodCreak`: rangido de madeira + "toc" → porta/baú de madeira abrindo, 400–500 ms. Substitui o `ui.open`. | Interface | 0,50 | 0,4 s / 1 | 5% / 10% |
 | `village.close` | Vila solta a pausa | `WoodKnock`: dois "tocs" ocos → tampa do baú/tramela fechando, 300 ms. Substitui o `ui.close`. | Interface | 0,45 | 0,4 s / 1 | 5% / — |
 | `npc.talk` | `DialogueStartedEvent` (NPC da região, da vila e do Main.unity) | `Murmur`: "hm-hm" murmurado → interjeição curta por personagem ("Ô!", "Ei!", "Hum…"), 300 ms. A caixa de diálogo não toca `ui.open`. | Interface | 0,40 | 0,5 s / 1 | 8% / 10% |
-| `combat.thorns` | Dano refletido por Espinhos (`ThornsRules.IsReflecting`, canal próprio) — substitui o `combat.hit` desse golpe | `Prick`: picada metálica + raspado → espinho de mandacaru/arame farpado, 150 ms. | Efeitos | 0,35 | 0,12 s / 2 | 10% / 15% |
+| `combat.thorns` | Dano refletido por Espinhos (`ThornsRules.IsReflecting`, canal próprio) — substitui o `combat.hit` desse golpe | `Prick`: picada metálica + raspado → espinho de saxaul/arame farpado, 150 ms. | Efeitos | 0,35 | 0,12 s / 2 | 10% / 15% |
 | `enemy.windup` | `EnemyAttackWindupEvent` (agachada de antecipação, 3D) — sutil | `Inhale`: respiro/couro "juntando força", 250 ms. | Efeitos | 0,20 | 0,3 s / 2 | 12% / 20% |
 | `hero.land` | `PlayerLandedEvent` (squash de aterrissagem ≥ 20%) — sutil | `Thud` grave → pé na terra batida/poeira, 100–150 ms. | Efeitos | 0,22 | 0,25 s / 1 | 8% / 20% |
-| `ambience.title` | **Loop** na tela de título e na seleção de herói (`MainMenu` / `CharacterSelect`), fade de 2,5 s | `CountrysideLoop`: grilos em grupos de três sobre brisa leve → entardecer no sertão (grilos, vento, um bem-te-vi distante), loop estéreo de 20–40 s. Não pausa. | Efeitos | 0,16 | — | — |
+| `ambience.title` | **Loop** na tela de título e na seleção de herói (`MainMenu` / `CharacterSelect`), fade de 2,5 s | `CountrysideLoop`: grilos em grupos de três sobre brisa leve → entardecer na Ilha da Aurora (grilos, vento, um bem-te-vi distante), loop estéreo de 20–40 s. Não pausa. | Efeitos | 0,16 | — | — |
 
-### Caramelo, o vira-lata da Vó Zefa (2026-10-29)
+### Ari, o cachorro da Vó Edna (2026-10-29)
 
 Tocados direto pelo id (`SfxEventRouter.PlayCue`) por `CarameloCompanion` / `CarameloCuddleButton`,
 sem gatilho próprio no `SfxTrigger`. Preset novo `Bark` (31): um "au" curto (tom vozeado que cai + sopro no ataque).
 
 | Cue id | Quando toca | Placeholder hoje → sugestão de som real | Vol. | Cooldown / vozes | Jitter |
 |---|---|---|---|---|---|
-| `pet.bark` | Caramelo late para o inimigo que vai atacar (até 3 latidos, 3D) | `Bark` 420 Hz → latido de vira-lata médio, amigável (nada de rosnado), 150–200 ms. Gravar 3–4. | 0,40 | 0,35 s / 1 | 8% / 15% |
+| `pet.bark` | Ari late para o inimigo que vai atacar (até 3 latidos, 3D) | `Bark` 420 Hz → latido de vira-lata médio, amigável (nada de rosnado), 150–200 ms. Gravar 3–4. | 0,40 | 0,35 s / 1 | 8% / 15% |
 | `pet.yip` | "Fazer carinho" no mapa (não pausa) | `Bark` 780 Hz → ganido feliz/"auau" agudo curtinho. | 0,35 | 0,3 s / 1 | 10% / 10% |
 | `pet.sniff` | Fareja parado / pega o loot (3D, bem baixo) | `Inhale` 1,4 kHz → fungadas curtas de focinho. | 0,18 | 1 s / 1 | 12% / 20% |
 | `pet.fetch` | Entrega o loot buscado ao herói | `Clink` 1,5 kHz → moedinha caindo no chão + "plim". | 0,30 | 0,3 s / 1 | 8% / 15% |
@@ -189,7 +189,7 @@ só os ids que faltam — um cue com o mesmo id criado no asset (com clip de ver
 | `fishing.snap` | Linha arrebentou | `Crunch` 1,5 kHz → "tec" de linha partindo | 0,42 | 0,3 s |
 | `fishing.escape` | Escapou / cedo / tarde demais | `BlipDown` 400 Hz → "blup" de peixe indo embora | 0,35 | 0,3 s |
 | `fishing.catch` | Pegou (comum/incomum) | `Chime` 880 Hz → peixe batendo na margem + sininho | 0,45 | 0,3 s |
-| `fishing.catch_rare` | Pegou (raro/lendário) | `Fanfare` 660 Hz → floreio de sanfona curtinho | 0,50 | 0,5 s |
+| `fishing.catch_rare` | Pegou (raro/lendário) | `Fanfare` 660 Hz → floreio de dutar curtinho | 0,50 | 0,5 s |
 | `fishing.record` | Novo recorde de uma espécie já pescada | `Sparkle` 1,5 kHz → brilho | 0,40 | 0,5 s |
 
 Vibração: `Light` na mordida, `Medium` quando a linha arrebenta, `Success` ao pegar.
@@ -204,8 +204,8 @@ parte da telegrafia). Mesmo esquema da pesca: `NightCreatureAudio.EnsureCues` ac
 
 | Cue id | Quando toca | Placeholder hoje → sugestão de som real | Vol. | Cooldown |
 |---|---|---|---|---|
-| `night.werewolf.howl` | Lobisomem chega / ronda (12–18 s) | `Swell` 210 Hz → uivo "auuuu" meio desafinado, engraçado, 1 s | 0,42 | 6 s |
-| `night.werewolf.growl` | Lobisomem empina para a patada | `Bark` 170 Hz → rosnado curto e grave (sem ser assustador) | 0,40 | 0,8 s |
+| `night.werewolf.howl` | Mardagayl chega / ronda (12–18 s) | `Swell` 210 Hz → uivo "auuuu" meio desafinado, engraçado, 1 s | 0,42 | 6 s |
+| `night.werewolf.growl` | Mardagayl empina para a patada | `Bark` 170 Hz → rosnado curto e grave (sem ser assustador) | 0,40 | 0,8 s |
 | `night.vampire_bat.screech` | Morcego-vampiro chega / ronda | `Chirp` 2,6 kHz → guincho agudo duplo | 0,30 | 2 s |
 | `night.vampire_bat.bite` | Morcego-vampiro mergulha | `Zap` 1,7 kHz → chiado + "nhac" | 0,32 | 0,5 s |
 | `night.owl.screech` | Coruja chega / ronda | `Zap` 2,3 kHz → o grito de "pano rasgando" da rasga-mortalha | 0,34 | 3 s |
@@ -214,8 +214,8 @@ parte da telegrafia). Mesmo esquema da pesca: `NightCreatureAudio.EnsureCues` ac
 | `night.firefly.flare` | Enxame vai queimar | `Sparkle` 1,8 kHz → estalinhos de brasa | 0,30 | 0,5 s |
 | `night.peccary.grunt` | Queixada chega / ronda | `Bark` 140 Hz → grunhido + bater de dentes ("tec-tec") | 0,32 | 1,2 s |
 | `night.peccary.charge` | Queixada investe | `Crunch` 320 Hz → patas batendo na terra | 0,36 | 0,35 s |
-| `night.potoo.song` | Mãe-da-lua canta (9–14 s) | `ChimeDown` 540 Hz → o canto real do urutau: notas tristes descendo | 0,30 | 6 s |
-| `night.potoo.gape` | Mãe-da-lua abre o bocão | `Inhale` 900 Hz → "hááá" de bico abrindo | 0,30 | 0,6 s |
+| `night.potoo.song` | Ave-Graveto de Omöl canta (9–14 s) | `ChimeDown` 540 Hz → o canto real do urutau: notas tristes descendo | 0,30 | 6 s |
+| `night.potoo.gape` | Ave-Graveto de Omöl abre o bocão | `Inhale` 900 Hz → "hááá" de bico abrindo | 0,30 | 0,6 s |
 
 **Quem tocou a pausa:** `SfxEventRouter.ClassifyPauseOwners` olha os donos do `GameplayPause` no
 `GamePausedEvent`: Vila → `village.open`/`village.close`; painel de história → silêncio (os cues
@@ -240,9 +240,9 @@ Contextos (`MusicContext`) e quando entram:
 
 | Contexto | Variante | Quando | Sugestão |
 |---|---|---|---|
-| `Title` | — | Menu principal e seleção de herói | Tema principal calmo (viola caipira/sanfona), 72 bpm. |
+| `Title` | — | Menu principal e seleção de herói | Tema principal calmo (dutar/ney), 72 bpm. |
 | `WorldMap` | — | Mapa-múndi | Tema de viagem, maior, 90 bpm. |
-| `Encounter` | `forest`, `desert`, `mountain`, `caves` (e genérico) | Encontro por bioma | Combate leve com cor do bioma (zabumba na floresta, pífano no sertão, ecos nas cavernas), ~90–112 bpm. |
+| `Encounter` | `forest`, `desert`, `mountain`, `caves` (e genérico) | Encontro por bioma | Combate leve com cor do bioma (zabumba na floresta, pífano na Ilha da Aurora, ecos nas cavernas), ~90–112 bpm. |
 | `Boss` | (bioma opcional) | Encontro com algum inimigo `IsBoss` | Tema de chefe, menor, 140 bpm. |
 | `Story` | — / `ending` | **Sobreposição**: enquanto um painel de história (ou os créditos depois do final) está na tela; `ending` no epílogo | Tema íntimo e lento (viola solo/rabeca), maior, 60 bpm; `ending` mais caloroso, 66 bpm (Lá). |
 

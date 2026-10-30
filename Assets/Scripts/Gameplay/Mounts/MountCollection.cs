@@ -53,6 +53,13 @@ namespace Rapadura.Gameplay.Mounts
         /// <summary>Metres ridden in total (1 XP per 20 m, +1 affection per km).</summary>
         public float metersRidden;
 
+        /// <summary>Brilho, 0..<see cref="MountGrowthRules.MaxGlow"/>: XP stored while at the rider's cap (Docs/Progressao500.md §6.1). Old saves: 0.</summary>
+        public int glow;
+
+        /// <summary>Despertar reached, 0..4 (§6.4; look and ability only). Old saves: 0.</summary>
+        public int awakening;
+
+        public float KmRidden => metersRidden / 1000f;
         public bool IsTired => MountRules.IsTired(tiredUntilEncounter);
         public int Hearts => MountCareRules.Hearts(affection);
         public bool IsHungry => MountCareRules.IsHungry(satiety);
@@ -95,6 +102,19 @@ namespace Rapadura.Gameplay.Mounts
             MountId = mountId;
             Guid = guid;
             Source = source;
+        }
+    }
+
+    /// <summary>A mount reached a Despertar (1..4, Docs/Progressao500.md §6.4).</summary>
+    public readonly struct MountAwakenedEvent : IGameEvent
+    {
+        public readonly string MountId;
+        public readonly int Awakening;
+
+        public MountAwakenedEvent(string mountId, int awakening)
+        {
+            MountId = mountId;
+            Awakening = awakening;
         }
     }
 
@@ -232,6 +252,7 @@ namespace Rapadura.Gameplay.Mounts
             EventBus.Subscribe<Rapadura.Gameplay.Quests.QuestCompletedEvent>(OnQuestCompleted);
             EventBus.Subscribe<Rapadura.Gameplay.Achievements.AchievementUnlockedEvent>(OnAchievementUnlocked);
             EventBus.Subscribe<Rapadura.Gameplay.Secrets.SecretClaimedEvent>(OnSecretClaimed);
+            EventBus.Subscribe<PlayerExperienceChangedEvent>(OnPlayerExperienceChanged);
 
             if (ServiceLocator.TryGet(out Rapadura.Core.Localization.LocalizationManager localization))
             {
@@ -259,6 +280,7 @@ namespace Rapadura.Gameplay.Mounts
             EventBus.Unsubscribe<Rapadura.Gameplay.Quests.QuestCompletedEvent>(OnQuestCompleted);
             EventBus.Unsubscribe<Rapadura.Gameplay.Achievements.AchievementUnlockedEvent>(OnAchievementUnlocked);
             EventBus.Unsubscribe<Rapadura.Gameplay.Secrets.SecretClaimedEvent>(OnSecretClaimed);
+            EventBus.Unsubscribe<PlayerExperienceChangedEvent>(OnPlayerExperienceChanged);
             FirstSaddleQuest.Uninstall();
         }
 
@@ -291,13 +313,13 @@ namespace Rapadura.Gameplay.Mounts
         public static float MaxHealthOf(OwnedMount mount)
         {
             MountDefinition definition = mount != null ? MountCatalog.Get(mount.mountId) : null;
-            return definition != null ? MountRules.MaxHealthAt(definition.BaseHealth, mount.level) * MountCareRules.HealthMultiplier(mount.Hearts) : 100f;
+            return definition != null ? MountRules.MaxHealthAt(definition.BaseHealth, EffectiveLevelOf(mount)) * MountCareRules.HealthMultiplier(mount.Hearts) : 100f;
         }
 
         public static float MaxStaminaOf(OwnedMount mount)
         {
             MountDefinition definition = mount != null ? MountCatalog.Get(mount.mountId) : null;
-            return definition != null ? MountRules.MaxStaminaAt(definition.BaseStamina, mount.level) : 100f;
+            return definition != null ? MountRules.MaxStaminaAt(definition.BaseStamina, EffectiveLevelOf(mount)) : 100f;
         }
 
         /// <summary>Current health of <paramref name="mount"/> (full when never hurt).</summary>
@@ -401,6 +423,50 @@ namespace Rapadura.Gameplay.Mounts
         // Care (M2)
         // ------------------------------------------------------------------
 
+        // ------------------------------------------------------------------
+        // Growth with the rider (Docs/Progressao500.md §6)
+        // ------------------------------------------------------------------
+
+        /// <summary>Tests (and the future server, per character) pin the rider's level here; null = the active hero's level.</summary>
+        public static Func<int> RiderLevelOverride { get; set; }
+
+        /// <summary>
+        /// Level of the cousin riding (offline: the active hero, the 5 cousins share the collection): the Player-tagged
+        /// <c>PlayerStats</c>. 0 when no hero is known (an EditMode test without a player): then no cap applies.
+        /// </summary>
+        public static int RiderLevel
+        {
+            get
+            {
+                if (RiderLevelOverride != null)
+                {
+                    return Math.Max(0, RiderLevelOverride());
+                }
+
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                Rapadura.Gameplay.Player.PlayerStats stats = player != null ? player.GetComponent<Rapadura.Gameplay.Player.PlayerStats>() : null;
+                return stats != null ? stats.Level : 0;
+            }
+        }
+
+        /// <summary>Level cap for the current rider (<see cref="MountGrowthRules.LevelCapFor"/>; 20 when no rider is known).</summary>
+        public static int RiderCap
+        {
+            get
+            {
+                int hero = RiderLevel;
+                return hero > 0 ? MountGrowthRules.LevelCapFor(hero) : MountRules.MaxLevel;
+            }
+        }
+
+        /// <summary>The level <paramref name="mount"/> works at under the current rider (<c>min(level, cap)</c>).</summary>
+        public static int EffectiveLevelOf(OwnedMount mount)
+        {
+            return mount == null ? 1 : Mathf.Min(Mathf.Clamp(mount.level, 1, MountRules.MaxLevel), RiderCap);
+        }
+
+        private int _lastRiderLevel;
+
         /// <summary>Adds XP; publishes <see cref="MountLeveledEvent"/> per level gained. Returns levels gained.</summary>
         public int AddXp(OwnedMount mount, int amount)
         {
@@ -409,7 +475,10 @@ namespace Rapadura.Gameplay.Mounts
                 return 0;
             }
 
-            int gained = MountCareRules.AddXp(ref mount.level, ref mount.xp, amount);
+            // At the rider's cap the XP is stored as Brilho; when the cap opens the Brilho goes in first.
+            int hero = RiderLevel;
+            int heroLevel = hero > 0 ? hero : MountGrowthRules.HeroLevelForCap(MountRules.MaxLevel);
+            int gained = MountGrowthRules.AddXp(ref mount.level, ref mount.xp, ref mount.glow, amount, heroLevel);
             if (gained > 0)
             {
                 EventBus.Publish(new MountLeveledEvent(mount.mountId, mount.level));
@@ -417,6 +486,53 @@ namespace Rapadura.Gameplay.Mounts
 
             EventBus.Publish(new MountCollectionChangedEvent());
             return gained;
+        }
+
+        /// <summary>The rider grew: the cap may have opened, so <paramref name="mount"/> takes in its stored Brilho. Returns levels gained.</summary>
+        public int ReleaseGlow(OwnedMount mount)
+        {
+            int hero = RiderLevel;
+            if (mount == null || mount.glow <= 0 || hero <= 0 || mount.level >= MountGrowthRules.LevelCapFor(hero))
+            {
+                return 0;
+            }
+
+            int gained = MountGrowthRules.AddXp(ref mount.level, ref mount.xp, ref mount.glow, 0, hero);
+            if (gained > 0)
+            {
+                EventBus.Publish(new MountLeveledEvent(mount.mountId, mount.level));
+            }
+
+            EventBus.Publish(new MountCollectionChangedEvent());
+            return gained;
+        }
+
+        /// <summary>Whether <paramref name="mount"/> may take its next Despertar now (materials and the Srosh's quest are checked by the stable).</summary>
+        public static bool CanAwaken(OwnedMount mount, bool hasMaterials)
+        {
+            return mount != null && MountGrowthRules.CanAwaken(mount.awakening, RiderLevel, mount.level, mount.glow, mount.Hearts, mount.KmRidden, hasMaterials);
+        }
+
+        /// <summary>
+        /// The next Despertar (§6.4) once <see cref="CanAwaken"/> allows it; I and II spend the full Brilho. Look and
+        /// ability only. Publishes <see cref="MountAwakenedEvent"/>.
+        /// </summary>
+        public bool TryAwaken(OwnedMount mount, bool hasMaterials)
+        {
+            if (!CanAwaken(mount, hasMaterials))
+            {
+                return false;
+            }
+
+            mount.awakening++;
+            if (MountGrowthRules.AwakeningSpendsGlow(mount.awakening))
+            {
+                mount.glow = 0;
+            }
+
+            EventBus.Publish(new MountAwakenedEvent(mount.mountId, mount.awakening));
+            EventBus.Publish(new MountCollectionChangedEvent());
+            return true;
         }
 
         public void AddAffection(OwnedMount mount, int points, bool isFavorite)
@@ -713,6 +829,24 @@ namespace Rapadura.Gameplay.Mounts
             }
 
             ResolveEnemyDeath(enemy.Definition.name, evt.WasBoss, IsNight != null && IsNight());
+
+            // Fighting with the hero (§6.2): 2 + 1% of the kill XP, at most 30, to the active mount (mounted, or waiting at
+            // the edge of the arena). Replaces the old +5 per won fight.
+            OwnedMount active = Active;
+            if (active != null && !active.IsTired)
+            {
+                AddXp(active, MountGrowthRules.CombatXp(Rapadura.Gameplay.Enemies.BossBonusRules.GetExperienceReward(enemy.Definition)));
+            }
+        }
+
+        private void OnPlayerExperienceChanged(PlayerExperienceChangedEvent evt)
+        {
+            bool grew = _lastRiderLevel > 0 && evt.Level > _lastRiderLevel;
+            _lastRiderLevel = evt.Level;
+            if (grew)
+            {
+                ReleaseGlow(Active);
+            }
         }
 
         private void OnQuestCompleted(Rapadura.Gameplay.Quests.QuestCompletedEvent evt) => ReportHook(MountSourceKind.Quest, evt.QuestId);
@@ -729,13 +863,7 @@ namespace Rapadura.Gameplay.Mounts
 
         private void OnEncounterEnded(EncounterEndedEvent evt)
         {
-            // +5 XP to the active mount that waited at the edge of a won fight (§4.1).
-            OwnedMount active = Active;
-            if (evt.Outcome == EncounterOutcome.Victory && active != null && !active.IsTired)
-            {
-                AddXp(active, MountCareRules.VictoryXp);
-            }
-
+            // Fight XP now comes per kill (OnEnemyDied, Docs/Progressao500.md §6.2), not +5 per won fight.
             ApplyStable(MountStable.Current());
             RestAfterEncounter();
         }
@@ -777,6 +905,8 @@ namespace Rapadura.Gameplay.Mounts
                     {
                         OwnedMount copy = Clone(mount);
                         copy.level = Mathf.Clamp(copy.level, 1, MountRules.MaxLevel);
+                        copy.glow = Mathf.Clamp(copy.glow, 0, MountGrowthRules.MaxGlow);
+                        copy.awakening = Mathf.Clamp(copy.awakening, 0, MountGrowthRules.MaxAwakening);
                         copy.tiredUntilEncounter = Mathf.Clamp(copy.tiredUntilEncounter, 0, MountRules.TiredEncounters);
                         copy.satiety = Mathf.Clamp(copy.satiety, 0f, MountCareRules.MaxSatiety);
                         copy.affection = Mathf.Clamp(copy.affection, 0, MountCareRules.MaxAffection);

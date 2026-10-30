@@ -44,7 +44,8 @@ namespace Rapadura.Gameplay.Mounts
     /// ×1.15 and does not gallop (it never stops).</item>
     /// <item><b>Food</b> (§4.2): capim (2 fibras), Ração do Haras, erva fresca, carne assada (carnivores) and three of
     /// Vó Edna's dishes (cuscuz, rapadura — the favourite treat, +5 affection — and baião de dois), with diets.</item>
-    /// <item><b>Level 1–20</b>: next = 60 + 20 × level; 1 XP per 20 m ridden, food XP, +5 per fight won with the mount
+    /// <item><b>Level 1–20</b>: next = 60 + 20 × level; 1 XP per 20 m ridden, food XP, 2 + 1% of each kill with the hero
+    /// (<see cref="MountGrowthRules"/>: capped by the rider's level, the rest stored as Brilho) while the mount is
     /// waiting. Level raises health (+5%/level, <see cref="MountRules.MaxHealthAt"/>), stamina (+1) and shortens the
     /// cooldown (−0.5%/level); never speed nor defense.</item>
     /// <item><b>Affection</b> 0..500, 100 per heart: food, cuddles (30 s apart), +1 per km ridden. Hearts give comfort,
@@ -64,6 +65,7 @@ namespace Rapadura.Gameplay.Mounts
 
         public const float MetersPerXp = 20f;
         public const float MetersPerAffection = 1000f;
+        /// <summary>Legacy +5 per fight won; superseded by per-kill XP (<see cref="MountGrowthRules.CombatXp"/>). Kept for old references.</summary>
         public const int VictoryXp = 5;
         public const int CuddleAffection = 1;
         public const float CuddleCooldownSeconds = 30f;
@@ -201,8 +203,9 @@ namespace Rapadura.Gameplay.Mounts
             }
 
             bool favorite = IsFavorite(definition, rider);
-            float cooldown = MountRules.AbilityCooldownSeconds(definition.Ability.CooldownSeconds, mount != null ? mount.level : 1,
-                mount != null ? Hearts(mount.affection) : 0, favorite);
+            // Effective level under the rider (Docs/Progressao500.md §6.1); Despertar III shortens it by 10% (§6.4).
+            float cooldown = MountRules.AbilityCooldownSeconds(definition.Ability.CooldownSeconds, mount != null ? MountCollection.EffectiveLevelOf(mount) : 1,
+                mount != null ? Hearts(mount.affection) : 0, favorite) * MountGrowthRules.AbilityCooldownFactor(mount != null ? mount.awakening : 0);
             return Mathf.Max(1f, cooldown - (favorite ? FavoriteExtraCooldownCut(definition.MountId) : 0f));
         }
 

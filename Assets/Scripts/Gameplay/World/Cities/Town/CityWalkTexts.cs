@@ -16,6 +16,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Floating line on arrival; {0} = city name.</summary>
         public const string Arrived = "ui.city.walk_arrived";
 
+        /// <summary>Floating line when the hero wakes up at the plaza after a defeat (Docs/Progressao500.md §7); {0} = city name.</summary>
+        public const string RespawnedAtPlaza = "ui.city.walk_respawned";
+
         /// <summary>Floating line at the Cais da Barca, just before going back to the map with the barcas open.</summary>
         public const string DockBoarding = "ui.city.walk_dock";
 
@@ -26,6 +29,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         {
             new LocalizationEntry(WalkIn, "Walk into town", "Andar pela cidade"),
             new LocalizationEntry(Arrived, "{0} · safe zone", "{0} · zona segura"),
+            new LocalizationEntry(RespawnedAtPlaza, "Ari found you again. {0} plaza · safe zone", "O Ari te achou de novo. Praça de {0} · zona segura"),
             new LocalizationEntry(DockBoarding, "To the Ship Dock: choose where the barca goes", "Ao Cais da Barca: escolha para onde a barca vai"),
             new LocalizationEntry(Leaving, "Back to the road", "De volta à estrada"),
         };

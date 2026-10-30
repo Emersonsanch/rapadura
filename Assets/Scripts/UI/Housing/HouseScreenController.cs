@@ -160,7 +160,7 @@ namespace Rapadura.UI.Housing
         // Enter / leave
         // ------------------------------------------------------------------
 
-        /// <summary>"Minha casa": the Vó Zefa card the first time (quest beat), else straight inside.</summary>
+        /// <summary>"Minha casa": the Vó Edna card the first time (quest beat), else straight inside.</summary>
         public void OpenFromButton()
         {
             _house = HouseService.ResolveShared();

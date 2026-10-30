@@ -8,7 +8,10 @@ namespace Rapadura.Gameplay.Inventory
     /// "Morrer perde XP" (Docs/Referencias_MMO.md §6; Docs/Balance/README.md, "Perda de XP, Bênção da Romaria e Patuá").
     /// Pure, EditMode-tested.
     /// <list type="bullet">
-    /// <item>A death costs <see cref="LossFraction"/> (5%) of the XP the current level needs (<c>xp_to_next</c>).</item>
+    /// <item>A death costs a share of the XP the current level needs (<c>xp_to_next</c>) that falls by level band
+    /// (<see cref="LossFractionFor"/>, Docs/Progressao500.md §7.2): <see cref="LossFraction"/> (5%) up to level 100, 4%
+    /// at 101–200, 3% at 201–300 and 2% above, so a death costs about the same number of kills at any level instead of
+    /// growing with the curve.</item>
     /// <item><b>Never de-levels</b> (kid-friendly): the loss only comes out of the XP already earned inside the current
     /// level, so the bar can drop to empty but the level number never goes down.</item>
     /// <item>No loss while the hero is below <see cref="GraceLevel"/> (the first fights / tutorial) nor in a region boss
@@ -18,8 +21,23 @@ namespace Rapadura.Gameplay.Inventory
     /// </summary>
     public static class DeathXpLossRules
     {
-        /// <summary>Share of the current level's <c>xp_to_next</c> lost per death.</summary>
+        /// <summary>Share of the current level's <c>xp_to_next</c> lost per death up to level 100 (the first band).</summary>
         public const float LossFraction = 0.05f;
+
+        /// <summary>Last level of each band of <see cref="LossFractionFor"/> (5% / 4% / 3%; 2% above the last).</summary>
+        public static readonly int[] BandTopLevels = { 100, 200, 300 };
+
+        /// <summary>5 up to level 100, 4 at 101–200, 3 at 201–300, 2 from 301 on (Docs/Progressao500.md §7.2).</summary>
+        public static int LossPercentFor(int level)
+        {
+            if (level <= BandTopLevels[0]) return 5;
+            if (level <= BandTopLevels[1]) return 4;
+            if (level <= BandTopLevels[2]) return 3;
+            return 2;
+        }
+
+        /// <summary><see cref="LossPercentFor"/> as a fraction (0.05 / 0.04 / 0.03 / 0.02).</summary>
+        public static float LossFractionFor(int level) => LossPercentFor(level) / 100f;
 
         /// <summary>How much of the loss the Bênção da Romaria takes away.</summary>
         public const float BlessingReduction = 0.6f;
@@ -35,7 +53,7 @@ namespace Rapadura.Gameplay.Inventory
                 return 0;
             }
 
-            int raw = (int)Math.Round(experienceToNextLevel * (double)LossFraction, MidpointRounding.AwayFromZero);
+            int raw = (int)Math.Round(experienceToNextLevel * (double)LossPercentFor(level) / 100.0, MidpointRounding.AwayFromZero);
             return Math.Min(Math.Max(0, raw), currentExperience);
         }
 

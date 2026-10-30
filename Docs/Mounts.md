@@ -154,6 +154,25 @@ nenhuma montaria é melhor que outra em tudo. O Leão de Luz (Raro) é mais ráp
 | **Aquático** | nada em água funda na velocidade cheia. Na terra anda a ×0,9 da velocidade da ficha |
 | **Escavador** | atravessa areia fofa e terra solta sem lentidão e entra em tocas marcadas no mapa (atalhos) |
 
+### 2.7 Peso e carga (alforjes)
+
+Cada item pesa (ouro não; pilhas por unidade) e a carga = mochila + equipamento vestido. Cada espécie tem uma
+**capacidade** (tabela completa no Balance §28.2): animais de carga levam muito (**Asno de Caravana 450**, Mamute 420,
+Ijapa 400, Asno de Três Patas 380, Boi das Canções 360), cavalos e bichos médios 120–240, aves, felinos e canídeos
+70–140. A capacidade sobe 2% por nível da montaria. Montado, a mochila continua nas costas do primo: capacidade da
+montada = montaria + metade da capacidade do primo (60 + 2/nível + 1/Vitalidade).
+
+| Carga ÷ capacidade (r) | Montaria |
+|---|---|
+| até 50% | velocidade cheia |
+| 50% → 100% | perde velocidade em linha reta até **−50%** em 100% |
+| acima de 100% | **sem galope** e lentidão forte: ×0,50 − 0,4 por 100% a mais, nunca abaixo de ×0,30 |
+
+A pé, o primo só fica mais lento acima da capacidade dele (leve: −30% por 100% a mais, nunca abaixo de ×0,60). O
+fator só multiplica para baixo o multiplicador da montaria (§2.3), então o teto de 11,9 m/s (§9.2) não muda. O HUD
+montado mostra a barrinha "Alforjes", a mochila mostra "Carga" e um aviso aparece quando pesa. Código:
+`EncumbranceRules`, `ItemWeightRules`, `EncumbranceTracker`.
+
 ---
 
 ## 3. Catálogo (30 montarias)
@@ -165,7 +184,7 @@ nenhuma montaria é melhor que outra em tudo. O Leão de Luz (Raro) é mais ráp
 - **Pts** = orçamento do §2.4.
 - **Guerra** = montaria de guerra, que não perde dano de ataque básico montado.
 - **Drop** é chance **por morte**, sempre rolada no servidor (offline: `EnemyLootRoller` com RNG injetável). A
-  montaria cai como item **"Apito de …"** (peso 0), que vai para o inventário. Usar o apito leva a montaria para o
+  montaria cai como item **"Apito de …"** (peso 0,1), que vai para o inventário. Usar o apito leva a montaria para o
   estábulo. Explicação para criança: o bicho estava preso ou assustado perto do chefe e, depois da luta, decide
   seguir os primos.
 - **Lojas novas** (§3.17 da bíblia): **Estrebaria do Srosh** (Vila da Vó Edna, Bosque do Zarafshan; id
@@ -180,7 +199,7 @@ nenhuma montaria é melhor que outra em tudo. O Leão de Luz (Raro) é mais ráp
 | `mount_big_dog` | Alabai Fofão | terrestre | Comum | 1,50 | +2% | 125 | 110 | 8 | — | **Faro de Tesouro:** puxa todo loot do chão num raio de 8 m e marca segredos a até 20 m por 10 s. Recarga 40 s | Loja: Estrebaria do Srosh, 60 ouro (~33 lutas) | Bosque do Zarafshan | — |
 | `mount_capybara` | Hipopotinha de Taweret | aquático | Comum | 1,35 | +4% | 150 | 110 | 8 | — | **Banho de Lama:** tira lentidão, veneno e queimadura do primo e deixa ele imune a eles por 3 s. Recarga 35 s | Loja: Estrebaria do Srosh, 55 ouro (~31 lutas) | Bosque do Zarafshan | — |
 | `mount_mountain_goat` | Íbex-da-Walia | terrestre | Comum | 1,40 | +3% | 150 | 110 | 8 | — | **Pulo Duplo:** um segundo pulo no ar (alcança bordas de 2,5 m). Recarrega 6 s depois de usado | Loja: Curral de Litema, 70 ouro (~39 lutas) | Serra de Kaggen | — |
-| `mount_pack_donkey` | Asno de Caravana | terrestre | Comum | 1,30 | +4% | 175 | 110 | 8 | — | **Zurro Espanta-Bicho:** bichos comuns a até 6 m fogem por 3 s (chefe ignora). Passivo: +20 de peso na mochila enquanto montado. Recarga 45 s | Loja: Caravançará de Qocho, 65 ouro (~36 lutas) | Areias Flamejantes | — |
+| `mount_pack_donkey` | Asno de Caravana | terrestre | Comum | 1,30 | +4% | 175 | 110 | 8 | — | **Zurro Espanta-Bicho:** bichos comuns a até 6 m fogem por 3 s (chefe ignora). Passivo: a maior capacidade de carga, 450 (§2.7). Recarga 45 s | Loja: Caravançará de Qocho, 65 ouro (~36 lutas) | Areias Flamejantes | — |
 | `mount_rhea` | Avestruz Corredora | terrestre | Comum | 1,55 | +0% | 100 | 130 | 8 | — | **Fôlego de Avestruz:** galopa 8 s sem gastar fôlego. Recarga 30 s | Loja: Caravançará de Qocho, 75 ouro (~42 lutas) | Areias Flamejantes | — |
 
 ### 3.2 Incomuns (loja cara, drop de bicho comum, missão)
@@ -271,12 +290,35 @@ buff de grupo, renascer, invulnerável parado e sopro em cone.
 
 ### 4.1 Nível da montaria (1–20)
 
-- **XP:** 1 por 20 m andados montado (o servidor conta a distância validada), +XP por comida (§4.2), +5 por luta
-  vencida com a montaria esperando na arena (offline).
+- **XP:** 1 por 20 m andados montado (o servidor conta a distância validada), +XP por comida (§4.2) e, lutando com o
+  herói (montada ou esperando na beira da arena), **2 + 1% do XP de cada abate, no máximo 30 por abate**
+  (`MountGrowthRules.CombatXp`; substituiu o antigo +5 por luta vencida).
 - **Por nível:** vida +5% da base (nível 20 = vida ×1,95), fôlego +1, recarga da habilidade −0,5% (nível 20 = −9,5%).
 - **Nunca sobe:** velocidade e defesa. É o que deixa o teto de velocidade do servidor fixo por espécie, e a defesa
   fica longe do teto de 80%.
 - Curva: `xp_para_o_próximo = 60 + 20 × nível` (nível 20 ≈ 4.940 XP no total ≈ 100 km montado; só andando, ~3,5 h de sela a 8 m/s, e bem menos com comida e aulas de doma).
+
+### 4.1.1 Cresce com o herói: teto, Brilho e Despertar (Docs/Progressao500.md §6)
+
+Implementado em `MountGrowthRules` (puro, sem Unity: o servidor usa os mesmos números) e ligado em `MountCollection`.
+
+- **Teto pelo cavaleiro:** `teto = clamp(floor(2·√h), 1, 20)`, h = nível do primo que monta (offline, o herói ativo;
+  `MountCollection.RiderLevel`). Herói 1 → 2, 9 → 6, 15 → 7, 25 → 10, 100+ → 20. A fórmula vale para qualquer nível
+  (o teto de nível do herói continua o de hoje; o 500 é outra tarefa).
+- **Nível efetivo:** `min(nível, teto)` (`EffectiveLevelOf`). Vida, fôlego e recarga da habilidade usam o nível efetivo.
+  O nível salvo **nunca desce**: um primo de nível baixo numa montaria nível 18 só a usa no teto dele.
+- **Brilho** (`OwnedMount.glow`, 0–5 000): no teto, todo XP vira Brilho. Quando o herói sobe e o teto abre
+  (`PlayerExperienceChangedEvent` → `ReleaseGlow`), o Brilho entra primeiro. No 20, Brilho cheio é requisito do Despertar.
+- **Despertar I–IV** (`OwnedMount.awakening`, `MountCollection.TryAwaken`, `MountAwakenedEvent`): herói 100/200/300/500,
+  montaria 20, corações 3/4/5/5, Brilho cheio para I e II (gasto ao despertar), 1 000 km montado para o IV; materiais e
+  a missão do Srosh ficam por conta da estrebaria (`hasMaterials`). Só **visual e habilidade**: +1 grau (×1,15
+  distância/duração, +1 m de raio), efeito secundário (II), recarga ×0,9 (III, já aplicada em
+  `MountCareRules.AbilityCooldown`), 2ª carga (IV). Nunca velocidade, defesa ou dano.
+- **Estábulo:** cada card mostra "Cresce até o nível X com este herói (nv h) · Brilho b/5000", "Funciona no nível N com
+  este primo" quando o nível salvo passa do teto, e "Despertar I–IV" quando houver (`MountTexts.GrowthLine`,
+  `WorksAtLine`, `AwakeningLine`).
+- Save: `glow` e `awakening` entram no `OwnedMount` (saves antigos: 0); `kmRidden` sai de `metersRidden`.
+- Testes: `Tests/EditMode/MountGrowthTests.cs`.
 
 ### 4.2 Alimentação (liga com a Forno da Vó Edna)
 

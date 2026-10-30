@@ -76,7 +76,7 @@ namespace Rapadura.Gameplay.Enemies
     }
 
     /// <summary>
-    /// A page of "Caderno da Vó Zefa": everything shown about one enemy, derived from its
+    /// A page of "Caderno da Vó Edna": everything shown about one enemy, derived from its
     /// <see cref="EnemyDefinition"/> and the loot table of its biome (nothing is typed twice by hand;
     /// only the lore and the cousins' one-liners are authored, in <c>BestiaryTexts</c>).
     /// </summary>
@@ -120,7 +120,7 @@ namespace Rapadura.Gameplay.Enemies
     }
 
     /// <summary>
-    /// Every page of "Caderno da Vó Zefa" (the bestiary), one per <see cref="EnemyDefinition"/> under
+    /// Every page of "Caderno da Vó Edna" (the bestiary), one per <see cref="EnemyDefinition"/> under
     /// <c>Resources/Enemies</c> (bosses included), in campaign order: region (Floresta → Deserto →
     /// Montanha → Cavernas), regular enemies before the region boss, then by name. Pages are keyed by
     /// <see cref="DefeatedEnemyRegistry.GetId"/> (the asset name), the same id the kill events,

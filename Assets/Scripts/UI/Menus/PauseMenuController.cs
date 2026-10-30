@@ -277,7 +277,7 @@ namespace Rapadura.UI.Menus
             }
         }
 
-        /// <summary>"Caderno da Vó Zefa": same close-then-open as Conquistas; the notebook is self-bootstrapped (no scene ref).</summary>
+        /// <summary>"Caderno da Vó Edna": same close-then-open as Conquistas; the notebook is self-bootstrapped (no scene ref).</summary>
         private void OnBestiaryClicked()
         {
             if (Rapadura.UI.Bestiary.BestiaryController.CanOpen)

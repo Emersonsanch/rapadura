@@ -77,6 +77,12 @@ namespace Rapadura.Gameplay.World.Map
         public string PendingCityVisit { get; private set; }
         public bool HasPendingCityVisit => !string.IsNullOrEmpty(PendingCityVisit);
 
+        /// <summary>
+        /// The pending city visit is a respawn (Docs/Progressao500.md §7): the hero fell outside an encounter and wakes up
+        /// at the plaza of the city instead of walking in by the road. Cleared with the visit.
+        /// </summary>
+        public bool PendingCityRespawn { get; private set; }
+
         /// <summary>Set by <see cref="EndCityVisit"/> from the Cais da Barca: the map opens the fast-travel window once (consumed by the hub).</summary>
         public bool OpenFastTravelOnMapReturn { get; set; }
 
@@ -196,6 +202,7 @@ namespace Rapadura.Gameplay.World.Map
         public void AbandonPendingEncounter()
         {
             PendingCityVisit = null;
+            PendingCityRespawn = false;
             OpenFastTravelOnMapReturn = false;
             PendingEncounter = null;
             DecidedOutcome = null;
@@ -206,8 +213,9 @@ namespace Rapadura.Gameplay.World.Map
         /// <summary>
         /// "Entrar na cidade": loads Main.unity in city mode for <paramref name="cityId"/> (no enemies, no arena; the
         /// walkable town is built there by <c>CityModeController</c>). False while an encounter or another visit is pending.
+        /// <paramref name="respawn"/>: the hero wakes up at the plaza (a defeat outside an encounter) instead of arriving by the road.
         /// </summary>
-        public bool BeginCityVisit(string cityId)
+        public bool BeginCityVisit(string cityId, bool respawn = false)
         {
             if (string.IsNullOrEmpty(cityId) || HasPendingEncounter || HasPendingCityVisit)
             {
@@ -216,6 +224,7 @@ namespace Rapadura.Gameplay.World.Map
             }
 
             PendingCityVisit = cityId;
+            PendingCityRespawn = respawn;
             OpenFastTravelOnMapReturn = false;
             EventBus.Publish(new Rapadura.Gameplay.World.Cities.CityVisitStartedEvent(cityId));
             _sceneLoader.LoadScene(CombatSceneName);
@@ -235,6 +244,7 @@ namespace Rapadura.Gameplay.World.Map
 
             string cityId = PendingCityVisit;
             PendingCityVisit = null;
+            PendingCityRespawn = false;
             OpenFastTravelOnMapReturn = openFastTravel;
             EventBus.Publish(new Rapadura.Gameplay.World.Cities.CityVisitEndedEvent(cityId, openFastTravel));
             if (ServiceLocator.TryGet(out SaveManager saveManager))

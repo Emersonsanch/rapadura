@@ -40,7 +40,7 @@ R7_ENEMIES = {
     "enemy_mountain_stone_golem": {"max_health": 100, "attack_damage": 13}, "enemy_mountain_warlord": {"max_health": 580, "attack_damage": 16},
     "enemy_cave_bat_swarm": {"max_health": 80, "attack_damage": 7}, "enemy_cave_dweller": {"max_health": 700, "attack_damage": 18},
 }
-NAMES = {"Forest": "Floresta", "Desert": "Deserto", "Mountain": "Montanha", "Caves": "Cavernas"}
+NAMES = {"Forest": "Bosque do Zarafshan", "Desert": "Areias Flamejantes", "Mountain": "Serra de Kaggen", "Caves": "Grutas do Limiar"}
 
 
 def apply_candidate(data: rd.GameData, candidate: dict) -> rd.GameData:

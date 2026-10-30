@@ -180,7 +180,7 @@ namespace Rapadura.Tests
                 if (region != BiomeType.Forest)
                 {
                     Assert.That(city.Residents.Count, Is.InRange(3, 4), $"{city.CityId} residents");
-                    Assert.IsFalse(city.HasGrandmaServices, "Baú and Fogão stay in Vó Zefa's village");
+                    Assert.IsFalse(city.HasGrandmaServices, "Baú and Fogão stay in Vó Edna's village");
                     Assert.IsFalse(city.HasStoryVillagers);
                 }
             }
@@ -565,6 +565,40 @@ namespace Rapadura.Tests
             Assert.AreEqual(CityCatalog.AreiaBranca, cities.ConsumeRespawnNotice().CityId);
             Assert.IsNull(cities.ConsumeRespawnNotice(), "told once");
             cities.Shutdown();
+        }
+
+        [Test]
+        public void DefeatOutsideAnEncounter_AlsoWakesTheHeroInTheCity()
+        {
+            // Docs/Progressao500.md §7: every defeat (walkable city, open map), not only an encounter's.
+            var map = new WorldMapProgress();
+            map.Unlock(BiomeType.Mountain);
+            Assert.IsTrue(map.SetCurrentRegion(BiomeType.Mountain));
+            var cities = new CityProgress(map);
+
+            Assert.AreEqual(BiomeType.Mountain, cities.CurrentRegion);
+            CitySpec city = cities.ApplyDefeatHere();
+            Assert.IsNotNull(city);
+            Assert.AreEqual(BiomeType.Mountain, city.Region);
+            Assert.AreEqual(BiomeType.Mountain, map.CurrentRegion);
+            Assert.IsTrue(cities.IsVisited(BiomeType.Mountain));
+            Assert.AreEqual(city.CityId, cities.ConsumeRespawnNotice().CityId);
+
+            Assert.AreEqual(BiomeType.Forest, cities.ApplyDefeatHere(BiomeType.Forest).Region, "explicit region (the town the hero fell in)");
+        }
+
+        [Test]
+        public void RespawnCity_ComesFromTheMap_AndOutpostsAreNeverRespawnPoints()
+        {
+            Func<string, string> returnCity = map => map == "map_dunes" ? "city_sand" : null;
+            Assert.AreEqual("city_sand", SafeZoneRules.RespawnCity("map_dunes", returnCity, "city_start"));
+            Assert.AreEqual("city_start", SafeZoneRules.RespawnCity("map_unknown", returnCity, "city_start"), "map without a return city");
+            Assert.AreEqual("city_start", SafeZoneRules.RespawnCity(null, returnCity, "city_start"));
+            Assert.AreEqual("city_start", SafeZoneRules.RespawnCity("map_dunes", null, "city_start"));
+
+            Assert.IsTrue(SafeZoneRules.IsRespawnPoint(isCity: true, isOutpost: false));
+            Assert.IsFalse(SafeZoneRules.IsRespawnPoint(isCity: false, isOutpost: true), "outpost: rest, sell, repair; never respawn");
+            Assert.IsFalse(SafeZoneRules.IsRespawnPoint(isCity: false, isOutpost: false), "wilds / arena checkpoint");
         }
 
         [Test]

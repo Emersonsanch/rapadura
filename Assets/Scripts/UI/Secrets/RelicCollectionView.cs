@@ -66,7 +66,7 @@ namespace Rapadura.UI.Secrets
     }
 
     /// <summary>
-    /// Pure presenter of the "Relíquias do Sertão" panel: every relic in catalog order, found ones with name, owner tag,
+    /// Pure presenter of the "Lembranças do Vô Jorge" panel: every relic in catalog order, found ones with name, owner tag,
     /// passive and lore, missing ones as "???" with their clue. <paramref name="localize"/> maps a key to text (tests pass
     /// the key back), <paramref name="heroName"/> a hero to its display name.
     /// </summary>

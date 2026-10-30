@@ -253,7 +253,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_wooden_sword", 10, 1, rotating: true),
                 new CityShopEntry("item_health_potion", 17, 3, rotating: true),
                 new CityShopEntry("item_iron_sword", 41, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Mountain)),
-                // Pedras do Sertão (refino, Docs/Balance/README.md "Refino de item"): the blacksmith sells them ~10% cheaper.
+                // Pedras da Luz Presa (refino, Docs/Balance/README.md "Refino de item"): the blacksmith sells them ~10% cheaper.
                 new CityShopEntry("item_pedra_bencao", 11, 5),
                 new CityShopEntry("item_pedra_alma", 32, 2, unlock: ShopUnlock.Cleared(BiomeType.Mountain)),
                 // Bode Saltador (Docs/Mounts.md §3.1, M3 wave 1): the Curral do Pico sells through the forge until it has a stall.

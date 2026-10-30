@@ -66,10 +66,25 @@ namespace Rapadura.Gameplay.Wardrobe
             ("Drop: ", "Drop: "), ("Segredo do mapa", "Map secret"), ("Desbloqueado desde o começo", "Unlocked from the start"),
         };
 
+        /// <summary>Source labels kept as parse keys in the catalog (WardrobeCatalogImport) but shown with the re-themed region names.</summary>
+        private static readonly (string Key, string Pt)[] PtOriginDisplay =
+        {
+            ("Missão regional da Floresta (2ª)", "Missão regional do Bosque do Zarafshan (2ª)"),
+            ("Drop: inimigos comuns da Floresta e do Deserto", "Drop: inimigos comuns do Bosque do Zarafshan e das Areias Flamejantes"),
+        };
+
         public static string OriginText(string origin, bool ptBR)
         {
             string text = (origin ?? string.Empty).Replace("`", string.Empty).Trim();
-            if (ptBR) return text;
+            if (ptBR)
+            {
+                foreach ((string key, string pt) in PtOriginDisplay)
+                {
+                    if (text.StartsWith(key, StringComparison.Ordinal)) return pt + text.Substring(key.Length);
+                }
+
+                return text;
+            }
             foreach ((string pt, string en) in OriginPrefixes)
             {
                 if (text.StartsWith(pt, StringComparison.Ordinal)) return en + text.Substring(pt.Length);

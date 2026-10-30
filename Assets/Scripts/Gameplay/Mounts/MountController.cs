@@ -240,8 +240,18 @@ namespace Rapadura.Gameplay.Mounts
         {
             MountDefinition definition = Definition;
             OwnedMount owned = ActiveMount;
-            return definition != null ? _session.SpeedMultiplier(buffMultiplier, definition.SpeedMultiplier, Place, owned != null && owned.IsHungry) : buffMultiplier;
+            float ride = definition != null ? _session.SpeedMultiplier(buffMultiplier, definition.SpeedMultiplier, Place, owned != null && owned.IsHungry) : buffMultiplier;
+            return Rapadura.Gameplay.Inventory.EncumbranceRules.ApplyFactor(ride, LoadFactor);
         }
+
+        /// <summary>
+        /// Carry-load factor of the ride (0..1, 1 = light saddlebags), set by <c>EncumbranceTracker</c>
+        /// (<c>EncumbranceRules.MountSpeedFactor</c>). Only ever lowers the already-capped ride multiplier.
+        /// </summary>
+        public float LoadFactor { get; set; } = 1f;
+
+        /// <summary>False while the ride is over capacity (<c>EncumbranceRules.CanGallop</c>): no gallop.</summary>
+        public bool LoadAllowsGallop { get; set; } = true;
 
         // ------------------------------------------------------------------
         // Frame
@@ -303,7 +313,7 @@ namespace Rapadura.Gameplay.Mounts
                 }
             }
 
-            bool wantsGallop = _input != null && _input.IsRunHeld;
+            bool wantsGallop = _input != null && _input.IsRunHeld && LoadAllowsGallop;
             OwnedMount riding = ActiveMount;
             _session.Tick(dt, wantsGallop, place, riding != null && riding.IsHungry);
             if (_session.IsMounted && riding != null)

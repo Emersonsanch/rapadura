@@ -66,5 +66,35 @@ namespace Rapadura.Tests
 
             Assert.DoesNotThrow(() => _checkpointManager.ActivateCheckpoint(_spawnPoint));
         }
+
+        [Test]
+        public void SpawnPoints_AreOnlyEntryPoints_TheCityPlazaIsTheRespawn()
+        {
+            // Docs/Progressao500.md §7: walking into a later checkpoint no longer moves where a death is resolved.
+            var laterGo = new GameObject("LaterCheckpoint");
+            var plazaGo = new GameObject("Plaza");
+            try
+            {
+                SpawnPoint later = laterGo.AddComponent<SpawnPoint>();
+                SpawnPoint plaza = plazaGo.AddComponent<SpawnPoint>();
+
+                _checkpointManager.SetInitialCheckpoint(_spawnPoint);
+                _checkpointManager.ActivateCheckpoint(later);
+                Assert.AreSame(_spawnPoint, _checkpointManager.EntryPoint, "the first spawn point stays the entry point");
+                Assert.AreSame(_spawnPoint, _checkpointManager.RespawnTarget);
+
+                _checkpointManager.SetCityRespawn(plaza);
+                Assert.AreSame(plaza, _checkpointManager.CityRespawn);
+                Assert.AreSame(plaza, _checkpointManager.RespawnTarget, "in the walkable city the plaza wins");
+
+                _checkpointManager.SetCityRespawn(null);
+                Assert.AreSame(_spawnPoint, _checkpointManager.RespawnTarget);
+            }
+            finally
+            {
+                Object.DestroyImmediate(laterGo);
+                Object.DestroyImmediate(plazaGo);
+            }
+        }
     }
 }

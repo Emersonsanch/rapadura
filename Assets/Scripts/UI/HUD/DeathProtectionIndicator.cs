@@ -12,7 +12,7 @@ namespace Rapadura.UI.HUD
 {
     /// <summary>
     /// Small HUD badge (top right) showing the death protections the hero carries: "Bênção" while the Bênção da Romaria
-    /// is on (<see cref="DeathProtectionState.IsBlessed"/>) and "Patuá ×N" for Patuás in the bag. Self-bootstrapping like
+    /// is on (<see cref="DeathProtectionState.IsBlessed"/>) and "Tumar ×N" for Tumares in the bag. Self-bootstrapping like
     /// <see cref="NightDangerIndicator"/>: one DontDestroyOnLoad host, PanelSettings borrowed from a HUD, view built in
     /// code with picking-mode Ignore. Visible only with a gameplay HUD on screen and not paused. The Patuá count reads the
     /// player's bag in combat and the carried bag on the world map.

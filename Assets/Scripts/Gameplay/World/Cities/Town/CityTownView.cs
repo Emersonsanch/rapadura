@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Rapadura.Gameplay.Environment;
+using Rapadura.Gameplay.NPC.Visuals;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -160,8 +161,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
                     continue;
                 }
 
+                // The keeper's own look (Docs/NPCs.md): the named resident's recipe, or a villager seeded by the lot in
+                // the region's palette; one skinned renderer on the shared NPC material, idle + head turn included.
                 string figureKey = lot.ResidentId ?? lot.Id;
-                Mesh mesh = TownMeshCache.Get("npc:" + Layout.Region + ":" + figureKey, b => TownKit.Villager(b, figureKey, style));
                 float y = decks.Exists(d => d.Contains(lot.StandPoint)) ? CitySolids.DeckHeight : 0f;
                 Vector2 look = lot.DoorApproach - lot.StandPoint;
                 float yaw = look.sqrMagnitude > 0.01f ? Mathf.Atan2(look.x, look.y) * Mathf.Rad2Deg : lot.Yaw + 180f;
@@ -169,11 +171,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 var go = new GameObject("Npc_" + lot.Id);
                 go.transform.SetParent(transform, false);
                 go.transform.localPosition = new Vector3(lot.StandPoint.x, y, lot.StandPoint.y);
-                go.transform.localRotation = Quaternion.Euler(0f, yaw + 180f, 0f);
-                go.AddComponent<MeshFilter>().sharedMesh = mesh;
-                var renderer = go.AddComponent<MeshRenderer>();
-                renderer.sharedMaterial = material;
+                go.transform.localRotation = Quaternion.Euler(0f, yaw, 0f);
+                NpcFigure figure = NpcFigure.Create(go.transform, figureKey, Layout.Region, Vector3.zero);
                 RendererCount++;
+                TriangleCount += figure.Model != null ? figure.Model.Triangles : 0;
 
                 var trigger = go.AddComponent<SphereCollider>();
                 trigger.isTrigger = true;

@@ -54,6 +54,14 @@ namespace Rapadura.Gameplay.Player
         [Tooltip("Already past the destination (moving away from it) within this distance counts as arrived — no tiny back-step.")]
         [SerializeField, Min(0f)] private float _passedArrivalTolerance = 0.45f;
 
+        [Header("Terrain")]
+        [Tooltip("Speed lost climbing straight up a slope at the controller's slope limit (0 = no terrain effect). Downhill gives back a little (see LocomotionMath.SlopeSpeedFactor).")]
+        [SerializeField, Range(0f, 0.6f)] private float _uphillPenalty = 0.3f;
+        [Tooltip("Speed gained going straight down a slope at the slope limit.")]
+        [SerializeField, Range(0f, 0.3f)] private float _downhillBonus = 0.08f;
+        [Tooltip("How fast (1/s) the sensed ground normal follows the surface — keeps the slope factor from flickering on bumpy ground.")]
+        [SerializeField, Min(1f)] private float _groundNormalSmoothing = 10f;
+
         [Header("Jump & Gravity")]
         [SerializeField] private float _jumpHeight = 1.2f;
         [SerializeField] private float _gravity = -18f;
@@ -75,6 +83,26 @@ namespace Rapadura.Gameplay.Player
         private bool _hasSmoothedDestination;
 
         public bool IsGrounded { get; private set; }
+
+        private Vector3 _groundNormal = Vector3.up;
+        private Vector3 _lastContactNormal = Vector3.up;
+        private bool _hasContactNormal;
+
+        /// <summary>Smoothed normal of the ground under the feet (Vector3.up in the air or on flat ground).</summary>
+        public Vector3 GroundNormal => _groundNormal;
+
+        /// <summary>Last applied terrain speed factor (<see cref="LocomotionMath.SlopeSpeedFactor"/>): &lt; 1 climbing, &gt; 1 descending.</summary>
+        public float SlopeFactor { get; private set; } = 1f;
+
+        private void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            // Only contacts from below count as ground (a wall contact must not tilt the slope sense).
+            if (hit.normal.y > 0.3f && hit.moveDirection.y <= 0.1f)
+            {
+                _lastContactNormal = hit.normal;
+                _hasContactNormal = true;
+            }
+        }
 
         /// <summary>Actual (accelerated, buffed) horizontal velocity this step — what the Animator and procedural layers read.</summary>
         public Vector3 HorizontalVelocity { get; private set; }
@@ -115,9 +143,18 @@ namespace Rapadura.Gameplay.Player
                 }
 
                 float buff = _buffController != null ? _buffController.GetMoveSpeedMultiplier() : 1f;
-                return IsSpeedSourceActive ? SpeedSource.ResolveMultiplier(buff) : buff;
+                return IsSpeedSourceActive
+                    ? SpeedSource.ResolveMultiplier(buff)
+                    : Rapadura.Gameplay.Inventory.EncumbranceRules.ApplyFactor(buff, LoadFactor);
             }
         }
+
+        /// <summary>
+        /// On-foot carry-load factor (0..1, 1 = unburdened), set by <c>EncumbranceTracker</c>
+        /// (<c>EncumbranceRules.HeroSpeedFactor</c>). Only lowers the speed and is ignored while a speed source (mount)
+        /// is active: the mount applies its own load factor.
+        /// </summary>
+        public float LoadFactor { get; set; } = 1f;
 
         /// <summary>
         /// Mount hook (<c>MountController</c>): while active, every stance moves at <see cref="RunSpeed"/> × the source's
@@ -344,7 +381,9 @@ namespace Rapadura.Gameplay.Player
             else
             {
                 float inputMagnitude = Mathf.Clamp01(desiredDirection.magnitude);
-                float target = hasIntent ? Mathf.Min(speed * multiplier * inputMagnitude, speedCap) : 0f;
+                float slope = hasIntent ? LocomotionMath.SlopeSpeedFactor(_groundNormal, desiredDirection, _uphillPenalty, _downhillBonus, controller.slopeLimit) : 1f;
+                SlopeFactor = slope;
+                float target = hasIntent ? Mathf.Min(speed * multiplier * inputMagnitude * slope, speedCap) : 0f;
                 TargetHorizontalSpeed = target;
 
                 TurnBrake = 0f;
@@ -402,7 +441,21 @@ namespace Rapadura.Gameplay.Player
             ApplyGravity();
 
             Vector3 finalVelocity = HorizontalVelocity + Vector3.up * _verticalVelocity;
+            _hasContactNormal = false;
             controller.Move(finalVelocity * Time.deltaTime);
+            UpdateGroundNormal(deltaTime);
+        }
+
+        /// <summary>Follows the latest ground contact normal (from <see cref="OnControllerColliderHit"/> during the move); eases back to up in the air.</summary>
+        private void UpdateGroundNormal(float deltaTime)
+        {
+            Vector3 target = IsGrounded && _hasContactNormal ? _lastContactNormal : (IsGrounded ? _groundNormal : Vector3.up);
+            float k = LocomotionMath.ExpBlend(_groundNormalSmoothing, deltaTime);
+            _groundNormal = Vector3.Slerp(_groundNormal, target, k);
+            if (_groundNormal.sqrMagnitude < 1e-6f)
+            {
+                _groundNormal = Vector3.up;
+            }
         }
 
         private void ApplyGravity()

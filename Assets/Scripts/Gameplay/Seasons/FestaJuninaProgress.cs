@@ -55,7 +55,7 @@ namespace Rapadura.Gameplay.Seasons
 
     /// <summary>
     /// The save's Festa Junina: the prendas (event currency, kept from one June to the next), the dances, the prizes
-    /// bought at the Barraca de Prendas and the Lendário of the tarefas do arraiá. Plain C# (EditMode-testable), built
+    /// bought at the Barraca de Prendas and the Lendário of the tarefas do Bema. Plain C# (EditMode-testable), built
     /// by GameManager and saved under <see cref="Key"/>; a save from before the festa loads with nothing. Prizes go to
     /// the house's Depósito (<see cref="HouseLayout.GrantToDepot"/>: a prize is never lost, house or no house yet).
     /// During the festa every fish landed also pays a prenda (the "pescaria", <see cref="FestaJuninaRules.PrendasForFish"/>).

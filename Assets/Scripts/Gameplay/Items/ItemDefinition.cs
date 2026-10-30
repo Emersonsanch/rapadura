@@ -27,7 +27,7 @@ namespace Rapadura.Gameplay.Items
         [SerializeField] private ItemRarity _rarity = ItemRarity.Common;
 
         [Header("Economy & Stacking")]
-        [Tooltip("Dormant since the MU-style grid bag (the grid is the limit now). Kept for data compatibility and a possible future encumbrance rule.")]
+        [Tooltip("Weight of ONE unit (stacks weigh per unit). Drives the carry load (EncumbranceRules): a heavy bag slows the hero and the mount. 0 = suggested from category x grid cells (ItemWeightRules); currency/gold always weigh 0.")]
         [SerializeField] private float _weight = 1f;
         [SerializeField] private int _value = 1;
         [SerializeField] private int _maxStack = 1;
@@ -67,7 +67,11 @@ namespace Rapadura.Gameplay.Items
         public ItemCategory Category => _category;
         public ItemRarity Rarity => _rarity;
 
+        /// <summary>Authored unit weight (0 = use the suggestion). Prefer <see cref="CarryWeight"/>.</summary>
         public float Weight => _weight;
+
+        /// <summary>Effective unit weight used by the carry load (<see cref="ItemWeightRules.UnitWeight(ItemDefinition)"/>).</summary>
+        public float CarryWeight => ItemWeightRules.UnitWeight(this);
         public int Value => _value;
         public int MaxStack => Mathf.Max(1, _maxStack);
         public bool IsStackable => MaxStack > 1;

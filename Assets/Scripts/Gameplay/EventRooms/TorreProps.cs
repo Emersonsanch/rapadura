@@ -144,20 +144,13 @@ namespace Rapadura.Gameplay.EventRooms
         public static GameObject BuildKeeper(Vector3 position, Vector3 lookAt)
         {
             GameObject root = Root("SeuMalaquias", position, lookAt);
-            var block = new MaterialPropertyBlock();
-            // Long robe in tower-keeper indigo with a pale sash.
-            Part(root.transform, PrimitiveType.Capsule, new Vector3(0f, 0.85f, 0f), Vector3.zero, new Vector3(0.6f, 0.85f, 0.6f), new Color(0.24f, 0.25f, 0.42f), block);
-            Part(root.transform, PrimitiveType.Cylinder, new Vector3(0f, 1.05f, 0f), Vector3.zero, new Vector3(0.64f, 0.05f, 0.64f), new Color(0.95f, 0.93f, 0.88f), block);
-            Part(root.transform, PrimitiveType.Sphere, new Vector3(0f, 1.85f, 0f), Vector3.zero, Vector3.one * 0.42f, new Color(0.62f, 0.45f, 0.32f), block);
-            // Tall white felt cap (no brim).
-            Part(root.transform, PrimitiveType.Cylinder, new Vector3(0f, 2.12f, 0f), Vector3.zero, new Vector3(0.36f, 0.16f, 0.36f), new Color(0.94f, 0.92f, 0.86f), block);
-            Part(root.transform, PrimitiveType.Sphere, new Vector3(0f, 2.28f, 0f), Vector3.zero, new Vector3(0.34f, 0.16f, 0.34f), new Color(0.94f, 0.92f, 0.86f), block);
-            // Lantern on a stick, so the hero sees where to bring the Golden Jar.
-            Part(root.transform, PrimitiveType.Cylinder, new Vector3(0.5f, 1.2f, 0f), Vector3.zero, new Vector3(0.05f, 1.2f, 0.05f), DarkWood, block);
-            Part(root.transform, PrimitiveType.Cube, new Vector3(0.5f, 2.45f, 0f), Vector3.zero, Vector3.one * 0.22f, new Color(1f, 0.85f, 0.45f), block);
+            // Adda, the tower keeper (Docs/NPCs.md): old and emotional, tall white felt cap, indigo robe with a pale sash
+            // and the lantern on a pole, so the hero sees where to bring the Golden Jar. The procedural NPC figure
+            // (shared palette material, idle + head turn) replaces the old primitive capsule body.
+            Rapadura.Gameplay.NPC.Visuals.NpcFigure.Create(root.transform, "adda", Rapadura.Gameplay.World.Biomes.BiomeType.Mountain, Vector3.zero);
             var light = new GameObject("Lantern").AddComponent<Light>();
             light.transform.SetParent(root.transform, false);
-            light.transform.localPosition = new Vector3(0.5f, 2.45f, 0f);
+            light.transform.localPosition = new Vector3(0.32f, 1.85f, 0.42f);
             light.type = LightType.Point;
             light.range = 6f;
             light.intensity = 1.6f;

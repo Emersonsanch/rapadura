@@ -100,10 +100,10 @@ XP: todo inimigo dá 10 XP; a missão do herói dá 450–520 XP (→ nível 4) 
 
 | Bioma | Nível esperado (estimado) |
 |---|---|
-| Floresta | 1–3 |
-| Deserto | 3–5 |
-| Montanha | 5–7 |
-| Cavernas | 7–9 |
+| Bosque do Zarafshan | 1–3 |
+| Areias Flamejantes | 3–5 |
+| Serra de Kaggen | 5–7 |
+| Grutas do Limiar | 7–9 |
 
 Dano do jogador: ataque básico (`PlayerBasicAttack`) = **15 de dano a cada 0,5 s = 30 DPS**,
 em área, sem custo. Ele **não escala** com nível, atributos nem buffs. Vida do jogador: 100,
@@ -117,25 +117,25 @@ nem esquiva.
 
 | Bioma | Inimigo | HP | Golpes | TTK | DPS do inimigo | Mata o jogador em |
 |---|---|---|---|---|---|---|
-| Floresta | Lobo da Mata | 30 | 2 | 0,5 s | 7,0 | 14,3 s |
-| Floresta | Aranha da Floresta | 30 | 2 | 0,5 s | 7,0 | 14,3 s |
-| Floresta | **Lobo Alfa (boss)** | 160 | 11 | 5,0 s | 20,0 | **5,0 s** |
-| Deserto | Escorpião das Dunas | 26 | 2 | 0,5 s | 6,9 | 14,4 s |
-| Deserto | **Guardião da Ruína (boss)** | 200 | 14 | 6,5 s | 14,7 | 6,8 s |
-| Montanha | Golem de Pedra | 55 | 4 | 1,5 s | 8,1 | 12,3 s |
-| Montanha | **Senhor da Guerra (boss)** | 220 | 15 | 7,0 s | 23,6 | **4,2 s** |
-| Cavernas | Enxame de Morcegos | 18 | 2 | 0,5 s | 7,1 | 14,0 s |
-| Cavernas | **Habitante Ancestral (boss)** | 180 | 12 | 5,5 s | 14,3 | 7,0 s |
+| Bosque do Zarafshan | Lobo do Tugai | 30 | 2 | 0,5 s | 7,0 | 14,3 s |
+| Bosque do Zarafshan | Aranha-Tecelã Apagada | 30 | 2 | 0,5 s | 7,0 | 14,3 s |
+| Bosque do Zarafshan | **Kök-Böri (boss)** | 160 | 11 | 5,0 s | 20,0 | **5,0 s** |
+| Areias Flamejantes | Escorpião das Areias Flamejantes | 26 | 2 | 0,5 s | 6,9 | 14,4 s |
+| Areias Flamejantes | **Grande Ushabti (boss)** | 200 | 14 | 6,5 s | 14,7 | 6,8 s |
+| Serra de Kaggen | Ushabti de Pedra | 55 | 4 | 1,5 s | 8,1 | 12,3 s |
+| Serra de Kaggen | **Senhor da Guerra (boss)** | 220 | 15 | 7,0 s | 23,6 | **4,2 s** |
+| Grutas do Limiar | Enxame de Morcegos | 18 | 2 | 0,5 s | 7,1 | 14,0 s |
+| Grutas do Limiar | **Tages, o Habitante Ancestral (boss)** | 180 | 12 | 5,5 s | 14,3 | 7,0 s |
 
 Como nem o dano do jogador nem a vida dos inimigos escalam com o nível, **o TTK é o mesmo em
 qualquer nível** — a tabela vale para todo o intervalo esperado de cada bioma. Somar o kit de
-skills do herói ajuda pouco (melhor caso, Maithe: +16 DPS no nível 1 → Lobo Alfa em ~3,5 s).
+skills do herói ajuda pouco (melhor caso, Maithe: +16 DPS no nível 1 → Kök-Böri em ~3,5 s).
 
 Leituras:
 - **Inimigos comuns não escalam entre biomas**: todos morrem em 2 golpes, exceto o Golem (4).
-  O Escorpião do Deserto (26 HP) é mais fraco que o Lobo da Floresta (30 HP).
-- **Bosses são cara-ou-coroa**: o Lobo Alfa e o Senhor da Guerra matam o jogador antes (ou no
-  mesmo tempo) que o jogador os mata. O Senhor da Guerra (Montanha) é o pico de dificuldade.
+  O Escorpião das Areias Flamejantes (26 HP) é mais fraco que o Lobo do Bosque do Zarafshan (30 HP).
+- **Bosses são cara-ou-coroa**: o Kök-Böri e o Senhor da Guerra matam o jogador antes (ou no
+  mesmo tempo) que o jogador os mata. O Senhor da Guerra (Serra de Kaggen) é o pico de dificuldade.
 - **XP por inimigo é fixo em 10, inclusive para bosses** (`_bossExperienceMultiplier` = 1 em
   todos). Matar um boss rende o mesmo que matar um morcego; o Enxame de Morcegos é o melhor
   XP/HP do jogo (0,56 contra 0,05 de um boss).
@@ -163,27 +163,27 @@ no nível 1 (regeneração de mana: 5/s, mana máxima: 100).
 |---|---|---|---|---|---|---|---|
 | Maithe | **Flecha Precisa** | 28 | 10 | 3 s | **9,33** | **2,80** | **2,28×** ⬆ |
 | Maithe | Disparo Explosivo | 47 (35 + 12 queimadura) | 25 | 10 s | 4,70 | 1,88 | 1,53× |
-| Lavine | Orbe Sombria | 26 | 14 | 3,5 s | 7,43 | 1,86 | 1,51× |
-| Ícaro | Drone de Ataque | 40 | 26 | 14 s | 2,86 | 1,54 | 1,25× |
-| Ícaro | Torreta Automática | 34 | 24 | 12 s | 2,83 | 1,42 | 1,15× |
-| Lavine | Explosão Arcana | 40 | 30 | 10 s | 4,00 | 1,33 | 1,08× |
-| Ícaro | Granada Elétrica | 26 | 20 | 8 s | 3,25 | 1,30 | 1,06× |
-| Ícaro | Exército Mecânico (ult) | 93 | 80 | 75 s | 1,24 | 1,16 | 0,94× |
-| Joaquim | Terremoto | 30 | 28 | 12 s | 2,50 | 1,07 | 0,87× |
+| Lavine | Orbe do Ar Sereno | 26 | 14 | 3,5 s | 7,43 | 1,86 | 1,51× |
+| Ícaro | Drone Senmurv | 40 | 26 | 14 s | 2,86 | 1,54 | 1,25× |
+| Ícaro | Torreta Ushabti | 34 | 24 | 12 s | 2,83 | 1,42 | 1,15× |
+| Lavine | Explosão de Estrelas | 40 | 30 | 10 s | 4,00 | 1,33 | 1,08× |
+| Ícaro | Granada de Faísca | 26 | 20 | 8 s | 3,25 | 1,30 | 1,06× |
+| Ícaro | Exército de Ushabtis (ult) | 93 | 80 | 75 s | 1,24 | 1,16 | 0,94× |
+| Joaquim | Maremoto | 30 | 28 | 12 s | 2,50 | 1,07 | 0,87× |
 | Maria | Purificação | 15 | 18 | 10 s | 1,50 | 0,83 | 0,67× |
 | Maithe | Chuva de Flechas | 18 | 22 | 8 s | 2,25 | 0,82 | 0,67× |
 | Maithe | Tempestade de Mil Flechas (ult) | 55 | 70 | 60 s | 0,92 | 0,79 | 0,64× |
-| Lavine | Eclipse Eterno (ult) | 65 | 90 | 70 s | 0,93 | 0,72 | 0,59× |
-| Lavine | **Correntes das Trevas** | 12 | 22 | 11 s | 1,09 | **0,55** | **0,45×** ⬇ |
+| Lavine | Céu da Noite Rubra (ult) | 65 | 90 | 70 s | 0,93 | 0,72 | 0,59× |
+| Lavine | **Correntes de Ar** | 12 | 22 | 11 s | 1,09 | **0,55** | **0,45×** ⬇ |
 
 Pontos fora da curva:
 - **Flecha Precisa** é o maior outlier: 2,3× a mediana em dano/mana, a maior DPS de herói, e
   gasta só 3,3 mana/s — menos que a regeneração (5/s) — então pode ser usada sem parar.
-  Orbe Sombria (4 mana/s) também é praticamente infinita.
+  Orbe do Ar Sereno (4 mana/s) também é praticamente infinita.
 - **Ultimates** causam só 1,5–2× o dano de uma skill comum, mas custam 70–90 mana e têm
   CD de 60–90 s. A Tempestade de Mil Flechas (55 por 70 mana) causa menos que um Disparo
   Explosivo (47) mais uma Flecha Precisa (28), que juntos custam 35 mana.
-- **Correntes das Trevas** e **Chuva de Flechas** ficam bem abaixo da mediana (a primeira é
+- **Correntes de Ar** e **Chuva de Flechas** ficam bem abaixo da mediana (a primeira é
   controle, então até é aceitável; a segunda é a skill de área da Maithe e perde para o
   Disparo Explosivo em tudo).
 - Entre as gerais, a **Flecha (`skill_arrow`)** custa energia e zero mana: 12 DPS (é a skill
@@ -239,22 +239,22 @@ números exatos.
 | `ProgressionCurve.asset` | `_experienceCurveMultiplier` | 1,25 | **1,10** |
 | `ProgressionCurve.asset` | `_maxHealthPerLevel` (coluna `hp`) | 0 | **8** |
 | `PlayerCombatBalance.asset` (novo) | dano do ataque básico | 15 (Inspector da cena) | **10**, e agora passa por `AttackDamage`, `damage_mult` e crítico |
-| Lobo da Mata / Aranha (Floresta) | XP | 10 | 10 |
-| Escorpião das Dunas (Deserto) | HP / XP | 26 / 10 | **45 / 18** |
-| Golem de Pedra (Montanha) | HP / XP | 55 / 10 | **75 / 28** |
-| Enxame de Morcegos (Cavernas) | HP / XP | 18 / 10 | **28 / 40** |
+| Lobo do Tugai / Aranha (Bosque do Zarafshan) | XP | 10 | 10 |
+| Escorpião das Areias Flamejantes | HP / XP | 26 / 10 | **45 / 18** |
+| Ushabti de Pedra (Serra de Kaggen) | HP / XP | 55 / 10 | **75 / 28** |
+| Enxame de Morcegos (Grutas do Limiar) | HP / XP | 18 / 10 | **28 / 40** |
 | 4 bosses | `_bossExperienceMultiplier` | 1 | **8** (XP base = a dos comuns do bioma: 80 / 144 / 224 / 320) |
-| Lobo Alfa (boss Floresta) | HP / `_attackCooldown` | 160 / 0,9 | **120 / 1,1** |
-| Guardião da Ruína (boss Deserto) | HP | 200 | **160** |
-| Senhor da Guerra (boss Montanha) | HP / dano / cooldown | 220 / 26 / 1,1 | **170 / 20 / 1,3** |
-| Habitante Ancestral (boss Cavernas) | HP | 180 | **200** |
+| Kök-Böri (boss Bosque do Zarafshan) | HP / `_attackCooldown` | 160 / 0,9 | **120 / 1,1** |
+| Grande Ushabti (boss Areias Flamejantes) | HP | 200 | **160** |
+| Senhor da Guerra (boss Serra de Kaggen) | HP / dano / cooldown | 220 / 26 / 1,1 | **170 / 20 / 1,3** |
+| Tages, o Habitante Ancestral (boss Grutas do Limiar) | HP | 180 | **200** |
 | Flecha Precisa (Maithe) | mana | 10 | **15** |
-| Orbe Sombria (Lavine) | cooldown | 3,5 s | **4 s** |
+| Orbe do Ar Sereno (Lavine) | cooldown | 3,5 s | **4 s** |
 | Chuva de Flechas (Maithe) | dano base / por nível | 18 / 4 | **26 / 6** |
-| Correntes das Trevas (Lavine) | mana | 22 | **16** |
+| Correntes de Ar (Lavine) | mana | 22 | **16** |
 | Tempestade de Mil Flechas (ult) | dano base / por nível | 55 / 14 | **130 / 32** |
-| Eclipse Eterno (ult) | dano base / por nível | 65 / 16 | **150 / 36** |
-| Exército Mecânico (ult) | dano base / por nível | 45 / 12 | **100 / 26** |
+| Céu da Noite Rubra (ult) | dano base / por nível | 65 / 16 | **150 / 36** |
+| Exército de Ushabtis (ult) | dano base / por nível | 45 / 12 | **100 / 26** |
 | Flecha (`skill_arrow`, geral) | mana | 0 | **6** (mantém 8 de energia) |
 
 Os HP/dano dos inimigos também foram atualizados no `EnemyDatabaseSeeder` (e `skill_arrow` no
@@ -268,24 +268,24 @@ bioma, enquanto cada boss ainda perde a corrida de DPS para um jogador do nível
 
 Mesmas premissas da §2 (só ataque básico, primeiro golpe em t=0, sem esquiva/dano de contato).
 Ataque básico = **10 a cada 0,5 s = 20 DPS**. Vida do jogador no meio da faixa esperada de cada
-bioma: Floresta nível 2 = 108, Deserto nível 4 = 124, Montanha nível 6 = 140, Cavernas nível 8 = 156.
+bioma: Bosque do Zarafshan nível 2 = 108, Areias Flamejantes nível 4 = 124, Serra de Kaggen nível 6 = 140, Grutas do Limiar nível 8 = 156.
 
 | Bioma | Inimigo | HP antes → depois | Golpes | TTK antes → depois | DPS do inimigo | Mata o jogador em (antes, 100 HP → depois) |
 |---|---|---|---|---|---|---|
-| Floresta | Lobo da Mata / Aranha | 30 → 30 | 3 | 0,5 → 1,0 s | 7,0 | 14,3 → 15,4 s |
-| Floresta | **Lobo Alfa (boss)** | 160 → 120 | 12 | 5,0 → **5,5 s** | 20,0 → 16,4 | 5,0 → **6,6 s** |
-| Deserto | Escorpião das Dunas | 26 → 45 | 5 | 0,5 → 2,0 s | 6,9 | 14,4 → 17,9 s |
-| Deserto | **Guardião da Ruína (boss)** | 200 → 160 | 16 | 6,5 → **7,5 s** | 14,7 | 6,8 → **8,5 s** |
-| Montanha | Golem de Pedra | 55 → 75 | 8 | 1,5 → 3,5 s | 8,1 | 12,3 → 17,2 s |
-| Montanha | **Senhor da Guerra (boss)** | 220 → 170 | 17 | 7,0 → **8,0 s** | 23,6 → 15,4 | 4,2 → **9,1 s** |
-| Cavernas | Enxame de Morcegos | 18 → 28 | 3 | 0,5 → 1,0 s | 7,1 | 14,0 → 21,8 s (vêm em bando) |
-| Cavernas | **Habitante Ancestral (boss)** | 180 → 200 | 20 | 5,5 → **9,5 s** | 14,3 | 7,0 → **10,9 s** |
+| Bosque do Zarafshan | Lobo do Tugai / Aranha | 30 → 30 | 3 | 0,5 → 1,0 s | 7,0 | 14,3 → 15,4 s |
+| Bosque do Zarafshan | **Kök-Böri (boss)** | 160 → 120 | 12 | 5,0 → **5,5 s** | 20,0 → 16,4 | 5,0 → **6,6 s** |
+| Areias Flamejantes | Escorpião das Areias Flamejantes | 26 → 45 | 5 | 0,5 → 2,0 s | 6,9 | 14,4 → 17,9 s |
+| Areias Flamejantes | **Grande Ushabti (boss)** | 200 → 160 | 16 | 6,5 → **7,5 s** | 14,7 | 6,8 → **8,5 s** |
+| Serra de Kaggen | Ushabti de Pedra | 55 → 75 | 8 | 1,5 → 3,5 s | 8,1 | 12,3 → 17,2 s |
+| Serra de Kaggen | **Senhor da Guerra (boss)** | 220 → 170 | 17 | 7,0 → **8,0 s** | 23,6 → 15,4 | 4,2 → **9,1 s** |
+| Grutas do Limiar | Enxame de Morcegos | 18 → 28 | 3 | 0,5 → 1,0 s | 7,1 | 14,0 → 21,8 s (vêm em bando) |
+| Grutas do Limiar | **Tages, o Habitante Ancestral (boss)** | 180 → 200 | 20 | 5,5 → **9,5 s** | 14,3 | 7,0 → **10,9 s** |
 
 Leituras:
 - Os comuns pedem 3 / 5 / 8 / 3 golpes (morcegos compensam em número), em vez de 2 em quase todo
   bioma.
 - Todo boss agora é vencível só no ataque básico no nível esperado, com margem de 13–20%
-  (Senhor da Guerra: 8,0 s contra 9,1 s). Antes, Lobo Alfa e Senhor da Guerra matavam primeiro.
+  (Senhor da Guerra: 8,0 s contra 9,1 s). Antes, Kök-Böri e Senhor da Guerra matavam primeiro.
   Skills, crítico, Poder Arcano e esquiva aumentam essa margem.
 - O ataque básico agora escala: +1% por ponto de Poder Arcano, Berserk/combos (`AttackDamage`),
   coluna `damage_mult` e crítico (Destreza).
@@ -300,8 +300,8 @@ Leituras:
 | 30 | 64 623 → 1 586 | 258 094 → 14 861 | 1 487 | 531 |
 | 50 | 5 605 194 → 10 672 | 22 420 374 → **105 715** | 10 572 | 3 776 |
 
-Com XP por bioma, avançar dois níveis em cada bioma custa: Floresta 1→3 (210 XP) ≈ 13 comuns + o boss
-(80); Deserto 3→5 (254) ≈ 6 comuns + boss (144); Montanha 5→7 (307) ≈ 3 comuns + boss (224); Cavernas
+Com XP por bioma, avançar dois níveis em cada bioma custa: Bosque do Zarafshan 1→3 (210 XP) ≈ 13 comuns + o boss
+(80); Areias Flamejantes 3→5 (254) ≈ 6 comuns + boss (144); Serra de Kaggen 5→7 (307) ≈ 3 comuns + boss (224); Grutas do Limiar
 7→9 (372) ≈ 2 comuns + boss (320). As missões de herói (450–520 XP) e de convergência (1 200) adiantam
 o jogador — o que só deixa os bosses mais fáceis que o "nível esperado" da tabela acima. Ultimates
 (nível 10) chegam com ~1 357 XP em vez de ~2 579.
@@ -312,18 +312,18 @@ o jogador — o que só deixa os bosses mais fáceis que o "nível esperado" da 
 |---|---|---|---|---|---|---|---|---|
 | Maithe | Disparo Explosivo | 47 | 25 | 10 s | 4,70 | 1,88 | 1,27× | 2,5 |
 | Maithe | Flecha Precisa | 28 | 10 → **15** | 3 s | 9,33 | 2,80 → **1,87** | 1,26× | 3,3 → **5,0** (= regeneração) |
-| Lavine | Orbe Sombria | 26 | 14 | 3,5 → **4 s** | 7,43 → **6,50** | 1,86 | 1,26× | 4,0 → 3,5 |
+| Lavine | Orbe do Ar Sereno | 26 | 14 | 3,5 → **4 s** | 7,43 → **6,50** | 1,86 | 1,26× | 4,0 → 3,5 |
 | Maithe | Tempestade de Mil Flechas (ult) | 55 → **130** | 70 | 60 s | 0,92 → **2,17** | 0,79 → **1,86** | 1,26× | 1,2 |
-| Ícaro | Exército Mecânico (ult) | 93 → **148** | 80 | 75 s | 1,24 → **1,97** | 1,16 → **1,85** | 1,25× | 1,1 |
-| Lavine | Eclipse Eterno (ult) | 65 → **150** | 90 | 70 s | 0,93 → **2,14** | 0,72 → **1,67** | 1,13× | 1,3 |
-| Ícaro | Drone de Ataque | 40 | 26 | 14 s | 2,86 | 1,54 | 1,04× | 1,9 |
-| Ícaro | Torreta Automática | 34 | 24 | 12 s | 2,83 | 1,42 | 0,96× | 2,0 |
-| Lavine | Explosão Arcana | 40 | 30 | 10 s | 4,00 | 1,33 | 0,90× | 3,0 |
-| Ícaro | Granada Elétrica | 26 | 20 | 8 s | 3,25 | 1,30 | 0,88× | 2,5 |
+| Ícaro | Exército de Ushabtis (ult) | 93 → **148** | 80 | 75 s | 1,24 → **1,97** | 1,16 → **1,85** | 1,25× | 1,1 |
+| Lavine | Céu da Noite Rubra (ult) | 65 → **150** | 90 | 70 s | 0,93 → **2,14** | 0,72 → **1,67** | 1,13× | 1,3 |
+| Ícaro | Drone Senmurv | 40 | 26 | 14 s | 2,86 | 1,54 | 1,04× | 1,9 |
+| Ícaro | Torreta Ushabti | 34 | 24 | 12 s | 2,83 | 1,42 | 0,96× | 2,0 |
+| Lavine | Explosão de Estrelas | 40 | 30 | 10 s | 4,00 | 1,33 | 0,90× | 3,0 |
+| Ícaro | Granada de Faísca | 26 | 20 | 8 s | 3,25 | 1,30 | 0,88× | 2,5 |
 | Maithe | Chuva de Flechas | 18 → **26** | 22 | 8 s | 2,25 → **3,25** | 0,82 → **1,18** | 0,80× | 2,75 |
-| Joaquim | Terremoto | 30 | 28 | 12 s | 2,50 | 1,07 | 0,72× | 2,3 |
+| Joaquim | Maremoto | 30 | 28 | 12 s | 2,50 | 1,07 | 0,72× | 2,3 |
 | Maria | Purificação | 15 | 18 | 10 s | 1,50 | 0,83 | 0,56× | 1,8 |
-| Lavine | Correntes das Trevas (controle) | 12 | 22 → **16** | 11 s | 1,09 | 0,55 → **0,75** | 0,51× | 1,45 |
+| Lavine | Correntes de Ar (controle) | 12 | 22 → **16** | 11 s | 1,09 | 0,55 → **0,75** | 0,51× | 1,45 |
 
 - Nenhuma skill de herói passa de 1,3× a mediana em dano/mana (antes: Flecha Precisa a 2,3×).
 - Cada ultimate de dano agora bate ~3,7× a melhor skill ativa do herói por cast (antes, ~1,5×).
@@ -338,15 +338,15 @@ o jogador — o que só deixa os bosses mais fáceis que o "nível esperado" da 
   herói.
 - `damage_mult` continua 1 em todos os níveis; +2%/nível é a próxima alavanca se o fim do jogo ficar
   lento (os bosses ficam mais fáceis conforme o jogador passa do nível esperado, só pela vida).
-- Purificação (Maria) e Terremoto (Joaquim) seguem abaixo da mediana; são skills de suporte/controle.
+- Purificação (Maria) e Maremoto (Joaquim) seguem abaixo da mediana; são skills de suporte/controle.
 
 ---
 
 ## 4. Defesa, velocidade e stats mortos (bug, não balanceamento)
 
 Até aqui **nenhum código lia `StatType.Defense` nem `StatType.MoveSpeed`**, e os inimigos nem tinham
-`BuffController` — então ~20 skills (Campo Magnético, Granada, Drone, Escudo das Raízes, Muralha,
-Provocação, Última Resistência, Terremoto, Escudo Sagrado, Milagre, Correntes, Eclipse, Névoa, Chuva de
+`BuffController` — então ~20 skills (Campo do Engenho, Granada, Drone, Escudo das Raízes, Muralha,
+Provocação, Última Resistência, Maremoto, Escudo Solar, Milagre, Correntes, Eclipse, Névoa, Chuva de
 Flechas, Passo do Vento, Tempestade, shield, thorns, berserk, dash, freeze, ice_shard, invisibility)
 tinham metade do efeito (ou todo) jogado fora. **Todo debuff em inimigo** (lentidão, defesa, dano e as
 DoTs de Drone/Torreta/Exército/Disparo Explosivo/fireball/poison) era descartado.
@@ -372,7 +372,7 @@ dano_recebido = dano × (1 − def/(def+100)) × (1 − clamp(Σ%Defense, −1, 
 - Jogador/`PlayerStats`: em `ApplyDamageInternal` (todas as entradas de dano), **sem** arredondar nem
   dano mínimo — sem defesa o multiplicador é exatamente 1 e nada muda.
 
-Exemplos: Campo Magnético → jogador recebe ×0,75; Muralha ×0,4; Última Resistência ×0,2; Drone no
+Exemplos: Campo do Engenho → jogador recebe ×0,75; Muralha ×0,4; Última Resistência ×0,2; Drone no
 inimigo → ×1,2; Eclipse + Correntes + Drone → ×1,65; Berserk "Exposto" → ×1,3 nos alvos.
 
 ### 4.2 Velocidade (`BuffController.GetMoveSpeedMultiplier`)
@@ -403,7 +403,7 @@ limpa efeitos/stun da vida anterior (pool).
 As invariantes de `BalanceInvariantsTests` (corrida de DPS só com ataque básico, sem skills) **não
 mudam**: inimigos e jogador continuam com defesa base 0, então o multiplicador é 1 nesse modelo.
 Tudo o que entrou é margem extra a favor do jogador — buffs de defesa reduzem o DPS dos bosses
-(Senhor da Guerra 15,4 → 11,5 DPS sob Campo Magnético, → 6,2 sob Muralha), debuffs de defesa e as DoTs
+(Senhor da Guerra 15,4 → 11,5 DPS sob Campo do Engenho, → 6,2 sob Muralha), debuffs de defesa e as DoTs
 que agora funcionam aceleram o TTK, lentidões dão espaço para fugir/kitar. Nenhum dado foi alterado.
 Se os bosses ficarem fáceis demais no playtest, as alavancas são: o teto de 0,8 (`DamageCalculator.MaxPercentDefense`)
 e o piso de −1 (`MinPercentDefense`), o 0,1 de `MinMoveSpeedMultiplier`, ou `_defense` base nos bosses.
@@ -426,10 +426,10 @@ lacaio) mostrou o combate **fácil demais**:
 
 | Bioma | Luta | Tempo médio r5 → r6 | Vida perdida média r5 → r6 | Pior vida mínima r6 | Mortes |
 |---|---|---|---|---|---|
-| Floresta | normal / boss | 7,5 → 2,1 s / 10,1 → **4,0 s** | 9% → 3% / 67% → 28% | 94% / 68% | 0/10 |
-| Deserto | normal / boss | 26,6 → 3,7 s / 18,9 → **7,5 s** | 10% → 4% / 78% → 42% | 95% / 56% | 0/10 |
-| Montanha | normal / boss | 9,2 → 5,5 s / 14,0 → **8,4 s** | 30% → 21% / 87% → 59% | 74% / 43% | 0/10 |
-| Cavernas | normal / boss | 7,3 → 2,0 s / 13,4 → **7,0 s** | 7% → 0% / 63% → 32% | 100% / 68% | 0/10 |
+| Bosque do Zarafshan | normal / boss | 7,5 → 2,1 s / 10,1 → **4,0 s** | 9% → 3% / 67% → 28% | 94% / 68% | 0/10 |
+| Areias Flamejantes | normal / boss | 26,6 → 3,7 s / 18,9 → **7,5 s** | 10% → 4% / 78% → 42% | 95% / 56% | 0/10 |
+| Serra de Kaggen | normal / boss | 9,2 → 5,5 s / 14,0 → **8,4 s** | 30% → 21% / 87% → 59% | 74% / 43% | 0/10 |
+| Grutas do Limiar | normal / boss | 7,3 → 2,0 s / 13,4 → **7,0 s** | 7% → 0% / 63% → 32% | 100% / 68% | 0/10 |
 
 Bosses caíam em 3–11,5 s, as lutas normais duravam 2–5,5 s em média e ninguém morreu: as skills
 defensivas (Muralha, Escudo, curas) não tinham o que defender.
@@ -438,16 +438,16 @@ defensivas (Muralha, Escudo, curas) não tinham o que defender.
 
 | Onde | Campo | Antes | Depois |
 |---|---|---|---|
-| Lobo da Mata / Aranha da Floresta | HP | 30 | **70** |
-| Escorpião das Dunas | HP | 45 | **85** |
-| Golem de Pedra | HP | 75 | **100** |
+| Lobo do Tugai / Aranha-Tecelã Apagada | HP | 30 | **70** |
+| Escorpião das Areias Flamejantes | HP | 45 | **85** |
+| Ushabti de Pedra | HP | 75 | **100** |
 | Enxame de Morcegos | HP / dano | 28 / 5 | **80 / 7** |
-| Lobo Alfa (boss Floresta) | HP / `_attackCooldown` | 120 / 1,1 | **430 / 2,4** |
-| Guardião da Ruína (boss Deserto) | HP / `_attackCooldown` | 160 / 1,5 | **505 / 3,3** |
-| Senhor da Guerra (boss Montanha) | HP / dano / `_attackCooldown` | 170 / 20 / 1,3 | **580 / 16 / 2,6** |
-| Habitante Ancestral (boss Cavernas) | HP / dano / `_attackCooldown` | 200 / 20 / 1,4 | **700 / 18 / 3,0** |
+| Kök-Böri (boss Bosque do Zarafshan) | HP / `_attackCooldown` | 120 / 1,1 | **430 / 2,4** |
+| Grande Ushabti (boss Areias Flamejantes) | HP / `_attackCooldown` | 160 / 1,5 | **505 / 3,3** |
+| Senhor da Guerra (boss Serra de Kaggen) | HP / dano / `_attackCooldown` | 170 / 20 / 1,3 | **580 / 16 / 2,6** |
+| Tages, o Habitante Ancestral (boss Grutas do Limiar) | HP / dano / `_attackCooldown` | 200 / 20 / 1,4 | **700 / 18 / 3,0** |
 | Purificação (Maria) | dano base / por nível | 15 / 4 | **24 / 5** |
-| Muralha de Pedra (Joaquim) | buff de Defense / cooldown | 0,6 / 12 s | **0,5 / 16 s** |
+| Muralha da Maré (Joaquim) | buff de Defense / cooldown | 0,6 / 12 s | **0,5 / 16 s** |
 | `ProgressionCurve.asset` | `_damageMultiplierPerLevel` (coluna `damage_mult`) | 0 (1,00 em todo nível) | **0,02** (1,02 no nível 2 … 1,18 no 10 … 1,98 no 50) |
 
 Os HP/dano/cooldown dos inimigos também estão no `EnemyDatabaseSeeder` (a Aranha não é semeada por
@@ -482,10 +482,10 @@ Maithe 16,9 DPS, Lavine 11,6, Ícaro 8,9, Joaquim 2,5, Maria 1,5 → 2,4 (×`dam
 
 | Bioma (nível) | HP do boss | DPS do boss | Boss mata o jogador em | Só ataque básico | Com o kit (pior–melhor herói) | Jogador sob Muralha morre em |
 |---|---|---|---|---|---|---|
-| Floresta (2) | 120 → **430** | 16,4 → 7,5 | 6,6 → **14,4 s** | 6,0 → 21,1 s | 3,3–5,6 → **11,4–18,8 s** | 16,5 → 28,8 s |
-| Deserto (4) | 160 → **505** | 14,7 → 6,7 | 8,5 → **18,6 s** | 8,0 → 23,8 s | 4,3–7,4 → **12,9–21,3 s** | 21,1 → 37,2 s |
-| Montanha (6) | 170 → **580** | 15,4 → 6,2 | 9,1 → **22,8 s** | 8,5 → 26,4 s | 4,6–7,9 → **14,3–23,5 s** | 22,8 → 45,5 s |
-| Cavernas (8) | 200 → **700** | 14,3 → 6,0 | 10,9 → **26,0 s** | 10,0 → 30,7 s | 5,4–9,3 → **16,7–27,4 s** | 27,3 → 52,0 s |
+| Bosque do Zarafshan (2) | 120 → **430** | 16,4 → 7,5 | 6,6 → **14,4 s** | 6,0 → 21,1 s | 3,3–5,6 → **11,4–18,8 s** | 16,5 → 28,8 s |
+| Areias Flamejantes (4) | 160 → **505** | 14,7 → 6,7 | 8,5 → **18,6 s** | 8,0 → 23,8 s | 4,3–7,4 → **12,9–21,3 s** | 21,1 → 37,2 s |
+| Serra de Kaggen (6) | 170 → **580** | 15,4 → 6,2 | 9,1 → **22,8 s** | 8,5 → 26,4 s | 4,6–7,9 → **14,3–23,5 s** | 22,8 → 45,5 s |
+| Grutas do Limiar (8) | 200 → **700** | 14,3 → 6,0 | 10,9 → **26,0 s** | 10,0 → 30,7 s | 5,4–9,3 → **16,7–27,4 s** | 27,3 → 52,0 s |
 
 Comuns (só ataque básico → com o melhor kit): Lobo/Aranha 1,5 → **3,4 s** (0,8 → 1,9 s), Escorpião
 2,2 → **4,0 s** (1,2 → 2,2 s), Golem 3,8 → **4,5 s** (2,0 → 2,5 s), Morcegos 1,4 → **3,5 s**
@@ -500,9 +500,9 @@ Leituras:
 - No jogo real os tempos são maiores que o modelo (deslocamento, golpes que erram, lacaio junto), e o
   playtest r6 rodou em níveis acima do esperado (5/8/11 em vez de 4/6/8); rode o playtest de novo
   para conferir.
-- A Floresta é o boss mais agressivo em relação à vida do jogador (14,4 s para matar um jogador de
+- O Bosque do Zarafshan é o boss mais agressivo em relação à vida do jogador (14,4 s para matar um jogador de
   nível 2 parado, abaixo da meta de ~20 s): é o primeiro boss e o jogador ainda está aprendendo a
-  esquivar. Se ficar duro demais, a alavanca é `_attackCooldown` do Lobo Alfa (2,4 → 3,0 dá 18 s).
+  esquivar. Se ficar duro demais, a alavanca é `_attackCooldown` do Kök-Böri (2,4 → 3,0 dá 18 s).
 
 ### 5.4 Invariantes (`BalanceInvariantsTests`)
 
@@ -512,7 +512,7 @@ sempre em faixas:
 
 | Teste | Faixa / regra |
 |---|---|
-| `BossHealth_IsWithinItsBiomeBand` | Floresta 350–550, Deserto 400–650, Montanha 450–750, Cavernas 550–900 |
+| `BossHealth_IsWithinItsBiomeBand` | Bosque do Zarafshan 350–550, Areias Flamejantes 400–650, Serra de Kaggen 450–750, Grutas do Limiar 550–900 |
 | `Boss_KillsAnUndefendedPlayerInAFewRotations_NotInstantly` | vida do jogador no nível esperado ÷ DPS do boss em 12–40 s |
 | `Boss_WithTheFullKit_IsATenToThirtyFiveSecondFight_ForEveryHero` | HP do boss ÷ (básico + kit) em 10–35 s, para os 5 heróis |
 | `Boss_OutlastsABasicAttackOnlyPlayer_SoSkillsAndDefenseMatter` | só no ataque básico o jogador precisa de > 1,05× o tempo que o boss leva para matá-lo |
@@ -541,9 +541,9 @@ deixando o arquivo vencer. Testes: `CarriedStateExperienceTests`.
 Mesmo protocolo do r6 (5 heróis × 4 biomas), já com os números da §5:
 
 - **Lutas normais: 4,3–7,4 s** em média; **bosses: 15–22 s**. As duas faixas batem com a meta da §5.3.
-- **Floresta matou heróis frágeis**: o Lobo Alfa (18 de dano a cada 2,4 s = 7,5 DPS) derrubava um
+- **Bosque do Zarafshan matou heróis frágeis**: o Kök-Böri (18 de dano a cada 2,4 s = 7,5 DPS) derrubava um
   jogador de nível 2 (108 HP) em ~14 s, rápido demais para o primeiro boss (a alavanca já prevista na §5.3).
-- **Cavernas: os morcegos não conseguiam atacar.** O Enxame paira ~0,92 m acima do herói; o teste de
+- **Grutas do Limiar: os morcegos não conseguiam atacar.** O Enxame paira ~0,92 m acima do herói; o teste de
   alcance usava distância 3D, que nunca ficava abaixo de ~1,2 m, então com `_attackRange` 1,1 o
   inimigo orbitava sem nunca entrar no estado de ataque (bug, não balanceamento).
 
@@ -553,23 +553,23 @@ Mesmo protocolo do r6 (5 heróis × 4 biomas), já com os números da §5:
 |---|---|---|---|
 | `EnemyDetectionUtility.IsWithinAttackRange` (código) | teste de alcance | distância 3D | **distância horizontal (XZ)** com tolerância vertical de 2 m (`AttackVerticalTolerance`) |
 | Enxame de Morcegos | `_attackRange` | 1,1 | **1,5** |
-| Lobo Alfa (boss Floresta) | `_attackDamage` | 18 | **14** (DPS 7,5 → 5,83) |
-| Escorpião das Dunas | `_attackDamage` | 9 | **11** (DPS 6,92 → 8,46) |
-| Cura Divina (Maria) | `_cooldownSeconds` | 6 | **9** |
+| Kök-Böri (boss Bosque do Zarafshan) | `_attackDamage` | 18 | **14** (DPS 7,5 → 5,83) |
+| Escorpião das Areias Flamejantes | `_attackDamage` | 9 | **11** (DPS 6,92 → 8,46) |
+| Luz que Cura (Maria) | `_cooldownSeconds` | 6 | **9** |
 
 Por quê:
 - **Alcance horizontal.** Inimigos de chão se comportam igual (mesma altura = mesma distância); quem
   voa/paira passa a atacar independente da altura. A tolerância vertical evita golpes através de
   andares/plataformas muito acima ou abaixo. O alcance 1,5 dos morcegos fica como dado para o enxame
   não precisar encostar no herói.
-- **Lobo Alfa 18 → 14.** O boss passa a matar um jogador parado de nível 2 em **18,5 s** (era 14,4 s),
+- **Kök-Böri 18 → 14.** O boss passa a matar um jogador parado de nível 2 em **18,5 s** (era 14,4 s),
   perto da meta de ~20 s; sob Muralha, 37,0 s. Só no ataque básico o jogador ainda precisa de 21,1 s,
   então o boss continua vencendo quem não usa skills/defesa (21,1 > 1,05 × 18,5 = 19,4).
-- **Escorpião 9 → 11.** Recomendação do r7: mais pressão no comum do Deserto, para a dificuldade
-  não afrouxar depois de a Floresta ser aliviada.
-- **Cura Divina 6 → 9 s.** Recomendação do r7: com as lutas agora mais longas, a cura da Maria em
+- **Escorpião 9 → 11.** Recomendação do r7: mais pressão no comum das Areias Flamejantes, para a dificuldade
+  não afrouxar depois de o Bosque do Zarafshan ser aliviada.
+- **Luz que Cura 6 → 9 s.** Recomendação do r7: com as lutas agora mais longas, a cura da Maria em
   cooldown curto vira um estado permanente; com 9 s ela continua forte, mas passa a ser uma decisão
-  de tempo junto do Escudo Sagrado.
+  de tempo junto do Escudo Solar.
 
 Espelhos atualizados: `EnemyDatabaseSeeder` e `EnemyDatabaseSeederTests` (as skills de herói não têm
 seeder). `enemies.csv` e `skills.csv` regenerados com as fórmulas do `BalanceCsvMenu`.
@@ -577,10 +577,10 @@ seeder). `enemies.csv` e `skills.csv` regenerados com as fórmulas do `BalanceCs
 ### 6.3 Invariantes
 
 Recalculado à mão o modelo do `BalanceInvariantsTests` (§5.3/§5.4): nenhuma faixa muda. O único boss
-alterado é o Lobo Alfa — 18,5 s para matar o jogador (faixa 12–40 s), 21,1 s só no básico (> 19,4 s),
+alterado é o Kök-Böri — 18,5 s para matar o jogador (faixa 12–40 s), 21,1 s só no básico (> 19,4 s),
 11,4–18,8 s com o kit (faixa 10–35 s, inalterado), todo herói vence sob Muralha (19,8 s < 37,0 s) e a
 Maithe vence sem defender (11,4 s < 18,5 s). Escorpião e morcegos só entram nas regras de HP dos comuns
-(inalteradas); a Cura Divina não causa dano, então não entra no kit. Teste novo de código:
+(inalteradas); a Luz que Cura não causa dano, então não entra no kit. Teste novo de código:
 `EnemyDetectionUtilityTests.IsWithinAttackRange_FlyingEnemyHoveringAboveTarget_StillInRange` e
 `IsWithinAttackRange_FalseWhenHorizontallyTooFar_OrBeyondVerticalTolerance`.
 
@@ -609,9 +609,9 @@ aplicado = skill._stunDurationSeconds × (boss ? 0,5 : 1)      // nunca encurta 
 
 | Skill | Herói | Recarga | Stun (comum) | Stun (boss) | % do ciclo travado (comum) |
 |---|---|---|---|---|---|
-| Correntes das Trevas | Lavine | 11 s | **1,0 s** | 0,5 s | 9% |
-| Terremoto | Joaquim | 12 s | **0,8 s** | 0,4 s | 7% |
-| Granada Elétrica | Ícaro | 8 s | **0,6 s** | 0,3 s | 8% |
+| Correntes de Ar | Lavine | 11 s | **1,0 s** | 0,5 s | 9% |
+| Maremoto | Joaquim | 12 s | **0,8 s** | 0,4 s | 7% |
+| Granada de Faísca | Ícaro | 8 s | **0,6 s** | 0,3 s | 8% |
 
 Lavine (controle de multidão) tem o stun mais longo; a Granada, que tem a menor recarga, tem o mais curto.
 Num boss com `attack_cooldown` de 1,5–3 s, 0,3–0,5 s de stun atrasa no máximo um golpe por conjuração.
@@ -651,7 +651,7 @@ refletido = dano_tomado_após_defesa × fração     // volta para quem bateu, n
 | `affix_nimble` (Ágil / Nimble) | prefixo | Mão principal | AttackSpeed | +6–12% | 45 |
 | `affix_of_frenzy` (do Frenesi / of Frenzy) | sufixo | Mão principal | AttackSpeed | +13–20% | 12 |
 | `affix_thorned` (Espinhosa / Thorned) | prefixo | Peito | Thorns | 5–10% | 40 |
-| `affix_of_the_mandacaru` (do Mandacaru / of the Mandacaru) | sufixo | Peito | Thorns | 11–18% | 12 |
+| `affix_of_the_mandacaru` (do Saxaul / of the Saxaul) | sufixo | Peito | Thorns | 11–18% | 12 |
 
 Os assets já estão em `Resources/Affixes` (gerados com os mesmos valores do seeder). Tooltip:
 "+10% Velocidade de ataque" e "+15% Espinhos (dano refletido)". A Ficha mostra as linhas
@@ -725,11 +725,11 @@ mesma semente, mesmos drops.
 
 ### 8.2 Tabelas (`Assets/Resources/Biomes/*.asset`, espelhadas no `BiomeSeeder`)
 
-Todos os biomas usam `_lootRollsPerKill` 2 e `_bossLootRolls` 4. `_lootDropChance` é 0,65 na Floresta e
+Todos os biomas usam `_lootRollsPerKill` 2 e `_bossLootRolls` 4. `_lootDropChance` é 0,65 no Bosque do Zarafshan e
 0,60 nos outros. "% por rolagem" = chance × peso / peso total. "Por luta" considera 1,5 inimigo comum por
 encontro (`WorldMap.unity`: 1–2; encontros aleatórios nunca trazem o chefe). "Chefe" é o esperado das 4 rolagens garantidas.
 
-**Floresta** (Lobo da Mata, Aranha da Floresta; chefe Lobo Alfa), peso total 30
+**Bosque do Zarafshan** (Lobo do Tugai, Aranha-Tecelã Apagada; chefe Kök-Böri), peso total 30
 
 | Item | Peso | Qtd | % por rolagem | Por morte | Por luta | Chefe |
 |---|---|---|---|---|---|---|
@@ -739,7 +739,7 @@ encontro (`WorldMap.unity`: 1–2; encontros aleatórios nunca trazem o chefe). 
 | `item_cooked_meat` | 3 | 1–2 | 6,5% | 0,20 | 0,29 | 0,60 |
 | `item_wooden_sword` (procedural) | 1 | 1 | 2,2% | 0,04 | 0,07 | 0,13 |
 
-**Deserto** (Escorpião das Dunas; chefe Guardião da Ruína), peso total 30
+**Areias Flamejantes** (Escorpião das Areias Flamejantes; chefe Grande Ushabti), peso total 30
 
 | Item | Peso | Qtd | % por rolagem | Por morte | Por luta | Chefe |
 |---|---|---|---|---|---|---|
@@ -751,7 +751,7 @@ encontro (`WorldMap.unity`: 1–2; encontros aleatórios nunca trazem o chefe). 
 | `item_health_potion` | 3 | 1 | 6,0% | 0,12 | 0,18 | 0,40 |
 | `item_hunting_bow` (procedural) | 1 | 1 | 2,0% | 0,04 | 0,06 | 0,13 |
 
-**Montanha** (Golem de Pedra; chefe Senhor da Guerra da Montanha), peso total 24
+**Serra de Kaggen** (Ushabti de Pedra; chefe Hahya, o Gigante Guerreiro), peso total 24
 
 | Item | Peso | Qtd | % por rolagem | Por morte | Por luta | Chefe |
 |---|---|---|---|---|---|---|
@@ -762,7 +762,7 @@ encontro (`WorldMap.unity`: 1–2; encontros aleatórios nunca trazem o chefe). 
 | `item_leather_boots` (procedural) | 2 | 1 | 5,0% | 0,10 | 0,15 | 0,33 |
 | `item_pickaxe` (procedural) | 1 | 1 | 2,5% | 0,05 | 0,07 | 0,17 |
 
-**Cavernas** (Enxame de Morcegos; chefe Habitante Ancestral), peso total 22
+**Grutas do Limiar** (Enxame de Morcegos; chefe Tages, o Habitante Ancestral), peso total 22
 
 | Item | Peso | Qtd | % por rolagem | Por morte | Por luta | Chefe |
 |---|---|---|---|---|---|---|
@@ -776,10 +776,10 @@ encontro (`WorldMap.unity`: 1–2; encontros aleatórios nunca trazem o chefe). 
 
 | Chefe | Ouro (antes 1–3, 60%) | Bônus procedural |
 |---|---|---|
-| Lobo Alfa | 4–8 | `item_hunting_bow` Raro |
-| Guardião da Ruína | 6–10 | `item_leather_helmet` Raro |
-| Senhor da Guerra da Montanha | 8–14 | `item_leather_chest` Épico |
-| Habitante Ancestral | 10–16 | `item_iron_sword` Épico |
+| Kök-Böri | 4–8 | `item_hunting_bow` Raro |
+| Grande Ushabti | 6–10 | `item_leather_helmet` Raro |
+| Hahya, o Gigante Guerreiro | 8–14 | `item_leather_chest` Épico |
+| Tages, o Habitante Ancestral | 10–16 | `item_iron_sword` Épico |
 
 Inimigos comuns continuam soltando `item_gold` 1–3 com 60% (1,2 por morte).
 
@@ -787,9 +787,9 @@ Inimigos comuns continuam soltando `item_gold` 1–3 com 60% (1,2 por morte).
 
 | Receita | Insumos | De onde vêm |
 |---|---|---|
-| `recipe_health_potion` | 3 `item_herb` | Floresta, Cavernas |
-| `recipe_iron_ingot` | 2 `item_iron_ore` + 1 `item_wood` | Montanha/Deserto/Cavernas + Floresta |
-| `recipe_iron_sword` | 2 `item_iron` + 1 `item_wood` | lingote (receita, ou drop no Deserto/Montanha) + Floresta |
+| `recipe_health_potion` | 3 `item_herb` | Bosque do Zarafshan, Grutas do Limiar |
+| `recipe_iron_ingot` | 2 `item_iron_ore` + 1 `item_wood` | Serra de Kaggen/Areias Flamejantes/Grutas do Limiar + Bosque do Zarafshan |
+| `recipe_iron_sword` | 2 `item_iron` + 1 `item_wood` | lingote (receita, ou drop nas Areias Flamejantes/Serra de Kaggen) + Bosque do Zarafshan |
 
 ### 8.4 Lutas esperadas por objetivo de coleta (melhor bioma)
 
@@ -797,17 +797,17 @@ Lutas ≈ quantidade ÷ "por luta". `EnemyLootTableTests` exige no máximo 12 lu
 
 | Missão | Objetivo | Melhor bioma | Lutas |
 |---|---|---|---|
-| `quest_daily_family_campfire` | 6 madeira + 4 fibra | Floresta | ~4,6 (madeira) / ~3,8 (fibra), **~5** juntas |
-| `quest_daily_icaro_ore_tinkering` | 4 minério + 1 lingote | Montanha | ~3 (minério); +2 minério e 1 madeira para fundir: **~4,5** |
-| `quest_daily_maria_herb_basket` | 5 ervas + 1 poção | Floresta | ~4,8; com a poção feita de 3 ervas, **~7,7** |
-| `quest_daily_maria_visit_survivor` | 2 carne assada | Floresta | **~6,9** |
-| `quest_maithe_windtrail` | 3 minério | Montanha | ~2,2 (os 4 golens já pedem ~2,7) |
-| `quest_maria_fading_light` | 2 minério | Cavernas | ~2 (os 5 morcegos já pedem ~3,3) |
-| `quest_icaro_ancient_gears` | 1 lingote | Deserto | drop direto ~8,3; fundindo (2 minério + 1 madeira) **~2,2**; o Guardião da Ruína (objetivo da mesma missão) dá em média 2 minérios |
-| `quest_joaquim_echoes_of_home` | 1 espada de ferro | Cavernas | drop raro (~12,5); caminhos principais: forjar (4 minério + 3 madeira), bônus Épico do Habitante Ancestral ou recompensa da 2ª missão da Montanha |
-| `quest_region_desert_crossing_reserve` | 12 ouro | Deserto | **~6,7** |
+| `quest_daily_family_campfire` | 6 madeira + 4 fibra | Bosque do Zarafshan | ~4,6 (madeira) / ~3,8 (fibra), **~5** juntas |
+| `quest_daily_icaro_ore_tinkering` | 4 minério + 1 lingote | Serra de Kaggen | ~3 (minério); +2 minério e 1 madeira para fundir: **~4,5** |
+| `quest_daily_maria_herb_basket` | 5 ervas + 1 poção | Bosque do Zarafshan | ~4,8; com a poção feita de 3 ervas, **~7,7** |
+| `quest_daily_maria_visit_survivor` | 2 carne assada | Bosque do Zarafshan | **~6,9** |
+| `quest_maithe_windtrail` | 3 minério | Serra de Kaggen | ~2,2 (os 4 golens já pedem ~2,7) |
+| `quest_maria_fading_light` | 2 minério | Grutas do Limiar | ~2 (os 5 morcegos já pedem ~3,3) |
+| `quest_icaro_ancient_gears` | 1 lingote | Areias Flamejantes | drop direto ~8,3; fundindo (2 minério + 1 madeira) **~2,2**; o Guardião da Ruína (objetivo da mesma missão) dá em média 2 minérios |
+| `quest_joaquim_echoes_of_home` | 1 espada de ferro | Grutas do Limiar | drop raro (~12,5); caminhos principais: forjar (4 minério + 3 madeira), bônus Épico do Tages, o Habitante Ancestral ou recompensa da 2ª missão da Serra de Kaggen |
+| `quest_region_desert_crossing_reserve` | 12 ouro | Areias Flamejantes | **~6,7** |
 
-Peso: ver §9 (mochila cheia). Antes o minério pesava 3 e umas 18 lutas na Montanha enchiam a mochila;
+Peso: ver §9 (mochila cheia). Antes o minério pesava 3 e umas 18 lutas na Serra de Kaggen enchiam a mochila;
 hoje são ~43, e o que não cabe nunca some em silêncio.
 
 ### 8.5 Testes
@@ -841,12 +841,12 @@ Peso esperado por luta (1,5 inimigo comum, tabelas da §8.2) e lutas até encher
 
 | Bioma | Antes | Lutas | Depois | Lutas |
 |---|---|---|---|---|
-| Floresta | 2,52 | ~40 | 1,22 | ~82 |
-| Deserto | 3,65 | ~27 | 1,49 | ~67 |
-| Montanha | 5,54 | ~18 | 2,31 | **~43** |
-| Cavernas | 3,96 | ~25 | 1,75 | ~57 |
+| Bosque do Zarafshan | 2,52 | ~40 | 1,22 | ~82 |
+| Areias Flamejantes | 3,65 | ~27 | 1,49 | ~67 |
+| Serra de Kaggen | 5,54 | ~18 | 2,31 | **~43** |
+| Grutas do Limiar | 3,96 | ~25 | 1,75 | ~57 |
 
-Espaços: a Montanha solta ~0,22 equipamento por luta (cada peça ocupa um espaço); em 43 lutas são ~10
+Espaços: a Serra de Kaggen solta ~0,22 equipamento por luta (cada peça ocupa um espaço); em 43 lutas são ~10
 peças mais ~6 pilhas, abaixo dos 30. `LootOverflowTests.EveryBiome_TakesAtLeast40Fights_ToFillTheBag`
 trava o mínimo de 40.
 
@@ -911,14 +911,14 @@ Fora do modelo (como no r5–r7): esquiva, buffs/debuffs de % Defesa e de dano d
 
 | Rota | Região | Lutas | XP abates / missões / chefe | Nível no chefe | Chefe no jogo (média dos 5) | 2 comuns no jogo (média) |
 |---|---|---|---|---|---|---|
-| só chefes | Floresta | 3 | 45 / 0 / 90 | 1,4 | 15,8 s | 5,2 s |
-| só chefes | Deserto | 3 | 81 / 0 / 162 | 3,0 | 13,1 s | 5,1 s |
-| só chefes | Montanha | 3 | 126 / 0 / 252 | 5,3 | 13,2 s | 4,9 s |
-| só chefes | Cavernas | 3 | 180 / 0 / 360 | 7,9 | 14,4 s | 2,4 s |
-| missões | Floresta | 12,4 | 187 / **350** / 90 | **5,5** | 11,6 s | 4,1 s |
-| missões | Deserto | 5,3 | 144 / **580** / 162 | **10,0** | 9,5 s | 1,7 s |
-| missões | Montanha | 6,7 | 280 / **840** / 252 | **14,5** | 8,2 s | 1,5 s |
-| missões | Cavernas | 9,3 | 560 / **1 140** / 360 | **19,0** | 8,3 s | 0,4 s |
+| só chefes | Bosque do Zarafshan | 3 | 45 / 0 / 90 | 1,4 | 15,8 s | 5,2 s |
+| só chefes | Areias Flamejantes | 3 | 81 / 0 / 162 | 3,0 | 13,1 s | 5,1 s |
+| só chefes | Serra de Kaggen | 3 | 126 / 0 / 252 | 5,3 | 13,2 s | 4,9 s |
+| só chefes | Grutas do Limiar | 3 | 180 / 0 / 360 | 7,9 | 14,4 s | 2,4 s |
+| missões | Bosque do Zarafshan | 12,4 | 187 / **350** / 90 | **5,5** | 11,6 s | 4,1 s |
+| missões | Areias Flamejantes | 5,3 | 144 / **580** / 162 | **10,0** | 9,5 s | 1,7 s |
+| missões | Serra de Kaggen | 6,7 | 280 / **840** / 252 | **14,5** | 8,2 s | 1,5 s |
+| missões | Grutas do Limiar | 9,3 | 560 / **1 140** / 360 | **19,0** | 8,3 s | 0,4 s |
 
 - **As missões regionais eram o maior salto de poder**: 2 910 XP, mais que todas as lutas que elas pedem
   somadas aos 4 chefes (~2 000). Quem as fazia chegava aos chefes nos níveis 5,5 / 10 / 14,5 / 19 (o r7
@@ -927,12 +927,12 @@ Fora do modelo (como no r5–r7): esquiva, buffs/debuffs de % Defesa e de dano d
   (13–16 s).
 - **Morte sem skills nem defesa**: só no ataque básico, o jogador da rota com missões vencia todos os
   chefes, então a regra "risco real sem skills/defesa" não valia mais.
-- **Equipamento**: na média pesa pouco (+3 de dano plano a partir do Deserto, +2% de velocidade de ataque,
-  3% de espinhos nas Cavernas), mas a cauda é grande: Brutal 6–12 + Afiada 2–5 somam até +17 num básico
+- **Equipamento**: na média pesa pouco (+3 de dano plano a partir das Areias Flamejantes, +2% de velocidade de ataque,
+  3% de espinhos nas Grutas do Limiar), mas a cauda é grande: Brutal 6–12 + Afiada 2–5 somam até +17 num básico
   de 10. Os 10% com mais sorte (+9,7 de dano plano) matavam os chefes em 12,7–15,3 s.
 - **Atordoamento**: no código do r7 o stun tirava o inimigo do estado de ataque e o `Enter` rearmava o
   golpe uma preparação depois do fim do stun. Num chefe de 2,4–3,3 s de recarga com 0,3–0,5 s de stun,
-  isso **adiantava** o próximo golpe: com a Granada do Ícaro (recarga 8 s) o Lobo Alfa dava 9 golpes numa
+  isso **adiantava** o próximo golpe: com a Granada do Ícaro (recarga 8 s) o Kök-Böri dava 9 golpes numa
   luta em vez de 7. Bug de fórmula, corrigido em código (§10.3).
 
 ### 10.3 Mudanças aplicadas (antes → depois)
@@ -943,13 +943,13 @@ Fora do modelo (como no r5–r7): esquiva, buffs/debuffs de % Defesa e de dano d
 | `RegionQuestCatalog` | XP de `desert_stinger_road` / `desert_crossing_reserve` | 260 / 320 | **100 / 130** |
 | `RegionQuestCatalog` | XP de `mountain_walking_stones` / `mountain_mine_pass` | 380 / 460 | **150 / 180** |
 | `RegionQuestCatalog` | XP de `caves_dark_lamps` / `caves_last_lantern` | 520 / 620 | **200 / 240** |
-| Lobo Alfa | HP / dano | 430 / 14 | **520 / 15** (DPS 5,83 → 6,25) |
-| Escorpião das Dunas | HP | 85 | **110** |
-| Guardião da Ruína | HP / dano | 505 / 22 | **780 / 32** (DPS 6,67 → 9,70) |
-| Golem de Pedra | HP | 100 | **140** |
-| Senhor da Guerra da Montanha | HP / dano | 580 / 16 | **900 / 30** (DPS 6,15 → 11,54) |
+| Kök-Böri | HP / dano | 430 / 14 | **520 / 15** (DPS 5,83 → 6,25) |
+| Escorpião das Areias Flamejantes | HP | 85 | **110** |
+| Grande Ushabti | HP / dano | 505 / 22 | **780 / 32** (DPS 6,67 → 9,70) |
+| Ushabti de Pedra | HP | 100 | **140** |
+| Hahya, o Gigante Guerreiro | HP / dano | 580 / 16 | **900 / 30** (DPS 6,15 → 11,54) |
 | Enxame de Morcegos | HP | 80 | **170** |
-| Habitante Ancestral | HP / dano | 700 / 18 | **1 180 / 42** (DPS 6 → 14) |
+| Tages, o Habitante Ancestral | HP / dano | 700 / 18 | **1 180 / 42** (DPS 6 → 14) |
 | `affix_sharp` (Afiada) | AttackDamage plano | 2–5 | **1–3** |
 | `affix_brutal` (Brutal) | AttackDamage plano | 6–12 | **3–6** |
 | `EnemyController` / `EnemyAttackState` (código) | golpe depois de stun ou de sair/voltar ao alcance | próximo golpe 1 preparação depois | **a recarga que faltava continua valendo** (congelada durante o stun); a preparação inteira sempre telegrafa |
@@ -965,11 +965,11 @@ Espelhos: `EnemyDatabaseSeeder` + `EnemyDatabaseSeederTests`, `AffixDatabaseSeed
 Por quê:
 - **XP das missões a ~40%**. Cada missão continua valendo 0,75–2,4× o XP dos próprios abates (antes até
   3×) e a rota com missões ainda chega ~2,5–7 níveis acima da rota só de chefes. A ultimate (nível 10)
-  chega na Montanha para quem faz as missões e no fim das Cavernas para quem só enfrenta chefes.
+  chega na Serra de Kaggen para quem faz as missões e no fim das Grutas do Limiar para quem só enfrenta chefes.
 - **Inimigos re-baseados no nível da rota com missões** (3 / 7 / 10 / 15 no chefe): os chefes ganham
   +21% / +54% / +55% / +69% de HP e o dano por golpe sobe para que, parado e sem defesa, o herói morra em
   21–25 s, antes de matar o chefe só no ataque básico (24–40 s). O golpe continua lento e telegrafado
-  (recargas iguais). O Lobo Alfa só ganhou +1 de dano: é o chefe tutorial.
+  (recargas iguais). O Kök-Böri só ganhou +1 de dano: é o chefe tutorial.
 - **Comuns**: Escorpião +29%, Golem +40%, Morcegos +113%. Os morcegos eram o caso pior: no nível 13
   qualquer skill de área matava os dois na abertura.
 - **Afixos de dano plano pela metade**: o básico tem 10 de dano; dois afixos na mesma arma agora somam no
@@ -982,14 +982,14 @@ lutas comuns 4–7 s, chefes 15–22 s, morte possível sem skills nem defesa.
 
 | Bioma | Rota | Nível no chefe r7 → r8 | 2 comuns: média r7 → r8 (pior / **média** / melhor) | Chefe: média r7 → r8 (pior / **média** / melhor) | Só básico, r8: mata o chefe / morre em |
 |---|---|---|---|---|---|
-| Floresta | missões | 5,5 → **4,0** | 4,1 → 7,5 / **4,8** / 1,8 s | 11,6 → 20,0 / **16,5** / 12,3 s | 24,0 / 22,2 s |
-| Deserto | missões | 10,0 → **7,1** | 1,7 → 8,7 / **6,1** / 3,8 s | 9,5 → 22,8 / **18,2** / 12,7 s | 28,0 / 20,6 s |
-| Montanha | missões | 14,5 → **10,9** | 1,5 → 10,4 / **6,4** / 3,8 s | 8,2 → 24,6 / **18,4** / 12,0 s | 29,5 / 21,6 s |
-| Cavernas | missões | 19,0 → **15,0** | 0,4 → 12,2 / **4,6** / 0,0 s | 8,3 → 27,1 / **20,0** / 13,0 s | 33,5 / 24,8 s |
-| Floresta | só chefes | 1,4 | 5,2 → **5,2** s | 15,8 → **19,3** s | 25,5 / 14,9 s |
-| Deserto | só chefes | 3,0 | 5,1 → **8,5** s | 13,1 → **22,5** s | 31,5 / 13,9 s |
-| Montanha | só chefes | 5,3 | 4,9 → **9,8** s | 13,2 → **22,9** s | 34,0 / 13,7 s |
-| Cavernas | só chefes | 7,9 | 2,4 → **10,0** s | 14,4 → **28,2** s | 41,0 / 15,7 s |
+| Bosque do Zarafshan | missões | 5,5 → **4,0** | 4,1 → 7,5 / **4,8** / 1,8 s | 11,6 → 20,0 / **16,5** / 12,3 s | 24,0 / 22,2 s |
+| Areias Flamejantes | missões | 10,0 → **7,1** | 1,7 → 8,7 / **6,1** / 3,8 s | 9,5 → 22,8 / **18,2** / 12,7 s | 28,0 / 20,6 s |
+| Serra de Kaggen | missões | 14,5 → **10,9** | 1,5 → 10,4 / **6,4** / 3,8 s | 8,2 → 24,6 / **18,4** / 12,0 s | 29,5 / 21,6 s |
+| Grutas do Limiar | missões | 19,0 → **15,0** | 0,4 → 12,2 / **4,6** / 0,0 s | 8,3 → 27,1 / **20,0** / 13,0 s | 33,5 / 24,8 s |
+| Bosque do Zarafshan | só chefes | 1,4 | 5,2 → **5,2** s | 15,8 → **19,3** s | 25,5 / 14,9 s |
+| Areias Flamejantes | só chefes | 3,0 | 5,1 → **8,5** s | 13,1 → **22,5** s | 31,5 / 13,9 s |
+| Serra de Kaggen | só chefes | 5,3 | 4,9 → **9,8** s | 13,2 → **22,9** s | 34,0 / 13,7 s |
+| Grutas do Limiar | só chefes | 7,9 | 2,4 → **10,0** s | 14,4 → **28,2** s | 41,0 / 15,7 s |
 
 - **Rota com missões (a de referência)**: todas as médias dentro da meta (comuns 4,6–6,4 s, chefes
   16,5–20,0 s), e só no ataque básico o chefe mata primeiro em todos os biomas.
@@ -1004,28 +1004,28 @@ lutas comuns 4–7 s, chefes 15–22 s, morte possível sem skills nem defesa.
 
 | Região | XP por encontro | Nível típico r7 → r8 | XP para o próximo | Encontros por nível (só abates) | Min/nível só abates | Min/nível com missões |
 |---|---|---|---|---|---|---|
-| Floresta | 15 | 3 → 2 | 121 → 110 | 8,1 → 7,3 | 3,1 → 2,9 | 1,1 → 1,6 |
-| Deserto | 27 | 8 → 5 | 195 → 146 | 7,2 → 5,4 | 2,7 → 2,3 | 0,5 → 0,9 |
-| Montanha | 42 | 12 → 9 | 285 → 214 | 6,8 → 5,1 | 2,4 → 2,2 | 0,6 → 1,0 |
-| Cavernas | 60 | 17 → 13 | 459 → 314 | 7,7 → 5,2 | 2,6 → 2,1 | 0,9 → 1,2 |
+| Bosque do Zarafshan | 15 | 3 → 2 | 121 → 110 | 8,1 → 7,3 | 3,1 → 2,9 | 1,1 → 1,6 |
+| Areias Flamejantes | 27 | 8 → 5 | 195 → 146 | 7,2 → 5,4 | 2,7 → 2,3 | 0,5 → 0,9 |
+| Serra de Kaggen | 42 | 12 → 9 | 285 → 214 | 6,8 → 5,1 | 2,4 → 2,2 | 0,6 → 1,0 |
+| Grutas do Limiar | 60 | 17 → 13 | 459 → 314 | 7,7 → 5,2 | 2,6 → 2,1 | 0,9 → 1,2 |
 
 **Poder na entrada de cada região** (rota com missões, r8; equipamento médio do Monte Carlo):
 
 | Região | Nível | Vida | Ataque básico | Kit Maithe / Joaquim | Equipamento médio | Chefe da região mata o herói parado em |
 |---|---|---|---|---|---|---|
-| Floresta | 1 | 100 | 20,0 DPS | 17,3 / 2,5 DPS | nada | 16,0 s |
-| Deserto | 4 | 154 | 26,0 DPS | 26,5 / 4,8 DPS | +1,6 dano plano, +2% vel., +1% crítico | 15,9 s |
-| Montanha | 8 | 226 | 29,4 DPS | 35,0 / 6,2 DPS | +1,7 dano plano, +2% vel., +2,5% crítico | 19,6 s |
-| Cavernas | 11 | 286 | 31,8 DPS | 43,0 / 6,7 DPS | idem + 3% espinhos, +3,6 defesa, +6 vida | 21,2 s |
+| Bosque do Zarafshan | 1 | 100 | 20,0 DPS | 17,3 / 2,5 DPS | nada | 16,0 s |
+| Areias Flamejantes | 4 | 154 | 26,0 DPS | 26,5 / 4,8 DPS | +1,6 dano plano, +2% vel., +1% crítico | 15,9 s |
+| Serra de Kaggen | 8 | 226 | 29,4 DPS | 35,0 / 6,2 DPS | +1,7 dano plano, +2% vel., +2,5% crítico | 19,6 s |
+| Grutas do Limiar | 11 | 286 | 31,8 DPS | 43,0 / 6,7 DPS | idem + 3% espinhos, +3,6 defesa, +6 vida | 21,2 s |
 
 (r7, mesma rota: níveis 1 / 6 / 10,7 / 15,2, básico 20 / 30,4 / 34,4 / 38,6 DPS, chefe matava em
 17 / 28,5 / 42,6 / 61,8 s.)
 
-**Sorte no loot** (p90 do dano plano, rota com missões): Deserto +4,8 → chefe 18,2 → 15,4 s; Montanha
-+4,9 → 18,4 → 15,5 s; Cavernas +5,1 → 20,0 → 17,4 s (antes: +9,7 → 12,7 s no Deserto).
+**Sorte no loot** (p90 do dano plano, rota com missões): Areias Flamejantes +4,8 → chefe 18,2 → 15,4 s; Serra de Kaggen
++4,9 → 18,4 → 15,5 s; Grutas do Limiar +5,1 → 20,0 → 17,4 s (antes: +9,7 → 12,7 s nas Areias Flamejantes).
 
 **Atordoamento nos chefes** (golpes do chefe numa luta: sem stun → código r7 → r8): Granada do Ícaro no
-Lobo Alfa 7 → 9 → 7; Correntes da Lavine no Guardião 5 → 6 → 5 e na Habitante 6 → 7 → 6. Com a correção o
+Kök-Böri 7 → 9 → 7; Correntes da Lavine no Guardião 5 → 6 → 5 e na Habitante 6 → 7 → 6. Com a correção o
 stun nunca adianta um golpe; no chefe custa 0–1 golpe por luta, nos comuns (0,6–1,0 s contra recargas de
 0,7–1,6 s) cerca de 1 golpe por conjuração.
 
@@ -1034,7 +1034,7 @@ stun nunca adianta um golpe; no chefe custa 0–1 golpe por luta, nos comuns (0,
 `BalanceInvariantsTests` re-baseado no r8 (justificativa nos comentários do teste):
 - nível esperado por bioma 2/4/6/8 → **3/7/10/15** (o chefe da rota com missões), com atributos
   (Vitalidade/Poder Arcano) e pontos de skill gulosos no modelo analítico;
-- faixas de HP de chefe: Floresta 450–650, Deserto 650–950, Montanha 750–1100, Cavernas 1000–1400;
+- faixas de HP de chefe: Bosque do Zarafshan 450–650, Areias Flamejantes 650–950, Serra de Kaggen 750–1100, Grutas do Limiar 1000–1400;
 - as outras regras não mudaram: chefe mata o jogador parado em 12–40 s, luta com kit 10–35 s para os 5
   heróis, só no básico o chefe vence, com defesa todos vencem, a Maithe vence sem defender, comuns 2,5–8 s
   só no básico e ≥ 1,5 s com o melhor kit (r8: 21–25 s, 12–33 s, 24–40 s contra 21–25 s, 3,3–5,8 s);
@@ -1049,10 +1049,10 @@ correção do atordoamento. `EnemyDatabaseSeederTests` espelha os novos HP/dano.
 
 ## 11. Nova Jornada+ (New Game+) (2026-10-29)
 
-Depois do epílogo e dos créditos, o botão **Nova Jornada+** aparece na Vila (Floresta) do mapa
+Depois do epílogo e dos créditos, o botão **Nova Jornada+** aparece na Vila (Bosque do Zarafshan) do mapa
 (`NewGamePlusHud`). Ele recomeça a campanha com o mesmo herói: **mantém** nível, atributos, skills,
 equipamento, mochila, ouro e o Baú da Vó Edna; **recomeçam** a história (`StoryProgress`), o mapa (só a
-Floresta liberada), os chefes (`DefeatedEnemyRegistry`) e as 8 missões regionais (`RegionQuestCatalog`).
+Bosque do Zarafshan liberada), os chefes (`DefeatedEnemyRegistry`) e as 8 missões regionais (`RegionQuestCatalog`).
 Missões pessoais, de convergência e diárias, construções, receitas, relógio e clima ficam como estão. O
 ciclo é salvo na chave `NewGamePlus` (`NewGamePlusProgress`); save antigo, sem a chave, carrega como ciclo 0.
 
@@ -1064,15 +1064,15 @@ número a mais (mesma semente, mesmos drops de antes).
 
 | O quê | Fórmula | NG+1 | NG+2 | NG+3 | NG+5 | Onde |
 |---|---|---|---|---|---|---|
-| Vida dos inimigos (chefes inclusos), por região | 1 + bônus da região + 0,15·c | Floresta ×2,2 · Deserto ×1,5 · Montanha ×1,35 · Cavernas ×1,15 | +0,15 | +0,3 | +0,6 (×2,8 / 2,1 / 1,95 / 1,75) | `EnemyController.ApplyDefinitionToHealth` (arredondada) |
+| Vida dos inimigos (chefes inclusos), por região | 1 + bônus da região + 0,15·c | Bosque do Zarafshan ×2,2 · Areias Flamejantes ×1,5 · Serra de Kaggen ×1,35 · Grutas do Limiar ×1,15 | +0,15 | +0,3 | +0,6 (×2,8 / 2,1 / 1,95 / 1,75) | `EnemyController.ApplyDefinitionToHealth` (arredondada) |
 | Dano por golpe (antes de buffs/debuffs), por região | 1 + bônus da região + 0,25·c | ×2,7 · ×1,8 · ×1,6 · ×1,45 | +0,25 | +0,5 | +1,0 (×3,7 / 2,8 / 2,6 / 2,45) | `EnemyController.EffectiveAttackDamage` + hitbox |
 | XP por abate (depois do bônus de chefe) | 1 + 0,5·c | ×1,5 | ×2,0 | ×2,5 | ×3,5 | `EnemyRewardGranter` |
 | Quantidade do loot base (ouro) | 1 + 0,25·c | ×1,25 | ×1,5 | ×1,75 | ×2,25 | `EnemyLootRoller` (passo 1) |
 | Chance de cada peça de equipamento subir 1 raridade | 0,1·c | 10% | 20% | 30% | 50% | `EnemyLootRoller` (passo 2; nunca passa de Lendário) |
 
-Bônus da região (de NG+1 em diante, uma vez): vida Floresta +1,05 / Deserto +0,35 / Montanha +0,2 /
-Cavernas 0; dano +1,45 / +0,55 / +0,35 / +0,2. A região do inimigo é a da tabela de spawn que o lista
-(`BiomeRegistry.FindBiomeOf`, só consultada fora do ciclo 0); inimigo sem região usa os números do Deserto.
+Bônus da região (de NG+1 em diante, uma vez): vida Bosque do Zarafshan +1,05 / Areias Flamejantes +0,35 / Serra de Kaggen +0,2 /
+Grutas do Limiar 0; dano +1,45 / +0,55 / +0,35 / +0,2. A região do inimigo é a da tabela de spawn que o lista
+(`BiomeRegistry.FindBiomeOf`, só consultada fora do ciclo 0); inimigo sem região usa os números das Areias Flamejantes.
 O HUD mostra a faixa ("vida ×1,15–2,2, dano ×1,45–2,7").
 
 Não escalam: XP/recompensas de missões, chance de drop e quantidades da tabela do bioma, o bônus de chefe
@@ -1080,17 +1080,17 @@ Não escalam: XP/recompensas de missões, chance de drop e quantidades da tabela
 
 ### 11.2 Por que esses números (r9, ajustados no modelo, §14.4)
 
-- Quem termina a campanha pela rota com missões chega ao chefe das Cavernas no nível ~15 (§10.4) e entra na
+- Quem termina a campanha pela rota com missões chega ao chefe das Grutas do Limiar no nível ~15 (§10.4) e entra na
   NG+1 por volta do 16; durante a NG+1 ele sobe até ~22. A campanha espera 3 / 7 / 10 / 15 nos chefes,
-  então a distância de nível é enorme na Floresta (+14) e pequena nas Cavernas (+7).
-- **Antes (r8, ×1,8 vida / ×1,5 dano em todo lugar)**: a NG+1 era trivial na Floresta (chefe 14 s, comuns
-  2 s, o chefe levava ~45 s para matar o herói parado) e arrastada nas Cavernas (chefe 33 s).
+  então a distância de nível é enorme no Bosque do Zarafshan (+14) e pequena nas Grutas do Limiar (+7).
+- **Antes (r8, ×1,8 vida / ×1,5 dano em todo lugar)**: a NG+1 era trivial no Bosque do Zarafshan (chefe 14 s, comuns
+  2 s, o chefe levava ~45 s para matar o herói parado) e arrastada nas Grutas do Limiar (chefe 33 s).
 - **Agora** o bônus da região compensa a distância de nível uma vez, e o passo por ciclo (+0,15 vida,
   +0,25 dano) é igual para todas. Com isso todo chefe da NG+1 fica em 18,5–19,8 s, e na NG+2/NG+3 em
-  ~16–21 s (o modelo mantém o equipamento das Cavernas da NG+0, então nos ciclos altos é conservador).
+  ~16–21 s (o modelo mantém o equipamento das Grutas do Limiar da NG+0, então nos ciclos altos é conservador).
 - **Dano cresce mais que vida**: a vida do herói cresce a cada nível (curva + Vitalidade), e só o dano faz o
-  chefe matar o herói parado em ~25 s, como na NG+0 (21–27 s). Lobo Alfa NG+1: 1 144 de vida / 40,5 de dano;
-  Habitante Ancestral NG+1: 1 357 / 60,9.
+  chefe matar o herói parado em ~25 s, como na NG+0 (21–27 s). Kök-Böri NG+1: 1 144 de vida / 40,5 de dano;
+  Tages, o Habitante Ancestral NG+1: 1 357 / 60,9.
 - Escala por região (e não pelo nível do herói) porque é determinística, igual para todo mundo, sem
   "elástico" que pune quem subiu de nível, e não depende de quem está no grupo.
 - XP ×1,5 por ciclo compensa a curva (`xp_to_next` cresce 10% por nível): sem isso, a NG+1 inteira daria
@@ -1099,11 +1099,11 @@ Não escalam: XP/recompensas de missões, chance de drop e quantidades da tabela
 ### 11.3 Testes
 
 `NewGamePlusTests`: ciclo 0 não muda nada em nenhuma região (nem arredonda), os números do NG+1 batem com a
-tabela (Floresta e Cavernas), todos crescem até o teto e param, cada região cresce a cada ciclo e as regiões
+tabela (Bosque do Zarafshan e Grutas do Limiar), todos crescem até o teto e param, cada região cresce a cada ciclo e as regiões
 iniciais sempre escalam mais, cada chefe é achado na região certa pelo `BiomeRegistry`, o HUD mostra a faixa
 ("vida ×1,15–2,2"), XP/loot nunca ficam abaixo da base, o loot
 do ciclo 0 é idêntico ao de antes com a mesma semente, a NG+5 dá mais ouro e equipamento melhor no chefe da
-Montanha, o reset/manutenção do estado, save/load, save antigo = ciclo 0 e a conquista `ach_new_journey_plus`.
+Serra de Kaggen, o reset/manutenção do estado, save/load, save antigo = ciclo 0 e a conquista `ach_new_journey_plus`.
 
 ## 12. Forno da Vó Edna: refeições do tandir (2026-10-29)
 
@@ -1138,9 +1138,9 @@ materiais comuns de §8 (madeira é a lenha do forno; a loja também vende madei
 | Nan do Tandir | StaminaRegen +30% (10 → 13/s) | 3 | madeira 1, erva 1 | 2 ouro | início |
 | Chá de Karkadé | CooldownReduction +0,06 (Flat) | 3 | madeira 1, fibra 1 | 2 ouro | início |
 | Pão de Tâmara | MaxHealth +10% | 3 | madeira 2, fibra 2 | 3 ouro | `quest_region_forest_howling_trail` / Vó → Maria |
-| Torrão Dourado | AttackSpeed +12% **nos primeiros 20 s** (era +25%, §14.3) | 4 | madeira 2, pedra 1 | 3 ouro | `quest_region_desert_stinger_road` / Vó → Ícaro (Deserto aberto) |
-| Plov da Vó | Defense +10% (percentual) | 3 | madeira 2, erva 2, carne assada 1 | 4 ouro | `quest_region_mountain_walking_stones` / Vó → Joaquim (Montanha aberta) |
-| Samsa Assada | Thorns 8% | 3 | madeira 1, minério 1, erva 1 | 4 ouro | `quest_region_caves_dark_lamps` / Vó → Lavine (Cavernas abertas) |
+| Torrão Dourado | AttackSpeed +12% **nos primeiros 20 s** (era +25%, §14.3) | 4 | madeira 2, pedra 1 | 3 ouro | `quest_region_desert_stinger_road` / Vó → Ícaro (Areias Flamejantes abertas) |
+| Plov da Vó | Defense +10% (percentual) | 3 | madeira 2, erva 2, carne assada 1 | 4 ouro | `quest_region_mountain_walking_stones` / Vó → Joaquim (Serra de Kaggen aberta) |
+| Samsa Assada | Thorns 8% | 3 | madeira 1, minério 1, erva 1 | 4 ouro | `quest_region_caves_dark_lamps` / Vó → Lavine (Grutas do Limiar abertas) |
 
 Por que esses números: cada efeito fica na faixa de **um afixo incomum** (afixos de §7: velocidade de
 ataque +6–12%, espinhos 5–10%; chá ≈ 15 pontos de Inteligência a 0,4%), porque a refeição ocupa um
@@ -1195,18 +1195,18 @@ Peso relativo entre os elegíveis na região/hora. Noite = fase `Night` do `Time
 
 | Evento | Onde / quando | Peso | Escolha A | Escolha B (sempre grátis) |
 |---|---|---|---|---|
-| Mascate ambulante | todas, de dia | 10 | -18 ouro → +2 Poção de Vida (loja: 30) | nada |
-| Chuva de caju | Floresta, Deserto, de dia | 8 | cura 35% da vida no início da próxima luta | +3 vida/s na próxima luta |
+| Caravana ambulante | todas, de dia | 10 | -18 ouro → +2 Poção de Vida (loja: 30) | nada |
+| Chuva de caju | Bosque do Zarafshan, Areias Flamejantes, de dia | 8 | cura 35% da vida no início da próxima luta | +3 vida/s na próxima luta |
 | Romeiros na estrada | todas, de dia | 8 | -1 Poção de Vida → +8 ouro, +15 XP* | +10% defesa na próxima luta |
 | Emboscada de elite | todas, qualquer hora | 6 (×1,5 à noite) | luta com elite + 1 comum | +1 h no relógio |
 | Cantoria ao pé da fogueira | todas, **só à noite** | 10 | +8% dano na próxima luta, +1 h (era +15%, §14.3) | cura 25% na próxima luta |
-| Tempestade de areia | Deserto | 12 | viagem 50% mais lenta até chegar | +2 h no relógio |
-| Neblina na serra | Montanha | 12 | +3 h no relógio | viagem 40% mais lenta, +2 minério de ferro |
-| Eco na caverna | Cavernas | 12 | luta comum agora, +20 XP* nela | +5% crítico na próxima luta |
+| Tempestade de areia | Areias Flamejantes | 12 | viagem 50% mais lenta até chegar | +2 h no relógio |
+| Neblina na serra | Serra de Kaggen | 12 | +3 h no relógio | viagem 40% mais lenta, +2 minério de ferro |
+| Eco na caverna | Grutas do Limiar | 12 | luta comum agora, +20 XP* nela | +5% crítico na próxima luta |
 
-\* XP × região, na mesma razão do XP dos inimigos (10/18/28/40): Floresta ×1, Deserto ×1,8, Montanha ×2,8,
-Cavernas ×4. Romeiros = 1,5 inimigo de XP, eco = 2. **Ouro não escala:** os inimigos soltam 1–3 de ouro em
-qualquer região (~1,8 por luta, §8), então 8 ouro ≈ 4 lutas e o desconto do mascate (12 ouro) ≈ 7 lutas.
+\* XP × região, na mesma razão do XP dos inimigos (10/18/28/40): Bosque do Zarafshan ×1, Areias Flamejantes ×1,8, Serra de Kaggen ×2,8,
+Grutas do Limiar ×4. Romeiros = 1,5 inimigo de XP, eco = 2. **Ouro não escala:** os inimigos soltam 1–3 de ouro em
+qualquer região (~1,8 por luta, §8), então 8 ouro ≈ 4 lutas e o desconto do caravaneiro (12 ouro) ≈ 7 lutas.
 
 **"Próxima luta":** o mapa não tem `PlayerStats`/`BuffController` vivos, então XP, cura e buffs ficam na fila
 de `WorldEventState` (salva) e entram dois quadros depois que a Main carrega (depois do estado carregado do
@@ -1259,7 +1259,7 @@ uv run --no-project --with pytest python -m pytest -q -p no:cacheprovider tools/
   de peixinho: +1,5 HP/s), tratadas como disponíveis desde o início.
 - **NG+1**: inimigos com a escala por região do §11.1 (lida de `NewGamePlusRules`), XP de abate ×1,5,
   missões regionais de novo (XP sem escala); o herói começa com o nível do fim da NG+0 e o equipamento das
-  Cavernas (drops novos ignorados: conservador).
+  Grutas do Limiar (drops novos ignorados: conservador).
 - O modelo ganhou: Defense e MaxHealth percentuais, ResourceCostReduction, ManaRegen percentual e um bônus
   de velocidade de ataque só no começo da luta. Sem nenhuma dessas fontes ele dá exatamente a saída do r8.
 - Limite: o passo de 20 ms arredonda o intervalo do básico, então +2% e +3% de velocidade de ataque dão o
@@ -1271,12 +1271,12 @@ Média dos 5 heróis, segundos "no jogo". Meta do r8: comuns 4–7 s, chefes 15�
 
 | Ciclo | Bioma | Chefe: r8 → pilha | Comuns: r8 → pilha | Só básico com a pilha: mata / chefe mata em |
 |---|---|---|---|---|
-| NG+0 | Floresta | 16,5 → **12,2** (−26%) | 4,8 → 3,4 | 17,4 / 21,8 |
-| NG+0 | Deserto | 18,2 → **12,4** (−32%) | 6,1 → 3,4 | 16,8 / 23,0 |
-| NG+0 | Montanha | 18,4 → **12,2** (−34%) | 6,4 → 3,9 | 18,0 / 25,2 |
-| NG+0 | Cavernas | 20,0 → **13,2** (−34%) | 4,6 → 2,7 | 20,9 / 29,6 |
-| NG+1 | Floresta | 14,3 → 9,4 (−34%) | 2,2 → 1,0 | 16,0 / 50,0 |
-| NG+1 | Cavernas | 33,4 → 23,3 (−30%) | 7,4 → 4,9 | 35,3 / 25,9 |
+| NG+0 | Bosque do Zarafshan | 16,5 → **12,2** (−26%) | 4,8 → 3,4 | 17,4 / 21,8 |
+| NG+0 | Areias Flamejantes | 18,2 → **12,4** (−32%) | 6,1 → 3,4 | 16,8 / 23,0 |
+| NG+0 | Serra de Kaggen | 18,4 → **12,2** (−34%) | 6,4 → 3,9 | 18,0 / 25,2 |
+| NG+0 | Grutas do Limiar | 20,0 → **13,2** (−34%) | 4,6 → 2,7 | 20,9 / 29,6 |
+| NG+1 | Bosque do Zarafshan | 14,3 → 9,4 (−34%) | 2,2 → 1,0 | 16,0 / 50,0 |
+| NG+1 | Grutas do Limiar | 33,4 → 23,3 (−30%) | 7,4 → 4,9 | 35,3 / 25,9 |
 
 - A pilha deixava **todo chefe abaixo de 15 s** e quem só usava o ataque básico vencia com folga (a regra
   do r8 "só no básico o chefe mata primeiro" caía em todos os biomas).
@@ -1301,7 +1301,7 @@ o chefe mata o herói parado em 12–40 s.
 | `MealCatalog` (Torrão Dourado) | AttackSpeed nos primeiros 20 s | +25% | **+12%** (o teto do `affix_nimble`) |
 
 Sem mudança: as outras 11 relíquias e o ×2 do dono, as outras refeições e favoritos, os outros eventos
-(crítico +5% do eco só existe nas Cavernas e perde para a Cantoria), o carinho, os coeficientes da NG+
+(crítico +5% do eco só existe nas Grutas do Limiar e perde para a Cantoria), o carinho, os coeficientes da NG+
 (§14.4) e todos os inimigos (as invariantes do r8 continuam valendo sem pilha). Textos: `SecretTexts`,
 `KitchenTexts`; o texto da carta do evento sai do valor. Testes: `WorldEventTests` ("+8% de dano").
 
@@ -1311,14 +1311,14 @@ Sem mudança: as outras 11 relíquias e o ×2 do dono, as outras refeições e f
 
 | Ciclo | Bioma (níveis comuns / chefe) | Relíquias | Chefe: r8 → só relíquias → pilha | Comuns: r8 → pilha | Só básico com a pilha: mata / chefe mata em | Refeição mais usada |
 |---|---|---|---|---|---|---|
-| NG+0 | Floresta (2 / 3) | 3 | 16,5 → 15,3 → **13,8** (−16%) | 4,8 → **3,8** (−22%) | 19,9 / 21,8 | chá de karkadé |
-| NG+0 | Deserto (5 / 7) | 6 | 18,2 → 17,3 → **14,9** (−18%) | 6,1 → **4,8** (−22%) | 22,4 / 23,0 | torrão dourado |
-| NG+0 | Montanha (9 / 10) | 9 | 18,4 → 16,6 → **14,4** (−22%) | 6,4 → **4,9** (−24%) | 23,4 / 25,2 | torrão dourado |
-| NG+0 | Cavernas (13 / 15) | 12 | 20,0 → 18,4 → **16,2** (−19%) | 4,6 → **3,5** (−24%) | 27,4 / 29,6 | torrão dourado |
-| NG+1 | Floresta (16 / 17) | 12 | 18,5 → 16,4 → **14,6** (−21%) | 3,3 → **2,5** | 25,0 / 26,7 | samsa assada |
-| NG+1 | Deserto (17 / 18) | 12 | 18,5 → 16,4 → **14,5** (−22%) | 3,6 → **2,9** | 24,7 / 26,9 | torrão dourado |
-| NG+1 | Montanha (19 / 20) | 12 | 18,5 → 16,4 → **14,5** (−22%) | 4,1 → **2,9** (−29%) | 24,6 / 27,5 | torrão dourado |
-| NG+1 | Cavernas (21 / 22) | 12 | 19,8 → 17,9 → **15,9** (−20%) | 4,0 → **2,9** | 26,8 / 26,9 | torrão dourado |
+| NG+0 | Bosque do Zarafshan (2 / 3) | 3 | 16,5 → 15,3 → **13,8** (−16%) | 4,8 → **3,8** (−22%) | 19,9 / 21,8 | chá de karkadé |
+| NG+0 | Areias Flamejantes (5 / 7) | 6 | 18,2 → 17,3 → **14,9** (−18%) | 6,1 → **4,8** (−22%) | 22,4 / 23,0 | torrão dourado |
+| NG+0 | Serra de Kaggen (9 / 10) | 9 | 18,4 → 16,6 → **14,4** (−22%) | 6,4 → **4,9** (−24%) | 23,4 / 25,2 | torrão dourado |
+| NG+0 | Grutas do Limiar (13 / 15) | 12 | 20,0 → 18,4 → **16,2** (−19%) | 4,6 → **3,5** (−24%) | 27,4 / 29,6 | torrão dourado |
+| NG+1 | Bosque do Zarafshan (16 / 17) | 12 | 18,5 → 16,4 → **14,6** (−21%) | 3,3 → **2,5** | 25,0 / 26,7 | samsa assada |
+| NG+1 | Areias Flamejantes (17 / 18) | 12 | 18,5 → 16,4 → **14,5** (−22%) | 3,6 → **2,9** | 24,7 / 26,9 | torrão dourado |
+| NG+1 | Serra de Kaggen (19 / 20) | 12 | 18,5 → 16,4 → **14,5** (−22%) | 4,1 → **2,9** (−29%) | 24,6 / 27,5 | torrão dourado |
+| NG+1 | Grutas do Limiar (21 / 22) | 12 | 19,8 → 17,9 → **15,9** (−20%) | 4,0 → **2,9** | 26,8 / 26,9 | torrão dourado |
 
 NG+1 com a NG+ do r8 (×1,8 / ×1,5 em todo lugar), para comparar: chefe sem pilha 14,3 / 23,0 / 25,9 / 33,4 s,
 comuns 2,2 / 4,6 / 6,7 / 7,4 s, herói parado morre em 45 / 30 / 27 / 24 s.
@@ -1326,7 +1326,7 @@ comuns 2,2 / 4,6 / 6,7 / 7,4 s, herói parado morre em 45 / 30 / 27 / 24 s.
 - **NG+0**: a pilha completa vale −16 a −22% no chefe e −22 a −24% nos comuns, dentro do orçamento. Os
   chefes ficam em 13,8–16,2 s (a meta absoluta é 15–22 s para o herói sem pilha; quem junta tudo fica um
   pouco abaixo, como quem tira uma arma de sorte). Só no básico, o herói com tudo vence por um fio (mata em
-  92–97% do tempo que o chefe leva) em vez de folgado (71–80% antes). A Montanha fica a 0,5 pp do teto
+  92–97% do tempo que o chefe leva) em vez de folgado (71–80% antes). A Serra de Kaggen fica a 0,5 pp do teto
   do orçamento: a próxima fonte de dano precisa sair de algum lugar.
 - **NG+1 (escala por região, §11.1)**: sem pilha todo chefe fica em 18,5–19,8 s e o herói parado morre em
   25–26 s em qualquer região (antes: 14–33 s e 24–45 s). Com a pilha, −20 a −22%, dentro do orçamento. Os
@@ -1367,7 +1367,7 @@ cura     = combo.cura × vida máx. do herói
 
 | Constante | Valor | Por quê |
 |---|---|---|
-| `BaseDamage` | **60** | Entre a skill ativa mais forte (Explosão Arcana, 40) e a Ultimate mais fraca (Exército Mecânico, 100): ~1,5–2 ativas, ~60% de uma Ultimate. Teste: `Damage_SitsBetweenTheActiveSkillsAndTheUltimates`. |
+| `BaseDamage` | **60** | Entre a skill ativa mais forte (Explosão de Estrelas, 40) e a Ultimate mais fraca (Exército de Ushabtis, 100): ~1,5–2 ativas, ~60% de uma Ultimate. Teste: `Damage_SitsBetweenTheActiveSkillsAndTheUltimates`. |
 | `MaxUsesPerEncounter` | **1** | É um momento da luta, não uma skill de rotação. A carga zera ao usar e não volta a subir. |
 | `ArmDelaySeconds` | 2,5 s | Cobre o "Prepare-se!" (inimigos parados ~2 s): não dá para abrir a luta com ele. |
 | `CooldownSeconds` | 45 s | Só vale se um modo liberar mais de um uso (NG+, grupo online). |
@@ -1392,10 +1392,10 @@ com nível, equipamento nem NG+.
 
 | Chefe | Vida | 0,7× | 1,0× | 1,4× | Tempo médio de luta tirado (1,0×) |
 |---|---|---|---|---|---|
-| Lobo Alfa | 520 | 44 (8%) | 62 (12%) | 87 (17%) | ~2,0 s de 16,5 s |
-| Guardião da Ruína | 780 | 47 (6%) | 67 (9%) | 94 (12%) | ~1,6 s de 18,2 s |
+| Kök-Böri | 520 | 44 (8%) | 62 (12%) | 87 (17%) | ~2,0 s de 16,5 s |
+| Grande Ushabti | 780 | 47 (6%) | 67 (9%) | 94 (12%) | ~1,6 s de 18,2 s |
 | Senhor da Guerra | 900 | 50 (6%) | 71 (8%) | 99 (11%) | ~1,5 s de 18,4 s |
-| Habitante Ancestral | 1 180 | 54 (5%) | 77 (7%) | 108 (9%) | ~1,3 s de 20,0 s |
+| Tages, o Habitante Ancestral | 1 180 | 54 (5%) | 77 (7%) | 108 (9%) | ~1,3 s de 20,0 s |
 
 Mesmo com o golpe, a média do chefe fica em 14,5–18,7 s (meta 15–22 s; piso da pilha da §14: 13,5 s). Contra
 comuns (70–170 de vida) ele mata ou quase mata a área toda — é o papel de finalizador.
@@ -1407,11 +1407,11 @@ Falas: o primo mais velho fala primeiro, depois o mais novo (ordem de nascimento
 | Par | Combo | Elem. | Dano | Raio | Stun (comum/chefe) | Cura | Empurrão | Buff / debuff |
 |---|---|---|---|---|---|---|---|---|
 | **Maithe + Ícaro** (irmãos) | **Flecha-Trovão** | Elétrico | 1,4× | 6 m | 1,2 / 0,6 s | — | 5 | herói +15% crítico 6 s |
-| **Maria + Joaquim** (irmãos) | **Bastião Sagrado** | Sagrado | 1,0× | 5,5 m | — | 30% | 7 | herói +40% defesa 8 s |
+| **Maria + Joaquim** (irmãos) | **Bastião de Luz** | Sagrado | 1,0× | 5,5 m | — | 30% | 7 | herói +40% defesa 8 s |
 | Maithe + Maria | Flechas da Aurora | Sagrado | 1,0× | 5 m | — | 15% | — | — |
 | Maithe + Joaquim | Salto da Muralha | Terra | 1,15× | 4,5 m | — | — | 5 | herói +20% crítico 6 s |
 | Maithe + Lavine | Lua Caçadora | Trevas | 1,2× | 4,5 m | — | — | — | inimigos −40% velocidade 4 s |
-| Maria + Ícaro | Drone Abençoado | Elétrico | 0,7× | 4,5 m | — | 20% | — | herói +3 vida/s 6 s |
+| Maria + Ícaro | Drone de Luz | Elétrico | 0,7× | 4,5 m | — | 20% | — | herói +3 vida/s 6 s |
 | Maria + Lavine | Crepúsculo Sereno | Arcano | 0,9× | 4,5 m | 1,0 / 0,5 s | 15% | — | — |
 | Joaquim + Ícaro | Terremoto Elétrico | Terra | 1,1× | 5 m | 1,0 / 0,5 s | — | 4 | — |
 | Joaquim + Lavine | Correntes de Pedra | Trevas | 0,9× | 4,5 m | 1,4 / 0,7 s | — | — | herói +25% defesa 6 s |
@@ -1420,7 +1420,7 @@ Falas: o primo mais velho fala primeiro, depois o mais novo (ordem de nascimento
 **Laço de irmãos:** os dois pares de irmãos têm o maior "poder" (`DuoComboSpec.PowerScore`, teste exige ≥ 15% acima
 do melhor combo de primos), anel de efeito duplo (o segundo na cor do parceiro), silhueta quase dourada, tremor de
 câmera mais forte e a faixa "Laço de irmãos!". Os stuns ficam ≤ 1,5 s (no chefe ≤ 0,75 s, abaixo das recargas de
-2,4–3,3 s dos chefes) e as curas ≤ 30% (Cura Divina nível 1 = 35 de vida).
+2,4–3,3 s dos chefes) e as curas ≤ 30% (Luz que Cura nível 1 = 35 de vida).
 
 Parceiro padrão (save antigo / Novo jogo): o irmão ou irmã; Lavine chama a Maria. A escolha fica no menu de pausa
 (mapa e arena), uma por herói, salva em `DuoPartnerState` (chave `"DuoPartner"`).
@@ -1470,8 +1470,8 @@ Reforço = nº de comuns da 1ª onda × tamanho, entre 1 e 4. A fase usada é a 
 | | Vida | Dano (AttackDamage %) | Raio de percepção | Tamanho | XP ao matar | Saque extra |
 |---|---|---|---|---|---|---|
 | Variante "(noturno)" | ×1,35 | +20% | ×1,4 | ×1,1 | ×1,5 | +1 rolagem (ouro + tabela do bioma) |
-| Lobisomem-do-sertão (Floresta, base Lobo da Mata) | ×5 (350) | +60% | ×1,6 | ×1,6 | ×5 (+40) | +3 rolagens |
-| Morcego-vampiro gigante (Cavernas, base Enxame) | ×1,8 (306) | +30% | ×1,5 | ×1,35 | ×1,8 (+32) | +1 rolagem |
+| Mardagayl, o Lobo-das-Sete-Noites (Bosque do Zarafshan, base Lobo do Tugai) | ×5 (350) | +60% | ×1,6 | ×1,6 | ×5 (+40) | +3 rolagens |
+| Morcego-vampiro gigante (Grutas do Limiar, base Enxame) | ×1,8 (306) | +30% | ×1,5 | ×1,35 | ×1,8 (+32) | +1 rolagem |
 
 O XP/saque normal do inimigo base continua vindo de `EnemyRewardGranter`/`EnemyLootGranter`; o bônus é pago à parte
 (`NightVariantTag`, como o elite do §13.3). Os stats da variante são sempre os da noite, mesmo se ela surgir no
@@ -1495,7 +1495,7 @@ Interruptor de emergência no Inspector: `EncounterArenaController._reinforcemen
 
 ### 16.4 Visão noturna (`NightVisibilityRules`) — não muda números de combate
 
-| | Normal | "Noite mais clara" | Cavernas |
+| | Normal | "Noite mais clara" | Grutas do Limiar |
 |---|---|---|---|
 | Luz ambiente na noite cheia | ×0,70 | ×0,90 | ×0,88 |
 | Neblina extra (arena) | +0,022 | +0,010 | +0,008 |
@@ -1514,28 +1514,28 @@ onda, regras de XP/nome "(noturno)", `NightVariantTag` (vida, dano, tamanho, olh
 compartilhado, idempotente), visibilidade (luz, neblina, câmera, lamparina, opção "Noite mais clara" salva) e a regra
 do indicador do HUD.
 
-## 17. Cidades: lojas temáticas, rotação e carro de boi (2026-10-29)
+## 17. Cidades: lojas temáticas, rotação e Barcas de Luz (2026-10-29)
 
-Toda região tem uma cidade (TODO 12.3a): Vila da Vó Zefa (Floresta), Povoado de Areia Branca (Deserto), Vila da
-Serra Alta (Montanha) e Vila das Lamparinas (Cavernas). Dados em `CityCatalog`/`CityShopCatalog` (código), regras puras
+Toda região tem uma cidade (TODO 12.3a): Vila da Vó Edna (Bosque do Zarafshan), Oásis de Qocho (Areias Flamejantes), Vila da
+Litema (Serra de Kaggen) e Vila das Lamparinas (Grutas do Limiar). Dados em `CityCatalog`/`CityShopCatalog` (código), regras puras
 em `SafeZoneRules`, `ShopRotation` e `FastTravelRules` (`CityTests`), estado salvo por slot em `CityProgress`
 (chave `Cities`). Projeto e regras de zona segura em `Docs/Cities.md`.
 
 ### 17.1 Preços das lojas
 
 Só itens que já existem (`Resources/Items`). Preço sempre entre **80% e 125%** do `ItemDefinition.Value` (teste):
-a especialidade da cidade vende o seu tema ~10% mais barato, o Mascate cobra ~20% a mais (vem de longe), a Feira
+a especialidade da cidade vende o seu tema ~10% mais barato, o Caravaneiro cobra ~20% a mais (vem de longe), a Feira
 vende comida um pouco mais barata. A loja paga 50% na revenda, como a Loja Geral.
 
 | Loja (cidade) | Tema | Rotação | Sempre no balcão | Sorteados (vagas) | Destravam com a campanha |
 |---|---|---|---|---|---|
-| Mercearia do Seu Lázaro (Vila) | mercearia | diária | carne assada 6, Poção de Vida 15 | erva 3, madeira 2, fibra 1 (2) | Poção de Mana 16 — Deserto aberto |
-| Armarinho da Dona Cida (Vila) | armarinho | semanal | fibra 1, botas de couro 10 | capacete 12, peitoral 20, erva 3 (2) | Arco de Caça 38 — chefe da Floresta |
-| Feira livre (Vila) | feira | diária | erva 3 | madeira 2, fibra 1, pedra 1, carne assada 5 (3) | minério de ferro 6 — Montanha aberta |
-| Selaria do Seu Vavá (Areia Branca) | especialidade: couro | semanal | botas 9, capacete 11, peitoral 18 | Poção de Vida 16, carne 7, fibra 1 (2) | Arco de Caça 33 — chefe do Deserto |
-| Forja do Mestre Tonho (Serra Alta) | ferreiro | semanal | ferro 7, minério 5, picareta 18 | martelo 15, machado 18, espada de madeira 10, Poção de Vida 17 (2) | Espada de Ferro 41 — chefe da Montanha |
-| Lamparinas da Benedita (Lamparinas) | especialidade: botica | diária | Poção de Vida 15, Poção de Mana 13 | erva 3, minério 6, pedra 1, capacete 12 (2) | Espada de Ferro 45 — chefe das Cavernas |
-| Mascate Seu Bento (uma cidade por dia) | mascate | diária | — | poções 18, carne 7, peitoral 24, martelo 18 (3) | Arco 42 (chefe da Floresta), Espada de Ferro 54 (chefe do Deserto) |
+| Mercearia do Zaku (Vila) | mercearia | diária | carne assada 6, Poção de Vida 15 | erva 3, madeira 2, fibra 1 (2) | Poção de Mana 16 — Areias Flamejantes abertas |
+| Armarinho da Mariam (Vila) | armarinho | semanal | fibra 1, botas de couro 10 | capacete 12, peitoral 20, erva 3 (2) | Arco de Caça 38 — chefe do Bosque do Zarafshan |
+| Feira livre (Vila) | feira | diária | erva 3 | madeira 2, fibra 1, pedra 1, carne assada 5 (3) | minério de ferro 6 — Serra de Kaggen aberta |
+| Selaria do Vandak (Qocho) | especialidade: couro | semanal | botas 9, capacete 11, peitoral 18 | Poção de Vida 16, carne 7, fibra 1 (2) | Arco de Caça 33 — chefe das Areias Flamejantes |
+| Forja do Mestre Mihr (Litema) | ferreiro | semanal | ferro 7, minério 5, picareta 18 | martelo 15, machado 18, espada de madeira 10, Poção de Vida 17 (2) | Espada de Ferro 41 — chefe da Serra de Kaggen |
+| Lamparinas da Parthenos (Lamparinas) | especialidade: botica | diária | Poção de Vida 15, Poção de Mana 13 | erva 3, minério 6, pedra 1, capacete 12 (2) | Espada de Ferro 45 — chefe das Grutas do Limiar |
+| Caravaneiro Ammo (uma cidade por dia) | caravaneiro | diária | — | poções 18, carne 7, peitoral 24, martelo 18 (3) | Arco 42 (chefe do Bosque do Zarafshan), Espada de Ferro 54 (chefe das Areias Flamejantes) |
 
 A Loja Geral antiga (`shop_general_store`: madeira, pedra, ferro) continua na Vila, sem mudança.
 
@@ -1550,14 +1550,14 @@ completam o loot, não substituem.
 - Balcão = linhas fixas destravadas + N sorteadas entre as rotativas destravadas, com semente `FNV(loja) × período`
   (mesmo dia, mesmo balcão em qualquer aparelho; o servidor online pode usar a mesma conta).
 - Relógio atrasado não sorteia de novo um balcão antigo: vale o maior período já visto (salvo em `Cities`).
-- O Mascate fica, a cada dia, em uma das cidades com região aberta (sorteio pela data); nesse dia ele aparece como
+- O Caravaneiro fica, a cada dia, em uma das cidades com região aberta (sorteio pela data); nesse dia ele aparece como
   morador e a loja dele entra na lista de serviços.
 
-### 17.3 Carro de boi (`FastTravelRules`)
+### 17.3 Barcas de Luz (`FastTravelRules`)
 
 - Só entre cidades **já visitadas** (chegar a pé com o token parado no nó; a Vila conta desde o início; save antigo
   conta toda região onde já houve vitória) e de região **aberta**.
-- Custo: **2 ouro por estrada** do grafo do mapa (Floresta → Deserto 2, Floresta → Cavernas 6 ≈ 3 lutas de ouro).
+- Custo: **2 ouro por estrada** do grafo do mapa (Bosque do Zarafshan → Areias Flamejantes 2, Bosque do Zarafshan → Grutas do Limiar 6 ≈ 3 lutas de ouro).
   Sem encontro e sem evento de estrada no caminho; o jogo salva ao chegar.
 
 ### 17.4 Zona segura no mapa e efeito nos encontros
@@ -1575,7 +1575,7 @@ completam o loot, não substituem.
 `CityTests`: matriz de ataque/dano/perseguição da `SafeZoneRules` (cidade × fora, NPC, PvP, a si mesmo), trava de
 PvP, renascimento; cidade por região com 3–4 moradores e loja; textos em pt-BR e inglês com fala por primo; lojas
 temáticas com dono, itens existentes e preço na faixa; períodos, semente, rotação, travas de campanha, relógio
-atrasado, Mascate por data; balcão de hoje no `ShopManager` com reposição na virada; carro de boi (estradas, custo,
+atrasado, Caravaneiro por data; balcão de hoje no `ShopManager` com reposição na virada; Barcas de Luz (estradas, custo,
 ordem das checagens, linhas da janela); visitas, save antigo, ida e volta do save, registro no GameManager e novo jogo;
 botão da cidade, indicador do HUD e a geometria do anel/casas no mapa.
 
@@ -1632,7 +1632,7 @@ casas, peitoral 6). `LootOverflowTests.EveryBiome_TakesAtLeast40Fights_ToFillThe
 
 Cada entrada salva `gridX/gridY`; `InventorySaveState.gridVersion = 1` marca saves da grade, `extraRows` a expansão.
 Save antigo (`gridVersion` 0, lista de 30 espaços sem posição): o jogo **auto-posiciona** tudo (ouro e itens de missão
-primeiro, depois os maiores, desempate pela ordem antiga). O que não couber vai para o **Baú da Vó Zefa** — nunca
+primeiro, depois os maiores, desempate pela ordem antiga). O que não couber vai para o **Baú da Vó Edna** — nunca
 some. Como o baú carrega depois da mochila no mesmo load, ele recebe numa "caixa de entrada"
 (`VillageChestStorage.EnqueueOverflow`) salva junto com o baú e despejada nos espaços livres no próprio load, ao salvar,
 ao abrir o baú e ao tirar algo dele. Save de grade com posição inválida (ex.: o tamanho de um item mudou) reposiciona
@@ -1641,8 +1641,8 @@ só o item quebrado.
 ### 18.4 Expansão (opcional)
 
 `InventoryManager.AddBagRows(n)`: até +2 linhas (`MaxExtraRows`), salvo em `extraRows`. Vendido como **Bornal de couro**
-(`item_bornal_couro`, +2 linhas, uma vez por save): 150 no Armarinho da Dona Cida (freguesia Freguês) ou 180 no Mascate
-(após o Lobo Alfa). Ver `Docs/Cities.md` §4.3.
+(`item_bornal_couro`, +2 linhas, uma vez por save): 150 no Armarinho da Mariam (freguesia Freguês) ou 180 no Caravaneiro
+(após o Kök-Böri). Ver `Docs/Cities.md` §4.3.
 
 ### 18.5 Queda de item ao morrer (9%)
 
@@ -1651,9 +1651,9 @@ só o item quebrado.
   (`DeathDropRules.DropQuantity = 1`): de uma pilha de 6 poções cai 1 e ficam 5; um item único sai inteiro.
 - Nunca cai: equipado (não está na grade), ouro/moeda, item de missão/história, relíquias (hoje nem são itens; id
   `relic_*` reservado) e item marcado **vinculado** (`_isBound`).
-- **Patuá da Vó Edna** e **Bênção da Romaria** cancelam o sorteio (0%, `DeathPenaltyRules.AllowsItemDrop`, §19).
+- **Tumar da Vó Edna** e **Lâmpada Guardiã** cancelam o sorteio (0%, `DeathPenaltyRules.AllowsItemDrop`, §19).
 - **Decisão do usuário (2026-10-30): item perdido não se recupera.** Offline a unidade sai da mochila **de vez** e a
-  tela diz "Na pressa, você deixou cair: <item>" + "Perdeu de vez. Um Patuá da Vó Edna ou a Bênção da Romaria teria
+  tela diz "Na pressa, você deixou cair: <item>" + "Perdeu de vez. Um Tumar da Vó Edna ou a Lâmpada Guardiã teria
   guardado." Não existe mais resgate ("Achados e Perdidos" foi removido). Saves antigos que ainda trazem a lista
   `lostAndFound` no save do baú carregam normalmente; a lista é ignorada (`DeathDropTests.OldChestSave_...`).
 - Em média: 1 unidade a cada ~11 mortes desprotegidas. Morrer não custa ouro.
@@ -1668,10 +1668,10 @@ só o item quebrado.
   Itens vinculados nunca caem.
 - Zona segura da cidade: morrer lá não acontece (sem combate), então nada cai em cidade.
 
-## 19. Perda de XP ao morrer, Bênção da Romaria e Patuá da Vó Zefa (2026-10-30)
+## 19. Perda de XP ao morrer, Lâmpada Guardiã e Tumar da Vó Edna (2026-10-30)
 
-Decisão do usuário (Docs/Referencias_MMO.md §6): **morrer perde XP**, pouco, e a **Bênção da Romaria** e o **Patuá da Vó
-Zefa** protegem. Código: `DeathXpLossRules`, `DeathPenaltyRules`, `DeathPenaltyService` (`Gameplay/Inventory/DeathPenalty.cs`),
+Decisão do usuário (Docs/Referencias_MMO.md §6): **morrer perde XP**, pouco, e a **Lâmpada Guardiã** e o **Tumar da Vó
+Edna** protegem. Código: `DeathXpLossRules`, `DeathPenaltyRules`, `DeathPenaltyService` (`Gameplay/Inventory/DeathPenalty.cs`),
 `DeathProtectionState`, `RomariaBlessingRules`, `RomariaOratory`, `PatuaRules` (`Gameplay/Inventory/RomariaBlessing.cs`);
 testes em `DeathPenaltyTests`. Aplicado pela tela de morte (`DeathScreenController`), junto com a queda de 9% (§18.5).
 
@@ -1685,7 +1685,7 @@ testes em `DeathPenaltyTests`. Aplicado pela tela de morte (`DeathScreenControll
   normalmente. A queda de 9% continua valendo no chefe (já decidida em §18).
 - Sem a tela de morte (respawn instantâneo antigo) não há perda, igual à queda de item.
 
-| Nível | `xp_to_next` | Perda (5%) | Com Bênção (−60%) | XP por encontro na época (§10) | Perda em encontros |
+| Nível | `xp_to_next` | Perda (5%) | Com Lâmpada (−60%) | XP por encontro na época (§10) | Perda em encontros |
 |---|---|---|---|---|---|
 | 1–2 | 100–110 | 0 (carência) | 0 | 15 | 0 |
 | 5 | 146 | 7 | 3 | 27 | ~0,3 |
@@ -1696,39 +1696,39 @@ testes em `DeathPenaltyTests`. Aplicado pela tela de morte (`DeathScreenControll
 
 Em média uma morte custa **~¼ de encontro** de XP: sente-se, mas não desanima.
 
-### 19.2 Bênção da Romaria (oratório de cada cidade)
+### 19.2 Lâmpada Guardiã (nicho da lâmpada de cada cidade)
 
-- Pedida no **oratório** de cada cidade (hub da cidade → Serviços): Capelinha da **Dona Fé** (Vila da Vó Zefa),
-  Oratório da Cisterna (Dona Socorro, Areia Branca), Capela de Pedra (Dona Graça, Serra Alta), Oratório das
-  Lamparinas (Benedita). Dado aditivo por cidade em `RomariaOratory.Oratories` (ids do `CityCatalog`).
+- Pedida no **nicho da lâmpada** de cada cidade (hub da cidade → Serviços): Nicho da Lâmpada da **Ramrat** (Vila da Vó Edna),
+  Nicho da Lâmpada da Cisterna (Yardena, Qocho), Nicho de Pedra da Lâmpada (Coti, Litema) e a
+  Lâmpada-Mãe (Parthenos, Lamparinas). Dado aditivo por cidade em `RomariaOratory.Oratories` (ids do `CityCatalog`).
 - Dura **até a próxima morte** (não por tempo). Corta **60% da perda de XP** e põe a queda de item em **0%**.
 - Preço: **5 + nível** de ouro, teto 60. Com ~1,8 ouro por luta (§8): nível 1 = 6 (≈3 lutas), nível 5 = 10 (≈6),
   nível 10 = 15 (≈8), nível 20 = 25 (≈14). Comparação: a Poção de Vida custa 15. Não acumula (comprar de novo com
-  a bênção ativa não cobra). Ícone "Bênção" no HUD (`DeathProtectionIndicator`).
-- Salva por slot (`DeathProtectionState`, chave `DeathProtection`; save antigo carrega sem bênção; "Novo jogo" zera).
+  a lâmpada ativa não cobra). Ícone "Lâmpada" no HUD (`DeathProtectionIndicator`).
+- Salva por slot (`DeathProtectionState`, chave `DeathProtection`; save antigo carrega sem lâmpada; "Novo jogo" zera).
 
-### 19.3 Patuá da Vó Zefa (`item_patua_vo_zefa`)
+### 19.3 Tumar da Vó Edna (`item_patua_vo_zefa`)
 
 - Item de mochila **1×1** (Diversos, override `_gridWidth/_gridHeight` = 1), pilha 5, raro, valor 100.
 - **Gasta-se ao morrer** (1 unidade) e impede **toda** a perda de XP **e** a queda de item.
-- **Precedência: o Patuá se gasta primeiro**; a Bênção fica para a próxima morte (nenhum dos dois se desperdiça e a
-  regra é fácil de explicar: "com patuá na mochila, nada se perde").
+- **Precedência: o Tumar se gasta primeiro**; a Lâmpada fica para a próxima morte (nenhum dos dois se desperdiça e a
+  regra é fácil de explicar: "com tumar na mochila, nada se perde").
 - Proteções se gastam em qualquer morte da tela de morte, mesmo nas isentas de XP (carência/chefe NG+0), porque a
   queda de 9% continua possível lá.
-- De onde vem: **presente da Vó Zefa** — 1 Patuá na primeira vez que cada chefe de região cai (4 por campanha, de
-  novo a cada Nova Jornada+); vai para a mochila se couber (`InventoryManager.CanFit`), senão para o Baú da Vó Zefa
-  (nunca some). **À venda** com o Mascate Seu Bento por **120 ouro** (rotativo, depois do chefe da Floresta; ≈ 67
+- De onde vem: **presente da Vó Edna** — 1 Tumar na primeira vez que cada chefe de região cai (4 por campanha, de
+  novo a cada Nova Jornada+); vai para a mochila se couber (`InventoryManager.CanFit`), senão para o Baú da Vó Edna
+  (nunca some). **À venda** com o Caravaneiro Ammo por **120 ouro** (rotativo, depois do chefe do Bosque do Zarafshan; ≈ 67
   lutas de ouro). Queda rara em loot: ainda não (fica para o dono das tabelas; sugestão 0,5% em chefes).
 
 ### 19.4 Online (FASE 12)
 
-- **Mesmas regras no servidor** (autoritativo): ele calcula a perda, gasta o Patuá/Bênção e sorteia os 9%.
+- **Mesmas regras no servidor** (autoritativo): ele calcula a perda, gasta o Tumar/Lâmpada e sorteia os 9%.
 - O item que cai **vai para o chão e qualquer jogador pode pegar** (já decidido em §18.6).
-- A bênção é por personagem/conta no servidor; o preço segue o nível do personagem.
+- A lâmpada é por personagem/conta no servidor; o preço segue o nível do personagem.
 
 ---
 
-## 20. Refino de item +0 a +15: Pedras do Sertão (2026-10-30)
+## 20. Refino de item +0 a +15: Pedras da Luz Presa (2026-10-30)
 
 Refino estilo MU Online (FASE 16). Regras puras em `RefineRules` (`Assets/Scripts/Gameplay/Refining`), testadas em
 `RefineTests`; aplicação no inventário em `RefineService`; janela "Ferreiro: refinar" no hub de toda cidade
@@ -1738,9 +1738,9 @@ Refino estilo MU Online (FASE 16). Regras puras em `RefineRules` (`Assets/Script
 
 ### 20.1 Tabela de chance e custo (`RefineRules`)
 
-| De → para | Pedra | Ouro | Chance | Com Amuleto da Sorte | Se falhar |
+| De → para | Pedra | Ouro | Chance | Com Amuleto de Bes | Se falhar |
 |---|---|---|---|---|---|
-| +0 → +6 (cada) | Bênção | 0 | 100% | (não gasta) | — |
+| +0 → +6 (cada) | Faísca | 0 | 100% | (não gasta) | — |
 | +6 → +7 | Alma | 0 | 80% | 90% | fica +6 |
 | +7 → +8 | Alma | 0 | 75% | 85% | volta +6 |
 | +8 → +9 | Alma | 0 | 70% | 80% | volta +7 |
@@ -1751,15 +1751,15 @@ Refino estilo MU Online (FASE 16). Regras puras em `RefineRules` (`Assets/Script
 | +13 → +14 | Alma | 40 | 40% | 50% | volta +12 |
 | +14 → +15 | Alma | 50 | 35% | 45% | volta +13 |
 
-- Amuleto da Sorte: +10 pontos (teto 95%), gasto na tentativa; nunca usado em rolagem certa.
-- Falha: −1 nível acima de +6 (+6 é o piso seguro, porque a Bênção sobe até lá sem falhar).
-- Pedra da Vida: opção extra 0→4, 60% por pedra; falhar não muda nada.
-- Pedra do Caos: só definida (item e drop); vai para o Tacho Encantado depois.
+- Amuleto de Bes: +10 pontos (teto 95%), gasto na tentativa; nunca usado em rolagem certa.
+- Falha: −1 nível acima de +6 (+6 é o piso seguro, porque a Faísca sobe até lá sem falhar).
+- Pedra da Água Viva: opção extra 0→4, 60% por pedra; falhar não muda nada.
+- Pedra da Mistura: só definida (item e drop); vai para o Uasamonga depois.
 - Rolagem com semente (`RefineRules.Roll`, SplitMix64): mesmo resultado em qualquer plataforma. **Online, o servidor
   sorteia** (`RefineRules.Attempt` com a semente dele) e o cliente só mostra a resposta.
 
-Custo esperado do +0 (cadeia de Markov com a volta de nível, `RefineRules.ExpectedCostTo`): +6 = 6 Bênçãos;
-+9 ≈ 6 Bênçãos + 5,2 Almas; +12 ≈ 25 pedras e 138 de ouro (com amuleto em toda rolagem: 18 e 99); +15 ≈ 88 pedras e
+Custo esperado do +0 (cadeia de Markov com a volta de nível, `RefineRules.ExpectedCostTo`): +6 = 6 Faíscas;
++9 ≈ 6 Faíscas + 5,2 Almas Vivas; +12 ≈ 25 pedras e 138 de ouro (com amuleto em toda rolagem: 18 e 99); +15 ≈ 88 pedras e
 1.440 de ouro (com amuleto: 40 e 706). +12 a +15 é meta de longo prazo (online), não da campanha.
 
 ### 20.2 O que cada nível dá
@@ -1781,28 +1781,28 @@ Em combate (`InventoryManager.ApplyRefineEffects`, chaves `equip_<slot>/refine/*
 Quarta fonte de loot (`RefineStoneDrops`, rolada pelo `EnemyLootGranter` depois das outras, então as sementes antigas
 continuam iguais). Comum: chance por morte; chefe: chance × quantidade. NG+ aumenta a chance dos comuns em 25% por ciclo.
 
-| Item (valor) | Floresta | Deserto | Montanha | Cavernas | Chefe (F / D / M / C) |
+| Item (valor) | Bosque do Zarafshan | Areias Flamejantes | Serra de Kaggen | Grutas do Limiar | Chefe (F / D / M / C) |
 |---|---|---|---|---|---|
-| Pedra da Bênção (12) | 6% | 8% | 9% | 10% | 2 / 2 / 3 / 3, sempre |
-| Pedra da Alma (35) | — | 1,5% | 2,5% | 4% | — / 1 / 1 / 2, sempre |
-| Pedra da Vida (40) | — | — | 1% | 1,5% | — / 25% / 35% / 50% |
-| Pedra do Caos (50) | — | — | — | 1% | — / — / 15% / 25% |
-| Amuleto da Sorte (25) | — | 1% | 1% | 1,5% | 10% / 15% / 20% / 25% |
+| Pedra-Faísca (12) | 6% | 8% | 9% | 10% | 2 / 2 / 3 / 3, sempre |
+| Pedra da Alma Viva (35) | — | 1,5% | 2,5% | 4% | — / 1 / 1 / 2, sempre |
+| Pedra da Água Viva (40) | — | — | 1% | 1,5% | — / 25% / 35% / 50% |
+| Pedra da Mistura (50) | — | — | — | 1% | — / — / 15% / 25% |
+| Amuleto de Bes (25) | — | 1% | 1% | 1,5% | 10% / 15% / 20% / 25% |
 
-Só na rota com missões (§9: ~19 / 8 / 10 / 14 comuns + 1 chefe por região), o esperado acumulado é: Bênção 3,1 → 5,8 →
-9,7 → 14,1; Alma 0 → 1,1 → 2,4 → 4,9; Vida 1,4 e Amuleto 1,1 ao fim das Cavernas. Ou seja, a rota leva a arma a ~+6
-no Deserto e ~+8 nas Cavernas; quem farma um pouco ou compra chega aos níveis do orçamento abaixo.
+Só na rota com missões (§9: ~19 / 8 / 10 / 14 comuns + 1 chefe por região), o esperado acumulado é: Faísca 3,1 → 5,8 →
+9,7 → 14,1; Alma 0 → 1,1 → 2,4 → 4,9; Vida 1,4 e Amuleto 1,1 ao fim das Grutas do Limiar. Ou seja, a rota leva a arma a ~+6
+nas Areias Flamejantes e ~+8 nas Grutas do Limiar; quem farma um pouco ou compra chega aos níveis do orçamento abaixo.
 
-Lojas (preço entre 80% e 125% do valor, como §17): Forja do Mestre Tonho — Bênção 11 (sempre, 5/semana), Alma 32
-(depois do chefe da Montanha, 2/semana); Lamparinas da Benedita — Amuleto 25 (rotativo); Mascate — Bênção 14 (Deserto
-aberto) e Amuleto 30 (chefe do Deserto). Vida e Caos só caem. Com ~1,8 ouro por luta, uma Bênção comprada custa ~6
+Lojas (preço entre 80% e 125% do valor, como §17): Forja do Mestre Mihr — Faísca 11 (sempre, 5/semana), Alma 32
+(depois do chefe da Serra de Kaggen, 2/semana); Lamparinas da Parthenos — Amuleto 25 (rotativo); Caravaneiro — Faísca 14 (Areias Flamejantes
+aberto) e Amuleto 30 (chefe das Areias Flamejantes). Água Viva e Mistura só caem. Com ~1,8 ouro por luta, uma Faísca comprada custa ~6
 lutas: a loja completa o drop, não substitui.
 
 ### 20.4 Orçamento (`tools/balance/power_stack.py`, `test_refine_stack.py`)
 
 Nível que o modelo põe em **todas** as peças (arma + chapéu + peitoral + botas) ao chegar em cada região — teto de
-quem farmou: Floresta **+4**, Deserto **+6** (opção 1), Montanha **+7** (opção 1), Cavernas **+9** (opção 2); NG+1
-mantém o equipamento das Cavernas, então +9 (opção 2). Regras:
+quem farmou: Bosque do Zarafshan **+4**, Areias Flamejantes **+6** (opção 1), Serra de Kaggen **+7** (opção 1), Grutas do Limiar **+9** (opção 2); NG+1
+mantém o equipamento das Grutas do Limiar, então +9 (opção 2). Regras:
 
 - r8 + refino: chefe ≥ 92% do tempo do r8; 2 comuns ≥ 80% (comuns morrem em 3–6 golpes: um golpe a menos já é −15%).
 - pilha completa (§14) por cima do herói refinado: mesmo orçamento do §14.3 contra o r8 refinado (chefe ≥ 78%), com a
@@ -1814,14 +1814,14 @@ Resultado (r9 + refino, 3000 jogadas):
 
 | Ciclo | Bioma | Refino (opção) | Chefe: r8 → r8+refino → pilha+refino | 2 comuns: r8 → r8+refino → pilha+refino | Parado, chefe mata em (pilha+refino) |
 |---|---|---|---|---|---|
-| NG+0 | Floresta | +4 (0) | 16,5 → 16,3 → **13,6** s | 4,8 → 4,5 → **3,8** s | 22,3 s |
-| NG+0 | Deserto | +6 (1) | 18,1 → 17,6 → **14,4** s | 6,1 → 5,6 → **4,6** s | 24,2 s |
-| NG+0 | Montanha | +7 (1) | 18,4 → 17,3 → **14,0** s | 6,4 → 6,3 → **4,7** s | 26,8 s |
-| NG+0 | Cavernas | +9 (2) | 20,0 → 19,1 → **15,3** s | 4,6 → 4,0 → **2,9** s | 32,4 s |
-| NG+1 | Floresta | +9 (2) | 18,5 → 17,2 → **13,7** s | 3,3 → 3,2 → **2,3** s | 29,2 s |
-| NG+1 | Deserto | +9 (2) | 18,5 → 17,3 → **13,8** s | 3,6 → 3,3 → **2,5** s | 29,4 s |
-| NG+1 | Montanha | +9 (2) | 18,5 → 17,4 → **13,8** s | 4,0 → 4,0 → **3,1** s | 30,1 s |
-| NG+1 | Cavernas | +9 (2) | 19,8 → 18,8 → **15,2** s | 4,0 → 4,0 → **2,9** s | 29,4 s |
+| NG+0 | Bosque do Zarafshan | +4 (0) | 16,5 → 16,3 → **13,6** s | 4,8 → 4,5 → **3,8** s | 22,3 s |
+| NG+0 | Areias Flamejantes | +6 (1) | 18,1 → 17,6 → **14,4** s | 6,1 → 5,6 → **4,6** s | 24,2 s |
+| NG+0 | Serra de Kaggen | +7 (1) | 18,4 → 17,3 → **14,0** s | 6,4 → 6,3 → **4,7** s | 26,8 s |
+| NG+0 | Grutas do Limiar | +9 (2) | 20,0 → 19,1 → **15,3** s | 4,6 → 4,0 → **2,9** s | 32,4 s |
+| NG+1 | Bosque do Zarafshan | +9 (2) | 18,5 → 17,2 → **13,7** s | 3,3 → 3,2 → **2,3** s | 29,2 s |
+| NG+1 | Areias Flamejantes | +9 (2) | 18,5 → 17,3 → **13,8** s | 3,6 → 3,3 → **2,5** s | 29,4 s |
+| NG+1 | Serra de Kaggen | +9 (2) | 18,5 → 17,4 → **13,8** s | 4,0 → 4,0 → **3,1** s | 30,1 s |
+| NG+1 | Grutas do Limiar | +9 (2) | 19,8 → 18,8 → **15,2** s | 4,0 → 4,0 → **2,9** s | 29,4 s |
 
 Orçamento do refino e orçamento da pilha (§14.3): **dentro**; pytest de `tools/balance` verde.
 
@@ -1841,16 +1841,16 @@ alonga luta, orçamento NG+0/NG+1).
 
 ---
 
-## 21. Caça: tarefas do Seu Zé, presa do dia, bicho destaque e amuletos do Caderno (2026-10-30)
+## 21. Caça: tarefas do Patig, presa do dia, bicho destaque e amuletos do Caderno (2026-10-30)
 
 Inspirado no Tibia (Referencias_MMO.md §3), com nomes e tema nossos. Regras puras em `HuntingRules` e
 `HuntingCharmCatalog` (Gameplay/Hunting), estado em `HuntingProgress` (save `Hunting`), testes em
 `HuntingTests`. **Nada disso vale contra chefe**: tarefa, presa, destaque e amuleto só contam para bichos comuns.
 
-### 21.1 Tarefas de caça (Seu Zé Caçador, Vila)
+### 21.1 Tarefas de caça (Patig, o Rastreador, Vila)
 
 Uma tarefa por vez, "derrote N de um bicho" entre os bichos comuns com página no Caderno (no começo, os da
-Floresta). Desistir não dá nada e libera outra na hora. Recompensa entregue no abate que conclui a tarefa
+Bosque do Zarafshan). Desistir não dá nada e libera outra na hora. Recompensa entregue no abate que conclui a tarefa
 (XP para o herói, ouro na mochila pelo encaixe da grade; o que não couber fica guardado para o próximo abate).
 
 | Tamanho | Abates | XP bônus | Ouro | Pontos de Caça | Ex.: lobo (10 XP) / morcegos (28 XP) |
@@ -1861,7 +1861,7 @@ Floresta). Desistir não dá nada e libera outra na hora. Recompensa entregue no
 
 - O bônus de XP é **metade a três quartos** da XP que os próprios abates já deram: acelera, não substitui.
 - Limite: **5 tarefas concluídas por dia**.
-- Pontos de Caça: título com o Seu Zé (Aprendiz 0, Mateiro 5, Rastreador 20, Caçador do Sertão 50 pontos ganhos) e
+- Pontos de Caça: título com o Patig (Aprendiz 0, Mateiro 5, Rastreador 20, Mestre de Pegadas da Ilha 50 pontos ganhos) e
   troca **5 Pontos de Caça → 1 Ponto do Caderno**.
 
 ### 21.2 Presa do dia e bicho destaque do dia
@@ -1884,18 +1884,18 @@ Floresta). Desistir não dá nada e libera outra na hora. Recompensa entregue no
 ### 21.3 Pontos do Caderno e amuletos
 
 Cada página dá Pontos do Caderno ao chegar em **10 / 50 / 200 vitórias (1 + 2 + 3 = 6 por página)**. Os pontos
-não são salvos: são as vitórias do Caderno + as trocas com o Seu Zé − o custo dos amuletos comprados (save antigo
+não são salvos: são as vitórias do Caderno + as trocas com o Patig − o custo dos amuletos comprados (save antigo
 já chega com seus pontos). Compra-se uma vez; **o cordão da Vó aguenta 2 amuletos** de cada vez.
 
 | Amuleto | Efeito (só bichos comuns) | Custo |
 |---|---|---|
 | Dente de Onça | −8% de dano recebido de bichos de quatro patas | 4 |
 | Casca de Besouro | −8% de dano recebido de bichos de muitas patas | 4 |
-| Pena de Carcará | −8% de dano recebido de bichos que voam | 4 |
+| Pena de Cegonha | −8% de dano recebido de bichos que voam | 4 |
 | Pedra de Corisco | −8% de dano recebido de bichos pesados | 4 |
 | Figa de Guiné | 3% de chance de desviar do golpe | 6 |
 | Raminho de Arruda | cura 2% da vida máxima a cada bicho vencido | 5 |
-| Nó de Vaqueiro | atordoamentos duram +10% | 5 |
+| Nó de Caravaneiro | atordoamentos duram +10% | 5 |
 
 Proteção somada contra um bicho (amuleto do tipo + presa "Couro grosso") limitada a 30% (hoje no máximo 18%).
 Total dos 7 amuletos: 32 pontos (~5–6 páginas completas).
@@ -1908,10 +1908,10 @@ AttackDamage % **contra os comuns** (nunca chefes), conservador: em todos os com
 | Dano extra contra comuns (cordão + presa) | Resultado do orçamento (NG+0 / NG+1) |
 |---|---|
 | 0 (desenho final) | dentro do orçamento |
-| +2% (só amuleto ou só presa) | NG+0 Cavernas: comuns 3,1 s < 70% de 4,6 s |
-| +4% + 3% (proposta inicial) | NG+0 Montanha 4,1 s < 4,5 s; Cavernas 3,1 s < 3,2 s |
+| +2% (só amuleto ou só presa) | NG+0 Grutas do Limiar: comuns 3,1 s < 70% de 4,6 s |
+| +4% + 3% (proposta inicial) | NG+0 Serra de Kaggen 4,1 s < 4,5 s; Grutas do Limiar 3,1 s < 3,2 s |
 
-Os comuns das Cavernas estão num **limiar de golpes**: com a pilha atual, qualquer +2% de dano tira um golpe da
+Os comuns das Grutas do Limiar estão num **limiar de golpes**: com a pilha atual, qualquer +2% de dano tira um golpe da
 luta e passa do teto de 30%. Por isso os efeitos de combate da caça viraram **proteção** (dano recebido, desvio,
 cura no abate, atordoamento), que não muda nenhum tempo para matar do orçamento; chefes ficam de fora, então o
 "herói parado" também não muda. O pytest (`test_hunting_is_parsed_and_adds_no_damage` e
@@ -1941,7 +1941,7 @@ neutros sem o serviço, round-trip do save em JSON, save vazio/antigo e saneamen
 
 ---
 
-## 22. Salas de evento com horário: Terreiro das Assombrações e Torre do Engenho Velho (2026-10-30)
+## 22. Salas de evento com horário: Pátio dos Mazans e Torre da Roda das Doze Jarras (2026-10-30)
 
 Inspiração: Devil Square e Blood Castle do MU (Docs/Referencias_MMO.md §2, FASE 16). Primeiro offline. Regras puras
 em `EventRoomRules` (`Assets/Scripts/Gameplay/EventRooms/`), estado salvo em `EventRoomProgress`, sala rodada por
@@ -1952,16 +1952,16 @@ Testes: `EventRoomTests`. **Estimativa, ainda não passou pelo modelo do r8/r9.*
 
 | Sala | Abre | Janela de entrada | Item de entrada | Nível mínimo |
 |---|---|---|---|---|
-| Terreiro das Assombrações | 0h, 4h, 8h, 12h, 16h, 20h | 1 h de jogo (~50 s reais no dia de 20 min) | Convite do Terreiro | 3 |
-| Torre do Engenho Velho | 2h, 6h, 10h, 14h, 18h, 22h | 1 h de jogo | Chave do Engenho | 6 |
+| Pátio dos Mazans | 0h, 4h, 8h, 12h, 16h, 20h | 1 h de jogo (~50 s reais no dia de 20 min) | Convite do Terreiro | 3 |
+| Torre da Roda das Doze Jarras | 2h, 6h, 10h, 14h, 18h, 22h | 1 h de jogo | Chave do Engenho | 6 |
 
 - As duas nunca abrem juntas. **Uma entrada por abertura** (o índice da janela fica no save); o item só é gasto no
   clique "Entrar" do mapa e volta se a viagem falhar.
 - "10 minutos de janela" do pedido virou 1 h de jogo: 10 min de jogo seriam ~8 s reais, curto demais para criança.
   O horário fica no save (`EventRoomSaveState.schedules`); online o servidor manda o dele.
 - Entrada: queda rara fora das salas (comum 1,5% Convite / 0,75% Chave; chefe 25% / 15%; Chave só a partir do nível
-  6, nada antes do nível 3, nada dentro das salas) ou o Mascate Seu Bento (36 / 54 de ouro, 120% do valor, no rodízio
-  depois do chefe da Floresta / do Deserto). Os dois itens são `QuestItem`: não ocupam a grade nem caem ao morrer.
+  6, nada antes do nível 3, nada dentro das salas) ou o Caravaneiro Ammo (36 / 54 de ouro, 120% do valor, no rodízio
+  depois do chefe do Bosque do Zarafshan / das Areias Flamejantes). Os dois itens são `QuestItem`: não ocupam a grade nem caem ao morrer.
 
 ### 22.2 Faixas de nível e escala dos bichos
 
@@ -1969,16 +1969,16 @@ Os bichos vêm de **todas** as regiões (só comuns) e são ajustados à faixa d
 
 | Faixa | Níveis | Referência | Vida e XP do comum | Extra |
 |---|---|---|---|---|
-| 0 | 1–4 | Floresta | 70 / 10 | — |
-| 1 | 5–8 | Deserto | 110 / 18 | — |
-| 2 | 9–12 | Montanha | 140 / 28 | — |
-| 3 | 13–15 | Cavernas | 170 / 40 | — |
-| 4 | 16+ (NG+) | Cavernas | 221 / 52 | ×1,3 |
+| 0 | 1–4 | Bosque do Zarafshan | 70 / 10 | — |
+| 1 | 5–8 | Areias Flamejantes | 110 / 18 | — |
+| 2 | 9–12 | Serra de Kaggen | 140 / 28 | — |
+| 3 | 13–15 | Grutas do Limiar | 170 / 40 | — |
+| 4 | 16+ (NG+) | Grutas do Limiar | 221 / 52 | ×1,3 |
 
 Vida e XP ×(referência ÷ comum da região de origem), vida presa em ×0,35–3,5; dano `√(vida) − 1` (−40% a +80%,
 mais suave porque vêm vários juntos). XP por abate vira a da faixa (gancho `IKillExperienceScaler` no
-`EnemyRewardGranter`), então um herói nível 3 não ganha XP de Cavernas matando morcego enfraquecido. Ouro e
-materiais continuam os do bicho. Guardião da Torre: Golem de Pedra (comum, sem registro de chefe) na escala da
+`EnemyRewardGranter`), então um herói nível 3 não ganha XP de Grutas do Limiar matando morcego enfraquecido. Ouro e
+materiais continuam os do bicho. Guardião da Torre: Ushabti de Pedra (comum, sem registro de chefe) na escala da
 faixa ×4 vida/XP, +25% de dano, ×1,5 de tamanho. Portão: 6 comuns da faixa de vida (420 → 1.326).
 
 ### 22.3 Ritmo
@@ -1986,8 +1986,8 @@ faixa ×4 vida/XP, +25% de dano, ×1,5 de tamanho. Portão: 6 comuns da faixa de
 | | Terreiro | Torre |
 |---|---|---|
 | Tempo | 3 min | 4 min |
-| Ondas | 3, 4, 5, 6, 6… a cada 20 s ou com ≤ 1 vivo; teto 8 vivos | Ponte: 2, 3, 4, 4… a cada 15 s (teto 6) até **10 abates**; portão/guardião: 2 a cada 18 s (teto 3); pegar a Moenda acorda +2 |
-| Fim | tempo acaba (vencido) ou morte | entregar a Moenda ao Seu Malaquias (vencido), tempo acaba ou morte |
+| Ondas | 3, 4, 5, 6, 6… a cada 20 s ou com ≤ 1 vivo; teto 8 vivos | Ponte: 2, 3, 4, 4… a cada 15 s (teto 6) até **10 abates**; portão/guardião: 2 a cada 18 s (teto 3); pegar a Jarra de Ouro acorda +2 |
+| Fim | tempo acaba (vencido) ou morte | entregar a Jarra de Ouro ao Adda (vencido), tempo acaba ou morte |
 
 ### 22.4 Pontuação e medalhas
 
@@ -2007,9 +2007,9 @@ pela grade normal da mochila (`LootGrantRules`; o que não couber é avisado).
 | Medalha | XP (abates) | Faixa 0 | Faixa 2 | Faixa 4 | Ouro (faixa 0 / 2 / 4) | Pedras |
 |---|---|---|---|---|---|---|
 | Bronze | 5 | 50 | 140 | 260 | 8 / 16 / 24 | — |
-| Prata | 10 | 100 | 280 | 520 | 15 / 30 / 45 | 1 Bênção |
-| Ouro | 16 | 160 | 448 | 832 | 25 / 50 / 75 | 2 Bênção |
-| Mestre | 25 | 250 | 700 | 1.300 | 40 / 80 / 120 | 2 Bênção + 1 Alma |
+| Prata | 10 | 100 | 280 | 520 | 15 / 30 / 45 | 1 Faísca |
+| Ouro | 16 | 160 | 448 | 832 | 25 / 50 / 75 | 2 Faísca |
+| Mestre | 25 | 250 | 700 | 1.300 | 40 / 80 / 120 | 2 Faísca + 1 Alma |
 
 Somando o XP dos abates (~30 comuns da faixa), uma sala Ouro rende ~46 abates-equivalentes em 3–4 min: ~1,5× o XP
 por minuto de uma luta normal de dia (§16.3), compensado por 6 entradas/dia no máximo por sala, item gasto e a
@@ -2019,7 +2019,7 @@ demais no r10, cortar `TierExperienceKills` (5/10/16/25) antes de mexer nas onda
 ### 22.6 Conquistas e save
 
 - `ach_room_terreiro_clear` "Ninguém Assusta a Gente" (vencer o Terreiro), `ach_room_torre_clear` "O Engenho Canta
-  de Novo" (entregar a Moenda), `ach_room_master` "Mestre das Salas" (7.000 pontos em qualquer sala). Tipos novos
+  de Novo" (entregar a Jarra de Ouro), `ach_room_master` "Mestre das Salas" (7.000 pontos em qualquer sala). Tipos novos
   `EventRoomCleared = 50` (ids distintos) e `EventRoomBestScore = 51` (máximo).
 - Save `EventRooms`: melhor pontuação e medalha, partidas, vitórias, última janela usada e horário por sala. Save
   antigo carrega vazio com o horário padrão.
@@ -2061,12 +2061,12 @@ cada dia novo, numa trilha de 7 dias). Código em `Assets/Scripts/Gameplay/Daily
   adiantar a data não vira descanso. **Online (Fase 12) o servidor é dono do fôlego**; o cliente só mostra.
 - Guardado **por aparelho** (PlayerPrefs `Daily.Folego.State`), não no slot: é sobre a criança, e um jogo novo não
   reabastece o fôlego.
-- **Lembrete** "Hora de descansar, a Vó Zefa chamou para o café!" ao entrar no cansaço e a cada 30 min de jogo
+- **Lembrete** "Hora de descansar, a Vó Edna chamou para o chá!" ao entrar no cansaço e a cada 30 min de jogo
   ativo enquanto cansado (toast no HUD do mapa e da arena).
 - **Onde se aplica (um lugar cada)**: XP de abate em `EnemyRewardGranter` (depois de chefe/presa do dia/sala de
   evento, antes da NG+); loot em `EnemyLootGranter` logo depois das rolagens do inimigo (base + bioma + rolagens
   extras), via `StaminaLootRules`: só pilhas simples (ouro, materiais, itens de missão) escalam, com arredondamento
-  sorteado (2 de ouro ×1,3 = 2 ou 3, média 2,6); **equipamento gerado, bônus de chefe e Pedras do Sertão não mudam**.
+  sorteado (2 de ouro ×1,3 = 2 ou 3, média 2,6); **equipamento gerado, bônus de chefe e Pedras da Luz Presa não mudam**.
   XP de missão, de evento da estrada e de variante noturna também não.
 
 ### 23.2 Pilha de poder com fôlego cheio (`power_stack.py`, seção "Fôlego cheio")
@@ -2076,32 +2076,32 @@ missões com aquela XP de abate (níveis maiores) e compara com o herói do r8 n
 
 | Ciclo | Bioma (níveis comuns / chefe) | Relíquias | 2 comuns: r8 → pilha | Chefe: r8 → relíquias → pilha |
 |---|---|---|---|---|
-| NG+0 | Floresta (2 / 3) | 3 | 4,8 → **3,8** s | 16,5 → 15,3 → **13,8** s |
-| NG+0 | Deserto (5 / 7) | 6 | 6,1 → **4,8** s | 18,1 → 17,3 → **14,9** s |
-| NG+0 | Montanha (9 / 10) | 9 | 6,4 → **4,9** s | 18,4 → 16,5 → **14,4** s |
-| NG+0 | Cavernas (13 / 15) | 12 | 4,6 → **3,5** s | 20,0 → 18,4 → **16,1** s |
-| NG+1 | Floresta (16 / 17) | 12 | 3,3 → **2,5** s | 18,5 → 16,4 → **14,6** s |
-| NG+1 | Deserto (17 / 18) | 12 | 3,6 → **2,9** s | 18,5 → 16,4 → **14,5** s |
-| NG+1 | Montanha (19 / 20) | 12 | 4,0 → **2,9** s | 18,5 → 16,4 → **14,5** s |
-| NG+1 | Cavernas (21 / 22) | 12 | 4,0 → **2,9** s | 19,8 → 17,9 → **15,9** s |
+| NG+0 | Bosque do Zarafshan (2 / 3) | 3 | 4,8 → **3,8** s | 16,5 → 15,3 → **13,8** s |
+| NG+0 | Areias Flamejantes (5 / 7) | 6 | 6,1 → **4,8** s | 18,1 → 17,3 → **14,9** s |
+| NG+0 | Serra de Kaggen (9 / 10) | 9 | 6,4 → **4,9** s | 18,4 → 16,5 → **14,4** s |
+| NG+0 | Grutas do Limiar (13 / 15) | 12 | 4,6 → **3,5** s | 20,0 → 18,4 → **16,1** s |
+| NG+1 | Bosque do Zarafshan (16 / 17) | 12 | 3,3 → **2,5** s | 18,5 → 16,4 → **14,6** s |
+| NG+1 | Areias Flamejantes (17 / 18) | 12 | 3,6 → **2,9** s | 18,5 → 16,4 → **14,5** s |
+| NG+1 | Serra de Kaggen (19 / 20) | 12 | 4,0 → **2,9** s | 18,5 → 16,4 → **14,5** s |
+| NG+1 | Grutas do Limiar (21 / 22) | 12 | 4,0 → **2,9** s | 19,8 → 17,9 → **15,9** s |
 
 **Dentro do orçamento** (§14.3) na NG+0 e na NG+1: com o ritmo de campanha o fôlego cheio é exatamente o r8.
 
 ### 23.3 Por que o "ritmo de campanha" (`DailyStaminaRules.KillXpPace` = 1 / 1,3)
 
 O fôlego não mexe no tempo para matar diretamente, mas XP vira nível. A rota com missões tem número fixo de lutas,
-então +30% de XP de abate por cima do r8 leva o herói **1 nível acima** em cada chefe na NG+0 (Floresta 3 → 4,
-Cavernas 15 → 16) e **1–2 na NG+1** (Cavernas 22 → 24). Isso, somado à pilha completa, quebra o orçamento
+então +30% de XP de abate por cima do r8 leva o herói **1 nível acima** em cada chefe na NG+0 (Bosque do Zarafshan 3 → 4,
+Grutas do Limiar 15 → 16) e **1–2 na NG+1** (Grutas do Limiar 22 → 24). Isso, somado à pilha completa, quebra o orçamento
 (saída informativa do `power_stack.py`, não aplicada no jogo):
 
 | Ciclo | Bioma (níveis) | 2 comuns: r8 → pilha | Chefe: r8 → pilha |
 |---|---|---|---|
-| NG+0 | Montanha (10 / 11) | 6,4 → **2,9** s (−55%) | 18,4 → **14,3** s (−22,3%) |
-| NG+0 | Cavernas (14 / 16) | 4,6 → **2,9** s | 20,0 → **15,6** s |
-| NG+1 | Floresta (17 / 18) | 3,3 → 2,5 s | 18,5 → **14,0** s |
-| NG+1 | Cavernas (23 / 24) | 4,0 → 3,1 s | 19,8 → **15,1** s |
+| NG+0 | Serra de Kaggen (10 / 11) | 6,4 → **2,9** s (−55%) | 18,4 → **14,3** s (−22,3%) |
+| NG+0 | Grutas do Limiar (14 / 16) | 4,6 → **2,9** s | 20,0 → **15,6** s |
+| NG+1 | Bosque do Zarafshan (17 / 18) | 3,3 → 2,5 s | 18,5 → **14,0** s |
+| NG+1 | Grutas do Limiar (23 / 24) | 4,0 → 3,1 s | 19,8 → **15,1** s |
 
-Além disso, na NG+0 quem só usa o básico venceria folgado em Floresta, Montanha e Cavernas. Como uma criança joga
+Além disso, na NG+0 quem só usa o básico venceria folgado em Bosque do Zarafshan, Serra de Kaggen e Grutas do Limiar. Como uma criança joga
 quase sempre menos de 3 h por dia (fôlego cheio), o r8 foi tratado como o ritmo do **fôlego cheio**: a XP de
 abate é `base × faixa × KillXpPace`. As proporções decididas ficam (+30% sobre o normal, −50% sob ele) e o
 orçamento não muda. Quem joga de 3 a 5 h sobe ~23% mais devagar do que hoje; cansado, ~62%.
@@ -2127,7 +2127,7 @@ mostra o estouro). O loot não tem ritmo (moedas e materiais estão fora do mode
 - Relógio: a data do último presente é marca d'água (relógio atrasado não ganha nada); adiantar a data só conta
   como "faltou" (um passo para trás), nunca como progresso. Online, o servidor é dono.
 - Por **slot** (`SaveManager.Register`, chave "DailyLogin"); saves antigos e jogo novo começam no dia 1. O que não
-  cabe na Mochila (API de encaixe da grade) vai para o Baú da Vó Zefa.
+  cabe na Mochila (API de encaixe da grade) vai para o Baú da Vó Edna.
 - Valor da semana: ~110 de ouro + 5 poções de vida + 2 de mana + materiais + 1 convite + 1 peça Rara. A peça Rara de
   couro fica dentro do p90 de sorte do equipamento (§10.4); não entra na pilha.
 - Popup no mapa (abre sozinho quando há presente; Esc/Start fecha) e faixa no título (prévia pela cópia em
@@ -2149,13 +2149,13 @@ pilha com fôlego cheio dentro do orçamento, e o estouro sem o ritmo).
 
 ---
 
-## 24. Tacho Encantado da Vó Zefa: asas, Proteção do Caos e Frutas do Sertão (2026-10-30)
+## 24. Uasamonga da Vó Edna: asas, Proteção da Mistura e Frutas de Luz (2026-10-30)
 
 A "máquina de combinar" do MU (Chaos Machine), com nomes e tema nossos (FASE 16, `Docs/Referencias_MMO.md` §2).
 Regras puras em `TachoRules` / `WingCatalog` / `FruitRules` (`Assets/Scripts/Gameplay/Tacho`), testadas em `TachoTests`;
-aplicação na Mochila em `TachoService`; janela "Tacho Encantado da Vó" no hub da **Vila** (`VillageTachoPanel`,
-`Resources/UI/Tacho.uss`). **Quem cuida:** a Vó Zefa, não o Mestre Tonho — a Pedra do Caos já dizia "a Vó guarda essas
-para o Tacho Encantado", tacho é coisa de cozinha (é ela quem tem o fogão a lenha e o Baú), e o ferreiro fica com o que é
+aplicação na Mochila em `TachoService`; janela "Uasamonga da Vó Edna" no hub da **Vila** (`VillageTachoPanel`,
+`Resources/UI/Tacho.uss`). **Quem cuida:** a Vó Edna, não o Mestre Mihr — a Pedra da Mistura já dizia "a Vó guarda essas
+para o Uasamonga", tacho é coisa de cozinha (é ela quem tem o fogão a lenha e o Baú), e o ferreiro fica com o que é
 de bigorna (refino). O Tacho só existe onde a Vó mora (`CitySpec.HasGrandmaServices`), o que também garante o Baú para o
 que não couber na Mochila.
 
@@ -2168,29 +2168,29 @@ com a semente dele, mesma rolagem SplitMix64 do refino) e o cliente só mostra a
 
 | Receita | Item principal (fica se falhar) | Materiais | Ouro | Chance |
 |---|---|---|---|---|
-| Asas nível 1 (5 estilos) | arma/armadura refinada **+4 ou mais** (vira as asas no sucesso) | 1 Pedra do Caos + materiais do estilo | 60 | 50% em +4, +5 pontos por nível, teto 75% (+9) |
-| Asas 1 → 2 | as asas nível 1 | 2 Caos + 1 Alma + 4 minério de ferro + 4 pedras | 100 | 50% |
-| Asas 2 → 3 | as asas nível 2 | 3 Caos + 2 Alma + 1 Vida + 6 ferro + 6 pedras | 150 | 35% |
+| Asas nível 1 (5 estilos) | arma/armadura refinada **+4 ou mais** (vira as asas no sucesso) | 1 Pedra da Mistura + materiais do estilo | 60 | 50% em +4, +5 pontos por nível, teto 75% (+9) |
+| Asas 1 → 2 | as asas nível 1 | 2 Mistura + 1 Alma + 4 minério de ferro + 4 pedras | 100 | 50% |
+| Asas 2 → 3 | as asas nível 2 | 3 Mistura + 2 Alma + 1 Água Viva + 6 ferro + 6 pedras | 150 | 35% |
 | Asas nível 4 (lendária) | — | só documentada (sem item e sem receita): stats ×2 do nível 1, absorve 3% | — | — |
-| Proteção do Caos | peça em +7..+14 | a pedra do refino normal (Alma) + 1 Pedra do Caos | o do refino (0–50) | a do refino (80% → 35%) |
-| Fruta do Mandacaru | — | 1 Caos + 1 Vida + 5 ervas | 40 | 60% |
-| Fruta do Umbu | — | 2 Bênção + 3 ervas | 20 | 80% |
+| Proteção da Mistura | peça em +7..+14 | a pedra do refino normal (Alma) + 1 Pedra da Mistura | o do refino (0–50) | a do refino (80% → 35%) |
+| Melão de Luz | — | 1 Mistura + 1 Água Viva + 5 ervas | 40 | 60% |
+| Romã do Recomeço | — | 2 Faísca + 3 ervas | 20 | 80% |
 
 Materiais do estilo (nível 1), um estilo por primo (qualquer primo pode usar qualquer asa; a janela destaca o do primo em
 jogo):
 
 | Estilo | Primo | Materiais | Nível 1: dano / defesa / velocidade |
 |---|---|---|---|
-| Asas de Carcará | Maithe | 6 fibras + 3 pedras | +1,5% / +1% / +3% |
-| Capa de Vaqueiro Encantada | Joaquim | 8 fibras + 2 ferros | +1% / +1,5% / +2% |
-| Asas de Beija-flor | Maria | 6 ervas + 4 fibras | +1% / +1% / +5% |
-| Asas de Asa-branca | Ícaro | 6 fibras + 3 ferros | +1% / +1% / +3% |
+| Asas de Huma | Maithe | 6 fibras + 3 pedras | +1,5% / +1% / +3% |
+| Capa de Feltro dos Nartes | Joaquim | 8 fibras + 2 ferros | +1% / +1,5% / +2% |
+| Asas de Aralez | Maria | 6 ervas + 4 fibras | +1% / +1% / +5% |
+| Asas de Bronze de Kurdalægon | Ícaro | 6 fibras + 3 ferros | +1% / +1% / +3% |
 | Asas de Vaga-lume | Lavine | 5 ervas + 3 pedras | +1,5% / +0,5% / +4% |
 
-O pedido listava quatro asas; a quinta (Vaga-lume, da Lavine) fecha "uma por primo". Proteção do Caos não aparece em
+O pedido listava quatro asas; a quinta (Vaga-lume, da Lavine) fecha "uma por primo". Proteção da Mistura não aparece em
 +0..+6: lá o refino normal já não perde nível ("use o Ferreiro"). Custo esperado: asas 1 a partir de +4 ≈ 2 tentativas
-(2 Caos, 120 de ouro); 1 → 2 ≈ 4 Caos + 2 Almas; 2 → 3 ≈ 8,6 Caos + 5,7 Almas + 2,9 Vidas. Com a Pedra do Caos caindo só do
-chefe da Montanha (15%) e nas Cavernas (1% / chefe 25%), asas 3 são meta de longo prazo (NG+ / online).
+(2 Mistura, 120 de ouro); 1 → 2 ≈ 4 Mistura + 2 Almas; 2 → 3 ≈ 8,6 Mistura + 5,7 Almas + 2,9 Vidas. Com a Pedra da Mistura caindo só do
+chefe da Serra de Kaggen (15%) e nas Grutas do Limiar (1% / chefe 25%), asas 3 são meta de longo prazo (NG+ / online).
 
 ### 24.2 Asas no equipamento (slot novo "Costas/Asas")
 
@@ -2208,11 +2208,11 @@ chefe da Montanha (15%) e nas Cavernas (1% / chefe 25%), asas 3 são meta de lon
   peito do modelo do herói (`WingBackVisual`), batendo devagar pelas molas do motion feel (`MotionFeelMath.StepSpring`) e
   dobrando para trás na corrida. Com **"Reduzir Movimento"** a batida parada desliga e a resposta cai pela metade.
 
-### 24.3 Frutas do Sertão (`FruitRules`, `AttributeSet`)
+### 24.3 Frutas de Luz (`FruitRules`, `AttributeSet`)
 
-- **Fruta do Mandacaru:** +1 ponto de atributo para distribuir, **até 2 por jornada** (`FruitRules.MaxGrowthPoints`,
+- **Melão de Luz:** +1 ponto de atributo para distribuir, **até 2 por jornada** (`FruitRules.MaxGrowthPoints`,
   contado no save do `AttributeSet`, `growthFruitPoints`; save antigo = 0).
-- **Fruta do Umbu:** devolve 1 ponto do atributo com mais pontos distribuídos (empate: ordem da ficha) para distribuir
+- **Romã do Recomeço:** devolve 1 ponto do atributo com mais pontos distribuídos (empate: ordem da ficha) para distribuir
   de novo.
 - Come-se na Mochila durante uma aventura (onde está a ficha do herói). Fruta que não faria nada (teto atingido, nada
   para devolver, ou no mapa sem ficha) **não é comida**: continua na Mochila.
@@ -2220,8 +2220,8 @@ chefe da Montanha (15%) e nas Cavernas (1% / chefe 25%), asas 3 são meta de lon
 ### 24.4 Orçamento (`tools/balance/power_stack.py`, `test_wings_stack.py`)
 
 O modelo põe, em todas as lutas ao chegar em cada região, o refino de §20.4 **mais** as asas e frutas de quem farmou as
-Pedras do Caos (teto): Floresta e Deserto nada (não cai Caos), Montanha asas 1, Cavernas asas 1 + 2 frutas (≈3 Caos até
-o fim das Cavernas: o gasto mais ofensivo), NG+1 asas 3 + 2 frutas (teto). Conservador: soma o **maior dano** de
+Pedras do Caos (teto): Bosque do Zarafshan e Areias Flamejantes nada (não cai Caos), Serra de Kaggen asas 1, Grutas do Limiar asas 1 + 2 frutas (≈3 Mistura até
+o fim das Grutas do Limiar: o gasto mais ofensivo), NG+1 asas 3 + 2 frutas (teto). Conservador: soma o **maior dano** de
 qualquer estilo com a **maior defesa** de qualquer estilo (+ absorção) na mesma asa, e as frutas como Poder Arcano (+1%
 de dano cada). Velocidade fica fora (o modelo não anda).
 
@@ -2233,28 +2233,28 @@ Resultado (3000 jogadas):
 
 | Ciclo | Bioma | Asas (frutas) | Chefe: r8 → r8+refino → r8+refino+asas → tudo | 2 comuns: r8 → r8+refino+asas → tudo | Parado, chefe mata em (tudo) |
 |---|---|---|---|---|---|
-| NG+0 | Floresta | — (0) | 16,5 → 16,3 → 16,3 → **13,6** s | 4,8 → 4,5 → **3,8** s | 22,3 s |
-| NG+0 | Deserto | — (0) | 18,2 → 17,6 → 17,6 → **14,4** s | 6,1 → 5,6 → **4,6** s | 24,2 s |
-| NG+0 | Montanha | 1 (0) | 18,4 → 17,5 → 17,0 → **13,6** s | 6,4 → 5,8 → **4,4** s | 27,2 s |
-| NG+0 | Cavernas | 1 (2) | 20,0 → 19,1 → 18,6 → **14,8** s | 4,6 → 4,0 → **3,1** s | 32,9 s |
-| NG+1 | Floresta | 3 (2) | 18,5 → 17,3 → 16,5 → **13,4** s | 3,3 → 2,6 → **2,3** s | 30,6 s |
-| NG+1 | Deserto | 3 (2) | 18,5 → 17,4 → 16,8 → **13,5** s | 3,6 → 3,3 → **2,4** s | 30,8 s |
-| NG+1 | Montanha | 3 (2) | 18,5 → 17,4 → 16,7 → **13,6** s | 4,1 → 3,8 → **2,9** s | 31,5 s |
-| NG+1 | Cavernas | 3 (2) | 19,8 → 18,8 → 18,1 → **14,4** s | 4,0 → 3,6 → **2,9** s | 30,8 s |
+| NG+0 | Bosque do Zarafshan | — (0) | 16,5 → 16,3 → 16,3 → **13,6** s | 4,8 → 4,5 → **3,8** s | 22,3 s |
+| NG+0 | Areias Flamejantes | — (0) | 18,2 → 17,6 → 17,6 → **14,4** s | 6,1 → 5,6 → **4,6** s | 24,2 s |
+| NG+0 | Serra de Kaggen | 1 (0) | 18,4 → 17,5 → 17,0 → **13,6** s | 6,4 → 5,8 → **4,4** s | 27,2 s |
+| NG+0 | Grutas do Limiar | 1 (2) | 20,0 → 19,1 → 18,6 → **14,8** s | 4,6 → 4,0 → **3,1** s | 32,9 s |
+| NG+1 | Bosque do Zarafshan | 3 (2) | 18,5 → 17,3 → 16,5 → **13,4** s | 3,3 → 2,6 → **2,3** s | 30,6 s |
+| NG+1 | Areias Flamejantes | 3 (2) | 18,5 → 17,4 → 16,8 → **13,5** s | 3,6 → 3,3 → **2,4** s | 30,8 s |
+| NG+1 | Serra de Kaggen | 3 (2) | 18,5 → 17,4 → 16,7 → **13,6** s | 4,1 → 3,8 → **2,9** s | 31,5 s |
+| NG+1 | Grutas do Limiar | 3 (2) | 19,8 → 18,8 → 18,1 → **14,4** s | 4,0 → 3,6 → **2,9** s | 30,8 s |
 
 Orçamento das asas: **dentro**; pytest de `tools/balance` verde.
 
-Ajustes feitos no caminho (antes → depois): dano do nível 1 3% → **1,5%** (Carcará), defesa 3% → **1,5%** (Capa),
-escala dos níveis ×1/1,5/2 → **×1/1,25/1,5**, absorção 2/4% → **1/2%**, teto do Mandacaru 5 → **2**, e as Cavernas do
+Ajustes feitos no caminho (antes → depois): dano do nível 1 3% → **1,5%** (Asas de Huma), defesa 3% → **1,5%** (Capa),
+escala dos níveis ×1/1,5/2 → **×1/1,25/1,5**, absorção 2/4% → **1/2%**, teto do Saxaul 5 → **2**, e as Grutas do Limiar do
 NG+0 passaram a supor asas 1 + 2 frutas (o que ~3 Pedras do Caos pagam) em vez de asas 2 + 3 frutas. Com os números
-antigos o NG+1 ficava em 91% do r8 refinado (chefe) e o "tudo junto" em 67%; o "só básico" das Cavernas passava do
-limite pela defesa. Comuns: no NG+1 da Floresta eles morrem em 2–3 golpes e +4% de dano já tira um golpe (−21%,
+antigos o NG+1 ficava em 91% do r8 refinado (chefe) e o "tudo junto" em 67%; o "só básico" das Grutas do Limiar passava do
+limite pela defesa. Comuns: no NG+1 do Bosque do Zarafshan eles morrem em 2–3 golpes e +4% de dano já tira um golpe (−21%,
 degrau, não tendência), por isso o piso dos comuns é 75% (o refino usa 80% pelo mesmo motivo).
 
 ### 24.5 Conquistas, testes e online
 
 - Conquistas: **"Bateu Asas"** (`ach_wings_first`, primeiro par de asas, `AchievementConditionType.WingsCrafted = 60`)
-  e **"Por Cima do Sertão"** (`ach_wings_level3`, asas nível 3, `WingLevelReached = 61`, máximo), alimentadas pelo
+  e **"Por Cima da Ilha da Aurora"** (`ach_wings_level3`, asas nível 3, `WingLevelReached = 61`, máximo), alimentadas pelo
   `TachoService`.
 - `TachoTests` (EditMode): receitas e itens existentes, slot novo (int 9), asas presas/2×2/sem refino, stats por nível,
   chances, checagens, sementes reproduzíveis, falha que nunca rebaixa nada, serviço (asas feitas consomem a peça; falha
@@ -2278,10 +2278,10 @@ revalidado na grade maior e o que não couber (por exemplo, um banquinho na fren
 
 | Subida | Nível do primo | Chefe libertado | Ouro | Materiais | Lutas de ouro (~6/luta, §10.1 de Housing) |
 |---|---|---|---|---|---|
-| N1 → N2 | 8 | Lobo Alfa | 150 | 30 madeira, 15 fibra, 5 ferro | ~25 |
-| N2 → N3 | 18 | Guardião da Ruína | 400 | 40 madeira, 30 pedra, 20 fibra | ~65 |
+| N1 → N2 | 8 | Kök-Böri | 150 | 30 madeira, 15 fibra, 5 ferro | ~25 |
+| N2 → N3 | 18 | Grande Ushabti | 400 | 40 madeira, 30 pedra, 20 fibra | ~65 |
 | N3 → N4 | 28 | Senhor da Guerra | 1.000 | 60 pedra, 20 ferro, 30 madeira | ~165 |
-| N4 → N5 | 38 | Habitante Ancestral | 2.500 | 100 pedra, 40 ferro, 60 madeira + 1 lembrança de cada chefe (não é gasta) | ~415 |
+| N4 → N5 | 38 | Tages, o Habitante Ancestral | 2.500 | 100 pedra, 40 ferro, 60 madeira + 1 lembrança de cada chefe (não é gasta) | ~415 |
 
 - A rota com missões termina a NG+0 no nível ~16 (§10): na primeira campanha a casa chega a **N2**; N3–N5 são metas
   da Nova Jornada+ e do pós-jogo, como o Housing.md prevê (dreno de ouro de longo prazo).
@@ -2311,18 +2311,18 @@ Estimativa só com o catálogo (sem considerar encaixe): N1 com Comuns/Incomuns 
 
 ### 24.3 Ritmo de nível e pilha de poder
 
-A rota com missões tem só ~34 lutas na NG+0 (Floresta 12, Deserto 5, Montanha 7, Cavernas 9), então **uma noite
+A rota com missões tem só ~34 lutas na NG+0 (Bosque do Zarafshan 12, Areias Flamejantes 5, Serra de Kaggen 7, Grutas do Limiar 9), então **uma noite
 cobre uma região inteira**: quem dorme em casa antes de cada saída fica descansado o tempo todo. O teste foi feito
-assim (generoso): NG+0 com faixa 0 na Floresta, 1 no Deserto, 2 na Montanha, 3 nas Cavernas; NG+1 inteira na faixa 4,
+assim (generoso): NG+0 com faixa 0 no Bosque do Zarafshan, 1 nas Areias Flamejantes, 2 na Serra de Kaggen, 3 nas Grutas do Limiar; NG+1 inteira na faixa 4,
 rodando `power_stack.evaluate` com a XP de abate por região (script ad hoc, sem mudar a ferramenta):
 
 | Tabela de % por faixa | Resultado |
 |---|---|
-| 2/3/5/7/10 (proposta do Housing.md) | NG+0 dentro; **NG+1 Deserto: comuns 2,3 s < 70% de 3,6 s** (o herói chega um nível acima) |
+| 2/3/5/7/10 (proposta do Housing.md) | NG+0 dentro; **NG+1 Areias Flamejantes: comuns 2,3 s < 70% de 3,6 s** (o herói chega um nível acima) |
 | 1/2/3/4/5 e 1/2/3/4/4 | mesmo estouro na NG+1 (qualquer coisa ≥ +4% a campanha toda) |
 | **2/2/3/3/3 (adotada)** | **dentro do orçamento**, mesmos níveis da pilha sem descanso em todos os biomas |
 
-Com XP global: ×1,02 fica dentro; ×1,03 já empurra o chefe da Floresta de nível 3 para 4 — mas na Floresta a casa
+Com XP global: ×1,02 fica dentro; ×1,03 já empurra o chefe do Bosque do Zarafshan de nível 3 para 4 — mas no Bosque do Zarafshan a casa
 acabou de chegar (conforto ~6, faixa 0 = +2%, e só depois das 3 primeiras vitórias), então não acontece no jogo.
 `power_stack.py` (sem o descanso, que é só XP) segue verde em todas as seções e `test_power_stack.py` passa (21).
 
@@ -2331,12 +2331,12 @@ acabou de chegar (conforto ~6, faixa 0 = +2%, e só depois das 3 primeiras vitó
 - Plantas: felizes até 3 dias de jogo sem água, "com sede" no 3º, murchas depois (metade do conforto), **nunca
   morrem nem somem**; o regador da Vó rega tudo de uma vez; chuva ao chegar em casa rega o quintal.
 - Livro de visitas: no máximo 1 visita por dia de jogo, só com o livro colocado; quem visita: os 4 primos que não
-  estão jogando, Vó Zefa, Dona Cida e, conforme os chefes caem, Seu Bento, Mestre Tonho e Benedita. Primos que ainda
+  estão jogando, Vó Edna, Mariam e, conforme os chefes caem, Ammo, Mestre Mihr e Parthenos. Primos que ainda
   não assinaram têm prioridade em dias alternados ("Casa Cheia" sai em ~1–2 semanas de dias de jogo). Guarda 100.
 - Missões da Casa 2–6 dão só itens de casa (Depósito); as roupas de "Parede de Barro" e "Casa Cheia" ficam
   anotadas para o guarda-roupa (H5). Entregas: Água Fresca 10 pedra + 5 madeira; Fogo na Cozinha 3 carne assada +
-  8 madeira (depois do Lobo Alfa). Madeira e carne saem da Floresta; a pedra, do Deserto e da Montanha, então
-  "Água Fresca" costuma fechar depois da primeira ida ao Deserto (nada trava: a missão espera).
+  8 madeira (depois do Kök-Böri). Madeira e carne saem do Bosque do Zarafshan; a pedra, das Areias Flamejantes e da Serra de Kaggen, então
+  "Água Fresca" costuma fechar depois da primeira ida às Areias Flamejantes (nada trava: a missão espera).
 
 ---
 
@@ -2380,12 +2380,12 @@ Só peças refináveis (arma com dano, armadura com defesa) têm opções; ficam
   +2% vida, 1,5% menos dano recebido ou 1% de espinhos. 1 linha de bicho comum, 1–2 de chefe.
 - **Com Sorte**: +5% de chance nos refinos que podem falhar (`RefineRules.LuckBonus`, soma com o amuleto, teto 95%) e
   +0,5% de crítico.
-- **Conjunto antigo** (só de chefe, nunca excelente junto, como no MU): um por primo — Penas do Carcará Antigo
-  (Maithe), Couro do Vaqueiro Antigo (Joaquim), Renda da Benzedeira Antiga (Maria), Engrenagens do Inventor Antigo
+- **Conjunto antigo** (só de chefe, nunca excelente junto, como no MU): um por primo — Penas do Falcão Antigo
+  (Maithe), Feltro do Nart Antigo (Joaquim), Renda da Curandeira Antiga (Maria), Engrenagens dos Artífices
   (Ícaro), Luz do Vaga-lume Antigo (Lavine). Bônus com 2, 3 e 4 peças vestidas (somam), cada um ~1,5–2% (ou +2 de
   defesa / +4% de dano crítico).
 - **Engaste**: 1 encaixe de bicho comum, 1–2 de chefe; o Ferreiro grava um material que já cai no jogo. Ofensivos só em
-  arma (ferro: 2 ferro + 10 ouro, +1% dano; caos: 1 Pedra do Caos + 25 ouro, +1,5% crítico), defensivos só em armadura
+  arma (ferro: 2 ferro + 10 ouro, +1% dano; caos: 1 Pedra da Mistura + 25 ouro, +1,5% crítico), defensivos só em armadura
   (pedra: 3 pedras + 10 ouro, +1 defesa; erva: 3 ervas + 10 ouro, +1,5% vida) — assim 8 encaixes de armadura nunca
   empilham dano. Regravar um encaixe troca o engaste (o item nunca se perde).
 
@@ -2402,7 +2402,7 @@ Chance por peça de equipamento que cai (`EnemyLootRoller`; semente própria der
 ### 25.3 Orçamento (`tools/balance/power_stack.py`, `test_options_stack.py`)
 
 Teto de quem farmou: peças com opções **perfeitas** (2 linhas excelentes, sorte e 2 engastes com o melhor material, ou
-o conjunto antigo mais ofensivo) — 1 peça na Floresta, 2 no Deserto, 3 na Montanha, 4 nas Cavernas e no NG+1 — por
+o conjunto antigo mais ofensivo) — 1 peça no Bosque do Zarafshan, 2 nas Areias Flamejantes, 3 na Serra de Kaggen, 4 nas Grutas do Limiar e no NG+1 — por
 cima de **tudo** (pilha §14 + refino §20 + asas e frutas §24). Regras: opções perfeitas tiram no máximo 10% do chefe e
 30% dos comuns (os comuns do NG+1 morrem em 2–3 golpes: um golpe a menos já é −26%); tudo junto mantém o chefe ≥ 66%
 do r8 sem nada e ≥ 12 s; parado, o chefe ainda mata em 12–40 s.
@@ -2411,14 +2411,14 @@ Resultado (3000 jogadas):
 
 | Ciclo | Bioma | Peças | Chefe: r8 → tudo → tudo+excelente / tudo+antigo | 2 comuns: tudo → excelente / antigo | Parado, chefe mata em (excelente / antigo) |
 |---|---|---|---|---|---|
-| NG+0 | Floresta | 1 | 16,5 → 13,6 → **13,2** / **13,5** s | 3,8 → **3,4** / **3,8** s | 22,3 / 22,3 s |
-| NG+0 | Deserto | 2 | 18,2 → 14,4 → **13,9** / **14,0** s | 4,6 → **4,3** / **4,3** s | 25,1 / 24,6 s |
-| NG+0 | Montanha | 3 | 18,4 → 13,6 → **13,2** / **13,5** s | 4,4 → **4,1** / **4,1** s | 29,4 / 28,3 s |
-| NG+0 | Cavernas | 4 | 20,0 → 14,8 → **14,0** / **14,2** s | 3,1 → **2,9** / **2,9** s | 36,9 / 34,8 s |
-| NG+1 | Floresta | 4 | 18,5 → 13,4 → **12,4** / **12,3** s | 2,3 → **1,7** / **1,7** s | 34,2 / 32,3 s |
-| NG+1 | Deserto | 4 | 18,5 → 13,5 → **12,4** / **12,4** s | 2,4 → **2,3** / **2,3** s | 34,4 / 32,6 s |
-| NG+1 | Montanha | 4 | 18,5 → 13,6 → **12,4** / **12,7** s | 2,9 → **2,5** / **2,5** s | 35,2 / 33,3 s |
-| NG+1 | Cavernas | 4 | 19,8 → 14,4 → **14,0** / **14,0** s | 2,9 → **2,3** / **2,3** s | 34,4 / 32,5 s |
+| NG+0 | Bosque do Zarafshan | 1 | 16,5 → 13,6 → **13,2** / **13,5** s | 3,8 → **3,4** / **3,8** s | 22,3 / 22,3 s |
+| NG+0 | Areias Flamejantes | 2 | 18,2 → 14,4 → **13,9** / **14,0** s | 4,6 → **4,3** / **4,3** s | 25,1 / 24,6 s |
+| NG+0 | Serra de Kaggen | 3 | 18,4 → 13,6 → **13,2** / **13,5** s | 4,4 → **4,1** / **4,1** s | 29,4 / 28,3 s |
+| NG+0 | Grutas do Limiar | 4 | 20,0 → 14,8 → **14,0** / **14,2** s | 3,1 → **2,9** / **2,9** s | 36,9 / 34,8 s |
+| NG+1 | Bosque do Zarafshan | 4 | 18,5 → 13,4 → **12,4** / **12,3** s | 2,3 → **1,7** / **1,7** s | 34,2 / 32,3 s |
+| NG+1 | Areias Flamejantes | 4 | 18,5 → 13,5 → **12,4** / **12,4** s | 2,4 → **2,3** / **2,3** s | 34,4 / 32,6 s |
+| NG+1 | Serra de Kaggen | 4 | 18,5 → 13,6 → **12,4** / **12,7** s | 2,9 → **2,5** / **2,5** s | 35,2 / 33,3 s |
+| NG+1 | Grutas do Limiar | 4 | 19,8 → 14,4 → **14,0** / **14,0** s | 2,9 → **2,3** / **2,3** s | 34,4 / 32,5 s |
 
 Dentro do orçamento; pytest de `tools/balance` verde (41). Ajuste feito no caminho: a primeira versão (linhas de 2%,
 sorte +2% de crítico, qualquer engaste em qualquer peça) dava +20% de crítico com 4 peças e levava o chefe do NG+1 a
@@ -2435,7 +2435,7 @@ sorteio das opções, conserto e engaste rodam no servidor com os mesmos número
 
 ---
 
-## 26. Crafting avançado: níveis de ofício, partes dos bichos, benzedura de arma, forja de fusão e runas (2026-10-30)
+## 26. Crafting avançado: níveis de ofício, partes dos bichos, segredo da lâmina, forja de fusão e runas (2026-10-30)
 
 Código: `Assets/Scripts/Gameplay/Crafting/Advanced/` (regras puras, RNG passada por quem chama — online roda no
 servidor). Modelo: `python -I tools/balance/crafting_stack.py` (+ `test_crafting_stack.py`). Testes:
@@ -2449,28 +2449,28 @@ Quinta fonte de loot, rolada **por último** em `EnemyLootGranter` (sementes ant
 
 | Parte | Raridade | Quem solta |
 |---|---|---|
-| Presa de Lobo | Incomum | comuns e chefe da Floresta (menos a aranha) |
-| Seda de Aranha | Incomum | Aranha da Floresta |
-| Ferrão de Escorpião | Incomum | Deserto |
-| Lasca de Golem | Incomum | Montanha |
-| Asa de Morcego | Incomum | Cavernas |
+| Presa de Lobo | Incomum | comuns e chefe do Bosque do Zarafshan (menos a aranha) |
+| Seda de Aranha | Incomum | Aranha-Tecelã Apagada |
+| Ferrão de Escorpião | Incomum | Areias Flamejantes |
+| Lasca de Golem | Incomum | Serra de Kaggen |
+| Asa de Morcego | Incomum | Grutas do Limiar |
 | Troféu da Fera | Raro | só chefes (50%) |
 
 ### 26.2 Nível de ofício e qualidade do material (`CraftTierRules`, `AdvancedRecipeCatalog`)
 
-- **Nível de ofício** = 1 + região mais funda aberta (Floresta 1 … Cavernas 4); NG+ abre os 4. Receita/benzedura de
+- **Nível de ofício** = 1 + região mais funda aberta (Bosque do Zarafshan 1 … Grutas do Limiar 4); NG+ abre os 4. Receita/segredo da lâmina de
   nível acima fica bloqueada.
 - **Qualidade** = raridade média das matérias-primas (ponderada pela quantidade): < 0,25 Rústico, < 0,6 Bom, < 1,0
   Fino, senão Primoroso; o Troféu da Fera (opcional, gasto) sobe um degrau.
 - Peça feita rola a raridade por qualidade (C/I/R/É): Rústico 60/30/10/0, Bom 30/45/22/3, Fino 0/45/40/15, Primoroso
   0/20/50/30 — **nunca abaixo do item base e nunca acima do teto do nível: Incomum, Incomum, Incomum, Raro**. Afixos
   por `ProceduralItemGenerator` (semente tirada da RNG). Peça feita **não tem opção MU** (excelente/sorte/antigo).
-- 6 receitas de equipamento (chapéu e botas nível 1; gibão e arco 2; espada de ferro 3 e 4) e 5 de runas.
+- 6 receitas de equipamento (chapéu e botas nível 1; chapan e arco 2; espada de ferro 3 e 4) e 5 de runas.
 
-### 26.3 Benzedura de arma do Vô Jorge (`ImbueCatalog`, `ImbueRules`, `ImbueEffectApplier`)
+### 26.3 Segredo da lâmina do Vô Jorge (`ImbueCatalog`, `ImbueRules`, `ImbueEffectApplier`)
 
-4 partes + ouro → um bônus na arma da mão por **8 lutas**. Uma de cada vez (nova substitui). **Divide a vaga da bênção
-da estrada**: luta que já tem bênção (`world_event`) pausa a benzedura, e luta sem arma na mão também; só conta luta
+4 partes + ouro → um bônus na arma da mão por **8 lutas**. Uma de cada vez (nova substitui). **Divide a vaga do reforço
+da estrada**: luta que já tem reforço (`world_event`) pausa o segredo da lâmina, e luta sem arma na mão também; só conta luta
 em que ela valeu (salvo no `CraftingManager`).
 
 | Benzedura | Nível | Parte | Ouro | Efeito |
@@ -2504,20 +2504,20 @@ recarga empilharia sem limite e o modelo de TTK não as vê (como as poções).
   Orçamentos: sozinho ≥ 92% do r8 no chefe / 80% nos comuns; a pilha do §14 no herói com as peças; pilha + feitas +
   refino ≥ 12 s; e **tudo** (pilha + refino + asas + frutas + peças excelentes perfeitas + peças da forja nos slots que
   sobram — slot é excelente *ou* forjado) dentro do orçamento global das opções (≥ 66% do r8, ≥ 12 s).
-- Tetos testados: Raro/Raro/Épico/Épico e Incomum/Incomum/Raro/Raro estouram (Montanha e NG+1: chefe < 92% / tudo < 12 s);
+- Tetos testados: Raro/Raro/Épico/Épico e Incomum/Incomum/Raro/Raro estouram (Serra de Kaggen e NG+1: chefe < 92% / tudo < 12 s);
   **Incomum/Incomum/Incomum/Raro** fica dentro. Ou seja: a forja é piso confiável, não teto novo — o melhor ainda vem
   do chefe.
 
-| Ciclo | Bioma | Chefe: r8 → pilha → pilha c/ benzedura | Chefe: r8 → r8 c/ peças feitas → pilha+feitas+refino | 2 comuns: r8 → pilha c/ benzedura → r8 c/ feitas |
+| Ciclo | Bioma | Chefe: r8 → pilha → pilha c/ segredo da lâmina | Chefe: r8 → r8 c/ peças feitas → pilha+feitas+refino | 2 comuns: r8 → pilha c/ segredo da lâmina → r8 c/ feitas |
 |---|---|---|---|---|
-| NG+0 | Floresta | 16,5 → 13,8 → **13,8** s | 16,5 → 15,6 → **13,2** s | 4,8 → 3,7 → 4,5 s |
-| NG+0 | Deserto | 18,2 → 14,9 → **14,9** s | 18,2 → 17,6 → **13,8** s | 6,1 → 4,7 → 5,6 s |
-| NG+0 | Montanha | 18,4 → 14,4 → **14,4** s | 18,4 → 17,2 → **13,4** s | 6,4 → 4,9 → 6,3 s |
-| NG+0 | Cavernas | 20,0 → 16,2 → **16,2** s | 20,0 → 19,0 → **14,5** s | 4,6 → 3,4 → 4,0 s |
-| NG+1 | Floresta | 18,5 → 14,6 → **14,6** s | 18,5 → 17,1 → **12,9** s | 3,3 → 2,5 → 3,3 s |
-| NG+1 | Deserto | 18,5 → 14,5 → **14,5** s | 18,5 → 17,2 → **13,0** s | 3,6 → 2,8 → 3,3 s |
-| NG+1 | Montanha | 18,5 → 14,5 → **14,5** s | 18,5 → 17,4 → **13,0** s | 4,1 → 2,9 → 4,0 s |
-| NG+1 | Cavernas | 19,8 → 15,9 → **15,9** s | 19,8 → 18,8 → **14,0** s | 4,0 → 2,9 → 4,0 s |
+| NG+0 | Bosque do Zarafshan | 16,5 → 13,8 → **13,8** s | 16,5 → 15,6 → **13,2** s | 4,8 → 3,7 → 4,5 s |
+| NG+0 | Areias Flamejantes | 18,2 → 14,9 → **14,9** s | 18,2 → 17,6 → **13,8** s | 6,1 → 4,7 → 5,6 s |
+| NG+0 | Serra de Kaggen | 18,4 → 14,4 → **14,4** s | 18,4 → 17,2 → **13,4** s | 6,4 → 4,9 → 6,3 s |
+| NG+0 | Grutas do Limiar | 20,0 → 16,2 → **16,2** s | 20,0 → 19,0 → **14,5** s | 4,6 → 3,4 → 4,0 s |
+| NG+1 | Bosque do Zarafshan | 18,5 → 14,6 → **14,6** s | 18,5 → 17,1 → **12,9** s | 3,3 → 2,5 → 3,3 s |
+| NG+1 | Areias Flamejantes | 18,5 → 14,5 → **14,5** s | 18,5 → 17,2 → **13,0** s | 3,6 → 2,8 → 3,3 s |
+| NG+1 | Serra de Kaggen | 18,5 → 14,5 → **14,5** s | 18,5 → 17,4 → **13,0** s | 4,1 → 2,9 → 4,0 s |
+| NG+1 | Grutas do Limiar | 19,8 → 15,9 → **15,9** s | 19,8 → 18,8 → **14,0** s | 4,0 → 2,9 → 4,0 s |
 
 Resultado: **dentro do orçamento**; `pytest tools/balance` verde (51).
 
@@ -2552,13 +2552,13 @@ primo na borda (custa 3, pede 6 pontos já no quarto). Um quarto cabe 12 pontos,
 
 | Quarto | Nós pequenos (por grau ×3) | Joaquim | Maria | Maithe | Ícaro | Lavine |
 |---|---|---|---|---|---|---|
-| Ataque | Mão Certeira +0,1% dano; Olho de Gavião +0,1% crítico; Golpe Pesado +0,5% dano crítico | Aboio de Guerra +0,3% dano | Prece Ardente +1,5% dano crítico | Flecha do Carcará +0,3% crítico | Engrenagem Afiada −0,3% recarga | Chama do Vaga-lume +0,3% dano |
-| Defesa | Couro Grosso +0,6% vida; Pele de Mandacaru +0,6% defesa; Espinho de Xique-xique 0,2% espinhos | Gibão de Couro +2,5% vida | Manto de Reza +2% defesa | Pena Ligeira +2% defesa | Blindagem de Lata +2,5% vida | Luz que Protege +5% mana |
+| Ataque | Mão Certeira +0,1% dano; Olho de Gavião +0,1% crítico; Golpe Pesado +0,5% dano crítico | Brado da Correnteza +0,3% dano | Clarão Ardente +1,5% dano crítico | Flecha do Falcão +0,3% crítico | Engrenagem Afiada −0,3% recarga | Estrela Cadente +0,3% dano |
+| Defesa | Couro Grosso +0,6% vida; Casca de Tamargueira +0,6% defesa; Espinho de Alcaparra 0,2% espinhos | Colete de Feltro +2,5% vida | Manto de Luz +2% defesa | Pena Ligeira +2% defesa | Blindagem de Lata +2,5% vida | Luz que Protege +5% mana |
 | Apoio | Cura de Quintal +5% regen. vida; Fôlego de Reza +2% regen. mana; Mente Mansa −0,2% custo | Berrante Amigo +10% regen. vida | Benzedura Forte +15% regen. vida | Ninho Seguro +5% regen. mana | Pilha Reserva −0,5% custo | Vaga-lume Sereno +5% regen. mana |
-| Utilidade | Pé Ligeiro +1% velocidade; Vigor Sertanejo +2% fôlego; Fôlego Largo +3% recup. fôlego | Trote de Vaqueiro +6% fôlego | Romeira Incansável +8% recup. | Voo Rasante +3% velocidade | Bota de Mola +3% velocidade | Rastro de Luz +8% recup. |
+| Utilidade | Pé Ligeiro +1% velocidade; Vigor de Caravana +2% fôlego; Fôlego Largo +3% recup. fôlego | Passo da Correnteza +6% fôlego | Viajante Incansável +8% recup. | Voo Rasante +3% velocidade | Bota de Mola +3% velocidade | Rastro de Luz +8% recup. |
 
 **Recomeçar** (respec): devolve todos os pontos por `max(50, 15 × pontos gastos)` de ouro da mochila (`item_gold`) —
-uma roda de 39 pontos custa 585, uma ida às Cavernas rende mais. A janela "Roda de Talentos" abre por um botão na Ficha
+uma roda de 39 pontos custa 585, uma ida às Grutas do Limiar rende mais. A janela "Roda de Talentos" abre por um botão na Ficha
 (abaixo dos atributos): roda desenhada em quatro quartos, nós de 56 px nos três anéis, tocar seleciona (nome, bônus,
 grau, o que falta), "Aprender" gasta, "Recomeçar (N de ouro)" limpa; B/Esc volta para a Ficha.
 
@@ -2574,14 +2574,14 @@ Resultado (3000 jogadas):
 
 | Ciclo | Bioma (nível do chefe) | Treino | Pontos | Chefe: tudo → +talentos (exc. / antigo) | 2 comuns: tudo → +talentos | Parado, chefe mata em (roda de ataque / de defesa) |
 |---|---|---|---|---|---|---|
-| NG+0 | Floresta (3) | 3 | 0 | 13,2 → **13,2** / 13,5 → **13,5** s | 3,4 → **3,4** s | 22,3 / 22,3 s |
-| NG+0 | Deserto (7) | 6 | 0 | 13,9 → **13,9** / 14,0 → **14,0** s | 4,3 → **4,3** s | 25,3 / 25,3 s |
-| NG+0 | Montanha (10) | 9 | 0 | 13,2 → **12,9** / 13,5 → **12,9** s | 4,1 → **4,0** s | 29,7 / 29,7 s |
-| NG+0 | Cavernas (15) | 12 | 4 | 14,0 → **13,5** / 14,2 → **13,5** s | 2,9 → **2,8** s | 37,3 / 38,2 s |
-| NG+1 | Floresta (17) | 20 | 6 | 12,4 → **12,2** / 12,3 → **12,1** s | 1,7 → **1,8** s | 35,0 / 37,4 s |
-| NG+1 | Deserto (18) | 20 | 7 | 12,4 → **12,2** / 12,4 → **12,1** s | 2,3 → **2,2** s | 35,2 / 37,7 s |
-| NG+1 | Montanha (20) | 20 | 9 | 12,4 → **12,3** / 12,7 → **12,2** s | 2,5 → **2,2** s | 36,0 / 38,5 s |
-| NG+1 | Cavernas (22) | 20 | 11 | 14,0 → **13,3** / 14,0 → **13,5** s | 2,3 → **2,2** s | 35,2 / 37,6 s |
+| NG+0 | Bosque do Zarafshan (3) | 3 | 0 | 13,2 → **13,2** / 13,5 → **13,5** s | 3,4 → **3,4** s | 22,3 / 22,3 s |
+| NG+0 | Areias Flamejantes (7) | 6 | 0 | 13,9 → **13,9** / 14,0 → **14,0** s | 4,3 → **4,3** s | 25,3 / 25,3 s |
+| NG+0 | Serra de Kaggen (10) | 9 | 0 | 13,2 → **12,9** / 13,5 → **12,9** s | 4,1 → **4,0** s | 29,7 / 29,7 s |
+| NG+0 | Grutas do Limiar (15) | 12 | 4 | 14,0 → **13,5** / 14,2 → **13,5** s | 2,9 → **2,8** s | 37,3 / 38,2 s |
+| NG+1 | Bosque do Zarafshan (17) | 20 | 6 | 12,4 → **12,2** / 12,3 → **12,1** s | 1,7 → **1,8** s | 35,0 / 37,4 s |
+| NG+1 | Areias Flamejantes (18) | 20 | 7 | 12,4 → **12,2** / 12,4 → **12,1** s | 2,3 → **2,2** s | 35,2 / 37,7 s |
+| NG+1 | Serra de Kaggen (20) | 20 | 9 | 12,4 → **12,3** / 12,7 → **12,2** s | 2,5 → **2,2** s | 36,0 / 38,5 s |
+| NG+1 | Grutas do Limiar (22) | 20 | 11 | 14,0 → **13,3** / 14,0 → **13,5** s | 2,3 → **2,2** s | 35,2 / 37,6 s |
 
 Roda mais ofensiva no nível 50 (39 pontos): +0,3% dano, +0,3% crítico, +2% dano crítico, −0,3% recarga, −1,1% custo — o
 quarto de Ataque tem teto, então passar do nível 22 não aumenta o dano. **Dentro do orçamento**; pytest de `tools/balance`
@@ -2600,3 +2600,109 @@ por quarto, roda não enche no 50, anéis e pedra-chave, pontos, respec, save id
 anel sem o de dentro, grau acima do teto —, textos e o layout da roda sem nós sobrepostos). `LocalizationCoverageTests`
 cobre `TalentTexts`; `ThemeAdoptionTests.CodeThemedSheets` inclui `Resources/UI/Talents.uss`. Online: tries contados no
 servidor pelos eventos de combate, gasto/respec validados lá (`TalentWheelRules.CanSpend` / `CanRespec`); o cliente só mostra.
+
+## 28. Peso e carga: a montaria fica mais lenta com a mochila pesada (2026-10-30)
+
+Pedido do usuário: "a montaria tem que ficar mais lenta se ele estiver carregando mais coisas no inventário, então
+cada item tem um peso". A grade (§18) continua sendo o único limite do que **cabe**; o peso **nunca recusa** um item,
+só deixa o primo e a montaria mais lentos (estilo "cap" do Tibia). Regras puras em
+`Gameplay/Items/ItemWeightRules.cs` e `Gameplay/Inventory/EncumbranceRules.cs` (C# puro, prontas para o servidor).
+
+### 28.1 Peso de cada item (`ItemWeightRules.UnitWeight`)
+
+1. **Ouro e moedas pesam 0** (`ItemType.Currency`, categorias `Currency`/`Gold`), mesmo se o asset disser outra coisa.
+2. O `_weight` do asset, **se for maior que 0**, vale (o número do designer).
+3. Senão (0), o peso sugerido = **casas da grade × densidade da categoria** (o "material"), nunca abaixo de 0,05.
+   Assim todo item tem peso. **Pilhas pesam por unidade** (99 pedras = 99).
+
+| Categoria | Densidade por casa | Exemplo (tamanho da grade → peso sugerido) |
+|---|---|---|
+| Madeira | 0,5 | tora 1×1 → 0,5 |
+| Pedra | 1,0 | pedra 1×1 → 1 |
+| Metal | 1,2 | minério 1×1 → 1,2 |
+| Erva | 0,2 | 1×1 → 0,2 |
+| Fibra | 0,1 | 1×1 → 0,1 |
+| Comida | 0,3 | 1×1 → 0,3 |
+| Poção | 0,4 | 1×1 → 0,4 |
+| Arma corpo a corpo | 1,0 | espada 1×3 → 3 |
+| Arma à distância | 0,2 | arco 2×4 → 1,6 |
+| Arma mágica | 0,5 | cajado 1×4 → 2 |
+| Cabeça / Botas | 0,25 | 2×2 → 1 |
+| Peito | 0,4 | 2×3 → 2,4 |
+| Pernas | 0,4 | 2×2 → 1,6 |
+| Acessório | 0,1 | anel 1×1 → 0,1 |
+| Ferramenta de coleta | 0,85 | machado 1×3 → 2,55 |
+| Ferramenta de construção | 1,0 | martelo 1×2 → 2 |
+| Missão / Projeto | 0,05 | 0,05 |
+| Diversos (apitos, partes) | 0,1 | 0,1 |
+| Ouro / Moeda | 0 | 0 |
+
+Os assets de hoje já têm peso autoral (espada de ferro 3, machado 2,5, ferro 1,5, pedra 1, madeira 0,5, fibra 0,1,
+surubim 10…); os apitos de montaria e a ração (asset com 0) passam a usar o sugerido (0,1 e 0,3).
+
+### 28.2 Carga e capacidade
+
+- **Carga** = mochila **+ equipamento vestido** (`InventoryManager.GetCarriedWeight` = `GetTotalWeight` +
+  `GetEquippedWeight`). Vestir uma armadura não "tira o peso"; é igual ao Tibia.
+- **Capacidade do primo** = 60 + 2 por nível acima do 1 + 1 por ponto de Vitalidade (nível 50 com 10 de Vitalidade = 168).
+- **Capacidade da montaria** = base da espécie × (1 + 2% por nível da montaria acima do 1). Montado, a mochila
+  continua nas costas do primo, então a **capacidade da montada** = montaria + metade da capacidade do primo.
+
+| Montaria | Base | | Montaria | Base |
+|---|---|---|---|---|
+| **Asno de Caravana** (`mount_pack_donkey`) | **450** (a maior) | | Leopardo-das-Neves | 120 |
+| Mamute de Komi | 420 | | Senmurv Ventania | 110 |
+| Ijapa, a Tartaruga Anciã | 400 | | Leão de Luz de Apedemak | 110 |
+| Asno de Três Patas | 380 | | Hipopotinha de Taweret | 110 |
+| Boi das Canções | 360 | | Alabai Fofão | 100 |
+| Sleipnir | 240 | | Raposa-Joia do Limiar | 100 |
+| Vishap Filhote Brasinha | 220 | | Chacal de Upuaut | 90 |
+| Mehen, a Serpente Guardiã | 200 | | Avestruz de Brasa | 80 |
+| Cavalo Celeste de Fergana | 180 | | Avestruz Corredora | 70 |
+| Qilin do Orvalho | 180 | | Grifo de Ouro Cita | 140 |
+| Escaravelho de Khepri | 170 | | Íbex-da-Walia | 130 |
+| Shadhavar Cantante | 170 | | Facóquero Trilheiro | 130 |
+| Pangolim Gigante | 160 | | Cavalo-d'Água do Lago Van | 130 |
+| Tulpar Nuvem-Branca | 160 | | Bennu, a Ave do Recomeço | 130 |
+| Porco-Formigueiro Gigante | 150 | | Pônei das Estepes | 120 |
+
+Regra de bolso: animais de carga (asnos, mamute, tartaruga, boi) carregam 3–4× um cavalo; aves, felinos e canídeos
+carregam pouco (são rápidos). Espécie desconhecida usa o tamanho (Pequeno 100, Médio 150, Grande 300).
+
+### 28.3 Velocidade
+
+r = carga ÷ capacidade (a da montada quando montado, a do primo a pé).
+
+```
+montado:  r ≤ 0,5 → ×1,00
+          0,5 < r ≤ 1 → ×(1 − (r − 0,5))            (linear até ×0,50 em r = 1)
+          r > 1 → ×max(0,30, 0,50 − 0,4·(r − 1))     e SEM galope
+a pé:     r ≤ 1 → ×1,00
+          r > 1 → ×max(0,60, 1 − 0,3·(r − 1))        (leve)
+```
+
+Exemplo: Pônei nível 1 (120 + 30 = 150) com 99 pedras (99): r = 0,66 → ×0,84. Com 99 lingotes de ferro (148,5):
+r = 0,99 → ×0,51. O Asno de Caravana (450 + 30 = 480) leva os mesmos 148,5 a r = 0,31, sem perder nada.
+
+**Caminho e teto de velocidade.** O fator **só multiplica para baixo** o multiplicador que já existia
+(`EncumbranceRules.ApplyFactor`): montado, `MountController.ResolveMultiplier` (e `WorldMapMountRider.SpeedFactor` no
+mapa) = `MountRules.MountedSpeedMultiplier` × fator; a pé, `PlayerMotor.SpeedMultiplier` = buffs × fator. Raiz (0)
+continua 0, o piso do `BuffController` (×0,1) continua, e nada passa do teto de 11,9 m/s do Mounts §9.2. Sem galope
+quando r > 1 (`MountController.LoadAllowsGallop`). Quem calcula é o `EncumbranceTracker` (componente que se acopla
+sozinho ao herói na arena/cidade e ao `WorldMapController` no mapa, lendo a mochila carregada do save), 4 vezes por segundo.
+
+### 28.4 Interface
+
+- **Tooltip** de item: "Peso: 3" / "Peso: 0.5 cada (20 = 10)" / "Não pesa nada" (ouro).
+- **Mochila**: barra "Carga: 42/60" (montado: "Alforjes 120/150", com marca nos 50%) embaixo do cabeçalho; âmbar quando a
+  montaria já perde velocidade, vermelha acima da capacidade.
+- **HUD montado** (arena e mapa): barra pequena "Alforjes" sob o fôlego e a vida da montaria.
+- **Avisos** (linha do HUD das montarias) quando a faixa muda: "sente o peso dos alforjes", "carga demais… nada de
+  galope", "alforjes mais leves", e a pé "a mochila pesou demais" / "ficou leve de novo".
+
+### 28.5 Save e online
+
+Nada novo é gravado: a carga sai do inventário de sempre, então saves antigos carregam iguais. Online, o servidor
+recalcula carga, capacidade e fator com as mesmas funções e valida a velocidade (igual ao Mounts §9.2).
+Testes: `EncumbranceTests` (peso por categoria/ouro/pilha, carga com equipamento, capacidades das 30 montarias,
+curvas de velocidade, galope, teto, faixas e avisos, linha do tooltip). `LocalizationCoverageTests` cobre `EncumbranceTexts`.

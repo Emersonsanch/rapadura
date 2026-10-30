@@ -34,13 +34,13 @@ namespace Rapadura.Gameplay.Enemies
         }
     }
 
-    /// <summary>Raised once per save, when the last page of "Caderno da Vó Zefa" unlocks (the "Caderno Completo" achievement listens to it).</summary>
+    /// <summary>Raised once per save, when the last page of "Caderno da Vó Edna" unlocks (the "Caderno Completo" achievement listens to it).</summary>
     public readonly struct BestiaryCompletedEvent : IGameEvent
     {
     }
 
     /// <summary>
-    /// "Caderno da Vó Zefa" progress: which enemy types were defeated in this save and how many times.
+    /// "Caderno da Vó Edna" progress: which enemy types were defeated in this save and how many times.
     /// Plain C# (EditMode-testable), built by GameManager next to <see cref="DefeatedEnemyRegistry"/>,
     /// registered with SaveManager under <see cref="Key"/> and with NewSessionReset like every per-save system.
     /// <list type="bullet">

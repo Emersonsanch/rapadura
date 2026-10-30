@@ -21,10 +21,10 @@ escondeu volta como **Arca Resgatada**. Os avós são Vó Edna e Vô Jorge.
 
 | Região | Dia (modelo) | Noite (modelo) | Nível mín. | Montaria rara (dia / noite) |
 |---|---|---|---|---|
-| Bosque do Zarafshan (Floresta) | **Saklas, o Lobo de Cinzas** (lobo) | **Saklas, o Rei Mardagayl** (Mardagayl) | 3 | Leão de Luz de Apedemak 2% / 4% |
-| Areias Flamejantes (Deserto) | **Namrael, o Escorpião-Rei** (escorpião) | **Namrael da Lua Cheia** (escorpião recolorido) | 6 | Avestruz de Brasa 1,5% / 3% |
-| Serra de Kaggen (Montanha) | **Mazan, o Gigante da Serra** (ushabti de pedra) | **Mazan, o Gigante da Pedra-Lua** (recolorido) | 9 | Irbis, o Leopardo-das-Neves 2% / 4% |
-| Grutas do Limiar (Cavernas) | **Mahaway, o Rei da Revoada** (enxame) | **Mahaway, o Morcegão da Treva** (Ubır) | 13 | Qilin do Orvalho 0,8% / 1,6% |
+| Bosque do Zarafshan | **Saklas, o Lobo de Cinzas** (lobo) | **Saklas, o Rei Mardagayl** (Mardagayl) | 3 | Leão de Luz de Apedemak 2% / 4% |
+| Areias Flamejantes | **Namrael, o Escorpião-Rei** (escorpião) | **Namrael da Lua Cheia** (escorpião recolorido) | 6 | Avestruz de Brasa 1,5% / 3% |
+| Serra de Kaggen | **Mazan, o Gigante da Serra** (ushabti de pedra) | **Mazan, o Gigante da Pedra-Lua** (recolorido) | 9 | Irbis, o Leopardo-das-Neves 2% / 4% |
+| Grutas do Limiar | **Mahaway, o Rei da Revoada** (enxame) | **Mahaway, o Morcegão da Treva** (Ubır) | 13 | Qilin do Orvalho 0,8% / 1,6% |
 
 Fontes: Saklas e Namrael (arcontes do mito, Teodoro bar Konai); Mazan (*māzan*, "gigante" nos textos médio-persas);
 Mahaway (o gigante que voa, *Livro dos Gigantes*); Āz (a cobiça, textos médio-persas); mardagayl (folclore armênio).
@@ -34,11 +34,11 @@ Mahaway (o gigante que voa, *Livro dos Gigantes*); Āz (a cobiça, textos médio
 `WorldEventCalendar`: tudo é função do instante UTC e do fuso **fixo do servidor (Brasília, UTC−3)**, nunca do fuso do
 aparelho. O relógio é `WorldEventCalendar.UtcNow` (os testes injetam; online é a hora do servidor).
 
-- **Chefes:** cada um a cada **3 h**, aberto **30 min**, defasados 45 min: Floresta 0h/3h/6h…, Deserto 0h45/3h45…,
-  Montanha 1h30…, Cavernas 2h15… → aparece um chefe em algum lugar a cada 45 min e nunca dois ao mesmo tempo.
+- **Chefes:** cada um a cada **3 h**, aberto **30 min**, defasados 45 min: Bosque do Zarafshan 0h/3h/6h…, Areias Flamejantes 0h45/3h45…,
+  Serra de Kaggen 1h30…, Grutas do Limiar 2h15… → aparece um chefe em algum lugar a cada 45 min e nunca dois ao mesmo tempo.
 - **Forma da noite:** se a janela **começa** entre 18h e 6h (Brasília). Decidida no início, nunca muda no meio da luta.
-- **Invasão:** às **2h, 6h, 10h, 14h, 18h e 22h**, 30 min, numa região por vez em rodízio (Floresta → Deserto →
-  Montanha → Cavernas); com 6 por dia o rodízio anda um passo por dia.
+- **Invasão:** às **2h, 6h, 10h, 14h, 18h e 22h**, 30 min, numa região por vez em rodízio (Bosque do Zarafshan → Areias Flamejantes →
+  Serra de Kaggen → Grutas do Limiar); com 6 por dia o rodízio anda um passo por dia.
 - **Prêmio uma vez por janela**: chefe vencido ou arca ganha fecham a janela para aquele jogador. Perdeu? Pode tentar
   de novo enquanto ela estiver aberta. A luta que já começou não é cortada se a janela fechar.
 - **Sem sorteio do cliente:** todo prêmio extra sai de `RewardSeed(tipo, chefe, janela, jogador)` (FNV-1a), então a
@@ -57,7 +57,7 @@ aparelho. O relógio é `WorldEventCalendar.UtcNow` (os testes injetam; online �
 - **Luta (5 min):** chama 2 comuns da região a cada 22 s (o primeiro chamado aos 12 s; no máximo 3 ajudantes vivos);
   com metade da vida fica **furioso** uma vez e chama 3. Tempo acabou → "foi embora" (sem prêmio, pode voltar).
 - **Prêmio da 1ª vitória da janela:** ouro 20 × (1 + 0,5 × região) (noite ×1,25), 2 Pedras-Faísca (+1 à noite),
-  1 Pedra da Alma Viva do Deserto em diante, **50% (noite 65%) de um item da casa** do grupo "Drop:" do chefe da região
+  1 Pedra da Alma Viva das Areias Flamejantes em diante, **50% (noite 65%) de um item da casa** do grupo "Drop:" do chefe da região
   (`HouseDropRules.BossPool`, raridades de chefe, vai para o Depósito) e a **montaria rara** da tabela acima
   (`MountCollection.Grant`, fonte `event`; só espécies jogáveis).
 
@@ -71,7 +71,7 @@ aparelho. O relógio é `WorldEventCalendar.UtcNow` (os testes injetam; online �
 - **Arca por pontos:** +1 ≥ 30, +2 ≥ 90, +3 ≥ 160 (todas as ondas sem Āz ≈ 180), +4 ≥ 260 (precisa vencer Āz),
   +5 ≥ 330 (vencer Āz com ~1 min sobrando). Morrer paga o que os pontos já valem.
 
-| Arca Resgatada | XP (comuns da região) | Ouro (Floresta; +50% por região) | Pedras | Item da casa | Cavalo Celeste de Fergana |
+| Arca Resgatada | XP (comuns da região) | Ouro (Bosque do Zarafshan; +50% por região) | Pedras | Item da casa | Cavalo Celeste de Fergana |
 |---|---|---|---|---|---|
 | +1 | 3 | 6 | — | — | — |
 | +2 | 6 | 12 | 1 Faísca | 10% | — |

@@ -16,7 +16,7 @@ namespace Rapadura.Gameplay.Daily
     {
         public readonly ItemDefinition Item;
 
-        /// <summary>The rare piece's rolled name ("Elmo de Couro do Vaqueiro"), else null.</summary>
+        /// <summary>The rare piece's rolled name ("Elmo de Couro do Caravaneiro"), else null.</summary>
         public readonly string GeneratedName;
 
         public readonly int ToBag;

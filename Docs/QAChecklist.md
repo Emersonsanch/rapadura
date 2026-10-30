@@ -45,12 +45,12 @@
 - [ ] Matar inimigo concede XP e loot; level-up atualiza HUD e atributos; bônus de chefe aplicado.
 - [ ] Armas: corpo a corpo, à distância (projétil, munição do inventário), durabilidade e quebra.
 - [ ] Atordoamento: Correntes das Trevas (1 s), Terremoto (0,8 s) e Granada Elétrica (0,6 s) param o inimigo, cancelam o golpe preparado, mostram faíscas azuis + "Atordoado!"; chefes ficam metade do tempo.
-- [ ] Afixos Ágil/do Frenesi (`AttackSpeed`): ataque básico recarrega mais rápido, sem começar golpe antes do anterior acertar. Espinhosa/do Mandacaru (`Thorns`): atacante corpo a corpo leva dano de volta (até 50%), sem recursão; tooltips mostram os afixos.
+- [ ] Afixos Ágil/do Frenesi (`AttackSpeed`): ataque básico recarrega mais rápido, sem começar golpe antes do anterior acertar. Espinhosa/do Saxaul (`Thorns`): atacante corpo a corpo leva dano de volta (até 50%), sem recursão; tooltips mostram os afixos.
 
 ## 5. Morte e checkpoints
 - [ ] Morte mostra tela com fade e contagem regressiva; "Continuar" e "Carregar" funcionam; auto-continuar ao zerar.
 - [ ] Renascer no checkpoint ativo (ou no spawn inicial); sem soft-lock, input do jogador restaurado.
-- [ ] Queda ao morrer (9%): sem Patuá nem Bênção, morrer várias vezes com uma pilha de poções, ouro, item de missão e equipamento. Em ~1 a cada 11 mortes a tela mostra "Na pressa, você deixou cair: <item>" + "Perdeu de vez. Um Patuá da Vó Edna ou a Bênção da Romaria teria guardado."; sai **só 1 unidade** (pilha de 6 vira 5) e ela não volta (não há mais Achados e Perdidos). Nunca cai ouro, item de missão, item equipado nem item vinculado. Na maioria das mortes nada aparece. Com Patuá ou Bênção ativos, nunca cai nada.
+- [ ] Queda ao morrer (9%): sem Tumar nem Lâmpada Guardiã, morrer várias vezes com uma pilha de poções, ouro, item de missão e equipamento. Em ~1 a cada 11 mortes a tela mostra "Na pressa, você deixou cair: <item>" + "Perdeu de vez. Um Tumar da Vó Edna ou a Lâmpada Guardiã teria guardado."; sai **só 1 unidade** (pilha de 6 vira 5) e ela não volta (não há mais Achados e Perdidos). Nunca cai ouro, item de missão, item equipado nem item vinculado. Na maioria das mortes nada aparece. Com Tumar ou Lâmpada ativos, nunca cai nada.
 - [ ] Save antigo com itens nos antigos "Achados e Perdidos": "Continuar" carrega normal, o Baú abre sem a faixa antiga e os itens dela não aparecem (perdidos de vez). (Online, FASE 12: o item cai no chão para qualquer um pegar.)
 
 ## 6. Itens, inventário, crafting e lojas
@@ -60,20 +60,20 @@
 - [ ] Mobile: tocar num item pega (fica apagado + fantasma), tocar numa casa solta (vermelho e continua segurando se não couber), tocar de novo no item segurado usa/equipa, segurar mostra o tooltip. Gamepad: A pega, setas até uma casa livre/item, A solta.
 - [ ] "Organizar" empacota a partir do canto de cima à esquerda (equipamento primeiro) sem sobrepor nada; numa mochila quase cheia e fragmentada não perde nada.
 - [ ] Cheia de verdade: loot que não cabe mostra "Mochila cheia"; loja recusa a compra sem tirar ouro; Bancada não consome material se o resultado não couber; baú "Pegar o que as missões pedem" leva só o que cabe; recompensa de missão que não coube aparece no Baú.
-- [ ] Save antigo (de antes da grade): carregar → tudo auto-posicionado, nada sobreposto; o que não coube está no Baú da Vó Zefa (chip do baú mostra "N item(ns) esperando lugar" se o baú também estiver cheio). Salvar e carregar de novo mantém cada item na mesma casa.
+- [ ] Save antigo (de antes da grade): carregar → tudo auto-posicionado, nada sobreposto; o que não coube está no Baú da Vó Edna (chip do baú mostra "N item(ns) esperando lugar" se o baú também estiver cheio). Salvar e carregar de novo mantém cada item na mesma casa.
 - [ ] Itens procedurais mostram afixos no tooltip e os bônus realmente mudam os atributos.
 - [ ] Tooltips por mouse, toque longo e foco de gamepad, sem sair da tela.
 - [ ] Crafting: receita com materiais suficientes cria o item e consome materiais; sem materiais fica bloqueada.
 - [ ] Loja: comprar/vender altera moeda e inventário corretamente; sem moeda suficiente bloqueia.
-- [ ] Loot por bioma: Floresta solta madeira/fibra/erva, Montanha minério/lingote, Deserto e Cavernas os seus; "+2 Madeira" sobre o corpo; chefe solta 4 materiais + item bônus Raro/Épico. Com a mochila cheia aparece o aviso "Mochila cheia" e nada some em silêncio.
-- [ ] Vila (botão "Vila", só na Floresta com o token parado): moradores com "(!)" quando há missão, ponto de encontro, Loja e Bancada. Fechar Loja/Bancada volta ao painel; comprar e criar no mapa → itens no próximo encontro e no save (salvar, sair, "Continuar").
+- [ ] Loot por bioma: Bosque do Zarafshan solta madeira/fibra/erva, Serra de Kaggen minério/lingote, Areias Flamejantes e Grutas do Limiar os seus; "+2 Madeira" sobre o corpo; chefe solta 4 materiais + item bônus Raro/Épico. Com a mochila cheia aparece o aviso "Mochila cheia" e nada some em silêncio.
+- [ ] Vila (botão "Vila", só no Bosque do Zarafshan com o token parado): moradores com "(!)" quando há missão, ponto de encontro, Loja e Bancada. Fechar Loja/Bancada volta ao painel; comprar e criar no mapa → itens no próximo encontro e no save (salvar, sair, "Continuar").
 
 ## 7. Narrativa: diálogos e quests
 - [ ] Diálogo com escolhas a partir de NPC; escolhas mudam o ramo; fechar/reabrir não quebra estado.
 - [ ] Quests de matar, coletar e conversar progridem e completam; recompensas (itens/XP) entregues.
 - [ ] Log de missões e rastreador na tela atualizam em tempo real.
-- [ ] Missões regionais: "Conversar com Dona Cida / Seu Bento / Mestre Tonho / Benedita das Lamparinas" só aparece em região desbloqueada com o token parado; "(!)" quando há missão ou chefe; 2 missões encadeadas por região, fala por primo, dica antes do chefe, agradecimento depois. Recompensa concluída no mapa chega no próximo encontro.
-- [ ] Campanha: Novo jogo → prólogo no primeiro mapa (painel do herói escolhido); toque/"Continuar"/Espaço/Enter/A avançam, "Pular" encerra e conta como visto. Interlúdio ao voltar ao mapa após Lobo Alfa, Guardião da Ruína e Senhor da Guerra; epílogo após o Habitante Ancestral → créditos → mapa pós-jogo + conquista "A Luz Volta para Casa". Sair entre o chefe e o mapa e "Continuar" ainda mostra o beat; save antigo não repete o prólogo.
+- [ ] Missões regionais: "Conversar com Mariam / Ammo / Mestre Mihr / Parthenos, a das Lamparinas" só aparece em região desbloqueada com o token parado; "(!)" quando há missão ou chefe; 2 missões encadeadas por região, fala por primo, dica antes do chefe, agradecimento depois. Recompensa concluída no mapa chega no próximo encontro.
+- [ ] Campanha: Novo jogo → prólogo no primeiro mapa (painel do herói escolhido); toque/"Continuar"/Espaço/Enter/A avançam, "Pular" encerra e conta como visto. Interlúdio ao voltar ao mapa após Kök-Böri, Grande Ushabti e Senhor da Guerra; epílogo após o Tages, o Habitante Ancestral → créditos → mapa pós-jogo + conquista "A Luz Volta para Casa". Sair entre o chefe e o mapa e "Continuar" ainda mostra o beat; save antigo não repete o prólogo.
 
 ## 8. Mapa mundi e encontros
 - [ ] Mapa mundi: viajar entre regiões desbloqueadas; regiões bloqueadas recusam viagem.
@@ -105,6 +105,6 @@
 - [ ] Créditos e avisos de licença conferidos contra `Docs/ThirdPartyLicenses.md`.
 
 ## 13. Dicas de primeira vez (tutorial)
-- [ ] Perfil novo (ou "Reiniciar tutorial"): cada dica aparece uma vez — mapa ("Explorar"), primeiro inimigo, skills, loot, missão, nível 2, morte, noite, receita possível, "Conversar com…" (contorna o botão), "Vila" na Floresta depois do prólogo (contorna o botão), primeiro material ("Materiais!") e primeiro atordoamento ("Atordoado!", só em encontro).
+- [ ] Perfil novo (ou "Reiniciar tutorial"): cada dica aparece uma vez — mapa ("Explorar"), primeiro inimigo, skills, loot, missão, nível 2, morte, noite, receita possível, "Conversar com…" (contorna o botão), "Vila" no Bosque do Zarafshan depois do prólogo (contorna o botão), primeiro material ("Materiais!") e primeiro atordoamento ("Atordoado!", só em encontro).
 - [ ] Nenhuma dica aparece sobre o prólogo/interlúdios/epílogo, o painel da Vila, a Loja/Bancada, uma conversa ou o banner "Prepare-se!"; a dica volta quando a tela fecha.
 - [ ] "Mostrar dicas" desligado: nada aparece; ligar de novo e "Reiniciar tutorial" trazem as dicas. Um `tutorial.json` de versão anterior carrega sem repetir as 9 dicas antigas (só as novas aparecem).

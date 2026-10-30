@@ -22,7 +22,7 @@ namespace Rapadura.UI.WorldMap
     /// a Nova Jornada+ (<see cref="NewGamePlusProgress.Cycle"/> 1+).</item>
     /// <item>Offer: a "Nova Jornada+" button in the HUD's <c>wm-action-row</c>, shown in the village region (Vó
     /// Zefa's) once the campaign is complete and its ending was shown (<see cref="NewGamePlusRules.CanOffer"/>).
-    /// It opens Vó Zefa's confirmation panel under <c>wm-hud-root</c> (one of the HUD's screens: Esc closes it):
+    /// It opens Vó Edna's confirmation panel under <c>wm-hud-root</c> (one of the HUD's screens: Esc closes it):
     /// her line for the current hero, what is kept, what starts over and the next cycle's enemy multipliers.</item>
     /// <item>"Partir de novo": <see cref="NewGamePlusProgress.BeginNextCycle"/>, auto-save, then the world map is
     /// reloaded so the token, regions and bosses start fresh; the new-journey prologue plays there
@@ -128,7 +128,7 @@ namespace Rapadura.UI.WorldMap
 
         /// <summary>
         /// Whether the "Nova Jornada+" button should be on screen: the city button's gating, plus the offer, and only in
-        /// Vó Zefa's village (she makes the offer; the other cities have a hub too but not her).
+        /// Vó Edna's village (she makes the offer; the other cities have a hub too but not her).
         /// </summary>
         public static bool ShouldShowOffer(bool canBegin, bool hudVisible, bool tokenIdle, bool paused, bool dialogueActive, BiomeType? currentRegion)
         {

@@ -582,9 +582,9 @@ def budget_table(ctx: Context) -> str:
     if ctx.hunting is not None:
         lines.append(f"| amuletos do Caderno + presa do dia (seção Caça) | AttackDamage +{ctx.hunting_common:g} contra comuns (nenhum amuleto de dano); "
                      f"proteção até {ctx.hunting.best_protection():g} contra um tipo de bicho comum (fora do modelo de TTK) | "
-                     f"páginas do Caderno / Seu Zé |")
+                     f"páginas do Caderno / Patig |")
     cuddle = load_cuddle()
-    lines.append(f"| carinho no Caramelo | {cuddle.stat} +{cuddle.value:g} por {cuddle.seconds:g} s (fora do modelo: 0 em combate) | Vila |")
+    lines.append(f"| carinho no Ari | {cuddle.stat} +{cuddle.value:g} por {cuddle.seconds:g} s (fora do modelo: 0 em combate) | Vila |")
     return "\n".join(lines)
 
 
@@ -828,7 +828,7 @@ def wings_report(plain_results: dict, refined_results: dict, winged_results: dic
 def wings_main(ctx: Context, runs: int, base_gear: dict, results: dict, refined: dict, refine: RefineCurve) -> None:
     wings = load_wings()
     winged = {cycle: evaluate(ctx, cycle, runs, winged_gear(base_gear, refine, wings, cycle)) for cycle in (0, 1)}
-    print("\n## Asas e Frutas do Sertão por região (README: Tacho Encantado e asas)\n")
+    print("\n## Asas e Frutas de Luz por região (README: Uasamonga da Vó Edna: asas)\n")
     print(wings_report(results, refined, winged))
     print("\n## Orçamento das asas\n")
     problems = [f"NG+{c}: {p}" for c in winged for p in wings_violations(results[c], refined[c], winged[c], c)]

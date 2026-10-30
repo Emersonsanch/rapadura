@@ -44,7 +44,7 @@ namespace Rapadura.Tests
             Assert.IsFalse(house.IsOffered);
             _forestVictories = 3;
             Assert.IsTrue(house.IsOffered);
-            Assert.IsTrue(house.HasQuestNews, "(!) while Vó Zefa waits");
+            Assert.IsTrue(house.HasQuestNews, "(!) while Vó Edna waits");
         }
 
         [Test]

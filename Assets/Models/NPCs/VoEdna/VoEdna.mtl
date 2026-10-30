@@ -1,0 +1,3 @@
+newmtl VoEdna_Mat
+Kd 1.0 1.0 1.0
+map_Kd VoEdna_tex.png

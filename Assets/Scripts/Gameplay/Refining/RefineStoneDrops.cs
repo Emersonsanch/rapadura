@@ -28,7 +28,7 @@ namespace Rapadura.Gameplay.Refining
     }
 
     /// <summary>
-    /// Rare drops of the "Pedras do Sertão" (Docs/Balance/README.md "Refino de item", fontes das pedras): a fourth loot source on top of
+    /// Rare drops of the "Pedras da Luz Presa" (Docs/Balance/README.md "Refino de item", fontes das pedras): a fourth loot source on top of
     /// <see cref="EnemyLootRoller"/>, rolled by <see cref="EnemyLootGranter"/> after it so the existing seeds keep
     /// reproducing the same base/biome/boss drops. One roll per item, in <see cref="RefineItems.All"/> order. The
     /// Bênção is the common one (bosses always drop it); Alma from the Deserto on; Vida and Caos only from the Serra.

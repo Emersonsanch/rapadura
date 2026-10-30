@@ -18,7 +18,7 @@ using UnityEngine;
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// "Caderno da Vó Zefa": unlocks and kill counts (<see cref="BestiaryProgress"/>), the once-per-save
+    /// "Caderno da Vó Edna": unlocks and kill counts (<see cref="BestiaryProgress"/>), the once-per-save
     /// completion and its achievement, the save round-trip and saves written before the bestiary existed,
     /// the data-derived pages (<see cref="BestiaryCatalog"/>) and that every enemy asset has a page with lore
     /// and the five cousins' comments in both languages (<see cref="BestiaryTexts"/>).

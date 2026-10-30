@@ -69,7 +69,7 @@ namespace Rapadura.Gameplay.World.Cities
         public string KeyBase => "city." + CityId;
         public string NameKey => KeyBase + ".name";
 
-        /// <summary>Short label of the HUD button ("Vila", "Areia Branca"...).</summary>
+        /// <summary>Short label of the HUD button ("Vila", "Qocho"...).</summary>
         public string ButtonKey => KeyBase + ".button";
         public string FlavourKey => KeyBase + ".flavour";
     }

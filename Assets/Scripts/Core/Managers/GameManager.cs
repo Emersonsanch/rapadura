@@ -67,9 +67,9 @@ namespace Rapadura.Core.Managers
         public Rapadura.Gameplay.World.Events.WorldEventState WorldEvents { get; private set; }
         /// <summary>"Conversas entre primos na estrada": exchanges already heard and the trip cooldown.</summary>
         public Rapadura.Gameplay.World.Chatter.RoadChatterState RoadChatter { get; private set; }
-        /// <summary>"Cozinha da Vó Zefa": known dishes and the active meal (village hub on the map).</summary>
+        /// <summary>"Forno da Vó Edna": known dishes and the active meal (village hub on the map).</summary>
         public Rapadura.Gameplay.Cooking.MealService Meals { get; private set; }
-        /// <summary>"Segredos e áreas ocultas": revealed/investigated map secrets and the "Relíquias do Sertão" owned.</summary>
+        /// <summary>"Segredos e áreas ocultas": revealed/investigated map secrets and the "Lembranças do Vô Jorge" owned.</summary>
         public Rapadura.Gameplay.Secrets.SecretsProgress Secrets { get; private set; }
         /// <summary>"Pesca no açude": fish collection and records ("Caderno de pesca").</summary>
         public Rapadura.Gameplay.Fishing.FishingProgress Fishing { get; private set; }
@@ -84,7 +84,7 @@ namespace Rapadura.Core.Managers
         public WorldMapProgress WorldMapProgress { get; private set; }
         /// <summary>Cities (TODO 12.3a): visited ones (carro de boi stops) and the themed shops' rotation periods.</summary>
         public Rapadura.Gameplay.World.Cities.CityProgress Cities { get; private set; }
-        /// <summary>Death protection: the Bênção da Romaria (until the next death) and Vó Zefa's Patuá gifts.</summary>
+        /// <summary>Death protection: the Bênção da Romaria (until the next death) and Vó Edna's Patuá gifts.</summary>
         public Rapadura.Gameplay.Inventory.DeathProtectionState DeathProtection { get; private set; }
         /// <summary>"Minha casa" (Fase 15, H1): one house per account/save, shared by the five cousins.</summary>
         public Rapadura.Gameplay.Housing.HouseService House { get; private set; }
@@ -289,7 +289,7 @@ namespace Rapadura.Core.Managers
             SaveManager.Register(BuildingManager);
             SaveManager.Register(CraftingManager);
             SaveManager.Register(DefeatedEnemyRegistry);
-            // "Caderno da Vó Zefa" (bestiary); older saves have no entry and load an empty notebook.
+            // "Caderno da Vó Edna" (bestiary); older saves have no entry and load an empty notebook.
             SaveManager.Register(BestiaryProgress);
             // Hunting; older saves have no entry and load with no task, no charms and today's prey offers.
             SaveManager.Register(Hunting);
@@ -298,7 +298,7 @@ namespace Rapadura.Core.Managers
             // Training + talent wheel; older saves have no entry and start untrained.
             SaveManager.Register(Talents);
             SaveManager.Register(ShopManager);
-            // "Baú da Vó Zefa" (village hub on the map); older saves have no entry and load an empty chest.
+            // "Baú da Vó Edna" (village hub on the map); older saves have no entry and load an empty chest.
             SaveManager.Register(VillageChest);
             // Road events on the map; older saves have no entry and load with no cooldown and no boons.
             SaveManager.Register(WorldEvents);

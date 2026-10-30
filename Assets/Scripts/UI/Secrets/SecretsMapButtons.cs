@@ -128,7 +128,7 @@ namespace Rapadura.UI.Secrets
             return hudVisible && hasInvestigable && !paused && !dialogueActive;
         }
 
-        /// <summary>"Investigar: Casa de farinha abandonada" / "… (tem guarda!)".</summary>
+        /// <summary>"Investigar: Moinho abandonado" / "… (tem guarda!)".</summary>
         public static string BuildInvestigateLabel(WorldSecretDefinition secret, LocalizationManager localization)
         {
             string name = SecretTexts.Get(localization, secret.NameKey);

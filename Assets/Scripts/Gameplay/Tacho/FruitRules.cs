@@ -16,7 +16,7 @@ namespace Rapadura.Gameplay.Tacho
     }
 
     /// <summary>
-    /// "Frutas do Sertão" (MU Online's fruits, our names; Docs/Balance/README.md "Tacho Encantado e asas"), brewed in the Tacho
+    /// "Frutas de Luz" (MU Online's fruits, our names; Docs/Balance/README.md "Tacho Encantado e asas"), brewed in the Tacho
     /// Encantado and eaten from the Mochila during an encounter (where the hero's <c>AttributeSet</c> lives):
     /// <list type="bullet">
     /// <item><b>Fruta do Mandacaru</b>: +1 attribute point to spend, at most <see cref="MaxGrowthPoints"/> per save (counted

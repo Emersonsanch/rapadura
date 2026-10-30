@@ -102,7 +102,7 @@ namespace Rapadura.UI.WorldMap
             return string.Join(" ", parts);
         }
 
-        /// <summary>"Na barriga: Cuscuz · faltam 2 lutas" / "... · última luta" / "Barriga vazia...".</summary>
+        /// <summary>"Na barriga: Nan do Tandir · faltam 2 lutas" / "... · última luta" / "Barriga vazia...".</summary>
         public static string ActiveMealLine(ActiveMeal meal, LocalizationManager manager)
         {
             MealRecipeSpec recipe = meal.IsActive ? MealCatalog.Get(meal.recipeId) : null;
@@ -116,7 +116,7 @@ namespace Rapadura.UI.WorldMap
                 : KitchenTexts.Format(manager, KitchenTexts.ActiveMeal, DishName(manager, recipe), meal.encountersRemaining);
         }
 
-        /// <summary>HUD badge text ("Cuscuz · 2" / "Cuscuz · última"), or null with no meal (badge hidden).</summary>
+        /// <summary>HUD badge text ("Nan do Tandir · 2" / "Nan do Tandir · última"), or null with no meal (badge hidden).</summary>
         public static string HudBadgeText(ActiveMeal meal, LocalizationManager manager)
         {
             MealRecipeSpec recipe = meal.IsActive ? MealCatalog.Get(meal.recipeId) : null;
@@ -143,7 +143,7 @@ namespace Rapadura.UI.WorldMap
             return string.IsNullOrEmpty(name) ? "?" : name.Substring(0, 1).ToUpperInvariant();
         }
 
-        /// <summary>Vó Zefa's line when <paramref name="hero"/> opens the stove (the lesson line when she just taught them).</summary>
+        /// <summary>Vó Edna's line when <paramref name="hero"/> opens the stove (the lesson line when she just taught them).</summary>
         public static string GrandmaLine(CharacterId? hero, MealRecipeSpec taught, LocalizationManager manager)
         {
             if (!hero.HasValue)
@@ -157,7 +157,7 @@ namespace Rapadura.UI.WorldMap
         /// <summary>
         /// Like <see cref="GrandmaLine(CharacterId?, MealRecipeSpec, LocalizationManager)"/>, but when
         /// <paramref name="cameFrom"/> is set (the region of the latest interlude seen, <c>StoryBeats.LastRegionCleared</c>)
-        /// Vó Zefa remembers it: the cousin's <c>ui.kitchen.grandma.after_&lt;region&gt;_&lt;hero&gt;</c> line, or the
+        /// Vó Edna remembers it: the cousin's <c>ui.kitchen.grandma.after_&lt;region&gt;_&lt;hero&gt;</c> line, or the
         /// family one without a cousin. A lesson still wins.
         /// </summary>
         public static string GrandmaLine(CharacterId? hero, MealRecipeSpec taught, LocalizationManager manager, BiomeType? cameFrom)
@@ -177,7 +177,7 @@ namespace Rapadura.UI.WorldMap
         }
 
         /// <summary>
-        /// Which region Vó Zefa remembers on the <paramref name="visit"/>-th stove opening of the session (0-based): the
+        /// Which region Vó Edna remembers on the <paramref name="visit"/>-th stove opening of the session (0-based): the
         /// last region cleared on even visits (so the first visit after an interlude remembers it), none on odd ones
         /// (her usual per-cousin greeting stays in rotation).
         /// </summary>

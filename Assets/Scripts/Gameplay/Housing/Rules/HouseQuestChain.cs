@@ -6,7 +6,7 @@ namespace Rapadura.Gameplay.Housing
 {
     public enum HouseQuestKind
     {
-        /// <summary>Bring materials to Vó Zefa (paid from the bag/chest when claimed).</summary>
+        /// <summary>Bring materials to Vó Edna (paid from the bag/chest when claimed).</summary>
         Deliver,
         /// <summary>Done by reaching a house level (the upgrade is the quest's scene).</summary>
         Upgrade,
@@ -58,7 +58,7 @@ namespace Rapadura.Gameplay.Housing
     }
 
     /// <summary>
-    /// The Vó Zefa chain "Missões da Casa" 2–6 (Housing.md §7.3): Água Fresca (10 pedra + 5 madeira → poço), Fogo na
+    /// The Vó Edna chain "Missões da Casa" 2–6 (Housing.md §7.3): Água Fresca (10 pedra + 5 madeira → poço), Fogo na
     /// Cozinha (after the Lobo Alfa: 3 carne assada + 8 madeira → fogão a lenha + filtro), Parede de Barro (reach N3 →
     /// colcha), Tijolo por Tijolo (reach N4 → rede da Vó + Baú-correio), Casa Cheia (N5 + four cousins in the guest
     /// book → retrato de casamento). Unity-free.

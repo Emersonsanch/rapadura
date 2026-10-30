@@ -16,10 +16,10 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.WorldMap
 {
     /// <summary>
-    /// "Tacho Encantado da Vó" of the Vila's hub (<see cref="VillageHubButton"/> → Serviços, only where Vó Zefa lives:
+    /// "Tacho Encantado da Vó" of the Vila's hub (<see cref="VillageHubButton"/> → Serviços, only where Vó Edna lives:
     /// <see cref="Rapadura.Gameplay.World.Cities.CitySpec.HasGrandmaServices"/>). Lists the recipes of <see cref="TachoRules"/>:
     /// wings level 1 per style (on the chosen refined piece), upgrades of the wings the hero has, the Proteção do Caos (on the
-    /// chosen piece) and the two Frutas do Sertão, each with its chance, cost and what a failure does (materials spent, main
+    /// chosen piece) and the two Frutas de Luz, each with its chance, cost and what a failure does (materials spent, main
     /// item kept), and a confirmation before each roll. Built in code on the map HUD's document like the forge window, with
     /// <c>Resources/UI/Tacho.uss</c>; works on the hub's live carried bag through <see cref="TachoService"/>. Offline the
     /// seed is local; online the server rolls (Fase 12) and this window only shows its answer.

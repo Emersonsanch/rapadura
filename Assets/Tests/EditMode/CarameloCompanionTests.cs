@@ -258,7 +258,7 @@ namespace Rapadura.Tests
         [Test]
         public void Cuddle_IntroFirst_ThenTheCousinsLinesInTurn_AndArmsTheBuffOnce()
         {
-            Assert.AreEqual(CarameloTexts.Intro, CarameloCuddle.Cuddle(CharacterId.Lavine, false), "Vó Zefa introduces him first");
+            Assert.AreEqual(CarameloTexts.Intro, CarameloCuddle.Cuddle(CharacterId.Lavine, false), "Vó Edna introduces him first");
             Assert.IsTrue(CarameloCuddle.BuffPending);
 
             string first = CarameloCuddle.Cuddle(CharacterId.Lavine, true);
@@ -267,7 +267,7 @@ namespace Rapadura.Tests
             Assert.AreEqual(CarameloTexts.CuddleLineKey(CharacterId.Lavine, 0), first);
             Assert.AreNotEqual(first, second);
             Assert.AreEqual(first, third, "wraps around");
-            Assert.AreEqual(CarameloTexts.Intro, CarameloCuddle.Cuddle(null, true), "no hero → Vó Zefa speaks");
+            Assert.AreEqual(CarameloTexts.Intro, CarameloCuddle.Cuddle(null, true), "no hero → Vó Edna speaks");
 
             Assert.IsTrue(CarameloCuddle.TryConsumeBuff());
             Assert.IsFalse(CarameloCuddle.TryConsumeBuff(), "cuddling twice never stacks");

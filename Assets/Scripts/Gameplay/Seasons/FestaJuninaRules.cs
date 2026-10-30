@@ -23,7 +23,7 @@ namespace Rapadura.Gameplay.Seasons
     /// <item>Pescaria: <see cref="FishPrenda"/> prenda per fish landed during the festa, up to <see cref="FishPrendasPerDay"/> a day.</item>
     /// <item>The Barraca de Prendas sells the 18 Festa Junina house items of CatalogoCasa.md (<see cref="HouseSeason.Junina"/>,
     /// event source, <c>_eventPrice</c> in prendas). The Lendário (<see cref="LegendaryItemId"/>) is not sold: it comes
-    /// from finishing the "tarefas do arraiá" (<see cref="TasksDone"/>).</item>
+    /// from finishing the "tarefas do Bema" (<see cref="TasksDone"/>).</item>
     /// </list>
     /// </summary>
     public static class FestaJuninaRules
@@ -34,7 +34,7 @@ namespace Rapadura.Gameplay.Seasons
         public const int FishPrenda = 1;
         public const int FishPrendasPerDay = 10;
 
-        /// <summary>"Bandeira do primeiro São João do sítio": the festa's Lendário.</summary>
+        /// <summary>"Estandarte do primeiro Bema da Vila": the festa's Lendário.</summary>
         public const string LegendaryItemId = "casa_familia_025";
 
         /// <summary>Tarefas do arraiá: dances to finish.</summary>
@@ -127,7 +127,7 @@ namespace Rapadura.Gameplay.Seasons
             return prendas < item.EventPrice ? PrendaBuyCheck.NotEnoughPrendas : PrendaBuyCheck.Ok;
         }
 
-        /// <summary>All tarefas do arraiá done: <see cref="TaskDances"/> dances, one without a miss, <see cref="TaskDistinctPrizes"/> different prizes.</summary>
+        /// <summary>All tarefas do Bema done: <see cref="TaskDances"/> dances, one without a miss, <see cref="TaskDistinctPrizes"/> different prizes.</summary>
         public static bool TasksDone(int dances, bool fullComboDanced, int distinctPrizes)
         {
             return dances >= TaskDances && fullComboDanced && distinctPrizes >= TaskDistinctPrizes;

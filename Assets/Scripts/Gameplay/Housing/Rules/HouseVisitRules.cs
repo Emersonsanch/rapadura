@@ -20,7 +20,7 @@ namespace Rapadura.Gameplay.Housing
 
     /// <summary>
     /// Offline visits (Housing.md §4.6): at most one per in-game day, when the cousin comes home and the guest book is
-    /// placed. The visitor is one of the four cousins who are not playing, Vó Zefa, or a regional NPC already met
+    /// placed. The visitor is one of the four cousins who are not playing, Vó Edna, or a regional NPC already met
     /// (Dona Cida from the start; Seu Bento, Mestre Tonho and Benedita as the bosses before their towns fall). They sit,
     /// comment on a piece and sign. Deterministic by day (no RNG state in the save). Unity-free.
     /// </summary>
@@ -45,7 +45,7 @@ namespace Rapadura.Gameplay.Housing
 
         public static bool CanVisit(int lastVisitDay, int today, bool guestBookPlaced) => guestBookPlaced && today > lastVisitDay;
 
-        /// <summary>Who may visit: the cousins not playing, Vó Zefa, Dona Cida, and one NPC per boss beaten (in campaign order).</summary>
+        /// <summary>Who may visit: the cousins not playing, Vó Edna, Dona Cida, and one NPC per boss beaten (in campaign order).</summary>
         public static List<string> Candidates(string activeCousin, int bossesDefeated)
         {
             var list = Cousins.Where(c => !string.Equals(c, activeCousin, StringComparison.Ordinal)).ToList();

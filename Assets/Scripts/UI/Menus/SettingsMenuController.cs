@@ -105,7 +105,7 @@ namespace Rapadura.UI.Menus
         private readonly HapticsSettingsSection _hapticsSection = new HapticsSettingsSection();
         /// <summary>Parental "Lembrete de tempo de jogo" (Acessibilidade panel, after the vibration row).</summary>
         private readonly PlayTimeReminderSettingsSection _playTimeReminderSection = new PlayTimeReminderSettingsSection();
-        // "Caramelo (companheiro nos encontros)", appended after the vibration row.
+        // "Ari (companheiro nos encontros)", appended after the vibration row.
         private readonly CompanionSettingsSection _companionSection = new CompanionSettingsSection();
         // "Joystick virtual", appended in code to the Controles panel.
         private readonly TouchControlsSettingsSection _touchControlsSection = new TouchControlsSettingsSection();

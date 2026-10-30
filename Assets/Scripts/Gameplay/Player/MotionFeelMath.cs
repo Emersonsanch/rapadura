@@ -455,5 +455,66 @@ namespace Rapadura.Gameplay.Player
             float a = Mathf.Clamp(yawAccelerationDegrees, -MaxTurnLagYawAcceleration, MaxTurnLagYawAcceleration);
             return -a * Mathf.Clamp01(followThrough);
         }
+
+        // ------------------------------------------------------------------ head-look interest
+
+        /// <summary>Half-angle (deg) of the cone in front of the hero inside which something can catch the eye.</summary>
+        public const float InterestConeDegrees = 100f;
+
+        /// <summary>
+        /// How much a candidate point of interest draws the gaze (0 = ignore): closer and more in front scores
+        /// higher; outside <paramref name="range"/> or behind the <see cref="InterestConeDegrees"/> cone = 0.
+        /// <paramref name="importance"/> scales the result (an enemy matters more than a prop).
+        /// </summary>
+        public static float InterestScore(Vector3 eye, Vector3 forward, Vector3 point, float range, float importance = 1f)
+        {
+            Vector3 to = point - eye;
+            to.y = 0f;
+            forward.y = 0f;
+            float distance = to.magnitude;
+            if (range <= 0f || distance > range || distance < 1e-4f || forward.sqrMagnitude < 1e-6f || importance <= 0f)
+            {
+                return 0f;
+            }
+
+            float angle = Vector3.Angle(forward, to);
+            if (angle > InterestConeDegrees)
+            {
+                return 0f;
+            }
+
+            float near = 1f - distance / range;                       // 1 touching, 0 at the edge of range
+            float front = 1f - angle / InterestConeDegrees;            // 1 dead ahead, 0 at the cone's edge
+            return importance * (0.4f + 0.6f * near) * (0.5f + 0.5f * front);
+        }
+
+        /// <summary>
+        /// Signed pitch (deg, + = looking down) from <paramref name="eye"/> to <paramref name="point"/>, clamped to
+        /// ±<paramref name="maxPitch"/>; 0 when the point is at eye height or (almost) on top of the eye.
+        /// </summary>
+        public static float LookPitch(Vector3 eye, Vector3 point, float maxPitch)
+        {
+            Vector3 to = point - eye;
+            float horizontal = new Vector2(to.x, to.z).magnitude;
+            if (horizontal < 0.05f)
+            {
+                return 0f;
+            }
+
+            float pitch = -Mathf.Atan2(to.y, horizontal) * Mathf.Rad2Deg;
+            return Mathf.Clamp(pitch, -Mathf.Abs(maxPitch), Mathf.Abs(maxPitch));
+        }
+
+        /// <summary>
+        /// Seconds the gaze stays on the k-th thing that caught it (<paramref name="baseHold"/> × 1.5..4, jittered per
+        /// hero and per glance) and seconds of disinterest after it (<paramref name="baseHold"/> × 2..6). Attention that
+        /// varies instead of a metronome.
+        /// </summary>
+        public static void InterestTiming(int seed, int index, float baseHold, out float hold, out float cooldown)
+        {
+            baseHold = Mathf.Max(0.2f, baseHold);
+            hold = baseHold * Mathf.Lerp(1.5f, 4f, Hash01(index, seed));
+            cooldown = baseHold * Mathf.Lerp(2f, 6f, Hash01(index + 1000, seed));
+        }
     }
 }

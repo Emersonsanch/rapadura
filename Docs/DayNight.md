@@ -29,12 +29,12 @@ modelo base, para o saque e o XP serem os da região.
 
 | Região | Dia | Amanhecer | Entardecer | Noite |
 |---|---|---|---|---|
-| Floresta | Lobo 5, Aranha 3 | + Lobo noturno 1 | Lobo 4, Aranha 3, + noturnos 1/1 | Lobo 2, Aranha 1, **Lobo noturno 4, Aranha noturna 3, Lobisomem 1, Coruja 2, Queixadas 2 (bando), Vaga-lumes 1** |
-| Deserto | Escorpião 5 | + noturno 1 | Escorpião 4, + noturno 1, **Vaga-lumes 1** | Escorpião 2, **noturno 5, Vaga-lumes 3** |
-| Montanha | Golem 4 | + noturno 1 | + noturno 1 | Golem 2, **noturno 5, Coruja 2, Mãe-da-lua 1** |
-| Cavernas | Morcegos 6 | Morcegos 5, + noturno 1 | Morcegos 5, + noturno 1 | Morcegos 2, **noturno 4, Morcego-vampiro 2** |
+| Bosque do Zarafshan | Lobo 5, Aranha 3 | + Lobo noturno 1 | Lobo 4, Aranha 3, + noturnos 1/1 | Lobo 2, Aranha 1, **Lobo noturno 4, Aranha noturna 3, Mardagayl 1, Coruja 2, Javalis do Lodo 2 (bando), Vaga-lumes 1** |
+| Areias Flamejantes | Escorpião 5 | + noturno 1 | Escorpião 4, + noturno 1, **Vaga-lumes 1** | Escorpião 2, **noturno 5, Vaga-lumes 3** |
+| Serra de Kaggen | Ushabti 4 | + noturno 1 | + noturno 1 | Ushabti 2, **noturno 5, Coruja 2, Ave-Graveto de Omöl 1** |
+| Grutas do Limiar | Morcegos 6 | Morcegos 5, + noturno 1 | Morcegos 5, + noturno 1 | Morcegos 2, **noturno 4, Ubır 2** |
 
-As Cavernas são sempre escuras para o olho, mas os bichos seguem o relógio (de dia lá dentro é "de dia" para eles).
+As Grutas do Limiar são sempre escuras para o olho, mas os bichos seguem o relógio (de dia lá dentro é "de dia" para eles).
 
 ### 2.1 Variante noturna (sem modelo novo)
 
@@ -46,32 +46,32 @@ ganha mais XP e saque. Feito como o elite dos eventos da estrada (`NightVariantT
 ### 2.2 Espécies da noite (modelo próprio, 2026-10-30)
 
 Cada espécie tem seu `EnemyDefinition` e seu modelo low-poly feito em código (`Docs/Animation.md` §7.2), substituindo os
-recolors de lobo/morcego. O asset copia o **inimigo comum da região de casa** (vida/dano/XP de Floresta 70/7/10,
-Deserto 110/11/18, Montanha 140/13/28, Cavernas 170/7/40 — assim o balanço e o bestiário não mudam de faixa) e fica na
+recolors de lobo/morcego. O asset copia o **inimigo comum da região de casa** (vida/dano/XP de Bosque do Zarafshan 70/7/10,
+Areias Flamejantes 110/11/18, Serra de Kaggen 140/13/28, Grutas do Limiar 170/7/40 — assim o balanço e o bestiário não mudam de faixa) e fica na
 tabela do bioma de casa com **peso 0** (nunca aparece de dia no mapa; o bioma dá a tabela de saque e a região do
 caderno). A noite aplica os multiplicadores da espécie (`NightVariantRules`, via `NightVariantTag`). Uma espécie
-**visitante** (coruja na Montanha, vaga-lumes na Floresta) é escalada pela razão entre os comuns das duas regiões
+**visitante** (coruja na Serra de Kaggen, vaga-lumes no Bosque do Zarafshan) é escalada pela razão entre os comuns das duas regiões
 (vida, dano e XP), então é tão dura lá quanto em casa; o saque continua sendo o da casa.
 
 | Espécie (asset) | Casa / onde | Vida | Dano | XP | Saque extra | Teto por onda | Modelo e silhueta no escuro | Olhos |
 |---|---|---|---|---|---|---|---|---|
-| **Lobisomem-do-sertão** (`enemy_forest_werewolf`, mini-chefe raro, 1/16 da noite) | Floresta, noite | ×5 (350) | +60% | ×5 | 3 | 1 | Lobão desgrenhado de ~1,6 m, corcova de juba, orelha caída, língua de fora; corre de quatro e **empina** para a patada. | vermelhos |
-| **Morcego-vampiro gigante** (`enemy_cave_vampire_bat`) | Cavernas, noite | ×1,8 | +30% | ×1,8 | 1 | 2 | Um morcegão vinho, asas de 2,4 m (o "M" das asas). | vermelhos |
-| **Coruja-rasga-mortalha** (`enemy_forest_shroud_owl`) | Floresta; visita a Montanha | ×0,8 | +20% | ×1,5 | 1 | 2 | Cara branca de coração que flutua no escuro; gira a cabeça. | amarelos |
-| **Enxame de vaga-lumes-de-fogo** (`enemy_desert_firefly_swarm`) | Deserto (entardecer e noite); visita a Floresta | ×1,05 (3 × 0,35) | ×0,4 | ×1,3 | 1 | 1 | Nuvem de 9 lanternas verde-amarelas que piscam. | amarelos + lanternas |
-| **Queixada da Caipora** (`enemy_forest_peccary`) | Floresta, noite | ×1,3 | +30% | ×1,3 | 0 | 3, **bando de 2–3** | Porco escuro com crista de cerdas e queixo branco. | laranja (brasa) |
-| **Mãe-da-lua** (`enemy_mountain_potoo`) | Montanha, noite | ×0,6 | −30% | ×2 | 1 | 1 | Ave-graveto no seu galho; bico mínimo que abre num bocão rosa. | amarelos enormes |
+| **Mardagayl, o Lobo-das-Sete-Noites** (`enemy_forest_werewolf`, mini-chefe raro, 1/16 da noite) | Bosque do Zarafshan, noite | ×5 (350) | +60% | ×5 | 3 | 1 | Lobão desgrenhado de ~1,6 m, corcova de juba, orelha caída, língua de fora; corre de quatro e **empina** para a patada. | vermelhos |
+| **Ubır, o Morcegão Bebe-Luz** (`enemy_cave_vampire_bat`) | Grutas do Limiar, noite | ×1,8 | +30% | ×1,8 | 1 | 2 | Um morcegão vinho, asas de 2,4 m (o "M" das asas). | vermelhos |
+| **Coruja-de-Fumaça** (`enemy_forest_shroud_owl`) | Bosque do Zarafshan; visita a Serra de Kaggen | ×0,8 | +20% | ×1,5 | 1 | 2 | Cara branca de coração que flutua no escuro; gira a cabeça. | amarelos |
+| **Enxame de Faíscas Presas** (`enemy_desert_firefly_swarm`) | Areias Flamejantes (entardecer e noite); visita o Bosque do Zarafshan | ×1,05 (3 × 0,35) | ×0,4 | ×1,3 | 1 | 1 | Nuvem de 9 lanternas verde-amarelas que piscam. | amarelos + lanternas |
+| **Javali do Lodo** (`enemy_forest_peccary`) | Bosque do Zarafshan, noite | ×1,3 | +30% | ×1,3 | 0 | 3, **bando de 2–3** | Porco escuro com crista de cerdas e queixo branco. | laranja (brasa) |
+| **Ave-Graveto de Omöl** (`enemy_mountain_potoo`) | Serra de Kaggen, noite | ×0,6 | −30% | ×2 | 1 | 1 | Ave-graveto no seu galho; bico mínimo que abre num bocão rosa. | amarelos enormes |
 
-- **Bando:** quando a queixada sai no sorteio vêm 2–3 de uma vez; um bando pode esticar uma onda pequena até o seu
+- **Bando:** quando o javali sai no sorteio vêm 2–3 de uma vez; um bando pode esticar uma onda pequena até o seu
   mínimo, nunca além de `NightDangerRules.MaxWaveSize` (4). Só sai se o bando mínimo couber.
 - **Olhos:** são células da paleta que brilham (emissão), não as esferas do `NightVariantTag` (a espécie tem
   `Tint` branco e `EyeColor` transparente). A variante noturna comum continua com as esferas amarelas.
 - **Som:** cada modelo tem um `NightCreatureVoice` (chamado + som de ataque), ver `Docs/Audio.md`.
-- **Conquista:** "Lua Cheia, Coragem Cheia" (`ach_night_werewolf`): vencer o Lobisomem.
+- **Conquista:** "Lua Cheia, Coragem Cheia" (`ach_night_werewolf`): vencer o Mardagayl.
 - **Ainda não feito (comportamento):** uivo que chama 1 lobo noturno, mordida que cura o morcego, grito da coruja que
-  deixa lento e a lamparina que a deixa tonta, queimadura dos vaga-lumes, investida em fila das queixadas e o assobio
-  da Caipora, o canto da mãe-da-lua que chama +1 bicho; saques especiais (pelo de lobisomem, asa de morcego-vampiro,
-  pena de rasga-mortalha, luz de vaga-lume, couro de queixada, pena de mãe-da-lua). Hoje elas lutam com a IA normal
+  deixa lento e a lamparina que a deixa tonta, queimadura dos vaga-lumes, investida em fila dos javalis e o grunhido
+  do bando, o canto da Ave-Graveto de Omöl que chama +1 bicho; saques especiais (pelo de mardagayl, asa de Ubır,
+  pena de coruja-de-fumaça, luz de vaga-lume, couro de javali, pena de Ave-Graveto de Omöl). Hoje elas lutam com a IA normal
   do arquétipo (quadrúpede/voador) e soltam o saque da região de casa.
 - **Fora de propósito:** a Mula-sem-cabeça (assustadora demais para a faixa etária).
 
@@ -93,7 +93,7 @@ caderno). A noite aplica os multiplicadores da espécie (`NightVariantRules`, vi
 Legível e infantil: **nunca breu**. A escuridão é suave e acompanha o `DaylightFactor` do relógio (rampa no amanhecer e
 no entardecer).
 
-| | Normal | "Noite mais clara" | Cavernas (já escuras) |
+| | Normal | "Noite mais clara" | Grutas do Limiar (já escuras) |
 |---|---|---|---|
 | Luz ambiente na noite cheia | ×0,70 | ×0,90 | ×0,88 |
 | Neblina extra (só na arena) | +0,022 | +0,010 | +0,008 |

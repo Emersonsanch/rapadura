@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.Hunting
 {
     /// <summary>
-    /// The "Amuletos" tab of "Caderno da Vó Zefa" (<c>BestiaryController</c>), added in code so the bestiary's UXML and
+    /// The "Amuletos" tab of "Caderno da Vó Edna" (<c>BestiaryController</c>), added in code so the bestiary's UXML and
     /// controller only gain two calls: a "Páginas | Amuletos" tab row under the header, the "Bicho destaque de hoje"
     /// banner, and a charms view that replaces the page list + page while its tab is on. The view shows the "Pontos do
     /// Caderno" available, how many charms are on the cord (<see cref="HuntingCharmCatalog.MaxEquipped"/>) and one row

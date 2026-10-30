@@ -38,10 +38,10 @@ Já funciona:
 
 - **Fluxo completo**: menu principal → seleção de herói → mapa ⇄ encontro → volta ao mapa, com pausa, voltar ao título (reset de sessão) e tutorial de primeira vez.
 - **5 heróis jogáveis**, cada um com 5 skills próprias (25 no total), árvore de skills por herói e hotbar (teclas 1-5, gamepad ou toque na HUD). Ficha do personagem para gastar pontos de atributo.
-- **Mapa mundi** com 4 regiões (Floresta, Deserto, Montanha, Cavernas), HUD própria, encontros aleatórios, arena decorada por bioma e chefe de região que desbloqueia a próxima região.
+- **Mapa mundi** com 4 regiões (Bosque do Zarafshan, Areias Flamejantes, Serra de Kaggen, Grutas do Limiar), HUD própria, encontros aleatórios, arena decorada por bioma e chefe de região que desbloqueia a próxima região.
 - **Combate**: ataque básico com preparo (dano no quadro do golpe) e clipes de mocap de ataque/magia/dano/morte nos heróis Humanoid, clique no inimigo para atacar, acerto crítico, defesa e velocidade, buffs/debuffs (também nos inimigos), XP, loot com raridade e afixos, bônus de chefe, tela de morte com respawn. Balanceamento por dados em `Docs/Balance`, ajustado em três playtests automatizados (r5–r7, 5 heróis × 4 biomas): lutas comuns de 4–7 s e de chefe de 15–22 s, com risco real de morte para quem não usa skills nem defesa.
 - **RPG**: Mochila (inventário + equipamentos) com arrastar e soltar, Organizar e tooltips; crafting com bancada, loja com estoque salvo, diálogos ramificados com NPCs que dão quests, log de missões + rastreador, missões diárias, conquistas.
-- **Mundo**: ciclo dia/noite, clima por bioma, VFX de skills e de ambiente, vento nas árvores/grama/cactos (força pelo clima) e pedras que tremem com Terremoto, pisadas pesadas e queda de chefe.
+- **Mundo**: ciclo dia/noite, clima por bioma, VFX de skills e de ambiente, vento nas árvores/grama/cactos (força pelo clima) e pedras que tremem com Maremoto, pisadas pesadas e queda de chefe.
 - **Áudio**: sons por evento e música por contexto (placeholders procedurais, ver `Docs/Audio.md`) e vibração no celular.
 - **Mobile**: tocar e segurar para andar, joystick virtual opcional, botões de atacar/correr/pular/girar câmera, botão Voltar do Android.
 - **Save**: slots manuais + auto save, save do mundo (herói, construções, receitas, bosses, hora/clima, estoque da loja), formato v2 compatível com saves v1, escrita atômica com backup.

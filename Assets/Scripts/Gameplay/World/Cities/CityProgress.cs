@@ -35,9 +35,12 @@ namespace Rapadura.Gameplay.World.Cities
     /// only the starting city visited — plus, derived, every region the cousins already won a fight in (they have been
     /// there), so old saves keep their routes.
     /// <para>
-    /// It also applies "renasce na cidade da região" (<see cref="SafeZoneRules.RespawnRegion"/>): when an encounter
-    /// ends in defeat, before the auto-save and the map load, the current region becomes the city of the region the
-    /// defeat happened in, and <see cref="PendingRespawnCity"/> tells the map HUD to say so.
+    /// It also applies "renasce na cidade da região" (<see cref="SafeZoneRules.RespawnRegion"/>, Docs/Progressao500.md §7)
+    /// to <b>every</b> defeat: an encounter (arena, event room, world event) that ends in defeat does it here, before the
+    /// auto-save and the map load (<see cref="EncounterEndedEvent"/>); a defeat outside an encounter (the walkable city,
+    /// Main.unity on its own) is applied by the Death screen through <see cref="ApplyDefeatHere"/>. The current region
+    /// becomes the city of the region the defeat happened in, the city is marked visited and
+    /// <see cref="PendingRespawnCity"/> tells the map HUD (or the plaza) to say so.
     /// </para>
     /// </summary>
     public class CityProgress : IManager, ISaveable, IResettable
@@ -238,6 +241,15 @@ namespace Rapadura.Gameplay.World.Cities
             CitySpec city = PendingRespawnCity;
             PendingRespawnCity = null;
             return city;
+        }
+
+        /// <summary>The region the hero is in now (the map token), where a defeat outside an encounter counts.</summary>
+        public BiomeType CurrentRegion => _map != null ? _map.CurrentRegion : BiomeType.Forest;
+
+        /// <summary>A defeat outside an encounter, in <see cref="CurrentRegion"/> (or <paramref name="region"/>): the city the hero wakes up in.</summary>
+        public CitySpec ApplyDefeatHere(BiomeType? region = null)
+        {
+            return CityCatalog.ForRegion(ApplyDefeat(region ?? CurrentRegion));
         }
 
         /// <summary>Defeat in <paramref name="defeatRegion"/>: wake up in that region's city (unlocked, so the token can stand there).</summary>

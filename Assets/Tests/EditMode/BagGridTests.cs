@@ -18,7 +18,7 @@ namespace Rapadura.Tests
     /// overrides, the pure placement rules (<see cref="BagGrid"/>, <see cref="BagGridRules"/>: first fit from the top-left,
     /// explicit placement, move / merge / swap, "Organizar" packing), the shared fit API (<see cref="BagFitSimulator"/>,
     /// <see cref="InventoryManager.CanFit"/>), the grid on a real <see cref="InventoryManager"/>, the old-save migration
-    /// (auto-place, overflow to the Baú da Vó Zefa, never lost) and the UI's pure tap/cell helpers.
+    /// (auto-place, overflow to the Baú da Vó Edna, never lost) and the UI's pure tap/cell helpers.
     /// </summary>
     public class BagGridTests
     {

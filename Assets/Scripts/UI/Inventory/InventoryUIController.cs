@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Inventory;
@@ -175,6 +177,93 @@ namespace Rapadura.UI.Inventory
                 _dragGhost.style.display = DisplayStyle.None;
                 _root.Add(_dragGhost);
             }
+
+            BindLoadBar(rootVisualElement);
+        }
+
+        // ---------------------------------------------------------------
+        // Carry load bar (EncumbranceRules)
+        // ---------------------------------------------------------------
+
+        public const string LoadRowName = "inventory-load";
+        private const string LoadHeavyClass = "inventory-load--heavy";
+        private const string LoadOverClass = "inventory-load--over";
+        private VisualElement _loadRow;
+        private Label _loadLabel;
+        private VisualElement _loadFill;
+        private VisualElement _loadMark;
+
+        /// <summary>Code-built row under the header (no UXML edit): "Carga: 42/80" + a bar; amber past the free half while mounted, red over capacity.</summary>
+        private void BindLoadBar(VisualElement rootVisualElement)
+        {
+            _loadRow = rootVisualElement.Q<VisualElement>(LoadRowName);
+            if (_loadRow == null)
+            {
+                VisualElement header = rootVisualElement.Q<VisualElement>("inventory-header");
+                if (header == null || header.parent == null)
+                {
+                    return;
+                }
+
+                _loadRow = new VisualElement { name = LoadRowName, pickingMode = PickingMode.Ignore };
+                _loadRow.AddToClassList(LoadRowName);
+                var label = new Label { name = "inventory-load-label", pickingMode = PickingMode.Ignore };
+                label.AddToClassList("inventory-load-label");
+                var bar = new VisualElement { name = "inventory-load-bar", pickingMode = PickingMode.Ignore };
+                bar.AddToClassList("inventory-load-bar");
+                var fill = new VisualElement { name = "inventory-load-fill", pickingMode = PickingMode.Ignore };
+                fill.AddToClassList("inventory-load-fill");
+                var mark = new VisualElement { name = "inventory-load-mark", pickingMode = PickingMode.Ignore };
+                mark.AddToClassList("inventory-load-mark");
+                bar.Add(fill);
+                bar.Add(mark);
+                _loadRow.Add(label);
+                _loadRow.Add(bar);
+                header.parent.Insert(header.parent.IndexOf(header) + 1, _loadRow);
+            }
+
+            _loadLabel = _loadRow.Q<Label>("inventory-load-label");
+            _loadFill = _loadRow.Q<VisualElement>("inventory-load-fill");
+            _loadMark = _loadRow.Q<VisualElement>("inventory-load-mark");
+        }
+
+        private void RefreshLoadBar()
+        {
+            if (_loadRow == null)
+            {
+                return;
+            }
+
+            if (_inventory == null)
+            {
+                _loadRow.style.display = DisplayStyle.None;
+                return;
+            }
+
+            float load = _inventory.GetCarriedWeight();
+            EncumbranceSnapshot snapshot = EncumbranceTracker.HasCurrent
+                ? new EncumbranceSnapshot(load, EncumbranceTracker.Current.HeroCapacity, EncumbranceTracker.Current.Mounted, EncumbranceTracker.Current.MountCapacity)
+                : new EncumbranceSnapshot(load, EncumbranceRules.HeroCapacity(1, 0), false, 0f);
+
+            ServiceLocator.TryGet(out LocalizationManager localization);
+            _loadRow.style.display = DisplayStyle.Flex;
+            SetText(_loadLabel, EncumbranceTexts.Format(localization, snapshot.Mounted ? EncumbranceTexts.HudMountLoad : EncumbranceTexts.BagLoad,
+                EncumbranceTexts.Number(snapshot.Load), EncumbranceTexts.Number(snapshot.Capacity)));
+            if (_loadFill != null)
+            {
+                _loadFill.style.width = Length.Percent(Mathf.Clamp01(snapshot.Ratio) * 100f);
+            }
+
+            if (_loadMark != null)
+            {
+                // Where the ride starts to slow down (half the ride's capacity); on foot the whole bar is free.
+                _loadMark.style.display = snapshot.Mounted ? DisplayStyle.Flex : DisplayStyle.None;
+                _loadMark.style.left = Length.Percent(EncumbranceRules.MountFreeRatio * 100f);
+            }
+
+            LoadBand band = snapshot.Band;
+            _loadRow.EnableInClassList(LoadHeavyClass, band == LoadBand.Heavy);
+            _loadRow.EnableInClassList(LoadOverClass, band == LoadBand.Overloaded);
         }
 
         private void RegisterCallbacks()
@@ -312,6 +401,7 @@ namespace Rapadura.UI.Inventory
             if (_inventory == null)
             {
                 SetText(_weightLabel, string.Empty);
+                RefreshLoadBar();
                 ClearRows();
                 return;
             }
@@ -323,6 +413,7 @@ namespace Rapadura.UI.Inventory
 
             string spacePattern = Localize(localize, "ui.inventory.space");
             SetText(_weightLabel, string.Format(CultureInfo.InvariantCulture, spacePattern, _inventory.UsedCellCount, _inventory.CellCount));
+            RefreshLoadBar();
 
             _dropTargets.Clear();
             RebuildEquipmentRows(localize);

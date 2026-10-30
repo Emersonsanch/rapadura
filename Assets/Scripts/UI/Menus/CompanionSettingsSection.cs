@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 namespace Rapadura.UI.Menus
 {
     /// <summary>
-    /// "Caramelo (companheiro nos encontros)" toggle, built in code and appended to the Acessibilidade
+    /// "Ari (companheiro nos encontros)" toggle, built in code and appended to the Acessibilidade
     /// panel (same approach as <see cref="TouchControlsSettingsSection"/>, so SettingsMenuView.uxml stays
     /// untouched; reuses the panel's <c>settings-field</c> class). Writes
     /// <see cref="CompanionPreferences.CarameloEnabled"/> (default on); the dog leaves or comes back live.

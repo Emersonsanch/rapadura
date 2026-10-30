@@ -7,7 +7,7 @@ namespace Rapadura.Gameplay.Housing
     {
         /// <summary>No house yet (new game, or an old save before the quest beat).</summary>
         NotStarted = 0,
-        /// <summary>Vó Zefa showed the cajá and handed over the key: the house exists, the cousin has not gone in yet.</summary>
+        /// <summary>Vó Edna showed the cajá and handed over the key: the house exists, the cousin has not gone in yet.</summary>
         HouseGiven = 1,
         /// <summary>The cousin went inside: quest done.</summary>
         Completed = 2,
@@ -17,7 +17,7 @@ namespace Rapadura.Gameplay.Housing
     public static class HouseRules
     {
         public const string FirstQuestId = "house_quest_um_cantinho_seu";
-        /// <summary>"Logo depois do prólogo, na primeira volta à vila (depois das 3 primeiras vitórias na Floresta)" (§2.1).</summary>
+        /// <summary>"Logo depois do prólogo, na primeira volta à vila (depois das 3 primeiras vitórias no Bosque do Zarafshan)" (§2.1).</summary>
         public const int ForestVictoriesForFirstQuest = 3;
         public const float MorningHour = 7f;
         public const int HoursPerDay = 24;
@@ -49,7 +49,7 @@ namespace Rapadura.Gameplay.Housing
 
         public static bool HasHouse(HouseQuestStep step) => step != HouseQuestStep.NotStarted;
 
-        /// <summary>"(!)" on the button: Vó Zefa is waiting, or the key is in hand and the cousin has not gone in.</summary>
+        /// <summary>"(!)" on the button: Vó Edna is waiting, or the key is in hand and the cousin has not gone in.</summary>
         public static bool HasQuestNews(HouseQuestStep step, int forestVictories)
         {
             return step == HouseQuestStep.HouseGiven || (step == HouseQuestStep.NotStarted && forestVictories >= ForestVictoriesForFirstQuest);

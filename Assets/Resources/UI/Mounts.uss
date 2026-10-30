@@ -318,3 +318,17 @@
     margin-top: 6px;
     font-size: 15px;
 }
+
+/* ---- Saddlebags (carry load, EncumbranceTracker) ---- */
+
+.mount-load .mount-bar-fill {
+    background-color: var(--rap-caramel-light);
+}
+
+.mount-load--heavy .mount-bar-fill {
+    background-color: var(--rap-warning);
+}
+
+.mount-load--over .mount-bar-fill {
+    background-color: var(--rap-clay-red);
+}

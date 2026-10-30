@@ -31,7 +31,7 @@ MonoBehaviour:
   _damagePerLevel: 0
   _healingPerLevel: 0
   _buffs:
-  - displayName: "Ben\xE7\xE3o da Vida"
+  - displayName: "Brilho da Vida"
     affectedStat: 1
     application: 0
     value: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
     ticksOverTime: 1
     tickIntervalSeconds: 1
     tickDamageOrHeal: 4
-  - displayName: "Vigor Aben\xE7oado"
+  - displayName: "Vigor Luminoso"
     affectedStat: 0
     application: 1
     value: 0.1

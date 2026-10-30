@@ -16,7 +16,7 @@ using UnityEngine;
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// Item refining +0 → +15 with the "Pedras do Sertão" (FASE 16, Docs/Balance/README.md "Refino de item"): the pure
+    /// Item refining +0 → +15 with the "Pedras da Luz Presa" (FASE 16, Docs/Balance/README.md "Refino de item"): the pure
     /// <see cref="RefineRules"/> (chance table, failure = −1 level, stones, stat curve, seeded rolls), the drop table,
     /// <see cref="RefineService"/> on a live bag, the save round-trip (old items load as +0) and the window's texts.
     /// </summary>

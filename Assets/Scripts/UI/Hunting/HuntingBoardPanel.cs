@@ -21,7 +21,7 @@ namespace Rapadura.UI.Hunting
     /// Seu Zé Caçador on the world map. Self-bootstrapping like <c>FishingSpotButton</c> (no scene edit, no change to
     /// the city hub panel): added to the <see cref="WorldMapHudController"/>'s GameObject after every scene load.
     /// <list type="bullet">
-    /// <item>"Seu Zé Caçador" button in the HUD's <c>wm-action-row</c>, in the Vila (Vó Zefa's region,
+    /// <item>"Patig, o Rastreador" button in the HUD's <c>wm-action-row</c>, in the Vila (Vó Edna's region,
     /// <see cref="VillageNpcCatalog.VillageRegion"/>) with the same gating as the city button
     /// (<see cref="VillageHubButton.ShouldShow"/>). <see cref="OpenShared"/> lets the city hub open the board too.</item>
     /// <item>The board (built in code on the HUD's document, under <c>wm-hud-root</c>, with the Mochila overlay classes

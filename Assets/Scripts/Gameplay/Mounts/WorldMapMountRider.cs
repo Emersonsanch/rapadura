@@ -171,19 +171,26 @@ namespace Rapadura.Gameplay.Mounts
         // Speed probe
         // ------------------------------------------------------------------
 
-        /// <summary>Token speed factor (1 on foot): <see cref="MountRules.MountedSpeedMultiplier"/> with no buffs on the map, plus the Arrancada burst.</summary>
+        /// <summary>Token speed factor (on foot only the load factor): <see cref="MountRules.MountedSpeedMultiplier"/> with no buffs on the map, plus the Arrancada burst.</summary>
         public float SpeedFactor()
         {
             MountDefinition definition = Definition;
             if (!_session.IsMounted || definition == null)
             {
-                return 1f;
+                return Rapadura.Gameplay.Inventory.EncumbranceRules.ApplyFactor(1f, LoadFactor); // on foot: the hero's own (mild) load factor
             }
 
             OwnedMount owned = ActiveMount;
             float ride = MountRules.MountedSpeedMultiplier(1f, definition.SpeedMultiplier, _session.IsGalloping, InSafeZone, owned != null && owned.IsHungry);
+            ride = Rapadura.Gameplay.Inventory.EncumbranceRules.ApplyFactor(ride, LoadFactor);
             return _boostRemaining > 0f ? Mathf.Min(MountRules.MaxMoveMultiplier, ride * DashBoost) : ride;
         }
+
+        /// <summary>Carry-load factor (0..1) of the current stance (ride or on foot), set by <c>EncumbranceTracker</c> from the carried bag.</summary>
+        public float LoadFactor { get; set; } = 1f;
+
+        /// <summary>False while the ride is over capacity: the automatic gallop stays off.</summary>
+        public bool LoadAllowsGallop { get; set; } = true;
 
         // ------------------------------------------------------------------
         // Frame
@@ -224,7 +231,7 @@ namespace Rapadura.Gameplay.Mounts
 
             TickRunIn(token, paused ? 0f : dt);
 
-            bool wantsGallop = _controller.IsTraveling;
+            bool wantsGallop = _controller.IsTraveling && LoadAllowsGallop;
             OwnedMount riding = ActiveMount;
             _session.Tick(paused ? 0f : dt, wantsGallop, place, riding != null && riding.IsHungry);
             if (_session.IsMounted && riding != null)
