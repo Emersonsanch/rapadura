@@ -58,6 +58,8 @@ namespace Rapadura.Gameplay.Locomotion
             public Vector3 HipInSpace;
             public float Length;
             public int Side;
+            /// <summary>+1 front half, -1 hind half, 0 middle / biped (same as the solver's).</summary>
+            public int Front;
         }
 
         private struct Follow
@@ -159,6 +161,20 @@ namespace Rapadura.Gameplay.Locomotion
         /// </summary>
         public float BodyHeightLimit => _bodyLimit;
 
+        /// <summary>
+        /// Additive (night-models pass): 0..1 multiplier on the IK weight of the front legs only (rest z in the front
+        /// half). Below 1 the forelegs let go of their planted feet and ride the body at their rest pose, so an animal can
+        /// rear up on its hind legs (the werewolf's strike, posed by <c>ProceduralEnemyRig</c> pitching the part the
+        /// forelegs hang from); they also stop dragging the hips' reactive step. 1 (default) = unchanged behaviour.
+        /// </summary>
+        public float FrontLegsWeight
+        {
+            get => _frontLegsWeight;
+            set => _frontLegsWeight = Mathf.Clamp01(value);
+        }
+
+        private float _frontLegsWeight = 1f;
+
         /// <summary>Gait style picked from the leg count by <see cref="Bind"/> (2 biped, 4 quadruped, more arthropod).</summary>
         public LegGaitStyle DetectedStyle { get; private set; }
 
@@ -224,6 +240,7 @@ namespace Rapadura.Gameplay.Locomotion
             {
                 ref Chain c = ref _chains[i];
                 int front = DetectedStyle == LegGaitStyle.Biped || halfDepth < 0.01f ? 0 : (c.RestInSpace.z > halfDepth * 0.25f ? 1 : (c.RestInSpace.z < -halfDepth * 0.25f ? -1 : 0));
+                c.Front = front;
                 _solver.AddLeg(c.RestInSpace, groundY, c.Length, c.Side, front, GeometricReach(c, KneeBendDrop(1f)));
             }
 
@@ -351,16 +368,25 @@ namespace Rapadura.Gameplay.Locomotion
 
             Quaternion yaw = YawOnly(_space.rotation);
             Vector3 sum = Vector3.zero;
+            float count = 0f;
             for (int i = 0; i < _chainCount; i++)
             {
                 ref Chain c = ref _chains[i];
                 if (c.Hip != null)
                 {
-                    sum += c.Hip.position - (_space.position + yaw * c.HipInSpace);
+                    // Forelegs lifted off the ground (FrontLegsWeight < 1) no longer pull the planted feet along.
+                    float k = c.Front > 0 ? _frontLegsWeight : 1f;
+                    sum += (c.Hip.position - (_space.position + yaw * c.HipInSpace)) * k;
+                    count += k;
                 }
             }
 
-            sum /= _chainCount;
+            if (count <= 0f)
+            {
+                return Vector3.zero;
+            }
+
+            sum /= count;
             return new Vector3(sum.x, 0f, sum.z);
         }
 
@@ -546,7 +572,7 @@ namespace Rapadura.Gameplay.Locomotion
             _bodyShift = HipShift() * w;
             for (int i = 0; i < _chainCount; i++)
             {
-                SolveChain(ref _chains[i], i, w);
+                SolveChain(ref _chains[i], i, _chains[i].Front > 0 ? w * _frontLegsWeight : w);
             }
 
             SolveFollow(deltaTime, w * Mathf.Clamp01(motionScale));

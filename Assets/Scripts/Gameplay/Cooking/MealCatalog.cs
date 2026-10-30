@@ -52,11 +52,16 @@ namespace Rapadura.Gameplay.Cooking
         /// gate). Keeps the lesson in step with the quest route: the dish's ingredients and its quest belong there.
         /// </summary>
         public readonly BiomeType? LessonRegion;
+        /// <summary>
+        /// Fish whose first catch at "Pesca no açude" teaches the dish (any cousin), or null. Such dishes have no quest
+        /// and no favourite: the açude is their lesson.
+        /// </summary>
+        public readonly string TaughtByCatchItemId;
 
         public MealRecipeSpec(string recipeId, MealIngredientSpec[] ingredients, int provisionsCost, int encounters,
             StatModifierDefinition[] effects, StatModifierDefinition[] openingBurst,
             CharacterId? favouriteOf, StatModifierDefinition[] favouriteBonus, bool favouriteBonusIsBurst,
-            bool starter, string unlockQuestId, BiomeType? lessonRegion)
+            bool starter, string unlockQuestId, BiomeType? lessonRegion, string taughtByCatchItemId = null)
         {
             RecipeId = recipeId;
             Ingredients = ingredients ?? new MealIngredientSpec[0];
@@ -70,6 +75,7 @@ namespace Rapadura.Gameplay.Cooking
             Starter = starter;
             UnlockQuestId = unlockQuestId;
             LessonRegion = lessonRegion;
+            TaughtByCatchItemId = taughtByCatchItemId;
         }
 
         /// <summary>"meal_cuscuz" → "meal.cuscuz" (text keys: <c>.name</c>, <c>.effect</c>, <c>.favourite</c>).</summary>
@@ -82,7 +88,7 @@ namespace Rapadura.Gameplay.Cooking
     /// <summary>
     /// "Cozinha da Vó Zefa": the dishes of the village's wood stove (<c>VillageKitchenController</c>, reached from the
     /// map's village hub). Defined in code like <see cref="RegionQuestCatalog"/>, so no asset/seeder is needed.
-    /// Numbers and the reasoning behind them: <c>Docs/Balance/README.md</c> §10.
+    /// Numbers and the reasoning behind them: <c>Docs/Balance/README.md</c> §12 (budget with the other power sources: §14).
     /// <list type="bullet">
     /// <item>Two dishes are known from the start (<see cref="MealRecipeSpec.Starter"/>); every other one is taught by
     /// the first region quest of its region, or by Vó Zefa herself at the stove to the cousin who loves it once that
@@ -104,6 +110,8 @@ namespace Rapadura.Gameplay.Cooking
         public const string Rapadura = "meal_rapadura";
         public const string BaiaoDeDois = "meal_baiao_de_dois";
         public const string QueijoCoalho = "meal_queijo_coalho";
+        public const string TilapiaNaBrasa = "meal_tilapia_na_brasa";
+        public const string CaldoDePiaba = "meal_caldo_de_piaba";
 
         /// <summary>The shop's currency (<c>shop_general_store._currencyItemId</c>): what "mantimentos da venda" cost.</summary>
         public const string ProvisionsItemId = "item_gold";
@@ -143,9 +151,10 @@ namespace Rapadura.Gameplay.Cooking
 
             // Rapadura: cane boiled in the tacho over a lot of wood, the stone of the mill — a sugar rush at the
             // start of the fight. Ícaro's: runs faster during the rush. One more encounter: the effect is short.
+            // +12% (was +25%, Balance §14): the top of an uncommon attack-speed affix, like the other meals.
             new MealRecipeSpec(Rapadura,
                 new[] { new MealIngredientSpec(Wood, 2), new MealIngredientSpec(Stone, 1) }, 3, 4,
-                null, new[] { Effect("Rapadura", StatType.AttackSpeed, ModifierApplication.PercentAdditive, 0.25f, RapaduraBurstSeconds) },
+                null, new[] { Effect("Rapadura", StatType.AttackSpeed, ModifierApplication.PercentAdditive, 0.12f, RapaduraBurstSeconds) },
                 CharacterId.Icaro, new[] { Effect("Rapadura do Ícaro", StatType.MoveSpeed, ModifierApplication.PercentAdditive, 0.08f, RapaduraBurstSeconds) }, true,
                 starter: false, unlockQuestId: RegionQuestCatalog.DesertFirst, lessonRegion: BiomeType.Desert),
 
@@ -163,6 +172,22 @@ namespace Rapadura.Gameplay.Cooking
                 new[] { Effect("Queijo coalho assado", StatType.Thorns, ModifierApplication.PercentAdditive, 0.08f) }, null,
                 CharacterId.Lavine, new[] { Effect("Queijo da Lavine", StatType.ManaRegen, ModifierApplication.PercentAdditive, 0.20f) }, false,
                 starter: false, unlockQuestId: RegionQuestCatalog.CavesFirst, lessonRegion: BiomeType.Caves),
+
+            // -- From "Pesca no açude" (taught by the first catch of their fish, see TaughtByCatchItemId) --
+
+            // Tilápia na brasa: on the coals with a pinch of herbs — a clear head, mana comes back faster.
+            new MealRecipeSpec(TilapiaNaBrasa,
+                new[] { new MealIngredientSpec(Wood, 1), new MealIngredientSpec(Fishing.FishCatalog.Tilapia, 1), new MealIngredientSpec(Herb, 1) }, 2, 3,
+                new[] { Effect("Tilápia na brasa", StatType.ManaRegen, ModifierApplication.PercentAdditive, 0.25f) }, null,
+                null, null, false,
+                starter: false, unlockQuestId: null, lessonRegion: null, taughtByCatchItemId: Fishing.FishCatalog.Tilapia),
+
+            // Caldo de piaba: a pot of tiny fish simmered with herbs — warm belly, health trickles back.
+            new MealRecipeSpec(CaldoDePiaba,
+                new[] { new MealIngredientSpec(Wood, 1), new MealIngredientSpec(Fishing.FishCatalog.Piaba, 3), new MealIngredientSpec(Herb, 1) }, 1, 3,
+                new[] { Effect("Caldo de piaba", StatType.HealthRegen, ModifierApplication.Flat, 1.5f) }, null,
+                null, null, false,
+                starter: false, unlockQuestId: null, lessonRegion: null, taughtByCatchItemId: Fishing.FishCatalog.Piaba),
         };
 
         private static Dictionary<string, MealRecipeSpec> _byId;
@@ -200,6 +225,26 @@ namespace Rapadura.Gameplay.Cooking
             }
 
             return null;
+        }
+
+        /// <summary>The dishes the first catch of <paramref name="fishItemId"/> teaches (empty when none).</summary>
+        public static List<MealRecipeSpec> TaughtByCatch(string fishItemId)
+        {
+            var taught = new List<MealRecipeSpec>();
+            if (string.IsNullOrEmpty(fishItemId))
+            {
+                return taught;
+            }
+
+            foreach (MealRecipeSpec recipe in Recipes)
+            {
+                if (recipe.TaughtByCatchItemId == fishItemId)
+                {
+                    taught.Add(recipe);
+                }
+            }
+
+            return taught;
         }
 
         /// <summary>The dish the given quest teaches, or null.</summary>

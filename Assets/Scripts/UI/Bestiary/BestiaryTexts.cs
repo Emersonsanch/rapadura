@@ -148,8 +148,8 @@ namespace Rapadura.UI.Bestiary
 
             // -- Floresta --
             Page(entries, "enemy_forest_wolf",
-                "Scrub wolves walk in gangs and howl at the moon just to show off. Alone they're more fuss than danger. Grandpa used to say a wolf respects whoever doesn't run.",
-                "Lobo da mata anda em bando e uiva pra lua só pra se mostrar. Sozinho é mais zoada que perigo. Seu avô dizia que lobo respeita quem não corre.",
+                "Scrub wolves walk in gangs and howl at the moon just to show off. Alone they're more fuss than danger. Grandpa Chico used to say a wolf respects whoever doesn't run.",
+                "Lobo da mata anda em bando e uiva pra lua só pra se mostrar. Sozinho é mais zoada que perigo. O Vô Chico dizia que lobo respeita quem não corre.",
                 ("When they spread out, they're about to jump. I can see it from here.", "Quando eles se espalham é porque vão pular. Daqui eu vejo."),
                 ("Poor thing, it's just hungry... but nobody bites my brother!", "Coitado, deve ser fome... mas no meu irmão ninguém morde!"),
                 ("Come on, then! The shield is right here.", "Pode vir! O escudo tá aqui."),
@@ -166,8 +166,8 @@ namespace Rapadura.UI.Bestiary
                 ("My shadows are faster than its legs. I timed it.", "Minhas sombras são mais rápidas que as pernas dela. Eu contei."));
 
             Page(entries, "enemy_forest_alpha_wolf",
-                "The Alpha Wolf is the old leader of the pack, with a scar on his snout and pride in his chest. When he howls, the whole forest goes quiet. Beat him and the wolves calm down.",
-                "O Lobo Alfa é o chefe velho do bando, com cicatriz no focinho e orgulho no peito. Quando ele uiva, a mata toda fica quieta. Vencendo ele, os lobos sossegam.",
+                "The Alpha Wolf is the old leader of the pack, with a scar on his snout and pride in his chest. When he howls, the whole forest goes quiet. Once the little dark stone fell off his collar, he went back to the woods and the wolves calmed down.",
+                "O Lobo Alfa é o chefe velho do bando, com cicatriz no focinho e orgulho no peito. Quando ele uiva, a mata toda fica quieta. Depois que a pedrinha escura caiu da coleira dele, ele voltou pra mata e os lobos sossegaram.",
                 ("I tracked him three days. He knew I was there.", "Segui o rastro dele três dias. Ele sabia que eu estava lá."),
                 ("He protects his pack like we protect each other. I almost feel sorry.", "Ele protege o bando como a gente se protege. Quase dá pena."),
                 ("He's big. My shield is bigger.", "Ele é grande. Meu escudo é maior."),
@@ -204,8 +204,8 @@ namespace Rapadura.UI.Bestiary
                 ("I'll call it Pebble. Even if it's huge.", "Vou chamar ele de Pedrinha. Mesmo sendo enorme."));
 
             Page(entries, "enemy_mountain_warlord",
-                "The Mountain Warlord climbed so high he thought he owned the sky. He shouts orders at the wind and the wind doesn't listen. Up there, it's the humble who keep their footing.",
-                "O Senhor da Guerra da Montanha subiu tão alto que achou que era dono do céu. Grita ordem pro vento e o vento nem escuta. Lá em cima, quem tem humildade é que não escorrega.",
+                "The Mountain Warlord climbed so high he thought he owned the sky. He shouts orders at the wind and the wind doesn't listen. Up there, it's the humble who keep their footing. Once the shadow left him, he remembered he used to guard that mountain.",
+                "O Senhor da Guerra da Montanha subiu tão alto que achou que era dono do céu. Grita ordem pro vento e o vento nem escuta. Lá em cima, quem tem humildade é que não escorrega. Quando a sombra saiu dele, lembrou que era o guardião daquela serra.",
                 ("The wind up there is mine. He'll learn it.", "O vento lá de cima é meu. Ele vai aprender."),
                 ("He shouts a lot. People who shout a lot are usually afraid.", "Ele grita demais. Quem grita muito geralmente tá com medo."),
                 ("He said nobody could hold him. I held him.", "Ele disse que ninguém segurava ele. Eu segurei."),
@@ -230,6 +230,9 @@ namespace Rapadura.UI.Bestiary
                 ("Nobody fell. Not while I was standing in front.", "Ninguém caiu. Não enquanto eu estava na frente."),
                 ("Maithe, did you see my drone hit it right in the crystal? Did you see?", "Maithe, viu o meu drone acertar bem no cristal? Viu?"),
                 ("I used the dark to bring back the light. Funny, right?", "Eu usei o escuro pra trazer a luz de volta. Engraçado, né?"));
+
+            // -- Bichos da noite (own file, so this one stays small) --
+            NightBestiaryTexts.AddPages(entries);
 
             return entries;
         }

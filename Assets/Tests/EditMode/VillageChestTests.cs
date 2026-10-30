@@ -22,7 +22,7 @@ namespace Rapadura.Tests
     /// <summary>
     /// "Baú da Vó Zefa" (<see cref="VillageChestStorage"/>, <see cref="VillageChestTransfer"/>, opened from the map's
     /// village hub): per-save persistence (old saves included), the bulk buttons against the quests' needs, the
-    /// bag's weight and slot limits, the 60-slot cap, the carried-inventory lifecycle and the new-session reset.
+    /// bag's grid limit (the weight limit is gone), the 60-slot cap, the carried-inventory lifecycle and the new-session reset.
     /// </summary>
     public class VillageChestTests
     {
@@ -203,19 +203,18 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void TakeForQuests_RespectsBagWeight()
+        public void TakeForQuests_RespectsTheBagGrid()
         {
-            QuestManager quests = StartCollectQuest(("ore", Ore, 5), ("fiber", Fiber, 2));
-            InventoryManager bag = NewBag();
             ItemDefinition stone = Item(Stone);
             ItemDefinition ore = Item(Ore);
-            Assume.That(ore.Weight, Is.GreaterThan(0f));
+            QuestManager quests = StartCollectQuest(("ore", Ore, ore.MaxStack + 2), ("fiber", Fiber, 2));
+            InventoryManager bag = NewBag();
 
-            // Leave room for a few ore only.
-            int stones = Mathf.FloorToInt((bag.MaxWeight - 2.5f * ore.Weight) / stone.Weight);
-            Assert.AreEqual(0, bag.AddItem(stone, stones));
-            int expectedOre = Mathf.FloorToInt((bag.MaxWeight - bag.GetTotalWeight()) / ore.Weight);
-            Assume.That(expectedOre, Is.InRange(1, 4));
+            // Every cell but one holds a full stack of stone; the last one an ore stack with room for 3 more.
+            Assert.AreEqual(0, bag.AddItem(stone, stone.MaxStack * (bag.CellCount - 1)));
+            Assert.AreEqual(0, bag.AddItem(ore, ore.MaxStack - 3));
+            Assert.AreEqual(0, bag.FreeCellCount);
+            int expectedOre = 3; // the quest still needs 5; only 3 fit
 
             var chest = new VillageChestStorage();
             chest.Store(Plain(Ore, 10), 10);
@@ -223,14 +222,14 @@ namespace Rapadura.Tests
 
             VillageChestBulkResult result = VillageChestTransfer.TakeForQuests(chest, bag, quests.GetOutstandingCollectAmount);
 
-            Assert.AreEqual(expectedOre, bag.GetTotalCount(Ore), "only what the weight allows");
+            Assert.AreEqual(ore.MaxStack - 3 + expectedOre, bag.GetTotalCount(Ore), "only what the grid allows");
             Assert.AreEqual(10 - expectedOre, chest.GetTotalCount(Ore));
             Assert.AreEqual(expectedOre, result.Moved);
             Assert.AreEqual(5 - expectedOre, result.LeftBehind, "the rest the quest asks for stays in the chest");
-            Assert.LessOrEqual(bag.GetTotalWeight(), bag.MaxWeight + 0.0001f);
+            Assert.AreEqual(0, bag.FreeCellCount);
             Assert.AreEqual(8, chest.GetTotalCount(Wood), "no quest asks for wood");
             Assert.AreEqual(0, bag.GetTotalCount(Fiber), "the chest has no fiber");
-            Assert.AreEqual($"Na mochila: {expectedOre}. Ficou no baú: {5 - expectedOre} (a mochila não aguenta mais).", VillageChestUIController.DescribeBulkResult(false, result, null));
+            Assert.AreEqual($"Na mochila: {expectedOre}. Ficou no baú: {5 - expectedOre} (não coube mais na mochila).", VillageChestUIController.DescribeBulkResult(false, result, null));
         }
 
         [Test]
@@ -256,15 +255,22 @@ namespace Rapadura.Tests
             ItemDefinition stone = Item(Stone);
             ItemDefinition sword = Item(Sword);
             Assume.That(sword.Weight, Is.GreaterThan(0f));
-            bag.AddItem(stone, Mathf.FloorToInt((bag.MaxWeight - sword.Weight * 0.5f) / stone.Weight));
+            // Fill every cell with stone: the sword (1×3) has nowhere to go.
+            Assert.AreEqual(0, bag.AddItem(stone, stone.MaxStack * bag.CellCount));
             var chest = new VillageChestStorage();
             chest.Store(Generated(Sword), 1);
             int swordSlot = IndexOf(chest, Sword);
 
-            Assert.AreEqual(0, VillageChestTransfer.TakeToBag(chest, swordSlot, 1, bag), "too heavy");
+            Assert.AreEqual(0, VillageChestTransfer.TakeToBag(chest, swordSlot, 1, bag), "no free 1x3 area");
             Assert.AreEqual(1, chest.GetTotalCount(Sword), "stays in the chest");
 
-            bag.RemoveById(Stone, Mathf.CeilToInt(sword.Weight / stone.Weight) + 1);
+            // Free a 1×3 column (cells (0,0), (0,1), (0,2)): now it fits.
+            for (int y = 0; y < 3; y++)
+            {
+                int index = bag.GetSlotIndexAt(0, y);
+                Assert.IsTrue(bag.RemoveFromSlot(index, bag.Slots[index].quantity));
+            }
+
             Assert.AreEqual(1, VillageChestTransfer.TakeToBag(chest, swordSlot, 1, bag));
             InventorySlotData carried = bag.Slots.Single(s => s.itemId == Sword);
             Assert.AreEqual("Espada do Teste", carried.generatedName);
@@ -273,13 +279,18 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void TakeToBag_RespectsBagSlots()
+        public void TakeToBag_RespectsBagGrid()
         {
             InventoryManager bag = NewBag();
-            for (int i = 0; i < bag.Slots.Count; i++)
+            int swords = 0;
+            while (bag.AddItem(Item("item_wooden_sword"), 1) == 0)
             {
-                Assert.AreEqual(0, bag.AddItem(Item("item_wooden_sword"), 1), "fill slot " + i);
+                swords++;
             }
+
+            Assert.AreEqual(16, swords, "1×3 swords: 8 columns × 2 per column on an 8×8 grid");
+            Assert.AreEqual(0, bag.AddItem(Item(Stone), Item(Stone).MaxStack * 16), "the last two rows take 1×1 stacks");
+            Assert.AreEqual(0, bag.FreeCellCount);
 
             var chest = new VillageChestStorage();
             chest.Store(Plain(Fiber, 3), 3);

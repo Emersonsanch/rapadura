@@ -17,21 +17,22 @@ namespace Rapadura.UI.Inventory
     /// Drives the backpack/equipment window (InventoryView.uxml/.uss), following the same
     /// single-<see cref="UIDocument"/>, <c>Q&lt;T&gt;()</c>-resolved-once, rows-generated-at-runtime
     /// pattern as <c>ShopUIController</c>. Purely reactive: reads <see cref="InventoryManager.Slots"/>/
-    /// <see cref="InventoryManager.Equipped"/> and forwards taps back into
-    /// <see cref="InventoryManager.EquipFromSlot"/>/<see cref="InventoryManager.UseItemInSlot"/>/
-    /// <see cref="InventoryManager.UnequipSlot"/>; refreshes on <see cref="InventoryChangedEvent"/>.
+    /// <see cref="InventoryManager.Equipped"/> and forwards input back into the manager; refreshes on
+    /// <see cref="InventoryChangedEvent"/>. Opened from the HUD's "Mochila" button (<c>HudController</c>) via <see cref="Toggle"/>.
     ///
-    /// Every item and equipment row gets a tooltip (name, rarity, stats/affixes, description) via
-    /// <see cref="TooltipTrigger"/> — hover with a mouse, press-and-hold on touch, focus on gamepad.
-    /// Opened from the HUD's "Mochila" button (<c>HudController</c>) via <see cref="Toggle"/>.
-    ///
-    /// The backpack is a grid with one tile per slot (empty ones included, so they can receive a
-    /// drop). Drag-and-drop (pointer events, works for touch and mouse): pressing an item and moving
-    /// past <see cref="InventoryDragDrop.DragThresholdPixels"/> picks it up — holding still instead
-    /// keeps showing the long-press tooltip, a quick tap still uses/equips. Dropping on another slot
-    /// moves/merges/swaps, on its equipment slot equips, and an equipped item dropped on the backpack
-    /// unequips into that slot (rules in <see cref="InventoryDragDrop.ResolveDrop"/>). "Organizar"
-    /// runs <see cref="InventoryManager.SortInventory"/>. Gamepad/keyboard: <see cref="FocusNavigator"/>.
+    /// The backpack is an MU Online-style grid (<see cref="InventoryManager.Columns"/> × <see cref="InventoryManager.Rows"/>):
+    /// background cells, and every item drawn over its footprint (<see cref="ItemFootprint"/>) with its rarity border colour.
+    /// <list type="bullet">
+    /// <item>PC: drag an item (press and move past <see cref="InventoryDragDrop.DragThresholdPixels"/>) — a ghost of its
+    /// footprint follows the pointer, green where it fits, red where it does not; drop on the grid moves/merges/swaps
+    /// (<see cref="InventoryManager.MoveItem"/>), on its equipment slot equips. Right-click uses/equips at once.</item>
+    /// <item>Mobile (and mouse clicks, gamepad A): tap an item to pick it up, tap a cell (or another item) to put it
+    /// there, tap the held item again to use/equip it (<see cref="InventoryDragDrop.ResolveTap"/>). While something is
+    /// held, the free cells become focusable so a gamepad can place it too.</item>
+    /// <item>Hold (touch) / hover (mouse) / focus (gamepad): tooltip (<see cref="TooltipTrigger"/>).</item>
+    /// <item>Equipped item dragged (or picked from its row) onto the grid: unequips into that spot.</item>
+    /// <item>"Organizar": <see cref="InventoryManager.SortInventory"/>. The header chip shows used/total cells.</item>
+    /// </list>
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class InventoryUIController : MonoBehaviour
@@ -46,11 +47,21 @@ namespace Rapadura.UI.Inventory
             EquipmentSlot.OffHand,
             EquipmentSlot.Tool,
             EquipmentSlot.Accessory,
+            EquipmentSlot.Wings,
         };
 
+        /// <summary>Pixel size of one grid cell (8 cells = 416px; 52px keeps touch targets above 44px).</summary>
+        public const float CellSize = 52f;
+
+        public const string BagGridName = "inventory-bag-grid";
+        public const string BagGhostName = "inventory-bag-ghost";
+
         private const string DragSourceClass = "inventory-slot--drag-source";
+        private const string HeldClass = "inventory-bag-item--held";
         private const string DropValidClass = "inventory-drop--valid";
         private const string DropInvalidClass = "inventory-drop--invalid";
+        private const string GhostValidClass = "inventory-bag-ghost--valid";
+        private const string GhostInvalidClass = "inventory-bag-ghost--invalid";
 
         [Header("References")]
         [Tooltip("Player's InventoryManager. If empty, resolved lazily from the scene on Show().")]
@@ -69,12 +80,16 @@ namespace Rapadura.UI.Inventory
         private Button _sortButton;
         private Label _dragGhost;
 
+        private VisualElement _bagGrid;
+        private VisualElement _cellGhost;
+        private readonly List<VisualElement> _cells = new List<VisualElement>();
+
         private TooltipController _tooltip;
         private FocusNavigator _focusNavigator;
         private readonly List<VisualElement> _spawnedEquipmentRows = new List<VisualElement>();
         private readonly List<VisualElement> _spawnedItemRows = new List<VisualElement>();
 
-        // Drag & drop state.
+        // Drop targets for drags: equipment rows (+ the grid, handled separately).
         private sealed class DropTarget
         {
             public VisualElement Element;
@@ -85,6 +100,8 @@ namespace Rapadura.UI.Inventory
         private readonly List<DropTarget> _dropTargets = new List<DropTarget>();
         private readonly List<Rect> _dropTargetRects = new List<Rect>();
         private readonly List<Rect> _dropClipRects = new List<Rect>();
+
+        // Press / drag state.
         private int _pressPointerId = -1;
         private Vector2 _pressPosition;
         private InventoryDragEndpoint _dragSource;
@@ -93,8 +110,18 @@ namespace Rapadura.UI.Inventory
         private string _dragLabel;
         private bool _isDragging;
         private DropTarget _hoveredTarget;
+        private Vector2Int _grab;
+
+        // Tap-to-pick state (mobile, clicks, gamepad).
+        private int _heldIndex = -1;
+        private Vector2Int _heldGrab;
+        private Vector2 _lastPointerPosition;
+        private bool _lastActivationWasPointer;
 
         public bool IsVisible => _root != null && _root.style.display == DisplayStyle.Flex;
+
+        /// <summary>Bag entry picked up by a tap, or -1.</summary>
+        public int HeldIndex => _heldIndex;
 
         private void Awake()
         {
@@ -142,7 +169,7 @@ namespace Rapadura.UI.Inventory
             if (_root != null && _dragGhost == null)
             {
                 // Last child of the full-screen root so it draws above the window; never pickable,
-                // so it doesn't hide the slot under the finger from hit testing.
+                // so it doesn't hide the cell under the finger from hit testing.
                 _dragGhost = new Label { name = "inventory-drag-ghost", pickingMode = PickingMode.Ignore };
                 _dragGhost.AddToClassList("inventory-drag-ghost");
                 _dragGhost.style.display = DisplayStyle.None;
@@ -166,8 +193,9 @@ namespace Rapadura.UI.Inventory
 
             if (_root != null)
             {
-                // TrickleDown on the full-screen root: runs before the ScrollViews/slots below, so an
+                // TrickleDown on the full-screen root: runs before the ScrollViews/tiles below, so an
                 // active drag can keep the moves to itself (no list scrolling, no button clicking).
+                _root.RegisterCallback<PointerDownEvent>(OnRootPointerDown, TrickleDown.TrickleDown);
                 _root.RegisterCallback<PointerMoveEvent>(OnRootPointerMove, TrickleDown.TrickleDown);
                 _root.RegisterCallback<PointerUpEvent>(OnRootPointerUp, TrickleDown.TrickleDown);
                 _root.RegisterCallback<PointerCancelEvent>(OnRootPointerCancel, TrickleDown.TrickleDown);
@@ -190,18 +218,20 @@ namespace Rapadura.UI.Inventory
 
             if (_root != null)
             {
+                _root.UnregisterCallback<PointerDownEvent>(OnRootPointerDown, TrickleDown.TrickleDown);
                 _root.UnregisterCallback<PointerMoveEvent>(OnRootPointerMove, TrickleDown.TrickleDown);
                 _root.UnregisterCallback<PointerUpEvent>(OnRootPointerUp, TrickleDown.TrickleDown);
                 _root.UnregisterCallback<PointerCancelEvent>(OnRootPointerCancel, TrickleDown.TrickleDown);
             }
 
             EndDrag();
+            ReleaseHeld();
             ClearRows();
         }
 
         private void OnInventoryChanged(InventoryChangedEvent evt)
         {
-            // Mid-drag the rows stay as they are (rebuilding would destroy the dragged tile); the drop
+            // Mid-drag the tiles stay as they are (rebuilding would destroy the dragged tile); the drop
             // itself refreshes.
             if (IsVisible && !_isDragging)
             {
@@ -233,6 +263,7 @@ namespace Rapadura.UI.Inventory
         {
             _tooltip?.Hide();
             EndDrag();
+            ReleaseHeld();
             _focusNavigator?.ReleaseFocus();
 
             if (_root != null)
@@ -259,6 +290,7 @@ namespace Rapadura.UI.Inventory
 
         private void OnSortClicked()
         {
+            ReleaseHeld();
             _inventory?.SortInventory();
         }
 
@@ -284,14 +316,17 @@ namespace Rapadura.UI.Inventory
                 return;
             }
 
-            string weightPattern = Localize(localize, "ui.inventory.weight");
-            SetText(_weightLabel, string.Format(CultureInfo.InvariantCulture, weightPattern,
-                _inventory.GetTotalWeight().ToString("0.#", CultureInfo.InvariantCulture),
-                _inventory.MaxWeight.ToString("0.#", CultureInfo.InvariantCulture)));
+            if (_heldIndex >= 0 && (_heldIndex >= _inventory.Slots.Count || _inventory.Slots[_heldIndex].IsEmpty))
+            {
+                _heldIndex = -1;
+            }
+
+            string spacePattern = Localize(localize, "ui.inventory.space");
+            SetText(_weightLabel, string.Format(CultureInfo.InvariantCulture, spacePattern, _inventory.UsedCellCount, _inventory.CellCount));
 
             _dropTargets.Clear();
             RebuildEquipmentRows(localize);
-            RebuildItemRows(localize);
+            RebuildBagGrid();
             _focusNavigator?.RestoreFocusAfterRebuild();
         }
 
@@ -313,7 +348,7 @@ namespace Rapadura.UI.Inventory
                 ItemDefinition item = equippedData != null ? ItemDatabase.GetById(equippedData.itemId) : null;
 
                 EquipmentSlot capturedSlot = equipSlot;
-                var row = new Button(() => _inventory?.UnequipSlot(capturedSlot));
+                var row = new Button(() => OnEquipmentRowClicked(capturedSlot));
                 row.AddToClassList("inventory-row-button");
                 row.AddToClassList("inventory-equipment-row");
 
@@ -325,13 +360,13 @@ namespace Rapadura.UI.Inventory
 
                     InventorySlotData tooltipData = equippedData;
                     TooltipTrigger.Bind(row, _tooltip, () => TooltipContentBuilder.ForItem(item, tooltipData, TooltipController.GetLocalizer()));
-                    RegisterDragSource(row, InventoryDragEndpoint.Equipment(equipSlot), equipSlot, itemName);
+                    RegisterDragSource(row, InventoryDragEndpoint.Equipment(equipSlot), equipSlot, itemName, Vector2Int.zero);
                 }
                 else
                 {
-                    // Disabled (nothing to unequip) but still a drop target for dragged gear.
+                    // Nothing to unequip, but still a drop/tap target for gear: enabled only while gear for it is held.
                     row.text = $"{slotName}: {Localize(localize, "ui.tooltip.empty_slot")}";
-                    row.SetEnabled(false);
+                    row.SetEnabled(HeldItemEquipSlot() == equipSlot);
                 }
 
                 _dropTargets.Add(new DropTarget { Element = row, Endpoint = InventoryDragEndpoint.Equipment(equipSlot), Scroll = scroll });
@@ -340,67 +375,272 @@ namespace Rapadura.UI.Inventory
             }
         }
 
-        private void RebuildItemRows(Func<string, string> localize)
+        private void OnEquipmentRowClicked(EquipmentSlot equipSlot)
+        {
+            if (_inventory == null)
+            {
+                return;
+            }
+
+            if (_heldIndex >= 0)
+            {
+                int held = _heldIndex;
+                ReleaseHeld();
+                if (HeldItemEquipSlot(held) == equipSlot)
+                {
+                    _inventory.EquipFromSlot(held);
+                }
+
+                RefreshIfVisible();
+                return;
+            }
+
+            _inventory.UnequipSlot(equipSlot);
+        }
+
+        // ---------------------------------------------------------------
+        // Grid
+        // ---------------------------------------------------------------
+
+        private void RebuildBagGrid()
         {
             ClearRows(_itemListContainer, _spawnedItemRows);
+            _cells.Clear();
+            _bagGrid = null;
+            _cellGhost = null;
 
             if (_itemListContainer == null)
             {
                 return;
             }
 
-            ScrollView scroll = _itemListContainer.GetFirstAncestorOfType<ScrollView>();
+            int columns = _inventory.Columns;
+            int rows = _inventory.Rows;
+
+            var grid = new VisualElement { name = BagGridName };
+            grid.AddToClassList(BagGridName);
+            grid.style.width = columns * CellSize;
+            grid.style.height = rows * CellSize;
+            grid.RegisterCallback<PointerMoveEvent>(OnGridPointerMove);
+            grid.RegisterCallback<PointerUpEvent>(OnGridPointerUp);
+            grid.RegisterCallback<PointerLeaveEvent>(_ => UpdateHeldGhostAtCurrentSpot());
+
+            for (int y = 0; y < rows; y++)
+            {
+                for (int x = 0; x < columns; x++)
+                {
+                    var cell = new VisualElement { name = $"inventory-cell-{x}-{y}", pickingMode = PickingMode.Ignore };
+                    cell.AddToClassList("inventory-cell");
+                    Place(cell, x, y, 1, 1);
+
+                    int cx = x;
+                    int cy = y;
+                    cell.RegisterCallback<NavigationSubmitEvent>(evt =>
+                    {
+                        _lastActivationWasPointer = false;
+                        OnCellActivated(cx, cy);
+                        evt.StopPropagation();
+                    });
+
+                    grid.Add(cell);
+                    _cells.Add(cell);
+                }
+            }
+
             IReadOnlyList<InventorySlotData> slots = _inventory.Slots;
+            BagGrid occupancy = _inventory.BuildGrid();
 
             for (int i = 0; i < slots.Count; i++)
             {
                 InventorySlotData slot = slots[i];
-                ItemDefinition item = slot.IsEmpty ? null : ItemDatabase.GetById(slot.itemId);
-                VisualElement tile;
-
-                if (item == null)
+                if (slot == null || slot.IsEmpty)
                 {
-                    // Empty (or unknown-id) slot: not focusable — gamepad navigation only stops on items.
-                    tile = new VisualElement();
-                    tile.AddToClassList("inventory-slot");
-                    tile.AddToClassList("inventory-slot--empty");
+                    continue;
                 }
-                else
+
+                GridRect rect = _inventory.GetSlotRect(i);
+                if (occupancy.At(rect.X, rect.Y) != i)
                 {
-                    int slotIndex = i;
-                    string itemName = GeneratedItemName.Compose(item, slot, ContentText.CurrentManager);
+                    continue; // not on the grid (should not happen; never draw two items on one cell)
+                }
 
-                    var button = new Button(() => OnItemClicked(slotIndex)) { text = itemName };
-                    button.AddToClassList("inventory-slot");
-                    AddRarityClass(button, TooltipContentBuilder.ResolveRarity(item, slot));
+                grid.Add(CreateItemTile(i, slot, rect));
+            }
 
-                    if (slot.quantity > 1)
+            _cellGhost = new VisualElement { name = BagGhostName, pickingMode = PickingMode.Ignore };
+            _cellGhost.AddToClassList(BagGhostName);
+            _cellGhost.style.display = DisplayStyle.None;
+            grid.Add(_cellGhost);
+
+            _itemListContainer.Add(grid);
+            _spawnedItemRows.Add(grid);
+            _bagGrid = grid;
+
+            SetCellsFocusable(_heldIndex >= 0);
+            UpdateHeldGhostAtCurrentSpot();
+        }
+
+        private VisualElement CreateItemTile(int slotIndex, InventorySlotData slot, GridRect rect)
+        {
+            ItemDefinition item = ItemDatabase.GetById(slot.itemId);
+            string itemName = item != null ? GeneratedItemName.Compose(item, slot, ContentText.CurrentManager) : slot.itemId;
+
+            var tile = new Button(() => OnTileActivated(slotIndex)) { name = "inventory-bag-item-" + slotIndex };
+            tile.AddToClassList("inventory-slot");
+            tile.AddToClassList("inventory-bag-item");
+            if (slotIndex == _heldIndex)
+            {
+                tile.AddToClassList(HeldClass);
+            }
+
+            Place(tile, rect.X, rect.Y, rect.Width, rect.Height);
+
+            var nameLabel = new Label(itemName) { pickingMode = PickingMode.Ignore };
+            nameLabel.AddToClassList("inventory-bag-item-name");
+            tile.Add(nameLabel);
+
+            if (item != null)
+            {
+                AddRarityClass(tile, TooltipContentBuilder.ResolveRarity(item, slot));
+                InventorySlotData tooltipSlot = slot;
+                TooltipTrigger.Bind(tile, _tooltip, () => TooltipContentBuilder.ForItem(item, tooltipSlot, TooltipController.GetLocalizer()));
+            }
+
+            if (slot.quantity > 1)
+            {
+                var quantity = new Label($"x{slot.quantity}") { pickingMode = PickingMode.Ignore };
+                quantity.AddToClassList("inventory-slot-quantity");
+                tile.Add(quantity);
+            }
+
+            // Right-click = use/equip at once (MU habit).
+            tile.RegisterCallback<PointerUpEvent>(evt =>
+            {
+                if (evt.pointerType == UnityEngine.UIElements.PointerType.mouse && evt.button == 1 && !_isDragging)
+                {
+                    ReleaseHeld();
+                    UseOrEquip(slotIndex);
+                    evt.StopPropagation();
+                }
+            });
+
+            string label = slot.quantity > 1 ? $"{itemName} x{slot.quantity}" : itemName;
+            RegisterDragSource(tile, InventoryDragEndpoint.Backpack(slotIndex), item != null ? item.EquipSlot : EquipmentSlot.None, label, Vector2Int.zero);
+            return tile;
+        }
+
+        private static void Place(VisualElement element, int x, int y, int width, int height)
+        {
+            element.style.position = Position.Absolute;
+            element.style.left = x * CellSize;
+            element.style.top = y * CellSize;
+            element.style.width = width * CellSize;
+            element.style.height = height * CellSize;
+        }
+
+        /// <summary>Tile clicked (tap, left click, gamepad A): pick it, use/equip it, or put the held item on it.</summary>
+        private void OnTileActivated(int slotIndex)
+        {
+            if (_inventory == null || _isDragging)
+            {
+                return;
+            }
+
+            bool pointer = _lastActivationWasPointer && !FocusNavigator.NavigationInputActive;
+            _lastActivationWasPointer = false;
+
+            switch (InventoryDragDrop.ResolveTap(_heldIndex, slotIndex))
+            {
+                case BagTapAction.Pick:
+                    Vector2Int grab = Vector2Int.zero;
+                    if (pointer && TryGetPointerCell(_lastPointerPosition, out int px, out int py))
                     {
-                        var quantity = new Label($"x{slot.quantity}") { pickingMode = PickingMode.Ignore };
-                        quantity.AddToClassList("inventory-slot-quantity");
-                        button.Add(quantity);
+                        GridRect rect = _inventory.GetSlotRect(slotIndex);
+                        grab = new Vector2Int(Mathf.Clamp(px - rect.X, 0, rect.Width - 1), Mathf.Clamp(py - rect.Y, 0, rect.Height - 1));
                     }
 
-                    InventorySlotData tooltipSlot = slot;
-                    TooltipTrigger.Bind(button, _tooltip, () => TooltipContentBuilder.ForItem(item, tooltipSlot, TooltipController.GetLocalizer()));
-                    RegisterDragSource(button, InventoryDragEndpoint.Backpack(i), item.EquipSlot, slot.quantity > 1 ? $"{itemName} x{slot.quantity}" : itemName);
-                    tile = button;
-                }
+                    Hold(slotIndex, grab);
+                    break;
 
-                _dropTargets.Add(new DropTarget { Element = tile, Endpoint = InventoryDragEndpoint.Backpack(i), Scroll = scroll });
-                _itemListContainer.Add(tile);
-                _spawnedItemRows.Add(tile);
+                case BagTapAction.UseOrEquip:
+                    ReleaseHeld();
+                    UseOrEquip(slotIndex);
+                    RefreshIfVisible();
+                    break;
+
+                case BagTapAction.Place:
+                    if (pointer && TryGetPointerCell(_lastPointerPosition, out int cx, out int cy))
+                    {
+                        TryPlaceHeld(cx, cy);
+                    }
+                    else
+                    {
+                        // Gamepad: onto the target item's own top-left cell.
+                        GridRect target = _inventory.GetSlotRect(slotIndex);
+                        TryPlaceHeld(target.X + _heldGrab.x, target.Y + _heldGrab.y);
+                    }
+
+                    break;
             }
         }
 
-        private void OnItemClicked(int slotIndex)
+        /// <summary>An empty cell tapped (or submitted with a gamepad while holding).</summary>
+        private void OnCellActivated(int x, int y)
+        {
+            if (_heldIndex >= 0)
+            {
+                TryPlaceHeld(x, y);
+            }
+        }
+
+        /// <summary>Puts the held item with its grabbed cell on (cellX, cellY). Keeps holding (red ghost) when it doesn't fit.</summary>
+        private void TryPlaceHeld(int cellX, int cellY)
+        {
+            if (_heldIndex < 0 || _inventory == null)
+            {
+                return;
+            }
+
+            Vector2Int anchor = InventoryDragDrop.AnchorFor(cellX, cellY, _heldGrab.x, _heldGrab.y);
+            if (_inventory.MoveItem(_heldIndex, anchor.x, anchor.y))
+            {
+                ReleaseHeld();
+                RefreshIfVisible();
+                return;
+            }
+
+            ShowGhost(_heldIndex, anchor.x, anchor.y);
+        }
+
+        private void Hold(int slotIndex, Vector2Int grab)
+        {
+            _heldIndex = slotIndex;
+            _heldGrab = grab;
+            _tooltip?.Hide();
+            RefreshIfVisible();
+        }
+
+        private void ReleaseHeld()
+        {
+            if (_heldIndex < 0)
+            {
+                return;
+            }
+
+            _heldIndex = -1;
+            _heldGrab = Vector2Int.zero;
+            HideGhost();
+            SetCellsFocusable(false);
+        }
+
+        private void UseOrEquip(int slotIndex)
         {
             if (_inventory == null || slotIndex < 0 || slotIndex >= _inventory.Slots.Count)
             {
                 return;
             }
 
-            ItemDefinition item = ItemDatabase.GetById(_inventory.Slots[slotIndex].itemId);
+            ItemDefinition item = ItemDatabase.GetById(_inventory.Slots[slotIndex].itemId ?? string.Empty);
 
             if (item == null)
             {
@@ -417,11 +657,157 @@ namespace Rapadura.UI.Inventory
             }
         }
 
+        private EquipmentSlot HeldItemEquipSlot(int index = -2)
+        {
+            int held = index == -2 ? _heldIndex : index;
+            if (_inventory == null || held < 0 || held >= _inventory.Slots.Count || _inventory.Slots[held].IsEmpty)
+            {
+                return EquipmentSlot.None;
+            }
+
+            ItemDefinition item = ItemDatabase.GetById(_inventory.Slots[held].itemId);
+            return item != null ? item.EquipSlot : EquipmentSlot.None;
+        }
+
+        private void SetCellsFocusable(bool focusable)
+        {
+            if (_inventory == null)
+            {
+                return;
+            }
+
+            BagGrid occupancy = focusable ? _inventory.BuildGrid() : null;
+            for (int i = 0; i < _cells.Count; i++)
+            {
+                int x = i % _inventory.Columns;
+                int y = i / _inventory.Columns;
+                bool canTake = focusable && occupancy.At(x, y) == BagGrid.Empty;
+                _cells[i].focusable = canTake;
+                _cells[i].pickingMode = PickingMode.Ignore;
+            }
+        }
+
+        private bool TryGetPointerCell(Vector2 pointerPosition, out int x, out int y)
+        {
+            x = -1;
+            y = -1;
+            if (_bagGrid == null || _inventory == null)
+            {
+                return false;
+            }
+
+            Vector2 local = _bagGrid.WorldToLocal(pointerPosition);
+            return InventoryDragDrop.TryGetCell(local, CellSize, _inventory.Columns, _inventory.Rows, out x, out y);
+        }
+
+        private bool IsOverGrid(Vector2 pointerPosition)
+        {
+            if (_bagGrid == null)
+            {
+                return false;
+            }
+
+            Rect bounds = _bagGrid.worldBound;
+            ScrollView scroll = _bagGrid.GetFirstAncestorOfType<ScrollView>();
+            return bounds.Contains(pointerPosition) && (scroll == null || scroll.contentViewport.worldBound.Contains(pointerPosition));
+        }
+
+        private void OnGridPointerMove(PointerMoveEvent evt)
+        {
+            if (_isDragging || _heldIndex < 0 || evt.pointerType != UnityEngine.UIElements.PointerType.mouse)
+            {
+                return;
+            }
+
+            // Mouse hover while holding: preview where the held item would land.
+            if (TryGetPointerCell(evt.position, out int x, out int y))
+            {
+                Vector2Int anchor = InventoryDragDrop.AnchorFor(x, y, _heldGrab.x, _heldGrab.y);
+                ShowGhost(_heldIndex, anchor.x, anchor.y);
+            }
+        }
+
+        private void OnGridPointerUp(PointerUpEvent evt)
+        {
+            // A tap on an empty cell (the tiles handle their own taps).
+            if (_isDragging || evt.target != _bagGrid || (evt.pointerType == UnityEngine.UIElements.PointerType.mouse && evt.button != 0))
+            {
+                return;
+            }
+
+            if (InventoryDragDrop.HasExceededDragThreshold(_pressPosition, evt.position))
+            {
+                return;
+            }
+
+            if (TryGetPointerCell(evt.position, out int x, out int y))
+            {
+                OnCellActivated(x, y);
+            }
+        }
+
+        private void UpdateHeldGhostAtCurrentSpot()
+        {
+            if (_heldIndex < 0 || _inventory == null)
+            {
+                HideGhost();
+                return;
+            }
+
+            GridRect rect = _inventory.GetSlotRect(_heldIndex);
+            ShowGhost(_heldIndex, rect.X, rect.Y);
+        }
+
+        /// <summary>Footprint ghost of entry <paramref name="slotIndex"/> at anchor (x, y): green where it fits, red where it doesn't.</summary>
+        private void ShowGhost(int slotIndex, int x, int y)
+        {
+            if (_cellGhost == null || _inventory == null || slotIndex < 0 || slotIndex >= _inventory.Slots.Count)
+            {
+                return;
+            }
+
+            GridRect rect = _inventory.GetSlotRect(slotIndex);
+            ShowGhostRect(x, y, rect.Width, rect.Height, _inventory.PlanMove(slotIndex, x, y).IsValid);
+        }
+
+        private void ShowGhostRect(int x, int y, int width, int height, bool valid)
+        {
+            if (_cellGhost == null || _inventory == null)
+            {
+                return;
+            }
+
+            // Clamp the drawing into the grid (an anchor off the edge still shows, red, at the edge).
+            int cx = Mathf.Clamp(x, 0, Mathf.Max(0, _inventory.Columns - width));
+            int cy = Mathf.Clamp(y, 0, Mathf.Max(0, _inventory.Rows - height));
+            Place(_cellGhost, cx, cy, width, height);
+            _cellGhost.EnableInClassList(GhostValidClass, valid);
+            _cellGhost.EnableInClassList(GhostInvalidClass, !valid);
+            _cellGhost.style.display = DisplayStyle.Flex;
+            _cellGhost.BringToFront();
+        }
+
+        private void HideGhost()
+        {
+            if (_cellGhost != null)
+            {
+                _cellGhost.style.display = DisplayStyle.None;
+            }
+        }
+
+        private void RefreshIfVisible()
+        {
+            if (IsVisible && !_isDragging)
+            {
+                RefreshAll();
+            }
+        }
+
         // ---------------------------------------------------------------
         // Drag & drop
         // ---------------------------------------------------------------
 
-        private void RegisterDragSource(VisualElement element, InventoryDragEndpoint endpoint, EquipmentSlot itemEquipSlot, string label)
+        private void RegisterDragSource(VisualElement element, InventoryDragEndpoint endpoint, EquipmentSlot itemEquipSlot, string label, Vector2Int grab)
         {
             // TrickleDown like TooltipTrigger: seen before the Button's Clickable handles the press.
             element.RegisterCallback<PointerDownEvent>(evt =>
@@ -437,7 +823,23 @@ namespace Rapadura.UI.Inventory
                 _dragSourceEquipSlot = itemEquipSlot;
                 _dragSourceElement = element;
                 _dragLabel = label;
+                _grab = grab;
+
+                if (endpoint.Location == InventoryDragLocation.BackpackSlot && _inventory != null && TryGetPointerCell(evt.position, out int px, out int py))
+                {
+                    GridRect rect = _inventory.GetSlotRect(endpoint.SlotIndex);
+                    _grab = new Vector2Int(Mathf.Clamp(px - rect.X, 0, rect.Width - 1), Mathf.Clamp(py - rect.Y, 0, rect.Height - 1));
+                }
             }, TrickleDown.TrickleDown);
+        }
+
+        private void OnRootPointerDown(PointerDownEvent evt)
+        {
+            _lastPointerPosition = evt.position;
+            if (evt.isPrimary)
+            {
+                _pressPosition = evt.position;
+            }
         }
 
         private void OnRootPointerMove(PointerMoveEvent evt)
@@ -454,7 +856,7 @@ namespace Rapadura.UI.Inventory
                     return;
                 }
 
-                // Not stopped: this same move must still reach the slot so TooltipTrigger cancels its
+                // Not stopped: this same move must still reach the tile so TooltipTrigger cancels its
                 // pending long-press (same threshold). Every later move is kept by the drag.
                 BeginDrag();
                 UpdateDrag(evt.position);
@@ -467,6 +869,9 @@ namespace Rapadura.UI.Inventory
 
         private void OnRootPointerUp(PointerUpEvent evt)
         {
+            _lastPointerPosition = evt.position;
+            _lastActivationWasPointer = true;
+
             if (evt.pointerId != _pressPointerId)
             {
                 return;
@@ -474,24 +879,40 @@ namespace Rapadura.UI.Inventory
 
             if (!_isDragging)
             {
-                // A tap or a long-press: leave it to the Button / TooltipTrigger.
+                // A tap or a long-press: leave it to the tile (OnTileActivated) / TooltipTrigger.
                 _pressPointerId = -1;
                 _dragSourceElement = null;
                 return;
             }
 
-            // Swallow the release: no click on the slot under the finger, no list fling.
+            // Swallow the release: no click on the tile under the finger, no list fling.
             evt.StopPropagation();
             _root.panel?.ReleasePointer(evt.pointerId);
+            _lastActivationWasPointer = false;
 
-            DropTarget target = FindDropTarget(evt.position);
             InventoryDragEndpoint source = _dragSource;
             EquipmentSlot sourceEquipSlot = _dragSourceEquipSlot;
+            Vector2Int grab = _grab;
+            Vector2 position = evt.position;
+            DropTarget target = FindDropTarget(position);
+            bool overGrid = IsOverGrid(position);
             EndDrag();
 
             if (target != null)
             {
                 PerformDrop(source, target.Endpoint, sourceEquipSlot);
+            }
+            else if (overGrid && TryGetPointerCell(position, out int x, out int y))
+            {
+                Vector2Int anchor = InventoryDragDrop.AnchorFor(x, y, grab.x, grab.y);
+                if (source.Location == InventoryDragLocation.BackpackSlot)
+                {
+                    _inventory?.MoveItem(source.SlotIndex, anchor.x, anchor.y);
+                }
+                else if (source.Location == InventoryDragLocation.EquipmentSlot)
+                {
+                    UnequipInto(source.EquipSlot, anchor.x, anchor.y);
+                }
             }
 
             // Always rebuild: resets the tiles' Button/tooltip press state even after a rejected drop.
@@ -520,6 +941,7 @@ namespace Rapadura.UI.Inventory
         private void BeginDrag()
         {
             _isDragging = true;
+            ReleaseHeld();
             _tooltip?.Hide();
             _dragSourceElement?.AddToClassList(DragSourceClass);
 
@@ -548,6 +970,31 @@ namespace Rapadura.UI.Inventory
             }
 
             SetHoveredTarget(FindDropTarget(pointerPosition));
+            UpdateGridGhostForDrag(pointerPosition);
+        }
+
+        private void UpdateGridGhostForDrag(Vector2 pointerPosition)
+        {
+            if (_inventory == null || !IsOverGrid(pointerPosition) || !TryGetPointerCell(pointerPosition, out int x, out int y))
+            {
+                HideGhost();
+                return;
+            }
+
+            Vector2Int anchor = InventoryDragDrop.AnchorFor(x, y, _grab.x, _grab.y);
+            if (_dragSource.Location == InventoryDragLocation.BackpackSlot)
+            {
+                ShowGhost(_dragSource.SlotIndex, anchor.x, anchor.y);
+                return;
+            }
+
+            // An equipped item: preview its footprint on a free area.
+            if (_inventory.Equipped.TryGetValue(_dragSource.EquipSlot, out InventorySlotData equipped) && equipped != null)
+            {
+                GridSize size = _inventory.GetFootprint(ItemDatabase.GetById(equipped.itemId));
+                var rect = new GridRect(anchor.x, anchor.y, size);
+                ShowGhostRect(anchor.x, anchor.y, size.Width, size.Height, _inventory.BuildGrid().IsFree(rect));
+            }
         }
 
         private void SetHoveredTarget(DropTarget target)
@@ -605,6 +1052,11 @@ namespace Rapadura.UI.Inventory
                 _dragGhost.style.display = DisplayStyle.None;
             }
 
+            if (_isDragging)
+            {
+                HideGhost();
+            }
+
             _isDragging = false;
             _pressPointerId = -1;
             _dragSourceElement = null;
@@ -619,27 +1071,20 @@ namespace Rapadura.UI.Inventory
                 return;
             }
 
-            switch (InventoryDragDrop.ResolveDrop(source, target, sourceEquipSlot))
+            // Equipment rows are the only list targets now; grid drops are handled by cell (OnRootPointerUp).
+            if (InventoryDragDrop.ResolveDrop(source, target, sourceEquipSlot) == InventoryDropAction.Equip)
             {
-                case InventoryDropAction.MoveOrMerge:
-                    _inventory.MoveOrMergeSlot(source.SlotIndex, target.SlotIndex);
-                    break;
-                case InventoryDropAction.Equip:
-                    _inventory.EquipFromSlot(source.SlotIndex);
-                    break;
-                case InventoryDropAction.Unequip:
-                    UnequipInto(source.EquipSlot, target.SlotIndex);
-                    break;
+                _inventory.EquipFromSlot(source.SlotIndex);
             }
         }
 
         /// <summary>
-        /// UnequipSlot returns the item to the first free slot; then move it onto the slot it was
-        /// dropped on (MoveOrMergeSlot swaps with whatever is there and keeps generated data intact).
+        /// UnequipSlot returns the item to the first free area; then move it onto the cell it was dropped on
+        /// (<see cref="InventoryManager.MoveItem"/>: if that spot doesn't fit, it stays where it landed).
         /// </summary>
-        private void UnequipInto(EquipmentSlot equipSlot, int targetIndex)
+        private void UnequipInto(EquipmentSlot equipSlot, int x, int y)
         {
-            if (!_inventory.Equipped.TryGetValue(equipSlot, out InventorySlotData equipped) || equipped == null)
+            if (_inventory == null || !_inventory.Equipped.TryGetValue(equipSlot, out InventorySlotData equipped) || equipped == null)
             {
                 return;
             }
@@ -664,11 +1109,7 @@ namespace Rapadura.UI.Inventory
             {
                 if (wasEmpty[i] && !slots[i].IsEmpty && slots[i].itemId == itemId)
                 {
-                    if (i != targetIndex)
-                    {
-                        _inventory.MoveOrMergeSlot(i, targetIndex);
-                    }
-
+                    _inventory.MoveItem(i, x, y);
                     return;
                 }
             }
@@ -707,6 +1148,9 @@ namespace Rapadura.UI.Inventory
             _dropTargets.Clear();
             ClearRows(_equipmentListContainer, _spawnedEquipmentRows);
             ClearRows(_itemListContainer, _spawnedItemRows);
+            _cells.Clear();
+            _bagGrid = null;
+            _cellGhost = null;
         }
 
         private static void ClearRows(VisualElement container, List<VisualElement> spawned)

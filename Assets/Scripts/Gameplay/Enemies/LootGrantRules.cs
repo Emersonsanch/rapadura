@@ -18,7 +18,10 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>Units that did not fit and are gone.</summary>
         public readonly int Lost;
 
-        /// <summary>Units let past the weight limit because an active quest needs them (<see cref="LootGrantRules"/>).</summary>
+        /// <summary>
+        /// Dormant since the MU-style grid bag (always 0): quest items used to go in past the old weight limit, but the
+        /// grid has no "past the limit". Kept so event consumers (<c>BagFullToastController</c>) stay source-compatible.
+        /// </summary>
         public readonly int KeptOverWeight;
 
         public LootGrantResult(LootDrop drop, int granted, int lost, int keptOverWeight)
@@ -33,8 +36,8 @@ namespace Rapadura.Gameplay.Enemies
     }
 
     /// <summary>
-    /// Raised by <see cref="EnemyLootGranter"/> when part of a kill's loot did not fit (bag over its weight limit or
-    /// out of slots), or when quest items were let past the weight limit. The arena's bag-full toast
+    /// Raised by <see cref="EnemyLootGranter"/> when part of a kill's loot did not fit (no free area of its footprint on
+    /// the Mochila's grid and no plain stack with room). The arena's bag-full toast
     /// (<c>BagFullToastController</c>) shows "Mochila cheia" and a warning-coloured text over the corpse.
     /// </summary>
     public readonly struct LootOverflowEvent : IGameEvent
@@ -53,17 +56,16 @@ namespace Rapadura.Gameplay.Enemies
     }
 
     /// <summary>
-    /// How a rolled drop goes into the killer's bag (Docs/Balance/README.md §9). Plain static rules so EditMode
-    /// tests drive them on a bare <see cref="InventoryManager"/>:
+    /// How a rolled drop goes into the killer's bag (Docs/Balance/README.md §9 and "Mochila em grade"). Plain static
+    /// rules so EditMode tests drive them on a bare <see cref="InventoryManager"/>:
     /// <list type="number">
-    /// <item>Normal add (<see cref="InventoryManager.AddItem(ItemDefinition,int)"/>): stacks first, then free slots, capped by weight.</item>
-    /// <item>What the weight cap refused is kept anyway when it is <b>currency</b> (gold weighs 0, so this only
-    /// matters for a full set of slots, which then also refuses it) or when an active quest still needs it
-    /// (<c>outstandingForQuests</c>, i.e. <c>QuestManager.GetOutstandingCollectAmount</c>): those
-    /// units go in over the limit (<see cref="InventoryManager.AddItemIgnoringWeight"/>). Slots are never bypassed.</item>
+    /// <item>Normal add (<see cref="InventoryManager.AddItem(ItemDefinition,int)"/>): plain stacks with room first, then a
+    /// new stack at the first free area of the item's footprint (the shared grid fit, <see cref="InventoryManager.CanFit"/>).</item>
+    /// <item>The grid is the only limit and cannot be bypassed (the old weight-limit exception for currency and quest
+    /// items is gone with the weight limit; <c>outstandingForQuests</c> is kept for callers and <see cref="ProtectedAmount"/>).</item>
     /// <item>The rest is lost and reported, never silently: <see cref="LootOverflowEvent"/>.</item>
     /// </list>
-    /// Generated gear only needs a free slot (<see cref="InventoryManager.AddGeneratedItem"/>).
+    /// Generated gear needs a free area of its footprint (<see cref="InventoryManager.AddGeneratedItem"/>).
     /// </summary>
     public static class LootGrantRules
     {
@@ -87,25 +89,13 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             int leftover = inventory.AddItem(drop.Item, drop.Quantity);
-            int keptOverWeight = 0;
-
-            if (leftover > 0)
-            {
-                int protectedAmount = ProtectedAmount(drop.Item, leftover, inventory.GetTotalCount(drop.Item.ItemId), outstandingForQuests);
-                if (protectedAmount > 0)
-                {
-                    int notPlaced = inventory.AddItemIgnoringWeight(drop.Item, protectedAmount);
-                    keptOverWeight = protectedAmount - notPlaced;
-                    leftover -= keptOverWeight;
-                }
-            }
-
-            return new LootGrantResult(drop, drop.Quantity - leftover, leftover, keptOverWeight);
+            return new LootGrantResult(drop, drop.Quantity - leftover, leftover, 0);
         }
 
         /// <summary>
-        /// Of <paramref name="leftover"/> units the weight cap refused, how many must be kept regardless: all of them
-        /// for currency, otherwise what the active quests still need beyond <paramref name="held"/>.
+        /// Of <paramref name="leftover"/> units that did not fit, how many matter most: all of them for currency and quest
+        /// items, otherwise what the active quests still need beyond <paramref name="held"/>. Informational since the grid
+        /// bag (nothing can go past the grid); kept for tests and future "make room" hints.
         /// </summary>
         public static int ProtectedAmount(ItemDefinition item, int leftover, int held, Func<string, int, int> outstandingForQuests)
         {

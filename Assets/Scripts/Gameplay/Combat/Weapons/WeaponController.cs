@@ -84,11 +84,20 @@ namespace Rapadura.Gameplay.Combat.Weapons
             return item != null && item.Type == ItemType.Weapon;
         }
 
-        /// <summary>Damage to use for a hit, sourced from the equipped item's <see cref="ItemDefinition.WeaponDamage"/> when available.</summary>
+        /// <summary>
+        /// Damage to use for a hit, sourced from the equipped item's <see cref="ItemDefinition.WeaponDamage"/> when available,
+        /// raised by its refine level (<see cref="Rapadura.Gameplay.Refining.RefineRules.RefinedStat"/>).
+        /// </summary>
         protected float ResolveWeaponDamage(float fallback)
         {
             ItemDefinition item = EquippedItem;
-            return item != null && item.WeaponDamage > 0f ? item.WeaponDamage : fallback;
+            if (item == null || item.WeaponDamage <= 0f)
+            {
+                return fallback;
+            }
+
+            InventorySlotData slot = EquippedSlotData;
+            return Rapadura.Gameplay.Refining.RefineRules.RefinedStat(item.WeaponDamage, slot != null ? slot.refineLevel : 0);
         }
 
         /// <summary>

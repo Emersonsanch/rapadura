@@ -240,9 +240,10 @@ namespace Rapadura.Gameplay.World.Events
                 new WorldEventChoiceSpec(WorldEventEffect.Elite()),
                 new WorldEventChoiceSpec(WorldEventEffect.Hours(1f))),
 
-            // Cantoria ao pé da fogueira (night only): a damage buff, or rest (heal).
+            // Cantoria ao pé da fogueira (night only): a damage buff, or rest (heal). +8% (was +15%, Balance §14):
+            // stacked with a meal and the relics it pushed bosses well under the r8 15-22 s band.
             new WorldEventSpec(Campfire, 10, null, NightOnly, 1f,
-                new WorldEventChoiceSpec(WorldEventEffect.Buff(StatType.AttackDamage, 0.15f), WorldEventEffect.Hours(1f)),
+                new WorldEventChoiceSpec(WorldEventEffect.Buff(StatType.AttackDamage, 0.08f), WorldEventEffect.Hours(1f)),
                 new WorldEventChoiceSpec(WorldEventEffect.Heal(0.25f))),
 
             // Tempestade de areia (Deserto): push on slowly, or shelter while the clock runs.

@@ -202,7 +202,8 @@ namespace Rapadura.UI.WorldMap
 
             ServiceLocator.TryGet(out CharacterSelectionState selection);
             bool introduced = CompanionPreferences.Introduced;
-            string lineKey = CarameloCuddle.Cuddle(selection != null ? selection.Selected : null, introduced);
+            BiomeType? cameFrom = ServiceLocator.TryGet(out StoryProgress story) && story != null ? StoryBeats.LastRegionCleared(story.HasSeen) : null;
+            string lineKey = CarameloCuddle.Cuddle(selection != null ? selection.Selected : null, introduced, cameFrom);
             if (!introduced)
             {
                 CompanionPreferences.Introduced = true;

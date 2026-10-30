@@ -96,6 +96,30 @@ namespace Rapadura.UI.Achievements
             Description("ach_bestiary_complete", "Defeat every kind of creature and boss so Grandma Zefa can fill in every page of her notebook.", "Vença todo tipo de bicho e chefe para a Vó Zefa preencher todas as páginas do caderno."),
             Title("ach_relics_all", "Relics of the Sertão", "Relíquias do Sertão"),
             Description("ach_relics_all", "Find all 12 family relics Grandpa Chico hid around the island.", "Encontre as 12 relíquias da família que o Vô Chico escondeu pela ilha."),
+
+            // Fishing (FishingProgress feeds every new species through RecordProgress).
+            Title("ach_fish_all", "Master of the Pond", "Mestre do Açude"),
+            Description("ach_fish_all", "Catch all 14 kinds of fish in the pond, the mountain stream and the underground lake.", "Pesque as 14 espécies de peixe do açude, do riacho da serra e do lago subterrâneo."),
+            Title("ach_fish_golden", "Grandpa Chico's Legend", "A Lenda do Vô Chico"),
+            Description("ach_fish_golden", "Catch the Golden Fish of the Pond. It only bites at dawn or dusk.", "Pesque o Peixe-Dourado do Açude. Ele só morde de madrugada ou ao entardecer."),
+
+            // Night (the rare Forest night mini-boss).
+            Title("ach_night_werewolf", "Full Moon, Full Courage", "Lua Cheia, Coragem Cheia"),
+            Description("ach_night_werewolf", "Defeat the Sertão Werewolf, the rare night visitor of the Forest. When it howls, dodge!", "Vença o Lobisomem-do-sertão, o raro visitante das noites da Floresta. Quando ele uivar, esquive!"),
+
+            // Timed event rooms (EventRoomProgress feeds clears and the best score).
+            Title("ach_room_terreiro_clear", "Nobody Spooks Us", "Ninguém Assusta a Gente"),
+            Description("ach_room_terreiro_clear", "Hold out in the Spook Yard until the timer ends.", "Aguente no Terreiro das Assombrações até o tempo acabar."),
+            Title("ach_room_torre_clear", "The Mill Sings Again", "O Engenho Canta de Novo"),
+            Description("ach_room_torre_clear", "Take the Golden Cane Press back to Mr. Malaquias in the Old Mill Tower.", "Leve a Moenda de Ouro até Seu Malaquias na Torre do Engenho Velho."),
+            Title("ach_room_master", "Master of the Rooms", "Mestre das Salas"),
+            Description("ach_room_master", "Score 7000 points in the Spook Yard or the Old Mill Tower.", "Faça 7000 pontos no Terreiro das Assombrações ou na Torre do Engenho Velho."),
+
+            // Tacho Encantado (TachoService feeds wings made and the highest wing level).
+            Title("ach_wings_first", "Up and Away", "Bateu Asas"),
+            Description("ach_wings_first", "Make your first pair of wings in Grandma Zefa's Enchanted Cauldron.", "Faça o primeiro par de asas no Tacho Encantado da Vó Zefa."),
+            Title("ach_wings_level3", "Above the Sertão", "Por Cima do Sertão"),
+            Description("ach_wings_level3", "Strengthen a pair of wings up to level 3 in the Enchanted Cauldron.", "Fortaleça um par de asas até o nível 3 no Tacho Encantado."),
         };
 
         private static LocalizationEntry Title(string id, string en, string ptBR) => new LocalizationEntry($"achievement.{id}.title", en, ptBR);

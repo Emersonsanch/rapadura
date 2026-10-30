@@ -49,6 +49,11 @@
                     <ui:Button name="village-chest-store-materials-button" text="" class="village-chest-action rap-button" focusable="true" />
                     <ui:Button name="village-chest-take-quests-button" text="" class="village-chest-action rap-button rap-button--primary" focusable="true" />
                 </ui:VisualElement>
+                <!-- "Achados e Perdidos" (death drops to buy back), filled by VillageChestUIController; hidden when empty. -->
+                <ui:VisualElement name="village-chest-lost-found" class="village-chest-lost-found" style="display: none;">
+                    <ui:Label name="village-chest-lost-found-title" text="" class="village-chest-pane-title" />
+                    <ui:VisualElement name="village-chest-lost-found-list" class="village-chest-lost-found-list" />
+                </ui:VisualElement>
                 <ui:Label name="village-chest-status" text="" class="village-chest-status" />
                 <ui:Label name="village-chest-hint" text="" class="village-chest-hint" />
             </ui:VisualElement>

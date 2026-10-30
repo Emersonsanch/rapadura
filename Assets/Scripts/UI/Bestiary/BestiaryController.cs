@@ -85,6 +85,8 @@ namespace Rapadura.UI.Bestiary
         private string _selectedId;
         private int _releasePauseAtFrame = -1;
         private LocalizationManager _localization;
+        /// <summary>"Páginas | Amuletos" tabs, the charms view and the "Bicho destaque" banner (hunting features).</summary>
+        private Rapadura.UI.Hunting.BestiaryCharmsTab _charmsTab;
 
         private WorldMapHudController _hud;
         private float _nextHudLookup;
@@ -398,6 +400,7 @@ namespace Rapadura.UI.Bestiary
             _root.UnregisterCallback<NavigationCancelEvent>(OnNavigationCancel);
             _root.RegisterCallback<NavigationCancelEvent>(OnNavigationCancel);
 
+            _charmsTab = Rapadura.UI.Hunting.BestiaryCharmsTab.Attach(_root, _charmsTab);
             _localizer.Attach(_root, () => { if (_open) Render(); }, BestiaryTexts.Get);
             SetRootVisible(false);
             return true;
@@ -453,6 +456,7 @@ namespace Rapadura.UI.Bestiary
 
             RenderList(entries, progress);
             RenderPage(BestiaryCatalog.Get(_selectedId), progress);
+            _charmsTab?.Render(_localization);
         }
 
         private void RenderList(IReadOnlyList<BestiaryEntry> entries, BestiaryProgress progress)

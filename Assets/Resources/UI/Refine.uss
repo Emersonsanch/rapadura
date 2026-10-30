@@ -1,0 +1,193 @@
+/*
+ * "Ferreiro: refinar" (VillageRefinePanel), built in code on top of the map HUD's Mochila overlay classes
+ * (.wm-backpack-overlay / .wm-backpack-panel). Loaded at runtime from Resources and attached to the window root,
+ * which sits under the HUD's `rap-theme` root (wm-hud-root), where the palette below resolves.
+ * Glow tiers (+7/+9/+11/+13/+15, RefineRules.GlowTier) are UI only: no item has a world model to light up.
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+.refine-panel {
+    width: 620px;
+    max-width: 94%;
+    max-height: 94%;
+    padding: 18px 22px;
+}
+
+.refine-smith {
+    font-size: 14px;
+    -unity-font-style: italic;
+    color: var(--rap-cream);
+    white-space: normal;
+    padding: 6px 10px;
+    margin-bottom: 6px;
+    border-left-width: 3px;
+    border-left-color: var(--rap-caramel);
+    background-color: var(--rap-brown-night);
+    border-radius: 6px;
+}
+
+.refine-owned {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    margin-bottom: 4px;
+}
+
+.refine-charm {
+    margin-bottom: 6px;
+    color: var(--rap-cream);
+}
+
+.refine-charm Label {
+    color: var(--rap-cream);
+    font-size: 13px;
+}
+
+.refine-list {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 160px;
+    margin-bottom: 6px;
+}
+
+.refine-empty {
+    color: var(--rap-cream-dim);
+    white-space: normal;
+    -unity-text-align: middle-center;
+    margin: 12px;
+}
+
+.refine-row {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background-color: var(--rap-brown);
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: var(--rap-panel-border);
+}
+
+.refine-row__body {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.refine-row__name {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--rap-cream);
+    white-space: normal;
+}
+
+.refine-row__step {
+    font-size: 13px;
+    color: var(--rap-gold-light);
+}
+
+.refine-row__cost {
+    font-size: 12px;
+    color: var(--rap-cream-dim);
+}
+
+.refine-row__safe {
+    font-size: 12px;
+    color: var(--rap-cane-green);
+}
+
+.refine-row__fail {
+    font-size: 12px;
+    color: var(--rap-caramel-light);
+    white-space: normal;
+}
+
+.refine-row__why {
+    font-size: 12px;
+    -unity-font-style: italic;
+    color: var(--rap-warning);
+    white-space: normal;
+}
+
+.refine-row__actions {
+    flex-direction: column;
+    align-items: stretch;
+    margin-left: 8px;
+}
+
+.refine-go {
+    min-width: 110px;
+    margin-bottom: 4px;
+}
+
+.refine-option {
+    min-width: 110px;
+    font-size: 11px;
+}
+
+/* ---- Glow tiers (+7 / +9 / +11 / +13 / +15) ---- */
+
+.refine-glow--1 {
+    border-color: var(--rap-caramel-light);
+}
+
+.refine-glow--2 {
+    border-color: var(--rap-gold);
+}
+
+.refine-glow--3 {
+    border-color: var(--rap-gold);
+    background-color: var(--rap-brown-light);
+}
+
+.refine-glow--4 {
+    border-color: var(--rap-gold-light);
+    border-width: 3px;
+    background-color: var(--rap-brown-light);
+}
+
+.refine-glow--5 {
+    border-color: var(--rap-gold-light);
+    border-width: 3px;
+    background-color: var(--rap-caramel);
+}
+
+/* ---- Status and confirmation ---- */
+
+.refine-status {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+    white-space: normal;
+    -unity-text-align: middle-center;
+    min-height: 18px;
+    margin-bottom: 4px;
+}
+
+.refine-confirm {
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: var(--rap-gold);
+    background-color: var(--rap-brown-night);
+}
+
+.refine-confirm__text {
+    font-size: 14px;
+    color: var(--rap-cream);
+    white-space: normal;
+    margin-bottom: 6px;
+}
+
+.refine-confirm__buttons {
+    flex-direction: row;
+    justify-content: center;
+}
+
+.refine-confirm__buttons > Button {
+    margin-left: 4px;
+    margin-right: 4px;
+}

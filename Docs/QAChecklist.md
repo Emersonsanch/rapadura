@@ -50,9 +50,17 @@
 ## 5. Morte e checkpoints
 - [ ] Morte mostra tela com fade e contagem regressiva; "Continuar" e "Carregar" funcionam; auto-continuar ao zerar.
 - [ ] Renascer no checkpoint ativo (ou no spawn inicial); sem soft-lock, input do jogador restaurado.
+- [ ] Queda ao morrer (9%): morrer várias vezes com itens comuns, ouro, item de missão e equipamento. Em ~1 a cada 11 mortes a tela mostra "Na pressa, você deixou cair: <item>" + "A Vó Zefa guarda nos Achados e Perdidos, na vila."; o item sai da Mochila. Nunca cai ouro, item de missão, item equipado nem item vinculado. Na maioria das mortes nada aparece.
+- [ ] Achados e Perdidos: na Vila → Baú, a faixa "Achados e Perdidos" lista o item com "Recuperar … — N de ouro" (10/25/60/150/400 por raridade). Sem ouro: "Falta ouro" e nada é cobrado; mochila cheia: aviso e nada é cobrado; com ouro e espaço o item volta com os mesmos afixos/nome. Salvar, sair e "Continuar": a lista continua lá; "Novo jogo" zera.
 
 ## 6. Itens, inventário, crafting e lojas
-- [ ] Coletar, empilhar, equipar, usar e descartar itens; peso respeitado; tela Mochila consistente.
+- [ ] Coletar, empilhar, equipar, usar e descartar itens; tela Mochila consistente.
+- [ ] Mochila em grade 8×8 (estilo MU): itens desenhados no tamanho certo (poção/anel/material 1×1, espada 1×3, gibão 2×3, chapéu/botas 2×2, arco 2×4), borda na cor da raridade, quantidade nas pilhas, chip "Espaço: usado/64". Peso não limita mais nada.
+- [ ] PC: arrastar um item mostra o fantasma do tamanho dele (verde onde cabe, vermelho onde não cabe); soltar em área livre move, em pilha igual junta, em um item troca de lugar, sobre dois itens não faz nada. Soltar no slot de equipamento equipa; arrastar o equipado para a grade desequipa ali. Botão direito usa/equipa.
+- [ ] Mobile: tocar num item pega (fica apagado + fantasma), tocar numa casa solta (vermelho e continua segurando se não couber), tocar de novo no item segurado usa/equipa, segurar mostra o tooltip. Gamepad: A pega, setas até uma casa livre/item, A solta.
+- [ ] "Organizar" empacota a partir do canto de cima à esquerda (equipamento primeiro) sem sobrepor nada; numa mochila quase cheia e fragmentada não perde nada.
+- [ ] Cheia de verdade: loot que não cabe mostra "Mochila cheia"; loja recusa a compra sem tirar ouro; Bancada não consome material se o resultado não couber; baú "Pegar o que as missões pedem" leva só o que cabe; recompensa de missão que não coube aparece no Baú.
+- [ ] Save antigo (de antes da grade): carregar → tudo auto-posicionado, nada sobreposto; o que não coube está no Baú da Vó Zefa (chip do baú mostra "N item(ns) esperando lugar" se o baú também estiver cheio). Salvar e carregar de novo mantém cada item na mesma casa.
 - [ ] Itens procedurais mostram afixos no tooltip e os bônus realmente mudam os atributos.
 - [ ] Tooltips por mouse, toque longo e foco de gamepad, sem sair da tela.
 - [ ] Crafting: receita com materiais suficientes cria o item e consome materiais; sem materiais fica bloqueada.

@@ -149,6 +149,74 @@ sem gatilho próprio no `SfxTrigger`. Preset novo `Bark` (31): um "au" curto (to
 | `pet.sniff` | Fareja parado / pega o loot (3D, bem baixo) | `Inhale` 1,4 kHz → fungadas curtas de focinho. | 0,18 | 1 s / 1 | 12% / 20% |
 | `pet.fetch` | Entrega o loot buscado ao herói | `Clink` 1,5 kHz → moedinha caindo no chão + "plim". | 0,30 | 0,3 s / 1 | 8% / 15% |
 
+### Montarias, fase M1 (2026-10-30)
+
+Tocados direto pelo id por `MountController` (arena), `WorldMapMountRider` (mapa) e `MountActor` (passos), via
+`MountAudio.Play`. Como na pesca, os cues **não estão no asset**: `MountAudio.EnsureCues` acrescenta só os ids que
+faltam. Assobio, casco, chocalho e zurro são sintetizados em `MountAudio` (`GenerateWhistle/Hoof/Cowbell/Bray`) e vão
+como `clip` do cue, sem mexer no `ProceduralSfxSynth`; os outros usam presets que já existem.
+
+| Cue id | Quando toca | Placeholder hoje → sugestão de som real | Vol. | Cooldown |
+|---|---|---|---|---|
+| `mount.whistle` | Começo do assobio (segurar 1,5 s) | "fiu-fiuuu" sintetizado → assobio de criança com dois dedos | 0,45 | 0,4 s |
+| `mount.hoof` | Cada pisada do pônei/jegue (3D, do motor de passos) | "clop" oco → casco em terra batida, 4–6 variações | 0,16 | 0,06 s |
+| `mount.paw` | Cada pisada do Cachorrão (3D) | `SackThump` 260 Hz → patada macia | 0,10 | 0,06 s |
+| `mount.cowbell` | Chocalho do jegue balançando forte | chocalho sintetizado → chocalho de bode de verdade | 0,30 | 0,5 s |
+| `mount.ability_ready` | A habilidade da montaria recarregou | o mesmo chocalho, uma batida | 0,28 | 1 s |
+| `mount.mount` / `mount.dismount` | Subir / descer | `SackThump` / `Thud` → sela de couro rangendo | 0,35 / 0,30 | 0,3 s |
+| `mount.dash` | Arrancada | `Whoosh` 700 Hz → galope rápido + vento | 0,40 | 0,3 s |
+| `mount.sniff` | Faro de Tesouro | `Inhale` 1,3 kHz → fungadas de cachorro grande | 0,32 | 0,5 s |
+| `mount.bray` | Zurro Espanta-Bicho | "ió-ió" sintetizado → zurro de jegue (engraçado, não assustador) | 0,50 | 1 s |
+| `mount.refused` | Assobio/habilidade recusados | `BlipDown` 380 Hz | 0,25 | 0,4 s |
+
+### Pesca no açude (2026-10-29)
+
+Tocados direto pelo id por `FishingPanelController` (via `FishingAudio.Play`), sem gatilho próprio. Os cues
+**não estão no asset**: `FishingAudio.EnsureCues` os acrescenta ao `SfxEventMap` carregado quando o painel abre,
+só os ids que faltam — um cue com o mesmo id criado no asset (com clip de verdade) sempre vence. Nenhum é
+`pausable` (o próprio painel segura o `GameplayPause`). Presets já existentes, nenhum novo.
+
+| Cue id | Quando toca | Placeholder hoje → sugestão de som real | Vol. | Cooldown |
+|---|---|---|---|---|
+| `fishing.cast` | Lançar a linha | `Whoosh` 900 Hz → vara cortando o ar + carretilha soltando | 0,35 | 0,2 s |
+| `fishing.splash` | A boia cai na água | `BlipDown` 520 Hz → "ploc" de boia na água parada | 0,30 | 0,2 s |
+| `fishing.nibble` | Beliscada (falso alarme) | `Click` 1,8 kHz → toquinho seco na boia, bem baixo | 0,22 | 0,15 s |
+| `fishing.tremble` | A boia treme (antecipação, ~0,5 s antes) | `Inhale` 1,1 kHz → água borbulhando / respiração presa | 0,28 | 0,3 s |
+| `fishing.bite` | Afundou: hora de fisgar | `Blip` 1,25 kHz → "plic!" claro e agudo (precisa ser inconfundível) | 0,50 | 0,2 s |
+| `fishing.hook` | Fisgou | `Zap` 700 Hz → puxão da vara + linha esticando | 0,40 | 0,2 s |
+| `fishing.reel` | Segurando para puxar (repete) | `Click` 2,4 kHz → catraca da carretilha | 0,12 | 0,09 s |
+| `fishing.surge` | Tranco do peixe | `WoodCreak` 300 Hz → vara de bambu rangendo | 0,32 | 0,4 s |
+| `fishing.snap` | Linha arrebentou | `Crunch` 1,5 kHz → "tec" de linha partindo | 0,42 | 0,3 s |
+| `fishing.escape` | Escapou / cedo / tarde demais | `BlipDown` 400 Hz → "blup" de peixe indo embora | 0,35 | 0,3 s |
+| `fishing.catch` | Pegou (comum/incomum) | `Chime` 880 Hz → peixe batendo na margem + sininho | 0,45 | 0,3 s |
+| `fishing.catch_rare` | Pegou (raro/lendário) | `Fanfare` 660 Hz → floreio de sanfona curtinho | 0,50 | 0,5 s |
+| `fishing.record` | Novo recorde de uma espécie já pescada | `Sparkle` 1,5 kHz → brilho | 0,40 | 0,5 s |
+
+Vibração: `Light` na mordida, `Medium` quando a linha arrebenta, `Success` ao pegar.
+
+### Bichos da noite (2026-10-30)
+
+Tocados direto pelo id, em 3D, por `NightCreatureVoice` (no visual de cada espécie noturna): um **chamado** pouco depois
+de surgir e de tempos em tempos enquanto ronda, e o som de **ataque** no `EnemyAttackWindupEvent` do próprio bicho (faz
+parte da telegrafia). Mesmo esquema da pesca: `NightCreatureAudio.EnsureCues` acrescenta só os ids que faltam no
+`SfxEventMap` carregado — um cue com o mesmo id no asset (com clip de verdade) sempre vence. Presets existentes, todos
+`pausable`, categoria Efeitos, 2 vozes.
+
+| Cue id | Quando toca | Placeholder hoje → sugestão de som real | Vol. | Cooldown |
+|---|---|---|---|---|
+| `night.werewolf.howl` | Lobisomem chega / ronda (12–18 s) | `Swell` 210 Hz → uivo "auuuu" meio desafinado, engraçado, 1 s | 0,42 | 6 s |
+| `night.werewolf.growl` | Lobisomem empina para a patada | `Bark` 170 Hz → rosnado curto e grave (sem ser assustador) | 0,40 | 0,8 s |
+| `night.vampire_bat.screech` | Morcego-vampiro chega / ronda | `Chirp` 2,6 kHz → guincho agudo duplo | 0,30 | 2 s |
+| `night.vampire_bat.bite` | Morcego-vampiro mergulha | `Zap` 1,7 kHz → chiado + "nhac" | 0,32 | 0,5 s |
+| `night.owl.screech` | Coruja chega / ronda | `Zap` 2,3 kHz → o grito de "pano rasgando" da rasga-mortalha | 0,34 | 3 s |
+| `night.owl.swoop` | Coruja dá o rasante | `Whoosh` 700 Hz → asa cortando o ar, sem bater | 0,36 | 0,6 s |
+| `night.firefly.hum` | Enxame ronda (4–7 s) | `Buzz` 520 Hz → zumbido baixinho de muitos insetos | 0,18 | 2 s |
+| `night.firefly.flare` | Enxame vai queimar | `Sparkle` 1,8 kHz → estalinhos de brasa | 0,30 | 0,5 s |
+| `night.peccary.grunt` | Queixada chega / ronda | `Bark` 140 Hz → grunhido + bater de dentes ("tec-tec") | 0,32 | 1,2 s |
+| `night.peccary.charge` | Queixada investe | `Crunch` 320 Hz → patas batendo na terra | 0,36 | 0,35 s |
+| `night.potoo.song` | Mãe-da-lua canta (9–14 s) | `ChimeDown` 540 Hz → o canto real do urutau: notas tristes descendo | 0,30 | 6 s |
+| `night.potoo.gape` | Mãe-da-lua abre o bocão | `Inhale` 900 Hz → "hááá" de bico abrindo | 0,30 | 0,6 s |
+
 **Quem tocou a pausa:** `SfxEventRouter.ClassifyPauseOwners` olha os donos do `GameplayPause` no
 `GamePausedEvent`: Vila → `village.open`/`village.close`; painel de história → silêncio (os cues
 `story.*` falam por ele); caixa de diálogo → abre em silêncio (`npc.talk` já tocou) e fecha com

@@ -1,0 +1,288 @@
+/*
+ * "Minha casa" (HouseScreenController / MyHouseButton), built in code on the map HUD's document under the
+ * `rap-theme` root wm-hud-root, where the palette below resolves. The overlay itself is transparent: it is the
+ * pointer surface over the 3D house view; only the bars and panels are painted. Buttons are big enough for a
+ * thumb (min 56 px high) since "Arrumar a casa" is played on phones too.
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+.house-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.house-topbar {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: 10px;
+    padding: 8px 14px;
+    flex-direction: column;
+    background-color: var(--rap-panel-bg);
+    border-color: var(--rap-panel-border);
+    border-width: 2px;
+    border-radius: 12px;
+}
+
+.house-title {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+}
+
+.house-counts {
+    font-size: 14px;
+    color: var(--rap-cream-dim);
+}
+
+.house-status {
+    font-size: 15px;
+    color: var(--rap-cream);
+    white-space: normal;
+    margin-top: 2px;
+}
+
+.house-status--warning {
+    color: var(--rap-warning);
+}
+
+.house-toolbar {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 6px;
+    background-color: var(--rap-panel-bg);
+    border-color: var(--rap-panel-border);
+    border-width: 2px;
+    border-radius: 12px;
+}
+
+.house-tool {
+    min-width: 110px;
+    min-height: 56px;
+    margin: 4px;
+    font-size: 16px;
+}
+
+.house-tool--active {
+    border-color: var(--rap-gold);
+    background-color: var(--rap-brown-light);
+}
+
+.house-arrange {
+    position: absolute;
+    right: 12px;
+    top: 110px;
+    bottom: 96px;
+    width: 300px;
+    max-width: 46%;
+    padding: 8px 10px;
+    flex-direction: column;
+    background-color: var(--rap-panel-bg);
+    border-color: var(--rap-panel-border);
+    border-width: 2px;
+    border-radius: 12px;
+}
+
+.house-section {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--rap-caramel-light);
+    margin-bottom: 4px;
+}
+
+.house-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+.house-tab {
+    min-height: 44px;
+    min-width: 84px;
+    margin: 2px;
+    font-size: 14px;
+}
+
+.house-tab--active {
+    border-color: var(--rap-gold);
+    color: var(--rap-gold-light);
+}
+
+.house-depot {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 80px;
+    margin-bottom: 6px;
+}
+
+.house-depot-item {
+    min-height: 48px;
+    margin: 2px 0;
+    font-size: 14px;
+    -unity-text-align: middle-left;
+    white-space: normal;
+}
+
+.house-depot-item--selected {
+    border-color: var(--rap-gold);
+    background-color: var(--rap-brown-light);
+}
+
+.house-depot-empty {
+    font-size: 14px;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+}
+
+.house-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.house-action {
+    min-height: 56px;
+    min-width: 88px;
+    flex-grow: 1;
+    margin: 2px;
+    font-size: 15px;
+}
+
+.house-confirm {
+    background-color: var(--rap-cane-green);
+}
+
+.house-hint {
+    font-size: 12px;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+    margin-top: 4px;
+}
+
+.house-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(20, 10, 4, 0.78);
+}
+
+.house-card-panel {
+    width: 620px;
+    max-width: 94%;
+    padding: 18px 22px;
+    background-color: var(--rap-panel-bg);
+    border-color: var(--rap-gold);
+    border-width: 2px;
+    border-radius: 14px;
+}
+
+.house-card-title {
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+    margin-bottom: 8px;
+}
+
+.house-card-text {
+    font-size: 16px;
+    color: var(--rap-cream);
+    white-space: normal;
+    -unity-font-style: italic;
+    padding: 6px 10px;
+    margin-bottom: 8px;
+    border-left-width: 3px;
+    border-left-color: var(--rap-caramel);
+    background-color: var(--rap-brown-night);
+    border-radius: 6px;
+}
+
+.house-card-buttons {
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.wm-house-button {
+    background-color: var(--rap-cane-green);
+    color: var(--rap-cream);
+}
+
+/* H4 "Melhorar a casa" and H6 "Vida na casa" (HouseLifePanel): a side panel on the left, opposite "Arrumar a casa". */
+
+.house-life {
+    position: absolute;
+    left: 12px;
+    top: 110px;
+    bottom: 96px;
+    width: 380px;
+    max-width: 52%;
+    padding: 8px 10px;
+    flex-direction: column;
+    background-color: var(--rap-panel-bg);
+    border-color: var(--rap-panel-border);
+    border-width: 2px;
+    border-radius: 12px;
+}
+
+.house-life-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.house-life-title {
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+    flex-shrink: 1;
+}
+
+.house-life-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.house-life-line {
+    font-size: 14px;
+    color: var(--rap-cream);
+    white-space: normal;
+    margin: 2px 0;
+}
+
+.house-life-line--dim {
+    color: var(--rap-cream-dim);
+}
+
+.house-life-row--met {
+    color: var(--rap-gold-light);
+}
+
+.house-life-row--missing {
+    color: var(--rap-warning);
+}
+
+.house-life-button {
+    min-height: 52px;
+    margin: 4px 0;
+    font-size: 15px;
+}
+
+.house-life-close {
+    min-height: 44px;
+    min-width: 88px;
+    font-size: 14px;
+}

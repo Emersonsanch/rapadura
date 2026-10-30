@@ -152,6 +152,8 @@
 .meal-icon--rapadura { background-color: rgb(176, 98, 34); }
 .meal-icon--baiao_de_dois { background-color: rgb(150, 70, 44); }
 .meal-icon--queijo_coalho { background-color: rgb(240, 214, 150); }
+.meal-icon--tilapia_na_brasa { background-color: rgb(196, 120, 80); }
+.meal-icon--caldo_de_piaba { background-color: rgb(120, 150, 110); }
 
 /* ---- HUD badge (MealHudBadge) ---- */
 

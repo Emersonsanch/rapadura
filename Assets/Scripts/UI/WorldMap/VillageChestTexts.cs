@@ -16,8 +16,19 @@ namespace Rapadura.UI.WorldMap
         public const string Subtitle = "ui.village_chest.subtitle";
         public const string BagPane = "ui.village_chest.bag_pane";
         public const string ChestPane = "ui.village_chest.chest_pane";
-        /// <summary>{0} = carried weight, {1} = weight limit.</summary>
+        /// <summary>Unused since the grid bag (kept so old translations resolve). {0} = carried weight, {1} = weight limit.</summary>
         public const string BagWeight = "ui.village_chest.bag_weight";
+        /// <summary>{0} = used cells, {1} = cells of the Mochila grid.</summary>
+        public const string BagSpace = "ui.village_chest.bag_space";
+        public const string LostFoundTitle = "ui.village_chest.lost_found_title";
+        /// <summary>{0} = item (with quantity), {1} = gold fee.</summary>
+        public const string LostFoundEntry = "ui.village_chest.lost_found_entry";
+        /// <summary>{0} = item name.</summary>
+        public const string StatusBoughtBack = "ui.village_chest.status_bought_back";
+        /// <summary>{0} = gold fee.</summary>
+        public const string StatusNoGold = "ui.village_chest.status_no_gold";
+        /// <summary>{0} = items still waiting in the chest's inbox.</summary>
+        public const string InboxWaiting = "ui.village_chest.inbox_waiting";
         /// <summary>{0} = used slots, {1} = slot count.</summary>
         public const string ChestSlots = "ui.village_chest.chest_slots";
         public const string Hint = "ui.village_chest.hint";
@@ -53,6 +64,12 @@ namespace Rapadura.UI.WorldMap
             new LocalizationEntry(BagPane, "Backpack", "Mochila"),
             new LocalizationEntry(ChestPane, "Chest", "Baú"),
             new LocalizationEntry(BagWeight, "Weight {0}/{1}", "Peso {0}/{1}"),
+            new LocalizationEntry(BagSpace, "Space {0}/{1}", "Espaço {0}/{1}"),
+            new LocalizationEntry(LostFoundTitle, "Lost and found — Grandma kept what you dropped", "Achados e Perdidos — a Vó guardou o que você deixou cair"),
+            new LocalizationEntry(LostFoundEntry, "Get back {0} — {1} gold", "Recuperar {0} — {1} de ouro"),
+            new LocalizationEntry(StatusBoughtBack, "{0} is back in the backpack. Grandma says: be careful out there!", "{0} voltou pra mochila. A Vó diz: cuidado por aí!"),
+            new LocalizationEntry(StatusNoGold, "Not enough gold: Grandma asks {0}.", "Falta ouro: a Vó pede {0}."),
+            new LocalizationEntry(InboxWaiting, "{0} item(s) waiting for room in the chest.", "{0} item(ns) esperando lugar no baú."),
             new LocalizationEntry(ChestSlots, "Slots {0}/{1}", "Espaços {0}/{1}"),
             new LocalizationEntry(Hint, "Tap an item to move it to the other side; drag to carry the whole stack.", "Toque num item para levá-lo ao outro lado; arraste para levar a pilha inteira."),
             new LocalizationEntry(StoreMaterials, "Store materials", "Guardar materiais"),
@@ -66,10 +83,10 @@ namespace Rapadura.UI.WorldMap
             new LocalizationEntry(StatusStored, "Stored in the chest: {0}. Grandma keeps an eye on it.", "Guardado no baú: {0}. A Vó fica de olho."),
             new LocalizationEntry(StatusTaken, "Back in the backpack: {0}.", "De volta na mochila: {0}."),
             new LocalizationEntry(StatusChestFull, "The chest is full — not even a needle fits.", "O baú tá cheio — não cabe nem agulha."),
-            new LocalizationEntry(StatusBagFull, "The backpack can't take that much — lighten the load first.", "A mochila não aguenta tanto — alivie o peso antes."),
+            new LocalizationEntry(StatusBagFull, "No room in the backpack — make space first.", "Não tem espaço na mochila — abra lugar antes."),
             new LocalizationEntry(StatusNothingToStore, "No spare materials: what's in the bag, the quests still need.", "Nenhum material sobrando: o que tá na mochila, as missões ainda pedem."),
             new LocalizationEntry(StatusNothingForQuests, "The chest has nothing the quests are asking for.", "O baú não tem nada que as missões estejam pedindo."),
-            new LocalizationEntry(StatusTakenPartial, "In the backpack: {0}. Left in the chest: {1} (the backpack can't take more).", "Na mochila: {0}. Ficou no baú: {1} (a mochila não aguenta mais)."),
+            new LocalizationEntry(StatusTakenPartial, "In the backpack: {0}. Left in the chest: {1} (no more room in the backpack).", "Na mochila: {0}. Ficou no baú: {1} (não coube mais na mochila)."),
             new LocalizationEntry(StatusStoredPartial, "Stored: {0}. Left in the backpack: {1} (the chest is full).", "Guardado: {0}. Ficou na mochila: {1} (o baú encheu)."),
             new LocalizationEntry(EmptyChest, "The chest is empty. Grandma says that's a waste of a good chest.", "O baú tá vazio. A Vó diz que é desperdício de baú bom."),
         };

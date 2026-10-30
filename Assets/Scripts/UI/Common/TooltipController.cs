@@ -252,9 +252,37 @@ namespace Rapadura.UI.Common
                 {
                     _titleLabel.style.color = StyleKeyword.Null;
                 }
+
+                ApplyRefineGlow(_titleLabel, content.RefineGlowTier);
             }
 
             ShowInternal(anchorElement);
+        }
+
+        /// <summary>
+        /// Refine glow of an item title (UI only: no item has a world model to light up): a golden text shadow that
+        /// widens at +7 / +9 / +11 / +13 / +15 (<see cref="Rapadura.Gameplay.Refining.RefineRules.GlowTier"/>).
+        /// </summary>
+        public static void ApplyRefineGlow(VisualElement element, int tier)
+        {
+            if (element == null)
+            {
+                return;
+            }
+
+            if (tier <= 0)
+            {
+                element.style.textShadow = StyleKeyword.Null;
+                return;
+            }
+
+            float alpha = Mathf.Clamp01(0.35f + 0.13f * tier);
+            element.style.textShadow = new TextShadow
+            {
+                offset = Vector2.zero,
+                blurRadius = 2f + 2f * tier,
+                color = new Color(1f, 0.82f, 0.35f, alpha),
+            };
         }
 
         /// <summary>

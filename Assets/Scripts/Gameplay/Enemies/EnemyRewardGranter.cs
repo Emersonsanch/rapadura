@@ -48,6 +48,17 @@ namespace Rapadura.Gameplay.Enemies
             // Bosses may multiply this (EnemyDefinition.BossExperienceMultiplier) — see BossBonusRules —
             // and a "Nova Jornada+" cycle multiplies the result (NewGamePlusRules, ×1 on the first campaign).
             int reward = BossBonusRules.GetExperienceReward(enemy.Definition);
+            // "Presa do dia" / "Bicho destaque do dia" (EnemyRewardHooks; x1 when nothing is installed).
+            reward = EnemyRewardHooks.ScaleExperience(enemy.Definition, reward);
+            // Event rooms rescale each enemy to the hero's level bracket (IKillExperienceScaler on the instance).
+            if (enemy.TryGetComponent(out IKillExperienceScaler scaler))
+            {
+                reward = scaler.ScaleKillExperience(reward);
+            }
+            // "Fôlego diário" (+30% / x1 / -50%, at the campaign pace): the one place kill XP takes the stamina tier.
+            reward = Rapadura.Gameplay.Daily.DailyStaminaRules.ScaleExperience(reward, Rapadura.Gameplay.Daily.DailyStaminaService.ResolveExperienceMultiplier());
+            // "Descansado" (bed at home, Housing.md §6.1): +2..10% for a few fights; x1 when not rested (HouseService).
+            reward = Rapadura.Gameplay.Housing.HouseRestedRules.ScaleExperience(reward, Rapadura.Gameplay.Housing.HouseService.ResolveRestedMultiplier());
             killerStats.AddExperience(NewGamePlusRules.ScaleExperience(reward, NewGamePlusProgress.ResolveCurrentCycle()));
         }
     }

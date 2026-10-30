@@ -173,7 +173,7 @@ namespace Rapadura.Tests
         [Test]
         public void StunRightAfterAStrike_DelaysTheNextSwing_InsteadOfReArmingItEarly()
         {
-            // r8 (Docs/Balance/README.md §9): before, the stun dropped the enemy out of the attack state
+            // r8 (Docs/Balance/README.md §10): before, the stun dropped the enemy out of the attack state
             // and EnemyAttackState.Enter re-armed the next swing one windup after the stun ended, so a
             // stun right after a 1 s-cooldown swing brought the next one in 0.3 + 0.42 s instead of 1.3 s.
             (EnemyController enemy, BuffController buffs, _) = CreateEnemy(isBoss: false);

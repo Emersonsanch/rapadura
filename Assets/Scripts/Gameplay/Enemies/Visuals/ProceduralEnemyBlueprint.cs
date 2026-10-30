@@ -21,6 +21,20 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         AlphaWolf = 7,
         Spider = 8,
         Scorpion = 9,
+
+        // Night-only species (Docs/DayNight.md), each with its own model since the night-models pass.
+        /// <summary>Lobisomem-do-sertão: shaggy quadruped that rears up on its hind legs to strike.</summary>
+        Werewolf = 10,
+        /// <summary>Morcego-vampiro gigante: one big bat with a wide wingspan.</summary>
+        VampireBat = 11,
+        /// <summary>Coruja-rasga-mortalha: barn owl with a pale heart-shaped face.</summary>
+        ShroudOwl = 12,
+        /// <summary>Enxame de vaga-lumes-de-fogo: a cloud of glowing fireflies that moves as one enemy.</summary>
+        FireflySwarm = 13,
+        /// <summary>Porco-do-mato da Caipora (queixada): bristly peccary with a pale collar, comes in herds.</summary>
+        Peccary = 14,
+        /// <summary>Mãe-da-lua (urutau): potoo with huge yellow eyes and a gaping mouth, carrying its branch.</summary>
+        Potoo = 15,
     }
 
     /// <summary>

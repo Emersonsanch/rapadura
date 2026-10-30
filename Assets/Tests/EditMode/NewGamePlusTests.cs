@@ -25,7 +25,7 @@ namespace Rapadura.Tests
 {
     /// <summary>
     /// "Nova Jornada+" (<see cref="NewGamePlusRules"/>, <see cref="NewGamePlusProgress"/>): the scaling numbers
-    /// (Docs/Balance/README.md §10), what a new journey resets and keeps, the save round-trip, saves written
+    /// (Docs/Balance/README.md §11), what a new journey resets and keeps, the save round-trip, saves written
     /// before it existed (cycle 0), the new-journey prologue and the "finish NG+1" achievement.
     /// </summary>
     public class NewGamePlusTests
@@ -155,16 +155,23 @@ namespace Rapadura.Tests
         [Test]
         public void Rules_MatchTheBalanceDoc_ForNgPlus1()
         {
-            // Docs/Balance/README.md §10.2: Lobo Alfa 520 HP / 15 dmg / 90 XP on NG+1.
-            Assert.AreEqual(936f, NewGamePlusRules.ScaleHealth(520f, 1));
-            Assert.AreEqual(22.5f, NewGamePlusRules.ScaleDamage(15f, 1));
+            // Docs/Balance/README.md §11.1: Lobo Alfa 520 HP / 15 dmg / 90 XP on NG+1 (Floresta ×2,2 / ×2,7),
+            // Habitante Ancestral 1180 / 42 (Cavernas ×1,15 / ×1,45).
+            Assert.AreEqual(1144f, NewGamePlusRules.ScaleHealth(520f, 1, BiomeType.Forest));
+            Assert.AreEqual(40.5f, NewGamePlusRules.ScaleDamage(15f, 1, BiomeType.Forest));
+            Assert.AreEqual(1357f, NewGamePlusRules.ScaleHealth(1180f, 1, BiomeType.Caves));
+            Assert.AreEqual(60.9f, NewGamePlusRules.ScaleDamage(42f, 1, BiomeType.Caves));
+            Assert.AreEqual(1.5f, NewGamePlusRules.HealthMultiplier(1), 1e-5f, "no region: the Deserto numbers");
+            Assert.AreEqual(1.8f, NewGamePlusRules.DamageMultiplier(1), 1e-5f);
             Assert.AreEqual(135, NewGamePlusRules.ScaleExperience(90, 1));
             Assert.AreEqual(4, NewGamePlusRules.ScaleLootQuantity(3, 1), "3 × 1,25 = 3,75 → 4");
             Assert.AreEqual(0.1f, NewGamePlusRules.RarityUpgradeChance(1), 1e-6f);
 
-            // Cap: NG+5 HP ×5, damage/XP ×3,5.
-            Assert.AreEqual(5f, NewGamePlusRules.HealthMultiplier(5), 1e-5f);
-            Assert.AreEqual(3.5f, NewGamePlusRules.DamageMultiplier(5), 1e-5f);
+            // Cap: NG+5 Floresta HP ×2,8 / damage ×3,7, Cavernas ×1,75 / ×2,45; XP ×3,5 everywhere.
+            Assert.AreEqual(2.8f, NewGamePlusRules.HealthMultiplier(5, BiomeType.Forest), 1e-5f);
+            Assert.AreEqual(3.7f, NewGamePlusRules.DamageMultiplier(5, BiomeType.Forest), 1e-5f);
+            Assert.AreEqual(1.75f, NewGamePlusRules.HealthMultiplier(5, BiomeType.Caves), 1e-5f);
+            Assert.AreEqual(2.45f, NewGamePlusRules.DamageMultiplier(5, BiomeType.Caves), 1e-5f);
             Assert.AreEqual(3.5f, NewGamePlusRules.ExperienceMultiplier(5), 1e-5f);
         }
 
@@ -179,8 +186,27 @@ namespace Rapadura.Tests
                 Assert.Greater(NewGamePlusRules.LootQuantityMultiplier(cycle), NewGamePlusRules.LootQuantityMultiplier(cycle - 1), $"loot NG+{cycle}");
                 Assert.LessOrEqual(NewGamePlusRules.RarityUpgradeChance(cycle), 0.5f);
 
-                // Enemies always get tougher faster than the reward grows, and damage never outpaces HP.
-                Assert.LessOrEqual(NewGamePlusRules.DamageMultiplier(cycle), NewGamePlusRules.HealthMultiplier(cycle));
+                // Per region: tougher every cycle, and the regions the carried-over level outgrows the most (the
+                // early ones) always get the most. Damage may outgrow HP: the hero's own HP grows with every level
+                // (the r9 model, Balance §14.4), so damage is what keeps a parked hero dying in ~25 s.
+                BiomeType[] order = { BiomeType.Forest, BiomeType.Desert, BiomeType.Mountain, BiomeType.Caves };
+                for (int i = 0; i < order.Length; i++)
+                {
+                    Assert.Greater(NewGamePlusRules.HealthMultiplier(cycle, order[i]), NewGamePlusRules.HealthMultiplier(cycle - 1, order[i]), $"HP {order[i]} NG+{cycle}");
+                    Assert.Greater(NewGamePlusRules.DamageMultiplier(cycle, order[i]), NewGamePlusRules.DamageMultiplier(cycle - 1, order[i]), $"damage {order[i]} NG+{cycle}");
+                    if (i > 0)
+                    {
+                        Assert.Greater(NewGamePlusRules.HealthMultiplier(cycle, order[i - 1]), NewGamePlusRules.HealthMultiplier(cycle, order[i]), $"HP {order[i - 1]} > {order[i]}");
+                        Assert.Greater(NewGamePlusRules.DamageMultiplier(cycle, order[i - 1]), NewGamePlusRules.DamageMultiplier(cycle, order[i]), $"damage {order[i - 1]} > {order[i]}");
+                    }
+                }
+            }
+
+            foreach (BiomeType region in new[] { BiomeType.Forest, BiomeType.Desert, BiomeType.Mountain, BiomeType.Caves })
+            {
+                Assert.AreEqual(1f, NewGamePlusRules.HealthMultiplier(0, region), $"cycle 0 HP in {region}");
+                Assert.AreEqual(1f, NewGamePlusRules.DamageMultiplier(0, region), $"cycle 0 damage in {region}");
+                Assert.AreEqual(517.3f, NewGamePlusRules.ScaleHealth(517.3f, 0, region), "cycle 0 never rounds, in any region");
             }
 
             int max = NewGamePlusRules.MaxCycle;
@@ -206,6 +232,27 @@ namespace Rapadura.Tests
             Assert.IsTrue(NewGamePlusRules.CanOffer(true, true));
             Assert.IsFalse(NewGamePlusRules.CanOffer(true, false), "Boss down, ending/credits not shown yet.");
             Assert.IsFalse(NewGamePlusRules.CanOffer(false, false));
+        }
+
+        [Test]
+        public void EveryBossScales_ByTheRegionItsBiomeTableListsItIn()
+        {
+            // EnemyController scales by BiomeRegistry.FindBiomeOf(definition).Type on a new journey.
+            var expected = new Dictionary<string, BiomeType>
+            {
+                { "enemy_forest_alpha_wolf", BiomeType.Forest },
+                { "enemy_desert_ruin_guardian", BiomeType.Desert },
+                { "enemy_mountain_warlord", BiomeType.Mountain },
+                { "enemy_cave_dweller", BiomeType.Caves },
+            };
+            foreach (KeyValuePair<string, BiomeType> pair in expected)
+            {
+                EnemyDefinition boss = Resources.Load<EnemyDefinition>("Enemies/" + pair.Key);
+                Assert.IsNotNull(boss, pair.Key);
+                BiomeDefinition biome = BiomeRegistry.FindBiomeOf(boss);
+                Assert.IsNotNull(biome, pair.Key);
+                Assert.AreEqual(pair.Value, biome.Type, pair.Key);
+            }
         }
 
         [Test]
@@ -509,7 +556,8 @@ namespace Rapadura.Tests
         {
             Assert.IsNull(NewGamePlusHud.BadgeText(null, 0));
             Assert.AreEqual("Jornada+2", NewGamePlusHud.BadgeText(null, 2));
-            StringAssert.Contains("vida ×1,8", NewGamePlusHud.ResetsText(null, 1));
+            StringAssert.Contains("vida ×1,15\u20132,2", NewGamePlusHud.ResetsText(null, 1));
+            StringAssert.Contains("dano ×1,45\u20132,7", NewGamePlusHud.ResetsText(null, 1));
 
             BiomeType village = VillageNpcCatalog.VillageRegion;
             Assert.IsTrue(NewGamePlusHud.ShouldShowOffer(true, true, true, false, false, village));

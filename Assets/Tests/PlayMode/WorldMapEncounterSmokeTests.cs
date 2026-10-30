@@ -32,6 +32,20 @@ namespace Rapadura.Tests.PlayMode
         [Timeout(180000)]
         public IEnumerator WorldMap_ForcedEncounter_SpawnsRolledEnemies_AndVictoryReturnsToMap()
         {
+            // One wave: killing the rolled group must resolve the encounter (reinforcement waves are NightDangerTests' job).
+            EncounterArenaController.ReinforcementWavesEnabled = false;
+            try
+            {
+                yield return ForcedEncounterVictory();
+            }
+            finally
+            {
+                EncounterArenaController.ReinforcementWavesEnabled = true;
+            }
+        }
+
+        private IEnumerator ForcedEncounterVictory()
+        {
             yield return LoadScene(WorldMapSceneName);
 
             // Pick the hero the way the game does: on WorldMap.unity, through the title flow when

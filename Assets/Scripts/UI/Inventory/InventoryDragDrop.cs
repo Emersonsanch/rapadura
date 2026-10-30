@@ -46,6 +46,19 @@ namespace Rapadura.UI.Inventory
         Unequip,
     }
 
+    /// <summary>What a tap on the grid does (<see cref="InventoryDragDrop.ResolveTap"/>).</summary>
+    public enum BagTapAction
+    {
+        /// <summary>Nothing held, empty cell tapped.</summary>
+        None,
+        /// <summary>Nothing held, an item tapped: it is picked up (highlighted, ghost shown).</summary>
+        Pick,
+        /// <summary>The held item tapped again: use it (consumable) or equip it (gear), then let go.</summary>
+        UseOrEquip,
+        /// <summary>Something held, another cell/item tapped: place it there (move / merge / swap) if it fits, else red ghost.</summary>
+        Place,
+    }
+
     /// <summary>
     /// Pure drag-and-drop rules for the Mochila window (no panel/UIDocument, so EditMode tests cover
     /// them): when a press becomes a drag, which target a point is over, and what a drop means.
@@ -95,6 +108,56 @@ namespace Rapadura.UI.Inventory
             }
 
             return -1;
+        }
+
+        /// <summary>
+        /// Grid cell under <paramref name="localPoint"/> (pixels from the grid's top-left), or false outside the grid.
+        /// </summary>
+        public static bool TryGetCell(Vector2 localPoint, float cellSize, int columns, int rows, out int x, out int y)
+        {
+            x = -1;
+            y = -1;
+            if (cellSize <= 0f || localPoint.x < 0f || localPoint.y < 0f)
+            {
+                return false;
+            }
+
+            int cx = Mathf.FloorToInt(localPoint.x / cellSize);
+            int cy = Mathf.FloorToInt(localPoint.y / cellSize);
+            if (cx >= columns || cy >= rows)
+            {
+                return false;
+            }
+
+            x = cx;
+            y = cy;
+            return true;
+        }
+
+        /// <summary>
+        /// Top-left cell an item lands on when the cell under the pointer is (<paramref name="cellX"/>, <paramref name="cellY"/>)
+        /// and it was grabbed by its (<paramref name="grabX"/>, <paramref name="grabY"/>) cell — so a sword picked by its hilt
+        /// keeps the hilt under the finger. May be outside the grid (then the move is invalid: red ghost).
+        /// </summary>
+        public static Vector2Int AnchorFor(int cellX, int cellY, int grabX, int grabY) => new Vector2Int(cellX - grabX, cellY - grabY);
+
+        /// <summary>
+        /// Tap-to-pick / tap-to-place (mobile, also mouse clicks and gamepad A) on the grid: what a tap on item
+        /// <paramref name="tappedIndex"/> (-1 = an empty cell) does while <paramref name="heldIndex"/> is held (-1 = nothing).
+        /// </summary>
+        public static BagTapAction ResolveTap(int heldIndex, int tappedIndex)
+        {
+            if (heldIndex < 0)
+            {
+                return tappedIndex >= 0 ? BagTapAction.Pick : BagTapAction.None;
+            }
+
+            if (tappedIndex == heldIndex)
+            {
+                return BagTapAction.UseOrEquip;
+            }
+
+            return BagTapAction.Place;
         }
 
         /// <summary>

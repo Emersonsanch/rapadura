@@ -609,8 +609,9 @@ namespace Rapadura.Tests.PlayMode
                 _equips++;
             }
 
-            int free = slots.Count - filled.Count;
-            for (int i = filled.Count - 1; i >= 0 && (free < 4 || inventory.IsOverWeightLimit); i--)
+            // The MU-style grid is the only limit (the weight limit is gone): keep at least 4 free cells.
+            int free = inventory.FreeCellCount;
+            for (int i = filled.Count - 1; i >= 0 && free < 4; i--)
             {
                 InventorySlotData data = inventory.Slots[filled[i]];
                 if (data == null || string.IsNullOrEmpty(data.itemId))
@@ -622,7 +623,7 @@ namespace Rapadura.Tests.PlayMode
                 if (inventory.RemoveFromSlot(filled[i], quantity))
                 {
                     _itemsDiscarded += quantity;
-                    free++;
+                    free = inventory.FreeCellCount;
                 }
             }
         }

@@ -120,7 +120,7 @@ namespace Rapadura.UI.WorldMap
                     ("Let me look at that ankle. Light heals, but kindness helps too.", "Deixa eu ver esse pé. A luz cura, mas um carinho ajuda também."),
                     ("I'd carry the boy on my back to the next village if I had to.", "Eu levava o menino nas costas até a próxima vila, se precisasse."),
                     ("You walk all that way? I'd build you a motor cart.", "Vocês andam tudo isso a pé? Eu fazia um carrinho com motor pra vocês."),
-                    ("Do you think they'd pray for me too? I was born on the Red Night...", "Será que eles rezam por mim também? Eu nasci na Noite Rubra..."),
+                    ("Do you think they'd pray for me too? I was born on the Noite Rubra...", "Será que eles rezam por mim também? Eu nasci na Noite Rubra..."),
                 });
 
             Add(entries, WorldEventCatalog.EliteAmbush,
@@ -154,7 +154,7 @@ namespace Rapadura.UI.WorldMap
                     ("Grandma Zefa sang this one to put us to sleep.", "A Vó Zefa cantava essa pra gente dormir."),
                     ("I don't sing. ...Fine, just the chorus.", "Eu não canto. ...Tá bom, só o refrão."),
                     ("Hook that viola to a lightning amp and the whole backlands will hear the party!", "Liga essa viola num amplificador de raio e o sertão inteiro escuta a festa!"),
-                    ("At night I get scared... but by the fire and the music, it goes away.", "De noite eu fico com medo... mas perto do fogo e da música, passa."),
+                    ("Sometimes the night gives me a chill... but by the fire and the music, it goes away.", "Às vezes a noite me dá um friozinho na barriga... mas perto do fogo e da música, passa."),
                 });
 
             Add(entries, WorldEventCatalog.Sandstorm,

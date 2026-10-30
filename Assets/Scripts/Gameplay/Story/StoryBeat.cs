@@ -1,3 +1,4 @@
+using System;
 using Rapadura.Gameplay.World.Biomes;
 
 namespace Rapadura.Gameplay.Story
@@ -74,6 +75,56 @@ namespace Rapadura.Gameplay.Story
                 default: return StoryBeat.None;
             }
         }
+
+        /// <summary>
+        /// Parses a dialogue key: a <see cref="Id"/> ("interlude_desert") or the enum name ("InterludeDesert"),
+        /// case-insensitive. False (and None) for empty/unknown keys.
+        /// </summary>
+        public static bool TryParse(string key, out StoryBeat beat)
+        {
+            beat = StoryBeat.None;
+            if (string.IsNullOrEmpty(key))
+            {
+                return false;
+            }
+
+            foreach (StoryBeat candidate in InOrder)
+            {
+                if (string.Equals(Id(candidate), key, StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(candidate.ToString(), key, StringComparison.OrdinalIgnoreCase))
+                {
+                    beat = candidate;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>The last beat seen in play order (<see cref="StoryBeat.None"/> when none / no lookup).</summary>
+        public static StoryBeat LatestSeen(Func<StoryBeat, bool> seen)
+        {
+            if (seen == null)
+            {
+                return StoryBeat.None;
+            }
+
+            for (int i = InOrder.Length - 1; i >= 0; i--)
+            {
+                if (seen(InOrder[i]))
+                {
+                    return InOrder[i];
+                }
+            }
+
+            return StoryBeat.None;
+        }
+
+        /// <summary>
+        /// The region the cousins last came back from: the region of the latest interlude (or the ending) seen; null
+        /// before the Forest interlude. Used by Vó Zefa's kitchen and Caramelo's cuddles (Docs/Narrative.md §9).
+        /// </summary>
+        public static BiomeType? LastRegionCleared(Func<StoryBeat, bool> seen) => RegionFor(LatestSeen(seen));
 
         /// <summary>The region whose clear unlocks <paramref name="beat"/> (null for the prologue/None).</summary>
         public static BiomeType? RegionFor(StoryBeat beat)

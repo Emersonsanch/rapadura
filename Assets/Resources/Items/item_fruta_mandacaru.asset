@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f171d806ae04e9545a71dcbace88f076, type: 3}
+  m_Name: item_fruta_mandacaru
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
+  _itemId: item_fruta_mandacaru
+  _displayName: "Fruta do Mandacaru"
+  _description: "Fruta rosada do mandacaru, cozida no Tacho Encantado. Coma numa aventura: +1 ponto de atributo para distribuir (at\xE9 2 por jornada)."
+  _icon: {fileID: 0}
+  _worldModelPrefab: {fileID: 0}
+  _type: 1
+  _category: 6
+  _rarity: 3
+  _weight: 0.2
+  _value: 60
+  _maxStack: 10
+  _gridWidth: 1
+  _gridHeight: 1
+  _isBound: 0
+  _hasDurability: 0
+  _maxDurability: 100
+  _equipSlot: 0
+  _armorDefense: 0
+  _weaponDamage: 0
+  _weaponAttackSpeed: 1
+  _equipStatModifiers: []
+  _healthRestore: 0
+  _staminaRestore: 0
+  _manaRestore: 0
+  _consumeBuffs: []

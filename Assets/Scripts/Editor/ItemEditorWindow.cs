@@ -144,6 +144,7 @@ namespace Rapadura.Editor
             DrawSection("Identity", "_itemId", "_displayName", "_description", "_icon", "_worldModelPrefab");
             DrawSection("Classification", "_type", "_category", "_rarity");
             DrawSection("Economy & Stacking", "_weight", "_value", "_maxStack");
+            DrawSection("Mochila (grade estilo MU)", "_gridWidth", "_gridHeight", "_isBound");
             DrawSection("Durability", "_hasDurability", "_maxDurability");
 
             SerializedProperty equipSlotProp = _selectedSerializedObject.FindProperty("_equipSlot");

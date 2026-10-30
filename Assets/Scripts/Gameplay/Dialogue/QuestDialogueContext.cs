@@ -5,6 +5,7 @@ using Rapadura.Core.DI;
 using Rapadura.Core.Logging;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Quests;
+using Rapadura.Gameplay.Story;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Dialogue
@@ -23,7 +24,7 @@ namespace Rapadura.Gameplay.Dialogue
     /// <see cref="QuestDefinition"/>; definitions are looked up with <see cref="Resources.Load{T}(string)"/>
     /// at <c>Resources/Quests/&lt;questId&gt;</c> (every quest asset is named after its id) and cached.
     /// </summary>
-    public class QuestDialogueContext : IDialogueContext
+    public class QuestDialogueContext : IDialogueContext, IStoryDialogueContext
     {
         private const string LogCategory = "Dialogue";
         private const string QuestResourcesFolder = "Quests/";
@@ -53,6 +54,24 @@ namespace Rapadura.Gameplay.Dialogue
         }
 
         public string ActiveCharacterId => _activeCharacterProvider();
+
+        /// <summary>Story beats seen, for <see cref="DialogueConditionType.StoryBeatSeen"/>. Null = the ServiceLocator's <see cref="StoryProgress"/>.</summary>
+        public Func<StoryBeat, bool> StoryBeatProvider { get; set; }
+
+        public bool HasSeenStoryBeat(StoryBeat beat)
+        {
+            if (beat == StoryBeat.None)
+            {
+                return false;
+            }
+
+            if (StoryBeatProvider != null)
+            {
+                return StoryBeatProvider(beat);
+            }
+
+            return ServiceLocator.TryGet(out StoryProgress story) && story != null && story.HasSeen(beat);
+        }
 
         public DialogueQuestState GetQuestState(string questId)
         {

@@ -85,11 +85,27 @@ namespace Rapadura.Gameplay.World.Map
         public float TravelSpeedMultiplier { get; set; } = 1f;
 
         /// <summary>
+        /// Optional extra token-speed factor of the mount (set by <c>WorldMapMountRider</c>: the species ×, the gallop,
+        /// trot in cities). Multiplies on top of <see cref="TravelSpeedMultiplier"/>, so road-event slows still apply. Null = on foot.
+        /// </summary>
+        public System.Func<float> MountSpeedProbe { get; set; }
+
+        /// <summary>
         /// Raised every travel frame that did not end in an encounter or arrival: trip progress (0..1) and the
         /// region the token is closest to. WorldEventCardController pops road events from here.
         /// </summary>
         public event System.Action<float, BiomeType> TravelProgressed;
         public IReadOnlyList<WorldMapRegionNode> Nodes => _nodes;
+
+        /// <summary>The hero token (null when the scene has none).</summary>
+        public Transform PlayerToken => _playerToken;
+
+        /// <summary>
+        /// Optional: whether a world position lies inside a city's safe zone (set by <c>WorldMapCityPresence</c>, see
+        /// <c>SafeZoneRules</c>). While the token is inside one, travel rolls no random encounter and raises no
+        /// <see cref="TravelProgressed"/> (so no road event either). Null = no cities, old behaviour.
+        /// </summary>
+        public System.Func<Vector3, bool> SafeZoneProbe { get; set; }
 
         /// <summary>
         /// Optional screen-space filter for map clicks/taps (bottom-left origin, like <c>Mouse.position</c>/<c>Touch.position</c>):
@@ -335,7 +351,7 @@ namespace Rapadura.Gameplay.World.Map
 
             Vector3 before = _playerToken.position;
             Vector3 destination = TokenPositionFor(_targetNode);
-            _playerToken.position = Vector3.MoveTowards(before, destination, _tokenSpeed * Mathf.Max(0.05f, TravelSpeedMultiplier) * deltaTime);
+            _playerToken.position = Vector3.MoveTowards(before, destination, _tokenSpeed * Mathf.Max(0.05f, TravelSpeedMultiplier) * (MountSpeedProbe != null ? Mathf.Max(0.05f, MountSpeedProbe()) : 1f) * deltaTime);
 
             Vector3 flatDirection = destination - before;
             flatDirection.y = 0f;
@@ -353,6 +369,12 @@ namespace Rapadura.Gameplay.World.Map
             float moved = Vector3.Distance(before, _playerToken.position);
             WorldMapRegionNode underToken = NearestOf(_currentNode, _targetNode, _playerToken.position);
             BiomeDefinition biome = BiomeRegistry.Get(underToken.Region);
+
+            // Inside a city (zona segura): no step counts, no roll, no road event.
+            if (SafeZoneProbe != null && SafeZoneProbe(_playerToken.position))
+            {
+                return;
+            }
 
             if (_encounters.Advance(moved, deltaTime, biome, out EncounterPayload payload))
             {
@@ -405,6 +427,24 @@ namespace Rapadura.Gameplay.World.Map
         /// <summary>True when "Explorar" can start a fight in the current region (idle token, no encounter pending).</summary>
         public bool CanExplore =>
             _currentNode != null && _encounters != null && !_encounterInProgress && !IsTraveling;
+
+        /// <summary>Region the token stands on (null while traveling / before the map is built).</summary>
+        public BiomeType? CurrentRegion => _currentNode != null ? _currentNode.Region : (BiomeType?)null;
+
+        /// <summary>
+        /// Starts a timed event room (Terreiro / Torre, <c>EventRoomMapButton</c>) in the current region through the
+        /// usual encounter hand-off. False when exploring is not possible right now.
+        /// </summary>
+        public bool TryStartEventRoom(EncounterPayload payload)
+        {
+            if (payload == null || !payload.IsEventRoom || !CanExplore || GameplayPause.IsPaused)
+            {
+                return false;
+            }
+
+            TriggerEncounter(_currentNode, payload);
+            return _encounterInProgress;
+        }
 
         /// <summary>
         /// "Explorar": rolls a normal encounter in the current region right away (same enemy table and

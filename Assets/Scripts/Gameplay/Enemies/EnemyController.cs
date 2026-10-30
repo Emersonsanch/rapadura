@@ -5,6 +5,7 @@ using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Enemies.States;
 using Rapadura.Gameplay.Skills;
 using Rapadura.Gameplay.Story;
+using Rapadura.Gameplay.World.Biomes;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Enemies
@@ -196,7 +197,8 @@ namespace Rapadura.Gameplay.Enemies
                 }
 
                 BuffController buffs = Buffs;
-                float baseDamage = NewGamePlusRules.ScaleDamage(_definition.AttackDamage, NewGamePlusProgress.ResolveCurrentCycle());
+                int cycle = NewGamePlusProgress.ResolveCurrentCycle();
+                float baseDamage = NewGamePlusRules.ScaleDamage(_definition.AttackDamage, cycle, cycle > 0 ? ScalingRegion : null);
                 float damage = buffs != null ? buffs.GetModifiedValue(StatType.AttackDamage, baseDamage) : baseDamage;
                 return Mathf.Max(0f, damage);
             }
@@ -483,13 +485,37 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             int cycle = NewGamePlusProgress.ResolveCurrentCycle();
-            Health.ConfigureMaxHealth(NewGamePlusRules.ScaleHealth(_definition.MaxHealth, cycle));
+            BiomeType? region = cycle > 0 ? ScalingRegion : null;
+            Health.ConfigureMaxHealth(NewGamePlusRules.ScaleHealth(_definition.MaxHealth, cycle, region));
 
             if (_hitbox != null)
             {
-                _hitbox.Damage = NewGamePlusRules.ScaleDamage(_definition.AttackDamage, cycle);
+                _hitbox.Damage = NewGamePlusRules.ScaleDamage(_definition.AttackDamage, cycle, region);
             }
         }
+
+        /// <summary>
+        /// Region whose spawn table lists this enemy (<see cref="BiomeRegistry.FindBiomeOf"/>), for the per-region
+        /// "Nova Jornada+" scaling; null when none does. Resolved once per definition, and only on a new journey
+        /// (cycle 0 never touches the registry).
+        /// </summary>
+        private BiomeType? ScalingRegion
+        {
+            get
+            {
+                if (_scalingRegionFor != _definition)
+                {
+                    _scalingRegionFor = _definition;
+                    BiomeDefinition biome = _definition != null ? BiomeRegistry.FindBiomeOf(_definition) : null;
+                    _scalingRegion = biome != null ? biome.Type : (BiomeType?)null;
+                }
+
+                return _scalingRegion;
+            }
+        }
+
+        private EnemyDefinition _scalingRegionFor;
+        private BiomeType? _scalingRegion;
 
         public void MarkTargetSpotted()
         {
@@ -573,7 +599,7 @@ namespace Rapadura.Gameplay.Enemies
         /// <see cref="EnemyAttackState.Enter"/>: re-entering attack range (after a stun, a dodge or a chase)
         /// no longer re-arms the swing after just one windup. Before r8 a stun dropped the enemy out of the
         /// attack state and the next swing came one windup after the stun ended, so stunning a boss right
-        /// after its swing (2.4-3.3 s cooldown, 0.3-0.5 s stun) made it hit back sooner (Docs/Balance/README.md §9).
+        /// after its swing (2.4-3.3 s cooldown, 0.3-0.5 s stun) made it hit back sooner (Docs/Balance/README.md §10).
         /// </summary>
         public float AttackCooldownRemaining => _attackCooldownRemaining;
 

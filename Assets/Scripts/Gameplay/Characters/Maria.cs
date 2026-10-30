@@ -21,8 +21,8 @@ namespace Rapadura.Gameplay.Characters
             "ensinaram os primeiros segredos da energia vital. Quando os cristais sagrados começaram a " +
             "perder seu brilho, ela recebeu uma visão mostrando que apenas um grupo de heróis poderia " +
             "restaurar o equilíbrio do mundo. Corajosa mesmo sendo tão nova, parte em uma jornada para " +
-            "reunir os escolhidos e impedir que a escuridão consuma Rapadura — e os escolhidos são, antes " +
-            "de tudo, sua própria família: sua irmã mais velha Maithe, seu irmão mais novo Joaquim e seus " +
+            "reunir os escolhidos e impedir que a escuridão consuma o sertão — e os escolhidos são, antes " +
+            "de tudo, sua própria família: sua prima mais velha Maithe, seu irmão mais novo Joaquim e seus " +
             "primos Ícaro e Lavine.";
 
         public override string[] AbilityNames => new[]

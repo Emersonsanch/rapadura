@@ -16,7 +16,15 @@ namespace Rapadura.Gameplay.Dialogue
         QuestObjectiveComplete = 2,
 
         /// <summary>The hero being played is <see cref="DialogueCondition.Key"/> (a <c>CharacterId</c> name, e.g. "Maithe"; case-insensitive).</summary>
-        ActiveCharacter = 3
+        ActiveCharacter = 3,
+
+        /// <summary>
+        /// Story beat <see cref="DialogueCondition.Key"/> was seen in this journey (a <c>StoryBeats.Id</c> such as
+        /// "interlude_desert", or the <c>StoryBeat</c> name, case-insensitive): read through
+        /// <see cref="IStoryDialogueContext"/>; false when the context has no story or the key is unknown. Village
+        /// NPCs use it to comment on the interludes (<see cref="VillageStoryNews"/>).
+        /// </summary>
+        StoryBeatSeen = 4
     }
 
     /// <summary>

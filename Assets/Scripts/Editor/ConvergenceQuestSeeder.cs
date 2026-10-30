@@ -119,8 +119,9 @@ namespace Rapadura.Editor
         /// five heroes stand together: Maria's vision brought them to a shared meeting point, they
         /// choose (via <c>dialogue_convergence_first_meeting</c>, see
         /// <see cref="ConvergenceDialogueSeeder"/>) to face Rapadura's growing threat as a group, and
-        /// prove it by putting down a stronger foe together — the mountain warlord seeded by
-        /// EnemyDatabaseSeeder.
+        /// prove it by facing the last boss together — the Habitante Ancestral at the bottom of the Caves
+        /// (enemy_cave_dweller, seeded by EnemyDatabaseSeeder), so the personal-quest path ends where the region
+        /// order (Floresta → Deserto → Montanha → Cavernas) does (Docs/Narrative.md §4).
         /// </summary>
         private static QuestDefinition BuildConvergenceQuest()
         {
@@ -155,11 +156,11 @@ namespace Rapadura.Editor
                 },
                 new QuestObjective
                 {
-                    ObjectiveId = "face_the_mountain_warlord",
+                    ObjectiveId = "face_the_ancient_dweller",
                     Type = QuestObjectiveType.KillEnemyType,
-                    TargetId = "enemy_mountain_warlord",
+                    TargetId = "enemy_cave_dweller",
                     RequiredAmount = 1,
-                    DescriptionKey = "quest.convergence.obj_face_the_mountain_warlord"
+                    DescriptionKey = "quest.convergence.obj_face_the_ancient_dweller"
                 }
             };
 

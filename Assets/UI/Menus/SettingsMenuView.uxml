@@ -58,6 +58,7 @@
                     <ui:Slider name="screen-shake-slider" label="Tremor de Tela" low-value="0" high-value="1" focusable="true" class="settings-field loc" view-data-key="ui.settings.accessibility.screen_shake" />
                     <ui:Toggle name="reduce-flash-toggle" label="Reduzir Flashes" focusable="true" class="settings-field loc" view-data-key="ui.settings.accessibility.reduce_flash" />
                     <ui:Toggle name="reduce-motion-toggle" label="Reduzir Movimento" focusable="true" class="settings-field loc" view-data-key="ui.settings.accessibility.reduce_motion" />
+                    <ui:Toggle name="clearer-night-toggle" label="Noite mais clara" focusable="true" class="settings-field loc" view-data-key="ui.settings.accessibility.clearer_night" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

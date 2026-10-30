@@ -67,7 +67,9 @@ namespace Rapadura.Gameplay.Dialogue
         /// <summary>The villager's conversation (<c>Resources/Dialogue/dialogue_&lt;npc&gt;</c>), or null if the asset is missing.</summary>
         public static DialogueDefinition LoadDialogue(VillageNpcSpec npc)
         {
-            return npc != null ? Resources.Load<DialogueDefinition>(npc.DialogueResourcePath) : null;
+            DialogueDefinition asset = npc != null ? Resources.Load<DialogueDefinition>(npc.DialogueResourcePath) : null;
+            // + "Soube das novidades da estrada?" (StoryBeatSeen): the villager comments on the latest interlude.
+            return VillageStoryNews.WithNews(asset, npc != null ? npc.NpcKey : null);
         }
 
         /// <summary>"(!)": the villager's quest can be taken now, or waits to be handed in.</summary>

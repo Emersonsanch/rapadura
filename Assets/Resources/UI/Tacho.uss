@@ -1,0 +1,183 @@
+/*
+ * "Tacho Encantado da Vó" (VillageTachoPanel), built in code on top of the map HUD's Mochila overlay classes
+ * (.wm-backpack-overlay / .wm-backpack-panel). Loaded at runtime from Resources and attached to the window root,
+ * which sits under the HUD's `rap-theme` root (wm-hud-root), where the palette below resolves.
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+.tacho-panel {
+    width: 660px;
+    max-width: 94%;
+    max-height: 94%;
+    padding: 18px 22px;
+}
+
+.tacho-grandma {
+    font-size: 14px;
+    -unity-font-style: italic;
+    color: var(--rap-cream);
+    white-space: normal;
+    padding: 6px 10px;
+    margin-bottom: 6px;
+    border-left-width: 3px;
+    border-left-color: var(--rap-gold);
+    background-color: var(--rap-brown-night);
+    border-radius: 6px;
+}
+
+.tacho-owned {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    margin-bottom: 4px;
+}
+
+.tacho-picker {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.tacho-picker__label {
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 13px;
+    color: var(--rap-cream);
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.tacho-picker__button {
+    min-width: 90px;
+    font-size: 12px;
+}
+
+.tacho-list {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 180px;
+    margin-bottom: 6px;
+}
+
+.tacho-section {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
+.tacho-empty {
+    color: var(--rap-cream-dim);
+    white-space: normal;
+    margin: 4px 10px;
+}
+
+.tacho-note {
+    font-size: 12px;
+    -unity-font-style: italic;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+    margin: 2px 10px 6px 10px;
+}
+
+.tacho-row {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background-color: var(--rap-brown);
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: var(--rap-panel-border);
+}
+
+.tacho-row--suggested {
+    border-color: var(--rap-gold);
+}
+
+.tacho-row__body {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.tacho-row__name {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--rap-cream);
+    white-space: normal;
+}
+
+.tacho-row__effect {
+    font-size: 12px;
+    color: var(--rap-cane-green);
+    white-space: normal;
+}
+
+.tacho-row__chance {
+    font-size: 13px;
+    color: var(--rap-gold-light);
+}
+
+.tacho-row__cost {
+    font-size: 12px;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+}
+
+.tacho-row__fail {
+    font-size: 12px;
+    color: var(--rap-caramel-light);
+    white-space: normal;
+}
+
+.tacho-row__why {
+    font-size: 12px;
+    -unity-font-style: italic;
+    color: var(--rap-warning);
+    white-space: normal;
+}
+
+.tacho-go {
+    min-width: 110px;
+    margin-left: 8px;
+}
+
+.tacho-status {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+    white-space: normal;
+    -unity-text-align: middle-center;
+    min-height: 18px;
+    margin-bottom: 4px;
+}
+
+.tacho-confirm {
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: var(--rap-gold);
+    background-color: var(--rap-brown-night);
+}
+
+.tacho-confirm__text {
+    font-size: 14px;
+    color: var(--rap-cream);
+    white-space: normal;
+    margin-bottom: 6px;
+}
+
+.tacho-confirm__buttons {
+    flex-direction: row;
+    justify-content: center;
+}
+
+.tacho-confirm__buttons > Button {
+    margin-left: 4px;
+    margin-right: 4px;
+}

@@ -48,6 +48,8 @@ namespace Rapadura.UI.Quests
         private IVisualElementScheduledItem _toastHideItem;
         private IVisualElementScheduledItem _pulseItem;
         private string _displayedQuestId;
+        /// <summary>The running "Tarefa de caça" (Seu Zé Caçador), a second card under the quest one.</summary>
+        private Rapadura.UI.Hunting.HuntingTrackerCard _huntingCard;
 
         /// <summary>Quest currently shown on the card (null when hidden).</summary>
         public string DisplayedQuestId => _displayedQuestId;
@@ -62,6 +64,7 @@ namespace Rapadura.UI.Quests
             BindElements();
             RegisterCallbacks();
             Refresh();
+            _huntingCard ??= Rapadura.UI.Hunting.HuntingTrackerCard.Attach(_uiDocument.rootVisualElement.Q<VisualElement>("quest-tracker-root") ?? _uiDocument.rootVisualElement);
         }
 
         private void Start()
@@ -73,6 +76,8 @@ namespace Rapadura.UI.Quests
         private void OnDisable()
         {
             UnregisterCallbacks();
+            _huntingCard?.Detach();
+            _huntingCard = null;
         }
 
         private void BindElements()

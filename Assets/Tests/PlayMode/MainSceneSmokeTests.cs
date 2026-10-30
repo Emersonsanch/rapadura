@@ -230,7 +230,7 @@ namespace Rapadura.Tests.PlayMode
 
             // --- Arrange a recognisable state -------------------------------------------------
             var item = Rapadura.Gameplay.Items.ItemDatabase.GetAll()
-                .FirstOrDefault(i => i != null && !i.IsEquippable && i.IsStackable && inventory.HasWeightCapacityFor(i, 3));
+                .FirstOrDefault(i => i != null && !i.IsEquippable && i.IsStackable && inventory.CanFit(i, 3));
             Assert.IsNotNull(item, "No stackable, non-equippable item under Resources/Items to put in the inventory.");
             int countBefore = inventory.GetTotalCount(item.ItemId);
             inventory.AddItem(item, 3);

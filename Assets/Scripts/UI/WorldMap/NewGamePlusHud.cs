@@ -139,20 +139,32 @@ namespace Rapadura.UI.WorldMap
             return clamped > 0 ? NewGamePlusTexts.Format(localization, NewGamePlusTexts.Badge, clamped) : null;
         }
 
-        /// <summary>The "what changes" line for the cycle about to start (multipliers like "1,8" in pt-BR, "1.8" in English).</summary>
+        /// <summary>
+        /// The "what changes" line for the cycle about to start (multipliers like "1,8" in pt-BR, "1.8" in English).
+        /// Enemy HP/damage scale by region, so they show as a range ("vida ×1,1–2,2").
+        /// </summary>
         public static string ResetsText(LocalizationManager localization, int nextCycle)
         {
             bool english = localization != null && localization.CurrentLanguage == LanguageCode.en;
+            NewGamePlusRules.MultiplierRange(nextCycle, false, out float hpMin, out float hpMax);
+            NewGamePlusRules.MultiplierRange(nextCycle, true, out float dmgMin, out float dmgMax);
             return NewGamePlusTexts.Format(localization, NewGamePlusTexts.Resets,
-                Multiplier(NewGamePlusRules.HealthMultiplier(nextCycle), english),
-                Multiplier(NewGamePlusRules.DamageMultiplier(nextCycle), english),
+                MultiplierRange(hpMin, hpMax, english),
+                MultiplierRange(dmgMin, dmgMax, english),
                 Multiplier(NewGamePlusRules.ExperienceMultiplier(nextCycle), english));
+        }
+
+        private static string MultiplierRange(float min, float max, bool english)
+        {
+            string low = Multiplier(min, english);
+            string high = Multiplier(max, english);
+            return low == high ? low : low + "\u2013" + high;
         }
 
         // No pt-BR CultureInfo lookup (not every player build ships culture data): invariant + decimal comma.
         private static string Multiplier(float value, bool english)
         {
-            string text = value.ToString("0.#", CultureInfo.InvariantCulture);
+            string text = value.ToString("0.##", CultureInfo.InvariantCulture);
             return english ? text : text.Replace('.', ',');
         }
 

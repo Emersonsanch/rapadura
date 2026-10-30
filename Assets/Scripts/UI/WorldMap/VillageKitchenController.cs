@@ -5,6 +5,8 @@ using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Cooking;
 using Rapadura.Gameplay.Inventory;
+using Rapadura.Gameplay.Story;
+using Rapadura.Gameplay.World.Biomes;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -45,6 +47,9 @@ namespace Rapadura.UI.WorldMap
         private InventoryManager _bag;
         private CharacterId? _hero;
         private MealRecipeSpec _taughtOnOpen;
+        // Region Vó Zefa remembers on this opening (KitchenPresenter.CameFromForVisit); visits counted per session.
+        private BiomeType? _cameFromOnOpen;
+        private static int s_visits;
         private bool _open;
 
         public bool IsOpen => _open;
@@ -75,6 +80,8 @@ namespace Rapadura.UI.WorldMap
             _hero = ServiceLocator.TryGet(out CharacterSelectionState selection) ? selection.Selected : null;
             MealService meals = MealService.ResolveShared();
             _taughtOnOpen = meals.TryTeachFavourite(_hero);
+            StoryProgress story = ServiceLocator.TryGet(out StoryProgress progress) ? progress : null;
+            _cameFromOnOpen = KitchenPresenter.CameFromForVisit(story != null ? StoryBeats.LastRegionCleared(story.HasSeen) : null, s_visits++);
 
             _open = true;
             _overlay.style.display = DisplayStyle.Flex;
@@ -171,7 +178,7 @@ namespace Rapadura.UI.WorldMap
 
             _titleLabel.text = KitchenTexts.Get(localization, KitchenTexts.Title);
             _subtitleLabel.text = KitchenTexts.Get(localization, KitchenTexts.Subtitle);
-            _grandmaLabel.text = KitchenPresenter.GrandmaLine(_hero, _taughtOnOpen, localization);
+            _grandmaLabel.text = KitchenPresenter.GrandmaLine(_hero, _taughtOnOpen, localization, _cameFromOnOpen);
             _activeLabel.text = KitchenPresenter.ActiveMealLine(meals.Active, localization);
             _closeButton.text = KitchenTexts.Get(localization, KitchenTexts.Close);
 

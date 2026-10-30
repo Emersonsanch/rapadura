@@ -605,7 +605,7 @@ namespace Rapadura.Tests
             Assert.AreEqual("Nada muda.", WorldEventCardController.DescribeChoice(peddler.ChoiceB, BiomeType.Forest, portuguese));
             Assert.AreEqual("Nothing changes.", WorldEventCardController.DescribeChoice(peddler.ChoiceB, BiomeType.Forest, english));
 
-            StringAssert.Contains("+15% de dano", WorldEventCardController.DescribeChoice(Spec(WorldEventCatalog.Campfire).ChoiceA, BiomeType.Forest, portuguese));
+            StringAssert.Contains("+8% de dano", WorldEventCardController.DescribeChoice(Spec(WorldEventCatalog.Campfire).ChoiceA, BiomeType.Forest, portuguese));
             StringAssert.Contains("+60 XP", WorldEventCardController.DescribeChoice(Spec(WorldEventCatalog.Pilgrims).ChoiceA, BiomeType.Caves, english));
             StringAssert.Contains("50% slower", WorldEventCardController.DescribeChoice(Spec(WorldEventCatalog.Sandstorm).ChoiceA, BiomeType.Desert, english));
         }

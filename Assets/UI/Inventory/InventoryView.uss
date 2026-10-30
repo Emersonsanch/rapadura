@@ -244,3 +244,86 @@
     color: var(--rap-cream-dim);
     -unity-text-align: middle-center;
 }
+
+/* ---------------------------------------------------------------------------------------------
+   MU-style backpack grid (InventoryUIController.RebuildBagGrid): background cells + items drawn
+   over their footprint (ItemFootprint). Positions/sizes are set in code (CellSize = 52px); the look
+   lives here. Rarity colours the whole border of a grid item (same reference colours as above). */
+.inventory-bag-grid {
+    position: relative;
+    flex-shrink: 0;
+    align-self: center;
+    margin: 4px;
+    background-color: var(--rap-brown-night);
+}
+
+.inventory-cell {
+    background-color: rgba(86, 50, 26, 0.35);
+    border-width: 1px;
+    border-color: rgba(150, 96, 48, 0.4);
+    border-radius: 3px;
+}
+
+.inventory-cell:focus {
+    background-color: rgba(196, 122, 44, 0.45);
+    border-color: var(--rap-focus);
+}
+
+.inventory-slot.inventory-bag-item {
+    margin: 0;
+    padding: 3px;
+    border-width: 2px;
+    border-bottom-width: 2px;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+}
+
+.inventory-bag-item-name {
+    font-size: 11px;
+    color: var(--rap-cream);
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.inventory-slot.inventory-bag-item.inventory-row--common {
+    border-color: rgb(199, 199, 199);
+}
+
+.inventory-slot.inventory-bag-item.inventory-row--uncommon {
+    border-color: rgb(51, 204, 64);
+}
+
+.inventory-slot.inventory-bag-item.inventory-row--rare {
+    border-color: rgb(51, 115, 242);
+}
+
+.inventory-slot.inventory-bag-item.inventory-row--epic {
+    border-color: rgb(166, 64, 230);
+}
+
+.inventory-slot.inventory-bag-item.inventory-row--legendary {
+    border-color: rgb(242, 153, 26);
+}
+
+/* Picked up by a tap (tap-to-pick / tap-to-place). */
+.inventory-slot.inventory-bag-item--held {
+    opacity: 0.55;
+    border-color: var(--rap-gold);
+}
+
+/* Footprint preview while dragging / holding: green = fits, red = doesn't. */
+.inventory-bag-ghost {
+    border-width: 2px;
+    border-radius: 6px;
+}
+
+.inventory-bag-ghost--valid {
+    background-color: rgba(90, 200, 110, 0.28);
+    border-color: rgb(90, 200, 110);
+}
+
+.inventory-bag-ghost--invalid {
+    background-color: rgba(220, 70, 70, 0.32);
+    border-color: rgb(220, 70, 70);
+}

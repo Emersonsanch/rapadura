@@ -20,10 +20,14 @@ MonoBehaviour:
   _lootDropChance: 0.6
   _lootQuantityMin: 1
   _lootQuantityMax: 3
-  _visualPrefab: {fileID: 919132149155446097, guid: 3730cff5da0538c47816a2eaf1148c3b, type: 3}
-  _visualLocalPosition: {x: 0, y: -0.5, z: 0}
-  _visualLocalEulerAngles: {x: -90, y: 0, z: 0}
-  _visualScale: 0.0145
+  _bossGuaranteedLoot: 1
+  _bossBonusDropItem: {fileID: 0}
+  _bossBonusDropRarity: 2
+  _bossExperienceMultiplier: 1
+  _visualPrefab: {fileID: 6384685518858323493, guid: 354f8512faf223f44a16af6045e4344f, type: 3}
+  _visualLocalPosition: {x: 0, y: 0, z: 0}
+  _visualLocalEulerAngles: {x: 0, y: 0, z: 0}
+  _visualScale: 1
   _usePlaceholderVisual: 1
   _placeholderShape: 0
   _placeholderColor: {r: 0, g: 0, b: 0, a: 0}

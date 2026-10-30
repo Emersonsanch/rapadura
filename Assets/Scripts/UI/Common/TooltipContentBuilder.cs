@@ -6,6 +6,8 @@ using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Items.Procedural;
+using Rapadura.Gameplay.Refining;
+using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Skills;
 
 namespace Rapadura.UI.Common
@@ -25,6 +27,9 @@ namespace Rapadura.UI.Common
 
         /// <summary>Set for items (drives the title color); null for skills.</summary>
         public ItemRarity? Rarity;
+
+        /// <summary>Refine glow tier 0..5 of the item (<see cref="Rapadura.Gameplay.Refining.RefineRules.GlowTier"/>): the title glows from +7.</summary>
+        public int RefineGlowTier;
 
         public string ToPlainText()
         {
@@ -100,16 +105,24 @@ namespace Rapadura.UI.Common
 
             List<string> lines = content.StatLines;
 
+            // A refined piece shows its refined base stat (RefineRules.RefinedStat), then what the refine adds.
+            int refineLevel = slot != null ? RefineRules.ClampLevel(slot.refineLevel) : 0;
+            int refineOption = slot != null ? RefineRules.ClampOption(slot.refineOptionLevel) : 0;
+            content.RefineGlowTier = RefineRules.GlowTier(refineLevel);
+
             if (item.WeaponDamage > 0f)
             {
-                lines.Add(Format(localize, "ui.tooltip.weapon_damage", Number(item.WeaponDamage)));
+                lines.Add(Format(localize, "ui.tooltip.weapon_damage", Number(RefineRules.RefinedStat(item.WeaponDamage, refineLevel))));
                 lines.Add(Format(localize, "ui.tooltip.attack_speed", Number(item.WeaponAttackSpeed)));
             }
 
             if (item.ArmorDefense > 0f)
             {
-                lines.Add(Format(localize, "ui.tooltip.armor_defense", Number(item.ArmorDefense)));
+                lines.Add(Format(localize, "ui.tooltip.armor_defense", Number(RefineRules.RefinedStat(item.ArmorDefense, refineLevel))));
             }
+
+            AppendRefineLines(item, refineLevel, refineOption, lines);
+            AppendWingLines(item, lines, localize);
 
             if (item.EquipStatModifiers != null)
             {
@@ -290,6 +303,40 @@ namespace Rapadura.UI.Common
                 ? Localize(localize, "ui.tooltip.slot." + TooltipLocalization.ToSnakeCase(item.EquipSlot.ToString()))
                 : Localize(localize, "ui.tooltip.type." + TooltipLocalization.ToSnakeCase(item.Type.ToString()));
             return $"{rarityText} · {kindText}";
+        }
+
+        /// <summary>"Refino +7: +30% no atributo base" and the Pedra da Vida's option line (RefineTexts).</summary>
+        private static void AppendRefineLines(ItemDefinition item, int level, int option, List<string> lines)
+        {
+            if (!RefineRules.IsRefinable(item))
+            {
+                return;
+            }
+
+            LocalizationManager manager = ContentText.CurrentManager;
+            if (level > 0)
+            {
+                lines.Add(RefineTexts.Format(manager, RefineTexts.TooltipLevel, level, Number(RefineRules.StatBonusFraction(level) * 100f)));
+            }
+
+            if (option > 0)
+            {
+                bool weapon = item.WeaponDamage > 0f;
+                float percent = weapon ? option * RefineRules.WeaponOptionAttackPercent : RefineRules.ArmourHealthPercent(option);
+                lines.Add(RefineTexts.Format(manager, weapon ? RefineTexts.TooltipOptionWeapon : RefineTexts.TooltipOptionArmour,
+                    option, RefineRules.MaxOptionLevel, Number(percent * 100f)));
+            }
+        }
+
+        /// <summary>A wing's bonuses (Tacho Encantado, <see cref="Rapadura.Gameplay.Tacho.WingCatalog"/>): damage, defense, speed, absorb.</summary>
+        private static void AppendWingLines(ItemDefinition item, List<string> lines, Func<string, string> localize)
+        {
+            foreach (Rapadura.Gameplay.Tacho.WingModifier modifier in Rapadura.Gameplay.Tacho.WingCatalog.ModifiersFor(item.ItemId))
+            {
+                lines.Add(modifier.IsAbsorb
+                    ? Rapadura.Gameplay.Tacho.TachoTexts.Format(ContentText.CurrentManager, Rapadura.Gameplay.Tacho.TachoTexts.TooltipAbsorb, Number(modifier.Value * 100f))
+                    : FormatModifier(modifier.Stat, modifier.Application, modifier.Value, localize));
+            }
         }
 
         private static void AppendAffixLines(InventorySlotData slot, List<string> lines, Func<string, string> localize, Func<string, ItemAffixDefinition> resolveAffix)

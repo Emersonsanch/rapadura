@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.Enemies.Visuals
 {
-    /// <summary>Flat colours of the procedural enemy palette texture (one cell each, 8 x 4).</summary>
+    /// <summary>Flat colours of the procedural enemy palette texture (one cell each, 8 x 6). Append only.</summary>
     public enum EnemySwatch
     {
         // Cavernas: morcegos
@@ -17,6 +17,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         CaveSkin, CaveSkinDark, CaveBelly, SoftEye, Crystal, StolenLight, CaveMoss,
         // Neutros
         Black, Bone, Shadow, Fang, Spare,
+        // Noite: lobisomem, morcego-vampiro, coruja, vaga-lumes, queixadas, mae-da-lua (Docs/DayNight.md)
+        WolfFur, WolfFurDark, WolfBelly, Pink, VampFur, VampWing, OwlBuff, OwlFace,
+        MoonEye, FireflyGlow, Ember, PeccaryFur, Bark, BarkDark, Lichen, Spare2,
     }
 
     /// <summary>
@@ -30,7 +33,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
     public static class EnemyModelPalette
     {
         public const int Columns = 8;
-        public const int Rows = 4;
+        public const int Rows = 6;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -67,6 +70,22 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             new Color(0.12f, 0.1f, 0.14f),   // Shadow
             new Color(0.98f, 0.97f, 0.92f),  // Fang
             new Color(1f, 0f, 1f),           // Spare
+            new Color(0.47f, 0.39f, 0.33f),  // WolfFur (scruffy brown-grey)
+            new Color(0.27f, 0.22f, 0.21f),  // WolfFurDark
+            new Color(0.76f, 0.66f, 0.52f),  // WolfBelly
+            new Color(0.9f, 0.5f, 0.54f),    // Pink (tongue, mouth, snout)
+            new Color(0.36f, 0.18f, 0.24f),  // VampFur
+            new Color(0.56f, 0.27f, 0.35f),  // VampWing
+            new Color(0.84f, 0.66f, 0.4f),   // OwlBuff
+            new Color(0.97f, 0.94f, 0.87f),  // OwlFace (pale: reads in the dark)
+            new Color(1f, 0.88f, 0.3f),      // MoonEye (glow)
+            new Color(0.8f, 1f, 0.32f),      // FireflyGlow (glow)
+            new Color(1f, 0.55f, 0.16f),     // Ember (glow)
+            new Color(0.31f, 0.28f, 0.28f),  // PeccaryFur
+            new Color(0.52f, 0.44f, 0.36f),  // Bark
+            new Color(0.31f, 0.26f, 0.21f),  // BarkDark
+            new Color(0.64f, 0.68f, 0.56f),  // Lichen
+            new Color(1f, 0f, 1f),           // Spare2
         };
 
         /// <summary>Emission strength per glow swatch (multiplied onto its colour); 0 = not glowing.</summary>
@@ -81,6 +100,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case EnemySwatch.SoftEye: return 0.8f;
                 case EnemySwatch.Crystal: return 0.7f;
                 case EnemySwatch.StolenLight: return 1f;
+                case EnemySwatch.MoonEye: return 1f;
+                case EnemySwatch.FireflyGlow: return 1f;
+                case EnemySwatch.Ember: return 0.9f;
                 default: return 0f;
             }
         }

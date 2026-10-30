@@ -209,3 +209,27 @@
     -unity-text-align: middle-center;
     white-space: normal;
 }
+
+/* "Achados e Perdidos": death drops to buy back (VillageChestUIController.BuildLostAndFound). */
+.village-chest-lost-found {
+    margin-top: 10px;
+    padding: 6px 10px;
+    background-color: var(--rap-brown-night);
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: var(--rap-gold);
+}
+
+.village-chest-lost-found-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.village-chest-lost-found-entry {
+    min-height: 44px;
+    margin: 3px;
+    padding: 6px 10px;
+    font-size: 14px;
+    border-left-width: 4px;
+    white-space: normal;
+}

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Rapadura.Core.Accessibility;
 using Rapadura.Core.DI;
 using Rapadura.Gameplay.Combat;
+using Rapadura.Gameplay.Locomotion;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Enemies.Visuals
@@ -37,14 +38,32 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         private readonly Dictionary<string, int> _index = new Dictionary<string, int>();
         private readonly List<int> _bats = new List<int>(8);
         private readonly List<int> _wings = new List<int>(16);
+        private readonly List<int> _fireflies = new List<int>(12);
+        private readonly List<int> _lanterns = new List<int>(12);
         private bool _cached;
         private float _time;
         private float _seed;
         private Health _health;
         private AccessibilitySettings _accessibility;
         private float _accessibilityRetry;
+        private EnemyProceduralAnimator _animator;
+        private ProceduralLegLocomotion _legRig;
+        private float _legRigRetry;
+        private float _attack01;
+
+        /// <summary>Werewolf: how far (deg) the torso pitches up when it rears to strike.</summary>
+        public const float WerewolfRearDegrees = 52f;
 
         public ProceduralEnemyKind Kind => _kind;
+
+        /// <summary>
+        /// 0..1 attack pose of the night species (werewolf rearing up, jaws/gape opening): rises during the attack
+        /// windup, falls back after the strike. A telegraph, so "Reduzir Movimento" does not shrink it.
+        /// </summary>
+        public float Attack01 => _attack01;
+
+        /// <summary>Attack phase used when there is no <see cref="EnemyProceduralAnimator"/> above (tests, previews); ignored otherwise.</summary>
+        public EnemyAttackVisualPhase AttackPhaseOverride { get; set; }
 
         /// <summary>0..1 how fast the enemy travels (set by <see cref="EnemyProceduralAnimator"/>): bats glide more between beats when flying.</summary>
         public float MoveSpeed01 { get; set; }
@@ -52,6 +71,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         private static readonly string[] GolemParts = { ProceduralEnemyParts.Head };
         private static readonly string[] GuardianParts = { ProceduralEnemyParts.Head };
         private static readonly string[] DwellerParts = { ProceduralEnemyParts.Head, ProceduralEnemyParts.EarLeft, ProceduralEnemyParts.EarRight };
+        private static readonly string[] OwlParts = { ProceduralEnemyParts.Head };
 
         /// <summary>
         /// Follow-through parts this rig already animates for <paramref name="kind"/> (head bob/turn, ear
@@ -64,6 +84,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.StoneGolem: return GolemParts;
                 case ProceduralEnemyKind.RuinGuardian: return GuardianParts;
                 case ProceduralEnemyKind.AncientDweller: return DwellerParts;
+                case ProceduralEnemyKind.ShroudOwl: return OwlParts;
                 default: return null;
             }
         }
@@ -99,7 +120,10 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         private void OnEnable()
         {
             _health = GetComponentInParent<Health>();
+            _animator = GetComponentInParent<EnemyProceduralAnimator>();
             _seed = (Mathf.Abs(GetInstanceID()) % 997) * 0.13f;
+            _attack01 = 0f;
+            _legRigRetry = 0f;
         }
 
         private void OnDisable()
@@ -199,6 +223,103 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     Rotate(ProceduralEnemyParts.EarRight, Quaternion.Euler(0f, 0f, -Mathf.Sin(t * 0.9f + 0.5f) * 6f * k));
                     Pulse(ProceduralEnemyParts.StolenLight, 1f + Mathf.Sin(t * 2.2f) * 0.05f * k);
                     break;
+
+                case ProceduralEnemyKind.Werewolf:
+                {
+                    // Rears up on the hind legs for the strike: the torso (chest, head, forelegs) pitches up from the
+                    // hips, the forelegs let go of the ground, the clawed paws come up and the jaws open; then it slams down.
+                    if (_legRig == null)
+                    {
+                        // Added on the visual by EnemyProceduralAnimator after this rig was enabled: look again now and then.
+                        _legRigRetry -= deltaTime;
+                        if (_legRigRetry <= 0f)
+                        {
+                            _legRigRetry = 0.5f;
+                            _legRig = GetComponent<ProceduralLegLocomotion>();
+                        }
+                    }
+
+                    float r = StepAttack(deltaTime, 4.5f, 2.6f);
+                    Rotate(ProceduralEnemyParts.Torso, Quaternion.Euler(-WerewolfRearDegrees * r, 0f, 0f));
+                    Rotate(WerewolfRecipe.ShoulderLeft, Quaternion.Euler(-24f * r, 0f, -10f * r));
+                    Rotate(WerewolfRecipe.ShoulderRight, Quaternion.Euler(-24f * r, 0f, 10f * r));
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(22f * r + Mathf.Max(0f, Mathf.Sin(t * 1.7f)) * 4f * k, 0f, 0f));
+                    if (_legRig != null)
+                    {
+                        _legRig.FrontLegsWeight = 1f - r;
+                    }
+
+                    break;
+                }
+
+                case ProceduralEnemyKind.VampireBat:
+                    StepAttack(deltaTime, 5f, 3f);
+                    FlapWings(t, speed * 0.55f, Mathf.Max(k, 0.25f) * 1.1f, Mathf.Clamp01(MoveSpeed01));
+                    break;
+
+                case ProceduralEnemyKind.ShroudOwl:
+                {
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    // Slow flaps with long glides; the wings hold wide open (the screech) on the windup.
+                    FlapWings(t, speed * 0.42f, Mathf.Max(k, 0.25f) * (1f - 0.6f * r), Mathf.Max(Mathf.Clamp01(MoveSpeed01), 0.4f));
+                    // Every few seconds the head swivels way round, then snaps forward again to attack.
+                    float glance = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01((Mathf.Sin(t * 0.45f) - 0.55f) / 0.3f)) * (1f - r);
+                    float direction = Mathf.Sin(t * 0.13f + 1f) >= 0f ? 1f : -1f;
+                    Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(0f, glance * 80f * direction * k, 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.FireflySwarm:
+                    Rotate(ProceduralEnemyParts.Swarm, Quaternion.Euler(Mathf.Sin(t * 0.7f) * 8f * k, _time * 38f * speed * _intensity, 0f));
+                    for (int i = 0; i < _fireflies.Count; i++)
+                    {
+                        Offset(_fireflies[i], new Vector3(Mathf.Sin(t * 2.3f + i * 2.1f) * 0.05f * k, Mathf.Sin(t * 3.4f + i * 1.3f) * 0.09f * k, 0f));
+                    }
+
+                    for (int i = 0; i < _lanterns.Count; i++)
+                    {
+                        // Blinking lanterns (never off, never above 1.25x: always readable in the dark).
+                        float blink = 0.5f + 0.5f * Mathf.Sin(t * 3.1f + i * 1.9f);
+                        Pulse(_lanterns[i], Mathf.Lerp(0.8f, 1.25f, blink * Mathf.Max(k, 0.3f)));
+                    }
+
+                    break;
+
+                case ProceduralEnemyKind.Potoo:
+                {
+                    // Sits stiff as a stick; the tiny beak opens into a huge pink gape for the ambush.
+                    float r = StepAttack(deltaTime, 6f, 2.2f);
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(48f * r, 0f, 0f));
+                    float travel = Mathf.Clamp01(MoveSpeed01);
+                    FlapWings(t, speed * 0.7f, Mathf.Max(k, 0.25f) * Mathf.Lerp(0.15f, 1f, Mathf.Max(travel, r)), travel);
+                    break;
+                }
+            }
+        }
+
+        /// <summary>Eases <see cref="Attack01"/> toward 1 during the windup (rate <paramref name="up"/>/s), back to 0 otherwise; returns it smoothed.</summary>
+        private float StepAttack(float deltaTime, float up, float down)
+        {
+            EnemyAttackVisualPhase phase = _animator != null ? _animator.AttackPhase : AttackPhaseOverride;
+            bool windup = phase == EnemyAttackVisualPhase.Windup;
+            _attack01 = Mathf.MoveTowards(_attack01, windup ? 1f : 0f, Mathf.Max(0f, deltaTime) * (windup ? up : down));
+            return Mathf.SmoothStep(0f, 1f, _attack01);
+        }
+
+        /// <summary>Flaps every <c>Wing_L</c>/<c>Wing_R</c> of a single flyer (one bird or bat, not the swarm).</summary>
+        private void FlapWings(float t, float rate, float amplitude, float travel)
+        {
+            if (!_driveLimbs)
+            {
+                return;
+            }
+
+            for (int i = 0; i < _wings.Count; i++)
+            {
+                Tracked wing = _parts[_wings[i]];
+                float sign = wing.Transform.name == ProceduralEnemyParts.WingLeft ? -1f : 1f;
+                float flap = BatWingAngle(t, 0, rate, travel) * amplitude;
+                wing.Transform.localRotation = wing.Rotation * Quaternion.AngleAxis(flap * sign, Vector3.forward);
             }
         }
 
@@ -233,6 +354,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             _index.Clear();
             _bats.Clear();
             _wings.Clear();
+            _fireflies.Clear();
+            _lanterns.Clear();
             foreach (Transform child in GetComponentsInChildren<Transform>(true))
             {
                 if (child == transform)
@@ -263,6 +386,14 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 {
                     _wings.Add(i);
                 }
+                else if (partName.StartsWith(ProceduralEnemyParts.FireflyPrefix))
+                {
+                    _fireflies.Add(i);
+                }
+                else if (partName == ProceduralEnemyParts.Lantern)
+                {
+                    _lanterns.Add(i);
+                }
             }
         }
 
@@ -290,12 +421,20 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         {
             if (_index.TryGetValue(partName, out int i))
             {
-                _parts[i].Transform.localScale = _parts[i].Scale * scale;
+                Pulse(i, scale);
             }
         }
 
+        private void Pulse(int i, float scale) => _parts[i].Transform.localScale = _parts[i].Scale * scale;
+
         private void RestoreAll()
         {
+            _attack01 = 0f;
+            if (_legRig != null)
+            {
+                _legRig.FrontLegsWeight = 1f;
+            }
+
             if (!_cached)
             {
                 return;

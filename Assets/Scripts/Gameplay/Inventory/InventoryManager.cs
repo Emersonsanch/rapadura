@@ -22,6 +22,15 @@ namespace Rapadura.Gameplay.Inventory
         public InventorySlotData[] slots = Array.Empty<InventorySlotData>();
         public EquippedEntry[] equipped = Array.Empty<EquippedEntry>();
 
+        /// <summary>
+        /// 0 = a save from before the MU-style grid (slot list + weight limit): its entries carry no cell positions and
+        /// are auto-placed on load. <see cref="InventoryManager.GridSaveVersion"/> (1) = positions are valid and kept.
+        /// </summary>
+        public int gridVersion;
+
+        /// <summary>Rows added by bag expansions (<see cref="InventoryManager.AddBagRows"/>). Old saves: 0.</summary>
+        public int extraRows;
+
         [Serializable]
         public class EquippedEntry
         {
@@ -38,30 +47,57 @@ namespace Rapadura.Gameplay.Inventory
             public float[] generatedAffixValues;
             public string generatedName;
             public ItemRarity generatedRarity;
+
+            // Refine data of the equipped item (InventorySlotData.refineLevel/refineOptionLevel, RefineRules).
+            // Old saves lack the keys: 0 = a plain +0 item.
+            public int refineLevel;
+            public int refineOptionLevel;
         }
     }
 
     /// <summary>
-    /// Owns the player's carried items and equipped gear. Handles slot-based storage with
-    /// weight limits and stacking, category/type filters for UI, moving/splitting stacks,
-    /// equipping/unequipping (applying equip stat bonuses through BuffController) and
-    /// consuming consumable items (healing/mana/stamina/buffs through PlayerStats). Persists
-    /// itself to JSON through ISaveable, storing only item ids so it can be restored via
-    /// <see cref="ItemDatabase"/> regardless of asset GUID churn.
+    /// Owns the player's carried items and equipped gear. The backpack is an MU Online-style grid
+    /// (<see cref="Columns"/> × <see cref="Rows"/>, 8 × 8 by default): every entry of <see cref="Slots"/> is one item
+    /// (or stack) with a top-left cell (<see cref="InventorySlotData.gridX"/>/<see cref="InventorySlotData.gridY"/>) and a
+    /// footprint from its category (<see cref="ItemFootprint"/>). The grid is the only capacity limit — an item fits only
+    /// when a free area of its footprint exists (or a plain stack of it has room). Weight is dormant data
+    /// (<see cref="GetTotalWeight"/> is informational). Everything that asks "does it fit?" goes through the shared fit API
+    /// (<see cref="CanFit"/>, <see cref="GetFittableAmount"/>, <see cref="CanFitAll"/>, <see cref="CanFitCopy"/>), which
+    /// simulates exactly what <see cref="AddItem(ItemDefinition,int)"/> would do (<see cref="BagFitSimulator"/>).
+    /// Also: moving on the grid (<see cref="MoveItem"/>: move / merge / swap), splitting, "Organizar"
+    /// (<see cref="SortInventory"/>), equipping/unequipping (applying equip stat bonuses through BuffController) and
+    /// consuming consumables (healing/mana/stamina/buffs through PlayerStats). Persists itself to JSON through ISaveable,
+    /// storing only item ids and cell positions; an old (pre-grid) save is auto-placed on load and anything that does not
+    /// fit goes to the Baú da Vó Zefa, never lost (<see cref="RestoreState"/>).
     /// </summary>
     public class InventoryManager : MonoBehaviour, ISaveable, IRestoreOrder
     {
-        [Header("Capacity")]
-        [SerializeField] private int _slotCount = 30;
-        [SerializeField] private float _maxWeight = 100f;
+        public const int DefaultColumns = 8;
+        public const int DefaultRows = 8;
+
+        /// <summary>Most rows a bag expansion ("Bornal de couro") can add (<see cref="AddBagRows"/>).</summary>
+        public const int MaxExtraRows = 2;
+
+        /// <summary><see cref="InventorySaveState.gridVersion"/> written by this build (0 = a save from before the grid).</summary>
+        public const int GridSaveVersion = 1;
+
+        [Header("Mochila (grade estilo MU)")]
+        [SerializeField, Min(1)] private int _columns = DefaultColumns;
+        [SerializeField, Min(1)] private int _rows = DefaultRows;
 
         [Header("Optional References")]
         [SerializeField] private PlayerStats _playerStats;
         [SerializeField] private BuffController _buffController;
 
         private InventorySlotData[] _slots;
+        private int _extraRows;
         private readonly Dictionary<EquipmentSlot, InventorySlotData> _equipped = new Dictionary<EquipmentSlot, InventorySlotData>();
+        private readonly List<InventorySlotData> _lastRestoreOverflow = new List<InventorySlotData>();
 
+        /// <summary>
+        /// Every bag entry (one per grid cell, so the bag can never hold more entries than cells); empty ones have no
+        /// position. An entry's index is stable while it stays in the bag, so slot-index APIs (use, equip, sell) keep working.
+        /// </summary>
         public IReadOnlyList<InventorySlotData> Slots
         {
             get
@@ -71,7 +107,22 @@ namespace Rapadura.Gameplay.Inventory
             }
         }
         public IReadOnlyDictionary<EquipmentSlot, InventorySlotData> Equipped => _equipped;
-        public float MaxWeight => _maxWeight;
+
+        public int Columns => Mathf.Max(1, _columns);
+        public int Rows => Mathf.Max(1, _rows) + _extraRows;
+        public int CellCount => Columns * Rows;
+
+        /// <summary>Rows added by bag expansions (0..<see cref="MaxExtraRows"/>); saved.</summary>
+        public int ExtraRows => _extraRows;
+
+        /// <summary>
+        /// Where <see cref="RestoreState"/> sends what an old save's layout could not keep. Null = the shared chest
+        /// (<see cref="VillageChestStorage.ResolveShared"/>). Tests set their own.
+        /// </summary>
+        public VillageChestStorage OverflowChest { get; set; }
+
+        /// <summary>Copies of the entries the last <see cref="RestoreState"/> sent to the chest (empty when everything fit).</summary>
+        public IReadOnlyList<InventorySlotData> LastRestoreOverflow => _lastRestoreOverflow;
 
         public string SaveKey => "Inventory";
 
@@ -109,12 +160,24 @@ namespace Rapadura.Gameplay.Inventory
                 return;
             }
 
-            _slots = new InventorySlotData[_slotCount];
+            _slots = CreateEmptySlots(CellCount);
+        }
 
-            for (int i = 0; i < _slotCount; i++)
+        private static InventorySlotData[] CreateEmptySlots(int count)
+        {
+            var slots = new InventorySlotData[count];
+            for (int i = 0; i < count; i++)
             {
-                _slots[i] = InventorySlotData.Empty();
+                slots[i] = InventorySlotData.Empty();
             }
+
+            return slots;
+        }
+
+        /// <summary>ItemDatabase lookup that tolerates null/empty ids (empty entries).</summary>
+        private static ItemDefinition ResolveItem(string itemId)
+        {
+            return string.IsNullOrEmpty(itemId) ? null : ItemDatabase.GetById(itemId);
         }
 
         private void Start()
@@ -134,9 +197,215 @@ namespace Rapadura.Gameplay.Inventory
         }
 
         // ---------------------------------------------------------------
-        // Weight
+        // Grid
         // ---------------------------------------------------------------
 
+        /// <summary>Current cell occupancy (each cell = the entry index covering it, or <see cref="BagGrid.Empty"/>).</summary>
+        public BagGrid BuildGrid()
+        {
+            EnsureSlotsInitialized();
+            return BagGridRules.Build(Columns, Rows, _slots, ResolveItem);
+        }
+
+        /// <summary>Footprint of <paramref name="item"/> on this bag (category default or override, clamped to the grid).</summary>
+        public GridSize GetFootprint(ItemDefinition item) => ItemFootprint.For(item, Columns, Rows);
+
+        /// <summary>Area entry <paramref name="slotIndex"/> covers (meaningless for an empty entry).</summary>
+        public GridRect GetSlotRect(int slotIndex)
+        {
+            EnsureSlotsInitialized();
+            return IsValidSlot(slotIndex)
+                ? BagGridRules.RectOf(_slots[slotIndex], ResolveItem, Columns, Rows)
+                : new GridRect(-1, -1, 1, 1);
+        }
+
+        /// <summary>Entry covering cell (<paramref name="x"/>, <paramref name="y"/>), or -1.</summary>
+        public int GetSlotIndexAt(int x, int y) => BuildGrid().At(x, y);
+
+        public int FreeCellCount => BuildGrid().FreeCellCount;
+
+        public int UsedCellCount => CellCount - FreeCellCount;
+
+        /// <summary>
+        /// Adds <paramref name="rows"/> rows to the bottom of the grid (bag expansion, e.g. "Bornal de couro"), up to
+        /// <see cref="MaxExtraRows"/> in total. Returns true if the bag grew. Saved (<see cref="InventorySaveState.extraRows"/>).
+        /// </summary>
+        public bool AddBagRows(int rows)
+        {
+            EnsureSlotsInitialized();
+            int target = Mathf.Clamp(_extraRows + Mathf.Max(0, rows), 0, MaxExtraRows);
+            if (target == _extraRows)
+            {
+                return false;
+            }
+
+            _extraRows = target;
+            var grown = CreateEmptySlots(CellCount);
+            Array.Copy(_slots, grown, Mathf.Min(_slots.Length, grown.Length));
+            _slots = grown;
+            EventBus.Publish(new InventoryChangedEvent());
+            return true;
+        }
+
+        /// <summary>Index of the first empty entry, or -1.</summary>
+        private int FirstEmptyEntry()
+        {
+            for (int i = 0; i < _slots.Length; i++)
+            {
+                if (_slots[i] == null)
+                {
+                    _slots[i] = InventorySlotData.Empty();
+                }
+
+                if (_slots[i].IsEmpty)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Reserves a new entry for <paramref name="item"/> at the first free area of its footprint (MU order) and returns
+        /// its index with the position already set (the caller fills it), or -1 when no entry or area is free.
+        /// </summary>
+        private int ReserveNewEntry(ItemDefinition item, BagGrid grid)
+        {
+            int entry = FirstEmptyEntry();
+            if (entry < 0)
+            {
+                return -1;
+            }
+
+            GridSize size = GetFootprint(item);
+            if (!grid.TryFindFirstFit(size, out int x, out int y))
+            {
+                return -1;
+            }
+
+            _slots[entry].Clear();
+            _slots[entry].gridX = x;
+            _slots[entry].gridY = y;
+            grid.TryOccupy(entry, new GridRect(x, y, size));
+            return entry;
+        }
+
+        /// <summary>Non-empty entry indices in grid order (top row first, left to right), ties by index.</summary>
+        private List<int> EntriesInGridOrder()
+        {
+            var order = new List<int>();
+            for (int i = 0; i < _slots.Length; i++)
+            {
+                if (_slots[i] != null && !_slots[i].IsEmpty)
+                {
+                    order.Add(i);
+                }
+            }
+
+            order.Sort((a, b) =>
+            {
+                int byRow = _slots[a].gridY.CompareTo(_slots[b].gridY);
+                if (byRow != 0)
+                {
+                    return byRow;
+                }
+
+                int byColumn = _slots[a].gridX.CompareTo(_slots[b].gridX);
+                return byColumn != 0 ? byColumn : a.CompareTo(b);
+            });
+
+            return order;
+        }
+
+        // ---------------------------------------------------------------
+        // Shared fit API ("does it fit?")
+        // ---------------------------------------------------------------
+
+        /// <summary>A simulation of this bag's current room; several <see cref="BagFitSimulator.Add"/> calls check a bundle.</summary>
+        public BagFitSimulator CreateFitSimulator()
+        {
+            EnsureSlotsInitialized();
+            return new BagFitSimulator(BuildGrid(), _slots, ResolveItem);
+        }
+
+        /// <summary>How many of <paramref name="quantity"/> units <see cref="AddItem(ItemDefinition,int)"/> would place right now.</summary>
+        public int GetFittableAmount(ItemDefinition item, int quantity)
+        {
+            return item == null || quantity <= 0 ? 0 : CreateFitSimulator().Add(item, quantity);
+        }
+
+        /// <summary>True when all <paramref name="quantity"/> units fit (plain stacks with room first, then free areas).</summary>
+        public bool CanFit(ItemDefinition item, int quantity)
+        {
+            if (quantity <= 0)
+            {
+                return true;
+            }
+
+            return item != null && GetFittableAmount(item, quantity) >= quantity;
+        }
+
+        /// <summary>True when every (item, quantity) fits at the same time (a reward bundle, a craft's outputs).</summary>
+        public bool CanFitAll(IEnumerable<KeyValuePair<ItemDefinition, int>> items)
+        {
+            if (items == null)
+            {
+                return true;
+            }
+
+            BagFitSimulator simulator = CreateFitSimulator();
+            foreach (KeyValuePair<ItemDefinition, int> pair in items)
+            {
+                if (pair.Value <= 0)
+                {
+                    continue;
+                }
+
+                if (pair.Key == null || simulator.Add(pair.Key, pair.Value) < pair.Value)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// True when <see cref="TryAddCopy"/> would succeed: a generated roll / non-stackable piece needs a free area of its
+        /// own; a plain stack may also fill existing stacks.
+        /// </summary>
+        public bool CanFitCopy(InventorySlotData data)
+        {
+            if (data == null || data.IsEmpty)
+            {
+                return false;
+            }
+
+            ItemDefinition item = ResolveItem(data.itemId);
+            if (item == null)
+            {
+                return false;
+            }
+
+            bool asPiece = data.HasGeneratedData || !item.IsStackable;
+            return CreateFitSimulator().Add(item, data.quantity, asPiece) >= data.quantity;
+        }
+
+        /// <summary>Legacy name (the weight limit is gone): same as <see cref="CanFit"/>. Prefer <see cref="CanFit"/>.</summary>
+        public bool HasWeightCapacityFor(ItemDefinition item, int quantity)
+        {
+            return CanFit(item, quantity);
+        }
+
+        // ---------------------------------------------------------------
+        // Weight (dormant)
+        // ---------------------------------------------------------------
+
+        /// <summary>
+        /// Total carried weight. Informational only since the grid bag: weight no longer limits anything (the data stays on
+        /// <see cref="ItemDefinition.Weight"/> for compatibility and a possible future encumbrance rule).
+        /// </summary>
         public float GetTotalWeight()
         {
             EnsureSlotsInitialized();
@@ -144,12 +413,12 @@ namespace Rapadura.Gameplay.Inventory
 
             foreach (InventorySlotData slot in _slots)
             {
-                if (slot.IsEmpty)
+                if (slot == null || slot.IsEmpty)
                 {
                     continue;
                 }
 
-                ItemDefinition item = ItemDatabase.GetById(slot.itemId);
+                ItemDefinition item = ResolveItem(slot.itemId);
 
                 if (item != null)
                 {
@@ -160,24 +429,11 @@ namespace Rapadura.Gameplay.Inventory
             return total;
         }
 
-        public bool HasWeightCapacityFor(ItemDefinition item, int quantity)
-        {
-            return GetTotalWeight() + item.Weight * quantity <= _maxWeight;
-        }
-
-        /// <summary>
-        /// True once the carried weight is past <see cref="MaxWeight"/>. Only reachable through
-        /// <see cref="AddItemIgnoringWeight"/> (quest items let past a full bag) or generated gear
-        /// (<see cref="AddGeneratedItem"/> only needs a free slot); <see cref="AddItem(ItemDefinition,int)"/>
-        /// then refuses anything that weighs until something is sold, used or crafted away.
-        /// </summary>
-        public bool IsOverWeightLimit => GetTotalWeight() > _maxWeight + 0.0001f;
-
         // ---------------------------------------------------------------
         // Add / Remove
         // ---------------------------------------------------------------
 
-        /// <summary>Attempts to add a quantity of an item, filling existing stacks first, then empty slots. Returns leftover that could not fit.</summary>
+        /// <summary>Attempts to add a quantity of an item, filling existing plain stacks first (grid order), then new stacks at the first free area. Returns leftover that could not fit.</summary>
         public int AddItem(ItemDefinition item, int quantity)
         {
             return AddItem(item, quantity, null);
@@ -185,27 +441,12 @@ namespace Rapadura.Gameplay.Inventory
 
         /// <summary>
         /// Same as <see cref="AddItem(ItemDefinition,int)"/>, but when the item lands in a fresh
-        /// empty slot, <paramref name="preserveDurability"/> (if given) is used instead of resetting
+        /// entry, <paramref name="preserveDurability"/> (if given) is used instead of resetting
         /// to <c>MaxDurability</c>. Used when returning an item that already existed at some
         /// durability (e.g. unequipping) so it doesn't come back fully repaired. A brand-new item
         /// (preserveDurability == null) still starts at MaxDurability as before.
         /// </summary>
         public int AddItem(ItemDefinition item, int quantity, float? preserveDurability)
-        {
-            return AddItemCore(item, quantity, preserveDurability, ignoreWeight: false);
-        }
-
-        /// <summary>
-        /// Like <see cref="AddItem(ItemDefinition,int)"/> but past the weight limit: still needs a stack with room
-        /// or an empty slot. Reserved for what must never be lost to a heavy bag — the units an active quest still
-        /// needs (<c>QuestManager.GetOutstandingCollectAmount</c>, used by <c>EnemyLootGranter</c>). Returns the leftover.
-        /// </summary>
-        public int AddItemIgnoringWeight(ItemDefinition item, int quantity)
-        {
-            return AddItemCore(item, quantity, null, ignoreWeight: true);
-        }
-
-        private int AddItemCore(ItemDefinition item, int quantity, float? preserveDurability, bool ignoreWeight)
         {
             EnsureSlotsInitialized();
 
@@ -218,12 +459,14 @@ namespace Rapadura.Gameplay.Inventory
 
             if (item.IsStackable)
             {
-                foreach (InventorySlotData slot in _slots)
+                foreach (int index in EntriesInGridOrder())
                 {
                     if (remaining <= 0)
                     {
                         break;
                     }
+
+                    InventorySlotData slot = _slots[index];
 
                     // Never stack into a slot holding a generated item: the plain items would
                     // inherit (or, when later split/removed, be confused with) that roll's affixes.
@@ -232,38 +475,33 @@ namespace Rapadura.Gameplay.Inventory
                         continue;
                     }
 
-                    int spaceInStack = item.MaxStack - slot.quantity;
-                    int amountToAdd = Mathf.Min(spaceInStack, remaining, ignoreWeight ? remaining : GetWeightAffordableAmount(item, remaining));
+                    int amountToAdd = Mathf.Min(item.MaxStack - slot.quantity, remaining);
                     slot.quantity += amountToAdd;
                     remaining -= amountToAdd;
                 }
             }
 
-            foreach (InventorySlotData slot in _slots)
+            if (remaining > 0)
             {
-                if (remaining <= 0)
+                BagGrid grid = BuildGrid();
+
+                while (remaining > 0)
                 {
-                    break;
+                    int entry = ReserveNewEntry(item, grid);
+                    if (entry < 0)
+                    {
+                        break;
+                    }
+
+                    int amountToAdd = Mathf.Min(item.MaxStack, remaining);
+                    InventorySlotData slot = _slots[entry];
+                    slot.itemId = item.ItemId;
+                    slot.quantity = amountToAdd;
+                    slot.currentDurability = item.HasDurability
+                        ? (preserveDurability ?? item.MaxDurability)
+                        : 0f;
+                    remaining -= amountToAdd;
                 }
-
-                if (!slot.IsEmpty)
-                {
-                    continue;
-                }
-
-                int amountToAdd = Mathf.Min(item.MaxStack, remaining, ignoreWeight ? remaining : GetWeightAffordableAmount(item, remaining));
-
-                if (amountToAdd <= 0)
-                {
-                    break;
-                }
-
-                slot.itemId = item.ItemId;
-                slot.quantity = amountToAdd;
-                slot.currentDurability = item.HasDurability
-                    ? (preserveDurability ?? item.MaxDurability)
-                    : 0f;
-                remaining -= amountToAdd;
             }
 
             if (remaining != quantity)
@@ -275,15 +513,18 @@ namespace Rapadura.Gameplay.Inventory
         }
 
         /// <summary>
-        /// Adds a single procedurally-generated item (with rolled affixes) into the first empty
-        /// slot. There was previously no way at all to get a <see cref="GeneratedItemInstance"/>
-        /// into an inventory — <see cref="AddItem(ItemDefinition,int)"/> only ever accepted a plain
-        /// base <see cref="ItemDefinition"/> — so loot/quest-reward code had nowhere to hand off a
-        /// Rare/Epic/Legendary roll's affixes even though <see cref="InventorySlotData"/> already had
-        /// fields to store them (<see cref="InventorySlotData.generatedAffixIds"/>/
-        /// <see cref="InventorySlotData.generatedAffixValues"/>). Generated items are never stacked
-        /// with anything (each roll is unique), unlike <see cref="AddItem(ItemDefinition,int)"/>.
-        /// Returns false if no empty slot was available.
+        /// Legacy name from the weight-limit era (quest items used to go in past the weight cap). The grid has no
+        /// "past the limit": this is <see cref="AddItem(ItemDefinition,int)"/>. Returns the leftover.
+        /// </summary>
+        public int AddItemIgnoringWeight(ItemDefinition item, int quantity)
+        {
+            return AddItem(item, quantity);
+        }
+
+        /// <summary>
+        /// Adds a single procedurally-generated item (with rolled affixes) at the first free area of
+        /// its footprint. Generated items are never stacked with anything (each roll is unique), unlike
+        /// <see cref="AddItem(ItemDefinition,int)"/>. Returns false if no area/entry was available.
         /// </summary>
         public bool AddGeneratedItem(GeneratedItemInstance instance)
         {
@@ -294,38 +535,59 @@ namespace Rapadura.Gameplay.Inventory
                 return false;
             }
 
-            foreach (InventorySlotData slot in _slots)
+            int entry = ReserveNewEntry(instance.BaseItem, BuildGrid());
+            if (entry < 0)
             {
-                if (!slot.IsEmpty)
-                {
-                    continue;
-                }
-
-                slot.itemId = instance.BaseItem.ItemId;
-                slot.quantity = 1;
-                slot.currentDurability = instance.BaseItem.HasDurability ? instance.BaseItem.MaxDurability : 0f;
-                slot.generatedAffixIds = instance.AffixIds;
-                slot.generatedAffixValues = instance.AffixValues;
-                slot.generatedName = instance.GeneratedName;
-                slot.generatedRarity = instance.Rarity;
-
-                EventBus.Publish(new InventoryChangedEvent());
-                return true;
+                return false;
             }
 
-            return false;
+            InventorySlotData slot = _slots[entry];
+            slot.itemId = instance.BaseItem.ItemId;
+            slot.quantity = 1;
+            slot.currentDurability = instance.BaseItem.HasDurability ? instance.BaseItem.MaxDurability : 0f;
+            slot.generatedAffixIds = instance.AffixIds;
+            slot.generatedAffixValues = instance.AffixValues;
+            slot.generatedName = instance.GeneratedName;
+            slot.generatedRarity = instance.Rarity;
+
+            EventBus.Publish(new InventoryChangedEvent());
+            return true;
         }
 
-        private int GetWeightAffordableAmount(ItemDefinition item, int desiredAmount)
+        /// <summary>
+        /// Puts a copy of an existing item back in the bag exactly as it is (quantity, durability, affixes, name, rarity):
+        /// the chest's "take", the Achados e Perdidos buy-back, unequipping a generated roll. All or nothing
+        /// (<see cref="CanFitCopy"/>): a generated roll or non-stackable piece gets an area of its own, a plain stack fills
+        /// existing stacks first. <paramref name="data"/> itself is not changed.
+        /// </summary>
+        public bool TryAddCopy(InventorySlotData data)
         {
-            if (item.Weight <= 0f)
+            EnsureSlotsInitialized();
+
+            if (!CanFitCopy(data))
             {
-                return desiredAmount;
+                return false;
             }
 
-            float remainingCapacity = _maxWeight - GetTotalWeight();
-            int affordable = Mathf.FloorToInt(remainingCapacity / item.Weight);
-            return Mathf.Clamp(affordable, 0, desiredAmount);
+            ItemDefinition item = ResolveItem(data.itemId);
+            if (!data.HasGeneratedData && item.IsStackable)
+            {
+                return AddItem(item, data.quantity, item.HasDurability ? data.currentDurability : (float?)null) == 0;
+            }
+
+            int entry = ReserveNewEntry(item, BuildGrid());
+            if (entry < 0)
+            {
+                return false;
+            }
+
+            int x = _slots[entry].gridX;
+            int y = _slots[entry].gridY;
+            _slots[entry] = data.CloneWithQuantity(data.quantity);
+            _slots[entry].gridX = x;
+            _slots[entry].gridY = y;
+            EventBus.Publish(new InventoryChangedEvent());
+            return true;
         }
 
         public bool RemoveFromSlot(int slotIndex, int quantity)
@@ -409,6 +671,68 @@ namespace Rapadura.Gameplay.Inventory
         // Move / Split
         // ---------------------------------------------------------------
 
+        /// <summary>What dropping entry <paramref name="slotIndex"/> with its top-left on cell (x, y) would do (the UI's ghost preview).</summary>
+        public BagMovePlan PlanMove(int slotIndex, int x, int y)
+        {
+            EnsureSlotsInitialized();
+            return BagGridRules.PlanMove(BuildGrid(), _slots, ResolveItem, slotIndex, x, y);
+        }
+
+        /// <summary>
+        /// Grid drag-and-drop: puts entry <paramref name="slotIndex"/> with its top-left on cell (<paramref name="x"/>,
+        /// <paramref name="y"/>) — moves into a free area, merges into a plain stack of the same item, or swaps with the one
+        /// item in the way (<see cref="BagGridRules.PlanMove"/>). Returns false (nothing changes) when it does not fit.
+        /// </summary>
+        public bool MoveItem(int slotIndex, int x, int y)
+        {
+            BagMovePlan plan = PlanMove(slotIndex, x, y);
+
+            switch (plan.Kind)
+            {
+                case BagMoveKind.Unchanged:
+                    return true;
+
+                case BagMoveKind.Move:
+                    _slots[slotIndex].gridX = x;
+                    _slots[slotIndex].gridY = y;
+                    break;
+
+                case BagMoveKind.Merge:
+                {
+                    InventorySlotData from = _slots[slotIndex];
+                    InventorySlotData to = _slots[plan.OtherIndex];
+                    ItemDefinition item = ResolveItem(from.itemId);
+                    int amountToMove = Mathf.Min(item.MaxStack - to.quantity, from.quantity);
+                    to.quantity += amountToMove;
+                    from.quantity -= amountToMove;
+                    if (from.quantity <= 0)
+                    {
+                        from.Clear();
+                    }
+
+                    break;
+                }
+
+                case BagMoveKind.Swap:
+                    _slots[slotIndex].gridX = x;
+                    _slots[slotIndex].gridY = y;
+                    _slots[plan.OtherIndex].gridX = plan.OtherX;
+                    _slots[plan.OtherIndex].gridY = plan.OtherY;
+                    break;
+
+                default:
+                    return false;
+            }
+
+            EventBus.Publish(new InventoryChangedEvent());
+            return true;
+        }
+
+        /// <summary>
+        /// List-order move (kept from the slot-list bag; the grid UI uses <see cref="MoveItem"/>): merges plain stacks of
+        /// the same item, otherwise swaps the two entries' places in <see cref="Slots"/>. Each item keeps its grid cell —
+        /// on the grid nothing moves unless units merge.
+        /// </summary>
         public void MoveOrMergeSlot(int fromIndex, int toIndex)
         {
             EnsureSlotsInitialized();
@@ -431,7 +755,7 @@ namespace Rapadura.Gameplay.Inventory
                 // Merging is only safe between plain stacks: merging a generated item into (or
                 // with) another stack of the same base id would keep just one side's
                 // affixes/name/rarity and silently discard the other's. Generated items swap below.
-                ItemDefinition item = ItemDatabase.GetById(from.itemId);
+                ItemDefinition item = ResolveItem(from.itemId);
                 int maxStack = item != null ? item.MaxStack : int.MaxValue;
                 int spaceInStack = maxStack - to.quantity;
                 int amountToMove = Mathf.Min(spaceInStack, from.quantity);
@@ -453,6 +777,7 @@ namespace Rapadura.Gameplay.Inventory
             EventBus.Publish(new InventoryChangedEvent());
         }
 
+        /// <summary>Splits <paramref name="amount"/> units into a new stack at the first free area. False when there is none.</summary>
         public bool SplitStack(int slotIndex, int amount)
         {
             EnsureSlotsInitialized();
@@ -462,18 +787,18 @@ namespace Rapadura.Gameplay.Inventory
                 return false;
             }
 
-            int emptySlotIndex = Array.FindIndex(_slots, s => s.IsEmpty);
+            InventorySlotData source = _slots[slotIndex];
+            int target = ReserveNewEntry(ResolveItem(source.itemId), BuildGrid());
 
-            if (emptySlotIndex < 0)
+            if (target < 0)
             {
                 return false;
             }
 
-            InventorySlotData source = _slots[slotIndex];
-            _slots[emptySlotIndex].itemId = source.itemId;
-            _slots[emptySlotIndex].quantity = amount;
-            _slots[emptySlotIndex].currentDurability = source.currentDurability;
-            _slots[emptySlotIndex].CopyGeneratedDataFrom(source);
+            _slots[target].itemId = source.itemId;
+            _slots[target].quantity = amount;
+            _slots[target].currentDurability = source.currentDurability;
+            _slots[target].CopyGeneratedDataFrom(source);
 
             source.quantity -= amount;
 
@@ -504,13 +829,48 @@ namespace Rapadura.Gameplay.Inventory
         };
 
         /// <summary>
-        /// "Organizar" button: re-packs the backpack with <see cref="BuildSortedSlots"/> (type → rarity →
-        /// name, plain stacks merged, generated items untouched). Equipment is not affected.
+        /// "Organizar" button: orders the backpack with <see cref="BuildSortedSlots"/> (type → rarity →
+        /// name, plain stacks merged, generated items untouched), then packs it MU-style from the top-left
+        /// (<see cref="BagGridRules.TryPackForSort"/>: in that order, else biggest first). If neither packing fits
+        /// (a fragmented, nearly full bag), nothing changes. Equipment is not affected.
         /// </summary>
         public void SortInventory()
         {
             EnsureSlotsInitialized();
-            _slots = BuildSortedSlots(_slots, ItemDatabase.GetById);
+            InventorySlotData[] sorted = BuildSortedSlots(_slots, ResolveItem);
+
+            var placed = new List<InventorySlotData>();
+            var sizes = new List<GridSize>();
+            foreach (InventorySlotData slot in sorted)
+            {
+                if (slot != null && !slot.IsEmpty)
+                {
+                    placed.Add(slot);
+                    sizes.Add(GetFootprint(ResolveItem(slot.itemId)));
+                }
+            }
+
+            if (!BagGridRules.TryPackForSort(Columns, Rows, sizes, out GridRect[] rects))
+            {
+                return;
+            }
+
+            for (int i = 0; i < placed.Count; i++)
+            {
+                placed[i].gridX = rects[i].X;
+                placed[i].gridY = rects[i].Y;
+            }
+
+            var result = CreateEmptySlots(CellCount);
+            for (int i = 0; i < sorted.Length && i < result.Length; i++)
+            {
+                if (sorted[i] != null)
+                {
+                    result[i] = sorted[i];
+                }
+            }
+
+            _slots = result;
             EventBus.Publish(new InventoryChangedEvent());
         }
 
@@ -773,9 +1133,126 @@ namespace Rapadura.Gameplay.Inventory
                     _buffController.ApplyEffect(WithPermanentDuration(generated), GetEquipAffixSourceKey(equipSlot, affixIndex++));
                 }
             }
+
+            ApplyRefineEffects(item, equippedData, equipSlot);
+            ApplyWingEffects(item, equipSlot);
         }
 
-        public bool UnequipSlot(EquipmentSlot equipSlot)
+        /// <summary>
+        /// A wing item's bonuses (<see cref="Rapadura.Gameplay.Tacho.WingCatalog.ModifiersFor"/>: damage %, defense %, speed %,
+        /// absorb from level 2) as permanent buffs under <c>equip_&lt;slot&gt;/wing/*</c>. Nothing for any other item.
+        /// </summary>
+        private void ApplyWingEffects(ItemDefinition item, EquipmentSlot equipSlot)
+        {
+            if (_buffController == null || item == null)
+            {
+                return;
+            }
+
+            List<Rapadura.Gameplay.Tacho.WingModifier> modifiers = Rapadura.Gameplay.Tacho.WingCatalog.ModifiersFor(item.ItemId);
+            for (int i = 0; i < modifiers.Count; i++)
+            {
+                var modifier = new StatModifierDefinition
+                {
+                    displayName = modifiers[i].IsAbsorb ? "wing_absorb" : "wing_" + modifiers[i].Stat,
+                    affectedStat = modifiers[i].Stat,
+                    application = modifiers[i].Application,
+                    value = modifiers[i].Value,
+                };
+                _buffController.ApplyEffect(WithPermanentDuration(modifier), $"{GetEquipSourceKey(equipSlot)}/wing/{i}");
+            }
+        }
+
+        /// <summary>
+        /// Takes the item out of <paramref name="equipSlot"/> WITHOUT returning it to the bag (it is consumed: the Tacho
+        /// Encantado turning an equipped piece into wings, or an equipped wing into the next level). Its bonuses go too.
+        /// </summary>
+        public bool RemoveEquipped(EquipmentSlot equipSlot)
+        {
+            EnsureSlotsInitialized();
+            if (!_equipped.ContainsKey(equipSlot))
+            {
+                return false;
+            }
+
+            _buffController?.RemoveEffectsBySourcePrefix(GetEquipSourceKey(equipSlot) + "/");
+            _buffController?.RemoveEffectsBySource(GetEquipSourceKey(equipSlot));
+            _equipped.Remove(equipSlot);
+            EventBus.Publish(new InventoryChangedEvent());
+            return true;
+        }
+
+        /// <summary>
+        /// The refine level and extra option of an equipped piece (<see cref="Rapadura.Gameplay.Refining.RefineRules"/>), as
+        /// permanent buffs under <c>equip_&lt;slot&gt;/refine/*</c>: a weapon raises AttackDamage (PercentAdditive), an armour
+        /// piece adds the refined part of its armour defense as Defense (Flat) and its option as MaxHealth (PercentAdditive).
+        /// Nothing at +0 without option, so plain items apply exactly what they did before.
+        /// </summary>
+        private void ApplyRefineEffects(ItemDefinition item, InventorySlotData equippedData, EquipmentSlot equipSlot)
+        {
+            if (_buffController == null || item == null || equippedData == null || !equippedData.HasRefineData)
+            {
+                return;
+            }
+
+            int level = equippedData.refineLevel;
+            int option = equippedData.refineOptionLevel;
+            int index = 0;
+            if (item.WeaponDamage > 0f)
+            {
+                ApplyRefineModifier(StatType.AttackDamage, ModifierApplication.PercentAdditive,
+                    Rapadura.Gameplay.Refining.RefineRules.WeaponAttackPercent(level, option), equipSlot, index++);
+            }
+
+            if (item.ArmorDefense > 0f)
+            {
+                ApplyRefineModifier(StatType.Defense, ModifierApplication.Flat,
+                    Rapadura.Gameplay.Refining.RefineRules.ArmourDefenseBonus(item.ArmorDefense, level), equipSlot, index++);
+                ApplyRefineModifier(StatType.MaxHealth, ModifierApplication.PercentAdditive,
+                    Rapadura.Gameplay.Refining.RefineRules.ArmourHealthPercent(option), equipSlot, index++);
+            }
+        }
+
+        private void ApplyRefineModifier(StatType stat, ModifierApplication application, float value, EquipmentSlot equipSlot, int index)
+        {
+            if (value == 0f)
+            {
+                return;
+            }
+
+            var modifier = new StatModifierDefinition
+            {
+                displayName = "refine_" + stat,
+                affectedStat = stat,
+                application = application,
+                value = value,
+            };
+            _buffController.ApplyEffect(WithPermanentDuration(modifier), GetEquipRefineSourceKey(equipSlot, index));
+        }
+
+        /// <summary>BuffController source key of an equipped item's <paramref name="index"/>-th refine bonus.</summary>
+        public static string GetEquipRefineSourceKey(EquipmentSlot slot, int index)
+        {
+            return $"{GetEquipSourceKey(slot)}/refine/{index}";
+        }
+
+        /// <summary>
+        /// Call after changing an item instance's own data in place (refine level, option): re-applies the equip
+        /// effects when <paramref name="equippedSlot"/> holds it (None = a bag item) and raises InventoryChangedEvent.
+        /// </summary>
+        public void NotifyItemDataChanged(EquipmentSlot equippedSlot = EquipmentSlot.None)
+        {
+            EnsureSlotsInitialized();
+            if (equippedSlot != EquipmentSlot.None && _equipped.TryGetValue(equippedSlot, out InventorySlotData data) && _buffController != null)
+            {
+                _buffController.RemoveEffectsBySourcePrefix(GetEquipSourceKey(equippedSlot) + "/");
+                ApplyEquipEffects(ItemDatabase.GetById(data.itemId), data, equippedSlot);
+            }
+
+            EventBus.Publish(new InventoryChangedEvent());
+        }
+
+                public bool UnequipSlot(EquipmentSlot equipSlot)
         {
             EnsureSlotsInitialized();
 
@@ -808,8 +1285,7 @@ namespace Rapadura.Gameplay.Inventory
         /// durability). Generated items used to go through that same AddItem too, which only
         /// knows the base ItemDefinition — so unequipping a Rare/Epic/Legendary roll turned it
         /// into a plain base item (affixes, generated name and rarity gone). They now go, as a
-        /// deep copy, into an empty slot of their own (never stacked), subject to the same weight
-        /// limit AddItem enforces.
+        /// deep copy, into a free area of their own (never stacked) via <see cref="TryAddCopy"/>.
         /// </summary>
         private bool ReturnToInventory(ItemDefinition item, InventorySlotData data)
         {
@@ -818,21 +1294,7 @@ namespace Rapadura.Gameplay.Inventory
                 return AddItem(item, 1, data.currentDurability) == 0;
             }
 
-            if (!HasWeightCapacityFor(item, 1))
-            {
-                return false;
-            }
-
-            int emptySlotIndex = Array.FindIndex(_slots, s => s.IsEmpty);
-
-            if (emptySlotIndex < 0)
-            {
-                return false;
-            }
-
-            _slots[emptySlotIndex] = data.CloneWithQuantity(1);
-            EventBus.Publish(new InventoryChangedEvent());
-            return true;
+            return TryAddCopy(data.CloneWithQuantity(1));
         }
 
         private static string GetEquipSourceKey(EquipmentSlot slot)
@@ -894,6 +1356,12 @@ namespace Rapadura.Gameplay.Inventory
                 return false;
             }
 
+            // Frutas do Sertão (Tacho Encantado): they change the AttributeSet and are only eaten when they did something.
+            if (Rapadura.Gameplay.Tacho.FruitRules.IsFruit(item.ItemId))
+            {
+                return Rapadura.Gameplay.Tacho.FruitEater.TryEat(this, slotIndex, item.ItemId) == Rapadura.Gameplay.Tacho.FruitCheck.Ok;
+            }
+
             if (_playerStats != null)
             {
                 if (item.HealthRestore > 0f)
@@ -937,13 +1405,17 @@ namespace Rapadura.Gameplay.Inventory
                 generatedAffixIds = pair.Value.generatedAffixIds,
                 generatedAffixValues = pair.Value.generatedAffixValues,
                 generatedName = pair.Value.generatedName,
-                generatedRarity = pair.Value.generatedRarity
+                generatedRarity = pair.Value.generatedRarity,
+                refineLevel = pair.Value.refineLevel,
+                refineOptionLevel = pair.Value.refineOptionLevel
             }).ToArray();
 
             return new InventorySaveState
             {
                 slots = _slots,
-                equipped = equippedEntries
+                equipped = equippedEntries,
+                gridVersion = GridSaveVersion,
+                extraRows = _extraRows
             };
         }
 
@@ -954,12 +1426,7 @@ namespace Rapadura.Gameplay.Inventory
                 return;
             }
 
-            _slots = new InventorySlotData[_slotCount];
-
-            for (int i = 0; i < _slotCount; i++)
-            {
-                _slots[i] = i < saveState.slots.Length && saveState.slots[i] != null ? saveState.slots[i] : InventorySlotData.Empty();
-            }
+            RestoreBagLayout(saveState);
 
             _equipped.Clear();
             _buffController?.ClearAllEffects();
@@ -976,7 +1443,9 @@ namespace Rapadura.Gameplay.Inventory
                     generatedAffixIds = entry.generatedAffixIds,
                     generatedAffixValues = entry.generatedAffixValues,
                     generatedName = entry.generatedName,
-                    generatedRarity = entry.generatedRarity
+                    generatedRarity = entry.generatedRarity,
+                    refineLevel = entry.refineLevel,
+                    refineOptionLevel = entry.refineOptionLevel
                 };
                 _equipped[entry.slot] = equippedData;
 
@@ -984,6 +1453,76 @@ namespace Rapadura.Gameplay.Inventory
             }
 
             EventBus.Publish(new InventoryChangedEvent());
+        }
+
+        /// <summary>
+        /// Rebuilds the bag from a save. Entries keep their saved index where it exists. A grid save
+        /// (<see cref="InventorySaveState.gridVersion"/> &gt;= 1) keeps every valid position; an old pre-grid save (or an
+        /// entry whose area became invalid, e.g. a footprint changed between versions) is auto-placed MU-style
+        /// (<see cref="BagGridRules.LayoutForRestore"/>). Whatever does not fit goes to the Baú da Vó Zefa
+        /// (<see cref="VillageChestStorage.EnqueueOverflow"/>) — never lost — and is listed in <see cref="LastRestoreOverflow"/>.
+        /// </summary>
+        private void RestoreBagLayout(InventorySaveState saveState)
+        {
+            _extraRows = Mathf.Clamp(saveState.extraRows, 0, MaxExtraRows);
+            _slots = CreateEmptySlots(CellCount);
+            _lastRestoreOverflow.Clear();
+
+            InventorySlotData[] saved = saveState.slots ?? Array.Empty<InventorySlotData>();
+            var late = new List<InventorySlotData>();
+
+            for (int i = 0; i < saved.Length; i++)
+            {
+                InventorySlotData slot = saved[i];
+                if (slot == null || slot.IsEmpty)
+                {
+                    continue;
+                }
+
+                if (i < _slots.Length)
+                {
+                    _slots[i] = slot;
+                }
+                else
+                {
+                    late.Add(slot);
+                }
+            }
+
+            var overflow = new List<InventorySlotData>();
+            foreach (InventorySlotData slot in late)
+            {
+                int free = FirstEmptyEntry();
+                if (free < 0)
+                {
+                    overflow.Add(slot);
+                    continue;
+                }
+
+                _slots[free] = slot;
+            }
+
+            bool keepPositions = saveState.gridVersion >= GridSaveVersion;
+            foreach (int index in BagGridRules.LayoutForRestore(Columns, Rows, _slots, ResolveItem, keepPositions))
+            {
+                overflow.Add(_slots[index]);
+                _slots[index] = InventorySlotData.Empty();
+            }
+
+            if (overflow.Count == 0)
+            {
+                return;
+            }
+
+            VillageChestStorage chest = OverflowChest ?? VillageChestStorage.ResolveShared();
+            foreach (InventorySlotData slot in overflow)
+            {
+                InventorySlotData copy = slot.CloneWithQuantity(slot.quantity);
+                _lastRestoreOverflow.Add(copy);
+                chest.EnqueueOverflow(copy);
+            }
+
+            Debug.LogWarning($"[InventoryManager] {overflow.Count} item(s) did not fit the {Columns}x{Rows} backpack grid on load and went to the Baú da Vó Zefa.");
         }
     }
 }

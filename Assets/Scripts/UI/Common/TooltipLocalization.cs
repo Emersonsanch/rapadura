@@ -47,6 +47,7 @@ namespace Rapadura.UI.Common
             new LocalizationEntry("ui.tooltip.slot.off_hand", "Off hand", "Mão secundária"),
             new LocalizationEntry("ui.tooltip.slot.tool", "Tool", "Ferramenta"),
             new LocalizationEntry("ui.tooltip.slot.accessory", "Accessory", "Acessório"),
+            new LocalizationEntry("ui.tooltip.slot.wings", "Back/Wings", "Costas/Asas"),
 
             // -- Stats (StatType) --
             new LocalizationEntry("ui.tooltip.stat.max_health", "Max health", "Vida máxima"),
@@ -105,7 +106,8 @@ namespace Rapadura.UI.Common
             new LocalizationEntry("ui.inventory.equipment", "Equipment", "Equipamento"),
             new LocalizationEntry("ui.inventory.items", "Items", "Itens"),
             new LocalizationEntry("ui.inventory.weight", "Weight: {0}/{1}", "Peso: {0}/{1}"),
-            new LocalizationEntry("ui.inventory.hint", "Tap to use/equip. Hold for details. Drag to move.", "Toque para usar/equipar. Segure para ver detalhes. Arraste para mover."),
+            new LocalizationEntry("ui.inventory.space", "Space: {0}/{1}", "Espaço: {0}/{1}"),
+            new LocalizationEntry("ui.inventory.hint", "Tap an item to pick it up, tap a cell to put it down, tap it again to use/equip. Hold for details. PC: drag, right-click uses.", "Toque num item para pegar, toque numa casa para soltar, toque de novo para usar/equipar. Segure para ver detalhes. No PC: arraste; botão direito usa."),
             new LocalizationEntry("ui.inventory.sort", "Sort", "Organizar"),
         };
 

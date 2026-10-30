@@ -250,3 +250,28 @@ Convenção de nomes (genérica, serve para o Caramelo ou outro bicho): quadril 
   plantado não desliza" andando, galopando, correndo como aranha, pisando, parando e girando),
   `ProceduralLegLocomotionTests` (modelos reais, IK segurando o pé, animador de ponta a ponta, morte e
   *respawn*) e `ProceduralEnemyModelsTests` (cadeias `Leg_`/`Shin_`/`Foot_`).
+
+### 7.2 Bichos da noite (modelos próprios, 2026-10-30)
+
+Seis espécies noturnas ganharam receita própria em `Enemies/Visuals` (detalhes de jogo em `Docs/DayNight.md` §2.2):
+`WerewolfRecipe` (Lobisomem, quadrúpede de 4 pernas no motor de passos), `PeccaryRecipe` (queixada, quadrúpede),
+`VampireBatRecipe`, `ShroudOwlRecipe` e `PotooRecipe` (voadores, asas `Wing_L/R`, sem pernas de passo) e
+`FireflySwarmRecipe` (enxame: `Swarm` → `Firefly_n` → `Lantern`, como o dos morcegos). Todas com olhos nas células
+que brilham da paleta (`WarEye`, `MoonEye`, `Ember`, `FireflyGlow`); a paleta cresceu de 8×4 para 8×6 (só acrescentou
+células no fim — por isso o rebake abaixo é obrigatório para os prefabs já assados).
+
+- **Lobisomem empina para bater:** o peito, a cabeça e as patas da frente ficam em `Torso`, com pivô no quadril.
+  Durante a antecipação (`EnemyProceduralAnimator.AttackPhase == Windup`) o `ProceduralEnemyRig` gira o `Torso`
+  52° para cima, ergue os ombros (`Shoulder_L/R`) e abre a mandíbula (`Jaw`); as patas da frente soltam o chão pela
+  extensão aditiva `ProceduralLegLocomotion.FrontLegsWeight` (0..1, padrão 1 = comportamento antigo: multiplica o
+  peso do IK só das pernas da metade da frente e tira essas pernas do "passo de reação" do quadril). Depois do
+  golpe ele volta para as quatro patas. É telegrafia: "Reduzir Movimento" não diminui.
+- **Mãe-da-lua:** o bico minúsculo abre num bocão rosa (`Jaw`, 48°) na antecipação; carrega o galho (`Branch`).
+- **Coruja:** batida lenta com planeio; de vez em quando a cabeça gira ~80° (a cabeça fica com o rig, não com as
+  molas do motor de passos: `ProceduralEnemyRig.PartsAnimatedBy`).
+- **Vaga-lumes:** o enxame gira devagar, cada um flutua, e as lanternas piscam (escala 0,8–1,25, nunca apagam).
+- **Som:** cada modelo noturno leva um `NightCreatureVoice` (chamado ao chegar/rondar + som no início de cada
+  antecipação), ver `Docs/Audio.md`.
+- **Rebake:** **Rapadura ▸ Enemies ▸ Build Procedural Enemy Models** (assa os 6 novos e refaz os antigos com a paleta
+  nova); depois, se o Caramelo já tiver sido assado, **Rapadura ▸ Pets ▸ Build Caramelo Model**.
+- Testes: `NightSpeciesModelsTests` (+ as checagens genéricas de `ProceduralEnemyModelsTests`).

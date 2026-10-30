@@ -132,6 +132,33 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "DuoStrike",
+                    "type": "Button",
+                    "id": "bcd87e5e-7730-4428-b0c5-0cd510f6038a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Mount",
+                    "type": "Button",
+                    "id": "550fcdef-ea0b-4a32-9d9a-b5e066cbb718",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MountAbility",
+                    "type": "Button",
+                    "id": "a77bb4a7-18ba-40c1-b19d-78c8c02556e5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "QuestLog",
                     "type": "Button",
                     "id": "710230d5-0c68-4db3-850a-ad62f328951b",
@@ -532,6 +559,72 @@
                 },
                 {
                     "name": "",
+                    "id": "ea98382b-5604-4310-ac2c-1099436677a7",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DuoStrike",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "be32f86d-8f53-468b-95da-43844477316f",
+                    "path": "<Gamepad>/rightStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DuoStrike",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e5886b75-b5bc-4eb5-b3ee-a922c1f9e415",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Mount",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "54a96c8e-48b9-4813-8ebc-689009084df9",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Mount",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "540273e7-42b1-4a26-a82e-bf8dba04649f",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MountAbility",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f9c5f1b2-7e23-4d93-b912-98ad9fac17a8",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MountAbility",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "6c3ddbf2-6fee-4ffc-9707-faa04813c2ad",
                     "path": "<Keyboard>/j",
                     "interactions": "",
@@ -615,22 +708,38 @@
             "name": "KeyboardMouse",
             "bindingGroup": "KeyboardMouse",
             "devices": [
-                { "devicePath": "<Keyboard>", "isOptional": false, "isOR": false },
-                { "devicePath": "<Mouse>", "isOptional": false, "isOR": false }
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
             ]
         },
         {
             "name": "Gamepad",
             "bindingGroup": "Gamepad",
             "devices": [
-                { "devicePath": "<Gamepad>", "isOptional": false, "isOR": false }
+                {
+                    "devicePath": "<Gamepad>",
+                    "isOptional": false,
+                    "isOR": false
+                }
             ]
         },
         {
             "name": "Touch",
             "bindingGroup": "Touch",
             "devices": [
-                { "devicePath": "<Touchscreen>", "isOptional": false, "isOR": false }
+                {
+                    "devicePath": "<Touchscreen>",
+                    "isOptional": false,
+                    "isOR": false
+                }
             ]
         }
     ]

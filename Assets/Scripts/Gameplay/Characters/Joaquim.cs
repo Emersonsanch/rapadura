@@ -20,9 +20,9 @@ namespace Rapadura.Gameplay.Characters
         public override string Lore =>
             "Joaquim tem apenas 12 anos, mas cresceu ouvindo os anciãos de sua vila, cercada por florestas " +
             "antigas, contarem como proteger os outros dos perigos que surgiam durante a noite — e decidiu " +
-            "que seria ele a fazer isso um dia. Após a destruição da vila por criaturas sombrias vindas das " +
-            "profundezas do mundo de Rapadura, o garoto jurou, com toda a teimosia de uma criança, proteger " +
-            "todos os inocentes. Carrega consigo o Escudo das Raízes Eternas, um artefato herdado de seus " +
+            "que seria ele a fazer isso um dia. Quando criaturas sombrias vindas das profundezas do " +
+            "sertão destruíram a vila velha onde ele nasceu, a família foi morar perto da Vó Zefa, e o garoto " +
+            "jurou, com toda a teimosia de uma criança, proteger todos os inocentes. Carrega consigo o Escudo das Raízes Eternas, um artefato herdado de seus " +
             "ancestrais — grande demais pra ele, mas que absorve parte do dano sofrido pelos aliados. Irmão " +
             "mais novo de Maria e primo de Maithe, Ícaro e Lavine, é o mais velho entre os meninos da " +
             "família e insiste em bancar o protetor também dos primos mais novos, Ícaro e Lavine, mesmo " +

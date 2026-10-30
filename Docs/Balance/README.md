@@ -1064,39 +1064,44 @@ número a mais (mesma semente, mesmos drops de antes).
 
 | O quê | Fórmula | NG+1 | NG+2 | NG+3 | NG+5 | Onde |
 |---|---|---|---|---|---|---|
-| Vida dos inimigos (chefes inclusos) | 1 + 0,8·c | ×1,8 | ×2,6 | ×3,4 | ×5,0 | `EnemyController.ApplyDefinitionToHealth` (arredondada) |
-| Dano por golpe (antes de buffs/debuffs) | 1 + 0,5·c | ×1,5 | ×2,0 | ×2,5 | ×3,5 | `EnemyController.EffectiveAttackDamage` + hitbox |
+| Vida dos inimigos (chefes inclusos), por região | 1 + bônus da região + 0,15·c | Floresta ×2,2 · Deserto ×1,5 · Montanha ×1,35 · Cavernas ×1,15 | +0,15 | +0,3 | +0,6 (×2,8 / 2,1 / 1,95 / 1,75) | `EnemyController.ApplyDefinitionToHealth` (arredondada) |
+| Dano por golpe (antes de buffs/debuffs), por região | 1 + bônus da região + 0,25·c | ×2,7 · ×1,8 · ×1,6 · ×1,45 | +0,25 | +0,5 | +1,0 (×3,7 / 2,8 / 2,6 / 2,45) | `EnemyController.EffectiveAttackDamage` + hitbox |
 | XP por abate (depois do bônus de chefe) | 1 + 0,5·c | ×1,5 | ×2,0 | ×2,5 | ×3,5 | `EnemyRewardGranter` |
 | Quantidade do loot base (ouro) | 1 + 0,25·c | ×1,25 | ×1,5 | ×1,75 | ×2,25 | `EnemyLootRoller` (passo 1) |
 | Chance de cada peça de equipamento subir 1 raridade | 0,1·c | 10% | 20% | 30% | 50% | `EnemyLootRoller` (passo 2; nunca passa de Lendário) |
 
+Bônus da região (de NG+1 em diante, uma vez): vida Floresta +1,05 / Deserto +0,35 / Montanha +0,2 /
+Cavernas 0; dano +1,45 / +0,55 / +0,35 / +0,2. A região do inimigo é a da tabela de spawn que o lista
+(`BiomeRegistry.FindBiomeOf`, só consultada fora do ciclo 0); inimigo sem região usa os números do Deserto.
+O HUD mostra a faixa ("vida ×1,15–2,2, dano ×1,45–2,7").
+
 Não escalam: XP/recompensas de missões, chance de drop e quantidades da tabela do bioma, o bônus de chefe
 (`_bossBonusDropRarity` fixa), recargas e velocidade dos inimigos.
 
-### 11.2 Por que esses números (estimativa; o modelo rodou depois, §14.4)
+### 11.2 Por que esses números (r9, ajustados no modelo, §14.4)
 
 - Quem termina a campanha pela rota com missões chega ao chefe das Cavernas no nível ~15 (§10.4) e entra na
-  NG+1 por volta do 16, com o equipamento das Cavernas. Sem escala, a Floresta morreria na primeira rotação.
-- **NG+1 Floresta ≈ Montanha do 1º ciclo.** Lobo Alfa NG+1 = 936 de vida / 22,5 de dano (Senhor da Guerra
-  no ciclo 0: 900 / 30, enfrentado no nível ~11). Para um herói de nível ~16 a luta deve cair perto da
-  meta de 15–22 s, um pouco mais fácil — a Floresta continua sendo a região de aquecimento.
-- **NG+1 Cavernas** = Habitante Ancestral com 2 124 de vida / 63 de dano: é o novo topo, para o nível ~20
-  que o XP ×1,5 dos abates leva até lá.
-- Dano cresce mais devagar que vida (0,5 contra 0,8 por ciclo) porque o herói ganha dano (nível, skills,
-  afixos) bem mais rápido do que ganha vida e defesa: a luta fica mais longa sem virar "um golpe e morre".
+  NG+1 por volta do 16; durante a NG+1 ele sobe até ~22. A campanha espera 3 / 7 / 10 / 15 nos chefes,
+  então a distância de nível é enorme na Floresta (+14) e pequena nas Cavernas (+7).
+- **Antes (r8, ×1,8 vida / ×1,5 dano em todo lugar)**: a NG+1 era trivial na Floresta (chefe 14 s, comuns
+  2 s, o chefe levava ~45 s para matar o herói parado) e arrastada nas Cavernas (chefe 33 s).
+- **Agora** o bônus da região compensa a distância de nível uma vez, e o passo por ciclo (+0,15 vida,
+  +0,25 dano) é igual para todas. Com isso todo chefe da NG+1 fica em 18,5–19,8 s, e na NG+2/NG+3 em
+  ~16–21 s (o modelo mantém o equipamento das Cavernas da NG+0, então nos ciclos altos é conservador).
+- **Dano cresce mais que vida**: a vida do herói cresce a cada nível (curva + Vitalidade), e só o dano faz o
+  chefe matar o herói parado em ~25 s, como na NG+0 (21–27 s). Lobo Alfa NG+1: 1 144 de vida / 40,5 de dano;
+  Habitante Ancestral NG+1: 1 357 / 60,9.
+- Escala por região (e não pelo nível do herói) porque é determinística, igual para todo mundo, sem
+  "elástico" que pune quem subiu de nível, e não depende de quem está no grupo.
 - XP ×1,5 por ciclo compensa a curva (`xp_to_next` cresce 10% por nível): sem isso, a NG+1 inteira daria
   poucos níveis. O ouro e a chance de raridade são a recompensa visível de jogar de novo.
 
-**Modelo rodado (§14.4)**: `tools/balance/power_stack.py` multiplica os inimigos pelo ciclo e leva o herói
-do fim do r8 (nível ~16, equipamento das Cavernas) pela rota com missões da NG+1. Resultado: a NG+1 é fácil
-na Floresta (chefe 14 s, comuns 2 s) e longa nas Cavernas (chefe 33 s), porque o multiplicador é o mesmo em
-todas as regiões e o herói sobe de 16 para 22 durante o ciclo. Os coeficientes ficaram como estão: o
-conserto é de forma (escala por região/nível), não de número.
-
 ### 11.3 Testes
 
-`NewGamePlusTests`: ciclo 0 não muda nada (nem arredonda), os números do NG+1 batem com a tabela, todos
-crescem até o teto e param, XP/loot nunca ficam abaixo da base, o dano nunca cresce mais que a vida, o loot
+`NewGamePlusTests`: ciclo 0 não muda nada em nenhuma região (nem arredonda), os números do NG+1 batem com a
+tabela (Floresta e Cavernas), todos crescem até o teto e param, cada região cresce a cada ciclo e as regiões
+iniciais sempre escalam mais, cada chefe é achado na região certa pelo `BiomeRegistry`, o HUD mostra a faixa
+("vida ×1,15–2,2"), XP/loot nunca ficam abaixo da base, o loot
 do ciclo 0 é idêntico ao de antes com a mesma semente, a NG+5 dá mais ouro e equipamento melhor no chefe da
 Montanha, o reset/manutenção do estado, save/load, save antigo = ciclo 0 e a conquista `ach_new_journey_plus`.
 
@@ -1252,9 +1257,9 @@ uv run --no-project --with pytest python -m pytest -q -p no:cacheprovider tools/
   de evento + o carinho (só MoveSpeed: 0 em combate). Na prática o evento escolhido é sempre a Cantoria.
   Toda refeição do `MealCatalog` entra na disputa, inclusive as da pesca (tilápia: ManaRegen +25%; caldo
   de piaba: +1,5 HP/s), tratadas como disponíveis desde o início.
-- **NG+1**: inimigos ×1,8 de vida e ×1,5 de dano, XP de abate ×1,5, missões regionais de novo (XP sem
-  escala); o herói começa com o nível do fim da NG+0 e o equipamento das Cavernas (drops novos ignorados:
-  conservador).
+- **NG+1**: inimigos com a escala por região do §11.1 (lida de `NewGamePlusRules`), XP de abate ×1,5,
+  missões regionais de novo (XP sem escala); o herói começa com o nível do fim da NG+0 e o equipamento das
+  Cavernas (drops novos ignorados: conservador).
 - O modelo ganhou: Defense e MaxHealth percentuais, ResourceCostReduction, ManaRegen percentual e um bônus
   de velocidade de ataque só no começo da luta. Sem nenhuma dessas fontes ele dá exatamente a saída do r8.
 - Limite: o passo de 20 ms arredonda o intervalo do básico, então +2% e +3% de velocidade de ataque dão o
@@ -1310,20 +1315,23 @@ Sem mudança: as outras 11 relíquias e o ×2 do dono, as outras refeições e f
 | NG+0 | Deserto (5 / 7) | 6 | 18,2 → 17,3 → **14,9** (−18%) | 6,1 → **4,8** (−22%) | 22,4 / 23,0 | rapadura |
 | NG+0 | Montanha (9 / 10) | 9 | 18,4 → 16,6 → **14,4** (−22%) | 6,4 → **4,9** (−24%) | 23,4 / 25,2 | rapadura |
 | NG+0 | Cavernas (13 / 15) | 12 | 20,0 → 18,4 → **16,2** (−19%) | 4,6 → **3,5** (−24%) | 27,4 / 29,6 | rapadura |
-| NG+1 | Floresta (16 / 17) | 12 | 14,3 → 12,6 → **11,5** (−20%) | 2,2 → **1,7** | 21,0 / 50,0 | rapadura |
-| NG+1 | Deserto (17 / 18) | 12 | 23,0 → 20,4 → **18,2** (−21%) | 4,6 → **3,7** | 30,5 / 32,6 | queijo coalho |
-| NG+1 | Montanha (19 / 20) | 12 | 25,9 → 23,2 → **20,9** (−19%) | 6,7 → **4,8** (−29%) | 34,0 / 29,4 | rapadura |
-| NG+1 | Cavernas (21 / 22) | 12 | 33,4 → 30,0 → **26,6** (−20%) | 7,4 → **6,1** | 42,7 / 25,9 | queijo coalho |
+| NG+1 | Floresta (16 / 17) | 12 | 18,5 → 16,4 → **14,6** (−21%) | 3,3 → **2,5** | 25,0 / 26,7 | queijo coalho |
+| NG+1 | Deserto (17 / 18) | 12 | 18,5 → 16,4 → **14,5** (−22%) | 3,6 → **2,9** | 24,7 / 26,9 | rapadura |
+| NG+1 | Montanha (19 / 20) | 12 | 18,5 → 16,4 → **14,5** (−22%) | 4,1 → **2,9** (−29%) | 24,6 / 27,5 | rapadura |
+| NG+1 | Cavernas (21 / 22) | 12 | 19,8 → 17,9 → **15,9** (−20%) | 4,0 → **2,9** | 26,8 / 26,9 | rapadura |
+
+NG+1 com a NG+ do r8 (×1,8 / ×1,5 em todo lugar), para comparar: chefe sem pilha 14,3 / 23,0 / 25,9 / 33,4 s,
+comuns 2,2 / 4,6 / 6,7 / 7,4 s, herói parado morre em 45 / 30 / 27 / 24 s.
 
 - **NG+0**: a pilha completa vale −16 a −22% no chefe e −22 a −24% nos comuns, dentro do orçamento. Os
   chefes ficam em 13,8–16,2 s (a meta absoluta é 15–22 s para o herói sem pilha; quem junta tudo fica um
   pouco abaixo, como quem tira uma arma de sorte). Só no básico, o herói com tudo vence por um fio (mata em
   92–97% do tempo que o chefe leva) em vez de folgado (71–80% antes). A Montanha fica a 0,5 pp do teto
   do orçamento: a próxima fonte de dano precisa sair de algum lugar.
-- **NG+1**: a pilha também fica em −19 a −21%. O que sai da meta é da própria NG+, com ou sem pilha:
-  multiplicador igual em todas as regiões, herói subindo de 16 para 22 durante o ciclo. Floresta trivial
-  (chefe 14 s, comuns 2 s, chefe leva 45–50 s para matar o herói parado) e Cavernas longa (chefe 27–33 s).
-  Fica para uma rodada de forma (escala da NG+ por região ou pelo nível do herói), não de coeficiente.
+- **NG+1 (escala por região, §11.1)**: sem pilha todo chefe fica em 18,5–19,8 s e o herói parado morre em
+  25–26 s em qualquer região (antes: 14–33 s e 24–45 s). Com a pilha, −20 a −22%, dentro do orçamento. Os
+  comuns ficam curtos (3,3–4,1 s sem pilha): em dupla, as skills de área do nível ~20 os pegam juntos; subir
+  mais a vida deles alongaria os chefes também.
 - Golpe em dupla e lojas novas: rodar `power_stack.py` de novo quando entrarem. Uma fonte nova de dano
   plano ou percentual deve caber no orçamento acima (o pytest falha se não couber).
 
@@ -1332,6 +1340,1002 @@ Sem mudança: as outras 11 relíquias e o ×2 do dono, as outras refeições e f
 `tools/balance/test_power_stack.py` (pytest, via `uv`): fontes lidas do C# (6 refeições, 12 relíquias,
 dono ×2, eventos, NG+), os valores do ajuste, carinho sem stat de combate, frações com base 0 (§7.6),
 vida/defesa percentuais, bônus de abertura só nos seus segundos, relíquias por região e bônus do dono,
-refeições por região, escala de inimigos da NG+, a pilha nunca alonga uma luta, **orçamento da pilha na
-NG+0 e na NG+1**, chefe com a pilha ≥ 13,5 s na NG+0 e NG+1 mais difícil que NG+0 do Deserto em diante.
+refeições por região, escala de inimigos da NG+ por região, **chefes da NG+1 e NG+2 em 15–22 s e a no máximo
+4 s um do outro**, herói parado da NG+1 na faixa de 12–40 s, a pilha nunca alonga uma luta, **orçamento da pilha na
+NG+0 e na NG+1** e chefe com a pilha ≥ 13,5 s na NG+0.
 C#: `ZeroBaseFractionStatTests` (§7.6) e `WorldEventTests` com o novo texto da Cantoria.
+
+---
+
+## 15. Golpe em dupla (parceiro de encontro) (2026-10-29)
+
+Um primo chamado da vila entra na luta para **um** golpe combinado por encontro. Regras puras em
+`DuoStrikeRules` / `DuoStrikeMeter` (`Assets/Scripts/Gameplay/Duo/`), combos em `DuoComboCatalog`, testes em
+`DuoStrikeTests`. Executor na arena: `DuoStrikeController` (auto-bootstrap, sem editar cena).
+
+### 15.1 Regras
+
+```
+carga   += min(0,25, dano causado / vida máx. do alvo × (chefe ? 2,0 : 0,5))   // 50% de um chefe, ou 200% de um comum
+carga   += min(0,25, dano sofrido / vida máx. do herói × 1,25)                // perder 80% da vida enche
+pronto   = carga ≥ 1  e  2,5 s depois do início do encontro  e  ainda não usado neste encontro
+dano     = OutgoingDamage.Resolve(60 × combo.mult, damage_mult(nível), buffs do herói)   // mesmo pipeline das skills
+stun     = combo.stun × (chefe ? 0,5 : 1)       // StunRules, via BuffController.ApplyStun (IStunDurationModifier)
+empurrão = combo.força × (chefe ? 0,35 : 1)     // KnockbackReceiver; força 5 ≈ 1,6 m num comum, 0,2 m num chefe
+cura     = combo.cura × vida máx. do herói
+```
+
+| Constante | Valor | Por quê |
+|---|---|---|
+| `BaseDamage` | **60** | Entre a skill ativa mais forte (Explosão Arcana, 40) e a Ultimate mais fraca (Exército Mecânico, 100): ~1,5–2 ativas, ~60% de uma Ultimate. Teste: `Damage_SitsBetweenTheActiveSkillsAndTheUltimates`. |
+| `MaxUsesPerEncounter` | **1** | É um momento da luta, não uma skill de rotação. A carga zera ao usar e não volta a subir. |
+| `ArmDelaySeconds` | 2,5 s | Cobre o "Prepare-se!" (inimigos parados ~2 s): não dá para abrir a luta com ele. |
+| `CooldownSeconds` | 45 s | Só vale se um modo liberar mais de um uso (NG+, grupo online). |
+| `MaxChargePerHit` | 0,25 | Um crítico enorme ou um golpe de chefe não enchem a barra sozinhos. |
+| `BossKnockbackMultiplier` | 0,35 | Mesma ideia do stun ×0,5: chefe quase não sai do lugar. |
+| Duração | 1,5 s (impacto aos 0,45 s) | O parceiro aparece, golpeia e some; o herói continua jogável. |
+
+A carga é **relativa à vida do alvo/herói**, não a números absolutos, então o momento em que ela enche não muda
+com nível, equipamento nem NG+.
+
+### 15.2 Quando fica pronto
+
+- **Chefe** (lutas médias de 16,5–20 s, §9.4): só causando dano, enche com 50% da vida do chefe (~8–10 s);
+  apanhando junto, ~35–45% da luta. Pensado para ser o "agora!" do meio da luta.
+- **2 comuns** (4,6–6,4 s): enche perto do fim (200% da vida de um comum = os dois inteiros), mais cedo se o herói
+  apanhar. Vira um finalizador; em grupos de 3 (elite, emboscada) fica pronto no meio.
+
+### 15.3 Dano contra o chefe da região (rota com missões, §9.4)
+
+`damage_mult` no nível do chefe (3 / 7 / 10 / 15) = 1,04 / 1,12 / 1,18 / 1,28. Combos: 0,7× (mais fraco),
+1,0× (típico) e 1,4× (Flecha-Trovão). Sem Poder Arcano/refeição/crítico (esses somam igual às skills).
+
+| Chefe | Vida | 0,7× | 1,0× | 1,4× | Tempo médio de luta tirado (1,0×) |
+|---|---|---|---|---|---|
+| Lobo Alfa | 520 | 44 (8%) | 62 (12%) | 87 (17%) | ~2,0 s de 16,5 s |
+| Guardião da Ruína | 780 | 47 (6%) | 67 (9%) | 94 (12%) | ~1,6 s de 18,2 s |
+| Senhor da Guerra | 900 | 50 (6%) | 71 (8%) | 99 (11%) | ~1,5 s de 18,4 s |
+| Habitante Ancestral | 1 180 | 54 (5%) | 77 (7%) | 108 (9%) | ~1,3 s de 20,0 s |
+
+Mesmo com o golpe, a média do chefe fica em 14,5–18,7 s (meta 15–22 s; piso da pilha da §14: 13,5 s). Contra
+comuns (70–170 de vida) ele mata ou quase mata a área toda — é o papel de finalizador.
+
+### 15.4 Os 10 combos (um por par, busca sem ordem: Maithe+Ícaro = Ícaro+Maithe)
+
+Falas: o primo mais velho fala primeiro, depois o mais novo (ordem de nascimento), seja quem for o herói.
+
+| Par | Combo | Elem. | Dano | Raio | Stun (comum/chefe) | Cura | Empurrão | Buff / debuff |
+|---|---|---|---|---|---|---|---|---|
+| **Maithe + Ícaro** (irmãos) | **Flecha-Trovão** | Elétrico | 1,4× | 6 m | 1,2 / 0,6 s | — | 5 | herói +15% crítico 6 s |
+| **Maria + Joaquim** (irmãos) | **Bastião Sagrado** | Sagrado | 1,0× | 5,5 m | — | 30% | 7 | herói +40% defesa 8 s |
+| Maithe + Maria | Flechas da Aurora | Sagrado | 1,0× | 5 m | — | 15% | — | — |
+| Maithe + Joaquim | Salto da Muralha | Terra | 1,15× | 4,5 m | — | — | 5 | herói +20% crítico 6 s |
+| Maithe + Lavine | Lua Caçadora | Trevas | 1,2× | 4,5 m | — | — | — | inimigos −40% velocidade 4 s |
+| Maria + Ícaro | Drone Abençoado | Elétrico | 0,7× | 4,5 m | — | 20% | — | herói +3 vida/s 6 s |
+| Maria + Lavine | Crepúsculo Sereno | Arcano | 0,9× | 4,5 m | 1,0 / 0,5 s | 15% | — | — |
+| Joaquim + Ícaro | Terremoto Elétrico | Terra | 1,1× | 5 m | 1,0 / 0,5 s | — | 4 | — |
+| Joaquim + Lavine | Correntes de Pedra | Trevas | 0,9× | 4,5 m | 1,4 / 0,7 s | — | — | herói +25% defesa 6 s |
+| Ícaro + Lavine | Curto-Circuito Arcano | Arcano | 1,3× | 5 m | — | — | — | herói +20% vel. de ataque 6 s |
+
+**Laço de irmãos:** os dois pares de irmãos têm o maior "poder" (`DuoComboSpec.PowerScore`, teste exige ≥ 15% acima
+do melhor combo de primos), anel de efeito duplo (o segundo na cor do parceiro), silhueta quase dourada, tremor de
+câmera mais forte e a faixa "Laço de irmãos!". Os stuns ficam ≤ 1,5 s (no chefe ≤ 0,75 s, abaixo das recargas de
+2,4–3,3 s dos chefes) e as curas ≤ 30% (Cura Divina nível 1 = 35 de vida).
+
+Parceiro padrão (save antigo / Novo jogo): o irmão ou irmã; Lavine chama a Maria. A escolha fica no menu de pausa
+(mapa e arena), uma por herói, salva em `DuoPartnerState` (chave `"DuoPartner"`).
+
+### 15.5 Acessibilidade e desempenho
+
+- **Reduzir Flashes:** sem sprite de flash no anel (`SkillVfxFlashPolicy`), silhueta mais apagada e sem brilho aditivo,
+  sem pulso dourado, sem hit-stop, faixa sem fade.
+- **Reduzir Movimento:** o parceiro aparece e some no lugar (sem avanço nem braços), sem tremor de câmera, sem hit-stop,
+  faixa sem fade.
+- **Silhueta em vez do modelo do primo:** 5 malhas primitivas com 1 material unlit compartilhado, sem sombra, sem
+  skinning, sem `Resources.Load` no meio da luta. Um segundo herói riggado custaria um FBX carregado no clímax da luta,
+  mais um SkinnedMeshRenderer + animador procedural (~2× o custo do herói por 1,5 s) no celular.
+
+### 15.6 Online (Fase 12)
+
+No online o "parceiro" vira um **membro real do grupo**: a barra de carga é por jogador; quando dois membros com a
+barra cheia estão a ≤ 12 m, o primeiro aperta "Dupla" e o outro tem ~2 s para confirmar (o mesmo botão). O servidor
+valida a dupla, resolve o combo pelo par de personagens dos dois (`DuoComboCatalog.Find`), aplica dano/stun/cura com
+as mesmas regras e consome um uso de cada um. Sem confirmação (ou jogando sozinho) cai no golpe com o primo-fantasma
+de hoje. Regras que precisam ir para o servidor: `DuoStrikeRules` inteiro (carga relativa, limite por encontro,
+stun ×0,5 e empurrão ×0,35 em chefe); o cliente só mostra a silhueta / o modelo real do companheiro de grupo.
+
+---
+
+## 16. Dia e noite: ondas que renascem, bichos noturnos e visão noturna (2026-10-29)
+
+Pedido: dia e noite com bichos diferentes, que renascem, e a noite mais perigosa (e com menos visão). Desenho completo
+e tabela das espécies futuras em `Docs/DayNight.md`. Código em `Assets/Scripts/Gameplay/Night/`; testes em
+`NightDangerTests`. **Estimativa, ainda não passou pelo modelo do r8/r9** (`tools/balance/balance_model.py`).
+
+### 16.1 Multiplicadores por fase (`NightDangerRules`)
+
+| Fase | Ondas (total) | Intervalo entre ondas | Tamanho do reforço | Chance de variante (1ª onda) |
+|---|---|---|---|---|
+| Dia (7h–18h) | 2 (mapa + 1) | 4,0 s | ×1,0 | 0% |
+| Amanhecer (5h–7h) | 2 | 3,5 s | ×1,0 | 10% |
+| Entardecer (18h–20h) | 2 | 3,5 s | ×1,0 | 15% |
+| Noite (20h–5h) | **3** (mapa + 2) | **2,5 s** (ritmo ×1,6) | **×1,5** (arred., 1–4) | **50%** |
+
+Reforço = nº de comuns da 1ª onda × tamanho, entre 1 e 4. A fase usada é a do momento em que a onda anterior cai
+(troca de fase no meio da luta vale na próxima onda). Segura de ataque do reforço: 1,75 s × 1,0 (dia) / × 0,6 (noite).
+**Sem reforços:** desafio de chefe, grupo com chefe, emboscada de elite e a 1ª luta (tutorial). Chefes: sem mudança.
+
+### 16.2 Variante noturna e espécies (`NightVariantRules`)
+
+| | Vida | Dano (AttackDamage %) | Raio de percepção | Tamanho | XP ao matar | Saque extra |
+|---|---|---|---|---|---|---|
+| Variante "(noturno)" | ×1,35 | +20% | ×1,4 | ×1,1 | ×1,5 | +1 rolagem (ouro + tabela do bioma) |
+| Lobisomem-do-sertão (Floresta, base Lobo da Mata) | ×5 (350) | +60% | ×1,6 | ×1,6 | ×5 (+40) | +3 rolagens |
+| Morcego-vampiro gigante (Cavernas, base Enxame) | ×1,8 (306) | +30% | ×1,5 | ×1,35 | ×1,8 (+32) | +1 rolagem |
+
+O XP/saque normal do inimigo base continua vindo de `EnemyRewardGranter`/`EnemyLootGranter`; o bônus é pago à parte
+(`NightVariantTag`, como o elite do §13.3). Os stats da variante são sempre os da noite, mesmo se ela surgir no
+amanhecer/entardecer.
+
+### 16.3 Impacto esperado por encontro (1ª onda de 1–2 comuns, média 1,5)
+
+| | Dia (antes) | Dia (agora) | Noite (agora) |
+|---|---|---|---|
+| Inimigos por encontro | 1,5 | ~3,0 | ~6,5 (1,5 + 2 × 2,5) |
+| Fração de variantes/espécies | 0 | 0 | ~50% na 1ª onda, ~70% nos reforços |
+| Vida total a derrubar (em "comuns") | 1,5 | ~3,0 | ~9 |
+| XP por encontro (em "kills comuns") | 1,5 | ~3,0 | ~8,5 |
+| Encontros por passo no mapa | ×1 | ×1 | ×1,25 (já existia) |
+
+Ou seja: **o dia agora rende ~2× XP/saque por encontro em ~2× o tempo** (XP por minuto de luta ≈ igual), e a noite
+rende ~5–6× por encontro em ~6× o tempo, com mais dano recebido (mais bichos ao mesmo tempo, +20% de dano e chegada
+mais rápida). Para o r10: rodar o modelo com as ondas; se a curva de XP andar rápido demais, o ajuste mais simples é
+`Day.ReinforcementWaves = 0` (dia volta a ser 1 onda) ou reduzir `ExperienceMultiplier` da variante para ×1,25.
+Interruptor de emergência no Inspector: `EncounterArenaController._reinforcementWaves`.
+
+### 16.4 Visão noturna (`NightVisibilityRules`) — não muda números de combate
+
+| | Normal | "Noite mais clara" | Cavernas |
+|---|---|---|---|
+| Luz ambiente na noite cheia | ×0,70 | ×0,90 | ×0,88 |
+| Neblina extra (arena) | +0,022 | +0,010 | +0,008 |
+| Corte da câmera (arena) | 70 m | 120 m | 70 m |
+| Lamparina | 8 m (teto 16 m com itens/montaria) | igual | sempre acesa (≥60%) |
+
+Piso absoluto da luz ambiente ×0,6; a câmera nunca corta antes de (distância até o herói + 40 m).
+
+### 16.5 Testes
+
+`NightDangerTests`: noite mais perigosa que o dia em todos os eixos, amanhecer/entardecer no meio, temporização das
+ondas (incl. troca de fase no meio da luta), tamanho com teto, travas (chefe, elite, tutorial), sorteio de variante
+determinístico (~50% à noite, 0 de dia), toda região com entradas em toda fase, toda entrada resolve um inimigo comum
+da própria região, tabela do dia = tabela do bioma, noite majoritariamente noturna, espécies só à noite e com teto por
+onda, regras de XP/nome "(noturno)", `NightVariantTag` (vida, dano, tamanho, olhos, recolor sem mexer no material
+compartilhado, idempotente), visibilidade (luz, neblina, câmera, lamparina, opção "Noite mais clara" salva) e a regra
+do indicador do HUD.
+
+## 17. Cidades: lojas temáticas, rotação e carro de boi (2026-10-29)
+
+Toda região tem uma cidade (TODO 12.3a): Vila da Vó Zefa (Floresta), Povoado de Areia Branca (Deserto), Vila da
+Serra Alta (Montanha) e Vila das Lamparinas (Cavernas). Dados em `CityCatalog`/`CityShopCatalog` (código), regras puras
+em `SafeZoneRules`, `ShopRotation` e `FastTravelRules` (`CityTests`), estado salvo por slot em `CityProgress`
+(chave `Cities`). Projeto e regras de zona segura em `Docs/Cities.md`.
+
+### 17.1 Preços das lojas
+
+Só itens que já existem (`Resources/Items`). Preço sempre entre **80% e 125%** do `ItemDefinition.Value` (teste):
+a especialidade da cidade vende o seu tema ~10% mais barato, o Mascate cobra ~20% a mais (vem de longe), a Feira
+vende comida um pouco mais barata. A loja paga 50% na revenda, como a Loja Geral.
+
+| Loja (cidade) | Tema | Rotação | Sempre no balcão | Sorteados (vagas) | Destravam com a campanha |
+|---|---|---|---|---|---|
+| Mercearia do Seu Lázaro (Vila) | mercearia | diária | carne assada 6, Poção de Vida 15 | erva 3, madeira 2, fibra 1 (2) | Poção de Mana 16 — Deserto aberto |
+| Armarinho da Dona Cida (Vila) | armarinho | semanal | fibra 1, botas de couro 10 | capacete 12, peitoral 20, erva 3 (2) | Arco de Caça 38 — chefe da Floresta |
+| Feira livre (Vila) | feira | diária | erva 3 | madeira 2, fibra 1, pedra 1, carne assada 5 (3) | minério de ferro 6 — Montanha aberta |
+| Selaria do Seu Vavá (Areia Branca) | especialidade: couro | semanal | botas 9, capacete 11, peitoral 18 | Poção de Vida 16, carne 7, fibra 1 (2) | Arco de Caça 33 — chefe do Deserto |
+| Forja do Mestre Tonho (Serra Alta) | ferreiro | semanal | ferro 7, minério 5, picareta 18 | martelo 15, machado 18, espada de madeira 10, Poção de Vida 17 (2) | Espada de Ferro 41 — chefe da Montanha |
+| Lamparinas da Benedita (Lamparinas) | especialidade: botica | diária | Poção de Vida 15, Poção de Mana 13 | erva 3, minério 6, pedra 1, capacete 12 (2) | Espada de Ferro 45 — chefe das Cavernas |
+| Mascate Seu Bento (uma cidade por dia) | mascate | diária | — | poções 18, carne 7, peitoral 24, martelo 18 (3) | Arco 42 (chefe da Floresta), Espada de Ferro 54 (chefe do Deserto) |
+
+A Loja Geral antiga (`shop_general_store`: madeira, pedra, ferro) continua na Vila, sem mudança.
+
+Estoque: cada linha tem um estoque por período (o "do dia"), e quando o período vira o estoque da loja volta ao
+cheio (`ShopManager.RestockShop`); a reposição geral do amanhecer do jogo (§ "Reposição" do `ShopManager`) continua
+valendo também. Com ~1,8 ouro por luta (§8), uma Poção de Vida custa ~8 lutas e a Espada de Ferro ~23: as lojas
+completam o loot, não substituem.
+
+### 17.2 Rotação (`ShopRotation`)
+
+- Período = dia do calendário (diária) ou semana de segunda a domingo (semanal), contado a partir de 05/01/2026.
+- Balcão = linhas fixas destravadas + N sorteadas entre as rotativas destravadas, com semente `FNV(loja) × período`
+  (mesmo dia, mesmo balcão em qualquer aparelho; o servidor online pode usar a mesma conta).
+- Relógio atrasado não sorteia de novo um balcão antigo: vale o maior período já visto (salvo em `Cities`).
+- O Mascate fica, a cada dia, em uma das cidades com região aberta (sorteio pela data); nesse dia ele aparece como
+  morador e a loja dele entra na lista de serviços.
+
+### 17.3 Carro de boi (`FastTravelRules`)
+
+- Só entre cidades **já visitadas** (chegar a pé com o token parado no nó; a Vila conta desde o início; save antigo
+  conta toda região onde já houve vitória) e de região **aberta**.
+- Custo: **2 ouro por estrada** do grafo do mapa (Floresta → Deserto 2, Floresta → Cavernas 6 ≈ 3 lutas de ouro).
+  Sem encontro e sem evento de estrada no caminho; o jogo salva ao chegar.
+
+### 17.4 Zona segura no mapa e efeito nos encontros
+
+- A cidade é o círculo de **1,5 m** (`SafeZoneRules.MapCityRadius`, a praça plana do nó) em volta de cada nó.
+  Ali dentro os passos não contam e não sai encontro aleatório nem evento de estrada.
+- Uma viagem entre nós vizinhos tem ~10 m, então ~3 m (início e fim) agora são seguros: **~30% menos passos de
+  encontro por viagem**. "Explorar" e "Enfrentar o chefe" não mudam (são saídas da cidade de propósito), então o ritmo
+  de lutas de quem explora não muda. Se a progressão ficar lenta para quem só viaja, o botão é `MapCityRadius`.
+- Derrota: o herói acorda na cidade da região onde perdeu (a região atual vira essa), com aviso no HUD.
+- A arena (Main.unity) não tem cidade: lá tudo é "fora da cidade" e nada mudou.
+
+### 17.5 Testes
+
+`CityTests`: matriz de ataque/dano/perseguição da `SafeZoneRules` (cidade × fora, NPC, PvP, a si mesmo), trava de
+PvP, renascimento; cidade por região com 3–4 moradores e loja; textos em pt-BR e inglês com fala por primo; lojas
+temáticas com dono, itens existentes e preço na faixa; períodos, semente, rotação, travas de campanha, relógio
+atrasado, Mascate por data; balcão de hoje no `ShopManager` com reposição na virada; carro de boi (estradas, custo,
+ordem das checagens, linhas da janela); visitas, save antigo, ida e volta do save, registro no GameManager e novo jogo;
+botão da cidade, indicador do HUD e a geometria do anel/casas no mapa.
+
+## 18. Mochila em grade (estilo MU) e queda de item ao morrer (2026-10-30)
+
+O limite de **peso** da mochila saiu; o limite agora é a **grade** de 8 colunas × 8 linhas (64 casas), como o
+inventário do MU Online. Um item só entra se houver uma área livre do tamanho dele (ou uma pilha comum dele com
+espaço). Código: `ItemFootprint`, `BagGrid`, `BagGridRules`, `BagFitSimulator` (`Gameplay/Inventory/BagGrid.cs`) e
+`InventoryManager`; queda ao morrer em `Gameplay/Inventory/DeathDrop.cs`.
+
+### 18.1 Tamanho dos itens (por categoria; `_gridWidth`/`_gridHeight` no item sobrescrevem)
+
+| Categoria | Casas | Exemplos atuais |
+|---|---|---|
+| Madeira, Pedra, Metal, Ouro, Erva, Fibra | 1×1 | madeira, pedra, ferro, minério, erva, fibra (pilha 50–99) |
+| Comida, Poção | 1×1 | carne assada, poção de vida/mana (pilha 20); peixes/ingredientes entram aqui |
+| Acessório | 1×1 | anel, amuleto |
+| Moeda, Item de missão, Planta, Diversos | 1×1 | ouro (pilha 9999) |
+| Arma corpo a corpo | 1×3 | espada de madeira, espada de ferro |
+| Arma à distância | 2×4 | arco de caça |
+| Arma mágica | 1×4 | (cajados futuros) |
+| Cabeça, Pernas, Botas | 2×2 | chapéu de couro, botas de couro |
+| Peito | 2×3 | gibão de couro |
+| Ferramenta de coleta | 1×3 | machado, picareta |
+| Ferramenta de construção | 1×2 | martelo |
+| Escudo (sem categoria própria) | 2×2 | use o override (`ItemFootprint.Shield`) |
+
+Regra de pilha: tudo que empilha ocupa 1 casa por pilha (até `MaxStack`). Item gerado (raridade/afixos) nunca
+empilha com o comum. Nada gira (o MU também não gira): **rotação ficou de fora** de propósito.
+
+Ordem de busca: da casa de cima à esquerda, linha por linha (MU). Arrastar/soltar: área livre = move; pilha igual =
+junta; um item no caminho = troca (o outro vai para onde o primeiro estava, ou a primeira área livre); dois ou mais
+itens no caminho = não cabe (fantasma vermelho). "Organizar": ordena (tipo → raridade → nome) e empacota a partir do
+canto; se não couber nessa ordem, tenta maior-primeiro; se nem assim, não mexe.
+
+### 18.2 Peso: dormente, não apagado
+
+`ItemDefinition.Weight` e `InventoryManager.GetTotalWeight()` continuam (dados e saves intactos, conta só informativa).
+`HasWeightCapacityFor` e `AddItemIgnoringWeight` viraram nomes antigos para o novo encaixe (`CanFit` / `AddItem`).
+`LootGrantResult.KeptOverWeight` fica sempre 0 (o "item de missão passa do peso" não existe numa grade). Motivo:
+apagar o campo mexeria em 20 assets e em código de outros sistemas sem ganho; deixá-lo dormente é o caminho de menor
+risco e permite, no futuro, uma regra de "carga" (ex.: lentidão) se o design quiser.
+
+API única de encaixe (todo "cabe?" passa por ela): `InventoryManager.CanFit(item, qtd)`, `GetFittableAmount`,
+`CanFitAll(lista)`, `CanFitCopy(entrada)`, `TryAddCopy(entrada)`. Usada por: loot (`LootGrantRules`, toast "Mochila
+cheia"), compra na loja (`ShopManager.BuyItem`), baú (`VillageChestTransfer`), criação (`CraftingManager`, que agora
+desfaz o resultado parcial antes de devolver os ingredientes), recompensas de evento (`WorldEventOutcomes` →
+`LootGrantRules`), segredos (ouro pendente) e Achados e Perdidos. Recompensa de missão que não couber vai para o Baú.
+
+Quanto enche: materiais empilham, então um bioma enche a grade em centenas de lutas; quem enche é equipamento (arco 8
+casas, peitoral 6). `LootOverflowTests.EveryBiome_TakesAtLeast40Fights_ToFillTheGrid` guarda o mínimo de 40 lutas.
+
+### 18.3 Save e migração
+
+Cada entrada salva `gridX/gridY`; `InventorySaveState.gridVersion = 1` marca saves da grade, `extraRows` a expansão.
+Save antigo (`gridVersion` 0, lista de 30 espaços sem posição): o jogo **auto-posiciona** tudo (ouro e itens de missão
+primeiro, depois os maiores, desempate pela ordem antiga). O que não couber vai para o **Baú da Vó Zefa** — nunca
+some. Como o baú carrega depois da mochila no mesmo load, ele recebe numa "caixa de entrada"
+(`VillageChestStorage.EnqueueOverflow`) salva junto com o baú e despejada nos espaços livres no próprio load, ao salvar,
+ao abrir o baú e ao tirar algo dele. Save de grade com posição inválida (ex.: o tamanho de um item mudou) reposiciona
+só o item quebrado.
+
+### 18.4 Expansão (opcional)
+
+`InventoryManager.AddBagRows(n)`: até +2 linhas (`MaxExtraRows`), salvo em `extraRows`. **Ainda não está à venda**:
+falta o item "Bornal de couro" (sugestão: 2 linhas, ~150 de ouro, Mascate/Feira) e o gancho de compra na loja — fica
+para o dono das lojas.
+
+### 18.5 Queda de item ao morrer (9%)
+
+- `DeathDropRules.DropChance = 0.09`: **um sorteio por morte** (tela de morte), semente injetável (testado).
+- Sucesso: **uma** entrada da mochila elegível, sorteada por igual, cai **inteira** (pilha cai como pilha).
+- Nunca cai: equipado (não está na grade), ouro/moeda, item de missão/história, relíquias (hoje nem são itens; id
+  `relic_*` reservado) e item marcado **vinculado** (`_isBound`).
+- Offline: o item sai da mochila, a tela diz "Na pressa, você deixou cair: <item>" e ele vai para os
+  **Achados e Perdidos** da Vó Zefa (janela do Baú, na vila). Resgate pagando ouro por raridade:
+
+| Raridade | Comum | Incomum | Raro | Épico | Lendário |
+|---|---|---|---|---|---|
+| Ouro para recuperar | 10 | 25 | 60 | 150 | 400 |
+
+  (Referência: a espada de ferro vale 45 na loja.) Sem ouro ou sem espaço, nada é cobrado e
+  o item continua lá. A lista é salva no save do baú (`VillageChestSaveState.lostAndFound`) e zera em "Novo jogo".
+- Em média: 1 item a cada ~11 mortes. Morrer não custa ouro (só quando se quer o item de volta).
+
+### 18.6 Online (FASE 12) — decidido
+
+- **Decisão do usuário: qualquer jogador pode pegar o item que caiu de outro (estilo MU).** O item cai no chão onde o
+  herói morreu (servidor autoritativo sorteia os mesmos 9% e escolhe a entrada).
+- Proposta de detalhe (a confirmar no servidor): o dono tem prioridade de alguns segundos (ex.: 10 s) antes de
+  liberar para todos; o item some do chão depois de N minutos (ex.: 2 min) e, se ninguém pegar, vai para os Achados e
+  Perdidos do dono (mantém o espírito "nunca perde de vez" para crianças). Itens vinculados nunca caem.
+- Zona segura da cidade: morrer lá não acontece (sem combate), então nada cai em cidade.
+
+## 19. Perda de XP ao morrer, Bênção da Romaria e Patuá da Vó Zefa (2026-10-30)
+
+Decisão do usuário (Docs/Referencias_MMO.md §6): **morrer perde XP**, pouco, e a **Bênção da Romaria** e o **Patuá da Vó
+Zefa** protegem. Código: `DeathXpLossRules`, `DeathPenaltyRules`, `DeathPenaltyService` (`Gameplay/Inventory/DeathPenalty.cs`),
+`DeathProtectionState`, `RomariaBlessingRules`, `RomariaOratory`, `PatuaRules` (`Gameplay/Inventory/RomariaBlessing.cs`);
+testes em `DeathPenaltyTests`. Aplicado pela tela de morte (`DeathScreenController`), junto com a queda de 9% (§18.5).
+
+### 19.1 Quanto se perde
+
+- **5% do XP que o nível atual pede** (`xp_to_next`), arredondado. **Nunca desce de nível** (decisão para crianças):
+  a perda só sai do XP já ganho dentro do nível; a barra pode esvaziar, o número do nível não volta.
+- **Sem perda abaixo do nível 3** (primeiras lutas/tutorial: quem ainda está aprendendo não é punido).
+- **Sem perda no desafio do chefe da região na primeira campanha** (NG+0). Motivo: o chefe é onde a criança mais
+  morre e tenta de novo; perder XP a cada tentativa vira castigo. Na Nova Jornada+ (ciclo ≥ 1) o chefe custa XP
+  normalmente. A queda de 9% continua valendo no chefe (já decidida em §18).
+- Sem a tela de morte (respawn instantâneo antigo) não há perda, igual à queda de item.
+
+| Nível | `xp_to_next` | Perda (5%) | Com Bênção (−60%) | XP por encontro na época (§10) | Perda em encontros |
+|---|---|---|---|---|---|
+| 1–2 | 100–110 | 0 (carência) | 0 | 15 | 0 |
+| 5 | 146 | 7 | 3 | 27 | ~0,3 |
+| 9 | 214 | 11 | 4 | 42 | ~0,25 |
+| 13 | 314 | 16 | 6 | 60 | ~0,25 |
+| 20 | 612 | 31 | 12 | — | — |
+| 50 | 10 672 | 534 | 214 | — | — |
+
+Em média uma morte custa **~¼ de encontro** de XP: sente-se, mas não desanima.
+
+### 19.2 Bênção da Romaria (oratório de cada cidade)
+
+- Pedida no **oratório** de cada cidade (hub da cidade → Serviços): Capelinha da **Dona Fé** (Vila da Vó Zefa),
+  Oratório da Cisterna (Dona Socorro, Areia Branca), Capela de Pedra (Dona Graça, Serra Alta), Oratório das
+  Lamparinas (Benedita). Dado aditivo por cidade em `RomariaOratory.Oratories` (ids do `CityCatalog`).
+- Dura **até a próxima morte** (não por tempo). Corta **60% da perda de XP** e põe a queda de item em **0%**.
+- Preço: **5 + nível** de ouro, teto 60. Com ~1,8 ouro por luta (§8): nível 1 = 6 (≈3 lutas), nível 5 = 10 (≈6),
+  nível 10 = 15 (≈8), nível 20 = 25 (≈14). Comparação: a Poção de Vida custa 15. Não acumula (comprar de novo com
+  a bênção ativa não cobra). Ícone "Bênção" no HUD (`DeathProtectionIndicator`).
+- Salva por slot (`DeathProtectionState`, chave `DeathProtection`; save antigo carrega sem bênção; "Novo jogo" zera).
+
+### 19.3 Patuá da Vó Zefa (`item_patua_vo_zefa`)
+
+- Item de mochila **1×1** (Diversos, override `_gridWidth/_gridHeight` = 1), pilha 5, raro, valor 100.
+- **Gasta-se ao morrer** (1 unidade) e impede **toda** a perda de XP **e** a queda de item.
+- **Precedência: o Patuá se gasta primeiro**; a Bênção fica para a próxima morte (nenhum dos dois se desperdiça e a
+  regra é fácil de explicar: "com patuá na mochila, nada se perde").
+- Proteções se gastam em qualquer morte da tela de morte, mesmo nas isentas de XP (carência/chefe NG+0), porque a
+  queda de 9% continua possível lá.
+- De onde vem: **presente da Vó Zefa** — 1 Patuá na primeira vez que cada chefe de região cai (4 por campanha, de
+  novo a cada Nova Jornada+); vai para a mochila se couber (`InventoryManager.CanFit`), senão para o Baú da Vó Zefa
+  (nunca some). **À venda** com o Mascate Seu Bento por **120 ouro** (rotativo, depois do chefe da Floresta; ≈ 67
+  lutas de ouro). Queda rara em loot: ainda não (fica para o dono das tabelas; sugestão 0,5% em chefes).
+
+### 19.4 Online (FASE 12)
+
+- **Mesmas regras no servidor** (autoritativo): ele calcula a perda, gasta o Patuá/Bênção e sorteia os 9%.
+- O item que cai **vai para o chão e qualquer jogador pode pegar** (já decidido em §18.6).
+- A bênção é por personagem/conta no servidor; o preço segue o nível do personagem.
+
+---
+
+## 20. Refino de item +0 a +15: Pedras do Sertão (2026-10-30)
+
+Refino estilo MU Online (FASE 16). Regras puras em `RefineRules` (`Assets/Scripts/Gameplay/Refining`), testadas em
+`RefineTests`; aplicação no inventário em `RefineService`; janela "Ferreiro: refinar" no hub de toda cidade
+(`VillageRefinePanel`, `Resources/UI/Refine.uss`). O nível fica na instância do item
+(`InventorySlotData.refineLevel` / `refineOptionLevel`, também no `EquippedEntry` do save); save antigo carrega como +0.
+**Decisão do usuário:** refino que falha volta um nível; o item nunca some.
+
+### 20.1 Tabela de chance e custo (`RefineRules`)
+
+| De → para | Pedra | Ouro | Chance | Com Amuleto da Sorte | Se falhar |
+|---|---|---|---|---|---|
+| +0 → +6 (cada) | Bênção | 0 | 100% | (não gasta) | — |
+| +6 → +7 | Alma | 0 | 80% | 90% | fica +6 |
+| +7 → +8 | Alma | 0 | 75% | 85% | volta +6 |
+| +8 → +9 | Alma | 0 | 70% | 80% | volta +7 |
+| +9 → +10 | Alma | 10 | 60% | 70% | volta +8 |
+| +10 → +11 | Alma | 15 | 55% | 65% | volta +9 |
+| +11 → +12 | Alma | 20 | 50% | 60% | volta +10 |
+| +12 → +13 | Alma | 30 | 45% | 55% | volta +11 |
+| +13 → +14 | Alma | 40 | 40% | 50% | volta +12 |
+| +14 → +15 | Alma | 50 | 35% | 45% | volta +13 |
+
+- Amuleto da Sorte: +10 pontos (teto 95%), gasto na tentativa; nunca usado em rolagem certa.
+- Falha: −1 nível acima de +6 (+6 é o piso seguro, porque a Bênção sobe até lá sem falhar).
+- Pedra da Vida: opção extra 0→4, 60% por pedra; falhar não muda nada.
+- Pedra do Caos: só definida (item e drop); vai para o Tacho Encantado depois.
+- Rolagem com semente (`RefineRules.Roll`, SplitMix64): mesmo resultado em qualquer plataforma. **Online, o servidor
+  sorteia** (`RefineRules.Attempt` com a semente dele) e o cliente só mostra a resposta.
+
+Custo esperado do +0 (cadeia de Markov com a volta de nível, `RefineRules.ExpectedCostTo`): +6 = 6 Bênçãos;
++9 ≈ 6 Bênçãos + 5,2 Almas; +12 ≈ 25 pedras e 138 de ouro (com amuleto em toda rolagem: 18 e 99); +15 ≈ 88 pedras e
+1.440 de ouro (com amuleto: 40 e 706). +12 a +15 é meta de longo prazo (online), não da campanha.
+
+### 20.2 O que cada nível dá
+
+Curva no atributo base (dano da arma / defesa da armadura), acumulada: +1..+6 = 4% por nível (24%), +7..+9 = 6% por
+nível (42%), depois 50 / 58 / 67 / 77 / 88 / **100%** (+15 dobra o atributo). O nome mostra o nível ("Espada de Ferro
++7"), a dica mostra o atributo já refinado e a linha "Refino +7: +30% no atributo base".
+
+Em combate (`InventoryManager.ApplyRefineEffects`, chaves `equip_<slot>/refine/*`):
+- **arma**: AttackDamage % = bônus da curva × **0,10** (`WeaponAttackShare`: a arma é só uma parte do golpe) + 1% por
+  nível de opção. +9 com opção 2 = +6,2%.
+- **armadura**: Defense fixa = a parte refinada da defesa da peça (couro 4/8/3 em +9: +6,3 no total) e vida máxima
+  +0,5% por nível de opção, por peça.
+- Brilho em +7 / +9 / +11 / +13 / +15 (5 níveis): só na interface (título da dica com sombra dourada, borda da linha
+  na janela), porque nenhum item tem modelo no mundo ainda.
+
+### 20.3 De onde vêm as pedras
+
+Quarta fonte de loot (`RefineStoneDrops`, rolada pelo `EnemyLootGranter` depois das outras, então as sementes antigas
+continuam iguais). Comum: chance por morte; chefe: chance × quantidade. NG+ aumenta a chance dos comuns em 25% por ciclo.
+
+| Item (valor) | Floresta | Deserto | Montanha | Cavernas | Chefe (F / D / M / C) |
+|---|---|---|---|---|---|
+| Pedra da Bênção (12) | 6% | 8% | 9% | 10% | 2 / 2 / 3 / 3, sempre |
+| Pedra da Alma (35) | — | 1,5% | 2,5% | 4% | — / 1 / 1 / 2, sempre |
+| Pedra da Vida (40) | — | — | 1% | 1,5% | — / 25% / 35% / 50% |
+| Pedra do Caos (50) | — | — | — | 1% | — / — / 15% / 25% |
+| Amuleto da Sorte (25) | — | 1% | 1% | 1,5% | 10% / 15% / 20% / 25% |
+
+Só na rota com missões (§9: ~19 / 8 / 10 / 14 comuns + 1 chefe por região), o esperado acumulado é: Bênção 3,1 → 5,8 →
+9,7 → 14,1; Alma 0 → 1,1 → 2,4 → 4,9; Vida 1,4 e Amuleto 1,1 ao fim das Cavernas. Ou seja, a rota leva a arma a ~+6
+no Deserto e ~+8 nas Cavernas; quem farma um pouco ou compra chega aos níveis do orçamento abaixo.
+
+Lojas (preço entre 80% e 125% do valor, como §17): Forja do Mestre Tonho — Bênção 11 (sempre, 5/semana), Alma 32
+(depois do chefe da Montanha, 2/semana); Lamparinas da Benedita — Amuleto 25 (rotativo); Mascate — Bênção 14 (Deserto
+aberto) e Amuleto 30 (chefe do Deserto). Vida e Caos só caem. Com ~1,8 ouro por luta, uma Bênção comprada custa ~6
+lutas: a loja completa o drop, não substitui.
+
+### 20.4 Orçamento (`tools/balance/power_stack.py`, `test_refine_stack.py`)
+
+Nível que o modelo põe em **todas** as peças (arma + chapéu + peitoral + botas) ao chegar em cada região — teto de
+quem farmou: Floresta **+4**, Deserto **+6** (opção 1), Montanha **+7** (opção 1), Cavernas **+9** (opção 2); NG+1
+mantém o equipamento das Cavernas, então +9 (opção 2). Regras:
+
+- r8 + refino: chefe ≥ 92% do tempo do r8; 2 comuns ≥ 80% (comuns morrem em 3–6 golpes: um golpe a menos já é −15%).
+- pilha completa (§14) por cima do herói refinado: mesmo orçamento do §14.3 contra o r8 refinado (chefe ≥ 78%), com a
+  borda "só básico" afrouxada para 75% (o herói refinado também aguenta mais).
+- pilha + refino contra o r8 sem refino: chefe ≥ 74%, comuns ≥ 55%, e nenhum chefe abaixo de 12 s; parado, o chefe
+  ainda mata em 12–40 s.
+
+Resultado (r9 + refino, 3000 jogadas):
+
+| Ciclo | Bioma | Refino (opção) | Chefe: r8 → r8+refino → pilha+refino | 2 comuns: r8 → r8+refino → pilha+refino | Parado, chefe mata em (pilha+refino) |
+|---|---|---|---|---|---|
+| NG+0 | Floresta | +4 (0) | 16,5 → 16,3 → **13,6** s | 4,8 → 4,5 → **3,8** s | 22,3 s |
+| NG+0 | Deserto | +6 (1) | 18,1 → 17,6 → **14,4** s | 6,1 → 5,6 → **4,6** s | 24,2 s |
+| NG+0 | Montanha | +7 (1) | 18,4 → 17,3 → **14,0** s | 6,4 → 6,3 → **4,7** s | 26,8 s |
+| NG+0 | Cavernas | +9 (2) | 20,0 → 19,1 → **15,3** s | 4,6 → 4,0 → **2,9** s | 32,4 s |
+| NG+1 | Floresta | +9 (2) | 18,5 → 17,2 → **13,7** s | 3,3 → 3,2 → **2,3** s | 29,2 s |
+| NG+1 | Deserto | +9 (2) | 18,5 → 17,3 → **13,8** s | 3,6 → 3,3 → **2,5** s | 29,4 s |
+| NG+1 | Montanha | +9 (2) | 18,5 → 17,4 → **13,8** s | 4,0 → 4,0 → **3,1** s | 30,1 s |
+| NG+1 | Cavernas | +9 (2) | 19,8 → 18,8 → **15,2** s | 4,0 → 4,0 → **2,9** s | 29,4 s |
+
+Orçamento do refino e orçamento da pilha (§14.3): **dentro**; pytest de `tools/balance` verde.
+
+Ajuste feito no caminho: com 25% do bônus da arma indo para o AttackDamage (primeira versão), a pilha + refino passava
+do orçamento em todo NG+1 (chefe a 12,6 s, 69% do r8); caiu para **10%**, opção da arma 1,5% → 1% e opção da
+armadura 1% → 0,5%. A tabela de chance também ficou mais branda acima de +9 (antes 50% → 25% com 20–100 de ouro: +15
+custava ~400 pedras e 9.000 de ouro).
+
+### 20.5 Testes
+
+`RefineTests` (EditMode): tabela de chance e pedras, amuleto (só onde pode falhar, teto 95%), falha −1 acima de +6 e
+item nunca destruído, checagens (pedra, ouro acima de +9, amuleto), curva e brilho, nome "+N", sementes reproduzíveis e
+uniformes, custo esperado, drops por região/chefe com semente, itens nas lojas, serviço gastando pedra/ouro/amuleto,
+dados que viajam por equipar/copiar/salvar (save antigo = +0) e textos da janela. `LocalizationCoverageTests` cobre
+`RefineTexts`; `ThemeAdoptionTests` cobre `Refine.uss`. Python: `test_refine_stack.py` (curva lida do C#, refino nunca
+alonga luta, orçamento NG+0/NG+1).
+
+---
+
+## 21. Caça: tarefas do Seu Zé, presa do dia, bicho destaque e amuletos do Caderno (2026-10-30)
+
+Inspirado no Tibia (Referencias_MMO.md §3), com nomes e tema nossos. Regras puras em `HuntingRules` e
+`HuntingCharmCatalog` (Gameplay/Hunting), estado em `HuntingProgress` (save `Hunting`), testes em
+`HuntingTests`. **Nada disso vale contra chefe**: tarefa, presa, destaque e amuleto só contam para bichos comuns.
+
+### 21.1 Tarefas de caça (Seu Zé Caçador, Vila)
+
+Uma tarefa por vez, "derrote N de um bicho" entre os bichos comuns com página no Caderno (no começo, os da
+Floresta). Desistir não dá nada e libera outra na hora. Recompensa entregue no abate que conclui a tarefa
+(XP para o herói, ouro na mochila pelo encaixe da grade; o que não couber fica guardado para o próximo abate).
+
+| Tamanho | Abates | XP bônus | Ouro | Pontos de Caça | Ex.: lobo (10 XP) / morcegos (28 XP) |
+|---|---|---|---|---|---|
+| Pequena | 10 | abates × XP do bicho × 0,5 | 15 | 1 | 50 / 140 XP |
+| Média | 25 | × 0,6 | 45 | 3 | 150 / 420 XP |
+| Grande | 60 | × 0,75 | 120 | 8 | 450 / 1260 XP |
+
+- O bônus de XP é **metade a três quartos** da XP que os próprios abates já deram: acelera, não substitui.
+- Limite: **5 tarefas concluídas por dia**.
+- Pontos de Caça: título com o Seu Zé (Aprendiz 0, Mateiro 5, Rastreador 20, Caçador do Sertão 50 pontos ganhos) e
+  troca **5 Pontos de Caça → 1 Ponto do Caderno**.
+
+### 21.2 Presa do dia e bicho destaque do dia
+
+- **Presa do dia**: 3 bichos comuns elegíveis por dia, cada um com um bônus sorteado; escolhe-se um, que vale até
+  o dia virar. **Uma troca por dia, por 15 de ouro** (sorteia outras 3 e limpa a escolha).
+
+| Bônus da presa | Valor |
+|---|---|
+| XP | +25% de XP de abate |
+| Saque | +25% de chance de uma rolagem inteira extra de saque |
+| Couro grosso | −10% de dano recebido daquele bicho |
+
+- **Bicho destaque do dia**: um bicho comum (posicionado no mapa) por dia, **+50% de XP e +50% de chance de
+  rolagem extra de saque**; anunciado no HUD do mapa (bloco da região) e no topo do Caderno.
+- Presa de XP + destaque no mesmo bicho somam: ×1,75 de XP; saque: 75% de chance de rolagem extra.
+- Sorteio: FNV-1a("aaaa-mm-dd|propósito") + LCG, sobre os ids em ordem ordinal (o mesmo em qualquer aparelho e
+  ordem de carga). O dia salvo é uma marca d'água: relógio voltado para trás não vira o dia.
+
+### 21.3 Pontos do Caderno e amuletos
+
+Cada página dá Pontos do Caderno ao chegar em **10 / 50 / 200 vitórias (1 + 2 + 3 = 6 por página)**. Os pontos
+não são salvos: são as vitórias do Caderno + as trocas com o Seu Zé − o custo dos amuletos comprados (save antigo
+já chega com seus pontos). Compra-se uma vez; **o cordão da Vó aguenta 2 amuletos** de cada vez.
+
+| Amuleto | Efeito (só bichos comuns) | Custo |
+|---|---|---|
+| Dente de Onça | −8% de dano recebido de bichos de quatro patas | 4 |
+| Casca de Besouro | −8% de dano recebido de bichos de muitas patas | 4 |
+| Pena de Carcará | −8% de dano recebido de bichos que voam | 4 |
+| Pedra de Corisco | −8% de dano recebido de bichos pesados | 4 |
+| Figa de Guiné | 3% de chance de desviar do golpe | 6 |
+| Raminho de Arruda | cura 2% da vida máxima a cada bicho vencido | 5 |
+| Nó de Vaqueiro | atordoamentos duram +10% | 5 |
+
+Proteção somada contra um bicho (amuleto do tipo + presa "Couro grosso") limitada a 30% (hoje no máximo 18%).
+Total dos 7 amuletos: 32 pontos (~5–6 páginas completas).
+
+### 21.4 Por que os amuletos protegem em vez de bater mais forte (pilha de poder, §14)
+
+`power_stack.py` agora lê `HuntingCharmCatalog`/`HuntingRules` e soma o melhor cordão + a presa como
+AttackDamage % **contra os comuns** (nunca chefes), conservador: em todos os comuns da luta.
+
+| Dano extra contra comuns (cordão + presa) | Resultado do orçamento (NG+0 / NG+1) |
+|---|---|
+| 0 (desenho final) | dentro do orçamento |
+| +2% (só amuleto ou só presa) | NG+0 Cavernas: comuns 3,1 s < 70% de 4,6 s |
+| +4% + 3% (proposta inicial) | NG+0 Montanha 4,1 s < 4,5 s; Cavernas 3,1 s < 3,2 s |
+
+Os comuns das Cavernas estão num **limiar de golpes**: com a pilha atual, qualquer +2% de dano tira um golpe da
+luta e passa do teto de 30%. Por isso os efeitos de combate da caça viraram **proteção** (dano recebido, desvio,
+cura no abate, atordoamento), que não muda nenhum tempo para matar do orçamento; chefes ficam de fora, então o
+"herói parado" também não muda. O pytest (`test_hunting_is_parsed_and_adds_no_damage` e
+`test_hunting_damage_would_break_the_commons_budget`) falha se um amuleto de dano ou uma presa de dano voltar.
+Resultado com o código atual: **pilha completa dentro do orçamento** (tabela de §14.4 inalterada).
+
+XP e saque (presa, destaque, tarefas) mudam o ritmo de nível e de loot, não o TTK; com as metas de missão
+por região o herói chega ao chefe no nível de §10. Teto prático diário: 5 tarefas + 1 presa + 1 destaque.
+
+### 21.5 Testes
+
+`HuntingTests` (EditMode): tamanhos e recompensas, progresso e conclusão única, uma tarefa por vez e limite diário,
+elegíveis, sorteio determinístico e independente da ordem, destaque nunca chefe, ofertas distintas e troca,
+virada de dia (relógio para trás ignorado; a tarefa sobrevive), troca paga, bônus empilhando só no bicho certo e
+nunca em chefe, rolagens extras de saque, marcos 10/50/200, custos/efeitos/cordão de 2, troca 5→1, ganchos
+neutros sem o serviço, round-trip do save em JSON, save vazio/antigo e saneamento.
+`tools/balance/test_power_stack.py`: os dois testes de §21.4.
+
+### 21.6 Online (FASE 12)
+
+- **Sorteios pelo relógio do servidor**: o dia (`aaaa-mm-dd`, fuso do servidor) e as sementes da presa e do
+  destaque vêm do servidor; o cliente só exibe. O destaque é o mesmo para todos no dia.
+- **Antifarm** validado no servidor: progresso de tarefa só por abate dado pelo personagem (ou grupo) no
+  encontro, com o bicho do nível do mapa; 5 tarefas/dia por conta; 1 troca de presa/dia; bônus de XP/saque não
+  valem em bichos de "Ajudante de Caça" (caça automática) nem em mapas 10+ níveis abaixo; pontos do Caderno e
+  amuletos por personagem, recalculados das vitórias no servidor.
+
+---
+
+## 22. Salas de evento com horário: Terreiro das Assombrações e Torre do Engenho Velho (2026-10-30)
+
+Inspiração: Devil Square e Blood Castle do MU (Docs/Referencias_MMO.md §2, FASE 16). Primeiro offline. Regras puras
+em `EventRoomRules` (`Assets/Scripts/Gameplay/EventRooms/`), estado salvo em `EventRoomProgress`, sala rodada por
+`EventRoomDirector` (Main.unity, sem editar cena: a arena entra em "modo dirigido" pela flag `EncounterPayload.eventRoom`).
+Testes: `EventRoomTests`. **Estimativa, ainda não passou pelo modelo do r8/r9.**
+
+### 22.1 Horário (`EventRoomSchedule`, relógio do jogo)
+
+| Sala | Abre | Janela de entrada | Item de entrada | Nível mínimo |
+|---|---|---|---|---|
+| Terreiro das Assombrações | 0h, 4h, 8h, 12h, 16h, 20h | 1 h de jogo (~50 s reais no dia de 20 min) | Convite do Terreiro | 3 |
+| Torre do Engenho Velho | 2h, 6h, 10h, 14h, 18h, 22h | 1 h de jogo | Chave do Engenho | 6 |
+
+- As duas nunca abrem juntas. **Uma entrada por abertura** (o índice da janela fica no save); o item só é gasto no
+  clique "Entrar" do mapa e volta se a viagem falhar.
+- "10 minutos de janela" do pedido virou 1 h de jogo: 10 min de jogo seriam ~8 s reais, curto demais para criança.
+  O horário fica no save (`EventRoomSaveState.schedules`); online o servidor manda o dele.
+- Entrada: queda rara fora das salas (comum 1,5% Convite / 0,75% Chave; chefe 25% / 15%; Chave só a partir do nível
+  6, nada antes do nível 3, nada dentro das salas) ou o Mascate Seu Bento (36 / 54 de ouro, 120% do valor, no rodízio
+  depois do chefe da Floresta / do Deserto). Os dois itens são `QuestItem`: não ocupam a grade nem caem ao morrer.
+
+### 22.2 Faixas de nível e escala dos bichos
+
+Os bichos vêm de **todas** as regiões (só comuns) e são ajustados à faixa do herói (`EventRoomEnemyScaler`).
+
+| Faixa | Níveis | Referência | Vida e XP do comum | Extra |
+|---|---|---|---|---|
+| 0 | 1–4 | Floresta | 70 / 10 | — |
+| 1 | 5–8 | Deserto | 110 / 18 | — |
+| 2 | 9–12 | Montanha | 140 / 28 | — |
+| 3 | 13–15 | Cavernas | 170 / 40 | — |
+| 4 | 16+ (NG+) | Cavernas | 221 / 52 | ×1,3 |
+
+Vida e XP ×(referência ÷ comum da região de origem), vida presa em ×0,35–3,5; dano `√(vida) − 1` (−40% a +80%,
+mais suave porque vêm vários juntos). XP por abate vira a da faixa (gancho `IKillExperienceScaler` no
+`EnemyRewardGranter`), então um herói nível 3 não ganha XP de Cavernas matando morcego enfraquecido. Ouro e
+materiais continuam os do bicho. Guardião da Torre: Golem de Pedra (comum, sem registro de chefe) na escala da
+faixa ×4 vida/XP, +25% de dano, ×1,5 de tamanho. Portão: 6 comuns da faixa de vida (420 → 1.326).
+
+### 22.3 Ritmo
+
+| | Terreiro | Torre |
+|---|---|---|
+| Tempo | 3 min | 4 min |
+| Ondas | 3, 4, 5, 6, 6… a cada 20 s ou com ≤ 1 vivo; teto 8 vivos | Ponte: 2, 3, 4, 4… a cada 15 s (teto 6) até **10 abates**; portão/guardião: 2 a cada 18 s (teto 3); pegar a Moenda acorda +2 |
+| Fim | tempo acaba (vencido) ou morte | entregar a Moenda ao Seu Malaquias (vencido), tempo acaba ou morte |
+
+### 22.4 Pontuação e medalhas
+
+- Abate 100 pontos, Guardião 1.000, × combo: +0,1 por abate encadeado em até 4 s, teto ×2,0 (11 seguidos).
+- Bônus: Terreiro chegar vivo ao fim +1.000; Torre ponte +500, portão +1.000, entrega +2.000 + 10 por segundo restante.
+- Medalhas (as duas salas): **Bronze 1.000, Prata 2.500, Ouro 4.500, Mestre 7.000.** Torre sem entrega: no máximo
+  Bronze. Terreiro com morte: sem teto (a morte só encerra antes).
+- Esperado (estimativa, ~5 s por comum como no r8, combo médio ×1,3): Terreiro ~30 abates ≈ 3.900 + 1.000 = **Prata/
+  Ouro**; Mestre pede ~45 abates com combos longos. Torre vencida com ~90 s sobrando ≈ 1.300 + 500 + 1.000 + 1.300 +
+  2.000 + 900 ≈ **Ouro**; Mestre pede pressa e combo.
+
+### 22.5 Recompensas por medalha (`EventRoomRules.RewardFor`)
+
+XP = abates-equivalentes × XP do comum da faixa (×1,3 na faixa 4); ouro × (1 + 0,5 × faixa); pedras do refino (§20)
+pela grade normal da mochila (`LootGrantRules`; o que não couber é avisado).
+
+| Medalha | XP (abates) | Faixa 0 | Faixa 2 | Faixa 4 | Ouro (faixa 0 / 2 / 4) | Pedras |
+|---|---|---|---|---|---|---|
+| Bronze | 5 | 50 | 140 | 260 | 8 / 16 / 24 | — |
+| Prata | 10 | 100 | 280 | 520 | 15 / 30 / 45 | 1 Bênção |
+| Ouro | 16 | 160 | 448 | 832 | 25 / 50 / 75 | 2 Bênção |
+| Mestre | 25 | 250 | 700 | 1.300 | 40 / 80 / 120 | 2 Bênção + 1 Alma |
+
+Somando o XP dos abates (~30 comuns da faixa), uma sala Ouro rende ~46 abates-equivalentes em 3–4 min: ~1,5× o XP
+por minuto de uma luta normal de dia (§16.3), compensado por 6 entradas/dia no máximo por sala, item gasto e a
+janela de 1 h de jogo. Não mexe na pilha de poder (§14): nada de buff, só XP/ouro/pedras. Se a curva andar rápido
+demais no r10, cortar `TierExperienceKills` (5/10/16/25) antes de mexer nas ondas.
+
+### 22.6 Conquistas e save
+
+- `ach_room_terreiro_clear` "Ninguém Assusta a Gente" (vencer o Terreiro), `ach_room_torre_clear` "O Engenho Canta
+  de Novo" (entregar a Moenda), `ach_room_master` "Mestre das Salas" (7.000 pontos em qualquer sala). Tipos novos
+  `EventRoomCleared = 50` (ids distintos) e `EventRoomBestScore = 51` (máximo).
+- Save `EventRooms`: melhor pontuação e medalha, partidas, vitórias, última janela usada e horário por sala. Save
+  antigo carrega vazio com o horário padrão.
+
+### 22.7 Online (FASE 12)
+
+Sala vira instância compartilhada de até 5 jogadores (grupo); pontuação, medalha e recompensa **por jogador**
+(abate conta para quem matou, bônus de fase para todos presentes); o servidor é dono do horário, das janelas e da
+entrada (gasta o item do lado do servidor); ranking por abertura no servidor.
+
+---
+
+## 23. Fôlego diário e recompensa diária em sequência (2026-10-30)
+
+Duas decisões do usuário (TODO Fase 16, `Docs/Referencias_MMO.md` §6): o **fôlego diário** (bônus nas
+primeiras horas e lembrete gentil contra o excesso de jogo) e a **recompensa diária em sequência** (presente a
+cada dia novo, numa trilha de 7 dias). Código em `Assets/Scripts/Gameplay/Daily/` e `Assets/Scripts/UI/Daily/`.
+
+### 23.1 Fôlego: faixas, descanso e relógio (`DailyStaminaRules`, testado em `DailyStaminaTests`)
+
+| Faixa | Tempo de jogo ativo | Loot (moedas e materiais) | XP de abate (ritmo de campanha, §23.3) |
+|---|---|---|---|
+| **Fôlego cheio** | primeiras 3 h | ×1,3 | ×1,00 (= XP do r8) |
+| Fôlego normal | de 3 h a 5 h | ×1 | ×0,77 (cheio é +30% sobre ele) |
+| Cansado | depois de 5 h | ×0,5 | ×0,38 (−50% sob o normal) |
+
+- **Dois baldes** gastos em ordem pelo jogo ativo: 3 h de fôlego cheio, depois 2 h de normal. Depois disso o
+  herói fica "cansado", sem piso de tempo; **o jogo nunca é bloqueado**.
+- **Descanso**: cada segundo longe do jogo devolve um segundo, **primeiro no fôlego cheio** (1 hora fora = 1 hora
+  de fôlego cheio), depois no normal; 5 h fora enchem tudo. Não há virada à meia-noite: uma noite de sono enche
+  tudo, e jogar atravessando a meia-noite não ganha 3 h novas.
+- **Só jogo ativo conta** (`ClassifyTick`): cena de jogo (mapa ou arena), sem pausa, app em foco e alguma entrada
+  (tecla, mouse, toque, controle) nos últimos **3 min**. Título, pausa, app em segundo plano e ocioso contam como
+  descanso. Os 3 primeiros minutos de um período ocioso ainda contam como jogo (só se sabe que ficou ocioso depois).
+- **Relógio** (offline): o tempo da sessão vem do relógio monotônico (`Time.unscaledDeltaTime`, quadros acima de
+  5 s vão pelo caminho offline); o descanso offline é o relógio UTC menos uma **marca d'água** que nunca volta
+  (relógio atrasado = 0 de descanso), limitado a 5 h. Um salto de data com o jogo aberto (relógio de parede ×
+  monotônico com diferença > 2 min) é guardado como "desvio" e descontado no próximo cálculo offline, então
+  adiantar a data não vira descanso. **Online (Fase 12) o servidor é dono do fôlego**; o cliente só mostra.
+- Guardado **por aparelho** (PlayerPrefs `Daily.Folego.State`), não no slot: é sobre a criança, e um jogo novo não
+  reabastece o fôlego.
+- **Lembrete** "Hora de descansar, a Vó Zefa chamou para o café!" ao entrar no cansaço e a cada 30 min de jogo
+  ativo enquanto cansado (toast no HUD do mapa e da arena).
+- **Onde se aplica (um lugar cada)**: XP de abate em `EnemyRewardGranter` (depois de chefe/presa do dia/sala de
+  evento, antes da NG+); loot em `EnemyLootGranter` logo depois das rolagens do inimigo (base + bioma + rolagens
+  extras), via `StaminaLootRules`: só pilhas simples (ouro, materiais, itens de missão) escalam, com arredondamento
+  sorteado (2 de ouro ×1,3 = 2 ou 3, média 2,6); **equipamento gerado, bônus de chefe e Pedras do Sertão não mudam**.
+  XP de missão, de evento da estrada e de variante noturna também não.
+
+### 23.2 Pilha de poder com fôlego cheio (`power_stack.py`, seção "Fôlego cheio")
+
+`load_stamina()` lê os multiplicadores e o ritmo do C#; `evaluate(..., stamina_mult=)` sobe o herói da rota com
+missões com aquela XP de abate (níveis maiores) e compara com o herói do r8 nos níveis de sempre.
+
+| Ciclo | Bioma (níveis comuns / chefe) | Relíquias | 2 comuns: r8 → pilha | Chefe: r8 → relíquias → pilha |
+|---|---|---|---|---|
+| NG+0 | Floresta (2 / 3) | 3 | 4,8 → **3,8** s | 16,5 → 15,3 → **13,8** s |
+| NG+0 | Deserto (5 / 7) | 6 | 6,1 → **4,8** s | 18,1 → 17,3 → **14,9** s |
+| NG+0 | Montanha (9 / 10) | 9 | 6,4 → **4,9** s | 18,4 → 16,5 → **14,4** s |
+| NG+0 | Cavernas (13 / 15) | 12 | 4,6 → **3,5** s | 20,0 → 18,4 → **16,1** s |
+| NG+1 | Floresta (16 / 17) | 12 | 3,3 → **2,5** s | 18,5 → 16,4 → **14,6** s |
+| NG+1 | Deserto (17 / 18) | 12 | 3,6 → **2,9** s | 18,5 → 16,4 → **14,5** s |
+| NG+1 | Montanha (19 / 20) | 12 | 4,0 → **2,9** s | 18,5 → 16,4 → **14,5** s |
+| NG+1 | Cavernas (21 / 22) | 12 | 4,0 → **2,9** s | 19,8 → 17,9 → **15,9** s |
+
+**Dentro do orçamento** (§14.3) na NG+0 e na NG+1: com o ritmo de campanha o fôlego cheio é exatamente o r8.
+
+### 23.3 Por que o "ritmo de campanha" (`DailyStaminaRules.KillXpPace` = 1 / 1,3)
+
+O fôlego não mexe no tempo para matar diretamente, mas XP vira nível. A rota com missões tem número fixo de lutas,
+então +30% de XP de abate por cima do r8 leva o herói **1 nível acima** em cada chefe na NG+0 (Floresta 3 → 4,
+Cavernas 15 → 16) e **1–2 na NG+1** (Cavernas 22 → 24). Isso, somado à pilha completa, quebra o orçamento
+(saída informativa do `power_stack.py`, não aplicada no jogo):
+
+| Ciclo | Bioma (níveis) | 2 comuns: r8 → pilha | Chefe: r8 → pilha |
+|---|---|---|---|
+| NG+0 | Montanha (10 / 11) | 6,4 → **2,9** s (−55%) | 18,4 → **14,3** s (−22,3%) |
+| NG+0 | Cavernas (14 / 16) | 4,6 → **2,9** s | 20,0 → **15,6** s |
+| NG+1 | Floresta (17 / 18) | 3,3 → 2,5 s | 18,5 → **14,0** s |
+| NG+1 | Cavernas (23 / 24) | 4,0 → 3,1 s | 19,8 → **15,1** s |
+
+Além disso, na NG+0 quem só usa o básico venceria folgado em Floresta, Montanha e Cavernas. Como uma criança joga
+quase sempre menos de 3 h por dia (fôlego cheio), o r8 foi tratado como o ritmo do **fôlego cheio**: a XP de
+abate é `base × faixa × KillXpPace`. As proporções decididas ficam (+30% sobre o normal, −50% sob ele) e o
+orçamento não muda. Quem joga de 3 a 5 h sobe ~23% mais devagar do que hoje; cansado, ~62%.
+**Decisão para o usuário**: se a ideia for +30% por cima da XP de hoje, troque `KillXpPace` para `1f` e corte
+~1 nível de poder em outro lugar (o pytest `test_stamina_on_top_of_r8_without_the_pace_would_break_the_budget`
+mostra o estouro). O loot não tem ritmo (moedas e materiais estão fora do modelo de combate).
+
+### 23.4 Recompensa diária em sequência (`DailyLoginRules`, testado em `DailyLoginTests`)
+
+| Dia | Presente |
+|---|---|
+| 1 | 20 de ouro |
+| 2 | 2 poções de vida |
+| 3 | 3 de ferro (material) |
+| 4 | 40 de ouro + 2 poções de mana |
+| 5 | 1 Convite do Terreiro (`item_convite_terreiro`, salas de evento; 30 de ouro se o item sumir) |
+| 6 | 3 poções de vida + 5 ervas |
+| 7 | peça rara surpresa (couro: elmo → botas → peitoral a cada ciclo, afixos Raro, semente pela data) + 50 de ouro |
+
+- O primeiro login de cada **novo dia do calendário local** recebe o presente; depois do dia 7 a trilha volta ao 1.
+- **Faltou um dia: volta um passo** a partir de onde continuaria (pegou o dia 4, faltou → dia 4 de novo; pegou o 7
+  → dia 1). Uma ausência longa também é um passo só. Nunca zera.
+- Relógio: a data do último presente é marca d'água (relógio atrasado não ganha nada); adiantar a data só conta
+  como "faltou" (um passo para trás), nunca como progresso. Online, o servidor é dono.
+- Por **slot** (`SaveManager.Register`, chave "DailyLogin"); saves antigos e jogo novo começam no dia 1. O que não
+  cabe na Mochila (API de encaixe da grade) vai para o Baú da Vó Zefa.
+- Valor da semana: ~110 de ouro + 5 poções de vida + 2 de mana + materiais + 1 convite + 1 peça Rara. A peça Rara de
+  couro fica dentro do p90 de sorte do equipamento (§10.4); não entra na pilha.
+- Popup no mapa (abre sozinho quando há presente; Esc/Start fecha) e faixa no título (prévia pela cópia em
+  PlayerPrefs `Daily.Login.Preview`, sem save carregado).
+
+### 23.5 Acessibilidade / pais
+
+Configurações → Acessibilidade → **"Lembrete de tempo de jogo (para os pais)"**: desligado (padrão) ou a cada 30,
+45, 60, 90 ou 120 min de jogo ativo na sessão, um toast "Você já jogou N minutos. Que tal esticar as pernas e beber
+uma água?". Guardado por aparelho (PlayerPrefs `Parental.PlayTimeReminderMinutes`). Nunca pausa nem bloqueia.
+
+### 23.6 Testes
+
+C#: `DailyStaminaTests` (faixas, multiplicadores, ritmo de XP, loot com arredondamento sorteado, baldes de
+descanso, ocioso/pausa/título, marca d'água, salto de data na sessão, persistência, lembretes) e
+`DailyLoginTests` (trilha, passo para trás, relógio, tabela, itens no banco, convite/fallback, peça rara,
+Mochila cheia → Baú, save antigo → dia 1, prévia do título). Python: `test_power_stack.py` (fôlego lido do C#,
+pilha com fôlego cheio dentro do orçamento, e o estouro sem o ritmo).
+
+---
+
+## 24. Tacho Encantado da Vó Zefa: asas, Proteção do Caos e Frutas do Sertão (2026-10-30)
+
+A "máquina de combinar" do MU (Chaos Machine), com nomes e tema nossos (FASE 16, `Docs/Referencias_MMO.md` §2).
+Regras puras em `TachoRules` / `WingCatalog` / `FruitRules` (`Assets/Scripts/Gameplay/Tacho`), testadas em `TachoTests`;
+aplicação na Mochila em `TachoService`; janela "Tacho Encantado da Vó" no hub da **Vila** (`VillageTachoPanel`,
+`Resources/UI/Tacho.uss`). **Quem cuida:** a Vó Zefa, não o Mestre Tonho — a Pedra do Caos já dizia "a Vó guarda essas
+para o Tacho Encantado", tacho é coisa de cozinha (é ela quem tem o fogão a lenha e o Baú), e o ferreiro fica com o que é
+de bigorna (refino). O Tacho só existe onde a Vó mora (`CitySpec.HasGrandmaServices`), o que também garante o Baú para o
+que não couber na Mochila.
+
+**Regra infantil (todas as receitas):** se falhar, os materiais, pedras e ouro se gastam, mas o **item principal fica
+com você do jeitinho que estava** (a peça +4 não vira pó, a asa não perde nível, a peça protegida não perde nível).
+A janela mostra chance, custo e essa frase antes de cada mistura. **Online, o servidor sorteia** (`TachoRules.Attempt`
+com a semente dele, mesma rolagem SplitMix64 do refino) e o cliente só mostra a resposta.
+
+### 24.1 Receitas e chances (`TachoRules`)
+
+| Receita | Item principal (fica se falhar) | Materiais | Ouro | Chance |
+|---|---|---|---|---|
+| Asas nível 1 (5 estilos) | arma/armadura refinada **+4 ou mais** (vira as asas no sucesso) | 1 Pedra do Caos + materiais do estilo | 60 | 50% em +4, +5 pontos por nível, teto 75% (+9) |
+| Asas 1 → 2 | as asas nível 1 | 2 Caos + 1 Alma + 4 minério de ferro + 4 pedras | 100 | 50% |
+| Asas 2 → 3 | as asas nível 2 | 3 Caos + 2 Alma + 1 Vida + 6 ferro + 6 pedras | 150 | 35% |
+| Asas nível 4 (lendária) | — | só documentada (sem item e sem receita): stats ×2 do nível 1, absorve 3% | — | — |
+| Proteção do Caos | peça em +7..+14 | a pedra do refino normal (Alma) + 1 Pedra do Caos | o do refino (0–50) | a do refino (80% → 35%) |
+| Fruta do Mandacaru | — | 1 Caos + 1 Vida + 5 ervas | 40 | 60% |
+| Fruta do Umbu | — | 2 Bênção + 3 ervas | 20 | 80% |
+
+Materiais do estilo (nível 1), um estilo por primo (qualquer primo pode usar qualquer asa; a janela destaca o do primo em
+jogo):
+
+| Estilo | Primo | Materiais | Nível 1: dano / defesa / velocidade |
+|---|---|---|---|
+| Asas de Carcará | Maithe | 6 fibras + 3 pedras | +1,5% / +1% / +3% |
+| Capa de Vaqueiro Encantada | Joaquim | 8 fibras + 2 ferros | +1% / +1,5% / +2% |
+| Asas de Beija-flor | Maria | 6 ervas + 4 fibras | +1% / +1% / +5% |
+| Asas de Asa-branca | Ícaro | 6 fibras + 3 ferros | +1% / +1% / +3% |
+| Asas de Vaga-lume | Lavine | 5 ervas + 3 pedras | +1,5% / +0,5% / +4% |
+
+O pedido listava quatro asas; a quinta (Vaga-lume, da Lavine) fecha "uma por primo". Proteção do Caos não aparece em
++0..+6: lá o refino normal já não perde nível ("use o Ferreiro"). Custo esperado: asas 1 a partir de +4 ≈ 2 tentativas
+(2 Caos, 120 de ouro); 1 → 2 ≈ 4 Caos + 2 Almas; 2 → 3 ≈ 8,6 Caos + 5,7 Almas + 2,9 Vidas. Com a Pedra do Caos caindo só do
+chefe da Montanha (15%) e nas Cavernas (1% / chefe 25%), asas 3 são meta de longo prazo (NG+ / online).
+
+### 24.2 Asas no equipamento (slot novo "Costas/Asas")
+
+- `EquipmentSlot.Wings = 9`, **acrescentado no fim** do enum: assets e saves guardam o slot como int, então saves
+  antigos (Mochila em grade e `EquippedEntry`) carregam iguais; `tools/balance/rapadura_data.py` ganhou o nome na lista.
+- Itens `item_asas_carcara_1..3`, `item_capa_vaqueiro_1..3`, `item_asas_beija_flor_1..3`, `item_asas_asa_branca_1..3`,
+  `item_asas_vaga_lume_1..3`: Armor/Accessory, 2×2 na grade, **presos ao herói** (nunca caem ao morrer), sem
+  durabilidade e sem refino (não têm atributo base).
+- Bônus (`WingCatalog.ModifiersFor`, aplicados pelo `InventoryManager` em `equip_Wings/wing/*`): AttackDamage %,
+  Defense % (menos dano recebido, `DamageCalculator`) e MoveSpeed %, = nível 1 × **1 / 1,25 / 1,5** (nível 4: ×2).
+  **Absorção** a partir do nível 2: **1% / 2%** (lendária 3%). No Rapadura, Defesa percentual já é "menos dano
+  recebido", então a absorção usa esse mesmo canal (soma com os outros percentuais, teto de 80% do `DamageCalculator`),
+  com linha própria na dica ("Absorve 2% do dano").
+- Visual: malha procedural low-poly (`WingMeshBuilder`, paleta dos bichos, ≤ 96 triângulos por lado) presa no osso do
+  peito do modelo do herói (`WingBackVisual`), batendo devagar pelas molas do motion feel (`MotionFeelMath.StepSpring`) e
+  dobrando para trás na corrida. Com **"Reduzir Movimento"** a batida parada desliga e a resposta cai pela metade.
+
+### 24.3 Frutas do Sertão (`FruitRules`, `AttributeSet`)
+
+- **Fruta do Mandacaru:** +1 ponto de atributo para distribuir, **até 2 por jornada** (`FruitRules.MaxGrowthPoints`,
+  contado no save do `AttributeSet`, `growthFruitPoints`; save antigo = 0).
+- **Fruta do Umbu:** devolve 1 ponto do atributo com mais pontos distribuídos (empate: ordem da ficha) para distribuir
+  de novo.
+- Come-se na Mochila durante uma aventura (onde está a ficha do herói). Fruta que não faria nada (teto atingido, nada
+  para devolver, ou no mapa sem ficha) **não é comida**: continua na Mochila.
+
+### 24.4 Orçamento (`tools/balance/power_stack.py`, `test_wings_stack.py`)
+
+O modelo põe, em todas as lutas ao chegar em cada região, o refino de §20.4 **mais** as asas e frutas de quem farmou as
+Pedras do Caos (teto): Floresta e Deserto nada (não cai Caos), Montanha asas 1, Cavernas asas 1 + 2 frutas (≈3 Caos até
+o fim das Cavernas: o gasto mais ofensivo), NG+1 asas 3 + 2 frutas (teto). Conservador: soma o **maior dano** de
+qualquer estilo com a **maior defesa** de qualquer estilo (+ absorção) na mesma asa, e as frutas como Poder Arcano (+1%
+de dano cada). Velocidade fica fora (o modelo não anda).
+
+Regras: herói r8 refinado + asas + frutas: chefe ≥ **95%** do r8 refinado, comuns ≥ **75%**; tudo junto (pilha §14 +
+refino + asas + frutas) contra o r8 puro: chefe ≥ **70%**, comuns ≥ 50%, nenhum chefe abaixo de 12 s; NG+0 "só
+básico" ≥ 75% do tempo que o chefe leva; parado, o chefe ainda mata em 12–40 s.
+
+Resultado (3000 jogadas):
+
+| Ciclo | Bioma | Asas (frutas) | Chefe: r8 → r8+refino → r8+refino+asas → tudo | 2 comuns: r8 → r8+refino+asas → tudo | Parado, chefe mata em (tudo) |
+|---|---|---|---|---|---|
+| NG+0 | Floresta | — (0) | 16,5 → 16,3 → 16,3 → **13,6** s | 4,8 → 4,5 → **3,8** s | 22,3 s |
+| NG+0 | Deserto | — (0) | 18,2 → 17,6 → 17,6 → **14,4** s | 6,1 → 5,6 → **4,6** s | 24,2 s |
+| NG+0 | Montanha | 1 (0) | 18,4 → 17,5 → 17,0 → **13,6** s | 6,4 → 5,8 → **4,4** s | 27,2 s |
+| NG+0 | Cavernas | 1 (2) | 20,0 → 19,1 → 18,6 → **14,8** s | 4,6 → 4,0 → **3,1** s | 32,9 s |
+| NG+1 | Floresta | 3 (2) | 18,5 → 17,3 → 16,5 → **13,4** s | 3,3 → 2,6 → **2,3** s | 30,6 s |
+| NG+1 | Deserto | 3 (2) | 18,5 → 17,4 → 16,8 → **13,5** s | 3,6 → 3,3 → **2,4** s | 30,8 s |
+| NG+1 | Montanha | 3 (2) | 18,5 → 17,4 → 16,7 → **13,6** s | 4,1 → 3,8 → **2,9** s | 31,5 s |
+| NG+1 | Cavernas | 3 (2) | 19,8 → 18,8 → 18,1 → **14,4** s | 4,0 → 3,6 → **2,9** s | 30,8 s |
+
+Orçamento das asas: **dentro**; pytest de `tools/balance` verde.
+
+Ajustes feitos no caminho (antes → depois): dano do nível 1 3% → **1,5%** (Carcará), defesa 3% → **1,5%** (Capa),
+escala dos níveis ×1/1,5/2 → **×1/1,25/1,5**, absorção 2/4% → **1/2%**, teto do Mandacaru 5 → **2**, e as Cavernas do
+NG+0 passaram a supor asas 1 + 2 frutas (o que ~3 Pedras do Caos pagam) em vez de asas 2 + 3 frutas. Com os números
+antigos o NG+1 ficava em 91% do r8 refinado (chefe) e o "tudo junto" em 67%; o "só básico" das Cavernas passava do
+limite pela defesa. Comuns: no NG+1 da Floresta eles morrem em 2–3 golpes e +4% de dano já tira um golpe (−21%,
+degrau, não tendência), por isso o piso dos comuns é 75% (o refino usa 80% pelo mesmo motivo).
+
+### 24.5 Conquistas, testes e online
+
+- Conquistas: **"Bateu Asas"** (`ach_wings_first`, primeiro par de asas, `AchievementConditionType.WingsCrafted = 60`)
+  e **"Por Cima do Sertão"** (`ach_wings_level3`, asas nível 3, `WingLevelReached = 61`, máximo), alimentadas pelo
+  `TachoService`.
+- `TachoTests` (EditMode): receitas e itens existentes, slot novo (int 9), asas presas/2×2/sem refino, stats por nível,
+  chances, checagens, sementes reproduzíveis, falha que nunca rebaixa nada, serviço (asas feitas consomem a peça; falha
+  mantém a peça e o +N; asa equipada sobe de nível e volta equipada com os bônus; proteção que segura o nível; Mochila
+  cheia → Baú), frutas (teto, save antigo, Umbu no maior atributo, mapa sem ficha), malha low-poly por estilo/nível,
+  batida com "Reduzir Movimento", textos e dica. `LocalizationCoverageTests` cobre `TachoTexts`; `ThemeAdoptionTests`
+  cobre `Tacho.uss`. Python: `test_wings_stack.py`.
+- Online (FASE 12): o servidor valida materiais, sorteia, aplica e devolve o `TachoOutcome`; o cliente nunca rola.
+
+## 24. Casa: melhorias N1→N5, conforto e "Descansado" (2026-10-30)
+
+Fases H4 e H6 de `Docs/Housing.md` (§2.2, §6, §7.3, §11.9). Código em `Assets/Scripts/Gameplay/Housing/`
+(`HouseUpgradeRules`, `HouseComfortRules`, `HouseRestedRules`, `HousePlantRules`, `HouseVisitRules`,
+`HouseQuestChain`, `HouseService.Life.cs`) e `Assets/Scripts/UI/Housing/` (`HouseLifePanel`, `HouseLifeTexts`);
+testes em `HouseUpgradeTests` e `HouseLifeRulesTests`.
+
+### 24.1 Subidas da casa (preços provisórios, decisão do usuário pendente)
+
+Uma subida por vez, paga com o que está na **mochila + Baú da casa** (tudo ou nada). Nada se perde: o arranjo é
+revalidado na grade maior e o que não couber (por exemplo, um banquinho na frente da porta nova) vai para o Depósito.
+
+| Subida | Nível do primo | Chefe libertado | Ouro | Materiais | Lutas de ouro (~6/luta, §10.1 de Housing) |
+|---|---|---|---|---|---|
+| N1 → N2 | 8 | Lobo Alfa | 150 | 30 madeira, 15 fibra, 5 ferro | ~25 |
+| N2 → N3 | 18 | Guardião da Ruína | 400 | 40 madeira, 30 pedra, 20 fibra | ~65 |
+| N3 → N4 | 28 | Senhor da Guerra | 1.000 | 60 pedra, 20 ferro, 30 madeira | ~165 |
+| N4 → N5 | 38 | Habitante Ancestral | 2.500 | 100 pedra, 40 ferro, 60 madeira + 1 lembrança de cada chefe (não é gasta) | ~415 |
+
+- A rota com missões termina a NG+0 no nível ~16 (§10): na primeira campanha a casa chega a **N2**; N3–N5 são metas
+  da Nova Jornada+ e do pós-jogo, como o Housing.md prevê (dreno de ouro de longo prazo).
+- Subir de nível não dá atributo nenhum: muda grade, limite de itens, Baú (20/30/45/60/90) e o casco 3D.
+
+### 24.2 Conforto e faixas
+
+Conforto = soma do catálogo das peças colocadas (cada ID conta no máximo 2 vezes; Depósito não conta; planta murcha
+perde metade, arredondado para baixo) + conjuntos (3 peças distintas +5, 6 peças +12, todas +25; vale a maior).
+Estimativa só com o catálogo (sem considerar encaixe): N1 com Comuns/Incomuns ≈ 160, melhor caso ≈ 530; N3 ≈ 385/1.130.
+
+| Faixa | Conforto | Nome | "Descansado" (XP de abate) | Lutas | XP extra máxima por noite |
+|---|---|---|---|---|---|
+| 0 | 0–19 | Casa arrumadinha | +2% | 10 | 0,2 luta |
+| 1 | 20–59 | Aconchegante | +2% | 15 | 0,3 luta |
+| 2 | 60–149 | Caprichada | +3% | 20 | 0,6 luta |
+| 3 | 150–299 | Casa de Vó | +3% | 25 | 0,75 luta |
+| 4 | 300+ | Lar dos sonhos | +3% | 30 | 0,9 luta |
+
+- **Mudança em relação ao Housing.md §6.1** (que propunha +2/3/5/7/10%): o ganho para em **+3%** e as faixas altas
+  passam a durar mais. Motivo abaixo (§24.3). Luz da Maria completa: +5 lutas.
+- Duas noites com bônus por dia de calendário (relógio das diárias); a que sobra não acumula; dormir de novo
+  substitui o bônus (não soma). Conta uma luta por encontro terminado (`EncounterEndedEvent`, qualquer resultado).
+- **Só XP**: nada de dano, vida ou loot. Entra em `EnemyRewardGranter` como mais um multiplicador da cadeia
+  (chefe → presa do dia → sala de evento → fôlego → **descansado** → NG+), cada um arredondado, então eles se compõem
+  (ex.: 100 × 1,3 → 130 × 1,03 → 134).
+
+### 24.3 Ritmo de nível e pilha de poder
+
+A rota com missões tem só ~34 lutas na NG+0 (Floresta 12, Deserto 5, Montanha 7, Cavernas 9), então **uma noite
+cobre uma região inteira**: quem dorme em casa antes de cada saída fica descansado o tempo todo. O teste foi feito
+assim (generoso): NG+0 com faixa 0 na Floresta, 1 no Deserto, 2 na Montanha, 3 nas Cavernas; NG+1 inteira na faixa 4,
+rodando `power_stack.evaluate` com a XP de abate por região (script ad hoc, sem mudar a ferramenta):
+
+| Tabela de % por faixa | Resultado |
+|---|---|
+| 2/3/5/7/10 (proposta do Housing.md) | NG+0 dentro; **NG+1 Deserto: comuns 2,3 s < 70% de 3,6 s** (o herói chega um nível acima) |
+| 1/2/3/4/5 e 1/2/3/4/4 | mesmo estouro na NG+1 (qualquer coisa ≥ +4% a campanha toda) |
+| **2/2/3/3/3 (adotada)** | **dentro do orçamento**, mesmos níveis da pilha sem descanso em todos os biomas |
+
+Com XP global: ×1,02 fica dentro; ×1,03 já empurra o chefe da Floresta de nível 3 para 4 — mas na Floresta a casa
+acabou de chegar (conforto ~6, faixa 0 = +2%, e só depois das 3 primeiras vitórias), então não acontece no jogo.
+`power_stack.py` (sem o descanso, que é só XP) segue verde em todas as seções e `test_power_stack.py` passa (21).
+
+### 24.4 Plantas, visitas e Missões da Casa
+
+- Plantas: felizes até 3 dias de jogo sem água, "com sede" no 3º, murchas depois (metade do conforto), **nunca
+  morrem nem somem**; o regador da Vó rega tudo de uma vez; chuva ao chegar em casa rega o quintal.
+- Livro de visitas: no máximo 1 visita por dia de jogo, só com o livro colocado; quem visita: os 4 primos que não
+  estão jogando, Vó Zefa, Dona Cida e, conforme os chefes caem, Seu Bento, Mestre Tonho e Benedita. Primos que ainda
+  não assinaram têm prioridade em dias alternados ("Casa Cheia" sai em ~1–2 semanas de dias de jogo). Guarda 100.
+- Missões da Casa 2–6 dão só itens de casa (Depósito); as roupas de "Parede de Barro" e "Casa Cheia" ficam
+  anotadas para o guarda-roupa (H5). Entregas: Água Fresca 10 pedra + 5 madeira; Fogo na Cozinha 3 carne assada +
+  8 madeira (depois do Lobo Alfa). Madeira e carne saem da Floresta; a pedra, do Deserto e da Montanha, então
+  "Água Fresca" costuma fechar depois da primeira ida ao Deserto (nada trava: a missão espera).

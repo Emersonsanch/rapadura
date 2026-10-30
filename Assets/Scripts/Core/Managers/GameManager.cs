@@ -57,15 +57,35 @@ namespace Rapadura.Core.Managers
         public DialogueManager DialogueManager { get; private set; }
         public QuestManager QuestManager { get; private set; }
         public DailyQuestService DailyQuestService { get; private set; }
+        /// <summary>"Fôlego diário": +30% / x1 / -50% XP and loot by active play time (per device, PlayerPrefs).</summary>
+        public Rapadura.Gameplay.Daily.DailyStaminaService DailyStamina { get; private set; }
+        /// <summary>"Recompensa diária em sequência": the 7-day login track (per save).</summary>
+        public Rapadura.Gameplay.Daily.DailyLoginService DailyLogin { get; private set; }
         public ShopManager ShopManager { get; private set; }
         public VillageChestStorage VillageChest { get; private set; }
         /// <summary>World map road events ("Eventos aleatórios"): trip cooldown, last event, boons for the next fight.</summary>
         public Rapadura.Gameplay.World.Events.WorldEventState WorldEvents { get; private set; }
+        /// <summary>"Conversas entre primos na estrada": exchanges already heard and the trip cooldown.</summary>
+        public Rapadura.Gameplay.World.Chatter.RoadChatterState RoadChatter { get; private set; }
         /// <summary>"Cozinha da Vó Zefa": known dishes and the active meal (village hub on the map).</summary>
         public Rapadura.Gameplay.Cooking.MealService Meals { get; private set; }
         /// <summary>"Segredos e áreas ocultas": revealed/investigated map secrets and the "Relíquias do Sertão" owned.</summary>
         public Rapadura.Gameplay.Secrets.SecretsProgress Secrets { get; private set; }
+        /// <summary>"Pesca no açude": fish collection and records ("Caderno de pesca").</summary>
+        public Rapadura.Gameplay.Fishing.FishingProgress Fishing { get; private set; }
+        /// <summary>Timed event rooms (Terreiro das Assombrações, Torre do Engenho Velho): bests, clears, entered windows, schedule.</summary>
+        public Rapadura.Gameplay.EventRooms.EventRoomProgress EventRooms { get; private set; }
+        /// <summary>"Golpe em dupla": which cousin each hero calls for the duo strike.</summary>
+        public Rapadura.Gameplay.Duo.DuoPartnerState DuoPartners { get; private set; }
         public WorldMapProgress WorldMapProgress { get; private set; }
+        /// <summary>Cities (TODO 12.3a): visited ones (carro de boi stops) and the themed shops' rotation periods.</summary>
+        public Rapadura.Gameplay.World.Cities.CityProgress Cities { get; private set; }
+        /// <summary>Death protection: the Bênção da Romaria (until the next death) and Vó Zefa's Patuá gifts.</summary>
+        public Rapadura.Gameplay.Inventory.DeathProtectionState DeathProtection { get; private set; }
+        /// <summary>"Minha casa" (Fase 15, H1): one house per account/save, shared by the five cousins.</summary>
+        public Rapadura.Gameplay.Housing.HouseService House { get; private set; }
+        /// <summary>Montarias (Docs/Mounts.md, M1): one collection per account/save, shared by the five cousins.</summary>
+        public Rapadura.Gameplay.Mounts.MountCollection Mounts { get; private set; }
         public StoryProgress StoryProgress { get; private set; }
         public NewGamePlusProgress NewGamePlusProgress { get; private set; }
         public SceneTransitionService SceneTransitionService { get; private set; }
@@ -73,6 +93,8 @@ namespace Rapadura.Core.Managers
         public CharacterSelectionState CharacterSelectionState { get; private set; }
         public DefeatedEnemyRegistry DefeatedEnemyRegistry { get; private set; }
         public BestiaryProgress BestiaryProgress { get; private set; }
+        /// <summary>Hunting (Seu Zé's tasks, "Presa do dia", "Bicho destaque do dia", "Amuletos do Caderno").</summary>
+        public Rapadura.Gameplay.Hunting.HuntingProgress Hunting { get; private set; }
         public AchievementManager AchievementManager { get; private set; }
         public TimeOfDayManager TimeOfDayManager { get; private set; }
         public WeatherSystem WeatherSystem { get; private set; }
@@ -143,12 +165,22 @@ namespace Rapadura.Core.Managers
             DialogueManager = new DialogueManager();
             QuestManager = new QuestManager();
             DailyQuestService = new DailyQuestService(QuestManager);
+            DailyStamina = new Rapadura.Gameplay.Daily.DailyStaminaService();
+            DailyLogin = new Rapadura.Gameplay.Daily.DailyLoginService();
             ShopManager = new ShopManager();
             VillageChest = new VillageChestStorage();
             WorldEvents = new Rapadura.Gameplay.World.Events.WorldEventState();
+            RoadChatter = new Rapadura.Gameplay.World.Chatter.RoadChatterState();
             Meals = new Rapadura.Gameplay.Cooking.MealService();
             Secrets = new Rapadura.Gameplay.Secrets.SecretsProgress();
+            Fishing = new Rapadura.Gameplay.Fishing.FishingProgress();
+            EventRooms = new Rapadura.Gameplay.EventRooms.EventRoomProgress();
+            DuoPartners = new Rapadura.Gameplay.Duo.DuoPartnerState();
             WorldMapProgress = new WorldMapProgress();
+            Cities = new Rapadura.Gameplay.World.Cities.CityProgress(WorldMapProgress);
+            DeathProtection = new Rapadura.Gameplay.Inventory.DeathProtectionState();
+            House = new Rapadura.Gameplay.Housing.HouseService();
+            Mounts = new Rapadura.Gameplay.Mounts.MountCollection();
             StoryProgress = new StoryProgress(WorldMapProgress);
             SceneTransitionService = new SceneTransitionService(WorldMapProgress);
             FrameRateManager = new FrameRateManager();
@@ -157,6 +189,7 @@ namespace Rapadura.Core.Managers
             // After the managers whose campaign state "Nova Jornada+" resets.
             NewGamePlusProgress = new NewGamePlusProgress(StoryProgress, WorldMapProgress, DefeatedEnemyRegistry, QuestManager);
             BestiaryProgress = new BestiaryProgress(DefeatedEnemyRegistry);
+            Hunting = new Rapadura.Gameplay.Hunting.HuntingProgress();
             AchievementManager = new AchievementManager();
             TimeOfDayManager = new TimeOfDayManager();
             WeatherSystem = new WeatherSystem();
@@ -180,12 +213,22 @@ namespace Rapadura.Core.Managers
             RegisterManager(DialogueManager);
             RegisterManager(QuestManager);
             RegisterManager(DailyQuestService);
+            RegisterManager(DailyStamina);
+            RegisterManager(DailyLogin);
             RegisterManager(ShopManager);
             RegisterManager(VillageChest);
             RegisterManager(WorldEvents);
+            RegisterManager(RoadChatter);
             RegisterManager(Meals);
             RegisterManager(Secrets);
+            RegisterManager(Fishing);
+            RegisterManager(EventRooms);
+            RegisterManager(DuoPartners);
             RegisterManager(WorldMapProgress);
+            RegisterManager(Cities);
+            RegisterManager(DeathProtection);
+            RegisterManager(House);
+            RegisterManager(Mounts);
             RegisterManager(StoryProgress);
             RegisterManager(NewGamePlusProgress);
             RegisterManager(SceneTransitionService);
@@ -193,6 +236,7 @@ namespace Rapadura.Core.Managers
             RegisterManager(CharacterSelectionState);
             RegisterManager(DefeatedEnemyRegistry);
             RegisterManager(BestiaryProgress);
+            RegisterManager(Hunting);
             RegisterManager(AchievementManager);
             RegisterManager(TimeOfDayManager);
             RegisterManager(WeatherSystem);
@@ -201,7 +245,17 @@ namespace Rapadura.Core.Managers
 
             SaveManager.Register(QuestManager);
             SaveManager.Register(DailyQuestService);
+            // Daily login streak; older saves have no entry and start at day 1.
+            SaveManager.Register(DailyLogin);
             SaveManager.Register(WorldMapProgress);
+            // Cities; older saves have no entry and load with the starting city (plus every region already fought in) visited.
+            SaveManager.Register(Cities);
+            // Bênção da Romaria; older saves have no entry and load unblessed.
+            SaveManager.Register(DeathProtection);
+            // "Minha casa"; older saves have no entry and load without a house until the "Um Cantinho Seu" beat.
+            SaveManager.Register(House);
+            // Mounts; older saves have no entry and load with no mount (the pony comes with "Primeira Sela").
+            SaveManager.Register(Mounts);
             SaveManager.Register(StoryProgress);
             // "Nova Jornada+" cycle; older saves have no entry and load as cycle 0 (first campaign).
             SaveManager.Register(NewGamePlusProgress);
@@ -215,15 +269,25 @@ namespace Rapadura.Core.Managers
             SaveManager.Register(DefeatedEnemyRegistry);
             // "Caderno da Vó Zefa" (bestiary); older saves have no entry and load an empty notebook.
             SaveManager.Register(BestiaryProgress);
+            // Hunting; older saves have no entry and load with no task, no charms and today's prey offers.
+            SaveManager.Register(Hunting);
             SaveManager.Register(ShopManager);
             // "Baú da Vó Zefa" (village hub on the map); older saves have no entry and load an empty chest.
             SaveManager.Register(VillageChest);
             // Road events on the map; older saves have no entry and load with no cooldown and no boons.
             SaveManager.Register(WorldEvents);
+            // Road conversations between cousins; older saves have no entry and load with nothing heard yet.
+            SaveManager.Register(RoadChatter);
             // Fogão a lenha: older saves have no entry and load with the starter dishes and no meal.
             SaveManager.Register(Meals);
             // Secrets and relics; older saves have no entry and load with nothing revealed and no relics.
             SaveManager.Register(Secrets);
+            // "Pesca no açude"; older saves have no entry and load with an empty fishing notebook.
+            SaveManager.Register(Fishing);
+            // Event rooms; older saves have no entry and load with the default schedule and no records.
+            SaveManager.Register(EventRooms);
+            // Duo strike partner per hero; older saves have no entry and every hero calls the default partner (the sibling).
+            SaveManager.Register(DuoPartners);
 
             // Only reads achievements out of slots written before they moved to the profile file
             // (Saves/profile.json); AchievementManager.CaptureState returns null so slots no longer carry them.
@@ -263,17 +327,27 @@ namespace Rapadura.Core.Managers
             NewSessionReset.Register(DialogueManager);
             NewSessionReset.Register(QuestManager);
             NewSessionReset.Register(DailyQuestService);
+            NewSessionReset.Register(DailyLogin);
             NewSessionReset.Register(ShopManager);
             NewSessionReset.Register(VillageChest);
             NewSessionReset.Register(WorldEvents);
+            NewSessionReset.Register(RoadChatter);
             NewSessionReset.Register(Meals);
             NewSessionReset.Register(Secrets);
+            NewSessionReset.Register(Fishing);
+            NewSessionReset.Register(EventRooms);
+            NewSessionReset.Register(DuoPartners);
             NewSessionReset.Register(WorldMapProgress);
+            NewSessionReset.Register(Cities);
+            NewSessionReset.Register(DeathProtection);
+            NewSessionReset.Register(House);
+            NewSessionReset.Register(Mounts);
             NewSessionReset.Register(StoryProgress);
             NewSessionReset.Register(NewGamePlusProgress);
             NewSessionReset.Register(CharacterSelectionState);
             NewSessionReset.Register(DefeatedEnemyRegistry);
             NewSessionReset.Register(BestiaryProgress);
+            NewSessionReset.Register(Hunting);
             NewSessionReset.Register(TimeOfDayManager);
             NewSessionReset.Register(WeatherSystem);
 

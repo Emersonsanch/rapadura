@@ -5,6 +5,8 @@
         <ui:VisualElement name="death-screen-panel" class="death-screen-panel rap-panel">
             <ui:Label name="death-title" text="Você caiu..." class="death-title loc" view-data-key="ui.death.title" />
             <ui:Label name="death-message" text="O sertão não perdoa, mas a jornada continua." class="death-message loc" view-data-key="ui.death.message" />
+            <!-- 9% death drop ("Na pressa, você deixou cair: ..."), filled and shown by DeathScreenController. -->
+            <ui:Label name="death-drop" text="" class="death-drop" style="display: none;" />
             <!-- First-death tutorial tip ("Não desista!"), filled and shown by DeathScreenController. -->
             <ui:VisualElement name="death-tip" class="death-tip" style="display: none;">
                 <ui:Label name="death-tip-title" text="" class="death-tip-title" />

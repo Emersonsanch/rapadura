@@ -103,6 +103,8 @@ namespace Rapadura.UI.Menus
         private readonly TutorialSettingsSection _tutorialSection = new TutorialSettingsSection();
         // "Vibração", appended after the tutorial rows.
         private readonly HapticsSettingsSection _hapticsSection = new HapticsSettingsSection();
+        /// <summary>Parental "Lembrete de tempo de jogo" (Acessibilidade panel, after the vibration row).</summary>
+        private readonly PlayTimeReminderSettingsSection _playTimeReminderSection = new PlayTimeReminderSettingsSection();
         // "Caramelo (companheiro nos encontros)", appended after the vibration row.
         private readonly CompanionSettingsSection _companionSection = new CompanionSettingsSection();
         // "Joystick virtual", appended in code to the Controles panel.
@@ -158,6 +160,7 @@ namespace Rapadura.UI.Menus
         private Slider _screenShakeSlider;
         private Toggle _reduceFlashToggle;
         private Toggle _reduceMotionToggle;
+        private Toggle _clearerNightToggle;
         private readonly List<ColorblindMode> _colorblindChoiceModes = new List<ColorblindMode>();
 
         private readonly MenuNavigationStack _tabStack = new MenuNavigationStack();
@@ -185,6 +188,7 @@ namespace Rapadura.UI.Menus
             _localizer.Attach(_uiDocument.rootVisualElement, null, SettingsMenuTexts.Get);
             _tutorialSection.Attach(_panelAccessibility);
             _hapticsSection.Attach(_panelAccessibility);
+            _playTimeReminderSection.Attach(_panelAccessibility);
             _companionSection.Attach(_panelAccessibility);
             _touchControlsSection.Attach(_panelControls);
             RegisterCallbacks();
@@ -208,6 +212,7 @@ namespace Rapadura.UI.Menus
             _localizer.Detach();
             _tutorialSection.Detach();
             _hapticsSection.Detach();
+            _playTimeReminderSection.Detach();
             _companionSection.Detach();
             _touchControlsSection.Detach();
             GameplayPause.Release(this);
@@ -273,6 +278,7 @@ namespace Rapadura.UI.Menus
             _screenShakeSlider = rootVisualElement.Q<Slider>("screen-shake-slider");
             _reduceFlashToggle = rootVisualElement.Q<Toggle>("reduce-flash-toggle");
             _reduceMotionToggle = rootVisualElement.Q<Toggle>("reduce-motion-toggle");
+            _clearerNightToggle = rootVisualElement.Q<Toggle>("clearer-night-toggle");
         }
 
         private void RegisterCallbacks()
@@ -305,6 +311,7 @@ namespace Rapadura.UI.Menus
             if (_screenShakeSlider != null) _screenShakeSlider.RegisterValueChangedCallback(OnScreenShakeChanged);
             if (_reduceFlashToggle != null) _reduceFlashToggle.RegisterValueChangedCallback(OnReduceFlashChanged);
             if (_reduceMotionToggle != null) _reduceMotionToggle.RegisterValueChangedCallback(OnReduceMotionChanged);
+            if (_clearerNightToggle != null) _clearerNightToggle.RegisterValueChangedCallback(OnClearerNightChanged);
         }
 
         private void UnregisterCallbacks()
@@ -325,6 +332,7 @@ namespace Rapadura.UI.Menus
             if (_screenShakeSlider != null) _screenShakeSlider.UnregisterValueChangedCallback(OnScreenShakeChanged);
             if (_reduceFlashToggle != null) _reduceFlashToggle.UnregisterValueChangedCallback(OnReduceFlashChanged);
             if (_reduceMotionToggle != null) _reduceMotionToggle.UnregisterValueChangedCallback(OnReduceMotionChanged);
+            if (_clearerNightToggle != null) _clearerNightToggle.UnregisterValueChangedCallback(OnClearerNightChanged);
         }
 
         // ------------------------------------------------------------------
@@ -934,8 +942,10 @@ namespace Rapadura.UI.Menus
             _screenShakeSlider?.SetValueWithoutNotify(_accessibility != null ? _accessibility.ScreenShakeIntensity : 1f);
             _reduceFlashToggle?.SetValueWithoutNotify(_accessibility != null && _accessibility.ReduceFlashEffects);
             _reduceMotionToggle?.SetValueWithoutNotify(_accessibility != null && _accessibility.ReduceMotion);
+            _clearerNightToggle?.SetValueWithoutNotify(_accessibility != null && _accessibility.ClearerNight);
             _tutorialSection.Refresh();
             _hapticsSection.Refresh();
+            _playTimeReminderSection.Refresh();
             _companionSection.Refresh();
 
             InitializeColorblindChoices();
@@ -1000,6 +1010,11 @@ namespace Rapadura.UI.Menus
             _accessibility?.SetReduceMotion(evt.newValue);
         }
 
+        private void OnClearerNightChanged(ChangeEvent<bool> evt)
+        {
+            _accessibility?.SetClearerNight(evt.newValue);
+        }
+
         // ------------------------------------------------------------------
         // Localization refresh
         // ------------------------------------------------------------------
@@ -1034,6 +1049,7 @@ namespace Rapadura.UI.Menus
             InitializeColorblindChoices();
             _tutorialSection.Refresh();
             _hapticsSection.Refresh();
+            _playTimeReminderSection.Refresh();
             _companionSection.Refresh();
             _touchControlsSection.Refresh();
             InitializeControlsPanel();

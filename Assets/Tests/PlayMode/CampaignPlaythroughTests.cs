@@ -74,6 +74,7 @@ namespace Rapadura.Tests.PlayMode
         public void CampaignSetUp()
         {
             WorldMapController.SeedOverride = Seed;
+            EncounterArenaController.ReinforcementWavesEnabled = false; // one wave per fight: kill all → Victory at once
             _spawned.Clear();
             _panelChanges.Clear();
             _onSpawned = e => _spawned.Add(e.Enemy);
@@ -86,6 +87,7 @@ namespace Rapadura.Tests.PlayMode
         public void CampaignTearDown()
         {
             WorldMapController.SeedOverride = null;
+            EncounterArenaController.ReinforcementWavesEnabled = true;
             EventBus.Unsubscribe(_onSpawned);
             EventBus.Unsubscribe(_onPanelChanged);
             _spawned.Clear();

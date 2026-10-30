@@ -41,6 +41,8 @@ RELIC_DEFINITION = os.path.join(SCRIPTS, "Gameplay", "Secrets", "RelicDefinition
 EVENT_CATALOG = os.path.join(SCRIPTS, "Gameplay", "World", "Events", "WorldEventCatalog.cs")
 CUDDLE = os.path.join(SCRIPTS, "Gameplay", "Pets", "CarameloCuddle.cs")
 REGION_QUESTS = os.path.join(SCRIPTS, "Gameplay", "Quests", "RegionQuestCatalog.cs")
+HUNTING_RULES = os.path.join(SCRIPTS, "Gameplay", "Hunting", "HuntingRules.cs")
+HUNTING_CHARMS = os.path.join(SCRIPTS, "Gameplay", "Hunting", "HuntingCharmCatalog.cs")
 
 HERO_IDS = {"Maithe": "Maithe", "Lavine": "Lavine", "Icaro": "Icaro", "Joaquim": "Joaquim", "Maria": "Maria"}
 HEALTH_REGEN_BASE = 1.0  # PlayerStats._healthRegenPerSecond: what a PercentAdditive HealthRegen bonus scales.
@@ -93,18 +95,23 @@ class Relic:
 @dataclass
 class NgRules:
     max_cycle: int
-    health: float
+    health_bonus: dict  # region -> one-off extra HP from NG+1 on (NewGamePlusRules.<Region>HealthBonus)
+    health: float  # extra HP per cycle, every region
+    damage_bonus: dict
     damage: float
     experience: float
+    regionless: str = "Desert"  # NewGamePlusRules.RegionlessScaling
 
     def clamp(self, cycle: int) -> int:
         return max(0, min(self.max_cycle, cycle))
 
-    def health_mult(self, cycle: int) -> float:
-        return 1 + self.health * self.clamp(cycle)
+    def health_mult(self, cycle: int, region: str | None = None) -> float:
+        c = self.clamp(cycle)
+        return 1.0 if c == 0 else 1 + self.health_bonus[region or self.regionless] + self.health * c
 
-    def damage_mult(self, cycle: int) -> float:
-        return 1 + self.damage * self.clamp(cycle)
+    def damage_mult(self, cycle: int, region: str | None = None) -> float:
+        c = self.clamp(cycle)
+        return 1.0 if c == 0 else 1 + self.damage_bonus[region or self.regionless] + self.damage * c
 
     def xp_mult(self, cycle: int) -> float:
         return 1 + self.experience * self.clamp(cycle)
@@ -112,8 +119,19 @@ class NgRules:
 
 def load_ng_rules() -> NgRules:
     source = _read(NG_RULES)
-    return NgRules(int(_const(source, "MaxCycle")), _const(source, "HealthPerCycle"),
-                   _const(source, "DamagePerCycle"), _const(source, "ExperiencePerCycle"))
+    health = {b: _const(source, f"{b}HealthBonus") for b in rd.BIOME_ORDER}
+    damage = {b: _const(source, f"{b}DamageBonus") for b in rd.BIOME_ORDER}
+    regionless = re.search(r"RegionlessScaling\s*=\s*BiomeType\.(\w+)", source).group(1)
+    return NgRules(int(_const(source, "MaxCycle")), health, _const(source, "HealthPerCycle"), damage,
+                   _const(source, "DamagePerCycle"), _const(source, "ExperiencePerCycle"), regionless)
+
+
+def region_of(data: rd.GameData, enemy_id: str) -> str | None:
+    """BiomeRegistry.FindBiomeOf: the first region (BiomeType order) whose spawn table lists the enemy."""
+    for biome in rd.BIOME_ORDER:
+        if any(eid == enemy_id for eid, _ in data.biomes[biome].spawn):
+            return biome
+    return None
 
 
 _EFFECT = re.compile(r'Effect\("[^"]*",\s*StatType\.(\w+),\s*ModifierApplication\.(\w+),\s*([-\d.]+)f(?:,\s*(\w+))?\)')
@@ -178,6 +196,55 @@ def load_event_buffs() -> list:
     for stat, value, application in re.findall(r"WorldEventEffect\.Buff\(StatType\.(\w+),\s*([-\d.]+)f(?:,\s*ModifierApplication\.(\w+))?\)", source):
         out.append(Modifier(stat, application != "Flat", float(value)))
     return out
+
+
+@dataclass
+class Hunting:
+    """Hunting bonuses that reach combat (Docs/Balance/README.md, section "Caça"), parsed from HuntingCharmCatalog.cs and HuntingRules.cs.
+
+    Charms and the "Presa do dia" only work against commons (never bosses). Today they are all protective (less damage
+    taken, dodge, heal on a win, longer stuns): none shortens a fight, so `best_vs_common` is 0. The commons of the
+    Cavernas sit on a hit breakpoint where even +2% damage breaks COMMON_BUDGET, so any damage charm or prey
+    damage pick added later is applied here, to every common of the fight (conservative), and fails the budget test."""
+    damage_charms: dict  # archetype -> damage values of HuntingCharmEffect.*Damage charms
+    protection_charms: dict  # archetype -> protection values (informative: commons' damage is not in the TTK budget)
+    max_equipped: int
+    prey_damage: float
+    prey_protection: float
+    max_protection: float
+
+    def best_vs_common(self) -> float:
+        """Best cord against one common: the damage charms of its archetype that fit, plus a prey damage pick."""
+        best = max((sum(sorted(v, reverse=True)[:self.max_equipped]) for v in self.damage_charms.values()), default=0.0)
+        return best + self.prey_damage
+
+    def best_protection(self) -> float:
+        best = max((sum(sorted(v, reverse=True)[:self.max_equipped]) for v in self.protection_charms.values()), default=0.0)
+        return min(self.max_protection, best + self.prey_protection)
+
+
+def _const_or(source: str, name: str, default: float) -> float:
+    try:
+        return _const(source, name)
+    except ValueError:
+        return default
+
+
+def load_hunting() -> Hunting:
+    charms = _read(HUNTING_CHARMS)
+    rules = _read(HUNTING_RULES)
+    consts = {name: float(value) for name, value in re.findall(r"const\s+float\s+(\w+)\s*=\s*([-\d.]+)f\s*;", charms)}
+    damage: dict = {}
+    protection: dict = {}
+    spec = re.compile(r"new HuntingCharmSpec\(\w+,\s*HuntingCharmEffect\.(\w+),\s*(\w+|[\d.]+f?),\s*\w+(?:,\s*EnemyMotionArchetype\.(\w+))?\)")
+    for effect, value, archetype in spec.findall(charms):
+        v = consts[value] if value in consts else float(value.rstrip("f"))
+        if "Damage" in effect:
+            damage.setdefault(archetype or "any", []).append(v)
+        elif "Protection" in effect:
+            protection.setdefault(archetype or "any", []).append(v)
+    return Hunting(damage, protection, int(_const(charms, "MaxEquipped")), _const_or(rules, "PreyDamageBonus", 0.0),
+                   _const_or(rules, "PreyProtectionBonus", 0.0), _const_or(rules, "MaxProtection", 1.0))
 
 
 def load_cuddle() -> Modifier:
@@ -255,6 +322,7 @@ class Stack:
     relics: tuple = ()
     owner_multiplier: float = 2.0
     event: Modifier | None = None
+    creature_damage: float = 0.0  # hunting charms + prey vs commons (§18), an AttackDamage % in the model
 
     def apply(self, hero: str, level: int, gear: bm.Gear) -> bm.Build:
         g = bm.Gear(**{k: getattr(gear, k) for k in gear.__dataclass_fields__})
@@ -269,17 +337,19 @@ class Stack:
             add_modifier(g, build, relic.modifier, self.owner_multiplier if relic.hero == HERO_IDS[hero] else 1.0)
         if self.event is not None:
             add_modifier(g, build, self.event)
+        g.ad_pct += self.creature_damage
         return build
 
 
 def ng_data(data: rd.GameData, rules: NgRules, cycle: int) -> rd.GameData:
-    """Enemies as EnemyController sees them on cycle `cycle` (HP rounded, damage per hit, before buffs)."""
+    """Enemies as EnemyController sees them on cycle `cycle`, by their region (HP rounded, damage to 0.1, before buffs)."""
     if cycle == 0:
         return data
     scaled = bm.clone_data(data)
     for enemy in scaled.enemies.values():
-        enemy.max_health = round(enemy.max_health * rules.health_mult(cycle))
-        enemy.attack_damage = enemy.attack_damage * rules.damage_mult(cycle)
+        region = region_of(data, enemy.id)
+        enemy.max_health = round(enemy.max_health * rules.health_mult(cycle, region))
+        enemy.attack_damage = round(enemy.attack_damage * rules.damage_mult(cycle, region), 1)
     return scaled
 
 
@@ -303,6 +373,11 @@ class Context:
     events: list
     k_common: float
     k_boss: float
+    hunting: Hunting | None = None
+
+    @property
+    def hunting_common(self) -> float:
+        return self.hunting.best_vs_common() if self.hunting else 0.0
 
 
 def load_context(data: rd.GameData | None = None, k_common: float | None = None, k_boss: float | None = None) -> Context:
@@ -311,22 +386,23 @@ def load_context(data: rd.GameData | None = None, k_common: float | None = None,
         k_common, k_boss, _ = run_r8.calibrate(data)
     relics, owner = load_relics()
     events = [e for e in load_event_buffs() if e.stat in COMBAT_STATS]
-    return Context(data, load_ng_rules(), load_meals(), relics, owner, events, k_common, k_boss)
+    return Context(data, load_ng_rules(), load_meals(), relics, owner, events, k_common, k_boss, load_hunting())
 
 
-def cycle_setup(ctx: Context, cycle: int, runs: int, seed: int = 8, base_gear: dict | None = None):
+def cycle_setup(ctx: Context, cycle: int, runs: int, seed: int = 8, base_gear: dict | None = None, xp_mult: float = 1.0):
     """(model, visits by biome, gear) for the quest route on `cycle`: NG+0 = r8; NG+1 keeps the end-of-campaign
-    level and the Caves gear (new drops ignored: conservative), kill/boss XP x the rules."""
+    level and the Caves gear (new drops ignored: conservative), kill/boss XP x the rules. `xp_mult` scales kill and
+    boss XP on every cycle (the "fôlego diário" tier, §23: 1.3 = fôlego cheio the whole campaign)."""
     base_model = bm.Model(ctx.data)
     gear0 = base_gear or bm.gear_by_region(base_model, "quests", runs, seed)
     if cycle == 0:
-        visits = bm.route_xp(base_model, "quests")
+        visits = bm.route_xp(base_model, "quests", kill_xp_mult=xp_mult)
         return base_model, {v.biome: v for v in visits}, gear0
-    end = bm.route_xp(base_model, "quests")[-1].exit_xp
+    end = bm.route_xp(base_model, "quests", kill_xp_mult=xp_mult)[-1].exit_xp
     for c in range(1, cycle):
-        end = bm.route_xp(bm.Model(ng_data(ctx.data, ctx.rules, c)), "quests", start_xp=end, kill_xp_mult=ctx.rules.xp_mult(c))[-1].exit_xp
+        end = bm.route_xp(bm.Model(ng_data(ctx.data, ctx.rules, c)), "quests", start_xp=end, kill_xp_mult=ctx.rules.xp_mult(c) * xp_mult)[-1].exit_xp
     model = bm.Model(ng_data(ctx.data, ctx.rules, cycle))
-    visits = bm.route_xp(model, "quests", start_xp=end, kill_xp_mult=ctx.rules.xp_mult(cycle))
+    visits = bm.route_xp(model, "quests", start_xp=end, kill_xp_mult=ctx.rules.xp_mult(cycle) * xp_mult)
     caves = gear0[("Caves", "boss")]
     gear = {(b, phase): caves for b in rd.BIOME_ORDER for phase in ("entry", "boss")}
     return model, {v.biome: v for v in visits}, gear
@@ -338,17 +414,17 @@ def best_stack(ctx: Context, model, hero, level, gear, enemies, biome, cycle, ba
     for meal in ctx.meals:
         if not meal_available(meal, biome, cycle):
             continue
-        stack = Stack(meal, base.relics, base.owner_multiplier, base.event)
+        stack = Stack(meal, base.relics, base.owner_multiplier, base.event, base.creature_damage)
         t = model.fight(stack.apply(hero, level, gear), enemies)["time"]
         if t < best_time - 1e-9:
             best_meal, best_time = meal, t
     best_event = None
     for event in ctx.events:
-        stack = Stack(best_meal, base.relics, base.owner_multiplier, event)
+        stack = Stack(best_meal, base.relics, base.owner_multiplier, event, base.creature_damage)
         t = model.fight(stack.apply(hero, level, gear), enemies)["time"]
         if t < best_time - 1e-9:
             best_event, best_time = event, t
-    return Stack(best_meal, base.relics, base.owner_multiplier, best_event), best_time
+    return Stack(best_meal, base.relics, base.owner_multiplier, best_event, base.creature_damage), best_time
 
 
 def tankiest_stack(ctx: Context, model, hero, level, gear, boss, biome, cycle, relics) -> tuple:
@@ -363,14 +439,20 @@ def tankiest_stack(ctx: Context, model, hero, level, gear, boss, biome, cycle, r
     return best, best_t
 
 
-def evaluate(ctx: Context, cycle: int, runs: int = 3000, base_gear: dict | None = None) -> dict:
-    """Per biome: r8 vs full stack (best meal + relics so far + best event; cuddle = 0), calibrated in-game seconds."""
-    model, visits, gear = cycle_setup(ctx, cycle, runs, base_gear=base_gear)
+def evaluate(ctx: Context, cycle: int, runs: int = 3000, base_gear: dict | None = None, stamina_mult: float = 1.0) -> dict:
+    """Per biome: r8 vs full stack (best meal + relics so far + best event; cuddle = 0), calibrated in-game seconds.
+    `stamina_mult` > 1: the stacked hero also levelled with that kill-XP tier ("fôlego cheio", §23) while the r8
+    reference keeps the plain levels, so the budget covers the extra levels too."""
+    model, visits, gear = cycle_setup(ctx, cycle, runs, base_gear=base_gear, xp_mult=stamina_mult)
+    base_visits = visits if stamina_mult == 1.0 else cycle_setup(ctx, cycle, runs, base_gear=gear if cycle == 0 else base_gear)[1]
     out = {}
     for biome in rd.BIOME_ORDER:
         v = visits[biome]
         lvl_common = int(model.level_for_xp((v.entry_xp + v.boss_xp_before) / 2))
         lvl_boss = int(model.level_for_xp(v.boss_xp_before))
+        bv = base_visits[biome]
+        r8_lvl_common = int(model.level_for_xp((bv.entry_xp + bv.boss_xp_before) / 2))
+        r8_lvl_boss = int(model.level_for_xp(bv.boss_xp_before))
         g_common = gear[(biome, "entry")].plus(gear[(biome, "boss")]).scaled(0.5)
         g_boss = gear[(biome, "boss")]
         relics = tuple(relics_available(ctx.relics, biome, cycle))
@@ -379,11 +461,12 @@ def evaluate(ctx: Context, cycle: int, runs: int = 3000, base_gear: dict | None 
             commons_fight, boss_fight = model.common_fight(biome), model.boss_fight(biome)
             boss = model.biome_boss(biome)
             plain = Stack()
-            r8_common = model.fight(plain.apply(hero, lvl_common, g_common), commons_fight)["time"]
-            r8_boss = model.fight(plain.apply(hero, lvl_boss, g_boss), boss_fight)["time"]
+            r8_common = model.fight(plain.apply(hero, r8_lvl_common, g_common), commons_fight)["time"]
+            r8_boss = model.fight(plain.apply(hero, r8_lvl_boss, g_boss), boss_fight)["time"]
             with_relics = Stack(None, relics, ctx.owner_multiplier)
             relic_boss = model.fight(with_relics.apply(hero, lvl_boss, g_boss), boss_fight)["time"]
-            _, stack_common = best_stack(ctx, model, hero, lvl_common, g_common, commons_fight, biome, cycle, with_relics)
+            hunted = Stack(None, relics, ctx.owner_multiplier, creature_damage=ctx.hunting_common)
+            _, stack_common = best_stack(ctx, model, hero, lvl_common, g_common, commons_fight, biome, cycle, hunted)
             stack, stack_boss = best_stack(ctx, model, hero, lvl_boss, g_boss, boss_fight, biome, cycle, with_relics)
             basic = model.fight(stack.apply(hero, lvl_boss, g_boss), [boss], use_skills=False)
             _, tank_ttd = tankiest_stack(ctx, model, hero, lvl_boss, g_boss, boss, biome, cycle, relics)
@@ -394,7 +477,7 @@ def evaluate(ctx: Context, cycle: int, runs: int = 3000, base_gear: dict | None 
                 "meal": stack.meal.id if stack.meal else None,
                 "event": f"{stack.event.stat} +{stack.event.value:g}" if stack.event else None,
                 "basic_kill": basic["time"], "basic_death": basic["death_time"],
-                "parked_ttd_plain": parked_time_to_die(model, plain.apply(hero, lvl_boss, g_boss), boss),
+                "parked_ttd_plain": parked_time_to_die(model, plain.apply(hero, r8_lvl_boss, g_boss), boss),
                 "parked_ttd_stack": parked_time_to_die(model, stack.apply(hero, lvl_boss, g_boss), boss),
                 "parked_ttd_tank": tank_ttd,
             }
@@ -429,8 +512,7 @@ def biome_summary(result: dict, biome: str) -> dict:
 def violations(result: dict, cycle: int) -> list:
     """The power budget (§14.3) a full offensive stack must keep, per biome (means of the 5 heroes):
     boss/commons TTK within BOSS_BUDGET/COMMON_BUDGET of the r8 hero; at NG+0 a basic-attack-only hero wins by a
-    hair at best (kill >= BASIC_ONLY_EDGE x time-to-die) and the boss kills a parked hero in 12-40 s; at NG+1 in
-    at least 12 s (the upper end is the NG+ scaling's, not the stack's: §14.4)."""
+    hair at best (kill >= BASIC_ONLY_EDGE x time-to-die); on every cycle the boss kills a parked hero in 12-40 s."""
     out = []
     for biome in result:
         s = biome_summary(result, biome)
@@ -441,7 +523,7 @@ def violations(result: dict, cycle: int) -> list:
         if cycle == 0 and s["basic_kill"] < BASIC_ONLY_EDGE * s["parked_ttd_stack"]:
             out.append(f"{biome}: basic-only kill {s['basic_kill']:.1f} s < {BASIC_ONLY_EDGE:.0%} of time-to-die {s['parked_ttd_stack']:.1f} s")
         low, high = PARKED_TTD_BAND
-        if s["parked_ttd_stack"] < low or (cycle == 0 and s["parked_ttd_stack"] > high):
+        if not low <= s["parked_ttd_stack"] <= high:
             out.append(f"{biome}: parked time-to-die {s['parked_ttd_stack']:.1f} s outside {low}-{high}")
     return out
 
@@ -497,9 +579,260 @@ def budget_table(ctx: Context) -> str:
                      f"{relic.biome} ({relic.source}) |")
     for event in ctx.events:
         lines.append(f"| evento | {event.stat} +{event.value:g} | próxima luta |")
+    if ctx.hunting is not None:
+        lines.append(f"| amuletos do Caderno + presa do dia (seção Caça) | AttackDamage +{ctx.hunting_common:g} contra comuns (nenhum amuleto de dano); "
+                     f"proteção até {ctx.hunting.best_protection():g} contra um tipo de bicho comum (fora do modelo de TTK) | "
+                     f"páginas do Caderno / Seu Zé |")
     cuddle = load_cuddle()
     lines.append(f"| carinho no Caramelo | {cuddle.stat} +{cuddle.value:g} por {cuddle.seconds:g} s (fora do modelo: 0 em combate) | Vila |")
     return "\n".join(lines)
+
+
+# ----------------------------------------------------------------------------- refine +0..+15 (README "Refino de item")
+
+REFINE_RULES = os.path.join(SCRIPTS, "Gameplay", "Refining", "RefineRules.cs")
+ITEMS_DIR = os.path.join(rd.ROOT, "Assets", "Resources", "Items")
+# Refine level and Pedra da Vida option the budget assumes on EVERY piece (weapon + head/chest/boots) when the hero
+# reaches each region: a player who farmed the stones and bought some at the Forja, i.e. an upper bound. The quest
+# route alone drops fewer (README "Refino de item"). NG+1 keeps the Cavernas gear (cycle_setup), so also its refine.
+REFINE_BY_REGION = {"Forest": (4, 0), "Desert": (6, 1), "Mountain": (7, 1), "Caves": (9, 2)}
+REFINE_BOSS_BUDGET = 0.92  # r8 hero + refine: boss TTK >= 92% of the plain r8 one
+# Commons die in 3-6 hits: one hit less is already -15..-20%, so their bands are wider (quantised, not a trend).
+REFINE_COMMON_BUDGET = 0.80
+FULL_BOSS_BUDGET = 0.74  # full stack + refine: boss TTK >= 74% of the plain r8 one (the whole optional ceiling)
+FULL_COMMON_BUDGET = 0.55
+REFINE_BASIC_EDGE = 0.75  # NG+0, stack + refine, basic attacks only: kill >= 75% of the time the boss needs (stack: 90%)
+FULL_BOSS_FLOOR = 12.0  # NG+0 and NG+1: a stacked + refined hero still needs >= 12 s for any boss
+
+
+@dataclass
+class RefineCurve:
+    stat_bonus: list  # cumulative fraction at +0..+15
+    weapon_share: float
+    weapon_option: float
+    armour_option: float
+    armour: dict  # equip slot -> best ArmorDefense among Resources/Items
+
+    def refined(self, base: float, level: int) -> float:
+        if base <= 0 or level <= 0:
+            return base
+        return round(base * (1 + self.stat_bonus[max(0, min(15, level))]) + 1e-9, 1)
+
+    def gear(self, level: int, option: int) -> bm.Gear:
+        """What RefineRules/InventoryManager.ApplyRefineEffects add with a weapon and every armour piece at `level`."""
+        g = bm.Gear()
+        g.ad_pct = self.stat_bonus[level] * self.weapon_share + option * self.weapon_option
+        g.defense = sum(self.refined(d, level) - d for d in self.armour.values())
+        g.max_hp_pct = len(self.armour) * option * self.armour_option
+        return g
+
+
+def load_refine() -> RefineCurve:
+    source = _read(REFINE_RULES)
+    body = re.search(r"StatBonuses\s*=\s*\{(.*?)\};", source, re.S).group(1)
+    bonus = [float(v) for v in re.findall(r"([\d.]+)f", body)]
+    armour = {}
+    for name in sorted(os.listdir(ITEMS_DIR)):
+        if not name.endswith(".asset"):
+            continue
+        text = _read(os.path.join(ITEMS_DIR, name))
+        slot = int(re.search(r"_equipSlot: (\d+)", text).group(1))
+        defense = float(re.search(r"_armorDefense: ([\d.]+)", text).group(1))
+        if slot and defense > 0:
+            armour[slot] = max(armour.get(slot, 0.0), defense)
+    return RefineCurve(bonus, _const(source, "WeaponAttackShare"), _const(source, "WeaponOptionAttackPercent"),
+                       _const(source, "ArmourOptionHealthPercent"), armour)
+
+
+def refined_gear(base_gear: dict, curve: RefineCurve, levels: dict | None = None) -> dict:
+    """base_gear (gear_by_region) with every region's expected refine added (other keys kept)."""
+    levels = levels or REFINE_BY_REGION
+    out = dict(base_gear)
+    for biome in rd.BIOME_ORDER:
+        for phase in ("entry", "boss"):
+            out[(biome, phase)] = base_gear[(biome, phase)].plus(curve.gear(*levels[biome]))
+    return out
+
+
+def refine_violations(plain: dict, refined: dict, cycle: int) -> list:
+    """README "Refino de item" (budget): the refined hero keeps the §14.3 stack budget (relative to the refined r8 hero; the basic-only edge loosens
+    to REFINE_BASIC_EDGE), refine alone shortens the r8 fights by at most REFINE_*_BUDGET, stack + refine together by
+    at most FULL_*_BUDGET, and no boss drops under FULL_BOSS_FLOOR seconds."""
+    # The §14.3 stack budget on top of the refined r8 hero; the commons part is checked against the plain r8 hero below
+    # (FULL_COMMON_BUDGET): on a refined hero the stack often removes exactly one hit, which reads as -35%.
+    out = [f"stack on refined hero: {v}" for v in violations(refined, cycle) if "basic-only" not in v and "commons" not in v]
+    for biome in plain:
+        p, r = biome_summary(plain, biome), biome_summary(refined, biome)
+        if cycle == 0 and r["basic_kill"] < REFINE_BASIC_EDGE * r["parked_ttd_stack"]:
+            out.append(f"{biome}: basic-only kill {r['basic_kill']:.1f} s < {REFINE_BASIC_EDGE:.0%} of time-to-die {r['parked_ttd_stack']:.1f} s")
+        if r["stack_boss"] < FULL_BOSS_FLOOR:
+            out.append(f"{biome}: stack+refine boss {r['stack_boss']:.1f} s < {FULL_BOSS_FLOOR:g} s")
+        if r["r8_boss"] < REFINE_BOSS_BUDGET * p["r8_boss"]:
+            out.append(f"{biome}: refined boss {r['r8_boss']:.1f} s < {REFINE_BOSS_BUDGET:.0%} of r8 {p['r8_boss']:.1f} s")
+        if r["r8_common"] < REFINE_COMMON_BUDGET * p["r8_common"]:
+            out.append(f"{biome}: refined commons {r['r8_common']:.1f} s < {REFINE_COMMON_BUDGET:.0%} of r8 {p['r8_common']:.1f} s")
+        if r["stack_boss"] < FULL_BOSS_BUDGET * p["r8_boss"]:
+            out.append(f"{biome}: stack+refine boss {r['stack_boss']:.1f} s < {FULL_BOSS_BUDGET:.0%} of r8 {p['r8_boss']:.1f} s")
+        if r["stack_common"] < FULL_COMMON_BUDGET * p["r8_common"]:
+            out.append(f"{biome}: stack+refine commons {r['stack_common']:.1f} s < {FULL_COMMON_BUDGET:.0%} of r8 {p['r8_common']:.1f} s")
+    return out
+
+
+def refine_report(plain_results: dict, refined_results: dict) -> str:
+    lines = ["| Ciclo | Bioma | Refino (opção) | Chefe: r8 → r8+refino → pilha+refino | 2 comuns: r8 → r8+refino → pilha+refino | "
+             "Parado, chefe mata em (pilha+refino) |", "|---|---|---|---|---|---|"]
+    for cycle in refined_results:
+        for biome in refined_results[cycle]:
+            p, r = biome_summary(plain_results[cycle], biome), biome_summary(refined_results[cycle], biome)
+            level, option = REFINE_BY_REGION["Caves" if cycle > 0 else biome]
+            lines.append(f"| NG+{cycle} | {run_r8.NAMES[biome]} | +{level} ({option}) | "
+                         f"{f1(p['r8_boss'])} → {f1(r['r8_boss'])} → **{f1(r['stack_boss'])}** s | "
+                         f"{f1(p['r8_common'])} → {f1(r['r8_common'])} → **{f1(r['stack_common'])}** s | {f1(r['parked_ttd_stack'])} s |")
+    return "\n".join(lines)
+
+
+DAILY_STAMINA = os.path.join(SCRIPTS, "Gameplay", "Daily", "DailyStaminaRules.cs")
+
+
+def load_stamina() -> dict:
+    """The "fôlego diário" (§23), parsed from DailyStaminaRules.cs: the tier multipliers (full/normal/tired) and the
+    campaign pace of kill XP (`KillXpPace`, "1f / FullMultiplier" or a literal); kill XP = tier x pace."""
+    text = _read(DAILY_STAMINA)
+    out = {tier: _const(text, name) for tier, name in
+           (("full", "FullMultiplier"), ("normal", "NormalMultiplier"), ("tired", "TiredMultiplier"))}
+    if re.search(r"const\s+float\s+KillXpPace\s*=\s*1f\s*/\s*FullMultiplier\s*;", text):
+        out["pace"] = 1.0 / out["full"]
+    else:
+        out["pace"] = _const(text, "KillXpPace")
+    return out
+
+
+def stamina_xp_mult(stamina: dict, tier: str = "full") -> float:
+    """Kill-XP multiplier of a tier as the game applies it (EnemyRewardGranter): tier x campaign pace."""
+    return stamina[tier] * stamina["pace"]
+
+
+# ----------------------------------------------------------------------------- wings + fruits (README "Tacho Encantado e asas")
+
+WING_CATALOG = os.path.join(SCRIPTS, "Gameplay", "Tacho", "WingCatalog.cs")
+FRUIT_RULES = os.path.join(SCRIPTS, "Gameplay", "Tacho", "FruitRules.cs")
+ATTRIBUTE_SET = os.path.join(SCRIPTS, "Gameplay", "Player", "AttributeSet.cs")
+# Wing level and Frutas do Mandacaru eaten that the budget assumes when the hero reaches each region: a player who farmed
+# the Pedras do Caos (they only drop from the Montanha boss on: 15%, Cavernas 1% / boss 25%) and won every Tacho roll, i.e.
+# an upper bound. Each wing level 1 / fruit costs 1 Caos, level 2 costs 2 more: with ~3 stones by the end of the Cavernas
+# the most offensive spend is wings 1 + both fruits. NG+1 keeps the Cavernas gear (cycle_setup), so it gets WINGS_NG1 and
+# the fruit cap.
+WINGS_BY_REGION = {"Forest": 0, "Desert": 0, "Mountain": 1, "Caves": 1}
+WINGS_NG1 = 3
+FRUITS_BY_REGION = {"Forest": 0, "Desert": 0, "Mountain": 0, "Caves": 2}
+WINGS_BOSS_BUDGET = 0.95  # refined r8 hero + wings + fruits: boss TTK >= 95% of the refined r8 one
+WINGS_COMMON_BUDGET = 0.75  # NG+1 commons die in 2-3 hits: +4% damage already removes one (-21%, quantised; README)
+ALL_BOSS_BUDGET = 0.70  # full stack + refine + wings + fruits: boss TTK >= 70% of the plain r8 one
+ALL_COMMON_BUDGET = 0.50
+ALL_BASIC_EDGE = 0.75  # NG+0, everything on, basic attacks only: kill >= 75% of the time the boss needs (as the refine)
+ALL_BOSS_FLOOR = 12.0  # no boss under 12 s, NG+0 and NG+1
+
+
+@dataclass
+class WingCurve:
+    """WingCatalog.cs (styles at level 1, level scale, absorb) + the fruit cap and Poder Arcano per point."""
+    styles: dict  # style -> (damage, defense, move speed) at level 1
+    level_scale: list  # index = wing level (0 unused, 4 = legendary, documented only)
+    absorb: list
+    fruit_cap: int
+    arcane_pct: float
+
+    def damage(self, level: int) -> float:
+        """Best AttackDamage % of any style at `level` (0 = no wings)."""
+        return max(d for d, _, _ in self.styles.values()) * self.level_scale[level] if level > 0 else 0.0
+
+    def defense(self, level: int) -> float:
+        """Best Defense % of any style at `level` plus the absorb (same percent channel)."""
+        return max(f for _, f, _ in self.styles.values()) * self.level_scale[level] + self.absorb[level] if level > 0 else 0.0
+
+    def gear(self, level: int, fruits: int) -> bm.Gear:
+        """Upper bound: the most offensive style's damage AND the most defensive style's defense on the same wing, plus the
+        fruits as Poder Arcano points (the most offensive spend). MoveSpeed: not modelled (no movement)."""
+        g = bm.Gear()
+        g.ad_pct = self.damage(level) + min(fruits, self.fruit_cap) * self.arcane_pct
+        g.defense_pct = self.defense(level)
+        return g
+
+
+def load_wings() -> WingCurve:
+    source = _read(WING_CATALOG)
+    styles = {}
+    for style, damage, defense, move in re.findall(
+            r"new WingStyleSpec\(WingStyle\.(\w+),\s*CharacterId\.\w+,\s*\"\w+\",\s*([\d.]+)f,\s*([\d.]+)f,\s*([\d.]+)f", source):
+        styles[style] = (float(damage), float(defense), float(move))
+
+    def table(name: str) -> list:
+        body = re.search(name + r"\s*=\s*\{(.*?)\};", source, re.S).group(1)
+        return [float(v) for v in re.findall(r"([\d.]+)f", body)]
+
+    attributes = _read(ATTRIBUTE_SET)
+    return WingCurve(styles, table("LevelScale"), table("AbsorbByLevel"), int(_const(_read(FRUIT_RULES), "MaxGrowthPoints")),
+                     _const(attributes, "ArcanePowerAttackDamagePerPoint"))
+
+
+def winged_gear(base_gear: dict, refine: RefineCurve, wings: WingCurve, cycle: int) -> dict:
+    """refined_gear + each region's wings and fruits. NG+1 reads only the Cavernas boss gear, which gets WINGS_NG1 and the cap."""
+    out = refined_gear(base_gear, refine)
+    for biome in rd.BIOME_ORDER:
+        level, fruits = (WINGS_NG1, wings.fruit_cap) if cycle > 0 else (WINGS_BY_REGION[biome], FRUITS_BY_REGION[biome])
+        for phase in ("entry", "boss"):
+            out[(biome, phase)] = out[(biome, phase)].plus(wings.gear(level, fruits))
+    return out
+
+
+def wings_violations(plain: dict, refined: dict, winged: dict, cycle: int) -> list:
+    """README "Tacho Encantado e asas": wings + fruits on the refined r8 hero cost at most WINGS_*_BUDGET; everything
+    (stack + refine + wings + fruits) at most ALL_*_BUDGET of the plain r8 hero; no boss under ALL_BOSS_FLOOR; at NG+0 a
+    basic-attack-only hero keeps ALL_BASIC_EDGE; parked, the boss still kills in 12-40 s."""
+    out = []
+    low, high = PARKED_TTD_BAND
+    for biome in plain:
+        p, r, w = biome_summary(plain, biome), biome_summary(refined, biome), biome_summary(winged, biome)
+        if w["r8_boss"] < WINGS_BOSS_BUDGET * r["r8_boss"]:
+            out.append(f"{biome}: wings boss {w['r8_boss']:.1f} s < {WINGS_BOSS_BUDGET:.0%} of refined r8 {r['r8_boss']:.1f} s")
+        if w["r8_common"] < WINGS_COMMON_BUDGET * r["r8_common"]:
+            out.append(f"{biome}: wings commons {w['r8_common']:.1f} s < {WINGS_COMMON_BUDGET:.0%} of refined r8 {r['r8_common']:.1f} s")
+        if w["stack_boss"] < ALL_BOSS_BUDGET * p["r8_boss"]:
+            out.append(f"{biome}: everything boss {w['stack_boss']:.1f} s < {ALL_BOSS_BUDGET:.0%} of r8 {p['r8_boss']:.1f} s")
+        if w["stack_common"] < ALL_COMMON_BUDGET * p["r8_common"]:
+            out.append(f"{biome}: everything commons {w['stack_common']:.1f} s < {ALL_COMMON_BUDGET:.0%} of r8 {p['r8_common']:.1f} s")
+        if w["stack_boss"] < ALL_BOSS_FLOOR:
+            out.append(f"{biome}: everything boss {w['stack_boss']:.1f} s < {ALL_BOSS_FLOOR:g} s")
+        if cycle == 0 and w["basic_kill"] < ALL_BASIC_EDGE * w["parked_ttd_stack"]:
+            out.append(f"{biome}: basic-only kill {w['basic_kill']:.1f} s < {ALL_BASIC_EDGE:.0%} of time-to-die {w['parked_ttd_stack']:.1f} s")
+        if not low <= w["parked_ttd_stack"] <= high:
+            out.append(f"{biome}: parked time-to-die {w['parked_ttd_stack']:.1f} s outside {low}-{high}")
+    return out
+
+
+def wings_report(plain_results: dict, refined_results: dict, winged_results: dict) -> str:
+    lines = ["| Ciclo | Bioma | Asas (frutas) | Chefe: r8 → r8+refino → r8+refino+asas → tudo | 2 comuns: r8 → r8+refino+asas → tudo | "
+             "Parado, chefe mata em (tudo) |", "|---|---|---|---|---|---|"]
+    for cycle in winged_results:
+        for biome in winged_results[cycle]:
+            p = biome_summary(plain_results[cycle], biome)
+            r = biome_summary(refined_results[cycle], biome)
+            w = biome_summary(winged_results[cycle], biome)
+            level, fruits = (WINGS_NG1, "cap") if cycle > 0 else (WINGS_BY_REGION[biome], FRUITS_BY_REGION[biome])
+            lines.append(f"| NG+{cycle} | {run_r8.NAMES[biome]} | {level or '—'} ({fruits}) | "
+                         f"{f1(p['r8_boss'])} → {f1(r['r8_boss'])} → {f1(w['r8_boss'])} → **{f1(w['stack_boss'])}** s | "
+                         f"{f1(p['r8_common'])} → {f1(w['r8_common'])} → **{f1(w['stack_common'])}** s | {f1(w['parked_ttd_stack'])} s |")
+    return "\n".join(lines)
+
+
+def wings_main(ctx: Context, runs: int, base_gear: dict, results: dict, refined: dict, refine: RefineCurve) -> None:
+    wings = load_wings()
+    winged = {cycle: evaluate(ctx, cycle, runs, winged_gear(base_gear, refine, wings, cycle)) for cycle in (0, 1)}
+    print("\n## Asas e Frutas do Sertão por região (README: Tacho Encantado e asas)\n")
+    print(wings_report(results, refined, winged))
+    print("\n## Orçamento das asas\n")
+    problems = [f"NG+{c}: {p}" for c in winged for p in wings_violations(results[c], refined[c], winged[c], c)]
+    print("\n".join(f"- {p}" for p in problems) if problems else "- dentro do orçamento")
 
 
 def main():
@@ -520,6 +853,28 @@ def main():
     print("\n## Metas absolutas do r8 com a pilha (informativo)\n")
     misses = [f"NG+{c}: {p}" for c, r in results.items() for p in target_misses(r)]
     print("\n".join(f"- {p}" for p in misses) if misses else "- todas dentro")
+    curve = load_refine()
+    refined = {cycle: evaluate(ctx, cycle, args.runs, refined_gear(base_gear, curve)) for cycle in (0, 1)}
+    print("\n## Refino +0..+15 por região (README: Refino de item)\n")
+    print(refine_report(results, refined))
+    print("\n## Orçamento do refino\n")
+    rproblems = [f"NG+{c}: {p}" for c in refined for p in refine_violations(results[c], refined[c], c)]
+    print("\n".join(f"- {p}" for p in rproblems) if rproblems else "- dentro do orçamento")
+    stamina = load_stamina()
+    mult = stamina_xp_mult(stamina)
+    full = {cycle: evaluate(ctx, cycle, args.runs, base_gear, stamina_mult=mult) for cycle in (0, 1)}
+    print(f"\n## Fôlego cheio a campanha inteira + pilha completa (§23): XP de abate ×{stamina['full']:g} × ritmo "
+          f"{stamina['pace']:.3f} = ×{mult:.3f}\n")
+    print(report(full))
+    print("\n## Orçamento da pilha com fôlego cheio (§23)\n")
+    sproblems = [f"NG+{c}: {p}" for c, r in full.items() for p in violations(r, c)]
+    print("\n".join(f"- {p}" for p in sproblems) if sproblems else "- dentro do orçamento")
+    literal = {cycle: evaluate(ctx, cycle, args.runs, base_gear, stamina_mult=stamina["full"]) for cycle in (0, 1)}
+    print(f"\n## Informativo: +{stamina['full'] - 1:.0%} por cima do r8, sem o ritmo de campanha (§23.3, não aplicado no jogo e fora do orçamento)\n")
+    print(report(literal))
+    lproblems = [f"NG+{c}: {p}" for c, r in literal.items() for p in violations(r, c)]
+    print("\n" + ("\n".join(f"- {p}" for p in lproblems) if lproblems else "- dentro do orçamento"))
+    wings_main(ctx, args.runs, base_gear, results, refined, curve)
 
 
 if __name__ == "__main__":

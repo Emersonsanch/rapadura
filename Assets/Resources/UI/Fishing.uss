@@ -1,0 +1,318 @@
+/*
+ * "Pesca no açude", built in code: the fishing window (FishingPanelController, on top of the map HUD's
+ * Mochila overlay classes .wm-backpack-overlay / .wm-backpack-panel). Loaded at runtime from Resources and
+ * attached to the window root, which sits under the HUD's `rap-theme` root (wm-hud-root), where the palette
+ * below resolves. Water and bars are opaque so they read on any map background.
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+.fishing-panel {
+    width: 620px;
+    max-width: 94%;
+    max-height: 96%;
+    padding: 16px 20px;
+}
+
+.fishing-intro {
+    font-size: 13px;
+    -unity-font-style: italic;
+    color: var(--rap-cream);
+    white-space: normal;
+    padding: 6px 10px;
+    margin-bottom: 6px;
+    border-left-width: 3px;
+    border-left-color: var(--rap-caramel);
+    background-color: var(--rap-brown-night);
+    border-radius: 6px;
+}
+
+.fishing-conditions {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+    -unity-text-align: middle-center;
+    margin-bottom: 6px;
+}
+
+.fishing-game {
+    flex-shrink: 1;
+    align-items: stretch;
+}
+
+/* ---- Water and float ---- */
+
+.fishing-water {
+    height: 110px;
+    border-radius: 12px;
+    border-width: 2px;
+    border-color: var(--rap-panel-border);
+    background-color: rgb(38, 86, 104);
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 6px;
+}
+
+.fishing-water--bite {
+    border-color: var(--rap-gold);
+    background-color: rgb(30, 74, 92);
+}
+
+.fishing-float {
+    width: 26px;
+    height: 34px;
+    border-radius: 13px;
+    border-width: 2px;
+    border-color: var(--rap-cream);
+    background-color: var(--rap-clay-red);
+    align-items: center;
+    justify-content: center;
+}
+
+.fishing-float--twitch {
+    border-color: var(--rap-gold-light);
+}
+
+.fishing-float--tremble {
+    border-color: var(--rap-gold);
+    border-width: 3px;
+    background-color: var(--rap-warning);
+}
+
+.fishing-float--sunk {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    border-color: var(--rap-gold);
+    border-width: 4px;
+    background-color: rgb(20, 44, 56);
+}
+
+.fishing-float--hooked {
+    background-color: var(--rap-caramel);
+}
+
+.fishing-float-mark {
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(46, 27, 16);
+    padding: 0;
+    margin: 0;
+}
+
+.fishing-hint {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--rap-cream);
+    white-space: normal;
+    -unity-text-align: middle-center;
+    min-height: 22px;
+    margin-bottom: 6px;
+}
+
+/* ---- Bars ---- */
+
+.fishing-bars {
+    margin-bottom: 6px;
+}
+
+.fishing-bars--idle {
+    opacity: 0.55;
+}
+
+.fishing-bar-label {
+    font-size: 12px;
+    color: var(--rap-cream-dim);
+    margin-bottom: 2px;
+}
+
+.fishing-tension-track,
+.fishing-progress-track {
+    height: 16px;
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: var(--rap-panel-border);
+    background-color: var(--rap-brown-deep);
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+/* The red zone: holding here snaps the line. */
+.fishing-tension-danger {
+    position: absolute;
+    left: 80%;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgb(120, 40, 30);
+}
+
+.fishing-tension-fill {
+    height: 100%;
+    width: 0;
+    background-color: var(--rap-cane-green);
+}
+
+.fishing-tension-fill--danger {
+    background-color: var(--rap-clay-red);
+}
+
+.fishing-tension-fill--slack {
+    background-color: var(--rap-cream-dim);
+}
+
+.fishing-progress-fill {
+    height: 100%;
+    width: 0;
+    background-color: var(--rap-gold);
+}
+
+/* ---- The one action (tap / hold) ---- */
+
+.fishing-action {
+    min-height: 64px;
+    border-radius: 14px;
+    border-width: 3px;
+    border-color: var(--rap-gold);
+    background-color: var(--rap-caramel);
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+}
+
+.fishing-action:focus {
+    border-color: var(--rap-focus);
+}
+
+.fishing-action--bite {
+    background-color: var(--rap-warning);
+    border-color: var(--rap-gold-light);
+}
+
+.fishing-action--held {
+    background-color: var(--rap-brown-light);
+}
+
+.fishing-action--wait {
+    opacity: 0.7;
+}
+
+.fishing-action-label {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: var(--rap-cream);
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(46, 27, 16);
+}
+
+.fishing-result {
+    font-size: 13px;
+    color: var(--rap-cream);
+    white-space: normal;
+    -unity-text-align: middle-center;
+    min-height: 18px;
+    margin-bottom: 4px;
+}
+
+.fishing-result--good {
+    color: var(--rap-gold-light);
+}
+
+.fishing-result--bad {
+    color: var(--rap-cream-dim);
+}
+
+/* ---- Notebook (collection and records) ---- */
+
+.fishing-collection {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.fishing-collection-title {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+    margin-bottom: 6px;
+}
+
+.fishing-collection-list {
+    min-height: 200px;
+    max-height: 340px;
+    margin-bottom: 6px;
+}
+
+.fishing-row {
+    padding: 6px 10px;
+    margin-bottom: 4px;
+    background-color: var(--rap-brown);
+    border-radius: 8px;
+    border-left-width: 5px;
+    border-left-color: var(--rap-cream-dim);
+}
+
+.fishing-row--unknown {
+    background-color: var(--rap-brown-deep);
+    opacity: 0.8;
+}
+
+.fishing-row-title {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: var(--rap-cream);
+    white-space: normal;
+}
+
+.fishing-row-line {
+    font-size: 12px;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+}
+
+.fishing-rarity--uncommon {
+    border-left-color: var(--rap-cane-green);
+}
+
+.fishing-rarity--rare {
+    border-left-color: var(--rap-caramel-light);
+}
+
+.fishing-rarity--legendary {
+    border-left-color: var(--rap-gold);
+}
+
+/* ---- Options and buttons ---- */
+
+.fishing-options {
+    margin-bottom: 6px;
+}
+
+.fishing-relaxed {
+    color: var(--rap-cream);
+    font-size: 13px;
+}
+
+.fishing-relaxed-note {
+    font-size: 12px;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+}
+
+.fishing-buttons {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Look from .rap-button (RapaduraTheme.uss). */
+.fishing-collection-button {
+    min-height: 44px;
+    margin: 0 8px 0 0;
+    font-size: 14px;
+    flex-grow: 1;
+}

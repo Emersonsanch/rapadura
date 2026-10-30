@@ -40,6 +40,8 @@ namespace Rapadura.Gameplay.Cooking
     {
         Quest,
         GrandmaLesson,
+        /// <summary>The first catch of the dish's fish (<c>FishingProgress</c>, see <see cref="MealRecipeSpec.TaughtByCatchItemId"/>).</summary>
+        Fishing,
     }
 
     /// <summary>Raised once per recipe, the moment it is learned.</summary>

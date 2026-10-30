@@ -1,0 +1,320 @@
+/*
+ * Montarias (phase M1), built in code (no UXML) by MountHudView and injected into the arena HUD's hud-root
+ * (MountHud) and the world map HUD's wm-hud-root (WorldMapMountHud): the big round "Montaria" button (hold to
+ * whistle; the fill rises with the whistle), the mount ability button, the gallop stamina and mount health bars, and
+ * a short notice line. Loaded at runtime from Resources (MountHudStyles), which also puts `rap-theme` on the layer so
+ * the palette below resolves. No transitions at all, so "Reduzir Movimento" has nothing to switch off.
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+.mount-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* ---- Cluster: arena = left of the duo button, above the hotbar; map = bottom right ---- */
+
+.mount-cluster {
+    position: absolute;
+    right: 136px;
+    bottom: 208px;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.mount-layer--map .mount-cluster {
+    right: 24px;
+    bottom: 150px;
+}
+
+.mount-button {
+    width: 84px;
+    height: 84px;
+    border-radius: 42px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(58, 34, 18, 0.86);
+    border-width: 2px;
+    border-color: var(--rap-caramel-light);
+}
+
+.mount-button--mounted {
+    border-color: var(--rap-gold-light);
+    border-width: 3px;
+    background-color: rgba(120, 76, 24, 0.92);
+}
+
+.mount-button--empty {
+    opacity: 0.75;
+}
+
+.mount-fill {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0;
+    background-color: rgba(214, 160, 54, 0.55);
+}
+
+.mount-label {
+    font-size: 14px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    color: var(--rap-cream);
+    text-shadow: 1px 1px 2px rgba(20, 8, 2, 0.95);
+}
+
+.mount-hint {
+    font-size: 10px;
+    -unity-text-align: middle-center;
+    color: var(--rap-gold-light);
+    text-shadow: 1px 1px 2px rgba(20, 8, 2, 0.95);
+}
+
+.mount-ability-button {
+    width: 64px;
+    height: 64px;
+    border-radius: 32px;
+    margin: 0 10px 8px 0;
+    padding: 0;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(58, 34, 18, 0.86);
+    border-width: 2px;
+    border-color: var(--rap-cane-green);
+}
+
+.mount-ability-button:disabled {
+    opacity: 0.85;
+    border-color: var(--rap-brown-light);
+}
+
+.mount-ability-label {
+    font-size: 11px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    color: var(--rap-cream);
+    text-shadow: 1px 1px 2px rgba(20, 8, 2, 0.95);
+}
+
+/* ---- Bars under the cluster ---- */
+
+.mount-bars {
+    position: absolute;
+    right: 136px;
+    bottom: 186px;
+    width: 160px;
+}
+
+.mount-layer--map .mount-bars {
+    right: 24px;
+    bottom: 126px;
+}
+
+.mount-bar {
+    height: 7px;
+    margin-top: 3px;
+    background-color: rgba(20, 10, 4, 0.75);
+    border-width: 1px;
+    border-color: var(--rap-brown-light);
+}
+
+.mount-bar-fill {
+    height: 100%;
+    width: 100%;
+}
+
+.mount-stamina .mount-bar-fill {
+    background-color: var(--rap-gold);
+}
+
+.mount-stamina--trot .mount-bar-fill {
+    background-color: var(--rap-cream-dim);
+}
+
+.mount-health .mount-bar-fill {
+    background-color: var(--rap-cane-green);
+}
+
+.mount-bar-caption {
+    font-size: 10px;
+    -unity-text-align: middle-right;
+    color: var(--rap-cream-dim);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+/* ---- Notice: a single line, top centre ---- */
+
+.mount-notice {
+    position: absolute;
+    top: 150px;
+    left: 18%;
+    right: 18%;
+    padding: 6px 16px;
+    font-size: 16px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    color: var(--rap-cream);
+    background-color: var(--rap-brown-night);
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-top-color: var(--rap-caramel-light);
+    border-bottom-color: var(--rap-caramel-light);
+}
+
+.mount-layer--map .mount-notice {
+    top: 96px;
+}
+
+/* ---- M2: "Montarias" button (map) and the stable / Caderno panel ---- */
+
+.mount-stable-button {
+    position: absolute;
+    right: 24px;
+    bottom: 104px;
+    height: 34px;
+    padding: 0 14px;
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: var(--rap-cream);
+    background-color: rgba(58, 34, 18, 0.86);
+    border-width: 2px;
+    border-radius: 8px;
+    border-color: var(--rap-caramel-light);
+}
+
+.mount-stable-panel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(10, 5, 2, 0.55);
+}
+
+.mount-stable-window {
+    width: 78%;
+    max-width: 900px;
+    height: 82%;
+    padding: 14px 18px;
+}
+
+.mount-stable-title {
+    font-size: 22px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: var(--rap-gold-light);
+    margin-bottom: 8px;
+}
+
+.mount-stable-tabs {
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.mount-stable-tab {
+    min-width: 140px;
+    height: 36px;
+    margin: 0 4px;
+    font-size: 14px;
+    color: var(--rap-cream-dim);
+}
+
+.mount-stable-tab--on {
+    color: var(--rap-cream);
+    border-color: var(--rap-gold-light);
+    border-width: 2px;
+}
+
+.mount-stable-content {
+    flex-grow: 1;
+}
+
+.mount-stable-note {
+    font-size: 13px;
+    white-space: normal;
+    color: var(--rap-cream-dim);
+    margin: 4px 0 8px 0;
+}
+
+.mount-card {
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    border-width: 1px;
+    border-radius: 6px;
+    border-color: var(--rap-brown-light);
+    background-color: rgba(40, 22, 10, 0.6);
+}
+
+.mount-card--active {
+    border-color: var(--rap-gold-light);
+    border-width: 2px;
+}
+
+.mount-card-name {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: var(--rap-cream);
+}
+
+.mount-card-line {
+    font-size: 13px;
+    white-space: normal;
+    color: var(--rap-cream-dim);
+}
+
+.mount-card-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.mount-card-button {
+    height: 32px;
+    min-width: 96px;
+    margin: 2px 6px 2px 0;
+    font-size: 13px;
+}
+
+.mount-codex-row {
+    padding: 4px 8px;
+    margin-bottom: 4px;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--rap-brown-light);
+}
+
+.mount-codex-row--unknown .mount-card-name {
+    color: var(--rap-brown-light);
+}
+
+.mount-stable-status {
+    min-height: 22px;
+    font-size: 14px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    color: var(--rap-gold-light);
+    margin-top: 6px;
+}
+
+.mount-stable-close {
+    align-self: center;
+    min-width: 160px;
+    height: 38px;
+    margin-top: 6px;
+    font-size: 15px;
+}

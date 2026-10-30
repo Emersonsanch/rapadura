@@ -66,8 +66,8 @@ namespace Rapadura.UI.Tutorial
 
             Title(TutorialSteps.Night, "Night has fallen", "A noite chegou"),
             Body(TutorialSteps.Night,
-                "At night the sertão gets dark. Watch your step: the sun will be back soon!",
-                "À noite o sertão fica escuro. Cuidado com o caminho: logo o sol volta!"),
+                "At night the sertão gets dark and the critters get fiercer: more of them come, in bigger and faster waves, and some have glowing eyes. They are tougher, but give more XP and loot. Your lamp lights the way; the sun will be back soon!",
+                "À noite o sertão fica escuro e os bichos ficam mais bravos: vêm mais, em ondas maiores e mais rápidas, e alguns têm olhos brilhando. São mais fortes, mas dão mais XP e mais saque. Sua lamparina ilumina o caminho; logo o sol volta!"),
 
             Title(TutorialSteps.Crafting, "You can craft something!", "Dá para criar algo!"),
             Body(TutorialSteps.Crafting,

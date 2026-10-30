@@ -1,0 +1,139 @@
+/*
+ * "Golpe em dupla" (duo strike), built in code (no UXML) and injected into the arena HUD's hud-root by DuoStrikeHud:
+ * the round "Dupla" button above the skill hotbar and the shout banner. Loaded at runtime from Resources
+ * (DuoStrikeStyles), which also puts `rap-theme` on the layer so the palette below resolves. The button also
+ * carries .hud-touch-button (HudView.uss) for the shared glass look; only size, position and states live here.
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+.duo-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* ---- Button: right column, above the 5-slot hotbar (hotbar: right 32px, bottom 132px, 64px tall) ---- */
+
+.duo-strike-button {
+    right: 32px;
+    bottom: 212px;
+    width: 92px;
+    height: 92px;
+    border-radius: 46px;
+    padding: 0;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    border-color: var(--rap-gold);
+}
+
+.duo-strike-button:disabled {
+    opacity: 0.9;
+}
+
+/* The charge rises from the bottom of the circle. */
+.duo-strike-fill {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0;
+    background-color: rgba(214, 160, 54, 0.55);
+}
+
+.duo-strike-label {
+    font-size: 15px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: var(--rap-cream);
+    text-shadow: 1px 1px 2px rgba(20, 8, 2, 0.95);
+}
+
+.duo-strike-partner {
+    font-size: 10px;
+    -unity-text-align: middle-center;
+    color: var(--rap-gold-light);
+    text-shadow: 1px 1px 2px rgba(20, 8, 2, 0.95);
+}
+
+.duo-strike-button--ready {
+    background-color: rgba(150, 98, 22, 0.92);
+    border-color: var(--rap-gold-light);
+    border-width: 3px;
+}
+
+.duo-strike-button--ready .duo-strike-fill {
+    background-color: rgba(246, 204, 96, 0.5);
+}
+
+.duo-strike-button--spent {
+    border-color: var(--rap-brown-light);
+}
+
+.duo-strike-button--spent .duo-strike-label {
+    color: var(--rap-cream-dim);
+}
+
+/* ---- Shout banner: top centre, below the vitals / menu cluster ---- */
+
+.duo-banner {
+    position: absolute;
+    top: 112px;
+    left: 12%;
+    right: 12%;
+    align-items: center;
+    padding: 8px 24px 10px 24px;
+    background-color: var(--rap-brown-night);
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-top-color: var(--rap-caramel-light);
+    border-bottom-color: var(--rap-caramel-light);
+    transition-property: opacity;
+    transition-duration: 0.25s;
+}
+
+.duo-banner--sibling {
+    border-top-color: var(--rap-gold-light);
+    border-bottom-color: var(--rap-gold-light);
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+}
+
+/* "Reduzir Movimento" / "Reduzir Flashes": no fade. */
+.duo-banner--instant,
+.rap-reduced-motion .duo-banner {
+    transition-duration: 0s;
+}
+
+.duo-banner-tag {
+    font-size: 13px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: var(--rap-gold);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.duo-banner-title {
+    font-size: 28px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    color: var(--rap-cream);
+    text-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.9);
+}
+
+.duo-banner--sibling .duo-banner-title {
+    color: var(--rap-gold-light);
+}
+
+.duo-banner-line1,
+.duo-banner-line2 {
+    font-size: 16px;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    color: var(--rap-cream-dim);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+}

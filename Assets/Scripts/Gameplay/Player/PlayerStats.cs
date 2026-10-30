@@ -406,6 +406,14 @@ namespace Rapadura.Gameplay.Player
                 return 0f;
             }
 
+            // Context-aware dodge (e.g. the "Figa de Guiné" hunting charm); never without an attacker.
+            if (CombatModifierHooks.ShouldDodge(gameObject, source))
+            {
+                return 0f;
+            }
+
+            // Context-aware protection (hunting charms / prey against a creature type); 1 when no hook is installed.
+            amount *= CombatModifierHooks.ResolveDamageTakenMultiplier(gameObject, source);
             amount *= DefenseMultiplier;
 
             SetHealth(CurrentHealth - amount);
@@ -487,6 +495,23 @@ namespace Rapadura.Gameplay.Player
             }
 
             ApplyExperience(amount);
+        }
+
+        /// <summary>
+        /// Death penalty (<c>DeathXpLossRules</c>): removes up to <paramref name="amount"/> XP from the current level only —
+        /// never below 0, so the level never goes down. Returns the XP actually removed.
+        /// </summary>
+        public int RemoveExperience(int amount)
+        {
+            int removed = Mathf.Clamp(amount, 0, CurrentExperience);
+            if (removed <= 0)
+            {
+                return 0;
+            }
+
+            CurrentExperience -= removed;
+            EventBus.Publish(new PlayerExperienceChangedEvent(CurrentExperience, GetExperienceToNextLevel(), Level));
+            return removed;
         }
 
         /// <summary>

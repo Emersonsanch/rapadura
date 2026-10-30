@@ -25,6 +25,18 @@ namespace Rapadura.Gameplay.Shop
         /// <summary>Authored starting / restock amount. -1 means infinite (never depletes).</summary>
         [SerializeField] private int _stock = -1;
 
+        public ShopInventoryItem()
+        {
+        }
+
+        /// <summary>Code-built entry (runtime shops, see <see cref="ShopDefinition.CreateRuntime"/>). <paramref name="stock"/> -1 = infinite.</summary>
+        public ShopInventoryItem(ItemDefinition item, int priceOverride, int stock)
+        {
+            _item = item;
+            _priceOverride = priceOverride;
+            _stock = stock;
+        }
+
         public ItemDefinition Item => _item;
         public bool HasInfiniteStock => _stock < 0;
 

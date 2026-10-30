@@ -1,5 +1,6 @@
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Skills;
+using Rapadura.Gameplay.World.Biomes;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.Pets
@@ -48,6 +49,22 @@ namespace Rapadura.Gameplay.Pets
             }
 
             return CarameloTexts.CuddleLineKey(hero.Value, _cuddles++);
+        }
+
+        /// <summary>
+        /// <see cref="Cuddle(CharacterId?, bool)"/> once the campaign moved on: <paramref name="cameFrom"/> (the region of
+        /// the latest interlude seen, <c>StoryBeats.LastRegionCleared</c>) adds the cousin's stage line to the rotation,
+        /// first (<see cref="CarameloTexts.CuddleLineKey(CharacterId, int, BiomeType?)"/>).
+        /// </summary>
+        public static string Cuddle(CharacterId? hero, bool introduced, BiomeType? cameFrom)
+        {
+            BuffPending = true;
+            if (!introduced || !hero.HasValue)
+            {
+                return CarameloTexts.Intro;
+            }
+
+            return CarameloTexts.CuddleLineKey(hero.Value, _cuddles++, cameFrom);
         }
 
         /// <summary>Takes the pending buff (once): true if one was waiting.</summary>

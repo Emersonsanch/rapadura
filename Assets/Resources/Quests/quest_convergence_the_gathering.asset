@@ -29,11 +29,11 @@ MonoBehaviour:
     RequiredAmount: 1
     DescriptionKey: quest.convergence.obj_five_heroes_unite
     CurrentAmount: 0
-  - ObjectiveId: face_the_mountain_warlord
+  - ObjectiveId: face_the_ancient_dweller
     Type: 0
-    TargetId: enemy_mountain_warlord
+    TargetId: enemy_cave_dweller
     RequiredAmount: 1
-    DescriptionKey: quest.convergence.obj_face_the_mountain_warlord
+    DescriptionKey: quest.convergence.obj_face_the_ancient_dweller
     CurrentAmount: 0
   _prerequisiteQuestIds:
   - quest_joaquim_echoes_of_home

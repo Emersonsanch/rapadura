@@ -5,7 +5,7 @@
 > atributos diferentes; umas compradas em loja, outras dropadas, outras muito raras".
 > **Só documentação.** Nada daqui existe no código ainda. Números conferidos com o código e os dados de hoje
 > (`PlayerMotor`, `PlayerStats`, `BuffController`, `DamageCalculator`, `StunRules`, `ItemRarity`, `ShopDefinition`,
-> `Docs/Balance/README.md` §4, §7, §8, §10 e §11, `Docs/Housing/CatalogoCasa.md`).
+> `Docs/Balance/README.md` §4, §7, §8, §11, §12 e §13, `Docs/Housing/CatalogoCasa.md`).
 > `Docs/Housing.md` ainda não existe (outro agente está escrevendo). O estábulo (§7) usa só o que o
 > `CatalogoCasa.md` já mostra: os níveis da casa e os itens do curral. Quando o Housing.md sair, confira §7 e §9 com ele.
 
@@ -38,7 +38,7 @@
 | Multiplicador de velocidade | `GetModifiedValue(MoveSpeed, 1)` com limite **[0,1; 2,5]** | `BuffController.GetMoveSpeedMultiplier` (README §4.2) |
 | Defesa percentual | soma das fontes, limitada a **[−1; +0,8]** | `DamageCalculator` (README §4.1) |
 | Atordoamento em chefe | ×0,5 | `StunRules` (README §7.1) |
-| Ouro por luta | ~1,8 (`item_gold` 1–3 a 60%, 1,5 bicho por luta); chefe 4–16 | README §8, §10.2 |
+| Ouro por luta | ~1,8 (`item_gold` 1–3 a 60%, 1,5 bicho por luta); chefe 4–16 | README §8, §12.2 |
 | Faixas de preço da casa | Comum 8–30, Incomum 35–90, Raro 100–250, Épico 300–700 | `CatalogoCasa.md` |
 | Moeda de evento | prendas | `CatalogoCasa.md`, `CatalogoRoupas.md` |
 | Atributos | Vitalidade, Espírito, Destreza, Inteligência, Poder Arcano (não existe Força) | README §9 |

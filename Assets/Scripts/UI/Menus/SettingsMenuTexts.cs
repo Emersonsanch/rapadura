@@ -82,6 +82,7 @@ namespace Rapadura.UI.Menus
         public const string AccessibilityScreenShake = "ui.settings.accessibility.screen_shake";
         public const string AccessibilityReduceFlash = "ui.settings.accessibility.reduce_flash";
         public const string AccessibilityReduceMotion = "ui.settings.accessibility.reduce_motion";
+        public const string AccessibilityClearerNight = "ui.settings.accessibility.clearer_night";
 
         /// <summary>Rows shown in the "Controles" tab, in display order.</summary>
         public static readonly IReadOnlyList<RebindRowDefinition> Rows = new[]
@@ -101,6 +102,9 @@ namespace Rapadura.UI.Menus
             new RebindRowDefinition("Skill3", null, "ui.settings.controls.action.skill3"),
             new RebindRowDefinition("Skill4", null, "ui.settings.controls.action.skill4"),
             new RebindRowDefinition("Skill5", null, "ui.settings.controls.action.skill5"),
+            new RebindRowDefinition("DuoStrike", null, "ui.settings.controls.action.duo_strike"),
+            new RebindRowDefinition("Mount", null, "ui.settings.controls.action.mount"),
+            new RebindRowDefinition("MountAbility", null, "ui.settings.controls.action.mount_ability"),
             new RebindRowDefinition("QuestLog", null, "ui.settings.controls.action.quest_log"),
             new RebindRowDefinition("Inventory", null, "ui.settings.controls.action.inventory"),
             new RebindRowDefinition("SkillTree", null, "ui.settings.controls.action.skill_tree"),
@@ -129,6 +133,9 @@ namespace Rapadura.UI.Menus
             new LocalizationEntry("ui.settings.controls.action.skill3", "Skill 3", "Habilidade 3"),
             new LocalizationEntry("ui.settings.controls.action.skill4", "Skill 4", "Habilidade 4"),
             new LocalizationEntry("ui.settings.controls.action.skill5", "Skill 5", "Habilidade 5"),
+            new LocalizationEntry("ui.settings.controls.action.duo_strike", "Duo strike", "Golpe em dupla"),
+            new LocalizationEntry("ui.settings.controls.action.mount", "Mount (hold to whistle)", "Montaria (segure para assobiar)"),
+            new LocalizationEntry("ui.settings.controls.action.mount_ability", "Mount ability", "Habilidade da montaria"),
             new LocalizationEntry("ui.settings.controls.action.quest_log", "Quest log", "Missões"),
             new LocalizationEntry("ui.settings.controls.action.inventory", "Inventory", "Mochila"),
             new LocalizationEntry("ui.settings.controls.action.skill_tree", "Skill tree", "Árvore de habilidades"),
@@ -178,6 +185,7 @@ namespace Rapadura.UI.Menus
             new LocalizationEntry(AccessibilityScreenShake, "Screen shake", "Tremor de Tela"),
             new LocalizationEntry(AccessibilityReduceFlash, "Reduce flashes", "Reduzir Flashes"),
             new LocalizationEntry(AccessibilityReduceMotion, "Reduce motion", "Reduzir Movimento"),
+            new LocalizationEntry(AccessibilityClearerNight, "Brighter nights", "Noite mais clara"),
             new LocalizationEntry(LanguageNamePrefix + "en", "English", "English"),
             new LocalizationEntry(LanguageNamePrefix + "ptbr", "Português (Brasil)", "Português (Brasil)"),
 

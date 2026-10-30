@@ -49,5 +49,29 @@ namespace Rapadura.Gameplay.Achievements
         /// from the values above so features added in parallel can take the next numbers without clashing.
         /// </summary>
         RelicsCollected = 20,
+
+        /// <summary>
+        /// Fish species landed in "Pesca no açude" (fed directly by <c>FishingProgress.RecordCatch</c> through
+        /// <see cref="AchievementManager.RecordProgress"/>, distinct ids). Target ids = fish item ids (<c>FishCatalog</c>).
+        /// </summary>
+        FishSpeciesCaught = 30,
+
+        /// <summary>
+        /// Timed event rooms cleared (fed by <c>EventRoomProgress.RecordRun</c>, distinct ids). Target ids = room ids
+        /// (<c>terreiro</c>, <c>torre</c>).
+        /// </summary>
+        EventRoomCleared = 50,
+
+        /// <summary>Best score in any timed event room (<c>EventRoomProgress</c>, through <see cref="AchievementManager.RecordMax"/>).</summary>
+        EventRoomBestScore = 51,
+
+        /// <summary>
+        /// Wings made in the Tacho Encantado (fed by <c>TachoService</c> through <see cref="AchievementManager.RecordProgress"/>
+        /// on every successful "Asas nível 1"). Target value = how many.
+        /// </summary>
+        WingsCrafted = 60,
+
+        /// <summary>Highest wing level reached in the Tacho Encantado (<c>TachoService</c>, through <see cref="AchievementManager.RecordMax"/>).</summary>
+        WingLevelReached = 61,
     }
 }

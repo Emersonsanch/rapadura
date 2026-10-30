@@ -53,7 +53,7 @@ namespace Rapadura.Gameplay.Enemies
     /// (<see cref="BossBonusRules.RollBonusDrop"/>).</item>
     /// </list>
     /// Numbers and the expected fights per collect quest live in Docs/Balance/README.md §8.
-    /// On a "Nova Jornada+" (<c>newGamePlusCycle</c> 1+, <see cref="NewGamePlusRules"/>, §10) the base
+    /// On a "Nova Jornada+" (<c>newGamePlusCycle</c> 1+, <see cref="NewGamePlusRules"/>, §11) the base
     /// loot quantity grows and each equipment piece may go up one rarity tier; cycle 0 draws exactly the same
     /// random numbers as before, so seeds keep reproducing the same drops.
     /// </summary>

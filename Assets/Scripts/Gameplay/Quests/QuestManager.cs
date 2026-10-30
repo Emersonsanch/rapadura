@@ -94,8 +94,8 @@ namespace Rapadura.Gameplay.Quests
         /// Whether a unique enemy (a region boss, keyed by its <c>EnemyDefinition</c> asset name) was already
         /// defeated. Null = the <see cref="DefeatedEnemyRegistry"/> registered in the ServiceLocator. Used to
         /// credit a KillEnemyType objective on a boss that died before the quest was taken: a boss is fought
-        /// once (<c>RegionBossProgress</c>), so without this the Guardião da Ruína (Ícaro) and the Senhor da
-        /// Guerra (convergence) could never be counted once their region was cleared.
+        /// once (<c>RegionBossProgress</c>), so without this the Guardião da Ruína (Ícaro) and the Habitante
+        /// Ancestral (convergence) could never be counted once their region was cleared.
         /// </summary>
         public Func<string, bool> DefeatedUniqueEnemyLookup { get; set; }
 
@@ -681,7 +681,17 @@ namespace Rapadura.Gameplay.Quests
                 {
                     if (itemReward?.Item != null && itemReward.Quantity > 0)
                     {
-                        _rewardInventory.AddItem(itemReward.Item, itemReward.Quantity);
+                        int leftover = _rewardInventory.AddItem(itemReward.Item, itemReward.Quantity);
+                        if (leftover > 0)
+                        {
+                            // No room on the Mochila's grid: the reward waits in the Baú da Vó Zefa instead of vanishing.
+                            VillageChestStorage.ResolveShared().EnqueueOverflow(new InventorySlotData
+                            {
+                                itemId = itemReward.Item.ItemId,
+                                quantity = leftover,
+                                currentDurability = itemReward.Item.HasDurability ? itemReward.Item.MaxDurability : 0f,
+                            });
+                        }
                     }
                 }
             }

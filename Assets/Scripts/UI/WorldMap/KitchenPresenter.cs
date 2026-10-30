@@ -6,6 +6,7 @@ using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Cooking;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Quests;
+using Rapadura.Gameplay.World.Biomes;
 
 namespace Rapadura.UI.WorldMap
 {
@@ -93,6 +94,11 @@ namespace Rapadura.UI.WorldMap
                 parts.Add(KitchenTexts.Format(manager, KitchenTexts.LearnByLesson, WorldMapHudPresenter.HeroName(manager, recipe.FavouriteOf.Value)));
             }
 
+            if (!string.IsNullOrEmpty(recipe.TaughtByCatchItemId))
+            {
+                parts.Add(KitchenTexts.Format(manager, KitchenTexts.LearnByCatch, ItemName(recipe.TaughtByCatchItemId, manager)));
+            }
+
             return string.Join(" ", parts);
         }
 
@@ -146,6 +152,38 @@ namespace Rapadura.UI.WorldMap
             }
 
             return KitchenTexts.Get(manager, taught != null ? KitchenTexts.LessonKey(hero.Value) : KitchenTexts.GreetingKey(hero.Value));
+        }
+
+        /// <summary>
+        /// Like <see cref="GrandmaLine(CharacterId?, MealRecipeSpec, LocalizationManager)"/>, but when
+        /// <paramref name="cameFrom"/> is set (the region of the latest interlude seen, <c>StoryBeats.LastRegionCleared</c>)
+        /// Vó Zefa remembers it: the cousin's <c>ui.kitchen.grandma.after_&lt;region&gt;_&lt;hero&gt;</c> line, or the
+        /// family one without a cousin. A lesson still wins.
+        /// </summary>
+        public static string GrandmaLine(CharacterId? hero, MealRecipeSpec taught, LocalizationManager manager, BiomeType? cameFrom)
+        {
+            if (taught != null || !cameFrom.HasValue)
+            {
+                return GrandmaLine(hero, taught, manager);
+            }
+
+            string key = KitchenTexts.AfterRegionKey(cameFrom.Value, hero);
+            if (KitchenTexts.GetFallback(key) == null && (manager == null || !manager.HasKey(key)))
+            {
+                key = KitchenTexts.AfterRegionKey(cameFrom.Value, null);
+            }
+
+            return KitchenTexts.Get(manager, key);
+        }
+
+        /// <summary>
+        /// Which region Vó Zefa remembers on the <paramref name="visit"/>-th stove opening of the session (0-based): the
+        /// last region cleared on even visits (so the first visit after an interlude remembers it), none on odd ones
+        /// (her usual per-cousin greeting stays in rotation).
+        /// </summary>
+        public static BiomeType? CameFromForVisit(BiomeType? lastRegionCleared, int visit)
+        {
+            return visit % 2 == 0 ? lastRegionCleared : null;
         }
 
         /// <summary>Status line after pressing "Cozinhar". <paramref name="previous"/> = the meal before cooking.</summary>

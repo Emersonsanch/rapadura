@@ -245,6 +245,47 @@ namespace Rapadura.Gameplay.Skills.Vfx
             }
         }
 
+        /// <summary>
+        /// Additive hook for effects that are not a <see cref="SkillDefinition"/> cast (the duo strike, "Golpe em
+        /// dupla"): one element-coloured ground ring at <paramref name="groundPoint"/> (Area look, or the Ultimate
+        /// ring + pillar when <paramref name="big"/>), through the same pool and reduce-flash policy as skills.
+        /// False when no manager is alive or the pool is saturated.
+        /// </summary>
+        public static bool PlayAreaBurst(Vector3 groundPoint, ElementType element, float radius, bool big)
+        {
+            if (_instance == null)
+            {
+                return false;
+            }
+
+            _instance.EnsureInitialized();
+            bool reduceFlashes = IsReduceFlashEnabled();
+            SkillVfxPreset preset = _instance._library.Resolve(null, element, big ? SkillVfxCategory.Ultimate : SkillVfxCategory.Area);
+            Vector3 point = groundPoint + Vector3.up * _instance._groundHeight;
+            float ring = Mathf.Max(0.5f, radius * 0.85f);
+            SkillVfxPlayback burst = Build(preset, reduceFlashes, big ? 1.5f : 1.2f, big ? 1.2f : 1f, SkillVfxShape.Ring, ring, big || preset.flashLike, big ? 2.2f : 1.2f + radius * 0.2f);
+            if (burst.Burst.IsSkipped && burst.Flash.IsSkipped)
+            {
+                return false;
+            }
+
+            SkillVfxEmitter emitter = _instance.Acquire();
+            if (emitter == null)
+            {
+                return false;
+            }
+
+            emitter.PlayBurst(point, burst);
+            if (big)
+            {
+                SkillVfxPlayback pillar = Build(preset, reduceFlashes, 1f, 1f, SkillVfxShape.Column, ring * 0.4f, false, 0f);
+                pillar.Gravity = -Mathf.Abs(pillar.Gravity) - 0.5f;
+                _instance.SpawnBurst(point, pillar);
+            }
+
+            return true;
+        }
+
         private void SpawnProjectile(SkillVfxPreset preset, bool reduceFlashes, Vector3 from, Vector3 to, float area, bool withImpact)
         {
             bool splash = area > 0.5f;

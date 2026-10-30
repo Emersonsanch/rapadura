@@ -1,0 +1,154 @@
+/*
+ * Hunting features, built in code: Seu Zé Caçador's board (HuntingBoardPanel, on the map HUD's Mochila overlay
+ * classes), the "Bicho destaque do dia" chip in the HUD's region block, the quest-tracker card
+ * (HuntingTrackerCard) and the Caderno's "Amuletos" tab (BestiaryCharmsTab). Loaded at runtime from Resources and
+ * attached to elements under a `rap-theme` root, where the palette below resolves.
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+.hunting-panel {
+    width: 640px;
+    max-width: 94%;
+    max-height: 96%;
+    padding: 16px 20px;
+}
+
+.hunting-scroll {
+    flex-shrink: 1;
+    margin-bottom: 6px;
+}
+
+.hunting-intro {
+    font-size: 13px;
+    -unity-font-style: italic;
+    color: var(--rap-cream);
+    white-space: normal;
+    padding: 6px 10px;
+    margin-bottom: 6px;
+    border-left-width: 3px;
+    border-left-color: var(--rap-caramel);
+    background-color: var(--rap-brown-night);
+    border-radius: 6px;
+}
+
+.hunting-section {
+    margin-bottom: 10px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: var(--rap-panel-border);
+}
+
+.hunting-section-title {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+    margin-bottom: 4px;
+}
+
+.hunting-line {
+    font-size: 13px;
+    color: var(--rap-cream);
+    white-space: normal;
+    margin-bottom: 4px;
+}
+
+.hunting-subtle {
+    font-size: 12px;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+    margin-bottom: 4px;
+}
+
+.hunting-status {
+    font-size: 12px;
+    color: var(--rap-warning);
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.hunting-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 3px 4px;
+    margin-bottom: 3px;
+    border-radius: 6px;
+}
+
+.hunting-row--picked {
+    background-color: var(--rap-brown-night);
+    border-width: 1px;
+    border-color: var(--rap-gold);
+}
+
+.hunting-creature {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: var(--rap-cream);
+    min-width: 140px;
+    flex-grow: 1;
+}
+
+.hunting-bonus {
+    font-size: 12px;
+    color: var(--rap-cane-green);
+    margin-right: 8px;
+}
+
+.hunting-button {
+    font-size: 12px;
+    margin: 2px 3px;
+    min-height: 30px;
+}
+
+.hunting-boosted-chip {
+    font-size: 12px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+    white-space: normal;
+    margin-top: 2px;
+}
+
+.hunting-tracker-card {
+    margin-top: 6px;
+}
+
+.hunting-tabs {
+    flex-direction: row;
+    margin: 4px 0;
+}
+
+.hunting-tab {
+    font-size: 13px;
+    margin-right: 6px;
+    min-height: 30px;
+}
+
+.hunting-tab--selected {
+    border-color: var(--rap-gold);
+    color: var(--rap-gold-light);
+}
+
+.hunting-boosted-banner {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+    white-space: normal;
+    padding: 4px 8px;
+    margin-bottom: 4px;
+    border-radius: 6px;
+    background-color: var(--rap-brown-night);
+}
+
+.hunting-charms-view {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.hunting-charm-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 200px;
+}

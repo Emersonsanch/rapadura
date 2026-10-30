@@ -43,7 +43,7 @@ namespace Rapadura.Tests
             Assert.AreEqual("convergence_five_heroes_agreed", quest.Objectives[1].TargetId);
 
             Assert.AreEqual(QuestObjectiveType.KillEnemyType, quest.Objectives[2].Type);
-            Assert.AreEqual("enemy_mountain_warlord", quest.Objectives[2].TargetId);
+            Assert.AreEqual("enemy_cave_dweller", quest.Objectives[2].TargetId, "the last fight is the Caves boss (region order)");
             Assert.AreEqual(1, quest.Objectives[2].RequiredAmount);
 
             Assert.AreEqual(1200, quest.RewardExperience);
@@ -207,7 +207,7 @@ namespace Rapadura.Tests
             {
                 new QuestObjective { ObjectiveId = "meet_maria_at_the_gathering", Type = QuestObjectiveType.TalkToNpc, TargetId = "npc_maria_gathering_point", RequiredAmount = 1, DescriptionKey = "quest.convergence.obj_meet_maria_at_the_gathering" },
                 new QuestObjective { ObjectiveId = "five_heroes_unite", Type = QuestObjectiveType.CustomFlag, TargetId = "convergence_five_heroes_agreed", RequiredAmount = 1, DescriptionKey = "quest.convergence.obj_five_heroes_unite" },
-                new QuestObjective { ObjectiveId = "face_the_mountain_warlord", Type = QuestObjectiveType.KillEnemyType, TargetId = "enemy_mountain_warlord", RequiredAmount = 1, DescriptionKey = "quest.convergence.obj_face_the_mountain_warlord" }
+                new QuestObjective { ObjectiveId = "face_the_ancient_dweller", Type = QuestObjectiveType.KillEnemyType, TargetId = "enemy_cave_dweller", RequiredAmount = 1, DescriptionKey = "quest.convergence.obj_face_the_ancient_dweller" }
             };
 
             quest.SetDataForTests(

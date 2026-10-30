@@ -48,6 +48,18 @@ namespace Rapadura.Gameplay.World.Map
 
         public bool IsBossChallenge => isBossChallenge;
 
+        /// <summary>
+        /// Timed event room this encounter is (Terreiro / Torre, <c>EventRoomDirector</c>), else None. The arena then
+        /// only dresses the floor and places the hero; the room's director spawns, scores and resolves. The enemy ids
+        /// are the room's pool (all regular enemies), not a group to spawn. Serialized.
+        /// </summary>
+        public Rapadura.Gameplay.EventRooms.EventRoomKind eventRoom;
+
+        /// <summary>Hero level the room was entered at (picks its level bracket).</summary>
+        public int eventRoomLevel;
+
+        public bool IsEventRoom => eventRoom != Rapadura.Gameplay.EventRooms.EventRoomKind.None;
+
         [NonSerialized] private List<EnemyDefinition> _cachedEnemies;
 
         /// <summary>Builds a payload from rolled enemy definitions, skipping nulls.</summary>

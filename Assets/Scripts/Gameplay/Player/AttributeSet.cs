@@ -37,6 +37,8 @@ namespace Rapadura.Gameplay.Player
         public int arcanePower;
         public int availableAttributePoints;
         public int lastKnownPlayerLevel = 1;
+        /// <summary>Frutas do Mandacaru eaten (Tacho Encantado, capped by <c>FruitRules.MaxGrowthPoints</c>); old saves load 0.</summary>
+        public int growthFruitPoints;
     }
 
     /// <summary>
@@ -101,6 +103,7 @@ namespace Rapadura.Gameplay.Player
         private readonly Dictionary<AttributeType, int> _allocatedPoints = new Dictionary<AttributeType, int>();
         private readonly Dictionary<AttributeType, int> _passiveBonus = new Dictionary<AttributeType, int>();
         private int _lastKnownPlayerLevel = 1;
+        private int _growthFruitPoints;
 
         public string SaveKey => "AttributeSet";
 
@@ -238,6 +241,56 @@ namespace Rapadura.Gameplay.Player
         {
             EnsureInitialized();
             return _allocatedPoints[type] + _passiveBonus[type];
+        }
+
+        /// <summary>Frutas do Mandacaru eaten so far (each gave +1 point to spend; capped by <c>FruitRules.MaxGrowthPoints</c>).</summary>
+        public int GrowthFruitPoints => _growthFruitPoints;
+
+        /// <summary>
+        /// Fruta do Mandacaru (Tacho Encantado): +1 point to spend, unless the cap was reached (then nothing changes and the
+        /// fruit is not eaten). See <see cref="Rapadura.Gameplay.Tacho.FruitRules"/>.
+        /// </summary>
+        public Rapadura.Gameplay.Tacho.FruitCheck TryEatGrowthFruit()
+        {
+            EnsureInitialized();
+            Rapadura.Gameplay.Tacho.FruitCheck check = Rapadura.Gameplay.Tacho.FruitRules.CheckGrowth(_growthFruitPoints);
+            if (check != Rapadura.Gameplay.Tacho.FruitCheck.Ok)
+            {
+                return check;
+            }
+
+            _growthFruitPoints++;
+            AvailableAttributePoints++;
+            OnAttributesChanged?.Invoke();
+            return check;
+        }
+
+        /// <summary>
+        /// Fruta do Umbu (Tacho Encantado): takes 1 allocated point back from the most-invested attribute (first on ties) and
+        /// returns it to the pool. Nothing allocated → nothing changes and the fruit is not eaten.
+        /// </summary>
+        public Rapadura.Gameplay.Tacho.FruitCheck TryEatResetFruit(out AttributeType taken)
+        {
+            EnsureInitialized();
+            var types = new List<AttributeType>(AllTypes);
+            var allocated = new List<int>();
+            foreach (AttributeType type in types)
+            {
+                allocated.Add(_allocatedPoints[type]);
+            }
+
+            int index = Rapadura.Gameplay.Tacho.FruitRules.ResetTarget(allocated);
+            taken = index >= 0 ? types[index] : default;
+            if (index < 0)
+            {
+                return Rapadura.Gameplay.Tacho.FruitCheck.NothingToReset;
+            }
+
+            _allocatedPoints[taken]--;
+            AvailableAttributePoints++;
+            ApplyDerivedEffect(taken);
+            OnAttributesChanged?.Invoke();
+            return Rapadura.Gameplay.Tacho.FruitCheck.Ok;
         }
 
         /// <summary>
@@ -379,7 +432,8 @@ namespace Rapadura.Gameplay.Player
                 intelligence = _allocatedPoints[AttributeType.Intelligence],
                 arcanePower = _allocatedPoints[AttributeType.ArcanePower],
                 availableAttributePoints = AvailableAttributePoints,
-                lastKnownPlayerLevel = _lastKnownPlayerLevel
+                lastKnownPlayerLevel = _lastKnownPlayerLevel,
+                growthFruitPoints = _growthFruitPoints
             };
         }
 
@@ -399,6 +453,7 @@ namespace Rapadura.Gameplay.Player
             _allocatedPoints[AttributeType.ArcanePower] = saveState.arcanePower;
             AvailableAttributePoints = saveState.availableAttributePoints;
             _lastKnownPlayerLevel = Mathf.Max(1, saveState.lastKnownPlayerLevel);
+            _growthFruitPoints = Mathf.Max(0, saveState.growthFruitPoints);
 
             ApplyAllDerivedEffects();
             OnAttributesChanged?.Invoke();

@@ -14,7 +14,9 @@ namespace Rapadura.Gameplay.Dialogue
     /// <list type="bullet">
     /// <item><c>hub</c> → a greeting per hero (<see cref="DialogueConditionType.ActiveCharacter"/>; every NPC
     /// knows the family: Maithe the eldest, Maria, Joaquim the stubborn protector, Ícaro the inventor,
-    /// Lavine the youngest) or <c>greet_any</c> when no hero is selected.</item>
+    /// Lavine the youngest) or <c>greet_any</c> when no hero is selected. Once the region's boss is beaten
+    /// (<see cref="RegionClearedFlag"/>) the greeting is the "after the boss" one instead
+    /// (<c>greet_after_&lt;hero&gt;</c> / <c>greet_after_any</c>): the NPC remembers the fight (Docs/Narrative.md).</item>
     /// <item>The greeting and <c>menu</c> share one list of choices gated by quest state: offer quest 1 →
     /// "how is it going" while active → offer quest 2 once quest 1 is done → "any news?" after both.</item>
     /// <item>Pre-boss hint (<c>boss</c>, with a special line for <see cref="RegionNpcSpec.BossHintHero"/>) only
@@ -43,6 +45,7 @@ namespace Rapadura.Gameplay.Dialogue
 
         public const string HubNodeId = "hub";
         public const string GreetAnyNodeId = "greet_any";
+        public const string GreetAfterAnyNodeId = "greet_after_any";
         public const string MenuNodeId = "menu";
         public const string BossNodeId = "boss";
         public const string BossSpecialNodeId = "boss_special";
@@ -54,6 +57,9 @@ namespace Rapadura.Gameplay.Dialogue
         private static void ResetStatics() => Built.Clear();
 
         public static string GreetNodeId(CharacterId hero) => "greet_" + hero.ToString().ToLowerInvariant();
+
+        /// <summary>Greeting once the region's boss is beaten: <c>greet_after_maithe</c>...</summary>
+        public static string GreetAfterNodeId(CharacterId hero) => "greet_after_" + hero.ToString().ToLowerInvariant();
 
         /// <summary>The cached conversation of <paramref name="region"/>'s quest-giver, or null if the region has none.</summary>
         public static DialogueDefinition Get(BiomeType region)
@@ -97,6 +103,14 @@ namespace Rapadura.Gameplay.Dialogue
             var nodes = new List<DialogueNode>();
 
             var hub = Node(npc, HubNodeId, null);
+            // After the boss: the NPC remembers the fight (first match wins, so these go first).
+            foreach (CharacterId hero in Heroes)
+            {
+                hub.Redirects.Add(new DialogueRedirect { TargetNodeId = GreetAfterNodeId(hero), Conditions = { FlagIs(RegionClearedFlag), HeroIs(hero) } });
+            }
+
+            hub.Redirects.Add(new DialogueRedirect { TargetNodeId = GreetAfterAnyNodeId, Conditions = { FlagIs(RegionClearedFlag) } });
+
             foreach (CharacterId hero in Heroes)
             {
                 hub.Redirects.Add(new DialogueRedirect { TargetNodeId = GreetNodeId(hero), Conditions = { HeroIs(hero) } });
@@ -108,9 +122,11 @@ namespace Rapadura.Gameplay.Dialogue
             foreach (CharacterId hero in Heroes)
             {
                 nodes.Add(WithMenu(Node(npc, GreetNodeId(hero), key + "." + GreetNodeId(hero)), npc));
+                nodes.Add(WithMenu(Node(npc, GreetAfterNodeId(hero), key + "." + GreetAfterNodeId(hero)), npc));
             }
 
             nodes.Add(WithMenu(Node(npc, GreetAnyNodeId, key + ".greet_any"), npc));
+            nodes.Add(WithMenu(Node(npc, GreetAfterAnyNodeId, key + "." + GreetAfterAnyNodeId), npc));
             nodes.Add(WithMenu(Node(npc, MenuNodeId, key + ".menu"), npc));
 
             // Quest 1: offer (hero-specific accept line for npc.AcceptHero) → accepted / declined; progress line.

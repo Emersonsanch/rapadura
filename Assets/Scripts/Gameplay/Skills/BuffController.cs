@@ -76,7 +76,7 @@ namespace Rapadura.Gameplay.Skills
         /// </summary>
         public float ApplyStun(float durationSeconds)
         {
-            float scaled = StunRules.ScaleDuration(durationSeconds, ResolveStunMultiplier());
+            float scaled = StunRules.ScaleDuration(durationSeconds, ResolveStunMultiplier() * Rapadura.Gameplay.Combat.CombatModifierHooks.ResolveStunMultiplier(gameObject));
             if (scaled <= 0f)
             {
                 return 0f;

@@ -20,8 +20,8 @@ namespace Rapadura.Gameplay.Characters
             "Com 11 anos, Ícaro já acredita que a tecnologia pode mudar o mundo. Enquanto as outras " +
             "crianças brincavam, ele desmontava e remontava tudo que encontrava. Depois de achar " +
             "fragmentos de uma civilização perdida num terreno baldio perto de casa, começou a montar " +
-            "pequenos equipamentos capazes de surpreender até os magos adultos do continente. Seu sonho é " +
-            "desvendar os segredos da antiga tecnologia que pode salvar ou destruir Rapadura. Irmão mais " +
+            "pequenos equipamentos capazes de surpreender até os magos adultos do sertão. Seu sonho é " +
+            "desvendar os segredos da antiga tecnologia que pode salvar ou destruir o sertão. Irmão mais " +
             "novo de Maithe e primo mais velho de Lavine, vive tentando impressionar a irmã mais velha com " +
             "suas invenções.";
 

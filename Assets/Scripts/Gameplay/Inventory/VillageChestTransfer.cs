@@ -12,7 +12,7 @@ namespace Rapadura.Gameplay.Inventory
         /// <summary>Units that changed side.</summary>
         public readonly int Moved;
 
-        /// <summary>Units that should have moved but did not fit (chest out of slots, bag out of weight/slots).</summary>
+        /// <summary>Units that should have moved but did not fit (chest out of slots, no room on the bag's grid).</summary>
         public readonly int LeftBehind;
 
         public VillageChestBulkResult(int moved, int leftBehind)
@@ -27,10 +27,10 @@ namespace Rapadura.Gameplay.Inventory
     /// one) and the <see cref="VillageChestStorage"/>. Static and pure so EditMode tests drive it on a bare bag:
     /// <list type="bullet">
     /// <item>Into the chest: only its slots limit (no weight cap).</item>
-    /// <item>Into the bag: the bag's own rules, so weight and slots are always respected —
-    /// <see cref="InventoryManager.AddItem(ItemDefinition,int)"/> for plain items (stacks first, capped by weight),
-    /// a free slot plus <see cref="InventoryManager.HasWeightCapacityFor"/> for a generated roll, whose affixes,
-    /// name, rarity and durability come back intact.</item>
+    /// <item>Into the bag: the bag's own grid rules (the shared fit API) —
+    /// <see cref="InventoryManager.AddItem(ItemDefinition,int)"/> for plain stacks (stacks first, then free areas),
+    /// <see cref="InventoryManager.TryAddCopy"/> for a generated roll or a piece of gear, whose affixes, name, rarity
+    /// and durability come back intact.</item>
     /// <item>Bulk moves take the quests' needs from <c>QuestManager.GetOutstandingCollectAmount</c>
     /// ((itemId, held) → units still needed), passed in as a delegate.</item>
     /// </list>
@@ -61,7 +61,7 @@ namespace Rapadura.Gameplay.Inventory
             return stored;
         }
 
-        /// <summary>Takes up to <paramref name="amount"/> units of chest slot <paramref name="chestSlot"/> into the bag, within its weight and slots. Returns how many moved.</summary>
+        /// <summary>Takes up to <paramref name="amount"/> units of chest slot <paramref name="chestSlot"/> into the bag, within its grid. Returns how many moved.</summary>
         public static int TakeToBag(VillageChestStorage chest, int chestSlot, int amount, InventoryManager bag)
         {
             if (bag == null || chest == null || chestSlot < 0 || chestSlot >= chest.Slots.Count)
@@ -79,13 +79,11 @@ namespace Rapadura.Gameplay.Inventory
             amount = Mathf.Min(amount, slot.quantity);
             int moved;
 
-            if (slot.HasGeneratedData)
+            if (slot.HasGeneratedData || !item.IsStackable)
             {
-                moved = PlacePiece(bag, slot, item, amount) ? amount : 0;
-            }
-            else if (!item.IsStackable)
-            {
-                moved = bag.AddItem(item, 1, item.HasDurability ? slot.currentDurability : (float?)null) == 0 ? 1 : 0;
+                // A generated roll or a piece of gear: one entry, copied as it is (durability, affixes).
+                int pieceAmount = slot.HasGeneratedData ? amount : 1;
+                moved = bag.TryAddCopy(slot.CloneWithQuantity(pieceAmount)) ? pieceAmount : 0;
             }
             else
             {
@@ -157,7 +155,7 @@ namespace Rapadura.Gameplay.Inventory
         /// <summary>
         /// "Pegar o que as missões pedem": for every item in the chest, takes what the active collect objectives still
         /// need beyond what the bag holds (<paramref name="outstandingForQuests"/>), plain stacks first, within the bag's
-        /// weight and slots. What does not fit stays in the chest (<see cref="VillageChestBulkResult.LeftBehind"/>).
+        /// grid. What does not fit stays in the chest (<see cref="VillageChestBulkResult.LeftBehind"/>).
         /// </summary>
         public static VillageChestBulkResult TakeForQuests(VillageChestStorage chest, InventoryManager bag, Func<string, int, int> outstandingForQuests)
         {
@@ -201,38 +199,6 @@ namespace Rapadura.Gameplay.Inventory
         }
 
         // ------------------------------------------------------------------
-
-        /// <summary>
-        /// A generated roll goes into a free bag slot as it is (id, quantity, durability, affixes, name, rarity), if
-        /// the bag can carry its weight. <see cref="InventoryManager.AddGeneratedItem"/> needs a rolled
-        /// <c>GeneratedItemInstance</c>, which a stored slot no longer is, so the slot's data is copied directly.
-        /// </summary>
-        private static bool PlacePiece(InventoryManager bag, InventorySlotData source, ItemDefinition item, int quantity)
-        {
-            if (!bag.HasWeightCapacityFor(item, quantity))
-            {
-                return false;
-            }
-
-            IReadOnlyList<InventorySlotData> slots = bag.Slots;
-            for (int i = 0; i < slots.Count; i++)
-            {
-                InventorySlotData target = slots[i];
-                if (!target.IsEmpty)
-                {
-                    continue;
-                }
-
-                target.itemId = source.itemId;
-                target.quantity = quantity;
-                target.currentDurability = source.currentDurability;
-                target.CopyGeneratedDataFrom(source);
-                EventBus.Publish(new InventoryChangedEvent());
-                return true;
-            }
-
-            return false;
-        }
 
         private static List<string> DistinctIds(IReadOnlyList<InventorySlotData> slots, ItemType? type)
         {

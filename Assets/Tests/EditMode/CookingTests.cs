@@ -63,7 +63,8 @@ namespace Rapadura.Tests
             CollectionAssert.AreEquivalent(new[] { MealCatalog.Cuscuz, MealCatalog.CafeCoado }, MealCatalog.Recipes.Where(r => r.Starter).Select(r => r.RecipeId));
 
             var regionQuestIds = new HashSet<string>(RegionQuestCatalog.Quests.Select(q => q.QuestId));
-            foreach (MealRecipeSpec recipe in MealCatalog.Recipes.Where(r => !r.Starter))
+            // Dishes taught by a catch at "Pesca no açude" have their own route (FishingTests).
+            foreach (MealRecipeSpec recipe in MealCatalog.Recipes.Where(r => !r.Starter && r.TaughtByCatchItemId == null))
             {
                 Assert.IsTrue(regionQuestIds.Contains(recipe.UnlockQuestId), $"{recipe.RecipeId}: unlock quest {recipe.UnlockQuestId} is not a region quest");
                 Assert.IsTrue(recipe.FavouriteOf.HasValue, $"{recipe.RecipeId}: no cousin to be taught by Vó Zefa");

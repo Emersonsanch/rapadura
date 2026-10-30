@@ -51,6 +51,21 @@ namespace Rapadura.Gameplay.Items.Procedural
             LocalizationManager manager,
             Func<string, ItemAffixDefinition> resolveAffix = null)
         {
+            // Refined pieces carry their level in the name everywhere: "Facão do Vaqueiro +7" (RefineRules).
+            Rapadura.Gameplay.Refining.RefineTexts.EnsureRegistered(manager);
+            string name = ComposeUnrefined(item, slot, manager, resolveAffix);
+            return slot != null && slot.refineLevel > 0 && !string.IsNullOrEmpty(name)
+                ? name + Rapadura.Gameplay.Refining.RefineRules.NameSuffix(slot.refineLevel)
+                : name;
+        }
+
+        /// <summary><see cref="Compose(ItemDefinition, InventorySlotData, LocalizationManager, Func{string, ItemAffixDefinition})"/> without the " +N" refine suffix.</summary>
+        public static string ComposeUnrefined(
+            ItemDefinition item,
+            InventorySlotData slot,
+            LocalizationManager manager,
+            Func<string, ItemAffixDefinition> resolveAffix = null)
+        {
             if (item == null)
             {
                 return slot?.generatedName ?? string.Empty;

@@ -41,5 +41,23 @@ namespace Rapadura.Gameplay.Shop
         public string CurrencyItemId => _currencyItemId;
         public float SellBackRate => _sellBackRate;
         public IReadOnlyList<ShopInventoryItem> Catalog => _catalog;
+
+        /// <summary>
+        /// A shop built in code instead of authored as an asset (the cities' themed shops, whose counter rotates by
+        /// date: <c>CityShopService</c>). Not saved anywhere; the caller owns (and destroys) the instance.
+        /// </summary>
+        public static ShopDefinition CreateRuntime(string shopId, string displayNameKey, IEnumerable<ShopInventoryItem> catalog,
+            float sellBackRate = 0.5f, string currencyItemId = "item_gold")
+        {
+            var shop = CreateInstance<ShopDefinition>();
+            shop.name = shopId;
+            shop.hideFlags = HideFlags.DontSave;
+            shop._shopId = shopId;
+            shop._displayNameKey = displayNameKey;
+            shop._currencyItemId = currencyItemId;
+            shop._sellBackRate = Mathf.Clamp01(sellBackRate);
+            shop._catalog = catalog != null ? new List<ShopInventoryItem>(catalog) : new List<ShopInventoryItem>();
+            return shop;
+        }
     }
 }

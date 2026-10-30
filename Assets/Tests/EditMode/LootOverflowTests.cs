@@ -17,10 +17,10 @@ using Object = UnityEngine.Object;
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// Full-bag rules (Docs/Balance/README.md §9). Before: iron ore weighed 3 against a 100 cap, ~18 Montanha fights
-    /// filled the bag and from then on every drop was logged and silently dropped, quest items included. Now raw
-    /// materials are lighter, currency weighs 0, the units an active quest still needs go in past the weight limit
-    /// (<see cref="LootGrantRules"/>), and what is really lost raises <see cref="LootOverflowEvent"/> ("Mochila cheia").
+    /// Full-bag rules (Docs/Balance/README.md §9 and "Mochila em grade"). History: iron ore weighed 3 against a 100 cap
+    /// and the bag filled in ~18 Montanha fights; then weights were lowered and quest items went past the weight cap.
+    /// Since the MU-style grid bag the 8×8 grid is the only limit (weight is dormant data, still checked below so it
+    /// stays sane), nothing goes past the grid, and what is really lost raises <see cref="LootOverflowEvent"/> ("Mochila cheia").
     /// Also covers the quest-side fixes that came with the reachability audit: a boss killed before its quest was
     /// taken is credited, and a saved quest whose definition changed is brought up to date.
     /// </summary>
@@ -29,7 +29,7 @@ namespace Rapadura.Tests
         /// <summary>Average enemies per random encounter (WorldMap.unity: 1-2), as in EnemyLootTableTests.</summary>
         private const float EnemiesPerFight = 1.5f;
 
-        /// <summary>Fewest random fights in one biome, without selling/crafting, before the 100 cap is reached.</summary>
+        /// <summary>Fewest random fights in one biome, without selling/crafting, before biome materials fill the 8×8 grid.</summary>
         private const float MinFightsToFillTheBag = 40f;
 
         private readonly List<Object> _created = new List<Object>();
@@ -91,9 +91,10 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void EveryBiome_TakesAtLeast40Fights_ToFillTheBag()
+        public void EveryBiome_TakesAtLeast40Fights_ToFillTheGrid()
         {
-            float cap = _inventory.MaxWeight;
+            // Biome materials stack (50-99 per cell, 1×1): cells used per fight = expected units / stack size.
+            float cap = _inventory.CellCount;
             foreach (BiomeDefinition biome in BiomeRegistry.GetAll())
             {
                 List<BiomeEnemySpawnEntry> commons = biome.Enemies.Where(e => e?.Enemy != null && e.Weight > 0 && !e.Enemy.IsBoss).ToList();
@@ -106,18 +107,24 @@ namespace Rapadura.Tests
                 float perKill = 0f;
                 foreach (BiomeEnemySpawnEntry entry in commons)
                 {
-                    float weight = 0f;
+                    float cells = 0f;
                     foreach (BiomeLootEntry loot in biome.Loot.Where(l => l?.Item != null && l.Weight > 0))
                     {
-                        weight += loot.Item.Weight * EnemyLootRoller.ExpectedBiomeQuantity(entry.Enemy, biome, loot.Item.ItemId);
+                        GridSize size = _inventory.GetFootprint(loot.Item);
+                        cells += size.Area * EnemyLootRoller.ExpectedBiomeQuantity(entry.Enemy, biome, loot.Item.ItemId) / loot.Item.MaxStack;
                     }
 
-                    perKill += (float)entry.Weight / totalWeight * weight;
+                    perKill += (float)entry.Weight / totalWeight * cells;
+                }
+
+                if (perKill <= 0f)
+                {
+                    continue;
                 }
 
                 float fights = cap / (perKill * EnemiesPerFight);
                 Assert.GreaterOrEqual(fights, MinFightsToFillTheBag,
-                    $"{biome.Type}: {perKill * EnemiesPerFight:0.00} weight per fight fills the {cap} bag in ~{fights:0} fights.");
+                    $"{biome.Type}: {perKill * EnemiesPerFight:0.00} cells per fight fill the {cap}-cell grid in ~{fights:0} fights.");
             }
         }
 
@@ -138,58 +145,67 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void Grant_OverTheWeightLimit_ReportsTheLoss()
+        public void Grant_WithNoRoomOnTheGrid_ReportsTheLoss()
         {
-            SetPrivateField(_inventory, "_maxWeight", 3f);
+            SetGrid(_inventory, 1, 1);
             ItemDefinition ore = ItemDatabase.GetById("item_iron_ore");
-            Assert.AreEqual(0, _inventory.AddItem(ore, 3));
+            Assert.AreEqual(0, _inventory.AddItem(ore, ore.MaxStack), "one full stack fills the only cell");
 
             LootGrantResult result = LootGrantRules.Grant(_inventory, new LootDrop(ore, 2), (id, held) => 0);
 
             Assert.AreEqual(0, result.Granted);
             Assert.AreEqual(2, result.Lost);
             Assert.IsTrue(result.AnyLost);
-            Assert.AreEqual(3, _inventory.GetTotalCount("item_iron_ore"));
-            Assert.IsFalse(_inventory.IsOverWeightLimit);
+            Assert.AreEqual(ore.MaxStack, _inventory.GetTotalCount("item_iron_ore"));
         }
 
         [Test]
-        public void Grant_KeepsWhatAnActiveQuestStillNeeds_PastTheWeightLimit()
+        public void Grant_QuestNeeds_CannotBypassTheGrid()
         {
-            SetPrivateField(_inventory, "_maxWeight", 3f);
+            // The weight-era exception (quest units went in past the weight cap) is gone: a full grid is full.
+            SetGrid(_inventory, 1, 1);
             ItemDefinition ore = ItemDatabase.GetById("item_iron_ore");
-            _inventory.AddItem(ore, 3);
+            _inventory.AddItem(ore, ore.MaxStack);
 
-            // A quest wants 4 ore and the hero holds 3: one more is kept, the other is lost.
-            LootGrantResult result = LootGrantRules.Grant(_inventory, new LootDrop(ore, 2), (id, held) => id == "item_iron_ore" ? Math.Max(0, 4 - held) : 0);
+            LootGrantResult result = LootGrantRules.Grant(_inventory, new LootDrop(ore, 2), (id, held) => id == "item_iron_ore" ? 999 : 0);
 
-            Assert.AreEqual(1, result.Granted);
-            Assert.AreEqual(1, result.KeptOverWeight);
-            Assert.AreEqual(1, result.Lost);
-            Assert.AreEqual(4, _inventory.GetTotalCount("item_iron_ore"));
-            Assert.IsTrue(_inventory.IsOverWeightLimit);
-
-            // Over the limit, a normal add refuses anything that weighs.
-            Assert.AreEqual(1, _inventory.AddItem(ItemDatabase.GetById("item_stone"), 1));
+            Assert.AreEqual(0, result.Granted);
+            Assert.AreEqual(0, result.KeptOverWeight, "dormant field");
+            Assert.AreEqual(2, result.Lost);
+            Assert.AreEqual(0, _inventory.FreeCellCount);
         }
 
         [Test]
-        public void Grant_NeverLosesCurrency_InAHeavyBag()
+        public void Grant_Currency_StacksIntoItsCell_EvenWhenTheGridIsFull()
         {
-            SetPrivateField(_inventory, "_maxWeight", 1f);
+            SetGrid(_inventory, 2, 1);
             _inventory.AddItem(ItemDatabase.GetById("item_iron_ore"), 1);
 
-            LootGrantResult result = LootGrantRules.Grant(_inventory, new LootDrop(ItemDatabase.GetById("item_gold"), 3), null);
+            LootGrantResult first = LootGrantRules.Grant(_inventory, new LootDrop(ItemDatabase.GetById("item_gold"), 3), null);
+            Assert.AreEqual(3, first.Granted);
+            Assert.AreEqual(0, _inventory.FreeCellCount, "gold took the last cell");
 
-            Assert.AreEqual(3, result.Granted);
-            Assert.AreEqual(0, result.Lost);
-            Assert.AreEqual(3, _inventory.GetTotalCount("item_gold"));
+            LootGrantResult more = LootGrantRules.Grant(_inventory, new LootDrop(ItemDatabase.GetById("item_gold"), 5), null);
+            Assert.AreEqual(5, more.Granted, "gold stacks (9999 per cell): it never needs a second cell here");
+            Assert.AreEqual(0, more.Lost);
+            Assert.AreEqual(8, _inventory.GetTotalCount("item_gold"));
+        }
+
+        [Test]
+        public void Weight_IsDormant_HeavyLoadsStillFit()
+        {
+            // 10 full stacks of stone weigh 990 (the old cap was 100) but take 10 of 64 cells.
+            ItemDefinition stone = ItemDatabase.GetById("item_stone");
+            Assert.AreEqual(0, _inventory.AddItem(stone, stone.MaxStack * 10));
+            Assert.Greater(_inventory.GetTotalWeight(), 100f);
+            Assert.AreEqual(10, _inventory.UsedCellCount);
+            Assert.IsTrue(_inventory.HasWeightCapacityFor(stone, 1), "legacy name = grid fit");
         }
 
         [Test]
         public void Grant_GeneratedGear_WithoutAFreeSlot_IsLost_NotThrown()
         {
-            SetPrivateField(_inventory, "_slotCount", 1);
+            SetGrid(_inventory, 1, 1);
             _inventory.AddItem(ItemDatabase.GetById("item_herb"), 1);
             ItemDefinition sword = ItemDatabase.GetById("item_iron_sword");
             var generated = new GeneratedItemInstance(sword, ItemRarity.Rare, Array.Empty<RolledAffix>(), "Espada de Ferro Rara");
@@ -345,6 +361,14 @@ namespace Rapadura.Tests
         private static QuestObjective Objective(string id, QuestObjectiveType type, string target, int amount)
         {
             return new QuestObjective { ObjectiveId = id, Type = type, TargetId = target, RequiredAmount = amount, DescriptionKey = "obj." + id };
+        }
+
+        /// <summary>Resizes a fresh bag's grid (before anything was added).</summary>
+        private static void SetGrid(InventoryManager inventory, int columns, int rows)
+        {
+            SetPrivateField(inventory, "_columns", columns);
+            SetPrivateField(inventory, "_rows", rows);
+            SetPrivateField(inventory, "_slots", null);
         }
 
         private static void SetPrivateField(object target, string fieldName, object value)

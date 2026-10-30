@@ -2,7 +2,12 @@ using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
+using Rapadura.Gameplay.Content;
+using Rapadura.Gameplay.Inventory;
+using Rapadura.Gameplay.Items;
+using Rapadura.Gameplay.Items.Procedural;
 using Rapadura.Gameplay.Player;
+using Rapadura.Gameplay.Story;
 using Rapadura.Gameplay.Tutorial;
 using Rapadura.Gameplay.World;
 using Rapadura.Gameplay.World.Map;
@@ -36,6 +41,10 @@ namespace Rapadura.UI.Death
     /// Pausing goes through <see cref="GameplayPause"/> like every other modal screen.
     ///
     /// If this component is absent or disabled, CheckpointManager keeps its original instant respawn.
+    ///
+    /// Death drop (9%, <see cref="DeathDropRules"/>): each death shown here rolls once; on success one eligible backpack
+    /// item goes to Vó Zefa's "Achados e Perdidos" (<see cref="DeathDropService"/>, saved with the village chest) and the
+    /// panel says "Na pressa, você deixou cair: …" ("death-drop"). No drop without this screen (instant respawn).
     ///
     /// The first-death tutorial tip (<see cref="TutorialSteps.Death"/>) is shown inside this panel
     /// ("death-tip") rather than as the floating hint bubble, which steps aside while a modal holds a
@@ -85,6 +94,13 @@ namespace Rapadura.UI.Death
         private Label _tipTitleLabel;
         private Label _tipBodyLabel;
         private bool _tipShown;
+        private Label _dropLabel;
+        private DeathDropResult _lastDrop;
+        /// <summary>"−N XP" + protection line (built in code under the drop label; see <see cref="DeathPenaltyService"/>).</summary>
+        private Label _penaltyLabel;
+        private DeathPenaltyResult _lastPenalty;
+        private bool _penaltyApplied;
+        private static readonly System.Random DropRandom = new System.Random();
 
         private DeathScreenFlow _flow;
         private CheckpointManager _checkpointManager;
@@ -163,6 +179,24 @@ namespace Rapadura.UI.Death
             _tipBox = rootVisualElement.Q<VisualElement>("death-tip");
             _tipTitleLabel = rootVisualElement.Q<Label>("death-tip-title");
             _tipBodyLabel = rootVisualElement.Q<Label>("death-tip-body");
+            _dropLabel = rootVisualElement.Q<Label>("death-drop");
+            _penaltyLabel = EnsurePenaltyLabel(rootVisualElement, _dropLabel);
+        }
+
+        /// <summary>The "death-penalty" label, created next to "death-drop" (same look) when the UXML has none.</summary>
+        private static Label EnsurePenaltyLabel(VisualElement root, Label dropLabel)
+        {
+            Label label = root.Q<Label>("death-penalty");
+            if (label != null || dropLabel == null || dropLabel.parent == null)
+            {
+                return label;
+            }
+
+            label = new Label { name = "death-penalty" };
+            label.AddToClassList("death-drop");
+            label.style.display = DisplayStyle.None;
+            dropLabel.parent.Insert(dropLabel.parent.IndexOf(dropLabel), label);
+            return label;
         }
 
         private void RegisterCallbacks()
@@ -231,6 +265,8 @@ namespace Rapadura.UI.Death
 
             _localizer.Refresh();
             _tipShown = ShouldShowDeathTip();
+            _penaltyApplied = TryApplyDeathPenalty(out _lastPenalty);
+            _lastDrop = _lastPenalty.Drop;
             ApplyTexts();
             if (_loadButton != null) _loadButton.style.display = _saveLoadMenu != null ? DisplayStyle.Flex : DisplayStyle.None;
 
@@ -253,7 +289,95 @@ namespace Rapadura.UI.Death
             }
 
             ApplyDeathTip(localization);
+            ApplyDeathDrop(localization);
+            ApplyDeathPenaltyText(localization);
             _lastCountdownSecond = int.MinValue;
+        }
+
+        /// <summary>
+        /// The death penalty on the player (<see cref="DeathPenaltyService"/>): a Patuá or the Bênção da Romaria is used up,
+        /// the XP loss is removed (never de-levels) and, unprotected, the 9% roll may move one item to the village chest's
+        /// "Achados e Perdidos". No loss below level 3 nor in a first-campaign boss challenge.
+        /// </summary>
+        private bool TryApplyDeathPenalty(out DeathPenaltyResult result)
+        {
+            result = default;
+            GameObject player = GameObject.FindGameObjectWithTag(PlayerTag);
+            if (player == null)
+            {
+                return false;
+            }
+
+            InventoryManager bag = player.GetComponent<InventoryManager>();
+            PlayerStats stats = player.GetComponent<PlayerStats>();
+            bool boss = _transition != null && _transition.PendingEncounter != null && _transition.PendingEncounter.IsBossChallenge;
+            var context = stats != null
+                ? new DeathPenaltyContext(stats.Level, stats.CurrentExperience, stats.GetExperienceToNextLevel(), boss, NewGamePlusProgress.ResolveCurrentCycle())
+                : new DeathPenaltyContext(1, 0, 0, boss);
+
+            result = DeathPenaltyService.Apply(context, bag, VillageChestStorage.ResolveShared().LostAndFound,
+                DeathProtectionState.ResolveShared(), DropRandom);
+            int removed = stats != null ? stats.RemoveExperience(result.ExperienceLost) : 0;
+            result = new DeathPenaltyResult(removed, result.Protection, result.Drop);
+            return true;
+        }
+
+        private void ApplyDeathPenaltyText(LocalizationManager localization)
+        {
+            if (_penaltyLabel == null)
+            {
+                return;
+            }
+
+            _penaltyLabel.style.display = _penaltyApplied ? DisplayStyle.Flex : DisplayStyle.None;
+            if (!_penaltyApplied)
+            {
+                return;
+            }
+
+            string text = _lastPenalty.ExperienceLost > 0
+                ? DeathProtectionTexts.Format(localization, DeathProtectionTexts.DeathXpLost, _lastPenalty.ExperienceLost)
+                : DeathProtectionTexts.Get(localization, DeathProtectionTexts.DeathNoXpLost);
+            if (_lastPenalty.Protection == DeathProtection.Patua)
+            {
+                text += "\n" + DeathProtectionTexts.Get(localization, DeathProtectionTexts.DeathProtectedPatua);
+            }
+            else if (_lastPenalty.Protection == DeathProtection.Blessing)
+            {
+                text += "\n" + DeathProtectionTexts.Get(localization, DeathProtectionTexts.DeathProtectedBlessing);
+            }
+
+            _penaltyLabel.text = text;
+        }
+
+        private void ApplyDeathDrop(LocalizationManager localization)
+        {
+            if (_dropLabel == null)
+            {
+                return;
+            }
+
+            _dropLabel.style.display = _lastDrop.Dropped ? DisplayStyle.Flex : DisplayStyle.None;
+            if (!_lastDrop.Dropped)
+            {
+                return;
+            }
+
+            _dropLabel.text = UiTexts.Format(localization, UiTexts.DeathDropped, DescribeDrop(_lastDrop.Item))
+                + "\n" + UiTexts.Get(localization, UiTexts.DeathDroppedHint);
+        }
+
+        /// <summary>"Espada de Ferro" / "3 Poção de Vida": the shown name (generated name for a rolled item), quantity above one.</summary>
+        public static string DescribeDrop(InventorySlotData item)
+        {
+            if (item == null || item.IsEmpty)
+            {
+                return string.Empty;
+            }
+
+            ItemDefinition definition = ItemDatabase.GetById(item.itemId);
+            string name = definition != null ? GeneratedItemName.Compose(definition, item, ContentText.CurrentManager) : item.itemId;
+            return item.quantity > 1 ? item.quantity + " " + name : name;
         }
 
         /// <summary>

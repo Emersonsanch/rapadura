@@ -28,8 +28,8 @@ namespace Rapadura.Gameplay.Enemies
     /// (<c>SaveManager</c>'s carried state), so collect quests progress across the map ⇄ encounter loop.
     /// A short "+2 Madeira" text floats over the corpse for each drop (<see cref="CombatFxManager"/>).
     ///
-    /// A full bag never eats loot silently (<see cref="LootGrantRules"/>, Docs/Balance/README.md §9): currency and
-    /// the units an active quest still needs go in past the weight limit, and whatever is really lost raises
+    /// A full bag never eats loot silently (<see cref="LootGrantRules"/>, Docs/Balance/README.md §9): the Mochila's
+    /// MU-style grid is the only limit (shared fit API), and whatever does not fit raises
     /// <see cref="LootOverflowEvent"/> (the arena's "Mochila cheia" toast + a warning text over the corpse).
     /// </summary>
     public class EnemyLootGranter : MonoBehaviour
@@ -70,6 +70,21 @@ namespace Rapadura.Gameplay.Enemies
             EnemyDefinition definition = enemy.Definition;
             BiomeDefinition biome = BiomeRegistry.FindBiomeOf(definition);
             List<LootDrop> drops = EnemyLootRoller.Roll(definition, biome, _random, newGamePlusCycle: NewGamePlusProgress.ResolveCurrentCycle());
+            // "Presa do dia" / "Bicho destaque do dia": whole extra rolls (EnemyRewardHooks; none when nothing is installed).
+            float extraChance = EnemyRewardHooks.ResolveExtraLootChance(definition);
+            int extraRolls = extraChance > 0f ? Rapadura.Gameplay.Hunting.HuntingRules.ExtraLootRolls(extraChance, _random.NextDouble()) : 0;
+            for (int extra = 0; extra < extraRolls; extra++)
+            {
+                drops.AddRange(EnemyLootRoller.Roll(definition, biome, _random, newGamePlusCycle: NewGamePlusProgress.ResolveCurrentCycle()));
+            }
+
+            // "Fôlego diário": the one place loot takes the stamina tier — the enemy's own drops (base + biome + extra rolls)
+            // scale their plain stacks; generated gear and the refine stones below are untouched (StaminaLootRules).
+            drops = Rapadura.Gameplay.Daily.StaminaLootRules.Apply(drops, Rapadura.Gameplay.Daily.DailyStaminaService.ResolveMultiplier(), _random);
+
+            // Pedras do Sertão (refine stones, Amuleto da Sorte): their own rare-drop table, rolled last (RefineStoneDrops).
+            drops.AddRange(Rapadura.Gameplay.Refining.RefineStoneDrops.Roll(definition.IsBoss, biome != null ? biome.Type : (BiomeType?)null,
+                _random, NewGamePlusProgress.ResolveCurrentCycle()));
 
             Vector3 labelPosition = evt.Target.transform.position + Vector3.up * 1.8f;
             Func<string, int, int> outstanding = ResolveQuestNeeds();
@@ -87,7 +102,7 @@ namespace Rapadura.Gameplay.Enemies
                 if (result.Lost > 0)
                 {
                     string what = drops[i].IsGenerated ? drops[i].Generated.GeneratedName : drops[i].Item.ItemId;
-                    GameLogger.Warning("Enemy", $"Loot '{what}' x{result.Lost} lost: killer inventory is full or over its weight limit.");
+                    GameLogger.Warning("Enemy", $"Loot '{what}' x{result.Lost} lost: no free area of its footprint on the killer's backpack grid.");
                 }
 
                 if (result.Lost > 0 || result.KeptOverWeight > 0)

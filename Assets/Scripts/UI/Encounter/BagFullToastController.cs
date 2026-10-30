@@ -16,7 +16,7 @@ namespace Rapadura.UI.Encounter
 {
     /// <summary>
     /// "Mochila cheia" feedback for <see cref="LootOverflowEvent"/> (raised by <see cref="EnemyLootGranter"/> when a
-    /// kill's loot did not fit, or quest items went in past the weight limit): a warning-coloured "Sem espaço: 2
+    /// kill's loot did not fit on the Mochila's grid): a warning-coloured "Sem espaço: 2
     /// Minério de Ferro" floats over the corpse (<see cref="CombatFxManager.SpawnLootWarningText"/>) and a small toast
     /// at the bottom of the screen says what was left behind and how to make room. Before this, a full bag only wrote
     /// a warning to the log.

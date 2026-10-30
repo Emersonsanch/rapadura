@@ -27,7 +27,7 @@ namespace Rapadura.Tests
 
         /// <summary>
         /// Player level at each region's boss for a player who does that region's two side quests
-        /// (README §9.2, the r8 reference route; until r7 it was 2/4/6/8, a guess with no quests,
+        /// (README §10.2, the r8 reference route; until r7 it was 2/4/6/8, a guess with no quests,
         /// attributes or skill points). <see cref="RegionQuestRoute_ReachesTheExpectedBossLevels"/> checks
         /// that the XP economy really lands there.
         /// </summary>
@@ -145,7 +145,7 @@ namespace Rapadura.Tests
         }
 
         // ---------------------------------------------------------------
-        // Bosses and commons (r6 rebalance, re-based on the r8 progression: Docs/Balance/README.md §5, §9)
+        // Bosses and commons (r6 rebalance, re-based on the r8 progression: Docs/Balance/README.md §5, §10)
         //
         // Model, at the biome's expected level (the region-quest route), with no dodging, crits or gear:
         //  - attributes: 1 Vitalidade (+10 HP) and 1 Poder Arcano (+1% AttackDamage) per level gained
@@ -292,7 +292,7 @@ namespace Rapadura.Tests
         public void BossHealth_IsWithinItsBiomeBand(string bossId, float min, float max)
         {
             // r5 bosses (120–200 HP) died in 3–11 s in the r6 playtest with nobody dying; r6 made them a real
-            // fight (430–700 HP). r8 re-bases them on the level the region quests really bring (README §9).
+            // fight (430–700 HP). r8 re-bases them on the level the region quests really bring (README §10).
             Assert.That(LoadEnemy(bossId).MaxHealth, Is.InRange(min, max), bossId);
         }
 
@@ -388,7 +388,7 @@ namespace Rapadura.Tests
         }
 
         // ---------------------------------------------------------------
-        // XP economy and loot (r8, README §9)
+        // XP economy and loot (r8, README §10)
         // ---------------------------------------------------------------
 
         private static readonly BiomeType[] RegionOrder = { BiomeType.Forest, BiomeType.Desert, BiomeType.Mountain, BiomeType.Caves };
@@ -515,7 +515,7 @@ namespace Rapadura.Tests
         {
             // Flat AttackDamage is added to every hit (OutgoingDamage.Resolve). With a 10-damage basic attack,
             // Brutal 6–12 + Afiada 2–5 on one Rare weapon gave up to +170% basic damage, and the luckiest 10%
-            // of players beat the bosses in 13–15 s instead of 17–20 s (README §9.4).
+            // of players beat the bosses in 13–15 s instead of 17–20 s (README §10.4).
             PlayerCombatBalance balance = PlayerCombatBalance.LoadDefault();
             Assert.IsNotNull(balance);
             List<ItemAffixDefinition> flat = AffixDatabase.GetAll()

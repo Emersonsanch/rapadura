@@ -1,0 +1,211 @@
+/*
+ * Timed event rooms (Terreiro das Assombrações / Torre do Engenho Velho), built in code (no UXML):
+ * - the world-map schedule pill and "Entrar" buttons (EventRoomMapButton, on the map HUD's document);
+ * - the in-room HUD (timer, points, combo, objective, banner) and the results card (EventRoomHud).
+ * Loaded at runtime from Resources (EventRoomStyles), which also puts `rap-theme` on the layer.
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+/* ---- World map: schedule pill (top centre, under the night pill) ---- */
+
+.er-map-pill {
+    position: absolute;
+    top: 104px;
+    left: 0;
+    right: 0;
+    align-items: center;
+}
+
+.er-map-card {
+    background-color: rgba(43, 24, 12, 0.86);
+    border-width: 2px;
+    border-color: var(--rap-gold);
+    border-radius: 12px;
+    padding: 4px 12px;
+    align-items: center;
+}
+
+.er-map-line {
+    font-size: 15px;
+    color: var(--rap-cream);
+    -unity-text-align: middle-center;
+}
+
+.er-map-line--open {
+    color: var(--rap-gold-light);
+    -unity-font-style: bold;
+}
+
+.er-map-message {
+    font-size: 14px;
+    color: var(--rap-warning);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    max-width: 520px;
+}
+
+.er-map-button--open {
+    border-color: var(--rap-gold-light);
+}
+
+/* ---- In-room HUD ---- */
+
+.er-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.er-hud {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    right: 0;
+    align-items: center;
+}
+
+.er-hud-card {
+    background-color: rgba(43, 24, 12, 0.82);
+    border-width: 2px;
+    border-color: var(--rap-gold);
+    border-radius: 14px;
+    padding: 6px 18px;
+    align-items: center;
+    min-width: 280px;
+}
+
+.er-hud-title {
+    font-size: 14px;
+    color: var(--rap-gold-light);
+    -unity-font-style: bold;
+}
+
+.er-hud-timer {
+    font-size: 30px;
+    color: var(--rap-cream);
+    -unity-font-style: bold;
+}
+
+.er-hud-timer--low {
+    color: var(--rap-clay-red);
+}
+
+.er-hud-row {
+    flex-direction: row;
+    justify-content: center;
+}
+
+.er-hud-score {
+    font-size: 18px;
+    color: var(--rap-cream);
+    margin-right: 14px;
+}
+
+.er-hud-combo {
+    font-size: 18px;
+    color: var(--rap-gold-light);
+    -unity-font-style: bold;
+}
+
+.er-hud-goal {
+    font-size: 15px;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+    -unity-text-align: middle-center;
+    max-width: 460px;
+}
+
+.er-hud-gate-bar {
+    width: 220px;
+    height: 8px;
+    margin-top: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.er-hud-gate-fill {
+    height: 100%;
+    background-color: var(--rap-caramel);
+}
+
+.er-banner {
+    position: absolute;
+    top: 170px;
+    left: 0;
+    right: 0;
+    align-items: center;
+}
+
+.er-banner-text {
+    background-color: rgba(43, 24, 12, 0.86);
+    border-radius: 12px;
+    padding: 6px 16px;
+    font-size: 18px;
+    color: var(--rap-cream);
+    white-space: normal;
+    max-width: 640px;
+    -unity-text-align: middle-center;
+}
+
+/* ---- Results card ---- */
+
+.er-results {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(10, 5, 2, 0.45);
+}
+
+.er-results-card {
+    background-color: var(--rap-panel-bg);
+    border-width: 3px;
+    border-color: var(--rap-panel-border);
+    border-radius: 16px;
+    padding: 16px 26px;
+    align-items: center;
+    min-width: 360px;
+    max-width: 640px;
+}
+
+.er-results-title {
+    font-size: 26px;
+    color: var(--rap-gold-light);
+    -unity-font-style: bold;
+    margin-bottom: 6px;
+}
+
+.er-results-tier {
+    font-size: 22px;
+    color: var(--rap-gold);
+    -unity-font-style: bold;
+}
+
+.er-results-line {
+    font-size: 16px;
+    color: var(--rap-cream);
+    white-space: normal;
+    -unity-text-align: middle-center;
+    margin-top: 2px;
+}
+
+.er-results-best {
+    color: var(--rap-cane-green);
+    -unity-font-style: bold;
+}
+
+.er-results-quote {
+    font-size: 16px;
+    color: var(--rap-cream-dim);
+    -unity-font-style: italic;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    margin-top: 10px;
+}

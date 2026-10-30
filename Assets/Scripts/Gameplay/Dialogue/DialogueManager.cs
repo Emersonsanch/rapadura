@@ -370,6 +370,10 @@ namespace Rapadura.Gameplay.Dialogue
                     string active = Context.ActiveCharacterId;
                     result = !string.IsNullOrEmpty(active) && string.Equals(active, condition.Key, System.StringComparison.OrdinalIgnoreCase);
                     break;
+                case DialogueConditionType.StoryBeatSeen:
+                    result = Rapadura.Gameplay.Story.StoryBeats.TryParse(condition.Key, out Rapadura.Gameplay.Story.StoryBeat beat)
+                             && Context is IStoryDialogueContext story && story.HasSeenStoryBeat(beat);
+                    break;
                 default:
                     result = false;
                     break;
@@ -420,6 +424,7 @@ namespace Rapadura.Gameplay.Dialogue
             {
                 QuestGiverTexts.EnsureLoaded(localization);
                 Rapadura.Gameplay.Quests.RegionQuestTexts.EnsureLoaded(localization);
+                VillageStoryNewsTexts.EnsureLoaded(localization);
             }
         }
 

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Characters;
+using Rapadura.Gameplay.World.Biomes;
 
 namespace Rapadura.Gameplay.Pets
 {
@@ -75,6 +76,67 @@ namespace Rapadura.Gameplay.Pets
             new LocalizationEntry(CuddlePrefix + "lavine.1",
                 "Lavine: \"When the shadow gets cold, you lean on me. Thank you.\"",
                 "Lavine: \"Quando a sombra esfria, você encosta em mim. Obrigada.\""),
+            // Stage lines: what the cousin remembers of the region they just came back from (latest interlude seen).
+            new LocalizationEntry(CuddlePrefix + "maithe.after_forest",
+                "Maithe: \"You sniffed out the golden sand before I did. Are you competing with me?\"",
+                "Maithe: \"Você farejou a areia dourada antes de mim. Tá competindo comigo, é?\""),
+            new LocalizationEntry(CuddlePrefix + "maithe.after_desert",
+                "Maithe: \"Built guardians, a cracking seal... and all you want is a belly rub. Fine, here.\"",
+                "Maithe: \"Guardião construído, selo rachando... e você só quer coçar a barriga. Tá bom, toma.\""),
+            new LocalizationEntry(CuddlePrefix + "maithe.after_mountain",
+                "Maithe: \"Up there the wind fooled my Eye, but your nose didn't. Good boy.\"",
+                "Maithe: \"Lá em cima o vento enganou o meu Olho, mas o seu nariz não. Bom garoto.\""),
+            new LocalizationEntry(CuddlePrefix + "maithe.after_caves",
+                "Maithe: \"Go ahead and run in front, Caramelo. Today I'm not counting anyone. ...Okay, just once.\"",
+                "Maithe: \"Pode correr na frente, Caramelo. Hoje eu não conto ninguém. ...Tá, só uma vez.\""),
+            new LocalizationEntry(CuddlePrefix + "maria.after_forest",
+                "Maria: \"The Wolf had a dark little stone on his collar, you know? Good thing yours is just leather.\"",
+                "Maria: \"O Lobo tinha uma pedrinha escura na coleira, sabia? Ainda bem que a sua é só de couro.\""),
+            new LocalizationEntry(CuddlePrefix + "maria.after_desert",
+                "Maria: \"The ancients left guardians to keep watch. We have you.\"",
+                "Maria: \"Os antigos deixaram guardiões vigiando. A gente tem você.\""),
+            new LocalizationEntry(CuddlePrefix + "maria.after_mountain",
+                "Maria: \"I saved you another little piece of rapadura from the campfire. Don't tell Joaquim.\"",
+                "Maria: \"Guardei mais um pedacinho de rapadura da fogueira pra você. Não conta pro Joaquim.\""),
+            new LocalizationEntry(CuddlePrefix + "maria.after_caves",
+                "Maria: \"In my dream there were five cousins and one caramel dog. Everybody came back.\"",
+                "Maria: \"No meu sonho tinha cinco primos e um cachorro caramelo. Voltou todo mundo.\""),
+            new LocalizationEntry(CuddlePrefix + "joaquim.after_forest",
+                "Joaquim: \"See how the Alpha Wolf calmed down? It was the shield. And a little bit you, okay.\"",
+                "Joaquim: \"Viu como o Lobo Alfa sossegou? Foi o escudo. E um pouquinho você, tá.\""),
+            new LocalizationEntry(CuddlePrefix + "joaquim.after_desert",
+                "Joaquim: \"You sneezed sand on me the whole trip. Team of two, but I get the side without sand.\"",
+                "Joaquim: \"Você espirrou areia em mim a viagem inteira. Time de dois, mas eu fico com o lado sem areia.\""),
+            new LocalizationEntry(CuddlePrefix + "joaquim.after_mountain",
+                "Joaquim: \"On the mountain I learned to step aside. You already knew, right? You always come back to check we're coming.\"",
+                "Joaquim: \"Na serra eu aprendi a sair da frente. Você já sabia, né? Sempre volta pra ver se a gente vem.\""),
+            new LocalizationEntry(CuddlePrefix + "joaquim.after_caves",
+                "Joaquim: \"Shield on the wall, belly full, dog on my lap. Now that's a victory.\"",
+                "Joaquim: \"Escudo encostado, barriga cheia, cachorro no colo. Isso é que é vitória.\""),
+            new LocalizationEntry(CuddlePrefix + "icaro.after_forest",
+                "Ícaro: \"You barked three seconds before the Wolf showed up. I'm calling it the Caramelo radar.\"",
+                "Ícaro: \"Você latiu três segundos antes do Lobo aparecer. Vou chamar isso de radar Caramelo.\""),
+            new LocalizationEntry(CuddlePrefix + "icaro.after_desert",
+                "Ícaro: \"The ancients' panel talked about guardians. Scientific hypothesis: you're a furry guardian.\"",
+                "Ícaro: \"O painel dos antigos falava de guardiões. Hipótese científica: você é um guardião peludo.\""),
+            new LocalizationEntry(CuddlePrefix + "icaro.after_mountain",
+                "Ícaro: \"Experiment: rapadura in the left hand, rapadura in the right. Result: you ate both.\"",
+                "Ícaro: \"Experimento: rapadura na mão esquerda, rapadura na direita. Resultado: você comeu as duas.\""),
+            new LocalizationEntry(CuddlePrefix + "icaro.after_caves",
+                "Ícaro: \"The light meter is maxed out. So is the tail-wag meter.\"",
+                "Ícaro: \"O medidor de luz tá no máximo. E o medidor de abanadas também.\""),
+            new LocalizationEntry(CuddlePrefix + "lavine.after_forest",
+                "Lavine: \"The Forest night gave me the shivers. You slept leaning on me. That was on purpose, wasn't it?\"",
+                "Lavine: \"A noite na Floresta deu friozinho. Você dormiu encostado em mim. Foi de propósito, né?\""),
+            new LocalizationEntry(CuddlePrefix + "lavine.after_desert",
+                "Lavine: \"In the sandstorm I couldn't see anything. But I heard you. That was enough.\"",
+                "Lavine: \"Na tempestade de areia eu não vi nada. Mas ouvi você. Foi o suficiente.\""),
+            new LocalizationEntry(CuddlePrefix + "lavine.after_mountain",
+                "Lavine: \"It's really dark down in the Caves, Caramelo. We go together, okay? I hold the ribbon, you hold the courage.\"",
+                "Lavine: \"Lá embaixo nas Cavernas é bem escuro, Caramelo. A gente vai junto, tá? Eu seguro a fita, você segura a coragem.\""),
+            new LocalizationEntry(CuddlePrefix + "lavine.after_caves",
+                "Lavine: \"You're not afraid of the dark anymore either, right, Caramelo?\"",
+                "Lavine: \"Você também não tem mais medo do escuro, né, Caramelo?\""),
         };
 
         private static Dictionary<string, string> _fallbackByKey;
@@ -85,6 +147,32 @@ namespace Rapadura.Gameplay.Pets
         {
             int n = ((index % LinesPerHero) + LinesPerHero) % LinesPerHero;
             return CuddlePrefix + hero.ToString().ToLowerInvariant() + "." + n;
+        }
+
+        /// <summary>
+        /// Key of <paramref name="hero"/>'s line for the region they just came back from:
+        /// <c>pet.caramelo.cuddle.&lt;hero&gt;.after_&lt;region&gt;</c> (forest/desert/mountain/caves).
+        /// </summary>
+        public static string StageLineKey(CharacterId hero, BiomeType cameFrom)
+        {
+            return CuddlePrefix + hero.ToString().ToLowerInvariant() + ".after_" + cameFrom.ToString().ToLowerInvariant();
+        }
+
+        /// <summary>
+        /// The <paramref name="index"/>-th cuddle line once the campaign moved on: the rotation gains the stage line of
+        /// <paramref name="cameFrom"/> (index 0, 3, 6... → <see cref="StageLineKey"/>, the others the usual lines).
+        /// Without a region (before the Forest interlude) it is <see cref="CuddleLineKey(CharacterId, int)"/>.
+        /// </summary>
+        public static string CuddleLineKey(CharacterId hero, int index, BiomeType? cameFrom)
+        {
+            if (!cameFrom.HasValue)
+            {
+                return CuddleLineKey(hero, index);
+            }
+
+            int cycle = LinesPerHero + 1;
+            int n = ((index % cycle) + cycle) % cycle;
+            return n == 0 ? StageLineKey(hero, cameFrom.Value) : CuddleLineKey(hero, n - 1);
         }
 
         /// <summary>Merges <see cref="Entries"/> into <paramref name="manager"/>, skipping keys it already has. Safe to call repeatedly.</summary>

@@ -175,7 +175,13 @@ namespace Rapadura.Gameplay.Crafting
 
             if (leftover > 0)
             {
-                // No space for the result — refund the consumed ingredients rather than lose them.
+                // No room on the grid for the result. Whatever fraction of it DID fit comes out first, so
+                // the refunded ingredients get back the cells they just freed, then the ingredients return.
+                if (leftover < recipe.ResultQuantity)
+                {
+                    inventory.RemoveById(recipe.ResultItem.ItemId, recipe.ResultQuantity - leftover);
+                }
+
                 foreach (RecipeIngredient ingredient in recipe.Ingredients)
                 {
                     if (ingredient.item == null || ingredient.quantity <= 0)
@@ -184,12 +190,6 @@ namespace Rapadura.Gameplay.Crafting
                     }
 
                     inventory.AddItem(ingredient.item, ingredient.quantity);
-                }
-
-                // Whatever fraction of the result DID fit must also be removed again.
-                if (leftover < recipe.ResultQuantity)
-                {
-                    inventory.RemoveById(recipe.ResultItem.ItemId, recipe.ResultQuantity - leftover);
                 }
 
                 return false;

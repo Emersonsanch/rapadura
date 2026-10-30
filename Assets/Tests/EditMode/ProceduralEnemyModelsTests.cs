@@ -66,6 +66,17 @@ namespace Rapadura.Tests
             { ProceduralEnemyKind.Spider, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Abdomen, "Leg_L0", "Shin_L0", "Foot_L0", "Leg_R3", "Shin_R3", "Foot_R3" } },
             { ProceduralEnemyKind.Scorpion, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.ClawLeft, ProceduralEnemyParts.ClawRight, ProceduralEnemyParts.Tail,
                 "Tail_1", "Tail_2", "Tail_3", ProceduralEnemyParts.Stinger, "Leg_L0", "Shin_L0", "Foot_L0", "Leg_R3", "Shin_R3", "Foot_R3" } },
+            { ProceduralEnemyKind.Werewolf, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Torso, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw,
+                ProceduralEnemyParts.EarLeft, ProceduralEnemyParts.EarRight, ProceduralEnemyParts.Tail, "Tail_1", WerewolfRecipe.ShoulderLeft, WerewolfRecipe.ShoulderRight,
+                "Leg_FL", "Shin_FL", "Foot_FL", "Leg_FR", "Shin_FR", "Foot_FR", "Leg_HL", "Shin_HL", "Foot_HL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.VampireBat, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight } },
+            { ProceduralEnemyKind.ShroudOwl, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight,
+                ProceduralEnemyParts.Tail } },
+            { ProceduralEnemyKind.FireflySwarm, new[] { ProceduralEnemyParts.Swarm, "Firefly_0", ProceduralEnemyParts.Lantern } },
+            { ProceduralEnemyKind.Peccary, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.EarLeft, ProceduralEnemyParts.EarRight,
+                ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_FR", "Shin_FR", "Foot_FR", "Leg_HL", "Shin_HL", "Foot_HL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.Potoo, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Branch,
+                ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight, ProceduralEnemyParts.Tail } },
         };
 
         private static readonly string[] WolfParts =
@@ -80,6 +91,8 @@ namespace Rapadura.Tests
             { ProceduralEnemyKind.BatSwarm, 0 }, { ProceduralEnemyKind.StoneGolem, 2 }, { ProceduralEnemyKind.Warlord, 2 },
             { ProceduralEnemyKind.RuinGuardian, 2 }, { ProceduralEnemyKind.AncientDweller, 2 }, { ProceduralEnemyKind.Wolf, 4 },
             { ProceduralEnemyKind.AlphaWolf, 4 }, { ProceduralEnemyKind.Spider, 8 }, { ProceduralEnemyKind.Scorpion, 8 },
+            { ProceduralEnemyKind.Werewolf, 4 }, { ProceduralEnemyKind.VampireBat, 0 }, { ProceduralEnemyKind.ShroudOwl, 0 },
+            { ProceduralEnemyKind.FireflySwarm, 0 }, { ProceduralEnemyKind.Peccary, 4 }, { ProceduralEnemyKind.Potoo, 0 },
         };
 
         [Test]
@@ -230,9 +243,10 @@ namespace Rapadura.Tests
             visual.transform.SetParent(root.transform, false);
 
             Assert.IsTrue(EnemyVisualSwapper.TryGetMeshBoundsInRootSpace(root.transform, visual.transform, out Bounds bounds));
-            Assert.That(bounds.min.y, Is.InRange(-0.15f, kind == ProceduralEnemyKind.BatSwarm ? 0.9f : 0.15f), $"{kind}: feet at {bounds.min.y}");
+            bool floatingSwarm = kind == ProceduralEnemyKind.BatSwarm || kind == ProceduralEnemyKind.FireflySwarm;
+            Assert.That(bounds.min.y, Is.InRange(-0.15f, floatingSwarm ? 0.9f : 0.15f), $"{kind}: feet at {bounds.min.y}");
             Assert.That(bounds.size.y, Is.InRange(0.6f, 4f), $"{kind}: height {bounds.size.y}");
-            bool lean = kind == ProceduralEnemyKind.Wolf || kind == ProceduralEnemyKind.AlphaWolf;
+            bool lean = kind == ProceduralEnemyKind.Wolf || kind == ProceduralEnemyKind.AlphaWolf || kind == ProceduralEnemyKind.Peccary;
             Assert.That(bounds.size.x, Is.InRange(lean ? 0.3f : 0.5f, 3.5f), $"{kind}: width {bounds.size.x}");
             Assert.That(bounds.size.z, Is.InRange(0.4f, 3.5f), $"{kind}: depth {bounds.size.z}");
             Assert.That(Mathf.Abs(bounds.center.x), Is.LessThan(0.3f), $"{kind}: model must be centred on the pivot");
@@ -306,6 +320,12 @@ namespace Rapadura.Tests
             Assert.AreEqual(ProceduralEnemyKind.AlphaWolf, ProceduralEnemyModels.KindFor("enemy_forest_alpha_wolf"));
             Assert.AreEqual(ProceduralEnemyKind.Spider, ProceduralEnemyModels.KindFor("enemy_forest_spider"));
             Assert.AreEqual(ProceduralEnemyKind.Scorpion, ProceduralEnemyModels.KindFor("enemy_desert_scorpion"));
+            Assert.AreEqual(ProceduralEnemyKind.Werewolf, ProceduralEnemyModels.KindFor("enemy_forest_werewolf"));
+            Assert.AreEqual(ProceduralEnemyKind.VampireBat, ProceduralEnemyModels.KindFor("enemy_cave_vampire_bat"));
+            Assert.AreEqual(ProceduralEnemyKind.ShroudOwl, ProceduralEnemyModels.KindFor("enemy_forest_shroud_owl"));
+            Assert.AreEqual(ProceduralEnemyKind.FireflySwarm, ProceduralEnemyModels.KindFor("enemy_desert_firefly_swarm"));
+            Assert.AreEqual(ProceduralEnemyKind.Peccary, ProceduralEnemyModels.KindFor("enemy_forest_peccary"));
+            Assert.AreEqual(ProceduralEnemyKind.Potoo, ProceduralEnemyModels.KindFor("enemy_mountain_potoo"));
             Assert.AreEqual(ProceduralEnemyKind.None, ProceduralEnemyModels.KindFor("enemy_unknown_thing"));
             Assert.AreEqual(ProceduralEnemyKind.None, ProceduralEnemyModels.KindFor((string)null));
 

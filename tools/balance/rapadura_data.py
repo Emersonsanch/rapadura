@@ -28,7 +28,7 @@ BIOME_ORDER = ["Forest", "Desert", "Mountain", "Caves"]
 BIOME_TYPE_INDEX = {0: "Forest", 1: "Desert", 2: "Mountain", 3: "Caves"}
 
 # EquipmentSlot enum order (Assets/Scripts/Gameplay/Items/EquipmentSlot.cs).
-EQUIP_SLOTS = ["None", "Head", "Chest", "Legs", "Boots", "MainHand", "OffHand", "Tool", "Accessory"]
+EQUIP_SLOTS = ["None", "Head", "Chest", "Legs", "Boots", "MainHand", "OffHand", "Tool", "Accessory", "Wings"]  # EquipmentSlot.cs (append only)
 
 # StatType enum (Assets/Scripts/Gameplay/Skills/StatType.cs) is read from source below.
 

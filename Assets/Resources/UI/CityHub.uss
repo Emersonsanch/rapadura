@@ -1,0 +1,145 @@
+/*
+ * Cities on the world map, built in code: the "Você está em zona segura" indicator (CitySafeZoneHud, injected in the
+ * HUD's region block), the resident speech line of the city hub (VillageHubButton) and the "Carro de boi" window
+ * (CityFastTravelPanel, on top of the Mochila overlay classes .wm-backpack-overlay / .wm-backpack-panel). Loaded at
+ * runtime from Resources and attached to those roots, which all sit under the HUD's `rap-theme` root (wm-hud-root),
+ * where the palette below resolves.
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+/* ---- Safe-zone indicator (HUD) ---- */
+
+.city-indicator {
+    flex-direction: row;
+    align-items: center;
+    align-self: flex-start;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    padding: 2px 10px;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: var(--rap-cane-green);
+    background-color: rgba(28, 16, 10, 0.78);
+}
+
+.city-indicator__dot {
+    width: 8px;
+    height: 8px;
+    margin-right: 6px;
+    border-radius: 4px;
+    background-color: var(--rap-cane-green);
+}
+
+.city-indicator__label {
+    font-size: 12px;
+    -unity-font-style: bold;
+    color: var(--rap-cream);
+}
+
+.city-notice {
+    font-size: 12px;
+    -unity-font-style: italic;
+    color: var(--rap-gold-light);
+    white-space: normal;
+    margin-top: 2px;
+}
+
+/* ---- City hub ---- */
+
+.city-speech {
+    font-size: 14px;
+    -unity-font-style: italic;
+    color: var(--rap-cream);
+    white-space: normal;
+    padding: 6px 10px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    border-left-width: 3px;
+    border-left-color: var(--rap-caramel);
+    background-color: var(--rap-brown-night);
+    border-radius: 6px;
+}
+
+.city-peddler {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+    -unity-text-align: middle-center;
+    margin-top: 2px;
+}
+
+/* ---- Carro de boi ---- */
+
+.fast-travel-panel {
+    width: 520px;
+    max-width: 94%;
+    max-height: 94%;
+    padding: 18px 22px;
+}
+
+.fast-travel-gold {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+    -unity-text-align: middle-center;
+    margin-bottom: 8px;
+}
+
+.fast-travel-list {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 120px;
+    margin-bottom: 8px;
+}
+
+.fast-travel-row {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background-color: var(--rap-brown);
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: var(--rap-panel-border);
+}
+
+.fast-travel-row--here {
+    border-color: var(--rap-cane-green);
+}
+
+.fast-travel-row--closed {
+    background-color: var(--rap-brown-deep);
+    opacity: 0.75;
+}
+
+.fast-travel-row__body {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-right: 10px;
+}
+
+.fast-travel-row__name {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--rap-cream);
+}
+
+.fast-travel-row__status {
+    font-size: 12px;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+}
+
+.fast-travel-go {
+    min-width: 150px;
+    min-height: 44px;
+}
+
+.fast-travel-status {
+    font-size: 13px;
+    color: var(--rap-gold-light);
+    white-space: normal;
+    -unity-text-align: middle-center;
+    margin-bottom: 6px;
+}

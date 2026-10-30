@@ -64,13 +64,12 @@ namespace Rapadura.Tests
         // ------------------------------------------------------------------
 
         [Test]
-        public void Button_ShowsOnlyInTheVillageRegion_WhenTheMapIsIdle()
+        public void Button_ShowsInEveryRegionCity_WhenTheMapIsIdle()
         {
-            Assert.IsTrue(VillageHubButton.ShouldShow(true, true, false, false, BiomeType.Forest));
-
-            foreach (BiomeType other in new[] { BiomeType.Desert, BiomeType.Mountain, BiomeType.Caves })
+            // Every region has a city (TODO 12.3a): the same hub opens there with that city's services.
+            foreach (BiomeType region in new[] { BiomeType.Forest, BiomeType.Desert, BiomeType.Mountain, BiomeType.Caves })
             {
-                Assert.IsFalse(VillageHubButton.ShouldShow(true, true, false, false, other), other.ToString());
+                Assert.IsTrue(VillageHubButton.ShouldShow(true, true, false, false, region), region.ToString());
             }
 
             Assert.IsFalse(VillageHubButton.ShouldShow(true, true, false, false, null), "no current node");

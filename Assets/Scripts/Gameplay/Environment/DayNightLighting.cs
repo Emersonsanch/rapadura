@@ -127,6 +127,10 @@ namespace Rapadura.Gameplay.Environment
 
                 ambient *= EnvironmentOverrides.AmbientTint;
 
+                // "Menos visão à noite": a little darker at night, softened in already-dark places and by
+                // "Noite mais clara" (NightVisibilityRules; never below its floor, never pitch black).
+                ambient *= Rapadura.Gameplay.Night.NightVisibility.AmbientMultiplier(_time.DaylightFactor);
+
                 ApplyAmbient(ambient);
             }
         }

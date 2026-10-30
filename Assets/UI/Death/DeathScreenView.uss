@@ -88,3 +88,19 @@
     color: var(--rap-cream-dim);
     -unity-text-align: middle-center;
 }
+
+/* 9% death drop line ("Na pressa, você deixou cair: ..."): warm warning, never alarming. */
+.death-drop {
+    width: 100%;
+    max-width: 480px;
+    margin-bottom: 18px;
+    padding: 8px 12px;
+    font-size: 16px;
+    color: var(--rap-gold-light);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    background-color: rgba(70, 40, 20, 0.85);
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: var(--rap-gold);
+}

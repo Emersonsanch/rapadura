@@ -27,9 +27,18 @@ namespace Rapadura.Gameplay.Items
         [SerializeField] private ItemRarity _rarity = ItemRarity.Common;
 
         [Header("Economy & Stacking")]
+        [Tooltip("Dormant since the MU-style grid bag (the grid is the limit now). Kept for data compatibility and a possible future encumbrance rule.")]
         [SerializeField] private float _weight = 1f;
         [SerializeField] private int _value = 1;
         [SerializeField] private int _maxStack = 1;
+
+        [Header("Mochila (grade estilo MU)")]
+        [Tooltip("Cells wide on the backpack grid. 0 = the category default (ItemFootprint.ForCategory).")]
+        [SerializeField, Min(0)] private int _gridWidth = 0;
+        [Tooltip("Cells tall on the backpack grid. 0 = the category default (ItemFootprint.ForCategory).")]
+        [SerializeField, Min(0)] private int _gridHeight = 0;
+        [Tooltip("Bound to the hero: never falls out of the backpack on death (DeathDropRules).")]
+        [SerializeField] private bool _isBound = false;
 
         [Header("Durability")]
         [SerializeField] private bool _hasDurability = false;
@@ -62,6 +71,13 @@ namespace Rapadura.Gameplay.Items
         public int Value => _value;
         public int MaxStack => Mathf.Max(1, _maxStack);
         public bool IsStackable => MaxStack > 1;
+
+        /// <summary>Per-item grid width override (0 = category default). See <c>ItemFootprint</c>.</summary>
+        public int GridWidthOverride => Mathf.Max(0, _gridWidth);
+        /// <summary>Per-item grid height override (0 = category default). See <c>ItemFootprint</c>.</summary>
+        public int GridHeightOverride => Mathf.Max(0, _gridHeight);
+        /// <summary>Bound items never drop on death (<c>DeathDropRules</c>).</summary>
+        public bool IsBound => _isBound;
 
         public bool HasDurability => _hasDurability;
         public float MaxDurability => _maxDurability;

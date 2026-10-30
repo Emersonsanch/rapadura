@@ -22,4 +22,14 @@ namespace Rapadura.Gameplay.Dialogue
         /// <summary>The selected hero's <c>CharacterId</c> name (e.g. "Maithe"), or null if none was chosen yet.</summary>
         string ActiveCharacterId { get; }
     }
+
+    /// <summary>
+    /// Optional extension of <see cref="IDialogueContext"/> for <see cref="DialogueConditionType.StoryBeatSeen"/>
+    /// (kept apart so existing contexts and test fakes don't have to implement it; without it the condition is false).
+    /// </summary>
+    public interface IStoryDialogueContext
+    {
+        /// <summary>Whether <paramref name="beat"/> was seen in the current journey.</summary>
+        bool HasSeenStoryBeat(Rapadura.Gameplay.Story.StoryBeat beat);
+    }
 }

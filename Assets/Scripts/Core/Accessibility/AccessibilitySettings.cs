@@ -50,6 +50,7 @@ namespace Rapadura.Core.Accessibility
         private const string ScreenShakeIntensityKey = "Accessibility.ScreenShakeIntensity";
         private const string ReduceFlashEffectsKey = "Accessibility.ReduceFlashEffects";
         private const string ReduceMotionKey = "Accessibility.ReduceMotion";
+        private const string ClearerNightKey = "Accessibility.ClearerNight";
 
         public const float MinFontScale = 0.75f;
         public const float MaxFontScale = 2f;
@@ -59,6 +60,7 @@ namespace Rapadura.Core.Accessibility
         private const float DefaultScreenShakeIntensity = 1f;
         private const bool DefaultReduceFlashEffects = false;
         private const bool DefaultReduceMotion = false;
+        private const bool DefaultClearerNight = false;
 
         /// <summary>Multiplier on procedural flourishes (squash, overlap, bob, bounces) while <see cref="ReduceMotion"/> is on.</summary>
         public const float ReducedMotionScale = 0.5f;
@@ -82,6 +84,12 @@ namespace Rapadura.Core.Accessibility
         /// weaker camera shake and no UI entrance slides. Independent of <see cref="ReduceFlashEffects"/>.
         /// </summary>
         public bool ReduceMotion { get; private set; } = DefaultReduceMotion;
+
+        /// <summary>
+        /// "Noite mais clara": limits how much the night darkens the scene (ambient, fog, view distance; see
+        /// <c>NightVisibilityRules</c>). Night danger (waves, variants) is unchanged; only what the player sees.
+        /// </summary>
+        public bool ClearerNight { get; private set; } = DefaultClearerNight;
 
         /// <summary>1, or <see cref="ReducedMotionScale"/> while <see cref="ReduceMotion"/> is on.</summary>
         public float MotionScale => MotionScaleFor(this);
@@ -108,6 +116,7 @@ namespace Rapadura.Core.Accessibility
             ScreenShakeIntensity = Mathf.Clamp01(PlayerPrefs.GetFloat(ScreenShakeIntensityKey, DefaultScreenShakeIntensity));
             ReduceFlashEffects = PlayerPrefs.GetInt(ReduceFlashEffectsKey, DefaultReduceFlashEffects ? 1 : 0) != 0;
             ReduceMotion = PlayerPrefs.GetInt(ReduceMotionKey, DefaultReduceMotion ? 1 : 0) != 0;
+            ClearerNight = PlayerPrefs.GetInt(ClearerNightKey, DefaultClearerNight ? 1 : 0) != 0;
 
             IsInitialized = true;
             GameLogger.Info(LogCategory, $"AccessibilitySettings initialized (fontScale={FontScale}, highContrast={HighContrast}, colorblind={ActiveColorblindMode}, shake={ScreenShakeIntensity}, reduceFlash={ReduceFlashEffects}, reduceMotion={ReduceMotion}).");
@@ -157,6 +166,13 @@ namespace Rapadura.Core.Accessibility
         {
             ReduceMotion = enabled;
             PlayerPrefs.SetInt(ReduceMotionKey, enabled ? 1 : 0);
+            RaiseChanged();
+        }
+
+        public void SetClearerNight(bool enabled)
+        {
+            ClearerNight = enabled;
+            PlayerPrefs.SetInt(ClearerNightKey, enabled ? 1 : 0);
             RaiseChanged();
         }
 

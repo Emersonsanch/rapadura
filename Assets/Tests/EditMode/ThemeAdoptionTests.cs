@@ -59,8 +59,18 @@ namespace Rapadura.Tests
         {
             "Resources/UI/EncounterOverlays.uss",
             "Resources/UI/VillageKitchen.uss",
+            "Resources/UI/CityHub.uss",
             "Resources/UI/SecretsOverlay.uss",
             "Resources/UI/PhotoMode.uss",
+            "Resources/UI/Fishing.uss",
+            "Resources/UI/DuoStrike.uss",
+            "Resources/UI/EventRooms.uss",
+            "Resources/UI/DailyRewards.uss",
+            "Resources/UI/Mounts.uss",
+            "Resources/UI/Refine.uss",
+            "Resources/UI/Tacho.uss",
+            "Resources/UI/Hunting.uss",
+            "Resources/UI/House.uss",
         };
 
         [Test]

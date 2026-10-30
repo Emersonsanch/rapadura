@@ -1,0 +1,210 @@
+/*
+ * "Fôlego diário" meter + reminder toast (DailyStaminaHud, map and arena HUDs) and the "Presente do dia da Vó Zefa"
+ * popup / title ribbon (DailyLoginPopup). Built in code, loaded at runtime from Resources by DailyStyles, which also puts
+ * `rap-theme` on each root so the palette below resolves.
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+/* ---- Fôlego meter (flows inside wm-hero-block / hud-vitals-panel) ---- */
+
+.daily-stamina {
+    flex-direction: column;
+    margin-top: 4px;
+    padding: 3px 6px;
+    min-width: 150px;
+    border-radius: 6px;
+    background-color: rgba(28, 16, 10, 0.55);
+}
+
+.daily-stamina-caption {
+    font-size: 12px;
+    -unity-font-style: bold;
+    color: var(--rap-cream);
+    margin: 0;
+    padding: 0;
+}
+
+.daily-stamina-track {
+    height: 6px;
+    margin-top: 2px;
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: var(--rap-brown-night);
+}
+
+.daily-stamina-fill {
+    height: 100%;
+    width: 100%;
+    background-color: var(--rap-cream-dim);
+}
+
+.daily-stamina--full .daily-stamina-fill {
+    background-color: var(--rap-gold);
+}
+
+.daily-stamina--full .daily-stamina-caption {
+    color: var(--rap-gold-light);
+}
+
+.daily-stamina--normal .daily-stamina-fill {
+    background-color: var(--rap-cane-green);
+}
+
+.daily-stamina--tired .daily-stamina-fill {
+    background-color: var(--rap-clay-red);
+}
+
+.daily-stamina--tired .daily-stamina-caption {
+    color: var(--rap-warning);
+}
+
+.daily-stamina-tooltip {
+    margin-top: 4px;
+    padding: 4px 6px;
+    max-width: 260px;
+    font-size: 11px;
+    white-space: normal;
+    color: var(--rap-cream);
+    background-color: var(--rap-panel-bg);
+    border-width: 1px;
+    border-color: var(--rap-panel-border);
+    border-radius: 4px;
+}
+
+/* ---- Reminder toast (top centre of the HUD) ---- */
+
+.daily-stamina-toast {
+    position: absolute;
+    top: 96px;
+    left: 25%;
+    right: 25%;
+    padding: 10px 14px;
+    font-size: 16px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    color: var(--rap-cream);
+    background-color: var(--rap-panel-bg);
+    border-width: 2px;
+    border-color: var(--rap-gold);
+    border-radius: 10px;
+}
+
+/* ---- Daily login popup ---- */
+
+.daily-login-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.55);
+}
+
+.daily-login-panel {
+    max-width: 92%;
+    padding: 16px 20px;
+    align-items: center;
+}
+
+.daily-login-title {
+    font-size: 24px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+}
+
+.daily-login-subtitle {
+    font-size: 14px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    color: var(--rap-cream-dim);
+    margin-bottom: 10px;
+}
+
+.daily-login-track {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.daily-login-cell {
+    width: 112px;
+    min-height: 120px;
+    margin: 4px;
+    padding: 6px;
+    align-items: center;
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: var(--rap-panel-border);
+    background-color: var(--rap-brown-deep);
+}
+
+.daily-login-cell--claimed {
+    opacity: 0.6;
+    border-color: var(--rap-cane-green);
+}
+
+.daily-login-cell--today {
+    border-color: var(--rap-gold);
+    background-color: var(--rap-brown);
+}
+
+.daily-login-cell--big {
+    border-color: var(--rap-caramel-light);
+}
+
+.daily-login-cell-day {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+}
+
+.daily-login-cell-reward {
+    font-size: 12px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    color: var(--rap-cream);
+}
+
+.daily-login-cell-state {
+    margin-top: auto;
+    font-size: 12px;
+    color: var(--rap-gold-light);
+}
+
+.daily-login-note {
+    margin-top: 10px;
+    font-size: 14px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    color: var(--rap-cream);
+}
+
+.daily-login-buttons {
+    flex-direction: row;
+    margin-top: 12px;
+}
+
+.daily-login-claim,
+.daily-login-close {
+    min-width: 140px;
+    margin: 0 6px;
+}
+
+/* ---- Title ribbon (bottom centre of the main menu) ---- */
+
+.daily-login-title-banner {
+    position: absolute;
+    bottom: 64px;
+    left: 30%;
+    right: 30%;
+    padding: 8px 12px;
+    font-size: 15px;
+    white-space: normal;
+    color: var(--rap-brown-night);
+    background-color: var(--rap-gold);
+    border-radius: 10px;
+    border-width: 0;
+}

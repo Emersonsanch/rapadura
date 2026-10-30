@@ -160,6 +160,27 @@ namespace Rapadura.Gameplay.Shop
             EventBus.Publish(new ShopRestockedEvent(day));
         }
 
+        /// <summary>
+        /// Refills one shop to its authored stock (drops its live entries only): a city shop whose counter rotated to a
+        /// new day/week (<c>CityShopService</c>). Returns how many live entries were dropped.
+        /// </summary>
+        public int RestockShop(string shopId)
+        {
+            if (string.IsNullOrEmpty(shopId))
+            {
+                return 0;
+            }
+
+            string prefix = shopId + "/";
+            List<string> keys = _stock.Keys.Where(k => k.StartsWith(prefix, StringComparison.Ordinal)).ToList();
+            foreach (string key in keys)
+            {
+                _stock.Remove(key);
+            }
+
+            return keys.Count;
+        }
+
         private void OnTimeOfDayPhaseChanged(TimeOfDayPhaseChangedEvent evt)
         {
             if (evt.CurrentPhase == TimeOfDayPhase.Dawn && evt.Day > LastRestockDay)
@@ -276,7 +297,8 @@ namespace Rapadura.Gameplay.Shop
                 return false;
             }
 
-            if (!BuyerInventory.HasWeightCapacityFor(entry.Item, quantity))
+            // Shared grid fit API (MU-style Mochila): a free area of the item's footprint, or plain stacks with room.
+            if (!BuyerInventory.CanFit(entry.Item, quantity))
             {
                 return false;
             }

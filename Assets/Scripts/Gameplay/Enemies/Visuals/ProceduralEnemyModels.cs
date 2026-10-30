@@ -47,6 +47,15 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         public const string Runes = "Runes";
         /// <summary>Ancient dweller: the pile of stolen light hugged against its chest.</summary>
         public const string StolenLight = "StolenLight";
+        /// <summary>Werewolf: chest/shoulders/head pivot at the hips; pitches up when it rears to strike (front legs ride it).</summary>
+        public const string Torso = "Torso";
+        /// <summary>Lower jaw / lower beak (werewolf, potoo): opens during the attack windup.</summary>
+        public const string Jaw = "Jaw";
+        /// <summary>Firefly swarm: the glowing units are "Firefly_0".."Firefly_n" under <see cref="Swarm"/>, each with a "Lantern".</summary>
+        public const string FireflyPrefix = "Firefly_";
+        public const string Lantern = "Lantern";
+        /// <summary>Potoo: the dead branch it ambushes from (it takes it along, of course).</summary>
+        public const string Branch = "Branch";
     }
 
     /// <summary>
@@ -82,6 +91,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_forest_alpha_wolf", ProceduralEnemyKind.AlphaWolf },
             { "enemy_forest_spider", ProceduralEnemyKind.Spider },
             { "enemy_desert_scorpion", ProceduralEnemyKind.Scorpion },
+            { "enemy_forest_werewolf", ProceduralEnemyKind.Werewolf },
+            { "enemy_cave_vampire_bat", ProceduralEnemyKind.VampireBat },
+            { "enemy_forest_shroud_owl", ProceduralEnemyKind.ShroudOwl },
+            { "enemy_desert_firefly_swarm", ProceduralEnemyKind.FireflySwarm },
+            { "enemy_forest_peccary", ProceduralEnemyKind.Peccary },
+            { "enemy_mountain_potoo", ProceduralEnemyKind.Potoo },
         };
 
         public static readonly ProceduralEnemyKind[] AllKinds =
@@ -89,7 +104,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.BatSwarm, ProceduralEnemyKind.StoneGolem, ProceduralEnemyKind.Warlord,
             ProceduralEnemyKind.RuinGuardian, ProceduralEnemyKind.AncientDweller,
             ProceduralEnemyKind.Wolf, ProceduralEnemyKind.AlphaWolf, ProceduralEnemyKind.Spider, ProceduralEnemyKind.Scorpion,
+            ProceduralEnemyKind.Werewolf, ProceduralEnemyKind.VampireBat, ProceduralEnemyKind.ShroudOwl,
+            ProceduralEnemyKind.FireflySwarm, ProceduralEnemyKind.Peccary, ProceduralEnemyKind.Potoo,
         };
+
+        /// <summary>The night-only species models (Docs/DayNight.md): they also get a <see cref="Rapadura.Gameplay.Night.NightCreatureVoice"/>.</summary>
+        public static bool IsNightSpecies(ProceduralEnemyKind kind) => kind >= ProceduralEnemyKind.Werewolf && kind <= ProceduralEnemyKind.Potoo;
 
         public static ProceduralEnemyKind KindFor(string enemyId)
         {
@@ -143,6 +163,24 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.Scorpion:
                     ScorpionRecipe.Build(blueprint);
+                    break;
+                case ProceduralEnemyKind.Werewolf:
+                    WerewolfRecipe.Build(blueprint);
+                    break;
+                case ProceduralEnemyKind.VampireBat:
+                    VampireBatRecipe.Build(blueprint);
+                    break;
+                case ProceduralEnemyKind.ShroudOwl:
+                    ShroudOwlRecipe.Build(blueprint);
+                    break;
+                case ProceduralEnemyKind.FireflySwarm:
+                    FireflySwarmRecipe.Build(blueprint);
+                    break;
+                case ProceduralEnemyKind.Peccary:
+                    PeccaryRecipe.Build(blueprint);
+                    break;
+                case ProceduralEnemyKind.Potoo:
+                    PotooRecipe.Build(blueprint);
                     break;
             }
 
@@ -210,6 +248,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             }
 
             root.AddComponent<ProceduralEnemyRig>().Configure(blueprint.Kind);
+            if (IsNightSpecies(blueprint.Kind))
+            {
+                // Arrival call + attack cue through the procedural synth (pool-safe: re-armed on every enable).
+                root.AddComponent<Rapadura.Gameplay.Night.NightCreatureVoice>().Configure(blueprint.Kind);
+            }
+
             return root;
         }
 

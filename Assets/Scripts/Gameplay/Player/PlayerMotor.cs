@@ -114,8 +114,28 @@ namespace Rapadura.Gameplay.Player
                     _buffController = GetComponent<BuffController>();
                 }
 
-                return _buffController != null ? _buffController.GetMoveSpeedMultiplier() : 1f;
+                float buff = _buffController != null ? _buffController.GetMoveSpeedMultiplier() : 1f;
+                return IsSpeedSourceActive ? SpeedSource.ResolveMultiplier(buff) : buff;
             }
+        }
+
+        /// <summary>
+        /// Mount hook (<c>MountController</c>): while active, every stance moves at <see cref="RunSpeed"/> × the source's
+        /// multiplier (speed buffs ignored, slows kept — see <c>MountRules.MountedSpeedMultiplier</c>). Null = on foot.
+        /// </summary>
+        public IMotorSpeedSource SpeedSource { get; set; }
+
+        private bool IsSpeedSourceActive => SpeedSource != null && SpeedSource.IsActive;
+
+        /// <summary>Base speed of a stance: the run speed while a speed source (mount) is active.</summary>
+        private float StanceSpeed(bool isRunning)
+        {
+            if (IsSpeedSourceActive)
+            {
+                return _runSpeed;
+            }
+
+            return _isCrouching ? _crouchSpeed : (isRunning ? _runSpeed : _walkSpeed);
         }
 
         private void Awake()
@@ -236,7 +256,7 @@ namespace Rapadura.Gameplay.Player
             Vector3 desiredDirection = (forward * moveInput.y + right * moveInput.x);
             desiredDirection = Vector3.ClampMagnitude(desiredDirection, 1f);
 
-            float speed = speedOverride ?? (_isCrouching ? _crouchSpeed : (isRunning ? _runSpeed : _walkSpeed));
+            float speed = speedOverride ?? StanceSpeed(isRunning);
             _hasSmoothedDestination = false;
             MoveInDirection(desiredDirection, speed);
         }
@@ -281,7 +301,7 @@ namespace Rapadura.Gameplay.Player
             }
 
             float distance = toDestination.magnitude;
-            float speed = _isCrouching ? _crouchSpeed : (isRunning ? _runSpeed : _walkSpeed);
+            float speed = StanceSpeed(isRunning);
 
             // Ease into the point (v = √(2·a·d)) and never step past it in one frame.
             float cap = LocomotionMath.ArrivalSpeed(distance - arrivalThreshold, float.MaxValue, _arrivalDeceleration, _minArrivalSpeed);

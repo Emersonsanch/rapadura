@@ -28,11 +28,13 @@ Os 5 personagens jogáveis são todos primos entre si — uma família só, não
 - **Lavine** é prima dos outros quatro (filha do irmão/irmã dos pais dos outros dois pares).
 
 Ordem de idade, do mais velho para o mais novo:
-1. **Maithe** (mais velha)
-2. **Maria** (~3 meses mais nova que Maithe)
-3. **Joaquim** (nasceu logo depois de Maria)
-4. **Ícaro** (~3 anos mais novo que Joaquim)
-5. **Lavine** (mais nova, ~3 anos mais nova que Ícaro)
+1. **Maithe** — 14 anos (mais velha)
+2. **Maria** — 13 anos (só ~3 meses mais nova que Maithe; aniversários em anos diferentes)
+3. **Joaquim** — 12 anos (nasceu logo depois de Maria)
+4. **Ícaro** — 11 anos
+5. **Lavine** — 9 anos (a caçula)
+
+Idades canônicas = `PlayableCharacter.Age` (decisão de 2026-08-24, roster infantil). Bíblia narrativa completa (vozes, arcos, motivos, linha do tempo, glossário e mapa de fontes de texto): `Docs/Narrative.md`.
 
 Essa relação de parentesco é canônica e deve informar diálogos, quests e lore futuros — os personagens se conhecem a vida inteira como família, não são aliados recém-formados.
 
@@ -43,6 +45,14 @@ Cada herói tem 5 habilidades próprias (4 ativas + 1 Ultimate) como `SkillDefin
 - **Joaquim** (Terra, defesa e provocação): Muralha de Pedra · Provocação Heroica · Escudo das Raízes · Terremoto · *Última Resistência*. O "protetor" teimoso da família, que não cai enquanto houver um primo atrás dele.
 - **Ícaro** (Elétrico, torretas/drones e controle): Torreta Automática · Granada Elétrica · Drone de Ataque · Campo Magnético · *Exército Mecânico*. O drone é pintado com as cores do arco de Maithe, para impressionar a irmã mais velha.
 - **Lavine** (Trevas/Arcano, dano mágico e controle de multidão): Orbe Sombria · Correntes das Trevas · Névoa da Ilusão · Explosão Arcana · *Eclipse Eterno*. A caçula que quer ser levada a sério; o Eclipse Eterno revive a Noite Rubra em que nasceu, agora usado para proteger.
+
+### Golpe em dupla (parceiro de encontro)
+Só um primo é jogado por vez; os outros ficam na vila. Em cada encontro o jogador pode **chamar um parceiro** (escolhido no menu de pausa, no mapa ou na arena — um por herói, salvo no save) para **um golpe combinado**:
+- A barra "Dupla" enche causando ou sofrendo dano (relativo à vida do alvo/herói); botão de toque acima da hotbar, tecla **F** / analógico direito no controle (remapeável em Controles).
+- O parceiro aparece ao lado do herói como uma **silhueta dourada leve** (não o modelo riggado — decisão de desempenho no celular), faz o golpe e some. Uma vez por encontro.
+- **10 combos**, um por par de primos, cada um com nome e duas falas (o mais velho fala primeiro). Os pares de irmãos (Maithe+Ícaro "Flecha-Trovão", Maria+Joaquim "Bastião Sagrado") são o **laço de irmãos**: mais fortes e mais vistosos. Parceiro padrão: o irmão/irmã; Lavine chama a Maria.
+- Chefes levam stun ×0,5 e empurrão ×0,35; respeita Reduzir Flashes / Reduzir Movimento. Números e regra online em `Docs/Balance/README.md` §15. Código: `Assets/Scripts/Gameplay/Duo/`.
+- **Online:** o parceiro vira um membro real do grupo (os dois confirmam a dupla; o servidor resolve o combo pelo par de personagens).
 
 ## Loop de Gameplay (macro)
 Explorar → combater/coletar recursos → craftar/equipar → evoluir personagem (skills/atributos) → avançar no mundo/enfrentar bosses → repetir com poder crescente.

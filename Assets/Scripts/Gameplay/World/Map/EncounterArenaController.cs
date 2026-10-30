@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Core.Localization;
 using Rapadura.Core.Logging;
+using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Enemies;
+using Rapadura.Gameplay.Environment;
+using Rapadura.Gameplay.Night;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.World.Biomes;
 using UnityEngine;
@@ -36,6 +40,13 @@ namespace Rapadura.Gameplay.World.Map
     /// the scene after death for <see cref="EnemyDeathVfx"/>'s sink/fade and the Victory return delay
     /// — releasing them into a pool on death would cut that short. All spawned enemies go away with
     /// the scene unload. Revisit if encounters ever chain inside one scene load.
+    ///
+    /// Reinforcement waves (day/night, <see cref="NightDangerRules"/>): when a wave is cleared and the phase at that
+    /// moment asks for another (day 1 more, night 2 more, faster and bigger), the next wave is rolled from the
+    /// region x period table (<see cref="PeriodSpawnTable"/>) after the phase's interval; the encounter is a Victory
+    /// once the last wave is cleared. A phase change mid-fight therefore takes effect on the next wave. Never for boss
+    /// challenges, groups with a boss, the elite ambush or the first fight (tutorial). At night/dawn/dusk some regular
+    /// enemies of the first wave come as night variants (<see cref="NightVariantTag"/>).
     /// </summary>
     public class EncounterArenaController : MonoBehaviour
     {
@@ -76,6 +87,10 @@ namespace Rapadura.Gameplay.World.Map
         [Tooltip("Re-dresses the arena for the encounter's biome. Empty = found in the scene, else added to this object at runtime.")]
         [SerializeField] private BiomeArenaDressing _biomeDressing;
 
+        [Header("Reinforcement waves (day/night)")]
+        [Tooltip("Send reinforcement waves after the first one is cleared (NightDangerRules: day 1, night 2). Off = one wave, as before.")]
+        [SerializeField] private bool _reinforcementWaves = true;
+
         [Header("Resolution")]
         [Tooltip("Player farther than this from the arena center (this transform) counts as fleeing. 0 disables distance fleeing.")]
         [SerializeField] [Min(0f)] private float _fleeRadius = 30f;
@@ -92,9 +107,67 @@ namespace Rapadura.Gameplay.World.Map
         private bool _active;
         private bool _resolved;
 
+        private bool _allowReinforcements;
+        private int _wavesSpawned;
+        private int _firstWaveRegularCount;
+        private BiomeType _region;
+        private System.Random _waveRandom;
+        private bool _waveIncoming;
+
         public bool IsEncounterActive => _active && !_resolved;
         public int AliveEnemies => _tracker.AliveCount;
         public float IntroGraceSeconds => _introGraceSeconds;
+
+        // ---------------------------------------------------------------
+        // Directed mode (timed event rooms, EventRoomDirector)
+        // ---------------------------------------------------------------
+
+        /// <summary>True when the pending encounter is an event room: an external director spawns and resolves.</summary>
+        public bool IsDirected { get; private set; }
+
+        public Vector3 ArenaCenter => transform.position;
+        public float SpawnArenaRadius => _spawnArenaRadius;
+        public LayerMask GroundMask => _groundMask;
+
+        /// <summary>
+        /// Directed mode: spawns <paramref name="definition"/> exactly like a rolled enemy (ring in front of the hero,
+        /// ground snap, visual swap, aggro hold). <paramref name="index"/> 0 starts a new wave's spacing. Null when not directed.
+        /// </summary>
+        public GameObject SpawnDirected(EnemyDefinition definition, int index, int count, float aggroHoldSeconds)
+        {
+            if (!IsDirected || !IsEncounterActive || definition == null || _enemyPrefab == null)
+            {
+                return null;
+            }
+
+            if (index == 0)
+            {
+                _spawnGroundPoints.Clear();
+            }
+
+            return SpawnEnemy(definition, index, Mathf.Max(1, count), aggroHoldSeconds);
+        }
+
+        /// <summary>Directed mode: ends the encounter (the usual return delay, then back to the map).</summary>
+        public void ResolveDirected(EncounterOutcome outcome)
+        {
+            if (IsDirected)
+            {
+                Resolve(outcome);
+            }
+        }
+
+        /// <summary>
+        /// Process-wide switch on top of the Inspector's <c>_reinforcementWaves</c>: PlayMode playthroughs that clear one
+        /// wave and expect the Victory at once turn it off (and back on in their TearDown).
+        /// </summary>
+        public static bool ReinforcementWavesEnabled { get; set; } = true;
+
+        /// <summary>Waves spawned so far this encounter (1 after the start).</summary>
+        public int WavesSpawned => _wavesSpawned;
+
+        /// <summary>True between a cleared wave and the arrival of the next reinforcement wave.</summary>
+        public bool IsWaveIncoming => _waveIncoming;
 
         /// <summary>Highest a ground hit may sit above the player's feet before it counts as a prop top (tree, rock).</summary>
         private const float MaxGroundStepUp = 2.5f;
@@ -178,12 +251,46 @@ namespace Rapadura.Gameplay.World.Map
                 return;
             }
 
+            // Timed event rooms (Terreiro / Torre): EventRoomDirector spawns (SpawnDirected), scores and resolves
+            // (ResolveDirected). The arena has dressed the floor and placed the hero; flee/death still resolve here.
+            if (payload.IsEventRoom)
+            {
+                IsDirected = true;
+                _region = payload.biome;
+                _active = true;
+                if (_introGraceSeconds > 0f)
+                {
+                    EventBus.Publish(new EncounterIntroEvent(payload, _introGraceSeconds, false));
+                }
+
+                return;
+            }
+
             List<EnemyDefinition> enemies = payload.ResolveEnemies();
             FilterDefeatedUniqueEnemies(enemies);
+
+            // Day/night: reinforcement waves and night variants (NightDangerRules), decided once from the payload.
+            bool groupHasBoss = enemies.Exists(enemy => enemy != null && enemy.IsBoss);
+            bool eliteAmbush = IsEliteAmbush(payload);
+            int victories = TotalVictories();
+            TimeOfDayPhase phase = CurrentPhase();
+            _region = payload.biome;
+            _waveRandom = new System.Random(payload.seed);
+            _allowReinforcements = _reinforcementWaves && ReinforcementWavesEnabled && NightDangerRules.AllowsReinforcements(payload.isBossChallenge, groupHasBoss, eliteAmbush, victories);
+            bool allowVariants = NightDangerRules.AllowsNightVariants(payload.isBossChallenge, groupHasBoss, victories);
+            _firstWaveRegularCount = enemies.FindAll(enemy => enemy != null && !enemy.IsBoss).Count;
+            _wavesSpawned = 1;
+            _waveIncoming = false;
+
             _spawnGroundPoints.Clear();
             for (int i = 0; i < enemies.Count; i++)
             {
-                SpawnEnemy(enemies[i], i, enemies.Count);
+                GameObject spawned = SpawnEnemy(enemies[i], i, enemies.Count, _introGraceSeconds);
+                bool isElite = eliteAmbush && i == 0;
+                if (spawned != null && allowVariants && !isElite && NightDangerRules.RollVariant(phase, _waveRandom))
+                {
+                    NightVariantTag.Attach(spawned, NightVariantRules.Resolve(NightForm.Variant));
+                }
             }
 
             _active = true;
@@ -225,7 +332,7 @@ namespace Rapadura.Gameplay.World.Map
             return _biomeDressing;
         }
 
-        private void SpawnEnemy(EnemyDefinition definition, int index, int count)
+        private GameObject SpawnEnemy(EnemyDefinition definition, int index, int count, float aggroHoldSeconds)
         {
             Vector3 position = GetSpawnPosition(index, count);
             Quaternion rotation = Quaternion.identity;
@@ -253,7 +360,7 @@ namespace Rapadura.Gameplay.World.Map
 
                 // Force aggro once "Ja!" ends the grace: short-detection enemies (spiders/scorpions,
                 // 7-8 m) spawned 8-9 m away never noticed the hero otherwise.
-                controller.HoldAggro(_introGraceSeconds, forceAggroWhenHoldEnds: true);
+                controller.HoldAggro(aggroHoldSeconds, forceAggroWhenHoldEnds: true);
             }
             else
             {
@@ -266,6 +373,7 @@ namespace Rapadura.Gameplay.World.Map
 
             _spawned.Add(instance);
             EventBus.Publish(new EnemySpawnedEvent(instance));
+            return instance;
         }
 
         /// <summary>
@@ -375,15 +483,129 @@ namespace Rapadura.Gameplay.World.Map
 
         private void OnEnemyDied(EnemyDiedEvent evt)
         {
-            if (!IsEncounterActive || !_spawned.Contains(evt.Enemy))
+            if (!IsEncounterActive || IsDirected || !_spawned.Contains(evt.Enemy))
             {
                 return;
             }
 
             if (_tracker.RegisterDeath())
             {
+                if (TryScheduleNextWave())
+                {
+                    return;
+                }
+
                 Resolve(EncounterOutcome.Victory);
             }
+        }
+
+        // ---------------------------------------------------------------
+        // Reinforcement waves (day/night)
+        // ---------------------------------------------------------------
+
+        /// <summary>Queues the next wave if the phase right now asks for one (NightDangerRules). False = the encounter is won.</summary>
+        private bool TryScheduleNextWave()
+        {
+            if (!_allowReinforcements || !isActiveAndEnabled)
+            {
+                return false;
+            }
+
+            TimeOfDayPhase phase = CurrentPhase();
+            if (!NightDangerRules.ShouldSpawnAnotherWave(_wavesSpawned, phase))
+            {
+                return false;
+            }
+
+            _waveIncoming = true;
+            StartCoroutine(SpawnNextWaveAfter(phase));
+            return true;
+        }
+
+        private IEnumerator SpawnNextWaveAfter(TimeOfDayPhase phase)
+        {
+            float interval = NightDangerRules.WaveInterval(phase);
+            if (interval > 0f)
+            {
+                // Scaled time: the wait stops with the game's pause like the fight itself.
+                yield return new WaitForSeconds(interval);
+            }
+
+            _waveIncoming = false;
+            if (!IsEncounterActive)
+            {
+                yield break;
+            }
+
+            int size = NightDangerRules.WaveSize(_firstWaveRegularCount, phase);
+            List<PeriodSpawnPick> picks = PeriodSpawnTable.RollWave(_region, phase, size, _waveRandom);
+            if (picks.Count == 0)
+            {
+                Resolve(EncounterOutcome.Victory);
+                yield break;
+            }
+
+            float hold = NightDangerRules.ReinforcementAggroHold(_introGraceSeconds, phase);
+            _spawnGroundPoints.Clear();
+            int spawnedCount = 0;
+            for (int i = 0; i < picks.Count; i++)
+            {
+                GameObject spawned = SpawnEnemy(picks[i].Enemy, i, picks.Count, hold);
+                if (spawned == null)
+                {
+                    continue;
+                }
+
+                spawnedCount++;
+                NightVariantTag.Attach(spawned, picks[i].Look);
+            }
+
+            if (spawnedCount == 0)
+            {
+                Resolve(EncounterOutcome.Victory);
+                yield break;
+            }
+
+            int waveIndex = _wavesSpawned++;
+            _tracker.StartWave(waveIndex, spawnedCount);
+            EventBus.Publish(new WaveStartedEvent(waveIndex, spawnedCount));
+
+            if (_player != null)
+            {
+                ServiceLocator.TryGet(out LocalizationManager localization);
+                string key = NightDangerRules.IsNight(phase) ? NightTexts.WaveIncomingNight : NightTexts.WaveIncoming;
+                CombatFxManager.SpawnLootWarningText(_player.position + Vector3.up * 2.4f, NightTexts.Get(localization, key));
+            }
+
+            GameLogger.Info(LogCategory, $"Reinforcement wave {waveIndex + 1} ({phase}) in {_region}: {spawnedCount} enemies.");
+        }
+
+        private static TimeOfDayPhase CurrentPhase()
+        {
+            return ServiceLocator.TryGet(out TimeOfDayManager time) && time != null ? time.Phase : TimeOfDayPhase.Day;
+        }
+
+        /// <summary>Total victories on the map (the first fight is the tutorial). No progress service = 0 (one wave, no variants).</summary>
+        private static int TotalVictories()
+        {
+            if (!ServiceLocator.TryGet(out WorldMapProgress progress) || progress == null)
+            {
+                return 0;
+            }
+
+            int total = 0;
+            foreach (BiomeType region in System.Enum.GetValues(typeof(BiomeType)))
+            {
+                total += progress.GetVictories(region);
+            }
+
+            return total;
+        }
+
+        private static bool IsEliteAmbush(EncounterPayload payload)
+        {
+            Rapadura.Gameplay.World.Events.WorldEventState state = Rapadura.Gameplay.World.Events.WorldEventState.ResolveShared();
+            return payload != null && state != null && state.PendingEliteSeed.HasValue && state.PendingEliteSeed.Value == payload.seed;
         }
 
         private void OnPlayerDied(PlayerDiedEvent evt)

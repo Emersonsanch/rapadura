@@ -118,7 +118,8 @@ namespace Rapadura.Gameplay.Secrets
             new RelicDefinition(FitaLavine, RelicSource.MapSecret, BiomeType.Caves, CharacterId.Lavine, StatType.MaxMana, ModifierApplication.Flat, 8f),
 
             // Arena secrets (ArenaSecretSpawner), one per biome.
-            new RelicDefinition(CaniveteVoChico, RelicSource.ArenaSecret, BiomeType.Forest, null, StatType.AttackDamage, ModifierApplication.Flat, 2f),
+            // +1, not +2 (Balance §14): on the 10-damage basic attack +2 was +20%, the biggest single piece of the power stack.
+            new RelicDefinition(CaniveteVoChico, RelicSource.ArenaSecret, BiomeType.Forest, null, StatType.AttackDamage, ModifierApplication.Flat, 1f),
             new RelicDefinition(ChapeuCouro, RelicSource.ArenaSecret, BiomeType.Desert, null, StatType.MaxStamina, ModifierApplication.Flat, 8f),
             new RelicDefinition(PiaoIrmaos, RelicSource.ArenaSecret, BiomeType.Mountain, null, StatType.AttackSpeed, ModifierApplication.Flat, 0.03f),
             new RelicDefinition(RetratoPrimos, RelicSource.ArenaSecret, BiomeType.Caves, null, StatType.ResourceCostReduction, ModifierApplication.Flat, 0.03f),

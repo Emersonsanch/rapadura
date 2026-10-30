@@ -11,6 +11,9 @@ namespace Rapadura.Gameplay.Items
         MainHand,
         OffHand,
         Tool,
-        Accessory
+        Accessory,
+        // Append only: item assets and saves store the slot as its int (Wings = 9).
+        /// <summary>"Costas/Asas": wings and capes of the Tacho Encantado (<c>Rapadura.Gameplay.Tacho.WingCatalog</c>).</summary>
+        Wings
     }
 }
