@@ -1509,6 +1509,29 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 
 ---
 
+## 🏠 FASE 15 — Casa própria, lojas e guarda-roupa (pedido do usuário, 2026-10-29)
+> Design completo em `Docs/Housing.md` (em escrita). Catálogos em `Docs/Housing/CatalogoCasa.md` (mínimo de 500 itens de casa) e `Docs/Housing/CatalogoRoupas.md` (roupas, armaduras, acessórios, tinturas).
+
+### Lojas (o jogador sentiu falta de onde comprar coisas)
+- [ ] Mais lojas na Vila, cada uma com NPC e estoque próprio: armarinho, ferreiro, feira livre, mercearia, marceneiro, costureira, mascate ambulante com estoque rotativo; casa de leilões no online.
+- [ ] Estoque com rotação diária/semanal e itens por nível de reputação ou progresso da campanha.
+
+### Casa própria
+- [ ] Cada jogador ganha um terreno da Vó Zefa e uma casa própria, com melhorias (tapera → taipa → alvenaria → casarão).
+- [ ] **Casa trancada:** só o dono entra. Pode convidar outra pessoa (por visita ou lista de amigos, revogável), com permissões (visitar, mexer na decoração, usar a bancada). Visitante nunca abre o baú; o dono pode expulsar.
+- [ ] Decoração em grade (piso, parede, teto, quintal), com rotação e limite de itens por nível da casa.
+- [ ] **Baú da casa** com capacidade por melhoria (convive com o Baú da Vó Zefa).
+- [ ] **Guarda-roupa:** trocar de roupa e usar a aparência de qualquer peça já desbloqueada, separada dos atributos; tinturas.
+- [ ] Parede de troféus dos chefes, estante de relíquias e do Caderno, caminha do Caramelo, livro de visitas.
+- [ ] Pontos de conforto pela decoração dão um pequeno bônus de XP descansado; conjuntos de móveis dão bônus de conjunto.
+- [ ] Itens de casa com raridade, vindos de loja, drop dos bichos (tabela por inimigo/chefe), missões regionais e diárias, conquistas, eventos sazonais e crafting.
+- [ ] Online: casas instanciadas, salvas no servidor, convites pela lista de amigos, proteção contra vandalismo.
+
+### Equipamento e aparência do personagem
+- [ ] Conjuntos de armadura/roupa por primo em vários níveis de raridade, acessórios (chapéu de couro, lenço, alpargatas…) e skins de arma.
+
+---
+
 ## 🎯 Meta do MVP
 
 O jogo só pode sair da fase MVP quando tiver:
