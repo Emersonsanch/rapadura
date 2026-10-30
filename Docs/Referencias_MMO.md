@@ -111,3 +111,9 @@
 - Caça automática (MU Helper): permitir, com limite diário?
 - Fôlego diário (limite de horas com bônus): ligar?
 - Facções fixas do servidor: quais?
+
+## 6. Decisões do usuário (2026-10-29)
+- **Refino que falha volta um nível**; o item nunca some.
+- **Morrer perde XP** (pequena, reduzida pela Bênção da Romaria).
+- **Existe "fora da lei"** ao matar outro jogador fora de duelo, área PvP ou guerra de guilda.
+- **Sistema de Procurado, como no faroeste:** cartaz com recompensa que cresce a cada morte; quem derrota o procurado ganha a recompensa; guardas, lojas mais caras e queda de item maior enquanto procurado; a marca some com o tempo ou com fiança na cadeia da cidade; o servidor bloqueia recompensas combinadas entre amigos/mesma conta.

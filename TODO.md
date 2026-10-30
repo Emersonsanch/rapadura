@@ -1606,7 +1606,12 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [ ] Mapas com andares; depósito por cidade; banco com transferência; mercado global por oferta; mercador viajante por dia da semana; barco entre cidades.
 - [ ] Missões grandes com baú de escolha única; adereços de roupa por missão; recompensa diária em sequência; fins de semana de XP dobrada.
 - [ ] Lista de amigos com aviso e bloqueio; enciclopédia do jogo; denúncia e anti-bot; tipos de servidor (sem PvP como padrão infantil); torneios.
-- [ ] 🙋 Decisões (`Docs/Referencias_MMO.md` §5): refino que falha, perda de XP ao morrer, "fora da lei", caça automática, fôlego diário, facções.
+- ✅ Decisões do usuário (2026-10-29):
+  - **Refino que falha volta um nível** (ex.: +8 falhou → +7); o item nunca some.
+  - **Morrer perde XP** (porcentagem pequena do nível; a Bênção da Romaria reduz a perda).
+  - **Existe "fora da lei"**: quem mata outro jogador sem ser em duelo/área PvP/guerra de guilda vira fora da lei.
+- [ ] **Sistema de Procurado (estilo faroeste)** — pedido do usuário: ao matar outro jogador, aparece um cartaz "PROCURADO" com o rosto e o nome nas cidades e no quadro de avisos, com uma recompensa em ouro que sobe a cada nova morte causada. Qualquer jogador (ou caçador de recompensa) que derrotar o procurado recebe a recompensa. Enquanto procurado: nome vermelho, guardas da cidade não deixam entrar na zona segura (ou o prendem por um tempo), lojas cobram mais, chance de queda de item maior que 9%. A marca some com o tempo jogado sem matar ninguém, ou pagando a fiança na delegacia/cadeia da cidade. Recompensa também pode ser oferecida por quem foi morto (tirando do próprio ouro). Tudo validado no servidor, com proteções contra "combinar" mortes para farmar recompensa (mesma conta, mesmo IP, amigos repetidos).
+- [ ] 🙋 Ainda em aberto: caça automática, fôlego diário, facções do servidor.
 
 ---
 
