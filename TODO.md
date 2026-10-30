@@ -4,6 +4,13 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-10-29 (noite — build menor, áudio dos sistemas novos, créditos e nova leva de agentes)
+- 📦 **Build menor** (`4512d34`): menus "Rapadura ▸ Build ▸ Apply Mesh Import Settings" (compressão Medium, Read/Write off, tangentes só onde o material usa normal map) e "Dedupe Hero Meshes" (prefabs variantes do rigged com a malha limpa em `Assets/Prefabs/Characters`). `Joaquim_NoPedestal` 29 → 15,6 MB. 🐛 `EditorUtility.CopySerialized` não substituía os vértices de um Mesh salvo; a compactação agora reescreve pela API do Mesh. Testes de orçamento em `Rapadura.Tests.EditorTools`. Fecha o item 2 dos próximos passos.
+- 🔊 **Áudio** (`cbd1e8f`): 16 sons procedurais novos (atordoamento, espinhos, baú, missão, pulo/aterrissagem, aviso de ataque inimigo…), música própria dos painéis de história, grilos e brisa no título.
+- 🎬 **Créditos e overlays** (`916ca19`): créditos bilíngues com rolagem automática (toque para fechar) e atribuição do CMU; banner de chefe e "Mochila cheia" no tema. Teste PlayMode `CampaignPlaythroughTests` (`[Category("Campaign")]`) joga a campanha inteira com a Maithe, com save/load no meio.
+- ✅ EditMode **1781/1781**. PlayMode não inicializou dentro do tempo nesta rodada (repetir).
+- 🤖 **Em andamento (agentes)**: New Game+ ("Nova Jornada+"), Caderno da Vó Zefa (bestiário), eventos aleatórios no mapa, Caramelo (pet), segredos e Relíquias do Sertão, teste de resistência de 30 min + relatório de falhas local + Definition of Done, cozinha da Vó Zefa, modo foto.
+
 ### 2026-10-29 (sessão multiagente — campanha com começo e fim, missões regionais, atordoamento/espinhos/velocidade de ataque)
 - 📖 **Campanha** (`Gameplay/Story`): prólogo no Novo jogo (sítio da Vó Zefa, o Cristal do Sol apagado, painel do primo escolhido), interlúdios após Lobo Alfa / Guardião da Ruína / Senhor da Guerra, epílogo ao vencer o Habitante Ancestral → créditos → mapa (pós-jogo). `StoryProgress` (chave "Story": `campaignComplete` + beats vistos) deduz o próximo beat das regiões limpas, então sobrevive a sair do jogo entre o chefe e o mapa. Conquista `ach_campaign_complete`. 🐛 O `.meta` do `StoryPanelView.uxml/.uss` veio com o guid do próprio asset no importer: a view não importava e o painel se desligava; corrigido no playtest e guardado por `AssetMetaIntegrityTests`. Conferido no Editor: prólogo aparece no mapa depois da seleção (Lavine).
 - 💬 **Missões regionais** no mapa (as NPCs da `Main.unity` são inalcançáveis no loop mapa → encontro → mapa): botão "Conversar com…" no HUD do mapa, 4 NPCs, 8 missões encadeadas (kill de inimigos comuns da região + ouro), falas por primo com a condição `ActiveCharacter` que já existia. 🐛 Recompensa de missão concluída no mapa agora fica na fila e é entregue no próximo encontro.
@@ -91,7 +98,7 @@
 ### 🔜 Próximos passos (após 2026-10-29)
 **Código (próximos itens):**
 1. Decimar as malhas de heróis e inimigos (cerca de 300k vértices hoje), só depois de revisão visual lado a lado.
-2. Deduplicar as malhas rigadas e as limpas sem pedestal (cerca de 18 MB repetidos no build).
+2. ~~Deduplicar as malhas rigadas e as limpas sem pedestal~~ — feito em `4512d34` (menus de build).
 3. Addressables (e LOD/occlusion) quando houver build mobile para medir.
 4. Ultimate com recurso próprio (carga), se esse design for confirmado; hoje a ultimate só exige nível 10.
 
@@ -1456,6 +1463,15 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [ ] Segredos e áreas ocultas
 - [ ] New Game+
 - [ ] Sistema de temporadas
+
+### 💡 Novas ideias (2026-10-29)
+- [ ] 🍳 **Cozinha da Vó Zefa**: pratos do sertão (cuscuz, pamonha, rapadura, baião de dois) feitos com materiais dos biomas dão buffs temporários antes da viagem; receitas aprendidas em missões (em andamento).
+- [ ] 📷 **Modo foto**: pausa, câmera livre limitada, filtros (sépia de cordel, xilogravura), poses dos primos e esconder HUD (em andamento).
+- [ ] 🗣️ **Conversas entre primos na estrada**: falas curtas no mapa entre o primo ativo e os outros (via "rádio" de lembranças), que mudam com o progresso da campanha e reforçam quem é irmão de quem.
+- [ ] 🎉 **Festa Junina sazonal** (primeiro passo do "Sistema de temporadas"): em junho a vila ganha bandeirinhas, fogueira, quadrilha como minijogo de ritmo e prendas.
+- [ ] 🎣 **Pesca no açude** da Floresta: minijogo curto com peixes por horário e clima, ingredientes para a cozinha.
+- [ ] 🧭 **Viagem rápida** pelas estradas já percorridas (carro de boi da vila), liberada depois de cada chefe.
+- [ ] 🤝 **Golpe em dupla**: ao trocar de primo na vila, o anterior aparece como assistente num golpe especial por luta (dupla de irmãos com animação própria).
 
 ---
 
