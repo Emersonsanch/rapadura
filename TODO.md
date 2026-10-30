@@ -1551,6 +1551,12 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [ ] Itens de casa com raridade, vindos de loja, drop dos bichos (tabela por inimigo/chefe), missões regionais e diárias, conquistas, eventos sazonais e crafting.
 - [ ] Online: casas instanciadas, salvas no servidor, convites pela lista de amigos, proteção contra vandalismo.
 
+### Mochila em grade e queda de item ao morrer (pedido do usuário, 2026-10-29)
+- [ ] **Mochila em grade estilo MU Online** (em andamento): 8×8 células, cada item ocupa seu tamanho (poção 1×1, espada 1×3, armadura 2×3, escudo 2×2, arco 2×4…), empilháveis por célula; o limite da mochila passa a ser o espaço da grade. Arrastar e soltar no PC, tocar para pegar/colocar no celular, prévia vermelha onde não cabe, botão "Organizar". Saves antigos: itens arrumados sozinhos; o que não couber vai para o Baú da Vó Zefa.
+- [ ] Bornal de couro (expansão de +2 linhas) vendido em loja.
+- [ ] **Queda ao morrer: 9% de chance** de cair um item aleatório da mochila (nunca equipados, ouro, itens de história, relíquias ou itens vinculados). Offline: aviso na tela de morte e o item vai para os "Achados e Perdidos" da Vó Zefa, para comprar de volta por uma taxa conforme a raridade.
+- [ ] 🙋 Decisão do usuário para o online: o item cai no chão onde a pessoa morreu e qualquer um pode pegar depois de alguns segundos, ou só o dono pode pegar?
+
 ### Equipamento e aparência do personagem
 - [ ] Conjuntos de armadura/roupa por primo em vários níveis de raridade, acessórios (chapéu de couro, lenço, alpargatas…) e skins de arma.
 
