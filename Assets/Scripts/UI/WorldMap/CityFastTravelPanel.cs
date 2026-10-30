@@ -77,9 +77,17 @@ namespace Rapadura.UI.WorldMap
         public static FastTravelRow BuildRow(CitySpec city, BiomeType from, bool tokenIdleInCity, Func<BiomeType, bool> isVisited,
             Func<BiomeType, bool> isUnlocked, Func<BiomeType, IEnumerable<BiomeType>> neighbours, int gold, LocalizationManager localization)
         {
+            return BuildRow(city, from, tokenIdleInCity, isVisited, isUnlocked, neighbours, gold, localization, null, false);
+        }
+
+        /// <summary>As above with the viagem rápida gates: the destination's boss beaten (<paramref name="isBossCleared"/>) and no event going on.</summary>
+        public static FastTravelRow BuildRow(CitySpec city, BiomeType from, bool tokenIdleInCity, Func<BiomeType, bool> isVisited,
+            Func<BiomeType, bool> isUnlocked, Func<BiomeType, IEnumerable<BiomeType>> neighbours, int gold, LocalizationManager localization,
+            Func<BiomeType, bool> isBossCleared, bool eventActive)
+        {
             int roads = FastTravelRules.Roads(neighbours, from, city.Region);
             int cost = FastTravelRules.Cost(roads);
-            FastTravelCheck check = FastTravelRules.Check(from, city.Region, tokenIdleInCity, isVisited, isUnlocked, roads, gold);
+            FastTravelCheck check = FastTravelRules.Check(from, city.Region, tokenIdleInCity, isVisited, isUnlocked, roads, gold, isBossCleared, eventActive);
 
             string status;
             switch (check)
@@ -90,11 +98,27 @@ namespace Rapadura.UI.WorldMap
                 case FastTravelCheck.NoRoute: status = CityTexts.Get(localization, CityTexts.FastTravelNoRoute); break;
                 case FastTravelCheck.NotEnoughGold: status = CityTexts.Format(localization, CityTexts.FastTravelNoGold, cost); break;
                 case FastTravelCheck.NotInCity: status = CityTexts.Get(localization, CityTexts.FastTravelNotInCity); break;
+                case FastTravelCheck.BossNotDefeated: status = CityTexts.Get(localization, CityTexts.FastTravelBossLocked); break;
+                case FastTravelCheck.EventActive: status = CityTexts.Get(localization, CityTexts.FastTravelEventActive); break;
                 default: status = CityTexts.Format(localization, CityTexts.FastTravelRoads, roads); break;
             }
 
             return new FastTravelRow(city, check, roads, cost, CityTexts.CityName(localization, city), status,
                 CityTexts.Format(localization, CityTexts.FastTravelGo, cost));
+        }
+
+        /// <summary>The region's boss was beaten (persisted flag or defeated registry); null without a map.</summary>
+        public static Func<BiomeType, bool> BossClearedLookup(WorldMapController map)
+        {
+            return map != null && map.RegionBosses != null ? map.RegionBosses.IsRegionCleared : (Func<BiomeType, bool>)null;
+        }
+
+        /// <summary>A road event card is up, an encounter is pending or the token is walking: no cart now.</summary>
+        public static bool IsEventActive(WorldMapController map)
+        {
+            WorldEventCardController card = FindFirstObjectByType<WorldEventCardController>();
+            bool pending = ServiceLocator.TryGet(out SceneTransitionService transition) && transition.HasPendingEncounter;
+            return FastTravelRules.IsEventActive(card != null && card.IsOpen, pending, map != null && map.IsTraveling);
         }
 
         // ------------------------------------------------------------------
@@ -216,18 +240,22 @@ namespace Rapadura.UI.WorldMap
             _goldLabel.text = CityTexts.Format(localization, CityTexts.FastTravelGold, gold);
             _closeButton.text = CityTexts.Get(localization, CityTexts.FastTravelClose);
 
+            Func<BiomeType, bool> bossCleared = BossClearedLookup(_map);
+            bool eventActive = IsEventActive(_map);
             _list.Clear();
             Button first = null;
             foreach (CitySpec city in CityCatalog.Cities)
             {
                 FastTravelRow row = BuildRow(city, from, inCity, cities.IsVisited,
                     progress != null ? progress.IsUnlocked : (Func<BiomeType, bool>)null,
-                    graph != null ? graph.GetNeighbours : (Func<BiomeType, IEnumerable<BiomeType>>)null, gold, localization);
+                    graph != null ? graph.GetNeighbours : (Func<BiomeType, IEnumerable<BiomeType>>)null, gold, localization,
+                    bossCleared, eventActive);
 
                 var element = new VisualElement { name = "wm-fast-travel-row-" + city.CityId };
                 element.AddToClassList("fast-travel-row");
                 element.EnableInClassList("fast-travel-row--here", row.Check == FastTravelCheck.SameCity);
-                element.EnableInClassList("fast-travel-row--closed", row.Check == FastTravelCheck.NotVisited || row.Check == FastTravelCheck.Locked);
+                element.EnableInClassList("fast-travel-row--closed", row.Check == FastTravelCheck.NotVisited || row.Check == FastTravelCheck.Locked
+                    || row.Check == FastTravelCheck.BossNotDefeated);
 
                 var body = new VisualElement();
                 body.AddToClassList("fast-travel-row__body");
@@ -274,7 +302,8 @@ namespace Rapadura.UI.WorldMap
             int gold = _bag.GetTotalCount(CurrencyItemId);
             FastTravelRow row = BuildRow(city, from, _map.CanExplore, CityProgress.ResolveShared().IsVisited,
                 _map.Progress != null ? _map.Progress.IsUnlocked : (Func<BiomeType, bool>)null,
-                _map.Graph != null ? _map.Graph.GetNeighbours : (Func<BiomeType, IEnumerable<BiomeType>>)null, gold, Localization);
+                _map.Graph != null ? _map.Graph.GetNeighbours : (Func<BiomeType, IEnumerable<BiomeType>>)null, gold, Localization,
+                BossClearedLookup(_map), IsEventActive(_map));
             if (!row.CanTravel || (row.Cost > 0 && !_bag.RemoveById(CurrencyItemId, row.Cost)))
             {
                 _statusLabel.text = row.Status;

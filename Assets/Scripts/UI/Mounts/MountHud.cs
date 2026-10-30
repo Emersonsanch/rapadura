@@ -90,13 +90,14 @@ namespace Rapadura.UI.Mounts
 
         private void OnGranted(MountGrantedEvent evt)
         {
-            if (evt.Source == MountCollection.SourceQuest)
+            if (evt.Source == MountCollection.SourceQuest && evt.MountId == MountCatalog.Pony)
             {
                 return; // the Primeira Sela scene says it
             }
 
             ServiceLocator.TryGet(out LocalizationManager localization);
-            OnNotice(MountTexts.Format(localization, MountTexts.GrantedToast, MountTexts.MountName(localization, MountCatalog.Get(evt.MountId))));
+            string key = evt.Source == MountCollection.SourceDrop ? MountWaveTexts.DropToast : MountTexts.GrantedToast;
+            OnNotice(MountTexts.Format(localization, key, MountTexts.MountName(localization, MountCatalog.Get(evt.MountId))));
         }
 
         /// <summary>"Primeira Sela": Vó Zefa hands over the pony, Lavine names him, Maithe pretends not to care, then the how-to.</summary>

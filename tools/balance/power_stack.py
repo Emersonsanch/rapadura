@@ -835,6 +835,353 @@ def wings_main(ctx: Context, runs: int, base_gear: dict, results: dict, refined:
     print("\n".join(f"- {p}" for p in problems) if problems else "- dentro do orçamento")
 
 
+# ----------------------------------------------------------------------------- MU-style item options (README "Opções de item")
+
+ITEM_OPTION_CATALOG = os.path.join(SCRIPTS, "Gameplay", "Items", "Options", "ItemOptionCatalog.cs")
+_MOD = r"Mod\(StatType\.(\w+),\s*ModifierApplication\.(\w+),\s*([-\d.]+)f\)"
+# Pieces (of weapon + hat + chest + boots) that carry options when the hero reaches each region: a player who farmed
+# (excellent off a common enemy is 1.5% per equipment drop, ancient only off bosses), i.e. an upper bound. Every piece
+# with options is assumed perfect: max excellent lines, luck and both sockets engraved with the best engraving.
+OPTION_PIECES_BY_REGION = {"Forest": 1, "Desert": 2, "Mountain": 3, "Caves": 4}
+OPTIONS_BOSS_BUDGET = 0.90  # everything + perfect options: boss TTK >= 90% of everything without options (+1% damage is already -4%: rotation steps)
+OPTIONS_COMMON_BUDGET = 0.70  # NG+1 commons die in 2-3 hits: one hit less is -26% (quantised, as the wings)
+TOTAL_BOSS_BUDGET = 0.66  # stack + refine + wings + fruits + options: boss TTK >= 66% of the plain r8 one
+TOTAL_BOSS_FLOOR = 12.0
+
+
+def _option_mod(stat: str, application: str, value: str) -> Modifier:
+    return Modifier(stat, application != "Flat", float(value))
+
+
+@dataclass
+class OptionCatalog:
+    """ItemOptionCatalog.cs: excellent lines (weapon/armour), luck, ancient sets (tiers), engravings, caps."""
+    weapon_lines: list
+    armour_lines: list
+    luck: Modifier
+    sets: dict  # id -> [(pieces, Modifier)]
+    engravings: dict  # id -> (weapon only?, Modifier)
+    lines_max: int
+    sockets_max: int
+
+    @staticmethod
+    def as_gear(mods: list) -> bm.Gear:
+        g = bm.Gear()
+        for mod in mods:
+            add_modifier(g, None, mod)  # whole-fight modifiers only: the build is never touched
+        return g
+
+    @staticmethod
+    def offense(g: bm.Gear) -> float:
+        """The offensive part of Gear.score (the budget is about kill time, so the upper bound picks damage)."""
+        return g.ad_flat + g.ad_pct * 10 + g.attack_speed * 12 + g.crit * 8 + g.crit_dmg * 1.5 + g.thorns * 6 + g.cdr * 8
+
+    def _best(self, candidates: list, count: int) -> list:
+        """The `count` most offensive candidates."""
+        return sorted(candidates, key=lambda m: -self.offense(self.as_gear([m])))[:count]
+
+    def piece_extras(self, weapon: bool) -> list:
+        """Luck + every socket with the best engraving that fits the piece (offensive ones only go in weapons)."""
+        fits = [mod for for_weapon, mod in self.engravings.values() if for_weapon == weapon]
+        return [self.luck] + self._best(fits, 1) * self.sockets_max
+
+    def excellent_gear(self, pieces: int) -> bm.Gear:
+        """`pieces` perfect excellent pieces: the weapon first (best lines_max weapon lines), then armour."""
+        mods = []
+        for i in range(pieces):
+            mods += self._best(self.weapon_lines if i == 0 else self.armour_lines, self.lines_max) + self.piece_extras(i == 0)
+        return self.as_gear(mods)
+
+    def ancient_gear(self, pieces: int) -> bm.Gear:
+        """`pieces` pieces of the strongest ancient set (all active tiers) + luck and sockets on each."""
+        best = None
+        for tiers in self.sets.values():
+            mods = [m for need, m in tiers if pieces >= need]
+            for i in range(pieces):
+                mods += self.piece_extras(i == 0)
+            g = self.as_gear(mods)
+            if best is None or self.offense(g) > self.offense(best):
+                best = g
+        return best
+
+    def gear(self, pieces: int, kind: str) -> bm.Gear:
+        return self.excellent_gear(pieces) if kind == "excellent" else self.ancient_gear(pieces)
+
+
+def load_options() -> OptionCatalog:
+    source = _read(ITEM_OPTION_CATALOG)
+    weapon, armour = [], []
+    for _, is_weapon, stat, application, value in re.findall(
+            r"new ExcellentLine\(ExcellentOption\.(\w+),\s*(true|false),\s*" + _MOD, source):
+        (weapon if is_weapon == "true" else armour).append(_option_mod(stat, application, value))
+    luck = _option_mod(*re.search(r"LuckModifier\s*=\s*" + _MOD, source).groups())
+    sets = {}
+    for block in source.split("new AncientSet(")[1:]:
+        set_id = re.match(r'\s*"(\w+)"', block).group(1)
+        sets[set_id] = [(int(n), _option_mod(s, a, v)) for n, s, a, v in
+                        re.findall(r"new AncientTier\((\d+),\s*" + _MOD, block.split("})")[0])]
+    engravings = {e: (w == "true", _option_mod(s, a, v)) for e, w, s, a, v in
+                  re.findall(r'new Engraving\("(\w+)",\s*(true|false),\s*"\w+",\s*\d+,\s*\d+,\s*' + _MOD, source)}
+    return OptionCatalog(weapon, armour, luck, sets, engravings,
+                         int(_const(source, "ExcellentLinesBossMax")), int(_const(source, "MaxSockets")))
+
+
+def optioned_gear(base_gear: dict, refine: RefineCurve, wings: WingCurve, options: OptionCatalog, cycle: int, kind: str) -> dict:
+    """winged_gear + each region's perfect options of `kind` ("excellent" or "ancient"). NG+1: all 4 pieces."""
+    out = winged_gear(base_gear, refine, wings, cycle)
+    for biome in rd.BIOME_ORDER:
+        extra = options.gear(4 if cycle > 0 else OPTION_PIECES_BY_REGION[biome], kind)
+        for phase in ("entry", "boss"):
+            out[(biome, phase)] = out[(biome, phase)].plus(extra)
+    return out
+
+
+def options_violations(plain: dict, winged: dict, optioned: dict, cycle: int) -> list:
+    """README "Opções de item": perfect options on top of everything cost at most OPTIONS_*_BUDGET; the whole pile at
+    most TOTAL_BOSS_BUDGET of the plain r8 hero; no boss under TOTAL_BOSS_FLOOR; parked, the boss still kills in 12-40 s."""
+    out = []
+    low, high = PARKED_TTD_BAND
+    for biome in plain:
+        p, w, o = biome_summary(plain, biome), biome_summary(winged, biome), biome_summary(optioned, biome)
+        if o["stack_boss"] < OPTIONS_BOSS_BUDGET * w["stack_boss"]:
+            out.append(f"{biome}: options boss {o['stack_boss']:.1f} s < {OPTIONS_BOSS_BUDGET:.0%} of everything {w['stack_boss']:.1f} s")
+        if o["stack_common"] < OPTIONS_COMMON_BUDGET * w["stack_common"]:
+            out.append(f"{biome}: options commons {o['stack_common']:.1f} s < {OPTIONS_COMMON_BUDGET:.0%} of everything {w['stack_common']:.1f} s")
+        if o["stack_boss"] < TOTAL_BOSS_BUDGET * p["r8_boss"]:
+            out.append(f"{biome}: total boss {o['stack_boss']:.1f} s < {TOTAL_BOSS_BUDGET:.0%} of r8 {p['r8_boss']:.1f} s")
+        if o["stack_boss"] < TOTAL_BOSS_FLOOR:
+            out.append(f"{biome}: total boss {o['stack_boss']:.1f} s < {TOTAL_BOSS_FLOOR:g} s")
+        if not low <= o["parked_ttd_stack"] <= high:
+            out.append(f"{biome}: parked time-to-die {o['parked_ttd_stack']:.1f} s outside {low}-{high}")
+    return out
+
+
+def options_report(plain_results: dict, winged_results: dict, optioned: dict) -> str:
+    lines = ["| Ciclo | Bioma | Peças | Chefe: r8 → tudo → tudo+excelente / tudo+antigo | 2 comuns: tudo → excelente / antigo | "
+             "Parado, chefe mata em (excelente / antigo) |", "|---|---|---|---|---|---|"]
+    for cycle in winged_results:
+        for biome in winged_results[cycle]:
+            p = biome_summary(plain_results[cycle], biome)
+            w = biome_summary(winged_results[cycle], biome)
+            e = biome_summary(optioned["excellent"][cycle], biome)
+            a = biome_summary(optioned["ancient"][cycle], biome)
+            pieces = 4 if cycle > 0 else OPTION_PIECES_BY_REGION[biome]
+            lines.append(f"| NG+{cycle} | {run_r8.NAMES[biome]} | {pieces} | {f1(p['r8_boss'])} → {f1(w['stack_boss'])} → "
+                         f"**{f1(e['stack_boss'])}** / **{f1(a['stack_boss'])}** s | {f1(w['stack_common'])} → "
+                         f"**{f1(e['stack_common'])}** / **{f1(a['stack_common'])}** s | "
+                         f"{f1(e['parked_ttd_stack'])} / {f1(a['parked_ttd_stack'])} s |")
+    return "\n".join(lines)
+
+
+def options_main(ctx: Context, runs: int, base_gear: dict, results: dict, refine: RefineCurve) -> None:
+    wings, options = load_wings(), load_options()
+    winged = {c: evaluate(ctx, c, runs, winged_gear(base_gear, refine, wings, c)) for c in (0, 1)}
+    optioned = {kind: {c: evaluate(ctx, c, runs, optioned_gear(base_gear, refine, wings, options, c, kind)) for c in (0, 1)}
+                for kind in ("excellent", "ancient")}
+    print("\n## Opções de item (excelente, sorte, conjunto antigo, engaste) por região (README: Opções de item)\n")
+    print(options_report(results, winged, optioned))
+    print("\n## Orçamento das opções\n")
+    problems = [f"NG+{c} {kind}: {p}" for kind in optioned for c in (0, 1)
+                for p in options_violations(results[c], winged[c], optioned[kind][c], c)]
+    print("\n".join(f"- {p}" for p in problems) if problems else "- dentro do orçamento")
+
+
+# ----------------------------------------------------------------------------- class evolution (Docs/ClassEvolution.md)
+
+CLASS_CATALOG = os.path.join(SCRIPTS, "Gameplay", "ClassEvolution", "ClassEvolutionCatalog.cs")
+MASTER_RULES = os.path.join(SCRIPTS, "Gameplay", "ClassEvolution", "MasterLevelRules.cs")
+CLASS_RECOVERY = 0.2  # GraduationSkillFactory: _recoverySeconds
+CLASS_MAX_LEVEL = 5  # GraduationSkillFactory: _maxLevel
+CLASS_BOSS_BUDGET = 0.88  # r8 hero + graduations (skills, every group buff, best combo): boss TTK >= 88% of the r8 one
+CLASS_COMMON_BUDGET = 0.75  # commons die in a few hits: one hit less is already -15..-20% (quantised, as the refine)
+CLASS_ALL_BOSS_BUDGET = 0.70  # meal/relic/event stack + graduations: boss TTK >= 70% of the r8 one (as "everything" of the wings)
+CLASS_ALL_COMMON_BUDGET = 0.55
+CLASS_BASIC_EDGE = 0.75  # NG+0, stack + graduations, basic attacks only: kill >= 75% of the time the boss needs
+CLASS_BOSS_FLOOR = 12.0
+MASTER_BOSS_BUDGET = 0.95  # the whole master tree (30 points) on top of everything else: boss TTK >= 95% of without it
+
+
+@dataclass
+class ClassSkill:
+    id: str
+    hero: str
+    tier: int
+    kind: str  # GroupBuff | Active
+    cooldown: float
+    mana: float
+    cast: float
+    damage: float
+    per_level: float
+    area: float
+    stun: float
+    heal: float
+    stat: str
+    percent: bool
+    value: float
+    duration: float
+
+
+@dataclass
+class ClassEvolution:
+    skills: list  # [ClassSkill]
+    min_level: dict  # (hero, tier) -> level
+    combos: list  # [(hero, bonus type, value, duration, last skill id)]
+    master_nodes: list  # [(node id, Modifier at max rank, max rank)]
+    combo_tier: int
+
+    def level_of(self, skill: ClassSkill) -> int:
+        return self.min_level[(skill.hero, skill.tier)]
+
+    def gear(self, level: int) -> bm.Gear:
+        """What the graduations add at `level`, hero-independent upper bound: a party of the five cousins (FASE 12) keeps
+        EVERY tier-1 group buff up the whole fight (each lasts 12-15 s, about one boss fight), plus the best damage combo
+        and the best cost combo at their uptime (bonus seconds / cooldown of the combo's last skill)."""
+        g, build = bm.Gear(), bm.Build("Maithe", level)
+        for s in self.skills:
+            if s.kind == "GroupBuff" and level >= self.level_of(s):
+                add_modifier(g, build, Modifier(s.stat, s.percent, s.value))
+        best = {"DamageMultiplier": 0.0, "CostReduction": 0.0}
+        by_id = {s.id: s for s in self.skills}
+        for hero, kind, value, duration, last in self.combos:
+            if kind in best and level >= self.min_level[(hero, self.combo_tier)]:
+                best[kind] = max(best[kind], value * min(1.0, duration / by_id[last].cooldown))
+        g.ad_pct += best["DamageMultiplier"]
+        g.rcr += best["CostReduction"]
+        return g
+
+    def master_gear(self) -> bm.Gear:
+        g, build = bm.Gear(), bm.Build("Maithe", 50)
+        for _, mod, _ in self.master_nodes:
+            add_modifier(g, build, mod)
+        return g
+
+
+def load_class_evolution() -> ClassEvolution:
+    source = _read(CLASS_CATALOG)
+    num = r"([-\d.]+)f"
+    skills = []
+    pattern = (r'Skill\("(\w+)",\s*CharacterId\.(\w+),\s*(\d+),\s*GraduationSkillKind\.(\w+),\s*' + r",\s*".join([num] * 8)
+               + r",\s*StatType\.(\w+),\s*ModifierApplication\.(\w+),\s*" + num + r",\s*" + num + r"\)")
+    for m in re.finditer(pattern, source):
+        g = m.groups()
+        skills.append(ClassSkill(g[0], g[1], int(g[2]), g[3], *map(float, g[4:12]), g[12], g[13] == "PercentAdditive",
+                                 float(g[14]), float(g[15])))
+    min_level = {(h, int(t)): int(lv) for h, t, lv in re.findall(r"Grad\(CharacterId\.(\w+),\s*(\d+),\s*(\d+),", source)}
+    combos = [(h, kind, float(v), float(d), ids.split(",")[-1].strip().strip('"'))
+              for h, ids, kind, v, d in re.findall(
+                  r'Combo\("\w+",\s*CharacterId\.(\w+),\s*new\[\]\s*\{([^}]*)\},\s*[\d.]+f,\s*ComboBonusType\.(\w+),\s*([\d.]+)f,\s*([\d.]+)f\)',
+                  source)]
+    master = []
+    for node, stat, app, value, rank in re.findall(
+            r'new MasterNodeSpec\("(\w+)",\s*StatType\.(\w+),\s*ModifierApplication\.(\w+),\s*([\d.]+)f,\s*(\d+)', _read(MASTER_RULES)):
+        master.append((node, Modifier(stat, app == "PercentAdditive", float(value) * int(rank)), int(rank)))
+    return ClassEvolution(skills, min_level, combos, master, int(_const(source, "ComboTier")))
+
+
+def class_data(data: rd.GameData, cls: ClassEvolution) -> rd.GameData:
+    """GameData with every graduation active skill in its hero's list, unlocked at the graduation's level (the model
+    learns a skill at min_player_level: an upper bound, the mission itself takes a while)."""
+    out = bm.clone_data(data)
+    for s in cls.skills:
+        if s.kind != "Active":
+            continue
+        out.skills.setdefault(s.hero, []).append(rd.Skill(
+            id=s.id, hero=s.hero, skill_type=0, cooldown=s.cooldown, mana=s.mana, cast=s.cast, recovery=CLASS_RECOVERY,
+            base_damage=s.damage, damage_per_level=s.per_level, area=s.area, max_level=CLASS_MAX_LEVEL,
+            min_player_level=cls.level_of(s), dot_total=0.0, stun=s.stun))
+    return out
+
+
+def class_context(ctx: Context, cls: ClassEvolution) -> Context:
+    return load_context(class_data(ctx.data, cls), ctx.k_common, ctx.k_boss)
+
+
+def class_gear(base_gear: dict, cls: ClassEvolution, levels: dict, master: bool = False) -> dict:
+    """base_gear + the graduations each region allows at its boss level (`levels`: biome -> boss level)."""
+    out = dict(base_gear)
+    for biome in rd.BIOME_ORDER:
+        extra = cls.gear(levels[biome])
+        if master:
+            extra = extra.plus(cls.master_gear())
+        for phase in ("entry", "boss"):
+            out[(biome, phase)] = base_gear[(biome, phase)].plus(extra)
+    return out
+
+
+def levels_of(result: dict) -> dict:
+    return {biome: result[biome]["levels"][1] for biome in result}
+
+
+def class_violations(plain: dict, classed: dict, cycle: int) -> list:
+    """Docs/ClassEvolution.md §6: graduations on the r8 hero cost at most CLASS_*_BUDGET; stack + graduations at most
+    CLASS_ALL_*_BUDGET of the plain r8 hero; no boss under CLASS_BOSS_FLOOR; at NG+0 a basic-attack-only stacked hero keeps
+    CLASS_BASIC_EDGE; parked, the boss still kills in 12-40 s."""
+    out = []
+    low, high = PARKED_TTD_BAND
+    for biome in plain:
+        p, c = biome_summary(plain, biome), biome_summary(classed, biome)
+        if c["r8_boss"] < CLASS_BOSS_BUDGET * p["r8_boss"]:
+            out.append(f"{biome}: class boss {c['r8_boss']:.1f} s < {CLASS_BOSS_BUDGET:.0%} of r8 {p['r8_boss']:.1f} s")
+        if c["r8_common"] < CLASS_COMMON_BUDGET * p["r8_common"]:
+            out.append(f"{biome}: class commons {c['r8_common']:.1f} s < {CLASS_COMMON_BUDGET:.0%} of r8 {p['r8_common']:.1f} s")
+        if c["stack_boss"] < CLASS_ALL_BOSS_BUDGET * p["r8_boss"]:
+            out.append(f"{biome}: stack+class boss {c['stack_boss']:.1f} s < {CLASS_ALL_BOSS_BUDGET:.0%} of r8 {p['r8_boss']:.1f} s")
+        if c["stack_common"] < CLASS_ALL_COMMON_BUDGET * p["r8_common"]:
+            out.append(f"{biome}: stack+class commons {c['stack_common']:.1f} s < {CLASS_ALL_COMMON_BUDGET:.0%} of r8 {p['r8_common']:.1f} s")
+        if c["stack_boss"] < CLASS_BOSS_FLOOR:
+            out.append(f"{biome}: stack+class boss {c['stack_boss']:.1f} s < {CLASS_BOSS_FLOOR:g} s")
+        if cycle == 0 and c["basic_kill"] < CLASS_BASIC_EDGE * c["parked_ttd_stack"]:
+            out.append(f"{biome}: basic-only kill {c['basic_kill']:.1f} s < {CLASS_BASIC_EDGE:.0%} of time-to-die {c['parked_ttd_stack']:.1f} s")
+        if not low <= c["parked_ttd_stack"] <= high:
+            out.append(f"{biome}: parked time-to-die {c['parked_ttd_stack']:.1f} s outside {low}-{high}")
+    return out
+
+
+def master_violations(classed: dict, mastered: dict) -> list:
+    """The full master tree (stress test on NG+1) shortens the stacked + graduated boss fight by at most MASTER_BOSS_BUDGET."""
+    out = []
+    for biome in mastered:
+        c, m = biome_summary(classed, biome), biome_summary(mastered, biome)
+        if m["stack_boss"] < MASTER_BOSS_BUDGET * c["stack_boss"]:
+            out.append(f"{biome}: master tree boss {m['stack_boss']:.1f} s < {MASTER_BOSS_BUDGET:.0%} of {c['stack_boss']:.1f} s")
+        if m["stack_boss"] < CLASS_BOSS_FLOOR:
+            out.append(f"{biome}: master tree boss {m['stack_boss']:.1f} s < {CLASS_BOSS_FLOOR:g} s")
+    return out
+
+
+def class_evaluate(ctx: Context, cls: ClassEvolution, runs: int, base_gear: dict, plain: dict) -> tuple:
+    """(classed, mastered) per cycle: graduations by level; mastered = classed + the full master tree on NG+1 (a stress
+    test: the tree needs level 50, past the modelled campaign)."""
+    cctx = class_context(ctx, cls)
+    classed = {c: evaluate(cctx, c, runs, class_gear(base_gear, cls, levels_of(plain[c]))) for c in plain}
+    mastered = {c: evaluate(cctx, c, runs, class_gear(base_gear, cls, levels_of(plain[c]), master=True)) for c in plain if c > 0}
+    return classed, mastered
+
+
+def class_report(plain: dict, classed: dict, mastered: dict) -> str:
+    lines = ["| Ciclo | Bioma (nível do chefe) | Chefe: r8 → r8+classe → pilha+classe (+árvore de mestre) | "
+             "2 comuns: r8 → r8+classe → pilha+classe | Parado, chefe mata em (pilha+classe) |", "|---|---|---|---|---|"]
+    for cycle in classed:
+        for biome in classed[cycle]:
+            p, c = biome_summary(plain[cycle], biome), biome_summary(classed[cycle], biome)
+            m = f" ({f1(biome_summary(mastered[cycle], biome)['stack_boss'])})" if cycle in mastered else ""
+            lines.append(f"| NG+{cycle} | {run_r8.NAMES[biome]} ({plain[cycle][biome]['levels'][1]}) | "
+                         f"{f1(p['r8_boss'])} → {f1(c['r8_boss'])} → **{f1(c['stack_boss'])}**{m} s | "
+                         f"{f1(p['r8_common'])} → {f1(c['r8_common'])} → **{f1(c['stack_common'])}** s | {f1(c['parked_ttd_stack'])} s |")
+    return "\n".join(lines)
+
+
+def class_main(ctx: Context, runs: int, base_gear: dict, results: dict) -> None:
+    cls = load_class_evolution()
+    classed, mastered = class_evaluate(ctx, cls, runs, base_gear, results)
+    print("\n## Evolução de classe: graduações + combo + buffs de grupo (Docs/ClassEvolution.md §6)\n")
+    print(class_report(results, classed, mastered))
+    print("\n## Orçamento da evolução de classe\n")
+    problems = [f"NG+{c}: {p}" for c in classed for p in class_violations(results[c], classed[c], c)]
+    problems += [f"NG+{c}: {p}" for c in mastered for p in master_violations(classed[c], mastered[c])]
+    print("\n".join(f"- {p}" for p in problems) if problems else "- dentro do orçamento")
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser()
@@ -875,6 +1222,8 @@ def main():
     lproblems = [f"NG+{c}: {p}" for c, r in literal.items() for p in violations(r, c)]
     print("\n" + ("\n".join(f"- {p}" for p in lproblems) if lproblems else "- dentro do orçamento"))
     wings_main(ctx, args.runs, base_gear, results, refined, curve)
+    class_main(ctx, args.runs, base_gear, results)
+    options_main(ctx, args.runs, base_gear, results, curve)
 
 
 if __name__ == "__main__":

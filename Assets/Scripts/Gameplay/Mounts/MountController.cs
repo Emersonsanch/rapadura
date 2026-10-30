@@ -703,6 +703,22 @@ namespace Rapadura.Gameplay.Mounts
                     Say(MountTexts.Format(Localization, MountTexts.AbilityScared, scared));
                     break;
                 }
+
+                default:
+                {
+                    // M3 wave 1 (MountWaveCatalog): every other kind.
+                    var context = new MountAbilityContext
+                    {
+                        Hero = gameObject, Session = _session, Buffs = _buffs, Stats = _stats, Motor = _motor, Controller = _characterController,
+                    };
+                    string toast = MountWaveAbilities.Execute(ability, context);
+                    if (!string.IsNullOrEmpty(toast))
+                    {
+                        Say(MountTexts.Format(Localization, toast, MountTexts.MountName(Localization, Definition)));
+                    }
+
+                    break;
+                }
             }
         }
 

@@ -54,6 +54,8 @@ namespace Rapadura.Tests.PlayMode
 
             // The campaign prologue would hold GameplayPause over the first world map; smoke tests drive the map directly.
             StoryPanelController.AutoPresent = false;
+            // Camera cutscenes (intro / outro) are presentation only: the flow tests never wait through them.
+            CutscenePlayerController.AutoPlay = false;
             yield return null;
         }
 
@@ -65,6 +67,7 @@ namespace Rapadura.Tests.PlayMode
             yield return UnloadSession("SmokeTestEmpty_" + (++_emptySceneCounter));
 
             StoryPanelController.AutoPresent = true;
+            CutscenePlayerController.AutoPlay = true;
 
             RestoreSaveFolder();
         }

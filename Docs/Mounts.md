@@ -405,8 +405,8 @@ Cozinha (README §10.3), quem decide é o primo que está montado, não quem peg
 
 **Histórias curtas para a campanha** (seguir a regra de escrever história ligada aos 5 primos):
 
-- **Primeira Sela:** depois do Lobo Alfa, a Vó Zefa leva os primos ao Haras do Seu Zé, velho amigo de estrada do
-  Vô Chico, e dá um pônei para os cinco. A Lavine escolhe o nome. A Maithe finge que não liga, mas é a primeira a
+- **Primeira Sela:** depois do Lobo Alfa, a Vó Zefa leva os primos ao Haras do Seu Tonico, velho amigo de estrada do
+  Vô Jorge, e dá um pônei para os cinco. A Lavine escolhe o nome. A Maithe finge que não liga, mas é a primeira a
   pedir para montar.
 - **Asas da Ventania (Maithe):** um filhote de hipogrifo caiu do ninho no Pico. A Maithe passa três dias subindo e
   descendo a serra levando comida até ele confiar nela. O Ícaro "ajuda" com um planador que não funciona.
@@ -604,6 +604,36 @@ dos primos com as falas.
 
 1. Terrestres sem física nova: Capivara (sem nado ainda), Bode, Ema, Cavalo Pampa, Jumento, Lobo-Guará, Caititu,
    Tamanduá, Tigre, Mamute, Unicórnio, Onça, Carbúnculo, Ema de Fogo, Kirin, Boitatá, Boi-Bumbá, Jabuti.
+   **Feito (onda 1):**
+   - **Ficha:** `MountWaveCatalog` (18 `MountSpec`, juntadas ao `MountCatalog` depois das 3 iniciais). Números do
+     §3 exatos, cada uma bate o orçamento da raridade (§2.4) e as 21 têm linha de atributos, efeito, modelo e
+     habilidade distintos (`MountWaveTests`). A Capivara é aquática no papel, mas só nada na onda 2.
+   - **Modelos:** procedurais, mesma receita quadrúpede das iniciais (`MountRecipe` + `MountWaveRecipes`/
+     `MountWaveDecor`: chifres, casco, tromba, lã, pintas, joia, crista de fogo, barba). As duas Emas são bípedes
+     (só `Leg_HL/HR`, o motor de passos detecta `Biped`). Passo macio (pata) ou casco por receita (`MountAudio.StepCueFor`).
+   - **Habilidades:** `MountWaveAbilities` (parte instantânea) + `MountAbilityEffects` no herói (imunidades, aura,
+     rastros, anel, casco, furtividade, lanterna), números puros em `MountWaveAbilityRules`. Furtividade do Kirin
+     entra pela `EnemyDetectionUtility.TargetDetectionScale` (raio de detecção ×0,2; atacar cancela). Salto da Onça:
+     +100% de crítico até o próximo golpe (no máximo 4 s). No mapa-múndi só o Fôlego de Ema age (galope grátis); as
+     outras só "se exibem" (aviso). Como a luta começa a pé (M1), as de combate valem na arena depois da luta e no online.
+   - **Lojas (ouro):** Haras da Vila: Capivara 55 e Cavalo Pampa 150 (depois de limpar a Floresta, no lugar do
+     "nível 10"). Ema 75 na Selaria do Deserto, Bode 70 na Forja da Montanha e Tamanduá 140 nas Lamparinas das
+     Cavernas (depois do Deserto), enquanto a Feira de Bichos, o Curral do Pico e a Toca do Tratador não existem.
+     Apitos em `Resources/Items/item_whistle_mount_*`.
+   - **Drops:** `MountDropRules` (tabela inteira do §3.6; linhas de espécies de ondas futuras são puladas sem
+     sortear número). `MountCollection` ouve `EnemyDiedEvent` e rola com `DropRandom` injetável (offline o jogo,
+     online o servidor; o cliente nunca sorteia). **Mudança:** o drop entra direto na coleção (origem `drop`), em vez
+     de virar um "Apito" na mochila, para uma mochila cheia nunca perder um 0,2%. Noite = `TimeOfDayManager` (Lobo-Guará
+     0,8%, Onça só à noite).
+   - **Fitas do Laço:** cada vitória contra um dos 4 chefes dá 1 fita daquele chefe (salva em `bossRibbonIds/Counts`);
+     `MountCollection.RedeemRibbons` troca 25 pela Rara e 80 pela Épica (Lendário nunca). Falta o botão no Haras.
+   - **Missão/conquista/segredo/evento:** `MountSourceHooks` com os ids `quest_agua_pro_jumento`,
+     `achievement_amigo_da_caipora`, `achievement_paciencia_de_jabuti`, `secret_mata_que_nao_queima` e
+     `event_festa_junina`. A coleção ouve `QuestCompletedEvent`, `AchievementUnlockedEvent` e `SecretClaimedEvent` e dá
+     a montaria uma vez só; quem escrever a missão/conquista/segredo só precisa usar o id. A loja da Festa Junina chama
+     `MountCollection.BuyWithPrendas` (Ema de Fogo 90, Boi-Bumbá 250). O conteúdo (missão, conquistas, segredo,
+     evento com prendas) ainda não existe.
+   - **Textos:** `MountWaveTexts` (descrição com as historinhas dos primos, habilidades, apitos, avisos) em en + pt-BR.
 2. Física nova: nado (Capivara, Cavalo-Marinho), túnel e areia (Tatu, Escaravelho), teleporte (Sleipnir).
 3. Voadores: Hipogrifo (planar), Grifo (voo curto), Pégaso (voo livre), Fênix, Dragão (ovo e choco).
 4. Drops nos chefes e bichos (`EnemyLootRoller`, bônus de chefe), Fitas do Laço, conquistas e missões novas, itens
@@ -625,7 +655,7 @@ estrebaria em cada cidade, troca com as regras do §5.3, montarias nos eventos a
    loot normal), ou deixar os drops de chefe só para o NG+ e o online?
 3. **Chances de drop:** 0,4% (Incomum de bicho comum), 2% (Raro de chefe), 0,8% (Épico), 0,2–0,3% (Lendário), com
    as Fitas do Laço (25/80) como proteção. Está bom, mais raro (mais "MU") ou mais generoso (público infantil)?
-4. **Nomes das lojas e das cidades:** Haras da Vila (Seu Zé, amigo do Vô Chico), Feira de Bichos do Oásis, Curral
+4. **Nomes das lojas e das cidades:** Haras da Vila (Seu Tonico, amigo de estrada do Vô Jorge; não confundir com o Seu Zé Caçador), Feira de Bichos do Oásis, Curral
    do Pico e Toca do Tratador são provisórios até as cidades do Deserto, da Montanha e das Cavernas terem nome
    (FASE 12.3a).
 5. **De quem é a montaria:** da conta (todos os primos / personagens da conta usam, como o Baú) ou de cada

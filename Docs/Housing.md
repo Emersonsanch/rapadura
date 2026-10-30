@@ -1,6 +1,6 @@
 # Rapadura — Casa própria, lojas e guarda-roupa
 
-> Documento de design da **Fase 15** do `TODO.md` (pedido do usuário, 2026-10-29). Só design: nada disto existe em código ainda.
+> Documento de design da **Fase 15** do `TODO.md` (pedido do usuário, 2026-10-29). Começou como só design; o que já existe em código está nas seções "Estado no código" (§7.8 = H3 Fontes, §9.8 = H5 Guarda-roupa).
 > Catálogos: [`Docs/Housing/CatalogoCasa.md`](Housing/CatalogoCasa.md) (580 itens de casa) e [`Docs/Housing/CatalogoRoupas.md`](Housing/CatalogoRoupas.md) (234 roupas, acessórios, tinturas e visuais de arma).
 > Os catálogos são o **conjunto inicial de lançamento**, não a lista de tudo o que pode existir. Itens novos entram por temporada/evento com ID novo.
 >
@@ -243,7 +243,7 @@ A proposta é um **`HouseMeshBuilder`** (irmão desses dois) que monta a casa a 
 | **Caixa de correio** | `casa_util_024` | Cartas e encomendas (§11.6) **[online]**. |
 | **Quadro de avisos da família** | `casa_util_027` | Mostra as 3 diárias do dia (`DailyQuestService`) e o estoque do Mascate. |
 | **Sino da porteira** | `casa_util_026` | **[online]** Quem está de fora toca o sino para pedir para entrar, e o dono recebe o aviso. **[offline]** É assim que as visitas de NPC chegam. |
-| **Boneco de treino de palha** | `casa_quintal_037` | Treino tranquilo, com limite (§11.8). |
+| **Boneco de treino de palha** | `casa_quintal_037` | Testar os poderes: dano por golpe, crítico e DPS, sem XP (§11.8). |
 | **Poço** | `casa_quintal_001` | Água para a horta (§11.9). |
 | **Balcão de vendas do ajudante** | `casa_util_031` | O ajudante que vende enquanto você está offline (§11.7) **[online] [proposto]**. |
 
@@ -406,6 +406,15 @@ Toda receita de móvel conta para "Mestre Artesão".
 - Estoque de 6 itens por parada: 3 do grupo dele ("Loja: Mascate Seu Bento" no catálogo), 2 Raros sorteados de qualquer loja e, com 50% de chance, 1 Épico. Cada item tem 1 unidade por jogador.
 - O sorteio usa semente pela data, como o `DailyQuestService` faz hoje. **[online]** É o mesmo estoque para o servidor inteiro, com limite por conta.
 
+### 7.8 Estado no código (H3 — Fontes) **[feito, 2026-10-30]**
+
+- **Drop de inimigo e chefe:** `HouseDropRules` (puro, RNG injetada, roda igual no servidor) + `HouseService.Sources.cs`. É uma **rolagem a mais**, separada do `EnemyLootRoller` (não mexe nas tabelas dele): o `HouseService` ouve o `EnemyDiedEvent` e sorteia com os números do §7.2 (4% / 5% à noite; grupo = "Drop: <inimigo>" peso 3 + lojas da cidade do bioma até Raro peso 1; raridade cai um nível até achar). Chefe: placa garantida na 1ª vitória (`BossTrophies`), 1 rolagem + 25% de outra, e proteção de azar de 25 vitórias sem Lendário (`HouseBossRecord.sinceLegendary`).
+- **Missões, diárias, conquistas:** `HouseRewardRules` lê a coluna "Origem" do catálogo (+ os 2 extras regionais da Floresta). Cada uma paga **uma vez por save** (`HouseSourceBook.Claim`); diária dá a "Caixinha da Vó" toda vez e o item fixo só na primeira.
+- **Crafting:** `HouseCraftRules` (15 receitas: as 7 do §7.6 com os números do doc, mais 5 da oficina do Ícaro/cortina/música e 3 entradas de guarda-roupa com números **propostos**). Painel `HouseWorkbenchPanel`, aberto ao tocar numa Bancada/Forja/Fogão montado na casa; paga da mochila + Baú da casa, tudo ou nada. A Lareira pede a Bancada de mestre e o Senhor da Guerra derrotado (a lembrança não é gasta). As receitas do **Tear** precisam de material de chefe que ainda não existe como item: ficam de fora.
+- **Entrega:** tudo vai para o **Depósito** (`HouseService.GrantItem`, nunca na mochila, nunca perdido), com o texto dourado "+ Encomenda: …" e o toast "Encomenda para a casa!" (`HouseGrantToastRelay`, reaproveita o `SecretToastController`). Evento `HouseItemGrantedEvent`; `HouseRecipeCraftedEvent` para o "Mestre Artesão".
+- **Save:** `HouseSaveState.sources` (versão 3); saves antigos carregam sem registro de chefe e sem nada pago.
+- Testes: `HouseSourcesTests`.
+
 ---
 
 ## 8. Lojas, NPCs e moedas
@@ -518,6 +527,16 @@ Está no catálogo, coluna "Origem". Resumo das 234 entradas:
 | Épico | 29 |
 | Lendário | 27 |
 
+### 9.8 Estado no código (H5 — Guarda-roupa) **[feito, 2026-10-30]**
+
+- **Dados:** `CatalogoRoupas.md` é a fonte. "Rapadura ▸ Housing ▸ Import Wardrobe Catalog" (`WardrobeCatalogImporter` + `WardrobeCatalogImport`) gera `WardrobeCatalogData.g.cs` (234 entradas), com nomes em inglês do `CatalogoRoupas.en.tsv`; o teste falha se a tabela gerada estiver velha. Textos: `WardrobeTexts` (nomes/descrições) e `WardrobeUiTexts` (tela).
+- **Regras:** `WardrobeBook` (puro): Coleção da conta (desbloqueio para sempre; "Pés descalços" já vem), aparência por primo e por camada (só visual desbloqueado, da mesma camada, e conjunto de primo só no dono), "esconder", tinta gasta por canal (principal/detalhe), sabão de coco grátis, 3 trajes por primo (6 com o `casa_util_007` montado). **Nada disso mexe em atributo**: o guarda-roupa não conhece a mochila nem o equipamento.
+- **Fontes** (`WardrobeSourceRules` + `WardrobeService`): missão/diária/conquista/relíquia (uma vez por save); chefe com 1 visual garantido na 1ª vitória e 35% depois (só o que falta; tinta sempre pode); inimigo comum 3% (o grupo "comuns da Floresta e do Deserto" só nesses biomas); **todo equipamento saqueado desbloqueia a aparência padrão** do primo (§9.3, ex.: Peito Raro na Maithe → "Túnica de linho verde bordada de vento"); Missões da Casa e receitas de guarda-roupa chegam pela lista `owedWardrobe` da casa; **lojas**: o `CityShopService.OutfitResolver` agora é do guarda-roupa (`WardrobeShopBridge`), então as linhas de roupa da Costureira (e das outras lojas) aparecem no balcão; comprar dá o visual (ou a tinta) e o "vale" sai da mochila na hora. Um visual que já está na Coleção sai do balcão. **Ainda sem fonte:** eventos (Junina/Natal/Carnaval) e o Tear; essas entradas ficam trancadas.
+- **Tela:** `WardrobePanel`, ao tocar num guarda-roupa montado em "Minha casa": camadas com ◀ ▶ entre os visuais desbloqueados, esconder/mostrar, "Pintar principal/detalhe" com a tinta na mão, sabão de coco, pote de tintas e trajes. Toast "Visual novo no guarda-roupa!" pelo `HouseGrantToastRelay`.
+- **Arte (honesto):** os heróis são uma malha só (Meshy `*_RO`), sem peças separadas nem malhas modulares. A v1 (`WardrobeVisuals`, chamada pelo `PlayerVisualSwapper` ao trocar de herói e a cada `WardrobeChangedEvent`) faz só isto: o visual do **Peito** tinge o corpo (cor da tinta principal, senão uma cor por raridade) por `MaterialPropertyBlock`, por cima do tom da graduação quando houver; **Cabeça**, **Rosto/Pescoço** e **Costas** ganham um chapéu, lenço ou bornal low-poly de primitivas preso ao osso humanoide (cabeça/pescoço/peito), com a tinta de detalhe na aba. **Pernas, Pés, Acessório, Caramelo e visuais de arma** ficam registrados e aparecem na tela, mas ainda **sem mudança 3D** (os heróis não têm malha de arma separada; a v1 só tinge um filho com nome de arma, se existir). A v2 com malhas por conjunto continua na Fase 11.
+- **Save:** chave `"Wardrobe"` (`WardrobeSaveState`, versão 1), restaurada antes da casa; ids que somem do catálogo são descartados.
+- Testes: `WardrobeTests`.
+
 ---
 
 ## 10. Economia
@@ -589,7 +608,7 @@ São mecânicas comuns em MMOs de casa do tipo que o usuário citou como inspira
 | 11.5 | **Cama: dormir é sair com segurança** | Deitar na cama da própria casa → "Dormir até amanhã?" = logout seguro **[online]** ou salvar e sair **[offline]**, e carrega o "Descansado" (§6.1). A **cama de casal** (`casa_quarto_001`) deixa o co-dono dormir também, cada um com o próprio descanso. | Parcial (o descanso vale offline; o logout seguro é do online) |
 | 11.6 | **Caixa de correio** | Cartas e encomendas entre jogadores: carta de texto (frases prontas + texto filtrado) e encomenda de até 5 itens negociáveis ou ouro. A entrega leva "um dia de carroça" (1 hora real), o que freia troca suspeita. Item de conquista não vai pelo correio. A Vó Zefa também manda cartas (avisos do jogo). | Sim (offline: só cartas da Vó Zefa) |
 | 11.7 | **Ajudante da casa** | Um parente da vila ("primo de segundo grau" ou "comadre ajudante") fica no balcão (`casa_util_031`). Ele guarda até 10 itens negociáveis e **vende pelo preço que o dono marcar** para visitantes enquanto o dono está offline, com taxa de 5%. **Riscos para a economia:** vira mercado paralelo à Casa de Leilões, facilita lavagem de ouro de bots e pode esvaziar as lojas de NPC. **Freios:** preço mínimo = 25% de referência e máximo = 3× referência; 10 vendas por dia; só para quem tem acesso à casa; tudo registrado. Alternativa mais simples: o ajudante só põe os itens no leilão por você. | Sim |
-| 11.8 | **Boneco de treino de palha** | Treino de "postura" no quintal: o primo pratica golpes num boneco, sem dano de verdade (a cidade é zona segura, então não é combate). Dá XP lento: **10% da XP de uma luta comum do bioma por minuto, com teto de 30 minutos por dia**. Não dá loot nem ouro. **[online]** só conta com o jogador online e mexendo de vez em quando (contra bot parado). | Não |
+| 11.8 | **Boneco de treino de palha** | **Decidido (2026-10-30): serve para testar os poderes, não dá XP.** Tocar no boneco em "Minha casa" abre o painel `TrainingDummyPanel`: o primo ativo escolhe o ataque básico ou um poder de ataque aprendido (no nível dele) e vê uma sessão de 10 s (`TrainingDummyRules.SessionSeconds`) com **dano por golpe** (normal e crítico), **críticos** (quantos, taxa e chance) e **dano por segundo**, usando as fórmulas reais (`OutgoingDamage`: nível, AttackDamage fixo e %, crítico; `DamageCalculator`: armadura do boneco = 0, arredondamento, mínimo 1). Com o herói vivo na cena, conta equipamento e buffs; no mapa, conta nível, Destreza/Poder Arcano e nível dos poderes do save. **Não dá XP, ouro, loot, nem gasta mana ou durabilidade** (`TrainingDummyRules.ExperienceGranted = 0`; a cidade é zona segura). Cada primo comenta o DPS (o Joaquim se gaba dos números). Regra pura e com semente (`TrainingDummyTests`). **[online]** o servidor pode rodar a mesma sessão; nada a proteger contra bot porque não rende nada. | Não |
 | 11.9 | **Plantas que pedem água** | Plantas e canteiros têm um "humor": felizes até 3 dias sem água, depois **murcham** (ficam caídas, perdem metade do conforto). **Nunca morrem nem somem.** Uma regada com o regador (água do poço) volta tudo na hora. A chuva do `WeatherSystem` rega o quintal sozinha. Canteiros regados dão colheita (erva, ingredientes da cozinha). | Não |
 | 11.10 | **Troféus de chefe na parede** | Em vez de bicho empalhado, **cabeças entalhadas em madeira** no estilo carranca, mais estátuas em paz e placas. Combina com a história (os chefes são libertados) e com o tom infantil. São 4 cabeças, uma por chefe, Épicas, no catálogo. | Não |
 | 11.11 | **Casa em cada cidade + sede do clã** | Terrenos em todas as 4 cidades, com 1 casa principal por conta (§1) **[proposto]**. **Sede do clã:** um casarão especial por clã, com nível próprio, baú do clã por cargo, mural do brasão, sala de reunião e troféus de guerra de clãs. Cargos do clã substituem a lista de convidados. | Sim |
@@ -689,7 +708,7 @@ Regras:
 | **H3 — Fontes** | Rolagem de item de casa no `EnemyLootRoller` (grupo por inimigo + loja do bioma; chefes com placa garantida e proteção de azar); `HouseItemGrantedEvent` + toast; itens nas missões regionais/pessoais/diárias; conquistas; receitas de móveis | chances com RNG injetada, entrega no Depósito sem tocar na mochila, garantia de 1ª vitória, contador de azar |
 | **H4 — Subidas N2–N5** | Kits de módulos N2–N5; custos e requisitos; cenas curtas da família; Missões da Casa 2–6 | nada se perde na subida; requisitos de chefe/nível |
 | **H5 — Guarda-roupa** | Coleção de aparências; camadas Rosto/Costas/Caramelo; aparência padrão dos itens procedurais; tintas; visuais de arma; trajes salvos; v1 de arte (cor + anexos em osso) | aparência não muda stat; desbloqueio permanente; tinta gasta |
-| **H6 — Vida na casa** | Conforto + "Descansado"; conjuntos e efeitos; parede de troféus; vitrine de relíquias; estante do Caderno; Caramelo em casa; livro de visitas; visitas de NPC; plantas e regador; boneco de treino | cálculo do conforto (limite de 2 cópias), faixas, recarga diária, teto do boneco |
+| **H6 — Vida na casa** | Conforto + "Descansado"; conjuntos e efeitos; parede de troféus; vitrine de relíquias; estante do Caderno; Caramelo em casa; livro de visitas; visitas de NPC; plantas e regador; boneco de treino | cálculo do conforto (limite de 2 cópias), faixas, recarga diária, sessão do boneco (dano/crítico/DPS, sem XP) |
 | **H7 — Eventos** | Prendas; Barraca de Prendas; enfeites sazonais com guardar/voltar | evento abre e fecha pelo relógio; item fica após o evento |
 | **H8 — Online** | Casas instanciadas; convites, lista, permissões, expulsar, snapshot/desfazer, *log*; co-dono; listas por porta; correio; Casa de Leilões; ajudante (se aprovado); conta da lenha; quadro de terrenos; sede do clã; venda de casa | matriz de permissões (visitante nunca abre baú), validação no servidor, concorrência de edição, carga com N casas |
 
@@ -709,7 +728,7 @@ Regras:
 10. **NPCs novos:** Mestre Damião, Seu Lázaro, Dona Fátima, Comadre Neném, Seu Bené e Dona Rosa. Reaproveitar os NPCs que já existem (Dona Cida no Armarinho, Seu Bento como Mascate, Mestre Tonho na Forja, Benedita nas Lamparinas) está ok?
 11. **Moeda de evento (prendas)** e **loja paga só de cosméticos** (Fase 12.1).
 12. **Arte das roupas:** começar pela v1 (cor + anexos em osso) e deixar malhas modulares para depois?
-13. **Boneco de treino:** dar XP lenta (proposta, com teto) ou ser só enfeite/animação?
+13. ~~**Boneco de treino:** dar XP lenta (proposta, com teto) ou ser só enfeite/animação?~~ **Decidido (2026-10-30):** nem um nem outro — serve para **testar os poderes** (dano por golpe, crítico, DPS) e **não dá XP** (§11.8).
 
 
 ## Decisões do usuário registradas (2026-10-29)

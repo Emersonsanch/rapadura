@@ -76,6 +76,7 @@ namespace Rapadura.Audio
             map.AddBinding(SfxTrigger.EnemyWindup, "", "enemy.windup");
             map.AddBinding(SfxTrigger.HeroLanding, "", "hero.land");
             map.AddBinding(SfxTrigger.TitleAmbience, "", "ambience.title");
+            map.AddBinding(SfxTrigger.HeroFootstep, "", "hero.step");
 
             map.AddCue(new Cue { id = "combat.hit", category = AudioCategory.Sfx, volume = 0.55f, cooldown = 0.05f, maxVoices = 4, pausable = true, spatial = true, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Thud, frequency = 180f });
             map.AddCue(new Cue { id = "combat.crit", category = AudioCategory.Sfx, volume = 0.8f, cooldown = 0.08f, maxVoices = 3, pausable = true, spatial = true, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Crunch, frequency = 260f });
@@ -136,6 +137,7 @@ namespace Rapadura.Audio
             map.AddCue(new Cue { id = "combat.thorns", category = AudioCategory.Sfx, volume = 0.35f, cooldown = 0.12f, maxVoices = 2, pausable = true, spatial = true, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Prick, frequency = 2800f, pitchJitter = 0.1f, volumeJitter = 0.15f });
             map.AddCue(new Cue { id = "enemy.windup", category = AudioCategory.Sfx, volume = 0.2f, cooldown = 0.3f, maxVoices = 2, pausable = true, spatial = true, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Inhale, frequency = 650f, pitchJitter = 0.12f, volumeJitter = 0.2f });
             map.AddCue(new Cue { id = "hero.land", category = AudioCategory.Sfx, volume = 0.22f, cooldown = 0.25f, maxVoices = 1, pausable = true, spatial = false, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Thud, frequency = 95f, pitchJitter = 0.08f, volumeJitter = 0.2f });
+            map.AddCue(new Cue { id = "hero.step", category = AudioCategory.Sfx, volume = 0.09f, cooldown = 0.08f, maxVoices = 2, pausable = true, spatial = false, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Thud, frequency = 150f, pitchJitter = 0.15f, volumeJitter = 0.3f });
             // Caramelo (companion dog, CarameloCompanion): played by cue id, no trigger of their own.
             map.AddCue(new Cue { id = "pet.bark", category = AudioCategory.Sfx, volume = 0.4f, cooldown = 0.35f, maxVoices = 1, pausable = true, spatial = true, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Bark, frequency = 420f, pitchJitter = 0.08f, volumeJitter = 0.15f });
             map.AddCue(new Cue { id = "pet.yip", category = AudioCategory.Sfx, volume = 0.35f, cooldown = 0.3f, maxVoices = 1, pausable = false, spatial = false, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Bark, frequency = 780f, pitchJitter = 0.1f, volumeJitter = 0.1f });

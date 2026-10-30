@@ -123,6 +123,32 @@ namespace Rapadura.UI.Housing
         public const string ShelfUnavailable = "ui.house_life.shelf_unavailable";
         public const string PetNap = "ui.house_life.pet_nap";
         public const string Dummy = "ui.house_life.dummy";
+        public const string DummyTitle = "ui.house_life.dummy_title";
+        /// <summary>{0} = hero name, {1} = hero level.</summary>
+        public const string DummyHero = "ui.house_life.dummy_hero";
+        public const string DummyNoHero = "ui.house_life.dummy_no_hero";
+        public const string DummyPick = "ui.house_life.dummy_pick";
+        public const string DummyBasicAttack = "ui.house_life.dummy_basic_attack";
+        /// <summary>{0} = skill name, {1} = skill level.</summary>
+        public const string DummySkill = "ui.house_life.dummy_skill";
+        public const string DummyNoSkills = "ui.house_life.dummy_no_skills";
+        /// <summary>{0} = attack name, {1} = session seconds.</summary>
+        public const string DummyResultHeader = "ui.house_life.dummy_result_header";
+        /// <summary>{0} = hits, {1} = average per hit, {2} = normal hit, {3} = critical hit.</summary>
+        public const string DummyPerHit = "ui.house_life.dummy_per_hit";
+        /// <summary>{0} = crits, {1} = crit rate %, {2} = crit chance %.</summary>
+        public const string DummyCrits = "ui.house_life.dummy_crits";
+        /// <summary>{0} = damage per second, {1} = total damage.</summary>
+        public const string DummyDps = "ui.house_life.dummy_dps";
+        /// <summary>{0} = the hits, e.g. "18 · 27! · 18".</summary>
+        public const string DummyLastHits = "ui.house_life.dummy_last_hits";
+        public const string DummyNoXp = "ui.house_life.dummy_no_xp";
+        public const string DummySourceNote = "ui.house_life.dummy_source_note";
+        private const string DummyReactionPrefix = "ui.house_life.dummy_reaction.";
+
+        /// <summary>The cousin's line after a session ({0} = damage per second); a generic one without a hero.</summary>
+        public static string DummyReactionKey(Rapadura.Gameplay.Characters.CharacterId? hero) =>
+            DummyReactionPrefix + (hero.HasValue ? hero.Value.ToString().ToLowerInvariant() : "any");
         public const string Ok = "ui.house_life.ok";
 
         public static string SceneKey(int level) => ScenePrefix + level;
@@ -244,7 +270,27 @@ namespace Rapadura.UI.Housing
                 E(ShelfOpening, "Opening Vó's Notebook…", "Abrindo o Caderno da Vó…"),
                 E(ShelfUnavailable, "The Notebook can't open right now.", "O Caderno não abre agora."),
                 E(PetNap, "Caramelo is taking a nap. Zzz… His tail still wags.", "O Caramelo está tirando uma soneca. Zzz… O rabo ainda abana."),
-                E(Dummy, "A straw training dummy. For now it's just decoration — Joaquim swears he'll train tomorrow.", "Um boneco de treino de palha. Por enquanto é só enfeite — o Joaquim jura que vai treinar amanhã."),
+                E(Dummy, "A straw training dummy. Test your powers on it: it gives no XP, only the numbers.", "Um boneco de treino de palha. Teste seus poderes nele: não dá XP, só mostra os números."),
+                E(DummyTitle, "Straw training dummy", "Boneco de treino de palha"),
+                E(DummyHero, "{0}, level {1}", "{0}, nível {1}"),
+                E(DummyNoHero, "Pick a cousin first to test the powers.", "Escolha um primo antes de testar os poderes."),
+                E(DummyPick, "Pick an attack to try on the dummy:", "Escolha um golpe pra testar no boneco:"),
+                E(DummyBasicAttack, "Basic attack", "Ataque básico"),
+                E(DummySkill, "{0} (lv. {1})", "{0} (nv. {1})"),
+                E(DummyNoSkills, "No attack skill learned yet: only the basic attack.", "Nenhum poder de ataque aprendido ainda: só o ataque básico."),
+                E(DummyResultHeader, "{0} — {1} seconds on the dummy", "{0} — {1} segundos no boneco"),
+                E(DummyPerHit, "Hits: {0} · per hit: {1} (normal {2}, critical {3})", "Golpes: {0} · por golpe: {1} (normal {2}, crítico {3})"),
+                E(DummyCrits, "Crits: {0} ({1}%) · crit chance: {2}%", "Críticos: {0} ({1}%) · chance de crítico: {2}%"),
+                E(DummyDps, "Damage per second: {0} · total: {1}", "Dano por segundo: {0} · total: {1}"),
+                E(DummyLastHits, "Hits: {0}", "Golpes: {0}"),
+                E(DummyNoXp, "The dummy gives no XP, gold or loot: it's just for testing your powers.", "O boneco não dá XP, ouro nem loot: é só pra testar seus poderes."),
+                E(DummySourceNote, "Counts level, attributes and skill levels (gear bonuses add up in battle).", "Conta nível, atributos e nível dos poderes (os bônus dos equipamentos somam na luta)."),
+                E(DummyReactionKey(Rapadura.Gameplay.Characters.CharacterId.Maithe), "Maithe: \"{0} per second, and every arrow where I aimed.\"", "Maithe: \"{0} por segundo, e toda flecha onde eu mirei.\""),
+                E(DummyReactionKey(Rapadura.Gameplay.Characters.CharacterId.Maria), "Maria: \"{0} per second… sorry, little dummy. I'll patch you up later.\"", "Maria: \"{0} por segundo… desculpa, bonequinho. Depois eu te remendo.\""),
+                E(DummyReactionKey(Rapadura.Gameplay.Characters.CharacterId.Joaquim), "Joaquim: \"{0} per second! Told you I'd train. Write it down, Ícaro.\"", "Joaquim: \"{0} por segundo! Falei que ia treinar. Anota aí, Ícaro.\""),
+                E(DummyReactionKey(Rapadura.Gameplay.Characters.CharacterId.Icaro), "Ícaro: \"{0} per second. With a little gear I can improve that.\"", "Ícaro: \"{0} por segundo. Com uma engrenagenzinha eu melhoro isso.\""),
+                E(DummyReactionKey(Rapadura.Gameplay.Characters.CharacterId.Lavine), "Lavine: \"{0} per second! The dummy is my friend now. A sore friend.\"", "Lavine: \"{0} por segundo! O boneco agora é meu amigo. Um amigo dolorido.\""),
+                E(DummyReactionKey(null), "{0} damage per second. The straw holds on.", "{0} de dano por segundo. A palha aguenta firme."),
                 E(Ok, "OK", "OK"),
             };
 
@@ -336,8 +382,8 @@ namespace Rapadura.UI.Housing
                     new[] { "I prayed a little for {0}. Things last longer that way.", "I brought herb tea. Drink it before it gets cold!", "This house smells like a hug." },
                     new[] { "Rezei um pouquinho pro(a) {0}. Assim dura mais.", "Trouxe chá de erva. Bebe antes de esfriar!", "Esta casa tem cheiro de abraço." }),
                 ("Joaquim", "Joaquim", "Joaquim",
-                    new[] { "{0}? I'd have made it stronger. But it's pretty.", "Anything heavy to carry? I'm here.", "Tomorrow I'll train on that dummy. For real." },
-                    new[] { "{0}? Eu faria mais forte. Mas tá bonito.", "Tem coisa pesada pra carregar? Tô aqui.", "Amanhã eu treino naquele boneco. Sério." }),
+                    new[] { "{0}? I'd have made it stronger. But it's pretty.", "Anything heavy to carry? I'm here.", "Did you see my numbers on the dummy? Nobody hits harder. For real." },
+                    new[] { "{0}? Eu faria mais forte. Mas tá bonito.", "Tem coisa pesada pra carregar? Tô aqui.", "Viu meus números no boneco? Ninguém bate mais forte. Sério." }),
                 ("Icaro", "Ícaro", "Ícaro",
                     new[] { "I could put a little engine in {0}. Just a small one.", "I measured the house: it fits three more inventions.", "Don't touch the gear on the shelf, it's calibrated." },
                     new[] { "Dava pra pôr um motorzinho no(a) {0}. Só um pequeno.", "Medi a casa: cabem mais três invenções.", "Não mexe na engrenagem da estante, tá calibrada." }),

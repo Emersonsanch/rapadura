@@ -126,13 +126,12 @@ namespace Rapadura.Tests
             InventoryManager bag = NewBag();
             bag.AddItem(_sword, 1);
             bag.AddItem(_patua, 1);
-            var lostAndFound = new LostAndFoundList();
             var state = new DeathProtectionState();
             state.Bless();
             var context = new DeathPenaltyContext(10, 200, 236);
 
             // 1st death: the Patuá is used up, the Bênção stays, nothing lost even with a sure drop roll.
-            DeathPenaltyResult first = DeathPenaltyService.Apply(context, bag, lostAndFound, state, new AlwaysRandom(), Resolve);
+            DeathPenaltyResult first = DeathPenaltyService.Apply(context, bag, state, new AlwaysRandom(), Resolve);
             Assert.AreEqual(DeathProtection.Patua, first.Protection);
             Assert.AreEqual(0, first.ExperienceLost);
             Assert.IsFalse(first.Drop.Dropped);
@@ -140,7 +139,7 @@ namespace Rapadura.Tests
             Assert.IsTrue(state.IsBlessed);
 
             // 2nd death: the Bênção acts and ends; 40% of the XP loss, no drop.
-            DeathPenaltyResult second = DeathPenaltyService.Apply(context, bag, lostAndFound, state, new AlwaysRandom(), Resolve);
+            DeathPenaltyResult second = DeathPenaltyService.Apply(context, bag, state, new AlwaysRandom(), Resolve);
             Assert.AreEqual(DeathProtection.Blessing, second.Protection);
             Assert.AreEqual(5, second.ExperienceLost); // 12 × 0.4 = 4.8
             Assert.IsFalse(second.Drop.Dropped);
@@ -148,11 +147,12 @@ namespace Rapadura.Tests
             Assert.AreEqual(1, bag.GetTotalCount(_sword.ItemId));
 
             // 3rd death: unprotected, full loss and the 9% roll (forced here) takes the sword.
-            DeathPenaltyResult third = DeathPenaltyService.Apply(context, bag, lostAndFound, state, new AlwaysRandom(), Resolve);
+            DeathPenaltyResult third = DeathPenaltyService.Apply(context, bag, state, new AlwaysRandom(), Resolve);
             Assert.AreEqual(DeathProtection.None, third.Protection);
             Assert.AreEqual(12, third.ExperienceLost);
             Assert.IsTrue(third.Drop.Dropped);
-            Assert.AreEqual(1, lostAndFound.Count);
+            Assert.AreEqual(1, third.Drop.Item.quantity);
+            Assert.AreEqual(0, bag.GetTotalCount(_sword.ItemId), "lost for good");
         }
 
         // ------------------------------------------------------------------

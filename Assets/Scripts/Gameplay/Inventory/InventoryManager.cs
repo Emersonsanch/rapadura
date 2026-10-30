@@ -52,6 +52,13 @@ namespace Rapadura.Gameplay.Inventory
             // Old saves lack the keys: 0 = a plain +0 item.
             public int refineLevel;
             public int refineOptionLevel;
+
+            // MU-style options of the equipped item (InventorySlotData.excellentMask/luck/ancientSetId/sockets,
+            // ItemOptionRules). Old saves lack the keys: 0 / false / null = a plain piece.
+            public int excellentMask;
+            public bool luck;
+            public string ancientSetId;
+            public string[] sockets;
         }
     }
 
@@ -141,6 +148,12 @@ namespace Rapadura.Gameplay.Inventory
             if (_buffController == null)
             {
                 _buffController = GetComponent<BuffController>();
+            }
+
+            // Durability (FASE 16): the hero's gear wears with attacks, hits and deaths. Only on the player object.
+            if (CompareTag("Player") && GetComponent<Rapadura.Gameplay.Items.Durability.EquipmentWearTracker>() == null)
+            {
+                gameObject.AddComponent<Rapadura.Gameplay.Items.Durability.EquipmentWearTracker>();
             }
         }
 
@@ -549,6 +562,7 @@ namespace Rapadura.Gameplay.Inventory
             slot.generatedAffixValues = instance.AffixValues;
             slot.generatedName = instance.GeneratedName;
             slot.generatedRarity = instance.Rarity;
+            instance.Options.ApplyTo(slot);
 
             EventBus.Publish(new InventoryChangedEvent());
             return true;
@@ -556,7 +570,7 @@ namespace Rapadura.Gameplay.Inventory
 
         /// <summary>
         /// Puts a copy of an existing item back in the bag exactly as it is (quantity, durability, affixes, name, rarity):
-        /// the chest's "take", the Achados e Perdidos buy-back, unequipping a generated roll. All or nothing
+        /// the chest's "take", unequipping a generated roll. All or nothing
         /// (<see cref="CanFitCopy"/>): a generated roll or non-stackable piece gets an area of its own, a plain stack fills
         /// existing stacks first. <paramref name="data"/> itself is not changed.
         /// </summary>
@@ -1077,6 +1091,13 @@ namespace Rapadura.Gameplay.Inventory
                 return;
             }
 
+            // A broken piece (durability 0, DurabilityRules) gives no stats at all until the ferreiro repairs it.
+            if (Rapadura.Gameplay.Items.Durability.DurabilityRules.IsBroken(item, equippedData))
+            {
+                RefreshAncientSetBonuses();
+                return;
+            }
+
             // Base modifiers and affixes each get their own sub-key under "equip_<slot>/": they used to
             // share "equip_<slot>", so an affix on the same stat as a base modifier (or a second base
             // modifier on the same stat) replaced it in BuffController.ApplyEffect instead of stacking.
@@ -1136,6 +1157,83 @@ namespace Rapadura.Gameplay.Inventory
 
             ApplyRefineEffects(item, equippedData, equipSlot);
             ApplyWingEffects(item, equipSlot);
+            ApplyItemOptionEffects(item, equippedData, equipSlot);
+            RefreshAncientSetBonuses();
+        }
+
+        /// <summary>BuffController source prefix of the ancient set bonuses (whole equipment, not one slot).</summary>
+        public const string AncientSetSourcePrefix = "ancient_set/";
+
+        /// <summary>
+        /// The piece's own MU-style options (<see cref="Rapadura.Gameplay.Items.Options.ItemOptionRules.PieceModifiers"/>:
+        /// excellent lines, luck, engraved sockets), summed per (stat, application) under <c>equip_&lt;slot&gt;/option/*</c>.
+        /// </summary>
+        private void ApplyItemOptionEffects(ItemDefinition item, InventorySlotData equippedData, EquipmentSlot equipSlot)
+        {
+            if (_buffController == null || equippedData == null || !equippedData.HasItemOptions)
+            {
+                return;
+            }
+
+            int index = 0;
+            foreach (KeyValuePair<(StatType, ModifierApplication), float> kvp in SumOptionModifiers(
+                         Rapadura.Gameplay.Items.Options.ItemOptionRules.PieceModifiers(item, equippedData)))
+            {
+                _buffController.ApplyEffect(WithPermanentDuration(new StatModifierDefinition
+                {
+                    displayName = "option_" + kvp.Key.Item1,
+                    affectedStat = kvp.Key.Item1,
+                    application = kvp.Key.Item2,
+                    value = kvp.Value,
+                }), $"{GetEquipSourceKey(equipSlot)}/option/{index++}");
+            }
+        }
+
+        /// <summary>
+        /// Re-applies every ancient set bonus from the current equipment (<see cref="Rapadura.Gameplay.Items.Options.ItemOptionRules.SetBonuses"/>;
+        /// broken pieces do not count) under <see cref="AncientSetSourcePrefix"/>. Called whenever the equipment changes.
+        /// </summary>
+        private void RefreshAncientSetBonuses()
+        {
+            if (_buffController == null)
+            {
+                return;
+            }
+
+            _buffController.RemoveEffectsBySourcePrefix(AncientSetSourcePrefix);
+            var pieces = new List<(ItemDefinition, InventorySlotData, bool)>();
+            foreach (KeyValuePair<EquipmentSlot, InventorySlotData> pair in _equipped)
+            {
+                ItemDefinition piece = ResolveItem(pair.Value?.itemId);
+                pieces.Add((piece, pair.Value, Rapadura.Gameplay.Items.Durability.DurabilityRules.IsBroken(piece, pair.Value)));
+            }
+
+            int index = 0;
+            foreach (KeyValuePair<(StatType, ModifierApplication), float> kvp in SumOptionModifiers(
+                         Rapadura.Gameplay.Items.Options.ItemOptionRules.SetBonuses(pieces)))
+            {
+                _buffController.ApplyEffect(WithPermanentDuration(new StatModifierDefinition
+                {
+                    displayName = "ancient_" + kvp.Key.Item1,
+                    affectedStat = kvp.Key.Item1,
+                    application = kvp.Key.Item2,
+                    value = kvp.Value,
+                }), AncientSetSourcePrefix + index++);
+            }
+        }
+
+        private static Dictionary<(StatType, ModifierApplication), float> SumOptionModifiers(
+            IEnumerable<Rapadura.Gameplay.Items.Options.OptionModifier> modifiers)
+        {
+            var byStat = new Dictionary<(StatType, ModifierApplication), float>();
+            foreach (Rapadura.Gameplay.Items.Options.OptionModifier modifier in modifiers)
+            {
+                var key = (modifier.Stat, modifier.Application);
+                byStat.TryGetValue(key, out float existing);
+                byStat[key] = existing + modifier.Value;
+            }
+
+            return byStat;
         }
 
         /// <summary>
@@ -1178,6 +1276,7 @@ namespace Rapadura.Gameplay.Inventory
             _buffController?.RemoveEffectsBySourcePrefix(GetEquipSourceKey(equipSlot) + "/");
             _buffController?.RemoveEffectsBySource(GetEquipSourceKey(equipSlot));
             _equipped.Remove(equipSlot);
+            RefreshAncientSetBonuses();
             EventBus.Publish(new InventoryChangedEvent());
             return true;
         }
@@ -1273,6 +1372,7 @@ namespace Rapadura.Gameplay.Inventory
             // Pre-sub-key effects (if any were applied under the bare slot key) go too.
             _buffController?.RemoveEffectsBySource(GetEquipSourceKey(equipSlot));
             _equipped.Remove(equipSlot);
+            RefreshAncientSetBonuses();
 
             EventBus.Publish(new InventoryChangedEvent());
             return true;
@@ -1407,7 +1507,11 @@ namespace Rapadura.Gameplay.Inventory
                 generatedName = pair.Value.generatedName,
                 generatedRarity = pair.Value.generatedRarity,
                 refineLevel = pair.Value.refineLevel,
-                refineOptionLevel = pair.Value.refineOptionLevel
+                refineOptionLevel = pair.Value.refineOptionLevel,
+                excellentMask = pair.Value.excellentMask,
+                luck = pair.Value.luck,
+                ancientSetId = pair.Value.ancientSetId,
+                sockets = pair.Value.sockets
             }).ToArray();
 
             return new InventorySaveState
@@ -1445,7 +1549,11 @@ namespace Rapadura.Gameplay.Inventory
                     generatedName = entry.generatedName,
                     generatedRarity = entry.generatedRarity,
                     refineLevel = entry.refineLevel,
-                    refineOptionLevel = entry.refineOptionLevel
+                    refineOptionLevel = entry.refineOptionLevel,
+                    excellentMask = entry.excellentMask,
+                    luck = entry.luck,
+                    ancientSetId = entry.ancientSetId,
+                    sockets = entry.sockets
                 };
                 _equipped[entry.slot] = equippedData;
 

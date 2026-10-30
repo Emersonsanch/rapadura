@@ -253,6 +253,7 @@ namespace Rapadura.Audio
             Toggle<DialogueStartedEvent>(on, OnDialogueStarted);
             Toggle<EnemyAttackWindupEvent>(on, OnEnemyWindup);
             Toggle<PlayerLandedEvent>(on, OnPlayerLanded);
+            Toggle<PlayerFootstepEvent>(on, OnPlayerFootstep);
         }
 
         private static void Toggle<TEvent>(bool on, Action<TEvent> handler) where TEvent : IGameEvent
@@ -691,6 +692,8 @@ namespace Rapadura.Audio
         private void OnEnemyWindup(EnemyAttackWindupEvent evt) => Trigger(SfxTrigger.EnemyWindup, evt.Position);
 
         private void OnPlayerLanded(PlayerLandedEvent evt) => Trigger(SfxTrigger.HeroLanding, evt.Position);
+
+        private void OnPlayerFootstep(PlayerFootstepEvent evt) => Trigger(SfxTrigger.HeroFootstep, evt.Position);
 
         private void OnDialogueStarted(DialogueStartedEvent evt) => Trigger(SfxTrigger.NpcTalk);
 

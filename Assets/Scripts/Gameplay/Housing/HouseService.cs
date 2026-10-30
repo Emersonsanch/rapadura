@@ -45,6 +45,10 @@ namespace Rapadura.Gameplay.Housing
         public string[] houseQuests = Array.Empty<string>();
         /// <summary>Wardrobe rewards of house quests waiting for the wardrobe (H5).</summary>
         public string[] owedWardrobe = Array.Empty<string>();
+
+        // ---- v3 (H3 sources). Older saves lack it: no boss record, nothing claimed yet. ----
+        /// <summary>Boss records (first-win trophy, bad-luck protection) and one-time rewards already paid.</summary>
+        public HouseSourceState sources = new HouseSourceState();
     }
 
     /// <summary>Raised whenever the house changes (granted, furniture, depot, chest capacity, load, new game).</summary>
@@ -73,8 +77,8 @@ namespace Rapadura.Gameplay.Housing
     public partial class HouseService : IManager, ISaveable, IResettable
     {
         public const string Key = "House";
-        /// <summary>1 = H1; 2 = H4/H6 (rested, plants, guest book, house quests, comfort cache). v1 saves load as is.</summary>
-        public const int SaveVersion = 2;
+        /// <summary>1 = H1; 2 = H4/H6 (rested, plants, guest book, house quests, comfort cache); 3 = H3 sources. Older saves load as is.</summary>
+        public const int SaveVersion = 3;
         /// <summary>The Vila da Vó Zefa (<c>CityCatalog.VilaZefa</c>): offline the one house is always there (§1).</summary>
         public const string DefaultCityId = "vila_zefa";
 
@@ -129,11 +133,13 @@ namespace Rapadura.Gameplay.Housing
         public void Initialize()
         {
             EventBus.Subscribe<EncounterEndedEvent>(OnEncounterEnded);
+            InitializeSources();
         }
 
         public void Shutdown()
         {
             EventBus.Unsubscribe<EncounterEndedEvent>(OnEncounterEnded);
+            ShutdownSources();
         }
 
         // ------------------------------------------------------------------
@@ -249,6 +255,7 @@ namespace Rapadura.Gameplay.Housing
             _level = 1;
             _lastSleepDay = 0;
             ResetLife();
+            ResetSources();
             Layout.Restore(HouseLevels.Get(1), null, null, 1);
             _chest = new VillageChestStorage(HouseRules.ChestCapacity(Spec, 0));
             _suppressEvents = false;
@@ -271,6 +278,7 @@ namespace Rapadura.Gameplay.Housing
                 lastSleepDay = _lastSleepDay,
             };
             CaptureLife(state);
+            CaptureSources(state);
             return state;
         }
 
@@ -286,6 +294,7 @@ namespace Rapadura.Gameplay.Housing
             _questStep = (HouseQuestStep)Math.Max(0, Math.Min((int)HouseQuestStep.Completed, saved.houseQuestStep));
             _lastSleepDay = saved.lastSleepDay;
             RestoreLife(saved);
+            RestoreSources(saved);
             Layout.Restore(HouseLevels.Get(_level), saved.placed, saved.depot, saved.nextInstanceId);
 
             // Sized for what is placed now, then filled (anything over capacity is packed into free slots).

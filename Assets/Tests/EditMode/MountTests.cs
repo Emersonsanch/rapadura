@@ -238,7 +238,8 @@ namespace Rapadura.Tests
         [Test]
         public void Catalog_ThreeStarters_HitTheCommonBudget()
         {
-            Assert.AreEqual(3, MountCatalog.Specs.Count);
+            Assert.AreEqual(3, MountCatalog.Starters.Count);
+            Assert.AreEqual(3 + MountWaveCatalog.Specs.Count, MountCatalog.Specs.Count);
             foreach (string id in new[] { MountCatalog.Pony, MountCatalog.BigDog, MountCatalog.PackDonkey })
             {
                 MountDefinition definition = MountCatalog.Get(id);
@@ -258,13 +259,29 @@ namespace Rapadura.Tests
         }
 
         [Test]
+        public void HarasKeeper_IsSeuTonico_NotSeuZeCacador()
+        {
+            // Seu Tonico (Vô Jorge's old road friend) keeps the Haras; Seu Zé Caçador (Hunting) is someone else.
+            CityResidentSpec keeper = CityCatalog.AllResidents().Single(r => r.ShopId == CityShopCatalog.HarasVila);
+            Assert.AreEqual("tonico_haras", keeper.ResidentId);
+            Assert.IsFalse(CityCatalog.AllResidents().Any(r => r.ResidentId == "ze_haras"));
+
+            LocalizationEntry name = Rapadura.UI.WorldMap.CityTexts.Entries.Single(e => e.Key == keeper.NameKey);
+            Assert.AreEqual("Seu Tonico do Haras", name.PtBR);
+            Assert.AreEqual("Seu Tonico of the Haras", name.En);
+            Assert.IsFalse(Rapadura.UI.WorldMap.CityTexts.Entries.Any(e => e.Key.StartsWith("city.resident.ze_haras", System.StringComparison.Ordinal)));
+            Assert.IsFalse(MountTexts.Entries.Any(e => (e.PtBR ?? string.Empty).Contains("Seu Zé") || (e.En ?? string.Empty).Contains("Seu Zé")), "mount texts name Seu Tonico");
+        }
+
+        [Test]
         public void Haras_SellsTheThreeWhistles_InTheVila()
         {
             CityShopSpec haras = CityShopCatalog.Get(CityShopCatalog.HarasVila);
             Assert.IsNotNull(haras);
             Assert.AreEqual(FirstSaddleQuest.HarasShopId, haras.ShopId);
             CollectionAssert.Contains(CityCatalog.ForRegion(Rapadura.Gameplay.World.Biomes.BiomeType.Forest).ShopIds, CityShopCatalog.HarasVila);
-            foreach (MountSpec spec in MountCatalog.Specs)
+            var harasMounts = MountCatalog.Starters.Concat(new[] { MountCatalog.FindSpec(MountWaveCatalog.Capybara), MountCatalog.FindSpec(MountWaveCatalog.PintoHorse) });
+            foreach (MountSpec spec in harasMounts)
             {
                 CityShopEntry entry = haras.Entries.FirstOrDefault(e => e.ItemId == spec.WhistleItemId);
                 Assert.IsNotNull(entry, spec.MountId);
@@ -357,7 +374,8 @@ namespace Rapadura.Tests
                 try
                 {
                     Assert.LessOrEqual(blueprint.TriangleCount, MountModels.TriangleBudget, recipe.ToString());
-                    foreach (string leg in new[] { "FL", "FR", "HL", "HR" })
+                    bool biped = MountRecipe.ShapeFor(recipe).Biped;
+                    foreach (string leg in biped ? new[] { "HL", "HR" } : new[] { "FL", "FR", "HL", "HR" })
                     {
                         Assert.GreaterOrEqual(blueprint.IndexOf("Leg_" + leg), 0);
                         Assert.GreaterOrEqual(blueprint.IndexOf("Shin_" + leg), 0);
@@ -373,8 +391,8 @@ namespace Rapadura.Tests
                         GameObject visual = Rapadura.Gameplay.Pets.Visuals.CarameloModel.Instantiate(blueprint, null, root.transform);
                         var legs = visual.AddComponent<ProceduralLegLocomotion>();
                         Assert.IsTrue(legs.Bind(root.transform, visual.transform, 0f), recipe.ToString());
-                        Assert.AreEqual(4, legs.LegCount);
-                        Assert.AreEqual(LegGaitStyle.Quadruped, legs.DetectedStyle);
+                        Assert.AreEqual(biped ? 2 : 4, legs.LegCount, recipe.ToString());
+                        Assert.AreEqual(biped ? LegGaitStyle.Biped : LegGaitStyle.Quadruped, legs.DetectedStyle, recipe.ToString());
                     }
                     finally
                     {
@@ -667,7 +685,7 @@ namespace Rapadura.Tests
                 Assert.IsTrue(keys.Contains(entry.HintKey), entry.HintKey);
             }
 
-            Assert.AreEqual(3, MountCodex.Entries.Count(e => e.IsAvailable));
+            Assert.AreEqual(MountCatalog.Specs.Count, MountCodex.Entries.Count(e => e.IsAvailable));
             foreach (MountCosmeticSpec cosmetic in MountCosmetics.All)
             {
                 Assert.IsTrue(keys.Contains(cosmetic.NameKey), cosmetic.NameKey);

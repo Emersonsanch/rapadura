@@ -49,6 +49,10 @@ namespace Rapadura.UI.WorldMap
         /// <summary>{0} = city name, {1} = gold paid.</summary>
         public const string FastTravelDone = "ui.city.fast_travel.done";
         public const string FastTravelClose = "ui.city.fast_travel.close";
+        public const string FastTravelBossLocked = "ui.city.fast_travel.boss_locked";
+        public const string FastTravelEventActive = "ui.city.fast_travel.event_active";
+        /// <summary>{0} = destination city.</summary>
+        public const string FastTravelOnTheWay = "ui.city.fast_travel.on_the_way";
 
         public static readonly List<LocalizationEntry> Entries = BuildEntries();
 
@@ -80,6 +84,9 @@ namespace Rapadura.UI.WorldMap
                 new LocalizationEntry(FastTravelNotInCity, "The cart only leaves from a town", "O carro só sai de uma cidade"),
                 new LocalizationEntry(FastTravelDone, "You arrived in {0}! (-{1} gold)", "Chegaram em {0}! (-{1} ouro)"),
                 new LocalizationEntry(FastTravelClose, "Close", "Fechar"),
+                new LocalizationEntry(FastTravelBossLocked, "Beat this region's boss and the cart will stop here", "Vençam o chefe da região e o carro passa a parar aqui"),
+                new LocalizationEntry(FastTravelEventActive, "Not now: something is happening on the road", "Agora não: tem coisa acontecendo na estrada"),
+                new LocalizationEntry(FastTravelOnTheWay, "The ox cart creaks down the road to {0}...", "O carro de boi vai rangendo pela estrada até {0}..."),
 
                 // ---- Shops ----
                 Shop(CityShopCatalog.MerceariaLazaro, "Mr. Lázaro's Grocery", "Mercearia do Seu Lázaro"),
@@ -90,7 +97,7 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.LamparinasBenedita, "Benedita's Lamps", "Lamparinas da Benedita"),
                 Shop(CityShopCatalog.MascateBento, "Old Bento the Peddler", "Mascate Seu Bento"),
                 // Same text as MountTexts.HarasShopName (the mounts' own table registers it too).
-                Shop(CityShopCatalog.HarasVila, "Haras da Vila (Seu Zé)", "Haras da Vila (Seu Zé)"),
+                Shop(CityShopCatalog.HarasVila, "Haras da Vila (Seu Tonico)", "Haras da Vila (Seu Tonico)"),
             };
 
             // ---- Cities ----
@@ -132,7 +139,7 @@ namespace Rapadura.UI.WorldMap
                 ("Lavine, try this cajá. If you make a face, it's a good one.", "Lavine, prova esse cajá. Se fizer careta, é porque está bom."),
                 ("Today's market, today's prices: tomorrow the stall is different.", "Feira de hoje, preço de hoje: amanhã a barraca é outra."));
 
-            AddResident(entries, "ze_haras", "Seu Zé of the Haras", "Seu Zé do Haras",
+            AddResident(entries, "tonico_haras", "Seu Tonico of the Haras", "Seu Tonico do Haras",
                 ("A guardian needs a mount that doesn't spook. The big dog stands firm by your shield, Joaquim.", "Guardião precisa de montaria que não se assusta. O cachorrão fica firme do lado do seu escudo, Joaquim."),
                 ("Bless my pony, Maria? Your grandpa Chico rode with me for thirty years and never fell.", "Benze meu pônei, Maria? Seu avô Chico andou comigo trinta anos de estrada e nunca caiu."),
                 ("The eldest picks first, Maithe. Look at the legs, not the coat: that's how Chico taught me.", "A mais velha escolhe primeiro, Maithe. Olha as pernas, não o pelo: foi assim que o Chico me ensinou."),
@@ -227,6 +234,9 @@ namespace Rapadura.UI.WorldMap
                 ("Ícaro, teach me to make sparks without flint? I promise not to burn my bangs again.", "Ícaro, me ensina a fazer faísca sem pederneira? Prometo não queimar a franja de novo."),
                 ("Lavine, bet I trim wicks faster than you cast spells!", "Lavine, aposto que eu corto pavio mais rápido do que você solta feitiço!"),
                 ("Wick trimmed, lamp lit: darkness doesn't rule here.", "Pavio cortado, candeia acesa: o escuro aqui não manda."));
+
+            // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
+            entries.AddRange(CityShopTexts.Entries);
 
             return entries;
         }

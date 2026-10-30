@@ -1,0 +1,157 @@
+/*
+ * Camera cutscenes over the world map (CutscenePlayerController): letterbox bars, title card, subtitle plate with
+ * a speaker portrait medal, "Pular" button, and the cold-shadow / warm-light screen tints. Built in code, loaded
+ * at runtime from Resources; the controller puts `rap-theme` on the root so the palette resolves. Code only
+ * toggles classes, display, opacity (tints) and the hero portraits' accent colour (CharacterRegistry).
+ * "Reduzir Movimento" / "Reduzir Flashes" (rap-reduced-motion on the root): bars and text appear without sliding/fading.
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+.cutscene-root {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.cutscene-tint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+}
+
+.cutscene-tint--shadow {
+    background-color: rgb(20, 10, 40);
+}
+
+.cutscene-tint--light {
+    background-color: var(--rap-gold-light);
+}
+
+.cutscene-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 14%;
+    background-color: rgb(0, 0, 0);
+    translate: 0 0;
+    transition-property: translate;
+    transition-duration: 0.6s;
+    transition-timing-function: ease-out;
+}
+
+.cutscene-bar--top {
+    top: 0;
+    translate: 0 -100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 24px;
+    padding-right: 16px;
+}
+
+.cutscene-bar--bottom {
+    bottom: 0;
+    height: 22%;
+    translate: 0 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.cutscene-root--open .cutscene-bar {
+    translate: 0 0;
+}
+
+.cutscene-title {
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+}
+
+.cutscene-skip {
+    font-size: 16px;
+    padding: 4px 16px 4px 16px;
+    color: var(--rap-cream);
+    background-color: var(--rap-brown-deep);
+    border-width: 1px;
+    border-color: var(--rap-gold);
+    border-radius: 6px;
+}
+
+.cutscene-portrait {
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    margin-right: 16px;
+    border-radius: 32px;
+    border-width: 3px;
+    border-color: var(--rap-gold);
+    background-color: var(--rap-brown);
+    align-items: center;
+    justify-content: center;
+}
+
+.cutscene-portrait--vo_edna {
+    background-color: rgb(150, 92, 60);
+    border-color: var(--rap-cream);
+}
+
+.cutscene-portrait-initial {
+    font-size: 30px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: var(--rap-cream);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.cutscene-text {
+    flex-shrink: 1;
+    max-width: 900px;
+}
+
+.cutscene-speaker {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: var(--rap-gold);
+}
+
+.cutscene-line {
+    font-size: 20px;
+    white-space: normal;
+    color: var(--rap-cream);
+    opacity: 1;
+    transition-property: opacity;
+    transition-duration: 0.3s;
+}
+
+.cutscene-line--narrator {
+    -unity-font-style: italic;
+    color: var(--rap-cream-dim);
+}
+
+.cutscene-line--entering {
+    opacity: 0;
+    transition-duration: 0s;
+}
+
+.cutscene-hint {
+    position: absolute;
+    right: 16px;
+    bottom: 6px;
+    font-size: 12px;
+    -unity-font-style: italic;
+    color: var(--rap-cream-dim);
+}
+
+.rap-reduced-motion .cutscene-bar,
+.rap-reduced-motion .cutscene-line {
+    transition-duration: 0s;
+}

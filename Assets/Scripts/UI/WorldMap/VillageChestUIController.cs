@@ -28,7 +28,6 @@ namespace Rapadura.UI.WorldMap
     /// <see cref="VillageChestTransfer.TakeForQuests"/> with the quests' outstanding collect amounts.</item>
     /// <item>Everything into the bag goes through the bag's own grid rules (<see cref="VillageChestTransfer"/>); the bag pane
     /// lists only the bag's items (its grid layout lives in the Mochila) and its chip shows used/total cells.</item>
-    /// <item>"Achados e Perdidos": death drops (<see cref="LostAndFoundList"/>) with a "Recuperar … — N de ouro" button each.</item>
     /// <item>Gamepad / keyboard through <see cref="FocusNavigator"/> (B / Esc closes); tooltips on every item.</item>
     /// </list>
     /// Opened by <see cref="VillageHubButton"/> on the live <see cref="CarriedInventorySession"/> inventory; the hub
@@ -84,9 +83,6 @@ namespace Rapadura.UI.WorldMap
         private Label _statusLabel;
         private Label _hintLabel;
         private Label _dragGhost;
-        private VisualElement _lostFoundBox;
-        private Label _lostFoundTitle;
-        private VisualElement _lostFoundList;
 
         private TooltipController _tooltip;
         private FocusNavigator _focusNavigator;
@@ -271,9 +267,6 @@ namespace Rapadura.UI.WorldMap
             _closeButton = tree.Q<Button>(CloseButtonName);
             _statusLabel = tree.Q<Label>("village-chest-status");
             _hintLabel = tree.Q<Label>("village-chest-hint");
-            _lostFoundBox = tree.Q<VisualElement>("village-chest-lost-found");
-            _lostFoundTitle = tree.Q<Label>("village-chest-lost-found-title");
-            _lostFoundList = tree.Q<VisualElement>("village-chest-lost-found-list");
 
             if (_root != null && _dragGhost == null)
             {
@@ -383,7 +376,6 @@ namespace Rapadura.UI.WorldMap
 
             BuildGrid(_bagGrid, Pane.Bag, _bag.Slots);
             BuildGrid(_chestGrid, Pane.Chest, _chest.Slots);
-            BuildLostAndFound(localization);
             ValidateSelection();
             RefreshAmountBar();
             _focusNavigator?.RestoreFocusAfterRebuild();
@@ -447,80 +439,6 @@ namespace Rapadura.UI.WorldMap
         private static void ClearGrid(VisualElement grid)
         {
             grid?.Clear();
-        }
-
-        /// <summary>"Achados e Perdidos": one "Recuperar … — N de ouro" button per death drop; hidden when there is none.</summary>
-        private void BuildLostAndFound(LocalizationManager localization)
-        {
-            if (_lostFoundBox == null || _lostFoundList == null || _chest == null)
-            {
-                return;
-            }
-
-            _lostFoundList.Clear();
-            IReadOnlyList<LostAndFoundEntry> entries = _chest.LostAndFound.Entries;
-            _lostFoundBox.style.display = entries.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
-            SetText(_lostFoundTitle, VillageChestTexts.Get(localization, VillageChestTexts.LostFoundTitle));
-
-            Func<string, string> localize = TooltipController.GetLocalizer();
-            for (int i = 0; i < entries.Count; i++)
-            {
-                InventorySlotData data = entries[i].item;
-                ItemDefinition item = data != null ? ItemDatabase.GetById(data.itemId ?? string.Empty) : null;
-                string name = DescribeLostItem(item, data);
-                int index = i;
-                var button = new Button(() => OnBuyBackClicked(index)) { focusable = true };
-                button.text = VillageChestTexts.Format(localization, VillageChestTexts.LostFoundEntry, name, entries[i].fee);
-                button.AddToClassList("village-chest-lost-found-entry");
-                button.AddToClassList("rap-button");
-                if (item != null)
-                {
-                    button.AddToClassList("inventory-row--" + TooltipLocalization.ToSnakeCase(TooltipContentBuilder.ResolveRarity(item, data).ToString()));
-                    TooltipTrigger.Bind(button, _tooltip, () => TooltipContentBuilder.ForItem(item, data, localize));
-                }
-
-                _lostFoundList.Add(button);
-            }
-        }
-
-        /// <summary>"Espada de Ferro" / "3 Poção de Vida" (quantity only above one), as the death screen names it.</summary>
-        public static string DescribeLostItem(ItemDefinition item, InventorySlotData data)
-        {
-            if (data == null)
-            {
-                return string.Empty;
-            }
-
-            string name = item != null ? GeneratedItemName.Compose(item, data, ContentText.CurrentManager) : data.itemId;
-            return data.quantity > 1 ? data.quantity + " " + name : name;
-        }
-
-        private void OnBuyBackClicked(int index)
-        {
-            if (_chest == null || _bag == null || index < 0 || index >= _chest.LostAndFound.Count)
-            {
-                return;
-            }
-
-            LostAndFoundEntry entry = _chest.LostAndFound.Entries[index];
-            string name = DescribeLostItem(ItemDatabase.GetById(entry.item?.itemId ?? string.Empty), entry.item);
-            int fee = entry.fee;
-            LocalizationManager localization = Localization;
-
-            switch (_chest.LostAndFound.TryBuyBack(index, _bag))
-            {
-                case LostAndFoundBuyback.Ok:
-                    SetStatus(VillageChestTexts.Format(localization, VillageChestTexts.StatusBoughtBack, name));
-                    break;
-                case LostAndFoundBuyback.NotEnoughGold:
-                    SetStatus(VillageChestTexts.Format(localization, VillageChestTexts.StatusNoGold, fee));
-                    break;
-                case LostAndFoundBuyback.BagFull:
-                    SetStatus(VillageChestTexts.Get(localization, VillageChestTexts.StatusBagFull));
-                    break;
-            }
-
-            Rebuild();
         }
 
         // ------------------------------------------------------------------

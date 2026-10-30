@@ -67,35 +67,29 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public static List<CityShopEntry> PickStock(CityShopSpec shop, long period, Func<ShopUnlock, bool> isMet)
         {
+            return PickStock(shop, period, isMet, null);
+        }
+
+        /// <summary>
+        /// The counter of <paramref name="shop"/> in <paramref name="period"/> (the shop's own period index). Each
+        /// <see cref="ShopPool"/> is drawn on its own: <see cref="ShopPool.Main"/> with the shop id and the period (the
+        /// original seed), <see cref="ShopPool.House"/> with "id/house" and the period, <see cref="ShopPool.Weekly"/> with
+        /// "id/week" and the week (<see cref="WeekOf"/>). <paramref name="isAvailable"/> (null = all) drops lines that
+        /// cannot be sold right now (no house yet, a bag already expanded, outfits without data) before the draw, like a
+        /// locked gate, so they never waste a slot. Result in catalog order.
+        /// </summary>
+        public static List<CityShopEntry> PickStock(CityShopSpec shop, long period, Func<ShopUnlock, bool> isMet, Func<CityShopEntry, bool> isAvailable)
+        {
             var result = new List<CityShopEntry>();
             if (shop == null || shop.Entries == null)
             {
                 return result;
             }
 
-            var pool = new List<int>();
-            for (int i = 0; i < shop.Entries.Count; i++)
-            {
-                CityShopEntry entry = shop.Entries[i];
-                if (entry != null && entry.Rotating && IsUnlocked(entry.Unlock, isMet))
-                {
-                    pool.Add(i);
-                }
-            }
-
-            // Seeded Fisher-Yates on the pool, first N win.
-            var random = new Random(Seed(shop.ShopId, period));
-            for (int i = pool.Count - 1; i > 0; i--)
-            {
-                int j = random.Next(i + 1);
-                (pool[i], pool[j]) = (pool[j], pool[i]);
-            }
-
             var drawn = new HashSet<int>();
-            for (int i = 0; i < Math.Min(Math.Max(0, shop.RotatingSlots), pool.Count); i++)
-            {
-                drawn.Add(pool[i]);
-            }
+            Draw(shop, ShopPool.Main, Seed(shop.ShopId, period), isMet, isAvailable, drawn);
+            Draw(shop, ShopPool.House, Seed(shop.ShopId + "/house", period), isMet, isAvailable, drawn);
+            Draw(shop, ShopPool.Weekly, Seed(shop.ShopId + "/week", WeekOf(period, shop.Period)), isMet, isAvailable, drawn);
 
             for (int i = 0; i < shop.Entries.Count; i++)
             {
@@ -105,13 +99,54 @@ namespace Rapadura.Gameplay.World.Cities
                     continue;
                 }
 
-                if (entry.Rotating ? drawn.Contains(i) : IsUnlocked(entry.Unlock, isMet))
+                bool open = entry.Rotating ? drawn.Contains(i) : IsUnlocked(entry.Unlock, isMet) && (isAvailable == null || isAvailable(entry));
+                if (open)
                 {
                     result.Add(entry);
                 }
             }
 
             return result;
+        }
+
+        /// <summary>The week index of a period of <paramref name="kind"/> (a daily period is a day index).</summary>
+        public static long WeekOf(long period, ShopRotationPeriod kind)
+        {
+            return kind == ShopRotationPeriod.Weekly ? period : FloorDiv(period, 7);
+        }
+
+        private static void Draw(CityShopSpec shop, ShopPool which, int seed, Func<ShopUnlock, bool> isMet,
+            Func<CityShopEntry, bool> isAvailable, HashSet<int> drawn)
+        {
+            int slots = Math.Max(0, shop.SlotsOf(which));
+            if (slots == 0)
+            {
+                return;
+            }
+
+            var pool = new List<int>();
+            for (int i = 0; i < shop.Entries.Count; i++)
+            {
+                CityShopEntry entry = shop.Entries[i];
+                if (entry != null && entry.Rotating && entry.Pool == which && IsUnlocked(entry.Unlock, isMet)
+                    && (isAvailable == null || isAvailable(entry)))
+                {
+                    pool.Add(i);
+                }
+            }
+
+            // Seeded Fisher-Yates on the pool, first N win.
+            var random = new Random(seed);
+            for (int i = pool.Count - 1; i > 0; i--)
+            {
+                int j = random.Next(i + 1);
+                (pool[i], pool[j]) = (pool[j], pool[i]);
+            }
+
+            for (int i = 0; i < Math.Min(slots, pool.Count); i++)
+            {
+                drawn.Add(pool[i]);
+            }
         }
 
         /// <summary>

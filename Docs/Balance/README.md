@@ -1623,7 +1623,7 @@ API única de encaixe (todo "cabe?" passa por ela): `InventoryManager.CanFit(ite
 `CanFitAll(lista)`, `CanFitCopy(entrada)`, `TryAddCopy(entrada)`. Usada por: loot (`LootGrantRules`, toast "Mochila
 cheia"), compra na loja (`ShopManager.BuyItem`), baú (`VillageChestTransfer`), criação (`CraftingManager`, que agora
 desfaz o resultado parcial antes de devolver os ingredientes), recompensas de evento (`WorldEventOutcomes` →
-`LootGrantRules`), segredos (ouro pendente) e Achados e Perdidos. Recompensa de missão que não couber vai para o Baú.
+`LootGrantRules`), segredos (ouro pendente). Recompensa de missão que não couber vai para o Baú.
 
 Quanto enche: materiais empilham, então um bioma enche a grade em centenas de lutas; quem enche é equipamento (arco 8
 casas, peitoral 6). `LootOverflowTests.EveryBiome_TakesAtLeast40Fights_ToFillTheGrid` guarda o mínimo de 40 lutas.
@@ -1640,34 +1640,32 @@ só o item quebrado.
 
 ### 18.4 Expansão (opcional)
 
-`InventoryManager.AddBagRows(n)`: até +2 linhas (`MaxExtraRows`), salvo em `extraRows`. **Ainda não está à venda**:
-falta o item "Bornal de couro" (sugestão: 2 linhas, ~150 de ouro, Mascate/Feira) e o gancho de compra na loja — fica
-para o dono das lojas.
+`InventoryManager.AddBagRows(n)`: até +2 linhas (`MaxExtraRows`), salvo em `extraRows`. Vendido como **Bornal de couro**
+(`item_bornal_couro`, +2 linhas, uma vez por save): 150 no Armarinho da Dona Cida (freguesia Freguês) ou 180 no Mascate
+(após o Lobo Alfa). Ver `Docs/Cities.md` §4.3.
 
 ### 18.5 Queda de item ao morrer (9%)
 
 - `DeathDropRules.DropChance = 0.09`: **um sorteio por morte** (tela de morte), semente injetável (testado).
-- Sucesso: **uma** entrada da mochila elegível, sorteada por igual, cai **inteira** (pilha cai como pilha).
+- Sucesso: **uma** entrada da mochila elegível, sorteada por igual, perde **exatamente 1 unidade**
+  (`DeathDropRules.DropQuantity = 1`): de uma pilha de 6 poções cai 1 e ficam 5; um item único sai inteiro.
 - Nunca cai: equipado (não está na grade), ouro/moeda, item de missão/história, relíquias (hoje nem são itens; id
   `relic_*` reservado) e item marcado **vinculado** (`_isBound`).
-- Offline: o item sai da mochila, a tela diz "Na pressa, você deixou cair: <item>" e ele vai para os
-  **Achados e Perdidos** da Vó Zefa (janela do Baú, na vila). Resgate pagando ouro por raridade:
-
-| Raridade | Comum | Incomum | Raro | Épico | Lendário |
-|---|---|---|---|---|---|
-| Ouro para recuperar | 10 | 25 | 60 | 150 | 400 |
-
-  (Referência: a espada de ferro vale 45 na loja.) Sem ouro ou sem espaço, nada é cobrado e
-  o item continua lá. A lista é salva no save do baú (`VillageChestSaveState.lostAndFound`) e zera em "Novo jogo".
-- Em média: 1 item a cada ~11 mortes. Morrer não custa ouro (só quando se quer o item de volta).
+- **Patuá da Vó Edna** e **Bênção da Romaria** cancelam o sorteio (0%, `DeathPenaltyRules.AllowsItemDrop`, §19).
+- **Decisão do usuário (2026-10-30): item perdido não se recupera.** Offline a unidade sai da mochila **de vez** e a
+  tela diz "Na pressa, você deixou cair: <item>" + "Perdeu de vez. Um Patuá da Vó Edna ou a Bênção da Romaria teria
+  guardado." Não existe mais resgate ("Achados e Perdidos" foi removido). Saves antigos que ainda trazem a lista
+  `lostAndFound` no save do baú carregam normalmente; a lista é ignorada (`DeathDropTests.OldChestSave_...`).
+- Em média: 1 unidade a cada ~11 mortes desprotegidas. Morrer não custa ouro.
 
 ### 18.6 Online (FASE 12) — decidido
 
-- **Decisão do usuário: qualquer jogador pode pegar o item que caiu de outro (estilo MU).** O item cai no chão onde o
-  herói morreu (servidor autoritativo sorteia os mesmos 9% e escolhe a entrada).
+- **Decisão do usuário: qualquer jogador pode pegar o item que caiu de outro (estilo MU).** A unidade cai no chão
+  onde o herói morreu (servidor autoritativo roda as mesmas regras puras: os 9%, a entrada sorteada e só 1 unidade;
+  `ItemDroppedOnDeathEvent` vira o drop no chão).
 - Proposta de detalhe (a confirmar no servidor): o dono tem prioridade de alguns segundos (ex.: 10 s) antes de
-  liberar para todos; o item some do chão depois de N minutos (ex.: 2 min) e, se ninguém pegar, vai para os Achados e
-  Perdidos do dono (mantém o espírito "nunca perde de vez" para crianças). Itens vinculados nunca caem.
+  liberar para todos; o item some do chão depois de N minutos (ex.: 2 min) — e aí está perdido de vez, como offline.
+  Itens vinculados nunca caem.
 - Zona segura da cidade: morrer lá não acontece (sem combate), então nada cai em cidade.
 
 ## 19. Perda de XP ao morrer, Bênção da Romaria e Patuá da Vó Zefa (2026-10-30)
@@ -2339,3 +2337,98 @@ acabou de chegar (conforto ~6, faixa 0 = +2%, e só depois das 3 primeiras vitó
   anotadas para o guarda-roupa (H5). Entregas: Água Fresca 10 pedra + 5 madeira; Fogo na Cozinha 3 carne assada +
   8 madeira (depois do Lobo Alfa). Madeira e carne saem da Floresta; a pedra, do Deserto e da Montanha, então
   "Água Fresca" costuma fechar depois da primeira ida ao Deserto (nada trava: a missão espera).
+
+---
+
+## 25. Durabilidade e conserto; opções de item estilo MU: excelente, sorte, conjunto antigo e engaste (2026-10-30)
+
+Primeira versão, pequena e coerente com os afixos e o refino (§20). Regras puras: `DurabilityRules` / `RepairService`
+(`Gameplay/Items/Durability/`) e `ItemOptionCatalog` / `ItemOptionRules` / `EngraveService` (`Gameplay/Items/Options/`),
+sem UnityEngine nas regras e com semente passada de fora: online (FASE 12) o servidor roda os mesmos números.
+
+### 25.1 Durabilidade e conserto (`DurabilityRules`, testado em `DurabilityTests`)
+
+Só itens com `HasDurability` (armas e armaduras dos assets) se desgastam; o valor já existia no save
+(`InventorySlotData.currentDurability` e `EquippedEntry.durability`), então saves antigos carregam iguais.
+
+| Desgaste | Quanto | Espada de ferro (120) / peitoral de couro (90) |
+|---|---|---|
+| Arma, por ataque básico (`PlayerAttackPerformedEvent`) | 0,1 | ~1.200 ataques |
+| Cada peça de armadura, por golpe recebido (`DamageAppliedEvent`) | 0,15 | ~600 golpes |
+| Tudo o que está vestido, por morte (`PlayerDiedEvent`) | 10% do máximo | 10 mortes |
+
+`EquipmentWearTracker` é posto em tempo de execução pelo `InventoryManager` no objeto com a tag "Player" (sem mudar
+cena/prefab). Abaixo de 25% o tooltip avisa "Gasto". Em **0** a peça fica **quebrada**: não dá nenhum status (base,
+afixos, refino, opções, nem conta para o conjunto antigo), mas **nunca some, nunca cai e não é desequipada à força** — só
+espera o ferreiro. O conserto devolve os status na hora.
+
+Conserto (ouro): `cheio = valor × 25% × raridade × (1 + 10% por nível de refino) × (1,5 se tiver opções)`, raridade
+Comum 1 / Incomum 1,25 / Raro 1,5 / Épico 2 / Lendário 2,5; o preço é `cheio × fração que falta` (arredonda para cima,
+mínimo 1) e uma peça quebrada paga **×1,25** (o castigo de deixar quebrar). Espada de ferro (45, Incomum, +0): conserto
+completo 15 de ouro, quebrada 19; a mesma espada +10 com opções, ~45/56 — barato perto do que se ganha numa ida.
+
+Onde consertar: a janela do **Ferreiro** da Vila (`VillageRefinePanel`, a do refino) ganhou "Consertar tudo" (tudo ou
+nada) e um "Consertar" por peça. `RepairService.Quote/TryRepair/TryRepairAll/ListWorn` são públicos e puros sobre um
+`InventoryManager`, para o ferreiro das cidades (dono das lojas) chamar sem copiar regra.
+
+### 25.2 Opções de item (`ItemOptionCatalog`, testado em `ItemOptionTests`)
+
+Só peças refináveis (arma com dano, armadura com defesa) têm opções; ficam no slot (`excellentMask`, `luck`,
+`ancientSetId`, `sockets`), viajam por equipar/copiar/baú/save, e saves antigos carregam como peça comum.
+
+- **Excelente** (linhas verdes no tooltip): arma — +1,5% dano, +1,5% velocidade de ataque ou +1,5% crítico; armadura —
+  +2% vida, 1,5% menos dano recebido ou 1% de espinhos. 1 linha de bicho comum, 1–2 de chefe.
+- **Com Sorte**: +5% de chance nos refinos que podem falhar (`RefineRules.LuckBonus`, soma com o amuleto, teto 95%) e
+  +0,5% de crítico.
+- **Conjunto antigo** (só de chefe, nunca excelente junto, como no MU): um por primo — Penas do Carcará Antigo
+  (Maithe), Couro do Vaqueiro Antigo (Joaquim), Renda da Benzedeira Antiga (Maria), Engrenagens do Inventor Antigo
+  (Ícaro), Luz do Vaga-lume Antigo (Lavine). Bônus com 2, 3 e 4 peças vestidas (somam), cada um ~1,5–2% (ou +2 de
+  defesa / +4% de dano crítico).
+- **Engaste**: 1 encaixe de bicho comum, 1–2 de chefe; o Ferreiro grava um material que já cai no jogo. Ofensivos só em
+  arma (ferro: 2 ferro + 10 ouro, +1% dano; caos: 1 Pedra do Caos + 25 ouro, +1,5% crítico), defensivos só em armadura
+  (pedra: 3 pedras + 10 ouro, +1 defesa; erva: 3 ervas + 10 ouro, +1,5% vida) — assim 8 encaixes de armadura nunca
+  empilham dano. Regravar um encaixe troca o engaste (o item nunca se perde).
+
+Chance por peça de equipamento que cai (`EnemyLootRoller`; semente própria derivada da semente da peça,
+`ItemOptionRules.OptionSeed`, então o roller não sorteia nenhum número a mais e as sementes antigas dão os mesmos drops):
+
+| | Bicho comum | Chefe |
+|---|---|---|
+| Antigo | — | 4% |
+| Excelente (se não for antigo) | 1,5% | 8% |
+| Com Sorte | 5% | 15% |
+| Engaste | 4% (1 encaixe) | 12% (1–2) |
+
+### 25.3 Orçamento (`tools/balance/power_stack.py`, `test_options_stack.py`)
+
+Teto de quem farmou: peças com opções **perfeitas** (2 linhas excelentes, sorte e 2 engastes com o melhor material, ou
+o conjunto antigo mais ofensivo) — 1 peça na Floresta, 2 no Deserto, 3 na Montanha, 4 nas Cavernas e no NG+1 — por
+cima de **tudo** (pilha §14 + refino §20 + asas e frutas §24). Regras: opções perfeitas tiram no máximo 10% do chefe e
+30% dos comuns (os comuns do NG+1 morrem em 2–3 golpes: um golpe a menos já é −26%); tudo junto mantém o chefe ≥ 66%
+do r8 sem nada e ≥ 12 s; parado, o chefe ainda mata em 12–40 s.
+
+Resultado (3000 jogadas):
+
+| Ciclo | Bioma | Peças | Chefe: r8 → tudo → tudo+excelente / tudo+antigo | 2 comuns: tudo → excelente / antigo | Parado, chefe mata em (excelente / antigo) |
+|---|---|---|---|---|---|
+| NG+0 | Floresta | 1 | 16,5 → 13,6 → **13,2** / **13,5** s | 3,8 → **3,4** / **3,8** s | 22,3 / 22,3 s |
+| NG+0 | Deserto | 2 | 18,2 → 14,4 → **13,9** / **14,0** s | 4,6 → **4,3** / **4,3** s | 25,1 / 24,6 s |
+| NG+0 | Montanha | 3 | 18,4 → 13,6 → **13,2** / **13,5** s | 4,4 → **4,1** / **4,1** s | 29,4 / 28,3 s |
+| NG+0 | Cavernas | 4 | 20,0 → 14,8 → **14,0** / **14,2** s | 3,1 → **2,9** / **2,9** s | 36,9 / 34,8 s |
+| NG+1 | Floresta | 4 | 18,5 → 13,4 → **12,4** / **12,3** s | 2,3 → **1,7** / **1,7** s | 34,2 / 32,3 s |
+| NG+1 | Deserto | 4 | 18,5 → 13,5 → **12,4** / **12,4** s | 2,4 → **2,3** / **2,3** s | 34,4 / 32,6 s |
+| NG+1 | Montanha | 4 | 18,5 → 13,6 → **12,4** / **12,7** s | 2,9 → **2,5** / **2,5** s | 35,2 / 33,3 s |
+| NG+1 | Cavernas | 4 | 19,8 → 14,4 → **14,0** / **14,0** s | 2,9 → **2,3** / **2,3** s | 34,4 / 32,5 s |
+
+Dentro do orçamento; pytest de `tools/balance` verde (41). Ajuste feito no caminho: a primeira versão (linhas de 2%,
+sorte +2% de crítico, qualquer engaste em qualquer peça) dava +20% de crítico com 4 peças e levava o chefe do NG+1 a
+11,1 s (60% do r8). Caiu para linhas de arma 1,5%, espinhos 1%, sorte 0,5% de crítico, conjuntos ~1,5%, e engastes
+ofensivos só na arma. O NG+1 fica perto do piso de 12 s: qualquer bônus novo de dano precisa passar por este modelo.
+
+### 25.4 Testes e online
+
+`DurabilityTests` (regras, desgaste por ataque/golpe/morte, peça quebrada sem status e nunca desequipada, conserto
+tudo-ou-nada, save) e `ItemOptionTests` (sementes reproduzíveis, frequências do catálogo, antigo nunca excelente,
+conjuntos por peças que funcionam, sorte no refino, engaste respeitando arma/armadura, linhas verdes do tooltip, save
+antigo = peça comum). `LocalizationCoverageTests` cobre `DurabilityTexts` e `ItemOptionTexts`. Online: desgaste,
+sorteio das opções, conserto e engaste rodam no servidor com os mesmos números; o cliente só mostra.

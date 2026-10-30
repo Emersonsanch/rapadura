@@ -138,8 +138,8 @@ namespace Rapadura.Gameplay.World.Map
             DecidedOutcome = null;
             LastOutcome = outcome;
 
-            // Event rooms (Terreiro / Torre) are not regional fights: no victory towards the region's unlock rules.
-            if (outcome == EncounterOutcome.Victory && !payload.IsEventRoom)
+            // Event rooms (Terreiro / Torre) and world events are not regional fights: no victory towards the region's unlock rules.
+            if (outcome == EncounterOutcome.Victory && !payload.IsDirected)
             {
                 _progress?.RecordVictory(payload.biome);
 

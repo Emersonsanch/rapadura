@@ -483,6 +483,18 @@ namespace Rapadura.Gameplay.Mounts
                     MountAudio.Play(MountAudio.Bray);
                     MountNotices.Raise(MountTexts.Get(localization, MountTexts.AbilityBrayMap));
                     break;
+                case MountAbilityKind.FreeGallop:
+                    // Fôlego de Ema works on the road too: the token gallops for free.
+                    _session.StartFreeGallop(ability.DurationSeconds);
+                    MountAudio.Play(MountAudio.Dash);
+                    MountNotices.Raise(MountTexts.Format(localization, MountWaveTexts.ToastFreeGallop, MountTexts.MountName(localization, definition)));
+                    break;
+                default:
+                    // The other wave-1 abilities act on critters and secrets in the arena; on the map the mount just shows off.
+                    MountAudio.Play(MountAudio.Cowbell);
+                    MountNotices.Raise(MountTexts.Format(localization, MountWaveTexts.MapShowOff, MountTexts.MountName(localization, definition),
+                        MountTexts.AbilityName(localization, definition)));
+                    break;
             }
 
             return true;

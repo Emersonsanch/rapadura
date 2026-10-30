@@ -63,6 +63,11 @@ namespace Rapadura.UI.Housing
         private Button _arrangeButton, _chestButton, _sleepButton, _turnLeftButton, _turnRightButton, _yardButton, _leaveButton;
         private Button _upgradeButton, _lifeButton;
         private HouseLifePanel _lifePanel;
+        // H3 workbench (HouseWorkbenchPanel.cs).
+        private HouseWorkbenchPanel _workbench;
+        // H5 wardrobe (WardrobePanel.cs).
+        private WardrobePanel _wardrobe;
+        private TrainingDummyPanel _dummy;
         private HouseLifeDecor _decor;
         private VisualElement _arrangePanel;
         private Label _depotHeader, _depotEmpty, _hint;
@@ -258,6 +263,9 @@ namespace Rapadura.UI.Housing
             SetArranging(false);
             CloseCard();
             _lifePanel?.Hide();
+            _workbench?.Hide();
+            _wardrobe?.Hide();
+            _dummy?.Hide();
             if (_view != null)
             {
                 _view.Show(false);
@@ -296,6 +304,24 @@ namespace Rapadura.UI.Housing
             if (_lifePanel != null && _lifePanel.IsVisible)
             {
                 _lifePanel.Hide();
+                return;
+            }
+
+            if (_dummy != null && _dummy.IsVisible)
+            {
+                _dummy.Hide();
+                return;
+            }
+
+            if (_wardrobe != null && _wardrobe.IsVisible)
+            {
+                _wardrobe.Hide();
+                return;
+            }
+
+            if (_workbench != null && _workbench.IsVisible)
+            {
+                _workbench.Hide();
                 return;
             }
 
@@ -413,6 +439,9 @@ namespace Rapadura.UI.Housing
             _hint = AddLabel(_arrangePanel, "house-hint");
             _overlay.Add(_arrangePanel);
 
+            _workbench = new HouseWorkbenchPanel(_overlay, () => _house, LifeWallet, () => Localization, SetStatus);
+            _wardrobe = new WardrobePanel(_overlay, Rapadura.Gameplay.Wardrobe.WardrobeService.ResolveShared, () => Localization, SetStatus);
+            _dummy = new TrainingDummyPanel(_overlay, () => Localization, SetStatus, null);
             _lifePanel = new HouseLifePanel(_overlay, () => _house, LifeWallet, RomariaOratoryHub.CarriedLevel, () => Localization,
                 (title, text, reaction, yes, no, onYes) => ShowCard(title, text, reaction, yes, no, onYes), SetStatus, OnLifePanelClosed);
 
@@ -621,6 +650,9 @@ namespace Rapadura.UI.Housing
         {
             _arranging = arranging && _inside;
             if (_arranging) _lifePanel?.Hide();
+            if (_arranging) _workbench?.Hide();
+            if (_arranging) _wardrobe?.Hide();
+            if (_arranging) _dummy?.Hide();
             if (!_arranging)
             {
                 CancelCarry();
@@ -1086,7 +1118,20 @@ namespace Rapadura.UI.Housing
                 case HouseItemFunction.Chest: OpenHouseChest(); return;
                 case HouseItemFunction.VillageChestLink: OpenChestWindow(VillageChestStorage.ResolveShared(), null, null); return;
                 case HouseItemFunction.Bed: AskSleep(); return;
-                case HouseItemFunction.Wardrobe: SetStatus(HouseTexts.Get(l, HouseTexts.StatusWardrobe), false); return;
+                case HouseItemFunction.Wardrobe:
+                    _lifePanel?.Hide();
+                    _workbench?.Hide();
+                    _dummy?.Hide();
+                    _wardrobe?.Show();
+                    return;
+                case HouseItemFunction.Bench:
+                case HouseItemFunction.Forge:
+                case HouseItemFunction.Stove:
+                    _lifePanel?.Hide();
+                    _dummy?.Hide();
+                    _wardrobe?.Hide();
+                    _workbench?.Show(item.Function);
+                    return;
                 case HouseItemFunction.GuestBook: ShowLifePanel(HouseLifePanel.Mode.Life); return;
                 case HouseItemFunction.PetBed: SetStatus(HouseLifeTexts.Get(l, HouseLifeTexts.PetNap), false); return;
                 case HouseItemFunction.TrophyStand:
@@ -1094,7 +1139,7 @@ namespace Rapadura.UI.Housing
                     return;
                 case HouseItemFunction.RelicCase: ShowRelics(); return;
                 case HouseItemFunction.BestiaryShelf: OpenNotebook(); return;
-                case HouseItemFunction.TrainingDummy: SetStatus(HouseLifeTexts.Get(l, HouseLifeTexts.Dummy), false); return;
+                case HouseItemFunction.TrainingDummy: ShowTrainingDummy(); return;
                 default:
                     if (HousePlantRules.IsPlant(item))
                     {
@@ -1165,7 +1210,24 @@ namespace Rapadura.UI.Housing
         {
             if (_lifePanel == null) return;
             if (_arranging) SetArranging(false);
+            _workbench?.Hide();
+            _wardrobe?.Hide();
+            _dummy?.Hide();
             _lifePanel.Show(mode);
+            RefreshTexts();
+        }
+
+        /// <summary>
+        /// The straw training dummy (Docs/Housing.md §11.8): the active cousin tests attacks and sees damage per hit, crits
+        /// and DPS (<see cref="Rapadura.Gameplay.Combat.TrainingDummyRules"/>). No XP, gold or loot: the city is a safe zone.
+        /// </summary>
+        private void ShowTrainingDummy()
+        {
+            if (_dummy == null) return;
+            if (_arranging) SetArranging(false);
+            _lifePanel?.Hide();
+            _workbench?.Hide();
+            _dummy.Show();
             RefreshTexts();
         }
 

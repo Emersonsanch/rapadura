@@ -1,6 +1,8 @@
 # Catálogo de roupas, armaduras e aparência — Rapadura
 
 > Design do guarda-roupa, slots e regras de aparência em [`Docs/Housing.md`](../Housing.md) §9. **Conjunto inicial de lançamento, não a lista de tudo o que pode existir:** novas peças entram por temporada/evento com ID novo.
+>
+> **Este arquivo é dado de jogo:** as tabelas viram `Assets/Scripts/Gameplay/Wardrobe/WardrobeCatalogData.g.cs` pelo menu "Rapadura ▸ Housing ▸ Import Wardrobe Catalog" (nomes em inglês em `CatalogoRoupas.en.tsv`). Mexeu numa linha, rode o import: o `WardrobeTests` falha se a tabela gerada ficar velha. Estado do guarda-roupa no código: `Docs/Housing.md` §9.8.
 
 **Total: 234 entradas** (120 peças de conjuntos dos primos, 28 roupas comuns a todos, 36 acessórios, 25 tinturas, 25 visuais de arma). Checagem automática: 234 IDs distintos, 234 nomes distintos (ignorando acento/maiúscula/pontuação), nenhuma duplicata.
 
@@ -177,11 +179,11 @@
 | `roupa_comum_007` | Capa de chuva amarela de botão | Peito | Comum | Loja: Armazém Geral | 25 |
 | `roupa_comum_008` | Bata de renda renascença | Peito | Raro | Loja: Costureira Dona Fátima | 90 |
 | `roupa_comum_009` | Gibão de couro de vaqueiro adulto, grande demais | Peito | Incomum | Loja: Mascate Seu Bento | 65 |
-| `roupa_comum_010` | Suéter de tricô da Vó Zefa | Peito | Raro | Missão da Casa: Parede de Barro | — |
+| `roupa_comum_010` | Suéter de tricô da Vó Edna | Peito | Raro | Missão da Casa: Parede de Barro | — |
 | `roupa_comum_011` | Camisa de festa de linho branco | Peito | Incomum | Loja: Costureira Dona Fátima | 60 |
 | `roupa_comum_012` | Colete de tropeiro com bordado de estrada | Peito | Raro | Missão: Reserva pra Travessia | — |
 | `roupa_comum_013` | Agasalho de lã da serra | Peito | Incomum | Loja: Forja do Mestre Tonho | 35 |
-| `roupa_comum_014` | Avental de cozinha da Vó Zefa | Peito | Comum | Missão da Casa: Fogo na Cozinha | — |
+| `roupa_comum_014` | Avental de cozinha da Vó Edna | Peito | Comum | Missão da Casa: Fogo na Cozinha | — |
 | `roupa_comum_015` | Bermuda de tactel colorida | Pernas | Comum | Loja: Armazém Geral | 21 |
 | `roupa_comum_016` | Calça de pijama listrada | Pernas | Comum | Loja: Costureira Dona Fátima | 20 |
 | `roupa_comum_017` | Saia de chita com bolsos | Pernas | Comum | Loja: Costureira Dona Fátima | 22 |
@@ -202,7 +204,7 @@
 | ID | Nome | Para | Encaixe | Raridade | Origem | Preço (ouro) |
 |---|---|---|---|---|---|---|
 | `acess_001` | Chapéu de couro de aba virada | Todos | Cabeça | Raro | Loja: Mascate Seu Bento | 90 |
-| `acess_002` | Réplica do chapéu de couro do Vô Chico | Todos | Cabeça | Épico | Segredo do mapa (relíquia `relic_chapeu_couro` encontrada) | — |
+| `acess_002` | Réplica do chapéu de couro do Vô Jorge | Todos | Cabeça | Épico | Segredo do mapa (relíquia `relic_chapeu_couro` encontrada) | — |
 | `acess_003` | Chapéu de meia-lua de couro | Todos | Cabeça | Raro | Drop: Guardião da Ruína (chefe) | — |
 | `acess_004` | Chapéu de palha desfiado | Todos | Cabeça | Comum | Loja: Feira livre | 25 |
 | `acess_005` | Boné virado para trás | Todos | Cabeça | Comum | Loja: Armazém Geral | 15 |
@@ -214,7 +216,7 @@
 | `acess_011` | Óculos redondos de aro de arame | Todos | Rosto/Pescoço | Incomum | Loja: Mascate Seu Bento | 35 |
 | `acess_012` | Colar de sementes de açaí | Todos | Rosto/Pescoço | Comum | Loja: Feira livre | 15 |
 | `acess_013` | Colar de contas de cristal das cavernas | Todos | Rosto/Pescoço | Raro | Loja: Lamparinas da Benedita | 185 |
-| `acess_014` | Medalhinha de latão da Vó Zefa | Todos | Rosto/Pescoço | Épico | Missão da Casa: Casa Cheia | — |
+| `acess_014` | Medalhinha de latão da Vó Edna | Todos | Rosto/Pescoço | Épico | Missão da Casa: Casa Cheia | — |
 | `acess_015` | Bigode falso de quadrilha | Todos | Rosto/Pescoço | Comum | Evento: Festa Junina | — (10 prendas) |
 | `acess_016` | Pintinhas de sarda pintadas a carvão | Todos | Rosto/Pescoço | Comum | Evento: Festa Junina | — (10 prendas) |
 | `acess_017` | Máscara de papangu de papel machê | Todos | Rosto/Pescoço | Incomum | Evento: Carnaval | — (20 prendas) |

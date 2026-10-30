@@ -42,9 +42,10 @@ namespace Rapadura.UI.Death
     ///
     /// If this component is absent or disabled, CheckpointManager keeps its original instant respawn.
     ///
-    /// Death drop (9%, <see cref="DeathDropRules"/>): each death shown here rolls once; on success one eligible backpack
-    /// item goes to Vó Zefa's "Achados e Perdidos" (<see cref="DeathDropService"/>, saved with the village chest) and the
-    /// panel says "Na pressa, você deixou cair: …" ("death-drop"). No drop without this screen (instant respawn).
+    /// Death drop (9%, <see cref="DeathDropRules"/>): each unprotected death shown here rolls once; on success exactly one
+    /// unit of one eligible backpack item is lost for good (<see cref="DeathDropService"/>; no buy-back) and the panel says
+    /// "Na pressa, você deixou cair: … Perdeu de vez." ("death-drop"). Online (FASE 12) that unit falls on the ground for
+    /// anyone to pick up instead. No drop without this screen (instant respawn).
     ///
     /// The first-death tutorial tip (<see cref="TutorialSteps.Death"/>) is shown inside this panel
     /// ("death-tip") rather than as the floating hint bubble, which steps aside while a modal holds a
@@ -296,8 +297,8 @@ namespace Rapadura.UI.Death
 
         /// <summary>
         /// The death penalty on the player (<see cref="DeathPenaltyService"/>): a Patuá or the Bênção da Romaria is used up,
-        /// the XP loss is removed (never de-levels) and, unprotected, the 9% roll may move one item to the village chest's
-        /// "Achados e Perdidos". No loss below level 3 nor in a first-campaign boss challenge.
+        /// the XP loss is removed (never de-levels) and, unprotected, the 9% roll may take one unit of one backpack item for
+        /// good. No XP loss below level 3 nor in a first-campaign boss challenge.
         /// </summary>
         private bool TryApplyDeathPenalty(out DeathPenaltyResult result)
         {
@@ -315,8 +316,7 @@ namespace Rapadura.UI.Death
                 ? new DeathPenaltyContext(stats.Level, stats.CurrentExperience, stats.GetExperienceToNextLevel(), boss, NewGamePlusProgress.ResolveCurrentCycle())
                 : new DeathPenaltyContext(1, 0, 0, boss);
 
-            result = DeathPenaltyService.Apply(context, bag, VillageChestStorage.ResolveShared().LostAndFound,
-                DeathProtectionState.ResolveShared(), DropRandom);
+            result = DeathPenaltyService.Apply(context, bag, DeathProtectionState.ResolveShared(), DropRandom);
             int removed = stats != null ? stats.RemoveExperience(result.ExperienceLost) : 0;
             result = new DeathPenaltyResult(removed, result.Protection, result.Drop);
             return true;
@@ -364,7 +364,7 @@ namespace Rapadura.UI.Death
             }
 
             _dropLabel.text = UiTexts.Format(localization, UiTexts.DeathDropped, DescribeDrop(_lastDrop.Item))
-                + "\n" + UiTexts.Get(localization, UiTexts.DeathDroppedHint);
+                + "\n" + UiTexts.Get(localization, UiTexts.DeathDroppedLost);
         }
 
         /// <summary>"Espada de Ferro" / "3 Poção de Vida": the shown name (generated name for a rolled item), quantity above one.</summary>

@@ -50,8 +50,8 @@
 ## 5. Morte e checkpoints
 - [ ] Morte mostra tela com fade e contagem regressiva; "Continuar" e "Carregar" funcionam; auto-continuar ao zerar.
 - [ ] Renascer no checkpoint ativo (ou no spawn inicial); sem soft-lock, input do jogador restaurado.
-- [ ] Queda ao morrer (9%): morrer várias vezes com itens comuns, ouro, item de missão e equipamento. Em ~1 a cada 11 mortes a tela mostra "Na pressa, você deixou cair: <item>" + "A Vó Zefa guarda nos Achados e Perdidos, na vila."; o item sai da Mochila. Nunca cai ouro, item de missão, item equipado nem item vinculado. Na maioria das mortes nada aparece.
-- [ ] Achados e Perdidos: na Vila → Baú, a faixa "Achados e Perdidos" lista o item com "Recuperar … — N de ouro" (10/25/60/150/400 por raridade). Sem ouro: "Falta ouro" e nada é cobrado; mochila cheia: aviso e nada é cobrado; com ouro e espaço o item volta com os mesmos afixos/nome. Salvar, sair e "Continuar": a lista continua lá; "Novo jogo" zera.
+- [ ] Queda ao morrer (9%): sem Patuá nem Bênção, morrer várias vezes com uma pilha de poções, ouro, item de missão e equipamento. Em ~1 a cada 11 mortes a tela mostra "Na pressa, você deixou cair: <item>" + "Perdeu de vez. Um Patuá da Vó Edna ou a Bênção da Romaria teria guardado."; sai **só 1 unidade** (pilha de 6 vira 5) e ela não volta (não há mais Achados e Perdidos). Nunca cai ouro, item de missão, item equipado nem item vinculado. Na maioria das mortes nada aparece. Com Patuá ou Bênção ativos, nunca cai nada.
+- [ ] Save antigo com itens nos antigos "Achados e Perdidos": "Continuar" carrega normal, o Baú abre sem a faixa antiga e os itens dela não aparecem (perdidos de vez). (Online, FASE 12: o item cai no chão para qualquer um pegar.)
 
 ## 6. Itens, inventário, crafting e lojas
 - [ ] Coletar, empilhar, equipar, usar e descartar itens; tela Mochila consistente.

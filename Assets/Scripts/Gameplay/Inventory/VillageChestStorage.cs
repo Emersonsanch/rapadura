@@ -17,8 +17,9 @@ namespace Rapadura.Gameplay.Inventory
         /// <summary>Bag items waiting for a free chest slot (<see cref="VillageChestStorage.EnqueueOverflow"/>). Old saves: none.</summary>
         public InventorySlotData[] overflowInbox = Array.Empty<InventorySlotData>();
 
-        /// <summary>"Achados e Perdidos" (<see cref="LostAndFoundList"/>). Old saves: empty.</summary>
-        public LostAndFoundEntry[] lostAndFound = Array.Empty<LostAndFoundEntry>();
+        // Saves written while the old "Achados e Perdidos" buy-back existed also carry a "lostAndFound" array here.
+        // That field is gone on purpose (a lost item can not be recovered): JsonUtility ignores unknown fields, so those
+        // saves load normally and the old entries are simply discarded (DeathDropTests covers it).
     }
 
     /// <summary>Raised whenever the village chest's contents change (store, take, load, new game).</summary>
@@ -40,7 +41,6 @@ namespace Rapadura.Gameplay.Inventory
     /// (<see cref="InventoryManager.RestoreState"/>) arrives through <see cref="EnqueueOverflow"/>. It waits in the inbox
     /// (saved with the chest) and moves into free slots on <see cref="FlushInbox"/> — after a restore, a capture, a take
     /// — so it is never lost, even when the chest restores after the bag in the same load or is full.</item>
-    /// <item>"Achados e Perdidos" (<see cref="LostAndFound"/>): death drops waiting to be bought back, saved here too.</item>
     /// </list>
     /// </summary>
     public class VillageChestStorage : IManager, ISaveable, IResettable
@@ -106,9 +106,6 @@ namespace Rapadura.Gameplay.Inventory
 
         /// <summary>Items waiting for a free slot (<see cref="EnqueueOverflow"/>), oldest first.</summary>
         public IReadOnlyList<InventorySlotData> Inbox => _inbox;
-
-        /// <summary>"Achados e Perdidos": death drops waiting at Vó Zefa's (saved with the chest).</summary>
-        public LostAndFoundList LostAndFound { get; } = new LostAndFoundList();
 
         /// <summary>
         /// Hands the chest an item the bag could not keep (a copy is stored; the caller drops its own). It joins the inbox
@@ -219,7 +216,6 @@ namespace Rapadura.Gameplay.Inventory
         {
             _slots = CreateEmptySlots(_slotCount);
             _inbox.Clear();
-            LostAndFound.Clear();
             EventBus.Publish(new VillageChestChangedEvent());
         }
 
@@ -244,7 +240,7 @@ namespace Rapadura.Gameplay.Inventory
                 inbox[i] = _inbox[i].CloneWithQuantity(_inbox[i].quantity);
             }
 
-            return new VillageChestSaveState { slots = copy, overflowInbox = inbox, lostAndFound = LostAndFound.Capture() };
+            return new VillageChestSaveState { slots = copy, overflowInbox = inbox };
         }
 
         public void RestoreState(object state)
@@ -304,7 +300,6 @@ namespace Rapadura.Gameplay.Inventory
                 }
             }
 
-            LostAndFound.Restore(saved.lostAndFound);
             FlushInbox();
 
             EventBus.Publish(new VillageChestChangedEvent());

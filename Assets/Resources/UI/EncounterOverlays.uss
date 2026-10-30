@@ -60,6 +60,17 @@
     text-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.9);
 }
 
+/* Boss stinger: the active cousin's quip under the boss name (CutsceneScript.BossStingerKey). */
+.boss-intro-stinger {
+    margin-top: 4px;
+    font-size: 17px;
+    -unity-font-style: italic;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    color: var(--rap-cream-dim);
+    text-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.9);
+}
+
 /* ---- "Mochila cheia" toast ---- */
 
 .bag-full-root {

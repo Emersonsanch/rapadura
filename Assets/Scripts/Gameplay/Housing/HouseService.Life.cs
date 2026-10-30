@@ -454,7 +454,7 @@ namespace Rapadura.Gameplay.Housing
                 }
             }
 
-            if (saved.owedWardrobe != null) _owedWardrobe.AddRange(saved.owedWardrobe.Where(id => !string.IsNullOrEmpty(id)).Distinct());
+            if (saved.owedWardrobe != null) _owedWardrobe.AddRange(saved.owedWardrobe.Where(id => !string.IsNullOrEmpty(id)));
             _lastVisitDay = saved.lastVisitDay;
         }
     }

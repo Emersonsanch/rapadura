@@ -185,7 +185,8 @@ namespace Rapadura.Gameplay.Characters
                 }
             }
 
-            return null;
+            // Graduation skills (Docs/ClassEvolution.md) are built in code, not assets: resolve them too, so a save keeps their levels.
+            return Rapadura.Gameplay.ClassEvolution.GraduationSkillFactory.Get(skillId);
         }
 
         private static int FindFreeSlot(SkillManager skillManager)

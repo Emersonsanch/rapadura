@@ -103,24 +103,34 @@ namespace Rapadura.Tests
             yield return Source(nameof(CharacterSheetTexts), CharacterSheetTexts.Entries, CharacterSheetTexts.EnsureRegistered);
             yield return Source(nameof(BossTexts), BossTexts.Entries, BossTexts.EnsureRegistered);
             yield return Source(nameof(StoryTexts), StoryTexts.Entries, StoryTexts.EnsureRegistered);
+            yield return Source(nameof(CutsceneTexts), CutsceneTexts.Entries, CutsceneTexts.EnsureRegistered);
             yield return Source(nameof(BestiaryTexts), BestiaryTexts.Entries, BestiaryTexts.EnsureRegistered);
             yield return Source(nameof(CarameloTexts), CarameloTexts.Entries, CarameloTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.UI.PhotoMode.PhotoModeTexts), Rapadura.UI.PhotoMode.PhotoModeTexts.Entries, Rapadura.UI.PhotoMode.PhotoModeTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.Secrets.SecretTexts), Rapadura.Gameplay.Secrets.SecretTexts.Entries, Rapadura.Gameplay.Secrets.SecretTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.Night.NightTexts), Rapadura.Gameplay.Night.NightTexts.Entries, Rapadura.Gameplay.Night.NightTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.Fishing.FishingTexts), Rapadura.Gameplay.Fishing.FishingTexts.Entries, Rapadura.Gameplay.Fishing.FishingTexts.EnsureRegistered);
+            yield return Source(nameof(Rapadura.Gameplay.Seasons.FestaJuninaTexts), Rapadura.Gameplay.Seasons.FestaJuninaTexts.Entries, Rapadura.Gameplay.Seasons.FestaJuninaTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.EventRooms.EventRoomTexts), Rapadura.Gameplay.EventRooms.EventRoomTexts.Entries, Rapadura.Gameplay.EventRooms.EventRoomTexts.EnsureRegistered);
+            yield return Source(nameof(Rapadura.Gameplay.WorldEvents.WorldBossTexts), Rapadura.Gameplay.WorldEvents.WorldBossTexts.Entries, Rapadura.Gameplay.WorldEvents.WorldBossTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.Duo.DuoTexts), Rapadura.Gameplay.Duo.DuoTexts.Entries, Rapadura.Gameplay.Duo.DuoTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.Mounts.MountTexts), Rapadura.Gameplay.Mounts.MountTexts.Entries, Rapadura.Gameplay.Mounts.MountTexts.EnsureRegistered);
             yield return Source(nameof(VillageStoryNewsTexts), VillageStoryNewsTexts.All, VillageStoryNewsTexts.EnsureLoaded);
             yield return Source(nameof(Rapadura.Gameplay.Hunting.HuntingTexts), Rapadura.Gameplay.Hunting.HuntingTexts.Entries, Rapadura.Gameplay.Hunting.HuntingTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.World.Chatter.RoadChatterTexts), Rapadura.Gameplay.World.Chatter.RoadChatterTexts.Entries, Rapadura.Gameplay.World.Chatter.RoadChatterTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.Refining.RefineTexts), Rapadura.Gameplay.Refining.RefineTexts.Entries, Rapadura.Gameplay.Refining.RefineTexts.EnsureRegistered);
+            yield return Source(nameof(Rapadura.Gameplay.ClassEvolution.ClassEvolutionTexts), Rapadura.Gameplay.ClassEvolution.ClassEvolutionTexts.Entries, Rapadura.Gameplay.ClassEvolution.ClassEvolutionTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.Tacho.TachoTexts), Rapadura.Gameplay.Tacho.TachoTexts.Entries, Rapadura.Gameplay.Tacho.TachoTexts.EnsureRegistered);
+            yield return Source(nameof(Rapadura.Gameplay.Crafting.Advanced.CraftingTexts), Rapadura.Gameplay.Crafting.Advanced.CraftingTexts.Entries, Rapadura.Gameplay.Crafting.Advanced.CraftingTexts.EnsureRegistered);
+            yield return Source(nameof(Rapadura.Gameplay.Items.Durability.DurabilityTexts), Rapadura.Gameplay.Items.Durability.DurabilityTexts.Entries, Rapadura.Gameplay.Items.Durability.DurabilityTexts.EnsureRegistered);
+            yield return Source(nameof(Rapadura.Gameplay.Items.Options.ItemOptionTexts), Rapadura.Gameplay.Items.Options.ItemOptionTexts.Entries, Rapadura.Gameplay.Items.Options.ItemOptionTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.Inventory.DeathProtectionTexts), Rapadura.Gameplay.Inventory.DeathProtectionTexts.Entries, Rapadura.Gameplay.Inventory.DeathProtectionTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.UI.Housing.HouseTexts), Rapadura.UI.Housing.HouseTexts.Entries, Rapadura.UI.Housing.HouseTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.Housing.HouseItemTexts), Rapadura.Gameplay.Housing.HouseItemTexts.Entries, Rapadura.Gameplay.Housing.HouseItemTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.UI.Housing.HouseLifeTexts), Rapadura.UI.Housing.HouseLifeTexts.Entries, Rapadura.UI.Housing.HouseLifeTexts.EnsureRegistered);
+            yield return Source(nameof(Rapadura.Gameplay.Housing.HouseSourceTexts), Rapadura.Gameplay.Housing.HouseSourceTexts.Entries, Rapadura.Gameplay.Housing.HouseSourceTexts.EnsureRegistered);
+            yield return Source(nameof(Rapadura.Gameplay.Wardrobe.WardrobeTexts), Rapadura.Gameplay.Wardrobe.WardrobeTexts.Entries, Rapadura.Gameplay.Wardrobe.WardrobeTexts.EnsureRegistered);
+            yield return Source(nameof(Rapadura.UI.Housing.WardrobeUiTexts), Rapadura.UI.Housing.WardrobeUiTexts.Entries, Rapadura.UI.Housing.WardrobeUiTexts.EnsureRegistered);
         }
 
         private static TextSource Source(string name, IReadOnlyList<LocalizationEntry> entries, Action<LocalizationManager> merge)
@@ -534,7 +544,7 @@ namespace Rapadura.Tests
         public void HelperKeyConstants_AllLocalized()
         {
             var references = new List<(string, string)>();
-            foreach (Type type in new[] { typeof(Rapadura.UI.Housing.HouseTexts), typeof(Rapadura.UI.Housing.HouseLifeTexts), typeof(QuestLogTexts), typeof(QuestLogPresenter), typeof(AchievementTexts), typeof(SettingsMenuTexts), typeof(UiTexts), typeof(WorldMapTexts), typeof(VillageHubTexts), typeof(CityTexts), typeof(VillageChestTexts), typeof(KitchenTexts), typeof(NewGamePlusTexts), typeof(TutorialTexts), typeof(HapticsTexts), typeof(CharacterSheetTexts), typeof(BossTexts), typeof(Rapadura.Gameplay.Secrets.SecretTexts), typeof(Rapadura.UI.PhotoMode.PhotoModeTexts), typeof(Rapadura.Gameplay.Duo.DuoTexts), typeof(Rapadura.Gameplay.Mounts.MountTexts), typeof(Rapadura.Gameplay.Hunting.HuntingTexts) })
+            foreach (Type type in new[] { typeof(Rapadura.UI.Housing.HouseTexts), typeof(Rapadura.UI.Housing.HouseLifeTexts), typeof(Rapadura.Gameplay.Housing.HouseSourceTexts), typeof(Rapadura.UI.Housing.WardrobeUiTexts), typeof(QuestLogTexts), typeof(QuestLogPresenter), typeof(AchievementTexts), typeof(SettingsMenuTexts), typeof(UiTexts), typeof(WorldMapTexts), typeof(VillageHubTexts), typeof(CityTexts), typeof(VillageChestTexts), typeof(KitchenTexts), typeof(NewGamePlusTexts), typeof(TutorialTexts), typeof(HapticsTexts), typeof(CharacterSheetTexts), typeof(BossTexts), typeof(Rapadura.Gameplay.Secrets.SecretTexts), typeof(Rapadura.UI.PhotoMode.PhotoModeTexts), typeof(Rapadura.Gameplay.Duo.DuoTexts), typeof(Rapadura.Gameplay.Mounts.MountTexts), typeof(Rapadura.Gameplay.Hunting.HuntingTexts), typeof(Rapadura.Gameplay.Seasons.FestaJuninaTexts) })
             {
                 foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
                 {

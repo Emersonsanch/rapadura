@@ -11,7 +11,9 @@ using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Items.Procedural;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
+using Rapadura.Gameplay.Talents;
 using Rapadura.UI.Common;
+using Rapadura.UI.Talents;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -62,6 +64,10 @@ namespace Rapadura.UI.CharacterSheet
         private VisualElement _attributeList;
         private VisualElement _derivedList;
         private VisualElement _equipmentList;
+        private VisualElement _trainingList;
+        private Label _trainingHeader;
+        private Button _wheelButton;
+        private TalentWheelView _wheel;
 
         private readonly Dictionary<AttributeType, AttributeRow> _rows = new Dictionary<AttributeType, AttributeRow>();
         private readonly UiDocumentLocalizer _localizer = new UiDocumentLocalizer();
@@ -120,10 +126,12 @@ namespace Rapadura.UI.CharacterSheet
             EventBus.Subscribe<PlayerExperienceChangedEvent>(OnExperienceChanged);
             EventBus.Subscribe<InventoryChangedEvent>(OnInventoryChanged);
             EventBus.Subscribe<GameLoadedEvent>(OnGameLoaded);
+            EventBus.Subscribe<ProficiencyLevelUpEvent>(OnProficiencyLevelUp);
+            EventBus.Subscribe<TalentWheelChangedEvent>(OnTalentWheelChanged);
 
             _localizer.Attach(_root, OnLanguageChanged, CharacterSheetTexts.Get);
             // D-pad between the "+" buttons and Fechar, A spends, B closes — see FocusNavigator.
-            _focusNavigator = FocusNavigator.Attach(_root, () => IsOpen, Hide, () => FirstSpendableButton() ?? _closeButton);
+            _focusNavigator = FocusNavigator.Attach(_root, () => IsOpen, OnCancel, () => FirstSpendableButton() ?? _closeButton);
             Hide();
         }
 
@@ -147,6 +155,8 @@ namespace Rapadura.UI.CharacterSheet
             EventBus.Unsubscribe<PlayerExperienceChangedEvent>(OnExperienceChanged);
             EventBus.Unsubscribe<InventoryChangedEvent>(OnInventoryChanged);
             EventBus.Unsubscribe<GameLoadedEvent>(OnGameLoaded);
+            EventBus.Unsubscribe<ProficiencyLevelUpEvent>(OnProficiencyLevelUp);
+            EventBus.Unsubscribe<TalentWheelChangedEvent>(OnTalentWheelChanged);
             SubscribeAttributes(null);
 
             _isOpen = false;
@@ -178,6 +188,7 @@ namespace Rapadura.UI.CharacterSheet
             // The document's own root must not swallow touches while the sheet is hidden (HUD under it).
             documentRoot.pickingMode = PickingMode.Ignore;
             BuildAttributeRows();
+            BuildTalentElements(documentRoot);
         }
 
         // ------------------------------------------------------------------
@@ -203,6 +214,7 @@ namespace Rapadura.UI.CharacterSheet
 
         public void Hide()
         {
+            _wheel?.Close();
             _focusNavigator?.ReleaseFocus();
             _isOpen = false;
 
@@ -298,6 +310,8 @@ namespace Rapadura.UI.CharacterSheet
         private void OnExperienceChanged(PlayerExperienceChangedEvent evt) => RefreshIfOpen();
         private void OnInventoryChanged(InventoryChangedEvent evt) => RefreshIfOpen();
         private void OnGameLoaded(GameLoadedEvent evt) => RefreshIfOpen();
+        private void OnProficiencyLevelUp(ProficiencyLevelUpEvent evt) => RefreshIfOpen();
+        private void OnTalentWheelChanged(TalentWheelChangedEvent evt) => RefreshIfOpen();
 
         private void OnLanguageChanged()
         {
@@ -417,6 +431,7 @@ namespace Rapadura.UI.CharacterSheet
             RefreshAttributes(manager);
             RefreshDerived(manager);
             RefreshEquipment(manager);
+            RefreshTalents(manager);
         }
 
         private PlayableCharacter CurrentHero()
@@ -599,6 +614,100 @@ namespace Rapadura.UI.CharacterSheet
             }
 
             return TooltipLocalization.GetFallback(key) ?? slot.ToString();
+        }
+
+        // ------------------------------------------------------------------
+        // Treino + Roda de Talentos (Docs/Balance/README.md §26)
+        // ------------------------------------------------------------------
+
+        /// <summary>B/Esc: closes the wheel first (back to the sheet), then the sheet.</summary>
+        private void OnCancel()
+        {
+            if (_wheel != null && _wheel.IsOpen)
+            {
+                _wheel.Close();
+                _wheelButton?.Focus();
+                return;
+            }
+
+            Hide();
+        }
+
+        /// <summary>The "Roda de Talentos" button under the attributes and the "Treino" rows under the status (built in code).</summary>
+        private void BuildTalentElements(VisualElement documentRoot)
+        {
+            if (_root == null)
+            {
+                return;
+            }
+
+            StyleSheet sheet = Resources.Load<StyleSheet>(TalentWheelView.StyleResourcePath);
+            if (sheet != null && !_root.styleSheets.Contains(sheet))
+            {
+                _root.styleSheets.Add(sheet);
+            }
+
+            if (_attributeList?.parent != null && _wheelButton == null)
+            {
+                _wheelButton = new Button(OpenWheel) { name = "character-sheet-talent-wheel-button" };
+                _wheelButton.AddToClassList("talent-open-button");
+                _wheelButton.AddToClassList("rap-button");
+                VisualElement column = _attributeList.parent;
+                column.Insert(column.IndexOf(_attributeList) + 1, _wheelButton);
+            }
+
+            if (_derivedList?.parent != null && _trainingList == null)
+            {
+                VisualElement column = _derivedList.parent;
+                _trainingHeader = NewLabel("character-sheet-section-header");
+                _trainingHeader.AddToClassList("character-sheet-section-header--spaced");
+                _trainingList = new VisualElement { name = "character-sheet-training-list" };
+                _trainingList.pickingMode = PickingMode.Ignore;
+                int at = column.IndexOf(_derivedList) + 1;
+                column.Insert(at, _trainingHeader);
+                column.Insert(at + 1, _trainingList);
+            }
+
+            VisualElement window = documentRoot.Q<VisualElement>("character-sheet-window");
+            _wheel ??= new TalentWheelView(_root, window, () => Localization, () => (_playerStats, _buffs, _inventory));
+        }
+
+        private void OpenWheel()
+        {
+            ResolvePlayer();
+            _wheel?.Open();
+        }
+
+        private void RefreshTalents(LocalizationManager manager)
+        {
+            if (_wheelButton != null)
+            {
+                _wheelButton.text = TalentTexts.Get(manager, TalentTexts.OpenButton);
+            }
+
+            if (_trainingHeader != null)
+            {
+                _trainingHeader.text = TalentTexts.Get(manager, TalentTexts.TrainingHeader);
+            }
+
+            if (_trainingList != null)
+            {
+                _trainingList.Clear();
+                if (TalentProgress.TryActiveHero(out CharacterId hero))
+                {
+                    foreach (ProficiencySpec spec in ProficiencyRules.Specs)
+                    {
+                        Label row = NewLabel("talent-training-row");
+                        row.text = TalentWheelPresenter.TrainingText(TalentProgress.ResolveShared().Proficiency(hero, spec.Kind), manager);
+                        _trainingList.Add(row);
+                    }
+                }
+            }
+
+            if (_wheel != null && _wheel.IsOpen)
+            {
+                _wheel.Refresh();
+            }
         }
 
         private Button FirstSpendableButton()

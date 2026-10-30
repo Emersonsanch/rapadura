@@ -83,6 +83,8 @@ namespace Rapadura.Gameplay.Refining
 
         /// <summary>Amuleto da Sorte: added to the success chance of a roll that can fail.</summary>
         public const float LuckCharmBonus = 0.10f;
+        /// <summary>A piece "com Sorte" (ItemOptionRules): added to the chance of its rolls that can fail (stacks with the charm, cap 95%).</summary>
+        public const float LuckBonus = 0.05f;
         /// <summary>A roll that can fail never becomes certain, not even with the charm.</summary>
         public const float MaxChance = 0.95f;
         /// <summary>Pedra da Vida's chance of adding one level to the option line.</summary>
@@ -156,15 +158,25 @@ namespace Rapadura.Gameplay.Refining
         public static bool CanFail(int level) => BaseChance(level) < 1f && ClampLevel(level) < MaxLevel;
 
         /// <summary>Chance of <paramref name="level"/> → +1, with the Amuleto da Sorte when <paramref name="withCharm"/>.</summary>
-        public static float ChanceFor(int level, bool withCharm)
+        public static float ChanceFor(int level, bool withCharm, bool luck = false)
         {
             float chance = BaseChance(level);
-            if (withCharm && CanFail(level))
+            if (!CanFail(level))
             {
-                chance = Math.Min(MaxChance, chance + LuckCharmBonus);
+                return chance;
             }
 
-            return chance;
+            if (withCharm)
+            {
+                chance += LuckCharmBonus;
+            }
+
+            if (luck)
+            {
+                chance += LuckBonus;
+            }
+
+            return withCharm || luck ? Math.Min(MaxChance, chance) : chance;
         }
 
         /// <summary>Gold paid with the stone to refine from <paramref name="level"/>.</summary>
@@ -302,10 +314,10 @@ namespace Rapadura.Gameplay.Refining
         /// Resolves a roll already drawn: success when <c>roll &lt; chance</c>. At the cap there is nothing to attempt
         /// (<see cref="Check"/> answers <see cref="RefineCheck.MaxLevel"/>), so a stray call is a no-op, never a drop.
         /// </summary>
-        public static RefineAttempt Resolve(int level, bool withCharm, double roll)
+        public static RefineAttempt Resolve(int level, bool withCharm, double roll, bool luck = false)
         {
             level = ClampLevel(level);
-            float chance = ChanceFor(level, withCharm);
+            float chance = ChanceFor(level, withCharm, luck);
             bool atCap = level >= MaxLevel;
             bool success = !atCap && roll < chance;
             int to = success ? level + 1 : atCap ? level : FailureLevel(level);
@@ -313,7 +325,7 @@ namespace Rapadura.Gameplay.Refining
         }
 
         /// <summary>One refine from <paramref name="level"/> with <paramref name="seed"/> (online: the server's seed).</summary>
-        public static RefineAttempt Attempt(int level, bool withCharm, int seed) => Resolve(level, withCharm, Roll(seed));
+        public static RefineAttempt Attempt(int level, bool withCharm, int seed, bool luck = false) => Resolve(level, withCharm, Roll(seed), luck);
 
         /// <summary>One Pedra da Vida on <paramref name="option"/>: the new option level (unchanged on failure).</summary>
         public static int ResolveOption(int option, double roll)

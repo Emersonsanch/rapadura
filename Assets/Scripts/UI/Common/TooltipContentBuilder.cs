@@ -31,6 +31,9 @@ namespace Rapadura.UI.Common
         /// <summary>Refine glow tier 0..5 of the item (<see cref="Rapadura.Gameplay.Refining.RefineRules.GlowTier"/>): the title glows from +7.</summary>
         public int RefineGlowTier;
 
+        /// <summary>The MU-style option lines (also in <see cref="StatLines"/>): the tooltip paints them green ("Excelente").</summary>
+        public readonly List<string> OptionLines = new List<string>();
+
         public string ToPlainText()
         {
             var builder = new StringBuilder();
@@ -136,6 +139,9 @@ namespace Rapadura.UI.Common
             }
 
             AppendAffixLines(slot, lines, localize, resolveAffix ?? AffixDatabase.GetById);
+            // MU-style options (FASE 16): green "Excelente" lines, luck, ancient set, sockets.
+            content.OptionLines.AddRange(Rapadura.Gameplay.Items.Options.ItemOptionTexts.TooltipLines(ContentText.CurrentManager, item, slot));
+            lines.AddRange(content.OptionLines);
 
             if (item.HealthRestore > 0f)
             {
@@ -166,6 +172,14 @@ namespace Rapadura.UI.Common
             if (slot != null && item.HasDurability)
             {
                 lines.Add(Format(localize, "ui.tooltip.durability", Number(slot.currentDurability), Number(item.MaxDurability)));
+                if (Rapadura.Gameplay.Items.Durability.DurabilityRules.IsBroken(item, slot))
+                {
+                    lines.Add(Rapadura.Gameplay.Items.Durability.DurabilityTexts.Get(ContentText.CurrentManager, Rapadura.Gameplay.Items.Durability.DurabilityTexts.TooltipBroken));
+                }
+                else if (Rapadura.Gameplay.Items.Durability.DurabilityRules.IsWorn(item.MaxDurability, slot.currentDurability))
+                {
+                    lines.Add(Rapadura.Gameplay.Items.Durability.DurabilityTexts.Get(ContentText.CurrentManager, Rapadura.Gameplay.Items.Durability.DurabilityTexts.TooltipWorn));
+                }
             }
 
             if (slot != null && item.IsStackable && slot.quantity > 1)

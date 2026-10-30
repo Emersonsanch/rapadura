@@ -70,6 +70,8 @@ namespace Rapadura.Audio
         HeroLanding = 40,
         /// <summary>Looping countryside bed under the title music (main menu / hero select).</summary>
         TitleAmbience = 41,
+        /// <summary>One of the hero's feet planted while walking/running (<c>PlayerFootstepEvent</c>). Very subtle.</summary>
+        HeroFootstep = 42,
     }
 
     /// <summary>Music state chosen by <see cref="MusicDirector"/>. Serialized as int — append only.</summary>

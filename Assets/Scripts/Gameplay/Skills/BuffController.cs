@@ -191,6 +191,22 @@ namespace Rapadura.Gameplay.Skills
             }
         }
 
+        /// <summary>
+        /// Removes the active debuffs (slows, DoTs such as poison and burn), only those on <paramref name="stat"/> when given.
+        /// Used by the mounts' Banho de Lama / Teimosia Santa (Docs/Mounts.md §3). Returns how many were removed.
+        /// </summary>
+        public int RemoveDebuffs(StatType? stat = null)
+        {
+            int removed = _activeEffects.RemoveAll(e => e.Definition != null && e.Definition.isDebuff
+                && (!stat.HasValue || e.Definition.affectedStat == stat.Value));
+            if (removed > 0)
+            {
+                OnModifiersChanged?.Invoke();
+            }
+
+            return removed;
+        }
+
         /// <summary>Whether any active effect carries <paramref name="sourceKey"/> (e.g. a meal's effects survived a carried-state restore).</summary>
         public bool HasEffectsFromSource(string sourceKey)
         {

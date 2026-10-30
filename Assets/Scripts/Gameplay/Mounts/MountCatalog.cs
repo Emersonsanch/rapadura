@@ -61,7 +61,13 @@ namespace Rapadura.Gameplay.Mounts
         public const string FaroDeTesouro = "faro_de_tesouro";
         public const string ZurroEspantaBicho = "zurro_espanta_bicho";
 
-        public static readonly IReadOnlyList<MountSpec> Specs = new List<MountSpec>
+        /// <summary>Every playable species: the three M1 starters, then M3 wave 1 (<see cref="MountWaveCatalog"/>).</summary>
+        public static readonly IReadOnlyList<MountSpec> Specs = StarterSpecs().Concat(MountWaveCatalog.Specs).ToList();
+
+        /// <summary>The three M1 starters (§13 M1).</summary>
+        public static IReadOnlyList<MountSpec> Starters => Specs.Take(3).ToList();
+
+        private static IEnumerable<MountSpec> StarterSpecs() => new List<MountSpec>
         {
             new MountSpec
             {

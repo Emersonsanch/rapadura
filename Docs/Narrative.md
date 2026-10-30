@@ -305,3 +305,38 @@ normais) não citam nada além do prólogo.
 - `SecretTexts.PanelSubtitle`: "pela ilha" / "around the island" está **certo** (o mapa é uma ilha; ver §1).
 - `SecretTexts` (Fita vermelha da Lavine, en): "Noite Rubra" já padronizado.
 - Ordem da trilha pessoal/Convocação: resolvida (Convocação termina no Habitante Ancestral, §4).
+
+---
+
+## 10. Cutscenes (intro, outro, ferrões de chefe)
+
+Código: `Gameplay/Story/CutsceneScript.cs` (lista de planos em C# puro — sem ScriptableObject), `CutsceneSequence.cs`
+(relógio, regras, câmera), `CutsceneTexts.cs` (en + pt-BR), apresentador `UI/Story/CutscenePlayerController.cs`, visual
+`Resources/UI/Cutscene.uss`. **Sem Timeline:** `com.unity.timeline` não está no `Packages/manifest.json` e o mapa-múndi é
+montado em código (não há cena para autorar uma Timeline), então um player pequeno guiado por dados move a `Camera.main`
+entre enquadramentos (órbita: foco, yaw, pitch, distância, FOV) ancorados nos nós de região do mapa (Vila = nó da Floresta).
+
+**Moldura mítica (maniqueísta, em tom de conto infantil — não doutrina):** Luz × Treva; faíscas de luz presas na matéria
+(bichos, pedras, guardiões) que os primos libertam; o **Chamado** (o sonho da Maria) e a **Resposta** (os cinco); a sombra
+do **Príncipe das Trevas** escorrendo das Cavernas; a **Coluna da Glória** por onde a luz liberta sobe no fim. Quem conta o
+mito é o **Vô Jorge** (lembrado pela Vó Edna) — o coração humano são os cinco primos, a Vó Edna e a cadeira do Vô na varanda.
+
+| Cutscene | Quando | Planos (resumo) |
+|---|---|---|
+| **Intro "O Chamado"** | Novo jogo (ciclo 0), **antes** dos painéis do prólogo | Ilha inteira → chegada no sítio (Lavine "cheguei primeiro", Joaquim, Maithe conta os primos) → varanda (Vó Edna, café e bolo de milho) → Ícaro nota o Cristal apagado → a câmera cruza o mapa até as Cavernas: a pedra velha racha (o **gancho do selo**, só narrado — os primos ainda não sabem do selo) e a luz vira mil faíscas presas → Maria: o sonho chamando → Vó Edna: "quando a luz chama, a gente responde". Tinta de sombra cresce no gancho. |
+| **Outro "A Coluna da Glória"** | Depois dos painéis do epílogo, **antes dos créditos** | Ilha acesa, a luz sobe em coluna → Cavernas (Lavine se despede do Habitante, "vizinho") → Montanha/Deserto (Ícaro: medidor no máximo) → Floresta/Vila (Joaquim, bolo de milho; Maithe conta seis com o Caramelo) → **varanda da Vó Edna** (Maria: "ouvimos o chamado e respondemos"; Vó Edna; narrador: cadeira de balanço do Vô Jorge e a Coluna da Glória). Termina na varanda, como os créditos. |
+| **Ferrão de chefe** | Banner "Chefe da região" (`BossIntroBannerController`) | Linha extra sob o nome do chefe: a fala do **primo ativo** por região (`cutscene.stinger.<região>.<herói>`), ou uma linha do narrador sem herói. Fica +1,5 s no banner. |
+
+Regras de apresentação:
+- **Pulável sempre:** botão "Pular", Esc, gamepad Leste/Start. Toque / Espaço / Enter / gamepad Sul = próximo plano; cada
+  plano avança sozinho após o tempo de leitura (`CutsceneRules.ReadingSeconds`, 14 caracteres/s, 2,5–14 s).
+- **Reduzir Movimento / Flashes:** cada plano é um corte parado (sem travelling), barras e textos sem deslizar/fade, tintas
+  pela metade.
+- Letterbox, título no 1º plano, legenda com medalha de retrato (inicial + cor do herói; Vó Edna com cor própria; narrador
+  sem retrato, itálico). Esconde os outros UIDocuments e segura uma `GameplayPause`; devolve a câmera ao terminar.
+- **Música:** `StoryPanelController.IsShowing` inclui a cutscene, então o `MusicDirector` toca o contexto Story (intro) e
+  mantém a variante do epílogo (outro → créditos).
+- Toca **uma vez por sessão** por cutscene (sair no meio dos painéis não cria loop); Nova Jornada+ não tem intro (tem o
+  próprio prólogo). **Testes PlayMode:** `SmokeTestBase` desliga `CutscenePlayerController.AutoPlay`, então os fluxos
+  (`WorldMapFlowTestBase`, `CampaignPlaythroughTests`) nunca esperam por cutscenes.
+- Falas de cutscene seguem a §5: personagens só citam o que já foi liberado; o gancho do selo e o mito ficam com o narrador.

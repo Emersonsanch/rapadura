@@ -44,6 +44,31 @@ namespace Rapadura.Gameplay.Mounts.Visuals
         public bool Collar;
         public bool Packs;
 
+        // ---- M3 wave 1 extras (MountWaveDecor draws them; all default to "off") ----
+
+        /// <summary>Two legs (the rheas): only <c>Leg_HL/HR</c>, set under the body's centre.</summary>
+        public bool Biped;
+        public MountHornStyle Horns;
+        public MountCoatPattern Pattern;
+        public EnemySwatch PatternSwatch;
+        public EnemySwatch Accent;
+        public bool Tusks;
+        public bool Trunk;
+        public bool Shell;
+        public bool Shaggy;
+        public bool Jewel;
+        public bool FlameCrest;
+        public bool Beard;
+        public bool Wings;
+
+        /// <summary>Leg thickness factor (0 = 1: the starters; the mammoth and the tortoise have thick legs).</summary>
+        public float LegGirth;
+
+        public float Girth => LegGirth > 0f ? LegGirth : 1f;
+
+        /// <summary>Extra height of the seat (the tortoise rides on top of its shell).</summary>
+        public float SeatLift;
+
         public EnemySwatch Coat;
         public EnemySwatch Dark;
         public EnemySwatch Light;
@@ -58,7 +83,7 @@ namespace Rapadura.Gameplay.Mounts.Visuals
         public float BodyHeight => LegLength + BodyThickness * 0.12f;
 
         /// <summary>Height of the saddle top (the rider's hips).</summary>
-        public float SeatHeight => BodyHeight + BodyThickness * 0.5f + 0.05f;
+        public float SeatHeight => BodyHeight + BodyThickness * 0.5f + 0.05f + SeatLift;
     }
 
     /// <summary>
@@ -102,6 +127,11 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                         Blanket = EnemySwatch.Sandstone, Saddle = EnemySwatch.Leather, Trim = EnemySwatch.Gold,
                     };
                 default:
+                    if (MountWaveRecipes.TryShape(recipe, out QuadrupedShape wave))
+                    {
+                        return wave;
+                    }
+
                     return new QuadrupedShape
                     {
                         LegLength = 0.6f, BodyLength = 1.12f, BodyThickness = 0.44f, BodyWidth = 0.4f,
@@ -127,7 +157,7 @@ namespace Rapadura.Gameplay.Mounts.Visuals
             Vector3 neckBase = new Vector3(0f, s.BodyThickness * 0.22f, halfLength * 0.78f);
             Vector3 neckTip = neckBase + new Vector3(0f, Mathf.Sin(pitch), Mathf.Cos(pitch)) * s.NeckLength;
             int head = bp.Mesh(MountParts.Head, body, neckTip, b => DrawHead(b, s), Quaternion.Euler(12f, 0f, 0f));
-            for (int side = -1; side <= 1; side += 2)
+            for (int side = -1; side <= 1 && s.EarLength > 0f; side += 2)
             {
                 int captured = side;
                 Quaternion earRotation = s.FloppyEars
@@ -154,22 +184,29 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                 float L = s.LegLength;
                 float halfWidth = s.BodyWidth * 0.32f;
 
-                // Front: shoulder → elbow (just behind) → hoof/paw.
-                Vector3 frontKnee = new Vector3(0f, -L * 0.48f, -L * 0.04f);
-                Vector3 frontFoot = new Vector3(0f, -L * 0.42f, L * 0.04f);
-                int front = bp.Mesh("Leg_F" + x, -1, new Vector3(halfWidth * side, L, halfLength * 0.62f),
-                    b => DrawUpper(b, s, frontKnee, 0.085f, 0.05f, false), meshKey: "FrontUpper");
-                int frontShin = bp.Mesh("Shin_F" + x, front, frontKnee, b => DrawLower(b, s, frontFoot, 0.048f, 0.04f), meshKey: "FrontLower");
-                bp.Mesh("Foot_F" + x, frontShin, frontFoot, b => DrawFoot(b, s), meshKey: "Foot");
+                if (!s.Biped)
+                {
+                    // Front: shoulder → elbow (just behind) → hoof/paw.
+                    Vector3 frontKnee = new Vector3(0f, -L * 0.48f, -L * 0.04f);
+                    Vector3 frontFoot = new Vector3(0f, -L * 0.42f, L * 0.04f);
+                    int front = bp.Mesh("Leg_F" + x, -1, new Vector3(halfWidth * side, L, halfLength * 0.62f),
+                        b => DrawUpper(b, s, frontKnee, 0.085f, 0.05f, false), meshKey: "FrontUpper");
+                    int frontShin = bp.Mesh("Shin_F" + x, front, frontKnee, b => DrawLower(b, s, frontFoot, 0.048f, 0.04f), meshKey: "FrontLower");
+                    bp.Mesh("Foot_F" + x, frontShin, frontFoot, b => DrawFoot(b, s), meshKey: "Foot");
+                }
 
-                // Hind: hip → hock (well behind) → hoof/paw.
+                // Hind: hip → hock (well behind) → hoof/paw. A biped stands on them under the body's centre.
                 Vector3 hindKnee = new Vector3(0f, -L * 0.55f, -L * 0.1f);
                 Vector3 hindFoot = new Vector3(0f, -L * 0.35f, L * 0.1f);
-                int hind = bp.Mesh("Leg_H" + x, -1, new Vector3(halfWidth * side, L, -halfLength * 0.62f),
+                float hindZ = s.Biped ? -halfLength * 0.08f : -halfLength * 0.62f;
+                int hind = bp.Mesh("Leg_H" + x, -1, new Vector3(halfWidth * side, L, hindZ),
                     b => DrawUpper(b, s, hindKnee, 0.095f, 0.048f, true), meshKey: "HindUpper");
                 int hindShin = bp.Mesh("Shin_H" + x, hind, hindKnee, b => DrawLower(b, s, hindFoot, 0.045f, 0.04f), meshKey: "HindLower");
                 bp.Mesh("Foot_H" + x, hindShin, hindFoot, b => DrawFoot(b, s), meshKey: "Foot");
             }
+
+            // Horns, shell, trunk, spots, flames... of the M3 species (nothing for the starters).
+            MountWaveDecor.Decorate(bp, s, body, head);
         }
 
         // ------------------------------------------------------------------
@@ -355,10 +392,13 @@ namespace Rapadura.Gameplay.Mounts.Visuals
 
         private static void DrawUpper(EnemyMeshBuilder b, QuadrupedShape s, Vector3 knee, float topRadius, float bottomRadius, bool thigh)
         {
+            float g = s.Girth;
+            topRadius *= g;
+            bottomRadius *= g;
             b.Segment(knee, new Vector3(0f, 0.05f, 0f), bottomRadius, topRadius, 6, s.Coat);
             if (thigh)
             {
-                b.Blob(new Vector3(0f, -s.LegLength * 0.12f, -0.01f), new Vector3(0.16f, s.LegLength * 0.42f, 0.22f), s.Coat, coarse: true);
+                b.Blob(new Vector3(0f, -s.LegLength * 0.12f, -0.01f), new Vector3(0.16f * g, s.LegLength * 0.42f, 0.22f * g), s.Coat, coarse: true);
             }
 
             b.Blob(knee, Vector3.one * (bottomRadius * 2.1f), s.Coat, coarse: true);
@@ -367,6 +407,8 @@ namespace Rapadura.Gameplay.Mounts.Visuals
         private static void DrawLower(EnemyMeshBuilder b, QuadrupedShape s, Vector3 foot, float topRadius, float bottomRadius)
         {
             // The lower half takes the "socks" colour (white pé-de-pano, cream paws).
+            topRadius *= s.Girth;
+            bottomRadius *= s.Girth;
             Vector3 mid = foot * 0.45f;
             b.Segment(mid, Vector3.zero, bottomRadius * 1.05f, topRadius, 5, s.Coat);
             b.Segment(foot, mid, bottomRadius, bottomRadius * 1.05f, 5, s.Socks);
@@ -376,11 +418,11 @@ namespace Rapadura.Gameplay.Mounts.Visuals
         {
             if (s.Hooves)
             {
-                b.Cylinder(new Vector3(0f, -s.LegLength * 0.1f, 0.005f), 0.055f, 0.045f, s.LegLength * 0.1f, 6, s.Foot, s.Foot, bottomCap: true);
+                b.Cylinder(new Vector3(0f, -s.LegLength * 0.1f, 0.005f), 0.055f * s.Girth, 0.045f * s.Girth, s.LegLength * 0.1f, 6, s.Foot, s.Foot, bottomCap: true);
             }
             else
             {
-                b.Blob(new Vector3(0f, -s.LegLength * 0.06f, 0.03f), new Vector3(0.09f, s.LegLength * 0.12f, 0.13f), s.Socks, coarse: true);
+                b.Blob(new Vector3(0f, -s.LegLength * 0.06f, 0.03f), new Vector3(0.09f * s.Girth, s.LegLength * 0.12f, 0.13f * s.Girth), s.Socks, coarse: true);
             }
         }
     }

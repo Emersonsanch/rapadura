@@ -90,7 +90,7 @@ namespace Rapadura.Gameplay.Inventory
             return blessed ? DeathProtection.Blessing : DeathProtection.None;
         }
 
-        /// <summary>Any protection turns the 9% item drop into 0%.</summary>
+        /// <summary>Any protection turns the 9% item drop into 0% (a dropped item is lost for good, so this matters).</summary>
         public static bool AllowsItemDrop(DeathProtection protection) => protection == DeathProtection.None;
     }
 
@@ -150,7 +150,7 @@ namespace Rapadura.Gameplay.Inventory
     /// </summary>
     public static class DeathPenaltyService
     {
-        public static DeathPenaltyResult Apply(DeathPenaltyContext context, InventoryManager bag, LostAndFoundList lostAndFound,
+        public static DeathPenaltyResult Apply(DeathPenaltyContext context, InventoryManager bag,
             DeathProtectionState protection, Random random, Func<string, ItemDefinition> resolve = null)
         {
             bool hasPatua = bag != null && bag.GetTotalCount(PatuaRules.ItemId) > 0;
@@ -171,7 +171,7 @@ namespace Rapadura.Gameplay.Inventory
                 context.BossChallenge, context.NewGamePlusCycle);
 
             DeathDropResult drop = DeathPenaltyRules.AllowsItemDrop(used)
-                ? DeathDropService.Apply(bag, lostAndFound, random, resolve)
+                ? DeathDropService.Apply(bag, random, resolve)
                 : DeathDropResult.None;
 
             EventBus.Publish(new DeathPenaltyAppliedEvent(lost, used));

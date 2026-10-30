@@ -45,6 +45,18 @@ namespace Rapadura.Gameplay.Inventory
         public int refineLevel;
         public int refineOptionLevel;
 
+        // MU-style item options (FASE 16, ItemOptionRules / ItemOptionCatalog, Docs/Balance/README.md "Opções de item"):
+        // excellentMask = bits of the green "Excelente" lines, luck = "com Sorte", ancientSetId = the ancient set the
+        // piece belongs to (null = none), sockets = one entry per socket ("" = empty, else the EngravingCatalog id).
+        // Saves written before these lack the keys and load as 0 / false / null = a plain piece.
+        public int excellentMask;
+        public bool luck;
+        public string ancientSetId;
+        public string[] sockets;
+
+        /// <summary>True if the piece has any MU-style option (excellent, luck, ancient set or sockets).</summary>
+        public bool HasItemOptions => excellentMask != 0 || luck || !string.IsNullOrEmpty(ancientSetId) || (sockets != null && sockets.Length > 0);
+
         /// <summary>True if the item was refined or got an extra option (refine data travels like generated data).</summary>
         public bool HasRefineData => refineLevel > 0 || refineOptionLevel > 0;
 
@@ -61,7 +73,7 @@ namespace Rapadura.Gameplay.Inventory
         /// must not treat that as a plain item (merging would silently drop the generated data).
         /// </summary>
         public bool HasGeneratedData =>
-            HasGeneratedAffixes || !string.IsNullOrEmpty(generatedName) || generatedRarity != ItemRarity.Common || HasRefineData;
+            HasGeneratedAffixes || !string.IsNullOrEmpty(generatedName) || generatedRarity != ItemRarity.Common || HasRefineData || HasItemOptions;
 
         /// <summary>
         /// Copies only the procedural fields (affix ids/values, generated name, generated rarity)
@@ -76,6 +88,16 @@ namespace Rapadura.Gameplay.Inventory
             generatedRarity = source != null ? source.generatedRarity : ItemRarity.Common;
             refineLevel = source != null ? source.refineLevel : 0;
             refineOptionLevel = source != null ? source.refineOptionLevel : 0;
+            CopyItemOptionsFrom(source);
+        }
+
+        /// <summary>Copies only the MU-style options (excellent, luck, ancient set, sockets; the array is cloned).</summary>
+        public void CopyItemOptionsFrom(InventorySlotData source)
+        {
+            excellentMask = source != null ? source.excellentMask : 0;
+            luck = source != null && source.luck;
+            ancientSetId = source?.ancientSetId;
+            sockets = source?.sockets != null ? (string[])source.sockets.Clone() : null;
         }
 
         /// <summary>Deep copy of this slot (including generated data) with an explicit quantity.</summary>
@@ -109,6 +131,10 @@ namespace Rapadura.Gameplay.Inventory
             generatedRarity = ItemRarity.Common;
             refineLevel = 0;
             refineOptionLevel = 0;
+            excellentMask = 0;
+            luck = false;
+            ancientSetId = null;
+            sockets = null;
             gridX = 0;
             gridY = 0;
         }

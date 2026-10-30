@@ -9,13 +9,15 @@ namespace Rapadura.Gameplay.Inventory
     /// "Na pressa, você deixou cair…": the 9% death drop (Docs/Balance/README.md, "Queda de item ao morrer"). Pure and
     /// seeded (a <see cref="Random"/> is passed in), EditMode-tested.
     /// <list type="bullet">
-    /// <item>Each player death rolls <see cref="DropChance"/> once.</item>
-    /// <item>On success one random eligible backpack entry falls — the whole entry (a stack falls as a stack).
-    /// Equipped gear is never touched (it is not in the backpack grid).</item>
+    /// <item>Each unprotected player death rolls <see cref="DropChance"/> once (the Patuá da Vó Zefa and the Bênção da
+    /// Romaria turn it into 0%, <see cref="DeathPenaltyRules.AllowsItemDrop"/>).</item>
+    /// <item>On success <b>exactly one unit</b> of one random eligible backpack entry falls: a stack of 6 potions loses 1
+    /// and keeps 5 (<see cref="DropQuantity"/>). Equipped gear is never touched (it is not in the backpack grid).</item>
     /// <item>Not eligible (<see cref="IsEligible"/>): gold/currency, quest and story items, relics, items flagged
     /// <see cref="ItemDefinition.IsBound"/>, unknown ids.</item>
-    /// <item>Offline the item goes to "Achados e Perdidos" at Vó Zefa's (<see cref="LostAndFoundList"/>), to buy back for
-    /// <see cref="BuybackFee"/> gold, so a kid never loses an item for good.</item>
+    /// <item><b>A lost item can not be recovered.</b> Offline it is gone for good (there is no buy-back). Online (FASE 12)
+    /// the server drops that same unit on the ground where the hero fell, for anyone to pick up (MU Online style); the
+    /// rule that picks it is this one, so the server can run it as is.</item>
     /// </list>
     /// </summary>
     public static class DeathDropRules
@@ -23,8 +25,8 @@ namespace Rapadura.Gameplay.Inventory
         /// <summary>Chance per death that one item falls out of the backpack.</summary>
         public const float DropChance = 0.09f;
 
-        /// <summary>Gold the buy-back costs at "Achados e Perdidos", per rarity (flat; the whole entry comes back).</summary>
-        public static readonly int[] BuybackFeeByRarity = { 10, 25, 60, 150, 400 };
+        /// <summary>Units that fall from the chosen entry: always one, never the whole stack.</summary>
+        public const int DropQuantity = 1;
 
         /// <summary>Id prefix reserved for relic items, should relics ever become bag items (today they live in SecretsProgress).</summary>
         public const string RelicIdPrefix = "relic_";
@@ -72,163 +74,30 @@ namespace Rapadura.Gameplay.Inventory
             return eligible.Count == 0 ? -1 : eligible[random.Next(eligible.Count)];
         }
 
+        /// <summary>How many units fall from <paramref name="slot"/>: <see cref="DropQuantity"/>, or 0 for an empty slot.</summary>
+        public static int QuantityToDrop(InventorySlotData slot) =>
+            slot == null || slot.IsEmpty ? 0 : Math.Min(DropQuantity, slot.quantity);
+
         /// <summary>A generated roll counts at its rolled rarity when higher than the base item's (as the tooltip shows it).</summary>
         public static ItemRarity RarityOf(InventorySlotData slot, ItemDefinition item)
         {
             ItemRarity baseRarity = item != null ? item.Rarity : ItemRarity.Common;
             return slot != null && slot.HasGeneratedData && slot.generatedRarity > baseRarity ? slot.generatedRarity : baseRarity;
         }
-
-        public static int BuybackFee(ItemRarity rarity)
-        {
-            int index = (int)rarity;
-            if (index < 0)
-            {
-                index = 0;
-            }
-
-            return BuybackFeeByRarity[Math.Min(index, BuybackFeeByRarity.Length - 1)];
-        }
-    }
-
-    /// <summary>One item waiting at "Achados e Perdidos" (the whole dropped entry, affixes included, plus its fee).</summary>
-    [Serializable]
-    public class LostAndFoundEntry
-    {
-        public InventorySlotData item;
-        public int fee;
-    }
-
-    /// <summary>Raised when the death drop took an item out of the backpack (<see cref="DeathDropService.Apply"/>).</summary>
-    public readonly struct ItemDroppedOnDeathEvent : IGameEvent
-    {
-        public readonly InventorySlotData Item;
-        public readonly int Fee;
-
-        public ItemDroppedOnDeathEvent(InventorySlotData item, int fee)
-        {
-            Item = item;
-            Fee = fee;
-        }
-    }
-
-    /// <summary>Outcome of <see cref="LostAndFoundList.TryBuyBack"/>.</summary>
-    public enum LostAndFoundBuyback
-    {
-        Ok,
-        Invalid,
-        NotEnoughGold,
-        BagFull,
     }
 
     /// <summary>
-    /// "Achados e Perdidos" at Vó Zefa's: items the death drop took, waiting to be bought back. Owned and saved by the
-    /// village chest (<see cref="VillageChestStorage.LostAndFound"/>, same save entry, same new-game reset).
+    /// Raised when the death drop took an item out of the backpack (<see cref="DeathDropService.Apply"/>). Offline nothing
+    /// keeps it; online the server turns this into a ground drop at the death spot.
     /// </summary>
-    public sealed class LostAndFoundList
+    public readonly struct ItemDroppedOnDeathEvent : IGameEvent
     {
-        /// <summary>The shop's currency (<c>ShopDefinition</c> default) pays the fee.</summary>
-        public const string FeeCurrencyItemId = "item_gold";
+        /// <summary>The unit that fell (quantity 1, affixes/durability as they were).</summary>
+        public readonly InventorySlotData Item;
 
-        private readonly List<LostAndFoundEntry> _entries = new List<LostAndFoundEntry>();
-
-        public IReadOnlyList<LostAndFoundEntry> Entries => _entries;
-
-        public int Count => _entries.Count;
-
-        public event Action Changed;
-
-        public void Add(InventorySlotData item, int fee)
+        public ItemDroppedOnDeathEvent(InventorySlotData item)
         {
-            if (item == null || item.IsEmpty)
-            {
-                return;
-            }
-
-            _entries.Add(new LostAndFoundEntry { item = item.CloneWithQuantity(item.quantity), fee = Math.Max(0, fee) });
-            Changed?.Invoke();
-        }
-
-        /// <summary>
-        /// Pays the fee from <paramref name="bag"/> and puts the item back in it (stacks/affixes/durability intact). Nothing
-        /// changes unless both the gold and the room are there.
-        /// </summary>
-        public LostAndFoundBuyback TryBuyBack(int index, InventoryManager bag, string currencyItemId = FeeCurrencyItemId)
-        {
-            if (bag == null || index < 0 || index >= _entries.Count)
-            {
-                return LostAndFoundBuyback.Invalid;
-            }
-
-            LostAndFoundEntry entry = _entries[index];
-            if (entry.fee > 0 && bag.GetTotalCount(currencyItemId) < entry.fee)
-            {
-                return LostAndFoundBuyback.NotEnoughGold;
-            }
-
-            if (!bag.CanFitCopy(entry.item))
-            {
-                return LostAndFoundBuyback.BagFull;
-            }
-
-            if (entry.fee > 0 && !bag.RemoveById(currencyItemId, entry.fee))
-            {
-                return LostAndFoundBuyback.NotEnoughGold;
-            }
-
-            if (!bag.TryAddCopy(entry.item))
-            {
-                ItemDefinition currency = ItemDatabase.GetById(currencyItemId);
-                if (currency != null && entry.fee > 0)
-                {
-                    bag.AddItem(currency, entry.fee);
-                }
-
-                return LostAndFoundBuyback.BagFull;
-            }
-
-            _entries.RemoveAt(index);
-            Changed?.Invoke();
-            return LostAndFoundBuyback.Ok;
-        }
-
-        public void Clear()
-        {
-            if (_entries.Count == 0)
-            {
-                return;
-            }
-
-            _entries.Clear();
-            Changed?.Invoke();
-        }
-
-        public LostAndFoundEntry[] Capture()
-        {
-            var copy = new LostAndFoundEntry[_entries.Count];
-            for (int i = 0; i < copy.Length; i++)
-            {
-                copy[i] = new LostAndFoundEntry { item = _entries[i].item.CloneWithQuantity(_entries[i].item.quantity), fee = _entries[i].fee };
-            }
-
-            return copy;
-        }
-
-        public void Restore(LostAndFoundEntry[] saved)
-        {
-            _entries.Clear();
-            if (saved != null)
-            {
-                foreach (LostAndFoundEntry entry in saved)
-                {
-                    if (entry?.item != null && !entry.item.IsEmpty)
-                    {
-                        _entries.Add(new LostAndFoundEntry { item = entry.item.CloneWithQuantity(entry.item.quantity), fee = Math.Max(0, entry.fee) });
-                    }
-                }
-            }
-
-            Changed?.Invoke();
+            Item = item;
         }
     }
 
@@ -236,25 +105,25 @@ namespace Rapadura.Gameplay.Inventory
     public readonly struct DeathDropResult
     {
         public readonly bool Dropped;
-        public readonly InventorySlotData Item;
-        public readonly int Fee;
 
-        public DeathDropResult(InventorySlotData item, int fee)
+        /// <summary>The unit that fell (quantity <see cref="DeathDropRules.DropQuantity"/>), or null.</summary>
+        public readonly InventorySlotData Item;
+
+        public DeathDropResult(InventorySlotData item)
         {
             Dropped = item != null;
             Item = item;
-            Fee = fee;
         }
 
         public static DeathDropResult None => default;
     }
 
-    /// <summary>Applies <see cref="DeathDropRules"/> to a live bag (offline: the item moves to "Achados e Perdidos").</summary>
+    /// <summary>Applies <see cref="DeathDropRules"/> to a live bag: one unit leaves it for good.</summary>
     public static class DeathDropService
     {
-        public static DeathDropResult Apply(InventoryManager bag, LostAndFoundList lostAndFound, Random random, Func<string, ItemDefinition> resolve = null)
+        public static DeathDropResult Apply(InventoryManager bag, Random random, Func<string, ItemDefinition> resolve = null)
         {
-            if (bag == null || lostAndFound == null)
+            if (bag == null)
             {
                 return DeathDropResult.None;
             }
@@ -268,17 +137,16 @@ namespace Rapadura.Gameplay.Inventory
             }
 
             InventorySlotData slot = slots[index];
-            InventorySlotData dropped = slot.CloneWithQuantity(slot.quantity);
-            int fee = DeathDropRules.BuybackFee(DeathDropRules.RarityOf(slot, resolve(slot.itemId)));
+            int quantity = DeathDropRules.QuantityToDrop(slot);
+            InventorySlotData dropped = slot.CloneWithQuantity(quantity);
 
-            if (!bag.RemoveFromSlot(index, slot.quantity))
+            if (quantity <= 0 || !bag.RemoveFromSlot(index, quantity))
             {
                 return DeathDropResult.None;
             }
 
-            lostAndFound.Add(dropped, fee);
-            EventBus.Publish(new ItemDroppedOnDeathEvent(dropped, fee));
-            return new DeathDropResult(dropped, fee);
+            EventBus.Publish(new ItemDroppedOnDeathEvent(dropped));
+            return new DeathDropResult(dropped);
         }
     }
 }

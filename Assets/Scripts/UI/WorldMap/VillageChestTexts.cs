@@ -20,13 +20,6 @@ namespace Rapadura.UI.WorldMap
         public const string BagWeight = "ui.village_chest.bag_weight";
         /// <summary>{0} = used cells, {1} = cells of the Mochila grid.</summary>
         public const string BagSpace = "ui.village_chest.bag_space";
-        public const string LostFoundTitle = "ui.village_chest.lost_found_title";
-        /// <summary>{0} = item (with quantity), {1} = gold fee.</summary>
-        public const string LostFoundEntry = "ui.village_chest.lost_found_entry";
-        /// <summary>{0} = item name.</summary>
-        public const string StatusBoughtBack = "ui.village_chest.status_bought_back";
-        /// <summary>{0} = gold fee.</summary>
-        public const string StatusNoGold = "ui.village_chest.status_no_gold";
         /// <summary>{0} = items still waiting in the chest's inbox.</summary>
         public const string InboxWaiting = "ui.village_chest.inbox_waiting";
         /// <summary>{0} = used slots, {1} = slot count.</summary>
@@ -65,10 +58,6 @@ namespace Rapadura.UI.WorldMap
             new LocalizationEntry(ChestPane, "Chest", "Baú"),
             new LocalizationEntry(BagWeight, "Weight {0}/{1}", "Peso {0}/{1}"),
             new LocalizationEntry(BagSpace, "Space {0}/{1}", "Espaço {0}/{1}"),
-            new LocalizationEntry(LostFoundTitle, "Lost and found — Grandma kept what you dropped", "Achados e Perdidos — a Vó guardou o que você deixou cair"),
-            new LocalizationEntry(LostFoundEntry, "Get back {0} — {1} gold", "Recuperar {0} — {1} de ouro"),
-            new LocalizationEntry(StatusBoughtBack, "{0} is back in the backpack. Grandma says: be careful out there!", "{0} voltou pra mochila. A Vó diz: cuidado por aí!"),
-            new LocalizationEntry(StatusNoGold, "Not enough gold: Grandma asks {0}.", "Falta ouro: a Vó pede {0}."),
             new LocalizationEntry(InboxWaiting, "{0} item(s) waiting for room in the chest.", "{0} item(ns) esperando lugar no baú."),
             new LocalizationEntry(ChestSlots, "Slots {0}/{1}", "Espaços {0}/{1}"),
             new LocalizationEntry(Hint, "Tap an item to move it to the other side; drag to carry the whole stack.", "Toque num item para levá-lo ao outro lado; arraste para levar a pilha inteira."),

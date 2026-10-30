@@ -58,6 +58,7 @@ namespace Rapadura.Tests
         private static readonly string[] CodeThemedSheets =
         {
             "Resources/UI/EncounterOverlays.uss",
+            "Resources/UI/Cutscene.uss",
             "Resources/UI/VillageKitchen.uss",
             "Resources/UI/CityHub.uss",
             "Resources/UI/SecretsOverlay.uss",
@@ -65,12 +66,14 @@ namespace Rapadura.Tests
             "Resources/UI/Fishing.uss",
             "Resources/UI/DuoStrike.uss",
             "Resources/UI/EventRooms.uss",
+            "Resources/UI/WorldEvents.uss",
             "Resources/UI/DailyRewards.uss",
             "Resources/UI/Mounts.uss",
             "Resources/UI/Refine.uss",
             "Resources/UI/Tacho.uss",
             "Resources/UI/Hunting.uss",
             "Resources/UI/House.uss",
+            "Resources/UI/FestaJunina.uss",
         };
 
         [Test]

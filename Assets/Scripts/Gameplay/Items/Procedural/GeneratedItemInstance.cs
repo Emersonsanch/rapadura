@@ -37,6 +37,12 @@ namespace Rapadura.Gameplay.Items.Procedural
         public IReadOnlyList<RolledAffix> Affixes { get; }
         public string GeneratedName { get; }
 
+        /// <summary>
+        /// MU-style options rolled with the drop (excellent, luck, ancient set, sockets; <c>ItemOptionRules.Roll</c>),
+        /// copied onto the slot by <c>InventoryManager.AddGeneratedItem</c>. Default = none.
+        /// </summary>
+        public Options.ItemOptionRoll Options { get; set; }
+
         public GeneratedItemInstance(ItemDefinition baseItem, ItemRarity rarity, IReadOnlyList<RolledAffix> affixes, string generatedName)
         {
             BaseItem = baseItem;

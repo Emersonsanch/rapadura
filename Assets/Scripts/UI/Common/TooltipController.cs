@@ -236,7 +236,7 @@ namespace Rapadura.UI.Common
             SetLabel(_label, null);
             SetLabel(_titleLabel, content.Title);
             SetLabel(_subtitleLabel, content.Subtitle);
-            SetLabel(_statsLabel, string.Join("\n", content.StatLines));
+            SetLabel(_statsLabel, JoinStatLines(content));
             SetLabel(_descriptionLabel, content.Description);
 
             if (_titleLabel != null)
@@ -439,6 +439,26 @@ namespace Rapadura.UI.Common
             float height = float.IsNaN(layout.height) ? 32f : layout.height;
 
             return new Vector2(width, height);
+        }
+
+        /// <summary>Green of the "Excelente" lines (readable on the dark tooltip panel).</summary>
+        public const string OptionLineColor = "#6FDB6F";
+
+        /// <summary>Stat lines joined by newlines; the MU-style option lines are painted green (rich text).</summary>
+        public static string JoinStatLines(TooltipContent content)
+        {
+            if (content == null)
+            {
+                return string.Empty;
+            }
+
+            var lines = new System.Collections.Generic.List<string>(content.StatLines.Count);
+            foreach (string line in content.StatLines)
+            {
+                lines.Add(content.OptionLines.Contains(line) ? "<color=" + OptionLineColor + ">" + line + "</color>" : line);
+            }
+
+            return string.Join("\n", lines);
         }
     }
 }

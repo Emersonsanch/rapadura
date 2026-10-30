@@ -158,6 +158,7 @@ namespace Rapadura.Gameplay.Player
         private Transform _rightFoot;
         private bool _rigMode;
         private PlayerFootIK _footIk;
+        private PlayerFootsteps _footsteps;
 
         private Renderer[] _renderers = new Renderer[0];
         private bool _flashApplied;
@@ -206,6 +207,11 @@ namespace Rapadura.Gameplay.Player
         private Vector2 _overlap;
         private Vector2 _overlapVelocity;
 
+        // Turn follow-through: yaw lag (deg) of head/neck/upper spine behind the body's turn, spring.
+        private float _turnLag;
+        private float _turnLagVelocity;
+        private float _prevYawRateSmoothed;
+
         // Timers (-1 = inactive; count up from 0)
         private float _attackTime = -1f;
         private float _attackStrikeDelay = HeroActionTiming.StrikeDelay;
@@ -227,6 +233,12 @@ namespace Rapadura.Gameplay.Player
         private float _deathFall;
         private float _deathSink;
         private bool _deathImpactDone;
+
+        /// <summary>Procedural step phase (radians, a footfall every π) — the rigid-body footsteps follow it.</summary>
+        public float StepPhase => _bobPhase;
+
+        /// <summary>Current turn follow-through yaw lag of the head (deg, before accessibility/toggle) — tests/debugging.</summary>
+        public float TurnLag => _turnLag;
 
         /// <summary>True when bone layers are active (a rig was found on the visual).</summary>
         public bool IsRigMode => _rigMode;
@@ -339,6 +351,7 @@ namespace Rapadura.Gameplay.Player
             }
 
             FindBones(visualRoot);
+            BindFootsteps(visualRoot);
             FindSecondaryBones(visualRoot);
             FindBlinkShape();
         }
@@ -393,6 +406,21 @@ namespace Rapadura.Gameplay.Player
 
                 _footIk.Initialize(_motor, transform);
             }
+        }
+
+        /// <summary>Footstep events (sound + dust) for this visual: its Animator's baked plant phases, else its feet, else the rigid step phase.</summary>
+        private void BindFootsteps(Transform root)
+        {
+            if (_footsteps == null)
+            {
+                _footsteps = GetComponent<PlayerFootsteps>();
+                if (_footsteps == null)
+                {
+                    _footsteps = gameObject.AddComponent<PlayerFootsteps>();
+                }
+            }
+
+            _footsteps.Bind(_motor, root != null ? root.GetComponentInChildren<Animator>() : null, _leftFoot, _rightFoot);
         }
 
         /// <summary>
@@ -554,6 +582,9 @@ namespace Rapadura.Gameplay.Player
         private float MotionScale => AccessibilitySettings.MotionScaleFor(_accessibility, _reducedMotionScale);
 
         private float SpringFrequency => Mathf.Max(0.2f, _profile.springFrequency);
+
+        /// <summary>Weight of the procedural overlap layer (springs, turn follow-through, extra hip bob): the hero's toggle × accessibility.</summary>
+        private float OverlapScale => _profile.proceduralOverlap ? MotionScale : 0f;
 
         /// <summary>The Animator plays real attack/cast clips: the procedural arm whip and cast pose stand down (lean, head look, flinch and flash stay).</summary>
         private bool ClipActions
@@ -879,6 +910,14 @@ namespace Rapadura.Gameplay.Player
             Vector2 drive = new Vector2(-_planarAccel.y, -_planarAccel.x) * gain;
             MotionFeelMath.StepSpring(ref _overlap, ref _overlapVelocity, Vector2.zero, SpringFrequency, _profile.springDamping, deltaTime, drive);
             _overlap = Vector2.ClampMagnitude(_overlap, 25f);
+
+            // Turn follow-through: in the turning body's frame the head feels the opposite of the yaw
+            // acceleration — it trails when a turn starts and swings past when it stops.
+            float yawAccel = (_yawRateSmoothed - _prevYawRateSmoothed) / deltaTime;
+            _prevYawRateSmoothed = _yawRateSmoothed;
+            MotionFeelMath.StepSpring(ref _turnLag, ref _turnLagVelocity, 0f, SpringFrequency, _profile.springDamping, deltaTime,
+                                      MotionFeelMath.TurnLagDrive(yawAccel, _profile.turnFollowThrough));
+            _turnLag = Mathf.Clamp(_turnLag, -_profile.turnLagMaxDegrees, _profile.turnLagMaxDegrees);
         }
 
         private void TickTimers(float deltaTime)
@@ -1012,7 +1051,8 @@ namespace Rapadura.Gameplay.Player
             float flinch = (_hitTime >= 0f ? LocomotionMath.Envelope(_hitTime, 0.04f, 0f, Mathf.Max(0.01f, _flinchDuration - 0.04f)) : 0f) * _profile.flinchScale;
 
             float alive = 1f - _deathFall;
-            Vector2 overlap = _overlap * motion;
+            Vector2 overlap = _overlap * OverlapScale;
+            float turnLag = _turnLag * OverlapScale;
             float counter = -_stride * _profile.torsoCounterTwist * moving;
             float pitch = (_leanPitch + _currentSpeedFactor * _runLeanDegrees) * alive
                           - _castArchDegrees * cast
@@ -1025,11 +1065,11 @@ namespace Rapadura.Gameplay.Player
             // upper chest takes a bit of the overlap (it rides on the spine like the head does).
             RotateChain(_spineLow, 0.35f, pitch, roll, torsoYaw * 0.3f - counter * 0.3f, right, forward, up);
             RotateChain(_chest, 0.35f, pitch + breath * 0.5f, roll, torsoYaw * 0.35f + counter * 0.4f, right, forward, up);
-            RotateChain(_upperChest, 0.3f, pitch + breath + overlap.x * 0.3f, roll + overlap.y * 0.3f, torsoYaw * 0.35f + counter * 0.6f, right, forward, up);
+            RotateChain(_upperChest, 0.3f, pitch + breath + overlap.x * 0.3f, roll + overlap.y * 0.3f, torsoYaw * 0.35f + counter * 0.6f + turnLag * 0.8f, right, forward, up);
 
             // Head: look (yaw), counter part of the lean so the eyes stay level, overlap lag, fidget,
             // flinch jerk, death droop.
-            float headYaw = (_headYaw + fidgetYaw * idle) * alive - torsoYaw * 0.5f - counter * 0.5f;
+            float headYaw = (_headYaw + fidgetYaw * idle) * alive - torsoYaw * 0.5f - counter * 0.5f + turnLag * 0.75f;
             float headPitch = -pitch * 0.4f * alive + overlap.x * 0.8f + fidgetPitch * idle * alive - _flinchDegrees * 0.6f * flinch + 22f * _deathFall;
             float headRoll = overlap.y * 0.8f;
             RotateChain(_neck, 0.4f, headPitch, headRoll, headYaw, right, forward, up);
@@ -1061,7 +1101,7 @@ namespace Rapadura.Gameplay.Player
             RestoreBases(_secondary);
             Vector3 right = transform.right;
             Vector3 forward = transform.forward;
-            Vector2 overlap = _overlap * MotionScale;
+            Vector2 overlap = _overlap * OverlapScale;
             float bob = Mathf.Abs(Mathf.Sin(_bobPhase)) * _currentSpeedFactor * 4f;
             foreach (Bone bone in _secondary)
             {
@@ -1145,7 +1185,7 @@ namespace Rapadura.Gameplay.Player
             float moving = Mathf.Clamp01(_currentSpeedFactor * 3f);
 
             // Lowest at full stride spread (double support), highest passing the feet — the physical walk bob.
-            float bob = -Mathf.Abs(_stride) * _profile.bobAmplitude * moving * MotionScale;
+            float bob = -Mathf.Abs(_stride) * _profile.bobAmplitude * moving * OverlapScale;
             Vector3 offset = transform.right * (shiftWave * _profile.weightShiftHip * idle)
                              + Vector3.up * (bob + _dip * MotionScale);
             _footIk.BodyOffset = offset * alive;
@@ -1182,15 +1222,15 @@ namespace Rapadura.Gameplay.Player
                 float bobScale = Mathf.Lerp(0.8f, 1.2f, Mathf.InverseLerp(0.5f, 1.5f, _profile.weight));
                 worldOffset += Vector3.up * (hop * _bobAmplitude * bobScale * (0.3f + _currentSpeedFactor) * Mathf.Clamp01(_currentSpeedFactor * 4f) * MotionScale);
 
-                pitch += (_currentSpeedFactor * _leanDegrees + _leanPitch) * alive + _overlap.x * 0.3f * MotionScale;
-                roll += (_leanRoll + stepWave * _swayDegrees * _currentSpeedFactor) * alive + _overlap.y * 0.3f * MotionScale;
+                pitch += (_currentSpeedFactor * _leanDegrees + _leanPitch) * alive + _overlap.x * 0.3f * OverlapScale;
+                roll += (_leanRoll + stepWave * _swayDegrees * _currentSpeedFactor) * alive + _overlap.y * 0.3f * OverlapScale;
                 yaw += -stepWave * _profile.torsoCounterTwist * 0.5f * _currentSpeedFactor * alive;
 
                 float idle = 1f - _currentSpeedFactor;
                 stretch += -footfall * _footfallSquash * _currentSpeedFactor;
                 stretch += Mathf.Sin(_idleClock * Mathf.PI * 2f * _profile.breathRate) * _breathScale * idle;
                 roll += Mathf.Sin(_idleClock * Mathf.PI * 2f / Mathf.Max(0.5f, _profile.weightShiftPeriod)) * _profile.weightShiftDegrees * idle;
-                yaw += _turnLead * 0.3f * alive;
+                yaw += _turnLead * 0.3f * alive + _turnLag * 0.3f * OverlapScale;
 
                 if (_castTime >= 0f)
                 {

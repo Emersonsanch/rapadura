@@ -454,6 +454,20 @@ namespace Rapadura.Gameplay.Player
             _verticalVelocity = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
         }
 
+        /// <summary>
+        /// Upward velocity reaching <paramref name="height"/> m, grounded or not (the mounts' Pulo Duplo, Docs/Mounts.md §3.1).
+        /// Never slows a rise already faster than that.
+        /// </summary>
+        public void LaunchUpward(float height)
+        {
+            if (height <= 0f)
+            {
+                return;
+            }
+
+            _verticalVelocity = Mathf.Max(_verticalVelocity, Mathf.Sqrt(height * -2f * _gravity));
+        }
+
         public void SetCrouching(bool crouching)
         {
             _isCrouching = crouching;

@@ -436,5 +436,24 @@ namespace Rapadura.Gameplay.Player
 
             return Vector3.SignedAngle(facing, desired, Vector3.up);
         }
+
+        /// <summary>Largest body yaw acceleration (deg/s²) the turn follow-through reacts to (a snap turn must not whip the head).</summary>
+        public const float MaxTurnLagYawAcceleration = 12000f;
+
+        /// <summary>
+        /// External acceleration (deg/s²) on the head/neck yaw spring for turn follow-through: in the turning
+        /// body's frame a loose part feels minus the body's yaw acceleration, scaled by <paramref name="followThrough"/>
+        /// (0 = off, 1 = physical). Steady lag during the ramp = drive / ω², overshoot when the turn stops.
+        /// </summary>
+        public static float TurnLagDrive(float yawAccelerationDegrees, float followThrough)
+        {
+            if (float.IsNaN(yawAccelerationDegrees) || float.IsInfinity(yawAccelerationDegrees))
+            {
+                return 0f;
+            }
+
+            float a = Mathf.Clamp(yawAccelerationDegrees, -MaxTurnLagYawAcceleration, MaxTurnLagYawAcceleration);
+            return -a * Mathf.Clamp01(followThrough);
+        }
     }
 }

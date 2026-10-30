@@ -251,9 +251,9 @@ namespace Rapadura.Gameplay.World.Map
                 return;
             }
 
-            // Timed event rooms (Terreiro / Torre): EventRoomDirector spawns (SpawnDirected), scores and resolves
+            // Timed event rooms (Terreiro / Torre) and world events (WorldEventDirector): the director spawns (SpawnDirected), scores and resolves
             // (ResolveDirected). The arena has dressed the floor and placed the hero; flee/death still resolve here.
-            if (payload.IsEventRoom)
+            if (payload.IsDirected)
             {
                 IsDirected = true;
                 _region = payload.biome;

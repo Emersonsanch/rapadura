@@ -59,7 +59,12 @@ namespace Rapadura.Gameplay.Enemies
             reward = Rapadura.Gameplay.Daily.DailyStaminaRules.ScaleExperience(reward, Rapadura.Gameplay.Daily.DailyStaminaService.ResolveExperienceMultiplier());
             // "Descansado" (bed at home, Housing.md §6.1): +2..10% for a few fights; x1 when not rested (HouseService).
             reward = Rapadura.Gameplay.Housing.HouseRestedRules.ScaleExperience(reward, Rapadura.Gameplay.Housing.HouseService.ResolveRestedMultiplier());
-            killerStats.AddExperience(NewGamePlusRules.ScaleExperience(reward, NewGamePlusProgress.ResolveCurrentCycle()));
+            reward = NewGamePlusRules.ScaleExperience(reward, NewGamePlusProgress.ResolveCurrentCycle());
+            // Master level (Docs/ClassEvolution.md §4): a cousin with the 3rd graduation at the max level fills the master bar instead.
+            if (!Rapadura.Gameplay.ClassEvolution.ClassEvolutionProgress.TryRouteMasterExperience(killerStats, reward))
+            {
+                killerStats.AddExperience(reward);
+            }
         }
     }
 }

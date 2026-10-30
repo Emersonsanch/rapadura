@@ -49,6 +49,7 @@ namespace Rapadura.Tests
             (SfxTrigger.EnemyWindup, "enemy.windup"),
             (SfxTrigger.HeroLanding, "hero.land"),
             (SfxTrigger.TitleAmbience, "ambience.title"),
+            (SfxTrigger.HeroFootstep, "hero.step"),
         };
 
         private readonly List<GameObject> _objects = new List<GameObject>();
@@ -224,6 +225,7 @@ namespace Rapadura.Tests
             AssertPlaysOnce(router, "npc.talk", () => EventBus.Publish(new DialogueStartedEvent("npc_floresta", "start")));
             AssertPlaysOnce(router, "enemy.windup", () => EventBus.Publish(new EnemyAttackWindupEvent(enemy, Vector3.one, 0.6f)));
             AssertPlaysOnce(router, "hero.land", () => EventBus.Publish(new PlayerLandedEvent(player, Vector3.zero, 0.8f)));
+            AssertPlaysOnce(router, "hero.step", () => EventBus.Publish(new PlayerFootstepEvent(player, Vector3.zero, true, 0.5f)));
 
             SetThornsReflecting(true);
             AssertPlaysOnce(router, "combat.thorns", () => EventBus.Publish(new DamageAppliedEvent(enemy, player, 4f, ElementType.Physical, false)));

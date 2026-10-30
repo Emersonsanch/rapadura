@@ -33,6 +33,25 @@ namespace Rapadura.Gameplay.Player
         [SerializeField] private PlayerProceduralAnimator _proceduralAnimator;
 
         private GameObject _currentInstance;
+        private CharacterId? _currentId;
+
+        private void OnEnable()
+        {
+            Core.Events.EventBus.Subscribe<Wardrobe.WardrobeChangedEvent>(OnWardrobeChanged);
+        }
+
+        private void OnDisable()
+        {
+            Core.Events.EventBus.Unsubscribe<Wardrobe.WardrobeChangedEvent>(OnWardrobeChanged);
+        }
+
+        /// <summary>H5: re-dresses the live model when the wardrobe changes (Docs/Housing.md §9.6, WardrobeVisuals).</summary>
+        private void OnWardrobeChanged(Wardrobe.WardrobeChangedEvent evt)
+        {
+            if (_currentInstance == null || !_currentId.HasValue) return;
+            if (evt.Cousin.HasValue && evt.Cousin.Value != _currentId.Value) return;
+            Wardrobe.WardrobeVisuals.Apply(_currentInstance, _currentId.Value, Wardrobe.WardrobeService.ResolveShared().Book);
+        }
 
         public void SwapTo(CharacterId id)
         {
@@ -94,6 +113,9 @@ namespace Rapadura.Gameplay.Player
                 _proceduralAnimator.SetMotionProfile(profile);
                 _proceduralAnimator.SetVisualRoot(_currentInstance.transform);
             }
+
+            _currentId = id;
+            Wardrobe.WardrobeVisuals.Apply(_currentInstance, id, Wardrobe.WardrobeService.ResolveShared().Book);
         }
     }
 }

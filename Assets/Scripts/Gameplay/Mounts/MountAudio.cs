@@ -88,7 +88,27 @@ namespace Rapadura.Gameplay.Mounts
         }
 
         /// <summary>Step cue of a recipe: hooves for the pony and the donkey, soft paws for the dog.</summary>
-        public static string StepCueFor(MountVisualRecipe recipe) => recipe == MountVisualRecipe.BigDog ? PawStep : HoofStep;
+        public static string StepCueFor(MountVisualRecipe recipe)
+        {
+            switch (recipe)
+            {
+                // Soft feet: dogs, cats, the capybara, the anteater, the carbuncle, the rheas, Boitatá and the tortoise.
+                case MountVisualRecipe.BigDog:
+                case MountVisualRecipe.Capybara:
+                case MountVisualRecipe.ManedWolf:
+                case MountVisualRecipe.Anteater:
+                case MountVisualRecipe.SnowTiger:
+                case MountVisualRecipe.LightJaguar:
+                case MountVisualRecipe.Carbuncle:
+                case MountVisualRecipe.Rhea:
+                case MountVisualRecipe.FireRhea:
+                case MountVisualRecipe.Boitata:
+                case MountVisualRecipe.ElderTortoise:
+                    return PawStep;
+                default:
+                    return HoofStep;
+            }
+        }
 
         // ------------------------------------------------------------------
         // Synths (pure, EditMode-tested)

@@ -101,6 +101,12 @@ namespace Rapadura.Gameplay.Player
         [Range(0.1f, 1.5f)] public float springDamping = 0.55f;
         [Tooltip("Degrees of lag per m/s² of body acceleration.")]
         public float overlapGain = 1f;
+        [Tooltip("Procedural overlap layer on/off for this hero: head/spine/arm spring lag, turn follow-through and the extra hip bob. Off = only the clip, lean and foot IK.")]
+        public bool proceduralOverlap = true;
+        [Tooltip("Turn follow-through: share (0..1) of the physical yaw lag of head/neck/upper spine when a turn starts or stops (they trail, then overshoot).")]
+        [Range(0f, 1f)] public float turnFollowThrough = 0.35f;
+        [Tooltip("Largest yaw lag (deg) of the head on a turn.")]
+        [Range(0f, 20f)] public float turnLagMaxDegrees = 8f;
 
         [Header("Hit")]
         [Tooltip("Multiplier on the flinch/impact reaction.")]
@@ -171,6 +177,8 @@ namespace Rapadura.Gameplay.Player
                     p.springFrequency = 2.2f;
                     p.springDamping = 0.55f;
                     p.overlapGain = 1.4f;
+                    p.turnFollowThrough = 0.45f;
+                    p.turnLagMaxDegrees = 10f;
                     p.flinchScale = 0.75f;
                     break;
 
@@ -211,6 +219,8 @@ namespace Rapadura.Gameplay.Player
                     p.springFrequency = 2.6f;
                     p.springDamping = 0.75f;
                     p.overlapGain = 0.9f;
+                    p.turnFollowThrough = 0.3f;
+                    p.turnLagMaxDegrees = 7f;
                     p.flinchScale = 1f;
                     break;
 
@@ -251,6 +261,8 @@ namespace Rapadura.Gameplay.Player
                     p.springFrequency = 3.4f;
                     p.springDamping = 0.5f;
                     p.overlapGain = 1f;
+                    p.turnFollowThrough = 0.25f;
+                    p.turnLagMaxDegrees = 6f;
                     p.flinchScale = 1.2f;
                     break;
 
@@ -291,6 +303,8 @@ namespace Rapadura.Gameplay.Player
                     p.springFrequency = 3.2f;
                     p.springDamping = 0.45f;
                     p.overlapGain = 1.2f;
+                    p.turnFollowThrough = 0.35f;
+                    p.turnLagMaxDegrees = 8f;
                     p.flinchScale = 1.1f;
                     break;
 
@@ -331,6 +345,8 @@ namespace Rapadura.Gameplay.Player
                     p.springFrequency = 3f;
                     p.springDamping = 0.4f;
                     p.overlapGain = 1.3f;
+                    p.turnFollowThrough = 0.4f;
+                    p.turnLagMaxDegrees = 9f;
                     p.flinchScale = 1.3f;
                     break;
             }

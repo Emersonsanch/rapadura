@@ -85,6 +85,9 @@ namespace Rapadura.Gameplay.Enemies
             // Pedras do Sertão (refine stones, Amuleto da Sorte): their own rare-drop table, rolled last (RefineStoneDrops).
             drops.AddRange(Rapadura.Gameplay.Refining.RefineStoneDrops.Roll(definition.IsBoss, biome != null ? biome.Type : (BiomeType?)null,
                 _random, NewGamePlusProgress.ResolveCurrentCycle()));
+            // Partes dos bichos (crafting avançado): rolled after everything else so older seeds keep their drops (CreaturePartDrops).
+            drops.AddRange(Rapadura.Gameplay.Crafting.Advanced.CreaturePartDrops.Roll(definition.name, definition.IsBoss,
+                biome != null ? biome.Type : (BiomeType?)null, _random, NewGamePlusProgress.ResolveCurrentCycle()));
 
             Vector3 labelPosition = evt.Target.transform.position + Vector3.up * 1.8f;
             Func<string, int, int> outstanding = ResolveQuestNeeds();

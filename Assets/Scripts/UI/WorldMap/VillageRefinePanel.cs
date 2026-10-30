@@ -8,6 +8,8 @@ using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Items;
+using Rapadura.Gameplay.Items.Durability;
+using Rapadura.Gameplay.Items.Options;
 using Rapadura.Gameplay.Items.Procedural;
 using Rapadura.Gameplay.Refining;
 using Rapadura.UI.Common;
@@ -39,6 +41,7 @@ namespace Rapadura.UI.WorldMap
         private Label _smithLabel;
         private Label _ownedLabel;
         private Toggle _charmToggle;
+        private Button _repairAllButton;
         private ScrollView _list;
         private Label _statusLabel;
         private VisualElement _confirm;
@@ -205,6 +208,12 @@ namespace Rapadura.UI.WorldMap
             _smithLabel = AddLabel(panel, "refine-smith");
             _ownedLabel = AddLabel(panel, "refine-owned");
 
+            // Repair (FASE 16, RepairService): every worn piece at once, tools included; rows below repair one piece.
+            _repairAllButton = new Button(OnRepairAllClicked) { name = "wm-refine-repair-all", focusable = true };
+            _repairAllButton.AddToClassList("rap-button");
+            _repairAllButton.AddToClassList("refine-repair-all");
+            panel.Add(_repairAllButton);
+
             _charmToggle = new Toggle { name = "wm-refine-charm", focusable = true };
             _charmToggle.AddToClassList("refine-charm");
             _charmToggle.RegisterValueChangedCallback(_ => Rebuild());
@@ -274,6 +283,13 @@ namespace Rapadura.UI.WorldMap
                 _bag.GetTotalCount(RefineItems.BlessingStone), _bag.GetTotalCount(RefineItems.SoulStone),
                 _bag.GetTotalCount(RefineItems.LifeStone), _bag.GetTotalCount(RefineItems.LuckCharm), _bag.GetTotalCount(RefineItems.Gold));
             _charmToggle.label = RefineTexts.Get(localization, RefineTexts.UseCharm);
+            DurabilityTexts.EnsureRegistered(localization);
+            ItemOptionTexts.EnsureRegistered(localization);
+            int repairCost = RepairService.RepairAllCost(_bag, out int wornPieces);
+            _repairAllButton.text = wornPieces > 0
+                ? DurabilityTexts.Format(localization, DurabilityTexts.RepairAllButton, wornPieces, repairCost)
+                : DurabilityTexts.Get(localization, DurabilityTexts.NothingToRepair);
+            _repairAllButton.SetEnabled(wornPieces > 0 && _bag.GetTotalCount(RefineItems.Gold) >= repairCost);
             _closeButton.text = RefineTexts.Get(localization, RefineTexts.Close);
             _confirmYes.text = RefineTexts.Get(localization, RefineTexts.ConfirmYes);
             _confirmNo.text = RefineTexts.Get(localization, RefineTexts.ConfirmNo);
@@ -360,7 +376,148 @@ namespace Rapadura.UI.WorldMap
             option.AddToClassList("refine-option");
             option.SetEnabled(preview.CanAddOption);
             actions.Add(option);
+
+            AddRepairAndSockets(target, preview, index, localization, body, actions);
             return row;
+        }
+
+        /// <summary>The row's durability line + "Consertar", its option/socket lines and one "Engastar" button per engraving.</summary>
+        private void AddRepairAndSockets(RefineTarget target, RefinePreview preview, int index, LocalizationManager localization,
+            VisualElement body, VisualElement actions)
+        {
+            RepairQuote quote = RepairService.Quote(_bag, target);
+            if (quote.Check != RepairCheck.NotRepairable)
+            {
+                body.Add(NewLabel(DurabilityTexts.Format(localization, DurabilityTexts.RowLine,
+                    Mathf.CeilToInt(quote.Current).ToString(CultureInfo.InvariantCulture),
+                    Mathf.RoundToInt(quote.Max).ToString(CultureInfo.InvariantCulture), quote.Cost),
+                    quote.IsBroken ? "refine-row__fail" : "refine-row__cost"));
+                if (quote.Cost > 0)
+                {
+                    var repair = new Button(() => OnRepairClicked(target))
+                    {
+                        name = RowPrefix + index + "-repair",
+                        focusable = true,
+                        text = DurabilityTexts.Format(localization, DurabilityTexts.RepairButton, quote.Cost),
+                    };
+                    repair.AddToClassList("rap-button");
+                    repair.AddToClassList("refine-repair");
+                    repair.SetEnabled(quote.CanRepair);
+                    actions.Add(repair);
+                }
+            }
+
+            foreach (string line in ItemOptionTexts.TooltipLines(localization, preview.Item, preview.Data))
+            {
+                Label label = NewLabel(line, "refine-row__option");
+                label.style.color = new StyleColor(new Color(0.44f, 0.86f, 0.44f));
+                body.Add(label);
+            }
+
+            if (ItemOptionRules.FirstEmptySocket(preview.Data) < 0)
+            {
+                return;
+            }
+
+            body.Add(NewLabel(ItemOptionTexts.Get(localization, ItemOptionTexts.EngraveTitle), "refine-row__step"));
+            for (int e = 0; e < ItemOptionCatalog.Engravings.Length; e++)
+            {
+                Engraving engraving = ItemOptionCatalog.Engravings[e];
+                if (!ItemOptionRules.CanEngrave(preview.Item, engraving))
+                {
+                    continue;
+                }
+
+                var engrave = new Button(() => OnEngraveClicked(target, engraving.Id))
+                {
+                    name = RowPrefix + index + "-engrave-" + e,
+                    focusable = true,
+                    text = ItemOptionTexts.Format(localization, ItemOptionTexts.EngraveButton, ItemOptionTexts.Get(localization, engraving.NameKey),
+                        engraving.MaterialQuantity, MaterialName(engraving.MaterialId, localization), engraving.Gold),
+                };
+                engrave.AddToClassList("rap-button");
+                engrave.AddToClassList("refine-engrave");
+                engrave.SetEnabled(EngraveService.Check(_bag, target, engraving.Id) == EngraveCheck.Ok);
+                actions.Add(engrave);
+            }
+        }
+
+        private static string MaterialName(string itemId, LocalizationManager localization)
+        {
+            ItemDefinition item = ItemDatabase.GetById(itemId);
+            return item != null ? item.LocalizedName(localization) : itemId;
+        }
+
+        private void OnRepairClicked(RefineTarget target)
+        {
+            if (!_open || _bag == null)
+            {
+                return;
+            }
+
+            LocalizationManager localization = Localization;
+            InventorySlotData data = RefineService.Resolve(_bag, target);
+            string name = data != null ? GeneratedItemName.Compose(ItemDatabase.GetById(data.itemId), data, localization) : string.Empty;
+            if (RepairService.TryRepair(_bag, target, out int cost, out RepairCheck check))
+            {
+                Report(DurabilityTexts.Format(localization, DurabilityTexts.Repaired, name));
+                GameLogger.Info("Repair", $"{data?.itemId} repaired for {cost} gold.");
+            }
+            else
+            {
+                _statusLabel.text = check == RepairCheck.NotEnoughGold
+                    ? DurabilityTexts.Format(localization, DurabilityTexts.MissingGold, cost)
+                    : DurabilityTexts.Get(localization, DurabilityTexts.NothingToRepair);
+            }
+
+            Rebuild();
+        }
+
+        private void OnRepairAllClicked()
+        {
+            if (!_open || _bag == null)
+            {
+                return;
+            }
+
+            LocalizationManager localization = Localization;
+            if (RepairService.TryRepairAll(_bag, out int cost, out int pieces, out RepairCheck check))
+            {
+                Report(DurabilityTexts.Format(localization, DurabilityTexts.RepairedAll, pieces, cost));
+                GameLogger.Info("Repair", $"{pieces} piece(s) repaired for {cost} gold.");
+            }
+            else
+            {
+                _statusLabel.text = check == RepairCheck.NotEnoughGold
+                    ? DurabilityTexts.Format(localization, DurabilityTexts.MissingGold, cost)
+                    : DurabilityTexts.Get(localization, DurabilityTexts.NothingToRepair);
+            }
+
+            Rebuild();
+        }
+
+        private void OnEngraveClicked(RefineTarget target, string engravingId)
+        {
+            if (!_open || _bag == null)
+            {
+                return;
+            }
+
+            LocalizationManager localization = Localization;
+            if (EngraveService.TryEngrave(_bag, target, engravingId, out EngraveCheck check))
+            {
+                InventorySlotData data = RefineService.Resolve(_bag, target);
+                string name = data != null ? GeneratedItemName.Compose(ItemDatabase.GetById(data.itemId), data, localization) : string.Empty;
+                Engraving engraving = ItemOptionCatalog.FindEngraving(engravingId);
+                Report(ItemOptionTexts.Format(localization, ItemOptionTexts.Engraved, name, ItemOptionTexts.Get(localization, engraving?.NameKey)));
+            }
+            else
+            {
+                _statusLabel.text = ItemOptionTexts.Get(localization,
+                    check == EngraveCheck.NoSocket ? ItemOptionTexts.EngraveNoSocket : ItemOptionTexts.EngraveMissing);
+            }
+
+            Rebuild();
         }
 
         private void AskConfirm(RefineTarget target)

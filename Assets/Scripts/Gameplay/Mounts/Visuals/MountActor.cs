@@ -115,7 +115,7 @@ namespace Rapadura.Gameplay.Mounts.Visuals
             }
             else
             {
-                _legs.Settings = MountGait.SettingsFor(_legs.MeanLegLength, 0f, _scale);
+                _legs.Settings = MountGait.SettingsFor(_legs.MeanLegLength, 0f, _scale, _legs.DetectedStyle);
                 _legs.ResetState();
             }
 
@@ -251,7 +251,7 @@ namespace Rapadura.Gameplay.Mounts.Visuals
 
             if (_legs != null)
             {
-                _legs.Settings = MountGait.SettingsFor(_legs.MeanLegLength, Galloping ? 1f : 0f, _scale);
+                _legs.Settings = MountGait.SettingsFor(_legs.MeanLegLength, Galloping ? 1f : 0f, _scale, _legs.DetectedStyle);
                 _legs.Advance(dt, _velocity, yawRate, motion);
                 float offset = _legs.BodyBob - _legs.KneeBendDrop(worldSpeed01);
                 offset = Mathf.Min(offset, _legs.BodyHeightLimit);
@@ -316,11 +316,12 @@ namespace Rapadura.Gameplay.Mounts.Visuals
     /// </summary>
     public static class MountGait
     {
-        public static LegGaitSettings SettingsFor(float legLength, float gallop01, float scale)
+        public static LegGaitSettings SettingsFor(float legLength, float gallop01, float scale, LegGaitStyle style = LegGaitStyle.Quadruped)
         {
             float k = Mathf.Max(0.01f, scale);
             float g = Mathf.Clamp01(gallop01);
-            LegGaitSettings s = LegGaitSettings.Default(LegGaitStyle.Quadruped);
+            // The rheas run on two legs (M3): same tuning on the engine's biped default.
+            LegGaitSettings s = LegGaitSettings.Default(style == LegGaitStyle.Biped ? LegGaitStyle.Biped : LegGaitStyle.Quadruped);
             s.StrideLength = Mathf.Max(1.1f * k, legLength * 2f);
             s.StrideGrowth = 1.2f;
             s.FullSpeed = 10f * k;

@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
+using Rapadura.Gameplay.Crafting.Advanced;
 using Rapadura.Gameplay.Inventory;
+using Rapadura.Gameplay.World.Map;
 
 namespace Rapadura.Gameplay.Crafting
 {
@@ -11,6 +13,22 @@ namespace Rapadura.Gameplay.Crafting
     public class CraftingManagerSaveState
     {
         public string[] unlockedRecipeIds = Array.Empty<string>();
+
+        /// <summary>Vô Jorge's weapon enchantment (FASE 16, crafting avançado). Older saves: none.</summary>
+        public ActiveImbue activeImbue;
+    }
+
+    /// <summary>Raised when the weapon enchantment changes: applied, counted down, expired, loaded or reset.</summary>
+    public readonly struct ImbueChangedEvent : IGameEvent
+    {
+        public readonly ActiveImbue Imbue;
+        public readonly bool Expired;
+
+        public ImbueChangedEvent(ActiveImbue imbue, bool expired)
+        {
+            Imbue = imbue;
+            Expired = expired;
+        }
     }
 
     /// <summary>
@@ -36,6 +54,9 @@ namespace Rapadura.Gameplay.Crafting
         public const string Key = "CraftingManager";
 
         private readonly HashSet<string> _knownRecipeIds = new HashSet<string>();
+        private ActiveImbue _imbue = ActiveImbue.None;
+        private bool _imbueAppliedThisFight;
+        private bool _subscribed;
 
         /// <summary>Registered with SaveManager by GameManager.BuildManagers() (recipe unlocks used to be lost on load).</summary>
         public string SaveKey => Key;
@@ -43,7 +64,53 @@ namespace Rapadura.Gameplay.Crafting
         public void Initialize()
         {
             AddDefaultRecipes();
+            if (Rapadura.Core.DI.ServiceLocator.TryGet(out Rapadura.Core.Localization.LocalizationManager localization))
+            {
+                CraftingTexts.EnsureRegistered(localization);
+            }
+
+            if (!_subscribed)
+            {
+                EventBus.Subscribe<EncounterEndedEvent>(OnEncounterEnded);
+                _subscribed = true;
+            }
         }
+
+        // ---------------------------------------------------------------
+        // Weapon enchantment (ImbueRules)
+        // ---------------------------------------------------------------
+
+        /// <summary>The enchantment on the weapon hand (none = <see cref="ActiveImbue.IsActive"/> false).</summary>
+        public ActiveImbue Imbue => _imbue;
+
+        /// <summary>Replaces the enchantment (<see cref="AdvancedCraftingService.TryImbue"/>).</summary>
+        public void SetImbue(ActiveImbue imbue)
+        {
+            _imbue = ImbueRules.Sanitize(imbue);
+            EventBus.Publish(new ImbueChangedEvent(_imbue, false));
+        }
+
+        /// <summary>Called by <see cref="ImbueEffectApplier"/> when the enchantment really applied in this fight.</summary>
+        public void MarkImbueApplied() => _imbueAppliedThisFight = true;
+
+        /// <summary>One resolved encounter (what <see cref="EncounterEndedEvent"/> triggers): counts down only if it applied.</summary>
+        public void CountEncounter()
+        {
+            bool applied = _imbueAppliedThisFight;
+            _imbueAppliedThisFight = false;
+            if (!_imbue.IsActive)
+            {
+                return;
+            }
+
+            _imbue = ImbueRules.CountEncounter(_imbue, applied, out bool expired);
+            if (applied)
+            {
+                EventBus.Publish(new ImbueChangedEvent(_imbue, expired));
+            }
+        }
+
+        private void OnEncounterEnded(EncounterEndedEvent evt) => CountEncounter();
 
         private void AddDefaultRecipes()
         {
@@ -59,6 +126,11 @@ namespace Rapadura.Gameplay.Crafting
         public void Shutdown()
         {
             _knownRecipeIds.Clear();
+            if (_subscribed)
+            {
+                EventBus.Unsubscribe<EncounterEndedEvent>(OnEncounterEnded);
+                _subscribed = false;
+            }
         }
 
         /// <summary>New game: only the KnownByDefault recipes.</summary>
@@ -66,6 +138,8 @@ namespace Rapadura.Gameplay.Crafting
         {
             _knownRecipeIds.Clear();
             AddDefaultRecipes();
+            _imbue = ActiveImbue.None;
+            _imbueAppliedThisFight = false;
         }
 
         // ---------------------------------------------------------------
@@ -207,7 +281,7 @@ namespace Rapadura.Gameplay.Crafting
         {
             var ids = new List<string>(_knownRecipeIds);
             ids.Sort(StringComparer.Ordinal);
-            return new CraftingManagerSaveState { unlockedRecipeIds = ids.ToArray() };
+            return new CraftingManagerSaveState { unlockedRecipeIds = ids.ToArray(), activeImbue = _imbue.IsActive ? _imbue : ActiveImbue.None };
         }
 
         /// <summary>Replaces the known set with the defaults plus every saved unlock. Ids whose recipe asset no longer exists are kept (harmless, and they come back if the asset does).</summary>
@@ -220,6 +294,8 @@ namespace Rapadura.Gameplay.Crafting
 
             _knownRecipeIds.Clear();
             AddDefaultRecipes();
+            _imbue = ImbueRules.Sanitize(saveState.activeImbue);
+            _imbueAppliedThisFight = false;
 
             if (saveState.unlockedRecipeIds == null)
             {

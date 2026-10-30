@@ -25,6 +25,10 @@ namespace Rapadura.Gameplay.Player.States
         public const string IsGroundedName = "IsGrounded";
         public const string VerticalSpeedName = "VerticalSpeed";
         public const string FallStateName = "Fall";
+        public const string LocomotionStateName = "Locomotion";
+        public const string FootPlantLeftName = "FootPlantL";
+        public const string FootPlantRightName = "FootPlantR";
+        public const string FootStridesName = "FootStrides";
         public const string LandStateName = "Land";
 
         // One-shot action clips (mocap), built by Rapadura/Animation/Rebuild Hero Animators.
@@ -56,6 +60,14 @@ namespace Rapadura.Gameplay.Player.States
         public static readonly int AttackStrikeTime = Animator.StringToHash(AttackStrikeTimeName);
         /// <summary>Same for the second attack variant (punch); falls back to <see cref="AttackStrikeTime"/> when absent.</summary>
         public static readonly int AttackStrikeTimeB = Animator.StringToHash(AttackStrikeTimeBName);
+
+        /// <summary>Base-layer state holding the locomotion blend tree (footstep phases refer to its normalized time).</summary>
+        public static readonly int LocomotionState = Animator.StringToHash(LocomotionStateName);
+
+        /// <summary>Read-only "data" parameters baked by Rebuild Hero Animators: normalized time (0..1) of the left/right foot plant in one loop of the Locomotion state, and the strides per loop.</summary>
+        public static readonly int FootPlantLeft = Animator.StringToHash(FootPlantLeftName);
+        public static readonly int FootPlantRight = Animator.StringToHash(FootPlantRightName);
+        public static readonly int FootStrides = Animator.StringToHash(FootStridesName);
 
         /// <summary>Legacy float: raw horizontal speed in m/s (old 3-state controllers transition on it).</summary>
         public static readonly int Speed = Animator.StringToHash(SpeedName);

@@ -47,6 +47,8 @@ namespace Rapadura.Tests
             ServiceLocator.Clear();
             ItemDatabase.Invalidate();
             CityShopService.ClockOverride = null;
+            CityShopService.HasHouseOverride = null;
+            CityShopService.OutfitResolver = null;
             CityShopService.ClearCache();
         }
 
@@ -72,6 +74,8 @@ namespace Rapadura.Tests
             }
 
             CityShopService.ClockOverride = null;
+            CityShopService.HasHouseOverride = null;
+            CityShopService.OutfitResolver = null;
             CityShopService.ClearCache();
             EventBus.Clear();
             ServiceLocator.Clear();
@@ -284,7 +288,7 @@ namespace Rapadura.Tests
             foreach (CityShopSpec shop in CityShopCatalog.Shops)
             {
                 Assert.AreEqual(shop.Entries.Count, shop.Entries.Select(e => e.ItemId).Distinct().Count(), $"{shop.ShopId} lists an item twice");
-                int rotatingEntries = shop.Entries.Count(e => e.Rotating);
+                int rotatingEntries = shop.Entries.Count(e => e.Rotating && e.Pool == ShopPool.Main);
                 if (rotatingEntries > 0)
                 {
                     Assert.That(shop.RotatingSlots, Is.InRange(1, rotatingEntries), shop.ShopId);
@@ -295,7 +299,8 @@ namespace Rapadura.Tests
                     Assert.AreEqual(0, shop.RotatingSlots, $"{shop.ShopId} has slots but nothing rotating");
                 }
 
-                foreach (CityShopEntry entry in shop.Entries)
+                // House items and outfits are checked in CityShopTests (they are not Resources/Items).
+                foreach (CityShopEntry entry in shop.Entries.Where(e => e.IsBagItem))
                 {
                     ItemDefinition item = ItemDatabase.GetById(entry.ItemId);
                     Assert.IsNotNull(item, $"{shop.ShopId}: {entry.ItemId} is not in Resources/Items");
@@ -345,7 +350,7 @@ namespace Rapadura.Tests
 
             List<string> today = ShopRotation.PickStock(feira, day, null).Select(e => e.ItemId).ToList();
             CollectionAssert.AreEqual(today, ShopRotation.PickStock(feira, day, null).Select(e => e.ItemId).ToList(), "same day, same counter");
-            Assert.AreEqual(feira.Entries.Count(e => !e.Rotating) + feira.RotatingSlots, today.Count);
+            Assert.AreEqual(feira.Entries.Count(e => !e.Rotating) + feira.RotatingSlots + feira.HouseSlots + feira.WeeklySlots, today.Count);
             Assert.IsTrue(today.Contains("item_herb"), "fixed entry always there");
 
             var seen = new HashSet<string>();
@@ -382,7 +387,7 @@ namespace Rapadura.Tests
             Assert.IsTrue(appeared, "the sword rotates in once the Mountain is cleared");
 
             CityShopSpec mascate = CityShopCatalog.Get(CityShopCatalog.MascateBento);
-            Assert.AreEqual(mascate.RotatingSlots, ShopRotation.PickStock(mascate, 5, _ => false).Count, "slots filled from what is open");
+            Assert.AreEqual(mascate.RotatingSlots, ShopRotation.PickStock(mascate, 5, _ => false).Count(e => e.Pool == ShopPool.Main), "slots filled from what is open");
         }
 
         [Test]
@@ -435,6 +440,7 @@ namespace Rapadura.Tests
             var map = new WorldMapProgress();
             var date = new DateTime(2026, 10, 29);
             CityShopService.ClockOverride = () => date;
+            CityShopService.HasHouseOverride = () => false;
 
             ShopDefinition lazaro = CityShopService.Resolve(CityShopCatalog.MerceariaLazaro, cities, shops, map);
             Assert.IsNotNull(lazaro);
@@ -442,7 +448,7 @@ namespace Rapadura.Tests
             Assert.AreEqual("city.shop." + CityShopCatalog.MerceariaLazaro + ".name", lazaro.DisplayNameKey);
             CityShopSpec spec = CityShopCatalog.Get(CityShopCatalog.MerceariaLazaro);
             CollectionAssert.AreEqual(
-                ShopRotation.PickStock(spec, ShopRotation.DayIndex(date), CityShopService.UnlockCheck(map)).Select(e => e.ItemId),
+                ShopRotation.PickStock(spec, ShopRotation.DayIndex(date), CityShopService.UnlockCheck(map), e => e.Kind != CityShopEntryKind.HouseItem).Select(e => e.ItemId),
                 lazaro.Catalog.Select(e => e.Item.ItemId));
             Assert.AreEqual(6, lazaro.Catalog.First(e => e.Item.ItemId == "item_cooked_meat").Price);
             Assert.AreEqual(10, lazaro.Catalog.First(e => e.Item.ItemId == "item_cooked_meat").InitialStock);

@@ -443,12 +443,12 @@ namespace Rapadura.Gameplay.World.Map
         public BiomeType? CurrentRegion => _currentNode != null ? _currentNode.Region : (BiomeType?)null;
 
         /// <summary>
-        /// Starts a timed event room (Terreiro / Torre, <c>EventRoomMapButton</c>) in the current region through the
+        /// Starts a timed event room (Terreiro / Torre, <c>EventRoomMapButton</c>) or a world event (<c>WorldEventMapPanel</c>) in the current region through the
         /// usual encounter hand-off. False when exploring is not possible right now.
         /// </summary>
         public bool TryStartEventRoom(EncounterPayload payload)
         {
-            if (payload == null || !payload.IsEventRoom || !CanExplore || GameplayPause.IsPaused)
+            if (payload == null || !payload.IsDirected || !CanExplore || GameplayPause.IsPaused)
             {
                 return false;
             }

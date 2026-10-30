@@ -25,4 +25,28 @@ namespace Rapadura.Gameplay.Player
             Intensity = intensity;
         }
     }
+
+    /// <summary>
+    /// Raised by <see cref="PlayerFootsteps"/> when one of the hero's feet plants while walking/running:
+    /// the footstep sound (<c>hero.step</c> via SfxEventRouter) and the dust puff
+    /// (<see cref="PlayerFootstepDust"/>) listen to it. Timing comes from the plant phases baked into the
+    /// controller (Rebuild Hero Animators), else from the animated feet, else from the rigid step phase.
+    /// </summary>
+    public readonly struct PlayerFootstepEvent : IGameEvent
+    {
+        public readonly GameObject Player;
+        /// <summary>World position of the planted foot (or of the hero for rig-less bodies).</summary>
+        public readonly Vector3 Position;
+        public readonly bool LeftFoot;
+        /// <summary>0..1: soft walking steps, full at run speed (<see cref="FootstepMath.Intensity"/>).</summary>
+        public readonly float Intensity;
+
+        public PlayerFootstepEvent(GameObject player, Vector3 position, bool leftFoot, float intensity)
+        {
+            Player = player;
+            Position = position;
+            LeftFoot = leftFoot;
+            Intensity = intensity;
+        }
+    }
 }

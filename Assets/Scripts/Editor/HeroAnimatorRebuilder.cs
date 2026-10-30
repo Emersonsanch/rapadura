@@ -184,6 +184,7 @@ namespace Rapadura.Editor
             string locomotionNote = humanoid ? "Meshy locomotion (mocap switch off)" : "Meshy locomotion (Generic rig)";
             AnimationClip jog = null;
             float jogSpeed = 0f;
+            ClipMeasurement jogMeasure = ClipMeasurement.None;
             if (humanoid && UseMocapLocomotion)
             {
                 MocapLocomotion mocap = LoadMocapLocomotion(hero, walkPath, out locomotionNote);
@@ -192,8 +193,9 @@ namespace Rapadura.Editor
                     walk = mocap.Walk;
                     run = mocap.Run;
                     jog = mocap.Jog;
-                    walkMeasure.GroundSpeed = mocap.WalkSpeed;
-                    runMeasure.GroundSpeed = mocap.RunSpeed;
+                    walkMeasure = mocap.WalkMeasure;
+                    runMeasure = mocap.RunMeasure;
+                    jogMeasure = mocap.JogMeasure;
                     jogSpeed = mocap.JogSpeed;
                     walkName = walk.name;
                     runName = run.name;
@@ -205,7 +207,7 @@ namespace Rapadura.Editor
             }
 
             // 3) Controller.
-            RebuildController(controller, walk, run, jog, idlePose, mocapIdle, walkMeasure.GroundSpeed, runMeasure.GroundSpeed, jogSpeed, humanoid);
+            string feetNote = RebuildController(controller, walk, run, jog, idlePose, mocapIdle, walkMeasure, runMeasure, jogMeasure, humanoid);
 
             // 4) One-shot mocap actions (attack/cast/hit/jump/death), see HeroAnimatorRebuilder.Actions.cs.
             string actionsReport = AddActions(controller, hero, walkPath, humanoid && IncludeMocapActions);
@@ -215,7 +217,7 @@ namespace Rapadura.Editor
                    + (jog != null ? $"Jog '{jog.name}' {jogSpeed:0.###} u/s, " : string.Empty)
                    + $"Run '{runName}' {runMeasure.GroundSpeed:0.###} u/s (model units, ×model scale at runtime), "
                    + $"idle pose @ {walkMeasure.StandingTime:0.###}s{(idlePose == null ? " (MISSING)" : string.Empty)}, "
-                   + $"{(humanoid ? "Humanoid" : "Generic")}{(mocapIdle != null ? $", Idle state = {AssetDatabase.GetAssetPath(mocapIdle)}" : string.Empty)}; {actionsReport}.";
+                   + $"{(humanoid ? "Humanoid" : "Generic")}{(mocapIdle != null ? $", Idle state = {AssetDatabase.GetAssetPath(mocapIdle)}" : string.Empty)}; {feetNote}; {actionsReport}.";
         }
 
         // ------------------------------------------------------------------
@@ -225,7 +227,11 @@ namespace Rapadura.Editor
         private sealed class MocapLocomotion
         {
             public AnimationClip Walk, Jog, Run, Idle;
-            public float WalkSpeed, JogSpeed, RunSpeed;
+            public ClipMeasurement WalkMeasure, RunMeasure;
+            public ClipMeasurement JogMeasure = ClipMeasurement.None;
+            public float WalkSpeed => WalkMeasure.GroundSpeed;
+            public float RunSpeed => RunMeasure.GroundSpeed;
+            public float JogSpeed => JogMeasure.GroundSpeed;
         }
 
         /// <summary>
@@ -256,8 +262,8 @@ namespace Rapadura.Editor
             {
                 Walk = walk,
                 Run = run,
-                WalkSpeed = Measure(walk, modelPath).GroundSpeed,
-                RunSpeed = Measure(run, modelPath).GroundSpeed,
+                WalkMeasure = Measure(walk, modelPath),
+                RunMeasure = Measure(run, modelPath),
             };
             if (result.WalkSpeed <= 0f || result.RunSpeed <= 0f)
             {
@@ -268,8 +274,12 @@ namespace Rapadura.Editor
             AnimationClip jog = MocapClipBuilder.LoadForHero(hero, MocapJogClip);
             if (MocapClipSanity.IsHealthy(jog))
             {
-                result.JogSpeed = Measure(jog, modelPath).GroundSpeed;
+                result.JogMeasure = Measure(jog, modelPath);
                 result.Jog = result.JogSpeed > 0f ? jog : null;
+                if (result.Jog == null)
+                {
+                    result.JogMeasure = ClipMeasurement.None;
+                }
             }
 
             AnimationClip idle = MocapClipBuilder.LoadForHero(hero, MocapIdleClip);
@@ -345,11 +355,20 @@ namespace Rapadura.Editor
         {
             public float GroundSpeed;
             public float StandingTime;
+            /// <summary>Normalized time (0..1) of the left/right foot plant, -1 = not found (<see cref="FootstepMath.PlantPhase"/>).</summary>
+            public float PlantLeft;
+            public float PlantRight;
+            /// <summary>Strides (left+right step pairs) in one loop of the clip.</summary>
+            public int Strides;
+
+            public static ClipMeasurement None => new ClipMeasurement { PlantLeft = -1f, PlantRight = -1f, Strides = 1 };
+
+            public bool HasPlants => PlantLeft >= 0f && PlantRight >= 0f;
         }
 
         private static ClipMeasurement Measure(AnimationClip clip, string modelPath)
         {
-            var result = new ClipMeasurement();
+            ClipMeasurement result = ClipMeasurement.None;
             var model = AssetDatabase.LoadAssetAtPath<GameObject>(modelPath);
             if (model == null || clip.length <= 0f)
             {
@@ -401,6 +420,9 @@ namespace Rapadura.Editor
                 float speed = leftSpeed > 0f && rightSpeed > 0f ? (leftSpeed + rightSpeed) * 0.5f : Mathf.Max(leftSpeed, rightSpeed);
                 result.GroundSpeed = float.IsNaN(speed) || float.IsInfinity(speed) ? 0f : speed;
                 result.StandingTime = LocomotionMath.ChooseStandingSample(left, right) * interval;
+                result.PlantLeft = FootstepMath.PlantPhase(left);
+                result.PlantRight = FootstepMath.PlantPhase(right);
+                result.Strides = Mathf.Max(FootstepMath.StrideCount(left), FootstepMath.StrideCount(right));
             }
             finally
             {
@@ -587,10 +609,15 @@ namespace Rapadura.Editor
             return transition;
         }
 
-        private static void RebuildController(AnimatorController controller, AnimationClip walk, AnimationClip run, AnimationClip jog, AnimationClip idlePose, AnimationClip mocapIdle,
-                                              float walkClipSpeed, float runClipSpeed, float jogClipSpeed, bool humanoid)
+        /// <summary>Rebuilds the base layer; returns a short note on the foot-plant phases/alignment for the report.</summary>
+        private static string RebuildController(AnimatorController controller, AnimationClip walk, AnimationClip run, AnimationClip jog, AnimationClip idlePose, AnimationClip mocapIdle,
+                                                ClipMeasurement walkMeasure, ClipMeasurement runMeasure, ClipMeasurement jogMeasure, bool humanoid)
         {
             string path = AssetDatabase.GetAssetPath(controller);
+            float walkClipSpeed = walkMeasure.GroundSpeed;
+            float runClipSpeed = runMeasure.GroundSpeed;
+            float jogClipSpeed = jogMeasure.GroundSpeed;
+            bool bakeFeet = walkMeasure.HasPlants;
 
             // Parameters: legacy Speed (raw m/s), MoveBlend, MoveSpeedMul and the baked clip speeds.
             while (controller.parameters.Length > 0)
@@ -610,6 +637,13 @@ namespace Rapadura.Editor
             controller.AddParameter(PlayerAnimatorHashes.TurnAngleName, AnimatorControllerParameterType.Float);
             controller.AddParameter(PlayerAnimatorHashes.IsGroundedName, AnimatorControllerParameterType.Bool);
             controller.AddParameter(PlayerAnimatorHashes.VerticalSpeedName, AnimatorControllerParameterType.Float);
+            if (bakeFeet)
+            {
+                // Data for PlayerFootsteps: plant times in the Locomotion state's normalized time (= Walk's, see cycleOffset below).
+                controller.AddParameter(PlayerAnimatorHashes.FootPlantLeftName, AnimatorControllerParameterType.Float);
+                controller.AddParameter(PlayerAnimatorHashes.FootPlantRightName, AnimatorControllerParameterType.Float);
+                controller.AddParameter(PlayerAnimatorHashes.FootStridesName, AnimatorControllerParameterType.Float);
+            }
 
             AnimatorControllerParameter[] parameters = controller.parameters;
             foreach (AnimatorControllerParameter parameter in parameters)
@@ -619,6 +653,9 @@ namespace Rapadura.Editor
                 else if (parameter.name == PlayerAnimatorHashes.RunClipSpeedName) parameter.defaultFloat = runClipSpeed;
                 else if (parameter.name == PlayerAnimatorHashes.JogClipSpeedName) parameter.defaultFloat = jogClipSpeed;
                 else if (parameter.name == PlayerAnimatorHashes.IsGroundedName) parameter.defaultBool = true;
+                else if (parameter.name == PlayerAnimatorHashes.FootPlantLeftName) parameter.defaultFloat = walkMeasure.PlantLeft;
+                else if (parameter.name == PlayerAnimatorHashes.FootPlantRightName) parameter.defaultFloat = walkMeasure.PlantRight;
+                else if (parameter.name == PlayerAnimatorHashes.FootStridesName) parameter.defaultFloat = Mathf.Max(1, walkMeasure.Strides);
             }
 
             controller.parameters = parameters;
@@ -684,14 +721,41 @@ namespace Rapadura.Editor
 
             // The blend tree syncs normalized time across children by their duration: give the
             // 1-frame idle pose the walk's effective duration so it never speeds the walk up.
+            //
+            // Phase alignment: the clips loop from arbitrary frames (each mocap loop window starts wherever the
+            // cut was cleanest), so a Walk↔Jog↔Run cross-fade mixed a left-foot-forward pose with a
+            // right-foot-forward one (legs scissoring, feet sliding). Each child's cycleOffset puts its foot
+            // plants on the Walk's, so both feet land together through the whole blend and the baked
+            // FootPlantL/R hold for every child.
+            var feetNote = new StringBuilder(bakeFeet
+                ? $"feet: plants L {walkMeasure.PlantLeft:0.00} / R {walkMeasure.PlantRight:0.00} x{Mathf.Max(1, walkMeasure.Strides)}"
+                : "feet: plants not found (footsteps fall back to the animated feet)");
             ChildMotion[] children = tree.children;
             for (int i = 0; i < children.Length; i++)
             {
                 children[i].timeScale = 1f;
+                children[i].cycleOffset = 0f;
                 if (idlePose != null && children[i].motion == idlePose && walk.length > 0f)
                 {
                     children[i].timeScale = Mathf.Max(0.001f, idlePose.length / walk.length);
+                    continue;
                 }
+
+                Motion motion = children[i].motion;
+                ClipMeasurement measure = motion == run ? runMeasure : jog != null && motion == jog ? jogMeasure : ClipMeasurement.None;
+                if (!bakeFeet || motion == walk || !measure.HasPlants)
+                {
+                    continue;
+                }
+
+                if (Mathf.Max(1, measure.Strides) != Mathf.Max(1, walkMeasure.Strides))
+                {
+                    feetNote.Append($", {motion.name} not aligned ({measure.Strides} vs {walkMeasure.Strides} strides)");
+                    continue;
+                }
+
+                children[i].cycleOffset = FootstepMath.AlignmentOffset(walkMeasure.PlantLeft, walkMeasure.PlantRight, measure.PlantLeft, measure.PlantRight);
+                feetNote.Append($", {motion.name} offset {children[i].cycleOffset:0.00}");
             }
 
             tree.children = children;
@@ -730,6 +794,7 @@ namespace Rapadura.Editor
             EditorUtility.SetDirty(tree);
             EditorUtility.SetDirty(controller);
             AssetDatabase.SaveAssets();
+            return feetNote.ToString();
         }
     }
 }

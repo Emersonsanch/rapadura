@@ -37,7 +37,8 @@ namespace Rapadura.Gameplay.Enemies.States
             }
 
             if (context.Target != null && (context.IsAggroLocked
-                    || EnemyDetectionUtility.IsWithinRadius(context.transform.position, context.Target.position, definition.DetectionRadius)))
+                    || EnemyDetectionUtility.IsWithinRadius(context.transform.position, context.Target.position,
+                        EnemyDetectionUtility.DetectionRadiusFor(definition.DetectionRadius, context.Target))))
             {
                 context.MarkTargetSpotted();
                 context.StateMachine.ChangeState<EnemyChaseState>();

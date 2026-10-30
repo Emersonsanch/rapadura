@@ -32,7 +32,7 @@ namespace Rapadura.Gameplay.Mounts
     /// <summary>
     /// The "Caderno de Montarias" (Docs/Mounts.md §7, phase M2): all 30 species of §3, in catalog order. Owned ones show
     /// their name and stats, seen-but-not-owned ones their name, the rest a "???" silhouette with the hint of where they
-    /// appear. Only the 3 starters of <see cref="MountCatalog"/> exist in the game yet (M3 adds the rest); their names and
+    /// appear. The species in <see cref="MountCatalog"/> (3 starters + M3 wave 1) are playable, the rest only listed; their names and
     /// hints live in <see cref="MountTexts"/>, the other 27 here.
     /// </summary>
     public static class MountCodex

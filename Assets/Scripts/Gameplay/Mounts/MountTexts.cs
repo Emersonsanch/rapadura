@@ -6,7 +6,7 @@ namespace Rapadura.Gameplay.Mounts
 {
     /// <summary>
     /// Localization (en + pt-BR) of the mounts (phase M1): the three starters and their abilities, the HUD captions and
-    /// refusals, the Haras da Vila and the "Primeira Sela" mission with its little scene (Vó Zefa, Seu Zé, Lavine naming
+    /// refusals, the Haras da Vila and the "Primeira Sela" mission with its little scene (Vó Zefa, Seu Tonico, Lavine naming
     /// the pony, Maithe pretending not to care). Same self-contained pattern as <c>DuoTexts</c>: merged into the live
     /// <see cref="LocalizationManager"/> on first use (keys it already has win), pt-BR fallback otherwise.
     /// </summary>
@@ -120,7 +120,7 @@ namespace Rapadura.Gameplay.Mounts
             new LocalizationEntry(AbilityBrayMap, "Hee-haw! The whole road heard the donkey.", "Ió-ió! A estrada inteira ouviu o jegue."),
             new LocalizationEntry(AbilityDashMap, "Off we go!", "Lá vamos nós!"),
 
-            new LocalizationEntry(HarasShopName, "Haras da Vila (Seu Zé)", "Haras da Vila (Seu Zé)"),
+            new LocalizationEntry(HarasShopName, "Haras da Vila (Seu Tonico)", "Haras da Vila (Seu Tonico)"),
 
             new LocalizationEntry(StableButton, "Mounts", "Montarias"),
             new LocalizationEntry(StableTitle, "Stable and Mount Notebook", "Estábulo e Caderno de Montarias"),
@@ -139,7 +139,7 @@ namespace Rapadura.Gameplay.Mounts
             new LocalizationEntry(Cuddle, "Pet", "Fazer carinho"),
             new LocalizationEntry(Feed, "Give {0}", "Dar {0}"),
             new LocalizationEntry(StallsLine, "Stalls at home: {0} · the rest stay at the Haras", "Baias na casa: {0} · as outras ficam no Haras"),
-            new LocalizationEntry(NoHouse, "No house yet: they all stay at Seu Zé's Haras.", "Sem casa ainda: todas ficam no Haras do Seu Zé."),
+            new LocalizationEntry(NoHouse, "No house yet: they all stay at Seu Tonico's Haras.", "Sem casa ainda: todas ficam no Haras do Seu Tonico."),
             new LocalizationEntry(SaddleLine, "Saddle: {0}", "Sela: {0}"),
             new LocalizationEntry(BlanketLine, "Blanket: {0}", "Manta: {0}"),
             new LocalizationEntry(NoneCosmetic, "plain", "simples"),
@@ -186,11 +186,11 @@ namespace Rapadura.Gameplay.Mounts
 
             new LocalizationEntry(QuestTitle, "First Saddle", "Primeira Sela"),
             new LocalizationEntry(QuestDescription,
-                "After the Lobo Alfa, Vó Zefa wants to take the cousins to the Haras of Seu Zé, Vô Chico's old road friend.",
-                "Depois do Lobo Alfa, a Vó Zefa quer levar os primos ao Haras do Seu Zé, velho amigo de estrada do Vô Chico."),
+                "After the Lobo Alfa, Vó Zefa wants to take the cousins to the Haras of Seu Tonico, Vô Jorge's old road friend.",
+                "Depois do Lobo Alfa, a Vó Zefa quer levar os primos ao Haras do Seu Tonico, velho amigo de estrada do Vô Jorge."),
             new LocalizationEntry(QuestObjective, "Visit the Haras da Vila", "Visitar o Haras da Vila"),
-            new LocalizationEntry(SceneLine1, "Vó Zefa: Seu Zé kept this one for you five. Vô Chico would have loved it.",
-                "Vó Zefa: O Seu Zé guardou esse aqui pra vocês cinco. O Vô Chico ia adorar."),
+            new LocalizationEntry(SceneLine1, "Vó Zefa: Seu Tonico kept this one for you five. Vô Jorge would have loved it.",
+                "Vó Zefa: O Seu Tonico guardou esse aqui pra vocês cinco. O Vô Jorge ia adorar."),
             new LocalizationEntry(SceneLine2, "Lavine: Look at his white feet! His name is Pé-de-Pano!",
                 "Lavine: Olha os pezinhos brancos dele! O nome dele é Pé-de-Pano!"),
             new LocalizationEntry(SceneLine3, "Maithe: Whatever. A pony is a pony… Can I ride him first?",
@@ -230,6 +230,7 @@ namespace Rapadura.Gameplay.Mounts
         {
             var entries = new List<LocalizationEntry>(UiEntries);
             entries.AddRange(MountCodex.TextEntries());
+            entries.AddRange(MountWaveTexts.Entries); // M3 wave 1: the 18 walkers, their abilities, whistles, drops and ribbons.
             foreach (var m in Mounts)
             {
                 entries.Add(new LocalizationEntry("mount." + m.Id + ".name", m.NameEn, m.NamePt));
@@ -240,7 +241,7 @@ namespace Rapadura.Gameplay.Mounts
             // The Haras's items (Resources/Items): pt-BR = the asset text, like RefineTexts / TachoTexts do for theirs.
             entries.Add(new LocalizationEntry(Content.ContentText.ItemNameKey(MountCareRules.FeedItemId), "Haras Feed", "Ração do Haras"));
             entries.Add(new LocalizationEntry(Content.ContentText.ItemDescriptionKey(MountCareRules.FeedItemId),
-                "Seu Zé's corn-and-grass feed. Every mount eats it: +40 fullness.", "Ração de milho e capim do Seu Zé. Toda montaria come: +40 de saciedade."));
+                "Seu Tonico's corn-and-grass feed. Every mount eats it: +40 fullness.", "Ração de milho e capim do Seu Tonico. Toda montaria come: +40 de saciedade."));
             AddWhistle(entries, MountCatalog.PonyWhistle, "Pé-de-Pano Pony Whistle", "Apito do Pônei Pé-de-Pano", "Pé-de-Pano Pony", "Pônei Pé-de-Pano");
             AddWhistle(entries, MountCatalog.BigDogWhistle, "Paçoca the Big Dog Whistle", "Apito do Cachorrão Paçoca", "Paçoca the Big Dog", "Cachorrão Paçoca");
             AddWhistle(entries, MountCatalog.PackDonkeyWhistle, "Pack Donkey Whistle", "Apito do Jegue Carregador", "the Pack Donkey", "Jegue Carregador");
@@ -259,8 +260,8 @@ namespace Rapadura.Gameplay.Mounts
         {
             entries.Add(new LocalizationEntry(Content.ContentText.ItemNameKey(itemId), nameEn, namePt));
             entries.Add(new LocalizationEntry(Content.ContentText.ItemDescriptionKey(itemId),
-                $"Bamboo whistle from Seu Zé's Haras. Whoever buys it takes {mountEn} home.",
-                $"Apito de taquara do Haras do Seu Zé. Quem compra leva o {mountPt} para casa."));
+                $"Bamboo whistle from Seu Tonico's Haras. Whoever buys it takes {mountEn} home.",
+                $"Apito de taquara do Haras do Seu Tonico. Quem compra leva o {mountPt} para casa."));
         }
 
         private static Dictionary<string, string> _fallbackByKey;

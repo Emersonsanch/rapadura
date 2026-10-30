@@ -165,7 +165,7 @@ namespace Rapadura.Gameplay.Refining
             bool charm = useCharm && canFail;
 
             return new RefinePreview(item, data, level, option, stone, stones, RefineRules.GoldCostFor(level), gold, charms, life,
-                RefineRules.ChanceFor(level, charm), canFail, RefineRules.FailureLevel(level),
+                RefineRules.ChanceFor(level, charm, data != null && data.luck), canFail, RefineRules.FailureLevel(level),
                 RefineRules.Check(refinable, level, stones, gold, charm, charms),
                 RefineRules.CheckOption(refinable, option, life));
         }
@@ -202,7 +202,7 @@ namespace Rapadura.Gameplay.Refining
                 bag.RemoveById(RefineItems.LuckCharm, 1);
             }
 
-            attempt = RefineRules.Attempt(preview.Level, charm, seed);
+            attempt = RefineRules.Attempt(preview.Level, charm, seed, data.luck);
             data.refineLevel = attempt.ToLevel;
             bag.NotifyItemDataChanged(target.IsEquipped ? target.EquipSlot : EquipmentSlot.None);
             EventBus.Publish(new ItemRefinedEvent(data.itemId, attempt));

@@ -19,6 +19,18 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>Seconds an enemy keeps fleeing before it tires and turns back to fight (it won't flee again this life).</summary>
         public const float FleeMaxDurationSeconds = 3f;
 
+        /// <summary>
+        /// Optional multiplier of a target's detection radius (1 = normal). The Kirin's "Passo Sem Pegada" (Docs/Mounts.md §3.4)
+        /// sets it so critters notice a hidden cousin at 20% of the distance. Null = always 1.
+        /// </summary>
+        public static System.Func<Transform, float> TargetDetectionScale { get; set; }
+
+        /// <summary>Detection radius of <paramref name="baseRadius"/> against <paramref name="target"/> (see <see cref="TargetDetectionScale"/>).</summary>
+        public static float DetectionRadiusFor(float baseRadius, Transform target)
+        {
+            return TargetDetectionScale != null && target != null ? baseRadius * Mathf.Max(0f, TargetDetectionScale(target)) : baseRadius;
+        }
+
         /// <summary>Highest speed an enemy may flee at (0.8 x hero run = 4.4).</summary>
         public static float MaxFleeSpeed => HeroRunSpeed * MaxFleeSpeedFractionOfHeroRun;
 

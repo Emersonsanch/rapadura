@@ -94,10 +94,17 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("cida", CityShopCatalog.ArmarinhoCida, "dialogue.forest_rezadeira.name"),
                     new CityResidentSpec("lazaro", CityShopCatalog.MerceariaLazaro),
                     new CityResidentSpec("nenem", CityShopCatalog.FeiraLivre),
-                    // Seu Zé of the Haras (Docs/Mounts.md §3), Vô Chico's old road friend: keeps the mount whistles.
-                    new CityResidentSpec("ze_haras", CityShopCatalog.HarasVila),
+                    // Seu Tonico of the Haras (Docs/Mounts.md §3), Vô Jorge's old road friend: keeps the mount whistles.
+                    // Not Seu Zé Caçador (Hunting): two different people. Was "ze_haras" before 2026-10-30; resident ids
+                    // are not saved anywhere (only localization keys), so the rename needs no migration.
+                    new CityResidentSpec("tonico_haras", CityShopCatalog.HarasVila),
+                    // The new Vila shops (Docs/Cities.md §4): blacksmith, carpenter and seamstress.
+                    new CityResidentSpec("severino", CityShopCatalog.FerrariaSeverino),
+                    new CityResidentSpec("damiao", CityShopCatalog.MarcenariaDamiao),
+                    new CityResidentSpec("fatima", CityShopCatalog.CostureiraFatima),
                 },
-                new List<string> { CityShopCatalog.GeneralStore, CityShopCatalog.MerceariaLazaro, CityShopCatalog.ArmarinhoCida, CityShopCatalog.FeiraLivre, CityShopCatalog.HarasVila },
+                new List<string> { CityShopCatalog.GeneralStore, CityShopCatalog.MerceariaLazaro, CityShopCatalog.ArmarinhoCida, CityShopCatalog.FeiraLivre, CityShopCatalog.HarasVila,
+                    CityShopCatalog.FerrariaSeverino, CityShopCatalog.MarcenariaDamiao, CityShopCatalog.CostureiraFatima },
                 hasGrandmaServices: true, hasStoryVillagers: true),
 
             new CitySpec(AreiaBranca, BiomeType.Desert,

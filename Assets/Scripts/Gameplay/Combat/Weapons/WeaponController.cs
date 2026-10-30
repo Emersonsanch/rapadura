@@ -81,7 +81,8 @@ namespace Rapadura.Gameplay.Combat.Weapons
             }
 
             ItemDefinition item = EquippedItem;
-            return item != null && item.Type == ItemType.Weapon;
+            return item != null && item.Type == ItemType.Weapon
+                && !Rapadura.Gameplay.Items.Durability.DurabilityRules.IsBroken(item, EquippedSlotData);
         }
 
         /// <summary>
@@ -139,7 +140,11 @@ namespace Rapadura.Gameplay.Combat.Weapons
             IsBroken = true;
             GameLogger.Info("Weapon", $"{item.ItemId} broke (durability reached 0) and was unequipped from {_equipSlot}.");
             EventBus.Publish(new WeaponBrokenEvent(gameObject, item.ItemId, _equipSlot));
-            _inventory?.UnequipSlot(_equipSlot);
+            // Back to the bag; with a full bag it stays equipped, broken: no stats (DurabilityRules), never destroyed.
+            if (_inventory != null && !_inventory.UnequipSlot(_equipSlot))
+            {
+                _inventory.NotifyItemDataChanged(_equipSlot);
+            }
         }
 
         /// <summary>Resets the broken flag — used when a fresh (non-broken) weapon is equipped into this slot.</summary>

@@ -13,10 +13,10 @@ using Object = UnityEngine.Object;
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// The 9% death drop (<see cref="DeathDropRules"/>, <see cref="DeathDropService"/>) and Vó Zefa's "Achados e Perdidos"
-    /// (<see cref="LostAndFoundList"/>, saved with the village chest): the constant, a seeded rate, eligibility (no gold,
-    /// quest/story items, bound items or relics; equipped gear is never in the backpack), the whole entry moving with its
-    /// affixes, the buy-back fee by rarity, gold/room checks and the save round trip.
+    /// The 9% death drop (<see cref="DeathDropRules"/>, <see cref="DeathDropService"/>): the constant, a seeded rate,
+    /// eligibility (no gold, quest/story items, bound items or relics; equipped gear is never in the backpack), exactly one
+    /// unit falling (a stack keeps the rest), the item being lost for good (no buy-back) and old saves that still carry the
+    /// removed "Achados e Perdidos" list loading fine.
     /// </summary>
     public class DeathDropTests
     {
@@ -36,7 +36,7 @@ namespace Rapadura.Tests
             EventBus.Clear();
             _sword = Create("drop_sword", ItemType.Weapon, ItemCategory.MeleeWeapon, 1, ItemRarity.Uncommon, EquipmentSlot.MainHand);
             _potion = Create("drop_potion", ItemType.Consumable, ItemCategory.Potion, 20, ItemRarity.Common);
-            _gold = Create(LostAndFoundList.FeeCurrencyItemId, ItemType.Currency, ItemCategory.Currency, 9999, ItemRarity.Common);
+            _gold = Create("item_gold", ItemType.Currency, ItemCategory.Currency, 9999, ItemRarity.Common);
             _questItem = Create("drop_letter", ItemType.QuestItem, ItemCategory.QuestItem, 1, ItemRarity.Common);
             _bound = Create("drop_amulet", ItemType.Armor, ItemCategory.Accessory, 1, ItemRarity.Epic, EquipmentSlot.Accessory, bound: true);
             _relic = Create(DeathDropRules.RelicIdPrefix + "carranca", ItemType.Material, ItemCategory.Miscellaneous, 1, ItemRarity.Legendary);
@@ -133,20 +133,28 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void Fee_ScalesWithRarity_GeneratedRollCountsAtItsRarity()
+        public void DropQuantity_IsAlwaysOneUnit()
         {
-            CollectionAssert.AreEqual(new[] { 10, 25, 60, 150, 400 }, DeathDropRules.BuybackFeeByRarity);
-            Assert.AreEqual(25, DeathDropRules.BuybackFee(DeathDropRules.RarityOf(Slot(_sword, 1), _sword)));
+            Assert.AreEqual(1, DeathDropRules.DropQuantity);
+            Assert.AreEqual(1, DeathDropRules.QuantityToDrop(Slot(_potion, 6)));
+            Assert.AreEqual(1, DeathDropRules.QuantityToDrop(Slot(_sword, 1)));
+            Assert.AreEqual(0, DeathDropRules.QuantityToDrop(InventorySlotData.Empty()));
+            Assert.AreEqual(0, DeathDropRules.QuantityToDrop(null));
+        }
+
+        [Test]
+        public void RarityOf_GeneratedRollCountsAtItsRarity()
+        {
+            Assert.AreEqual(ItemRarity.Uncommon, DeathDropRules.RarityOf(Slot(_sword, 1), _sword));
 
             InventorySlotData rolled = Slot(_sword, 1);
             rolled.generatedName = "Peixeira Épica";
             rolled.generatedRarity = ItemRarity.Epic;
             Assert.AreEqual(ItemRarity.Epic, DeathDropRules.RarityOf(rolled, _sword));
-            Assert.AreEqual(150, DeathDropRules.BuybackFee(ItemRarity.Epic));
         }
 
         [Test]
-        public void Apply_MovesTheWholeEntry_ToLostAndFound_AndNeverTouchesEquipment()
+        public void Apply_TakesOneUnitOfAStack_ForGood_AndNeverTouchesEquipment()
         {
             InventoryManager bag = NewBag();
             bag.AddItem(_gold, 500);
@@ -154,88 +162,57 @@ namespace Rapadura.Tests
             Assert.IsTrue(bag.EquipFromSlot(Index(bag, _sword.ItemId)), "the equipped sword is not in the grid");
             bag.AddItem(_potion, 6);
 
-            var lostAndFound = new LostAndFoundList();
             int events = 0;
-            EventBus.Subscribe<ItemDroppedOnDeathEvent>(_ => events++);
+            InventorySlotData published = null;
+            EventBus.Subscribe<ItemDroppedOnDeathEvent>(e =>
+            {
+                events++;
+                published = e.Item;
+            });
 
-            DeathDropResult result = DeathDropService.Apply(bag, lostAndFound, new AlwaysRandom(), Resolve);
+            DeathDropResult result = DeathDropService.Apply(bag, new AlwaysRandom(), Resolve);
 
             Assert.IsTrue(result.Dropped);
             Assert.AreEqual(_potion.ItemId, result.Item.itemId, "the only eligible backpack entry");
-            Assert.AreEqual(6, result.Item.quantity, "the whole stack");
-            Assert.AreEqual(10, result.Fee);
-            Assert.AreEqual(0, bag.GetTotalCount(_potion.ItemId));
+            Assert.AreEqual(1, result.Item.quantity, "only one unit falls, never the whole stack");
+            Assert.AreEqual(5, bag.GetTotalCount(_potion.ItemId), "the rest of the stack stays");
             Assert.AreEqual(500, bag.GetTotalCount(_gold.ItemId));
             Assert.AreEqual(_sword.ItemId, bag.Equipped[EquipmentSlot.MainHand].itemId);
-            Assert.AreEqual(1, lostAndFound.Count);
             Assert.AreEqual(1, events);
-            Assert.AreEqual("6 drop_potion", DeathScreenController.DescribeDrop(result.Item));
+            Assert.AreEqual(1, published.quantity);
+            Assert.AreEqual("drop_potion", DeathScreenController.DescribeDrop(result.Item));
 
-            Assert.IsFalse(DeathDropService.Apply(bag, lostAndFound, new NeverRandom(), Resolve).Dropped, "91%: nothing happens");
-            Assert.AreEqual(1, lostAndFound.Count);
+            Assert.IsFalse(DeathDropService.Apply(bag, new NeverRandom(), Resolve).Dropped, "91%: nothing happens");
+            Assert.AreEqual(5, bag.GetTotalCount(_potion.ItemId));
         }
 
         [Test]
-        public void BuyBack_NeedsGoldAndRoom_AndRestoresAffixes()
+        public void Apply_ASingleItem_LeavesTheBag()
         {
             InventoryManager bag = NewBag();
-            var lostAndFound = new LostAndFoundList();
-            InventorySlotData rolled = Slot(_sword, 1);
-            rolled.generatedName = "Peixeira Épica";
-            rolled.generatedRarity = ItemRarity.Epic;
-            rolled.generatedAffixIds = new[] { "affix_x" };
-            rolled.generatedAffixValues = new[] { 3f };
-            lostAndFound.Add(rolled, 150);
+            bag.AddItem(_sword, 1);
 
-            bag.AddItem(_gold, 149);
-            Assert.AreEqual(LostAndFoundBuyback.NotEnoughGold, lostAndFound.TryBuyBack(0, bag));
-            Assert.AreEqual(149, bag.GetTotalCount(_gold.ItemId));
+            DeathDropResult result = DeathDropService.Apply(bag, new AlwaysRandom(), Resolve);
 
-            bag.AddItem(_gold, 51);
-            Assert.AreEqual(LostAndFoundBuyback.Ok, lostAndFound.TryBuyBack(0, bag));
-            Assert.AreEqual(50, bag.GetTotalCount(_gold.ItemId));
-            InventorySlotData back = bag.Slots[Index(bag, _sword.ItemId)];
-            Assert.AreEqual("Peixeira Épica", back.generatedName);
-            CollectionAssert.AreEqual(new[] { "affix_x" }, back.generatedAffixIds);
-            Assert.AreEqual(0, lostAndFound.Count);
-            Assert.AreEqual(LostAndFoundBuyback.Invalid, lostAndFound.TryBuyBack(0, bag));
-
-            // No room: nothing paid, the entry stays.
-            InventoryManager full = NewBag(1, 2);
-            full.AddItem(_gold, 999);
-            full.AddItem(_potion, 1);
-            lostAndFound.Add(Slot(_sword, 1), 25);
-            Assert.AreEqual(LostAndFoundBuyback.BagFull, lostAndFound.TryBuyBack(0, full));
-            Assert.AreEqual(999, full.GetTotalCount(_gold.ItemId));
-            Assert.AreEqual(1, lostAndFound.Count);
+            Assert.IsTrue(result.Dropped);
+            Assert.AreEqual(1, result.Item.quantity);
+            Assert.AreEqual(0, bag.GetTotalCount(_sword.ItemId), "gone for good: nothing keeps it to buy back");
+            Assert.IsFalse(DeathDropService.Apply(null, new AlwaysRandom(), Resolve).Dropped);
         }
 
         [Test]
-        public void LostAndFound_IsSavedWithTheChest_AndClearedOnNewGame()
+        public void OldChestSave_WithTheRemovedLostAndFoundList_StillLoads()
         {
+            // Written while "Achados e Perdidos" existed: the extra array is ignored and its entries are discarded.
+            const string Json = "{\"slots\":[{\"itemId\":\"drop_potion\",\"quantity\":2}],\"overflowInbox\":[],"
+                + "\"lostAndFound\":[{\"item\":{\"itemId\":\"drop_sword\",\"quantity\":1},\"fee\":25}]}";
+            var saved = JsonUtility.FromJson<VillageChestSaveState>(Json);
             var chest = new VillageChestStorage(resolveItem: Resolve);
-            InventorySlotData rolled = Slot(_sword, 1);
-            rolled.generatedName = "Peixeira";
-            rolled.generatedRarity = ItemRarity.Rare;
-            chest.LostAndFound.Add(rolled, 60);
-            chest.LostAndFound.Add(Slot(_potion, 3), 10);
+            chest.RestoreState(saved);
 
-            var saved = JsonUtility.FromJson<VillageChestSaveState>(JsonUtility.ToJson(chest.CaptureState()));
-            var loaded = new VillageChestStorage(resolveItem: Resolve);
-            loaded.RestoreState(saved);
-
-            Assert.AreEqual(2, loaded.LostAndFound.Count);
-            Assert.AreEqual("Peixeira", loaded.LostAndFound.Entries[0].item.generatedName);
-            Assert.AreEqual(60, loaded.LostAndFound.Entries[0].fee);
-            Assert.AreEqual(3, loaded.LostAndFound.Entries[1].item.quantity);
-
-            // An old chest save (before Achados e Perdidos) loads with an empty list.
-            var old = JsonUtility.FromJson<VillageChestSaveState>("{\"slots\":[]}");
-            loaded.RestoreState(old);
-            Assert.AreEqual(0, loaded.LostAndFound.Count);
-
-            chest.Clear();
-            Assert.AreEqual(0, chest.LostAndFound.Count, "Novo jogo empties it");
+            Assert.AreEqual(1, chest.UsedSlotCount);
+            Assert.AreEqual(0, chest.Inbox.Count);
+            Assert.IsFalse(JsonUtility.ToJson(chest.CaptureState()).Contains("lostAndFound"), "never written again");
         }
 
         // ------------------------------------------------------------------

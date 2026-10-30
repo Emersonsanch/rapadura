@@ -73,8 +73,12 @@ namespace Rapadura.Core.Managers
         public Rapadura.Gameplay.Secrets.SecretsProgress Secrets { get; private set; }
         /// <summary>"Pesca no açude": fish collection and records ("Caderno de pesca").</summary>
         public Rapadura.Gameplay.Fishing.FishingProgress Fishing { get; private set; }
+        /// <summary>Festa Junina (prendas, quadrilha, Barraca de Prendas; Docs/Seasons.md).</summary>
+        public Rapadura.Gameplay.Seasons.FestaJuninaProgress FestaJunina { get; private set; }
         /// <summary>Timed event rooms (Terreiro das Assombrações, Torre do Engenho Velho): bests, clears, entered windows, schedule.</summary>
         public Rapadura.Gameplay.EventRooms.EventRoomProgress EventRooms { get; private set; }
+        /// <summary>Scheduled world bosses and Invasão do Cangaço (Docs/WorldEvents.md): defeats, paid windows, chests.</summary>
+        public Rapadura.Gameplay.WorldEvents.WorldEventProgress ScheduledEvents { get; private set; }
         /// <summary>"Golpe em dupla": which cousin each hero calls for the duo strike.</summary>
         public Rapadura.Gameplay.Duo.DuoPartnerState DuoPartners { get; private set; }
         public WorldMapProgress WorldMapProgress { get; private set; }
@@ -84,6 +88,8 @@ namespace Rapadura.Core.Managers
         public Rapadura.Gameplay.Inventory.DeathProtectionState DeathProtection { get; private set; }
         /// <summary>"Minha casa" (Fase 15, H1): one house per account/save, shared by the five cousins.</summary>
         public Rapadura.Gameplay.Housing.HouseService House { get; private set; }
+        /// <summary>Guarda-roupa (Docs/Housing.md §9, H5): the account's look collection, dyes, each cousin's look and outfits.</summary>
+        public Rapadura.Gameplay.Wardrobe.WardrobeService Wardrobe { get; private set; }
         /// <summary>Montarias (Docs/Mounts.md, M1): one collection per account/save, shared by the five cousins.</summary>
         public Rapadura.Gameplay.Mounts.MountCollection Mounts { get; private set; }
         public StoryProgress StoryProgress { get; private set; }
@@ -95,6 +101,10 @@ namespace Rapadura.Core.Managers
         public BestiaryProgress BestiaryProgress { get; private set; }
         /// <summary>Hunting (Seu Zé's tasks, "Presa do dia", "Bicho destaque do dia", "Amuletos do Caderno").</summary>
         public Rapadura.Gameplay.Hunting.HuntingProgress Hunting { get; private set; }
+        /// <summary>Class evolution: graduations by story mission, master level and tree, class combo (Docs/ClassEvolution.md).</summary>
+        public Rapadura.Gameplay.ClassEvolution.ClassEvolutionProgress ClassEvolution { get; private set; }
+        /// <summary>Trained proficiencies and the Roda de Talentos of each cousin (Docs/Balance/README.md §26).</summary>
+        public Rapadura.Gameplay.Talents.TalentProgress Talents { get; private set; }
         public AchievementManager AchievementManager { get; private set; }
         public TimeOfDayManager TimeOfDayManager { get; private set; }
         public WeatherSystem WeatherSystem { get; private set; }
@@ -174,12 +184,15 @@ namespace Rapadura.Core.Managers
             Meals = new Rapadura.Gameplay.Cooking.MealService();
             Secrets = new Rapadura.Gameplay.Secrets.SecretsProgress();
             Fishing = new Rapadura.Gameplay.Fishing.FishingProgress();
+            FestaJunina = new Rapadura.Gameplay.Seasons.FestaJuninaProgress();
             EventRooms = new Rapadura.Gameplay.EventRooms.EventRoomProgress();
+            ScheduledEvents = new Rapadura.Gameplay.WorldEvents.WorldEventProgress();
             DuoPartners = new Rapadura.Gameplay.Duo.DuoPartnerState();
             WorldMapProgress = new WorldMapProgress();
             Cities = new Rapadura.Gameplay.World.Cities.CityProgress(WorldMapProgress);
             DeathProtection = new Rapadura.Gameplay.Inventory.DeathProtectionState();
             House = new Rapadura.Gameplay.Housing.HouseService();
+            Wardrobe = new Rapadura.Gameplay.Wardrobe.WardrobeService();
             Mounts = new Rapadura.Gameplay.Mounts.MountCollection();
             StoryProgress = new StoryProgress(WorldMapProgress);
             SceneTransitionService = new SceneTransitionService(WorldMapProgress);
@@ -190,6 +203,8 @@ namespace Rapadura.Core.Managers
             NewGamePlusProgress = new NewGamePlusProgress(StoryProgress, WorldMapProgress, DefeatedEnemyRegistry, QuestManager);
             BestiaryProgress = new BestiaryProgress(DefeatedEnemyRegistry);
             Hunting = new Rapadura.Gameplay.Hunting.HuntingProgress();
+            ClassEvolution = new Rapadura.Gameplay.ClassEvolution.ClassEvolutionProgress();
+            Talents = new Rapadura.Gameplay.Talents.TalentProgress();
             AchievementManager = new AchievementManager();
             TimeOfDayManager = new TimeOfDayManager();
             WeatherSystem = new WeatherSystem();
@@ -222,12 +237,15 @@ namespace Rapadura.Core.Managers
             RegisterManager(Meals);
             RegisterManager(Secrets);
             RegisterManager(Fishing);
+            RegisterManager(FestaJunina);
             RegisterManager(EventRooms);
+            RegisterManager(ScheduledEvents);
             RegisterManager(DuoPartners);
             RegisterManager(WorldMapProgress);
             RegisterManager(Cities);
             RegisterManager(DeathProtection);
             RegisterManager(House);
+            RegisterManager(Wardrobe);
             RegisterManager(Mounts);
             RegisterManager(StoryProgress);
             RegisterManager(NewGamePlusProgress);
@@ -237,6 +255,8 @@ namespace Rapadura.Core.Managers
             RegisterManager(DefeatedEnemyRegistry);
             RegisterManager(BestiaryProgress);
             RegisterManager(Hunting);
+            RegisterManager(ClassEvolution);
+            RegisterManager(Talents);
             RegisterManager(AchievementManager);
             RegisterManager(TimeOfDayManager);
             RegisterManager(WeatherSystem);
@@ -254,6 +274,8 @@ namespace Rapadura.Core.Managers
             SaveManager.Register(DeathProtection);
             // "Minha casa"; older saves have no entry and load without a house until the "Um Cantinho Seu" beat.
             SaveManager.Register(House);
+            // Wardrobe; older saves have no entry and load with only the starter look (restores before the house).
+            SaveManager.Register(Wardrobe);
             // Mounts; older saves have no entry and load with no mount (the pony comes with "Primeira Sela").
             SaveManager.Register(Mounts);
             SaveManager.Register(StoryProgress);
@@ -271,6 +293,10 @@ namespace Rapadura.Core.Managers
             SaveManager.Register(BestiaryProgress);
             // Hunting; older saves have no entry and load with no task, no charms and today's prey offers.
             SaveManager.Register(Hunting);
+            // Class evolution; older saves have no entry and load every cousin at the base class.
+            SaveManager.Register(ClassEvolution);
+            // Training + talent wheel; older saves have no entry and start untrained.
+            SaveManager.Register(Talents);
             SaveManager.Register(ShopManager);
             // "Baú da Vó Zefa" (village hub on the map); older saves have no entry and load an empty chest.
             SaveManager.Register(VillageChest);
@@ -284,8 +310,12 @@ namespace Rapadura.Core.Managers
             SaveManager.Register(Secrets);
             // "Pesca no açude"; older saves have no entry and load with an empty fishing notebook.
             SaveManager.Register(Fishing);
+            // Festa Junina; older saves have no entry and load with no prendas.
+            SaveManager.Register(FestaJunina);
             // Event rooms; older saves have no entry and load with the default schedule and no records.
             SaveManager.Register(EventRooms);
+            // World events; older saves have no entry and load with no defeats/chests.
+            SaveManager.Register(ScheduledEvents);
             // Duo strike partner per hero; older saves have no entry and every hero calls the default partner (the sibling).
             SaveManager.Register(DuoPartners);
 
@@ -335,12 +365,15 @@ namespace Rapadura.Core.Managers
             NewSessionReset.Register(Meals);
             NewSessionReset.Register(Secrets);
             NewSessionReset.Register(Fishing);
+            NewSessionReset.Register(FestaJunina);
             NewSessionReset.Register(EventRooms);
+            NewSessionReset.Register(ScheduledEvents);
             NewSessionReset.Register(DuoPartners);
             NewSessionReset.Register(WorldMapProgress);
             NewSessionReset.Register(Cities);
             NewSessionReset.Register(DeathProtection);
             NewSessionReset.Register(House);
+            NewSessionReset.Register(Wardrobe);
             NewSessionReset.Register(Mounts);
             NewSessionReset.Register(StoryProgress);
             NewSessionReset.Register(NewGamePlusProgress);
@@ -348,6 +381,8 @@ namespace Rapadura.Core.Managers
             NewSessionReset.Register(DefeatedEnemyRegistry);
             NewSessionReset.Register(BestiaryProgress);
             NewSessionReset.Register(Hunting);
+            NewSessionReset.Register(ClassEvolution);
+            NewSessionReset.Register(Talents);
             NewSessionReset.Register(TimeOfDayManager);
             NewSessionReset.Register(WeatherSystem);
 

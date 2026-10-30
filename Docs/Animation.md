@@ -38,6 +38,8 @@ frame no herói).
 | `TurnAngle` | float | driver | ângulo com sinal (+ = direita) entre a frente e a direção desejada, dampTime 0,12 s |
 | `IsGrounded` | bool | driver | motor no chão |
 | `VerticalSpeed` | float | driver | m/s (+ = sobe), dampTime 0,05 s no ar; ao tocar o chão segura a velocidade do impacto por 0,12 s |
+| `FootPlantL` / `FootPlantR` | float | rebuilder (dado) | tempo normalizado (0..1) da pisada de cada pé num ciclo do estado Locomotion, medido no clipe Walk |
+| `FootStrides` | float | rebuilder (dado) | passadas (par esquerdo+direito) por ciclo do clipe (1 nos mocaps) |
 
 ### Estados da camada base
 
@@ -63,6 +65,58 @@ Land: !IsGrounded && VerticalSpeed > 1 ──(0,08 s)──► Jump             
 - A camada de ações do mocap CMU continua **desligada** (`IncludeMocapActions`). A causa da deformação foi corrigida
   no importador (`Docs/Mocap.md` §1), mas as ações ainda são gravadas só no Ícaro. Reimporte o conjunto e confira
   no Console (`MocapClipSanity`) antes de usar o menu "(with mocap actions)".
+
+### 2.1 Fase dos pés no blend tree e passos (2026-10-30)
+
+- **Pés em fase no blend:** cada clipe de loop começa num quadro diferente (o corte do `bvh_prep.py` pega a
+  janela de loop mais limpa, não um pé específico). Sem correção, o cruzamento Walk↔Jog↔Run misturava uma pose
+  "pé esquerdo na frente" com uma "pé direito na frente": as pernas "tesouravam" e o pé patinava no meio da
+  transição, e isso parecia andar duro/estranho. Agora o rebuild mede a pisada de cada pé em cada clipe
+  (`FootstepMath.PlantPhase`: o primeiro quadro no chão do apoio que contém o ponto mais à frente do pé) e põe
+  um `cycleOffset` em cada filho para as pisadas caírem junto com as do Walk (`FootstepMath.AlignmentOffset`,
+  média circular dos dois pés). Clipes com número de passadas diferente não são alinhados, e o relatório avisa.
+  O relatório do rebuild mostra, por herói, `feet: plants L … / R … xN, Mocap_Jog offset …, Mocap_Run offset …`.
+- **Passos (som + poeira):** `PlayerFootsteps` (adicionado sozinho ao Player pelo `PlayerProceduralAnimator`)
+  publica `PlayerFootstepEvent` a cada pisada, acima de 0,4 m/s e no chão. A ordem de fontes é:
+  1. fases gravadas no controller (`FootPlantL/R`, comparadas com o `normalizedTime` do estado Locomotion,
+     `FootstepMath.CrossedPhase`). É exato e vale para o blend inteiro por causa do alinhamento acima;
+  2. sem fases gravadas (controller antigo), os extremos do afastamento entre os pés animados
+     (`FootstepMath.StrideExtremum`);
+  3. sem rig (Maithe), a cada π da fase de passo procedural.
+
+  O `SfxEventRouter` toca `hero.step` (gatilho `HeroFootstep` = 42, *Thud* bem baixo, 0,09, com variação de tom e de
+  volume). O `PlayerFootstepDust` solta uma nuvem pequena de poeira no pé quando a intensidade passa de 0,5
+  (trote/corrida). **Não se usam AnimationEvents:** o mesmo clipe toca em outros Animators (prévia, foto,
+  seleção de herói), e um evento sem receptor enche o Console de erros. Os dados no controller fazem o mesmo papel.
+- **Sincronia do golpe:** já vinha dos clipes. `AttackStrikeTime`/`AttackStrikeTimeB` (rebuild com ações mocap)
+  guardam o tempo real da mão mais rápida, que o `PlayerBasicAttack` espera antes do dano. Sem clipes de ação, a
+  curva procedural do braço cai exatamente em `StrikeDelay` (§3).
+- **Viradas, partida e parada:** não há clipes de virada, partida ou parada no conjunto (o `Mocap_TurnLeft90`
+  tem root motion e não entra na locomoção). O blend tree continua 1D por velocidade. A inclinação na curva, o
+  peito puxando a virada (`TurnAngle`), o freio em curva fechada, a inclinação por aceleração e o *follow-through*
+  de cabeça e tronco ficam na camada procedural. O parâmetro `TurnAngle` já está no controller para um blend 2D
+  futuro, se aparecerem clipes de virada.
+
+### 2.2 Decisão: movido pelo motor, não por root motion
+
+**Os heróis são movidos pelo `PlayerMotor` (CharacterController), e o Animator só acompanha.** `Apply Root
+Motion` fica desligado (`PlayerAnimatorSpeedDriver._disableRootMotion`), e os clipes de locomoção são *in-place*.
+Motivos:
+
+1. **Multiplayer (Fase 12, estilo MU Online):** a posição é regra de jogo. Ela tem de sair de números (velocidade,
+   aceleração, colisão) que o servidor consegue rodar e validar sem Animator. Com root motion, a posição dependeria
+   do clipe e do *frame rate*.
+2. **Resposta no celular:** clique para andar e joystick precisam partir e parar no tempo do perfil (0,1–0,25 s).
+   Um clipe de partida com root motion atrasaria a resposta ou teria de ser cortado.
+3. **Cinco corpos, um conjunto de clipes:** o mesmo mocap toca em heróis de alturas diferentes, e as velocidades
+   de andar/correr são balanceamento (atributos, montarias, lentidão). O casamento de passada
+   (`MoveSpeedMul`) ajusta a cadência à velocidade real.
+4. **Patinação controlada:** o pé não patina por outros caminhos: velocidade do clipe medida e casada, fases dos
+   filhos alinhadas, pés presos parado ou girando no lugar, e IK no chão.
+
+Custo aceito: a passada não "puxa" o corpo nem acelera sozinha. O peso vem do perfil (curva de aceleração,
+inclinação, molas). Root motion continua possível em ações sem efeito de regra (emotes, cutscenes), ligando
+`applyRootMotion` só durante elas.
 
 ## 3. Perfil de movimento (`HeroMotionProfile`)
 
@@ -92,6 +146,15 @@ do herói no `PlayerVisualSwapper`. Durante o Play Mode, a cópia viva aparece n
 | mergulho da pelve ao aterrissar (m) / encolher no ar (m) | 0,14 / 0,10 | 0,09 / 0,12 | 0,07 / 0,16 | 0,09 / 0,14 | 0,08 / 0,16 | 0,1 / 0,12 |
 | mola: frequência (Hz) / amortecimento / ganho | 2,2 / 0,55 / 1,4 | 2,6 / 0,75 / 0,9 | 3,4 / 0,5 / 1,0 | 3,2 / 0,45 / 1,2 | 3,0 / 0,4 / 1,3 | 2,8 / 0,55 / 1,0 |
 | `flinchScale` | 0,75 | 1,0 | 1,2 | 1,1 | 1,3 | 1,0 |
+| `proceduralOverlap` (liga/desliga a camada de *overlap*) | sim | sim | sim | sim | sim | sim |
+| `turnFollowThrough` / `turnLagMaxDegrees` (°) | 0,45 / 10 | 0,3 / 7 | 0,25 / 6 | 0,35 / 8 | 0,4 / 9 | 0,35 / 8 |
+
+**Camada de *overlap* por herói:** com `proceduralOverlap` desligado, o herói fica só com o clipe, a inclinação e
+o IK dos pés (sem molas de cabeça, braços e tronco, sem *follow-through* na virada e sem o balanço extra da
+pelve). O *follow-through* da virada é uma mola de giro (yaw) na cabeça, no pescoço e no peito alto, que recebe
+o contrário da aceleração de giro do corpo (`MotionFeelMath.TurnLagDrive`): ao começar a virar, a cabeça fica
+para trás; ao parar de virar, passa um pouco do ponto e volta. Numa virada constante não há atraso (o peito
+continua puxando a virada). "Reduzir Movimento" corta pela metade, como as outras molas.
 
 ### Curvas (dá para ajustar no Inspector)
 
@@ -140,7 +203,10 @@ do herói no `PlayerVisualSwapper`. Durante o Play Mode, a cópia viva aparece n
 3. Copie os valores para um asset *Hero Motion Profile* (ou para `HeroMotionProfile.For`) para guardá-los.
 4. No `PlayerFootIK` (que fica no objeto do Animator do herói) ficam os ajustes do IK: raio de
    reposição (`_lockMaxDrift`), torção máxima (`_lockMaxTwist`) e duração e altura do passo.
-5. Testes: `HeroMotionFeelTests` e `HeroLocomotionTests` (EditMode).
+5. Testes: `HeroMotionFeelTests`, `HeroLocomotionTests` e `FootstepMathTests` (EditMode).
+6. Passos: no `PlayerFootsteps` do Player, `Source` mostra de onde vem o tempo da pisada (`Baked` depois do
+   rebuild) e `StepCount` conta os passos. Velocidade mínima e intervalo ficam no mesmo componente, e a poeira no
+   `PlayerFootstepDust`.
 
 ## 7. Inimigos: mesmo peso, sem rig
 

@@ -60,6 +60,23 @@ namespace Rapadura.Gameplay.World.Map
 
         public bool IsEventRoom => eventRoom != Rapadura.Gameplay.EventRooms.EventRoomKind.None;
 
+        /// <summary>
+        /// Scheduled world event this encounter is (world boss / Invasão do Cangaço, <c>WorldEventDirector</c>), else None.
+        /// Directed like an event room; the enemy ids are the region's pool. Serialized.
+        /// </summary>
+        public Rapadura.Gameplay.WorldEvents.WorldEventKind worldEvent;
+
+        /// <summary>Real-time window index the world event was entered in (reward once per window).</summary>
+        public long worldEventWindow = -1;
+
+        /// <summary>The world boss's night form (decided at the window's start).</summary>
+        public bool worldEventNight;
+
+        public bool IsWorldEvent => worldEvent != Rapadura.Gameplay.WorldEvents.WorldEventKind.None;
+
+        /// <summary>An external director spawns, scores and resolves (event room or world event): no regional victory bookkeeping.</summary>
+        public bool IsDirected => IsEventRoom || IsWorldEvent;
+
         [NonSerialized] private List<EnemyDefinition> _cachedEnemies;
 
         /// <summary>Builds a payload from rolled enemy definitions, skipping nulls.</summary>

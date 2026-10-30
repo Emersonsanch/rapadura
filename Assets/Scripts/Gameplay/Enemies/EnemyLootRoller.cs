@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Rapadura.Gameplay.Items;
+using Rapadura.Gameplay.Items.Options;
 using Rapadura.Gameplay.Items.Procedural;
 using Rapadura.Gameplay.Story;
 using Rapadura.Gameplay.World.Biomes;
@@ -52,6 +53,9 @@ namespace Rapadura.Gameplay.Enemies
     /// <item><b>Boss bonus</b> — <see cref="EnemyDefinition.BossBonusDropItem"/> at its rarity
     /// (<see cref="BossBonusRules.RollBonusDrop"/>).</item>
     /// </list>
+    /// Every equipment piece also rolls its MU-style options (<see cref="ItemOptionRules.Roll(ItemDefinition, bool, int)"/>:
+    /// excellent, luck, ancient set, sockets) from a seed derived from the piece's own seed, so no extra number is drawn
+    /// from <c>random</c> and old seeds keep the same drops.
     /// Numbers and the expected fights per collect quest live in Docs/Balance/README.md §8.
     /// On a "Nova Jornada+" (<c>newGamePlusCycle</c> 1+, <see cref="NewGamePlusRules"/>, §11) the base
     /// loot quantity grows and each equipment piece may go up one rarity tier; cycle 0 draws exactly the same
@@ -131,7 +135,10 @@ namespace Rapadura.Gameplay.Enemies
                             rarity = NewGamePlusRules.UpgradeRarity(rarity, newGamePlusCycle, random.NextDouble());
                         }
 
-                        drops.Add(new LootDrop(ProceduralItemGenerator.Generate(entry.Item, rarity, random.Next(), localizeName, affixPool)));
+                        int pieceSeed = random.Next();
+                        GeneratedItemInstance piece = ProceduralItemGenerator.Generate(entry.Item, rarity, pieceSeed, localizeName, affixPool);
+                        piece.Options = ItemOptionRules.Roll(entry.Item, enemy.IsBoss, ItemOptionRules.OptionSeed(pieceSeed));
+                        drops.Add(new LootDrop(piece));
                     }
                     else
                     {
@@ -143,7 +150,14 @@ namespace Rapadura.Gameplay.Enemies
             // 3. Boss bonus drop.
             if (BossBonusRules.HasBonusDrop(enemy))
             {
-                drops.Add(new LootDrop(BossBonusRules.RollBonusDrop(enemy, random.Next(), localizeName, affixPool)));
+                int bonusSeed = random.Next();
+                GeneratedItemInstance bonus = BossBonusRules.RollBonusDrop(enemy, bonusSeed, localizeName, affixPool);
+                if (bonus != null)
+                {
+                    bonus.Options = ItemOptionRules.Roll(bonus.BaseItem, true, ItemOptionRules.OptionSeed(bonusSeed));
+                }
+
+                drops.Add(new LootDrop(bonus));
             }
 
             return drops;

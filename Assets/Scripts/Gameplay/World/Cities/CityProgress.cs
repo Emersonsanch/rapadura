@@ -4,6 +4,7 @@ using System.Linq;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
+using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.Gameplay.World.Map;
 
@@ -18,6 +19,13 @@ namespace Rapadura.Gameplay.World.Cities
         /// <summary>Last rotation period seen per themed shop (see <see cref="ShopRotation.EffectivePeriod"/>).</summary>
         public List<string> shopIds = new List<string>();
         public List<long> shopPeriods = new List<long>();
+
+        /// <summary>Freguesia points per shop (<see cref="ShopReputation"/>). Old saves: none.</summary>
+        public List<string> reputationShopIds = new List<string>();
+        public List<int> reputationPoints = new List<int>();
+
+        /// <summary>Bornais de couro bought (the bag expansion is sold once). Old saves: 0.</summary>
+        public int bornaisBought;
     }
 
     /// <summary>
@@ -38,6 +46,8 @@ namespace Rapadura.Gameplay.World.Cities
 
         private readonly HashSet<BiomeType> _visited = new HashSet<BiomeType>();
         private readonly Dictionary<string, long> _shopPeriods = new Dictionary<string, long>(StringComparer.Ordinal);
+        private readonly Dictionary<string, int> _reputation = new Dictionary<string, int>(StringComparer.Ordinal);
+        private int _bornaisBought;
         private WorldMapProgress _map;
         private bool _subscribed;
 
@@ -76,6 +86,7 @@ namespace Rapadura.Gameplay.World.Cities
             {
                 _subscribed = true;
                 EventBus.Subscribe<EncounterEndedEvent>(OnEncounterEnded);
+                EventBus.Subscribe<ItemPurchasedEvent>(OnItemPurchased);
             }
         }
 
@@ -85,6 +96,7 @@ namespace Rapadura.Gameplay.World.Cities
             {
                 _subscribed = false;
                 EventBus.Unsubscribe<EncounterEndedEvent>(OnEncounterEnded);
+                EventBus.Unsubscribe<ItemPurchasedEvent>(OnItemPurchased);
             }
         }
 
@@ -92,6 +104,8 @@ namespace Rapadura.Gameplay.World.Cities
         {
             _visited.Clear();
             _shopPeriods.Clear();
+            _reputation.Clear();
+            _bornaisBought = 0;
             PendingRespawnCity = null;
         }
 
@@ -177,6 +191,44 @@ namespace Rapadura.Gameplay.World.Cities
         }
 
         // ---------------------------------------------------------------
+        // Freguesia (shop reputation) and the Bornal de couro
+        // ---------------------------------------------------------------
+
+        public int ReputationPoints(string shopId)
+        {
+            return shopId != null && _reputation.TryGetValue(shopId, out int points) ? points : 0;
+        }
+
+        public int ReputationTier(string shopId) => ShopReputation.TierFor(ReputationPoints(shopId));
+
+        /// <summary>Adds freguesia points to <paramref name="shopId"/>; true when that reached a new tier.</summary>
+        public bool AddReputation(string shopId, int points)
+        {
+            if (string.IsNullOrEmpty(shopId) || points <= 0)
+            {
+                return false;
+            }
+
+            int before = ReputationPoints(shopId);
+            int after = ShopReputation.Add(before, points);
+            _reputation[shopId] = after;
+            return ShopReputation.TierFor(after) > ShopReputation.TierFor(before);
+        }
+
+        /// <summary>How many Bornais de couro were bought (0 or 1: the bag grows once).</summary>
+        public int BornaisBought => _bornaisBought;
+
+        /// <summary>The Bornal de couro is on a counter only until one was bought.</summary>
+        public bool CanBuyBornal => _bornaisBought < 1;
+
+        public void RecordBornal() => _bornaisBought++;
+
+        private void OnItemPurchased(ItemPurchasedEvent evt)
+        {
+            CityShopPurchases.Apply(evt, this);
+        }
+
+        // ---------------------------------------------------------------
         // Respawn
         // ---------------------------------------------------------------
 
@@ -218,11 +270,15 @@ namespace Rapadura.Gameplay.World.Cities
         public object CaptureState()
         {
             string[] ids = _shopPeriods.Keys.OrderBy(k => k, StringComparer.Ordinal).ToArray();
+            string[] repIds = _reputation.Keys.OrderBy(k => k, StringComparer.Ordinal).ToArray();
             return new CitySaveState
             {
                 visitedRegions = _visited.Select(r => (int)r).OrderBy(r => r).ToList(),
                 shopIds = ids.ToList(),
                 shopPeriods = ids.Select(id => _shopPeriods[id]).ToList(),
+                reputationShopIds = repIds.ToList(),
+                reputationPoints = repIds.Select(id => _reputation[id]).ToList(),
+                bornaisBought = _bornaisBought,
             };
         }
 
@@ -235,6 +291,19 @@ namespace Rapadura.Gameplay.World.Cities
 
             _visited.Clear();
             _shopPeriods.Clear();
+            _reputation.Clear();
+            _bornaisBought = Math.Max(0, saved.bornaisBought);
+
+            if (saved.reputationShopIds != null && saved.reputationPoints != null)
+            {
+                for (int i = 0; i < Math.Min(saved.reputationShopIds.Count, saved.reputationPoints.Count); i++)
+                {
+                    if (!string.IsNullOrEmpty(saved.reputationShopIds[i]) && saved.reputationPoints[i] > 0)
+                    {
+                        _reputation[saved.reputationShopIds[i]] = saved.reputationPoints[i];
+                    }
+                }
+            }
 
             if (saved.visitedRegions != null)
             {

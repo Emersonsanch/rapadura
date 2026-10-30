@@ -1,0 +1,172 @@
+/*
+ * Roda de Talentos (TalentWheelView, built in code inside the Ficha do personagem's `rap-theme` root) and the
+ * "Treino" rows of the sheet. Loaded at runtime from Resources; the palette resolves under the sheet's root.
+ * Touch-first: every node is a 56px button, every other button at least 44px tall.
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+.talent-window {
+    width: 86%;
+    min-width: 560px;
+    max-width: 1100px;
+    height: 86%;
+    min-height: 380px;
+    background-color: var(--rap-brown-deep);
+    padding: 16px 20px;
+}
+
+.talent-header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.talent-title {
+    flex-grow: 1;
+    font-size: 28px;
+}
+
+.talent-close-button,
+.talent-respec-button,
+.talent-spend-button {
+    min-width: 96px;
+    height: 44px;
+    margin: 0 0 0 8px;
+    font-size: 16px;
+}
+
+.talent-body {
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    align-items: center;
+}
+
+.talent-wheel {
+    width: 440px;
+    height: 440px;
+    flex-shrink: 0;
+}
+
+.talent-side {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-left: 16px;
+    padding: 10px 12px;
+    background-color: var(--rap-brown);
+    border-width: 1px;
+    border-color: var(--rap-panel-border);
+    border-radius: 10px;
+}
+
+.talent-intro {
+    font-size: 13px;
+    -unity-font-style: italic;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+    margin-bottom: 6px;
+}
+
+.talent-points {
+    font-size: 18px;
+    color: var(--rap-gold-light);
+    -unity-font-style: bold;
+    margin-bottom: 6px;
+}
+
+.talent-quadrant-summary,
+.talent-detail,
+.talent-status {
+    font-size: 14px;
+    color: var(--rap-cream);
+    white-space: normal;
+    margin-bottom: 4px;
+}
+
+.talent-detail-name {
+    font-size: 18px;
+    color: var(--rap-gold);
+    -unity-font-style: bold;
+    margin-top: 8px;
+    white-space: normal;
+}
+
+.talent-status {
+    color: var(--rap-warning);
+}
+
+.talent-actions {
+    flex-direction: row;
+    margin-top: 8px;
+}
+
+.talent-node {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    margin: 0;
+    padding: 0;
+    border-radius: 28px;
+    border-width: 2px;
+    border-color: var(--rap-brown-light);
+    background-color: var(--rap-brown-night);
+    color: var(--rap-cream-dim);
+    font-size: 13px;
+    -unity-text-align: middle-center;
+}
+
+.talent-node--keystone {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    border-width: 3px;
+}
+
+.talent-node--available {
+    border-color: var(--rap-caramel-light);
+    color: var(--rap-cream);
+}
+
+.talent-node--learned {
+    background-color: var(--rap-caramel);
+    border-color: var(--rap-gold);
+    color: var(--rap-brown-night);
+}
+
+.talent-node--maxed {
+    background-color: var(--rap-gold);
+    border-color: var(--rap-gold-light);
+    color: var(--rap-brown-night);
+}
+
+.talent-node--locked {
+    opacity: 0.55;
+}
+
+.talent-node--selected {
+    border-color: var(--rap-focus);
+    border-width: 4px;
+}
+
+.talent-quadrant-label {
+    position: absolute;
+    width: 120px;
+    font-size: 15px;
+    color: var(--rap-gold-light);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.talent-open-button {
+    height: 44px;
+    margin: 8px 0 4px 0;
+    font-size: 16px;
+}
+
+.talent-training-row {
+    font-size: 14px;
+    color: var(--rap-cream);
+    white-space: normal;
+    margin-bottom: 2px;
+}

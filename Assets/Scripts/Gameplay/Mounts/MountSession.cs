@@ -94,11 +94,25 @@ namespace Rapadura.Gameplay.Mounts
 
             IsMounted = false;
             IsGalloping = false;
+            FreeGallopRemaining = 0f;
+            ShellRemaining = 0f;
             if (startRecallCooldown)
             {
                 RecallReadyAt = MountRules.CooldownReadyAt(now, MountRules.RecallCooldownSeconds);
             }
         }
+
+        /// <summary>Seconds left of the Ema's "Fôlego de Ema": galloping spends no stamina (M3).</summary>
+        public float FreeGallopRemaining { get; private set; }
+
+        /// <summary>Seconds left of the Jabuti's "Casco de Pedra": rider and mount shut in the shell, no moving (M3).</summary>
+        public float ShellRemaining { get; private set; }
+
+        public bool IsInShell => IsMounted && ShellRemaining > 0f;
+
+        public void StartFreeGallop(float seconds) => FreeGallopRemaining = IsMounted ? Mathf.Max(FreeGallopRemaining, seconds) : 0f;
+
+        public void StartShell(float seconds) => ShellRemaining = IsMounted ? Mathf.Max(ShellRemaining, seconds) : 0f;
 
         /// <summary>One ride step: gallop when wanted and allowed (and not in a city), stamina spent/refilled.</summary>
         public void Tick(float deltaTime, bool wantsGallop, MountPlace place, bool hungry = false)
@@ -108,14 +122,40 @@ namespace Rapadura.Gameplay.Mounts
                 Stamina = MaxStamina;
             }
 
+            bool free = FreeGallopRemaining > 0f;
+            if (free)
+            {
+                _exhausted = false;
+                Stamina = Mathf.Max(Stamina, 1f);
+            }
+
+            float before = Stamina;
             bool allowed = IsMounted && MountRules.CanGallop(place, Stamina, _exhausted, hungry);
+
             Stamina = MountRules.StepGallopStamina(Stamina, MaxStamina, IsMounted && wantsGallop, allowed, deltaTime, ref _exhausted, out bool galloping);
+            if (free && galloping)
+            {
+                // Fôlego de Ema: the gallop costs nothing while it lasts.
+                Stamina = Mathf.Max(before, Stamina);
+                _exhausted = false;
+            }
+
             IsGalloping = galloping;
+            if (deltaTime > 0f)
+            {
+                FreeGallopRemaining = Mathf.Max(0f, FreeGallopRemaining - deltaTime);
+                ShellRemaining = Mathf.Max(0f, ShellRemaining - deltaTime);
+            }
         }
 
         /// <summary>Motor multiplier for the current state (see <see cref="MountRules.MountedSpeedMultiplier"/>); 1 when not mounted.</summary>
         public float SpeedMultiplier(float buffMultiplier, float mountSpeed, MountPlace place, bool hungry = false)
         {
+            if (IsInShell)
+            {
+                return 0f;
+            }
+
             return IsMounted
                 ? MountRules.MountedSpeedMultiplier(buffMultiplier, mountSpeed, IsGalloping, place == MountPlace.SafeZone, hungry)
                 : buffMultiplier;

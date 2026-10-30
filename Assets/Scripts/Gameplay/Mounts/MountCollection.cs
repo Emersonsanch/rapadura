@@ -144,6 +144,17 @@ namespace Rapadura.Gameplay.Mounts
         public const string Key = "Mounts";
         public const string SourceShop = "shop";
         public const string SourceQuest = "quest";
+        public const string SourceDrop = "drop";
+        public const string SourceAchievement = "achievement";
+        public const string SourceSecret = "secret";
+        public const string SourceEvent = "event";
+        public const string SourceRibbon = "ribbon";
+
+        /// <summary>Random source of the mount drops (§3.6). Offline the game owns it; online the server injects its own and the client never rolls.</summary>
+        public System.Random DropRandom { get; set; } = new System.Random();
+
+        /// <summary>Whether it is night now (the Lobo-Guará doubles and the Onça shows up at night). Tests inject one.</summary>
+        public Func<bool> IsNight { get; set; } = DefaultIsNight;
 
         private readonly List<OwnedMount> _mounts = new List<OwnedMount>();
         private readonly Dictionary<string, int> _ribbons = new Dictionary<string, int>(StringComparer.Ordinal);
@@ -217,6 +228,10 @@ namespace Rapadura.Gameplay.Mounts
             _subscribed = true;
             EventBus.Subscribe<ItemPurchasedEvent>(OnItemPurchased);
             EventBus.Subscribe<EncounterEndedEvent>(OnEncounterEnded);
+            EventBus.Subscribe<Rapadura.Gameplay.Enemies.EnemyDiedEvent>(OnEnemyDied);
+            EventBus.Subscribe<Rapadura.Gameplay.Quests.QuestCompletedEvent>(OnQuestCompleted);
+            EventBus.Subscribe<Rapadura.Gameplay.Achievements.AchievementUnlockedEvent>(OnAchievementUnlocked);
+            EventBus.Subscribe<Rapadura.Gameplay.Secrets.SecretClaimedEvent>(OnSecretClaimed);
 
             if (ServiceLocator.TryGet(out Rapadura.Core.Localization.LocalizationManager localization))
             {
@@ -240,6 +255,10 @@ namespace Rapadura.Gameplay.Mounts
             _subscribed = false;
             EventBus.Unsubscribe<ItemPurchasedEvent>(OnItemPurchased);
             EventBus.Unsubscribe<EncounterEndedEvent>(OnEncounterEnded);
+            EventBus.Unsubscribe<Rapadura.Gameplay.Enemies.EnemyDiedEvent>(OnEnemyDied);
+            EventBus.Unsubscribe<Rapadura.Gameplay.Quests.QuestCompletedEvent>(OnQuestCompleted);
+            EventBus.Unsubscribe<Rapadura.Gameplay.Achievements.AchievementUnlockedEvent>(OnAchievementUnlocked);
+            EventBus.Unsubscribe<Rapadura.Gameplay.Secrets.SecretClaimedEvent>(OnSecretClaimed);
             FirstSaddleQuest.Uninstall();
         }
 
@@ -581,6 +600,132 @@ namespace Rapadura.Gameplay.Mounts
                 shops.BuyerInventory.RemoveById(evt.ItemId, Math.Max(1, evt.Quantity));
             }
         }
+
+        // ------------------------------------------------------------------
+        // M3 sources: drops, Fitas do Laco, missions/achievements/secrets, Festa Junina
+        // ------------------------------------------------------------------
+
+        /// <summary>
+        /// One death of <paramref name="enemyId"/> (an <c>EnemyDefinition</c> asset name): rolls its mount drops
+        /// (<see cref="MountDropRules.Roll"/> with <see cref="DropRandom"/>; a drop joins the collection at once, source
+        /// <see cref="SourceDrop"/>) and, for a region boss, adds one Fita do Laço. Returns the mounts that dropped.
+        /// </summary>
+        public List<OwnedMount> ResolveEnemyDeath(string enemyId, bool isBoss, bool isNight)
+        {
+            var granted = new List<OwnedMount>();
+            if (string.IsNullOrEmpty(enemyId))
+            {
+                return granted;
+            }
+
+            foreach (string mountId in MountDropRules.Roll(enemyId, isNight, DropRandom))
+            {
+                OwnedMount mount = Grant(mountId, SourceDrop);
+                if (mount != null)
+                {
+                    granted.Add(mount);
+                }
+            }
+
+            if (isBoss && MountDropRules.GivesRibbons(enemyId))
+            {
+                AddRibbons(enemyId, MountDropRules.RibbonsPerBossVictory);
+            }
+
+            return granted;
+        }
+
+        public void AddRibbons(string bossId, int amount)
+        {
+            if (string.IsNullOrEmpty(bossId) || amount <= 0)
+            {
+                return;
+            }
+
+            _ribbons[bossId] = RibbonsOf(bossId) + amount;
+            EventBus.Publish(new MountCollectionChangedEvent());
+        }
+
+        /// <summary>Trades the boss's Fitas do Laço for <paramref name="mountId"/> at the Haras (25 Rare / 80 Epic). Null when not allowed.</summary>
+        public OwnedMount RedeemRibbons(string bossId, string mountId)
+        {
+            if (!MountDropRules.CanRedeem(bossId, mountId, RibbonsOf(bossId)))
+            {
+                return null;
+            }
+
+            _ribbons[bossId] = RibbonsOf(bossId) - MountDropRules.CostOf(bossId, mountId);
+            return Grant(mountId, SourceRibbon);
+        }
+
+        /// <summary>
+        /// A quest was completed / achievement unlocked / map secret claimed: grants the matching
+        /// <see cref="MountSourceHooks"/> mount once. Returns the granted mounts.
+        /// </summary>
+        public List<OwnedMount> ReportHook(MountSourceKind kind, string hookId)
+        {
+            var granted = new List<OwnedMount>();
+            foreach (MountSourceHook hook in MountSourceHooks.Matching(kind, hookId).ToList())
+            {
+                if (hook.Kind != MountSourceKind.Event && MountSourceHooks.ShouldGrant(hook, Owns(hook.MountId)))
+                {
+                    OwnedMount mount = Grant(hook.MountId, hook.SourceTag);
+                    if (mount != null)
+                    {
+                        granted.Add(mount);
+                    }
+                }
+            }
+
+            return granted;
+        }
+
+        /// <summary>Festa Junina shop: pays <paramref name="prendas"/> for an event mount (Ema de Fogo 90, Boi-Bumbá 250). Null when not affordable / not an event mount.</summary>
+        public OwnedMount BuyWithPrendas(string mountId, ref int prendas)
+        {
+            int before = prendas;
+            if (!MountSourceHooks.TryPayPrendas(mountId, ref prendas))
+            {
+                return null;
+            }
+
+            OwnedMount mount = Grant(mountId, SourceEvent);
+            if (mount == null)
+            {
+                prendas = before;
+            }
+
+            return mount;
+        }
+
+        private static bool DefaultIsNight()
+        {
+            return ServiceLocator.TryGet(out Rapadura.Gameplay.Environment.TimeOfDayManager time) && time != null
+                && Rapadura.Gameplay.Night.NightDangerRules.IsNight(time.Phase);
+        }
+
+        private void OnEnemyDied(Rapadura.Gameplay.Enemies.EnemyDiedEvent evt)
+        {
+            Rapadura.Gameplay.Enemies.EnemyController enemy = evt.Enemy != null ? evt.Enemy.GetComponent<Rapadura.Gameplay.Enemies.EnemyController>() : null;
+            if (enemy == null || enemy.Definition == null)
+            {
+                return;
+            }
+
+            ResolveEnemyDeath(enemy.Definition.name, evt.WasBoss, IsNight != null && IsNight());
+        }
+
+        private void OnQuestCompleted(Rapadura.Gameplay.Quests.QuestCompletedEvent evt) => ReportHook(MountSourceKind.Quest, evt.QuestId);
+
+        private void OnAchievementUnlocked(Rapadura.Gameplay.Achievements.AchievementUnlockedEvent evt)
+        {
+            if (evt.Achievement != null)
+            {
+                ReportHook(MountSourceKind.Achievement, evt.Achievement.AchievementId);
+            }
+        }
+
+        private void OnSecretClaimed(Rapadura.Gameplay.Secrets.SecretClaimedEvent evt) => ReportHook(MountSourceKind.Secret, evt.SecretId);
 
         private void OnEncounterEnded(EncounterEndedEvent evt)
         {

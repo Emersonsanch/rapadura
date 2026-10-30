@@ -3,8 +3,11 @@ using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
 using Rapadura.Core.Systems;
+using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Enemies;
+using Rapadura.Gameplay.Story;
+using Rapadura.Gameplay.World.Biomes;
 using Rapadura.Gameplay.World.Map;
 using Rapadura.UI.Common;
 using Rapadura.UI.HUD;
@@ -51,6 +54,11 @@ namespace Rapadura.UI.Encounter
         public const string BannerClass = "boss-intro-banner";
         public const string TitleName = "boss-intro-title";
         public const string NameLabelName = "boss-intro-name";
+        /// <summary>Boss stinger: the active cousin's one-line quip under the name (<see cref="CutsceneScript.BossStingerKey"/>).</summary>
+        public const string StingerName = "boss-intro-stinger";
+
+        /// <summary>Extra seconds the banner stays up when it carries a stinger line.</summary>
+        public const float StingerExtraSeconds = 1.5f;
         /// <summary>Half-length fade, used by the "Prepare-se!" countdown.</summary>
         public const string QuickFadeClass = "boss-intro-banner--quick";
         /// <summary>No fade (reduced motion / flashes).</summary>
@@ -66,6 +74,7 @@ namespace Rapadura.UI.Encounter
         private VisualElement _banner;
         private Label _titleLabel;
         private Label _nameLabel;
+        private Label _stingerLabel;
         private float _bossVisibleRemaining;
         private bool _fadingOut;
         private bool _noMotion;
@@ -176,7 +185,28 @@ namespace Rapadura.UI.Encounter
 
         private void OnBossIntro(BossEncounterIntroEvent evt)
         {
-            Show(evt.Boss);
+            Show(evt.Boss, evt.Payload != null ? evt.Payload.biome : (BiomeType?)null);
+        }
+
+        /// <summary>
+        /// The stinger text for a boss of <paramref name="region"/>: "Maithe: “…”" for the active cousin, the narrator's
+        /// line without a hero, empty without a region.
+        /// </summary>
+        public static string StingerText(LocalizationManager localization, BiomeType? region, CharacterId? hero)
+        {
+            if (!region.HasValue)
+            {
+                return string.Empty;
+            }
+
+            string line = CutsceneTexts.Get(localization, CutsceneScript.BossStingerKey(region.Value, hero));
+            if (!hero.HasValue)
+            {
+                return line;
+            }
+
+            string name = CutsceneTexts.Get(localization, CutsceneScript.SpeakerNameKey(CutsceneScript.SpeakerOf(hero.Value)));
+            return CutsceneTexts.Format(localization, CutsceneTexts.StingerFormat, name, line);
         }
 
         private void OnEncounterIntro(EncounterIntroEvent evt)
@@ -279,11 +309,15 @@ namespace Rapadura.UI.Encounter
             }
 
             _lastCountdownValue = value;
+            _stingerLabel.style.display = DisplayStyle.None;
             _nameLabel.text = value > 0 ? value.ToString(System.Globalization.CultureInfo.InvariantCulture) : BossTexts.Get(localization, BossTexts.PrepareGo);
         }
 
         /// <summary>Announces <paramref name="boss"/> (no-op for null or when no panel can be borrowed yet).</summary>
-        public void Show(EnemyDefinition boss)
+        public void Show(EnemyDefinition boss) => Show(boss, null);
+
+        /// <summary>Announces <paramref name="boss"/>, with the <paramref name="region"/>'s stinger line when given.</summary>
+        public void Show(EnemyDefinition boss, BiomeType? region)
         {
             if (boss == null || !EnsureBound())
             {
@@ -296,6 +330,15 @@ namespace Rapadura.UI.Encounter
             ShownBoss = boss;
             IsShowingPrepare = false;
             _bossVisibleRemaining = Mathf.Max(0.5f, _displaySeconds);
+
+            ServiceLocator.TryGet(out CharacterSelectionState selection);
+            string stinger = StingerText(localization, region, selection != null ? selection.Selected : null);
+            _stingerLabel.text = stinger;
+            _stingerLabel.style.display = string.IsNullOrEmpty(stinger) ? DisplayStyle.None : DisplayStyle.Flex;
+            if (!string.IsNullOrEmpty(stinger))
+            {
+                _bossVisibleRemaining += StingerExtraSeconds;
+            }
 
             ServiceLocator.TryGet(out AccessibilitySettings accessibility);
             bool noMotion = accessibility != null && accessibility.SuppressUiMotion;
@@ -406,6 +449,7 @@ namespace Rapadura.UI.Encounter
             _banner = _root.Q<VisualElement>(BannerName);
             _titleLabel = _root.Q<Label>(TitleName);
             _nameLabel = _root.Q<Label>(NameLabelName);
+            _stingerLabel = _root.Q<Label>(StingerName);
             documentRoot.Add(_root);
         }
 
@@ -430,8 +474,13 @@ namespace Rapadura.UI.Encounter
             var nameLabel = new Label { name = NameLabelName, pickingMode = PickingMode.Ignore };
             nameLabel.AddToClassList(NameLabelName);
 
+            var stinger = new Label { name = StingerName, pickingMode = PickingMode.Ignore };
+            stinger.AddToClassList(StingerName);
+            stinger.style.display = DisplayStyle.None;
+
             banner.Add(title);
             banner.Add(nameLabel);
+            banner.Add(stinger);
             root.Add(banner);
             return root;
         }

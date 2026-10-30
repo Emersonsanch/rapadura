@@ -22,7 +22,7 @@ namespace Rapadura.Gameplay.Mounts
 
     /// <summary>
     /// "Primeira Sela" (Docs/Mounts.md §8): after the Lobo Alfa (the Floresta cleared), Vó Zefa takes the cousins to Seu
-    /// Zé's Haras and gives the five of them a pony; Lavine names him Pé-de-Pano. A side quest built in code (like
+    /// Tonico's Haras and gives the five of them a pony; Lavine names him Pé-de-Pano. A side quest built in code (like
     /// <c>RegionQuestCatalog</c>) with one <see cref="QuestObjectiveType.CustomFlag"/> objective, "visit the Haras",
     /// set when the Haras shop opens (<see cref="HarasShopId"/>) or when the cousins stand in the Vila on the map
     /// (<see cref="ReportVisitedVillage"/>). Completing it grants the pony (<see cref="MountCollection.SourceQuest"/>); a save

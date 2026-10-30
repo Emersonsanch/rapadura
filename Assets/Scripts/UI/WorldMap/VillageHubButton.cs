@@ -937,10 +937,21 @@ namespace Rapadura.UI.WorldMap
             _fastTravelUI.Open(BeginInventorySession(), _worldMap, OnFastTravelPaid);
         }
 
-        /// <summary>The cart was paid: hand the bag back, move the token to the destination's city and save.</summary>
+        /// <summary>
+        /// The cart was paid: hand the bag back, then play the short trip (<see cref="FastTravelTransition"/>) and, with the
+        /// screen covered, move the token to the destination's city and save.
+        /// </summary>
         private void OnFastTravelPaid(BiomeType destination, int gold)
         {
             EndInventorySession();
+            FastTravelTransition transition = GetComponent<FastTravelTransition>() ?? gameObject.AddComponent<FastTravelTransition>();
+            LocalizationManager localization = Localization;
+            string line = CityTexts.Format(localization, CityTexts.FastTravelOnTheWay, CityTexts.CityName(localization, CityCatalog.ForRegion(destination)));
+            transition.Play(line, () => ArriveByCart(destination, gold));
+        }
+
+        private void ArriveByCart(BiomeType destination, int gold)
+        {
             if (_worldMap == null || _worldMap.Progress == null || !_worldMap.Progress.SetCurrentRegion(destination))
             {
                 return;

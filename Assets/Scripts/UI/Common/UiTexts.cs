@@ -150,10 +150,13 @@ namespace Rapadura.UI.Common
         public const string DeathLoad = "ui.death.load";
         public const string DeathReturnToMap = "ui.death.return_to_map";
         public const string DeathCountdown = "ui.death.countdown";
-        /// <summary>Death drop line; {0} = item ("Espada de Ferro", "3 Poção de Vida").</summary>
+        /// <summary>Death drop line; {0} = item (one unit: "Espada de Ferro", "Poção de Vida").</summary>
         public const string DeathDropped = "ui.death.dropped";
-        /// <summary>Second line of the death drop: where to get it back.</summary>
-        public const string DeathDroppedHint = "ui.death.dropped_hint";
+        /// <summary>
+        /// Second line of the death drop: the item is gone for good (offline; there is no buy-back). Online (FASE 12) it
+        /// falls on the ground for anyone to pick up, and this line will say so.
+        /// </summary>
+        public const string DeathDroppedLost = "ui.death.dropped_lost";
 
         // -- Character select (hero names/classes/lore stay pt-BR content, see Docs/Localization.md) --
         public const string CharacterSelectTitle = "ui.character_select.title";
@@ -284,7 +287,7 @@ namespace Rapadura.UI.Common
             new LocalizationEntry(DeathReturnToMap, "Back to the map", "Voltar ao mapa"),
             new LocalizationEntry(DeathCountdown, "Continuing in {0}s", "Continuando em {0}s"),
             new LocalizationEntry(DeathDropped, "In the rush, you dropped: {0}", "Na pressa, você deixou cair: {0}"),
-            new LocalizationEntry(DeathDroppedHint, "Grandma Zefa keeps it at the Lost and Found, in the village.", "A Vó Zefa guarda nos Achados e Perdidos, na vila."),
+            new LocalizationEntry(DeathDroppedLost, "It is lost for good. Grandma Edna's Patuá or the Pilgrimage Blessing would have kept it safe.", "Perdeu de vez. Um Patuá da Vó Edna ou a Bênção da Romaria teria guardado."),
 
             new LocalizationEntry(CharacterSelectTitle, "Choose your Hero", "Escolha seu Herói"),
             new LocalizationEntry(CharacterSelectPrompt, "Select a character to see their story.", "Selecione um personagem para ver a história."),

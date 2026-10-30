@@ -203,6 +203,9 @@ MonoBehaviour:
   - trigger: 41
     variant: 
     cueId: ambience.title
+  - trigger: 42
+    variant: 
+    cueId: hero.step
   _cues:
   - id: combat.hit
     clip: {fileID: 0}
@@ -942,6 +945,20 @@ MonoBehaviour:
     frequency: 95
     pitchJitter: 0.08
     volumeJitter: 0.2
+  - id: hero.step
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.09
+    cooldown: 0.08
+    maxVoices: 2
+    pausable: 1
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 4
+    frequency: 150
+    pitchJitter: 0.15
+    volumeJitter: 0.3
   - id: ambience.title
     clip: {fileID: 0}
     category: 2

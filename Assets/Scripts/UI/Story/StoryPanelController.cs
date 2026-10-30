@@ -78,11 +78,16 @@ namespace Rapadura.UI.Story
         private float _lastAdvanceAt = -10f;
         private int _releasePauseAtFrame = -1;
 
+        // Cutscenes already started this session (a quit mid-panels must not replay them in a loop), and whether one
+        // of ours is on screen right now (intro before the prologue panels, outro before the credits).
+        private readonly System.Collections.Generic.HashSet<CutsceneId> _cutscenesPlayed = new System.Collections.Generic.HashSet<CutsceneId>();
+        private bool _waitingForCutscene;
+
         /// <summary>The beat on screen right now (None when idle).</summary>
         public static StoryBeat ShowingBeat => _instance != null && _instance._sequence != null ? _instance._sequence.Beat : StoryBeat.None;
 
-        /// <summary>True while a story beat (or the credits it opened) is on screen.</summary>
-        public static bool IsShowing => _instance != null && (_instance._sequence != null || _instance._credits != null);
+        /// <summary>True while a story beat, its cutscene (<see cref="CutscenePlayerController"/>) or the credits it opened is on screen.</summary>
+        public static bool IsShowing => _instance != null && (_instance._sequence != null || _instance._credits != null || _instance._waitingForCutscene);
 
         /// <summary>Panel index / count of the beat on screen (-1 / 0 when idle), e.g. for the PlayMode campaign test.</summary>
         public static int ShowingPanelIndex => _instance != null && _instance._sequence != null ? _instance._sequence.Index : -1;
@@ -195,6 +200,7 @@ namespace Rapadura.UI.Story
             }
 
             DetachCredits();
+            _waitingForCutscene = false;
             GameplayPause.Release(this);
         }
 
@@ -209,6 +215,16 @@ namespace Rapadura.UI.Story
             if (_sequence != null)
             {
                 PollAdvanceInput();
+                return;
+            }
+
+            if (_waitingForCutscene)
+            {
+                if (!CutscenePlayerController.IsPlaying)
+                {
+                    _waitingForCutscene = false; // dropped without its callback (scene swap)
+                }
+
                 return;
             }
 
@@ -264,7 +280,40 @@ namespace Rapadura.UI.Story
 
             ServiceLocator.TryGet(out CharacterSelectionState selection);
             CharacterId? hero = selection != null ? selection.Selected : null;
-            Begin(new StoryPanelSequence(pending, hero, NewGamePlusProgress.ResolveCurrentCycle()), hero);
+            int cycle = NewGamePlusProgress.ResolveCurrentCycle();
+
+            // New game: the intro cutscene first, then the prologue panels (Docs/Narrative.md, "Cutscenes").
+            CutsceneDefinition before = CutsceneScript.For(pending, CutscenePlacement.BeforePanels, cycle);
+            if (PlayCutscene(before, () => Begin(new StoryPanelSequence(pending, hero, cycle), hero)))
+            {
+                _readyTime = -1f;
+                return;
+            }
+
+            Begin(new StoryPanelSequence(pending, hero, cycle), hero);
+        }
+
+        /// <summary>Plays <paramref name="definition"/> once per session (see <see cref="CutsceneRules.ShouldPlay"/>), then <paramref name="then"/>. False when it does not play.</summary>
+        private bool PlayCutscene(CutsceneDefinition definition, System.Action then)
+        {
+            if (!CutsceneRules.ShouldPlay(definition, CutscenePlayerController.AutoPlay, definition != null && _cutscenesPlayed.Contains(definition.Id)))
+            {
+                return false;
+            }
+
+            _cutscenesPlayed.Add(definition.Id);
+            _waitingForCutscene = true;
+            if (CutscenePlayerController.TryPlay(definition, () =>
+                {
+                    _waitingForCutscene = false;
+                    then?.Invoke();
+                }))
+            {
+                return true;
+            }
+
+            _waitingForCutscene = false;
+            return false;
         }
 
         private WorldMapController FindMap()
@@ -554,7 +603,12 @@ namespace Rapadura.UI.Story
 
             if (StoryPresentationRules.RollsCredits(finished.Beat))
             {
-                OpenCredits();
+                // The outro cutscene (the light runs home, Vó Edna's porch) leads into the credits.
+                CutsceneDefinition after = CutsceneScript.For(finished.Beat, CutscenePlacement.AfterPanels, NewGamePlusProgress.ResolveCurrentCycle());
+                if (!PlayCutscene(after, OpenCredits))
+                {
+                    OpenCredits();
+                }
             }
 
             _releasePauseAtFrame = Time.frameCount + 1;
