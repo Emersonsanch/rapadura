@@ -1510,6 +1510,12 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Missões diárias — `Gameplay/Quests/DailyQuestService.cs` (3 por dia, escolha determinística pela data), 8 missões em `Resources/Quests/Daily` ligadas aos heróis — 2026-10-21
 - [ ] Sistema de pets
 - [ ] Montarias (pedido do usuário, 2026-10-29) — design e catálogo em `Docs/Mounts.md` (em escrita): pônei, unicórnio, cachorro grande, tigre, mamute e cerca de 20 animais mitológicos (mitologia mundial + folclore brasileiro), cada um com habilidade especial própria e atributos diferentes (velocidade, defesa, vida, fôlego). Comuns compradas em lojas, médias dropadas por bichos, muito raras de chefes/eventos com chance mínima. Estábulo na casa própria, alimentação com ingredientes da cozinha, primo favorito com bônus. Online: velocidade limitada no servidor.
+  - Catálogo pronto: **30 montarias** em `Docs/Mounts.md` (6 comuns, 8 incomuns, 8 raras, 5 épicas, 3 lendárias; 21 terrestres, 5 voadoras, 2 aquáticas, 2 escavadoras), cada uma com habilidade única; primo favorito: Maithe — Hipogrifo Ventania, Maria — Unicórnio, Joaquim — Mamute, Ícaro — Tatu-Bola, Lavine — Pônei Pé-de-Pano.
+  - [ ] M1 (offline): regras puras + controlador (assobio, subir/descer, galope com fôlego), 3 montarias iniciais procedurais (Pônei Pé-de-Pano, Cachorrão Paçoca, Jegue Carregador), loja Haras da Vila, missão "Primeira Sela", save.
+  - [ ] M2: comida/saciedade, nível 1–20, afeição, Caderno de Montarias, selas e mantas, estábulo na casa.
+  - [ ] M3: as outras 27 em ondas (terrestres → nado/túnel/teleporte → voadoras), drops de chefes com proteção de azar "Fitas do Laço", missões e eventos.
+  - [ ] M4 (online): sincronização, teto de velocidade no servidor, combate montado nos mapas abertos.
+  - [ ] 🙋 Decisões (`Docs/Mounts.md` §14): combate montado ou só viagem, chances de drop, montaria por conta ou por personagem, regras de troca, nada de montaria com atributo vendida por dinheiro real.
 - [ ] Crafting avançado
 - [ ] Sistema de ranking
 - [ ] Eventos aleatórios
@@ -1574,6 +1580,33 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 
 ### Equipamento e aparência do personagem
 - [ ] Conjuntos de armadura/roupa por primo em vários níveis de raridade, acessórios (chapéu de couro, lenço, alpargatas…) e skins de arma.
+
+---
+
+## 🗡️ FASE 16 — Ideias de MU Online e Tibia que ainda faltam (levantamento de 2026-10-29)
+> Lista completa, explicada e adaptada ao tema em `Docs/Referencias_MMO.md` (inspiração de mecânica; nomes e arte nossos).
+
+### Do MU Online
+- [ ] Evolução de classe por missão (2–3 graduações por primo, skill e visual novos) e nível de mestre depois do máximo.
+- [ ] Combo de skills da classe e buffs de suporte para o grupo.
+- [ ] Refino de item +0 a +15 com "Pedras do Sertão" (Bênção, Alma, Vida, Caos); falha sem destruir o item.
+- [ ] Itens excelentes, conjuntos antigos com bônus por peça, opção de sorte, engaste de soquetes.
+- [ ] Durabilidade e conserto no ferreiro.
+- [ ] Asas (níveis 1–4) e "Tacho Encantado" para combinar itens com chance (asas, montarias, refino alto).
+- [ ] Caixas de tesouro "Baú do Cangaço +1…+5" em invasões; frutas de atributo; barra de poções e poção automática.
+- [ ] Eventos de sala com horário: Torre do Engenho Velho, Terreiro das Assombrações, Corrida do Caos, Pega-Bandeira da Romaria; invasões no mapa; defesa de fortaleza do servidor; moedas da sorte; mapa de alto nível com chave.
+- [ ] Facções do servidor, sistema de "fora da lei" (a decidir), duelo com placar, cerco ao castelo de guilda, nível mínimo por mapa.
+- [ ] Caça automática limitada (a decidir), selos de bônus só por jogo, coleção de mascotes pequenos.
+
+### Do Tibia
+- [ ] Bênção da Romaria e Patuá da Vó Zefa contra a perda ao morrer (zera os 9% de queda); perda pequena de XP (a decidir).
+- [ ] Habilidades que sobem pelo uso; fôlego diário (bônus nas primeiras horas, ajuda contra vício); roda de talentos.
+- [ ] Pontos do Caderno para "amuletos" de bônus por tipo de bicho; bosstiário; presa do dia; tarefas de caça; bicho destaque do dia; invasões agendadas; coleta automática de loot.
+- [ ] Encantamento temporário com partes dos bichos; forja de fusão de itens; runas fabricadas pelos magos; ferramentas (corda, pá, picareta, machado) que abrem caminhos.
+- [ ] Mapas com andares; depósito por cidade; banco com transferência; mercado global por oferta; mercador viajante por dia da semana; barco entre cidades.
+- [ ] Missões grandes com baú de escolha única; adereços de roupa por missão; recompensa diária em sequência; fins de semana de XP dobrada.
+- [ ] Lista de amigos com aviso e bloqueio; enciclopédia do jogo; denúncia e anti-bot; tipos de servidor (sem PvP como padrão infantil); torneios.
+- [ ] 🙋 Decisões (`Docs/Referencias_MMO.md` §5): refino que falha, perda de XP ao morrer, "fora da lei", caça automática, fôlego diário, facções.
 
 ---
 
