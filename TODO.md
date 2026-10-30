@@ -1517,7 +1517,8 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [ ] Estoque com rotação diária/semanal e itens por nível de reputação ou progresso da campanha.
 
 ### Casa própria
-- [ ] Cada jogador ganha um terreno da Vó Zefa e uma casa própria, com melhorias (tapera → taipa → alvenaria → casarão).
+- [ ] Cada jogador ganha um terreno da Vó Zefa e uma casa própria. **Todos começam com uma casa de madeira** (decisão do usuário, 2026-10-29), que evolui por melhorias (madeira → madeira com varanda → taipa e telha → alvenaria → casarão).
+- [ ] Modelo 3D da casa por nível, em peças modulares low-poly (paredes, telhado, varanda, janelas, portas): a melhoria troca peças em vez do modelo inteiro. Especificação em `Docs/Housing.md`.
 - [ ] **Casa trancada:** só o dono entra. Pode convidar outra pessoa (por visita ou lista de amigos, revogável), com permissões (visitar, mexer na decoração, usar a bancada). Visitante nunca abre o baú; o dono pode expulsar.
 - [ ] Decoração em grade (piso, parede, teto, quintal), com rotação e limite de itens por nível da casa.
 - [ ] **Baú da casa** com capacidade por melhoria (convive com o Baú da Vó Zefa).
