@@ -1,8 +1,42 @@
 using System.Collections.Generic;
+using Rapadura.Core.Events;
 using Rapadura.Gameplay.Characters;
 
 namespace Rapadura.Gameplay.Story
 {
+    /// <summary>What just happened to a <see cref="StoryPanelSequence"/> (page-turn / skip sounds, music).</summary>
+    public enum StoryPanelChange
+    {
+        /// <summary>A beat with at least one panel started (first panel on screen).</summary>
+        Opened = 0,
+        /// <summary>Moved to the next panel.</summary>
+        Advanced = 1,
+        /// <summary>The last panel was read to the end.</summary>
+        Finished = 2,
+        /// <summary>"Pular" ended the beat early.</summary>
+        Skipped = 3,
+    }
+
+    /// <summary>
+    /// Raised by <see cref="StoryPanelSequence"/> on open / page advance / finish / skip. For audio
+    /// (<c>SfxEventRouter</c>: page rustle, skip, the ending into the credits); nothing in gameplay depends on it.
+    /// </summary>
+    public readonly struct StoryPanelChangedEvent : IGameEvent
+    {
+        public readonly StoryBeat Beat;
+        public readonly StoryPanelChange Change;
+        public readonly int Index;
+        public readonly int Count;
+
+        public StoryPanelChangedEvent(StoryBeat beat, StoryPanelChange change, int index, int count)
+        {
+            Beat = beat;
+            Change = change;
+            Index = index;
+            Count = count;
+        }
+    }
+
     /// <summary>
     /// Page-by-page state of one story beat on screen (plain C#, so the advance/skip rules are
     /// EditMode-tested without UI): the panel keys from <see cref="StoryScript"/>, the current page,
@@ -31,7 +65,13 @@ namespace Rapadura.Gameplay.Story
             TitleKey = StoryScript.TitleKey(beat);
             _panelKeys = StoryScript.GetPanelKeys(beat, hero);
             IsFinished = _panelKeys.Count == 0;
+            if (!IsFinished)
+            {
+                Publish(StoryPanelChange.Opened);
+            }
         }
+
+        private void Publish(StoryPanelChange change) => EventBus.Publish(new StoryPanelChangedEvent(Beat, change, Index, Count));
 
         /// <summary>Next page; on the last one, finishes the sequence. Returns true while there is still a page to show.</summary>
         public bool Advance()
@@ -44,10 +84,12 @@ namespace Rapadura.Gameplay.Story
             if (IsLastPanel)
             {
                 IsFinished = true;
+                Publish(StoryPanelChange.Finished);
                 return false;
             }
 
             Index++;
+            Publish(StoryPanelChange.Advanced);
             return true;
         }
 
@@ -61,6 +103,7 @@ namespace Rapadura.Gameplay.Story
 
             WasSkipped = true;
             IsFinished = true;
+            Publish(StoryPanelChange.Skipped);
         }
     }
 

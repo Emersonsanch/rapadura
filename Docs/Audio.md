@@ -1,9 +1,9 @@
 # Rapadura — Áudio e vibração (cues, música, placeholders)
 
-> Documento vivo, 2026-10-21. Para o compositor / designer de som: a lista de **cue ids** abaixo é
+> Documento vivo, 2026-10-21 (cues novos em 2026-10-29). Para o compositor / designer de som: a lista de **cue ids** abaixo é
 > tudo o que precisa ganhar som de verdade. Hoje todos tocam um **placeholder procedural**
 > (sintetizado em código), então o jogo já tem som — trocar por arquivo real não exige código.
-> Guardado por `Assets/Tests/EditMode/AudioEventWiringTests.cs`.
+> Guardado por `Assets/Tests/EditMode/AudioEventWiringTests.cs` e `AudioNewCuesTests.cs`.
 
 ---
 
@@ -111,6 +111,47 @@ no campo `clip` do cue correspondente em `Resources/Audio/SfxEventMap.asset`.
 | `ambience.wind` | **Loop** com tempestade de areia | Vento forte com areia, loop 10–30 s. |
 | `ambience.wind_soft` | **Loop** com neve | Vento frio suave, loop 10–30 s. |
 
+### Novos cues (2026-10-29): atordoamento, loot, história, vila, campanha
+
+Todos com placeholder procedural, **mixados abaixo dos existentes** (volume ≤ 0,75) e com cooldown;
+os que se repetem muito têm variação de pitch/volume (`pitchJitter` / `volumeJitter` do cue, sorteio
+semeado). Para trocar por arquivo real basta arrastar o `clip` no cue — o jitter continua valendo
+(zere-o se o arquivo já tiver variações).
+
+| Cue id | Evento (quem dispara) | Placeholder hoje → sugestão de som real | Barramento | Vol. | Cooldown / vozes | Jitter (pitch/vol) |
+|---|---|---|---|---|---|---|
+| `combat.stun` | `StunAppliedEvent` (3D no alvo) | `Dizzy`: tom que cai "ondulando" → "estrelinhas"/passarinhos girando, 300–400 ms. | Efeitos | 0,40 | 0,25 s / 2 | 6% / 10% |
+| `loot.drop` | `EnemyLootDroppedEvent` (substitui o `item.pickup` daquela morte) | `Clink`: dois "plins" de moeda na madeira → moedas/couro caindo na sacola, ~200 ms. | Efeitos | 0,35 | **0,3 s / 1** (anti-spam: AoE com várias mortes no mesmo frame = um som só) | 8% / 15% |
+| `loot.bag_full` | `LootOverflowEvent` ("Mochila cheia") | `SackThump`: baque abafado de saco cheio + pano → saco de estopa batendo cheio, 300 ms. Não é o `ui.error`, para não soar como erro. | Interface | 0,45 | 1,5 s / 1 | 3% / — |
+| `story.open` | `StoryPanelChangedEvent` Opened (1º painel) | `PageRustle` (2,4 kHz): farfalhar de papel → caderno/cordel abrindo, 300 ms. | Interface | 0,40 | 0,3 s / 1 | 5% / — |
+| `story.page` | `StoryPanelChangedEvent` Advanced | `PageRustle` (3 kHz): virada de página, 250–350 ms. Gravar 3–4 viradas. | Interface | 0,30 | 0,15 s / 2 | 10% / 20% |
+| `story.skip` | `StoryPanelChangedEvent` Skipped | `Whoosh` curto → folhas passando rápido (folhear). | Interface | 0,30 | 0,3 s / 1 | 5% / — |
+| `story.close` | `StoryPanelChangedEvent` Finished (fim lido, não é o final) | `PageRustle` (1,8 kHz): página fechando, mais grave. | Interface | 0,32 | 0,3 s / 1 | 5% / — |
+| `story.credits` | Final (`Ending`) lido ou pulado → créditos | `Chime` (Sol): sino suave → acorde de viola caipira se abrindo, ~1 s. | Interface | 0,45 | 2 s / 1 | — |
+| `campaign.completed` | `CampaignCompletedEvent`, **1,6 s depois** (deixa a fanfarra de vitória do mesmo frame tocar) | `ForroFlourish`: 2 compassos de baião (zabumba nos tempos 1 / "e" do 2, triângulo abafado/aberto) + arpejo maior → vinheta de forró pé-de-serra (zabumba + triângulo + sanfona), 2 s. Abaixa a música. | Interface | 0,75 | 5 s / 1 | — |
+| `village.open` | Vila (`VillageHubButton`) pega a pausa | `WoodCreak`: rangido de madeira + "toc" → porta/baú de madeira abrindo, 400–500 ms. Substitui o `ui.open`. | Interface | 0,50 | 0,4 s / 1 | 5% / 10% |
+| `village.close` | Vila solta a pausa | `WoodKnock`: dois "tocs" ocos → tampa do baú/tramela fechando, 300 ms. Substitui o `ui.close`. | Interface | 0,45 | 0,4 s / 1 | 5% / — |
+| `npc.talk` | `DialogueStartedEvent` (NPC da região, da vila e do Main.unity) | `Murmur`: "hm-hm" murmurado → interjeição curta por personagem ("Ô!", "Ei!", "Hum…"), 300 ms. A caixa de diálogo não toca `ui.open`. | Interface | 0,40 | 0,5 s / 1 | 8% / 10% |
+| `combat.thorns` | Dano refletido por Espinhos (`ThornsRules.IsReflecting`, canal próprio) — substitui o `combat.hit` desse golpe | `Prick`: picada metálica + raspado → espinho de mandacaru/arame farpado, 150 ms. | Efeitos | 0,35 | 0,12 s / 2 | 10% / 15% |
+| `enemy.windup` | `EnemyAttackWindupEvent` (agachada de antecipação, 3D) — sutil | `Inhale`: respiro/couro "juntando força", 250 ms. | Efeitos | 0,20 | 0,3 s / 2 | 12% / 20% |
+| `hero.land` | `PlayerLandedEvent` (squash de aterrissagem ≥ 20%) — sutil | `Thud` grave → pé na terra batida/poeira, 100–150 ms. | Efeitos | 0,22 | 0,25 s / 1 | 8% / 20% |
+| `ambience.title` | **Loop** na tela de título e na seleção de herói (`MainMenu` / `CharacterSelect`), fade de 2,5 s | `CountrysideLoop`: grilos em grupos de três sobre brisa leve → entardecer no sertão (grilos, vento, um bem-te-vi distante), loop estéreo de 20–40 s. Não pausa. | Efeitos | 0,16 | — | — |
+
+**Quem tocou a pausa:** `SfxEventRouter.ClassifyPauseOwners` olha os donos do `GameplayPause` no
+`GamePausedEvent`: Vila → `village.open`/`village.close`; painel de história → silêncio (os cues
+`story.*` falam por ele); caixa de diálogo → abre em silêncio (`npc.talk` já tocou) e fecha com
+`ui.close`; o resto continua com `ui.open`/`ui.close`.
+
+**Loot × pickup:** o router assina `CombatTargetDiedEvent` no boot (antes do `EnemyLootGranter`), então
+os itens que entram na mochila no mesmo instante de uma morte ficam pendentes; o
+`EnemyLootDroppedEvent` que vem logo depois toca `loot.drop` no lugar do `item.pickup`. Se ele não vier,
+o `Tick` seguinte toca o `item.pickup` normal.
+
+**Eventos novos (mínimos, só para áudio):** `StoryPanelChangedEvent` (publicado por
+`StoryPanelSequence`), `EnemyAttackWindupEvent` (`EnemyProceduralAnimator`, no início da antecipação) e
+`PlayerLandedEvent` (`PlayerProceduralAnimator`, na aterrissagem com squash). Nenhum sistema de jogo
+depende deles.
+
 ---
 
 ## 3. Música
@@ -123,6 +164,12 @@ Contextos (`MusicContext`) e quando entram:
 | `WorldMap` | — | Mapa-múndi | Tema de viagem, maior, 90 bpm. |
 | `Encounter` | `forest`, `desert`, `mountain`, `caves` (e genérico) | Encontro por bioma | Combate leve com cor do bioma (zabumba na floresta, pífano no sertão, ecos nas cavernas), ~90–112 bpm. |
 | `Boss` | (bioma opcional) | Encontro com algum inimigo `IsBoss` | Tema de chefe, menor, 140 bpm. |
+| `Story` | — / `ending` | **Sobreposição**: enquanto um painel de história (ou os créditos depois do final) está na tela; `ending` no epílogo | Tema íntimo e lento (viola solo/rabeca), maior, 60 bpm; `ending` mais caloroso, 66 bpm (Lá). |
+
+O contexto `Story` é uma camada por cima do fluxo: o `MusicDirector` consulta
+`StoryPanelController.IsShowing` a cada frame (`Tick`), faz crossfade para `Story` e, quando o painel
+some, volta para o contexto que o fluxo pediu nesse meio-tempo (normalmente o `WorldMap`). Nada de
+"ducking" fixo: a troca é o mesmo crossfade de 1,5 s dos outros contextos.
 
 Loops de 1–3 min, OGG estéreo, ponto de loop sem clique. Arraste no `clip` da entrada em `_music`.
 Vitória/derrota não trocam a música: tocam os stings `encounter.*` e o fluxo volta ao `WorldMap`.
@@ -161,7 +208,10 @@ bioma vem do asset acima); pode ser removido ou ligado depois.
 
 - Não há `AudioMixer` real ainda (ver nota em `AudioManager`): volumes são multiplicados direto no
   `AudioSource.volume`. Os cues já carregam a categoria, então a migração não muda os dados.
-- Pitch aleatório por cue (variação de golpes) não existe: grave 3–4 variações e, se quiser,
-  adicione um campo `pitchJitter` ao cue e aplique no `AudioManager`.
+- Pitch/volume aleatório por cue existe (`pitchJitter`/`volumeJitter`, aplicado pelo router e passado ao
+  `AudioManager.PlaySfx(..., pitch)`), mas só os cues novos usam; os de combate antigos ainda tocam fixos —
+  grave 3–4 variações ou ligue o jitter neles.
+- Não existe configuração de acessibilidade específica de áudio (legendas de som, mono): os cues novos
+  seguem só os sliders Geral/Música/Efeitos/Interface e a pausa.
 - `item.pickup` é detectado pelo aumento da contagem de itens na mochila do jogador
   (`InventoryChangedEvent` não diz o motivo); compras/criações nos 0,3 s anteriores não tocam o pickup.

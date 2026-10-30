@@ -7,7 +7,9 @@ using Rapadura.Core.Interfaces;
 using Rapadura.Core.Logging;
 using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Flow;
+using Rapadura.Gameplay.Story;
 using Rapadura.Gameplay.World.Map;
+using Rapadura.UI.Story;
 using UnityEngine;
 
 namespace Rapadura.Audio
@@ -28,6 +30,11 @@ namespace Rapadura.Audio
     /// (<see cref="MaxCachedProceduralClips"/>), and Title + WorldMap are pre-baked at boot, behind the
     /// title screen. Turning the flag off gives silence with the same hooks — assigning real clips in
     /// the asset is the only change a composer needs (Docs/Audio.md).
+    ///
+    /// Story panels are an overlay context: while <c>StoryPanelController</c> shows a beat (or the credits
+    /// after the ending) the music crossfades to <see cref="MusicContext.Story"/> (variant
+    /// <see cref="EndingVariant"/> for the epilogue), and back to whatever the flow asked for meanwhile
+    /// once the panel is gone. Polled in <see cref="Tick"/> (one static read per frame).
     /// </summary>
     public class MusicDirector : IManager
     {
@@ -35,6 +42,9 @@ namespace Rapadura.Audio
         public const int MaxCachedProceduralClips = 2;
 
         private const string LogCategory = "Audio";
+
+        /// <summary>Story music variant for the ending beat and the credits that follow it.</summary>
+        public const string EndingVariant = "ending";
 
         private sealed class PendingBake
         {
@@ -55,6 +65,12 @@ namespace Rapadura.Audio
         private string _awaitingKey;
         private float _awaitingVolume;
 
+        // What the game flow asked for (restored when the story overlay ends).
+        private MusicContext _baseContext = MusicContext.None;
+        private string _baseVariant = string.Empty;
+        private bool _storyActive;
+        private readonly Func<string> _storyOverlay;
+
         public bool IsInitialized { get; private set; }
 
         public MusicContext CurrentContext { get; private set; } = MusicContext.None;
@@ -68,10 +84,64 @@ namespace Rapadura.Audio
 
         public int CachedProceduralClipCount => _proceduralCache.Count;
 
-        public MusicDirector(AudioManager audio, SfxEventMap map = null)
+        /// <summary>True while the story overlay context is playing.</summary>
+        public bool IsStoryOverlayActive => _storyActive;
+
+        /// <summary>The context the game flow wants under any overlay.</summary>
+        public MusicContext BaseContext => _baseContext;
+
+        /// <param name="storyOverlay">
+        /// Null when no story panel is up, else the <see cref="MusicContext.Story"/> variant ("" or
+        /// <see cref="EndingVariant"/>). Defaults to reading <c>StoryPanelController</c>; tests inject it.
+        /// </param>
+        public MusicDirector(AudioManager audio, SfxEventMap map = null, Func<string> storyOverlay = null)
         {
             _audio = audio;
             _map = map;
+            _storyOverlay = storyOverlay ?? DefaultStoryOverlay;
+        }
+
+        private string DefaultStoryOverlay()
+        {
+            if (!StoryPanelController.IsShowing)
+            {
+                return null;
+            }
+
+            StoryBeat beat = StoryPanelController.ShowingBeat;
+            if (beat == StoryBeat.None)
+            {
+                // The credits rolled by the ending: keep the epilogue track.
+                return _storyActive ? CurrentVariant : string.Empty;
+            }
+
+            return StoryPresentationRules.RollsCredits(beat) ? EndingVariant : string.Empty;
+        }
+
+        /// <summary>The flow's context: played now unless the story overlay is up, restored when it ends.</summary>
+        private void RequestBase(MusicContext context, string variant = null)
+        {
+            _baseContext = context;
+            _baseVariant = SfxEventMap.Normalize(variant);
+            if (!_storyActive)
+            {
+                SetContext(context, _baseVariant);
+            }
+        }
+
+        private void PollStoryOverlay()
+        {
+            string overlay = _storyOverlay != null ? _storyOverlay() : null;
+            if (overlay != null)
+            {
+                _storyActive = true;
+                SetContext(MusicContext.Story, overlay);
+            }
+            else if (_storyActive)
+            {
+                _storyActive = false;
+                SetContext(_baseContext, _baseVariant);
+            }
         }
 
         public void Initialize()
@@ -176,6 +246,8 @@ namespace Rapadura.Audio
         /// </summary>
         public void Tick()
         {
+            PollStoryOverlay();
+
             if (_pendingBakes.Count == 0)
             {
                 return;
@@ -351,16 +423,16 @@ namespace Rapadura.Audio
             {
                 case GameFlowState.MainMenu:
                 case GameFlowState.CharacterSelect:
-                    SetContext(MusicContext.Title);
+                    RequestBase(MusicContext.Title);
                     break;
                 case GameFlowState.World:
-                    SetContext(MusicContext.WorldMap);
+                    RequestBase(MusicContext.WorldMap);
                     break;
                 case GameFlowState.Encounter:
                     // EncounterStartedEvent (which carries the biome) normally arrives first.
-                    if (CurrentContext != MusicContext.Encounter && CurrentContext != MusicContext.Boss)
+                    if (_baseContext != MusicContext.Encounter && _baseContext != MusicContext.Boss)
                     {
-                        SetContext(MusicContext.Encounter);
+                        RequestBase(MusicContext.Encounter);
                     }
                     break;
             }
@@ -370,7 +442,7 @@ namespace Rapadura.Audio
         {
             EncounterPayload payload = evt.Payload;
             string biome = payload != null ? payload.biome.ToString() : null;
-            SetContext(HasBoss(payload) ? MusicContext.Boss : MusicContext.Encounter, biome);
+            RequestBase(HasBoss(payload) ? MusicContext.Boss : MusicContext.Encounter, biome);
         }
 
         private static bool HasBoss(EncounterPayload payload)
@@ -392,7 +464,7 @@ namespace Rapadura.Audio
         }
     }
 
-    /// <summary>Per-frame pump for <see cref="MusicDirector.Tick"/> (finished background bakes → AudioClips).</summary>
+    /// <summary>Per-frame pump for <see cref="MusicDirector.Tick"/> (story overlay poll, finished background bakes → AudioClips).</summary>
     internal class MusicDirectorDriver : MonoBehaviour
     {
         private MusicDirector _owner;

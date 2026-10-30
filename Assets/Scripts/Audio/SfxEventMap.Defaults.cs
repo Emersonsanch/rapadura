@@ -60,6 +60,22 @@ namespace Rapadura.Audio
             map.AddBinding(SfxTrigger.WeatherLoop, "snow", "ambience.wind_soft");
             map.AddBinding(SfxTrigger.WeatherLoop, "fog", "");
             map.AddBinding(SfxTrigger.WeatherLoop, "clear", "");
+            map.AddBinding(SfxTrigger.Stun, "", "combat.stun");
+            map.AddBinding(SfxTrigger.LootDrop, "", "loot.drop");
+            map.AddBinding(SfxTrigger.BagFull, "", "loot.bag_full");
+            map.AddBinding(SfxTrigger.StoryOpen, "", "story.open");
+            map.AddBinding(SfxTrigger.StoryPage, "", "story.page");
+            map.AddBinding(SfxTrigger.StorySkip, "", "story.skip");
+            map.AddBinding(SfxTrigger.StoryClose, "", "story.close");
+            map.AddBinding(SfxTrigger.StoryToCredits, "", "story.credits");
+            map.AddBinding(SfxTrigger.CampaignCompleted, "", "campaign.completed");
+            map.AddBinding(SfxTrigger.VillageOpen, "", "village.open");
+            map.AddBinding(SfxTrigger.VillageClose, "", "village.close");
+            map.AddBinding(SfxTrigger.NpcTalk, "", "npc.talk");
+            map.AddBinding(SfxTrigger.Thorns, "", "combat.thorns");
+            map.AddBinding(SfxTrigger.EnemyWindup, "", "enemy.windup");
+            map.AddBinding(SfxTrigger.HeroLanding, "", "hero.land");
+            map.AddBinding(SfxTrigger.TitleAmbience, "", "ambience.title");
 
             map.AddCue(new Cue { id = "combat.hit", category = AudioCategory.Sfx, volume = 0.55f, cooldown = 0.05f, maxVoices = 4, pausable = true, spatial = true, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Thud, frequency = 180f });
             map.AddCue(new Cue { id = "combat.crit", category = AudioCategory.Sfx, volume = 0.8f, cooldown = 0.08f, maxVoices = 3, pausable = true, spatial = true, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Crunch, frequency = 260f });
@@ -105,6 +121,22 @@ namespace Rapadura.Audio
             map.AddCue(new Cue { id = "ambience.rain", category = AudioCategory.Sfx, volume = 0.35f, cooldown = 0f, maxVoices = 1, pausable = true, spatial = false, loop = true, ducksMusic = false, preset = ProceduralSfxPreset.RainLoop, frequency = 1200f });
             map.AddCue(new Cue { id = "ambience.wind", category = AudioCategory.Sfx, volume = 0.35f, cooldown = 0f, maxVoices = 1, pausable = true, spatial = false, loop = true, ducksMusic = false, preset = ProceduralSfxPreset.WindLoop, frequency = 500f });
             map.AddCue(new Cue { id = "ambience.wind_soft", category = AudioCategory.Sfx, volume = 0.22f, cooldown = 0f, maxVoices = 1, pausable = true, spatial = false, loop = true, ducksMusic = false, preset = ProceduralSfxPreset.WindLoop, frequency = 300f });
+            map.AddCue(new Cue { id = "combat.stun", category = AudioCategory.Sfx, volume = 0.4f, cooldown = 0.25f, maxVoices = 2, pausable = true, spatial = true, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Dizzy, frequency = 660f, pitchJitter = 0.06f, volumeJitter = 0.1f });
+            map.AddCue(new Cue { id = "loot.drop", category = AudioCategory.Sfx, volume = 0.35f, cooldown = 0.3f, maxVoices = 1, pausable = true, spatial = false, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Clink, frequency = 1760f, pitchJitter = 0.08f, volumeJitter = 0.15f });
+            map.AddCue(new Cue { id = "loot.bag_full", category = AudioCategory.Ui, volume = 0.45f, cooldown = 1.5f, maxVoices = 1, pausable = false, spatial = false, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.SackThump, frequency = 95f, pitchJitter = 0.03f });
+            map.AddCue(new Cue { id = "story.open", category = AudioCategory.Ui, volume = 0.4f, cooldown = 0.3f, maxVoices = 1, pausable = false, spatial = false, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.PageRustle, frequency = 2400f, pitchJitter = 0.05f });
+            map.AddCue(new Cue { id = "story.page", category = AudioCategory.Ui, volume = 0.3f, cooldown = 0.15f, maxVoices = 2, pausable = false, spatial = false, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.PageRustle, frequency = 3000f, pitchJitter = 0.1f, volumeJitter = 0.2f });
+            map.AddCue(new Cue { id = "story.skip", category = AudioCategory.Ui, volume = 0.3f, cooldown = 0.3f, maxVoices = 1, pausable = false, spatial = false, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Whoosh, frequency = 900f, pitchJitter = 0.05f });
+            map.AddCue(new Cue { id = "story.close", category = AudioCategory.Ui, volume = 0.32f, cooldown = 0.3f, maxVoices = 1, pausable = false, spatial = false, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.PageRustle, frequency = 1800f, pitchJitter = 0.05f });
+            map.AddCue(new Cue { id = "story.credits", category = AudioCategory.Ui, volume = 0.45f, cooldown = 2f, maxVoices = 1, pausable = false, spatial = false, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Chime, frequency = 392f });
+            map.AddCue(new Cue { id = "campaign.completed", category = AudioCategory.Ui, volume = 0.75f, cooldown = 5f, maxVoices = 1, pausable = false, spatial = false, loop = false, ducksMusic = true, preset = ProceduralSfxPreset.ForroFlourish, frequency = 523.25f });
+            map.AddCue(new Cue { id = "village.open", category = AudioCategory.Ui, volume = 0.5f, cooldown = 0.4f, maxVoices = 1, pausable = false, spatial = false, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.WoodCreak, frequency = 210f, pitchJitter = 0.05f, volumeJitter = 0.1f });
+            map.AddCue(new Cue { id = "village.close", category = AudioCategory.Ui, volume = 0.45f, cooldown = 0.4f, maxVoices = 1, pausable = false, spatial = false, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.WoodKnock, frequency = 170f, pitchJitter = 0.05f });
+            map.AddCue(new Cue { id = "npc.talk", category = AudioCategory.Ui, volume = 0.4f, cooldown = 0.5f, maxVoices = 1, pausable = false, spatial = false, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Murmur, frequency = 190f, pitchJitter = 0.08f, volumeJitter = 0.1f });
+            map.AddCue(new Cue { id = "combat.thorns", category = AudioCategory.Sfx, volume = 0.35f, cooldown = 0.12f, maxVoices = 2, pausable = true, spatial = true, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Prick, frequency = 2800f, pitchJitter = 0.1f, volumeJitter = 0.15f });
+            map.AddCue(new Cue { id = "enemy.windup", category = AudioCategory.Sfx, volume = 0.2f, cooldown = 0.3f, maxVoices = 2, pausable = true, spatial = true, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Inhale, frequency = 650f, pitchJitter = 0.12f, volumeJitter = 0.2f });
+            map.AddCue(new Cue { id = "hero.land", category = AudioCategory.Sfx, volume = 0.22f, cooldown = 0.25f, maxVoices = 1, pausable = true, spatial = false, loop = false, ducksMusic = false, preset = ProceduralSfxPreset.Thud, frequency = 95f, pitchJitter = 0.08f, volumeJitter = 0.2f });
+            map.AddCue(new Cue { id = "ambience.title", category = AudioCategory.Sfx, volume = 0.16f, cooldown = 0f, maxVoices = 1, pausable = false, spatial = false, loop = true, ducksMusic = false, preset = ProceduralSfxPreset.CountrysideLoop, frequency = 4200f });
 
             map.AddMusic(new MusicEntry { context = MusicContext.Title, variant = "", volume = 0.3f, rootFrequency = 220f, minor = false, bpm = 72f });
             map.AddMusic(new MusicEntry { context = MusicContext.WorldMap, variant = "", volume = 0.3f, rootFrequency = 196f, minor = false, bpm = 90f });
@@ -114,6 +146,8 @@ namespace Rapadura.Audio
             map.AddMusic(new MusicEntry { context = MusicContext.Encounter, variant = "mountain", volume = 0.32f, rootFrequency = 164.81f, minor = true, bpm = 96f });
             map.AddMusic(new MusicEntry { context = MusicContext.Encounter, variant = "caves", volume = 0.32f, rootFrequency = 146.83f, minor = true, bpm = 88f });
             map.AddMusic(new MusicEntry { context = MusicContext.Boss, variant = "", volume = 0.36f, rootFrequency = 110f, minor = true, bpm = 140f });
+            map.AddMusic(new MusicEntry { context = MusicContext.Story, variant = "", volume = 0.24f, rootFrequency = 196f, minor = false, bpm = 60f });
+            map.AddMusic(new MusicEntry { context = MusicContext.Story, variant = "ending", volume = 0.28f, rootFrequency = 220f, minor = false, bpm = 66f });
 
             return map;
         }

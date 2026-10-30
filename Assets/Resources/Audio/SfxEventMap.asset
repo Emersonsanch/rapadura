@@ -155,6 +155,54 @@ MonoBehaviour:
   - trigger: 25
     variant: clear
     cueId: 
+  - trigger: 26
+    variant: 
+    cueId: combat.stun
+  - trigger: 27
+    variant: 
+    cueId: loot.drop
+  - trigger: 28
+    variant: 
+    cueId: loot.bag_full
+  - trigger: 29
+    variant: 
+    cueId: story.open
+  - trigger: 30
+    variant: 
+    cueId: story.page
+  - trigger: 31
+    variant: 
+    cueId: story.skip
+  - trigger: 32
+    variant: 
+    cueId: story.close
+  - trigger: 33
+    variant: 
+    cueId: story.credits
+  - trigger: 34
+    variant: 
+    cueId: campaign.completed
+  - trigger: 35
+    variant: 
+    cueId: village.open
+  - trigger: 36
+    variant: 
+    cueId: village.close
+  - trigger: 37
+    variant: 
+    cueId: npc.talk
+  - trigger: 38
+    variant: 
+    cueId: combat.thorns
+  - trigger: 39
+    variant: 
+    cueId: enemy.windup
+  - trigger: 40
+    variant: 
+    cueId: hero.land
+  - trigger: 41
+    variant: 
+    cueId: ambience.title
   _cues:
   - id: combat.hit
     clip: {fileID: 0}
@@ -684,6 +732,230 @@ MonoBehaviour:
     ducksMusic: 0
     preset: 19
     frequency: 300
+  - id: combat.stun
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.4
+    cooldown: 0.25
+    maxVoices: 2
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 20
+    frequency: 660
+    pitchJitter: 0.06
+    volumeJitter: 0.1
+  - id: loot.drop
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.35
+    cooldown: 0.3
+    maxVoices: 1
+    pausable: 1
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 21
+    frequency: 1760
+    pitchJitter: 0.08
+    volumeJitter: 0.15
+  - id: loot.bag_full
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.45
+    cooldown: 1.5
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 29
+    frequency: 95
+    pitchJitter: 0.03
+    volumeJitter: 0
+  - id: story.open
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.4
+    cooldown: 0.3
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 24
+    frequency: 2400
+    pitchJitter: 0.05
+    volumeJitter: 0
+  - id: story.page
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.3
+    cooldown: 0.15
+    maxVoices: 2
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 24
+    frequency: 3000
+    pitchJitter: 0.1
+    volumeJitter: 0.2
+  - id: story.skip
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.3
+    cooldown: 0.3
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 8
+    frequency: 900
+    pitchJitter: 0.05
+    volumeJitter: 0
+  - id: story.close
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.32
+    cooldown: 0.3
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 24
+    frequency: 1800
+    pitchJitter: 0.05
+    volumeJitter: 0
+  - id: story.credits
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.45
+    cooldown: 2
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 9
+    frequency: 392
+    pitchJitter: 0
+    volumeJitter: 0
+  - id: campaign.completed
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.75
+    cooldown: 5
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 1
+    preset: 25
+    frequency: 523.25
+    pitchJitter: 0
+    volumeJitter: 0
+  - id: village.open
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.5
+    cooldown: 0.4
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 23
+    frequency: 210
+    pitchJitter: 0.05
+    volumeJitter: 0.1
+  - id: village.close
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.45
+    cooldown: 0.4
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 22
+    frequency: 170
+    pitchJitter: 0.05
+    volumeJitter: 0
+  - id: npc.talk
+    clip: {fileID: 0}
+    category: 3
+    volume: 0.4
+    cooldown: 0.5
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 26
+    frequency: 190
+    pitchJitter: 0.08
+    volumeJitter: 0.1
+  - id: combat.thorns
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.35
+    cooldown: 0.12
+    maxVoices: 2
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 27
+    frequency: 2800
+    pitchJitter: 0.1
+    volumeJitter: 0.15
+  - id: enemy.windup
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.2
+    cooldown: 0.3
+    maxVoices: 2
+    pausable: 1
+    spatial: 1
+    loop: 0
+    ducksMusic: 0
+    preset: 28
+    frequency: 650
+    pitchJitter: 0.12
+    volumeJitter: 0.2
+  - id: hero.land
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.22
+    cooldown: 0.25
+    maxVoices: 1
+    pausable: 1
+    spatial: 0
+    loop: 0
+    ducksMusic: 0
+    preset: 4
+    frequency: 95
+    pitchJitter: 0.08
+    volumeJitter: 0.2
+  - id: ambience.title
+    clip: {fileID: 0}
+    category: 2
+    volume: 0.16
+    cooldown: 0
+    maxVoices: 1
+    pausable: 0
+    spatial: 0
+    loop: 1
+    ducksMusic: 0
+    preset: 30
+    frequency: 4200
+    pitchJitter: 0
+    volumeJitter: 0
   _music:
   - context: 1
     variant: 
@@ -741,3 +1013,17 @@ MonoBehaviour:
     rootFrequency: 110
     minor: 1
     bpm: 140
+  - context: 5
+    variant: 
+    clip: {fileID: 0}
+    volume: 0.24
+    rootFrequency: 196
+    minor: 0
+    bpm: 60
+  - context: 5
+    variant: ending
+    clip: {fileID: 0}
+    volume: 0.28
+    rootFrequency: 220
+    minor: 0
+    bpm: 66

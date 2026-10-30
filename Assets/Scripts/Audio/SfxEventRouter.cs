@@ -8,15 +8,21 @@ using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Achievements;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Crafting;
+using Rapadura.Gameplay.Dialogue;
 using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Environment;
 using Rapadura.Gameplay.Flow;
+using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.Skills;
 using Rapadura.Gameplay.Skills.Vfx;
+using Rapadura.Gameplay.Story;
 using Rapadura.Gameplay.World.Map;
+using Rapadura.UI.Dialogue;
 using Rapadura.UI.Menus;
+using Rapadura.UI.Story;
+using Rapadura.UI.WorldMap;
 using UnityEngine;
 
 namespace Rapadura.Audio
@@ -32,7 +38,11 @@ namespace Rapadura.Audio
     /// <item><description>per-cue and global voice caps (<see cref="SfxEventMap.MaxVoices"/>), skipping instead of cutting older sounds;</description></item>
     /// <item><description>pause: cues flagged <c>pausable</c> are dropped while <see cref="GameplayPause"/> is active and the weather loop pauses;</description></item>
     /// <item><description>a looping ambience bed (rain/wind) with fades, outside the one-shot pool so it is never stolen;</description></item>
-    /// <item><description>procedural placeholder clips (<see cref="ProceduralSfxSynth"/>) for every cue without a real clip.</description></item>
+    /// <item><description>procedural placeholder clips (<see cref="ProceduralSfxSynth"/>) for every cue without a real clip;</description></item>
+    /// <item><description>per-cue pitch/volume jitter (<see cref="SfxEventMap.Cue.pitchJitter"/>), seeded so tests are stable;</description></item>
+    /// <item><description>a second looping bed for the title screen (crickets + breeze under the title music);</description></item>
+    /// <item><description>which screen took the <see cref="GameplayPause"/>: the village hub plays its wooden chest instead of the
+    /// generic <c>ui.open</c>, story panels and dialogue boxes have their own cues and stay silent there.</description></item>
     /// </list>
     /// Time comes from an injectable clock (unscaled time by default, so UI sounds work while paused).
     /// </summary>
@@ -42,6 +52,22 @@ namespace Rapadura.Audio
         private const float AmbienceFadeSeconds = 2f;
         private const float PickupSuppressAfterTradeSeconds = 0.3f;
         private const float MinAudibleVolume = 0.001f;
+        private const float TitleAmbienceFadeSeconds = 2.5f;
+
+        /// <summary>Campaign sting waits for the victory fanfare of the same frame to ring out.</summary>
+        public const float CampaignStingDelaySeconds = 1.6f;
+
+        /// <summary>Who froze gameplay, as far as the UI sounds care (see <see cref="ClassifyPauseOwners"/>).</summary>
+        public enum PauseSource
+        {
+            Generic = 0,
+            /// <summary>Village hub (Vila): wooden chest open/close instead of ui.open/close.</summary>
+            Village = 1,
+            /// <summary>Story panels: their own page cues (<see cref="StoryPanelChangedEvent"/>), silent here.</summary>
+            Story = 2,
+            /// <summary>Dialogue box: <c>npc.talk</c> already played on DialogueStartedEvent, silent open.</summary>
+            Dialogue = 3,
+        }
 
         private readonly AudioManager _audio;
         private readonly Func<float> _clock;
@@ -65,6 +91,18 @@ namespace Rapadura.Audio
         private string _requestedAmbienceCueId;
         private int _lastInventoryCount = -1;
         private float _lastTradeTime = float.NegativeInfinity;
+        private float _lastKillTime = float.NegativeInfinity;
+        private bool _pickupPending;
+        private PauseSource _pauseSource;
+        private readonly List<object> _ownerBuffer = new List<object>();
+        private readonly List<KeyValuePair<float, SfxTrigger>> _scheduled = new List<KeyValuePair<float, SfxTrigger>>();
+        // Seeded: the same sequence of plays always gets the same jitter (tests, bug repros).
+        private readonly System.Random _jitter = new System.Random(0x5EED);
+
+        private AudioSource _titleSource;
+        private SfxEventMap.Cue _titleCue;
+        private float _titleFade;
+        private bool _titleWanted;
 
         public bool IsInitialized { get; private set; }
 
@@ -79,6 +117,20 @@ namespace Rapadura.Audio
         public string CurrentAmbienceCueId => _ambienceFadeTarget > 0f ? _requestedAmbienceCueId : null;
 
         public bool IsAmbiencePaused => _ambiencePaused;
+
+        /// <summary>Pitch / volume (before category volumes) of the last played cue, after jitter. Tests.</summary>
+        public float LastPlayedPitch { get; private set; } = 1f;
+
+        public float LastPlayedVolume { get; private set; }
+
+        /// <summary>Title-screen bed cue while it is wanted (flow on main menu / hero select), else null.</summary>
+        public string CurrentTitleAmbienceCueId => _titleWanted && _titleCue != null ? _titleCue.id : null;
+
+        /// <summary>Title bed gain before category volumes (0..1). Tests.</summary>
+        public float TitleAmbienceFade => _titleFade;
+
+        /// <summary>Delayed cues still waiting (campaign sting). Tests.</summary>
+        public int ScheduledCount => _scheduled.Count;
 
         /// <param name="audio">Volumes + pooled playback. May be null (tests) — cues are then tracked but not heard.</param>
         /// <param name="map">Defaults to <see cref="SfxEventMap.LoadOrDefault"/>.</param>
@@ -120,6 +172,12 @@ namespace Rapadura.Audio
             _ambienceSource.spatialBlend = 0f;
             _ambienceSource.volume = 0f;
 
+            _titleSource = _root.AddComponent<AudioSource>();
+            _titleSource.playOnAwake = false;
+            _titleSource.loop = true;
+            _titleSource.spatialBlend = 0f;
+            _titleSource.volume = 0f;
+
             Subscribe(true);
             IsInitialized = true;
         }
@@ -152,6 +210,12 @@ namespace Rapadura.Audio
             _clipCache.Clear();
             _voices.Clear();
             _lastPlayTime.Clear();
+            _scheduled.Clear();
+            _titleSource = null;
+            _titleCue = null;
+            _titleFade = 0f;
+            _titleWanted = false;
+            _pickupPending = false;
             IsInitialized = false;
         }
 
@@ -180,6 +244,15 @@ namespace Rapadura.Audio
             Toggle<TimeOfDayPhaseChangedEvent>(on, OnPhaseChanged);
             Toggle<WeatherChangedEvent>(on, OnWeatherChanged);
             Toggle<GameFlowStateChangedEvent>(on, OnFlowStateChanged);
+            Toggle<StunAppliedEvent>(on, OnStunApplied);
+            Toggle<CombatTargetDiedEvent>(on, OnCombatTargetDied);
+            Toggle<EnemyLootDroppedEvent>(on, OnLootDropped);
+            Toggle<LootOverflowEvent>(on, OnLootOverflow);
+            Toggle<StoryPanelChangedEvent>(on, OnStoryPanelChanged);
+            Toggle<CampaignCompletedEvent>(on, OnCampaignCompleted);
+            Toggle<DialogueStartedEvent>(on, OnDialogueStarted);
+            Toggle<EnemyAttackWindupEvent>(on, OnEnemyWindup);
+            Toggle<PlayerLandedEvent>(on, OnPlayerLanded);
         }
 
         private static void Toggle<TEvent>(bool on, Action<TEvent> handler) where TEvent : IGameEvent
@@ -251,15 +324,26 @@ namespace Rapadura.Audio
                 return false;
             }
 
+            float pitch = 1f, volume = cue.volume;
+            if (cue.pitchJitter > 0f)
+            {
+                pitch += ((float)_jitter.NextDouble() * 2f - 1f) * Mathf.Min(cue.pitchJitter, 0.3f);
+            }
+
+            if (cue.volumeJitter > 0f)
+            {
+                volume *= 1f - (float)_jitter.NextDouble() * Mathf.Min(cue.volumeJitter, 0.5f);
+            }
+
             if (_audio != null)
             {
                 if (cue.spatial && position.HasValue)
                 {
-                    _audio.PlaySfxAtPosition(clip, position.Value, cue.volume, cue.category);
+                    _audio.PlaySfxAtPosition(clip, position.Value, volume, cue.category, pitch: pitch);
                 }
                 else
                 {
-                    _audio.PlaySfx(clip, cue.volume, cue.category);
+                    _audio.PlaySfx(clip, volume, cue.category, pitch);
                 }
 
                 if (cue.ducksMusic)
@@ -269,8 +353,10 @@ namespace Rapadura.Audio
             }
 
             _lastPlayTime[cueId] = now;
-            _voices.Add(new KeyValuePair<string, float>(cueId, now + Mathf.Max(0.02f, clip.length)));
+            _voices.Add(new KeyValuePair<string, float>(cueId, now + Mathf.Max(0.02f, clip.length / pitch)));
             LastPlayedCueId = cueId;
+            LastPlayedPitch = pitch;
+            LastPlayedVolume = volume;
             PlayedCount++;
             return true;
         }
@@ -374,9 +460,19 @@ namespace Rapadura.Audio
             }
         }
 
-        /// <summary>Advances ambience fades / pause / volume. Called each frame by the driver; public for EditMode tests.</summary>
+        /// <summary>Advances ambience fades / pause / volume, delayed cues and the deferred pickup. Called each frame by the driver; public for EditMode tests.</summary>
         public void Tick(float deltaTime)
         {
+            if (_pickupPending)
+            {
+                // Items arrived right after a kill but no EnemyLootDroppedEvent claimed them: a plain pickup.
+                _pickupPending = false;
+                Trigger(SfxTrigger.ItemPickup);
+            }
+
+            RunScheduled();
+            TickTitleAmbience(deltaTime);
+
             bool shouldPause = _ambienceCue != null && _ambienceCue.pausable && _isGameplayPaused();
             if (shouldPause != _ambiencePaused)
             {
@@ -408,6 +504,87 @@ namespace Rapadura.Audio
         /// <summary>Current ambience gain before category volumes (0..1). Tests.</summary>
         public float AmbienceFade => _ambienceFade;
 
+        /// <summary>Plays <paramref name="trigger"/> once <paramref name="delaySeconds"/> (clock time) have passed, from <see cref="Tick"/>.</summary>
+        public void Schedule(SfxTrigger trigger, float delaySeconds)
+        {
+            _scheduled.Add(new KeyValuePair<float, SfxTrigger>(_clock() + Mathf.Max(0f, delaySeconds), trigger));
+        }
+
+        private void RunScheduled()
+        {
+            if (_scheduled.Count == 0)
+            {
+                return;
+            }
+
+            float now = _clock();
+            for (int i = 0; i < _scheduled.Count; i++)
+            {
+                if (_scheduled[i].Key <= now)
+                {
+                    SfxTrigger trigger = _scheduled[i].Value;
+                    _scheduled.RemoveAt(i--);
+                    Trigger(trigger);
+                }
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // Title-screen bed (crickets + breeze under the title music)
+        // ------------------------------------------------------------------
+
+        private void SetTitleAmbienceWanted(bool wanted)
+        {
+            _titleWanted = wanted;
+            if (!wanted || _map == null)
+            {
+                return;
+            }
+
+            string cueId = _map.ResolveFirst(SfxTrigger.TitleAmbience);
+            if (string.IsNullOrEmpty(cueId) || !_map.TryGetCue(cueId, out SfxEventMap.Cue cue))
+            {
+                _titleWanted = false;
+                return;
+            }
+
+            if (_titleCue == cue && _titleSource != null && _titleSource.clip != null)
+            {
+                return;
+            }
+
+            _titleCue = cue;
+            if (_titleSource != null)
+            {
+                _titleSource.clip = ResolveClip(cue);
+                _titleSource.volume = 0f;
+            }
+        }
+
+        private void TickTitleAmbience(float deltaTime)
+        {
+            if (_titleCue == null)
+            {
+                return;
+            }
+
+            _titleFade = Mathf.MoveTowards(_titleFade, _titleWanted ? 1f : 0f, deltaTime / TitleAmbienceFadeSeconds);
+            if (_titleSource == null)
+            {
+                return;
+            }
+
+            _titleSource.volume = _titleFade * EffectiveVolume(_titleCue);
+            if (_titleFade <= 0f && !_titleWanted)
+            {
+                if (_titleSource.isPlaying) _titleSource.Stop();
+            }
+            else if (_titleWanted && !_titleSource.isPlaying && _titleSource.clip != null && Application.isPlaying)
+            {
+                _titleSource.Play();
+            }
+        }
+
         // ------------------------------------------------------------------
         // Event handlers
         // ------------------------------------------------------------------
@@ -416,6 +593,14 @@ namespace Rapadura.Audio
 
         private void OnDamageApplied(DamageAppliedEvent evt)
         {
+            // A reflected Espinhos hit (delivered synchronously inside ThornsRules.TryReflect): its own prick
+            // instead of a second thud on top of the hit that caused it.
+            if (ThornsRules.IsReflecting)
+            {
+                Trigger(SfxTrigger.Thorns, PositionOf(evt.Target));
+                return;
+            }
+
             if (AudioEventHelpers.IsPlayer(evt.Target))
             {
                 Trigger(SfxTrigger.PlayerHurt, PositionOf(evt.Target));
@@ -470,9 +655,56 @@ namespace Rapadura.Audio
             bool gained = _lastInventoryCount >= 0 && count > _lastInventoryCount;
             _lastInventoryCount = count;
 
-            if (gained && _clock() - _lastTradeTime > PickupSuppressAfterTradeSeconds)
+            if (!gained || _clock() - _lastTradeTime <= PickupSuppressAfterTradeSeconds)
             {
-                Trigger(SfxTrigger.ItemPickup);
+                return;
+            }
+
+            if (_clock() - _lastKillTime <= 0f)
+            {
+                // Loot of the kill being processed right now: EnemyLootDroppedEvent follows in this same
+                // dispatch and plays loot.drop instead. If it never comes, Tick plays the pickup.
+                _pickupPending = true;
+                return;
+            }
+
+            Trigger(SfxTrigger.ItemPickup);
+        }
+
+        // The router subscribes at boot, before EnemyLootGranter, so this runs before the loot is granted.
+        private void OnCombatTargetDied(CombatTargetDiedEvent evt) => _lastKillTime = _clock();
+
+        private void OnLootDropped(EnemyLootDroppedEvent evt)
+        {
+            _pickupPending = false;
+            if (evt.Drops != null && evt.Drops.Count > 0)
+            {
+                // Many kills in one frame (AoE) or a boss's pile: the cue's cooldown + single voice keep it to one clink.
+                Trigger(SfxTrigger.LootDrop);
+            }
+        }
+
+        private void OnLootOverflow(LootOverflowEvent evt) => Trigger(SfxTrigger.BagFull);
+
+        private void OnStunApplied(StunAppliedEvent evt) => Trigger(SfxTrigger.Stun, PositionOf(evt.Target));
+
+        private void OnEnemyWindup(EnemyAttackWindupEvent evt) => Trigger(SfxTrigger.EnemyWindup, evt.Position);
+
+        private void OnPlayerLanded(PlayerLandedEvent evt) => Trigger(SfxTrigger.HeroLanding, evt.Position);
+
+        private void OnDialogueStarted(DialogueStartedEvent evt) => Trigger(SfxTrigger.NpcTalk);
+
+        private void OnCampaignCompleted(CampaignCompletedEvent evt) => Schedule(SfxTrigger.CampaignCompleted, CampaignStingDelaySeconds);
+
+        private void OnStoryPanelChanged(StoryPanelChangedEvent evt)
+        {
+            bool ending = StoryPresentationRules.RollsCredits(evt.Beat);
+            switch (evt.Change)
+            {
+                case StoryPanelChange.Opened: Trigger(SfxTrigger.StoryOpen); break;
+                case StoryPanelChange.Advanced: Trigger(SfxTrigger.StoryPage); break;
+                case StoryPanelChange.Skipped: Trigger(ending ? SfxTrigger.StoryToCredits : SfxTrigger.StorySkip); break;
+                default: Trigger(ending ? SfxTrigger.StoryToCredits : SfxTrigger.StoryClose); break;
             }
         }
 
@@ -492,9 +724,54 @@ namespace Rapadura.Audio
 
         // Almost every full-screen menu (inventory, shop, settings, pause, death...) holds a
         // GameplayPause, so the first acquire / last release is the "screen opened / closed" signal.
-        private void OnGamePaused(GamePausedEvent evt) => Trigger(SfxTrigger.UiOpen);
+        // The village hub, story panels and dialogue boxes have their own sounds (see PauseSource).
+        private void OnGamePaused(GamePausedEvent evt)
+        {
+            _ownerBuffer.Clear();
+            GameplayPause.CopyOwnersTo(_ownerBuffer);
+            _pauseSource = ClassifyPauseOwners(_ownerBuffer);
+            _ownerBuffer.Clear();
 
-        private void OnGameResumed(GameResumedEvent evt) => Trigger(SfxTrigger.UiClose);
+            switch (_pauseSource)
+            {
+                case PauseSource.Village: Trigger(SfxTrigger.VillageOpen); break;
+                case PauseSource.Generic: Trigger(SfxTrigger.UiOpen); break;
+            }
+        }
+
+        private void OnGameResumed(GameResumedEvent evt)
+        {
+            PauseSource source = _pauseSource;
+            _pauseSource = PauseSource.Generic;
+
+            switch (source)
+            {
+                case PauseSource.Village: Trigger(SfxTrigger.VillageClose); break;
+                case PauseSource.Story: break;
+                default: Trigger(SfxTrigger.UiClose); break;
+            }
+        }
+
+        /// <summary>Which screen holds the pause, by owner type: village hub, story panel, dialogue box, else generic.</summary>
+        public static PauseSource ClassifyPauseOwners(IReadOnlyList<object> owners)
+        {
+            if (owners == null)
+            {
+                return PauseSource.Generic;
+            }
+
+            foreach (object owner in owners)
+            {
+                switch (owner)
+                {
+                    case VillageHubButton _: return PauseSource.Village;
+                    case StoryPanelController _: return PauseSource.Story;
+                    case DialogueUIController _: return PauseSource.Dialogue;
+                }
+            }
+
+            return PauseSource.Generic;
+        }
 
         private void OnShopOpened(ShopOpenedEvent evt) => Trigger(SfxTrigger.UiOpen);
 
@@ -533,6 +810,7 @@ namespace Rapadura.Audio
         private void OnFlowStateChanged(GameFlowStateChangedEvent evt)
         {
             _flowAllowsAmbience = evt.Current == GameFlowState.World || evt.Current == GameFlowState.Encounter;
+            SetTitleAmbienceWanted(evt.Current == GameFlowState.MainMenu || evt.Current == GameFlowState.CharacterSelect);
         }
     }
 

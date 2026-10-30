@@ -50,6 +50,10 @@ namespace Rapadura.Audio
             public bool ducksMusic;
             public ProceduralSfxPreset preset = ProceduralSfxPreset.Blip;
             public float frequency = 440f;
+            [Tooltip("Random pitch spread per play (0.06 = +/-6%), so repeats don't sound identical. 0 = fixed pitch.")]
+            [Range(0f, 0.3f)] public float pitchJitter;
+            [Tooltip("Random volume cut per play (0.15 = up to 15% quieter). 0 = fixed volume.")]
+            [Range(0f, 0.5f)] public float volumeJitter;
         }
 
         [Serializable]

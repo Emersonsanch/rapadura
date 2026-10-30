@@ -839,6 +839,10 @@ namespace Rapadura.Gameplay.Player
                 _squashVelocity -= amount * omega * 1.4f;
                 _dipVelocity -= fraction * _profile.landingDip * 2f * Mathf.PI * 3f * 1.3f;
                 _overlapVelocity.x += fraction * 18f * heavy * 2f * Mathf.PI * SpringFrequency;
+                if (fraction >= PlayerLandedEvent.MinIntensity)
+                {
+                    EventBus.Publish(new PlayerLandedEvent(gameObject, transform.position, Mathf.Clamp01(fraction)));
+                }
             }
 
             if (!grounded)

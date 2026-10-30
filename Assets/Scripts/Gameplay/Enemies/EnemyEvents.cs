@@ -44,6 +44,24 @@ namespace Rapadura.Gameplay.Enemies
     }
 
     /// <summary>
+    /// Raised by <see cref="EnemyProceduralAnimator"/> when an attack windup starts (the anticipation crouch),
+    /// <see cref="WindupSeconds"/> before the hit lands. For a subtle telegraph SFX; nothing in gameplay depends on it.
+    /// </summary>
+    public readonly struct EnemyAttackWindupEvent : IGameEvent
+    {
+        public readonly GameObject Enemy;
+        public readonly Vector3 Position;
+        public readonly float WindupSeconds;
+
+        public EnemyAttackWindupEvent(GameObject enemy, Vector3 position, float windupSeconds)
+        {
+            Enemy = enemy;
+            Position = position;
+            WindupSeconds = windupSeconds;
+        }
+    }
+
+    /// <summary>
     /// Raised by <see cref="EnemyProceduralAnimator"/> on each heavy footfall (Heavy archetype: golem,
     /// guardian, warlord, cave dweller) — walking stomps, the alert landing and the attack slam. Timed by
     /// the procedural gait (scaled time), independent of the camera. Intended for a footstep/thud SFX or

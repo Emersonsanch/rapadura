@@ -625,6 +625,7 @@ namespace Rapadura.Gameplay.Enemies
                 _attackTime = 0f;
                 // The gameplay windup, read as-is: the lunge peaks exactly when EnemyAttackState deals damage.
                 _attackWindup = Mathf.Max(0.05f, _controller.AttackWindupDuration);
+                EventBus.Publish(new EnemyAttackWindupEvent(_root.gameObject, _root.position, _attackWindup));
             }
 
             if (_controller.StrikeSequence != _seenStrike)

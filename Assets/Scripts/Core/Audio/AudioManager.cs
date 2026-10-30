@@ -399,7 +399,7 @@ namespace Rapadura.Core.Audio
         // Generic SFX / UI playback (pooled, no Instantiate/Destroy per sound).
         // ------------------------------------------------------------------
 
-        public void PlaySfx(AudioClip clip, float volume = 1f, AudioCategory category = AudioCategory.Sfx)
+        public void PlaySfx(AudioClip clip, float volume = 1f, AudioCategory category = AudioCategory.Sfx, float pitch = 1f)
         {
             if (clip == null)
             {
@@ -418,13 +418,15 @@ namespace Rapadura.Core.Audio
             source.transform.localPosition = Vector3.zero;
             source.clip = clip;
             source.volume = Mathf.Clamp01(volume) * GetEffectiveVolume(category);
+            // Always written: pooled sources are reused, so a jittered pitch must not leak into the next sound.
+            source.pitch = Mathf.Clamp(pitch, 0.5f, 2f);
             source.Play();
 
             MaybeDuckForHighPriority(category, volume);
         }
 
         /// <summary>Plays a 3D (spatialized) sound at a world position, e.g. an impact effect far from the player.</summary>
-        public void PlaySfxAtPosition(AudioClip clip, Vector3 position, float volume = 1f, AudioCategory category = AudioCategory.Sfx, float minDistance = 1f, float maxDistance = 25f)
+        public void PlaySfxAtPosition(AudioClip clip, Vector3 position, float volume = 1f, AudioCategory category = AudioCategory.Sfx, float minDistance = 1f, float maxDistance = 25f, float pitch = 1f)
         {
             if (clip == null)
             {
@@ -445,6 +447,8 @@ namespace Rapadura.Core.Audio
             source.maxDistance = maxDistance;
             source.clip = clip;
             source.volume = Mathf.Clamp01(volume) * GetEffectiveVolume(category);
+            // Always written: pooled sources are reused, so a jittered pitch must not leak into the next sound.
+            source.pitch = Mathf.Clamp(pitch, 0.5f, 2f);
             source.Play();
 
             MaybeDuckForHighPriority(category, volume);

@@ -16,7 +16,7 @@ namespace Rapadura.Audio
         private const float Peak = 0.8f;
         private const float TwoPi = Mathf.PI * 2f;
 
-        public static bool IsLoopPreset(ProceduralSfxPreset preset) => preset == ProceduralSfxPreset.RainLoop || preset == ProceduralSfxPreset.WindLoop;
+        public static bool IsLoopPreset(ProceduralSfxPreset preset) => preset == ProceduralSfxPreset.RainLoop || preset == ProceduralSfxPreset.WindLoop || preset == ProceduralSfxPreset.CountrysideLoop;
 
         public static AudioClip CreateClip(string name, ProceduralSfxPreset preset, float frequency)
         {
@@ -172,6 +172,184 @@ namespace Rapadura.Audio
                     MakeLoop(ref s, sampleRate / 10);
                     break;
                 }
+                case ProceduralSfxPreset.Dizzy:
+                {
+                    s = Buffer(0.42f, sampleRate);
+                    float phaseA = 0f, phaseB = 0f;
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        float t = T(i, sampleRate), p = (float)i / s.Length;
+                        float wobble = 1f + 0.06f * Mathf.Sin(TwoPi * 9f * t);
+                        phaseA += TwoPi * f * (1f - 0.35f * p) * wobble / sampleRate;
+                        phaseB += TwoPi * f * 1.5f * (1f - 0.3f * p) * (2f - wobble) / sampleRate;
+                        s[i] = (Mathf.Sin(phaseA) + 0.3f * Mathf.Sin(2f * phaseA) + 0.35f * Mathf.Sin(phaseB)) * Mathf.Exp(-t * 5f) * Mathf.Min(1f, t * 150f);
+                    }
+                    break;
+                }
+                case ProceduralSfxPreset.Clink:
+                {
+                    s = Buffer(0.24f, sampleRate);
+                    AddPluck(s, sampleRate, 0f, f, 1f, 45f);
+                    AddPluck(s, sampleRate, 0.07f, f * 1.12f, 0.7f, 50f);
+                    int tick = sampleRate / 200;
+                    for (int i = 0; i < tick && i < s.Length; i++) s[i] += Noise(rng) * 0.3f * (1f - (float)i / tick);
+                    break;
+                }
+                case ProceduralSfxPreset.WoodKnock:
+                    s = Buffer(0.3f, sampleRate);
+                    AddKnock(s, sampleRate, rng, 0f, f, 1f);
+                    AddKnock(s, sampleRate, rng, 0.11f, f * 1.06f, 0.6f);
+                    break;
+                case ProceduralSfxPreset.WoodCreak:
+                {
+                    s = Buffer(0.48f, sampleRate);
+                    const float creakEnd = 0.34f;
+                    float pulse = 1f, ring = 0f, ringTime = 0f;
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        float t = T(i, sampleRate);
+                        if (t >= creakEnd) break;
+                        float p = t / creakEnd;
+                        // Stick-slip: a train of tiny impulses whose rate drifts (40 -> 95 Hz), each ringing the wood.
+                        pulse += (40f + 55f * p + 10f * Mathf.Sin(TwoPi * 3f * t)) / sampleRate;
+                        if (pulse >= 1f) { pulse -= 1f; ring = 0.6f + 0.4f * (float)rng.NextDouble(); ringTime = 0f; }
+                        ringTime += 1f / sampleRate;
+                        s[i] = ring * Mathf.Exp(-ringTime * 140f) * (Mathf.Sin(TwoPi * f * 3f * ringTime) + 0.5f * Mathf.Sin(TwoPi * f * 4.7f * ringTime)) * Mathf.Sin(Mathf.PI * p) * 0.8f;
+                    }
+                    AddKnock(s, sampleRate, rng, creakEnd + 0.02f, f * 0.6f, 1f);
+                    break;
+                }
+                case ProceduralSfxPreset.PageRustle:
+                {
+                    s = Buffer(0.32f, sampleRate);
+                    var crinkle = new float[s.Length];
+                    int crinkleLength = sampleRate / 25;
+                    for (int c = 0; c < 14; c++)
+                    {
+                        int start = rng.Next(s.Length * 4 / 5);
+                        float amp = 0.5f + (float)rng.NextDouble() * 0.5f;
+                        for (int k = 0; start + k < s.Length && k < crinkleLength; k++) crinkle[start + k] += amp * Mathf.Exp(-T(k, sampleRate) * 90f);
+                    }
+                    float lowCut = 0f, smooth = 0f, aLow = Coef(f * 0.4f, sampleRate), aHigh = Coef(f * 1.6f, sampleRate);
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        float n = Noise(rng);
+                        lowCut += aLow * (n - lowCut);
+                        smooth += aHigh * ((n - lowCut) - smooth);
+                        float body = 0.35f * Mathf.Sin(Mathf.PI * i / s.Length);
+                        s[i] = smooth * 2.5f * (body + crinkle[i]);
+                    }
+                    break;
+                }
+                case ProceduralSfxPreset.ForroFlourish:
+                {
+                    // 150 bpm baiao, 16th = 0.1 s, two bars: zabumba (steps 0, 3, 4 of each bar + the closing
+                    // hit), triangulo on every 16th (open on the off-beat eighths, muted otherwise) and a major
+                    // arpeggio over the second bar, closing on the tonic chord.
+                    const float step = 0.1f;
+                    s = Buffer(step * 16f + 0.38f, sampleRate);
+                    foreach (int k in new[] { 0, 3, 4, 8, 11, 12 }) AddZabumba(s, sampleRate, rng, k * step, k % 8 == 0 ? 1f : 0.7f);
+                    AddZabumba(s, sampleRate, rng, 16 * step, 1f);
+                    for (int k = 0; k < 16; k++)
+                    {
+                        bool open = k % 4 == 2;
+                        AddTriangle(s, sampleRate, k * step, f * 7.6f, open ? 0.16f : 0.09f, open ? 12f : 80f);
+                    }
+                    float[] arp = { f, f * 1.2599f, f * 1.4983f, f * 2f };
+                    for (int n = 0; n < arp.Length; n++) AddPluck(s, sampleRate, (8 + 2 * n) * step, arp[n], 0.45f, 9f);
+                    AddPluck(s, sampleRate, 16 * step, f, 0.4f, 6f);
+                    AddPluck(s, sampleRate, 16 * step, f * 1.2599f, 0.3f, 6f);
+                    AddPluck(s, sampleRate, 16 * step, f * 1.4983f, 0.3f, 6f);
+                    AddTriangle(s, sampleRate, 16 * step, f * 7.6f, 0.2f, 7f);
+                    break;
+                }
+                case ProceduralSfxPreset.Murmur:
+                {
+                    // "hm-hm": two hummed syllables, harmonics rolling off like a closed-mouth voice.
+                    s = Buffer(0.34f, sampleRate);
+                    float phase = 0f;
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        float t = T(i, sampleRate);
+                        bool first = t < 0.14f;
+                        float local = first ? t / 0.14f : (t - 0.18f) / 0.16f;
+                        if (!first && local < 0f) { s[i] = 0f; continue; }
+                        float pitch = first ? Mathf.Lerp(f * 1.1f, f, local) : Mathf.Lerp(f, f * 0.88f, local);
+                        phase += TwoPi * pitch / sampleRate;
+                        float v = 0f;
+                        for (int h = 1; h <= 6; h++) v += Mathf.Sin(phase * h) / (h * h);
+                        s[i] = v * Mathf.Sin(Mathf.PI * Mathf.Clamp01(local)) * (first ? 1f : 0.8f);
+                    }
+                    break;
+                }
+                case ProceduralSfxPreset.Prick:
+                {
+                    s = Buffer(0.16f, sampleRate);
+                    float lp = 0f, a = Coef(f * 0.5f, sampleRate);
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        float t = T(i, sampleRate), n = Noise(rng);
+                        lp += a * (n - lp);
+                        s[i] = (Sin(f, t) + 0.5f * Sin(f * 1.47f, t)) * Mathf.Exp(-t * 40f) + (n - lp) * 0.5f * Mathf.Exp(-t * 25f);
+                    }
+                    break;
+                }
+                case ProceduralSfxPreset.Inhale:
+                {
+                    s = Buffer(0.26f, sampleRate);
+                    float lp = 0f;
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        float p = (float)i / s.Length;
+                        lp += Coef(f * (0.5f + p), sampleRate) * (Noise(rng) - lp);
+                        s[i] = lp * Mathf.Pow(p, 1.5f) * Mathf.Clamp01((1f - p) * 10f);
+                    }
+                    break;
+                }
+                case ProceduralSfxPreset.SackThump:
+                {
+                    s = Buffer(0.3f, sampleRate);
+                    Sweep(s, sampleRate, f, f * 0.6f, 1f, 0f);
+                    float lp = 0f, a = Coef(600f, sampleRate);
+                    int settle = Mathf.RoundToInt(0.09f * sampleRate);
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        float t = T(i, sampleRate);
+                        lp += a * (Noise(rng) - lp);
+                        float second = i >= settle ? 0.35f * Mathf.Exp(-(t - 0.09f) * 30f) : 0f;
+                        s[i] = s[i] * Mathf.Exp(-t * 20f) + lp * 1.6f * (Mathf.Exp(-t * 14f) + second);
+                    }
+                    break;
+                }
+                case ProceduralSfxPreset.CountrysideLoop:
+                {
+                    // Soft evening breeze (double low-pass noise, slow gusts) + two crickets chirping in
+                    // groups of three at seeded, uneven intervals.
+                    s = Buffer(3.7f, sampleRate);
+                    float lp = 0f, lp2 = 0f;
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        float p = (float)i / s.Length;
+                        float gust = 0.7f + 0.3f * Mathf.Sin(TwoPi * p + 0.5f) * Mathf.Sin(TwoPi * 2f * p);
+                        float a = Coef(350f * gust, sampleRate);
+                        lp += a * (Noise(rng) - lp);
+                        lp2 += a * (lp - lp2);
+                        s[i] = lp2 * 2.2f * gust;
+                    }
+                    for (int voice = 0; voice < 2; voice++)
+                    {
+                        float carrier = f * (voice == 0 ? 1f : 1.08f);
+                        float amp = voice == 0 ? 0.22f : 0.14f;
+                        float at = 0.15f + voice * 0.37f;
+                        while (at < 3.4f)
+                        {
+                            for (int pulse = 0; pulse < 3; pulse++) AddPluck(s, sampleRate, at + pulse * 0.045f, carrier, amp, 160f);
+                            at += 0.65f + (float)rng.NextDouble() * 0.35f;
+                        }
+                    }
+                    MakeLoop(ref s, sampleRate / 10);
+                    break;
+                }
                 default:
                     return Array.Empty<float>();
             }
@@ -248,6 +426,63 @@ namespace Rapadura.Audio
                 phase += TwoPi * Mathf.Lerp(from, to, p) / sampleRate;
                 float sin = Mathf.Sin(phase);
                 s[i] = sin * sineMix + (sin >= 0f ? 1f : -1f) * squareMix * 0.4f;
+            }
+        }
+
+        /// <summary>Adds a decaying bell-ish pluck (two inharmonic partials) starting at <paramref name="at"/> seconds.</summary>
+        private static void AddPluck(float[] s, int sampleRate, float at, float f, float amp, float decay)
+        {
+            int start = Mathf.RoundToInt(at * sampleRate);
+            float top = Mathf.Min(f * 3.9f, sampleRate * 0.45f);
+            for (int k = 0; start + k < s.Length; k++)
+            {
+                float t = T(k, sampleRate);
+                float env = Mathf.Exp(-t * decay);
+                if (env < 0.001f) break;
+                s[start + k] += (Sin(f, t) + 0.5f * Sin(Mathf.Min(f * 2.4f, sampleRate * 0.45f), t) + 0.25f * Sin(top, t)) * env * amp * Mathf.Min(1f, k / 20f);
+            }
+        }
+
+        /// <summary>Hollow knock on wood: a fast-dropping low tone plus a short band of noise.</summary>
+        private static void AddKnock(float[] s, int sampleRate, System.Random rng, float at, float f, float amp)
+        {
+            int start = Mathf.RoundToInt(at * sampleRate);
+            float lp = 0f, a = Coef(f * 8f, sampleRate), phase = 0f;
+            for (int k = 0; start + k < s.Length && k < sampleRate / 6; k++)
+            {
+                float t = T(k, sampleRate);
+                lp += a * (Noise(rng) - lp);
+                phase += TwoPi * f * (1f - 0.15f * Mathf.Min(1f, t * 20f)) / sampleRate;
+                float tone = Mathf.Sin(phase) * Mathf.Exp(-t * 35f) + 0.4f * Sin(f * 2.3f, t) * Mathf.Exp(-t * 50f);
+                s[start + k] += (tone + lp * 1.5f * Mathf.Exp(-t * 120f)) * amp;
+            }
+        }
+
+        /// <summary>Zabumba hit: a pitch-dropping bass thump (110 -> 55 Hz) with a skin click.</summary>
+        private static void AddZabumba(float[] s, int sampleRate, System.Random rng, float at, float amp)
+        {
+            int start = Mathf.RoundToInt(at * sampleRate);
+            float phase = 0f;
+            for (int k = 0; start + k < s.Length && k < sampleRate / 3; k++)
+            {
+                float t = T(k, sampleRate);
+                phase += TwoPi * Mathf.Lerp(110f, 55f, Mathf.Min(1f, t * 8f)) / sampleRate;
+                s[start + k] += (Mathf.Sin(phase) * Mathf.Exp(-t * 18f) + Noise(rng) * 0.25f * Mathf.Exp(-t * 200f)) * amp;
+            }
+        }
+
+        /// <summary>Triangulo strike: three inharmonic metallic partials; a high <paramref name="decay"/> = muted (hand on the bar).</summary>
+        private static void AddTriangle(float[] s, int sampleRate, float at, float f, float amp, float decay)
+        {
+            int start = Mathf.RoundToInt(at * sampleRate);
+            float nyquist = sampleRate * 0.45f;
+            float f1 = Mathf.Min(f, nyquist), f2 = Mathf.Min(f * 1.43f, nyquist), f3 = Mathf.Min(f * 1.88f, nyquist);
+            for (int k = 0; start + k < s.Length; k++)
+            {
+                float t = T(k, sampleRate);
+                float env = Mathf.Exp(-t * decay);
+                if (env < 0.001f) break;
+                s[start + k] += (Sin(f1, t) + 0.6f * Sin(f2, t) + 0.35f * Sin(f3, t)) * env * amp * Mathf.Min(1f, k / 8f);
             }
         }
 
