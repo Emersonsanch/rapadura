@@ -103,7 +103,7 @@ namespace Rapadura.Core.Managers
         public Rapadura.Gameplay.Hunting.HuntingProgress Hunting { get; private set; }
         /// <summary>Class evolution: graduations by story mission, master level and tree, class combo (Docs/ClassEvolution.md).</summary>
         public Rapadura.Gameplay.ClassEvolution.ClassEvolutionProgress ClassEvolution { get; private set; }
-        /// <summary>Trained proficiencies and the Roda de Talentos of each cousin (Docs/Balance/README.md §26).</summary>
+        /// <summary>Trained proficiencies and the Roda de Talentos of each cousin (Docs/Balance/README.md §27).</summary>
         public Rapadura.Gameplay.Talents.TalentProgress Talents { get; private set; }
         public AchievementManager AchievementManager { get; private set; }
         public TimeOfDayManager TimeOfDayManager { get; private set; }

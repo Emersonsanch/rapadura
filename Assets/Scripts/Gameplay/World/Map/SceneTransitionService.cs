@@ -69,7 +69,18 @@ namespace Rapadura.Gameplay.World.Map
         /// </summary>
         public EncounterOutcome? DecidedOutcome { get; private set; }
 
-        public SceneTransitionService(WorldMapProgress progress, ISceneLoader sceneLoader = null)
+        /// <summary>
+        /// The city being walked in (<c>CityCatalog</c> id) between <see cref="BeginCityVisit"/> and
+        /// <see cref="EndCityVisit"/>: Main.unity then loads in "city mode" (the walkable town, Docs/Cities.md §5) instead
+        /// of an arena. Null otherwise. Never saved: a save loaded later starts on the map.
+        /// </summary>
+        public string PendingCityVisit { get; private set; }
+        public bool HasPendingCityVisit => !string.IsNullOrEmpty(PendingCityVisit);
+
+        /// <summary>Set by <see cref="EndCityVisit"/> from the Cais da Barca: the map opens the fast-travel window once (consumed by the hub).</summary>
+        public bool OpenFastTravelOnMapReturn { get; set; }
+
+                public SceneTransitionService(WorldMapProgress progress, ISceneLoader sceneLoader = null)
         {
             _progress = progress;
             _sceneLoader = sceneLoader ?? new UnitySceneLoader();
@@ -184,13 +195,58 @@ namespace Rapadura.Gameplay.World.Map
 
         public void AbandonPendingEncounter()
         {
+            PendingCityVisit = null;
+            OpenFastTravelOnMapReturn = false;
             PendingEncounter = null;
             DecidedOutcome = null;
             LastOutcome = null;
             DeferDefeatResolution = false;
         }
 
-        /// <summary>Loads the world map without any encounter bookkeeping (e.g. from a "Mapa" menu button in Main.unity).</summary>
+        /// <summary>
+        /// "Entrar na cidade": loads Main.unity in city mode for <paramref name="cityId"/> (no enemies, no arena; the
+        /// walkable town is built there by <c>CityModeController</c>). False while an encounter or another visit is pending.
+        /// </summary>
+        public bool BeginCityVisit(string cityId)
+        {
+            if (string.IsNullOrEmpty(cityId) || HasPendingEncounter || HasPendingCityVisit)
+            {
+                GameLogger.Warning(LogCategory, $"BeginCityVisit('{cityId}') ignored (encounter or visit pending, or no city).");
+                return false;
+            }
+
+            PendingCityVisit = cityId;
+            OpenFastTravelOnMapReturn = false;
+            EventBus.Publish(new Rapadura.Gameplay.World.Cities.CityVisitStartedEvent(cityId));
+            _sceneLoader.LoadScene(CombatSceneName);
+            return true;
+        }
+
+        /// <summary>
+        /// Leaves the walkable city (a gate, or the Cais da Barca with <paramref name="openFastTravel"/>): auto-saves and
+        /// loads the world map, where the token is still on the city's node. False when no visit is pending.
+        /// </summary>
+        public bool EndCityVisit(bool openFastTravel = false)
+        {
+            if (!HasPendingCityVisit)
+            {
+                return false;
+            }
+
+            string cityId = PendingCityVisit;
+            PendingCityVisit = null;
+            OpenFastTravelOnMapReturn = openFastTravel;
+            EventBus.Publish(new Rapadura.Gameplay.World.Cities.CityVisitEndedEvent(cityId, openFastTravel));
+            if (ServiceLocator.TryGet(out SaveManager saveManager))
+            {
+                saveManager.AutoSave();
+            }
+
+            _sceneLoader.LoadScene(WorldMapSceneName);
+            return true;
+        }
+
+                /// <summary>Loads the world map without any encounter bookkeeping (e.g. from a "Mapa" menu button in Main.unity).</summary>
         public void ReturnToWorldMap()
         {
             _sceneLoader.LoadScene(WorldMapSceneName);

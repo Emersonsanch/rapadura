@@ -128,3 +128,87 @@ mochila maior, item enviado ao depósito, nova faixa de freguesia.
 - Olaria da Dona Rosa, Viveiro, Casa de Música e as filiais do Armazém Geral ainda não têm balcão (seus itens de casa
   já estão no catálogo).
 
+## 5. Cidades andáveis (modo cidade)
+
+> Feito em 2026-10-30, já no re-tema da `Docs/WorldBible_Maniqueismo.md` (§2): a Vila da Vó Edna é **sogdiana** (adobe cor
+> de damasco, teto plano com parapeito, aivan fundo em colunas entalhadas, cúpula turquesa), não sertaneja. Ids não mudam.
+
+### 5.1 Como se entra e se sai
+
+- No painel da cidade (mapa, `VillageHubButton`) há **"Andar pela cidade"** (`CityWalkTexts.WalkIn`). Ele chama
+  `SceneTransitionService.BeginCityVisit(cityId)`, que carrega **Main.unity em modo cidade** (sem encontro, sem inimigos).
+- `CityModeController` (auto-bootstrap no `sceneLoaded`, sem editar cena) esconde a arena (`HiddenSceneRoots`: `Sandbox`,
+  `Ground`, `GroundDetail`, `NaturalTrees`, `Rocks`, `Rock1`, `Rock2`), monta a cidade (`CityTownView`), põe o herói na
+  estrada que vem do mapa (`CityLayout.Arrival`), marca a **praça** como ponto de renascer (`CheckpointManager`), troca
+  clima e ambiente para a região e deixa o dia/noite correndo.
+- **Saídas:** o portal de adobe no fim de cada rua de saída volta ao mapa (`EndCityVisit`); o **Cais da Barca**
+  (`CityLotKind.ShipDock`, §3.16 da bíblia) volta ao mapa **com a janela das Barcas de Luz aberta**
+  (`OpenFastTravelOnMapReturn`, consumido pelo hub). O token continua no nó da cidade; auto-save na saída.
+
+### 5.2 Kit modular (código, `Gameplay/World/Cities/Town`)
+
+| Peça | Arquivo | O quê |
+|---|---|---|
+| Paleta | `TownPalette` | 64 cores (8×8) num só material URP Lit (instancing, SRP batcher); a emissão de janelas, lanternas e brasas acende à noite (`SetNightGlow`). |
+| Construtor | `TownMeshBuilder` | caixas, troncos, cúpulas, placas de telhado com enrolamento automático (`QuadFacing`/`Plate`). Puro até `ToMesh`. |
+| Arquitetura | `TownKit` | plinto, faixa de reboco, enxaimel; **porta** com arco ogival e folhas de nogueira entalhadas com rosetas; **janela** com treliça (*panjara*) que acende à noite; janela redonda; **nicho de lâmpada**; **teto plano** com parapeito, cimalha de cal, vigas aparentes e bicas; **cúpula** em tambor; empena de telha (estrebaria); quarto alto no terraço; **aivan** (piso de tijolo, **colunas sogdianas** com capitel em leque, viga, forro de caibros); **pishtaq**; torre da lâmpada; chaminé; ninho de cegonha; letreiro; *suzani*. |
+| Props | `TownKit.Props` | poço com cântaros, *supa/tapchan* (banco-estrado), barracas com toldo listrado, lampião de bronze, **Relógio de Zurvan**, **tandir**, **latada de uva**, muro de quintal (adobe; **pedra seca** com espinha de peixe em Litema e Lamparinas), portal da cidade, fardo, caixotes, canteiro, **estela** (Litema), as figuras dos donos das lojas. |
+| Vegetação | `TownKit.Tree` | Zarafshan: choupo verde e dourado, tamargueira rosa, pomar (damasco, romã). Qocho: tamareira, tamargueira. Litema: cedro retorcido, babosa-de-árvore. Lamparinas: cogumelo azul que brilha, estalagmite com musgo. |
+| Chão | `TownGroundBuilder` | campo em duas cores, ruas de terra com meio-fio de pedra e sulcos, calçadas de lajota, **aryk** (canal) com pontezinhas nas portas, praça em anéis com estrela *girih* no centro. |
+| Prédios | `TownBuildingBuilder` | casa, loja, oficina, estrebaria, casa da Vó, casa da lâmpada e cais a partir do `TownBuildingSpec`; **rondavel** (paredes redondas, teto cônico de palha) e **casa no tufo** prontas para Litema e Lamparinas. |
+| Estilos | `TownStyles` | material e forma por região: `Sogdian` (teto plano), `Oasis` (taipa rosa), `Rondavel` (cone), `CaveTuff` (rocha). |
+
+Variação sem repetição óbvia: cada lote escolhe parede, remate e madeira por hash FNV-1a do id (nunca RNG); janelas
+acesas 2 em 3; quarto alto e ninho por hash. Prédios iguais compartilham a malha (`TownMeshCache`).
+
+### 5.3 Layout (dados): `CityTownRecipe` → `CityLayoutGenerator` → `CityLayout`
+
+- Receita = praça (raio), ruas (braços N/L/S/O com comprimento e saída), lotes (rua, lado, distância; ou livres com centro
+  e frente), props da praça. O gerador calcula pegada, porta, **ponto de chegada à porta** (na calçada) e **lugar do dono**
+  (no aivan, ao lado da porta, nunca na frente dela), raio de interação, cais, saídas, chegada e renascer; põe sozinho
+  lampiões entre os lotes, quintais com muro e árvores, canteiros, portais e a mata de fundo, e descarta o que bater.
+- **Vila da Vó Edna** (`CityTownRecipes.VilaEdna`): praça com a **casa da lâmpada** (pishtaq, cúpula, torre) na cabeça e o
+  Relógio de Zurvan na frente, poço, *supas* e a feira da Nana; rua **Oeste** (Zaku/Mercearia, Mariam/Armarinho, Cais da
+  Barca), rua **Leste** (Loja Geral em dois pisos, **casa da Vó Edna** com aivan comprido, tandir, latada e cegonha; a
+  estrebaria do Srosh fechando a rua, com piquete), rua **Sul** (a estrada do mapa: ferraria do Adamas, marcenaria do
+  Omóforo, costura da Narisah). As frentes de loja olham para a câmera isométrica (lado norte das ruas O/L, lado leste da S).
+- **Outras cidades:** `CityTownRecipes.Default(city)` já monta uma cidade andável com os moradores e lojas de cada uma, no
+  estilo da região. Para a versão final, escrever uma receita como `VilaEdna()` (e, se preciso, módulos novos no
+  `TownKit`); nenhum outro código muda. O **Ammo** (caravaneiro) ganha uma barraca na praça no dia dele.
+
+### 5.4 Regras (testadas: `CityLayoutRules`, `Tests/EditMode/CityTownTests.cs`)
+
+- Nenhum prédio sobre rua, calçada ou praça; nenhum lote sobre outro.
+- Toda porta, saída e o ponto de chegada alcançáveis da praça por corredores de **≥ 1,2 m** (grade de 0,2 m, folga de
+  0,6 m de cada collider; o herói é uma cápsula de 0,35 m).
+- Dono de loja a ≥ 0,35 m de qualquer collider, com o ponto de chegada à porta dentro do raio de interação dele.
+- O volume da zona segura cobre a cidade inteira (lotes, donos, saídas, chegada, renascer).
+- Orçamentos: < 6.000 triângulos por prédio, < 160.000 a Vila inteira (com a mata de fundo), < 60 renderers, nenhum
+  `MeshCollider`. PlayMode (`Tests/PlayMode/CityWalkSmokeTests.cs`): do mapa entra na Vila, anda com o clique-para-andar
+  real da praça até a porta de cada loja (dentro do alcance do dono) e sai pela porta sul de volta ao mapa.
+
+### 5.5 Desempenho (mobile) e colisão
+
+- Um material para tudo; uma malha por prédio (culling individual), props fundidos em 4 quadrantes + 1 fundo sem
+  sombra, chão numa malha só: ~30 renderers por cidade. Malhas em cache na sessão; nada vira asset (o build não cresce).
+- Colliders num só objeto, saídos de `CitySolids` (a mesma lista que os testes usam): caixas nas paredes (até 2,6 m,
+  para a câmera isométrica não "puxar" em cada beiral), barracas e muros; cápsulas nas colunas, postes e troncos; pisos
+  de aivan como degraus de 0,16 m; um chão; quatro paredes invisíveis. A raiz recebe `NonSolidPropZone` (o
+  `SolidPropBinder` de `Docs/Collision.md` não mexe nela).
+- Noite: só 6 luzes pontuais sem sombra (lanternas da praça, da casa da lâmpada e do cais); o resto é emissão da paleta.
+
+### 5.6 Zona segura ligada (§3)
+
+- `CitySafeZoneVolume` (gatilho com o `CityId`) registra a caixa em `CitySafeZones`; `CitySafeZones.ZoneAt(pos)` dá o
+  `ZoneKind`. **Dano:** `Health` recusa qualquer dano dentro (`SafeZoneRules.CanTakeDamage`), sem custo fora de cidade.
+  **Entrada:** limpa veneno, lentidão e atordoamento (`ShouldClearDebuffsOnEntry` → `BuffController.RemoveDebuffs/ClearStun`)
+  e publica `CityZoneChangedEvent`.
+- Ainda não ligados (não há bichos na cidade hoje): `CanAttack` antes do golpe, a hotbar com `CanUseDamagingSkill` e a IA
+  com `CanEnemyPursueInto`/`ShouldDropTarget`. Quando uma cidade tiver borda com o mato, ligar lendo `CitySafeZones.ZoneAt`.
+
+### 5.7 Ver no editor
+
+`Rapadura ▸ Cities ▸ Preview Walkable Town ▸ <cidade>` monta a cidade na cena aberta como objeto que não é salvo (use uma
+cena vazia), com a câmera da Scene no ângulo do jogo; `Toggle Night` liga a noite; `Clear Preview` limpa.
+`Rapadura ▸ Cities ▸ Validate Town Layouts` roda as regras e escreve no Console.
+

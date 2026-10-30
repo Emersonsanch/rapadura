@@ -240,6 +240,12 @@ namespace Rapadura.Gameplay.Combat
                 return;
             }
 
+            // Zona segura (Docs/Cities.md §3.3): nothing is ever hurt inside a walkable city. Free when no city is loaded.
+            if (Rapadura.Gameplay.World.Cities.CitySafeZones.IsSafeAt(transform.position))
+            {
+                return;
+            }
+
             int sourceId = SourceIdOf(info.Source);
             if (FindChannelWindow(sourceId, info.Channel) >= 0)
             {

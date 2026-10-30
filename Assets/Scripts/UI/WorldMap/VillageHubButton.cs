@@ -55,6 +55,8 @@ namespace Rapadura.UI.WorldMap
     public class VillageHubButton : MonoBehaviour
     {
         public const string ButtonName = "wm-village-button";
+        /// <summary>The hub's "Andar pela cidade" option (walkable town).</summary>
+        public const string WalkInButtonName = "wm-village-walk-in-button";
         public const string OverlayName = "wm-village-overlay";
         /// <summary>USS classes (WorldMapHudView.uss) of the hub's section headers and option buttons.</summary>
         public const string VillageSectionClass = "wm-village-section";
@@ -106,6 +108,8 @@ namespace Rapadura.UI.WorldMap
         private Button _tachoButton;
         /// <summary>"Oratório": the Bênção da Romaria (<see cref="RomariaOratoryHub"/>); the keeper answers on the speech line.</summary>
         private Button _oratoryButton;
+        /// <summary>"Andar pela cidade": loads the walkable town (Docs/Cities.md §5, SceneTransitionService.BeginCityVisit).</summary>
+        private Button _walkInButton;
         private string _oratorySpeech;
         private Button _closeButton;
         private readonly List<Button> _npcButtons = new List<Button>();
@@ -334,6 +338,8 @@ namespace Rapadura.UI.WorldMap
                 CloseHub();
             }
 
+            ConsumeFastTravelRequest(hudVisible);
+
             // Decided once the conversation/window is over: back to the panel, or (something else took
             // over) forget it.
             bool serviceOpen = ShopOpen || CraftingOpen || ChestOpen || KitchenOpen || FastTravelOpen || RefineOpen || TachoOpen;
@@ -529,6 +535,7 @@ namespace Rapadura.UI.WorldMap
             _refineButton = NewOptionButton("wm-village-refine-button", OnRefineClicked);
             _tachoButton = NewOptionButton("wm-village-tacho-button", OnTachoClicked);
             _oratoryButton = NewOptionButton("wm-village-oratory-button", OnOratoryClicked);
+            _walkInButton = NewOptionButton(WalkInButtonName, OnWalkInClicked);
 
             _closeButton = new Button(CloseHub) { name = "wm-village-close-button", focusable = true };
             _closeButton.AddToClassList("rap-button");
@@ -589,6 +596,7 @@ namespace Rapadura.UI.WorldMap
                 _shopButtons.Add((shopButton, shopId));
             }
 
+            _servicesGrid.Add(_walkInButton);
             _servicesGrid.Add(_craftingButton);
             _servicesGrid.Add(_refineButton);
             if (_city.HasGrandmaServices)
@@ -663,6 +671,7 @@ namespace Rapadura.UI.WorldMap
             SetText(_tachoButton, Rapadura.Gameplay.Tacho.TachoTexts.Get(localization, Rapadura.Gameplay.Tacho.TachoTexts.HubButton));
             SetText(_oratoryButton, RomariaOratoryHub.ButtonText(localization, _city));
             SetText(_closeButton, VillageHubTexts.Get(localization, VillageHubTexts.Close));
+            SetText(_walkInButton, Rapadura.Gameplay.World.Cities.Town.CityWalkTexts.Get(localization, Rapadura.Gameplay.World.Cities.Town.CityWalkTexts.WalkIn));
 
             bool peddler = false;
             foreach ((Button button, string shopId) in _shopButtons)
@@ -863,6 +872,33 @@ namespace Rapadura.UI.WorldMap
         // ------------------------------------------------------------------
         // Carro de boi
         // ------------------------------------------------------------------
+
+        /// <summary>"Andar pela cidade": hands the visit to the scene service (Main.unity in city mode) and closes the panel.</summary>
+        private void OnWalkInClicked()
+        {
+            if (_city == null || !ServiceLocator.TryGet(out SceneTransitionService transition) || _worldMap == null || !_worldMap.CanExplore)
+            {
+                return;
+            }
+
+            CloseHub();
+            _returnToHub = false;
+            EndInventorySession();
+            transition.BeginCityVisit(_city.CityId);
+        }
+
+        /// <summary>Back from the Cais da Barca of a walkable city: open the carro de boi / barcas window once the map is idle.</summary>
+        private void ConsumeFastTravelRequest(bool hudVisible)
+        {
+            if (!hudVisible || GameplayPause.IsPaused || _worldMap == null || !_worldMap.CanExplore
+                || !ServiceLocator.TryGet(out SceneTransitionService transition) || !transition.OpenFastTravelOnMapReturn)
+            {
+                return;
+            }
+
+            transition.OpenFastTravelOnMapReturn = false;
+            OpenFastTravel();
+        }
 
         private void OnFastTravelClicked()
         {

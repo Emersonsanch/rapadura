@@ -132,6 +132,7 @@ namespace Rapadura.Tests
             yield return Source(nameof(Rapadura.Gameplay.Housing.HouseSourceTexts), Rapadura.Gameplay.Housing.HouseSourceTexts.Entries, Rapadura.Gameplay.Housing.HouseSourceTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.Wardrobe.WardrobeTexts), Rapadura.Gameplay.Wardrobe.WardrobeTexts.Entries, Rapadura.Gameplay.Wardrobe.WardrobeTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.UI.Housing.WardrobeUiTexts), Rapadura.UI.Housing.WardrobeUiTexts.Entries, Rapadura.UI.Housing.WardrobeUiTexts.EnsureRegistered);
+            yield return Source(nameof(Rapadura.Gameplay.World.Cities.Town.CityWalkTexts), Rapadura.Gameplay.World.Cities.Town.CityWalkTexts.Entries, Rapadura.Gameplay.World.Cities.Town.CityWalkTexts.EnsureRegistered);
         }
 
         private static TextSource Source(string name, IReadOnlyList<LocalizationEntry> entries, Action<LocalizationManager> merge)
