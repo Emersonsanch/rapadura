@@ -1569,7 +1569,8 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [ ] H6 — Vida na casa: conforto e "Descansado", conjuntos, parede de troféus, vitrine de relíquias, estante do Caderno, caminha do Caramelo, livro de visitas, plantas, boneco de treino.
 - [ ] H7 — Eventos sazonais e prendas.
 - [ ] H8 — Online: casas instanciadas, convites e permissões, desfazer vandalismo, correio, leilão, conta da lenha, sede do clã.
-- [ ] 🙋 Decisões do usuário (lista em `Docs/Housing.md` §14): custos das melhorias (150/400/1.000/2.500 ouro), casa por conta ou por personagem, quem da lista entra com o dono offline, conta da lenha ligada ou não, ajudante que vende offline, venda de casa entre jogadores, nomes das 3 cidades novas, moeda de evento "prendas" e loja paga só cosmética.
+- ✅ Decisões do usuário (2026-10-29): **uma casa por conta**; **com o dono offline ninguém entra** (a casa fica trancada, mesmo para a lista de convidados); **pode vender a casa** para outro jogador (online, com proteções); preços das melhorias ficam para depois (valores atuais do doc são provisórios).
+- [ ] 🙋 Ainda em aberto (`Docs/Housing.md` §14): conta da lenha ligada ou não, ajudante que vende offline, nomes das 3 cidades novas, moeda de evento "prendas" e loja paga só cosmética.
 
 ### Equipamento e aparência do personagem
 - [ ] Conjuntos de armadura/roupa por primo em vários níveis de raridade, acessórios (chapéu de couro, lenço, alpargatas…) e skins de arma.

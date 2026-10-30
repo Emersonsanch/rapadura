@@ -710,3 +710,10 @@ Regras:
 11. **Moeda de evento (prendas)** e **loja paga só de cosméticos** (Fase 12.1).
 12. **Arte das roupas:** começar pela v1 (cor + anexos em osso) e deixar malhas modulares para depois?
 13. **Boneco de treino:** dar XP lenta (proposta, com teto) ou ser só enfeite/animação?
+
+
+## Decisões do usuário registradas (2026-10-29)
+- **Uma casa por conta** (não por personagem): todos os personagens da conta usam a mesma casa.
+- **Dono offline = casa trancada:** ninguém entra, nem quem está na lista permanente de convidados. As visitas só acontecem com o dono online.
+- **Venda de casa entre jogadores: sim**, no online, com confirmação dupla, registro no servidor e os itens do dono indo para o Depósito antes da entrega.
+- **Preços das melhorias:** definidos no futuro; os valores deste documento são provisórios.
