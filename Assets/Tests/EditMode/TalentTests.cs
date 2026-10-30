@@ -11,7 +11,7 @@ using UnityEngine;
 namespace Rapadura.Tests.EditMode
 {
     /// <summary>
-    /// Training by use and the Roda de Talentos (Docs/Balance/README.md §26): proficiency curve and cap, the wheel catalog
+    /// Training by use and the Roda de Talentos (Docs/Balance/README.md §27): proficiency curve and cap, the wheel catalog
     /// shape, spending rules, respec price, save round-trip and sanitising, texts and the wheel layout.
     /// </summary>
     public class TalentTests
@@ -61,7 +61,7 @@ namespace Rapadura.Tests.EditMode
         [Test]
         public void Proficiency_BonusesAreSmall()
         {
-            Assert.LessOrEqual(ProficiencyRules.GetSpec(ProficiencyKind.Weapon).MaxValue, 0.02f, "attack speed: inside the §26 budget");
+            Assert.LessOrEqual(ProficiencyRules.GetSpec(ProficiencyKind.Weapon).MaxValue, 0.02f, "attack speed: inside the §27 budget");
             Assert.LessOrEqual(ProficiencyRules.GetSpec(ProficiencyKind.Magic).MaxValue, 0.05f);
             Assert.LessOrEqual(ProficiencyRules.GetSpec(ProficiencyKind.Shielding).MaxValue, 0.05f);
             foreach (ProficiencySpec spec in ProficiencyRules.Specs)
@@ -176,7 +176,7 @@ namespace Rapadura.Tests.EditMode
             Assert.AreEqual(TalentSpendResult.Spent, TalentWheelRules.Spend(record, CharacterId.Joaquim, level, "aboio_de_guerra"));
             Assert.AreEqual(9, TalentWheelRules.SpentPoints(record), "keystone costs 3");
             Assert.AreEqual(TalentSpendResult.MaxRank, TalentWheelRules.Spend(record, CharacterId.Joaquim, level, "aboio_de_guerra"));
-            Assert.AreEqual(0.01f, TalentWheelRules.Bonus(record, StatType.AttackDamage) - 2 * 0.002f, 1e-6f);
+            Assert.AreEqual(TalentWheelCatalog.GetNode("aboio_de_guerra").MaxValue + 2 * TalentWheelCatalog.GetNode("mao_certeira").ValuePerRank, TalentWheelRules.Bonus(record, StatType.AttackDamage), 1e-6f);
         }
 
         [Test]
@@ -320,7 +320,7 @@ namespace Rapadura.Tests.EditMode
 
             var entry = new ProficiencyEntry { kind = "Shielding", level = 4, tries = 0 };
             StringAssert.StartsWith("Defesa 4 (0%)", TalentWheelPresenter.TrainingText(entry, null));
-            StringAssert.Contains("+1% defesa", TalentWheelPresenter.TrainingText(entry, null));
+            StringAssert.Contains("+0,4% defesa", TalentWheelPresenter.TrainingText(entry, null));
         }
     }
 }

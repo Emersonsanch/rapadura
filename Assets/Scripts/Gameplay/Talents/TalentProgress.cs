@@ -46,7 +46,7 @@ namespace Rapadura.Gameplay.Talents
     }
 
     /// <summary>
-    /// Per-save training and "Roda de Talentos" of each cousin (Docs/Balance/README.md §26). Plain C# like the other progress
+    /// Per-save training and "Roda de Talentos" of each cousin (Docs/Balance/README.md §27). Plain C# like the other progress
     /// managers (built by GameManager, saved under <see cref="Key"/>, NewSessionReset; an older save has no entry and starts
     /// untrained). Counts tries from the combat events (swing in a fight, mana spent, hit taken) for the cousin playing and
     /// puts the trained levels and the wheel on the hero's <see cref="BuffController"/> under <see cref="ProficiencySourceKey"/>

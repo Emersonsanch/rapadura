@@ -59,7 +59,7 @@ namespace Rapadura.Gameplay.Talents
     }
 
     /// <summary>
-    /// The wheel's nodes (Docs/Balance/README.md §26). Every cousin shares the 12 small nodes (3 per quadrant) and has one
+    /// The wheel's nodes (Docs/Balance/README.md §27). Every cousin shares the 12 small nodes (3 per quadrant) and has one
     /// keystone per quadrant. A quadrant holds <see cref="QuadrantCapacity"/> points, the whole wheel 48, and a cousin earns
     /// 39 by level 50: the build is a choice. The offence quadrant alone is capped (12 points), so the extra damage it can
     /// give never grows with level past it — that is what keeps the wheel inside the power budget.
@@ -88,34 +88,34 @@ namespace Rapadura.Gameplay.Talents
         public static readonly IReadOnlyList<TalentNodeSpec> Nodes = new[]
         {
             // Ataque
-            Small("mao_certeira", TalentQuadrant.Offence, 1, StatType.AttackDamage, Pct, 0.002f, null),
-            Small("olho_de_gaviao", TalentQuadrant.Offence, 2, StatType.CriticalChance, Add, 0.002f, "mao_certeira"),
-            Small("golpe_pesado", TalentQuadrant.Offence, 2, StatType.CriticalDamage, Add, 0.01f, "mao_certeira"),
-            Keystone("aboio_de_guerra", TalentQuadrant.Offence, CharacterId.Joaquim, StatType.AttackDamage, Pct, 0.01f),
-            Keystone("prece_ardente", TalentQuadrant.Offence, CharacterId.Maria, StatType.CriticalDamage, Add, 0.05f),
-            Keystone("flecha_do_carcara", TalentQuadrant.Offence, CharacterId.Maithe, StatType.CriticalChance, Add, 0.01f),
-            Keystone("engrenagem_afiada", TalentQuadrant.Offence, CharacterId.Icaro, StatType.CooldownReduction, Add, 0.01f),
-            Keystone("chama_do_vagalume", TalentQuadrant.Offence, CharacterId.Lavine, StatType.AttackDamage, Pct, 0.01f),
+            Small("mao_certeira", TalentQuadrant.Offence, 1, StatType.AttackDamage, Pct, 0.001f, null),
+            Small("olho_de_gaviao", TalentQuadrant.Offence, 2, StatType.CriticalChance, Add, 0.001f, "mao_certeira"),
+            Small("golpe_pesado", TalentQuadrant.Offence, 2, StatType.CriticalDamage, Add, 0.005f, "mao_certeira"),
+            Keystone("aboio_de_guerra", TalentQuadrant.Offence, CharacterId.Joaquim, StatType.AttackDamage, Pct, 0.003f),
+            Keystone("prece_ardente", TalentQuadrant.Offence, CharacterId.Maria, StatType.CriticalDamage, Add, 0.015f),
+            Keystone("flecha_do_carcara", TalentQuadrant.Offence, CharacterId.Maithe, StatType.CriticalChance, Add, 0.003f),
+            Keystone("engrenagem_afiada", TalentQuadrant.Offence, CharacterId.Icaro, StatType.CooldownReduction, Add, 0.003f),
+            Keystone("chama_do_vagalume", TalentQuadrant.Offence, CharacterId.Lavine, StatType.AttackDamage, Pct, 0.003f),
 
             // Defesa
-            Small("couro_grosso", TalentQuadrant.Defence, 1, StatType.MaxHealth, Pct, 0.01f, null),
-            Small("pele_de_mandacaru", TalentQuadrant.Defence, 2, StatType.Defense, Pct, 0.01f, "couro_grosso"),
-            Small("espinho_de_xiquexique", TalentQuadrant.Defence, 2, StatType.Thorns, Add, 0.003f, "couro_grosso"),
-            Keystone("gibao_de_couro", TalentQuadrant.Defence, CharacterId.Joaquim, StatType.MaxHealth, Pct, 0.04f),
-            Keystone("manto_de_reza", TalentQuadrant.Defence, CharacterId.Maria, StatType.Defense, Pct, 0.03f),
-            Keystone("pena_ligeira", TalentQuadrant.Defence, CharacterId.Maithe, StatType.Defense, Pct, 0.03f),
-            Keystone("blindagem_de_lata", TalentQuadrant.Defence, CharacterId.Icaro, StatType.MaxHealth, Pct, 0.04f),
+            Small("couro_grosso", TalentQuadrant.Defence, 1, StatType.MaxHealth, Pct, 0.006f, null),
+            Small("pele_de_mandacaru", TalentQuadrant.Defence, 2, StatType.Defense, Pct, 0.006f, "couro_grosso"),
+            Small("espinho_de_xiquexique", TalentQuadrant.Defence, 2, StatType.Thorns, Add, 0.002f, "couro_grosso"),
+            Keystone("gibao_de_couro", TalentQuadrant.Defence, CharacterId.Joaquim, StatType.MaxHealth, Pct, 0.025f),
+            Keystone("manto_de_reza", TalentQuadrant.Defence, CharacterId.Maria, StatType.Defense, Pct, 0.02f),
+            Keystone("pena_ligeira", TalentQuadrant.Defence, CharacterId.Maithe, StatType.Defense, Pct, 0.02f),
+            Keystone("blindagem_de_lata", TalentQuadrant.Defence, CharacterId.Icaro, StatType.MaxHealth, Pct, 0.025f),
             Keystone("luz_que_protege", TalentQuadrant.Defence, CharacterId.Lavine, StatType.MaxMana, Pct, 0.05f),
 
             // Apoio
             Small("cura_de_quintal", TalentQuadrant.Support, 1, StatType.HealthRegen, Pct, 0.05f, null),
-            Small("folego_de_reza", TalentQuadrant.Support, 2, StatType.ManaRegen, Pct, 0.03f, "cura_de_quintal"),
-            Small("mente_mansa", TalentQuadrant.Support, 2, StatType.ResourceCostReduction, Add, 0.005f, "cura_de_quintal"),
+            Small("folego_de_reza", TalentQuadrant.Support, 2, StatType.ManaRegen, Pct, 0.02f, "cura_de_quintal"),
+            Small("mente_mansa", TalentQuadrant.Support, 2, StatType.ResourceCostReduction, Add, 0.002f, "cura_de_quintal"),
             Keystone("berrante_amigo", TalentQuadrant.Support, CharacterId.Joaquim, StatType.HealthRegen, Pct, 0.10f),
             Keystone("benzedura_forte", TalentQuadrant.Support, CharacterId.Maria, StatType.HealthRegen, Pct, 0.15f),
-            Keystone("ninho_seguro", TalentQuadrant.Support, CharacterId.Maithe, StatType.ManaRegen, Pct, 0.08f),
-            Keystone("pilha_reserva", TalentQuadrant.Support, CharacterId.Icaro, StatType.ResourceCostReduction, Add, 0.015f),
-            Keystone("vaga_lume_sereno", TalentQuadrant.Support, CharacterId.Lavine, StatType.ManaRegen, Pct, 0.10f),
+            Keystone("ninho_seguro", TalentQuadrant.Support, CharacterId.Maithe, StatType.ManaRegen, Pct, 0.05f),
+            Keystone("pilha_reserva", TalentQuadrant.Support, CharacterId.Icaro, StatType.ResourceCostReduction, Add, 0.005f),
+            Keystone("vaga_lume_sereno", TalentQuadrant.Support, CharacterId.Lavine, StatType.ManaRegen, Pct, 0.05f),
 
             // Utilidade
             Small("pe_ligeiro", TalentQuadrant.Utility, 1, StatType.MoveSpeed, Pct, 0.01f, null),

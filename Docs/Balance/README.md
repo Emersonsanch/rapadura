@@ -2520,3 +2520,83 @@ recarga empilharia sem limite e o modelo de TTK não as vê (como as poções).
 | NG+1 | Cavernas | 19,8 → 15,9 → **15,9** s | 19,8 → 18,8 → **14,0** s | 4,0 → 2,9 → 4,0 s |
 
 Resultado: **dentro do orçamento**; `pytest tools/balance` verde (51).
+
+## 27. Treino pelo uso (estilo Tibia) e Roda de Talentos (Wheel of Destiny) (2026-10-30)
+
+Regras puras em `Gameplay/Talents/` (`ProficiencyRules`, `TalentWheelCatalog`, `TalentWheelRules`), sem UnityEngine nas
+regras: online (FASE 12) o servidor conta os "tries" e guarda a roda com os mesmos números. Estado por primo em
+`TalentProgress` (GameManager, salvo sob `"Talents"`, NewSessionReset; save antigo = primo sem treino e roda vazia),
+bônus no `BuffController` sob `talent_proficiency` / `talent_wheel` (reaplicados ao trocar de primo, ao carregar e duas
+frames depois de cada cena, por `TalentPassiveApplier`).
+
+### 27.1 Treino pelo uso (`ProficiencyRules`, testado em `TalentTests`)
+
+Cada primo tem três treinos próprios, de 0 a 20. Cada uso é um "try"; o nível n→n+1 pede `base × 1,25ⁿ` tries (cada nível
+demora 25% mais que o anterior: retorno decrescente no tempo), bônus linear e pequeno:
+
+| Treino | Sobe com | Base | Até o 12 / até o 20 | Bônus por nível → no 20 |
+|---|---|---|---|---|
+| Golpe | ataque básico **em luta** (bateu ou apanhou nos últimos 4 s) | 50 | ~2.700 / ~17.100 golpes | +0,02% vel. de ataque → +0,4% |
+| Magia | mana gasta em habilidade (1 try por ponto de mana) | 400 | ~21.700 / ~137.000 de mana | −0,03% custo → −0,6% |
+| Defesa | golpe recebido de bicho | 40 | ~2.200 / ~13.700 golpes | +0,1% defesa → +2% |
+
+Treino nunca dá dano puro (o NG+1 está a ~0,4 s do piso de 12 s, §25). Golpe no ar não treina. A Ficha do personagem
+mostra "Treino (sobe com o uso)": nível, % até o próximo e o bônus atual de cada um.
+
+### 27.2 Roda de Talentos (`TalentWheelCatalog`, `TalentWheelRules`)
+
+Abre no **nível 12** com 1 ponto, +1 por nível (39 no nível 50). Quatro quartos — **Ataque, Defesa, Apoio, Utilidade** —
+cada um com 1 nó do anel de dentro (3 graus), 2 do anel do meio (3 graus, pedem 2 no de dentro) e 1 **pedra-chave** do
+primo na borda (custa 3, pede 6 pontos já no quarto). Um quarto cabe 12 pontos, a roda 48: no 50 ainda falta ponto, então
+é escolha. Os 12 nós pequenos são iguais para todos; as pedras-chave são de cada primo:
+
+| Quarto | Nós pequenos (por grau ×3) | Joaquim | Maria | Maithe | Ícaro | Lavine |
+|---|---|---|---|---|---|---|
+| Ataque | Mão Certeira +0,1% dano; Olho de Gavião +0,1% crítico; Golpe Pesado +0,5% dano crítico | Aboio de Guerra +0,3% dano | Prece Ardente +1,5% dano crítico | Flecha do Carcará +0,3% crítico | Engrenagem Afiada −0,3% recarga | Chama do Vaga-lume +0,3% dano |
+| Defesa | Couro Grosso +0,6% vida; Pele de Mandacaru +0,6% defesa; Espinho de Xique-xique 0,2% espinhos | Gibão de Couro +2,5% vida | Manto de Reza +2% defesa | Pena Ligeira +2% defesa | Blindagem de Lata +2,5% vida | Luz que Protege +5% mana |
+| Apoio | Cura de Quintal +5% regen. vida; Fôlego de Reza +2% regen. mana; Mente Mansa −0,2% custo | Berrante Amigo +10% regen. vida | Benzedura Forte +15% regen. vida | Ninho Seguro +5% regen. mana | Pilha Reserva −0,5% custo | Vaga-lume Sereno +5% regen. mana |
+| Utilidade | Pé Ligeiro +1% velocidade; Vigor Sertanejo +2% fôlego; Fôlego Largo +3% recup. fôlego | Trote de Vaqueiro +6% fôlego | Romeira Incansável +8% recup. | Voo Rasante +3% velocidade | Bota de Mola +3% velocidade | Rastro de Luz +8% recup. |
+
+**Recomeçar** (respec): devolve todos os pontos por `max(50, 15 × pontos gastos)` de ouro da mochila (`item_gold`) —
+uma roda de 39 pontos custa 585, uma ida às Cavernas rende mais. A janela "Roda de Talentos" abre por um botão na Ficha
+(abaixo dos atributos): roda desenhada em quatro quartos, nós de 56 px nos três anéis, tocar seleciona (nome, bônus,
+grau, o que falta), "Aprender" gasta, "Recomeçar (N de ouro)" limpa; B/Esc volta para a Ficha.
+
+### 27.3 Orçamento (`tools/balance/power_stack.py`, `test_talent_stack.py`)
+
+Teto de quem treinou muito (Golpe/Magia/Defesa 3, 6, 9 e 12 ao chegar em cada chefe do NG+0; 20 no NG+1) e gastou
+os pontos da roda (do nível do chefe) na distribuição **mais ofensiva** possível (todo arranjo legal de cada quarto,
+combinados por pontos; a melhor pedra-chave de qualquer primo), por cima de **tudo** do §25 (pilha + refino + asas +
+frutas + opções perfeitas, excelente e antigo). Regras: chefe ≥ 93% de "tudo" e ≥ 12 s, comuns ≥ 75%; parado, o chefe
+mata em 12–40 s com a roda mais ofensiva **e** com a mais defensiva.
+
+Resultado (3000 jogadas):
+
+| Ciclo | Bioma (nível do chefe) | Treino | Pontos | Chefe: tudo → +talentos (exc. / antigo) | 2 comuns: tudo → +talentos | Parado, chefe mata em (roda de ataque / de defesa) |
+|---|---|---|---|---|---|---|
+| NG+0 | Floresta (3) | 3 | 0 | 13,2 → **13,2** / 13,5 → **13,5** s | 3,4 → **3,4** s | 22,3 / 22,3 s |
+| NG+0 | Deserto (7) | 6 | 0 | 13,9 → **13,9** / 14,0 → **14,0** s | 4,3 → **4,3** s | 25,3 / 25,3 s |
+| NG+0 | Montanha (10) | 9 | 0 | 13,2 → **12,9** / 13,5 → **12,9** s | 4,1 → **4,0** s | 29,7 / 29,7 s |
+| NG+0 | Cavernas (15) | 12 | 4 | 14,0 → **13,5** / 14,2 → **13,5** s | 2,9 → **2,8** s | 37,3 / 38,2 s |
+| NG+1 | Floresta (17) | 20 | 6 | 12,4 → **12,2** / 12,3 → **12,1** s | 1,7 → **1,8** s | 35,0 / 37,4 s |
+| NG+1 | Deserto (18) | 20 | 7 | 12,4 → **12,2** / 12,4 → **12,1** s | 2,3 → **2,2** s | 35,2 / 37,7 s |
+| NG+1 | Montanha (20) | 20 | 9 | 12,4 → **12,3** / 12,7 → **12,2** s | 2,5 → **2,2** s | 36,0 / 38,5 s |
+| NG+1 | Cavernas (22) | 20 | 11 | 14,0 → **13,3** / 14,0 → **13,5** s | 2,3 → **2,2** s | 35,2 / 37,6 s |
+
+Roda mais ofensiva no nível 50 (39 pontos): +0,3% dano, +0,3% crítico, +2% dano crítico, −0,3% recarga, −1,1% custo — o
+quarto de Ataque tem teto, então passar do nível 22 não aumenta o dano. **Dentro do orçamento**; pytest de `tools/balance`
+verde (60).
+
+Ajuste feito no caminho: a primeira versão (Golpe +1,5% vel. de ataque, Magia −5% custo, Defesa +5%; nós de ataque 0,2%,
+pedras-chave +1% dano / +5% dano crítico; Defesa 1%/grau e pedras de +4% vida) levava o chefe do NG+1 a **11,6 s** e o
+parado a 41 s. Como o §25 avisava, o NG+1 está colado no piso: cada +0,3% de dano já tira um passo da rotação (~0,1 s).
+Ficou: treino quase todo defensivo/utilitário, ataque em décimos de %, pedras-chave de defesa 2–2,5%. O que sobra de
+"gostoso" na roda está em Apoio e Utilidade (regeneração, fôlego, velocidade), que não encurtam a luta.
+
+### 27.4 Testes e online
+
+`TalentTests` (curva e teto do treino, golpe só treina em luta, Magia por mana, catálogo 16 nós/primo com 1 pedra-chave
+por quarto, roda não enche no 50, anéis e pedra-chave, pontos, respec, save ida e volta e saneamento — nó de outro primo,
+anel sem o de dentro, grau acima do teto —, textos e o layout da roda sem nós sobrepostos). `LocalizationCoverageTests`
+cobre `TalentTexts`; `ThemeAdoptionTests.CodeThemedSheets` inclui `Resources/UI/Talents.uss`. Online: tries contados no
+servidor pelos eventos de combate, gasto/respec validados lá (`TalentWheelRules.CanSpend` / `CanRespec`); o cliente só mostra.

@@ -617,7 +617,7 @@ namespace Rapadura.UI.CharacterSheet
         }
 
         // ------------------------------------------------------------------
-        // Treino + Roda de Talentos (Docs/Balance/README.md §26)
+        // Treino + Roda de Talentos (Docs/Balance/README.md §27)
         // ------------------------------------------------------------------
 
         /// <summary>B/Esc: closes the wheel first (back to the sheet), then the sheet.</summary>

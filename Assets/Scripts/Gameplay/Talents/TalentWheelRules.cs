@@ -42,7 +42,7 @@ namespace Rapadura.Gameplay.Talents
     }
 
     /// <summary>
-    /// Rules of the "Roda de Talentos" (Docs/Balance/README.md §26): points from the hero level, spending with the ring
+    /// Rules of the "Roda de Talentos" (Docs/Balance/README.md §27): points from the hero level, spending with the ring
     /// requirements, the gold price of a reset and the modifiers it puts on the hero. Pure: the server owns the record online.
     /// </summary>
     public static class TalentWheelRules

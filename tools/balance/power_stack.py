@@ -1182,6 +1182,208 @@ def class_main(ctx: Context, runs: int, base_gear: dict, results: dict) -> None:
     print("\n".join(f"- {p}" for p in problems) if problems else "- dentro do orçamento")
 
 
+# ----------------------------------------------------------------------------- training + talent wheel (README §27)
+
+PROFICIENCY_RULES = os.path.join(SCRIPTS, "Gameplay", "Talents", "ProficiencyRules.cs")
+TALENT_CATALOG = os.path.join(SCRIPTS, "Gameplay", "Talents", "TalentWheelCatalog.cs")
+# Proficiency levels the budget assumes when the hero reaches each region's boss: a player who swung, cast and got hit
+# the whole campaign (Golpe 12 needs ~2,700 swings in a fight; the cap, 20, ~17,000), i.e. an upper bound. NG+1: the cap.
+PROFICIENCY_BY_REGION = {"Forest": 3, "Desert": 6, "Mountain": 9, "Caves": 12}
+TALENT_BOSS_BUDGET = 0.93  # everything (§25 pile) + training + the most offensive wheel: boss TTK >= 93% of without them (rotation steps: +0.3% damage can already be -2%)
+TALENT_COMMON_BUDGET = 0.75  # commons die in 2-3 hits: one hit less is already -26% (quantised, as the options)
+TALENT_BOSS_FLOOR = 12.0
+
+
+@dataclass
+class TalentNode:
+    id: str
+    quadrant: str
+    ring: int
+    hero: str | None
+    mod: Modifier  # per rank
+    max_rank: int
+    cost: int
+    required: str | None
+    required_rank: int
+    required_points: int
+
+
+@dataclass
+class Talents:
+    """ProficiencyRules.cs (stat + value per level, cap) and TalentWheelCatalog.cs (nodes, unlock level)."""
+    proficiencies: dict  # kind -> Modifier per level
+    max_level: int
+    nodes: list
+    unlock_level: int
+    points_per_level: int
+
+    def points(self, level: int) -> int:
+        return (level - self.unlock_level + 1) * self.points_per_level if level >= self.unlock_level else 0
+
+    def training_gear(self, level: int) -> bm.Gear:
+        mods = [Modifier(m.stat, m.percent, m.value * min(level, self.max_level)) for m in self.proficiencies.values()]
+        return OptionCatalog.as_gear(mods)
+
+    def quadrant_options(self, hero: str, quadrant: str) -> list:
+        """Every legal allocation of one quadrant for `hero`: [(cost, [Modifier])]."""
+        nodes = [n for n in self.nodes if n.quadrant == quadrant and n.hero in (None, hero)]
+        out = []
+
+        def legal(ranks: dict) -> bool:
+            spent = {n.id: ranks[n.id] * n.cost for n in nodes}
+            for n in nodes:
+                if ranks[n.id] == 0:
+                    continue
+                if n.required and ranks[n.required] < n.required_rank:
+                    return False
+                if sum(v for k, v in spent.items() if k != n.id) < n.required_points:
+                    return False
+            return True
+
+        def walk(i: int, ranks: dict):
+            if i == len(nodes):
+                if legal(ranks):
+                    mods = [Modifier(n.mod.stat, n.mod.percent, n.mod.value * ranks[n.id]) for n in nodes if ranks[n.id]]
+                    out.append((sum(ranks[n.id] * n.cost for n in nodes), mods))
+                return
+            for r in range(nodes[i].max_rank + 1):
+                ranks[nodes[i].id] = r
+                walk(i + 1, ranks)
+
+        walk(0, {})
+        return out
+
+    def best_wheel(self, points: int, score) -> bm.Gear:
+        """The allocation of `points` (any cousin, any quadrants) that maximises `score(Gear)`: every legal allocation of
+        each quadrant, combined across the four quadrants by points spent (knapsack)."""
+        best_gear, best_score = bm.Gear(), score(bm.Gear())
+        heroes = sorted({n.hero for n in self.nodes if n.hero})
+        quadrants = sorted({n.quadrant for n in self.nodes})
+        for hero in heroes:
+            table = {0: bm.Gear()}  # points spent -> best gear
+            for q in quadrants:
+                nxt = {}
+                for spent, gear in table.items():
+                    for cost, mods in self.quadrant_options(hero, q):
+                        total = spent + cost
+                        if total > points:
+                            continue
+                        cand = gear.plus(OptionCatalog.as_gear(mods))
+                        if total not in nxt or score(cand) > score(nxt[total]):
+                            nxt[total] = cand
+                table = nxt
+            for gear in table.values():
+                if score(gear) > best_score:
+                    best_gear, best_score = gear, score(gear)
+        return best_gear
+
+
+def talent_offense(g: bm.Gear) -> float:
+    return OptionCatalog.offense(g) + g.rcr * 4
+
+
+def talent_toughness(g: bm.Gear) -> float:
+    return g.defense_pct * 10 + g.max_hp_pct * 10 + g.defense + g.regen
+
+
+def load_talents() -> Talents:
+    rules = _read(PROFICIENCY_RULES)
+    consts = {n: float(v) for n, v in re.findall(r"const\s+(?:float|int)\s+(\w+)\s*=\s*([-\d.]+)f?\s*;", rules)}
+    prof = {}
+    for kind, _, stat, app, value in re.findall(
+            r"new ProficiencySpec\(ProficiencyKind\.(\w+),\s*(\w+),\s*StatType\.(\w+),\s*ModifierApplication\.(\w+),\s*(\w+)\)", rules):
+        prof[kind] = Modifier(stat, app == "PercentAdditive", consts[value] if value in consts else float(value.rstrip("f")))
+    cat = _read(TALENT_CATALOG)
+    small_ranks, ring2_rank = int(_const(cat, "SmallNodeRanks")), int(_const(cat, "Ring2RequiredRank"))
+    key_cost, key_points, key_ring = int(_const(cat, "KeystoneCost")), int(_const(cat, "KeystoneRequiredPoints")), int(_const(cat, "KeystoneRing"))
+    apps = {"Pct": True, "Add": False}
+    nodes = []
+    for nid, quadrant, ring, stat, app, value, req in re.findall(
+            r'Small\("(\w+)",\s*TalentQuadrant\.(\w+),\s*(\d+),\s*StatType\.(\w+),\s*(\w+),\s*([-\d.]+)f,\s*(null|"\w+")\)', cat):
+        required = None if req == "null" else req.strip('"')
+        nodes.append(TalentNode(nid, quadrant, int(ring), None, Modifier(stat, apps[app], float(value)), small_ranks, 1,
+                                required, ring2_rank if required else 0, 0))
+    for nid, quadrant, hero, stat, app, value in re.findall(
+            r'Keystone\("(\w+)",\s*TalentQuadrant\.(\w+),\s*CharacterId\.(\w+),\s*StatType\.(\w+),\s*(\w+),\s*([-\d.]+)f\)', cat):
+        nodes.append(TalentNode(nid, quadrant, key_ring, hero, Modifier(stat, apps[app], float(value)), 1, key_cost, None, 0, key_points))
+    return Talents(prof, int(consts["MaxLevel"]), nodes, int(_const(cat, "UnlockLevel")), int(_const(cat, "PointsPerLevel")))
+
+
+def talent_extra(talents: Talents, cycle: int, biome: str, level: int, score=talent_offense) -> bm.Gear:
+    prof = talents.max_level if cycle > 0 else PROFICIENCY_BY_REGION[biome]
+    return talents.training_gear(prof).plus(talents.best_wheel(talents.points(level), score))
+
+
+def talented_gear(pile: dict, talents: Talents, cycle: int, levels: dict, score=talent_offense) -> dict:
+    """The §25 pile (`pile`: optioned_gear) + each region's training and best wheel at its boss level."""
+    out = dict(pile)
+    for biome in rd.BIOME_ORDER:
+        extra = talent_extra(talents, cycle, biome, levels[biome], score)
+        for phase in ("entry", "boss"):
+            out[(biome, phase)] = pile[(biome, phase)].plus(extra)
+    return out
+
+
+def talent_violations(pile: dict, talented: dict, tank: dict) -> list:
+    """README §27: training + the most offensive wheel on top of everything cost at most TALENT_*_BUDGET, no boss under
+    TALENT_BOSS_FLOOR; with the most offensive and the most defensive wheel the parked hero still dies in 12-40 s."""
+    out = []
+    low, high = PARKED_TTD_BAND
+    for biome in pile:
+        p, t, k = biome_summary(pile, biome), biome_summary(talented, biome), biome_summary(tank, biome)
+        if t["stack_boss"] < TALENT_BOSS_BUDGET * p["stack_boss"]:
+            out.append(f"{biome}: talents boss {t['stack_boss']:.1f} s < {TALENT_BOSS_BUDGET:.0%} of everything {p['stack_boss']:.1f} s")
+        if t["stack_common"] < TALENT_COMMON_BUDGET * p["stack_common"]:
+            out.append(f"{biome}: talents commons {t['stack_common']:.1f} s < {TALENT_COMMON_BUDGET:.0%} of everything {p['stack_common']:.1f} s")
+        if t["stack_boss"] < TALENT_BOSS_FLOOR:
+            out.append(f"{biome}: talents boss {t['stack_boss']:.1f} s < {TALENT_BOSS_FLOOR:g} s")
+        for name, r in (("offensive", t), ("defensive", k)):
+            if not low <= r["parked_ttd_stack"] <= high:
+                out.append(f"{biome}: {name} wheel parked time-to-die {r['parked_ttd_stack']:.1f} s outside {low}-{high}")
+    return out
+
+
+def talent_evaluate(ctx: Context, runs: int, base_gear: dict, plain: dict, kind: str = "excellent") -> tuple:
+    """(pile, talented, tank) per cycle: the §25 pile with perfect `kind` options; + training + the most offensive wheel;
+    + training + the most defensive wheel."""
+    refine, wings, options, talents = load_refine(), load_wings(), load_options(), load_talents()
+    pile_gear = {c: optioned_gear(base_gear, refine, wings, options, c, kind) for c in plain}
+    pile = {c: evaluate(ctx, c, runs, pile_gear[c]) for c in plain}
+    talented = {c: evaluate(ctx, c, runs, talented_gear(pile_gear[c], talents, c, levels_of(plain[c]))) for c in plain}
+    tank = {c: evaluate(ctx, c, runs, talented_gear(pile_gear[c], talents, c, levels_of(plain[c]), talent_toughness)) for c in plain}
+    return pile, talented, tank
+
+
+def talent_report(plain: dict, results: dict, talents: Talents) -> str:
+    lines = ["| Ciclo | Bioma (nível do chefe) | Treino | Pontos | Chefe: tudo → +talentos (exc. / antigo) | "
+             "2 comuns: tudo → +talentos | Parado, chefe mata em (roda de ataque / de defesa) |", "|---|---|---|---|---|---|---|"]
+    exc, anc = results["excellent"], results["ancient"]
+    for cycle in exc[1]:
+        for biome in exc[1][cycle]:
+            level = plain[cycle][biome]["levels"][1]
+            pe, te, ke = (biome_summary(r[cycle], biome) for r in exc)
+            pa, ta, _ = (biome_summary(r[cycle], biome) for r in anc)
+            prof = talents.max_level if cycle > 0 else PROFICIENCY_BY_REGION[biome]
+            lines.append(f"| NG+{cycle} | {run_r8.NAMES[biome]} ({level}) | {prof} | {talents.points(level)} | "
+                         f"{f1(pe['stack_boss'])} → **{f1(te['stack_boss'])}** / {f1(pa['stack_boss'])} → **{f1(ta['stack_boss'])}** s | "
+                         f"{f1(pe['stack_common'])} → **{f1(te['stack_common'])}** s | {f1(te['parked_ttd_stack'])} / {f1(ke['parked_ttd_stack'])} s |")
+    return "\n".join(lines)
+
+
+def talent_main(ctx: Context, runs: int, base_gear: dict, results: dict) -> None:
+    talents = load_talents()
+    evaluated = {kind: talent_evaluate(ctx, runs, base_gear, results, kind) for kind in ("excellent", "ancient")}
+    print("\n## Treino pelo uso + Roda de Talentos por cima de tudo (README §27)\n")
+    print(talent_report(results, evaluated, talents))
+    full = talents.best_wheel(talents.points(50), talent_offense)
+    print(f"\nRoda mais ofensiva no nível 50 ({talents.points(50)} pontos): dano +{full.ad_pct:.1%}, crítico +{full.crit:.1%}, "
+          f"dano crítico +{full.crit_dmg:.0%}, recarga -{full.cdr:.1%}, custo -{full.rcr:.1%}")
+    print("\n## Orçamento do treino e da roda\n")
+    problems = [f"NG+{c} {kind}: {p}" for kind, (pile, tal, tank) in evaluated.items() for c in tal
+                for p in talent_violations(pile[c], tal[c], tank[c])]
+    print("\n".join(f"- {p}" for p in problems) if problems else "- dentro do orçamento")
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser()
@@ -1224,6 +1426,7 @@ def main():
     wings_main(ctx, args.runs, base_gear, results, refined, curve)
     class_main(ctx, args.runs, base_gear, results)
     options_main(ctx, args.runs, base_gear, results, curve)
+    talent_main(ctx, args.runs, base_gear, results)
 
 
 if __name__ == "__main__":

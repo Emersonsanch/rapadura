@@ -47,7 +47,7 @@ namespace Rapadura.Gameplay.Talents
     }
 
     /// <summary>
-    /// Proficiencies that rise with use (Docs/Balance/README.md §26): every swing in a fight, every mana point spent on a
+    /// Proficiencies that rise with use (Docs/Balance/README.md §27): every swing in a fight, every mana point spent on a
     /// skill and every hit taken is one "try"; the tries a level needs grow by <see cref="TriesGrowth"/> per level (each
     /// level takes 25% longer than the last: diminishing returns in time) up to <see cref="MaxLevel"/>. The bonus is small
     /// and linear per level. Pure: online (FASE 12) the server counts the tries with the same numbers.
@@ -62,9 +62,9 @@ namespace Rapadura.Gameplay.Talents
         public const int WeaponBaseTries = 50;
         public const int MagicBaseTries = 400;
         public const int ShieldingBaseTries = 40;
-        public const float WeaponAttackSpeedPerLevel = 0.00075f;
-        public const float MagicCostReductionPerLevel = 0.0025f;
-        public const float ShieldingDefensePerLevel = 0.0025f;
+        public const float WeaponAttackSpeedPerLevel = 0.0002f;
+        public const float MagicCostReductionPerLevel = 0.0003f;
+        public const float ShieldingDefensePerLevel = 0.001f;
 
         public static readonly IReadOnlyList<ProficiencySpec> Specs = new[]
         {
