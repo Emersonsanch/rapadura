@@ -166,6 +166,16 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         }
 
         // ------------------------------------------------------------------
+        // Relief
+        // ------------------------------------------------------------------
+
+        /// <summary>Height (m) of the region's relief at <paramref name="p"/> (pure, continuous; 0 at the towns and gates).</summary>
+        public static float HeightAt(OverworldLayout layout, Vector2 p) => OverworldRelief.For(layout).HeightAt(p);
+
+        /// <summary>Height (m) of the drawn and collided ground at <paramref name="p"/> (the facet under it): stand things here.</summary>
+        public static float SurfaceAt(OverworldLayout layout, Vector2 p) => OverworldRelief.For(layout).SurfaceAt(p);
+
+        // ------------------------------------------------------------------
         // Chunks
         // ------------------------------------------------------------------
 
@@ -221,6 +231,26 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             }
 
             result.Sort((a, b) => DistanceToChunk(layout, p, a).CompareTo(DistanceToChunk(layout, p, b)));
+        }
+
+        /// <summary>The chunks a spawn clearing (and the few metres its monsters wander past it) stands on (cleared into <paramref name="result"/>).</summary>
+        public static void ChunksUnderClearing(OverworldLayout layout, MapSpawnZone zone, List<Vector2Int> result)
+        {
+            result.Clear();
+            float reach = zone.Radius + 6f;
+            Vector2Int min = ChunkOf(layout, zone.Center - new Vector2(reach, reach));
+            Vector2Int max = ChunkOf(layout, zone.Center + new Vector2(reach, reach));
+            for (int x = min.x; x <= max.x; x++)
+            {
+                for (int y = min.y; y <= max.y; y++)
+                {
+                    var c = new Vector2Int(x, y);
+                    if (IsInnerChunk(layout, c) && DistanceToChunk(layout, zone.Center, c) <= reach)
+                    {
+                        result.Add(c);
+                    }
+                }
+            }
         }
 
         /// <summary>Whether a spawner must run for a hero at <paramref name="hero"/>; <paramref name="wasActive"/> gives the hysteresis.</summary>

@@ -65,18 +65,49 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       ou sem a exigência especial empurra o herói um passo para trás com uma mensagem (**barreira suave**, nunca
       teleporte). Só saem da região os **portões** para 07, 13 e 19 (troca de cena como antes) e o círculo de pedras ao
       lado da Vila (volta ao mapa da ilha).
-    - **Chão e cenário:** cores por terreno misturadas por ruído (manchas orgânicas, bordas entre áreas que serpenteiam,
-      lavouras em retalhos), trilhas, o Rio Dourado de norte a sul com pontes e vaus, o aryk dos campos, o córrego de
-      Mihryazd e o lago das cegonhas, montes nas colinas, muros caídos nas ruínas, fileiras de pomar e de amoreira.
+    - **Relevo** (`OverworldRelief`, altura pura `OverworldRules.HeightAt`/`SurfaceAt`, ruído gerenciado próprio
+      `OverworldNoise` — mesmo número em qualquer plataforma e no servidor): cada terreno sobe do seu jeito, misturado
+      70 m entre zonas pelo mesmo ruído das bordas de cor — colinas arredondadas com fundos planos nas Colinas de
+      Mihryazd (até ~16 m), platôs em degraus nos Altos do Mensageiro (até ~23 m, 3 degraus), planalto cortado por
+      gargantas na Ravina (~15 m), ondulações longas na estepe e nas campinas (5–7 m), "tells" nas Ruínas, Campos e
+      Pomar quase planos (≤ 3,5 m). Regras de jogo: **cidades, zonas seguras, portões e chegadas em y = 0 exato** (o kit
+      da cidade assume y = 0; rampa de 40 m em volta das cidades e 90 m dos portões); **trilhas niveladas na largura**
+      (o eixo segue só a parte suave do relevo, cortes e aterros de 5,5 m dos lados; ≤ 30° ao longo); **clareiras de
+      bichos e marcos em platôs**; rios em vales com fundo y = 0 (7 m além da margem, encosta de 50 m); rios largos e
+      lagoas (≥ 8 m) cavam leito a −1,25 m com a água a −0,3 m e vau raso (−0,5 m); pontes sobre leito cavado são
+      maiores (largura + 13 m) e pousam no chão plano; fora dos muros o fundo vira morros. Malha low-poly facetada numa
+      grade de 3 m alinhada ao mundo (diagonais alternadas): bordas de pedaço com os mesmos vértices, **sem costura**.
+    - **Movimento na altura:** cada pedaço interno tem um `MeshCollider` com as mesmas facetas do chão (é nele que o
+      herói, os bichos, o clique, o pé/IK e a câmera batem); a laje antiga virou rede de segurança a −6 m; muros da
+      região de −20 a +60 m; `CityModeController.PlaceAt` usa a altura do relevo (`GroundHeightAt`, ligado pelo
+      `OverworldView`) — chegada, renascer e empurrão da barreira; `MapMonsterSpawner` põe bichos e waypoints na altura
+      do chão; um spawner só acorda com os pedaços sob a clareira prontos e esses pedaços ficam presos enquanto ele roda
+      (`OverworldRules.ChunksUnderClearing`); colisores de árvore/pedra/cerca partem 0,4 m abaixo do chão.
+    - **Chão:** cada faceta pinta a cor do terreno de um dos 3 cantos (sorteado) — bordas entre áreas pontilhadas, nunca
+      retas —; tom por ruído (base/alt/acento) com pequenas manchas de um tom vizinho, faixas de altura (topos dourados
+      ou nus, baixadas mais escuras), terra/rocha nas facetas íngremes, terra batida nas clareiras, areia/lama nas
+      margens e no leito; trilhas drapeadas sobre as facetas com bordas irregulares (sem os discos octogonais antigos).
+    - **Cenário por área** (`OverworldDecorKit`, peças mescladas no material único; peças pequenas são "carimbos"
+      gravados uma vez — `TownMeshBuilder.Record/Stamp`): Campos do Aryk com fileiras de verdade por talhão (trigo,
+      algodão com capulhos, parreiras em espaldeira, melancias, restolho com fardos, terra arada) e cercas vivas com
+      falhas nas divisas; pomar e amoreiras em grade; tamargueiras na margem e choupos (verdes e dourados) atrás em
+      todo rio; capim, flores do campo (cores por área), juncos/taboas nas margens, no brejo e na várzea, samambaias na
+      mata e nas Copas, seixos, poças; troncos caídos, tocos e pedras com musgo; peça própria: marcos de pedras empilhadas
+      nos Altos, colunas de basalto na Ravina, colunas quebradas nas Ruínas, ciprestes no Jardim, árvores mortas no Brejo.
     - **Streaming:** pedaços de 48 m; só os que estão a até 96 m do herói existem (somem a 136 m), no máximo um novo por
-      quadro; cada pedaço = 2 malhas mescladas (chão; árvores/pedras/marcos/pontes) no material único do kit, colisores
-      cápsula/caixa. Os spawners acordam a 85 m e dormem (bichos somem) a 125 m: os bichos renascem estilo MU quando o
-      herói volta. Regras puras em `OverworldRules` (servidor autoritativo pode rodar igual).
+      quadro; cada pedaço = 2 malhas mescladas (chão; árvores/pedras/detalhes/marcos/pontes) no material único do kit +
+      o colisor do relevo, colisores cápsula/caixa. Os spawners acordam a 85 m e dormem (bichos somem) a 125 m: os bichos
+      renascem estilo MU quando o herói volta. Regras puras em `OverworldRules` (servidor autoritativo pode rodar igual).
+    - **Orçamento medido** (todos os 2704 pedaços, .NET 6 desktop fora do Editor): ~5,8 mil triângulos em média por
+      pedaço, p95 ~8 mil, pior 10,1 mil (meta ≤ 12 mil; o anel de fundo é o mais pesado); geração (conteúdo + 2 malhas)
+      ~0,85–1,0 ms em média, p50 ~0,8–0,9 ms, p95 ~1,3–1,7 ms (antes do acabamento: ~0,6 ms com ~3,1 mil triângulos);
+      o cozimento do `MeshCollider` (512 triângulos) vem à parte. O teste `OverworldReliefTests` registra os números do
+      Editor no console.
     - **Fluxo:** "Mover" para qualquer mapa 01–06 (barca, novo jogo, voltar do 07) carrega o mundo da região; morrer
       acorda na praça da cidade de retorno sem recarregar; a Barca de Luz dentro da região leva a um cais já visitado a
       pé, na mesma cena. Código: `Assets/Scripts/Gameplay/World/Map/Overworld/` (`OverworldLayout`, `OverworldRules`,
-      `OverworldLayouts.Zarafshan`, `OverworldChunkBuilder`, `OverworldView`); testes `OverworldTests` (EditMode) e
-      `OverworldWalkSmokeTests` (PlayMode). Os layouts 01–06 continuam existindo sozinhos (servidor e testes) e são
+      `OverworldLayouts.Zarafshan`, `OverworldRelief`, `OverworldTerrains`, `OverworldDecorKit`, `OverworldChunkBuilder`,
+      `OverworldView`); testes `OverworldTests` e `OverworldReliefTests` (EditMode) e `OverworldWalkSmokeTests` (PlayMode). Os layouts 01–06 continuam existindo sozinhos (servidor e testes) e são
       encaixados na região como estão.
 
 ---
@@ -550,7 +581,7 @@ Apagada, Javali do Lodo. Chefe do mundo da região: **Saklas** (arconte, mapa 06
 - **Noite:** as mariposas acendem; a **Coruja-de-Fumaça** caça; visão normal nas fileiras.
 
 ### 05 · Copas de Garajonay / *Garajonay Canopy* — nv 20–26 · ★ · cidade de raça (elfos-da-mata)
-- **No jogo (2026-11-03): jogável** (`MapLayouts.Zarafshan.cs`, receita `CityTownRecipes.Garajonay`): a cidade dos elfos-da-mata no centro (cidade de retorno, respawn na praça; casas redondas de tábua com telhado de folha de louro, salão da Gara, cais) e as copas: 6 louros gigantes com plataforma em anel a ~8,8 m, casa redonda no alto, escada em espiral no tronco e lanternas de casulo (peça nova `CanopyTree` do kit, com colisor), ligados por 5 pontes de cipó; chão da mata com 3 trilhas, 2 córregos em cascata com pontes e o anel do Velho da Névoa ao norte; oeste para o 04, leste para o 06; 6 clareiras nv 20–26 (Lobo no lugar do Lagarto-Gigante [rápido], Javali de Musgo [tanque], Aranha no lugar da Névoa Pegajosa [controle]; à noite Mardagayl, Faíscas e Coruja). Falta: andar nas plataformas (hoje são cenário alto; anda-se no chão), Pombo-do-Louro [distância], névoa a cada 3 min, Coletor de Névoa, CitySpec/passeio da cidade (o respawn do 06 cai na Vila da Vó Edna até lá), Gara/Jonay/Dácil/Bencomo/Tinguaro como NPCs.
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Zarafshan.cs`, receita `CityTownRecipes.Garajonay`): a cidade dos elfos-da-mata no centro (cidade de retorno, respawn na praça; casas redondas de tábua com telhado de folha de louro, salão da Gara, cais) e as copas: 6 louros gigantes com plataforma em anel a ~8,8 m, casa redonda no alto, escada em espiral no tronco e lanternas de casulo (peça nova `CanopyTree` do kit, com colisor), ligados por 5 pontes de cipó; chão da mata com 3 trilhas, 2 córregos em cascata com pontes e o anel do Velho da Névoa ao norte; oeste para o 04, leste para o 06; 6 clareiras nv 20–26 (Lobo no lugar do Lagarto-Gigante [rápido], Javali de Musgo [tanque], Aranha no lugar da Névoa Pegajosa [controle]; à noite Mardagayl, Faíscas e Coruja). Desde 2026-11-03 é `CitySpec` de cidade de raça (`CityCatalog.RaceCities`): passeio da cidade, respawn dos mapas 05–06 na praça, Gara/Jonay/Dácil/Bencomo/Tinguaro nas portas com visual de elfo e falas, Ervaria da Dácil (Corda de Escalada, Chave do Jardim) e 2 missões da cidade (Docs/Cities.md §1.1). Falta: andar nas plataformas (hoje são cenário alto; anda-se no chão), Pombo-do-Louro [distância], névoa a cada 3 min, Coletor de Névoa, banco da praça encostado na rua Sul (receita).
 - **Fonte:** lenda de Gara e Jonay (La Gomera, Canárias); a laurissilva, mata de louro que "bebe a névoa".
 - **Bioma e visual:** mata de louro alta e nublada; paleta da cidade em §3.3; urze arbórea, samambaias, musgo pendurado,
   névoa no chão.

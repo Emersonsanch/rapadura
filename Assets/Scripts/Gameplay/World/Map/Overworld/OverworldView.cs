@@ -41,6 +41,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public GameObject Root;
             public Mesh Ground;
             public Mesh Props;
+            public Mesh Collider;
         }
 
         private readonly Dictionary<Vector2Int, Chunk> _chunks = new Dictionary<Vector2Int, Chunk>();
@@ -48,6 +49,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private readonly List<Vector2Int> _wanted = new List<Vector2Int>();
         private readonly List<Vector2Int> _drop = new List<Vector2Int>();
         private readonly List<string> _sleep = new List<string>();
+        private readonly HashSet<Vector2Int> _pinned = new HashSet<Vector2Int>();
+        private readonly List<Vector2Int> _clearingChunks = new List<Vector2Int>();
+        private readonly List<Vector3> _colliderVertices = new List<Vector3>(400);
+        private readonly List<int> _colliderTriangles = new List<int>(1600);
         private readonly Stack<Mesh> _meshPool = new Stack<Mesh>();
         private readonly List<MapExitTrigger> _exits = new List<MapExitTrigger>();
         private readonly List<CityTownView> _towns = new List<CityTownView>();
@@ -101,6 +106,23 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             return view;
         }
 
+        private void OnEnable()
+        {
+            // Whoever stands the hero somewhere in this region (arrival, respawn, barrier) stands them on the relief.
+            CityModeController.GroundHeightAt = GroundHeight;
+        }
+
+        private void OnDisable()
+        {
+            if (CityModeController.GroundHeightAt != null && ReferenceEquals(CityModeController.GroundHeightAt.Target, this))
+            {
+                CityModeController.GroundHeightAt = null;
+            }
+        }
+
+        /// <summary>Height of the drawn and collided ground at <paramref name="p"/> (<see cref="OverworldRules.SurfaceAt"/>).</summary>
+        public float GroundHeight(Vector2 p) => Layout != null ? OverworldRules.SurfaceAt(Layout, p) : 0f;
+
         private void OnDestroy()
         {
             foreach (Chunk chunk in _chunks.Values)
@@ -124,15 +146,17 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             var colliders = new GameObject("Ow_WorldColliders");
             colliders.transform.SetParent(transform, false);
             colliders.isStatic = true;
+            // The ground itself is each chunk's relief collider; the slab is only a safety net well below the river beds.
             var slab = colliders.AddComponent<BoxCollider>();
-            slab.center = new Vector3(b.center.x, -0.5f, b.center.y);
+            slab.center = new Vector3(b.center.x, -6.5f, b.center.y);
             slab.size = new Vector3(b.width + 120f, 1f, b.height + 120f);
-            const float h = 4f;
+            const float bottom = -20f;
+            const float h = 80f;
             const float t = 1f;
-            AddBox(colliders, new Vector3(b.center.x, h * 0.5f, b.yMax + t * 0.5f), new Vector3(b.width + t * 2f, h, t));
-            AddBox(colliders, new Vector3(b.center.x, h * 0.5f, b.yMin - t * 0.5f), new Vector3(b.width + t * 2f, h, t));
-            AddBox(colliders, new Vector3(b.xMax + t * 0.5f, h * 0.5f, b.center.y), new Vector3(t, h, b.height));
-            AddBox(colliders, new Vector3(b.xMin - t * 0.5f, h * 0.5f, b.center.y), new Vector3(t, h, b.height));
+            AddBox(colliders, new Vector3(b.center.x, bottom + h * 0.5f, b.yMax + t * 0.5f), new Vector3(b.width + t * 2f, h, t));
+            AddBox(colliders, new Vector3(b.center.x, bottom + h * 0.5f, b.yMin - t * 0.5f), new Vector3(b.width + t * 2f, h, t));
+            AddBox(colliders, new Vector3(b.xMax + t * 0.5f, bottom + h * 0.5f, b.center.y), new Vector3(t, h, b.height));
+            AddBox(colliders, new Vector3(b.xMin - t * 0.5f, bottom + h * 0.5f, b.center.y), new Vector3(t, h, b.height));
 
             foreach (OverworldSettlement settlement in Layout.Settlements)
             {
@@ -152,7 +176,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             {
                 var go = new GameObject("MapExit_" + exit.Id);
                 go.transform.SetParent(transform, false);
-                go.transform.localPosition = new Vector3(exit.Trigger.center.x, 0f, exit.Trigger.center.y);
+                go.transform.localPosition = new Vector3(exit.Trigger.center.x, GroundHeight(exit.Trigger.center), exit.Trigger.center.y);
                 var trigger = go.AddComponent<BoxCollider>();
                 trigger.isTrigger = true;
                 trigger.center = new Vector3(0f, 1.2f, 0f);
@@ -212,6 +236,17 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             UnloadFar(at);
             UpdateSpawners(at);
+
+            // The clearings that woke up asked for their ground: build it now, then let them spawn.
+            foreach (Vector2Int c in _wanted)
+            {
+                if (!_chunks.ContainsKey(c))
+                {
+                    BuildChunk(c);
+                }
+            }
+
+            UpdateSpawners(at);
         }
 
         private void Update()
@@ -254,7 +289,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             _drop.Clear();
             foreach (KeyValuePair<Vector2Int, Chunk> pair in _chunks)
             {
-                if (OverworldRules.DistanceToChunk(Layout, at, pair.Key) > OverworldRules.UnloadRadius)
+                // A chunk under an awake clearing keeps its ground collider (its monsters stand on it).
+                if (OverworldRules.DistanceToChunk(Layout, at, pair.Key) > OverworldRules.UnloadRadius && !_pinned.Contains(pair.Key))
                 {
                     _drop.Add(pair.Key);
                 }
@@ -271,7 +307,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private void DestroyMeshes(Chunk chunk)
         {
-            foreach (Mesh mesh in new[] { chunk.Ground, chunk.Props })
+            foreach (Mesh mesh in new[] { chunk.Ground, chunk.Props, chunk.Collider })
             {
                 if (mesh != null)
                 {
@@ -282,6 +318,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             chunk.Ground = null;
             chunk.Props = null;
+            chunk.Collider = null;
         }
 
         private Mesh TakeMesh() => _meshPool.Count > 0 ? _meshPool.Pop() : new Mesh();
@@ -313,11 +350,29 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             if (content.Inner)
             {
+                chunk.Collider = BuildGroundCollider(root, content);
                 BuildColliders(root, content);
             }
 
             _chunks[coord] = chunk;
             ChunksBuiltTotal++;
+        }
+
+        /// <summary>The relief collider of the chunk (same facets as the drawn ground): what the hero, the monsters and the clicks stand on.</summary>
+        private Mesh BuildGroundCollider(GameObject root, OverworldChunkContent content)
+        {
+            OverworldChunkBuilder.BuildColliderMesh(content, _colliderVertices, _colliderTriangles);
+            Mesh mesh = TakeMesh();
+            mesh.Clear();
+            mesh.name = "ow_ground_collider";
+            mesh.SetVertices(_colliderVertices);
+            mesh.SetTriangles(_colliderTriangles, 0);
+            mesh.RecalculateBounds();
+            var go = new GameObject("Ow_GroundCollider");
+            go.transform.SetParent(root.transform, false);
+            go.isStatic = true;
+            go.AddComponent<MeshCollider>().sharedMesh = mesh;
+            return mesh;
         }
 
         private void BuildColliders(GameObject root, OverworldChunkContent content)
@@ -331,7 +386,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 {
                     var piece = new GameObject("Ow_Box");
                     piece.transform.SetParent(solids.transform, false);
-                    piece.transform.localPosition = new Vector3(solid.Center.x, solid.Height * 0.5f, solid.Center.y);
+                    piece.transform.localPosition = new Vector3(solid.Center.x, solid.Base + solid.Height * 0.5f, solid.Center.y);
                     piece.transform.localRotation = Quaternion.Euler(0f, solid.Yaw, 0f);
                     piece.AddComponent<BoxCollider>().size = new Vector3(solid.Size.x, solid.Height, solid.Size.y);
                     continue;
@@ -341,16 +396,17 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 capsule.direction = 1;
                 capsule.radius = solid.Radius;
                 capsule.height = Mathf.Max(solid.Height, solid.Radius * 2f);
-                capsule.center = new Vector3(solid.Center.x, capsule.height * 0.5f, solid.Center.y);
+                capsule.center = new Vector3(solid.Center.x, solid.Base + capsule.height * 0.5f, solid.Center.y);
             }
 
             foreach ((Vector2 center, float length, float yaw, float width) in Layout.RiverPiecesIn(content.Coord))
             {
                 var piece = new GameObject("Ow_RiverBlock");
                 piece.transform.SetParent(solids.transform, false);
-                piece.transform.localPosition = new Vector3(center.x, 1.5f, center.y);
+                // From under the carved bed (-2 m) to 3 m over the banks (the valley floor is y = 0).
+                piece.transform.localPosition = new Vector3(center.x, 0.5f, center.y);
                 piece.transform.localRotation = Quaternion.Euler(0f, yaw, 0f);
-                piece.AddComponent<BoxCollider>().size = new Vector3(Mathf.Max(1f, width - 1.2f), 3f, length);
+                piece.AddComponent<BoxCollider>().size = new Vector3(Mathf.Max(1f, width - 1.2f), 5f, length);
             }
 
             foreach ((MapRiver river, MapCrossing crossing) in content.Bridges)
@@ -358,9 +414,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 Vector2 across = MapAreaView.RiverNormal(river, crossing.At);
                 var bridge = new GameObject("Ow_BridgeDeck");
                 bridge.transform.SetParent(solids.transform, false);
-                bridge.transform.localPosition = new Vector3(crossing.At.x, 0f, crossing.At.y);
+                bridge.transform.localPosition = new Vector3(crossing.At.x, Mathf.Max(0f, content.Grid.Sample(crossing.At)), crossing.At.y);
                 bridge.transform.localRotation = Quaternion.Euler(0f, CityGeometry.YawFacing(across), 0f);
-                float span = river.Width + 4f;
+                float span = OverworldChunkBuilder.BridgeSpan(river);
                 var deck = bridge.AddComponent<BoxCollider>();
                 deck.center = new Vector3(0f, 0.09f, 0f);
                 deck.size = new Vector3(crossing.Width, 0.18f, span);
@@ -394,6 +450,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private void UpdateSpawners(Vector2 at)
         {
             _sleep.Clear();
+            _pinned.Clear();
             foreach (KeyValuePair<string, MapMonsterSpawner> pair in _spawners)
             {
                 if (pair.Value == null || !OverworldRules.SpawnerShouldRun(pair.Value.Zone, at, true))
@@ -413,6 +470,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 }
             }
 
+            foreach (KeyValuePair<string, MapMonsterSpawner> pair in _spawners)
+            {
+                OverworldRules.ChunksUnderClearing(Layout, pair.Value.Zone, _clearingChunks);
+                foreach (Vector2Int c in _clearingChunks)
+                {
+                    _pinned.Add(c);
+                }
+            }
+
             foreach (MapSpawnZone zone in Layout.World.Zones)
             {
                 if (_spawners.ContainsKey(zone.Id) || !OverworldRules.SpawnerShouldRun(zone, at, false))
@@ -420,12 +486,37 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     continue;
                 }
 
+                // Its monsters stand on the relief collider: wait until the chunks under the clearing are built (asked for here).
+                OverworldRules.ChunksUnderClearing(Layout, zone, _clearingChunks);
+                bool ready = true;
+                foreach (Vector2Int c in _clearingChunks)
+                {
+                    if (!_chunks.ContainsKey(c))
+                    {
+                        ready = false;
+                        if (!_wanted.Contains(c))
+                        {
+                            _wanted.Add(c);
+                        }
+                    }
+                }
+
+                if (!ready)
+                {
+                    continue;
+                }
+
+                foreach (Vector2Int c in _clearingChunks)
+                {
+                    _pinned.Add(c);
+                }
+
                 var go = new GameObject("Spawner_" + zone.Id);
                 go.transform.SetParent(_spawnerRoot, false);
-                go.transform.localPosition = new Vector3(zone.Center.x, 0f, zone.Center.y);
+                go.transform.localPosition = new Vector3(zone.Center.x, GroundHeight(zone.Center), zone.Center.y);
                 MapMonsterSpawner spawner = go.AddComponent<MapMonsterSpawner>();
                 Layout.ZoneOfSpawn.TryGetValue(zone.Id, out OverworldZone owner);
-                spawner.Configure(Layout.World, zone, _enemyPrefab, (int)TownStyle.Hash(zone.Id, 3), owner?.MapIdOrOwner);
+                spawner.Configure(Layout.World, zone, _enemyPrefab, (int)TownStyle.Hash(zone.Id, 3), owner?.MapIdOrOwner, GroundHeight);
                 _spawners[zone.Id] = spawner;
             }
         }

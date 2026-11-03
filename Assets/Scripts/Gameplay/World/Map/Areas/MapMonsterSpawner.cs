@@ -41,15 +41,18 @@ namespace Rapadura.Gameplay.World.Map.Areas
         private float _nextSpawnAt;
         private Transform _player;
         private string _mapId;
+        private System.Func<Vector2, float> _groundHeight;
 
         public MapSpawnZone Zone { get; private set; }
         public int AliveCount => _alive.Count;
         public int SpawnedTotal { get; private set; }
 
         /// <param name="mapId">The catalog map the monsters count for (<see cref="MapMonsterInfo.MapId"/>); default: the layout's.</param>
-        public void Configure(MapLayout layout, MapSpawnZone zone, GameObject enemyPrefab, int seed, string mapId = null)
+        /// <param name="groundHeight">Height of the ground at a point (the overworld's relief); null = flat at y = 0.</param>
+        public void Configure(MapLayout layout, MapSpawnZone zone, GameObject enemyPrefab, int seed, string mapId = null, System.Func<Vector2, float> groundHeight = null)
         {
             _layout = layout;
+            _groundHeight = groundHeight;
             _mapId = mapId ?? layout?.MapId;
             Zone = zone;
             _prefab = enemyPrefab;
@@ -76,6 +79,11 @@ namespace Rapadura.Gameplay.World.Map.Areas
                 var wp = new GameObject("Waypoint_" + i).transform;
                 wp.SetParent(transform, false);
                 wp.localPosition = new Vector3(Mathf.Cos(a), 0f, Mathf.Sin(a)) * (Zone.Radius * 0.6f);
+                if (_groundHeight != null)
+                {
+                    Vector3 world = wp.position;
+                    wp.position = new Vector3(world.x, _groundHeight(new Vector2(world.x, world.z)), world.z);
+                }
                 _waypoints[i] = wp;
             }
         }
@@ -145,7 +153,8 @@ namespace Rapadura.Gameplay.World.Map.Areas
             }
 
             float footHeight = EnemyVisualSwapper.GetFootHeight(_prefab.transform) * _prefab.transform.localScale.y;
-            Vector3 position = EncounterSpawnLayout.StandOnGround(new Vector3(ground.x, 0f, ground.y), footHeight);
+            float groundY = _groundHeight != null ? _groundHeight(ground) : 0f;
+            Vector3 position = EncounterSpawnLayout.StandOnGround(new Vector3(ground.x, groundY, ground.y), footHeight);
             Quaternion rotation = Quaternion.Euler(0f, (float)_random.NextDouble() * 360f, 0f);
             GameObject instance = Instantiate(_prefab, position, rotation);
             instance.name = $"{_prefab.name}_{definition.name}_{Zone.Id}_{SpawnedTotal}";

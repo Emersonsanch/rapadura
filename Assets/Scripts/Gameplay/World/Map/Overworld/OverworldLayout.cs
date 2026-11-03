@@ -165,6 +165,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>The wild props of the embedded hand-made maps (world coordinates), streamed with their chunk.</summary>
         public readonly List<CityProp> FixedProps = new List<CityProp>();
 
+        /// <summary>The relief of the region, built on first use (<see cref="OverworldRelief.For"/>).</summary>
+        internal OverworldRelief ReliefCache;
+
         private Dictionary<Vector2Int, List<(Vector2 Center, float Length, float Yaw, float Width)>> _riverPieces;
         private Dictionary<Vector2Int, List<CityProp>> _fixedProps;
 
