@@ -57,6 +57,29 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         BoneSorcerer = 23,
         /// <summary>O Colosso de Crânios (boss): a giant of stacked skulls round a soul-fire core, with a femur club.</summary>
         BoneColossus = 24,
+
+        // The beasts the map sheets of the continuous worlds (Docs/Mapas100.md 07–24) and Taa Pwani (25) asked for, which
+        // used to be played by stand-ins (OverworldBeastRecipes, OverworldOddityRecipes).
+        /// <summary>Chacal Apagado (Areias): lean sandy jackal with tall ears and a dark saddle, ember eyes.</summary>
+        Jackal = 25,
+        /// <summary>Cobra-de-Areia Apagada (Areias): horned sand viper, forepart raised, body lying in an S.</summary>
+        SandSnake = 26,
+        /// <summary>Orc Coroado de Āz (Areias, Tambor Rubro): a big orc wearing one of Āz's tin crowns, with a club.</summary>
+        CrownedOrc = 27,
+        /// <summary>Pedra que Rola (Kaggen): a ushabti boulder that rolls at you, molten cracks and runes.</summary>
+        RollingStone = 28,
+        /// <summary>Neblina do Vento Ruim (Kaggen): a knot of cold fog with two pale eyes and puffs circling it.</summary>
+        IllWindMist = 29,
+        /// <summary>Babuíno Apagado (Kaggen): grey-maned baboon, long pink muzzle, arched tail.</summary>
+        Baboon = 30,
+        /// <summary>Lodo de Gruta (Limiar): a mossy dome of cave mud with swallowed crystals poking out.</summary>
+        CaveOoze = 31,
+        /// <summary>Corvo-da-Treva (Limiar): black raven with violet-tipped feathers, throws them like darts.</summary>
+        DarkCrow = 32,
+        /// <summary>Gaivota Ladra (Costa das Monções): white-and-grey gull with a stolen coin in its beak.</summary>
+        ThiefGull = 33,
+        /// <summary>Caranguejo-dos-Coqueiros Gigante (Costa das Monções): red giant crab, one big pincer, eyes on stalks.</summary>
+        CoconutCrab = 34,
     }
 
     /// <summary>

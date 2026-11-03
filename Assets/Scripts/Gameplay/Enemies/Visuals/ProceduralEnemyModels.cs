@@ -70,6 +70,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>Bone colossus: the ring of loose skulls ("HaloSkull_0".."HaloSkull_5") folded away until the skull-throwing phase.</summary>
         public const string Halo = "Halo";
         public const string HaloSkullPrefix = "HaloSkull_";
+        /// <summary>Ill-wind mist: the fog puffs ("Puff_0".."Puff_n") circling under <see cref="Swarm"/>.</summary>
+        public const string PuffPrefix = "Puff_";
     }
 
     /// <summary>
@@ -115,6 +117,17 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_desert_broken_lantern", ProceduralEnemyKind.BrokenLantern },
             { "enemy_mountain_crested_hawk", ProceduralEnemyKind.CrestedHawk },
             { "enemy_cave_lantern_fish", ProceduralEnemyKind.LanternFish },
+            // The beasts the map sheets asked for (Docs/Mapas100.md 07–25), formerly played by stand-ins.
+            { "enemy_desert_jackal", ProceduralEnemyKind.Jackal },
+            { "enemy_desert_sand_snake", ProceduralEnemyKind.SandSnake },
+            { "enemy_desert_crowned_orc", ProceduralEnemyKind.CrownedOrc },
+            { "enemy_mountain_rolling_stone", ProceduralEnemyKind.RollingStone },
+            { "enemy_mountain_ill_wind_mist", ProceduralEnemyKind.IllWindMist },
+            { "enemy_mountain_baboon", ProceduralEnemyKind.Baboon },
+            { "enemy_cave_ooze", ProceduralEnemyKind.CaveOoze },
+            { "enemy_cave_dark_crow", ProceduralEnemyKind.DarkCrow },
+            { "enemy_forest_thief_gull", ProceduralEnemyKind.ThiefGull },
+            { "enemy_forest_coconut_crab", ProceduralEnemyKind.CoconutCrab },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -133,6 +146,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.EmberVulture, ProceduralEnemyKind.BrokenLantern, ProceduralEnemyKind.CrestedHawk, ProceduralEnemyKind.LanternFish,
             ProceduralEnemyKind.FloatingSkull, ProceduralEnemyKind.SkeletonWarrior, ProceduralEnemyKind.SkeletonArcher,
             ProceduralEnemyKind.BoneSorcerer, ProceduralEnemyKind.BoneColossus,
+            ProceduralEnemyKind.Jackal, ProceduralEnemyKind.SandSnake, ProceduralEnemyKind.CrownedOrc, ProceduralEnemyKind.RollingStone,
+            ProceduralEnemyKind.IllWindMist, ProceduralEnemyKind.Baboon, ProceduralEnemyKind.CaveOoze, ProceduralEnemyKind.DarkCrow,
+            ProceduralEnemyKind.ThiefGull, ProceduralEnemyKind.CoconutCrab,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -238,6 +254,36 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.BoneColossus:
                     OssuaryEnemyRecipes.BuildBoneColossus(blueprint);
+                    break;
+                case ProceduralEnemyKind.Jackal:
+                    OverworldBeastRecipes.BuildJackal(blueprint);
+                    break;
+                case ProceduralEnemyKind.SandSnake:
+                    OverworldBeastRecipes.BuildSandSnake(blueprint);
+                    break;
+                case ProceduralEnemyKind.CrownedOrc:
+                    OverworldOddityRecipes.BuildCrownedOrc(blueprint);
+                    break;
+                case ProceduralEnemyKind.RollingStone:
+                    OverworldOddityRecipes.BuildRollingStone(blueprint);
+                    break;
+                case ProceduralEnemyKind.IllWindMist:
+                    OverworldOddityRecipes.BuildIllWindMist(blueprint);
+                    break;
+                case ProceduralEnemyKind.Baboon:
+                    OverworldBeastRecipes.BuildBaboon(blueprint);
+                    break;
+                case ProceduralEnemyKind.CaveOoze:
+                    OverworldOddityRecipes.BuildCaveOoze(blueprint);
+                    break;
+                case ProceduralEnemyKind.DarkCrow:
+                    OverworldBeastRecipes.BuildDarkCrow(blueprint);
+                    break;
+                case ProceduralEnemyKind.ThiefGull:
+                    OverworldBeastRecipes.BuildThiefGull(blueprint);
+                    break;
+                case ProceduralEnemyKind.CoconutCrab:
+                    OverworldBeastRecipes.BuildCoconutCrab(blueprint);
                     break;
             }
 

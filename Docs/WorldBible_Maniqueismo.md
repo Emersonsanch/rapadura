@@ -291,6 +291,26 @@ the Weaver, Innaios the Player, Parthenos of the Lamps, Old Mihrshah, Aso the St
 | Enxame de Morcegos (`enemy_cave_bat_swarm`) | **Enxame de Morcegos do Limiar** / *Threshold Bat Swarm* | bicho real. |
 | Variante "(noturno)" | **"(da noite)"** / *(night)* | igual. Evitar "(da Treva)", que soa vilão demais para bicho comum. |
 
+#### 3.2.1 Bichos das fichas dos mapas (2026-11-03: os que os mundos contínuos faziam com substitutos)
+
+Definições em `Resources/Enemies` (bioma de casa com peso 0: só entram onde o layout do mapa/overworld põe), números da
+faixa da região (vida/XP iguais aos comuns dela; o nível vem da área, `EnemyLevelScaling`), modelo procedural
+(`OverworldBeastRecipes` / `OverworldOddityRecipes`), página do Caderno em `OverworldBestiaryTexts` (lore da Vó + uma fala
+por primo, en/pt-BR). Testes: `OverworldBeastsTests`.
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_desert_jackal` | **Chacal Apagado** / *Dimmed Jackal* | 07 (e o "chacal" de toda a Areias) | [rápido], foge ferido | bicho real; os "primos arrumadinhos" das caravanas, apagados pelo Fogo Devorador. |
+| `enemy_desert_sand_snake` | **Cobra-de-Areia Apagada** / *Dimmed Sand Snake* | 08 | [rápido] | víbora-chifruda das dunas (bicho real); a sombra bebeu o calor das escamas. |
+| `enemy_desert_crowned_orc` | **Orc Coroado de Āz** / *Āz-Crowned Orc* | 11 (Clã Coroado) | [elite], pesado | coroinha de lata de Āz (§3.4); **nunca a raça**: vencido, a coroa cai e ele volta para o Tambor Rubro. |
+| `enemy_mountain_rolling_stone` | **Pedra que Rola** / *Rolling Stone* | 13 (e a Pedra-Rolante Ushabti do 11) | [controle], pesado | ushabti-mensageiro dos Artífices que se enrola em bola; esqueceu o recado. |
+| `enemy_mountain_ill_wind_mist` | **Neblina do Vento Ruim** / *Ill-Wind Mist* | 14, 18 | [controle], voa | o Vento Destruidor (§1.3) preso nas pedras, juntando neblina até ganhar olhos. |
+| `enemy_mountain_baboon` | **Babuíno Apagado** / *Dimmed Baboon* | 13 (e o Babuíno Ladrão do 15) | [rápido], foge ferido | bicho real; família enxerida que deu de roubar sacola. |
+| `enemy_cave_ooze` | **Lodo de Gruta** / *Cave Ooze* | 19 | [tanque], pesado | o Lodo (contrário da Água Viva) que levantou da margem; engole luz (cristais à mostra). |
+| `enemy_cave_dark_crow` | **Corvo-da-Treva** / *Crow of the Dark* | 24 | [distância] (pena-dardo, mesmo tiro do Gavião) | corvos-mensageiros do Ninho de Mahaway com a Treva nas pontas das penas. |
+| `enemy_forest_thief_gull` | **Gaivota Ladra** / *Thief Gull* | 25 (missão do Liyongo) | [rápido], voa | bicho real, apagada pela gula de Āz: rasga velas atrás de moeda. Bioma Floresta (Água Viva) até a Costa ter o seu. |
+| `enemy_forest_coconut_crab` | **Caranguejo-dos-Coqueiros Gigante** / *Giant Coconut Crab* | 25 (missão do Zawadi) | [tanque] | bicho real; o Lodo entrou nas raízes do mangue. Bioma Floresta até a Costa ter o seu. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |

@@ -223,6 +223,17 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_desert_broken_lantern", "Broken Lantern of the Artificers", "Lanterna Quebrada dos Artífices"),
             EnemyName("enemy_mountain_crested_hawk", "Crested Hawk", "Gavião-de-Penacho"),
             EnemyName("enemy_cave_lantern_fish", "Dimmed Lanternfish", "Peixe-Lanterna Apagado"),
+            // The beasts the map sheets asked for (Docs/Mapas100.md 07–25), formerly played by stand-ins.
+            EnemyName("enemy_desert_jackal", "Dimmed Jackal", "Chacal Apagado"),
+            EnemyName("enemy_desert_sand_snake", "Dimmed Sand Snake", "Cobra-de-Areia Apagada"),
+            EnemyName("enemy_desert_crowned_orc", "Āz-Crowned Orc", "Orc Coroado de Āz"),
+            EnemyName("enemy_mountain_rolling_stone", "Rolling Stone", "Pedra que Rola"),
+            EnemyName("enemy_mountain_ill_wind_mist", "Ill-Wind Mist", "Neblina do Vento Ruim"),
+            EnemyName("enemy_mountain_baboon", "Dimmed Baboon", "Babuíno Apagado"),
+            EnemyName("enemy_cave_ooze", "Cave Ooze", "Lodo de Gruta"),
+            EnemyName("enemy_cave_dark_crow", "Crow of the Dark", "Corvo-da-Treva"),
+            EnemyName("enemy_forest_thief_gull", "Thief Gull", "Gaivota Ladra"),
+            EnemyName("enemy_forest_coconut_crab", "Giant Coconut Crab", "Caranguejo-dos-Coqueiros Gigante"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),

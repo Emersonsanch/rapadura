@@ -13,7 +13,7 @@ namespace Rapadura.Tests
 {
     /// <summary>
     /// The [distância] commons of the playable maps (Docs/Mapas100.md 07 Abutre de Brasa, 08 Lanterna Quebrada dos
-    /// Artífices, 13 Gavião-de-Penacho, 19 Peixe-Lanterna Apagado): real definitions, not bosses, shooting
+    /// Artífices, 13 Gavião-de-Penacho, 19 Peixe-Lanterna Apagado, 24 Corvo-da-Treva): real definitions, not bosses, shooting
     /// (<see cref="EnemyDefinition.IsRanged"/>) from farther than any melee swing, in their biome (bestiary + loot table)
     /// and placed in the clearings of 07/08/13/14/19/20.
     /// </summary>
@@ -23,6 +23,7 @@ namespace Rapadura.Tests
         private const string Lantern = "enemy_desert_broken_lantern";
         private const string Hawk = "enemy_mountain_crested_hawk";
         private const string Fish = "enemy_cave_lantern_fish";
+        private const string Crow = "enemy_cave_dark_crow";
 
         private static readonly (string id, BiomeType biome, EnemyProjectileKind projectile, ProceduralEnemyKind model)[] Ranged =
         {
@@ -30,6 +31,8 @@ namespace Rapadura.Tests
             (Lantern, BiomeType.Desert, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.BrokenLantern),
             (Hawk, BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.CrestedHawk),
             (Fish, BiomeType.Caves, EnemyProjectileKind.LureGlob, ProceduralEnemyKind.LanternFish),
+            // Ninho de Mahaway (24): throws its feathers like the hawk (same shot and sound), placed by the Limiar overworld.
+            (Crow, BiomeType.Caves, EnemyProjectileKind.Feather, ProceduralEnemyKind.DarkCrow),
         };
 
         /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>
@@ -101,7 +104,7 @@ namespace Rapadura.Tests
             }
 
             CollectionAssert.AreEquivalent(Ranged.Select(r => r.id), all.Where(e => e.IsRanged).Select(DefeatedEnemyRegistry.GetId),
-                "Only the four [distância] commons shoot (melee enemies keep EnemyProjectileKind.None)");
+                "Only the [distância] commons shoot (melee enemies keep EnemyProjectileKind.None)");
         }
 
         [Test]

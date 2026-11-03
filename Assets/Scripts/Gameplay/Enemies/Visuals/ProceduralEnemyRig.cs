@@ -40,6 +40,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         private readonly List<int> _wings = new List<int>(16);
         private readonly List<int> _fireflies = new List<int>(12);
         private readonly List<int> _lanterns = new List<int>(12);
+        private readonly List<int> _puffs = new List<int>(8);
         private bool _cached;
         private float _time;
         private float _seed;
@@ -52,6 +53,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         private float _attack01;
         private float _halo01;
         private float _cage01;
+        private float _roll;
 
         /// <summary>Werewolf: how far (deg) the torso pitches up when it rears to strike.</summary>
         public const float WerewolfRearDegrees = 52f;
@@ -83,6 +85,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         private static readonly string[] GuardianParts = { ProceduralEnemyParts.Head };
         private static readonly string[] DwellerParts = { ProceduralEnemyParts.Head, ProceduralEnemyParts.EarLeft, ProceduralEnemyParts.EarRight };
         private static readonly string[] OwlParts = { ProceduralEnemyParts.Head };
+        private static readonly string[] SnakeParts =
+            { ProceduralEnemyParts.Head, ProceduralEnemyParts.Tail, "Tail_1", "Tail_2", "Tail_3" };
 
         /// <summary>
         /// Follow-through parts this rig already animates for <paramref name="kind"/> (head bob/turn, ear
@@ -96,6 +100,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.RuinGuardian: return GuardianParts;
                 case ProceduralEnemyKind.AncientDweller: return DwellerParts;
                 case ProceduralEnemyKind.ShroudOwl: return OwlParts;
+                case ProceduralEnemyKind.SandSnake: return SnakeParts;
                 default: return null;
             }
         }
@@ -136,6 +141,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             _attack01 = 0f;
             _halo01 = 0f;
             _cage01 = 0f;
+            _roll = 0f;
             _legRigRetry = 0f;
         }
 
@@ -310,10 +316,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
 
                 case ProceduralEnemyKind.EmberVulture:
                 case ProceduralEnemyKind.CrestedHawk:
+                case ProceduralEnemyKind.DarkCrow:
+                case ProceduralEnemyKind.ThiefGull:
                 {
                     // Broad soaring wings: long glides, the wings spread and hold still on the windup (taking aim).
                     float r = StepAttack(deltaTime, 5f, 3f);
-                    float rate = _kind == ProceduralEnemyKind.CrestedHawk ? 0.6f : 0.38f;
+                    float rate = _kind == ProceduralEnemyKind.EmberVulture ? 0.38f : _kind == ProceduralEnemyKind.ThiefGull ? 0.75f : 0.6f;
                     FlapWings(t, speed * rate, Mathf.Max(k, 0.25f) * (1f - 0.7f * r), Mathf.Max(Mathf.Clamp01(MoveSpeed01), 0.5f));
                     Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(-14f * r, Mathf.Sin(t * 0.6f) * 25f * k * (1f - r), 0f));
                     break;
@@ -337,6 +345,71 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(35f * r, 0f, 0f));
                     FlapWings(t, speed * 0.9f, Mathf.Max(k, 0.25f) * 0.6f, Mathf.Clamp01(MoveSpeed01));
                     Pulse(ProceduralEnemyParts.Lantern, 1f + Mathf.Sin(t * 2.4f) * 0.08f * k + 0.45f * r);
+                    break;
+                }
+
+                case ProceduralEnemyKind.CrownedOrc:
+                {
+                    // Heavy breathing, the club arm swings back on the windup.
+                    float r = StepAttack(deltaTime, 4f, 2.5f);
+                    if (_driveLimbs)
+                    {
+                        Swing(ProceduralEnemyParts.ArmLeft, Mathf.Sin(t * 1.3f) * 4f * k);
+                        Swing(ProceduralEnemyParts.ArmRight, -Mathf.Sin(t * 1.3f) * 4f * k - 55f * r);
+                    }
+
+                    Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(Mathf.Sin(t * 0.9f) * 3f * k, Mathf.Sin(t * 0.5f) * 10f * k, 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.SandSnake:
+                {
+                    // Slithers: a travelling wave down the tail, the raised head sways and pulls back before it strikes.
+                    float r = StepAttack(deltaTime, 6f, 3f);
+                    float wave = Mathf.Lerp(1.6f, 4.2f, Mathf.Clamp01(MoveSpeed01)) * speed;
+                    Rotate(ProceduralEnemyParts.Tail, Quaternion.Euler(0f, Mathf.Sin(t * wave) * 14f * k, 0f));
+                    for (int i = 1; i < OverworldBeastRecipes.SnakeTailSegments; i++)
+                    {
+                        Rotate(ProceduralEnemyParts.TailSegmentPrefix + i, Quaternion.Euler(0f, Mathf.Sin(t * wave - i * 0.9f) * 18f * k, 0f));
+                    }
+
+                    Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(-25f * r, Mathf.Sin(t * 1.1f) * 12f * k * (1f - r), 0f));
+                    Offset(ProceduralEnemyParts.Head, new Vector3(0f, 0f, -0.08f * r));
+                    break;
+                }
+
+                case ProceduralEnemyKind.RollingStone:
+                {
+                    // Rolls about its axle while it travels (a slow rock in place when idle); shudders on the windup.
+                    float r = StepAttack(deltaTime, 4f, 2.5f);
+                    float metresPerSecond = Mathf.Lerp(0.15f, 3.5f, Mathf.Clamp01(MoveSpeed01));
+                    _roll = Mathf.Repeat(_roll + Mathf.Max(0f, deltaTime) * metresPerSecond / OverworldOddityRecipes.RollingStoneRadius * Mathf.Rad2Deg * Mathf.Max(k, 0.3f), 360f);
+                    Rotate(ProceduralEnemyParts.Body, Quaternion.Euler(_roll, 0f, Mathf.Sin(t * 37f) * 3f * r));
+                    break;
+                }
+
+                case ProceduralEnemyKind.IllWindMist:
+                {
+                    // The puffs circle the core, bobbing; the core breathes and swells before it blows.
+                    float r = StepAttack(deltaTime, 4f, 2.5f);
+                    Rotate(ProceduralEnemyParts.Swarm, Quaternion.Euler(0f, _time * (45f + 90f * r) * speed * _intensity, 0f));
+                    for (int i = 0; i < _puffs.Count; i++)
+                    {
+                        Offset(_puffs[i], new Vector3(0f, Mathf.Sin(t * 1.7f + i * 1.3f) * 0.06f * k, 0f));
+                    }
+
+                    Pulse(ProceduralEnemyParts.Body, 1f + Mathf.Sin(t * 1.2f) * 0.04f * k + 0.18f * r);
+                    Rotate(ProceduralEnemyParts.Wisp, Quaternion.Euler(Mathf.Sin(t * 2f) * 10f * k, 0f, Mathf.Sin(t * 1.4f) * 12f * k));
+                    break;
+                }
+
+                case ProceduralEnemyKind.CaveOoze:
+                {
+                    // Squash and stretch; it flattens on the windup and the swallowed lights flare.
+                    float r = StepAttack(deltaTime, 4f, 2.5f);
+                    float squash = Mathf.Sin(t * 2.1f) * 0.06f * k + 0.2f * r;
+                    Squash(ProceduralEnemyParts.Body, squash);
+                    Pulse(ProceduralEnemyParts.StolenLight, 1f + Mathf.Sin(t * 2.6f) * 0.08f * k + 0.3f * r);
                     break;
                 }
 
@@ -493,6 +566,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             _wings.Clear();
             _fireflies.Clear();
             _lanterns.Clear();
+            _puffs.Clear();
             foreach (Transform child in GetComponentsInChildren<Transform>(true))
             {
                 if (child == transform)
@@ -531,6 +605,10 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 {
                     _lanterns.Add(i);
                 }
+                else if (partName.StartsWith(ProceduralEnemyParts.PuffPrefix))
+                {
+                    _puffs.Add(i);
+                }
             }
         }
 
@@ -563,6 +641,16 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         }
 
         private void Pulse(int i, float scale) => _parts[i].Transform.localScale = _parts[i].Scale * scale;
+
+        /// <summary>Squash (+) / stretch (−) keeping the volume about right: shorter and wider, or taller and thinner.</summary>
+        private void Squash(string partName, float amount)
+        {
+            if (_index.TryGetValue(partName, out int i))
+            {
+                Vector3 rest = _parts[i].Scale;
+                _parts[i].Transform.localScale = new Vector3(rest.x * (1f + amount * 0.5f), rest.y * (1f - amount), rest.z * (1f + amount * 0.5f));
+            }
+        }
 
         private void RestoreAll()
         {

@@ -112,7 +112,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         // ------------------------------------------------------------------
 
         /// <summary>Feathered legs down to hooked talons on the ground (y = <paramref name="ground"/> in body space).</summary>
-        private static void DrawTalons(EnemyMeshBuilder b, float ground, float spread, EnemySwatch claw)
+        internal static void DrawTalons(EnemyMeshBuilder b, float ground, float spread, EnemySwatch claw)
         {
             for (int s = -1; s <= 1; s += 2)
             {
@@ -125,7 +125,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         }
 
         /// <summary>Broad fingered wing in the horizontal plane; <paramref name="side"/> +1 = right; tips in <paramref name="tip"/>.</summary>
-        private static void DrawBroadWing(EnemyMeshBuilder b, float side, EnemySwatch top, EnemySwatch under, EnemySwatch tip, float span = 1f)
+        internal static void DrawBroadWing(EnemyMeshBuilder b, float side, EnemySwatch top, EnemySwatch under, EnemySwatch tip, float span = 1f)
         {
             b.Matrix = Matrix4x4.Scale(new Vector3(side * span, 1f, 1f));
             var r0 = new Vector3(0f, 0f, 0.12f);
@@ -149,7 +149,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             b.Matrix = Matrix4x4.identity;
         }
 
-        private static void DrawFanTail(EnemyMeshBuilder b, EnemySwatch top, EnemySwatch under)
+        internal static void DrawFanTail(EnemyMeshBuilder b, EnemySwatch top, EnemySwatch under)
         {
             b.TwoSided(new Vector3(-0.07f, 0f, 0f), new Vector3(0.07f, 0f, 0f), new Vector3(0.12f, 0f, -0.2f), top, under);
             b.TwoSided(new Vector3(-0.07f, 0f, 0f), new Vector3(0.12f, 0f, -0.2f), new Vector3(-0.12f, 0f, -0.2f), top, under);

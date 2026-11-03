@@ -11,7 +11,7 @@ namespace Rapadura.Gameplay.Enemies
         None = 0,
         /// <summary>Abutre de Brasa: a spat ember, fire, straight and quick.</summary>
         Ember = 1,
-        /// <summary>Gavião-de-Penacho: a hard flight feather thrown like a dart, straight and fastest.</summary>
+        /// <summary>Gavião-de-Penacho (and Corvo-da-Treva): a hard flight feather thrown like a dart, straight and fastest.</summary>
         Feather = 2,
         /// <summary>Lanterna Quebrada dos Artífices: a cracked bolt of trapped light that leans a little toward the hero.</summary>
         LanternBolt = 3,
