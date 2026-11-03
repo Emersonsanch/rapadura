@@ -155,7 +155,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 Roofs = new[] { TownSwatch.Thatch },
                 Joinery = new[] { TownSwatch.WoodDark, TownSwatch.Walnut },
                 Accent = TownSwatch.ClothIndigo,
-                Ground = TownSwatch.Grass, GroundAlt = TownSwatch.Snow,
+                Ground = TownSwatch.Grass, GroundAlt = TownSwatch.GrassDark,
                 Street = TownSwatch.DirtDark, StreetEdge = TownSwatch.Stone, Sidewalk = TownSwatch.Cobble,
                 Plaza = TownSwatch.Cobble, PlazaAlt = TownSwatch.Stone,
                 Fence = TownSwatch.Stone, Plinth = TownSwatch.Stone,
