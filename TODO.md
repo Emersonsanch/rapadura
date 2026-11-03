@@ -2004,7 +2004,7 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 > Lista completa, explicada e adaptada ao tema em `Docs/Referencias_MMO.md` (inspiração de mecânica; nomes e arte nossos).
 
 ### Do MU Online
-- [ ] Evolução de classe por missão (2–3 graduações por primo, skill e visual novos) e nível de mestre depois do máximo.
+- [x] Evolução de classe por missão (5 graduações por primo: 8/14/25 na campanha, G4 no 150 e G5 no 350; skill/passiva e visual novos) e nível de mestre depois do máximo (500 + G5, 100 pontos em 4 linhas) — `Docs/ClassEvolution.md`. Falta: as montarias lerem os nós do Laço (`ClassEvolutionProgress.ActiveEffectBonus`).
 - [ ] Combo de skills da classe e buffs de suporte para o grupo.
 - [x] Refino de item +0 a +15 com "Pedras do Sertão" (Bênção, Alma, Vida, Caos); falha sem destruir o item.
 - [ ] Itens excelentes, conjuntos antigos com bônus por peça, opção de sorte, engaste de soquetes.

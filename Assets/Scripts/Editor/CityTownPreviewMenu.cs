@@ -77,7 +77,7 @@ namespace Rapadura.Editor
         private static void Validate()
         {
             int total = 0;
-            foreach (CitySpec city in CityCatalog.Cities)
+            foreach (CitySpec city in CityCatalog.AllCities)
             {
                 foreach (bool mascate in new[] { false, true })
                 {

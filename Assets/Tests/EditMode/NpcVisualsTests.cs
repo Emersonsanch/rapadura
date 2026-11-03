@@ -62,7 +62,7 @@ namespace Rapadura.Tests
         [Test]
         public void EveryCityResident_AndTheCaravaneer_ResolveToANamedRecipe()
         {
-            foreach (CitySpec city in CityCatalog.Cities)
+            foreach (CitySpec city in CityCatalog.AllCities)
             {
                 foreach (CityResidentSpec resident in city.Residents)
                 {

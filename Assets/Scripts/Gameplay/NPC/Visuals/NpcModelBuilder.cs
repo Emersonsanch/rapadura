@@ -694,7 +694,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // Arms
         // ------------------------------------------------------------------
 
-        private static bool IsSkin(NpcSwatch swatch) => swatch <= NpcSwatch.SkinDeep;
+        private static bool IsSkin(NpcSwatch swatch) => swatch <= NpcSwatch.SkinDeep || swatch == NpcSwatch.SkinBark;
 
         /// <summary>
         /// One arm with volume: a shoulder cap, a tapered upper arm, an elbow, a forearm ending in a cuff (wide bell sleeves
@@ -809,7 +809,18 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 || r.Headwear == NpcHeadwear.Headwrap || r.Headwear == NpcHeadwear.LampHelmet;
             bool coversEars = covers;
 
-            if (!coversEars && r.Hair != NpcHair.Long && r.Hair != NpcHair.Curly)
+            if (r.ElfEars && !coversEars)
+            {
+                // Elf ears: a long flat leaf of skin from the side of the head, swept up and back past the hair (it pokes
+                // through long hair on purpose: the ears are how an elf reads from the iso camera).
+                foreach (float side in new[] { -1f, 1f })
+                {
+                    Vector3 root = hc + new Vector3(side * hw * 0.44f, -hh * 0.02f, -hd * 0.06f);
+                    Quaternion tilt = Quaternion.FromToRotation(Vector3.up, new Vector3(side * 0.85f, 0.42f, -0.32f).normalized);
+                    b.Cylinder(root, 0.042f * rig.S, 0f, 0.17f * rig.S, 4, r.Skin, rotation: tilt, depth: 0.45f, twist: 45f);
+                }
+            }
+            else if (!coversEars && r.Hair != NpcHair.Long && r.Hair != NpcHair.Curly)
             {
                 foreach (float side in new[] { -1f, 1f })
                 {

@@ -101,6 +101,7 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.MascateBento, "Ammo's Caravan", "Caravana do Ammo"),
                 // Same text as MountTexts.HarasShopName (the mounts' own table registers it too).
                 Shop(CityShopCatalog.HarasVila, "Srosh's Stable", "Estrebaria do Srosh"),
+                Shop(CityShopCatalog.ErvariaDacil, "Dácil's Herb House", "Ervaria da Dácil"),
             };
 
             // ---- Cities ----
@@ -116,6 +117,10 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.Lamparinas, "Lampkeepers' Village", "Vila das Lamparinas", "Lampkeepers", "Lamparinas",
                 "At the mouth of the Threshold Caves, every house carved into the rose tuff keeps a lamp lit in the window. Since the light was stolen, nobody here lets the dark win.",
                 "Na boca das Grutas do Limiar, cada casa escavada no tufo rosa deixa uma lamparina acesa na janela. Desde que a luz foi roubada, ninguém aqui deixa o escuro ganhar.");
+
+            AddCity(entries, CityCatalog.CopasGarajonay, "Garajonay Canopy", "Copas de Garajonay", "Garajonay", "Garajonay",
+                "The city of the forest elves, up in the laurels that drink the mist: round plank houses, rope bridges from trunk to trunk and cocoon lanterns. Nobody here fells a tree.",
+                "A cidade dos elfos-da-mata, no alto dos louros que bebem a névoa: casas redondas de tábua, pontes de cipó de tronco em tronco e lanternas de casulo. Aqui ninguém derruba árvore.");
 
             // ---- Residents: name (unless shared), then Joaquim, Maria, Maithe, Ícaro, Lavine, anyone ----
             // Mariam, the Herbalist (resident id "cida").
@@ -242,6 +247,97 @@ namespace Rapadura.UI.WorldMap
                 ("Lavine, bet I trim wicks faster than you cast spells!", "Lavine, aposto que eu corto pavio mais rápido do que você solta feitiço!"),
                 ("Wick trimmed, lamp lit: darkness doesn't rule here.", "Pavio cortado, candeia acesa: o escuro aqui não manda."));
 
+            // ---- The Vila's lore cast without a counter (TODO.md "História e Arcos dos NPCs") ----
+            AddResident(entries, "vo_edna", "Grandma Edna", "Vó Edna",
+                ("Sit down, Joaquim, and lean that shield on the bench. A guardian eats first and protects afterwards.", "Senta, Joaquim, e encosta esse escudo no banco. Guardião come primeiro e protege depois."),
+                ("Maria, my light. Your grandpa Jorge used to say you shine like the Sun Ship at dawn. Take some bread for the road.", "Maria, minha luz. Seu avô Jorge dizia que você brilha que nem a Barca do Sol de manhã. Leva um pão para a estrada."),
+                ("Maithe, you count your cousins before you count the beasts. That's how your grandpa did it on the caravan road.", "Maithe, você conta os primos antes de contar os bichos. Era assim que o seu avô fazia na estrada das caravanas."),
+                ("Ícaro, the little radio you built works fine: I hear the news of all five of you every night.", "Ícaro, o radinho que você montou funciona direitinho: escuto a notícia de vocês cinco toda noite."),
+                ("Lavine, my youngest, the plov is still warm. Eat, then tell me about the lilac mist again.", "Lavine, minha caçula, o plov ainda está quentinho. Come, depois me conta de novo da névoa lilás."),
+                ("The tandir is hot and the door is open. Whoever arrives hungry leaves fed.", "O tandir está quente e a porta aberta. Quem chega com fome sai alimentado."));
+
+            AddResident(entries, "socorro_vila", "Ramrat the Lampkeeper", "Ramrat, a Guardiã da Lâmpada",
+                ("A lamp for the one who walks in front, Joaquim. A light behind the shield is still a light.", "Uma lamparina para quem vai na frente, Joaquim. Luz atrás do escudo ainda é luz."),
+                ("You and I keep the same flame, Maria. Mine stays in the square, yours goes out on the road.", "Você e eu guardamos a mesma chama, Maria. A minha fica na praça, a sua vai para a estrada."),
+                ("Every time you leave, Maithe, I light one for each cousin. Five little flames in a row.", "Toda vez que vocês saem, Maithe, eu acendo uma para cada primo. Cinco chaminhas enfileiradas."),
+                ("No, Ícaro, the lamp doesn't need a switch. It needs someone who remembers to light it.", "Não, Ícaro, a lâmpada não precisa de interruptor. Precisa de alguém que lembre de acender."),
+                ("Your grandpa Jorge lit the first lamp of this square, Lavine. I just never let it go out.", "Seu avô Jorge acendeu a primeira lâmpada desta praça, Lavine. Eu só nunca deixei apagar."),
+                ("Whoever leaves the village takes a little of the lamp's light. Ask for the blessing before the road.", "Quem sai da vila leva um pouco da luz da lâmpada. Peça a bênção antes da estrada."));
+
+            AddResident(entries, "xroshtag", "Master Xroshtag", "Mestre Xroshtag",
+                ("JOAQUIM! Sing the Bema hymn with me: a guardian's voice must reach the last house!", "JOAQUIM! Canta o hino do Bema comigo: voz de guardião tem que chegar na última casa!"),
+                ("Maria, the Call needs an Answer. My apprentice is shy; sing the answer with him, will you?", "Maria, o Chamado precisa de Resposta. Meu aprendiz é tímido; canta a resposta com ele?"),
+                ("I call, the mountains answer! Maithe, you call your cousins the same way, I've heard you.", "Eu chamo, a serra responde! Maithe, você chama os primos do mesmo jeito, já ouvi."),
+                ("A machine to make my voice louder, Ícaro? My voice is already louder than any machine!", "Uma máquina para deixar minha voz mais alta, Ícaro? Minha voz já é mais alta que qualquer máquina!"),
+                ("Lavine, Grandpa Jorge sang off-key and proud at every Bema. Sing like him!", "Lavine, o Vô Jorge cantava desafinado e orgulhoso em todo Bema. Canta igual a ele!"),
+                ("The Call goes out from this square to the whole Dawn Isle. Who answers?", "O Chamado sai desta praça para a Ilha da Aurora inteira. Quem responde?"));
+
+            AddResident(entries, "padwaxtag", "Padwaxtag the Answer", "Padwaxtag, a Resposta",
+                ("Y-you're very brave, Joaquim. I only answer when my master calls...", "V-você é muito corajoso, Joaquim. Eu só respondo quando o mestre chama..."),
+                ("Maria... if you sing the answer with me, I won't be scared of my own voice.", "Maria... se você cantar a resposta comigo, eu não fico com medo da minha voz."),
+                ("Maithe, how do you call so loud? I practise every day and only the birds answer.", "Maithe, como você chama tão alto? Eu treino todo dia e só os passarinhos respondem."),
+                ("Ícaro, could a little machine sing the high part? ...No, never mind, the master would hear.", "Ícaro, será que uma maquininha canta a parte aguda? ...Não, esquece, o mestre ia ouvir."),
+                ("Lavine, you're the youngest and you're not shy at all. Teach me?", "Lavine, você é a caçula e não tem vergonha nenhuma. Me ensina?"),
+                ("When the Call goes out, someone has to answer. Today it's me... I think.", "Quando o Chamado sai, alguém tem que responder. Hoje sou eu... acho."));
+
+            AddResident(entries, "patig", "Patig the Tracker", "Patig, o Rastreador",
+                ("A guardian walks loud, Joaquim. Out in the tugai, step on the moss, not on the dry leaves.", "Guardião anda fazendo barulho, Joaquim. No tugai, pisa no musgo, não na folha seca."),
+                ("Hunting is honouring the light of the animal, Maria. You'd understand that better than anyone.", "Caçar é honrar a luz do bicho, Maria. Você entende isso melhor que ninguém."),
+                ("Maithe, you read the wind; I read the mud. Between the two of us, nothing gets lost in the woods.", "Maithe, você lê o vento; eu leio a lama. Entre nós dois, nada se perde no bosque."),
+                ("No, Ícaro, a drone doesn't read tracks. It scares off whatever made them.", "Não, Ícaro, drone não lê pegada. Ele espanta quem deixou a pegada."),
+                ("These little tracks here are a fox's, Lavine. Your grandpa Jorge taught me that one.", "Essas pegadinhas aqui são de raposa, Lavine. Foi o seu avô Jorge que me ensinou."),
+                ("Every track is a story the animal left behind. Today's prey is on the hunting board.", "Todo rastro é uma história que o bicho deixou para trás. A presa do dia está no quadro de caça."));
+
+            // ---- Qocho: Náfsha the potter (resident id "rosa") ----
+            AddResident(entries, "rosa", "Náfsha the Potter", "Náfsha, a Oleira",
+                ("A clay jar is like a shield, Joaquim: it holds what matters and doesn't complain about the heat.", "Jarra de barro é que nem escudo, Joaquim: segura o que importa e não reclama do calor."),
+                ("Maria, put your hand on the wheel. See? The clay calms down just like your patients.", "Maria, põe a mão no torno. Viu? O barro acalma igual aos seus doentes."),
+                ("A water jar for the crossing, Maithe, one per cousin. The eldest carries the biggest, I know.", "Uma jarra d'água para a travessia, Maithe, uma por primo. A mais velha carrega a maior, eu sei."),
+                ("A pedal wheel with gears, Ícaro? ...Draw it in the clay and I'll think about it.", "Um torno de pedal com engrenagem, Ícaro? ...Desenha no barro que eu penso."),
+                ("Your grandma Edna still uses the black pot I made for her wedding, Lavine. Tell her I said hello.", "A sua avó Edna ainda usa a panela preta que eu fiz para o casamento dela, Lavine. Manda um abraço."),
+                ("I sing to the rhythm of the wheel: red clay, cool water, the whole desert drinks from my jars.", "Canto no compasso do torno: barro vermelho, água fresca, o deserto inteiro bebe das minhas jarras."));
+
+            // ---- Copas de Garajonay (the elfos-da-mata) ----
+            AddResident(entries, "gara", "Gara, Warden of the Canopy", "Gara, a Guardiã das Copas",
+                ("Up here a shield won't stop a fall, Joaquim. Hold the rope with both hands, then be brave.", "Aqui em cima escudo não segura queda, Joaquim. Segura a corda com as duas mãos, depois seja corajoso."),
+                ("Your light makes the mist glow, Maria. The laurels lean towards you when you cross the bridge.", "A sua luz faz a névoa brilhar, Maria. Os louros se inclinam para você quando atravessa a ponte."),
+                ("Maithe, you count the cousins on every bridge. Jonay noticed. So did I.", "Maithe, você conta os primos em cada ponte. O Jonay reparou. Eu também."),
+                ("No nails in the trunks, Ícaro, please. The bridges are tied, never nailed. The laurels feel it.", "Nada de prego nos troncos, Ícaro, por favor. As pontes são amarradas, nunca pregadas. O louro sente."),
+                ("Your grandpa Jorge crossed these bridges once, Lavine, singing out of tune. The mist still remembers.", "Seu avô Jorge atravessou estas pontes uma vez, Lavine, cantando desafinado. A névoa ainda lembra."),
+                ("The laurels drink the cloud and the cloud remembers everything. Walk lightly on the bridges.", "O louro bebe a nuvem e a nuvem lembra de tudo. Pise de leve nas pontes."));
+
+            AddResident(entries, "jonay", "Jonay the Archer", "Jonay, o Arqueiro",
+                ("Your shield, my arrows, Joaquim: whoever comes up the trunk meets both.", "Seu escudo, minhas flechas, Joaquim: quem subir pelo tronco encontra os dois."),
+                ("Maria, an archer shoots better calm. Your light calms even me.", "Maria, arqueiro atira melhor calmo. Sua luz acalma até a mim."),
+                ("Maithe! Breathe out, then let go. Again. You already shoot better than half my apprentices.", "Maithe! Solta o ar, depois a corda. De novo. Você já atira melhor que metade dos meus aprendizes."),
+                ("An arrow with a little propeller, Ícaro? ...It turned left. Arrows don't turn left.", "Uma flecha com hélice, Ícaro? ...Ela virou para a esquerda. Flecha não vira para a esquerda."),
+                ("A small bow for the youngest, Lavine. Don't aim at the lanterns, they're cocoons.", "Um arco pequeno para a caçula, Lavine. Não mira nas lanternas, são casulos."),
+                ("A bowstring of laurel fibre and a quiet hand: the canopy has no better guard.", "Corda de fibra de louro e mão quieta: as copas não têm guarda melhor."));
+
+            AddResident(entries, "dacil", "Dácil the Herbalist", "Dácil, a Ervateira",
+                ("For the one who takes the hits, Joaquim: a mist potion. It tastes of rain, drink it anyway.", "Para quem leva as pancadas, Joaquim: poção de névoa. Tem gosto de chuva, bebe assim mesmo."),
+                ("Maria, a healer from the Vila! Mariam taught me her mint tea; will you teach me the light?", "Maria, curandeira da Vila! A Mariam me ensinou o chá de hortelã; você me ensina a luz?"),
+                ("The rope for the bridges is on my counter, Maithe. One for each cousin: the eldest checks the knots.", "A corda das pontes está no meu balcão, Maithe. Uma para cada primo: a mais velha confere os nós."),
+                ("A machine that catches mist, Ícaro? The laurels already do it. Look at the leaves dripping.", "Uma máquina de pegar névoa, Ícaro? O louro já faz isso. Olha as folhas pingando."),
+                ("Grandma Edna sent me pomegranate seeds once, Lavine. They grew up here, in the mist. Want to see?", "A Vó Edna me mandou sementes de romã uma vez, Lavine. Nasceram aqui em cima, na névoa. Quer ver?"),
+                ("Herbs, mist potions and the canopy rope. The counter changes every day, like the cloud.", "Ervas, poções de névoa e a corda das copas. O balcão muda todo dia, igual à nuvem."));
+
+            AddResident(entries, "bencomo", "Bencomo the Old Chief", "Bencomo, o Velho Chefe",
+                ("A guardian of the ground among the people of the trees. Bencomo greets you, Joaquim.", "Um guardião do chão entre o povo das árvores. Bencomo te saúda, Joaquim."),
+                ("Maria, the light you carry is the same the laurels drink. You are welcome at my fire.", "Maria, a luz que você carrega é a mesma que os louros bebem. Você é bem-vinda na minha fogueira."),
+                ("The eldest who listens before she speaks. Our people admire that, Maithe.", "A mais velha que escuta antes de falar. O nosso povo admira isso, Maithe."),
+                ("Jorge brought me a whistle he had carved himself, Ícaro. You have his hands, boy.", "O Jorge me trouxe um apito que ele mesmo entalhou, Ícaro. Você tem as mãos dele, menino."),
+                ("Tell Edna that the old chief still keeps her place by the fire, Lavine.", "Diz para a Edna que o velho chefe ainda guarda o lugar dela perto do fogo, Lavine."),
+                ("We do not fell trees and we do not forget friends. That is the whole law of the canopy.", "Não derrubamos árvores e não esquecemos amigos. Essa é toda a lei das copas."));
+
+            AddResident(entries, "tinguaro", "Tinguaro the Tracker", "Tinguaro, o Rastreador",
+                ("A heavy step, Joaquim, but an honest one. The boars hear you coming; that's not always bad.", "Passo pesado, Joaquim, mas honesto. Os javalis te ouvem chegando; nem sempre isso é ruim."),
+                ("Maria, even a dimmed beast leaves a soft track. It wants to be found.", "Maria, até bicho apagado deixa rastro macio. Ele quer ser encontrado."),
+                ("Patig of the Vila told me about you, Maithe. Moss or mud, a good eye is a good eye.", "O Patig da Vila me falou de você, Maithe. Musgo ou lama, olho bom é olho bom."),
+                ("Your drone saw the boar, Ícaro? I saw it yesterday, by the moss. Slower, but no noise.", "Seu drone viu o javali, Ícaro? Eu vi ontem, pelo musgo. Mais devagar, mas sem barulho."),
+                ("Lavine, put your hand here. Still warm: the lizard passed a moment ago.", "Lavine, põe a mão aqui. Ainda está quente: o lagarto passou agora há pouco."),
+                ("Turned moss, broken fern, a dry drop on the leaf. The forest floor writes everything down.", "Musgo revirado, samambaia quebrada, gota seca na folha. O chão da mata anota tudo."));
+
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);
 
@@ -290,6 +386,7 @@ namespace Rapadura.UI.WorldMap
             }
 
             RegionQuestTexts.EnsureLoaded(manager);
+            CityQuestTexts.EnsureLoaded(manager);
             manager.LoadEntries(Entries.Where(entry => !manager.HasKey(entry.Key)).ToList());
             _mergedInto = manager;
         }
@@ -348,7 +445,7 @@ namespace Rapadura.UI.WorldMap
                     table[entry.Key] = entry.PtBR;
                 }
 
-                foreach (LocalizationEntry entry in RegionQuestTexts.All.Concat(LocalizationManager.DefaultEntries.All))
+                foreach (LocalizationEntry entry in RegionQuestTexts.All.Concat(CityQuestTexts.All).Concat(LocalizationManager.DefaultEntries.All))
                 {
                     if (entry != null && !string.IsNullOrEmpty(entry.Key) && !table.ContainsKey(entry.Key))
                     {

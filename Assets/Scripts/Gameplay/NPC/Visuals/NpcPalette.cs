@@ -28,6 +28,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // Face read from the iso camera: eye whites, lips/tongue that show on every skin tone, a deeper blush for dark
         // skin, grey brows for white hair, lash line; ivory and charcoal accents
         Sclera, Lip, Tongue, CheekRose, BrowGrey, Lash, Ivory, Charcoal,
+        // Copas de Garajonay (elfos-da-mata, Docs/Mapas100.md §3.3): bark skin, laurel #3F6B3A, moss #8DB255, bark #6E4B32,
+        // mist #DDE6E2, living water #7FD1C7 (glows a little), heather #E7B9D9, autumn-leaf hair
+        SkinBark, Laurel, MossLeaf, Bark, Mist, MistWater, Heather, HairAutumn,
     }
 
     /// <summary>
@@ -39,7 +42,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 9;
+        public const int Rows = 10;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -71,6 +74,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Face + accents
             new Color(0.98f, 0.96f, 0.92f), new Color(0.78f, 0.3f, 0.32f), new Color(0.93f, 0.46f, 0.46f), new Color(0.78f, 0.36f, 0.4f),
             new Color(0.46f, 0.44f, 0.43f), new Color(0.05f, 0.035f, 0.035f), new Color(0.9f, 0.85f, 0.72f), new Color(0.18f, 0.18f, 0.2f),
+            // Garajonay  bark skin #9C7A5B, #3F6B3A #8DB255 #6E4B32 #DDE6E2 #7FD1C7 #E7B9D9, autumn hair #B5652B
+            new Color(0.61f, 0.48f, 0.36f), new Color(0.25f, 0.42f, 0.23f), new Color(0.55f, 0.7f, 0.33f), new Color(0.43f, 0.29f, 0.2f),
+            new Color(0.87f, 0.9f, 0.89f), new Color(0.5f, 0.82f, 0.78f), new Color(0.91f, 0.73f, 0.85f), new Color(0.71f, 0.4f, 0.17f),
         };
 
         public static int Count => Colors.Length;
@@ -84,6 +90,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 case NpcSwatch.CrystalGlow: return 0.8f;
                 case NpcSwatch.Ember: return 0.9f;
                 case NpcSwatch.SunGlow: return 0.8f;
+                case NpcSwatch.MistWater: return 0.35f;
                 default: return 0f;
             }
         }

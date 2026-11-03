@@ -7,13 +7,38 @@
 
 | Região | Cidade | Moradores (conversa por primo) | Lojas | Serviços da Vó |
 |---|---|---|---|---|
-| Bosque do Zarafshan | **Vila da Vó Edna** | os 5 da história pessoal + Ponto de encontro (diálogos), Mariam, Zaku, Nana, Srosh, o Tratador (`tonico_haras`, amigo de estrada do Vô Jorge; não é o Patig, o Rastreador), Mestre Adamas (ferreiro), Mestre Omóforo (marceneiro), Mestra Narisah (costureira) | Loja Geral, Mercearia do Zaku, Armarinho da Mariam, Feira livre, Estrebaria do Srosh, Ferraria do Mestre Adamas, Marcenaria do Mestre Omóforo, Costureira Mestra Narisah | Baú e Fogão |
-| Areias Flamejantes | **Oásis de Qocho** | Vandak (seleiro), Yardena (cisterna), Uzzai, o Pastor | Selaria do Vandak | — |
+| Bosque do Zarafshan | **Vila da Vó Edna** | os 5 da história pessoal + Ponto de encontro (diálogos), Vó Edna (no aivan da casa dela), Mariam, Zaku, Nana, Srosh, o Tratador (`tonico_haras`, amigo de estrada do Vô Jorge; não é o Patig, o Rastreador), Mestre Adamas (ferreiro), Mestre Omóforo (marceneiro), Mestra Narisah (costureira), Ramrat, a Guardiã da Lâmpada (`socorro_vila`, guarda o oratório da Bênção), Mestre Xroshtag e Padwaxtag (músicos do Bema), Patig, o Rastreador | Loja Geral, Mercearia do Zaku, Armarinho da Mariam, Feira livre, Estrebaria do Srosh, Ferraria do Mestre Adamas, Marcenaria do Mestre Omóforo, Costureira Mestra Narisah | Baú e Fogão |
+| Areias Flamejantes | **Oásis de Qocho** | Vandak (seleiro), Yardena (cisterna), Uzzai, o Pastor, Náfsha, a Oleira (`rosa`, na olaria da rua Oeste) | Selaria do Vandak | — |
 | Serra de Kaggen | **Vila de Litema** | Mestre Mihr (forja), Coti (fiandeira), Innaios (tambor e lira) | Forja do Mestre Mihr | — |
 | Grutas do Limiar | **Vila das Lamparinas** | Parthenos, a das Lamparinas, Mihrshah (mineiro velho), Aso (causos), Gabryab, o do Pavio | Lamparinas da Parthenos | — |
 
 O **Caravaneiro Ammo** (o caravaneiro das Areias Flamejantes) passa cada dia numa cidade de região aberta; nesse dia ele é morador
 e a loja dele entra na lista. Bancada e Barcas de Luz existem em todas as cidades.
+
+### 1.1 Cidades de raça (`CityCatalog.RaceCities`)
+
+Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** de `CityCatalog.Cities` (a lista de
+"uma cidade-hub por região": painel do mapa-múndi, respawn por região, lista das Barcas). `CityCatalog.Get`,
+`AllCities` e `AllResidents` enxergam as duas listas; `IsRaceCity` diz qual é qual.
+
+| Região | Cidade | Moradores | Loja | Missões |
+|---|---|---|---|---|
+| Bosque do Zarafshan (mapa 05) | **Copas de Garajonay** (elfos-da-mata, `copas_garajonay`) | Gara, a Guardiã das Copas (salão da praça), Jonay, o Arqueiro, Dácil, a Ervateira, Bencomo, o Velho Chefe, Tinguaro, o Rastreador | **Ervaria da Dácil** (`shop_ervaria_dacil`) | Gara: "A Névoa Que Esqueceu a Água"; Tinguaro: "Rastros no Musgo" |
+
+- **Passeio da cidade:** a mesma receita `CityTownRecipes.Garajonay` do mapa 05 e do mundo contínuo (mesmo `CityId`,
+  mesma geometria; os moradores só ganharam `ResidentId` nos lotes que já existiam). Problema herdado da receita (não
+  mexido, outro agente usa a geometria): o banco da praça a 250° encosta na rua Sul (`CityLayoutRules` acusa).
+- **Respawn:** derrota nos mapas 05 e 06 acorda na praça das Copas (`MapCatalog.RespawnCityFor` → `CityProgress.ApplyDefeatIn`);
+  no mundo contínuo continua valendo o assentamento de retorno da área (`MapModeController.RespawnHere`).
+- **Ervaria da Dácil** (diária, 3 vagas que giram): erva, poção de vida e **Corda de Escalada** (exigência do 05) fixas;
+  **Chave do Jardim** (exigência do 06) fixa após o chefe da Floresta (como a cópia do Armarinho da Mariam, que continua
+  vendendo as duas); giram poção de mana, fibra, madeira, carne, ração de montaria, arco de caça e Amuleto da Sorte
+  (este após o chefe da Floresta). O Ammo nunca para numa cidade de raça.
+- **Missões da cidade** (`CityQuestCatalog`, textos em `CityQuestTexts`): o morador oferece a próxima missão da corrente
+  quando os primos chegam até ele (`CityResidentPost` → `CityQuestCatalog.Talk`), e pergunta como vai enquanto ela roda.
+  Gara pede 6 bichos bravos do chão da mata (o Lobo faz o Lagarto-Gigante do Louro; 3 poções de vida + 2 de mana, 320 XP);
+  depois Tinguaro pede 5 Javalis de Musgo (Queixada; arco de caça + 25 ouro, 380 XP). Objetivos só de combate, como as
+  missões de região. Testes: `CityGarajonayTests`.
 
 Código: `CityCatalog`, `CityShopCatalog` (dados), `CityTexts` (textos en/pt-BR), `VillageHubButton` (o mesmo painel
 para toda cidade), `CityFastTravelPanel` (Barcas de Luz), `CitySafeZoneHud` (aviso), `WorldMapCityPresence` (zona

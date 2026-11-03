@@ -4,6 +4,17 @@ using UnityEngine.Rendering;
 
 namespace Rapadura.Gameplay.World.Cities.Town
 {
+    /// <summary>A small piece recorded once by <see cref="TownMeshBuilder.Record"/> and stamped many times (grass, flowers, reeds).</summary>
+    public sealed class TownStamp
+    {
+        internal Vector3[] Vertices;
+        internal Vector3[] Normals;
+        internal Vector2[] Uvs;
+        internal byte[] Slots;
+
+        public int TriangleCount => Vertices.Length / 3;
+    }
+
     /// <summary>
     /// Flat-shaded low-poly appender of the town kit (sibling of <c>HouseMeshBuilder</c>/<c>WorldMapMeshBuilder</c>):
     /// boxes, frusta, logs, blobs, discs and slabs into one vertex list, every face coloured through a
@@ -17,8 +28,21 @@ namespace Rapadura.Gameplay.World.Cities.Town
         private readonly List<Vector2> _uvs = new List<Vector2>(2048);
         private readonly List<int> _triangles = new List<int>(4096);
 
-        /// <summary>Applied to every shape added from now on.</summary>
-        public Matrix4x4 Matrix = Matrix4x4.identity;
+        private Matrix4x4 _matrix = Matrix4x4.identity;
+        private bool _flip;
+        private bool _identity = true;
+
+        /// <summary>Applied to every shape added from now on (its handedness is cached: no determinant per triangle).</summary>
+        public Matrix4x4 Matrix
+        {
+            get => _matrix;
+            set
+            {
+                _matrix = value;
+                _identity = value == Matrix4x4.identity;
+                _flip = !_identity && value.determinant < 0f;
+            }
+        }
 
         public int TriangleCount => _triangles.Count / 3;
         public int VertexCount => _vertices.Count;
@@ -37,13 +61,130 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Runs <paramref name="build"/> with <see cref="Matrix"/> multiplied by a local TRS, then restores it.</summary>
         public void With(Vector3 position, float yaw, Vector3 scale, System.Action build)
         {
-            Matrix4x4 saved = Matrix;
-            Matrix = saved * Matrix4x4.TRS(position, Quaternion.Euler(0f, yaw, 0f), scale);
+            Matrix4x4 saved = _matrix;
+            bool savedFlip = _flip;
+            bool savedIdentity = _identity;
+            PushYawTrs(position, yaw, scale);
             build();
-            Matrix = saved;
+            _matrix = saved;
+            _flip = savedFlip;
+            _identity = savedIdentity;
+        }
+
+        /// <summary>
+        /// <see cref="Matrix"/> = <see cref="Matrix"/> × TRS(<paramref name="position"/>, yaw about +y, <paramref name="scale"/>),
+        /// built by hand (no TRS, quaternion or determinant: the kit places thousands of pieces this way).
+        /// </summary>
+        private void PushYawTrs(Vector3 position, float yaw, Vector3 scale)
+        {
+            float r = yaw * Mathf.Deg2Rad;
+            float c = Mathf.Cos(r);
+            float s = Mathf.Sin(r);
+            var m = new Matrix4x4();
+            m.m00 = c * scale.x;
+            m.m02 = s * scale.z;
+            m.m11 = scale.y;
+            m.m20 = -s * scale.x;
+            m.m22 = c * scale.z;
+            m.m03 = position.x;
+            m.m13 = position.y;
+            m.m23 = position.z;
+            m.m33 = 1f;
+            _matrix = _identity ? m : _matrix * m;
+            _flip ^= scale.x * scale.y * scale.z < 0f;
+            _identity = false;
         }
 
         public void With(Vector3 position, float yaw, System.Action build) => With(position, yaw, Vector3.one, build);
+
+        /// <summary>
+        /// Sets <see cref="Matrix"/> to a placement (turned <paramref name="yaw"/> degrees about +y, uniform
+        /// <paramref name="scale"/>) without TRS or determinant: the fast path for many small scattered pieces.
+        /// Restore with <see cref="Matrix"/> = identity (or a saved matrix) afterwards.
+        /// </summary>
+        public void Place(Vector3 position, float yaw, float scale)
+        {
+            float r = yaw * Mathf.Deg2Rad;
+            float c = Mathf.Cos(r) * scale;
+            float s = Mathf.Sin(r) * scale;
+            var m = new Matrix4x4();
+            m.m00 = c;
+            m.m02 = s;
+            m.m11 = scale;
+            m.m20 = -s;
+            m.m22 = c;
+            m.m03 = position.x;
+            m.m13 = position.y;
+            m.m23 = position.z;
+            m.m33 = 1f;
+            _matrix = m;
+            _flip = scale < 0f;
+            _identity = false;
+        }
+
+        /// <summary>
+        /// Records a small piece once (built by <paramref name="build"/> at the origin, scale 1) so it can be stamped many
+        /// times cheaply (<see cref="Stamp"/>). Triangles drawn with <paramref name="slots"/> swatches become colour slots
+        /// (0, 1, 2) chosen per stamp; any other swatch is kept.
+        /// </summary>
+        public static TownStamp Record(System.Action<TownMeshBuilder> build, params TownSwatch[] slots)
+        {
+            var b = new TownMeshBuilder();
+            build(b);
+            int count = b._vertices.Count;
+            var stamp = new TownStamp { Vertices = b._vertices.ToArray(), Normals = b._normals.ToArray(), Slots = new byte[count], Uvs = b._uvs.ToArray() };
+            for (int i = 0; i < count; i++)
+            {
+                TownSwatch swatch = TownPalette.SwatchAt(stamp.Uvs[i]);
+                int slot = System.Array.IndexOf(slots, swatch);
+                stamp.Slots[i] = (byte)(slot < 0 ? 255 : slot);
+            }
+
+            return stamp;
+        }
+
+        /// <summary>
+        /// Appends a recorded piece at <paramref name="position"/>, turned <paramref name="yaw"/> degrees about +y and scaled
+        /// by <paramref name="scale"/> (through <see cref="Matrix"/> when it is not identity), its colour slots painted with
+        /// <paramref name="slot0"/>..<paramref name="slot2"/>: no per-triangle normal or winding work.
+        /// </summary>
+        public void Stamp(TownStamp stamp, Vector3 position, float yaw, float scale, TownSwatch slot0, TownSwatch slot1 = TownSwatch.Black, TownSwatch slot2 = TownSwatch.Black)
+        {
+            float r = yaw * Mathf.Deg2Rad;
+            float c = Mathf.Cos(r);
+            float s = Mathf.Sin(r);
+            Vector2 uv0 = TownPalette.UvOf(slot0);
+            Vector2 uv1 = TownPalette.UvOf(slot1);
+            Vector2 uv2 = TownPalette.UvOf(slot2);
+            int start = _vertices.Count;
+            Vector3[] v = stamp.Vertices;
+            Vector3[] n = stamp.Normals;
+            for (int i = 0; i < v.Length; i++)
+            {
+                Vector3 p = v[i];
+                var world = new Vector3(position.x + (c * p.x + s * p.z) * scale, position.y + p.y * scale, position.z + (c * p.z - s * p.x) * scale);
+                Vector3 q = n[i];
+                var normal = new Vector3(c * q.x + s * q.z, q.y, c * q.z - s * q.x);
+                if (!_identity)
+                {
+                    world = _matrix.MultiplyPoint3x4(world);
+                    normal = _matrix.MultiplyVector(normal).normalized;
+                }
+
+                _vertices.Add(world);
+                _normals.Add(normal);
+                byte slot = stamp.Slots[i];
+                _uvs.Add(slot == 0 ? uv0 : slot == 1 ? uv1 : slot == 2 ? uv2 : stamp.Uvs[i]);
+            }
+
+            bool flip = _flip ^ (scale < 0f);
+            for (int i = 0; i < v.Length; i += 3)
+            {
+                _triangles.Add(start + i);
+                _triangles.Add(start + (flip ? i + 2 : i + 1));
+                _triangles.Add(start + (flip ? i + 1 : i + 2));
+            }
+        }
 
         /// <summary>Appends everything another builder holds (its own matrix already applied), through this one's matrix.</summary>
         public void Append(TownMeshBuilder other)
@@ -74,10 +215,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>One flat triangle (clockwise seen from the front, Unity's winding).</summary>
         public void Triangle(Vector3 a, Vector3 b, Vector3 c, TownSwatch swatch)
         {
-            a = Matrix.MultiplyPoint3x4(a);
-            b = Matrix.MultiplyPoint3x4(b);
-            c = Matrix.MultiplyPoint3x4(c);
-            if (Matrix.determinant < 0f)
+            if (!_identity)
+            {
+                a = _matrix.MultiplyPoint3x4(a);
+                b = _matrix.MultiplyPoint3x4(b);
+                c = _matrix.MultiplyPoint3x4(c);
+            }
+
+            if (_flip)
             {
                 (b, c) = (c, b);
             }
@@ -191,8 +336,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Box centred on <paramref name="center"/>, turned <paramref name="yaw"/> degrees about +y.</summary>
         public void Box(Vector3 center, Vector3 size, TownSwatch swatch, float yaw = 0f, TownSwatch? top = null, bool bottom = false)
         {
-            Matrix4x4 saved = Matrix;
-            Matrix = saved * Matrix4x4.TRS(center, Quaternion.Euler(0f, yaw, 0f), size);
+            Matrix4x4 saved = _matrix;
+            bool savedFlip = _flip;
+            bool savedIdentity = _identity;
+            PushYawTrs(center, yaw, size);
 
             var p000 = new Vector3(-0.5f, -0.5f, -0.5f);
             var p100 = new Vector3(0.5f, -0.5f, -0.5f);
@@ -213,7 +360,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 Quad(p001, p000, p100, p101, swatch);
             }
 
-            Matrix = saved;
+            _matrix = saved;
+            _flip = savedFlip;
+            _identity = savedIdentity;
         }
 
         /// <summary>Axis-aligned box spanning <paramref name="min"/>..<paramref name="max"/> (no bottom face: it rests on something).</summary>
@@ -319,14 +468,18 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Chunky icosahedron (20 faces) scaled per axis: tree crowns, hedges, hills.</summary>
         public void Crown(Vector3 center, Vector3 size, TownSwatch swatch, float yaw = 0f)
         {
-            Matrix4x4 saved = Matrix;
-            Matrix = saved * Matrix4x4.TRS(center, Quaternion.Euler(0f, yaw, 0f), size * 0.5f);
+            Matrix4x4 saved = _matrix;
+            bool savedFlip = _flip;
+            bool savedIdentity = _identity;
+            PushYawTrs(center, yaw, size * 0.5f);
             for (int i = 0; i < IcoFaces.Length; i += 3)
             {
                 Triangle(IcoVertices[IcoFaces[i]], IcoVertices[IcoFaces[i + 1]], IcoVertices[IcoFaces[i + 2]], swatch);
             }
 
-            Matrix = saved;
+            _matrix = saved;
+            _flip = savedFlip;
+            _identity = savedIdentity;
         }
 
         /// <summary>Flat n-gon facing up at height <paramref name="y"/> (a fan).</summary>

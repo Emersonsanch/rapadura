@@ -6,7 +6,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
 {
     /// <summary>
     /// The town recipes (content as code, like <c>CityCatalog</c>): every city is laid out by hand (Docs/Cities.md §5.3):
-    /// <see cref="VilaEdna"/>, <see cref="Qocho"/>, <see cref="Litema"/> and <see cref="Lamparinas"/>. A city added to the
+    /// <see cref="VilaEdna"/>, <see cref="Qocho"/>, <see cref="Litema"/>, <see cref="Lamparinas"/> and the race city
+    /// <see cref="Garajonay"/> (<see cref="CityCatalog.RaceCities"/>). A city added to the
     /// catalog without a recipe gets <see cref="Default"/> (the Vila's plan filled with its residents, shops and regional
     /// style) until it has one. Layouts are cached per city and "mascate today" flag (the generator is deterministic,
     /// so the cache never goes stale).
@@ -65,6 +66,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityCatalog.AreiaBranca: return Qocho();
                 case CityCatalog.SerraAlta: return Litema();
                 case CityCatalog.Lamparinas: return Lamparinas();
+                case CityCatalog.CopasGarajonay: return Garajonay();
                 default: return null;
             }
         }
@@ -111,7 +113,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             // ---- East street (the Loja Geral, Vo Edna's house, the stable closing the street) ----
             r.Lots.Add(Street("loja_geral", CityLotKind.Shop, CityArm.East, CityArm.North, 12.5f, 7.5f, 6f, 1.8f, null, CityShopCatalog.GeneralStore,
                 Shop(TownShopDressing.GeneralStore, TownSwatch.AdobeOchre, TownSwatch.Plaster, TownSwatch.Walnut, TownSwatch.ClothRed, door: 0f, floors: 2)));
-            r.Lots.Add(Street("casa_vo_edna", CityLotKind.Grandma, CityArm.East, CityArm.North, 22f, 8.5f, 6f, 2.2f, null, null, new TownBuildingSpec
+            r.Lots.Add(Street("casa_vo_edna", CityLotKind.Grandma, CityArm.East, CityArm.North, 22f, 8.5f, 6f, 2.2f, "vo_edna", null, new TownBuildingSpec
             {
                 WallColor = TownSwatch.Adobe,
                 TrimColor = TownSwatch.LimeWhite,
@@ -164,6 +166,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
             });
             r.PlazaProps.Add(new CityProp { Kind = CityPropKind.Stall, Position = new Vector2(-1.9f, 5.6f), Yaw = 0f, Variant = 0 });
             r.PlazaProps.Add(new CityProp { Kind = CityPropKind.Stall, Position = new Vector2(-4.3f, 5.6f), Yaw = 0f, Variant = 1 });
+
+            // ---- The lore cast without a counter (TODO.md "História e Arcos dos NPCs"), standing on the plaza: Ramrat by the
+            // lamp house (the lamp and the Bênção da Romaria), the two musicians of the Bema on the east side (the Call and the
+            // Answer), Patig the tracker at the mouth of the West street (the road to the woods). Standing spots: no building.
+            AddStandingSpot(r, "lampada_ramrat", "socorro_vila", new Vector2(-1.6f, 8.1f), new Vector2(-1.6f, 7.0f));
+            AddStandingSpot(r, "musicos_xroshtag", "xroshtag", new Vector2(4.6f, -2.2f), new Vector2(3.5f, -1.7f));
+            AddStandingSpot(r, "musicos_padwaxtag", "padwaxtag", new Vector2(5.9f, -0.5f), new Vector2(4.8f, -0.1f));
+            AddStandingSpot(r, "rastros_patig", "patig", new Vector2(-5.9f, -2.4f), new Vector2(-4.9f, -1.8f));
 
             // ---- Plaza ----
             r.PlazaProps.Add(new CityProp { Kind = CityPropKind.Well, Position = new Vector2(3.6f, 3.6f) });
@@ -308,7 +318,21 @@ namespace Rapadura.Gameplay.World.Cities.Town
             r.PlazaProps.Add(new CityProp { Kind = CityPropKind.Bench, Position = at, Yaw = CityGeometry.YawFacing(-at) });
         }
 
-        private static CityProp Fence(float x0, float z0, float x1, float z1, float height = 1f) =>
+/// <summary>
+        /// A resident standing on the plaza without a building of their own (a <see cref="CityLotKind.Market"/> lot of
+        /// 1 × 1 m: no walls, no ground patch): the keeper stands at <paramref name="stand"/>, the cousins step to
+        /// <paramref name="approach"/> to hear them.
+        /// </summary>
+        private static void AddStandingSpot(CityTownRecipe r, string id, string residentId, Vector2 stand, Vector2 approach)
+        {
+            r.Lots.Add(new CityLotRecipe
+            {
+                Id = id, Kind = CityLotKind.Market, Free = true, Center = stand, Front = (approach - stand).normalized, Width = 1f, Depth = 1f, Porch = 0f,
+                ResidentId = residentId, StandOverride = stand, ApproachOverride = approach,
+            });
+        }
+
+                private static CityProp Fence(float x0, float z0, float x1, float z1, float height = 1f) =>
             new CityProp { Kind = CityPropKind.FenceRun, Position = new Vector2(x0, z0), End = new Vector2(x1, z1), Scale = height };
 
         private static CityProp Segment(CityPropKind kind, float x0, float z0, float x1, float z1, float scale = 1f, int variant = 0) =>

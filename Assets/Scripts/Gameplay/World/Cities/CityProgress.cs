@@ -252,6 +252,28 @@ namespace Rapadura.Gameplay.World.Cities
             return CityCatalog.ForRegion(ApplyDefeat(region ?? CurrentRegion));
         }
 
+        /// <summary>
+        /// A defeat whose map names <paramref name="city"/> as its return city (Docs/Mapas100.md): wake up there. A race
+        /// city (Copas de Garajonay) is not its region's hub, so the region rule alone would send the hero to the hub; when
+        /// the region respawn stays in the city's region, the city itself is the answer. Null city = <see cref="ApplyDefeatHere"/>.
+        /// </summary>
+        public CitySpec ApplyDefeatIn(CitySpec city)
+        {
+            if (city == null)
+            {
+                return ApplyDefeatHere();
+            }
+
+            BiomeType respawn = ApplyDefeat(city.Region);
+            if (respawn != city.Region)
+            {
+                return CityCatalog.ForRegion(respawn);
+            }
+
+            PendingRespawnCity = city;
+            return city;
+        }
+
         /// <summary>Defeat in <paramref name="defeatRegion"/>: wake up in that region's city (unlocked, so the token can stand there).</summary>
         public BiomeType ApplyDefeat(BiomeType defeatRegion)
         {

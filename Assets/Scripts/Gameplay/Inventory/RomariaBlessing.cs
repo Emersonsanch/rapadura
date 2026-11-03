@@ -68,7 +68,7 @@ namespace Rapadura.Gameplay.Inventory
     {
         public static readonly IReadOnlyList<OratorySpec> Oratories = new List<OratorySpec>
         {
-            new OratorySpec(CityCatalog.VilaZefa, null),
+            new OratorySpec(CityCatalog.VilaZefa, "socorro_vila"),
             new OratorySpec(CityCatalog.AreiaBranca, "socorro"),
             new OratorySpec(CityCatalog.SerraAlta, "graca"),
             new OratorySpec(CityCatalog.Lamparinas, "benedita"),

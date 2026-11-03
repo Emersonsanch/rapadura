@@ -55,7 +55,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
             // ---- West street (the karez road; the Cais da Barca near its gate) ----
             TownBuildingSpec olaria = Spec(TownSwatch.TaipaRose, TownSwatch.Plaster, TownSwatch.Violet, TownSwatch.Gold, dressing: TownShopDressing.Pottery, door: 0.15f);
             olaria.DryingLoft = true;
-            r.Lots.Add(Street("olaria", CityLotKind.House, CityArm.West, CityArm.North, 12.5f, 7f, 5.5f, 1.6f, null, null, olaria));
+            // Náfsha the potter (resident id "rosa") at her door; the olaria sells nothing yet (CatalogoCasa's "Olaria da Náfsha").
+            r.Lots.Add(Street("olaria", CityLotKind.House, CityArm.West, CityArm.North, 12.5f, 7f, 5.5f, 1.6f, "rosa", null, olaria));
             TownBuildingSpec yardena = Spec(TownSwatch.Adobe, TownSwatch.Sandstone, TownSwatch.Walnut, TownSwatch.Turquoise, roof: TownRoofKind.Dome,
                 dressing: TownShopDressing.Cistern, door: -0.15f);
             r.Lots.Add(Street("casa_yardena", CityLotKind.House, CityArm.West, CityArm.North, 20.5f, 6.5f, 5.5f, 1.5f, "socorro", null, yardena));

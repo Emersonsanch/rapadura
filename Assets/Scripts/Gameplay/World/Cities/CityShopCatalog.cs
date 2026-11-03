@@ -186,6 +186,13 @@ namespace Rapadura.Gameplay.World.Cities
         /// <summary>Costureira Mestra Narisah (Docs/Housing.md §8.1): cloth for the house and the looks of CatalogoRoupas.md.</summary>
         public const string CostureiraFatima = "shop_costureira_fatima";
 
+        /// <summary>
+        /// Ervaria da Dácil (Copas de Garajonay, the elfos-da-mata, Docs/Mapas100.md §3.3): herbs, mist potions and the
+        /// canopy gear. Sells the Corda de Escalada (gate of map 05) and, after the Forest boss, a copy of the Chave do
+        /// Jardim (gate of map 06), the same as Mariam's Armarinho (Docs/MetodologiaMapasERacas.md §2.1).
+        /// </summary>
+        public const string ErvariaDacil = "shop_ervaria_dacil";
+
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
@@ -287,6 +294,24 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_lamparina_runica", 150, 1, unlock: ShopUnlock.Cleared(BiomeType.Caves)),
                 new CityShopEntry("item_oleo_fogo_eterno", 185, 2, unlock: ShopUnlock.Cleared(BiomeType.Caves)),
             }), houseSlots: 2),
+
+            // ---- Copas de Garajonay (elfos-da-mata): Dácil's herbs, mist potions and canopy gear; the counter turns daily ----
+            new CityShopSpec(ErvariaDacil, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(ErvariaDacil, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_herb", 3, 20),
+                new CityShopEntry("item_health_potion", 14, 5),
+                // Map gates (MapRequirementRules): the rope of the canopy (05) and a copy of the Garden Key (06).
+                new CityShopEntry("item_corda_escalada", 36, 3),
+                new CityShopEntry("item_chave_jardim", 60, 1, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
+                // The rotation: mist potions, laurel wood and fibre, mount feed (the Lagarto-do-Louro eats it too), Jonay's bows.
+                new CityShopEntry("item_mana_potion", 14, 4, rotating: true),
+                new CityShopEntry("item_fiber", 1, 20, rotating: true),
+                new CityShopEntry("item_wood", 2, 20, rotating: true),
+                new CityShopEntry("item_cooked_meat", 6, 6, rotating: true),
+                new CityShopEntry("item_mount_feed", 3, 10, rotating: true),
+                new CityShopEntry("item_hunting_bow", 33, 1, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 24, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
+            })),
 
             // ---- Ferraria do Mestre Adamas (Vila): the village blacksmith ----
             new CityShopSpec(FerrariaSeverino, ShopTheme.Ferreiro, BiomeType.Forest, ShopRotationPeriod.Weekly, 2, new List<CityShopEntry>

@@ -173,7 +173,7 @@ namespace Rapadura.Gameplay.Dialogue
             QuestDefinition asset = Resources.Load<QuestDefinition>(QuestResourcesFolder + questId);
 
             // Region side quests are defined in code (RegionQuestCatalog), not as Resources assets.
-            return asset != null ? asset : RegionQuestCatalog.GetQuest(questId);
+            return asset != null ? asset : RegionQuestCatalog.GetQuest(questId) ?? Rapadura.Gameplay.World.Cities.CityQuestCatalog.GetQuest(questId);
         }
 
         private static string ResolveActiveCharacterFromServices()

@@ -201,7 +201,7 @@ namespace Rapadura.Tests
             CityTexts.EnsureRegistered(manager);
 
             var keys = new List<string>();
-            foreach (CitySpec city in CityCatalog.Cities)
+            foreach (CitySpec city in CityCatalog.AllCities)
             {
                 keys.Add(city.NameKey);
                 keys.Add(city.ButtonKey);
@@ -263,7 +263,8 @@ namespace Rapadura.Tests
                 }
                 else
                 {
-                    Assert.IsTrue(CityCatalog.ForRegion(shop.HomeRegion).ShopIds.Contains(shop.ShopId), $"{shop.ShopId} not in its home city");
+                    // In its region's hub city, or in a race city of that region (Dácil's herbs in Copas de Garajonay).
+                    Assert.IsTrue(CityCatalog.AllCities.Any(c => c.Region == shop.HomeRegion && c.ShopIds.Contains(shop.ShopId)), $"{shop.ShopId} not in its home region's cities");
                 }
             }
 
@@ -273,7 +274,7 @@ namespace Rapadura.Tests
                 Assert.IsTrue(city.ShopIds.Any(id => CityShopCatalog.Get(id) != null && CityShopCatalog.Get(id).HomeRegion == city.Region), city.CityId);
             }
 
-            foreach (CitySpec city in CityCatalog.Cities)
+            foreach (CitySpec city in CityCatalog.AllCities)
             {
                 foreach (string shopId in city.ShopIds)
                 {
@@ -677,7 +678,7 @@ namespace Rapadura.Tests
             Assert.AreEqual("Qocho", VillageHubButton.BuildButtonLabel(CityCatalog.ForRegion(BiomeType.Desert), false, null));
             Assert.IsNotEmpty(VillageHubButton.StoryVillagersOf(CityCatalog.ForRegion(BiomeType.Forest)));
             Assert.IsEmpty(VillageHubButton.StoryVillagersOf(CityCatalog.ForRegion(BiomeType.Caves)), "story villagers live in the Vila");
-            Assert.AreEqual(3, VillageHubButton.ResidentsOf(CityCatalog.ForRegion(BiomeType.Desert), new List<string> { CityShopCatalog.SelariaVava }).Count);
+            Assert.AreEqual(4, VillageHubButton.ResidentsOf(CityCatalog.ForRegion(BiomeType.Desert), new List<string> { CityShopCatalog.SelariaVava }).Count);
         }
 
         [Test]

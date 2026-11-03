@@ -3,6 +3,7 @@ using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Inventory;
+using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.World.Map;
 using Rapadura.UI.WorldMap;
@@ -118,7 +119,16 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
             ServiceLocator.TryGet(out LocalizationManager localization);
             CharacterId? hero = ServiceLocator.TryGet(out CharacterSelectionState selection) && selection.HasSelection ? selection.Selected : null;
-            CombatFxManager.SpawnLootText(transform.position + Vector3.up * 2.3f, CityTexts.ResidentSpeech(localization, resident, hero));
+            string speech = CityTexts.ResidentSpeech(localization, resident, hero);
+
+            // A quest-giver (CityQuestCatalog: Gara, Tinguaro...) hands out the next quest of their chain, or asks how it goes.
+            string questLine = ServiceLocator.TryGet(out QuestManager quests) ? CityQuestCatalog.Talk(quests, _residentId) : null;
+            if (questLine != null)
+            {
+                speech = CityTexts.Format(localization, CityTexts.Speech, CityTexts.ResidentName(localization, resident), CityTexts.Get(localization, questLine));
+            }
+
+            CombatFxManager.SpawnLootText(transform.position + Vector3.up * 2.3f, speech);
         }
 
         private CityResidentSpec FindResident()

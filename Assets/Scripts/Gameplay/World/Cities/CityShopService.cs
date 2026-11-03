@@ -209,7 +209,7 @@ namespace Rapadura.Gameplay.World.Cities
             return ShopRotation.MascateRegion(ShopRotation.DayIndex(date), MascateCandidates(map));
         }
 
-        /// <summary>The shops with a counter in <paramref name="city"/> today: its own, plus the peddler when his mule is there.</summary>
+        /// <summary>The shops with a counter in <paramref name="city"/> today: its own, plus the peddler when his mule is there (hub cities only).</summary>
         public static List<string> ShopsOpenIn(CitySpec city, DateTime date, WorldMapProgress map)
         {
             var shops = new List<string>();
@@ -219,7 +219,8 @@ namespace Rapadura.Gameplay.World.Cities
             }
 
             shops.AddRange(city.ShopIds);
-            if (MascateRegion(date, map) == city.Region)
+            // Ammo's mule stops at the region's hub city only (a race city in the same region does not get him too).
+            if (!CityCatalog.IsRaceCity(city) && MascateRegion(date, map) == city.Region)
             {
                 shops.Add(CityShopCatalog.MascateBento);
             }

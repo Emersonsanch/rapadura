@@ -67,12 +67,12 @@
 | **Zaku, o Merceeiro** (`lazaro`, `shopkeeper`) | econômico, confere tudo duas vezes | magro, chapan índigo, doppa, cavanhaque, bolsa de moedas, balança erguida | conta com a mão, duas vezes |
 | **Nana, a Feirante** (`nenem`) | tagarela, sabe de tudo, ama flores | redonda e alegre, duas tranças ruivas, coroa de flores, vestido romã, cesto de flores | fala com as duas mãos |
 | **Srosh, o Tratador** (`tonico_haras`) | escuta bicho e gente, fala pouco | sem chapéu (orelhas à mostra), rabo de cavalo, colete de couro, rolo de corda, escova | afaga devagar |
-| **Patig, o Rastreador** (Barraca de caça) | paciente, mestre de pegadas, respeita os bichos | ombros para frente e cabeça baixa lendo o chão, verde de mata, capa marrom, penas na tiara, arco e aljava | varre o chão com o olhar |
-| **Mestre Xroshtag** (casa de música) | o Chamado, voz de trovão | grande e barrigudo, boca aberta, turbante romã, cafetã açafrão, dutar nas costas | ergue o braço chamando de longe |
-| **Padwaxtag** | a Resposta, tímido, voz fininha | jovem de cabeça baixa e bochechas coradas, cores do mestre em menor, flauta de junco | espia de vez em quando |
-| **Ramrat, a Guardiã da Lâmpada** | serena, acende uma lâmpada para quem sai | toda de branco com capuz e faixa dourada, lamparina nas duas mãos | ergue a lamparina devagar |
+| **Patig, o Rastreador** (`patig`, boca da rua Oeste da Vila) | paciente, mestre de pegadas, respeita os bichos | ombros para frente e cabeça baixa lendo o chão, verde de mata, capa marrom, penas na tiara, arco e aljava | varre o chão com o olhar |
+| **Mestre Xroshtag** (`xroshtag`, praça da Vila) | o Chamado, voz de trovão | grande e barrigudo, boca aberta, turbante romã, cafetã açafrão, dutar nas costas | ergue o braço chamando de longe |
+| **Padwaxtag** (`padwaxtag`, ao lado do mestre) | a Resposta, tímido, voz fininha | jovem de cabeça baixa e bochechas coradas, cores do mestre em menor, flauta de junco | espia de vez em quando |
+| **Ramrat, a Guardiã da Lâmpada** (`socorro_vila`, diante da casa da lâmpada) | serena, acende uma lâmpada para quem sai | toda de branco com capuz e faixa dourada, lamparina nas duas mãos | ergue a lamparina devagar |
 | **Ammo, o Caravaneiro** (`bento`, mascate) | velho contador de causos, amigo de estrada do Vô Jorge | barba branca curta e riso, envoltório e cachecol azuis com óculos de areia, cafetã ferrugem, mochila e rolo de dormir, sino da Teimosa, cajado de latão com sinos | apoia-se no cajado |
-| **Náfsha, a Oleira** | mãos sujas de barro, canta no torno | mãos cor de barro e mangas arregaçadas, avental manchado, vestido rosa, jarra nas mãos, boca aberta cantando | amassa o barro |
+| **Náfsha, a Oleira** (`rosa`, olaria de Qocho) | mãos sujas de barro, canta no torno | mãos cor de barro e mangas arregaçadas, avental manchado, vestido rosa, jarra nas mãos, boca aberta cantando | amassa o barro |
 | **Vandak, o Seleiro** (`vava`) | mercador esperto, escreve cartas à família | chapan violeta, gorro de feltro, bigode, avental de seleiro, carta e pena | rabisca |
 | **Yardena, a da Cisterna** (`socorro`) | prática, mandona, guarda cada gota | peito para fora, sobrancelhas severas, mão na cintura, túnica azul-água, envoltório turquesa, jarro de cobre, chaves no cinto | inclina o jarro medindo |
 | **Uzzai, o Pastor** (`tiao`) | brincalhão, imita bicho | jovem rindo, cabelo crespo, colete de feltro, cajado de pastor, sino de camelo | bate os braços imitando bicho |
@@ -89,6 +89,11 @@
 | **Estudioso das Trilhas** (`windtrail_scholar`, Maithe) | curioso, lê a espiral dos ushabtis na serra | cachecol e capa turquesa ao vento, porta-pergaminho nas costas, pergaminho e bastão | lê e olha para cima |
 | **Arquivista das Ruínas** (`ruins_archivist`, Ícaro) | decifra as tábuas dos Artífices | idoso redondo, turbante creme, cafetã dourado, bolsa de notas, duas tábuas de argila | lê as tábuas |
 | **Eremita Místico** (`hermit_mystic`, Lavine) | a Noite Rubra; a névoa lilás é filtro para a luz | alto e curvado, capuz e túnica violeta-noite com lilás, faixa vermelha (lua rubra), barba branca longa, cajado com lua crescente e pedra que brilha | mão no queixo, pensando |
+| **Gara, a Guardiã das Copas** (`gara`, Copas de Garajonay) | guardiã das copas, dá as missões da cidade, a névoa fala com ela | elfa alta e serena, **orelhas longas**, pele cor de casca, cabelo outonal solto, coroa de urze, túnica de louro com barra de névoa, capa de musgo, lanterna de casulo no poste | ergue a lanterna devagar |
+| **Jonay, o Arqueiro** (`jonay`) | treina o tiro; a Maithe adora | elfo ereto e de olhar vivo, rabo de cavalo outonal, tiara de louro, túnica musgo, cachecol de urze, arco e aljava | chama os aprendizes de longe |
+| **Dácil, a Ervateira** (`dacil`, Ervaria) | ervas e poções de névoa, a loja da cidade | jovem elfa gentil, duas tranças outonais, coroa de musgo, vestido de louro, avental de névoa e bolsa, cesto de ervas e jarra de água de névoa | verte a gota medida |
+| **Bencomo, o Velho Chefe** (`bencomo`) | graduações e convites; amigo do Vô Jorge | elfo idoso largo e orgulhoso, cabelo e barba longos brancos, faixa dourada na testa, cafetã de casca com ouro, capa de louro, cajado e pergaminho do convite | apoia-se e assente |
+| **Tinguaro, o Rastreador** (`tinguaro`) | lê rastro no musgo, tarefas de caça | elfo calmo de coque escuro e cavanhaque, chapan de casca, colete de couro, bolsa de laços, rolo de corda, bastão de rastreio | varre o musgo com o olhar |
 | aldeões genéricos | moradores de cada cidade | sorteio estável por lote na paleta da região: Zarafshan (damasco, choupo, romã, índigo; doppa, kalpak, lenço), Qocho (arenito, rosa, ouro, azul; envoltórios), Litema (barro, cal, cobertores; chapéu cônico), Lamparinas (branco, tufo, cobre; capuz, lamparina) | variado |
 
 ## 3. Notas
@@ -106,3 +111,11 @@
   usar em build: rigar (o zip "Mixamo" só tem o OBJ, sem esqueleto), reduzir para ~1500 tris e referenciar por um
   catálogo/Resources.
 - Ids antigos continuam valendo (aliases em `NpcRecipes`), nada de save muda.
+- **Elfos-da-mata** (Copas de Garajonay, 2026-11-03): `NpcRecipe.ElfEars` desenha a orelha longa (um cone achatado de 4
+  lados de cada lado da cabeça, varrido para cima e para trás, atravessando o cabelo; substitui a orelha redonda) e a
+  paleta ganhou a linha 10, de Garajonay (`SkinBark`, `Laurel`, `MossLeaf`, `Bark`, `Mist`, `MistWater` com brilho leve,
+  `Heather`, `HairAutumn`, Docs/Mapas100.md §3.3). Nomes da ficha 05 (lenda de Gara e Jonay; Bencomo, Tinguaro e
+  Dácil de Tenerife), nunca "Seu/Dona".
+- **Elenco de lore nas 4 cidades** (TODO.md "História e Arcos dos NPCs"): todos têm figura e porta. Quem não tem casa
+  própria na receita fica num **ponto de pé** da praça (`CityTownRecipes.AddStandingSpot`: lote `Market` de 1 × 1 m,
+  sem parede nem chão), conferido por `CityGarajonayTests.LoreCast_OfTheFirstFourCities_StandsInTheirTowns_OutsideEverySolid`.

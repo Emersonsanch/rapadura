@@ -191,10 +191,18 @@ namespace Rapadura.Gameplay.World.Cities.Town
             return true;
         }
 
+        /// <summary>
+        /// Height of the ground where <see cref="PlaceAt"/> stands the hero, when the world has relief (the continuous
+        /// overworld sets it while it is alive); null = flat ground at y = 0 (towns, arenas).
+        /// </summary>
+        public static System.Func<Vector2, float> GroundHeightAt;
+
         /// <summary>Teleports the hero onto the town ground at <paramref name="ground"/> (tests use it to start walks at the plaza).</summary>
         public static void PlaceAt(GameObject player, Vector2 ground, Vector2 facing)
         {
-            var position = new Vector3(ground.x, 0.05f, ground.y);
+            // On relief the hero is put just above the drawn ground, then snapped down onto its collider.
+            float y = GroundHeightAt != null ? Mathf.Max(0f, GroundHeightAt(ground)) : 0f;
+            var position = new Vector3(ground.x, y + 0.05f, ground.y);
             Quaternion rotation = facing.sqrMagnitude > 0.001f ? Quaternion.LookRotation(new Vector3(facing.x, 0f, facing.y)) : player.transform.rotation;
             if (player.TryGetComponent(out PlayerMotor motor))
             {

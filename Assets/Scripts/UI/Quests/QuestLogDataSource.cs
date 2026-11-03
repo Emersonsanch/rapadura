@@ -48,6 +48,7 @@ namespace Rapadura.UI.Quests
             {
                 QuestLogTexts.EnsureLoaded(_localization);
                 RegionQuestTexts.EnsureLoaded(_localization);
+                Rapadura.Gameplay.World.Cities.CityQuestTexts.EnsureLoaded(_localization);
             }
 
             if (_definitions.Count == 0)
@@ -55,7 +56,8 @@ namespace Rapadura.UI.Quests
                 _definitions.AddRange(Resources.LoadAll<QuestDefinition>(ResourcesFolder).Where(d => d != null && !string.IsNullOrEmpty(d.QuestId)));
 
                 // Region side quests live in code (RegionQuestCatalog), not in Resources/Quests.
-                foreach (QuestDefinition regionQuest in RegionQuestCatalog.GetAllQuests())
+                // Region and city side quests live in code (RegionQuestCatalog, CityQuestCatalog), not in Resources/Quests.
+                foreach (QuestDefinition regionQuest in RegionQuestCatalog.GetAllQuests().Concat(Rapadura.Gameplay.World.Cities.CityQuestCatalog.GetAllQuests()))
                 {
                     if (regionQuest != null && _definitions.All(d => d.QuestId != regionQuest.QuestId))
                     {

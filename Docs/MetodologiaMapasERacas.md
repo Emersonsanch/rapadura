@@ -53,8 +53,8 @@ a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: 
 | Exigência (mapas) | Como é atendida | Onde conseguir |
 |---|---|---|
 | Botas de couro (03) | calçar **qualquer** bota no slot Botas; Joaquim dispensa (não afunda no lodo, §3) | Botas de Couro: Armarinho da Mariam (Vila da Vó Edna), Costureira, Selaria de Qocho; recompensa da 2ª missão do Deserto |
-| Plataformas elevadas (05) | levar Corda de Escalada ou vestir asas (não a capa) | Armarinho da Mariam (Vila) |
-| Chave do Jardim (06) | levar a Chave do Jardim (presa ao herói, não cai na morte) | recompensa da 2ª missão da Floresta (Mariam); cópia no Armarinho após o chefe da Floresta |
+| Plataformas elevadas (05) | levar Corda de Escalada ou vestir asas (não a capa) | Armarinho da Mariam (Vila); Ervaria da Dácil (Copas de Garajonay) |
+| Chave do Jardim (06) | levar a Chave do Jardim (presa ao herói, não cai na morte) | recompensa da 2ª missão da Floresta (Mariam); cópia no Armarinho e na Ervaria da Dácil (Copas de Garajonay) após o chefe da Floresta |
 | Água fresca (10) | levar Odre de Água Fresca | Selaria de Qocho |
 | Proteção a veneno (12) | levar Teriaga do Oásis ou Amuleto Antiveneno; Lavine dispensa (névoas, §3) | Selaria de Qocho |
 | Manta de lã (14) | levar Manta de Lã, ou vestir a Capa de Feltro dos Nartes (Tacho), ou levar a Roupa Térmica | Forja do Mestre Mihr (Litema); recompensa da 2ª missão da Montanha |

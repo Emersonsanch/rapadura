@@ -86,6 +86,12 @@ namespace Rapadura.Gameplay.World.Cities
         public const string SerraAlta = "serra_alta";
         public const string Lamparinas = "lamparinas";
 
+        /// <summary>
+        /// Copas de Garajonay, the race city of the elfos-da-mata (map 05, Docs/Mapas100.md §3.3). Same id as
+        /// <c>MapCatalog.CopasGarajonay</c> and <c>CityTownRecipes.GarajonayCityId</c> (never change it: the map uses it).
+        /// </summary>
+        public const string CopasGarajonay = "copas_garajonay";
+
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
             new CitySpec(VilaZefa, BiomeType.Forest,
@@ -98,6 +104,13 @@ namespace Rapadura.Gameplay.World.Cities
                     // Not Patig, the Tracker (Hunting): two different people. Was "ze_haras" before 2026-10-30; resident ids
                     // are not saved anywhere (only localization keys), so the rename needs no migration.
                     new CityResidentSpec("tonico_haras", CityShopCatalog.HarasVila),
+                    // The lore cast of the Vila without a counter (TODO.md "História e Arcos dos NPCs"): Vó Edna on her
+                    // aivan, Ramrat at the lamp, the two musicians of the Bema and Patig the tracker on the plaza.
+                    new CityResidentSpec("vo_edna"),
+                    new CityResidentSpec("socorro_vila"),
+                    new CityResidentSpec("xroshtag"),
+                    new CityResidentSpec("padwaxtag"),
+                    new CityResidentSpec("patig"),
                     // The new Vila shops (Docs/Cities.md §4): blacksmith, carpenter and seamstress.
                     new CityResidentSpec("severino", CityShopCatalog.FerrariaSeverino),
                     new CityResidentSpec("damiao", CityShopCatalog.MarcenariaDamiao),
@@ -113,6 +126,8 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("vava", CityShopCatalog.SelariaVava),
                     new CityResidentSpec("socorro"),
                     new CityResidentSpec("tiao"),
+                    // Náfsha the potter, in the olaria on the West street (old id "rosa", like shop_olaria_rosa).
+                    new CityResidentSpec("rosa"),
                 },
                 new List<string> { CityShopCatalog.SelariaVava }),
 
@@ -136,10 +151,38 @@ namespace Rapadura.Gameplay.World.Cities
                 new List<string> { CityShopCatalog.LamparinasBenedita }),
         };
 
+        /// <summary>
+        /// The race cities (Docs/Mapas100.md §3.3) that already have a walkable town: a second city inside a region, so they
+        /// stay out of <see cref="Cities"/> (one hub city per region: the world-map hub, the region respawn, the Barcas list).
+        /// <see cref="Get"/>, <see cref="AllCities"/> and <see cref="AllResidents"/> see them; a defeat on one of their maps
+        /// wakes the hero in their plaza (<c>MapCatalog.RespawnCityFor</c>).
+        /// </summary>
+        public static readonly IReadOnlyList<CitySpec> RaceCities = new List<CitySpec>
+        {
+            // Copas de Garajonay (elfos-da-mata): Gara the canopy warden (missions), Jonay the archer, Dácil the herbalist
+            // (the city's shop, with the rope of the canopy and the Garden Key), Bencomo the old chief, Tinguaro the tracker.
+            new CitySpec(CopasGarajonay, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("gara"),
+                    new CityResidentSpec("jonay"),
+                    new CityResidentSpec("dacil", CityShopCatalog.ErvariaDacil),
+                    new CityResidentSpec("bencomo"),
+                    new CityResidentSpec("tinguaro"),
+                },
+                new List<string> { CityShopCatalog.ErvariaDacil }),
+        };
+
         /// <summary>Ammo, the peddler: not a resident of one city, he is wherever his mule is today (<see cref="ShopRotation.MascateRegion"/>).</summary>
         public static readonly CityResidentSpec Mascate = new CityResidentSpec("bento", CityShopCatalog.MascateBento, "dialogue.desert_tropeiro.name");
 
-        public static CitySpec Get(string cityId) => Cities.FirstOrDefault(c => c.CityId == cityId);
+        /// <summary>Any city with a walkable town: the region hubs, then the race cities.</summary>
+        public static IEnumerable<CitySpec> AllCities => Cities.Concat(RaceCities);
+
+        public static CitySpec Get(string cityId) => AllCities.FirstOrDefault(c => c.CityId == cityId);
+
+        /// <summary>Whether <paramref name="city"/> is a race city (not its region's hub: no world-map hub, no peddler).</summary>
+        public static bool IsRaceCity(CitySpec city) => city != null && RaceCities.Contains(city);
 
         public static CitySpec ForRegion(BiomeType? region)
         {
@@ -151,7 +194,7 @@ namespace Rapadura.Gameplay.World.Cities
         /// <summary>Every resident, the roaming peddler included.</summary>
         public static IEnumerable<CityResidentSpec> AllResidents()
         {
-            foreach (CitySpec city in Cities)
+            foreach (CitySpec city in AllCities)
             {
                 foreach (CityResidentSpec resident in city.Residents)
                 {

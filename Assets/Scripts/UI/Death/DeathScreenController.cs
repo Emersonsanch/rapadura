@@ -603,7 +603,7 @@ namespace Rapadura.UI.Death
                 CitySpec here = CityCatalog.Get(town.CityId);
                 if (hasCities && here != null)
                 {
-                    cities.ApplyDefeatHere(here.Region);
+                    cities.ApplyDefeatIn(here);
                     cities.ConsumeRespawnNotice();
                 }
 
@@ -619,7 +619,7 @@ namespace Rapadura.UI.Death
             {
                 if (hasCities && mapReturnCity != null)
                 {
-                    cities.ApplyDefeatHere(mapReturnCity.Region);
+                    cities.ApplyDefeatIn(mapReturnCity);
                     cities.ConsumeRespawnNotice();
                 }
 
@@ -630,7 +630,8 @@ namespace Rapadura.UI.Death
 
             if (hasCities && _transition != null && !_transition.HasPendingCityVisit && !_transition.HasPendingEncounter)
             {
-                CitySpec city = mapReturnCity != null ? cities.ApplyDefeatHere(mapReturnCity.Region) : cities.ApplyDefeatHere();
+                // The map's own return city (a race city like Copas de Garajonay included), else the region's hub city.
+                CitySpec city = cities.ApplyDefeatIn(mapReturnCity);
                 if (city != null)
                 {
                     stats?.Revive();

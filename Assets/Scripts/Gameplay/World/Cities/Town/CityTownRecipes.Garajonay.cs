@@ -9,7 +9,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
     /// platform with a round house (<see cref="CityPropKind.CanopyTree"/>), linked by rope bridges at the same height, a
     /// spiral stair round every trunk. Same conventions as the other recipes (x = east, z = north; fronts towards the
     /// isometric camera; the tall canopy stands north of the streets and at the far ends, the south side stays low).
-    /// Not a <see cref="CityCatalog"/> city yet (no city walk): it lives only inside its map (MapLayouts.Zarafshan).
+    /// A <see cref="CityCatalog.RaceCities"/> city since 2026-11-03: the same recipe is its walkable town (the city walk, the
+    /// respawn of maps 05–06) and the settlement of its map (MapLayouts.Zarafshan, the overworld). Its five residents stand
+    /// at their own doors (Gara at her hall, Dácil at her herb house with the city's shop, Jonay, Bencomo, Tinguaro);
+    /// giving them a keeper changes no footprint.
     /// </summary>
     public static partial class CityTownRecipes
     {
@@ -50,13 +53,13 @@ namespace Rapadura.Gameplay.World.Cities.Town
             r.Lots.Add(new CityLotRecipe
             {
                 Id = "salao_de_gara", Kind = CityLotKind.Workshop, Free = true, Center = new Vector2(0f, 12.5f), Front = Vector2.down,
-                Width = 8f, Depth = 5f, Porch = 1.8f, Spec = hall,
+                Width = 8f, Depth = 5f, Porch = 1.8f, Spec = hall, ResidentId = "gara",
             });
 
             // ---- West street (Dácil the herbalist, Jonay the archer, the Cais da Barca) ----
-            r.Lots.Add(Street("casa_dacil", CityLotKind.House, CityArm.West, CityArm.North, 12.5f, 6.5f, 5f, 1.4f, null, null,
+            r.Lots.Add(Street("casa_dacil", CityLotKind.House, CityArm.West, CityArm.North, 12.5f, 6.5f, 5f, 1.4f, "dacil", CityShopCatalog.ErvariaDacil,
                 Round(TownSwatch.WoodDark, TownSwatch.ClothGreen, TownSwatch.Tamarisk, door: 0.15f)));
-            r.Lots.Add(Street("casa_jonay", CityLotKind.House, CityArm.West, CityArm.North, 20.5f, 6.5f, 5f, 1.3f, null, null,
+            r.Lots.Add(Street("casa_jonay", CityLotKind.House, CityArm.West, CityArm.North, 20.5f, 6.5f, 5f, 1.3f, "jonay", null,
                 Round(TownSwatch.Walnut, TownSwatch.LeafDark, TownSwatch.ClothIndigo)));
             r.Lots.Add(Street("cais_da_barca", CityLotKind.ShipDock, CityArm.West, CityArm.North, 28.5f, 7f, 3.2f, 1.0f));
             r.Lots.Add(Street("casa_w1", CityLotKind.House, CityArm.West, CityArm.South, 12.5f, 6f, 4.8f, 1.0f, null, null,
@@ -65,9 +68,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 Round(TownSwatch.Walnut, TownSwatch.LeafDark, TownSwatch.Tamarisk, wallHeight: 2.6f)));
 
             // ---- East street (Bencomo the old chief, Tinguaro the tracker) ----
-            r.Lots.Add(Street("casa_bencomo", CityLotKind.House, CityArm.East, CityArm.North, 12.5f, 7f, 5.2f, 1.4f, null, null,
+            r.Lots.Add(Street("casa_bencomo", CityLotKind.House, CityArm.East, CityArm.North, 12.5f, 7f, 5.2f, 1.4f, "bencomo", null,
                 Round(TownSwatch.Walnut, TownSwatch.Gold, TownSwatch.Turquoise, door: -0.15f)));
-            r.Lots.Add(Street("casa_tinguaro", CityLotKind.House, CityArm.East, CityArm.North, 20.5f, 6.5f, 5f, 1.3f, null, null,
+            r.Lots.Add(Street("casa_tinguaro", CityLotKind.House, CityArm.East, CityArm.North, 20.5f, 6.5f, 5f, 1.3f, "tinguaro", null,
                 Round(TownSwatch.WoodDark, TownSwatch.LeafDark, TownSwatch.ClothRed)));
             r.Lots.Add(Street("casa_e1", CityLotKind.House, CityArm.East, CityArm.South, 15f, 6f, 4.8f, 1.0f, null, null,
                 Round(TownSwatch.WoodWeathered, TownSwatch.ClothGreen, TownSwatch.Tamarisk, wallHeight: 2.6f)));

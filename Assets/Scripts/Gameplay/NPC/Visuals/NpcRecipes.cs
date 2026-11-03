@@ -199,6 +199,86 @@ namespace Rapadura.Gameplay.NPC.Visuals
             },
 
             // ------------------------------------------------------------------
+            // Copas de Garajonay (elfos-da-mata, Docs/Mapas100.md §3.3): bark skin, autumn-leaf hair, laurel, moss, mist
+            // and heather; long ears swept back (Docs/MetodologiaMapasERacas.md §2.1). Names from the legend of Gara and
+            // Jonay (La Gomera) and the guanche chiefs of Tenerife.
+            // ------------------------------------------------------------------
+
+            // Gara, the canopy warden (she gives the city's missions): tall and calm, autumn hair loose to the waist under
+            // a heather crown, a laurel robe with a mist trim and a moss cape, the cocoon lantern of the bridges on a pole
+            // in her hand. Raises it slowly, lighting the rope bridges for whoever walks them at night.
+            new NpcRecipe
+            {
+                Id = "gara", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 1.08f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinBark, Face = NpcFace.Calm, Hair = NpcHair.Long, HairColor = NpcSwatch.HairAutumn, ElfEars = true,
+                Headwear = NpcHeadwear.FlowerCrown, HeadColor = NpcSwatch.Laurel,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.Laurel, Trim = NpcSwatch.Mist, Sleeves = NpcSwatch.Laurel, Boots = NpcSwatch.Bark,
+                Layers = NpcLayer.Cape | NpcLayer.Sash, LayerColor = NpcSwatch.MossLeaf, LayerTrim = NpcSwatch.Heather,
+                RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.LanternPole },
+                Gesture = NpcGesture.LanternRaise,
+                Story = "Guardiã das copas, acende as pontes de cipó, dá as missões da cidade",
+            },
+
+            // Jonay, the archer (he trains the shot; Maithe adores him): upright and bright-eyed, autumn ponytail and a laurel
+            // headband, a moss tunic and a heather scarf, the longbow and the quiver of laurel arrows. Calls out to the
+            // apprentices across the clearing.
+            new NpcRecipe
+            {
+                Id = "jonay", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 1.06f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinBark, Face = NpcFace.Bright, Hair = NpcHair.Ponytail, HairColor = NpcSwatch.HairAutumn, ElfEars = true,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.Laurel,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.MossLeaf, Trim = NpcSwatch.Bark, Sleeves = NpcSwatch.Laurel, Trousers = NpcSwatch.Bark, Boots = NpcSwatch.Bark,
+                Layers = NpcLayer.Belt | NpcLayer.Scarf, LayerColor = NpcSwatch.Bark, LayerTrim = NpcSwatch.Heather,
+                Props = new[] { NpcProp.Bow, NpcProp.Quiver },
+                Gesture = NpcGesture.Call,
+                Story = "Arqueiro das copas, treina tiro com a Maithe",
+            },
+
+            // Dácil, the herbalist (herbs and mist potions, the city's shop): young and kind, two autumn braids and a crown of
+            // moss, a laurel dress with a mist apron and a satchel, a basket of herbs on the arm and a jar of mist water
+            // (the drop the laurels drink from the cloud). Pours a measured drop.
+            new NpcRecipe
+            {
+                Id = "dacil", Region = BiomeType.Forest, Age = NpcAge.Youth, Build = NpcBuild.Slim, Height = 0.98f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinBark, Face = NpcFace.Kind, Hair = NpcHair.TwoBraids, HairColor = NpcSwatch.HairAutumn, ElfEars = true,
+                Headwear = NpcHeadwear.FlowerCrown, HeadColor = NpcSwatch.MossLeaf,
+                Garment = NpcGarment.Dress, Main = NpcSwatch.Laurel, Trim = NpcSwatch.Heather, Sleeves = NpcSwatch.Mist, Boots = NpcSwatch.Bark,
+                Layers = NpcLayer.Apron | NpcLayer.Satchel, LayerColor = NpcSwatch.Mist, LayerTrim = NpcSwatch.MossLeaf,
+                LeftArm = NpcArmPose.Crook, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.HerbBasket, NpcProp.Jar },
+                Gesture = NpcGesture.Pour,
+                Story = "Ervateira das copas, ervas e poções de névoa",
+            },
+
+            // Bencomo, the old chief (graduations and invitations): broad and proud even old, white hair and a long beard, a
+            // gold band on the brow, a bark kaftan with gold trim and a laurel cape, the chief's staff in one hand and the
+            // invitation scroll in the other. Leans on the staff and nods.
+            new NpcRecipe
+            {
+                Id = "bencomo", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Broad, Height = 1.04f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinBark, Face = NpcFace.Stern, Hair = NpcHair.Long, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Long, ElfEars = true,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.OldGold,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.Bark, Trim = NpcSwatch.OldGold, Sleeves = NpcSwatch.Bark, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Cape | NpcLayer.Sash, LayerColor = NpcSwatch.Laurel, LayerTrim = NpcSwatch.OldGold,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.WalkingStick, NpcProp.Scroll },
+                Gesture = NpcGesture.Lean,
+                Story = "Velho chefe dos elfos, graduações e convites",
+            },
+
+            // Tinguaro, the tracker (hunting tasks): quiet and patient, a dark topknot and a goatee, a bark chapan under a
+            // leather vest, a satchel of snares and a coil of rope, the forked tracking staff of the laurel floor. Reads the
+            // moss for tracks, slowly.
+            new NpcRecipe
+            {
+                Id = "tinguaro", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Average, Height = 1.02f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinBark, Face = NpcFace.Calm, Hair = NpcHair.Topknot, HairColor = NpcSwatch.HairDark, Beard = NpcBeard.Goatee, ElfEars = true,
+                Garment = NpcGarment.Chapan, Main = NpcSwatch.Bark, Trim = NpcSwatch.MossLeaf, Sleeves = NpcSwatch.Bark, Trousers = NpcSwatch.Laurel, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Vest | NpcLayer.Belt | NpcLayer.Satchel, LayerColor = NpcSwatch.LeatherDark, LayerTrim = NpcSwatch.MossLeaf,
+                RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.Crook, NpcProp.RopeCoil },
+                Gesture = NpcGesture.Scan,
+                Story = "Rastreador das copas, lê rastro no musgo, tarefas de caça",
+            },
+
+            // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
 
