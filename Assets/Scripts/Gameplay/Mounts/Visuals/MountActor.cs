@@ -41,6 +41,18 @@ namespace Rapadura.Gameplay.Mounts.Visuals
         private Transform _follow;
         private float _followDown;
 
+        // Flyers (MountType.Voador, MountFlightRules): hover, wing beat, legs tucked. Visual only.
+        private bool _flyer;
+        private Transform _wingLeft;
+        private Transform _wingRight;
+        private Transform _wingTipLeft;
+        private Transform _wingTipRight;
+        private Transform[] _legHips;
+        private float _beatPhase;
+        private float _hover = -1f;
+        private float _soarRemaining;
+        private float _soarDuration;
+
         private bool _hasTarget;
         private Vector3 _target;
         private float _runSpeed;
@@ -73,6 +85,18 @@ namespace Rapadura.Gameplay.Mounts.Visuals
         /// <summary>Plays hoof/paw sounds (off for the map token, which is far and tiny).</summary>
         public bool StepSounds { get; set; } = true;
 
+        /// <summary>A flyer: hovers and beats its wings instead of walking (<see cref="MountFlightRules"/>).</summary>
+        public bool IsFlyer => _flyer;
+
+        /// <summary>Flyers fly high here (false in cities and houses: low glide). Set by the rider controller.</summary>
+        public bool FlightAllowed { get; set; } = true;
+
+        /// <summary>Current height of the flyer's model above its root (world units), 0 for walkers.</summary>
+        public float HoverHeight => _flyer && _hover > 0f ? _hover * _scale : 0f;
+
+        /// <summary>Whether the "Voo da Coluna" arc is running.</summary>
+        public bool IsSoaring => _soarRemaining > 0f;
+
         /// <summary>Creates a mount actor (root + model) at <paramref name="position"/>.</summary>
         public static MountActor Spawn(MountDefinition definition, Vector3 position, Quaternion rotation, float scale = 1f, Transform parent = null,
             OwnedMount owned = null)
@@ -104,6 +128,23 @@ namespace Rapadura.Gameplay.Mounts.Visuals
             _visual = visual.transform;
             _seat = FindDeep(_visual, MountParts.Seat);
             _bell = FindDeep(_visual, MountParts.Bell);
+
+            _flyer = definition != null && definition.Type == MountType.Voador && _shape.FlightWings;
+            if (_flyer)
+            {
+                // Flyers never touch the ground: no gait engine (it would plant the feet), the legs fold under the body.
+                _wingLeft = FindDeep(_visual, MountParts.WingLeft);
+                _wingRight = FindDeep(_visual, MountParts.WingRight);
+                _wingTipLeft = FindDeep(_visual, MountParts.WingTipLeft);
+                _wingTipRight = FindDeep(_visual, MountParts.WingTipRight);
+                _legHips = new[]
+                {
+                    FindDeep(_visual, "Leg_FL"), FindDeep(_visual, "Leg_FR"), FindDeep(_visual, "Leg_HL"), FindDeep(_visual, "Leg_HR"),
+                };
+                _lastPosition = transform.position;
+                _lastYaw = transform.eulerAngles.y;
+                return;
+            }
 
             _legs = visual.AddComponent<ProceduralLegLocomotion>();
             _legs.SelfDriven = false;
@@ -185,6 +226,18 @@ namespace Rapadura.Gameplay.Mounts.Visuals
             _legs?.ResetState();
         }
 
+        /// <summary>"Voo da Coluna": the flyer climbs in an arc for <paramref name="seconds"/> and comes back down (look only).</summary>
+        public void Soar(float seconds)
+        {
+            if (!_flyer)
+            {
+                return;
+            }
+
+            _soarDuration = Mathf.Max(0.1f, seconds);
+            _soarRemaining = _soarDuration;
+        }
+
         private void Update()
         {
             if (!_hasTarget)
@@ -249,7 +302,11 @@ namespace Rapadura.Gameplay.Mounts.Visuals
             float motion = reduced ? ReducedMotionScale : 1f;
             float worldSpeed01 = Mathf.Clamp01(_speed / (MountRules.HeroRunSpeed * MountRules.MaxRideMultiplier * _scale));
 
-            if (_legs != null)
+            if (_flyer)
+            {
+                TickFlight(dt, reduced, worldSpeed01, position);
+            }
+            else if (_legs != null)
             {
                 _legs.Settings = MountGait.SettingsFor(_legs.MeanLegLength, Galloping ? 1f : 0f, _scale, _legs.DetectedStyle);
                 _legs.Advance(dt, _velocity, yawRate, motion);
@@ -286,6 +343,68 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                 {
                     MountAudio.Play(MountAudio.Cowbell, _bell.position);
                 }
+            }
+        }
+
+        /// <summary>Hover, bob, pitch with speed, wing beat (tips lagging), legs tucked and a wing "whoomp" on each downstroke.</summary>
+        private void TickFlight(float dt, bool reduced, float speed01, Vector3 position)
+        {
+            bool soaring = _soarRemaining > 0f;
+            float soar01 = -1f;
+            if (soaring)
+            {
+                _soarRemaining = Mathf.Max(0f, _soarRemaining - dt);
+                soar01 = 1f - _soarRemaining / _soarDuration;
+            }
+
+            float target = MountFlightRules.HoverHeight(FlightAllowed, speed01, soar01);
+            // The soar arc is followed exactly; the rest eases (take-off on spawn, landing in a city).
+            _hover = _hover < 0f || soaring ? target : Mathf.Lerp(_hover, target, 1f - Mathf.Exp(-dt * MountFlightRules.HeightEase));
+
+            float previous = _beatPhase;
+            _beatPhase += dt * MountFlightRules.BeatsPerSecond(speed01, soaring);
+            if (_beatPhase > 1000f)
+            {
+                _beatPhase -= 1000f;
+                previous -= 1000f;
+            }
+
+            float amplitude = MountFlightRules.FlapAmplitude(speed01, soaring, reduced);
+            float wing = MountFlightRules.WingAngle(_beatPhase, amplitude);
+            float tip = MountFlightRules.WingAngle(_beatPhase - MountFlightRules.TipLag, amplitude) * 0.6f;
+            SetWing(_wingLeft, wing, -1);
+            SetWing(_wingRight, wing, 1);
+            SetWing(_wingTipLeft, tip, -1);
+            SetWing(_wingTipRight, tip, 1);
+
+            float bob = MountFlightRules.Bob(_beatPhase, reduced);
+            float pitch = (soaring ? -8f : 6f * speed01) * MountFlightRules.MotionScale(reduced);
+            _visual.localPosition = new Vector3(0f, _hover + bob, 0f);
+            _visual.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+
+            if (_legHips != null)
+            {
+                for (int i = 0; i < _legHips.Length; i++)
+                {
+                    if (_legHips[i] != null)
+                    {
+                        _legHips[i].localRotation = Quaternion.Euler(i < 2 ? MountFlightRules.FrontLegTuck : MountFlightRules.HindLegTuck, 0f, 0f);
+                    }
+                }
+            }
+
+            if (StepSounds && _definition != null && MountFlightRules.DownstrokeStarted(previous, _beatPhase) && (speed01 > 0.05f || soaring))
+            {
+                MountAudio.Play(MountAudio.WingBeat, position);
+            }
+        }
+
+        /// <summary>Rolls a wing part up by <paramref name="degrees"/> (+ = up) on its side.</summary>
+        private static void SetWing(Transform part, float degrees, int side)
+        {
+            if (part != null)
+            {
+                part.localRotation = Quaternion.Euler(0f, 0f, degrees * side);
             }
         }
 

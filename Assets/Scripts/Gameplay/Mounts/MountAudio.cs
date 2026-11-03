@@ -28,6 +28,12 @@ namespace Rapadura.Gameplay.Mounts
         public const string Bray = "mount.bray";
         public const string Refused = "mount.refused";
 
+        /// <summary>Flyers: the soft "whoomp" of a wing downstroke (<see cref="GenerateWingBeat"/>).</summary>
+        public const string WingBeat = "mount.wingbeat";
+
+        /// <summary>The griffin's high, bright cry (eagle, not scary) for the "Voo da Coluna" (<see cref="GenerateGriffinCry"/>).</summary>
+        public const string GriffinCry = "mount.griffin_cry";
+
         public const int SampleRate = 22050;
 
         private static readonly Dictionary<string, AudioClip> Clips = new Dictionary<string, AudioClip>();
@@ -51,6 +57,8 @@ namespace Rapadura.Gameplay.Mounts
                 Cue(Sniff, ProceduralSfxPreset.Inhale, 1300f, 0.32f, 0.5f, 0.1f, null),
                 Cue(Bray, ProceduralSfxPreset.Buzz, 400f, 0.5f, 1f, 0.05f, withClips ? ClipFor(Bray, GenerateBray) : null),
                 Cue(Refused, ProceduralSfxPreset.BlipDown, 380f, 0.25f, 0.4f, 0f, null),
+                Cue(WingBeat, ProceduralSfxPreset.Whoosh, 240f, 0.22f, 0.18f, 0.12f, withClips ? ClipFor(WingBeat, GenerateWingBeat) : null, voices: 2, spatial: true),
+                Cue(GriffinCry, ProceduralSfxPreset.Chirp, 2200f, 0.4f, 0.8f, 0.05f, withClips ? ClipFor(GriffinCry, GenerateGriffinCry) : null),
             };
         }
 
@@ -104,6 +112,7 @@ namespace Rapadura.Gameplay.Mounts
                 case MountVisualRecipe.FireRhea:
                 case MountVisualRecipe.Boitata:
                 case MountVisualRecipe.ElderTortoise:
+                case MountVisualRecipe.ColumnGriffin:
                     return PawStep;
                 default:
                     return HoofStep;
@@ -211,6 +220,70 @@ namespace Rapadura.Gameplay.Mounts
             }
 
             Smooth(s, 0.3f);
+            Normalize(s, 0.75f);
+            return s;
+        }
+
+        /// <summary>Wing beat: a low swell of filtered noise (air pushed down) with a soft body, ~0.3 s.</summary>
+        public static float[] GenerateWingBeat()
+        {
+            float[] s = Buffer(0.32f);
+            var rng = new System.Random(23);
+            float low = 0f;
+            float lower = 0f;
+            for (int i = 0; i < s.Length; i++)
+            {
+                float t = (float)i / SampleRate;
+                float u = t / 0.32f;
+                float noise = (float)(rng.NextDouble() * 2.0 - 1.0);
+                low += 0.12f * (noise - low);
+                lower += 0.04f * (low - lower);
+                float env = Mathf.Sin(Mathf.PI * Mathf.Pow(u, 0.6f)) * (1f - u);
+                float body = Mathf.Sin(2f * Mathf.PI * Mathf.Lerp(140f, 90f, u) * t) * 0.25f;
+                s[i] = (lower * 3f + low * 0.6f + body) * env;
+            }
+
+            Normalize(s, 0.7f);
+            return s;
+        }
+
+        /// <summary>Griffin cry: "kiii-ah", a bright falling eagle call with a rasp, then a shorter echo.</summary>
+        public static float[] GenerateGriffinCry()
+        {
+            float[] s = Buffer(0.85f);
+            var rng = new System.Random(31);
+            float phase = 0f;
+            for (int i = 0; i < s.Length; i++)
+            {
+                float t = (float)i / SampleRate;
+                float f;
+                float env;
+                if (t < 0.5f)
+                {
+                    float u = t / 0.5f;
+                    f = u < 0.15f ? Mathf.Lerp(2100f, 3000f, u / 0.15f) : Mathf.Lerp(3000f, 1800f, (u - 0.15f) / 0.85f);
+                    env = Mathf.Clamp01(u * 20f) * Mathf.Clamp01((1f - u) * 3f);
+                }
+                else if (t < 0.58f)
+                {
+                    f = 2000f;
+                    env = 0f;
+                }
+                else
+                {
+                    float u = (t - 0.58f) / 0.27f;
+                    f = Mathf.Lerp(2600f, 1900f, u);
+                    env = 0.55f * Mathf.Clamp01(u * 15f) * Mathf.Clamp01((1f - u) * 3f);
+                }
+
+                f *= 1f + 0.02f * Mathf.Sin(2f * Mathf.PI * 28f * t);
+                phase += f / SampleRate;
+                float tone = Mathf.Sin(2f * Mathf.PI * phase) + 0.35f * Mathf.Sin(4f * Mathf.PI * phase);
+                float rasp = (float)(rng.NextDouble() * 2.0 - 1.0) * 0.25f;
+                s[i] = env * (tone + rasp);
+            }
+
+            Smooth(s, 0.6f);
             Normalize(s, 0.75f);
             return s;
         }

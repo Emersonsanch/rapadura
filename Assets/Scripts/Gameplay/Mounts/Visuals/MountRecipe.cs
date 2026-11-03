@@ -18,6 +18,14 @@ namespace Rapadura.Gameplay.Mounts.Visuals
 
         /// <summary>Cowbell hanging under the neck (the donkey's chocalho): swings on its own.</summary>
         public const string Bell = "Bell";
+
+        /// <summary>Flapping wings of the flyers (children of <see cref="Body"/>; <see cref="MountActor"/> beats them).</summary>
+        public const string WingLeft = "Wing_L";
+        public const string WingRight = "Wing_R";
+
+        /// <summary>Outer half of a wing (child of the wing), bent with a little lag.</summary>
+        public const string WingTipLeft = "WingTip_L";
+        public const string WingTipRight = "WingTip_R";
     }
 
     /// <summary>
@@ -60,6 +68,17 @@ namespace Rapadura.Gameplay.Mounts.Visuals
         public bool FlameCrest;
         public bool Beard;
         public bool Wings;
+
+        // ---- Flyers (MountSkyRecipes) ----
+
+        /// <summary>Two big jointed wings that flap (<see cref="MountParts.WingLeft"/>...), not the folded <see cref="Wings"/> of the rheas.</summary>
+        public bool FlightWings;
+
+        /// <summary>Length of one wing (shoulder to tip), metres.</summary>
+        public float WingSpan;
+
+        /// <summary>Hooked eagle beak on the head (the griffin), in <see cref="Accent"/>.</summary>
+        public bool Beak;
 
         /// <summary>Leg thickness factor (0 = 1: the starters; the mammoth and the tortoise have thick legs).</summary>
         public float LegGirth;
@@ -131,6 +150,11 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                     if (MountWaveRecipes.TryShape(recipe, out QuadrupedShape wave))
                     {
                         return wave;
+                    }
+
+                    if (MountSkyRecipes.TryShape(recipe, out QuadrupedShape sky))
+                    {
+                        return sky;
                     }
 
                     return new QuadrupedShape
@@ -208,6 +232,9 @@ namespace Rapadura.Gameplay.Mounts.Visuals
 
             // Horns, shell, trunk, spots, flames... of the M3 species (nothing for the starters).
             MountWaveDecor.Decorate(bp, s, body, head);
+
+            // Flapping wings and beak of the flyers.
+            MountSkyRecipes.Decorate(bp, s, body, head);
         }
 
         // ------------------------------------------------------------------

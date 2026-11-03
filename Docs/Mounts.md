@@ -15,6 +15,7 @@
 > **Bema** (ids `prendas`/`event_festa_junina` iguais).
 
 **Total: 30 montarias**, sendo 20 dos mitos e contos antigos (Rota da Seda, Kemet, Kush, Pérsia, estepes) e 10 bichos "de verdade" (alguns gigantes).
+**+1 (2026-11-03):** o **Grifo da Coluna da Glória** (§3.8), a primeira voadora no código; o Caderno lista 31.
 
 | Raridade (`ItemRarity`) | Montarias | Como se consegue |
 |---|---|---|
@@ -256,7 +257,7 @@ montado mostra a barrinha "Alforjes", a mochila mostra "Carga" e um aviso aparec
 | Grande Ushabti | Escaravelho 4%, Grifo 2%, Ovo de Vishap 0,3% |
 | Hahya, o Gigante Guerreiro | Irbis, o Leopardo-das-Neves 2%, Mamute 1,5%, Tulpar 0,8% |
 | Tages, o Habitante Ancestral | Raposa-Joia 1,5%, Qilin 0,8%, Bennu 0,2% |
-| Missão | Pônei (presente), Asno de Três Patas, Cavalo-d'Água, Senmurv |
+| Missão | Pônei (presente), Asno de Três Patas, Cavalo-d'Água, Senmurv, Grifo da Coluna da Glória (§3.8) |
 | Conquista | Facóquero, Sleipnir, Ijapa, a Tartaruga Anciã |
 | Segredo do mapa | Mehen |
 | Evento (oferendas) | Avestruz de Brasa 90, Boi das Canções 250 |
@@ -274,6 +275,39 @@ offline (Decisão 2).
 vira montaria (bíblia §0). Apedemak, Taweret, Khepri, Wepwawet e Mehen dão nome ou inspiração, mas a montaria é "o
 bicho dos relevos", não o deus. A Mehen aparece como **protetora**: se enrola em volta do sol para guardá-lo à noite e
 assusta quem quer queimar o bosque.
+
+### 3.8 Grifo da Coluna da Glória (primeira voadora, no código)
+
+| Id | Nome | Tipo | Raridade | Vel. | Def. | Vida | Fôlego | Pts | Guerra | Habilidade (G) | Como consegue | Região | Favorito |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `mount_column_griffin` | Grifo da Coluna da Glória / *Column of Glory Griffin* | voador | Raro | 1,65 | +2% | 125 | 160 | 16 | — | **Voo da Coluna:** sobe e voa 10 m para a frente por cima dos bichos (0,8 s; parede ainda segura) e pousa num clarão: bichos comuns a até 4 m fogem por 2,5 s (chefe não). Recarga 25 s | Missão **Asas da Coluna** (nível 40) | Grutas do Limiar | Lavine |
+
+- **História (bíblia §1.1):** os grifos de luz guardam a **Coluna da Glória** (*Srōšahrāy*), o caminho por onde as
+  faíscas libertadas sobem. Um deles foi apagado e caiu nas Grutas do Limiar. O Srosh da Estrebaria ouve as asas; cada
+  bicho vencido solta uma faísca que sobe pela Coluna e, com luz que chega, o grifo lembra o caminho e desce até os
+  primos. Lavine (Ar Sereno, a luz presa "no céu, na Coluna") é a favorita: "Sobe, sobe! O ar lá em cima é o mais
+  sereno que tem."
+- **Como consegue:** a missão lateral **Asas da Coluna** (`quest_mount_column_griffin`, `ColumnGriffinQuest`) abre
+  sozinha quando o primo chega ao **nível 40** (antes do mapa 24, Ninho de Mahaway, 42–50, que pede asas ou voadora) e
+  pede **40 faíscas** (40 bichos quaisquer vencidos: objetivo `KillEnemyType` sem alvo). Ao concluir, o gancho
+  `MountSourceHooks.QuestAsasDaColuna` dá o grifo uma vez só (fonte `quest`); save com a missão feita e sem o grifo
+  recebe de volta. Não é vendido (troca: uma vez, por ser Raro).
+- **Mapas:** ter o grifo conta como "montaria voadora" nas exigências `WingsOrDoubleJump` (mapa 24) e `WingsRequired`
+  (mapa 39): `MapRequirementHeroState` transforma cada montaria possuída no seu `MountType`.
+- **Voo só visual** (`MountFlightRules`, `MountActor`): o herói continua no chão (mesmo `CharacterController`, clique,
+  colisão, câmera); só o modelo (e o primo sentado na sela) flutua **1,0 m** parado e **1,35 m** andando, com bater de
+  asas (subida mais lenta que a descida), pernas dobradas e balanço leve. Na cidade e em casa plana baixo (0,3 m, §9.2).
+  No **Voo da Coluna** o modelo faz um arco até **+2,6 m** enquanto o herói avança pelo chão (o mesmo avanço da
+  Investida: parede segura). "Reduzir Movimento" corta pela metade o balanço e a batida das asas, nunca a altura. No
+  mapa mundi o grifo só sobe e desce sobre o token. `ServerMaxAltitude` do voo = 3,95 m (só visual).
+- **Modelo:** low-poly procedural no mesmo sistema (`MountSkyRecipes`): corpo de leão marfim com linha dourada, gola de
+  penas clara, cabeça de águia branca com bico dourado em gancho e tufos, garras douradas, asas articuladas
+  (`Wing_L/R` → `WingTip_L/R`) com rêmiges de ponta luminosa (as faíscas), manta prateada.
+- **Carga (§2.7):** capacidade 120 (`EncumbranceRules.MountBaseCapacity`), ave de luz leva pouco.
+- **Som:** `mount.wingbeat` (sopro grave a cada batida para baixo, só em movimento) e `mount.griffin_cry` (grito agudo
+  de águia, não assusta) sintetizados em `MountAudio`.
+- **Testes:** `MountSkyTests` (catálogo e orçamento, textos, portões 24/39, missão de ponta a ponta e reposição, regras
+  do voo, modelo, sons).
 
 ### 3.7 Checagem de unicidade
 
@@ -693,6 +727,9 @@ dos primos com as falas.
    - **Textos:** `MountWaveTexts` (descrição com as historinhas dos primos, habilidades, apitos, avisos) em en + pt-BR.
 2. Física nova: nado (Hipopotinha, Cavalo-d'Água), túnel e areia (Pangolim, Escaravelho), teleporte (Sleipnir).
 3. Voadores: Senmurv (planar), Grifo (voo curto), Tulpar (voo livre), Bennu, Vishap (ovo e choco).
+   **Feito (2026-11-03):** a primeira, o Grifo da Coluna da Glória (§3.8), com o voo visual (`MountFlightRules`), as
+   asas no `MountActor`, o Voo Curto (`ShortFlight`) e a missão "Asas da Coluna". As próximas reaproveitam o
+   `MountSkyCatalog` e o `MountSkyRecipes`.
 4. Drops nos chefes e bichos (`EnemyLootRoller`, bônus de chefe), Fitas de Luz, conquistas e missões novas, itens
    dos eventos Bema.
 5. Balanceamento: script que confere o orçamento do §2.4 e a unicidade do §3.7 (teste como o

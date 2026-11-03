@@ -63,6 +63,9 @@ namespace Rapadura.Gameplay.Mounts
         Boitata = 18,
         BoiBumba = 19,
         ElderTortoise = 20,
+
+        // First flyer (MountSkyCatalog, MountSkyRecipes). Appended only.
+        ColumnGriffin = 21,
     }
 
     /// <summary>The effect family of a mount ability (§12.2). M1 implements Dash, LootMagnet and Fear; M3 wave 1 the walkers' kinds (MountWaveAbilities).</summary>

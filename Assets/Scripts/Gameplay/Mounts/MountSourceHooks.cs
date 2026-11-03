@@ -51,6 +51,9 @@ namespace Rapadura.Gameplay.Mounts
         public const string SecretMataQueNaoQueima = "secret_mata_que_nao_queima";
         public const string EventFestaJunina = "event_festa_junina";
 
+        /// <summary>"Asas da Coluna" (<see cref="ColumnGriffinQuest"/>): gives the first flyer, the Grifo da Coluna da Glória.</summary>
+        public const string QuestAsasDaColuna = "quest_mount_column_griffin";
+
         public static readonly IReadOnlyList<MountSourceHook> All = new[]
         {
             new MountSourceHook(MountWaveCatalog.EnchantedDonkey, MountSourceKind.Quest, QuestAguaProJumento),
@@ -59,6 +62,7 @@ namespace Rapadura.Gameplay.Mounts
             new MountSourceHook(MountWaveCatalog.Boitata, MountSourceKind.Secret, SecretMataQueNaoQueima),
             new MountSourceHook(MountWaveCatalog.FireRhea, MountSourceKind.Event, EventFestaJunina, 90),
             new MountSourceHook(MountWaveCatalog.BoiBumba, MountSourceKind.Event, EventFestaJunina, 250),
+            new MountSourceHook(MountSkyCatalog.ColumnGriffin, MountSourceKind.Quest, QuestAsasDaColuna),
         };
 
         public static IEnumerable<MountSourceHook> Matching(MountSourceKind kind, string hookId)

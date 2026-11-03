@@ -85,7 +85,10 @@ namespace Rapadura.Gameplay.Mounts
             _allowedInSafeZone = false;
             _serverMaxDistance = _distance;
             _serverMaxDuration = _durationSeconds;
-            _serverMaxAltitude = 0f;
+            // Flight is visual only (MountFlightRules): the model's highest point, the hero itself stays on the ground.
+            _serverMaxAltitude = kind == MountAbilityKind.ShortFlight || kind == MountAbilityKind.FreeFlight || kind == MountAbilityKind.Glide
+                ? MountFlightRules.CruiseHover + MountFlightRules.SoarPeak
+                : 0f;
         }
     }
 }

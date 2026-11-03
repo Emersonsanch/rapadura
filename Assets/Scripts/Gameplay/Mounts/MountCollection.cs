@@ -263,6 +263,9 @@ namespace Rapadura.Gameplay.Mounts
             if (ServiceLocator.TryGet(out Rapadura.Gameplay.Quests.QuestManager quests))
             {
                 FirstSaddleQuest.Install(quests, this);
+
+                // "Asas da Coluna": the first flyer, opened at hero level 40 (MountSkyCatalog).
+                ColumnGriffinQuest.Install(quests, this);
             }
         }
 
@@ -282,6 +285,7 @@ namespace Rapadura.Gameplay.Mounts
             EventBus.Unsubscribe<Rapadura.Gameplay.Secrets.SecretClaimedEvent>(OnSecretClaimed);
             EventBus.Unsubscribe<PlayerExperienceChangedEvent>(OnPlayerExperienceChanged);
             FirstSaddleQuest.Uninstall();
+            ColumnGriffinQuest.Uninstall();
         }
 
         public void ResetForNewSession()

@@ -165,6 +165,9 @@ namespace Rapadura.Gameplay.Mounts
             {
                 FirstSaddleQuest.Evaluate(map);
             }
+
+            // No live hero on the map: only repays a griffin a finished "Asas da Coluna" still owes.
+            ColumnGriffinQuest.Evaluate(0);
         }
 
         // ------------------------------------------------------------------
@@ -495,6 +498,13 @@ namespace Rapadura.Gameplay.Mounts
                     _session.StartFreeGallop(ability.DurationSeconds);
                     MountAudio.Play(MountAudio.Dash);
                     MountNotices.Raise(MountTexts.Format(localization, MountWaveTexts.ToastFreeGallop, MountTexts.MountName(localization, definition)));
+                    break;
+                case MountAbilityKind.ShortFlight:
+                    // Voo da Coluna on the road: the griffin just climbs and circles back down over the token (look only).
+                    _actor?.Soar(ability.DurationSeconds * 2f);
+                    MountAudio.Play(MountAudio.GriffinCry);
+                    MountNotices.Raise(MountTexts.Format(localization, MountWaveTexts.MapShowOff, MountTexts.MountName(localization, definition),
+                        MountTexts.AbilityName(localization, definition)));
                     break;
                 default:
                     // The other wave-1 abilities act on critters and secrets in the arena; on the map the mount just shows off.

@@ -6,7 +6,7 @@ using Rapadura.Gameplay.World.Biomes;
 
 namespace Rapadura.Gameplay.Mounts
 {
-    /// <summary>One line of the "Caderno de Montarias": a species of the full catalog of 30 (§3), with where it shows up.</summary>
+    /// <summary>One line of the "Caderno de Montarias": a species of the full catalog of 31 (§3), with where it shows up.</summary>
     public sealed class MountCodexEntry
     {
         public readonly string MountId;
@@ -30,10 +30,10 @@ namespace Rapadura.Gameplay.Mounts
     }
 
     /// <summary>
-    /// The "Caderno de Montarias" (Docs/Mounts.md §7, phase M2): all 30 species of §3, in catalog order. Owned ones show
+    /// The "Caderno de Montarias" (Docs/Mounts.md §7, phase M2): all 31 species of §3 (30 + the Grifo da Coluna, §3.8), in catalog order. Owned ones show
     /// their name and stats, seen-but-not-owned ones their name, the rest a "???" silhouette with the hint of where they
-    /// appear. The species in <see cref="MountCatalog"/> (3 starters + M3 wave 1) are playable, the rest only listed; their names and
-    /// hints live in <see cref="MountTexts"/>, the other 27 here.
+    /// appear. The species in <see cref="MountCatalog"/> (3 starters + M3 wave 1 + the first flyer) are playable, the rest only listed; their names and
+    /// hints live in <see cref="MountTexts"/>, the others here.
     /// </summary>
     public static class MountCodex
     {
@@ -59,6 +59,8 @@ namespace Rapadura.Gameplay.Mounts
             ("mount_unicorn", ItemRarity.Rare, BiomeType.Forest, "Singing Shadhavar", "Shadhavar Cantante", "Seen near Kök-Böri, the Sky Wolf.", "Visto perto do Kök-Böri, o Lobo Celeste."),
             ("mount_hippogriff", ItemRarity.Rare, BiomeType.Mountain, "Gale Senmurv", "Senmurv Ventania", "A chick fell from its nest in the Kaggen Range.", "Um filhote caiu do ninho na Serra de Kaggen."),
             ("mount_griffin", ItemRarity.Rare, BiomeType.Desert, "Scythian Gold Griffin", "Grifo de Ouro Cita", "Nests by the Great Ushabti.", "Faz ninho junto ao Grande Ushabti."),
+            ("mount_column_griffin", ItemRarity.Rare, BiomeType.Caves, "Column of Glory Griffin", "Grifo da Coluna da Glória",
+                "Level 40: free 40 sparks and a griffin of light comes down the Column.", "Nível 40: liberte 40 faíscas e um grifo de luz desce pela Coluna."),
             ("mount_light_jaguar", ItemRarity.Rare, BiomeType.Forest, "Apedemak's Light Lion", "Leão de Luz de Apedemak", "Hunts with spiders and wolves at night.", "Caça com aranhas e lobos à noite."),
             ("mount_carbuncle", ItemRarity.Rare, BiomeType.Caves, "Threshold Jewel Fox", "Raposa-Joia do Limiar", "A jewel glows near Tages, the Ancient Dweller.", "Uma joia brilha perto do Tages, o Habitante Ancestral."),
             ("mount_fire_rhea", ItemRarity.Rare, BiomeType.Desert, "Ember Ostrich", "Avestruz de Brasa", "Bema prize.", "Prêmio do Bema."),

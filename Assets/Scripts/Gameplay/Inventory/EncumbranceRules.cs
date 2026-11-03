@@ -131,6 +131,7 @@ namespace Rapadura.Gameplay.Inventory
             { "mount_unicorn", 170f },
             { "mount_hippogriff", 110f },
             { "mount_griffin", 140f },
+            { "mount_column_griffin", 120f }, // flyer: light frame, carries less than the gold griffin
             { "mount_light_jaguar", 110f },
             { "mount_carbuncle", 100f },
             { "mount_fire_rhea", 80f },

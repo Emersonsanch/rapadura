@@ -327,6 +327,7 @@ namespace Rapadura.Gameplay.Mounts
             if (_actor != null)
             {
                 _actor.Galloping = _session.IsMounted && _session.IsGalloping;
+                _actor.FlightAllowed = MountFlightRules.FlightAllowed(place);
             }
 
             bool abilityPressed = !paused && ((_abilityAction != null && _abilityAction.WasPressedThisFrame()) || TouchAbilityRequested);
@@ -683,6 +684,12 @@ namespace Rapadura.Gameplay.Mounts
 
         private void Execute(MountAbilityDefinition ability)
         {
+            if (ability.Kind == MountAbilityKind.ShortFlight && _actor != null)
+            {
+                // Voo da Coluna: the model climbs while MountWaveAbilities lunges the hero on the ground.
+                _actor.Soar(ability.DurationSeconds);
+            }
+
             switch (ability.Kind)
             {
                 case MountAbilityKind.Dash:

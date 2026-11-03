@@ -244,6 +244,14 @@ namespace Rapadura.Gameplay.Mounts
                     return MountWaveTexts.ToastBoiDance;
                 }
 
+                case MountAbilityKind.ShortFlight:
+                    // Voo da Coluna (MountSkyCatalog): a lunge on the ground (walls stop it, the hero never leaves the
+                    // CharacterController) while the griffin's model climbs (MountActor.Soar); the landing scares.
+                    effects.StartFlight(MountFlightRules.FlightLanding(at, ctx.Hero.transform.forward, ability.Distance), ability);
+                    MountAudio.Play(MountAudio.GriffinCry, at);
+                    MountAudio.Play(MountAudio.WingBeat, at);
+                    return MountSkyTexts.ToastFlight;
+
                 case MountAbilityKind.Invulnerable:
                     ctx.Session?.StartShell(ability.DurationSeconds);
                     ctx.Stats?.GrantInvulnerability(ability.DurationSeconds);
@@ -379,6 +387,7 @@ namespace Rapadura.Gameplay.Mounts
         private float _hopSpeed;
         private Vector3 _lungeTarget;
         private float _lungeRemaining;
+        private MountAbilityDefinition _landing;
         private bool _subscribed;
 
         public float CleanseRemaining { get; set; }
@@ -439,6 +448,43 @@ namespace Rapadura.Gameplay.Mounts
         {
             _lungeTarget = target;
             _lungeRemaining = Mathf.Max(0.05f, seconds);
+        }
+
+        /// <summary>Voo da Coluna: lunges to <paramref name="target"/> over the ability's duration, then lands in a ring of light (<see cref="Land"/>).</summary>
+        public void StartFlight(Vector3 target, MountAbilityDefinition ability)
+        {
+            StartLunge(target, ability != null ? ability.DurationSeconds : 0.5f);
+            _landing = ability;
+        }
+
+        /// <summary>The landing: common critters within the ability's radius run away for <c>Magnitude</c> s (bosses by <c>BossMultiplier</c>). Returns how many.</summary>
+        public int Land()
+        {
+            MountAbilityDefinition ability = _landing;
+            _landing = null;
+            if (ability == null)
+            {
+                return 0;
+            }
+
+            Vector3 at = transform.position;
+            int scared = 0;
+            foreach (EnemyController enemy in MountWaveAbilities.LiveEnemies())
+            {
+                float seconds = MountRules.EffectDurationOn(ability.Magnitude, enemy.IsBoss, ability.BossMultiplier);
+                if (seconds <= 0f || !MountWaveAbilityRules.InRadius(at, enemy.transform.position, ability.Radius))
+                {
+                    continue;
+                }
+
+                enemy.HoldAggro(seconds, forceAggroWhenHoldEnds: true);
+                MountFearDriver.Apply(enemy, transform, seconds);
+                scared++;
+            }
+
+            CombatFxManager.SpawnLootText(at + Vector3.up * 2.2f, "!");
+            MountAudio.Play(MountAudio.WingBeat, at);
+            return scared;
         }
 
         public void StartTrail(TrailKind kind, float seconds, float radius, float magnitude)
@@ -621,6 +667,7 @@ namespace Rapadura.Gameplay.Mounts
             {
                 _hopSpeed = 0f;
                 _lungeRemaining = 0f;
+                _landing = null;
                 return;
             }
 
@@ -638,6 +685,10 @@ namespace Rapadura.Gameplay.Mounts
                 _lungeRemaining -= dt;
                 float slow = _ctx.Buffs != null ? Mathf.Min(1f, _ctx.Buffs.GetMoveSpeedMultiplier()) : 1f;
                 cc.Move(to * (step * slow));
+                if (_lungeRemaining <= 0f && _landing != null)
+                {
+                    Land();
+                }
             }
         }
 
