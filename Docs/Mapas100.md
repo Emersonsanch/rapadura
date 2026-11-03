@@ -485,6 +485,7 @@ Apagada, Javali do Lodo. Chefe do mundo da região: **Saklas** (arconte, mapa 06
 - **Noite:** **Mardagayl** (o lobo das sete noites) e **Javali do Lodo** em bando; a visão encurta fora da trilha.
 
 ### 03 · Brejo do Lodo Escuro / *Dark Mire Marsh* — nv 16–22 · ★
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Zarafshan.cs`): posto Ponte do Aryk (lâmpada, casa do barqueiro, cais) na ilha norte, dois canais de água preta atravessados só por 3 passarelas de tronco, Poço Turvo no charco oeste (anel da Mãe-Lodo; a luta segue como desafio do mapa-múndi); trilha a pé do Tugai (saída sul do 02) e para o 04; 5 clareiras nv 16–22 (Javali [tanque]; Lobo no lugar da Enguia [rápido]; Aranha e Enxame de Morcegos no lugar dos Mosquitos [enxame]; à noite Javali do Lodo, Faíscas Presas no lugar do Fogo-Fátuo e Mardagayl raro). Falta: Sapo-Bolha [distância], lama ×0,7 fora da passarela, Água Viva limpando poças.
 - **Fonte:** o **Lodo**, elemento da Treva contrário à Água Viva (Teodoro bar Konai; bíblia §1.3).
 - **Bioma e visual:** tugai alagado; lama `#3E3A2F`, água verde `#5F7F5A`, junco seco `#B6A66A`, faísca `#4FC3B0`; troncos
   podres, pegadas de lama, bolhas.
@@ -499,6 +500,7 @@ Apagada, Javali do Lodo. Chefe do mundo da região: **Saklas** (arconte, mapa 06
 - **Noite:** os mosquitos dobram; **Fogo-Fátuo Preso** [enxame, só à noite] (luz presa perdida); visão curta.
 
 ### 04 · Bosque das Amoreiras de Seda / *Silk Mulberry Grove* — nv 18–24 · ★
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Zarafshan.cs`): posto Casa do Tear (oficina, casa da tecelã, cais) no meio de 4 quadras de amoreiras em fileiras (labirinto suave), 4 quintais de tear em ruína (muros, teares/varais, caixas de casulo); oeste para o 03, leste para o 05; 4 clareiras nv 18–24 (Aranha-Tecelã [enxame]; Javali no lugar da Lagarta-Casulo [tanque]; Lobo no lugar da Gralha [rápido]; à noite Coruja-de-Fumaça e Faíscas no lugar das mariposas). Falta: Mariposa de Seda [distância], teias que prendem 1,5 s, Fiandeira Esquecida.
 - **Fonte:** amoreira e bicho-da-seda da Sogdiana; a lenda da princesa que levou ovos de bicho-da-seda escondidos no
   chapéu para Khotan (Xuanzang; painel de Dandan-Uiliq).
 - **Bioma e visual:** pomar abandonado; folha `#6FA34A`, amora `#5B2A4A`, seda `#F4EDE1`, casulo `#EFE3C8`; casas do tear
@@ -515,6 +517,7 @@ Apagada, Javali do Lodo. Chefe do mundo da região: **Saklas** (arconte, mapa 06
 - **Noite:** as mariposas acendem; a **Coruja-de-Fumaça** caça; visão normal nas fileiras.
 
 ### 05 · Copas de Garajonay / *Garajonay Canopy* — nv 20–26 · ★ · cidade de raça (elfos-da-mata)
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Zarafshan.cs`, receita `CityTownRecipes.Garajonay`): a cidade dos elfos-da-mata no centro (cidade de retorno, respawn na praça; casas redondas de tábua com telhado de folha de louro, salão da Gara, cais) e as copas: 6 louros gigantes com plataforma em anel a ~8,8 m, casa redonda no alto, escada em espiral no tronco e lanternas de casulo (peça nova `CanopyTree` do kit, com colisor), ligados por 5 pontes de cipó; chão da mata com 3 trilhas, 2 córregos em cascata com pontes e o anel do Velho da Névoa ao norte; oeste para o 04, leste para o 06; 6 clareiras nv 20–26 (Lobo no lugar do Lagarto-Gigante [rápido], Javali de Musgo [tanque], Aranha no lugar da Névoa Pegajosa [controle]; à noite Mardagayl, Faíscas e Coruja). Falta: andar nas plataformas (hoje são cenário alto; anda-se no chão), Pombo-do-Louro [distância], névoa a cada 3 min, Coletor de Névoa, CitySpec/passeio da cidade (o respawn do 06 cai na Vila da Vó Edna até lá), Gara/Jonay/Dácil/Bencomo/Tinguaro como NPCs.
 - **Fonte:** lenda de Gara e Jonay (La Gomera, Canárias); a laurissilva, mata de louro que "bebe a névoa".
 - **Bioma e visual:** mata de louro alta e nublada; paleta da cidade em §3.3; urze arbórea, samambaias, musgo pendurado,
   névoa no chão.
@@ -530,6 +533,7 @@ Apagada, Javali do Lodo. Chefe do mundo da região: **Saklas** (arconte, mapa 06
 - **Noite:** as pontes acendem; **Mardagayl** na mata baixa; vaga-lumes guiam a trilha.
 
 ### 06 · Jardim Esquecido de Mihrshah / *Mihrshah's Forgotten Garden* — nv 26–32 · ★
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Zarafshan.cs`): posto Portão do Jardim (lâmpada, casa do jardineiro, cais) no portão oeste; o chahar bagh murado (muro de 4 lados com 4 portões, canais secos em cruz, fileiras de ciprestes, roseiras, 4 fontes secas) e o pavilhão de 8 colunas no centro (arena de Saklas; a luta segue como evento do mapa-múndi); oeste de volta ao 05; 4 clareiras, uma por quadrante, nv 26–32 (Aranha no lugar da Roseira-Espinho [controle], Lobo no lugar do Lobo de Cinzas [rápido], Ushabti de Pedra = Jardineiro de Barro [tanque]; à noite Faíscas, Coruja e Mardagayl). Falta: Pavão de Fumaça [distância], libertar as 4 faíscas para encher os canais e abrir o pavilhão, água que cura.
 - **Fonte:** o jardim de luz que Mani mostra a Mihrshah (texto médio-persa M 47); o Velho Mihrshah (NPC das Grutas) o
   viu quando jovem.
 - **Bioma e visual:** jardim murado persa (*chahar bagh*: quatro canteiros e canais em cruz) tomado pelo mato; azulejo

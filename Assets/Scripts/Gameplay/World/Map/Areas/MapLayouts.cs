@@ -15,7 +15,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
     /// east to 02, west back to the island map, south to the Estrada das Caravanas (07, not open yet).</item>
     /// <item><b>02 · Tugai do Rio Dourado</b> (M, nv 2–5): the outpost Moinho do Pomar by the west entrance, the S-shaped
     /// golden river with two fords and a log bridge, four hunting clearings and the boss clearing to the north (Kök-Böri's
-    /// ring of stones; the fight itself stays the world-map boss challenge).</item>
+    /// ring of stones; the fight itself stays the world-map boss challenge); a trail south to the Brejo do Lodo Escuro (03).</item>
     /// </list>
     /// Deterministic (props by <see cref="TownStyle.Hash01"/>, never a runtime RNG) and cached for the session.
     /// </summary>
@@ -228,7 +228,13 @@ namespace Rapadura.Gameplay.World.Map.Areas
             m.Paths.Add(new MapPath(new Vector2(152f, -36f), new Vector2(178f, -44f), 3.5f));
             m.Paths.Add(new MapPath(new Vector2(13f, 6f), new Vector2(40f, 48f), 3f));
             m.Paths.Add(new MapPath(new Vector2(40f, 48f), new Vector2(60f, 80f), 3f));
+            m.Paths.Add(new MapPath(new Vector2(78f, -53f), new Vector2(78f, -100f), 3f));
 
+            m.Exits.Add(new MapExitSpec
+            {
+                Id = "exit_brejo", Kind = MapExitKind.Map, TargetMapId = BrejoId,
+                Trigger = Rect.MinMaxRect(72f, -100f, 84f, -97f), Arrival = new Vector2(78f, -93f), ArrivalFacing = Vector2.up,
+            });
             m.Exits.Add(new MapExitSpec
             {
                 Id = "exit_pomar", Kind = MapExitKind.Map, TargetMapId = MapCatalog.PomarId,

@@ -21,6 +21,14 @@ namespace Rapadura.Tests
     /// </summary>
     public class MapAccessRulesTests
     {
+        /// <summary>The same map, not built (03 is playable since the Zarafshan maps; its gate and fare still read the same).</summary>
+        private static MapDefinition Unbuilt(int mapId)
+        {
+            MapDefinition m = MapCatalog.Get(mapId);
+            return new MapDefinition(m.MapId, m.Id, m.Region, m.RegionType, m.Size, m.MonsterLevelMin, m.MonsterLevelMax, m.WalkLevelRequirement,
+                m.WarpLevelRequirement, m.BaseWarpGoldFee, m.SpecialRequirementTag, m.ReturnCityId, m.Settlement, m.SettlementId, isBuilt: false);
+        }
+
         // ------------------------------------------------------------------
         // MapAccessRules
         // ------------------------------------------------------------------
@@ -90,7 +98,7 @@ namespace Rapadura.Tests
             Assert.AreEqual(MapAccessCheck.Ok, MapAccessRules.CheckWarp(tugai, 5, null, 125, false, null, false, null));
 
             // Not built comes before level; the gate before gold.
-            MapDefinition brejo = MapCatalog.Get(3);
+            MapDefinition brejo = Unbuilt(3);
             Assert.AreEqual(MapAccessCheck.NotBuilt, MapAccessRules.CheckWarp(brejo, 1, null, 0, false, null, false, null));
             var gated = new MapDefinition(99, "map_099_test", MapRegion.Zarafshan, MapRegionTypes.Swamp, MapSize.M, 16, 22, 14, 18,
                 MapAccessRules.BaseWarpFee, MapRequirementTags.LeatherBoots, CityCatalog.VilaZefa, MapSettlementKind.Outpost, "x", isBuilt: true);
@@ -106,7 +114,7 @@ namespace Rapadura.Tests
             MapDefinition tugai = MapCatalog.Get(MapCatalog.TugaiId);
             Assert.AreEqual(MapAccessCheck.LevelTooLow, MapAccessRules.CheckWalk(tugai, 1, null, null));
             Assert.AreEqual(MapAccessCheck.Ok, MapAccessRules.CheckWalk(tugai, 2, null, null), "on foot from level 2, the barca only from 5");
-            Assert.AreEqual(MapAccessCheck.NotBuilt, MapAccessRules.CheckWalk(MapCatalog.Get(3), 99, null, null));
+            Assert.AreEqual(MapAccessCheck.NotBuilt, MapAccessRules.CheckWalk(Unbuilt(3), 99, null, null));
             Assert.AreEqual(MapAccessCheck.NotBuilt, MapAccessRules.CheckWalk(null, 99, null, null));
             Assert.IsTrue(MapAccessRules.MeetsRequirement(MapRequirementTags.None, null));
             Assert.IsFalse(MapAccessRules.MeetsRequirement(MapRequirementTags.SunSeal, null));
@@ -302,7 +310,7 @@ namespace Rapadura.Tests
                 Assert.IsEmpty(problems, string.Join("\n", problems));
             }
 
-            Assert.IsNull(MapLayouts.For("map_003_brejo"));
+            Assert.IsNull(MapLayouts.For("map_042_torres_brancas"));
             Assert.IsNull(MapLayouts.For(null));
         }
 
@@ -473,7 +481,7 @@ namespace Rapadura.Tests
             Assert.AreEqual(MapAccessCheck.Here, here.Check);
             Assert.AreEqual("Vocês estão aqui", here.Status);
 
-            MapTravelRow closed = FastTravelWindowController.BuildMapRow(MapCatalog.Get(3), 1, null, 0, false, null, false, null, null);
+            MapTravelRow closed = FastTravelWindowController.BuildMapRow(Unbuilt(3), 1, null, 0, false, null, false, null, null);
             Assert.AreEqual(MapAccessCheck.NotBuilt, closed.Check);
             Assert.IsTrue(closed.IsLocked);
             StringAssert.StartsWith("Exige Nível 18 (ou a pé nível 14) - Barca: 320 ouro", closed.Requirement);

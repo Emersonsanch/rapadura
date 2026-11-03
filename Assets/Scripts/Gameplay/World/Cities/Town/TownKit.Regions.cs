@@ -26,6 +26,12 @@ namespace Rapadura.Gameplay.World.Cities.Town
         public const float RopeBridgeHeight = 6.3f;
         public const float LampStringHeight = 2.75f;
 
+        /// <summary>Radius of the ring platform of a <see cref="CityPropKind.CanopyTree"/> (× its scale): where its rope bridges land.</summary>
+        public const float CanopyPlatformRadius = 3.2f;
+
+        /// <summary>Collider radius of a canopy tree on the ground (× its scale): the trunk and the spiral stair round it.</summary>
+        public const float CanopyTrunkSolidRadius = 2.0f;
+
         /// <summary>Props that run from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> (no yaw; the view anchors them at their midpoint).</summary>
         public static bool IsSegment(CityPropKind kind) =>
             kind == CityPropKind.FenceRun || kind == CityPropKind.Gate || kind == CityPropKind.KarezChannel || kind == CityPropKind.Cliff ||
@@ -55,6 +61,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.Vishapakar: Vishapakar(b, s); return true;
                 case CityPropKind.Fountain: Fountain(b, s); return true;
                 case CityPropKind.ConicalTower: ConicalTower(b, s); return true;
+                case CityPropKind.CanopyTree: CanopyTree(b, s); return true;
                 default: return false;
             }
         }
@@ -982,6 +989,91 @@ namespace Rapadura.Gameplay.World.Cities.Town
                     b.Cylinder(wheel + Vector3.up * 0.55f, 0.2f, 0.2f, 0.05f, 9, TownSwatch.WoodLight, TownSwatch.Mud);
                     b.Cylinder(wheel + Vector3.up * 0.6f, 0.08f, 0.1f, 0.14f, 7, TownSwatch.Mud);
                     break;
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // Copas de Garajonay: the laurel canopy
+        // ------------------------------------------------------------------
+
+        /// <summary>
+        /// A giant laurel of Garajonay carrying a ring platform at <see cref="RopeBridgeHeight"/> × <paramref name="s"/> (the
+        /// height the rope bridges of the same scale arrive at): buttress roots, the trunk, a spiral stair of planks round it,
+        /// four struts under the plank ring, a rail, a round plank house with two layers of laurel-leaf roof (door to the
+        /// south, towards the camera), two cocoon lanterns, the crown above and moss hanging from it.
+        /// </summary>
+        private static void CanopyTree(TownMeshBuilder b, float s)
+        {
+            float py = RopeBridgeHeight * s;
+            float pr = CanopyPlatformRadius * s;
+
+            // Roots and trunk.
+            for (int i = 0; i < 4; i++)
+            {
+                float a = (i * 90f + 45f) * Mathf.Deg2Rad;
+                var dir = new Vector3(Mathf.Cos(a), 0f, Mathf.Sin(a));
+                b.Log(dir * 0.6f * s + Vector3.up * 1.1f * s, dir * 1.9f * s, 0.22f * s, TownSwatch.Trunk, 5);
+            }
+
+            b.Cylinder(Vector3.zero, 1.0f * s, 0.62f * s, py + 4.2f * s, 8, TownSwatch.Trunk);
+
+            // Spiral stair: planks round the trunk, two turns from the ground to the platform.
+            const int steps = 22;
+            for (int i = 0; i < steps; i++)
+            {
+                float t = (i + 0.5f) / steps;
+                float a = t * Mathf.PI * 4f;
+                var dir = new Vector3(Mathf.Cos(a), 0f, Mathf.Sin(a));
+                float y = Mathf.Lerp(0.35f * s, py - 0.3f * s, t);
+                b.Box(dir * 1.45f * s + Vector3.up * y, new Vector3(0.9f, 0.08f, 0.42f) * s, (i & 1) == 0 ? TownSwatch.WoodLight : TownSwatch.WoodWeathered,
+                    -a * Mathf.Rad2Deg);
+            }
+
+            // The plank ring, its struts and rail.
+            b.Cylinder(new Vector3(0f, py - 0.22f * s, 0f), pr, pr, 0.22f * s, 12, TownSwatch.WoodWeathered, TownSwatch.WoodLight);
+            for (int i = 0; i < 4; i++)
+            {
+                float a = i * Mathf.PI * 0.5f;
+                var dir = new Vector3(Mathf.Cos(a), 0f, Mathf.Sin(a));
+                b.Log(dir * 0.7f * s + Vector3.up * (py - 2.4f * s), dir * (pr - 0.3f * s) + Vector3.up * (py - 0.25f * s), 0.09f * s, TownSwatch.WoodDark, 4);
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                float a = i * Mathf.PI * 2f / 10f;
+                var dir = new Vector3(Mathf.Cos(a), 0f, Mathf.Sin(a));
+                b.Log(dir * (pr - 0.1f * s) + Vector3.up * py, dir * (pr - 0.1f * s) + Vector3.up * (py + 0.9f * s), 0.04f * s, TownSwatch.WoodDark, 4);
+            }
+
+            b.Ring(new Vector3(0f, py + 0.9f * s, 0f), pr - 0.18f * s, pr - 0.02f * s, 12, TownSwatch.WoodDark);
+
+            // The round plank house (north side of the ring, door to the south) and its leaf roof.
+            var house = new Vector3(0f, py, 0.9f * s);
+            b.Cylinder(house, 1.5f * s, 1.5f * s, 2.0f * s, 10, TownSwatch.Walnut);
+            b.Box(house + new Vector3(0f, 0.85f * s, -1.48f * s), new Vector3(0.7f, 1.5f, 0.06f) * s, TownSwatch.DoorPlank);
+            b.Box(house + new Vector3(0.95f * s, 1.25f * s, -1.15f * s), new Vector3(0.4f, 0.35f, 0.05f) * s, TownSwatch.WindowLit, 40f);
+            b.Cylinder(house + Vector3.up * 1.9f * s, 2.1f * s, 0f, 1.1f * s, 10, TownSwatch.LeafDark);
+            b.Cylinder(house + Vector3.up * 2.55f * s, 1.3f * s, 0f, 0.9f * s, 10, TownSwatch.GrassDark, null, 0.5f);
+
+            // Cocoon lanterns on the rail.
+            foreach (float a in new[] { 200f, 340f })
+            {
+                float r = a * Mathf.Deg2Rad;
+                Vector3 at = new Vector3(Mathf.Cos(r), 0f, Mathf.Sin(r)) * (pr - 0.1f * s) + Vector3.up * (py + 1.25f * s);
+                b.Log(at + Vector3.up * 0.35f * s, at + Vector3.up * 0.15f * s, 0.015f * s, TownSwatch.Iron, 3);
+                b.Blob(at, new Vector3(0.3f, 0.42f, 0.3f) * s, TownSwatch.LampGlow);
+                b.Blob(at + Vector3.up * 0.02f * s, new Vector3(0.34f, 0.2f, 0.34f) * s, TownSwatch.ClothWhite);
+            }
+
+            // The crown over the platform and the moss hanging from it.
+            b.Crown(new Vector3(0f, py + 5.2f * s, 0f), new Vector3(7.5f, 3.6f, 7.5f) * s, TownSwatch.LeafDark, 15f);
+            b.Crown(new Vector3(1.2f * s, py + 6.8f * s, -0.6f * s), new Vector3(4.6f, 2.6f, 4.6f) * s, TownSwatch.GrassDark, 50f);
+            b.Crown(new Vector3(-1.6f * s, py + 4.6f * s, 1.4f * s), new Vector3(3.6f, 2.0f, 3.6f) * s, TownSwatch.Poplar, 80f);
+            for (int i = 0; i < 6; i++)
+            {
+                float a = (i * 60f + 20f) * Mathf.Deg2Rad;
+                var top = new Vector3(Mathf.Cos(a) * 3.1f * s, py + 4.2f * s, Mathf.Sin(a) * 3.1f * s);
+                b.Log(top, top + Vector3.down * (1.0f + (i % 3) * 0.4f) * s, 0.05f * s, TownSwatch.Moss, 3);
             }
         }
     }

@@ -13,7 +13,7 @@ namespace Rapadura.Gameplay.World.Map
     /// <summary>
     /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II): level
     /// bands, walk/warp levels, special gates, settlements and return cities, as content-as-code like
-    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01, 02, 07, 08, 13, 14, 19 and 20, <c>MapLayouts</c>);
+    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–08, 13, 14, 19 and 20, <c>MapLayouts</c>);
     /// the rest are listed in the Barcas de Luz window, closed. The gold fare is never stored: it is always the
     /// formula of <see cref="MapAccessRules.CalculateWarpCost(int,int,bool)"/> (the "Custo Ouro" column of the methodology
     /// table is design history).
@@ -51,10 +51,10 @@ namespace Rapadura.Gameplay.World.Map
             // Região 1 — Bosque do Zarafshan
             new MapDefinition(1, PomarId, R.Zarafshan, Y.Forest, S.P, 1, 3, 1, 1, 0, T.None, CityCatalog.VilaZefa, K.City, "vila_vo_edna", isBuilt: true),
             new MapDefinition(2, TugaiId, R.Zarafshan, Y.Forest, S.M, 2, 5, 2, 5, Fee, T.None, CityCatalog.VilaZefa, K.Outpost, "moinho_do_pomar", isBuilt: true),
-            new MapDefinition(3, "map_003_brejo", R.Zarafshan, Y.Swamp, S.M, 16, 22, 14, 18, Fee, T.LeatherBoots, CityCatalog.VilaZefa, K.Outpost, "ponte_do_aryk"),
-            new MapDefinition(4, "map_004_amoreiras", R.Zarafshan, Y.Forest, S.M, 18, 24, 16, 20, Fee, T.None, CityCatalog.VilaZefa, K.Outpost, "casa_do_tear"),
-            new MapDefinition(5, "map_005_garajonay", R.Zarafshan, Y.Forest, S.G, 20, 26, 18, 22, Fee, T.ElevatedPlatforms, CopasGarajonay, K.RaceCity, "copas_garajonay"),
-            new MapDefinition(6, "map_006_mihrshah", R.Zarafshan, Y.Ruins, S.M, 26, 32, 24, 28, Fee, T.GardenKey, CopasGarajonay, K.Outpost, "portao_do_jardim"),
+            new MapDefinition(3, "map_003_brejo", R.Zarafshan, Y.Swamp, S.M, 16, 22, 14, 18, Fee, T.LeatherBoots, CityCatalog.VilaZefa, K.Outpost, "ponte_do_aryk", isBuilt: true),
+            new MapDefinition(4, "map_004_amoreiras", R.Zarafshan, Y.Forest, S.M, 18, 24, 16, 20, Fee, T.None, CityCatalog.VilaZefa, K.Outpost, "casa_do_tear", isBuilt: true),
+            new MapDefinition(5, "map_005_garajonay", R.Zarafshan, Y.Forest, S.G, 20, 26, 18, 22, Fee, T.ElevatedPlatforms, CopasGarajonay, K.RaceCity, "copas_garajonay", isBuilt: true),
+            new MapDefinition(6, "map_006_mihrshah", R.Zarafshan, Y.Ruins, S.M, 26, 32, 24, 28, Fee, T.GardenKey, CopasGarajonay, K.Outpost, "portao_do_jardim", isBuilt: true),
 
             // Região 2 — Areias Flamejantes
             new MapDefinition(7, "map_007_caravanas", R.AreiasFlamejantes, Y.Desert, S.M, 5, 7, 5, 8, Fee, T.None, CityCatalog.AreiaBranca, K.Outpost, "caravancara_do_ammo", isBuilt: true),

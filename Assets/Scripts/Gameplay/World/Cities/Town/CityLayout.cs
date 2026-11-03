@@ -86,6 +86,12 @@ namespace Rapadura.Gameplay.World.Cities.Town
         Fountain = 28,
         /// <summary>Litema: a Great Zimbabwe conical tower of dry stone with the chevron frieze.</summary>
         ConicalTower = 29,
+        /// <summary>
+        /// Copas de Garajonay: a giant laurel with a ring platform at <see cref="TownKit.RopeBridgeHeight"/> × scale (so the rope
+        /// bridges of the same scale land on it), a round plank house with a layered leaf roof, a spiral stair round the
+        /// trunk and cocoon lanterns; the crown and the hanging moss above.
+        /// </summary>
+        CanopyTree = 30,
     }
 
     public enum CityExitKind

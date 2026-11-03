@@ -35,6 +35,11 @@ namespace Rapadura.Gameplay.World.Map.Areas
 
         private static bool HasRegional(string mapId)
         {
+            if (HasZarafshan(mapId))
+            {
+                return true;
+            }
+
             foreach (string id in RegionalMapIds)
             {
                 if (id == mapId)
@@ -50,6 +55,10 @@ namespace Rapadura.Gameplay.World.Map.Areas
         {
             switch (mapId)
             {
+                case BrejoId: return Brejo();
+                case AmoreirasId: return Amoreiras();
+                case GarajonayId: return Garajonay();
+                case MihrshahId: return Mihrshah();
                 case CaravanasId: return Caravanas();
                 case ArtificesId: return Artifices();
                 case RondaveisId: return Rondaveis();
