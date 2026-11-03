@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f171d806ae04e9545a71dcbace88f076, type: 3}
+  m_Name: item_garrafa_ar_sereno
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
+  _itemId: item_garrafa_ar_sereno
+  _displayName: "Garrafa de Ar Sereno"
+  _description: "Garrafa de vidro verde com o ar quieto e estrelado que desce das frestas, engarrafado pelos kobolds. Aberta, devolve o fôlego: +20% de recuperação de vigor por 60 segundos, para o ar parado longe dos tubos."
+  _icon: {fileID: 21300000, guid: 6644d2351460348a4d7cf71fafc77b46, type: 3}
+  _worldModelPrefab: {fileID: 0}
+  _type: 1
+  _category: 7
+  _rarity: 1
+  _weight: 0.3
+  _value: 30
+  _maxStack: 10
+  _gridWidth: 0
+  _gridHeight: 0
+  _isBound: 0
+  _hasDurability: 0
+  _maxDurability: 100
+  _equipSlot: 0
+  _armorDefense: 0
+  _weaponDamage: 0
+  _weaponAttackSpeed: 1
+  _equipStatModifiers: []
+  _healthRestore: 0
+  _staminaRestore: 20
+  _manaRestore: 0
+  _consumeBuffs:
+  - displayName: Garrafa de Ar Sereno
+    affectedStat: 3
+    application: 1
+    value: 0.2
+    durationSeconds: 60
+    isDebuff: 0
+    ticksOverTime: 0
+    tickIntervalSeconds: 1
+    tickDamageOrHeal: 0

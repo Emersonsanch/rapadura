@@ -56,14 +56,15 @@ a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: 
 | Plataformas elevadas (05) | levar Corda de Escalada ou vestir asas (não a capa) | Armarinho da Mariam (Vila); Ervaria da Dácil (Copas de Garajonay) |
 | Chave do Jardim (06) | levar a Chave do Jardim (presa ao herói, não cai na morte) | recompensa da 2ª missão da Floresta (Mariam); cópia no Armarinho e na Ervaria da Dácil (Copas de Garajonay) após o chefe da Floresta |
 | Água fresca (10) | levar Odre de Água Fresca | Selaria de Qocho |
-| Proteção a veneno (12) | levar Teriaga do Oásis ou Amuleto Antiveneno; Lavine dispensa (névoas, §3) | Selaria de Qocho |
+| Proteção a veneno (12) | levar Teriaga do Oásis ou Amuleto Antiveneno; Lavine dispensa (névoas, §3) | Selaria de Qocho; Forja de Tambor (Tambor Rubro) |
 | Manta de lã (14) | levar Manta de Lã, ou vestir a Capa de Feltro dos Nartes (Tacho), ou levar a Roupa Térmica | Forja do Mestre Mihr (Litema); recompensa da 2ª missão da Montanha |
-| Picareta e tocha (17) | levar picareta (mochila ou slot Ferramenta) **e** uma lamparina | Picareta: forjas de Litema/Vila; lamparina: Vila das Lamparinas |
-| Resistência à nevasca (18) | levar Chá de Gengibre do Tandir ou Roupa Térmica | Forja de Litema (após o chefe da Montanha) |
+| Picareta e tocha (17) | levar picareta (mochila ou slot Ferramenta) **e** uma lamparina | Picareta e lamparina: Portões de Runa (Salões de Bronze); picareta também nas forjas de Litema/Vila, lamparina na Vila das Lamparinas |
+| Resistência à nevasca (18) | levar Chá de Gengibre do Tandir ou Roupa Térmica | Portões de Runa (Salões de Bronze); Forja de Litema (após o chefe da Montanha) |
 | Lamparina acesa (19, 20) | levar Lamparina de Óleo ou Lamparina Rúnica (a luz noturna embutida do herói não basta) | Lamparinas da Parthenos (Vila das Lamparinas); recompensa da 1ª missão das Cavernas |
 | Lamparina rúnica (21) | levar Lamparina Rúnica | Lamparinas da Parthenos, após o chefe das Cavernas |
-| Óleo de Fogo Eterno (23) | levar Óleo de Fogo Eterno | Lamparinas da Parthenos, após o chefe das Cavernas |
-| Asas ou salto duplo (24) · Asas/montaria (39) | asas de verdade do Tacho Encantado no slot Costas/Asas (a Capa de Feltro não voa) ou ter montaria Voadora | Tacho Encantado; montarias aladas (ainda não há no catálogo). Salto duplo não existe ainda |
+| Óleo de Fogo Eterno (23) | levar Óleo de Fogo Eterno | Feira da Miwnay (Mercado dos Túneis) e recompensa da 2ª missão de lá (Farnkhund); Lamparinas da Parthenos, após o chefe das Cavernas |
+| Asas ou salto duplo (24) | **vestir** no slot Costas/Asas as Asas de Lona do Takhsich (pulo duplo; planam, não voam) ou asas de verdade do Tacho Encantado (a Capa de Feltro não voa), ou ter montaria Voadora (Grifo da Coluna da Glória) | Asas de Lona: Feira da Miwnay (Mercado dos Túneis), 420 ouro; Tacho Encantado; Grifo: missão "Asas da Coluna" (nv 40) |
+| Asas/montaria (39) | asas de verdade do Tacho Encantado no slot Costas/Asas ou montaria Voadora (as Asas de Lona **não** contam: só planam) | Tacho Encantado; Grifo da Coluna da Glória |
 | Barco ou cais (25) | levar Passagem de Dhow ou ter montaria Aquática (Capivara) | Bazar de Pérolas da Mwana (Taa Pwani) |
 | Relíquia dos Artífices (27) | levar a relíquia | Bazar de Pérolas da Mwana (Taa Pwani), até Aratta ter cidade |
 | Concha respirável (28) | levar Concha Respirável | Bazar de Pérolas da Mwana (Taa Pwani), até Kirta ter cidade |
@@ -77,6 +78,14 @@ a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: 
 | Grampos de escalada (38) | levar Grampos de Escalada | Sangkent (planejada) |
 | Proteção a tempestade (40) | levar Capa de Tempestade | Sangkent (planejada) |
 | Selo do Sol (42) | levar o Selo do Sol (preso ao herói) | Mingcheng (planejada) |
+
+Toda exigência das regiões 1–5 tem um "kit" de itens (`MapRequirementRules.KitOf`: o item principal, mais a lamparina no
+17) que a atende sozinho, e cada item do kit é vendido numa loja (`CityShopCatalog`) ou dado por missão
+(`RegionQuestCatalog`/`CityQuestCatalog`) — conferido por `MapRequirementTests`. Os itens das regiões 6–8 (Vara de
+Equilíbrio, Barco de Junco, Amuleto Antiveneno, Fruta Purificadora, Roupa Térmica, Grampos, Capa de Tempestade, Selo do
+Sol) existem em `Resources/Items` mas ainda não têm loja: entram no balcão quando Jhilpur, Tarchon, Sangkent e Mingcheng
+virarem cidade. Fora das exigências, a **Garrafa de Ar Sereno** dos kobolds (consumível: +20% de recuperação de vigor por
+60 s, para o "ar parado" do 22) é vendida na Feira da Miwnay e dada pela missão "Teia nos Tubos" (Takhsich).
 
 Os itens das regiões 5–8 já existem (`Resources/Items`, textos en/pt-BR em `ContentTexts`); os da região 5 (25–30) estão à
 venda, fixos desde o primeiro dia, no Bazar de Pérolas da Mwana em Taa Pwani (2026-11-03, `CityTaaPwaniTests`); os das

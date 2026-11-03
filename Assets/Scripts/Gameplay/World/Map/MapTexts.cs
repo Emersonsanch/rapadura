@@ -179,7 +179,7 @@ namespace Rapadura.Gameplay.World.Map
             (MapRequirementTags.TorchRequired, "Carry an Oil Lamp: Parthenos sells it in the Vila das Lamparinas and gives one for scattering the bats.", "Leve uma Lamparina de Óleo: a Parthenos vende na Vila das Lamparinas e dá uma por espantar os morcegos."),
             (MapRequirementTags.RunicLamp, "Carry a Runic Lamp: Parthenos sells it once the Caves boss has fallen.", "Leve uma Lamparina Rúnica: a Parthenos vende depois do chefe das Cavernas."),
             (MapRequirementTags.EternalFireOil, "Carry Eternal Fire Oil: Parthenos sells it once the Caves boss has fallen.", "Leve Óleo de Fogo Eterno: a Parthenos vende depois do chefe das Cavernas."),
-            (MapRequirementTags.WingsOrDoubleJump, "Wear wings of the Enchanted Cauldron or own a winged mount.", "Vista asas do Tacho Encantado ou tenha uma montaria alada."),
+            (MapRequirementTags.WingsOrDoubleJump, "Wear Takhsich's Canvas Wings (Miwnay's Fair, Tunnel Market) or wings of the Enchanted Cauldron, or own a winged mount.", "Vista as Asas de Lona do Takhsich (Feira da Miwnay, Mercado dos Túneis) ou asas do Tacho Encantado, ou tenha uma montaria alada."),
             (MapRequirementTags.BoatOrDock, "Carry a Dhow Passage (Taa Pwani) or own a water mount.", "Leve uma Passagem de Dhow (Taa Pwani) ou tenha uma montaria aquática."),
             (MapRequirementTags.ArtificerRelic, "Carry an Artificers' Relic (Aratta).", "Leve uma Relíquia dos Artífices (Aratta)."),
             (MapRequirementTags.BreathingShell, "Carry a Breathing Shell (Kirta).", "Leve uma Concha Respirável (Kirta)."),

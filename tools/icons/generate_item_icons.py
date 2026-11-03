@@ -518,6 +518,28 @@ def r_bolha_ar(ic):
         ic.ngon(x, y, r, 8, (240, 252, 255))
 
 
+def r_asas_lona_takhsich(ic):
+    # Asas de Lona do Takhsich: armação de cobre e lona encerada (pulo duplo do Ninho de Mahaway, mapa 24).
+    canvas = (201, 180, 138)
+    ic.glow(64, 58, 50, (201, 184, 240), 110)
+    for side in (-1, 1):
+        def X(x):
+            return 64 + side * x
+        ic.poly([(X(8), 52), (X(56), 22), (X(58), 70), (X(12), 74)], canvas)
+        ic.poly([(X(30), 38), (X(56), 22), (X(57), 46)], darker(canvas, 0.12), outline=False)
+        for (x0, y0, x1, y1) in ((8, 52, 56, 22), (10, 63, 58, 46), (12, 74, 58, 70)):
+            ic.stroke([(X(x0), y0), (X(x1), y1)], 3, COPPER)
+    ic.ngon(64, 62, 11, 8, COPPER)
+    ic.ngon(64, 62, 5, 8, (201, 184, 240))
+
+
+def r_garrafa_ar_sereno(ic):
+    # Garrafa de Ar Sereno dos kobolds: vidro verde com ar quieto e estrelado.
+    bottle(ic, (201, 184, 240), glass=(127, 191, 143), neck_col=COPPER)
+    for (x, y, r) in ((56, 80, 4), (72, 72, 3), (66, 92, 3), (78, 86, 2)):
+        ic.ngon(x, y, r, 4, (255, 250, 230), rot=45)
+
+
 def r_botas_raiz(ic):
     boot(ic, (110, 84, 48), sole=WOOD_DARK, cuff=LEAF)
     ic.stroke([(44, 40), (52, 70), (46, 96)], 3, LEAF_DARK)
@@ -925,6 +947,8 @@ RECIPES = {
     "item_grampos_escalada": r_grampos_escalada,
     "item_capa_tempestade": r_capa_tempestade,
     "item_selo_sol": r_selo_sol,
+    "item_asas_lona_takhsich": r_asas_lona_takhsich,
+    "item_garrafa_ar_sereno": r_garrafa_ar_sereno,
     # Ossuário dos Artífices
     "armor_bone_chest": r_armor_bone_chest,
     "armor_bone_helm": r_armor_bone_helm,

@@ -27,6 +27,13 @@ namespace Rapadura.Gameplay.World.Map
         public const string RunicLamp = "item_lamparina_runica";
         public const string EternalFireOil = "item_oleo_fogo_eterno";
 
+        /// <summary>
+        /// Asas de Lona do Takhsich: worn in the "Costas/Asas" slot they give the double jump of the Ninho de Mahaway (24,
+        /// <see cref="MapRequirementTags.WingsOrDoubleJump"/>); they glide, they do not fly (not <see cref="MapRequirementTags.WingsRequired"/>).
+        /// Sold at the Feira da Miwnay (Mercado dos Túneis).
+        /// </summary>
+        public const string CanvasWings = "item_asas_lona_takhsich";
+
         // Regiões 5–8 (their cities are still planned: Docs/Mapas100.md §2–§3).
         public const string DhowPassage = "item_passagem_dhow";
         public const string ArtificerRelic = "item_reliquia_artifices";
@@ -45,7 +52,7 @@ namespace Rapadura.Gameplay.World.Map
         /// <summary>The items created for the gates (not the reused leather boots / pickaxe).</summary>
         public static readonly string[] Created =
         {
-            ClimbingRope, GardenKey, Waterskin, Theriac, WoolCloak, GingerTea, OilLamp, RunicLamp, EternalFireOil,
+            ClimbingRope, GardenKey, Waterskin, Theriac, WoolCloak, GingerTea, OilLamp, RunicLamp, EternalFireOil, CanvasWings,
             DhowPassage, ArtificerRelic, BreathingShell, AirBubble, RootBoots, BalancePole, ReedBoat, AntiVenomAmulet,
             PurifyingFruit, ThermalClothes, ClimbingCrampons, StormCloak, SunSeal,
         };
@@ -150,6 +157,9 @@ namespace Rapadura.Gameplay.World.Map
                 case MapRequirementTags.EternalFireOil:
                     return state.Has(MapRequirementItems.EternalFireOil);
                 case MapRequirementTags.WingsOrDoubleJump:
+                    // Real wings, the flying mount (the Grifo da Coluna) or the double jump of the canvas wings worn on the back.
+                    return HasWings(state) || state.OwnedMountTypes.Contains(MountType.Voador)
+                        || state.WornIn(EquipmentSlot.Wings) == MapRequirementItems.CanvasWings;
                 case MapRequirementTags.WingsRequired:
                     return HasWings(state) || state.OwnedMountTypes.Contains(MountType.Voador);
                 case MapRequirementTags.BoatOrDock:
@@ -207,8 +217,23 @@ namespace Rapadura.Gameplay.World.Map
         }
 
         /// <summary>
+        /// Everything the hero has to carry/wear for <paramref name="tag"/> with the bought gear alone: the primary item, plus
+        /// the lamp for "Picareta e Tocha". Empty when only wings or a mount do (Asas Obrigatórias, map 39).
+        /// </summary>
+        public static string[] KitOf(string tag)
+        {
+            string primary = PrimaryItemOf(tag);
+            if (primary == null)
+            {
+                return Array.Empty<string>();
+            }
+
+            return tag == MapRequirementTags.PickaxeTorch ? new[] { primary, MapRequirementItems.OilLamp } : new[] { primary };
+        }
+
+        /// <summary>
         /// The item that answers <paramref name="tag"/> (the one sold/given in the return city), or null when only wings or
-        /// a mount do (Asas). Used by the docs table, the hints and the tests.
+        /// a mount do (Asas Obrigatórias). Used by the docs table, the hints and the tests.
         /// </summary>
         public static string PrimaryItemOf(string tag)
         {
@@ -225,6 +250,7 @@ namespace Rapadura.Gameplay.World.Map
                 case MapRequirementTags.TorchRequired: return MapRequirementItems.OilLamp;
                 case MapRequirementTags.RunicLamp: return MapRequirementItems.RunicLamp;
                 case MapRequirementTags.EternalFireOil: return MapRequirementItems.EternalFireOil;
+                case MapRequirementTags.WingsOrDoubleJump: return MapRequirementItems.CanvasWings;
                 case MapRequirementTags.BoatOrDock: return MapRequirementItems.DhowPassage;
                 case MapRequirementTags.ArtificerRelic: return MapRequirementItems.ArtificerRelic;
                 case MapRequirementTags.BreathingShell: return MapRequirementItems.BreathingShell;

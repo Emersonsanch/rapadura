@@ -118,7 +118,8 @@ namespace Rapadura.Gameplay.World.Cities
             // Lagarta de Pedra and the stone golems for the Toupeira-Gigante (Docs/Mapas100.md 22). --
             new CityQuestSpec(CityCatalog.MercadoDosTuneis, "takhsich", new RegionQuestSpec(MercadoWebs, BiomeType.Caves, null, 760,
                 new[] { new RegionObjectiveSpec("clear_webbed_pipes", QuestObjectiveType.KillEnemyType, "enemy_forest_spider", 6) },
-                new[] { new RegionRewardSpec("item_mana_potion", 4), new RegionRewardSpec("item_lamparina_oleo", 1), new RegionRewardSpec("item_gold", 65) })),
+                new[] { new RegionRewardSpec("item_mana_potion", 4), new RegionRewardSpec("item_lamparina_oleo", 1), new RegionRewardSpec("item_garrafa_ar_sereno", 2),
+                    new RegionRewardSpec("item_gold", 65) })),
             new CityQuestSpec(CityCatalog.MercadoDosTuneis, "farnkhund", new RegionQuestSpec(MercadoRails, BiomeType.Caves, MercadoWebs, 840,
                 new[] { new RegionObjectiveSpec("clear_the_rails", QuestObjectiveType.KillEnemyType, "enemy_mountain_stone_golem", 4) },
                 new[] { new RegionRewardSpec("item_oleo_fogo_eterno", 1), new RegionRewardSpec("item_gold", 70) })),

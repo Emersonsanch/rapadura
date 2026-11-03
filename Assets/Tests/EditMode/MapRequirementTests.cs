@@ -105,6 +105,12 @@ namespace Rapadura.Tests
                 Assert.IsFalse(MapRequirementRules.IsMet(tag, new MapRequirementState().Own(MountType.Terrestre)), tag);
             }
 
+            // Takhsich's canvas wings give the double jump of the Ninho de Mahaway (24), worn on the back; they glide, they do not fly (39).
+            Assert.IsTrue(MapRequirementRules.IsMet(MapRequirementTags.WingsOrDoubleJump, new MapRequirementState().Wear(EquipmentSlot.Wings, MapRequirementItems.CanvasWings)));
+            Assert.IsFalse(MapRequirementRules.IsMet(MapRequirementTags.WingsOrDoubleJump, new MapRequirementState().Carry(MapRequirementItems.CanvasWings)), "in the backpack they do not jump");
+            Assert.IsFalse(MapRequirementRules.IsMet(MapRequirementTags.WingsRequired, new MapRequirementState().Wear(EquipmentSlot.Wings, MapRequirementItems.CanvasWings)), "canvas does not fly");
+            Assert.AreEqual(EquipmentSlot.Wings, ItemDatabase.GetById(MapRequirementItems.CanvasWings).EquipSlot);
+
             Assert.IsTrue(MapRequirementRules.IsMet(MapRequirementTags.ElevatedPlatforms, new MapRequirementState().Wear(EquipmentSlot.Wings, WingCatalog.ItemId(WingStyle.BeijaFlor, 1))));
             Assert.IsTrue(MapRequirementRules.IsMet(MapRequirementTags.ElevatedPlatforms, new MapRequirementState().Carry(MapRequirementItems.ClimbingRope)));
         }
@@ -203,6 +209,46 @@ namespace Rapadura.Tests
             Assert.IsTrue(RegionQuestCatalog.Quests.Any(q => q.Rewards.Any(r => r.ItemId == MapRequirementItems.OilLamp)), "Parthenos gives the first lamp");
             Assert.IsTrue(RegionQuestCatalog.Quests.Any(q => q.Rewards.Any(r => r.ItemId == MapRequirementItems.WoolCloak)));
             Assert.IsTrue(RegionQuestCatalog.Quests.Any(q => q.Rewards.Any(r => r.ItemId == MapRequirementItems.GardenKey)));
+        }
+
+        [Test]
+        public void EveryGateOfRegionsOneToFive_HasAnItemKitThatMeetsIt_AndEveryItemIsSoldOrGivenByAQuest()
+        {
+            var regions = new[] { MapRegion.Zarafshan, MapRegion.AreiasFlamejantes, MapRegion.SerraDeKaggen, MapRegion.GrutasDoLimiar, MapRegion.CostaDasMoncoes };
+            List<MapDefinition> gated = MapCatalog.Maps.Where(m => m.HasSpecialRequirement && regions.Contains(m.Region)).ToList();
+            Assert.Greater(gated.Count, 10);
+            foreach (MapDefinition map in gated)
+            {
+                string[] kit = MapRequirementRules.KitOf(map.SpecialRequirementTag);
+                Assert.IsNotEmpty(kit, $"{map}: no item meets {map.SpecialRequirementTag}");
+                var state = new MapRequirementState();
+                foreach (string itemId in kit)
+                {
+                    ItemDefinition item = ItemDatabase.GetById(itemId);
+                    Assert.IsNotNull(item, $"{map}: {itemId} is not in Resources/Items");
+                    state.Carry(itemId).Wear(item.EquipSlot, itemId);
+
+                    bool sold = CityShopCatalog.Shops.Any(s => s.Entries.Any(e => e.IsBagItem && e.ItemId == itemId));
+                    bool given = RegionQuestCatalog.Quests.Any(q => q.Rewards.Any(r => r.ItemId == itemId))
+                        || CityQuestCatalog.Quests.Any(q => q.Quest.Rewards.Any(r => r.ItemId == itemId));
+                    Assert.IsTrue(sold || given, $"{map}: {itemId} is neither sold nor given by a quest");
+                }
+
+                Assert.IsTrue(MapRequirementRules.IsMet(map.SpecialRequirementTag, state), $"{map}: its kit does not meet {map.SpecialRequirementTag}");
+            }
+        }
+
+        [Test]
+        public void PureAirBottle_IsTheKobolds_SoldAtMiwnaysFair_AndGivenByTakhsich()
+        {
+            const string bottle = "item_garrafa_ar_sereno";
+            ItemDefinition item = ItemDatabase.GetById(bottle);
+            Assert.IsNotNull(item);
+            Assert.AreEqual(ItemType.Consumable, item.Type);
+            Assert.AreEqual(EquipmentSlot.None, item.EquipSlot);
+            Assert.IsTrue(ContentTexts.Entries.Any(e => e.Key == ContentText.ItemNameKey(bottle) && e.PtBR == item.DisplayName));
+            Assert.IsNotNull(CityShopCatalog.EntryOf(CityShopCatalog.FeiraMiwnay, bottle));
+            Assert.IsTrue(CityQuestCatalog.Quests.Any(q => q.Quest.QuestId == CityQuestCatalog.MercadoWebs && q.Quest.Rewards.Any(r => r.ItemId == bottle)));
         }
 
         [Test]

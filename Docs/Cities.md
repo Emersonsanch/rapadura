@@ -127,9 +127,10 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
   24 seguem acordando na Vila das Lamparinas.
 - **Feira da Miwnay** (diária, 3 vagas que giram, tema Feira): poções, Lamparina e o **Óleo do Fogo Eterno** (exigência
   do 23, Cânion da Roda) fixos; giram minério, pedra, lascas de golem, asas de morcego, capacete de couro, amuleto da
-  sorte, picareta e a Lamparina Rúnica (após o chefe das Cavernas). O 22 não tem exigência e as Asas/Pulo Duplo do 24
-  não são item de loja. O Ammo nunca para lá. (A Garrafa de Ar Sereno, a Banca de Troca e a feira que muda de galeria
-  ainda faltam.)
+  sorte, picareta e a Lamparina Rúnica (após o chefe das Cavernas). Também fixos: as **Asas de Lona do Takhsich** (420 ouro; vestidas nas costas
+  dão o pulo duplo da exigência do 24, Ninho de Mahaway) e a **Garrafa de Ar Sereno** (30 ouro; +20% de recuperação de
+  vigor por 60 s; 2 vêm também na missão do Takhsich). O 22 não tem exigência. O Ammo nunca para lá. (A Banca de Troca e
+  a feira que muda de galeria ainda faltam.)
 - **Missões da cidade:** Takhsich pede 6 aranhas tirando as teias dos tubos de ar (a Aranha-Tecelã faz a Lagarta de
   Pedra; 4 poções de mana + Lamparina + 65 ouro, 760 XP); depois Farnkhund pede 4 golens fora dos trilhos (o Ushabti
   de Pedra faz a Toupeira-Gigante; Óleo do Fogo Eterno + 70 ouro, 840 XP). Testes: `CityTunnelMarketTests`.

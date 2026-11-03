@@ -225,9 +225,13 @@ namespace Rapadura.Tests
             Assert.AreEqual(ShopRotationPeriod.Daily, shop.Period);
 
             // Map 22 has no gate; map 23 (Cânion da Roda, return city the Mercado) asks for the eternal-fire oil; map 24's
-            // wings or double jump is a hero ability, not a shop item.
+            // wings or double jump is met by Takhsich's canvas wings, sold here too (with the bottled Pure Air).
             Assert.IsTrue(string.IsNullOrEmpty(MapRequirementRules.PrimaryItemOf(MapCatalog.Maps.Single(m => m.MapId == 22).SpecialRequirementTag)));
-            Assert.IsTrue(string.IsNullOrEmpty(MapRequirementRules.PrimaryItemOf(MapCatalog.Maps.Single(m => m.MapId == 24).SpecialRequirementTag)));
+            string wings = MapRequirementRules.PrimaryItemOf(MapCatalog.Maps.Single(m => m.MapId == 24).SpecialRequirementTag);
+            Assert.AreEqual(MapRequirementItems.CanvasWings, wings);
+            Assert.IsNotNull(CityShopCatalog.EntryOf(shop.ShopId, wings), "Miwnay sells Takhsich's canvas wings");
+            Assert.IsFalse(CityShopCatalog.EntryOf(shop.ShopId, wings).Rotating);
+            Assert.IsNotNull(CityShopCatalog.EntryOf(shop.ShopId, "item_garrafa_ar_sereno"), "the kobolds sell bottled Pure Air");
             string oil = MapRequirementRules.PrimaryItemOf(MapCatalog.Maps.Single(m => m.MapId == 23).SpecialRequirementTag);
             Assert.AreEqual(MapRequirementItems.EternalFireOil, oil);
             CityShopEntry gate = CityShopCatalog.EntryOf(shop.ShopId, oil);

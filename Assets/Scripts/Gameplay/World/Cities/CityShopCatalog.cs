@@ -405,7 +405,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_hammer", 15, 1, rotating: true),
             })),
 
-            // ---- Mercado dos Túneis: the Feira da Miwnay (mended scrap, lamps, potions), the eternal-fire oil of map 23; daily ----
+            // ---- Mercado dos Túneis: the Feira da Miwnay (mended scrap, lamps, bottled Pure Air), the eternal-fire oil of 23 and the canvas wings of 24; daily ----
             new CityShopSpec(FeiraMiwnay, ShopTheme.Feira, BiomeType.Caves, ShopRotationPeriod.Daily, 3, WithHouse(FeiraMiwnay, new List<CityShopEntry>
             {
                 new CityShopEntry("item_health_potion", 15, 5),
@@ -413,6 +413,10 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_lamparina_oleo", 28, 3),
                 // Map gate (MapRequirementRules): the Óleo do Fogo Eterno for the Cânion da Roda (23), whose return city this is.
                 new CityShopEntry("item_oleo_fogo_eterno", 190, 2),
+                // Map gate (MapRequirementRules): Takhsich's canvas wings, the double jump of the Ninho de Mahaway (24).
+                new CityShopEntry("item_asas_lona_takhsich", 420, 1),
+                // The kobolds' own trade (Docs/Mapas100.md §3.3): bottled Pure Air, for the still air far from the pipes.
+                new CityShopEntry("item_garrafa_ar_sereno", 30, 10),
                 // The rotation: what the market brought up from the four galleries today.
                 new CityShopEntry("item_iron_ore", 5, 12, rotating: true),
                 new CityShopEntry("item_stone", 1, 20, rotating: true),
