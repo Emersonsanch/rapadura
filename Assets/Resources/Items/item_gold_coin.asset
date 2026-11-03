@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_gold_coin
   _displayName: Moeda Furada de Qocho
   _description: "Moeda com furo quadrado, como as que corriam no bazar de Qocho. \xC9 a moeda corrente da ilha."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: aa783d174ab56dce1f4d9110676c264c, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 6
   _category: 19

@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_teriaga
   _displayName: "Teriaga do Oásis"
   _description: "Antídoto amargo de ervas e mel dos boticários de Qocho. Segura o veneno dos escorpiões de Namrael."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 031cf6b574eeb37d798fc63c67844ac5, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_lamparina_runica
   _displayName: "Lamparina Rúnica"
   _description: "Lamparina de alabastro com runas que guardam a Luz Viva. Não apaga nem no sopro das Pedras-Dragão."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 1108931828f0a0c0f7e5a0d7d63e7160, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_pedra_vida
   _displayName: "Pedra da \xC1gua Viva"
   _description: "Pedra verde e fresquinha, clara como \xE1gua de fonte. D\xE1 mais for\xE7a \xE0 op\xE7\xE3o extra de um equipamento."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 6511fee62ec444633713e4a5949a0383, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

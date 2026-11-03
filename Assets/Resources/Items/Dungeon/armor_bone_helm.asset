@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: armor_bone_helm
   _displayName: "Elmo Cr\xE2nio de Cobre"
   _description: "Elmo de cobre em forma de cr\xE2nio sorridente, forrado de l\xE3. Conjunto Marfim dos Art\xEDfices (2 pe\xE7as): Toque Espectral."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 10a5b2ee4df98f468c45161d1bdea32c, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 3
   _category: 11

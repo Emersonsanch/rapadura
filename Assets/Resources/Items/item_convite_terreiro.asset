@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_convite_terreiro
   _displayName: "Convite do P\xE1tio"
   _description: "Convite pintado \xE0 m\xE3o para o P\xE1tio dos Mazans. Vale uma entrada quando o p\xE1tio abre."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 9915cb7b5dd77e192fad03c918f0185a, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 5
   _category: 18

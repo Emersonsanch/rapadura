@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_whistle_mount_pony
   _displayName: "Apito do P\xF4nei das Estepes"
   _description: "Apito de junco da Estrebaria do Srosh. Quem compra leva o P\xF4nei das Estepes para casa."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: eef98e0c52fa7e1ace2832cdaaaadb8e, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

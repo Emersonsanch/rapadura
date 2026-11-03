@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_fish_peixe_dourado
   _displayName: "Peixe-Dourado do Remanso"
   _description: "A lenda do V\xF4 Jorge: s\xF3 aparece de madrugada ou ao entardecer, e mais ainda na chuva."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: c405d17bc83ae24bc4ec10ead968c0f5, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 6

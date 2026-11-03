@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_cha_gengibre
   _displayName: "Chá de Gengibre do Tandir"
   _description: "Garrafa de chá de gengibre ainda morno do forno tandir. Esquenta por dentro no meio da nevasca."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: e59db9ba11bdd9fdb472aa14af2b5ed5, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

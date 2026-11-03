@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_wooden_sword
   _displayName: Espada de Madeira
   _description: Uma espada simples de treino, feita de madeira.
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: d963f8b55d5687afc9ebd25bac9d0fba, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 2
   _category: 8

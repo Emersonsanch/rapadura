@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: armor_bone_chest
   _displayName: "Armadura Peitoral de Costelas"
   _description: "Peitoral de marfim dos Art\xEDfices, leve como cesto. Conjunto Marfim dos Art\xEDfices (2 pe\xE7as): Toque Espectral."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: ecd9c67de824a03d13af399d64be5d9c, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 3
   _category: 12

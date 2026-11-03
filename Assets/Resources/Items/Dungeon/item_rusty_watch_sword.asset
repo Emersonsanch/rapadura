@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_rusty_watch_sword
   _displayName: "Espada Enferrujada do Vigia"
   _description: "Espada de cobre de um vigia do Ossu\xE1rio. Velha e manchada, mas ainda corta."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 9936d1e2e9240b4a155fe625115c7dc6, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 2
   _category: 8

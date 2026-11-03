@@ -16,7 +16,7 @@ MonoBehaviour:
   _displayName: "Min\xE9rio de Ferro"
   _description: "Min\xE9rio bruto extra\xEDdo de veios rochosos. Pode ser fundido
     em barras."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 8ad37356838007eba6a7dfc6aaa8f300, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 2

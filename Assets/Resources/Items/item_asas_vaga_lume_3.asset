@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_asas_vaga_lume_3
   _displayName: "Asas de Vaga-lume III"
   _description: "Asinhas escuras com pontas que brilham feito fa\xEDsca. A Lavine n\xE3o tem mais medo da noite. N\xEDvel 3: reluzem e absorvem ainda mais dano."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: fd0c91dc2bc0ddc02e08522b34cf6e21, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 3
   _category: 15

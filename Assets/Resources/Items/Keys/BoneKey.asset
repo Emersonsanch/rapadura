@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_bone_key
   _displayName: "Chave de Osso R\xFAnica"
   _description: "Chave de marfim gravada com runas dos Art\xEDfices. Abre um port\xE3o gradeado do Ossu\xE1rio (e some na fechadura)."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 9eb8843d8d9016d55d22d196635775bb, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 5
   _category: 18

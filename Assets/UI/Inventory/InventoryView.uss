@@ -279,6 +279,16 @@
     align-items: center;
 }
 
+/* Item icon (tools/icons/generate_item_icons.py) filling the tile; the quantity sits on top of it. */
+.inventory-bag-item-icon {
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    right: 3px;
+    bottom: 3px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
 .inventory-bag-item-name {
     font-size: 11px;
     color: var(--rap-cream);

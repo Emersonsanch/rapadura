@@ -16,7 +16,7 @@ MonoBehaviour:
   _displayName: Ferro
   _description: "Barra de ferro forjada a partir de min\xE9rio. Usada em constru\xE7\xE3o
     e crafting avan\xE7ado."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: e62ff52572e681a6955139ffcf32767e, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 2

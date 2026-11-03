@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_runa_couro
   _displayName: "Runa do Couro Duro"
   _description: "Verso que endurece a pele feito couro curtido: +15% de defesa por 15 segundos."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 4d18c94b9f76e440744beebbc45ac936, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 1
   _category: 7

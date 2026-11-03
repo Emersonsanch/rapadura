@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_selo_sol
   _displayName: "Selo do Sol"
   _description: "Selo de ouro com o disco do Sol. As Torres Brancas só abrem para quem o carrega."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 7d5c795614117e9f646d6e8f079447b4, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 5
   _category: 18

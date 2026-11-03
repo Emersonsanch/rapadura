@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_chave_jardim
   _displayName: "Chave do Jardim"
   _description: "Chave de bronze com uma romã gravada. Abre o portão do Jardim de Mihrshah."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 1a70e974e839d13a13820a9becca32ed, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 5
   _category: 18

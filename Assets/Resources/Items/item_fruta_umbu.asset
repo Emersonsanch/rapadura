@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_fruta_umbu
   _displayName: "Rom\xE3 do Recome\xE7o"
   _description: "Rom\xE3 azedinha da Uasamonga. Coma numa aventura: 1 ponto volta do seu atributo mais alto para voc\xEA distribuir de novo."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: c5e66931dcc39e245cce7fbfad6308b5, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 1
   _category: 6

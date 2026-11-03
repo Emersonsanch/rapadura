@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_fish_lambari
   _displayName: "Barbo"
   _description: "Bigodudo e ligeiro, vive nas corredeiras do riacho."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 96ab9f22315a02bd71680a24c0a55206, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 6

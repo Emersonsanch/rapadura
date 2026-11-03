@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_corda_escalada
   _displayName: "Corda de Escalada"
   _description: "Corda de fibra trançada com gancho de ferro. Leva às plataformas das Copas de Garajonay."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: ad83f3354d660193ff595e7312dea67c, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

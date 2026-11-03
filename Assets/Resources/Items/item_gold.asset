@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_gold
   _displayName: Ouro
   _description: "Pepita de ouro bruto. Usada em crafting de itens raros/lend\xE1rios."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 04ff828c2aa9d5fe7cf0687d52c9d5c0, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 6
   _category: 3

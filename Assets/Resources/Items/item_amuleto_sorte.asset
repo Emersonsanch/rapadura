@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_amuleto_sorte
   _displayName: "Amuleto de Bes"
   _description: "Um Bes de barro, o bochechudo que protege as casas e as crian\xE7as. Aumenta a chance de um refino que pode falhar; gasta na tentativa."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 5f4914e0bdc85676db14431d89db798d, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_stone
   _displayName: Pedra
   _description: "Pedra bruta coletada de rochas. Usada em constru\xE7\xE3o e crafting."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 9e200e8d5a1698445adf59592a1eab0e, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 1

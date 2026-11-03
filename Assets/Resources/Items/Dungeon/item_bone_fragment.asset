@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_bone_fragment
   _displayName: "Fragmento de Osso Antigo"
   _description: "Lasca de marfim que ainda brilha de leve. Os artes\xE3os pagam bem por ela."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 82c2ed8c14cd3bf5982c6a913ed4fbc9, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

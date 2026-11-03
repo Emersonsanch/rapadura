@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_bolha_ar
   _displayName: "Bolha de Ar Engarrafada"
   _description: "Bolha de ar presa num frasco de vidro do recife. Dá fôlego nas salas afundadas de Kilwa."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: bc2a47a9399b12932007695679e5ba16, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

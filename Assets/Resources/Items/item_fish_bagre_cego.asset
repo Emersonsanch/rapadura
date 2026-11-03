@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_fish_bagre_cego
   _displayName: "Bagre-cego do Limiar"
   _description: "Nunca viu a luz do sol. Sente a isca pelo tremor da \xE1gua."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 3e7c2537ac2d7b7977b4684315c02485, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 6

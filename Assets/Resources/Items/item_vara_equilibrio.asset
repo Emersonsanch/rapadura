@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_vara_equilibrio
   _displayName: "Vara de Equilíbrio"
   _description: "Vara longa de bambu dos Vanaras. Com ela as pontes de raiz param de balançar."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 9bb129e7b74c2b43c40d64611b481862, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_whistle_mount_pinto_horse
   _displayName: "Apito do Cavalo Celeste de Fergana"
   _description: "Apito de junco. Quem compra leva o Cavalo Celeste de Fergana para casa."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 017a136fdf22c2c04090488f94b24b7c, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

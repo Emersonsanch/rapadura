@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_herb
   _displayName: Erva Medicinal
   _description: "Planta com propriedades curativas, usada em po\xE7\xF5es."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 87bce1400aafe6178549c5cfbf31b1ca, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 4

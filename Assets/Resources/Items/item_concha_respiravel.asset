@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_concha_respiravel
   _displayName: "Concha Respirável"
   _description: "Concha do Povo-do-Mar que guarda ar fresco. Encostada à boca, deixa respirar debaixo d'água."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 43bf4492bec0f3d34e67ccf649939525, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

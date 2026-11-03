@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_parte_asa_morcego
   _displayName: "Asa de Morcego"
   _description: "Asa fina das Grutas do Limiar. Dizem que faz quem luta beber um pouco da pr\xF3pria for\xE7a de volta."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 7c14afd76e43f19da2fffc82b2805231, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

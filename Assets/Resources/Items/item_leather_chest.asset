@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_leather_chest
   _displayName: Peitoral de Couro
   _description: "Prote\xE7\xE3o b\xE1sica para o tronco."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 3d372884ac89fc14c07fab212cd87c68, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 3
   _category: 12

@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_fruta_mandacaru
   _displayName: "Mel\xE3o de Luz"
   _description: "Fatia de mel\xE3o cozida na Uasamonga. O V\xF4 Jorge dizia que mel\xE3o guarda muita luz. Coma numa aventura: +1 ponto de atributo para distribuir (at\xE9 2 por jornada)."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: ff8b49e80d2c718328cab8a34713005b, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 1
   _category: 6

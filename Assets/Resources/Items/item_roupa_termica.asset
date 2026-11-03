@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_roupa_termica
   _displayName: "Roupa Térmica Refinada"
   _description: "Roupa acolchoada de feltro e seda dos monges de Sangkent. Vestida, o frio do Teto do Mundo não entra."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: de9284ea1374864efe55f43cdf31945e, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 3
   _category: 12
@@ -29,7 +29,7 @@ MonoBehaviour:
   _hasDurability: 1
   _maxDurability: 80
   _equipSlot: 2
-  _armorDefense: 20
+  _armorDefense: 8
   _weaponDamage: 0
   _weaponAttackSpeed: 1
   _equipStatModifiers: []

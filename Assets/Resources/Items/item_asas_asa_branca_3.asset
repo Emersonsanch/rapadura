@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_asas_asa_branca_3
   _displayName: "Asas de Bronze de Kurdal\xE6gon III"
   _description: "Asas de placas de metal claro, como as que o ferreiro do c\xE9u dos contos forjava. O \xCDcaro jura que dessa vez ele voa de verdade. N\xEDvel 3: reluzem e absorvem ainda mais dano."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 50761b02c5cd902eea0e7588b93be3d4, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 3
   _category: 15

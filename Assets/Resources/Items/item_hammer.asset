@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_hammer
   _displayName: "Martelo de Constru\xE7\xE3o"
   _description: Ferramenta usada para construir e reparar estruturas.
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 0e1278b5b015c2807632d6aabe25ed67, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 4
   _category: 17

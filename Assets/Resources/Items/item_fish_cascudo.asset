@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_fish_cascudo
   _displayName: "Esturj\xE3o-mi\xFAdo"
   _description: "Esturj\xE3o pequeno, de placas de osso, que vive grudado nas pedras."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 18cc8f7502fc639187d548fc121e1131, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 6

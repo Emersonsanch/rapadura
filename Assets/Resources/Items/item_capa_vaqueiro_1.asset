@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_capa_vaqueiro_1
   _displayName: "Capa de Feltro dos Nartes"
   _description: "Capa de feltro grosso com fivela dourada que esvoa\xE7a sozinha. Protege como a capa dos her\xF3is nartes dos contos: o Joaquim aprova."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 7135efb2ffa388b0005cdadec2bd61e3, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 3
   _category: 15

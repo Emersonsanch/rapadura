@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_asas_beija_flor_1
   _displayName: "Asas de Aralez"
   _description: "Asinhas verdes e macias, como as do aralez, o c\xE3o alado dos contos que lambia o machucado dos her\xF3is. A Maria diz que elas cheiram a hortel\xE3."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 22da898261a86c9d592b97dede8d9fa5, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 3
   _category: 15

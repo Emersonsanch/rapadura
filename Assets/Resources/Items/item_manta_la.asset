@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_manta_la
   _displayName: "Manta de Lã"
   _description: "Manta grossa de lã de ovelha da serra. Segura o vento gelado do Passo do Hahya."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 50e75370fa0b0a1d2951e9bb2e4e1264, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

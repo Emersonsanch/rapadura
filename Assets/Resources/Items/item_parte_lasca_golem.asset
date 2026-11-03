@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_parte_lasca_golem
   _displayName: "Lasca de Ushabti"
   _description: "Lasca de pedra de um ushabti da serra, os guardi\xF5es antigos que respondem. Endurece o couro e a l\xE2mina."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: f844c33abe98f33cafe01632360a607b, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_whistle_mount_giant_anteater
   _displayName: "Apito do Porco-Formigueiro Gigante"
   _description: "Apito de junco. Quem compra leva o Porco-Formigueiro Gigante para casa."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 0557a40bc5e9aaebdc08e7093bde9344, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

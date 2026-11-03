@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_parte_seda_aranha
   _displayName: "Seda de Aranha"
   _description: "Fio forte e grudento da aranha-tecel\xE3 do bosque. Deixa a arma mais ligeira e vira papel de runa."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: bf31e2e6943b08547dd3711230522698, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

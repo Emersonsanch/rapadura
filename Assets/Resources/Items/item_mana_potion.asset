@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_mana_potion
   _displayName: "Po\xE7\xE3o de Mana"
   _description: Restaura uma quantidade de mana ao ser consumida.
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: f54110d68ded32977f2bc8bfb2dc9f0e, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 1
   _category: 7

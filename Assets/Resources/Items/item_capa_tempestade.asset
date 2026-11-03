@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_capa_tempestade
   _displayName: "Capa de Tempestade"
   _description: "Capa encerada com fios de cobre que desviam o raio. Para o Passo de Wakhan."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: dd35665786147371cc4e148502e2d11b, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

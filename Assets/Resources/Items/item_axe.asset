@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_axe
   _displayName: Machado
   _description: "Ferramenta usada para cortar \xE1rvores e coletar madeira mais r\xE1pido."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: dd53cdc4a7e144e1d702d64fabfeb19a, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 4
   _category: 16

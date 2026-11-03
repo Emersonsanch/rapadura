@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_whistle_mount_pack_donkey
   _displayName: "Apito do Asno de Caravana"
   _description: "Apito de junco da Estrebaria do Srosh. Quem compra leva o Asno de Caravana para casa."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: f4dc46a9852800df95c7aaf812928ff0, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

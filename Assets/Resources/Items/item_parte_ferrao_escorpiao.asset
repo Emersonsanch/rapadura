@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_parte_ferrao_escorpiao
   _displayName: "Ferr\xE3o de Escorpi\xE3o"
   _description: "Ferr\xE3o das Areias Flamejantes, ainda com veneno. Ajuda a arma a achar o ponto fraco do bicho."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 37092a88f643321905887dddcceb4c7f, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

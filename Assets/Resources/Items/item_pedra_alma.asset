@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_pedra_alma
   _displayName: "Pedra da Alma Viva"
   _description: "Pedra azulada onde dizem que dorme um pouco da Alma Viva. Refina de +6 at\xE9 +15; pode falhar."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: e3ce602c51cecf9ac99ec79d735451c3, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

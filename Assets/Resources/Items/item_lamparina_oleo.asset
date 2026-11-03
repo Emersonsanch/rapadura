@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_lamparina_oleo
   _displayName: "Lamparina de Óleo"
   _description: "Lamparina de barro com pavio de algodão e óleo para muitas horas. Acesa, abre caminho nas Grutas do Limiar."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: f1dc0fa6ca2d48bf3fa3b62face92377, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

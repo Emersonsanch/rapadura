@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_whistle_mount_big_dog
   _displayName: "Apito do Alabai Fof\xE3o"
   _description: "Apito de junco da Estrebaria do Srosh. Quem compra leva o Alabai Fof\xE3o para casa."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 815794c4707e1c70708d38da58d42511, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

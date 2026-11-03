@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_fish_piau
   _displayName: "Truta-do-Tian-Shan"
   _description: "Truta pintadinha que gosta da neblina da madrugada."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 9c86f0a3ce9c61564f957b340c6deb7b, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 6

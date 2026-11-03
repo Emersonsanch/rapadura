@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_fish_tilapia
   _displayName: "Til\xE1pia"
   _description: "Peixe de remanso, carne branca e firme. Vai bem na brasa."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 31d108c8ff49221e6e424b15bb545e7d, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 6

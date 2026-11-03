@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_pedra_caos
   _displayName: "Pedra da Mistura"
   _description: "Luz e sombra misturadas numa pedra s\xF3, por isso ela muda de cor sozinha. A V\xF3 guarda essas para a Uasamonga."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 2f77b7c42c6f226aa8d55422776e87f9, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_fish_piaba
   _displayName: "Alburno"
   _description: "Peixinho mi\xFAdo que vive em todo canto d'\xE1gua. Bom pra caldo."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 64fac5348ee437957e0f017c54370564, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 6

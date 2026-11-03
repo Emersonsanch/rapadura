@@ -16,7 +16,7 @@ MonoBehaviour:
   _displayName: Madeira
   _description: "Tora de madeira coletada de \xE1rvores. Usada em constru\xE7\xE3o
     e crafting."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 5cd6e3791ad08a0af6cfab77a2d4ff08, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 0

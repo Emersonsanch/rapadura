@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_runa_cura
   _displayName: "Runa da Cura"
   _description: "Cartinha iluminada com um verso de cura, desenhada por Lavine ou Maria. Ao ler, cura 60 de vida."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 0cd853208e28a15ea0b1ee432e3690a1, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 1
   _category: 7

@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_grampos_escalada
   _displayName: "Grampos de Escalada"
   _description: "Grampos de ferro para prender nas botas. Mordem o gelo da Geleira Ancestral."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 52aa3661147b46d436edfc888d9b023e, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

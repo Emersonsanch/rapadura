@@ -586,9 +586,21 @@ namespace Rapadura.UI.Inventory
 
             Place(tile, rect.X, rect.Y, rect.Width, rect.Height);
 
-            var nameLabel = new Label(itemName) { pickingMode = PickingMode.Ignore };
-            nameLabel.AddToClassList("inventory-bag-item-name");
-            tile.Add(nameLabel);
+            // MU style: the icon fills the tile and the name lives in the tooltip; items without
+            // an icon (should not ship — see ItemIconCoverageTests) fall back to the name label.
+            if (item != null && item.Icon != null)
+            {
+                var icon = new VisualElement { name = "inventory-bag-item-icon", pickingMode = PickingMode.Ignore };
+                icon.AddToClassList("inventory-bag-item-icon");
+                icon.style.backgroundImage = new StyleBackground(item.Icon);
+                tile.Add(icon);
+            }
+            else
+            {
+                var nameLabel = new Label(itemName) { pickingMode = PickingMode.Ignore };
+                nameLabel.AddToClassList("inventory-bag-item-name");
+                tile.Add(nameLabel);
+            }
 
             if (item != null)
             {

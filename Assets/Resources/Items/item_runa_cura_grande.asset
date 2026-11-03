@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_runa_cura_grande
   _displayName: "Runa da Cura Grande"
   _description: "Rolo inteiro de cura, iluminado a ouro, com asa de morcego no lacre. Ao ler, cura 120 de vida."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 75b66eb55e5adfb5e2201e60aa56c6c3, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 1
   _category: 7

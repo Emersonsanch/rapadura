@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_fish_traira
   _displayName: "L\xFAcio"
   _description: "Peixe de dente afiado que ca\xE7a no fim da tarde e de noite."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 71de69e9f71e83f1c390a5ede4f53676, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 6

@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_pickaxe
   _displayName: Picareta
   _description: "Ferramenta usada para minerar pedras e min\xE9rios."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 9988ebe552d00e371861c63a47a14f89, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 4
   _category: 16

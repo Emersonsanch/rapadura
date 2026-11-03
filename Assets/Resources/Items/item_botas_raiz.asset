@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_botas_raiz
   _displayName: "Botas de Raiz Viva"
   _description: "Botas trançadas de raiz viva que se agarram ao lodo sem afundar. Para os mangues de Liyongo."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 02cfeeeab748a1c5061c9e5c598c142a, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 3
   _category: 14
@@ -29,7 +29,7 @@ MonoBehaviour:
   _hasDurability: 1
   _maxDurability: 80
   _equipSlot: 4
-  _armorDefense: 12
+  _armorDefense: 3
   _weaponDamage: 0
   _weaponAttackSpeed: 1
   _equipStatModifiers: []

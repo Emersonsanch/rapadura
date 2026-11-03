@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_qocho_holed_coin
   _displayName: "Moeda Furada de Qocho"
   _description: "Moeda antiga com um furo no meio, para levar num cord\xE3o. Vale umas pratas na cidade."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 9f1ed5ce01eaa78eaee98572dd53785c, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_passagem_dhow
   _displayName: "Passagem de Dhow"
   _description: "Tábua de cedro marcada com o selo dos barqueiros de Taa Pwani. Dá lugar num dhow até o recife."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 95befe7a37787515f935ca514abd0666, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 5
   _category: 18

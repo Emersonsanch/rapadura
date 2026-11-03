@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_fish_mandi
   _displayName: "Bagre-chiador"
   _description: "Bagrinho de espinho que chia e sai de noite. Cuidado ao tirar do anzol!"
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: bacb99980a7a05ce6c5512f9a2c703f6, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 6

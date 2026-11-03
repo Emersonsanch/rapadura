@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_leather_boots
   _displayName: Botas de Couro
   _description: "Prote\xE7\xE3o b\xE1sica para os p\xE9s."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 56d865648f39bd771d48ec2dbdbd0b19, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 3
   _category: 14

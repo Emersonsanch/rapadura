@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_asas_carcara_1
   _displayName: "Asas de Huma"
   _description: "Asas cor de areia de penas firmes, feitas na Uasamonga. Diz o conto que a Huma nunca pousa e que a sombra dela d\xE1 sorte: a Maithe adora."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 7c9c678e395ddd1f0cff9a3dcca4bda6, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 3
   _category: 15

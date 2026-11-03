@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_runa_vento
   _displayName: "Runa do Vento"
   _description: "Verso que chama o Vento Vivo nas costas: +20% de velocidade por 12 segundos."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: b6586167bcfdd692dc81999101f8bb4f, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 1
   _category: 7

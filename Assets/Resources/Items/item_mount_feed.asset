@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_mount_feed
   _displayName: "Ra\xE7\xE3o da Estrebaria"
   _description: "Ra\xE7\xE3o de cevada e capim do Srosh. Toda montaria come: +40 de saciedade."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 8cfeac22dadba6b3daebf03d06e5b17a, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 6

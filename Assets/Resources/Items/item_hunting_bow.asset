@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_hunting_bow
   _displayName: "Arco de Ca\xE7a"
   _description: "Arco leve usado para ataques \xE0 dist\xE2ncia."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 215e890af155787e0f23baf4d47a4eba, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 2
   _category: 9

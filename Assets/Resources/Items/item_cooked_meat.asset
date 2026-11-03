@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_cooked_meat
   _displayName: Carne Assada
   _description: Alimento que restaura energia.
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 48d7c63e8fba83858d23e63fa04975b7, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 1
   _category: 6

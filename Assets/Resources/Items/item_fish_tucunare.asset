@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_fish_tucunare
   _displayName: "Perca-do-Nilo"
   _description: "Peixe grande e valente, de olho que brilha. S\xF3 ataca a isca com o c\xE9u limpo."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 4ceeaf2d635650c54731841f5a5fc3ca, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 6
