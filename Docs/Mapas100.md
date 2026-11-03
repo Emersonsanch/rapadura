@@ -119,6 +119,17 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       dentro, 19 e 20 encaixados, 21–24 e 18 salões intermediários, paredes altas de tufo entre os salões (sem teto real),
       abismos com pontes de corda, lagos, cristais, colunas e fungos que brilham; o portão oeste do Zarafshan (para o 19)
       chega à borda leste do Limiar e o do Hahya à borda oeste. Detalhes em §5, "Região 4".
+    - **Viagem e save dos mapas-zona** (2026-11-03): 09–12, 15–18 e 21–24 não têm layout próprio, só existem como zonas
+      do mundo da região, e agora contam como construídos (`MapCatalog` `isBuilt`; `MapLayouts.IsPlayable` = layout próprio
+      **ou** zona de overworld, `MapLayouts.IsOverworldOnly`; o teste de catálogo exige `isBuilt ⇔ IsPlayable`). A janela M
+      (Barcas de Luz) leva até eles: carrega o mundo da região e põe o herói no Cais da Barca do posto/cidade do mapa
+      (`OverworldLayout.ArrivalFor`, `MapModeController.ArrivalPoint`). Regra dos cais: de fora da região, qualquer mapa
+      construído (nível, exigência e ouro como sempre); dentro da região, só cais já pisados a pé — a linha aparece com
+      cadeado e "Ande até esse cais uma vez antes de pedir a barca" (`MapAccessCheck.DockNotVisited`). Os cais visitados
+      (`OverworldProgress`) são salvos com as cidades (`CitySaveState.visitedDocks`, `docksSchema` = 1) e zerados em jogo
+      novo; save antigo (sem o campo) ganha o cais da Vila de cada região cuja cidade já tinha sido visitada (01, 07, 13,
+      19). O portão gradeado do **Ossuário dos Artífices** no Limiar entra direto na masmorra (ver `Docs/Dungeons.md` §2).
+      Testes: `OverworldTravelTests`.
 
 ---
 

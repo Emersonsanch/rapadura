@@ -147,7 +147,10 @@ namespace Rapadura.Gameplay.World.Map
         /// <summary>Slug of the settlement's name (texts <c>map.settlement.&lt;slug&gt;</c>).</summary>
         public readonly string SettlementId;
 
-        /// <summary>Built and playable in this build (code-built layout in <c>MapLayouts</c>); the others are listed but closed.</summary>
+        /// <summary>
+        /// Built and playable in this build: a code-built layout in <c>MapLayouts</c> or a zone of a continuous region
+        /// (<c>OverworldLayouts</c>), i.e. <c>MapLayouts.IsPlayable</c>; the others are listed but closed.
+        /// </summary>
         public readonly bool IsBuilt;
 
         public MapDefinition(int mapId, string id, MapRegion region, string regionType, MapSize size, int monsterLevelMin, int monsterLevelMax,

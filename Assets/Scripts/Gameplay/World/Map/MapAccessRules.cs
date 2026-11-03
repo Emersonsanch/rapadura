@@ -24,6 +24,9 @@ namespace Rapadura.Gameplay.World.Map
         MissingRequirement = 5,
 
         NotEnoughGold = 6,
+
+        /// <summary>A dock of the continuous region the hero is in, never reached on foot (the barca only links visited docks).</summary>
+        DockNotVisited = 7,
     }
 
     /// <summary>

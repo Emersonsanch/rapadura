@@ -29,6 +29,12 @@ Vó Edna e Vô Jorge.
   `DungeonDirector` se cria sozinho (sem editar cena), a arena veste o chão de caverna e o diretor ergue o salão.
 - Morrer ou fugir resolvem pela arena como sempre (volta ao mapa, sem ressuscitar dentro); os portões já abertos
   continuam abertos na próxima visita.
+- **Pelo mundo contínuo** (2026-11-03): no mundo das Grutas do Limiar, o portão gradeado do Ossuário (saída
+  `exit_ossuario`, `OverworldLayouts.OssuaryPortal`) entra direto na masmorra — `MapModeController` reconhece a saída
+  (`MapModeController.OssuaryExitId`), confere `DungeonRules.CanEnter` (nível 12; abaixo, a mesma mensagem e o herói
+  volta um passo) e chama `SceneTransitionService.BeginEncounterFromMap` com o mesmo `DungeonDirector.BuildPayload`.
+  Vencer ou sair a pé traz o herói de volta ao mundo do Limiar, em frente ao portão (`PendingMapArrivalExit`); morrer
+  segue o caminho de sempre (mapa mundi e cidade de retorno). O botão do mapa mundi continua igual.
 
 ## 3. Planta (gerada em código)
 

@@ -49,7 +49,8 @@ namespace Rapadura.UI.WorldMap
         public bool CanTravel => Check == MapAccessCheck.Ok;
 
         /// <summary>Greyed with the padlock: closed by level, gate or build.</summary>
-        public bool IsLocked => Check == MapAccessCheck.LevelTooLow || Check == MapAccessCheck.MissingRequirement || Check == MapAccessCheck.NotBuilt;
+        public bool IsLocked => Check == MapAccessCheck.LevelTooLow || Check == MapAccessCheck.MissingRequirement || Check == MapAccessCheck.NotBuilt
+            || Check == MapAccessCheck.DockNotVisited;
     }
 
     /// <summary>What the window travels with: the bag that pays and where a city trip / a map trip goes.</summary>
@@ -139,11 +140,20 @@ namespace Rapadura.UI.WorldMap
         // Pure
         // ------------------------------------------------------------------
 
-        /// <summary>The row of <paramref name="map"/> for a hero of <paramref name="level"/> with <paramref name="gold"/>.</summary>
+        /// <summary>
+        /// The row of <paramref name="map"/> for a hero of <paramref name="level"/> with <paramref name="gold"/>.
+        /// <paramref name="isUnvisitedStop"/> (<see cref="MapModeController.IsUnvisitedStop(OverworldLayout,string)"/>): a dock of
+        /// the region the hero walks in that was never reached on foot is offered closed (<see cref="MapAccessCheck.DockNotVisited"/>).
+        /// </summary>
         public static MapTravelRow BuildMapRow(MapDefinition map, int level, CharacterId? hero, int gold, bool overloaded, string currentMapId, bool busy,
-            Func<string, bool> hasRequirement, LocalizationManager localization)
+            Func<string, bool> hasRequirement, LocalizationManager localization, Func<string, bool> isUnvisitedStop = null)
         {
             MapAccessCheck check = MapAccessRules.CheckWarp(map, level, hero, gold, overloaded, currentMapId, busy, hasRequirement);
+            if ((check == MapAccessCheck.Ok || check == MapAccessCheck.NotEnoughGold) && isUnvisitedStop != null && isUnvisitedStop(map.Id))
+            {
+                check = MapAccessCheck.DockNotVisited;
+            }
+
             int cost = MapAccessRules.CalculateWarpCost(map, overloaded);
             int warp = MapAccessRules.EffectiveLevelRequirement(map.WarpLevelRequirement, hero, map.RegionType);
             int walk = MapAccessRules.EffectiveLevelRequirement(map.WalkLevelRequirement, hero, map.RegionType);
@@ -165,6 +175,7 @@ namespace Rapadura.UI.WorldMap
                 case MapAccessCheck.LevelTooLow: status = MapTexts.Format(localization, MapTexts.StatusLevel, warp); break;
                 case MapAccessCheck.MissingRequirement: status = MapTexts.Format(localization, MapTexts.StatusRequirement, MapTexts.RequirementName(localization, map.SpecialRequirementTag)); break;
                 case MapAccessCheck.NotEnoughGold: status = MapTexts.Format(localization, MapTexts.StatusNoGold, cost); break;
+                case MapAccessCheck.DockNotVisited: status = OverworldTexts.Get(localization, OverworldTexts.DockNotVisited); break;
                 default: status = string.Empty; break;
             }
 
@@ -187,6 +198,13 @@ namespace Rapadura.UI.WorldMap
             }
 
             return ServiceLocator.TryGet(out SceneTransitionService transition) && transition.TravelToMap(mapId);
+        }
+
+        /// <summary>The stops the barca refuses right now: the unvisited docks of the region the hero walks in (null elsewhere).</summary>
+        public static Func<string, bool> UnvisitedStopLookup()
+        {
+            MapModeController mode = MapModeController.Current;
+            return mode != null && mode.Overworld != null ? mode.IsUnvisitedStop : (Func<string, bool>)null;
         }
 
         /// <summary>The backpack is above 100% of its capacity right now (the fare doubles).</summary>
@@ -555,6 +573,7 @@ namespace Rapadura.UI.WorldMap
             _list.Clear();
             Button first = null;
             Func<string, bool> hasRequirement = MapRequirementHeroState.LookupFor(bag);
+            Func<string, bool> unvisitedStop = UnvisitedStopLookup();
             foreach (MapRegion region in MapCatalog.Regions)
             {
                 var header = new Label(MapTexts.RegionName(localization, region));
@@ -571,7 +590,7 @@ namespace Rapadura.UI.WorldMap
 
                 foreach (MapDefinition def in MapCatalog.InRegion(region))
                 {
-                    MapTravelRow row = BuildMapRow(def, level, hero, gold, overloaded, here, busy, hasRequirement, localization);
+                    MapTravelRow row = BuildMapRow(def, level, hero, gold, overloaded, here, busy, hasRequirement, localization, unvisitedStop);
                     Button go = AddMapRow(row);
                     first ??= go;
                 }
@@ -680,14 +699,9 @@ namespace Rapadura.UI.WorldMap
             CharacterId? hero = ServiceLocator.TryGet(out CharacterSelectionState selection) ? selection.Selected : null;
             bool busy = _request.Map != null && CityFastTravelPanel.IsEventActive(_request.Map);
             string here = MapModeController.Current != null ? MapModeController.Current.MapId : null;
+            // Same region, dock never reached on foot: the barca only links docks already visited (DockNotVisited, a padlock).
             MapTravelRow row = BuildMapRow(map, HeroLevelNow(), hero, bag.GetTotalCount(CurrencyItemId), IsOverloadedNow(), here, busy,
-                MapRequirementHeroState.LookupFor(bag), Localization);
-            if (row.CanTravel && MapModeController.Current != null && MapModeController.Current.IsUnvisitedStop(mapId))
-            {
-                // Same region, dock never reached on foot: the barca only links docks already visited.
-                _status.text = OverworldTexts.Get(Localization, OverworldTexts.DockNotVisited);
-                return;
-            }
+                MapRequirementHeroState.LookupFor(bag), Localization, UnvisitedStopLookup());
 
             if (!row.CanTravel || (row.Cost > 0 && !bag.RemoveById(CurrencyItemId, row.Cost)))
             {

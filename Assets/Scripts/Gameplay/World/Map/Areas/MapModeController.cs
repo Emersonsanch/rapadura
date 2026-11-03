@@ -5,6 +5,7 @@ using Rapadura.Core.Localization;
 using Rapadura.Core.Logging;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Combat;
+using Rapadura.Gameplay.Dungeon;
 using Rapadura.Gameplay.Environment;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.World.Biomes;
@@ -44,6 +45,10 @@ namespace Rapadura.Gameplay.World.Map.Areas
 
         public string MapId { get; private set; }
         public string ArrivingFrom { get; private set; }
+
+        /// <summary>The exit the hero comes back out of (the Ossuário's portal after a run), else null (dock or border).</summary>
+        public string ArrivalExit { get; private set; }
+
         public MapDefinition Definition { get; private set; }
         public MapLayout Layout { get; private set; }
         public MapAreaView Area { get; private set; }
@@ -109,6 +114,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
             MapModeController controller = host.AddComponent<MapModeController>();
             controller.MapId = transition.PendingMapVisit;
             controller.ArrivingFrom = transition.PendingMapArrivalFrom;
+            controller.ArrivalExit = transition.PendingMapArrivalExit;
         }
 
         private void Awake()
@@ -228,9 +234,31 @@ namespace Rapadura.Gameplay.World.Map.Areas
                 return;
             }
 
-            Vector2 facing;
-            Vector2 at = Overworld != null ? Overworld.ArrivalFor(MapId, ArrivingFrom, out facing) : Layout.ArrivalFrom(ArrivingFrom, out facing);
+            Vector2 at = ArrivalPoint(Overworld, Layout, MapId, ArrivingFrom, ArrivalExit, out Vector2 facing);
             PlaceInWorld(player, at, facing);
+        }
+
+        /// <summary>
+        /// Where a hero entering map mode stands (pure): at the arrival of exit <paramref name="arrivalExit"/> when the hero comes
+        /// back out of it (the Ossuário's portal), else in a continuous region <see cref="OverworldLayout.ArrivalFor"/> (the border
+        /// walked in by, else the dock of <paramref name="mapId"/>'s post), else the map's own arrival.
+        /// </summary>
+        public static Vector2 ArrivalPoint(OverworldLayout overworld, MapLayout layout, string mapId, string arrivingFrom, string arrivalExit, out Vector2 facing)
+        {
+            MapLayout world = overworld != null ? overworld.World : layout;
+            MapExitSpec exit = !string.IsNullOrEmpty(arrivalExit) && world != null ? world.Exits.Find(e => e.Id == arrivalExit) : null;
+            if (exit != null)
+            {
+                facing = exit.ArrivalFacing;
+                return exit.Arrival;
+            }
+
+            if (overworld != null)
+            {
+                return overworld.ArrivalFor(mapId, arrivingFrom, out facing);
+            }
+
+            return layout.ArrivalFrom(arrivingFrom, out facing);
         }
 
         /// <summary>Stands the hero at <paramref name="at"/>; in an overworld the chunks around are built first and the zone re-read.</summary>
@@ -285,9 +313,15 @@ namespace Rapadura.Gameplay.World.Map.Areas
         }
 
         /// <summary>The map is a dock of this overworld the hero has not reached on foot yet (the barca refuses it).</summary>
-        public bool IsUnvisitedStop(string mapId)
+        public bool IsUnvisitedStop(string mapId) => IsUnvisitedStop(Overworld, mapId);
+
+        /// <summary>
+        /// Pure rule of the barca inside a continuous region: a map of <paramref name="here"/> whose dock was never reached on
+        /// foot (<see cref="OverworldProgress"/>, saved) is refused; maps of other regions (or from outside) are not.
+        /// </summary>
+        public static bool IsUnvisitedStop(OverworldLayout here, string mapId)
         {
-            return Overworld != null && Overworld.ContainsMap(mapId) && !OverworldProgress.IsVisited(mapId);
+            return here != null && here.ContainsMap(mapId) && !OverworldProgress.IsVisited(mapId);
         }
 
         private void AnnounceArrival()
@@ -363,6 +397,10 @@ namespace Rapadura.Gameplay.World.Map.Areas
                     DockReached?.Invoke();
                     return;
 
+                case MapExitKind.WorldMap when spec.Id == OssuaryExitId:
+                    TryEnterOssuary(exit, player, above, localization);
+                    return;
+
                 case MapExitKind.WorldMap:
                     if (player != null)
                     {
@@ -377,7 +415,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
                     CharacterId? hero = ServiceLocator.TryGet(out CharacterSelectionState selection) ? selection.Selected : null;
                     Rapadura.Gameplay.Inventory.InventoryManager bag = player != null ? player.GetComponentInChildren<Rapadura.Gameplay.Inventory.InventoryManager>() : null;
                     MapAccessCheck check = MapAccessRules.CheckWalk(target, HeroLevel, hero, MapRequirementHeroState.LookupFor(bag));
-                    if (check == MapAccessCheck.Ok && MapLayouts.Has(spec.TargetMapId))
+                    if (check == MapAccessCheck.Ok && MapLayouts.IsPlayable(spec.TargetMapId))
                     {
                         WalkTo(spec.TargetMapId);
                         return;
@@ -396,6 +434,57 @@ namespace Rapadura.Gameplay.World.Map.Areas
 
                     exit.Rearm();
                     return;
+            }
+        }
+
+        /// <summary>
+        /// The barred portal of the Ossuário dos Artífices in the Grutas do Limiar (<c>OverworldLayouts.Limiar</c>, exit
+        /// "exit_ossuario"): walking into it starts the dungeon run directly, the same directed encounter the island map's button
+        /// starts (<see cref="DungeonDirector.BuildPayload"/>, <see cref="DungeonRules.CanEnter"/>); a victory or a walk-out comes
+        /// back out of this portal (<see cref="SceneTransitionService.BeginEncounterFromMap"/>).
+        /// </summary>
+        public const string OssuaryExitId = "exit_ossuario";
+
+        private void TryEnterOssuary(MapExitTrigger exit, GameObject player, Vector3 above, LocalizationManager localization)
+        {
+            MapExitSpec spec = exit.Spec;
+            int level = HeroLevel;
+            if (!DungeonRules.CanEnter(level, DungeonRules.Region))
+            {
+                if (player != null)
+                {
+                    CombatFxManager.SpawnLootWarningText(above,
+                        DungeonTexts.Format(localization, DungeonTexts.MapNeedLevel, DungeonTexts.Get(localization, DungeonTexts.DungeonName), DungeonRules.MinLevel));
+                    CityModeController.PlaceAt(player, spec.Arrival, spec.ArrivalFacing);
+                }
+
+                exit.Rearm();
+                return;
+            }
+
+            EncounterPayload payload = DungeonDirector.BuildPayload(System.Environment.TickCount);
+            if (payload == null || !ServiceLocator.TryGet(out SceneTransitionService transition))
+            {
+                GameLogger.Warning(LogCategory, "The Ossuário could not start (missing enemy assets or no scene transition).");
+                if (player != null)
+                {
+                    CityModeController.PlaceAt(player, spec.Arrival, spec.ArrivalFacing);
+                }
+
+                exit.Rearm();
+                return;
+            }
+
+            _leaving = true;
+            if (player != null)
+            {
+                CombatFxManager.SpawnLootText(above, DungeonTexts.Get(localization, DungeonTexts.DungeonName));
+            }
+
+            if (!transition.BeginEncounterFromMap(payload, MapId, spec.Id))
+            {
+                _leaving = false;
+                exit.Rearm();
             }
         }
 

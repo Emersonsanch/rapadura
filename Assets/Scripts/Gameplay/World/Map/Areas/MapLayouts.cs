@@ -60,7 +60,18 @@ namespace Rapadura.Gameplay.World.Map.Areas
             return layout;
         }
 
+        /// <summary>The map has its own hand-made layout (<see cref="For"/> is not null).</summary>
         public static bool Has(string mapId) => mapId == MapCatalog.PomarId || mapId == MapCatalog.TugaiId || HasRegional(mapId);
+
+        /// <summary>
+        /// The map can be loaded in map mode: its own layout (<see cref="Has"/>) or a zone of a continuous region
+        /// (<see cref="Overworld.OverworldLayouts.ForMap"/>; 09–12, 15–18, 21–24 exist only that way). What
+        /// <see cref="MapDefinition.IsBuilt"/> mirrors (catalog test). Builds the region on first use (cached).
+        /// </summary>
+        public static bool IsPlayable(string mapId) => Has(mapId) || Overworld.OverworldLayouts.ForMap(mapId) != null;
+
+        /// <summary>The map exists only as a zone of a continuous region (no hand-made layout of its own).</summary>
+        public static bool IsOverworldOnly(string mapId) => !Has(mapId) && Overworld.OverworldLayouts.ForMap(mapId) != null;
 
         public static void ClearCache() => Cache.Clear();
 

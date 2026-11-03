@@ -7,6 +7,7 @@ using Rapadura.Core.Interfaces;
 using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.Gameplay.World.Map;
+using Rapadura.Gameplay.World.Map.Overworld;
 
 namespace Rapadura.Gameplay.World.Cities
 {
@@ -26,6 +27,15 @@ namespace Rapadura.Gameplay.World.Cities
 
         /// <summary>Bornais de couro bought (the bag expansion is sold once). Old saves: 0.</summary>
         public int bornaisBought;
+
+        /// <summary>
+        /// Docks of the continuous regions reached on foot (<see cref="OverworldProgress"/>, catalog map ids). Old saves: none,
+        /// and <see cref="docksSchema"/> 0 — on load they get the Vila of every region whose city was already visited.
+        /// </summary>
+        public List<string> visitedDocks = new List<string>();
+
+        /// <summary>0 = written before the docks were saved (migrated on load), <see cref="CityProgress.DocksSchema"/> since.</summary>
+        public int docksSchema;
     }
 
     /// <summary>
@@ -46,6 +56,9 @@ namespace Rapadura.Gameplay.World.Cities
     public class CityProgress : IManager, ISaveable, IResettable
     {
         public const string Key = "Cities";
+
+        /// <summary>Version of the docks part of <see cref="CitySaveState"/> (<see cref="CitySaveState.docksSchema"/>).</summary>
+        public const int DocksSchema = 1;
 
         private readonly HashSet<BiomeType> _visited = new HashSet<BiomeType>();
         private readonly Dictionary<string, long> _shopPeriods = new Dictionary<string, long>(StringComparer.Ordinal);
@@ -110,6 +123,7 @@ namespace Rapadura.Gameplay.World.Cities
             _reputation.Clear();
             _bornaisBought = 0;
             PendingRespawnCity = null;
+            OverworldProgress.Clear();
         }
 
         /// <summary>Uses <paramref name="map"/> for the derived visits and the respawn (tests, stand-alone scenes).</summary>
@@ -313,6 +327,8 @@ namespace Rapadura.Gameplay.World.Cities
                 reputationShopIds = repIds.ToList(),
                 reputationPoints = repIds.Select(id => _reputation[id]).ToList(),
                 bornaisBought = _bornaisBought,
+                visitedDocks = OverworldProgress.VisitedMapIds.ToList(),
+                docksSchema = DocksSchema,
             };
         }
 
@@ -358,6 +374,36 @@ namespace Rapadura.Gameplay.World.Cities
                     {
                         _shopPeriods[saved.shopIds[i]] = saved.shopPeriods[i];
                     }
+                }
+            }
+
+            OverworldProgress.Restore(saved.visitedDocks);
+            if (saved.docksSchema < DocksSchema)
+            {
+                foreach (string mapId in MigratedDocks(VisitedRegions()))
+                {
+                    OverworldProgress.MarkVisited(mapId);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Docks a save written before they were saved gets (pure): the region's first map — the post of its Vila (01 Vila da
+        /// Vó Edna, 07 Qocho, 13 Litema, 19 Lamparinas) — for every region whose city the cousins had already reached.
+        /// </summary>
+        public static IEnumerable<string> MigratedDocks(IEnumerable<BiomeType> visitedRegions)
+        {
+            if (visitedRegions == null)
+            {
+                yield break;
+            }
+
+            foreach (BiomeType region in visitedRegions.Distinct())
+            {
+                MapDefinition first = MapCatalog.InRegion(MapCatalog.RegionOf(region)).OrderBy(m => m.MapId).FirstOrDefault();
+                if (first != null)
+                {
+                    yield return first.Id;
                 }
             }
         }

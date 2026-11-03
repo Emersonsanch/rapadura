@@ -110,19 +110,4 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             return text == zone.NameKey ? zone.NamePt ?? zone.Id : text;
         }
     }
-
-    /// <summary>
-    /// The docks of a continuous region the hero has reached on foot this session (the Barcas de Luz only carry the hero
-    /// between docks already visited; the Vila's is always open). Pure, server-side state in the online build.
-    /// </summary>
-    public static class OverworldProgress
-    {
-        private static readonly HashSet<string> Visited = new HashSet<string>();
-
-        public static bool IsVisited(string mapId) => !string.IsNullOrEmpty(mapId) && (mapId == MapCatalog.PomarId || Visited.Contains(mapId));
-
-        public static bool MarkVisited(string mapId) => !string.IsNullOrEmpty(mapId) && Visited.Add(mapId);
-
-        public static void Clear() => Visited.Clear();
-    }
 }

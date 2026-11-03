@@ -296,13 +296,18 @@ namespace Rapadura.Tests
         [Test]
         public void BuiltLayouts_AreValid_AndOnlyForBuiltMaps()
         {
+            // Built ⇔ playable: its own hand-made layout OR a zone of a continuous region (09–12, 15–18, 21–24 exist only there).
             foreach (MapDefinition map in MapCatalog.Maps)
             {
-                Assert.AreEqual(map.IsBuilt, MapLayouts.Has(map.Id), $"{map.Id}: built ⇔ has a layout");
+                bool ownLayout = MapLayouts.Has(map.Id);
+                bool overworldZone = OverworldLayouts.ForMap(map.Id) != null;
+                Assert.AreEqual(map.IsBuilt, ownLayout || overworldZone, $"{map.Id}: built ⇔ (own layout or overworld zone)");
+                Assert.AreEqual(map.IsBuilt, MapLayouts.IsPlayable(map.Id), $"{map.Id}: IsPlayable mirrors the flag");
+                Assert.AreEqual(!ownLayout && overworldZone, MapLayouts.IsOverworldOnly(map.Id), map.Id);
             }
 
             MapLayouts.ClearCache();
-            foreach (MapDefinition map in MapCatalog.Built)
+            foreach (MapDefinition map in MapCatalog.Built.Where(m => MapLayouts.Has(m.Id)))
             {
                 MapLayout layout = MapLayouts.For(map.Id);
                 Assert.IsNotNull(layout, map.Id);
@@ -370,7 +375,7 @@ namespace Rapadura.Tests
         public void BuiltLayouts_SpawnOnlyExistingNonBossMonsters_InEveryPeriod()
         {
             MapLayouts.ClearCache();
-            foreach (MapDefinition map in MapCatalog.Built)
+            foreach (MapDefinition map in MapCatalog.Built.Where(m => MapLayouts.Has(m.Id)))
             {
                 foreach (MapSpawnZone zone in MapLayouts.For(map.Id).Zones)
                 {

@@ -97,6 +97,21 @@ namespace Rapadura.Gameplay.World.Map
         /// <summary>The map the hero walked in from (border crossing), or null when the Barcas de Luz brought them (arrival at the dock).</summary>
         public string PendingMapArrivalFrom { get; private set; }
 
+        /// <summary>
+        /// The exit of the map the hero comes back out of (its arrival point), e.g. the Ossuário's portal after a run entered from
+        /// the Grutas do Limiar; null = the usual arrival (dock or border). Cleared with the map visit.
+        /// </summary>
+        public string PendingMapArrivalExit { get; private set; }
+
+        /// <summary>
+        /// The pending encounter was entered from a playable map (<see cref="BeginEncounterFromMap"/>): unless it ends in
+        /// defeat, <see cref="CompleteEncounter"/> goes back to this map (at <see cref="EncounterReturnExit"/>) instead of
+        /// the island map. Null otherwise.
+        /// </summary>
+        public string EncounterReturnMap { get; private set; }
+
+        public string EncounterReturnExit { get; private set; }
+
                 public SceneTransitionService(WorldMapProgress progress, ISceneLoader sceneLoader = null)
         {
             _progress = progress;
@@ -135,8 +150,27 @@ namespace Rapadura.Gameplay.World.Map
             PendingEncounter = payload;
             DecidedOutcome = null;
             ClearMapVisit();
+            EncounterReturnMap = null;
+            EncounterReturnExit = null;
             EventBus.Publish(new EncounterStartedEvent(payload));
             _sceneLoader.LoadScene(CombatSceneName);
+            return true;
+        }
+
+        /// <summary>
+        /// A directed encounter entered from inside a playable map (the Ossuário's portal in the Grutas do Limiar): like
+        /// <see cref="BeginEncounter"/>, but a victory or a walk-out brings the hero back to <paramref name="returnMapId"/>, standing
+        /// at the arrival of its exit <paramref name="returnExitId"/>; a defeat goes the usual way (return city via the island map).
+        /// </summary>
+        public bool BeginEncounterFromMap(EncounterPayload payload, string returnMapId, string returnExitId)
+        {
+            if (!BeginEncounter(payload))
+            {
+                return false;
+            }
+
+            EncounterReturnMap = string.IsNullOrEmpty(returnMapId) ? null : returnMapId;
+            EncounterReturnExit = EncounterReturnMap != null ? returnExitId : null;
             return true;
         }
 
@@ -180,11 +214,27 @@ namespace Rapadura.Gameplay.World.Map
                 }
             }
 
+            string returnMap = EncounterReturnMap;
+            string returnExit = EncounterReturnExit;
+            EncounterReturnMap = null;
+            EncounterReturnExit = null;
+
             EventBus.Publish(new EncounterEndedEvent(payload, outcome));
 
             if (ServiceLocator.TryGet(out SaveManager saveManager))
             {
                 saveManager.AutoSave();
+            }
+
+            if (returnMap != null && outcome != EncounterOutcome.Defeat)
+            {
+                // Back out of the dungeon's portal, in the map the run was entered from.
+                PendingMapVisit = returnMap;
+                PendingMapArrivalFrom = null;
+                PendingMapArrivalExit = returnExit;
+                EventBus.Publish(new MapVisitStartedEvent(returnMap, null));
+                _sceneLoader.LoadScene(CombatSceneName);
+                return true;
             }
 
             _sceneLoader.LoadScene(WorldMapSceneName);
@@ -221,6 +271,8 @@ namespace Rapadura.Gameplay.World.Map
             DecidedOutcome = null;
             LastOutcome = null;
             DeferDefeatResolution = false;
+            EncounterReturnMap = null;
+            EncounterReturnExit = null;
         }
 
         /// <summary>
@@ -324,6 +376,7 @@ namespace Rapadura.Gameplay.World.Map
         {
             PendingMapVisit = null;
             PendingMapArrivalFrom = null;
+            PendingMapArrivalExit = null;
         }
 
         /// <summary>Loads the world map without any encounter bookkeeping (e.g. from a "Mapa" menu button in Main.unity).</summary>
