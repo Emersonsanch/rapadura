@@ -10,6 +10,7 @@ using Rapadura.Gameplay.World.Cities;
 using Rapadura.Gameplay.World.Cities.Town;
 using Rapadura.Gameplay.World.Map;
 using Rapadura.Gameplay.World.Map.Areas;
+using Rapadura.Gameplay.World.Map.Overworld;
 using Rapadura.Save;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -178,6 +179,13 @@ namespace Rapadura.UI.WorldMap
         /// <summary>The default map trip: the Barca leaves for <paramref name="mapId"/> (Main.unity in map mode, arrival at its dock).</summary>
         public static bool TravelToMap(string mapId)
         {
+            // Inside a continuous region (Docs/Mapas100.md §0.10) the barca moves the hero to that dock in the same scene.
+            MapModeController mode = MapModeController.Current;
+            if (mode != null && mode.TryTravelWithin(mapId))
+            {
+                return true;
+            }
+
             return ServiceLocator.TryGet(out SceneTransitionService transition) && transition.TravelToMap(mapId);
         }
 
@@ -674,6 +682,13 @@ namespace Rapadura.UI.WorldMap
             string here = MapModeController.Current != null ? MapModeController.Current.MapId : null;
             MapTravelRow row = BuildMapRow(map, HeroLevelNow(), hero, bag.GetTotalCount(CurrencyItemId), IsOverloadedNow(), here, busy,
                 MapRequirementHeroState.LookupFor(bag), Localization);
+            if (row.CanTravel && MapModeController.Current != null && MapModeController.Current.IsUnvisitedStop(mapId))
+            {
+                // Same region, dock never reached on foot: the barca only links docks already visited.
+                _status.text = OverworldTexts.Get(Localization, OverworldTexts.DockNotVisited);
+                return;
+            }
+
             if (!row.CanTravel || (row.Cost > 0 && !bag.RemoveById(CurrencyItemId, row.Cost)))
             {
                 _status.text = row.Hint;

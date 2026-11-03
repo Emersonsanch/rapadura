@@ -45,6 +45,39 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
 8. **Noite:** todo mapa tem variante noturna (`NightVariantRules`): bichos "(da noite)", um bicho só da noite e a regra
    de visão (`NightVisibilityRules`).
 9. ★ = **escopo "até 100"** (construir primeiro). ☆ = depois.
+10. **Mundo contínuo por região** (pedido do usuário, 2026-11-03: "o mapa inicial é muito pequeno, tem que conectar com
+    outros mapas com a cidade sem ficar se teleportando, um mapa gigantesco com vários tipos de planície, bichos
+    diferentes em cada área", e "pelo menos 20 vezes o tamanho"). Uma região inteira é **um mapa só**, sem troca de
+    cena entre a cidade e as áreas em volta; os mapas do catálogo viram **zonas** dele. Começou pela **Região 1**:
+    - **Tamanho:** 2400 × 2400 m (20× o lado do Pomar antigo, 120 m); a área inicial (Pomar 600 × 450 m + Campos do
+      Aryk 600 × 250 m, nível 1–3) tem 600 × 700 m, 29× a área antiga. A Vila fica na praça (0, 0), no centro-sul-oeste.
+    - **Zonas** (retângulos que cobrem a região sem sobrepor; a zona do herói sai da posição): Pomar (01, 1–3), Campos
+      do Aryk (01, 2–3), Tugai do Rio Dourado (02, 2–5, o mapa feito à mão encaixado em volta do Moinho), Círculo de
+      Kök-Böri (02, 4–5), Campinas do Vento Vivo (3–6), Prado das Cegonhas e o lago (4–7), Estepe de Ohrmazd (4–6, portão
+      para o 07), Várzea Dourada (5–8), Colinas de Mihryazd (7–11), Altos do Mensageiro (8–12, portão para o 13),
+      Ruínas do Aryk Velho (8–12), Mata das Cinco Árvores (10–15), Ravina das Bocas de Luz (11–15, portão para o 19),
+      Mata Alta de Zurvan (12–16) e, no extremo leste, cada um com o seu mapa feito à mão encaixado: Brejo (03, 16–22,
+      botas), Amoreiras (04, 18–24), Copas de Garajonay com a cidade dos elfos (05, 20–26) e Jardim de Mihrshah (06,
+      26–32, chave). A faixa sobe com a distância da Vila (teste). Cada zona tem 2–3 grupos de bichos próprios (bichos de
+      hoje: lobo, aranha, javali, escorpião, ushabti, urutau, morcegos e as espécies da noite) espalhados em ~250
+      clareiras geradas, com nível que sobe dentro da zona conforme se afasta da Vila.
+    - **Passagens:** zonas vizinhas são abertas. Entrar numa zona acima do nível a pé (com o bônus de terreno do herói)
+      ou sem a exigência especial empurra o herói um passo para trás com uma mensagem (**barreira suave**, nunca
+      teleporte). Só saem da região os **portões** para 07, 13 e 19 (troca de cena como antes) e o círculo de pedras ao
+      lado da Vila (volta ao mapa da ilha).
+    - **Chão e cenário:** cores por terreno misturadas por ruído (manchas orgânicas, bordas entre áreas que serpenteiam,
+      lavouras em retalhos), trilhas, o Rio Dourado de norte a sul com pontes e vaus, o aryk dos campos, o córrego de
+      Mihryazd e o lago das cegonhas, montes nas colinas, muros caídos nas ruínas, fileiras de pomar e de amoreira.
+    - **Streaming:** pedaços de 48 m; só os que estão a até 96 m do herói existem (somem a 136 m), no máximo um novo por
+      quadro; cada pedaço = 2 malhas mescladas (chão; árvores/pedras/marcos/pontes) no material único do kit, colisores
+      cápsula/caixa. Os spawners acordam a 85 m e dormem (bichos somem) a 125 m: os bichos renascem estilo MU quando o
+      herói volta. Regras puras em `OverworldRules` (servidor autoritativo pode rodar igual).
+    - **Fluxo:** "Mover" para qualquer mapa 01–06 (barca, novo jogo, voltar do 07) carrega o mundo da região; morrer
+      acorda na praça da cidade de retorno sem recarregar; a Barca de Luz dentro da região leva a um cais já visitado a
+      pé, na mesma cena. Código: `Assets/Scripts/Gameplay/World/Map/Overworld/` (`OverworldLayout`, `OverworldRules`,
+      `OverworldLayouts.Zarafshan`, `OverworldChunkBuilder`, `OverworldView`); testes `OverworldTests` (EditMode) e
+      `OverworldWalkSmokeTests` (PlayMode). Os layouts 01–06 continuam existindo sozinhos (servidor e testes) e são
+      encaixados na região como estão.
 
 ---
 
@@ -556,7 +589,7 @@ Cidade de região: **Oásis de Qocho** (bíblia §2.2). Estilo `Oasis`. Bichos-b
 Enxame de Faíscas Presas (noite). Chefe do mundo: **Namrael** (mapa 12).
 
 ### 07 · Estrada das Caravanas / *Caravan Road* — nv 5–7 · ★
-- **No jogo (2026-11-03): jogável** (`MapLayouts.Areias.cs`): estrada de 5 m oeste→leste, Caravançará do Ammo murado (cais, cisterna, camelos, fardos), desvio norte pela fila de karez e sul para o 08; 4 clareiras nv 5–7 (Escorpião [tanque]; o Lobo do Tugai faz o papel do Chacal [rápido]; Faíscas Presas no crepúsculo/noite, Mardagayl raro). Falta: Abutre [distância], bicho coroado de Āz, tempestade de areia e o Ammo vendendo.
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Areias.cs`): estrada de 5 m oeste→leste, Caravançará do Ammo murado (cais, cisterna, camelos, fardos), desvio norte pela fila de karez e sul para o 08; 4 clareiras nv 5–7 (Escorpião [tanque]; o Lobo do Tugai faz o papel do Chacal [rápido]; Faíscas Presas no crepúsculo/noite, Mardagayl raro; Abutre de Brasa [distância], cospe brasa de 8 m). Atiradores [distância] mantêm distância: se o herói chega a ~3,5–4 m, recuam flanqueando até reabrir o alcance; só o projétil fere, cada um com seu som de tiro. Falta: bicho coroado de Āz, tempestade de areia e o Ammo vendendo.
 - **Fonte:** a Rota da Seda e os caravançarás; Ammo, o Caravaneiro (Mār Ammō, texto parto M 2).
 - **Bioma e visual:** estepe seca virando areia; areia `#E7C27D`, arenito `#B5482F`, espinheiro `#8DAA3A`; marcos de
   pedra, bocas de karez em fila, carroças quebradas, fardos de seda.
@@ -571,7 +604,7 @@ Enxame de Faíscas Presas (noite). Chefe do mundo: **Namrael** (mapa 12).
 - **Noite:** **Enxame de Faíscas Presas**; frio (o fôlego volta 20% mais devagar fora do caravançará).
 
 ### 08 · Ruínas dos Artífices / *Artificers' Ruins* — nv 6–9 · ★
-- **No jogo (2026-11-03): jogável** (`MapLayouts.Areias.cs`): Acampamento das Pirâmides na entrada norte, avenida de ushabtis até o anel de colunas de lótus (arena do Grande Ushabti, luta segue como desafio do mapa-múndi), 3 estelas do painel, pirâmides de Meroé; 4 clareiras nv 6–9 (Ushabti de Pedra e Escorpião [tanque]; de noite variantes "acordadas" e Faíscas). Falta: Cobra-de-Areia, Lanterna Quebrada [distância], leitura das inscrições.
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Areias.cs`): Acampamento das Pirâmides na entrada norte, avenida de ushabtis até o anel de colunas de lótus (arena do Grande Ushabti, luta segue como desafio do mapa-múndi), 3 estelas do painel, pirâmides de Meroé; 4 clareiras nv 6–9 (Ushabti de Pedra e Escorpião [tanque]; de noite variantes "acordadas" e Faíscas; Lanterna Quebrada dos Artífices [distância], raio de luz de 7 m que persegue um pouco). Atiradores [distância] mantêm distância: se o herói chega a ~3,5–4 m, recuam flanqueando até reabrir o alcance; só o projétil fere, cada um com seu som de tiro. Falta: Cobra-de-Areia, leitura das inscrições.
 - **Fonte:** pirâmides de Meroé (Kush) e ushabtis (Kemet, "os que respondem"); o Grande Ushabti (bíblia §3.3).
 - **Bioma e visual:** deserto de pedra; ouro velho `#C9A23F`, sombra violeta `#6D4C7D`, arenito; pirâmides pequenas e
   pontudas com capela, colunas de lótus quebradas, ushabtis em fila.
@@ -647,7 +680,7 @@ Omöl (noite). Chefe do mundo: **Mazan** (mapa 18). Respeito: San e basotho são
 gigantes, ushabtis e bichos (bíblia §2.3).
 
 ### 13 · Trilha dos Rondavéis / *Rondavel Trail* — nv 9–11 · ★
-- **No jogo (2026-11-03): jogável** (`MapLayouts.Kaggen.cs`): a Vila de Litema inteira no platô (cidade de retorno, respawn na praça), trilha em zigue-zague, 2 currais de pedra seca, abrigos pintados e baobá; 4 clareiras nv 9–11 (Ushabti de Pedra [tanque]; Lobo e Javali no lugar do Babuíno [rápido]; de noite Ave-Graveto e Coruja-de-Fumaça). Falta: Gavião [distância], Pedra que Rola, ventos da serra.
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Kaggen.cs`): a Vila de Litema inteira no platô (cidade de retorno, respawn na praça), trilha em zigue-zague, 2 currais de pedra seca, abrigos pintados e baobá; 4 clareiras nv 9–11 (Ushabti de Pedra [tanque]; Lobo e Javali no lugar do Babuíno [rápido]; de noite Ave-Graveto e Coruja-de-Fumaça; Gavião-de-Penacho [distância], pena-dardo de 9 m). Atiradores [distância] mantêm distância: se o herói chega a ~3,5–4 m, recuam flanqueando até reabrir o alcance; só o projétil fere, cada um com seu som de tiro. Falta: Pedra que Rola, ventos da serra.
 - **Fonte:** *litema* (pintura mural basotho); rondavéis das terras altas; \|Kaggen, o louva-a-deus dos contos \|xam.
 - **Bioma e visual:** capim alto dourado e encostas; barro `#A0522D`, cal `#EFE6D8`, palha `#C8A85A`, cobertor
   `#2F4F8F`/`#E3B23C`; aloé, protea.
@@ -660,7 +693,7 @@ gigantes, ushabtis e bichos (bíblia §2.3).
 - **Noite:** **Ave-Graveto de Omöl**; frio leve; vila iluminada.
 
 ### 14 · Passo do Hahya / *Hahya's Pass* — nv 10–13 · ★
-- **No jogo (2026-11-03): jogável** (`MapLayouts.Kaggen.cs`): posto Boca da Mina do Mihr (forja, rondavéis, cais), passo estreito entre muralhas de pedra, torrente com 2 pontes, anel de pedras de Hahya no alto, galeria para o 19; 4 clareiras nv 10–13 (Ushabti [tanque], Lobo no lugar do Lince [rápido], Enxame de Morcegos = Morcego da Mina [enxame]; Ubır, Ave-Graveto e Coruja à noite). Falta: Neblina do Vento Ruim [controle], neve no chão, pontes de corda que balançam.
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Kaggen.cs`): posto Boca da Mina do Mihr (forja, rondavéis, cais), passo estreito entre muralhas de pedra, torrente com 2 pontes, anel de pedras de Hahya no alto, galeria para o 19; 4 clareiras nv 10–13 (Ushabti [tanque], Lobo no lugar do Lince [rápido], Enxame de Morcegos = Morcego da Mina [enxame]; Ubır, Ave-Graveto e Coruja à noite; Gavião-de-Penacho [distância]). Atiradores [distância] mantêm distância: se o herói chega a ~3,5–4 m, recuam flanqueando até reabrir o alcance; só o projétil fere, cada um com seu som de tiro. Falta: Neblina do Vento Ruim [controle], neve no chão, pontes de corda que balançam.
 - **Fonte:** Hahya, o gigante do *Livro dos Gigantes* que sonha e se arrepende (bíblia §3.3).
 - **Bioma e visual:** passo de pedra com neve; granito `#8A8A84`, neve `#DDE8F0`; ponte de corda, boca de mina, forja.
 - **Layout:** M. Passo estreito com 2 pontes; **posto: Boca da Mina do Mihr**; arena do chefe no alto. Retorno: Vila de
@@ -731,7 +764,7 @@ Cidade de região: **Vila das Lamparinas** (bíblia §2.4). Estilo `CaveTuff`. B
 Ubır (noite). Chefe do mundo: **Mahaway** (mapa 24).
 
 ### 19 · Lago do Limiar / *Threshold Lake* — nv 13–15 · ★
-- **No jogo (2026-11-03): jogável** (`MapLayouts.Limiar.cs`): a Vila das Lamparinas inteira na parede norte (cidade de retorno), lago escuro com trilha da margem, 2 túneis entre paredes de tufo (oeste → 14, leste → 20); 5 clareiras nv 13–15 (Morcegos [enxame], Aranha-Tecelã no lugar da Aranha de Gruta [rápido], Ushabti no lugar do Lodo [tanque]; Ubır sai do lago à noite). Falta: barcos, Peixe-Lanterna [distância], lâmpadas que salvam o caminho.
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Limiar.cs`): a Vila das Lamparinas inteira na parede norte (cidade de retorno), lago escuro com trilha da margem, 2 túneis entre paredes de tufo (oeste → 14, leste → 20); 5 clareiras nv 13–15 (Morcegos [enxame], Aranha-Tecelã no lugar da Aranha de Gruta [rápido], Ushabti no lugar do Lodo [tanque]; Ubır sai do lago à noite; Peixe-Lanterna Apagado [distância], gota de luz fria de 7,5 m que persegue). Atiradores [distância] mantêm distância: se o herói chega a ~3,5–4 m, recuam flanqueando até reabrir o alcance; só o projétil fere, cada um com seu som de tiro. Falta: barcos, lâmpadas que salvam o caminho.
 - **Fonte:** o limiar da Terra da Treva; casas de gruta armênias (Khndzoresk); vishapakar.
 - **Bioma e visual:** caverna grande com lago; tufo rosa `#C98F86`, basalto `#3B3B44`, âmbar `#FFB347`, musgo
   fluorescente; ponte suspensa, nichos de lâmpada.
@@ -745,7 +778,7 @@ Ubır (noite). Chefe do mundo: **Mahaway** (mapa 24).
 - **Noite:** igual (subterrâneo); na noite do relógio, **Ubır** sai do lago.
 
 ### 20 · Salão de Tages / *Tages' Hall* — nv 14–18 · ★
-- **No jogo (2026-11-03): jogável** (`MapLayouts.Limiar.cs`): posto Nicho da Ponte (nicho da lâmpada, casas de tufo, cais, lâmpadas sobre a rua), riacho subterrâneo com ponte e vau, corredor de colunas até o salão e o anel de pedras de Tages (luta segue como desafio do mapa-múndi); 4 clareiras nv 14–18 (Morcegos [enxame], Aranha no lugar da Sombra Pequena [rápido], Ushabti no lugar da Pedra-Lâmina [controle]; Ubır à noite). Falta: Ubır jovem, medo do escuro (apagar/acender lâmpadas).
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Limiar.cs`): posto Nicho da Ponte (nicho da lâmpada, casas de tufo, cais, lâmpadas sobre a rua), riacho subterrâneo com ponte e vau, corredor de colunas até o salão e o anel de pedras de Tages (luta segue como desafio do mapa-múndi); 4 clareiras nv 14–18 (Morcegos [enxame], Aranha no lugar da Sombra Pequena [rápido], Ushabti no lugar da Pedra-Lâmina [controle]; Peixe-Lanterna Apagado e Lanterna Quebrada [distância]; Ubır à noite). Atiradores [distância] mantêm distância: se o herói chega a ~3,5–4 m, recuam flanqueando até reabrir o alcance; só o projétil fere, cada um com seu som de tiro. Falta: Ubır jovem, medo do escuro (apagar/acender lâmpadas).
 - **Fonte:** Tages, o ser etrusco de rosto de criança e sabedoria de velho (Cícero, *De Divinatione* II.50).
 - **Bioma e visual:** salão de estalactites; cristal `#9FD3E6`, índigo `#232046`, âmbar; colunas naturais, o sulco de
   terra de onde Tages brotou.

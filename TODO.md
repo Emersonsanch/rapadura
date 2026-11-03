@@ -1685,6 +1685,8 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 ---
 
 ### 🗺️ Próximos Mapas para Desenvolver (Pipeline dos 100 Mapas — Escopo Níveis 1–100)
+- [x] 🌍 **Mundo contínuo da Região 1** (pedido do usuário 2026-11-03: mapa inicial gigante, ≥ 20× o tamanho, ligado à cidade sem teleporte, várias planícies e bichos por área) — feito: overworld 2400 × 2400 m com a Vila, 18 áreas, os mapas 01–06 encaixados como zonas, streaming por pedaços, barreira suave, portões 07/13/19 (`Docs/Mapas100.md` §0.10, `OverworldTests`, `OverworldWalkSmokeTests`).
+- [ ] 🌍 Mundo contínuo — próximos passos: conferir no Play (visual das bordas entre áreas, densidade, custo no celular, sombras das árvores), salvar os cais visitados no save (hoje vale a sessão), música/clima por área, marcar no chão a borda das áreas trancadas, nome da área no HUD, colocar a Areias (07–12), a Serra (13–18) e as Grutas (19–24) no mesmo esquema e ligá-las ao Zarafshan sem portão.
 > 📌 **Fundamentos de Design de Cenários (`Docs/Mapas100.md` e `Docs/Progressao500.md`):**
 > 1. **Zona Segura Obrigatória:** Todo mapa conta com uma **cidade completa** (respawn, ferreiro, lojas, estrebaria, barca) ou um **posto avançado seguro** (fogueira/lâmpada, baú de passagem, conserto básico).
 > 2. **Renascer Canônico:** O jogador **sempre renasce na cidade de retorno** da região (na praça com a Lâmpada de Ramrat); nunca no próprio ponto de morte ou na arena.

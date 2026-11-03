@@ -8,6 +8,7 @@ using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.World.Cities;
 using Rapadura.Gameplay.World.Map;
 using Rapadura.Gameplay.World.Map.Areas;
+using Rapadura.Gameplay.World.Map.Overworld;
 using Rapadura.UI.WorldMap;
 using UnityEngine;
 
@@ -400,19 +401,28 @@ namespace Rapadura.Tests
             Assert.IsTrue(pomarRow.CanTravel);
             Assert.AreEqual(0, pomarRow.Cost);
 
-            // In the Pomar: its exit east leads to the Tugai, walkable from level 2 (the barca from 5).
-            MapLayout pomarLayout = MapLayouts.For(pomar.Id);
-            MapExitSpec toTugai = pomarLayout.Exits.Find(e => e.Kind == MapExitKind.Map && e.TargetMapId == tugai.Id);
-            Assert.IsNotNull(toTugai, "Pomar → Tugai on foot");
-            Assert.AreEqual(MapAccessCheck.LevelTooLow, MapAccessRules.CheckWalk(tugai, 1, CharacterId.Lavine, null));
-            Assert.AreEqual(MapAccessCheck.Ok, MapAccessRules.CheckWalk(tugai, 2, CharacterId.Lavine, null));
+            // The Pomar and the Tugai are neighbouring areas of ONE continuous map (Docs/Mapas100.md §0.10): an open passage
+            // (no scene change), walkable from level 2 (the soft barrier pushes a level-1 hero back), the barca from 5.
+            OverworldLayouts.ClearCache();
+            OverworldLayout world = OverworldLayouts.ForMap(pomar.Id);
+            Assert.IsNotNull(world, "the Pomar is part of the Zarafshan overworld");
+            Assert.AreSame(world, OverworldLayouts.ForMap(tugai.Id), "the Tugai is in the same overworld");
+            OverworldZone pomarZone = world.Zone("pomar");
+            OverworldZone tugaiZone = world.Zone("tugai_margem");
+            Assert.IsTrue(OverworldRules.AreNeighbours(pomarZone, tugaiZone), "Pomar ↔ Tugai: open passage");
+            Assert.IsFalse(world.World.Exits.Exists(e => e.Kind == MapExitKind.Map && world.ContainsMap(e.TargetMapId)), "no scene-change exit inside the region");
+            Assert.AreEqual(MapAccessCheck.LevelTooLow, OverworldRules.CheckEnter(tugaiZone, 1, CharacterId.Lavine, null));
+            Assert.AreEqual(MapAccessCheck.Ok, OverworldRules.CheckEnter(tugaiZone, 2, CharacterId.Lavine, null));
+            Assert.AreEqual(MapAccessCheck.Ok, OverworldRules.CheckEnter(pomarZone, 1, CharacterId.Lavine, null));
 
-            // The Tugai has the way back, a dock, an exit to the island map, and the arrival from the Pomar is its own border.
+            // The overworld has the Vila's dock (arrival by barca), the Tugai's dock and the portal back to the island map.
+            Assert.IsTrue(world.SettlementOf(pomar.Id).HasDock && world.SettlementOf(tugai.Id).HasDock, "Cais da Barca in the Vila and the Moinho");
+            Assert.AreEqual(world.SettlementOf(tugai.Id).DockArrival, world.ArrivalFor(tugai.Id, null, out _), "by barca: the Moinho's dock");
+            Assert.IsTrue(world.World.Exits.Exists(e => e.Kind == MapExitKind.WorldMap), "back to the island map");
+
+            // The standalone layouts (server/legacy) keep their docks and their way back to the island map.
+            MapLayout pomarLayout = MapLayouts.For(pomar.Id);
             MapLayout tugaiLayout = MapLayouts.For(tugai.Id);
-            MapExitSpec back = tugaiLayout.Exits.Find(e => e.Kind == MapExitKind.Map && e.TargetMapId == pomar.Id);
-            Assert.IsNotNull(back, "Tugai → Pomar on foot");
-            Assert.AreEqual(back.Arrival, tugaiLayout.ArrivalFrom(pomar.Id, out _));
-            Assert.AreEqual(tugaiLayout.DockArrival, tugaiLayout.ArrivalFrom(null, out _), "by barca: the dock");
             foreach (MapLayout layout in new[] { pomarLayout, tugaiLayout })
             {
                 Assert.IsTrue(layout.Exits.Exists(e => e.Kind == MapExitKind.Dock), $"{layout.MapId}: Cais da Barca");

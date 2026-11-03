@@ -40,14 +40,17 @@ namespace Rapadura.Gameplay.World.Map.Areas
         private float _nextTick;
         private float _nextSpawnAt;
         private Transform _player;
+        private string _mapId;
 
         public MapSpawnZone Zone { get; private set; }
         public int AliveCount => _alive.Count;
         public int SpawnedTotal { get; private set; }
 
-        public void Configure(MapLayout layout, MapSpawnZone zone, GameObject enemyPrefab, int seed)
+        /// <param name="mapId">The catalog map the monsters count for (<see cref="MapMonsterInfo.MapId"/>); default: the layout's.</param>
+        public void Configure(MapLayout layout, MapSpawnZone zone, GameObject enemyPrefab, int seed, string mapId = null)
         {
             _layout = layout;
+            _mapId = mapId ?? layout?.MapId;
             Zone = zone;
             _prefab = enemyPrefab;
             _random = new System.Random(seed);
@@ -165,12 +168,38 @@ namespace Rapadura.Gameplay.World.Map.Areas
             int level = MapAccessRules.RollMonsterLevel(Zone.MinLevel, Zone.MaxLevel, _random.NextDouble());
             // The level-500 curve: above the archetype level the creature's stats scale (identity for today's bands 1–5).
             EnemyLevelScaler.Attach(instance, level);
-            instance.AddComponent<MapMonsterInfo>().Configure(level, _layout != null ? _layout.MapId : null, Zone.Id, species != null ? species.Id : null);
+            instance.AddComponent<MapMonsterInfo>().Configure(level, _mapId, Zone.Id, species != null ? species.Id : null);
 
             _alive.Add(instance);
             SpawnedTotal++;
             EventBus.Publish(new EnemySpawnedEvent(instance));
             return instance;
+        }
+
+        /// <summary>
+        /// Removes every monster of the clearing, alive or fallen (the overworld puts a far-away spawner to sleep: the
+        /// clearing refills, MU style, when the hero comes back).
+        /// </summary>
+        public void DespawnAll()
+        {
+            foreach (GameObject enemy in _alive)
+            {
+                if (enemy != null)
+                {
+                    Destroy(enemy);
+                }
+            }
+
+            foreach ((GameObject enemy, float _) in _corpses)
+            {
+                if (enemy != null)
+                {
+                    Destroy(enemy);
+                }
+            }
+
+            _alive.Clear();
+            _corpses.Clear();
         }
 
         /// <summary>A species never exceeds its <see cref="NightSpecies.MaxPerWave"/> alive in one clearing.</summary>

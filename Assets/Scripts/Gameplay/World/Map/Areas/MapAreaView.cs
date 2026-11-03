@@ -293,7 +293,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
             }
         }
 
-        private static void BridgeMesh(TownMeshBuilder b, float width, float span)
+        internal static void BridgeMesh(TownMeshBuilder b, float width, float span)
         {
             for (float z = -span * 0.5f; z < span * 0.5f - 0.01f; z += 0.5f)
             {
@@ -402,14 +402,14 @@ namespace Rapadura.Gameplay.World.Map.Areas
             renderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
         }
 
-        private static void RingStone(TownMeshBuilder b, int variant)
+        internal static void RingStone(TownMeshBuilder b, int variant)
         {
             float h = 2.2f + variant * 0.45f;
             b.Box(new Vector3(0f, h * 0.5f, 0f), new Vector3(0.9f, h, 0.55f), TownSwatch.Stone, 0f, TownSwatch.StoneDark);
             b.Crown(new Vector3(0f, h, 0f), new Vector3(0.95f, 0.35f, 0.6f), TownSwatch.Moss);
         }
 
-        private static void WaterMill(TownMeshBuilder b)
+        internal static void WaterMill(TownMeshBuilder b)
         {
             b.Box(new Vector3(0f, 1.5f, 0f), new Vector3(4.2f, 3f, 3.2f), TownSwatch.Adobe, 0f, TownSwatch.Mud);
             b.Box(new Vector3(0f, 3.1f, 0f), new Vector3(4.5f, 0.2f, 3.5f), TownSwatch.Mud);
@@ -426,14 +426,14 @@ namespace Rapadura.Gameplay.World.Map.Areas
             b.Flat(2.0f, -3.5f, 2.9f, 3.5f, 0.03f, TownSwatch.Water);
         }
 
-        private static void Signpost(TownMeshBuilder b)
+        internal static void Signpost(TownMeshBuilder b)
         {
             b.Log(new Vector3(0f, 0f, 0f), new Vector3(0f, 2.4f, 0f), 0.08f, TownSwatch.WoodDark);
             b.Box(new Vector3(0.45f, 2.0f, 0f), new Vector3(1.0f, 0.26f, 0.06f), TownSwatch.WoodLight, 0f, TownSwatch.Beam);
             b.Box(new Vector3(-0.4f, 1.6f, 0f), new Vector3(0.9f, 0.24f, 0.06f), TownSwatch.WoodLight, 18f, TownSwatch.Beam);
         }
 
-        private static void Campfire(TownMeshBuilder b)
+        internal static void Campfire(TownMeshBuilder b)
         {
             for (int k = 0; k < 8; k++)
             {
@@ -447,7 +447,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
             b.Box(new Vector3(-1.4f, 0.22f, 0f), new Vector3(0.4f, 0.44f, 1.4f), TownSwatch.WoodWeathered);
         }
 
-        private static void MelonBed(TownMeshBuilder b)
+        internal static void MelonBed(TownMeshBuilder b)
         {
             b.Flat(-2.2f, -1.3f, 2.2f, 1.3f, 0.02f, TownSwatch.DirtDark);
             for (int k = 0; k < 10; k++)
