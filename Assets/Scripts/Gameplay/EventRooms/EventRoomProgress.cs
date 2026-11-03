@@ -315,7 +315,8 @@ namespace Rapadura.Gameplay.EventRooms
             }
 
             EnemyController enemy = evt.Target.GetComponent<EnemyController>();
-            if (enemy == null || enemy.Definition == null)
+            if (enemy == null || enemy.Definition == null
+                || (enemy.GetComponent<IEnemyLootSource>() is IEnemyLootSource lootSource && lootSource.SuppressLoot))
             {
                 return;
             }

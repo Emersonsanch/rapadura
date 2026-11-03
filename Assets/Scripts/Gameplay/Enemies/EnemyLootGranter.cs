@@ -68,7 +68,15 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             EnemyDefinition definition = enemy.Definition;
-            BiomeDefinition biome = BiomeRegistry.FindBiomeOf(definition);
+            // Dungeon enemies (IEnemyLootSource on the instance) roll their dungeon's table; a reanimated one drops nothing.
+            IEnemyLootSource lootSource = enemy.GetComponent<IEnemyLootSource>();
+            if (lootSource != null && lootSource.SuppressLoot)
+            {
+                return;
+            }
+
+            BiomeDefinition table = lootSource?.LootTable;
+            BiomeDefinition biome = table != null ? table : BiomeRegistry.FindBiomeOf(definition);
             List<LootDrop> drops = EnemyLootRoller.Roll(definition, biome, _random, newGamePlusCycle: NewGamePlusProgress.ResolveCurrentCycle());
             // "Presa do dia" / "Bicho destaque do dia": whole extra rolls (EnemyRewardHooks; none when nothing is installed).
             float extraChance = EnemyRewardHooks.ResolveExtraLootChance(definition);

@@ -125,6 +125,8 @@ namespace Rapadura.Gameplay.Environment
             "Workbench", "Bench", "Banco", "Bancada", "Stall", "Barraca", "Cart", "Carroca", "Carroça", "Fence", "Cerca",
             "House", "Casa", "Crate", "Caixote", "Barrel", "Barril", "Table", "Mesa", "Well", "Poco", "Poço",
             "Anvil", "Bigorna", "Forge", "Forja", "Chest", "Bau", "Baú", "Hut", "Cabana", "Shed", "Wagon",
+            // Dungeon masonry (DungeonProps): walls, gate pillars, sarcophagi, the niche's chest.
+            "Ossuary_",
         };
 
         private static readonly string[] CapsulePrefixes =

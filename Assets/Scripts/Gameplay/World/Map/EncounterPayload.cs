@@ -74,8 +74,16 @@ namespace Rapadura.Gameplay.World.Map
 
         public bool IsWorldEvent => worldEvent != Rapadura.Gameplay.WorldEvents.WorldEventKind.None;
 
-        /// <summary>An external director spawns, scores and resolves (event room or world event): no regional victory bookkeeping.</summary>
-        public bool IsDirected => IsEventRoom || IsWorldEvent;
+        /// <summary>
+        /// Dungeon this encounter is (the Ossuário dos Artífices: <c>DungeonDirector</c>), else empty. Directed like an event
+        /// room; the enemy ids are the dungeon's regulars (its assets live under Resources/Dungeons, not Resources/Enemies). Serialized.
+        /// </summary>
+        public string dungeonId;
+
+        public bool IsDungeon => !string.IsNullOrEmpty(dungeonId);
+
+        /// <summary>An external director spawns, scores and resolves (event room, world event or dungeon): no regional victory bookkeeping.</summary>
+        public bool IsDirected => IsEventRoom || IsWorldEvent || IsDungeon;
 
         [NonSerialized] private List<EnemyDefinition> _cachedEnemies;
 
