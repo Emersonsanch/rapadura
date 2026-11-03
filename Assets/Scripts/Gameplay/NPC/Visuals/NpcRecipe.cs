@@ -187,6 +187,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
         public NpcSwatch? Hands;
 
         public NpcFace Face = NpcFace.Kind;
+
+        /// <summary>Rosy cheeks on/off; null = by face and age (children, laughing, shy, bright and kind faces).</summary>
+        public bool? RosyCheeks;
         public NpcHair Hair = NpcHair.Short;
         public NpcSwatch HairColor = NpcSwatch.HairDark;
         public NpcBeard Beard = NpcBeard.None;

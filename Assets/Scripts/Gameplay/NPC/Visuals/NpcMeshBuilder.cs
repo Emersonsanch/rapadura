@@ -91,6 +91,26 @@ namespace Rapadura.Gameplay.NPC.Visuals
             Matrix = saved;
         }
 
+        /// <summary>
+        /// A flat <paramref name="sides"/>-gon facing local +z, <paramref name="size"/> wide/tall (eyes, cheeks, open mouths:
+        /// rounder than a <see cref="Decal"/> for a few more triangles), one-sided. <paramref name="spin"/> turns the corners (degrees).
+        /// </summary>
+        public void Disc(Vector3 center, Vector2 size, int sides, NpcSwatch swatch, Quaternion? rotation = null, float spin = 0f)
+        {
+            sides = Mathf.Max(3, sides);
+            Matrix4x4 saved = Matrix;
+            Matrix = saved * Matrix4x4.TRS(center, rotation ?? Quaternion.identity, new Vector3(size.x * 0.5f, size.y * 0.5f, 1f));
+            float a0 = spin * Mathf.Deg2Rad;
+            for (int i = 0; i < sides; i++)
+            {
+                float a = a0 + (float)i / sides * Mathf.PI * 2f;
+                float b = a0 + (float)(i + 1) / sides * Mathf.PI * 2f;
+                Triangle(Vector3.zero, new Vector3(Mathf.Cos(a), Mathf.Sin(a), 0f), new Vector3(Mathf.Cos(b), Mathf.Sin(b), 0f), swatch);
+            }
+
+            Matrix = saved;
+        }
+
         /// <summary>Box centred on <paramref name="center"/>; <paramref name="noBottom"/> skips the unseen underside.</summary>
         public void Box(Vector3 center, Vector3 size, NpcSwatch swatch, Quaternion? rotation = null, NpcSwatch? top = null, bool noBottom = false)
         {
@@ -194,9 +214,11 @@ namespace Rapadura.Gameplay.NPC.Visuals
 
         /// <summary>
         /// Upper half of an 80-face icosphere blob (faces whose centre is above <paramref name="cutY"/> in unit space): hair
-        /// caps, domes of helmets and hoods without paying for the hidden half.
+        /// caps, domes of helmets and hoods without paying for the hidden half. Faces in front of <paramref name="openFrontZ"/>
+        /// and below <paramref name="openTopY"/> (unit space) are left out too: the face opening of a hood or headscarf.
         /// </summary>
-        public void Dome(Vector3 center, Vector3 size, NpcSwatch swatch, Quaternion? rotation = null, float cutY = -0.15f, float backCutZ = 2f)
+        public void Dome(Vector3 center, Vector3 size, NpcSwatch swatch, Quaternion? rotation = null, float cutY = -0.15f, float backCutZ = 2f,
+            float openFrontZ = 2f, float openTopY = 0f)
         {
             EnsureIco();
             Matrix4x4 saved = Matrix;
@@ -208,7 +230,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 Vector3 c = _icoVertices[_icoTriangles[i + 2]];
                 Vector3 mid = (a + b + c) / 3f;
                 // Keep the top; below the cut keep only the back (hair falling behind the face), if asked.
-                if (mid.y >= cutY || mid.z < -backCutZ)
+                if ((mid.y >= cutY || mid.z < -backCutZ) && !(mid.z > openFrontZ && mid.y < openTopY))
                 {
                     Triangle(a, b, c, swatch);
                 }

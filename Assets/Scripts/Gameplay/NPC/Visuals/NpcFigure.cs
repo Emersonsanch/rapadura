@@ -27,6 +27,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
         private NpcRecipe _recipe;
         private NpcModel _model;
         private SkinnedMeshRenderer _renderer;
+        private MeshRenderer _imported;
         private readonly Transform[] _bones = new Transform[NpcBones.Count];
         private Vector3[] _restLocal;
         private float _phase;
@@ -40,6 +41,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
         public NpcRecipe Recipe => _recipe;
         public NpcModel Model => _model;
         public SkinnedMeshRenderer Renderer => _renderer;
+
+        /// <summary>The imported model standing in for the procedural mesh (<see cref="NpcImportedModels"/>), or null.</summary>
+        public MeshRenderer Imported => _imported;
         public string RecipeId => _recipeId;
         public Transform Bone(int index) => _bones[index];
 
@@ -116,6 +120,16 @@ namespace Rapadura.Gameplay.NPC.Visuals
             bounds.Expand(0.6f);
             _renderer.localBounds = bounds;
 
+            // Optional imported model (flagged off by default): it rides the Body bone, the skinned mesh is hidden.
+            _imported = null;
+            NpcImportedModel imported = NpcImportedModels.Find(recipe.Id);
+            if (imported != null)
+            {
+                _imported = NpcImportedModels.Attach(_bones[NpcBones.Body], _restLocal[NpcBones.Body], imported, _model.Height);
+            }
+
+            _renderer.enabled = _imported == null;
+
             _phase = Mathf.Abs(recipe.Id.GetHashCode() % 997) * 0.0173f;
             _homeYaw = transform.localEulerAngles.y;
             _yawOffset = 0f;
@@ -148,7 +162,8 @@ namespace Rapadura.Gameplay.NPC.Visuals
 
         private void LateUpdate()
         {
-            if (_model == null || _renderer == null || !_renderer.isVisible)
+            Renderer shown = _imported != null ? (Renderer)_imported : _renderer;
+            if (_model == null || shown == null || !shown.isVisible)
             {
                 return;
             }
@@ -187,8 +202,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
             }
 
             float t = time + _phase;
-            NpcPoseOffsets o = NpcIdleMath.Gesture(_recipe.Gesture, t);
+            NpcPoseOffsets o = NpcIdleMath.Gesture(_recipe.Gesture, t, _model.GroundedL ? 0f : 1f, _model.GroundedR ? 0f : 1f);
             float breath = NpcIdleMath.Breath(time, _phase);
+            float breathL = _model.GroundedL ? 0f : breath, breathR = _model.GroundedR ? 0f : breath;
 
             Vector2 lookGoal = Vector2.zero;
             float faceGoal = 0f;
@@ -229,8 +245,8 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 Mathf.Clamp(o.HeadPitch + _look.y + breath * 0.8f, -30f, 30f),
                 Mathf.Clamp(o.HeadYaw + _look.x, -NpcIdleMath.MaxHeadYaw, NpcIdleMath.MaxHeadYaw),
                 o.HeadRoll);
-            _bones[NpcBones.ArmL].localRotation = Quaternion.Euler(o.ArmL.x + breath * 1.2f, 0f, -o.ArmL.z - breath * 0.8f);
-            _bones[NpcBones.ArmR].localRotation = Quaternion.Euler(o.ArmR.x + breath * 1.2f, 0f, o.ArmR.z + breath * 0.8f);
+            _bones[NpcBones.ArmL].localRotation = Quaternion.Euler(o.ArmL.x + breathL * 1.2f, 0f, -o.ArmL.z - breathL * 0.8f);
+            _bones[NpcBones.ArmR].localRotation = Quaternion.Euler(o.ArmR.x + breathR * 1.2f, 0f, o.ArmR.z + breathR * 0.8f);
         }
     }
 }

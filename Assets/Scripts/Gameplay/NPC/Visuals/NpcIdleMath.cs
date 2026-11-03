@@ -61,14 +61,17 @@ namespace Rapadura.Gameplay.NPC.Visuals
             return new Vector2(Mathf.Clamp(yaw, -MaxHeadYaw, MaxHeadYaw), Mathf.Clamp(pitch, -MaxHeadPitch, MaxHeadPitch));
         }
 
-        /// <summary>The role gesture at <paramref name="time"/> (seconds, already offset by the figure's phase).</summary>
-        public static NpcPoseOffsets Gesture(NpcGesture gesture, float time)
+        /// <summary>
+        /// The role gesture at <paramref name="time"/> (seconds, already offset by the figure's phase).
+        /// <paramref name="swayL"/>/<paramref name="swayR"/> scale the small resting arm sway (0 for an arm planted on a staff).
+        /// </summary>
+        public static NpcPoseOffsets Gesture(NpcGesture gesture, float time, float swayL = 1f, float swayR = 1f)
         {
             var o = new NpcPoseOffsets { LookWeight = 1f };
             float t = time;
             float sway = Mathf.Sin(t * 0.9f) * 2f;
-            o.ArmL.x = sway;
-            o.ArmR.x = -sway;
+            o.ArmL.x = sway * swayL;
+            o.ArmR.x = -sway * swayR;
 
             switch (gesture)
             {

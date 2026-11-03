@@ -3,8 +3,12 @@ using UnityEngine;
 namespace Rapadura.Gameplay.NPC.Visuals
 {
     /// <summary>
-    /// Role props of the NPC figures. Hand props are built in posed model space and bound to the arm bone (they follow
-    /// the idle gesture); worn props are bound to the body; nothing is a separate object.
+    /// Role props of the NPC figures. Hand props are built in posed model space around the hand socket
+    /// (<see cref="Rig.HandR"/>: the centre of the fist, with <see cref="Rig.GripR"/> the axis through it) and bound to the
+    /// arm bone, so they follow the idle gesture; each prop type has its hold — staffs and poles stand vertical through
+    /// the fist, handles run along the grip, baskets hook over the forearm, lamps sit on the palm, lanterns and scales
+    /// hang below the hand, two-hand things sit between both palms. Worn props are bound to the body; nothing is a
+    /// separate object.
     /// </summary>
     public static partial class NpcModelBuilder
     {
@@ -34,6 +38,22 @@ namespace Rapadura.Gameplay.NPC.Visuals
             b.Matrix = rig.HeadM;
         }
 
+        /// <summary>Between both palms when both hands hold in front, else on the given hand's socket.</summary>
+        private static Vector3 HeldCenter(ref Rig rig, bool right, out bool both)
+        {
+            both = rig.R.LeftArm == NpcArmPose.HoldFront && rig.R.RightArm == NpcArmPose.HoldFront;
+            return both ? Vector3.Lerp(rig.HandL, rig.HandR, 0.5f) : right ? rig.HandR : rig.HandL;
+        }
+
+        /// <summary>A pole standing on the ground through the right fist, up to <paramref name="top"/>; returns its head.</summary>
+        private static Vector3 Pole(NpcMeshBuilder b, ref Rig rig, float top, float radius, NpcSwatch swatch)
+        {
+            Vector3 hr = rig.HandR;
+            var head = new Vector3(hr.x, top, hr.z);
+            b.Segment(new Vector3(hr.x, 0f, hr.z), head, radius * 1.1f, radius, 6, swatch);
+            return head;
+        }
+
         /// <summary>Which hand holds what: right for tools and staffs, left for baskets, bows and things shown.</summary>
         private static void BuildProp(NpcMeshBuilder b, ref Rig rig, NpcProp prop)
         {
@@ -44,11 +64,15 @@ namespace Rapadura.Gameplay.NPC.Visuals
             {
                 case NpcProp.Hammer:
                 {
+                    // Hangs from the fist along the forearm, the glowing head just off the ground.
                     InHand(b, true);
-                    Vector3 headAt = hr - up * Mathf.Min(0.5f * s, hr.y - 0.1f);
-                    b.Segment(hr + up * 0.07f, headAt, 0.024f, 0.024f, 5, NpcSwatch.Wood);
-                    b.Box(headAt, new Vector3(0.14f, 0.14f, 0.28f) * s, NpcSwatch.Iron, top: NpcSwatch.Steel);
-                    b.Box(headAt, new Vector3(0.15f, 0.05f, 0.08f) * s, NpcSwatch.Ember);
+                    Vector3 f = rig.ForeR;
+                    float len = Mathf.Min(0.42f * s, (hr.y - 0.1f * s) / Mathf.Max(0.3f, -f.y));
+                    Vector3 headAt = hr + f * len;
+                    Quaternion rot = Quaternion.LookRotation(rig.GripR, -f);
+                    b.Segment(hr - f * 0.06f * s, headAt, 0.024f * s, 0.026f * s, 5, NpcSwatch.Wood);
+                    b.Box(headAt, new Vector3(0.14f, 0.14f, 0.28f) * s, NpcSwatch.Iron, rot, NpcSwatch.Steel);
+                    b.Box(headAt + rot * new Vector3(0f, 0f, 0.1f * s), new Vector3(0.15f, 0.15f, 0.06f) * s, NpcSwatch.Ember, rot);
                     break;
                 }
                 case NpcProp.Tongs:
@@ -63,15 +87,22 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 case NpcProp.FlowerBasket:
                 {
                     bool right = rig.R.LeftArm != NpcArmPose.Crook && rig.R.RightArm == NpcArmPose.Crook;
+                    // Hooked over the forearm: the handle arches over the sleeve, the basket hangs under it.
                     InHand(b, right);
                     Vector3 e = right ? rig.ElbowR : rig.ElbowL;
-                    Vector3 h = right ? rig.HandR : rig.HandL;
-                    Vector3 hook = Vector3.Lerp(e, h, 0.55f);
-                    Vector3 basket = hook + Vector3.down * 0.2f * s;
+                    Vector3 h = right ? rig.WristR : rig.WristL;
+                    Vector3 f = (h - e).normalized;
+                    Vector3 across = Vector3.Cross(up, f);
+                    across = across.sqrMagnitude > 1e-4f ? across.normalized : Vector3.right;
+                    Vector3 hook = Vector3.Lerp(e, h, 0.6f);
+                    float armR = 0.07f * rig.Limb;
+                    Vector3 basket = hook + Vector3.down * 0.24f * s;
                     b.Cylinder(basket, 0.09f * s, 0.125f * s, 0.12f * s, 7, NpcSwatch.Wicker, NpcSwatch.Wicker, bottomCap: true, topCap: false);
-                    Vector3 rimL = basket + new Vector3(-0.11f * s, 0.12f * s, 0f), rimR = basket + new Vector3(0.11f * s, 0.12f * s, 0f);
-                    b.Segment(rimL, hook + new Vector3(-0.02f, 0.03f, 0f), 0.012f, 0.012f, 3, NpcSwatch.Wood, caps: false);
-                    b.Segment(rimR, hook + new Vector3(0.02f, 0.03f, 0f), 0.012f, 0.012f, 3, NpcSwatch.Wood, caps: false);
+                    Vector3 rimL = basket + up * 0.12f * s - across * 0.11f * s, rimR = basket + up * 0.12f * s + across * 0.11f * s;
+                    Vector3 archL = hook + up * (armR + 0.01f) - across * armR * 0.9f, archR = hook + up * (armR + 0.01f) + across * armR * 0.9f;
+                    b.Segment(rimL, archL, 0.012f * s, 0.012f * s, 3, NpcSwatch.Wood, caps: false);
+                    b.Segment(archL, archR, 0.012f * s, 0.012f * s, 3, NpcSwatch.Wood, caps: false);
+                    b.Segment(archR, rimR, 0.012f * s, 0.012f * s, 3, NpcSwatch.Wood, caps: false);
                     NpcSwatch[] fill = prop == NpcProp.HerbBasket
                         ? new[] { NpcSwatch.HerbGreen, NpcSwatch.Pomegranate, NpcSwatch.Aloe }
                         : new[] { NpcSwatch.FlowerPink, NpcSwatch.FlowerYellow, NpcSwatch.Protea };
@@ -85,8 +116,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 }
                 case NpcProp.MortarPestle:
                 {
+                    // The bowl sits on the palm.
                     InHand(b, true);
-                    Vector3 bowl = hr + new Vector3(-0.03f, 0.03f, 0.03f);
+                    Vector3 bowl = hr + up * 0.035f * s;
                     b.Cylinder(bowl, 0.055f * s, 0.085f * s, 0.08f * s, 7, NpcSwatch.Wood, NpcSwatch.HerbGreen, bottomCap: true);
                     b.Segment(bowl + up * 0.05f * s, bowl + new Vector3(0.05f, 0.19f, -0.03f) * s, 0.017f * s, 0.022f * s, 5, NpcSwatch.WoodDark);
                     break;
@@ -95,7 +127,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 {
                     InHand(b, true);
                     float top = rig.H * 1.08f;
-                    b.Segment(new Vector3(hr.x, 0f, hr.z), new Vector3(hr.x, top, hr.z), 0.03f * s, 0.028f * s, 6, NpcSwatch.Brass);
+                    Pole(b, ref rig, top, 0.028f * s, NpcSwatch.Brass);
                     for (int i = 0; i < 3; i++)
                     {
                         float a = i * 2.1f;
@@ -144,10 +176,14 @@ namespace Rapadura.Gameplay.NPC.Visuals
                     break;
                 }
                 case NpcProp.Brush:
+                {
+                    // The back of the brush along the grip, bristles past the fingers.
                     InHand(b, true);
-                    b.Box(hr + new Vector3(0f, -0.01f, 0.04f), new Vector3(0.06f, 0.045f, 0.15f) * s, NpcSwatch.Wood);
-                    b.Box(hr + new Vector3(0f, -0.055f, 0.04f), new Vector3(0.055f, 0.045f, 0.13f) * s, NpcSwatch.Straw);
+                    Quaternion rot = Quaternion.LookRotation(rig.GripR, -rig.ForeR);
+                    b.Box(hr + rig.ForeR * 0.03f * s, new Vector3(0.08f, 0.05f, 0.22f) * s, NpcSwatch.Wood, rot);
+                    b.Box(hr + rig.ForeR * 0.075f * s, new Vector3(0.07f, 0.05f, 0.2f) * s, NpcSwatch.Straw, rot);
                     break;
+                }
                 case NpcProp.Bow:
                 {
                     InHand(b, false);
@@ -194,24 +230,25 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 }
                 case NpcProp.LanternPole:
                 {
+                    // The lantern hangs on a short cord from the hook at the top of the pole.
                     InHand(b, true);
                     float top = rig.H * 1.16f;
-                    var foot = new Vector3(hr.x, 0f, hr.z);
-                    var head = new Vector3(hr.x, top, hr.z);
-                    b.Segment(foot, head, 0.028f * s, 0.024f * s, 6, NpcSwatch.WoodDark);
+                    Vector3 head = Pole(b, ref rig, top, 0.025f * s, NpcSwatch.WoodDark);
                     Vector3 h1 = head + new Vector3(0f, 0.06f, 0.08f) * s;
                     Vector3 h2 = head + new Vector3(0f, 0.02f, 0.17f) * s;
                     b.Segment(head, h1, 0.02f * s, 0.018f * s, 4, NpcSwatch.WoodDark, caps: false);
                     b.Segment(h1, h2, 0.018f * s, 0.016f * s, 4, NpcSwatch.WoodDark);
-                    Lantern(b, h2 + Vector3.down * 0.16f * s, s);
+                    b.Segment(h2, h2 + Vector3.down * 0.05f * s, 0.006f, 0.006f, 3, NpcSwatch.LeatherDark, caps: false);
+                    Lantern(b, h2 + Vector3.down * 0.17f * s, s);
                     break;
                 }
                 case NpcProp.OilLamp:
                 {
+                    // On the palm (or cupped between both hands), the flame on its spout.
                     InHand(b, true);
-                    Vector3 lamp = hr + new Vector3(-0.03f, 0.045f, 0.03f);
-                    b.Blob(lamp, new Vector3(0.13f, 0.05f, 0.09f) * s, NpcSwatch.Clay, coarse: false);
-                    b.Cylinder(lamp + new Vector3(0f, 0.02f, 0.05f) * s, 0.024f * s, 0f, 0.07f * s, 5, NpcSwatch.LampGlow);
+                    Vector3 lamp = HeldCenter(ref rig, true, out bool both) + up * (both ? 0.04f : 0.05f) * s;
+                    b.Blob(lamp, new Vector3(0.14f, 0.06f, 0.1f) * s, NpcSwatch.Clay, coarse: false);
+                    b.Cylinder(lamp + new Vector3(0f, 0.02f, 0.06f) * s, 0.028f * s, 0f, 0.09f * s, 5, NpcSwatch.LampGlow);
                     break;
                 }
                 case NpcProp.HandDrum:
@@ -225,7 +262,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 case NpcProp.Lyre:
                 {
                     InHand(b, false);
-                    Vector3 basePos = hl + new Vector3(0.02f, 0.05f, 0.04f);
+                    Vector3 basePos = hl + up * 0.05f * s;
                     b.Box(basePos, new Vector3(0.14f, 0.07f, 0.05f) * s, NpcSwatch.Wood);
                     Vector3 lt = basePos + new Vector3(-0.08f, 0.26f, 0f) * s, rt = basePos + new Vector3(0.08f, 0.26f, 0f) * s;
                     b.Segment(basePos + new Vector3(-0.05f, 0f, 0f) * s, lt, 0.016f * s, 0.014f * s, 4, NpcSwatch.Cream);
@@ -248,14 +285,20 @@ namespace Rapadura.Gameplay.NPC.Visuals
                     break;
                 }
                 case NpcProp.Flute:
+                {
+                    // Through both fists, held close and pointing forward-down.
                     InHand(b, true);
-                    b.Segment(hr + new Vector3(0.01f, -0.02f, -0.02f), hr + new Vector3(-0.1f, 0.06f, 0.2f) * s, 0.013f * s, 0.012f * s, 5, NpcSwatch.Straw);
+                    Vector3 c = Vector3.Lerp(hl, hr, 0.5f);
+                    Vector3 dir = ((hr - hl) + new Vector3(0f, -0.08f, 0.16f) * s).normalized;
+                    b.Segment(c - dir * 0.16f * s, c + dir * 0.18f * s, 0.016f * s, 0.014f * s, 5, NpcSwatch.Straw, NpcSwatch.Walnut);
                     break;
+                }
                 case NpcProp.Jar:
                 {
+                    // Between both palms.
                     InHand(b, true);
-                    Vector3 c = hr + new Vector3(-0.07f, 0.08f, 0.06f) * s;
-                    b.Blob(c, new Vector3(0.2f, 0.22f, 0.2f) * s, NpcSwatch.Clay);
+                    Vector3 c = HeldCenter(ref rig, true, out _) + new Vector3(0f, 0.06f, 0.02f) * s;
+                    b.Blob(c, new Vector3(0.21f, 0.23f, 0.21f) * s, NpcSwatch.Clay);
                     b.Cylinder(c + up * 0.09f * s, 0.05f * s, 0.045f * s, 0.06f * s, 7, NpcSwatch.Clay, topCap: false);
                     b.Cylinder(c + up * 0.15f * s, 0.06f * s, 0.065f * s, 0.022f * s, 7, NpcSwatch.Sandstone, NpcSwatch.Mouth);
                     break;
@@ -285,20 +328,29 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 }
                 case NpcProp.Pick:
                 {
+                    // Over the shoulder: the handle runs from the fist up and back, the head behind the shoulder.
                     InHand(b, true);
-                    Vector3 end = hr + new Vector3(0.03f, -0.22f, -0.48f) * s;
-                    b.Segment(hr + new Vector3(0f, 0.06f, 0.08f) * s, end, 0.022f * s, 0.022f * s, 5, NpcSwatch.Wood);
-                    b.Segment(end, end + new Vector3(0f, 0.2f, 0.05f) * s, 0.03f * s, 0.008f * s, 4, NpcSwatch.Steel);
-                    b.Segment(end, end + new Vector3(0f, -0.2f, -0.05f) * s, 0.03f * s, 0.008f * s, 4, NpcSwatch.Steel);
+                    Vector3 dir = new Vector3(0.02f, 0.3f, -1f).normalized;
+                    Vector3 end = hr + dir * 0.55f * s;
+                    Vector3 perp = Vector3.Cross(dir, Vector3.right).normalized;
+                    if (perp.y < 0f)
+                    {
+                        perp = -perp;
+                    }
+
+                    b.Segment(hr - dir * 0.08f * s, end, 0.022f * s, 0.024f * s, 5, NpcSwatch.Wood);
+                    b.Segment(end, end + perp * 0.2f * s + dir * 0.04f * s, 0.032f * s, 0.008f * s, 4, NpcSwatch.Steel);
+                    b.Segment(end, end - perp * 0.2f * s + dir * 0.04f * s, 0.032f * s, 0.008f * s, 4, NpcSwatch.Steel);
                     break;
                 }
                 case NpcProp.OilCan:
                 {
+                    // Hangs from the fist by its bail.
                     InHand(b, true);
-                    Vector3 c = hr + Vector3.down * 0.12f * s;
-                    b.Cylinder(c, 0.045f * s, 0.04f * s, 0.09f * s, 6, NpcSwatch.Copper, NpcSwatch.Brass, bottomCap: true);
-                    b.Segment(c + new Vector3(0f, 0.08f, 0.03f) * s, c + new Vector3(0f, 0.13f, 0.12f) * s, 0.01f * s, 0.006f * s, 3, NpcSwatch.Copper);
-                    b.Segment(c + up * 0.09f * s, hr, 0.008f, 0.008f, 3, NpcSwatch.Brass, caps: false);
+                    Vector3 c = hr + Vector3.down * 0.17f * s;
+                    b.Cylinder(c, 0.05f * s, 0.044f * s, 0.1f * s, 6, NpcSwatch.Copper, NpcSwatch.Brass, bottomCap: true);
+                    b.Segment(c + new Vector3(0f, 0.08f, 0.04f) * s, c + new Vector3(0f, 0.14f, 0.14f) * s, 0.012f * s, 0.006f * s, 3, NpcSwatch.Copper);
+                    b.Segment(c + up * 0.1f * s, hr, 0.008f, 0.008f, 3, NpcSwatch.Brass, caps: false);
                     break;
                 }
                 case NpcProp.WickBundle:
@@ -332,32 +384,34 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 }
                 case NpcProp.Scale:
                 {
+                    // Held up by its ring: the beam hangs under the fist and the pans swing under the beam.
                     InHand(b, true);
-                    Vector3 top = hr + up * 0.15f * s;
-                    b.Segment(hr, top, 0.01f * s, 0.01f * s, 4, NpcSwatch.Brass, caps: false);
-                    Vector3 l = top + new Vector3(-0.13f, 0f, 0f) * s, r = top + new Vector3(0.13f, 0f, 0f) * s;
-                    b.Segment(l, r, 0.01f * s, 0.01f * s, 4, NpcSwatch.Brass);
+                    Vector3 beam = hr + Vector3.down * 0.08f * s;
+                    b.Segment(hr + up * 0.03f * s, beam, 0.01f * s, 0.01f * s, 4, NpcSwatch.Brass, caps: false);
+                    Vector3 l = beam + new Vector3(-0.14f, 0f, 0f) * s, r = beam + new Vector3(0.14f, 0f, 0f) * s;
+                    b.Segment(l, r, 0.012f * s, 0.012f * s, 4, NpcSwatch.Brass);
                     foreach (Vector3 end in new[] { l, r })
                     {
-                        b.Segment(end, end + Vector3.down * 0.1f * s, 0.004f, 0.004f, 3, NpcSwatch.LeatherDark, caps: false);
-                        b.Cylinder(end + Vector3.down * 0.11f * s, 0.05f * s, 0.055f * s, 0.012f * s, 7, NpcSwatch.Brass, bottomCap: true);
+                        b.Segment(end, end + Vector3.down * 0.12f * s, 0.004f, 0.004f, 3, NpcSwatch.LeatherDark, caps: false);
+                        b.Cylinder(end + Vector3.down * 0.13f * s, 0.055f * s, 0.06f * s, 0.014f * s, 7, NpcSwatch.Brass, bottomCap: true);
                     }
 
                     break;
                 }
                 case NpcProp.Letter:
                     InHand(b, false);
-                    b.Box(hl + new Vector3(0.04f, 0.08f, 0.04f) * s, new Vector3(0.15f, 0.19f, 0.01f) * s, NpcSwatch.Cream, Quaternion.Euler(-35f, 15f, 0f));
+                    b.Box(hl + new Vector3(0.03f, 0.09f, 0.02f) * s, new Vector3(0.16f, 0.2f, 0.012f) * s, NpcSwatch.Cream, Quaternion.Euler(-35f, 15f, 0f));
                     break;
                 case NpcProp.Quill:
                     InHand(b, true);
-                    b.Box(hr + new Vector3(0f, 0.08f, 0.02f) * s, new Vector3(0.015f, 0.18f, 0.04f) * s, NpcSwatch.Feather, Quaternion.Euler(-10f, 0f, 22f));
+                    b.Box(hr + new Vector3(-0.02f, 0.1f, 0f) * s, new Vector3(0.018f, 0.2f, 0.05f) * s, NpcSwatch.Feather, Quaternion.Euler(-10f, 0f, 22f));
                     break;
                 case NpcProp.WaterJug:
                 {
+                    // Carried by its handle, hanging from the fist.
                     InHand(b, false);
-                    Vector3 c = hl + Vector3.down * 0.16f * s;
-                    b.Blob(c, new Vector3(0.17f, 0.2f, 0.17f) * s, NpcSwatch.Copper);
+                    Vector3 c = hl + Vector3.down * 0.19f * s;
+                    b.Blob(c, new Vector3(0.18f, 0.21f, 0.18f) * s, NpcSwatch.Copper);
                     b.Cylinder(c + up * 0.08f * s, 0.04f * s, 0.035f * s, 0.08f * s, 6, NpcSwatch.Copper, NpcSwatch.Mouth);
                     b.Segment(c + up * 0.13f * s, hl, 0.012f * s, 0.012f * s, 4, NpcSwatch.Copper, caps: false);
                     break;
@@ -380,8 +434,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 {
                     InHand(b, true);
                     float top = rig.H * 0.98f;
-                    var head = new Vector3(hr.x, top, hr.z);
-                    b.Segment(new Vector3(hr.x, 0f, hr.z), head, 0.024f * s, 0.022f * s, 5, NpcSwatch.WoodDark);
+                    Vector3 head = Pole(b, ref rig, top, 0.022f * s, NpcSwatch.WoodDark);
                     Vector3 prev = head;
                     Vector3[] curl = { new Vector3(0f, 0.08f, 0.04f), new Vector3(0f, 0.1f, 0.11f), new Vector3(0f, 0.05f, 0.16f), new Vector3(0f, -0.03f, 0.15f) };
                     foreach (Vector3 step in curl)
@@ -397,17 +450,17 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 {
                     InHand(b, true);
                     Vector3 bottom = hr + Vector3.down * 0.26f * s;
-                    b.Segment(hr, bottom, 0.006f, 0.006f, 3, NpcSwatch.Cream, caps: false);
+                    b.Segment(hr, bottom, 0.007f, 0.007f, 3, NpcSwatch.Cream, caps: false);
                     b.Segment(bottom, bottom + Vector3.down * 0.16f * s, 0.01f * s, 0.006f * s, 4, NpcSwatch.Wood);
                     b.Cylinder(bottom + Vector3.down * 0.12f * s, 0.045f * s, 0.045f * s, 0.02f * s, 8, NpcSwatch.WoodDark);
                     InHand(b, false);
-                    b.Blob(hl + new Vector3(0.02f, 0.08f, 0.02f) * s, new Vector3(0.14f, 0.13f, 0.13f) * s, NpcSwatch.LimeWhite, coarse: false);
+                    b.Blob(hl + up * 0.08f * s, new Vector3(0.15f, 0.14f, 0.14f) * s, NpcSwatch.LimeWhite, coarse: false);
                     break;
                 }
                 case NpcProp.Tablets:
                 {
                     InHand(b, false);
-                    Vector3 c = Vector3.Lerp(rig.HandL, rig.HandR, 0.5f) + new Vector3(0f, 0.05f, 0.01f) * s;
+                    Vector3 c = HeldCenter(ref rig, false, out _) + new Vector3(0f, 0.045f, 0f) * s;
                     b.Box(c, new Vector3(0.17f, 0.03f, 0.13f) * s, NpcSwatch.Clay, Quaternion.Euler(-12f, 4f, 0f), NpcSwatch.Sandstone);
                     b.Box(c + new Vector3(0.01f, 0.035f, -0.01f) * s, new Vector3(0.16f, 0.03f, 0.12f) * s, NpcSwatch.Clay, Quaternion.Euler(-12f, -6f, 0f), NpcSwatch.Rose);
                     break;
@@ -421,14 +474,16 @@ namespace Rapadura.Gameplay.NPC.Visuals
                     break;
                 }
                 case NpcProp.Scroll:
+                    // Across the fist, along the grip.
                     InHand(b, false);
-                    b.Segment(hl + new Vector3(-0.1f, 0.03f, 0.03f) * s, hl + new Vector3(0.1f, 0.05f, 0.05f) * s, 0.032f * s, 0.032f * s, 6, NpcSwatch.Cream, NpcSwatch.OldGold);
+                    b.Segment(hl - rig.GripL * 0.11f * s, hl + rig.GripL * 0.11f * s, 0.034f * s, 0.034f * s, 6, NpcSwatch.Cream, NpcSwatch.OldGold);
                     break;
                 case NpcProp.WalkingStick:
                 {
+                    // A cane: the knob just above the fist, the tip on the ground.
                     InHand(b, true);
-                    b.Segment(new Vector3(hr.x, 0f, hr.z + 0.02f), hr + up * 0.05f, 0.022f * s, 0.026f * s, 5, NpcSwatch.Wood);
-                    b.Blob(hr + up * 0.07f, Vector3.one * 0.06f * s, NpcSwatch.WoodDark, coarse: true);
+                    b.Segment(new Vector3(hr.x, 0f, hr.z), hr + up * 0.06f * s, 0.022f * s, 0.026f * s, 5, NpcSwatch.Wood);
+                    b.Blob(hr + up * 0.08f * s, Vector3.one * 0.065f * s, NpcSwatch.WoodDark, coarse: true);
                     break;
                 }
                 case NpcProp.CrystalPendant:
@@ -452,17 +507,17 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 }
                 case NpcProp.Cup:
                 {
+                    // Cupped in both palms.
                     InHand(b, true);
-                    Vector3 c = Vector3.Lerp(rig.HandL, rig.HandR, 0.5f) + new Vector3(0f, 0.01f, 0.01f) * s;
-                    b.Cylinder(c, 0.04f * s, 0.048f * s, 0.075f * s, 7, NpcSwatch.Turquoise, NpcSwatch.Walnut, bottomCap: true);
+                    Vector3 c = HeldCenter(ref rig, true, out _) + up * 0.0f * s;
+                    b.Cylinder(c, 0.042f * s, 0.052f * s, 0.08f * s, 7, NpcSwatch.Turquoise, NpcSwatch.Walnut, bottomCap: true);
                     break;
                 }
                 case NpcProp.MoonStaff:
                 {
                     InHand(b, true);
                     float top = rig.H * 1.1f;
-                    var head = new Vector3(hr.x, top, hr.z);
-                    b.Segment(new Vector3(hr.x, 0f, hr.z), head, 0.026f * s, 0.022f * s, 5, NpcSwatch.WoodDark);
+                    Vector3 head = Pole(b, ref rig, top, 0.024f * s, NpcSwatch.WoodDark);
                     Vector3 prev = head + new Vector3(0f, 0f, -0.09f) * s;
                     for (int i = 1; i <= 5; i++)
                     {
@@ -489,7 +544,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 case NpcProp.SpiderPuppet:
                 {
                     InHand(b, false);
-                    Vector3 body = hl + new Vector3(0f, 0.09f, 0.02f) * s;
+                    Vector3 body = hl + new Vector3(0f, 0.09f, 0f) * s;
                     b.Blob(body, new Vector3(0.09f, 0.065f, 0.1f) * s, NpcSwatch.HairBlack, coarse: true);
                     b.Blob(body + new Vector3(0f, 0.01f, 0.07f) * s, Vector3.one * 0.05f * s, NpcSwatch.HairBlack, coarse: true);
                     b.Decal(body + new Vector3(0f, 0.025f, 0.096f) * s, new Vector2(0.04f, 0.012f) * s, NpcSwatch.OldGold);

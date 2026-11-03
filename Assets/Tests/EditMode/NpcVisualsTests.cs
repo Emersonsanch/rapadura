@@ -130,7 +130,7 @@ namespace Rapadura.Tests
             {
                 int tris = NpcModelBuilder.CountTriangles(recipe);
                 Assert.LessOrEqual(tris, 1500, $"{recipe.Id} is too heavy ({tris} tris).");
-                Assert.GreaterOrEqual(tris, 350, $"{recipe.Id} is suspiciously empty ({tris} tris).");
+                Assert.GreaterOrEqual(tris, 600, $"{recipe.Id} is suspiciously empty ({tris} tris).");
             }
         }
 
@@ -189,6 +189,78 @@ namespace Rapadura.Tests
             Assert.Greater(mesh.bounds.size.y, 1.6f);
             Assert.Less(mesh.bounds.size.y, 2.4f);
             Assert.AreEqual(0f, mesh.bounds.min.y, 0.02f, "Feet on the ground (y = 0).");
+        }
+
+        [Test]
+        public void StaffsAndPoles_StandInTheFist_AndRestingArmsHangDown()
+        {
+            foreach (NpcRecipe recipe in AllLooks())
+            {
+                NpcModel model = NpcModelBuilder.Build(recipe);
+                _created.Add(model.Mesh);
+                bool grounded = recipe.Props.Any(p => p == NpcProp.CaravanStaff || p == NpcProp.LanternPole || p == NpcProp.Crook
+                    || p == NpcProp.MoonStaff || p == NpcProp.WalkingStick);
+                Assert.AreEqual(grounded && recipe.RightArm == NpcArmPose.HoldStaff, model.GroundedR, recipe.Id);
+                if (model.GroundedR)
+                {
+                    // The fist holds the pole somewhere between the hip and the chest, beside and in front of the body.
+                    Assert.That(model.HandR.y, Is.InRange(model.Height * 0.3f, model.Height * 0.72f), recipe.Id);
+                    Assert.Greater(model.HandR.x, model.Pivots[NpcBones.ArmR].x * 0.9f, recipe.Id);
+                }
+
+                foreach (bool right in new[] { false, true })
+                {
+                    if ((right ? recipe.RightArm : recipe.LeftArm) != NpcArmPose.Hang)
+                    {
+                        continue;
+                    }
+
+                    Vector3 shoulder = model.Pivots[right ? NpcBones.ArmR : NpcBones.ArmL];
+                    Vector3 hand = right ? model.HandR : model.HandL;
+                    float drop = shoulder.y - hand.y;
+                    float side = Mathf.Abs(hand.x) - Mathf.Abs(shoulder.x);
+                    Assert.Greater(drop, model.Height * 0.25f, $"{recipe.Id}: a resting arm hangs down.");
+                    Assert.Less(side, Mathf.Max(0.12f, drop * 0.35f), $"{recipe.Id}: a resting arm is not held out (no T/A pose).");
+                }
+            }
+        }
+
+        [Test]
+        public void ImportedModel_IsBehindAFlag_AndStandsOnTheGround()
+        {
+            bool wasEnabled = NpcImportedModels.Enabled;
+            var wasProvider = NpcImportedModels.Provider;
+            try
+            {
+                var parent = new GameObject("npc_import_test");
+                _created.Add(parent);
+
+                NpcImportedModels.Enabled = false;
+                NpcFigure plain = NpcFigure.Create(parent.transform, "vo_edna", BiomeType.Forest, Vector3.zero);
+                Assert.IsNull(plain.Imported, "Off by default: Vó Edna stays procedural.");
+                Assert.IsTrue(plain.Renderer.enabled);
+
+                // A stand-in "imported" mesh: 2 units tall, centred on the origin (like the OBJ, which is 1 unit tall).
+                var b = new NpcMeshBuilder();
+                b.Box(Vector3.zero, new Vector3(0.6f, 2f, 0.4f), NpcSwatch.Sandstone);
+                Mesh mesh = b.ToMesh("fake_import", new[] { Matrix4x4.identity });
+                _created.Add(mesh);
+                NpcImportedModels.Provider = id => id == "vo_edna" ? new NpcImportedModel { RecipeId = id, Mesh = mesh } : null;
+                NpcImportedModels.Enabled = true;
+
+                NpcFigure figure = NpcFigure.Create(parent.transform, "vo_edna", BiomeType.Forest, Vector3.zero);
+                Assert.IsNotNull(figure.Imported);
+                Assert.IsFalse(figure.Renderer.enabled, "The procedural mesh hides behind the imported one.");
+                Bounds world = figure.Imported.bounds;
+                Assert.AreEqual(0f, world.min.y, 0.02f, "Feet on the ground.");
+                Assert.AreEqual(figure.Model.Height, world.size.y, 0.03f, "Scaled to the recipe height.");
+                Assert.IsNull(NpcFigure.Create(parent.transform, "zaku", BiomeType.Forest, Vector3.right).Imported, "Only the registered NPC changes.");
+            }
+            finally
+            {
+                NpcImportedModels.Enabled = wasEnabled;
+                NpcImportedModels.Provider = wasProvider;
+            }
         }
 
         [Test]

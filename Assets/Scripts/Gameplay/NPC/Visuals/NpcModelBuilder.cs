@@ -27,12 +27,19 @@ namespace Rapadura.Gameplay.NPC.Visuals
         public float Height;
         public float HeadCenterY;
         public int Triangles;
+
+        /// <summary>Hand sockets in model space (centre of each fist, where the held props pass), left and right.</summary>
+        public Vector3 HandL, HandR;
+
+        /// <summary>The arm holds a staff/pole standing on the ground: the idle keeps it still instead of swinging it.</summary>
+        public bool GroundedL, GroundedR;
     }
 
     /// <summary>
     /// Builds an NPC figure from a <see cref="NpcRecipe"/>: chibi proportions like the cousins (a big head, about four and a
     /// half heads tall), a parametric body (age, build, posture, height), a head with a drawn face, hair, beard and
-    /// headwear, the clothing silhouette and layers, two bent arms in a baked pose and the role props. Feet at y = 0,
+    /// headwear, the clothing silhouette and layers, two arms with volume posed by two-bone IK toward a hand socket per
+    /// pose (<see cref="NpcArmPose"/>) and the role props held in those sockets. Feet at y = 0,
     /// facing +z. ~600–1500 triangles, one skinned mesh with five bones (<see cref="NpcBones"/>), all on the shared
     /// <see cref="NpcPalette"/> material. Pure: the same recipe always gives the same mesh.
     /// </summary>
@@ -49,8 +56,17 @@ namespace Rapadura.Gameplay.NPC.Visuals
             public float SkirtY0, SkirtR0;
             public Matrix4x4 BodyM, HeadM;
             public Vector3 HeadCenter; // in head rest space (apply HeadM)
-            public Vector3 ShoulderL, ShoulderR, HandL, HandR, ForeL, ForeR; // posed model space
-            public Vector3 ElbowL, ElbowR;
+            public float UpperLen, ForeLen, HandLen;
+            public float KneeY, KneeR, WaistR;
+
+            /// <summary>Posed model space. Hand = the hand socket (centre of the fist, where a held prop passes).</summary>
+            public Vector3 ShoulderL, ShoulderR, HandL, HandR, ForeL, ForeR, ElbowL, ElbowR, WristL, WristR;
+
+            /// <summary>Axis through each fist (a staff, a handle), unit, perpendicular to the forearm.</summary>
+            public Vector3 GripL, GripR;
+
+            /// <summary>The arm holds something standing on the ground (staff, pole, stick): the idle must not swing it.</summary>
+            public bool GroundedL, GroundedR;
 
             /// <summary>Front surface z of the torso at height y (body rest space).</summary>
             public float TorsoFrontZ(float y)
@@ -59,11 +75,66 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 return Mathf.Lerp(Rw * 0.92f * Belly, Rw * ShoulderMul, t) * 0.78f;
             }
 
-            /// <summary>Front surface z of the skirt at height y (root space).</summary>
-            public float SkirtFrontZ(float y)
+            /// <summary>
+            /// Radius of the skirt / lower garment at height y (root space): long garments taper from the waist to the knee and
+            /// then flare out to the hem, short ones are a plain frustum.
+            /// </summary>
+            public float SkirtRadius(float y)
             {
-                float t = Mathf.InverseLerp(SkirtY0, WaistY, y);
-                return Mathf.Lerp(SkirtR0, Rw * 0.98f * Belly, t) * 0.84f;
+                if (y >= KneeY)
+                {
+                    return Mathf.Lerp(KneeR, WaistR, Mathf.InverseLerp(KneeY, WaistY, y));
+                }
+
+                float t = Mathf.InverseLerp(SkirtY0, KneeY, y);
+                return Mathf.Lerp(SkirtR0, KneeR, 1f - (1f - t) * (1f - t));
+            }
+
+            /// <summary>Front surface z of the skirt at height y (root space).</summary>
+            public float SkirtFrontZ(float y) => SkirtRadius(y) * 0.84f;
+
+            /// <summary>Front z of the figure at height y in body rest space (belly, skirt or chest, whichever sticks out).</summary>
+            public float FrontZ(float y)
+            {
+                float z = y >= HipY ? TorsoFrontZ(y) : 0f;
+                if (R.Build == NpcBuild.Stout && y > HipY && y < NeckY - 0.1f * S)
+                {
+                    z = Mathf.Max(z, Rw * 0.88f);
+                }
+
+                if (y < WaistY && y >= SkirtY0)
+                {
+                    z = Mathf.Max(z, SkirtFrontZ(y));
+                }
+
+                return z;
+            }
+
+            /// <summary>Half width of the figure at height y in body rest space (what a hanging hand must clear).</summary>
+            public float SideX(float y)
+            {
+                float x = Rw * 0.45f + 0.08f * Limb;
+                if (y >= SkirtY0 && y < WaistY)
+                {
+                    x = Mathf.Max(x, SkirtRadius(y));
+                }
+
+                if (y >= HipY)
+                {
+                    float t = Mathf.InverseLerp(HipY, NeckY, y);
+                    x = Mathf.Max(x, Mathf.Lerp(Rw * 0.92f * Belly, Rw * ShoulderMul, t));
+                    if (R.Build == NpcBuild.Stout && y < NeckY - 0.1f * S)
+                    {
+                        x = Mathf.Max(x, Rw * 0.98f * Belly + 0.02f);
+                    }
+                }
+
+                if (R.Has(NpcLayer.Satchel) && y > HipY - 0.08f * S && y < HipY + 0.14f * S)
+                {
+                    x = Mathf.Max(x, Rw * 1.02f + 0.05f * S);
+                }
+
+                return x;
             }
         }
 
@@ -102,6 +173,10 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 Height = rig.H,
                 HeadCenterY = rig.HeadM.MultiplyPoint3x4(rig.HeadCenter).y,
                 Triangles = b.TriangleCount,
+                HandL = rig.HandL,
+                HandR = rig.HandR,
+                GroundedL = rig.GroundedL,
+                GroundedR = rig.GroundedR,
             };
         }
 
@@ -151,28 +226,64 @@ namespace Rapadura.Gameplay.NPC.Visuals
             {
                 case NpcBuild.Slim: buildW = 0.86f; break;
                 case NpcBuild.Stout: buildW = 1.14f; break;
-                case NpcBuild.Broad: buildW = 1.12f; break;
+                case NpcBuild.Broad: buildW = 1.1f; break;
                 default: buildW = 1f; break;
             }
 
             rig.Rw = 0.19f * Mathf.Lerp(1f, rig.S, 0.7f) * buildW;
             rig.Belly = r.Build == NpcBuild.Stout ? 1.16f : 1f;
-            rig.ShoulderMul = r.Build == NpcBuild.Broad ? 1.2f : r.Build == NpcBuild.Slim ? 0.95f : 1f;
+            // Shoulders carry the role from far away: the smith and the carpenter are a wedge, the scholar a reed.
+            switch (r.Build)
+            {
+                case NpcBuild.Broad: rig.ShoulderMul = 1.34f; break;
+                case NpcBuild.Slim: rig.ShoulderMul = 0.9f; break;
+                case NpcBuild.Stout: rig.ShoulderMul = 1.04f; break;
+                default: rig.ShoulderMul = 1.06f; break;
+            }
+
+            if (r.Age == NpcAge.Elder)
+            {
+                rig.ShoulderMul *= 0.95f;
+            }
+
             rig.ShoulderY = rig.NeckY - 0.05f * rig.S;
             rig.ShoulderX = rig.Rw * rig.ShoulderMul + 0.03f * rig.Limb;
+            rig.WaistR = rig.Rw * 0.98f * rig.Belly;
 
             switch (r.Garment)
             {
                 case NpcGarment.Robe:
+                    rig.SkirtY0 = 0.05f; rig.SkirtR0 = rig.Rw * 1.58f * rig.Belly; break;
                 case NpcGarment.Kaftan:
-                    rig.SkirtY0 = 0.05f; rig.SkirtR0 = rig.Rw * 1.3f * rig.Belly; break;
+                    rig.SkirtY0 = 0.05f; rig.SkirtR0 = rig.Rw * 1.5f * rig.Belly; break;
                 case NpcGarment.Dress:
-                    rig.SkirtY0 = 0.04f; rig.SkirtR0 = rig.Rw * 1.5f * rig.Belly; break;
+                    rig.SkirtY0 = 0.04f; rig.SkirtR0 = rig.Rw * 1.72f * rig.Belly; break;
                 case NpcGarment.Chapan:
-                    rig.SkirtY0 = rig.HipY * 0.42f; rig.SkirtR0 = rig.Rw * 1.26f * rig.Belly; break;
+                    rig.SkirtY0 = rig.HipY * 0.42f; rig.SkirtR0 = rig.Rw * 1.32f * rig.Belly; break;
                 default:
                     rig.SkirtY0 = rig.HipY * 0.78f; rig.SkirtR0 = rig.Rw * 1.12f * rig.Belly; break;
             }
+
+            if (LongSkirt(r.Garment))
+            {
+                // Narrow at the knee, flaring to the hem: a long robe reads as a bell, not a tube.
+                rig.KneeY = Mathf.Lerp(rig.SkirtY0, rig.WaistY, 0.5f);
+                rig.KneeR = rig.WaistR * 1.1f + (rig.SkirtR0 - rig.WaistR) * 0.12f;
+            }
+            else if (r.Garment == NpcGarment.Chapan)
+            {
+                rig.KneeY = Mathf.Lerp(rig.SkirtY0, rig.WaistY, 0.4f);
+                rig.KneeR = rig.WaistR * 1.06f + (rig.SkirtR0 - rig.WaistR) * 0.3f;
+            }
+            else
+            {
+                rig.KneeY = rig.SkirtY0;
+                rig.KneeR = rig.SkirtR0;
+            }
+
+            rig.UpperLen = (rig.NeckY - rig.HipY) * 0.5f;
+            rig.ForeLen = rig.UpperLen * 0.86f;
+            rig.HandLen = 0.06f * rig.Limb;
 
             float posture;
             switch (r.Posture)
@@ -198,49 +309,154 @@ namespace Rapadura.Gameplay.NPC.Visuals
             return rig;
         }
 
-        /// <summary>Upper/forearm pitch (negative = forward/up), roll outward, in degrees.</summary>
-        private static void PoseAngles(NpcArmPose pose, out float upperPitch, out float upperRoll, out float forePitch, out float foreRoll)
+        private static bool Grounded(NpcProp p) =>
+            p == NpcProp.CaravanStaff || p == NpcProp.LanternPole || p == NpcProp.Crook || p == NpcProp.MoonStaff || p == NpcProp.WalkingStick;
+
+        /// <summary>Half the gap between two hands holding something in front (the thing fits between the palms).</summary>
+        private static float FrontGap(NpcRecipe r)
         {
+            if (r.Has(NpcProp.Jar)) return 0.1f;
+            if (r.Has(NpcProp.Tablets)) return 0.085f;
+            if (r.Has(NpcProp.Letter) || r.Has(NpcProp.Flute)) return 0.1f;
+            if (r.Has(NpcProp.Cup)) return 0.05f;
+            return 0.065f;
+        }
+
+        /// <summary>
+        /// Where the hand socket of a pose sits (right arm, body rest space; the left arm mirrors x), which way the elbow
+        /// points (IK pole) and the axis through the fist. Targets are built from the body's own measures, so a stout
+        /// figure holds the cup in front of the belly and a wide dress pushes the hanging hands out a little.
+        /// </summary>
+        private static void PoseTarget(ref Rig rig, NpcArmPose pose, out Vector3 hand, out Vector3 pole, out Vector3 grip)
+        {
+            float s = rig.S;
+            float reach = rig.UpperLen + rig.ForeLen + rig.HandLen;
+            float handHalf = 0.05f * rig.Limb;
+            NpcRecipe r = rig.R;
             switch (pose)
             {
-                case NpcArmPose.HoldFront: upperPitch = -30f; upperRoll = -8f; forePitch = -85f; foreRoll = -40f; break;
-                case NpcArmPose.HoldStaff: upperPitch = -26f; upperRoll = 16f; forePitch = -62f; foreRoll = 6f; break;
-                case NpcArmPose.HipRest: upperPitch = 12f; upperRoll = 40f; forePitch = 20f; foreRoll = -55f; break;
-                case NpcArmPose.Carry: upperPitch = -150f; upperRoll = 6f; forePitch = 110f; foreRoll = 0f; break;
-                case NpcArmPose.HoldUp: upperPitch = -60f; upperRoll = 6f; forePitch = -150f; foreRoll = -10f; break;
-                case NpcArmPose.Crook: upperPitch = -6f; upperRoll = 10f; forePitch = -88f; foreRoll = -22f; break;
-                default: upperPitch = -4f; upperRoll = 8f; forePitch = -14f; foreRoll = 5f; break;
+                case NpcArmPose.HoldFront:
+                {
+                    float y = Mathf.Lerp(rig.WaistY, rig.ShoulderY, 0.12f);
+                    hand = new Vector3(FrontGap(r) * s, y, rig.FrontZ(y) + 0.085f * s);
+                    pole = new Vector3(1f, -0.7f, -0.5f);
+                    grip = Vector3.up;
+                    break;
+                }
+                case NpcArmPose.HoldStaff:
+                {
+                    bool cane = r.Has(NpcProp.WalkingStick);
+                    float y = cane ? rig.WaistY - 0.02f * s : Mathf.Lerp(rig.WaistY, rig.ShoulderY, 0.32f);
+                    float x = Mathf.Max(rig.ShoulderX + (cane ? 0.07f : 0.05f) * s, rig.SideX(y) + handHalf + 0.05f * s);
+                    hand = new Vector3(x, y, rig.FrontZ(y) * 0.6f + (cane ? 0.1f : 0.13f) * s);
+                    pole = new Vector3(0.8f, -0.4f, -0.7f);
+                    grip = Vector3.up;
+                    break;
+                }
+                case NpcArmPose.HipRest:
+                {
+                    float y = rig.WaistY + 0.02f * s;
+                    hand = new Vector3(rig.SideX(y) + 0.035f * s, y, 0.01f);
+                    pole = new Vector3(1f, 0.1f, -0.45f);
+                    grip = Vector3.forward;
+                    break;
+                }
+                case NpcArmPose.Carry:
+                    hand = new Vector3(rig.ShoulderX + 0.035f * s, rig.ShoulderY + 0.1f * s, 0.15f * s);
+                    pole = new Vector3(0.45f, -1f, 0.25f);
+                    grip = Vector3.forward;
+                    break;
+                case NpcArmPose.HoldUp:
+                {
+                    float y = rig.ShoulderY - 0.12f * s;
+                    hand = new Vector3(rig.ShoulderX * 0.78f, y, rig.FrontZ(y) + 0.2f * s);
+                    pole = new Vector3(1f, -1f, -0.3f);
+                    grip = Vector3.up;
+                    break;
+                }
+                case NpcArmPose.Crook:
+                {
+                    float y = rig.WaistY + 0.06f * s;
+                    hand = new Vector3(rig.ShoulderX * 0.92f, y, rig.FrontZ(y) + 0.22f * s);
+                    pole = new Vector3(0.35f, -1f, -0.55f);
+                    grip = Vector3.up;
+                    break;
+                }
+                default:
+                {
+                    // Hanging at rest: the arm falls along the side, elbow soft and a little back, the hand just in front
+                    // of the thigh and clear of the skirt (no T or A pose).
+                    float y = rig.ShoulderY - reach * 0.9f;
+                    float x = Mathf.Max(rig.ShoulderX + 0.015f * s, rig.SideX(y) + handHalf * 0.9f);
+                    hand = new Vector3(x, y, 0.045f * s);
+                    pole = new Vector3(0.3f, 0f, -1f);
+                    grip = Vector3.forward;
+                    break;
+                }
             }
         }
 
-        private static Vector3 ArmDirection(float pitch, float rollOut, bool right)
+        /// <summary>Two-bone IK: the elbow for a shoulder→socket reach, bent toward <paramref name="pole"/>.</summary>
+        private static Vector3 SolveElbow(Vector3 shoulder, ref Vector3 target, float upper, float lower, Vector3 pole)
         {
-            float roll = right ? rollOut : -rollOut;
-            return Quaternion.Euler(pitch, 0f, roll) * Vector3.down;
+            Vector3 to = target - shoulder;
+            float d = to.magnitude;
+            float maxD = (upper + lower) * 0.985f;
+            float minD = Mathf.Abs(upper - lower) + 0.02f;
+            Vector3 dir = d > 1e-4f ? to / d : Vector3.down;
+            if (d > maxD || d < minD)
+            {
+                d = Mathf.Clamp(d, minD, maxD);
+                target = shoulder + dir * d;
+            }
+
+            float along = (upper * upper - lower * lower + d * d) / (2f * d);
+            float h = Mathf.Sqrt(Mathf.Max(0f, upper * upper - along * along));
+            Vector3 side = pole - dir * Vector3.Dot(pole, dir);
+            if (side.sqrMagnitude < 1e-6f)
+            {
+                side = Vector3.Cross(dir, Vector3.right);
+            }
+
+            return shoulder + dir * along + side.normalized * h;
         }
 
         private static void PoseArm(ref Rig rig, bool right)
         {
             NpcArmPose pose = right ? rig.R.RightArm : rig.R.LeftArm;
-            PoseAngles(pose, out float up, out float ur, out float fp, out float fr);
-            float upperLen = (rig.NeckY - rig.HipY) * 0.5f;
-            float foreLen = upperLen * 0.95f;
-            var shoulder = new Vector3(right ? rig.ShoulderX : -rig.ShoulderX, rig.ShoulderY, 0f);
-            Vector3 elbow = shoulder + ArmDirection(up, ur, right) * upperLen;
-            Vector3 foreDir = ArmDirection(fp, fr, right);
-            Vector3 hand = elbow + foreDir * foreLen;
+            PoseTarget(ref rig, pose, out Vector3 hand, out Vector3 pole, out Vector3 grip);
+            float m = right ? 1f : -1f;
+            hand.x *= m;
+            pole.x *= m;
+            grip.x *= m;
+
+            var shoulder = new Vector3(rig.ShoulderX * m, rig.ShoulderY, 0f);
+            float lower = rig.ForeLen + rig.HandLen;
+            Vector3 elbow = SolveElbow(shoulder, ref hand, rig.UpperLen, lower, pole);
+            Vector3 fore = (hand - elbow).normalized;
+            Vector3 wrist = hand - fore * rig.HandLen;
 
             Vector3 s = rig.BodyM.MultiplyPoint3x4(shoulder);
             Vector3 e = rig.BodyM.MultiplyPoint3x4(elbow);
             Vector3 h = rig.BodyM.MultiplyPoint3x4(hand);
-            Vector3 f = rig.BodyM.MultiplyVector(foreDir).normalized;
+            Vector3 w = rig.BodyM.MultiplyPoint3x4(wrist);
+            Vector3 f = rig.BodyM.MultiplyVector(fore).normalized;
+            Vector3 g = pose == NpcArmPose.HoldStaff ? Vector3.up : rig.BodyM.MultiplyVector(grip); // a staff stands vertical
+            g -= f * Vector3.Dot(g, f);
+            if (g.sqrMagnitude < 1e-5f)
+            {
+                g = Vector3.Cross(f, Vector3.right);
+            }
+
+            g.Normalize();
+            bool grounded = pose == NpcArmPose.HoldStaff && right && System.Array.Exists(rig.R.Props, Grounded);
             if (right)
             {
-                rig.ShoulderR = s; rig.ElbowR = e; rig.HandR = h; rig.ForeR = f;
+                rig.ShoulderR = s; rig.ElbowR = e; rig.HandR = h; rig.WristR = w; rig.ForeR = f; rig.GripR = g; rig.GroundedR = grounded;
             }
             else
             {
-                rig.ShoulderL = s; rig.ElbowL = e; rig.HandL = h; rig.ForeL = f;
+                rig.ShoulderL = s; rig.ElbowL = e; rig.HandL = h; rig.WristL = w; rig.ForeL = f; rig.GripL = g; rig.GroundedL = grounded;
             }
         }
 
@@ -268,19 +484,26 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 }
 
                 b.Cylinder(new Vector3(x, 0f, 0.005f), 0.082f * L, 0.074f * L, 0.16f * L, 6, r.Boots, r.Boots);
-                float toeZ = longSkirt ? Mathf.Max(0.08f * L, rig.SkirtR0 * 0.84f - 0.03f) : 0.08f * L;
+                float toeZ = longSkirt ? Mathf.Max(0.08f * L, rig.SkirtR0 * 0.84f - 0.05f) : 0.08f * L;
                 b.Box(new Vector3(x, 0.045f * L, toeZ), new Vector3(0.12f, 0.09f, 0.15f) * L, r.Boots, noBottom: true);
             }
 
-            // The skirt / lower garment (root bone: it stays put while the chest breathes).
-            float topR = rig.Rw * 0.98f * rig.Belly;
-            b.Cylinder(new Vector3(0f, rig.SkirtY0, 0f), rig.SkirtR0, topR, rig.WaistY - rig.SkirtY0, 8, r.Main, topCap: false, depth: 0.84f);
-
-            if (r.Garment == NpcGarment.Kaftan || r.Garment == NpcGarment.Dress || r.Garment == NpcGarment.Chapan)
+            // The skirt / lower garment (root bone: it stays put while the chest breathes): waist → knee → a flared hem.
+            int sides = longSkirt ? 10 : 8;
+            float[] rings = rig.KneeY > rig.SkirtY0 + 0.01f
+                ? new[] { rig.SkirtY0, Mathf.Lerp(rig.SkirtY0, rig.KneeY, 0.4f), rig.KneeY, rig.WaistY }
+                : new[] { rig.SkirtY0, rig.WaistY };
+            for (int i = 0; i + 1 < rings.Length; i++)
             {
-                float hemH = 0.07f * rig.S;
-                float rAt = Mathf.Lerp(rig.SkirtR0, topR, hemH / (rig.WaistY - rig.SkirtY0));
-                b.Cylinder(new Vector3(0f, rig.SkirtY0 - 0.005f, 0f), rig.SkirtR0 * 1.035f, rAt * 1.035f, hemH, 8, r.Trim, topCap: false, depth: 0.84f);
+                float y0 = rings[i], y1 = rings[i + 1];
+                b.Cylinder(new Vector3(0f, y0, 0f), rig.SkirtRadius(y0), rig.SkirtRadius(y1), y1 - y0, sides, r.Main, topCap: false, depth: 0.84f);
+            }
+
+            if (r.Garment == NpcGarment.Kaftan || r.Garment == NpcGarment.Dress || r.Garment == NpcGarment.Chapan || r.Garment == NpcGarment.Robe)
+            {
+                float hemH = (r.Garment == NpcGarment.Robe ? 0.045f : 0.07f) * rig.S;
+                float rAt = rig.SkirtRadius(rig.SkirtY0 + hemH);
+                b.Cylinder(new Vector3(0f, rig.SkirtY0 - 0.005f, 0f), rig.SkirtR0 * 1.03f, rAt * 1.035f, hemH, sides, r.Trim, topCap: false, depth: 0.84f);
             }
 
             if (r.Garment == NpcGarment.Kaftan || r.Garment == NpcGarment.Chapan)
@@ -471,6 +694,13 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // Arms
         // ------------------------------------------------------------------
 
+        private static bool IsSkin(NpcSwatch swatch) => swatch <= NpcSwatch.SkinDeep;
+
+        /// <summary>
+        /// One arm with volume: a shoulder cap, a tapered upper arm, an elbow, a forearm ending in a cuff (wide bell sleeves
+        /// on long robes, a rolled short sleeve when the arm is bare) and a mitten hand closed around the grip axis, so a
+        /// staff or a handle passes through the fist at <see cref="Rig.HandR"/>.
+        /// </summary>
         private static void BuildArm(NpcMeshBuilder b, ref Rig rig, bool right)
         {
             NpcRecipe r = rig.R;
@@ -478,13 +708,75 @@ namespace Rapadura.Gameplay.NPC.Visuals
             b.Matrix = Matrix4x4.identity;
             Vector3 s = right ? rig.ShoulderR : rig.ShoulderL;
             Vector3 e = right ? rig.ElbowR : rig.ElbowL;
+            Vector3 w = right ? rig.WristR : rig.WristL;
             Vector3 h = right ? rig.HandR : rig.HandL;
             Vector3 f = right ? rig.ForeR : rig.ForeL;
+            Vector3 g = right ? rig.GripR : rig.GripL;
             float L = rig.Limb;
-            b.Blob(s, new Vector3(0.14f, 0.14f, 0.13f) * L, r.Sleeves, coarse: true);
-            b.Segment(s, e, 0.062f * L, 0.054f * L, 6, r.Sleeves);
-            b.Segment(e, h, 0.056f * L, 0.05f * L, 6, r.Sleeves);
-            b.Blob(h + f * 0.035f * L, new Vector3(0.1f, 0.1f, 0.1f) * L, r.Hands ?? r.Skin, coarse: true);
+            bool bare = IsSkin(r.Sleeves);
+            bool bell = !bare && (r.Garment == NpcGarment.Robe || r.Garment == NpcGarment.Kaftan);
+            NpcSwatch skin = r.Skin;
+            NpcSwatch sleeve = r.Sleeves;
+            NpcSwatch top = bare ? r.Main : sleeve;
+            float bulk = r.Build == NpcBuild.Broad ? 1.22f : r.Build == NpcBuild.Stout ? 1.12f : r.Build == NpcBuild.Slim ? 0.92f : 1f;
+            if (r.Age == NpcAge.Child)
+            {
+                bulk *= 0.92f;
+            }
+
+            float upperR = 0.07f * L * bulk;
+            float shoulderD = 0.165f * L * bulk;
+
+            // Shoulder cap (in the garment's colour), a little low so it rounds off the top of the torso.
+            b.Blob(s + Vector3.down * 0.012f * L, new Vector3(shoulderD * 1.08f, shoulderD, shoulderD), top, coarse: true);
+
+            // Upper arm, tapering to the elbow.
+            if (bare)
+            {
+                Vector3 sleeveEnd = Vector3.Lerp(s, e, 0.42f);
+                b.Segment(s, sleeveEnd, upperR * 1.18f, upperR * 1.12f, 6, r.Main, r.Trim, caps: false);
+                b.Segment(sleeveEnd - (e - s).normalized * 0.01f, e, upperR * 0.98f, upperR * 0.82f, 6, skin, caps: false);
+            }
+            else
+            {
+                b.Segment(s, e, upperR * 1.08f, upperR * 0.86f, 6, sleeve, caps: false);
+            }
+
+            NpcSwatch elbowColor = bare ? skin : sleeve;
+            b.Blob(e, Vector3.one * upperR * 1.8f, elbowColor, coarse: true);
+
+            // Forearm and cuff.
+            float wristR = upperR * 0.74f;
+            if (bare)
+            {
+                b.Segment(e, w, upperR * 0.84f, wristR, 6, skin, caps: false);
+            }
+            else
+            {
+                float cuffR = bell ? upperR * 1.45f : upperR * 0.95f;
+                float cuffLen = (bell ? 0.07f : 0.045f) * L;
+                Vector3 cuffAt = w - f * cuffLen;
+                b.Segment(e, cuffAt, upperR * 0.86f, cuffR * 0.94f, 6, sleeve, caps: false);
+                NpcSwatch cuff = r.Trim == r.Main || r.Trim == sleeve ? NpcSwatch.Cream : r.Trim;
+                b.Segment(cuffAt, w + f * 0.006f, cuffR, cuffR * 1.04f, 6, bell ? sleeve : cuff, cuff, caps: true);
+                if (bell)
+                {
+                    b.Segment(w - f * 0.012f, w + f * 0.008f, cuffR * 1.06f, cuffR * 1.08f, 6, cuff, cuff, caps: false);
+                }
+            }
+
+            // Mitten hand: a soft fist around the grip axis, with a thumb on top.
+            NpcSwatch hand = r.Hands ?? skin;
+            Quaternion hr = Quaternion.LookRotation(f, g);
+            b.Segment(w - f * 0.01f, w + f * 0.02f * L, wristR * 0.95f, wristR * 0.9f, 5, hand, caps: false);
+            b.Blob(h, new Vector3(0.078f, 0.094f, 0.112f) * L * Mathf.Lerp(1f, bulk, 0.5f), hand, hr);
+            Vector3 inner = Vector3.Cross(f, g).normalized;
+            if (Vector3.Dot(inner, right ? Vector3.left : Vector3.right) < 0f)
+            {
+                inner = -inner;
+            }
+
+            b.Blob(h + g * 0.036f * L + inner * 0.02f * L - f * 0.012f * L, new Vector3(0.04f, 0.04f, 0.058f) * L, hand, hr, coarse: true);
         }
 
         // ------------------------------------------------------------------
@@ -530,21 +822,36 @@ namespace Rapadura.Gameplay.NPC.Visuals
             BuildHeadwear(b, ref rig);
         }
 
+        private static bool DarkSkin(NpcSwatch skin) => skin == NpcSwatch.SkinBrown || skin == NpcSwatch.SkinDeep;
+
+        /// <summary>Rosy cheeks: the recipe's choice, else children, laughing, shy, bright and kind faces.</summary>
+        private static bool Cheeks(NpcRecipe r) => r.RosyCheeks ?? (r.Age == NpcAge.Child || r.Face == NpcFace.Jolly || r.Face == NpcFace.Shy
+            || r.Face == NpcFace.Bright || r.Face == NpcFace.Kind);
+
+        /// <summary>
+        /// The face, drawn to read from the iso camera at ~10 m: big eyes (white, a dark iris, a shine), thick brows on
+        /// everyone, a wedge nose, a mouth shaped by the mood (open laugh, smile, flat line) and rosy cheeks. Lips use a
+        /// rose tone on dark skin so the mouth never melts into it.
+        /// </summary>
         private static void BuildFace(NpcMeshBuilder b, ref Rig rig)
         {
             NpcRecipe r = rig.R;
             float hw = rig.HeadW, hh = rig.HeadH;
             bool child = r.Age == NpcAge.Child;
-            float eyeScale = child ? 1.3f : r.Age == NpcAge.Youth ? 1.12f : 1f;
+            bool dark = DarkSkin(r.Skin);
+            float eyeScale = child ? 1.18f : r.Age == NpcAge.Youth ? 1.08f : 1f;
             if (r.Face == NpcFace.Bright)
             {
-                eyeScale *= 1.12f;
+                eyeScale *= 1.08f;
             }
 
-            var eye = new Vector2(hw * 0.085f, hh * 0.12f) * eyeScale;
-            float eyeY = -hh * 0.04f;
-            float eyeX = hw * 0.2f;
-            const float lift = 0.004f;
+            var eye = new Vector2(hw * 0.15f, hh * 0.19f) * eyeScale;
+            float eyeY = -hh * 0.05f;
+            float eyeX = hw * 0.205f;
+            const float lift = 0.006f;
+            NpcSwatch brow = r.HairColor == NpcSwatch.HairWhite || r.HairColor == NpcSwatch.HairGrey ? NpcSwatch.BrowGrey
+                : r.HairColor == NpcSwatch.HairAuburn || r.HairColor == NpcSwatch.HairBrown ? NpcSwatch.HairDark : NpcSwatch.HairBlack;
+            NpcSwatch lineColor = NpcSwatch.Lash;
 
             foreach (float side in new[] { -1f, 1f })
             {
@@ -554,74 +861,122 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 switch (r.Face)
                 {
                     case NpcFace.Jolly:
-                        // Closed, laughing eyes: a little "^".
-                        p = OnFace(ref rig, x - eye.x * 0.22f, eyeY, lift, out rot);
-                        b.Decal(p, new Vector2(eye.x * 0.75f, eye.y * 0.22f), NpcSwatch.Eye, rot * Quaternion.Euler(0f, 0f, 28f));
-                        p = OnFace(ref rig, x + eye.x * 0.22f, eyeY, lift, out rot);
-                        b.Decal(p, new Vector2(eye.x * 0.75f, eye.y * 0.22f), NpcSwatch.Eye, rot * Quaternion.Euler(0f, 0f, -28f));
+                        // Closed, laughing eyes: a thick "^".
+                        p = OnFace(ref rig, x - eye.x * 0.2f, eyeY, lift, out rot);
+                        b.Decal(p, new Vector2(eye.x * 0.62f, eye.y * 0.2f), lineColor, rot * Quaternion.Euler(0f, 0f, 32f));
+                        p = OnFace(ref rig, x + eye.x * 0.2f, eyeY, lift, out rot);
+                        b.Decal(p, new Vector2(eye.x * 0.62f, eye.y * 0.2f), lineColor, rot * Quaternion.Euler(0f, 0f, -32f));
                         break;
                     case NpcFace.Dreamy:
-                    case NpcFace.Calm:
-                        p = OnFace(ref rig, x, eyeY - eye.y * 0.1f, lift, out rot);
-                        b.Decal(p, new Vector2(eye.x * 1.1f, eye.y * (r.Face == NpcFace.Dreamy ? 0.32f : 0.5f)), NpcSwatch.Eye, rot);
+                    {
+                        // Half-closed: the lower half of the eye under a heavy lid line.
+                        p = OnFace(ref rig, x, eyeY - eye.y * 0.18f, lift, out rot);
+                        b.Disc(p, new Vector2(eye.x * 0.95f, eye.y * 0.5f), 6, NpcSwatch.Sclera, rot);
+                        b.Disc(p + rot * new Vector3(0f, -eye.y * 0.04f, 0.0015f), new Vector2(eye.x * 0.62f, eye.y * 0.42f), 6, NpcSwatch.Eye, rot);
+                        b.Decal(p + rot * new Vector3(0f, eye.y * 0.2f, 0.003f), new Vector2(eye.x * 1.12f, eye.y * 0.16f), lineColor, rot);
                         break;
-                    case NpcFace.Shy:
-                        p = OnFace(ref rig, x, eyeY - eye.y * 0.15f, lift, out rot);
-                        b.Decal(p, new Vector2(eye.x, eye.y * 0.7f), NpcSwatch.Eye, rot);
+                    }
+                    case NpcFace.Calm:
+                        // Gentle closed-ish eyes: a soft downward curve.
+                        p = OnFace(ref rig, x, eyeY - eye.y * 0.1f, lift, out rot);
+                        b.Decal(p + rot * new Vector3(-eye.x * 0.24f, 0f, 0f), new Vector2(eye.x * 0.55f, eye.y * 0.18f), lineColor, rot * Quaternion.Euler(0f, 0f, -14f));
+                        b.Decal(p + rot * new Vector3(eye.x * 0.24f, 0f, 0f), new Vector2(eye.x * 0.55f, eye.y * 0.18f), lineColor, rot * Quaternion.Euler(0f, 0f, 14f));
                         break;
                     default:
+                    {
+                        float squash = r.Face == NpcFace.Shy ? 0.82f : r.Face == NpcFace.Stern ? 0.78f : 1f;
                         p = OnFace(ref rig, x, eyeY, lift, out rot);
-                        b.Decal(p, eye, NpcSwatch.Eye, rot);
-                        b.Decal(p + rot * new Vector3(eye.x * 0.18f * side, eye.y * 0.22f, 0.002f), eye * 0.34f, NpcSwatch.EyeShine, rot);
+                        b.Disc(p, new Vector2(eye.x, eye.y * squash), 7, NpcSwatch.Sclera, rot, 90f);
+                        // The iris looks a little inward (and down when shy): friendlier than a straight stare.
+                        Vector3 iris = rot * new Vector3(-side * eye.x * 0.1f, -eye.y * (r.Face == NpcFace.Shy ? 0.16f : 0.06f), 0.0015f);
+                        b.Disc(p + iris, new Vector2(eye.x * 0.7f, eye.y * squash * 0.8f), 7, NpcSwatch.Eye, rot, 90f);
+                        b.Disc(p + iris + rot * new Vector3(eye.x * 0.14f * side, eye.y * 0.18f, 0.0015f), new Vector2(eye.x * 0.3f, eye.y * 0.26f), 5, NpcSwatch.EyeShine, rot);
+                        if (r.Face == NpcFace.Stern)
+                        {
+                            b.Decal(p + rot * new Vector3(0f, eye.y * squash * 0.42f, 0.003f), new Vector2(eye.x * 1.1f, eye.y * 0.16f), lineColor, rot * Quaternion.Euler(0f, 0f, 12f * side));
+                        }
+
                         break;
+                    }
                 }
 
-                if (r.Face == NpcFace.Stern || r.Face == NpcFace.Bright || r.Age == NpcAge.Elder)
+                // Brows: on everyone now (they carry the mood further than the eyes do).
+                float browTilt;
+                float browY = eyeY + eye.y * 0.78f;
+                switch (r.Face)
                 {
-                    float browTilt = r.Face == NpcFace.Stern ? -16f : r.Face == NpcFace.Bright ? 10f : 4f;
-                    p = OnFace(ref rig, x, eyeY + eye.y * (r.Face == NpcFace.Bright ? 1.05f : 0.82f), lift + 0.002f, out rot);
-                    NpcSwatch brow = r.HairColor == NpcSwatch.HairWhite ? NpcSwatch.HairGrey : r.HairColor;
-                    b.Decal(p, new Vector2(eye.x * 1.5f, eye.y * (r.Face == NpcFace.Stern ? 0.3f : 0.2f)), brow, rot * Quaternion.Euler(0f, 0f, browTilt * side));
+                    case NpcFace.Stern: browTilt = 20f; browY -= eye.y * 0.12f; break;
+                    case NpcFace.Bright: browTilt = -8f; browY += eye.y * 0.12f; break;
+                    case NpcFace.Shy: browTilt = -16f; break;
+                    case NpcFace.Jolly: browTilt = -8f; browY += eye.y * 0.06f; break;
+                    case NpcFace.Dreamy: browTilt = -12f; break;
+                    default: browTilt = -5f; break;
                 }
 
-                if (child || r.Face == NpcFace.Jolly || r.Face == NpcFace.Shy)
+                float browThick = (r.Face == NpcFace.Stern ? 0.26f : 0.2f) * eye.y * (r.Age == NpcAge.Elder ? 1.25f : 1f);
+                p = OnFace(ref rig, x + side * eye.x * 0.05f, browY, lift + 0.002f, out rot);
+                b.Decal(p, new Vector2(eye.x * 1.22f, browThick), brow, rot * Quaternion.Euler(0f, 0f, browTilt * side));
+
+                if (Cheeks(r))
                 {
-                    p = OnFace(ref rig, hw * 0.3f * side, -hh * 0.16f, lift, out rot);
-                    b.Decal(p, new Vector2(hw * 0.11f, hh * 0.05f), NpcSwatch.Blush, rot);
+                    p = OnFace(ref rig, hw * 0.3f * side, -hh * 0.2f, lift, out rot);
+                    b.Disc(p, new Vector2(hw * 0.15f, hh * 0.085f), 6, dark ? NpcSwatch.CheekRose : NpcSwatch.Blush, rot);
                 }
             }
 
-            if (r.Age != NpcAge.Child)
+            // Nose: a small wedge catching the light (children get a button).
             {
-                Vector3 p = OnFace(ref rig, 0f, -hh * 0.1f, 0f, out Quaternion rot);
-                b.Box(p, new Vector3(hw * 0.09f, hh * 0.1f, rig.HeadD * 0.1f), r.Skin, rot);
+                Vector3 p = OnFace(ref rig, 0f, -hh * 0.13f, -0.004f, out Quaternion rot);
+                float nr = hw * (child ? 0.055f : 0.075f);
+                b.Cylinder(p, nr, nr * 0.15f, rig.HeadD * (child ? 0.06f : 0.1f), 4, r.Skin, rotation: rot * Quaternion.Euler(100f, 0f, 0f), twist: 45f);
             }
 
             bool bearded = r.Beard == NpcBeard.Short || r.Beard == NpcBeard.Full || r.Beard == NpcBeard.Long || r.Beard == NpcBeard.LongBraided;
-            Vector2 mouth;
-            switch (r.Face)
-            {
-                case NpcFace.Jolly: mouth = new Vector2(hw * 0.2f, hh * 0.085f); break;
-                case NpcFace.Bright: mouth = new Vector2(hw * 0.1f, hh * 0.06f); break;
-                case NpcFace.Stern: mouth = new Vector2(hw * 0.13f, hh * 0.022f); break;
-                case NpcFace.Shy: mouth = new Vector2(hw * 0.07f, hh * 0.022f); break;
-                default: mouth = new Vector2(hw * 0.14f, hh * 0.028f); break;
-            }
-
-            float mouthY = -hh * (bearded ? 0.25f : 0.24f);
+            NpcSwatch lip = dark ? NpcSwatch.Lip : NpcSwatch.Mouth;
+            float mouthY = -hh * (bearded ? 0.27f : 0.255f);
+            Vector3 mp;
+            Quaternion mr;
             if (bearded)
             {
                 // The mouth is an opening in the beard (in front of the face).
                 BeardShape(ref rig, out Vector3 bc, out Vector3 bs);
                 float dy = (rig.HeadCenter.y + mouthY) - bc.y;
                 float k = 1f - (dy * dy) / (bs.y * bs.y * 0.25f);
-                float z = bc.z + bs.z * 0.5f * Mathf.Sqrt(Mathf.Max(0.05f, k)) + 0.006f;
-                b.Decal(new Vector3(0f, rig.HeadCenter.y + mouthY, z), mouth, NpcSwatch.Mouth);
+                float z = bc.z + bs.z * 0.5f * Mathf.Sqrt(Mathf.Max(0.05f, k)) + 0.008f;
+                mp = new Vector3(0f, rig.HeadCenter.y + mouthY, z);
+                mr = Quaternion.identity;
+                lip = NpcSwatch.Mouth;
             }
             else
             {
-                Vector3 p = OnFace(ref rig, 0f, mouthY, lift, out Quaternion rot);
-                b.Decal(p, mouth, NpcSwatch.Mouth, rot);
+                mp = OnFace(ref rig, 0f, mouthY, lift, out mr);
+            }
+
+            switch (r.Face)
+            {
+                case NpcFace.Jolly:
+                    // Wide open laugh: a dark "D" with a tongue.
+                    b.Disc(mp, new Vector2(hw * 0.24f, hh * 0.13f), 6, NpcSwatch.Mouth, mr, 0f);
+                    b.Disc(mp + mr * new Vector3(0f, -hh * 0.025f, 0.0015f), new Vector2(hw * 0.13f, hh * 0.05f), 5, NpcSwatch.Tongue, mr);
+                    break;
+                case NpcFace.Bright:
+                    b.Disc(mp, new Vector2(hw * 0.14f, hh * 0.09f), 6, NpcSwatch.Mouth, mr, 0f);
+                    b.Disc(mp + mr * new Vector3(0f, -hh * 0.018f, 0.0015f), new Vector2(hw * 0.08f, hh * 0.035f), 5, NpcSwatch.Tongue, mr);
+                    break;
+                case NpcFace.Stern:
+                    b.Decal(mp, new Vector2(hw * 0.17f, hh * 0.035f), lip, mr);
+                    break;
+                case NpcFace.Shy:
+                    b.Disc(mp, new Vector2(hw * 0.07f, hh * 0.05f), 5, lip, mr);
+                    break;
+                default:
+                {
+                    // A smile: two little strokes turned up at the ends.
+                    float wsm = r.Face == NpcFace.Kind ? 0.2f : 0.16f;
+                    b.Decal(mp + mr * new Vector3(-hw * wsm * 0.24f, 0f, 0f), new Vector2(hw * wsm * 0.56f, hh * 0.032f), lip, mr * Quaternion.Euler(0f, 0f, -14f));
+                    b.Decal(mp + mr * new Vector3(hw * wsm * 0.24f, 0f, 0f), new Vector2(hw * wsm * 0.56f, hh * 0.032f), lip, mr * Quaternion.Euler(0f, 0f, 14f));
+                    break;
+                }
             }
         }
 
@@ -637,7 +992,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 if (r.Headwear == NpcHeadwear.Hood || r.Headwear == NpcHeadwear.Kerchief)
                 {
                     // A fringe peeking out on the forehead.
-                    b.Blob(c + new Vector3(0f, hh * 0.3f, hd * 0.3f), new Vector3(hw * 0.72f, hh * 0.2f, hd * 0.3f), hair, coarse: true);
+                    b.Blob(c + new Vector3(0f, hh * 0.35f, hd * 0.2f), new Vector3(hw * 0.74f, hh * 0.16f, hd * 0.26f), hair);
                 }
             }
             else if (r.Hair == NpcHair.Bald)
@@ -738,8 +1093,8 @@ namespace Rapadura.Gameplay.NPC.Visuals
             }
             else
             {
-                center = c + new Vector3(0f, -hh * 0.35f, hd * 0.2f);
-                size = new Vector3(hw * 0.95f, hh * 0.62f, hd * 0.7f);
+                center = c + new Vector3(0f, -hh * 0.38f, hd * 0.24f);
+                size = new Vector3(hw * 1.02f, hh * 0.7f, hd * 0.78f);
             }
         }
 
@@ -771,11 +1126,22 @@ namespace Rapadura.Gameplay.NPC.Visuals
 
             BeardShape(ref rig, out Vector3 bc, out Vector3 bs);
             b.Blob(bc, bs, hair);
-            Vector3 must = OnFace(ref rig, 0f, -hh * 0.17f, 0.012f, out Quaternion mr);
-            b.Box(must + new Vector3(0f, 0f, 0.02f), new Vector3(hw * 0.4f, hh * 0.07f, 0.04f), hair, mr);
+            if (r.Beard != NpcBeard.Short)
+            {
+                // Sideburns joining the beard to the hair: the beard frames the face instead of floating under it.
+                foreach (float side in new[] { -1f, 1f })
+                {
+                    b.Blob(c + new Vector3(side * hw * 0.4f, -hh * 0.14f, hd * 0.04f), new Vector3(hw * 0.2f, hh * 0.42f, hd * 0.42f), hair, coarse: true);
+                }
+            }
+
+            Vector3 must = OnFace(ref rig, 0f, -hh * 0.18f, 0.012f, out Quaternion mr);
+            b.Box(must + new Vector3(0f, 0f, 0.02f), new Vector3(hw * 0.46f, hh * 0.08f, 0.045f), hair, mr * Quaternion.Euler(0f, 0f, 0f));
             if (r.Beard == NpcBeard.Long)
             {
-                b.Cylinder(bc + new Vector3(0f, -bs.y * 0.3f, bs.z * 0.08f), hw * 0.34f, 0f, hh * 0.55f, 6, hair, rotation: Quaternion.Euler(172f, 0f, 0f));
+                // Two tiers: a wide bib and a long point down the chest.
+                b.Cylinder(bc + new Vector3(0f, -bs.y * 0.22f, bs.z * 0.1f), hw * 0.44f, hw * 0.3f, hh * 0.3f, 7, hair, rotation: Quaternion.Euler(170f, 0f, 0f), topCap: false);
+                b.Cylinder(bc + new Vector3(0f, -bs.y * 0.22f - hh * 0.28f, bs.z * 0.14f), hw * 0.3f, 0f, hh * 0.5f, 6, hair, rotation: Quaternion.Euler(168f, 0f, 0f));
             }
             else if (r.Beard == NpcBeard.LongBraided)
             {
@@ -797,7 +1163,8 @@ namespace Rapadura.Gameplay.NPC.Visuals
             {
                 case NpcHeadwear.Kerchief:
                 {
-                    b.Dome(c + new Vector3(0f, hh * 0.06f, -hd * 0.14f), new Vector3(hw * 1.16f, hh * 1.12f, hd * 1.16f), col, cutY: -0.35f, backCutZ: 0.1f);
+                    b.Dome(c + new Vector3(0f, hh * 0.07f, -hd * 0.16f), new Vector3(hw * 1.18f, hh * 1.14f, hd * 1.18f), col, cutY: -0.35f, backCutZ: 0.1f,
+                        openFrontZ: 0.28f, openTopY: 0.42f);
                     // Tail of the knot hanging down the back and the knot under the chin.
                     b.TwoSided(c + new Vector3(-hw * 0.34f, -hh * 0.1f, -hd * 0.5f), c + new Vector3(hw * 0.34f, -hh * 0.1f, -hd * 0.5f), c + new Vector3(0f, -hh * 0.75f, -hd * 0.62f), col, trim);
                     b.Blob(c + new Vector3(0f, -hh * 0.5f, hd * 0.2f), new Vector3(hw * 0.2f, hh * 0.14f, hd * 0.16f), col, coarse: true);
@@ -812,7 +1179,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
                     break;
                 }
                 case NpcHeadwear.Hood:
-                    b.Dome(c + new Vector3(0f, hh * 0.04f, -hd * 0.17f), new Vector3(hw * 1.24f, hh * 1.2f, hd * 1.24f), col, cutY: -0.55f, backCutZ: 0f);
+                    // Pulled back off the face: the opening keeps the eyes and brows in the light.
+                    b.Dome(c + new Vector3(0f, hh * 0.06f, -hd * 0.24f), new Vector3(hw * 1.26f, hh * 1.22f, hd * 1.3f), col, cutY: -0.55f, backCutZ: 0f,
+                        openFrontZ: 0.22f, openTopY: 0.48f);
                     b.Bone = NpcBones.Body;
                     b.Matrix = rig.BodyM;
                     b.Cylinder(new Vector3(0f, rig.NeckY - 0.14f * s, -0.01f), rig.Rw * rig.ShoulderMul * 1.15f, hw * 0.5f, 0.2f * s, 8, col, topCap: false, depth: 0.9f);
@@ -824,9 +1193,12 @@ namespace Rapadura.Gameplay.NPC.Visuals
                     Vector3 basePos = c + new Vector3(0f, hh * 0.16f, -hd * 0.04f);
                     for (int i = 0; i < 3; i++)
                     {
-                        float rr = hw * (0.6f - i * 0.06f);
-                        b.Cylinder(basePos + Vector3.up * (i * hh * 0.11f), rr, rr * 0.94f, hh * 0.13f, 8, i == 1 ? trim : col, col, rotation: Quaternion.Euler(i % 2 == 0 ? 6f : -5f, 0f, i == 1 ? 4f : -3f), topCap: i == 2, depth: 0.96f);
+                        float rr = hw * (0.62f - i * 0.045f);
+                        b.Cylinder(basePos + Vector3.up * (i * hh * 0.1f), rr, rr * 0.95f, hh * 0.16f, 8, i == 1 ? trim : col, col, rotation: Quaternion.Euler(i % 2 == 0 ? 3f : -3f, 0f, i == 1 ? 2f : -2f), topCap: false, depth: 0.96f);
                     }
+
+                    // The crown, a soft dome closing the top turn.
+                    b.Dome(basePos + Vector3.up * (hh * 0.26f), new Vector3(hw * 1.1f, hh * 0.56f, hd * 1.04f), col, cutY: -0.2f);
 
                     Vector3 front = OnFace(ref rig, 0f, hh * 0.27f, hd * 0.12f, out Quaternion rot);
                     b.Box(front, new Vector3(0.05f, 0.06f, 0.02f) * s, NpcSwatch.Brass, rot);
@@ -843,16 +1215,17 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 case NpcHeadwear.FeltCap:
                 {
                     float y0 = c.y + hh * 0.26f;
-                    b.Cylinder(new Vector3(0f, y0, c.z - hd * 0.03f), hw * 0.52f, hw * 0.36f, hh * 0.62f, 8, col, col, depth: 0.96f);
+                    // Tall kalpak: a clear tapering tower with the split brim turned up front and back.
+                    b.Cylinder(new Vector3(0f, y0, c.z - hd * 0.03f), hw * 0.53f, hw * 0.3f, hh * 0.82f, 8, col, col, depth: 0.96f);
                     foreach (float side in new[] { 1f, -1f })
                     {
-                        b.Box(new Vector3(0f, y0 + hh * 0.06f, c.z + side * hd * 0.47f), new Vector3(hw * 0.6f, hh * 0.16f, 0.025f), trim, Quaternion.Euler(side * -14f, 0f, 0f));
+                        b.Box(new Vector3(0f, y0 + hh * 0.08f, c.z + side * hd * 0.5f), new Vector3(hw * 0.74f, hh * 0.2f, 0.03f), trim, Quaternion.Euler(side * -18f, 0f, 0f));
                     }
 
                     break;
                 }
                 case NpcHeadwear.Skullcap:
-                    b.Cylinder(new Vector3(0f, c.y + hh * 0.26f, c.z - hd * 0.03f), hw * 0.55f, hw * 0.5f, hh * 0.2f, 4, col, trim, twist: 45f);
+                    b.Cylinder(new Vector3(0f, c.y + hh * 0.25f, c.z - hd * 0.03f), hw * 0.57f, hw * 0.5f, hh * 0.27f, 4, col, trim, twist: 45f);
                     break;
                 case NpcHeadwear.Bandana:
                     b.Dome(c + new Vector3(0f, hh * 0.08f, -hd * 0.02f), new Vector3(hw * 1.07f, hh * 1.02f, hd * 1.08f), col, cutY: 0.25f, backCutZ: 0.45f);
@@ -863,14 +1236,16 @@ namespace Rapadura.Gameplay.NPC.Visuals
 
                     break;
                 case NpcHeadwear.StrawCone:
-                    b.Cylinder(new Vector3(0f, c.y + hh * 0.22f, c.z), hw * 0.8f, 0f, hh * 0.62f, 10, col, bottomCap: true);
-                    b.Cylinder(new Vector3(0f, c.y + hh * 0.3f, c.z), hw * 0.62f, hw * 0.55f, hh * 0.07f, 10, trim, topCap: false);
-                    b.Blob(new Vector3(0f, c.y + hh * 0.86f, c.z), Vector3.one * hh * 0.14f, col, coarse: true);
+                    // Mokorotlo: a wide woven cone, a band and the knob on top — unmistakable from the iso camera.
+                    b.Cylinder(new Vector3(0f, c.y + hh * 0.18f, c.z), hw * 1.05f, 0f, hh * 0.78f, 10, col, bottomCap: true);
+                    b.Cylinder(new Vector3(0f, c.y + hh * 0.3f, c.z), hw * 0.88f, hw * 0.76f, hh * 0.09f, 10, trim, topCap: false);
+                    b.Blob(new Vector3(0f, c.y + hh * 0.98f, c.z), Vector3.one * hh * 0.16f, col, coarse: true);
                     break;
                 case NpcHeadwear.LampHelmet:
                 {
                     b.Dome(c + new Vector3(0f, hh * 0.1f, -hd * 0.02f), new Vector3(hw * 1.12f, hh * 1.04f, hd * 1.12f), col, cutY: 0.1f, backCutZ: 0.3f);
                     b.Cylinder(c + new Vector3(0f, hh * 0.1f, -hd * 0.02f), hw * 0.62f, hw * 0.6f, hh * 0.04f, 10, NpcSwatch.LeatherDark, topCap: true, depth: 1.04f);
+                    b.Box(c + new Vector3(0f, hh * 0.13f, hd * 0.5f), new Vector3(hw * 0.7f, hh * 0.035f, hd * 0.22f), NpcSwatch.LeatherDark, Quaternion.Euler(-10f, 0f, 0f), noBottom: false);
                     Vector3 lamp = OnFace(ref rig, 0f, hh * 0.3f, 0.01f, out Quaternion rot);
                     b.Cylinder(lamp, 0.05f * s, 0.045f * s, 0.06f * s, 6, NpcSwatch.Copper, trim, rotation: rot * Quaternion.Euler(90f, 0f, 0f));
                     break;

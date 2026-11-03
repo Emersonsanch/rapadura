@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Rapadura.Gameplay.NPC.Visuals
 {
     /// <summary>
-    /// Flat colours of the NPC palette texture (one cell each, 8 x 8). Append only (a cell index is baked in the mesh UVs).
+    /// Flat colours of the NPC palette texture (one cell each, 8 x 9). Append only (a cell index is baked in the mesh UVs).
     /// Region rows follow Docs/WorldBible_Maniqueismo.md §2 (Zarafshan, Qocho, Litema, Lamparinas).
     /// </summary>
     public enum NpcSwatch
@@ -25,6 +25,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
         Leather, LeatherDark, Wood, WoodDark, Iron, Steel, Brass, Wicker,
         // Glow (emissive) + small accents
         LampGlow, CrystalGlow, Ember, SunGlow, HerbGreen, FlowerPink, FlowerYellow, Feather,
+        // Face read from the iso camera: eye whites, lips/tongue that show on every skin tone, a deeper blush for dark
+        // skin, grey brows for white hair, lash line; ivory and charcoal accents
+        Sclera, Lip, Tongue, CheekRose, BrowGrey, Lash, Ivory, Charcoal,
     }
 
     /// <summary>
@@ -36,7 +39,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 8;
+        public const int Rows = 9;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -65,6 +68,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Glow + accents
             new Color(1f, 0.72f, 0.3f), new Color(0.62f, 0.9f, 1f), new Color(1f, 0.5f, 0.18f), new Color(1f, 0.86f, 0.4f),
             new Color(0.32f, 0.6f, 0.26f), new Color(0.95f, 0.55f, 0.7f), new Color(1f, 0.85f, 0.3f), new Color(0.86f, 0.84f, 0.8f),
+            // Face + accents
+            new Color(0.98f, 0.96f, 0.92f), new Color(0.78f, 0.3f, 0.32f), new Color(0.93f, 0.46f, 0.46f), new Color(0.78f, 0.36f, 0.4f),
+            new Color(0.46f, 0.44f, 0.43f), new Color(0.05f, 0.035f, 0.035f), new Color(0.9f, 0.85f, 0.72f), new Color(0.18f, 0.18f, 0.2f),
         };
 
         public static int Count => Colors.Length;

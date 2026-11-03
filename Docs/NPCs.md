@@ -11,13 +11,31 @@
 - **Proporção chibi como os primos:** cabeça grande (~4,5 cabeças de altura). Idade muda altura e tamanho da cabeça
   (criança 1,15 m · jovem 1,5 m · adulto 1,75 m · idoso 1,66 m), `Height` ajusta ±25 %.
 - **Corpo paramétrico:** porte (magro, médio, barrigudo, ombros largos), postura (ereta, orgulhosa = peito para fora,
-  curvada = idoso, tímida = cabeça baixa, relaxada).
-- **Cabeça:** rosto desenhado com decalques planos (olhos abertos com brilho, olhos fechados de riso, olhos sonhadores,
-  sobrancelhas severas/erguidas, boca, bochechas coradas, nariz), cabelo (curto, longo, coque, trança, duas tranças, rabo,
+  curvada = idoso, tímida = cabeça baixa, relaxada). Ombros por porte (largo 1,34× — ferreiro/marceneiro são uma cunha;
+  magro 0,9×; idosos um pouco mais estreitos). Túnica longa, cafetã e vestido afinam até o joelho e **abrem na barra**
+  (perfil cintura → joelho → barra em 3 anéis), o chapan abre um pouco.
+- **Braços com volume:** ombro arredondado na cor da roupa, braço que afina até o cotovelo, antebraço com **punho** na cor
+  de acabamento (mangas largas "de sino" em túnica longa/cafetã; braço nu = manga curta da roupa + pele), mão-luva
+  (punho fechado + polegar). Postos por **IK de dois ossos** até um *encaixe da mão* por pose (`NpcArmPose`), medido no
+  próprio corpo (barriga, saia, bolsa): `Hang` cai ao lado, cotovelo solto para trás, mão à frente da coxa (sem T/A-pose);
+  `HoldFront` mãos à frente da barriga com a folga do objeto; `HoldStaff` punho ao lado/à frente, à altura do peito (bengala
+  à altura do quadril); `HipRest`, `Carry`, `HoldUp`, `Crook` idem.
+- **Encaixe na mão** (`NpcModel.HandL/HandR` + eixo de pegada): cada tipo de prop tem o seu jeito de segurar — cajado,
+  poste, cajado de pastor e bengala ficam **verticais passando pelo punho** até o chão (o idle não balança esse braço,
+  `NpcModel.GroundedR`); cabo do martelo/escova ao longo do antebraço/pegada; cesto **pendurado no antebraço** (alça por
+  cima da manga); lamparina e pilão **na palma**; jarra, xícara, tábuas e lamparina de duas mãos **entre as palmas**;
+  balança, jarro, almotolia e fuso **pendurados abaixo da mão**; lanterna pendurada num cordão no gancho do poste;
+  picareta e tora **no ombro**, com a mão segurando à frente; flauta passando pelos dois punhos.
+- **Cabeça:** rosto feito para ler a ~10 m na câmera iso: **olhos grandes** (branco + íris escura olhando um pouco para
+  dentro + brilho; olhos de riso "^", sonhadores semicerrados, calmos em arco), **sobrancelhas grossas em todos** (o humor
+  vem delas), nariz em cunha, boca pelo humor (riso aberto com língua, sorriso em "U", linha séria), lábio rosado em pele
+  escura, **bochechas coradas** (`NpcRecipe.RosyCheeks`, nulo = criança/risonho/tímido/alegre/gentil). Capuz e lenço têm
+  **abertura no rosto** (puxados para trás) e a franja fica acima das sobrancelhas. Cabelo (curto, longo, coque, trança, duas tranças, rabo,
   crespo, topete, espetado, careca com tufos), barba (bigode, cavanhaque, curta, cheia, longa, longa trançada com anéis).
-- **Na cabeça:** lenço amarrado (Vó Edna), capuz com gola, turbante de 3 voltas, envoltório do deserto com cauda,
-  gorro alto de feltro (kalpak), doppa de 4 lados, bandana de forja, chapéu cônico de palha (Litema), capacete de mineiro
-  com lamparina (acesa ou fria), tiara, coroa de flores, tiara com disco de sol.
+- **Na cabeça:** lenço amarrado (Vó Edna), capuz com gola, turbante de 3 voltas com copa, envoltório do deserto com cauda,
+  gorro alto de feltro (kalpak, torre afinando com abas viradas), doppa de 4 lados, bandana de forja, chapéu cônico de
+  palha largo (mokorotlo de Litema), capacete de mineiro com aba e lamparina (acesa ou fria), tiara, coroa de flores,
+  tiara com disco de sol. Barbas com volume: cheia/longa com costeletas ligando ao cabelo, longa em dois andares.
 - **Silhueta da roupa:** túnica longa, cafetã (faixa frontal e barra), chapan até o joelho sobre calça, túnica curta,
   vestido rodado. **Camadas:** avental, colete de feltro/couro, faixa (com ponta), cinto com fivela, xale, capa,
   cobertor listrado (Litema), cachecol, bolsa a tiracolo, remendos.
@@ -28,8 +46,9 @@
   tábuas de argila, porta-pergaminho, pergaminho, bengala, pingente de cristal/sol, xícara, cajado da lua, óculos de
   areia, boneco da aranha Ananse, trouxa, louva-a-deus no ombro.
 - **Barato para mobile:** uma `SkinnedMeshRenderer` por NPC (5 ossos rígidos: raiz, corpo, cabeça, braços), malha em
-  cache por receita (todos os iguais dividem a mesma), **um único material** (`NpcPalette`, textura de paleta 8×8 com
-  emissão nas células de luz), 600–1500 triângulos, idle parado fora da tela.
+  cache por receita (todos os iguais dividem a mesma), **um único material** (`NpcPalette`, textura de paleta 8×9 com
+  emissão nas células de luz; a linha 9 tem branco do olho, lábio, língua, rubor para pele escura, sobrancelha
+  grisalha), 750–1350 triângulos (teto 1500), idle parado fora da tela.
 - **Idle procedural** (`NpcIdleMath`): respiração; gesto do ofício; cabeça vira para o jogador (±65°, até 7 m) e, bem
   perto, o corpo todo gira devagar para encará-lo.
 - **Onde aparece:** lojistas das cidades andáveis (`CityTownView` → `CityResidentPost`), Adda na Torre (`TorreProps`), e
@@ -76,6 +95,14 @@
 
 - Nenhum NPC é sagrado ou fundador (bíblia §0.2): os nomes vêm dos contos, a roupa vem de culturas vivas **com
   respeito** (mokorotlo, cobertor basotho, doppa, kalpak, turbante) — só beleza emprestada, nunca inimigo (§2.5).
-- `Assets/Models/NPCs/VoEdna` (OBJ/GLB de outra sessão) **não** foi ligado: a Vó Edna procedural mantém o mesmo
-  material/escala dos outros; trocar pelo modelo é só criar a figura com ele no lugar de `NpcFigure`.
+- **Modelo importado da Vó Edna** (`Assets/Models/NPCs/VoEdna`, OBJ/GLB de outra sessão, arquivos **não alterados**):
+  ligado só atrás de um flag, **desligado por padrão** — **Rapadura ▸ NPCs ▸ Use Imported Vó Edna Model (experimental)**
+  (EditorPrefs). `NpcImportedModels` (runtime) é o adaptador: escala o OBJ (1 unidade de altura, centrado) para a altura da
+  receita (1,53 m) com os pés em y = 0, gira para +z (`Yaw`, 0 — o OBJ já olha para +z; se aparecer de costas, 180 em
+  `NpcImportedModelsEditor.Sources`) e usa um material URP Lit montado como o da paleta (`EnemyModelPalette.CreateMaterial`)
+  com a textura `VoEdna_tex.png`. Ele pendura no osso Body da figura (respira, balança e se vira para o jogador), mas é
+  estático (sem gesto nem cabeça virando) e pesa ~14 400 triângulos e um material a mais — por isso fica no flag. Só o
+  editor registra o modelo (`NpcImportedModelsEditor`, via `AssetDatabase`); build de player continua procedural. Para
+  usar em build: rigar (o zip "Mixamo" só tem o OBJ, sem esqueleto), reduzir para ~1500 tris e referenciar por um
+  catálogo/Resources.
 - Ids antigos continuam valendo (aliases em `NpcRecipes`), nada de save muda.
