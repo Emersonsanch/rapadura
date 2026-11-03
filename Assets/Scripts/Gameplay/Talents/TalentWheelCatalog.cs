@@ -69,6 +69,9 @@ namespace Rapadura.Gameplay.Talents
         /// <summary>The wheel opens at this hero level with 1 point; +1 per level after (39 at level 50).</summary>
         public const int UnlockLevel = 12;
         public const int PointsPerLevel = 1;
+        /// <summary>Past this level (the old cap) the wheel gains 1 point every <see cref="HighLevelLevelsPerPoint"/> levels (Docs/Progressao500.md §2).</summary>
+        public const int HighLevelStart = 50;
+        public const int HighLevelLevelsPerPoint = 10;
         public const int KeystoneRing = 3;
         public const int SmallNodeRanks = 3;
         public const int Ring2RequiredRank = 2;

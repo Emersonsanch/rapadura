@@ -180,7 +180,8 @@ class Model:
     def skill_levels(self, build: Build) -> list:
         skills = self.damaging_skills(build.hero, build.level)
         levels = {s.id: 1 for s in skills}
-        points = int(build.level - 1) if build.skill_points else 0
+        # Skill points from the curve (progression.csv): 1 per level up to 50, then 1 every 5 levels (Progressao500 §2).
+        points = int(sum(r["skill_points"] for r in self.data.progression[1:int(build.level)])) if build.skill_points else 0
         if any(s.skill_type == 2 for s in skills):
             points -= 1  # learning the ultimate at level 10
         while points > 0:

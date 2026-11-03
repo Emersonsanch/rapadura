@@ -1216,9 +1216,14 @@ class Talents:
     nodes: list
     unlock_level: int
     points_per_level: int
+    high_level_start: int = 50  # TalentWheelCatalog.HighLevelStart: past it, +1 every high_level_every levels
+    high_level_every: int = 10
 
     def points(self, level: int) -> int:
-        return (level - self.unlock_level + 1) * self.points_per_level if level >= self.unlock_level else 0
+        if level < self.unlock_level:
+            return 0
+        campaign = (min(level, self.high_level_start) - self.unlock_level + 1) * self.points_per_level
+        return campaign + max(0, level - self.high_level_start) // self.high_level_every
 
     def training_gear(self, level: int) -> bm.Gear:
         mods = [Modifier(m.stat, m.percent, m.value * min(level, self.max_level)) for m in self.proficiencies.values()]
@@ -1306,7 +1311,8 @@ def load_talents() -> Talents:
     for nid, quadrant, hero, stat, app, value in re.findall(
             r'Keystone\("(\w+)",\s*TalentQuadrant\.(\w+),\s*CharacterId\.(\w+),\s*StatType\.(\w+),\s*(\w+),\s*([-\d.]+)f\)', cat):
         nodes.append(TalentNode(nid, quadrant, key_ring, hero, Modifier(stat, apps[app], float(value)), 1, key_cost, None, 0, key_points))
-    return Talents(prof, int(consts["MaxLevel"]), nodes, int(_const(cat, "UnlockLevel")), int(_const(cat, "PointsPerLevel")))
+    return Talents(prof, int(consts["MaxLevel"]), nodes, int(_const(cat, "UnlockLevel")), int(_const(cat, "PointsPerLevel")),
+                   int(_const_or(cat, "HighLevelStart", 50)), int(_const_or(cat, "HighLevelLevelsPerPoint", 10)))
 
 
 def talent_extra(talents: Talents, cycle: int, biome: str, level: int, score=talent_offense) -> bm.Gear:
@@ -1427,6 +1433,18 @@ def main():
     class_main(ctx, args.runs, base_gear, results)
     options_main(ctx, args.runs, base_gear, results, curve)
     talent_main(ctx, args.runs, base_gear, results)
+    level_main(ctx, args.runs)
+
+
+def level_main(ctx: Context, runs: int) -> None:
+    """Creature level scaling, levels 15-100 (level_scaling.py, Docs/Progressao500.md §4)."""
+    import level_scaling as ls  # noqa: E402 (sibling module, lazy so the rest runs without it)
+    result = ls.evaluate(min(runs, 600), ctx.data)
+    print("\n## Nível do bicho até o 100 (Grutas do Limiar como arquétipo, herói de referência no mesmo nível)\n")
+    print(ls.report(result))
+    print("\n## Orçamento do nível do bicho (1–100)\n")
+    problems = ls.violations(result)
+    print("\n".join(f"- {p}" for p in problems) if problems else "- dentro do orçamento")
 
 
 if __name__ == "__main__":

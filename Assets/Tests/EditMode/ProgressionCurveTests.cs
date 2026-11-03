@@ -105,7 +105,8 @@ namespace Rapadura.Tests
             ProgressionCurve curve = ProgressionCurve.LoadDefault();
 
             Assert.IsNotNull(curve, $"Expected Resources/{ProgressionCurve.ResourcesPath}.asset to exist.");
-            Assert.AreEqual(Levels, curve.TableMaxLevel);
+            // The campaign rows 1..50 at least (an import of the full 500-row spreadsheet may add 51..500).
+            Assert.GreaterOrEqual(curve.TableMaxLevel, Levels);
 
             for (int level = 1; level <= Levels; level++)
             {
@@ -166,11 +167,11 @@ namespace Rapadura.Tests
         {
             ProgressionCurve source = NewCurve();
             source.RegenerateFromFormula(Levels);
-            string first = ProgressionCsv.Export(source);
+            string first = ProgressionCsv.Export(source, Levels);
 
             ProgressionCurve copy = NewCurve();
             copy.SetRows(ProgressionCsv.Import(first));
-            string second = ProgressionCsv.Export(copy);
+            string second = ProgressionCsv.Export(copy, Levels);
 
             Assert.AreEqual(first, second);
             Assert.AreEqual(Levels, copy.TableMaxLevel);

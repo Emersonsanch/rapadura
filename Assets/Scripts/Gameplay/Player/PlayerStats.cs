@@ -18,8 +18,14 @@ namespace Rapadura.Gameplay.Player
         public float currentHealth;
         public float currentStamina;
         public float currentMana;
+        /// <summary>XP inside the current level (always fits an int: at most 21 344 000, level 500).</summary>
         public int currentExperience;
         public int level;
+        /// <summary>
+        /// Lifetime XP (long: reaching 500 takes 1.85 billion). Added with the 500 cap; saves written before it don't
+        /// have the field (JsonUtility leaves 0) and get it rebuilt from level + currentExperience on load.
+        /// </summary>
+        public long totalExperience;
     }
 
     /// <summary>
@@ -69,7 +75,7 @@ namespace Rapadura.Gameplay.Player
         /// wiped by <see cref="RestoreState"/> overwriting level/XP. The XP is applied immediately (the
         /// bar still moves) and re-applied on top of the restored state by <see cref="RestoreState"/>.
         /// </summary>
-        private int _experienceAwaitingCarriedRestore;
+        private long _experienceAwaitingCarriedRestore;
 
         /// <summary>Optional — absence means no resistance/immunity to any element (see <see cref="ElementResistance"/>).</summary>
         private ElementResistance _elementResistance;
@@ -202,6 +208,15 @@ namespace Rapadura.Gameplay.Player
         private bool _curveLookupDone;
         public int CurrentExperience { get; private set; }
         public int Level { get; private set; } = 1;
+
+        /// <summary>Hero level cap (<see cref="LevelCurveMath.MaxLevel"/> = 500).</summary>
+        public static int MaxLevel => LevelCurveMath.MaxLevel;
+
+        /// <summary>At the cap: the bar fills once and stays full (a master's kill XP goes to the master bar instead).</summary>
+        public bool IsAtMaxLevel => Level >= MaxLevel;
+
+        /// <summary>Lifetime XP: everything needed to reach <see cref="Level"/> plus <see cref="CurrentExperience"/>. Long on purpose.</summary>
+        public long TotalExperience => TotalExperienceToReach(Level) + CurrentExperience;
         public bool IsDead { get; private set; }
 
         public bool IsAlive => !IsDead;
@@ -525,18 +540,22 @@ namespace Rapadura.Gameplay.Player
             return ServiceLocator.TryGet(out SaveManager saveManager) && saveManager != null && saveManager.HasCarriedState(SaveKey);
         }
 
-        private void ApplyExperience(int amount)
+        private void ApplyExperience(long amount)
         {
-            CurrentExperience += amount;
+            // Summed in long: a big reward on a nearly full high-level bar must not wrap the int.
+            long pending = (long)CurrentExperience + System.Math.Max(0L, amount);
             int levelBefore = Level;
             int experienceToNextLevel = GetExperienceToNextLevel();
 
-            while (CurrentExperience >= experienceToNextLevel)
+            while (Level < MaxLevel && pending >= experienceToNextLevel)
             {
-                CurrentExperience -= experienceToNextLevel;
+                pending -= experienceToNextLevel;
                 Level++;
                 experienceToNextLevel = GetExperienceToNextLevel();
             }
+
+            // At the cap the bar is kept full (Docs/Progressao500.md §5: XP above the cap is held up to one level).
+            CurrentExperience = (int)System.Math.Min(pending, Level >= MaxLevel ? experienceToNextLevel : int.MaxValue);
 
             if (Level != levelBefore)
             {
@@ -547,14 +566,35 @@ namespace Rapadura.Gameplay.Player
             EventBus.Publish(new PlayerExperienceChangedEvent(CurrentExperience, experienceToNextLevel, Level));
         }
 
-        public int GetExperienceToNextLevel()
+        public int GetExperienceToNextLevel() => ExperienceToNext(Level);
+
+        private int ExperienceToNext(int level)
         {
             if (Curve != null)
             {
-                return Curve.GetExperienceToNextLevel(Level);
+                return Curve.GetExperienceToNextLevel(level);
             }
 
-            return Mathf.RoundToInt(_baseExperienceToLevel * Mathf.Pow(_experienceCurveMultiplier, Level - 1));
+            int FallbackExponential(int l) => Mathf.RoundToInt(_baseExperienceToLevel * Mathf.Pow(_experienceCurveMultiplier, l - 1));
+            return level <= LevelCurveMath.CampaignLevels
+                ? FallbackExponential(level)
+                : LevelCurveMath.HighLevelExperienceToNext(level, FallbackExponential(LevelCurveMath.CampaignLevels));
+        }
+
+        private long TotalExperienceToReach(int level)
+        {
+            if (Curve != null)
+            {
+                return Curve.GetTotalExperienceToReach(level);
+            }
+
+            long total = 0;
+            for (int l = 1; l < Mathf.Min(level, MaxLevel); l++)
+            {
+                total += ExperienceToNext(l);
+            }
+
+            return total;
         }
 
         /// <summary>Refreshes the vitals bars only when the curve actually raised a max on this level-up (no-op with the default flat curve).</summary>
@@ -641,7 +681,8 @@ namespace Rapadura.Gameplay.Player
                 currentStamina = CurrentStamina,
                 currentMana = CurrentMana,
                 currentExperience = CurrentExperience,
-                level = Level
+                level = Level,
+                totalExperience = TotalExperience
             };
         }
 
@@ -653,14 +694,16 @@ namespace Rapadura.Gameplay.Player
             }
 
             // Carried restore (scene hop): keep XP earned since this instance spawned. Slot load: the file wins.
-            int experienceEarnedBeforeRestore = IsAwaitingCarriedState() ? _experienceAwaitingCarriedRestore : 0;
+            long experienceEarnedBeforeRestore = IsAwaitingCarriedState() ? _experienceAwaitingCarriedRestore : 0;
             _experienceAwaitingCarriedRestore = 0;
 
             CurrentHealth = saveState.currentHealth;
             CurrentStamina = saveState.currentStamina;
             CurrentMana = saveState.currentMana;
-            CurrentExperience = saveState.currentExperience;
-            Level = saveState.level;
+            // Old saves (cap 50, int XP, no totalExperience) load as they are: level clamped to 1..500, XP never negative.
+            // A pre-500 save past level 50 that had XP above the new (smaller) 51+ thresholds levels up below, nothing lost.
+            CurrentExperience = Mathf.Max(0, saveState.currentExperience);
+            Level = LevelCurveMath.ClampLevel(saveState.level);
             IsDead = CurrentHealth <= 0f;
             _lastMaxHealth = MaxHealth;
             _lastMaxMana = MaxMana;
@@ -670,7 +713,8 @@ namespace Rapadura.Gameplay.Player
             EventBus.Publish(new PlayerManaChangedEvent(CurrentMana, MaxMana));
             EventBus.Publish(new PlayerExperienceChangedEvent(CurrentExperience, GetExperienceToNextLevel(), Level));
 
-            if (experienceEarnedBeforeRestore > 0)
+            if (experienceEarnedBeforeRestore > 0 || (Level < MaxLevel && CurrentExperience >= GetExperienceToNextLevel())
+                || (Level >= MaxLevel && CurrentExperience > GetExperienceToNextLevel()))
             {
                 ApplyExperience(experienceEarnedBeforeRestore);
             }

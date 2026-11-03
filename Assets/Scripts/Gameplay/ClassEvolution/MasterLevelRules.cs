@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
 
 namespace Rapadura.Gameplay.ClassEvolution
@@ -48,16 +49,28 @@ namespace Rapadura.Gameplay.ClassEvolution
     /// Master level ("Nível de Mestre", Docs/ClassEvolution.md §4), after the max level like MU Online's Master Level: a cousin
     /// with the 3rd graduation at level <see cref="RequiredLevel"/> stops gaining normal XP and fills a separate master bar
     /// instead; each master level gives one point for a small tree of modest bonuses. Pure: the server owns the record.
+    /// <para>
+    /// The gate moved from level 50 to the 500 cap (Docs/Progressao500.md §3.3). Saves from the level-50 era keep everything:
+    /// a cousin with master levels earned then (tier 3, hero level ≥ <see cref="LegacyRequiredLevel"/>, master level ≥ 1) is a
+    /// "kept master" (<see cref="HasKeptMasterProgress"/>): the tree bonuses stay on and the earned points can still be spent
+    /// or reset (<see cref="CanUseTree"/>), but kill XP goes to normal levels again (51+) until level 500, where the master bar
+    /// starts filling again from where it stopped. Nothing in the record is rewritten.
+    /// </para>
     /// </summary>
     public static class MasterLevelRules
     {
-        /// <summary>The max level (= ProgressionCurve.DefaultMaxLevel).</summary>
-        public const int RequiredLevel = 50;
+        /// <summary>The hero level cap (= <see cref="LevelCurveMath.MaxLevel"/>, 500): master XP only from here.</summary>
+        public const int RequiredLevel = LevelCurveMath.MaxLevel;
+        /// <summary>The old gate (level 50, before the 500 cap). Only used to recognise master progress earned on old saves.</summary>
+        public const int LegacyRequiredLevel = 50;
+        /// <summary>The last graduation that exists (3 today; follows <see cref="ClassEvolutionCatalog.MaxTier"/> when G4/G5 ship).</summary>
         public const int RequiredTier = ClassEvolutionCatalog.MaxTier;
+        /// <summary>Stays 30 while the tree has 30 points (the 3 new lines of Docs/Progressao500.md §3.3 would take it to 100).</summary>
         public const int MaxMasterLevel = 30;
         public const int PointsPerMasterLevel = 1;
-        public const int BaseMasterExperience = 25000;
-        public const float MasterExperienceGrowth = 0.15f;
+        /// <summary>Master XP weighs like a level at the cap: xp(500) × 0.5 × (1 + 0.05 × master level) (≈ 10.7 million at master 0).</summary>
+        public const double MasterExperienceShareOfCapLevel = 0.5;
+        public const double MasterExperienceGrowth = 0.05;
 
         /// <summary>Row 1 has no requirement; each row-2 node needs 3 ranks in the node above it. Full tree = 30 points.</summary>
         public static readonly IReadOnlyList<MasterNodeSpec> Nodes = new[]
@@ -83,12 +96,27 @@ namespace Rapadura.Gameplay.ClassEvolution
             return null;
         }
 
+        /// <summary>The master bar fills: last graduation and the 500 cap.</summary>
         public static bool IsMaster(GraduationRecord record, int heroLevel) =>
             record != null && record.tier >= RequiredTier && heroLevel >= RequiredLevel;
 
+        /// <summary>
+        /// Master levels earned under the old level-50 gate (save migration, see the class summary): kept, usable, not
+        /// growing until <see cref="RequiredLevel"/>.
+        /// </summary>
+        public static bool HasKeptMasterProgress(GraduationRecord record, int heroLevel) =>
+            record != null && record.masterLevel > 0 && record.tier >= RequiredTier && heroLevel >= LegacyRequiredLevel;
+
+        /// <summary>The tree can be spent/reset: a master, or a cousin with kept master progress from an old save.</summary>
+        public static bool CanUseTree(GraduationRecord record, int heroLevel) =>
+            IsMaster(record, heroLevel) || HasKeptMasterProgress(record, heroLevel);
+
+        /// <summary>XP of the level at the cap on the shipped curve (21 344 000): the master bar's unit.</summary>
+        public static long CapLevelExperience => LevelCurveMath.ShippedExperienceToNext(LevelCurveMath.MaxLevel);
+
         /// <summary>Master XP from master level <paramref name="masterLevel"/> to the next.</summary>
         public static long ExperienceToNext(int masterLevel) =>
-            (long)Math.Round(BaseMasterExperience * (1.0 + MasterExperienceGrowth * Math.Max(0, masterLevel)));
+            (long)Math.Round(CapLevelExperience * MasterExperienceShareOfCapLevel * (1.0 + MasterExperienceGrowth * Math.Max(0, masterLevel)));
 
         /// <summary>
         /// Adds kill XP to the master bar (only when <see cref="IsMaster"/>). Returns master levels gained; XP past
@@ -155,7 +183,7 @@ namespace Rapadura.Gameplay.ClassEvolution
 
         public static MasterSpendResult CanSpend(GraduationRecord record, int heroLevel, string nodeId)
         {
-            if (!IsMaster(record, heroLevel))
+            if (!CanUseTree(record, heroLevel))
             {
                 return MasterSpendResult.NotMaster;
             }

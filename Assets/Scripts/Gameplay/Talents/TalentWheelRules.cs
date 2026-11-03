@@ -52,8 +52,19 @@ namespace Rapadura.Gameplay.Talents
 
         public static bool IsUnlocked(int heroLevel) => heroLevel >= TalentWheelCatalog.UnlockLevel;
 
-        public static int EarnedPoints(int heroLevel) =>
-            IsUnlocked(heroLevel) ? (heroLevel - TalentWheelCatalog.UnlockLevel + 1) * TalentWheelCatalog.PointsPerLevel : 0;
+        /// <summary>+1 per level from the unlock to 50 (39 at 50), then +1 every 10 levels (44 at 100, 84 at 500).</summary>
+        public static int EarnedPoints(int heroLevel)
+        {
+            if (!IsUnlocked(heroLevel))
+            {
+                return 0;
+            }
+
+            int campaignLevel = Math.Min(heroLevel, TalentWheelCatalog.HighLevelStart);
+            int campaign = (campaignLevel - TalentWheelCatalog.UnlockLevel + 1) * TalentWheelCatalog.PointsPerLevel;
+            int high = Math.Max(0, heroLevel - TalentWheelCatalog.HighLevelStart) / TalentWheelCatalog.HighLevelLevelsPerPoint;
+            return campaign + high;
+        }
 
         public static int RankOf(TalentRecord record, string nodeId)
         {

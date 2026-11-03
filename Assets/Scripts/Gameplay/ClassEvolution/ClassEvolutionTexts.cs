@@ -45,6 +45,8 @@ namespace Rapadura.Gameplay.ClassEvolution
         public const string MasterTitle = "ui.class.master.title";
         /// <summary>{0} required level.</summary>
         public const string MasterLocked = "ui.class.master.locked";
+        /// <summary>{0} master level kept from an old save, {1} level the master bar fills again.</summary>
+        public const string MasterKept = "ui.class.master.kept";
         /// <summary>{0} points.</summary>
         public const string MasterPoints = "ui.class.master.points";
         /// <summary>{0} xp, {1} xp to next.</summary>
@@ -99,6 +101,7 @@ namespace Rapadura.Gameplay.ClassEvolution
                 new LocalizationEntry(ComboDone, "Combo: {0}!", "Combo: {0}!"),
                 new LocalizationEntry(MasterTitle, "Master Level {0}", "Nível de Mestre {0}"),
                 new LocalizationEntry(MasterLocked, "The Master Level opens at level {0} with the 3rd graduation.", "O Nível de Mestre abre no nível {0} com a 3ª graduação."),
+                new LocalizationEntry(MasterKept, "Master Level {0} (kept). The master bar fills again at level {1}.", "Nível de Mestre {0} (guardado). A barra de mestre volta a encher no nível {1}."),
                 new LocalizationEntry(MasterPoints, "Master points: {0}", "Pontos de mestre: {0}"),
                 new LocalizationEntry(MasterXp, "Master XP: {0}/{1}", "XP de mestre: {0}/{1}"),
                 new LocalizationEntry(MasterLevelUp, "Master Level {0}! +1 point.", "Nível de Mestre {0}! +1 ponto."),
@@ -131,6 +134,18 @@ namespace Rapadura.Gameplay.ClassEvolution
                 new LocalizationEntry(ClassEvolutionCatalog.MentorNameKey("lavine"), "Lavine", "Lavine"),
                 new LocalizationEntry(ClassEvolutionCatalog.MentorNameKey(ClassEvolutionCatalog.VoEdna), "Grandma Edna", "Vó Edna"),
             };
+
+            // ---------------------------------------------------------------- G4 / G5 titles (planned, Docs/Progressao500.md §3.2)
+            Planned(list, CharacterId.Maithe, 4, "Breath of Farnkesh", "Sopro de Farnkesh");
+            Planned(list, CharacterId.Maithe, 5, "Wind of the Column", "Vento da Coluna");
+            Planned(list, CharacterId.Maria, 4, "Lamp of Mingcheng", "Lâmpada de Mingcheng");
+            Planned(list, CharacterId.Maria, 5, "Dawn of the Column", "Aurora da Coluna");
+            Planned(list, CharacterId.Joaquim, 4, "Root of Jhilpur", "Raiz de Jhilpur");
+            Planned(list, CharacterId.Joaquim, 5, "River of the Column", "Rio da Coluna");
+            Planned(list, CharacterId.Icaro, 4, "Forge of Hinokura", "Forja de Hinokura");
+            Planned(list, CharacterId.Icaro, 5, "Engine of the Column", "Engenho da Coluna");
+            Planned(list, CharacterId.Lavine, 4, "White Moon", "Lua Branca");
+            Planned(list, CharacterId.Lavine, 5, "Silence of the Column", "Silêncio da Coluna");
 
             // ---------------------------------------------------------------- Maithe
             Grad(list, CharacterId.Maithe, 1, "Falcon Tracker", "Rastreadora do Falcão", "The Wind Meter", "Medidor de Vento",
@@ -333,6 +348,15 @@ namespace Rapadura.Gameplay.ClassEvolution
             Node(list, "passo_ligeiro", "Quick Step", "Passo Ligeiro", "+1% move speed per point (up to 5%). Needs 3 points in Caravaneer's Breath.", "+1% de velocidade por ponto (até 5%). Pede 3 pontos em Fôlego de Caravaneiro.");
 
             return list;
+        }
+
+        private static void Planned(List<LocalizationEntry> list, CharacterId hero, int tier, string titleEn, string titlePt)
+        {
+            PlannedGraduationSpec spec = ClassEvolutionCatalog.GetPlanned(hero, tier);
+            if (spec != null)
+            {
+                list.Add(new LocalizationEntry(spec.TitleKey, titleEn, titlePt));
+            }
         }
 
         private static void Grad(List<LocalizationEntry> list, CharacterId hero, int tier, string titleEn, string titlePt, string missionEn,

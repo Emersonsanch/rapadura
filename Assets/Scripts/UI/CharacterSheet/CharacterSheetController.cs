@@ -474,7 +474,8 @@ namespace Rapadura.UI.CharacterSheet
 
             if (_xpLabel != null)
             {
-                _xpLabel.text = CharacterSheetTexts.Format(manager, CharacterSheetTexts.Experience, xp, toNext);
+                _xpLabel.text = CharacterSheetTexts.Format(manager, CharacterSheetTexts.Experience,
+                    LargeNumberFormat.Compact(xp, manager), LargeNumberFormat.Compact(toNext, manager));
             }
         }
 

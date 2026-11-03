@@ -61,9 +61,24 @@ Noite Rubra (Lavine).
 
 ## 4. Nível de Mestre
 
-`MasterLevelRules`: com a 3ª graduação e o nível máximo (**50**), o XP de abate vai para a barra de mestre em vez do XP
-normal (`EnemyRewardGranter` → `ClassEvolutionProgress.TryRouteMasterExperience`). 30 níveis de mestre, XP
-25 000 × (1 + 0,15 × nível), 1 ponto por nível. Árvore de Mestre (30 pontos = árvore cheia, só com bônus pequenos):
+`MasterLevelRules`: com a 3ª graduação (a última que existe, `ClassEvolutionCatalog.MaxTier`) e o nível máximo (**500**,
+`LevelCurveMath.MaxLevel`; era 50 antes do teto 500, `Docs/Progressao500.md` §3.3), o XP de abate vai para a barra de mestre
+em vez do XP normal (`EnemyRewardGranter` → `ClassEvolutionProgress.TryRouteMasterExperience`). 30 níveis de mestre, XP
+`xp(500) × 0,5 × (1 + 0,05 × nível)` (10 672 000 no mestre 0; era 25 000 × (1 + 0,15 × nível)), 1 ponto por nível.
+`MaxMasterLevel` fica 30 enquanto a árvore tiver 30 pontos (vai a 100 com as 3 linhas novas do Progressao500 §3.3).
+
+**Migração de save (Mestre do tempo do nível 50):** nada no registro é reescrito. Um primo com 3ª graduação, nível ≥ 50 e
+nível de mestre ≥ 1 vira "mestre guardado" (`MasterLevelRules.HasKeptMasterProgress`): os bônus da árvore continuam
+ligados, os pontos já ganhos podem ser gastos e "começar de novo" funciona (`CanUseTree`), o XP da barra fica como está.
+O XP de abate volta a ir para o nível normal (51, 52, …) até o 500; lá a barra de mestre volta a encher de onde parou
+(os limiares novos são maiores que os antigos, então o `Sanitize` não corta o XP guardado). Painel: "Nível de Mestre N
+(guardado). A barra de mestre volta a encher no nível 500." Testes: `Level500Tests` (gate, migração por JSON antigo).
+
+**G4 e G5** (150 / 350) existem só como dados (`ClassEvolutionCatalog.PlannedGraduations`, `MilestoneLevel`, títulos
+en/pt-BR): `MaxTier` continua 3 e nenhuma missão é oferecida. Quando entrarem, `MaxTier` sobe para 5 e o Mestre passa a
+pedir a G5 automaticamente (`RequiredTier = MaxTier`).
+
+Árvore de Mestre (30 pontos = árvore cheia, só com bônus pequenos):
 
 | Linha 1 | máx | Linha 2 (pede 3 pontos acima) | máx |
 |---|---|---|---|
@@ -85,7 +100,7 @@ próxima cena de região carrega. Auto-save ao fechar.
 `power_stack.py` lê o catálogo (mantenha cada `Skill(...)`, `Grad(...)`, `Combo(...)` numa linha, posicional) e soma, como
 **limite superior**: skills ativas de graduação na rotação no nível mínimo; **todos os 5 buffs de grupo** ligados a luta
 inteira (grupo de cinco primos); o melhor combo de dano e o melhor de custo com uptime = duração / recarga da skill do
-tier 2. A árvore de mestre cheia entra como teste de estresse no NG+1 (o nível 50 fica além da campanha modelada).
+tier 2. A árvore de mestre cheia entra como teste de estresse no NG+1 (o nível 500 fica muito além da campanha modelada).
 
 | Regra | Limite |
 |---|---|

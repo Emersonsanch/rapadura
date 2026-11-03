@@ -15,6 +15,8 @@ namespace Rapadura.Gameplay.Enemies
         [Header("Identity")]
         [SerializeField] private string _enemyName = "Enemy";
         [SerializeField] private bool _isBoss;
+        [Tooltip("Creature level (Docs/Progressao500.md §4). 0 = the band of the region it spawns in (EnemyLevelScaling.RegionBandLevel). Above 15 its health/damage scale with the reference hero.")]
+        [SerializeField] [Min(0)] private int _level;
 
         [Header("Vitals")]
         [SerializeField] private float _maxHealth = 30f;
@@ -89,6 +91,8 @@ namespace Rapadura.Gameplay.Enemies
 
         public string EnemyName => _enemyName;
         public bool IsBoss => _isBoss;
+        /// <summary>Own level, or 0 = the spawn region's band (<see cref="EnemyLevelScaling.ResolveLevel"/>).</summary>
+        public int Level => _level;
 
         public float MaxHealth => _maxHealth;
         public int ExperienceReward => _experienceReward;

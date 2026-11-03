@@ -428,10 +428,15 @@ namespace Rapadura.UI.ClassEvolution
         {
             AddLabel(_masterSection, "hunting-section-title").text = ClassEvolutionTexts.Get(localization, ClassEvolutionTexts.SectionMaster);
             AddLabel(_masterSection, "hunting-line").text = ClassEvolutionPresenter.MasterHeader(localization, record, level);
-            bool master = progress.IsMaster(hero, level);
+            // The tree is usable by a master and by a cousin with master levels kept from the old level-50 gate.
+            bool master = MasterLevelRules.CanUseTree(record, level);
             if (master)
             {
-                AddLabel(_masterSection, "hunting-subtle").text = ClassEvolutionPresenter.MasterXpLine(localization, record);
+                if (progress.IsMaster(hero, level))
+                {
+                    AddLabel(_masterSection, "hunting-subtle").text = ClassEvolutionPresenter.MasterXpLine(localization, record);
+                }
+
                 AddLabel(_masterSection, "hunting-subtle").text = ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.MasterPoints,
                     MasterLevelRules.AvailablePoints(record));
             }

@@ -115,6 +115,9 @@ namespace Rapadura.Gameplay.World.Map
         private bool _waveIncoming;
 
         public bool IsEncounterActive => _active && !_resolved;
+
+        /// <summary>The shared enemy prefab (behaviour only; the look comes from each definition). Map mode spawners reuse it.</summary>
+        public GameObject EnemyPrefab => _enemyPrefab;
         public int AliveEnemies => _tracker.AliveCount;
         public float IntroGraceSeconds => _introGraceSeconds;
 
@@ -370,6 +373,13 @@ namespace Rapadura.Gameplay.World.Map
             // The shared prefab only provides behaviour; the look comes from the definition
             // (its model, else a per-enemy placeholder, else the prefab's own visual).
             EnemyVisualSwapper.Apply(instance, definition);
+
+            // Creature level (Docs/Progressao500.md §4): the definition's own level, else the region band. The campaign
+            // bands (3/7/10/15) are identity, so no scaler is attached there; directed rooms/events scale on their own.
+            if (!IsDirected)
+            {
+                EnemyLevelScaler.Attach(instance, EnemyLevelScaling.ResolveLevel(definition.Level, EnemyLevelScaling.RegionBandLevel(_region)));
+            }
 
             _spawned.Add(instance);
             EventBus.Publish(new EnemySpawnedEvent(instance));

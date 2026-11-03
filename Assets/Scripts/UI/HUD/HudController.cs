@@ -1393,6 +1393,12 @@ namespace Rapadura.UI.HUD
         private void UpdateXpBar(int current, int toNextLevel, int level)
         {
             SetBarFill(_xpFill, _xpValueLabel, current, toNextLevel);
+            if (_xpValueLabel != null)
+            {
+                // Up to 21 million XP per level at the 500 cap: "288k/1.2M" instead of 7+7 digits.
+                _xpValueLabel.text = LargeNumberFormat.Compact(Math.Max(0, current), _localizer.Manager) + "/"
+                    + LargeNumberFormat.Compact(Math.Max(0, toNextLevel), _localizer.Manager);
+            }
 
             _displayedLevel = level;
             UpdateLevelLabel();

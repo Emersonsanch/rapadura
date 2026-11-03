@@ -1,6 +1,9 @@
 # Progressão até o nível 500 (estilo MU), montarias que crescem com o herói e respawn na cidade
 
-> **Status:** proposta de design (2026-10-30). **Só documentação:** nada daqui existe no código ainda.
+> **Status:** aprovado (2026-10-30). **Implementado (§1–4):** curva por partes e teto 500 (`LevelCurveMath`,
+> `ProgressionCurve`, `PlayerStats`), pontos por nível, nível do bicho (`EnemyLevelScaling`, identidade na campanha),
+> Mestre no 500 com migração, ganchos G4/G5, orçamento 1–100 em `tools/balance/level_scaling.py` (README §29).
+> Ainda não: XP por abate/diferença de nível ligados, montarias (§6), respawn (§7, feito por outro agente), NG+ com piso.
 > Pedido do usuário: "as montarias ... quero que elas evoluam também conforme os heróis forem evoluindo, porém elas têm
 > limite até lvl 20 e os heróis podem chegar até nível 500; quero que você também crie no md para desenvolvimento até
 > 100, mas escreva os 100 modelos de mapas no md para irmos fazendo com o tempo; e outra coisa: o respawn sempre volta

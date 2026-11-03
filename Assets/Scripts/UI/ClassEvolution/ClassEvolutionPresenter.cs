@@ -3,6 +3,7 @@ using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.ClassEvolution;
 using Rapadura.Gameplay.Content;
+using Rapadura.UI.Common;
 
 namespace Rapadura.UI.ClassEvolution
 {
@@ -128,15 +129,25 @@ namespace Rapadura.UI.ClassEvolution
         }
 
         /// <summary>Master header line: "Master Level N" or the lock reason.</summary>
-        public static string MasterHeader(LocalizationManager localization, GraduationRecord record, int heroLevel) =>
-            MasterLevelRules.IsMaster(record, heroLevel)
-                ? ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.MasterTitle, record.masterLevel)
+        public static string MasterHeader(LocalizationManager localization, GraduationRecord record, int heroLevel)
+        {
+            if (MasterLevelRules.IsMaster(record, heroLevel))
+            {
+                return ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.MasterTitle, record.masterLevel);
+            }
+
+            // Master levels earned under the old level-50 gate: kept and spendable, the bar waits for the 500 cap.
+            return MasterLevelRules.HasKeptMasterProgress(record, heroLevel)
+                ? ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.MasterKept, record.masterLevel, MasterLevelRules.RequiredLevel)
                 : ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.MasterLocked, MasterLevelRules.RequiredLevel);
+        }
 
         public static string MasterXpLine(LocalizationManager localization, GraduationRecord record) =>
             record.masterLevel >= MasterLevelRules.MaxMasterLevel
                 ? ClassEvolutionTexts.Get(localization, ClassEvolutionTexts.MasterMax)
-                : ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.MasterXp, record.masterExperience, MasterLevelRules.ExperienceToNext(record.masterLevel));
+                : ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.MasterXp,
+                    LargeNumberFormat.Compact(record.masterExperience, localization),
+                    LargeNumberFormat.Compact(MasterLevelRules.ExperienceToNext(record.masterLevel), localization));
 
         /// <summary>"Name 2/5 — description", and the lock reason when the node above is short.</summary>
         public static string NodeLine(LocalizationManager localization, GraduationRecord record, MasterNodeSpec node)

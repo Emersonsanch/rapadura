@@ -159,12 +159,43 @@ namespace Rapadura.Gameplay.ClassEvolution
     }
 
     /// <summary>
+    /// A graduation planned past the campaign (G4 "do Elemento" at 150, G5 "da Coluna" at 350; Docs/Progressao500.md §3).
+    /// Data hook only: no mission, skill or look yet, so <see cref="ClassEvolutionCatalog.MaxTier"/> stays 3 and nothing
+    /// offers it. When one ships it becomes a real <see cref="GraduationSpec"/> and <c>MaxTier</c> goes up.
+    /// </summary>
+    public sealed class PlannedGraduationSpec
+    {
+        public readonly CharacterId Character;
+        public readonly int Tier;
+        public readonly int MinLevel;
+        /// <summary>Map of Docs/Mapas100.md where the mission happens (G4: the capital of the cousin's element; G5: the Sky Realms).</summary>
+        public readonly int MissionMapId;
+
+        public PlannedGraduationSpec(CharacterId character, int tier, int minLevel, int missionMapId)
+        {
+            Character = character;
+            Tier = tier;
+            MinLevel = minLevel;
+            MissionMapId = missionMapId;
+        }
+
+        public string Id => ClassEvolutionCatalog.GraduationId(Character, Tier);
+        public string TitleKey => "class.grad." + Id + ".title";
+    }
+
+    /// <summary>
     /// All graduations, their skills and the class combos (Docs/ClassEvolution.md). Pure data: no Unity objects, so the
     /// future server (FASE 12) validates the same table. Numbers are budgeted by <c>tools/balance/power_stack.py</c>.
     /// </summary>
     public static class ClassEvolutionCatalog
     {
+        /// <summary>Highest graduation that exists (missions, skills, looks). G4/G5 are only <see cref="PlannedGraduations"/>.</summary>
         public const int MaxTier = 3;
+        /// <summary>Highest graduation planned for the 500 cap (G5).</summary>
+        public const int PlannedMaxTier = 5;
+        /// <summary>Hero level of G4 "do Elemento" and G5 "da Coluna" (Docs/Progressao500.md §3.1).</summary>
+        public const int Tier4Level = 150;
+        public const int Tier5Level = 350;
         public const int ComboTier = 2;
         public const string VoEdna = "vo_edna";
 
@@ -240,6 +271,60 @@ namespace Rapadura.Gameplay.ClassEvolution
             Combo("combo_class_icaro", CharacterId.Icaro, new[] { "skill_icaro_torreta_automatica", "skill_icaro_granada_eletrica", "skill_grad_icaro_bobina_de_cata_vento" }, 3f, ComboBonusType.DamageMultiplier, 0.03f, 6f),
             Combo("combo_class_lavine", CharacterId.Lavine, new[] { "skill_lavine_orbe_sombria", "skill_lavine_correntes_das_trevas", "skill_grad_lavine_fita_vermelha" }, 3f, ComboBonusType.DamageMultiplier, 0.04f, 5f),
         };
+
+        private static PlannedGraduationSpec Planned(CharacterId hero, int tier, int mapId) =>
+            new PlannedGraduationSpec(hero, tier, tier == 4 ? Tier4Level : Tier5Level, mapId);
+
+        /// <summary>G4 at the capital of each cousin's element, G5 for the whole family in the Sky Realms (maps 91–100). Hooks only.</summary>
+        public static readonly IReadOnlyList<PlannedGraduationSpec> PlannedGraduations = new[]
+        {
+            Planned(CharacterId.Maithe, 4, 54), Planned(CharacterId.Maithe, 5, 91),
+            Planned(CharacterId.Maria, 4, 41), Planned(CharacterId.Maria, 5, 91),
+            Planned(CharacterId.Joaquim, 4, 31), Planned(CharacterId.Joaquim, 5, 91),
+            Planned(CharacterId.Icaro, 4, 65), Planned(CharacterId.Icaro, 5, 91),
+            Planned(CharacterId.Lavine, 4, 59), Planned(CharacterId.Lavine, 5, 91),
+        };
+
+        /// <summary>True when the tier has a real graduation (mission, skill, look): 1..<see cref="MaxTier"/>.</summary>
+        public static bool IsTierImplemented(int tier) => tier >= 1 && tier <= MaxTier;
+
+        /// <summary>Hero level a graduation tier opens at (8 / 14 / 25 / 150 / 350), or -1 for an unknown tier.</summary>
+        public static int MilestoneLevel(int tier)
+        {
+            if (tier == 4)
+            {
+                return Tier4Level;
+            }
+
+            if (tier == 5)
+            {
+                return Tier5Level;
+            }
+
+            int level = -1;
+            foreach (GraduationSpec spec in Graduations)
+            {
+                if (spec.Tier == tier && (level < 0 || spec.MinLevel < level))
+                {
+                    level = spec.MinLevel;
+                }
+            }
+
+            return level;
+        }
+
+        public static PlannedGraduationSpec GetPlanned(CharacterId character, int tier)
+        {
+            foreach (PlannedGraduationSpec spec in PlannedGraduations)
+            {
+                if (spec.Character == character && spec.Tier == tier)
+                {
+                    return spec;
+                }
+            }
+
+            return null;
+        }
 
         public static GraduationSpec GetGraduation(CharacterId character, int tier)
         {

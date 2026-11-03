@@ -2706,3 +2706,40 @@ Nada novo é gravado: a carga sai do inventário de sempre, então saves antigos
 recalcula carga, capacidade e fator com as mesmas funções e valida a velocidade (igual ao Mounts §9.2).
 Testes: `EncumbranceTests` (peso por categoria/ouro/pilha, carga com equipamento, capacidades das 30 montarias,
 curvas de velocidade, galope, teto, faixas e avisos, linha do tooltip). `LocalizationCoverageTests` cobre `EncumbranceTexts`.
+
+## 29. Teto 500: curva por partes, pontos, nível do bicho e Mestre no 500 (2026-10-30)
+
+Implementa `Docs/Progressao500.md` §1–4 (escopo de conteúdo "até 100"; o código já vai até o 500).
+
+- **Curva** (`LevelCurveMath`, puro; `ProgressionCurve.BuildFormulaRow`): 1–50 **idêntico** (tabela do asset, 50 linhas);
+  acima, `round(xp(50) × (n/50)³ × W(n))`, `W = 1` até o 300 e `1 + ((n−300)/200)²` depois. Teto `MaxLevel = 500`
+  (`ProgressionCurve.MaxLevel`, `PlayerStats.MaxLevel`); no teto a barra enche uma vez e fica cheia (o Mestre recebe o XP).
+  Marcos conferidos em `Level500Tests`: 100 → 85 376 / total 2 069 521; 500 → 21 344 000 / total **1 853 225 538**.
+- **`progression.csv`** agora tem as 500 linhas (51–500 geradas por `tools/balance/gen_progression.py`, iguais ao
+  "Export Progression CSV" do Unity); o asset continua com as 50 linhas da campanha e cai na fórmula acima delas.
+- **`long`**: o XP dentro do nível continua `int` (máx. 21,3 mi); o total vira `PlayerStats.TotalExperience` (`long`) e o
+  save ganha `totalExperience` (`long`). Save antigo (sem o campo, `int`) carrega igual: nível limitado a 1–500, XP ≥ 0;
+  um save antigo acima do 50 (curva exponencial de antes) com XP maior que o novo limiar sobe de nível ao carregar.
+- **Pontos**: atributo 2/nível sempre (998 no 500); skill 1/nível até o 50 e 1 a cada 5 depois (59 no 100, 139 no 500;
+  `balance_model.skill_levels` lê da planilha); Roda de Talentos +1/nível até o 50 e +1 a cada 10 depois (44 / 84).
+- **Nível do bicho** (`EnemyLevelScaling`, puro): `vida × Rd(L)/Rd(15)`, `dano × Rh(L)/Rh(15)`; ≤ 15 = ×1. O
+  `EncounterArenaController` resolve o nível (`EnemyDefinition._level`, 0 = faixa da região 3/7/10/15) e só põe o
+  `EnemyLevelScaler` acima do 15: **o jogo de hoje não muda**. `KillExperience` e `LevelDifferenceXpMultiplier` (§1.2) estão
+  prontos mas **não ligados** (cortariam XP de herói acima do nível na campanha).
+- **Orçamento** (`tools/balance/level_scaling.py`, seção nova do `power_stack.py`, `test_level_scaling.py`): herói de
+  referência no nível L (equipamento das Grutas com afixos planos "por faixa") contra os arquétipos das Grutas no nível L:
+
+| Nível | ×vida / ×dano | 2 comuns | Chefe | Parado, chefe mata em | Só básico: mata em |
+|---|---|---|---|---|---|
+| 15 | 1,00 / 1,00 | 4,0 s | 19,9 s | 26,5 s | 33,5 s |
+| 50 | 2,02 / 2,70 | 4,0 s | 19,7 s | 27,2 s | 32,0 s |
+| 100 | 4,06 / 5,88 | 4,0 s | 19,2 s | 24,1 s | 30,5 s |
+
+  Limites: chefe 85–120% e comuns 80–130% do nível 15, parado 12–40 s, só básico ≥ 75% do tempo para morrer. Tudo dentro.
+- **Mestre**: abre no **500** (`MasterLevelRules.RequiredLevel = LevelCurveMath.MaxLevel`); XP de mestre
+  `xp(500) × 0,5 × (1 + 0,05 × nível)` (10,7 mi no mestre 0). `MaxMasterLevel` fica 30 até a árvore ganhar as 3 linhas novas.
+  Migração em `Docs/ClassEvolution.md` §4.
+- **G4/G5**: só ganchos de dados (`ClassEvolutionCatalog.PlannedGraduations`, 150/350, mapa da missão, títulos en/pt-BR);
+  `MaxTier` continua 3, nada oferece a missão.
+- **Interface**: barra de XP do HUD, Ficha, barra de mestre e "−N XP" da morte usam `LargeNumberFormat` ("288k",
+  "21,3M"/"21.3M", truncado, nunca arredonda para cima).

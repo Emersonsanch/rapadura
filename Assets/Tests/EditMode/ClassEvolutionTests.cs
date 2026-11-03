@@ -205,30 +205,30 @@ namespace Rapadura.Tests.EditMode
             GraduationRecord record = Master(0);
             long first = MasterLevelRules.ExperienceToNext(0);
             Assert.Greater(MasterLevelRules.ExperienceToNext(1), first);
-            Assert.AreEqual(0, MasterLevelRules.AddExperience(record, 50, first - 1));
-            Assert.AreEqual(1, MasterLevelRules.AddExperience(record, 50, 1));
+            Assert.AreEqual(0, MasterLevelRules.AddExperience(record, MasterLevelRules.RequiredLevel, first - 1));
+            Assert.AreEqual(1, MasterLevelRules.AddExperience(record, MasterLevelRules.RequiredLevel, 1));
             Assert.AreEqual(1, record.masterLevel);
             Assert.AreEqual(0, record.masterExperience);
             Assert.AreEqual(1, MasterLevelRules.AvailablePoints(record));
 
-            MasterLevelRules.AddExperience(record, 50, long.MaxValue / 4);
+            MasterLevelRules.AddExperience(record, MasterLevelRules.RequiredLevel, long.MaxValue / 4);
             Assert.AreEqual(MasterLevelRules.MaxMasterLevel, record.masterLevel);
             Assert.AreEqual(0, record.masterExperience);
-            Assert.AreEqual(0, MasterLevelRules.AddExperience(record, 50, 1000));
+            Assert.AreEqual(0, MasterLevelRules.AddExperience(record, MasterLevelRules.RequiredLevel, 1000));
         }
 
         [Test]
         public void MasterTree_RowTwoNeedsThreeRanksAbove_AndResetRefunds()
         {
             GraduationRecord record = Master(10);
-            Assert.AreEqual(MasterSpendResult.Locked, MasterLevelRules.Spend(record, 50, "olho_vivo"));
-            Assert.AreEqual(MasterSpendResult.UnknownNode, MasterLevelRules.Spend(record, 50, "nope"));
+            Assert.AreEqual(MasterSpendResult.Locked, MasterLevelRules.Spend(record, MasterLevelRules.RequiredLevel, "olho_vivo"));
+            Assert.AreEqual(MasterSpendResult.UnknownNode, MasterLevelRules.Spend(record, MasterLevelRules.RequiredLevel, "nope"));
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(MasterSpendResult.Spent, MasterLevelRules.Spend(record, 50, "mao_firme"));
+                Assert.AreEqual(MasterSpendResult.Spent, MasterLevelRules.Spend(record, MasterLevelRules.RequiredLevel, "mao_firme"));
             }
 
-            Assert.AreEqual(MasterSpendResult.Spent, MasterLevelRules.Spend(record, 50, "olho_vivo"));
+            Assert.AreEqual(MasterSpendResult.Spent, MasterLevelRules.Spend(record, MasterLevelRules.RequiredLevel, "olho_vivo"));
             Assert.AreEqual(3, MasterLevelRules.RankOf(record, "mao_firme"));
             Assert.AreEqual(0.015f, MasterLevelRules.Bonus(record, StatType.AttackDamage), 1e-6f);
             Assert.AreEqual(6, MasterLevelRules.AvailablePoints(record));
@@ -245,12 +245,12 @@ namespace Rapadura.Tests.EditMode
             GraduationRecord record = Master(MasterLevelRules.MaxMasterLevel);
             for (int i = 0; i < 5; i++)
             {
-                MasterLevelRules.Spend(record, 50, "couro_curtido");
+                MasterLevelRules.Spend(record, MasterLevelRules.RequiredLevel, "couro_curtido");
             }
 
-            Assert.AreEqual(MasterSpendResult.MaxRank, MasterLevelRules.Spend(record, 50, "couro_curtido"));
+            Assert.AreEqual(MasterSpendResult.MaxRank, MasterLevelRules.Spend(record, MasterLevelRules.RequiredLevel, "couro_curtido"));
             GraduationRecord poor = Master(0);
-            Assert.AreEqual(MasterSpendResult.NoPoints, MasterLevelRules.Spend(poor, 50, "couro_curtido"));
+            Assert.AreEqual(MasterSpendResult.NoPoints, MasterLevelRules.Spend(poor, MasterLevelRules.RequiredLevel, "couro_curtido"));
 
             int totalRanks = MasterLevelRules.Nodes.Sum(n => n.MaxRank);
             Assert.AreEqual(MasterLevelRules.MaxMasterLevel * MasterLevelRules.PointsPerMasterLevel, totalRanks, "max master level fills the whole tree");
@@ -522,7 +522,7 @@ namespace Rapadura.Tests.EditMode
         public void Presenter_MasterLines()
         {
             GraduationRecord record = Master(3);
-            StringAssert.Contains("3", ClassEvolutionPresenter.MasterHeader(null, record, 50));
+            StringAssert.Contains("3", ClassEvolutionPresenter.MasterHeader(null, record, MasterLevelRules.RequiredLevel));
             StringAssert.Contains(MasterLevelRules.RequiredLevel.ToString(), ClassEvolutionPresenter.MasterHeader(null, record, 49));
             Assert.IsNull(ClassEvolutionPresenter.SpendFailure(null, MasterSpendResult.Spent, null));
             MasterNodeSpec locked = MasterLevelRules.GetNode("olho_vivo");

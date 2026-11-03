@@ -51,7 +51,8 @@ namespace Rapadura.Gameplay.Player
     /// Two layers:
     /// <list type="bullet">
     /// <item>Formula parameters (the old hardcoded numbers) — used to (re)generate the table and as the
-    /// fallback for any level the table doesn't cover (e.g. past level 50).</item>
+    /// fallback for any level the table doesn't cover (past level 50 it switches to the cubic of
+    /// <see cref="LevelCurveMath"/>, up to the cap <see cref="MaxLevel"/> = 500).</item>
     /// <item>An explicit per-level table (<see cref="Rows"/>) that designers edit through the spreadsheet
     /// <c>Docs/Balance/progression.csv</c> and re-import via <c>Rapadura &gt; Balance &gt; Import Progression CSV</c>.</item>
     /// </list>
@@ -65,8 +66,12 @@ namespace Rapadura.Gameplay.Player
         /// <summary>Path (relative to a Resources folder) of the shipped curve.</summary>
         public const string ResourcesPath = "Balance/ProgressionCurve";
 
-        /// <summary>Number of levels the exported table covers.</summary>
-        public const int DefaultMaxLevel = 50;
+        /// <summary>Number of levels the explicit (campaign) table covers: 1..50 are designer rows, the cubic formula
+        /// of <see cref="LevelCurveMath"/> takes over above (Docs/Progressao500.md §1).</summary>
+        public const int DefaultMaxLevel = LevelCurveMath.CampaignLevels;
+
+        /// <summary>Hero level cap (500). The spreadsheet export covers 1..this.</summary>
+        public const int MaxLevel = LevelCurveMath.MaxLevel;
 
         [Header("Formula (fallback + table generator)")]
         [SerializeField] private int _baseExperienceToLevel = 100;
@@ -102,25 +107,47 @@ namespace Rapadura.Gameplay.Player
         }
 
         /// <summary>
-        /// Builds the row the formula parameters produce for a level. The XP expression is kept
-        /// bit-for-bit identical to the old <c>PlayerStats.GetExperienceToNextLevel</c>.
+        /// Builds the row the formula parameters produce for a level. Up to <see cref="DefaultMaxLevel"/> (50) the XP
+        /// expression is kept bit-for-bit identical to the old <c>PlayerStats.GetExperienceToNextLevel</c>; above it the
+        /// cubic + wall of <see cref="LevelCurveMath"/>, anchored on this formula's level-50 XP, and the vitals/damage
+        /// growth computed in double (one rounding) so the spreadsheet tooling can reproduce it exactly.
+        /// Points: attributes every level; skill points per level up to 50, then 1 every 5 levels.
         /// </summary>
         public ProgressionLevelRow BuildFormulaRow(int level)
         {
-            level = Mathf.Max(1, level);
+            level = Mathf.Clamp(level, 1, MaxLevel);
             int steps = level - 1;
+            if (level <= DefaultMaxLevel)
+            {
+                return new ProgressionLevelRow
+                {
+                    level = level,
+                    experienceToNext = ExponentialExperienceToNext(level),
+                    maxHealth = _baseMaxHealth + _maxHealthPerLevel * steps,
+                    maxMana = _baseMaxMana + _maxManaPerLevel * steps,
+                    maxStamina = _baseMaxStamina + _maxStaminaPerLevel * steps,
+                    damageMultiplier = 1f + _damageMultiplierPerLevel * steps,
+                    attributePoints = LevelCurveMath.AttributePointsForReaching(level, _attributePointsPerLevel),
+                    skillPoints = LevelCurveMath.SkillPointsForReaching(level, _skillPointsPerLevel)
+                };
+            }
+
             return new ProgressionLevelRow
             {
                 level = level,
-                experienceToNext = Mathf.RoundToInt(_baseExperienceToLevel * Mathf.Pow(_experienceCurveMultiplier, level - 1)),
-                maxHealth = _baseMaxHealth + _maxHealthPerLevel * steps,
-                maxMana = _baseMaxMana + _maxManaPerLevel * steps,
-                maxStamina = _baseMaxStamina + _maxStaminaPerLevel * steps,
-                damageMultiplier = 1f + _damageMultiplierPerLevel * steps,
-                attributePoints = level <= 1 ? 0 : _attributePointsPerLevel,
-                skillPoints = level <= 1 ? 0 : _skillPointsPerLevel
+                experienceToNext = LevelCurveMath.HighLevelExperienceToNext(level, ExponentialExperienceToNext(DefaultMaxLevel)),
+                maxHealth = (float)((double)_baseMaxHealth + (double)_maxHealthPerLevel * steps),
+                maxMana = (float)((double)_baseMaxMana + (double)_maxManaPerLevel * steps),
+                maxStamina = (float)((double)_baseMaxStamina + (double)_maxStaminaPerLevel * steps),
+                damageMultiplier = (float)(1.0 + (double)_damageMultiplierPerLevel * steps),
+                attributePoints = LevelCurveMath.AttributePointsForReaching(level, _attributePointsPerLevel),
+                skillPoints = LevelCurveMath.SkillPointsForReaching(level, _skillPointsPerLevel)
             };
         }
+
+        /// <summary>The exponential campaign formula (levels 1..50), exactly the old hardcoded float expression.</summary>
+        private int ExponentialExperienceToNext(int level) =>
+            Mathf.RoundToInt(_baseExperienceToLevel * Mathf.Pow(_experienceCurveMultiplier, level - 1));
 
         /// <summary>Overwrites the explicit table with the formula's output for levels 1..maxLevel.</summary>
         public void RegenerateFromFormula(int maxLevel = DefaultMaxLevel)
@@ -174,7 +201,7 @@ namespace Rapadura.Gameplay.Player
         /// <summary>The table row for a level, or the formula row if the table doesn't cover it.</summary>
         public ProgressionLevelRow GetRow(int level)
         {
-            level = Mathf.Max(1, level);
+            level = Mathf.Clamp(level, 1, MaxLevel);
             return level <= _levels.Count ? _levels[level - 1] : BuildFormulaRow(level);
         }
 
@@ -201,7 +228,8 @@ namespace Rapadura.Gameplay.Player
         public long GetTotalExperienceToReach(int level)
         {
             long total = 0;
-            for (int l = 1; l < level; l++)
+            int target = Mathf.Min(level, MaxLevel);
+            for (int l = 1; l < target; l++)
             {
                 total += GetExperienceToNextLevel(l);
             }
@@ -213,7 +241,7 @@ namespace Rapadura.Gameplay.Player
         public int GetAttributePointsGained(int fromLevel, int toLevel)
         {
             int total = 0;
-            for (int l = Mathf.Max(1, fromLevel) + 1; l <= toLevel; l++)
+            for (int l = Mathf.Max(1, fromLevel) + 1; l <= Mathf.Min(toLevel, MaxLevel); l++)
             {
                 total += GetRow(l).attributePoints;
             }
@@ -225,7 +253,7 @@ namespace Rapadura.Gameplay.Player
         public int GetSkillPointsGained(int fromLevel, int toLevel)
         {
             int total = 0;
-            for (int l = Mathf.Max(1, fromLevel) + 1; l <= toLevel; l++)
+            for (int l = Mathf.Max(1, fromLevel) + 1; l <= Mathf.Min(toLevel, MaxLevel); l++)
             {
                 total += GetRow(l).skillPoints;
             }

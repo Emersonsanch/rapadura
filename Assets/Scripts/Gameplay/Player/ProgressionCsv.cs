@@ -35,8 +35,8 @@ namespace Rapadura.Gameplay.Player
 
         private static readonly CultureInfo Invariant = CultureInfo.InvariantCulture;
 
-        /// <summary>Exports levels 1..maxLevel of the curve (table rows, falling back to the formula past the table).</summary>
-        public static string Export(ProgressionCurve curve, int maxLevel = ProgressionCurve.DefaultMaxLevel)
+        /// <summary>Exports levels 1..maxLevel (default: the 500 cap) of the curve (table rows, falling back to the formula past the table).</summary>
+        public static string Export(ProgressionCurve curve, int maxLevel = ProgressionCurve.MaxLevel)
         {
             if (curve == null)
             {

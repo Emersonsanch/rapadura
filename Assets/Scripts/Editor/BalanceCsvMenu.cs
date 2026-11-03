@@ -48,7 +48,7 @@ namespace Rapadura.Editor
                 AssetDatabase.SaveAssets();
             }
 
-            WriteFile(ProgressionCsvPath, ProgressionCsv.Export(curve, Mathf.Max(ProgressionCurve.DefaultMaxLevel, curve.TableMaxLevel)));
+            WriteFile(ProgressionCsvPath, ProgressionCsv.Export(curve, Mathf.Max(ProgressionCurve.MaxLevel, curve.TableMaxLevel)));
             Debug.Log($"[Balance] Exported progression curve to {ProgressionCsvPath}");
         }
 
