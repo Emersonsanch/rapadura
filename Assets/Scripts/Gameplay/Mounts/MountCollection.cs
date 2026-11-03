@@ -323,7 +323,8 @@ namespace Rapadura.Gameplay.Mounts
         public static float MaxStaminaOf(OwnedMount mount)
         {
             MountDefinition definition = mount != null ? MountCatalog.Get(mount.mountId) : null;
-            return definition != null ? MountRules.MaxStaminaAt(definition.BaseStamina, EffectiveLevelOf(mount)) : 100f;
+            float bond = ClassEvolution.ClassEvolutionProgress.ActiveEffectBonus(ClassEvolution.MasterNodeEffect.MountStamina);
+            return definition != null ? MountRules.MaxStaminaAt(definition.BaseStamina, EffectiveLevelOf(mount), bond) : 100f;
         }
 
         /// <summary>Current health of <paramref name="mount"/> (full when never hurt).</summary>
@@ -839,7 +840,8 @@ namespace Rapadura.Gameplay.Mounts
             OwnedMount active = Active;
             if (active != null && !active.IsTired)
             {
-                AddXp(active, MountGrowthRules.CombatXp(Rapadura.Gameplay.Enemies.BossBonusRules.GetExperienceReward(enemy.Definition)));
+                AddXp(active, MountGrowthRules.CombatXp(Rapadura.Gameplay.Enemies.BossBonusRules.GetExperienceReward(enemy.Definition),
+                    ClassEvolution.ClassEvolutionProgress.ActiveEffectBonus(ClassEvolution.MasterNodeEffect.MountExperience)));
             }
         }
 

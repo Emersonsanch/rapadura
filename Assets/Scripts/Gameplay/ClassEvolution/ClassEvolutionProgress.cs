@@ -243,7 +243,7 @@ namespace Rapadura.Gameplay.ClassEvolution
 
         /// <summary>
         /// A special master-tree bonus (<see cref="MasterNodeEffect"/>) of the cousin on the field, 0 without one. The hook other
-        /// systems read: Ari (alert/fetch radius) today, the mount code (stamina/XP of the "Laço" line) when it reads it.
+        /// systems read: Ari (alert/fetch radius) and the mounts (stamina/XP of the "Laço" line, <c>MountCollection</c>).
         /// </summary>
         public static float ActiveEffectBonus(MasterNodeEffect effect)
         {

@@ -71,12 +71,19 @@ namespace Rapadura.Gameplay.Mounts
 
         // ---------------- XP ----------------
 
-        /// <summary>Mount XP for a kill of <paramref name="killXp"/> with the hero: <c>2 + floor(1%)</c>, at most 30.</summary>
-        public static int CombatXp(int killXp)
+        /// <summary>
+        /// Mount XP for a kill of <paramref name="killXp"/> with the hero: <c>2 + floor(1%)</c>, at most 30, then
+        /// <c>× (1 + bondBonus)</c> rounded — <paramref name="bondBonus"/> is the "Rédea de Luz" node of the master tree's
+        /// "Laço" line (<c>MasterNodeEffect.MountExperience</c>, up to +15%), so it still counts at the 30 cap.
+        /// </summary>
+        public static int CombatXp(int killXp, float bondBonus = 0f)
         {
             // Integer percent: 0.01f is not exact in binary, so (2800 * 0.01f) floors to 27.
             int share = Math.Max(0, killXp) / CombatXpPercentOfKill;
-            return Math.Min(MaxCombatXpPerKill, BaseCombatXp + share);
+            int xp = Math.Min(MaxCombatXpPerKill, BaseCombatXp + share);
+            // The bonus is a float sum of node steps (5 × 0.03f = 0.1499999f): snap it before the midpoint rounding.
+            double bonus = Math.Round(bondBonus, 4);
+            return bonus > 0.0 ? (int)Math.Round(xp * (1.0 + bonus), MidpointRounding.AwayFromZero) : xp;
         }
 
         /// <summary>Brilho after storing <paramref name="amount"/> more (clamped to 0..<see cref="MaxGlow"/>).</summary>

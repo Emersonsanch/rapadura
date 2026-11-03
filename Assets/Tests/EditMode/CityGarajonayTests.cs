@@ -114,11 +114,8 @@ namespace Rapadura.Tests
         public void Garajonay_Keepers_StandAtTheirDoors_OutsideEverySolid_AndReachable()
         {
             CityLayout layout = CityTownRecipes.LayoutFor(CityCatalog.CopasGarajonay);
-            var problems = new List<string>();
-            CityLayoutRules.CheckStandPoints(layout, problems);
-            CityLayoutRules.CheckLotsApart(layout, problems);
-            CityLayoutRules.CheckSafeZone(layout, problems);
-            CityLayoutRules.CheckReachability(layout, problems, CityLayoutRules.MinCorridor);
+            // The whole validator, buildings and props off the streets included (the 250° bench stood on the South road).
+            List<string> problems = CityLayoutRules.Validate(layout);
             Assert.IsEmpty(problems, string.Join("\n", problems));
 
             foreach (string id in Elves)

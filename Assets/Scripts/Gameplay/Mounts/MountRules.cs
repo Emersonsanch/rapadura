@@ -265,7 +265,12 @@ namespace Rapadura.Gameplay.Mounts
 
         public static float MaxHealthAt(float baseHealth, int level) => baseHealth * (1f + 0.05f * (Mathf.Clamp(level, 1, MaxLevel) - 1));
 
-        public static float MaxStaminaAt(float baseStamina, int level) => baseStamina + (Mathf.Clamp(level, 1, MaxLevel) - 1);
+        /// <summary>
+        /// Gallop stamina of a mount: <c>(base + level − 1) × (1 + bondBonus)</c>. <paramref name="bondBonus"/> is the
+        /// "Laço da Sela" node of the master tree's "Laço" line (<c>MasterNodeEffect.MountStamina</c>, up to +10%).
+        /// </summary>
+        public static float MaxStaminaAt(float baseStamina, int level, float bondBonus = 0f) =>
+            (baseStamina + (Mathf.Clamp(level, 1, MaxLevel) - 1)) * (1f + Mathf.Max(0f, bondBonus));
 
         /// <summary>Ability cooldown for a mount: −0.5% per level above 1, −5% from 2 hearts, −15% for the rider's favorite.</summary>
         public static float AbilityCooldownSeconds(float baseCooldown, int level, int hearts, bool isFavorite)

@@ -99,7 +99,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             r.PlazaProps.Add(At(CityPropKind.Well, 4.2f, -3.8f, 0f, 0.9f));
             AddPlazaBench(r, 135f, 6.4f);
             AddPlazaBench(r, 45f, 6.4f);
-            AddPlazaBench(r, 250f, 6.4f);
+            AddPlazaBench(r, 235f, 6.4f); // clear of the South road (at 250° it stood on it)
             foreach (float angle in new[] { 30f, 150f, 210f, 330f })
             {
                 r.PlazaProps.Add(new CityProp { Kind = CityPropKind.LampPost, Position = Polar(angle, 7.5f), Yaw = CityGeometry.YawFacing(-Polar(angle, 1f)) });

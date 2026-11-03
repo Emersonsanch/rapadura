@@ -1,6 +1,8 @@
 using NUnit.Framework;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
+using Rapadura.Gameplay.Characters;
+using Rapadura.Gameplay.ClassEvolution;
 using Rapadura.Gameplay.Mounts;
 
 namespace Rapadura.Tests
@@ -98,6 +100,45 @@ namespace Rapadura.Tests
             Assert.AreEqual(30, MountGrowthRules.CombatXp(2800));
             Assert.AreEqual(30, MountGrowthRules.CombatXp(1000000), "a level-300 kill never fills the bar");
             Assert.AreEqual(2, MountGrowthRules.CombatXp(-5));
+        }
+
+        [Test]
+        public void MasterTreeBondLine_RaisesMountStaminaAndCombatXp()
+        {
+            var record = new GraduationRecord
+            {
+                characterId = CharacterId.Maithe.ToString(),
+                tier = ClassEvolutionCatalog.MaxTier,
+                masterLevel = 100
+            };
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(MasterSpendResult.Spent, MasterLevelRules.Spend(record, MasterLevelRules.RequiredLevel, "laco_da_sela"));
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(MasterSpendResult.Spent, MasterLevelRules.Spend(record, MasterLevelRules.RequiredLevel, "redea_de_luz"));
+            }
+
+            float stamina = MasterLevelRules.EffectBonus(record, MasterNodeEffect.MountStamina);
+            float xpBonus = MasterLevelRules.EffectBonus(record, MasterNodeEffect.MountExperience);
+            Assert.AreEqual(0.10f, stamina, 1e-5f, "Laço da Sela 5/5");
+            Assert.AreEqual(0.15f, xpBonus, 1e-5f, "Rédea de Luz 5/5");
+
+            // Stamina: (base + level - 1) x (1 + bonus); no bonus keeps the old numbers.
+            Assert.AreEqual(109f, MountRules.MaxStaminaAt(100f, 10), 1e-4f);
+            Assert.AreEqual(109f, MountRules.MaxStaminaAt(100f, 10, 0f), 1e-4f);
+            Assert.AreEqual(119.9f, MountRules.MaxStaminaAt(100f, 10, stamina), 1e-3f);
+            Assert.AreEqual(109f, MountRules.MaxStaminaAt(100f, 10, -1f), 1e-4f, "a negative bonus never shrinks it");
+            Assert.Greater(MountRules.GallopSeconds(MountRules.MaxStaminaAt(100f, 10, stamina)), MountRules.GallopSeconds(109f));
+
+            // Combat XP: applied after the 30 cap, rounded.
+            Assert.AreEqual(20, MountGrowthRules.CombatXp(1800));
+            Assert.AreEqual(23, MountGrowthRules.CombatXp(1800, xpBonus));
+            Assert.AreEqual(35, MountGrowthRules.CombatXp(1000000, xpBonus), "the bond still counts at the 30 cap");
+            Assert.AreEqual(2, MountGrowthRules.CombatXp(0, xpBonus), "2 x 1.15 rounds back to 2");
+            Assert.AreEqual(30, MountGrowthRules.CombatXp(2800, 0f));
         }
 
         [Test]
