@@ -150,6 +150,8 @@ namespace Rapadura.Gameplay.World.Map.Areas
                 SceneManager.MoveGameObjectToScene(OverworldArea.gameObject, gameObject.scene);
                 OverworldArea.ZoneChanged += OnOverworldZoneChanged;
                 OverworldArea.RegionChanged += OnOverworldRegionChanged;
+                // Music and weather of the area the hero walks in (AreaChangedEvent of the OverworldView).
+                gameObject.AddComponent<Rapadura.Audio.AreaAmbienceDirector>();
             }
             else
             {

@@ -77,6 +77,7 @@ namespace Rapadura.Tests
             "Resources/UI/House.uss",
             "Resources/UI/FestaJunina.uss",
             "Resources/UI/Talents.uss",
+            "Resources/UI/AreaBanner.uss",
         };
 
         [Test]

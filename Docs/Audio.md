@@ -265,6 +265,21 @@ O contexto `Story` é uma camada por cima do fluxo: o `MusicDirector` consulta
 some, volta para o contexto que o fluxo pediu nesse meio-tempo (normalmente o `WorldMap`). Nada de
 "ducking" fixo: a troca é o mesmo crossfade de 1,5 s dos outros contextos.
 
+**Música por área do mundo contínuo** (2026-11-03): no modo mapa com overworld, o `AreaAmbienceDirector`
+(posto pelo `MapModeController`) ouve o `AreaChangedEvent` e escolhe, **com as faixas que já existem**, o contexto-base
+pelo humor da área (`OverworldAreaAmbience.MoodOf`) e pela hora (`AreaMusicRules.Pick`), via
+`MusicDirector.RequestAmbient` (mesmo crossfade):
+
+| Humor da área | Dia | Noite |
+|---|---|---|
+| Cidade/posto (zona segura) | `Title` | `Title` |
+| Campo calmo (pomar, campos, oásis…) | `WorldMap` | `Story` |
+| Ermo (mata fechada, ravina, brejo, erg, abismo, cume…) | `WorldMap` | `Encounter`/bioma |
+| Perigo (bichos muito acima do nível, a mesma regra do "Cuidado") | `Encounter`/bioma | `Encounter`/bioma |
+
+Reavalia a cada 1 s (subiu de nível, virou noite). Um encontro/chefe que tomar a música é respeitado; ao sair do modo
+mapa volta o `WorldMap`. Quando houver faixas próprias, basta criar variantes novas e trocar `AreaMusicRules`.
+
 Loops de 1–3 min, OGG estéreo, ponto de loop sem clique. Arraste no `clip` da entrada em `_music`.
 Vitória/derrota não trocam a música: tocam os stings `encounter.*` e o fluxo volta ao `WorldMap`.
 

@@ -18,6 +18,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>{0} = settlement / area name.</summary>
         public const string BarcaArrived = "ui.overworld.barca_arrived";
 
+        /// <summary>Area letreiro band, {0}–{1} = level band.</summary>
+        public const string AreaBand = "ui.overworld.area_band";
+        /// <summary>Area letreiro / label band inside a town or post.</summary>
+        public const string AreaSafe = "ui.overworld.area_safe";
+        /// <summary>Area letreiro warning, {0} = the special gear the hero lacks.</summary>
+        public const string AreaMissing = "ui.overworld.area_missing";
+        /// <summary>Permanent HUD label: {0} = area, {1} = band.</summary>
+        public const string AreaLabel = "ui.overworld.area_label";
+
         private static List<LocalizationEntry> _entries;
         private static Dictionary<string, string> _fallback;
         private static LocalizationManager _mergedInto;
@@ -32,6 +41,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 new LocalizationEntry(BarrierRequirement, "You cannot go on without: {0}", "Não dá para seguir sem: {0}"),
                 new LocalizationEntry(DockNotVisited, "Walk to that dock once before asking the barca", "Ande até esse cais uma vez antes de pedir a barca"),
                 new LocalizationEntry(BarcaArrived, "The barca leaves you at {0}", "A barca deixa vocês em {0}"),
+                new LocalizationEntry(AreaBand, "Lv {0}–{1}", "Nv {0}–{1}"),
+                new LocalizationEntry(AreaSafe, "Safe zone", "Área segura"),
+                new LocalizationEntry(AreaMissing, "Requires {0} — you don't have it", "Exige {0} — você não tem"),
+                new LocalizationEntry(AreaLabel, "{0} · {1}", "{0} · {1}"),
             };
 
             foreach (string regionId in OverworldLayouts.RegionLayoutIds)

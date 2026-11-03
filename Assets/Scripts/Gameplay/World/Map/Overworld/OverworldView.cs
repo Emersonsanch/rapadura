@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Rapadura.Core.DI;
+using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Combat;
@@ -25,8 +26,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// one new chunk per frame): two merged meshes per chunk (ground; props, landmarks and bridges) on the shared town
     /// material, capsule/box colliders, the river blockers and bridge decks;</item>
     /// <item>spawners woken near the hero and put to sleep (monsters removed) far from them, so only a handful run;</item>
-    /// <item>the zone the hero is in (area name and band on entering, "dangerous" warning, the map id the rest of the game
-    /// reads) and the soft barrier: stepping into an area above the hero's walk level (or without its special gear) pushes
+    /// <item>the zone the hero is in (the map id the rest of the game reads; with hysteresis, <see cref="AreaTracker"/>, the
+    /// <see cref="AreaChangedEvent"/> of the HUD letreiro and the area music / weather) and the soft barrier: stepping into an area above the hero's walk level (or without its special gear) pushes
     /// the hero back a step with a message, never a teleport across the map.</item>
     /// </list>
     /// </summary>
@@ -104,6 +105,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>Raised when the hero walks (or is carried) into another region of the stitched world.</summary>
         public event System.Action<OverworldPart> RegionChanged;
 
+        /// <summary>
+        /// The hero's area with hysteresis (letreiro, area music and weather): each change is published as an
+        /// <see cref="AreaChangedEvent"/> on the <see cref="EventBus"/>.
+        /// </summary>
+        public OverworldAreaTracker AreaTracker { get; private set; }
+
         public bool IsChunkLoaded(Vector2Int chunk) => _chunks.ContainsKey(chunk);
 
         public CityTownView TownOf(OverworldSettlement settlement)
@@ -121,6 +128,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             OverworldView view = root.AddComponent<OverworldView>();
             view.Layout = layout;
+            view.AreaTracker = new OverworldAreaTracker(layout);
             view._enemyPrefab = enemyPrefab;
             view.BuildStatic();
             return view;
@@ -625,6 +633,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             _hasLastAllowed = true;
             CurrentZone = null;
             _nextZone = 0f;
+            AreaTracker?.Reset();
         }
 
         private void TrackZone(Transform player, Vector2 at)
@@ -657,12 +666,17 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 }
 
                 CurrentZone = zone;
-                Announce(player, zone, level);
                 ZoneChanged?.Invoke(zone);
             }
 
             _lastAllowed = at;
             _hasLastAllowed = true;
+            if (AreaTracker != null && AreaTracker.Update(at, out AreaChangedEvent change))
+            {
+                // The letreiro (UI.HUD.AreaBannerController) announces it; music and weather follow (Audio.AreaAmbienceDirector).
+                EventBus.Publish(change);
+            }
+
             OverworldSettlement settlement = OverworldRules.SettlementAt(Layout, at);
             if (settlement != null)
             {
@@ -692,17 +706,6 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 ? OverworldTexts.Format(localization, OverworldTexts.BarrierRequirement, MapTexts.RequirementName(localization, zone.RequirementTag))
                 : OverworldTexts.Format(localization, OverworldTexts.BarrierLevel, MapAccessRules.EffectiveLevelRequirement(zone.WalkLevel, hero, zone.RegionType));
             CombatFxManager.SpawnLootWarningText(player.position + Vector3.up * 2.4f, OverworldTexts.ZoneName(localization, zone) + ": " + line);
-        }
-
-        private static void Announce(Transform player, OverworldZone zone, int heroLevel)
-        {
-            ServiceLocator.TryGet(out LocalizationManager localization);
-            string line = MapTexts.Format(localization, MapTexts.Arrived, OverworldTexts.ZoneName(localization, zone), zone.MinLevel, zone.MaxLevel);
-            CombatFxManager.SpawnLootText(player.position + Vector3.up * 2.4f, line);
-            if (MapAccessRules.GetMonsterLevelDeltaPenalty(heroLevel, zone.MaxLevel).MonsterCritChanceBonus > 0f)
-            {
-                CombatFxManager.SpawnLootWarningText(player.position + Vector3.up * 3.1f, MapTexts.Get(localization, MapTexts.DangerWarning));
-            }
         }
     }
 }

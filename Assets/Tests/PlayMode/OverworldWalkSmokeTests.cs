@@ -1,5 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
+using Rapadura.Audio;
+using Rapadura.Core.Events;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.World.Map;
@@ -61,6 +64,11 @@ namespace Rapadura.Tests.PlayMode
             Assert.IsTrue(world.Vila.SafeZone.Contains(Ground(player)), $"The hero arrived at {Ground(player)}, outside the Vila.");
             Assert.Greater(mode.OverworldArea.LoadedChunkCount, 4, "The chunks around the Vila were not built.");
 
+            Assert.IsNotNull(mode.GetComponent<AreaAmbienceDirector>(), "Map mode with an overworld plays the area music and weather.");
+            var areas = new List<AreaChangedEvent>();
+            System.Action<AreaChangedEvent> onArea = areas.Add;
+            EventBus.Subscribe(onArea);
+
             int loads = 0;
             UnityEngine.Events.UnityAction<Scene, LoadSceneMode> counter = (s, m) => loads++;
             SceneManager.sceneLoaded += counter;
@@ -78,6 +86,9 @@ namespace Rapadura.Tests.PlayMode
                 yield return WaitFrames(5);
                 Assert.Less(Ground(player).y, -100f, $"The hero stopped at {Ground(player)} before the fields (blocked?).");
                 Assert.AreEqual("campos_do_aryk", mode.OverworldArea.CurrentZone?.Id, "The zone is derived from the hero's position.");
+                Assert.AreEqual("campos_do_aryk", mode.OverworldArea.AreaTracker.Zone?.Id, "The area (with hysteresis) follows the hero.");
+                Assert.IsTrue(areas.Exists(e => !e.Teleported && e.Previous?.Id == "pomar" && e.Current?.Id == "campos_do_aryk"),
+                    "Walking from the Pomar into the Campos do Aryk publishes AreaChanged (pomar -> campos_do_aryk).");
                 Assert.AreEqual(MapCatalog.PomarId, mode.MapId);
                 Assert.IsTrue(mode.OverworldArea.IsChunkLoaded(OverworldRules.ChunkOf(world, Ground(player))), "The chunk under the hero is not loaded.");
 
@@ -93,6 +104,9 @@ namespace Rapadura.Tests.PlayMode
                 Assert.Less(Ground(player).x, 300.5f, $"A level-1 hero got into the Tugai ({Ground(player)}).");
                 Assert.Greater(Ground(player).x, 280f, "The barrier teleported the hero away instead of a step back.");
                 Assert.AreEqual("pomar", mode.OverworldArea.CurrentZone?.Id);
+                Assert.AreEqual("pomar", mode.OverworldArea.AreaTracker.Zone?.Id, "Pushed back at the border: the area never flipped to the Tugai.");
+                Assert.IsFalse(areas.Exists(e => e.Current?.MapIdOrOwner == MapCatalog.TugaiId),
+                    "The soft barrier's step back must not announce the area the hero never entered.");
 
                 // The stitched world: down the Estepe's south road, through the open pass (the old gate to 07) into the Areias.
                 Assert.IsTrue(world.IsStitched, "The Pomar loads the stitched world of the four regions.");
@@ -112,6 +126,8 @@ namespace Rapadura.Tests.PlayMode
                 yield return WaitFrames(5);
                 Assert.Less(Ground(player).y, -1040f, $"The hero stopped at {Ground(player)} before the Areias (blocked at the border?).");
                 Assert.AreEqual(OverworldLayouts.AreiasId, mode.OverworldArea.CurrentPart?.Id, "The region follows the hero's position.");
+                Assert.IsTrue(areas.Exists(e => !e.Teleported && e.RegionChanged && e.CurrentPart?.Id == OverworldLayouts.AreiasId),
+                    "Walking through the pass publishes AreaChanged into the Areias.");
                 Assert.AreEqual(MapLayouts.CaravanasId, mode.MapId, "The map is the Estrada das Caravanas (07).");
                 Assert.IsTrue(mode.OverworldArea.IsChunkLoaded(OverworldRules.ChunkOf(world, Ground(player))), "The chunk under the hero is not loaded.");
 
@@ -122,6 +138,7 @@ namespace Rapadura.Tests.PlayMode
             finally
             {
                 SceneManager.sceneLoaded -= counter;
+                EventBus.Unsubscribe(onArea);
             }
         }
 

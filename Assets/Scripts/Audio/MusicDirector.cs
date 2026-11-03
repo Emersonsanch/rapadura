@@ -90,6 +90,9 @@ namespace Rapadura.Audio
         /// <summary>The context the game flow wants under any overlay.</summary>
         public MusicContext BaseContext => _baseContext;
 
+        /// <summary>The variant of <see cref="BaseContext"/>.</summary>
+        public string BaseVariant => _baseVariant;
+
         /// <param name="storyOverlay">
         /// Null when no story panel is up, else the <see cref="MusicContext.Story"/> variant ("" or
         /// <see cref="EndingVariant"/>). Defaults to reading <c>StoryPanelController</c>; tests inject it.
@@ -127,6 +130,22 @@ namespace Rapadura.Audio
             {
                 SetContext(context, _baseVariant);
             }
+        }
+
+        /// <summary>
+        /// The area of the continuous world asks for its music (<see cref="AreaMusicRules"/>, <c>OverworldAreaAmbienceDirector</c>):
+        /// becomes the base context like a flow change (crossfade; story overlay still wins). True when the base changed.
+        /// </summary>
+        public bool RequestAmbient(MusicContext context, string variant = null)
+        {
+            string key = SfxEventMap.Normalize(variant);
+            if (context == _baseContext && key == _baseVariant)
+            {
+                return false;
+            }
+
+            RequestBase(context, key);
+            return true;
         }
 
         private void PollStoryOverlay()

@@ -1,0 +1,97 @@
+/*
+ * Area letreiro of the continuous world (AreaBannerController, built in code, MU-style): the big area name that fades in
+ * at the top centre when the hero walks into a new area (region above, level band and a warning line below), and the
+ * small permanent label with the current area under the HUD's top-right buttons. Loaded at runtime from Resources; the
+ * controller puts `rap-theme` on the root so the palette below resolves. Plates are opaque (sand / snow behind).
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+.area-banner-root {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+/* ---- Letreiro ---- */
+
+.area-banner {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 15%;
+    align-items: center;
+}
+
+.area-banner-plate {
+    padding: 8px 40px 10px 40px;
+    max-width: 90%;
+    align-items: center;
+    background-color: var(--rap-brown-night);
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-top-color: var(--rap-gold);
+    border-bottom-color: var(--rap-gold);
+    transition-property: opacity;
+    transition-duration: 0.6s;
+}
+
+/* "Reduzir Movimento" / "Reduzir Flashes": appears and disappears without the fade. */
+.area-banner--instant .area-banner-plate,
+.rap-reduced-motion .area-banner-plate {
+    transition-duration: 0s;
+}
+
+.area-banner-region {
+    font-size: 15px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    letter-spacing: 2px;
+    color: var(--rap-gold);
+    text-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.9);
+}
+
+.area-banner-name {
+    font-size: 34px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    color: var(--rap-cream);
+    text-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.9);
+}
+
+.area-banner-band {
+    font-size: 16px;
+    -unity-text-align: middle-center;
+    color: var(--rap-cream-dim);
+    text-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.9);
+}
+
+.area-banner-warning {
+    margin-top: 4px;
+    font-size: 15px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    color: var(--rap-warning);
+    text-shadow: 1.5px 1.5px 2px rgba(0, 0, 0, 0.9);
+}
+
+/* ---- Permanent label (under the top-right buttons of HudView) ---- */
+
+.area-label {
+    position: absolute;
+    top: 112px;
+    right: 32px;
+    padding: 4px 12px;
+    background-color: rgba(46, 27, 16, 0.9);
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: var(--rap-panel-border);
+    font-size: 14px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-right;
+    color: var(--rap-cream);
+}
