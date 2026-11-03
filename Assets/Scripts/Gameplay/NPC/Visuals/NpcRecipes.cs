@@ -839,6 +839,73 @@ namespace Rapadura.Gameplay.NPC.Visuals
             },
 
             // ------------------------------------------------------------------
+            // Sangkent, a Cidade-Escadaria (Teto do Mundo, Docs/Mapas100.md §2.1 and map 36): quilted felt and yak wool against
+            // the cold, the caravans' silk red and blue, apricot blossom, terrace stone and juniper. Names of Manichaean
+            // missionaries and scribes (Abā; Kustai and Baraies of the Cologne Codex; Sisinnios, Mani's successor). Human; no
+            // marks of any living rite (no beads, no prayer flags).
+            // ------------------------------------------------------------------
+
+            // Abā, the missionary, here the chief of the chutes (the city's missions): broad and proud, a full black beard, a
+            // yak-wool felt cap with a red band, a yak-wool chapan with red hems, a blue scarf and a belt, the coil of chute rope
+            // on his shoulder and the keys of the stations. Calls the next cart down.
+            new NpcRecipe
+            {
+                Id = "aba", Region = BiomeType.Mountain, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 1.04f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Jolly, Hair = NpcHair.Short, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.Full,
+                Headwear = NpcHeadwear.FeltCap, HeadColor = NpcSwatch.YakWool, HeadTrim = NpcSwatch.SilkRed,
+                Garment = NpcGarment.Chapan, Main = NpcSwatch.YakWool, Trim = NpcSwatch.SilkRed, Sleeves = NpcSwatch.YakWool, Boots = NpcSwatch.Juniper,
+                Layers = NpcLayer.Belt | NpcLayer.Scarf, LayerColor = NpcSwatch.SilkBlue, LayerTrim = NpcSwatch.Felt,
+                LeftArm = NpcArmPose.HipRest, RightArm = NpcArmPose.Carry, Props = new[] { NpcProp.RopeCoil, NpcProp.Keys },
+                Gesture = NpcGesture.Call,
+                Story = "Abā, missionário de Mani; aqui, o chefe das calhas de Sangkent, que dá as missões da cidade",
+            },
+
+            // Sisinnios, Mani's successor, here the outfitter of the caravans (the city's shop: the gear of the gates 36, 38, 40):
+            // stout and easygoing, curly brown hair and a short beard under a felt hood with a red edge, a long quilted felt
+            // kaftan with red hems under a red vest and an apricot sash, a bolt of quilted cloth and his scale. Counts the straps.
+            new NpcRecipe
+            {
+                Id = "sisinnios", Region = BiomeType.Mountain, Age = NpcAge.Adult, Build = NpcBuild.Stout, Height = 0.99f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinLight, Face = NpcFace.Kind, Hair = NpcHair.Curly, HairColor = NpcSwatch.HairBrown, Beard = NpcBeard.Short,
+                Headwear = NpcHeadwear.Hood, HeadColor = NpcSwatch.Felt, HeadTrim = NpcSwatch.SilkRed,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.Felt, Trim = NpcSwatch.SilkRed, Sleeves = NpcSwatch.Felt, Boots = NpcSwatch.YakWool,
+                Layers = NpcLayer.Vest | NpcLayer.Sash, LayerColor = NpcSwatch.SilkRed, LayerTrim = NpcSwatch.ApricotBlossom,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.FabricBolt, NpcProp.Scale },
+                Gesture = NpcGesture.Count,
+                Story = "Sisinnios (Mar Sisin), sucessor de Mani; aqui, o agasalheiro das caravanas: a loja da cidade (roupa térmica, grampos, capa de tempestade)",
+            },
+
+            // Kustai, the scribe of the Cologne Codex, here the keeper of the caravan notice board (the second mission): slim and
+            // upright, a dark ponytail and a goatee, a blue skullcap, a long silk-blue robe with felt hems, a yak-wool satchel of
+            // notices on a belt, the quill and a scroll held up. Writes.
+            new NpcRecipe
+            {
+                Id = "kustai", Region = BiomeType.Mountain, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 1.02f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinOlive, Face = NpcFace.Calm, Hair = NpcHair.Ponytail, HairColor = NpcSwatch.HairDark, Beard = NpcBeard.Goatee,
+                Headwear = NpcHeadwear.Skullcap, HeadColor = NpcSwatch.SilkBlue, HeadTrim = NpcSwatch.Felt,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.SilkBlue, Trim = NpcSwatch.Felt, Sleeves = NpcSwatch.SilkBlue, Boots = NpcSwatch.Juniper,
+                Layers = NpcLayer.Satchel | NpcLayer.Belt, LayerColor = NpcSwatch.YakWool, LayerTrim = NpcSwatch.SilkRed,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Quill, NpcProp.Scroll },
+                Gesture = NpcGesture.Write,
+                Story = "Kustai, escriba do Códice de Colônia; aqui, quem cuida do quadro de avisos das caravanas e dá a 2ª missão",
+            },
+
+            // Baraies, the master of the Codex, here the teacher who counts the maps: old and stooped, a long grey beard under a
+            // felt turban with an apricot band, a long terrace-stone robe with felt hems and a juniper shawl
+            // edged red, the walking stick and the clay tablets of his maps. Tells the way.
+            new NpcRecipe
+            {
+                Id = "baraies", Region = BiomeType.Mountain, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 0.96f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinFair, Face = NpcFace.Dreamy, Hair = NpcHair.Short, HairColor = NpcSwatch.HairGrey, Beard = NpcBeard.Long,
+                Headwear = NpcHeadwear.Turban, HeadColor = NpcSwatch.Felt, HeadTrim = NpcSwatch.ApricotBlossom,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.PamirStone, Trim = NpcSwatch.Felt, Sleeves = NpcSwatch.PamirStone, Boots = NpcSwatch.YakWool,
+                Layers = NpcLayer.Shawl, LayerColor = NpcSwatch.Juniper, LayerTrim = NpcSwatch.SilkRed,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.WalkingStick, NpcProp.Tablets },
+                Gesture = NpcGesture.Storytell,
+                Story = "Baraies, o mestre do Códice de Colônia; aqui, o professor de Sangkent que conta os mapas do Teto do Mundo",
+            },
+
+            // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
 

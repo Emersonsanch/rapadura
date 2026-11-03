@@ -140,6 +140,12 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string PalafitasTarchon = "palafitas_tarchon";
 
+        /// <summary>
+        /// Sangkent, a Cidade-Escadaria, capital of the Teto do Mundo (map 36, return city of maps 36–40, Docs/Mapas100.md §2.1
+        /// and região 7). Same id as <c>MapCatalog.Sangkent</c> and <c>CityTownRecipes.SangkentCityId</c>.
+        /// </summary>
+        public const string Sangkent = "sangkent";
+
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
             new CitySpec(VilaZefa, BiomeType.Forest,
@@ -343,6 +349,21 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("tehat"),
                 },
                 new List<string> { CityShopCatalog.TrocasNuhzadag }),
+
+            // Sangkent (the Teto do Mundo, região 7; names of Manichaean missionaries and scribes): Abā, the missionary, here the
+            // chief of the chutes (missions), Kustai, the scribe of the Cologne Codex, who keeps the caravan notice board (second
+            // mission), Baraies, the master of the Codex, the teacher who counts the maps, and Sisinnios, Mani's successor, here
+            // the outfitter of the caravans (the city's shop: the gear of the gates 36, 38 and 40). Region: the borrowed Forest
+            // (as Jhilpur).
+            new CitySpec(Sangkent, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("aba"),
+                    new CityResidentSpec("sisinnios", CityShopCatalog.AgasalhosSisinnios),
+                    new CityResidentSpec("kustai"),
+                    new CityResidentSpec("baraies"),
+                },
+                new List<string> { CityShopCatalog.AgasalhosSisinnios }),
         };
 
         /// <summary>Ammo, the peddler: not a resident of one city, he is wherever his mule is today (<see cref="ShopRotation.MascateRegion"/>).</summary>

@@ -71,6 +71,8 @@ namespace Rapadura.Gameplay.World.Cities
     /// then Abiesous wants the crows off his boat school's oars and pays with a Fruta Purificadora (the gate of map 35).
     /// Palafitas de Tarchon (map 33): old Tarchon asks the cousins to free the will-o'-wisps caught in the reeds round the stilts,
     /// then Vel the fisher wants the ghost herons off his nets and pays with an Amuleto Antiveneno (the gate of map 34).
+    /// Sangkent (map 36): Abā, the chief of the chutes, sends the cousins after the rolling stones that jam the chutes, then
+    /// Kustai wants the ill-wind mist off the caravan notice board and pays with a Capa de Tempestade (the gate of map 40).
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -92,6 +94,8 @@ namespace Rapadura.Gameplay.World.Cities
         public const string JhilpurOars = "quest_city_jhilpur_boat_school_crows";
         public const string TarchonWisps = "quest_city_tarchon_caught_wisps";
         public const string TarchonNets = "quest_city_tarchon_herons_on_the_nets";
+        public const string SangkentChutes = "quest_city_sangkent_stones_in_the_chutes";
+        public const string SangkentBoard = "quest_city_sangkent_mist_on_the_board";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -175,6 +179,15 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.PalafitasTarchon, "vel", new RegionQuestSpec(TarchonNets, BiomeType.Forest, TarchonWisps, 1450,
                 new[] { new RegionObjectiveSpec("chase_the_herons", QuestObjectiveType.KillEnemyType, "enemy_forest_shroud_owl", 6) },
                 new[] { new RegionRewardSpec("item_amuleto_antiveneno", 1), new RegionRewardSpec("item_gold", 130) })),
+
+            // -- Sangkent: Abā, then Kustai. The rolling stone is the Pedra-Rolante of the ficha (Docs/Mapas100.md 36) and the
+            // ill-wind mist the Neblina do Vento Ruim of the Calhas de Pedra (37), which blurs the notices of the caravans. --
+            new CityQuestSpec(CityCatalog.Sangkent, "aba", new RegionQuestSpec(SangkentChutes, BiomeType.Forest, null, 1500,
+                new[] { new RegionObjectiveSpec("clear_the_chutes", QuestObjectiveType.KillEnemyType, "enemy_mountain_rolling_stone", 7) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 130) })),
+            new CityQuestSpec(CityCatalog.Sangkent, "kustai", new RegionQuestSpec(SangkentBoard, BiomeType.Forest, SangkentChutes, 1600,
+                new[] { new RegionObjectiveSpec("clear_the_board", QuestObjectiveType.KillEnemyType, "enemy_mountain_ill_wind_mist", 6) },
+                new[] { new RegionRewardSpec("item_capa_tempestade", 1), new RegionRewardSpec("item_gold", 140) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();

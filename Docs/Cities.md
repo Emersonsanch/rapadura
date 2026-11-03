@@ -234,6 +234,7 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 
 | Região | Cidade | Moradores | Loja | Missões |
 |---|---|---|---|---|
+| Teto do Mundo (mapas 36–40) | **Sangkent, a Cidade-Escadaria** (capital, `sangkent`) | Abā, o Chefe das Calhas (casa na cabeça da praça), Sisinnios, o Agasalheiro (rua Oeste), Kustai, o Escriba (rua Leste), Baraies, o Professor (rua Leste) | **Agasalhos do Sisinnios** (`shop_agasalhos_sisinnios`) | Abā: "Pedras nas Calhas"; Kustai: "Neblina no Quadro" |
 | Delta de Jhilpur (mapas 31, 32 e 35) | **Jhilpur, a Cidade nas Raízes** (capital, `jhilpur`) | Salmaios, o Guardião da Raiz-Mãe (rua Norte), Nuhzadag, o Barqueiro (rua Oeste), Abiesous, o Mestre da Escola de Barco (rua Leste), Tehat, a Erveira (rua Leste) | **Barcos e Trocas do Nuhzadag** (`shop_trocas_nuhzadag`) | Salmaios: "Lodo nos Ghats"; Abiesous: "Corvos nos Remos" |
 | Costa das Monções (mapas 25 e 30) | **Taa Pwani** (marinheiros e mercadores suaílis, `taa_pwani`) | Capitão Liyongo, o Nakhoda (casa de 2 andares na rua Leste), Mwana, a Mercadora de Pérolas (rua Oeste), Nuru, a Guardiã do Farol (cabeça da praça, ao pé do Farol de Coral), Zawadi, o Trançador de Raízes (rua Leste), Mbaraka, o Navegador das Estrelas (rua Oeste) | **Bazar de Pérolas da Mwana** (`shop_bazar_mwana`) | Liyongo: "Ladras de Vela"; Zawadi: "Garras no Mangue" |
 
@@ -291,6 +292,50 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 - **Falta:** o mapa 31 e o mundo contínuo do delta ainda não existem, então o passeio só abre pelo menu de prévia do
   editor (`Preview Walkable Town/Jhilpur`); a monção que sobe um andar, a escola de barco ensinando a remar, a Maré de
   Lodo e a Casa nas Raízes ainda faltam.
+
+**Sangkent, a Cidade-Escadaria** (capital do Teto do Mundo, região 7, mapa 36; cidade de retorno de 36–40):
+- **Passeio da cidade:** receita `CityTownRecipes.Sangkent` (`CityTownRecipes.Sangkent.cs`) no estilo novo
+  `TownStyles.StoneTerrace` (`TownArchitecture.StoneTerrace`, `TownVegetation.Mountain`, linha 13 da `TownPalette`: pedra
+  de terraço `#8C8173`, barro `#B98B5E`, zimbro `#5A3E2B`, neve `#E6EEF2`, damasco em flor `#F2B8A0`, seda vermelha
+  `#C0392B` e azul `#2E86AB` das fitas das caravanas, brasa de lareira `#FFB866` (brilha à noite: os terraços acendem
+  um por um)). Cada casa é uma **casa de pedra e barro do Pamir** de dois andares (`TownBuildingSpec.StoneTerrace`,
+  `Floors = 2`: `TownKit.StoneTerraceHouse`): soco de pedra escura, térreo de pedra, andar de cima de barro (ou pedra),
+  vigas de zimbro amarrando as paredes com as **pontas das vigas à mostra** na fachada, porta de moldura pesada e
+  janelinhas fundas embaixo, janela acesa em cima, **varanda de treliça** (a de Baltit) do lado oposto à porta,
+  terraço plano com parapeito, a claraboia quadrada da casa pamiri, damascos secando e lenha; deque de lajes com postes
+  de zimbro (nos `PorchPostsX`) e alpendre plano na altura do primeiro andar, a tabuleta pendurada nele. Peças:
+  `TerraceWall` (muro de arrimo de pedra seca de segmento com **três degraus de terraço** atrás, damasqueiros e
+  casinhas de pedra com janela acesa; a variante 1 põe o **forte do 7º terraço** no meio: torre de pedra e barro com
+  vigas, varanda acesa e as cinco fitas), `StoneChute` (pé de uma **calha de pedra polida** descendo os terraços,
+  patamar de lajes com para-choque de zimbro, carrinho esperando e lanterna da estação), `ChuteCart` (carrinho de tábua
+  em patins de pedra com as **cinco fitas das cinco luzes**; damascos ou fardos de feltro), `ApricotTree` (damasqueiro
+  num anel de pedras; em flor ou com fruta), `IrrigationChannel` (canal de pedra com água atravessando a rua e laje de
+  pedra no meio; pisável) e `CaravanStone` (o **Marco das Caravanas** na praça: marco alto num degrau redondo, travessa
+  com as cinco fitas e lanterna, cocho de água de degelo); portão de pilares de pedra com vigas de zimbro, lintel com
+  telhadinho, as cinco fitas e lanternas (`TownKit.TerraceGate`); vitrine do agasalheiro (`TownShopDressing.Outfitter`:
+  arara de casacos de feltro acolchoado, grampos pendurados, capas dobradas, rolo de corda). As fitas são as cores das
+  caravanas (as cinco luzes se encontraram nesta encruzilhada), não rito. Peças em `TownKit.StoneTerrace.cs`, colisores
+  em `CitySolids`. Ruas Oeste (a entrada, a estrada das caravanas), Leste e Sul de 19 m (saídas em (±19, 0) e (0, −19),
+  alvo de chegada a 18,6 m); Cais da Barca na rua Oeste; **sem rua ao norte**: ali os terraços sobem em três lances
+  (z = 19,5 com o forte e z = 14 dos lados) e as duas calhas descem até os patamares em (±13, 12,4); tudo dentro de um
+  círculo de 22,5 m (o sólido mais longe, o muro de arrimo do meio, chega a 21,7 m), caminhada em ±22; a cidade fica
+  plana em y = 0 (os terraços de cima e o forte são cenário atrás dos muros); `CityLayoutRules.Validate` sem problemas,
+  com e sem o mascate. Casas com 600–850 triângulos, peças com 70–560.
+- **Respawn:** derrota nos mapas 36–40 acorda na praça de Sangkent, ao pé do Marco das Caravanas
+  (`MapCatalog.RespawnCityFor` → `ApplyDefeatIn`).
+- **Agasalhos do Sisinnios** (diária, 3 vagas que giram, tema Especialidade): poções de vida e mana e **todas as
+  exigências do Teto do Mundo que um item atende**, fixas desde o primeiro dia: Roupa Térmica Refinada (36, vestida no
+  slot Peito), Grampos de Escalada (38) e Capa de Tempestade (40); Manta de Lã e Chá de Gengibre para o frio dos passos;
+  giram corda, carne, ração de montaria, fibra, erva, Amuleto da Sorte e Pedra da Bênção. O Forte dos Ventos (39) pede
+  asas de verdade ou montaria voadora (Tacho Encantado, Grifo da Coluna): nenhum balcão vende. O Ammo nunca para lá.
+- **Missões da cidade:** Abā pede 7 pedras-rolantes fora das calhas (`enemy_mountain_rolling_stone`, a Pedra-Rolante
+  da ficha; 5 poções de vida + 5 de mana + 130 ouro, 1500 XP); depois Kustai pede 6 neblinas do vento ruim fora do
+  quadro de avisos das caravanas (`enemy_mountain_ill_wind_mist`; **Capa de Tempestade** + 140 ouro, 1600 XP). Testes:
+  `CitySangkentTests`.
+- **Falta:** o mundo contínuo do Teto do Mundo (outro trabalho) vai encaixar a cidade; até lá o passeio só abre pelo
+  menu de prévia do editor (`Preview Walkable Town/Sangkent`). As calhas e os carrinhos andáveis (transporte da cidade,
+  fila de 1 por vez), os 7 terraços de verdade, o evento Avalanche, o Iaque do Teto do Mundo e o conjunto Terraço do
+  Pamir ainda faltam.
 
 Código: `CityCatalog`, `CityShopCatalog` (dados), `CityTexts` (textos en/pt-BR), `VillageHubButton` (o mesmo painel
 para toda cidade), `CityFastTravelPanel` (Barcas de Luz), `CitySafeZoneHud` (aviso), `WorldMapCityPresence` (zona

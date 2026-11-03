@@ -52,6 +52,9 @@ namespace Rapadura.Editor
         [MenuItem(Root + "Preview Walkable Town/Palafitas de Tarchon (trols, Delta de Jhilpur)", priority = 21)]
         private static void PreviewTarchon() => Preview(CityCatalog.PalafitasTarchon);
 
+        [MenuItem(Root + "Preview Walkable Town/Sangkent (capital, Teto do Mundo)", priority = 22)]
+        private static void PreviewSangkent() => Preview(CityCatalog.Sangkent);
+
         [MenuItem(Root + "Preview Walkable Town/Toggle Night", priority = 30)]
         private static void ToggleNight()
         {

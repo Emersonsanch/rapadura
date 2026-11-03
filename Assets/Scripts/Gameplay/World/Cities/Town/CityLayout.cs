@@ -206,6 +206,21 @@ namespace Rapadura.Gameplay.World.Cities.Town
         NetRack = 69,
         /// <summary>Tarchon: a floating reed island in a round patch of bog water, rush tufts and a will-o'-wisp over it.</summary>
         ReedIsland = 70,
+
+        // ---- Sangkent, the stair city (Teto do Mundo; drawn by TownKit.StoneTerrace) ----
+
+        /// <summary>Sangkent: a dry-stone retaining wall from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> with the terraces stepping up behind it (its mass behind the line; Variant 1: the fort on the top terrace).</summary>
+        TerraceWall = 71,
+        /// <summary>Sangkent: the foot of a polished stone chute coming down the terraces behind it, the landing in front with a plank cart (yaw: the landing faces local −z).</summary>
+        StoneChute = 72,
+        /// <summary>Sangkent: a plank chute cart on stone runners with the five ribbons of the five lights (Variant: loaded with apricots / with felt bales).</summary>
+        ChuteCart = 73,
+        /// <summary>Sangkent: an apricot tree in a ring of stones (Variant 0: in blossom, 1: in fruit).</summary>
+        ApricotTree = 74,
+        /// <summary>Sangkent: a stone irrigation channel from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> crossed by a stone slab in the middle; walkable.</summary>
+        IrrigationChannel = 75,
+        /// <summary>Sangkent: the Marco das Caravanas, a tall milestone on a round stone step with the five ribbons of the five lights and a hanging lantern.</summary>
+        CaravanStone = 76,
     }
 
     public enum CityExitKind

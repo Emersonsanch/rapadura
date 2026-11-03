@@ -92,7 +92,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 return;
             }
 
-            if (spec.ReedHall || spec.ReefTower || spec.RootStilt || spec.StiltLonghouse)
+            if (spec.ReedHall || spec.ReefTower || spec.RootStilt || spec.StiltLonghouse || spec.StoneTerrace)
             {
                 // Aratta's reed halls and Kirta's coral towers (TownKit.ReedHorn / CoralReef): their own mass, roof and porch.
                 float rhw = spec.Width * 0.5f;
@@ -111,12 +111,17 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 {
                     TownKit.StiltLonghouseHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
                 }
+                else if (spec.StoneTerrace)
+                {
+                    // Sangkent's two-storey stone houses hang their sign over the porch roof themselves (the eave is a storey up).
+                    TownKit.StoneTerraceHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
+                }
                 else
                 {
                     TownKit.ReefTowerHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
                 }
 
-                if (spec.Sign && spec.PorchDepth > 0.01f)
+                if (spec.Sign && spec.PorchDepth > 0.01f && !spec.StoneTerrace)
                 {
                     TownKit.SignBoard(b, new Vector3(spec.DoorOffset * spec.Width, spec.EaveHeight + 0.25f, rzFront + 0.05f), spec.SignColor, spec.AccentColor);
                 }

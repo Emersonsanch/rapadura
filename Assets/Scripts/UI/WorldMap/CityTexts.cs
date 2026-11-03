@@ -110,6 +110,7 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.MergulhoDanel, "Danel's Diving Tools", "Ferramentas de Mergulho do Danel"),
                 Shop(CityShopCatalog.TrocasNuhzadag, "Nuhzadag's Boats and Trades", "Barcos e Trocas do Nuhzadag"),
                 Shop(CityShopCatalog.CestariaLarthia, "Larthia's Baskets", "Cestaria da Larthia"),
+                Shop(CityShopCatalog.AgasalhosSisinnios, "Sisinnios's Mountain Gear", "Agasalhos do Sisinnios"),
             };
 
             // ---- Cities ----
@@ -149,6 +150,10 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.Jhilpur, "Jhilpur, City in the Roots", "Jhilpur, a Cidade nas Raízes", "Jhilpur", "Jhilpur",
                 "The capital of the delta, built in the roots of giant fig trees over a brown-green lake: plank houses on root columns under curved thatch roofs, bridges of living root over the canals, brick ghats stepping down into the water and, in the middle of the round plaza, the Raiz-Mãe. Mani's journey to the east passed through here: the Living Water against the Lodo.",
                 "A capital do delta, construída nas raízes de figueiras gigantes sobre um lago marrom-esverdeado: casas de tábua sobre colunas de raiz debaixo de telhados de palha curvos, pontes de raiz viva sobre os canais, ghats de tijolo descendo para a água e, no meio da praça redonda, a Raiz-Mãe. A viagem de Mani para o leste passou por aqui: a Água Viva contra o Lodo.");
+
+            AddCity(entries, CityCatalog.Sangkent, "Sangkent, the Stair City", "Sangkent, a Cidade-Escadaria", "Sangkent", "Sangkent",
+                "The capital of the Roof of the World, built in terraces of stone up a high valley: houses of stone and loam laced with juniper, lattice balconies, apricot trees in blossom and, above it all, the fort of the seventh terrace. Polished stone chutes carry plank carts down between the levels. The caravans that took the hymns east crossed here, and the five lights met: five colours on the ribbons of every cart.",
+                "A capital do Teto do Mundo, construída em terraços de pedra subindo um vale alto: casas de pedra e barro amarradas com vigas de zimbro, varandas de treliça, damasqueiros em flor e, acima de tudo, o forte do sétimo terraço. Calhas de pedra polida levam carrinhos de tábua para baixo entre os níveis. As caravanas que levaram os hinos para o leste passavam por aqui, e as cinco luzes se encontraram: cinco cores nas fitas de cada carrinho.");
 
             AddCity(entries, CityCatalog.PalafitasTarchon, "Tarchon Stilts", "Palafitas de Tarchon", "Tarchon", "Tarchon",
                 "The trols' city in the open swamp: long houses on tall piles with leaf roofs down to the floor, plank boardwalks over the bog water, nets drying, baskets as tall as a cousin and floating reed islands. At night the swamp fills with will-o'-wisps, sparks caught in the Ar Sereno; half the trols stared at them until they forgot themselves, and every spark set free wakes a neighbour.",
@@ -673,6 +678,39 @@ namespace Rapadura.UI.WorldMap
                 ("Ícaro... you want the end first? Trols tell the end... last. Very last. ...Fine. They lived. Happy?", "Ícaro... você quer o fim primeiro? Trol conta o fim... por último. Bem por último. ...Tá. Eles viveram. Feliz?"),
                 ("Lavine... I know a story about a boy named Jorge... who whistled so badly the herons flew away. It is true. Ask Tarchon.", "Lavine... eu sei uma história de um menino chamado Jorge... que assobiava tão mal que as garças voavam embora. É verdade. Pergunta para o Tarchon."),
                 ("Every spark set free... is a story that comes back. The stilts are full of stories... waiting to come back.", "Cada faísca libertada... é uma história que volta. As palafitas estão cheias de histórias... esperando para voltar."));
+
+            // ---- Sangkent, a Cidade-Escadaria (names of Manichaean missionaries and scribes) ----
+            AddResident(entries, "aba", "Abā, Chief of the Chutes", "Abā, o Chefe das Calhas",
+                ("Joaquim, a guardian who is afraid of a cart? Sit at the back, hold the ribbons and shout. Everyone shouts the first time.", "Joaquim, um guardião com medo de carrinho? Senta atrás, segura as fitas e grita. Todo mundo grita na primeira vez."),
+                ("Maria, at dusk the terraces light up one by one, from the market to the fort. Count them with me: the seventh is always the last.", "Maria, no fim da tarde os terraços acendem um por um, do mercado até o forte. Conta comigo: o sétimo é sempre o último."),
+                ("Maithe, the eldest goes down first and waits at the bottom for the others. That is the rule of the chutes, and of families too.", "Maithe, a mais velha desce primeiro e espera os outros lá embaixo. Essa é a regra das calhas, e das famílias também."),
+                ("Ícaro, no, you cannot put a sail on the cart. ...Who told you about the sail? Kustai? I will have a word with Kustai.", "Ícaro, não, você não pode pôr vela no carrinho. ...Quem te contou da vela? O Kustai? Vou ter uma conversa com o Kustai."),
+                ("Lavine, your grandpa Jorge rode my first chute when it was a plank on the snow. He went down backwards, laughing. Nobody has beaten his time.", "Lavine, o seu avô Jorge desceu na minha primeira calha quando ela era uma tábua na neve. Desceu de costas, rindo. Ninguém bateu o tempo dele."),
+                ("Going down is quick, going up takes the stairs. Seven terraces, one cart at a time. Wait your turn.", "Descer é rápido, subir é de escada. Sete terraços, um carrinho por vez. Espera a sua vez."));
+
+            AddResident(entries, "sisinnios", "Sisinnios the Outfitter", "Sisinnios, o Agasalheiro",
+                ("Joaquim, felt over silk, silk over skin. Up here the cold does not bite, it waits. Dress before it starts waiting for you.", "Joaquim, feltro por cima da seda, seda por cima da pele. Aqui em cima o frio não morde, ele espera. Se agasalha antes que ele comece a esperar por você."),
+                ("Maria, the thermal clothes of the monks of Sangkent: you wear them, you do not carry them. The gate of the city knows the difference.", "Maria, a roupa térmica dos monges de Sangkent: é para vestir, não para levar na mochila. O portão da cidade sabe a diferença."),
+                ("Maithe, crampons for the glacier, the eldest takes two pairs. One for her, one for whoever forgot.", "Maithe, grampos para a geleira, a mais velha leva dois pares. Um para ela, outro para quem esqueceu."),
+                ("Ícaro, the storm cloak has twelve straps. Each one has a reason. ...No, you cannot remove the eleventh.", "Ícaro, a capa de tempestade tem doze correias. Cada uma tem um motivo. ...Não, você não pode tirar a décima primeira."),
+                ("Lavine, Grandma Edna sent me a jar of apricot jam with a note: for the man who keeps my grandchildren warm. I keep the note in my coat.", "Lavine, a Vó Edna me mandou um pote de doce de damasco com um bilhete: para o homem que mantém os meus netos aquecidos. Eu guardo o bilhete no casaco."),
+                ("Clothes for the stair city, crampons for the glacier, a cloak for the pass. Everything for the roof of the world, at a fair price.", "Roupa para a cidade-escadaria, grampos para a geleira, capa para o passo. Tudo para o teto do mundo, a preço justo."));
+
+            AddResident(entries, "kustai", "Kustai the Scribe", "Kustai, o Escriba",
+                ("Joaquim, this notice says a caravan of salt needs a guard to the pass. I wrote your name next to it. In pencil. For now.", "Joaquim, esse aviso diz que uma caravana de sal precisa de guarda até o passo. Escrevi o seu nome do lado. A lápis. Por enquanto."),
+                ("Maria, I copy every notice twice: one for the board, one for the box. The wind takes the first. The light keeps the second.", "Maria, eu copio todo aviso duas vezes: um para o quadro, outro para a caixa. O vento leva o primeiro. A luz guarda o segundo."),
+                ("Maithe, you read aloud for those who cannot read. A scribe could not ask for a better neighbour on the terrace.", "Maithe, você lê em voz alta para quem não sabe ler. Um escriba não podia pedir vizinha melhor no terraço."),
+                ("Ícaro, I did not tell Abā about the sail. I only wrote it down. ...Writing is not telling.", "Ícaro, eu não contei da vela para o Abā. Só escrevi. ...Escrever não é contar."),
+                ("Lavine, Grandpa Jorge left a notice on this board forty years ago: looking for a girl named Edna. Someone answered it, it seems.", "Lavine, o Vô Jorge deixou um aviso nesse quadro há quarenta anos: procuro uma moça chamada Edna. Parece que alguém respondeu."),
+                ("East or west, wool or silk, salt or hymns: every caravan that crosses the terraces leaves a word on my board.", "Leste ou oeste, lã ou seda, sal ou hinos: toda caravana que cruza os terraços deixa uma palavra no meu quadro."));
+
+            AddResident(entries, "baraies", "Baraies the Teacher", "Baraies, o Professor",
+                ("Joaquim, a map is a promise: this way there is water. Keep the promises of the maps and they will keep you.", "Joaquim, um mapa é uma promessa: por aqui tem água. Cumpre as promessas dos mapas e elas cuidam de você."),
+                ("Maria, from the fort you can see four valleys. The fifth is behind the light. Every student asks where. I let them guess.", "Maria, do forte dá para ver quatro vales. O quinto fica atrás da luz. Todo aluno pergunta onde. Eu deixo adivinhar."),
+                ("Maithe, the wind of the Fort of the Winds turns with the vanes. Learn which way, and the whole valley will speak to you.", "Maithe, o vento do Forte dos Ventos gira com os cata-ventos. Aprende para que lado, e o vale inteiro vai falar com você."),
+                ("Ícaro, you counted the steps of all seven terraces? Four hundred and twelve. ...Four hundred and thirteen? Count again. With me.", "Ícaro, você contou os degraus dos sete terraços? Quatrocentos e doze. ...Quatrocentos e treze? Conta de novo. Comigo."),
+                ("Lavine, Grandma Edna was my best student. She drew the map of the Zarafshan from memory, with every apricot tree on it.", "Lavine, a Vó Edna foi a minha melhor aluna. Ela desenhou o mapa do Zarafshan de memória, com todos os damasqueiros."),
+                ("Seven terraces, four chutes, one pass. Learn the stair city by heart and the mountain will never lose you.", "Sete terraços, quatro calhas, um passo. Aprende a cidade-escadaria de cor e a montanha nunca vai perder você."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

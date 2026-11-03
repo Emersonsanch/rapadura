@@ -37,7 +37,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
             kind == CityPropKind.FenceRun || kind == CityPropKind.Gate || kind == CityPropKind.KarezChannel || kind == CityPropKind.Cliff ||
             kind == CityPropKind.RopeBridge || kind == CityPropKind.LampString || kind == CityPropKind.Palisade || kind == CityPropKind.RockWall ||
             kind == CityPropKind.MineRails || kind == CityPropKind.ShellBridge || kind == CityPropKind.ReefEdge ||
-            kind == CityPropKind.RootBridge || kind == CityPropKind.Ghat || kind == CityPropKind.SwampEdge || kind == CityPropKind.Boardwalk;
+            kind == CityPropKind.RootBridge || kind == CityPropKind.Ghat || kind == CityPropKind.SwampEdge || kind == CityPropKind.Boardwalk ||
+            kind == CityPropKind.TerraceWall || kind == CityPropKind.IrrigationChannel;
 
         /// <summary>Unit direction of a segment prop and the side its mass stands on (left of the direction: east-going → north).</summary>
         public static Vector2 SegmentBack(Vector2 direction) => new Vector2(-direction.y, direction.x);
@@ -104,6 +105,12 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.GiantBasket: GiantBasket(b, s, prop.Variant); return true;
                 case CityPropKind.NetRack: NetRack(b, s); return true;
                 case CityPropKind.ReedIsland: ReedIsland(b, s, prop.Variant); return true;
+                case CityPropKind.TerraceWall: TerraceWall(b, d, s, prop.Variant); return true;
+                case CityPropKind.StoneChute: StoneChute(b, s); return true;
+                case CityPropKind.ChuteCart: ChuteCart(b, s, prop.Variant); return true;
+                case CityPropKind.ApricotTree: ApricotTree(b, s, prop.Variant); return true;
+                case CityPropKind.IrrigationChannel: IrrigationChannel(b, d); return true;
+                case CityPropKind.CaravanStone: CaravanStone(b, s); return true;
                 default: return false;
             }
         }
@@ -855,6 +862,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
                 case TownShopDressing.BasketWeaver:
                     StiltVillageDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.Outfitter:
+                    StoneTerraceDressing(b, spec, x, y, z, zFacade);
                     break;
 
                 case TownShopDressing.AirBottles:

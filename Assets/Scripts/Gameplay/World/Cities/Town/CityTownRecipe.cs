@@ -336,6 +336,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             spec.ReefTower |= style.Architecture == TownArchitecture.CoralReef && plainHouse;
             spec.RootStilt |= style.Architecture == TownArchitecture.RootStilt && plainHouse;
             spec.StiltLonghouse |= style.Architecture == TownArchitecture.StiltVillage && plainHouse;
+            spec.StoneTerrace |= style.Architecture == TownArchitecture.StoneTerrace && plainHouse;
 
             switch (r.Kind)
             {

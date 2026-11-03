@@ -254,6 +254,14 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string CestariaLarthia = "shop_cestaria_larthia";
 
+        /// <summary>
+        /// Agasalhos do Sisinnios (Sangkent, the capital of the Teto do Mundo, Docs/Mapas100.md região 7): the outfitter of the
+        /// caravans sells the gear of every gate of the region that an item answers (Docs/MetodologiaMapasERacas.md §2.1): the
+        /// Roupa Térmica Refinada (36, worn), the Grampos de Escalada (38) and the Capa de Tempestade (40). The Forte dos Ventos
+        /// (39) asks for real wings or a flying mount, which no counter sells. The counter turns daily.
+        /// </summary>
+        public const string AgasalhosSisinnios = "shop_agasalhos_sisinnios";
+
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
@@ -538,6 +546,29 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_mount_feed", 3, 12, rotating: true),
                 new CityShopEntry("item_corda_escalada", 40, 2, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+            })),
+
+            // ---- Sangkent: Sisinnios's mountain gear, the gear of the gates 36, 38 and 40; daily ----
+            new CityShopSpec(AgasalhosSisinnios, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(AgasalhosSisinnios, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                // Map gates (MapRequirementRules): the thermal clothes of Sangkent itself (36, worn in the Chest slot), the
+                // crampons of the Geleira do Teto do Mundo (38) and the storm cloak of the Passo de Wakhan (40).
+                new CityShopEntry("item_roupa_termica", 900, 2),
+                new CityShopEntry("item_grampos_escalada", 950, 2),
+                new CityShopEntry("item_capa_tempestade", 1100, 1),
+                // For the cold of the passes (Docs/Mapas100.md 38: the medidor de frio): wool cloaks and ginger tea.
+                new CityShopEntry("item_manta_la", 45, 2),
+                new CityShopEntry("item_cha_gengibre", 70, 3),
+                // The rotation: what the caravans bring up the Rota da Seda.
+                new CityShopEntry("item_corda_escalada", 40, 2, rotating: true),
+                new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
+                new CityShopEntry("item_mount_feed", 3, 12, rotating: true),
+                new CityShopEntry("item_fiber", 1, 20, rotating: true),
+                new CityShopEntry("item_herb", 3, 12, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
             })),
 
             // ---- Ferraria do Mestre Adamas (Vila): the village blacksmith ----

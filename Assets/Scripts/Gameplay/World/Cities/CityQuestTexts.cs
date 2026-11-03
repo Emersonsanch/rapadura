@@ -300,6 +300,38 @@ namespace Rapadura.Gameplay.World.Cities
             new LocalizationEntry("quest.city_tarchon_herons_on_the_nets.active",
                 "They come... when the mist is lilac. Wait... by the nets.",
                 "Eles vêm... quando a névoa fica lilás. Esperem... perto das redes."),
+
+            // ================= Sangkent — Abā, o chefe das calhas =================
+            new LocalizationEntry("quest.city_sangkent_stones_in_the_chutes.title", "Stones in the Chutes", "Pedras nas Calhas"),
+            new LocalizationEntry("quest.city_sangkent_stones_in_the_chutes.description",
+                "Stones dimmed by the cold have come loose from the slopes above Sangkent and roll down the polished chutes on their own, jamming the carts between the terraces. Abā, who keeps every chute of the city running, asked the cousins to break them up before a cart full of people meets one.",
+                "Pedras apagadas pelo frio se soltaram das encostas acima de Sangkent e descem sozinhas pelas calhas polidas, travando os carrinhos entre os terraços. O Abā, que mantém todas as calhas da cidade funcionando, pediu aos primos que quebrem as pedras antes que um carrinho cheio de gente encontre uma."),
+            new LocalizationEntry("quest.city_sangkent_stones_in_the_chutes.obj_clear_the_chutes", "Break the rolling stones off the chutes", "Quebrar as pedras-rolantes das calhas"),
+            new LocalizationEntry("quest.city_sangkent_stones_in_the_chutes.journal",
+                "With the last stone in pieces, Abā sent an empty cart down the long chute and listened to it all the way to the market terrace. Not a single bump. Ícaro asked to go down in the next one. Abā said yes, then said no, and then went down with him.",
+                "Com a última pedra em pedaços, o Abā mandou um carrinho vazio pela calha comprida e ficou escutando até ele chegar ao terraço do mercado. Nenhum solavanco. O Ícaro pediu para descer no próximo. O Abā disse que sim, depois disse que não, e depois desceu junto com ele."),
+            new LocalizationEntry("quest.city_sangkent_stones_in_the_chutes.offer",
+                "Edna's grandchildren, on my terraces! Jorge rode my first chute when it was still a plank on the snow. Now seven stones roll down my chutes with nobody in them. Break them before they meet a cart, and the whole city will ride in peace again.",
+                "Os netos da Edna, nos meus terraços! O Jorge desceu na minha primeira calha quando ela ainda era uma tábua na neve. Agora sete pedras descem pelas minhas calhas sem ninguém dentro. Quebrem elas antes que encontrem um carrinho, e a cidade inteira vai voltar a descer em paz."),
+            new LocalizationEntry("quest.city_sangkent_stones_in_the_chutes.active",
+                "A stone that rolls on its own always comes back up for another go. Wait for it at the top of the chute.",
+                "Pedra que rola sozinha sempre sobe de novo para mais uma descida. Esperem por ela no alto da calha."),
+
+            // ================= Sangkent — Kustai, o escriba do quadro das caravanas =================
+            new LocalizationEntry("quest.city_sangkent_mist_on_the_board.title", "Mist on the Board", "Neblina no Quadro"),
+            new LocalizationEntry("quest.city_sangkent_mist_on_the_board.description",
+                "A bad-wind mist has settled over the caravan notice board that Kustai keeps by the plaza: the ink runs, the notices blow away and the caravans no longer know who is going east and who is going west. The scribe asked the cousins to chase it off the terraces.",
+                "Uma neblina de vento ruim pousou no quadro de avisos das caravanas que o Kustai cuida perto da praça: a tinta escorre, os avisos voam e as caravanas já não sabem quem vai para o leste e quem vai para o oeste. O escriba pediu aos primos que espantem a neblina dos terraços."),
+            new LocalizationEntry("quest.city_sangkent_mist_on_the_board.obj_clear_the_board", "Chase the ill-wind mist off the notice board", "Espantar a neblina do vento ruim do quadro de avisos"),
+            new LocalizationEntry("quest.city_sangkent_mist_on_the_board.journal",
+                "Kustai copied every notice again, in his small careful hand, and pinned them up one by one. Maithe read them all aloud for the caravaneers who cannot read. He gave her the storm cloak and said the Wakhan Pass is the only notice that never changes: go in warm.",
+                "O Kustai copiou todos os avisos de novo, com a letra pequena e caprichada dele, e pregou um por um. A Maithe leu todos em voz alta para os caravaneiros que não sabem ler. Ele deu a capa de tempestade para ela e disse que o Passo de Wakhan é o único aviso que nunca muda: entre agasalhado."),
+            new LocalizationEntry("quest.city_sangkent_mist_on_the_board.offer",
+                "You cleared Abā's chutes; now my board. Six puffs of bad-wind mist sit on it and the ink runs off every notice. Chase them off and take this storm cloak: up in the Wakhan Pass the wind tears the words out of your mouth.",
+                "Vocês limparam as calhas do Abā; agora o meu quadro. Seis nuvens de neblina do vento ruim estão sentadas nele e a tinta escorre de todos os avisos. Espantem elas e levem esta capa de tempestade: lá no Passo de Wakhan o vento arranca as palavras da boca da gente."),
+            new LocalizationEntry("quest.city_sangkent_mist_on_the_board.active",
+                "The mist hates the dry wind from the valley. Stand with your back to the valley and it comes to you.",
+                "A neblina detesta o vento seco do vale. Fiquem de costas para o vale e ela vem até vocês."),
         };
 
         public static void EnsureLoaded(LocalizationManager localization)

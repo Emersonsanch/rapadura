@@ -74,6 +74,13 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// (sparks caught in the Ar Sereno) in lanterns.
         /// </summary>
         StiltVillage = 11,
+        /// <summary>
+        /// Sangkent, the stair city (the Teto do Mundo, Docs/Mapas100.md §2.1 and map 36, style <c>StoneTerrace</c>): stone and
+        /// loam houses of two storeys with timber lacing and beam ends showing, lattice balconies, flat roofs with apricots
+        /// drying; dry-stone terraces stepping up to the fort, polished stone chutes and plank carts between the levels,
+        /// irrigation channels and apricot trees in blossom (the Pamir and Hunza villages, the tower houses of Shibam).
+        /// </summary>
+        StoneTerrace = 12,
     }
 
     /// <summary>
@@ -412,6 +419,31 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Plaza = TownSwatch.WetWood, PlazaAlt = TownSwatch.WoodWeathered,
             Fence = TownSwatch.WetWood, Plinth = TownSwatch.BogWater,
             HouseRoof = TownRoofKind.Gable,
+        };
+
+        /// <summary>
+        /// Sangkent, the stair city (Docs/Mapas100.md §2.1, map 36): picked by hand. Terrace stone #8C8173, loam #B98B5E, juniper
+        /// #5A3E2B, firn #E6EEF2, apricot blossom #F2B8A0, the caravans' silk red #C0392B and blue #2E86AB, the hearth glow
+        /// #FFB866 (row 13 of <see cref="TownPalette"/>). Houses are stone-and-loam houses of two storeys with timber lacing
+        /// (<see cref="TownBuildingSpec.StoneTerrace"/>); streets are stone paving, the plaza (the 4th terrace) flagstones
+        /// round the Marco das Caravanas. The Teto do Mundo has no world-map biome: <see cref="TownStyle.Region"/> is the
+        /// borrowed Forest (as Jhilpur).
+        /// </summary>
+        public static readonly TownStyle StoneTerrace = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Mountain,
+            Architecture = TownArchitecture.StoneTerrace,
+            Walls = new[] { TownSwatch.TerraceStone, TownSwatch.Loam, TownSwatch.TerraceStone },
+            Trims = new[] { TownSwatch.Juniper, TownSwatch.SilkRed },
+            Roofs = new[] { TownSwatch.Loam, TownSwatch.Mud },
+            Joinery = new[] { TownSwatch.Juniper, TownSwatch.WoodDark },
+            Accent = TownSwatch.SilkBlue,
+            Ground = TownSwatch.GrassDark, GroundAlt = TownSwatch.Loam,
+            Street = TownSwatch.Cobble, StreetEdge = TownSwatch.TerraceStone, Sidewalk = TownSwatch.Loam,
+            Plaza = TownSwatch.Paving, PlazaAlt = TownSwatch.TerraceStone,
+            Fence = TownSwatch.TerraceStone, Plinth = TownSwatch.StoneDark,
+            HouseRoof = TownRoofKind.Flat,
         };
     }
 }

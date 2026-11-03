@@ -52,6 +52,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // #4F7A82 and the bark-green one #66704F, wet wood #5B4636, leaf #6F8F3F, lilac mist #B9A9D6, the will-o'-wisp
         // #D6E8FF (glows), rush #B9A55A and net twine #8E8466
         SkinTrollMoss, SkinTrollBark, WetWood, SwampLeaf, LilacMist, WillWisp, Rush, NetTwine,
+        // Sangkent (Teto do Mundo, Docs/Mapas100.md §2.1 and map 36): yak wool #6E5A48, felt #E3D5BC, apricot blossom #F2B8A0,
+        // the caravans' silk red #C0392B and blue #2E86AB, terrace stone #8C8173, juniper #5A3E2B and glacier ice #BFD9E8
+        YakWool, Felt, ApricotBlossom, SilkRed, SilkBlue, PamirStone, Juniper, Glacier,
     }
 
     /// <summary>
@@ -63,7 +66,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 16;
+        public const int Rows = 17;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -116,6 +119,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Tarchon  trol moss #4F7A82, trol bark #66704F, wet wood #5B4636, leaf #6F8F3F, lilac mist #B9A9D6, wisp #D6E8FF, rush #B9A55A, net twine #8E8466
             new Color(0.31f, 0.48f, 0.51f), new Color(0.4f, 0.44f, 0.31f), new Color(0.36f, 0.27f, 0.21f), new Color(0.44f, 0.56f, 0.25f),
             new Color(0.73f, 0.66f, 0.84f), new Color(0.84f, 0.91f, 1f), new Color(0.73f, 0.65f, 0.35f), new Color(0.56f, 0.52f, 0.4f),
+            // Sangkent  yak wool #6E5A48, felt #E3D5BC, apricot blossom #F2B8A0, silk red #C0392B, silk blue #2E86AB, terrace stone #8C8173, juniper #5A3E2B, glacier #BFD9E8
+            new Color(0.43f, 0.35f, 0.28f), new Color(0.89f, 0.84f, 0.74f), new Color(0.95f, 0.72f, 0.63f), new Color(0.75f, 0.22f, 0.17f),
+            new Color(0.18f, 0.53f, 0.67f), new Color(0.55f, 0.51f, 0.45f), new Color(0.35f, 0.24f, 0.17f), new Color(0.75f, 0.85f, 0.91f),
         };
 
         public static int Count => Colors.Length;

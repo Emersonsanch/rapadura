@@ -237,7 +237,18 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.GiantBasket: return CitySolid.Capsule(prop.Position, TownKit.GiantBasketRadius * s, 1.8f, owner);
                 case CityPropKind.NetRack: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.NetRackSize * s, prop.Yaw), 1.8f, owner);
                 case CityPropKind.ReedIsland: return CitySolid.Capsule(prop.Position, TownKit.ReedIslandRadius * s, 1.2f, owner);
+                case CityPropKind.TerraceWall:
+                {
+                    Rect run = CityGeometry.RectFromMinMax(prop.Position, prop.End);
+                    return CitySolid.Box(CityGeometry.Inflate(run, TownKit.TerraceWallHalfThickness), WallColliderHeight, owner);
+                }
 
+                case CityPropKind.StoneChute: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.ChuteLandingSize * s, prop.Yaw), 1.6f, owner);
+                case CityPropKind.ChuteCart: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.ChuteCartSize * s, prop.Yaw), 1.2f, owner);
+                case CityPropKind.ApricotTree: return CitySolid.Capsule(prop.Position, TownKit.ApricotTreeRadius * s, 3f, owner);
+                case CityPropKind.CaravanStone: return CitySolid.Capsule(prop.Position, TownKit.CaravanStoneRadius * s, WallColliderHeight, owner);
+
+                case CityPropKind.IrrigationChannel:
                 case CityPropKind.Boardwalk:
                 case CityPropKind.RootBridge:
                 case CityPropKind.ShellBridge:

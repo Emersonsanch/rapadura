@@ -74,23 +74,25 @@ a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: 
 | Barco de junco (33) | levar Barco de Junco ou montaria Aquática | Cestaria da Larthia (Palafitas de Tarchon) e Barcos e Trocas do Nuhzadag (Jhilpur) |
 | Amuleto antiveneno (34) | levar Amuleto Antiveneno (Lavine **não** dispensa: é mordida, não névoa) | Cestaria da Larthia (Palafitas de Tarchon) e Barcos e Trocas do Nuhzadag (Jhilpur); recompensa da 2ª missão de Tarchon (Vel) |
 | Fruta purificadora (35) | levar Fruta Purificadora | Barcos e Trocas do Nuhzadag (Jhilpur); recompensa da 2ª missão de Jhilpur (Abiesous) |
-| Roupa térmica (36) | **vestir** Roupa Térmica Refinada (slot Peito) | Sangkent (planejada) |
-| Grampos de escalada (38) | levar Grampos de Escalada | Sangkent (planejada) |
-| Proteção a tempestade (40) | levar Capa de Tempestade | Sangkent (planejada) |
+| Roupa térmica (36) | **vestir** Roupa Térmica Refinada (slot Peito) | Agasalhos do Sisinnios (Sangkent) |
+| Grampos de escalada (38) | levar Grampos de Escalada | Agasalhos do Sisinnios (Sangkent) |
+| Proteção a tempestade (40) | levar Capa de Tempestade | Agasalhos do Sisinnios (Sangkent); recompensa da 2ª missão de Sangkent (Kustai) |
 | Selo do Sol (42) | levar o Selo do Sol (preso ao herói) | Mingcheng (planejada) |
 
 Toda exigência das regiões 1–6 tem um "kit" de itens (`MapRequirementRules.KitOf`: o item principal, mais a lamparina no
 17) que a atende sozinho, e cada item do kit é vendido numa loja (`CityShopCatalog`) ou dado por missão
 (`RegionQuestCatalog`/`CityQuestCatalog`) — conferido por `MapRequirementTests`. Os da região 6 (Vara de Equilíbrio, Barco de Junco, Amuleto
 Antiveneno, Fruta Purificadora) estão fixos no balcão dos Barcos e Trocas do Nuhzadag em Jhilpur (2026-11-03,
-`CityJhilpurTests`). Os das regiões 7–8 (Roupa Térmica, Grampos, Capa de Tempestade, Selo do Sol) existem em
-`Resources/Items` mas ainda não têm loja: entram no balcão quando Sangkent e Mingcheng virarem cidade. Fora das exigências, a **Garrafa de Ar Sereno** dos kobolds (consumível: +20% de recuperação de vigor por
+`CityJhilpurTests`). Os da região 7 (Roupa Térmica 36, Grampos 38, Capa de Tempestade 40) estão fixos no balcão dos
+Agasalhos do Sisinnios em Sangkent (2026-11-03, `CitySangkentTests`; o 39 pede asas de verdade ou montaria voadora, sem
+item de kit, e `MapRequirementTests` agora cobre as regiões 1–7). O da região 8 (Selo do Sol) existe em
+`Resources/Items` mas ainda não tem loja: entra no balcão quando Mingcheng virar cidade. Fora das exigências, a **Garrafa de Ar Sereno** dos kobolds (consumível: +20% de recuperação de vigor por
 60 s, para o "ar parado" do 22) é vendida na Feira da Miwnay e dada pela missão "Teia nos Tubos" (Takhsich).
 
 Os itens das regiões 5–8 já existem (`Resources/Items`, textos en/pt-BR em `ContentTexts`); os da região 5 (25–30) estão à
 venda, fixos desde o primeiro dia, no Bazar de Pérolas da Mwana em Taa Pwani (2026-11-03, `CityTaaPwaniTests`); os da
-região 6 (32–35) nos Barcos e Trocas do Nuhzadag em Jhilpur (`CityJhilpurTests`); os das regiões 7–8 só entram numa loja
-quando a cidade de retorno for construída. Nada é consumido ao entrar: basta levar.
+região 6 (32–35) nos Barcos e Trocas do Nuhzadag em Jhilpur (`CityJhilpurTests`); os da região 7 (36, 38, 40) nos
+Agasalhos do Sisinnios em Sangkent (`CitySangkentTests`); o da região 8 só entra numa loja quando Mingcheng for construída. Nada é consumido ao entrar: basta levar.
 
 ---
 
