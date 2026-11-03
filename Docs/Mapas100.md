@@ -63,8 +63,8 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       clareiras geradas, com nível que sobe dentro da zona conforme se afasta da Vila.
     - **Passagens:** zonas vizinhas são abertas. Entrar numa zona acima do nível a pé (com o bônus de terreno do herói)
       ou sem a exigência especial empurra o herói um passo para trás com uma mensagem (**barreira suave**, nunca
-      teleporte). Só saem da região os **portões** para 07, 13 e 19 (troca de cena como antes) e o círculo de pedras ao
-      lado da Vila (volta ao mapa da ilha).
+      teleporte). Os antigos **portões** para 07, 13 e 19 viraram passagens abertas do mundo costurado (abaixo); só o
+      círculo de pedras ao lado da Vila sai do mapa (volta ao mapa da ilha).
     - **Relevo** (`OverworldRelief`, altura pura `OverworldRules.HeightAt`/`SurfaceAt`, ruído gerenciado próprio
       `OverworldNoise` — mesmo número em qualquer plataforma e no servidor): cada terreno sobe do seu jeito, misturado
       70 m entre zonas pelo mesmo ruído das bordas de cor — colinas arredondadas com fundos planos nas Colinas de
@@ -103,9 +103,9 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       ~0,85–1,0 ms em média, p50 ~0,8–0,9 ms, p95 ~1,3–1,7 ms (antes do acabamento: ~0,6 ms com ~3,1 mil triângulos);
       o cozimento do `MeshCollider` (512 triângulos) vem à parte. O teste `OverworldReliefTests` registra os números do
       Editor no console.
-    - **Fluxo:** "Mover" para qualquer mapa 01–06 (barca, novo jogo, voltar do 07) carrega o mundo da região; morrer
-      acorda na praça da cidade de retorno sem recarregar; a Barca de Luz dentro da região leva a um cais já visitado a
-      pé, na mesma cena. Código: `Assets/Scripts/Gameplay/World/Map/Overworld/` (`OverworldLayout`, `OverworldRules`,
+    - **Fluxo:** "Mover" para qualquer mapa das Regiões 1–4 (barca, novo jogo) carrega o mundo costurado; morrer
+      acorda na praça da cidade de retorno sem recarregar; a Barca de Luz leva a qualquer cais do mundo na mesma cena
+      (cais da região atual só depois de pisado a pé). Código: `Assets/Scripts/Gameplay/World/Map/Overworld/` (`OverworldLayout`, `OverworldRules`,
       `OverworldLayouts.Zarafshan`, `OverworldRelief`, `OverworldTerrains`, `OverworldDecorKit`, `OverworldChunkBuilder`,
       `OverworldView`); testes `OverworldTests` e `OverworldReliefTests` (EditMode) e `OverworldWalkSmokeTests` (PlayMode). Os layouts 01–06 continuam existindo sozinhos (servidor e testes) e são
       encaixados na região como estão.
@@ -119,6 +119,41 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       dentro, 19 e 20 encaixados, 21–24 e 18 salões intermediários, paredes altas de tufo entre os salões (sem teto real),
       abismos com pontes de corda, lagos, cristais, colunas e fungos que brilham; o portão oeste do Zarafshan (para o 19)
       chega à borda leste do Limiar e o do Hahya à borda oeste. Detalhes em §5, "Região 4".
+    - **Mundo costurado** (2026-11-03, pedido do usuário: andar entre as regiões sem portão): as quatro regiões são **um
+      mapa só** de 4800 × 4800 m (`OverworldLayouts.WorldId`, `OverworldLayouts.World.cs`), 2 × 2:
+      Serra de Kaggen (x −3400…−1000, z −1000…1400) | Bosque do Zarafshan (x −1000…1400, z −1000…1400) em cima;
+      Grutas do Limiar (x −3400…−1000, z −3400…−1000) | Areias Flamejantes (x −1000…1400, z −3400…−1000) embaixo.
+      Cada região guarda o seu layout nas suas coordenadas e é deslocada por um número inteiro de pedaços (Zarafshan
+      (0, 0) — a Vila continua na origem —, Areias (200, −1500), Kaggen (−1700, −100), Limiar (−2200, −1300)): as grades
+      de pedaço (48 m) e de faceta (3 m) casam, cada ponto pertence a uma só região (retângulos semiabertos).
+      - **Passagens:** cada portão entre duas regiões vira passagem aberta: o chão plano em y = 0 fica (núcleo + rampa de
+        90 m dos dois lados), os dois portões que se olham na mesma borda ganham uma trilha ligando as chegadas
+        (Zarafshan sul ↔ Areias norte, a antiga estrada para o 07; Zarafshan oeste ↔ Kaggen leste, o antigo caminho para
+        o 13), e um portão sozinho numa borda é levado à trilha mais próxima do outro lado sem vau nem cidade no meio
+        (Zarafshan → Passo do Hahya pelo antigo portão do 19; Kaggen → Campinas do Vento Vivo pelos Altos; Kaggen sul → galeria da Ravina do
+        Limiar, antigo portão para o 08; Limiar leste → Erg Dourado das Areias, antigo portão do Zarafshan). Clareiras na
+        trilha nova ou a menos de 30 m da passagem saem. Portões cuja região agora está no mundo mas que dão na borda de
+        fora (Areias → Rondavéis, Limiar → Hahya) só fecham (a trilha termina no muro). Ficam: os quatro anéis de pedras
+        (`exit_island`, `exit_island_areias`, `_kaggen`, `_limiar`), o portal do Ossuário (`exit_ossuario`) e os cais.
+      - **Relevo:** um relevo só para o mundo; cada área tem o formato calculado nas coordenadas da sua região
+        (`OverworldZone.Origin`), então longe das bordas cada região é idêntica a ela sozinha (teste no Zarafshan), e entre
+        regiões as áreas se misturam nos mesmos 70 m de qualquer borda de área: **sem degrau nem buraco** na costura
+        (teste: < 0,1 m de diferença em 4 cm ao longo das duas bordas inteiras; pedaços vizinhos com os mesmos vértices).
+        A Grutas do Limiar ganha a abóbada de tufo em volta do seu retângulo, aberta nas passagens (entrada da caverna).
+      - **Região atual:** a do retângulo sob o herói (`OverworldLayout.PartAt`/`RegionAt`/`VilaAt`/`BiomeAt`): ao cruzar,
+        clima e ambiente trocam de bioma e a ficha da ilha muda de região (`OverworldView.RegionChanged`); o mapa (zona)
+        segue a área como antes; morrer acorda na cidade de retorno do mapa, senão na vila da região atual. Barreira
+        suave, níveis e exigências continuam por área.
+      - **Performance:** nada é carregado inteiro: os pedaços continuam por distância (≤ 96 m), e as cidades agora também
+        (constroem a 170 m do chão da cidade, uma por vez; somem a 260 m) — o mundo tem 25. Para os pedaços não pagarem
+        pelo mundo 4× maior, trilhas, clareiras e marcos ficam indexados por pedaço, as áreas por balde do relevo e os
+        pontos de chegada/cais só valem perto do pedaço: geração por pedaço medida (.NET, fora do Editor) igual ou
+        melhor que a da região sozinha (Zarafshan 0,62 ms × 0,67 ms; Areias 0,46 × 0,43; Kaggen 0,59 × 0,58; Limiar
+        0,44 × 0,45), triângulos iguais; montar o mundo (4 regiões + costura) ~0,45 s, uma vez por sessão. Coordenadas até
+        ±3400 m: precisão de float sobra (sem recentrar).
+      - `OverworldLayouts.ForMap` continua dando a região sozinha (servidor, catálogo, testes das regiões); o modo mapa usa
+        `OverworldLayouts.WorldOf`. Testes `OverworldWorldTests` (EditMode) e a caminhada `OverworldWalkSmokeTests`
+        (PlayMode), que agora segue pela passagem da Estepe até a Estrada das Caravanas sem carregar cena.
     - **Viagem e save dos mapas-zona** (2026-11-03): 09–12, 15–18 e 21–24 não têm layout próprio, só existem como zonas
       do mundo da região, e agora contam como construídos (`MapCatalog` `isBuilt`; `MapLayouts.IsPlayable` = layout próprio
       **ou** zona de overworld, `MapLayouts.IsOverworldOnly`; o teste de catálogo exige `isBuilt ⇔ IsPlayable`). A janela M

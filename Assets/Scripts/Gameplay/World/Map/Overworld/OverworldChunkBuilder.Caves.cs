@@ -101,6 +101,26 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static CaveData CaveDataOf(OverworldLayout layout) => CaveTable.GetValue(layout, _ => new CaveData());
 
+        /// <summary>
+        /// The stitched world takes over the monuments and chasms of a cave region already moved to world coordinates
+        /// (<paramref name="from"/>'s pieces shifted by <paramref name="offset"/>; its rivers are the same objects).
+        /// </summary>
+        internal static void CopyCaveData(OverworldLayout from, OverworldLayout to, Vector2 offset)
+        {
+            CaveData source = CaveDataOf(from);
+            CaveData target = CaveDataOf(to);
+            foreach (CavePiece piece in source.Explicit)
+            {
+                CavePiece moved = piece;
+                moved.Prop.Position += offset;
+                moved.Prop.End += offset;
+                target.Explicit.Add(moved);
+            }
+
+            target.Abysses.UnionWith(source.Abysses);
+            target.ByChunk = null;
+        }
+
         // ------------------------------------------------------------------
         // Per chunk
         // ------------------------------------------------------------------
@@ -151,7 +171,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 }
             }
 
-            ScatterCaveGrid(layout, content);
+            // Only where a cave terrain is drawn (the stitched world's other regions skip the per-sample pass).
+            foreach (ReliefInfo info in content.Grid.Info)
+            {
+                if (IsCave(info.Terrain))
+                {
+                    ScatterCaveGrid(layout, content);
+                    break;
+                }
+            }
         }
 
         /// <summary>Each cave terrain's own pieces on a jittered grid (<see cref="CaveSampleSpacing"/>).</summary>
@@ -373,13 +401,29 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>The vault round the region: tall walls just outside the north, west and east walls, a low ledge on the camera (south) side; open at the gates.</summary>
         private static void AddVaultWalls(OverworldLayout layout, List<(CavePiece, Vector2)> all)
         {
-            Rect r = layout.Bounds;
+            if (!layout.IsStitched)
+            {
+                AddVault(layout, all, layout.Bounds, 45f, "vault");
+                return;
+            }
+
+            // The stitched world: a vault round each cave region, open at the passes to its neighbours.
+            foreach (OverworldPart part in layout.Parts)
+            {
+                if (layout.Zones.Exists(z => IsCave(z.Terrain) && part.Bounds.Contains(z.Bounds.center)))
+                {
+                    AddVault(layout, all, part.Bounds, 0f, "vault_" + part.Id);
+                }
+            }
+        }
+
+        private static void AddVault(OverworldLayout layout, List<(CavePiece, Vector2)> all, Rect r, float extra, string salt)
+        {
             const float out1 = 3.5f;
-            const float extra = 45f;
-            AddVaultRun(layout, all, new Vector2(r.xMin - extra, r.yMax + out1), new Vector2(r.xMax + extra, r.yMax + out1), 16f, 7f, "vault_n");
-            AddVaultRun(layout, all, new Vector2(r.xMin - out1, r.yMin - extra), new Vector2(r.xMin - out1, r.yMax + extra), 14f, 7f, "vault_w");
-            AddVaultRun(layout, all, new Vector2(r.xMax + out1, r.yMin - extra), new Vector2(r.xMax + out1, r.yMax + extra), 14f, 7f, "vault_e");
-            AddVaultRun(layout, all, new Vector2(r.xMin - extra, r.yMin - out1), new Vector2(r.xMax + extra, r.yMin - out1), 2.4f, 1.2f, "vault_s");
+            AddVaultRun(layout, all, new Vector2(r.xMin - extra, r.yMax + out1), new Vector2(r.xMax + extra, r.yMax + out1), 16f, 7f, salt + "_n");
+            AddVaultRun(layout, all, new Vector2(r.xMin - out1, r.yMin - extra), new Vector2(r.xMin - out1, r.yMax + extra), 14f, 7f, salt + "_w");
+            AddVaultRun(layout, all, new Vector2(r.xMax + out1, r.yMin - extra), new Vector2(r.xMax + out1, r.yMax + extra), 14f, 7f, salt + "_e");
+            AddVaultRun(layout, all, new Vector2(r.xMin - extra, r.yMin - out1), new Vector2(r.xMax + extra, r.yMin - out1), 2.4f, 1.2f, salt + "_s");
         }
 
         private static void AddVaultRun(OverworldLayout layout, List<(CavePiece, Vector2)> all, Vector2 from, Vector2 to, float height, float spread, string salt)
@@ -396,6 +440,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 foreach (MapExitSpec exit in layout.World.Exits)
                 {
                     if (Vector2.Distance(exit.Trigger.center, mid) < 14f)
+                    {
+                        atGate = true;
+                        break;
+                    }
+                }
+
+                foreach (Vector2 pass in layout.Passes)
+                {
+                    if (Vector2.Distance(pass, mid) < 16f)
                     {
                         atGate = true;
                         break;

@@ -206,7 +206,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Gate(w, "exit_zarafshan", MapExitKind.Map, MapCatalog.PomarId, Rect.MinMaxRect(1197f, 182f, 1200f, 198f), new Vector2(1191f, 190f), Vector2.left);
             Gate(w, "exit_island", MapExitKind.WorldMap, null, Rect.MinMaxRect(60f, -32f, 64f, -28f), new Vector2(62f, -38f), Vector2.up);
             Landmark(w, MapLandmarkKind.StoneRing, 62f, -30f, 0f, 0.45f);
-            // The barred portal of the Ossuário dos Artífices (the dungeon opens from the island map of the caves).
+            // The barred portal of the Ossuário dos Artífices: walking into it starts the dungeon run (MapModeController.OssuaryExitId).
             Gate(w, "exit_ossuario", MapExitKind.WorldMap, null, Rect.MinMaxRect(OssuaryPortal.x - 3f, OssuaryPortal.y - 4f, OssuaryPortal.x + 3f, OssuaryPortal.y - 1f),
                 OssuaryPortal + new Vector2(0f, -9f), Vector2.up);
             OverworldChunkBuilder.AddCavePiece(w, OverworldDecor.OssuaryPortal, OssuaryPortal, 0f, 1f, 0, true);

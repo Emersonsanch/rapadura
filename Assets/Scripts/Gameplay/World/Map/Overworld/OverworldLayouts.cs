@@ -57,6 +57,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 case AreiasId: return Areias();
                 case KaggenId: return Kaggen();
                 case LimiarId: return Limiar();
+                case WorldId: return BuildWorld();
                 default: return null;
             }
         }

@@ -54,8 +54,9 @@ namespace Rapadura.Gameplay.World.Map.Areas
         public MapAreaView Area { get; private set; }
 
         /// <summary>
-        /// The continuous region the map belongs to (Docs/Mapas100.md §0.10: Região 1 is one overworld), or null when the map
-        /// is its own scene. While set, <see cref="MapId"/> follows the area the hero walks in.
+        /// The continuous world the map belongs to (Docs/Mapas100.md §0.10: the four regions stitched into one overworld,
+        /// <see cref="OverworldLayouts.WorldOf"/>), or null when the map is its own scene. While set, <see cref="MapId"/>
+        /// follows the area the hero walks in, and the weather and the island token follow the region.
         /// </summary>
         public OverworldLayout Overworld { get; private set; }
 
@@ -68,7 +69,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
         public bool IsReady { get; private set; }
 
         /// <summary>The map hosts its own return city (01: the Vila): a defeat wakes the hero at this plaza.</summary>
-        public bool CanRespawnHere => Layout != null && Layout.SettlementIsReturnCity && Town != null;
+        public bool CanRespawnHere => Layout != null && Layout.SettlementIsReturnCity && (OverworldArea != null || Town != null);
 
         public int HeroLevel
         {
@@ -133,7 +134,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
         private IEnumerator Start()
         {
             Definition = MapCatalog.Get(MapId);
-            Overworld = OverworldLayouts.ForMap(MapId);
+            Overworld = OverworldLayouts.WorldOf(MapId) ?? OverworldLayouts.ForMap(MapId);
             Layout = Overworld != null ? Overworld.World : MapLayouts.For(MapId);
             if (Definition == null || Layout == null)
             {
@@ -148,6 +149,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
                 OverworldArea = OverworldView.Build(Overworld, ResolveEnemyPrefab());
                 SceneManager.MoveGameObjectToScene(OverworldArea.gameObject, gameObject.scene);
                 OverworldArea.ZoneChanged += OnOverworldZoneChanged;
+                OverworldArea.RegionChanged += OnOverworldRegionChanged;
             }
             else
             {
@@ -155,8 +157,8 @@ namespace Rapadura.Gameplay.World.Map.Areas
                 SceneManager.MoveGameObjectToScene(Area.gameObject, gameObject.scene);
             }
 
-            SyncEnvironment(Layout.Biome);
-            if (CanRespawnHere && ServiceLocator.TryGet(out CheckpointManager checkpoints))
+            SyncEnvironment(Overworld != null ? Overworld.PartOfMap(MapId)?.Biome ?? Layout.Biome : Layout.Biome);
+            if (Town != null && CanRespawnHere && ServiceLocator.TryGet(out CheckpointManager checkpoints))
             {
                 checkpoints.SetCityRespawn(Town.Respawn);
             }
@@ -273,6 +275,25 @@ namespace Rapadura.Gameplay.World.Map.Areas
             CityModeController.PlaceAt(player, at, facing);
         }
 
+        /// <summary>
+        /// The hero walked into another region of the stitched world: its weather and ambience, and the island token (the
+        /// "current region" a defeat counts in) follow, like a barca trip used to.
+        /// </summary>
+        private void OnOverworldRegionChanged(OverworldPart part)
+        {
+            if (part == null)
+            {
+                return;
+            }
+
+            SyncEnvironment(part.Biome);
+            BiomeType? legacy = MapCatalog.LegacyBiomeOf(part.Region);
+            if (legacy.HasValue && ServiceLocator.TryGet(out WorldMapProgress progress))
+            {
+                progress.SetCurrentRegion(legacy.Value);
+            }
+        }
+
         private void OnOverworldZoneChanged(OverworldZone zone)
         {
             string mapId = zone != null ? zone.MapIdOrOwner : null;
@@ -313,7 +334,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
         }
 
         /// <summary>The map is a dock of this overworld the hero has not reached on foot yet (the barca refuses it).</summary>
-        public bool IsUnvisitedStop(string mapId) => IsUnvisitedStop(Overworld, mapId);
+        public bool IsUnvisitedStop(string mapId) => IsUnvisitedStop(Overworld != null && Overworld.IsStitched ? OverworldLayouts.ForMap(MapId) : Overworld, mapId);
 
         /// <summary>
         /// Pure rule of the barca inside a continuous region: a map of <paramref name="here"/> whose dock was never reached on
@@ -354,7 +375,8 @@ namespace Rapadura.Gameplay.World.Map.Areas
             {
                 // The region's return city for the map the hero fell on (Copas de Garajonay for 05-06), else the Vila.
                 string cityId = MapCatalog.ReturnCityOf(MapId);
-                OverworldSettlement home = Overworld.Settlements.Find(s => s.IsReturnCity && s.Id == cityId) ?? Overworld.Vila;
+                OverworldSettlement home = Overworld.Settlements.Find(s => s.IsReturnCity && s.Id == cityId)
+                    ?? Overworld.VilaAt(new Vector2(player.transform.position.x, player.transform.position.z));
                 PlaceInWorld(player, home.Town.Respawn + home.Offset, Vector2.down);
                 return true;
             }

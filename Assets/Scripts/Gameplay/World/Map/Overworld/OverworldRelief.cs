@@ -99,6 +99,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public const float ZoneBlend = 70f;
 
         private const float WarpScale = 34f;
+
+        /// <summary>Bound (m) of <see cref="OverworldTerrains.Warp"/> × <see cref="WarpScale"/> (|warp| &lt; 1.35 √2 · 1.1).</summary>
+        private const float MaxWarp = 80f;
         private const float BucketSize = 32f;
         private const float DetailWavelength = 16f;
 
@@ -133,6 +136,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private readonly Rect _bounds;
         private readonly Rect[] _zoneRects;
         private readonly OverworldTerrainStyle[] _zoneStyles;
+        private readonly Vector2[] _zoneOrigins;
         private readonly Segment[] _trails;
         private readonly Segment[] _rivers;
         private readonly Spot[] _spots;
@@ -146,6 +150,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private readonly int[][] _riverCells;
         private readonly int[][] _spotCells;
         private readonly int[][] _flatCells;
+        private readonly int[][] _zoneCells;
         private bool _spotsReady;
 
         private static readonly int[] None = new int[0];
@@ -167,16 +172,22 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             _bounds = layout.Bounds;
             _zoneRects = new Rect[layout.Zones.Count];
             _zoneStyles = new OverworldTerrainStyle[layout.Zones.Count];
+            _zoneOrigins = new Vector2[layout.Zones.Count];
             for (int i = 0; i < layout.Zones.Count; i++)
             {
                 _zoneRects[i] = layout.Zones[i].Bounds;
                 _zoneStyles[i] = OverworldTerrains.For(layout.Zones[i].Terrain);
+                _zoneOrigins[i] = layout.Zones[i].Origin;
             }
 
             // Buckets cover the walls plus the backdrop ring and the warp.
             _bucketArea = CityGeometry.Inflate(_bounds, layout.ChunkSize * 2f + 64f);
             _nx = Mathf.CeilToInt(_bucketArea.width / BucketSize);
             _nz = Mathf.CeilToInt(_bucketArea.height / BucketSize);
+
+            // The zones that can weigh at a point of each bucket (blend width plus the largest warp): the stitched world has
+            // ~80 zones, a point only ever reads the few around it.
+            _zoneCells = Bucket(_zoneRects.Length, i => CityGeometry.Inflate(_zoneRects[i], ZoneBlend + MaxWarp + 1f));
 
             var trails = new List<Segment>();
             foreach (MapPath path in layout.World.Paths)
@@ -222,6 +233,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             {
                 flats.Add(new Flat { Rect = exit.Trigger, Inner = GateFlat, Ramp = GateRamp });
                 flats.Add(new Flat { Rect = new Rect(exit.Arrival, Vector2.zero), Inner = 4f, Ramp = GateRamp });
+            }
+
+            // The passes of the stitched world, where the gates between two regions stood: still at y = 0 on both sides.
+            foreach ((Rect rect, float inner) in layout.OpenFlats)
+            {
+                flats.Add(new Flat { Rect = rect, Inner = inner, Ramp = GateRamp });
             }
 
             _flats = flats.ToArray();
@@ -508,8 +525,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             float sd = 0f;
             float best = float.MaxValue;
             int bestIndex = 0;
-            for (int i = 0; i < _zoneRects.Length; i++)
+            int cell = CellOf(p);
+            int[] near = cell >= 0 ? _zoneCells[cell] : null;
+            int count = near != null ? near.Length : _zoneRects.Length;
+            for (int k = 0; k < count; k++)
             {
+                int i = near != null ? near[k] : k;
                 Rect r = _zoneRects[i];
                 float dx = Mathf.Max(Mathf.Max(r.xMin - wp.x, wp.x - r.xMax), 0f);
                 float dz = Mathf.Max(Mathf.Max(r.yMin - wp.y, wp.y - r.yMax), 0f);
@@ -527,11 +548,31 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 }
 
                 w *= w;
-                Shape(_zoneStyles[i], p, out float l, out float t, out float dd);
+                Shape(_zoneStyles[i], p - _zoneOrigins[i], out float l, out float t, out float dd);
                 sw += w;
                 sl += w * l;
                 st += w * t;
                 sd += w * dd;
+            }
+
+            // Every zone that can weigh is in the bucket (in ascending order: the same sums as a full pass); the nearest zone
+            // for the terrain is only sure when it is within the blend width, else (far backdrop) look at them all.
+            if (near != null && best > ZoneBlend)
+            {
+                best = float.MaxValue;
+                bestIndex = 0;
+                for (int i = 0; i < _zoneRects.Length; i++)
+                {
+                    Rect r = _zoneRects[i];
+                    float dx = Mathf.Max(Mathf.Max(r.xMin - wp.x, wp.x - r.xMax), 0f);
+                    float dz = Mathf.Max(Mathf.Max(r.yMin - wp.y, wp.y - r.yMax), 0f);
+                    float d = dx == 0f && dz == 0f ? 0f : Mathf.Sqrt(dx * dx + dz * dz);
+                    if (d < best)
+                    {
+                        best = d;
+                        bestIndex = i;
+                    }
+                }
             }
 
             // Inside the walls one zone always weighs 1; beyond them the relief fades out with the weights.

@@ -146,7 +146,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // The posts of 09, 10 and 12 and the orcs' city of 11 (return city of 11–12).
             Place(w, KarezId, BocaDoKarez(), BocaDoKarezOffset, DesertPostSafe, 18f, false);
             Place(w, DunasId, PocoDasTamareiras(), PocoTamareirasOffset, DesertPostSafe, 18f, false);
-            Place(w, TamborRubroMapId, TamborRubroCity(), TamborRubroOffset, Rect.MinMaxRect(-34f, -34f, 34f, 34f), 38f, true);
+            CityTownRecipe tambor = CityTownRecipes.TamborRubro();
+            tambor.Backdrop = false;
+            Place(w, TamborRubroMapId, tambor, TamborRubroOffset, Rect.MinMaxRect(-34f, -34f, 34f, 34f), 38f, true);
             Place(w, NamraelId, TorreDeTaipa(), TorreDeTaipaOffset, DesertPostSafe, 18f, false);
 
             // ---------------- Water ----------------
@@ -571,86 +573,6 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             r.PlazaProps.Add(DesertProp(CityPropKind.Stela, -9.5f, -9.5f, 45f, 0.55f));
             r.PlazaProps.Add(DesertProp(CityPropKind.Crates, 6f, -6f, 15f));
             r.PlazaProps.Add(DesertProp(CityPropKind.Jugs, -6f, 5.6f, 0f));
-            return r;
-        }
-
-        /// <summary>
-        /// 11 · Tambor Rubro, the orcs' city (Docs/Mapas100.md §3.3): the Salão Grande at the plaza head (north), Ashmunikal's
-        /// guardian lamp, the Forja de Tambor, the drum houses, the Cais da Barca on the West street, adobe walls round it. A first
-        /// cut in the kit's Oasis style (the WarCamp style — palisade, gabled long hall, drum towers — is still to come).
-        /// </summary>
-        private static CityTownRecipe TamborRubroCity()
-        {
-            var r = new CityTownRecipe
-            {
-                CityId = MapCatalog.TamborRubro, Region = BiomeType.Desert, PlazaRadius = 7f, EntryArm = CityArm.South, WalkHalfExtent = 36f,
-                AutoYards = false, Backdrop = false, NightLights = 6,
-            };
-            r.Arms.Add(new CityArmRecipe(CityArm.South, 30f, exitToMap: true));
-            r.Arms.Add(new CityArmRecipe(CityArm.East, 26f, exitToMap: true));
-            r.Arms.Add(new CityArmRecipe(CityArm.West, 26f, exitToMap: true));
-
-            TownBuildingSpec hall = new TownBuildingSpec
-            {
-                WallColor = TownSwatch.Laterite, TrimColor = TownSwatch.AdobeOchre, RoofColor = TownSwatch.WoodDark, JoineryColor = TownSwatch.Beam,
-                AccentColor = TownSwatch.ClothYellow, SignColor = TownSwatch.ClothYellow, Roof = TownRoofKind.Gable, WallHeight = 3.8f, WideDoor = true,
-                Dressing = TownShopDressing.Drums,
-            };
-            r.Lots.Add(new CityLotRecipe { Id = "salao_grande", Kind = CityLotKind.House, Free = true, Center = new Vector2(0f, 12f), Front = Vector2.down, Width = 12f, Depth = 6f, Porch = 2f, Spec = hall });
-            r.Lots.Add(new CityLotRecipe
-            {
-                Id = "lampada_de_ashmunikal", Kind = CityLotKind.LampHouse, Arm = CityArm.East, Side = CityArm.North, Along = 12f, Width = 5f, Depth = 5.5f, Porch = 0.8f,
-                Spec = new TownBuildingSpec { WallColor = TownSwatch.Sandstone, TrimColor = TownSwatch.Gold, RoofColor = TownSwatch.Laterite, JoineryColor = TownSwatch.WoodDark, AccentColor = TownSwatch.Gold, WallHeight = 3.6f },
-            });
-            r.Lots.Add(new CityLotRecipe
-            {
-                Id = "forja_de_tambor", Kind = CityLotKind.House, Arm = CityArm.West, Side = CityArm.North, Along = 12f, Width = 6.5f, Depth = 5.5f, Porch = 1.4f,
-                Spec = new TownBuildingSpec
-                {
-                    WallColor = TownSwatch.RedClay, TrimColor = TownSwatch.Sandstone, RoofColor = TownSwatch.Mud, JoineryColor = TownSwatch.Iron,
-                    AccentColor = TownSwatch.Ember, Dressing = TownShopDressing.Forja, Chimney = true,
-                },
-            });
-            r.Lots.Add(new CityLotRecipe { Id = "cais_do_tambor", Kind = CityLotKind.ShipDock, Arm = CityArm.West, Side = CityArm.South, Along = 20f, Width = 6.5f, Depth = 3.2f, Porch = 1f });
-            int n = 0;
-            foreach ((CityArm arm, CityArm side, float along) in new[]
-            {
-                (CityArm.South, CityArm.West, 12f), (CityArm.South, CityArm.East, 12f), (CityArm.South, CityArm.West, 21f), (CityArm.South, CityArm.East, 21f),
-                (CityArm.East, CityArm.South, 12f), (CityArm.East, CityArm.North, 20f), (CityArm.West, CityArm.South, 12f), (CityArm.West, CityArm.North, 20f),
-            })
-            {
-                r.Lots.Add(new CityLotRecipe
-                {
-                    Id = "casa_do_tambor_" + (++n), Kind = CityLotKind.House, Arm = arm, Side = side, Along = along, Width = 6f, Depth = 5f, Porch = 1.2f,
-                    Spec = new TownBuildingSpec
-                    {
-                        WallColor = n % 2 == 0 ? TownSwatch.Laterite : TownSwatch.AdobeOchre, TrimColor = TownSwatch.Sandstone, RoofColor = TownSwatch.Mud,
-                        JoineryColor = TownSwatch.WoodDark, AccentColor = TownSwatch.ClothYellow, Dressing = n == 3 ? TownShopDressing.Drums : TownShopDressing.None,
-                        FrontWindows = 1,
-                    },
-                });
-            }
-
-            // The training arena of sand, stalls of dyed leather, the war drums' fire; adobe walls round the plaza quarter.
-            r.PlazaProps.Add(DesertProp(CityPropKind.Stall, -5f, -5.6f, 0f, 1f, 1));
-            r.PlazaProps.Add(DesertProp(CityPropKind.Stall, 5f, -5.6f, 0f, 1f, 0));
-            r.PlazaProps.Add(DesertProp(CityPropKind.Crates, 8f, 6f, 20f));
-            r.PlazaProps.Add(DesertProp(CityPropKind.HayBale, -8.5f, 6.5f, 70f));
-            r.PlazaProps.Add(DesertProp(CityPropKind.Jugs, 6.5f, -8f, 10f));
-            foreach (float angle in new[] { 30f, 150f, 210f, 330f })
-            {
-                r.PlazaProps.Add(new CityProp { Kind = CityPropKind.LampPost, Position = CityTownRecipes.Polar(angle, 6.6f), Yaw = CityGeometry.YawFacing(-CityTownRecipes.Polar(angle, 1f)) });
-            }
-
-            foreach ((float ax, float az, float bx, float bz) in new[]
-            {
-                (-33f, -33f, -4f, -33f), (4f, -33f, 33f, -33f), (-33f, 33f, 33f, 33f),
-                (-33f, -33f, -33f, -4f), (-33f, 4f, -33f, 33f), (33f, -33f, 33f, -4f), (33f, 4f, 33f, 33f),
-            })
-            {
-                r.PlazaProps.Add(new CityProp { Kind = CityPropKind.FenceRun, Position = new Vector2(ax, az), End = new Vector2(bx, bz), Scale = 1.4f });
-            }
-
             return r;
         }
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Rapadura.Gameplay.Night;
+using Rapadura.Gameplay.World.Biomes;
 using Rapadura.Gameplay.World.Cities.Town;
 using Rapadura.Gameplay.World.Map.Areas;
 using UnityEngine;
@@ -194,6 +195,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         public string NameKey => "overworld.zone." + Id + ".name";
 
+        /// <summary>
+        /// Where the zone's region sits in the stitched world (<see cref="OverworldPart.Offset"/>; zero in a region on its own):
+        /// the relief shapes the zone in its region's own coordinates, so a region looks the same alone and stitched.
+        /// </summary>
+        public Vector2 Origin;
+
         public override string ToString() => Id;
     }
 
@@ -228,6 +235,31 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     }
 
     /// <summary>
+    /// One region placed in the stitched world (<see cref="OverworldLayouts.WorldId"/>, Docs/Mapas100.md §0.10 "Mundo
+    /// costurado"): its rectangle in world coordinates, how far its own layout was moved (<see cref="Offset"/>), its return
+    /// city, its biome (weather, ambience) and the region the rest of the game reads (music, island token, respawn).
+    /// </summary>
+    public sealed class OverworldPart
+    {
+        /// <summary>The region's own layout id (<see cref="OverworldLayouts.ZarafshanId"/>…).</summary>
+        public string Id;
+
+        public MapRegion Region;
+        public BiomeType Biome;
+
+        /// <summary>The region's rectangle in world coordinates.</summary>
+        public Rect Bounds;
+
+        /// <summary>Region coordinates + <see cref="Offset"/> = world coordinates.</summary>
+        public Vector2 Offset;
+
+        /// <summary>The region's town (a defeat with no return city of its own wakes the hero here).</summary>
+        public OverworldSettlement Vila;
+
+        public override string ToString() => Id;
+    }
+
+    /// <summary>
     /// A whole region as ONE continuous map (Docs/Mapas100.md §0.10): no scene change between the Vila and the areas around
     /// it. <see cref="World"/> is a <see cref="MapLayout"/> in world coordinates holding what the shared map code reads
     /// (bounds, rivers, trails, landmarks, every spawn clearing, gates and docks, the Vila as the return city), so the
@@ -258,6 +290,18 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>The wild props of the embedded hand-made maps (world coordinates), streamed with their chunk.</summary>
         public readonly List<CityProp> FixedProps = new List<CityProp>();
+
+        /// <summary>The regions of the stitched world (empty for a region on its own: it is its only part).</summary>
+        public readonly List<OverworldPart> Parts = new List<OverworldPart>();
+
+        /// <summary>
+        /// Ground kept at y = 0 besides the towns and gates (world coordinates, with the flat core around each): where the
+        /// gates between two stitched regions stood, now open passes (<see cref="OverworldRelief.GateRamp"/> around them).
+        /// </summary>
+        public readonly List<(Rect Rect, float Inner)> OpenFlats = new List<(Rect, float)>();
+
+        /// <summary>The open passes of the stitched world (where a gate between two regions stood): the cave vault opens there.</summary>
+        public readonly List<Vector2> Passes = new List<Vector2>();
 
         /// <summary>The relief of the region, built on first use (<see cref="OverworldRelief.For"/>).</summary>
         internal OverworldRelief ReliefCache;
@@ -301,6 +345,55 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         }
 
         public OverworldZone Zone(string id) => Zones.Find(z => z.Id == id);
+
+        /// <summary>True for the stitched world (several regions); false for a region on its own.</summary>
+        public bool IsStitched => Parts.Count > 0;
+
+        /// <summary>The region holding <paramref name="p"/> (half-open rectangles: each point belongs to one), else the nearest; null for a region on its own.</summary>
+        public OverworldPart PartAt(Vector2 p)
+        {
+            OverworldPart best = null;
+            float bestDistance = float.MaxValue;
+            foreach (OverworldPart part in Parts)
+            {
+                if (part.Bounds.Contains(p))
+                {
+                    return part;
+                }
+
+                float d = CityGeometry.DistanceToRect(p, part.Bounds);
+                if (d < bestDistance)
+                {
+                    bestDistance = d;
+                    best = part;
+                }
+            }
+
+            return best;
+        }
+
+        /// <summary>The region whose areas include catalog map <paramref name="mapId"/> (stitched world), else null.</summary>
+        public OverworldPart PartOfMap(string mapId)
+        {
+            foreach (OverworldZone zone in Zones)
+            {
+                if (zone.MapIdOrOwner == mapId && !string.IsNullOrEmpty(mapId))
+                {
+                    return PartAt(zone.Bounds.center);
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>The catalog region at <paramref name="p"/> (the layout's own region when it is not stitched).</summary>
+        public MapRegion RegionAt(Vector2 p) => PartAt(p)?.Region ?? Region;
+
+        /// <summary>The weather/ambience biome at <paramref name="p"/>.</summary>
+        public BiomeType BiomeAt(Vector2 p) => PartAt(p)?.Biome ?? World.Biome;
+
+        /// <summary>The town of the region at <paramref name="p"/> (the layout's Vila when it is not stitched).</summary>
+        public OverworldSettlement VilaAt(Vector2 p) => PartAt(p)?.Vila ?? Vila;
 
         public IEnumerable<OverworldZone> ZonesOfMap(string mapId)
         {

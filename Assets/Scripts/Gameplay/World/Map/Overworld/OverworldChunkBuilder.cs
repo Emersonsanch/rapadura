@@ -194,8 +194,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ScatterRows(layout, content);
             ScatterDetails(layout, content);
 
-            foreach (MapLandmark landmark in layout.World.Landmarks)
+            foreach (int i in Near(IndexOf(layout).Landmarks, coord))
             {
+                MapLandmark landmark = layout.World.Landmarks[i];
                 if (content.Rect.Contains(landmark.Position))
                 {
                     content.Landmarks.Add(landmark);
@@ -255,9 +256,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static void Gather(OverworldLayout layout, OverworldChunkContent content)
         {
-            Rect near = CityGeometry.Inflate(content.Rect, 16f);
-            foreach (MapPath path in layout.World.Paths)
+            Rect near = CityGeometry.Inflate(content.Rect, GatherMargin);
+            ChunkIndex index = IndexOf(layout);
+            foreach (int i in Near(index.Paths, content.Coord))
             {
+                MapPath path = layout.World.Paths[i];
                 if (SegmentNear(near, path.A, path.B, path.Width))
                 {
                     content.NearPaths.Add(path);
@@ -276,16 +279,18 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 }
             }
 
-            foreach (MapSpawnZone spawn in layout.World.Zones)
+            foreach (int i in Near(index.Spawns, content.Coord))
             {
+                MapSpawnZone spawn = layout.World.Zones[i];
                 if (CityGeometry.DistanceToRect(spawn.Center, near) <= spawn.Radius)
                 {
                     content.NearSpawns.Add(spawn);
                 }
             }
 
-            foreach (MapLandmark landmark in layout.World.Landmarks)
+            foreach (int i in Near(index.Landmarks, content.Coord))
             {
+                MapLandmark landmark = layout.World.Landmarks[i];
                 if (CityGeometry.DistanceToRect(landmark.Position, near) <= 10f)
                 {
                     content.NearLandmarks.Add(landmark);
@@ -311,7 +316,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     content.NearTowns.Add(settlement);
                 }
 
-                if (settlement.HasDock)
+                if (settlement.HasDock && CityGeometry.DistanceToRect(settlement.DockArrival, near) < KeepClearReach)
                 {
                     content.KeepClearPoints.Add(settlement.DockArrival);
                 }
@@ -325,7 +330,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     content.Blocked.Add(keep);
                 }
 
-                content.KeepClearPoints.Add(exit.Arrival);
+                if (CityGeometry.DistanceToRect(exit.Arrival, near) < KeepClearReach)
+                {
+                    content.KeepClearPoints.Add(exit.Arrival);
+                }
             }
 
             foreach (ReliefInfo info in content.Grid.Info)
@@ -337,6 +345,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 }
             }
         }
+
+        /// <summary>Arrival points farther than this (m) from the chunk cannot keep any of its spots clear (they reach 10 m).</summary>
+        private const float KeepClearReach = 48f;
 
         private static bool SegmentNear(Rect r, Vector2 a, Vector2 b, float pad)
         {
@@ -1127,7 +1138,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 for (int li = m; li < m + cells; li++)
                 {
                     Vector2 c = g.VertexAt(li, lj) + new Vector2(GroundCell * 0.5f, GroundCell * 0.5f);
-                    if (InTownGround(layout, c))
+                    if (InTownGround(content, c))
                     {
                         continue;
                     }
@@ -1237,7 +1248,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>A trail draped over the facets: a dark worn border and the trail surface, both with ragged edges.</summary>
         private static void DrapeTrail(TownMeshBuilder b, OverworldLayout layout, OverworldChunkContent content, MapPath path)
         {
-            if (InTownGround(layout, path.A) && InTownGround(layout, path.B))
+            if (InTownGround(content, path.A) && InTownGround(content, path.B))
             {
                 return;
             }
@@ -1263,7 +1274,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 Vector2 p0 = a + d * (total * k / pieces);
                 Vector2 p1 = a + d * (total * (k + 1) / pieces);
                 Vector2 mid = (p0 + p1) * 0.5f;
-                if (!r.Contains(mid) || InTownGround(layout, mid))
+                if (!r.Contains(mid) || InTownGround(content, mid))
                 {
                     continue;
                 }
@@ -1518,9 +1529,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             }
         }
 
-        private static bool InTownGround(OverworldLayout layout, Vector2 p)
+        /// <summary>On a town's ground (the towns near the chunk: <see cref="OverworldChunkContent.NearTowns"/> holds every one that reaches it).</summary>
+        private static bool InTownGround(OverworldChunkContent content, Vector2 p)
         {
-            foreach (OverworldSettlement settlement in layout.Settlements)
+            foreach (OverworldSettlement settlement in content.NearTowns)
             {
                 if (settlement.GroundRect.Contains(p))
                 {

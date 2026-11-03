@@ -16,7 +16,8 @@ namespace Rapadura.Tests.PlayMode
     /// mode with the whole Zarafshan overworld, the hero at the Vila's dock; then the hero walks with real click-to-move
     /// from the Vila down the south road into the Campos do Aryk (another area) with no scene load at all, the chunks
     /// stream in around them, and a level-1 hero walking east into the Tugai (walk level 2) is pushed back by the soft
-    /// barrier instead of being teleported.
+    /// barrier instead of being teleported. The four regions are one stitched world (§0.10, "Mundo costurado"): levelled up,
+    /// the hero walks on down the south road through the open pass into the Areias Flamejantes, still with no scene load.
     /// </summary>
     [Category("Smoke")]
     public class OverworldWalkSmokeTests : WorldMapFlowTestBase
@@ -92,6 +93,27 @@ namespace Rapadura.Tests.PlayMode
                 Assert.Less(Ground(player).x, 300.5f, $"A level-1 hero got into the Tugai ({Ground(player)}).");
                 Assert.Greater(Ground(player).x, 280f, "The barrier teleported the hero away instead of a step back.");
                 Assert.AreEqual("pomar", mode.OverworldArea.CurrentZone?.Id);
+
+                // The stitched world: down the Estepe's south road, through the open pass (the old gate to 07) into the Areias.
+                Assert.IsTrue(world.IsStitched, "The Pomar loads the stitched world of the four regions.");
+                PlayerStats stats = player.GetComponent<PlayerStats>();
+                Assert.IsNotNull(stats);
+                for (int i = 0; i < 40 && stats.Level < 8; i++)
+                {
+                    stats.AddExperience(100000);
+                }
+
+                Assert.GreaterOrEqual(mode.HeroLevel, 5, "The hero must be able to walk the Estrada das Caravanas (walk level 5).");
+                CityModeControllerPlace(player, new Vector2(0f, -930f), Vector2.down);
+                yield return WaitFrames(3);
+                yield return WalkTo(click, player, new Vector2(0f, -990f), "the pass at the end of the Estepe's south road");
+                yield return WalkTo(click, player, new Vector2(-100f, -1010f), "the far side of the pass");
+                yield return WalkTo(click, player, new Vector2(-100f, -1070f), "the Estrada das Caravanas");
+                yield return WaitFrames(5);
+                Assert.Less(Ground(player).y, -1040f, $"The hero stopped at {Ground(player)} before the Areias (blocked at the border?).");
+                Assert.AreEqual(OverworldLayouts.AreiasId, mode.OverworldArea.CurrentPart?.Id, "The region follows the hero's position.");
+                Assert.AreEqual(MapLayouts.CaravanasId, mode.MapId, "The map is the Estrada das Caravanas (07).");
+                Assert.IsTrue(mode.OverworldArea.IsChunkLoaded(OverworldRules.ChunkOf(world, Ground(player))), "The chunk under the hero is not loaded.");
 
                 Assert.AreEqual(0, loads, "No scene may load while walking inside the overworld.");
                 int handleNow = SceneManager.GetActiveScene().handle;

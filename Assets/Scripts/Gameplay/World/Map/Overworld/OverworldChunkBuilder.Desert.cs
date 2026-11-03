@@ -60,7 +60,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static void ScatterDesert(OverworldLayout layout, OverworldChunkContent content)
         {
-            if (layout.Region != MapRegion.AreiasFlamejantes)
+            if (layout.RegionAt(content.Rect.center) != MapRegion.AreiasFlamejantes)
             {
                 return;
             }

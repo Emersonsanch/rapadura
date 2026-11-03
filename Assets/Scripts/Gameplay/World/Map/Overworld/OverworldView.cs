@@ -16,9 +16,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// Turns an <see cref="OverworldLayout"/> into the scene of a continuous region (map mode of Main.unity,
     /// <see cref="MapModeController"/>), streamed around the hero:
     /// <list type="bullet">
-    /// <item>always there: one ground slab collider and the walls of the whole region, the settlements (town kit, their own
-    /// colliders, safe zones, keepers and night lights; the city gates removed), the gates out of the region and the Cais
-    /// da Barca triggers;</item>
+    /// <item>always there: one ground slab collider and the walls of the whole region, the gates out of the region and the
+    /// Cais da Barca triggers;</item>
+    /// <item>streamed by distance (<see cref="TownLoadRadius"/> / <see cref="TownUnloadRadius"/>, at most one per tick): the
+    /// settlements (town kit, their own colliders, safe zones, keepers and night lights; the city gates removed); the
+    /// stitched world has some 25 of them, only the ones near the hero exist;</item>
     /// <item>streamed by chunk (<see cref="OverworldRules.LoadRadius"/> / <see cref="OverworldRules.UnloadRadius"/>, at most
     /// one new chunk per frame): two merged meshes per chunk (ground; props, landmarks and bridges) on the shared town
     /// material, capsule/box colliders, the river blockers and bridge decks;</item>
@@ -35,6 +37,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private const float StreamTick = 0.2f;
         private const float ZoneTick = 0.1f;
         private const float WarningCooldown = 2.5f;
+
+        /// <summary>A town whose ground comes this close to the hero (m) is built...</summary>
+        public const float TownLoadRadius = 170f;
+
+        /// <summary>...and torn down past this (m).</summary>
+        public const float TownUnloadRadius = 260f;
 
         private sealed class Chunk
         {
@@ -56,11 +64,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private readonly Stack<Mesh> _meshPool = new Stack<Mesh>();
         private readonly List<MapExitTrigger> _exits = new List<MapExitTrigger>();
         private readonly List<CityTownView> _towns = new List<CityTownView>();
+        private readonly Dictionary<OverworldSettlement, CityTownView> _townOf = new Dictionary<OverworldSettlement, CityTownView>();
+        private readonly List<OverworldSettlement> _townDrop = new List<OverworldSettlement>();
+        private readonly Dictionary<OverworldSettlement, GameObject> _townAnchors = new Dictionary<OverworldSettlement, GameObject>();
         private readonly TownMeshBuilder _builder = new TownMeshBuilder();
 
         private GameObject _enemyPrefab;
         private Transform _chunkRoot;
         private Transform _spawnerRoot;
+        private Transform _townRoot;
         private Transform _player;
         private InventoryManager _bag;
         private float _nextStream;
@@ -71,8 +83,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         public OverworldLayout Layout { get; private set; }
 
-        /// <summary>The region's return city (respawn at its plaza).</summary>
-        public CityTownView Vila { get; private set; }
+        /// <summary>The town of the region the hero is in, when it is built (null while streamed out).</summary>
+        public CityTownView Vila => TownOf(CurrentPart != null ? CurrentPart.Vila : Layout?.Vila);
+
+        /// <summary>The region of the stitched world the hero is in (null for a region on its own).</summary>
+        public OverworldPart CurrentPart { get; private set; }
+
+        public int LoadedTownCount => _townOf.Count;
 
         public IReadOnlyList<CityTownView> Towns => _towns;
         public IReadOnlyList<MapExitTrigger> Exits => _exits;
@@ -84,11 +101,14 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>Raised when the hero walks into another area of the region.</summary>
         public event System.Action<OverworldZone> ZoneChanged;
 
+        /// <summary>Raised when the hero walks (or is carried) into another region of the stitched world.</summary>
+        public event System.Action<OverworldPart> RegionChanged;
+
         public bool IsChunkLoaded(Vector2Int chunk) => _chunks.ContainsKey(chunk);
 
         public CityTownView TownOf(OverworldSettlement settlement)
         {
-            return settlement == null ? null : _towns.Find(t => t != null && t.Layout == settlement.Town);
+            return settlement != null && _townOf.TryGetValue(settlement, out CityTownView town) && town != null ? town : null;
         }
 
         public static OverworldView Build(OverworldLayout layout, GameObject enemyPrefab, Transform parent = null)
@@ -158,19 +178,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             AddBox(colliders, new Vector3(b.xMax + t * 0.5f, bottom + h * 0.5f, b.center.y), new Vector3(t, h, b.height));
             AddBox(colliders, new Vector3(b.xMin - t * 0.5f, bottom + h * 0.5f, b.center.y), new Vector3(t, h, b.height));
 
-            foreach (OverworldSettlement settlement in Layout.Settlements)
-            {
-                var anchor = new GameObject("Ow_Town_" + settlement.Id).transform;
-                anchor.SetParent(transform, false);
-                anchor.localPosition = new Vector3(settlement.Offset.x, 0f, settlement.Offset.y);
-                CityTownView town = CityTownView.Build(settlement.Town, anchor, "ow:" + Layout.Id + ":" + settlement.Id);
-                RemoveCityGates(town);
-                _towns.Add(town);
-                if (settlement == Layout.Vila)
-                {
-                    Vila = town;
-                }
-            }
+            _townRoot = new GameObject("Ow_Towns").transform;
+            _townRoot.SetParent(transform, false);
 
             foreach (MapExitSpec exit in Layout.World.Exits)
             {
@@ -190,6 +199,76 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             _chunkRoot.SetParent(transform, false);
             _spawnerRoot = new GameObject("Ow_Spawners").transform;
             _spawnerRoot.SetParent(transform, false);
+        }
+
+        private void BuildTown(OverworldSettlement settlement)
+        {
+            var anchor = new GameObject("Ow_Town_" + settlement.Id).transform;
+            anchor.SetParent(_townRoot, false);
+            anchor.localPosition = new Vector3(settlement.Offset.x, 0f, settlement.Offset.y);
+            CityTownView town = CityTownView.Build(settlement.Town, anchor, "ow:" + Layout.Id + ":" + settlement.Id);
+            RemoveCityGates(town);
+            _towns.Add(town);
+            _townOf[settlement] = town;
+            _townAnchors[settlement] = anchor.gameObject;
+        }
+
+        /// <summary>
+        /// Builds the towns near <paramref name="at"/> (all of them with <paramref name="all"/>, else at most one, the nearest)
+        /// and tears down the far ones: a town is heavy (houses, keepers, lights), only the few around the hero exist.
+        /// </summary>
+        private void UpdateTowns(Vector2 at, bool all)
+        {
+            _townDrop.Clear();
+            foreach (KeyValuePair<OverworldSettlement, CityTownView> pair in _townOf)
+            {
+                if (CityGeometry.DistanceToRect(at, pair.Key.GroundRect) > TownUnloadRadius)
+                {
+                    _townDrop.Add(pair.Key);
+                }
+            }
+
+            foreach (OverworldSettlement settlement in _townDrop)
+            {
+                _towns.Remove(_townOf[settlement]);
+                _townOf.Remove(settlement);
+                if (_townAnchors.TryGetValue(settlement, out GameObject anchor))
+                {
+                    _townAnchors.Remove(settlement);
+                    Destroy(anchor);
+                }
+            }
+
+            OverworldSettlement nearest = null;
+            float best = TownLoadRadius;
+            foreach (OverworldSettlement settlement in Layout.Settlements)
+            {
+                if (_townOf.ContainsKey(settlement))
+                {
+                    continue;
+                }
+
+                float d = CityGeometry.DistanceToRect(at, settlement.GroundRect);
+                if (d > TownLoadRadius)
+                {
+                    continue;
+                }
+
+                if (all)
+                {
+                    BuildTown(settlement);
+                }
+                else if (d <= best)
+                {
+                    best = d;
+                    nearest = settlement;
+                }
+            }
+
+            if (nearest != null)
+            {
+                BuildTown(nearest);
+            }
         }
 
         private static void RemoveCityGates(CityTownView town)
@@ -235,6 +314,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             }
 
             UnloadFar(at);
+            UpdateTowns(at, true);
             UpdateSpawners(at);
 
             // The clearings that woke up asked for their ground: build it now, then let them spawn.
@@ -269,6 +349,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 _nextStream = Time.unscaledTime + StreamTick;
                 OverworldRules.ChunksWithin(Layout, at, OverworldRules.LoadRadius, _wanted);
                 UnloadFar(at);
+                UpdateTowns(at, false);
                 UpdateSpawners(at);
             }
 
@@ -552,6 +633,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             if (zone == null)
             {
                 return;
+            }
+
+            // The region is the one under the hero's feet (half-open rectangles: one per point); if the soft barrier pushes
+            // them back over the border, the next tick switches back.
+            OverworldPart part = Layout.PartAt(at);
+            if (part != CurrentPart)
+            {
+                CurrentPart = part;
+                RegionChanged?.Invoke(part);
             }
 
             if (zone != CurrentZone)
