@@ -1,0 +1,29 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Common/RapaduraTheme.uss" />
+    <Style src="/Assets/Resources/UI/FastTravelWindow.uss" />
+    <!-- Barcas de Luz · Mover (FastTravelWindowController): the one travel window. Opened by M, by the compass button
+         (world map HUD cluster, or the floating compass in a playable map / city walk) and by the Cais da Barca.
+         Region sections, town rows (Barca between cities) and map rows (MapCatalog) are built in code; all texts
+         come from MapTexts / CityTexts. -->
+    <ui:VisualElement name="ftw-layer" class="ftw-layer rap-theme" picking-mode="Ignore">
+        <ui:Button name="ftw-compass" text="Mapa (M)" focusable="true" class="ftw-compass rap-button" />
+        <ui:VisualElement name="ftw-root" class="ftw-root">
+            <ui:VisualElement name="ftw-card" class="ftw-card rap-panel">
+                <ui:VisualElement class="ftw-header">
+                    <ui:VisualElement class="ftw-header-text">
+                        <ui:Label name="ftw-title" text="" class="ftw-title rap-heading" />
+                        <ui:Label name="ftw-subtitle" text="" class="ftw-subtitle rap-subtle" />
+                    </ui:VisualElement>
+                    <ui:Button name="ftw-close" text="" focusable="true" class="ftw-close rap-button rap-button--primary" />
+                </ui:VisualElement>
+                <ui:VisualElement class="ftw-chips">
+                    <ui:Label name="ftw-hero" text="" class="ftw-chip rap-chip" />
+                    <ui:Label name="ftw-gold" text="" class="ftw-chip rap-chip" />
+                    <ui:Label name="ftw-overloaded" text="" class="ftw-chip ftw-chip--warning rap-chip" />
+                </ui:VisualElement>
+                <ui:ScrollView name="ftw-list" class="ftw-list" />
+                <ui:Label name="ftw-status" text="" class="ftw-status" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

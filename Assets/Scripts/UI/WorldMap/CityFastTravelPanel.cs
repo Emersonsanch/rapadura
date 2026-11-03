@@ -64,8 +64,10 @@ namespace Rapadura.UI.WorldMap
         private WorldMapController _map;
         private Action<BiomeType, int> _onTravel;
         private bool _open;
+        private bool _delegated;
 
-        public bool IsOpen => _open;
+        /// <summary>Open here, or in the unified Barcas de Luz window it delegates to (<see cref="FastTravelWindowController"/>).</summary>
+        public bool IsOpen => _open || (_delegated && FastTravelWindowController.IsOpenShared);
 
         private static LocalizationManager Localization => ServiceLocator.TryGet(out LocalizationManager localization) ? localization : null;
 
@@ -138,8 +140,22 @@ namespace Rapadura.UI.WorldMap
         }
 
         /// <summary>Opens the window paying from <paramref name="bag"/>; <paramref name="onTravel"/> gets the destination and the gold paid.</summary>
-        public void Open(InventoryManager bag, WorldMapController map, Action<BiomeType, int> onTravel)
+        public void Open(InventoryManager bag, WorldMapController map, Action<BiomeType, int> onTravel) => Open(bag, map, onTravel, null);
+
+        /// <summary>
+        /// One travel system: the towns and the 100 maps live in the unified Barcas de Luz window
+        /// (<see cref="FastTravelWindowController"/>); this panel delegates to it and keeps its own overlay only as a
+        /// fallback when that window cannot render. <paramref name="onMapTravel"/> gets a map trip (id, gold paid).
+        /// </summary>
+        public void Open(InventoryManager bag, WorldMapController map, Action<BiomeType, int> onTravel, Action<string, int> onMapTravel)
         {
+            if (bag != null && map != null && !_open && !IsOpen && FastTravelWindowController.OpenShared(new FastTravelWindowRequest
+                { Bag = bag, Map = map, OnCityTravel = onTravel, OnMapTravel = onMapTravel }))
+            {
+                _delegated = true;
+                return;
+            }
+
             if (_open || bag == null || map == null || !EnsureOverlay())
             {
                 return;
@@ -157,6 +173,12 @@ namespace Rapadura.UI.WorldMap
 
         public void Close()
         {
+            if (_delegated)
+            {
+                _delegated = false;
+                FastTravelWindowController.CloseShared();
+            }
+
             if (_overlay != null)
             {
                 _overlay.style.display = DisplayStyle.None;

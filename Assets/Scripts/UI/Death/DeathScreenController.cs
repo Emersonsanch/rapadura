@@ -348,7 +348,7 @@ namespace Rapadura.UI.Death
             }
 
             string text = _lastPenalty.ExperienceLost > 0
-                ? DeathProtectionTexts.Format(localization, DeathProtectionTexts.DeathXpLost, _lastPenalty.ExperienceLost)
+                ? DeathProtectionTexts.Format(localization, DeathProtectionTexts.DeathXpLost, LargeNumberFormat.Compact(_lastPenalty.ExperienceLost, localization))
                 : DeathProtectionTexts.Get(localization, DeathProtectionTexts.DeathNoXpLost);
             if (_lastPenalty.Protection == DeathProtection.Patua)
             {
@@ -612,9 +612,25 @@ namespace Rapadura.UI.Death
                 return;
             }
 
+            // A playable map (Docs/Mapas100.md): the map's own return city. Map 01 hosts it (the Vila): wake at its plaza here.
+            Rapadura.Gameplay.World.Map.Areas.MapModeController mapMode = Rapadura.Gameplay.World.Map.Areas.MapModeController.Current;
+            CitySpec mapReturnCity = mapMode != null && mapMode.IsReady ? Rapadura.Gameplay.World.Map.MapCatalog.RespawnCityFor(mapMode.MapId) : null;
+            if (mapMode != null && mapMode.CanRespawnHere)
+            {
+                if (hasCities && mapReturnCity != null)
+                {
+                    cities.ApplyDefeatHere(mapReturnCity.Region);
+                    cities.ConsumeRespawnNotice();
+                }
+
+                stats?.Revive();
+                mapMode.RespawnHere();
+                return;
+            }
+
             if (hasCities && _transition != null && !_transition.HasPendingCityVisit && !_transition.HasPendingEncounter)
             {
-                CitySpec city = cities.ApplyDefeatHere();
+                CitySpec city = mapReturnCity != null ? cities.ApplyDefeatHere(mapReturnCity.Region) : cities.ApplyDefeatHere();
                 if (city != null)
                 {
                     stats?.Revive();

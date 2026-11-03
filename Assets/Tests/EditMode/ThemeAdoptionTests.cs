@@ -48,6 +48,7 @@ namespace Rapadura.Tests
             "Resources/UI/TutorialHintView.uxml",
             "Resources/UI/VillageChestView.uxml",
             "Resources/UI/BestiaryView.uxml",
+            "Resources/UI/FastTravelWindow.uxml",
         };
 
         /// <summary>

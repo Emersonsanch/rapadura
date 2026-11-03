@@ -86,6 +86,17 @@ namespace Rapadura.Gameplay.World.Map
         /// <summary>Set by <see cref="EndCityVisit"/> from the Cais da Barca: the map opens the fast-travel window once (consumed by the hub).</summary>
         public bool OpenFastTravelOnMapReturn { get; set; }
 
+        /// <summary>
+        /// The playable map being visited (<c>MapCatalog</c> id) between <see cref="TravelToMap"/> and <see cref="EndMapVisit"/>:
+        /// Main.unity then loads in "map mode" (<c>MapModeController</c>, the code-built map with its safe settlement and
+        /// spawners). Null otherwise. Never saved, like the city visit.
+        /// </summary>
+        public string PendingMapVisit { get; private set; }
+        public bool HasPendingMapVisit => !string.IsNullOrEmpty(PendingMapVisit);
+
+        /// <summary>The map the hero walked in from (border crossing), or null when the Barcas de Luz brought them (arrival at the dock).</summary>
+        public string PendingMapArrivalFrom { get; private set; }
+
                 public SceneTransitionService(WorldMapProgress progress, ISceneLoader sceneLoader = null)
         {
             _progress = progress;
@@ -123,6 +134,7 @@ namespace Rapadura.Gameplay.World.Map
 
             PendingEncounter = payload;
             DecidedOutcome = null;
+            ClearMapVisit();
             EventBus.Publish(new EncounterStartedEvent(payload));
             _sceneLoader.LoadScene(CombatSceneName);
             return true;
@@ -201,6 +213,7 @@ namespace Rapadura.Gameplay.World.Map
 
         public void AbandonPendingEncounter()
         {
+            ClearMapVisit();
             PendingCityVisit = null;
             PendingCityRespawn = false;
             OpenFastTravelOnMapReturn = false;
@@ -223,6 +236,8 @@ namespace Rapadura.Gameplay.World.Map
                 return false;
             }
 
+            // From a playable map (respawn in its return city, or walking into the town): the map visit ends here.
+            ClearMapVisit();
             PendingCityVisit = cityId;
             PendingCityRespawn = respawn;
             OpenFastTravelOnMapReturn = false;
@@ -256,10 +271,90 @@ namespace Rapadura.Gameplay.World.Map
             return true;
         }
 
-                /// <summary>Loads the world map without any encounter bookkeeping (e.g. from a "Mapa" menu button in Main.unity).</summary>
+        /// <summary>
+        /// "Mover" in the Barcas de Luz window (or walking across a border, <paramref name="arrivingFromMapId"/>): loads
+        /// Main.unity in map mode for <paramref name="mapId"/>. Ends a city visit or another map visit first (one trip at a
+        /// time); false for an empty id or while an encounter is pending.
+        /// </summary>
+        public bool TravelToMap(string mapId, string arrivingFromMapId = null)
+        {
+            if (string.IsNullOrEmpty(mapId) || HasPendingEncounter)
+            {
+                GameLogger.Warning(LogCategory, $"TravelToMap('{mapId}') ignored (encounter pending or no map).");
+                return false;
+            }
+
+            PendingCityVisit = null;
+            PendingCityRespawn = false;
+            OpenFastTravelOnMapReturn = false;
+            PendingMapVisit = mapId;
+            PendingMapArrivalFrom = arrivingFromMapId;
+            EventBus.Publish(new MapVisitStartedEvent(mapId, arrivingFromMapId));
+            if (ServiceLocator.TryGet(out SaveManager saveManager))
+            {
+                saveManager.AutoSave();
+            }
+
+            _sceneLoader.LoadScene(CombatSceneName);
+            return true;
+        }
+
+        /// <summary>Leaves the playable map back to the world map (an exit to the island map). False when no map visit is pending.</summary>
+        public bool EndMapVisit()
+        {
+            if (!HasPendingMapVisit)
+            {
+                return false;
+            }
+
+            string mapId = PendingMapVisit;
+            ClearMapVisit();
+            EventBus.Publish(new MapVisitEndedEvent(mapId));
+            if (ServiceLocator.TryGet(out SaveManager saveManager))
+            {
+                saveManager.AutoSave();
+            }
+
+            _sceneLoader.LoadScene(WorldMapSceneName);
+            return true;
+        }
+
+        /// <summary>Forgets the map visit without loading anything (the world map came up some other way).</summary>
+        public void ClearMapVisit()
+        {
+            PendingMapVisit = null;
+            PendingMapArrivalFrom = null;
+        }
+
+        /// <summary>Loads the world map without any encounter bookkeeping (e.g. from a "Mapa" menu button in Main.unity).</summary>
         public void ReturnToWorldMap()
         {
+            ClearMapVisit();
             _sceneLoader.LoadScene(WorldMapSceneName);
+        }
+    }
+
+    /// <summary>Published by <see cref="SceneTransitionService.TravelToMap"/>.</summary>
+    public readonly struct MapVisitStartedEvent : IGameEvent
+    {
+        public readonly string MapId;
+        public readonly string ArrivingFromMapId;
+
+        public MapVisitStartedEvent(string mapId, string arrivingFromMapId)
+        {
+            MapId = mapId;
+            ArrivingFromMapId = arrivingFromMapId;
+        }
+    }
+
+    /// <summary>Published by <see cref="SceneTransitionService.EndMapVisit"/>.</summary>
+    public readonly struct MapVisitEndedEvent : IGameEvent
+    {
+        public readonly string MapId;
+
+        public MapVisitEndedEvent(string mapId)
+        {
+            MapId = mapId;
         }
     }
 }

@@ -970,7 +970,31 @@ namespace Rapadura.UI.WorldMap
             }
 
             _fastTravelUI = _fastTravelUI != null ? _fastTravelUI : (GetComponent<CityFastTravelPanel>() ?? gameObject.AddComponent<CityFastTravelPanel>());
-            _fastTravelUI.Open(BeginInventorySession(), _worldMap, OnFastTravelPaid);
+            _fastTravelUI.Open(BeginInventorySession(), _worldMap, OnFastTravelPaid, OnMapTravelPaid);
+        }
+
+        /// <summary>M / the compass on the island map: the Barcas de Luz window with this hub's bag and town trips. False without a map.</summary>
+        public bool OpenTravelWindow()
+        {
+            if (_worldMap == null)
+            {
+                _worldMap = FindFirstObjectByType<WorldMapController>();
+            }
+
+            if (_worldMap == null || FastTravelOpen)
+            {
+                return FastTravelOpen;
+            }
+
+            OpenFastTravel();
+            return FastTravelOpen;
+        }
+
+        /// <summary>A map was paid for in the Barcas de Luz window: hand the bag back to the carry, then the barca leaves (Main.unity, map mode).</summary>
+        private void OnMapTravelPaid(string mapId, int gold)
+        {
+            EndInventorySession();
+            FastTravelWindowController.TravelToMap(mapId);
         }
 
         /// <summary>

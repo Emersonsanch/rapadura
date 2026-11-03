@@ -1,0 +1,177 @@
+/* Barcas de Luz · Mover (FastTravelWindowController). Rapadura theme imported first in the UXML; rows are built in
+   code. Touch targets >= 48px (mobile), min-height so labels grow with the accessibility font scale. */
+.ftw-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.ftw-compass {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    min-width: 96px;
+    min-height: 52px;
+    height: auto;
+    font-size: 17px;
+    display: none;
+}
+
+.ftw-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    background-color: rgba(20, 10, 4, 0.86);
+    display: none;
+}
+
+.ftw-card {
+    width: 96%;
+    max-width: 920px;
+    height: 94%;
+    max-height: 760px;
+    padding: 14px 18px 14px 18px;
+    background-color: var(--rap-brown-deep);
+}
+
+.ftw-header {
+    flex-direction: row;
+    align-items: center;
+}
+
+.ftw-header-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.ftw-title {
+    font-size: 26px;
+    white-space: normal;
+}
+
+.ftw-subtitle {
+    white-space: normal;
+}
+
+.ftw-close {
+    min-width: 110px;
+    min-height: 50px;
+    height: auto;
+    margin: 0 0 0 10px;
+}
+
+.ftw-chips {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 8px 0 8px 0;
+}
+
+.ftw-chip {
+    margin: 0 8px 4px 0;
+    white-space: normal;
+}
+
+.ftw-chip--warning {
+    color: var(--rap-warning);
+}
+
+.ftw-list {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.ftw-region-header {
+    font-size: 19px;
+    -unity-font-style: bold;
+    color: var(--rap-gold-light);
+    margin: 12px 0 4px 2px;
+    white-space: normal;
+}
+
+.ftw-row {
+    flex-direction: row;
+    align-items: center;
+    min-height: 60px;
+    padding: 6px 10px 6px 10px;
+    margin: 0 0 6px 0;
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: var(--rap-panel-border);
+    background-color: var(--rap-panel-bg);
+}
+
+.ftw-row--city {
+    border-left-width: 4px;
+    border-left-color: var(--rap-gold);
+}
+
+.ftw-row--here {
+    border-color: var(--rap-cane-green);
+    border-width: 2px;
+}
+
+.ftw-row--locked {
+    opacity: 0.55;
+    background-color: var(--rap-brown-night);
+}
+
+.ftw-row__body {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.ftw-row__name {
+    font-size: 17px;
+    -unity-font-style: bold;
+    color: var(--rap-cream);
+    white-space: normal;
+}
+
+.ftw-row__meta {
+    font-size: 14px;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+}
+
+.ftw-row__req {
+    font-size: 14px;
+    color: var(--rap-caramel-light);
+    white-space: normal;
+}
+
+.ftw-row__lock {
+    width: 22px;
+    height: 26px;
+    margin-right: 8px;
+    border-radius: 4px;
+    border-width: 3px;
+    border-color: var(--rap-cream-dim);
+    background-color: var(--rap-brown);
+    display: none;
+}
+
+.ftw-row--locked .ftw-row__lock {
+    display: flex;
+}
+
+.ftw-go {
+    min-width: 150px;
+    min-height: 50px;
+    height: auto;
+    margin-left: 10px;
+    white-space: normal;
+}
+
+.ftw-status {
+    min-height: 22px;
+    margin-top: 6px;
+    white-space: normal;
+    color: var(--rap-gold-light);
+}
