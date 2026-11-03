@@ -113,6 +113,16 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>Trees planted on a lattice (orchards, mulberry rows) instead of the noise scatter.</summary>
         public bool Rows;
         public Vector2 RowSpacing = new Vector2(6.5f, 5.5f);
+
+        /// <summary>Several own pieces drawn in turn instead of <see cref="Special"/> (null = only <see cref="Special"/>).</summary>
+        public OverworldDecor[] SpecialMix;
+
+        /// <summary>The trees along the water (null = the tugai's tamarisks and poplars), and their variants.</summary>
+        public TownVegetation? WaterVegetation;
+        public int[] WaterVariants;
+
+        /// <summary>The colour of the scattered rocks and pebbles (null = the default per terrain).</summary>
+        public TownSwatch? RockTint;
     }
 
     /// <summary>The crop of one plot of the Campos do Aryk.</summary>
@@ -146,7 +156,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     }
 
     /// <summary>The look of every overworld terrain, and the deterministic ground colour at a point (EditMode-testable).</summary>
-    public static class OverworldTerrains
+    public static partial class OverworldTerrains
     {
         /// <summary>Field plots: width (x) and depth (z) in m, lane widths.</summary>
         public const float PlotWidth = 28f;
@@ -260,7 +270,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static OverworldTerrainStyle[] Build()
         {
-            var styles = new OverworldTerrainStyle[15];
+            // Room for the regions' own terrains (Região 4: 40–59, OverworldTerrains.Caves.cs).
+            var styles = new OverworldTerrainStyle[100];
             styles[(int)OverworldTerrain.Orchard] = new OverworldTerrainStyle
             {
                 Terrain = OverworldTerrain.Orchard, Mottle = TownSwatch.Vine, Relief = 2.6f, ReliefScale = 200f, ReliefDetail = 0.2f, Hollow = TownSwatch.GrassDark,
@@ -404,6 +415,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 Specials = 0.05f, Special = OverworldDecor.Cypress, Tufts = 0.14f, Flowers = 0.26f,
                 FlowerColors = new[] { TownSwatch.ClothRed, TownSwatch.Tamarisk, TownSwatch.ClothWhite, TownSwatch.Turquoise },
             };
+            DesertStyles(styles);
+            CaveStyles(styles);
+            MountainStyles(styles);
             return styles;
         }
     }

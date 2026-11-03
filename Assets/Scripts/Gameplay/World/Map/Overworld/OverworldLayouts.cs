@@ -22,20 +22,44 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static readonly Dictionary<string, OverworldLayout> Cache = new Dictionary<string, OverworldLayout>();
 
+        /// <summary>The continuous region of each catalog region (one line per region; its builder in <see cref="Build"/>).</summary>
+        private static readonly Dictionary<MapRegion, string> RegionIds = new Dictionary<MapRegion, string>
+        {
+            { MapRegion.Zarafshan, ZarafshanId },
+            { MapRegion.AreiasFlamejantes, AreiasId },
+            { MapRegion.SerraDeKaggen, KaggenId },
+            { MapRegion.GrutasDoLimiar, LimiarId },
+        };
+
+        /// <summary>Every continuous region of this build (texts, tests).</summary>
+        public static IEnumerable<string> RegionLayoutIds => RegionIds.Values;
+
         /// <summary>The continuous region holding catalog map <paramref name="mapId"/>, or null when the map is its own scene.</summary>
         public static OverworldLayout ForMap(string mapId)
         {
             MapDefinition map = MapCatalog.Get(mapId);
-            if (map == null || map.Region != MapRegion.Zarafshan)
+            if (map == null || !RegionIds.TryGetValue(map.Region, out string id))
             {
                 return null;
             }
 
-            OverworldLayout layout = Get(ZarafshanId);
+            OverworldLayout layout = Get(id);
             return layout != null && layout.ContainsMap(mapId) ? layout : null;
         }
 
         public static bool IsContinuous(string mapId) => ForMap(mapId) != null;
+
+        private static OverworldLayout Build(string id)
+        {
+            switch (id)
+            {
+                case ZarafshanId: return Zarafshan();
+                case AreiasId: return Areias();
+                case KaggenId: return Kaggen();
+                case LimiarId: return Limiar();
+                default: return null;
+            }
+        }
 
         public static OverworldLayout Get(string id)
         {
@@ -44,7 +68,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 return cached;
             }
 
-            OverworldLayout layout = id == ZarafshanId ? Zarafshan() : null;
+            OverworldLayout layout = Build(id);
             if (layout != null)
             {
                 Cache[id] = layout;

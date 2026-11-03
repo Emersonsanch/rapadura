@@ -34,6 +34,93 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         Cypress = 27,
         /// <summary>The Brejo: dead trees.</summary>
         DeadTree = 28,
+
+        // Região 2 — Areias Flamejantes (OverworldDecorKit.Desert.cs): 80–99.
+        /// <summary>Bleached bones: a camel's rib cage and skull half in the sand.</summary>
+        Bones = 80,
+        /// <summary>A broken caravan cart with spilled crates and bales of silk.</summary>
+        CaravanWreck = 81,
+        /// <summary>A steep Meroë pyramid with its chapel (the town kit's ruin).</summary>
+        Pyramid = 82,
+        /// <summary>A broken lotus column and its fallen drum.</summary>
+        LotusColumn = 83,
+        /// <summary>A row of ushabtis on a plinth.</summary>
+        Ushabtis = 84,
+        /// <summary>A karez well shaft: spoil ring, timber frame, windlass.</summary>
+        KarezShaft = 85,
+        /// <summary>A stone chimney (hoodoo) of layered red sandstone with its cap rock.</summary>
+        Hoodoo = 86,
+        /// <summary>A natural sandstone arch.</summary>
+        RockArch = 87,
+        /// <summary>A cluster of red salt crystals (Namrael's).</summary>
+        SaltCrystal = 88,
+        /// <summary>A rammed-earth watchtower of Qocho's sentinels (half ruined).</summary>
+        TaipaTower = 89,
+        /// <summary>A flat polygon of salt crust (ground detail, no collider).</summary>
+        SaltCrust = 90,
+        /// <summary>A stone marker (stela) along the caravan ways.</summary>
+        Marker = 91,
+        /// <summary>A resting caravan: camels, bales, jars round a cold hearth.</summary>
+        CaravanCamp = 92,
+        /// <summary>A clan camp of the crowned orcs: ochre leather tents and a drum (11).</summary>
+        ClanTent = 93,
+
+        // Região 4 — Grutas do Limiar (OverworldDecorKit.Caves.cs): 60–79, all solid.
+        /// <summary>A run of tall tuff wall (<see cref="OverworldProp.End"/> = its other end): the cave's walls between halls.</summary>
+        TuffWall = 60,
+        Stalagmite = 61,
+        /// <summary>A cluster of glowing crystals.</summary>
+        Crystal = 62,
+        /// <summary>A natural stone column, floor to "ceiling" (cut off high above the camera).</summary>
+        CaveColumn = 63,
+        /// <summary>A giant glowing mushroom cluster.</summary>
+        GiantMushroom = 64,
+        /// <summary>A vishapakar, the dragon stone with a fish head (21).</summary>
+        Vishapakar = 65,
+        /// <summary>A mine cart on a piece of rail (22).</summary>
+        MineCart = 66,
+        /// <summary>A copper air pipe on posts (22).</summary>
+        AirPipe = 67,
+        /// <summary>A bronze jar of the wheel's aqueducts (23).</summary>
+        Jar = 68,
+        /// <summary>Mahaway's flock: a nest of sticks and bones (24).</summary>
+        Nest = 69,
+        /// <summary>The posts and ropes at the end of a rope bridge.</summary>
+        RopePosts = 70,
+        /// <summary>A lamp niche: a tuff post with a lit oil lamp (the Lamparinas' lamps along the trails).</summary>
+        LampNiche = 71,
+        /// <summary>The wheel of twelve jars (23's centrepiece).</summary>
+        JarWheel = 72,
+        /// <summary>The barred portal of the Ossuário dos Artífices.</summary>
+        OssuaryPortal = 73,
+        /// <summary>The black void over a chasm's bed (<see cref="OverworldProp.End"/> = its other end; ground detail, no collider: the bed blocks).</summary>
+        Abyss = 74,
+
+        // Região 3 — Serra de Kaggen (OverworldDecorKit.Mountain.cs): 100–119.
+        /// <summary>A herder's rondavel: round stone-and-clay wall with a litema band, conical thatch.</summary>
+        Rondavel = 100,
+        /// <summary>A round dry-stone kraal (curral) with its gap.</summary>
+        Kraal = 101,
+        /// <summary>A run of dry-stone wall (<see cref="OverworldProp.End"/> = its other end; <see cref="OverworldProp.Scale"/> = height).</summary>
+        DryStoneWall = 102,
+        /// <summary>A terrace step: low retaining wall with a sorghum row on top (<see cref="OverworldProp.End"/> = its other end).</summary>
+        TerraceRow = 103,
+        /// <summary>A sandstone overhang with a painted panel (eland, dancers' silhouettes only as shapes).</summary>
+        PaintedShelter = 104,
+        /// <summary>A tall slab of the rock walls of a narrow pass.</summary>
+        RockSpire = 105,
+        /// <summary>A Great-Zimbabwe-like conical stone tower.</summary>
+        ConicalTower = 106,
+        /// <summary>A granite pillar with a bronze cap and runes (Napirasu).</summary>
+        BronzePillar = 107,
+        /// <summary>A snow drift on the ground (no collider).</summary>
+        SnowDrift = 108,
+        /// <summary>A low bank of mist (no collider).</summary>
+        MistBank = 109,
+        /// <summary>A giant granite block of the Mazans.</summary>
+        GraniteBlock = 110,
+        /// <summary>A tall stone stela (Estela Alta, the summit).</summary>
+        Stela = 111,
     }
 
     /// <summary>
@@ -42,7 +129,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// except the row pieces (crop rows, hedges), which take their two ground points so they follow the slope.
     /// Kept cheap: a grass tuft is 15 triangles, a flower clump 20, a crop-row piece 6–26.
     /// </summary>
-    public static class OverworldDecorKit
+    public static partial class OverworldDecorKit
     {
         public static bool IsSolid(OverworldDecor decor) => (int)decor >= (int)OverworldDecor.Hedge;
 

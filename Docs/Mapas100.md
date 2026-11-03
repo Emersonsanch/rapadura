@@ -109,6 +109,16 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       `OverworldLayouts.Zarafshan`, `OverworldRelief`, `OverworldTerrains`, `OverworldDecorKit`, `OverworldChunkBuilder`,
       `OverworldView`); testes `OverworldTests` e `OverworldReliefTests` (EditMode) e `OverworldWalkSmokeTests` (PlayMode). Os layouts 01–06 continuam existindo sozinhos (servidor e testes) e são
       encaixados na região como estão.
+    - **Região 2 — Areias Flamejantes** (2026-11-03): mesmo modelo, 2400 × 2400 m com o Oásis de Qocho dentro, 07 e 08
+      encaixados, 09–12 e 15 áreas intermediárias geradas, relevo de deserto (dunas em crista, mesas, cânions) e cenário
+      próprio; o portão sul do Zarafshan (para o 07) chega ao portão norte das Areias. Detalhes em §5, "Região 2".
+    - **Região 3 — Serra de Kaggen** (2026-11-03): mesmo modelo, 2400 × 2400 m com a Vila de Litema dentro, 13 e 14
+      encaixados, 15–18 e 9 áreas intermediárias, relevo de montanha forte (até ~41 m no cume) com trilhas e cidades
+      caminháveis; o portão oeste do Zarafshan (para o 13) chega à borda leste da Serra. Detalhes em §5, "Região 3".
+    - **Região 4 — Grutas do Limiar** (2026-11-03): mesmo modelo, 2400 × 2400 m de caverna com a Vila das Lamparinas
+      dentro, 19 e 20 encaixados, 21–24 e 18 salões intermediários, paredes altas de tufo entre os salões (sem teto real),
+      abismos com pontes de corda, lagos, cristais, colunas e fungos que brilham; o portão oeste do Zarafshan (para o 19)
+      chega à borda leste do Limiar e o do Hahya à borda oeste. Detalhes em §5, "Região 4".
 
 ---
 
@@ -619,6 +629,40 @@ Apagada, Javali do Lodo. Chefe do mundo da região: **Saklas** (arconte, mapa 06
 Cidade de região: **Oásis de Qocho** (bíblia §2.2). Estilo `Oasis`. Bichos-base: Escorpião das Areias Flamejantes,
 Enxame de Faíscas Presas (noite). Chefe do mundo: **Namrael** (mapa 12).
 
+**No jogo (2026-11-03): mundo contínuo** (§0 item 10, `OverworldLayouts.Areias.cs`): um mapa só de 2400 × 2400 m
+(x −1200…1200, z −1900…500) sem troca de cena; "Mover" para 07 ou 08 (ou o portão sul do Zarafshan) carrega a região.
+- **Qocho** na praça (0, 0), perto da borda norte, com o lago do oásis a leste e a fila de karez descendo do norte; é a
+  cidade de retorno de 07–10 (o **Tambor Rubro** é a de 11–12). O 07 (Caravançará do Ammo) e o 08 (Acampamento das
+  Pirâmides, avenida de ushabtis, anel do Grande Ushabti) estão encaixados como estavam; 09–12 ganharam posto gerado
+  (Boca do Karez, Poço das Tamareiras, Torre de Taipa) e o Tambor Rubro uma primeira versão da cidade dos orcs (Salão
+  Grande com tambores, Lâmpada de Ashmunikal, Forja de Tambor, cais; estilo `Oasis` por enquanto, o `WarCamp` falta).
+- **21 áreas** (faixa sobe com a distância de Qocho): Oásis de Qocho (07, 5–6), Estrada das Caravanas (07, 5–7, portão
+  para o Pomar na borda norte), Ruínas dos Artífices (08, 6–9), Palmeiral do Karez (6–8), Dunas do Vento Quente (7–10),
+  Salinas de Lop (8–11), Planície dos Karez (10–14), Oásis das Tamargueiras (10–14), Erg Dourado (11–15), Cânions
+  Vermelhos (11–15, portão para o 13 na borda leste), Vale das Ossadas, Mesas do Fogo e Campo das Pirâmides de Meroé
+  (12–16), Erg das Sete Cristas e Cânion do Eco (15–19), Cemitério de Caravanas e Erg do Sul (17–21), Galerias do Karez
+  (09, 20–26), Dunas que Cantam (10, 22–28, **Água Fresca**), Ermos do Tambor Rubro (11, 24–32) e Trono de Namrael (12,
+  30–38, **Proteção contra Veneno**): exigência e nível a pé pela barreira suave. ~435 clareiras com 2–3 grupos por
+  área, só bichos de hoje: Escorpião [tanque], Abutre de Brasa e Lanterna Quebrada [distância], ushabti (golem),
+  chacal (lobo), morcegos do karez, Gavião de Brasa (gavião-de-penacho); noite com Faíscas Presas, Mardagayl e Ubır.
+- **Relevo próprio** (`OverworldRelief.Desert.cs`): dunas em crista (dorso longo contra o vento oeste, face de
+  deslizamento curta, cristas sinuosas; 5 m nas dunas baixas, ~10 m no erg, ~13 m nas Dunas que Cantam), mesas de topo
+  chato com paredes a pique (~20 m), platô em camadas cortado por cânions estreitos (cânions e ermos, ~15–17 m),
+  três terraços de sal no Trono, "tells" em Meroé, salinas e oásis quase planos. Clareiras cujo platô inclinaria a trilha
+  vizinha (dunas/mesas/cânions) são descartadas: trilhas seguem niveladas na largura.
+- **Chão e cenário por área** (`OverworldTerrains.Desert.cs`, `OverworldDecorKit.Desert.cs`): areia, arenito vermelho,
+  sal, barro do karez, ouro velho e sombra violeta; tamareiras (em fileiras no palmeiral e na beira d'água),
+  tamargueiras, choupos-do-deserto e espinheiro; peças novas: ossadas de camelo, carroças quebradas, caravanas
+  paradas (camelos, fardos de seda, cântaros), pirâmides de Meroé (11 grandes colocadas + menores espalhadas), colunas
+  de lótus e ushabtis, fila de poços de karez, marcos de pedra, chaminés e arcos de arenito, cristais de sal vermelhos e
+  o trono de sal, torres de taipa, crosta de sal, tendas de clã com tambor. Rios: lago de Qocho, canal do karez no
+  palmeiral (ponte), poças de salmoura, lago das tamargueiras, poços que vertem nas galerias e o **lago em meia-lua**.
+- **Orçamento medido** (2704 pedaços, .NET 6 fora do Editor): ~3,0 mil triângulos em média, pior 11,4 mil (anel de
+  fundo leste, cinturão de choupos), geração ~0,67 ms em média, p95 ~1,2 ms. Testes: `AreiasOverworldTests`.
+- **Falta:** 09–12 continuam `isBuilt: false` no catálogo (dá para andar até eles, a barca ainda não leva; pede layout
+  à mão ou `MapLayouts.Has` aceitar o mundo contínuo); estilo `WarCamp` do Tambor Rubro e Tambor Rubro numa mesa (a
+  cidade precisa de y = 0); portões de volta das regiões 3/4 para a borda certa das Areias quando elas virarem mundo.
+
 ### 07 · Estrada das Caravanas / *Caravan Road* — nv 5–7 · ★
 - **No jogo (2026-11-03): jogável** (`MapLayouts.Areias.cs`): estrada de 5 m oeste→leste, Caravançará do Ammo murado (cais, cisterna, camelos, fardos), desvio norte pela fila de karez e sul para o 08; 4 clareiras nv 5–7 (Escorpião [tanque]; o Lobo do Tugai faz o papel do Chacal [rápido]; Faíscas Presas no crepúsculo/noite, Mardagayl raro; Abutre de Brasa [distância], cospe brasa de 8 m). Atiradores [distância] mantêm distância: se o herói chega a ~3,5–4 m, recuam flanqueando até reabrir o alcance; só o projétil fere, cada um com seu som de tiro. Falta: bicho coroado de Āz, tempestade de areia e o Ammo vendendo.
 - **Fonte:** a Rota da Seda e os caravançarás; Ammo, o Caravaneiro (Mār Ammō, texto parto M 2).
@@ -710,6 +754,44 @@ Cidade de região: **Vila de Litema** (bíblia §2.3). Estilo `Rondavel`. Bichos
 Omöl (noite). Chefe do mundo: **Mazan** (mapa 18). Respeito: San e basotho são povos vivos; os inimigos daqui são
 gigantes, ushabtis e bichos (bíblia §2.3).
 
+**No jogo (2026-11-03): mundo contínuo** (§0 item 10, `OverworldLayouts.Kaggen.cs`): um mapa só de 2400 × 2400 m
+(x −1700…700, z −900…1500) sem troca de cena; "Mover" para 13 ou 14 (ou o portão oeste do Zarafshan) carrega a região.
+- **Vila de Litema** na praça (0, 0), perto da borda leste, com a Trilha dos Rondavéis (13) encaixada em volta (cidade
+  de retorno de 13–16); o **Passo do Hahya** (14) encaixado a nordeste com a Boca da Mina do Mihr, sua torrente e o
+  anel de Hahya. 15–18 ganharam posto gerado no estilo `Rondavel` (Abrigo do Eland, Recinto Curvo, Estela Alta) e os
+  **Salões de Bronze de Napirasu** (17) uma primeira versão da cidade dos anões (Grande Forja, casa das runas, casa do
+  bronze, cais, estelas; cidade de retorno de 17–18: morrer ali acorda na praça dos Salões). 15–18 seguem sem layout
+  próprio no catálogo (`isBuilt` falso): chega-se a pé pela Serra; a barca ainda não vai até eles.
+- **15 áreas** (faixa sobe com a distância de Litema): Trilha dos Rondavéis (13, 9–11), Terraços de Litema (10–12,
+  portão para o 08 na borda sul), Encosta do Vento (10–12, portão para o Zarafshan na borda leste), Capinzal dos
+  Baobás (10–13), Torrentes de Qacha (11–14), Passo do Hahya (14, 10–13, **Manta de Lã**, galeria para o 19 na borda
+  leste), Pastos dos Currais (13–17), Passos Estreitos (15–20), Escarpas de Arenito (18–24), Campos de Neve (22–28),
+  Abrigos Pintados (15, 26–32), Muralhas de Pedra Seca (16, 28–34), Salões de Bronze (17, 30–38, **Picareta e
+  Tocha**), Estela Alta e Cume dos Mazans (18, 36–44, **Resistência à Nevasca**): exigência e nível a pé pela barreira
+  suave. ~400 clareiras com 2–3 grupos por área, só bichos de hoje: Ushabti de Pedra [tanque], Gavião-de-Penacho
+  [distância], Ave-Graveto (urutau) [distância/controle], lobo no lugar do Babuíno/Lince/Borrão [rápido], javali,
+  morcegos da mina [enxame]; à noite variantes, Ave-Graveto de Omöl (Mãe-da-Lua), Coruja-de-Fumaça, Mardagayl e
+  Morcego-Vampiro.
+- **Relevo de montanha** (`OverworldTerrains.Mountain.cs`): colinas douradas suaves em volta de Litema (~12 m),
+  terraços agrícolas em 4 degraus, encostas de aloés e passo do Hahya em degraus (~17 m), gargantas das torrentes,
+  paredões dos Passos Estreitos (~25 m), escarpas de arenito em 3 degraus (~30 m), campos de neve (~33 m) e o cume
+  nevado (~41 m). Onde há cidade, portão ou torrente o relevo fica em ≤ 18 m (rampas e encostas de vale caminháveis);
+  trilhas niveladas na largura, nenhum trecho acima de ~25°. Clareiras geradas a menos de 12,5 m de uma trilha ou em
+  chão inclinado são descartadas (o platô delas não inclina mais a trilha).
+- **Chão e cenário por área** (`OverworldDecorKit.Mountain.cs`, `OverworldChunkBuilder.Mountain.cs`): capim dourado,
+  barro vermelho, granito, arenito, líquen, basalto frio e neve; cedros retorcidos, aloés-árvore e baobás (também na
+  beira d'água; o fundo além dos muros é só de cedros por orçamento), touceiras de aloé, protea; peças novas: rondavéis
+  de pastor com faixa de litema, currais redondos de pedra seca, muros de pedra seca (curvos nas Muralhas), degraus de
+  terraço com sorgo, abrigos de arenito com painel de elands (só a imagem do bicho), lajes dos paredões, torres
+  cônicas, pilares de runas com capitel de bronze (runa acende à noite), blocos de granito dos Mazans, a estela alta,
+  montes de neve e bancos de neblina; marcos de pedras empilhadas. Água: a Torrente de Qacha (3 pontes e um vau) e a
+  torrente do Hahya prolongada até a borda sul (ponte na estrada do Zarafshan), três lagoas de degelo.
+- **Orçamento medido** (2704 pedaços, .NET 6 fora do Editor): ~5,2 mil triângulos em média, pior 10,7 mil (meta ≤ 12
+  mil); geração média ~0,74 ms, p95 ~1,1 ms; montar a região ~0,12 s. Testes em `OverworldKaggenTests` (EditMode).
+- **Falta:** layouts próprios de 15–18 (barca até eles), ventos da serra, pontes de corda que balançam, ar fino no
+  cume, Pedra que Rola e Neblina do Vento Ruim como bichos próprios, NPCs dos Salões de Bronze; ligação com as Areias
+  ainda por portão (borda sul da Serra ↔ borda leste das Areias).
+
 ### 13 · Trilha dos Rondavéis / *Rondavel Trail* — nv 9–11 · ★
 - **No jogo (2026-11-03): jogável** (`MapLayouts.Kaggen.cs`): a Vila de Litema inteira no platô (cidade de retorno, respawn na praça), trilha em zigue-zague, 2 currais de pedra seca, abrigos pintados e baobá; 4 clareiras nv 9–11 (Ushabti de Pedra [tanque]; Lobo e Javali no lugar do Babuíno [rápido]; de noite Ave-Graveto e Coruja-de-Fumaça; Gavião-de-Penacho [distância], pena-dardo de 9 m). Atiradores [distância] mantêm distância: se o herói chega a ~3,5–4 m, recuam flanqueando até reabrir o alcance; só o projétil fere, cada um com seu som de tiro. Falta: Pedra que Rola, ventos da serra.
 - **Fonte:** *litema* (pintura mural basotho); rondavéis das terras altas; \|Kaggen, o louva-a-deus dos contos \|xam.
@@ -793,6 +875,47 @@ gigantes, ushabtis e bichos (bíblia §2.3).
 
 Cidade de região: **Vila das Lamparinas** (bíblia §2.4). Estilo `CaveTuff`. Bichos-base: Enxame de Morcegos do Limiar,
 Ubır (noite). Chefe do mundo: **Mahaway** (mapa 24).
+
+**No jogo (2026-11-03): mundo contínuo** (§0 item 10, `OverworldLayouts.Limiar.cs`): um mapa só de 2400 × 2400 m
+(x −1200…1200, z −2100…300) sem troca de cena; "Mover" para 19 ou 20 (ou o portão do Zarafshan / do Hahya) carrega a
+região. Quanto mais fundo (sul) e mais longe da Vila, mais difícil.
+- **Vila das Lamparinas** na praça (0, 0), na parede norte, com o Lago do Limiar (19) encaixado como estava (lago,
+  túneis de tufo); o **Salão de Tages** (20) encaixado a leste com o Nicho da Ponte, o riacho e o anel de Tages. 21, 23 e
+  24 ganharam posto gerado em tufo (Vishapakar Grande, Torre das Jarras, Última Ponte de Corda) e o **Mercado dos
+  Túneis** (22) uma primeira versão da cidade dos kobolds no cruzamento das quatro galerias (barracas, lâmpadas, cais;
+  cidade de retorno de 22–23: morrer ali acorda na praça do Mercado; 19–21 e 24 acordam na Vila).
+- **27 áreas** em 5 fileiras de salões: Lago do Limiar (19, 13–15), Boca do Hahya (14–16), Galeria do Hahya e Galeria
+  da Ravina (14–16, compridas sob a parede norte até os portões: **oeste → 14**, **leste → Zarafshan**), Salão de Tages
+  (20, 14–18), Colunata do Lago (15–20, portão gradeado do **Ossuário dos Artífices**: leva ao mapa da ilha, onde a
+  masmorra abre), Campo de Cristais e Lago dos Peixes-Lanterna (17–22), Fendas Ocidentais e Terraços de Tufo (19–24),
+  Bosque de Cogumelos e Abismo Oriental (20–26), Jardim de Fungos (22–27), Prados de Musgo e Galerias Rosadas (23–28),
+  Ravina de Cristal e Fenda do Bronze (27–32), Campo das Pedras-Dragão e Fontes do Vishap (21, 32–38, **Lamparina
+  Rúnica**, as 12 vishapakar), Mercado dos Túneis (22, 34–40), Cânion da Roda e Aquedutos da Roda (23, 38–46, **Óleo
+  do Fogo Eterno**, a roda de doze jarras no seu poço), Ninho de Mahaway e Ninhos Ocidentais (24, 42–50, **Asas ou Pulo
+  Duplo**, o poço gigante com ninhos na borda), Escarpas da Revoada, Aquedutos Profundos e Abismo sem Fundo (42–50).
+  Os salões de 19/20 pedem **Tocha** (barreira suave). ~380 clareiras com 2–3 grupos por área, só bichos de hoje:
+  Enxame de Morcegos [enxame], **Peixe-Lanterna Apagado** [distância], aranha (Aranha de Gruta/Kobold tocado),
+  ushabti (Pedra-Lâmina, Sapo de Pedra, Filho de Ullikummi), Lanterna Quebrada (Jarra Rachada), urutau (Corvo-da-Treva),
+  gavião-de-penacho (Revoada), javali (Toupeira-Gigante), escorpião (Lagarta de Pedra), Faíscas (Fumaça de Mina, esporos);
+  à noite variantes e **Ubır** (morcego-vampiro) em toda clareira. Clareiras cujo platô inclinaria uma trilha são
+  descartadas (como na Serra).
+- **Relevo de caverna** (formas do `OverworldRelief`): degraus de tufo em 4 níveis nos Terraços (~18 m), 5 níveis no
+  Ninho (~24 m), fendas/gargantas nos abismos e no cânion (~15 m), montículos de estalagmite no Salão, morros nos
+  fungos e na boca, margens quase planas nos lagos e no mercado.
+- **Cenário por área** (`OverworldTerrains.Caves.cs`, `OverworldDecorKit.Caves.cs`, `OverworldChunkBuilder.Caves.cs`):
+  chão de basalto, ardósia, areia negra, índigo dos cristais, tufo rosa e musgo; **paredes altas de tufo** nas bordas
+  entre salões (8–13 m nas norte–sul, ressaltos de 3–5 m nas leste–oeste, do lado da câmera), com vãos em toda trilha,
+  rio, clareira e em trechos de ruído; abóbada de paredes de 14–23 m fora das bordas norte/leste/oeste (sem colisor);
+  **abismos** (leitos cavados desenhados como vazio negro) com pontes e postes de corda nas duas pontas; estalagmites,
+  aglomerados de cristal, colunas naturais, cogumelos gigantes, vishapakar, vagonetes e tubos de ar (22), jarras de
+  bronze (23), ninhos (24), nichos de lâmpada à beira das trilhas, a roda das doze jarras e o portal do Ossuário. **Luz**:
+  só as células emissivas da paleta (musgo, cogumelo/cristal azul, lâmpadas), que as cidades da região mantêm acesas
+  (`AmbientNight` 0,65 em todas).
+- **Orçamento medido** (2704 pedaços, .NET 6 fora do Editor): ~3,7 mil triângulos em média, pior 9,6 mil, geração
+  ~0,7–1,1 ms em média, p95 ~1,0–1,7 ms. Testes: `OverworldLimiarTests`.
+- **Falta:** 21–24 continuam `isBuilt: false` (a pé sim, barca não); o Ossuário abre pelo mapa da ilha (portal leva para
+  lá: entrada direta pede gancho no `DungeonDirector`); célula emissiva própria para cristal (hoje usa a do cogumelo
+  azul); estilo kobold do Mercado (usa `CaveTuff`); barcos do lago, lâmpadas que salvam o caminho, poços de vento do 24.
 
 ### 19 · Lago do Limiar / *Threshold Lake* — nv 13–15 · ★
 - **No jogo (2026-11-03): jogável** (`MapLayouts.Limiar.cs`): a Vila das Lamparinas inteira na parede norte (cidade de retorno), lago escuro com trilha da margem, 2 túneis entre paredes de tufo (oeste → 14, leste → 20); 5 clareiras nv 13–15 (Morcegos [enxame], Aranha-Tecelã no lugar da Aranha de Gruta [rápido], Ushabti no lugar do Lodo [tanque]; Ubır sai do lago à noite; Peixe-Lanterna Apagado [distância], gota de luz fria de 7,5 m que persegue). Atiradores [distância] mantêm distância: se o herói chega a ~3,5–4 m, recuam flanqueando até reabrir o alcance; só o projétil fere, cada um com seu som de tiro. Falta: barcos, lâmpadas que salvam o caminho.
@@ -887,6 +1010,14 @@ cais. Paleta: coral caiado `#EFE7DA`, madeira de teca `#6B4A2E`, latão `#C9A23F
 Viva e Fogo Vivo (o sol da savana). Chefe do mundo: **Hedammu** (mapa 30).
 
 ### 25 · Taa Pwani e o Recife / *Taa Pwani and the Reef* — nv 45–50 · ★
+- **No jogo (2026-11-03): cidade pronta, mapa ainda não.** `CitySpec` de cidade de região tardia
+  (`CityCatalog.LateRegionCities`) com passeio próprio (`CityTownRecipes.TaaPwani`, estilo `CoralStone`: casas de coral
+  caiada com terraço, ameias, porta de teca entalhada com pinos de latão e baraza; mercado de pérolas na praça; Farol de
+  Coral; 2 dhows de vela triangular nas poças de maré; mangues no sudeste; coqueiros e baobás), respawn na praça para
+  derrotas nos mapas 25 e 30, Capitão Liyongo, Mwana, Nuru, Zawadi e Mbaraka nas portas com visual e falas próprios,
+  Bazar de Pérolas da Mwana (todas as exigências dos mapas 25–30) e 2 missões da cidade (Docs/Cities.md §1.2). Falta: o
+  mapa 25 jogável (recife, maré, bichos próprios: as missões usam Abutre de Brasa e Escorpião no lugar da Gaivota Ladra
+  e do Caranguejo-dos-Coqueiros).
 - **Fonte:** cidades de pedra de coral da costa suaíli (Kilwa, Lamu); dhows e as monções do Oceano Índico; Fumo Liyongo,
   herói-arqueiro e poeta suaíli (já é a G3 da Maithe).
 - **Bioma e visual:** praia, recife raso e cidade de coral; paleta acima; coqueiros, mangue na borda, poças de maré.

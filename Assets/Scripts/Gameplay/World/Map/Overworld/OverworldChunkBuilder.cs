@@ -140,7 +140,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// draped over them, rivers; props: everything standing on it). Pure until the meshes are made
     /// (<see cref="TownMeshBuilder"/>), deterministic: hashes and <see cref="OverworldNoise"/> only.
     /// </summary>
-    public static class OverworldChunkBuilder
+    public static partial class OverworldChunkBuilder
     {
         /// <summary>Distance between two scatter samples (m).</summary>
         public const float SampleSpacing = 3.2f;
@@ -182,6 +182,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             content.Grid = BuildGrid(layout, coord);
             Gather(layout, content);
             AddFixed(layout, content);
+            ScatterCaves(layout, content);
+            ScatterDesert(layout, content);
+            ScatterMountain(layout, content);
             if (content.HasFields)
             {
                 ScatterFields(layout, content);
@@ -472,7 +475,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static bool Green(OverworldTerrain t)
         {
-            return t != OverworldTerrain.Steppe && t != OverworldTerrain.Ruins && t != OverworldTerrain.Ravine && t != OverworldTerrain.HighHills;
+            return t != OverworldTerrain.Steppe && t != OverworldTerrain.Ruins && t != OverworldTerrain.Ravine && t != OverworldTerrain.HighHills && !IsCave(t)
+                && (!IsDesert(t) || OverworldTerrains.For(t).WaterVegetation.HasValue);
         }
 
         /// <summary>A crop grows here (no trees, shrubs or tufts in the rows).</summary>
@@ -540,12 +544,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     float t6 = t5 + style.Logs;
                     float t7 = t6 + style.Stumps;
                     float t8 = t7 + style.MossRocks;
-                    float t9 = t8 + (style.Special != OverworldDecor.None ? style.Specials : 0f);
+                    float t9 = t8 + (style.Special != OverworldDecor.None || style.SpecialMix != null ? style.Specials : 0f);
                     float s01 = TownStyle.Hash01(salt, i + 120000);
                     float yaw = TownStyle.Hash01(salt, i + 160000) * 360f;
                     if (roll < t0)
                     {
-                        bool second = style.SecondVegetation.HasValue && TownStyle.Hash01(salt, i + 200000) < style.SecondShare;
+                        // Beyond the walls only the first (cheap) trees: the dense backdrop stays within the chunk budget.
+                        bool second = style.SecondVegetation.HasValue && wall >= 0f && TownStyle.Hash01(salt, i + 200000) < style.SecondShare;
                         TownVegetation vegetation = second ? style.SecondVegetation.Value : style.Vegetation;
                         int[] variants = second ? style.SecondVariants : style.TreeVariants;
                         if (wall < 0f && !second)
@@ -554,7 +559,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                         }
 
                         int variant = variants[(int)(TownStyle.Hash(salt, i + 240000) % (uint)variants.Length)];
-                        if (river < 10f)
+                        if (river < 10f && style.WaterVegetation.HasValue && style.WaterVariants != null && style.WaterVariants.Length > 0)
+                        {
+                            // The area's own trees along the water (cedars and tree aloes by the Kaggen torrents).
+                            vegetation = style.WaterVegetation.Value;
+                            variant = style.WaterVariants[(int)(TownStyle.Hash(salt, i + 260000) % (uint)style.WaterVariants.Length)];
+                        }
+                        else if (river < 10f)
                         {
                             // The tugai along the water: tamarisks on the bank, gold and green poplars behind them.
                             vegetation = TownVegetation.Forest;
@@ -624,9 +635,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     }
                     else if (roll < t9)
                     {
-                        OverworldDecor special = style.Special;
+                        OverworldDecor special = style.SpecialMix != null && style.SpecialMix.Length > 0
+                            ? style.SpecialMix[(int)(TownStyle.Hash(salt, i + 320000) % (uint)style.SpecialMix.Length)]
+                            : style.Special;
                         float scale = special == OverworldDecor.Cypress ? 0.85f + 0.35f * s01 : 0.8f + 0.6f * s01;
-                        TryAdd(layout, content, p, special == OverworldDecor.Basalt ? 1.4f : 0.9f, new OverworldProp
+                        float room = IsDesertDecor(special) ? DesertClearance(special) : special == OverworldDecor.Basalt ? 1.4f : 0.9f;
+                        TryAdd(layout, content, p, room, new OverworldProp
                         {
                             Kind = CityPropKind.Rock, Decor = special, Position = p, Yaw = yaw, Scale = scale,
                             Variant = (int)(TownStyle.Hash(salt, i + 300000) & 3),
@@ -638,13 +652,19 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static TownSwatch RockColor(OverworldTerrain terrain)
         {
+            TownSwatch? tint = OverworldTerrains.For(terrain).RockTint;
+            if (tint.HasValue)
+            {
+                return tint.Value;
+            }
+
             switch (terrain)
             {
                 case OverworldTerrain.Ravine: return TownSwatch.Basalt;
                 case OverworldTerrain.Ruins: return TownSwatch.Sandstone;
                 case OverworldTerrain.Steppe: return TownSwatch.Sandstone;
                 case OverworldTerrain.HighHills: return TownSwatch.StoneDark;
-                default: return TownSwatch.Stone;
+                default: return IsCave(terrain) ? CaveRockColor(terrain) : TownSwatch.Stone;
             }
         }
 
@@ -865,7 +885,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     OverworldTerrain terrain = info.Terrain;
                     OverworldTerrainStyle style = OverworldTerrains.For(terrain);
                     bool crop = InCrop(terrain, p);
-                    bool wet = info.RiverEdge > 0.2f && info.RiverEdge < 3.2f && terrain != OverworldTerrain.Steppe && terrain != OverworldTerrain.Ruins;
+                    bool wet = info.RiverEdge > 0.2f && info.RiverEdge < 3.2f && terrain != OverworldTerrain.Steppe && terrain != OverworldTerrain.Ruins && !IsCave(terrain);
                     float tufts = crop ? 0f : style.Tufts;
                     float flowers = crop ? 0f : style.Flowers;
                     float reeds = style.Reeds + (wet ? 0.45f : 0f);
@@ -945,7 +965,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 var item = new OverworldProp
                 {
                     Kind = prop.Kind, Position = prop.Position, End = prop.End, Yaw = prop.Yaw, Scale = prop.Scale <= 0f ? 1f : prop.Scale,
-                    Variant = prop.Variant, Vegetation = TownVegetation.Forest,
+                    Variant = prop.Variant, Vegetation = FixedVegetation(layout, prop.Position),
                     Color = prop.Kind == CityPropKind.Rock && prop.Variant == 9 ? TownSwatch.GrassDark : TownSwatch.Stone,
                 };
                 content.Props.Add(item);
@@ -1016,6 +1036,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         {
             Vector2 p = prop.Position;
             float s = prop.Scale;
+            if (AddCaveDecorSolid(content, prop, ground, sink) || AddMountainDecorSolid(content, prop, ground, sink)
+                || AddDesertDecorSolid(content, prop, ground, sink))
+            {
+                return;
+            }
+
             switch (prop.Decor)
             {
                 case OverworldDecor.Hedge:
@@ -1434,6 +1460,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 case OverworldDecor.Puddle:
                     b.Stamp(OverworldDecorKit.PuddleStamps[prop.Variant & 3], at, prop.Yaw, s, TownSwatch.Water);
                     return;
+            }
+
+            if (AppendCaveDecor(b, g, prop, at) || AppendMountainDecor(b, g, prop, at) || AppendDesertDecor(b, g, prop, at))
+            {
+                return;
             }
 
             // Small pieces: one placement matrix, no closure (the scatter has hundreds of them per chunk).

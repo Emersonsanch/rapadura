@@ -18,6 +18,14 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         Gorges = 3,
         /// <summary>Low ground with scattered tells (the buried ruins).</summary>
         Mounds = 4,
+
+        // Região 2 — Areias Flamejantes (OverworldRelief.Desert.cs): 20–29.
+        /// <summary>Crested dunes: long windward backs, steep slip faces, sinuous crests.</summary>
+        Dunes = 20,
+        /// <summary>Flat-topped sandstone mesas with sheer sides over a sand floor.</summary>
+        Mesas = 21,
+        /// <summary>A high layered plateau cut by narrow winding canyons (the badlands).</summary>
+        Canyons = 22,
     }
 
     /// <summary>What the relief knows about one point besides its height (ground colours and scatter read it).</summary>
@@ -58,7 +66,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// <item>outside the walls the backdrop rises into hills.</item>
     /// </list>
     /// </summary>
-    public sealed class OverworldRelief
+    public sealed partial class OverworldRelief
     {
         /// <summary>Side (m) of a ground cell: the relief is sampled on this world-aligned grid and drawn as facets.</summary>
         public const float Cell = 3f;
@@ -584,6 +592,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 }
 
                 default:
+                    if (DesertShape(style, x, z, a, out smooth, out shaped))
+                    {
+                        break; // Região 2: dunes, mesas, canyons (OverworldRelief.Desert.cs).
+                    }
+
                     smooth = shaped = a * SmoothStep(0f, 1f, 0.5f + 0.85f * OverworldNoise.Fbm(x, z, 2));
                     break;
             }

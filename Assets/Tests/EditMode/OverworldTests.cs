@@ -74,7 +74,7 @@ namespace Rapadura.Tests
                 Assert.IsNotNull(w.SettlementOf(id), $"{id}: its settlement stands in the region");
             }
 
-            Assert.IsFalse(OverworldLayouts.IsContinuous(MapLayouts.CaravanasId), "07 is still its own scene");
+            Assert.IsFalse(w.ContainsMap(MapLayouts.CaravanasId), "07 is in the Areias overworld, not this one");
 
             foreach (OverworldZone zone in w.Zones)
             {

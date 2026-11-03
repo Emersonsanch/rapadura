@@ -39,6 +39,100 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         Canopy = 13,
         /// <summary>Mihrshah's walled garden: paving, cypresses, roses, dry canals.</summary>
         Garden = 14,
+
+        // Região 2 — Areias Flamejantes (OverworldLayouts.Areias.cs, OverworldTerrains.Desert.cs): 20–39.
+        /// <summary>The caravan road's dry steppe turning to sand: camel thorn, tamarisks, stone markers.</summary>
+        CaravanSteppe = 20,
+        /// <summary>The Oásis de Qocho: palms and green patches round the water.</summary>
+        Oasis = 21,
+        /// <summary>Date-palm rows watered by the karez channels.</summary>
+        PalmGrove = 22,
+        /// <summary>Stony desert (hamada) of the Artífices: gravel, lotus columns, ushabtis.</summary>
+        StoneDesert = 23,
+        /// <summary>Low rolling dunes.</summary>
+        LowDunes = 24,
+        /// <summary>The erg: high crested dunes.</summary>
+        Erg = 25,
+        /// <summary>Red sandstone canyons: chimneys and natural arches.</summary>
+        RedCanyon = 26,
+        /// <summary>Salt flats: white crust, brine pools.</summary>
+        SaltFlat = 27,
+        /// <summary>The Meroë pyramid fields: steep pyramids, chapels, tells.</summary>
+        MeroeRuins = 28,
+        /// <summary>Flat-topped sandstone mesas over a sand floor.</summary>
+        Mesas = 29,
+        /// <summary>Lines of karez shafts across the clay plain.</summary>
+        KarezField = 30,
+        /// <summary>A tamarisk thicket round an oasis lake.</summary>
+        TamariskOasis = 31,
+        /// <summary>Dark sand strewn with bones and broken caravans.</summary>
+        BoneValley = 32,
+        /// <summary>The Galerias do Karez (09): sunken clay ground over the galleries, shafts and wells.</summary>
+        KarezGallery = 33,
+        /// <summary>The Dunas que Cantam (10): the tallest dunes, the crescent lake.</summary>
+        SingingDunes = 34,
+        /// <summary>The Ermos do Tambor Rubro (11): layered red badlands, canyons and chimneys.</summary>
+        Badlands = 35,
+        /// <summary>The Trono de Namrael (12): terraces of salt and red crystal, rammed-earth towers.</summary>
+        SaltThrone = 36,
+
+        // Região 4 — Grutas do Limiar (OverworldLayouts.Limiar.cs, OverworldTerrains.Caves.cs): 40–59.
+        /// <summary>The mouth of the caves towards the Hahya: juniper, tuff boulders, the first glowing moss.</summary>
+        CaveMouth = 40,
+        /// <summary>Black-sand shores of the underground lakes: basalt, moss, glowing mushrooms by the water.</summary>
+        LakeShore = 41,
+        /// <summary>A hall of stalactites and stalagmites.</summary>
+        StalactiteHall = 42,
+        /// <summary>A grove of giant glowing mushrooms.</summary>
+        MushroomGrove = 43,
+        /// <summary>A field of blue crystals on indigo rock.</summary>
+        CrystalField = 44,
+        /// <summary>Chasms and fissures: high basalt cut by gorges, rope bridges over the abysses.</summary>
+        Chasm = 45,
+        /// <summary>Stepped pink-tuff terraces.</summary>
+        TuffTerraces = 46,
+        /// <summary>A forest of natural stone columns.</summary>
+        ColumnForest = 47,
+        /// <summary>Moss meadows with springs and the vishapakar (21).</summary>
+        MossMeadow = 48,
+        /// <summary>The kobolds' tunnels: rails, carts, air pipes (22).</summary>
+        TunnelMarket = 49,
+        /// <summary>The underground canyon of the wheel of twelve jars: tuff, bronze, aqueducts (23).</summary>
+        WheelCanyon = 50,
+        /// <summary>Mahaway's roost: a giant shaft, nests on the ledges, rope bridges (24).</summary>
+        Roost = 51,
+
+        // Região 3 — Serra de Kaggen (OverworldLayouts.Kaggen.cs, OverworldTerrains.Mountain.cs): 60–79.
+        /// <summary>Golden grass slopes round the Vila de Litema: aloes, proteas, the odd baobab, pastors' rondavels.</summary>
+        GoldenSlopes = 60,
+        /// <summary>Farming terraces: dry-stone retaining walls with sorghum rows on each step.</summary>
+        FarmTerraces = 61,
+        /// <summary>Windy aloe slopes: tree aloes, protea, granite boulders, cairns.</summary>
+        AloeSlopes = 62,
+        /// <summary>Baobab grassland on the lower plateau.</summary>
+        BaobabGrass = 63,
+        /// <summary>The high pass of Hahya: granite, snow in the hollows, twisted cedars.</summary>
+        HighPass = 64,
+        /// <summary>Meltwater torrents in green gullies: cedars, ferns, mossy boulders.</summary>
+        Torrents = 65,
+        /// <summary>Herders' pastures with round dry-stone kraals (currais) and rondavels.</summary>
+        Kraals = 66,
+        /// <summary>Narrow passes between rock walls (paredões).</summary>
+        NarrowPass = 67,
+        /// <summary>Stepped red sandstone escarpments.</summary>
+        SandstoneScarp = 68,
+        /// <summary>The Abrigos Pintados (15): sandstone overhangs with rock paintings.</summary>
+        PaintedShelters = 69,
+        /// <summary>The Muralhas de Pedra Seca (16): granite hills, curved dry-stone walls, conical towers, lichen.</summary>
+        DryStone = 70,
+        /// <summary>The Salões de Bronze de Napirasu (17): dark granite, bronze rune pillars, cold lava.</summary>
+        BronzeHalls = 71,
+        /// <summary>Snowfields under the summit: snow, granite, sparse cedars, mist.</summary>
+        Snowfield = 72,
+        /// <summary>The Cume dos Mazans (18): the snowy peak in the mist, giant granite blocks.</summary>
+        Summit = 73,
+        /// <summary>The Estela Alta plateau (18): snow-dusted steps, the shepherds' shelter.</summary>
+        StelaPlateau = 74,
     }
 
     /// <summary>

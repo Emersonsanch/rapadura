@@ -34,10 +34,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 new LocalizationEntry(BarcaArrived, "The barca leaves you at {0}", "A barca deixa vocês em {0}"),
             };
 
-            OverworldLayout zarafshan = OverworldLayouts.Get(OverworldLayouts.ZarafshanId);
-            if (zarafshan != null)
+            foreach (string regionId in OverworldLayouts.RegionLayoutIds)
             {
-                foreach (OverworldZone zone in zarafshan.Zones)
+                OverworldLayout region = OverworldLayouts.Get(regionId);
+                if (region == null)
+                {
+                    continue;
+                }
+
+                foreach (OverworldZone zone in region.Zones)
                 {
                     entries.Add(new LocalizationEntry(zone.NameKey, zone.NameEn ?? zone.Id, zone.NamePt ?? zone.Id));
                 }
