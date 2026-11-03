@@ -19,7 +19,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
     /// </list>
     /// Deterministic (props by <see cref="TownStyle.Hash01"/>, never a runtime RNG) and cached for the session.
     /// </summary>
-    public static class MapLayouts
+    public static partial class MapLayouts
     {
         private static readonly Dictionary<string, MapLayout> Cache = new Dictionary<string, MapLayout>();
 
@@ -45,7 +45,14 @@ namespace Rapadura.Gameplay.World.Map.Areas
             {
                 case MapCatalog.PomarId: layout = Pomar(); break;
                 case MapCatalog.TugaiId: layout = Tugai(); break;
-                default: return null;
+                default:
+                    layout = BuildRegional(mapId);
+                    if (layout == null)
+                    {
+                        return null;
+                    }
+
+                    break;
             }
 
             Finish(layout);
@@ -53,7 +60,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
             return layout;
         }
 
-        public static bool Has(string mapId) => mapId == MapCatalog.PomarId || mapId == MapCatalog.TugaiId;
+        public static bool Has(string mapId) => mapId == MapCatalog.PomarId || mapId == MapCatalog.TugaiId || HasRegional(mapId);
 
         public static void ClearCache() => Cache.Clear();
 

@@ -13,7 +13,7 @@ namespace Rapadura.Gameplay.World.Map
     /// <summary>
     /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II): level
     /// bands, walk/warp levels, special gates, settlements and return cities, as content-as-code like
-    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01 and 02, <c>MapLayouts</c>);
+    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01, 02, 07, 08, 13, 14, 19 and 20, <c>MapLayouts</c>);
     /// the rest are listed in the Barcas de Luz window, closed. The gold fare is never stored: it is always the
     /// formula of <see cref="MapAccessRules.CalculateWarpCost(int,int,bool)"/> (the "Custo Ouro" column of the methodology
     /// table is design history).
@@ -57,24 +57,24 @@ namespace Rapadura.Gameplay.World.Map
             new MapDefinition(6, "map_006_mihrshah", R.Zarafshan, Y.Ruins, S.M, 26, 32, 24, 28, Fee, T.GardenKey, CopasGarajonay, K.Outpost, "portao_do_jardim"),
 
             // Região 2 — Areias Flamejantes
-            new MapDefinition(7, "map_007_caravanas", R.AreiasFlamejantes, Y.Desert, S.M, 5, 7, 5, 8, Fee, T.None, CityCatalog.AreiaBranca, K.Outpost, "caravancara_do_ammo"),
-            new MapDefinition(8, "map_008_artifices", R.AreiasFlamejantes, Y.Ruins, S.M, 6, 9, 6, 10, Fee, T.None, CityCatalog.AreiaBranca, K.Outpost, "acampamento_das_piramides"),
+            new MapDefinition(7, "map_007_caravanas", R.AreiasFlamejantes, Y.Desert, S.M, 5, 7, 5, 8, Fee, T.None, CityCatalog.AreiaBranca, K.Outpost, "caravancara_do_ammo", isBuilt: true),
+            new MapDefinition(8, "map_008_artifices", R.AreiasFlamejantes, Y.Ruins, S.M, 6, 9, 6, 10, Fee, T.None, CityCatalog.AreiaBranca, K.Outpost, "acampamento_das_piramides", isBuilt: true),
             new MapDefinition(9, "map_009_karez", R.AreiasFlamejantes, Y.Underground, S.M, 20, 26, 18, 22, Fee, T.None, CityCatalog.AreiaBranca, K.Outpost, "boca_do_karez"),
             new MapDefinition(10, "map_010_dunas", R.AreiasFlamejantes, Y.Desert, S.G, 22, 28, 20, 25, Fee, T.FreshWater, CityCatalog.AreiaBranca, K.Outpost, "poco_das_tamareiras"),
             new MapDefinition(11, "map_011_tambor_rubro", R.AreiasFlamejantes, Y.Desert, S.G, 24, 32, 22, 28, Fee, T.None, TamborRubro, K.RaceCity, "tambor_rubro"),
             new MapDefinition(12, "map_012_namrael", R.AreiasFlamejantes, Y.Desert, S.G, 30, 38, 28, 32, Fee, T.PoisonProtection, TamborRubro, K.Outpost, "torre_de_taipa"),
 
             // Região 3 — Serra de Kaggen
-            new MapDefinition(13, "map_013_rondaveis", R.SerraDeKaggen, Y.Mountain, S.M, 9, 11, 8, 12, Fee, T.None, CityCatalog.SerraAlta, K.City, "vila_de_litema"),
-            new MapDefinition(14, "map_014_hahya", R.SerraDeKaggen, Y.Mountain, S.M, 10, 13, 9, 14, Fee, T.WoolCloak, CityCatalog.SerraAlta, K.Outpost, "boca_da_mina"),
+            new MapDefinition(13, "map_013_rondaveis", R.SerraDeKaggen, Y.Mountain, S.M, 9, 11, 8, 12, Fee, T.None, CityCatalog.SerraAlta, K.City, "vila_de_litema", isBuilt: true),
+            new MapDefinition(14, "map_014_hahya", R.SerraDeKaggen, Y.Mountain, S.M, 10, 13, 9, 14, Fee, T.WoolCloak, CityCatalog.SerraAlta, K.Outpost, "boca_da_mina", isBuilt: true),
             new MapDefinition(15, "map_015_abrigos", R.SerraDeKaggen, Y.Mountain, S.M, 26, 32, 24, 28, Fee, T.None, CityCatalog.SerraAlta, K.Outpost, "abrigo_do_eland"),
             new MapDefinition(16, "map_016_pedra_seca", R.SerraDeKaggen, Y.Ruins, S.G, 28, 34, 26, 30, Fee, T.None, CityCatalog.SerraAlta, K.Outpost, "recinto_curvo"),
             new MapDefinition(17, "map_017_napirasu", R.SerraDeKaggen, Y.Mountain, S.G, 30, 38, 28, 34, Fee, T.PickaxeTorch, SaloesDeBronze, K.RaceCity, "saloes_de_bronze"),
             new MapDefinition(18, "map_018_mazans", R.SerraDeKaggen, Y.Mountain, S.G, 36, 44, 34, 40, Fee, T.BlizzardResistance, SaloesDeBronze, K.Outpost, "estela_alta"),
 
             // Região 4 — Grutas do Limiar
-            new MapDefinition(19, "map_019_lago_limiar", R.GrutasDoLimiar, Y.Underground, S.M, 13, 15, 12, 16, Fee, T.TorchRequired, CityCatalog.Lamparinas, K.City, "vila_das_lamparinas"),
-            new MapDefinition(20, "map_020_tages", R.GrutasDoLimiar, Y.Underground, S.M, 14, 18, 13, 18, Fee, T.TorchRequired, CityCatalog.Lamparinas, K.Outpost, "nicho_da_ponte"),
+            new MapDefinition(19, "map_019_lago_limiar", R.GrutasDoLimiar, Y.Underground, S.M, 13, 15, 12, 16, Fee, T.TorchRequired, CityCatalog.Lamparinas, K.City, "vila_das_lamparinas", isBuilt: true),
+            new MapDefinition(20, "map_020_tages", R.GrutasDoLimiar, Y.Underground, S.M, 14, 18, 13, 18, Fee, T.TorchRequired, CityCatalog.Lamparinas, K.Outpost, "nicho_da_ponte", isBuilt: true),
             new MapDefinition(21, "map_021_pedras_dragao", R.GrutasDoLimiar, Y.Underground, S.G, 32, 38, 30, 35, Fee, T.RunicLamp, CityCatalog.Lamparinas, K.Outpost, "vishapakar_grande"),
             new MapDefinition(22, "map_022_mercado_tuneis", R.GrutasDoLimiar, Y.Underground, S.G, 34, 42, 32, 38, Fee, T.None, MercadoDosTuneis, K.RaceCity, "mercado_dos_tuneis"),
             new MapDefinition(23, "map_023_canion_roda", R.GrutasDoLimiar, Y.Ruins, S.G, 38, 46, 36, 42, Fee, T.EternalFireOil, MercadoDosTuneis, K.Outpost, "torre_das_jarras"),
