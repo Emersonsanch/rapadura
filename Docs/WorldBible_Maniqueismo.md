@@ -316,8 +316,8 @@ por primo, en/pt-BR). Testes: `OverworldBeastsTests`.
 Montanha, como os layouts `OverworldLayouts.Costa/Delta/Teto` já declaram. Modelos em `CoastDeltaBeastRecipes` /
 `PamirBeastRecipes` (o crocodilo, o leão, o urso e o irbis abrem a mandíbula no bote; o rinoceronte e o iaque baixam a
 cabeça para a carga; a píton serpenteia como a cobra-de-areia; o trol e o almas erguem os braços), Caderno em
-`LateRegionBestiaryTexts`. Testes: `LateRegionBeastsTests`. Ainda não trocados nos overworlds (os grupos seguem com os
-substitutos até a troca).
+`LateRegionBestiaryTexts`. Testes: `LateRegionBeastsTests`. Já nos overworlds da Costa, do Delta e do Teto no lugar dos
+substitutos (testes: `LateRegionBeastsPlacementTests`).
 
 | `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
 |---|---|---|---|---|

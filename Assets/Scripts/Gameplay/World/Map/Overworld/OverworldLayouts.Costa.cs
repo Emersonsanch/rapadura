@@ -78,6 +78,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Ooze = "enemy_cave_ooze";
             public const string Crow = "enemy_cave_dark_crow";
             public const string LanternFish = "enemy_cave_lantern_fish";
+            public const string Crocodile = "enemy_forest_mangrove_crocodile";
+            public const string Lion = "enemy_forest_grass_lion";
+            public const string Rhino = "enemy_forest_dust_rhino";
         }
 
         private static OverworldLayout Costa()
@@ -432,8 +435,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             // Savana dos Auroques (26): the Leão do Capim Apagado [rápido] (the wolf's body), the Rinoceronte-de-Pó [tanque]
             // (peccary and ushabti), the Ave-Relâmpago [distância] (the ember vulture); the smoke hyenas at night.
-            auroques.Fauna.Add(Fauna("leoes_do_capim", "[rápido]", T(N(Coast.Wolf, 3), N(Coast.Jackal, 1)), T(V(Coast.Wolf, 2), S(mngwa, 1)), 4));
-            auroques.Fauna.Add(Fauna("rinocerontes_de_po", "[tanque]", T(N(Coast.Boar, 2), N(Coast.Ushabti, 1)), T(S(NightVariantRules.Queixada, 2), V(Coast.Ushabti, 1)), 3, null, 30f));
+            auroques.Fauna.Add(Fauna("leoes_do_capim", "[rápido]", T(N(Coast.Lion, 3), N(Coast.Jackal, 1)), T(V(Coast.Lion, 2), S(mngwa, 1)), 4));
+            auroques.Fauna.Add(Fauna("rinocerontes_de_po", "[tanque]", T(N(Coast.Rhino, 3), N(Coast.Jackal, 1)), T(V(Coast.Rhino, 2), S(NightVariantRules.Queixada, 1)), 3, null, 30f));
             auroques.Fauna.Add(Fauna("aves_relampago", "[distância]", T(N(Coast.Vulture, 3), N(Coast.Hawk, 1)), T(V(Coast.Vulture, 2), S(NightVariantRules.RasgaMortalha, 1)), 3));
             acacias.Fauna.Add(Fauna("hienas_de_fumaca", "[enxame] [rápido]", T(N(Coast.Jackal, 3), N(Coast.Wolf, 1)), T(V(Coast.Jackal, 3), S(mngwa, 1)), 5));
             acacias.Fauna.Add(Fauna("aves_das_acacias", "[distância]", T(N(Coast.Vulture, 2), N(Coast.Hawk, 2)), T(V(Coast.Vulture, 1), V(Coast.Hawk, 1), S(NightVariantRules.RasgaMortalha, 1)), 4));
@@ -491,17 +494,17 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             husuni.Fauna.Add(Fauna("corvos_de_husuni", "[distância]", T(N(Coast.Crow, 3), N(Coast.Bats, 1)), T(V(Coast.Crow, 2), S(kongamato, 1)), 4));
 
             // Mangue Raso: the Crocodilo do Mangue [tanque] (the sand snake's body), the fiddler crabs [enxame].
-            mangueRaso.Fauna.Add(Fauna("crocodilos_do_mangue", "[tanque]", T(N(Coast.SandSnake, 3), N(Coast.Crab, 1)), T(V(Coast.SandSnake, 2), S(plankton, 1)), 3, null, 28f));
+            mangueRaso.Fauna.Add(Fauna("crocodilos_do_mangue", "[tanque]", T(N(Coast.Crocodile, 3), N(Coast.Crab, 1)), T(V(Coast.Crocodile, 2), S(plankton, 1)), 3, null, 28f));
             mangueRaso.Fauna.Add(Fauna("caranguejos_violinistas", "[enxame]", T(N(Coast.Crab, 3), N(Coast.Spider, 1)), T(V(Coast.Crab, 3), S(plankton, 1)), 5));
 
             // Canais e Mangues de Liyongo (30): the Kongamato [distância] (the crow, the vampire bat at night: it doubles), the
             // Garça Apagada [rápido] (the gull's body), the crocodiles, the fiddler crabs; fireflies in the mangroves at night.
             canais.Fauna.Add(Fauna("kongamatos", "[distância]", T(N(Coast.Crow, 3), N(Coast.Bats, 1)), T(V(Coast.Crow, 2), S(kongamato, 2)), 4));
             canais.Fauna.Add(Fauna("garcas_apagadas", "[rápido]", T(N(Coast.Gull, 3), N(Coast.Crow, 1)), T(V(Coast.Gull, 2), S(plankton, 1)), 4, null, 22f));
-            canais.Fauna.Add(Fauna("crocodilos_dos_canais", "[tanque]", T(N(Coast.SandSnake, 3), N(Coast.Ooze, 1)), T(V(Coast.SandSnake, 2), V(Coast.Ooze, 1)), 3, null, 30f));
+            canais.Fauna.Add(Fauna("crocodilos_dos_canais", "[tanque]", T(N(Coast.Crocodile, 3), N(Coast.Ooze, 1)), T(V(Coast.Crocodile, 2), V(Coast.Ooze, 1)), 3, null, 30f));
             mangues.Fauna.Add(Fauna("kongamatos_de_liyongo", "[distância]", T(N(Coast.Crow, 3), N(Coast.Bats, 1)), T(V(Coast.Crow, 2), S(kongamato, 2)), 4));
             mangues.Fauna.Add(Fauna("violinistas_de_liyongo", "[enxame] [tanque]", T(N(Coast.Crab, 3), N(Coast.Ooze, 1)), T(V(Coast.Crab, 2), S(plankton, 1)), 5));
-            mangues.Fauna.Add(Fauna("crocodilos_de_liyongo", "[tanque] [elite]", T(N(Coast.SandSnake, 3), N(Coast.Spider, 1)), T(V(Coast.SandSnake, 2), V(Coast.Spider, 1)), 3, null, 32f));
+            mangues.Fauna.Add(Fauna("crocodilos_de_liyongo", "[tanque] [elite]", T(N(Coast.Crocodile, 3), N(Coast.Spider, 1)), T(V(Coast.Crocodile, 2), V(Coast.Spider, 1)), 3, null, 32f));
         }
     }
 }
