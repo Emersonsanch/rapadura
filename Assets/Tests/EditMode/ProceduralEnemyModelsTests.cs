@@ -91,6 +91,20 @@ namespace Rapadura.Tests
                 ProceduralEnemyParts.Tail } },
             { ProceduralEnemyKind.LanternFish, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Lantern, ProceduralEnemyParts.WingLeft,
                 ProceduralEnemyParts.WingRight, ProceduralEnemyParts.Tail } },
+            { ProceduralEnemyKind.FloatingSkull, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Wisp } },
+            { ProceduralEnemyKind.SkeletonWarrior, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.ArmLeft,
+                ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.Shield, ProceduralEnemyParts.Weapon, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight,
+                ProceduralEnemyParts.ShinLeft, ProceduralEnemyParts.ShinRight, ProceduralEnemyParts.FootLeft, ProceduralEnemyParts.FootRight } },
+            { ProceduralEnemyKind.SkeletonArcher, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.ArmLeft,
+                ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.Weapon, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight,
+                ProceduralEnemyParts.ShinLeft, ProceduralEnemyParts.ShinRight, ProceduralEnemyParts.FootLeft, ProceduralEnemyParts.FootRight } },
+            { ProceduralEnemyKind.BoneSorcerer, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.ArmLeft,
+                ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.Weapon, ProceduralEnemyParts.Orb, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight,
+                ProceduralEnemyParts.ShinLeft, ProceduralEnemyParts.ShinRight, ProceduralEnemyParts.FootLeft, ProceduralEnemyParts.FootRight } },
+            { ProceduralEnemyKind.BoneColossus, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core,
+                ProceduralEnemyParts.RibsLeft, ProceduralEnemyParts.RibsRight, ProceduralEnemyParts.Halo, "HaloSkull_0", "HaloSkull_5", ProceduralEnemyParts.ArmLeft,
+                ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.Weapon, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight,
+                ProceduralEnemyParts.ShinLeft, ProceduralEnemyParts.ShinRight, ProceduralEnemyParts.FootLeft, ProceduralEnemyParts.FootRight } },
         };
 
         /// <summary>Legs per kind; every one a Leg_ (hip) → Shin_ (knee) → Foot_ chain for ProceduralLegLocomotion.</summary>
@@ -103,6 +117,8 @@ namespace Rapadura.Tests
             { ProceduralEnemyKind.FireflySwarm, 0 }, { ProceduralEnemyKind.Peccary, 4 }, { ProceduralEnemyKind.Potoo, 0 },
             { ProceduralEnemyKind.EmberVulture, 0 }, { ProceduralEnemyKind.BrokenLantern, 0 }, { ProceduralEnemyKind.CrestedHawk, 0 },
             { ProceduralEnemyKind.LanternFish, 0 },
+            { ProceduralEnemyKind.FloatingSkull, 0 }, { ProceduralEnemyKind.SkeletonWarrior, 2 }, { ProceduralEnemyKind.SkeletonArcher, 2 },
+            { ProceduralEnemyKind.BoneSorcerer, 2 }, { ProceduralEnemyKind.BoneColossus, 2 },
         };
 
         [Test]
@@ -340,12 +356,19 @@ namespace Rapadura.Tests
             Assert.AreEqual(ProceduralEnemyKind.BrokenLantern, ProceduralEnemyModels.KindFor("enemy_desert_broken_lantern"));
             Assert.AreEqual(ProceduralEnemyKind.CrestedHawk, ProceduralEnemyModels.KindFor("enemy_mountain_crested_hawk"));
             Assert.AreEqual(ProceduralEnemyKind.LanternFish, ProceduralEnemyModels.KindFor("enemy_cave_lantern_fish"));
+            Assert.AreEqual(ProceduralEnemyKind.FloatingSkull, ProceduralEnemyModels.KindFor("enemy_floating_skull"));
+            Assert.AreEqual(ProceduralEnemyKind.SkeletonWarrior, ProceduralEnemyModels.KindFor("enemy_skeleton_warrior"));
+            Assert.AreEqual(ProceduralEnemyKind.SkeletonArcher, ProceduralEnemyModels.KindFor("enemy_skeleton_archer"));
+            Assert.AreEqual(ProceduralEnemyKind.BoneSorcerer, ProceduralEnemyModels.KindFor("enemy_bone_sorcerer"));
+            Assert.AreEqual(ProceduralEnemyKind.BoneColossus, ProceduralEnemyModels.KindFor("boss_bone_colossus"));
             Assert.AreEqual(ProceduralEnemyKind.None, ProceduralEnemyModels.KindFor("enemy_unknown_thing"));
             Assert.AreEqual(ProceduralEnemyKind.None, ProceduralEnemyModels.KindFor((string)null));
 
             foreach (KeyValuePair<string, ProceduralEnemyKind> entry in ProceduralEnemyModels.KindsById)
             {
-                var definition = Resources.Load<EnemyDefinition>("Enemies/" + entry.Key);
+                // Open-world enemies under Resources/Enemies, the dungeon guardians under their dungeon's folder.
+                var definition = Resources.Load<EnemyDefinition>("Enemies/" + entry.Key)
+                    ?? Resources.Load<EnemyDefinition>(Rapadura.Gameplay.Dungeon.DungeonRules.EnemyResourcePath(entry.Key));
                 Assert.IsNotNull(definition, entry.Key);
                 Assert.AreEqual(definition.IsBoss, ProceduralEnemyModels.IsBoss(entry.Value), $"{entry.Key}: boss flag vs model budget");
             }

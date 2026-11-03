@@ -103,7 +103,9 @@ namespace Rapadura.Editor
 
         private static bool AssignToDefinition(string enemyId, GameObject prefab)
         {
-            var definition = AssetDatabase.LoadAssetAtPath<EnemyDefinition>($"{EnemyFolder}/{enemyId}.asset");
+            // Open-world enemies, then the dungeon guardians (Resources/Dungeons/Ossuario/Enemies).
+            var definition = AssetDatabase.LoadAssetAtPath<EnemyDefinition>($"{EnemyFolder}/{enemyId}.asset")
+                ?? AssetDatabase.LoadAssetAtPath<EnemyDefinition>($"Assets/Resources/{Rapadura.Gameplay.Dungeon.DungeonRules.EnemyResourcesFolder}/{enemyId}.asset");
             if (definition == null)
             {
                 Debug.LogWarning($"[ProceduralEnemyModelBaker] {EnemyFolder}/{enemyId}.asset not found; prefab baked but not assigned.");

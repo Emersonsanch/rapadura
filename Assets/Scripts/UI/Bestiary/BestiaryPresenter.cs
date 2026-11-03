@@ -3,6 +3,7 @@ using System.Globalization;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Content;
+using Rapadura.Gameplay.Dungeon;
 using Rapadura.Gameplay.Enemies;
 using Rapadura.UI.WorldMap;
 using UnityEngine;
@@ -50,13 +51,29 @@ namespace Rapadura.UI.Bestiary
             return unlocked ? EnemyName(manager, entry) : BestiaryTexts.Get(manager, BestiaryTexts.LockedName);
         }
 
-        public static string EnemyName(LocalizationManager manager, BestiaryEntry entry) =>
-            entry?.Definition != null ? entry.Definition.LocalizedName(manager) : entry?.Id ?? string.Empty;
+        public static string EnemyName(LocalizationManager manager, BestiaryEntry entry)
+        {
+            if (entry != null && entry.IsDungeon && manager != null)
+            {
+                // The guardians' names live in DungeonTexts, merged only once the dungeon is entered: merge them here too.
+                DungeonTexts.EnsureRegistered(manager);
+            }
 
-        public static string RegionName(LocalizationManager manager, BestiaryEntry entry) =>
-            entry != null && entry.Region.HasValue
+            return entry?.Definition != null ? entry.Definition.LocalizedName(manager) : entry?.Id ?? string.Empty;
+        }
+
+        /// <summary>The region the page lives in, or for a dungeon guardian the dungeon's name ("Ossuário dos Artífices").</summary>
+        public static string RegionName(LocalizationManager manager, BestiaryEntry entry)
+        {
+            if (entry != null && entry.IsDungeon)
+            {
+                return DungeonTexts.Get(manager, DungeonTexts.DungeonName);
+            }
+
+            return entry != null && entry.Region.HasValue
                 ? WorldMapHudPresenter.RegionName(manager, entry.Region.Value)
                 : BestiaryTexts.Get(manager, BestiaryTexts.UnknownRegion);
+        }
 
         /// <summary>"7/9 páginas escritas", or the completion line once every page is unlocked.</summary>
         public static string ProgressText(LocalizationManager manager, int unlocked, int total)

@@ -242,6 +242,9 @@ namespace Rapadura.UI.Bestiary
             // -- Bichos de distância dos mapas jogáveis (own file too) --
             RangedBestiaryTexts.AddPages(entries);
 
+            // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
+            OssuaryBestiaryTexts.AddPages(entries);
+
             return entries;
         }
 

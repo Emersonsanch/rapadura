@@ -56,6 +56,20 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         public const string Lantern = "Lantern";
         /// <summary>Potoo: the dead branch it ambushes from (it takes it along, of course).</summary>
         public const string Branch = "Branch";
+        /// <summary>Copper skeleton warrior: the bone shield on the left forearm (rides <see cref="ArmLeft"/>, which its guard behaviour raises).</summary>
+        public const string Shield = "Shield";
+        /// <summary>Floating skull: the trail of soul-fire wisps under the jaw (flickers).</summary>
+        public const string Wisp = "Wisp";
+        /// <summary>Bone sorcerer: the violet orb held by the claws on top of its staff (pulses, swells before each cast).</summary>
+        public const string Orb = "Orb";
+        /// <summary>Bone colossus: the soul-fire heart inside the stacked skulls (blazes in the last phase).</summary>
+        public const string Core = "Core";
+        /// <summary>Bone colossus: the two halves of the rib cage over its chest, hinged at the sides (swing open in the last phase).</summary>
+        public const string RibsLeft = "Ribs_L";
+        public const string RibsRight = "Ribs_R";
+        /// <summary>Bone colossus: the ring of loose skulls ("HaloSkull_0".."HaloSkull_5") folded away until the skull-throwing phase.</summary>
+        public const string Halo = "Halo";
+        public const string HaloSkullPrefix = "HaloSkull_";
     }
 
     /// <summary>
@@ -101,6 +115,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_desert_broken_lantern", ProceduralEnemyKind.BrokenLantern },
             { "enemy_mountain_crested_hawk", ProceduralEnemyKind.CrestedHawk },
             { "enemy_cave_lantern_fish", ProceduralEnemyKind.LanternFish },
+            // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
+            { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
+            { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
+            { "enemy_skeleton_archer", ProceduralEnemyKind.SkeletonArcher },
+            { "enemy_bone_sorcerer", ProceduralEnemyKind.BoneSorcerer },
+            { "boss_bone_colossus", ProceduralEnemyKind.BoneColossus },
         };
 
         public static readonly ProceduralEnemyKind[] AllKinds =
@@ -111,7 +131,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.Werewolf, ProceduralEnemyKind.VampireBat, ProceduralEnemyKind.ShroudOwl,
             ProceduralEnemyKind.FireflySwarm, ProceduralEnemyKind.Peccary, ProceduralEnemyKind.Potoo,
             ProceduralEnemyKind.EmberVulture, ProceduralEnemyKind.BrokenLantern, ProceduralEnemyKind.CrestedHawk, ProceduralEnemyKind.LanternFish,
+            ProceduralEnemyKind.FloatingSkull, ProceduralEnemyKind.SkeletonWarrior, ProceduralEnemyKind.SkeletonArcher,
+            ProceduralEnemyKind.BoneSorcerer, ProceduralEnemyKind.BoneColossus,
         };
+
+        /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
+        public static bool IsOssuaryGuardian(ProceduralEnemyKind kind) => kind >= ProceduralEnemyKind.FloatingSkull && kind <= ProceduralEnemyKind.BoneColossus;
 
         /// <summary>The night-only species models (Docs/DayNight.md): they also get a <see cref="Rapadura.Gameplay.Night.NightCreatureVoice"/>.</summary>
         public static bool IsNightSpecies(ProceduralEnemyKind kind) => kind >= ProceduralEnemyKind.Werewolf && kind <= ProceduralEnemyKind.Potoo;
@@ -128,7 +153,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         public static bool IsBoss(ProceduralEnemyKind kind)
         {
             return kind == ProceduralEnemyKind.Warlord || kind == ProceduralEnemyKind.RuinGuardian || kind == ProceduralEnemyKind.AncientDweller
-                || kind == ProceduralEnemyKind.AlphaWolf;
+                || kind == ProceduralEnemyKind.AlphaWolf || kind == ProceduralEnemyKind.BoneColossus;
         }
 
         public static int TriangleBudget(ProceduralEnemyKind kind) => IsBoss(kind) ? BossTriangleBudget : CommonTriangleBudget;
@@ -198,6 +223,21 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.LanternFish:
                     RangedEnemyRecipes.BuildLanternFish(blueprint);
+                    break;
+                case ProceduralEnemyKind.FloatingSkull:
+                    OssuaryEnemyRecipes.BuildFloatingSkull(blueprint);
+                    break;
+                case ProceduralEnemyKind.SkeletonWarrior:
+                    OssuaryEnemyRecipes.BuildSkeletonWarrior(blueprint);
+                    break;
+                case ProceduralEnemyKind.SkeletonArcher:
+                    OssuaryEnemyRecipes.BuildSkeletonArcher(blueprint);
+                    break;
+                case ProceduralEnemyKind.BoneSorcerer:
+                    OssuaryEnemyRecipes.BuildBoneSorcerer(blueprint);
+                    break;
+                case ProceduralEnemyKind.BoneColossus:
+                    OssuaryEnemyRecipes.BuildBoneColossus(blueprint);
                     break;
             }
 

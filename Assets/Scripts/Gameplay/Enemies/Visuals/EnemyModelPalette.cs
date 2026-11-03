@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.Enemies.Visuals
 {
-    /// <summary>Flat colours of the procedural enemy palette texture (one cell each, 8 x 6). Append only.</summary>
+    /// <summary>Flat colours of the procedural enemy palette texture (one cell each, 8 x 7). Append only.</summary>
     public enum EnemySwatch
     {
         // Cavernas: morcegos
@@ -20,6 +20,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         // Noite: lobisomem, morcego-vampiro, coruja, vaga-lumes, queixadas, mae-da-lua (Docs/DayNight.md)
         WolfFur, WolfFurDark, WolfBelly, Pink, VampFur, VampWing, OwlBuff, OwlFace,
         MoonEye, FireflyGlow, Ember, PeccaryFur, Bark, BarkDark, Lichen, Spare2,
+        // Ossuario dos Artifices (Docs/Dungeons.md): ossos de cobre e marfim, fogo das almas, feitiço, mortalha
+        Copper, CopperDark, Verdigris, Ivory, IvoryDark, SoulFire, Sorcery, Shroud,
     }
 
     /// <summary>
@@ -33,7 +35,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
     public static class EnemyModelPalette
     {
         public const int Columns = 8;
-        public const int Rows = 6;
+        public const int Rows = 7;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -86,6 +88,14 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             new Color(0.31f, 0.26f, 0.21f),  // BarkDark
             new Color(0.64f, 0.68f, 0.56f),  // Lichen
             new Color(1f, 0f, 1f),           // Spare2
+            new Color(0.74f, 0.44f, 0.24f),  // Copper (the warriors' bones and the artificers' fittings)
+            new Color(0.46f, 0.26f, 0.15f),  // CopperDark
+            new Color(0.36f, 0.64f, 0.54f),  // Verdigris (green patina on old copper)
+            new Color(0.95f, 0.91f, 0.78f),  // Ivory
+            new Color(0.7f, 0.64f, 0.5f),    // IvoryDark (aged bone, joints, cracks)
+            new Color(0.42f, 1f, 0.78f),     // SoulFire (glow: the trapped sparks in the sockets)
+            new Color(0.74f, 0.42f, 1f),     // Sorcery (glow: the sorcerer's orb, rune arrows)
+            new Color(0.22f, 0.17f, 0.26f),  // Shroud (tattered burial cloth)
         };
 
         /// <summary>Emission strength per glow swatch (multiplied onto its colour); 0 = not glowing.</summary>
@@ -103,6 +113,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case EnemySwatch.MoonEye: return 1f;
                 case EnemySwatch.FireflyGlow: return 1f;
                 case EnemySwatch.Ember: return 0.9f;
+                case EnemySwatch.SoulFire: return 1f;
+                case EnemySwatch.Sorcery: return 1f;
                 default: return 0f;
             }
         }

@@ -579,7 +579,8 @@ namespace Rapadura.Gameplay.Hunting
             foreach (BestiaryEntry entry in entries)
             {
                 creatures.Add(new HuntingCreature(entry.Id, entry.Archetype, entry.IsBoss,
-                    entry.Region.HasValue ? (int)entry.Region.Value : int.MaxValue,
+                    // Dungeon guardians are not out in the regions: never offered as prey or tasks (unplaced).
+                    entry.Region.HasValue && !entry.IsDungeon ? (int)entry.Region.Value : int.MaxValue,
                     entry.Definition != null ? entry.Definition.ExperienceReward : 0));
             }
 

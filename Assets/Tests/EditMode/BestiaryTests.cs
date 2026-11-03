@@ -340,10 +340,16 @@ namespace Rapadura.Tests
         // Catalog (real data)
         // ------------------------------------------------------------------
 
+        /// <summary>Every enemy asset with a page: the open-world ones plus the guardians of each dungeon in <see cref="BestiaryCatalog.DungeonSources"/>.</summary>
+        private static EnemyDefinition[] AllPagedEnemies() =>
+            Resources.LoadAll<EnemyDefinition>("Enemies")
+                .Concat(BestiaryCatalog.DungeonSources.SelectMany(d => Resources.LoadAll<EnemyDefinition>(d.EnemyFolder)))
+                .ToArray();
+
         [Test]
         public void EveryEnemyAsset_HasAPage_WithLoreAndFiveCommentsInBothLanguages()
         {
-            EnemyDefinition[] enemies = Resources.LoadAll<EnemyDefinition>("Enemies");
+            EnemyDefinition[] enemies = AllPagedEnemies();
             Assert.IsNotEmpty(enemies);
             Dictionary<string, LocalizationEntry> table = BestiaryTexts.Entries.ToDictionary(e => e.Key);
             var problems = new List<string>();
@@ -387,7 +393,7 @@ namespace Rapadura.Tests
         [Test]
         public void NoLoreOrComment_ForAnEnemyThatDoesNotExist()
         {
-            var ids = new HashSet<string>(Resources.LoadAll<EnemyDefinition>("Enemies").Select(DefeatedEnemyRegistry.GetId));
+            var ids = new HashSet<string>(AllPagedEnemies().Select(DefeatedEnemyRegistry.GetId));
             var orphans = BestiaryTexts.Entries
                 .Select(e => e.Key)
                 .Where(k => k.StartsWith("bestiary.", System.StringComparison.Ordinal))
@@ -408,13 +414,17 @@ namespace Rapadura.Tests
                 Assert.LessOrEqual(BestiaryCatalog.ComparePages(entries[i - 1], entries[i]), 0, $"{entries[i - 1].Id} should not come after {entries[i].Id}");
             }
 
-            // One boss per region, each the last page of its region.
-            foreach (IGrouping<BiomeType?, BestiaryEntry> region in entries.GroupBy(e => e.Region))
+            // One boss per region (and per dungeon), each the last page of its group; the dungeons come after the regions.
+            foreach (IGrouping<(BiomeType?, string), BestiaryEntry> region in entries.GroupBy(e => (e.Region, e.DungeonId)))
             {
-                Assert.IsNotNull(region.Key, $"{region.First().Id} is in no biome spawn table.");
+                Assert.IsNotNull(region.Key.Item1, $"{region.First().Id} is in no biome spawn table.");
                 Assert.AreEqual(1, region.Count(e => e.IsBoss), $"{region.Key} should have exactly one boss page.");
                 Assert.IsTrue(region.Last().IsBoss, $"{region.Key}: the boss page comes last.");
             }
+
+            int firstDungeonPage = entries.ToList().FindIndex(e => e.IsDungeon);
+            Assert.GreaterOrEqual(firstDungeonPage, 0, "the dungeon guardians have pages");
+            Assert.IsTrue(entries.Skip(firstDungeonPage).All(e => e.IsDungeon), "dungeon pages come after every region page");
         }
 
         [Test]
@@ -493,7 +503,11 @@ namespace Rapadura.Tests
         {
             foreach (BestiaryEntry entry in BestiaryCatalog.Entries)
             {
-                BiomeDefinition biome = BiomeRegistry.FindBiomeOf(entry.Definition);
+                // Dungeon guardians drop from their dungeon's own loot table, not a region's.
+                BestiaryDungeonSource dungeon = BestiaryCatalog.DungeonSourceOf(entry);
+                BiomeDefinition biome = dungeon != null
+                    ? Resources.Load<BiomeDefinition>(dungeon.LootTablePath)
+                    : BiomeRegistry.FindBiomeOf(entry.Definition);
                 Assert.IsNotNull(biome, entry.Id);
                 foreach (BiomeLootEntry loot in biome.Loot.Where(l => l?.Item != null && l.Weight > 0))
                 {

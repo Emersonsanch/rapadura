@@ -50,6 +50,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         private ProceduralLegLocomotion _legRig;
         private float _legRigRetry;
         private float _attack01;
+        private float _halo01;
+        private float _cage01;
 
         /// <summary>Werewolf: how far (deg) the torso pitches up when it rears to strike.</summary>
         public const float WerewolfRearDegrees = 52f;
@@ -67,6 +69,15 @@ namespace Rapadura.Gameplay.Enemies.Visuals
 
         /// <summary>0..1 how fast the enemy travels (set by <see cref="EnemyProceduralAnimator"/>): bats glide more between beats when flying.</summary>
         public float MoveSpeed01 { get; set; }
+
+        /// <summary>Health fraction used when there is no <see cref="Health"/> above (tests, previews): drives the colossus' phase look.</summary>
+        public float Health01Override { get; set; } = 1f;
+
+        /// <summary>Bone colossus: 0..1 how far its skull halo is unfolded (second phase on, <see cref="Rapadura.Gameplay.Dungeon.DungeonRules.ColossusPhaseFor"/>).</summary>
+        public float Halo01 => _halo01;
+
+        /// <summary>Bone colossus: 0..1 how far its rib cage is open (last phase).</summary>
+        public float Cage01 => _cage01;
 
         private static readonly string[] GolemParts = { ProceduralEnemyParts.Head };
         private static readonly string[] GuardianParts = { ProceduralEnemyParts.Head };
@@ -123,6 +134,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             _animator = GetComponentInParent<EnemyProceduralAnimator>();
             _seed = (Mathf.Abs(GetInstanceID()) % 997) * 0.13f;
             _attack01 = 0f;
+            _halo01 = 0f;
+            _cage01 = 0f;
             _legRigRetry = 0f;
         }
 
@@ -326,6 +339,98 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     Pulse(ProceduralEnemyParts.Lantern, 1f + Mathf.Sin(t * 2.4f) * 0.08f * k + 0.45f * r);
                     break;
                 }
+
+                case ProceduralEnemyKind.FloatingSkull:
+                {
+                    // Bobs and nods in the air, teeth chattering; the jaw gapes for the dive and the wisps flare.
+                    float r = StepAttack(deltaTime, 6f, 3f);
+                    Offset(ProceduralEnemyParts.Body, new Vector3(0f, Mathf.Sin(t * 1.7f) * 0.06f * k, 0f));
+                    Rotate(ProceduralEnemyParts.Body, Quaternion.Euler(Mathf.Sin(t * 1.3f) * 7f * k - 12f * r, Mathf.Sin(t * 0.6f) * 10f * k, Mathf.Sin(t * 0.9f) * 5f * k));
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(Mathf.Max(0f, Mathf.Sin(t * 11f)) * 7f * k + 32f * r, 0f, 0f));
+                    Pulse(ProceduralEnemyParts.Wisp, Mathf.Lerp(0.85f, 1.15f, (0.5f + 0.5f * Mathf.Sin(t * 7.3f) * Mathf.Sin(t * 2.9f)) * Mathf.Max(k, 0.3f)) + 0.25f * r);
+                    break;
+                }
+
+                case ProceduralEnemyKind.SkeletonWarrior:
+                {
+                    // Raises the copper sword for the blow (the shield arm belongs to the guard behaviour).
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    if (_driveLimbs)
+                    {
+                        Rotate(ProceduralEnemyParts.ArmRight, Quaternion.Euler(-115f * r + Mathf.Sin(t * 1.3f) * 3f * k, 0f, 12f * r));
+                    }
+
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(Mathf.Max(0f, Mathf.Sin(t * 5f)) * 5f * k + 14f * r, 0f, 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.SkeletonArcher:
+                {
+                    // Lifts the bow upright at arm's length and draws the string back to the jaw.
+                    float r = StepAttack(deltaTime, 4f, 2.5f);
+                    if (_driveLimbs)
+                    {
+                        Rotate(ProceduralEnemyParts.ArmLeft, Quaternion.Euler(-82f * r + Mathf.Sin(t * 1.1f) * 3f * k, 0f, -8f * r));
+                        Rotate(ProceduralEnemyParts.ArmRight, Quaternion.Euler(-88f * r - Mathf.Sin(t * 1.1f + 1f) * 3f * k, 0f, 38f * r));
+                    }
+
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(Mathf.Max(0f, Mathf.Sin(t * 4.3f)) * 4f * k, 0f, 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.BoneSorcerer:
+                {
+                    // The orb turns and breathes over the staff; to cast: staff forward, the free hand up, the orb swells.
+                    float r = StepAttack(deltaTime, 4f, 2.5f);
+                    if (_driveLimbs)
+                    {
+                        Rotate(ProceduralEnemyParts.ArmRight, Quaternion.Euler(-38f * r + Mathf.Sin(t * 0.9f) * 3f * k, 0f, 0f));
+                        Rotate(ProceduralEnemyParts.ArmLeft, Quaternion.Euler(-70f * r + Mathf.Sin(t * 0.9f + 2f) * 4f * k, 0f, -15f * r));
+                    }
+
+                    Offset(ProceduralEnemyParts.Orb, new Vector3(0f, Mathf.Sin(t * 1.6f) * 0.04f * k, 0f));
+                    Rotate(ProceduralEnemyParts.Orb, Quaternion.Euler(0f, _time * 60f * speed * _intensity, 0f));
+                    Pulse(ProceduralEnemyParts.Orb, 1f + Mathf.Sin(t * 2.6f) * 0.08f * k + 0.5f * r);
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(18f * r, 0f, 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.BoneColossus:
+                    TickColossus(deltaTime, t, k, speed);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// The colossus shows its fight phases (<see cref="Rapadura.Gameplay.Dungeon.DungeonRules.ColossusPhaseFor"/>): from the
+        /// second phase the halo of loose skulls unfolds and circles its head (the skulls it throws), in the last one the rib
+        /// cage swings open and the soul-fire core blazes. A state, not decoration: "Reduzir Movimento" keeps it (only slower).
+        /// </summary>
+        private void TickColossus(float deltaTime, float t, float k, float speed)
+        {
+            float r = StepAttack(deltaTime, 3.5f, 2f);
+            float health01 = _health != null && _health.MaxHealth > 0f ? _health.CurrentHealth / _health.MaxHealth : Health01Override;
+            Rapadura.Gameplay.Dungeon.ColossusPhase phase = Rapadura.Gameplay.Dungeon.DungeonRules.ColossusPhaseFor(Mathf.Clamp01(health01));
+            float dt = Mathf.Max(0f, deltaTime);
+            _halo01 = Mathf.MoveTowards(_halo01, phase >= Rapadura.Gameplay.Dungeon.ColossusPhase.Skulls ? 1f : 0f, dt * 1.5f);
+            _cage01 = Mathf.MoveTowards(_cage01, phase >= Rapadura.Gameplay.Dungeon.ColossusPhase.Cage ? 1f : 0f, dt * 1.2f);
+
+            float halo = Mathf.SmoothStep(0f, 1f, _halo01);
+            if (_index.TryGetValue(ProceduralEnemyParts.Halo, out int h))
+            {
+                _parts[h].Transform.localScale = Vector3.one * Mathf.Lerp(OssuaryEnemyRecipes.HaloFoldedScale, 1f, halo);
+                _parts[h].Transform.localRotation = _parts[h].Rotation * Quaternion.Euler(Mathf.Sin(t * 0.8f) * 6f * k, _time * 55f * speed * _intensity, 0f);
+            }
+
+            float cage = Mathf.SmoothStep(0f, 1f, _cage01);
+            float breathe = Mathf.Max(0f, Mathf.Sin(t * 1.4f)) * 4f * k * (0.3f + cage);
+            Rotate(ProceduralEnemyParts.RibsLeft, Quaternion.Euler(0f, -(68f * cage + breathe), 0f));
+            Rotate(ProceduralEnemyParts.RibsRight, Quaternion.Euler(0f, 68f * cage + breathe, 0f));
+            Pulse(ProceduralEnemyParts.Core, 1f + Mathf.Sin(t * (2f + 2f * cage)) * 0.07f * Mathf.Max(k, 0.3f) + 0.35f * cage + 0.15f * r);
+            Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(16f * r + 6f * cage + Mathf.Max(0f, Mathf.Sin(t * 3f)) * 3f * k, 0f, 0f));
+            if (_driveLimbs)
+            {
+                Swing(ProceduralEnemyParts.ArmLeft, Mathf.Sin(t * 1.1f) * 4f * k);
             }
         }
 
@@ -462,6 +567,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         private void RestoreAll()
         {
             _attack01 = 0f;
+            _halo01 = 0f;
+            _cage01 = 0f;
             if (_legRig != null)
             {
                 _legRig.FrontLegsWeight = 1f;

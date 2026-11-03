@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Rapadura.Gameplay.Characters;
+using Rapadura.Gameplay.Dungeon;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Skills;
 using Rapadura.Gameplay.World.Biomes;
@@ -99,11 +100,22 @@ namespace Rapadura.Gameplay.Enemies
         public IReadOnlyList<BestiaryTip> Tips { get; }
         public IReadOnlyList<BestiaryDrop> Drops { get; }
 
-        public BestiaryEntry(string id, EnemyDefinition definition, BiomeType? region, IReadOnlyList<BestiaryTip> tips, IReadOnlyList<BestiaryDrop> drops)
+        /// <summary>
+        /// Id of the dungeon whose guardians this page is about (<c>"ossuario"</c>, <see cref="DungeonRules.OssuaryId"/>), or null
+        /// for the open-world enemies. Dungeon pages carry the region the dungeon is entered from in <see cref="Region"/>, are
+        /// listed after the regions under the dungeon's own header and never show up as hunting prey.
+        /// </summary>
+        public string DungeonId { get; }
+
+        public bool IsDungeon => !string.IsNullOrEmpty(DungeonId);
+
+        public BestiaryEntry(string id, EnemyDefinition definition, BiomeType? region, IReadOnlyList<BestiaryTip> tips, IReadOnlyList<BestiaryDrop> drops,
+            string dungeonId = null)
         {
             Id = id;
             Definition = definition;
             Region = region;
+            DungeonId = string.IsNullOrEmpty(dungeonId) ? null : dungeonId;
             IsBoss = definition != null && definition.IsBoss;
             Archetype = definition != null ? definition.MotionArchetype : EnemyMotionArchetype.Quadruped;
             StunMultiplier = StunRules.MultiplierFor(IsBoss);
@@ -121,10 +133,32 @@ namespace Rapadura.Gameplay.Enemies
         public string CommentKey(CharacterId hero) => BestiaryCatalog.CommentKey(Id, hero);
     }
 
+    /// <summary>A dungeon whose guardians get bestiary pages (their assets live outside <c>Resources/Enemies</c>).</summary>
+    public sealed class BestiaryDungeonSource
+    {
+        public readonly string DungeonId;
+        /// <summary>Resources folder of the guardians' <see cref="EnemyDefinition"/> assets.</summary>
+        public readonly string EnemyFolder;
+        /// <summary>Region of the world map the dungeon is entered from.</summary>
+        public readonly BiomeType Region;
+        /// <summary>Resources path of the BiomeDefinition used as the dungeon's loot table (its drops are listed on the pages).</summary>
+        public readonly string LootTablePath;
+
+        public BestiaryDungeonSource(string dungeonId, string enemyFolder, BiomeType region, string lootTablePath)
+        {
+            DungeonId = dungeonId;
+            EnemyFolder = enemyFolder;
+            Region = region;
+            LootTablePath = lootTablePath;
+        }
+    }
+
     /// <summary>
     /// Every page of "Caderno da Vó Edna" (the bestiary), one per <see cref="EnemyDefinition"/> under
     /// <c>Resources/Enemies</c> (bosses included), in campaign order: region (Floresta → Deserto →
-    /// Montanha → Cavernas), regular enemies before the region boss, then by name. Pages are keyed by
+    /// Montanha → Cavernas), regular enemies before the region boss, then by name; then the guardians of each
+    /// dungeon in <see cref="DungeonSources"/> (Ossuário dos Artífices: <c>Resources/Dungeons/Ossuario/Enemies</c>), with
+    /// the drops of the dungeon's own loot table. Pages are keyed by
     /// <see cref="DefeatedEnemyRegistry.GetId"/> (the asset name), the same id the kill events,
     /// achievements and <c>enemy.&lt;id&gt;.name</c> localization use.
     ///
@@ -141,6 +175,12 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>Damage per hit at or above which the "bate forte" tip shows.</summary>
         public const float HeavyHitterDamage = 25f;
+
+        /// <summary>The dungeons whose guardians have pages, in page order.</summary>
+        public static readonly IReadOnlyList<BestiaryDungeonSource> DungeonSources = new[]
+        {
+            new BestiaryDungeonSource(DungeonRules.OssuaryId, DungeonRules.EnemyResourcesFolder, DungeonRules.Region, DungeonRules.LootTableResourcePath),
+        };
 
         private static List<BestiaryEntry> _entries;
         private static Dictionary<string, BestiaryEntry> _byId;
@@ -203,7 +243,79 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
-            SetEntries(BuildAll(Resources.LoadAll<EnemyDefinition>(EncounterPayload.EnemyResourcesFolder), BiomeRegistry.FindBiomeOf));
+            List<BestiaryEntry> entries = BuildAll(Resources.LoadAll<EnemyDefinition>(EncounterPayload.EnemyResourcesFolder), BiomeRegistry.FindBiomeOf);
+            foreach (BestiaryDungeonSource dungeon in DungeonSources)
+            {
+                entries.AddRange(BuildDungeonPages(Resources.LoadAll<EnemyDefinition>(dungeon.EnemyFolder), dungeon,
+                    Resources.Load<BiomeDefinition>(dungeon.LootTablePath)));
+            }
+
+            entries = Distinct(entries);
+            entries.Sort(ComparePages);
+            SetEntries(entries);
+        }
+
+        /// <summary>
+        /// The pages of one dungeon's guardians: region = the dungeon's entry region, drops from its loot table
+        /// (<paramref name="lootTable"/>, may be null), in page order.
+        /// </summary>
+        public static List<BestiaryEntry> BuildDungeonPages(IEnumerable<EnemyDefinition> enemies, BestiaryDungeonSource dungeon, BiomeDefinition lootTable)
+        {
+            var built = new List<BestiaryEntry>();
+            if (enemies == null || dungeon == null)
+            {
+                return built;
+            }
+
+            var seen = new HashSet<string>();
+            foreach (EnemyDefinition enemy in enemies)
+            {
+                string id = DefeatedEnemyRegistry.GetId(enemy);
+                if (string.IsNullOrEmpty(id) || !seen.Add(id))
+                {
+                    continue;
+                }
+
+                var entry = new BestiaryEntry(id, enemy, dungeon.Region, null, null, dungeon.DungeonId);
+                built.Add(new BestiaryEntry(id, enemy, dungeon.Region, BuildTips(entry), BuildDrops(enemy, lootTable), dungeon.DungeonId));
+            }
+
+            built.Sort(ComparePages);
+            return built;
+        }
+
+        /// <summary>The source of a dungeon page (null for open-world pages).</summary>
+        public static BestiaryDungeonSource DungeonSourceOf(BestiaryEntry entry)
+        {
+            if (entry == null || !entry.IsDungeon)
+            {
+                return null;
+            }
+
+            foreach (BestiaryDungeonSource dungeon in DungeonSources)
+            {
+                if (dungeon.DungeonId == entry.DungeonId)
+                {
+                    return dungeon;
+                }
+            }
+
+            return null;
+        }
+
+        private static List<BestiaryEntry> Distinct(List<BestiaryEntry> entries)
+        {
+            var seen = new HashSet<string>();
+            var unique = new List<BestiaryEntry>(entries.Count);
+            foreach (BestiaryEntry entry in entries)
+            {
+                if (seen.Add(entry.Id))
+                {
+                    unique.Add(entry);
+                }
+            }
+
+            return unique;
         }
 
         private static void SetEntries(List<BestiaryEntry> entries)
@@ -247,14 +359,17 @@ namespace Rapadura.Gameplay.Enemies
             return built;
         }
 
-        /// <summary>Region (unplaced enemies last), regular before boss, then id (stable, language-independent).</summary>
+        /// <summary>
+        /// Open-world pages by region, then the dungeon pages (by dungeon order), unplaced enemies last; inside a group regular
+        /// before boss, then id (stable, language-independent).
+        /// </summary>
         public static int ComparePages(BestiaryEntry a, BestiaryEntry b)
         {
-            int regionA = a.Region.HasValue ? (int)a.Region.Value : int.MaxValue;
-            int regionB = b.Region.HasValue ? (int)b.Region.Value : int.MaxValue;
-            if (regionA != regionB)
+            int groupA = GroupRank(a);
+            int groupB = GroupRank(b);
+            if (groupA != groupB)
             {
-                return regionA.CompareTo(regionB);
+                return groupA.CompareTo(groupB);
             }
 
             if (a.IsBoss != b.IsBoss)
@@ -263,6 +378,25 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             return string.CompareOrdinal(a.Id, b.Id);
+        }
+
+        /// <summary>Region index for open-world pages, 1000 + dungeon order for dungeon pages, int.MaxValue for unplaced ones.</summary>
+        private static int GroupRank(BestiaryEntry entry)
+        {
+            if (entry.IsDungeon)
+            {
+                for (int i = 0; i < DungeonSources.Count; i++)
+                {
+                    if (DungeonSources[i].DungeonId == entry.DungeonId)
+                    {
+                        return 1000 + i;
+                    }
+                }
+
+                return 1000 + DungeonSources.Count;
+            }
+
+            return entry.Region.HasValue ? (int)entry.Region.Value : int.MaxValue;
         }
 
         public static BestiaryEntry Build(EnemyDefinition enemy, BiomeDefinition biome)

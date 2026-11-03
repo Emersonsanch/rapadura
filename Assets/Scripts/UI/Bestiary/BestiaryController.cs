@@ -469,14 +469,16 @@ namespace Rapadura.UI.Bestiary
             _list.Clear();
             _listButtons.Clear();
             BiomeType? currentRegion = null;
+            string currentDungeon = null;
             bool first = true;
 
             foreach (BestiaryEntry entry in entries)
             {
-                if (first || entry.Region != currentRegion)
+                if (first || entry.Region != currentRegion || entry.DungeonId != currentDungeon)
                 {
                     first = false;
                     currentRegion = entry.Region;
+                    currentDungeon = entry.DungeonId;
                     var header = new Label(BestiaryPresenter.RegionName(_localization, entry));
                     header.AddToClassList(RegionHeaderClass);
                     _list.Add(header);

@@ -45,6 +45,18 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         CrestedHawk = 18,
         /// <summary>Peixe-Lanterna Apagado: a dimmed anglerfish swimming in the cave air, flicking globs from its lure.</summary>
         LanternFish = 19,
+
+        // Guardians of the Ossuário dos Artífices (Docs/Dungeons.md), spawned by the DungeonDirector (OssuaryEnemyRecipes).
+        /// <summary>Caveira Flutuante: an ivory skull with soul-fire sockets and a trail of green wisps.</summary>
+        FloatingSkull = 20,
+        /// <summary>Guerreiro Esqueleto de Cobre: copper-boned skeleton with a crested helm, bone shield and copper sword.</summary>
+        SkeletonWarrior = 21,
+        /// <summary>Arqueiro Esqueleto do Fosso: hooded ivory skeleton with a recurved longbow and rune arrows.</summary>
+        SkeletonArcher = 22,
+        /// <summary>Feiticeiro das Ossadas: hunched skeleton in a burial robe, bone staff with a violet orb.</summary>
+        BoneSorcerer = 23,
+        /// <summary>O Colosso de Crânios (boss): a giant of stacked skulls round a soul-fire core, with a femur club.</summary>
+        BoneColossus = 24,
     }
 
     /// <summary>

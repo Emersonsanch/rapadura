@@ -72,8 +72,22 @@ novo (`IKillExperienceScaler` antes de qualquer multiplicador; `IEnemyLootSource
 70–30% arremesso de 3 Crânios Saltitantes que ricocheteiam nas paredes e explodem; < 30% **Prisão de Costelas**: jaula de
 ossos em volta do herói, quebra com 3 golpes; se não quebrar a tempo, o golpe carregado (44) acerta.
 
-Visual: por ora **placeholders** (esfera/cápsula marfim, cobre e lilás) + as luzes e partículas dos comportamentos; os
-modelos low-poly procedurais (`ProceduralEnemyModels`) ainda não têm receita de esqueleto.
+**Visual** (`OssuaryEnemyRecipes`, mesmo sistema dos outros inimigos: `ProceduralEnemyModels` → `EnemyVisualSwapper`, que a
+arena do `DungeonDirector` já chama ao gerar cada guardião; animação de partes em `ProceduralEnemyRig`, pernas `Leg_/Shin_/Foot_`
+pelo `ProceduralLegLocomotion`). Cores na 7ª linha da paleta (`Copper`, `Verdigris`, `Ivory`, `SoulFire`, `Sorcery`, `Shroud`…):
+
+| Modelo | Visual | Partes animadas |
+|---|---|---|
+| Caveira Flutuante (~0,75 m, ~280 tris) | crânio de marfim com rebites de cobre, órbitas de fogo das almas, rabo de chamas verdes | `Body` balança, `Jaw` bate os dentes e abre no mergulho, `Wisp` tremula |
+| Guerreiro Esqueleto de Cobre (~2 m) | ossos de cobre azinhavrado, elmo com crista, escudo redondo de osso, espada de cobre | `Arm_L` (com `Shield`) é erguido pela guarda do `SkeletonGuardBehaviour` (o rig não mexe nele); `Arm_R` ergue a espada no preparo |
+| Arqueiro Esqueleto do Fosso (~1,85 m) | marfim, capuz de mortalha, aljava de flechas de costela com runa roxa, arco recurvo na mão esquerda | no preparo `Arm_L` levanta o arco em pé e `Arm_R` puxa a corda |
+| Feiticeiro das Ossadas (~2,2 m) | curvado, mortalha esfarrapada, diadema de cobre, cajado de fêmures com garras e `Orb` violeta | orbe gira/pulsa e incha antes do tiro; cajado à frente, mão livre erguida |
+| O Colosso de Crânios (~3,4 m, ~6000 tris) | anéis de crânios empilhados em volta do `Core` verde, coroa de 5 crânios, clava de fêmur, portas de costelas | **fases** (`DungeonRules.ColossusPhaseFor` pela vida): a `Halo` de 6 crânios soltos se abre e gira a partir de 70%; abaixo de 30% `Ribs_L/Ribs_R` se abrem e o `Core` arde |
+
+**Caderno da Vó Edna:** os 5 têm página (`OssuaryBestiaryTexts`, história + fala de cada primo, pt-BR/en). O
+`BestiaryCatalog` lê também `BestiaryCatalog.DungeonSources` (pasta dos inimigos + tabela de loot da masmorra): as páginas
+vêm depois das regiões, sob o título "Ossuário dos Artífices", com o espólio das catacumbas; não entram na Caça (presa/tarefas).
+Testes: `OssuaryEnemyModelsTests` (+ os genéricos de `ProceduralEnemyModelsTests` e `BestiaryTests`).
 
 ## 6. Itens e loot
 
