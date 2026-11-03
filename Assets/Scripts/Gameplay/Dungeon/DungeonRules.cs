@@ -355,7 +355,7 @@ namespace Rapadura.Gameplay.Dungeon
 
         public static readonly IReadOnlyList<string> BoneSetItemIds = new[] { BoneChestItemId, BoneHelmItemId };
         public const int SpectralTouchPieces = 2;
-        public const float SpectralTouchChance = 0.15f;
+        public const double SpectralTouchChance = 0.15;
         public const float SpectralShardDamageFraction = 0.35f;
         public const float SpectralShardRadius = 4f;
         public const int SpectralShardMaxTargets = 3;

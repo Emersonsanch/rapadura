@@ -112,6 +112,7 @@ namespace Rapadura.Tests
             yield return Source(nameof(Rapadura.Gameplay.Fishing.FishingTexts), Rapadura.Gameplay.Fishing.FishingTexts.Entries, Rapadura.Gameplay.Fishing.FishingTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.Seasons.FestaJuninaTexts), Rapadura.Gameplay.Seasons.FestaJuninaTexts.Entries, Rapadura.Gameplay.Seasons.FestaJuninaTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.EventRooms.EventRoomTexts), Rapadura.Gameplay.EventRooms.EventRoomTexts.Entries, Rapadura.Gameplay.EventRooms.EventRoomTexts.EnsureRegistered);
+            yield return Source(nameof(Rapadura.Gameplay.Dungeon.DungeonTexts), Rapadura.Gameplay.Dungeon.DungeonTexts.Entries, Rapadura.Gameplay.Dungeon.DungeonTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.WorldEvents.WorldBossTexts), Rapadura.Gameplay.WorldEvents.WorldBossTexts.Entries, Rapadura.Gameplay.WorldEvents.WorldBossTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.Duo.DuoTexts), Rapadura.Gameplay.Duo.DuoTexts.Entries, Rapadura.Gameplay.Duo.DuoTexts.EnsureRegistered);
             yield return Source(nameof(Rapadura.Gameplay.Mounts.MountTexts), Rapadura.Gameplay.Mounts.MountTexts.Entries, Rapadura.Gameplay.Mounts.MountTexts.EnsureRegistered);

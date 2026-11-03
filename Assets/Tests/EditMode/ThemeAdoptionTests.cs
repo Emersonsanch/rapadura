@@ -67,6 +67,7 @@ namespace Rapadura.Tests
             "Resources/UI/Fishing.uss",
             "Resources/UI/DuoStrike.uss",
             "Resources/UI/EventRooms.uss",
+            "Resources/UI/Dungeon.uss",
             "Resources/UI/WorldEvents.uss",
             "Resources/UI/DailyRewards.uss",
             "Resources/UI/Mounts.uss",

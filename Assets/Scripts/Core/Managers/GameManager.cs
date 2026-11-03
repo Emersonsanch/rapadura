@@ -77,6 +77,8 @@ namespace Rapadura.Core.Managers
         public Rapadura.Gameplay.Seasons.FestaJuninaProgress FestaJunina { get; private set; }
         /// <summary>Timed event rooms (Terreiro das Assombrações, Torre do Engenho Velho): bests, clears, entered windows, schedule.</summary>
         public Rapadura.Gameplay.EventRooms.EventRoomProgress EventRooms { get; private set; }
+        /// <summary>Ossuário dos Artífices (Docs/Dungeons.md): open gates, opened sarcophagi, broken wall, runs and clears.</summary>
+        public Rapadura.Gameplay.Dungeon.DungeonProgress Dungeons { get; private set; }
         /// <summary>Scheduled world bosses and Invasão do Cangaço (Docs/WorldEvents.md): defeats, paid windows, chests.</summary>
         public Rapadura.Gameplay.WorldEvents.WorldEventProgress ScheduledEvents { get; private set; }
         /// <summary>"Golpe em dupla": which cousin each hero calls for the duo strike.</summary>
@@ -186,6 +188,7 @@ namespace Rapadura.Core.Managers
             Fishing = new Rapadura.Gameplay.Fishing.FishingProgress();
             FestaJunina = new Rapadura.Gameplay.Seasons.FestaJuninaProgress();
             EventRooms = new Rapadura.Gameplay.EventRooms.EventRoomProgress();
+            Dungeons = new Rapadura.Gameplay.Dungeon.DungeonProgress();
             ScheduledEvents = new Rapadura.Gameplay.WorldEvents.WorldEventProgress();
             DuoPartners = new Rapadura.Gameplay.Duo.DuoPartnerState();
             WorldMapProgress = new WorldMapProgress();
@@ -239,6 +242,7 @@ namespace Rapadura.Core.Managers
             RegisterManager(Fishing);
             RegisterManager(FestaJunina);
             RegisterManager(EventRooms);
+            RegisterManager(Dungeons);
             RegisterManager(ScheduledEvents);
             RegisterManager(DuoPartners);
             RegisterManager(WorldMapProgress);
@@ -314,6 +318,8 @@ namespace Rapadura.Core.Managers
             SaveManager.Register(FestaJunina);
             // Event rooms; older saves have no entry and load with the default schedule and no records.
             SaveManager.Register(EventRooms);
+            // Ossuary; older saves have no entry and load with every gate shut and every sarcophagus closed.
+            SaveManager.Register(Dungeons);
             // World events; older saves have no entry and load with no defeats/chests.
             SaveManager.Register(ScheduledEvents);
             // Duo strike partner per hero; older saves have no entry and every hero calls the default partner (the sibling).
@@ -367,6 +373,7 @@ namespace Rapadura.Core.Managers
             NewSessionReset.Register(Fishing);
             NewSessionReset.Register(FestaJunina);
             NewSessionReset.Register(EventRooms);
+            NewSessionReset.Register(Dungeons);
             NewSessionReset.Register(ScheduledEvents);
             NewSessionReset.Register(DuoPartners);
             NewSessionReset.Register(WorldMapProgress);

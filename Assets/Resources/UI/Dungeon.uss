@@ -1,0 +1,131 @@
+/*
+ * Ossuário dos Artífices (dungeon), built in code (no UXML):
+ * - the world-map "Entrar: Ossuário dos Artífices" button and its message (DungeonMapButton, on the map HUD's document);
+ * - the in-dungeon HUD (room, bone keys, objective), the Colosso's health bar and the banner (DungeonHud).
+ * Loaded at runtime from Resources (DungeonStyles), which also puts `rap-theme` on the root.
+ */
+
+@import url("/Assets/UI/Common/RapaduraTheme.uss");
+
+/* ---- World map ---- */
+
+.dg-map-button {
+    border-color: var(--rap-gold-light);
+}
+
+.dg-map-message {
+    position: absolute;
+    bottom: 120px;
+    left: 0;
+    right: 0;
+    font-size: 15px;
+    color: var(--rap-warning);
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+/* ---- In-dungeon HUD ---- */
+
+.dg-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.dg-hud {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    right: 0;
+    align-items: center;
+}
+
+.dg-hud-card {
+    background-color: rgba(20, 18, 28, 0.84);
+    border-width: 2px;
+    border-color: var(--rap-gold);
+    border-radius: 14px;
+    padding: 6px 18px;
+    align-items: center;
+    min-width: 280px;
+}
+
+.dg-hud-title {
+    font-size: 14px;
+    color: var(--rap-gold-light);
+    -unity-font-style: bold;
+}
+
+.dg-hud-room {
+    font-size: 20px;
+    color: var(--rap-cream);
+    -unity-font-style: bold;
+}
+
+.dg-hud-keys {
+    font-size: 15px;
+    color: var(--rap-gold-light);
+}
+
+.dg-hud-goal {
+    font-size: 15px;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+    -unity-text-align: middle-center;
+    max-width: 460px;
+}
+
+/* ---- Colosso's health bar ---- */
+
+.dg-boss {
+    position: absolute;
+    bottom: 150px;
+    left: 0;
+    right: 0;
+    align-items: center;
+}
+
+.dg-boss-name {
+    font-size: 16px;
+    color: var(--rap-cream);
+    -unity-font-style: bold;
+}
+
+.dg-boss-bar {
+    width: 420px;
+    height: 12px;
+    margin-top: 4px;
+    background-color: rgba(0, 0, 0, 0.55);
+    border-width: 1px;
+    border-color: var(--rap-gold);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.dg-boss-fill {
+    height: 100%;
+    background-color: var(--rap-clay-red);
+}
+
+/* ---- Banner ---- */
+
+.dg-banner {
+    position: absolute;
+    top: 170px;
+    left: 0;
+    right: 0;
+    align-items: center;
+}
+
+.dg-banner-text {
+    background-color: rgba(20, 18, 28, 0.86);
+    border-radius: 12px;
+    padding: 6px 16px;
+    font-size: 18px;
+    color: var(--rap-cream);
+    white-space: normal;
+    max-width: 640px;
+    -unity-text-align: middle-center;
+}

@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Rapadura.Audio;
+using Rapadura.Core.Audio;
 using Rapadura.Core.DI;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Combat;
@@ -118,8 +120,68 @@ namespace Rapadura.Gameplay.Dungeon
         {
             if (Application.isPlaying && ServiceLocator.TryGet(out SfxEventRouter router) && router != null && router.IsInitialized)
             {
+                EnsureCues(router.Map);
                 router.PlayCue(cueId, position);
             }
+        }
+
+        /// <summary>
+        /// The dungeon's procedural placeholder cues (like <c>MountAudio</c>): added to the live map on first use, only the
+        /// ids it lacks, so a cue authored in <c>Resources/Audio/SfxEventMap.asset</c> with a real recording always wins.
+        /// </summary>
+        public static List<SfxEventMap.Cue> BuildCues()
+        {
+            return new List<SfxEventMap.Cue>
+            {
+                Cue(GateCue, ProceduralSfxPreset.WoodCreak, 140f, 0.55f, 0.6f),
+                Cue(StoneSlideCue, ProceduralSfxPreset.SackThump, 90f, 0.5f, 0.5f),
+                Cue(AmbushCue, ProceduralSfxPreset.ChimeDown, 260f, 0.55f, 0.8f),
+                Cue(WallCrumbleCue, ProceduralSfxPreset.Boom, 70f, 0.7f, 0.8f),
+                Cue(ArrowCue, ProceduralSfxPreset.Whoosh, 900f, 0.35f, 0.15f, 3),
+                Cue(RaiseCue, ProceduralSfxPreset.Swell, 160f, 0.5f, 1f),
+                Cue(LockedCue, ProceduralSfxPreset.Clink, 520f, 0.35f, 0.5f),
+            };
+        }
+
+        /// <summary>Adds the dungeon cues <paramref name="map"/> lacks; returns how many.</summary>
+        public static int EnsureCues(SfxEventMap map)
+        {
+            if (map == null)
+            {
+                return 0;
+            }
+
+            int added = 0;
+            foreach (SfxEventMap.Cue cue in BuildCues())
+            {
+                if (!map.TryGetCue(cue.id, out _))
+                {
+                    map.AddCue(cue);
+                    added++;
+                }
+            }
+
+            return added;
+        }
+
+        private static SfxEventMap.Cue Cue(string id, ProceduralSfxPreset preset, float frequency, float volume, float cooldown, int voices = 1)
+        {
+            return new SfxEventMap.Cue
+            {
+                id = id,
+                category = AudioCategory.Sfx,
+                volume = volume,
+                cooldown = cooldown,
+                maxVoices = voices,
+                pausable = true,
+                spatial = true,
+                loop = false,
+                ducksMusic = false,
+                preset = preset,
+                frequency = frequency,
+                pitchJitter = 0.05f,
+                volumeJitter = 0.1f,
+            };
         }
 
         public static string Text(string key)

@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a11674b35d511c54a82e7c0669e0958d, type: 3}
+  m_Name: LootTable_Catacombs
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.World.Biomes.BiomeDefinition
+  _type: 3
+  _nameLocalizationKey: ui.dungeon.ossuario.name
+  _narrativeDescription: "Tabela de loot das Catacumbas de Marfim (Ossu\xE1rio dos Art\xEDfices). N\xE3o \xE9 uma regi\xE3o: s\xF3 os guardi\xF5es, os sarc\xF3fagos e o ba\xFA do nicho a usam."
+  _minTemperatureCelsius: 8
+  _maxTemperatureCelsius: 12
+  _ambientMusicCueId: music.biome.caves
+  _enemies: []
+  _loot:
+  - _item: {fileID: 11400000, guid: 57586edf12fd419c86aa5f0a56cb1932, type: 2}
+    _weight: 10
+    _quantityMin: 1
+    _quantityMax: 3
+  - _item: {fileID: 11400000, guid: cd1946ed57284ded899464f9e6f5460f, type: 2}
+    _weight: 7
+    _quantityMin: 1
+    _quantityMax: 2
+  - _item: {fileID: 11400000, guid: ad13020b425c48c08a3fa2290cda6bcd, type: 2}
+    _weight: 3
+    _quantityMin: 1
+    _quantityMax: 1
+  - _item: {fileID: 11400000, guid: 6e7e1fd8ba084c569b2c8c711dd5adfd, type: 2}
+    _weight: 1
+    _quantityMin: 1
+    _quantityMax: 1
+  - _item: {fileID: 11400000, guid: 5a99b4450cd74febaf108b3438444691, type: 2}
+    _weight: 1
+    _quantityMin: 1
+    _quantityMax: 1
+  _lootDropChance: 0.55
+  _lootRollsPerKill: 1
+  _bossLootRolls: 4
+  _weather: []
