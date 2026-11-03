@@ -108,7 +108,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         {
             foreach (CityProp prop in Layout.Props)
             {
-                Vector2 anchor = prop.Kind == CityPropKind.FenceRun || prop.Kind == CityPropKind.Gate ? (prop.Position + prop.End) * 0.5f : prop.Position;
+                Vector2 anchor = TownKit.IsSegment(prop.Kind) ? (prop.Position + prop.End) * 0.5f : prop.Position;
                 if (ChunkOf(anchor) != chunk)
                 {
                     continue;
@@ -118,13 +118,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 switch (prop.Kind)
                 {
                     case CityPropKind.FenceRun:
-                        TownKit.WallRun(b, p, new Vector3(prop.End.x, 0f, prop.End.y), style);
+                        TownKit.WallRun(b, p, new Vector3(prop.End.x, 0f, prop.End.y), style, prop.Scale);
                         break;
                     case CityPropKind.Gate:
                         TownKit.Gate(b, p, new Vector3(prop.End.x, 0f, prop.End.y), style);
                         break;
                     default:
-                        b.With(p, prop.Yaw, () => TownKit.Prop(b, prop, style));
+                        // Segment props (cliff, bridge, lamp string, channel) are drawn from Position towards End, unturned.
+                        b.With(p, TownKit.IsSegment(prop.Kind) ? 0f : prop.Yaw, () => TownKit.Prop(b, prop, style));
                         break;
                 }
             }
@@ -281,6 +282,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         private void BuildLights()
         {
             NightLights = gameObject.AddComponent<CityNightLights>();
+            NightLights.MinimumNight = Layout.AmbientNight;
             var candidates = new List<Vector3>();
             foreach (CityProp prop in Layout.Props)
             {
@@ -302,7 +304,24 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 candidates.Add(new Vector3(dock.Center.x, 1.5f, dock.Center.y));
             }
 
-            for (int i = 0; i < candidates.Count && i < 6; i++)
+            // Lamp strings near the plaza (the Lamparinas), nearest first.
+            var strings = new List<Vector2>();
+            foreach (CityProp prop in Layout.Props)
+            {
+                Vector2 mid = (prop.Position + prop.End) * 0.5f;
+                if (prop.Kind == CityPropKind.LampString && Vector2.Distance(mid, Layout.PlazaCenter) < Layout.PlazaRadius + 14f)
+                {
+                    strings.Add(mid);
+                }
+            }
+
+            strings.Sort((a, c) => Vector2.Distance(a, Layout.PlazaCenter).CompareTo(Vector2.Distance(c, Layout.PlazaCenter)));
+            foreach (Vector2 mid in strings)
+            {
+                candidates.Add(new Vector3(mid.x, TownKit.LampStringHeight - 0.3f, mid.y));
+            }
+
+            for (int i = 0; i < candidates.Count && i < Layout.NightLights; i++)
             {
                 NightLights.AddLight(candidates[i]);
             }

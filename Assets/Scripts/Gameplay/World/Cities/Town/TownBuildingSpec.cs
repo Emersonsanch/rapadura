@@ -30,6 +30,25 @@ namespace Rapadura.Gameplay.World.Cities.Town
         Forja = 10,
         /// <summary>The Vila's lamp house (Ramrat's guardian lamp): pishtaq portal, dome, lamps in niches.</summary>
         LampHouse = 11,
+
+        // Residents without a counter: what their front says about them (TownKit.Regions).
+
+        /// <summary>Coti (Litema): striped Basotho blankets on a line and a small loom.</summary>
+        Weaver = 12,
+        /// <summary>Innaios (Litema): skin drums and a lyre by the door.</summary>
+        Drums = 13,
+        /// <summary>Gabryab (Lamparinas): baskets of wicks and a cutting block.</summary>
+        Wicks = 14,
+        /// <summary>Aso (Lamparinas): a carpet with cushions where the children sit for the Ananse stories.</summary>
+        Storyteller = 15,
+        /// <summary>Old Mihrshah (Lamparinas): pick, coil of rope and his miner's lamp.</summary>
+        OldMiner = 16,
+        /// <summary>Yardena (Qocho): water jars and the cistern's copper ladle.</summary>
+        Cistern = 17,
+        /// <summary>Uzzai (Qocho): a goat at the door, a water trough and a crook.</summary>
+        Herder = 18,
+        /// <summary>A Qocho potter's front: jars drying on a plank, a kick wheel.</summary>
+        Pottery = 19,
     }
 
     /// <summary>
@@ -76,6 +95,15 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>A stork's nest on the roof (Zarafshan).</summary>
         public bool StorkNest;
 
+        /// <summary>Qocho: rammed-earth (taipa) walls, the horizontal lift lines of the formwork and rounded, battered corners.</summary>
+        public bool RammedEarth;
+
+        /// <summary>Qocho: a grape-drying chamber on the roof (walls of honeycomb brick lattice, bunches hanging inside).</summary>
+        public bool DryingLoft;
+
+        /// <summary>Qocho caravanserai: the porch columns become brick piers carrying stepped pointed arches.</summary>
+        public bool Arcade;
+
         /// <summary>Door centre as a fraction of the width from the middle (−0.5 .. 0.5).</summary>
         public float DoorOffset;
 
@@ -108,7 +136,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Key of the cached mesh: equal specs share one mesh.</summary>
         public string CacheKey =>
             $"{Kind}|{Width:0.00}|{Depth:0.00}|{PorchDepth:0.00}|{FullVaranda}|{WallHeight:0.00}|{Floors}|{Roof}|{WallColor}|{TrimColor}|{RoofColor}|" +
-            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
+            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
             $"{Chimney}|{Sign}|{SignColor}|{Dressing}|{Seed}";
     }
 }

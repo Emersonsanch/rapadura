@@ -116,6 +116,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
             else
             {
                 TownKit.PlasterBand(b, -hw, hw, zFacade, zBack, FloorY, spec.TrimColor);
+                if (spec.RammedEarth)
+                {
+                    TownKit.RammedEarthLines(b, -hw, hw, zFacade, zBack, FloorY, top);
+                }
             }
 
             if (spec.Floors > 1)
@@ -131,7 +135,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             switch (spec.Roof)
             {
                 case TownRoofKind.Gable:
-                    TownKit.GableRoof(b, -hw, hw, zFront, zBack, top, spec.Width > 7f ? 1.4f : 1.2f, TownSwatch.ClayTile, TownSwatch.Beam, wall);
+                    TownKit.GableRoof(b, -hw, hw, zFront, zBack, top, spec.Width > 7f ? 1.4f : 1.2f, spec.RoofColor == TownSwatch.Thatch ? TownSwatch.Thatch : TownSwatch.ClayTile, TownSwatch.Beam, wall);
                     if (spec.PorchDepth > 0.01f)
                     {
                         // The front slope already covers the aivan: only the columns and the deck below.
@@ -158,14 +162,27 @@ namespace Rapadura.Gameplay.World.Cities.Town
                     if (spec.PorchDepth > 0.01f)
                     {
                         TownKit.AivanDeck(b, -hw, hw, zFront, zFacade, spec);
-                        TownKit.AivanColumns(b, spec, zFront + PostInset, FloorY, top - 0.3f);
-                        TownKit.AivanBeam(b, -hw, hw, zFront + PostInset, top - 0.3f, spec.JoineryColor);
+                        if (spec.Arcade)
+                        {
+                            TownKit.Arcade(b, spec, zFront + PostInset, FloorY, top - 0.3f);
+                        }
+                        else
+                        {
+                            TownKit.AivanColumns(b, spec, zFront + PostInset, FloorY, top - 0.3f);
+                            TownKit.AivanBeam(b, -hw, hw, zFront + PostInset, top - 0.3f, spec.JoineryColor);
+                        }
+
                         TownKit.AivanCeiling(b, -hw, hw, zFront, zFacade, top - 0.06f);
                     }
 
                     if (spec.UpperRoom)
                     {
                         TownKit.UpperRoom(b, spec, hw, zFacade, zBack, top, wall);
+                    }
+
+                    if (spec.DryingLoft)
+                    {
+                        TownKit.DryingLoft(b, spec, hw, zFacade, zBack, top);
                     }
 
                     break;
@@ -186,11 +203,16 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 TownKit.SignBoard(b, new Vector3(spec.DoorOffset * spec.Width, top - 0.55f, zFront + 0.05f), spec.SignColor, spec.AccentColor);
             }
 
-            if (spec.Kind == CityLotKind.Shop || spec.Kind == CityLotKind.Workshop || spec.Kind == CityLotKind.Stable || spec.Kind == CityLotKind.Grandma)
+            if (HasDressing(spec))
             {
                 TownKit.Dressing(b, spec, hw, zFront, zFacade);
             }
         }
+
+        /// <summary>Shops, workshops, the stable and Vo Edna's house always; a resident's house when the recipe gave it a dressing.</summary>
+        private static bool HasDressing(TownBuildingSpec spec) =>
+            spec.Kind == CityLotKind.Shop || spec.Kind == CityLotKind.Workshop || spec.Kind == CityLotKind.Stable || spec.Kind == CityLotKind.Grandma ||
+            (spec.Kind == CityLotKind.House && spec.Dressing != TownShopDressing.None);
 
         /// <summary>Door, windows and the suzani of the facade; windows on the sides and the back.</summary>
         private static void BuildOpenings(TownMeshBuilder b, TownBuildingSpec spec, float hw, float zFacade, float zBack)
@@ -467,39 +489,88 @@ namespace Rapadura.Gameplay.World.Cities.Town
             b.Cylinder(hat + Vector3.up * 0.08f, hatR, 0.08f, 0.45f, 4, TownSwatch.Copper, TownSwatch.Copper, 0.5f);
         }
 
-        /// <summary>Litema rondavel: round clay walls with painted bands, a conical thatch roof (walls fit inside the lot rect).</summary>
+        /// <summary>
+        /// Litema rondavel (Basotho round house): round stone-and-clay walls on a plinth, a mud skirt, the painted litema
+        /// zig-zag and diamonds, a conical thatch roof with binding rings and the mokorotlo knot on top, a small window
+        /// beside the door; in front a swept clay forecourt and, when the lot has a porch, a thatch shade on posts (exactly
+        /// where the post colliders are). Walls fit inside the lot rect.
+        /// </summary>
         private static void BuildRondavel(TownMeshBuilder b, TownBuildingSpec spec)
         {
+            const int sides = 14;
             float depth = spec.Depth + spec.PorchDepth;
-            float zFacade = -depth * 0.5f + spec.PorchDepth;
+            float zFront = -depth * 0.5f;
+            float zFacade = zFront + spec.PorchDepth;
             float radius = Mathf.Min(spec.Width, spec.Depth) * 0.5f - 0.05f;
             var center = new Vector3(0f, 0f, zFacade + spec.Depth * 0.5f);
             float wallTop = FloorY + spec.WallHeight * 0.85f;
-            b.Cylinder(center, radius + 0.12f, radius + 0.12f, FloorY, 14, spec.PlinthColor, spec.PlinthColor);
-            b.Cylinder(center + Vector3.up * FloorY, radius, radius, wallTop - FloorY, 14, spec.WallColor);
-            b.Cylinder(center + Vector3.up * (FloorY + 0.45f), radius + 0.02f, radius + 0.02f, 0.28f, 14, spec.TrimColor);
-            b.Cylinder(center + Vector3.up * (wallTop - 0.55f), radius + 0.02f, radius + 0.02f, 0.18f, 14, spec.AccentColor);
-            b.Cylinder(center + Vector3.up * (wallTop - 0.1f), radius + 0.55f, 0f, radius * 1.25f + 0.6f, 14, spec.RoofColor);
-            b.Cylinder(center + Vector3.up * (wallTop - 0.1f), radius + 0.55f, radius + 0.45f, 0.12f, 14, TownSwatch.Thatch);
-            b.Log(center + Vector3.up * (wallTop + radius * 1.2f), center + Vector3.up * (wallTop + radius * 1.25f + 0.9f), 0.05f, TownSwatch.WoodDark);
+            b.Cylinder(center, radius + 0.12f, radius + 0.12f, FloorY, sides, spec.PlinthColor, spec.PlinthColor);
+            b.Cylinder(center + Vector3.up * FloorY, radius, radius, wallTop - FloorY, sides, spec.WallColor);
+            b.Cylinder(center + Vector3.up * FloorY, radius + 0.02f, radius + 0.02f, 0.4f, sides, TownSwatch.Mud);
+            TownKit.LitemaBands(b, center, radius, FloorY + 0.55f, sides, spec.TrimColor, spec.AccentColor);
+            b.Cylinder(center + Vector3.up * (wallTop - 0.35f), radius + 0.02f, radius + 0.02f, 0.14f, sides, spec.AccentColor);
+
+            // Thatch cone: eave ring, the cone, two binding rings, and the knot (mokorotlo) on top.
+            float coneH = radius * 1.25f + 0.6f;
+            Vector3 eave = center + Vector3.up * (wallTop - 0.1f);
+            b.Cylinder(eave, radius + 0.55f, 0f, coneH, sides, spec.RoofColor);
+            b.Cylinder(eave, radius + 0.55f, radius + 0.45f, 0.12f, sides, TownSwatch.Thatch);
+            foreach (float t in new[] { 0.45f, 0.72f })
+            {
+                float r = (radius + 0.55f) * (1f - t) + 0.03f;
+                b.Cylinder(eave + Vector3.up * (coneH * t), r, r * 0.96f, 0.08f, sides, TownSwatch.LeafGold);
+            }
+
+            Vector3 knot = eave + Vector3.up * (coneH * 0.9f);
+            b.Cylinder(knot, 0.2f, 0.04f, 0.55f, 6, TownSwatch.Thatch);
+            b.Cylinder(knot + Vector3.up * 0.18f, 0.16f, 0.16f, 0.08f, 6, TownSwatch.WoodDark, TownSwatch.WoodDark);
+            b.Log(knot + Vector3.up * 0.5f, knot + Vector3.up * 0.95f, 0.035f, TownSwatch.WoodDark, 4);
+
             float doorX = spec.DoorOffset * spec.Width;
-            b.With(new Vector3(0f, 0f, center.z - radius), 0f, () =>
+            float frontZ = center.z - radius;
+            b.With(new Vector3(0f, 0f, frontZ), 0f, () =>
             {
                 TownKit.Door(b, doorX, FloorY, 0.95f, 1.95f, spec.JoineryColor, spec.TrimColor, spec.AccentColor, arched: false);
             });
 
+            // A small square window on the round wall, 50 degrees round from the front, on the side away from the keeper.
+            float windowAngle = (KeeperSide(spec) > 0f ? -1f : 1f) * 50f;
+            float wa = (windowAngle - 90f) * Mathf.Deg2Rad;
+            Vector3 windowAt = center + new Vector3(Mathf.Cos(wa) * radius, 0f, Mathf.Sin(wa) * radius);
+            bool lit = Lit(spec.Seed, 3f);
+            b.With(windowAt, -windowAngle, () =>
+            {
+                b.BoxMinMax(new Vector3(-0.3f, FloorY + 1.05f, -0.03f), new Vector3(0.3f, FloorY + 1.6f, 0f), lit ? TownSwatch.WindowLit : TownSwatch.Black);
+                b.BoxMinMax(new Vector3(-0.38f, FloorY + 0.98f, -0.06f), new Vector3(0.38f, FloorY + 1.05f, 0f), spec.JoineryColor);
+                b.BoxMinMax(new Vector3(-0.38f, FloorY + 1.6f, -0.06f), new Vector3(0.38f, FloorY + 1.67f, 0f), spec.JoineryColor);
+            });
+
+            // A swept clay forecourt with a low curb, the thatch shade on its posts.
+            b.BoxMinMax(new Vector3(-spec.Width * 0.5f, 0f, zFront), new Vector3(spec.Width * 0.5f, 0.06f, Mathf.Max(zFacade, frontZ) + 0.3f), TownSwatch.Mud);
             if (spec.PorchDepth > 0.01f)
             {
-                // A swept clay forecourt with a low curb instead of an aivan.
-                b.BoxMinMax(new Vector3(-spec.Width * 0.5f, 0f, -depth * 0.5f), new Vector3(spec.Width * 0.5f, 0.06f, zFacade + 0.3f), TownSwatch.Mud);
+                TownKit.RondavelShade(b, spec, zFront, frontZ + 0.1f, spec.RoofColor);
+            }
+
+            if (spec.Sign)
+            {
+                // Sign board on its own post at the forecourt corner (away from the keeper).
+                float sx = doorX - KeeperSide(spec) * 1.6f;
+                b.Log(new Vector3(sx, 0f, zFront + 0.25f), new Vector3(sx, 2.0f, zFront + 0.25f), 0.06f, TownSwatch.WoodDark);
+                TownKit.SignBoard(b, new Vector3(sx, 2.2f, zFront + 0.2f), spec.SignColor, spec.AccentColor);
+            }
+
+            if (HasDressing(spec))
+            {
+                TownKit.Dressing(b, spec, spec.Width * 0.5f, zFront, Mathf.Max(zFacade, frontZ));
             }
         }
 
         /// <summary>Lamparinas: the house is a facade on a pink tuff mass, with an arched door, a round window and a lamp niche.</summary>
         private static void BuildTuffHouse(TownMeshBuilder b, TownBuildingSpec spec, float hw, float zFront, float zFacade, float zBack, float top)
         {
-            b.Crown(new Vector3(0f, top * 0.55f, (zFacade + zBack) * 0.5f + 0.4f), new Vector3(spec.Width + 1.6f, top * 2.1f, spec.Depth + 1.6f), spec.WallColor);
-            b.Crown(new Vector3(hw * 0.4f, top * 1.15f, zBack - 0.5f), new Vector3(spec.Width * 0.9f, top * 1.2f, spec.Depth), TownSwatch.PinkTuff, 30f);
+            b.Crown(new Vector3(0f, top * 0.8f, (zFacade + zBack) * 0.5f + 0.4f), new Vector3(spec.Width + 1.6f, top * 1.6f, spec.Depth + 1.6f), spec.WallColor);
+            b.Crown(new Vector3(hw * 0.4f, top * 1.15f, zBack - 1.7f), new Vector3(spec.Width * 0.8f, top * 1.2f, spec.Depth * 0.6f), TownSwatch.PinkTuff, 30f);
             b.BoxMinMax(new Vector3(-hw, FloorY, zFacade), new Vector3(hw, top, zFacade + 0.6f), spec.WallColor);
             float doorX = spec.DoorOffset * spec.Width;
             b.With(new Vector3(0f, 0f, zFacade), 0f, () =>
@@ -514,6 +585,18 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 TownKit.AivanDeck(b, -hw, hw, zFront, zFacade, spec);
                 TownKit.AivanColumns(b, spec, zFront + PostInset, FloorY, top - 0.4f);
                 TownKit.AivanBeam(b, -hw, hw, zFront + PostInset, top - 0.4f, spec.JoineryColor);
+                if (spec.Sign)
+                {
+                    TownKit.SignBoard(b, new Vector3(doorX, top - 0.15f, zFront + 0.05f), spec.SignColor, spec.AccentColor);
+                }
+            }
+
+            // A basalt lintel over the cut facade and a lamp burning beside every door (the town of lamps).
+            b.BoxMinMax(new Vector3(-hw - 0.15f, top, zFacade - 0.1f), new Vector3(hw + 0.15f, top + 0.18f, zFacade + 0.65f), TownSwatch.Basalt);
+            TownKit.Lantern(b, new Vector3(doorX + (doorX >= 0f ? 0.8f : -0.8f), FloorY + 1.9f, zFacade - 0.3f), 0.65f);
+            if (HasDressing(spec))
+            {
+                TownKit.Dressing(b, spec, hw, zFront, zFacade);
             }
         }
 

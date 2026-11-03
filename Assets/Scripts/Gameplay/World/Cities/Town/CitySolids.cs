@@ -147,6 +147,39 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.Rock: return CitySolid.Capsule(prop.Position, 0.5f * s, 1f, owner);
                 case CityPropKind.Tandir: return CitySolid.Capsule(prop.Position, 0.6f, 1f, owner);
                 case CityPropKind.Stela: return CitySolid.Box(CityGeometry.RectFromCenter(prop.Position, new Vector2(1.6f, 1.2f) * s), 2f, owner);
+                case CityPropKind.KarezShaft: return CitySolid.Capsule(prop.Position, 0.85f * s, 1f, owner);
+                case CityPropKind.CisternDome: return CitySolid.Capsule(prop.Position, 1.95f * s, WallColliderHeight, owner);
+                case CityPropKind.Ruin:
+                    switch (prop.Variant % 3)
+                    {
+                        case 0: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position + CityGeometry.Rotate(new Vector2(0.1f, -0.2f) * s, prop.Yaw), new Vector2(3.1f, 3.6f) * s, prop.Yaw), WallColliderHeight, owner);
+                        case 1: return CitySolid.Capsule(prop.Position, 0.45f * s, WallColliderHeight, owner);
+                        default: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, new Vector2(3.1f, 0.7f) * s, prop.Yaw), 1.4f, owner);
+                    }
+
+                case CityPropKind.Camel: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, new Vector2(1.0f, 2.2f) * s, prop.Yaw), 1.4f, owner);
+                case CityPropKind.RockArt: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position + CityGeometry.Rotate(new Vector2(0f, 0.2f) * s, prop.Yaw), new Vector2(3.0f, 1.5f) * s, prop.Yaw), WallColliderHeight, owner);
+                case CityPropKind.Cliff:
+                {
+                    // The mass stands behind the line Position → End (left of the direction), CliffDepth deep.
+                    Vector2 d = prop.End - prop.Position;
+                    if (d.sqrMagnitude < 0.01f)
+                    {
+                        return null;
+                    }
+
+                    Vector2 back = TownKit.SegmentBack(d.normalized) * TownKit.CliffDepth;
+                    return CitySolid.Box(CityGeometry.RectFromMinMax(prop.Position, prop.End + back), WallColliderHeight, owner);
+                }
+
+                case CityPropKind.Vishapakar: return CitySolid.Capsule(prop.Position, 0.6f * s, WallColliderHeight, owner);
+                case CityPropKind.Fountain: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, new Vector2(2.3f, 1.1f) * s, prop.Yaw), 1.5f, owner);
+                case CityPropKind.ConicalTower: return CitySolid.Capsule(prop.Position, 1.6f * s, WallColliderHeight, owner);
+                case CityPropKind.KarezChannel:
+                case CityPropKind.RopeBridge:
+                case CityPropKind.LampString:
+                    // Walkable (a channel to step over) or overhead.
+                    return null;
                 case CityPropKind.FenceRun:
                 {
                     Rect run = CityGeometry.RectFromMinMax(prop.Position, prop.End);

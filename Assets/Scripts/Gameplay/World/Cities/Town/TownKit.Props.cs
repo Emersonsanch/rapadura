@@ -83,6 +83,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
                     }
 
                     break;
+
+                default:
+                    RegionDressing(b, spec, x, y, z, zFacade);
+                    break;
             }
 
             if (spec.Kind == CityLotKind.Grandma)
@@ -172,7 +176,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.LampPost: LampPost(b, Vector3.zero, 0f); break;
                 case CityPropKind.Tree: Tree(b, style.Vegetation, prop.Variant, s); break;
                 case CityPropKind.Stall: Stall(b, prop.Variant, style); break;
-                case CityPropKind.Bush: b.Crown(new Vector3(0f, 0.45f * s, 0f), new Vector3(1.1f, 0.9f, 1.0f) * s, style.Vegetation == TownVegetation.Forest ? TownSwatch.Tamarisk : TownSwatch.LeafDark); break;
+                case CityPropKind.Bush: Bush(b, style.Vegetation, s); break;
                 case CityPropKind.FlowerBed: FlowerBed(b, prop.Variant); break;
                 case CityPropKind.Crates:
                     b.Box(new Vector3(0f, 0.25f, 0f), new Vector3(0.6f, 0.5f, 0.6f), TownSwatch.WoodLight, 0f, TownSwatch.Beam);
@@ -201,11 +205,45 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.Trellis: Trellis(b, s); break;
                 case CityPropKind.Jugs: Jugs(b); break;
                 case CityPropKind.Stela: Stela(b, s); break;
+                default: RegionProp(b, prop, style, s); break;
             }
         }
 
-        /// <summary>A yard wall run from <paramref name="a"/> to <paramref name="c"/> (adobe with coping, or dry stone).</summary>
-        public static void WallRun(TownMeshBuilder b, Vector3 a, Vector3 c, TownStyle style)
+        /// <summary>A shrub in the region's flora: tamarisk (Zarafshan), camel thorn (Qocho), aloe (Litema), cave fern on glowing moss (Lamparinas).</summary>
+        public static void Bush(TownMeshBuilder b, TownVegetation vegetation, float s)
+        {
+            switch (vegetation)
+            {
+                case TownVegetation.Mountain:
+                    AloeBush(b, s);
+                    return;
+                case TownVegetation.Desert:
+                    b.Crown(new Vector3(0f, 0.35f * s, 0f), new Vector3(1.1f, 0.7f, 1.0f) * s, TownSwatch.LeafDark, 20f);
+                    b.Crown(new Vector3(0.2f, 0.55f * s, -0.1f), new Vector3(0.7f, 0.45f, 0.6f) * s, TownSwatch.Thatch, 60f);
+                    return;
+                case TownVegetation.Caves:
+                    b.Cylinder(Vector3.zero, 0.55f * s, 0.45f * s, 0.12f * s, 7, TownSwatch.Moss, TownSwatch.Moss);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        float a = i / 5f * Mathf.PI * 2f;
+                        var tip = new Vector3(Mathf.Cos(a) * 0.7f, 0.65f, Mathf.Sin(a) * 0.7f) * s;
+                        var side = new Vector3(-Mathf.Sin(a), 0f, Mathf.Cos(a)) * 0.16f * s;
+                        b.TwoSidedQuad(Vector3.up * 0.1f * s, tip * 0.5f + Vector3.up * 0.25f * s + side, tip, tip * 0.5f + Vector3.up * 0.25f * s - side, TownSwatch.Pine);
+                    }
+
+                    return;
+                default:
+                    b.Crown(new Vector3(0f, 0.45f * s, 0f), new Vector3(1.1f, 0.9f, 1.0f) * s, TownSwatch.Tamarisk);
+                    return;
+            }
+        }
+
+        /// <summary>
+        /// A yard wall run from <paramref name="a"/> to <paramref name="c"/> (adobe with coping, or dry stone). Dry-stone
+        /// walls with <paramref name="height"/> above 1 (the prop's scale: Litema's Great Zimbabwe enclosure) get more
+        /// courses, a batter and the chevron frieze on both faces near the top.
+        /// </summary>
+        public static void WallRun(TownMeshBuilder b, Vector3 a, Vector3 c, TownStyle style, float height = 1f)
         {
             Vector3 d = c - a;
             float length = d.magnitude;
@@ -221,16 +259,25 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 if (dryStone)
                 {
                     // Dry-stone courses with a herringbone band (Great Zimbabwe style): stacked, slightly offset blocks.
-                    int courses = 4;
+                    int courses = Mathf.Clamp(Mathf.RoundToInt(4f * Mathf.Max(1f, height)), 4, 14);
+                    bool tall = courses > 4;
+                    float batter = tall ? 0.025f : 0.03f;
                     for (int i = 0; i < courses; i++)
                     {
                         float y = 0.12f + i * 0.24f;
-                        b.Box(new Vector3((i & 1) * 0.03f, y, 0f), new Vector3(0.36f - i * 0.03f, 0.24f, length), i == 2 ? TownSwatch.StoneDark : style.Fence, 0f);
+                        float thick = Mathf.Max(0.22f, (tall ? 0.6f : 0.36f) - i * batter);
+                        b.Box(new Vector3((i & 1) * 0.03f, y, 0f), new Vector3(thick, 0.24f, length + (i & 1) * 0.04f), i == 2 || (tall && i == courses - 3) ? TownSwatch.StoneDark : style.Fence, 0f);
                     }
 
+                    float band = tall ? 0.12f + (courses - 2) * 0.24f : 0.6f;
+                    float face = tall ? Mathf.Max(0.22f, 0.6f - (courses - 2) * batter) * 0.5f + 0.01f : 0.17f;
                     for (float z = -length * 0.5f + 0.2f; z < length * 0.5f - 0.1f; z += 0.35f)
                     {
-                        b.Box(new Vector3(0.17f, 0.6f, z), new Vector3(0.03f, 0.14f, 0.22f), TownSwatch.Stone, 40f);
+                        b.Box(new Vector3(face, band, z), new Vector3(0.03f, 0.14f, 0.22f), TownSwatch.Stone, 40f);
+                        if (tall)
+                        {
+                            b.Box(new Vector3(-face, band, z), new Vector3(0.03f, 0.14f, 0.22f), TownSwatch.Stone, -40f);
+                        }
                     }
                 }
                 else
@@ -436,20 +483,30 @@ namespace Rapadura.Gameplay.World.Cities.Town
             switch (vegetation)
             {
                 case TownVegetation.Desert:
+                    // 0 / 3 date palm, 1 pink tamarisk, 2 desert poplar.
                     if (variant == 0 || variant == 3)
                     {
                         DatePalm(b, s);
                     }
+                    else if (variant == 1)
+                    {
+                        Feathery(b, s, TownSwatch.Tamarisk);
+                    }
                     else
                     {
-                        Feathery(b, s, variant == 1 ? TownSwatch.Tamarisk : TownSwatch.Vine);
+                        DesertPoplar(b, s);
                     }
 
                     return;
                 case TownVegetation.Mountain:
+                    // 0 / 2 twisted cedar, 1 tree aloe, 3 baobab.
                     if (variant == 1)
                     {
                         TreeAloe(b, s);
+                    }
+                    else if (variant == 3)
+                    {
+                        Baobab(b, s);
                     }
                     else
                     {

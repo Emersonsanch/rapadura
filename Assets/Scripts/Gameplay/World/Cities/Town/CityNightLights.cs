@@ -26,6 +26,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
         public float Night { get; private set; }
 
+        /// <summary>The town never gets less "night" than this (the cave town of the Lamparinas keeps its lamps lit all day).</summary>
+        public float MinimumNight { get; set; }
+
         public void AddLight(Vector3 position, float range = 7f)
         {
             var go = new GameObject("TownLight");
@@ -76,6 +79,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 daylight = time.DaylightFactor;
             }
 
+            daylight = Mathf.Min(daylight, 1f - Mathf.Clamp01(MinimumNight));
             Night = Mathf.Clamp01(1f - daylight);
             TownPalette.SetNightGlow(Night);
             bool on = daylight < LightsOnBelowDaylight;

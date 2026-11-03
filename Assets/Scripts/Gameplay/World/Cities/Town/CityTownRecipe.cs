@@ -81,11 +81,20 @@ namespace Rapadura.Gameplay.World.Cities.Town
         public readonly List<CityProp> PlazaProps = new List<CityProp>();
 
         public bool AutoLamps = true;
+
+        /// <summary>String lamps from each street lamp to the next, zig-zagging over the street (the Lamparinas' lamp-lit streets).</summary>
+        public bool LampStrings;
+
+        /// <summary>Distance between the automatic street lamps (they alternate sides).</summary>
+        public float LampSpacing = 8f;
         public bool AutoYards = true;
         public bool Backdrop = true;
 
-        /// <summary>Point lights at night (the lamps nearest the plaza get one, mobile budget).</summary>
-        public int NightLights = 5;
+        /// <summary>Point lights at night (the lamps nearest the plaza get one, mobile budget; at most 8).</summary>
+        public int NightLights = 6;
+
+        /// <summary>Floor of the night factor (0 = normal day/night; the cave town of the Lamparinas keeps its lamps lit all day).</summary>
+        public float AmbientNight;
     }
 
     /// <summary>
@@ -107,6 +116,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 Style = TownStyles.For(recipe.Region),
                 PlazaCenter = Vector2.zero,
                 PlazaRadius = recipe.PlazaRadius,
+                NightLights = Mathf.Clamp(recipe.NightLights, 0, 8),
+                AmbientNight = Mathf.Clamp01(recipe.AmbientNight),
             };
 
             float halfRoad = recipe.StreetWidth * 0.5f;
@@ -295,12 +306,16 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 spec.Chimney = (TownStyle.Hash(key, 10) % 4) == 0;
                 spec.UpperRoom = style.HouseRoof == TownRoofKind.Flat && (TownStyle.Hash(key, 11) % 3) == 0;
                 spec.StorkNest = style.Region == BiomeType.Forest && (TownStyle.Hash(key, 12) % 5) == 0;
+                spec.DryingLoft = style.Architecture == TownArchitecture.Oasis && !spec.UpperRoom && (TownStyle.Hash(key, 13) % 3) == 0;
             }
             else
             {
                 // Spec given: keep what the recipe chose, fill only the plinth from the region.
                 spec.PlinthColor = r.Spec.PlinthColor == TownSwatch.Stone ? style.Plinth : r.Spec.PlinthColor;
             }
+
+            // Qocho's houses are rammed earth (taipa) whatever the recipe gave them.
+            spec.RammedEarth |= style.Architecture == TownArchitecture.Oasis && !spec.WoodenWalls;
 
             switch (r.Kind)
             {
@@ -334,13 +349,49 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 Vector2 d = street.Direction;
                 Vector2 n = new Vector2(-d.y, d.x);
                 int index = 0;
-                for (float along = layout.PlazaRadius + 4f; along < street.Length - 2f; along += 8f)
+                Vector2? previous = null;
+                for (float along = layout.PlazaRadius + 4f; along < street.Length - 2f; along += Mathf.Max(3f, recipe.LampSpacing))
                 {
                     float side = (index++ & 1) == 0 ? 1f : -1f;
                     Vector2 position = d * along + n * side * (halfRoad + LampCurbInset);
+                    int before = layout.Props.Count;
                     TryAddProp(layout, occupied, new CityProp { Kind = CityPropKind.LampPost, Position = position, Yaw = CityGeometry.YawFacing(-n * side) }, 0.9f);
+                    if (layout.Props.Count == before)
+                    {
+                        continue;
+                    }
+
+                    if (recipe.LampStrings)
+                    {
+                        // Overhead from lantern to lantern (no collider): the street reads as lamp-lit from afar. The first
+                        // lamp of the street hangs its string from the nearest plaza lamp.
+                        Vector2? from = previous ?? NearestPlazaLamp(recipe, position, 16f);
+                        if (from.HasValue)
+                        {
+                            layout.Props.Add(new CityProp { Kind = CityPropKind.LampString, Position = from.Value, End = position });
+                        }
+                    }
+
+                    previous = position;
                 }
             }
+        }
+
+        private static Vector2? NearestPlazaLamp(CityTownRecipe recipe, Vector2 to, float maxDistance)
+        {
+            Vector2? best = null;
+            float bestDistance = maxDistance;
+            foreach (CityProp prop in recipe.PlazaProps)
+            {
+                float distance = Vector2.Distance(prop.Position, to);
+                if (prop.Kind == CityPropKind.LampPost && distance < bestDistance)
+                {
+                    best = prop.Position;
+                    bestDistance = distance;
+                }
+            }
+
+            return best;
         }
 
         private static void AddGates(CityLayout layout, float halfStreet)

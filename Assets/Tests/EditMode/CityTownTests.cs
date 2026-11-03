@@ -25,6 +25,14 @@ namespace Rapadura.Tests
             }
         }
 
+        private static IEnumerable<TestCaseData> CityIds()
+        {
+            foreach (CitySpec city in CityCatalog.Cities)
+            {
+                yield return new TestCaseData(city.CityId).SetName($"Town_{city.CityId}");
+            }
+        }
+
         [TearDown]
         public void TearDown()
         {
@@ -113,14 +121,126 @@ namespace Rapadura.Tests
             Assert.AreEqual(layout.PlazaCenter, layout.Respawn, "The respawn point is the plaza (Docs/Cities.md §3.8).");
         }
 
-        [Test]
-        public void ShopFronts_FaceTheIsometricCamera_InTheVila()
+        [TestCaseSource(nameof(CityIds))]
+        public void ShopFronts_AndResidentHomes_FaceTheIsometricCamera(string cityId)
         {
-            // The camera looks from the south-west (yaw 45): fronts facing south or west read; north/east only for homes.
-            CityLayout layout = CityTownRecipes.LayoutFor(CityCatalog.VilaZefa);
-            foreach (CityLot lot in layout.Lots.Where(l => l.Kind == CityLotKind.Shop || l.Kind == CityLotKind.Workshop || l.Kind == CityLotKind.Grandma))
+            // The camera looks from the south-west (yaw 45): fronts facing south or west read; north/east only for plain homes.
+            CityLayout layout = CityTownRecipes.LayoutFor(cityId);
+            foreach (CityLot lot in layout.Lots.Where(l => l.Kind == CityLotKind.Shop || l.Kind == CityLotKind.Workshop || l.Kind == CityLotKind.Grandma ||
+                                                           (l.Kind == CityLotKind.House && l.HasKeeper)))
             {
-                Assert.IsTrue(lot.Front.x < -0.5f || lot.Front.y < -0.5f, $"{lot.Id} turns its back to the camera (front {lot.Front}).");
+                Assert.IsTrue(lot.Front.x < -0.5f || lot.Front.y < -0.5f, $"{cityId}/{lot.Id} turns its back to the camera (front {lot.Front}).");
+            }
+        }
+
+        [TestCaseSource(nameof(CityIds))]
+        public void EveryCity_HasItsOwnHandRecipe_WithAShopFrontPerShop_AndAHomePerResident(string cityId)
+        {
+            Assert.IsNotNull(CityTownRecipes.HandRecipe(cityId), $"{cityId} still walks on the default plan.");
+            CitySpec city = CityCatalog.Get(cityId);
+            CityLayout layout = CityTownRecipes.LayoutFor(cityId);
+            foreach (string shopId in city.ShopIds)
+            {
+                CityLot lot = layout.LotOfShop(shopId);
+                Assert.IsNotNull(lot, $"{cityId}: no shop front for {shopId}.");
+                CityResidentSpec keeper = city.Residents.FirstOrDefault(r => r.ShopId == shopId);
+                if (keeper != null)
+                {
+                    Assert.AreEqual(keeper.ResidentId, lot.ResidentId, $"{cityId}: {shopId} is kept by the wrong resident.");
+                }
+            }
+
+            foreach (CityResidentSpec resident in city.Residents)
+            {
+                Assert.IsNotNull(layout.LotOfResident(resident.ResidentId), $"{cityId}: {resident.ResidentId} has no door to stand at.");
+            }
+
+            Assert.AreEqual(1, layout.Exits.Count(e => e.Kind == CityExitKind.ShipDock), $"{cityId}: the Cais da Barca is missing.");
+            Assert.GreaterOrEqual(layout.Exits.Count(e => e.Kind == CityExitKind.ToMap), 1, $"{cityId}: no road back to the map.");
+            Assert.AreEqual(layout.PlazaCenter, layout.Respawn, "The respawn point is the plaza (Docs/Cities.md §3.8).");
+            Assert.IsTrue(layout.Exits.Any(e => e.Id == "exit_" + CityArm.South.ToString().ToLowerInvariant()), $"{cityId}: the road in from the map must also lead out.");
+        }
+
+        [Test]
+        public void Qocho_HasItsShapeSignature_Caravanserai_DryingLofts_Karez_Cistern_Ruins()
+        {
+            CityLayout layout = CityTownRecipes.LayoutFor(CityCatalog.AreiaBranca);
+            CityLot caravanserai = layout.LotOfShop(CityShopCatalog.SelariaVava);
+            Assert.IsTrue(caravanserai.Building.Arcade, "The Selaria is the caravanserai: an arcade on brick piers.");
+            Assert.AreEqual(TownShopDressing.Selaria, caravanserai.Building.Dressing);
+            Assert.GreaterOrEqual(layout.Lots.Count(l => l.Building != null && l.Building.DryingLoft), 3, "Grape-drying lofts on the roofs.");
+            Assert.IsTrue(layout.Lots.Where(l => l.Kind == CityLotKind.House).All(l => l.Building.RammedEarth), "Qocho's houses are rammed earth.");
+            Assert.AreEqual(TownRoofKind.Dome, layout.LotOfResident("socorro").Building.Roof, "Yardena lives under a cistern dome.");
+            Assert.AreEqual(1, layout.Props.Count(p => p.Kind == CityPropKind.CisternDome));
+            Assert.GreaterOrEqual(layout.Props.Count(p => p.Kind == CityPropKind.KarezShaft), 4, "The karez: a line of well shafts.");
+            Assert.GreaterOrEqual(layout.Props.Count(p => p.Kind == CityPropKind.KarezChannel), 1);
+            Assert.GreaterOrEqual(layout.Props.Count(p => p.Kind == CityPropKind.Ruin && p.Variant == 0), 2, "Meroë pyramids at the edge.");
+            Assert.AreEqual(1, layout.Props.Count(p => p.Kind == CityPropKind.Camel));
+        }
+
+        [Test]
+        public void Litema_HasItsShapeSignature_Rondavels_CurvedWalls_Stela_RockArt()
+        {
+            CityLayout layout = CityTownRecipes.LayoutFor(CityCatalog.SerraAlta);
+            Assert.IsTrue(layout.Lots.Where(l => l.Kind == CityLotKind.House).All(l => l.Building.Roof == TownRoofKind.Cone), "Litema's homes are rondavels.");
+            Assert.AreEqual(CityLotKind.Workshop, layout.LotOfShop(CityShopCatalog.ForjaTonho).Kind, "Mestre Mihr works at an open forge.");
+            Assert.GreaterOrEqual(layout.Props.Count(p => p.Kind == CityPropKind.FenceRun && p.Scale > 2f), 12, "The tall curved dry-stone enclosure.");
+            Assert.AreEqual(1, layout.Props.Count(p => p.Kind == CityPropKind.Stela));
+            Assert.AreEqual(1, layout.Props.Count(p => p.Kind == CityPropKind.ConicalTower));
+            Assert.GreaterOrEqual(layout.Props.Count(p => p.Kind == CityPropKind.RockArt), 2);
+            Assert.IsTrue(layout.Props.Any(p => p.Kind == CityPropKind.Tree && p.Variant == 3), "A baobab on the plaza.");
+            Assert.IsTrue(layout.LotOfResident("graca").Building.Dressing == TownShopDressing.Weaver);
+        }
+
+        [Test]
+        public void Lamparinas_HasItsShapeSignature_CliffHouses_RopeBridges_LampLitStreets_AndAPermanentDusk()
+        {
+            CityLayout layout = CityTownRecipes.LayoutFor(CityCatalog.Lamparinas);
+            Assert.IsTrue(layout.Lots.Where(l => l.Kind == CityLotKind.House || l.Kind == CityLotKind.Shop).All(l => l.Building.Roof == TownRoofKind.Rock), "Houses cut into the tuff.");
+            Assert.GreaterOrEqual(layout.Props.Count(p => p.Kind == CityPropKind.Cliff), 4);
+            Assert.GreaterOrEqual(layout.Props.Count(p => p.Kind == CityPropKind.RopeBridge), 2);
+            Assert.GreaterOrEqual(layout.Props.Count(p => p.Kind == CityPropKind.LampString), 6, "Lamps strung along the streets.");
+            Assert.AreEqual(1, layout.Props.Count(p => p.Kind == CityPropKind.Vishapakar));
+            Assert.AreEqual(1, layout.Props.Count(p => p.Kind == CityPropKind.Fountain));
+            Assert.Greater(layout.AmbientNight, 0.5f, "The cave town keeps its lamps lit.");
+            Assert.Greater(layout.NightLights, 6);
+
+            // Every cliff stands behind the houses, never on a street or over a door path.
+            foreach (CityProp cliff in layout.Props.Where(p => p.Kind == CityPropKind.Cliff))
+            {
+                CitySolid? solid = CitySolids.PropSolid(cliff, layout.WalkBounds);
+                Assert.IsTrue(solid.HasValue);
+                foreach (CityStreet street in layout.Streets)
+                {
+                    Assert.IsFalse(CityGeometry.Overlaps(solid.Value.Footprint, street.Bounds), $"A cliff at {cliff.Position} cuts the {street.Arm} street.");
+                }
+
+                foreach (CityLot lot in layout.Lots)
+                {
+                    Assert.IsFalse(CityGeometry.Overlaps(solid.Value.Footprint, lot.Footprint), $"A cliff at {cliff.Position} cuts into {lot.Id}.");
+                }
+            }
+        }
+
+        [Test]
+        public void NightLights_KeepTheMinimumNight_OfACaveTown()
+        {
+            var go = new GameObject("lights");
+            try
+            {
+                CityNightLights lights = go.AddComponent<CityNightLights>();
+                lights.MinimumNight = 0.65f;
+                lights.NightOverride = 0f;
+                lights.Refresh();
+                Assert.AreEqual(0.65f, lights.Night, 1e-4f, "Broad day outside, dusk in the cave.");
+                lights.NightOverride = 1f;
+                lights.Refresh();
+                Assert.AreEqual(1f, lights.Night, 1e-4f);
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
+                TownPalette.SetNightGlow(0f);
             }
         }
 
@@ -199,10 +319,10 @@ namespace Rapadura.Tests
             }
         }
 
-        [Test]
-        public void BuildingMeshes_StayInsideTheirLot_AboveTheGround()
+        [TestCaseSource(nameof(CityIds))]
+        public void BuildingMeshes_StayInsideTheirLot_AboveTheGround(string cityId)
         {
-            CityLayout layout = CityTownRecipes.LayoutFor(CityCatalog.VilaZefa);
+            CityLayout layout = CityTownRecipes.LayoutFor(cityId);
             foreach (CityLot lot in layout.Lots.Where(l => l.Kind != CityLotKind.Market))
             {
                 var b = new TownMeshBuilder();
@@ -256,10 +376,10 @@ namespace Rapadura.Tests
             Assert.Greater(total, 0);
         }
 
-        [Test]
-        public void WholeVila_StaysUnderTheMobileTriangleBudget()
+        [TestCaseSource(nameof(CityIds))]
+        public void WholeTown_StaysUnderTheMobileTriangleBudget(string cityId)
         {
-            CityLayout layout = CityTownRecipes.LayoutFor(CityCatalog.VilaZefa, true);
+            CityLayout layout = CityTownRecipes.LayoutFor(cityId, true);
             var b = new TownMeshBuilder();
             TownGroundBuilder.Build(b, layout);
             foreach (CityLot lot in layout.Lots.Where(l => l.Kind != CityLotKind.Market))
@@ -271,7 +391,7 @@ namespace Rapadura.Tests
             {
                 if (prop.Kind == CityPropKind.FenceRun)
                 {
-                    TownKit.WallRun(b, new Vector3(prop.Position.x, 0f, prop.Position.y), new Vector3(prop.End.x, 0f, prop.End.y), layout.Style);
+                    TownKit.WallRun(b, new Vector3(prop.Position.x, 0f, prop.Position.y), new Vector3(prop.End.x, 0f, prop.End.y), layout.Style, prop.Scale);
                 }
                 else if (prop.Kind != CityPropKind.Gate)
                 {
@@ -279,24 +399,108 @@ namespace Rapadura.Tests
                 }
             }
 
-            Assert.Less(b.TriangleCount, 160000, "The whole Vila (ground, buildings, props, backdrop) is over the mobile budget.");
+            Assert.Less(b.TriangleCount, 160000, $"The whole of {cityId} (ground, buildings, props, backdrop) is over the mobile budget.");
         }
 
         [Test]
-        public void TownView_BuildsFewRenderersAndOnlyPrimitiveColliders()
+        public void RegionalProps_EachBuildWithinBudget_AndTheSegmentsFollowTheirLength()
         {
-            CityLayout layout = CityTownRecipes.LayoutFor(CityCatalog.VilaZefa);
-            CityTownView view = CityTownView.Build(layout, null, "test_view");
+            TownStyle style = TownStyles.For(BiomeType.Caves);
+            foreach (CityPropKind kind in new[] { CityPropKind.Cliff, CityPropKind.RopeBridge, CityPropKind.LampString, CityPropKind.KarezChannel })
+            {
+                var shortRun = new TownMeshBuilder();
+                TownKit.Prop(shortRun, new CityProp { Kind = kind, Position = Vector2.zero, End = new Vector2(6f, 0f) }, style);
+                var longRun = new TownMeshBuilder();
+                TownKit.Prop(longRun, new CityProp { Kind = kind, Position = Vector2.zero, End = new Vector2(24f, 0f) }, style);
+                Assert.Greater(shortRun.TriangleCount, 20, $"{kind} built nothing.");
+                Assert.Greater(longRun.TriangleCount, shortRun.TriangleCount, $"{kind} does not grow with its length.");
+                Assert.Less(longRun.TriangleCount, 6000, $"{kind} is too heavy.");
+                Assert.IsTrue(TownKit.IsSegment(kind));
+            }
+
+            foreach (CityPropKind kind in new[] { CityPropKind.KarezShaft, CityPropKind.CisternDome, CityPropKind.Camel, CityPropKind.RockArt, CityPropKind.Vishapakar,
+                         CityPropKind.Fountain, CityPropKind.ConicalTower })
+            {
+                var b = new TownMeshBuilder();
+                TownKit.Prop(b, new CityProp { Kind = kind }, style);
+                Assert.Greater(b.TriangleCount, 20, $"{kind} built nothing.");
+                Assert.Less(b.TriangleCount, 2500, $"{kind} is too heavy.");
+                Assert.IsTrue(CitySolids.PropSolid(new CityProp { Kind = kind }, new Rect(-10f, -10f, 20f, 20f)).HasValue, $"{kind} needs a primitive collider.");
+            }
+
+            for (int variant = 0; variant < 3; variant++)
+            {
+                var b = new TownMeshBuilder();
+                TownKit.Prop(b, new CityProp { Kind = CityPropKind.Ruin, Variant = variant }, style);
+                Assert.Greater(b.TriangleCount, 20, $"Ruin {variant} built nothing.");
+            }
+
+            // The cliff's collider is the box behind its line (left of the direction), the bridge and the lamps are overhead.
+            CitySolid? cliff = CitySolids.PropSolid(new CityProp { Kind = CityPropKind.Cliff, Position = new Vector2(-5f, 2f), End = new Vector2(5f, 2f) }, new Rect(-20f, -20f, 40f, 40f));
+            Assert.AreEqual(Rect.MinMaxRect(-5f, 2f, 5f, 2f + TownKit.CliffDepth), cliff.Value.Footprint);
+            Assert.IsFalse(CitySolids.PropSolid(new CityProp { Kind = CityPropKind.RopeBridge, Position = Vector2.zero, End = Vector2.one }, new Rect(-20f, -20f, 40f, 40f)).HasValue);
+            Assert.IsFalse(CitySolids.PropSolid(new CityProp { Kind = CityPropKind.LampString, Position = Vector2.zero, End = Vector2.one }, new Rect(-20f, -20f, 40f, 40f)).HasValue);
+        }
+
+        [Test]
+        public void RegionalBuildings_GetTheirModules()
+        {
+            var plain = new TownBuildingSpec { Kind = CityLotKind.House, Width = 7f, Depth = 5.5f, PorchDepth = 1.4f, Seed = "a" };
+            var qocho = plain.Clone();
+            qocho.RammedEarth = true;
+            qocho.DryingLoft = true;
+            qocho.Arcade = true;
+            qocho.FullVaranda = true;
+            Assert.AreNotEqual(plain.CacheKey, qocho.CacheKey, "The cache must tell the regional buildings apart.");
+            Assert.Greater(Triangles(qocho), Triangles(plain) + 200, "Lattice loft, lift lines and the arcade add their pieces.");
+
+            var rondavel = plain.Clone();
+            rondavel.Roof = TownRoofKind.Cone;
+            rondavel.Dressing = TownShopDressing.Weaver;
+            var bare = rondavel.Clone();
+            bare.Dressing = TownShopDressing.None;
+            Assert.Greater(Triangles(rondavel), Triangles(bare), "A resident's house shows its dressing.");
+
+            foreach (TownShopDressing dressing in System.Enum.GetValues(typeof(TownShopDressing)))
+            {
+                if (dressing == TownShopDressing.None || dressing == TownShopDressing.LampHouse)
+                {
+                    continue;
+                }
+
+                var shop = plain.Clone();
+                shop.Kind = CityLotKind.Shop;
+                shop.Dressing = dressing;
+                var none = shop.Clone();
+                none.Dressing = TownShopDressing.None;
+                Assert.Greater(Triangles(shop), Triangles(none), $"Dressing {dressing} draws nothing.");
+            }
+        }
+
+        private static int Triangles(TownBuildingSpec spec)
+        {
+            var b = new TownMeshBuilder();
+            TownBuildingBuilder.Build(b, spec);
+            return b.TriangleCount;
+        }
+
+        [TestCaseSource(nameof(CityIds))]
+        public void TownView_BuildsFewRenderersAndOnlyPrimitiveColliders(string cityId)
+        {
+            CityLayout layout = CityTownRecipes.LayoutFor(cityId);
+            CityTownView view = CityTownView.Build(layout, null, "test_view_" + cityId);
             try
             {
                 Assert.Less(view.RendererCount, 60, "Too many renderers for a mobile town.");
                 Assert.AreEqual(0, view.GetComponentsInChildren<MeshCollider>(true).Length, "No MeshCollider on town pieces.");
                 Assert.IsNotNull(view.GetComponent<Rapadura.Gameplay.Environment.NonSolidPropZone>(), "The solid binder must skip the town.");
                 Assert.IsNotNull(view.SafeZone);
-                Assert.AreEqual(CityCatalog.VilaZefa, view.SafeZone.CityId);
+                Assert.AreEqual(cityId, view.SafeZone.CityId);
                 Assert.IsNotNull(view.Respawn);
                 Assert.AreEqual(layout.Lots.Count(l => l.HasKeeper), view.Posts.Count);
                 Assert.AreEqual(layout.Exits.Count, view.Exits.Count);
+                Assert.LessOrEqual(view.NightLights.Lights.Count, 8, "Night lights over the mobile budget.");
+                Assert.AreEqual(layout.AmbientNight, view.NightLights.MinimumNight);
                 foreach (CityResidentPost post in view.Posts)
                 {
                     Assert.IsTrue(post.GetComponent<SphereCollider>().isTrigger, post.LotId);

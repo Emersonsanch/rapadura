@@ -5,12 +5,13 @@ using UnityEngine;
 namespace Rapadura.Gameplay.World.Cities.Town
 {
     /// <summary>
-    /// The town recipes (content as code, like <c>CityCatalog</c>): the Vila da Vó Edna is laid out by hand
-    /// (Docs/Cities.md §5.3); the other cities get <see cref="Default"/> — the same plan filled with their own residents,
-    /// shops and regional style — until a follow-up gives each one its own recipe. Layouts are cached per city and
-    /// "mascate today" flag (the generator is deterministic, so the cache never goes stale).
+    /// The town recipes (content as code, like <c>CityCatalog</c>): every city is laid out by hand (Docs/Cities.md §5.3):
+    /// <see cref="VilaEdna"/>, <see cref="Qocho"/>, <see cref="Litema"/> and <see cref="Lamparinas"/>. A city added to the
+    /// catalog without a recipe gets <see cref="Default"/> (the Vila's plan filled with its residents, shops and regional
+    /// style) until it has one. Layouts are cached per city and "mascate today" flag (the generator is deterministic,
+    /// so the cache never goes stale).
     /// </summary>
-    public static class CityTownRecipes
+    public static partial class CityTownRecipes
     {
         public const string MascateLotId = "mascate";
 
@@ -46,13 +47,26 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 return null;
             }
 
-            CityTownRecipe recipe = cityId == CityCatalog.VilaZefa ? VilaEdna() : Default(city);
+            CityTownRecipe recipe = HandRecipe(cityId) ?? Default(city);
             if (mascateToday)
             {
                 AddMascate(recipe);
             }
 
             return recipe;
+        }
+
+        /// <summary>The hand-made recipe of <paramref name="cityId"/> (null when the city has none yet).</summary>
+        public static CityTownRecipe HandRecipe(string cityId)
+        {
+            switch (cityId)
+            {
+                case CityCatalog.VilaZefa: return VilaEdna();
+                case CityCatalog.AreiaBranca: return Qocho();
+                case CityCatalog.SerraAlta: return Litema();
+                case CityCatalog.Lamparinas: return Lamparinas();
+                default: return null;
+            }
         }
 
         // ------------------------------------------------------------------
@@ -294,8 +308,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
             r.PlazaProps.Add(new CityProp { Kind = CityPropKind.Bench, Position = at, Yaw = CityGeometry.YawFacing(-at) });
         }
 
-        private static CityProp Fence(float x0, float z0, float x1, float z1) =>
-            new CityProp { Kind = CityPropKind.FenceRun, Position = new Vector2(x0, z0), End = new Vector2(x1, z1) };
+        private static CityProp Fence(float x0, float z0, float x1, float z1, float height = 1f) =>
+            new CityProp { Kind = CityPropKind.FenceRun, Position = new Vector2(x0, z0), End = new Vector2(x1, z1), Scale = height };
+
+        private static CityProp Segment(CityPropKind kind, float x0, float z0, float x1, float z1, float scale = 1f, int variant = 0) =>
+            new CityProp { Kind = kind, Position = new Vector2(x0, z0), End = new Vector2(x1, z1), Scale = scale, Variant = variant };
+
+        private static CityProp At(CityPropKind kind, float x, float z, float yaw = 0f, float scale = 1f, int variant = 0) =>
+            new CityProp { Kind = kind, Position = new Vector2(x, z), Yaw = yaw, Scale = scale, Variant = variant };
 
         private static CityLotRecipe Street(string id, CityLotKind kind, CityArm arm, CityArm side, float along, float width, float depth, float porch,
             string residentId = null, string shopId = null, TownBuildingSpec spec = null)

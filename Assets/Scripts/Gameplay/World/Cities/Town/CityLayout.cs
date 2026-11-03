@@ -59,6 +59,33 @@ namespace Rapadura.Gameplay.World.Cities.Town
         Jugs = 16,
         /// <summary>A tall carved stela (Aksum style, Litema's plaza).</summary>
         Stela = 17,
+
+        // ---- Regional pieces (Qocho, Litema, Lamparinas; drawn by TownKit.Regions) ----
+
+        /// <summary>Qocho: a karez well shaft (a ring of spoil around a timber-framed shaft with a windlass).</summary>
+        KarezShaft = 18,
+        /// <summary>Qocho: the open stone channel where the karez comes out (<see cref="CityProp.End"/> = the other end); walkable.</summary>
+        KarezChannel = 19,
+        /// <summary>Qocho: Yardena's cistern under a mud dome, with a stepped arched entrance and a water spout.</summary>
+        CisternDome = 20,
+        /// <summary>Qocho: the Ruínas dos Artífices at the edge. Variant 0 steep Meroë pyramid with its chapel, 1 broken lotus columns, 2 a row of ushabtis.</summary>
+        Ruin = 21,
+        /// <summary>Qocho: a Bactrian pack camel lying down with its load (the caravanserai yard).</summary>
+        Camel = 22,
+        /// <summary>Litema: a rock shelter face painted with elands, dancers and the mantis (San rock art).</summary>
+        RockArt = 23,
+        /// <summary>Lamparinas: the pink tuff cliff the houses are cut into, from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> (the mass rises behind that line).</summary>
+        Cliff = 24,
+        /// <summary>Lamparinas: a rope bridge high over a street, from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/>; overhead, walkable under.</summary>
+        RopeBridge = 25,
+        /// <summary>Lamparinas: a string of lamps hung across a street (overhead; glows at night).</summary>
+        LampString = 26,
+        /// <summary>Lamparinas: the vishapakar (dragon stone) at the town's entrance.</summary>
+        Vishapakar = 27,
+        /// <summary>Lamparinas: the spring of the cave, a basalt wall fountain with a stone spout and a basin.</summary>
+        Fountain = 28,
+        /// <summary>Litema: a Great Zimbabwe conical tower of dry stone with the chevron frieze.</summary>
+        ConicalTower = 29,
     }
 
     public enum CityExitKind
@@ -236,6 +263,12 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
         /// <summary>Half size of the painted ground (backdrop forest beyond the walk bounds).</summary>
         public float GroundHalfExtent = 90f;
+
+        /// <summary>Real point lights at night (mobile budget, from the recipe).</summary>
+        public int NightLights = 6;
+
+        /// <summary>The town never gets brighter than this "night" (0 = normal day/night; the Lamparinas live in a cave, always lamp-lit).</summary>
+        public float AmbientNight;
 
         private List<CitySolid> _solids;
 
