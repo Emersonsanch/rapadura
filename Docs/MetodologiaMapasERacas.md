@@ -75,7 +75,7 @@ a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: 
 | Amuleto antiveneno (34) | levar Amuleto Antiveneno (Lavine **não** dispensa: é mordida, não névoa) | Cestaria da Larthia (Palafitas de Tarchon) e Barcos e Trocas do Nuhzadag (Jhilpur); recompensa da 2ª missão de Tarchon (Vel) |
 | Fruta purificadora (35) | levar Fruta Purificadora | Barcos e Trocas do Nuhzadag (Jhilpur); recompensa da 2ª missão de Jhilpur (Abiesous) |
 | Roupa térmica (36) | **vestir** Roupa Térmica Refinada (slot Peito) | Agasalhos do Sisinnios (Sangkent) |
-| Grampos de escalada (38) | levar Grampos de Escalada | Agasalhos do Sisinnios (Sangkent) |
+| Grampos de escalada (38, 52) | levar Grampos de Escalada | Agasalhos do Sisinnios (Sangkent); Panela Grande do Shahmizad (Fortim dos Gigantes, cidade de retorno do 52); recompensa da 2ª missão do Fortim (Virogdad) |
 | Proteção a tempestade (40) | levar Capa de Tempestade | Agasalhos do Sisinnios (Sangkent); recompensa da 2ª missão de Sangkent (Kustai) |
 | Selo do Sol (42) | levar o Selo do Sol (preso ao herói) | Lanternas do Mestre Mōzak (Mingcheng); recompensa da 2ª missão de Mingcheng (Lin Deng) |
 
@@ -87,7 +87,11 @@ Antiveneno, Fruta Purificadora) estão fixos no balcão dos Barcos e Trocas do N
 Agasalhos do Sisinnios em Sangkent (2026-11-03, `CitySangkentTests`; o 39 pede asas de verdade ou montaria voadora, sem
 item de kit). O da região 8 (Selo do Sol 42, a única exigência da região com item hoje no `MapCatalog`) está fixo no
 balcão das Lanternas do Mestre Mōzak em Mingcheng e é a recompensa da 2ª missão de lá (Lin Deng) (2026-11-03,
-`CityMingchengTests`; as Torres Brancas, dentro do 42, não o vendem); `MapRequirementTests` agora cobre as regiões 1–8. Fora das exigências, a **Garrafa de Ar Sereno** dos kobolds (consumível: +20% de recuperação de vigor por
+`CityMingchengTests`; as Torres Brancas, dentro do 42, não o vendem). Os da região 9 (Estepe dos Nartes, só o 52 tem
+exigência hoje: Grampos de Escalada) estão fixos no balcão da Panela Grande do Shahmizad no Fortim, a cidade de retorno do
+52, e são a recompensa da 2ª missão de lá (Virogdad) (2026-11-03, `CityFortimTests`); o Acampamento de Soslan e o
+Arvoredo não têm exigência nos seus mapas. `MapRequirementTests` agora cobre todas as regiões do catálogo (1–9) e confere
+que cada exigência da região 9 está à venda na própria cidade de retorno do mapa. Fora das exigências, a **Garrafa de Ar Sereno** dos kobolds (consumível: +20% de recuperação de vigor por
 60 s, para o "ar parado" do 22) é vendida na Feira da Miwnay e dada pela missão "Teia nos Tubos" (Takhsich).
 
 Os itens das regiões 5–8 já existem (`Resources/Items`, textos en/pt-BR em `ContentTexts`); os da região 5 (25–30) estão à

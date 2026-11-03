@@ -158,6 +158,24 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string TorresBrancas = "torres_brancas";
 
+        /// <summary>
+        /// The Acampamento de Soslan, race city of the centaurs (map 47, return city of maps 47, 48 and 51, Docs/Mapas100.md §3.3
+        /// and região 9). Same id as <c>MapCatalog.AcampamentoSoslan</c> and <c>CityTownRecipes.SoslanCityId</c>.
+        /// </summary>
+        public const string AcampamentoSoslan = "acampamento_soslan";
+
+        /// <summary>
+        /// The Fortim dos Gigantes-da-Colina, race city of the hill giants (map 49, return city of maps 49 and 52,
+        /// Docs/Mapas100.md §3.3 and região 9). Same id as <c>MapCatalog.Fortim</c> and <c>CityTownRecipes.FortimCityId</c>.
+        /// </summary>
+        public const string Fortim = "fortim";
+
+        /// <summary>
+        /// The Arvoredo de Haripushpa, race city of the trunk folk (map 50, its own return city, Docs/Mapas100.md §3.3 and
+        /// região 9). Same id as <c>MapCatalog.Arvoredo</c> and <c>CityTownRecipes.ArvoredoCityId</c>.
+        /// </summary>
+        public const string Arvoredo = "arvoredo";
+
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
             new CitySpec(VilaZefa, BiomeType.Forest,
@@ -336,6 +354,46 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("arkamani"),
                 },
                 new List<string> { CityShopCatalog.EspelhosNatakamani }),
+
+            // Acampamento de Soslan (centaurs, the Estepe dos Nartes, região 9; names of the Nart sagas of Ossetia): Soslan, the
+            // steel-skinned hero (missions), Batradz the smith-warrior, Satana the wise woman of the house (second mission:
+            // the guardian lamp), Syrdon the trickster (the city's shop: the Selaria Nômade, saddles and blankets with a good
+            // prank) and old Uryzmæg, the chief. The Estepe dos Nartes has no world-map biome: the region is the borrowed Forest.
+            new CitySpec(AcampamentoSoslan, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("soslan"),
+                    new CityResidentSpec("batradz"),
+                    new CityResidentSpec("satana"),
+                    new CityResidentSpec("syrdon", CityShopCatalog.SelariaNomade),
+                    new CityResidentSpec("uryzmaeg"),
+                },
+                new List<string> { CityShopCatalog.SelariaNomade }),
+
+            // Fortim dos Gigantes-da-Colina (the penitent giants of the Manichaean Book of Giants): Baraqel, the chief (missions),
+            // Virogdad the dreamer (second mission: the crows of a bad dream; pays with the crampons of map 52) and old
+            // Shahmizad, the patriarch, who cooks for everyone at the Panela Grande (the city's shop). Region: the borrowed Forest.
+            new CitySpec(Fortim, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("baraqel"),
+                    new CityResidentSpec("virogdad"),
+                    new CityResidentSpec("shahmizad", CityShopCatalog.PanelaGrande),
+                },
+                new List<string> { CityShopCatalog.PanelaGrande }),
+
+            // Arvoredo de Haripushpa (the trunk folk; Haripuṣpa and Suvarṇapuṣpa, kings of Kucha): Haripushpa, the eldest
+            // (missions), Suvarnapushpa the gardener (the city's shop: the Viveiro) and Aryaman Puhr, a Sogdian herbalist
+            // passing through (second mission; Mār Aryāmān Puhr, the Manichaean teacher of the Bezeklik letters). Region: the
+            // borrowed Forest.
+            new CitySpec(Arvoredo, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("haripushpa"),
+                    new CityResidentSpec("suvarnapushpa", CityShopCatalog.ViveiroSuvarnapushpa),
+                    new CityResidentSpec("aryaman"),
+                },
+                new List<string> { CityShopCatalog.ViveiroSuvarnapushpa }),
         };
 
         /// <summary>

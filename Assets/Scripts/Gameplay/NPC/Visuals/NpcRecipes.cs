@@ -1054,6 +1054,187 @@ namespace Rapadura.Gameplay.NPC.Visuals
             },
 
             // ------------------------------------------------------------------
+            // Acampamento de Soslan, the centaurs' camp (the Estepe dos Nartes, Docs/Mapas100.md §3.3 and map 47): from the
+            // waist down a horse (HorseBody: bay, black, grey, dun and the old chief's white), short felt tunics in the dyed Nart
+            // red and blue, rawhide and Scythian gold. Names of the Nart sagas of Ossetia (Soslan, Batradz, Satana, Syrdon,
+            // Uryzmæg).
+            // ------------------------------------------------------------------
+
+            // Soslan, the steel-skinned hero (the city's missions): broad and proud, long black hair and a short beard under a
+            // felt cap edged red, a red tunic with gold hems and steel-grey arms (the skin tempered in the smith's water), a
+            // rawhide cape and belt, the bow in hand and the quiver; a bay horse. Calls the herd.
+            new NpcRecipe
+            {
+                Id = "soslan", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 1.08f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Stern, Hair = NpcHair.Long, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.Short,
+                Headwear = NpcHeadwear.FeltCap, HeadColor = NpcSwatch.SteppeFelt, HeadTrim = NpcSwatch.NartRed,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.NartRed, Trim = NpcSwatch.ScythGold, Sleeves = NpcSwatch.Steel,
+                Layers = NpcLayer.Cape | NpcLayer.Belt, LayerColor = NpcSwatch.Rawhide, LayerTrim = NpcSwatch.ScythGold,
+                LeftArm = NpcArmPose.HoldStaff, RightArm = NpcArmPose.HipRest, Props = new[] { NpcProp.Bow, NpcProp.Quiver },
+                Gesture = NpcGesture.Call, HorseBody = true, Coat = NpcSwatch.HorseBay,
+                Story = "Soslan, o herói de pele de aço das sagas dos Nartes; aqui, o centauro que guia a manada e dá as missões do acampamento",
+            },
+
+            // Batradz, the smith-warrior: broad, short dark hair and a full beard under a blue bandana, a blue tunic with rawhide
+            // hems, a rawhide apron and belt, hammer and tongs; a black horse. Strikes in the rhythm of the forge.
+            new NpcRecipe
+            {
+                Id = "batradz", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 1.06f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinOlive, Face = NpcFace.Jolly, Hair = NpcHair.Short, HairColor = NpcSwatch.HairDark, Beard = NpcBeard.Full,
+                Headwear = NpcHeadwear.Bandana, HeadColor = NpcSwatch.NartBlue, HeadTrim = NpcSwatch.ScythGold,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.NartBlue, Trim = NpcSwatch.Rawhide, Sleeves = NpcSwatch.SkinOlive,
+                Layers = NpcLayer.Apron | NpcLayer.Belt, LayerColor = NpcSwatch.Rawhide, LayerTrim = NpcSwatch.ScythGold,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Hammer, NpcProp.Tongs },
+                Gesture = NpcGesture.Hammer, HorseBody = true, Coat = NpcSwatch.Charcoal,
+                Story = "Batradz, o guerreiro temperado na forja das sagas dos Nartes; aqui, o ferreiro das ferraduras e dos aros das carroças",
+            },
+
+            // Satana, the wise woman of the house (the second mission): two auburn braids under a gold headband, a felt tunic
+            // with red hems, a red shawl, the guardian lamp held up in both hands; a grey horse. Lifts the lamp.
+            new NpcRecipe
+            {
+                Id = "satana", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Average, Height = 1.0f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinLight, Face = NpcFace.Kind, Hair = NpcHair.TwoBraids, HairColor = NpcSwatch.HairAuburn,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.ScythGold, HeadTrim = NpcSwatch.NartRed,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.SteppeFelt, Trim = NpcSwatch.NartRed, Sleeves = NpcSwatch.SteppeFelt,
+                Layers = NpcLayer.Shawl, LayerColor = NpcSwatch.NartRed, LayerTrim = NpcSwatch.ScythGold,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.OilLamp },
+                Gesture = NpcGesture.LanternRaise, HorseBody = true, Coat = NpcSwatch.HorseGrey,
+                Story = "Satana, a sábia das sagas dos Nartes; aqui, a guardiã da lâmpada do acampamento e dos conselhos; dá a 2ª missão",
+            },
+
+            // Syrdon, the trickster (the city's shop: the Selaria Nômade): slim and at ease, spiky brown hair and a goatee under a
+            // blue hood with a gold edge, a rawhide tunic with blue hems, a red sash and a satchel, the coin purse held up and a
+            // bundle; a dun horse. Talks with both hands.
+            new NpcRecipe
+            {
+                Id = "syrdon", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 0.98f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Bright, Hair = NpcHair.Spiky, HairColor = NpcSwatch.HairBrown, Beard = NpcBeard.Goatee,
+                Headwear = NpcHeadwear.Hood, HeadColor = NpcSwatch.NartBlue, HeadTrim = NpcSwatch.ScythGold,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.Rawhide, Trim = NpcSwatch.NartBlue, Sleeves = NpcSwatch.NartBlue,
+                Layers = NpcLayer.Satchel | NpcLayer.Sash, LayerColor = NpcSwatch.NartRed, LayerTrim = NpcSwatch.ScythGold,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.CoinPurse, NpcProp.Bundle },
+                Gesture = NpcGesture.Chatter, HorseBody = true, Coat = NpcSwatch.HorseDun,
+                Story = "Syrdon, o trapaceiro das sagas dos Nartes; aqui, o seleiro do acampamento (Selaria Nômade), sempre com uma pegadinha boa",
+            },
+
+            // Uryzmæg, the old chief: stooped, long grey hair and a long braided beard under a rawhide felt cap, a felt tunic with
+            // gold hems and red sleeves, a blue cape and belt, the walking stick and the cup of the Narts; an old white horse.
+            // Sips from the cup.
+            new NpcRecipe
+            {
+                Id = "uryzmaeg", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 1.0f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinFair, Face = NpcFace.Calm, Hair = NpcHair.Long, HairColor = NpcSwatch.HairGrey, Beard = NpcBeard.LongBraided,
+                Headwear = NpcHeadwear.FeltCap, HeadColor = NpcSwatch.Rawhide, HeadTrim = NpcSwatch.ScythGold,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.SteppeFelt, Trim = NpcSwatch.ScythGold, Sleeves = NpcSwatch.NartRed,
+                Layers = NpcLayer.Cape | NpcLayer.Belt, LayerColor = NpcSwatch.NartBlue, LayerTrim = NpcSwatch.ScythGold,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.WalkingStick, NpcProp.Cup },
+                Gesture = NpcGesture.Sip, HorseBody = true, Coat = NpcSwatch.Ivory,
+                Story = "Uryzmæg, o velho chefe das sagas dos Nartes; aqui, quem guia o acampamento de mudança em mudança e guarda a Uasamonga",
+            },
+
+            // ------------------------------------------------------------------
+            // Fortim dos Gigantes-da-Colina (Docs/Mapas100.md §3.3 and map 49): giants a head and shoulders over everyone (Height
+            // 1.45–1.55), ruddy and ochre skins, earth, stone, the good smoke, hill green and the Living Fire. Names of the
+            // Manichaean Book of Giants (Barakʾel, Virōgdād, Šahmīzād): the giants who dreamt of the end and were sorry.
+            // ------------------------------------------------------------------
+
+            // Baraqel, the chief (the city's missions): broad and proud, short brown hair and a full beard, an earth tunic with a
+            // green hem and a green cape, a log on his shoulder and the keys of the fort. Calls down the hill.
+            new NpcRecipe
+            {
+                Id = "baraqel", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 1.55f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinGiantRuddy, Face = NpcFace.Jolly, Hair = NpcHair.Short, HairColor = NpcSwatch.HairBrown, Beard = NpcBeard.Full,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.HillEarth, Trim = NpcSwatch.HillGreen, Sleeves = NpcSwatch.SkinGiantRuddy,
+                Trousers = NpcSwatch.GiantHide, Boots = NpcSwatch.GiantHide,
+                Layers = NpcLayer.Cape | NpcLayer.Belt, LayerColor = NpcSwatch.HillGreen, LayerTrim = NpcSwatch.LivingEmber,
+                LeftArm = NpcArmPose.HipRest, RightArm = NpcArmPose.Carry, Props = new[] { NpcProp.Log, NpcProp.Keys },
+                Gesture = NpcGesture.Call,
+                Story = "Barakʾel, gigante do Livro dos Gigantes maniqueu; aqui, o chefe do Fortim, arrependido e gentil, que dá as missões da cidade",
+            },
+
+            // Virogdad, the dreamer (the second mission): stout and easy, curly dark hair and a short beard under a hood the colour
+            // of the good smoke, a smoke robe with earth hems and an ember sash, the clay tablets of the dreams and the quill.
+            // Ponders.
+            new NpcRecipe
+            {
+                Id = "virogdad", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Stout, Height = 1.5f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinGiantOchre, Face = NpcFace.Dreamy, Hair = NpcHair.Curly, HairColor = NpcSwatch.HairDark, Beard = NpcBeard.Short,
+                Headwear = NpcHeadwear.Hood, HeadColor = NpcSwatch.GoodSmoke, HeadTrim = NpcSwatch.HillStone,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.GoodSmoke, Trim = NpcSwatch.HillEarth, Sleeves = NpcSwatch.GoodSmoke, Boots = NpcSwatch.GiantHide,
+                Layers = NpcLayer.Sash, LayerColor = NpcSwatch.LivingEmber, LayerTrim = NpcSwatch.HillEarth,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Tablets, NpcProp.Quill },
+                Gesture = NpcGesture.Ponder,
+                Story = "Virōgdād, gigante do Livro dos Gigantes maniqueu que sonhou com as tábuas; aqui, o sonhador que lê os sonhos e dá a 2ª missão",
+            },
+
+            // Shahmizad, the old patriarch (the city's shop: the Panela Grande): stooped, long white hair and a long beard under a
+            // green skullcap with an ember band, a stone-grey kaftan with ember hems, a smoke apron and a hide belt, the mortar and
+            // a jar of spices. Grinds the cumin.
+            new NpcRecipe
+            {
+                Id = "shahmizad", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Broad, Height = 1.45f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinGiantRuddy, Face = NpcFace.Kind, Hair = NpcHair.Long, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Long,
+                Headwear = NpcHeadwear.Skullcap, HeadColor = NpcSwatch.HillGreen, HeadTrim = NpcSwatch.LivingEmber,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.HillStone, Trim = NpcSwatch.LivingEmber, Sleeves = NpcSwatch.HillStone, Boots = NpcSwatch.GiantHide,
+                Layers = NpcLayer.Apron | NpcLayer.Belt, LayerColor = NpcSwatch.GoodSmoke, LayerTrim = NpcSwatch.GiantHide,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.MortarPestle, NpcProp.Jar },
+                Gesture = NpcGesture.Grind,
+                Story = "Šahmīzād, o pai dos gigantes no Livro dos Gigantes maniqueu; aqui, o patriarca arrependido que cozinha na Panela Grande",
+            },
+
+            // ------------------------------------------------------------------
+            // Arvoredo de Haripushpa, the trunk folk (Docs/Mapas100.md §3.3 and map 50): bark skin, moss and new-leaf hair, three
+            // twigs growing from the crown (Twigs), moss, spring leaf, catkin and larch. Names of the kings of Kucha
+            // (Haripuṣpa, Suvarṇapuṣpa); the Sogdian herbalist is human (Mār Aryāmān Puhr, the Manichaean teacher of the
+            // Bezeklik letters).
+            // ------------------------------------------------------------------
+
+            // Haripushpa, the eldest (the city's missions): old, broad and stooped, long moss hair and a braided moss beard under a
+            // crown of catkins, a moss robe with catkin hems and a larch shawl, the walking stick and a jug of meltwater.
+            // Leans and nods, very slowly.
+            new NpcRecipe
+            {
+                Id = "haripushpa", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Broad, Height = 1.2f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinBarkOld, Face = NpcFace.Calm, Hair = NpcHair.Long, HairColor = NpcSwatch.TrunkMoss, Beard = NpcBeard.LongBraided,
+                Headwear = NpcHeadwear.FlowerCrown, HeadColor = NpcSwatch.Catkin, HeadTrim = NpcSwatch.SpringLeaf,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.TrunkMoss, Trim = NpcSwatch.Catkin, Sleeves = NpcSwatch.SkinBarkOld, Boots = NpcSwatch.SkinBarkOld,
+                Layers = NpcLayer.Shawl, LayerColor = NpcSwatch.LarchGreen, LayerTrim = NpcSwatch.Catkin,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.WalkingStick, NpcProp.WaterJug },
+                Gesture = NpcGesture.Lean, Twigs = true,
+                Story = "Haripuṣpa, rei de Kucha; aqui, o mais velho do povo-tronco, que fala uma frase por minuto e dá as missões do arvoredo",
+            },
+
+            // Suvarnapushpa, the gardener (the city's shop: the Viveiro): slim and upright, two braids of new leaf under a catkin
+            // band, a spring-leaf dress with catkin hems and a moss apron, a basket of seedlings and the watering jug. Pours.
+            new NpcRecipe
+            {
+                Id = "suvarnapushpa", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 1.08f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinBarkYoung, Face = NpcFace.Bright, Hair = NpcHair.TwoBraids, HairColor = NpcSwatch.SpringLeaf,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.Catkin, HeadTrim = NpcSwatch.SapAmber,
+                Garment = NpcGarment.Dress, Main = NpcSwatch.SpringLeaf, Trim = NpcSwatch.Catkin, Sleeves = NpcSwatch.SkinBarkYoung, Boots = NpcSwatch.SkinBarkYoung,
+                Layers = NpcLayer.Apron, LayerColor = NpcSwatch.TrunkMoss, LayerTrim = NpcSwatch.Catkin,
+                LeftArm = NpcArmPose.Crook, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.FlowerBasket, NpcProp.WaterJug },
+                Gesture = NpcGesture.Pour, Twigs = true,
+                Story = "Suvarṇapuṣpa, rei de Kucha; aqui, a jardineira do povo-tronco, que cuida do Viveiro (mudas, ervas e runas de cura)",
+            },
+
+            // Aryaman Puhr, the Sogdian herbalist passing through (the second mission): human, short dark hair and a goatee under an
+            // indigo skullcap, a pomegranate chapan with gold hems, a moss satchel and belt bought in the grove, the herb basket
+            // on the arm and a letter held up. Chats.
+            new NpcRecipe
+            {
+                Id = "aryaman", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Average, Height = 1.0f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinOlive, Face = NpcFace.Kind, Hair = NpcHair.Short, HairColor = NpcSwatch.HairDark, Beard = NpcBeard.Goatee,
+                Headwear = NpcHeadwear.Skullcap, HeadColor = NpcSwatch.Indigo, HeadTrim = NpcSwatch.OldGold,
+                Garment = NpcGarment.Chapan, Main = NpcSwatch.Pomegranate, Trim = NpcSwatch.OldGold, Sleeves = NpcSwatch.Indigo, Trousers = NpcSwatch.Walnut, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Satchel | NpcLayer.Belt, LayerColor = NpcSwatch.TrunkMoss, LayerTrim = NpcSwatch.Catkin,
+                LeftArm = NpcArmPose.Crook, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.HerbBasket, NpcProp.Letter },
+                Gesture = NpcGesture.Chatter,
+                Story = "Mār Aryāmān Puhr, mestre maniqueu das cartas sogdianas de Bezeklik; aqui, o herbolário sogdiano de passagem que dá a 2ª missão",
+            },
+
+            // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
 

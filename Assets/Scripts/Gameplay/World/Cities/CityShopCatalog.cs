@@ -277,6 +277,25 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string EspelhosNatakamani = "shop_espelhos_natakamani";
 
+        /// <summary>
+        /// Selaria Nômade (Acampamento de Soslan, the centaurs' camp, Docs/Mapas100.md §3.3): Syrdon the trickster sells felt
+        /// saddle blankets, feed and travel food for the steppe (maps 47, 48 and 51 have no gate). The counter turns daily.
+        /// </summary>
+        public const string SelariaNomade = "shop_selaria_nomade";
+
+        /// <summary>
+        /// Panela Grande (Fortim dos Gigantes-da-Colina, Docs/Mapas100.md §3.3): old Shahmizad cooks for everyone and sells the
+        /// gear of the only gate of the region (Docs/MetodologiaMapasERacas.md §2.1): the Grampos de Escalada of the Corrente de
+        /// Amirani (52), whose return city is the Fortim. The counter turns daily.
+        /// </summary>
+        public const string PanelaGrande = "shop_panela_grande";
+
+        /// <summary>
+        /// Viveiro (Arvoredo de Haripushpa, Docs/Mapas100.md §3.3): Suvarnapushpa the gardener sells herbs, fibre and healing
+        /// runes grown slowly in the grove (map 50 has no gate). The counter turns daily.
+        /// </summary>
+        public const string ViveiroSuvarnapushpa = "shop_viveiro_suvarnapushpa";
+
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
@@ -621,6 +640,62 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_herb", 3, 12, rotating: true),
                 new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+            })),
+
+            // ---- Acampamento de Soslan: Syrdon's saddlery, felt and feed for the steppe; daily ----
+            new CityShopSpec(SelariaNomade, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(SelariaNomade, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                // Felt for the saddles (the wool blankets keep the steppe wind out too) and feed for the herds.
+                new CityShopEntry("item_manta_la", 45, 3),
+                new CityShopEntry("item_mount_feed", 3, 20),
+                new CityShopEntry("item_leather_boots", 10, 2),
+                // The rotation: what the wagons carry this week.
+                new CityShopEntry("item_odre_agua", 30, 2, rotating: true),
+                new CityShopEntry("item_corda_escalada", 40, 2, rotating: true),
+                new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
+                new CityShopEntry("item_fiber", 1, 20, rotating: true),
+                new CityShopEntry("item_herb", 3, 12, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+            })),
+
+            // ---- Fortim dos Gigantes: Shahmizad's great pot, food for the group and the gear of the gate 52; daily ----
+            new CityShopSpec(PanelaGrande, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(PanelaGrande, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                // Food for the whole group, ladled from the pot.
+                new CityShopEntry("item_cooked_meat", 6, 15),
+                new CityShopEntry("item_cha_gengibre", 70, 3),
+                // Map gate (MapRequirementRules): the crampons of the Corrente de Amirani (52), whose return city is the Fortim.
+                new CityShopEntry("item_grampos_escalada", 950, 2),
+                // The rotation.
+                new CityShopEntry("item_manta_la", 45, 2, rotating: true),
+                new CityShopEntry("item_corda_escalada", 40, 2, rotating: true),
+                new CityShopEntry("item_mount_feed", 3, 12, rotating: true),
+                new CityShopEntry("item_herb", 3, 12, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+            })),
+
+            // ---- Arvoredo de Haripushpa: Suvarnapushpa's nursery, herbs and healing runes; daily ----
+            new CityShopSpec(ViveiroSuvarnapushpa, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(ViveiroSuvarnapushpa, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                // What grows slowly in the grove: herbs, fibre and the healing rune.
+                new CityShopEntry("item_herb", 3, 20),
+                new CityShopEntry("item_fiber", 1, 30),
+                new CityShopEntry("item_runa_cura", 15, 3),
+                // The rotation.
+                new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
+                new CityShopEntry("item_mount_feed", 3, 12, rotating: true),
+                new CityShopEntry("item_corda_escalada", 40, 2, rotating: true),
+                new CityShopEntry("item_manta_la", 45, 2, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
             })),
 
             // ---- Ferraria do Mestre Adamas (Vila): the village blacksmith ----

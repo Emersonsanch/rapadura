@@ -77,6 +77,12 @@ namespace Rapadura.Gameplay.World.Cities
     /// then Lin Deng wants the lantern fish out of his canal and pays with the Selo do Sol (the gate of map 42).
     /// Torres Brancas (map 42): Queen Amanirenas asks the cousins to break the broken mirrors that steal the light of the towers,
     /// then Shanakdakhete wants the dimmed ibises off the terraces and pays with a rune lamp and soul stones.
+    /// Acampamento de Soslan (map 47): Soslan sends the cousins after the dimmed wolves that circle the foals, then Satana wants
+    /// the dimmed eagles off the camp and pays with a rune lamp (her guardian lamp).
+    /// Fortim dos Gigantes (map 49): Baraqel asks the cousins to chase the hill boars out of the giants' pantry, then Virogdad
+    /// wants the smoke crows of a bad dream off the tablets and pays with the Grampos de Escalada (the gate of map 52).
+    /// Arvoredo de Haripushpa (map 50): old Haripushpa asks the cousins to clear the bark-eaters off the sleeping trunks, then
+    /// Aryaman Puhr wants the smoke birds that peck the bark out of the grove and pays with healing runes.
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -104,6 +110,12 @@ namespace Rapadura.Gameplay.World.Cities
         public const string MingchengCanal = "quest_city_mingcheng_fish_in_the_canal";
         public const string TorresMirrors = "quest_city_torres_brancas_broken_mirrors";
         public const string TorresIbises = "quest_city_torres_brancas_dimmed_ibises";
+        public const string SoslanWolves = "quest_city_soslan_wolves_round_the_foals";
+        public const string SoslanEagles = "quest_city_soslan_eagles_over_the_camp";
+        public const string FortimBoars = "quest_city_fortim_boars_in_the_pantry";
+        public const string FortimCrows = "quest_city_fortim_crows_of_a_bad_dream";
+        public const string ArvoredoBarkEaters = "quest_city_arvoredo_bark_eaters";
+        public const string ArvoredoSmokeBirds = "quest_city_arvoredo_smoke_birds";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -214,6 +226,33 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.TorresBrancas, "shanakdakhete", new RegionQuestSpec(TorresIbises, BiomeType.Forest, TorresMirrors, 1950,
                 new[] { new RegionObjectiveSpec("chase_the_ibises", QuestObjectiveType.KillEnemyType, "enemy_cave_dark_crow", 6) },
                 new[] { new RegionRewardSpec("item_lamparina_runica", 1), new RegionRewardSpec("item_pedra_alma", 2), new RegionRewardSpec("item_gold", 170) })),
+
+            // -- Acampamento de Soslan: Soslan, then Satana. The wolf stands in for the Lobo da Estepe Apagado of the ficha
+            // (Docs/Mapas100.md 47) and the crested hawk for the Águia-Dourada Apagada. --
+            new CityQuestSpec(CityCatalog.AcampamentoSoslan, "soslan", new RegionQuestSpec(SoslanWolves, BiomeType.Forest, null, 2000,
+                new[] { new RegionObjectiveSpec("chase_the_wolves", QuestObjectiveType.KillEnemyType, "enemy_forest_wolf", 8) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 170) })),
+            new CityQuestSpec(CityCatalog.AcampamentoSoslan, "satana", new RegionQuestSpec(SoslanEagles, BiomeType.Forest, SoslanWolves, 2100,
+                new[] { new RegionObjectiveSpec("chase_the_eagles", QuestObjectiveType.KillEnemyType, "enemy_mountain_crested_hawk", 6) },
+                new[] { new RegionRewardSpec("item_lamparina_runica", 1), new RegionRewardSpec("item_gold", 170) })),
+
+            // -- Fortim dos Gigantes: Baraqel, then Virogdad. The peccary stands in for the Javali da Colina of the ficha
+            // (Docs/Mapas100.md 49) and the dark crow for the Corvo-Mensageiro de Fumaça. --
+            new CityQuestSpec(CityCatalog.Fortim, "baraqel", new RegionQuestSpec(FortimBoars, BiomeType.Forest, null, 2200,
+                new[] { new RegionObjectiveSpec("chase_the_boars", QuestObjectiveType.KillEnemyType, "enemy_forest_peccary", 7) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 180) })),
+            new CityQuestSpec(CityCatalog.Fortim, "virogdad", new RegionQuestSpec(FortimCrows, BiomeType.Forest, FortimBoars, 2300,
+                new[] { new RegionObjectiveSpec("chase_the_crows", QuestObjectiveType.KillEnemyType, "enemy_cave_dark_crow", 6) },
+                new[] { new RegionRewardSpec("item_grampos_escalada", 1), new RegionRewardSpec("item_gold", 180) })),
+
+            // -- Arvoredo de Haripushpa: Haripushpa, then Aryaman Puhr. The spider stands in for the Besouro-Casca of the ficha
+            // (Docs/Mapas100.md 50) and the potoo for the Pica-Pau de Fumaça. --
+            new CityQuestSpec(CityCatalog.Arvoredo, "haripushpa", new RegionQuestSpec(ArvoredoBarkEaters, BiomeType.Forest, null, 2400,
+                new[] { new RegionObjectiveSpec("clear_the_bark", QuestObjectiveType.KillEnemyType, "enemy_forest_spider", 7) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 190) })),
+            new CityQuestSpec(CityCatalog.Arvoredo, "aryaman", new RegionQuestSpec(ArvoredoSmokeBirds, BiomeType.Forest, ArvoredoBarkEaters, 2500,
+                new[] { new RegionObjectiveSpec("chase_the_smoke_birds", QuestObjectiveType.KillEnemyType, "enemy_mountain_potoo", 6) },
+                new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 190) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();

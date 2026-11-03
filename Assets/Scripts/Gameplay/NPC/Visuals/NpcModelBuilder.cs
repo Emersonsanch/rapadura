@@ -211,7 +211,8 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 default: baseH = 1.75f; headRatio = 0.245f; legRatio = 0.44f; break;
             }
 
-            rig.H = baseH * Mathf.Clamp(r.Height, 0.75f, 1.25f);
+            // Up to 1.6: the giants of the Fortim (Docs/Mapas100.md §3.3) stand head and shoulders over everyone else.
+            rig.H = baseH * Mathf.Clamp(r.Height, 0.75f, 1.6f);
             rig.S = rig.H / 1.75f;
             rig.Limb = Mathf.Lerp(1f, rig.S, 0.6f);
             rig.HeadH = rig.H * headRatio;
@@ -475,7 +476,12 @@ namespace Rapadura.Gameplay.NPC.Visuals
             float L = rig.Limb;
             bool longSkirt = LongSkirt(r.Garment);
 
-            foreach (float side in new[] { -1f, 1f })
+            if (r.HorseBody)
+            {
+                BuildHorse(b, ref rig);
+            }
+
+            foreach (float side in r.HorseBody ? new float[0] : new[] { -1f, 1f })
             {
                 float x = lx * side;
                 if (!longSkirt)
@@ -520,6 +526,37 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 Vector3 p = new Vector3(rig.Rw * 0.5f, y, rig.SkirtFrontZ(y) * 0.92f + 0.012f);
                 b.Decal(p, new Vector2(0.09f, 0.08f) * rig.S, r.Trim, Quaternion.Euler(-8f, 24f, 8f));
             }
+        }
+
+        /// <summary>
+        /// A centaur's horse half (root bone: it stays put while the chest breathes): the barrel from under the human hips back to
+        /// the rump, a chest that joins it to the waist, four legs with dark hooves, the tail in the hair colour and a felt
+        /// saddle blanket with a trim band.
+        /// </summary>
+        private static void BuildHorse(NpcMeshBuilder b, ref Rig rig)
+        {
+            NpcRecipe r = rig.R;
+            float s = rig.S;
+            float barrel = 0.17f * s;
+            float yb = rig.HipY * 0.95f - barrel * 0.6f;
+            var chest = new Vector3(0f, yb, 0.05f * s);
+            var rump = new Vector3(0f, yb + 0.02f * s, -0.6f * s);
+            b.Segment(chest, rump, barrel, barrel * 0.95f, 8, r.Coat);
+            b.Blob(chest + new Vector3(0f, 0.04f * s, 0.03f * s), new Vector3(barrel * 2.1f, barrel * 2.2f, barrel * 2.0f), r.Coat, coarse: true);
+            foreach (float z in new[] { 0.02f * s, -0.58f * s })
+            {
+                foreach (float side in new[] { -1f, 1f })
+                {
+                    float x = side * 0.085f * s;
+                    b.Segment(new Vector3(x, yb - barrel * 0.4f, z), new Vector3(x, 0.08f * s, z + 0.01f * s), 0.045f * s, 0.032f * s, 6, r.Coat, caps: false);
+                    b.Box(new Vector3(x, 0.04f * s, z + 0.015f * s), new Vector3(0.075f, 0.08f, 0.09f) * s, NpcSwatch.Charcoal, noBottom: true);
+                }
+            }
+
+            Vector3 tail = rump + new Vector3(0f, 0.05f * s, -0.14f * s);
+            b.Segment(tail, tail + new Vector3(0f, -0.32f, -0.16f) * s, 0.05f * s, 0.015f * s, 5, r.HairColor);
+            b.Box(new Vector3(0f, yb + barrel * 0.9f, -0.3f * s), new Vector3(barrel * 2.15f, 0.03f * s, 0.32f * s), r.LayerColor, noBottom: true);
+            b.Box(new Vector3(0f, yb + barrel * 0.9f + 0.005f, -0.14f * s), new Vector3(barrel * 2.2f, 0.035f * s, 0.04f * s), r.LayerTrim, noBottom: true);
         }
 
         /// <summary>A thin flat strip from <paramref name="from"/> to <paramref name="to"/>, facing +z (bands, apron panels).</summary>
@@ -833,6 +870,11 @@ namespace Rapadura.Gameplay.NPC.Visuals
             BuildHair(b, ref rig, covers);
             BuildBeard(b, ref rig);
             BuildHeadwear(b, ref rig);
+            if (r.Twigs)
+            {
+                BuildTwigs(b, ref rig);
+            }
+
             if (r.Horns)
             {
                 BuildHorns(b, ref rig);
@@ -841,6 +883,24 @@ namespace Rapadura.Gameplay.NPC.Visuals
             if (r.Gills)
             {
                 BuildFins(b, ref rig, coversEars);
+            }
+        }
+
+        /// <summary>
+        /// The trunk folk (Arvoredo de Haripushpa): three twigs of bark growing up and out from the crown, each with a tuft of
+        /// spring leaf at the tip, over any headwear (they read from the iso camera as a little tree).
+        /// </summary>
+        private static void BuildTwigs(NpcMeshBuilder b, ref Rig rig)
+        {
+            float hw = rig.HeadW, hh = rig.HeadH;
+            Vector3 hc = rig.HeadCenter;
+            float s = rig.S;
+            foreach (float x in new[] { -0.6f, 0f, 0.6f })
+            {
+                Vector3 root = hc + new Vector3(x * hw * 0.3f, hh * 0.42f, -0.01f * s);
+                Vector3 tip = root + new Vector3(x * 0.16f, 0.17f - Mathf.Abs(x) * 0.04f, -0.02f) * s;
+                b.Segment(root, tip, 0.022f * s, 0.01f * s, 4, rig.R.Skin, caps: false);
+                b.Blob(tip, new Vector3(0.08f, 0.06f, 0.08f) * s, NpcSwatch.SpringLeaf, coarse: true);
             }
         }
 

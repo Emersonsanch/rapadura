@@ -75,6 +75,12 @@ namespace Rapadura.Gameplay.World.Cities.Town
         LanternMaker = 31,
         /// <summary>Natakamani (Torres Brancas): bronze mirrors on stands catching the light, a crate of polished stones and a little brazier of light.</summary>
         Mirrors = 32,
+        /// <summary>Syrdon (Acampamento de Soslan): a saddle on a trestle, folded felt saddle blankets, a horsehair halter on a post.</summary>
+        Saddlery = 33,
+        /// <summary>Shahmizad (Fortim dos Gigantes): a giant ladle, a stack of wooden bowls, a sack of grain and a small fire under a pot.</summary>
+        GreatPot = 34,
+        /// <summary>Suvarnapushpa (Arvoredo de Haripushpa): rows of seedlings in bark pots, a watering gourd, a young larch in a tub.</summary>
+        Nursery = 35,
     }
 
     /// <summary>
@@ -199,6 +205,27 @@ namespace Rapadura.Gameplay.World.Cities.Town
         public bool SpireHouse;
 
         /// <summary>
+        /// Acampamento de Soslan: a round felt tent on a wagon (Docs/Mapas100.md §3.3, style <c>SteppeCamp</c>): a plank bed on
+        /// four spoked wheels, the round lattice wall wrapped in felt with dyed bands, a domed felt roof with the smoke crown, a
+        /// painted door and a felt awning on two poles in front (TownKit.SteppeCamp).
+        /// </summary>
+        public bool FeltYurt;
+
+        /// <summary>
+        /// Fortim dos Gigantes-da-Colina: a round giant house (Docs/Mapas100.md §3.3, style <c>HillFort</c>): a drum of dry
+        /// stone on a stone ring, a giant timber door, a conical turf roof with smoke rising, a stone porch of two posts and a
+        /// lintel big enough for a giant (TownKit.HillFort).
+        /// </summary>
+        public bool GiantRoundhouse;
+
+        /// <summary>
+        /// Arvoredo de Haripushpa: a house inside a huge hollow trunk (Docs/Mapas100.md §3.3, style <c>LivingGrove</c>): a
+        /// tapering bark trunk with root flares, an arched door into the dark of the hollow, nest windows, moss, a crown of
+        /// larch and new leaf on top and root steps up to the door (TownKit.LivingGrove).
+        /// </summary>
+        public bool HollowTrunk;
+
+        /// <summary>
         /// Mercado dos Túneis: with <see cref="TownRoofKind.Rock"/>, a stall set into an arched basalt niche: the round arch,
         /// a striped canvas awning on copper poles, a counter, bottle lanterns and a copper air pipe up the rock (TownKit.TunnelBazaar).
         /// </summary>
@@ -239,7 +266,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Key of the cached mesh: equal specs share one mesh.</summary>
         public string CacheKey =>
             $"{Kind}|{Width:0.00}|{Depth:0.00}|{PorchDepth:0.00}|{FullVaranda}|{WallHeight:0.00}|{Floors}|{Roof}|{WallColor}|{TrimColor}|{RoofColor}|" +
-            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{RootStilt}|{StiltLonghouse}|{StoneTerrace}|{RingWallHall}|{SpireHouse}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
+            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{RootStilt}|{StiltLonghouse}|{StoneTerrace}|{RingWallHall}|{SpireHouse}|{FeltYurt}|{GiantRoundhouse}|{HollowTrunk}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
             $"{Chimney}|{Sign}|{SignColor}|{Dressing}|{Seed}";
     }
 }

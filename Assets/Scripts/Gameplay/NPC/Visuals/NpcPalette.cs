@@ -62,6 +62,16 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // sky blue #7FB2E5, silver leaf #A8C5B5, Meroë sandstone #C79E6B, the passed-down sunlight #FFF4C2 (glows), carnelian
         // #B5452E and ebony #3A2A22
         SpireLime, PaleGold, SkyBlue, SilverLeaf, MeroeSandstone, SpireLight, Carnelian, Ebony,
+        // Acampamento de Soslan (centauros, Docs/Mapas100.md §3.3 and map 47): the horse coats bay #7A4A2C, grey #A8A39C and
+        // dun #C2A06A, the dyed Nart felts red #8E2F2F and blue #2F5E8E, steppe felt #D8C9A8, Scythian gold #D4A93A, rawhide #6E4A2E
+        HorseBay, HorseGrey, HorseDun, NartRed, NartBlue, SteppeFelt, ScythGold, Rawhide,
+        // Fortim dos Gigantes-da-Colina (Docs/Mapas100.md §3.3 and map 49): the giants' ruddy #C98A6A and ochre #B08A5E skins,
+        // hill earth #8A6A44, hill stone #9A948A, the good smoke #CFC6B8, the Living Fire's ember #E2763A (glows), hill grass
+        // #7F9A4A and giant hide #5A3B26
+        SkinGiantRuddy, SkinGiantOchre, HillEarth, HillStone, GoodSmoke, LivingEmber, HillGreen, GiantHide,
+        // Arvoredo de Haripushpa (povo-tronco, Docs/Mapas100.md §3.3 and map 50): old bark skin #5E4A3A and young bark #8A7458,
+        // trunk moss #6E8F4A, spring leaf #A9C96B, meltwater #86C9D6 (glows a little), catkin #F0D27A, larch #4F6B3A, sap amber #D9902E
+        SkinBarkOld, SkinBarkYoung, TrunkMoss, SpringLeaf, MeltWater, Catkin, LarchGreen, SapAmber,
     }
 
     /// <summary>
@@ -73,7 +83,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 19;
+        public const int Rows = 22;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -135,6 +145,15 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Torres Brancas  lime #F3EFE6, pale gold #E3C46B, sky blue #7FB2E5, silver leaf #A8C5B5, Meroë sandstone #C79E6B, sunlight #FFF4C2, carnelian #B5452E, ebony #3A2A22
             new Color(0.95f, 0.94f, 0.9f), new Color(0.89f, 0.77f, 0.42f), new Color(0.5f, 0.7f, 0.9f), new Color(0.66f, 0.77f, 0.71f),
             new Color(0.78f, 0.62f, 0.42f), new Color(1f, 0.96f, 0.76f), new Color(0.71f, 0.27f, 0.18f), new Color(0.23f, 0.16f, 0.13f),
+            // Soslan  bay #7A4A2C, grey #A8A39C, dun #C2A06A, Nart red #8E2F2F, Nart blue #2F5E8E, steppe felt #D8C9A8, Scythian gold #D4A93A, rawhide #6E4A2E
+            new Color(0.48f, 0.29f, 0.17f), new Color(0.66f, 0.64f, 0.61f), new Color(0.76f, 0.63f, 0.42f), new Color(0.56f, 0.18f, 0.18f),
+            new Color(0.18f, 0.37f, 0.56f), new Color(0.85f, 0.79f, 0.66f), new Color(0.83f, 0.66f, 0.23f), new Color(0.43f, 0.29f, 0.18f),
+            // Fortim  giant ruddy #C98A6A, giant ochre #B08A5E, hill earth #8A6A44, hill stone #9A948A, good smoke #CFC6B8, ember #E2763A, hill green #7F9A4A, giant hide #5A3B26
+            new Color(0.79f, 0.54f, 0.42f), new Color(0.69f, 0.54f, 0.37f), new Color(0.54f, 0.42f, 0.27f), new Color(0.6f, 0.58f, 0.54f),
+            new Color(0.81f, 0.78f, 0.72f), new Color(0.89f, 0.46f, 0.23f), new Color(0.5f, 0.6f, 0.29f), new Color(0.35f, 0.23f, 0.15f),
+            // Arvoredo  old bark #5E4A3A, young bark #8A7458, trunk moss #6E8F4A, spring leaf #A9C96B, meltwater #86C9D6, catkin #F0D27A, larch #4F6B3A, sap amber #D9902E
+            new Color(0.37f, 0.29f, 0.23f), new Color(0.54f, 0.45f, 0.35f), new Color(0.43f, 0.56f, 0.29f), new Color(0.66f, 0.79f, 0.42f),
+            new Color(0.53f, 0.79f, 0.84f), new Color(0.94f, 0.82f, 0.48f), new Color(0.31f, 0.42f, 0.23f), new Color(0.85f, 0.56f, 0.18f),
         };
 
         public static int Count => Colors.Length;
@@ -157,6 +176,8 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 case NpcSwatch.WillWisp: return 0.6f;
                 case NpcSwatch.LanternPaper: return 0.35f;
                 case NpcSwatch.SpireLight: return 0.6f;
+                case NpcSwatch.LivingEmber: return 0.7f;
+                case NpcSwatch.MeltWater: return 0.3f;
                 default: return 0f;
             }
         }

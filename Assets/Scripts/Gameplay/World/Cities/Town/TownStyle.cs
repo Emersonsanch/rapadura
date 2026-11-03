@@ -96,6 +96,27 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// the Relógio de Espelhos on the plaza, mirror posts and small steep pyramids in the gardens.
         /// </summary>
         WhiteSpire = 14,
+        /// <summary>
+        /// The Acampamento de Soslan, the centaurs' camp (the Estepe dos Nartes, Docs/Mapas100.md §3.3 and map 47, style
+        /// <c>SteppeCamp</c>): big round felt tents on wagons with spoked wheels (the camp that moves across the steppe), dyed
+        /// felt bands red and blue, horsehair standards, rope corrals and the collective stone oven (the yurts and kibitkas of
+        /// the steppe, the Scythian wagon tents, the Nart sagas of Ossetia).
+        /// </summary>
+        SteppeCamp = 15,
+        /// <summary>
+        /// The Fortim dos Gigantes-da-Colina (the Estepe dos Nartes, Docs/Mapas100.md §3.3 and map 49, style <c>HillFort</c>):
+        /// round giant houses of dry stone under turf roofs, much bigger than a cousin's house, earth ramparts in rings faced
+        /// with stone, stone tables, pots the size of a house over the Living Fire and giant spoons as benches (the hill forts
+        /// and brochs of the Iron Age; the penitent giants of the Manichaean Book of Giants).
+        /// </summary>
+        HillFort = 16,
+        /// <summary>
+        /// The Arvoredo de Haripushpa, the trunk folk's grove (the Estepe dos Nartes, Docs/Mapas100.md §3.3 and map 50, style
+        /// <c>LivingGrove</c>): houses inside huge hollow trunks with root steps and nest windows under a crown of larch, mossy
+        /// standing stones in a ring, meltwater streams with log bridges (the taiga at the edge of the steppe; the kings of
+        /// Kucha).
+        /// </summary>
+        LivingGrove = 17,
     }
 
     /// <summary>
@@ -509,6 +530,78 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Plaza = TownSwatch.SpireLime, PlazaAlt = TownSwatch.MeroeSandstone,
             Fence = TownSwatch.SpireLime, Plinth = TownSwatch.MeroeSandstone,
             HouseRoof = TownRoofKind.Dome,
+        };
+
+        /// <summary>
+        /// The Acampamento de Soslan (Docs/Mapas100.md §3.3, map 47): picked by hand. Felt #D8C9A8, the dyed felts #8E2F2F and
+        /// #2F5E8E, steppe grass #BFAE5A, horsehair #3A2E26, rawhide #6E4A2E, Scythian gold #D4A93A and the camp fire #FF9A4A
+        /// (glows; row 16 of <see cref="TownPalette"/>). Houses are felt tents on wagons (<see cref="TownBuildingSpec.FeltYurt"/>);
+        /// streets are trodden earth, the plaza packed earth round the stone oven. The Estepe dos Nartes has no world-map biome:
+        /// <see cref="TownStyle.Region"/> is the borrowed Forest (as the cities of regions 5–8).
+        /// </summary>
+        public static readonly TownStyle SteppeCamp = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Forest,
+            Architecture = TownArchitecture.SteppeCamp,
+            Walls = new[] { TownSwatch.Felt, TownSwatch.Felt, TownSwatch.FeltRed },
+            Trims = new[] { TownSwatch.FeltRed, TownSwatch.FeltBlue },
+            Roofs = new[] { TownSwatch.Felt, TownSwatch.FeltBlue },
+            Joinery = new[] { TownSwatch.SteppeLeather, TownSwatch.WoodDark },
+            Accent = TownSwatch.ScythianGold,
+            Ground = TownSwatch.SteppeGrass, GroundAlt = TownSwatch.GoldGrass,
+            Street = TownSwatch.Dirt, StreetEdge = TownSwatch.SteppeGrass, Sidewalk = TownSwatch.DirtDark,
+            Plaza = TownSwatch.Dirt, PlazaAlt = TownSwatch.DirtDark,
+            Fence = TownSwatch.SteppeLeather, Plinth = TownSwatch.WoodDark,
+            HouseRoof = TownRoofKind.Flat,
+        };
+
+        /// <summary>
+        /// The Fortim dos Gigantes-da-Colina (Docs/Mapas100.md §3.3, map 49): picked by hand. Earth #8A6A44, stone #9A948A, the
+        /// good smoke #CFC6B8, the Living Fire's embers #E2763A (glow), hill grass #7F9A4A, giant timber #7A5634, turf #5F7A3A and
+        /// pot iron #4A4A4E (row 17 of <see cref="TownPalette"/>). Houses are round giant houses of dry stone under turf
+        /// (<see cref="TownBuildingSpec.GiantRoundhouse"/>); streets are flagstones as big as a cart, the plaza packed earth
+        /// round the great pot. Region: the borrowed Forest.
+        /// </summary>
+        public static readonly TownStyle HillFort = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Mountain,
+            Architecture = TownArchitecture.HillFort,
+            Walls = new[] { TownSwatch.FortStone, TownSwatch.FortStone, TownSwatch.FortEarth },
+            Trims = new[] { TownSwatch.GiantWood, TownSwatch.FortEarth },
+            Roofs = new[] { TownSwatch.TurfRoof, TownSwatch.HillGrass },
+            Joinery = new[] { TownSwatch.GiantWood, TownSwatch.WoodDark },
+            Accent = TownSwatch.LivingFire,
+            Ground = TownSwatch.HillGrass, GroundAlt = TownSwatch.TurfRoof,
+            Street = TownSwatch.FortStone, StreetEdge = TownSwatch.FortEarth, Sidewalk = TownSwatch.FortEarth,
+            Plaza = TownSwatch.FortEarth, PlazaAlt = TownSwatch.FortStone,
+            Fence = TownSwatch.FortStone, Plinth = TownSwatch.FortStone,
+            HouseRoof = TownRoofKind.Flat,
+        };
+
+        /// <summary>
+        /// The Arvoredo de Haripushpa (Docs/Mapas100.md §3.3, map 50): picked by hand. Bark #5E4A3A, moss #6E8F4A, new leaf
+        /// #A9C96B, meltwater #86C9D6 (glows a little: the Living Water), flower #F0D27A, larch #4F6B3A, lichen #B7BFA0 and the
+        /// dark of a hollow #2E2620 (row 18 of <see cref="TownPalette"/>). Houses are hollow giant trunks
+        /// (<see cref="TownBuildingSpec.HollowTrunk"/>); streets are bark-strewn trails, the plaza moss round the circle of
+        /// stones. Region: the borrowed Forest.
+        /// </summary>
+        public static readonly TownStyle LivingGrove = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Forest,
+            Architecture = TownArchitecture.LivingGrove,
+            Walls = new[] { TownSwatch.GroveBark, TownSwatch.GroveBark, TownSwatch.Lichen },
+            Trims = new[] { TownSwatch.GroveMoss, TownSwatch.GroveFlower },
+            Roofs = new[] { TownSwatch.Larch, TownSwatch.NewLeaf },
+            Joinery = new[] { TownSwatch.GroveBark, TownSwatch.WoodDark },
+            Accent = TownSwatch.GroveFlower,
+            Ground = TownSwatch.GroveMoss, GroundAlt = TownSwatch.Moss,
+            Street = TownSwatch.DirtDark, StreetEdge = TownSwatch.GroveMoss, Sidewalk = TownSwatch.Lichen,
+            Plaza = TownSwatch.GroveMoss, PlazaAlt = TownSwatch.Lichen,
+            Fence = TownSwatch.GroveBark, Plinth = TownSwatch.GroveBark,
+            HouseRoof = TownRoofKind.Flat,
         };
     }
 }

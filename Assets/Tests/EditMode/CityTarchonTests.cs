@@ -185,7 +185,9 @@ namespace Rapadura.Tests
             CollectionAssert.AreEquivalent(Cast, tarchon.Residents.Select(r => r.ResidentId).ToArray());
             var silhouettes = new HashSet<string>(NpcRecipes.Named.Where(r => !Cast.Contains(r.Id)).Select(r => r.SilhouetteKey));
             var tarchonSwatches = new[] { NpcSwatch.WetWood, NpcSwatch.SwampLeaf, NpcSwatch.LilacMist, NpcSwatch.WillWisp, NpcSwatch.Rush, NpcSwatch.NetTwine };
-            float tallestHuman = NpcRecipes.Named.Where(r => r.Skin != NpcSwatch.SkinTrollMoss && r.Skin != NpcSwatch.SkinTrollBark && !r.Horns).Max(r => r.Height);
+            // The hill giants of the Fortim (Docs/Mapas100.md §3.3) are not human either: they stand a head over everyone, trols included.
+            float tallestHuman = NpcRecipes.Named.Where(r => r.Skin != NpcSwatch.SkinTrollMoss && r.Skin != NpcSwatch.SkinTrollBark && !r.Horns
+                && r.Skin != NpcSwatch.SkinGiantRuddy && r.Skin != NpcSwatch.SkinGiantOchre).Max(r => r.Height);
             foreach (string id in Cast)
             {
                 NpcRecipe look = NpcRecipes.Find(id);

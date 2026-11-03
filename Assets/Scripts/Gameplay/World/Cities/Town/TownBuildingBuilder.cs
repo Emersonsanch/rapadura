@@ -92,7 +92,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 return;
             }
 
-            if (spec.ReedHall || spec.ReefTower || spec.RootStilt || spec.StiltLonghouse || spec.StoneTerrace || spec.RingWallHall || spec.SpireHouse)
+            if (spec.ReedHall || spec.ReefTower || spec.RootStilt || spec.StiltLonghouse || spec.StoneTerrace || spec.RingWallHall || spec.SpireHouse
+                || spec.FeltYurt || spec.GiantRoundhouse || spec.HollowTrunk)
             {
                 // Aratta's reed halls and Kirta's coral towers (TownKit.ReedHorn / CoralReef): their own mass, roof and porch.
                 float rhw = spec.Width * 0.5f;
@@ -126,12 +127,27 @@ namespace Rapadura.Gameplay.World.Cities.Town
                     // The Torres Brancas' spire houses carry their sign as a plaque on the portico's architrave.
                     TownKit.SpireHouseHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
                 }
+                else if (spec.FeltYurt)
+                {
+                    // Soslan's felt tents on wagons hang their sign from the awning themselves.
+                    TownKit.FeltYurtHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
+                }
+                else if (spec.GiantRoundhouse)
+                {
+                    // The giants' round houses carry their sign on the porch lintel.
+                    TownKit.GiantRoundhouseHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
+                }
+                else if (spec.HollowTrunk)
+                {
+                    // The trunk folk hang their sign from a root over the door.
+                    TownKit.HollowTrunkHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
+                }
                 else
                 {
                     TownKit.ReefTowerHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
                 }
 
-                if (spec.Sign && spec.PorchDepth > 0.01f && !spec.StoneTerrace && !spec.RingWallHall && !spec.SpireHouse)
+                if (spec.Sign && spec.PorchDepth > 0.01f && !spec.StoneTerrace && !spec.RingWallHall && !spec.SpireHouse && !spec.FeltYurt && !spec.GiantRoundhouse && !spec.HollowTrunk)
                 {
                     TownKit.SignBoard(b, new Vector3(spec.DoorOffset * spec.Width, spec.EaveHeight + 0.25f, rzFront + 0.05f), spec.SignColor, spec.AccentColor);
                 }

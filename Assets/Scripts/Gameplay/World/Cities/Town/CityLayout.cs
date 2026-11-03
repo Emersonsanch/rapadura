@@ -247,6 +247,37 @@ namespace Rapadura.Gameplay.World.Cities.Town
         MirrorPost = 85,
         /// <summary>Torres Brancas: a small steep pyramid of Meroë sandstone on a plinth, a little pylon front and a gold cap (the garden's memory of Meroë).</summary>
         SpirePyramid = 86,
+
+        // ---- Acampamento de Soslan, the centaurs' camp (Estepe dos Nartes; drawn by TownKit.SteppeCamp) ----
+
+        /// <summary>Soslan: a small felt tent on a two-wheeled cart (the camp that moves), its shafts on the ground (Variant 1: loaded with felt bales instead of a tent).</summary>
+        FeltWagon = 87,
+        /// <summary>Soslan: a tall pole with horsehair tassels, a dyed felt pennant and a gold deer of the Scythian animal style on top.</summary>
+        HorseStandard = 88,
+        /// <summary>Soslan: a rope corral from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/>: posts with two ropes and a hay pile behind (its mass behind the line).</summary>
+        RopeCorral = 89,
+        /// <summary>Soslan: the collective stone oven, a dome of stones with a glowing mouth, a flat bread peel and firewood.</summary>
+        StoneOven = 90,
+
+        // ---- Fortim dos Gigantes-da-Colina (Estepe dos Nartes; drawn by TownKit.HillFort) ----
+
+        /// <summary>Fortim: an earth rampart faced with stone from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/>, the next ring of the hill behind it (Variant 1: with a round stone watch-tower in the middle).</summary>
+        EarthRing = 91,
+        /// <summary>Fortim: a giants' stone table (a slab on two stone legs) with a bowl and a cup as big as a cousin.</summary>
+        GiantTable = 92,
+        /// <summary>Fortim: a pot the size of a house over the Living Fire, on three stones, the good smoke rising and a ladle in it.</summary>
+        GiantPot = 93,
+        /// <summary>Fortim: a giant wooden spoon lying on two stones, used as a bench by the cousins.</summary>
+        SpoonBench = 94,
+
+        // ---- Arvoredo de Haripushpa, the trunk folk's grove (Estepe dos Nartes; drawn by TownKit.LivingGrove) ----
+
+        /// <summary>Arvoredo: a mossy standing stone of the circle (Variant 1: a leaning one with a flower ring).</summary>
+        MossStone = 95,
+        /// <summary>Arvoredo: a tall larch of the taiga (Variant 1: an old one asleep, with a face in the bark).</summary>
+        Larch = 96,
+        /// <summary>Arvoredo: a meltwater stream from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> crossing the trail, with a split-log bridge in the middle; walkable.</summary>
+        MeltStream = 97,
     }
 
     public enum CityExitKind

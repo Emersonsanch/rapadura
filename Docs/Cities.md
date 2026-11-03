@@ -30,6 +30,9 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
 | Costa das Monções (mapas 26 e 27) | **Aratta, a Cidade dos Chifres** (povo-touro, `aratta`) | Enmerkar, o Chefe Construtor (salão de junco na cabeça da praça), Lugalbanda, o Andarilho (rua Oeste), Shulgi, o Corredor (rua Leste), Ensuhkeshdanna, o Rival Amigo (rua Sul) | **Alforje do Lugalbanda** (`shop_alforje_lugalbanda`) | Enmerkar: "Chacais no Capim Seco"; Shulgi: "O Percurso de Shulgi" |
 | Costa das Monções (mapas 28 e 29) | **Cidade-Recife de Kirta** (povo-do-mar, `kirta`) | Kirta, o Rei do Recife (rua Norte), Danel, o Juiz Justo (rua Oeste), Pughat, a Que Cuida de Todos (rua Leste), Aqhat, o Arqueiro (rua Leste) | **Ferramentas de Mergulho do Danel** (`shop_mergulho_danel`) | Kirta: "Lodo no Recife"; Pughat: "Os Mergulhadores Encurralados" |
 | Delta de Jhilpur (mapas 33 e 34) | **Palafitas de Tarchon** (trols, `palafitas_tarchon`) | Tarchon, o Fundador (casa comprida na cabeça da praça), Larthia, a Cesteira (rua Oeste), Ramtha, a Curandeira (rua Leste), Thanchvil, a Contadora de Histórias (rua Leste), Vel, o Pescador (rua Sul) | **Cestaria da Larthia** (`shop_cestaria_larthia`) | Tarchon: "Fogos-Fátuos Presos"; Vel: "Garças nas Redes" |
+| Estepe dos Nartes (mapas 47, 48, 51) | **Acampamento de Soslan** (centauros, `acampamento_soslan`) | Soslan, o de Pele de Aço (tenda na cabeça da praça), Syrdon, o Trapaceiro (rua Oeste), Satana, a Sábia da Casa e Uryzmæg, o Velho Chefe (rua Leste), Batradz, o Ferreiro-Guerreiro (rua Sul) | **Selaria Nômade** (`shop_selaria_nomade`) | Soslan: "Lobos em Volta dos Potros"; Satana: "Águias sobre o Acampamento" |
+| Estepe dos Nartes (mapas 49, 52) | **Fortim dos Gigantes-da-Colina** (gigantes-da-colina, `fortim`) | Baraqel, o Chefe do Fortim (casa na cabeça da praça), Shahmizad, o Patriarca (rua Oeste), Virogdad, o Sonhador (rua Sul) | **Panela Grande** (`shop_panela_grande`) | Baraqel: "Javalis na Despensa"; Virogdad: "Os Corvos do Sonho Ruim" |
+| Estepe dos Nartes (mapa 50) | **Arvoredo de Haripushpa** (povo-tronco, `arvoredo`) | Haripushpa, o Mais Velho (tronco na cabeça da praça), Suvarnapushpa, a Jardineira (rua Oeste), Aryaman Puhr, o Herbolário (rua Leste) | **Viveiro da Suvarnapushpa** (`shop_viveiro_suvarnapushpa`) | Haripushpa: "Os Comedores de Casca"; Aryaman: "Os Pássaros de Fumaça" |
 | Planície de Mingcheng (mapa 42; 45 planejado) | **Torres Brancas de Amanirenas** (altos-elfos, `torres_brancas`) | Rainha Amanirenas, a Guardiã (casa na cabeça da praça), Natakamani, o Mestre dos Espelhos (rua Oeste), Amanitore, a Construtora (rua Leste), Arkamani, o que Lê as Estrelas (rua Leste), Shanakdakhete, a que Ensina a Luz (rua Sul) | **Espelhos de Natakamani** (`shop_espelhos_natakamani`) | Amanirenas: "Espelhos Quebrados"; Shanakdakhete: "As Íbis Apagadas" |
 
 - **Passeio da cidade:** a mesma receita `CityTownRecipes.Garajonay` do mapa 05 e do mundo contínuo (mesmo `CityId`,
@@ -263,6 +266,80 @@ fica em y = 0 dentro de um círculo de ~22 m com 3 saídas de rua, no lugar que 
   prévia do editor (`Preview Walkable Town/Torres Brancas`). O Relógio de Espelhos como quebra-cabeça (raios que mudam
   com a hora, salas de baú, atalho para o 45), as 7 torres andáveis com as pontes de folha, O Pequeno Eclipse, o Cervo
   de Luz Branca e o conjunto Torre Branca ainda faltam.
+
+**Acampamento de Soslan** (centauros, Estepe dos Nartes, região 9, mapa 47; cidade de retorno de 47, 48 e 51):
+- **Passeio da cidade:** receita `CityTownRecipes.Soslan` (`CityTownRecipes.Soslan.cs`) no estilo novo
+  `TownStyles.SteppeCamp` (`TownArchitecture.SteppeCamp`, linha 16 da `TownPalette`: feltro `#D8C9A8`, feltro tingido
+  `#8E2F2F`/`#2F5E8E`, capim `#BFAE5A`, crina `#3A2E26`, couro `#6E4A2E`, ouro cita `#D4A93A`, fogueira `#FF9A4A`, que
+  brilha). Cada casa é uma **tenda de feltro sobre carroça** (`TownBuildingSpec.FeltYurt`: `TownKit.FeltYurtHouse`):
+  leito de tábua em quatro rodas de raio, parede redonda de feltro com faixa tingida e aro de ouro, teto de feltro com a
+  coroa de fumaça e amarras de couro, porta pintada, degraus e toldo de feltro em duas varas com borlas de crina (nos
+  `PorchPostsX`), tabuleta pendurada. Peças: `FeltWagon` (carrinho de duas rodas com tenda pequena; variante 1 com fardos
+  de feltro), `HorseStandard` (estandarte de crina com flâmula tingida e **cervo de ouro** do estilo animal cita),
+  `RopeCorral` (cercado de corda, segmento, feno e cocho atrás) e `StoneOven` (o **forno coletivo** de pedra com a boca
+  acesa); portão de dois estandartes com flâmulas numa corda (`TownKit.StandardGate`); vitrine do seleiro
+  (`TownShopDressing.Saddlery`). Peças em `TownKit.SteppeCamp.cs`. Ruas Oeste (a entrada), Leste e Sul de 19 m (saídas
+  em (±19, 0) e (0, −19)); Cais da Barca na rua Oeste; **sem rua ao norte**: os cercados da manada em três lances
+  (z = 19,5 e z = 14); tudo dentro de um círculo de 22,5 m, caminhada em ±22, em y = 0.
+- **Respawn:** derrota nos mapas 47, 48 e 51 acorda na praça, ao pé do forno (`MapCatalog.RespawnCityFor`).
+- **Selaria Nômade** (Syrdon; diária, 3 vagas que giram): poções, Manta de Lã, ração e Botas de Couro fixas; giram odre,
+  corda, carne, fibra, erva, Amuleto da Sorte e Pedra da Bênção (nunca Vida/Caos). Os mapas do acampamento não têm
+  exigência.
+- **Missões:** Soslan pede 8 lobos apagados longe dos potros (o Lobo faz o Lobo da Estepe Apagado; poções + 170 ouro,
+  2000 XP); depois Satana pede 6 águias apagadas longe da lâmpada guardiã (o Gavião-de-Crista faz a Águia-Dourada
+  Apagada; **Lamparina Rúnica** + 170 ouro, 2100 XP). Testes: `CitySoslanTests`.
+- **Falta:** a cidade que anda (3 pontos por dia), a corrida de estepe, o Cavalo de Fumaça e o Cavalo Dourado da Estepe.
+
+**Fortim dos Gigantes-da-Colina** (gigantes-da-colina, região 9, mapa 49; cidade de retorno de 49 e 52):
+- **Passeio da cidade:** receita `CityTownRecipes.Fortim` (`CityTownRecipes.Fortim.cs`) no estilo novo
+  `TownStyles.HillFort` (`TownArchitecture.HillFort`, linha 17: terra `#8A6A44`, pedra `#9A948A`, fumaça boa `#CFC6B8`,
+  brasa do Fogo Vivo `#E2763A` (brilha), grama `#7F9A4A`, madeira gigante `#7A5634`, telhado de grama `#5F7A3A`, ferro
+  de panela `#4A4A4E`). Cada casa é uma **casa redonda gigante** (`TownBuildingSpec.GiantRoundhouse`:
+  `TownKit.GiantRoundhouseHouse`): tambor de pedra seca sobre anel de pedra, fiadas de terra, porta de madeira da altura
+  de dois primos com cintas de ferro, janelas do Fogo Vivo, teto cônico de grama com beiral e três baforadas de fumaça
+  boa; varanda de duas pedras em pé com lintel (nos `PorchPostsX`) e a tabuleta. Peças: `EarthRing` (muralha de terra
+  revestida de pedra, segmento, com o anel seguinte do morro atrás e telhados de grama; variante 1 com a torre de vigia
+  redonda), `GiantTable` (mesa de pedra com tigela e caneca do tamanho de um primo), `GiantPot` (a panela do tamanho de
+  uma casa sobre o Fogo Vivo, com concha e fumaça) e `SpoonBench` (colher gigante deitada, banco dos primos); portão
+  trilito (`TownKit.TrilithonGate`); vitrine da Panela Grande (`TownShopDressing.GreatPot`). Peças em
+  `TownKit.HillFort.cs`. Só **duas ruas**, Oeste (a subida) e Sul (a descida para o vale das tábuas), de 19 m; a leste a
+  encosta atrás de uma muralha de terra (x = 19,5) com mesas e colher; ao norte os anéis do fortim em três lances (a
+  torre de vigia no do meio); tudo dentro de 22,5 m, em y = 0. Gigantes com altura 1,45–1,55 (`NpcModelBuilder` agora
+  aceita até 1,6).
+- **Respawn:** derrota em 49 e 52 acorda na praça, ao pé da panela.
+- **Panela Grande** (Shahmizad; diária, 3 vagas): poções, carne (15) e Chá de Gengibre fixos e os **Grampos de Escalada**
+  fixos (a exigência do 52, Corrente de Amirani); giram manta, corda, ração, erva, Amuleto da Sorte e Pedra da Bênção
+  (nunca Vida/Caos).
+- **Missões:** Baraqel pede 7 javalis fora da despensa (o Caititu faz o Javali da Colina; poções + 180 ouro, 2200 XP);
+  depois Virogdad pede 6 corvos de fumaça fora das tábuas de sonho (o Corvo Sombrio faz o Corvo-Mensageiro de Fumaça;
+  **Grampos de Escalada** + 180 ouro, 2300 XP). Testes: `CityFortimTests`.
+- **Falta:** a escala gigante andável (móveis 3×, parkour leve), os sonhos diários do Virogdad com baús, o Pesadelo da
+  Tábua e o Carneiro Gigante da Colina.
+
+**Arvoredo de Haripushpa** (povo-tronco, região 9, mapa 50; cidade de retorno de 50):
+- **Passeio da cidade:** receita `CityTownRecipes.Arvoredo` (`CityTownRecipes.Arvoredo.cs`) no estilo novo
+  `TownStyles.LivingGrove` (`TownArchitecture.LivingGrove`, linha 18: casca `#5E4A3A`, musgo `#6E8F4A`, folha nova
+  `#A9C96B`, água do degelo `#86C9D6` (brilha um pouco: a Água Viva), flor `#F0D27A`, lariço `#4F6B3A`, líquen `#B7BFA0`,
+  escuro do oco `#2E2620`). Cada casa é um **tronco oco gigante** (`TownBuildingSpec.HollowTrunk`:
+  `TownKit.HollowTrunkHouse`): raízes abertas no pé, tronco de casca em dois lances com manchas de musgo, porta em arco
+  para o escuro do oco, janelas de ninho acesas, copa de lariço e folha nova; deque de raiz com duas raízes-pilar (nos
+  `PorchPostsX`) sob um galho de folhas e a tabuleta pendurada. Peças: `MossStone` (pedra em pé com musgo; variante 1
+  inclinada com flores), `Larch` (lariço da taiga; variante 1 um velho do povo-tronco **dormindo**, com rosto na casca) e
+  `MeltStream` (riacho de degelo atravessando a rua com ponte de dois troncos rachados; pisável); portão de raízes em
+  arco (`TownKit.RootArchGate`); vitrine do Viveiro (`TownShopDressing.Nursery`). Peças em `TownKit.LivingGrove.cs`.
+  Ruas Oeste (a entrada), Leste e Sul de 19 m; o **círculo de pedras** (6, raio 4,6 m) na praça, aberto nos caminhos;
+  riachos nas ruas Leste e Sul; **sem rua ao norte**: a taiga fecha em lariços; tudo dentro de 22,5 m, em y = 0.
+- **Respawn:** derrota no 50 acorda no círculo de pedras.
+- **Viveiro da Suvarnapushpa** (diária, 3 vagas): poções, erva, fibra e Runa de Cura fixas; giram carne, ração, corda,
+  manta, Amuleto da Sorte e Pedra da Bênção (nunca Vida/Caos). O 50 não tem exigência.
+- **Missões:** Haripushpa pede 7 comedores de casca fora dos que dormem (a Aranha faz o Besouro-Casca; poções + 190 ouro,
+  2400 XP); depois Aryaman Puhr pede 6 pássaros de fumaça fora do arvoredo (o Urutau faz o Pica-Pau de Fumaça; 3 Runas de
+  Cura + 190 ouro, 2500 XP). Testes: `CityArvoredoTests`.
+- **Falta:** o tempo lento (relógio pela metade, plantas da casa 2×), as mudas raras da casa (Housing), a Serra de Āz e o
+  Alce da Taiga.
+
+As três cidades ficam fora de `CityCatalog.Cities` (são `RaceCities`) e abrem pelo mundo contínuo da Estepe dos Nartes
+(outro trabalho) ou pelo menu de prévia do editor (`Preview Walkable Town/…`).
 
 ### 1.2 Cidades das regiões tardias (`CityCatalog.LateRegionCities`)
 

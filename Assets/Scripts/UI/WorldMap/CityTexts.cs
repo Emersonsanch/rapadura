@@ -113,6 +113,9 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.AgasalhosSisinnios, "Sisinnios's Mountain Gear", "Agasalhos do Sisinnios"),
                 Shop(CityShopCatalog.LanternasMozak, "Master Mōzak's Lanterns", "Lanternas do Mestre Mōzak"),
                 Shop(CityShopCatalog.EspelhosNatakamani, "Natakamani's Mirrors", "Espelhos de Natakamani"),
+                Shop(CityShopCatalog.SelariaNomade, "Nomad Saddlery", "Selaria Nômade"),
+                Shop(CityShopCatalog.PanelaGrande, "The Great Pot", "Panela Grande"),
+                Shop(CityShopCatalog.ViveiroSuvarnapushpa, "Suvarnapushpa's Nursery", "Viveiro da Suvarnapushpa"),
             };
 
             // ---- Cities ----
@@ -164,6 +167,18 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.TorresBrancas, "White Spires of Amanirenas", "Torres Brancas de Amanirenas", "White Spires", "Torres Brancas",
                 "The high elves' city on the white hills east of Mingcheng: slender white spires with glass domes on low pointed pyramids, leaf bridges of curved stone between them and garden terraces below. Bronze mirrors pass the sunlight down from the towers to the ground, by day and, with the moon, by night. The elves are astronomers and builders: proud, but gentle with children.",
                 "A cidade dos altos-elfos nas colinas brancas a leste de Mingcheng: torres brancas finas com cúpula de vidro sobre pirâmides baixas e pontudas, pontes de folha de pedra curva entre elas e jardins em terraço embaixo. Espelhos de bronze passam a luz do sol das torres até o chão, de dia e, com a lua, de noite. Os elfos são astrônomos e construtores: orgulhosos, mas gentis com as crianças.");
+
+            AddCity(entries, CityCatalog.AcampamentoSoslan, "Soslan's Camp", "Acampamento de Soslan", "Soslan's Camp", "Acampamento de Soslan",
+                "The centaurs' camp on the open steppe of the Narts: big round felt tents on wagons with spoked wheels, dyed felt bands red and blue, horsehair standards topped with gold stags, rope corrals and the stone oven everyone bakes in. The camp moves three times a week and the Cais da Barca rolls along with it. The centaurs tell sagas and run with the Living Wind.",
+                "O acampamento dos centauros na estepe aberta dos Nartes: grandes tendas redondas de feltro sobre carroças de rodas de raio, faixas de feltro tingido de vermelho e azul, estandartes de crina com cervos de ouro no alto, cercados de corda e o forno de pedra onde todo mundo assa o pão. O acampamento muda de lugar três vezes por semana e o Cais da Barca vai junto. Os centauros contam sagas e correm com o Vento Vivo.");
+
+            AddCity(entries, CityCatalog.Fortim, "Hill-Giant Fort", "Fortim dos Gigantes-da-Colina", "Hill-Giant Fort", "Fortim",
+                "The hill giants' fort: round houses of dry stone under turf roofs, much bigger than any house of the cousins, earth ramparts in rings faced with stone, stone tables, giant spoons the cousins sit on and a pot the size of a house over the Living Fire. Long ago the giants dreamt of the end and were sorry; now they cook for everyone and build doors too tall for anyone to bend.",
+                "O fortim dos gigantes-da-colina: casas redondas de pedra seca debaixo de telhados de grama, muito maiores que qualquer casa dos primos, muralhas de terra em anéis revestidas de pedra, mesas de pedra, colheres gigantes onde os primos sentam e uma panela do tamanho de uma casa sobre o Fogo Vivo. Faz muito tempo os gigantes sonharam com o fim e se arrependeram; agora cozinham para todo mundo e fazem portas altas demais para alguém precisar se abaixar.");
+
+            AddCity(entries, CityCatalog.Arvoredo, "Haripushpa Grove", "Arvoredo de Haripushpa", "Haripushpa Grove", "Arvoredo",
+                "The trunk folk's grove at the edge of the steppe, where the taiga begins: houses inside huge hollow trunks with root steps and nest windows, larches, a circle of mossy standing stones and streams of meltwater crossed by split logs. The trunk folk drink the Living Water of the thaw and remember everything; they say one sentence a minute, and here the clock walks at half speed.",
+                "O arvoredo do povo-tronco na beira da estepe, onde começa a taiga: casas dentro de troncos ocos enormes com degraus de raiz e janelas de ninho, lariços, um círculo de pedras com musgo e riachos de degelo cruzados por troncos rachados. O povo-tronco bebe a Água Viva do degelo e lembra de tudo; fala uma frase por minuto, e aqui o relógio anda pela metade.");
 
             AddCity(entries, CityCatalog.PalafitasTarchon, "Tarchon Stilts", "Palafitas de Tarchon", "Tarchon", "Tarchon",
                 "The trols' city in the open swamp: long houses on tall piles with leaf roofs down to the floor, plank boardwalks over the bog water, nets drying, baskets as tall as a cousin and floating reed islands. At night the swamp fills with will-o'-wisps, sparks caught in the Ar Sereno; half the trols stared at them until they forgot themselves, and every spark set free wakes a neighbour.",
@@ -795,6 +810,97 @@ namespace Rapadura.UI.WorldMap
                 ("Ícaro, that is not a falling star, it is a lantern from Mingcheng. ...Yes, it is still beautiful. Make the wish.", "Ícaro, isso não é estrela cadente, é uma lanterna de Mingcheng. ...Sim, continua bonita. Faz o pedido."),
                 ("Lavine, there is a little star I named after your grandma Edna. It blinks twice, then rests. Just like her laugh.", "Lavine, tem uma estrelinha que eu batizei com o nome da sua avó Edna. Pisca duas vezes, depois descansa. Igualzinho à risada dela."),
                 ("The sky is a bestiary: lions, cranes, a carp that jumps. Bring me what you see at night and I will write it down.", "O céu é um bestiário: leões, grous, uma carpa que pula. Me traz o que você vê de noite e eu anoto."));
+
+            // ---- Acampamento de Soslan (names of the Nart sagas of Ossetia) ----
+            AddResident(entries, "soslan", "Soslan, the Steel-Skinned", "Soslan, o de Pele de Aço",
+                ("Joaquim, a guardian runs with the herd, not in front of it. Learn the pace of the slowest foal and you will never lose one.", "Joaquim, um guardião corre com a manada, não na frente dela. Aprende o passo do potro mais lento e você nunca vai perder nenhum."),
+                ("Maria, my skin was tempered in the smith's water when I was a boy. It does not hurt. It only clinks when I laugh.", "Maria, a minha pele foi temperada na água do ferreiro quando eu era menino. Não dói. Só tilinta quando eu rio."),
+                ("Maithe, the camp moves three times a week and the eldest always knows where the next fire will be. That is you, now.", "Maithe, o acampamento muda três vezes por semana e a mais velha sempre sabe onde vai ser a próxima fogueira. Agora é você."),
+                ("Ícaro, a race? Across the whole steppe? ...Your grandpa asked me the same. Ask Satana how that ended.", "Ícaro, uma corrida? Pela estepe inteira? ...O seu avô me pediu a mesma coisa. Pergunta para a Satana como terminou."),
+                ("Lavine, Grandpa Jorge lost to me by a nose, and Grandma Edna said my nose was cheating. She was right. She is always right.", "Lavine, o Vô Jorge perdeu para mim por um focinho, e a Vó Edna disse que o meu focinho estava roubando. Ela tinha razão. Ela sempre tem."),
+                ("Three camps a week, one herd, no foal left behind. That is the law of the felt tents.", "Três acampamentos por semana, uma manada, nenhum potro para trás. Essa é a lei das tendas de feltro."));
+
+            AddResident(entries, "batradz", "Batradz the Smith-Warrior", "Batradz, o Ferreiro-Guerreiro",
+                ("Joaquim, I forge horseshoes for four legs and buckles for two arms. You only need the buckles. Lucky.", "Joaquim, eu forjo ferradura para quatro patas e fivela para dois braços. Você só precisa das fivelas. Sorte sua."),
+                ("Maria, the hammer falls three times and rests once. Count with me; the iron listens to the count.", "Maria, o martelo cai três vezes e descansa uma. Conta comigo; o ferro escuta a contagem."),
+                ("Maithe, a wheel of the wagons broke last night. The eldest holds the rim while I strike. Steady hands, like yours.", "Maithe, uma roda das carroças quebrou ontem à noite. A mais velha segura o aro enquanto eu bato. Mão firme, igual à sua."),
+                ("Ícaro, do not touch the red iron. ...Do not touch the black iron either, it was red a minute ago.", "Ícaro, não encosta no ferro vermelho. ...Nem no ferro preto, ele estava vermelho faz um minuto."),
+                ("Lavine, Grandma Edna mended my apron with felt thread and it has outlived three anvils. Look, her stitches are still here.", "Lavine, a Vó Edna remendou o meu avental com linha de feltro e ele já durou mais que três bigornas. Olha, os pontos dela ainda estão aqui."),
+                ("Horseshoes, wheel rims, a buckle for a saddle. In a camp that moves, the forge moves too.", "Ferradura, aro de roda, fivela de sela. Num acampamento que anda, a forja anda junto."));
+
+            AddResident(entries, "satana", "Satana, the Wise of the House", "Satana, a Sábia da Casa",
+                ("Joaquim, a guardian who listens is worth two who shout. You listen. Keep doing it.", "Joaquim, um guardião que escuta vale por dois que gritam. Você escuta. Continua assim."),
+                ("Maria, the guardian lamp burns felt oil and good words. I give it the oil; you give it the words.", "Maria, a lâmpada guardiã queima óleo de feltro e palavras boas. Eu dou o óleo; você dá as palavras."),
+                ("Maithe, the eldest of a family is like the lamp in a camp: everyone looks at her when the night comes.", "Maithe, a mais velha de uma família é como a lâmpada num acampamento: todo mundo olha para ela quando a noite chega."),
+                ("Ícaro, you asked how the race ended? Soslan won, Jorge laughed, and the two of them fell asleep by the fire. That is how races should end.", "Ícaro, você perguntou como terminou a corrida? O Soslan ganhou, o Jorge riu, e os dois dormiram perto da fogueira. É assim que corrida deve terminar."),
+                ("Lavine, Grandma Edna sat with me under this lamp for a whole night and we did not say a word. Some nights are like that, and they are good.", "Lavine, a Vó Edna sentou comigo debaixo desta lâmpada uma noite inteira e a gente não disse uma palavra. Tem noite assim, e é boa."),
+                ("A camp that moves needs a light that stays. Sit, eat, and tell me where you are going.", "Um acampamento que anda precisa de uma luz que fica. Senta, come e me conta para onde vocês vão."));
+
+            AddResident(entries, "syrdon", "Syrdon the Trickster", "Syrdon, o Trapaceiro",
+                ("Joaquim, this saddle has a little bell sewn inside. When you sit, it plays. ...No, I will not tell you which saddle.", "Joaquim, esta sela tem um sininho costurado por dentro. Quando você senta, ele toca. ...Não, não vou contar qual sela."),
+                ("Maria, the prices are fair. The prank is free. You only find out about the prank later.", "Maria, os preços são justos. A pegadinha é de graça. Você só descobre a pegadinha depois."),
+                ("Maithe, the eldest always checks the straps twice. That is why I tie them three times. Fair is fair.", "Maithe, a mais velha sempre confere as correias duas vezes. Por isso eu amarro três. Justo é justo."),
+                ("Ícaro, finally a customer with taste. Want to hide a frog in Soslan's felt cap? I have the frog.", "Ícaro, finalmente um freguês de bom gosto. Quer esconder um sapo no gorro de feltro do Soslan? O sapo eu tenho."),
+                ("Lavine, Grandpa Jorge once sold me a saddle blanket that turned out to be my own. Best trick anyone ever played on me. I still owe him one.", "Lavine, o Vô Jorge uma vez me vendeu uma manta de sela que era minha mesmo. O melhor truque que já fizeram comigo. Ainda devo uma para ele."),
+                ("Felt blankets, feed, boots for the steppe. And, with every purchase, one good prank. Tell no one.", "Mantas de feltro, ração, botas para a estepe. E, a cada compra, uma pegadinha boa. Não conta para ninguém."));
+
+            AddResident(entries, "uryzmaeg", "Uryzmæg, the Old Chief", "Uryzmæg, o Velho Chefe",
+                ("Joaquim, I have led this camp for two hundred moves. The secret is to always look back once before leaving.", "Joaquim, eu guio este acampamento há duzentas mudanças. O segredo é sempre olhar para trás uma vez antes de partir."),
+                ("Maria, the Uasamonga, the cup of the Narts, fills by itself for the bravest of the day. Some days it fills for a child.", "Maria, a Uasamonga, a taça dos Nartes, se enche sozinha para o mais corajoso do dia. Tem dia em que ela se enche para uma criança."),
+                ("Maithe, a chief speaks last. You already know that. I saw you wait for your cousins to finish.", "Maithe, um chefe fala por último. Você já sabe disso. Eu vi você esperar os seus primos terminarem."),
+                ("Ícaro, my legs are old but they still know the way to the river. Walk with me; I will not race you.", "Ícaro, as minhas pernas são velhas mas ainda sabem o caminho do rio. Anda comigo; não vou apostar corrida com você."),
+                ("Lavine, the cup filled once for Grandma Edna, when she carried a lost foal back on her shoulders. She was smaller than you.", "Lavine, a taça se encheu uma vez para a Vó Edna, quando ela trouxe um potro perdido de volta nos ombros. Ela era menor que você."),
+                ("The steppe is wide and the camp is small. That is why we keep it full of good people.", "A estepe é larga e o acampamento é pequeno. Por isso a gente enche ele de gente boa."));
+
+            // ---- Fortim dos Gigantes-da-Colina (names of the Manichaean Book of Giants) ----
+            AddResident(entries, "baraqel", "Baraqel, Chief of the Fort", "Baraqel, o Chefe do Fortim",
+                ("Joaquim, a guardian your size! Climb the spoon and stand by me; from up here you can see the whole hill.", "Joaquim, um guardião do seu tamanho! Sobe na colher e fica do meu lado; daqui de cima dá para ver o morro inteiro."),
+                ("Maria, we giants count slowly because our numbers are big. One, ...two. See? It takes a while.", "Maria, nós gigantes contamos devagar porque os nossos números são grandes. Um, ...dois. Viu? Demora."),
+                ("Maithe, the doors of the Fort are tall so that nobody has to bend to come in. Not even a giant who made mistakes.", "Maithe, as portas do Fortim são altas para que ninguém precise se abaixar para entrar. Nem um gigante que errou."),
+                ("Ícaro, do not jump from the table. ...Fine, jump, I will catch you. ...Again? Only once more.", "Ícaro, não pula da mesa. ...Tá bom, pula, eu te pego. ...De novo? Só mais uma vez."),
+                ("Lavine, Grandpa Jorge fell asleep on that spoon before the soup. Grandma Edna ate his bowl and said it was justice.", "Lavine, o Vô Jorge dormiu naquela colher antes da sopa. A Vó Edna comeu a tigela dele e disse que era justiça."),
+                ("Long ago we dreamt of the end and we were sorry. Now we cook, we keep the fire, and we build doors that are too tall.", "Faz muito tempo a gente sonhou com o fim e se arrependeu. Agora a gente cozinha, cuida do fogo e faz portas altas demais."));
+
+            AddResident(entries, "virogdad", "Virogdad the Dreamer", "Virogdad, o Sonhador",
+                ("Joaquim, last night I dreamt of a guardian made of mud who never sank. Was it you? It looked like you.", "Joaquim, ontem à noite eu sonhei com um guardião feito de lama que nunca afundava. Era você? Parecia você."),
+                ("Maria, I write every dream on a clay tablet. Good ones on the left, bad ones on the right. The left shelf is longer.", "Maria, eu escrevo todo sonho numa tábua de barro. Os bons na esquerda, os ruins na direita. A prateleira da esquerda é mais comprida."),
+                ("Maithe, one dream a day points to a hidden chest on the hill. The eldest reads the map; I only read the dream.", "Maithe, um sonho por dia aponta um baú escondido no morro. A mais velha lê o mapa; eu só leio o sonho."),
+                ("Ícaro, you dreamt of flying? Then it is written. Left shelf, top row, next to the dream of the big soup.", "Ícaro, você sonhou que voava? Então está escrito. Prateleira da esquerda, fileira de cima, do lado do sonho da sopa grande."),
+                ("Lavine, Grandma Edna told me her dream of a little girl who carries gold nobody else can lift. I wrote it down. I think it is you.", "Lavine, a Vó Edna me contou um sonho dela, de uma menina pequena que carrega um ouro que ninguém mais consegue levantar. Eu escrevi. Acho que é você."),
+                ("We giants once had a terrible dream and woke up sorry. Since then, I read the dreams so that they come true kindly.", "Nós gigantes tivemos um sonho terrível uma vez e acordamos arrependidos. Desde então eu leio os sonhos para que eles se cumpram com gentileza."));
+
+            AddResident(entries, "shahmizad", "Shahmizad, the Old Patriarch", "Shahmizad, o Patriarca",
+                ("Joaquim, a bowl of the Panela Grande feeds five cousins. Or one giant. Or Joaquim after a long march.", "Joaquim, uma tigela da Panela Grande alimenta cinco primos. Ou um gigante. Ou o Joaquim depois de uma marcha comprida."),
+                ("Maria, the secret of the soup is patience and turnips. Mostly turnips.", "Maria, o segredo da sopa é paciência e nabo. Mais nabo."),
+                ("Maithe, I was the oldest of the giants who were sorry. Being the eldest means being the first to say: I was wrong.", "Maithe, eu era o mais velho dos gigantes que se arrependeram. Ser o mais velho é ser o primeiro a dizer: eu errei."),
+                ("Ícaro, the ladle is not a boat. ...It is not a sword either. Put it back, little one.", "Ícaro, a concha não é um barco. ...Nem uma espada. Põe de volta, pequeno."),
+                ("Lavine, Grandma Edna taught me to put cumin in the soup. A giant learned a recipe from a girl. Never too old.", "Lavine, a Vó Edna me ensinou a pôr cominho na sopa. Um gigante aprendeu uma receita com uma menina. Nunca é tarde."),
+                ("Food for the whole group from one pot, crampons for the chain of Amirani. Sit; the soup is hot.", "Comida para o grupo inteiro numa panela só, grampos para a corrente de Amirani. Senta; a sopa está quente."));
+
+            // ---- Arvoredo de Haripushpa (the kings of Kucha; Aryaman Puhr of the Bezeklik letters) ----
+            AddResident(entries, "haripushpa", "Haripushpa, the Eldest", "Haripushpa, o Mais Velho",
+                ("Joaquim... a guardian... stands still... like a tree. ...You are learning.", "Joaquim... um guardião... fica parado... como uma árvore. ...Você está aprendendo."),
+                ("Maria... I count... rings. Inside me... there are... nine hundred. ...And one. Today.", "Maria... eu conto... anéis. Dentro de mim... tem... novecentos. ...E um. Hoje."),
+                ("Maithe... the eldest... waits. ...For everyone. ...I wait for the snow... to melt.", "Maithe... a mais velha... espera. ...Por todos. ...Eu espero... o degelo."),
+                ("Ícaro... do not... run. ...Here... the roots... are listening.", "Ícaro... não... corre. ...Aqui... as raízes... estão escutando."),
+                ("Lavine... Grandpa Jorge... sat by me... a whole summer. ...Grandma Edna... came... to take him home.", "Lavine... o Vô Jorge... sentou do meu lado... um verão inteiro. ...A Vó Edna... veio... buscar ele."),
+                ("In the grove... time walks... slowly. ...Sit. ...The water... of the thaw... is good.", "No arvoredo... o tempo... anda devagar. ...Senta. ...A água... do degelo... é boa."));
+
+            AddResident(entries, "suvarnapushpa", "Suvarnapushpa the Gardener", "Suvarnapushpa, a Jardineira",
+                ("Joaquim, plant it and stand by it. A seedling likes a guardian more than water. Well, almost.", "Joaquim, planta e fica do lado. Muda gosta mais de guardião do que de água. Bom, quase."),
+                ("Maria, in the grove the clock walks at half speed, so your plants at home grow twice as fast while you are here.", "Maria, no arvoredo o relógio anda pela metade, então as plantas da sua casa crescem duas vezes mais rápido enquanto você está aqui."),
+                ("Maithe, a larch is the only pine that drops its needles in winter. Even trees need a rest, eldest.", "Maithe, o lariço é o único pinheiro que derruba as folhas no inverno. Até árvore precisa descansar, mais velha."),
+                ("Ícaro, if you water the seedling twice it does not grow twice. ...Yes, I tried too.", "Ícaro, se você regar a muda duas vezes ela não cresce duas vezes. ...É, eu também tentei."),
+                ("Lavine, Grandma Edna took a larch seedling home in her apron. Is it still alive? Tell her I said hello to it.", "Lavine, a Vó Edna levou uma muda de lariço para casa no avental. Ela ainda está viva? Fala para ela que eu mandei um oi para a muda."),
+                ("Herbs, fibre, the healing rune. Everything here grew slowly, so everything here lasts.", "Ervas, fibra, a runa de cura. Tudo aqui cresceu devagar, então tudo aqui dura."));
+
+            AddResident(entries, "aryaman", "Aryaman Puhr the Herbalist", "Aryaman Puhr, o Herbolário",
+                ("Joaquim, I come from the Zarafshan every spring for the herbs of the grove. Your valley sends its greetings.", "Joaquim, eu venho do Zarafshan toda primavera buscar as ervas do arvoredo. O seu vale manda lembranças."),
+                ("Maria, the old trees write letters with their roots. I write mine with ink. Both arrive late, and both arrive.", "Maria, as árvores velhas escrevem cartas com as raízes. Eu escrevo as minhas com tinta. As duas chegam atrasadas, e as duas chegam."),
+                ("Maithe, moss on the north side, sap on the south. A herbalist reads a tree the way the eldest reads her cousins.", "Maithe, musgo do lado norte, seiva do lado sul. Um herbolário lê uma árvore do jeito que a mais velha lê os primos."),
+                ("Ícaro, that mushroom is not for eating. That one neither. ...That one is a stone, Ícaro.", "Ícaro, esse cogumelo não é de comer. Esse também não. ...Esse aí é uma pedra, Ícaro."),
+                ("Lavine, I carry a letter from Grandma Edna to Haripushpa. It is three lines long. He will take a week to answer.", "Lavine, eu trago uma carta da Vó Edna para o Haripushpa. Tem três linhas. Ele vai levar uma semana para responder."),
+                ("A Sogdian among trees: I bring letters, I take herbs. The road between them is my house.", "Um sogdiano entre as árvores: eu trago cartas, levo ervas. A estrada entre um e outro é a minha casa."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

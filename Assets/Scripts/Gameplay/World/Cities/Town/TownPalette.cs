@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Cities.Town
 {
-    /// <summary>Flat colours of the walkable-town palette texture (one 4 px cell each, 8 × 16). Docs/Cities.md §5.</summary>
+    /// <summary>Flat colours of the walkable-town palette texture (one 4 px cell each, 8 × 19). Docs/Cities.md §5.</summary>
     public enum TownSwatch
     {
         // Row 0: wood and earth (walnut joinery, carved columns).
@@ -53,6 +53,17 @@ namespace Rapadura.Gameplay.World.Cities.Town
         // #F3EFE6, pale gold #E3C46B, sky blue #7FB2E5, silver leaf #A8C5B5, Meroë sandstone #C79E6B, the sunlight the towers
         // pass down #FFF4C2 (glows), mirror bronze #B58B4C and garden green #5F8F4E.
         SpireLime, PaleGold, SkyBlue, SilverLeaf, MeroeSandstone, SpireLight, MirrorBronze, GardenGreen,
+        // Row 16: the Acampamento de Soslan, the centaurs' camp (Estepe dos Nartes, Docs/Mapas100.md §3.3 and map 47): felt
+        // #D8C9A8, the dyed felts red #8E2F2F and blue #2F5E8E, steppe grass #BFAE5A, horsehair #3A2E26, rawhide #6E4A2E,
+        // Scythian gold #D4A93A and the camp fire #FF9A4A (glows).
+        Felt, FeltRed, FeltBlue, SteppeGrass, HorseHair, SteppeLeather, ScythianGold, CampFire,
+        // Row 17: the Fortim dos Gigantes-da-Colina (Docs/Mapas100.md §3.3 and map 49): earth #8A6A44, stone #9A948A, the good
+        // smoke #CFC6B8, the Living Fire's embers #E2763A (glows), hill grass #7F9A4A, giant timber #7A5634, turf #5F7A3A and
+        // pot iron #4A4A4E.
+        FortEarth, FortStone, GoodSmoke, LivingFire, HillGrass, GiantWood, TurfRoof, PotIron,
+        // Row 18: the Arvoredo de Haripushpa (Docs/Mapas100.md §3.3 and map 50): bark #5E4A3A, moss #6E8F4A, new leaf #A9C96B,
+        // meltwater #86C9D6 (glows a little), flower #F0D27A, larch #4F6B3A, lichen #B7BFA0 and the dark of a hollow #2E2620.
+        GroveBark, GroveMoss, NewLeaf, MeltWater, GroveFlower, Larch, Lichen, HollowDark,
     }
 
     /// <summary>
@@ -64,7 +75,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
     public static class TownPalette
     {
         public const int Columns = 8;
-        public const int Rows = 16;
+        public const int Rows = 19;
         private const int CellPixels = 4;
 
         private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
@@ -87,6 +98,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Hex(0x8C8173), Hex(0xB98B5E), Hex(0x5A3E2B), Hex(0xE6EEF2), Hex(0xF2B8A0), Hex(0xC0392B), Hex(0x2E86AB), Hex(0xFFB866),
             Hex(0x7D7F86), Hex(0xB23A2E), Hex(0xD9A82B), Hex(0x5E9E7E), Hex(0xF4E3B5), Hex(0x4E525A), Hex(0x8DB25A), Hex(0x6FA3A8),
             Hex(0xF3EFE6), Hex(0xE3C46B), Hex(0x7FB2E5), Hex(0xA8C5B5), Hex(0xC79E6B), Hex(0xFFF4C2), Hex(0xB58B4C), Hex(0x5F8F4E),
+            Hex(0xD8C9A8), Hex(0x8E2F2F), Hex(0x2F5E8E), Hex(0xBFAE5A), Hex(0x3A2E26), Hex(0x6E4A2E), Hex(0xD4A93A), Hex(0xFF9A4A),
+            Hex(0x8A6A44), Hex(0x9A948A), Hex(0xCFC6B8), Hex(0xE2763A), Hex(0x7F9A4A), Hex(0x7A5634), Hex(0x5F7A3A), Hex(0x4A4A4E),
+            Hex(0x5E4A3A), Hex(0x6E8F4A), Hex(0xA9C96B), Hex(0x86C9D6), Hex(0xF0D27A), Hex(0x4F6B3A), Hex(0xB7BFA0), Hex(0x2E2620),
         };
 
         private static Material _material;
@@ -118,6 +132,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case TownSwatch.HearthGlow: return 0.8f;
                 case TownSwatch.LanternPaper: return 0.75f;
                 case TownSwatch.SpireLight: return 0.85f;
+                case TownSwatch.CampFire: return 0.9f;
+                case TownSwatch.LivingFire: return 0.8f;
+                case TownSwatch.MeltWater: return 0.3f;
                 default: return 0f;
             }
         }

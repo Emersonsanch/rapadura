@@ -61,6 +61,15 @@ namespace Rapadura.Editor
         [MenuItem(Root + "Preview Walkable Town/Torres Brancas (altos-elfos, Planície de Mingcheng)", priority = 24)]
         private static void PreviewTorresBrancas() => Preview(CityCatalog.TorresBrancas);
 
+        [MenuItem(Root + "Preview Walkable Town/Acampamento de Soslan (centauros, Estepe dos Nartes)", priority = 25)]
+        private static void PreviewSoslan() => Preview(CityCatalog.AcampamentoSoslan);
+
+        [MenuItem(Root + "Preview Walkable Town/Fortim dos Gigantes-da-Colina (gigantes, Estepe dos Nartes)", priority = 26)]
+        private static void PreviewFortim() => Preview(CityCatalog.Fortim);
+
+        [MenuItem(Root + "Preview Walkable Town/Arvoredo de Haripushpa (povo-tronco, Estepe dos Nartes)", priority = 27)]
+        private static void PreviewArvoredo() => Preview(CityCatalog.Arvoredo);
+
         [MenuItem(Root + "Preview Walkable Town/Toggle Night", priority = 30)]
         private static void ToggleNight()
         {

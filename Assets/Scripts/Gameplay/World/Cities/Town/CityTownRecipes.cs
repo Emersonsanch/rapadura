@@ -11,7 +11,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
     /// (<see cref="CityCatalog.RaceCities"/>; the orcs' war camp, the dwarves' rune halls, the kobolds' tunnel bazaar, the
     /// povo-touro's reed halls, the povo-do-mar's coral towers and the trols' long houses on piles in their own styles) and Taa Pwani (<see cref="TaaPwani"/>, the first of the
     /// <see cref="CityCatalog.LateRegionCities"/>, in its own coral-stone style; then <see cref="Jhilpur"/>, the city in the roots, <see cref="Sangkent"/>, the stair city, and <see cref="Mingcheng"/>, the city of nine rings; the high elves'
-    /// <see cref="TorresBrancas"/> keep their own white spires). A city added to the
+    /// <see cref="TorresBrancas"/> keep their own white spires; the Estepe dos Nartes has three race cities: the centaurs'
+    /// <see cref="Soslan"/> camp of felt tents on wagons, the giants' <see cref="Fortim"/> of round stone houses and the trunk
+    /// folk's <see cref="Arvoredo"/> of hollow trunks). A city added to the
     /// catalog without a recipe gets <see cref="Default"/> (the Vila's plan filled with its residents, shops and regional
     /// style) until it has one. Layouts are cached per city and "mascate today" flag (the generator is deterministic,
     /// so the cache never goes stale).
@@ -82,6 +84,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityCatalog.Sangkent: return Sangkent();
                 case CityCatalog.Mingcheng: return Mingcheng();
                 case CityCatalog.TorresBrancas: return TorresBrancas();
+                case CityCatalog.AcampamentoSoslan: return Soslan();
+                case CityCatalog.Fortim: return Fortim();
+                case CityCatalog.Arvoredo: return Arvoredo();
                 default: return null;
             }
         }

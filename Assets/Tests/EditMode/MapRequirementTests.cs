@@ -212,13 +212,10 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void EveryGateOfRegionsOneToEight_HasAnItemKitThatMeetsIt_AndEveryItemIsSoldOrGivenByAQuest()
+        public void EveryGateOfRegionsOneToNine_HasAnItemKitThatMeetsIt_AndEveryItemIsSoldOrGivenByAQuest()
         {
-            var regions = new[]
-            {
-                MapRegion.Zarafshan, MapRegion.AreiasFlamejantes, MapRegion.SerraDeKaggen, MapRegion.GrutasDoLimiar, MapRegion.CostaDasMoncoes, MapRegion.DeltaDeJhilpur,
-                MapRegion.TetoDoMundo, MapRegion.PlanicieDeMingcheng,
-            };
+            // Every region of the catalog (1–8 and the Estepe dos Nartes, região 9, whose Corrente de Amirani 52 asks for crampons).
+            var regions = (MapRegion[])System.Enum.GetValues(typeof(MapRegion));
 
             // The Forte dos Ventos (39) asks for real wings or a flying mount (Tacho Encantado, the Grifo da Coluna): no item kit.
             List<MapDefinition> wingsOnly = MapCatalog.Maps.Where(m => regions.Contains(m.Region) && m.SpecialRequirementTag == MapRequirementTags.WingsRequired).ToList();
@@ -229,6 +226,17 @@ namespace Rapadura.Tests
             Assert.Greater(gated.Count, 10);
             Assert.IsTrue(gated.Any(m => m.MapId == 36) && gated.Any(m => m.MapId == 38) && gated.Any(m => m.MapId == 40), "the Teto do Mundo's item gates");
             Assert.IsTrue(gated.Any(m => m.MapId == 42 && m.SpecialRequirementTag == MapRequirementTags.SunSeal), "the Planície de Mingcheng's item gate (the Sun Seal)");
+            foreach (MapDefinition map in gated.Where(m => m.MapId >= 47 && m.MapId <= 52))
+            {
+                // Região 9: the gate items of a map are on the counter of its own return city (the Panela Grande for 52).
+                CitySpec home = CityCatalog.Get(map.ReturnCityId);
+                Assert.IsNotNull(home, $"{map}: its return city {map.ReturnCityId} is a walkable town");
+                foreach (string itemId in MapRequirementRules.KitOf(map.SpecialRequirementTag))
+                {
+                    Assert.IsTrue(home.ShopIds.Any(id => CityShopCatalog.EntryOf(id, itemId) != null), $"{map}: {itemId} is not sold in {home.CityId}");
+                }
+            }
+
             foreach (MapDefinition map in gated)
             {
                 string[] kit = MapRequirementRules.KitOf(map.SpecialRequirementTag);

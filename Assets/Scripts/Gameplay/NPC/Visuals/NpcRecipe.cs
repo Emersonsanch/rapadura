@@ -235,6 +235,22 @@ namespace Rapadura.Gameplay.NPC.Visuals
         /// </summary>
         public bool Gills;
 
+        /// <summary>
+        /// The centaurs of Soslan (Docs/Mapas100.md §3.3): from the waist down a horse, the barrel behind the human hips, four
+        /// legs with dark hooves, a tail in the hair colour and a felt saddle blanket in the layer colours; the human legs are
+        /// not drawn. Wear a short garment (<see cref="NpcGarment.Tunic"/>).
+        /// </summary>
+        public bool HorseBody;
+
+        /// <summary>The coat of a <see cref="HorseBody"/>.</summary>
+        public NpcSwatch Coat = NpcSwatch.HorseBay;
+
+        /// <summary>
+        /// The trunk folk of Haripushpa (Docs/Mapas100.md §3.3): three twigs growing from the crown with tufts of spring leaf (the
+        /// skin is bark, the hair is moss: set them with <see cref="Skin"/> and <see cref="HairColor"/>).
+        /// </summary>
+        public bool Twigs;
+
         /// <summary>One line of why they look like this (Docs/NPCs.md, the preview labels).</summary>
         public string Story = string.Empty;
 
@@ -245,6 +261,6 @@ namespace Rapadura.Gameplay.NPC.Visuals
         /// <summary>A short signature of the silhouette (tests: two named NPCs never share one).</summary>
         public string SilhouetteKey =>
             $"{Age}/{Build}/{Posture}/{Hair}/{Beard}/{Headwear}/{Garment}/{(int)Layers}/{LeftArm}/{RightArm}/{string.Join(",", Props)}" + (ElfEars ? "/elf" : string.Empty) + (Tusks ? "/orc" : string.Empty) + (Snout ? "/kobold" : string.Empty)
-            + (Horns ? "/bull" : string.Empty) + (Gills ? "/reef" : string.Empty);
+            + (Horns ? "/bull" : string.Empty) + (Gills ? "/reef" : string.Empty) + (HorseBody ? "/centaur" : string.Empty) + (Twigs ? "/trunk" : string.Empty);
     }
 }

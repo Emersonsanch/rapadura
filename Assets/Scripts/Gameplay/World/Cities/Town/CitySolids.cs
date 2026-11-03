@@ -265,7 +265,28 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.MirrorClock: return CitySolid.Capsule(prop.Position, TownKit.MirrorClockRadius * s, WallColliderHeight, owner);
                 case CityPropKind.MirrorPost: return CitySolid.Capsule(prop.Position, TownKit.MirrorPostRadius * s, WallColliderHeight, owner);
                 case CityPropKind.SpirePyramid: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, new Vector2(TownKit.SpirePyramidSize, TownKit.SpirePyramidSize) * s, prop.Yaw), WallColliderHeight, owner);
+                case CityPropKind.FeltWagon: return CitySolid.Capsule(prop.Position, TownKit.FeltWagonRadius * s, 2.5f, owner);
+                case CityPropKind.HorseStandard: return CitySolid.Capsule(prop.Position, TownKit.HorseStandardRadius * s, WallColliderHeight, owner);
+                case CityPropKind.RopeCorral:
+                {
+                    Rect run = CityGeometry.RectFromMinMax(prop.Position, prop.End);
+                    return CitySolid.Box(CityGeometry.Inflate(run, TownKit.CorralHalfThickness), 1.2f, owner);
+                }
 
+                case CityPropKind.StoneOven: return CitySolid.Capsule(prop.Position, TownKit.StoneOvenRadius * s, 2f, owner);
+                case CityPropKind.EarthRing:
+                {
+                    Rect run = CityGeometry.RectFromMinMax(prop.Position, prop.End);
+                    return CitySolid.Box(CityGeometry.Inflate(run, TownKit.EarthRingHalfThickness), WallColliderHeight, owner);
+                }
+
+                case CityPropKind.GiantTable: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.GiantTableSize * s, prop.Yaw), 2.2f, owner);
+                case CityPropKind.GiantPot: return CitySolid.Capsule(prop.Position, TownKit.GiantPotRadius * s, WallColliderHeight, owner);
+                case CityPropKind.SpoonBench: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.SpoonBenchSize * s, prop.Yaw), 1.2f, owner);
+                case CityPropKind.MossStone: return CitySolid.Capsule(prop.Position, TownKit.MossStoneRadius * s, WallColliderHeight, owner);
+                case CityPropKind.Larch: return CitySolid.Capsule(prop.Position, TownKit.LarchRadius * s, 3f, owner);
+
+                case CityPropKind.MeltStream:
                 case CityPropKind.CanalBridge:
                 case CityPropKind.LeafBridge:
                 case CityPropKind.IrrigationChannel:
