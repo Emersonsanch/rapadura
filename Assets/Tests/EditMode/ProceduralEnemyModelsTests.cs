@@ -84,6 +84,13 @@ namespace Rapadura.Tests
                 ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_FR", "Shin_FR", "Foot_FR", "Leg_HL", "Shin_HL", "Foot_HL", "Leg_HR", "Shin_HR", "Foot_HR" } },
             { ProceduralEnemyKind.Potoo, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Branch,
                 ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight, ProceduralEnemyParts.Tail } },
+            { ProceduralEnemyKind.EmberVulture, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight,
+                ProceduralEnemyParts.Tail } },
+            { ProceduralEnemyKind.BrokenLantern, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Lantern } },
+            { ProceduralEnemyKind.CrestedHawk, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight,
+                ProceduralEnemyParts.Tail } },
+            { ProceduralEnemyKind.LanternFish, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Lantern, ProceduralEnemyParts.WingLeft,
+                ProceduralEnemyParts.WingRight, ProceduralEnemyParts.Tail } },
         };
 
         /// <summary>Legs per kind; every one a Leg_ (hip) → Shin_ (knee) → Foot_ chain for ProceduralLegLocomotion.</summary>
@@ -94,6 +101,8 @@ namespace Rapadura.Tests
             { ProceduralEnemyKind.AlphaWolf, 4 }, { ProceduralEnemyKind.Spider, 8 }, { ProceduralEnemyKind.Scorpion, 8 },
             { ProceduralEnemyKind.Werewolf, 4 }, { ProceduralEnemyKind.VampireBat, 0 }, { ProceduralEnemyKind.ShroudOwl, 0 },
             { ProceduralEnemyKind.FireflySwarm, 0 }, { ProceduralEnemyKind.Peccary, 4 }, { ProceduralEnemyKind.Potoo, 0 },
+            { ProceduralEnemyKind.EmberVulture, 0 }, { ProceduralEnemyKind.BrokenLantern, 0 }, { ProceduralEnemyKind.CrestedHawk, 0 },
+            { ProceduralEnemyKind.LanternFish, 0 },
         };
 
         [Test]
@@ -327,6 +336,10 @@ namespace Rapadura.Tests
             Assert.AreEqual(ProceduralEnemyKind.FireflySwarm, ProceduralEnemyModels.KindFor("enemy_desert_firefly_swarm"));
             Assert.AreEqual(ProceduralEnemyKind.Peccary, ProceduralEnemyModels.KindFor("enemy_forest_peccary"));
             Assert.AreEqual(ProceduralEnemyKind.Potoo, ProceduralEnemyModels.KindFor("enemy_mountain_potoo"));
+            Assert.AreEqual(ProceduralEnemyKind.EmberVulture, ProceduralEnemyModels.KindFor("enemy_desert_ember_vulture"));
+            Assert.AreEqual(ProceduralEnemyKind.BrokenLantern, ProceduralEnemyModels.KindFor("enemy_desert_broken_lantern"));
+            Assert.AreEqual(ProceduralEnemyKind.CrestedHawk, ProceduralEnemyModels.KindFor("enemy_mountain_crested_hawk"));
+            Assert.AreEqual(ProceduralEnemyKind.LanternFish, ProceduralEnemyModels.KindFor("enemy_cave_lantern_fish"));
             Assert.AreEqual(ProceduralEnemyKind.None, ProceduralEnemyModels.KindFor("enemy_unknown_thing"));
             Assert.AreEqual(ProceduralEnemyKind.None, ProceduralEnemyModels.KindFor((string)null));
 

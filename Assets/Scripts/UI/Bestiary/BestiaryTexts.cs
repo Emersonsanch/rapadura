@@ -71,6 +71,8 @@ namespace Rapadura.UI.Bestiary
         public const string TipFlees = "ui.bestiary.tip.flees";
         /// <summary>{0} percentage of the usual stun time ("50").</summary>
         public const string TipStunResistant = "ui.bestiary.tip.stun_resistant";
+        /// <summary>{0} metres it shoots from ("8").</summary>
+        public const string TipRanged = "ui.bestiary.tip.ranged";
 
         /// <summary>The five cousins, in birth order (Maithe > Maria > Joaquim > Ícaro > Lavine).</summary>
         public static readonly CharacterId[] Cousins = { CharacterId.Maithe, CharacterId.Maria, CharacterId.Joaquim, CharacterId.Icaro, CharacterId.Lavine };
@@ -88,6 +90,7 @@ namespace Rapadura.UI.Bestiary
                 case BestiaryTipKind.HeavyHitter: return TipHeavyHitter;
                 case BestiaryTipKind.Flees: return TipFlees;
                 case BestiaryTipKind.StunResistant: return TipStunResistant;
+                case BestiaryTipKind.Ranged: return TipRanged;
                 default: return null;
             }
         }
@@ -145,6 +148,7 @@ namespace Rapadura.UI.Bestiary
                 new LocalizationEntry(TipHeavyHitter, "Hits hard ({0} per hit): save your dodge for the big one.", "Bate forte ({0} por golpe): guarde a esquiva para a pancada grande."),
                 new LocalizationEntry(TipFlees, "Runs away below {0}% health: finish it before it gets away.", "Foge com menos de {0}% de vida: termine o serviço antes que escape."),
                 new LocalizationEntry(TipStunResistant, "Stubborn boss: stuns last only {0}% of the usual time.", "Chefe teimoso: atordoamento dura só {0}% do normal."),
+                new LocalizationEntry(TipRanged, "Shoots from up to {0} m away: sidestep the shot, then run in close.", "Atira de até {0} m de distância: desvie do tiro de lado e chegue perto."),
             };
 
             // -- Bosque do Zarafshan (Floresta) --
@@ -234,6 +238,9 @@ namespace Rapadura.UI.Bestiary
 
             // -- Bichos da noite (own file, so this one stays small) --
             NightBestiaryTexts.AddPages(entries);
+
+            // -- Bichos de distância dos mapas jogáveis (own file too) --
+            RangedBestiaryTexts.AddPages(entries);
 
             return entries;
         }

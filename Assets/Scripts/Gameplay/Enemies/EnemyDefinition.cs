@@ -83,6 +83,8 @@ namespace Rapadura.Gameplay.Enemies
         [SerializeField] private float _attackRange = 1.5f;
         [SerializeField] private float _attackCooldown = 1.2f;
         [SerializeField] private float _attackDamage = 8f;
+        [Tooltip("[distância] archetype: None = melee swing. Anything else = the strike of the telegraphed attack fires this projectile from Attack Range instead of swinging (plain ranged damage, no Espinhos), see EnemyRangedAttack.")]
+        [SerializeField] private EnemyProjectileKind _projectile = EnemyProjectileKind.None;
 
         [Header("Flee")]
         [Range(0f, 1f)]
@@ -134,6 +136,12 @@ namespace Rapadura.Gameplay.Enemies
         public float AttackRange => _attackRange;
         public float AttackCooldown => _attackCooldown;
         public float AttackDamage => _attackDamage;
+
+        /// <summary>What the attack shoots (<see cref="EnemyProjectileKind.None"/> = melee).</summary>
+        public EnemyProjectileKind Projectile => _projectile;
+
+        /// <summary>[distância] archetype: attacks by shooting <see cref="Projectile"/> from <see cref="AttackRange"/>.</summary>
+        public bool IsRanged => _projectile != EnemyProjectileKind.None;
 
         public float FleeHealthThreshold => _fleeHealthThreshold;
         public float FleeSafeDistance => _fleeSafeDistance;

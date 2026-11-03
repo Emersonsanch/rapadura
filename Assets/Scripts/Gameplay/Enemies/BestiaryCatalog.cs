@@ -30,6 +30,8 @@ namespace Rapadura.Gameplay.Enemies
         HeavyHitter = 7,
         /// <summary>Boss: stuns last only <see cref="BestiaryTip.Value"/> (0..1) of the usual time (<see cref="StunRules"/>).</summary>
         StunResistant = 8,
+        /// <summary>[distância]: shoots from up to <see cref="BestiaryTip.Value"/> m (<see cref="EnemyDefinition.IsRanged"/>).</summary>
+        Ranged = 9,
     }
 
     /// <summary>One tip line; <see cref="Value"/> is the number shown in it (seconds, or a 0..1 fraction), 0 when unused.</summary>
@@ -282,6 +284,11 @@ namespace Rapadura.Gameplay.Enemies
 
             tips.Add(new BestiaryTip(ArchetypeTip(entry.Archetype)));
             tips.Add(new BestiaryTip(BestiaryTipKind.Telegraph, entry.WindupSeconds));
+
+            if (enemy.IsRanged)
+            {
+                tips.Add(new BestiaryTip(BestiaryTipKind.Ranged, enemy.AttackRange));
+            }
 
             if (enemy.AttackCooldown <= RapidAttackCooldown)
             {

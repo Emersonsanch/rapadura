@@ -147,6 +147,7 @@ namespace Rapadura.UI.Bestiary
                 case BestiaryTipKind.Telegraph:
                     return BestiaryTexts.Format(manager, key, Decimal(manager, tip.Value));
                 case BestiaryTipKind.HeavyHitter:
+                case BestiaryTipKind.Ranged:
                     return BestiaryTexts.Format(manager, key, Mathf.RoundToInt(tip.Value));
                 case BestiaryTipKind.Flees:
                 case BestiaryTipKind.StunResistant:

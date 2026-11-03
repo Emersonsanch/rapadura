@@ -294,6 +294,38 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     FlapWings(t, speed * 0.7f, Mathf.Max(k, 0.25f) * Mathf.Lerp(0.15f, 1f, Mathf.Max(travel, r)), travel);
                     break;
                 }
+
+                case ProceduralEnemyKind.EmberVulture:
+                case ProceduralEnemyKind.CrestedHawk:
+                {
+                    // Broad soaring wings: long glides, the wings spread and hold still on the windup (taking aim).
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    float rate = _kind == ProceduralEnemyKind.CrestedHawk ? 0.6f : 0.38f;
+                    FlapWings(t, speed * rate, Mathf.Max(k, 0.25f) * (1f - 0.7f * r), Mathf.Max(Mathf.Clamp01(MoveSpeed01), 0.5f));
+                    Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(-14f * r, Mathf.Sin(t * 0.6f) * 25f * k * (1f - r), 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.BrokenLantern:
+                {
+                    // Sways on an invisible chain; the trapped light flickers and swells before each bolt.
+                    float r = StepAttack(deltaTime, 4f, 2.5f);
+                    Rotate(ProceduralEnemyParts.Body, Quaternion.Euler(Mathf.Sin(t * 0.9f) * 6f * k, 0f, Mathf.Sin(t * 0.7f + 1.3f) * 6f * k));
+                    float flicker = 0.5f + 0.5f * Mathf.Sin(t * 5.3f) * Mathf.Sin(t * 2.1f);
+                    Pulse(ProceduralEnemyParts.Lantern, Mathf.Lerp(0.9f, 1.1f, flicker * Mathf.Max(k, 0.3f)) + 0.3f * r);
+                    break;
+                }
+
+                case ProceduralEnemyKind.LanternFish:
+                {
+                    // Swims in the air: tail sweeps, fins paddle, the jaw gapes and the lure brightens to shoot.
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    Rotate(ProceduralEnemyParts.Tail, Quaternion.Euler(0f, Mathf.Sin(t * 3f) * 22f * k, 0f));
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(35f * r, 0f, 0f));
+                    FlapWings(t, speed * 0.9f, Mathf.Max(k, 0.25f) * 0.6f, Mathf.Clamp01(MoveSpeed01));
+                    Pulse(ProceduralEnemyParts.Lantern, 1f + Mathf.Sin(t * 2.4f) * 0.08f * k + 0.45f * r);
+                    break;
+                }
             }
         }
 

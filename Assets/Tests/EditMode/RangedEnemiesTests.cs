@@ -1,0 +1,183 @@
+using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
+using Rapadura.Gameplay.Dungeon;
+using Rapadura.Gameplay.Enemies;
+using Rapadura.Gameplay.Enemies.Visuals;
+using Rapadura.Gameplay.World.Biomes;
+using Rapadura.Gameplay.World.Map;
+using Rapadura.Gameplay.World.Map.Areas;
+using UnityEngine;
+
+namespace Rapadura.Tests
+{
+    /// <summary>
+    /// The [distância] commons of the playable maps (Docs/Mapas100.md 07 Abutre de Brasa, 08 Lanterna Quebrada dos
+    /// Artífices, 13 Gavião-de-Penacho, 19 Peixe-Lanterna Apagado): real definitions, not bosses, shooting
+    /// (<see cref="EnemyDefinition.IsRanged"/>) from farther than any melee swing, in their biome (bestiary + loot table)
+    /// and placed in the clearings of 07/08/13/14/19/20.
+    /// </summary>
+    public class RangedEnemiesTests
+    {
+        private const string Vulture = "enemy_desert_ember_vulture";
+        private const string Lantern = "enemy_desert_broken_lantern";
+        private const string Hawk = "enemy_mountain_crested_hawk";
+        private const string Fish = "enemy_cave_lantern_fish";
+
+        private static readonly (string id, BiomeType biome, EnemyProjectileKind projectile, ProceduralEnemyKind model)[] Ranged =
+        {
+            (Vulture, BiomeType.Desert, EnemyProjectileKind.Ember, ProceduralEnemyKind.EmberVulture),
+            (Lantern, BiomeType.Desert, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.BrokenLantern),
+            (Hawk, BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.CrestedHawk),
+            (Fish, BiomeType.Caves, EnemyProjectileKind.LureGlob, ProceduralEnemyKind.LanternFish),
+        };
+
+        /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>
+        private static readonly Dictionary<string, string[]> ExpectedByMap = new Dictionary<string, string[]>
+        {
+            { MapLayouts.CaravanasId, new[] { Vulture } },
+            { MapLayouts.ArtificesId, new[] { Lantern } },
+            { MapLayouts.RondaveisId, new[] { Hawk } },
+            { MapLayouts.HahyaId, new[] { Hawk } },
+            { MapLayouts.LagoLimiarId, new[] { Fish } },
+            { MapLayouts.TagesId, new[] { Fish, Lantern } },
+        };
+
+        private readonly List<Object> _created = new List<Object>();
+
+        [SetUp]
+        public void SetUp() => MapLayouts.ClearCache();
+
+        [TearDown]
+        public void TearDown()
+        {
+            MapLayouts.ClearCache();
+            foreach (Object obj in _created)
+            {
+                if (obj != null)
+                {
+                    Object.DestroyImmediate(obj);
+                }
+            }
+
+            _created.Clear();
+        }
+
+        private static EnemyDefinition Load(string id)
+        {
+            EnemyDefinition definition = Resources.Load<EnemyDefinition>($"{EncounterPayload.EnemyResourcesFolder}/{id}");
+            Assert.IsNotNull(definition, $"{id}: not in Resources/Enemies");
+            return definition;
+        }
+
+        [Test]
+        public void Definitions_Exist_AreCommons_AndShootTheirOwnProjectile()
+        {
+            foreach (var (id, _, projectile, _) in Ranged)
+            {
+                EnemyDefinition definition = Load(id);
+                Assert.IsFalse(definition.IsBoss, id);
+                Assert.IsTrue(definition.IsRanged, id);
+                Assert.AreEqual(projectile, definition.Projectile, id);
+                Assert.AreEqual(EnemyMotionArchetype.Flyer, definition.MotionArchetype, $"{id}: hovers like the other flyers");
+                Assert.Greater(definition.AttackDamage, 0f, id);
+                Assert.Greater(definition.MaxHealth, 0f, id);
+                Assert.Greater(definition.ExperienceReward, 0, id);
+                Assert.GreaterOrEqual(definition.DetectionRadius, definition.AttackRange, $"{id}: notices the hero before it can shoot");
+                Assert.Greater(definition.LoseTargetRadius, definition.AttackRange, $"{id}: does not lose the hero while shooting");
+            }
+        }
+
+        [Test]
+        public void AttackRange_IsWellBeyondEveryMeleeSwing()
+        {
+            EnemyDefinition[] all = Resources.LoadAll<EnemyDefinition>(EncounterPayload.EnemyResourcesFolder);
+            float longestSwing = all.Where(e => !e.IsRanged).Max(e => e.AttackRange);
+            foreach (var (id, _, _, _) in Ranged)
+            {
+                EnemyDefinition definition = Load(id);
+                Assert.Greater(definition.AttackRange, longestSwing * 2f, $"{id}: shoots from range");
+                Assert.That(definition.AttackRange, Is.InRange(6f, 10f), $"{id}: readable on the isometric camera");
+            }
+
+            CollectionAssert.AreEquivalent(Ranged.Select(r => r.id), all.Where(e => e.IsRanged).Select(DefeatedEnemyRegistry.GetId),
+                "Only the four [distância] commons shoot (melee enemies keep EnemyProjectileKind.None)");
+        }
+
+        [Test]
+        public void EachOne_LivesInItsBiome_HasABestiaryPage_AndAProceduralModel()
+        {
+            BestiaryCatalog.Invalidate();
+            BiomeRegistry.Invalidate();
+            foreach (var (id, biome, _, model) in Ranged)
+            {
+                EnemyDefinition definition = Load(id);
+                BiomeDefinition home = BiomeRegistry.FindBiomeOf(definition);
+                Assert.IsNotNull(home, $"{id}: in a biome table (loot + bestiary region)");
+                Assert.AreEqual(biome, home.Type, id);
+                Assert.AreEqual(0, home.Enemies.First(e => e.Enemy == definition).Weight, $"{id}: weight 0, never rolled by world-map encounters");
+
+                BestiaryEntry page = BestiaryCatalog.Get(id);
+                Assert.IsNotNull(page, $"{id}: bestiary page");
+                Assert.IsTrue(page.Tips.Any(t => t.Kind == BestiaryTipKind.Ranged && Mathf.Approximately(t.Value, definition.AttackRange)), $"{id}: the [distância] tip");
+                Assert.IsNotEmpty(page.Drops, $"{id}: drops from its biome's loot table");
+
+                Assert.AreEqual(model, ProceduralEnemyModels.KindFor(id), id);
+                Assert.IsFalse(ProceduralEnemyModels.IsNightSpecies(model), $"{id}: a day enemy (no night voice)");
+            }
+        }
+
+        [Test]
+        public void Launch_BuildsAFlyingShot_AimedAtTheTarget_AndNoneBuildsNothing()
+        {
+            var hero = new GameObject("Hero");
+            _created.Add(hero);
+            hero.transform.position = new Vector3(0f, 0f, 8f);
+
+            Assert.IsNull(EnemyRangedAttack.Launch(EnemyProjectileKind.None, Vector3.up, hero.transform, null, 10f, 8f));
+            foreach (var (_, _, projectile, _) in Ranged)
+            {
+                DungeonProjectile shot = EnemyRangedAttack.Launch(projectile, Vector3.up * EnemyRangedAttack.MuzzleHeight, hero.transform, null, 10f, 8f);
+                Assert.IsNotNull(shot, projectile.ToString());
+                _created.Add(shot.gameObject);
+                Assert.Greater(shot.transform.childCount, 0, $"{projectile}: has a visible body");
+                Assert.Greater(Vector3.Dot(shot.transform.forward, Vector3.forward), 0.9f, $"{projectile}: flies at the hero");
+                Assert.Greater(EnemyRangedAttack.SpeedOf(projectile), 0f, projectile.ToString());
+            }
+        }
+
+        [Test]
+        public void Clearings_Of07_08_13_14_19_20_SpawnTheirRangedEnemies()
+        {
+            foreach (KeyValuePair<string, string[]> map in ExpectedByMap)
+            {
+                MapLayout layout = MapLayouts.For(map.Key);
+                Assert.IsNotNull(layout, map.Key);
+                foreach (string enemyId in map.Value)
+                {
+                    List<MapSpawnZone> zones = layout.Zones.Where(z => z.Day.Any(e => e.EnemyId == enemyId)).ToList();
+                    Assert.IsNotEmpty(zones, $"{map.Key}: no clearing spawns {enemyId} by day");
+                    foreach (MapSpawnZone zone in zones)
+                    {
+                        StringAssert.Contains("[distância]", zone.Archetypes, $"{map.Key}/{zone.Id}: tagged [distância]");
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public void ProceduralModels_HaveTheirAnimatedParts()
+        {
+            foreach (var (id, _, _, model) in Ranged)
+            {
+                GameObject visual = ProceduralEnemyModels.Instantiate(model, null);
+                _created.Add(visual);
+                var rig = visual.GetComponent<ProceduralEnemyRig>();
+                Assert.IsNotNull(rig.GetPart(ProceduralEnemyParts.Body), $"{id}: Body");
+                bool lit = model == ProceduralEnemyKind.BrokenLantern || model == ProceduralEnemyKind.LanternFish;
+                Assert.AreEqual(lit, rig.GetPart(ProceduralEnemyParts.Lantern) != null, $"{id}: the light it shoots comes from a Lantern part");
+                Assert.DoesNotThrow(() => rig.Tick(0.1f), id);
+            }
+        }
+    }
+}

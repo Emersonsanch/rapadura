@@ -920,8 +920,8 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
-            // Every enemy attack is melee (no ranged enemies yet): a melee-aware target (the hero) can
-            // reflect Thorns back at this enemy. A future ranged attack must use plain ApplyDamage.
+            // The swing is melee: a melee-aware target (the hero) can reflect Thorns back at this enemy.
+            // [distância] enemies never get here: their shot lands as plain ApplyDamage (FireProjectile).
             if (combatTarget is IMeleeDamageTarget meleeTarget)
             {
                 meleeTarget.ApplyMeleeDamage(amount, Rapadura.Gameplay.Skills.ElementType.Physical, gameObject);
@@ -932,6 +932,27 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             EventBus.Publish(new EnemyAttackedEvent(gameObject, Target.gameObject, amount));
+        }
+
+        /// <summary>
+        /// [distância] strike: fires the definition's <see cref="EnemyDefinition.Projectile"/> at the target worth
+        /// <paramref name="amount"/> (plain ranged damage on hit, see <see cref="EnemyRangedAttack"/>). No-op without a
+        /// living target or for a melee definition.
+        /// </summary>
+        public void FireProjectile(float amount)
+        {
+            if (Target == null || _definition == null || !_definition.IsRanged)
+            {
+                return;
+            }
+
+            ICombatTarget combatTarget = Target.GetComponentInParent<ICombatTarget>();
+            if (combatTarget == null || !combatTarget.IsAlive)
+            {
+                return;
+            }
+
+            EnemyRangedAttack.Launch(_definition.Projectile, EnemyRangedAttack.MuzzleOf(transform), Target, gameObject, amount, _definition.AttackRange);
         }
 
         public void PublishFleeing()

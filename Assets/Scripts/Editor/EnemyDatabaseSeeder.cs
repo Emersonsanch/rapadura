@@ -53,6 +53,13 @@ namespace Rapadura.Editor
 
             public float fleeHealthThreshold = 0.2f;
             public float fleeSafeDistance = 10f;
+
+            // Only written when set (the older seeds keep whatever their assets were authored with).
+            public int experienceReward;
+            public EnemyMotionArchetype motionArchetype = EnemyMotionArchetype.Auto;
+
+            /// <summary>[distância]: what the strike shoots (None = melee swing), see EnemyRangedAttack.</summary>
+            public EnemyProjectileKind projectile = EnemyProjectileKind.None;
         }
 
         [MenuItem("Rapadura/Seed Example Enemies")]
@@ -120,6 +127,18 @@ namespace Rapadura.Editor
 
             so.FindProperty("_fleeHealthThreshold").floatValue = seed.fleeHealthThreshold;
             so.FindProperty("_fleeSafeDistance").floatValue = seed.fleeSafeDistance;
+
+            if (seed.experienceReward > 0)
+            {
+                so.FindProperty("_experienceReward").intValue = seed.experienceReward;
+            }
+
+            if (seed.motionArchetype != EnemyMotionArchetype.Auto)
+            {
+                so.FindProperty("_motionArchetype").enumValueIndex = (int)seed.motionArchetype;
+            }
+
+            so.FindProperty("_projectile").enumValueIndex = (int)seed.projectile;
 
             so.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(enemy);
@@ -337,6 +356,89 @@ namespace Rapadura.Editor
                     attackCooldown = 3f,
                     attackDamage = 42f,
                     fleeHealthThreshold = 0f,
+                },
+
+                // [distância] commons of the playable maps (Docs/Mapas100.md 07, 08, 13, 19): weight 0 = in the biome
+                // (bestiary region, loot table) but never rolled by the world-map encounters; MapLayouts places them.
+                new EnemySeed
+                {
+                    id = "enemy_desert_ember_vulture",
+                    name = "Abutre de Brasa",
+                    biome = BiomeType.Desert,
+                    spawnWeight = 0,
+                    maxHealth = 110f,
+                    patrolSpeed = 2.2f,
+                    chaseSpeed = 4.5f,
+                    fleeSpeed = 5f,
+                    detectionRadius = 11f,
+                    loseTargetRadius = 15f,
+                    attackRange = 8f,
+                    attackCooldown = 2.2f,
+                    attackDamage = 12f,
+                    fleeHealthThreshold = 0f,
+                    experienceReward = 18,
+                    motionArchetype = EnemyMotionArchetype.Flyer,
+                    projectile = EnemyProjectileKind.Ember,
+                },
+                new EnemySeed
+                {
+                    id = "enemy_desert_broken_lantern",
+                    name = "Lanterna Quebrada dos Artífices",
+                    biome = BiomeType.Desert,
+                    spawnWeight = 0,
+                    maxHealth = 110f,
+                    patrolSpeed = 1.2f,
+                    chaseSpeed = 2.6f,
+                    fleeSpeed = 0f,
+                    detectionRadius = 10f,
+                    loseTargetRadius = 14f,
+                    attackRange = 7f,
+                    attackCooldown = 2.6f,
+                    attackDamage = 14f,
+                    fleeHealthThreshold = 0f,
+                    experienceReward = 18,
+                    motionArchetype = EnemyMotionArchetype.Flyer,
+                    projectile = EnemyProjectileKind.LanternBolt,
+                },
+                new EnemySeed
+                {
+                    id = "enemy_mountain_crested_hawk",
+                    name = "Gavião-de-Penacho",
+                    biome = BiomeType.Mountain,
+                    spawnWeight = 0,
+                    maxHealth = 140f,
+                    patrolSpeed = 2.4f,
+                    chaseSpeed = 5f,
+                    fleeSpeed = 5f,
+                    detectionRadius = 12f,
+                    loseTargetRadius = 16f,
+                    attackRange = 9f,
+                    attackCooldown = 2f,
+                    attackDamage = 13f,
+                    fleeHealthThreshold = 0f,
+                    experienceReward = 28,
+                    motionArchetype = EnemyMotionArchetype.Flyer,
+                    projectile = EnemyProjectileKind.Feather,
+                },
+                new EnemySeed
+                {
+                    id = "enemy_cave_lantern_fish",
+                    name = "Peixe-Lanterna Apagado",
+                    biome = BiomeType.Caves,
+                    spawnWeight = 0,
+                    maxHealth = 170f,
+                    patrolSpeed = 1.5f,
+                    chaseSpeed = 3.2f,
+                    fleeSpeed = 0f,
+                    detectionRadius = 10f,
+                    loseTargetRadius = 14f,
+                    attackRange = 7.5f,
+                    attackCooldown = 2.4f,
+                    attackDamage = 16f,
+                    fleeHealthThreshold = 0f,
+                    experienceReward = 40,
+                    motionArchetype = EnemyMotionArchetype.Flyer,
+                    projectile = EnemyProjectileKind.LureGlob,
                 },
             };
         }

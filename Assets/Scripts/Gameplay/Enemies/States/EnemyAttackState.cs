@@ -91,6 +91,13 @@ namespace Rapadura.Gameplay.Enemies.States
             // AttackDamage debuffs (Provocação Heroica, Névoa da Ilusão, Purificação) weaken the swing.
             float damage = context.EffectiveAttackDamage;
 
+            // [distância]: the strike looses a shot from range instead of a swing (EnemyRangedAttack).
+            if (context.Definition != null && context.Definition.IsRanged)
+            {
+                context.FireProjectile(damage);
+                return;
+            }
+
             if (context.Hitbox != null)
             {
                 context.Hitbox.Damage = damage;

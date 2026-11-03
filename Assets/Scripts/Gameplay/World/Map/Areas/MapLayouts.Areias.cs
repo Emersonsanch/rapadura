@@ -19,6 +19,10 @@ namespace Rapadura.Gameplay.World.Map.Areas
     /// </summary>
     public static partial class MapLayouts
     {
+        /// <summary>[distância] of the Areias (Mapas100 07 and 08); the lantern also haunts the Salão de Tages (20).</summary>
+        private const string EmberVulture = "enemy_desert_ember_vulture";
+        private const string BrokenLantern = "enemy_desert_broken_lantern";
+
         // ------------------------------------------------------------------
         // 07 · Estrada das Caravanas
         // ------------------------------------------------------------------
@@ -134,7 +138,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
 
             // Step 4–5 (Mapas100 07): Escorpião das Areias Flamejantes [tanque]; the Lobo do Tugai that follows the caravans
             // stands in for the Chacal Apagado [rápido]; at dusk and night the Enxame de Faíscas Presas, and the Mardagayl
-            // comes down the karez on some nights ([elite]).
+            // comes down the karez on some nights ([elite]); the Abutre de Brasa [distância] circles the broken caravan and Qocho.
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "dunas_oeste", Center = new Vector2(-62f, -42f), Radius = 11f, MinLevel = 5, MaxLevel = 6, MaxAlive = 4, RespawnSeconds = 24f,
@@ -154,15 +158,15 @@ namespace Rapadura.Gameplay.World.Map.Areas
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "caravana_quebrada", Center = new Vector2(66f, 42f), Radius = 11f, MinLevel = 6, MaxLevel = 7, MaxAlive = 4, RespawnSeconds = 26f,
-                Archetypes = "[tanque] [rápido]",
-                Day = new[] { PeriodSpawnEntry.Normal(Scorpion, 3), PeriodSpawnEntry.Normal(Wolf, 2) },
-                Night = new[] { PeriodSpawnEntry.Variant(Scorpion, 2), PeriodSpawnEntry.Variant(Wolf, 2), PeriodSpawnEntry.Species(NightVariantRules.VagaLume, 1) },
+                Archetypes = "[tanque] [distância]",
+                Day = new[] { PeriodSpawnEntry.Normal(Scorpion, 3), PeriodSpawnEntry.Normal(EmberVulture, 2) },
+                Night = new[] { PeriodSpawnEntry.Variant(Scorpion, 2), PeriodSpawnEntry.Variant(EmberVulture, 2), PeriodSpawnEntry.Species(NightVariantRules.VagaLume, 1) },
             });
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "beira_de_qocho", Center = new Vector2(74f, -48f), Radius = 10f, MinLevel = 6, MaxLevel = 7, MaxAlive = 5, RespawnSeconds = 24f,
-                Archetypes = "[tanque] [enxame]",
-                Day = new[] { PeriodSpawnEntry.Normal(Scorpion, 4) },
+                Archetypes = "[tanque] [enxame] [distância]",
+                Day = new[] { PeriodSpawnEntry.Normal(Scorpion, 3), PeriodSpawnEntry.Normal(EmberVulture, 1) },
                 Dusk = new[] { PeriodSpawnEntry.Normal(Scorpion, 3), PeriodSpawnEntry.Species(NightVariantRules.VagaLume, 2) },
                 Night = new[] { PeriodSpawnEntry.Variant(Scorpion, 3), PeriodSpawnEntry.Species(NightVariantRules.VagaLume, 3) },
             });
@@ -293,7 +297,8 @@ namespace Rapadura.Gameplay.World.Map.Areas
             m.Exits.Add(Border("exit_island", MapExitKind.WorldMap, null, Rect.MinMaxRect(-100f, -46f, -97f, -34f), new Vector2(-93f, -40f), Vector2.right));
 
             // Step 4–5 (Mapas100 08): the Ushabti de Pedra [tanque] stands in for the Ushabti de Areia, the Escorpião
-            // [tanque]; at night the ushabtis "wake" (night variants, glowing eyes) and the sparks swarm over the stones.
+            // [tanque]; the Lanterna Quebrada dos Artífices [distância] floats among the pyramids and the lotus columns; at
+            // night the ushabtis "wake" (night variants, glowing eyes) and the sparks swarm over the stones.
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "avenida_oeste", Center = new Vector2(-48f, -66f), Radius = 11f, MinLevel = 6, MaxLevel = 7, MaxAlive = 4, RespawnSeconds = 24f,
@@ -304,17 +309,17 @@ namespace Rapadura.Gameplay.World.Map.Areas
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "piramides_leste", Center = new Vector2(52f, -95f), Radius = 12f, MinLevel = 7, MaxLevel = 8, MaxAlive = 5, RespawnSeconds = 24f,
-                Archetypes = "[tanque] [enxame]",
-                Day = new[] { PeriodSpawnEntry.Normal(Scorpion, 3), PeriodSpawnEntry.Normal(Golem, 1) },
+                Archetypes = "[tanque] [enxame] [distância]",
+                Day = new[] { PeriodSpawnEntry.Normal(Scorpion, 3), PeriodSpawnEntry.Normal(BrokenLantern, 1) },
                 Dusk = new[] { PeriodSpawnEntry.Normal(Scorpion, 3), PeriodSpawnEntry.Species(NightVariantRules.VagaLume, 1) },
-                Night = new[] { PeriodSpawnEntry.Variant(Scorpion, 3), PeriodSpawnEntry.Species(NightVariantRules.VagaLume, 2) },
+                Night = new[] { PeriodSpawnEntry.Variant(Scorpion, 2), PeriodSpawnEntry.Variant(BrokenLantern, 1), PeriodSpawnEntry.Species(NightVariantRules.VagaLume, 2) },
             });
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "colunas_oeste", Center = new Vector2(-58f, -128f), Radius = 12f, MinLevel = 7, MaxLevel = 8, MaxAlive = 4, RespawnSeconds = 26f,
-                Archetypes = "[tanque] [rápido]",
-                Day = new[] { PeriodSpawnEntry.Normal(Scorpion, 2), PeriodSpawnEntry.Normal(Golem, 2) },
-                Night = new[] { PeriodSpawnEntry.Variant(Scorpion, 2), PeriodSpawnEntry.Variant(Golem, 2), PeriodSpawnEntry.Species(NightVariantRules.VagaLume, 1) },
+                Archetypes = "[tanque] [distância]",
+                Day = new[] { PeriodSpawnEntry.Normal(Scorpion, 2), PeriodSpawnEntry.Normal(BrokenLantern, 2) },
+                Night = new[] { PeriodSpawnEntry.Variant(Scorpion, 2), PeriodSpawnEntry.Variant(BrokenLantern, 2), PeriodSpawnEntry.Species(NightVariantRules.VagaLume, 1) },
             });
             m.Zones.Add(new MapSpawnZone
             {

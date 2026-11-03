@@ -35,6 +35,16 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         Peccary = 14,
         /// <summary>Mãe-da-lua (urutau): potoo with huge yellow eyes and a gaping mouth, carrying its branch.</summary>
         Potoo = 15,
+
+        // [distância] (ranged) commons of the playable maps 07/08/13/14/19/20 (Docs/Mapas100.md), shoot via EnemyRangedAttack.
+        /// <summary>Abutre de Brasa: bald-headed vulture with ember-tipped wings that spits embers.</summary>
+        EmberVulture = 16,
+        /// <summary>Lanterna Quebrada dos Artífices: a floating cracked lantern engine that shoots bolts of trapped light.</summary>
+        BrokenLantern = 17,
+        /// <summary>Gavião-de-Penacho: crested hawk that throws hard flight feathers like darts.</summary>
+        CrestedHawk = 18,
+        /// <summary>Peixe-Lanterna Apagado: a dimmed anglerfish swimming in the cave air, flicking globs from its lure.</summary>
+        LanternFish = 19,
     }
 
     /// <summary>

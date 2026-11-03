@@ -20,6 +20,9 @@ namespace Rapadura.Gameplay.World.Map.Areas
     /// </summary>
     public static partial class MapLayouts
     {
+        /// <summary>[distância] of the Serra de Kaggen (Mapas100 13; also over the pass, 14).</summary>
+        private const string CrestedHawk = "enemy_mountain_crested_hawk";
+
         // ------------------------------------------------------------------
         // 13 · Trilha dos Rondavéis
         // ------------------------------------------------------------------
@@ -64,12 +67,12 @@ namespace Rapadura.Gameplay.World.Map.Areas
 
             // Step 4–5 (Mapas100 13): Ushabti de Pedra [tanque]; the Lobo do Tugai (the slopes' wolves) stands in for the
             // Babuíno Apagado [rápido] and the Javali charges down the grass; at night the Ave-Graveto de Omöl and the
-            // Coruja-de-Fumaça visiting from the Zarafshan.
+            // Coruja-de-Fumaça visiting from the Zarafshan; the Gavião-de-Penacho [distância] throws feathers from the ledges.
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "encosta_oeste", Center = new Vector2(-70f, -52f), Radius = 11f, MinLevel = 9, MaxLevel = 10, MaxAlive = 4, RespawnSeconds = 26f,
-                Archetypes = "[tanque]",
-                Day = new[] { PeriodSpawnEntry.Normal(Golem, 3), PeriodSpawnEntry.Normal(Wolf, 1) },
+                Archetypes = "[tanque] [distância]",
+                Day = new[] { PeriodSpawnEntry.Normal(Golem, 3), PeriodSpawnEntry.Normal(CrestedHawk, 2) },
                 Night = new[] { PeriodSpawnEntry.Variant(Golem, 3), PeriodSpawnEntry.Species(NightVariantRules.MaeDaLua, 1), PeriodSpawnEntry.Species(NightVariantRules.RasgaMortalha, 1) },
             });
             m.Zones.Add(new MapSpawnZone
@@ -90,9 +93,9 @@ namespace Rapadura.Gameplay.World.Map.Areas
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "beira_do_passo", Center = new Vector2(66f, -136f), Radius = 11f, MinLevel = 10, MaxLevel = 11, MaxAlive = 4, RespawnSeconds = 26f,
-                Archetypes = "[rápido] [tanque]",
-                Day = new[] { PeriodSpawnEntry.Normal(Wolf, 2), PeriodSpawnEntry.Normal(Golem, 2) },
-                Night = new[] { PeriodSpawnEntry.Variant(Wolf, 2), PeriodSpawnEntry.Variant(Golem, 1), PeriodSpawnEntry.Species(NightVariantRules.RasgaMortalha, 1) },
+                Archetypes = "[rápido] [distância]",
+                Day = new[] { PeriodSpawnEntry.Normal(Wolf, 2), PeriodSpawnEntry.Normal(CrestedHawk, 2) },
+                Night = new[] { PeriodSpawnEntry.Variant(Wolf, 2), PeriodSpawnEntry.Variant(CrestedHawk, 1), PeriodSpawnEntry.Species(NightVariantRules.RasgaMortalha, 1) },
             });
             ClearingsFromZones(m);
 
@@ -197,12 +200,12 @@ namespace Rapadura.Gameplay.World.Map.Areas
 
             // Step 4–5 (Mapas100 14): Ushabti de Pedra [tanque]; the Lobo stands in for the Lince Apagado [rápido], the
             // bat swarm is the Morcego da Mina [enxame]; at night the Ave-Graveto, the Coruja-de-Fumaça and Ubır at the
-            // gallery.
+            // gallery; the Gavião-de-Penacho [distância] of the 13 also hunts the slope and the summit.
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "ladeira_sul", Center = new Vector2(-52f, -55f), Radius = 11f, MinLevel = 10, MaxLevel = 11, MaxAlive = 4, RespawnSeconds = 26f,
-                Archetypes = "[tanque]",
-                Day = new[] { PeriodSpawnEntry.Normal(Golem, 3), PeriodSpawnEntry.Normal(Wolf, 1) },
+                Archetypes = "[tanque] [distância]",
+                Day = new[] { PeriodSpawnEntry.Normal(Golem, 3), PeriodSpawnEntry.Normal(CrestedHawk, 1) },
                 Night = new[] { PeriodSpawnEntry.Variant(Golem, 3), PeriodSpawnEntry.Species(NightVariantRules.MaeDaLua, 1) },
             });
             m.Zones.Add(new MapSpawnZone
@@ -222,9 +225,9 @@ namespace Rapadura.Gameplay.World.Map.Areas
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "beira_do_cume", Center = new Vector2(76f, 62f), Radius = 11f, MinLevel = 12, MaxLevel = 13, MaxAlive = 3, RespawnSeconds = 32f,
-                Archetypes = "[elite] [tanque]",
-                Day = new[] { PeriodSpawnEntry.Normal(Golem, 2), PeriodSpawnEntry.Normal(Wolf, 1) },
-                Night = new[] { PeriodSpawnEntry.Variant(Golem, 3), PeriodSpawnEntry.Variant(Wolf, 1), PeriodSpawnEntry.Species(NightVariantRules.MaeDaLua, 1) },
+                Archetypes = "[elite] [tanque] [distância]",
+                Day = new[] { PeriodSpawnEntry.Normal(Golem, 2), PeriodSpawnEntry.Normal(CrestedHawk, 1) },
+                Night = new[] { PeriodSpawnEntry.Variant(Golem, 3), PeriodSpawnEntry.Variant(CrestedHawk, 1), PeriodSpawnEntry.Species(NightVariantRules.MaeDaLua, 1) },
             });
             ClearingsFromZones(m);
 

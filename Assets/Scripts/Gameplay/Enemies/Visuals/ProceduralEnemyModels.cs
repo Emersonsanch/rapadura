@@ -97,6 +97,10 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_desert_firefly_swarm", ProceduralEnemyKind.FireflySwarm },
             { "enemy_forest_peccary", ProceduralEnemyKind.Peccary },
             { "enemy_mountain_potoo", ProceduralEnemyKind.Potoo },
+            { "enemy_desert_ember_vulture", ProceduralEnemyKind.EmberVulture },
+            { "enemy_desert_broken_lantern", ProceduralEnemyKind.BrokenLantern },
+            { "enemy_mountain_crested_hawk", ProceduralEnemyKind.CrestedHawk },
+            { "enemy_cave_lantern_fish", ProceduralEnemyKind.LanternFish },
         };
 
         public static readonly ProceduralEnemyKind[] AllKinds =
@@ -106,6 +110,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.Wolf, ProceduralEnemyKind.AlphaWolf, ProceduralEnemyKind.Spider, ProceduralEnemyKind.Scorpion,
             ProceduralEnemyKind.Werewolf, ProceduralEnemyKind.VampireBat, ProceduralEnemyKind.ShroudOwl,
             ProceduralEnemyKind.FireflySwarm, ProceduralEnemyKind.Peccary, ProceduralEnemyKind.Potoo,
+            ProceduralEnemyKind.EmberVulture, ProceduralEnemyKind.BrokenLantern, ProceduralEnemyKind.CrestedHawk, ProceduralEnemyKind.LanternFish,
         };
 
         /// <summary>The night-only species models (Docs/DayNight.md): they also get a <see cref="Rapadura.Gameplay.Night.NightCreatureVoice"/>.</summary>
@@ -181,6 +186,18 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.Potoo:
                     PotooRecipe.Build(blueprint);
+                    break;
+                case ProceduralEnemyKind.EmberVulture:
+                    RangedEnemyRecipes.BuildEmberVulture(blueprint);
+                    break;
+                case ProceduralEnemyKind.BrokenLantern:
+                    RangedEnemyRecipes.BuildBrokenLantern(blueprint);
+                    break;
+                case ProceduralEnemyKind.CrestedHawk:
+                    RangedEnemyRecipes.BuildCrestedHawk(blueprint);
+                    break;
+                case ProceduralEnemyKind.LanternFish:
+                    RangedEnemyRecipes.BuildLanternFish(blueprint);
                     break;
             }
 

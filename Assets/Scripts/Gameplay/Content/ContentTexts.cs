@@ -218,6 +218,11 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_desert_firefly_swarm", "Swarm of Trapped Sparks", "Enxame de Faíscas Presas"),
             EnemyName("enemy_forest_peccary", "Mire Boar", "Javali do Lodo"),
             EnemyName("enemy_mountain_potoo", "Omöl's Twig-Bird", "Ave-Graveto de Omöl"),
+            // [distância] commons of the playable maps (Docs/Mapas100.md 07, 08, 13, 19).
+            EnemyName("enemy_desert_ember_vulture", "Ember Vulture", "Abutre de Brasa"),
+            EnemyName("enemy_desert_broken_lantern", "Broken Lantern of the Artificers", "Lanterna Quebrada dos Artífices"),
+            EnemyName("enemy_mountain_crested_hawk", "Crested Hawk", "Gavião-de-Penacho"),
+            EnemyName("enemy_cave_lantern_fish", "Dimmed Lanternfish", "Peixe-Lanterna Apagado"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),
