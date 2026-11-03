@@ -140,7 +140,7 @@ namespace Rapadura.Gameplay.Quests
                 new[] { new RegionRewardSpec("item_health_potion", 2) }),
             new RegionQuestSpec(ForestSecond, BiomeType.Forest, ForestFirst, 80,
                 new[] { new RegionObjectiveSpec("clear_forest_spiders", QuestObjectiveType.KillEnemyType, "enemy_forest_spider", 4) },
-                new[] { new RegionRewardSpec("item_leather_helmet", 1) }),
+                new[] { new RegionRewardSpec("item_leather_helmet", 1), new RegionRewardSpec("item_chave_jardim", 1) }),
 
             // -- Deserto (Ammo, o Caravaneiro) --
             new RegionQuestSpec(DesertFirst, BiomeType.Desert, null, 100,
@@ -160,12 +160,12 @@ namespace Rapadura.Gameplay.Quests
                 new[] { new RegionRewardSpec("item_mana_potion", 2), new RegionRewardSpec("item_gold", 15) }),
             new RegionQuestSpec(MountainSecond, BiomeType.Mountain, MountainFirst, 180,
                 new[] { new RegionObjectiveSpec("open_the_mine_pass", QuestObjectiveType.KillEnemyType, "enemy_mountain_stone_golem", 6) },
-                new[] { new RegionRewardSpec("item_iron_sword", 1) }),
+                new[] { new RegionRewardSpec("item_iron_sword", 1), new RegionRewardSpec("item_manta_la", 1) }),
 
             // -- Cavernas (Parthenos) --
             new RegionQuestSpec(CavesFirst, BiomeType.Caves, null, 200,
                 new[] { new RegionObjectiveSpec("scatter_bat_swarms", QuestObjectiveType.KillEnemyType, "enemy_cave_bat_swarm", 6) },
-                new[] { new RegionRewardSpec("item_health_potion", 2), new RegionRewardSpec("item_mana_potion", 2) }),
+                new[] { new RegionRewardSpec("item_health_potion", 2), new RegionRewardSpec("item_mana_potion", 2), new RegionRewardSpec("item_lamparina_oleo", 1) }),
             new RegionQuestSpec(CavesSecond, BiomeType.Caves, CavesFirst, 240,
                 new[] { new RegionObjectiveSpec("light_the_deep_tunnel", QuestObjectiveType.KillEnemyType, "enemy_cave_bat_swarm", 8) },
                 new[] { new RegionRewardSpec("item_leather_chest", 1) }),

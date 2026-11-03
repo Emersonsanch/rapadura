@@ -169,7 +169,9 @@ namespace Rapadura.UI.WorldMap
 
             string meta = MapTexts.Format(localization, MapTexts.RowMeta, map.MonsterLevelMin, map.MonsterLevelMax, MapTexts.SettlementLine(localization, map));
             string button = cost > 0 ? MapTexts.Format(localization, MapTexts.Go, cost) : MapTexts.Get(localization, MapTexts.GoFree);
-            string hint = check == MapAccessCheck.LevelTooLow ? MapTexts.Format(localization, MapTexts.LevelHint, walk) : status;
+            string hint = check == MapAccessCheck.LevelTooLow ? MapTexts.Format(localization, MapTexts.LevelHint, walk)
+                : check == MapAccessCheck.MissingRequirement ? status + " · " + MapTexts.RequirementHint(localization, map.SpecialRequirementTag)
+                : status;
             return new MapTravelRow(map, check, cost, MapTexts.NumberedName(localization, map), meta, requirement, status, button, hint);
         }
 
@@ -544,6 +546,7 @@ namespace Rapadura.UI.WorldMap
 
             _list.Clear();
             Button first = null;
+            Func<string, bool> hasRequirement = MapRequirementHeroState.LookupFor(bag);
             foreach (MapRegion region in MapCatalog.Regions)
             {
                 var header = new Label(MapTexts.RegionName(localization, region));
@@ -560,7 +563,7 @@ namespace Rapadura.UI.WorldMap
 
                 foreach (MapDefinition def in MapCatalog.InRegion(region))
                 {
-                    MapTravelRow row = BuildMapRow(def, level, hero, gold, overloaded, here, busy, null, localization);
+                    MapTravelRow row = BuildMapRow(def, level, hero, gold, overloaded, here, busy, hasRequirement, localization);
                     Button go = AddMapRow(row);
                     first ??= go;
                 }
@@ -669,7 +672,8 @@ namespace Rapadura.UI.WorldMap
             CharacterId? hero = ServiceLocator.TryGet(out CharacterSelectionState selection) ? selection.Selected : null;
             bool busy = _request.Map != null && CityFastTravelPanel.IsEventActive(_request.Map);
             string here = MapModeController.Current != null ? MapModeController.Current.MapId : null;
-            MapTravelRow row = BuildMapRow(map, HeroLevelNow(), hero, bag.GetTotalCount(CurrencyItemId), IsOverloadedNow(), here, busy, null, Localization);
+            MapTravelRow row = BuildMapRow(map, HeroLevelNow(), hero, bag.GetTotalCount(CurrencyItemId), IsOverloadedNow(), here, busy,
+                MapRequirementHeroState.LookupFor(bag), Localization);
             if (!row.CanTravel || (row.Cost > 0 && !bag.RemoveById(CurrencyItemId, row.Cost)))
             {
                 _status.text = row.Hint;

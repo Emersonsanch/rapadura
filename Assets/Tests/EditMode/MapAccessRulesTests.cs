@@ -245,6 +245,7 @@ namespace Rapadura.Tests
 
             keys.AddRange(MapCatalog.Regions.Select(MapTexts.RegionKey));
             keys.AddRange(MapRequirementTags.All.Select(MapTexts.RequirementKey));
+            keys.AddRange(MapRequirementTags.All.Select(MapTexts.RequirementHintKey));
             keys.AddRange(MapCatalog.ReturnCityIds.Select(MapTexts.ReturnCityKey));
             var entries = MapTexts.Entries.ToDictionary(e => e.Key);
             Assert.AreEqual(MapTexts.Entries.Count, entries.Count, "duplicate text keys");

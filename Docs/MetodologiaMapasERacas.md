@@ -42,6 +42,45 @@ Exatamente como em *MU Online* (onde você precisa de **Asas / Dinorant** para e
 | **Botas de Raiz / Bóias de Lodo** | O lodo profundo afunda o herói (velocidade reduzida em 70% e impossibilidade de pular). | Brejos do Delta de Jhilpur e Charco do Ninki Nanka. | Botas Trançadas de Raiz Viva, Montaria Capivara/Cavalo-Marinho. |
 | **Chave Rúnica / Ticket de Entrada** | Portão bloqueado até consumir o item correspondente. | Masmorras fechadas e Criptas secretas. | *Chave de Osso Rúnica* (`item_bone_key`). |
 
+### 2.1 De onde vem cada exigência (implementado)
+
+Regra pura em `Gameplay/World/Map/MapRequirementRules.cs` (`IsMet(tag, estado)`), lida do herói por
+`MapRequirementHeroState` (mochila, equipamento, primo escolhido, montarias) e ligada a `MapAccessRules.CheckWarp/CheckWalk`:
+a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: …" e, ao clicar, dizem onde conseguir
+(`map.requirement.<tag>.hint`). "Levar" = na mochila **ou** equipado; "vestir/calçar" = equipado no slot. Testes:
+`MapRequirementTests`.
+
+| Exigência (mapas) | Como é atendida | Onde conseguir |
+|---|---|---|
+| Botas de couro (03) | calçar **qualquer** bota no slot Botas; Joaquim dispensa (não afunda no lodo, §3) | Botas de Couro: Armarinho da Mariam (Vila da Vó Edna), Costureira, Selaria de Qocho; recompensa da 2ª missão do Deserto |
+| Plataformas elevadas (05) | levar Corda de Escalada ou vestir asas (não a capa) | Armarinho da Mariam (Vila) |
+| Chave do Jardim (06) | levar a Chave do Jardim (presa ao herói, não cai na morte) | recompensa da 2ª missão da Floresta (Mariam); cópia no Armarinho após o chefe da Floresta |
+| Água fresca (10) | levar Odre de Água Fresca | Selaria de Qocho |
+| Proteção a veneno (12) | levar Teriaga do Oásis ou Amuleto Antiveneno; Lavine dispensa (névoas, §3) | Selaria de Qocho |
+| Manta de lã (14) | levar Manta de Lã, ou vestir a Capa de Feltro dos Nartes (Tacho), ou levar a Roupa Térmica | Forja do Mestre Mihr (Litema); recompensa da 2ª missão da Montanha |
+| Picareta e tocha (17) | levar picareta (mochila ou slot Ferramenta) **e** uma lamparina | Picareta: forjas de Litema/Vila; lamparina: Vila das Lamparinas |
+| Resistência à nevasca (18) | levar Chá de Gengibre do Tandir ou Roupa Térmica | Forja de Litema (após o chefe da Montanha) |
+| Lamparina acesa (19, 20) | levar Lamparina de Óleo ou Lamparina Rúnica (a luz noturna embutida do herói não basta) | Lamparinas da Parthenos (Vila das Lamparinas); recompensa da 1ª missão das Cavernas |
+| Lamparina rúnica (21) | levar Lamparina Rúnica | Lamparinas da Parthenos, após o chefe das Cavernas |
+| Óleo de Fogo Eterno (23) | levar Óleo de Fogo Eterno | Lamparinas da Parthenos, após o chefe das Cavernas |
+| Asas ou salto duplo (24) · Asas/montaria (39) | asas de verdade do Tacho Encantado no slot Costas/Asas (a Capa de Feltro não voa) ou ter montaria Voadora | Tacho Encantado; montarias aladas (ainda não há no catálogo). Salto duplo não existe ainda |
+| Barco ou cais (25) | levar Passagem de Dhow ou ter montaria Aquática (Capivara) | Taa Pwani (cidade planejada) |
+| Relíquia dos Artífices (27) | levar a relíquia | Aratta (planejada) |
+| Concha respirável (28) | levar Concha Respirável | Kirta (planejada) |
+| Bolha de ar (29) | levar Bolha de Ar Engarrafada ou Concha Respirável | Kirta (planejada) |
+| Botas de raiz (30) | calçar Botas de Raiz Viva, ou montaria Aquática; Joaquim dispensa | Taa Pwani (planejada) |
+| Equilíbrio nas pontes (32) | levar Vara de Equilíbrio; Maithe dispensa (pontes suspensas, §3) | Jhilpur (planejada) |
+| Barco de junco (33) | levar Barco de Junco ou montaria Aquática | Palafitas de Tarchon (planejada) |
+| Amuleto antiveneno (34) | levar Amuleto Antiveneno (Lavine **não** dispensa: é mordida, não névoa) | Palafitas de Tarchon (planejada) |
+| Fruta purificadora (35) | levar Fruta Purificadora | Jhilpur (planejada) |
+| Roupa térmica (36) | **vestir** Roupa Térmica Refinada (slot Peito) | Sangkent (planejada) |
+| Grampos de escalada (38) | levar Grampos de Escalada | Sangkent (planejada) |
+| Proteção a tempestade (40) | levar Capa de Tempestade | Sangkent (planejada) |
+| Selo do Sol (42) | levar o Selo do Sol (preso ao herói) | Mingcheng (planejada) |
+
+Os itens das regiões 5–8 já existem (`Resources/Items`, textos en/pt-BR em `ContentTexts`), mas só entram numa loja quando
+a cidade de retorno for construída. Nada é consumido ao entrar: basta levar.
+
 ---
 
 ## 3. Modificadores de Classe no Nível de Acesso (Estilo Magic Gladiator / Dark Lord)

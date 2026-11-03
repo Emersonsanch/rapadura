@@ -217,6 +217,9 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_hunting_bow", 38, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
                 // Alforje de Feltro (+2 rows of the Mochila, once): for a regular of Mariam (freguesia tier 1).
                 new CityShopEntry(BornalItemId, 150, 1, unlock: ShopUnlock.Reputation(ShopReputation.Regular)),
+                // Map gates (MapRequirementRules): the rope of the Copas de Garajonay (05) and a copy of the Garden Key (06).
+                new CityShopEntry("item_corda_escalada", 38, 2),
+                new CityShopEntry("item_chave_jardim", 66, 1, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
             }), houseSlots: 2),
             new CityShopSpec(FeiraLivre, ShopTheme.Feira, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(FeiraLivre, new List<CityShopEntry>
             {
@@ -240,6 +243,9 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_hunting_bow", 33, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Desert)),
                 // Ema Corredora (Docs/Mounts.md §3.1, M3 wave 1): the oasis critter fair lives here until it has a stall of its own.
                 new CityShopEntry("item_whistle_mount_rhea", 75, -1),
+                // Map gates (MapRequirementRules): water for the Dunas que Cantam (10), theriac for Namrael (12).
+                new CityShopEntry("item_odre_agua", 28, 5),
+                new CityShopEntry("item_teriaga", 48, 3),
             }),
 
             // ---- Vila de Litema (Montanha): ferreiro ----
@@ -258,6 +264,9 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_pedra_alma", 32, 2, unlock: ShopUnlock.Cleared(BiomeType.Mountain)),
                 // Bode Saltador (Docs/Mounts.md §3.1, M3 wave 1): the Curral do Pico sells through the forge until it has a stall.
                 new CityShopEntry("item_whistle_mount_mountain_goat", 70, -1),
+                // Map gates (MapRequirementRules): the wool cloak of the Passo do Hahya (14), ginger tea for the Mazans (18).
+                new CityShopEntry("item_manta_la", 42, 2),
+                new CityShopEntry("item_cha_gengibre", 66, 3, unlock: ShopUnlock.Cleared(BiomeType.Mountain)),
             }), houseSlots: 2),
 
             // ---- Vila das Lamparinas (Cavernas): lamparinas e botica ----
@@ -273,6 +282,10 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 // Tamanduá-Bandeira (Docs/Mounts.md §3.2, M3 wave 1): the caves' keeper den.
                 new CityShopEntry("item_whistle_mount_giant_anteater", 140, -1, unlock: ShopUnlock.Cleared(BiomeType.Desert)),
+                // Map gates (MapRequirementRules): the oil lamp of the Grutas (17, 19, 20), the runic lamp (21) and the eternal oil (23).
+                new CityShopEntry("item_lamparina_oleo", 27, 3),
+                new CityShopEntry("item_lamparina_runica", 150, 1, unlock: ShopUnlock.Cleared(BiomeType.Caves)),
+                new CityShopEntry("item_oleo_fogo_eterno", 185, 2, unlock: ShopUnlock.Cleared(BiomeType.Caves)),
             }), houseSlots: 2),
 
             // ---- Ferraria do Mestre Adamas (Vila): the village blacksmith ----

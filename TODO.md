@@ -1573,40 +1573,42 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 ### 💀 Nova Masmorra: O Ossuário dos Artífices (Catacumbas de Marfim) — Tarefas de Implementação
 > 📌 **Visão de Design:** Masmorra clássica subterrânea no estilo *MU Online Dungeon* e *Tibia*. Corredores estreitos de pedra, nichos repletos de crânios com fogo-fátuo azul/verde, portas gradeadas trancadas por chaves de osso, sarcófagos com armadilhas e hordas de esqueletos e caveiras.
 
+> ✅ **Feito** (`81e445c` + esta entrega): código em `Gameplay/Dungeon/`, inimigos/tabela em `Resources/Dungeons/Ossuario/`, chave e armadura em `Resources/Items/{Keys,Dungeon}/`, botão no mapa e HUD em `UI/Dungeon/`, testes em `Tests/EditMode/Dungeon/`. Documento: [`Docs/Dungeons.md`](Docs/Dungeons.md) (pendências no §9: modelos próprios dos esqueletos, resistência à Sombra, encaixe no catálogo de mapas MU).
+
 #### 1. Infraestrutura C# e Objetos Interativos da Masmorra
-- [ ] `Assets/Scripts/Gameplay/Dungeon/LockedDungeonGate.cs`:
+- [x] `Assets/Scripts/Gameplay/Dungeon/LockedDungeonGate.cs`:
   - Componente MonoBehaviour para portões de ferro gradeados.
   - Campos serializados: `string requiredKeyItemId = "item_bone_key"`, `bool consumeKeyOnUnlock = true`, `Transform gateBarsTransform`, `float openHeight = 3.5f`, `float openDuration = 1.2f`.
   - Método `TryUnlock(InventoryManager inventory)`: verifica `inventory.HasItem(requiredKeyItemId)`, remove se configurado, dispara som de engrenagem enferrujada (`AudioManager.PlaySfx`) e anima a elevação das grades via interpolação suave (sem alocação de corrotina).
   - Estado salvo em `DungeonProgress` para persistir portas já abertas ao trocar de cena.
-- [ ] `Assets/Scripts/Gameplay/Dungeon/SarcophagusInteractable.cs`:
+- [x] `Assets/Scripts/Gameplay/Dungeon/SarcophagusInteractable.cs`:
   - Implementa `IInteractable` com `Outline` ou destaque luminoso ao aproximar.
   - Ao interagir: a tampa de pedra desliza com som de atrito pesado (`Sfx_StoneSlide`).
   - Lógica de sorteio: 70% de chance de entregar drop da tabela de loot da masmorra (`LootTable_Catacombs`); 30% de chance de acionar emboscada de 2x `enemy_floating_skull` com efeito sonoro de susto e fumaça roxa.
   - Garante abertura única por sessão/save.
-- [ ] `Assets/Scripts/Gameplay/Dungeon/BreakableBoneWall.cs`:
+- [x] `Assets/Scripts/Gameplay/Dungeon/BreakableBoneWall.cs`:
   - Parede de pedra rachada bloqueando salas secretas com baús lendários.
   - Implementa `IDamageable` ou ouve `GroundImpactSystem`: quebra ao receber dano de impacto contundente (habilidade *Terremoto* de Joaquim ou explosão de granada de Ícaro).
   - Instancia partículas de pedregulhos e pó de osso (`Vfx_WallCrumble`) e desativa o `NavMeshObstacle` para liberar a passagem.
 
 #### 2. Bestiário de Esqueletos & Inimigos da Masmorra
-- [ ] **Caveira Flutuante (`enemy_floating_skull`)**:
+- [x] **Caveira Flutuante (`enemy_floating_skull`)**:
   - `EnemyDefinition`: Vida baixa (40 HP), velocidade altíssima (7.5 m/s), dano moderado (18).
   - IA / Comportamento: Movimento ondulante senoidal no eixo Y flutuando a 1.2m do chão. Ataque em mergulho rasante contra o herói com recuo rápido de 2m pós-golpe.
   - Visual/VFX: Prefab de crânio com luz pontual suave azul-esverdeada (`Light` com intensidade 1.5, alcance 3m) e emissão de partículas de fogo-fátuo nas órbitas dos olhos.
-- [ ] **Guerreiro Esqueleto de Cobre (`enemy_skeleton_warrior`)**:
+- [x] **Guerreiro Esqueleto de Cobre (`enemy_skeleton_warrior`)**:
   - `EnemyDefinition`: Vida média (180 HP), velocidade padrão (3.8 m/s), armadura alta (25% redução).
   - Habilidade de Guarda com Escudo de Osso: a cada 6 segundos, assume postura defensiva por 2.5s, reduzindo dano frontal em 60% e refletindo 15% do dano de projéteis.
   - Drop: Fragmentos de Osso Antigo, Moedas Furadas de Qocho e *Espada Enferrujada do Vigia*.
-- [ ] **Arqueiro Esqueleto do Fosso (`enemy_skeleton_archer`)**:
+- [x] **Arqueiro Esqueleto do Fosso (`enemy_skeleton_archer`)**:
   - `EnemyDefinition`: Vida baixa (95 HP), ataque à distância (alcance 14m), precisão alta.
   - IA de Manutenção de Distância: se o herói se aproximar a menos de 4m, o arqueiro recua 3 passos enquanto prepara a próxima flecha.
   - Projétil: Flecha de costela rúnica com rastro de fumaça roxa, aplicando debuff de *Lentidão* (-20% move speed por 3s).
-- [ ] **Feiticeiro das Ossadas (`enemy_bone_sorcerer`)**:
+- [x] **Feiticeiro das Ossadas (`enemy_bone_sorcerer`)**:
   - `EnemyDefinition`: Vida média (220 HP), ataque mágico à distância com esferas espectrais.
   - Habilidade *Erguer as Ossadas*: a cada 12 segundos, canaliza um encantamento de 2s e reanima até 2 esqueletos guerreiros derrotados na sala com 40% de vida máxima.
   - Regra de Ouro anti-exploit: esqueletos reanimados recebem a flag `isReanimated = true` e NÃO concedem XP nem drop adicional ao serem mortos novamente.
-- [ ] **Chefe: O Colosso de Crânios (`boss_bone_colossus`)**:
+- [x] **Chefe: O Colosso de Crânios (`boss_bone_colossus`)**:
   - `EnemyDefinition`: Vida colossal (1400 HP), ataque lento e devastador, imunidade a empurrão.
   - 3 Fases de Ataque:
     * Fase 1 (100%-70% HP): Pancada de Clava de Ossos no chão com onda de choque radial (exige pular ou afastar 5m).
@@ -1614,19 +1616,19 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
     * Fase 3 (<30% HP): *Prisão de Costelas*: invoca uma jaula de ossos ao redor do herói que precisa ser golpeada 3 vezes para quebrar, enquanto o colosso prepara um ataque carregado.
 
 #### 3. Itens, Loot & Tabelas de Recompensa
-- [ ] Criar ScriptableObject `item_bone_key` em `Assets/Resources/Items/Keys/BoneKey.asset`:
+- [x] Criar ScriptableObject `item_bone_key` em `Assets/Resources/Items/Keys/BoneKey.asset`:
   - Nome: "Chave de Osso Rúnica" (en: *Runic Bone Key*), raridade Rara, peso 0.1, não perde durabilidade.
-- [ ] Conjunto de Armadura de Marfim dos Artífices:
+- [x] Conjunto de Armadura de Marfim dos Artífices:
   - `armor_bone_chest`: Armadura Peitoral de Costelas (+Defesa, +Chance de Crítico).
   - `armor_bone_helm`: Elmo Crânio de Cobre (+Resistência à Sombra, +Mana Máxima).
   - Bônus de Conjunto (2 peças): *"Toque Espectral"* — golpes críticos têm 15% de chance de emitir um estilhaço de osso que atinge inimigos próximos.
 
 #### 4. Testes Automatizados da Masmorra
-- [ ] `Assets/Tests/EditMode/Dungeon/DungeonGateTests.cs`:
+- [x] `Assets/Tests/EditMode/Dungeon/DungeonGateTests.cs`:
   - `Gate_WithoutKey_RemainsLocked()`: garante que interagir sem a chave não altera estado.
   - `Gate_WithKey_ConsumesKeyAndUnlocks()`: valida remoção correta do item no inventário e alteração de flag.
   - `Gate_Unlocked_DoesNotRequireKeyAgain()`: valida persistência do estado aberto.
-- [ ] `Assets/Tests/EditMode/Dungeon/BoneSorcererAntiExploitTests.cs`:
+- [x] `Assets/Tests/EditMode/Dungeon/BoneSorcererAntiExploitTests.cs`:
   - Valida que inimigos com `isReanimated = true` retornam 0 de experiência no evento de morte.
 
 ---

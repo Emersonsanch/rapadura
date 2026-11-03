@@ -278,7 +278,8 @@ namespace Rapadura.Gameplay.World.Map.Areas
                 case MapExitKind.Map:
                     MapDefinition target = MapCatalog.Get(spec.TargetMapId);
                     CharacterId? hero = ServiceLocator.TryGet(out CharacterSelectionState selection) ? selection.Selected : null;
-                    MapAccessCheck check = MapAccessRules.CheckWalk(target, HeroLevel, hero, null);
+                    Rapadura.Gameplay.Inventory.InventoryManager bag = player != null ? player.GetComponentInChildren<Rapadura.Gameplay.Inventory.InventoryManager>() : null;
+                    MapAccessCheck check = MapAccessRules.CheckWalk(target, HeroLevel, hero, MapRequirementHeroState.LookupFor(bag));
                     if (check == MapAccessCheck.Ok && MapLayouts.Has(spec.TargetMapId))
                     {
                         WalkTo(spec.TargetMapId);

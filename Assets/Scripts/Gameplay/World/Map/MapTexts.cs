@@ -73,6 +73,9 @@ namespace Rapadura.Gameplay.World.Map
 
         public static string RequirementKey(string tag) => "map.requirement." + tag;
 
+        /// <summary>Where the gear of a gate comes from (MapRequirementRules), shown when the barca refuses for it.</summary>
+        public static string RequirementHintKey(string tag) => "map.requirement." + tag + ".hint";
+
         public static string KindKey(MapSettlementKind kind)
         {
             switch (kind)
@@ -161,6 +164,36 @@ namespace Rapadura.Gameplay.World.Map
             ("sangkent", "Sangkent", "Sangkent"),
             ("mingcheng", "Mingcheng", "Mingcheng"),
             ("torres_brancas", "White Spires", "Torres Brancas"),
+        };
+
+        private static readonly (string Tag, string En, string Pt)[] RequirementHints =
+        {
+            (MapRequirementTags.LeatherBoots, "Wear any boots: Leather Boots at Mariam's haberdashery (Vila da Vó Edna). Joaquim does not sink in the mud.", "Calce qualquer bota: Botas de Couro no Armarinho da Mariam (Vila da Vó Edna). O Joaquim não afunda no lodo."),
+            (MapRequirementTags.ElevatedPlatforms, "Carry a Climbing Rope (Mariam's haberdashery, Vila da Vó Edna) or wear wings.", "Leve uma Corda de Escalada (Armarinho da Mariam, Vila da Vó Edna) ou use asas."),
+            (MapRequirementTags.GardenKey, "Mariam gives the Garden Key for clearing the spider webs; after the Forest boss she also sells a copy.", "A Mariam dá a Chave do Jardim por limpar as teias; depois do chefe da Floresta ela também vende uma cópia."),
+            (MapRequirementTags.FreshWater, "Carry a Waterskin of Fresh Water from the Qocho Oasis saddlery.", "Leve um Odre de Água Fresca da selaria do Oásis de Qocho."),
+            (MapRequirementTags.PoisonProtection, "Carry an Oasis Theriac (Qocho) or an anti-venom amulet. Lavine breathes the poison mists.", "Leve uma Teriaga do Oásis (Qocho) ou um amuleto antiveneno. A Lavine respira as névoas venenosas."),
+            (MapRequirementTags.WoolCloak, "Carry a Wool Cloak (Litema forge, or Mestre Mihr's mine-pass quest) or wear the Nart Felt Cloak.", "Leve uma Manta de Lã (forja de Litema ou a missão do passo da mina do Mestre Mihr) ou vista a Capa de Feltro dos Nartes."),
+            (MapRequirementTags.PickaxeTorch, "Carry a pickaxe and a lamp: Oil Lamp at Parthenos's lamps (Vila das Lamparinas).", "Leve picareta e lamparina: Lamparina de Óleo nas Lamparinas da Parthenos (Vila das Lamparinas)."),
+            (MapRequirementTags.BlizzardResistance, "Carry Tandir Ginger Tea (Litema forge) or wear fine thermal clothes.", "Leve Chá de Gengibre do Tandir (forja de Litema) ou vista roupa térmica refinada."),
+            (MapRequirementTags.TorchRequired, "Carry an Oil Lamp: Parthenos sells it in the Vila das Lamparinas and gives one for scattering the bats.", "Leve uma Lamparina de Óleo: a Parthenos vende na Vila das Lamparinas e dá uma por espantar os morcegos."),
+            (MapRequirementTags.RunicLamp, "Carry a Runic Lamp: Parthenos sells it once the Caves boss has fallen.", "Leve uma Lamparina Rúnica: a Parthenos vende depois do chefe das Cavernas."),
+            (MapRequirementTags.EternalFireOil, "Carry Eternal Fire Oil: Parthenos sells it once the Caves boss has fallen.", "Leve Óleo de Fogo Eterno: a Parthenos vende depois do chefe das Cavernas."),
+            (MapRequirementTags.WingsOrDoubleJump, "Wear wings of the Enchanted Cauldron or own a winged mount.", "Vista asas do Tacho Encantado ou tenha uma montaria alada."),
+            (MapRequirementTags.BoatOrDock, "Carry a Dhow Passage (Taa Pwani) or own a water mount.", "Leve uma Passagem de Dhow (Taa Pwani) ou tenha uma montaria aquática."),
+            (MapRequirementTags.ArtificerRelic, "Carry an Artificers' Relic (Aratta).", "Leve uma Relíquia dos Artífices (Aratta)."),
+            (MapRequirementTags.BreathingShell, "Carry a Breathing Shell (Kirta).", "Leve uma Concha Respirável (Kirta)."),
+            (MapRequirementTags.AirBubble, "Carry a Bottled Air Bubble or a Breathing Shell (Kirta).", "Leve uma Bolha de Ar Engarrafada ou uma Concha Respirável (Kirta)."),
+            (MapRequirementTags.RootBoots, "Wear Living-Root Boots (Taa Pwani) or own a water mount. Joaquim does not sink in the mud.", "Calce Botas de Raiz Viva (Taa Pwani) ou tenha uma montaria aquática. O Joaquim não afunda no lodo."),
+            (MapRequirementTags.RootBridgeBalance, "Carry a Balance Pole (Jhilpur). Maithe walks the root bridges on her own.", "Leve uma Vara de Equilíbrio (Jhilpur). A Maithe atravessa as pontes de raiz sozinha."),
+            (MapRequirementTags.SaddleRequired, "Carry a Reed Boat (Tarchon stilt houses) or own a water mount.", "Leve um Barco de Junco (Palafitas de Tarchon) ou tenha uma montaria aquática."),
+            (MapRequirementTags.AntiVenomAmulet, "Carry an Anti-Venom Amulet (Tarchon stilt houses).", "Leve um Amuleto Antiveneno (Palafitas de Tarchon)."),
+            (MapRequirementTags.PurifyingFruit, "Carry a Purifying Fruit (Jhilpur).", "Leve uma Fruta Purificadora (Jhilpur)."),
+            (MapRequirementTags.ThermalClothes, "Wear Fine Thermal Clothes (Sangkent).", "Vista a Roupa Térmica Refinada (Sangkent)."),
+            (MapRequirementTags.ClimbingCrampons, "Carry Climbing Crampons (Sangkent).", "Leve Grampos de Escalada (Sangkent)."),
+            (MapRequirementTags.WingsRequired, "Wear wings of the Enchanted Cauldron or own a winged mount.", "Vista asas do Tacho Encantado ou tenha uma montaria alada."),
+            (MapRequirementTags.StormProtection, "Carry a Storm Cloak (Sangkent).", "Leve uma Capa de Tempestade (Sangkent)."),
+            (MapRequirementTags.SunSeal, "Carry the Sun Seal (Mingcheng).", "Leve o Selo do Sol (Mingcheng)."),
         };
 
         private static readonly (string Tag, string En, string Pt)[] RequirementNames =
@@ -266,6 +299,11 @@ namespace Rapadura.Gameplay.World.Map
                 entries.Add(new LocalizationEntry(RequirementKey(tag), en, pt));
             }
 
+            foreach ((string tag, string en, string pt) in RequirementHints)
+            {
+                entries.Add(new LocalizationEntry(RequirementHintKey(tag), en, pt));
+            }
+
             return entries;
         }
 
@@ -338,5 +376,7 @@ namespace Rapadura.Gameplay.World.Map
         public static string RegionName(LocalizationManager manager, MapRegion region) => Get(manager, RegionKey(region));
 
         public static string RequirementName(LocalizationManager manager, string tag) => string.IsNullOrEmpty(tag) ? string.Empty : Get(manager, RequirementKey(tag));
+
+        public static string RequirementHint(LocalizationManager manager, string tag) => string.IsNullOrEmpty(tag) ? string.Empty : Get(manager, RequirementHintKey(tag));
     }
 }
