@@ -235,6 +235,36 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         MilletTuft = 195,
         /// <summary>A drift of fallen bamboo leaves and young shoots (ground detail, no collider).</summary>
         BambooShoots = 196,
+
+        // Região 9 — Estepe dos Nartes (OverworldDecorKit.Nartes.cs): 200–219.
+        /// <summary>A round felt tent on a cart (the centaurs' camp that moves): felt walls, a domed roof, two big wheels.</summary>
+        FeltYurt = 200,
+        /// <summary>A horse standard (tug): a tall pole with horsetail tufts and a small gold finial.</summary>
+        HorseStandard = 201,
+        /// <summary>A stone baba (balbal): a weathered stone figure holding a cup at its belly, on the steppe or a kurgan.</summary>
+        StoneBaba = 202,
+        /// <summary>A golden stag in the Scythian animal style on a stone base (the kurgans' gold).</summary>
+        GoldStag = 203,
+        /// <summary>A birch: thin white trunks with dark marks, a light crown of small leaves.</summary>
+        Birch = 204,
+        /// <summary>A giant larch of the taiga: a tall straight trunk, soft green-gold tiers.</summary>
+        Larch = 205,
+        /// <summary>A dream tablet of the hill giants: a tall standing slab carved with lines, moss at its foot.</summary>
+        DreamTablet = 206,
+        /// <summary>A giant stone pot of the hill giants, as big as a hut, smoke rising from it.</summary>
+        GiantCauldron = 207,
+        /// <summary>A svan tower: a tall square stone watch tower narrowing upwards, a pyramid roof of slate.</summary>
+        SvanTower = 208,
+        /// <summary>A run of Amirani's giant chain (old iron links lying up the mountain; <see cref="OverworldProp.End"/> = its other end).</summary>
+        ChainRun = 209,
+        /// <summary>A stone well with its bucket frame (the Poço da Taça of the prairie).</summary>
+        StoneWell = 210,
+        /// <summary>An earthen rampart of the giants' hill forts (<see cref="OverworldProp.End"/> = its other end).</summary>
+        EarthRampart = 211,
+        /// <summary>Feather-grass plumes (ground detail, no collider).</summary>
+        FeatherTuft = 212,
+        /// <summary>A clump of red poppies (ground detail, no collider).</summary>
+        PoppyTuft = 213,
     }
 
     /// <summary>

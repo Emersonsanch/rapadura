@@ -170,15 +170,16 @@ namespace Rapadura.Tests
         // ------------------------------------------------------------------
 
         [Test]
-        public void Catalog_Has42Maps_UniqueIdsAndNumbers_InOrder()
+        public void Catalog_Has42MapsAndRegion9_UniqueIdsAndNumbers_InOrder()
         {
-            Assert.AreEqual(42, MapCatalog.Maps.Count);
+            // The 42 maps of the "até 100" scope (01–42) and Região 9's six (47–52, ☆, walked as its continuous region).
+            Assert.AreEqual(48, MapCatalog.Maps.Count);
             Assert.AreEqual(MapCatalog.Maps.Count, MapCatalog.Maps.Select(m => m.Id).Distinct().Count(), "unique ids");
             Assert.AreEqual(MapCatalog.Maps.Count, MapCatalog.Maps.Select(m => m.MapId).Distinct().Count(), "unique numbers");
             for (int i = 0; i < MapCatalog.Maps.Count; i++)
             {
                 MapDefinition map = MapCatalog.Maps[i];
-                Assert.AreEqual(i + 1, map.MapId);
+                Assert.AreEqual(i < 42 ? i + 1 : i + 5, map.MapId);
                 StringAssert.IsMatch(@"^map_\d{3}_[a-z_]+$", map.Id);
                 StringAssert.StartsWith($"map_{map.MapId:000}_", map.Id);
                 Assert.AreSame(map, MapCatalog.Get(map.Id));
@@ -232,7 +233,7 @@ namespace Rapadura.Tests
             foreach (MapDefinition map in MapCatalog.Maps)
             {
                 Assert.IsTrue(rows.TryGetValue(map.MapId, out Match doc), $"map {map.MapId:00} missing from Mapas100.md §1");
-                Assert.AreEqual("★", doc.Groups[7].Value, $"{map.Id}: in the 'até 100' scope");
+                Assert.AreEqual(map.MapId <= 42 ? "★" : "☆", doc.Groups[7].Value, $"{map.Id}: in the 'até 100' scope (Região 9 is ☆)");
                 Assert.AreEqual(int.Parse(doc.Groups[4].Value), map.MonsterLevelMin, $"{map.Id}: band min");
                 Assert.AreEqual(int.Parse(doc.Groups[5].Value), map.MonsterLevelMax, $"{map.Id}: band max");
                 Assert.AreEqual(doc.Groups[2].Value, MapTexts.MapName(null, map), $"{map.Id}: pt-BR name");

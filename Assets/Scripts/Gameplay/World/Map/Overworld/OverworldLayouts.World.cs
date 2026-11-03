@@ -28,8 +28,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// Jhilpur) south of it, east of the Areias (x 1400…3800, z −3400…−1000): a 3 × 2 rectangle of regions. Região 7 (the Teto do
     /// Mundo) goes on north of the Serra de Kaggen (x −3400…−1000, z 1400…3800), its two gates on the south edge led to the
     /// Serra's trails; Região 8 (the Planície de Mingcheng) fills the corner north of the Zarafshan (x −1000…1400, z 1400…3800),
-    /// its two south gates led to the Zarafshan's trails and its two west gates to the Teto's; the corner north of the Costa,
-    /// which no region covers, is a hole walled off like the world's edge (<see cref="OverworldLayout.Holes"/>).
+    /// its two south gates led to the Zarafshan's trails and its two west gates to the Teto's; Região 9 (the Estepe dos Nartes)
+    /// fills the last corner, north of the Costa and east of Mingcheng (x 1400…3800, z 1400…3800), its three south gates led to
+    /// the Costa's trails and its three west gates to Mingcheng's: a whole 3 × 3 square of regions. A corner no region covers
+    /// would be a hole walled off like the world's edge (<see cref="OverworldLayout.Holes"/>); today there is none.
     /// The relief blends across the borders like between any two areas (one relief for the whole world, each area shaped in
     /// its own region's coordinates), the chunk grids line up (offsets are multiples of the chunk), the streaming, the soft
     /// barrier, the levels and the requirements work per area as before.
@@ -66,6 +68,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// Costa stays a walled hole.
         /// </summary>
         public static readonly Vector2 MingchengWorldOffset = new Vector2(200f, 2000f);
+
+        /// <summary>
+        /// Região 9 north of the Costa, east of the Planície de Mingcheng (the Acampamento de Soslan at world (2600, 2000)): the
+        /// Estepe dos Nartes fills the last walled corner, so the world is a whole 7200 × 7200 m square of nine regions, no hole.
+        /// </summary>
+        public static readonly Vector2 NartesWorldOffset = new Vector2(2600f, 2000f);
 
         /// <summary>Width (m) of the trail that joins two passes (or a pass to the nearest trail across the border).</summary>
         public const float PassTrailWidth = 4f;
@@ -105,6 +113,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 (DeltaRegion(), DeltaWorldOffset),
                 (TetoRegion(), TetoWorldOffset),
                 (MingchengRegion(), MingchengWorldOffset),
+                (NartesRegion(), NartesWorldOffset),
             };
 
             Rect bounds = default;

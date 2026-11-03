@@ -268,6 +268,36 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         SpiritWay = 153,
         /// <summary>Loess gullies: yellow earth cut by deep ravines, earth pillars, terraced field strips.</summary>
         LoessGullies = 154,
+
+        // Região 9 — Estepe dos Nartes (OverworldLayouts.Nartes.cs, OverworldTerrains.Nartes.cs): 160–179.
+        /// <summary>The open steppe of tall feather grass (stipa): straw-gold waves, the herders' horse standards, a stone baba.</summary>
+        FeatherSteppe = 160,
+        /// <summary>The steppe's shallow rivers: wide shingle bars, willows, reeds and the fords (the Vau Largo).</summary>
+        SteppeRiver = 161,
+        /// <summary>The Acampamento de Soslan (47): trampled grass round the centaurs' felt tents on carts, horse standards, wells.</summary>
+        HorseCamp = 162,
+        /// <summary>The Kurgans de Ouro (48): burial mounds of earth and stone on the steppe, stone babas, golden stags.</summary>
+        KurganField = 163,
+        /// <summary>The silver wormwood steppe: grey-green tussocks, salt pans, bones of the herds.</summary>
+        WormwoodSteppe = 164,
+        /// <summary>The forest-steppe: birch groves in the grass, white trunks, golden leaves.</summary>
+        BirchSteppe = 165,
+        /// <summary>The green hills of the hill giants (49): earthen ramparts in rings round the tops, giant stone pots.</summary>
+        GiantHills = 166,
+        /// <summary>The vale of the dream tablets (49): standing slabs carved with the giants' dreams in a mossy valley.</summary>
+        DreamVale = 167,
+        /// <summary>The taiga at the steppe's edge (50): giant larches and spruces, moss, meltwater.</summary>
+        Taiga = 168,
+        /// <summary>Rolling prairie red with poppies (51).</summary>
+        PoppyPrairie = 169,
+        /// <summary>The Pradaria dos Mil Cavalos (51): wide short-grass plains of the wild herds, stone wells, cairns.</summary>
+        HorsePlains = 170,
+        /// <summary>A high valley of the Caucasus: svan stone towers, birch woods, stone field walls (52).</summary>
+        SvanValley = 171,
+        /// <summary>The Corrente de Amirani (52): grey crags of the Caucasus, old snow, the giant chain climbing the mountain.</summary>
+        ChainPeak = 172,
+        /// <summary>The snow crest under the summit where Ohya waits (52): snow, ice and black rock.</summary>
+        SnowCrest = 173,
     }
 
     /// <summary>

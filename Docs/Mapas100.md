@@ -135,6 +135,11 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       x −1200…1200, z −600…1800) com Mingcheng em (0, 0) na planície do rio e as Torres Brancas em (960, 600); 41 e 42 viram zonas
       (construídos), 25 áreas numa grade 5 × 5, 15 terrenos novos, relevo próprio (`KarstTowers`, `WallRidge`) e cenário próprio;
       preenche o buraco murado ao norte do Zarafshan, entre o Teto e a Costa. Detalhes em §5, "Região 8".
+    - **Região 9 — Estepe dos Nartes** (2026-11-03): mesmo modelo, 2400 × 2400 m (`OverworldLayouts.Nartes.cs`, coordenadas
+      x −1200…1200, z −600…1800) com o Acampamento de Soslan em (0, 0) junto do Rio dos Nartes, o Fortim em (−480, 1080) e o
+      Arvoredo em (−960, 1560); 47–52 entram no catálogo (☆) e viram zonas (construídos), 25 áreas numa grade 5 × 5, 14 terrenos
+      novos, relevo próprio (`Kurgans`, `Massif`) e cenário próprio (a Corrente de Amirani deitada pela montanha); preenche o
+      último buraco murado, ao norte da Costa e a leste de Mingcheng. Detalhes em §5, "Região 9".
     - **Mundo costurado** (2026-11-03, pedido do usuário: andar entre as regiões sem portão): as quatro primeiras regiões
       formam um quadrado de 4800 × 4800 m (`OverworldLayouts.WorldId`, `OverworldLayouts.World.cs`), 2 × 2, e a **Costa das
       Monções** fica a leste do Zarafshan (x 1400…3800, z −1000…1400, deslocamento (2000, 200)) e o **Delta de Jhilpur** a
@@ -152,11 +157,17 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       invisíveis). Passagens do Teto: os dois portões da borda sul (`exit_pedra_seca`, x −2350, e `exit_abrigos`, x −1080) são
       levados à trilha mais próxima da Serra logo ao sul (o caminho entre o Recinto Curvo e o Abrigo do Eland, e a ponta de trilha
       norte das Encostas dos Abrigos). A **Planície de Mingcheng** preenche o buraco ao norte do Zarafshan (x −1000…1400,
-      z 1400…3800, deslocamento (200, 2000), Mingcheng no mundo em (200, 2000)): sobra um só buraco murado, ao norte da Costa. O Rio
+      z 1400…3800, deslocamento (200, 2000), Mingcheng no mundo em (200, 2000)): sobrava um só buraco murado, ao norte da Costa. O Rio
       Dourado nasce nela e chega à borda sul no mesmo ponto (520, 1400) onde o do Zarafshan começa. Passagens: os dois portões da
       borda sul (`exit_pomar`, x 0, e `exit_tugai`, x 1000) são levados à trilha mais próxima do Zarafshan (a estrada das Ruínas do
       Aryk Velho e a da Mata Alta de Zurvan) e os dois da borda oeste (`exit_calhas`, z 2100, e `exit_forte_ventos`, z 2620) à do
-      Teto (a Estação da Calha Alta e a encruzilhada dos cata-ventos). Quadrado original:
+      Teto (a Estação da Calha Alta e a encruzilhada dos cata-ventos). A **Estepe dos Nartes** preenche esse último buraco
+      (x 1400…3800, z 1400…3800, deslocamento (2600, 2000), o Acampamento de Soslan no mundo em (2600, 2000)): o mundo vira um
+      **quadrado inteiro** de 7200 × 7200 m, 3 × 3 regiões, **sem buraco** (`Holes` vazio). Passagens: os três portões da borda sul
+      (`exit_auroques`, x 1700; `exit_meroe`, x 2750; `exit_husuni`, x 3500) são levados à trilha mais próxima da Costa logo ao sul
+      (a estrada de Aratta, a do Pátio dos Relevos e a ponta das falésias de Husuni) e os três da borda oeste (`exit_loess`, z 1850;
+      `exit_torres`, z 2700; `exit_nian`, z 3420) à de Mingcheng (a trilha das Ravinas de Loess, a das Colinas dos Espelhos e a dos
+      Picos do Nian). Rota a pé Vila → Acampamento de Soslan: ~4,0 km pela Costa. Quadrado original:
       Serra de Kaggen (x −3400…−1000, z −1000…1400) | Bosque do Zarafshan (x −1000…1400, z −1000…1400) em cima;
       Grutas do Limiar (x −3400…−1000, z −3400…−1000) | Areias Flamejantes (x −1000…1400, z −3400…−1000) embaixo.
       Cada região guarda o seu layout nas suas coordenadas e é deslocada por um número inteiro de pedaços (Zarafshan
@@ -1138,8 +1149,9 @@ Viva e Fogo Vivo (o sol da savana). Chefe do mundo: **Hedammu** (mapa 30).
     redes secando, cabeças de coral, muros, arcos e túmulos de pilar de coral, acácias de copa plana, cupinzeiros, mangues ao longo
     dos canais, cravo secando na esteira, linhas de sargaço; coqueiros inclinados, baobás e casuarinas (as do fundo além do muro,
     a árvore mais leve); pirâmides, colunas de lótus e ushabtis do deserto em Meroé.
-  - **Bichos:** Gaivota Ladra e Caranguejo-dos-Coqueiros (praias, recife, coqueiral, atol, mangues) com chacal, cobra-de-areia,
-    escorpião, aranha, lobo (leão do capim), queixada, ushabti, abutre de brasa, gavião, babuíno, Pedra que Rola, lodo, corvo da
+  - **Bichos:** Gaivota Ladra e Caranguejo-dos-Coqueiros (praias, recife, coqueiral, atol, mangues), Crocodilo do Mangue Apagado
+    (mangue raso, canais e mangues de Liyongo), Leão do Capim Apagado e Rinoceronte-de-Pó (savana dos auroques) com chacal,
+    cobra-de-areia (moreias), escorpião, aranha, lobo, queixada, ushabti, abutre de brasa, gavião, babuíno, Pedra que Rola, lodo, corvo da
     treva, peixe-lanterna e as espécies da noite (plâncton/vaga-lume no recife e nos mangues, Mngwa no corpo do lobisomem,
     kongamato no morcego-vampiro); nenhum chefe. Clima: céu limpo nas praias, recife, atol e savana; chuva de monção nos mangues e
     em Kilwa; névoa nas falésias, lagoas e algas; poeira em Meroé.
@@ -1275,9 +1287,9 @@ Viva e Fogo Vivo (o sol da savana). Chefe do mundo: **Hedammu** (mapa 30).
     bambu, fontes de Água Viva num anel de raízes (brilham), raízes podres, árvores mortas, diques de terra; detalhe de chão
     carimbado: folhas e flor de lótus na beira d'água, touceiras de arroz, bolhas violeta do Lodo; palmeiras e casuarinas do
     kit da costa (casuarinas na faixa dos muros, a árvore mais leve).
-  - **Bichos** (existentes, nenhum chefe): peixe-lanterna (Peixe-Saltador de Lodo), cobra-de-areia (Gavial do Lodo, Píton
-    Apagada, Crocodilo de Musgo, Cobra-d'Água, Ninki Nanka Filhote, Gavial-Sombra), chacal (Lontra Ladra), gaivota (Garça-Lança
-    e Garça-Fantasma), babuíno (Macaco Ladrão), lodo (Sanguessuga, Filhos do Lodo), aranha (Raiz-Laço), golem (Trol Apagado),
+  - **Bichos** (nenhum chefe): peixe-lanterna (Peixe-Saltador de Lodo), os próprios Crocodilo do Mangue Apagado (Gavial do Lodo,
+    Crocodilo de Musgo, Ninki Nanka Filhote, Gavial-Sombra), Píton Apagada (também a Cobra-d'Água), Lontra Ladra, Macaco Ladrão e
+    Trol Apagado, gaivota (Garça-Lança e Garça-Fantasma), lodo (Sanguessuga, Filhos do Lodo), aranha (Raiz-Laço), golem,
     lanterna quebrada (Fogo-Fátuo Preso), Neblina (Bolha de Fumaça), corvo (Raiz Podre), morcegos (Libélula de Fumaça),
     queixada (Sapo-Boi), gavião, caranguejo, urutau; à noite vaga-lumes/fogos-fátuos, a coruja rasga-mortalha (garça-fantasma),
     o morcego-vampiro e a queixada. Clima: monção nas gargantas, na floresta de chuva e na de maré; névoa no lótus, no junco,
@@ -1400,9 +1412,9 @@ Capital **Jhilpur** (§2). *Jhil* = lago/charco (bengali e hindi), *pur* = cidad
     de vigia com sinos de vento, bandeirolas coloridas das caravanas (sem rito), escamas caídas de Aydahar; muros de pedra seca nos
     terraços e pastagens; detalhe de chão carimbado: fendas azuis na geleira, tocas de marmota, cristais de gelo, montes de neve e
     névoa (do kit da Serra).
-  - **Bichos** (existentes, nenhum chefe): lobisomem como corpo do Urso-Pardo do Pamir, corvo (Gralha-de-Bico-Vermelho e Gralha das
-    Neves), chacal (Marmota Gigante), pedra-que-rola (Pedra-Rolante), golem (Ushabti de Calha e Guarda de Pedra), abutre de brasa
-    (Abutre-Barbudo), neblina do vento ruim, queixada (Iaque Selvagem e Argali), babuíno (Almas), lobo (Lobo de Gelo e Irbis), lodo
+  - **Bichos** (nenhum chefe): os próprios Urso-Pardo do Pamir Apagado, Marmota Gigante, Iaque Selvagem Apagado (também o Argali
+    até ter o seu), Almas e Irbis Apagado; corvo (Gralha-de-Bico-Vermelho e Gralha das Neves), pedra-que-rola (Pedra-Rolante), golem
+    (Ushabti de Calha e Guarda de Pedra), abutre de brasa (Abutre-Barbudo), neblina do vento ruim, lobo (Lobo de Gelo), lodo
     (Fenda Viva), lanterna quebrada (Pipa de Fumaça), gavião (Gavião-Real), morcegos (Morcego do Vento), orc coroado (Bandoleiro de
     Āz); à noite lobisomem, rasga-mortalha, morcego-vampiro, mãe-da-lua e a queixada. Clima: neve nas calhas, terraços de neve,
     geleira, seracs, cristas, passo e picos; névoa no degelo, no lago e nos penhascos de Aydahar; céu limpo na estepe e no vale.
@@ -1640,6 +1652,49 @@ cidades de raça (centauros, gigantes-da-colina, povo-tronco). Estilo base `Step
 feltro `#D8C9A8`, céu `#A7C7E7`, ouro cita `#D4A93A`, montanha `#6E7480`. Chefe do mundo: **Ohya** (mapa 52, o irmão do
 Hahya guardado para o online, bíblia §1.4).
 
+- **Mundo contínuo (2026-11-03): mapas 47–52 jogáveis a pé.** Os seis mapas ☆ entram no `MapCatalog` (`MapRegion.EstepeDosNartes`,
+  níveis e cidades de retorno de §1; a pé/barca 96/104, 102/110, 108/116, 114/122, 120/128, 128/140; só o 52 pede item: **Grampos
+  de Escalada**, vendidos em Sangkent) e a região inteira é um mapa de 2400 × 2400 m (`OverworldLayouts.Nartes`, `NartesId`)
+  costurado ao norte da Costa e a leste de Mingcheng, sem portão. As três cidades usam as próprias receitas
+  (`CityTownRecipes.Soslan()`, `.Fortim()`, `.Arvoredo()`, estilos `SteppeCamp`, `HillFort`, `LivingGrove`; `CityId` do catálogo
+  `acampamento_soslan`, `fortim`, `arvoredo`; Backdrop desligado, raio de 22,5 m sobre o chão plano de ±30 m em y = 0):
+  Acampamento de Soslan em (0, 0), 600 m da borda sul (ruas O/L/S); Fortim em (−480, 1080) (ruas O/S; a trilha das torres svan
+  sai da estrada sul); Arvoredo em (−960, 1560) (ruas O/L/S); postos Kurgan Aberto (960, 120), Poço da Taça (960, 1080) e Torre
+  de Vigia (0, 1560), todos com Cais.
+  Grade 5 × 5 de áreas (colunas x −1200/−720/−240/240/720/1200, linhas z −600/−120/360/840/1320/1800), nível subindo com a
+  distância do acampamento a partir de 100:
+  - **Perto (100–105):** Acampamento de Soslan, Vau Largo (a entrada pela Costa) e Pistas de Corrida (47), Estepe de Soslan,
+    Estepe das Saigas e, a leste, os Kurgans de Ouro (48). **Nada pede item no caminho do acampamento nem nas entradas.**
+  - **Meio (104–118):** Rio dos Nartes, Pastos dos Gigantes, Campos de Papoula, Kurgan Aberto (48), Lago Salgado, Kurgans do Leste,
+    Estepe dos Ventos e Bosque de Bétulas (as entradas por Mingcheng), Vale das Tábuas de Sonho e Fortim dos Gigantes (49), Vale
+    das Torres Svan, Pradaria Ondulada.
+  - **Longe (118–150):** Taiga de Lariços, Arvoredo de Haripushpa e Lago de Degelo (50), Pradaria dos Mil Cavalos (51) e o
+    Cáucaso do 52 (Grampos): Torre de Vigia, Corrente de Amirani e Cume de Ohya.
+  - **Água:** o Rio dos Nartes (12 m, leito cavado mas raso) desce das neves sob a corrente, passa pelas torres svan e a leste do
+    acampamento até um lago ao sul; dois **vaus largos** (as estradas do acampamento) e uma ponte de pedra sob a Torre de Vigia;
+    Lago de Degelo na taiga, lago salgado no absinto, lagoa das manadas.
+  - **Relevo:** estepe baixa (≤ 6 m) no acampamento, no vau e no absinto; ondulado nas pradarias (~9–15 m); `Kurgans` (montes
+    redondos de ~10 m sobre chão plano; trilhas e clareiras no chão) nos kurgans; `Terraced` nos montes dos gigantes (~14 m);
+    `Hills` nas bétulas, no vale das tábuas, na taiga e nos vales svan (~20 m); `Peaks` na corrente (~30 m); `Massif` (estratos
+    inclinados em cristas, ~34 m) no Cume de Ohya.
+  - **Cenário** (`OverworldDecorKit.Nartes.cs`, `OverworldChunkBuilder.Nartes.cs`; só linhas da paleta que todo build já tem):
+    tendas de feltro sobre carroças, estandartes de crina, babas de pedra, cervos de ouro no estilo animal cita, bétulas, lariços
+    gigantes, tábuas de sonho, panelas de pedra gigantes, **muralhas de terra** seguindo a curva de nível dos montes, torres svan,
+    poços de pedra, a **Corrente de Amirani** (elos de ferro deitados ao longo da linha `AmiraniChain`, de 5 em 5 m, sem colisor:
+    é o caminho), salgueiros nos rios; detalhe carimbado: plumas de capim-pluma, papoulas, crosta de sal, neve e névoa.
+  - **Bichos** (existentes, nenhum chefe): lobo (Lobo da Estepe, Garanhão Apagado, Lobo-Cinzento, Lince da Taiga, Lobo de Neve),
+    gavião (Águia-Dourada, Águia de Ferro, Pica-Pau de Fumaça), abutre de brasa (Grifo Jovem, Grifo Guardião, Abutre da Estepe),
+    chacal (Saiga Assustada, Cervo de Ouro, Cabra-Montês Gigante), gaivota ladra (Cisne de Feltro), golem (Lobo de Bronze), orc
+    coroado (Gigante Sonâmbulo), queixada (Javali da Colina), corvo (Corvo-Mensageiro de Fumaça), caranguejo-coco (Besouro-Casca),
+    lodo (Fungo Apagado), neblina do vento ruim (Tempestade de Capim, pesadelos), babuíno (Ochokochi), lobisomem como corpo do Urso
+    do Cáucaso, pedra-que-rola, escorpião (sal), aranha (bétulas), morcegos (kurgans); à noite lobisomem, rasga-mortalha,
+    morcego-vampiro, mãe-da-lua, queixada e vaga-lumes nas papoulas. Clima: céu limpo na estepe, no acampamento, nos kurgans, nas
+    pradarias e na planície dos cavalos; poeira no absinto; névoa na taiga, no vale das tábuas e nos vales svan; neve na corrente e
+    no cume.
+  - **Orçamento** (.NET fora do Editor, todos os 2704 pedaços): ~3,9 mil triângulos em média, pior 7,6 mil; geração ~0,44 ms em
+    média, p95 ~0,70 ms; pedaços das 25 passagens do mundo: pior 10,7 mil, ~0,6 ms. Testes `OverworldNartesTests` e
+    `OverworldWorldTests` (rota a pé Vila → Acampamento de Soslan, ~4,0 km pela Costa).
+
 ### 47 · Acampamento de Soslan / *Soslan's Camp* — nv 100–108 · ☆ · cidade de raça (centauros)
 - **Fonte:** sagas dos Nartes (§3.3).
 - **Bioma e visual:** estepe aberta com rios rasos; paleta da região; tendas sobre carroças, estandartes de crina.
@@ -1652,6 +1707,7 @@ Hahya guardado para o online, bíblia §1.4).
 - **Ganchos:** loot feltro, crina · montaria nova **Cavalo Dourado da Estepe** (§6) · casa: conjunto novo **Tenda de
   Feltro**.
 - **Noite:** fogueiras do acampamento; Lobo da Estepe em bando; céu estrelado (visão boa).
+- **No jogo (2026-11-03): cidade de verdade** (`CityTownRecipes.Soslan.cs`, estilo `SteppeCamp`, `CityCatalog.RaceCities`, id `acampamento_soslan`): em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S a 19 m; ao norte os cercados de corda da manada em três lances): tendas redondas de feltro sobre carroças de quatro rodas, com faixa tingida, aro de ouro, coroa de fumaça e toldo de feltro; o forno coletivo de pedra na praça, estandartes de crina com cervos de ouro, carrinhos de feltro; portão de dois estandartes com flâmulas; Soslan, Batradz, Satana, Syrdon e Uryzmæg (centauros, `NpcRecipe.HorseBody`) com falas para cada primo; Selaria Nômade do Syrdon; missões "Lobos em Volta dos Potros" e "Águias sobre o Acampamento" (paga com a Lamparina Rúnica); respawn na praça para 47, 48 e 51. Falta: a cidade que anda, a corrida de estepe, o Cavalo de Fumaça e o Cavalo Dourado da Estepe.
 
 ### 48 · Kurgans de Ouro / *Golden Kurgans* — nv 106–114 · ☆
 - **Fonte:** kurgans de Pazyryk e Issyk (ouro e feltro citas); os grifos que guardam o ouro (Heródoto IV); os **Ouros do
@@ -1681,6 +1737,7 @@ Hahya guardado para o online, bíblia §1.4).
 - **Ganchos:** loot lã gigante, panela de pedra · montaria nova **Carneiro Gigante da Colina** (§6) · casa: conjunto novo
   **Casa dos Gigantes** (colher-banco).
 - **Noite:** os sonâmbulos dobram; lareiras gigantes iluminam as colinas.
+- **No jogo (2026-11-03): cidade de verdade** (`CityTownRecipes.Fortim.cs`, estilo `HillFort`, `CityCatalog.RaceCities`, id `fortim`): em y = 0 dentro de um círculo de 22,5 m (só duas saídas, O e S a 19 m; a leste a encosta atrás de uma muralha de terra, ao norte os anéis do fortim em três lances com a torre de vigia): casas redondas gigantes de pedra seca com teto de grama, porta da altura de dois primos e fumaça boa; a panela do tamanho de uma casa sobre o Fogo Vivo na praça, mesas de pedra e colheres gigantes de banco; portão trilito; Baraqel, Virogdad e Shahmizad (gigantes de 1,45–1,55) com falas para cada primo; Panela Grande do Shahmizad com os Grampos de Escalada (exigência do 52); missões "Javalis na Despensa" e "Os Corvos do Sonho Ruim" (paga com os Grampos); respawn na praça para 49 e 52. Falta: a escala gigante andável, os sonhos diários com baús, o Pesadelo da Tábua e o Carneiro Gigante.
 
 ### 50 · Arvoredo de Haripushpa / *Haripushpa Grove* — nv 118–126 · ☆ · cidade de raça (povo-tronco)
 - **Fonte:** reis de Kucha (§3.3); a taiga da borda da estepe.
@@ -1693,6 +1750,7 @@ Hahya guardado para o online, bíblia §1.4).
 - **Mecânica:** **tempo lento** (§3.3).
 - **Ganchos:** loot casca antiga, seiva · montaria nova **Alce da Taiga** (§6) · casa: **Viveiro** do Arvoredo (mudas).
 - **Noite:** as árvores andantes "dormem" (viram trilha); corujas; visão curta.
+- **No jogo (2026-11-03): cidade de verdade** (`CityTownRecipes.Arvoredo.cs`, estilo `LivingGrove`, `CityCatalog.RaceCities`, id `arvoredo`): em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S a 19 m; ao norte a taiga fecha em lariços): casas dentro de troncos ocos gigantes com raízes, porta em arco, janelas de ninho e copa de lariço; o círculo de pedras com musgo na praça, lariços (um velho dormindo, com rosto na casca), riachos de degelo com pontes de tronco; portão de raízes em arco; Haripushpa e Suvarnapushpa (povo-tronco, `NpcRecipe.Twigs`) e o herbolário sogdiano Aryaman Puhr com falas para cada primo; Viveiro da Suvarnapushpa; missões "Os Comedores de Casca" e "Os Pássaros de Fumaça" (paga com Runas de Cura); respawn no círculo de pedras para o 50. Falta: o tempo lento, as mudas raras da casa, a Serra de Āz e o Alce da Taiga.
 
 ### 51 · Pradaria dos Mil Cavalos / *Thousand-Horse Prairie* — nv 124–134 · ☆
 - **Fonte:** a Uasamonga, a taça dos Nartes que se enche sozinha para o mais corajoso (bíblia §3.8); os grandes rebanhos

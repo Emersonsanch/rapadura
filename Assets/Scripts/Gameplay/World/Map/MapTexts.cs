@@ -132,6 +132,12 @@ namespace Rapadura.Gameplay.World.Map
             ("map_040_wakhan", "Wakhan Pass", "Passo de Wakhan", "Stone Caravanserai", "Caravançará de Pedra"),
             ("map_041_mingcheng", "Mingcheng, City of Nine Rings", "Mingcheng, a Cidade dos Nove Anéis", "Mingcheng", "Mingcheng"),
             ("map_042_torres_brancas", "White Spires of Amanirenas", "Torres Brancas de Amanirenas", "White Spires", "Torres Brancas"),
+            ("map_047_soslan", "Soslan's Camp", "Acampamento de Soslan", "Soslan's Camp", "Acampamento de Soslan"),
+            ("map_048_kurgans", "Golden Kurgans", "Kurgans de Ouro", "Open Kurgan", "Kurgan Aberto"),
+            ("map_049_fortim", "Hill-Giant Fort", "Fortim dos Gigantes-da-Colina", "Hill-Giant Fort", "Fortim"),
+            ("map_050_haripushpa", "Haripushpa Grove", "Arvoredo de Haripushpa", "Haripushpa Grove", "Arvoredo"),
+            ("map_051_mil_cavalos", "Thousand-Horse Prairie", "Pradaria dos Mil Cavalos", "Well of the Cup", "Poço da Taça"),
+            ("map_052_amirani", "Amirani's Chain", "Corrente de Amirani", "Watch Tower", "Torre de Vigia"),
         };
 
         private static readonly (MapRegion Region, string En, string Pt)[] RegionNames =
@@ -144,6 +150,7 @@ namespace Rapadura.Gameplay.World.Map
             (MapRegion.DeltaDeJhilpur, "Jhilpur Delta", "Delta de Jhilpur"),
             (MapRegion.TetoDoMundo, "Roof of the World", "Teto do Mundo"),
             (MapRegion.PlanicieDeMingcheng, "Mingcheng Plain", "Planície de Mingcheng"),
+            (MapRegion.EstepeDosNartes, "Steppe of the Narts", "Estepe dos Nartes"),
         };
 
         private static readonly (string Id, string En, string Pt)[] CityNames =
@@ -164,6 +171,9 @@ namespace Rapadura.Gameplay.World.Map
             ("sangkent", "Sangkent", "Sangkent"),
             ("mingcheng", "Mingcheng", "Mingcheng"),
             ("torres_brancas", "White Spires", "Torres Brancas"),
+            ("acampamento_soslan", "Soslan's Camp", "Acampamento de Soslan"),
+            ("fortim", "Hill-Giant Fort", "Fortim"),
+            ("arvoredo", "Haripushpa Grove", "Arvoredo"),
         };
 
         private static readonly (string Tag, string En, string Pt)[] RequirementHints =

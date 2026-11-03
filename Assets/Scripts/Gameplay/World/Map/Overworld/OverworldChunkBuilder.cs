@@ -189,6 +189,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ScatterDelta(layout, content);
             ScatterPamir(layout, content);
             ScatterMingcheng(layout, content);
+            ScatterNartes(layout, content);
             if (content.HasFields)
             {
                 ScatterFields(layout, content);
@@ -659,7 +660,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                             ? style.SpecialMix[(int)(TownStyle.Hash(salt, i + 320000) % (uint)style.SpecialMix.Length)]
                             : style.Special;
                         float scale = special == OverworldDecor.Cypress ? 0.85f + 0.35f * s01 : 0.8f + 0.6f * s01;
-                        float room = IsDesertDecor(special) ? DesertClearance(special) : IsCoastDecor(special) ? CoastClearance(special) : IsDeltaDecor(special) ? DeltaClearance(special) : IsPamirDecor(special) ? PamirClearance(special) : IsMingchengDecor(special) ? MingchengClearance(special) : special == OverworldDecor.Basalt ? 1.4f : 0.9f;
+                        float room = IsDesertDecor(special) ? DesertClearance(special) : IsCoastDecor(special) ? CoastClearance(special) : IsDeltaDecor(special) ? DeltaClearance(special) : IsPamirDecor(special) ? PamirClearance(special) : IsMingchengDecor(special) ? MingchengClearance(special) : IsNartesDecor(special) ? NartesClearance(special) : special == OverworldDecor.Basalt ? 1.4f : 0.9f;
                         TryAdd(layout, content, p, room, new OverworldProp
                         {
                             Kind = CityPropKind.Rock, Decor = special, Position = p, Yaw = yaw, Scale = scale,
@@ -1062,7 +1063,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             if (AddCaveDecorSolid(content, prop, ground, sink) || AddMountainDecorSolid(content, prop, ground, sink)
                 || AddDesertDecorSolid(content, prop, ground, sink) || AddCoastDecorSolid(content, prop, ground, sink)
                 || AddDeltaDecorSolid(content, prop, ground, sink) || AddPamirDecorSolid(content, prop, ground, sink)
-                || AddMingchengDecorSolid(content, prop, ground, sink))
+                || AddMingchengDecorSolid(content, prop, ground, sink) || AddNartesDecorSolid(content, prop, ground, sink))
             {
                 return;
             }
@@ -1489,7 +1490,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             if (AppendCaveDecor(b, g, prop, at) || AppendMountainDecor(b, g, prop, at) || AppendDesertDecor(b, g, prop, at) || AppendCoastDecor(b, g, prop, at)
                 || AppendDeltaDecor(b, g, prop, at) || AppendPamirDecor(b, g, prop, at)
-                || AppendMingchengDecor(b, g, prop, at))
+                || AppendMingchengDecor(b, g, prop, at) || AppendNartesDecor(b, g, prop, at))
             {
                 return;
             }

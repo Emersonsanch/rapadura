@@ -11,11 +11,12 @@ using Y = Rapadura.Gameplay.World.Map.MapRegionTypes;
 namespace Rapadura.Gameplay.World.Map
 {
     /// <summary>
-    /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II): level
+    /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II) and the six of
+    /// Região 9 (☆ 47–52, the Estepe dos Nartes, walked as zones of its continuous region): level
     /// bands, walk/warp levels, special gates, settlements and return cities, as content-as-code like
-    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42): a hand-made layout
+    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42, 47–52): a hand-made layout
     /// (<c>MapLayouts.Has</c>: 01–08, 13, 14, 19, 20) or only a zone of a continuous region (<c>OverworldLayouts.ForMap</c>:
-    /// 09–12, 15–18, 21–42, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
+    /// 09–12, 15–18, 21–42, 47–52, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
     /// the flag equal to it. The rest are listed in the Barcas de Luz window, closed. The gold fare is never stored: it is always the
     /// formula of <see cref="MapAccessRules.CalculateWarpCost(int,int,bool)"/> (the "Custo Ouro" column of the methodology
     /// table is design history).
@@ -35,6 +36,9 @@ namespace Rapadura.Gameplay.World.Map
         public const string Sangkent = "sangkent";
         public const string Mingcheng = "mingcheng";
         public const string TorresBrancas = "torres_brancas";
+        public const string AcampamentoSoslan = "acampamento_soslan";
+        public const string Fortim = "fortim";
+        public const string Arvoredo = "arvoredo";
 
         public const string PomarId = "map_001_pomar";
         public const string TugaiId = "map_002_tugai";
@@ -46,6 +50,7 @@ namespace Rapadura.Gameplay.World.Map
         {
             CityCatalog.VilaZefa, CopasGarajonay, CityCatalog.AreiaBranca, TamborRubro, CityCatalog.SerraAlta, SaloesDeBronze,
             CityCatalog.Lamparinas, MercadoDosTuneis, TaaPwani, Aratta, Kirta, Jhilpur, PalafitasTarchon, Sangkent, Mingcheng, TorresBrancas,
+            AcampamentoSoslan, Fortim, Arvoredo,
         };
 
         public static readonly IReadOnlyList<MapDefinition> Maps = new List<MapDefinition>
@@ -107,11 +112,20 @@ namespace Rapadura.Gameplay.World.Map
             // Região 8 — Planície de Mingcheng
             new MapDefinition(41, "map_041_mingcheng", R.PlanicieDeMingcheng, Y.Plain, S.GG, 90, 96, 88, 95, Fee, T.None, Mingcheng, K.Capital, "mingcheng", isBuilt: true),
             new MapDefinition(42, "map_042_torres_brancas", R.PlanicieDeMingcheng, Y.Plain, S.G, 95, 102, 92, 100, Fee, T.SunSeal, TorresBrancas, K.RaceCity, "torres_brancas", isBuilt: true),
+
+            // Região 9 — Estepe dos Nartes (☆, Docs/Mapas100.md §1; zones of its continuous region, OverworldLayouts.Nartes)
+            new MapDefinition(47, "map_047_soslan", R.EstepeDosNartes, Y.Plain, S.GG, 100, 108, 96, 104, Fee, T.None, AcampamentoSoslan, K.RaceCity, "acampamento_soslan", isBuilt: true),
+            new MapDefinition(48, "map_048_kurgans", R.EstepeDosNartes, Y.Plain, S.G, 106, 114, 102, 110, Fee, T.None, AcampamentoSoslan, K.Outpost, "kurgan_aberto", isBuilt: true),
+            new MapDefinition(49, "map_049_fortim", R.EstepeDosNartes, Y.Forest, S.G, 112, 120, 108, 116, Fee, T.None, Fortim, K.RaceCity, "fortim", isBuilt: true),
+            new MapDefinition(50, "map_050_haripushpa", R.EstepeDosNartes, Y.Forest, S.G, 118, 126, 114, 122, Fee, T.None, Arvoredo, K.RaceCity, "arvoredo", isBuilt: true),
+            new MapDefinition(51, "map_051_mil_cavalos", R.EstepeDosNartes, Y.Plain, S.GG, 124, 134, 120, 128, Fee, T.None, AcampamentoSoslan, K.Outpost, "poco_da_taca", isBuilt: true),
+            new MapDefinition(52, "map_052_amirani", R.EstepeDosNartes, Y.Mountain, S.GG, 134, 150, 128, 140, Fee, T.ClimbingCrampons, Fortim, K.Outpost, "torre_de_vigia", isBuilt: true),
         };
 
         public static readonly IReadOnlyList<MapRegion> Regions = new[]
         {
             R.Zarafshan, R.AreiasFlamejantes, R.SerraDeKaggen, R.GrutasDoLimiar, R.CostaDasMoncoes, R.DeltaDeJhilpur, R.TetoDoMundo, R.PlanicieDeMingcheng,
+            R.EstepeDosNartes,
         };
 
         private static Dictionary<string, MapDefinition> _byId;

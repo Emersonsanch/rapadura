@@ -196,6 +196,24 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { OverworldTerrain.TerracottaPits, new AreaClimate(Dust, true) },
             { OverworldTerrain.SpiritWay, new AreaClimate(null, false) },
             { OverworldTerrain.LoessGullies, new AreaClimate(Dust, true) },
+
+            // Região 9 — Estepe dos Nartes: clear sky over the open steppe, the camp, the kurgans, the prairies and the plains of the
+            // herds (céu #A7C7E7); dust over the wormwood and its salt; mist in the taiga, the dream vale and the svan valleys; snow on
+            // the chain's crags and Ohya's crest; the rivers, the birches and the giants' hills let the biome roll it.
+            { OverworldTerrain.FeatherSteppe, new AreaClimate(Clear, false) },
+            { OverworldTerrain.SteppeRiver, new AreaClimate(null, false) },
+            { OverworldTerrain.HorseCamp, new AreaClimate(Clear, false) },
+            { OverworldTerrain.KurganField, new AreaClimate(Clear, true) },
+            { OverworldTerrain.WormwoodSteppe, new AreaClimate(Dust, true) },
+            { OverworldTerrain.BirchSteppe, new AreaClimate(null, false) },
+            { OverworldTerrain.GiantHills, new AreaClimate(null, false) },
+            { OverworldTerrain.DreamVale, new AreaClimate(Mist, true) },
+            { OverworldTerrain.Taiga, new AreaClimate(Mist, true) },
+            { OverworldTerrain.PoppyPrairie, new AreaClimate(Clear, false) },
+            { OverworldTerrain.HorsePlains, new AreaClimate(Clear, false) },
+            { OverworldTerrain.SvanValley, new AreaClimate(Mist, true) },
+            { OverworldTerrain.ChainPeak, new AreaClimate(Snow, true) },
+            { OverworldTerrain.SnowCrest, new AreaClimate(Snow, true) },
         };
 
         /// <summary>True when <paramref name="terrain"/> has its own line (tests: every terrain must).</summary>

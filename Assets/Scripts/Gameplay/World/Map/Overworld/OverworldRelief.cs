@@ -54,6 +54,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         KarstTowers = 60,
         /// <summary>The great wall's crest: one long ridge following the wall's line across the region, foothills below it.</summary>
         WallRidge = 61,
+
+        // Região 9 — Estepe dos Nartes (OverworldRelief.Nartes.cs): 70–79.
+        /// <summary>Kurgans: round burial mounds standing on a flat steppe (the trails and clearings keep to the floor between them).</summary>
+        Kurgans = 70,
+        /// <summary>The Caucasus massif: tilted rock strata in long hogback ridges with sharp crests, the highest ground of the steppe.</summary>
+        Massif = 71,
     }
 
     /// <summary>What the relief knows about one point besides its height (ground colours and scatter read it).</summary>
@@ -665,10 +671,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 default:
                     if (DesertShape(style, x, z, a, out smooth, out shaped) || CoastShape(style, x, z, a, out smooth, out shaped)
                         || DeltaShape(style, x, z, a, out smooth, out shaped) || PamirShape(style, x, z, a, out smooth, out shaped)
-                        || MingchengShape(style, x, z, a, out smooth, out shaped))
+                        || MingchengShape(style, x, z, a, out smooth, out shaped) || NartesShape(style, x, z, a, out smooth, out shaped))
                     {
                         break; // Região 2: dunes, mesas, canyons (.Desert.cs); Região 5: cliffs, islets (.Coast.cs); Região 6: hummocks, levees (.Delta.cs);
-                               // Região 7: moraines, ice tongues, seracs, peaks (.Pamir.cs); Região 8: karst towers, the wall's crest (.Mingcheng.cs).
+                               // Região 7: moraines, ice tongues, seracs, peaks (.Pamir.cs); Região 8: karst towers, the wall's crest (.Mingcheng.cs);
+                               // Região 9: kurgans, the Caucasus massif (.Nartes.cs).
                     }
 
                     smooth = shaped = a * SmoothStep(0f, 1f, 0.5f + 0.85f * OverworldNoise.Fbm(x, z, 2));
