@@ -134,6 +134,42 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         Summit = 73,
         /// <summary>The Estela Alta plateau (18): snow-dusted steps, the shepherds' shelter.</summary>
         StelaPlateau = 74,
+
+        // Região 5 — Costa das Monções (OverworldLayouts.Costa.cs, OverworldTerrains.Coast.cs): 80–99.
+        /// <summary>White coral-sand beaches: leaning coconut palms, beached dhows, nets and fish traps.</summary>
+        WhiteBeach = 80,
+        /// <summary>The reef flat round Taa Pwani (25): turquoise shallows over coral, coral heads, tide pools.</summary>
+        Reef = 81,
+        /// <summary>Mangroves: grey mud, stilt-rooted mangroves along the channels (30).</summary>
+        Mangrove = 82,
+        /// <summary>Coastal dunes held by casuarinas and sea-grape shrubs.</summary>
+        CoastalDunes = 83,
+        /// <summary>Coral-stone ruins of the coast (Gedi, Kilwa): whitewashed walls, arches, pillar tombs.</summary>
+        CoralRuins = 84,
+        /// <summary>Clove plantations: rows of small evergreen trees, cloves drying on mats.</summary>
+        CloveRows = 85,
+        /// <summary>A coconut plantation: palms in rows over grass.</summary>
+        CoconutGrove = 86,
+        /// <summary>Laterite and coral sea cliffs in steps, sea stacks.</summary>
+        SeaCliffs = 87,
+        /// <summary>Islets of sand and coral linked by shallows (baixios), deep channels between them.</summary>
+        Shoals = 88,
+        /// <summary>The Savana dos Auroques (26): golden grass, flat-topped acacias, baobabs, termite mounds, pools.</summary>
+        Savanna = 89,
+        /// <summary>The Pirâmides Altas de Meroé (27): orange sand, steep pyramids, chapels, ushabtis.</summary>
+        KushPyramids = 90,
+        /// <summary>Kirta's atoll (28): a ring of coral sand round the lagoon.</summary>
+        Atoll = 91,
+        /// <summary>Kilwa Afundada (29): coral streets half drowned, flooded houses, arches.</summary>
+        SunkenCity = 92,
+        /// <summary>The restinga: coastal thicket of shrubs, palms and baobabs on low hills.</summary>
+        CoastScrub = 93,
+        /// <summary>Tidal lagoons: mud flats, pools, mangrove fringes.</summary>
+        TideLagoons = 94,
+        /// <summary>Baobab woods on red laterite.</summary>
+        BaobabWoods = 95,
+        /// <summary>Kelp flats north of Kirta (28): green shallows, kelp drifts, coral heads.</summary>
+        KelpFlats = 96,
     }
 
     /// <summary>
@@ -348,6 +384,94 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>True for the stitched world (several regions); false for a region on its own.</summary>
         public bool IsStitched => Parts.Count > 0;
+
+        private List<Rect> _holes;
+
+        /// <summary>
+        /// The rectangles of <see cref="Bounds"/> no region covers (the stitched world need not be a rectangle: Região 5 makes
+        /// it an L): walled off like the world's edge, the backdrop rises there. Empty for a region on its own.
+        /// </summary>
+        public IReadOnlyList<Rect> Holes
+        {
+            get
+            {
+                if (_holes == null)
+                {
+                    _holes = FindHoles();
+                }
+
+                return _holes;
+            }
+        }
+
+        /// <summary>
+        /// Signed distance (m) from <paramref name="p"/> to the nearest wall: positive inside the walkable world, negative
+        /// beyond the walls (outside <see cref="Bounds"/> or in a <see cref="Holes">hole</see>). Continuous across the walls.
+        /// </summary>
+        public float WallDistance(Vector2 p)
+        {
+            Rect b = Bounds;
+            float edge = Mathf.Min(Mathf.Min(p.x - b.xMin, b.xMax - p.x), Mathf.Min(p.y - b.yMin, b.yMax - p.y));
+            IReadOnlyList<Rect> holes = Holes;
+            if (holes.Count == 0 || edge <= 0f)
+            {
+                return edge;
+            }
+
+            float toHole = float.MaxValue;
+            foreach (Rect hole in holes)
+            {
+                if (hole.Contains(p))
+                {
+                    float toPart = float.MaxValue;
+                    foreach (OverworldPart part in Parts)
+                    {
+                        toPart = Mathf.Min(toPart, CityGeometry.DistanceToRect(p, part.Bounds));
+                    }
+
+                    return -toPart;
+                }
+
+                toHole = Mathf.Min(toHole, CityGeometry.DistanceToRect(p, hole));
+            }
+
+            return Mathf.Min(edge, toHole);
+        }
+
+        private List<Rect> FindHoles()
+        {
+            var holes = new List<Rect>();
+            if (Parts.Count == 0)
+            {
+                return holes;
+            }
+
+            var xs = new SortedSet<float> { Bounds.xMin, Bounds.xMax };
+            var zs = new SortedSet<float> { Bounds.yMin, Bounds.yMax };
+            foreach (OverworldPart part in Parts)
+            {
+                xs.Add(part.Bounds.xMin);
+                xs.Add(part.Bounds.xMax);
+                zs.Add(part.Bounds.yMin);
+                zs.Add(part.Bounds.yMax);
+            }
+
+            var x = new List<float>(xs);
+            var z = new List<float>(zs);
+            for (int i = 0; i + 1 < x.Count; i++)
+            {
+                for (int j = 0; j + 1 < z.Count; j++)
+                {
+                    Rect cell = Rect.MinMaxRect(x[i], z[j], x[i + 1], z[j + 1]);
+                    if (cell.width > 0.01f && cell.height > 0.01f && !Parts.Exists(part => part.Bounds.Contains(cell.center)))
+                    {
+                        holes.Add(cell);
+                    }
+                }
+            }
+
+            return holes;
+        }
 
         /// <summary>The region holding <paramref name="p"/> (half-open rectangles: each point belongs to one), else the nearest; null for a region on its own.</summary>
         public OverworldPart PartAt(Vector2 p)

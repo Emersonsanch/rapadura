@@ -29,6 +29,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { MapRegion.AreiasFlamejantes, AreiasId },
             { MapRegion.SerraDeKaggen, KaggenId },
             { MapRegion.GrutasDoLimiar, LimiarId },
+            { MapRegion.CostaDasMoncoes, CostaId },
         };
 
         /// <summary>Every continuous region of this build (texts, tests).</summary>
@@ -57,6 +58,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 case AreiasId: return Areias();
                 case KaggenId: return Kaggen();
                 case LimiarId: return Limiar();
+                case CostaId: return Costa();
                 case WorldId: return BuildWorld();
                 default: return null;
             }

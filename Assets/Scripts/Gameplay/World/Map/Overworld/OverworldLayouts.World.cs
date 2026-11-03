@@ -24,6 +24,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// The gates between two of them become open passes: their flat ground stays (y = 0 on both sides), the two trails are
     /// joined across the border (or the lone one is led to the nearest trail of the other region), and the cave vault of the
     /// Limiar opens there. Gates to maps outside the world, the island stone rings, the Ossuário's portal and the docks stay.
+    /// Região 5 (the Costa das Monções) sits east of the Zarafshan (x 1400…3800, z −1000…1400): the world becomes an L, and the
+    /// corner east of the Areias, which no region covers, is a hole walled off like the world's edge (<see cref="OverworldLayout.Holes"/>).
     /// The relief blends across the borders like between any two areas (one relief for the whole world, each area shaped in
     /// its own region's coordinates), the chunk grids line up (offsets are multiples of the chunk), the streaming, the soft
     /// barrier, the levels and the requirements work per area as before.
@@ -37,6 +39,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public static readonly Vector2 AreiasWorldOffset = new Vector2(200f, -1500f);
         public static readonly Vector2 KaggenWorldOffset = new Vector2(-1700f, -100f);
         public static readonly Vector2 LimiarWorldOffset = new Vector2(-2200f, -1300f);
+
+        /// <summary>Região 5 east of the Zarafshan (Taa Pwani at world (2000, 200)): the world becomes an L, its south-east corner a hole.</summary>
+        public static readonly Vector2 CostaWorldOffset = new Vector2(2000f, 200f);
 
         /// <summary>Width (m) of the trail that joins two passes (or a pass to the nearest trail across the border).</summary>
         public const float PassTrailWidth = 4f;
@@ -72,6 +77,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 (Areias(), AreiasWorldOffset),
                 (Kaggen(), KaggenWorldOffset),
                 (Limiar(), LimiarWorldOffset),
+                (Costa(), CostaWorldOffset),
             };
 
             Rect bounds = default;
@@ -151,6 +157,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             }
 
             OpenPasses(w, removed, regionPaths);
+            _ = w.Holes; // The corner no region covers (walled, backdrop), found once now that every part is in.
             if (desert.Count > 0)
             {
                 DesertPieces.AddOrUpdate(w, desert);

@@ -125,7 +125,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             {
                 var p = new Vector2(Mathf.Lerp(r.xMin + 7f, r.xMax - 7f, TownStyle.Hash01(salt, k)), Mathf.Lerp(r.yMin + 7f, r.yMax - 7f, TownStyle.Hash01(salt, k + 100)));
                 OverworldTerrain terrain = content.Grid.Near(p).Terrain;
-                if (!IsMountain(terrain) || layout.InAuthoredArea(p) || DistanceToWall(layout.Bounds, p) < EdgeBelt)
+                if (!IsMountain(terrain) || layout.InAuthoredArea(p) || DistanceToWall(layout, p) < EdgeBelt)
                 {
                     continue;
                 }
@@ -280,7 +280,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     continue;
                 }
 
-                if (DistanceToWall(layout.Bounds, p) < -10f || !IsOpen(layout, content, p, decor == OverworldDecor.MistBank ? 2.5f : 1.2f, false))
+                if (DistanceToWall(layout, p) < -10f || !IsOpen(layout, content, p, decor == OverworldDecor.MistBank ? 2.5f : 1.2f, false))
                 {
                     continue;
                 }

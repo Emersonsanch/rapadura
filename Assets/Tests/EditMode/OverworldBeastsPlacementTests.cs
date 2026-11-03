@@ -10,7 +10,7 @@ namespace Rapadura.Tests
 {
     /// <summary>
     /// The beasts of <see cref="OverworldBeastsTests"/> that live in the continuous worlds now stand where their stand-ins
-    /// stood (Docs/Mapas100.md 07–24): each one spawns by day in at least one clearing of every area its sheet puts it in,
+    /// stood (Docs/Mapas100.md 07–30): each one spawns by day in at least one clearing of every area its sheet puts it in,
     /// at that area's levels, with its night form in the same clearings' night table; the hand-made maps 07, 08, 13, 14 and
     /// 19 carry them too.
     /// </summary>
@@ -40,6 +40,8 @@ namespace Rapadura.Tests
         private const string Baboon = "enemy_mountain_baboon";
         private const string Ooze = "enemy_cave_ooze";
         private const string Crow = "enemy_cave_dark_crow";
+        private const string Gull = "enemy_forest_thief_gull";
+        private const string Crab = "enemy_forest_coconut_crab";
 
         private static readonly Placement[] Placements =
         {
@@ -65,6 +67,16 @@ namespace Rapadura.Tests
             new Placement(OverworldLayouts.LimiarId, Ooze, "boca_do_hahya"),
             new Placement(OverworldLayouts.LimiarId, Crow, "ninhos_ocidentais"),
             new Placement(OverworldLayouts.LimiarId, Crow, "ninho_de_mahaway"),
+            new Placement(OverworldLayouts.CostaId, Gull, "praia_de_taa_pwani"),
+            new Placement(OverworldLayouts.CostaId, Gull, "praia_dos_dhows"),
+            new Placement(OverworldLayouts.CostaId, Gull, "coqueiral_de_pwani"),
+            new Placement(OverworldLayouts.CostaId, Gull, "baixios_do_sul"),
+            new Placement(OverworldLayouts.CostaId, Gull, "recife_de_taa_pwani"),
+            new Placement(OverworldLayouts.CostaId, Crab, "praia_de_taa_pwani"),
+            new Placement(OverworldLayouts.CostaId, Crab, "coqueiral_de_pwani"),
+            new Placement(OverworldLayouts.CostaId, Crab, "recife_de_taa_pwani"),
+            new Placement(OverworldLayouts.CostaId, Crab, "atol_de_kirta"),
+            new Placement(OverworldLayouts.CostaId, Crab, "mangue_raso"),
         };
 
         private static IEnumerable<Placement> All() => Placements;

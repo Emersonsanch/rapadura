@@ -119,8 +119,17 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       dentro, 19 e 20 encaixados, 21–24 e 18 salões intermediários, paredes altas de tufo entre os salões (sem teto real),
       abismos com pontes de corda, lagos, cristais, colunas e fungos que brilham; o portão oeste do Zarafshan (para o 19)
       chega à borda leste do Limiar e o do Hahya à borda oeste. Detalhes em §5, "Região 4".
-    - **Mundo costurado** (2026-11-03, pedido do usuário: andar entre as regiões sem portão): as quatro regiões são **um
-      mapa só** de 4800 × 4800 m (`OverworldLayouts.WorldId`, `OverworldLayouts.World.cs`), 2 × 2:
+    - **Região 5 — Costa das Monções** (2026-11-03): mesmo modelo, 2400 × 2400 m (`OverworldLayouts.Costa.cs`, coordenadas
+      x −600…1800, z −1200…1200) com Taa Pwani na praia em (0, 0); 25–30 viram zonas (25 a 30 contam como construídos), 25 áreas
+      numa grade 5 × 5, relevo de costa (falésias em degraus, ilhotas e baixios rasos, praias suaves junto da água) e cenário
+      próprio; o portão oeste da Costa chega à trilha das Amoreiras na borda leste do Zarafshan. Detalhes em §5, "Região 5".
+    - **Mundo costurado** (2026-11-03, pedido do usuário: andar entre as regiões sem portão): as quatro primeiras regiões
+      formam um quadrado de 4800 × 4800 m (`OverworldLayouts.WorldId`, `OverworldLayouts.World.cs`), 2 × 2, e a **Costa das
+      Monções** fica a leste do Zarafshan (x 1400…3800, z −1000…1400, deslocamento (2000, 200)): o mundo vira um **L** de
+      7200 × 4800 m; o canto sudeste (x 1400…3800, z −3400…−1000, a leste das Areias) não tem região — é um **buraco murado**
+      (`OverworldLayout.Holes`/`WallDistance`: muros invisíveis por dentro, relevo de fundo subindo em morros como fora dos
+      muros, cenário de borda, `OverworldRules.Validate` conta a área sem o buraco). A passagem Zarafshan ↔ Costa: o portão
+      oeste da Costa (Mata da Restinga) é levado à trilha das Amoreiras (x 1380). Quadrado original:
       Serra de Kaggen (x −3400…−1000, z −1000…1400) | Bosque do Zarafshan (x −1000…1400, z −1000…1400) em cima;
       Grutas do Limiar (x −3400…−1000, z −3400…−1000) | Areias Flamejantes (x −1000…1400, z −3400…−1000) embaixo.
       Cada região guarda o seu layout nas suas coordenadas e é deslocada por um número inteiro de pedaços (Zarafshan
@@ -1079,6 +1088,35 @@ cais. Paleta: coral caiado `#EFE7DA`, madeira de teca `#6B4A2E`, latão `#C9A23F
 Viva e Fogo Vivo (o sol da savana). Chefe do mundo: **Hedammu** (mapa 30).
 
 ### 25 · Taa Pwani e o Recife / *Taa Pwani and the Reef* — nv 45–50 · ★
+- **Mundo contínuo (2026-11-03): mapas 25–30 jogáveis a pé.** A região inteira é um mapa de 2400 × 2400 m
+  (`OverworldLayouts.Costa`) costurado a leste do Zarafshan, sem portão. Grade 5 × 5 de áreas (colunas x −600/−150/250/750/1250/1800,
+  linhas z −1200/−700/−250/250/700/1200), nível subindo com a distância de Taa Pwani a partir de 45:
+  - **Perto (45–51):** Praia de Taa Pwani (25, a cidade, Backdrop desligado), Recife de Taa Pwani (25; Passagem de Dhow — a praia
+    da cidade nunca pede, o Bazar de Pérolas vende), Dunas das Casuarinas, Mata da Restinga (portão para o Zarafshan), Coqueiral
+    de Pwani, Cravais do Vento Leste, Praia dos Dhows, Lagoas de Maré, Baixios do Sul.
+  - **Meio (48–60):** Savana dos Auroques e Savana das Acácias (26, **Aratta** = `CityTownRecipes.Aratta()`), Pirâmides Altas de
+    Meroé (27, Pátio dos Relevos; Relíquia dos Artífices), Bosque dos Baobás, Falésias Vermelhas, Ruínas de Gedi, Atol de Kirta
+    (28, **Kirta** = `CityTownRecipes.Kirta()`, ao sul da lagoa; Concha Respirável, vendida em Taa Pwani), Ilhotas de Coral,
+    Lagoa Grande.
+  - **Longe (58–72):** Jardins de Alga (28), Kilwa Afundada (29, Farol de Coral; Bolha de Ar) e Palácio de Husuni (29), Falésias
+    do Norte, Mangue Raso, Canais de Liyongo (30, Cais das Dhows; Botas de Raiz) e Mangues de Liyongo (30, 66–72).
+  - **Água:** o mar aberto fica além do muro leste; dentro, o Canal do Recife (entre a praia e o recife), lagoas, o canal dos
+    baixios, a lagoa de Kirta, os canais afogados de Kilwa e os canais do mangue são **água funda que bloqueia** (azul escuro),
+    atravessada em **baixios** (vaus rasos, marcados por estacas listradas de vermelho e branco nas margens) e pontes/calçadas
+    de coral; o recife, as ilhotas, o atol e os jardins de alga são **raso caminhável** (chão turquesa).
+  - **Relevo:** `ReliefShape.Cliffs` (promontório de laterita em dois degraus com escarpas, até ~18 m) e `ReliefShape.Islets`
+    (bancos de areia logo acima da água); dunas em crista nas casuarinas; praias suaves pela planície de vale junto da água.
+  - **Cenário** (`OverworldDecorKit.Coast.cs`, `OverworldChunkBuilder.Coast.cs`): dhows encalhados, armadilhas de peixe (*wema*),
+    redes secando, cabeças de coral, muros, arcos e túmulos de pilar de coral, acácias de copa plana, cupinzeiros, mangues ao longo
+    dos canais, cravo secando na esteira, linhas de sargaço; coqueiros inclinados, baobás e casuarinas (as do fundo além do muro,
+    a árvore mais leve); pirâmides, colunas de lótus e ushabtis do deserto em Meroé.
+  - **Bichos:** Gaivota Ladra e Caranguejo-dos-Coqueiros (praias, recife, coqueiral, atol, mangues) com chacal, cobra-de-areia,
+    escorpião, aranha, lobo (leão do capim), queixada, ushabti, abutre de brasa, gavião, babuíno, Pedra que Rola, lodo, corvo da
+    treva, peixe-lanterna e as espécies da noite (plâncton/vaga-lume no recife e nos mangues, Mngwa no corpo do lobisomem,
+    kongamato no morcego-vampiro); nenhum chefe. Clima: céu limpo nas praias, recife, atol e savana; chuva de monção nos mangues e
+    em Kilwa; névoa nas falésias, lagoas e algas; poeira em Meroé.
+  - **Orçamento** (.NET fora do Editor, 1 de cada 9 pedaços): ~5,0 mil triângulos em média, pior 10,2 mil (anel de fundo);
+    geração ~0,8–1,1 ms em média, p95 ~1,0–1,6 ms. Testes `OverworldCostaTests` e `OverworldWorldTests` (rota a pé Vila → Taa Pwani).
 - **No jogo (2026-11-03): cidade pronta, mapa ainda não.** `CitySpec` de cidade de região tardia
   (`CityCatalog.LateRegionCities`) com passeio próprio (`CityTownRecipes.TaaPwani`, estilo `CoralStone`: casas de coral
   caiada com terraço, ameias, porta de teca entalhada com pinos de latão e baraza; mercado de pérolas na praça; Farol de

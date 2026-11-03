@@ -44,6 +44,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private const WeatherType Snow = WeatherType.Snow;
         private const WeatherType Clear = WeatherType.Clear;
 
+        /// <summary>The monsoon's rain (the Costa das Monções' mangroves and drowned streets).</summary>
+        private const WeatherType Monsoon = WeatherType.Rain;
+
         /// <summary>The caves' damp air: the fog visuals, under the vault.</summary>
         private const WeatherType Damp = WeatherType.Fog;
 
@@ -115,6 +118,26 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { OverworldTerrain.Snowfield, new AreaClimate(Snow, true) },
             { OverworldTerrain.Summit, new AreaClimate(Snow, true) },
             { OverworldTerrain.StelaPlateau, new AreaClimate(Snow, false) },
+
+            // Região 5 — Costa das Monções: clear sky on the beaches, the reef and the savanna; the monsoon rain over the
+            // mangroves and the drowned city; sea mist on the cliffs and the kelp; Meroë's pyramids in the dust.
+            { OverworldTerrain.WhiteBeach, new AreaClimate(Clear, false) },
+            { OverworldTerrain.Reef, new AreaClimate(Clear, false) },
+            { OverworldTerrain.Mangrove, new AreaClimate(Monsoon, true) },
+            { OverworldTerrain.CoastalDunes, new AreaClimate(null, false) },
+            { OverworldTerrain.CoralRuins, new AreaClimate(null, true) },
+            { OverworldTerrain.CloveRows, new AreaClimate(null, false) },
+            { OverworldTerrain.CoconutGrove, new AreaClimate(null, false) },
+            { OverworldTerrain.SeaCliffs, new AreaClimate(Mist, true) },
+            { OverworldTerrain.Shoals, new AreaClimate(Clear, false) },
+            { OverworldTerrain.Savanna, new AreaClimate(Clear, false) },
+            { OverworldTerrain.KushPyramids, new AreaClimate(Dust, true) },
+            { OverworldTerrain.Atoll, new AreaClimate(Clear, false) },
+            { OverworldTerrain.SunkenCity, new AreaClimate(Monsoon, true) },
+            { OverworldTerrain.CoastScrub, new AreaClimate(null, false) },
+            { OverworldTerrain.TideLagoons, new AreaClimate(Mist, false) },
+            { OverworldTerrain.BaobabWoods, new AreaClimate(null, false) },
+            { OverworldTerrain.KelpFlats, new AreaClimate(Mist, true) },
         };
 
         /// <summary>True when <paramref name="terrain"/> has its own line (tests: every terrain must).</summary>

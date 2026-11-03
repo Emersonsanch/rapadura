@@ -185,6 +185,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ScatterCaves(layout, content);
             ScatterDesert(layout, content);
             ScatterMountain(layout, content);
+            ScatterCoast(layout, content);
             if (content.HasFields)
             {
                 ScatterFields(layout, content);
@@ -473,6 +474,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             return Mathf.Min(Mathf.Min(p.x - bounds.xMin, bounds.xMax - p.x), Mathf.Min(p.y - bounds.yMin, bounds.yMax - p.y));
         }
 
+        /// <summary>Like <see cref="DistanceToWall(Rect, Vector2)"/>, the walls round the stitched world's holes included (<see cref="OverworldLayout.WallDistance"/>).</summary>
+        private static float DistanceToWall(OverworldLayout layout, Vector2 p) => layout.WallDistance(p);
+
         private static float NearestRiverEdge(OverworldChunkContent content, Vector2 p)
         {
             float best = float.MaxValue;
@@ -487,7 +491,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private static bool Green(OverworldTerrain t)
         {
             return t != OverworldTerrain.Steppe && t != OverworldTerrain.Ruins && t != OverworldTerrain.Ravine && t != OverworldTerrain.HighHills && !IsCave(t)
-                && (!IsDesert(t) || OverworldTerrains.For(t).WaterVegetation.HasValue);
+                && (!IsDesert(t) || OverworldTerrains.For(t).WaterVegetation.HasValue) && !OverworldTerrains.IsSeaShore(t) && t != OverworldTerrain.Mangrove;
         }
 
         /// <summary>A crop grows here (no trees, shrubs or tufts in the rows).</summary>
@@ -521,7 +525,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
                     OverworldTerrain terrain = content.Grid.Near(p).Terrain;
                     OverworldTerrainStyle style = OverworldTerrains.For(terrain);
-                    float wall = DistanceToWall(layout.Bounds, p);
+                    float wall = DistanceToWall(layout, p);
                     if (wall < -20f && TownStyle.Hash01(salt, i + 280000) < 0.5f)
                     {
                         // Far backdrop: half the samples (the camera barely sees it).
@@ -566,7 +570,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                         int[] variants = second ? style.SecondVariants : style.TreeVariants;
                         if (wall < 0f && !second)
                         {
-                            variants = style.Vegetation == TownVegetation.Forest ? new[] { 0, 1, 2 } : style.TreeVariants;
+                            // The coast's backdrop is casuarinas only, its lightest tree (palms and baobabs would break the budget).
+                            variants = style.Vegetation == TownVegetation.Forest ? new[] { 0, 1, 2 } : style.Vegetation == TownVegetation.Coast ? CoastBackdrop : style.TreeVariants;
                         }
 
                         int variant = variants[(int)(TownStyle.Hash(salt, i + 240000) % (uint)variants.Length)];
@@ -650,7 +655,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                             ? style.SpecialMix[(int)(TownStyle.Hash(salt, i + 320000) % (uint)style.SpecialMix.Length)]
                             : style.Special;
                         float scale = special == OverworldDecor.Cypress ? 0.85f + 0.35f * s01 : 0.8f + 0.6f * s01;
-                        float room = IsDesertDecor(special) ? DesertClearance(special) : special == OverworldDecor.Basalt ? 1.4f : 0.9f;
+                        float room = IsDesertDecor(special) ? DesertClearance(special) : IsCoastDecor(special) ? CoastClearance(special) : special == OverworldDecor.Basalt ? 1.4f : 0.9f;
                         TryAdd(layout, content, p, room, new OverworldProp
                         {
                             Kind = CityPropKind.Rock, Decor = special, Position = p, Yaw = yaw, Scale = scale,
@@ -660,6 +665,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 }
             }
         }
+
+        private static readonly int[] CoastBackdrop = { 3 };
 
         private static TownSwatch RockColor(OverworldTerrain terrain)
         {
@@ -695,7 +702,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 {
                     int key = ix * 92821 + iz * 7919;
                     var p = new Vector2(ix * dx + (TownStyle.Hash01(salt, key) - 0.5f) * 0.8f, iz * dz + (TownStyle.Hash01(salt, key + 1) - 0.5f) * 0.8f);
-                    if (DistanceToWall(layout.Bounds, p) < EdgeBelt || layout.InAuthoredArea(p))
+                    if (DistanceToWall(layout, p) < EdgeBelt || layout.InAuthoredArea(p))
                     {
                         continue;
                     }
@@ -881,7 +888,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                         continue;
                     }
 
-                    float wall = DistanceToWall(layout.Bounds, p);
+                    float wall = DistanceToWall(layout, p);
                     if (wall < -14f)
                     {
                         continue;
@@ -896,7 +903,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     OverworldTerrain terrain = info.Terrain;
                     OverworldTerrainStyle style = OverworldTerrains.For(terrain);
                     bool crop = InCrop(terrain, p);
-                    bool wet = info.RiverEdge > 0.2f && info.RiverEdge < 3.2f && terrain != OverworldTerrain.Steppe && terrain != OverworldTerrain.Ruins && !IsCave(terrain);
+                    bool wet = info.RiverEdge > 0.2f && info.RiverEdge < 3.2f && terrain != OverworldTerrain.Steppe && terrain != OverworldTerrain.Ruins && !IsCave(terrain)
+                        && !OverworldTerrains.IsSeaShore(terrain);
                     float tufts = crop ? 0f : style.Tufts;
                     float flowers = crop ? 0f : style.Flowers;
                     float reeds = style.Reeds + (wet ? 0.45f : 0f);
@@ -1048,7 +1056,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Vector2 p = prop.Position;
             float s = prop.Scale;
             if (AddCaveDecorSolid(content, prop, ground, sink) || AddMountainDecorSolid(content, prop, ground, sink)
-                || AddDesertDecorSolid(content, prop, ground, sink))
+                || AddDesertDecorSolid(content, prop, ground, sink) || AddCoastDecorSolid(content, prop, ground, sink))
             {
                 return;
             }
@@ -1473,7 +1481,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     return;
             }
 
-            if (AppendCaveDecor(b, g, prop, at) || AppendMountainDecor(b, g, prop, at) || AppendDesertDecor(b, g, prop, at))
+            if (AppendCaveDecor(b, g, prop, at) || AppendMountainDecor(b, g, prop, at) || AppendDesertDecor(b, g, prop, at) || AppendCoastDecor(b, g, prop, at))
             {
                 return;
             }

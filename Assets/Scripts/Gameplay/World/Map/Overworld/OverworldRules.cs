@@ -319,9 +319,16 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 }
             }
 
-            if (Mathf.Abs(covered - layout.Bounds.width * layout.Bounds.height) > 1f)
+            // The walkable ground: the whole rectangle, minus the holes of a stitched world that is not one (Região 5's L).
+            float ground = layout.Bounds.width * layout.Bounds.height;
+            foreach (Rect hole in layout.Holes)
             {
-                problems.Add($"the zones cover {covered:0} m² of {layout.Bounds.width * layout.Bounds.height:0} m²");
+                ground -= hole.width * hole.height;
+            }
+
+            if (Mathf.Abs(covered - ground) > 1f)
+            {
+                problems.Add($"the zones cover {covered:0} m² of {ground:0} m²");
             }
 
             foreach (MapSpawnZone spawn in layout.World.Zones)

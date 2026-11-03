@@ -26,6 +26,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         Mesas = 21,
         /// <summary>A high layered plateau cut by narrow winding canyons (the badlands).</summary>
         Canyons = 22,
+
+        // Região 5 — Costa das Monções (OverworldRelief.Coast.cs): 30–39.
+        /// <summary>Sea cliffs: a stepped laterite headland broken by sheer bluffs and coves.</summary>
+        Cliffs = 30,
+        /// <summary>Flat sandbanks and islets a little over the water line, with low coral humps.</summary>
+        Islets = 31,
     }
 
     /// <summary>What the relief knows about one point besides its height (ground colours and scatter read it).</summary>
@@ -134,6 +140,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private readonly OverworldLayout _layout;
         private readonly Rect _bounds;
+        private readonly Rect[] _holes;
         private readonly Rect[] _zoneRects;
         private readonly OverworldTerrainStyle[] _zoneStyles;
         private readonly Vector2[] _zoneOrigins;
@@ -170,6 +177,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         {
             _layout = layout;
             _bounds = layout.Bounds;
+            _holes = new List<Rect>(layout.Holes).ToArray();
             _zoneRects = new Rect[layout.Zones.Count];
             _zoneStyles = new OverworldTerrainStyle[layout.Zones.Count];
             _zoneOrigins = new Vector2[layout.Zones.Count];
@@ -633,9 +641,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 }
 
                 default:
-                    if (DesertShape(style, x, z, a, out smooth, out shaped))
+                    if (DesertShape(style, x, z, a, out smooth, out shaped) || CoastShape(style, x, z, a, out smooth, out shaped))
                     {
-                        break; // Região 2: dunes, mesas, canyons (OverworldRelief.Desert.cs).
+                        break; // Região 2: dunes, mesas, canyons (OverworldRelief.Desert.cs); Região 5: cliffs, islets (.Coast.cs).
                     }
 
                     smooth = shaped = a * SmoothStep(0f, 1f, 0.5f + 0.85f * OverworldNoise.Fbm(x, z, 2));
@@ -697,7 +705,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         {
             float dx = Mathf.Max(Mathf.Max(_bounds.xMin - p.x, p.x - _bounds.xMax), 0f);
             float dz = Mathf.Max(Mathf.Max(_bounds.yMin - p.y, p.y - _bounds.yMax), 0f);
-            return dx == 0f && dz == 0f ? 0f : Mathf.Sqrt(dx * dx + dz * dz);
+            if (dx == 0f && dz == 0f)
+            {
+                // Inside the bounds: beyond the walls only in a hole of the stitched world (no region there).
+                return _holes.Length == 0 ? 0f : Mathf.Max(0f, -_layout.WallDistance(p));
+            }
+
+            return Mathf.Sqrt(dx * dx + dz * dz);
         }
 
         /// <summary>Squared distance from <paramref name="p"/> to segment a–b, and where along it (0..1) the nearest point is.</summary>

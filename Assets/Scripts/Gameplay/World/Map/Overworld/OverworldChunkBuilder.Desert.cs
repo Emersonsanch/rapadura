@@ -138,7 +138,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     var p = new Vector2(
                         content.Rect.xMin + (gx + 0.5f + (TownStyle.Hash01(salt, i) - 0.5f) * 0.8f) * SaltSpacing,
                         content.Rect.yMin + (gz + 0.5f + (TownStyle.Hash01(salt, i + 20000) - 0.5f) * 0.8f) * SaltSpacing);
-                    if (!content.Rect.Contains(p) || DistanceToWall(layout.Bounds, p) < -14f)
+                    if (!content.Rect.Contains(p) || DistanceToWall(layout, p) < -14f)
                     {
                         continue;
                     }

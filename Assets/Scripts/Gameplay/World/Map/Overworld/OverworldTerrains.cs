@@ -418,6 +418,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             DesertStyles(styles);
             CaveStyles(styles);
             MountainStyles(styles);
+            CoastStyles(styles);
             return styles;
         }
     }

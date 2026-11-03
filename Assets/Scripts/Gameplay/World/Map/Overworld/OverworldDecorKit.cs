@@ -121,6 +121,34 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         GraniteBlock = 110,
         /// <summary>A tall stone stela (Estela Alta, the summit).</summary>
         Stela = 111,
+
+        // Região 5 — Costa das Monções (OverworldDecorKit.Coast.cs): 120–139.
+        /// <summary>A dhow beached on its side on the sand (the town kit's dhow, keeled over).</summary>
+        BeachedDhow = 120,
+        /// <summary>A wema fish trap: a heart of stakes and palm-rib fence on the beach.</summary>
+        FishTrap = 121,
+        /// <summary>Fishing nets hung to dry between two poles.</summary>
+        NetRack = 122,
+        /// <summary>A coral head (live or dimmed coral boulders) on the reef flat.</summary>
+        CoralHead = 123,
+        /// <summary>A run of ruined coral-stone wall (<see cref="OverworldProp.End"/> = its other end).</summary>
+        CoralWall = 124,
+        /// <summary>A ruined coral-stone arch (Kilwa, Gedi).</summary>
+        CoralArch = 125,
+        /// <summary>A flat-topped acacia of the savanna.</summary>
+        Acacia = 126,
+        /// <summary>A tall termite mound of red earth.</summary>
+        TermiteMound = 127,
+        /// <summary>A mangrove on its stilt roots (the town kit's mangrove).</summary>
+        MangroveClump = 128,
+        /// <summary>A line of wrack, seaweed and shells on the sand (ground detail, no collider).</summary>
+        Wrack = 129,
+        /// <summary>Cloves drying on a mat (ground detail, no collider).</summary>
+        CloveMat = 130,
+        /// <summary>A striped post marking the edge of a shallow ford (baixio).</summary>
+        FordPost = 131,
+        /// <summary>A Swahili pillar tomb of coral stone.</summary>
+        PillarTomb = 132,
     }
 
     /// <summary>

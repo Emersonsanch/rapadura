@@ -13,9 +13,9 @@ namespace Rapadura.Gameplay.World.Map
     /// <summary>
     /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II): level
     /// bands, walk/warp levels, special gates, settlements and return cities, as content-as-code like
-    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–24): a hand-made layout
+    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–30): a hand-made layout
     /// (<c>MapLayouts.Has</c>: 01–08, 13, 14, 19, 20) or only a zone of a continuous region (<c>OverworldLayouts.ForMap</c>:
-    /// 09–12, 15–18, 21–24, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
+    /// 09–12, 15–18, 21–30, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
     /// the flag equal to it. The rest are listed in the Barcas de Luz window, closed. The gold fare is never stored: it is always the
     /// formula of <see cref="MapAccessRules.CalculateWarpCost(int,int,bool)"/> (the "Custo Ouro" column of the methodology
     /// table is design history).
@@ -83,12 +83,12 @@ namespace Rapadura.Gameplay.World.Map
             new MapDefinition(24, "map_024_mahaway", R.GrutasDoLimiar, Y.Underground, S.G, 42, 50, 40, 46, Fee, T.WingsOrDoubleJump, CityCatalog.Lamparinas, K.Outpost, "ultima_ponte", isBuilt: true),
 
             // Região 5 — Costa das Monções
-            new MapDefinition(25, "map_025_taa_pwani", R.CostaDasMoncoes, Y.Coast, S.G, 45, 50, 42, 48, Fee, T.BoatOrDock, TaaPwani, K.City, "taa_pwani"),
-            new MapDefinition(26, "map_026_auroques", R.CostaDasMoncoes, Y.Plain, S.GG, 48, 55, 45, 52, Fee, T.None, Aratta, K.RaceCity, "aratta"),
-            new MapDefinition(27, "map_027_meroe", R.CostaDasMoncoes, Y.Ruins, S.G, 52, 58, 50, 56, Fee, T.ArtificerRelic, Aratta, K.Outpost, "patio_dos_relevos"),
-            new MapDefinition(28, "map_028_kirta", R.CostaDasMoncoes, Y.Coast, S.G, 55, 62, 52, 60, Fee, T.BreathingShell, Kirta, K.RaceCity, "kirta"),
-            new MapDefinition(29, "map_029_kilwa", R.CostaDasMoncoes, Y.Ruins, S.G, 60, 66, 58, 65, Fee, T.AirBubble, Kirta, K.Outpost, "farol_de_coral"),
-            new MapDefinition(30, "map_030_liyongo", R.CostaDasMoncoes, Y.Swamp, S.G, 64, 72, 60, 70, Fee, T.RootBoots, TaaPwani, K.Outpost, "cais_das_dhows"),
+            new MapDefinition(25, "map_025_taa_pwani", R.CostaDasMoncoes, Y.Coast, S.G, 45, 50, 42, 48, Fee, T.BoatOrDock, TaaPwani, K.City, "taa_pwani", isBuilt: true),
+            new MapDefinition(26, "map_026_auroques", R.CostaDasMoncoes, Y.Plain, S.GG, 48, 55, 45, 52, Fee, T.None, Aratta, K.RaceCity, "aratta", isBuilt: true),
+            new MapDefinition(27, "map_027_meroe", R.CostaDasMoncoes, Y.Ruins, S.G, 52, 58, 50, 56, Fee, T.ArtificerRelic, Aratta, K.Outpost, "patio_dos_relevos", isBuilt: true),
+            new MapDefinition(28, "map_028_kirta", R.CostaDasMoncoes, Y.Coast, S.G, 55, 62, 52, 60, Fee, T.BreathingShell, Kirta, K.RaceCity, "kirta", isBuilt: true),
+            new MapDefinition(29, "map_029_kilwa", R.CostaDasMoncoes, Y.Ruins, S.G, 60, 66, 58, 65, Fee, T.AirBubble, Kirta, K.Outpost, "farol_de_coral", isBuilt: true),
+            new MapDefinition(30, "map_030_liyongo", R.CostaDasMoncoes, Y.Swamp, S.G, 64, 72, 60, 70, Fee, T.RootBoots, TaaPwani, K.Outpost, "cais_das_dhows", isBuilt: true),
 
             // Região 6 — Delta de Jhilpur
             new MapDefinition(31, "map_031_jhilpur", R.DeltaDeJhilpur, Y.Swamp, S.GG, 60, 66, 58, 65, Fee, T.None, Jhilpur, K.Capital, "jhilpur"),

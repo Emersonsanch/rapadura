@@ -186,6 +186,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             AddBox(colliders, new Vector3(b.xMax + t * 0.5f, bottom + h * 0.5f, b.center.y), new Vector3(t, h, b.height));
             AddBox(colliders, new Vector3(b.xMin - t * 0.5f, bottom + h * 0.5f, b.center.y), new Vector3(t, h, b.height));
 
+            // The stitched world need not be a rectangle: each hole no region covers is walled off from the inside too.
+            foreach (Rect hole in Layout.Holes)
+            {
+                AddBox(colliders, new Vector3(hole.center.x, bottom + h * 0.5f, hole.yMax - t * 0.5f), new Vector3(hole.width, h, t));
+                AddBox(colliders, new Vector3(hole.center.x, bottom + h * 0.5f, hole.yMin + t * 0.5f), new Vector3(hole.width, h, t));
+                AddBox(colliders, new Vector3(hole.xMax - t * 0.5f, bottom + h * 0.5f, hole.center.y), new Vector3(t, h, hole.height));
+                AddBox(colliders, new Vector3(hole.xMin + t * 0.5f, bottom + h * 0.5f, hole.center.y), new Vector3(t, h, hole.height));
+            }
+
             _townRoot = new GameObject("Ow_Towns").transform;
             _townRoot.SetParent(transform, false);
 

@@ -132,6 +132,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Crossing(dourado, new Vector2(500f, 950f), 6f, false);
             Crossing(dourado, new Vector2(440f, 500f), 4.5f, true);
             Crossing(dourado, new Vector2(330f, 150f), 6f, false);
+            // Where the river bends south past the Tugai's east exit, its trail (on to the Mata and the Costa) wades a ford.
+            Crossing(dourado, new Vector2(604.5f, -0.9f), 6f, false);
             Vector2 brejoBridge = On(new Vector2(680f, -200f), new Vector2(640f, -380f), 1f / 3f);
             Crossing(dourado, brejoBridge, 4.5f, true);
             Crossing(dourado, new Vector2(580f, -560f), 6f, false);
