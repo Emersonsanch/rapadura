@@ -30,6 +30,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { MapRegion.SerraDeKaggen, KaggenId },
             { MapRegion.GrutasDoLimiar, LimiarId },
             { MapRegion.CostaDasMoncoes, CostaId },
+            { MapRegion.DeltaDeJhilpur, DeltaId },
         };
 
         /// <summary>Every continuous region of this build (texts, tests).</summary>
@@ -59,6 +60,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 case KaggenId: return Kaggen();
                 case LimiarId: return Limiar();
                 case CostaId: return Costa();
+                case DeltaId: return DeltaRegion();
                 case WorldId: return BuildWorld();
                 default: return null;
             }

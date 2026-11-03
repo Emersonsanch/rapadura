@@ -162,7 +162,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
                 foreach (MapCrossing crossing in river.Crossings)
                 {
-                    if (crossing.IsBridge || !IsCoast(content.Grid.Near(content.Rect.center).Terrain) && !IsCoast(TerrainNear(content, crossing.At)))
+                    if (crossing.IsBridge || !MarksFords(content.Grid.Near(content.Rect.center).Terrain) && !MarksFords(TerrainNear(content, crossing.At)))
                     {
                         continue;
                     }
@@ -187,6 +187,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 }
             }
         }
+
+        /// <summary>The fords of the coast and of the delta (Região 6) are marked by striped posts.</summary>
+        private static bool MarksFords(OverworldTerrain t) => IsCoast(t) || OverworldTerrains.IsDelta(t);
 
         private static OverworldTerrain TerrainNear(OverworldChunkContent content, Vector2 p)
         {

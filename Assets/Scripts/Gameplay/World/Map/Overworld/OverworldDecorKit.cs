@@ -149,6 +149,28 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         FordPost = 131,
         /// <summary>A Swahili pillar tomb of coral stone.</summary>
         PillarTomb = 132,
+
+        // Região 6 — Delta de Jhilpur (OverworldDecorKit.Delta.cs): 140–159.
+        /// <summary>A banyan fig: a cluster of trunks, curtains of aerial roots dropping to the ground, a wide flat crown.</summary>
+        Banyan = 140,
+        /// <summary>An arch of living roots over the ground (the root bridges' little sisters, in the gorges).</summary>
+        RootArch = 141,
+        /// <summary>Lotus pads and a pink flower on the water's edge (ground detail, no collider).</summary>
+        LotusPads = 142,
+        /// <summary>A fisher's reed hut raised on stilts, a ladder and a net (Tarchon's swamp).</summary>
+        StiltHut = 143,
+        /// <summary>A lotus lantern hung from a bamboo pole (the Ilhota das Lanternas; glows at night).</summary>
+        LanternPole = 144,
+        /// <summary>A spring of Living Water in a ring of roots (the Coração do Lodo's fountains; glows).</summary>
+        LivingSpring = 145,
+        /// <summary>Violet bubbles of the Lodo on black mud (ground detail, no collider).</summary>
+        MireBubbles = 146,
+        /// <summary>A run of earthen paddy dike (<see cref="OverworldProp.End"/> = its other end).</summary>
+        PaddyBund = 147,
+        /// <summary>A clump of rice in the flooded paddy (ground detail, no collider).</summary>
+        RiceTuft = 148,
+        /// <summary>A twisted mass of rotten root, black and grey, bracket fungi.</summary>
+        RottenRoot = 149,
     }
 
     /// <summary>

@@ -186,6 +186,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ScatterDesert(layout, content);
             ScatterMountain(layout, content);
             ScatterCoast(layout, content);
+            ScatterDelta(layout, content);
             if (content.HasFields)
             {
                 ScatterFields(layout, content);
@@ -568,9 +569,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                         bool second = style.SecondVegetation.HasValue && wall >= 0f && TownStyle.Hash01(salt, i + 200000) < style.SecondShare;
                         TownVegetation vegetation = second ? style.SecondVegetation.Value : style.Vegetation;
                         int[] variants = second ? style.SecondVariants : style.TreeVariants;
-                        if (wall < 0f && !second)
+                        if ((wall < 0f || (wall < EdgeBelt && IsDelta(terrain))) && !second)
                         {
-                            // The coast's backdrop is casuarinas only, its lightest tree (palms and baobabs would break the budget).
+                            // The coast's backdrop is casuarinas only, its lightest tree (palms and baobabs would break the budget);
+                            // the delta's palms give way to them along its walls too (its wall belt is otherwise all palms).
                             variants = style.Vegetation == TownVegetation.Forest ? new[] { 0, 1, 2 } : style.Vegetation == TownVegetation.Coast ? CoastBackdrop : style.TreeVariants;
                         }
 
@@ -655,7 +657,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                             ? style.SpecialMix[(int)(TownStyle.Hash(salt, i + 320000) % (uint)style.SpecialMix.Length)]
                             : style.Special;
                         float scale = special == OverworldDecor.Cypress ? 0.85f + 0.35f * s01 : 0.8f + 0.6f * s01;
-                        float room = IsDesertDecor(special) ? DesertClearance(special) : IsCoastDecor(special) ? CoastClearance(special) : special == OverworldDecor.Basalt ? 1.4f : 0.9f;
+                        float room = IsDesertDecor(special) ? DesertClearance(special) : IsCoastDecor(special) ? CoastClearance(special) : IsDeltaDecor(special) ? DeltaClearance(special) : special == OverworldDecor.Basalt ? 1.4f : 0.9f;
                         TryAdd(layout, content, p, room, new OverworldProp
                         {
                             Kind = CityPropKind.Rock, Decor = special, Position = p, Yaw = yaw, Scale = scale,
@@ -1056,7 +1058,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Vector2 p = prop.Position;
             float s = prop.Scale;
             if (AddCaveDecorSolid(content, prop, ground, sink) || AddMountainDecorSolid(content, prop, ground, sink)
-                || AddDesertDecorSolid(content, prop, ground, sink) || AddCoastDecorSolid(content, prop, ground, sink))
+                || AddDesertDecorSolid(content, prop, ground, sink) || AddCoastDecorSolid(content, prop, ground, sink)
+                || AddDeltaDecorSolid(content, prop, ground, sink))
             {
                 return;
             }
@@ -1481,7 +1484,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     return;
             }
 
-            if (AppendCaveDecor(b, g, prop, at) || AppendMountainDecor(b, g, prop, at) || AppendDesertDecor(b, g, prop, at) || AppendCoastDecor(b, g, prop, at))
+            if (AppendCaveDecor(b, g, prop, at) || AppendMountainDecor(b, g, prop, at) || AppendDesertDecor(b, g, prop, at) || AppendCoastDecor(b, g, prop, at)
+                || AppendDeltaDecor(b, g, prop, at))
             {
                 return;
             }

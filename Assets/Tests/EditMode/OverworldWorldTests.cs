@@ -13,11 +13,12 @@ namespace Rapadura.Tests
 {
     /// <summary>
     /// The stitched world (Docs/Mapas100.md §0.10, "Mundo costurado"): the Zarafshan, the Areias, the Serra de Kaggen, the
-    /// Grutas do Limiar and the Costa das Monções as ONE map: the four first tile a 4800 × 4800 m square, the Costa sits east
-    /// of the Zarafshan, so the world is an L of 7200 × 4800 m whose south-east corner (east of the Areias) is a walled hole.
+    /// Grutas do Limiar, the Costa das Monções and the Delta de Jhilpur as ONE map: the four first tile a 4800 × 4800 m square,
+    /// the Costa sits east of the Zarafshan and the Delta east of the Areias (south of the Costa), so the world is a whole
+    /// 7200 × 4800 m rectangle of 3 × 2 regions with no hole.
     /// Every walkable point belongs to one region, the chunk grids line up, the gates between the regions became open passes
     /// (flat, joined by trails), the relief has no hole nor step on the borders, the Zarafshan is the same as on its own away
-    /// from them, and the hero can walk on trails from the Vila to Qocho, Litema, the Lamparinas and Taa Pwani without a gate;
+    /// from them, and the hero can walk on trails from the Vila to Qocho, Litema, the Lamparinas, Taa Pwani and Jhilpur without a gate;
     /// the island rings, the Ossuário and the docks stay.
     /// </summary>
     public class OverworldWorldTests
@@ -29,10 +30,8 @@ namespace Rapadura.Tests
         private static readonly string[] RegionIds =
         {
             OverworldLayouts.ZarafshanId, OverworldLayouts.AreiasId, OverworldLayouts.KaggenId, OverworldLayouts.LimiarId, OverworldLayouts.CostaId,
+            OverworldLayouts.DeltaId,
         };
-
-        /// <summary>The corner of the bounds no region covers: east of the Areias, south of the Costa.</summary>
-        private static readonly Rect Hole = new Rect(1400f, -3400f, 2400f, 2400f);
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -46,16 +45,18 @@ namespace Rapadura.Tests
         // ------------------------------------------------------------------
 
         [Test]
-        public void World_IsValid_AndTilesTheFiveRegions_EachPointInOneRegion()
+        public void World_IsValid_AndTilesTheSixRegions_EachPointInOneRegion()
         {
             OverworldLayout w = World;
             CollectionAssert.IsEmpty(OverworldRules.Validate(w), string.Join("\n", OverworldRules.Validate(w)));
             Assert.IsTrue(w.IsStitched);
             CollectionAssert.AreEquivalent(RegionIds, w.Parts.Select(p => p.Id));
-            Assert.AreEqual(new Rect(-3400f, -3400f, 7200f, 4800f), w.Bounds, "2 × 2 regions of 2400 m and the Costa east of the Zarafshan");
-            CollectionAssert.AreEqual(new[] { Hole }, w.Holes, "an L: the corner east of the Areias is walled off");
+            Assert.AreEqual(new Rect(-3400f, -3400f, 7200f, 4800f), w.Bounds, "3 × 2 regions of 2400 m: the Costa east of the Zarafshan, the Delta east of the Areias");
+            CollectionAssert.IsEmpty(w.Holes, "the Delta fills the corner the L left: no hole");
             Assert.AreEqual(OverworldLayouts.CostaWorldOffset, w.Parts.Find(p => p.Id == OverworldLayouts.CostaId).Offset);
             Assert.AreEqual(new Rect(1400f, -1000f, 2400f, 2400f), w.Parts.Find(p => p.Id == OverworldLayouts.CostaId).Bounds, "the Costa east of the Zarafshan");
+            Assert.AreEqual(OverworldLayouts.DeltaWorldOffset, w.Parts.Find(p => p.Id == OverworldLayouts.DeltaId).Offset);
+            Assert.AreEqual(new Rect(1400f, -3400f, 2400f, 2400f), w.Parts.Find(p => p.Id == OverworldLayouts.DeltaId).Bounds, "the Delta east of the Areias, south of the Costa");
             Assert.AreEqual(Vector2.zero, w.Parts.Find(p => p.Id == OverworldLayouts.ZarafshanId).Offset, "the Vila stays at (0, 0)");
             Assert.AreEqual(Vector2.zero, w.Vila.Offset);
 
@@ -74,22 +75,14 @@ namespace Rapadura.Tests
                 Assert.AreEqual(alone.World.Biome, part.Biome);
             }
 
-            Assert.AreEqual(w.Bounds.width * w.Bounds.height - Hole.width * Hole.height, area, 1f, "the regions cover the world but its hole");
+            Assert.AreEqual(w.Bounds.width * w.Bounds.height, area, 1f, "the regions cover the whole world");
 
-            // Every point (borders included) belongs to exactly one region and one area of it, but in the hole (beyond the walls).
+            // Every point (borders included) belongs to exactly one region and one area of it.
             for (float x = w.Bounds.xMin; x < w.Bounds.xMax; x += 25f)
             {
                 for (float z = w.Bounds.yMin; z < w.Bounds.yMax; z += 25f)
                 {
                     var p = new Vector2(x, z);
-                    if (Hole.Contains(p))
-                    {
-                        Assert.AreEqual(0, w.Parts.Count(part => part.Bounds.Contains(p)), $"{p}: no region in the hole");
-                        Assert.IsNull(OverworldRules.ZoneAt(w, p), $"{p}: no area in the hole");
-                        Assert.LessOrEqual(w.WallDistance(p), 0f, $"{p}: the hole is beyond the walls");
-                        continue;
-                    }
-
                     Assert.AreEqual(1, w.Parts.Count(part => part.Bounds.Contains(p)), $"{p}: one region");
                     Assert.Greater(w.WallDistance(p), -0.01f, $"{p}: inside the walls");
                     OverworldZone zone = OverworldRules.ZoneAt(w, p);
@@ -105,7 +98,7 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void World_IsWhatMapModeLoads_ForEveryMapOfTheFiveRegions()
+        public void World_IsWhatMapModeLoads_ForEveryMapOfTheSixRegions()
         {
             OverworldLayout w = World;
             foreach (string id in RegionIds)
@@ -128,7 +121,8 @@ namespace Rapadura.Tests
             }
 
             Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.TaaPwaniMapId), "region 5 is part of the world");
-            Assert.IsNull(OverworldLayouts.WorldOf("map_031_jhilpur"), "region 6 is not a continuous region yet");
+            Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.JhilpurMapId), "region 6 is part of the world");
+            Assert.IsNull(OverworldLayouts.WorldOf("map_036_sangkent"), "region 7 is not a continuous region yet");
         }
 
         [Test]
@@ -136,13 +130,16 @@ namespace Rapadura.Tests
         {
             OverworldLayout w = World;
             Assert.IsFalse(w.World.Exits.Exists(e => e.Kind == MapExitKind.Map && w.ContainsMap(e.TargetMapId)), "no gate inside the world");
-            Assert.AreEqual(5, w.World.Exits.Count(e => e.Kind == MapExitKind.WorldMap && e.Id.StartsWith("exit_island")), "one stone ring per region");
+            Assert.AreEqual(6, w.World.Exits.Count(e => e.Kind == MapExitKind.WorldMap && e.Id.StartsWith("exit_island")), "one stone ring per region");
             Assert.IsNotNull(w.World.Exits.Find(e => e.Id == "exit_island_costa"), "the stone ring by Taa Pwani");
+            Assert.IsNotNull(w.World.Exits.Find(e => e.Id == "exit_island_delta"), "the stone ring by Jhilpur");
             Assert.IsNotNull(w.World.Exits.Find(e => e.Id == MapModeController.OssuaryExitId), "the Ossuário's portal keeps its id");
             Assert.AreEqual(w.Settlements.Count(s => s.HasDock), w.World.Exits.Count(e => e.Kind == MapExitKind.Dock));
 
-            // The passes: Zarafshan–Areias (south road), Zarafshan–Kaggen (twice), Kaggen–Limiar, Limiar–Areias, Zarafshan–Costa.
-            Assert.GreaterOrEqual(w.Passes.Count, 7);
+            // The passes: Zarafshan–Areias (south road), Zarafshan–Kaggen (twice), Kaggen–Limiar, Limiar–Areias, Zarafshan–Costa,
+            // Areias–Delta (the old gate east of the Areias meets the Delta's west gate), Costa–Delta (twice: the red cliffs' road
+            // and Liyongo's mangroves).
+            Assert.GreaterOrEqual(w.Passes.Count, 10);
             OverworldRelief relief = OverworldRelief.For(w);
             foreach (Vector2 pass in w.Passes)
             {
@@ -154,7 +151,8 @@ namespace Rapadura.Tests
             {
                 (new Vector2(0f, -900f), new Vector2(-100f, -1100f)), (new Vector2(-900f, -150f), new Vector2(-1100f, -200f)),
                 (new Vector2(-1700f, -900f), new Vector2(-1700f, -1100f)), (new Vector2(-1100f, -1110f), new Vector2(-900f, -1110f)),
-                (new Vector2(1300f, -230f), new Vector2(1500f, -230f)),
+                (new Vector2(1300f, -230f), new Vector2(1500f, -230f)), (new Vector2(1300f, -1250f), new Vector2(1500f, -1250f)),
+                (new Vector2(1940f, -900f), new Vector2(1940f, -1100f)), (new Vector2(3540f, -900f), new Vector2(3540f, -1100f)),
             })
             {
                 Assert.AreNotEqual(w.PartAt(a), w.PartAt(b), $"{a} and {b} are in two regions");
@@ -173,18 +171,15 @@ namespace Rapadura.Tests
             OverworldRelief relief = OverworldRelief.For(w);
             const float e = 0.02f;
             float worst = 0f;
-            // The inner borders: x = -1000 and z = -1000 (the whole width of the world, the Costa's wall on the hole included),
-            // and x = 1400 between the Zarafshan and the Costa.
+            // The inner borders: x = -1000 and z = -1000 (the whole width of the world, Costa | Delta included), and x = 1400
+            // (Zarafshan | Costa above, Areias | Delta below).
             for (float t = w.Bounds.xMin + 0.5f; t < w.Bounds.xMax; t += 1.5f)
             {
                 var lines = new List<(Vector2, Vector2)> { (new Vector2(t, -1000f), Vector2.up) };
                 if (t < w.Bounds.yMax)
                 {
                     lines.Add((new Vector2(-1000f, t), Vector2.right));
-                    if (t > -1000f)
-                    {
-                        lines.Add((new Vector2(1400f, t), Vector2.right));
-                    }
+                    lines.Add((new Vector2(1400f, t), Vector2.right));
                 }
 
                 foreach ((Vector2 p, Vector2 n) in lines)
@@ -281,7 +276,7 @@ namespace Rapadura.Tests
         // ------------------------------------------------------------------
 
         [Test]
-        public void Trails_LeadOnFoot_FromTheVila_ToQocho_Litema_TheLamparinas_AndTaaPwani()
+        public void Trails_LeadOnFoot_FromTheVila_ToQocho_Litema_TheLamparinas_TaaPwani_AndJhilpur()
         {
             OverworldLayout w = World;
             OverworldRelief relief = OverworldRelief.For(w);
@@ -347,7 +342,7 @@ namespace Rapadura.Tests
 
             OverworldSettlement vila = w.Vila;
             var report = new List<string>();
-            foreach (string regionId in new[] { OverworldLayouts.AreiasId, OverworldLayouts.KaggenId, OverworldLayouts.LimiarId, OverworldLayouts.CostaId })
+            foreach (string regionId in new[] { OverworldLayouts.AreiasId, OverworldLayouts.KaggenId, OverworldLayouts.LimiarId, OverworldLayouts.CostaId, OverworldLayouts.DeltaId })
             {
                 OverworldSettlement goal = w.Parts.Find(p => p.Id == regionId).Vila;
                 List<int> route = Route(links, townOf, vila, goal);

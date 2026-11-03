@@ -16,7 +16,7 @@ using UnityEngine;
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// The maps that exist only as zones of a continuous region (09–12, 15–18, 21–30): built in the catalog, reachable by the
+    /// The maps that exist only as zones of a continuous region (09–12, 15–18, 21–35): built in the catalog, reachable by the
     /// Barcas de Luz (arrival at their post's dock inside the right overworld), the visited docks saved with the cities (old
     /// saves migrated), and the Ossuário's portal in the Grutas do Limiar starting the dungeon run and bringing the hero back.
     /// </summary>
@@ -28,6 +28,7 @@ namespace Rapadura.Tests
             "map_015_abrigos", "map_016_pedra_seca", "map_017_napirasu", "map_018_mazans",
             "map_021_pedras_dragao", "map_022_mercado_tuneis", "map_023_canion_roda", "map_024_mahaway",
             "map_025_taa_pwani", "map_026_auroques", "map_027_meroe", "map_028_kirta", "map_029_kilwa", "map_030_liyongo",
+            "map_031_jhilpur", "map_032_raiz_viva", "map_033_tarchon", "map_034_ninki_nanka", "map_035_coracao_lodo",
         };
 
         private readonly List<Object> _objects = new List<Object>();
@@ -87,7 +88,7 @@ namespace Rapadura.Tests
             }
 
             CollectionAssert.IsSubsetOf(OverworldOnlyMaps, MapCatalog.Built.Select(m => m.Id).ToArray());
-            Assert.IsFalse(MapCatalog.Get("map_031_jhilpur").IsBuilt, "region 6 is not a continuous region yet");
+            Assert.IsFalse(MapCatalog.Get("map_036_sangkent").IsBuilt, "region 7 is not a continuous region yet");
         }
 
         [Test]

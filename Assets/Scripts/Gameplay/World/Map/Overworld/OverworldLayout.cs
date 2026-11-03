@@ -170,6 +170,32 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         BaobabWoods = 95,
         /// <summary>Kelp flats north of Kirta (28): green shallows, kelp drifts, coral heads.</summary>
         KelpFlats = 96,
+
+        // Região 6 — Delta de Jhilpur (OverworldLayouts.Delta.cs, OverworldTerrains.Delta.cs): 100–119.
+        /// <summary>Jhilpur's lake (31): murky green water's edge, lotus, banyans, brick ghats.</summary>
+        RootLake = 100,
+        /// <summary>Giant banyans whose aerial roots drop curtains to the ground; shade, moss, ferns.</summary>
+        BanyanGrove = 101,
+        /// <summary>Lotus lagoons: shallow murky ponds full of pads and pink flowers, reeds on the banks.</summary>
+        LotusMarsh = 102,
+        /// <summary>The Pontes de Raiz Viva (32): rain-forest gorges with rivers at the bottom, living-root bridges and arches.</summary>
+        RootGorge = 103,
+        /// <summary>Rain forest on rolling ground: dark broadleaves, palms, ferns, mossy boulders.</summary>
+        RainForest = 104,
+        /// <summary>Flooded rice paddies between earthen dikes (the delta's farmland).</summary>
+        PaddyLevees = 105,
+        /// <summary>The delta's grey mud banks between the channels, low and bare, puddles and crab holes.</summary>
+        MudFlats = 106,
+        /// <summary>Open swamp of reed islands (33, Tarchon): reeds, stilt huts of the fishers, lilac mist.</summary>
+        ReedIslands = 107,
+        /// <summary>The Charco do Ninki Nanka (34): tall reeds and raffia palms, hollow logs, dark water.</summary>
+        RaffiaBog = 108,
+        /// <summary>The Coração do Lodo (35): black mud, rotten roots, violet bubbles, the odd spring of Living Water.</summary>
+        BlackMire = 109,
+        /// <summary>A drowned dead wood: grey snags, rotten roots, bracket fungi.</summary>
+        DeadWood = 110,
+        /// <summary>The tidal forest of the delta's mouths: stilt-rooted trees along every creek, palms.</summary>
+        TidalForest = 111,
     }
 
     /// <summary>

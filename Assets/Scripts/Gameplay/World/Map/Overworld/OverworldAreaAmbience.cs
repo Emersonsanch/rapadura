@@ -138,6 +138,22 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { OverworldTerrain.TideLagoons, new AreaClimate(Mist, false) },
             { OverworldTerrain.BaobabWoods, new AreaClimate(null, false) },
             { OverworldTerrain.KelpFlats, new AreaClimate(Mist, true) },
+
+            // Região 6 — Delta de Jhilpur: the monsoon over the gorges, the rain forest and the tidal forest; the lilac mist
+            // over the reed swamp, the bog, the dead wood and the black mire; the lake, the paddies and the mud banks let the
+            // biome roll its weather.
+            { OverworldTerrain.RootLake, new AreaClimate(null, false) },
+            { OverworldTerrain.BanyanGrove, new AreaClimate(null, true) },
+            { OverworldTerrain.LotusMarsh, new AreaClimate(Mist, false) },
+            { OverworldTerrain.RootGorge, new AreaClimate(Monsoon, true) },
+            { OverworldTerrain.RainForest, new AreaClimate(Monsoon, true) },
+            { OverworldTerrain.PaddyLevees, new AreaClimate(null, false) },
+            { OverworldTerrain.MudFlats, new AreaClimate(null, false) },
+            { OverworldTerrain.ReedIslands, new AreaClimate(Mist, true) },
+            { OverworldTerrain.RaffiaBog, new AreaClimate(Mist, true) },
+            { OverworldTerrain.BlackMire, new AreaClimate(Mist, true) },
+            { OverworldTerrain.DeadWood, new AreaClimate(Mist, true) },
+            { OverworldTerrain.TidalForest, new AreaClimate(Monsoon, true) },
         };
 
         /// <summary>True when <paramref name="terrain"/> has its own line (tests: every terrain must).</summary>

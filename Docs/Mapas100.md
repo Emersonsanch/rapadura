@@ -123,13 +123,22 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       x −600…1800, z −1200…1200) com Taa Pwani na praia em (0, 0); 25–30 viram zonas (25 a 30 contam como construídos), 25 áreas
       numa grade 5 × 5, relevo de costa (falésias em degraus, ilhotas e baixios rasos, praias suaves junto da água) e cenário
       próprio; o portão oeste da Costa chega à trilha das Amoreiras na borda leste do Zarafshan. Detalhes em §5, "Região 5".
+    - **Região 6 — Delta de Jhilpur** (2026-11-03): mesmo modelo, 2400 × 2400 m (`OverworldLayouts.Delta.cs`, coordenadas
+      x −1200…1200, z −1800…600) com Jhilpur em (0, 0) na margem norte do seu lago; 31–35 viram zonas (construídos), 25 áreas
+      numa grade 5 × 5, 12 terrenos novos, relevo próprio (ilhotas de touceira `Hummocks`, diques `Levees`, gargantas) e
+      cenário próprio; preenche o canto murado a leste das Areias. Detalhes em §5, "Região 6".
     - **Mundo costurado** (2026-11-03, pedido do usuário: andar entre as regiões sem portão): as quatro primeiras regiões
       formam um quadrado de 4800 × 4800 m (`OverworldLayouts.WorldId`, `OverworldLayouts.World.cs`), 2 × 2, e a **Costa das
-      Monções** fica a leste do Zarafshan (x 1400…3800, z −1000…1400, deslocamento (2000, 200)): o mundo vira um **L** de
-      7200 × 4800 m; o canto sudeste (x 1400…3800, z −3400…−1000, a leste das Areias) não tem região — é um **buraco murado**
-      (`OverworldLayout.Holes`/`WallDistance`: muros invisíveis por dentro, relevo de fundo subindo em morros como fora dos
-      muros, cenário de borda, `OverworldRules.Validate` conta a área sem o buraco). A passagem Zarafshan ↔ Costa: o portão
-      oeste da Costa (Mata da Restinga) é levado à trilha das Amoreiras (x 1380). Quadrado original:
+      Monções** fica a leste do Zarafshan (x 1400…3800, z −1000…1400, deslocamento (2000, 200)) e o **Delta de Jhilpur** a
+      leste das Areias, ao sul da Costa (x 1400…3800, z −3400…−1000, deslocamento (2600, −1600), Jhilpur no mundo em
+      (2600, −1600)): o mundo é um **retângulo inteiro** de 7200 × 4800 m, 3 × 2 regiões. (Entre a Costa e o Delta o canto era
+      um **buraco murado** — `OverworldLayout.Holes`/`WallDistance` continuam valendo para qualquer canto sem região: muros
+      invisíveis por dentro, relevo de fundo, `OverworldRules.Validate` conta a área sem o buraco; hoje não há nenhum.) A
+      passagem Zarafshan ↔ Costa: o portão oeste da Costa (Mata da Restinga) é levado à trilha das Amoreiras (x 1380).
+      Passagens do Delta: o antigo portão leste das Areias (`exit_rondaveis`, que fechava no muro) encontra o portão oeste do
+      Delta (`exit_areias`) na mesma borda (z −1250) e as chegadas viram uma trilha; os dois portões norte do Delta
+      (`exit_costa`, x 1940, e `exit_liyongo`, x 3540) são levados às pontas de trilha da Costa logo ao norte (a estrada das
+      Falésias Vermelhas e a trilha dos Mangues de Liyongo). Quadrado original:
       Serra de Kaggen (x −3400…−1000, z −1000…1400) | Bosque do Zarafshan (x −1000…1400, z −1000…1400) em cima;
       Grutas do Limiar (x −3400…−1000, z −3400…−1000) | Areias Flamejantes (x −1000…1400, z −3400…−1000) embaixo.
       Cada região guarda o seu layout nas suas coordenadas e é deslocada por um número inteiro de pedaços (Zarafshan
@@ -1220,6 +1229,44 @@ Viva e Fogo Vivo (o sol da savana). Chefe do mundo: **Hedammu** (mapa 30).
 
 ### Região 6 — Delta de Jhilpur (pântano de raízes, Água Viva) · mapas 31–35
 
+- **Mundo contínuo (2026-11-03): mapas 31–35 jogáveis a pé.** A região inteira é um mapa de 2400 × 2400 m
+  (`OverworldLayouts.Delta`, `DeltaId`) costurado a leste das Areias e ao sul da Costa das Monções, sem portão. Jhilpur
+  (`CityTownRecipes.Jhilpur()`, Backdrop desligado, chão plano de ±30 m em y = 0, saídas O/L/N; ao sul os ghats descem ao lago)
+  fica em (0, 0). Grade 5 × 5 de áreas (colunas x −1200/−720/−240/240/720/1200, linhas z −1800/−1320/−840/−360/120/600), nível
+  subindo com a distância de Jhilpur a partir de 60:
+  - **Perto (60–65):** Lago de Jhilpur (31, a cidade), Bancos de Jhilpur, Diques do Norte (portão para a Costa), Lagoas de Lótus,
+    Figueiral das Raízes, Várzea dos Búfalos, Charcos de Lótus.
+  - **Meio (63–70):** Pontes de Raiz Viva e Gargantas Esquecidas (32, posto Plataforma das Garças; **Vara de Equilíbrio**),
+    Cascatas da Chuva (portão para as Areias) e Floresta de Chuva, Floresta de Maré (portão para os mangues de Liyongo), Ilhas
+    de Junco, Pântano Aberto, Brejo das Palmeiras.
+  - **Longe (70–88):** Palafitas de Tarchon e Ilhas que Andam (33; **Barco de Junco**), Bancos de Lama, Raízes Afogadas, Mata
+    Morta, Charco do Ninki Nanka, Ilhota das Lanternas (posto) e Toca da Dragoa (34; **Amuleto Antiveneno**), Coração do Lodo
+    (posto Raiz-Mãe) e Olho do Lodo (35; **Fruta Purificadora**). A Nuhzadag de Jhilpur vende o equipamento de todas.
+  - **Tarchon (33):** a cidade dos trols (`CityTownRecipes.Tarchon()`, sem backdrop) fica no chão plano de ±28 m em y = 0 em
+    (480, −1080); é a cidade de retorno de 33 e 34 (`MapCatalog` e a tabela do §1).
+  - **Água:** o Canal de Jhilpur (do norte, pelo lado leste da cidade, pelo lago e ao sul até o lodo), o Canal do Leste (pelas
+    ilhas de junco até o muro leste), os três rios das gargantas, lagoas de lótus, poças do charco e do lodo e os riachos da
+    maré são **água funda que bloqueia**, atravessada em **vaus** marcados pelas estacas listradas (como os baixios da Costa)
+    e em **pontes de raiz** (uma no canal ao leste da cidade, uma em cada garganta).
+  - **Relevo:** `ReliefShape.Hummocks` (ilhotas de touceira e raiz sobre lama plana: junco, ráfia, lodo) e `ReliefShape.Levees`
+    (diques longos e baixos sobre os arrozais); gargantas (`Gorges`, até ~15 m) nas Pontes de Raiz Viva; colinas na floresta
+    de chuva e no figueiral; o resto quase plano junto da água.
+  - **Cenário** (`OverworldDecorKit.Delta.cs`, `OverworldChunkBuilder.Delta.cs`; só cores da paleta já existente): figueiras-de-
+    bengala com cortinas de raízes aéreas, arcos de raiz viva, cabanas de pescador em palafita, lanternas de lótus em vara de
+    bambu, fontes de Água Viva num anel de raízes (brilham), raízes podres, árvores mortas, diques de terra; detalhe de chão
+    carimbado: folhas e flor de lótus na beira d'água, touceiras de arroz, bolhas violeta do Lodo; palmeiras e casuarinas do
+    kit da costa (casuarinas na faixa dos muros, a árvore mais leve).
+  - **Bichos** (existentes, nenhum chefe): peixe-lanterna (Peixe-Saltador de Lodo), cobra-de-areia (Gavial do Lodo, Píton
+    Apagada, Crocodilo de Musgo, Cobra-d'Água, Ninki Nanka Filhote, Gavial-Sombra), chacal (Lontra Ladra), gaivota (Garça-Lança
+    e Garça-Fantasma), babuíno (Macaco Ladrão), lodo (Sanguessuga, Filhos do Lodo), aranha (Raiz-Laço), golem (Trol Apagado),
+    lanterna quebrada (Fogo-Fátuo Preso), Neblina (Bolha de Fumaça), corvo (Raiz Podre), morcegos (Libélula de Fumaça),
+    queixada (Sapo-Boi), gavião, caranguejo, urutau; à noite vaga-lumes/fogos-fátuos, a coruja rasga-mortalha (garça-fantasma),
+    o morcego-vampiro e a queixada. Clima: monção nas gargantas, na floresta de chuva e na de maré; névoa no lótus, no junco,
+    no brejo, na mata morta e no lodo; o lago, os diques e os bancos deixam o bioma sortear.
+  - **Orçamento** (.NET fora do Editor, todos os 2704 pedaços): ~5,7 mil triângulos em média, pior 11,4 mil (faixa dos muros);
+    geração ~0,56 ms em média, p95 ~0,9 ms. Testes `OverworldDeltaTests` e `OverworldWorldTests` (rota a pé Vila → Jhilpur,
+    ~4,7 km).
+
 Capital **Jhilpur** (§2). *Jhil* = lago/charco (bengali e hindi), *pur* = cidade. Fonte maniqueia: a viagem de Mani à Índia
 (Kephalaia 1). Respeito: arquitetura das palafitas de Bengala e das pontes de raiz viva de Meghalaya (povo khasi, vivo),
 **só** como forma; nenhum rito, nenhuma divindade da região. Chefe do mundo: **O Lodo-que-Engole** (mapa 35).
@@ -1272,6 +1319,7 @@ Capital **Jhilpur** (§2). *Jhil* = lago/charco (bengali e hindi), *pur* = cidad
 - **Ganchos:** loot junco, Lanterna de Fogo-Fátuo · montaria nova **Sapo-Gigante de Tarchon** (§6) · casa: conjunto novo
   **Palafita** (cesto gigante, rede de pesca).
 - **Noite:** os fogos-fátuos dobram e a névoa sobe; Lanterna de Fogo-Fátuo dá visão normal.
+- **No jogo (2026-11-03): cidade de verdade** (`CityTownRecipes.Tarchon.cs`, estilo `StiltVillage`, `CityCatalog.RaceCities`): em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S a 19 m; ao norte a cerca de estacas abre para o pântano): casas compridas sobre estacas altas com a empena para a rua, telhado de folha até o piso, redes secando e lanterna de fogo-fátuo; o Mastro dos Fogos-Fátuos na praça, passarelas de tábua sobre o charco, cestos gigantes, varais de rede e ilhas de junco; Tarchon, Ramtha, Larthia, Vel e Thanchvil (trols altos de pele azul-musgo/verde-casca) com falas para cada primo; Cestaria da Larthia com o Barco de Junco (33), o Amuleto Antiveneno (34) e o Alforje; missões "Fogos-Fátuos Presos" e "Garças nas Redes" (paga com o Amuleto Antiveneno); respawn na praça para 33 e 34. Falta: o mapa/mundo contínuo, a Lanterna de Fogo-Fátuo, o Despertar o vizinho, as ilhas que andam e o Sapo-Gigante.
 
 ### 34 · Charco do Ninki Nanka / *Ninki Nanka Bog* — nv 76–82 · ★
 - **Fonte:** o ninki nanka, dragão do pântano do folclore da Senegâmbia ("quem a olha nos olhos fica doente", diz o

@@ -13,9 +13,9 @@ namespace Rapadura.Gameplay.World.Map
     /// <summary>
     /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II): level
     /// bands, walk/warp levels, special gates, settlements and return cities, as content-as-code like
-    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–30): a hand-made layout
+    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–35): a hand-made layout
     /// (<c>MapLayouts.Has</c>: 01–08, 13, 14, 19, 20) or only a zone of a continuous region (<c>OverworldLayouts.ForMap</c>:
-    /// 09–12, 15–18, 21–30, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
+    /// 09–12, 15–18, 21–35, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
     /// the flag equal to it. The rest are listed in the Barcas de Luz window, closed. The gold fare is never stored: it is always the
     /// formula of <see cref="MapAccessRules.CalculateWarpCost(int,int,bool)"/> (the "Custo Ouro" column of the methodology
     /// table is design history).
@@ -91,11 +91,11 @@ namespace Rapadura.Gameplay.World.Map
             new MapDefinition(30, "map_030_liyongo", R.CostaDasMoncoes, Y.Swamp, S.G, 64, 72, 60, 70, Fee, T.RootBoots, TaaPwani, K.Outpost, "cais_das_dhows", isBuilt: true),
 
             // Região 6 — Delta de Jhilpur
-            new MapDefinition(31, "map_031_jhilpur", R.DeltaDeJhilpur, Y.Swamp, S.GG, 60, 66, 58, 65, Fee, T.None, Jhilpur, K.Capital, "jhilpur"),
-            new MapDefinition(32, "map_032_raiz_viva", R.DeltaDeJhilpur, Y.Swamp, S.G, 64, 70, 62, 68, Fee, T.RootBridgeBalance, Jhilpur, K.Outpost, "plataforma_das_garcas"),
-            new MapDefinition(33, "map_033_tarchon", R.DeltaDeJhilpur, Y.Swamp, S.G, 70, 78, 66, 74, Fee, T.SaddleRequired, PalafitasTarchon, K.RaceCity, "palafitas_tarchon"),
-            new MapDefinition(34, "map_034_ninki_nanka", R.DeltaDeJhilpur, Y.Swamp, S.G, 76, 82, 72, 80, Fee, T.AntiVenomAmulet, PalafitasTarchon, K.Outpost, "ilhota_das_lanternas"),
-            new MapDefinition(35, "map_035_coracao_lodo", R.DeltaDeJhilpur, Y.Swamp, S.G, 82, 88, 78, 85, Fee, T.PurifyingFruit, Jhilpur, K.Outpost, "raiz_mae"),
+            new MapDefinition(31, "map_031_jhilpur", R.DeltaDeJhilpur, Y.Swamp, S.GG, 60, 66, 58, 65, Fee, T.None, Jhilpur, K.Capital, "jhilpur", isBuilt: true),
+            new MapDefinition(32, "map_032_raiz_viva", R.DeltaDeJhilpur, Y.Swamp, S.G, 64, 70, 62, 68, Fee, T.RootBridgeBalance, Jhilpur, K.Outpost, "plataforma_das_garcas", isBuilt: true),
+            new MapDefinition(33, "map_033_tarchon", R.DeltaDeJhilpur, Y.Swamp, S.G, 70, 78, 66, 74, Fee, T.SaddleRequired, PalafitasTarchon, K.RaceCity, "palafitas_tarchon", isBuilt: true),
+            new MapDefinition(34, "map_034_ninki_nanka", R.DeltaDeJhilpur, Y.Swamp, S.G, 76, 82, 72, 80, Fee, T.AntiVenomAmulet, PalafitasTarchon, K.Outpost, "ilhota_das_lanternas", isBuilt: true),
+            new MapDefinition(35, "map_035_coracao_lodo", R.DeltaDeJhilpur, Y.Swamp, S.G, 82, 88, 78, 85, Fee, T.PurifyingFruit, Jhilpur, K.Outpost, "raiz_mae", isBuilt: true),
 
             // Região 7 — Teto do Mundo
             new MapDefinition(36, "map_036_sangkent", R.TetoDoMundo, Y.Mountain, S.GG, 70, 76, 68, 75, Fee, T.ThermalClothes, Sangkent, K.Capital, "sangkent"),
