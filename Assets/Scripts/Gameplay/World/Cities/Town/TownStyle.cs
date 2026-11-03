@@ -61,6 +61,12 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// base, mother-of-pearl domes, shell bridges, kelp gardens and the mother coral, half of it dimmed by the Lodo.
         /// </summary>
         CoralReef = 9,
+        /// <summary>
+        /// Jhilpur, the city in the roots (the Delta de Jhilpur, Docs/Mapas100.md §2.1 and map 31): plank houses raised on
+        /// root-columns over the murky water, curved "boat-back" thatch roofs (the do-chala of the Bengal delta), brick ghats
+        /// stepping down into the water, living-root bridges over the canals, banyans with aerial roots and the Raiz-Mãe.
+        /// </summary>
+        RootStilt = 10,
     }
 
     /// <summary>
@@ -350,6 +356,30 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Plaza = TownSwatch.Pearl, PlazaAlt = TownSwatch.ReefTeal,
             Fence = TownSwatch.CoralDim, Plinth = TownSwatch.CoralDim,
             HouseRoof = TownRoofKind.Dome,
+        };
+
+        /// <summary>
+        /// Jhilpur, the city in the roots (Docs/Mapas100.md §2.1, map 31): picked by hand. Root green #4E6B3A, ghat brick #A4553A,
+        /// palm straw #C9A35B, murky water #5F7F6E, the Living Water #4FC3B0, lotus lanterns #FFC46B (row 11 of
+        /// <see cref="TownPalette"/>). Houses stand on root-columns (<see cref="TownBuildingSpec.RootStilt"/>); streets are plank
+        /// walkways, the plaza a round platform of planks round the Raiz-Mãe. The Delta de Jhilpur has no world-map biome:
+        /// <see cref="TownStyle.Region"/> is the borrowed Forest (as Taa Pwani).
+        /// </summary>
+        public static readonly TownStyle RootStilt = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Coast,
+            Architecture = TownArchitecture.RootStilt,
+            Walls = new[] { TownSwatch.Straw, TownSwatch.WoodWeathered, TownSwatch.Straw },
+            Trims = new[] { TownSwatch.GhatBrick, TownSwatch.LivingWater },
+            Roofs = new[] { TownSwatch.Thatch, TownSwatch.Straw },
+            Joinery = new[] { TownSwatch.RootBark, TownSwatch.WoodDark },
+            Accent = TownSwatch.LivingWater,
+            Ground = TownSwatch.RootGreen, GroundAlt = TownSwatch.Mud,
+            Street = TownSwatch.WoodWeathered, StreetEdge = TownSwatch.RootBark, Sidewalk = TownSwatch.Mud,
+            Plaza = TownSwatch.WoodLight, PlazaAlt = TownSwatch.RootBark,
+            Fence = TownSwatch.RootBark, Plinth = TownSwatch.GhatBrick,
+            HouseRoof = TownRoofKind.Gable,
         };
     }
 }

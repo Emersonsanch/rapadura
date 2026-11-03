@@ -212,9 +212,9 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void EveryGateOfRegionsOneToFive_HasAnItemKitThatMeetsIt_AndEveryItemIsSoldOrGivenByAQuest()
+        public void EveryGateOfRegionsOneToSix_HasAnItemKitThatMeetsIt_AndEveryItemIsSoldOrGivenByAQuest()
         {
-            var regions = new[] { MapRegion.Zarafshan, MapRegion.AreiasFlamejantes, MapRegion.SerraDeKaggen, MapRegion.GrutasDoLimiar, MapRegion.CostaDasMoncoes };
+            var regions = new[] { MapRegion.Zarafshan, MapRegion.AreiasFlamejantes, MapRegion.SerraDeKaggen, MapRegion.GrutasDoLimiar, MapRegion.CostaDasMoncoes, MapRegion.DeltaDeJhilpur };
             List<MapDefinition> gated = MapCatalog.Maps.Where(m => m.HasSpecialRequirement && regions.Contains(m.Region)).ToList();
             Assert.Greater(gated.Count, 10);
             foreach (MapDefinition map in gated)

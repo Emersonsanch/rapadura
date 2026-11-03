@@ -695,6 +695,74 @@ namespace Rapadura.Gameplay.NPC.Visuals
             },
 
             // ------------------------------------------------------------------
+            // Jhilpur, a Cidade nas Raízes (Delta de Jhilpur, Docs/MetodologiaMapasERacas.md §5.1): cotton dhotis and wraps dyed
+            // turmeric, indigo and madder, sandalwood, lotus pink, root green and the Living Water. Names of Manichaean
+            // missionaries (Salmaios and Abiesous of the Cologne Codex, Nuhzadag the interpreter of Mani) and of the Kellis
+            // letters (Tehat). Human; no marks of any living rite.
+            // ------------------------------------------------------------------
+
+            // Salmaios, the ascetic who tends the Raiz-Mãe (the city's missions): an old man, thin and at ease, the long white
+            // beard, a sandalwood turban with a Living-Water band, a long turmeric kaftan under a cape of root green, the staff
+            // with the lotus lantern held up and the case of his old letters. Ponders, then smiles.
+            new NpcRecipe
+            {
+                Id = "salmaios", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Slim, Height = 0.98f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinBrown, Face = NpcFace.Dreamy, Hair = NpcHair.Short, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Long,
+                Headwear = NpcHeadwear.Turban, HeadColor = NpcSwatch.Sandalwood, HeadTrim = NpcSwatch.LivingWater,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.Turmeric, Trim = NpcSwatch.Sandalwood, Sleeves = NpcSwatch.Turmeric, Boots = NpcSwatch.RootBark,
+                Layers = NpcLayer.Cape, LayerColor = NpcSwatch.RootGreen, LayerTrim = NpcSwatch.LivingWater,
+                LeftArm = NpcArmPose.HoldUp, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.MoonStaff, NpcProp.ScrollCase },
+                Gesture = NpcGesture.Ponder,
+                Story = "O asceta do Códice de Colônia; aqui, o velho que cuida da Raiz-Mãe e dá as missões da cidade",
+            },
+
+            // Nuhzadag, Mani's interpreter, here the boatman who speaks every tongue of the delta (the city's shop: the gear of
+            // the gates 32–35): broad-chested and easygoing, a full beard, an indigo skullcap, a long murky-green kaftan under
+            // a madder vest and a turmeric sash, the mooring rope on his shoulder and the case of his trade papers. Calls out
+            // across the canal.
+            new NpcRecipe
+            {
+                Id = "nuhzadag", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Average, Height = 1.04f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Jolly, Hair = NpcHair.Short, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.Full,
+                Headwear = NpcHeadwear.Skullcap, HeadColor = NpcSwatch.Indigo, HeadTrim = NpcSwatch.Turmeric,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.MurkWater, Trim = NpcSwatch.Turmeric, Sleeves = NpcSwatch.MurkWater, Boots = NpcSwatch.RootBark,
+                Layers = NpcLayer.Vest | NpcLayer.Sash, LayerColor = NpcSwatch.Madder, LayerTrim = NpcSwatch.Turmeric,
+                LeftArm = NpcArmPose.HipRest, RightArm = NpcArmPose.Carry, Props = new[] { NpcProp.RopeCoil, NpcProp.ScrollCase },
+                Gesture = NpcGesture.Call,
+                Story = "O intérprete de Mani; aqui, o barqueiro que fala todas as línguas do delta: barcos e trocas, a loja da cidade",
+            },
+
+            // Abiesous, the master of the Codex, here the teacher of the boat school (the second mission): an old teacher,
+            // upright, long grey hair under a lotus-leaf hood against the monsoon rain, a long indigo robe with a root-green
+            // shawl, the punting pole with its lantern and a small oil lamp for the dusk lessons. Raises the lantern.
+            new NpcRecipe
+            {
+                Id = "abiesous", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 1.0f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinOlive, Face = NpcFace.Calm, Hair = NpcHair.Long, HairColor = NpcSwatch.HairGrey,
+                Headwear = NpcHeadwear.Hood, HeadColor = NpcSwatch.RootGreen, HeadTrim = NpcSwatch.Lotus,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.Indigo, Trim = NpcSwatch.Sandalwood, Sleeves = NpcSwatch.Indigo, Boots = NpcSwatch.RootBark,
+                Layers = NpcLayer.Shawl, LayerColor = NpcSwatch.RootGreen, LayerTrim = NpcSwatch.LivingWater,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.LanternPole, NpcProp.OilLamp },
+                Gesture = NpcGesture.LanternRaise,
+                Story = "O mestre do Códice de Colônia; aqui, o professor da escola de barco que ensina a remar na monção",
+            },
+
+            // Tehat, a woman of the Kellis letters, here the herbalist of the herb quarter: slim and at ease, a bun under a
+            // madder headwrap, a long lotus-pink dress with a turmeric hem, a sandalwood shawl and sash, the scale she weighs
+            // the herbs on held up and a purse of seeds. Counts the leaves, twice.
+            new NpcRecipe
+            {
+                Id = "tehat", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 0.97f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinBrown, Face = NpcFace.Bright, Hair = NpcHair.Bun, HairColor = NpcSwatch.HairBlack,
+                Headwear = NpcHeadwear.Headwrap, HeadColor = NpcSwatch.Madder, HeadTrim = NpcSwatch.Turmeric,
+                Garment = NpcGarment.Dress, Main = NpcSwatch.Lotus, Trim = NpcSwatch.Turmeric, Sleeves = NpcSwatch.Lotus, Boots = NpcSwatch.Henna,
+                Layers = NpcLayer.Shawl | NpcLayer.Sash, LayerColor = NpcSwatch.Sandalwood, LayerTrim = NpcSwatch.RootGreen,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Scale, NpcProp.CoinPurse },
+                Gesture = NpcGesture.Count,
+                Story = "Uma mulher das cartas de Kellis; aqui, a erveira do bairro de ervas: nim, açafrão-da-terra e lótus",
+            },
+
+            // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
 

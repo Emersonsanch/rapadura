@@ -178,6 +178,19 @@ namespace Rapadura.Gameplay.World.Cities.Town
         ShellBridge = 58,
         /// <summary>Kirta: the edge of the reef over the abyss from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/>: a coral rim, the deep water beyond (its mass behind the line).</summary>
         ReefEdge = 59,
+
+        // ---- Jhilpur, the city in the roots (Delta de Jhilpur; drawn by TownKit.RootStilt) ----
+
+        /// <summary>Jhilpur: the Raiz-Mãe, a giant banyan on a round brick platform, curtains of aerial roots, Living Water at its foot.</summary>
+        MotherRoot = 60,
+        /// <summary>Jhilpur: a banyan fig with aerial roots dropping to the ground round its trunk (Variant: leaf shade).</summary>
+        Banyan = 61,
+        /// <summary>Jhilpur: a round pond of murky water with lotus pads, pink flowers and a floating lotus lantern, in a brick rim.</summary>
+        LotusPond = 62,
+        /// <summary>Jhilpur: a canal from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> crossed by a living-root bridge in the middle; walkable.</summary>
+        RootBridge = 63,
+        /// <summary>Jhilpur: a brick ghat from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/>: a parapet, steps going down to the water behind the line (its mass).</summary>
+        Ghat = 64,
     }
 
     public enum CityExitKind

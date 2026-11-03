@@ -237,6 +237,15 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string MergulhoDanel = "shop_mergulho_danel";
 
+        /// <summary>
+        /// Barcos e Trocas do Nuhzadag (Jhilpur, the capital of the Delta de Jhilpur, Docs/Mapas100.md região 6): the boatman
+        /// who speaks every tongue of the delta trades the gear of every gate of the region (Docs/MetodologiaMapasERacas.md
+        /// §2.1): the Vara de Equilíbrio (32), the Barco de Junco (33), the Amuleto Antiveneno (34) and the Fruta Purificadora
+        /// (35). The Palafitas de Tarchon (return city of 33–34) have no town yet, so his boats bring their gear to his counter.
+        /// The counter turns daily.
+        /// </summary>
+        public const string TrocasNuhzadag = "shop_trocas_nuhzadag";
+
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
@@ -474,6 +483,28 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_amuleto_sorte", 24, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
                 new CityShopEntry("item_hunting_bow", 34, 1, rotating: true),
+            })),
+
+            // ---- Jhilpur: Nuhzadag's boats and trades, the gear of the gates 32–35; daily ----
+            new CityShopSpec(TrocasNuhzadag, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(TrocasNuhzadag, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                // Map gates (MapRequirementRules): the balance pole of the Pontes de Raiz Viva (32), the reed boat of the Palafitas
+                // de Tarchon (33), the antivenom amulet of the Charco do Ninki Nanka (34) and the purifying fruit of the Coração do
+                // Lodo (35). Tarchon has no town yet: its gear (33, 34) comes down the canals to Nuhzadag.
+                new CityShopEntry("item_vara_equilibrio", 480, 2),
+                new CityShopEntry("item_barco_junco", 600, 1),
+                new CityShopEntry("item_amuleto_antiveneno", 700, 2),
+                new CityShopEntry("item_fruta_purificadora", 750, 2),
+                // The rotation: what the boats bring up the delta.
+                new CityShopEntry("item_corda_escalada", 40, 2, rotating: true),
+                new CityShopEntry("item_fish_peixe_dourado", 60, 3, rotating: true),
+                new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
+                new CityShopEntry("item_mount_feed", 3, 12, rotating: true),
+                new CityShopEntry("item_fiber", 1, 20, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
             })),
 
             // ---- Ferraria do Mestre Adamas (Vila): the village blacksmith ----

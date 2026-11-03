@@ -36,7 +36,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
         public static bool IsSegment(CityPropKind kind) =>
             kind == CityPropKind.FenceRun || kind == CityPropKind.Gate || kind == CityPropKind.KarezChannel || kind == CityPropKind.Cliff ||
             kind == CityPropKind.RopeBridge || kind == CityPropKind.LampString || kind == CityPropKind.Palisade || kind == CityPropKind.RockWall ||
-            kind == CityPropKind.MineRails || kind == CityPropKind.ShellBridge || kind == CityPropKind.ReefEdge;
+            kind == CityPropKind.MineRails || kind == CityPropKind.ShellBridge || kind == CityPropKind.ReefEdge ||
+            kind == CityPropKind.RootBridge || kind == CityPropKind.Ghat;
 
         /// <summary>Unit direction of a segment prop and the side its mass stands on (left of the direction: east-going → north).</summary>
         public static Vector2 SegmentBack(Vector2 direction) => new Vector2(-direction.y, direction.x);
@@ -92,6 +93,11 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.KelpGarden: KelpGarden(b, s); return true;
                 case CityPropKind.ShellBridge: ShellBridge(b, d); return true;
                 case CityPropKind.ReefEdge: ReefEdge(b, d, s); return true;
+                case CityPropKind.MotherRoot: MotherRoot(b, s); return true;
+                case CityPropKind.Banyan: Banyan(b, s, prop.Variant); return true;
+                case CityPropKind.LotusPond: LotusPond(b, s); return true;
+                case CityPropKind.RootBridge: RootBridge(b, d); return true;
+                case CityPropKind.Ghat: Ghat(b, d, s); return true;
                 default: return false;
             }
         }
@@ -835,6 +841,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
                 case TownShopDressing.DivingGear:
                     CoralReefDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.BoatTrader:
+                    RootStiltDressing(b, spec, x, y, z, zFacade);
                     break;
 
                 case TownShopDressing.AirBottles:

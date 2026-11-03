@@ -92,7 +92,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 return;
             }
 
-            if (spec.ReedHall || spec.ReefTower)
+            if (spec.ReedHall || spec.ReefTower || spec.RootStilt)
             {
                 // Aratta's reed halls and Kirta's coral towers (TownKit.ReedHorn / CoralReef): their own mass, roof and porch.
                 float rhw = spec.Width * 0.5f;
@@ -102,6 +102,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 if (spec.ReedHall)
                 {
                     TownKit.ReedHallHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
+                }
+                else if (spec.RootStilt)
+                {
+                    TownKit.RootStiltHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
                 }
                 else
                 {

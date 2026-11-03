@@ -334,6 +334,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             bool plainHouse = r.Kind == CityLotKind.House || r.Kind == CityLotKind.Shop || r.Kind == CityLotKind.Workshop;
             spec.ReedHall |= style.Architecture == TownArchitecture.ReedHorn && plainHouse;
             spec.ReefTower |= style.Architecture == TownArchitecture.CoralReef && plainHouse;
+            spec.RootStilt |= style.Architecture == TownArchitecture.RootStilt && plainHouse;
 
             switch (r.Kind)
             {

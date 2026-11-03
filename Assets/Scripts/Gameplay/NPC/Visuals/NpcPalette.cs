@@ -44,6 +44,10 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // Aratta (povo-touro) and Kirta (povo-do-mar), Docs/Mapas100.md §3.3: dark-brown and tawny aurochs coats, horn ivory,
         // bound reed #C8B27A, the ribbon blue #3F7CC0; turquoise and mother-of-pearl sea-folk skin, live coral #E8836B (glows a little)
         SkinAurochs, SkinAurochsTawny, Horn, Reed, Ribbon, SkinReef, SkinNacre, CoralLive,
+        // Jhilpur (Delta de Jhilpur, Docs/Mapas100.md §2.1 and Docs/MetodologiaMapasERacas.md §5.1): turmeric #E3A92B,
+        // sandalwood #D9B98C, lotus pink #E8A0B4, root green #4E6B3A, the Living Water #4FC3B0 (glows a little), murky water
+        // #5F7F6E, aerial-root bark #6B5236, madder red #A33B32
+        Turmeric, Sandalwood, Lotus, RootGreen, LivingWater, MurkWater, RootBark, Madder,
     }
 
     /// <summary>
@@ -55,7 +59,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 14;
+        public const int Rows = 15;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -102,6 +106,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Aratta / Kirta  aurochs #4A3022, tawny #8A5A34, horn #E2D3B0, reed #C8B27A, ribbon #3F7CC0, reef skin #7FC6C0, nacre skin #E3D6C4, coral #E8836B
             new Color(0.29f, 0.19f, 0.13f), new Color(0.54f, 0.35f, 0.2f), new Color(0.89f, 0.83f, 0.69f), new Color(0.78f, 0.7f, 0.48f),
             new Color(0.25f, 0.49f, 0.75f), new Color(0.5f, 0.78f, 0.75f), new Color(0.89f, 0.84f, 0.77f), new Color(0.91f, 0.51f, 0.42f),
+            // Jhilpur  turmeric #E3A92B, sandalwood #D9B98C, lotus #E8A0B4, root green #4E6B3A, Living Water #4FC3B0, murky water #5F7F6E, root bark #6B5236, madder #A33B32
+            new Color(0.89f, 0.66f, 0.17f), new Color(0.85f, 0.73f, 0.55f), new Color(0.91f, 0.63f, 0.71f), new Color(0.31f, 0.42f, 0.23f),
+            new Color(0.31f, 0.76f, 0.69f), new Color(0.37f, 0.5f, 0.43f), new Color(0.42f, 0.32f, 0.21f), new Color(0.64f, 0.23f, 0.2f),
         };
 
         public static int Count => Colors.Length;
@@ -120,6 +127,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 case NpcSwatch.GlassGreen: return 0.4f;
                 case NpcSwatch.SereneAir: return 0.45f;
                 case NpcSwatch.CoralLive: return 0.3f;
+                case NpcSwatch.LivingWater: return 0.35f;
                 default: return 0f;
             }
         }

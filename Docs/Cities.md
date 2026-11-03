@@ -203,6 +203,7 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 
 | Região | Cidade | Moradores | Loja | Missões |
 |---|---|---|---|---|
+| Delta de Jhilpur (mapas 31, 32 e 35) | **Jhilpur, a Cidade nas Raízes** (capital, `jhilpur`) | Salmaios, o Guardião da Raiz-Mãe (rua Norte), Nuhzadag, o Barqueiro (rua Oeste), Abiesous, o Mestre da Escola de Barco (rua Leste), Tehat, a Erveira (rua Leste) | **Barcos e Trocas do Nuhzadag** (`shop_trocas_nuhzadag`) | Salmaios: "Lodo nos Ghats"; Abiesous: "Corvos nos Remos" |
 | Costa das Monções (mapas 25 e 30) | **Taa Pwani** (marinheiros e mercadores suaílis, `taa_pwani`) | Capitão Liyongo, o Nakhoda (casa de 2 andares na rua Leste), Mwana, a Mercadora de Pérolas (rua Oeste), Nuru, a Guardiã do Farol (cabeça da praça, ao pé do Farol de Coral), Zawadi, o Trançador de Raízes (rua Leste), Mbaraka, o Navegador das Estrelas (rua Oeste) | **Bazar de Pérolas da Mwana** (`shop_bazar_mwana`) | Liyongo: "Ladras de Vela"; Zawadi: "Garras no Mangue" |
 
 - **Passeio da cidade:** receita `CityTownRecipes.TaaPwani` (`CityTownRecipes.TaaPwani.cs`) no estilo `TownStyles.Coast`
@@ -225,6 +226,41 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
   Raiz Viva + 80 ouro, 820 XP). Testes: `CityTaaPwaniTests`.
 - **Falta:** o mapa 25 ainda não é jogável, então o passeio só abre pelo menu de prévia do editor até o mapa existir. As
   outras cidades da região, Aratta (26) e Kirta (28), estão em §1.1 (cidades de raça).
+
+**Jhilpur, a Cidade nas Raízes** (capital do Delta de Jhilpur, região 6, mapa 31; cidade de retorno de 31, 32 e 35):
+- **Passeio da cidade:** receita `CityTownRecipes.Jhilpur` (`CityTownRecipes.Jhilpur.cs`) no estilo novo
+  `TownStyles.RootStilt` (`TownArchitecture.RootStilt`, linha 11 da `TownPalette`: verde-raiz `#4E6B3A`, tijolo de ghat
+  `#A4553A`, palha `#C9A35B`, água turva `#5F7F6E`, Água Viva `#4FC3B0` e lanternas de lótus `#FFC46B` (brilham à noite),
+  lótus `#E8A0B4`, casca de raiz `#6B5236`). Cada casa fica **sobre colunas de raiz** (`TownBuildingSpec.RootStilt`:
+  `TownKit.RootStiltHouse`): base de tijolo com água turva, colunas de raiz aérea torcidas com raízes-escora, piso de
+  tábua 0,85 m acima, paredes de palha trançada entre postes de casca de raiz com duas faixas de tijolo, porta e
+  janelinhas acesas, **telhado de palha curvo em "dorso de barco"** (do-chala do delta de Bengala: cumeeira e beirais
+  caindo nas pontas), escada de tábua do deque até a porta, toldo de palha em postes de raiz (nos `PorchPostsX`) e
+  lanternas de lótus nos cantos do beiral. Peças: `MotherRoot` (a **Raiz-Mãe** numa plataforma redonda de tijolo com
+  anel de Água Viva no pé, tronco de raízes fundidas, galhos, copa larga e cortinas de raiz aérea; árvore, não
+  santuário), `Banyan` (figueira com raízes aéreas em anel), `LotusPond` (lago de lótus com lanterna boiando),
+  `RootBridge` (canal atravessando a rua com uma ponte de raiz viva no meio; pisável) e `Ghat` (ghat de tijolo de
+  segmento: parapeito, degraus descendo para a água atrás); portão de pilares de raiz torcida com arco de raiz viva,
+  folhas e lanternas (`TownKit.RootGate`); vitrine de trocas do Nuhzadag (`TownShopDressing.BoatTrader`: barco de junco
+  emborcado, varas de equilíbrio, amuletos num cordão, cesto de fruta). Peças em `TownKit.RootStilt.cs`, colisores em
+  `CitySolids`. Ruas Oeste (a entrada, pelo delta), Leste e Norte de 19 m (saídas em (±19, 0) e (0, 19), alvo de
+  chegada a 18,6 m); **sem rua ao sul**: ali os ghats descem para a água em três lances (z = −19 e −16); tudo dentro de
+  um círculo de 22,5 m (o sólido mais longe, o ghat, chega a 21,6 m), caminhada em ±22; `CityLayoutRules.Validate` sem
+  problemas, com e sem o mascate.
+- **Respawn:** derrota nos mapas 31, 32 e 35 acorda na praça de Jhilpur, ao pé da Raiz-Mãe (`MapCatalog.RespawnCityFor`
+  → `ApplyDefeatIn`). 33 e 34 têm as Palafitas de Tarchon como cidade de retorno, que ainda não existe: até lá acordam
+  na Vila.
+- **Barcos e Trocas do Nuhzadag** (diária, 3 vagas que giram, tema Especialidade): poções de vida e mana e **todas as
+  exigências do delta**, fixas desde o primeiro dia: Vara de Equilíbrio (32), Barco de Junco (33), Amuleto Antiveneno
+  (34) e Fruta Purificadora (35) (as de Tarchon descem os canais até ele enquanto Tarchon não for cidade); giram corda
+  de escalada, peixe dourado, carne, ração de montaria, fibra, Amuleto da Sorte e Pedra da Bênção. O Ammo nunca para lá.
+- **Missões da cidade:** o velho Salmaios pede 7 bolotas de lodo nos ghats antes que subam até a Raiz-Mãe (o Lodo de
+  Gruta faz os Filhos do Lodo da Maré de Lodo; 5 poções de vida + 4 de mana + 110 ouro, 1200 XP); depois Abiesous pede
+  6 corvos fora do telhado da escola de barco (o Corvo-da-Treva faz a Garça-Lança Apagada que rouba os remos; **Fruta
+  Purificadora** + 120 ouro, 1300 XP). Testes: `CityJhilpurTests`.
+- **Falta:** o mapa 31 e o mundo contínuo do delta ainda não existem, então o passeio só abre pelo menu de prévia do
+  editor (`Preview Walkable Town/Jhilpur`); a monção que sobe um andar, a escola de barco ensinando a remar, a Maré de
+  Lodo e a Casa nas Raízes ainda faltam.
 
 Código: `CityCatalog`, `CityShopCatalog` (dados), `CityTexts` (textos en/pt-BR), `VillageHubButton` (o mesmo painel
 para toda cidade), `CityFastTravelPanel` (Barcas de Luz), `CitySafeZoneHud` (aviso), `WorldMapCityPresence` (zona

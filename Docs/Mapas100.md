@@ -1242,6 +1242,7 @@ Capital **Jhilpur** (§2). *Jhil* = lago/charco (bengali e hindi), *pur* = cidad
 - **Ganchos:** loot seda de lótus, raiz aérea · montaria nova **Búfalo-d'Água de Jhilpur** (§6) · casa: conjunto novo
   **Casa nas Raízes** (rede de raiz, lanterna de lótus). G4 do Joaquim (Raiz de Jhilpur) é aqui.
 - **Noite:** lanternas de lótus boiando; vaga-lumes nas raízes; a Raiz-Mãe brilha verde-água.
+- **No jogo (2026-11-03): cidade de verdade** (`CityTownRecipes.Jhilpur.cs`, estilo `RootStilt`, `CityCatalog.LateRegionCities`): em y = 0 dentro de um círculo de 22,5 m (saídas O, L e N a 19 m; ao sul os ghats de tijolo descem para a água): casas de tábua sobre colunas de raiz com telhado de palha em dorso de barco e lanternas de lótus; a Raiz-Mãe na praça redonda (anel de Água Viva no pé), pontes de raiz viva sobre os canais, figueiras de raízes aéreas e lagos de lótus; Salmaios, Nuhzadag, Abiesous e Tehat (das cartas de Kellis) com visual próprio e falas para cada primo; Barcos e Trocas do Nuhzadag com as exigências 32–35; missões "Lodo nos Ghats" e "Corvos nos Remos" (paga com a Fruta Purificadora); respawn na praça para 31, 32 e 35. Falta: o mapa/mundo contínuo do delta, a monção, a escola de barco ensinando a remar, a Maré de Lodo e a Casa nas Raízes.
 
 ### 32 · Pontes de Raiz Viva / *Living Root Bridges* — nv 64–70 · ★
 - **Fonte:** pontes de raiz viva de Meghalaya (forma); a Água Viva que faz as raízes crescerem (bíblia §1.3).

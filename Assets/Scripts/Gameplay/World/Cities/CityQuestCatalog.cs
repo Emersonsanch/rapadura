@@ -67,6 +67,8 @@ namespace Rapadura.Gameplay.World.Cities
     /// baboons off his race course and pays with waterskins for the long run.
     /// Kirta (map 28): King Kirta asks them to scrape the Lodo's ooze off the reef, then Pughat takes them to rescue the divers
     /// cornered by the dimmed lantern fish and pays with a Bolha de Ar Engarrafada (the gate of map 29).
+    /// Jhilpur (map 31): old Salmaios sends the cousins to scrape the living ooze off the ghats before it climbs to the Raiz-Mãe,
+    /// then Abiesous wants the crows off his boat school's oars and pays with a Fruta Purificadora (the gate of map 35).
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -84,6 +86,8 @@ namespace Rapadura.Gameplay.World.Cities
         public const string ArattaRace = "quest_city_aratta_shulgi_course";
         public const string KirtaOoze = "quest_city_kirta_reef_ooze";
         public const string KirtaRescue = "quest_city_kirta_divers_rescue";
+        public const string JhilpurGhats = "quest_city_jhilpur_ooze_on_the_ghats";
+        public const string JhilpurOars = "quest_city_jhilpur_boat_school_crows";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -149,6 +153,15 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.Kirta, "pughat", new RegionQuestSpec(KirtaRescue, BiomeType.Forest, KirtaOoze, 1120,
                 new[] { new RegionObjectiveSpec("free_the_divers", QuestObjectiveType.KillEnemyType, "enemy_cave_lantern_fish", 5) },
                 new[] { new RegionRewardSpec("item_bolha_ar", 1), new RegionRewardSpec("item_gold", 100) })),
+
+            // -- Jhilpur: old Salmaios, then Abiesous. The cave ooze stands in for the Filhos do Lodo that climb the ghats (the
+            // Maré de Lodo of Docs/Mapas100.md 31) and the dark crows for the dimmed herons that steal the boat school's oars. --
+            new CityQuestSpec(CityCatalog.Jhilpur, "salmaios", new RegionQuestSpec(JhilpurGhats, BiomeType.Forest, null, 1200,
+                new[] { new RegionObjectiveSpec("scrape_the_ghats", QuestObjectiveType.KillEnemyType, "enemy_cave_ooze", 7) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 4), new RegionRewardSpec("item_gold", 110) })),
+            new CityQuestSpec(CityCatalog.Jhilpur, "abiesous", new RegionQuestSpec(JhilpurOars, BiomeType.Forest, JhilpurGhats, 1300,
+                new[] { new RegionObjectiveSpec("chase_the_crows", QuestObjectiveType.KillEnemyType, "enemy_cave_dark_crow", 6) },
+                new[] { new RegionRewardSpec("item_fruta_purificadora", 1), new RegionRewardSpec("item_gold", 120) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();

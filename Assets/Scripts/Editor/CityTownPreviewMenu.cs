@@ -46,6 +46,9 @@ namespace Rapadura.Editor
         [MenuItem(Root + "Preview Walkable Town/Kirta (povo-do-mar, Costa das Monções)", priority = 19)]
         private static void PreviewKirta() => Preview(CityCatalog.Kirta);
 
+        [MenuItem(Root + "Preview Walkable Town/Jhilpur (capital, Delta de Jhilpur)", priority = 20)]
+        private static void PreviewJhilpur() => Preview(CityCatalog.Jhilpur);
+
         [MenuItem(Root + "Preview Walkable Town/Toggle Night", priority = 30)]
         private static void ToggleNight()
         {

@@ -128,6 +128,12 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string Kirta = "kirta";
 
+        /// <summary>
+        /// Jhilpur, a Cidade nas Raízes, capital of the Delta de Jhilpur (map 31, return city of maps 31, 32 and 35,
+        /// Docs/Mapas100.md §2.1 and região 6). Same id as <c>MapCatalog.Jhilpur</c> and <c>CityTownRecipes.JhilpurCityId</c>.
+        /// </summary>
+        public const string Jhilpur = "jhilpur";
+
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
             new CitySpec(VilaZefa, BiomeType.Forest,
@@ -301,6 +307,21 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("mbaraka"),
                 },
                 new List<string> { CityShopCatalog.BazarMwana }),
+
+            // Jhilpur (the Delta de Jhilpur, região 6; names of Manichaean missionaries and of the Kellis letters): old Salmaios,
+            // the ascetic of the Cologne Codex, who tends the Raiz-Mãe (missions), Nuhzadag, Mani's interpreter, here the
+            // boatman who speaks every tongue of the delta (the city's shop: the gear of the gates 32–35, while Tarchon has no
+            // town), Abiesous, the master of the Codex, who teaches at the boat school (second mission), and Tehat, a woman of
+            // the Kellis letters, the herbalist of the herb quarter. Region: the borrowed Forest (as Taa Pwani).
+            new CitySpec(Jhilpur, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("salmaios"),
+                    new CityResidentSpec("nuhzadag", CityShopCatalog.TrocasNuhzadag),
+                    new CityResidentSpec("abiesous"),
+                    new CityResidentSpec("tehat"),
+                },
+                new List<string> { CityShopCatalog.TrocasNuhzadag }),
         };
 
         /// <summary>Ammo, the peddler: not a resident of one city, he is wherever his mule is today (<see cref="ShopRotation.MascateRegion"/>).</summary>

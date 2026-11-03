@@ -236,6 +236,38 @@ namespace Rapadura.Gameplay.World.Cities
             new LocalizationEntry("quest.city_kirta_divers_rescue.active",
                 "Lantern fish chase the light. Cover your lamps, come from the dark side.",
                 "Peixe-lanterna corre atrás da luz. Cubram as lamparinas, cheguem pelo lado escuro."),
+
+            // ================= Jhilpur — Salmaios, o velho da Raiz-Mãe =================
+            new LocalizationEntry("quest.city_jhilpur_ooze_on_the_ghats.title", "Ooze on the Ghats", "Lodo nos Ghats"),
+            new LocalizationEntry("quest.city_jhilpur_ooze_on_the_ghats.description",
+                "Living lumps of the Lodo climb the brick steps of the ghats a little higher every night, and old Salmaios, who has tended the Raiz-Mãe since before the city had a name, fears they will reach its roots. He asked the cousins to scrape them off the steps.",
+                "Bolotas vivas do Lodo sobem os degraus de tijolo dos ghats um pouco mais a cada noite, e o velho Salmaios, que cuida da Raiz-Mãe desde antes de a cidade ter nome, tem medo de que cheguem às raízes dela. Ele pediu aos primos que raspem o lodo dos degraus."),
+            new LocalizationEntry("quest.city_jhilpur_ooze_on_the_ghats.obj_scrape_the_ghats", "Scrape the living ooze off the ghats", "Raspar o lodo vivo dos ghats"),
+            new LocalizationEntry("quest.city_jhilpur_ooze_on_the_ghats.journal",
+                "When the last lump slid back into the water, the ring at the foot of the Raiz-Mãe shone green for a moment. Joaquim swears the tree sighed. Salmaios just nodded, as if it had said thank you.",
+                "Quando a última bolota escorregou de volta para a água, o anel no pé da Raiz-Mãe brilhou verde por um instante. O Joaquim jura que a árvore suspirou. O Salmaios só acenou com a cabeça, como se ela tivesse dito obrigado."),
+            new LocalizationEntry("quest.city_jhilpur_ooze_on_the_ghats.offer",
+                "Edna's grandchildren, in my roots. Jorge sat on these same steps forty monsoons ago. Seven lumps of the Lodo are climbing the ghats tonight. Scrape them off before they touch the Raiz-Mãe, and the Living Water will run clean at her feet again.",
+                "Os netos da Edna, nas minhas raízes. O Jorge sentou nesses mesmos degraus há quarenta monções. Sete bolotas do Lodo estão subindo os ghats hoje. Raspem elas antes que encostem na Raiz-Mãe, e a Água Viva vai correr limpa nos pés dela de novo."),
+            new LocalizationEntry("quest.city_jhilpur_ooze_on_the_ghats.active",
+                "The ooze comes up where the steps are darkest. Follow the dark steps down.",
+                "O lodo sobe onde os degraus estão mais escuros. Desçam pelos degraus escuros."),
+
+            // ================= Jhilpur — Abiesous, o mestre da escola de barco =================
+            new LocalizationEntry("quest.city_jhilpur_boat_school_crows.title", "Crows on the Oars", "Corvos nos Remos"),
+            new LocalizationEntry("quest.city_jhilpur_boat_school_crows.description",
+                "Crows dimmed by the Lodo have taken the roof of Abiesous's boat school and steal the oars right out of the pupils' hands. The master teaches patience, but the monsoon is coming and nobody can learn to row without an oar.",
+                "Corvos apagados pelo Lodo tomaram o telhado da escola de barco do Abiesous e roubam os remos da mão dos alunos. O mestre ensina paciência, mas a monção está chegando e ninguém aprende a remar sem remo."),
+            new LocalizationEntry("quest.city_jhilpur_boat_school_crows.obj_chase_the_crows", "Chase the dimmed crows off the boat school", "Espantar os corvos apagados da escola de barco"),
+            new LocalizationEntry("quest.city_jhilpur_boat_school_crows.journal",
+                "The oars came back, one by one, and Abiesous counted them like a teacher counts pupils after a storm. Then he gave Lavine the first lesson for free. She rowed in a circle. He called it a good start.",
+                "Os remos voltaram, um por um, e o Abiesous contou todos como um professor conta os alunos depois de uma tempestade. Depois deu a primeira aula de graça para a Lavine. Ela remou em círculo. Ele disse que foi um bom começo."),
+            new LocalizationEntry("quest.city_jhilpur_boat_school_crows.offer",
+                "You cleaned Salmaios's steps, so you are patient enough for my school. Six crows are sitting on my roof with my oars. Chase them off and take this purifying fruit: down in the Heart of the Mire the water is so black that only it lets you breathe.",
+                "Vocês limparam os degraus do Salmaios, então têm paciência o bastante para a minha escola. Seis corvos estão sentados no meu telhado com os meus remos. Espantem eles e levem esta fruta purificadora: lá no Coração do Lodo a água é tão preta que só ela deixa a gente respirar."),
+            new LocalizationEntry("quest.city_jhilpur_boat_school_crows.active",
+                "Crows love what shines. Wave a lantern and they will come down to you.",
+                "Corvo gosta do que brilha. Balancem uma lanterna e eles descem até vocês."),
         };
 
         public static void EnsureLoaded(LocalizationManager localization)

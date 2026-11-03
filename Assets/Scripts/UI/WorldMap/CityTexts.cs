@@ -108,6 +108,7 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.FeiraMiwnay, "Miwnay's Fair", "Feira da Miwnay"),
                 Shop(CityShopCatalog.AlforjeLugalbanda, "Lugalbanda's Saddlebag", "Alforje do Lugalbanda"),
                 Shop(CityShopCatalog.MergulhoDanel, "Danel's Diving Tools", "Ferramentas de Mergulho do Danel"),
+                Shop(CityShopCatalog.TrocasNuhzadag, "Nuhzadag's Boats and Trades", "Barcos e Trocas do Nuhzadag"),
             };
 
             // ---- Cities ----
@@ -143,6 +144,10 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.Kirta, "Kirta Reef City", "Cidade-Recife de Kirta", "Kirta", "Kirta",
                 "The sea folk's city on its atoll: towers of coral with round windows, half drowned, domes of mother-of-pearl, shell bridges over the reef water and gardens of kelp. They tended the coral lit by the Living Water; the Lodo put its colour out, and every spark set free lights a piece of it again.",
                 "A cidade do povo-do-mar no seu atol: torres de coral com janelas redondas, meio afogadas, cúpulas de madrepérola, pontes de concha sobre a água do recife e jardins de alga. Eles cuidavam do coral aceso pela Água Viva; o Lodo apagou a cor dele, e cada faísca libertada acende um pedaço de novo.");
+
+            AddCity(entries, CityCatalog.Jhilpur, "Jhilpur, City in the Roots", "Jhilpur, a Cidade nas Raízes", "Jhilpur", "Jhilpur",
+                "The capital of the delta, built in the roots of giant fig trees over a brown-green lake: plank houses on root columns under curved thatch roofs, bridges of living root over the canals, brick ghats stepping down into the water and, in the middle of the round plaza, the Raiz-Mãe. Mani's journey to the east passed through here: the Living Water against the Lodo.",
+                "A capital do delta, construída nas raízes de figueiras gigantes sobre um lago marrom-esverdeado: casas de tábua sobre colunas de raiz debaixo de telhados de palha curvos, pontes de raiz viva sobre os canais, ghats de tijolo descendo para a água e, no meio da praça redonda, a Raiz-Mãe. A viagem de Mani para o leste passou por aqui: a Água Viva contra o Lodo.");
 
             AddCity(entries, CityCatalog.TamborRubro, "Red Drum", "Tambor Rubro", "Red Drum", "Tambor Rubro",
                 "The orcs' war camp in the red badlands: a palisade of sharpened logs, the Great Hall under its steep hide roof, clan tents dyed ochre and the drums that mark the hours and wake the Living Fire of the forge. Here a given word is worth more than gold.",
@@ -589,6 +594,39 @@ namespace Rapadura.UI.WorldMap
                 ("Ícaro, a bow that shoots under water? My father says it can't be done. My father also said that about the shell.", "Ícaro, um arco que atira debaixo d'água? O meu pai diz que não dá. O meu pai também disse isso da concha."),
                 ("Lavine, Grandma Edna made me promise never to shoot at a gull. I keep it. Even the thieving ones.", "Lavine, a Vó Edna me fez prometer nunca atirar numa gaivota. Eu cumpro. Até nas ladras."),
                 ("My bow was a gift of the reef. I teach anyone who asks. Nobody here takes a bow by force.", "O meu arco foi um presente do recife. Eu ensino quem pedir. Aqui ninguém toma arco à força."));
+
+            // ---- Jhilpur, a Cidade nas Raízes (names of Manichaean missionaries and of the Kellis letters) ----
+            AddResident(entries, "salmaios", "Salmaios, Keeper of the Mother Root", "Salmaios, o Guardião da Raiz-Mãe",
+                ("Joaquim, the Raiz-Mãe drinks the Living Water the way you drink tea: slowly, every day, without missing one. Your trial is in her roots. When you're ready, not before.", "Joaquim, a Raiz-Mãe bebe a Água Viva do jeito que você bebe chá: devagar, todo dia, sem faltar nenhum. A sua prova está nas raízes dela. Quando você estiver pronto, não antes."),
+                ("Maria, put your hand on the bark. Feel it? She is warm on the side the sun touches. Light and water, always together.", "Maria, põe a mão na casca. Sentiu? Ela é morna do lado onde o sol bate. Luz e água, sempre juntas."),
+                ("Maithe, I have eaten one bowl of rice a day for sixty years. The eldest asks why. Because the roots taught me: take little, give back a lot.", "Maithe, eu como uma tigela de arroz por dia há sessenta anos. A mais velha pergunta por quê. Porque as raízes me ensinaram: pegar pouco, devolver muito."),
+                ("Ícaro, you want to know how a root becomes a bridge? Forty years of patience and a hollow palm trunk to guide it. No machine is that slow. Yet.", "Ícaro, quer saber como uma raiz vira ponte? Quarenta anos de paciência e um tronco oco de palmeira para guiar. Nenhuma máquina é tão lenta. Ainda."),
+                ("Lavine, your grandpa Jorge carved his name on a root here when he was a boy. The root grew around it. Now the tree remembers him better than I do.", "Lavine, o seu avô Jorge entalhou o nome numa raiz aqui quando era menino. A raiz cresceu em volta. Agora a árvore lembra dele melhor do que eu."),
+                ("The Lodo rises a step every night. The roots rise a little every year. We will see who is more patient.", "O Lodo sobe um degrau toda noite. As raízes sobem um pouco todo ano. Vamos ver quem tem mais paciência."));
+
+            AddResident(entries, "nuhzadag", "Nuhzadag the Boatman", "Nuhzadag, o Barqueiro",
+                ("Joaquim, a guardian on a reed boat? Sit in the middle and don't move. ...No, the middle. The boat chooses where the middle is.", "Joaquim, um guardião num barco de junco? Senta no meio e não se mexe. ...Não, no meio. Quem escolhe onde é o meio é o barco."),
+                ("Maria, I speak eleven tongues of the delta, and in every one of them light is a word that also means welcome. Funny, no?", "Maria, eu falo onze línguas do delta, e em todas elas luz é uma palavra que também quer dizer bem-vindo. Engraçado, né?"),
+                ("Maithe, the eldest wants the pole for the root bridges. Good choice. Hold it in the middle and look at the far bank, never at your feet.", "Maithe, a mais velha quer a vara para as pontes de raiz. Boa escolha. Segura no meio e olha para a outra margem, nunca para os pés."),
+                ("Ícaro, the trols of Tarchon sent me a reed boat that folds in two. Don't take it apart. ...Fine, take it apart, but fold it back.", "Ícaro, os trols de Tarchon me mandaram um barco de junco que dobra em dois. Não desmonta. ...Tá bom, desmonta, mas dobra de volta."),
+                ("Lavine, Grandma Edna sent jars of apricot jam on my boat once. I traded one for a whole basket of purifying fruit. Best trade of my life.", "Lavine, a Vó Edna mandou potes de doce de damasco no meu barco uma vez. Troquei um por um cesto inteiro de fruta purificadora. Melhor troca da minha vida."),
+                ("Poles for the bridges, boats for the stilts, amulets for the bog, fruit for the black water. Every road of the delta, paid in fair coin.", "Vara para as pontes, barco para as palafitas, amuleto para o charco, fruta para a água preta. Todo caminho do delta, pago em moeda justa."));
+
+            AddResident(entries, "abiesous", "Abiesous, Master of the Boat School", "Abiesous, o Mestre da Escola de Barco",
+                ("Joaquim, you row like you hold a shield: too hard. The water is not an enemy. Let it push back a little.", "Joaquim, você rema como quem segura escudo: forte demais. A água não é inimiga. Deixa ela empurrar de volta um pouco."),
+                ("Maria, at dusk my pupils light lotus lanterns and let them float. Yours would float the farthest, I think.", "Maria, no fim da tarde os meus alunos acendem lanternas de lótus e deixam boiar. A sua ia boiar mais longe, eu acho."),
+                ("Maithe, you already know how to listen to the wind. Rowing is the same thing, but with the water. Lesson one is free.", "Maithe, você já sabe escutar o vento. Remar é a mesma coisa, só que com a água. A primeira aula é de graça."),
+                ("Ícaro, an oar that rows on its own? Then who learns anything? ...Draw it anyway. I want to see.", "Ícaro, um remo que rema sozinho? E quem aprende alguma coisa? ...Desenha mesmo assim. Eu quero ver."),
+                ("Lavine, Grandpa Jorge was my worst pupil and my best friend. He rowed in circles for a whole monsoon, laughing.", "Lavine, o Vô Jorge foi o meu pior aluno e o meu melhor amigo. Remou em círculo uma monção inteira, rindo."),
+                ("In the monsoon the streets become canals. Whoever can row goes home. That's the whole lesson.", "Na monção as ruas viram canais. Quem sabe remar volta para casa. Essa é a aula toda."));
+
+            AddResident(entries, "tehat", "Tehat the Herbalist", "Tehat, a Erveira",
+                ("Joaquim, you've got mud up to the knees. Here, a leaf of neem in your boots: the leeches will look for another guardian.", "Joaquim, você está com lama até o joelho. Toma, uma folha de nim na bota: as sanguessugas vão procurar outro guardião."),
+                ("Maria, the lotus grows out of the black mud and comes up clean. That is the whole of my medicine, and maybe of yours.", "Maria, o lótus nasce da lama preta e sobe limpo. Esse é todo o meu remédio, e talvez o seu também."),
+                ("Maithe, I write to my sister every week, a long letter on palm leaf. The eldest understands: someone has to keep the family together.", "Maithe, eu escrevo para a minha irmã toda semana, uma carta comprida em folha de palmeira. A mais velha entende: alguém tem que manter a família junta."),
+                ("Ícaro, a still that makes medicine by itself? You'll have to taste every drop it makes. ...Still want it?", "Ícaro, um alambique que faz remédio sozinho? Você vai ter que provar cada gota que ele fizer. ...Ainda quer?"),
+                ("Lavine, Grandma Edna's mint grows in my window. She sent the cutting in a letter, wrapped in a wet cloth. It arrived alive.", "Lavine, a hortelã da Vó Edna cresce na minha janela. Ela mandou a muda numa carta, enrolada num pano molhado. Chegou viva."),
+                ("Neem for the leeches, turmeric for the cuts, lotus for the heart. The roots give everything, if you ask nicely.", "Nim para as sanguessugas, açafrão-da-terra para os cortes, lótus para o coração. As raízes dão tudo, se a gente pedir com jeito."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

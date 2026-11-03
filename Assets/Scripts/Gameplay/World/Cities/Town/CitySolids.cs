@@ -218,6 +218,16 @@ namespace Rapadura.Gameplay.World.Cities.Town
                     return CitySolid.Box(CityGeometry.Inflate(run, TownKit.ReefEdgeHalfThickness), 1.2f, owner);
                 }
 
+                case CityPropKind.MotherRoot: return CitySolid.Capsule(prop.Position, TownKit.MotherRootRadius * s, WallColliderHeight, owner);
+                case CityPropKind.Banyan: return CitySolid.Capsule(prop.Position, TownKit.BanyanRadius * s, WallColliderHeight, owner);
+                case CityPropKind.LotusPond: return CitySolid.Capsule(prop.Position, TownKit.LotusPondRadius * s, 1.2f, owner);
+                case CityPropKind.Ghat:
+                {
+                    Rect run = CityGeometry.RectFromMinMax(prop.Position, prop.End);
+                    return CitySolid.Box(CityGeometry.Inflate(run, TownKit.GhatHalfThickness), 1.2f, owner);
+                }
+
+                case CityPropKind.RootBridge:
                 case CityPropKind.ShellBridge:
                 case CityPropKind.KarezChannel:
                 case CityPropKind.RopeBridge:
