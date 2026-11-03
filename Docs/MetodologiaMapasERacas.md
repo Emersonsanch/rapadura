@@ -71,8 +71,8 @@ a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: 
 | Bolha de ar (29) | levar Bolha de Ar Engarrafada ou Concha Respirável | Ferramentas de Mergulho do Danel (Kirta); recompensa da 2ª missão de Kirta (Pughat) |
 | Botas de raiz (30) | calçar Botas de Raiz Viva, ou montaria Aquática; Joaquim dispensa | Bazar de Pérolas da Mwana (Taa Pwani); recompensa da 2ª missão de Taa Pwani (Zawadi) |
 | Equilíbrio nas pontes (32) | levar Vara de Equilíbrio; Maithe dispensa (pontes suspensas, §3) | Barcos e Trocas do Nuhzadag (Jhilpur) |
-| Barco de junco (33) | levar Barco de Junco ou montaria Aquática | Barcos e Trocas do Nuhzadag (Jhilpur), até as Palafitas de Tarchon terem cidade |
-| Amuleto antiveneno (34) | levar Amuleto Antiveneno (Lavine **não** dispensa: é mordida, não névoa) | Barcos e Trocas do Nuhzadag (Jhilpur), até as Palafitas de Tarchon terem cidade |
+| Barco de junco (33) | levar Barco de Junco ou montaria Aquática | Cestaria da Larthia (Palafitas de Tarchon) e Barcos e Trocas do Nuhzadag (Jhilpur) |
+| Amuleto antiveneno (34) | levar Amuleto Antiveneno (Lavine **não** dispensa: é mordida, não névoa) | Cestaria da Larthia (Palafitas de Tarchon) e Barcos e Trocas do Nuhzadag (Jhilpur); recompensa da 2ª missão de Tarchon (Vel) |
 | Fruta purificadora (35) | levar Fruta Purificadora | Barcos e Trocas do Nuhzadag (Jhilpur); recompensa da 2ª missão de Jhilpur (Abiesous) |
 | Roupa térmica (36) | **vestir** Roupa Térmica Refinada (slot Peito) | Sangkent (planejada) |
 | Grampos de escalada (38) | levar Grampos de Escalada | Sangkent (planejada) |

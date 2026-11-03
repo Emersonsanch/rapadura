@@ -67,6 +67,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
         DivingGear = 27,
         /// <summary>Nuhzadag (Jhilpur): an upturned reed boat, bamboo balance poles in a rack, antivenom amulets on a cord, a basket of purifying fruit.</summary>
         BoatTrader = 28,
+        /// <summary>Larthia (Palafitas de Tarchon): stacked rush baskets, a basket as tall as a cousin, bundles of rush, a lantern basket of will-o'-wisps.</summary>
+        BasketWeaver = 29,
     }
 
     /// <summary>
@@ -162,6 +164,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
         public bool RootStilt;
 
         /// <summary>
+        /// Palafitas de Tarchon: a trol long house on piles (Docs/Mapas100.md §3.3, style <c>StiltVillage</c>): tall timber
+        /// piles standing in the bog water, a plank floor high over it, the gable end to the street with the door, a steep leaf
+        /// roof that comes down to the floor on both sides, fishing nets drying on the eaves, a plank stair up from the deck
+        /// and a will-o'-wisp lantern under the gable (TownKit.StiltVillage).
+        /// </summary>
+        public bool StiltLonghouse;
+
+        /// <summary>
         /// Mercado dos Túneis: with <see cref="TownRoofKind.Rock"/>, a stall set into an arched basalt niche: the round arch,
         /// a striped canvas awning on copper poles, a counter, bottle lanterns and a copper air pipe up the rock (TownKit.TunnelBazaar).
         /// </summary>
@@ -202,7 +212,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Key of the cached mesh: equal specs share one mesh.</summary>
         public string CacheKey =>
             $"{Kind}|{Width:0.00}|{Depth:0.00}|{PorchDepth:0.00}|{FullVaranda}|{WallHeight:0.00}|{Floors}|{Roof}|{WallColor}|{TrimColor}|{RoofColor}|" +
-            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{RootStilt}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
+            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{RootStilt}|{StiltLonghouse}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
             $"{Chimney}|{Sign}|{SignColor}|{Dressing}|{Seed}";
     }
 }

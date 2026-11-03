@@ -191,6 +191,21 @@ namespace Rapadura.Gameplay.World.Cities.Town
         RootBridge = 63,
         /// <summary>Jhilpur: a brick ghat from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/>: a parapet, steps going down to the water behind the line (its mass).</summary>
         Ghat = 64,
+
+        // ---- Palafitas de Tarchon, the trols' city (Delta de Jhilpur; drawn by TownKit.StiltVillage) ----
+
+        /// <summary>Tarchon: the edge of the open swamp from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/>: a rail of wet piles and rush, the bog water beyond (its mass behind the line).</summary>
+        SwampEdge = 65,
+        /// <summary>Tarchon: a strip of bog water from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> crossed by a plank boardwalk on short piles in the middle; walkable.</summary>
+        Boardwalk = 66,
+        /// <summary>Tarchon: the Mastro dos Fogos-Fátuos, a tall mast on a round deck hung with lanterns of caught will-o'-wisps, a giant basket at its foot.</summary>
+        WispMast = 67,
+        /// <summary>Tarchon: a giant woven rush basket, taller than a cousin (Variant: fish / empty / lid).</summary>
+        GiantBasket = 68,
+        /// <summary>Tarchon: two poles and a fishing net drying between them (yaw: along local x).</summary>
+        NetRack = 69,
+        /// <summary>Tarchon: a floating reed island in a round patch of bog water, rush tufts and a will-o'-wisp over it.</summary>
+        ReedIsland = 70,
     }
 
     public enum CityExitKind

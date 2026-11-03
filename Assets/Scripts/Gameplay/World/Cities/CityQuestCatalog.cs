@@ -69,6 +69,8 @@ namespace Rapadura.Gameplay.World.Cities
     /// cornered by the dimmed lantern fish and pays with a Bolha de Ar Engarrafada (the gate of map 29).
     /// Jhilpur (map 31): old Salmaios sends the cousins to scrape the living ooze off the ghats before it climbs to the Raiz-Mãe,
     /// then Abiesous wants the crows off his boat school's oars and pays with a Fruta Purificadora (the gate of map 35).
+    /// Palafitas de Tarchon (map 33): old Tarchon asks the cousins to free the will-o'-wisps caught in the reeds round the stilts,
+    /// then Vel the fisher wants the ghost herons off his nets and pays with an Amuleto Antiveneno (the gate of map 34).
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -88,6 +90,8 @@ namespace Rapadura.Gameplay.World.Cities
         public const string KirtaRescue = "quest_city_kirta_divers_rescue";
         public const string JhilpurGhats = "quest_city_jhilpur_ooze_on_the_ghats";
         public const string JhilpurOars = "quest_city_jhilpur_boat_school_crows";
+        public const string TarchonWisps = "quest_city_tarchon_caught_wisps";
+        public const string TarchonNets = "quest_city_tarchon_herons_on_the_nets";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -162,6 +166,15 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.Jhilpur, "abiesous", new RegionQuestSpec(JhilpurOars, BiomeType.Forest, JhilpurGhats, 1300,
                 new[] { new RegionObjectiveSpec("chase_the_crows", QuestObjectiveType.KillEnemyType, "enemy_cave_dark_crow", 6) },
                 new[] { new RegionRewardSpec("item_fruta_purificadora", 1), new RegionRewardSpec("item_gold", 120) })),
+
+            // -- Palafitas de Tarchon: old Tarchon, then Vel. The firefly swarm stands in for the Fogos-Fátuos Presos (the swarm of
+            // Docs/Mapas100.md 33) and the shroud owl for the Garça-Fantasma that steals from the nets (its ranged bird). --
+            new CityQuestSpec(CityCatalog.PalafitasTarchon, "tarchon", new RegionQuestSpec(TarchonWisps, BiomeType.Forest, null, 1350,
+                new[] { new RegionObjectiveSpec("free_the_wisps", QuestObjectiveType.KillEnemyType, "enemy_desert_firefly_swarm", 8) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 120) })),
+            new CityQuestSpec(CityCatalog.PalafitasTarchon, "vel", new RegionQuestSpec(TarchonNets, BiomeType.Forest, TarchonWisps, 1450,
+                new[] { new RegionObjectiveSpec("chase_the_herons", QuestObjectiveType.KillEnemyType, "enemy_forest_shroud_owl", 6) },
+                new[] { new RegionRewardSpec("item_amuleto_antiveneno", 1), new RegionRewardSpec("item_gold", 130) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();

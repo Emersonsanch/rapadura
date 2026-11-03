@@ -67,6 +67,13 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// stepping down into the water, living-root bridges over the canals, banyans with aerial roots and the Raiz-Mãe.
         /// </summary>
         RootStilt = 10,
+        /// <summary>
+        /// Palafitas de Tarchon (the trols' city in the open swamp, Docs/Mapas100.md §3.3 and map 33, style <c>StiltVillage</c>):
+        /// long houses on tall timber piles over the bog water, their gable end to the street and a steep leaf roof that comes
+        /// down to the floor, plank boardwalks, fishing nets drying, giant baskets, floating reed islands and the will-o'-wisps
+        /// (sparks caught in the Ar Sereno) in lanterns.
+        /// </summary>
+        StiltVillage = 11,
     }
 
     /// <summary>
@@ -379,6 +386,31 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Street = TownSwatch.WoodWeathered, StreetEdge = TownSwatch.RootBark, Sidewalk = TownSwatch.Mud,
             Plaza = TownSwatch.WoodLight, PlazaAlt = TownSwatch.RootBark,
             Fence = TownSwatch.RootBark, Plinth = TownSwatch.GhatBrick,
+            HouseRoof = TownRoofKind.Gable,
+        };
+
+        /// <summary>
+        /// Palafitas de Tarchon, the trols' city (Docs/Mapas100.md §3.3, map 33): picked by hand. Moss blue #4F7A82, wet wood
+        /// #5B4636, leaf #6F8F3F, lilac mist #B9A9D6, will-o'-wisp #D6E8FF (glows), bog water #3F5550, rush #B9A55A and net
+        /// twine #8E8466 (row 12 of <see cref="TownPalette"/>). Houses are long houses on tall piles
+        /// (<see cref="TownBuildingSpec.StiltLonghouse"/>); streets are plank boardwalks, the plaza a round deck of wet planks
+        /// round the Mastro dos Fogos-Fátuos. The Delta de Jhilpur has no world-map biome: <see cref="TownStyle.Region"/> is the
+        /// borrowed Forest (as Jhilpur).
+        /// </summary>
+        public static readonly TownStyle StiltVillage = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Coast,
+            Architecture = TownArchitecture.StiltVillage,
+            Walls = new[] { TownSwatch.Rush, TownSwatch.WetWood, TownSwatch.Rush },
+            Trims = new[] { TownSwatch.TrollMoss, TownSwatch.LilacMist },
+            Roofs = new[] { TownSwatch.SwampLeaf, TownSwatch.Rush },
+            Joinery = new[] { TownSwatch.WetWood, TownSwatch.WoodDark },
+            Accent = TownSwatch.WillWisp,
+            Ground = TownSwatch.SwampLeaf, GroundAlt = TownSwatch.Mud,
+            Street = TownSwatch.WoodWeathered, StreetEdge = TownSwatch.WetWood, Sidewalk = TownSwatch.Mud,
+            Plaza = TownSwatch.WetWood, PlazaAlt = TownSwatch.WoodWeathered,
+            Fence = TownSwatch.WetWood, Plinth = TownSwatch.BogWater,
             HouseRoof = TownRoofKind.Gable,
         };
     }

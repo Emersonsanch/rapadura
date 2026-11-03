@@ -29,6 +29,7 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
 | Grutas do Limiar (mapas 22 e 23) | **Mercado dos Túneis** (kobolds, `mercado_dos_tuneis`) | Miwnay, a Mestra da Feira (galeria Oeste), Takhsich, o Inventor (galeria Norte), Shayn, a Consertadora (galeria Leste), Farnkhund, o Vagoneiro (galeria Sul) | **Feira da Miwnay** (`shop_feira_miwnay`) | Takhsich: "Teia nos Tubos"; Farnkhund: "Pedras nos Trilhos" |
 | Costa das Monções (mapas 26 e 27) | **Aratta, a Cidade dos Chifres** (povo-touro, `aratta`) | Enmerkar, o Chefe Construtor (salão de junco na cabeça da praça), Lugalbanda, o Andarilho (rua Oeste), Shulgi, o Corredor (rua Leste), Ensuhkeshdanna, o Rival Amigo (rua Sul) | **Alforje do Lugalbanda** (`shop_alforje_lugalbanda`) | Enmerkar: "Chacais no Capim Seco"; Shulgi: "O Percurso de Shulgi" |
 | Costa das Monções (mapas 28 e 29) | **Cidade-Recife de Kirta** (povo-do-mar, `kirta`) | Kirta, o Rei do Recife (rua Norte), Danel, o Juiz Justo (rua Oeste), Pughat, a Que Cuida de Todos (rua Leste), Aqhat, o Arqueiro (rua Leste) | **Ferramentas de Mergulho do Danel** (`shop_mergulho_danel`) | Kirta: "Lodo no Recife"; Pughat: "Os Mergulhadores Encurralados" |
+| Delta de Jhilpur (mapas 33 e 34) | **Palafitas de Tarchon** (trols, `palafitas_tarchon`) | Tarchon, o Fundador (casa comprida na cabeça da praça), Larthia, a Cesteira (rua Oeste), Ramtha, a Curandeira (rua Leste), Thanchvil, a Contadora de Histórias (rua Leste), Vel, o Pescador (rua Sul) | **Cestaria da Larthia** (`shop_cestaria_larthia`) | Tarchon: "Fogos-Fátuos Presos"; Vel: "Garças nas Redes" |
 
 - **Passeio da cidade:** a mesma receita `CityTownRecipes.Garajonay` do mapa 05 e do mundo contínuo (mesmo `CityId`,
   mesma geometria; os moradores só ganharam `ResidentId` nos lotes que já existiam). Problema herdado da receita (não
@@ -194,6 +195,36 @@ fica em y = 0 dentro de um círculo de ~22 m com 3 saídas de rua, no lugar que 
   de vida + 4 de mana + 90 ouro, 1040 XP); depois Pughat pede 5 peixes-lanterna longe da gruta dos mergulhadores (o
   Peixe-Lanterna faz o Peixe-Leão Apagado; **Bolha de Ar** + 100 ouro, 1120 XP). Testes: `CityKirtaTests`.
 
+**Palafitas de Tarchon** (trols, mapa 33; cidade de retorno de 33–34):
+- **Passeio da cidade:** receita `CityTownRecipes.Tarchon` (`CityTownRecipes.Tarchon.cs`) no estilo novo
+  `TownStyles.StiltVillage` (`TownArchitecture.StiltVillage`, linha 12 da `TownPalette`: azul-musgo `#4F7A82`, madeira
+  molhada `#5B4636`, folha `#6F8F3F`, névoa lilás `#B9A9D6`, fogo-fátuo `#D6E8FF` (brilha à noite), água de charco
+  `#3F5550`, junco `#B9A55A`, fio de rede `#8E8466`). Cada casa é uma **casa comprida sobre estacas**
+  (`TownBuildingSpec.StiltLonghouse`: `TownKit.StiltLonghouseHouse`): água de charco embaixo, oito estacas altas com
+  travessas, piso de tábua 1,25 m acima (trol tem 3 m), **empena virada para a rua** com a porta alta e janela acesa,
+  **telhado de folha íngreme que desce até o piso** dos dois lados (fiada de junco embaixo, folha em cima, cumeeira com
+  varas cruzadas na frente), redes secando num beiral, lanterna de fogo-fátuo pendurada na empena, escada de tábua do
+  deque até a porta e toldo de folha em estacas (nos `PorchPostsX`). Peças: `WispMast` (o **Mastro dos Fogos-Fátuos**
+  num deque redondo, lanternas em gaiolas lilás nos braços), `Boardwalk` (canal de charco atravessando a rua com
+  passarela de tábua no meio; pisável), `SwampEdge` (cerca de estacas de segmento com o pântano aberto atrás),
+  `GiantBasket` (cesto gigante: peixe, vazio ou tampado), `NetRack` (rede secando entre duas varas) e `ReedIsland`
+  (ilha de junco boiando, às vezes com cabaninha); portão de duas estacas com telhadinho de folha e lanternas
+  (`TownKit.StiltGate`); vitrine da cesteira (`TownShopDressing.BasketWeaver`: cestos empilhados, cesto alto, feixes de
+  junco, cesto de lanternas). Peças em `TownKit.StiltVillage.cs`, colisores em `CitySolids`. Ruas Oeste (a entrada,
+  pelo delta), Leste e Sul de 19 m (saídas em (±19, 0) e (0, −19)); **sem rua ao norte**: atrás da casa do Tarchon a
+  cerca de estacas abre para o pântano em três lances (z = 19,5 e 14); tudo dentro de um círculo de 22,5 m (o sólido
+  mais longe, a cerca do charco, chega a ~21,7 m), caminhada em ±22.
+- **Respawn:** derrota nos mapas 33 e 34 acorda na praça das Palafitas, ao pé do mastro (`MapCatalog.RespawnCityFor` →
+  `ApplyDefeatIn`).
+- **Cestaria da Larthia** (diária, 3 vagas que giram, tema Especialidade): poções de vida e mana, **Barco de Junco**
+  (33, tecido aqui) e **Amuleto Antiveneno** (34) fixos, lamparina a óleo (o Cesto de Lanternas) e o Alforje (as
+  "bolsas" da Larthia, um por save, depois de limpar o Zarafshan); giram bagre, traíra, fibra, erva, carne, ração,
+  corda e Amuleto da Sorte. O Nuhzadag (Jhilpur) segue vendendo 33 e 34 para a ida. O Ammo nunca para lá. (A Lanterna
+  de Fogo-Fátuo, o Despertar o vizinho e o Sapo-Gigante ainda faltam.)
+- **Missões da cidade:** o velho Tarchon pede 8 fogos-fátuos presos libertados (o Enxame de Vaga-lumes faz o Fogo-Fátuo
+  Preso; 5 poções de vida + 5 de mana + 120 ouro, 1350 XP); depois Vel pede 6 pássaros-fantasma fora das redes (a
+  Coruja-Mortalha faz a Garça-Fantasma; **Amuleto Antiveneno** + 130 ouro, 1450 XP). Testes: `CityTarchonTests`.
+
 ### 1.2 Cidades das regiões tardias (`CityCatalog.LateRegionCities`)
 
 Cidades das regiões 5–8 (Docs/Mapas100.md), que ainda não têm bioma no mapa-múndi. Ficam fora de `Cities` (sem painel
@@ -248,11 +279,10 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
   um círculo de 22,5 m (o sólido mais longe, o ghat, chega a 21,6 m), caminhada em ±22; `CityLayoutRules.Validate` sem
   problemas, com e sem o mascate.
 - **Respawn:** derrota nos mapas 31, 32 e 35 acorda na praça de Jhilpur, ao pé da Raiz-Mãe (`MapCatalog.RespawnCityFor`
-  → `ApplyDefeatIn`). 33 e 34 têm as Palafitas de Tarchon como cidade de retorno, que ainda não existe: até lá acordam
-  na Vila.
+  → `ApplyDefeatIn`). 33 e 34 acordam nas Palafitas de Tarchon (§1.1).
 - **Barcos e Trocas do Nuhzadag** (diária, 3 vagas que giram, tema Especialidade): poções de vida e mana e **todas as
   exigências do delta**, fixas desde o primeiro dia: Vara de Equilíbrio (32), Barco de Junco (33), Amuleto Antiveneno
-  (34) e Fruta Purificadora (35) (as de Tarchon descem os canais até ele enquanto Tarchon não for cidade); giram corda
+  (34) e Fruta Purificadora (35) (as de Tarchon descem os canais até ele; a Cestaria da Larthia vende 33 e 34 também); giram corda
   de escalada, peixe dourado, carne, ração de montaria, fibra, Amuleto da Sorte e Pedra da Bênção. O Ammo nunca para lá.
 - **Missões da cidade:** o velho Salmaios pede 7 bolotas de lodo nos ghats antes que subam até a Raiz-Mãe (o Lodo de
   Gruta faz os Filhos do Lodo da Maré de Lodo; 5 poções de vida + 4 de mana + 110 ouro, 1200 XP); depois Abiesous pede

@@ -134,6 +134,12 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string Jhilpur = "jhilpur";
 
+        /// <summary>
+        /// Palafitas de Tarchon, the race city of the trols (map 33, return city of maps 33–34, Docs/Mapas100.md §3.3). Same id
+        /// as <c>MapCatalog.PalafitasTarchon</c> and <c>CityTownRecipes.TarchonCityId</c>.
+        /// </summary>
+        public const string PalafitasTarchon = "palafitas_tarchon";
+
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
             new CitySpec(VilaZefa, BiomeType.Forest,
@@ -282,6 +288,21 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("aqhat"),
                 },
                 new List<string> { CityShopCatalog.MergulhoDanel }),
+
+            // Palafitas de Tarchon (trols, Etruscan names from Tarquinia and Cerveteri): Tarchon the founder (missions), Ramtha
+            // the healer (the guardian lamp), Larthia the basket weaver (the city's shop: the Cestaria da Larthia, with the reed
+            // boat of map 33 and the antivenom amulet of map 34), Vel the fisher (second mission), Thanchvil the storyteller.
+            // The Delta de Jhilpur has no world-map biome: the region is the borrowed Forest, as for Jhilpur.
+            new CitySpec(PalafitasTarchon, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("tarchon"),
+                    new CityResidentSpec("ramtha"),
+                    new CityResidentSpec("larthia", CityShopCatalog.CestariaLarthia),
+                    new CityResidentSpec("vel"),
+                    new CityResidentSpec("thanchvil"),
+                },
+                new List<string> { CityShopCatalog.CestariaLarthia }),
         };
 
         /// <summary>
@@ -310,8 +331,8 @@ namespace Rapadura.Gameplay.World.Cities
 
             // Jhilpur (the Delta de Jhilpur, região 6; names of Manichaean missionaries and of the Kellis letters): old Salmaios,
             // the ascetic of the Cologne Codex, who tends the Raiz-Mãe (missions), Nuhzadag, Mani's interpreter, here the
-            // boatman who speaks every tongue of the delta (the city's shop: the gear of the gates 32–35, while Tarchon has no
-            // town), Abiesous, the master of the Codex, who teaches at the boat school (second mission), and Tehat, a woman of
+            // boatman who speaks every tongue of the delta (the city's shop: the gear of the gates 32–35; Tarchon's own
+            // Cestaria sells 33–34 too), Abiesous, the master of the Codex, who teaches at the boat school (second mission), and Tehat, a woman of
             // the Kellis letters, the herbalist of the herb quarter. Region: the borrowed Forest (as Taa Pwani).
             new CitySpec(Jhilpur, BiomeType.Forest,
                 new List<CityResidentSpec>

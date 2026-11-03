@@ -109,6 +109,7 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.AlforjeLugalbanda, "Lugalbanda's Saddlebag", "Alforje do Lugalbanda"),
                 Shop(CityShopCatalog.MergulhoDanel, "Danel's Diving Tools", "Ferramentas de Mergulho do Danel"),
                 Shop(CityShopCatalog.TrocasNuhzadag, "Nuhzadag's Boats and Trades", "Barcos e Trocas do Nuhzadag"),
+                Shop(CityShopCatalog.CestariaLarthia, "Larthia's Baskets", "Cestaria da Larthia"),
             };
 
             // ---- Cities ----
@@ -148,6 +149,10 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.Jhilpur, "Jhilpur, City in the Roots", "Jhilpur, a Cidade nas Raízes", "Jhilpur", "Jhilpur",
                 "The capital of the delta, built in the roots of giant fig trees over a brown-green lake: plank houses on root columns under curved thatch roofs, bridges of living root over the canals, brick ghats stepping down into the water and, in the middle of the round plaza, the Raiz-Mãe. Mani's journey to the east passed through here: the Living Water against the Lodo.",
                 "A capital do delta, construída nas raízes de figueiras gigantes sobre um lago marrom-esverdeado: casas de tábua sobre colunas de raiz debaixo de telhados de palha curvos, pontes de raiz viva sobre os canais, ghats de tijolo descendo para a água e, no meio da praça redonda, a Raiz-Mãe. A viagem de Mani para o leste passou por aqui: a Água Viva contra o Lodo.");
+
+            AddCity(entries, CityCatalog.PalafitasTarchon, "Tarchon Stilts", "Palafitas de Tarchon", "Tarchon", "Tarchon",
+                "The trols' city in the open swamp: long houses on tall piles with leaf roofs down to the floor, plank boardwalks over the bog water, nets drying, baskets as tall as a cousin and floating reed islands. At night the swamp fills with will-o'-wisps, sparks caught in the Ar Sereno; half the trols stared at them until they forgot themselves, and every spark set free wakes a neighbour.",
+                "A cidade dos trols no meio do pântano: casas compridas sobre estacas altas com telhado de folha até o chão, passarelas de tábua sobre a água do charco, redes secando, cestos do tamanho de um primo e ilhas de junco que boiam. À noite o pântano enche de fogos-fátuos, faíscas presas no Ar Sereno; metade dos trols olhou para elas até se esquecer, e cada faísca libertada acorda um vizinho.");
 
             AddCity(entries, CityCatalog.TamborRubro, "Red Drum", "Tambor Rubro", "Red Drum", "Tambor Rubro",
                 "The orcs' war camp in the red badlands: a palisade of sharpened logs, the Great Hall under its steep hide roof, clan tents dyed ochre and the drums that mark the hours and wake the Living Fire of the forge. Here a given word is worth more than gold.",
@@ -627,6 +632,47 @@ namespace Rapadura.UI.WorldMap
                 ("Ícaro, a still that makes medicine by itself? You'll have to taste every drop it makes. ...Still want it?", "Ícaro, um alambique que faz remédio sozinho? Você vai ter que provar cada gota que ele fizer. ...Ainda quer?"),
                 ("Lavine, Grandma Edna's mint grows in my window. She sent the cutting in a letter, wrapped in a wet cloth. It arrived alive.", "Lavine, a hortelã da Vó Edna cresce na minha janela. Ela mandou a muda numa carta, enrolada num pano molhado. Chegou viva."),
                 ("Neem for the leeches, turmeric for the cuts, lotus for the heart. The roots give everything, if you ask nicely.", "Nim para as sanguessugas, açafrão-da-terra para os cortes, lótus para o coração. As raízes dão tudo, se a gente pedir com jeito."));
+
+            // ---- Palafitas de Tarchon (trols; Etruscan names from Tarquinia and Cerveteri). Trols speak slowly. ----
+            AddResident(entries, "tarchon", "Tarchon, the Founder", "Tarchon, o Fundador",
+                ("Joaquim... you stand like a pile. Good. Piles hold the house... when the water rises. Your trial... is in the deep bog. Not today. When you are... ready.", "Joaquim... você fica de pé como uma estaca. Bom. Estaca segura a casa... quando a água sobe. A sua prova... está no charco fundo. Hoje não. Quando você estiver... pronto."),
+                ("Maria... a wisp is a spark... that lost its way. You have the light... that shows the way home. Stay... a little. My people... need it.", "Maria... um fogo-fátuo é uma faísca... que perdeu o caminho. Você tem a luz... que mostra o caminho de casa. Fica... um pouco. O meu povo... precisa."),
+                ("Maithe... the eldest. I drove the first pile... into this mud... three hundred years ago. The eldest... always drives the first pile. Then... the others follow.", "Maithe... a mais velha. Eu finquei a primeira estaca... nessa lama... há trezentos anos. A mais velha... sempre finca a primeira estaca. Depois... os outros vêm atrás."),
+                ("Ícaro... you talk fast. Like a dragonfly. I like... dragonflies. Tell me again... slowly... about the machine that pulls nets.", "Ícaro... você fala depressa. Que nem libélula. Eu gosto... de libélula. Me conta de novo... devagar... da máquina que puxa rede."),
+                ("Lavine... your grandpa Jorge... came here lost, in a reed boat... laughing. He stayed a whole moon. He taught us... to whistle. We still whistle... badly.", "Lavine... o seu avô Jorge... chegou aqui perdido, num barco de junco... rindo. Ficou uma lua inteira. Ensinou a gente... a assobiar. A gente ainda assobia... mal."),
+                ("The water rises... the piles hold. The wisps come... the lanterns hold them. Slowly... everything holds.", "A água sobe... as estacas seguram. Os fogos-fátuos vêm... as lanternas seguram. Devagar... tudo segura."));
+
+            AddResident(entries, "ramtha", "Ramtha the Healer", "Ramtha, a Curandeira",
+                ("Joaquim... you have a cut, and you did not say. Guardians never say. Sit. Moss from the north side of the pile... closes it by morning.", "Joaquim... você tem um corte e não falou. Guardião nunca fala. Senta. Musgo do lado norte da estaca... fecha até amanhã."),
+                ("Maria... the guardian lamp of the stilts burns over my door. When the wisps buzz too close... it hums back at them. Like you do.", "Maria... a lâmpada guardiã das palafitas queima em cima da minha porta. Quando os fogos-fátuos zumbem perto demais... ela zumbe de volta. Que nem você."),
+                ("Maithe... you carry everyone's worries... in your shoulders. Here. Lilac tea. Drink it... slowly. Slower. ...Good.", "Maithe... você carrega a preocupação de todo mundo... nos ombros. Toma. Chá de lilás. Bebe... devagar. Mais devagar. ...Isso."),
+                ("Ícaro... no, the mortar does not need a motor. The moss likes... to be ground by hand. It heals better. ...Maybe a small motor.", "Ícaro... não, o pilão não precisa de motor. O musgo gosta... de ser moído na mão. Cura melhor. ...Talvez um motorzinho."),
+                ("Lavine... Grandma Edna sent me seeds once... in a letter. Mint. It grows on my roof now... between the leaves. The whole house smells of her.", "Lavine... a Vó Edna me mandou sementes uma vez... numa carta. Hortelã. Agora cresce no meu telhado... no meio das folhas. A casa inteira tem o cheiro dela."),
+                ("Trols heal fast. Their hearts... heal slowly. For the heart... I have only tea and time.", "Trol sara depressa. O coração dele... sara devagar. Para o coração... eu só tenho chá e tempo."));
+
+            AddResident(entries, "larthia", "Larthia the Basket Weaver", "Larthia, a Cesteira",
+                ("Joaquim! A basket for your shield? No? A basket for your helmet? ...A basket for your baskets?", "Joaquim! Um cesto para o seu escudo? Não? Um cesto para o seu elmo? ...Um cesto para os seus cestos?"),
+                ("Maria, I weave the lantern baskets for the wisps the cousins set free. Each one... holds a little light. Like a pocket.", "Maria, eu teço os cestos de lanterna para os fogos-fátuos que os primos soltam. Cada um... guarda um pouco de luz. Que nem um bolso."),
+                ("Maithe, the eldest carries the most. So... a bigger bag. One more row. I sew it while you wait... slowly.", "Maithe, a mais velha carrega mais. Então... uma bolsa maior. Uma fileira a mais. Eu costuro enquanto você espera... devagar."),
+                ("Ícaro, this reed boat folds in two. It took me a week. If you take it apart... you weave it back. Another week.", "Ícaro, esse barco de junco dobra em dois. Levei uma semana. Se você desmontar... você tece de volta. Mais uma semana."),
+                ("Lavine, your grandpa Jorge bought a basket here and wore it on his head... as a hat. All the way home. Grandma Edna kept it.", "Lavine, o seu avô Jorge comprou um cesto aqui e usou na cabeça... de chapéu. Até chegar em casa. A Vó Edna guardou."),
+                ("Boats for the swamp, amulets for the bog, bags for the road. Everything woven... by hand... very slowly.", "Barco para o pântano, amuleto para o charco, bolsa para a estrada. Tudo tecido... à mão... bem devagar."));
+
+            AddResident(entries, "vel", "Vel the Fisher", "Vel, o Pescador",
+                ("Joaquim... catfish this big. Bigger than you. ...Bigger than me. It ate my boat once. Then gave it back.", "Joaquim... bagre deste tamanho. Maior que você. ...Maior que eu. Comeu o meu barco uma vez. Depois devolveu."),
+                ("Maria... the Fisher of Lights is a catfish... who swallowed the wisps... to have light just for himself. He is not bad. Only... afraid of the dark.", "Maria... o Pescador de Luzes é um bagre... que engoliu os fogos-fátuos... para ter luz só para ele. Ele não é mau. Só... tem medo do escuro."),
+                ("Maithe... you pull the net like a trol. Slowly, all the way. Want to come... at dawn? Bring your patience.", "Maithe... você puxa a rede que nem trol. Devagar, até o fim. Quer vir... de madrugada? Traz a sua paciência."),
+                ("Ícaro... yes, the net has holes. On purpose. The little fish... go home. Only the big ones stay.", "Ícaro... sim, a rede tem buraco. De propósito. Os peixinhos... voltam para casa. Só os grandes ficam."),
+                ("Lavine... Grandma Edna's recipe for catfish with lemon. I make it every full moon. The whole stilts come to my door.", "Lavine... a receita de bagre com limão da Vó Edna. Eu faço toda lua cheia. As palafitas inteiras vêm na minha porta."),
+                ("Net in the water... wait. Wait more. ...Fish. That is all fishing is.", "Rede na água... espera. Espera mais. ...Peixe. Pescar é só isso."));
+
+            AddResident(entries, "thanchvil", "Thanchvil the Storyteller", "Thanchvil, a Contadora de Histórias",
+                ("Joaquim... come, sit on the planks. Tonight's story is about a trol who held a falling house... with one arm. It took all night. Then... he slept a week.", "Joaquim... vem, senta nas tábuas. A história de hoje é de um trol que segurou uma casa caindo... com um braço. Levou a noite toda. Depois... dormiu uma semana."),
+                ("Maria... my sister is one of the dimmed ones. She sits by the mast... and looks at the wisps. I tell her stories every night. One day... she will answer.", "Maria... a minha irmã é uma das apagadas. Ela fica sentada perto do mastro... olhando os fogos-fátuos. Eu conto histórias para ela toda noite. Um dia... ela vai responder."),
+                ("Maithe... the eldest of the story always arrives last... because she waited for everyone. Did you know? Now you do.", "Maithe... a mais velha da história sempre chega por último... porque esperou todo mundo. Sabia? Agora sabe."),
+                ("Ícaro... you want the end first? Trols tell the end... last. Very last. ...Fine. They lived. Happy?", "Ícaro... você quer o fim primeiro? Trol conta o fim... por último. Bem por último. ...Tá. Eles viveram. Feliz?"),
+                ("Lavine... I know a story about a boy named Jorge... who whistled so badly the herons flew away. It is true. Ask Tarchon.", "Lavine... eu sei uma história de um menino chamado Jorge... que assobiava tão mal que as garças voavam embora. É verdade. Pergunta para o Tarchon."),
+                ("Every spark set free... is a story that comes back. The stilts are full of stories... waiting to come back.", "Cada faísca libertada... é uma história que volta. As palafitas estão cheias de histórias... esperando para voltar."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

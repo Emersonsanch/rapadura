@@ -335,6 +335,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             spec.ReedHall |= style.Architecture == TownArchitecture.ReedHorn && plainHouse;
             spec.ReefTower |= style.Architecture == TownArchitecture.CoralReef && plainHouse;
             spec.RootStilt |= style.Architecture == TownArchitecture.RootStilt && plainHouse;
+            spec.StiltLonghouse |= style.Architecture == TownArchitecture.StiltVillage && plainHouse;
 
             switch (r.Kind)
             {

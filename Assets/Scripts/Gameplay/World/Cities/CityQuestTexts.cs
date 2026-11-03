@@ -268,6 +268,38 @@ namespace Rapadura.Gameplay.World.Cities
             new LocalizationEntry("quest.city_jhilpur_boat_school_crows.active",
                 "Crows love what shines. Wave a lantern and they will come down to you.",
                 "Corvo gosta do que brilha. Balancem uma lanterna e eles descem até vocês."),
+
+            // ================= Palafitas de Tarchon — Tarchon, o fundador =================
+            new LocalizationEntry("quest.city_tarchon_caught_wisps.title", "Caught Wisps", "Fogos-Fátuos Presos"),
+            new LocalizationEntry("quest.city_tarchon_caught_wisps.description",
+                "Every night the swamp round the stilts fills with will-o'-wisps: sparks of light caught in the reeds, buzzing and angry. Half the trols have stared at them so long that they forgot who they were. Old Tarchon, who drove the first pile into this mud, asked the cousins to set them free.",
+                "Toda noite o pântano em volta das palafitas enche de fogos-fátuos: faíscas de luz presas no junco, zumbindo, bravas. Metade dos trols olhou tanto para elas que esqueceu quem era. O velho Tarchon, que fincou a primeira estaca nessa lama, pediu aos primos que soltem elas."),
+            new LocalizationEntry("quest.city_tarchon_caught_wisps.obj_free_the_wisps", "Set the caught will-o'-wisps free", "Libertar os fogos-fátuos presos"),
+            new LocalizationEntry("quest.city_tarchon_caught_wisps.journal",
+                "The last wisp went up slowly, like a bubble, and hung over the mast for a moment before it went on to the sky. On the boardwalk, a trol who had not spoken for a year said good evening. Tarchon cried a little. Very slowly.",
+                "O último fogo-fátuo subiu devagar, como uma bolha, e ficou um instante em cima do mastro antes de seguir para o céu. Na passarela, um trol que não falava fazia um ano disse boa noite. O Tarchon chorou um pouco. Bem devagar."),
+            new LocalizationEntry("quest.city_tarchon_caught_wisps.offer",
+                "Edna's... grandchildren. Jorge... rowed here... once. Lost. Laughing. Eight sparks... are caught... in the reeds tonight. They are not... wicked. Only... lost. Let them... go home.",
+                "Os netos... da Edna. O Jorge... remou até aqui... uma vez. Perdido. Rindo. Oito faíscas... estão presas... no junco hoje. Elas não são... más. Só... perdidas. Deixem elas... voltar para casa."),
+            new LocalizationEntry("quest.city_tarchon_caught_wisps.active",
+                "Wisps... buzz louder... near the water. Follow... the buzzing.",
+                "Os fogos-fátuos... zumbem mais alto... perto da água. Sigam... o zumbido."),
+
+            // ================= Palafitas de Tarchon — Vel, o pescador =================
+            new LocalizationEntry("quest.city_tarchon_herons_on_the_nets.title", "Herons on the Nets", "Garças nas Redes"),
+            new LocalizationEntry("quest.city_tarchon_herons_on_the_nets.description",
+                "Pale ghost birds, dimmed by the Lodo, stand on the poles of Vel's nets all night and steal every catfish he catches. Vel is too gentle to chase anything away; he asked the cousins to do it for him.",
+                "Pássaros pálidos, apagados pelo Lodo, ficam a noite inteira nos varais das redes do Vel e roubam todo bagre que ele pega. O Vel é manso demais para espantar qualquer coisa; pediu aos primos que façam isso por ele."),
+            new LocalizationEntry("quest.city_tarchon_herons_on_the_nets.obj_chase_the_herons", "Chase the ghost birds off Vel's nets", "Espantar os pássaros-fantasma das redes do Vel"),
+            new LocalizationEntry("quest.city_tarchon_herons_on_the_nets.journal",
+                "The nets came up full for the first time in weeks. Vel counted the catfish twice, gave the fattest one to Maria and laughed so hard the boardwalk shook. Then he hung an amulet round Lavine's neck: \"For the bog. The dragon is shy, but the snakes are not.\"",
+                "As redes subiram cheias pela primeira vez em semanas. O Vel contou os bagres duas vezes, deu o mais gordo para a Maria e riu tanto que a passarela tremeu. Depois pendurou um amuleto no pescoço da Lavine: \"Para o charco. A dragoa é tímida, mas as cobras não são.\""),
+            new LocalizationEntry("quest.city_tarchon_herons_on_the_nets.offer",
+                "You freed the wisps. Tarchon smiled. Took him... a year. Now... my nets. Six pale birds... on my poles. Every night. Chase them... and take this amulet. In the Ninki Nanka's bog... the snakes bite.",
+                "Vocês soltaram os fogos-fátuos. O Tarchon sorriu. Levou... um ano. Agora... as minhas redes. Seis pássaros pálidos... nos meus varais. Toda noite. Espantem eles... e levem este amuleto. No charco do Ninki Nanka... as cobras mordem."),
+            new LocalizationEntry("quest.city_tarchon_herons_on_the_nets.active",
+                "They come... when the mist is lilac. Wait... by the nets.",
+                "Eles vêm... quando a névoa fica lilás. Esperem... perto das redes."),
         };
 
         public static void EnsureLoaded(LocalizationManager localization)

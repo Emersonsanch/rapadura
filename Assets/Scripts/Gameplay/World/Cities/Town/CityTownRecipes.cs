@@ -7,9 +7,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
     /// <summary>
     /// The town recipes (content as code, like <c>CityCatalog</c>): every city is laid out by hand (Docs/Cities.md §5.3):
     /// <see cref="VilaEdna"/>, <see cref="Qocho"/>, <see cref="Litema"/>, <see cref="Lamparinas"/> and the race city
-    /// <see cref="Garajonay"/>, <see cref="TamborRubro"/>, <see cref="BronzeHalls"/>, <see cref="TunnelMarket"/>, <see cref="Aratta"/> and <see cref="Kirta"/>
+    /// <see cref="Garajonay"/>, <see cref="TamborRubro"/>, <see cref="BronzeHalls"/>, <see cref="TunnelMarket"/>, <see cref="Aratta"/>, <see cref="Kirta"/> and <see cref="Tarchon"/>
     /// (<see cref="CityCatalog.RaceCities"/>; the orcs' war camp, the dwarves' rune halls, the kobolds' tunnel bazaar, the
-    /// povo-touro's reed halls and the povo-do-mar's coral towers in their own styles) and Taa Pwani (<see cref="TaaPwani"/>, the first of the
+    /// povo-touro's reed halls, the povo-do-mar's coral towers and the trols' long houses on piles in their own styles) and Taa Pwani (<see cref="TaaPwani"/>, the first of the
     /// <see cref="CityCatalog.LateRegionCities"/>, in its own coral-stone style; then <see cref="Jhilpur"/>, the city in the roots). A city added to the
     /// catalog without a recipe gets <see cref="Default"/> (the Vila's plan filled with its residents, shops and regional
     /// style) until it has one. Layouts are cached per city and "mascate today" flag (the generator is deterministic,
@@ -77,6 +77,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityCatalog.Aratta: return Aratta();
                 case CityCatalog.Kirta: return Kirta();
                 case CityCatalog.Jhilpur: return Jhilpur();
+                case CityCatalog.PalafitasTarchon: return Tarchon();
                 default: return null;
             }
         }

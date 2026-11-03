@@ -241,10 +241,18 @@ namespace Rapadura.Gameplay.World.Cities
         /// Barcos e Trocas do Nuhzadag (Jhilpur, the capital of the Delta de Jhilpur, Docs/Mapas100.md região 6): the boatman
         /// who speaks every tongue of the delta trades the gear of every gate of the region (Docs/MetodologiaMapasERacas.md
         /// §2.1): the Vara de Equilíbrio (32), the Barco de Junco (33), the Amuleto Antiveneno (34) and the Fruta Purificadora
-        /// (35). The Palafitas de Tarchon (return city of 33–34) have no town yet, so his boats bring their gear to his counter.
+        /// (35). The Palafitas de Tarchon (return city of 33–34) weave the boats and the amulets; his boats bring them down too.
         /// The counter turns daily.
         /// </summary>
         public const string TrocasNuhzadag = "shop_trocas_nuhzadag";
+
+        /// <summary>
+        /// Cestaria da Larthia (Palafitas de Tarchon, the trols' city, Docs/Mapas100.md §3.3): the basket weaver sells what the
+        /// trols weave and catch: the Barco de Junco (33, their own map: the boats are woven here) and the Amuleto Antiveneno
+        /// (34, the Charco do Ninki Nanka, whose return city this is), the Alforje (her "bags", one per save), oil lamps for the
+        /// lantern basket and the catfish of the swamp. The counter turns daily.
+        /// </summary>
+        public const string CestariaLarthia = "shop_cestaria_larthia";
 
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
@@ -492,7 +500,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_mana_potion", 15, 6),
                 // Map gates (MapRequirementRules): the balance pole of the Pontes de Raiz Viva (32), the reed boat of the Palafitas
                 // de Tarchon (33), the antivenom amulet of the Charco do Ninki Nanka (34) and the purifying fruit of the Coração do
-                // Lodo (35). Tarchon has no town yet: its gear (33, 34) comes down the canals to Nuhzadag.
+                // Lodo (35). The boats and amulets of Tarchon (33, 34) also come down the canals to Nuhzadag.
                 new CityShopEntry("item_vara_equilibrio", 480, 2),
                 new CityShopEntry("item_barco_junco", 600, 1),
                 new CityShopEntry("item_amuleto_antiveneno", 700, 2),
@@ -505,6 +513,31 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_fiber", 1, 20, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+            })),
+
+            // ---- Palafitas de Tarchon: Larthia's baskets, the reed boat of 33 and the antivenom amulet of 34; daily ----
+            new CityShopSpec(CestariaLarthia, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(CestariaLarthia, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 5),
+                // Map gates (MapRequirementRules): the Barco de Junco for the Palafitas de Tarchon (33: the trols weave the
+                // boats; Nuhzadag sells them too, for the way in) and the Amuleto Antiveneno for the Charco do Ninki Nanka (34),
+                // whose return city this is.
+                new CityShopEntry("item_barco_junco", 600, 2),
+                new CityShopEntry("item_amuleto_antiveneno", 700, 2),
+                // The Cesto de Lanternas: oil lamps to carry a light through the swamp night (Docs/Mapas100.md §3.3).
+                new CityShopEntry("item_lamparina_oleo", 30, 3),
+                // Larthia's bags (Docs/Mapas100.md §3.3: +1 row of the backpack, her version of the Alforje): one per save.
+                new CityShopEntry(BornalItemId, 160, 1, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
+                // The rotation: what the trols weave and fish.
+                new CityShopEntry("item_fish_bagre_cego", 15, 4, rotating: true),
+                new CityShopEntry("item_fish_traira", 8, 4, rotating: true),
+                new CityShopEntry("item_fiber", 1, 20, rotating: true),
+                new CityShopEntry("item_herb", 3, 12, rotating: true),
+                new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
+                new CityShopEntry("item_mount_feed", 3, 12, rotating: true),
+                new CityShopEntry("item_corda_escalada", 40, 2, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
             })),
 
             // ---- Ferraria do Mestre Adamas (Vila): the village blacksmith ----

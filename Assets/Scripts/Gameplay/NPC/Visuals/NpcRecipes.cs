@@ -763,6 +763,82 @@ namespace Rapadura.Gameplay.NPC.Visuals
             },
 
             // ------------------------------------------------------------------
+            // Palafitas de Tarchon (trols, Docs/Mapas100.md §3.3 and Docs/MetodologiaMapasERacas.md §6.5): tall and thin, moss-blue
+            // or bark-green skin, slow and gentle; wet wood, leaf, lilac mist, rush, net twine and the will-o'-wisp. Etruscan
+            // names (Tarchon, the founder of Tarquinia; Ramtha, Larthia, Vel and Thanchvil from inscriptions and tombs). Trols are
+            // the tallest folk of the island: Height near the top of its range, no extra mesh.
+            // ------------------------------------------------------------------
+
+            // Tarchon, the founder (the city's missions): very old and very tall, stooped, long grey hair and a long beard, a
+            // wet-wood robe under a shawl of old fishing net, leaning on the lantern pole whose will-o'-wisp he caught himself.
+            new NpcRecipe
+            {
+                Id = "tarchon", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Slim, Height = 1.25f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinTrollMoss, Face = NpcFace.Calm, Hair = NpcHair.Long, HairColor = NpcSwatch.HairGrey, Beard = NpcBeard.Long,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.WetWood, Trim = NpcSwatch.Rush, Sleeves = NpcSwatch.WetWood, Boots = NpcSwatch.WetWood,
+                Layers = NpcLayer.Shawl, LayerColor = NpcSwatch.NetTwine, LayerTrim = NpcSwatch.LilacMist,
+                LeftArm = NpcArmPose.Hang, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.LanternPole },
+                Gesture = NpcGesture.Lean,
+                Story = "Tarchon, o fundador lendário de Tarquínia; aqui, o trol mais velho das palafitas, que dá as missões da cidade",
+            },
+
+            // Ramtha, the healer (healing and the guardian lamp): tall and slim, two leaf-green braids under a crown of lilac
+            // flowers with a wisp at the brow, a lilac-mist dress with a leaf sash, grinding moss in a mortar, a little lamp held up.
+            new NpcRecipe
+            {
+                Id = "ramtha", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 1.22f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinTrollMoss, Face = NpcFace.Kind, Hair = NpcHair.TwoBraids, HairColor = NpcSwatch.SwampLeaf,
+                Headwear = NpcHeadwear.FlowerCrown, HeadColor = NpcSwatch.LilacMist, HeadTrim = NpcSwatch.WillWisp,
+                Garment = NpcGarment.Dress, Main = NpcSwatch.LilacMist, Trim = NpcSwatch.SwampLeaf, Sleeves = NpcSwatch.LilacMist, Boots = NpcSwatch.WetWood,
+                Layers = NpcLayer.Sash, LayerColor = NpcSwatch.SwampLeaf, LayerTrim = NpcSwatch.WillWisp,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.MortarPestle, NpcProp.OilLamp },
+                Gesture = NpcGesture.Grind,
+                Story = "Nome etrusco de Tarquínia; aqui, a curandeira das palafitas, que guarda a Lâmpada Guardiã da cidade",
+            },
+
+            // Larthia, the basket weaver (the city's shop: baskets, bags and the gear of the gates 33–34): bark-green and broad
+            // for a trol, a bun under a rush headband, a rush tunic and a net-twine apron, a basket on the forearm and her purse.
+            new NpcRecipe
+            {
+                Id = "larthia", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Average, Height = 1.2f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinTrollBark, Face = NpcFace.Jolly, Hair = NpcHair.Bun, HairColor = NpcSwatch.HairDark,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.Rush, HeadTrim = NpcSwatch.LilacMist,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.Rush, Trim = NpcSwatch.WetWood, Sleeves = NpcSwatch.Rush, Trousers = NpcSwatch.WetWood, Boots = NpcSwatch.WetWood,
+                Layers = NpcLayer.Apron, LayerColor = NpcSwatch.NetTwine, LayerTrim = NpcSwatch.SwampLeaf,
+                LeftArm = NpcArmPose.Crook, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.HerbBasket, NpcProp.CoinPurse },
+                Gesture = NpcGesture.Count,
+                Story = "Nome etrusco de túmulo; aqui, a cesteira das palafitas: cestos, bolsas, barcos de junco e amuletos (a loja da cidade)",
+            },
+
+            // Vel, the fisher (the second mission): lanky, spiky moss hair under a cone hat of rush, a leaf tunic, belt and
+            // satchel, the coil of net on his shoulder. Carries it with a slow, steady bob.
+            new NpcRecipe
+            {
+                Id = "vel", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 1.25f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinTrollMoss, Face = NpcFace.Bright, Hair = NpcHair.Spiky, HairColor = NpcSwatch.SwampLeaf,
+                Headwear = NpcHeadwear.StrawCone, HeadColor = NpcSwatch.Rush, HeadTrim = NpcSwatch.NetTwine,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.SwampLeaf, Trim = NpcSwatch.Rush, Sleeves = NpcSwatch.SwampLeaf, Trousers = NpcSwatch.WetWood, Boots = NpcSwatch.WetWood,
+                Layers = NpcLayer.Belt | NpcLayer.Satchel, LayerColor = NpcSwatch.WetWood, LayerTrim = NpcSwatch.LilacMist,
+                LeftArm = NpcArmPose.Hang, RightArm = NpcArmPose.Carry, Props = new[] { NpcProp.RopeCoil },
+                Gesture = NpcGesture.Carry,
+                Story = "Nome etrusco de inscrição; aqui, o pescador de bagres das palafitas, que dá a 2ª missão",
+            },
+
+            // Thanchvil, the storyteller: old, bark-green, a long white braid under a lilac hood with a wisp, a wet-wood kaftan
+            // with lilac hems and a leaf scarf, a cup of lilac tea in one hand; the other arm tells the story.
+            new NpcRecipe
+            {
+                Id = "thanchvil", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 1.2f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinTrollBark, Face = NpcFace.Dreamy, Hair = NpcHair.Braid, HairColor = NpcSwatch.HairWhite,
+                Headwear = NpcHeadwear.Hood, HeadColor = NpcSwatch.LilacMist, HeadTrim = NpcSwatch.WillWisp,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.WetWood, Trim = NpcSwatch.LilacMist, Sleeves = NpcSwatch.WetWood, Boots = NpcSwatch.WetWood,
+                Layers = NpcLayer.Scarf, LayerColor = NpcSwatch.SwampLeaf, LayerTrim = NpcSwatch.Rush,
+                LeftArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.Cup },
+                Gesture = NpcGesture.Storytell,
+                Story = "Thanchvil Tarnai, nome etrusco de um túmulo de Cerveteri; aqui, a contadora de histórias dos trols apagados",
+            },
+
+            // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
 
