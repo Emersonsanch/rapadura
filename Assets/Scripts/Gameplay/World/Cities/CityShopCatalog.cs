@@ -195,9 +195,10 @@ namespace Rapadura.Gameplay.World.Cities
 
         /// <summary>
         /// Bazar de Pérolas da Mwana (Taa Pwani, the Costa das Monções, Docs/Mapas100.md região 5): pearls, sea gear and the
-        /// gear of every map gate of the region (Docs/MetodologiaMapasERacas.md §2.1): the Passagem de Dhow (25), the Relíquia
-        /// dos Artífices (27), the Concha Respirável (28), the Bolha de Ar (29) and the Botas de Raiz Viva (30). Aratta and
-        /// Kirta have no walkable town yet, so Mwana's dhows bring their gear to her counter.
+        /// gear of the gates whose way starts at Taa Pwani (Docs/MetodologiaMapasERacas.md §2.1): the Passagem de Dhow (25), the
+        /// Concha Respirável (28: Kirta stands on map 28, so the shell has to be bought before reaching it; Danel sells it too)
+        /// and the Botas de Raiz Viva (30). The Relíquia dos Artífices (27) is Lugalbanda's (Aratta) and the Bolha de Ar (29)
+        /// Danel's (Kirta) since those cities have a town.
         /// </summary>
         public const string BazarMwana = "shop_bazar_mwana";
 
@@ -221,6 +222,20 @@ namespace Rapadura.Gameplay.World.Cities
         /// Roda, whose return city is the Mercado). The counter turns daily.
         /// </summary>
         public const string FeiraMiwnay = "shop_feira_miwnay";
+
+        /// <summary>
+        /// Alforje do Lugalbanda (Aratta, the povo-touro's race city, Docs/Mapas100.md §3.3): the wanderer's saddlebag: rope,
+        /// waterskins, savanna food, and the Relíquia dos Artífices for the gate of map 27 (the Pirâmides de Meroé, whose
+        /// return city is Aratta). The counter turns daily.
+        /// </summary>
+        public const string AlforjeLugalbanda = "shop_alforje_lugalbanda";
+
+        /// <summary>
+        /// Ferramentas de Mergulho do Danel (Kirta, the povo-do-mar's race city, Docs/Mapas100.md §3.3): diving tools: the
+        /// Concha Respirável (gate of map 28) and the Bolha de Ar Engarrafada (gate of map 29, Kilwa Afundada, whose return city
+        /// is Kirta), sea potions and the reef's catch. The counter turns daily.
+        /// </summary>
+        public const string MergulhoDanel = "shop_mergulho_danel";
 
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
@@ -342,16 +357,14 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_amuleto_sorte", 24, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
             })),
 
-            // ---- Taa Pwani: Mwana's pearl bazaar, with the gear of every gate of the Costa das Monções; the counter turns daily ----
+            // ---- Taa Pwani: Mwana's pearl bazaar, with the gear of the gates 25, 28 and 30; the counter turns daily ----
             new CityShopSpec(BazarMwana, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(BazarMwana, new List<CityShopEntry>
             {
                 new CityShopEntry("item_health_potion", 14, 6),
-                // Map gates (MapRequirementRules): the dhow out to the reef (25), the Artificers' relic (27), the breathing shell
-                // (28), the bottled air bubble (29) and the living-root boots (30).
+                // Map gates (MapRequirementRules): the dhow out to the reef (25), the breathing shell (28: Kirta itself stands on
+                // that map) and the living-root boots (30). The relic of 27 is Lugalbanda's (Aratta), the air bubble of 29 Danel's (Kirta).
                 new CityShopEntry("item_passagem_dhow", 300, 3),
-                new CityShopEntry("item_reliquia_artifices", 400, 1),
                 new CityShopEntry("item_concha_respiravel", 450, 2),
-                new CityShopEntry("item_bolha_ar", 500, 2),
                 new CityShopEntry("item_botas_raiz", 520, 1),
                 // The rotation: mist potions, salt-dried meat, mount feed, rope fibre and timber off the dhows, lucky charms.
                 new CityShopEntry("item_mana_potion", 14, 4, rotating: true),
@@ -426,6 +439,41 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_amuleto_sorte", 24, 1, rotating: true),
                 new CityShopEntry("item_pickaxe", 18, 1, rotating: true),
                 new CityShopEntry("item_lamparina_runica", 155, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Caves)),
+            })),
+
+            // ---- Aratta: the Alforje do Lugalbanda (rope, waterskins, savanna food), the Artífices' relic of map 27; daily ----
+            new CityShopSpec(AlforjeLugalbanda, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(AlforjeLugalbanda, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 14, 6),
+                new CityShopEntry("item_odre_agua", 30, 3),
+                // Map gate (MapRequirementRules): the Relíquia dos Artífices for the Pirâmides de Meroé (27), whose return city this is.
+                new CityShopEntry("item_reliquia_artifices", 400, 1),
+                // The rotation: what Lugalbanda brought back from his wanderings, and the herders' own trade.
+                new CityShopEntry("item_corda_escalada", 36, 2, rotating: true),
+                new CityShopEntry("item_mana_potion", 14, 4, rotating: true),
+                new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
+                new CityShopEntry("item_mount_feed", 3, 12, rotating: true),
+                new CityShopEntry("item_leather_boots", 12, 1, rotating: true),
+                new CityShopEntry("item_fiber", 1, 20, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 24, 1, rotating: true),
+            })),
+
+            // ---- Kirta: Danel's diving tools, the breathing shell of 28 and the air bubble of 29; daily ----
+            new CityShopSpec(MergulhoDanel, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(MergulhoDanel, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 14, 6),
+                // Map gates (MapRequirementRules): the Concha Respirável (28, Kirta's own map; Mwana sells it too, for the way in)
+                // and the Bolha de Ar Engarrafada for Kilwa Afundada (29), whose return city this is.
+                new CityShopEntry("item_concha_respiravel", 450, 2),
+                new CityShopEntry("item_bolha_ar", 500, 2),
+                // The rotation: what the reef gives back as the coral is relit.
+                new CityShopEntry("item_fish_peixe_dourado", 60, 3, rotating: true),
+                new CityShopEntry("item_fiber", 1, 20, rotating: true),
+                new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 24, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+                new CityShopEntry("item_hunting_bow", 34, 1, rotating: true),
             })),
 
             // ---- Ferraria do Mestre Adamas (Vila): the village blacksmith ----

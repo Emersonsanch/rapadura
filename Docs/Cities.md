@@ -27,6 +27,8 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
 | Areias Flamejantes (mapas 11 e 12) | **Tambor Rubro** (orcs, `tambor_rubro`) | Gurparanzah, a Chefe-Arqueira (Salão Grande na cabeça da praça), Ashmunikal, a Matriarca dos Tambores (rua Leste, torre do tambor atrás), Kessi, o Caçador (rua Leste), Appu, o Mercador Gentil (rua Sul), Tushratta, o Ferreiro do Tambor (rua Oeste) | **Forja de Tambor** (`shop_forja_tambor`) | Gurparanzah: "Caudas Vermelhas na Mesa"; Kessi: "Gaviões de Brasa" |
 | Serra de Kaggen (mapas 17 e 18) | **Salões de Bronze de Napirasu** (anões, `saloes_de_bronze`) | Napirasu, a Mestra Fundidora (salão da forja na cabeça da praça), Untash, o Mestre de Obras (rua Leste), Kidin, o Cozinheiro do Salão (rua Leste, no portão), Puzur, o Guardião das Runas (rua Oeste), Shilhak, o Minerador (rua Sul) | **Portões de Runa do Puzur** (`shop_portoes_runa`) | Untash: "Escória na Escada"; Shilhak: "Morcegos no Veio" |
 | Grutas do Limiar (mapas 22 e 23) | **Mercado dos Túneis** (kobolds, `mercado_dos_tuneis`) | Miwnay, a Mestra da Feira (galeria Oeste), Takhsich, o Inventor (galeria Norte), Shayn, a Consertadora (galeria Leste), Farnkhund, o Vagoneiro (galeria Sul) | **Feira da Miwnay** (`shop_feira_miwnay`) | Takhsich: "Teia nos Tubos"; Farnkhund: "Pedras nos Trilhos" |
+| Costa das Monções (mapas 26 e 27) | **Aratta, a Cidade dos Chifres** (povo-touro, `aratta`) | Enmerkar, o Chefe Construtor (salão de junco na cabeça da praça), Lugalbanda, o Andarilho (rua Oeste), Shulgi, o Corredor (rua Leste), Ensuhkeshdanna, o Rival Amigo (rua Sul) | **Alforje do Lugalbanda** (`shop_alforje_lugalbanda`) | Enmerkar: "Chacais no Capim Seco"; Shulgi: "O Percurso de Shulgi" |
+| Costa das Monções (mapas 28 e 29) | **Cidade-Recife de Kirta** (povo-do-mar, `kirta`) | Kirta, o Rei do Recife (rua Norte), Danel, o Juiz Justo (rua Oeste), Pughat, a Que Cuida de Todos (rua Leste), Aqhat, o Arqueiro (rua Leste) | **Ferramentas de Mergulho do Danel** (`shop_mergulho_danel`) | Kirta: "Lodo no Recife"; Pughat: "Os Mergulhadores Encurralados" |
 
 - **Passeio da cidade:** a mesma receita `CityTownRecipes.Garajonay` do mapa 05 e do mundo contínuo (mesmo `CityId`,
   mesma geometria; os moradores só ganharam `ResidentId` nos lotes que já existiam). Problema herdado da receita (não
@@ -135,6 +137,63 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
   Pedra; 4 poções de mana + Lamparina + 65 ouro, 760 XP); depois Farnkhund pede 4 golens fora dos trilhos (o Ushabti
   de Pedra faz a Toupeira-Gigante; Óleo do Fogo Eterno + 70 ouro, 840 XP). Testes: `CityTunnelMarketTests`.
 
+As duas cidades de raça da Costa das Monções (região 5) não têm bioma no mapa-múndi: o `CitySpec.Region` é emprestado
+(Floresta, sempre desbloqueada), como o de Taa Pwani, e por isso o `ApplyDefeatIn` sempre acorda na praça delas. Cada uma
+fica em y = 0 dentro de um círculo de ~22 m com 3 saídas de rua, no lugar que o mundo contínuo da região 5 reserva.
+
+**Aratta, a Cidade dos Chifres** (povo-touro, mapa 26; cidade de retorno de 26–27):
+- **Passeio da cidade:** receita `CityTownRecipes.Aratta` (`CityTownRecipes.Aratta.cs`) no estilo novo
+  `TownStyles.ReedHorn` (`TownArchitecture.ReedHorn`, linha 10 da `TownPalette`: junco `#C8B27A`, esteira `#A88B55`, capim
+  dourado `#D9B44A`, fita azul `#3F7CC0`, mais o barro vermelho que já existia). Cada casa é um **salão de junco**
+  (mudhif dos pântanos da Mesopotâmia; `TownBuildingSpec.ReedHall`: `TownKit.ReedHallHouse`): plataforma de barro
+  vermelho, abóbada de esteira sobre arcos de feixe de junco a cada ~0,9 m, frente de treliça de junco com a porta alta
+  em arco, duas colunas grossas de feixe com a ponta enrolada e fitas, um par de chifres sobre a porta e dois toldos de
+  esteira em varas de junco (nos `PorchPostsX`) que deixam o vão da porta livre. Peças: `HornPost` (poste de chifre com
+  fitas azuis: marco de caminho, não objeto de culto), `StoneKraal` (cercado redondo de pedra seca aberto para a frente,
+  com cocho e manjedoura), `BullLyre` (a **Lira do Touro** na praça: caixa escura com ouro, cabeça de touro de ouro com
+  barba azul-lápis), `Acacia` (acácia de copa chata); portão de feixes com chifres e cordão de fitas nas saídas
+  (`TownKit.ReedGate`); vitrine do andarilho (`TownShopDressing.Wanderer`: esteira, mapas enrolados, corda, cajado, a
+  relíquia). Fogo baixo do Fogo Vivo na praça (`Bonfire`), baobá atrás do salão do Enmerkar. Peças em
+  `TownKit.ReedHorn.cs`, colisores em `CitySolids`. Ruas Oeste, Leste e Sul de 20 m (saídas em (±20, 0) e (0, −20), alvo
+  de chegada a 19,6 m); os postes de chifre da rua Sul marcam a largada da Corrida de Shulgi; tudo (colisores, lotes e os
+  mourões do portão) dentro de um círculo de 22 m, caminhada em ±22; `CityLayoutRules.Validate` sem problemas, com e sem
+  o mascate.
+- **Respawn:** derrota nos mapas 26 e 27 acorda na praça de Aratta (`MapCatalog.RespawnCityFor` → `ApplyDefeatIn`).
+- **Alforje do Lugalbanda** (diário, 3 vagas que giram, tema Especialidade): poção de vida, Odre de Água e a **Relíquia dos
+  Artífices** (exigência do 27, Pirâmides de Meroé) fixos; giram corda de escalada, poção de mana, carne, ração de
+  montaria, botas de couro, fibra e Amuleto da Sorte. O Ammo nunca para lá. (A Lira do Touro com a canção do dia, as
+  Fitas de Corrida e o Auroque de Aratta ainda faltam.)
+- **Missões da cidade:** Enmerkar pede 6 chacais no capim seco (o Chacal Apagado faz o Leão do Capim Apagado; 4 poções
+  de vida + 3 de mana + 75 ouro, 900 XP); depois Shulgi pede 5 babuínos fora do percurso da corrida (Babuíno Apagado;
+  2 Odres de Água + 90 ouro, 980 XP). Testes: `CityArattaTests`.
+
+**Cidade-Recife de Kirta** (povo-do-mar, mapa 28; cidade de retorno de 28–29):
+- **Passeio da cidade:** receita `CityTownRecipes.Kirta` (`CityTownRecipes.Kirta.cs`) no estilo novo `TownStyles.CoralReef`
+  (`TownArchitecture.CoralReef`, linha 10 da `TownPalette`: coral vivo `#E8836B` (brilha um pouco à noite), turquesa do
+  recife `#2FB3B3`, alga `#3E7D57`, coral apagado `#9A9590`, mais madrepérola e areia): a parte seca do atol. Cada casa é
+  uma **torre de coral** (`TownBuildingSpec.ReefTower`: `TownKit.ReefTowerHouse`): anexo baixo de coral na frente toda,
+  apagado e com cracas abaixo da antiga linha d'água e vivo acima, porta de cabeça redonda com aduelas de concha, janelas
+  redondas; a torre redonda sobe atrás até a **cúpula de madrepérola**; alga no pé e **toldo de vieira** (costelas de
+  madrepérola e coral) sobre o deque, em postes de madrepérola (nos `PorchPostsX`). Peças: `CoralMother` (o
+  **coral-mãe** na poça da praça: metade oeste cinza do Lodo, metade leste reacesa), `CoralSpire` (torre de coral solta),
+  `KelpGarden` (jardim de alga num anel de conchas), `ShellBridge` (água do recife atravessando a rua com uma ponte de
+  concha no meio; pisável) e `ReefEdge` (borda do recife de segmento: aro de coral apagado com a água funda do abismo
+  atrás); portão de pilares de coral com arco de conchas (`TownKit.CoralGate`); vitrine de mergulho do Danel
+  (`TownShopDressing.DivingGear`). Peças em `TownKit.CoralReef.cs`, colisores em `CitySolids`. Ruas Oeste, Leste e Norte
+  de 19 m (saídas em (±19, 0) e (0, 19), alvo de chegada a 18,6 m; a Norte vai aos jardins de alga da ficha); **sem rua
+  ao sul**: ali a borda do recife desce em três degraus (z = −19 e −16) para o abismo; tudo dentro de um círculo de
+  22,5 m, caminhada em ±22; `CityLayoutRules.Validate` sem problemas, com e sem o mascate.
+- **Respawn:** derrota nos mapas 28 e 29 acorda na praça de Kirta (`MapCatalog.RespawnCityFor` → `ApplyDefeatIn`); 30
+  segue acordando em Taa Pwani.
+- **Ferramentas de Mergulho do Danel** (diária, 3 vagas que giram, tema Especialidade): poções de vida e mana, a **Concha
+  Respirável** (exigência do 28) e a **Bolha de Ar Engarrafada** (exigência do 29, Kilwa Afundada) fixas; giram peixe
+  dourado, fibra, carne, Amuleto da Sorte, Pedra da Bênção e arco de caça. Como Kirta fica no próprio mapa 28, a Concha
+  continua também no Bazar da Mwana (Taa Pwani) para a ida. O Ammo nunca para lá. (O Apito de Concha das montarias
+  aquáticas, andar no fundo e reacender o coral por faísca ainda faltam.)
+- **Missões da cidade:** o rei Kirta pede 6 bolotas de lodo no recife (o Lodo de Gruta faz a Água-Viva de Lodo; 4 poções
+  de vida + 4 de mana + 90 ouro, 1040 XP); depois Pughat pede 5 peixes-lanterna longe da gruta dos mergulhadores (o
+  Peixe-Lanterna faz o Peixe-Leão Apagado; **Bolha de Ar** + 100 ouro, 1120 XP). Testes: `CityKirtaTests`.
+
 ### 1.2 Cidades das regiões tardias (`CityCatalog.LateRegionCities`)
 
 Cidades das regiões 5–8 (Docs/Mapas100.md), que ainda não têm bioma no mapa-múndi. Ficam fora de `Cities` (sem painel
@@ -156,15 +215,16 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
   de lanternas nas ruas; Cais da Barca na rua Oeste. Peças em `TownKit.Coast.cs`, colisores em `CitySolids`.
   `CityLayoutRules.Validate` sem problemas.
 - **Respawn:** derrota nos mapas 25 e 30 acorda na praça de Taa Pwani (`MapCatalog.RespawnCityFor` → `ApplyDefeatIn`).
-- **Bazar de Pérolas da Mwana** (diário, 3 vagas que giram): poção de vida e **todas as exigências da região**, fixas
-  desde o primeiro dia: Passagem de Dhow (25), Relíquia dos Artífices (27), Concha Respirável (28), Bolha de Ar (29) e
-  Botas de Raiz Viva (30) (Aratta e Kirta ainda não têm cidade, então os dhows da Mwana trazem o equipamento delas);
-  giram poção de mana, carne, ração de montaria, fibra, madeira e Amuleto da Sorte. O Ammo nunca para lá.
+- **Bazar de Pérolas da Mwana** (diário, 3 vagas que giram): poção de vida e as exigências do caminho que sai de Taa
+  Pwani, fixas desde o primeiro dia: Passagem de Dhow (25), Concha Respirável (28: Kirta fica no próprio 28, então a
+  concha se compra antes) e Botas de Raiz Viva (30). A Relíquia dos Artífices (27) passou para o Alforje do Lugalbanda
+  (Aratta) e a Bolha de Ar (29) para as Ferramentas de Mergulho do Danel (Kirta); giram poção de mana, carne, ração de
+  montaria, fibra, madeira e Amuleto da Sorte. O Ammo nunca para lá.
 - **Missões da cidade:** Liyongo pede 6 Gaivotas Ladras (`enemy_forest_thief_gull`; 4 poções de vida + 3 de mana +
   60 ouro, 700 XP); depois Zawadi pede 5 Caranguejos Gigantes (`enemy_forest_coconut_crab`; Botas de
   Raiz Viva + 80 ouro, 820 XP). Testes: `CityTaaPwaniTests`.
-- **Falta:** o mapa 25 ainda não é jogável, então o passeio só abre pelo menu de prévia do editor até o mapa existir; a
-  segunda cidade da região (Aratta, mapa 26) e Kirta (28) ficam para depois.
+- **Falta:** o mapa 25 ainda não é jogável, então o passeio só abre pelo menu de prévia do editor até o mapa existir. As
+  outras cidades da região, Aratta (26) e Kirta (28), estão em §1.1 (cidades de raça).
 
 Código: `CityCatalog`, `CityShopCatalog` (dados), `CityTexts` (textos en/pt-BR), `VillageHubButton` (o mesmo painel
 para toda cidade), `CityFastTravelPanel` (Barcas de Luz), `CitySafeZoneHud` (aviso), `WorldMapCityPresence` (zona

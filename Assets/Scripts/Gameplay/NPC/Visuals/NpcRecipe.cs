@@ -223,6 +223,18 @@ namespace Rapadura.Gameplay.NPC.Visuals
         /// <summary>A short rounded muzzle with two nostrils over the mouth (the kobolds of the Mercado dos Túneis, Docs/Mapas100.md §3.3).</summary>
         public bool Snout;
 
+        /// <summary>
+        /// The povo-touro of Aratta (Docs/Mapas100.md §3.3): wide aurochs horns curving out and up from the crown, cow ears
+        /// sideways, a broad muzzle with a dark nose pad and a brass ring.
+        /// </summary>
+        public bool Horns;
+
+        /// <summary>
+        /// The povo-do-mar of Kirta (Docs/Mapas100.md §3.3): fins in place of the ears, a fin crest over the head when it is
+        /// bare, gill slits on the cheeks.
+        /// </summary>
+        public bool Gills;
+
         /// <summary>One line of why they look like this (Docs/NPCs.md, the preview labels).</summary>
         public string Story = string.Empty;
 
@@ -232,6 +244,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
 
         /// <summary>A short signature of the silhouette (tests: two named NPCs never share one).</summary>
         public string SilhouetteKey =>
-            $"{Age}/{Build}/{Posture}/{Hair}/{Beard}/{Headwear}/{Garment}/{(int)Layers}/{LeftArm}/{RightArm}/{string.Join(",", Props)}" + (ElfEars ? "/elf" : string.Empty) + (Tusks ? "/orc" : string.Empty) + (Snout ? "/kobold" : string.Empty);
+            $"{Age}/{Build}/{Posture}/{Hair}/{Beard}/{Headwear}/{Garment}/{(int)Layers}/{LeftArm}/{RightArm}/{string.Join(",", Props)}" + (ElfEars ? "/elf" : string.Empty) + (Tusks ? "/orc" : string.Empty) + (Snout ? "/kobold" : string.Empty)
+            + (Horns ? "/bull" : string.Empty) + (Gills ? "/reef" : string.Empty);
     }
 }

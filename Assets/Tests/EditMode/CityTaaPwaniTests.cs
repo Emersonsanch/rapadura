@@ -20,8 +20,8 @@ namespace Rapadura.Tests
     /// <summary>
     /// Taa Pwani as a walkable late-region city (Docs/Cities.md, Docs/Mapas100.md 25): its <see cref="CitySpec"/> outside the
     /// one-hub-per-region list, the five Swahili sailors and merchants of the ficha at their doors with their own look, the
-    /// coral-stone style, Mwana's counter with the gear of every gate of maps 25–30, the two city quests and the respawn of
-    /// its maps (25 and 30).
+    /// coral-stone style, Mwana's counter with the gear of the gates whose way starts at Taa Pwani (25, 28, 30; the relic of 27
+    /// is sold in Aratta and the air bubble of 29 in Kirta), the two city quests and the respawn of its maps (25 and 30).
     /// </summary>
     public class CityTaaPwaniTests
     {
@@ -32,6 +32,16 @@ namespace Rapadura.Tests
         {
             MapRequirementItems.DhowPassage, MapRequirementItems.ArtificerRelic, MapRequirementItems.BreathingShell,
             MapRequirementItems.AirBubble, MapRequirementItems.RootBoots,
+        };
+
+        /// <summary>
+        /// The gates on Mwana's counter: the dhow out (25), the breathing shell (28: Kirta stands on that map, so the shell must
+        /// be bought before reaching it) and the root boots (30). The relic (27) is Lugalbanda's in Aratta, the air bubble (29)
+        /// Danel's in Kirta.
+        /// </summary>
+        private static readonly string[] MwanaGates =
+        {
+            MapRequirementItems.DhowPassage, MapRequirementItems.BreathingShell, MapRequirementItems.RootBoots,
         };
 
         [TearDown]
@@ -182,18 +192,27 @@ namespace Rapadura.Tests
         // ------------------------------------------------------------------
 
         [Test]
-        public void MwanasShop_SellsTheGearOfEveryGateOfMaps25To30_AndItsCounterTurnsDaily()
+        public void MwanasShop_SellsTheGearOfTheGatesFromTaaPwani_TheRegionsCitiesSellTheRest_AndItsCounterTurnsDaily()
         {
             CityShopSpec shop = CityShopCatalog.Get(CityShopCatalog.BazarMwana);
             Assert.IsNotNull(shop);
             Assert.AreEqual(BiomeType.Forest, shop.HomeRegion);
             Assert.AreEqual(ShopRotationPeriod.Daily, shop.Period);
 
-            // Every gate of the Costa das Monções (MapCatalog 25–30) is on Mwana's counter, always, from day one.
+            // Every gate of the Costa das Monções (MapCatalog 25–30) is on a counter of the region, always, from day one:
+            // Mwana's for the way out of Taa Pwani, Lugalbanda's (Aratta) and Danel's (Kirta) for their own maps.
             List<string> gates = MapCatalog.Maps.Where(m => m.MapId >= 25 && m.MapId <= 30)
                 .Select(m => MapRequirementRules.PrimaryItemOf(m.SpecialRequirementTag)).Where(id => !string.IsNullOrEmpty(id)).Distinct().ToList();
             CollectionAssert.AreEquivalent(RegionGates, gates, "the gates of the region (Docs/MetodologiaMapasERacas.md §2.1)");
+            var regionShops = new[] { CityShopCatalog.BazarMwana, CityShopCatalog.AlforjeLugalbanda, CityShopCatalog.MergulhoDanel };
             foreach (string itemId in RegionGates)
+            {
+                Assert.IsTrue(regionShops.Any(s => CityShopCatalog.EntryOf(s, itemId) != null && !CityShopCatalog.EntryOf(s, itemId).Rotating), $"{itemId} has a counter in the region");
+            }
+
+            Assert.IsNull(CityShopCatalog.EntryOf(shop.ShopId, MapRequirementItems.ArtificerRelic), "the relic moved to Lugalbanda's (Aratta)");
+            Assert.IsNull(CityShopCatalog.EntryOf(shop.ShopId, MapRequirementItems.AirBubble), "the air bubble moved to Danel's (Kirta)");
+            foreach (string itemId in MwanaGates)
             {
                 CityShopEntry entry = CityShopCatalog.EntryOf(shop.ShopId, itemId);
                 Assert.IsNotNull(entry, $"Mwana sells {itemId}");
@@ -217,7 +236,7 @@ namespace Rapadura.Tests
             {
                 List<string> today = ShopRotation.PickStock(shop, day + d, null).Select(e => e.ItemId).ToList();
                 CollectionAssert.AreEqual(today, ShopRotation.PickStock(shop, day + d, null).Select(e => e.ItemId).ToList(), "same day, same counter");
-                foreach (string itemId in RegionGates)
+                foreach (string itemId in MwanaGates)
                 {
                     Assert.Contains(itemId, today);
                 }

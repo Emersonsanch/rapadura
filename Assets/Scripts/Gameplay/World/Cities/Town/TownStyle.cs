@@ -50,6 +50,17 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// arches with canvas awnings, mine-cart rails, pulleys, copper air pipes with fans inside, bottle-glass lanterns.
         /// </summary>
         TunnelBazaar = 7,
+        /// <summary>
+        /// Aratta, the city of the horns (the povo-touro, Docs/Mapas100.md §3.3): great halls of reed bound in arches (the
+        /// mudhif of the Mesopotamian marshes) covered in mats, round dry-stone enclosures, horn posts with ribbons as
+        /// way-markers, the bull-headed lyre on the plaza.
+        /// </summary>
+        ReedHorn = 8,
+        /// <summary>
+        /// Kirta, the reef city (the povo-do-mar, Docs/Mapas100.md §3.3): round coral towers with round windows over a drowned
+        /// base, mother-of-pearl domes, shell bridges, kelp gardens and the mother coral, half of it dimmed by the Lodo.
+        /// </summary>
+        CoralReef = 9,
     }
 
     /// <summary>
@@ -294,6 +305,51 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Plaza = TownSwatch.Cobble, PlazaAlt = TownSwatch.Basalt,
             Fence = TownSwatch.Basalt, Plinth = TownSwatch.Basalt,
             HouseRoof = TownRoofKind.Rock,
+        };
+    
+        /// <summary>
+        /// Aratta, the city of the horns (Docs/Mapas100.md §3.3, map 26): picked by hand like <see cref="Coast"/>. Bound reed
+        /// #C8B27A, reed mat #A88B55, red clay #9C4A2F, golden grass #D9B44A, ribbon blue #3F7CC0 (row 10 of
+        /// <see cref="TownPalette"/>). Houses are reed halls (<see cref="TownBuildingSpec.ReedHall"/>). The Costa das Monções has no
+        /// world-map biome: <see cref="TownStyle.Region"/> is the borrowed Forest (as Taa Pwani); acacias and baobabs in the yards.
+        /// </summary>
+        public static readonly TownStyle ReedHorn = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Coast,
+            Architecture = TownArchitecture.ReedHorn,
+            Walls = new[] { TownSwatch.Reed, TownSwatch.Reed, TownSwatch.ReedMat },
+            Trims = new[] { TownSwatch.RedClay, TownSwatch.Ribbon },
+            Roofs = new[] { TownSwatch.ReedMat, TownSwatch.Reed },
+            Joinery = new[] { TownSwatch.Reed, TownSwatch.WoodDark },
+            Accent = TownSwatch.Ribbon,
+            Ground = TownSwatch.GoldGrass, GroundAlt = TownSwatch.Thatch,
+            Street = TownSwatch.RedClay, StreetEdge = TownSwatch.Reed, Sidewalk = TownSwatch.SandDark,
+            Plaza = TownSwatch.Sand, PlazaAlt = TownSwatch.RedClay,
+            Fence = TownSwatch.Stone, Plinth = TownSwatch.RedClay,
+            HouseRoof = TownRoofKind.Gable,
+        };
+
+        /// <summary>
+        /// Kirta, the reef city on its atoll (Docs/Mapas100.md §3.3, map 28): picked by hand. Live coral #E8836B, mother-of-pearl
+        /// (pearl), reef turquoise #2FB3B3, kelp #3E7D57, sand #E9D3A2, dimmed coral #9A9590 (row 10 of <see cref="TownPalette"/>).
+        /// Houses are coral towers (<see cref="TownBuildingSpec.ReefTower"/>). Region: the borrowed Forest (as Taa Pwani).
+        /// </summary>
+        public static readonly TownStyle CoralReef = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Coast,
+            Architecture = TownArchitecture.CoralReef,
+            Walls = new[] { TownSwatch.CoralLive, TownSwatch.CoralLive, TownSwatch.CoralDim },
+            Trims = new[] { TownSwatch.ReefTeal, TownSwatch.Pearl },
+            Roofs = new[] { TownSwatch.Pearl },
+            Joinery = new[] { TownSwatch.Kelp, TownSwatch.Teak },
+            Accent = TownSwatch.ReefTeal,
+            Ground = TownSwatch.Sand, GroundAlt = TownSwatch.SandDark,
+            Street = TownSwatch.Pearl, StreetEdge = TownSwatch.ReefTeal, Sidewalk = TownSwatch.Sand,
+            Plaza = TownSwatch.Pearl, PlazaAlt = TownSwatch.ReefTeal,
+            Fence = TownSwatch.CoralDim, Plinth = TownSwatch.CoralDim,
+            HouseRoof = TownRoofKind.Dome,
         };
     }
 }

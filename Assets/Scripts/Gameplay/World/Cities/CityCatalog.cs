@@ -116,6 +116,18 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string MercadoDosTuneis = "mercado_dos_tuneis";
 
+        /// <summary>
+        /// Aratta, the Cidade dos Chifres, race city of the povo-touro (map 26, return city of maps 26–27, Docs/Mapas100.md §3.3).
+        /// Same id as <c>MapCatalog.Aratta</c> and <c>CityTownRecipes.ArattaCityId</c>.
+        /// </summary>
+        public const string Aratta = "aratta";
+
+        /// <summary>
+        /// Kirta, the Cidade-Recife, race city of the povo-do-mar (map 28, return city of maps 28–29, Docs/Mapas100.md §3.3). Same
+        /// id as <c>MapCatalog.Kirta</c> and <c>CityTownRecipes.KirtaCityId</c>.
+        /// </summary>
+        public const string Kirta = "kirta";
+
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
             new CitySpec(VilaZefa, BiomeType.Forest,
@@ -237,6 +249,33 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("takhsich"),
                 },
                 new List<string> { CityShopCatalog.FeiraMiwnay }),
+
+            // Aratta (povo-touro, Sumerian names from the epics of Enmerkar and Lugalbanda and the Hymn of Shulgi): Enmerkar the
+            // chief builder (missions), Lugalbanda the wanderer (the city's shop: the Alforje do Lugalbanda, with the Artífices'
+            // relic of map 27), Shulgi the runner (second mission), Ensuhkeshdanna the rival who became a friend. The Costa das
+            // Monções has no world-map biome: the region is the borrowed Forest (always unlocked), as for Taa Pwani.
+            new CitySpec(Aratta, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("enmerkar"),
+                    new CityResidentSpec("lugalbanda", CityShopCatalog.AlforjeLugalbanda),
+                    new CityResidentSpec("shulgi"),
+                    new CityResidentSpec("ensuhkeshdanna"),
+                },
+                new List<string> { CityShopCatalog.AlforjeLugalbanda }),
+
+            // Kirta (povo-do-mar, Ugaritic names from the epics of Kirta and Aqhat): Kirta the king (missions), Pughat who looks
+            // after everyone (second mission, rescues), Danel the just judge (the city's shop: the diving tools, with the breathing
+            // shell of map 28 and the air bubble of map 29), Aqhat the archer (trainer). Region: the borrowed Forest.
+            new CitySpec(Kirta, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("kirta"),
+                    new CityResidentSpec("pughat"),
+                    new CityResidentSpec("danel", CityShopCatalog.MergulhoDanel),
+                    new CityResidentSpec("aqhat"),
+                },
+                new List<string> { CityShopCatalog.MergulhoDanel }),
         };
 
         /// <summary>

@@ -41,6 +41,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // smooth kobold scales, bright bronze #B07A3B, green copper #5E9C8A, rune light #FFE08A (glows), cold ember #8C3B2E,
         // bottle-glass green #7FBF8F and the bottled Ar Sereno #C9B8F0 (both glow a little)
         SkinKoboldRust, SkinKoboldSlate, BronzeBright, Verdigris, RuneGold, ColdEmber, GlassGreen, SereneAir,
+        // Aratta (povo-touro) and Kirta (povo-do-mar), Docs/Mapas100.md §3.3: dark-brown and tawny aurochs coats, horn ivory,
+        // bound reed #C8B27A, the ribbon blue #3F7CC0; turquoise and mother-of-pearl sea-folk skin, live coral #E8836B (glows a little)
+        SkinAurochs, SkinAurochsTawny, Horn, Reed, Ribbon, SkinReef, SkinNacre, CoralLive,
     }
 
     /// <summary>
@@ -52,7 +55,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 13;
+        public const int Rows = 14;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -96,6 +99,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Salões / Mercado  kobold rust #B0663A, kobold slate #5F7480, bronze #B07A3B, green copper #5E9C8A, rune #FFE08A, cold ember #8C3B2E, glass #7FBF8F, air #C9B8F0
             new Color(0.69f, 0.4f, 0.23f), new Color(0.37f, 0.45f, 0.5f), new Color(0.69f, 0.48f, 0.23f), new Color(0.37f, 0.61f, 0.54f),
             new Color(1f, 0.88f, 0.54f), new Color(0.55f, 0.23f, 0.18f), new Color(0.5f, 0.75f, 0.56f), new Color(0.79f, 0.72f, 0.94f),
+            // Aratta / Kirta  aurochs #4A3022, tawny #8A5A34, horn #E2D3B0, reed #C8B27A, ribbon #3F7CC0, reef skin #7FC6C0, nacre skin #E3D6C4, coral #E8836B
+            new Color(0.29f, 0.19f, 0.13f), new Color(0.54f, 0.35f, 0.2f), new Color(0.89f, 0.83f, 0.69f), new Color(0.78f, 0.7f, 0.48f),
+            new Color(0.25f, 0.49f, 0.75f), new Color(0.5f, 0.78f, 0.75f), new Color(0.89f, 0.84f, 0.77f), new Color(0.91f, 0.51f, 0.42f),
         };
 
         public static int Count => Colors.Length;
@@ -113,6 +119,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 case NpcSwatch.RuneGold: return 0.8f;
                 case NpcSwatch.GlassGreen: return 0.4f;
                 case NpcSwatch.SereneAir: return 0.45f;
+                case NpcSwatch.CoralLive: return 0.3f;
                 default: return 0f;
             }
         }

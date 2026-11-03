@@ -40,6 +40,12 @@ namespace Rapadura.Editor
         [MenuItem(Root + "Preview Walkable Town/Mercado dos Túneis (kobolds, Grutas do Limiar)", priority = 17)]
         private static void PreviewTunnelMarket() => Preview(CityCatalog.MercadoDosTuneis);
 
+        [MenuItem(Root + "Preview Walkable Town/Aratta (povo-touro, Costa das Monções)", priority = 18)]
+        private static void PreviewAratta() => Preview(CityCatalog.Aratta);
+
+        [MenuItem(Root + "Preview Walkable Town/Kirta (povo-do-mar, Costa das Monções)", priority = 19)]
+        private static void PreviewKirta() => Preview(CityCatalog.Kirta);
+
         [MenuItem(Root + "Preview Walkable Town/Toggle Night", priority = 30)]
         private static void ToggleNight()
         {

@@ -63,6 +63,10 @@ namespace Rapadura.Gameplay.World.Cities
     /// takes them into his seam after the ember bats and pays with the Chá de Gengibre (the gate of map 18).
     /// Mercado dos Túneis (map 22): Takhsich asks them to clear the webs choking his air pipes, then Farnkhund wants the stone
     /// golems off his rails and pays with the Óleo do Fogo Eterno (the gate of map 23).
+    /// Aratta (map 26): Enmerkar sends the cousins after the jackals that hunt the herds in the dry grass, then Shulgi wants the
+    /// baboons off his race course and pays with waterskins for the long run.
+    /// Kirta (map 28): King Kirta asks them to scrape the Lodo's ooze off the reef, then Pughat takes them to rescue the divers
+    /// cornered by the dimmed lantern fish and pays with a Bolha de Ar Engarrafada (the gate of map 29).
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -76,6 +80,10 @@ namespace Rapadura.Gameplay.World.Cities
         public const string SaloesBats = "quest_city_saloes_de_bronze_ember_bats";
         public const string MercadoWebs = "quest_city_mercado_dos_tuneis_webbed_pipes";
         public const string MercadoRails = "quest_city_mercado_dos_tuneis_stones_on_the_rails";
+        public const string ArattaJackals = "quest_city_aratta_grass_jackals";
+        public const string ArattaRace = "quest_city_aratta_shulgi_course";
+        public const string KirtaOoze = "quest_city_kirta_reef_ooze";
+        public const string KirtaRescue = "quest_city_kirta_divers_rescue";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -123,6 +131,24 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.MercadoDosTuneis, "farnkhund", new RegionQuestSpec(MercadoRails, BiomeType.Caves, MercadoWebs, 840,
                 new[] { new RegionObjectiveSpec("clear_the_rails", QuestObjectiveType.KillEnemyType, "enemy_mountain_stone_golem", 4) },
                 new[] { new RegionRewardSpec("item_oleo_fogo_eterno", 1), new RegionRewardSpec("item_gold", 70) })),
+
+            // -- Aratta: Enmerkar, the chief builder, then Shulgi, the runner. The desert jackals stand in for the Leão do Capim
+            // Apagado and the baboons for the beasts that block the course of the Corrida de Shulgi (Docs/Mapas100.md 26). --
+            new CityQuestSpec(CityCatalog.Aratta, "enmerkar", new RegionQuestSpec(ArattaJackals, BiomeType.Forest, null, 900,
+                new[] { new RegionObjectiveSpec("drive_off_grass_jackals", QuestObjectiveType.KillEnemyType, "enemy_desert_jackal", 6) },
+                new[] { new RegionRewardSpec("item_health_potion", 4), new RegionRewardSpec("item_mana_potion", 3), new RegionRewardSpec("item_gold", 75) })),
+            new CityQuestSpec(CityCatalog.Aratta, "shulgi", new RegionQuestSpec(ArattaRace, BiomeType.Forest, ArattaJackals, 980,
+                new[] { new RegionObjectiveSpec("clear_the_course", QuestObjectiveType.KillEnemyType, "enemy_mountain_baboon", 5) },
+                new[] { new RegionRewardSpec("item_odre_agua", 2), new RegionRewardSpec("item_gold", 90) })),
+
+            // -- Kirta: King Kirta, then Pughat. The cave ooze stands in for the Água-Viva de Lodo and the lantern fish for the
+            // Peixe-Leão Apagado (Docs/Mapas100.md 28). --
+            new CityQuestSpec(CityCatalog.Kirta, "kirta", new RegionQuestSpec(KirtaOoze, BiomeType.Forest, null, 1040,
+                new[] { new RegionObjectiveSpec("scrape_the_ooze", QuestObjectiveType.KillEnemyType, "enemy_cave_ooze", 6) },
+                new[] { new RegionRewardSpec("item_health_potion", 4), new RegionRewardSpec("item_mana_potion", 4), new RegionRewardSpec("item_gold", 90) })),
+            new CityQuestSpec(CityCatalog.Kirta, "pughat", new RegionQuestSpec(KirtaRescue, BiomeType.Forest, KirtaOoze, 1120,
+                new[] { new RegionObjectiveSpec("free_the_divers", QuestObjectiveType.KillEnemyType, "enemy_cave_lantern_fish", 5) },
+                new[] { new RegionRewardSpec("item_bolha_ar", 1), new RegionRewardSpec("item_gold", 100) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();

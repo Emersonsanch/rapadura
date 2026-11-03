@@ -1117,6 +1117,7 @@ Viva e Fogo Vivo (o sol da savana). Chefe do mundo: **Hedammu** (mapa 30).
 - **Ganchos:** loot couro de auroque, Fitas de Corrida · montaria nova **Auroque de Aratta** (§6) · casa: conjunto novo
   **Salão de Junco** (lira de cabeça de touro, esteira).
 - **Noite:** a Ave-Relâmpago brilha nas nuvens; **Hiena de Fumaça** [enxame, só à noite]; visão longa (céu aberto).
+- **No jogo (2026-11-03): cidade de verdade** (`CityTownRecipes.Aratta.cs`, estilo `ReedHorn`): Aratta em y = 0 dentro de um círculo de 22 m (saídas O, L e S a 20 m): salões de junco amarrado em arco (mudhif) cobertos de esteira, com colunas de feixe e chifres sobre a porta; salão do Enmerkar na cabeça da praça, Lira do Touro e fogo baixo do Fogo Vivo na praça, postes de chifre com fita azul (largada da Corrida de Shulgi na rua Sul), cercados redondos de pedra, acácias e baobá; Enmerkar, Lugalbanda, Shulgi e Ensuhkeshdanna com visual de povo-touro (chifres, focinho largo com argola) e falas para cada primo; Alforje do Lugalbanda (Relíquia dos Artífices do 27); missões "Chacais no Capim Seco" e "O Percurso de Shulgi"; respawn na praça para 26–27. Falta: a Corrida de Shulgi com tempo e Fitas de Corrida, a Lira do Touro (canção do dia), o Auroque de Aratta e o mundo contínuo da região 5 usar esta receita.
 
 ### 27 · Pirâmides Altas de Meroé / *High Pyramids of Meroë* — nv 52–58 · ★
 - **Fonte:** o campo de pirâmides de Meroé (Kush); o templo do leão de Naqa e o grande recinto de Musawwarat es-Sufra
@@ -1146,6 +1147,7 @@ Viva e Fogo Vivo (o sol da savana). Chefe do mundo: **Hedammu** (mapa 30).
 - **Ganchos:** loot pérola, alga, coral aceso · montaria `mount_river_seahorse` (desperta no mar) · casa: conjunto novo
   **Jardim de Coral**.
 - **Noite:** o coral aceso brilha; o apagado fica escuro e os tubarões saem; visão curta no fundo.
+- **No jogo (2026-11-03): cidade de verdade** (`CityTownRecipes.Kirta.cs`, estilo `CoralReef`): a parte seca do atol em y = 0 dentro de um círculo de 22,5 m (saídas O, L e N a 19 m; ao sul a borda do recife sobre o abismo): torres de coral com base afogada, janelas redondas, cúpula de madrepérola e toldo de vieira; coral-mãe na praça (metade cinza, metade reacesa), pontes de concha sobre a água do recife, jardins de alga e torres de coral soltas; Kirta, Pughat, Danel e Aqhat com visual de povo-do-mar (barbatanas no lugar das orelhas, crista, guelras) e falas para cada primo; Ferramentas de Mergulho do Danel (Concha Respirável do 28, Bolha de Ar do 29); missões "Lodo no Recife" e "Os Mergulhadores Encurralados" (paga com a Bolha de Ar); respawn na praça para 28–29. Falta: câmera em corte e andar no fundo, reacender o coral por faísca (zona de cura), Apito de Concha e o mundo contínuo da região 5 usar esta receita.
 
 ### 29 · Kilwa Afundada / *Sunken Kilwa* — nv 60–66 · ★
 - **Fonte:** as ruínas do palácio de Husuni Kubwa (Kilwa Kisiwani), em parte tomadas pelo mar; o *dingonek*, bicho

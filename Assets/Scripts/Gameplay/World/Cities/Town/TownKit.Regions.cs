@@ -36,7 +36,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         public static bool IsSegment(CityPropKind kind) =>
             kind == CityPropKind.FenceRun || kind == CityPropKind.Gate || kind == CityPropKind.KarezChannel || kind == CityPropKind.Cliff ||
             kind == CityPropKind.RopeBridge || kind == CityPropKind.LampString || kind == CityPropKind.Palisade || kind == CityPropKind.RockWall ||
-            kind == CityPropKind.MineRails;
+            kind == CityPropKind.MineRails || kind == CityPropKind.ShellBridge || kind == CityPropKind.ReefEdge;
 
         /// <summary>Unit direction of a segment prop and the side its mass stands on (left of the direction: east-going → north).</summary>
         public static Vector2 SegmentBack(Vector2 direction) => new Vector2(-direction.y, direction.x);
@@ -83,6 +83,15 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.AirPipe: AirPipe(b, s); return true;
                 case CityPropKind.NicheStall: NicheStall(b, s, prop.Variant); return true;
                 case CityPropKind.Pulley: Pulley(b, s); return true;
+                case CityPropKind.HornPost: HornPost(b, s, prop.Variant); return true;
+                case CityPropKind.StoneKraal: StoneKraal(b, s); return true;
+                case CityPropKind.BullLyre: BullLyre(b, s); return true;
+                case CityPropKind.Acacia: Acacia(b, s); return true;
+                case CityPropKind.CoralMother: CoralMother(b, s); return true;
+                case CityPropKind.CoralSpire: CoralSpire(b, s); return true;
+                case CityPropKind.KelpGarden: KelpGarden(b, s); return true;
+                case CityPropKind.ShellBridge: ShellBridge(b, d); return true;
+                case CityPropKind.ReefEdge: ReefEdge(b, d, s); return true;
                 default: return false;
             }
         }
@@ -818,6 +827,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
                 case TownShopDressing.Runes:
                     RuneHallDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.Wanderer:
+                    ReedHornDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.DivingGear:
+                    CoralReefDressing(b, spec, x, y, z, zFacade);
                     break;
 
                 case TownShopDressing.AirBottles:

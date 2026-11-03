@@ -106,6 +106,8 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.ForjaTambor, "The Drum Forge", "Forja de Tambor"),
                 Shop(CityShopCatalog.PortoesRuna, "Puzur's Rune Gates", "Portões de Runa do Puzur"),
                 Shop(CityShopCatalog.FeiraMiwnay, "Miwnay's Fair", "Feira da Miwnay"),
+                Shop(CityShopCatalog.AlforjeLugalbanda, "Lugalbanda's Saddlebag", "Alforje do Lugalbanda"),
+                Shop(CityShopCatalog.MergulhoDanel, "Danel's Diving Tools", "Ferramentas de Mergulho do Danel"),
             };
 
             // ---- Cities ----
@@ -133,6 +135,14 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.MercadoDosTuneis, "Tunnel Market", "Mercado dos Túneis", "Tunnel Market", "Mercado",
                 "The kobolds' market at the crossing of the four galleries: stalls set into niches under arches, cart rails, pulleys, copper pipes with fans that pull the air down from the cracks, and lanterns of coloured bottle glass. Here they bottle the Ar Sereno, and sell it with mended scrap.",
                 "O mercado dos kobolds no cruzamento das quatro galerias: barracas encaixadas em nichos sob arcos, trilhos de vagonete, roldanas, canos de cobre com cata-ventos que puxam o ar das frestas e lanternas de vidro colorido de garrafa. Aqui eles engarrafam o Ar Sereno, e vendem junto com sucata consertada.");
+
+            AddCity(entries, CityCatalog.Aratta, "Aratta, City of Horns", "Aratta, a Cidade dos Chifres", "Aratta", "Aratta",
+                "The city of the bull folk on the Aurochs Savanna: great halls of reed bound in arches and covered in mats, round stone pens, horn posts with blue ribbons marking the ways and the bull-headed lyre on the square. They keep the Living Fire of the sun: the low burn that renews the grass.",
+                "A cidade do povo-touro na Savana dos Auroques: grandes salões de junco amarrado em arcos e cobertos de esteira, cercados redondos de pedra, postes de chifre com fitas azuis marcando os caminhos e a lira de cabeça de touro na praça. Eles guardam o Fogo Vivo do sol: o fogo baixo que renova o capim.");
+
+            AddCity(entries, CityCatalog.Kirta, "Kirta Reef City", "Cidade-Recife de Kirta", "Kirta", "Kirta",
+                "The sea folk's city on its atoll: towers of coral with round windows, half drowned, domes of mother-of-pearl, shell bridges over the reef water and gardens of kelp. They tended the coral lit by the Living Water; the Lodo put its colour out, and every spark set free lights a piece of it again.",
+                "A cidade do povo-do-mar no seu atol: torres de coral com janelas redondas, meio afogadas, cúpulas de madrepérola, pontes de concha sobre a água do recife e jardins de alga. Eles cuidavam do coral aceso pela Água Viva; o Lodo apagou a cor dele, e cada faísca libertada acende um pedaço de novo.");
 
             AddCity(entries, CityCatalog.TamborRubro, "Red Drum", "Tambor Rubro", "Red Drum", "Tambor Rubro",
                 "The orcs' war camp in the red badlands: a palisade of sharpened logs, the Great Hall under its steep hide roof, clan tents dyed ochre and the drums that mark the hours and wake the Living Fire of the forge. Here a given word is worth more than gold.",
@@ -513,6 +523,72 @@ namespace Rapadura.UI.WorldMap
                 ("Ícaro! Seven blades or five? I say seven. You say five. Let's build both and let the wind decide.", "Ícaro! Sete pás ou cinco? Eu digo sete. Você diz cinco. Vamos fazer os dois e deixar o vento decidir."),
                 ("Lavine, Grandma Edna says I talk faster than my fans spin. Grandpa Jorge says that's impossible. They're both right.", "Lavine, a Vó Edna diz que eu falo mais rápido do que os meus cata-ventos giram. O Vô Jorge diz que é impossível. Os dois têm razão."),
                 ("Pipes, fans, gears, and one idea too many every morning. The air has to move, or the tunnels forget how to breathe.", "Canos, cata-ventos, engrenagens, e uma ideia a mais toda manhã. O ar tem que andar, senão os túneis esquecem como respirar."));
+
+            // ---- Aratta (povo-touro; Sumerian names from the epics of Enmerkar and Lugalbanda and the Hymn of Shulgi) ----
+            AddResident(entries, "enmerkar", "Enmerkar, the Chief Builder", "Enmerkar, o Chefe Construtor",
+                ("Joaquim, a guardian with horns would be a fine thing. You have the shoulders already. Help me lift this arch of reed?", "Joaquim, um guardião de chifre ia ser uma beleza. Os ombros você já tem. Me ajuda a levantar este arco de junco?"),
+                ("Maria, the Fogo Vivo is a small fire, low, that walks ahead of the grass. Your light is like it: it doesn't burn, it renews.", "Maria, o Fogo Vivo é um fogo pequeno, baixo, que anda na frente do capim. A sua luz é parecida: não queima, renova."),
+                ("Maithe, I wrote your name on clay, so the halls remember you. The eldest gets the first tablet. That is the rule.", "Maithe, eu escrevi o seu nome na argila, para os salões lembrarem de você. A mais velha ganha a primeira tabuinha. É a regra."),
+                ("Ícaro, you want to know how the clay keeps the words? You press, you dry, you wait. Like everything good.", "Ícaro, quer saber como a argila guarda as palavras? Aperta, seca, espera. Como tudo que é bom."),
+                ("Lavine, Grandma Edna once slept in my reed hall during the monsoon. She says the mats sing in the rain. They do.", "Lavine, a Vó Edna dormiu uma vez no meu salão de junco durante a monção. Ela diz que as esteiras cantam na chuva. Cantam mesmo."),
+                ("A hall of reed lasts a lifetime if you retie it every year. A city too.", "Salão de junco dura uma vida inteira se você amarrar de novo todo ano. Cidade também."));
+
+            AddResident(entries, "lugalbanda", "Lugalbanda the Wanderer", "Lugalbanda, o Andarilho",
+                ("Joaquim, I got lost in the mountains once, alone and sick. A guardian like you would have carried me home. Take a rope, just in case.", "Joaquim, eu me perdi nas montanhas uma vez, sozinho e doente. Um guardião como você teria me carregado para casa. Leva uma corda, por via das dúvidas."),
+                ("Maria, when I was lost, a little light in a cave kept me alive. I think about it every time you pass.", "Maria, quando eu me perdi, uma luzinha numa gruta me manteve vivo. Eu lembro dela toda vez que você passa."),
+                ("Maithe, this map has a path nobody walks. It goes past the pyramids of Meroë. Want it? You look like someone who walks paths nobody walks.", "Maithe, este mapa tem um caminho que ninguém anda. Passa pelas pirâmides de Meroé. Quer? Você tem cara de quem anda caminho que ninguém anda."),
+                ("Ícaro, I found this relic of the Artífices under the sand. It hums when the sun sets. Don't take it apart. ...Fine, take it apart, but put it back.", "Ícaro, achei esta relíquia dos Artífices debaixo da areia. Ela zumbe quando o sol se põe. Não desmonta. ...Tá bom, desmonta, mas monta de novo."),
+                ("Lavine, Grandpa Jorge found me on the road the year I came back. He gave me half his bread and didn't ask a thing. I still owe him the other half.", "Lavine, o Vô Jorge me achou na estrada no ano em que eu voltei. Me deu metade do pão dele e não perguntou nada. Ainda devo a outra metade."),
+                ("Rope, waterskins, a map with one path too many. Everything a wanderer needs to come back.", "Corda, odre, um mapa com um caminho a mais. Tudo que um andarilho precisa para voltar."));
+
+            AddResident(entries, "shulgi", "Shulgi the Runner", "Shulgi, o Corredor",
+                ("Joaquim, a race? You and me, to the horn post and back. ...You carry the shield. That's fair, I carry nothing.", "Joaquim, uma corrida? Você e eu, até o poste de chifre e de volta. ...Você leva o escudo. É justo, eu não levo nada."),
+                ("Maria, run with me in the morning, when the Fogo Vivo has passed and the black paths are still warm. The ground pushes you.", "Maria, corre comigo de manhã, quando o Fogo Vivo já passou e os caminhos pretos ainda estão mornos. O chão empurra você."),
+                ("Maithe! Finally someone who doesn't stop to breathe. From the gate to the big acacia, now. Go!", "Maithe! Finalmente alguém que não para para respirar. Do portão até a acácia grande, agora. Vai!"),
+                ("Ícaro, shoes that run on their own? No. ...Maybe. Show me the drawing.", "Ícaro, sapato que corre sozinho? Não. ...Talvez. Mostra o desenho."),
+                ("Lavine, the aurochs calves race me every dawn. They win. Grandpa Jorge says they cheat with four legs.", "Lavine, os bezerros de auroque apostam corrida comigo toda madrugada. Eles ganham. O Vô Jorge diz que eles roubam com quatro pernas."),
+                ("From one city to the next in a single day, and back. Ask me how. Better: run with me.", "De uma cidade até a outra num dia só, e de volta. Pergunta como. Melhor: corre comigo."));
+
+            AddResident(entries, "ensuhkeshdanna", "Ensuhkeshdanna, the Friendly Rival", "Ensuhkeshdanna, o Rival Amigo",
+                ("Joaquim! A duel of shoves, shield against horns. Whoever leaves the circle buys the milk. Ha!", "Joaquim! Um duelo de empurrão, escudo contra chifre. Quem sair do círculo paga o leite. Ha!"),
+                ("Maria, I lost a duel of riddles to Enmerkar once, a long time ago. Now I ask the riddles. Want one? What grows when the fire passes?", "Maria, eu perdi um duelo de charadas para o Enmerkar uma vez, faz muito tempo. Agora eu que faço as charadas. Quer uma? O que cresce quando o fogo passa?"),
+                ("Maithe, shoot at my drum from the edge of the square. If it sounds, you win. If it doesn't, you try again. Nobody loses here.", "Maithe, atira no meu tambor da beira da praça. Se ele soar, você ganha. Se não soar, tenta de novo. Aqui ninguém perde."),
+                ("Ícaro, you made my drum sound twice as loud? Enmerkar is going to hate it. I love it.", "Ícaro, você fez o meu tambor soar duas vezes mais alto? O Enmerkar vai detestar. Eu adorei."),
+                ("Lavine, Grandma Edna says a rival is a friend who arrived early. I didn't understand it for years. Now I do.", "Lavine, a Vó Edna diz que rival é amigo que chegou cedo. Eu levei anos para entender. Agora entendo."),
+                ("A duel a day, no one hurt, everyone hungry after. That's how Aratta keeps its horns sharp and its heart soft.", "Um duelo por dia, ninguém se machuca, todo mundo com fome depois. É assim que Aratta mantém os chifres afiados e o coração mole."));
+
+            // ---- Cidade-Recife de Kirta (povo-do-mar; Ugaritic names from the epics of Kirta and Aqhat) ----
+            AddResident(entries, "kirta", "Kirta, King of the Reef", "Kirta, o Rei do Recife",
+                ("Joaquim, I lost my whole house to the sea once. I rebuilt it stone by stone. A guardian understands: you hold what can be held.", "Joaquim, eu perdi a minha casa inteira para o mar uma vez. Reconstruí pedra por pedra. Um guardião entende: a gente segura o que dá para segurar."),
+                ("Maria, the coral was lit by the Living Water. Put your hand near the mother coral. ...See? The east side remembers.", "Maria, o coral era aceso pela Água Viva. Chega a mão perto do coral-mãe. ...Viu? O lado do leste lembra."),
+                ("Maithe, every spark you free out there lights a piece of my reef. I count them from the tower. You are winning.", "Maithe, cada faísca que você liberta lá fora acende um pedaço do meu recife. Eu conto da torre. Você está ganhando."),
+                ("Ícaro, a lamp that works under water? The divers would bless your name. So would I.", "Ícaro, uma lamparina que funciona debaixo d'água? Os mergulhadores iam abençoar o seu nome. Eu também."),
+                ("Lavine, Grandpa Jorge came here by dhow, years ago, and cried when he saw the coral lit. Tell him it will be lit again.", "Lavine, o Vô Jorge veio aqui de dhow, anos atrás, e chorou quando viu o coral aceso. Diz para ele que vai acender de novo."),
+                ("The coral went grey, not dead. Grey is a colour that is waiting.", "O coral ficou cinza, não morreu. Cinza é uma cor que está esperando."));
+
+            AddResident(entries, "pughat", "Pughat, Who Looks After Everyone", "Pughat, a Que Cuida de Todos",
+                ("Joaquim, can you hold your breath? No? Then you hold the rope and I go down. Deal?", "Joaquim, você prende a respiração? Não? Então você segura a corda e eu desço. Combinado?"),
+                ("Maria, the divers came up cold and scared. Sit with them a little. Your light warms better than any blanket.", "Maria, os mergulhadores subiram com frio e com medo. Senta um pouco com eles. A sua luz esquenta mais que qualquer cobertor."),
+                ("Maithe, you count your arrows the way I count my divers. Three in, three out. Always.", "Maithe, você conta as suas flechas do jeito que eu conto os meus mergulhadores. Três entram, três saem. Sempre."),
+                ("Ícaro, a rope that pulls back on its own when someone tugs twice? Make it and I'll never sleep badly again.", "Ícaro, uma corda que puxa sozinha quando alguém dá dois puxões? Faz isso e eu nunca mais durmo mal."),
+                ("Lavine, Grandma Edna sent me a jar of apricot jam by dhow. The divers ate it all. I saved you the spoon.", "Lavine, a Vó Edna me mandou um pote de doce de damasco de dhow. Os mergulhadores comeram tudo. Guardei a colher para você."),
+                ("Nobody stays down there alone. Not on my reef. Not while the coral is grey.", "Ninguém fica lá embaixo sozinho. Não no meu recife. Não enquanto o coral estiver cinza."));
+
+            AddResident(entries, "danel", "Danel the Just", "Danel, o Juiz Justo",
+                ("Joaquim, a breathing shell for the guardian: hold it between your teeth and breathe slowly. Slowly. That's the whole secret.", "Joaquim, uma concha respirável para o guardião: segura entre os dentes e respira devagar. Devagar. Esse é o segredo todo."),
+                ("Maria, I judge fairly: one bubble of air for each diver, never two for the same. Even the king waits in line.", "Maria, eu julgo com justiça: uma bolha de ar para cada mergulhador, nunca duas para o mesmo. Até o rei espera na fila."),
+                ("Maithe, the eldest asks the price first. Good. The price is fair. Danel never tips the scale.", "Maithe, a mais velha pergunta o preço primeiro. Bom. O preço é justo. O Danel nunca pende a balança."),
+                ("Ícaro, how does the shell keep the air? The coral teaches it. Ask the coral. ...It answers slowly.", "Ícaro, como a concha guarda o ar? O coral ensina. Pergunta para o coral. ...Ele responde devagar."),
+                ("Lavine, my son Aqhat says you talk to the fish. Grandpa Jorge did too, and they always told him where the pearls were.", "Lavine, o meu filho Aqhat diz que você conversa com os peixes. O Vô Jorge também conversava, e eles sempre contavam onde estavam as pérolas."),
+                ("Shells to breathe, bubbles to walk the bottom, stones to sink. A fair price for each, and a word of advice for free.", "Concha para respirar, bolha para andar no fundo, pedra para afundar. Preço justo para cada uma, e um conselho de graça."));
+
+            AddResident(entries, "aqhat", "Aqhat the Archer", "Aqhat, o Arqueiro",
+                ("Joaquim, stand behind the target with the shield up. If the arrow passes the shield, I owe you a pearl. It never passes.", "Joaquim, fica atrás do alvo com o escudo levantado. Se a flecha passar do escudo, eu te devo uma pérola. Nunca passa."),
+                ("Maria, under water the arrow bends. Up here it flies straight, like your light. Watch.", "Maria, debaixo d'água a flecha entorta. Aqui em cima ela voa reta, como a sua luz. Olha."),
+                ("Maithe! An archer! Hold the bow lower, breathe out, and let the wind of the reef choose the moment. Again.", "Maithe! Uma arqueira! Segura o arco mais baixo, solta o ar, e deixa o vento do recife escolher a hora. De novo."),
+                ("Ícaro, a bow that shoots under water? My father says it can't be done. My father also said that about the shell.", "Ícaro, um arco que atira debaixo d'água? O meu pai diz que não dá. O meu pai também disse isso da concha."),
+                ("Lavine, Grandma Edna made me promise never to shoot at a gull. I keep it. Even the thieving ones.", "Lavine, a Vó Edna me fez prometer nunca atirar numa gaivota. Eu cumpro. Até nas ladras."),
+                ("My bow was a gift of the reef. I teach anyone who asks. Nobody here takes a bow by force.", "O meu arco foi um presente do recife. Eu ensino quem pedir. Aqui ninguém toma arco à força."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

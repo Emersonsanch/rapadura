@@ -61,6 +61,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
         AirBottles = 24,
         /// <summary>Shayn / Takhsich (Mercado dos Túneis): mended scrap, gears on a bench, a little fan in a tube.</summary>
         Tinkerer = 25,
+        /// <summary>Lugalbanda (Aratta): a reed mat with rolled maps, a coil of rope, a walking staff and a relic of the Artífices.</summary>
+        Wanderer = 26,
+        /// <summary>Danel (Kirta): a rack of breathing shells, jars of bottled air bubbles, diving stones on a cord, a conch whistle.</summary>
+        DivingGear = 27,
     }
 
     /// <summary>
@@ -134,6 +138,20 @@ namespace Rapadura.Gameplay.World.Cities.Town
         public bool RuneHall;
 
         /// <summary>
+        /// Aratta: a mudhif, the great hall of bound reed (Docs/Mapas100.md §3.3, style <c>ReedHorn</c>): a barrel vault of reed
+        /// bundles bent into arches and covered in reed mats, the front a lattice of reed with a tall arched door between two
+        /// thick bundled columns, a pair of horns over the door, a mat awning on reed poles over the deck (TownKit.ReedHorn).
+        /// </summary>
+        public bool ReedHall;
+
+        /// <summary>
+        /// Kirta: a coral tower (Docs/Mapas100.md §3.3, style <c>CoralReef</c>): a round tower of live coral over a drowned base
+        /// (the old waterline, dim and barnacled), round windows, a mother-of-pearl dome on top and a scallop-shell canopy
+        /// over the deck (TownKit.CoralReef).
+        /// </summary>
+        public bool ReefTower;
+
+        /// <summary>
         /// Mercado dos Túneis: with <see cref="TownRoofKind.Rock"/>, a stall set into an arched basalt niche: the round arch,
         /// a striped canvas awning on copper poles, a counter, bottle lanterns and a copper air pipe up the rock (TownKit.TunnelBazaar).
         /// </summary>
@@ -174,7 +192,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Key of the cached mesh: equal specs share one mesh.</summary>
         public string CacheKey =>
             $"{Kind}|{Width:0.00}|{Depth:0.00}|{PorchDepth:0.00}|{FullVaranda}|{WallHeight:0.00}|{Floors}|{Roof}|{WallColor}|{TrimColor}|{RoofColor}|" +
-            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
+            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
             $"{Chimney}|{Sign}|{SignColor}|{Dressing}|{Seed}";
     }
 }

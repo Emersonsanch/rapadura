@@ -569,6 +569,132 @@ namespace Rapadura.Gameplay.NPC.Visuals
             },
 
             // ------------------------------------------------------------------
+            // Aratta, a Cidade dos Chifres (povo-touro, Savana dos Auroques): reed, mat, red clay, golden grass, ribbon blue.
+            // Sumerian names (the epics of Enmerkar and Lugalbanda, the Hymn of Shulgi). Big and gentle, horns, a broad muzzle.
+            // ------------------------------------------------------------------
+
+            // Enmerkar, the chief builder (the city's missions; in the epic he invented writing on clay to answer the lord of
+            // Aratta): broad and proud, the full Sumerian beard, a ribbon headband, a long reed-coloured robe with a red-clay hem
+            // and a blue sash, clay tablets held in front and the builder's measuring staff. Explains with both hands.
+            new NpcRecipe
+            {
+                Id = "enmerkar", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 1.2f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinAurochs, Face = NpcFace.Stern, Hair = NpcHair.Short, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.Full, Horns = true,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.Ribbon, HeadTrim = NpcSwatch.OldGold,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.Reed, Trim = NpcSwatch.Clay, Sleeves = NpcSwatch.SkinAurochs, Boots = NpcSwatch.Leather,
+                Layers = NpcLayer.Sash, LayerColor = NpcSwatch.Ribbon, LayerTrim = NpcSwatch.OldGold,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.Tablets, NpcProp.WalkingStick },
+                Gesture = NpcGesture.Chatter,
+                Story = "Chefe construtor de Aratta (o épico de Enmerkar), escreve na argila; dá as missões da cidade",
+            },
+
+            // Lugalbanda, the wanderer who got lost in the mountains and came back (exploration, secret maps; the city's shop:
+            // the Alforje do Lugalbanda, with the Artífices' relic of map 27): slim and dreamy, tawny coat, a reed hood, a
+            // patched chapan with a satchel, a bedroll on the back, a map scroll held up and the walking stick. Scans the horizon.
+            new NpcRecipe
+            {
+                Id = "lugalbanda", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 1.14f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinAurochsTawny, Face = NpcFace.Dreamy, Hair = NpcHair.Ponytail, HairColor = NpcSwatch.HairBrown, Beard = NpcBeard.Short, Horns = true,
+                Headwear = NpcHeadwear.Hood, HeadColor = NpcSwatch.Reed, HeadTrim = NpcSwatch.Ribbon,
+                Garment = NpcGarment.Chapan, Main = NpcSwatch.Straw, Trim = NpcSwatch.Ribbon, Sleeves = NpcSwatch.Straw, Trousers = NpcSwatch.Leather, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Satchel | NpcLayer.Patches, LayerColor = NpcSwatch.Leather, LayerTrim = NpcSwatch.Ribbon,
+                LeftArm = NpcArmPose.HoldUp, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.Scroll, NpcProp.WalkingStick, NpcProp.Bedroll },
+                Gesture = NpcGesture.Scan,
+                Story = "O andarilho que se perdeu e voltou (o épico de Lugalbanda): mapas secretos e o Alforje, a loja da cidade",
+            },
+
+            // Shulgi, the runner (in the hymn he ran from Nippur to Ur in a day; the Corrida de Shulgi, the second mission): young
+            // and light, a topknot, a ribbon band, a short golden tunic with a blue sash, a water jug and a race ribbon held up.
+            // Restless little hops.
+            new NpcRecipe
+            {
+                Id = "shulgi", Region = BiomeType.Forest, Age = NpcAge.Youth, Build = NpcBuild.Slim, Height = 1.16f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinAurochs, Face = NpcFace.Bright, Hair = NpcHair.Topknot, HairColor = NpcSwatch.HairBlack, Horns = true,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.SandGold, HeadTrim = NpcSwatch.Ribbon,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.SandGold, Trim = NpcSwatch.Ribbon, Sleeves = NpcSwatch.SkinAurochs, Trousers = NpcSwatch.Reed, Boots = NpcSwatch.Leather,
+                Layers = NpcLayer.Sash, LayerColor = NpcSwatch.Ribbon, LayerTrim = NpcSwatch.SandGold,
+                LeftArm = NpcArmPose.HoldUp, RightArm = NpcArmPose.Crook, Props = new[] { NpcProp.Letter, NpcProp.WaterJug },
+                Gesture = NpcGesture.Bounce,
+                Story = "O corredor (o Hino de Shulgi): treina a Corrida de Shulgi pela savana; dá a 2ª missão da cidade",
+            },
+
+            // Ensuhkeshdanna, the rival who became a friend (friendly duels; in the epic the lord of Aratta who lost the contest
+            // of riddles to Enmerkar): the biggest of them, a long braided beard, a red-clay chapan with a cape and belt, hand on
+            // the hip and the hand drum that calls the duels. Drums.
+            new NpcRecipe
+            {
+                Id = "ensuhkeshdanna", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Stout, Height = 1.24f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinAurochsTawny, Face = NpcFace.Jolly, Hair = NpcHair.Braid, HairColor = NpcSwatch.HairDark, Beard = NpcBeard.Short, Horns = true,
+                Garment = NpcGarment.Chapan, Main = NpcSwatch.Clay, Trim = NpcSwatch.Reed, Sleeves = NpcSwatch.Clay, Trousers = NpcSwatch.Leather, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Cape | NpcLayer.Belt, LayerColor = NpcSwatch.Ribbon, LayerTrim = NpcSwatch.Reed,
+                LeftArm = NpcArmPose.HipRest, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.HandDrum },
+                Gesture = NpcGesture.Drum,
+                Story = "O rival que virou amigo (o senhor de Aratta no épico de Enmerkar): duelos amistosos na praça",
+            },
+
+            // ------------------------------------------------------------------
+            // Cidade-Recife de Kirta (povo-do-mar): live coral, mother-of-pearl, reef turquoise, kelp, sand. Ugaritic names (the
+            // epics of Kirta and of Aqhat). Fins for ears, gills, nacre or reef-turquoise skin; tails and fishermen's legs live
+            // together (here, all on legs: the town is the dry part of the atoll).
+            // ------------------------------------------------------------------
+
+            // Kirta, the king who lost his family to the sea and rebuilt everything (the city's missions): upright and calm, a
+            // short beard, a coral circlet, a long nacre kaftan with a coral trim and a kelp-green sash, a coral staff. Calls the
+            // divers in.
+            new NpcRecipe
+            {
+                Id = "kirta", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Average, Height = 1.05f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinReef, Face = NpcFace.Calm, Hair = NpcHair.Long, HairColor = NpcSwatch.HairDark, Beard = NpcBeard.Short, Gills = true,
+                Headwear = NpcHeadwear.SunCirclet, HeadColor = NpcSwatch.CoralLive, HeadTrim = NpcSwatch.Pearl,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.Pearl, Trim = NpcSwatch.CoralLive, Sleeves = NpcSwatch.Pearl, Boots = NpcSwatch.Teak,
+                Layers = NpcLayer.Sash, LayerColor = NpcSwatch.Laurel, LayerTrim = NpcSwatch.Pearl,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.MoonStaff, NpcProp.CrystalPendant },
+                Gesture = NpcGesture.Call,
+                Story = "O rei que perdeu a família no mar e reconstruiu tudo (o épico de Kirta); dá as missões da cidade",
+            },
+
+            // Pughat, the heroine who looks after everyone (rescue missions, the second mission): young and quick, nacre skin, a
+            // ponytail, a turquoise tunic with a coral sash, a coil of rope and a jar of water. Bounces on her toes, ready to dive.
+            new NpcRecipe
+            {
+                Id = "pughat", Region = BiomeType.Forest, Age = NpcAge.Youth, Build = NpcBuild.Slim, Height = 0.98f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinNacre, Face = NpcFace.Bright, Hair = NpcHair.Ponytail, HairColor = NpcSwatch.HairBlack, Gills = true,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.Turquoise, Trim = NpcSwatch.CoralLive, Sleeves = NpcSwatch.SkinNacre, Trousers = NpcSwatch.SeaBlue, Boots = NpcSwatch.Teak,
+                Layers = NpcLayer.Sash | NpcLayer.Belt, LayerColor = NpcSwatch.CoralLive, LayerTrim = NpcSwatch.Pearl,
+                LeftArm = NpcArmPose.Carry, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.RopeCoil, NpcProp.WaterJug },
+                Gesture = NpcGesture.Bounce,
+                Story = "A heroína que cuida de todos (o épico de Aqhat): missões de resgate no recife; dá a 2ª missão da cidade",
+            },
+
+            // Danel, the just judge (the city's shop: the diving tools: breathing shells, bottled air bubbles): an elder, a little
+            // bent, a long white beard, a pearl hood, a long sea-blue robe with a pearl shawl, the scale of justice and the keys
+            // of the shell racks. Ponders before he speaks.
+            new NpcRecipe
+            {
+                Id = "danel", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 1.0f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinReef, Face = NpcFace.Kind, Hair = NpcHair.Long, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Long, Gills = true,
+                Headwear = NpcHeadwear.Hood, HeadColor = NpcSwatch.Pearl, HeadTrim = NpcSwatch.SeaBlue,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.SeaBlue, Trim = NpcSwatch.Pearl, Sleeves = NpcSwatch.SeaBlue, Boots = NpcSwatch.Teak,
+                Layers = NpcLayer.Shawl, LayerColor = NpcSwatch.Pearl, LayerTrim = NpcSwatch.CoralLive,
+                LeftArm = NpcArmPose.HoldUp, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.Scale, NpcProp.Keys },
+                Gesture = NpcGesture.Ponder,
+                Story = "O juiz justo (o pai de Aqhat): ferramentas de mergulho, conchas respiráveis e bolhas de ar, a loja da cidade",
+            },
+
+            // Aqhat, the archer (the trainer): broad shoulders, nacre skin, short hair and the fin crest, a kelp tunic under a
+            // coral vest, the bow of the epic (a gift of the craftsman god, here of the reef) and a quiver. Mimes the draw.
+            new NpcRecipe
+            {
+                Id = "aqhat", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 1.04f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinNacre, Face = NpcFace.Bright, Hair = NpcHair.Short, HairColor = NpcSwatch.HairBlack, Gills = true,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.Laurel, Trim = NpcSwatch.Pearl, Sleeves = NpcSwatch.SkinNacre, Trousers = NpcSwatch.SeaBlue, Boots = NpcSwatch.Teak,
+                Layers = NpcLayer.Vest | NpcLayer.Belt, LayerColor = NpcSwatch.CoralLive, LayerTrim = NpcSwatch.Pearl,
+                LeftArm = NpcArmPose.HoldStaff, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Bow, NpcProp.Quiver },
+                Gesture = NpcGesture.Mime,
+                Story = "O arqueiro (o épico de Aqhat), o melhor arco do recife: treinador dos primos",
+            },
+
+            // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
 

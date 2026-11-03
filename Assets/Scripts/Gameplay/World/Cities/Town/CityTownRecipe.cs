@@ -330,6 +330,11 @@ namespace Rapadura.Gameplay.World.Cities.Town
             spec.RuneHall |= style.Architecture == TownArchitecture.RuneHall && spec.Roof == TownRoofKind.Rock;
             spec.TunnelStall |= style.Architecture == TownArchitecture.TunnelBazaar && spec.Roof == TownRoofKind.Rock;
 
+            // Aratta's houses are reed halls (mudhif); Kirta's are coral towers (not the lamp house, the dock or a stall).
+            bool plainHouse = r.Kind == CityLotKind.House || r.Kind == CityLotKind.Shop || r.Kind == CityLotKind.Workshop;
+            spec.ReedHall |= style.Architecture == TownArchitecture.ReedHorn && plainHouse;
+            spec.ReefTower |= style.Architecture == TownArchitecture.CoralReef && plainHouse;
+
             switch (r.Kind)
             {
                 case CityLotKind.Shop:

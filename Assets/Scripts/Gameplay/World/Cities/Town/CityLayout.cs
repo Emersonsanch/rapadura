@@ -154,6 +154,30 @@ namespace Rapadura.Gameplay.World.Cities.Town
         NicheStall = 49,
         /// <summary>Mercado dos Túneis: a pulley frame (two posts, a wheel, a rope and a bucket of ore).</summary>
         Pulley = 50,
+
+        // ---- Aratta, the city of the horns (povo-touro; drawn by TownKit.ReedHorn) ----
+
+        /// <summary>Aratta: a horn post, a way-marker (not a cult object): a reed-bound pole with a pair of aurochs horns and blue ribbons.</summary>
+        HornPost = 51,
+        /// <summary>Aratta: a round enclosure of dry stone (cercado) with a gap to the front and a hay rack inside.</summary>
+        StoneKraal = 52,
+        /// <summary>Aratta: the bull-headed lyre of the plaza on its clay plinth (the Lira do Touro), front to local −z.</summary>
+        BullLyre = 53,
+        /// <summary>Aratta: a flat-topped savanna acacia.</summary>
+        Acacia = 54,
+
+        // ---- Kirta, the reef city (povo-do-mar; drawn by TownKit.CoralReef) ----
+
+        /// <summary>Kirta: the mother coral in its pool: a great branching coral, one side dim grey, the relit side glowing.</summary>
+        CoralMother = 55,
+        /// <summary>Kirta: a free-standing coral tower with round windows and a mother-of-pearl dome.</summary>
+        CoralSpire = 56,
+        /// <summary>Kirta: a garden of tall kelp ribbons in a ring of shells.</summary>
+        KelpGarden = 57,
+        /// <summary>Kirta: a strip of reef water from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> crossed by a shell bridge in the middle; walkable.</summary>
+        ShellBridge = 58,
+        /// <summary>Kirta: the edge of the reef over the abyss from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/>: a coral rim, the deep water beyond (its mass behind the line).</summary>
+        ReefEdge = 59,
     }
 
     public enum CityExitKind

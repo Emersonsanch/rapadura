@@ -66,9 +66,9 @@ a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: 
 | Asas ou salto duplo (24) | **vestir** no slot Costas/Asas as Asas de Lona do Takhsich (pulo duplo; planam, não voam) ou asas de verdade do Tacho Encantado (a Capa de Feltro não voa), ou ter montaria Voadora (Grifo da Coluna da Glória) | Asas de Lona: Feira da Miwnay (Mercado dos Túneis), 420 ouro; Tacho Encantado; Grifo: missão "Asas da Coluna" (nv 40) |
 | Asas/montaria (39) | asas de verdade do Tacho Encantado no slot Costas/Asas ou montaria Voadora (as Asas de Lona **não** contam: só planam) | Tacho Encantado; Grifo da Coluna da Glória |
 | Barco ou cais (25) | levar Passagem de Dhow ou ter montaria Aquática (Capivara) | Bazar de Pérolas da Mwana (Taa Pwani) |
-| Relíquia dos Artífices (27) | levar a relíquia | Bazar de Pérolas da Mwana (Taa Pwani), até Aratta ter cidade |
-| Concha respirável (28) | levar Concha Respirável | Bazar de Pérolas da Mwana (Taa Pwani), até Kirta ter cidade |
-| Bolha de ar (29) | levar Bolha de Ar Engarrafada ou Concha Respirável | Bazar de Pérolas da Mwana (Taa Pwani), até Kirta ter cidade |
+| Relíquia dos Artífices (27) | levar a relíquia | Alforje do Lugalbanda (Aratta) |
+| Concha respirável (28) | levar Concha Respirável | Bazar de Pérolas da Mwana (Taa Pwani: Kirta fica no próprio 28, então se compra antes); Ferramentas de Mergulho do Danel (Kirta) |
+| Bolha de ar (29) | levar Bolha de Ar Engarrafada ou Concha Respirável | Ferramentas de Mergulho do Danel (Kirta); recompensa da 2ª missão de Kirta (Pughat) |
 | Botas de raiz (30) | calçar Botas de Raiz Viva, ou montaria Aquática; Joaquim dispensa | Bazar de Pérolas da Mwana (Taa Pwani); recompensa da 2ª missão de Taa Pwani (Zawadi) |
 | Equilíbrio nas pontes (32) | levar Vara de Equilíbrio; Maithe dispensa (pontes suspensas, §3) | Jhilpur (planejada) |
 | Barco de junco (33) | levar Barco de Junco ou montaria Aquática | Palafitas de Tarchon (planejada) |

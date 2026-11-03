@@ -205,6 +205,20 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.NicheStall: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.NicheStallSize * s, prop.Yaw), WallColliderHeight, owner);
                 case CityPropKind.Pulley: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.PulleySize * s, prop.Yaw), WallColliderHeight, owner);
 
+                case CityPropKind.HornPost: return CitySolid.Capsule(prop.Position, TownKit.HornPostRadius * s, WallColliderHeight, owner);
+                case CityPropKind.StoneKraal: return CitySolid.Capsule(prop.Position, (TownKit.KraalRadius + 0.3f) * s, 1.2f, owner);
+                case CityPropKind.BullLyre: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.BullLyreSize * s, prop.Yaw), WallColliderHeight, owner);
+                case CityPropKind.Acacia: return CitySolid.Capsule(prop.Position, TownKit.AcaciaTrunkRadius * s, 3f, owner);
+                case CityPropKind.CoralMother: return CitySolid.Capsule(prop.Position, TownKit.CoralMotherRadius * s, 2f, owner);
+                case CityPropKind.CoralSpire: return CitySolid.Capsule(prop.Position, TownKit.CoralSpireRadius * s, WallColliderHeight, owner);
+                case CityPropKind.KelpGarden: return CitySolid.Capsule(prop.Position, TownKit.KelpGardenRadius * s, 2f, owner);
+                case CityPropKind.ReefEdge:
+                {
+                    Rect run = CityGeometry.RectFromMinMax(prop.Position, prop.End);
+                    return CitySolid.Box(CityGeometry.Inflate(run, TownKit.ReefEdgeHalfThickness), 1.2f, owner);
+                }
+
+                case CityPropKind.ShellBridge:
                 case CityPropKind.KarezChannel:
                 case CityPropKind.RopeBridge:
                 case CityPropKind.LampString:

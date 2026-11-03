@@ -695,7 +695,8 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // ------------------------------------------------------------------
 
         private static bool IsSkin(NpcSwatch swatch) => swatch <= NpcSwatch.SkinDeep || swatch == NpcSwatch.SkinBark
-            || swatch == NpcSwatch.SkinOrcOlive || swatch == NpcSwatch.SkinOrcGrey || swatch == NpcSwatch.SkinKoboldRust || swatch == NpcSwatch.SkinKoboldSlate;
+            || swatch == NpcSwatch.SkinOrcOlive || swatch == NpcSwatch.SkinOrcGrey || swatch == NpcSwatch.SkinKoboldRust || swatch == NpcSwatch.SkinKoboldSlate
+            || swatch == NpcSwatch.SkinAurochs || swatch == NpcSwatch.SkinAurochsTawny || swatch == NpcSwatch.SkinReef || swatch == NpcSwatch.SkinNacre;
 
         /// <summary>
         /// One arm with volume: a shoulder cap, a tapered upper arm, an elbow, a forearm ending in a cuff (wide bell sleeves
@@ -821,7 +822,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
                     b.Cylinder(root, 0.042f * rig.S, 0f, 0.17f * rig.S, 4, r.Skin, rotation: tilt, depth: 0.45f, twist: 45f);
                 }
             }
-            else if (!coversEars && r.Hair != NpcHair.Long && r.Hair != NpcHair.Curly)
+            else if (!coversEars && !r.Horns && !r.Gills && r.Hair != NpcHair.Long && r.Hair != NpcHair.Curly)
             {
                 foreach (float side in new[] { -1f, 1f })
                 {
@@ -832,6 +833,77 @@ namespace Rapadura.Gameplay.NPC.Visuals
             BuildHair(b, ref rig, covers);
             BuildBeard(b, ref rig);
             BuildHeadwear(b, ref rig);
+            if (r.Horns)
+            {
+                BuildHorns(b, ref rig);
+            }
+
+            if (r.Gills)
+            {
+                BuildFins(b, ref rig, coversEars);
+            }
+        }
+
+        /// <summary>
+        /// The povo-touro (Aratta): a pair of wide aurochs horns from the sides of the crown, curving out, a little forward and
+        /// up (horn ivory, dark tips), and cow ears sticking out sideways under them. Drawn over any headwear: the horns are how
+        /// they read from the iso camera.
+        /// </summary>
+        private static void BuildHorns(NpcMeshBuilder b, ref Rig rig)
+        {
+            float hw = rig.HeadW, hh = rig.HeadH, hd = rig.HeadD;
+            Vector3 hc = rig.HeadCenter;
+            float s = rig.S;
+            foreach (float side in new[] { -1f, 1f })
+            {
+                Vector3 root = hc + new Vector3(side * hw * 0.36f, hh * 0.3f, -hd * 0.02f);
+                Vector3 p1 = root + new Vector3(side * 0.12f, 0.015f, 0.025f) * s;
+                Vector3 p2 = root + new Vector3(side * 0.23f, 0.08f, 0.05f) * s;
+                Vector3 p3 = root + new Vector3(side * 0.26f, 0.19f, 0.03f) * s;
+                b.Segment(root, p1, 0.042f * s, 0.036f * s, 5, NpcSwatch.Horn);
+                b.Segment(p1, p2, 0.036f * s, 0.024f * s, 5, NpcSwatch.Horn);
+                b.Segment(p2, p3, 0.024f * s, 0.005f * s, 4, NpcSwatch.Charcoal);
+
+                Vector3 ear = hc + new Vector3(side * hw * 0.55f, hh * 0.06f, -hd * 0.06f);
+                b.Blob(ear, new Vector3(0.1f, 0.035f, 0.06f) * s, rig.R.Skin, Quaternion.Euler(0f, 0f, side * -18f), coarse: true);
+            }
+        }
+
+        /// <summary>
+        /// The povo-do-mar (Kirta): a fin in place of each ear, swept back (turquoise on nacre skin, live coral on reef skin),
+        /// and a fin crest from the brow to the nape when the head is bare or only banded.
+        /// </summary>
+        private static void BuildFins(NpcMeshBuilder b, ref Rig rig, bool coversEars)
+        {
+            NpcRecipe r = rig.R;
+            float hw = rig.HeadW, hh = rig.HeadH, hd = rig.HeadD;
+            Vector3 hc = rig.HeadCenter;
+            float s = rig.S;
+            NpcSwatch fin = r.Skin == NpcSwatch.SkinNacre ? NpcSwatch.Turquoise : NpcSwatch.CoralLive;
+            if (!coversEars)
+            {
+                foreach (float side in new[] { -1f, 1f })
+                {
+                    Vector3 root = hc + new Vector3(side * hw * 0.47f, -hh * 0.02f, -hd * 0.04f);
+                    Vector3 up = root + new Vector3(side * 0.06f, 0.1f, -0.11f) * s;
+                    Vector3 down = root + new Vector3(side * 0.05f, -0.05f, -0.09f) * s;
+                    Vector3 mid = root + new Vector3(side * 0.07f, 0.02f, -0.14f) * s;
+                    b.TwoSided(root, up, mid, fin);
+                    b.TwoSided(root, mid, down, fin);
+                }
+            }
+
+            bool bare = r.Headwear == NpcHeadwear.None || r.Headwear == NpcHeadwear.Headband || r.Headwear == NpcHeadwear.FlowerCrown
+                || r.Headwear == NpcHeadwear.SunCirclet;
+            if (bare)
+            {
+                Vector3 brow = hc + new Vector3(0f, hh * 0.46f, hd * 0.2f);
+                Vector3 crown = hc + new Vector3(0f, hh * 0.5f + 0.09f * s, -hd * 0.05f);
+                Vector3 nape = hc + new Vector3(0f, hh * 0.25f, -hd * 0.5f);
+                Vector3 top = hc + new Vector3(0f, hh * 0.5f, -hd * 0.1f);
+                b.TwoSided(brow, crown, top, fin);
+                b.TwoSided(top, crown, nape, fin);
+            }
         }
 
         private static bool DarkSkin(NpcSwatch skin) => skin == NpcSwatch.SkinBrown || skin == NpcSwatch.SkinDeep;
@@ -1002,6 +1074,43 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 foreach (float side in new[] { -1f, 1f })
                 {
                     b.Decal(pad + sr * new Vector3(side * hw * 0.05f, hh * 0.015f, 0.021f * rig.S), new Vector2(0.014f, 0.01f) * rig.S, NpcSwatch.Lash, sr);
+                }
+            }
+
+            if (r.Horns)
+            {
+                // The povo-touro's muzzle: broad and low over the mouth, a dark nose pad with two wide nostrils and a brass ring.
+                Vector3 sp = OnFace(ref rig, 0f, -hh * 0.24f, -0.01f, out Quaternion sr);
+                b.Blob(sp + sr * new Vector3(0f, 0f, 0.045f * rig.S), new Vector3(hw * 0.62f, hh * 0.34f, 0.12f * rig.S), r.Skin);
+                Vector3 pad = sp + sr * new Vector3(0f, -hh * 0.02f, 0.1f * rig.S);
+                b.Blob(pad, new Vector3(hw * 0.42f, hh * 0.15f, 0.045f * rig.S), NpcSwatch.Charcoal, coarse: true);
+                foreach (float side in new[] { -1f, 1f })
+                {
+                    b.Decal(pad + sr * new Vector3(side * hw * 0.11f, 0f, 0.024f * rig.S), new Vector2(0.02f, 0.013f) * rig.S, NpcSwatch.Lash, sr);
+                }
+
+                Vector3 ring = pad + sr * new Vector3(0f, -hh * 0.08f, 0.02f * rig.S);
+                const int links = 6;
+                for (int i = 0; i < links; i++)
+                {
+                    float a0 = i * Mathf.PI * 2f / links;
+                    float a1 = (i + 1) * Mathf.PI * 2f / links;
+                    Vector3 q0 = ring + sr * new Vector3(Mathf.Cos(a0) * 0.028f, Mathf.Sin(a0) * 0.028f, 0f) * rig.S;
+                    Vector3 q1 = ring + sr * new Vector3(Mathf.Cos(a1) * 0.028f, Mathf.Sin(a1) * 0.028f, 0f) * rig.S;
+                    b.Segment(q0, q1, 0.006f * rig.S, 0.006f * rig.S, 3, NpcSwatch.Brass, caps: false);
+                }
+            }
+
+            if (r.Gills)
+            {
+                // The povo-do-mar's gills: three thin slits on each cheek, low, towards the jaw.
+                foreach (float side in new[] { -1f, 1f })
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Vector3 p = OnFace(ref rig, side * hw * 0.36f, -hh * (0.12f + i * 0.07f), 0.004f, out Quaternion gr);
+                        b.Decal(p, new Vector2(0.04f, 0.007f) * rig.S, NpcSwatch.SeaBlue, gr * Quaternion.Euler(0f, 0f, side * 18f));
+                    }
                 }
             }
 
