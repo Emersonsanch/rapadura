@@ -166,6 +166,86 @@ namespace Rapadura.Gameplay.Enemies
             return 1f + (unit * 2f - 1f) * spread;
         }
 
+        // ------------------------------------------------------------------
+        // [distância] spacing: shooters keep the hero at arm's length
+        // ------------------------------------------------------------------
+
+        /// <summary>Shooter "too close" distance as a fraction of its attack range (clamped to <see cref="RangedTooCloseMin"/>..<see cref="RangedTooCloseMax"/>).</summary>
+        public const float RangedTooCloseFraction = 0.5f;
+        public const float RangedTooCloseMin = 3f;
+        public const float RangedTooCloseMax = 4f;
+
+        /// <summary>A backing-off shooter stops once it has opened this much (m) past "too close" (capped by <see cref="RangedPreferredFraction"/>).</summary>
+        public const float RangedBackOffMargin = 3f;
+
+        /// <summary>Never backs off past this fraction of its attack range: it must still reach the hero with the next shot.</summary>
+        public const float RangedPreferredFraction = 0.8f;
+
+        /// <summary>Back-off heading bent this many degrees off "straight away" (it flanks while it retreats, harder to corner).</summary>
+        public const float RangedFlankAngle = 35f;
+
+        /// <summary>Longest single back-off (s) before it plants and shoots again (a hero who keeps chasing still gets shot at).</summary>
+        public const float RangedBackOffMaxSeconds = 1.5f;
+
+        /// <summary>Rest (s) after a back-off before the next one may start.</summary>
+        public const float RangedBackOffRestSeconds = 1.2f;
+
+        /// <summary>Back-off speed as a fraction of the chase speed.</summary>
+        public const float RangedBackOffSpeedFactor = 0.85f;
+
+        /// <summary>
+        /// Distance (m) under which a shooter with <paramref name="attackRange"/> backs off: half its range, kept in 3–4 m
+        /// (the Arqueiro Esqueleto, 14 m, keeps its old 4 m; the 7–9 m map shooters back off at 3.5–4 m), and always inside the range.
+        /// </summary>
+        public static float RangedTooClose(float attackRange)
+        {
+            attackRange = Mathf.Max(0f, attackRange);
+            float d = Mathf.Clamp(attackRange * RangedTooCloseFraction, RangedTooCloseMin, RangedTooCloseMax);
+            return Mathf.Min(d, attackRange * 0.9f);
+        }
+
+        /// <summary>Distance (m) a backing-off shooter tries to reopen: too close + margin, at most <see cref="RangedPreferredFraction"/> of its range.</summary>
+        public static float RangedPreferred(float attackRange)
+        {
+            float tooClose = RangedTooClose(attackRange);
+            return Mathf.Max(tooClose, Mathf.Min(tooClose + RangedBackOffMargin, Mathf.Max(0f, attackRange) * RangedPreferredFraction));
+        }
+
+        /// <summary>
+        /// The keep-distance rule with hysteresis: a planted shooter starts backing off under <see cref="RangedTooClose"/>; one
+        /// already backing off (<paramref name="backingOff"/>) keeps going until <see cref="RangedPreferred"/>. Never for a
+        /// non-positive range (melee).
+        /// </summary>
+        public static bool RangedShouldBackOff(float flatDistance, float attackRange, bool backingOff)
+        {
+            if (attackRange <= 0f)
+            {
+                return false;
+            }
+
+            return flatDistance < (backingOff ? RangedPreferred(attackRange) : RangedTooClose(attackRange));
+        }
+
+        /// <summary>
+        /// Back-off heading: away from <paramref name="threat"/> on the XZ plane, bent <paramref name="flankAngle"/>° to the
+        /// right (<paramref name="flankRight"/>) or left, so it circles out instead of backing straight into a corner. Standing
+        /// on the threat, it picks a fixed side. Normalized.
+        /// </summary>
+        public static Vector3 RangedBackOffDirection(Vector3 self, Vector3 threat, bool flankRight, float flankAngle = RangedFlankAngle)
+        {
+            Vector3 away = self - threat;
+            away.y = 0f;
+            if (away.sqrMagnitude < 1e-6f)
+            {
+                away = Vector3.back;
+            }
+
+            away.Normalize();
+            Vector3 bent = Quaternion.Euler(0f, flankRight ? flankAngle : -flankAngle, 0f) * away;
+            bent.y = 0f;
+            return bent.normalized;
+        }
+
         /// <summary>Which way a creature sidesteps a head-on obstacle: stable per seed, so it never dithers between sides.</summary>
         public static bool PrefersRight(int seed)
         {

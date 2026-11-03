@@ -19,6 +19,17 @@ namespace Rapadura.Gameplay.Enemies
         LureGlob = 4,
     }
 
+    /// <summary>What the brain does at the strike of a telegraphed attack (<see cref="EnemyRangedAttack.StrikeKindOf"/>).</summary>
+    public enum EnemyStrikeKind
+    {
+        /// <summary>Melee swing: the brain applies the damage to its target (Hitbox or direct, Espinhos apply).</summary>
+        Swing = 0,
+        /// <summary>[distância] definition: the brain fires <see cref="EnemyDefinition.Projectile"/>; only the shot deals damage.</summary>
+        Projectile = 1,
+        /// <summary>A component shoots on its own (the ossuary archer/sorcerer watch <see cref="EnemyController.StrikeSequence"/>): the brain deals nothing.</summary>
+        External = 2,
+    }
+
     /// <summary>
     /// The shot of the open-map [distância] enemies (Docs/Mapas100.md §0.5: "atira de longe"). The regular
     /// <see cref="EnemyController"/> brain does everything else: it chases until <see cref="EnemyDefinition.AttackRange"/>
@@ -39,8 +50,20 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>The shot flies this much (m) past the attack range before it fizzles.</summary>
         public const float ExtraFlight = 3f;
 
-        /// <summary>The cue played on each shot (the ossuary's procedural whoosh, see <see cref="DungeonFx"/>).</summary>
-        public const string ShotCue = DungeonFx.ArrowCue;
+        /// <summary>
+        /// The strike rule: a definition that shoots fires its projectile; an enemy whose shot belongs to a component
+        /// (<paramref name="externalShot"/>) gets no brain damage at all; everyone else swings. A shooter never also lands the
+        /// melee hit of its AttackDamage at range (the ossuary archer used to: 10 damage at 14 m on top of its arrow).
+        /// </summary>
+        public static EnemyStrikeKind StrikeKindOf(bool definitionShoots, bool externalShot)
+        {
+            if (definitionShoots)
+            {
+                return EnemyStrikeKind.Projectile;
+            }
+
+            return externalShot ? EnemyStrikeKind.External : EnemyStrikeKind.Swing;
+        }
 
         public static float SpeedOf(EnemyProjectileKind kind)
         {
@@ -129,7 +152,7 @@ namespace Rapadura.Gameplay.Enemies
 
             var projectile = root.AddComponent<DungeonProjectile>();
             projectile.Setup(target, source, damage, SpeedOf(kind), Mathf.Max(0f, attackRange) + ExtraFlight, HomingOf(kind), false, ElementOf(kind), color);
-            DungeonFx.Play(ShotCue, from);
+            EnemyShotAudio.Play(kind, from);
             return projectile;
         }
     }

@@ -30,6 +30,30 @@ namespace Rapadura.Gameplay.Dungeon
         public virtual void Configure(DungeonHall hall)
         {
             Hall = hall;
+            EnemyController brain = GetComponent<EnemyController>();
+            if (brain != null && hall != null && KeepsDistance)
+            {
+                // Backing off (a shooter keeping its distance) never leaves the hall.
+                brain.SetBackOffArea(p => hall.Layout.Contains(hall.ToLocal(p), false));
+            }
+        }
+
+        /// <summary>This component looses the enemy's shot itself on <see cref="OnStrike"/>: the brain must deal no swing damage.</summary>
+        public virtual bool FiresOwnShot => false;
+
+        /// <summary>A shooter that backs off when the hero closes in (the brain's generic [distância] keep-distance rule).</summary>
+        public virtual bool KeepsDistance => false;
+
+        /// <summary>
+        /// Tells the brain of <paramref name="controller"/> what this ability takes over (called by <see cref="DungeonDirector.AddBehaviour"/>
+        /// right after the component is added, so it holds in EditMode too where Awake does not run).
+        /// </summary>
+        public void BindBrain(EnemyController controller)
+        {
+            if (controller != null && FiresOwnShot)
+            {
+                controller.ClaimRangedStrike(KeepsDistance);
+            }
         }
 
         protected virtual void Awake()
@@ -296,15 +320,19 @@ namespace Rapadura.Gameplay.Dungeon
     }
 
     /// <summary>
-    /// Arqueiro Esqueleto do Fosso: shoots from up to 14 m (its brain's "attack range"; the swing itself deals nothing) a rune rib
-    /// arrow with a purple smoke trail that slows the hero by 20% for 3 s (<see cref="DungeonProjectile.LaunchArrow"/>). When the
-    /// hero comes closer than 4 m it backs off three steps while it nocks the next arrow.
+    /// Arqueiro Esqueleto do Fosso: shoots from up to 14 m (its brain's "attack range"; the brain deals no swing damage, see
+    /// <see cref="EnemyController.ClaimRangedStrike"/>) a rune rib arrow with a purple smoke trail that slows the hero by 20% for 3 s
+    /// (<see cref="DungeonProjectile.LaunchArrow"/>). When the hero comes closer than 4 m it backs off, flanking, while it nocks the
+    /// next arrow: the same keep-distance rule as the open-map [distância] enemies (<see cref="EnemySteering.RangedShouldBackOff"/>,
+    /// <see cref="EnemyController.TickKeepDistance"/>), kept inside the hall.
     /// </summary>
     public class SkeletonArcherBehaviour : DungeonEnemyBehaviour
     {
         public const float ArrowDamage = 10f;
 
-        private float _retreatCooldown;
+        public override bool FiresOwnShot => true;
+
+        public override bool KeepsDistance => true;
 
         protected override void OnStrike()
         {
@@ -313,18 +341,6 @@ namespace Rapadura.Gameplay.Dungeon
                 DungeonProjectile.LaunchArrow(Muzzle(1.35f), Hero, gameObject, ScaledDamage(ArrowDamage));
                 DungeonFx.Play(DungeonFx.ArrowCue, transform.position);
             }
-        }
-
-        protected override void Tick(float deltaTime)
-        {
-            _retreatCooldown -= deltaTime;
-            if (_retreatCooldown > 0f || Hero == null || !DungeonRules.ArcherShouldRetreat(FlatDistanceToHero))
-            {
-                return;
-            }
-
-            _retreatCooldown = 1.4f;
-            Slide(transform.position - Hero.position, DungeonRules.ArcherRetreatDistance, 0.6f);
         }
     }
 
@@ -336,6 +352,9 @@ namespace Rapadura.Gameplay.Dungeon
     public class BoneSorcererBehaviour : DungeonEnemyBehaviour
     {
         public const float OrbDamage = 14f;
+
+        /// <summary>The orb is the whole attack: the brain deals no swing damage at 10 m (it stands its ground, no back-off).</summary>
+        public override bool FiresOwnShot => true;
 
         private DungeonDirector _director;
         private float _raiseTimer;

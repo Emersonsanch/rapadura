@@ -430,6 +430,13 @@ namespace Rapadura.Gameplay.Enemies
             _yawVelocity = 0f;
             _attackCooldownRemaining = 0f;
             CancelAttackWindup();
+            // A pooled body may have been an ossuary archer: its shot/keep-distance claims belong to that life.
+            _externalShot = false;
+            _keepDistanceClaim = false;
+            _backOffArea = null;
+            _backingOff = false;
+            _backOffLeft = 0f;
+            _backOffRest = 0f;
 
             if (Health == null)
             {
@@ -905,6 +912,125 @@ namespace Rapadura.Gameplay.Enemies
             {
                 transform.position += delta;
             }
+        }
+
+        // ------------------------------------------------------------------
+        // [distância]: who deals the strike, and keeping the hero at arm's length
+        // ------------------------------------------------------------------
+
+        private bool _externalShot;
+        private bool _keepDistanceClaim;
+        private System.Func<Vector3, bool> _backOffArea;
+        private bool _backingOff;
+        private float _backOffLeft;
+        private float _backOffRest;
+        private int _backOffCount;
+
+        /// <summary>What the strike of the telegraphed attack does (<see cref="EnemyRangedAttack.StrikeKindOf"/>).</summary>
+        public EnemyStrikeKind StrikeKind => EnemyRangedAttack.StrikeKindOf(_definition != null && _definition.IsRanged, _externalShot);
+
+        /// <summary>A shooter (its definition's projectile or a component's): it never swings, so it backs off instead of trading blows.</summary>
+        public bool KeepsDistance => (_definition != null && _definition.IsRanged) || _keepDistanceClaim;
+
+        /// <summary>True while it is backing off from a hero who came too close (<see cref="TickKeepDistance"/>).</summary>
+        public bool IsBackingOff => _backingOff;
+
+        /// <summary>
+        /// A component fires this enemy's shot on its own at each <see cref="StrikeSequence"/> (the ossuary archer/sorcerer): the
+        /// brain then deals no damage at the strike (before, it also landed the AttackDamage swing at range). With
+        /// <paramref name="keepDistance"/> it also backs off like the [distância] commons. Cleared by <see cref="ResetForSpawn"/>.
+        /// </summary>
+        public void ClaimRangedStrike(bool keepDistance)
+        {
+            _externalShot = true;
+            _keepDistanceClaim |= keepDistance;
+        }
+
+        /// <summary>Where a back-off step may land (e.g. inside a dungeon hall); null = anywhere (walls are steered around).</summary>
+        public void SetBackOffArea(System.Func<Vector3, bool> isInside) => _backOffArea = isInside;
+
+        /// <summary>
+        /// Attack-stance step of a shooter (<see cref="KeepsDistance"/>): under <see cref="EnemySteering.RangedTooClose"/> it backs
+        /// off, flanking (<see cref="EnemySteering.RangedBackOffDirection"/>, alternating sides), until
+        /// <see cref="EnemySteering.RangedPreferred"/>, for at most <see cref="EnemySteering.RangedBackOffMaxSeconds"/>, then rests
+        /// <see cref="EnemySteering.RangedBackOffRestSeconds"/> planted (and shooting) before the next one. Returns true when it moved.
+        /// </summary>
+        public bool TickKeepDistance(float deltaTime)
+        {
+            if (!KeepsDistance || Target == null || deltaTime <= 0f)
+            {
+                _backingOff = false;
+                return false;
+            }
+
+            _backOffRest = Mathf.Max(0f, _backOffRest - deltaTime);
+            Vector3 toHero = Target.position - transform.position;
+            toHero.y = 0f;
+            bool want = EnemySteering.RangedShouldBackOff(toHero.magnitude, _definition.AttackRange, _backingOff);
+
+            if (_backingOff)
+            {
+                _backOffLeft -= deltaTime;
+                if (!want || _backOffLeft <= 0f)
+                {
+                    EndBackOff();
+                    return false;
+                }
+            }
+            else
+            {
+                if (!want || _backOffRest > 0f)
+                {
+                    return false;
+                }
+
+                _backingOff = true;
+                _backOffLeft = EnemySteering.RangedBackOffMaxSeconds;
+                _backOffCount++;
+            }
+
+            Vector3 direction = BackOffDirection();
+            if (direction == Vector3.zero)
+            {
+                EndBackOff();
+                return false;
+            }
+
+            float speed = _definition.ChaseSpeed * EnemySteering.RangedBackOffSpeedFactor * PaceMultiplier;
+            MoveInDirection(direction, speed, deltaTime);
+            return true;
+        }
+
+        private void EndBackOff()
+        {
+            _backingOff = false;
+            _backOffRest = EnemySteering.RangedBackOffRestSeconds;
+        }
+
+        /// <summary>Flanking away, alternating sides per back-off; the other side, then square sideways, when the area forbids it.</summary>
+        private Vector3 BackOffDirection()
+        {
+            _ = PaceMultiplier; // resolves _prefersRight
+            bool right = _prefersRight ^ (_backOffCount % 2 == 0);
+            Vector3 self = transform.position;
+            Vector3 hero = Target.position;
+            Vector3 first = EnemySteering.RangedBackOffDirection(self, hero, right);
+            if (_backOffArea == null)
+            {
+                return first;
+            }
+
+            const float probe = 1f;
+            for (int i = 0; i < 4; i++)
+            {
+                Vector3 candidate = i == 0 ? first : EnemySteering.RangedBackOffDirection(self, hero, (i % 2 == 0) == right, i < 2 ? EnemySteering.RangedFlankAngle : 90f);
+                if (_backOffArea(self + candidate * probe))
+                {
+                    return candidate;
+                }
+            }
+
+            return Vector3.zero;
         }
 
         public void ApplyDamageToTarget(float amount)

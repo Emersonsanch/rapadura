@@ -30,19 +30,31 @@ namespace Rapadura.Tests
             public BiomeType biome;
             public float maxHealth;
             public float attackDamage;
+            public float attackRange;
+            public EnemyProjectileKind projectile;
         }
+
+        private const float MeleeRange = 1.5f;
 
         private static readonly List<EnemySeed> Seeds = new List<EnemySeed>
         {
-            new EnemySeed { id = "enemy_forest_wolf", name = "Lobo do Tugai", isBoss = false, biome = BiomeType.Forest, maxHealth = 70f, attackDamage = 7f },
-            new EnemySeed { id = "enemy_forest_alpha_wolf", name = "Kök-Böri, o Lobo Celeste", isBoss = true, biome = BiomeType.Forest, maxHealth = 520f, attackDamage = 15f },
-            new EnemySeed { id = "enemy_desert_scorpion", name = "Escorpião das Areias Flamejantes", isBoss = false, biome = BiomeType.Desert, maxHealth = 110f, attackDamage = 11f },
-            new EnemySeed { id = "enemy_desert_ruin_guardian", name = "O Grande Ushabti", isBoss = true, biome = BiomeType.Desert, maxHealth = 780f, attackDamage = 32f },
-            new EnemySeed { id = "enemy_mountain_stone_golem", name = "Ushabti de Pedra", isBoss = false, biome = BiomeType.Mountain, maxHealth = 140f, attackDamage = 13f },
-            new EnemySeed { id = "enemy_mountain_warlord", name = "Hahya, o Gigante Guerreiro", isBoss = true, biome = BiomeType.Mountain, maxHealth = 900f, attackDamage = 30f },
-            new EnemySeed { id = "enemy_cave_bat_swarm", name = "Enxame de Morcegos do Limiar", isBoss = false, biome = BiomeType.Caves, maxHealth = 170f, attackDamage = 7f },
-            new EnemySeed { id = "enemy_cave_dweller", name = "Tages, o Habitante Ancestral", isBoss = true, biome = BiomeType.Caves, maxHealth = 1180f, attackDamage = 42f },
+            new EnemySeed { id = "enemy_forest_wolf", name = "Lobo do Tugai", isBoss = false, biome = BiomeType.Forest, maxHealth = 70f, attackDamage = 7f, attackRange = MeleeRange },
+            new EnemySeed { id = "enemy_forest_alpha_wolf", name = "Kök-Böri, o Lobo Celeste", isBoss = true, biome = BiomeType.Forest, maxHealth = 520f, attackDamage = 15f, attackRange = MeleeRange },
+            new EnemySeed { id = "enemy_desert_scorpion", name = "Escorpião das Areias Flamejantes", isBoss = false, biome = BiomeType.Desert, maxHealth = 110f, attackDamage = 11f, attackRange = MeleeRange },
+            new EnemySeed { id = "enemy_desert_ruin_guardian", name = "O Grande Ushabti", isBoss = true, biome = BiomeType.Desert, maxHealth = 780f, attackDamage = 32f, attackRange = MeleeRange },
+            new EnemySeed { id = "enemy_mountain_stone_golem", name = "Ushabti de Pedra", isBoss = false, biome = BiomeType.Mountain, maxHealth = 140f, attackDamage = 13f, attackRange = MeleeRange },
+            new EnemySeed { id = "enemy_mountain_warlord", name = "Hahya, o Gigante Guerreiro", isBoss = true, biome = BiomeType.Mountain, maxHealth = 900f, attackDamage = 30f, attackRange = MeleeRange },
+            new EnemySeed { id = "enemy_cave_bat_swarm", name = "Enxame de Morcegos do Limiar", isBoss = false, biome = BiomeType.Caves, maxHealth = 170f, attackDamage = 7f, attackRange = MeleeRange },
+            new EnemySeed { id = "enemy_cave_dweller", name = "Tages, o Habitante Ancestral", isBoss = true, biome = BiomeType.Caves, maxHealth = 1180f, attackDamage = 42f, attackRange = MeleeRange },
+
+            // [distância] commons of the playable maps (Docs/Mapas100.md 07, 08, 13, 19), spawn weight 0 in their biome.
+            new EnemySeed { id = "enemy_desert_ember_vulture", name = "Abutre de Brasa", isBoss = false, biome = BiomeType.Desert, maxHealth = 110f, attackDamage = 12f, attackRange = 8f, projectile = EnemyProjectileKind.Ember },
+            new EnemySeed { id = "enemy_desert_broken_lantern", name = "Lanterna Quebrada dos Artífices", isBoss = false, biome = BiomeType.Desert, maxHealth = 110f, attackDamage = 14f, attackRange = 7f, projectile = EnemyProjectileKind.LanternBolt },
+            new EnemySeed { id = "enemy_mountain_crested_hawk", name = "Gavião-de-Penacho", isBoss = false, biome = BiomeType.Mountain, maxHealth = 140f, attackDamage = 13f, attackRange = 9f, projectile = EnemyProjectileKind.Feather },
+            new EnemySeed { id = "enemy_cave_lantern_fish", name = "Peixe-Lanterna Apagado", isBoss = false, biome = BiomeType.Caves, maxHealth = 170f, attackDamage = 16f, attackRange = 7.5f, projectile = EnemyProjectileKind.LureGlob },
         };
+
+        private static IEnumerable<EnemySeed> RangedSeeds => Seeds.Where(s => s.projectile != EnemyProjectileKind.None);
 
         private readonly List<Object> _created = new List<Object>();
 
@@ -76,18 +88,21 @@ namespace Rapadura.Tests
             SetPrivateField(enemy, "_isBoss", seed.isBoss);
             SetPrivateField(enemy, "_maxHealth", seed.maxHealth);
             SetPrivateField(enemy, "_attackDamage", seed.attackDamage);
+            SetPrivateField(enemy, "_attackRange", seed.attackRange);
+            SetPrivateField(enemy, "_projectile", seed.projectile);
 
             return enemy;
         }
 
         [Test]
-        public void BuildSeeds_ProducesEightEnemies()
+        public void BuildSeeds_ProducesTwelveEnemies_FourOfThemRanged()
         {
-            Assert.AreEqual(8, Seeds.Count);
+            Assert.AreEqual(12, Seeds.Count);
+            Assert.AreEqual(4, RangedSeeds.Count());
         }
 
         [Test]
-        public void BuildSeeds_CoversFourBiomesWithTwoEnemiesEach()
+        public void BuildSeeds_CoversFourBiomes_TwoMeleeEach_PlusTheRangedCommons()
         {
             var byBiome = Seeds.GroupBy(s => s.biome).ToDictionary(g => g.Key, g => g.Count());
 
@@ -95,10 +110,15 @@ namespace Rapadura.Tests
                 new[] { BiomeType.Forest, BiomeType.Desert, BiomeType.Mountain, BiomeType.Caves },
                 byBiome.Keys);
 
-            foreach (KeyValuePair<BiomeType, int> kvp in byBiome)
+            foreach (IGrouping<BiomeType, EnemySeed> group in Seeds.Where(s => s.projectile == EnemyProjectileKind.None).GroupBy(s => s.biome))
             {
-                Assert.AreEqual(2, kvp.Value, $"Expected exactly 2 enemies for biome {kvp.Key}.");
+                Assert.AreEqual(2, group.Count(), $"Expected exactly 2 melee enemies for biome {group.Key}.");
             }
+
+            Assert.AreEqual(4, byBiome[BiomeType.Desert], "Desert: Abutre de Brasa + Lanterna Quebrada");
+            Assert.AreEqual(3, byBiome[BiomeType.Mountain], "Mountain: Gavião-de-Penacho");
+            Assert.AreEqual(3, byBiome[BiomeType.Caves], "Caves: Peixe-Lanterna Apagado");
+            Assert.AreEqual(2, byBiome[BiomeType.Forest], "Forest: no ranged common yet");
         }
 
         [Test]
@@ -123,6 +143,8 @@ namespace Rapadura.Tests
                 "enemy_desert_scorpion", "enemy_desert_ruin_guardian",
                 "enemy_mountain_stone_golem", "enemy_mountain_warlord",
                 "enemy_cave_bat_swarm", "enemy_cave_dweller",
+                "enemy_desert_ember_vulture", "enemy_desert_broken_lantern",
+                "enemy_mountain_crested_hawk", "enemy_cave_lantern_fish",
             };
 
             var actualIds = new HashSet<string>(Seeds.Select(s => s.id));
@@ -150,10 +172,46 @@ namespace Rapadura.Tests
         {
             foreach (IGrouping<BiomeType, EnemySeed> group in Seeds.GroupBy(s => s.biome))
             {
-                EnemySeed common = group.Single(s => !s.isBoss);
                 EnemySeed boss = group.Single(s => s.isBoss);
+                foreach (EnemySeed common in group.Where(s => !s.isBoss))
+                {
+                    Assert.Greater(boss.maxHealth, common.maxHealth, $"Boss should be tougher than {common.id} in {group.Key}.");
+                }
+            }
+        }
 
-                Assert.Greater(boss.maxHealth, common.maxHealth, $"Boss should be tougher than the common enemy in {group.Key}.");
+        [Test]
+        public void RangedSeeds_AreCommonsThatShootFromRange_MeleeSeedsSwing()
+        {
+            foreach (EnemySeed seed in Seeds)
+            {
+                EnemyDefinition enemy = BuildEnemy(seed);
+                bool ranged = seed.projectile != EnemyProjectileKind.None;
+                Assert.AreEqual(ranged, enemy.IsRanged, seed.id);
+                Assert.AreEqual(seed.projectile, enemy.Projectile, seed.id);
+                if (ranged)
+                {
+                    Assert.IsFalse(seed.isBoss, $"{seed.id}: a common");
+                    Assert.That(enemy.AttackRange, Is.InRange(6f, 10f), $"{seed.id}: shoots from range");
+                }
+            }
+
+            CollectionAssert.AllItemsAreUnique(RangedSeeds.Select(s => s.projectile), "each shooter has its own projectile (and shot sound)");
+        }
+
+        [Test]
+        public void RangedSeeds_MirrorTheirSeededAssets()
+        {
+            foreach (EnemySeed seed in RangedSeeds)
+            {
+                EnemyDefinition asset = Resources.Load<EnemyDefinition>("Enemies/" + seed.id);
+                Assert.IsNotNull(asset, $"{seed.id}: seeded into Resources/Enemies");
+                Assert.AreEqual(seed.name, asset.EnemyName, seed.id);
+                Assert.AreEqual(seed.isBoss, asset.IsBoss, seed.id);
+                Assert.AreEqual(seed.maxHealth, asset.MaxHealth, 1e-4f, seed.id);
+                Assert.AreEqual(seed.attackDamage, asset.AttackDamage, 1e-4f, seed.id);
+                Assert.AreEqual(seed.attackRange, asset.AttackRange, 1e-4f, seed.id);
+                Assert.AreEqual(seed.projectile, asset.Projectile, seed.id);
             }
         }
     }

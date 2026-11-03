@@ -467,18 +467,22 @@ namespace Rapadura.Gameplay.Dungeon
             return enemy;
         }
 
-        /// <summary>The ability component of each ossuary enemy.</summary>
+        /// <summary>The ability component of each ossuary enemy (bound to its brain: shooters take over the strike).</summary>
         public static DungeonEnemyBehaviour AddBehaviour(GameObject enemy, string enemyId)
         {
+            DungeonEnemyBehaviour behaviour;
             switch (enemyId)
             {
-                case DungeonRules.FloatingSkullId: return enemy.AddComponent<FloatingSkullBehaviour>();
-                case DungeonRules.SkeletonWarriorId: return enemy.AddComponent<SkeletonGuardBehaviour>();
-                case DungeonRules.SkeletonArcherId: return enemy.AddComponent<SkeletonArcherBehaviour>();
-                case DungeonRules.BoneSorcererId: return enemy.AddComponent<BoneSorcererBehaviour>();
-                case DungeonRules.BoneColossusId: return enemy.AddComponent<BoneColossusBehaviour>();
+                case DungeonRules.FloatingSkullId: behaviour = enemy.AddComponent<FloatingSkullBehaviour>(); break;
+                case DungeonRules.SkeletonWarriorId: behaviour = enemy.AddComponent<SkeletonGuardBehaviour>(); break;
+                case DungeonRules.SkeletonArcherId: behaviour = enemy.AddComponent<SkeletonArcherBehaviour>(); break;
+                case DungeonRules.BoneSorcererId: behaviour = enemy.AddComponent<BoneSorcererBehaviour>(); break;
+                case DungeonRules.BoneColossusId: behaviour = enemy.AddComponent<BoneColossusBehaviour>(); break;
                 default: return null;
             }
+
+            behaviour.BindBrain(enemy.GetComponent<EnemyController>());
+            return behaviour;
         }
 
         private void Teleport(GameObject enemy, Vector3 target)

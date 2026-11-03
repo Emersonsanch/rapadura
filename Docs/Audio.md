@@ -149,6 +149,20 @@ sem gatilho próprio no `SfxTrigger`. Preset novo `Bark` (31): um "au" curto (to
 | `pet.sniff` | Fareja parado / pega o loot (3D, bem baixo) | `Inhale` 1,4 kHz → fungadas curtas de focinho. | 0,18 | 1 s / 1 | 12% / 20% |
 | `pet.fetch` | Entrega o loot buscado ao herói | `Clink` 1,5 kHz → moedinha caindo no chão + "plim". | 0,30 | 0,3 s / 1 | 8% / 15% |
 
+### Tiros dos inimigos [distância] (2026-11-03)
+
+Tocados no disparo por `EnemyRangedAttack.Launch` via `EnemyShotAudio.Play` (3D, na boca do tiro), um por tipo de
+projétil; antes os quatro usavam o `dungeon.arrow` da masmorra. Como nas montarias, os cues **não estão no asset**
+(`EnemyShotAudio.EnsureCues` acrescenta só os ids que faltam) e cada som é sintetizado em `EnemyShotAudio`
+(`GenerateEmber/LanternBolt/Feather/LureGlob`) e vai como `clip` do cue; o preset é só o fallback.
+
+| Cue id | Quem atira | Placeholder hoje → sugestão de som real | Vol. | Cooldown / vozes |
+|---|---|---|---|---|
+| `enemy.shot_ember` | Abutre de Brasa | "puf" + chiado com estalos (brasa) → cuspida de fogo curta, crepitar de carvão | 0,40 | 0,12 s / 3 |
+| `enemy.shot_light` | Lanterna Quebrada dos Artífices | zap vítreo descendo 2,4 kHz → 700 Hz com brilho → vidro vibrando + faísca elétrica suave | 0,36 | 0,12 s / 3 |
+| `enemy.shot_feather` | Gavião-de-Penacho | "fft" de ar com tremor de asa → pena cortando o ar, bater de asa seco | 0,34 | 0,12 s / 3 |
+| `enemy.shot_glob` | Peixe-Lanterna Apagado | "blup" subindo 300 Hz → 1,1 kHz (gota) → gota caindo em água de gruta, com eco | 0,38 | 0,12 s / 3 |
+
 ### Montarias, fase M1 (2026-10-30)
 
 Tocados direto pelo id por `MountController` (arena), `WorldMapMountRider` (mapa) e `MountActor` (passos), via

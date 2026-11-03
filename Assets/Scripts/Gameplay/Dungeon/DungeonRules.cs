@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Skills;
 using Rapadura.Gameplay.World.Biomes;
 using UnityEngine;
@@ -223,13 +224,15 @@ namespace Rapadura.Gameplay.Dungeon
         /// <summary>Arqueiro Esqueleto: range, the keep-away rule and its rib arrow.</summary>
         public const float ArcherRange = 14f;
         public const float ArcherRetreatTrigger = 4f;
-        public const float ArcherRetreatDistance = 2.4f;
         public const float ArrowSpeed = 15f;
         public const float ArrowSlowFraction = 0.2f;
         public const float ArrowSlowSeconds = 3f;
 
-        /// <summary>The archer backs off (three steps) while the hero is closer than <see cref="ArcherRetreatTrigger"/>.</summary>
-        public static bool ArcherShouldRetreat(float flatDistanceToHero) => flatDistanceToHero < ArcherRetreatTrigger;
+        /// <summary>
+        /// The archer starts backing off when the hero is closer than <see cref="ArcherRetreatTrigger"/>: the generic [distância]
+        /// rule at its 14 m range (<see cref="EnemySteering.RangedShouldBackOff"/>; <see cref="EnemySteering.RangedTooClose"/>(14) = 4 m).
+        /// </summary>
+        public static bool ArcherShouldRetreat(float flatDistanceToHero) => EnemySteering.RangedShouldBackOff(flatDistanceToHero, ArcherRange, false);
 
         /// <summary>Feiticeiro das Ossadas: spectral orbs and "Erguer as Ossadas".</summary>
         public const float OrbSpeed = 9f;

@@ -67,6 +67,20 @@ namespace Rapadura.Gameplay.Enemies.States
                 return;
             }
 
+            // [distância]: a shooter the hero walked up to backs off (flanking) instead of planting; it keeps nocking the
+            // next shot meanwhile but never looses it mid-step (the windup restarts, fully telegraphed, once it plants).
+            if (context.TickKeepDistance(deltaTime))
+            {
+                if (_windingUp)
+                {
+                    _windingUp = false;
+                    context.CancelAttackWindup();
+                }
+
+                _timeToStrike = Mathf.Max(_timeToStrike - deltaTime, _windup + deltaTime);
+                return;
+            }
+
             context.StopMoving(deltaTime);
             context.FaceTarget(deltaTime);
 
@@ -91,11 +105,16 @@ namespace Rapadura.Gameplay.Enemies.States
             // AttackDamage debuffs (Provocação Heroica, Névoa da Ilusão, Purificação) weaken the swing.
             float damage = context.EffectiveAttackDamage;
 
-            // [distância]: the strike looses a shot from range instead of a swing (EnemyRangedAttack).
-            if (context.Definition != null && context.Definition.IsRanged)
+            // [distância]: a shooter only ever hurts with its shot (EnemyRangedAttack.StrikeKindOf). The ossuary archer and
+            // sorcerer fire from their own components on StrikeSequence: the brain deals nothing (it used to also land the
+            // AttackDamage swing at 14/10 m on top of the arrow/orb).
+            switch (context.StrikeKind)
             {
-                context.FireProjectile(damage);
-                return;
+                case EnemyStrikeKind.Projectile:
+                    context.FireProjectile(damage);
+                    return;
+                case EnemyStrikeKind.External:
+                    return;
             }
 
             if (context.Hitbox != null)
