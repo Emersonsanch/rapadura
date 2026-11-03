@@ -48,6 +48,13 @@ namespace Rapadura.Gameplay.Enemies
             // Bosses may multiply this (EnemyDefinition.BossExperienceMultiplier) — see BossBonusRules —
             // and a "Nova Jornada+" cycle multiplies the result (NewGamePlusRules, ×1 on the first campaign).
             int reward = BossBonusRules.GetExperienceReward(enemy.Definition);
+            // A creature with its own level (open maps): the asset XP up to the archetype level, the table above it, then
+            // the MU-style level-difference cut (Docs/Progressao500.md §1.2). Campaign encounters have no level source.
+            if (enemy.TryGetComponent(out ICreatureLevelSource leveled))
+            {
+                reward = EnemyLevelScaling.LeveledKillExperience(reward, leveled.CreatureLevel, EnemyLevelScaling.RankOf(enemy.Definition.IsBoss), killerStats.Level);
+            }
+
             // "Presa do dia" / "Bicho destaque do dia" (EnemyRewardHooks; x1 when nothing is installed).
             reward = EnemyRewardHooks.ScaleExperience(enemy.Definition, reward);
             // Event rooms rescale each enemy to the hero's level bracket (IKillExperienceScaler on the instance).

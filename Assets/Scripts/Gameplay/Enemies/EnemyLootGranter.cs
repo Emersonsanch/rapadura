@@ -86,6 +86,13 @@ namespace Rapadura.Gameplay.Enemies
                 drops.AddRange(EnemyLootRoller.Roll(definition, biome, _random, newGamePlusCycle: NewGamePlusProgress.ResolveCurrentCycle()));
             }
 
+            // A creature with its own level far below the hero (open maps, > 20 levels) drops no equipment; materials stay
+            // (Docs/Progressao500.md §1.2).
+            if (enemy.TryGetComponent(out ICreatureLevelSource leveled) && !EnemyLevelScaling.DropsEquipment(ResolveHeroLevel(inventory), leveled.CreatureLevel))
+            {
+                drops.RemoveAll(drop => drop.IsGenerated);
+            }
+
             // "Fôlego diário": the one place loot takes the stamina tier — the enemy's own drops (base + biome + extra rolls)
             // scale their plain stacks; generated gear and the refine stones below are untouched (StaminaLootRules).
             drops = Rapadura.Gameplay.Daily.StaminaLootRules.Apply(drops, Rapadura.Gameplay.Daily.DailyStaminaService.ResolveMultiplier(), _random);
@@ -153,6 +160,13 @@ namespace Rapadura.Gameplay.Enemies
 
             GameObject player = GameObject.FindGameObjectWithTag(PlayerTag);
             return player != null ? player.GetComponent<InventoryManager>() : null;
+        }
+
+        /// <summary>The level of the hero owning <paramref name="inventory"/> (1 when it has no stats).</summary>
+        private static int ResolveHeroLevel(InventoryManager inventory)
+        {
+            Rapadura.Gameplay.Player.PlayerStats stats = inventory != null ? inventory.GetComponentInParent<Rapadura.Gameplay.Player.PlayerStats>() : null;
+            return stats != null ? stats.Level : 1;
         }
 
         private static string DescribeDrop(LootDrop drop, int quantity)

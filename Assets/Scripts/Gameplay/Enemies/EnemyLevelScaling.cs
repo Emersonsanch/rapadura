@@ -98,8 +98,9 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>True when the level changes nothing (every campaign band today).</summary>
         public static bool IsIdentity(int level) => level <= ArchetypeLevel;
 
-        /// <summary>Kill XP of a creature of <paramref name="level"/> and <paramref name="rank"/> (§1.2). Not wired yet: today's
-        /// assets keep their own XP; new maps use this.</summary>
+        /// <summary>Kill XP of a creature of <paramref name="level"/> and <paramref name="rank"/> (§1.2). Campaign encounters keep
+        /// their assets' XP; a creature with its own level (open maps, <see cref="ICreatureLevelSource"/>) gets this above the
+        /// archetype level through <see cref="LeveledKillExperience"/>.</summary>
         public static int KillExperience(int level, EnemyRank rank = EnemyRank.Common)
         {
             level = ClampLevel(level);
@@ -120,20 +121,58 @@ namespace Rapadura.Gameplay.Enemies
             }
         }
 
+        /// <summary>Levels below the hero a creature still gives full XP (§1.2).</summary>
+        public const int FullXpLevelsBelow = 10;
+
+        /// <summary>From this many levels below the hero on, the XP floor and no equipment drop (§1.2).</summary>
+        public const int FloorXpLevelsBelow = 20;
+
+        /// <summary>XP lost per level between <see cref="FullXpLevelsBelow"/> and <see cref="FloorXpLevelsBelow"/>.</summary>
+        public const float XpLossPerLevelBelow = 0.05f;
+
+        /// <summary>XP left beyond <see cref="FloorXpLevelsBelow"/> levels below.</summary>
+        public const float FloorXpMultiplier = 0.1f;
+
         /// <summary>
         /// MU-style XP by level difference (§1.2): 100% up to 10 levels below (or any level above), −5% per level from 11 to
-        /// 20 below (50% at 20), 10% beyond. Not wired yet (it would cut today's campaign XP for over-levelled heroes).
+        /// 20 below (50% at 20), 10% beyond. Applied only to creatures with their own level (<see cref="ICreatureLevelSource"/>,
+        /// the open maps), so today's campaign encounters keep their XP for over-levelled heroes.
         /// </summary>
         public static float LevelDifferenceXpMultiplier(int heroLevel, int creatureLevel)
         {
             int below = heroLevel - creatureLevel;
-            if (below <= 10)
+            if (below <= FullXpLevelsBelow)
             {
                 return 1f;
             }
 
-            return below <= 20 ? 1f - 0.05f * (below - 10) : 0.1f;
+            return below <= FloorXpLevelsBelow ? 1f - XpLossPerLevelBelow * (below - FullXpLevelsBelow) : FloorXpMultiplier;
         }
+
+        /// <summary>The kill-XP rank of a definition: a boss counts as a map boss (×9), anything else as a common.</summary>
+        public static EnemyRank RankOf(bool isBoss) => isBoss ? EnemyRank.MapBoss : EnemyRank.Common;
+
+        /// <summary>
+        /// Kill XP of a creature with its own level (§1.2), before the session multipliers (fôlego, descansado, NG+):
+        /// at or below <see cref="ArchetypeLevel"/> the asset's XP (<paramref name="assetExperience"/>, boss bonus included:
+        /// the 1–15 pace is today's), above it the table (<see cref="KillExperience"/>); then the level-difference
+        /// multiplier against <paramref name="heroLevel"/>. Rounded; a positive reward never drops to 0.
+        /// </summary>
+        public static int LeveledKillExperience(int assetExperience, int creatureLevel, EnemyRank rank, int heroLevel)
+        {
+            int level = ClampLevel(creatureLevel);
+            int baseExperience = IsIdentity(level) ? Math.Max(0, assetExperience) : KillExperience(level, rank);
+            if (baseExperience <= 0)
+            {
+                return 0;
+            }
+
+            double scaled = baseExperience * (double)LevelDifferenceXpMultiplier(Math.Max(MinLevel, heroLevel), level);
+            return Math.Max(1, (int)Math.Floor(scaled + 0.5));
+        }
+
+        /// <summary>A creature more than <see cref="FloorXpLevelsBelow"/> levels below the hero drops no equipment (materials still drop, §1.2).</summary>
+        public static bool DropsEquipment(int heroLevel, int creatureLevel) => heroLevel - creatureLevel <= FloorXpLevelsBelow;
 
         /// <summary>More than 15 levels above the hero: "Perigoso" (the creature hits ×1.25, the hero ×0.8).</summary>
         public static bool IsDangerous(int heroLevel, int creatureLevel) => creatureLevel - heroLevel > 15;

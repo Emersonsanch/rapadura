@@ -14,6 +14,7 @@ O formato segue o [Keep a Changelog 1.1.0](https://keepachangelog.com/pt-BR/1.1.
 ## [Não lançado]
 
 ### Adicionado
+- Mapas estilo MU: catálogo dos 42 mapas até o nível 100, janela de viagem (M) com as Barcas de Luz, Pomar da Vó Edna e Tugai do Rio Dourado jogáveis; bichos dos mapas dão XP pelo próprio nível, com corte quando o herói está muito acima (e sem equipamento a mais de 20 níveis abaixo). Testes em `MapAccessRulesTests`, `MapMonsterLevelTests` e `RaceCatalogTests`.
 - Fluxo completo do jogo: menu principal → seleção de herói → mapa mundi ⇄ encontro, com menu, configurações, créditos e seleção na cena `WorldMap` (`GameFlowService`, `GameFrontEndController`).
 - Acerto crítico (1.5x) em ataque básico e skills (`OutgoingDamage`, `PlayerCombatBalance`).
 - Ficha do personagem para gastar pontos de atributo (botão com selo de pontos na HUD, atalho C).

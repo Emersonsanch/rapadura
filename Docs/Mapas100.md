@@ -1,7 +1,10 @@
 # Os 100 mapas da Ilha da Aurora (e além): níveis 1–500
 
-> **Status:** catálogo de design (2026-10-30). **Só documentação:** nada daqui existe no código ainda, além dos 4 biomas
-> de hoje (Floresta, Deserto, Montanha, Cavernas), que são os mapas 01–02, 07–08, 13–14 e 19–20.
+> **Status:** catálogo de design (2026-10-30). **No código (2026-11-03):** os 42 mapas ★ estão em `MapCatalog`
+> (faixas, nível a pé/barca, exigências, cidade de retorno; conferidos contra a tabela do §1 por `MapAccessRulesTests`);
+> jogáveis em mapa aberto: **01 Pomar da Vó Edna** (barca grátis) e **02 Tugai do Rio Dourado** (a pé do nível 2, barca
+> do 5), pela janela M (Barcas de Luz). Os 4 biomas de hoje (Floresta, Deserto, Montanha, Cavernas) seguem como os mapas
+> 01–02, 07–08, 13–14 e 19–20 no mapa-múndi.
 > **Pedido do usuário:** "escreva os 100 modelos de mapas no md para irmos fazendo com o tempo", com desenvolvimento
 > agora **até o nível 100** (`Docs/Progressao500.md` §5). Depois: "algumas cidades baseadas nas cidades de *Avatar: A
 > Lenda de Aang*" (§2) e "umas cidades baseadas nas cidades de Warcraft, com os NPCs sendo orcs, elfos e outras raças que

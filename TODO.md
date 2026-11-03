@@ -1662,22 +1662,22 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 > 📌 **Documento Mestre Detalhado:** Veja [`Docs/MetodologiaMapasERacas.md`](Docs/MetodologiaMapasERacas.md) para a metodologia completa de níveis, fórmulas de teleporte (M), penalidades de delta de nível de monstros, exigências de Asas/Montarias/Tochas e a enciclopédia das mais de 20 raças (Sogdianos, Nômades, San, Suaílis, Elfos-da-Mata, Altos-Elfos, Orcs do Tambor Rubro, Esqueletos de Marfim, Jhilpuris Védicos, Nagas, Vanaras, Gandharvas, Anões, Kobolds, Povo-Touro, Povo-do-Mar, Trols, Centauros, etc.).
 
 #### Tarefas de Implementação Técnica (Para o Claude / Agentes):
-- [ ] `Assets/Scripts/Gameplay/World/Map/MapDefinition.cs`:
+- [x] `Assets/Scripts/Gameplay/World/Map/MapDefinition.cs`: — feito como C# puro (`MapDefinition` + `MapCatalog` com os 42 mapas ★, `MapDefinitionAsset` opcional), conferido contra a tabela do `Docs/Mapas100.md` por teste.
   - ScriptableObject para cada mapa: `int mapId`, `string mapNameKey`, `int walkLevelRequirement`, `int warpLevelRequirement`, `int baseWarpGoldFee`, `string specialRequirementTag` (ex: "WingsRequired", "TorchRequired", "SaddleRequired"), `string returnCityId`.
-- [ ] `Assets/Scripts/Gameplay/World/Map/MapAccessRules.cs`:
+- [x] `Assets/Scripts/Gameplay/World/Map/MapAccessRules.cs`: — feito (`CheckWarp`/`CheckWalk` na ordem aqui → ocupado → construído → nível → exigência → ouro).
   - Classe utilitária com lógica pura (testável fora da Unity):
     * `CanWalkIntoMap(int playerLevel, int walkLevel, CharacterId heroId, string regionType)`: aplica -5 níveis para Ícaro em Ruínas e Maithe em Montanhas.
     * `CanWarpToMap(int playerLevel, int warpLevel, int playerGold, int cost, out string failureReason)`.
     * `CalculateWarpCost(int warpLevel, bool isOverloaded)`: $50 + (\text{warpLevel} \times 15)$, dobrado se sobrecarregado.
     * `GetMonsterLevelDeltaPenalty(int playerLevel, int monsterLevel)`: retorna bônus de dano do monstro (+25% crítico em +10 níveis) e penalidade de hit rate (-40% acerto em +20 níveis).
-- [ ] `Assets/Scripts/UI/WorldMap/FastTravelWindowController.cs` & `FastTravelWindow.uxml`:
+- [x] `Assets/Scripts/UI/WorldMap/FastTravelWindowController.cs` & `FastTravelWindow.uxml`: — feito (tecla M, bússola, Cais da Barca); só 01 e 02 abrem nesta versão (os outros aparecem trancados). Exigências especiais (asas, tocha…) ainda não têm fonte: contam como não atendidas.
   - Interface aberta pela tecla **M** ou botão de bússola na HUD mobile:
     * Lista dinâmica dos 100 mapas agrupados por região.
     * Mapas inacessíveis ficam acinzentados com cadeado e indicação: *"Exige Nível {warpLevel} (ou a pé nível {walkLevel}) - Barca: {cost} ouro"*.
     * Botão "Mover" consome o ouro via `InventoryManager`, fecha a tela e chama `SceneTransitionService.TravelToMap()`.
-- [ ] `Assets/Scripts/Gameplay/Characters/RaceDefinition.cs`:
+- [x] `Assets/Scripts/Gameplay/Characters/RaceDefinition.cs`: — feito como C# puro (`RaceCatalog`, 25 povos; os "Nagas" viram `serpent_folk`) + `RaceTexts` (pt-BR/en).
   - ScriptableObject para catalogar as 25 raças da Ilha da Aurora e além, associando traços raciais cosméticos, sotaques/estilos de diálogo e NPCs correspondentes.
-- [ ] `Assets/Tests/EditMode/World/MapAccessRulesTests.cs`:
+- [x] `Assets/Tests/EditMode/MapAccessRulesTests.cs` (+ `RaceCatalogTests`, `MapMonsterLevelTests`): — feito (2026-11-03): regras, catálogo × `Mapas100.md`, layouts 01/02 (`MapLayoutRules.Validate`, rio, bichos existentes), linhas da janela M e o caminho de um herói nível 1 até o Pomar (barca grátis) e o Tugai (a pé no nível 2). XP do bicho do mapa pelo nível dele + corte por diferença de nível (`EnemyLevelScaling.LeveledKillExperience`, `ICreatureLevelSource`) e sem equipamento mais de 20 níveis abaixo. Falta: aplicar em combate o "Perigoso" (bicho muito acima: ×1,25/×0,8 ou o delta do §4 da Metodologia), que hoje só gera o aviso na chegada.
   - Suíte completa de testes unitários para cálculo de custos, bônus de herói, validação de sobrecarga e penalidades de nível de monstro.
 
 ---
