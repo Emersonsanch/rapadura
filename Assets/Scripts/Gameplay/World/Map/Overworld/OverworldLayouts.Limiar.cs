@@ -33,7 +33,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// </list>
     /// Chasms are carved "rivers" drawn as a black void with rope bridges (<see cref="OverworldChunkBuilder"/>, cave part); tall
     /// tuff walls along the borders of the halls (gaps at every trail) suggest the vault without a real ceiling. Monsters reuse
-    /// today's definitions (cave bats, lantern fish, spider, stone golem, broken lantern, potoo, crested hawk, peccary, fire
+    /// the cave definitions (cave bats, lantern fish, cave ooze, dark crow, spider, stone golem, broken lantern, potoo, crested hawk, peccary, fire
     /// sparks and the night species of <see cref="NightVariantRules"/>: Ubır is the vampire bat).
     /// </summary>
     public static partial class OverworldLayouts
@@ -47,7 +47,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public static readonly Vector2 UltimaPontePost = new Vector2(0f, -1900f);
         public static readonly Vector2 OssuaryPortal = new Vector2(-180f, -500f);
 
-        /// <summary>The beasts of the caves (existing definitions only; the stand-ins follow Mapas100 19–24).</summary>
+        /// <summary>The beasts of the caves (the Lodo de Gruta and the Corvo-da-Treva their own; the other stand-ins follow Mapas100 19–24).</summary>
         private static class LimiarBeasts
         {
             public const string Bats = PeriodSpawnTable.CaveBats;
@@ -60,6 +60,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Boar = NightVariantRules.PeccaryEnemyId;
             public const string Scorpion = PeriodSpawnTable.DesertScorpion;
             public const string Sparks = NightVariantRules.FireflySwarmEnemyId;
+            public const string Ooze = "enemy_cave_ooze";
+            public const string Crow = "enemy_cave_dark_crow";
         }
 
         private static OverworldLayout Limiar()
@@ -152,7 +154,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // ---------------- The outposts of 21–24 and the kobolds' market ----------------
             var postSafe = Rect.MinMaxRect(-15f, -14f, 16f, 15f);
             Place(w, pedras, LimiarPost("vishapakar_grande", TownShopDressing.Storyteller, TownShopDressing.Wicks), PedrasDragaoPost, postSafe, 18f, false);
-            OverworldSettlement market = Place(w, mercado, LimiarMarket(), MercadoTuneisPost, Rect.MinMaxRect(-21f, -20f, 22f, 21f), 24f, true);
+            OverworldSettlement market = Place(w, mercado, CityTownRecipes.TunnelMarket(), MercadoTuneisPost, Rect.MinMaxRect(-21f, -20f, 22f, 21f), 24f, true);
             market.IsReturnCity = true;
             Place(w, canion, LimiarPost("torre_das_jarras", TownShopDressing.Pottery, TownShopDressing.Cistern), TorreJarrasPost, postSafe, 18f, false);
             Place(w, ninho, LimiarPost("ultima_ponte", TownShopDressing.OldMiner, TownShopDressing.Wicks), UltimaPontePost, postSafe, 18f, false);
@@ -340,50 +342,6 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             return r;
         }
 
-        /// <summary>
-        /// The Mercado dos Túneis (Mapas100 §3.3, 22): the kobolds' market at the crossing of the four galleries, stalls in the
-        /// rock niches along the four arms, lamps strung over them, crates and jars, the Cais da Barca on the west gallery.
-        /// </summary>
-        private static CityTownRecipe LimiarMarket()
-        {
-            var r = new CityTownRecipe
-            {
-                CityId = MapCatalog.MercadoDosTuneis, Region = BiomeType.Caves, PlazaRadius = 6f, StreetWidth = 3.5f, SidewalkWidth = 0.8f, WalkHalfExtent = 22f,
-                EntryArm = CityArm.North, AutoYards = false, Backdrop = false, NightLights = 6, AmbientNight = 0.65f, LampStrings = true, LampSpacing = 5f,
-            };
-            foreach (CityArm arm in new[] { CityArm.North, CityArm.South, CityArm.East, CityArm.West })
-            {
-                r.Arms.Add(new CityArmRecipe(arm, 15f, exitToMap: true));
-            }
-
-            r.Lots.Add(new CityLotRecipe { Id = "mercado_cais", Kind = CityLotKind.ShipDock, Arm = CityArm.West, Side = CityArm.North, Along = 11f, Width = 6f, Depth = 3f, Porch = 1f });
-            r.Lots.Add(new CityLotRecipe
-            {
-                Id = "mercado_lampada", Kind = CityLotKind.House, Arm = CityArm.East, Side = CityArm.North, Along = 11f, Width = 5.5f, Depth = 4.6f, Porch = 1f,
-                Spec = LimiarTuffHouse(TownShopDressing.Lamparinas, 3f),
-            });
-            r.Lots.Add(new CityLotRecipe
-            {
-                Id = "mercado_sucata", Kind = CityLotKind.House, Arm = CityArm.East, Side = CityArm.South, Along = 11f, Width = 5.5f, Depth = 4.6f, Porch = 1f,
-                Spec = LimiarTuffHouse(TownShopDressing.Forja, 2.8f),
-            });
-            r.Lots.Add(new CityLotRecipe
-            {
-                Id = "mercado_garrafas", Kind = CityLotKind.House, Arm = CityArm.West, Side = CityArm.South, Along = 11f, Width = 5.5f, Depth = 4.6f, Porch = 1f,
-                Spec = LimiarTuffHouse(TownShopDressing.Pottery, 2.8f),
-            });
-            foreach (float angle in new[] { 45f, 135f, 225f, 315f })
-            {
-                Vector2 at = CityTownRecipes.Polar(angle, 9.5f);
-                r.PlazaProps.Add(new CityProp { Kind = CityPropKind.Stall, Position = at, Yaw = CityGeometry.YawFacing(-at), Scale = 1f });
-                r.PlazaProps.Add(new CityProp { Kind = CityPropKind.LampPost, Position = CityTownRecipes.Polar(angle + 22f, 6.4f), Yaw = CityGeometry.YawFacing(-at) });
-            }
-
-            r.PlazaProps.Add(new CityProp { Kind = CityPropKind.Crates, Position = new Vector2(-3.5f, 4.4f), Yaw = 30f, Scale = 1f });
-            r.PlazaProps.Add(new CityProp { Kind = CityPropKind.Jugs, Position = new Vector2(3.6f, -4.2f), Yaw = 10f, Scale = 1f });
-            return r;
-        }
-
         private static TownBuildingSpec LimiarTuffHouse(TownShopDressing dressing, float wallHeight)
         {
             return new TownBuildingSpec
@@ -422,14 +380,16 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             const string boar = LimiarBeasts.Boar;
             const string scorpion = LimiarBeasts.Scorpion;
             const string sparks = LimiarBeasts.Sparks;
+            const string ooze = LimiarBeasts.Ooze;
+            const string crow = LimiarBeasts.Crow;
             NightSpecies ubir = NightVariantRules.MorcegoVampiro;
 
-            // Row 1 — the Lago do Limiar (19), the Boca do Hahya, the Salão de Tages (20), the outer fissures and terraces.
+            // Row 1 — the Lago do Limiar (19), the Boca do Hahya (the Lodo de Gruta [tanque]), the Salão de Tages (20), the outer fissures and terraces.
             lago.Fauna.Add(Fauna("morcegos_do_limiar", "[enxame]", T(N(bats, 4)), T(V(bats, 3), S(ubir, 1)), 5, null, 22f));
             lago.Fauna.Add(Fauna("peixes_da_margem", "[distância] [enxame]", T(N(fish, 2), N(bats, 2)), T(V(fish, 2), S(ubir, 1)), 4, null, 26f));
             lago.Fauna.Add(Fauna("aranhas_de_gruta", "[rápido]", T(N(spider, 3), N(bats, 1)), T(V(spider, 2), S(ubir, 1)), 4));
             boca.Fauna.Add(Fauna("boca_aranhas", "[rápido]", T(N(spider, 3), N(bats, 1)), T(V(spider, 3), S(ubir, 1)), 4));
-            boca.Fauna.Add(Fauna("boca_pedras", "[tanque]", T(N(golem, 2), N(bats, 2)), T(V(golem, 2), S(ubir, 1)), 3, null, 28f));
+            boca.Fauna.Add(Fauna("boca_pedras", "[tanque]", T(N(ooze, 2), N(bats, 2)), T(V(ooze, 2), S(ubir, 1)), 3, null, 28f));
             tages.Fauna.Add(Fauna("estalactites", "[enxame] [controle]", T(N(bats, 3), N(golem, 1)), T(V(bats, 3), S(ubir, 1)), 5, null, 22f));
             tages.Fauna.Add(Fauna("lanternas_quebradas", "[distância] [tanque]", T(N(lantern, 2), N(golem, 2)), T(V(lantern, 2), S(ubir, 1)), 4, null, 28f));
             fendas.Fauna.Add(Fauna("beirais", "[tanque] [enxame]", T(N(golem, 2), N(bats, 2)), T(V(golem, 2), S(ubir, 2)), 4, null, 28f));
@@ -474,10 +434,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             aquedutos.Fauna.Add(Fauna("gotas_de_treva", "[rápido] [enxame]", T(N(bats, 2), N(sparks, 2)), T(V(bats, 2), S(ubir, 2)), 5, null, 22f));
             aquedutos.Fauna.Add(Fauna("ushabtis_de_bronze", "[tanque]", T(N(golem, 3), N(lantern, 1)), T(V(golem, 3), S(ubir, 1)), 3, null, 32f));
 
-            // Row 5 — Mahaway's flock round the shaft.
+            // Row 5 — Mahaway's flock round the shaft: the Corvos-da-Treva [distância] throw their feather darts from the roosts.
             ninho.Fauna.Add(Fauna("revoada_de_mahaway", "[enxame]", T(N(bats, 3), N(hawk, 2)), T(V(bats, 3), S(ubir, 2)), 5, null, 22f));
-            ninho.Fauna.Add(Fauna("morcegoes_de_pedra", "[tanque] [distância]", T(N(golem, 2), N(potoo, 2)), T(V(golem, 2), V(potoo, 1), S(ubir, 1)), 4, null, 30f));
-            ninhosOeste.Fauna.Add(Fauna("corvos_da_treva", "[distância]", T(N(potoo, 2), N(hawk, 2)), T(V(potoo, 2), S(ubir, 1)), 4));
+            ninho.Fauna.Add(Fauna("morcegoes_de_pedra", "[tanque] [distância]", T(N(golem, 2), N(crow, 2)), T(V(golem, 2), V(crow, 1), S(ubir, 1)), 4, null, 30f));
+            ninhosOeste.Fauna.Add(Fauna("corvos_da_treva", "[distância]", T(N(crow, 3), N(hawk, 1)), T(V(crow, 2), S(ubir, 1)), 4));
             ninhosOeste.Fauna.Add(Fauna("ninhada", "[enxame] [rápido]", T(N(bats, 3), N(spider, 1)), T(V(bats, 3), S(ubir, 2)), 5, null, 22f));
             escarpas.Fauna.Add(Fauna("gavioes_da_escarpa", "[rápido] [distância]", T(N(hawk, 3), N(bats, 1)), T(V(hawk, 2), S(ubir, 2)), 4));
             escarpas.Fauna.Add(Fauna("rochas_vivas", "[tanque]", T(N(golem, 3), N(potoo, 1)), T(V(golem, 2), S(ubir, 1)), 3, null, 32f));

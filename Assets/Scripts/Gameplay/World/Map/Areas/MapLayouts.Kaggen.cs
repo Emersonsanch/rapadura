@@ -23,6 +23,11 @@ namespace Rapadura.Gameplay.World.Map.Areas
         /// <summary>[distância] of the Serra de Kaggen (Mapas100 13; also over the pass, 14).</summary>
         private const string CrestedHawk = "enemy_mountain_crested_hawk";
 
+        /// <summary>The Serra's own beasts of 13 and 14 (Docs/WorldBible_Maniqueismo.md §3.2.1).</summary>
+        private const string Baboon = "enemy_mountain_baboon";
+        private const string RollingStone = "enemy_mountain_rolling_stone";
+        private const string IllWindMist = "enemy_mountain_ill_wind_mist";
+
         // ------------------------------------------------------------------
         // 13 · Trilha dos Rondavéis
         // ------------------------------------------------------------------
@@ -65,8 +70,8 @@ namespace Rapadura.Gameplay.World.Map.Areas
             m.Exits.Add(Border("exit_hahya", MapExitKind.Map, HahyaId, Rect.MinMaxRect(97f, -106f, 100f, -94f), new Vector2(93f, -100f), Vector2.left));
             m.Exits.Add(Border("exit_island", MapExitKind.WorldMap, null, Rect.MinMaxRect(-56f, -160f, -44f, -157f), new Vector2(-50f, -153f), Vector2.up));
 
-            // Step 4–5 (Mapas100 13): Ushabti de Pedra [tanque]; the Lobo do Tugai (the slopes' wolves) stands in for the
-            // Babuíno Apagado [rápido] and the Javali charges down the grass; at night the Ave-Graveto de Omöl and the
+            // Step 4–5 (Mapas100 13): Ushabti de Pedra [tanque]; the Pedra que Rola [controle] among the loose stones; the
+            // Babuíno Apagado [rápido] in the grass and the Javali charging down it, the Lobo do Tugai on the pass's edge; at night the Ave-Graveto de Omöl and the
             // Coruja-de-Fumaça visiting from the Zarafshan; the Gavião-de-Penacho [distância] throws feathers from the ledges.
             m.Zones.Add(new MapSpawnZone
             {
@@ -79,16 +84,16 @@ namespace Rapadura.Gameplay.World.Map.Areas
             {
                 Id = "capinzal", Center = new Vector2(64f, -62f), Radius = 12f, MinLevel = 9, MaxLevel = 10, MaxAlive = 4, RespawnSeconds = 22f,
                 Archetypes = "[rápido]",
-                Day = new[] { PeriodSpawnEntry.Normal(Wolf, 3), PeriodSpawnEntry.Normal(Boar, 1) },
-                Dusk = new[] { PeriodSpawnEntry.Normal(Wolf, 3), PeriodSpawnEntry.Variant(Wolf, 1) },
-                Night = new[] { PeriodSpawnEntry.Variant(Wolf, 3), PeriodSpawnEntry.Variant(Boar, 1), PeriodSpawnEntry.Species(NightVariantRules.MaeDaLua, 1) },
+                Day = new[] { PeriodSpawnEntry.Normal(Baboon, 3), PeriodSpawnEntry.Normal(Boar, 1) },
+                Dusk = new[] { PeriodSpawnEntry.Normal(Baboon, 3), PeriodSpawnEntry.Variant(Baboon, 1) },
+                Night = new[] { PeriodSpawnEntry.Variant(Baboon, 3), PeriodSpawnEntry.Variant(Boar, 1), PeriodSpawnEntry.Species(NightVariantRules.MaeDaLua, 1) },
             });
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "pedras_soltas", Center = new Vector2(-66f, -126f), Radius = 11f, MinLevel = 10, MaxLevel = 11, MaxAlive = 4, RespawnSeconds = 28f,
                 Archetypes = "[tanque] [controle]",
-                Day = new[] { PeriodSpawnEntry.Normal(Golem, 3) },
-                Night = new[] { PeriodSpawnEntry.Variant(Golem, 3), PeriodSpawnEntry.Species(NightVariantRules.MaeDaLua, 1) },
+                Day = new[] { PeriodSpawnEntry.Normal(RollingStone, 3), PeriodSpawnEntry.Normal(Golem, 1) },
+                Night = new[] { PeriodSpawnEntry.Variant(RollingStone, 3), PeriodSpawnEntry.Species(NightVariantRules.MaeDaLua, 1) },
             });
             m.Zones.Add(new MapSpawnZone
             {
@@ -199,7 +204,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
             m.Exits.Add(Border("exit_island", MapExitKind.WorldMap, null, Rect.MinMaxRect(-6f, -100f, 6f, -97f), new Vector2(0f, -93f), Vector2.up));
 
             // Step 4–5 (Mapas100 14): Ushabti de Pedra [tanque]; the Lobo stands in for the Lince Apagado [rápido], the
-            // bat swarm is the Morcego da Mina [enxame]; at night the Ave-Graveto, the Coruja-de-Fumaça and Ubır at the
+            // bat swarm is the Morcego da Mina [enxame], the Neblina do Vento Ruim [controle] fills the gorge; at night the Ave-Graveto, the Coruja-de-Fumaça and Ubır at the
             // gallery; the Gavião-de-Penacho [distância] of the 13 also hunts the slope and the summit.
             m.Zones.Add(new MapSpawnZone
             {
@@ -219,8 +224,8 @@ namespace Rapadura.Gameplay.World.Map.Areas
             {
                 Id = "garganta", Center = new Vector2(-55f, 78f), Radius = 11f, MinLevel = 11, MaxLevel = 12, MaxAlive = 4, RespawnSeconds = 28f,
                 Archetypes = "[tanque] [controle]",
-                Day = new[] { PeriodSpawnEntry.Normal(Golem, 3) },
-                Night = new[] { PeriodSpawnEntry.Variant(Golem, 2), PeriodSpawnEntry.Species(NightVariantRules.RasgaMortalha, 1), PeriodSpawnEntry.Species(NightVariantRules.MaeDaLua, 1) },
+                Day = new[] { PeriodSpawnEntry.Normal(Golem, 2), PeriodSpawnEntry.Normal(IllWindMist, 2) },
+                Night = new[] { PeriodSpawnEntry.Variant(Golem, 2), PeriodSpawnEntry.Variant(IllWindMist, 1), PeriodSpawnEntry.Species(NightVariantRules.RasgaMortalha, 1), PeriodSpawnEntry.Species(NightVariantRules.MaeDaLua, 1) },
             });
             m.Zones.Add(new MapSpawnZone
             {

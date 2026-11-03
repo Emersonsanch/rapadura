@@ -25,7 +25,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// torch; the dwarves' halls, return city of 17–18) and the <b>Estela Alta</b> and <b>Cume dos Mazans</b> (18, 36–44,
     /// blizzard resistance: the snowy peak in the mist).</item>
     /// </list>
-    /// Monsters reuse today's mountain beasts (stone ushabti, crested hawk, potoo) with the wolf, boar and bat swarm, and the
+    /// Monsters: the mountain beasts (stone ushabti, crested hawk, potoo, Pedra que Rola, Neblina do Vento Ruim, Babuíno
+    /// Apagado) with the wolf, boar and bat swarm, and the
     /// night species of <see cref="NightVariantRules"/>. Maps 15–18 have no hand-made layout of their own (they are walked
     /// into here; the Barca does not reach them yet).
     /// </summary>
@@ -40,6 +41,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>[distância] of the Serra (Mapas100 13): the crested hawk throws its feather darts from the ledges.</summary>
         private const string KaggenHawk = "enemy_mountain_crested_hawk";
+
+        /// <summary>The Serra's own beasts (Docs/WorldBible_Maniqueismo.md §3.2.1): the Pedra que Rola [controle], the Neblina do
+        /// Vento Ruim [controle] and the Babuíno Apagado [rápido].</summary>
+        private const string KaggenRollingStone = "enemy_mountain_rolling_stone";
+        private const string KaggenMist = "enemy_mountain_ill_wind_mist";
+        private const string KaggenBaboon = "enemy_mountain_baboon";
 
         public static readonly Vector2 LitemaOffset = Vector2.zero;
         public static readonly Vector2 HahyaOffset = new Vector2(475f, 475f);
@@ -105,7 +112,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 PostSafe, 18f, false);
             Place(w, PedraSecaId, Post("recinto_curvo", TownSwatch.Stone, TownSwatch.Thatch, TownRoofKind.Cone, TownShopDressing.Ferraria, false), RecintoOffset,
                 PostSafe, 18f, false);
-            Place(w, NapirasuId, SaloesDeBronze(), SaloesOffset, Rect.MinMaxRect(-20f, -19f, 21f, 20f), 24f, true);
+            Place(w, NapirasuId, CityTownRecipes.BronzeHalls(), SaloesOffset, Rect.MinMaxRect(-20f, -19f, 21f, 20f), 24f, true);
             Place(w, MazansId, Post("estela_alta", TownSwatch.Stone, TownSwatch.Slate, TownRoofKind.Gable, TownShopDressing.Mercearia, false), EstelaOffset,
                 PostSafe, 18f, false);
 
@@ -357,66 +364,6 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             return posto;
         }
 
-        /// <summary>
-        /// The Salões de Bronze de Napirasu (17), the dwarves' race city at the mountain's door: the Grande Forja at the back of
-        /// the plaza (stone, slate gable, chimney), the rune house and the bronze-smith's, the Cais da Barca, stelae at the
-        /// gate. Return city of 17–18.
-        /// </summary>
-        private static CityTownRecipe SaloesDeBronze()
-        {
-            var r = new CityTownRecipe
-            {
-                CityId = MapCatalog.SaloesDeBronze, Region = BiomeType.Mountain, PlazaRadius = 6f, StreetWidth = 4f, SidewalkWidth = 1f, WalkHalfExtent = 22f,
-                EntryArm = CityArm.East, AutoYards = false, Backdrop = false, NightLights = 6,
-            };
-            r.Arms.Add(new CityArmRecipe(CityArm.West, 16f, exitToMap: true));
-            r.Arms.Add(new CityArmRecipe(CityArm.East, 16f, exitToMap: true));
-            r.Arms.Add(new CityArmRecipe(CityArm.South, 14f, exitToMap: true));
-            r.Lots.Add(new CityLotRecipe
-            {
-                Id = "grande_forja", Kind = CityLotKind.Workshop, Free = true, Center = new Vector2(0f, 12f), Front = Vector2.down, Width = 9f, Depth = 6f, Porch = 1.6f,
-                Spec = new TownBuildingSpec
-                {
-                    WallColor = TownSwatch.StoneDark, TrimColor = TownSwatch.Copper, RoofColor = TownSwatch.Slate, JoineryColor = TownSwatch.WoodDark,
-                    AccentColor = TownSwatch.Copper, SignColor = TownSwatch.Gold, Roof = TownRoofKind.Gable, Dressing = TownShopDressing.Forja, WallHeight = 3.6f,
-                    Chimney = true,
-                },
-            });
-            r.Lots.Add(new CityLotRecipe
-            {
-                Id = "casa_das_runas", Kind = CityLotKind.House, Arm = CityArm.West, Side = CityArm.South, Along = 10f, Width = 6f, Depth = 5f, Porch = 1.2f,
-                Spec = new TownBuildingSpec
-                {
-                    WallColor = TownSwatch.Stone, TrimColor = TownSwatch.Copper, RoofColor = TownSwatch.Slate, JoineryColor = TownSwatch.WoodDark,
-                    AccentColor = TownSwatch.ClothIndigo, SignColor = TownSwatch.Gold, Roof = TownRoofKind.Gable, WallHeight = 3f,
-                },
-            });
-            r.Lots.Add(new CityLotRecipe { Id = "cais_dos_saloes", Kind = CityLotKind.ShipDock, Arm = CityArm.West, Side = CityArm.North, Along = 11f, Width = 6f, Depth = 3f, Porch = 1f });
-            r.Lots.Add(new CityLotRecipe
-            {
-                Id = "casa_do_bronze", Kind = CityLotKind.House, Arm = CityArm.East, Side = CityArm.North, Along = 10f, Width = 6f, Depth = 5f, Porch = 1.2f,
-                Spec = new TownBuildingSpec
-                {
-                    WallColor = TownSwatch.StoneDark, TrimColor = TownSwatch.Gold, RoofColor = TownSwatch.Slate, JoineryColor = TownSwatch.WoodDark,
-                    AccentColor = TownSwatch.Copper, SignColor = TownSwatch.Copper, Roof = TownRoofKind.Gable, Dressing = TownShopDressing.Ferraria, WallHeight = 3f,
-                    Chimney = true,
-                },
-            });
-            r.Lots.Add(new CityLotRecipe { Id = "casa_mineiros", Kind = CityLotKind.House, Arm = CityArm.East, Side = CityArm.South, Along = 10f, Width = 5.5f, Depth = 4.6f, Porch = 1f });
-            r.Lots.Add(new CityLotRecipe { Id = "casa_vigias", Kind = CityLotKind.House, Arm = CityArm.South, Side = CityArm.West, Along = 9f, Width = 5f, Depth = 4.4f, Porch = 1f });
-            r.PlazaProps.Add(Prop(CityPropKind.Well, 0f, 0f, 0f));
-            r.PlazaProps.Add(Prop(CityPropKind.Crates, -4f, 7f, 20f));
-            r.PlazaProps.Add(Prop(CityPropKind.Jugs, 4.5f, 7f, 40f));
-            r.PlazaProps.Add(Prop(CityPropKind.Stela, -3.5f, -10f, CityGeometry.YawFacing(Vector2.down), 1f));
-            r.PlazaProps.Add(Prop(CityPropKind.Stela, 3.5f, -10f, CityGeometry.YawFacing(Vector2.down), 1f));
-            foreach (float angle in new[] { 30f, 150f, 210f, 330f })
-            {
-                r.PlazaProps.Add(new CityProp { Kind = CityPropKind.LampPost, Position = CityTownRecipes.Polar(angle, 6.6f), Yaw = CityGeometry.YawFacing(-CityTownRecipes.Polar(angle, 1f)) });
-            }
-
-            return r;
-        }
-
         private static CityProp Prop(CityPropKind kind, float x, float z, float yaw, float scale = 1f)
         {
             return new CityProp { Kind = kind, Position = new Vector2(x, z), Yaw = yaw, Scale = scale };
@@ -432,12 +379,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         {
             NightSpecies aveGraveto = NightVariantRules.MaeDaLua;
 
-            // Trilha dos Rondavéis (13): the Ushabti de Pedra [tanque] and the hawk on the ledges; wolves stand in for the
-            // Babuíno Apagado [rápido] in the tall grass; at night the Ave-Graveto de Omöl and the smoke owl.
-            trilha.Fauna.Add(Fauna("pedras_vivas", "[tanque] [distância]", T(N(Golem, 3), N(KaggenHawk, 1)), T(V(Golem, 2), S(aveGraveto, 1)), 3,
-                null, 28f));
-            trilha.Fauna.Add(Fauna("capim_alto", "[rápido]", T(N(Wolf, 3), N(Boar, 1)), T(V(Wolf, 3), S(NightVariantRules.RasgaMortalha, 1)), 4,
-                T(N(Wolf, 3), V(Wolf, 1)), 22f));
+            // Trilha dos Rondavéis (13): the Ushabti de Pedra [tanque], the Pedra que Rola [controle] and the hawk on the ledges;
+            // the Babuíno Apagado [rápido] in the tall grass; at night the Ave-Graveto de Omöl and the smoke owl.
+            trilha.Fauna.Add(Fauna("pedras_vivas", "[tanque] [controle] [distância]", T(N(Golem, 2), N(KaggenRollingStone, 2), N(KaggenHawk, 1)),
+                T(V(Golem, 2), V(KaggenRollingStone, 1), S(aveGraveto, 1)), 3, null, 28f));
+            trilha.Fauna.Add(Fauna("capim_alto", "[rápido]", T(N(KaggenBaboon, 3), N(Boar, 1)), T(V(KaggenBaboon, 3), S(NightVariantRules.RasgaMortalha, 1)), 4,
+                T(N(KaggenBaboon, 3), V(KaggenBaboon, 1)), 22f));
 
             // Terraços de Litema: boars in the sorghum, ushabtis on the retaining walls.
             terracos.Fauna.Add(Fauna("sorgo", "[rápido] [tanque]", T(N(Boar, 3), N(Wolf, 1)), T(S(NightVariantRules.Queixada, 2), V(Wolf, 1)), 4, null, 26f));
@@ -455,27 +402,29 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             torrentes.Fauna.Add(Fauna("margens", "[rápido]", T(N(Wolf, 3), N(KaggenHawk, 1)), T(V(Wolf, 3), S(NightVariantRules.Lobisomem, 1)), 4));
             torrentes.Fauna.Add(Fauna("grutas_da_torrente", "[enxame]", T(N(Bats, 3), N(Wolf, 1)), T(N(Bats, 2), S(NightVariantRules.MorcegoVampiro, 1)), 5, null, 22f));
 
-            // Passo do Hahya (14): ushabtis [tanque], the Morcego da Mina [enxame], the hawk over the pass.
+            // Passo do Hahya (14): ushabtis [tanque], the Morcego da Mina [enxame], the hawk over the pass, the Neblina do Vento
+            // Ruim [controle] rolling down from the snow.
             hahya.Fauna.Add(Fauna("passo", "[tanque] [distância]", T(N(Golem, 3), N(KaggenHawk, 1)), T(V(Golem, 2), S(aveGraveto, 1)), 3, null, 30f));
             hahya.Fauna.Add(Fauna("morcegos_da_mina", "[enxame] [rápido]", T(N(Bats, 3), N(Wolf, 1)), T(V(Bats, 2), S(NightVariantRules.MorcegoVampiro, 1)), 5, null, 22f));
+            hahya.Fauna.Add(Fauna("neblina_do_passo", "[controle]", T(N(KaggenMist, 3), N(KaggenHawk, 1)), T(V(KaggenMist, 2), S(aveGraveto, 1)), 4, null, 26f));
 
             // Pastos dos Currais: the wild herd and the wolves round the kraals, hawks over the pasture.
             pastos.Fauna.Add(Fauna("currais", "[rápido]", T(N(Wolf, 3), N(Boar, 1)), T(V(Wolf, 3), S(NightVariantRules.Lobisomem, 1)), 4));
             pastos.Fauna.Add(Fauna("rebanho_bravo", "[tanque]", T(N(Boar, 3), N(Golem, 1)), T(S(NightVariantRules.Queixada, 2), V(Golem, 1)), 4, null, 28f));
             pastos.Fauna.Add(Fauna("gavioes_do_pasto", "[distância]", T(N(KaggenHawk, 3)), T(V(KaggenHawk, 2), S(aveGraveto, 1)), 3));
 
-            // Passos Estreitos: ushabtis and hawks on the walls, the lynx (wolf) in the gaps, the Neblina (potoo) at dusk.
+            // Passos Estreitos: ushabtis and hawks on the walls, the lynx (wolf) in the gaps, the Neblina do Vento Ruim at dusk.
             passos.Fauna.Add(Fauna("paredoes", "[tanque] [distância]", T(N(Golem, 2), N(KaggenHawk, 2)), T(V(Golem, 2), V(KaggenHawk, 1), S(aveGraveto, 1)), 4, null, 28f));
-            passos.Fauna.Add(Fauna("lince", "[rápido] [controle]", T(N(Wolf, 3), N(Potoo, 1)), T(V(Wolf, 2), S(NightVariantRules.MorcegoVampiro, 1)), 4,
-                T(N(Wolf, 2), N(Potoo, 2))));
+            passos.Fauna.Add(Fauna("lince", "[rápido] [controle]", T(N(Wolf, 3), N(KaggenMist, 1)), T(V(Wolf, 2), V(KaggenMist, 1), S(NightVariantRules.MorcegoVampiro, 1)), 4,
+                T(N(Wolf, 2), N(KaggenMist, 2))));
 
             // Escarpas de Arenito: sandstone ushabtis, the black eagles (hawks) on the steps.
             escarpas.Fauna.Add(Fauna("arenito", "[tanque]", T(N(Golem, 3), N(Potoo, 1)), T(V(Golem, 2), S(NightVariantRules.RasgaMortalha, 1)), 3, null, 30f));
             escarpas.Fauna.Add(Fauna("aguias_pretas", "[distância]", T(N(KaggenHawk, 3), N(Potoo, 1)), T(V(KaggenHawk, 2), S(aveGraveto, 1)), 3));
 
-            // Abrigos Pintados (15): the Borrão [rápido] (the wolf of shadow) and the baboon thieves (bats) [enxame]; the
+            // Abrigos Pintados (15): the Borrão [rápido] (the wolf of shadow) and the Babuínos Apagados, thieves [enxame]; the
             // Ushabti de Arenito [tanque]; the black eagle [distância].
-            abrigos.Fauna.Add(Fauna("borroes", "[rápido] [enxame]", T(N(Wolf, 3), N(Bats, 2)), T(V(Wolf, 2), S(NightVariantRules.Lobisomem, 1)), 5));
+            abrigos.Fauna.Add(Fauna("borroes", "[rápido] [enxame]", T(N(Wolf, 3), N(KaggenBaboon, 2)), T(V(Wolf, 2), V(KaggenBaboon, 1), S(NightVariantRules.Lobisomem, 1)), 5));
             abrigos.Fauna.Add(Fauna("ushabti_de_arenito", "[tanque] [distância]", T(N(Golem, 3), N(KaggenHawk, 1)), T(V(Golem, 2), S(aveGraveto, 1)), 4, null, 30f));
 
             // Muralhas de Pedra Seca (16): the granite ushabtis [tanque] (and the lesser Mazan at night), the stone crows [distância].
@@ -483,20 +432,21 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             pedraSeca.Fauna.Add(Fauna("gralhas_de_pedra", "[distância]", T(N(KaggenHawk, 2), N(Potoo, 2)), T(V(KaggenHawk, 1), V(Potoo, 1), S(aveGraveto, 1)), 4));
             pedraSeca.Fauna.Add(Fauna("lagartos", "[rápido]", T(N(Wolf, 3), N(Boar, 1)), T(V(Wolf, 3), S(NightVariantRules.Queixada, 1)), 4));
 
-            // Campos de Neve: snow ushabtis and wolves, the Neblina do Vento Ruim (potoos) [controle].
+            // Campos de Neve: snow ushabtis and wolves, the Neblina do Vento Ruim [controle].
             neve.Fauna.Add(Fauna("neve", "[tanque] [rápido]", T(N(Golem, 3), N(Wolf, 1)), T(V(Golem, 2), S(NightVariantRules.Lobisomem, 1)), 4, null, 30f));
-            neve.Fauna.Add(Fauna("neblina", "[controle] [distância]", T(N(Potoo, 2), N(KaggenHawk, 2)), T(S(aveGraveto, 2), V(KaggenHawk, 1)), 4));
+            neve.Fauna.Add(Fauna("neblina", "[controle] [distância]", T(N(KaggenMist, 2), N(KaggenHawk, 2)), T(V(KaggenMist, 1), S(aveGraveto, 2), V(KaggenHawk, 1)), 4));
 
             // Salões de Bronze (17): slag golems [tanque], ember bats [enxame].
             saloes.Fauna.Add(Fauna("escoria", "[tanque]", T(N(Golem, 3), N(Bats, 1)), T(V(Golem, 2), S(NightVariantRules.MorcegoVampiro, 1)), 4, null, 30f));
             saloes.Fauna.Add(Fauna("morcegos_de_brasa", "[enxame]", T(N(Bats, 3), N(Golem, 1)), T(V(Bats, 2), S(NightVariantRules.MorcegoVampiro, 1)), 5, null, 22f));
 
             // Estela Alta and the Cume dos Mazans (18): ice ushabtis and the lesser Mazans [elite] [tanque], the storm eagles
-            // [distância]; Mazan himself stays the world boss.
+            // [distância], the Neblina do Vento Ruim [controle] over the summit; Mazan himself stays the world boss.
             estela.Fauna.Add(Fauna("pastores_perdidos", "[rápido]", T(N(Wolf, 3), N(KaggenHawk, 1)), T(V(Wolf, 2), S(NightVariantRules.Lobisomem, 1)), 4));
             estela.Fauna.Add(Fauna("ushabti_de_gelo", "[tanque]", T(N(Golem, 3)), T(V(Golem, 2), S(aveGraveto, 1)), 3, null, 32f));
             cume.Fauna.Add(Fauna("mazans", "[elite] [tanque]", T(N(Golem, 3)), T(V(Golem, 3), S(NightVariantRules.Lobisomem, 1)), 3, null, 34f));
             cume.Fauna.Add(Fauna("aguias_da_tempestade", "[distância]", T(N(KaggenHawk, 3), N(Potoo, 1)), T(V(KaggenHawk, 3), S(aveGraveto, 1)), 4));
+            cume.Fauna.Add(Fauna("neblina_do_cume", "[controle] [distância]", T(N(KaggenMist, 3), N(KaggenHawk, 1)), T(V(KaggenMist, 2), S(aveGraveto, 1)), 4, null, 26f));
         }
     }
 }

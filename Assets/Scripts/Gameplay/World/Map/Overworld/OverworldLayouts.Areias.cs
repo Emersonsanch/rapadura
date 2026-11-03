@@ -27,8 +27,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// orcs' city (11, 24–32, return city of 11–12) and <b>Trono de Namrael</b> (12, 30–38, poison protection, Torre de
     /// Taipa, the salt throne).</item>
     /// </list>
-    /// Monsters reuse today's desert definitions (Escorpião, Abutre de Brasa and Lanterna Quebrada [distância], the ushabti,
-    /// the jackal, the karez bats, the ember hawk and the night species: Faíscas Presas, Mardagayl, Ubır). Relief: dunes
+    /// Monsters: the desert definitions (Escorpião, Abutre de Brasa and Lanterna Quebrada [distância], the ushabti, the
+    /// Chacal Apagado, the Cobra-de-Areia, the Orc Coroado de Āz, the Pedra que Rola, the karez bats, the ember hawk and the night species: Faíscas Presas, Mardagayl, Ubır). Relief: dunes
     /// in crests, mesas, layered canyons, salt terraces (OverworldRelief.Desert.cs).
     /// </summary>
     public static partial class OverworldLayouts
@@ -49,14 +49,17 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public static readonly Vector2 TorreDeTaipaOffset = new Vector2(800f, -1450f);
         public static readonly Vector2 NamraelThrone = new Vector2(800f, -1810f);
 
-        /// <summary>The existing desert monsters of the region (no new definitions).</summary>
+        /// <summary>The desert monsters of the region (the sheets' own beasts where they exist, Docs/WorldBible_Maniqueismo.md §3.2.1).</summary>
         private static class Sands
         {
             public const string Scorpion = PeriodSpawnTable.DesertScorpion;
             public const string Vulture = "enemy_desert_ember_vulture";
             public const string Lantern = "enemy_desert_broken_lantern";
             public const string Ushabti = PeriodSpawnTable.MountainGolem;
-            public const string Jackal = PeriodSpawnTable.ForestWolf;
+            public const string Jackal = "enemy_desert_jackal";
+            public const string SandSnake = "enemy_desert_sand_snake";
+            public const string CrownedOrc = "enemy_desert_crowned_orc";
+            public const string RollingStone = "enemy_mountain_rolling_stone";
             public const string Bats = PeriodSpawnTable.CaveBats;
             public const string Hawk = "enemy_mountain_crested_hawk";
         }
@@ -590,6 +593,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             const string lanterna = Sands.Lantern;
             const string ushabti = Sands.Ushabti;
             const string chacal = Sands.Jackal;
+            const string cobra = Sands.SandSnake;
+            const string orc = Sands.CrownedOrc;
+            const string pedra = Sands.RollingStone;
             const string morcegos = Sands.Bats;
             const string gaviao = Sands.Hawk;
             NightSpecies faiscas = NightVariantRules.VagaLume;
@@ -609,12 +615,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             qocho.Fauna.Add(Fauna("abutres_de_qocho", "[distância]", T(N(abutre, 2), N(chacal, 1)), T(V(abutre, 1), S(faiscas, 2)), 3, null, 26f));
 
             // Palmeiral do Karez: scorpions and jackals under the palms, sparks over the channel at night.
-            palmeiral.Fauna.Add(Fauna("tamareiras", "[tanque] [rápido]", T(N(esc, 2), N(chacal, 2)), T(V(esc, 2), S(faiscas, 2)), 4, null, 22f));
+            palmeiral.Fauna.Add(Fauna("tamareiras", "[tanque] [rápido]", T(N(esc, 2), N(chacal, 2)), T(V(esc, 2), V(chacal, 1), S(faiscas, 2)), 4, null, 22f));
             palmeiral.Fauna.Add(Fauna("abutres_das_palmeiras", "[distância]", T(N(abutre, 3)), T(V(abutre, 2), S(faiscas, 1)), 3, null, 26f));
 
-            // Ruínas dos Artífices (08): the ushabtis [tanque] that wake at night, the Lanterna Quebrada [distância].
-            artifices.Fauna.Add(Fauna("ushabtis_da_avenida", "[tanque]", T(N(ushabti, 3), N(esc, 1)), T(V(ushabti, 3), S(faiscas, 1)), 4, null, 26f));
-            artifices.Fauna.Add(Fauna("lanternas_quebradas", "[distância]", T(N(lanterna, 2), N(esc, 1)), T(V(lanterna, 2), S(faiscas, 1)), 3, null, 26f));
+            // Ruínas dos Artífices (08): the ushabtis [tanque] that wake at night, the Cobra-de-Areia [rápido] between their
+            // feet, the Lanterna Quebrada [distância].
+            artifices.Fauna.Add(Fauna("ushabtis_da_avenida", "[tanque] [rápido]", T(N(ushabti, 3), N(cobra, 1)), T(V(ushabti, 3), V(cobra, 1), S(faiscas, 1)), 4, null, 26f));
+            artifices.Fauna.Add(Fauna("lanternas_quebradas", "[distância] [rápido]", T(N(lanterna, 2), N(cobra, 1)), T(V(lanterna, 2), V(cobra, 1), S(faiscas, 1)), 3, null, 26f));
 
             // Dunas do Vento Quente and the Salinas de Lop.
             dunasBaixas.Fauna.Add(Fauna("escorpioes_da_duna", "[tanque]", T(N(esc, 3)), T(V(esc, 3), S(faiscas, 1)), 4));
@@ -640,7 +647,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // Vale das Ossadas and the Cemitério de Caravanas: carrion birds, the old ushabtis, jackals (the Mardagayl at night).
             foreach (OverworldZone bones in new[] { ossadas, cemiterio })
             {
-                bones.Fauna.Add(Fauna("carniceiros", "[distância] [rápido]", T(N(abutre, 2), N(chacal, 2)), T(V(abutre, 2), S(mardagayl, 1)), 4, null, 26f));
+                bones.Fauna.Add(Fauna("carniceiros", "[distância] [rápido]", T(N(abutre, 2), N(chacal, 2)), T(V(abutre, 2), V(chacal, 1), S(mardagayl, 1)), 4, null, 26f));
                 bones.Fauna.Add(Fauna("ossos_de_pedra", "[tanque]", T(N(ushabti, 3), N(esc, 1)), T(V(ushabti, 3), S(faiscas, 1)), 3, null, 30f));
             }
 
@@ -669,10 +676,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             dunas.Fauna.Add(Fauna("lagartos_da_duna", "[rápido]", T(N(chacal, 3), N(abutre, 1)), T(V(chacal, 2), S(faiscas, 2)), 4));
             dunas.Fauna.Add(Fauna("faiscas_da_duna", "[enxame]", T(N(esc, 1), N(abutre, 1)), T(S(faiscas, 3)), 5, T(S(faiscas, 2), N(esc, 1)), 20f));
 
-            // 11 · Ermos do Tambor Rubro: the ember hawks [rápido], the Escorpião-Rubro [tanque], the rolling ushabtis [controle].
+            // 11 · Ermos do Tambor Rubro: the ember hawks [rápido], the Escorpião-Rubro [tanque], the Pedra que Rola [controle] and
+            // the Clã Coroado [elite] (the Orcs Coroados de Āz round the clan camps; Mardagayl among them at night).
             tambor.Fauna.Add(Fauna("gavioes_do_tambor", "[rápido]", T(N(gaviao, 3), N(esc, 1)), T(V(gaviao, 2), S(faiscas, 2)), 4, null, 24f));
             tambor.Fauna.Add(Fauna("escorpioes_rubros_dos_ermos", "[tanque]", T(N(esc, 3), N(ushabti, 1)), T(V(esc, 3), S(faiscas, 1)), 4, null, 26f));
-            tambor.Fauna.Add(Fauna("pedras_rolantes", "[controle] [elite]", T(N(ushabti, 3)), T(V(ushabti, 2), S(mardagayl, 1)), 3, null, 32f));
+            tambor.Fauna.Add(Fauna("pedras_rolantes", "[controle] [elite]", T(N(pedra, 3)), T(V(pedra, 2), S(mardagayl, 1)), 3, null, 32f));
+            tambor.Fauna.Add(Fauna("cla_coroado", "[elite]", T(N(orc, 3), N(esc, 1)), T(V(orc, 2), S(mardagayl, 1)), 3, null, 32f));
 
             // 12 · Trono de Namrael: crystal scorpions, Namrael's guards (night variants), the salt mirrors (lanterns), Ubır in the towers.
             namrael.Fauna.Add(Fauna("escorpioes_cristal", "[tanque] [elite]", T(N(esc, 4)), T(V(esc, 4), S(ubir, 1)), 4, null, 28f));

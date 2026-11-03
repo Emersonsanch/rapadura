@@ -24,6 +24,9 @@ namespace Rapadura.Gameplay.World.Map.Areas
         /// <summary>[distância] of the Grutas do Limiar (Mapas100 19; also up the dark ford of the 20).</summary>
         private const string LanternFish = "enemy_cave_lantern_fish";
 
+        /// <summary>The Lodo de Gruta [tanque] of the Lago do Limiar (19, Docs/WorldBible_Maniqueismo.md §3.2.1).</summary>
+        private const string CaveOoze = "enemy_cave_ooze";
+
         // ------------------------------------------------------------------
         // 19 · Lago do Limiar
         // ------------------------------------------------------------------
@@ -72,7 +75,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
             m.Exits.Add(Border("exit_island", MapExitKind.WorldMap, null, Rect.MinMaxRect(-6f, -170f, 6f, -167f), new Vector2(0f, -163f), Vector2.up));
 
             // Step 4–5 (Mapas100 19): Enxame de Morcegos do Limiar [enxame]; the Aranha-Tecelã stands in for the Aranha de
-            // Gruta [rápido] and the Ushabti de Pedra for the Lodo de Gruta [tanque]; the Peixe-Lanterna Apagado [distância]
+            // Gruta [rápido]; the Lodo de Gruta [tanque] oozes out of the west gallery and the south island; the Peixe-Lanterna Apagado [distância]
             // swims over the beach and the south island; Ubır comes out of the lake at night.
             m.Zones.Add(new MapSpawnZone
             {
@@ -92,8 +95,8 @@ namespace Rapadura.Gameplay.World.Map.Areas
             {
                 Id = "galeria_oeste", Center = new Vector2(-72f, -18f), Radius = 10f, MinLevel = 13, MaxLevel = 14, MaxAlive = 3, RespawnSeconds = 28f,
                 Archetypes = "[tanque]",
-                Day = new[] { PeriodSpawnEntry.Normal(Golem, 3) },
-                Night = new[] { PeriodSpawnEntry.Variant(Golem, 2), PeriodSpawnEntry.Species(NightVariantRules.MorcegoVampiro, 1) },
+                Day = new[] { PeriodSpawnEntry.Normal(CaveOoze, 3) },
+                Night = new[] { PeriodSpawnEntry.Variant(CaveOoze, 2), PeriodSpawnEntry.Species(NightVariantRules.MorcegoVampiro, 1) },
             });
             m.Zones.Add(new MapSpawnZone
             {
@@ -106,8 +109,8 @@ namespace Rapadura.Gameplay.World.Map.Areas
             {
                 Id = "ilha_sul", Center = new Vector2(56f, -154f), Radius = 10f, MinLevel = 14, MaxLevel = 15, MaxAlive = 4, RespawnSeconds = 30f,
                 Archetypes = "[tanque] [distância]",
-                Day = new[] { PeriodSpawnEntry.Normal(Golem, 2), PeriodSpawnEntry.Normal(LanternFish, 2) },
-                Night = new[] { PeriodSpawnEntry.Variant(Golem, 2), PeriodSpawnEntry.Variant(LanternFish, 1), PeriodSpawnEntry.Species(NightVariantRules.MorcegoVampiro, 2) },
+                Day = new[] { PeriodSpawnEntry.Normal(CaveOoze, 2), PeriodSpawnEntry.Normal(LanternFish, 2) },
+                Night = new[] { PeriodSpawnEntry.Variant(CaveOoze, 2), PeriodSpawnEntry.Variant(LanternFish, 1), PeriodSpawnEntry.Species(NightVariantRules.MorcegoVampiro, 2) },
             });
 
             m.Landmarks.Add(new MapLandmark(MapLandmarkKind.Signpost, new Vector2(4.5f, -60f), 0f));

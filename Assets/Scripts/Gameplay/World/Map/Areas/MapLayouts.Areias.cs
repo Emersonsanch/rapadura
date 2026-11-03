@@ -23,6 +23,10 @@ namespace Rapadura.Gameplay.World.Map.Areas
         private const string EmberVulture = "enemy_desert_ember_vulture";
         private const string BrokenLantern = "enemy_desert_broken_lantern";
 
+        /// <summary>The Areias' own beasts of 07 and 08 (Docs/WorldBible_Maniqueismo.md §3.2.1).</summary>
+        private const string Jackal = "enemy_desert_jackal";
+        private const string SandSnake = "enemy_desert_sand_snake";
+
         // ------------------------------------------------------------------
         // 07 · Estrada das Caravanas
         // ------------------------------------------------------------------
@@ -136,8 +140,8 @@ namespace Rapadura.Gameplay.World.Map.Areas
             m.Exits.Add(Border("exit_qocho", MapExitKind.WorldMap, null, Rect.MinMaxRect(97f, -7f, 100f, 7f), new Vector2(93f, 0f), Vector2.left));
             m.Exits.Add(Border("exit_artifices", MapExitKind.Map, ArtificesId, Rect.MinMaxRect(34f, -90f, 46f, -87f), new Vector2(40f, -83f), Vector2.up));
 
-            // Step 4–5 (Mapas100 07): Escorpião das Areias Flamejantes [tanque]; the Lobo do Tugai that follows the caravans
-            // stands in for the Chacal Apagado [rápido]; at dusk and night the Enxame de Faíscas Presas, and the Mardagayl
+            // Step 4–5 (Mapas100 07): Escorpião das Areias Flamejantes [tanque]; the Chacal Apagado [rápido] follows the
+            // caravans; at dusk and night the Enxame de Faíscas Presas, and the Mardagayl
             // comes down the karez on some nights ([elite]); the Abutre de Brasa [distância] circles the broken caravan and Qocho.
             m.Zones.Add(new MapSpawnZone
             {
@@ -151,9 +155,9 @@ namespace Rapadura.Gameplay.World.Map.Areas
             {
                 Id = "karez_seco", Center = new Vector2(-74f, 58f), Radius = 10f, MinLevel = 5, MaxLevel = 6, MaxAlive = 4, RespawnSeconds = 22f,
                 Archetypes = "[rápido] [elite]",
-                Day = new[] { PeriodSpawnEntry.Normal(Wolf, 3), PeriodSpawnEntry.Normal(Scorpion, 1) },
-                Dusk = new[] { PeriodSpawnEntry.Normal(Wolf, 3), PeriodSpawnEntry.Variant(Wolf, 1) },
-                Night = new[] { PeriodSpawnEntry.Variant(Wolf, 3), PeriodSpawnEntry.Normal(Wolf, 1), PeriodSpawnEntry.Species(NightVariantRules.Lobisomem, 1) },
+                Day = new[] { PeriodSpawnEntry.Normal(Jackal, 3), PeriodSpawnEntry.Normal(Scorpion, 1) },
+                Dusk = new[] { PeriodSpawnEntry.Normal(Jackal, 3), PeriodSpawnEntry.Variant(Jackal, 1) },
+                Night = new[] { PeriodSpawnEntry.Variant(Jackal, 3), PeriodSpawnEntry.Normal(Jackal, 1), PeriodSpawnEntry.Species(NightVariantRules.Lobisomem, 1) },
             });
             m.Zones.Add(new MapSpawnZone
             {
@@ -296,15 +300,15 @@ namespace Rapadura.Gameplay.World.Map.Areas
             m.Exits.Add(Border("exit_rondaveis", MapExitKind.Map, RondaveisId, Rect.MinMaxRect(97f, -66f, 100f, -54f), new Vector2(93f, -60f), Vector2.left));
             m.Exits.Add(Border("exit_island", MapExitKind.WorldMap, null, Rect.MinMaxRect(-100f, -46f, -97f, -34f), new Vector2(-93f, -40f), Vector2.right));
 
-            // Step 4–5 (Mapas100 08): the Ushabti de Pedra [tanque] stands in for the Ushabti de Areia, the Escorpião
-            // [tanque]; the Lanterna Quebrada dos Artífices [distância] floats among the pyramids and the lotus columns; at
+            // Step 4–5 (Mapas100 08): the Ushabti de Pedra [tanque] stands in for the Ushabti de Areia, the Cobra-de-Areia
+            // [rápido] slides between their feet, the Escorpião [tanque]; the Lanterna Quebrada dos Artífices [distância] floats among the pyramids and the lotus columns; at
             // night the ushabtis "wake" (night variants, glowing eyes) and the sparks swarm over the stones.
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "avenida_oeste", Center = new Vector2(-48f, -66f), Radius = 11f, MinLevel = 6, MaxLevel = 7, MaxAlive = 4, RespawnSeconds = 24f,
-                Archetypes = "[tanque]",
-                Day = new[] { PeriodSpawnEntry.Normal(Golem, 3), PeriodSpawnEntry.Normal(Scorpion, 1) },
-                Night = new[] { PeriodSpawnEntry.Variant(Golem, 3), PeriodSpawnEntry.Normal(Golem, 1), PeriodSpawnEntry.Species(NightVariantRules.VagaLume, 1) },
+                Archetypes = "[tanque] [rápido]",
+                Day = new[] { PeriodSpawnEntry.Normal(Golem, 3), PeriodSpawnEntry.Normal(SandSnake, 1) },
+                Night = new[] { PeriodSpawnEntry.Variant(Golem, 3), PeriodSpawnEntry.Variant(SandSnake, 1), PeriodSpawnEntry.Species(NightVariantRules.VagaLume, 1) },
             });
             m.Zones.Add(new MapSpawnZone
             {
