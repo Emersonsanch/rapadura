@@ -146,6 +146,18 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string Sangkent = "sangkent";
 
+        /// <summary>
+        /// Mingcheng, a Cidade dos Nove Anéis, capital of the Planície de Mingcheng (map 41, return city of maps 41, 43, 44 and
+        /// 46, Docs/Mapas100.md §2.1 and região 8). Same id as <c>MapCatalog.Mingcheng</c> and <c>CityTownRecipes.MingchengCityId</c>.
+        /// </summary>
+        public const string Mingcheng = "mingcheng";
+
+        /// <summary>
+        /// The Torres Brancas de Amanirenas, race city of the high elves (map 42, return city of maps 42 and 45,
+        /// Docs/Mapas100.md §3.3 and região 8). Same id as <c>MapCatalog.TorresBrancas</c> and <c>CityTownRecipes.TorresBrancasCityId</c>.
+        /// </summary>
+        public const string TorresBrancas = "torres_brancas";
+
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
             new CitySpec(VilaZefa, BiomeType.Forest,
@@ -309,6 +321,21 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("thanchvil"),
                 },
                 new List<string> { CityShopCatalog.CestariaLarthia }),
+
+            // Torres Brancas de Amanirenas (altos-elfos, names of the candaces and kings of Kush/Meroë): Amanirenas the
+            // queen-guardian (missions), Amanitore the builder, Natakamani the master of the mirrors (the city's shop: the
+            // Espelhos de Natakamani, refining with reflected light), Shanakdakhete who teaches the light (second mission),
+            // Arkamani who reads the stars. The Planície de Mingcheng has no world-map biome: the region is the borrowed Forest.
+            new CitySpec(TorresBrancas, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("amanirenas"),
+                    new CityResidentSpec("amanitore"),
+                    new CityResidentSpec("natakamani", CityShopCatalog.EspelhosNatakamani),
+                    new CityResidentSpec("shanakdakhete"),
+                    new CityResidentSpec("arkamani"),
+                },
+                new List<string> { CityShopCatalog.EspelhosNatakamani }),
         };
 
         /// <summary>
@@ -364,6 +391,21 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("baraies"),
                 },
                 new List<string> { CityShopCatalog.AgasalhosSisinnios }),
+
+            // Mingcheng (the Planície de Mingcheng, região 8; names of the Mingjiao, the Manichaeism of China and of the Uyghurs):
+            // Bögü, the Uyghur khagan, here the old chief of the ring guard (missions), Mōzak, the title of the Manichaean
+            // teachers, here the keeper of the lanterns (the city's shop: the Sun Seal of map 42), Lin Deng of Fujian, the master
+            // of the canal (second mission), and Fuduodan, the bishop of 694, who reads the Two Principles. Region: the borrowed
+            // Forest (as Jhilpur and Sangkent).
+            new CitySpec(Mingcheng, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("bogu"),
+                    new CityResidentSpec("mozak", CityShopCatalog.LanternasMozak),
+                    new CityResidentSpec("lin_deng"),
+                    new CityResidentSpec("fuduodan"),
+                },
+                new List<string> { CityShopCatalog.LanternasMozak }),
         };
 
         /// <summary>Ammo, the peddler: not a resident of one city, he is wherever his mule is today (<see cref="ShopRotation.MascateRegion"/>).</summary>

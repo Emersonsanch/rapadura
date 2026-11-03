@@ -337,6 +337,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
             spec.RootStilt |= style.Architecture == TownArchitecture.RootStilt && plainHouse;
             spec.StiltLonghouse |= style.Architecture == TownArchitecture.StiltVillage && plainHouse;
             spec.StoneTerrace |= style.Architecture == TownArchitecture.StoneTerrace && plainHouse;
+            spec.RingWallHall |= style.Architecture == TownArchitecture.RingWall && plainHouse;
+            spec.SpireHouse |= style.Architecture == TownArchitecture.WhiteSpire && plainHouse;
 
             switch (r.Kind)
             {

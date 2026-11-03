@@ -92,7 +92,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 return;
             }
 
-            if (spec.ReedHall || spec.ReefTower || spec.RootStilt || spec.StiltLonghouse || spec.StoneTerrace)
+            if (spec.ReedHall || spec.ReefTower || spec.RootStilt || spec.StiltLonghouse || spec.StoneTerrace || spec.RingWallHall || spec.SpireHouse)
             {
                 // Aratta's reed halls and Kirta's coral towers (TownKit.ReedHorn / CoralReef): their own mass, roof and porch.
                 float rhw = spec.Width * 0.5f;
@@ -116,12 +116,22 @@ namespace Rapadura.Gameplay.World.Cities.Town
                     // Sangkent's two-storey stone houses hang their sign over the porch roof themselves (the eave is a storey up).
                     TownKit.StoneTerraceHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
                 }
+                else if (spec.RingWallHall)
+                {
+                    // Mingcheng's halls hang their sign as a lacquered plaque over the door themselves (the curved roof covers the porch).
+                    TownKit.RingWallHallHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
+                }
+                else if (spec.SpireHouse)
+                {
+                    // The Torres Brancas' spire houses carry their sign as a plaque on the portico's architrave.
+                    TownKit.SpireHouseHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
+                }
                 else
                 {
                     TownKit.ReefTowerHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
                 }
 
-                if (spec.Sign && spec.PorchDepth > 0.01f && !spec.StoneTerrace)
+                if (spec.Sign && spec.PorchDepth > 0.01f && !spec.StoneTerrace && !spec.RingWallHall && !spec.SpireHouse)
                 {
                     TownKit.SignBoard(b, new Vector3(spec.DoorOffset * spec.Width, spec.EaveHeight + 0.25f, rzFront + 0.05f), spec.SignColor, spec.AccentColor);
                 }

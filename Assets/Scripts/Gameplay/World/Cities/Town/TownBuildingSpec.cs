@@ -71,6 +71,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
         BasketWeaver = 29,
         /// <summary>Sisinnios (Sangkent): a rack of quilted felt coats, crampons hanging on a peg, a stack of folded storm cloaks, a coil of rope.</summary>
         Outfitter = 30,
+        /// <summary>Mōzak (Mingcheng): a rack of paper lanterns (round, tall, the fish lantern), riddle slips hanging from them, a pot of paste and a stack of paper.</summary>
+        LanternMaker = 31,
+        /// <summary>Natakamani (Torres Brancas): bronze mirrors on stands catching the light, a crate of polished stones and a little brazier of light.</summary>
+        Mirrors = 32,
     }
 
     /// <summary>
@@ -181,6 +185,20 @@ namespace Rapadura.Gameplay.World.Cities.Town
         public bool StoneTerrace;
 
         /// <summary>
+        /// Mingcheng: a courtyard hall of the walled cities (Docs/Mapas100.md §2.1, style <c>RingWall</c>): grey brick on a stone
+        /// base, red-lacquered columns, lattice windows, a curved grey-tile roof with upturned eaves and a ridge with end
+        /// ornaments (golden tile with <see cref="RoofColor"/> = GoldTile), paper lanterns under the eaves (TownKit.RingWall).
+        /// </summary>
+        public bool RingWallHall;
+
+        /// <summary>
+        /// Torres Brancas: a white spire house of the high elves (Docs/Mapas100.md §3.3, style <c>WhiteSpire</c>): a low pointed
+        /// pyramid base of Meroë sandstone, a slender lime-white tower with pale-gold bands, tall windows of light, a glass dome
+        /// with a gold finial and a bronze mirror catching the sun, a portico of white pillars (TownKit.WhiteSpire).
+        /// </summary>
+        public bool SpireHouse;
+
+        /// <summary>
         /// Mercado dos Túneis: with <see cref="TownRoofKind.Rock"/>, a stall set into an arched basalt niche: the round arch,
         /// a striped canvas awning on copper poles, a counter, bottle lanterns and a copper air pipe up the rock (TownKit.TunnelBazaar).
         /// </summary>
@@ -221,7 +239,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Key of the cached mesh: equal specs share one mesh.</summary>
         public string CacheKey =>
             $"{Kind}|{Width:0.00}|{Depth:0.00}|{PorchDepth:0.00}|{FullVaranda}|{WallHeight:0.00}|{Floors}|{Roof}|{WallColor}|{TrimColor}|{RoofColor}|" +
-            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{RootStilt}|{StiltLonghouse}|{StoneTerrace}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
+            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{RootStilt}|{StiltLonghouse}|{StoneTerrace}|{RingWallHall}|{SpireHouse}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
             $"{Chimney}|{Sign}|{SignColor}|{Dressing}|{Seed}";
     }
 }

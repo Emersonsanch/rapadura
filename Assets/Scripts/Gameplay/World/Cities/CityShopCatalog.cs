@@ -262,6 +262,21 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string AgasalhosSisinnios = "shop_agasalhos_sisinnios";
 
+        /// <summary>
+        /// Lanternas do Mestre Mōzak (Mingcheng, the capital of the Planície de Mingcheng, Docs/Mapas100.md região 8): the
+        /// keeper of the lanterns sells the gear of the only gate of the region that an item answers
+        /// (Docs/MetodologiaMapasERacas.md §2.1): the Selo do Sol of the Torres Brancas (42), bound to the hero. Oil and rune
+        /// lamps for the night of the outer rings. The counter turns daily.
+        /// </summary>
+        public const string LanternasMozak = "shop_lanternas_mozak";
+
+        /// <summary>
+        /// Espelhos de Natakamani (Torres Brancas de Amanirenas, the high elves' city, Docs/Mapas100.md §3.3): the master of the
+        /// mirrors sells the stones of the refining ("luz refletida": blessing, soul, life and chaos stones) and the clarity rune;
+        /// no gate item (the Sun Seal of 42 is sold in Mingcheng, before the road in). The counter turns daily.
+        /// </summary>
+        public const string EspelhosNatakamani = "shop_espelhos_natakamani";
+
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
@@ -569,6 +584,43 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_herb", 3, 12, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+            })),
+
+            // ---- Mingcheng: Mōzak's lanterns, the gear of the gate 42 (the Selo do Sol); daily ----
+            new CityShopSpec(LanternasMozak, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(LanternasMozak, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                // Map gate (MapRequirementRules): the Sun Seal that opens the Torres Brancas de Amanirenas (42), bound to the hero.
+                new CityShopEntry("item_selo_sol", 1500, 1),
+                // Light for the outer rings at night (the bell shuts the gates: whoever is outside stays outside).
+                new CityShopEntry("item_lamparina_oleo", 30, 3),
+                new CityShopEntry("item_lamparina_runica", 160, 1),
+                // The rotation: what the barges bring up the canal.
+                new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
+                new CityShopEntry("item_mount_feed", 3, 12, rotating: true),
+                new CityShopEntry("item_fiber", 1, 20, rotating: true),
+                new CityShopEntry("item_herb", 3, 12, rotating: true),
+                new CityShopEntry("item_corda_escalada", 40, 2, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+            })),
+
+            // ---- Torres Brancas: Natakamani's mirrors, the stones of the refining; daily ----
+            new CityShopSpec(EspelhosNatakamani, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(EspelhosNatakamani, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                // Refining with reflected light: the stones of the forge, always on the counter.
+                new CityShopEntry("item_pedra_bencao", 12, 6),
+                new CityShopEntry("item_pedra_alma", 35, 3),
+                new CityShopEntry("item_runa_clareza", 15, 3),
+                // The rotation.
+                new CityShopEntry("item_lamparina_runica", 160, 1, rotating: true),
+                new CityShopEntry("item_runa_cura", 15, 3, rotating: true),
+                new CityShopEntry("item_herb", 3, 12, rotating: true),
+                new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
             })),
 
             // ---- Ferraria do Mestre Adamas (Vila): the village blacksmith ----

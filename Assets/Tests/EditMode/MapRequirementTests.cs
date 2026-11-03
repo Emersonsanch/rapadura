@@ -212,12 +212,12 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void EveryGateOfRegionsOneToSeven_HasAnItemKitThatMeetsIt_AndEveryItemIsSoldOrGivenByAQuest()
+        public void EveryGateOfRegionsOneToEight_HasAnItemKitThatMeetsIt_AndEveryItemIsSoldOrGivenByAQuest()
         {
             var regions = new[]
             {
                 MapRegion.Zarafshan, MapRegion.AreiasFlamejantes, MapRegion.SerraDeKaggen, MapRegion.GrutasDoLimiar, MapRegion.CostaDasMoncoes, MapRegion.DeltaDeJhilpur,
-                MapRegion.TetoDoMundo,
+                MapRegion.TetoDoMundo, MapRegion.PlanicieDeMingcheng,
             };
 
             // The Forte dos Ventos (39) asks for real wings or a flying mount (Tacho Encantado, the Grifo da Coluna): no item kit.
@@ -228,6 +228,7 @@ namespace Rapadura.Tests
             List<MapDefinition> gated = MapCatalog.Maps.Where(m => m.HasSpecialRequirement && regions.Contains(m.Region) && m.SpecialRequirementTag != MapRequirementTags.WingsRequired).ToList();
             Assert.Greater(gated.Count, 10);
             Assert.IsTrue(gated.Any(m => m.MapId == 36) && gated.Any(m => m.MapId == 38) && gated.Any(m => m.MapId == 40), "the Teto do Mundo's item gates");
+            Assert.IsTrue(gated.Any(m => m.MapId == 42 && m.SpecialRequirementTag == MapRequirementTags.SunSeal), "the Planície de Mingcheng's item gate (the Sun Seal)");
             foreach (MapDefinition map in gated)
             {
                 string[] kit = MapRequirementRules.KitOf(map.SpecialRequirementTag);

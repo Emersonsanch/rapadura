@@ -55,6 +55,12 @@ namespace Rapadura.Editor
         [MenuItem(Root + "Preview Walkable Town/Sangkent (capital, Teto do Mundo)", priority = 22)]
         private static void PreviewSangkent() => Preview(CityCatalog.Sangkent);
 
+        [MenuItem(Root + "Preview Walkable Town/Mingcheng (capital, Planície de Mingcheng)", priority = 23)]
+        private static void PreviewMingcheng() => Preview(CityCatalog.Mingcheng);
+
+        [MenuItem(Root + "Preview Walkable Town/Torres Brancas (altos-elfos, Planície de Mingcheng)", priority = 24)]
+        private static void PreviewTorresBrancas() => Preview(CityCatalog.TorresBrancas);
+
         [MenuItem(Root + "Preview Walkable Town/Toggle Night", priority = 30)]
         private static void ToggleNight()
         {

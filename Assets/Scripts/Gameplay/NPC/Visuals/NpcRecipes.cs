@@ -906,6 +906,154 @@ namespace Rapadura.Gameplay.NPC.Visuals
             },
 
             // ------------------------------------------------------------------
+            // Mingcheng, a Cidade dos Nove Anéis (Planície de Mingcheng, Docs/Mapas100.md §2.1 and map 41): red lacquer,
+            // imperial gold, jade, lantern paper, grey brick, ink and celadon, the willow green. Names of the Mingjiao, the
+            // Manichaeism of China and of the Uyghurs (the title mōzak; Bögü Qaghan; Lin Deng of Fujian; the fuduodan of 694).
+            // Human; no marks of any living rite.
+            // ------------------------------------------------------------------
+
+            // Mōzak, the title of the Manichaean teachers in Chinese and Sogdian, here the keeper of the lanterns (the city's
+            // shop: the Sun Seal of map 42): an elder of grey topknot and goatee under a jade headband, a long celadon robe with
+            // lacquer hems and a red sash, the lantern pole in his right hand and the riddle slips in his left. Raises the lantern.
+            new NpcRecipe
+            {
+                Id = "mozak", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 0.98f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinLight, Face = NpcFace.Kind, Hair = NpcHair.Topknot, HairColor = NpcSwatch.HairGrey, Beard = NpcBeard.Goatee,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.Jade, HeadTrim = NpcSwatch.ImperialGold,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.Celadon, Trim = NpcSwatch.Lacquer, Sleeves = NpcSwatch.Celadon, Boots = NpcSwatch.Ink,
+                Layers = NpcLayer.Sash, LayerColor = NpcSwatch.Lacquer, LayerTrim = NpcSwatch.ImperialGold,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.LanternPole, NpcProp.Letter },
+                Gesture = NpcGesture.LanternRaise,
+                Story = "Mōzak, título dos mestres maniqueus em chinês e sogdiano; aqui, o guardião das lanternas de Mingcheng: a loja da cidade (o Selo do Sol)",
+            },
+
+            // Bögü, the Uyghur khagan who took up the Manichaean faith in 762, here the old chief of the ring guard (the city's
+            // missions): broad and proud, a full grey beard under a tall ink felt cap with a gold band, an ink kaftan with gold
+            // hems under a grey-brick lamellar vest and a belt, the keys of the gates and a quiver on the back. Calls the watch.
+            new NpcRecipe
+            {
+                Id = "bogu", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Broad, Height = 1.05f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Stern, Hair = NpcHair.Short, HairColor = NpcSwatch.HairGrey, Beard = NpcBeard.Full,
+                Headwear = NpcHeadwear.FeltCap, HeadColor = NpcSwatch.Ink, HeadTrim = NpcSwatch.ImperialGold,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.Ink, Trim = NpcSwatch.ImperialGold, Sleeves = NpcSwatch.Lacquer, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Vest | NpcLayer.Belt, LayerColor = NpcSwatch.GreyBrick, LayerTrim = NpcSwatch.Lacquer,
+                LeftArm = NpcArmPose.HipRest, RightArm = NpcArmPose.Carry, Props = new[] { NpcProp.Keys, NpcProp.Quiver },
+                Gesture = NpcGesture.Call,
+                Story = "Bögü Qaghan, o khagan uigur que adotou o maniqueísmo em 762; aqui, o velho chefe da guarda dos anéis, que dá as missões da cidade",
+            },
+
+            // Lin Deng, the Manichaean of Fujian in the Song era, here the master of the canal (the second mission): slim and
+            // easygoing, a black topknot and a thin moustache under a straw cone hat, a jade tunic with ink hems and ink
+            // trousers, a lacquer sash, the boat pole and a coil of mooring rope. Scans the water.
+            new NpcRecipe
+            {
+                Id = "lin_deng", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 1.0f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinLight, Face = NpcFace.Calm, Hair = NpcHair.Topknot, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.Moustache,
+                Headwear = NpcHeadwear.StrawCone, HeadColor = NpcSwatch.Straw, HeadTrim = NpcSwatch.Lacquer,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.Jade, Trim = NpcSwatch.Ink, Sleeves = NpcSwatch.Jade, Trousers = NpcSwatch.Ink, Boots = NpcSwatch.Straw,
+                Layers = NpcLayer.Sash, LayerColor = NpcSwatch.Lacquer, LayerTrim = NpcSwatch.LanternPaper,
+                LeftArm = NpcArmPose.Carry, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.CaravanStaff, NpcProp.RopeCoil },
+                Gesture = NpcGesture.Scan,
+                Story = "Lin Deng, maniqueu de Fujian da era Song; aqui, o mestre do canal de Mingcheng, que dá a 2ª missão",
+            },
+
+            // Fuduodan, the Persian bishop who brought the Book of the Two Principles to the court of China in 694, here the
+            // reader who reads the Two Principles aloud to whoever asks: an elder, slim and upright, a long grey beard under a
+            // white turban with a gold band, a long white robe with gold hems and a celadon shawl, a scroll held up and its case.
+            new NpcRecipe
+            {
+                Id = "fuduodan", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Slim, Height = 1.0f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinOlive, Face = NpcFace.Dreamy, Hair = NpcHair.Short, HairColor = NpcSwatch.HairGrey, Beard = NpcBeard.Long,
+                Headwear = NpcHeadwear.Turban, HeadColor = NpcSwatch.RobeWhite, HeadTrim = NpcSwatch.ImperialGold,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.RobeWhite, Trim = NpcSwatch.ImperialGold, Sleeves = NpcSwatch.RobeWhite, Boots = NpcSwatch.Ink,
+                Layers = NpcLayer.Shawl, LayerColor = NpcSwatch.Celadon, LayerTrim = NpcSwatch.Lacquer,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Scroll, NpcProp.ScrollCase },
+                Gesture = NpcGesture.Read,
+                Story = "Fuduodan, o bispo persa que levou o Livro dos Dois Princípios à corte da China em 694; aqui, o leitor que lê os Dois Princípios para quem pedir",
+            },
+
+            // ------------------------------------------------------------------
+            // Torres Brancas de Amanirenas (altos-elfos, Docs/Mapas100.md §3.3 and map 42): tall dark-skinned elves with white
+            // hair, astronomers and architects, in lime white, pale gold, sky blue, silver leaf and Meroë sandstone. Names of
+            // the candaces and kings of Kush/Meroë.
+            // ------------------------------------------------------------------
+
+            // Amanirenas, the one-eyed candace of Meroë, here the queen-guardian (the city's missions): tall and proud, long
+            // white hair under a sun circlet, a lime dress with gold hems and a sky-blue sash, the bow in her hand and the sun
+            // pendant. Scans the white hills.
+            new NpcRecipe
+            {
+                Id = "amanirenas", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 1.12f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinDeep, Face = NpcFace.Stern, Hair = NpcHair.Long, HairColor = NpcSwatch.HairWhite, ElfEars = true,
+                Headwear = NpcHeadwear.SunCirclet, HeadColor = NpcSwatch.PaleGold, HeadTrim = NpcSwatch.SpireLight,
+                Garment = NpcGarment.Dress, Main = NpcSwatch.SpireLime, Trim = NpcSwatch.PaleGold, Sleeves = NpcSwatch.SpireLime, Boots = NpcSwatch.MeroeSandstone,
+                Layers = NpcLayer.Sash, LayerColor = NpcSwatch.SkyBlue, LayerTrim = NpcSwatch.PaleGold,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HipRest, Props = new[] { NpcProp.Bow, NpcProp.SunPendant },
+                Gesture = NpcGesture.Scan,
+                Story = "Amanirenas, a candace de Meroé de um olho só; aqui, a rainha-guardiã das Torres Brancas, que dá as missões da cidade",
+            },
+
+            // Amanitore, the builder candace of Meroë, here the builder of the towers (decoration of the houses): a braid of white
+            // hair under a sandstone headwrap, a sandstone tunic with lime hems over ebony trousers, an apron and a belt, the
+            // hammer and the clay tablets of her plans. Taps the stone.
+            new NpcRecipe
+            {
+                Id = "amanitore", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Average, Height = 1.06f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinBrown, Face = NpcFace.Bright, Hair = NpcHair.Braid, HairColor = NpcSwatch.HairWhite, ElfEars = true,
+                Headwear = NpcHeadwear.Headwrap, HeadColor = NpcSwatch.MeroeSandstone, HeadTrim = NpcSwatch.PaleGold,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.MeroeSandstone, Trim = NpcSwatch.SpireLime, Sleeves = NpcSwatch.SpireLime, Trousers = NpcSwatch.Ebony, Boots = NpcSwatch.Ebony,
+                Layers = NpcLayer.Apron | NpcLayer.Belt, LayerColor = NpcSwatch.SilverLeaf, LayerTrim = NpcSwatch.Ebony,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Hammer, NpcProp.Tablets },
+                Gesture = NpcGesture.Hammer,
+                Story = "Amanitore, a candace construtora de Meroé; aqui, a construtora das torres, que faz os enfeites das casas",
+            },
+
+            // Natakamani, the builder king of Meroë, here the master of the mirrors (the city's shop: refining with reflected
+            // light): white ponytail and a short beard under a gold skullcap, a sky-blue kaftan with gold hems under a lime vest
+            // and a sash, the crystal pendant and his scale. Counts the light.
+            new NpcRecipe
+            {
+                Id = "natakamani", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Average, Height = 1.08f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinDeep, Face = NpcFace.Kind, Hair = NpcHair.Ponytail, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Short, ElfEars = true,
+                Headwear = NpcHeadwear.Skullcap, HeadColor = NpcSwatch.PaleGold, HeadTrim = NpcSwatch.SkyBlue,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.SkyBlue, Trim = NpcSwatch.PaleGold, Sleeves = NpcSwatch.SkyBlue, Boots = NpcSwatch.MeroeSandstone,
+                Layers = NpcLayer.Vest | NpcLayer.Sash, LayerColor = NpcSwatch.SpireLime, LayerTrim = NpcSwatch.PaleGold,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.CrystalPendant, NpcProp.Scale },
+                Gesture = NpcGesture.Count,
+                Story = "Natakamani, o rei construtor de Meroé; aqui, o mestre dos espelhos: a loja da cidade (refino com luz refletida)",
+            },
+
+            // Shanakdakhete, the first ruling queen of Meroë, here the one who teaches the light (magic; the second mission):
+            // slim and upright, a white bun under a band of light, a silver-leaf robe with gold hems and a sky-blue shawl, the
+            // moon staff in her right hand and the crystal held up in her left. Turns the light.
+            new NpcRecipe
+            {
+                Id = "shanakdakhete", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 1.1f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinBrown, Face = NpcFace.Calm, Hair = NpcHair.Bun, HairColor = NpcSwatch.HairWhite, ElfEars = true,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.SpireLight, HeadTrim = NpcSwatch.PaleGold,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.SilverLeaf, Trim = NpcSwatch.PaleGold, Sleeves = NpcSwatch.SilverLeaf, Boots = NpcSwatch.SpireLime,
+                Layers = NpcLayer.Shawl, LayerColor = NpcSwatch.SkyBlue, LayerTrim = NpcSwatch.SpireLight,
+                LeftArm = NpcArmPose.HoldUp, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.MoonStaff, NpcProp.CrystalPendant },
+                Gesture = NpcGesture.Mime,
+                Story = "Shanakdakhete, a primeira rainha reinante de Meroé; aqui, a que ensina a luz (magia) e dá a 2ª missão",
+            },
+
+            // Arkamani, the king of Meroë, here the one who reads the stars (the bestiary of the sky): an elder, slim and
+            // stooped, long white hair and a goatee under an ebony hood with a gold edge, an ebony robe with hems of light and a
+            // gold belt, the walking stick and the scroll of the sky. Reads the stars.
+            new NpcRecipe
+            {
+                Id = "arkamani", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Slim, Height = 1.04f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinDeep, Face = NpcFace.Dreamy, Hair = NpcHair.Long, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Goatee, ElfEars = true,
+                Headwear = NpcHeadwear.Hood, HeadColor = NpcSwatch.Ebony, HeadTrim = NpcSwatch.PaleGold,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.Ebony, Trim = NpcSwatch.SpireLight, Sleeves = NpcSwatch.Ebony, Boots = NpcSwatch.MeroeSandstone,
+                Layers = NpcLayer.Belt, LayerColor = NpcSwatch.PaleGold, LayerTrim = NpcSwatch.SkyBlue,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.WalkingStick, NpcProp.Scroll },
+                Gesture = NpcGesture.Read,
+                Story = "Arkamani I, rei de Meroé; aqui, o que lê as estrelas das Torres Brancas (o bestiário do céu)",
+            },
+
+            // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
 

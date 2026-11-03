@@ -10,7 +10,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
     /// <see cref="Garajonay"/>, <see cref="TamborRubro"/>, <see cref="BronzeHalls"/>, <see cref="TunnelMarket"/>, <see cref="Aratta"/>, <see cref="Kirta"/> and <see cref="Tarchon"/>
     /// (<see cref="CityCatalog.RaceCities"/>; the orcs' war camp, the dwarves' rune halls, the kobolds' tunnel bazaar, the
     /// povo-touro's reed halls, the povo-do-mar's coral towers and the trols' long houses on piles in their own styles) and Taa Pwani (<see cref="TaaPwani"/>, the first of the
-    /// <see cref="CityCatalog.LateRegionCities"/>, in its own coral-stone style; then <see cref="Jhilpur"/>, the city in the roots, and <see cref="Sangkent"/>, the stair city). A city added to the
+    /// <see cref="CityCatalog.LateRegionCities"/>, in its own coral-stone style; then <see cref="Jhilpur"/>, the city in the roots, <see cref="Sangkent"/>, the stair city, and <see cref="Mingcheng"/>, the city of nine rings; the high elves'
+    /// <see cref="TorresBrancas"/> keep their own white spires). A city added to the
     /// catalog without a recipe gets <see cref="Default"/> (the Vila's plan filled with its residents, shops and regional
     /// style) until it has one. Layouts are cached per city and "mascate today" flag (the generator is deterministic,
     /// so the cache never goes stale).
@@ -79,6 +80,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityCatalog.Jhilpur: return Jhilpur();
                 case CityCatalog.PalafitasTarchon: return Tarchon();
                 case CityCatalog.Sangkent: return Sangkent();
+                case CityCatalog.Mingcheng: return Mingcheng();
+                case CityCatalog.TorresBrancas: return TorresBrancas();
                 default: return null;
             }
         }

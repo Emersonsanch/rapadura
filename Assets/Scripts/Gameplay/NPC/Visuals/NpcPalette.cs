@@ -55,6 +55,13 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // Sangkent (Teto do Mundo, Docs/Mapas100.md §2.1 and map 36): yak wool #6E5A48, felt #E3D5BC, apricot blossom #F2B8A0,
         // the caravans' silk red #C0392B and blue #2E86AB, terrace stone #8C8173, juniper #5A3E2B and glacier ice #BFD9E8
         YakWool, Felt, ApricotBlossom, SilkRed, SilkBlue, PamirStone, Juniper, Glacier,
+        // Mingcheng (Planície de Mingcheng, Docs/Mapas100.md §2.1 and map 41): lacquer red #B23A2E, imperial gold #D9A82B,
+        // jade #5E9E7E, lantern paper #F4E3B5 (glows a little), grey brick #7D7F86, ink #2B2B30, celadon #9DC3B0, willow #8DB25A
+        Lacquer, ImperialGold, Jade, LanternPaper, GreyBrick, Ink, Celadon, Willow,
+        // Torres Brancas de Amanirenas (altos-elfos, Docs/Mapas100.md §3.3 and map 42): lime white #F3EFE6, pale gold #E3C46B,
+        // sky blue #7FB2E5, silver leaf #A8C5B5, Meroë sandstone #C79E6B, the passed-down sunlight #FFF4C2 (glows), carnelian
+        // #B5452E and ebony #3A2A22
+        SpireLime, PaleGold, SkyBlue, SilverLeaf, MeroeSandstone, SpireLight, Carnelian, Ebony,
     }
 
     /// <summary>
@@ -66,7 +73,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 17;
+        public const int Rows = 19;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -122,6 +129,12 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Sangkent  yak wool #6E5A48, felt #E3D5BC, apricot blossom #F2B8A0, silk red #C0392B, silk blue #2E86AB, terrace stone #8C8173, juniper #5A3E2B, glacier #BFD9E8
             new Color(0.43f, 0.35f, 0.28f), new Color(0.89f, 0.84f, 0.74f), new Color(0.95f, 0.72f, 0.63f), new Color(0.75f, 0.22f, 0.17f),
             new Color(0.18f, 0.53f, 0.67f), new Color(0.55f, 0.51f, 0.45f), new Color(0.35f, 0.24f, 0.17f), new Color(0.75f, 0.85f, 0.91f),
+            // Mingcheng  lacquer #B23A2E, imperial gold #D9A82B, jade #5E9E7E, lantern paper #F4E3B5, grey brick #7D7F86, ink #2B2B30, celadon #9DC3B0, willow #8DB25A
+            new Color(0.7f, 0.23f, 0.18f), new Color(0.85f, 0.66f, 0.17f), new Color(0.37f, 0.62f, 0.49f), new Color(0.96f, 0.89f, 0.71f),
+            new Color(0.49f, 0.5f, 0.53f), new Color(0.17f, 0.17f, 0.19f), new Color(0.62f, 0.76f, 0.69f), new Color(0.55f, 0.7f, 0.35f),
+            // Torres Brancas  lime #F3EFE6, pale gold #E3C46B, sky blue #7FB2E5, silver leaf #A8C5B5, Meroë sandstone #C79E6B, sunlight #FFF4C2, carnelian #B5452E, ebony #3A2A22
+            new Color(0.95f, 0.94f, 0.9f), new Color(0.89f, 0.77f, 0.42f), new Color(0.5f, 0.7f, 0.9f), new Color(0.66f, 0.77f, 0.71f),
+            new Color(0.78f, 0.62f, 0.42f), new Color(1f, 0.96f, 0.76f), new Color(0.71f, 0.27f, 0.18f), new Color(0.23f, 0.16f, 0.13f),
         };
 
         public static int Count => Colors.Length;
@@ -142,6 +155,8 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 case NpcSwatch.CoralLive: return 0.3f;
                 case NpcSwatch.LivingWater: return 0.35f;
                 case NpcSwatch.WillWisp: return 0.6f;
+                case NpcSwatch.LanternPaper: return 0.35f;
+                case NpcSwatch.SpireLight: return 0.6f;
                 default: return 0f;
             }
         }

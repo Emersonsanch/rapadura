@@ -30,6 +30,7 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
 | Costa das Monções (mapas 26 e 27) | **Aratta, a Cidade dos Chifres** (povo-touro, `aratta`) | Enmerkar, o Chefe Construtor (salão de junco na cabeça da praça), Lugalbanda, o Andarilho (rua Oeste), Shulgi, o Corredor (rua Leste), Ensuhkeshdanna, o Rival Amigo (rua Sul) | **Alforje do Lugalbanda** (`shop_alforje_lugalbanda`) | Enmerkar: "Chacais no Capim Seco"; Shulgi: "O Percurso de Shulgi" |
 | Costa das Monções (mapas 28 e 29) | **Cidade-Recife de Kirta** (povo-do-mar, `kirta`) | Kirta, o Rei do Recife (rua Norte), Danel, o Juiz Justo (rua Oeste), Pughat, a Que Cuida de Todos (rua Leste), Aqhat, o Arqueiro (rua Leste) | **Ferramentas de Mergulho do Danel** (`shop_mergulho_danel`) | Kirta: "Lodo no Recife"; Pughat: "Os Mergulhadores Encurralados" |
 | Delta de Jhilpur (mapas 33 e 34) | **Palafitas de Tarchon** (trols, `palafitas_tarchon`) | Tarchon, o Fundador (casa comprida na cabeça da praça), Larthia, a Cesteira (rua Oeste), Ramtha, a Curandeira (rua Leste), Thanchvil, a Contadora de Histórias (rua Leste), Vel, o Pescador (rua Sul) | **Cestaria da Larthia** (`shop_cestaria_larthia`) | Tarchon: "Fogos-Fátuos Presos"; Vel: "Garças nas Redes" |
+| Planície de Mingcheng (mapa 42; 45 planejado) | **Torres Brancas de Amanirenas** (altos-elfos, `torres_brancas`) | Rainha Amanirenas, a Guardiã (casa na cabeça da praça), Natakamani, o Mestre dos Espelhos (rua Oeste), Amanitore, a Construtora (rua Leste), Arkamani, o que Lê as Estrelas (rua Leste), Shanakdakhete, a que Ensina a Luz (rua Sul) | **Espelhos de Natakamani** (`shop_espelhos_natakamani`) | Amanirenas: "Espelhos Quebrados"; Shanakdakhete: "As Íbis Apagadas" |
 
 - **Passeio da cidade:** a mesma receita `CityTownRecipes.Garajonay` do mapa 05 e do mundo contínuo (mesmo `CityId`,
   mesma geometria; os moradores só ganharam `ResidentId` nos lotes que já existiam). Problema herdado da receita (não
@@ -225,6 +226,44 @@ fica em y = 0 dentro de um círculo de ~22 m com 3 saídas de rua, no lugar que 
   Preso; 5 poções de vida + 5 de mana + 120 ouro, 1350 XP); depois Vel pede 6 pássaros-fantasma fora das redes (a
   Coruja-Mortalha faz a Garça-Fantasma; **Amuleto Antiveneno** + 130 ouro, 1450 XP). Testes: `CityTarchonTests`.
 
+**Torres Brancas de Amanirenas** (altos-elfos, Planície de Mingcheng, mapa 42; cidade de retorno de 42 e 45):
+- **Passeio da cidade:** receita `CityTownRecipes.TorresBrancas` (`CityTownRecipes.TorresBrancas.cs`) no estilo novo
+  `TownStyles.WhiteSpire` (`TownArchitecture.WhiteSpire`, linha 15 da `TownPalette`: cal `#F3EFE6`, ouro claro `#E3C46B`,
+  azul-céu `#7FB2E5`, folha prateada `#A8C5B5`, arenito de Meroé `#C79E6B`, a luz do sol `#FFF4C2` (brilha à noite: a
+  luz que os espelhos passam), bronze de espelho `#B58B4C`, verde de jardim `#5F8F4E`). Cada casa é uma **casa-torre
+  branca** (`TownBuildingSpec.SpireHouse`: `TownKit.SpireHouseHouse`): base de arenito em dois degraus, salão de cal com
+  faixa e cornija de ouro claro e pirâmides douradas nos cantos, porta em arco de bronze e janelas altas em arco de luz,
+  **torre fina** recuada com faixas de ouro, fresta de luz e **cúpula de vidro** (`Dome`), um **espelho de bronze** na
+  torre e o raio que ele passa até o deque; pórtico de colunas brancas (nos `PorchPostsX`) sob arquitrave branca com a
+  tabuleta. Peças: `SpireTerrace` (muro branco de segmento com **três degraus de jardim** atrás, sebes e **torres
+  brancas** com cúpula de vidro ou ponta de ouro; a variante 1 ergue a **torre mais alta** no meio, sobre base de
+  pirâmide, com o espelho grande e seu raio até o muro, e duas torres menores ligadas por **pontes de folha**),
+  `MirrorClock` (o **Relógio de Espelhos** na praça: degrau redondo com as linhas das horas, obelisco branco com o disco
+  de ouro e seis espelhos em postes em volta), `LeafBridge` (riacho de jardim atravessando a rua com uma **ponte de
+  folha**, lâmina de pedra pontuda com nervura de ouro; pisável), `MirrorPost` (espelho de bronze num poste branco; a
+  variante 1 passa o raio até uma pedra de luz) e `SpirePyramid` (pirâmide pequena e íngreme de arenito com frente de
+  pilone e ponta de ouro, a lembrança de Meroé); portão de dois pilones brancos com o disco de ouro no lintel
+  (`TownKit.PylonGate`); vitrine do mestre dos espelhos (`TownShopDressing.Mirrors`: espelhos em suportes, caixote de
+  pedras polidas, braseiro de luz). Peças em `TownKit.WhiteSpire.cs`, colisores em `CitySolids`. Ruas Oeste (a entrada,
+  vindo de Mingcheng), Leste e Sul de 19 m (saídas em (±19, 0) e (0, −19), alvo de chegada a 18,6 m); Cais da Barca na
+  rua Oeste; **sem rua ao norte**: os jardins em terraço sobem em três lances (z = 19,5 com a torre mais alta e z = 14
+  dos lados) e duas pirâmides ficam em (±13, 12,4); tudo dentro de um círculo de 22,5 m (o sólido mais longe, o muro do
+  terraço do meio, chega a 21,7 m), caminhada em ±22; `CityLayoutRules.Validate` sem problemas, com e sem o mascate.
+- **Respawn:** derrota nos mapas 42 e 45 acorda na praça das Torres Brancas, ao pé do Relógio de Espelhos
+  (`MapCatalog.RespawnCityFor` → `ApplyDefeatIn`; hoje só o 42 está no `MapCatalog`).
+- **Espelhos de Natakamani** (diária, 3 vagas que giram, tema Especialidade): poções de vida e mana e as pedras do refino
+  com "luz refletida" fixas (Pedra da Bênção, Pedra da Alma, Runa da Clareza; Vida e Caos só caem de bichos); giram
+  Lamparina Rúnica, Runa de Cura, erva, carne e Amuleto da Sorte. **Não** vende o Selo do Sol: é a chave da entrada do 42
+  e se compra antes, em Mingcheng. O Ammo nunca para lá. (O desconto real de Pedra-Faísca nas faixas +7…+9 ainda falta.)
+- **Missões da cidade:** a rainha Amanirenas pede 7 espelhos apagados quebrados (a Lanterna Quebrada faz o Espelho
+  Quebrado da ficha; 5 poções de vida + 5 de mana + 160 ouro, 1850 XP); depois Shanakdakhete pede 6 íbis apagadas fora
+  dos terraços (o Corvo Sombrio faz a Íbis de Luz Apagada; **Lamparina Rúnica** + 2 Pedras da Alma + 170 ouro, 1950
+  XP). Testes: `CityTorresBrancasTests`.
+- **Falta:** o mundo contínuo da Planície de Mingcheng vai encaixar a cidade; até lá o passeio só abre pelo menu de
+  prévia do editor (`Preview Walkable Town/Torres Brancas`). O Relógio de Espelhos como quebra-cabeça (raios que mudam
+  com a hora, salas de baú, atalho para o 45), as 7 torres andáveis com as pontes de folha, O Pequeno Eclipse, o Cervo
+  de Luz Branca e o conjunto Torre Branca ainda faltam.
+
 ### 1.2 Cidades das regiões tardias (`CityCatalog.LateRegionCities`)
 
 Cidades das regiões 5–8 (Docs/Mapas100.md), que ainda não têm bioma no mapa-múndi. Ficam fora de `Cities` (sem painel
@@ -234,6 +273,7 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 
 | Região | Cidade | Moradores | Loja | Missões |
 |---|---|---|---|---|
+| Planície de Mingcheng (mapa 41; 43, 44 e 46 planejados) | **Mingcheng, a Cidade dos Nove Anéis** (capital, `mingcheng`) | Bögü, o Chefe da Guarda dos Anéis (salão na cabeça da praça), Mestre Mōzak, o Guardião das Lanternas (rua Oeste), Lin Deng, o Mestre do Canal (rua Leste), Fuduodan, o Leitor (rua Leste) | **Lanternas do Mestre Mōzak** (`shop_lanternas_mozak`) | Bögü: "Leões nos Portões"; Lin Deng: "Peixes no Canal" |
 | Teto do Mundo (mapas 36–40) | **Sangkent, a Cidade-Escadaria** (capital, `sangkent`) | Abā, o Chefe das Calhas (casa na cabeça da praça), Sisinnios, o Agasalheiro (rua Oeste), Kustai, o Escriba (rua Leste), Baraies, o Professor (rua Leste) | **Agasalhos do Sisinnios** (`shop_agasalhos_sisinnios`) | Abā: "Pedras nas Calhas"; Kustai: "Neblina no Quadro" |
 | Delta de Jhilpur (mapas 31, 32 e 35) | **Jhilpur, a Cidade nas Raízes** (capital, `jhilpur`) | Salmaios, o Guardião da Raiz-Mãe (rua Norte), Nuhzadag, o Barqueiro (rua Oeste), Abiesous, o Mestre da Escola de Barco (rua Leste), Tehat, a Erveira (rua Leste) | **Barcos e Trocas do Nuhzadag** (`shop_trocas_nuhzadag`) | Salmaios: "Lodo nos Ghats"; Abiesous: "Corvos nos Remos" |
 | Costa das Monções (mapas 25 e 30) | **Taa Pwani** (marinheiros e mercadores suaílis, `taa_pwani`) | Capitão Liyongo, o Nakhoda (casa de 2 andares na rua Leste), Mwana, a Mercadora de Pérolas (rua Oeste), Nuru, a Guardiã do Farol (cabeça da praça, ao pé do Farol de Coral), Zawadi, o Trançador de Raízes (rua Leste), Mbaraka, o Navegador das Estrelas (rua Oeste) | **Bazar de Pérolas da Mwana** (`shop_bazar_mwana`) | Liyongo: "Ladras de Vela"; Zawadi: "Garras no Mangue" |
@@ -336,6 +376,47 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
   menu de prévia do editor (`Preview Walkable Town/Sangkent`). As calhas e os carrinhos andáveis (transporte da cidade,
   fila de 1 por vez), os 7 terraços de verdade, o evento Avalanche, o Iaque do Teto do Mundo e o conjunto Terraço do
   Pamir ainda faltam.
+
+**Mingcheng, a Cidade dos Nove Anéis** (capital da Planície de Mingcheng, região 8, mapa 41; cidade de retorno de 41, 43,
+44 e 46):
+- **Passeio da cidade:** receita `CityTownRecipes.Mingcheng` (`CityTownRecipes.Mingcheng.cs`) no estilo novo
+  `TownStyles.RingWall` (`TownArchitecture.RingWall`, linha 14 da `TownPalette`: tijolo cinza `#7D7F86`, laca `#B23A2E`,
+  telha dourada `#D9A82B`, jade `#5E9E7E`, papel de lanterna `#F4E3B5` (brilha à noite: as milhares de lanternas),
+  telha cinza `#4E525A`, salgueiro `#8DB25A`, água de canal `#6FA3A8`). Cada casa é um **salão de pátio das cidades
+  muradas** (`TownBuildingSpec.RingWallHall`: `TownKit.RingWallHallHouse`): base de pedra, paredes de tijolo cinza com
+  rodapé escuro, friso de laca com faixa pintada de jade, porta dupla de laca vermelha com cravos de ouro, janelas de
+  treliça acesas, **telhado curvo** de telha cinza (`CurvedRoof`: cada água em duas placas, a de baixo mais deitada, beiral
+  que se abre, cumeeira com ornamentos nas pontas e **cantos virados para cima**) cobrindo o salão e o alpendre; deque de
+  lajes com **colunas de laca vermelha** (nos `PorchPostsX`) e mísulas douradas, duas **lanternas de papel** entre elas e
+  a tabuleta como placa de laca sobre a porta. Peças: `RingWall` (muralha de taipa com face de tijolo cinza, de segmento,
+  com ameias e, atrás, duas fileiras de telhados dos anéis de dentro, cinza e depois **dourados** (telha dourada só no
+  anel interno); a variante 1 abre o **portão de três arcos do 7º anel**, fechado, com folhas de laca e cravos de ouro,
+  sob a torre do portão de dois telhados dourados: a cidadela fica fechada até o mapa 46), `BellDrumTower` (a **Torre do
+  Tambor e do Sino** na praça: base de tijolo com passagem em arco, pavilhão de laca com o tambor e o sino de bronze,
+  telhado de quatro águas com cantos virados, segundo telhado e remate de ouro), `Willow` (salgueiro chorão num anel de
+  tijolo; variante 1 com lanterna), `CanalBridge` (canal atravessando a rua com **ponte de corcunda** de pedra e
+  parapeitos baixos; pisável) e `LanternFrame` (armação de laca com três lanternas de papel e as **charadas** penduradas,
+  a Festa das Lanternas; variante 1 com a **lanterna-carpa** dourada); portão de **três arcos** com quatro pilares de laca,
+  o vão do meio mais alto, telhado curvo em cada vão, placa de ouro e lanternas (`TownKit.TripleArchGate`); vitrine do
+  lanterneiro (`TownShopDressing.LanternMaker`: armação de lanternas, papel, pote de cola, lanterna-peixe). Peças em
+  `TownKit.RingWall.cs`, colisores em `CitySolids`. Ruas Oeste (a entrada, pela estrada do rio), Leste e Sul de 19 m
+  (saídas em (±19, 0) e (0, −19), alvo de chegada a 18,6 m); Cais da Barca na rua Oeste; **sem rua ao norte**: ali a
+  muralha do 7º anel fica em três lances (z = 19,5 com o portão da cidadela e z = 14 dos lados) e duas armações de
+  lanternas ficam em (±13, 12,4); tudo dentro de um círculo de 22,5 m (o sólido mais longe, a muralha do meio, chega a
+  21,9 m), caminhada em ±22; `CityLayoutRules.Validate` sem problemas, com e sem o mascate.
+- **Respawn:** derrota no mapa 41 (e no 43, 44 e 46 quando entrarem no `MapCatalog`) acorda na praça de Mingcheng, ao pé
+  da Torre do Tambor e do Sino (`MapCatalog.RespawnCityFor` → `ApplyDefeatIn`).
+- **Lanternas do Mestre Mōzak** (diária, 3 vagas que giram, tema Especialidade): poções de vida e mana e **a única
+  exigência da região que um item atende**, fixa desde o primeiro dia: o **Selo do Sol** (42, preso ao herói, 1500);
+  lamparina a óleo e Lamparina Rúnica para a noite dos anéis de fora; giram carne, ração, fibra, erva, corda, Amuleto da
+  Sorte e Pedra da Bênção. O Ammo nunca para lá.
+- **Missões da cidade:** Bögü pede 7 leões de pedra apagados fora dos portões (o Golem de Pedra faz o Leão de Pedra
+  Apagado da ficha; 5 poções de vida + 5 de mana + 150 ouro, 1700 XP); depois Lin Deng pede 6 peixes-lanterna fora do
+  canal (a Lanterna-Peixe do Canal das Lanternas, 43; **Selo do Sol** + 150 ouro, 1800 XP). Testes: `CityMingchengTests`.
+- **Falta:** o mundo contínuo da Planície de Mingcheng (outro trabalho) vai encaixar a cidade; até lá o passeio só abre
+  pelo menu de prévia do editor (`Preview Walkable Town/Mingcheng`). Os 9 anéis de verdade, os portões por hora (tambor e
+  sino), as Barcas de canal entre os bairros 4–6, a Festa das Lanternas com charadas, a Lâmpada de Mingcheng (G4 da
+  Maria), o Qilin de Jade e o conjunto Pátio dos Nove Anéis ainda faltam.
 
 Código: `CityCatalog`, `CityShopCatalog` (dados), `CityTexts` (textos en/pt-BR), `VillageHubButton` (o mesmo painel
 para toda cidade), `CityFastTravelPanel` (Barcas de Luz), `CitySafeZoneHud` (aviso), `WorldMapCityPresence` (zona

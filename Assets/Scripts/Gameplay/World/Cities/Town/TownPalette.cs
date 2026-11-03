@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Cities.Town
 {
-    /// <summary>Flat colours of the walkable-town palette texture (one 4 px cell each, 8 × 14). Docs/Cities.md §5.</summary>
+    /// <summary>Flat colours of the walkable-town palette texture (one 4 px cell each, 8 × 16). Docs/Cities.md §5.</summary>
     public enum TownSwatch
     {
         // Row 0: wood and earth (walnut joinery, carved columns).
@@ -45,6 +45,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
         // #B98B5E, juniper wood #5A3E2B, firn #E6EEF2, apricot blossom #F2B8A0, the silk red #C0392B and blue #2E86AB of the
         // caravans' ribbons and the hearth glow #FFB866 of the terraces lighting up one by one at dusk (glows).
         TerraceStone, Loam, Juniper, Firn, ApricotBlossom, SilkRed, SilkBlue, HearthGlow,
+        // Row 14: Mingcheng, the city of nine rings (Planície de Mingcheng, Docs/Mapas100.md §2.1 and map 41): grey brick
+        // #7D7F86, lacquer red #B23A2E, the golden glazed tile #D9A82B of the inner ring, jade #5E9E7E, lantern paper #F4E3B5
+        // (glows: the thousands of lanterns at night), grey roof tile #4E525A, willow #8DB25A and canal water #6FA3A8.
+        GreyBrick, Lacquer, GoldTile, Jade, LanternPaper, RoofTile, Willow, CanalWater,
+        // Row 15: the Torres Brancas de Amanirenas, the high elves' city (Docs/Mapas100.md §3.3 and map 42): lime white
+        // #F3EFE6, pale gold #E3C46B, sky blue #7FB2E5, silver leaf #A8C5B5, Meroë sandstone #C79E6B, the sunlight the towers
+        // pass down #FFF4C2 (glows), mirror bronze #B58B4C and garden green #5F8F4E.
+        SpireLime, PaleGold, SkyBlue, SilverLeaf, MeroeSandstone, SpireLight, MirrorBronze, GardenGreen,
     }
 
     /// <summary>
@@ -56,7 +64,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
     public static class TownPalette
     {
         public const int Columns = 8;
-        public const int Rows = 14;
+        public const int Rows = 16;
         private const int CellPixels = 4;
 
         private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
@@ -77,6 +85,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Hex(0x4E6B3A), Hex(0xA4553A), Hex(0xC9A35B), Hex(0x5F7F6E), Hex(0x4FC3B0), Hex(0xFFC46B), Hex(0xE8A0B4), Hex(0x6B5236),
             Hex(0x4F7A82), Hex(0x5B4636), Hex(0x6F8F3F), Hex(0xB9A9D6), Hex(0xD6E8FF), Hex(0x3F5550), Hex(0xB9A55A), Hex(0x8E8466),
             Hex(0x8C8173), Hex(0xB98B5E), Hex(0x5A3E2B), Hex(0xE6EEF2), Hex(0xF2B8A0), Hex(0xC0392B), Hex(0x2E86AB), Hex(0xFFB866),
+            Hex(0x7D7F86), Hex(0xB23A2E), Hex(0xD9A82B), Hex(0x5E9E7E), Hex(0xF4E3B5), Hex(0x4E525A), Hex(0x8DB25A), Hex(0x6FA3A8),
+            Hex(0xF3EFE6), Hex(0xE3C46B), Hex(0x7FB2E5), Hex(0xA8C5B5), Hex(0xC79E6B), Hex(0xFFF4C2), Hex(0xB58B4C), Hex(0x5F8F4E),
         };
 
         private static Material _material;
@@ -106,6 +116,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case TownSwatch.LotusLantern: return 0.85f;
                 case TownSwatch.WillWisp: return 0.9f;
                 case TownSwatch.HearthGlow: return 0.8f;
+                case TownSwatch.LanternPaper: return 0.75f;
+                case TownSwatch.SpireLight: return 0.85f;
                 default: return 0f;
             }
         }

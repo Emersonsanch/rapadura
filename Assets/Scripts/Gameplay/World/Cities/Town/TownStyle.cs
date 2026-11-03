@@ -81,6 +81,21 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// irrigation channels and apricot trees in blossom (the Pamir and Hunza villages, the tower houses of Shibam).
         /// </summary>
         StoneTerrace = 12,
+        /// <summary>
+        /// Mingcheng, the city of nine rings (the Planície de Mingcheng, Docs/Mapas100.md §2.1 and map 41, style <c>RingWall</c>):
+        /// halls of grey brick on a stone base with red-lacquered columns and lattice windows, curved grey-tile roofs with
+        /// upturned eaves (golden glazed tile only on the inner ring), paper lanterns under the eaves; the rammed-earth ring
+        /// walls faced with grey brick and their three-arch gates, the Torre do Tambor e do Sino on the plaza, humpback stone
+        /// bridges over the canals, willows and lantern frames (the walled cities of China: Chang'an, Xi'an, the Forbidden City).
+        /// </summary>
+        RingWall = 13,
+        /// <summary>
+        /// The Torres Brancas de Amanirenas, the high elves' city (Docs/Mapas100.md §3.3 and map 42, style <c>WhiteSpire</c>):
+        /// slender lime-white towers with a glass dome on a low pointed pyramid base (an echo of Meroë), pale-gold bands and
+        /// mirrors that pass the sunlight down; garden terraces with the seven spires behind, leaf bridges (curved stone blades),
+        /// the Relógio de Espelhos on the plaza, mirror posts and small steep pyramids in the gardens.
+        /// </summary>
+        WhiteSpire = 14,
     }
 
     /// <summary>
@@ -444,6 +459,56 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Plaza = TownSwatch.Paving, PlazaAlt = TownSwatch.TerraceStone,
             Fence = TownSwatch.TerraceStone, Plinth = TownSwatch.StoneDark,
             HouseRoof = TownRoofKind.Flat,
+        };
+
+        /// <summary>
+        /// Mingcheng, the city of nine rings (Docs/Mapas100.md §2.1, map 41): picked by hand. Grey brick #7D7F86, lacquer red
+        /// #B23A2E, golden tile #D9A82B, jade #5E9E7E, lantern paper #F4E3B5 (glows), grey roof tile #4E525A, willow #8DB25A and
+        /// canal water #6FA3A8 (row 14 of <see cref="TownPalette"/>). Houses are courtyard halls of grey brick with lacquered
+        /// columns and curved tile roofs (<see cref="TownBuildingSpec.RingWallHall"/>); streets are grey paving, the plaza (the
+        /// 6th ring) flagstones round the Torre do Tambor e do Sino. The Planície de Mingcheng has no world-map biome:
+        /// <see cref="TownStyle.Region"/> is the borrowed Forest (as Jhilpur and Sangkent).
+        /// </summary>
+        public static readonly TownStyle RingWall = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Forest,
+            Architecture = TownArchitecture.RingWall,
+            Walls = new[] { TownSwatch.GreyBrick, TownSwatch.Plaster, TownSwatch.GreyBrick },
+            Trims = new[] { TownSwatch.Lacquer, TownSwatch.Jade },
+            Roofs = new[] { TownSwatch.RoofTile, TownSwatch.GoldTile },
+            Joinery = new[] { TownSwatch.Lacquer, TownSwatch.WoodDark },
+            Accent = TownSwatch.GoldTile,
+            Ground = TownSwatch.Grass, GroundAlt = TownSwatch.Willow,
+            Street = TownSwatch.Paving, StreetEdge = TownSwatch.GreyBrick, Sidewalk = TownSwatch.PavingDark,
+            Plaza = TownSwatch.Paving, PlazaAlt = TownSwatch.GreyBrick,
+            Fence = TownSwatch.GreyBrick, Plinth = TownSwatch.StoneDark,
+            HouseRoof = TownRoofKind.Gable,
+        };
+
+        /// <summary>
+        /// The Torres Brancas de Amanirenas (Docs/Mapas100.md §3.3, map 42): picked by hand. Lime white #F3EFE6, pale gold
+        /// #E3C46B, sky blue #7FB2E5, silver leaf #A8C5B5, Meroë sandstone #C79E6B, the sunlight #FFF4C2 (glows), mirror bronze
+        /// #B58B4C and garden green #5F8F4E (row 15 of <see cref="TownPalette"/>). Houses are white spire houses on a pyramid
+        /// base with a glass dome (<see cref="TownBuildingSpec.SpireHouse"/>); streets are sandstone paving, the plaza lime
+        /// flagstones round the Relógio de Espelhos. Region: the borrowed Forest (the Planície de Mingcheng has no world-map
+        /// biome).
+        /// </summary>
+        public static readonly TownStyle WhiteSpire = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Forest,
+            Architecture = TownArchitecture.WhiteSpire,
+            Walls = new[] { TownSwatch.SpireLime, TownSwatch.SpireLime, TownSwatch.MeroeSandstone },
+            Trims = new[] { TownSwatch.PaleGold, TownSwatch.SkyBlue },
+            Roofs = new[] { TownSwatch.Glass, TownSwatch.PaleGold },
+            Joinery = new[] { TownSwatch.MirrorBronze, TownSwatch.PaleGold },
+            Accent = TownSwatch.SkyBlue,
+            Ground = TownSwatch.GardenGreen, GroundAlt = TownSwatch.Grass,
+            Street = TownSwatch.MeroeSandstone, StreetEdge = TownSwatch.SpireLime, Sidewalk = TownSwatch.Sandstone,
+            Plaza = TownSwatch.SpireLime, PlazaAlt = TownSwatch.MeroeSandstone,
+            Fence = TownSwatch.SpireLime, Plinth = TownSwatch.MeroeSandstone,
+            HouseRoof = TownRoofKind.Dome,
         };
     }
 }

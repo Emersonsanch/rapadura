@@ -77,7 +77,7 @@ a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: 
 | Roupa térmica (36) | **vestir** Roupa Térmica Refinada (slot Peito) | Agasalhos do Sisinnios (Sangkent) |
 | Grampos de escalada (38) | levar Grampos de Escalada | Agasalhos do Sisinnios (Sangkent) |
 | Proteção a tempestade (40) | levar Capa de Tempestade | Agasalhos do Sisinnios (Sangkent); recompensa da 2ª missão de Sangkent (Kustai) |
-| Selo do Sol (42) | levar o Selo do Sol (preso ao herói) | Mingcheng (planejada) |
+| Selo do Sol (42) | levar o Selo do Sol (preso ao herói) | Lanternas do Mestre Mōzak (Mingcheng); recompensa da 2ª missão de Mingcheng (Lin Deng) |
 
 Toda exigência das regiões 1–6 tem um "kit" de itens (`MapRequirementRules.KitOf`: o item principal, mais a lamparina no
 17) que a atende sozinho, e cada item do kit é vendido numa loja (`CityShopCatalog`) ou dado por missão
@@ -85,14 +85,16 @@ Toda exigência das regiões 1–6 tem um "kit" de itens (`MapRequirementRules.K
 Antiveneno, Fruta Purificadora) estão fixos no balcão dos Barcos e Trocas do Nuhzadag em Jhilpur (2026-11-03,
 `CityJhilpurTests`). Os da região 7 (Roupa Térmica 36, Grampos 38, Capa de Tempestade 40) estão fixos no balcão dos
 Agasalhos do Sisinnios em Sangkent (2026-11-03, `CitySangkentTests`; o 39 pede asas de verdade ou montaria voadora, sem
-item de kit, e `MapRequirementTests` agora cobre as regiões 1–7). O da região 8 (Selo do Sol) existe em
-`Resources/Items` mas ainda não tem loja: entra no balcão quando Mingcheng virar cidade. Fora das exigências, a **Garrafa de Ar Sereno** dos kobolds (consumível: +20% de recuperação de vigor por
+item de kit). O da região 8 (Selo do Sol 42, a única exigência da região com item hoje no `MapCatalog`) está fixo no
+balcão das Lanternas do Mestre Mōzak em Mingcheng e é a recompensa da 2ª missão de lá (Lin Deng) (2026-11-03,
+`CityMingchengTests`; as Torres Brancas, dentro do 42, não o vendem); `MapRequirementTests` agora cobre as regiões 1–8. Fora das exigências, a **Garrafa de Ar Sereno** dos kobolds (consumível: +20% de recuperação de vigor por
 60 s, para o "ar parado" do 22) é vendida na Feira da Miwnay e dada pela missão "Teia nos Tubos" (Takhsich).
 
 Os itens das regiões 5–8 já existem (`Resources/Items`, textos en/pt-BR em `ContentTexts`); os da região 5 (25–30) estão à
 venda, fixos desde o primeiro dia, no Bazar de Pérolas da Mwana em Taa Pwani (2026-11-03, `CityTaaPwaniTests`); os da
 região 6 (32–35) nos Barcos e Trocas do Nuhzadag em Jhilpur (`CityJhilpurTests`); os da região 7 (36, 38, 40) nos
-Agasalhos do Sisinnios em Sangkent (`CitySangkentTests`); o da região 8 só entra numa loja quando Mingcheng for construída. Nada é consumido ao entrar: basta levar.
+Agasalhos do Sisinnios em Sangkent (`CitySangkentTests`); o da região 8 (42) nas Lanternas do Mestre Mōzak em Mingcheng
+(`CityMingchengTests`). Nada é consumido ao entrar: basta levar.
 
 ---
 

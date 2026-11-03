@@ -247,7 +247,27 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.ChuteCart: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.ChuteCartSize * s, prop.Yaw), 1.2f, owner);
                 case CityPropKind.ApricotTree: return CitySolid.Capsule(prop.Position, TownKit.ApricotTreeRadius * s, 3f, owner);
                 case CityPropKind.CaravanStone: return CitySolid.Capsule(prop.Position, TownKit.CaravanStoneRadius * s, WallColliderHeight, owner);
+                case CityPropKind.RingWall:
+                {
+                    Rect run = CityGeometry.RectFromMinMax(prop.Position, prop.End);
+                    return CitySolid.Box(CityGeometry.Inflate(run, TownKit.RingWallHalfThickness), WallColliderHeight, owner);
+                }
 
+                case CityPropKind.BellDrumTower: return CitySolid.Capsule(prop.Position, TownKit.BellDrumTowerRadius * s, WallColliderHeight, owner);
+                case CityPropKind.Willow: return CitySolid.Capsule(prop.Position, TownKit.WillowRadius * s, 3f, owner);
+                case CityPropKind.LanternFrame: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.LanternFrameSize * s, prop.Yaw), 2.2f, owner);
+                case CityPropKind.SpireTerrace:
+                {
+                    Rect run = CityGeometry.RectFromMinMax(prop.Position, prop.End);
+                    return CitySolid.Box(CityGeometry.Inflate(run, TownKit.SpireTerraceHalfThickness), WallColliderHeight, owner);
+                }
+
+                case CityPropKind.MirrorClock: return CitySolid.Capsule(prop.Position, TownKit.MirrorClockRadius * s, WallColliderHeight, owner);
+                case CityPropKind.MirrorPost: return CitySolid.Capsule(prop.Position, TownKit.MirrorPostRadius * s, WallColliderHeight, owner);
+                case CityPropKind.SpirePyramid: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, new Vector2(TownKit.SpirePyramidSize, TownKit.SpirePyramidSize) * s, prop.Yaw), WallColliderHeight, owner);
+
+                case CityPropKind.CanalBridge:
+                case CityPropKind.LeafBridge:
                 case CityPropKind.IrrigationChannel:
                 case CityPropKind.Boardwalk:
                 case CityPropKind.RootBridge:

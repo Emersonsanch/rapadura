@@ -111,6 +111,8 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.TrocasNuhzadag, "Nuhzadag's Boats and Trades", "Barcos e Trocas do Nuhzadag"),
                 Shop(CityShopCatalog.CestariaLarthia, "Larthia's Baskets", "Cestaria da Larthia"),
                 Shop(CityShopCatalog.AgasalhosSisinnios, "Sisinnios's Mountain Gear", "Agasalhos do Sisinnios"),
+                Shop(CityShopCatalog.LanternasMozak, "Master Mōzak's Lanterns", "Lanternas do Mestre Mōzak"),
+                Shop(CityShopCatalog.EspelhosNatakamani, "Natakamani's Mirrors", "Espelhos de Natakamani"),
             };
 
             // ---- Cities ----
@@ -154,6 +156,14 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.Sangkent, "Sangkent, the Stair City", "Sangkent, a Cidade-Escadaria", "Sangkent", "Sangkent",
                 "The capital of the Roof of the World, built in terraces of stone up a high valley: houses of stone and loam laced with juniper, lattice balconies, apricot trees in blossom and, above it all, the fort of the seventh terrace. Polished stone chutes carry plank carts down between the levels. The caravans that took the hymns east crossed here, and the five lights met: five colours on the ribbons of every cart.",
                 "A capital do Teto do Mundo, construída em terraços de pedra subindo um vale alto: casas de pedra e barro amarradas com vigas de zimbro, varandas de treliça, damasqueiros em flor e, acima de tudo, o forte do sétimo terraço. Calhas de pedra polida levam carrinhos de tábua para baixo entre os níveis. As caravanas que levaram os hinos para o leste passavam por aqui, e as cinco luzes se encontraram: cinco cores nas fitas de cada carrinho.");
+
+            AddCity(entries, CityCatalog.Mingcheng, "Mingcheng, City of Nine Rings", "Mingcheng, a Cidade dos Nove Anéis", "Mingcheng", "Mingcheng",
+                "The capital of the river plain, a walled city of nine rings one inside the other: courtyard halls of grey brick with red-lacquered columns and curved tile roofs, humpback bridges over the canals, willows, and thousands of paper lanterns at night. In the 6th ring the Drum and Bell Tower keeps the hours: the drum opens the gates, the bell shuts them. Here the Light was called the Doctrine of Light.",
+                "A capital da planície do rio, uma cidade murada de nove anéis um dentro do outro: salões de tijolo cinza com colunas de laca vermelha e telhados curvos de telha, pontes de corcunda sobre os canais, salgueiros e milhares de lanternas de papel à noite. No 6º anel a Torre do Tambor e do Sino marca as horas: o tambor abre os portões, o sino fecha. Aqui a Luz era chamada de Doutrina da Luz.");
+
+            AddCity(entries, CityCatalog.TorresBrancas, "White Spires of Amanirenas", "Torres Brancas de Amanirenas", "White Spires", "Torres Brancas",
+                "The high elves' city on the white hills east of Mingcheng: slender white spires with glass domes on low pointed pyramids, leaf bridges of curved stone between them and garden terraces below. Bronze mirrors pass the sunlight down from the towers to the ground, by day and, with the moon, by night. The elves are astronomers and builders: proud, but gentle with children.",
+                "A cidade dos altos-elfos nas colinas brancas a leste de Mingcheng: torres brancas finas com cúpula de vidro sobre pirâmides baixas e pontudas, pontes de folha de pedra curva entre elas e jardins em terraço embaixo. Espelhos de bronze passam a luz do sol das torres até o chão, de dia e, com a lua, de noite. Os elfos são astrônomos e construtores: orgulhosos, mas gentis com as crianças.");
 
             AddCity(entries, CityCatalog.PalafitasTarchon, "Tarchon Stilts", "Palafitas de Tarchon", "Tarchon", "Tarchon",
                 "The trols' city in the open swamp: long houses on tall piles with leaf roofs down to the floor, plank boardwalks over the bog water, nets drying, baskets as tall as a cousin and floating reed islands. At night the swamp fills with will-o'-wisps, sparks caught in the Ar Sereno; half the trols stared at them until they forgot themselves, and every spark set free wakes a neighbour.",
@@ -711,6 +721,80 @@ namespace Rapadura.UI.WorldMap
                 ("Ícaro, you counted the steps of all seven terraces? Four hundred and twelve. ...Four hundred and thirteen? Count again. With me.", "Ícaro, você contou os degraus dos sete terraços? Quatrocentos e doze. ...Quatrocentos e treze? Conta de novo. Comigo."),
                 ("Lavine, Grandma Edna was my best student. She drew the map of the Zarafshan from memory, with every apricot tree on it.", "Lavine, a Vó Edna foi a minha melhor aluna. Ela desenhou o mapa do Zarafshan de memória, com todos os damasqueiros."),
                 ("Seven terraces, four chutes, one pass. Learn the stair city by heart and the mountain will never lose you.", "Sete terraços, quatro calhas, um passo. Aprende a cidade-escadaria de cor e a montanha nunca vai perder você."));
+
+            // ---- Mingcheng, a Cidade dos Nove Anéis (names of the Mingjiao and of the Uyghurs) ----
+            AddResident(entries, "bogu", "Bögü, Chief of the Ring Guard", "Bögü, o Chefe da Guarda dos Anéis",
+                ("Joaquim, a guard stands still and sees everything. You stand still and see everything too. The ring guard would take you tomorrow.", "Joaquim, guarda fica parado e vê tudo. Você fica parado e vê tudo também. A guarda dos anéis te aceitava amanhã."),
+                ("Maria, nine rings, nine gates each, one drum. Count with me: when the drum stops, the last gate is the seventh. Always.", "Maria, nove anéis, nove portões cada, um tambor. Conta comigo: quando o tambor para, o último portão é o do sétimo anel. Sempre."),
+                ("Maithe, the eldest walks last through the gate and checks that nobody stayed outside. I did that for forty years.", "Maithe, a mais velha passa por último pelo portão e confere se ninguém ficou do lado de fora. Eu fiz isso por quarenta anos."),
+                ("Ícaro, no, you may not ring the bell. ...Fine. Once. At dusk. And the whole city will know it was you.", "Ícaro, não, você não pode tocar o sino. ...Tá bom. Uma vez. No fim da tarde. E a cidade inteira vai saber que foi você."),
+                ("Lavine, your grandpa Jorge came to my gate after the bell, soaked, with flowers for a girl named Edna. I opened it. Best mistake of my watch.", "Lavine, o seu avô Jorge chegou no meu portão depois do sino, encharcado, com flores para uma moça chamada Edna. Eu abri. O melhor erro do meu plantão."),
+                ("The drum opens the rings, the bell shuts them. Whoever is outside at the bell stays outside until the drum.", "O tambor abre os anéis, o sino fecha. Quem estiver fora quando o sino tocar fica fora até o tambor."));
+
+            AddResident(entries, "mozak", "Master Mōzak, Keeper of the Lanterns", "Mestre Mōzak, o Guardião das Lanternas",
+                ("Joaquim, a lantern does not fight the dark. It only stays lit. You understand that better than anyone in the ring.", "Joaquim, a lanterna não briga com o escuro. Ela só fica acesa. Você entende isso melhor do que qualquer um no anel."),
+                ("Maria, there is a lamp in this city that waits for you. Not mine to sell: yours to earn. The nine rings will tell you when.", "Maria, tem uma lâmpada nesta cidade esperando por você. Não é minha para vender: é sua para merecer. Os nove anéis vão te dizer quando."),
+                ("Maithe, every lantern has a riddle under it. You answered three before I finished hanging them. Take one for your brother.", "Maithe, toda lanterna tem uma charada embaixo. Você respondeu três antes de eu terminar de pendurar. Leva uma para o seu irmão."),
+                ("Ícaro, the fish lantern is not a kite. ...It flew? Bring it back down before the bell, please.", "Ícaro, a lanterna-peixe não é pipa. ...Ela voou? Traz ela de volta antes do sino, por favor."),
+                ("Lavine, Grandma Edna made a lantern here once, round and a little crooked. I kept it. It still lights the best.", "Lavine, a Vó Edna fez uma lanterna aqui uma vez, redonda e meio torta. Eu guardei. Ainda é a que acende melhor."),
+                ("The Sun Seal for the White Spires, oil for the outer rings, a riddle for free. Light is the only trade of my lanterns.", "O Selo do Sol para as Torres Brancas, óleo para os anéis de fora, uma charada de graça. Luz é o único ofício das minhas lanternas."));
+
+            AddResident(entries, "lin_deng", "Lin Deng, Master of the Canal", "Lin Deng, o Mestre do Canal",
+                ("Joaquim, the canal is like you: calm on top, strong underneath. Help me push the barge and you will see.", "Joaquim, o canal é que nem você: calmo em cima, forte embaixo. Me ajuda a empurrar a barca e você vai ver."),
+                ("Maria, four locks, four levels of water. Open them in order and the low quarters breathe. Out of order, we all get wet.", "Maria, quatro eclusas, quatro níveis de água. Abre na ordem e os bairros baixos respiram. Fora de ordem, todo mundo se molha."),
+                ("Maithe, the carp that jumps the waterfall becomes a dragon, they say. The one that helps the others jump becomes the eldest.", "Maithe, a carpa que pula a cascata vira dragão, dizem. A que ajuda as outras a pular vira a mais velha."),
+                ("Ícaro, the pole is for pushing the barge, not for vaulting over the canal. ...Twice? Go dry off.", "Ícaro, a vara é para empurrar a barca, não para pular o canal. ...Duas vezes? Vai se secar."),
+                ("Lavine, your grandpa Jorge fell in my canal on his wedding day. Grandma Edna laughed so hard she fell in too.", "Lavine, o seu avô Jorge caiu no meu canal no dia do casamento. A Vó Edna riu tanto que caiu também."),
+                ("Barges of silk, paper, lacquer and tea. Every craft of the middle rings floats past my locks.", "Barcas de seda, papel, laca e chá. Todo ofício dos anéis do meio passa boiando pelas minhas eclusas."));
+
+            AddResident(entries, "fuduodan", "Fuduodan the Reader", "Fuduodan, o Leitor",
+                ("Joaquim, two principles: the Light and the Dark. You do not need the book to know which one you guard.", "Joaquim, dois princípios: a Luz e a Escuridão. Você não precisa do livro para saber qual dos dois você guarda."),
+                ("Maria, I brought the book over the mountains on a camel. You would have brought it in a notebook, with diagrams.", "Maria, eu trouxe o livro pelas montanhas num camelo. Você teria trazido num caderno, com diagramas."),
+                ("Maithe, you read aloud like a lantern: slowly, and everyone around you can see. Read me the next page.", "Maithe, você lê em voz alta que nem uma lanterna: devagar, e todo mundo em volta enxerga. Lê para mim a próxima página."),
+                ("Ícaro, the three times: before, now and after. You are always in the now. It is not the worst place to live.", "Ícaro, os três tempos: antes, agora e depois. Você está sempre no agora. Não é o pior lugar para morar."),
+                ("Lavine, Grandpa Jorge sat on this step and asked me to read him the part about the moon. Every night, for a month.", "Lavine, o Vô Jorge sentava neste degrau e me pedia para ler a parte da lua. Toda noite, durante um mês."),
+                ("Two principles, three times. Sit on the step of the 6th ring and I will read them to you, as I read them to everyone.", "Dois princípios, três tempos. Senta no degrau do 6º anel e eu leio para você, como leio para todo mundo."));
+
+            // ---- Torres Brancas de Amanirenas (altos-elfos; names of the candaces and kings of Kush/Meroë) ----
+            AddResident(entries, "amanirenas", "Queen Amanirenas, the Guardian", "Rainha Amanirenas, a Guardiã",
+                ("Joaquim, a guardian sees the whole hill from one tower. I have one eye and I see it all. You have two: use them.", "Joaquim, um guardião vê o morro inteiro de uma torre só. Eu tenho um olho e vejo tudo. Você tem dois: usa."),
+                ("Maria, the light of Mingcheng reaches my towers by the mirrors. Without them we would be white stone in the dark.", "Maria, a luz de Mingcheng chega às minhas torres pelos espelhos. Sem eles a gente seria pedra branca no escuro."),
+                ("Maithe, my people are proud, but our children follow you down the leaf bridges. That says more about you than about us.", "Maithe, o meu povo é orgulhoso, mas as nossas crianças seguem você pelas pontes de folha. Isso diz mais de você do que de nós."),
+                ("Ícaro, the tallest tower is not for climbing from the outside. ...You are already halfway? Then wave to me from the top.", "Ícaro, a torre mais alta não é para escalar por fora. ...Já está na metade? Então acena para mim lá de cima."),
+                ("Lavine, Grandma Edna came to my towers with the Sun Seal when she was your age. She said the mirrors looked like the moon on the water.", "Lavine, a Vó Edna veio às minhas torres com o Selo do Sol quando tinha a sua idade. Disse que os espelhos pareciam a lua na água."),
+                ("Seven spires, one light. Whoever carries the Sun Seal is a guest; whoever breaks a mirror answers to me.", "Sete torres, uma luz. Quem leva o Selo do Sol é hóspede; quem quebra um espelho responde para mim."));
+
+            AddResident(entries, "amanitore", "Amanitore the Builder", "Amanitore, a Construtora",
+                ("Joaquim, stone holds stone. A good tower is like a good guardian: it does not move, and everyone leans on it.", "Joaquim, pedra segura pedra. Torre boa é que nem guardião bom: não se mexe, e todo mundo se apoia nela."),
+                ("Maria, every spire is a pyramid that learned to grow thin. Measure the base and you will know the height.", "Maria, toda torre é uma pirâmide que aprendeu a ficar fina. Mede a base e você vai saber a altura."),
+                ("Maithe, I need someone to hold the plans while I tap the stone. You hold them straight. Stay.", "Maithe, preciso de alguém para segurar os planos enquanto eu bato na pedra. Você segura reto. Fica."),
+                ("Ícaro, no, we will not build a tower for your grenades. ...A small one? A very small one. Behind the garden.", "Ícaro, não, a gente não vai construir uma torre para as suas granadas. ...Uma pequena? Bem pequena. Atrás do jardim."),
+                ("Lavine, Grandpa Jorge carried stones for my first tower. He dropped one on his foot and kept singing.", "Lavine, o Vô Jorge carregou pedras para a minha primeira torre. Deixou uma cair no pé e continuou cantando."),
+                ("A dome of glass, a band of gold, a mirror for the sun. Ask me, and your house will have a corner of the White Spires.", "Uma cúpula de vidro, uma faixa de ouro, um espelho para o sol. Me pede, e a sua casa vai ter um canto das Torres Brancas."));
+
+            AddResident(entries, "natakamani", "Natakamani, Master of the Mirrors", "Natakamani, o Mestre dos Espelhos",
+                ("Joaquim, a mirror does not make light, it only passes it on. That is not small: that is the whole work of a guardian.", "Joaquim, o espelho não faz luz, só passa adiante. Isso não é pouco: é o trabalho inteiro de um guardião."),
+                ("Maria, the angle of the beam changes with the hour. I have the tables. You will want the tables.", "Maria, o ângulo do raio muda com a hora. Eu tenho as tabelas. Você vai querer as tabelas."),
+                ("Maithe, polish slowly, in circles. The mirror shows you the face you bring to it. Bring a kind one.", "Maithe, pule devagar, em círculos. O espelho mostra o rosto que você traz para ele. Traz um gentil."),
+                ("Ícaro, if you point the big mirror at the market, the awnings catch fire. ...How did you know? Do not answer.", "Ícaro, se você apontar o espelho grande para a feira, os toldos pegam fogo. ...Como você sabia? Não responde."),
+                ("Lavine, Grandma Edna polished this mirror for a whole afternoon and gave it back to me without one scratch. I still use it.", "Lavine, a Vó Edna poliu este espelho uma tarde inteira e me devolveu sem um arranhão. Eu ainda uso."),
+                ("Stones for the forge, refined with reflected light. Less spark-stone wasted on the hardest steps.", "Pedras para a forja, refinadas com luz refletida. Menos pedra-faísca desperdiçada nos degraus mais difíceis."));
+
+            AddResident(entries, "shanakdakhete", "Shanakdakhete, Who Teaches the Light", "Shanakdakhete, a que Ensina a Luz",
+                ("Joaquim, your light is slow and deep, like water. Do not rush it. The deep ones last longer.", "Joaquim, a sua luz é lenta e funda, que nem água. Não apressa. As fundas duram mais."),
+                ("Maria, you are a lamp, cousin of my students. Come to class at dawn: the first beam is the most honest.", "Maria, você é uma lâmpada, prima dos meus alunos. Vem para a aula de manhã cedo: o primeiro raio é o mais honesto."),
+                ("Maithe, the wind carries light too, did you know? Ask the leaves on the bridges. They are always shining.", "Maithe, o vento carrega luz também, sabia? Pergunta para as folhas das pontes. Elas estão sempre brilhando."),
+                ("Ícaro, fire is light that is in a hurry. Breathe. Now throw it. ...Better. Much better.", "Ícaro, fogo é luz com pressa. Respira. Agora joga. ...Melhor. Muito melhor."),
+                ("Lavine, the moon is the barge that carries the light home. Grandpa Jorge used to say that too, did you know?", "Lavine, a lua é a barca que leva a luz para casa. O Vô Jorge também dizia isso, sabia?"),
+                ("Turn the crystal, catch the beam, pass it on. That is the first lesson, and the last.", "Gira o cristal, pega o raio, passa adiante. Essa é a primeira lição, e a última."));
+
+            AddResident(entries, "arkamani", "Arkamani, Reader of the Stars", "Arkamani, o que Lê as Estrelas",
+                ("Joaquim, the slowest stars are the ones that hold the sky together. Guardians, like you.", "Joaquim, as estrelas mais lentas são as que seguram o céu inteiro. Guardiãs, que nem você."),
+                ("Maria, I have counted every star over the White Spires. Four thousand and twelve. Check my count; I trust you.", "Maria, eu contei todas as estrelas em cima das Torres Brancas. Quatro mil e doze. Confere a minha conta; eu confio em você."),
+                ("Maithe, the crane of the north points to the pass. Follow it and you will never lose your cousins.", "Maithe, o grou do norte aponta para o passo. Segue ele e você nunca perde os seus primos."),
+                ("Ícaro, that is not a falling star, it is a lantern from Mingcheng. ...Yes, it is still beautiful. Make the wish.", "Ícaro, isso não é estrela cadente, é uma lanterna de Mingcheng. ...Sim, continua bonita. Faz o pedido."),
+                ("Lavine, there is a little star I named after your grandma Edna. It blinks twice, then rests. Just like her laugh.", "Lavine, tem uma estrelinha que eu batizei com o nome da sua avó Edna. Pisca duas vezes, depois descansa. Igualzinho à risada dela."),
+                ("The sky is a bestiary: lions, cranes, a carp that jumps. Bring me what you see at night and I will write it down.", "O céu é um bestiário: leões, grous, uma carpa que pula. Me traz o que você vê de noite e eu anoto."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

@@ -221,6 +221,32 @@ namespace Rapadura.Gameplay.World.Cities.Town
         IrrigationChannel = 75,
         /// <summary>Sangkent: the Marco das Caravanas, a tall milestone on a round stone step with the five ribbons of the five lights and a hanging lantern.</summary>
         CaravanStone = 76,
+
+        // ---- Mingcheng, the city of nine rings (Planície de Mingcheng; drawn by TownKit.RingWall) ----
+
+        /// <summary>Mingcheng: a stretch of ring wall (rammed earth faced with grey brick, crenellated) from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/>, the roofs of the inner rings behind it (Variant 1: the closed three-arch gate of the 7th ring with its watchtower).</summary>
+        RingWall = 77,
+        /// <summary>Mingcheng: the Torre do Tambor e do Sino, the city's clock: a brick base with a lacquered pavilion of two curved roofs, the drum and the bell.</summary>
+        BellDrumTower = 78,
+        /// <summary>Mingcheng: a weeping willow in a ring of grey brick (Variant 1: with a lantern hanging from it).</summary>
+        Willow = 79,
+        /// <summary>Mingcheng: a canal from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> crossing the street, with a humpback stone bridge in the middle; walkable.</summary>
+        CanalBridge = 80,
+        /// <summary>Mingcheng: a lacquered frame hung with paper lanterns and their riddle slips (the Festa das Lanternas; Variant 1: with the fish lantern).</summary>
+        LanternFrame = 81,
+
+        // ---- Torres Brancas de Amanirenas, the high elves' city (drawn by TownKit.WhiteSpire) ----
+
+        /// <summary>Torres Brancas: a white garden-terrace wall from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> with the terraces and slender spires behind it (Variant 1: the tallest spire with its glass dome and leaf bridges).</summary>
+        SpireTerrace = 82,
+        /// <summary>Torres Brancas: the Relógio de Espelhos, a white obelisk with the sun disc on a round step ringed by bronze mirrors on posts.</summary>
+        MirrorClock = 83,
+        /// <summary>Torres Brancas: a garden rill from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> crossing the street, with a leaf bridge (a curved stone blade) in the middle; walkable.</summary>
+        LeafBridge = 84,
+        /// <summary>Torres Brancas: a bronze mirror on a slim white post, tilted to pass the light (Variant 1: with a glowing beam stone at its foot).</summary>
+        MirrorPost = 85,
+        /// <summary>Torres Brancas: a small steep pyramid of Meroë sandstone on a plinth, a little pylon front and a gold cap (the garden's memory of Meroë).</summary>
+        SpirePyramid = 86,
     }
 
     public enum CityExitKind

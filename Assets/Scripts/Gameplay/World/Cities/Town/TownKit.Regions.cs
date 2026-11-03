@@ -38,7 +38,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
             kind == CityPropKind.RopeBridge || kind == CityPropKind.LampString || kind == CityPropKind.Palisade || kind == CityPropKind.RockWall ||
             kind == CityPropKind.MineRails || kind == CityPropKind.ShellBridge || kind == CityPropKind.ReefEdge ||
             kind == CityPropKind.RootBridge || kind == CityPropKind.Ghat || kind == CityPropKind.SwampEdge || kind == CityPropKind.Boardwalk ||
-            kind == CityPropKind.TerraceWall || kind == CityPropKind.IrrigationChannel;
+            kind == CityPropKind.TerraceWall || kind == CityPropKind.IrrigationChannel ||
+            kind == CityPropKind.RingWall || kind == CityPropKind.CanalBridge || kind == CityPropKind.SpireTerrace || kind == CityPropKind.LeafBridge;
 
         /// <summary>Unit direction of a segment prop and the side its mass stands on (left of the direction: east-going → north).</summary>
         public static Vector2 SegmentBack(Vector2 direction) => new Vector2(-direction.y, direction.x);
@@ -111,6 +112,16 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.ApricotTree: ApricotTree(b, s, prop.Variant); return true;
                 case CityPropKind.IrrigationChannel: IrrigationChannel(b, d); return true;
                 case CityPropKind.CaravanStone: CaravanStone(b, s); return true;
+                case CityPropKind.RingWall: RingWall(b, d, s, prop.Variant); return true;
+                case CityPropKind.BellDrumTower: BellDrumTower(b, s); return true;
+                case CityPropKind.Willow: Willow(b, s, prop.Variant); return true;
+                case CityPropKind.CanalBridge: CanalBridge(b, d); return true;
+                case CityPropKind.LanternFrame: LanternFrame(b, s, prop.Variant); return true;
+                case CityPropKind.SpireTerrace: SpireTerrace(b, d, s, prop.Variant); return true;
+                case CityPropKind.MirrorClock: MirrorClock(b, s); return true;
+                case CityPropKind.LeafBridge: LeafBridge(b, d); return true;
+                case CityPropKind.MirrorPost: MirrorPost(b, s, prop.Variant); return true;
+                case CityPropKind.SpirePyramid: SpirePyramid(b, s); return true;
                 default: return false;
             }
         }
@@ -866,6 +877,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
                 case TownShopDressing.Outfitter:
                     StoneTerraceDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.LanternMaker:
+                    RingWallDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.Mirrors:
+                    WhiteSpireDressing(b, spec, x, y, z, zFacade);
                     break;
 
                 case TownShopDressing.AirBottles:

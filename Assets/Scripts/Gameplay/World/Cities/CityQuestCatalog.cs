@@ -73,6 +73,10 @@ namespace Rapadura.Gameplay.World.Cities
     /// then Vel the fisher wants the ghost herons off his nets and pays with an Amuleto Antiveneno (the gate of map 34).
     /// Sangkent (map 36): Abā, the chief of the chutes, sends the cousins after the rolling stones that jam the chutes, then
     /// Kustai wants the ill-wind mist off the caravan notice board and pays with a Capa de Tempestade (the gate of map 40).
+    /// Mingcheng (map 41): old Bögü sends the cousins after the dimmed stone lions that block the gates of the outer rings,
+    /// then Lin Deng wants the lantern fish out of his canal and pays with the Selo do Sol (the gate of map 42).
+    /// Torres Brancas (map 42): Queen Amanirenas asks the cousins to break the broken mirrors that steal the light of the towers,
+    /// then Shanakdakhete wants the dimmed ibises off the terraces and pays with a rune lamp and soul stones.
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -96,6 +100,10 @@ namespace Rapadura.Gameplay.World.Cities
         public const string TarchonNets = "quest_city_tarchon_herons_on_the_nets";
         public const string SangkentChutes = "quest_city_sangkent_stones_in_the_chutes";
         public const string SangkentBoard = "quest_city_sangkent_mist_on_the_board";
+        public const string MingchengLions = "quest_city_mingcheng_lions_at_the_gates";
+        public const string MingchengCanal = "quest_city_mingcheng_fish_in_the_canal";
+        public const string TorresMirrors = "quest_city_torres_brancas_broken_mirrors";
+        public const string TorresIbises = "quest_city_torres_brancas_dimmed_ibises";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -188,6 +196,24 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.Sangkent, "kustai", new RegionQuestSpec(SangkentBoard, BiomeType.Forest, SangkentChutes, 1600,
                 new[] { new RegionObjectiveSpec("clear_the_board", QuestObjectiveType.KillEnemyType, "enemy_mountain_ill_wind_mist", 6) },
                 new[] { new RegionRewardSpec("item_capa_tempestade", 1), new RegionRewardSpec("item_gold", 140) })),
+
+            // -- Mingcheng: Bögü, then Lin Deng. The stone golem stands in for the Leão de Pedra Apagado of the ficha (Docs/Mapas100.md
+            // 41: the guardian statues of the gates) and the lantern fish for the Lanterna-Peixe of the Canal das Lanternas (43). --
+            new CityQuestSpec(CityCatalog.Mingcheng, "bogu", new RegionQuestSpec(MingchengLions, BiomeType.Forest, null, 1700,
+                new[] { new RegionObjectiveSpec("clear_the_gates", QuestObjectiveType.KillEnemyType, "enemy_mountain_stone_golem", 7) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 150) })),
+            new CityQuestSpec(CityCatalog.Mingcheng, "lin_deng", new RegionQuestSpec(MingchengCanal, BiomeType.Forest, MingchengLions, 1800,
+                new[] { new RegionObjectiveSpec("clear_the_canal", QuestObjectiveType.KillEnemyType, "enemy_cave_lantern_fish", 6) },
+                new[] { new RegionRewardSpec("item_selo_sol", 1), new RegionRewardSpec("item_gold", 150) })),
+
+            // -- Torres Brancas: Amanirenas, then Shanakdakhete. The broken lantern stands in for the Espelho Quebrado of the ficha
+            // (Docs/Mapas100.md 42) and the dark crow for the Íbis de Luz Apagada. --
+            new CityQuestSpec(CityCatalog.TorresBrancas, "amanirenas", new RegionQuestSpec(TorresMirrors, BiomeType.Forest, null, 1850,
+                new[] { new RegionObjectiveSpec("break_the_mirrors", QuestObjectiveType.KillEnemyType, "enemy_desert_broken_lantern", 7) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 160) })),
+            new CityQuestSpec(CityCatalog.TorresBrancas, "shanakdakhete", new RegionQuestSpec(TorresIbises, BiomeType.Forest, TorresMirrors, 1950,
+                new[] { new RegionObjectiveSpec("chase_the_ibises", QuestObjectiveType.KillEnemyType, "enemy_cave_dark_crow", 6) },
+                new[] { new RegionRewardSpec("item_lamparina_runica", 1), new RegionRewardSpec("item_pedra_alma", 2), new RegionRewardSpec("item_gold", 170) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();
