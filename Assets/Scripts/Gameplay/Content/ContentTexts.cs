@@ -238,6 +238,19 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_cave_dark_crow", "Crow of the Dark", "Corvo-da-Treva"),
             EnemyName("enemy_forest_thief_gull", "Thief Gull", "Gaivota Ladra"),
             EnemyName("enemy_forest_coconut_crab", "Giant Coconut Crab", "Caranguejo-dos-Coqueiros Gigante"),
+            // The beasts of the late continuous worlds (Docs/Mapas100.md 25–40), formerly played by stand-ins.
+            EnemyName("enemy_forest_mangrove_crocodile", "Dimmed Mangrove Crocodile", "Crocodilo do Mangue Apagado"),
+            EnemyName("enemy_forest_grass_lion", "Dimmed Grass Lion", "Leão do Capim Apagado"),
+            EnemyName("enemy_forest_dust_rhino", "Dust Rhino", "Rinoceronte-de-Pó"),
+            EnemyName("enemy_forest_thief_monkey", "Thief Monkey", "Macaco Ladrão"),
+            EnemyName("enemy_forest_thief_otter", "Thief Otter", "Lontra Ladra"),
+            EnemyName("enemy_forest_dimmed_python", "Dimmed Python", "Píton Apagada"),
+            EnemyName("enemy_forest_dimmed_troll", "Dimmed Troll", "Trol Apagado"),
+            EnemyName("enemy_mountain_brown_bear", "Dimmed Pamir Brown Bear", "Urso-Pardo do Pamir Apagado"),
+            EnemyName("enemy_mountain_wild_yak", "Dimmed Wild Yak", "Iaque Selvagem Apagado"),
+            EnemyName("enemy_mountain_irbis", "Dimmed Irbis", "Irbis Apagado"),
+            EnemyName("enemy_mountain_almas", "Almas", "Almas"),
+            EnemyName("enemy_mountain_giant_marmot", "Giant Marmot", "Marmota Gigante"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),

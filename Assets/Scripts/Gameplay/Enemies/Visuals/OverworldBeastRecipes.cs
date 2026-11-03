@@ -379,7 +379,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         // ------------------------------------------------------------------
 
         /// <summary>One <c>Leg_id</c> (hip) → <c>Shin_id</c> (knee) → <c>Foot_id</c> (paw) chain under the root, for ProceduralLegLocomotion.</summary>
-        private static void AddLeg(ProceduralEnemyBlueprint bp, string id, Vector3 hip, Vector3 knee, Vector3 foot, float radius,
+        internal static void AddLeg(ProceduralEnemyBlueprint bp, string id, Vector3 hip, Vector3 knee, Vector3 foot, float radius,
             EnemySwatch fur, EnemySwatch paw, string meshKey)
         {
             int leg = bp.Mesh(ProceduralEnemyParts.LegPrefix + id, -1, hip, b =>

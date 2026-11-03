@@ -87,6 +87,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         private static readonly string[] OwlParts = { ProceduralEnemyParts.Head };
         private static readonly string[] SnakeParts =
             { ProceduralEnemyParts.Head, ProceduralEnemyParts.Tail, "Tail_1", "Tail_2", "Tail_3" };
+        /// <summary>Rhino and yak: the rig lowers the head to charge, so the stepping-legs driver leaves it alone.</summary>
+        private static readonly string[] ChargerParts = { ProceduralEnemyParts.Head };
 
         /// <summary>
         /// Follow-through parts this rig already animates for <paramref name="kind"/> (head bob/turn, ear
@@ -100,7 +102,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.RuinGuardian: return GuardianParts;
                 case ProceduralEnemyKind.AncientDweller: return DwellerParts;
                 case ProceduralEnemyKind.ShroudOwl: return OwlParts;
-                case ProceduralEnemyKind.SandSnake: return SnakeParts;
+                case ProceduralEnemyKind.SandSnake:
+                case ProceduralEnemyKind.Python:
+                    return SnakeParts;
+                case ProceduralEnemyKind.DustRhino:
+                case ProceduralEnemyKind.WildYak:
+                    return ChargerParts;
                 default: return null;
             }
         }
@@ -363,6 +370,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 }
 
                 case ProceduralEnemyKind.SandSnake:
+                case ProceduralEnemyKind.Python:
                 {
                     // Slithers: a travelling wave down the tail, the raised head sways and pulls back before it strikes.
                     float r = StepAttack(deltaTime, 6f, 3f);
@@ -410,6 +418,62 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     float squash = Mathf.Sin(t * 2.1f) * 0.06f * k + 0.2f * r;
                     Squash(ProceduralEnemyParts.Body, squash);
                     Pulse(ProceduralEnemyParts.StolenLight, 1f + Mathf.Sin(t * 2.6f) * 0.08f * k + 0.3f * r);
+                    break;
+                }
+
+                case ProceduralEnemyKind.MangroveCrocodile:
+                {
+                    // Basks with the mouth a crack open; the jaw gapes wide on the windup and snaps shut on the bite.
+                    float r = StepAttack(deltaTime, 4f, 6f);
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(4f * k + Mathf.Max(0f, Mathf.Sin(t * 0.4f)) * 6f * k + 34f * r, 0f, 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.GrassLion:
+                case ProceduralEnemyKind.Irbis:
+                case ProceduralEnemyKind.BrownBear:
+                {
+                    // The big cats and the bear: jaws open to roar/bite on the windup (the lion pants a little in the heat).
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    float pant = _kind == ProceduralEnemyKind.GrassLion ? Mathf.Max(0f, Mathf.Sin(t * 4f)) * 5f * k : 0f;
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(pant + 30f * r, 0f, 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.DustRhino:
+                case ProceduralEnemyKind.WildYak:
+                {
+                    // Chargers: the head swings while grazing and drops, horns first, on the windup.
+                    float r = StepAttack(deltaTime, 4f, 2.5f);
+                    Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(Mathf.Sin(t * 0.9f) * 3f * k + 20f * r, Mathf.Sin(t * 0.5f) * 8f * k * (1f - r), 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.DimmedTroll:
+                {
+                    // Long arms swaying, both raised for a two-handed slam; the caged will-o'-wisp flickers and flares.
+                    float r = StepAttack(deltaTime, 3.5f, 2.2f);
+                    if (_driveLimbs)
+                    {
+                        Swing(ProceduralEnemyParts.ArmLeft, Mathf.Sin(t * 1.1f) * 5f * k - 70f * r);
+                        Swing(ProceduralEnemyParts.ArmRight, -Mathf.Sin(t * 1.1f) * 5f * k - 70f * r);
+                    }
+
+                    Pulse(ProceduralEnemyParts.StolenLight, Mathf.Lerp(0.85f, 1.15f, (0.5f + 0.5f * Mathf.Sin(t * 4.1f) * Mathf.Sin(t * 1.7f)) * Mathf.Max(k, 0.3f)) + 0.25f * r);
+                    break;
+                }
+
+                case ProceduralEnemyKind.Almas:
+                {
+                    // Shy sway; the snowball arm goes up and back over the head on the windup.
+                    float r = StepAttack(deltaTime, 4f, 2.5f);
+                    if (_driveLimbs)
+                    {
+                        Swing(ProceduralEnemyParts.ArmLeft, Mathf.Sin(t * 1.2f) * 4f * k - 20f * r);
+                        Swing(ProceduralEnemyParts.ArmRight, -Mathf.Sin(t * 1.2f) * 4f * k - 125f * r);
+                    }
+
+                    Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(0f, Mathf.Sin(t * 0.6f) * 14f * k * (1f - r), 0f));
                     break;
                 }
 

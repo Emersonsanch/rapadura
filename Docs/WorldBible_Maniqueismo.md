@@ -311,6 +311,29 @@ por primo, en/pt-BR). Testes: `OverworldBeastsTests`.
 | `enemy_forest_thief_gull` | **Gaivota Ladra** / *Thief Gull* | 25 (missão do Liyongo) | [rápido], voa | bicho real, apagada pela gula de Āz: rasga velas atrás de moeda. Bioma Floresta (Água Viva) até a Costa ter o seu. |
 | `enemy_forest_coconut_crab` | **Caranguejo-dos-Coqueiros Gigante** / *Giant Coconut Crab* | 25 (missão do Zawadi) | [tanque] | bicho real; o Lodo entrou nas raízes do mangue. Bioma Floresta até a Costa ter o seu. |
 
+**Segunda leva (2026-11-03): Costa das Monções, Delta de Jhilpur e Teto do Mundo (Mapas100 25–40).** Mesmo contrato
+(peso 0 no bioma, nível da área, números do bioma). Costa e Delta ficam no bioma Floresta (Água Viva) e o Teto no
+Montanha, como os layouts `OverworldLayouts.Costa/Delta/Teto` já declaram. Modelos em `CoastDeltaBeastRecipes` /
+`PamirBeastRecipes` (o crocodilo, o leão, o urso e o irbis abrem a mandíbula no bote; o rinoceronte e o iaque baixam a
+cabeça para a carga; a píton serpenteia como a cobra-de-areia; o trol e o almas erguem os braços), Caderno em
+`LateRegionBestiaryTexts`. Testes: `LateRegionBeastsTests`. Ainda não trocados nos overworlds (os grupos seguem com os
+substitutos até a troca).
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_forest_mangrove_crocodile` | **Crocodilo do Mangue Apagado** / *Dimmed Mangrove Crocodile* | 30 (e o Gavial do Lodo, o Crocodilo de Musgo e o Gavial-Sombra de 31–35) | [tanque], pesado | bicho real; o Lodo subiu pelos canais e encheu a barriga de frio: engole faísca, rede e remo. |
+| `enemy_forest_grass_lion` | **Leão do Capim Apagado** / *Dimmed Grass Lion* | 26 | [rápido] | bicho real; o Fogo Devorador passou pelo capim seco e ficou nos olhos (e na juba, em brasinhas). |
+| `enemy_forest_dust_rhino` | **Rinoceronte-de-Pó** / *Dust Rhino* | 26 | [tanque], carga | bicho real; uma rachadura de luz presa nas costas dói, então ele investe em tudo o que se mexe. |
+| `enemy_forest_thief_monkey` | **Macaco Ladrão** / *Thief Monkey* | 32 (e os macacos do Figueiral e da Floresta de Maré) | [rápido], foge ferido | langur das pontes de raiz que ajudava a levar cipó; a gula de Āz o fez roubar pulseira e sininho. |
+| `enemy_forest_thief_otter` | **Lontra Ladra** / *Thief Otter* | 31 | [rápido], foge ferido | bicho real; dividia o peixe com os barqueiros, o Lodo a deixou gulosa (o peixe iluminado na boca). |
+| `enemy_forest_dimmed_python` | **Píton Apagada** / *Dimmed Python* | 32 | [controle] | bicho real; esquentava as raízes das pontes à noite, agora abraça quem passa, apertado e frio. |
+| `enemy_forest_dimmed_troll` | **Trol Apagado** / *Dimmed Troll* | 33 (e a Mata Morta) | [tanque], pesado | **nunca a raça**: pescador de Tarchon que foi pegar um fogo-fátuo e esqueceu o caminho; a faísca presa na gaiola das costas sussurra. Vencido, a gaiola abre e ele volta para casa. |
+| `enemy_mountain_brown_bear` | **Urso-Pardo do Pamir Apagado** / *Dimmed Pamir Brown Bear* | 36 | [tanque], pesado | bicho real; o frio da sombra entrou no sono de inverno, acordou cedo, emburrado, com geada que não derrete. Tira do dia o corpo do lobisomem (espécie da noite). |
+| `enemy_mountain_wild_yak` | **Iaque Selvagem Apagado** / *Dimmed Wild Yak* | 38 (e o Argali Apagado do 40 até ter o seu) | [tanque], carga | bicho real; a sombra gelou o calor do coração e ele investe nas caravanas. |
+| `enemy_mountain_irbis` | **Irbis Apagado** / *Dimmed Irbis* | 40 | [rápido] | o leopardo-das-neves (bicho real), atrevido pela sombra; pula dos penhascos no Passo de Wakhan. |
+| `enemy_mountain_almas` | **Almas** / *Almas* | 38 | [elite], tímido, foge ferido | o homem selvagem dos contos mongóis e da Ásia Central; assustado pela sombra, joga bola de neve socada (no corpo a corpo por enquanto). |
+| `enemy_mountain_giant_marmot` | **Marmota Gigante** / *Giant Marmot* | 36, 37 | [enxame], foge ferido | marmota do Pamir (bicho real) que cresceu do tamanho de um cachorro; o assobio para quando ela vem. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |

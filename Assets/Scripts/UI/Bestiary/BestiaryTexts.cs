@@ -245,6 +245,9 @@ namespace Rapadura.UI.Bestiary
             // -- Bichos das fichas dos mapas que os mundos contínuos e Taa Pwani faziam com substitutos (own file too) --
             OverworldBestiaryTexts.AddPages(entries);
 
+            // -- Bichos da Costa, do Delta e do Teto do Mundo que os mundos contínuos faziam com substitutos (own file too) --
+            LateRegionBestiaryTexts.AddPages(entries);
+
             // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
             OssuaryBestiaryTexts.AddPages(entries);
 

@@ -128,6 +128,19 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_cave_dark_crow", ProceduralEnemyKind.DarkCrow },
             { "enemy_forest_thief_gull", ProceduralEnemyKind.ThiefGull },
             { "enemy_forest_coconut_crab", ProceduralEnemyKind.CoconutCrab },
+            // The beasts of the late continuous worlds (Docs/Mapas100.md 25–40), formerly played by stand-ins.
+            { "enemy_forest_mangrove_crocodile", ProceduralEnemyKind.MangroveCrocodile },
+            { "enemy_forest_grass_lion", ProceduralEnemyKind.GrassLion },
+            { "enemy_forest_dust_rhino", ProceduralEnemyKind.DustRhino },
+            { "enemy_forest_thief_monkey", ProceduralEnemyKind.ThiefMonkey },
+            { "enemy_forest_thief_otter", ProceduralEnemyKind.ThiefOtter },
+            { "enemy_forest_dimmed_python", ProceduralEnemyKind.Python },
+            { "enemy_forest_dimmed_troll", ProceduralEnemyKind.DimmedTroll },
+            { "enemy_mountain_brown_bear", ProceduralEnemyKind.BrownBear },
+            { "enemy_mountain_wild_yak", ProceduralEnemyKind.WildYak },
+            { "enemy_mountain_irbis", ProceduralEnemyKind.Irbis },
+            { "enemy_mountain_almas", ProceduralEnemyKind.Almas },
+            { "enemy_mountain_giant_marmot", ProceduralEnemyKind.GiantMarmot },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -149,6 +162,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.Jackal, ProceduralEnemyKind.SandSnake, ProceduralEnemyKind.CrownedOrc, ProceduralEnemyKind.RollingStone,
             ProceduralEnemyKind.IllWindMist, ProceduralEnemyKind.Baboon, ProceduralEnemyKind.CaveOoze, ProceduralEnemyKind.DarkCrow,
             ProceduralEnemyKind.ThiefGull, ProceduralEnemyKind.CoconutCrab,
+            ProceduralEnemyKind.MangroveCrocodile, ProceduralEnemyKind.GrassLion, ProceduralEnemyKind.DustRhino, ProceduralEnemyKind.ThiefMonkey,
+            ProceduralEnemyKind.ThiefOtter, ProceduralEnemyKind.Python, ProceduralEnemyKind.DimmedTroll, ProceduralEnemyKind.BrownBear,
+            ProceduralEnemyKind.WildYak, ProceduralEnemyKind.Irbis, ProceduralEnemyKind.Almas, ProceduralEnemyKind.GiantMarmot,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -284,6 +300,42 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.CoconutCrab:
                     OverworldBeastRecipes.BuildCoconutCrab(blueprint);
+                    break;
+                case ProceduralEnemyKind.MangroveCrocodile:
+                    CoastDeltaBeastRecipes.BuildMangroveCrocodile(blueprint);
+                    break;
+                case ProceduralEnemyKind.GrassLion:
+                    CoastDeltaBeastRecipes.BuildGrassLion(blueprint);
+                    break;
+                case ProceduralEnemyKind.DustRhino:
+                    CoastDeltaBeastRecipes.BuildDustRhino(blueprint);
+                    break;
+                case ProceduralEnemyKind.ThiefMonkey:
+                    CoastDeltaBeastRecipes.BuildThiefMonkey(blueprint);
+                    break;
+                case ProceduralEnemyKind.ThiefOtter:
+                    CoastDeltaBeastRecipes.BuildThiefOtter(blueprint);
+                    break;
+                case ProceduralEnemyKind.Python:
+                    CoastDeltaBeastRecipes.BuildPython(blueprint);
+                    break;
+                case ProceduralEnemyKind.DimmedTroll:
+                    CoastDeltaBeastRecipes.BuildDimmedTroll(blueprint);
+                    break;
+                case ProceduralEnemyKind.BrownBear:
+                    PamirBeastRecipes.BuildBrownBear(blueprint);
+                    break;
+                case ProceduralEnemyKind.WildYak:
+                    PamirBeastRecipes.BuildWildYak(blueprint);
+                    break;
+                case ProceduralEnemyKind.Irbis:
+                    PamirBeastRecipes.BuildIrbis(blueprint);
+                    break;
+                case ProceduralEnemyKind.Almas:
+                    PamirBeastRecipes.BuildAlmas(blueprint);
+                    break;
+                case ProceduralEnemyKind.GiantMarmot:
+                    PamirBeastRecipes.BuildGiantMarmot(blueprint);
                     break;
             }
 

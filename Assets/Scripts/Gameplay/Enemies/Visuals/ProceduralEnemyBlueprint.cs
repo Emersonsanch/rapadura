@@ -80,6 +80,33 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         ThiefGull = 33,
         /// <summary>Caranguejo-dos-Coqueiros Gigante (Costa das Monções): red giant crab, one big pincer, eyes on stalks.</summary>
         CoconutCrab = 34,
+
+        // The beasts of the late continuous worlds (Docs/Mapas100.md 25–40: Costa das Monções, Delta de Jhilpur, Teto do
+        // Mundo) that the overworld layouts played with stand-ins (CoastDeltaBeastRecipes, PamirBeastRecipes).
+        /// <summary>Crocodilo do Mangue Apagado (Costa, Delta): long armoured crocodile, back scutes, jaw that gapes.</summary>
+        MangroveCrocodile = 35,
+        /// <summary>Leão do Capim Apagado (Costa, 26): tawny lion with a dark mane and a tufted tail.</summary>
+        GrassLion = 36,
+        /// <summary>Rinoceronte-de-Pó (Costa, 26): dust-grey rhino with two horns, lowers its head to charge.</summary>
+        DustRhino = 37,
+        /// <summary>Macaco Ladrão (Delta, 32): grey langur with a black face, long curled tail, a stolen bangle.</summary>
+        ThiefMonkey = 38,
+        /// <summary>Lontra Ladra (Delta, 31): long low otter, head up, a stolen glowing fish in its mouth.</summary>
+        ThiefOtter = 39,
+        /// <summary>Píton Apagada (Delta, 32): big blotched python, forepart raised, body in a wide S (slithers like the sand snake).</summary>
+        Python = 40,
+        /// <summary>Trol Apagado (Delta, 33): mossy swamp troll with long arms and a caged will-o'-wisp on its back.</summary>
+        DimmedTroll = 41,
+        /// <summary>Urso-Pardo do Pamir Apagado (Teto, 36): brown bear with a shoulder hump and a jaw that gapes.</summary>
+        BrownBear = 42,
+        /// <summary>Iaque Selvagem Apagado (Teto, 38): shaggy black yak with a skirt of long hair and wide horns.</summary>
+        WildYak = 43,
+        /// <summary>Irbis Apagado (Teto, 40): pale snow leopard with dark rosettes and a long thick tail.</summary>
+        Irbis = 44,
+        /// <summary>Almas (Teto, 38): stooped, hairy wild man of the glacier holding a snowball.</summary>
+        Almas = 45,
+        /// <summary>Marmota Gigante (Teto, 36–37): chubby golden marmot with big incisors and a bushy tail.</summary>
+        GiantMarmot = 46,
     }
 
     /// <summary>
