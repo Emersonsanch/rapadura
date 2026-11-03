@@ -13,9 +13,9 @@ namespace Rapadura.Gameplay.World.Map
     /// <summary>
     /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II): level
     /// bands, walk/warp levels, special gates, settlements and return cities, as content-as-code like
-    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–35): a hand-made layout
+    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–40): a hand-made layout
     /// (<c>MapLayouts.Has</c>: 01–08, 13, 14, 19, 20) or only a zone of a continuous region (<c>OverworldLayouts.ForMap</c>:
-    /// 09–12, 15–18, 21–35, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
+    /// 09–12, 15–18, 21–40, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
     /// the flag equal to it. The rest are listed in the Barcas de Luz window, closed. The gold fare is never stored: it is always the
     /// formula of <see cref="MapAccessRules.CalculateWarpCost(int,int,bool)"/> (the "Custo Ouro" column of the methodology
     /// table is design history).
@@ -98,11 +98,11 @@ namespace Rapadura.Gameplay.World.Map
             new MapDefinition(35, "map_035_coracao_lodo", R.DeltaDeJhilpur, Y.Swamp, S.G, 82, 88, 78, 85, Fee, T.PurifyingFruit, Jhilpur, K.Outpost, "raiz_mae", isBuilt: true),
 
             // Região 7 — Teto do Mundo
-            new MapDefinition(36, "map_036_sangkent", R.TetoDoMundo, Y.Mountain, S.GG, 70, 76, 68, 75, Fee, T.ThermalClothes, Sangkent, K.Capital, "sangkent"),
-            new MapDefinition(37, "map_037_calhas", R.TetoDoMundo, Y.Mountain, S.G, 74, 80, 70, 78, Fee, T.None, Sangkent, K.Outpost, "estacao_calha_alta"),
-            new MapDefinition(38, "map_038_geleira", R.TetoDoMundo, Y.Mountain, S.G, 80, 86, 76, 84, Fee, T.ClimbingCrampons, Sangkent, K.Outpost, "cabana_do_iaque"),
-            new MapDefinition(39, "map_039_forte_ventos", R.TetoDoMundo, Y.Mountain, S.G, 84, 92, 80, 88, Fee, T.WingsRequired, Sangkent, K.Outpost, "forte_dos_ventos"),
-            new MapDefinition(40, "map_040_wakhan", R.TetoDoMundo, Y.Mountain, S.GG, 90, 98, 86, 94, Fee, T.StormProtection, Sangkent, K.Outpost, "caravancara_de_pedra"),
+            new MapDefinition(36, "map_036_sangkent", R.TetoDoMundo, Y.Mountain, S.GG, 70, 76, 68, 75, Fee, T.ThermalClothes, Sangkent, K.Capital, "sangkent", isBuilt: true),
+            new MapDefinition(37, "map_037_calhas", R.TetoDoMundo, Y.Mountain, S.G, 74, 80, 70, 78, Fee, T.None, Sangkent, K.Outpost, "estacao_calha_alta", isBuilt: true),
+            new MapDefinition(38, "map_038_geleira", R.TetoDoMundo, Y.Mountain, S.G, 80, 86, 76, 84, Fee, T.ClimbingCrampons, Sangkent, K.Outpost, "cabana_do_iaque", isBuilt: true),
+            new MapDefinition(39, "map_039_forte_ventos", R.TetoDoMundo, Y.Mountain, S.G, 84, 92, 80, 88, Fee, T.WingsRequired, Sangkent, K.Outpost, "forte_dos_ventos", isBuilt: true),
+            new MapDefinition(40, "map_040_wakhan", R.TetoDoMundo, Y.Mountain, S.GG, 90, 98, 86, 94, Fee, T.StormProtection, Sangkent, K.Outpost, "caravancara_de_pedra", isBuilt: true),
 
             // Região 8 — Planície de Mingcheng
             new MapDefinition(41, "map_041_mingcheng", R.PlanicieDeMingcheng, Y.Plain, S.GG, 90, 96, 88, 95, Fee, T.None, Mingcheng, K.Capital, "mingcheng"),

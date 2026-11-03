@@ -127,6 +127,10 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       x −1200…1200, z −1800…600) com Jhilpur em (0, 0) na margem norte do seu lago; 31–35 viram zonas (construídos), 25 áreas
       numa grade 5 × 5, 12 terrenos novos, relevo próprio (ilhotas de touceira `Hummocks`, diques `Levees`, gargantas) e
       cenário próprio; preenche o canto murado a leste das Areias. Detalhes em §5, "Região 6".
+    - **Região 7 — Teto do Mundo** (2026-11-03): mesmo modelo, 2400 × 2400 m (`OverworldLayouts.Teto.cs`, coordenadas
+      x −1200…1200, z −600…1800) com Sangkent em (0, 0) no vale de terraços; 36–40 viram zonas (construídos), 25 áreas numa
+      grade 5 × 5, 19 terrenos novos, relevo próprio (`Moraines`, `IceTongue`, `SeracField`, `Peaks`) e cenário próprio;
+      costurada ao norte da Serra de Kaggen (o alto da Serra continua no Teto). Detalhes em §5, "Região 7".
     - **Mundo costurado** (2026-11-03, pedido do usuário: andar entre as regiões sem portão): as quatro primeiras regiões
       formam um quadrado de 4800 × 4800 m (`OverworldLayouts.WorldId`, `OverworldLayouts.World.cs`), 2 × 2, e a **Costa das
       Monções** fica a leste do Zarafshan (x 1400…3800, z −1000…1400, deslocamento (2000, 200)) e o **Delta de Jhilpur** a
@@ -138,7 +142,12 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       Passagens do Delta: o antigo portão leste das Areias (`exit_rondaveis`, que fechava no muro) encontra o portão oeste do
       Delta (`exit_areias`) na mesma borda (z −1250) e as chegadas viram uma trilha; os dois portões norte do Delta
       (`exit_costa`, x 1940, e `exit_liyongo`, x 3540) são levados às pontas de trilha da Costa logo ao norte (a estrada das
-      Falésias Vermelhas e a trilha dos Mangues de Liyongo). Quadrado original:
+      Falésias Vermelhas e a trilha dos Mangues de Liyongo). O **Teto do Mundo** fica ao norte da Serra de Kaggen (x −3400…−1000,
+      z 1400…3800, deslocamento (−2200, 2000), Sangkent no mundo em (−2200, 2000)): os limites do mundo passam a 7200 × 7200 m e os
+      cantos ao norte do Zarafshan e da Costa, que nenhuma região cobre, são **buracos murados** (relevo de fundo, muros
+      invisíveis). Passagens do Teto: os dois portões da borda sul (`exit_pedra_seca`, x −2350, e `exit_abrigos`, x −1080) são
+      levados à trilha mais próxima da Serra logo ao sul (o caminho entre o Recinto Curvo e o Abrigo do Eland, e a ponta de trilha
+      norte das Encostas dos Abrigos). Quadrado original:
       Serra de Kaggen (x −3400…−1000, z −1000…1400) | Bosque do Zarafshan (x −1000…1400, z −1000…1400) em cima;
       Grutas do Limiar (x −3400…−1000, z −3400…−1000) | Areias Flamejantes (x −1000…1400, z −3400…−1000) embaixo.
       Cada região guarda o seu layout nas suas coordenadas e é deslocada por um número inteiro de pedaços (Zarafshan
@@ -176,7 +185,8 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
         alto, campos de neve, Estela e cume; umidade (névoa) nos lagos, salões, abismos e ninho das grutas; céu limpo nos
         oásis, salinas, cristais e no mercado; o resto deixa o bioma sortear), aplicado no `WeatherSystem` com a transição
         dele (visuais de clima e `AmbientVfx` seguem); a música sai do humor (cidade × campo × ermo × perigo, dia/noite,
-        `Docs/Audio.md` §3). Testes `OverworldAreaTests` e a caminhada `OverworldWalkSmokeTests` (evento ao entrar nos
+        `Docs/Audio.md` §3; no Teto, neve na geleira, nos seracs, nas cristas, no passo e nos picos, névoa no degelo, no lago e nos
+        penhascos, céu limpo na estepe alta e no vale do Wakhan). Testes `OverworldAreaTests` e a caminhada `OverworldWalkSmokeTests` (evento ao entrar nos
         Campos e nas Areias, nada ao ser empurrado na borda do Tugai).
       - **Performance:** nada é carregado inteiro: os pedaços continuam por distância (≤ 96 m), e as cidades agora também
         (constroem a 170 m do chão da cidade, uma por vez; somem a 260 m) — o mundo tem 25. Para os pedaços não pagarem
@@ -1357,6 +1367,39 @@ Capital **Jhilpur** (§2). *Jhil* = lago/charco (bengali e hindi), *pur* = cidad
 
 ### Região 7 — Teto do Mundo (Pamir) · mapas 36–40
 
+- **Mundo contínuo (2026-11-03): mapas 36–40 jogáveis a pé.** A região inteira é um mapa de 2400 × 2400 m
+  (`OverworldLayouts.Teto`, `TetoId`) costurado ao norte da Serra de Kaggen, sem portão. Sangkent (`CityTownRecipes.Sangkent()`,
+  Backdrop desligado, chão plano de ±30 m em y = 0 cobrindo os terraços e o forte do lado norte; ruas O/L/S, a estrada do norte sai
+  da rua leste) fica em (0, 0), 600 m da borda sul. Grade 5 × 5 de áreas (colunas x −1200/−720/−240/240/720/1200, linhas
+  z −600/−120/360/840/1320/1800), nível subindo com a distância de Sangkent a partir de 70:
+  - **Perto (70–76):** Terraços de Sangkent (36, a cidade), Vale dos Damasqueiros (portão oeste para a Serra), Choupal dos Canais,
+    Estepe Alta, Rio de Degelo; acima da cidade os Terraços Altos e os Campos de Neve de Sangkent (36: **Roupa Térmica**, vestida —
+    a cidade e as entradas pela Serra não pedem nada, como o Recife de Taa Pwani).
+  - **Meio (74–84):** Calhas de Pedra, Estação da Calha Alta (posto) e Calhas Geladas (37, sem exigência), Encosta dos Zimbros
+    (portão leste para a Serra), Pastagens dos Iaques, Lago Turquesa, Morenas da Geleira, Torres de Cata-Vento, Vale do Wakhan.
+  - **Longe (80–98):** Geleira do Teto do Mundo com a Cabana do Iaque (posto) e Campo de Seracs (38: **Grampos de Escalada**),
+    Desfiladeiro dos Ventos e Forte dos Ventos (39, o forte é o posto: **asas**), Alto do Wakhan, Passo de Wakhan com o Caravançará
+    de Pedra (posto) e Ninho de Aydahar (40: **Capa de Tempestade**, sem o chefe), Picos Gelados e Cristas do Vento Ruim.
+  - **Água:** o Rio do Wakhan desce do passo pelo vale das caravanas, passa a leste da cidade pelas calhas e acaba numa lagoa de
+    degelo ao sul (leito cavado, atravessado só em 4 pontes de pedra); Lago Turquesa e lagoas no vale e nas morenas.
+  - **Relevo:** `ReliefShape.Moraines` (cristas de cascalho), `IceTongue` (língua de gelo com sulcos de fenda), `SeracField` (blocos
+    de gelo sobre um chão alto) e `Peaks` (cristas agudas, até ~42 m nos Picos Gelados); terraços (`Terraced`) na cidade, nos
+    damasqueiros, nas calhas, na neve e no passo; gargantas no forte; vales quase planos junto da água.
+  - **Cenário** (`OverworldDecorKit.Pamir.cs`, `OverworldChunkBuilder.Pamir.cs`; só linhas da paleta que todo build já tem):
+    damasqueiros em flor, zimbros velhos, cabanas de pedra de teto plano, currais (do kit da Serra), calhas de pedra polida sobre
+    pilares descendo a encosta e estações de madeira com carrinho, seracs azuis, cata-ventos de madeira em torres de pedra, torres
+    de vigia com sinos de vento, bandeirolas coloridas das caravanas (sem rito), escamas caídas de Aydahar; muros de pedra seca nos
+    terraços e pastagens; detalhe de chão carimbado: fendas azuis na geleira, tocas de marmota, cristais de gelo, montes de neve e
+    névoa (do kit da Serra).
+  - **Bichos** (existentes, nenhum chefe): lobisomem como corpo do Urso-Pardo do Pamir, corvo (Gralha-de-Bico-Vermelho e Gralha das
+    Neves), chacal (Marmota Gigante), pedra-que-rola (Pedra-Rolante), golem (Ushabti de Calha e Guarda de Pedra), abutre de brasa
+    (Abutre-Barbudo), neblina do vento ruim, queixada (Iaque Selvagem e Argali), babuíno (Almas), lobo (Lobo de Gelo e Irbis), lodo
+    (Fenda Viva), lanterna quebrada (Pipa de Fumaça), gavião (Gavião-Real), morcegos (Morcego do Vento), orc coroado (Bandoleiro de
+    Āz); à noite lobisomem, rasga-mortalha, morcego-vampiro, mãe-da-lua e a queixada. Clima: neve nas calhas, terraços de neve,
+    geleira, seracs, cristas, passo e picos; névoa no degelo, no lago e nos penhascos de Aydahar; céu limpo na estepe e no vale.
+  - **Orçamento** (.NET fora do Editor, todos os 2704 pedaços): ~3,5 mil triângulos em média, pior 7,6 mil; geração ~0,44 ms em
+    média, p95 ~0,7 ms. Testes `OverworldTetoTests` e `OverworldWorldTests` (rota a pé Vila → Sangkent, ~4,6 km pela Serra).
+
 Capital **Sangkent** (§2): persa *sang* = pedra, túrquico *kent* = cidade. Encruzilhada das caravanas: as **cinco luzes**
 aparecem juntas (cinco cores nas fitas dos carrinhos). NPCs com nomes maniqueus: **Abā** (missionário; aqui, o chefe das
 calhas), **Kustai** (escriba do Códice de Colônia; aqui, cuida do quadro de avisos da caravana), **Baraies** (o mestre do
@@ -1377,6 +1420,7 @@ Códice; aqui, professor e contador de mapas). Chefe do mundo: **Aydahar** (mapa
 - **Ganchos:** loot damasco seco, lã de iaque · montaria nova **Iaque do Teto do Mundo** (§6) · casa: conjunto novo
   **Terraço do Pamir** (fogão de pedra, tapete de feltro).
 - **Noite:** os terraços acendem um a um; estrelas fortes; frio (fôlego mais lento fora de casa).
+- **No jogo (2026-11-03): cidade de verdade** (`CityTownRecipes.Sangkent.cs`, estilo `StoneTerrace`, `CityCatalog.LateRegionCities`): em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S a 19 m; ao norte os muros de arrimo sobem em três degraus de terraço com o forte do 7º terraço no meio e duas calhas de pedra descendo até os patamares): casas de pedra e barro de dois andares amarradas com vigas de zimbro (pontas à mostra), varanda de treliça, terraço com claraboia e damascos secando; o Marco das Caravanas na praça com as cinco fitas das cinco luzes, carrinhos de tábua com as fitas, canais de irrigação com laje, damasqueiros em flor; Abā, Sisinnios, Kustai e Baraies com visual próprio e falas para cada primo; Agasalhos do Sisinnios com a Roupa Térmica (36), os Grampos (38) e a Capa de Tempestade (40); missões "Pedras nas Calhas" e "Neblina no Quadro" (paga com a Capa de Tempestade); respawn na praça para 36–40. Falta: o mundo contínuo da região, as calhas e carrinhos andáveis, os 7 terraços de verdade, a Avalanche, o Iaque e o Terraço do Pamir.
 
 ### 37 · Calhas de Pedra / *Stone Chutes* — nv 74–80 · ★
 - **Fonte:** invenção (as calhas de Sangkent continuam montanha afora, feitas pelos Artífices para descer minério).

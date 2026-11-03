@@ -196,6 +196,46 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         DeadWood = 110,
         /// <summary>The tidal forest of the delta's mouths: stilt-rooted trees along every creek, palms.</summary>
         TidalForest = 111,
+
+        // Região 7 — Teto do Mundo (OverworldLayouts.Teto.cs, OverworldTerrains.Pamir.cs): 120–139.
+        /// <summary>Sangkent's valley (36): stone-walled terraces, apricots in flower, poplars along the irrigation channels.</summary>
+        StairTerraces = 120,
+        /// <summary>A high valley of apricot orchards in blossom on low terraces, channels of meltwater between them.</summary>
+        ApricotValley = 121,
+        /// <summary>Poplar rows along the irrigation channels, green meadow, stone field walls.</summary>
+        PoplarCanals = 122,
+        /// <summary>The high steppe of the Pamir: thin feather grass, dwarf shrubs, cushions of stone, wide and cold.</summary>
+        HighSteppe = 123,
+        /// <summary>A braided meltwater river on grey gravel bars, willows on the banks.</summary>
+        MeltRiver = 124,
+        /// <summary>Slopes of old twisted junipers over rock and scree.</summary>
+        JuniperSlope = 125,
+        /// <summary>Summer pastures of the yaks: short turf, stone pens, the herders' stone huts.</summary>
+        YakPasture = 126,
+        /// <summary>The shore of a turquoise glacial lake: pale gravel, cushion plants, cairns.</summary>
+        TurquoiseLake = 127,
+        /// <summary>The Calhas de Pedra (37): steep slopes cut by polished stone chutes on pillars, timber stations.</summary>
+        StoneChutes = 128,
+        /// <summary>The snowy upper terraces above Sangkent (36): abandoned terraces under snow, stone huts, cairns.</summary>
+        SnowTerraces = 129,
+        /// <summary>Moraines: long ridges of grey gravel and boulders left by the glacier.</summary>
+        Moraine = 130,
+        /// <summary>The Geleira do Teto do Mundo (38): a tongue of white ice with blue crevasses.</summary>
+        Glacier = 131,
+        /// <summary>A field of seracs: towers and blocks of blue ice, snow bridges between them.</summary>
+        Seracs = 132,
+        /// <summary>Windswept ridges: bare rock and snow cornices, the wooden wind wheels of the fort.</summary>
+        WindRidge = 133,
+        /// <summary>The Forte dos Ventos (39): a crag of grey rock, watch towers of wood and stone, wind bells.</summary>
+        FortRock = 134,
+        /// <summary>The upper Wakhan valley: the caravan road along the meltwater river, gravel flats, the caravans' ribbons.</summary>
+        WakhanValley = 135,
+        /// <summary>The Passo de Wakhan (40): the high pass under snow, cairns and ribbon lines along the road.</summary>
+        WakhanPass = 136,
+        /// <summary>The dragon's crags (40): black rock, old snow, great shed scales of Aydahar stuck in the ground.</summary>
+        DragonCrags = 137,
+        /// <summary>The ice peaks at the roof of the world: snow, ice and rock, almost nothing grows.</summary>
+        IcePeaks = 138,
     }
 
     /// <summary>

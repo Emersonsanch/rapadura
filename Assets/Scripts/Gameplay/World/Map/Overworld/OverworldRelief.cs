@@ -38,6 +38,16 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         Hummocks = 40,
         /// <summary>Paddy levees: long low dikes on a flat floor (the trails run on the mean).</summary>
         Levees = 41,
+
+        // Região 7 — Teto do Mundo (OverworldRelief.Pamir.cs): 50–59.
+        /// <summary>Moraines: long bent ridges of gravel side by side, boulder humps on them.</summary>
+        Moraines = 50,
+        /// <summary>A glacier tongue: a broad smooth swell of ice cut by shallow crevasse grooves.</summary>
+        IceTongue = 51,
+        /// <summary>Seracs: blocks of ice stepped and broken, sharp-edged humps over a high floor.</summary>
+        SeracField = 52,
+        /// <summary>Peaks: sharp ridged mountains (ridged noise), the highest ground of the world.</summary>
+        Peaks = 53,
     }
 
     /// <summary>What the relief knows about one point besides its height (ground colours and scatter read it).</summary>
@@ -648,9 +658,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
                 default:
                     if (DesertShape(style, x, z, a, out smooth, out shaped) || CoastShape(style, x, z, a, out smooth, out shaped)
-                        || DeltaShape(style, x, z, a, out smooth, out shaped))
+                        || DeltaShape(style, x, z, a, out smooth, out shaped) || PamirShape(style, x, z, a, out smooth, out shaped))
                     {
-                        break; // Região 2: dunes, mesas, canyons (.Desert.cs); Região 5: cliffs, islets (.Coast.cs); Região 6: hummocks, levees (.Delta.cs).
+                        break; // Região 2: dunes, mesas, canyons (.Desert.cs); Região 5: cliffs, islets (.Coast.cs); Região 6: hummocks, levees (.Delta.cs);
+                               // Região 7: moraines, ice tongues, seracs, peaks (.Pamir.cs).
                     }
 
                     smooth = shaped = a * SmoothStep(0f, 1f, 0.5f + 0.85f * OverworldNoise.Fbm(x, z, 2));

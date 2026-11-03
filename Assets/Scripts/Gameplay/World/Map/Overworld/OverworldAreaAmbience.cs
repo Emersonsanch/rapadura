@@ -154,6 +154,29 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { OverworldTerrain.BlackMire, new AreaClimate(Mist, true) },
             { OverworldTerrain.DeadWood, new AreaClimate(Mist, true) },
             { OverworldTerrain.TidalForest, new AreaClimate(Monsoon, true) },
+
+            // Região 7 — Teto do Mundo: snow over the high terraces, the chutes, the glacier, the seracs, the ridges, the pass and
+            // the peaks; mist on the meltwater, the lake and the dragon's crags; clear cold sky on the high steppe and in the
+            // Wakhan valley; Sangkent's terraces, the apricots, the poplars, the junipers and the pastures let the biome roll it.
+            { OverworldTerrain.StairTerraces, new AreaClimate(null, false) },
+            { OverworldTerrain.ApricotValley, new AreaClimate(null, false) },
+            { OverworldTerrain.PoplarCanals, new AreaClimate(null, false) },
+            { OverworldTerrain.HighSteppe, new AreaClimate(Clear, false) },
+            { OverworldTerrain.MeltRiver, new AreaClimate(Mist, false) },
+            { OverworldTerrain.JuniperSlope, new AreaClimate(null, true) },
+            { OverworldTerrain.YakPasture, new AreaClimate(null, false) },
+            { OverworldTerrain.TurquoiseLake, new AreaClimate(Mist, false) },
+            { OverworldTerrain.StoneChutes, new AreaClimate(Snow, false) },
+            { OverworldTerrain.SnowTerraces, new AreaClimate(Snow, false) },
+            { OverworldTerrain.Moraine, new AreaClimate(null, true) },
+            { OverworldTerrain.Glacier, new AreaClimate(Snow, true) },
+            { OverworldTerrain.Seracs, new AreaClimate(Snow, true) },
+            { OverworldTerrain.WindRidge, new AreaClimate(Snow, true) },
+            { OverworldTerrain.FortRock, new AreaClimate(null, true) },
+            { OverworldTerrain.WakhanValley, new AreaClimate(Clear, false) },
+            { OverworldTerrain.WakhanPass, new AreaClimate(Snow, true) },
+            { OverworldTerrain.DragonCrags, new AreaClimate(Mist, true) },
+            { OverworldTerrain.IcePeaks, new AreaClimate(Snow, true) },
         };
 
         /// <summary>True when <paramref name="terrain"/> has its own line (tests: every terrain must).</summary>

@@ -31,6 +31,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { MapRegion.GrutasDoLimiar, LimiarId },
             { MapRegion.CostaDasMoncoes, CostaId },
             { MapRegion.DeltaDeJhilpur, DeltaId },
+            { MapRegion.TetoDoMundo, TetoId },
         };
 
         /// <summary>Every continuous region of this build (texts, tests).</summary>
@@ -61,6 +62,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 case LimiarId: return Limiar();
                 case CostaId: return Costa();
                 case DeltaId: return DeltaRegion();
+                case TetoId: return TetoRegion();
                 case WorldId: return BuildWorld();
                 default: return null;
             }

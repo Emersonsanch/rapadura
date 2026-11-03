@@ -25,8 +25,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// joined across the border (or the lone one is led to the nearest trail of the other region), and the cave vault of the
     /// Limiar opens there. Gates to maps outside the world, the island stone rings, the Ossuário's portal and the docks stay.
     /// Região 5 (the Costa das Monções) sits east of the Zarafshan (x 1400…3800, z −1000…1400) and Região 6 (the Delta de
-    /// Jhilpur) south of it, east of the Areias (x 1400…3800, z −3400…−1000): the world is a 3 × 2 rectangle of regions. A corner
-    /// no region covers would be a hole walled off like the world's edge (<see cref="OverworldLayout.Holes"/>; none today).
+    /// Jhilpur) south of it, east of the Areias (x 1400…3800, z −3400…−1000): a 3 × 2 rectangle of regions. Região 7 (the Teto do
+    /// Mundo) goes on north of the Serra de Kaggen (x −3400…−1000, z 1400…3800), its two gates on the south edge led to the
+    /// Serra's trails; the corners north of the Zarafshan and of the Costa, which no region covers, are holes walled off like
+    /// the world's edge (<see cref="OverworldLayout.Holes"/>).
     /// The relief blends across the borders like between any two areas (one relief for the whole world, each area shaped in
     /// its own region's coordinates), the chunk grids line up (offsets are multiples of the chunk), the streaming, the soft
     /// barrier, the levels and the requirements work per area as before.
@@ -49,6 +51,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// walled, so the world is a whole 7200 × 4800 m rectangle again.
         /// </summary>
         public static readonly Vector2 DeltaWorldOffset = new Vector2(2600f, -1600f);
+
+        /// <summary>
+        /// Região 7 north of the Serra de Kaggen (Sangkent at world (−2200, 2000)): the Teto do Mundo goes on where the Serra's
+        /// summit and drystone walls rise, so the world is no longer a rectangle: north of the Zarafshan and of the Costa two
+        /// walled holes (<see cref="OverworldLayout.Holes"/>).
+        /// </summary>
+        public static readonly Vector2 TetoWorldOffset = new Vector2(-2200f, 2000f);
 
         /// <summary>Width (m) of the trail that joins two passes (or a pass to the nearest trail across the border).</summary>
         public const float PassTrailWidth = 4f;
@@ -86,6 +95,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 (Limiar(), LimiarWorldOffset),
                 (Costa(), CostaWorldOffset),
                 (DeltaRegion(), DeltaWorldOffset),
+                (TetoRegion(), TetoWorldOffset),
             };
 
             Rect bounds = default;

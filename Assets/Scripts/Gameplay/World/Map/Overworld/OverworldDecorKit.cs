@@ -171,6 +171,34 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         RiceTuft = 148,
         /// <summary>A twisted mass of rotten root, black and grey, bracket fungi.</summary>
         RottenRoot = 149,
+
+        // Região 7 — Teto do Mundo (OverworldDecorKit.Pamir.cs): 160–179.
+        /// <summary>An apricot tree in flower (pale pink crown on a crooked trunk): Sangkent's orchards.</summary>
+        ApricotBlossom = 160,
+        /// <summary>A run of polished stone chute on low pillars, ice in the groove (<see cref="OverworldProp.End"/> = its other end).</summary>
+        StoneChute = 161,
+        /// <summary>A timber chute station: a roofed platform, a cart on its rails, a lantern.</summary>
+        ChuteStation = 162,
+        /// <summary>A herder's stone hut: low dry-stone walls, a flat roof of earth and beams, a smoke hole.</summary>
+        StoneHut = 163,
+        /// <summary>A serac: a leaning tower of blue ice, snow on its top.</summary>
+        Serac = 164,
+        /// <summary>A blue crevasse line on the ice (ground detail, no collider).</summary>
+        Crevasse = 165,
+        /// <summary>A wooden wind wheel on a stone tower (the Forte dos Ventos' cata-ventos).</summary>
+        WindWheel = 166,
+        /// <summary>A line of coloured pennants between two poles (the caravans' ribbons; <see cref="OverworldProp.End"/> = the other pole).</summary>
+        RibbonLine = 167,
+        /// <summary>A square watch tower of stone with a timber gallery and wind bells.</summary>
+        WatchTower = 168,
+        /// <summary>A great shed scale of Aydahar stuck slanting in the ground, dark and green-gold.</summary>
+        DragonScale = 169,
+        /// <summary>A marmot's burrow: a mound of earth with its hole (ground detail, no collider).</summary>
+        MarmotMound = 170,
+        /// <summary>Ice shards and frost on the ground (ground detail, no collider).</summary>
+        IceShards = 171,
+        /// <summary>An old twisted juniper (archa): a thick crooked trunk, dark scale-leaf clumps.</summary>
+        Juniper = 172,
     }
 
     /// <summary>
