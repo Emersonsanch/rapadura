@@ -103,6 +103,7 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.HarasVila, "Srosh's Stable", "Estrebaria do Srosh"),
                 Shop(CityShopCatalog.ErvariaDacil, "Dácil's Herb House", "Ervaria da Dácil"),
                 Shop(CityShopCatalog.BazarMwana, "Mwana's Pearl Bazaar", "Bazar de Pérolas da Mwana"),
+                Shop(CityShopCatalog.ForjaTambor, "The Drum Forge", "Forja de Tambor"),
             };
 
             // ---- Cities ----
@@ -122,6 +123,10 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.TaaPwani, "Taa Pwani", "Taa Pwani", "Taa Pwani", "Taa Pwani",
                 "The Coast of the Lamp: whitewashed coral-stone houses with carved teak doors, a pearl market on the square, dhows with triangular sails at the quay and the Coral Light that guides them home through the monsoon.",
                 "A Costa da Lâmpada: casas de pedra de coral caiada com portas de teca entalhada, mercado de pérolas na praça, dhows de vela triangular no cais e o Farol de Coral que guia todos de volta na monção.");
+
+            AddCity(entries, CityCatalog.TamborRubro, "Red Drum", "Tambor Rubro", "Red Drum", "Tambor Rubro",
+                "The orcs' war camp in the red badlands: a palisade of sharpened logs, the Great Hall under its steep hide roof, clan tents dyed ochre and the drums that mark the hours and wake the Living Fire of the forge. Here a given word is worth more than gold.",
+                "O acampamento dos orcs nos ermos vermelhos: paliçada de troncos com ponta, o Salão Grande sob o telhado alto de couro, tendas de clã tingidas de ocre e os tambores que marcam a hora e acordam o Fogo Vivo da forja. Aqui palavra dada vale mais que ouro.");
 
             AddCity(entries, CityCatalog.CopasGarajonay, "Garajonay Canopy", "Copas de Garajonay", "Garajonay", "Garajonay",
                 "The city of the forest elves, up in the laurels that drink the mist: round plank houses, rope bridges from trunk to trunk and cocoon lanterns. Nobody here fells a tree.",
@@ -383,6 +388,47 @@ namespace Rapadura.UI.WorldMap
                 ("Your compass spins near the reef, Ícaro? The stars never do. Your Grandpa Jorge learned that on my deck.", "A sua bússola gira perto do recife, Ícaro? As estrelas nunca giram. O seu avô Jorge aprendeu isso no meu convés."),
                 ("The boatwoman of the Moon! Lavine, ask the Moon Ship for a gentle monsoon this year. The old man asks.", "A barqueira da Lua! Lavine, pede para a Barca da Lua mandar uma monção mansa este ano. O velho pede."),
                 ("Sixty monsoons I have read these stars. The Moon Ship fills, empties and fills again: the light always comes home.", "Sessenta monções eu li estas estrelas. A Barca da Lua enche, esvazia e enche de novo: a luz sempre volta para casa."));
+
+            // ---- Tambor Rubro (orcs of the Red Drum; names from the Hurrian tales and Hittite/Mitanni history) ----
+            AddResident(entries, "gurparanzah", "Gurparanzah, the Archer Chief", "Gurparanzah, a Chefe-Arqueira",
+                ("Joaquim, you stand in front of your cousins without being asked. In this camp that is called a shield-brother. Sit at my fire.", "Joaquim, você fica na frente dos primos sem ninguém pedir. Neste acampamento isso se chama irmão de escudo. Senta na minha fogueira."),
+                ("Maria, the drums say the Living Fire warms, it does not burn. Your light says the same thing without a single beat.", "Maria, os tambores dizem que o Fogo Vivo aquece, não queima. A sua luz diz a mesma coisa sem uma batida só."),
+                ("Maithe, draw. Slower. Breathe out with the drum... There. Now you shoot like a Red Drum archer.", "Maithe, puxa. Mais devagar. Solta o ar com o tambor... Isso. Agora você atira como arqueira do Tambor Rubro."),
+                ("Ícaro, your trial waits in my hall when you are ready: a fire-arrow that flies true. Gears allowed. Shortcuts, no.", "Ícaro, a sua prova te espera no meu salão quando você estiver pronto: uma flecha de fogo que voe reta. Engrenagem pode. Atalho, não."),
+                ("Lavine, Grandpa Jorge gave me his word once and kept it through a sandstorm. You have his stubborn chin.", "Lavine, o Vô Jorge me deu a palavra uma vez e cumpriu no meio de uma tempestade de areia. Você tem o queixo teimoso dele."),
+                ("Some clans took Āz's tin crowns and fight for gold. They are still ours. We want them home, not beaten.", "Alguns clãs aceitaram as coroinhas de lata de Āz e brigam por ouro. Continuam sendo nossos. A gente quer eles em casa, não derrotados."));
+
+            AddResident(entries, "kessi", "Kessi the Hunter", "Kessi, o Caçador",
+                ("Joaquim, you walk like a wolf on a full belly: no hurry, no noise. Good. The hawks won't hear you coming.", "Joaquim, você anda feito lobo de barriga cheia: sem pressa, sem barulho. Bom. Os gaviões não vão te ouvir chegar."),
+                ("Maria, the hides on my rack are from the beasts the camp ate, nothing more. Will you bless the next hunt with me?", "Maria, os couros do meu varal são dos bichos que o acampamento comeu, nada mais. Abençoa a próxima caçada comigo?"),
+                ("Maithe, three beats to aim, one to loose. That's how my mother taught me, and hers taught her.", "Maithe, três batidas para mirar, uma para soltar. Foi assim que a minha mãe me ensinou, e a dela ensinou a ela."),
+                ("Ícaro, a snare that resets itself? ...Make it let the small ones go, and I'll set it by the canyon.", "Ícaro, uma armadilha que se arma sozinha? ...Faz ela soltar os pequenos, e eu ponho na beira do cânion."),
+                ("Lavine, you can tell when a hawk is just hungry? Then you are a better hunter than I am. Grandma Edna would be proud.", "Lavine, você sabe quando um gavião só está com fome? Então você caça melhor que eu. A Vó Edna ia ficar orgulhosa."),
+                ("The canyons echo: in the Red Drum Badlands the beasts hear your steps twice. Walk on the sand, not the stone.", "Os cânions ecoam: nos Ermos do Tambor Rubro os bichos escutam o seu passo duas vezes. Pisa na areia, não na pedra."));
+
+            AddResident(entries, "appu", "Appu the Kind Merchant", "Appu, o Mercador Gentil",
+                ("Joaquim! My little ones want to see the guardian lift the water barrel. Just once? They've been waiting all morning.", "Joaquim! Os meus pequenos querem ver o guardião levantar o barril de água. Só uma vez? Estão esperando desde cedo."),
+                ("Maria, the youngest has a cough. Would you look at her? I traded a whole bolt of red leather for honey and it didn't help.", "Maria, a menorzinha está com tosse. Você olha ela? Troquei uma peça inteira de couro vermelho por mel e não adiantou."),
+                ("Maithe, I dreamed for years of a big family. Now I have nineteen orphans and a camp full of aunts. Dreams come in odd sizes.", "Maithe, sonhei anos com uma família grande. Agora tenho dezenove órfãos e um acampamento cheio de tias. Sonho vem em tamanho esquisito."),
+                ("Ícaro, the children broke the toy you made them. ...No, they loved it. That is why it broke. Make two?", "Ícaro, as crianças quebraram o brinquedo que você fez. ...Não, elas amaram. Foi por isso que quebrou. Faz dois?"),
+                ("Lavine, Grandpa Jorge always paid me double and pretended he couldn't count. Tell Grandma Edna I noticed.", "Lavine, o Vô Jorge sempre me pagava em dobro e fingia que não sabia contar. Diz para a Vó Edna que eu percebi."),
+                ("Bread for the road, water for the wolves, a place by the fire. Nobody leaves my tent empty-handed.", "Pão para a estrada, água para os lobos, um lugar na fogueira. Ninguém sai da minha tenda de mão vazia."));
+
+            AddResident(entries, "ashmunikal", "Ashmunikal, Matriarch of the Drums", "Ashmunikal, a Matriarca dos Tambores",
+                ("Joaquim, hold the big drum steady while I tune it. Your arms are the only ones here that don't shake.", "Joaquim, segura o tambor grande firme enquanto eu afino. Os seus braços são os únicos aqui que não tremem."),
+                ("Maria, the lamp on my tower and the light in your hands are cousins, child. Both keep the dark outside the palisade.", "Maria, a lâmpada da minha torre e a luz das suas mãos são primas, menina. As duas deixam o escuro do lado de fora da paliçada."),
+                ("Maithe, every ten turns of the hourglass the drums play for everyone in the camp. Come play with us; the eldest leads.", "Maithe, a cada dez voltas da ampulheta os tambores tocam para todo mundo no acampamento. Vem tocar com a gente; a mais velha puxa."),
+                ("Ícaro, you counted the beats and found a pattern? Of course there is. It is a hundred years old. Keep counting.", "Ícaro, você contou as batidas e achou um padrão? Claro que tem. Tem cem anos. Continua contando."),
+                ("Lavine, Grandma Edna once danced to my drum until sunrise. Ask her. She'll say it was Grandpa Jorge who wouldn't stop.", "Lavine, a Vó Edna uma vez dançou no meu tambor até o sol nascer. Pergunta para ela. Ela vai dizer que foi o Vô Jorge que não parava."),
+                ("The drums mark the hours and wake the Living Fire of the forge. While they beat, the shadow keeps its distance.", "Os tambores marcam a hora e acordam o Fogo Vivo da forja. Enquanto eles batem, a sombra fica longe."));
+
+            AddResident(entries, "tushratta", "Tushratta the Drum Smith", "Tushratta, o Ferreiro do Tambor",
+                ("Joaquim, a guardian with a dented shield? Give it here. I'll beat it straight to the rhythm of the drum.", "Joaquim, guardião de escudo amassado? Passa para cá. Eu desamasso no ritmo do tambor."),
+                ("Maria, the forge's fire was asleep until the drums woke it. Fire and light are family, like you and your brother.", "Maria, o fogo da forja estava dormindo até os tambores acordarem ele. Fogo e luz são família, igual você e o seu irmão."),
+                ("Maithe, bronze arrowheads, balanced on my own finger. For the eldest, the first of the batch.", "Maithe, pontas de flecha de bronze, equilibradas no meu próprio dedo. Para a mais velha, a primeira da fornada."),
+                ("Ícaro, you want to see how the bellows work? Pump. Faster. ...Now you know why my arms are this size.", "Ícaro, quer ver como o fole funciona? Bombeia. Mais rápido. ...Agora você sabe por que o meu braço é desse tamanho."),
+                ("Lavine, going up to Namrael's Throne? Take theriac. The salt there bites, and Grandpa Jorge would scold me if I forgot to tell you.", "Lavine, vai subir para o Trono de Namrael? Leva teriaga. O sal de lá morde, e o Vô Jorge ia brigar comigo se eu esquecesse de avisar."),
+                ("Copper, bronze and iron, tempered to the beat of the drum. Repairs, stones of the Captured Light, theriac for the Throne.", "Cobre, bronze e ferro, temperados na batida do tambor. Conserto, pedras da Luz Presa, teriaga para o Trono."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

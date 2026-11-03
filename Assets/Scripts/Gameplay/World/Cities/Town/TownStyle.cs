@@ -34,6 +34,11 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// merlons, carved teak doors studded with brass, a <i>baraza</i> (stone bench) along the front.
         /// </summary>
         CoralStone = 4,
+        /// <summary>
+        /// Tambor Rubro (the orcs' war camp, Docs/Mapas100.md §3.3): log halls with walls of ochre-dyed hide between corner
+        /// posts, very steep hide gable roofs with crossed ridge poles, a palisade of sharpened logs, drum towers, clan tents.
+        /// </summary>
+        WarCamp = 5,
     }
 
     /// <summary>
@@ -209,6 +214,29 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Plaza = TownSwatch.CoralLime, PlazaAlt = TownSwatch.Laterite,
             Fence = TownSwatch.CoralLime, Plinth = TownSwatch.Laterite,
             HouseRoof = TownRoofKind.Flat,
+        };
+
+        /// <summary>
+        /// Tambor Rubro, the orcs' war camp (Docs/Mapas100.md §3.3, map 11): picked by hand like <see cref="Coast"/>. The ficha's
+        /// palette from the cells that already exist: ochre-red #A8452B (red clay / laterite), sandstone #C9774B (adobe ochre),
+        /// leather #7A4A2A (teak), iron #4A4A4F, ember #FF8A3D, cloth band #E8C547 (cloth yellow). The Areias Flamejantes are
+        /// a world-map biome, so <see cref="TownStyle.Region"/> is the Desert (date palms and tamarisks in the yards).
+        /// </summary>
+        public static readonly TownStyle WarCamp = new TownStyle
+        {
+            Region = BiomeType.Desert,
+            Vegetation = TownVegetation.Desert,
+            Architecture = TownArchitecture.WarCamp,
+            Walls = new[] { TownSwatch.RedClay, TownSwatch.Laterite, TownSwatch.AdobeOchre },
+            Trims = new[] { TownSwatch.Teak, TownSwatch.WoodDark },
+            Roofs = new[] { TownSwatch.Teak, TownSwatch.WoodDark },
+            Joinery = new[] { TownSwatch.WoodDark, TownSwatch.Teak, TownSwatch.Beam },
+            Accent = TownSwatch.ClothYellow,
+            Ground = TownSwatch.SandDark, GroundAlt = TownSwatch.AdobeOchre,
+            Street = TownSwatch.Laterite, StreetEdge = TownSwatch.Sandstone, Sidewalk = TownSwatch.DirtDark,
+            Plaza = TownSwatch.Sand, PlazaAlt = TownSwatch.Laterite,
+            Fence = TownSwatch.WoodDark, Plinth = TownSwatch.StoneDark,
+            HouseRoof = TownRoofKind.Gable,
         };
     }
 }

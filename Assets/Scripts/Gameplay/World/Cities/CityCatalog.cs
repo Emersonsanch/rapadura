@@ -98,6 +98,12 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string TaaPwani = "taa_pwani";
 
+        /// <summary>
+        /// Tambor Rubro, the race city of the orcs (map 11, return city of maps 11–12, Docs/Mapas100.md §3.3). Same id as
+        /// <c>MapCatalog.TamborRubro</c> and <c>CityTownRecipes.TamborRubroCityId</c>.
+        /// </summary>
+        public const string TamborRubro = "tambor_rubro";
+
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
             new CitySpec(VilaZefa, BiomeType.Forest,
@@ -177,6 +183,21 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("tinguaro"),
                 },
                 new List<string> { CityShopCatalog.ErvariaDacil }),
+
+            // Tambor Rubro (orcs, names from the Hurrian tales and Hittite/Mitanni history): Gurparanzah the archer chief
+            // (missions), Kessi the hunter (second mission), Appu the gentle merchant who adopts the camp's orphans,
+            // Ashmunikal the matriarch of the drums (the guardian lamp on the drum tower), Tushratta the smith (the city's
+            // shop: the Forja de Tambor, with the theriac of map 12).
+            new CitySpec(TamborRubro, BiomeType.Desert,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("gurparanzah"),
+                    new CityResidentSpec("kessi"),
+                    new CityResidentSpec("appu"),
+                    new CityResidentSpec("ashmunikal"),
+                    new CityResidentSpec("tushratta", CityShopCatalog.ForjaTambor),
+                },
+                new List<string> { CityShopCatalog.ForjaTambor }),
         };
 
         /// <summary>

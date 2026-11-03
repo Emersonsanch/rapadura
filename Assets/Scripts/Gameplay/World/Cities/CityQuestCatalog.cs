@@ -57,6 +57,8 @@ namespace Rapadura.Gameplay.World.Cities
     /// of the forest floor stand in for the Lagarto-Gigante do Louro), then Tinguaro sends them after the moss boars.
     /// Taa Pwani (map 25): Captain Liyongo sends the cousins after the thief gulls that tear the dhows' sails, then Zawadi
     /// asks them to free the mangrove roots from the giant crabs and pays with his own Botas de Raiz Viva (the gate of map 30).
+    /// Tambor Rubro (map 11): Gurparanzah sends the cousins after the red scorpions of the badlands, then Kessi takes them
+    /// hunting the ember hawks and pays with the Teriaga do Oásis (the gate of map 12).
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -64,6 +66,8 @@ namespace Rapadura.Gameplay.World.Cities
         public const string GarajonayMoss = "quest_city_garajonay_moss_tracks";
         public const string TaaPwaniGulls = "quest_city_taa_pwani_thief_gulls";
         public const string TaaPwaniClaws = "quest_city_taa_pwani_mangrove_claws";
+        public const string TamborRubroScorpions = "quest_city_tambor_rubro_red_scorpions";
+        public const string TamborRubroHawks = "quest_city_tambor_rubro_ember_hawks";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -83,6 +87,15 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.TaaPwani, "zawadi", new RegionQuestSpec(TaaPwaniClaws, BiomeType.Forest, TaaPwaniGulls, 820,
                 new[] { new RegionObjectiveSpec("cut_free_the_roots", QuestObjectiveType.KillEnemyType, "enemy_desert_scorpion", 5) },
                 new[] { new RegionRewardSpec("item_botas_raiz", 1), new RegionRewardSpec("item_gold", 80) })),
+
+            // -- Tambor Rubro: Gurparanzah, the archer chief, then Kessi, the hunter. The desert scorpions stand in for the
+            // Escorpião-Rubro and the crested hawks for the Gavião de Brasa (Docs/Mapas100.md 11). --
+            new CityQuestSpec(CityCatalog.TamborRubro, "gurparanzah", new RegionQuestSpec(TamborRubroScorpions, BiomeType.Desert, null, 460,
+                new[] { new RegionObjectiveSpec("clear_red_scorpions", QuestObjectiveType.KillEnemyType, "enemy_desert_scorpion", 6) },
+                new[] { new RegionRewardSpec("item_health_potion", 4), new RegionRewardSpec("item_pedra_bencao", 2), new RegionRewardSpec("item_gold", 45) })),
+            new CityQuestSpec(CityCatalog.TamborRubro, "kessi", new RegionQuestSpec(TamborRubroHawks, BiomeType.Desert, TamborRubroScorpions, 540,
+                new[] { new RegionObjectiveSpec("hunt_ember_hawks", QuestObjectiveType.KillEnemyType, "enemy_mountain_crested_hawk", 5) },
+                new[] { new RegionRewardSpec("item_teriaga", 1), new RegionRewardSpec("item_gold", 55) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();

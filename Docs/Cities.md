@@ -24,6 +24,7 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
 | Região | Cidade | Moradores | Loja | Missões |
 |---|---|---|---|---|
 | Bosque do Zarafshan (mapa 05) | **Copas de Garajonay** (elfos-da-mata, `copas_garajonay`) | Gara, a Guardiã das Copas (salão da praça), Jonay, o Arqueiro, Dácil, a Ervateira, Bencomo, o Velho Chefe, Tinguaro, o Rastreador | **Ervaria da Dácil** (`shop_ervaria_dacil`) | Gara: "A Névoa Que Esqueceu a Água"; Tinguaro: "Rastros no Musgo" |
+| Areias Flamejantes (mapas 11 e 12) | **Tambor Rubro** (orcs, `tambor_rubro`) | Gurparanzah, a Chefe-Arqueira (Salão Grande na cabeça da praça), Ashmunikal, a Matriarca dos Tambores (rua Leste, torre do tambor atrás), Kessi, o Caçador (rua Leste), Appu, o Mercador Gentil (rua Sul), Tushratta, o Ferreiro do Tambor (rua Oeste) | **Forja de Tambor** (`shop_forja_tambor`) | Gurparanzah: "Caudas Vermelhas na Mesa"; Kessi: "Gaviões de Brasa" |
 
 - **Passeio da cidade:** a mesma receita `CityTownRecipes.Garajonay` do mapa 05 e do mundo contínuo (mesmo `CityId`,
   mesma geometria; os moradores só ganharam `ResidentId` nos lotes que já existiam). Problema herdado da receita (não
@@ -38,7 +39,36 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
   quando os primos chegam até ele (`CityResidentPost` → `CityQuestCatalog.Talk`), e pergunta como vai enquanto ela roda.
   Gara pede 6 bichos bravos do chão da mata (o Lobo faz o Lagarto-Gigante do Louro; 3 poções de vida + 2 de mana, 320 XP);
   depois Tinguaro pede 5 Javalis de Musgo (Queixada; arco de caça + 25 ouro, 380 XP). Objetivos só de combate, como as
-  missões de região. Testes: `CityGarajonayTests`.
+  missões de região. Testes: `CityGarajonayTests`. A bacia da praça foi para a cabeça da praça (0; 5,2): em (4,2; −3,8)
+  ela tampava o lugar de quem compra no Ammo (o "Validate Town Layouts" roda toda cidade também com o mascate).
+
+**Tambor Rubro** (orcs, mapa 11; cidade de retorno de 11–12):
+- **Passeio da cidade:** receita `CityTownRecipes.TamborRubro` (`CityTownRecipes.TamborRubro.cs`) no estilo novo
+  `TownStyles.WarCamp` (`TownArchitecture.WarCamp`, vegetação do deserto, paleta da ficha com células que já existiam:
+  barro vermelho/laterita = ocre-rubro, adobe ocre = arenito, teca = couro, ferro, brasa, pano amarelo): acampamento de
+  guerra dentro de uma **paliçada de troncos com ponta** (`Palisade`, peça de segmento; pontas para cima, nunca
+  troféus) com vãos para as ruas Sul, Leste e Oeste; **Salão Grande** de vigas e couro na cabeça da praça, telhado de
+  duas águas muito alto com as varas da cumeeira cruzadas (`TownBuildingSpec.LogHall`: postes de canto, soleira e
+  frechal de tronco, paredes de couro tingido atado a ripas, porta de tábua reta, faixa amarela; `TownKit.LogHallRoof`),
+  tambores de guerra (`WarDrum`) nos cantos; **torre do tambor** com a Lâmpada Guardiã no topo (`DrumTower`) atrás da
+  casa da Ashmunikal; tendas de clã de couro ocre (`ClanTent`), postes de clã com faixas de pano (`ClanPost`; sinal do
+  clã, não altar), fogueiras (`Bonfire`, acendem à noite e entram nas luzes da cidade), arena de treino de areia
+  (`TrainingRing`, pisável) e portões de tronco com tochas (`TownKit.WarCampGate`). Peças em `TownKit.WarCamp.cs`,
+  colisores em `CitySolids`. Tudo em y = 0 e dentro de ±33 m (o mundo contínuo das Areias reserva ±34 de zona segura e
+  ±38 de chão plano); `CityLayoutRules.Validate` sem problemas, com e sem o mascate.
+- **No mundo contínuo:** `OverworldLayouts.Areias.cs` ainda monta a "primeira versão" própria (`TamborRubroCity()`,
+  estilo `Oasis`). Para usar esta receita lá basta trocar a linha do `Place` do 11 por
+  `CityTownRecipe tambor = CityTownRecipes.TamborRubro(); tambor.Backdrop = false;` e
+  `Place(w, TamborRubroMapId, tambor, TamborRubroOffset, Rect.MinMaxRect(-34f, -34f, 34f, 34f), 38f, true);` (mesmas
+  três saídas S/L/O e cais na rua Oeste).
+- **Respawn:** derrota nos mapas 11 e 12 acorda na praça do Tambor Rubro (`MapCatalog.RespawnCityFor` → `ApplyDefeatIn`).
+- **Forja de Tambor** (semanal, 3 vagas que giram, tema Ferreiro): ferro, minério, poção de vida, Pedra da Bênção e a
+  **Teriaga do Oásis** (exigência do 12, Trono de Namrael) fixas; giram martelo, machado, peitoral de couro, arco de
+  caça, carne, ração de montaria e espada de ferro (esta após o chefe do Deserto). O 11 não tem exigência. O Ammo
+  nunca para lá. (O conserto 20% mais barato e a "Têmpera do Tambor" da ficha ainda faltam.)
+- **Missões da cidade:** Gurparanzah pede 6 escorpiões (o Escorpião das Areias faz o Escorpião-Rubro; 4 poções de vida +
+  2 Pedras da Bênção + 45 ouro, 460 XP); depois Kessi pede 5 Gaviões de Brasa (o Gavião-de-Penacho faz o papel; Teriaga
+  do Oásis + 55 ouro, 540 XP). Testes: `CityTamborRubroTests`.
 
 ### 1.2 Cidades das regiões tardias (`CityCatalog.LateRegionCities`)
 

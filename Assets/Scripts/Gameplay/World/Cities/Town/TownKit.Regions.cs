@@ -35,7 +35,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Props that run from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> (no yaw; the view anchors them at their midpoint).</summary>
         public static bool IsSegment(CityPropKind kind) =>
             kind == CityPropKind.FenceRun || kind == CityPropKind.Gate || kind == CityPropKind.KarezChannel || kind == CityPropKind.Cliff ||
-            kind == CityPropKind.RopeBridge || kind == CityPropKind.LampString;
+            kind == CityPropKind.RopeBridge || kind == CityPropKind.LampString || kind == CityPropKind.Palisade;
 
         /// <summary>Unit direction of a segment prop and the side its mass stands on (left of the direction: east-going → north).</summary>
         public static Vector2 SegmentBack(Vector2 direction) => new Vector2(-direction.y, direction.x);
@@ -65,6 +65,13 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.Dhow: Dhow(b, s, prop.Variant); return true;
                 case CityPropKind.CoralTower: CoralTower(b, s); return true;
                 case CityPropKind.Mangrove: Mangrove(b, s, prop.Variant); return true;
+                case CityPropKind.Palisade: Palisade(b, d, s); return true;
+                case CityPropKind.DrumTower: DrumTower(b, s); return true;
+                case CityPropKind.ClanTent: ClanTent(b, s, prop.Variant); return true;
+                case CityPropKind.ClanPost: ClanPost(b, s, prop.Variant); return true;
+                case CityPropKind.Bonfire: Bonfire(b, s); return true;
+                case CityPropKind.WarDrum: WarDrum(b, s); return true;
+                case CityPropKind.TrainingRing: TrainingRing(b, s); return true;
                 default: return false;
             }
         }
@@ -794,6 +801,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
         {
             switch (spec.Dressing)
             {
+                case TownShopDressing.HuntingRack:
+                    WarCampDressing(b, spec, x, y, z, zFacade);
+                    break;
+
                 case TownShopDressing.Pearls:
                 case TownShopDressing.RootWeaver:
                     CoastDressing(b, spec, x, y, z, zFacade);

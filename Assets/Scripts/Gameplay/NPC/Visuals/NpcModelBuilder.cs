@@ -694,7 +694,8 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // Arms
         // ------------------------------------------------------------------
 
-        private static bool IsSkin(NpcSwatch swatch) => swatch <= NpcSwatch.SkinDeep || swatch == NpcSwatch.SkinBark;
+        private static bool IsSkin(NpcSwatch swatch) => swatch <= NpcSwatch.SkinDeep || swatch == NpcSwatch.SkinBark
+            || swatch == NpcSwatch.SkinOrcOlive || swatch == NpcSwatch.SkinOrcGrey;
 
         /// <summary>
         /// One arm with volume: a shoulder cap, a tapered upper arm, an elbow, a forearm ending in a cuff (wide bell sleeves
@@ -987,6 +988,16 @@ namespace Rapadura.Gameplay.NPC.Visuals
                     b.Decal(mp + mr * new Vector3(-hw * wsm * 0.24f, 0f, 0f), new Vector2(hw * wsm * 0.56f, hh * 0.032f), lip, mr * Quaternion.Euler(0f, 0f, -14f));
                     b.Decal(mp + mr * new Vector3(hw * wsm * 0.24f, 0f, 0f), new Vector2(hw * wsm * 0.56f, hh * 0.032f), lip, mr * Quaternion.Euler(0f, 0f, 14f));
                     break;
+                }
+            }
+
+            if (r.Tusks)
+            {
+                // Two small ivory tusks rising from the lower lip at the corners of the mouth (they read from the iso camera).
+                foreach (float side in new[] { -1f, 1f })
+                {
+                    Vector3 root = mp + mr * new Vector3(side * hw * 0.17f, -hh * 0.04f, 0.006f);
+                    b.Cylinder(root, 0.016f * rig.S, 0f, 0.055f * rig.S, 4, NpcSwatch.Ivory, rotation: mr * Quaternion.Euler(-20f, 0f, side * -12f));
                 }
             }
         }

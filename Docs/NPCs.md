@@ -99,6 +99,11 @@
 | **Nuru, a Guardiã do Farol** (`nuru`, ao pé do Farol de Coral) | velha serena; *nuru* = luz; acende a lâmpada que traz os dhows de volta | um pouco curvada, capuz e túnica de pano de vela com barra cor de mar, xale azul-mar, poste de lanterna e lamparina | ergue a lâmpada ao entardecer |
 | **Zawadi, o Trançador de Raízes** (`zawadi`) | jovem rápido, "pole pole"; trança as Botas de Raiz Viva, dá a 2ª missão | cabeça descoberta e cavanhaque, túnica de laterita, avental de pano de vela, cinto, feixe de raiz de mangue no braço e fuso | fia, sempre |
 | **Mbaraka, o Navegador das Estrelas** (`mbaraka`) | velho marinheiro, lê as estrelas da Barca da Lua e conta as monções; ensinou o Vô Jorge | curvado, barba longa branca, kilemba de coral com faixa azul-mar, kanzu de pano de vela sob capa de teca, bastão da lua e estojo de cartas | olha o céu pensando |
+| **Gurparanzah, a Chefe-Arqueira** (`gurparanzah`, Tambor Rubro) | herói dos contos hurritas; palavra dada vale mais que machado; dá as missões da cidade e a prova G4 do Ícaro | orc alta e orgulhosa, pele verde-oliva, presinhas, trança longa, tiara de bronze, túnica ocre-rubra sob colete de couro e faixa amarela, arco e aljava | vigia o horizonte |
+| **Kessi, o Caçador** (`kessi`) | caçador do conto hurrita, só caça o que o acampamento come; dá a 2ª missão | orc jovem e magro, pele cinza, capuz de couro, túnica de arenito, capa de couro e cinto, rolo de corda de laço e feixe de couros | encostado, calmo |
+| **Appu, o Mercador Gentil** (`appu`) | do conto hurrita: sonhava com filhos e adota todos os órfãos do acampamento; o Vô Jorge pagava em dobro | orc idoso e gordo, careca de barba cheia grisalha, gorro de feltro ocre, cafetã de arenito com faixa amarela, bolsa, xícara de chá e bolsa de moedas | conversa com todo mundo |
+| **Ashmunikal, a Matriarca dos Tambores** (`ashmunikal`) | rainha hitita (histórica); guarda a Lâmpada Guardiã no alto da torre do tambor, toca as horas | orc idosa e ereta, pele cinza, cabelo longo grisalho sob turbante ocre, túnica longa ocre-rubra com xale de couro, tambor de mão e lamparina | bate o tambor |
+| **Tushratta, o Ferreiro do Tambor** (`tushratta`, Forja de Tambor) | rei de Mitanni (histórico); cobre, bronze e ferro na batida do tambor; a loja da cidade | orc largo, coque no alto e barba curta, braços à mostra, túnica ocre-rubra, avental de couro e cinto, martelo e tenaz | martela |
 | aldeões genéricos | moradores de cada cidade | sorteio estável por lote na paleta da região: Zarafshan (damasco, choupo, romã, índigo; doppa, kalpak, lenço), Qocho (arenito, rosa, ouro, azul; envoltórios), Litema (barro, cal, cobertores; chapéu cônico), Lamparinas (branco, tufo, cobre; capuz, lamparina) | variado |
 
 ## 3. Notas
@@ -125,6 +130,11 @@
   `Sail`, `Laterite`, `Pearl`, `KangaRed`, `Henna`, Docs/Mapas100.md região 5). Kanzus brancos, coletes bordados com fio
   de ouro, kofia e kilemba, kangas e índigo. Nomes da ficha 25 (Capitão Liyongo, Mwana) e palavras suaílis (*nuru* =
   luz, *zawadi* = presente, *mbaraka* = bênção), nunca "Seu/Dona".
+- **Orcs do Tambor Rubro** (2026-11-03): `NpcRecipe.Tusks` desenha duas presinhas de marfim saindo do lábio de baixo
+  (lêem da câmera iso; entram na `SilhouetteKey` como "/orc") e a paleta ganhou a linha 12 (`SkinOrcOlive`,
+  `SkinOrcGrey`, `OchreRed`, `RedSandstone`, `Hide`, `BannerYellow`, `Bronze`, `Ash`, Docs/Mapas100.md §3.3). Nada de
+  pintura de guerra nem troféu: honra é trabalho e hospitalidade. Nomes dos contos hurritas (Gurparanzah, Kessi, Appu)
+  e da história hitita/mitânia (Ashmunikal, Tushratta), nunca "Seu/Dona".
 - **Elenco de lore nas 4 cidades** (TODO.md "História e Arcos dos NPCs"): todos têm figura e porta. Quem não tem casa
   própria na receita fica num **ponto de pé** da praça (`CityTownRecipes.AddStandingSpot`: lote `Market` de 1 × 1 m,
   sem parede nem chão), conferido por `CityGarajonayTests.LoreCast_OfTheFirstFourCities_StandsInTheirTowns_OutsideEverySolid`.

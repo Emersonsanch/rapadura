@@ -355,6 +355,82 @@ namespace Rapadura.Gameplay.NPC.Visuals
             },
 
             // ------------------------------------------------------------------
+            // Tambor Rubro (the orcs of the Red Drum, Docs/Mapas100.md §3.3): tall, olive-green or grey skin, small tusks;
+            // ochre-red tunics, dyed hide vests and capes, the yellow cloth band of the camp, bronze and iron. Names from the
+            // Hurrian tales (Kessi the hunter, Appu, the hero Gurparanzah) and Hittite/Mitanni history (Queen Ashmunikal,
+            // King Tushratta). No war paint, no trophies: honour is work and hospitality.
+            // ------------------------------------------------------------------
+
+            // Gurparanzah, the archer chief (the city's missions; Ícaro's G4 trial): tall and proud, a long braid, a bronze
+            // headband, an ochre-red tunic under a hide vest with the yellow sash, the bow in hand and the quiver on the back.
+            new NpcRecipe
+            {
+                Id = "gurparanzah", Region = BiomeType.Desert, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 1.12f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinOrcOlive, Face = NpcFace.Stern, Hair = NpcHair.Braid, HairColor = NpcSwatch.HairBlack, Tusks = true,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.Bronze, HeadTrim = NpcSwatch.BannerYellow,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.OchreRed, Trim = NpcSwatch.BannerYellow, Sleeves = NpcSwatch.SkinOrcOlive, Trousers = NpcSwatch.Hide, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Vest | NpcLayer.Sash, LayerColor = NpcSwatch.Hide, LayerTrim = NpcSwatch.BannerYellow,
+                LeftArm = NpcArmPose.HoldStaff, RightArm = NpcArmPose.HipRest, Props = new[] { NpcProp.Bow, NpcProp.Quiver },
+                Gesture = NpcGesture.Scan,
+                Story = "Chefe-arqueira do Tambor Rubro, dá as missões da cidade (a prova G4 do Ícaro passa por ela)",
+            },
+
+            // Kessi, the hunter (the second mission): lean and quiet, grey skin, short hair under a hide hood, a hide cape over
+            // a red-sandstone tunic, a coil of snare cord and a bundle of hides. Scans the canyon rim.
+            new NpcRecipe
+            {
+                Id = "kessi", Region = BiomeType.Desert, Age = NpcAge.Youth, Build = NpcBuild.Slim, Height = 1.08f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinOrcGrey, Face = NpcFace.Calm, Hair = NpcHair.Short, HairColor = NpcSwatch.HairDark, Tusks = true,
+                Headwear = NpcHeadwear.Hood, HeadColor = NpcSwatch.Hide, HeadTrim = NpcSwatch.OchreRed,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.RedSandstone, Trim = NpcSwatch.Hide, Sleeves = NpcSwatch.RedSandstone, Trousers = NpcSwatch.Hide, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Cape | NpcLayer.Belt, LayerColor = NpcSwatch.Hide, LayerTrim = NpcSwatch.Bronze,
+                LeftArm = NpcArmPose.Carry, RightArm = NpcArmPose.Crook, Props = new[] { NpcProp.RopeCoil, NpcProp.Bundle },
+                Gesture = NpcGesture.Lean,
+                Story = "Caçador do Tambor Rubro (o dos contos hurritas), só caça o que o acampamento come; dá a 2ª missão",
+            },
+
+            // Appu, the gentle merchant who adopts the camp's orphans: stout and kind, bald with a full grey beard, a felt cap,
+            // a sandstone kaftan with a yellow sash, a cup of tea held out and a purse of coins. Chatters with everyone.
+            new NpcRecipe
+            {
+                Id = "appu", Region = BiomeType.Desert, Age = NpcAge.Elder, Build = NpcBuild.Stout, Height = 1.06f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinOrcOlive, Face = NpcFace.Jolly, Hair = NpcHair.Bald, HairColor = NpcSwatch.HairGrey, Beard = NpcBeard.Full, Tusks = true,
+                Headwear = NpcHeadwear.FeltCap, HeadColor = NpcSwatch.OchreRed, HeadTrim = NpcSwatch.BannerYellow,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.RedSandstone, Trim = NpcSwatch.BannerYellow, Sleeves = NpcSwatch.RedSandstone, Boots = NpcSwatch.Hide,
+                Layers = NpcLayer.Sash | NpcLayer.Satchel, LayerColor = NpcSwatch.BannerYellow, LayerTrim = NpcSwatch.Hide,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.Carry, Props = new[] { NpcProp.Cup, NpcProp.CoinPurse },
+                Gesture = NpcGesture.Chatter,
+                Story = "Mercador gentil do conto hurrita, que sonhava com filhos e adota todos os órfãos do acampamento",
+            },
+
+            // Ashmunikal, matriarch of the drums (the guardian lamp on the drum tower): an old orc woman, upright, long grey
+            // hair under an ochre headwrap, a long robe with a hide shawl, the hand drum and an oil lamp. Beats the hours.
+            new NpcRecipe
+            {
+                Id = "ashmunikal", Region = BiomeType.Desert, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 1.04f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinOrcGrey, Face = NpcFace.Kind, Hair = NpcHair.Long, HairColor = NpcSwatch.HairGrey, Tusks = true,
+                Headwear = NpcHeadwear.Headwrap, HeadColor = NpcSwatch.OchreRed, HeadTrim = NpcSwatch.BannerYellow,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.OchreRed, Trim = NpcSwatch.Bronze, Sleeves = NpcSwatch.OchreRed, Boots = NpcSwatch.Hide,
+                Layers = NpcLayer.Shawl, LayerColor = NpcSwatch.Hide, LayerTrim = NpcSwatch.BannerYellow,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.HandDrum, NpcProp.OilLamp },
+                Gesture = NpcGesture.Drum,
+                Story = "Matriarca dos tambores, guarda a Lâmpada Guardiã do Tambor Rubro no alto da torre do tambor",
+            },
+
+            // Tushratta, the drum smith (the city's shop, the Forja de Tambor): broad, a topknot and a short beard, bare olive
+            // arms, a hide apron over the ochre tunic, the hammer and the tongs. Beats the iron to the drum.
+            new NpcRecipe
+            {
+                Id = "tushratta", Region = BiomeType.Desert, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 1.1f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinOrcOlive, Face = NpcFace.Bright, Hair = NpcHair.Topknot, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.Short, Tusks = true,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.OchreRed, Trim = NpcSwatch.Iron, Sleeves = NpcSwatch.SkinOrcOlive, Trousers = NpcSwatch.Ash, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Apron | NpcLayer.Belt, LayerColor = NpcSwatch.Hide, LayerTrim = NpcSwatch.Bronze,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Hammer, NpcProp.Tongs },
+                Gesture = NpcGesture.Hammer,
+                Story = "Ferreiro de cobre e bronze da Forja de Tambor, a loja da cidade (e a teriaga do Trono de Namrael)",
+            },
+
+            // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
 

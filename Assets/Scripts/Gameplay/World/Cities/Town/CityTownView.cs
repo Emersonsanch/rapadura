@@ -298,6 +298,22 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 candidates.Add(new Vector3(lamp.DoorApproach.x, 2.6f, lamp.DoorApproach.y));
             }
 
+            // The Tambor Rubro's fire pits near the plaza, nearest first.
+            var fires = new List<Vector2>();
+            foreach (CityProp prop in Layout.Props)
+            {
+                if (prop.Kind == CityPropKind.Bonfire && Vector2.Distance(prop.Position, Layout.PlazaCenter) < Layout.PlazaRadius + 14f)
+                {
+                    fires.Add(prop.Position);
+                }
+            }
+
+            fires.Sort((a, c) => Vector2.Distance(a, Layout.PlazaCenter).CompareTo(Vector2.Distance(c, Layout.PlazaCenter)));
+            foreach (Vector2 fire in fires)
+            {
+                candidates.Add(new Vector3(fire.x, 1.2f, fire.y));
+            }
+
             CityLot dock = Layout.Lots.Find(l => l.Kind == CityLotKind.ShipDock);
             if (dock != null)
             {

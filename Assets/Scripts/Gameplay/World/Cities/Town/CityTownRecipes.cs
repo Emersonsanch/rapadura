@@ -7,7 +7,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
     /// <summary>
     /// The town recipes (content as code, like <c>CityCatalog</c>): every city is laid out by hand (Docs/Cities.md §5.3):
     /// <see cref="VilaEdna"/>, <see cref="Qocho"/>, <see cref="Litema"/>, <see cref="Lamparinas"/> and the race city
-    /// <see cref="Garajonay"/> (<see cref="CityCatalog.RaceCities"/>) and Taa Pwani (<see cref="TaaPwani"/>, the first of the
+    /// <see cref="Garajonay"/> and <see cref="TamborRubro"/> (<see cref="CityCatalog.RaceCities"/>; the orcs' war camp in its own style) and Taa Pwani (<see cref="TaaPwani"/>, the first of the
     /// <see cref="CityCatalog.LateRegionCities"/>, in its own coral-stone style). A city added to the
     /// catalog without a recipe gets <see cref="Default"/> (the Vila's plan filled with its residents, shops and regional
     /// style) until it has one. Layouts are cached per city and "mascate today" flag (the generator is deterministic,
@@ -69,6 +69,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityCatalog.Lamparinas: return Lamparinas();
                 case CityCatalog.CopasGarajonay: return Garajonay();
                 case CityCatalog.TaaPwani: return TaaPwani();
+                case CityCatalog.TamborRubro: return TamborRubro();
                 default: return null;
             }
         }

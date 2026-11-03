@@ -109,7 +109,11 @@ namespace Rapadura.Gameplay.World.Cities.Town
             TownKit.Plinth(b, -hw, hw, zFacade, zBack, spec.PlinthColor);
             TownSwatch wall = spec.WoodenWalls ? TownSwatch.WoodLight : spec.WallColor;
             b.BoxMinMax(new Vector3(-hw, FloorY, zFacade), new Vector3(hw, top, zBack), wall);
-            if (spec.WoodenWalls)
+            if (spec.LogHall)
+            {
+                TownKit.LogHallWalls(b, spec, -hw, hw, zFacade, zBack, top);
+            }
+            else if (spec.WoodenWalls)
             {
                 TownKit.TimberFrame(b, -hw, hw, zFacade, zBack, FloorY, top, spec.JoineryColor == TownSwatch.Walnut ? TownSwatch.WoodDark : spec.JoineryColor);
             }
@@ -138,6 +142,16 @@ namespace Rapadura.Gameplay.World.Cities.Town
             // Roof.
             switch (spec.Roof)
             {
+                case TownRoofKind.Gable when spec.LogHall:
+                    TownKit.LogHallRoof(b, spec, -hw, hw, zFront, zBack, top, wall);
+                    if (spec.PorchDepth > 0.01f)
+                    {
+                        TownKit.AivanDeck(b, -hw, hw, zFront, zFacade, spec);
+                        TownKit.LogHallPosts(b, spec, zFront + PostInset, FloorY, top - 0.1f);
+                    }
+
+                    break;
+
                 case TownRoofKind.Gable:
                     TownKit.GableRoof(b, -hw, hw, zFront, zBack, top, spec.Width > 7f ? 1.4f : 1.2f, spec.RoofColor == TownSwatch.Thatch ? TownSwatch.Thatch : TownSwatch.ClayTile, TownSwatch.Beam, wall);
                     if (spec.PorchDepth > 0.01f)
@@ -238,7 +252,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 }
                 else
                 {
-                    TownKit.Door(b, doorX, FloorY, doorWidth, DoorHeight, spec.JoineryColor, spec.TrimColor, spec.AccentColor, arched: !spec.CoralStone);
+                    TownKit.Door(b, doorX, FloorY, doorWidth, DoorHeight, spec.JoineryColor, spec.TrimColor, spec.AccentColor, arched: !spec.CoralStone && !spec.LogHall);
                 }
 
                 if (spec.Kind != CityLotKind.Stable)
@@ -258,7 +272,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                     }
                 }
 
-                if (spec.PorchDepth > 0.6f && !spec.CoralStone && (spec.Kind == CityLotKind.Grandma || spec.Kind == CityLotKind.House))
+                if (spec.PorchDepth > 0.6f && !spec.CoralStone && !spec.LogHall && (spec.Kind == CityLotKind.Grandma || spec.Kind == CityLotKind.House))
                 {
                     // A suzani hanging on the aivan wall, on the side away from the door.
                     float sx = doorX >= 0f ? -hw * 0.55f : hw * 0.55f;

@@ -104,6 +104,26 @@ namespace Rapadura.Gameplay.World.Cities.Town
         CoralTower = 32,
         /// <summary>Taa Pwani: a mangrove on its stilt roots over a patch of dark mud and brackish water.</summary>
         Mangrove = 33,
+
+        // ---- Tambor Rubro, the orcs' war camp (drawn by TownKit.WarCamp) ----
+
+        /// <summary>
+        /// Tambor Rubro: a palisade of sharpened logs from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/>
+        /// (points up and leaning out, never trophies), braced on the inside, a walk-board and a band of yellow cloth.
+        /// </summary>
+        Palisade = 34,
+        /// <summary>Tambor Rubro: a square log drum tower with a platform, the great drum under a hide roof and the city's guardian lamp on top.</summary>
+        DrumTower = 35,
+        /// <summary>Tambor Rubro: a clan tent of ochre-dyed hide on a pole frame, flap open to the front (local −z), a clan banner.</summary>
+        ClanTent = 36,
+        /// <summary>Tambor Rubro: a clan post (carved log with cloth bands, a small drum and a banner): the clan's sign, not a shrine.</summary>
+        ClanPost = 37,
+        /// <summary>Tambor Rubro: a fire pit (stone ring, crossed logs, flames that glow at night).</summary>
+        Bonfire = 38,
+        /// <summary>Tambor Rubro: a great war drum on an X stand, with its two beaters.</summary>
+        WarDrum = 39,
+        /// <summary>Tambor Rubro: the training arena of sand (a raked disc with a low log border); walkable.</summary>
+        TrainingRing = 40,
     }
 
     public enum CityExitKind

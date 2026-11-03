@@ -201,6 +201,13 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string BazarMwana = "shop_bazar_mwana";
 
+        /// <summary>
+        /// Forja de Tambor (Tambor Rubro, the orcs' race city, Docs/Mapas100.md §3.3): Tushratta's copper-and-bronze forge:
+        /// iron, tools and blades, the Pedras da Luz Presa, and the Teriaga do Oásis for the gate of map 12 (the Trono de
+        /// Namrael, whose return city is the Tambor Rubro). The counter turns weekly.
+        /// </summary>
+        public const string ForjaTambor = "shop_forja_tambor";
+
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
@@ -339,6 +346,26 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_fiber", 1, 20, rotating: true),
                 new CityShopEntry("item_wood", 2, 20, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 24, 1, rotating: true),
+            })),
+
+            // ---- Tambor Rubro: Tushratta's Forja de Tambor (copper and bronze smiths), the theriac of map 12; the counter turns weekly ----
+            new CityShopSpec(ForjaTambor, ShopTheme.Ferreiro, BiomeType.Desert, ShopRotationPeriod.Weekly, 3, WithHouse(ForjaTambor, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_iron", 8, 20),
+                new CityShopEntry("item_iron_ore", 5, 20),
+                new CityShopEntry("item_health_potion", 15, 5),
+                // Pedras da Luz Presa (refino): the drums wake the forge's Fogo Vivo, the stones come a little cheaper.
+                new CityShopEntry("item_pedra_bencao", 11, 5),
+                // Map gate (MapRequirementRules): the Teriaga do Oásis for the Trono de Namrael (12), whose return city this is.
+                new CityShopEntry("item_teriaga", 50, 3),
+                // The rotation: tools, blades, red leather, Kessi's bows, meat and feed for the war wolves.
+                new CityShopEntry("item_hammer", 15, 1, rotating: true),
+                new CityShopEntry("item_axe", 18, 1, rotating: true),
+                new CityShopEntry("item_leather_chest", 20, 1, rotating: true),
+                new CityShopEntry("item_hunting_bow", 35, 1, rotating: true),
+                new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
+                new CityShopEntry("item_mount_feed", 3, 10, rotating: true),
+                new CityShopEntry("item_iron_sword", 45, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Desert)),
             })),
 
             // ---- Ferraria do Mestre Adamas (Vila): the village blacksmith ----

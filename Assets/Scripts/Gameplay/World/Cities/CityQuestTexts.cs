@@ -76,6 +76,38 @@ namespace Rapadura.Gameplay.World.Cities
             new LocalizationEntry("quest.city_taa_pwani_mangrove_claws.active",
                 "Pole pole: a crab backs off sideways. Wait for it to open its claws, then strike.",
                 "Pole pole: caranguejo recua de lado. Espera ele abrir a garra, aí bate."),
+
+            // ================= Tambor Rubro — Gurparanzah, a chefe-arqueira =================
+            new LocalizationEntry("quest.city_tambor_rubro_red_scorpions.title", "Red Tails on the Mesa", "Caudas Vermelhas na Mesa"),
+            new LocalizationEntry("quest.city_tambor_rubro_red_scorpions.description",
+                "Scorpions gone dim by the shadow nest in the cracks of the badlands and sting the clans' wolves on the way to the forge. Gurparanzah, the archer chief of the Tambor Rubro, wants the road to the canyons clear before the next drum.",
+                "Escorpiões apagados pela sombra fazem ninho nas fendas dos ermos e picam os lobos dos clãs no caminho da forja. A Gurparanzah, chefe-arqueira do Tambor Rubro, quer a estrada dos cânions limpa antes do próximo tambor."),
+            new LocalizationEntry("quest.city_tambor_rubro_red_scorpions.obj_clear_red_scorpions", "Clear the red scorpions from the canyon road", "Limpar os escorpiões rubros da estrada dos cânions"),
+            new LocalizationEntry("quest.city_tambor_rubro_red_scorpions.journal",
+                "Gurparanzah says an orc's word weighs more than an orc's axe. Grandpa Jorge once gave her his word he'd bring a sack of Grandma Edna's apricots, and he did, through a sandstorm.",
+                "A Gurparanzah diz que palavra de orc pesa mais que machado de orc. O Vô Jorge uma vez deu a palavra de trazer um saco de damascos da Vó Edna, e trouxe, no meio de uma tempestade de areia."),
+            new LocalizationEntry("quest.city_tambor_rubro_red_scorpions.offer",
+                "The grandchildren of Jorge and Edna, inside my palisade! Then you keep your word like he did. Six red scorpions are nesting on the canyon road. Clear them and the forge drum will play your names tonight.",
+                "Os netos do Jorge e da Edna, dentro da minha paliçada! Então vocês cumprem a palavra como ele cumpria. Seis escorpiões rubros fizeram ninho na estrada dos cânions. Limpem e o tambor da forja toca o nome de vocês hoje à noite."),
+            new LocalizationEntry("quest.city_tambor_rubro_red_scorpions.active",
+                "Still tails on the road. They hide in the shade of the chimneys of stone at noon: look there first.",
+                "Ainda tem cauda na estrada. Ao meio-dia eles se escondem na sombra das chaminés de pedra: olhem lá primeiro."),
+
+            // ================= Tambor Rubro — Kessi, o caçador =================
+            new LocalizationEntry("quest.city_tambor_rubro_ember_hawks.title", "Hawks of Ember", "Gaviões de Brasa"),
+            new LocalizationEntry("quest.city_tambor_rubro_ember_hawks.description",
+                "Hawks gone dim dive on the camp's hide racks and carry off the meat the drums were going to share. Kessi, the hunter of the Tambor Rubro, never hunts more than the camp eats: five of them, and not one more.",
+                "Gaviões apagados mergulham nos varais de couro do acampamento e levam a carne que os tambores iam repartir. O Kessi, caçador do Tambor Rubro, nunca caça mais do que o acampamento come: cinco deles, nem um a mais."),
+            new LocalizationEntry("quest.city_tambor_rubro_ember_hawks.obj_hunt_ember_hawks", "Hunt the ember hawks", "Caçar os gaviões de brasa"),
+            new LocalizationEntry("quest.city_tambor_rubro_ember_hawks.journal",
+                "Kessi hunts with the drum's rhythm: three beats to aim, one to loose. Maithe says she'll try it. Lavine says the hawks were only hungry, and Kessi agrees with her.",
+                "O Kessi caça no ritmo do tambor: três batidas para mirar, uma para soltar. A Maithe diz que vai tentar. A Lavine diz que os gaviões só estavam com fome, e o Kessi concorda com ela."),
+            new LocalizationEntry("quest.city_tambor_rubro_ember_hawks.offer",
+                "Gurparanzah says you keep your word. Good: so do I. Five ember hawks are robbing the racks. Bring them down and take this theriac: the Throne of Namrael is all poison, you'll need it.",
+                "A Gurparanzah diz que vocês cumprem a palavra. Bom: eu também. Cinco gaviões de brasa estão roubando os varais. Derrubem eles e levem esta teriaga: o Trono de Namrael é só veneno, vocês vão precisar."),
+            new LocalizationEntry("quest.city_tambor_rubro_ember_hawks.active",
+                "Watch the sky over the canyons. A hawk that is circling is still deciding; strike when it dives.",
+                "Olhem o céu em cima dos cânions. Gavião que está rodando ainda está decidindo; acertem quando ele mergulhar."),
         };
 
         public static void EnsureLoaded(LocalizationManager localization)

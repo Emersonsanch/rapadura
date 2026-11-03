@@ -323,6 +323,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
             // Taa Pwani's houses are coral stone: the carved teak door with brass studs, the baraza and the merlons.
             spec.CoralStone |= style.Architecture == TownArchitecture.CoralStone && !spec.WoodenWalls;
 
+            // The Tambor Rubro's houses are log halls of hide and timber.
+            spec.LogHall |= style.Architecture == TownArchitecture.WarCamp;
+
             switch (r.Kind)
             {
                 case CityLotKind.Shop:

@@ -31,6 +31,9 @@ namespace Rapadura.Editor
         [MenuItem(Root + "Preview Walkable Town/Taa Pwani (Costa das Monções)", priority = 14)]
         private static void PreviewTaaPwani() => Preview(CityCatalog.TaaPwani);
 
+        [MenuItem(Root + "Preview Walkable Town/Tambor Rubro (orcs, Areias Flamejantes)", priority = 15)]
+        private static void PreviewTamborRubro() => Preview(CityCatalog.TamborRubro);
+
         [MenuItem(Root + "Preview Walkable Town/Toggle Night", priority = 30)]
         private static void ToggleNight()
         {

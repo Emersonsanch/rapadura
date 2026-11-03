@@ -721,6 +721,7 @@ Enxame de Faíscas Presas (noite). Chefe do mundo: **Namrael** (mapa 12).
 - **Noite:** areia fria e azulada; o Enxame de Faíscas Presas dobra; o lago reflete a Barca da Lua.
 
 ### 11 · Ermos do Tambor Rubro / *Red Drum Badlands* — nv 24–32 · ★ · cidade de raça (orcs)
+- **No jogo (2026-11-03): cidade de verdade** (`CityTownRecipes.TamborRubro.cs`, estilo `WarCamp`): paliçada de troncos com ponta, Salão Grande de couro com telhado altíssimo e varas cruzadas, torre do tambor com a Lâmpada Guardiã, tendas de clã, postes de clã, fogueiras e arena de areia, tudo em y = 0 dentro de ±33 m; Gurparanzah, Ashmunikal, Kessi, Appu e Tushratta com visual de orc (presinhas, pele oliva/cinza) e falas para cada primo; Forja de Tambor (com a Teriaga do 12); missões "Caudas Vermelhas na Mesa" e "Gaviões de Brasa"; respawn na praça para 11–12. Falta: o mundo contínuo usar esta receita (hoje monta a própria, estilo `Oasis`), Ritmo do Tambor, conserto mais barato e Têmpera do Tambor.
 - **Fonte:** as Montanhas Flamejantes de arenito vermelho (Huoyan Shan); os nomes dos orcs vêm dos contos hurritas
   (§3.3).
 - **Bioma e visual:** *badlands* de arenito em camadas; paleta do Tambor Rubro (§3.3); canyons, chaminés de pedra,

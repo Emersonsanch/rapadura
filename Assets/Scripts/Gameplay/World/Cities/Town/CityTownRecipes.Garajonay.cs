@@ -96,7 +96,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
             }
 
             // ---- Plaza: the mist collector's basin, benches, lamps, ferns and heather ----
-            r.PlazaProps.Add(At(CityPropKind.Well, 4.2f, -3.8f, 0f, 0.9f));
+            // The basin at the head of the plaza, before Gara's hall: the south-east stays clear for Ammo's stall (the validator
+            // runs every city with the caravaneer too, and at (4.2, -3.8) the basin stood on his customers' spot).
+            r.PlazaProps.Add(At(CityPropKind.Well, 0f, 5.2f, 0f, 0.9f));
             AddPlazaBench(r, 135f, 6.4f);
             AddPlazaBench(r, 45f, 6.4f);
             AddPlazaBench(r, 235f, 6.4f); // clear of the South road (at 250° it stood on it)

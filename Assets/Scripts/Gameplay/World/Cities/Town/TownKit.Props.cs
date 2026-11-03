@@ -295,6 +295,12 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>The town gate: two adobe pylons with a carved beam over the road and lanterns.</summary>
         public static void Gate(TownMeshBuilder b, Vector3 a, Vector3 c, TownStyle style)
         {
+            if (style.Architecture == TownArchitecture.WarCamp)
+            {
+                WarCampGate(b, a, c);
+                return;
+            }
+
             foreach (Vector3 p in new[] { a, c })
             {
                 b.Box(p + Vector3.up * 1.6f, new Vector3(0.7f, 3.2f, 0.7f), style.Walls[0], 0f, TownSwatch.LimeWhite);

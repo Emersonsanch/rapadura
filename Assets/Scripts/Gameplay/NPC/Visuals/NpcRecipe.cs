@@ -217,6 +217,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
         /// <summary>Long pointed ears swept back (the elfos-da-mata of Garajonay, Docs/MetodologiaMapasERacas.md §2.1).</summary>
         public bool ElfEars;
 
+        /// <summary>Small lower tusks at the corners of the mouth (the orcs of the Tambor Rubro, Docs/Mapas100.md §3.3).</summary>
+        public bool Tusks;
+
         /// <summary>One line of why they look like this (Docs/NPCs.md, the preview labels).</summary>
         public string Story = string.Empty;
 
@@ -226,6 +229,6 @@ namespace Rapadura.Gameplay.NPC.Visuals
 
         /// <summary>A short signature of the silhouette (tests: two named NPCs never share one).</summary>
         public string SilhouetteKey =>
-            $"{Age}/{Build}/{Posture}/{Hair}/{Beard}/{Headwear}/{Garment}/{(int)Layers}/{LeftArm}/{RightArm}/{string.Join(",", Props)}" + (ElfEars ? "/elf" : string.Empty);
+            $"{Age}/{Build}/{Posture}/{Hair}/{Beard}/{Headwear}/{Garment}/{(int)Layers}/{LeftArm}/{RightArm}/{string.Join(",", Props)}" + (ElfEars ? "/elf" : string.Empty) + (Tusks ? "/orc" : string.Empty);
     }
 }

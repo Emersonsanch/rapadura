@@ -53,6 +53,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
         Pearls = 20,
         /// <summary>Zawadi (Taa Pwani): bundles of mangrove root, a rack of woven root boots, a soaking tub.</summary>
         RootWeaver = 21,
+        /// <summary>Kessi (Tambor Rubro): a drying frame of red hides, a bow and a quiver on pegs, a coil of snare cord.</summary>
+        HuntingRack = 22,
     }
 
     /// <summary>
@@ -111,6 +113,13 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// </summary>
         public bool CoralStone;
 
+        /// <summary>
+        /// Tambor Rubro: a log hall of the orcs' war camp: thick corner posts and log sill and plate, walls of ochre-dyed hide
+        /// laced to battens, a square timber door and, with <see cref="TownRoofKind.Gable"/>, a very steep hide roof whose
+        /// ridge poles cross above both gable ends (TownKit.WarCamp).
+        /// </summary>
+        public bool LogHall;
+
         /// <summary>Qocho caravanserai: the porch columns become brick piers carrying stepped pointed arches.</summary>
         public bool Arcade;
 
@@ -146,7 +155,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Key of the cached mesh: equal specs share one mesh.</summary>
         public string CacheKey =>
             $"{Kind}|{Width:0.00}|{Depth:0.00}|{PorchDepth:0.00}|{FullVaranda}|{WallHeight:0.00}|{Floors}|{Roof}|{WallColor}|{TrimColor}|{RoofColor}|" +
-            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
+            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
             $"{Chimney}|{Sign}|{SignColor}|{Dressing}|{Seed}";
     }
 }

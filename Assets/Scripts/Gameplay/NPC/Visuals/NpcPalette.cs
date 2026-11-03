@@ -34,6 +34,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // Taa Pwani (Swahili sailors and merchants, Docs/Mapas100.md região 5): coral lime #EFE7DA (kanzu white), teak #6B4A2E,
         // sea #2E9BB0, sail cloth #F2E6C9, laterite #B4583A, mother-of-pearl, kanga red, henna
         Coral, Teak, SeaBlue, Sail, Laterite, Pearl, KangaRed, Henna,
+        // Tambor Rubro (orcs, Docs/Mapas100.md §3.3): olive-green and grey orc skin, ochre-red #A8452B, red sandstone
+        // #C9774B, dyed hide #7A4A2A, the yellow cloth band #E8C547, war-camp bronze, ash
+        SkinOrcOlive, SkinOrcGrey, OchreRed, RedSandstone, Hide, BannerYellow, Bronze, Ash,
     }
 
     /// <summary>
@@ -45,7 +48,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 11;
+        public const int Rows = 12;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -83,6 +86,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Taa Pwani  coral #EFE7DA, teak #6B4A2E, sea #2E9BB0, sail #F2E6C9, laterite #B4583A, pearl #E6E1EC, kanga #C0392B, henna #8E3B1F
             new Color(0.94f, 0.91f, 0.85f), new Color(0.42f, 0.29f, 0.18f), new Color(0.18f, 0.61f, 0.69f), new Color(0.95f, 0.9f, 0.79f),
             new Color(0.71f, 0.35f, 0.23f), new Color(0.9f, 0.88f, 0.93f), new Color(0.75f, 0.22f, 0.17f), new Color(0.56f, 0.23f, 0.12f),
+            // Tambor Rubro  orc olive #6F7D4A, orc grey #7E827A, ochre-red #A8452B, sandstone #C9774B, hide #7A4A2A, band #E8C547, bronze #9C6B30, ash #5E5A55
+            new Color(0.44f, 0.49f, 0.29f), new Color(0.49f, 0.51f, 0.48f), new Color(0.66f, 0.27f, 0.17f), new Color(0.79f, 0.47f, 0.29f),
+            new Color(0.48f, 0.29f, 0.16f), new Color(0.91f, 0.77f, 0.28f), new Color(0.61f, 0.42f, 0.19f), new Color(0.37f, 0.35f, 0.33f),
         };
 
         public static int Count => Colors.Length;

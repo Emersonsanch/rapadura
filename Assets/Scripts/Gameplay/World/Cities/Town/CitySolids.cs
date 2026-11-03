@@ -179,9 +179,21 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.Dhow: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, new Vector2(TownKit.DhowBeam, TownKit.DhowLength) * s, prop.Yaw), 1.6f, owner);
                 case CityPropKind.CoralTower: return CitySolid.Capsule(prop.Position, TownKit.CoralTowerSolidRadius * s, WallColliderHeight, owner);
                 case CityPropKind.Mangrove: return CitySolid.Capsule(prop.Position, 0.9f * s, 2.5f, owner);
+                case CityPropKind.DrumTower: return CitySolid.Box(CityGeometry.RectFromCenter(prop.Position, new Vector2(TownKit.DrumTowerSize, TownKit.DrumTowerSize) * s), WallColliderHeight, owner);
+                case CityPropKind.ClanTent: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, new Vector2(TownKit.ClanTentSize, TownKit.ClanTentSize) * s, prop.Yaw), 2f, owner);
+                case CityPropKind.ClanPost: return CitySolid.Capsule(prop.Position, 0.3f * s, WallColliderHeight, owner);
+                case CityPropKind.Bonfire: return CitySolid.Capsule(prop.Position, 0.75f * s, 1f, owner);
+                case CityPropKind.WarDrum: return CitySolid.Capsule(prop.Position, 0.85f * s, 1.6f, owner);
+                case CityPropKind.Palisade:
+                {
+                    Rect run = CityGeometry.RectFromMinMax(prop.Position, prop.End);
+                    return CitySolid.Box(CityGeometry.Inflate(run, TownKit.PalisadeHalfThickness), WallColliderHeight, owner);
+                }
+
                 case CityPropKind.KarezChannel:
                 case CityPropKind.RopeBridge:
                 case CityPropKind.LampString:
+                case CityPropKind.TrainingRing:
                     // Walkable (a channel to step over) or overhead.
                     return null;
                 case CityPropKind.FenceRun:
