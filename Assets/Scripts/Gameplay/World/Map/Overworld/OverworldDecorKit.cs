@@ -199,6 +199,42 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         IceShards = 171,
         /// <summary>An old twisted juniper (archa): a thick crooked trunk, dark scale-leaf clumps.</summary>
         Juniper = 172,
+
+        // Região 8 — Planície de Mingcheng (OverworldDecorKit.Mingcheng.cs): 180–199.
+        /// <summary>A weeping willow: a leaning trunk, long curtains of hanging green.</summary>
+        Willow = 180,
+        /// <summary>A post with a red paper lantern (the Festa das Lanternas).</summary>
+        RedLantern = 181,
+        /// <summary>A small pavilion: red lacquered columns under a curved grey-tile roof with upturned eaves.</summary>
+        Pavilion = 182,
+        /// <summary>A stone guardian lion on its plinth (the gates' statues).</summary>
+        StoneLion = 183,
+        /// <summary>A stone turtle carrying a stele on its back.</summary>
+        StoneTurtle = 184,
+        /// <summary>A pit of terracotta soldiers in rows, its earthen rim.</summary>
+        TerracottaPit = 185,
+        /// <summary>A run of the great wall (grey brick, crenellated, a walkway on top; <see cref="OverworldProp.End"/> = its other end).</summary>
+        GreatWallRun = 186,
+        /// <summary>A beacon tower of the wall: square grey brick, crenellations, the beacon basin on top.</summary>
+        BeaconTower = 187,
+        /// <summary>A clump of bamboo culms with their leaf sprays.</summary>
+        Bamboo = 188,
+        /// <summary>A karst tower of grey limestone with pines on its ledges.</summary>
+        KarstPillar = 189,
+        /// <summary>An old mountain pine: a bent trunk, flat layered crowns.</summary>
+        MountainPine = 190,
+        /// <summary>A bronze mirror on a white post (the Torres Brancas pass the light down with them).</summary>
+        MirrorPost = 191,
+        /// <summary>A small white spire on a stepped base, a gold cap.</summary>
+        WhiteSpire = 192,
+        /// <summary>A wooden water wheel in its race (the Moinho d'Água of the paddies).</summary>
+        WaterWheel = 193,
+        /// <summary>A straw scarecrow in a conical hat.</summary>
+        Scarecrow = 194,
+        /// <summary>Golden millet heads (ground detail, no collider).</summary>
+        MilletTuft = 195,
+        /// <summary>A drift of fallen bamboo leaves and young shoots (ground detail, no collider).</summary>
+        BambooShoots = 196,
     }
 
     /// <summary>

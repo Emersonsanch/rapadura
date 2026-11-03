@@ -270,8 +270,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static OverworldTerrainStyle[] Build()
         {
-            // Room for the regions' own terrains (Região 4: 40–59, OverworldTerrains.Caves.cs; … Região 7: 120–139, OverworldTerrains.Pamir.cs).
-            var styles = new OverworldTerrainStyle[140];
+            // Room for the regions' own terrains (Região 4: 40–59, OverworldTerrains.Caves.cs; … Região 7: 120–139, OverworldTerrains.Pamir.cs;
+            // Região 8: 140–159, OverworldTerrains.Mingcheng.cs).
+            var styles = new OverworldTerrainStyle[160];
             styles[(int)OverworldTerrain.Orchard] = new OverworldTerrainStyle
             {
                 Terrain = OverworldTerrain.Orchard, Mottle = TownSwatch.Vine, Relief = 2.6f, ReliefScale = 200f, ReliefDetail = 0.2f, Hollow = TownSwatch.GrassDark,
@@ -421,6 +422,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             CoastStyles(styles);
             DeltaStyles(styles);
             PamirStyles(styles);
+            MingchengStyles(styles);
             return styles;
         }
     }

@@ -32,6 +32,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { MapRegion.CostaDasMoncoes, CostaId },
             { MapRegion.DeltaDeJhilpur, DeltaId },
             { MapRegion.TetoDoMundo, TetoId },
+            { MapRegion.PlanicieDeMingcheng, MingchengId },
         };
 
         /// <summary>Every continuous region of this build (texts, tests).</summary>
@@ -63,6 +64,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 case CostaId: return Costa();
                 case DeltaId: return DeltaRegion();
                 case TetoId: return TetoRegion();
+                case MingchengId: return MingchengRegion();
                 case WorldId: return BuildWorld();
                 default: return null;
             }

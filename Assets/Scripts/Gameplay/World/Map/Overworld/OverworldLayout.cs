@@ -236,6 +236,38 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         DragonCrags = 137,
         /// <summary>The ice peaks at the roof of the world: snow, ice and rock, almost nothing grows.</summary>
         IcePeaks = 138,
+
+        // Região 8 — Planície de Mingcheng (OverworldLayouts.Mingcheng.cs, OverworldTerrains.Mingcheng.cs): 140–159.
+        /// <summary>The outer rings of Mingcheng (41): villages of grey brick, willows, lantern posts, little canals and plots.</summary>
+        NineRings = 140,
+        /// <summary>Golden millet on the yellow earth of the outer rings: low field banks, haystacks, a shrine here and there.</summary>
+        MilletFields = 141,
+        /// <summary>The upper Rio Dourado on the plain: weeping willows on grassy banks, sandbars, reeds.</summary>
+        WillowRiver = 142,
+        /// <summary>The Canal das Lanternas (43): stone banks, willows, red lantern posts, stele-bearing stone turtles.</summary>
+        LanternCanal = 143,
+        /// <summary>The Arrozais Espelhados (44): flooded rice terraces stepping up the slope, mirror water, a water mill, scarecrows.</summary>
+        MirrorPaddies = 144,
+        /// <summary>Tea hills: rounded slopes combed by rows of tea bushes, pavilions on the tops.</summary>
+        TeaTerraces = 145,
+        /// <summary>A bamboo grove: tall green culms in clumps, deep shade, fallen leaves.</summary>
+        BambooGrove = 146,
+        /// <summary>The white hills east of Mingcheng (42): lime-white slopes in garden terraces, cypresses, bronze mirrors.</summary>
+        WhiteHills = 147,
+        /// <summary>The garden terraces of the Torres Brancas (42): green lawns, white spires and small Meroë pyramids, mirror posts.</summary>
+        SpireGardens = 148,
+        /// <summary>Karst: limestone towers rising sheer from a flat green floor, pines clinging to them.</summary>
+        KarstPeaks = 149,
+        /// <summary>Misty ridges of old flat-crowned mountain pines over grey granite.</summary>
+        PineRidge = 150,
+        /// <summary>The Muralha das Mil Torres (45): the wall riding the crest, its beacon towers, pines and mist below.</summary>
+        GreatWall = 151,
+        /// <summary>The terracotta pits (41, 45): flat loess with long pits of clay soldiers, burial mounds.</summary>
+        TerracottaPits = 152,
+        /// <summary>The spirit way into Mingcheng (41): an avenue of stone lions and stele turtles between pines and lawns.</summary>
+        SpiritWay = 153,
+        /// <summary>Loess gullies: yellow earth cut by deep ravines, earth pillars, terraced field strips.</summary>
+        LoessGullies = 154,
     }
 
     /// <summary>

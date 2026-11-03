@@ -177,6 +177,25 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { OverworldTerrain.WakhanPass, new AreaClimate(Snow, true) },
             { OverworldTerrain.DragonCrags, new AreaClimate(Mist, true) },
             { OverworldTerrain.IcePeaks, new AreaClimate(Snow, true) },
+
+            // Região 8 — Planície de Mingcheng: mist on the canal, the tea hills, the bamboo, the karst, the pine crests and under
+            // the wall; dust over the loess and the terracotta pits; clear sky on the millet, the white hills and the Torres' gardens;
+            // the rings, the spirit way, the willow river and the paddies let the biome roll it.
+            { OverworldTerrain.NineRings, new AreaClimate(null, false) },
+            { OverworldTerrain.MilletFields, new AreaClimate(Clear, false) },
+            { OverworldTerrain.WillowRiver, new AreaClimate(null, false) },
+            { OverworldTerrain.LanternCanal, new AreaClimate(Mist, false) },
+            { OverworldTerrain.MirrorPaddies, new AreaClimate(null, false) },
+            { OverworldTerrain.TeaTerraces, new AreaClimate(Mist, false) },
+            { OverworldTerrain.BambooGrove, new AreaClimate(Mist, true) },
+            { OverworldTerrain.WhiteHills, new AreaClimate(Clear, false) },
+            { OverworldTerrain.SpireGardens, new AreaClimate(Clear, false) },
+            { OverworldTerrain.KarstPeaks, new AreaClimate(Mist, true) },
+            { OverworldTerrain.PineRidge, new AreaClimate(Mist, true) },
+            { OverworldTerrain.GreatWall, new AreaClimate(Mist, true) },
+            { OverworldTerrain.TerracottaPits, new AreaClimate(Dust, true) },
+            { OverworldTerrain.SpiritWay, new AreaClimate(null, false) },
+            { OverworldTerrain.LoessGullies, new AreaClimate(Dust, true) },
         };
 
         /// <summary>True when <paramref name="terrain"/> has its own line (tests: every terrain must).</summary>

@@ -131,6 +131,10 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       x −1200…1200, z −600…1800) com Sangkent em (0, 0) no vale de terraços; 36–40 viram zonas (construídos), 25 áreas numa
       grade 5 × 5, 19 terrenos novos, relevo próprio (`Moraines`, `IceTongue`, `SeracField`, `Peaks`) e cenário próprio;
       costurada ao norte da Serra de Kaggen (o alto da Serra continua no Teto). Detalhes em §5, "Região 7".
+    - **Região 8 — Planície de Mingcheng** (2026-11-03): mesmo modelo, 2400 × 2400 m (`OverworldLayouts.Mingcheng.cs`, coordenadas
+      x −1200…1200, z −600…1800) com Mingcheng em (0, 0) na planície do rio e as Torres Brancas em (960, 600); 41 e 42 viram zonas
+      (construídos), 25 áreas numa grade 5 × 5, 15 terrenos novos, relevo próprio (`KarstTowers`, `WallRidge`) e cenário próprio;
+      preenche o buraco murado ao norte do Zarafshan, entre o Teto e a Costa. Detalhes em §5, "Região 8".
     - **Mundo costurado** (2026-11-03, pedido do usuário: andar entre as regiões sem portão): as quatro primeiras regiões
       formam um quadrado de 4800 × 4800 m (`OverworldLayouts.WorldId`, `OverworldLayouts.World.cs`), 2 × 2, e a **Costa das
       Monções** fica a leste do Zarafshan (x 1400…3800, z −1000…1400, deslocamento (2000, 200)) e o **Delta de Jhilpur** a
@@ -147,7 +151,12 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       cantos ao norte do Zarafshan e da Costa, que nenhuma região cobre, são **buracos murados** (relevo de fundo, muros
       invisíveis). Passagens do Teto: os dois portões da borda sul (`exit_pedra_seca`, x −2350, e `exit_abrigos`, x −1080) são
       levados à trilha mais próxima da Serra logo ao sul (o caminho entre o Recinto Curvo e o Abrigo do Eland, e a ponta de trilha
-      norte das Encostas dos Abrigos). Quadrado original:
+      norte das Encostas dos Abrigos). A **Planície de Mingcheng** preenche o buraco ao norte do Zarafshan (x −1000…1400,
+      z 1400…3800, deslocamento (200, 2000), Mingcheng no mundo em (200, 2000)): sobra um só buraco murado, ao norte da Costa. O Rio
+      Dourado nasce nela e chega à borda sul no mesmo ponto (520, 1400) onde o do Zarafshan começa. Passagens: os dois portões da
+      borda sul (`exit_pomar`, x 0, e `exit_tugai`, x 1000) são levados à trilha mais próxima do Zarafshan (a estrada das Ruínas do
+      Aryk Velho e a da Mata Alta de Zurvan) e os dois da borda oeste (`exit_calhas`, z 2100, e `exit_forte_ventos`, z 2620) à do
+      Teto (a Estação da Calha Alta e a encruzilhada dos cata-ventos). Quadrado original:
       Serra de Kaggen (x −3400…−1000, z −1000…1400) | Bosque do Zarafshan (x −1000…1400, z −1000…1400) em cima;
       Grutas do Limiar (x −3400…−1000, z −3400…−1000) | Areias Flamejantes (x −1000…1400, z −3400…−1000) embaixo.
       Cada região guarda o seu layout nas suas coordenadas e é deslocada por um número inteiro de pedaços (Zarafshan
@@ -1489,6 +1498,46 @@ Mōzak** (título dos mestres maniqueus em chinês e sogdiano, *mozhak*; aqui, o
 Portão** (Bögü Qaghan, o khagan uigur que adotou o maniqueísmo em 762; aqui, o velho chefe da guarda dos anéis), **Lin
 Deng** (maniqueu da era Song em Fujian **[verificar]**; aqui, o mestre do canal). Chefe do mundo: **Os Quatro Gulosos**
 (mapa 46).
+
+- **Mundo contínuo (2026-11-03): mapas 41–42 jogáveis a pé (43–46 viram áreas sem mapa de catálogo).** A região inteira é um mapa
+  de 2400 × 2400 m (`OverworldLayouts.Mingcheng`, `MingchengId`) costurado ao norte do Zarafshan e a leste do Teto do Mundo, sem
+  portão. Mingcheng (`CityTownRecipes.Mingcheng()`, Backdrop desligado, chão plano de ±30 m em y = 0; ruas O/L/S, a muralha do 7º
+  anel fecha o norte, a estrada do norte sai da estrada leste) fica em (0, 0), 600 m da borda sul; as Torres Brancas
+  (`CityTownRecipes.TorresBrancas()`, ±28 m, ruas O/L/S) em (960, 600). Grade 5 × 5 de áreas (colunas x −1200/−720/−240/240/720/1200,
+  linhas z −600/−120/360/840/1320/1800), nível subindo com a distância de Mingcheng a partir de 90:
+  - **Perto (90–96):** Anéis de Mingcheng e Vilas do Anel (41), Caminho dos Leões (41, a entrada pelo Zarafshan), Campos de Painço,
+    Rio dos Salgueiros (o alto Rio Dourado), Eclusa da Lua (43) e Fossos de Terracota (41). **Nada pede item até Mingcheng** (o
+    Selo do Sol só é vendido lá).
+  - **Meio (95–102):** Colinas de Chá, Canal das Lanternas (43), Arrozais Espelhados e Moinho d'Água (44, entrada pelo Teto),
+    Bambuzal do Oeste, Ravinas de Loess, e a leste os Jardins em Terraço e as Torres Brancas (42: **Selo do Sol**).
+  - **Longe (104–126):** Picos de Calcário, Cristas dos Pinheiros, Vale dos Guerreiros (terracota), Colinas dos Espelhos e Vale da
+    Névoa (o atalho dos espelhos, retorno às Torres), e ao norte a Muralha das Mil Torres (45): Muralha Oeste, Torre Quinhentos,
+    a muralha, Portão do Nian e Picos do Nian (retorno às Torres Brancas). 43–46 são ☆ e não estão no catálogo: as áreas usam o
+    41 ou o 42 como dono e os "postos" das fichas viram marcos (fogueira da Eclusa da Lua, moinho d'água, fogueira da Torre Quinhentos).
+  - **Água:** o Rio Dourado nasce na cabeceira do canal e desce até a borda sul (continua no Zarafshan); o Canal das Lanternas (14 m)
+    sobe para o norte até o Lago da Carpa, sob as colinas brancas; leitos cavados, só pontes de pedra (3); lagoa de lótus nos anéis,
+    lagoa do moinho.
+  - **Relevo:** planície baixa (≤ 5 m) em volta da cidade, do rio e do canal; `Terraced` nos arrozais (6 degraus), no chá e nas
+    colinas brancas; `KarstTowers` (torres de calcário de ~30 m sobre chão plano; trilhas e clareiras no chão); `Peaks` nos
+    pinheiros; `WallRidge`, a crista contínua sob a muralha (`OverworldLayouts.GreatWallZ`, nas coordenadas da região); `Gorges`
+    no loess; `Mounds` (túmulos) nos fossos.
+  - **Cenário** (`OverworldDecorKit.Mingcheng.cs`, `OverworldChunkBuilder.Mingcheng.cs`; só linhas da paleta que todo build já tem):
+    salgueiros-chorões, lanternas vermelhas, pavilhões de telhado curvo, leões de pedra, tartarugas com estela, fossos de
+    soldados de terracota, a **muralha contínua** pela crista (peças de 6 m numa grade que casa entre pedaços, aberta onde passam
+    trilhas, com torre de farol a cada 120 m), bambu, torres de calcário, pinheiros de copa chata, espelhos de bronze, torres
+    brancas e pirâmides de Meroé nos jardins, roda-d'água e espantalhos nos arrozais; fileiras de chá e diques seguindo a curva
+    de nível; detalhe carimbado: arroz, painço, brotos de bambu, lótus no canal, névoa.
+  - **Bichos** (existentes, nenhum chefe): golem (Leão de Pedra, Guardião de Cal), chacal (Raposa de Cauda Lanterna), gavião (Grou
+    de Papel, Íbis de Luz), orc coroado (Soldado de Terracota), lanterna quebrada (Arqueiro de Terracota, Espelho Quebrado,
+    Espantalho), cobra-da-areia (Carpa-Dragão), peixe-lanterna (Lanterna-Peixe), neblina do vento ruim (Barqueiro de Fumaça, Raio
+    Torto), caranguejo-coco (Tartaruga de Pedra), queixada (Búfalo de Lama), gaivota ladra (Pato-Mandarim Ladrão), morcegos
+    (Gafanhoto de Fumaça), babuíno (Filhote de Nian, macacos), lobo (Cavalo de Terracota), aranha (bambu), escorpião e abutre
+    (loess), pedra-que-rola e corvo (calcário, muralha); à noite lobisomem, rasga-mortalha, morcego-vampiro, mãe-da-lua,
+    queixada e vaga-lumes nos arrozais. Clima: névoa no canal, no chá, no bambu, no calcário, nos pinheiros e na muralha; poeira
+    no loess e nos fossos; céu limpo no painço, nas colinas brancas e nos jardins.
+  - **Orçamento** (.NET fora do Editor, todos os 2704 pedaços): ~3,7 mil triângulos em média, pior 10,6 mil (anel de fundo); geração
+    ~0,44 ms em média, p95 ~0,75 ms. Testes `OverworldMingchengTests` e `OverworldWorldTests` (rota a pé Vila → Mingcheng, ~2,1 km
+    pelo Caminho dos Leões).
 
 ### 41 · Mingcheng, a Cidade dos Nove Anéis / *Mingcheng, City of Nine Rings* — nv 90–96 · ★ · capital (Luz)
 - **Fonte:** cidades imperiais muradas da China (planta em grade de Chang'an, Cidade Proibida, muralha de Xi'an).

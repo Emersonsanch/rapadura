@@ -48,6 +48,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         SeracField = 52,
         /// <summary>Peaks: sharp ridged mountains (ridged noise), the highest ground of the world.</summary>
         Peaks = 53,
+
+        // Região 8 — Planície de Mingcheng (OverworldRelief.Mingcheng.cs): 60–69.
+        /// <summary>Karst: sheer limestone towers on a flat floor (the trails and clearings keep to the floor).</summary>
+        KarstTowers = 60,
+        /// <summary>The great wall's crest: one long ridge following the wall's line across the region, foothills below it.</summary>
+        WallRidge = 61,
     }
 
     /// <summary>What the relief knows about one point besides its height (ground colours and scatter read it).</summary>
@@ -658,10 +664,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
                 default:
                     if (DesertShape(style, x, z, a, out smooth, out shaped) || CoastShape(style, x, z, a, out smooth, out shaped)
-                        || DeltaShape(style, x, z, a, out smooth, out shaped) || PamirShape(style, x, z, a, out smooth, out shaped))
+                        || DeltaShape(style, x, z, a, out smooth, out shaped) || PamirShape(style, x, z, a, out smooth, out shaped)
+                        || MingchengShape(style, x, z, a, out smooth, out shaped))
                     {
                         break; // Região 2: dunes, mesas, canyons (.Desert.cs); Região 5: cliffs, islets (.Coast.cs); Região 6: hummocks, levees (.Delta.cs);
-                               // Região 7: moraines, ice tongues, seracs, peaks (.Pamir.cs).
+                               // Região 7: moraines, ice tongues, seracs, peaks (.Pamir.cs); Região 8: karst towers, the wall's crest (.Mingcheng.cs).
                     }
 
                     smooth = shaped = a * SmoothStep(0f, 1f, 0.5f + 0.85f * OverworldNoise.Fbm(x, z, 2));

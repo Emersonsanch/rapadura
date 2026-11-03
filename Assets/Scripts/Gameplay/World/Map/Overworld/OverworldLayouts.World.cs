@@ -27,8 +27,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// Região 5 (the Costa das Monções) sits east of the Zarafshan (x 1400…3800, z −1000…1400) and Região 6 (the Delta de
     /// Jhilpur) south of it, east of the Areias (x 1400…3800, z −3400…−1000): a 3 × 2 rectangle of regions. Região 7 (the Teto do
     /// Mundo) goes on north of the Serra de Kaggen (x −3400…−1000, z 1400…3800), its two gates on the south edge led to the
-    /// Serra's trails; the corners north of the Zarafshan and of the Costa, which no region covers, are holes walled off like
-    /// the world's edge (<see cref="OverworldLayout.Holes"/>).
+    /// Serra's trails; Região 8 (the Planície de Mingcheng) fills the corner north of the Zarafshan (x −1000…1400, z 1400…3800),
+    /// its two south gates led to the Zarafshan's trails and its two west gates to the Teto's; the corner north of the Costa,
+    /// which no region covers, is a hole walled off like the world's edge (<see cref="OverworldLayout.Holes"/>).
     /// The relief blends across the borders like between any two areas (one relief for the whole world, each area shaped in
     /// its own region's coordinates), the chunk grids line up (offsets are multiples of the chunk), the streaming, the soft
     /// barrier, the levels and the requirements work per area as before.
@@ -58,6 +59,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// walled holes (<see cref="OverworldLayout.Holes"/>).
         /// </summary>
         public static readonly Vector2 TetoWorldOffset = new Vector2(-2200f, 2000f);
+
+        /// <summary>
+        /// Região 8 north of the Zarafshan, east of the Teto do Mundo (Mingcheng at world (200, 2000)): the Planície de Mingcheng
+        /// fills the walled corner north of the Zarafshan (the Rio Dourado now rises in it), so only the corner north of the
+        /// Costa stays a walled hole.
+        /// </summary>
+        public static readonly Vector2 MingchengWorldOffset = new Vector2(200f, 2000f);
 
         /// <summary>Width (m) of the trail that joins two passes (or a pass to the nearest trail across the border).</summary>
         public const float PassTrailWidth = 4f;
@@ -96,6 +104,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 (Costa(), CostaWorldOffset),
                 (DeltaRegion(), DeltaWorldOffset),
                 (TetoRegion(), TetoWorldOffset),
+                (MingchengRegion(), MingchengWorldOffset),
             };
 
             Rect bounds = default;

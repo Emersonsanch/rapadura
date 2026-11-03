@@ -13,9 +13,9 @@ namespace Rapadura.Gameplay.World.Map
     /// <summary>
     /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II): level
     /// bands, walk/warp levels, special gates, settlements and return cities, as content-as-code like
-    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–40): a hand-made layout
+    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42): a hand-made layout
     /// (<c>MapLayouts.Has</c>: 01–08, 13, 14, 19, 20) or only a zone of a continuous region (<c>OverworldLayouts.ForMap</c>:
-    /// 09–12, 15–18, 21–40, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
+    /// 09–12, 15–18, 21–42, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
     /// the flag equal to it. The rest are listed in the Barcas de Luz window, closed. The gold fare is never stored: it is always the
     /// formula of <see cref="MapAccessRules.CalculateWarpCost(int,int,bool)"/> (the "Custo Ouro" column of the methodology
     /// table is design history).
@@ -105,8 +105,8 @@ namespace Rapadura.Gameplay.World.Map
             new MapDefinition(40, "map_040_wakhan", R.TetoDoMundo, Y.Mountain, S.GG, 90, 98, 86, 94, Fee, T.StormProtection, Sangkent, K.Outpost, "caravancara_de_pedra", isBuilt: true),
 
             // Região 8 — Planície de Mingcheng
-            new MapDefinition(41, "map_041_mingcheng", R.PlanicieDeMingcheng, Y.Plain, S.GG, 90, 96, 88, 95, Fee, T.None, Mingcheng, K.Capital, "mingcheng"),
-            new MapDefinition(42, "map_042_torres_brancas", R.PlanicieDeMingcheng, Y.Plain, S.G, 95, 102, 92, 100, Fee, T.SunSeal, TorresBrancas, K.RaceCity, "torres_brancas"),
+            new MapDefinition(41, "map_041_mingcheng", R.PlanicieDeMingcheng, Y.Plain, S.GG, 90, 96, 88, 95, Fee, T.None, Mingcheng, K.Capital, "mingcheng", isBuilt: true),
+            new MapDefinition(42, "map_042_torres_brancas", R.PlanicieDeMingcheng, Y.Plain, S.G, 95, 102, 92, 100, Fee, T.SunSeal, TorresBrancas, K.RaceCity, "torres_brancas", isBuilt: true),
         };
 
         public static readonly IReadOnlyList<MapRegion> Regions = new[]
