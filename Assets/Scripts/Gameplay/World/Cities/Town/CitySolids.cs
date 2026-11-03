@@ -190,10 +190,26 @@ namespace Rapadura.Gameplay.World.Cities.Town
                     return CitySolid.Box(CityGeometry.Inflate(run, TownKit.PalisadeHalfThickness), WallColliderHeight, owner);
                 }
 
+                case CityPropKind.BronzePillar: return CitySolid.Box(CityGeometry.RectFromCenter(prop.Position, new Vector2(TownKit.BronzePillarSize, TownKit.BronzePillarSize) * s), WallColliderHeight, owner);
+                case CityPropKind.GreatForge: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.GreatForgeSize * s, prop.Yaw), WallColliderHeight, owner);
+                case CityPropKind.LavaPit: return CitySolid.Capsule(prop.Position, TownKit.LavaPitRadius * s, 1f, owner);
+                case CityPropKind.ChainLift: return CitySolid.Box(CityGeometry.RectFromCenter(prop.Position, new Vector2(TownKit.ChainLiftSize, TownKit.ChainLiftSize) * s), WallColliderHeight, owner);
+                case CityPropKind.RockWall:
+                {
+                    Rect run = CityGeometry.RectFromMinMax(prop.Position, prop.End);
+                    return CitySolid.Box(CityGeometry.Inflate(run, TownKit.RockWallHalfThickness), WallColliderHeight, owner);
+                }
+
+                case CityPropKind.MineCart: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.MineCartSize * s, prop.Yaw), 1.4f, owner);
+                case CityPropKind.AirPipe: return CitySolid.Capsule(prop.Position, TownKit.AirPipeRadius * s, WallColliderHeight, owner);
+                case CityPropKind.NicheStall: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.NicheStallSize * s, prop.Yaw), WallColliderHeight, owner);
+                case CityPropKind.Pulley: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.PulleySize * s, prop.Yaw), WallColliderHeight, owner);
+
                 case CityPropKind.KarezChannel:
                 case CityPropKind.RopeBridge:
                 case CityPropKind.LampString:
                 case CityPropKind.TrainingRing:
+                case CityPropKind.MineRails:
                     // Walkable (a channel to step over) or overhead.
                     return null;
                 case CityPropKind.FenceRun:

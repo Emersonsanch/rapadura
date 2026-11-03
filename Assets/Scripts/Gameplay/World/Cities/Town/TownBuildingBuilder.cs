@@ -99,6 +99,31 @@ namespace Rapadura.Gameplay.World.Cities.Town
             float zBack = depth * 0.5f;
             float top = spec.EaveHeight;
 
+            if (spec.Roof == TownRoofKind.Rock && (spec.RuneHall || spec.TunnelStall))
+            {
+                // The Salões de Bronze's hall fronts and the Mercado dos Túneis' niche stalls (TownKit.RuneHall / TunnelBazaar).
+                if (spec.RuneHall)
+                {
+                    TownKit.RuneHallHouse(b, spec, hw, zFront, zFacade, zBack, top);
+                }
+                else
+                {
+                    TownKit.TunnelStallHouse(b, spec, hw, zFront, zFacade, zBack, top);
+                }
+
+                if (spec.Sign && spec.PorchDepth > 0.01f)
+                {
+                    TownKit.SignBoard(b, new Vector3(spec.DoorOffset * spec.Width, top + 0.25f, zFront + 0.05f), spec.SignColor, spec.AccentColor);
+                }
+
+                if (HasDressing(spec))
+                {
+                    TownKit.Dressing(b, spec, hw, zFront, zFacade);
+                }
+
+                return;
+            }
+
             if (spec.Roof == TownRoofKind.Rock)
             {
                 BuildTuffHouse(b, spec, hw, zFront, zFacade, zBack, top);

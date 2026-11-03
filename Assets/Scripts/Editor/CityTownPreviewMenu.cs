@@ -34,6 +34,12 @@ namespace Rapadura.Editor
         [MenuItem(Root + "Preview Walkable Town/Tambor Rubro (orcs, Areias Flamejantes)", priority = 15)]
         private static void PreviewTamborRubro() => Preview(CityCatalog.TamborRubro);
 
+        [MenuItem(Root + "Preview Walkable Town/Salões de Bronze (anões, Serra de Kaggen)", priority = 16)]
+        private static void PreviewBronzeHalls() => Preview(CityCatalog.SaloesDeBronze);
+
+        [MenuItem(Root + "Preview Walkable Town/Mercado dos Túneis (kobolds, Grutas do Limiar)", priority = 17)]
+        private static void PreviewTunnelMarket() => Preview(CityCatalog.MercadoDosTuneis);
+
         [MenuItem(Root + "Preview Walkable Town/Toggle Night", priority = 30)]
         private static void ToggleNight()
         {

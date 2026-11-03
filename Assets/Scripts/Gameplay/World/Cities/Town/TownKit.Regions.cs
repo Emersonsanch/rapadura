@@ -35,7 +35,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Props that run from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> (no yaw; the view anchors them at their midpoint).</summary>
         public static bool IsSegment(CityPropKind kind) =>
             kind == CityPropKind.FenceRun || kind == CityPropKind.Gate || kind == CityPropKind.KarezChannel || kind == CityPropKind.Cliff ||
-            kind == CityPropKind.RopeBridge || kind == CityPropKind.LampString || kind == CityPropKind.Palisade;
+            kind == CityPropKind.RopeBridge || kind == CityPropKind.LampString || kind == CityPropKind.Palisade || kind == CityPropKind.RockWall ||
+            kind == CityPropKind.MineRails;
 
         /// <summary>Unit direction of a segment prop and the side its mass stands on (left of the direction: east-going → north).</summary>
         public static Vector2 SegmentBack(Vector2 direction) => new Vector2(-direction.y, direction.x);
@@ -72,6 +73,16 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.Bonfire: Bonfire(b, s); return true;
                 case CityPropKind.WarDrum: WarDrum(b, s); return true;
                 case CityPropKind.TrainingRing: TrainingRing(b, s); return true;
+                case CityPropKind.BronzePillar: BronzePillar(b, s); return true;
+                case CityPropKind.GreatForge: GreatForge(b, s); return true;
+                case CityPropKind.LavaPit: LavaPit(b, s); return true;
+                case CityPropKind.ChainLift: ChainLift(b, s); return true;
+                case CityPropKind.RockWall: RockWall(b, d, s, prop.Variant); return true;
+                case CityPropKind.MineRails: MineRails(b, d); return true;
+                case CityPropKind.MineCart: MineCart(b, s, prop.Variant); return true;
+                case CityPropKind.AirPipe: AirPipe(b, s); return true;
+                case CityPropKind.NicheStall: NicheStall(b, s, prop.Variant); return true;
+                case CityPropKind.Pulley: Pulley(b, s); return true;
                 default: return false;
             }
         }
@@ -803,6 +814,15 @@ namespace Rapadura.Gameplay.World.Cities.Town
             {
                 case TownShopDressing.HuntingRack:
                     WarCampDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.Runes:
+                    RuneHallDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.AirBottles:
+                case TownShopDressing.Tinkerer:
+                    TunnelDressing(b, spec, x, y, z, zFacade);
                     break;
 
                 case TownShopDressing.Pearls:

@@ -220,6 +220,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
         /// <summary>Small lower tusks at the corners of the mouth (the orcs of the Tambor Rubro, Docs/Mapas100.md §3.3).</summary>
         public bool Tusks;
 
+        /// <summary>A short rounded muzzle with two nostrils over the mouth (the kobolds of the Mercado dos Túneis, Docs/Mapas100.md §3.3).</summary>
+        public bool Snout;
+
         /// <summary>One line of why they look like this (Docs/NPCs.md, the preview labels).</summary>
         public string Story = string.Empty;
 
@@ -229,6 +232,6 @@ namespace Rapadura.Gameplay.NPC.Visuals
 
         /// <summary>A short signature of the silhouette (tests: two named NPCs never share one).</summary>
         public string SilhouetteKey =>
-            $"{Age}/{Build}/{Posture}/{Hair}/{Beard}/{Headwear}/{Garment}/{(int)Layers}/{LeftArm}/{RightArm}/{string.Join(",", Props)}" + (ElfEars ? "/elf" : string.Empty) + (Tusks ? "/orc" : string.Empty);
+            $"{Age}/{Build}/{Posture}/{Hair}/{Beard}/{Headwear}/{Garment}/{(int)Layers}/{LeftArm}/{RightArm}/{string.Join(",", Props)}" + (ElfEars ? "/elf" : string.Empty) + (Tusks ? "/orc" : string.Empty) + (Snout ? "/kobold" : string.Empty);
     }
 }

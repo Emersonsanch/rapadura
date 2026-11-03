@@ -326,6 +326,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
             // The Tambor Rubro's houses are log halls of hide and timber.
             spec.LogHall |= style.Architecture == TownArchitecture.WarCamp;
 
+            // The Salões de Bronze's halls are fronts carved into the granite; the Mercado dos Túneis' houses are niche stalls.
+            spec.RuneHall |= style.Architecture == TownArchitecture.RuneHall && spec.Roof == TownRoofKind.Rock;
+            spec.TunnelStall |= style.Architecture == TownArchitecture.TunnelBazaar && spec.Roof == TownRoofKind.Rock;
+
             switch (r.Kind)
             {
                 case CityLotKind.Shop:

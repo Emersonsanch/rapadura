@@ -104,6 +104,8 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.ErvariaDacil, "Dácil's Herb House", "Ervaria da Dácil"),
                 Shop(CityShopCatalog.BazarMwana, "Mwana's Pearl Bazaar", "Bazar de Pérolas da Mwana"),
                 Shop(CityShopCatalog.ForjaTambor, "The Drum Forge", "Forja de Tambor"),
+                Shop(CityShopCatalog.PortoesRuna, "Puzur's Rune Gates", "Portões de Runa do Puzur"),
+                Shop(CityShopCatalog.FeiraMiwnay, "Miwnay's Fair", "Feira da Miwnay"),
             };
 
             // ---- Cities ----
@@ -123,6 +125,14 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.TaaPwani, "Taa Pwani", "Taa Pwani", "Taa Pwani", "Taa Pwani",
                 "The Coast of the Lamp: whitewashed coral-stone houses with carved teak doors, a pearl market on the square, dhows with triangular sails at the quay and the Coral Light that guides them home through the monsoon.",
                 "A Costa da Lâmpada: casas de pedra de coral caiada com portas de teca entalhada, mercado de pérolas na praça, dhows de vela triangular no cais e o Farol de Coral que guia todos de volta na monção.");
+
+            AddCity(entries, CityCatalog.SaloesDeBronze, "Napirasu's Bronze Halls", "Salões de Bronze de Napirasu", "Bronze Halls", "Salões",
+                "The dwarves' city cut into the mountain: granite halls on square pillars capped in bronze, massive doors under rune lintels that light one line at a time, pits of cold lava and chain lifts. The Grande Forja was lit by the Light held in a crystal; the shadow put it out, and now they forge in the cold.",
+                "A cidade dos anões escavada na montanha: salões de granito sobre pilares quadrados com capitel de bronze, portas maciças sob lintéis de runa que acendem uma linha por vez, poços de lava apagada e elevadores de corrente. A Grande Forja era acesa pela Luz presa num cristal; a sombra a apagou, e agora eles forjam no frio.");
+
+            AddCity(entries, CityCatalog.MercadoDosTuneis, "Tunnel Market", "Mercado dos Túneis", "Tunnel Market", "Mercado",
+                "The kobolds' market at the crossing of the four galleries: stalls set into niches under arches, cart rails, pulleys, copper pipes with fans that pull the air down from the cracks, and lanterns of coloured bottle glass. Here they bottle the Ar Sereno, and sell it with mended scrap.",
+                "O mercado dos kobolds no cruzamento das quatro galerias: barracas encaixadas em nichos sob arcos, trilhos de vagonete, roldanas, canos de cobre com cata-ventos que puxam o ar das frestas e lanternas de vidro colorido de garrafa. Aqui eles engarrafam o Ar Sereno, e vendem junto com sucata consertada.");
 
             AddCity(entries, CityCatalog.TamborRubro, "Red Drum", "Tambor Rubro", "Red Drum", "Tambor Rubro",
                 "The orcs' war camp in the red badlands: a palisade of sharpened logs, the Great Hall under its steep hide roof, clan tents dyed ochre and the drums that mark the hours and wake the Living Fire of the forge. Here a given word is worth more than gold.",
@@ -429,6 +439,80 @@ namespace Rapadura.UI.WorldMap
                 ("Ícaro, you want to see how the bellows work? Pump. Faster. ...Now you know why my arms are this size.", "Ícaro, quer ver como o fole funciona? Bombeia. Mais rápido. ...Agora você sabe por que o meu braço é desse tamanho."),
                 ("Lavine, going up to Namrael's Throne? Take theriac. The salt there bites, and Grandpa Jorge would scold me if I forgot to tell you.", "Lavine, vai subir para o Trono de Namrael? Leva teriaga. O sal de lá morde, e o Vô Jorge ia brigar comigo se eu esquecesse de avisar."),
                 ("Copper, bronze and iron, tempered to the beat of the drum. Repairs, stones of the Captured Light, theriac for the Throne.", "Cobre, bronze e ferro, temperados na batida do tambor. Conserto, pedras da Luz Presa, teriaga para o Trono."));
+
+            // ---- Salões de Bronze de Napirasu (dwarves; Elamite names: queen Napirasu, Untash-Napirisha, Puzur-Inshushinak, Shilhak-Inshushinak, Kidin-Hutran) ----
+            AddResident(entries, "napirasu", "Napirasu, the Master Founder", "Napirasu, a Mestra Fundidora",
+                ("Joaquim, you stand like a pillar, and a pillar is the most honest thing a dwarf can say about anyone. Hold this crucible for me?", "Joaquim, você fica parado feito pilar, e pilar é a coisa mais honesta que um anão pode dizer de alguém. Segura este cadinho para mim?"),
+                ("Maria, put your hand on the crystal of the Grande Forja. ...Did you feel it? It's not dead. It's only asleep, waiting for Light.", "Maria, põe a mão no cristal da Grande Forja. ...Sentiu? Não está morto. Só está dormindo, esperando a Luz."),
+                ("Maithe, I cast arrowheads for the eldest of the cousins. Bronze, cold-forged. They will be better the day the forge is lit again.", "Maithe, fundi pontas de flecha para a mais velha dos primos. Bronze, forjado a frio. Vão ficar melhores no dia em que a forja acender de novo."),
+                ("Ícaro, you want to know the alloy? Nine of copper, one of tin, and a dwarf who knows when to stop. The last part you can't write down.", "Ícaro, quer saber a liga? Nove de cobre, um de estanho, e um anão que sabe a hora de parar. A última parte não dá para escrever."),
+                ("Lavine, Grandma Edna sent me a jar of apricot jam the winter our forge went out. Tell her it kept the whole hall warm.", "Lavine, a Vó Edna me mandou um pote de doce de damasco no inverno em que a nossa forja apagou. Diz para ela que esquentou o salão inteiro."),
+                ("The Grande Forja was lit by the Light held in a crystal. The shadow put it out. We forge in the cold now, but we haven't forgotten how.", "A Grande Forja era acesa pela Luz presa num cristal. A sombra apagou. Agora a gente forja no frio, mas não esqueceu como."));
+
+            AddResident(entries, "untash", "Untash, the Master Builder", "Untash, o Mestre de Obras",
+                ("Joaquim, measure twice, cut once. And hold the ladder. ...No, the other ladder. Thank you.", "Joaquim, mede duas vezes, corta uma. E segura a escada. ...Não, a outra escada. Obrigado."),
+                ("Maria, the halls were cut so the light of the forge reached every door. Now it doesn't. Walk them with your light and tell me where it's darkest.", "Maria, os salões foram cortados para a luz da forja chegar em toda porta. Agora não chega. Anda por eles com a sua luz e me diz onde está mais escuro."),
+                ("Maithe, a good arch and a good bow work the same way: the strain goes where you tell it to. You understood that before I did.", "Maithe, um arco de pedra e um arco de flecha funcionam igual: a força vai para onde você manda. Você entendeu isso antes de mim."),
+                ("Ícaro, I've been drawing a new bellows for the Grande Forja for three years. You found my mistake in three minutes. I'm not happy. I'm grateful. Mostly.", "Ícaro, faz três anos que eu desenho um fole novo para a Grande Forja. Você achou o meu erro em três minutos. Não estou feliz. Estou grato. Quase."),
+                ("Lavine, Grandpa Jorge fixed a hinge in this hall with a piece of string forty years ago. It still holds. It still annoys me.", "Lavine, o Vô Jorge consertou uma dobradiça deste salão com um pedaço de barbante quarenta anos atrás. Segura até hoje. Me irrita até hoje."),
+                ("Pillars first, then the roof, then the door. Halls fall when someone starts with the door.", "Primeiro os pilares, depois o teto, depois a porta. Salão cai quando alguém começa pela porta."));
+
+            AddResident(entries, "puzur", "Puzur, Keeper of the Runes", "Puzur, o Guardião das Runas",
+                ("Joaquim, this rune means \"I stay\". We carve it on the threshold of every hall. I think it was carved for you.", "Joaquim, esta runa quer dizer \"eu fico\". A gente grava na soleira de todo salão. Acho que foi gravada para você."),
+                ("Maria, the rune gates light one line at a time, like someone learning to read. Yours lit all at once when you walked in.", "Maria, os portões de runa acendem uma linha por vez, como quem aprende a ler. Os seus acenderam todos de uma vez quando você entrou."),
+                ("Maithe, a rune of wind on the bowstring. Free, the first one, for the eldest. Don't tell Untash, he thinks I give too much away.", "Maithe, uma runa de vento na corda do arco. De graça, a primeira, para a mais velha. Não conta para o Untash, ele acha que eu dou demais."),
+                ("Ícaro, the runes are not magic words. They are instructions for the Light. You'd make a good keeper; you already read the instructions.", "Ícaro, as runas não são palavras mágicas. São instruções para a Luz. Você daria um bom guardião; você já lê as instruções."),
+                ("Lavine, Grandma Edna's name is carved on the guest stone by the gate. Vô Jorge's too, but smaller. He asked for it smaller.", "Lavine, o nome da Vó Edna está gravado na pedra dos hóspedes perto do portão. O do Vô Jorge também, mas menor. Ele pediu menor."),
+                ("Bronze runes, stones of the Captured Light, picks and lamps for the deep halls, ginger tea for the Mazans' summit. Choose slowly.", "Runas de bronze, pedras da Luz Presa, picaretas e lamparinas para os salões fundos, chá de gengibre para o cume dos Mazans. Escolham devagar."));
+
+            AddResident(entries, "shilhak", "Shilhak the Miner", "Shilhak, o Minerador",
+                ("Joaquim, you go first in the seam. If the roof speaks, you'll hear it before the rest of us. That's what shoulders like yours are for.", "Joaquim, você vai na frente no veio. Se o teto falar, você escuta antes de todo mundo. É para isso que serve um ombro desse."),
+                ("Maria, sing to the rock with me before the pick. It isn't a prayer, it's manners. The rock was here first.", "Maria, canta para a pedra comigo antes da picareta. Não é reza, é educação. A pedra chegou primeiro."),
+                ("Maithe, in the seam you can't shoot far. Count your steps instead. Eleven from the lamp to the bend. Remember it.", "Maithe, no veio não dá para atirar longe. Conta os passos em vez disso. Onze da lamparina até a curva. Guarda isso."),
+                ("Ícaro, a lamp that hangs from the helmet and turns with your head? ...I'll wear it if you make it. I'll complain, but I'll wear it.", "Ícaro, uma lamparina que pendura no capacete e vira com a cabeça? ...Eu uso se você fizer. Vou reclamar, mas uso."),
+                ("Lavine, you heard the bats crying? They're not bad. They nested in the forge's last warm cracks and the cold went to their heads. Grandpa Jorge would say the same.", "Lavine, você ouviu os morcegos chorando? Eles não são maus. Fizeram ninho nas últimas fendas quentes da forja e o frio subiu à cabeça. O Vô Jorge diria igual."),
+                ("Copper above, tin below, and in the middle, if you're lucky, a vein of something that still remembers the Light.", "Cobre em cima, estanho embaixo, e no meio, com sorte, um veio de alguma coisa que ainda lembra a Luz."));
+
+            AddResident(entries, "kidin", "Kidin, Cook of the Hall", "Kidin, o Cozinheiro do Salão",
+                ("Joaquim! A guardian eats twice. Sit. No, sit properly. Lentils with mountain onion, the bowl the size of your shield.", "Joaquim! Guardião come duas vezes. Senta. Não, senta direito. Lentilha com cebola da montanha, a tigela do tamanho do seu escudo."),
+                ("Maria, since the forge went cold my oven is the warmest place in the halls. The children sleep beside it. Will you stay for the bread?", "Maria, desde que a forja apagou, o meu forno é o lugar mais quente dos salões. As crianças dormem do lado dele. Fica para o pão?"),
+                ("Maithe, the eldest gets the crust. That's the rule of my kitchen, and the crust is the best part, so stop arguing.", "Maithe, a mais velha fica com a casca. É a regra da minha cozinha, e a casca é a melhor parte, então para de discutir."),
+                ("Ícaro, you made my spit turn by itself and now the roast is perfect and I have nothing to do. I'm going to need another invention.", "Ícaro, você fez o meu espeto girar sozinho e agora o assado sai perfeito e eu não tenho nada para fazer. Vou precisar de outra invenção."),
+                ("Lavine, this is Grandma Edna's apricot bread. She taught me in this very kitchen. Don't tell Napirasu I put honey in it.", "Lavine, este é o pão de damasco da Vó Edna. Ela me ensinou nesta mesma cozinha. Não conta para a Napirasu que eu pus mel."),
+                ("A hall without a warm pot is just a hole in the mountain. Eat something before you go down.", "Salão sem panela quente é só um buraco na montanha. Comam alguma coisa antes de descer."));
+
+            // ---- Mercado dos Túneis (kobolds; Sogdian names from the Ancient Letters and the Mug documents) ----
+            AddResident(entries, "miwnay", "Miwnay, Mistress of the Fair", "Miwnay, a Mestra da Feira",
+                ("Joaquim, stand by my stall a moment. Nobody haggles badly with a guardian watching. Ha! Just teasing. Mostly.", "Joaquim, fica do lado da minha banca um pouquinho. Ninguém pechincha feio com guardião olhando. Ha! Brincadeira. Quase."),
+                ("Maria, smell this bottle. Still air from the cracks, the Ar Sereno. It calms whoever breathes it. Take one for your brother.", "Maria, cheira esta garrafa. Ar parado das frestas, o Ar Sereno. Acalma quem respira. Leva uma para o seu irmão."),
+                ("Maithe, the fair moves gallery by gallery, one each day. You'll always find us: follow the lanterns of coloured glass.", "Maithe, a feira muda de galeria todo dia, uma por dia. Vocês sempre acham a gente: sigam as lanternas de vidro colorido."),
+                ("Ícaro, my Shayn says you fixed her fan with a hairpin. I'm writing that in my letters. I write everything in my letters.", "Ícaro, a minha Shayn diz que você consertou o cata-vento dela com um grampo de cabelo. Vou escrever isso nas minhas cartas. Eu escrevo tudo nas minhas cartas."),
+                ("Lavine, Grandma Edna trades me her apricots for bottled air every spring. She says it's for the house. I think it's for Grandpa Jorge's temper.", "Lavine, a Vó Edna me troca damasco por ar engarrafado toda primavera. Ela diz que é para a casa. Eu acho que é para o gênio do Vô Jorge."),
+                ("Bottled Ar Sereno, mended scrap, oil that never goes out. A fair price, and a bottle on the house for anyone who brings a lantern back lit.", "Ar Sereno engarrafado, sucata consertada, óleo que nunca apaga. Preço justo, e uma garrafa de brinde para quem devolve uma lanterna acesa."));
+
+            AddResident(entries, "shayn", "Shayn the Mender", "Shayn, a Consertadora",
+                ("Joaquim, give me that shield. ...Who hit it, a mountain? I can fix it. I'll fix it and paint a little lantern on it.", "Joaquim, me dá esse escudo. ...Quem bateu nele, uma montanha? Eu conserto. Conserto e pinto uma lanterninha nele."),
+                ("Maria, nothing is really broken, Mother says. It just stopped being what it was. Then I make it something else.", "Maria, nada está quebrado de verdade, a mãe diz. Só parou de ser o que era. Aí eu faço virar outra coisa."),
+                ("Maithe, a quiver made from an old air pipe. Light, it doesn't rattle, and it whistles a little when you run. I like that.", "Maithe, uma aljava feita de cano de ar velho. Leve, não chacoalha, e assobia um pouco quando você corre. Eu gosto disso."),
+                ("Ícaro, the hairpin trick, can you show me again? Slowly. ...Again. I almost had it.", "Ícaro, o truque do grampo, mostra de novo? Devagar. ...De novo. Quase peguei."),
+                ("Lavine, Grandpa Jorge brought me a broken music box when I was small. I fixed it. It plays backwards now. He says it's better.", "Lavine, o Vô Jorge me trouxe uma caixinha de música quebrada quando eu era pequena. Eu consertei. Agora ela toca de trás para frente. Ele diz que ficou melhor."),
+                ("Bring me what's broken. I'll give you back something that works. Maybe not the same thing.", "Me traz o que quebrou. Eu devolvo uma coisa que funciona. Talvez não a mesma."));
+
+            AddResident(entries, "farnkhund", "Farnkhund the Cart Driver", "Farnkhund, o Vagoneiro",
+                ("Joaquim, push my cart up the slope? It's not heavy. It's just... a lot of cart. Thank you, big one.", "Joaquim, empurra o meu vagonete na subida? Não é pesado. É só... muito vagonete. Obrigado, grandão."),
+                ("Maria, I know every switch of these tunnels by its squeak. That one, hear it? It squeaks sad since the dark came in.", "Maria, eu conheço cada desvio destes túneis pelo rangido. Aquele, ouviu? Range triste desde que o escuro entrou."),
+                ("Maithe, you timed my cart and lost. Tomorrow, from the north gallery to the wheel. Bring your fastest legs.", "Maithe, você cronometrou o meu vagonete e perdeu. Amanhã, da galeria norte até a roda. Traz as suas pernas mais rápidas."),
+                ("Ícaro, a brake that doesn't screech? Takhsich has been trying for years. If you do it, I'll name a cart after you.", "Ícaro, um freio que não guincha? O Takhsich tenta faz anos. Se você fizer, eu dou o seu nome a um vagonete."),
+                ("Lavine, Grandpa Jorge rode my cart once, all the way to the Wheel Canyon. Screaming. Laughing too. Mostly screaming.", "Lavine, o Vô Jorge andou no meu vagonete uma vez, até o Cânion da Roda. Gritando. Rindo também. Mais gritando."),
+                ("Rails north, south, east and west. If it can be carried, I carry it. If it can't, I carry it slower.", "Trilho para o norte, sul, leste e oeste. Se dá para levar, eu levo. Se não dá, eu levo mais devagar."));
+
+            AddResident(entries, "takhsich", "Takhsich the Inventor", "Takhsich, o Inventor",
+                ("Joaquim, stand there. No, there. I'm measuring how much wind a guardian blocks. For science. And for the pipes.", "Joaquim, fica ali. Não, ali. Estou medindo quanto vento um guardião segura. Pela ciência. E pelos tubos."),
+                ("Maria, the fans pull the Ar Sereno down from the cracks. Without them the tunnels go still, and still air makes people sad. Your light does the same as my fans.", "Maria, os cata-ventos puxam o Ar Sereno das frestas. Sem eles os túneis ficam parados, e ar parado deixa todo mundo triste. A sua luz faz o mesmo que os meus cata-ventos."),
+                ("Maithe, an arrow with a little fan on the tail. It flies crooked. Very crooked. ...Do you want it anyway? It's pretty.", "Maithe, uma flecha com um cata-ventinho no rabo. Voa torta. Muito torta. ...Você quer mesmo assim? Ela é bonita."),
+                ("Ícaro! Seven blades or five? I say seven. You say five. Let's build both and let the wind decide.", "Ícaro! Sete pás ou cinco? Eu digo sete. Você diz cinco. Vamos fazer os dois e deixar o vento decidir."),
+                ("Lavine, Grandma Edna says I talk faster than my fans spin. Grandpa Jorge says that's impossible. They're both right.", "Lavine, a Vó Edna diz que eu falo mais rápido do que os meus cata-ventos giram. O Vô Jorge diz que é impossível. Os dois têm razão."),
+                ("Pipes, fans, gears, and one idea too many every morning. The air has to move, or the tunnels forget how to breathe.", "Canos, cata-ventos, engrenagens, e uma ideia a mais toda manhã. O ar tem que andar, senão os túneis esquecem como respirar."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

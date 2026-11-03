@@ -104,6 +104,15 @@
 | **Appu, o Mercador Gentil** (`appu`) | do conto hurrita: sonhava com filhos e adota todos os órfãos do acampamento; o Vô Jorge pagava em dobro | orc idoso e gordo, careca de barba cheia grisalha, gorro de feltro ocre, cafetã de arenito com faixa amarela, bolsa, xícara de chá e bolsa de moedas | conversa com todo mundo |
 | **Ashmunikal, a Matriarca dos Tambores** (`ashmunikal`) | rainha hitita (histórica); guarda a Lâmpada Guardiã no alto da torre do tambor, toca as horas | orc idosa e ereta, pele cinza, cabelo longo grisalho sob turbante ocre, túnica longa ocre-rubra com xale de couro, tambor de mão e lamparina | bate o tambor |
 | **Tushratta, o Ferreiro do Tambor** (`tushratta`, Forja de Tambor) | rei de Mitanni (histórico); cobre, bronze e ferro na batida do tambor; a loja da cidade | orc largo, coque no alto e barba curta, braços à mostra, túnica ocre-rubra, avental de couro e cinto, martelo e tenaz | martela |
+| **Napirasu, a Mestra Fundidora** (`napirasu`, Salões de Bronze) | rainha elamita (a estátua de bronze do Louvre); refino e fusão; guarda o cristal apagado da Grande Forja; a Vó Edna mandou doce de damasco no inverno em que a forja apagou | anã forte e altiva, duas tranças ruivas sob tiara de bronze, vestido de cobre esverdeado, avental de couro e cinto, tenaz e martelo | martela |
+| **Untash, o Mestre de Obras** (`untash`) | Untash-Napirisha, o construtor do zigurate; dá as missões da cidade; mede duas vezes; a dobradiça de barbante do Vô Jorge o irrita há quarenta anos | anão largo e careca, barba longa trançada com contas de bronze, túnica de granito, colete de couro e cinto, planta enrolada e vara de medir | pensa, mão no queixo |
+| **Puzur, o Guardião das Runas** (`puzur`, Portões de Runa) | Puzur-Inshushinak, o rei da escrita linear elamita; a loja da cidade; grava as runas que dão instruções à Luz | anão idoso e curvado, barba longa branca, capuz de cobre esverdeado, túnica longa de granito com xale debruado de bronze, tabuletas e pena | escreve |
+| **Shilhak, o Minerador** (`shilhak`) | Shilhak-Inshushinak (rei elamita); canta para a pedra antes da picareta; dá a 2ª missão e paga com chá de gengibre | anão jovem e forte, barba curta, capacete de lamparina, túnica de brasa fria, avental de couro e bornal, picareta e lamparina | carrega |
+| **Kidin, o Cozinheiro do Salão** (`kidin`) | Kidin-Hutran (rei elamita); o forno dele é o lugar mais quente desde que a forja apagou; faz o pão de damasco da Vó Edna | anão gordo e risonho, barba cheia ruiva, gorro de feltro, cafetã de granito, avental branco, xícara e jarra | serve |
+| **Miwnay, a Mestra da Feira** (`miwnay`, Feira da Miwnay) | a carta de Miwnay (*Cartas Antigas* sogdianas); engarrafa o Ar Sereno; a loja da cidade | kobold de escamas ferrugem e focinho, coque sob turbante de lona, cafetã de cobre com faixa lilás e bornal, jarra e balança | chama os fregueses |
+| **Shayn, a Consertadora** (`shayn`) | a filha de Miwnay nas cartas; conserta e recicla sucata ("nada está quebrado, só parou de ser o que era") | kobold jovem e magra de escamas ardósia, rabo de cavalo sob bandana verde, óculos de proteção, túnica de lona, avental de couro com remendos, martelo e carretéis de fio | martela |
+| **Farnkhund, o Vagoneiro** (`farnkhund`) | nome sogdiano dos documentos de Mug; conhece cada desvio pelo rangido; dá a 2ª missão e paga com o Óleo do Fogo Eterno | kobold largo de escamas ferrugem, gorro de feltro, chapan de basalto com cachecol verde e cinto, molho de chaves e vara de lanterna | ergue a lanterna |
+| **Takhsich, o Inventor** (`takhsich`) | nome sogdiano dos documentos de Mug; faz os cata-ventos que puxam o Ar Sereno; dá as missões da cidade (o favorito do Ícaro) | kobold magro de escamas ardósia, crista espetada, óculos de proteção, túnica de vidro verde sob colete de cobre remendado, almotolia e carta de planos | imita o cata-vento |
 | aldeões genéricos | moradores de cada cidade | sorteio estável por lote na paleta da região: Zarafshan (damasco, choupo, romã, índigo; doppa, kalpak, lenço), Qocho (arenito, rosa, ouro, azul; envoltórios), Litema (barro, cal, cobertores; chapéu cônico), Lamparinas (branco, tufo, cobre; capuz, lamparina) | variado |
 
 ## 3. Notas
@@ -135,6 +144,14 @@
   `SkinOrcGrey`, `OchreRed`, `RedSandstone`, `Hide`, `BannerYellow`, `Bronze`, `Ash`, Docs/Mapas100.md §3.3). Nada de
   pintura de guerra nem troféu: honra é trabalho e hospitalidade. Nomes dos contos hurritas (Gurparanzah, Kessi, Appu)
   e da história hitita/mitânia (Ashmunikal, Tushratta), nunca "Seu/Dona".
+- **Anões dos Salões de Bronze e kobolds do Mercado dos Túneis** (2026-11-03): a paleta ganhou a linha 13
+  (`SkinKoboldRust`, `SkinKoboldSlate`, `BronzeBright`, `Verdigris`, `RuneGold`, `ColdEmber`, `GlassGreen`, `SereneAir`;
+  a runa, o vidro e o Ar Sereno brilham). Os anões são baixos (`Height` 0,78–0,84) e largos, barba trançada com contas
+  (`NpcBeard.LongBraided`), granito, cobre esverdeado e bronze; nomes elamitas (Napirasu, Untash, Puzur, Shilhak, Kidin).
+  Os kobolds ganharam `NpcRecipe.Snout` (focinho curto e arredondado com almofada escura e duas narinas; entra na
+  `SilhouetteKey` como "/kobold"; as escamas lisas são a cor da pele, que conta como pele nos braços), são pequenos
+  (0,75–0,8), de lona, cobre e vidro de garrafa; nomes das *Cartas Antigas* sogdianas e dos documentos de Mug (Miwnay,
+  Shayn, Farnkhund, Takhsich). Nenhum é avarento nem bruto, nunca "Seu/Dona".
 - **Elenco de lore nas 4 cidades** (TODO.md "História e Arcos dos NPCs"): todos têm figura e porta. Quem não tem casa
   própria na receita fica num **ponto de pé** da praça (`CityTownRecipes.AddStandingSpot`: lote `Market` de 1 × 1 m,
   sem parede nem chão), conferido por `CityGarajonayTests.LoreCast_OfTheFirstFourCities_StandsInTheirTowns_OutsideEverySolid`.

@@ -894,6 +894,7 @@ gigantes, ushabtis e bichos (bíblia §2.3).
 - **Noite:** os muros escondem bichos (visão curta nas curvas); Ave-Graveto.
 
 ### 17 · Salões de Bronze de Napirasu / *Napirasu's Bronze Halls* — nv 30–38 · ★ · cidade de raça (anões)
+- **No jogo (2026-11-03): cidade de verdade** (`CityTownRecipes.BronzeHalls.cs`, estilo `RuneHall`): salões com a frente escavada no granito, pilares quadrados com base e capitel de bronze, portas maciças de bronze com cravos sob o lintel de runa (uma linha acesa por vez), a Grande Forja apagada (cristal da Luz escuro, fole de bronze, bigornas), poços de lava apagada, elevadores de corrente e a parede de rocha da montanha ao norte e a leste, tudo em y = 0 dentro de ±19 m (o lugar que o mundo contínuo reserva: x −20…21, z −19…20); Napirasu, Untash, Puzur, Shilhak e Kidin com visual de anão (baixos e largos, barba trançada com contas de bronze) e falas para cada primo; Portões de Runa do Puzur (runas de bronze, Picareta e Lamparina do 17, Chá de Gengibre do 18); missões "Escória na Escada" e "Morcegos no Veio"; respawn na praça para 17–18. Falta: o mundo contínuo usar esta receita (hoje monta a "primeira versão" própria), gravar 1 runa por dia, as 5 etapas da Grande Forja.
 - **Fonte:** nomes elamitas (§3.3); a estátua de bronze de Napirasu; o ferreiro celeste Kurdalægon como lenda da forja.
 - **Bioma e visual:** dentro da montanha; paleta dos Salões (§3.3); lava apagada, pilares, runas.
 - **Layout:** G (3 andares). **Salões de Bronze** (§3.3) no andar do meio; minas em cima, a Grande Forja embaixo.
@@ -1005,6 +1006,7 @@ região. Quanto mais fundo (sul) e mais longe da Vila, mais difícil.
 - **Noite:** as fontes ficam escuras; o nhang canta (perto dele o herói anda lento).
 
 ### 22 · Mercado dos Túneis / *Tunnel Market* — nv 34–42 · ★ · cidade de raça (kobolds)
+- **No jogo (2026-11-03): cidade de verdade** (`CityTownRecipes.TunnelMarket.cs`, estilo `TunnelBazaar`): barracas encaixadas em nichos de basalto sob arco redondo (prateleiras de garrafas, toldo listrado em postes de cobre, lanternas de vidro de garrafa), trilhos de vagonete nas quatro galerias, vagonetes, roldana, canos de ar de cobre com cata-vento dentro do tubo, barraquinhas de nicho e a parede redonda dos túneis (cano de cobre e lâmpadas de garrafa) ao norte e a leste, tudo em y = 0 dentro de ±20 m (o lugar que o mundo contínuo reserva: x −21…22, z −20…21), com as quatro ruas onde chegam as galerias; Miwnay, Shayn, Farnkhund e Takhsich com visual de kobold (pequenos, focinho, escamas ferrugem/ardósia) e falas para cada primo; Feira da Miwnay (diária, com o Óleo do Fogo Eterno do 23); missões "Teia nos Tubos" e "Pedras nos Trilhos"; respawn na praça para 22–23. Falta: o mundo contínuo usar esta receita (hoje monta a "primeira versão" própria em `CaveTuff`), item Garrafa de Ar Sereno, Banca de Troca e a feira que muda de galeria por dia.
 - **Fonte:** nomes sogdianos das *Cartas Antigas* (§3.3); minas de lápis-lazúli e de sal das montanhas.
 - **Bioma e visual:** rede de túneis com trilhos; paleta do Mercado (§3.3); vagonetes, tubos de ar, barracas em nichos.
 - **Layout:** G (4 galerias em cruz). **Mercado dos Túneis** (§3.3) no cruzamento; a feira muda de galeria por dia.
@@ -1063,8 +1065,8 @@ Viva e Fogo Vivo (o sol da savana). Chefe do mundo: **Hedammu** (mapa 30).
   Coral; 2 dhows de vela triangular nas poças de maré; mangues no sudeste; coqueiros e baobás), respawn na praça para
   derrotas nos mapas 25 e 30, Capitão Liyongo, Mwana, Nuru, Zawadi e Mbaraka nas portas com visual e falas próprios,
   Bazar de Pérolas da Mwana (todas as exigências dos mapas 25–30) e 2 missões da cidade (Docs/Cities.md §1.2). Falta: o
-  mapa 25 jogável (recife, maré, bichos próprios: as missões usam Abutre de Brasa e Escorpião no lugar da Gaivota Ladra
-  e do Caranguejo-dos-Coqueiros).
+  mapa 25 jogável (recife, maré, os bichos da Gaivota Ladra e do Caranguejo-dos-Coqueiros já existem e as missões os usam, mas faltam no mapa
+  25).
 - **Fonte:** cidades de pedra de coral da costa suaíli (Kilwa, Lamu); dhows e as monções do Oceano Índico; Fumo Liyongo,
   herói-arqueiro e poeta suaíli (já é a G3 da Maithe).
 - **Bioma e visual:** praia, recife raso e cidade de coral; paleta acima; coqueiros, mangue na borda, poças de maré.

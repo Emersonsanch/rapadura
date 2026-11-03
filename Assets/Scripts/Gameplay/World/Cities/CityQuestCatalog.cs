@@ -59,6 +59,10 @@ namespace Rapadura.Gameplay.World.Cities
     /// asks them to free the mangrove roots from the giant crabs and pays with his own Botas de Raiz Viva (the gate of map 30).
     /// Tambor Rubro (map 11): Gurparanzah sends the cousins after the red scorpions of the badlands, then Kessi takes them
     /// hunting the ember hawks and pays with the Teriaga do Oásis (the gate of map 12).
+    /// Salões de Bronze (map 17): Untash sends the cousins after the slag golems that block the halls' stairs, then Shilhak
+    /// takes them into his seam after the ember bats and pays with the Chá de Gengibre (the gate of map 18).
+    /// Mercado dos Túneis (map 22): Takhsich asks them to clear the webs choking his air pipes, then Farnkhund wants the stone
+    /// golems off his rails and pays with the Óleo do Fogo Eterno (the gate of map 23).
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -68,6 +72,10 @@ namespace Rapadura.Gameplay.World.Cities
         public const string TaaPwaniClaws = "quest_city_taa_pwani_mangrove_claws";
         public const string TamborRubroScorpions = "quest_city_tambor_rubro_red_scorpions";
         public const string TamborRubroHawks = "quest_city_tambor_rubro_ember_hawks";
+        public const string SaloesGolems = "quest_city_saloes_de_bronze_slag_golems";
+        public const string SaloesBats = "quest_city_saloes_de_bronze_ember_bats";
+        public const string MercadoWebs = "quest_city_mercado_dos_tuneis_webbed_pipes";
+        public const string MercadoRails = "quest_city_mercado_dos_tuneis_stones_on_the_rails";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -79,13 +87,13 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("follow_moss_boars", QuestObjectiveType.KillEnemyType, "enemy_forest_peccary", 5) },
                 new[] { new RegionRewardSpec("item_hunting_bow", 1), new RegionRewardSpec("item_gold", 25) })),
 
-            // -- Taa Pwani: Captain Liyongo, the nakhoda, then Zawadi, the root weaver. Map 25's own beasts are not in the game yet:
-            // the ember vultures stand in for the Gaivota Ladra, the scorpions for the giant coconut crab (Docs/Mapas100.md 25). --
+            // -- Taa Pwani: Captain Liyongo, the nakhoda (the Gaivota Ladra), then Zawadi, the root weaver (the giant coconut
+            // crab) — map 25's own beasts (Docs/Mapas100.md 25). --
             new CityQuestSpec(CityCatalog.TaaPwani, "liyongo", new RegionQuestSpec(TaaPwaniGulls, BiomeType.Forest, null, 700,
-                new[] { new RegionObjectiveSpec("drive_off_thief_gulls", QuestObjectiveType.KillEnemyType, "enemy_desert_ember_vulture", 6) },
+                new[] { new RegionObjectiveSpec("drive_off_thief_gulls", QuestObjectiveType.KillEnemyType, "enemy_forest_thief_gull", 6) },
                 new[] { new RegionRewardSpec("item_health_potion", 4), new RegionRewardSpec("item_mana_potion", 3), new RegionRewardSpec("item_gold", 60) })),
             new CityQuestSpec(CityCatalog.TaaPwani, "zawadi", new RegionQuestSpec(TaaPwaniClaws, BiomeType.Forest, TaaPwaniGulls, 820,
-                new[] { new RegionObjectiveSpec("cut_free_the_roots", QuestObjectiveType.KillEnemyType, "enemy_desert_scorpion", 5) },
+                new[] { new RegionObjectiveSpec("cut_free_the_roots", QuestObjectiveType.KillEnemyType, "enemy_forest_coconut_crab", 5) },
                 new[] { new RegionRewardSpec("item_botas_raiz", 1), new RegionRewardSpec("item_gold", 80) })),
 
             // -- Tambor Rubro: Gurparanzah, the archer chief, then Kessi, the hunter. The desert scorpions stand in for the
@@ -96,6 +104,24 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.TamborRubro, "kessi", new RegionQuestSpec(TamborRubroHawks, BiomeType.Desert, TamborRubroScorpions, 540,
                 new[] { new RegionObjectiveSpec("hunt_ember_hawks", QuestObjectiveType.KillEnemyType, "enemy_mountain_crested_hawk", 5) },
                 new[] { new RegionRewardSpec("item_teriaga", 1), new RegionRewardSpec("item_gold", 55) })),
+
+            // -- Salões de Bronze: Untash, the master builder, then Shilhak, the miner. The stone golems stand in for the Golem de
+            // Escória (badly cast ushabtis) and the cave bat swarms for the Morcego de Brasa (Docs/Mapas100.md 17). --
+            new CityQuestSpec(CityCatalog.SaloesDeBronze, "untash", new RegionQuestSpec(SaloesGolems, BiomeType.Mountain, null, 620,
+                new[] { new RegionObjectiveSpec("break_slag_golems", QuestObjectiveType.KillEnemyType, "enemy_mountain_stone_golem", 5) },
+                new[] { new RegionRewardSpec("item_health_potion", 4), new RegionRewardSpec("item_pedra_bencao", 2), new RegionRewardSpec("item_gold", 55) })),
+            new CityQuestSpec(CityCatalog.SaloesDeBronze, "shilhak", new RegionQuestSpec(SaloesBats, BiomeType.Mountain, SaloesGolems, 700,
+                new[] { new RegionObjectiveSpec("drive_out_ember_bats", QuestObjectiveType.KillEnemyType, "enemy_cave_bat_swarm", 6) },
+                new[] { new RegionRewardSpec("item_cha_gengibre", 1), new RegionRewardSpec("item_gold", 60) })),
+
+            // -- Mercado dos Túneis: Takhsich, the inventor, then Farnkhund, the cart driver. The cave spiders stand in for the
+            // Lagarta de Pedra and the stone golems for the Toupeira-Gigante (Docs/Mapas100.md 22). --
+            new CityQuestSpec(CityCatalog.MercadoDosTuneis, "takhsich", new RegionQuestSpec(MercadoWebs, BiomeType.Caves, null, 760,
+                new[] { new RegionObjectiveSpec("clear_webbed_pipes", QuestObjectiveType.KillEnemyType, "enemy_forest_spider", 6) },
+                new[] { new RegionRewardSpec("item_mana_potion", 4), new RegionRewardSpec("item_lamparina_oleo", 1), new RegionRewardSpec("item_gold", 65) })),
+            new CityQuestSpec(CityCatalog.MercadoDosTuneis, "farnkhund", new RegionQuestSpec(MercadoRails, BiomeType.Caves, MercadoWebs, 840,
+                new[] { new RegionObjectiveSpec("clear_the_rails", QuestObjectiveType.KillEnemyType, "enemy_mountain_stone_golem", 4) },
+                new[] { new RegionRewardSpec("item_oleo_fogo_eterno", 1), new RegionRewardSpec("item_gold", 70) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();

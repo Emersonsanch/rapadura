@@ -25,6 +25,8 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
 |---|---|---|---|---|
 | Bosque do Zarafshan (mapa 05) | **Copas de Garajonay** (elfos-da-mata, `copas_garajonay`) | Gara, a Guardiã das Copas (salão da praça), Jonay, o Arqueiro, Dácil, a Ervateira, Bencomo, o Velho Chefe, Tinguaro, o Rastreador | **Ervaria da Dácil** (`shop_ervaria_dacil`) | Gara: "A Névoa Que Esqueceu a Água"; Tinguaro: "Rastros no Musgo" |
 | Areias Flamejantes (mapas 11 e 12) | **Tambor Rubro** (orcs, `tambor_rubro`) | Gurparanzah, a Chefe-Arqueira (Salão Grande na cabeça da praça), Ashmunikal, a Matriarca dos Tambores (rua Leste, torre do tambor atrás), Kessi, o Caçador (rua Leste), Appu, o Mercador Gentil (rua Sul), Tushratta, o Ferreiro do Tambor (rua Oeste) | **Forja de Tambor** (`shop_forja_tambor`) | Gurparanzah: "Caudas Vermelhas na Mesa"; Kessi: "Gaviões de Brasa" |
+| Serra de Kaggen (mapas 17 e 18) | **Salões de Bronze de Napirasu** (anões, `saloes_de_bronze`) | Napirasu, a Mestra Fundidora (salão da forja na cabeça da praça), Untash, o Mestre de Obras (rua Leste), Kidin, o Cozinheiro do Salão (rua Leste, no portão), Puzur, o Guardião das Runas (rua Oeste), Shilhak, o Minerador (rua Sul) | **Portões de Runa do Puzur** (`shop_portoes_runa`) | Untash: "Escória na Escada"; Shilhak: "Morcegos no Veio" |
+| Grutas do Limiar (mapas 22 e 23) | **Mercado dos Túneis** (kobolds, `mercado_dos_tuneis`) | Miwnay, a Mestra da Feira (galeria Oeste), Takhsich, o Inventor (galeria Norte), Shayn, a Consertadora (galeria Leste), Farnkhund, o Vagoneiro (galeria Sul) | **Feira da Miwnay** (`shop_feira_miwnay`) | Takhsich: "Teia nos Tubos"; Farnkhund: "Pedras nos Trilhos" |
 
 - **Passeio da cidade:** a mesma receita `CityTownRecipes.Garajonay` do mapa 05 e do mundo contínuo (mesmo `CityId`,
   mesma geometria; os moradores só ganharam `ResidentId` nos lotes que já existiam). Problema herdado da receita (não
@@ -70,6 +72,68 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
   2 Pedras da Bênção + 45 ouro, 460 XP); depois Kessi pede 5 Gaviões de Brasa (o Gavião-de-Penacho faz o papel; Teriaga
   do Oásis + 55 ouro, 540 XP). Testes: `CityTamborRubroTests`.
 
+**Salões de Bronze de Napirasu** (anões, mapa 17; cidade de retorno de 17–18):
+- **Passeio da cidade:** receita `CityTownRecipes.BronzeHalls` (`CityTownRecipes.BronzeHalls.cs`) no estilo novo
+  `TownStyles.RuneHall` (`TownArchitecture.RuneHall`, linha 9 da `TownPalette`: granito `#6E6A66`, bronze `#B07A3B`,
+  cobre esverdeado `#5E9C8A`, brasa fria `#8C3B2E`, luz de runa `#FFE08A` que acende à noite): cidade escavada na
+  montanha. Cada casa é uma frente cortada no granito (`TownBuildingSpec.RuneHall` com telhado `Rock`:
+  `TownKit.RuneHallHouse`): massa da montanha atrás, cornija de bronze, porta maciça quadrada de bronze com cravos e
+  argola sob o **lintel de runa** (traços acesos um sim, um não: "acende uma linha por vez"), janelas-fresta e alpendre
+  de granito sobre **pilares quadrados com base e capitel de bronze** (nos `PorchPostsX`, mesmos colisores). Peças:
+  `BronzePillar` (pilar solto com faixa de runas), `GreatForge` (a **Grande Forja apagada**: fornalha de granito em
+  degraus, boca escura com brasa fria, coifa de bronze até a rocha, o cristal da Luz escuro na garra, fole e duas
+  bigornas), `LavaPit` (poço de lava apagada com crosta escura, rachaduras de brasa fria e correntes),
+  `ChainLift` (elevador de corrente: armação de bronze, gaiola, roda e correntes) e `RockWall` (parede de rocha de
+  segmento: variante 0 granito com nichos, nervuras de bronze e linha de runas), portão de runa nas saídas
+  (`TownKit.RuneGate`) e a vitrine de runas do Puzur (`TownShopDressing.Runes`). Peças em `TownKit.RuneHall.cs`,
+  colisores em `CitySolids`. Ruas Oeste e Leste até x = ±18 (as trilhas do mundo contínuo chegam em (±24, 0)) e Sul;
+  parede de rocha só ao norte e a leste (o lado longe da câmera); tudo em y = 0 dentro de ±19 m (o mundo contínuo da
+  Serra reserva x −20…21, z −19…20 de zona segura e ±24 de chão plano); `CityLayoutRules.Validate` sem problemas, com
+  e sem o mascate.
+- **No mundo contínuo:** `OverworldLayouts.Kaggen.cs` ainda monta a "primeira versão" própria (`SaloesDeBronze()`).
+  Para usar esta receita basta trocar o `SaloesDeBronze()` do `Place` do 17 por `CityTownRecipes.BronzeHalls()` (mesmo
+  `CityId`, mesmo lugar e raio; `Backdrop` já é falso) e apagar o método antigo.
+- **Respawn:** derrota nos mapas 17 e 18 acorda na praça dos Salões (`MapCatalog.RespawnCityFor` → `ApplyDefeatIn`).
+- **Portões de Runa do Puzur** (semanal, 3 vagas que giram, tema Especialidade): poções de vida e mana, Pedra da
+  Bênção, Pedra da Alma (após o chefe da Montanha) e as exigências da região fixas: **Picareta** e **Lamparina**
+  (Picareta e Tocha do 17) e **Chá de Gengibre** (Resistência à Nevasca do 18); giram as runas de bronze (Clareza,
+  Couro, Cura, Vento, Cura Grande), ferro, minério e martelo. O Ammo nunca para lá. (Gravar 1 runa por dia de graça e
+  as 5 etapas da Grande Forja ainda faltam.)
+- **Missões da cidade:** Untash pede 5 golens de escória (o Ushabti de Pedra faz o Golem de Escória; 4 poções de vida
+  + 2 Pedras da Bênção + 55 ouro, 620 XP); depois Shilhak pede 6 bandos de morcegos de brasa no veio (o Enxame de
+  Morcegos faz o papel; Chá de Gengibre + 60 ouro, 700 XP). Testes: `CityBronzeHallsTests`.
+
+**Mercado dos Túneis** (kobolds, mapa 22; cidade de retorno de 22–23):
+- **Passeio da cidade:** receita `CityTownRecipes.TunnelMarket` (`CityTownRecipes.TunnelMarket.cs`) no estilo novo
+  `TownStyles.TunnelBazaar` (`TownArchitecture.TunnelBazaar`: basalto `#3B3B44`, cobre `#B06B3A`, lona (pano de vela),
+  vidro verde `#7FBF8F` e âmbar `#E0A040` e Ar Sereno `#C9B8F0`, que brilham à noite): o mercado no cruzamento das quatro
+  galerias. Cada casa é uma barraca num **nicho de basalto sob arco redondo** (`TownBuildingSpec.TunnelStall` com
+  telhado `Rock`: `TownKit.TunnelStallHouse`): prateleiras de garrafas brilhando no escuro do nicho, aduelas de cobre,
+  balcão do lado do dono, **toldo listrado de lona** em postes de cobre (nos `PorchPostsX`), lanternas de garrafa e um
+  cano de ar de cobre subindo a rocha. Peças: `MineRails` (trilhos de vagonete de segmento, pisáveis, um em cada
+  galeria), `MineCart` (vagonete de minério ou de garrafas), `AirPipe` (cano de cobre com **cata-vento dentro do
+  tubo**, que "puxa" o ar), `NicheStall` (barraquinha sob arco com toldo e garrafas), `Pulley` (roldana com balde de
+  minério) e `RockWall` variante 1 (parede redonda de basalto com cano de cobre e lâmpadas de garrafa); portão de túnel
+  redondo nas saídas (`TownKit.TunnelGate`); vitrines de garrafas de Ar Sereno (`AirBottles`) e de bancada de
+  consertos (`Tinkerer`). Peças em `TownKit.TunnelBazaar.cs`, colisores em `CitySolids`. Quatro ruas até ±18 onde chegam
+  as galerias do mundo contínuo; parede só ao norte e a leste; tudo em y = 0 dentro de ±20 m (o mundo contínuo do
+  Limiar reserva x −21…22, z −20…21 de zona segura e ±24 de chão plano); `CityLayoutRules.Validate` sem problemas, com
+  e sem o mascate.
+- **No mundo contínuo:** `OverworldLayouts.Limiar.cs` ainda monta a "primeira versão" própria (`LimiarMarket()`, em
+  `CaveTuff`). Para usar esta receita basta trocar o `LimiarMarket()` do `Place` do 22 por
+  `CityTownRecipes.TunnelMarket()` (mesmo `CityId`, mesmo lugar e raio, quatro saídas e cais na galeria Oeste) e apagar
+  o método antigo (`LimiarTuffHouse` continua usado pelos postos).
+- **Respawn:** derrota nos mapas 22 e 23 acorda no cruzamento (`MapCatalog.RespawnCityFor` → `ApplyDefeatIn`); 21 e
+  24 seguem acordando na Vila das Lamparinas.
+- **Feira da Miwnay** (diária, 3 vagas que giram, tema Feira): poções, Lamparina e o **Óleo do Fogo Eterno** (exigência
+  do 23, Cânion da Roda) fixos; giram minério, pedra, lascas de golem, asas de morcego, capacete de couro, amuleto da
+  sorte, picareta e a Lamparina Rúnica (após o chefe das Cavernas). O 22 não tem exigência e as Asas/Pulo Duplo do 24
+  não são item de loja. O Ammo nunca para lá. (A Garrafa de Ar Sereno, a Banca de Troca e a feira que muda de galeria
+  ainda faltam.)
+- **Missões da cidade:** Takhsich pede 6 aranhas tirando as teias dos tubos de ar (a Aranha-Tecelã faz a Lagarta de
+  Pedra; 4 poções de mana + Lamparina + 65 ouro, 760 XP); depois Farnkhund pede 4 golens fora dos trilhos (o Ushabti
+  de Pedra faz a Toupeira-Gigante; Óleo do Fogo Eterno + 70 ouro, 840 XP). Testes: `CityTunnelMarketTests`.
+
 ### 1.2 Cidades das regiões tardias (`CityCatalog.LateRegionCities`)
 
 Cidades das regiões 5–8 (Docs/Mapas100.md), que ainda não têm bioma no mapa-múndi. Ficam fora de `Cities` (sem painel
@@ -95,8 +159,8 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
   desde o primeiro dia: Passagem de Dhow (25), Relíquia dos Artífices (27), Concha Respirável (28), Bolha de Ar (29) e
   Botas de Raiz Viva (30) (Aratta e Kirta ainda não têm cidade, então os dhows da Mwana trazem o equipamento delas);
   giram poção de mana, carne, ração de montaria, fibra, madeira e Amuleto da Sorte. O Ammo nunca para lá.
-- **Missões da cidade:** Liyongo pede 6 Gaivotas Ladras (o Abutre de Brasa faz a Gaivota; 4 poções de vida + 3 de mana +
-  60 ouro, 700 XP); depois Zawadi pede 5 Caranguejos Gigantes (o Escorpião faz o Caranguejo-dos-Coqueiros; Botas de
+- **Missões da cidade:** Liyongo pede 6 Gaivotas Ladras (`enemy_forest_thief_gull`; 4 poções de vida + 3 de mana +
+  60 ouro, 700 XP); depois Zawadi pede 5 Caranguejos Gigantes (`enemy_forest_coconut_crab`; Botas de
   Raiz Viva + 80 ouro, 820 XP). Testes: `CityTaaPwaniTests`.
 - **Falta:** o mapa 25 ainda não é jogável, então o passeio só abre pelo menu de prévia do editor até o mapa existir; a
   segunda cidade da região (Aratta, mapa 26) e Kirta (28) ficam para depois.

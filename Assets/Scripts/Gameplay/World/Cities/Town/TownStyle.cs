@@ -39,6 +39,17 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// posts, very steep hide gable roofs with crossed ridge poles, a palisade of sharpened logs, drum towers, clan tents.
         /// </summary>
         WarCamp = 5,
+        /// <summary>
+        /// Salões de Bronze de Napirasu (the dwarves' city cut into the mountain, Docs/Mapas100.md §3.3): granite halls whose
+        /// fronts are carved into the rock, square bronze-capped pillars, massive bronze doors under a rune lintel that lights
+        /// one line at a time, cold lava pits, chain lifts.
+        /// </summary>
+        RuneHall = 6,
+        /// <summary>
+        /// Mercado dos Túneis (the kobolds' market, Docs/Mapas100.md §3.3): round basalt tunnels, stalls set into niches under
+        /// arches with canvas awnings, mine-cart rails, pulleys, copper air pipes with fans inside, bottle-glass lanterns.
+        /// </summary>
+        TunnelBazaar = 7,
     }
 
     /// <summary>
@@ -237,6 +248,52 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Plaza = TownSwatch.Sand, PlazaAlt = TownSwatch.Laterite,
             Fence = TownSwatch.WoodDark, Plinth = TownSwatch.StoneDark,
             HouseRoof = TownRoofKind.Gable,
+        };
+
+        /// <summary>
+        /// Salões de Bronze de Napirasu, the dwarves' halls inside the Serra de Kaggen (Docs/Mapas100.md §3.3, map 17): picked by
+        /// hand like <see cref="WarCamp"/>. The ficha's palette has its own cells (row 9 of <see cref="TownPalette"/>): granite
+        /// #6E6A66, bronze #B07A3B, green copper #5E9C8A, cold ember #8C3B2E, rune light #FFE08A. Houses are fronts cut into the
+        /// rock (<see cref="TownRoofKind.Rock"/>, <see cref="TownBuildingSpec.RuneHall"/>). Region: the Mountain.
+        /// </summary>
+        public static readonly TownStyle RuneHall = new TownStyle
+        {
+            Region = BiomeType.Mountain,
+            Vegetation = TownVegetation.Caves,
+            Architecture = TownArchitecture.RuneHall,
+            Walls = new[] { TownSwatch.Granite, TownSwatch.Granite, TownSwatch.StoneDark },
+            Trims = new[] { TownSwatch.Bronze, TownSwatch.Verdigris },
+            Roofs = new[] { TownSwatch.Granite },
+            Joinery = new[] { TownSwatch.Bronze, TownSwatch.Verdigris },
+            Accent = TownSwatch.RuneLight,
+            Ground = TownSwatch.StoneDark, GroundAlt = TownSwatch.Granite,
+            Street = TownSwatch.Granite, StreetEdge = TownSwatch.Bronze, Sidewalk = TownSwatch.StoneDark,
+            Plaza = TownSwatch.Stone, PlazaAlt = TownSwatch.Granite,
+            Fence = TownSwatch.Granite, Plinth = TownSwatch.StoneDark,
+            HouseRoof = TownRoofKind.Rock,
+        };
+
+        /// <summary>
+        /// Mercado dos Túneis, the kobolds' market at the crossing of the four galleries of the Grutas do Limiar (Docs/Mapas100.md
+        /// §3.3, map 22): picked by hand. Basalt #3B3B44, copper #B06B3A, canvas #C9B48A (sail cloth / thatch), bottle glass green
+        /// #7FBF8F and amber #E0A040, Ar Sereno #C9B8F0. Houses are stalls in arched rock niches (<see cref="TownRoofKind.Rock"/>,
+        /// <see cref="TownBuildingSpec.TunnelStall"/>). Region: the Caves.
+        /// </summary>
+        public static readonly TownStyle TunnelBazaar = new TownStyle
+        {
+            Region = BiomeType.Caves,
+            Vegetation = TownVegetation.Caves,
+            Architecture = TownArchitecture.TunnelBazaar,
+            Walls = new[] { TownSwatch.Basalt, TownSwatch.Basalt, TownSwatch.StoneDark },
+            Trims = new[] { TownSwatch.Copper, TownSwatch.Stone },
+            Roofs = new[] { TownSwatch.Basalt },
+            Joinery = new[] { TownSwatch.WoodDark, TownSwatch.Copper },
+            Accent = TownSwatch.GlassAmber,
+            Ground = TownSwatch.Basalt, GroundAlt = TownSwatch.StoneDark,
+            Street = TownSwatch.DirtDark, StreetEdge = TownSwatch.Copper, Sidewalk = TownSwatch.StoneDark,
+            Plaza = TownSwatch.Cobble, PlazaAlt = TownSwatch.Basalt,
+            Fence = TownSwatch.Basalt, Plinth = TownSwatch.Basalt,
+            HouseRoof = TownRoofKind.Rock,
         };
     }
 }

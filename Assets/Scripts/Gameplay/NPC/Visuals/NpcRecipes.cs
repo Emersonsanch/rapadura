@@ -431,6 +431,144 @@ namespace Rapadura.Gameplay.NPC.Visuals
             },
 
             // ------------------------------------------------------------------
+            // Salões de Bronze de Napirasu (the dwarves of the mountain, Docs/Mapas100.md §3.3): short (0.78–0.84) and broad,
+            // braided beards with bronze beads, granite-grey and green-copper cloth, bronze bands and leather aprons. Names from
+            // Elamite history: queen Napirasu (her bronze statue), Untash-Napirisha (the ziggurat builder), Puzur-Inshushinak
+            // (the king of Linear Elamite), Shilhak-Inshushinak, Kidin-Hutran. No helmets of war: they are founders.
+            // ------------------------------------------------------------------
+
+            // Napirasu, the master founder (refining and fusion; her hall at the plaza head): stout and upright, two long
+            // auburn braids under a bronze headband, a green-copper dress with a leather apron and belt, tongs and hammer.
+            new NpcRecipe
+            {
+                Id = "napirasu", Region = BiomeType.Mountain, Age = NpcAge.Adult, Build = NpcBuild.Stout, Height = 0.82f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Stern, Hair = NpcHair.TwoBraids, HairColor = NpcSwatch.HairAuburn,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.BronzeBright, HeadTrim = NpcSwatch.RuneGold,
+                Garment = NpcGarment.Dress, Main = NpcSwatch.Verdigris, Trim = NpcSwatch.BronzeBright, Sleeves = NpcSwatch.Granite, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Apron | NpcLayer.Belt, LayerColor = NpcSwatch.LeatherDark, LayerTrim = NpcSwatch.BronzeBright,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Tongs, NpcProp.Hammer },
+                Gesture = NpcGesture.Hammer,
+                Story = "Mestra fundidora dos Salões de Bronze (refino e fusão); guarda o cristal apagado da Grande Forja",
+            },
+
+            // Untash, the master builder (the city's missions): broad and bald, a long braided beard with bronze beads, a granite
+            // tunic under a leather vest, a scroll of plans and a builder's rod. Measures twice.
+            new NpcRecipe
+            {
+                Id = "untash", Region = BiomeType.Mountain, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 0.84f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinLight, Face = NpcFace.Calm, Hair = NpcHair.Bald, HairColor = NpcSwatch.HairBrown, Beard = NpcBeard.LongBraided,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.Granite, Trim = NpcSwatch.BronzeBright, Sleeves = NpcSwatch.Granite, Trousers = NpcSwatch.LeatherDark, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Vest | NpcLayer.Belt, LayerColor = NpcSwatch.Leather, LayerTrim = NpcSwatch.BronzeBright,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.Scroll, NpcProp.WalkingStick },
+                Gesture = NpcGesture.Ponder,
+                Story = "Mestre de obras dos Salões de Bronze, dá as missões da cidade; desenha o fole novo da Grande Forja",
+            },
+
+            // Puzur, the keeper of the runes (the city's shop, the Portões de Runa): an old dwarf, a long white beard, a green-copper
+            // hood and a granite robe with a bronze-trimmed shawl, a set of rune tablets and the quill. Writes the runes.
+            new NpcRecipe
+            {
+                Id = "puzur", Region = BiomeType.Mountain, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 0.8f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinFair, Face = NpcFace.Kind, Hair = NpcHair.Long, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Long,
+                Headwear = NpcHeadwear.Hood, HeadColor = NpcSwatch.Verdigris, HeadTrim = NpcSwatch.RuneGold,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.Granite, Trim = NpcSwatch.RuneGold, Sleeves = NpcSwatch.Granite, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Shawl, LayerColor = NpcSwatch.Verdigris, LayerTrim = NpcSwatch.BronzeBright,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Tablets, NpcProp.Quill },
+                Gesture = NpcGesture.Write,
+                Story = "Guardião das runas dos Salões de Bronze; os Portões de Runa, a loja da cidade (picareta, lamparina e chá de gengibre)",
+            },
+
+            // Shilhak, the miner (the second mission): young and stout, a short beard, the lamp helmet, a leather apron over a
+            // cold-ember tunic, a satchel of ore, the pick on the shoulder and an oil lamp. Sings to the rock.
+            new NpcRecipe
+            {
+                Id = "shilhak", Region = BiomeType.Mountain, Age = NpcAge.Youth, Build = NpcBuild.Stout, Height = 0.8f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinOlive, Face = NpcFace.Bright, Hair = NpcHair.Short, HairColor = NpcSwatch.HairDark, Beard = NpcBeard.Short,
+                Headwear = NpcHeadwear.LampHelmet, HeadColor = NpcSwatch.BronzeBright, HeadTrim = NpcSwatch.LampGlow,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.ColdEmber, Trim = NpcSwatch.BronzeBright, Sleeves = NpcSwatch.ColdEmber, Trousers = NpcSwatch.Granite, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Apron | NpcLayer.Satchel, LayerColor = NpcSwatch.Leather, LayerTrim = NpcSwatch.Iron,
+                LeftArm = NpcArmPose.Carry, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.Pick, NpcProp.OilLamp },
+                Gesture = NpcGesture.Carry,
+                Story = "Minerador dos Salões de Bronze, canta para a pedra antes da picareta; dá a 2ª missão (paga com chá de gengibre)",
+            },
+
+            // Kidin, the cook of the hall: stout and jolly, a full red beard, a felt cap, a bronze-trimmed kaftan under a white
+            // apron, a ladle-cup and a water jug. The warmest place in the halls is his oven.
+            new NpcRecipe
+            {
+                Id = "kidin", Region = BiomeType.Mountain, Age = NpcAge.Adult, Build = NpcBuild.Stout, Height = 0.78f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinLight, Face = NpcFace.Jolly, Hair = NpcHair.Short, HairColor = NpcSwatch.HairAuburn, Beard = NpcBeard.Full,
+                Headwear = NpcHeadwear.FeltCap, HeadColor = NpcSwatch.ColdEmber, HeadTrim = NpcSwatch.BronzeBright,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.Granite, Trim = NpcSwatch.BronzeBright, Sleeves = NpcSwatch.Granite, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Apron, LayerColor = NpcSwatch.RobeWhite, LayerTrim = NpcSwatch.ColdEmber,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.Carry, Props = new[] { NpcProp.Cup, NpcProp.WaterJug },
+                Gesture = NpcGesture.Pour,
+                Story = "Cozinheiro do salão; desde que a forja apagou, o forno dele é o lugar mais quente dos Salões",
+            },
+
+            // ------------------------------------------------------------------
+            // Mercado dos Túneis (the kobolds of the tunnels, Docs/Mapas100.md §3.3): small (0.75–0.8), a short muzzle
+            // (NpcRecipe.Snout), smooth rust-ochre or slate-blue scales; canvas, copper and bottle glass, goggles and tools.
+            // Names from the Sogdian Ancient Letters (Miwnay and her daughter Shayn) and the Mug documents (Farnkhund,
+            // Takhsich). Never misers: they bottle the quiet air and mend what is broken.
+            // ------------------------------------------------------------------
+
+            // Miwnay, who runs the market (the city's shop, the Feira da Miwnay): rust scales, a canvas headwrap, a copper
+            // kaftan with a lilac sash, a bottle of Ar Sereno held up and the scale. Calls the customers.
+            new NpcRecipe
+            {
+                Id = "miwnay", Region = BiomeType.Caves, Age = NpcAge.Adult, Build = NpcBuild.Average, Height = 0.78f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinKoboldRust, Face = NpcFace.Bright, Hair = NpcHair.Bun, HairColor = NpcSwatch.HairDark, Snout = true,
+                Headwear = NpcHeadwear.Headwrap, HeadColor = NpcSwatch.Straw, HeadTrim = NpcSwatch.SereneAir,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.Copper, Trim = NpcSwatch.SereneAir, Sleeves = NpcSwatch.Copper, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Sash | NpcLayer.Satchel, LayerColor = NpcSwatch.SereneAir, LayerTrim = NpcSwatch.Copper,
+                LeftArm = NpcArmPose.HoldUp, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.Jar, NpcProp.Scale },
+                Gesture = NpcGesture.Call,
+                Story = "Mestra da feira do Mercado dos Túneis (a carta de Miwnay); engarrafa o Ar Sereno, a loja da cidade",
+            },
+
+            // Shayn, Miwnay's daughter, who mends and recycles: slate scales, a ponytail under a bandana, goggles, a canvas tunic
+            // with a leather apron and patches, the hammer and spools of copper wire. Taps at the scrap.
+            new NpcRecipe
+            {
+                Id = "shayn", Region = BiomeType.Caves, Age = NpcAge.Youth, Build = NpcBuild.Slim, Height = 0.75f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinKoboldSlate, Face = NpcFace.Kind, Hair = NpcHair.Ponytail, HairColor = NpcSwatch.HairBlack, Snout = true,
+                Headwear = NpcHeadwear.Bandana, HeadColor = NpcSwatch.GlassGreen, HeadTrim = NpcSwatch.Copper,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.Straw, Trim = NpcSwatch.Copper, Sleeves = NpcSwatch.Straw, Trousers = NpcSwatch.Basalt, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Apron | NpcLayer.Patches, LayerColor = NpcSwatch.Leather, LayerTrim = NpcSwatch.GlassGreen,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Hammer, NpcProp.Spools, NpcProp.Goggles },
+                Gesture = NpcGesture.Hammer,
+                Story = "Filha da Miwnay (a carta de Shayn), consertadora: conserto e reciclagem de sucata",
+            },
+
+            // Farnkhund, the cart driver of the tunnels: broad for a kobold, rust scales, a felt cap, a basalt chapan with a scarf
+            // and belt, the lantern pole of the carts and the ring of switch keys. Raises the lantern down the gallery.
+            new NpcRecipe
+            {
+                Id = "farnkhund", Region = BiomeType.Caves, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 0.8f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinKoboldRust, Face = NpcFace.Jolly, Hair = NpcHair.Short, HairColor = NpcSwatch.HairBlack, Snout = true,
+                Headwear = NpcHeadwear.FeltCap, HeadColor = NpcSwatch.Basalt, HeadTrim = NpcSwatch.Copper,
+                Garment = NpcGarment.Chapan, Main = NpcSwatch.Basalt, Trim = NpcSwatch.Copper, Sleeves = NpcSwatch.Basalt, Trousers = NpcSwatch.Leather, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Scarf | NpcLayer.Belt, LayerColor = NpcSwatch.GlassGreen, LayerTrim = NpcSwatch.Copper,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.Keys, NpcProp.LanternPole },
+                Gesture = NpcGesture.LanternRaise,
+                Story = "Vagoneiro dos túneis, conhece cada desvio pelo rangido; dá a 2ª missão (paga com o Óleo do Fogo Eterno)",
+            },
+
+            // Takhsich, the inventor (the city's missions, Ícaro's favourite): slim, slate scales, spiky crest of hair, goggles,
+            // a green-glass tunic under a patched vest, an oil can and a letter of plans. Mimes the turning of his fans.
+            new NpcRecipe
+            {
+                Id = "takhsich", Region = BiomeType.Caves, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 0.77f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinKoboldSlate, Face = NpcFace.Bright, Hair = NpcHair.Spiky, HairColor = NpcSwatch.HairDark, Snout = true,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.GlassGreen, Trim = NpcSwatch.Copper, Sleeves = NpcSwatch.GlassGreen, Trousers = NpcSwatch.Basalt, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Vest | NpcLayer.Patches, LayerColor = NpcSwatch.Copper, LayerTrim = NpcSwatch.Basalt,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.OilCan, NpcProp.Letter, NpcProp.Goggles },
+                Gesture = NpcGesture.Mime,
+                Story = "Inventor do Mercado dos Túneis, faz os cata-ventos que puxam o Ar Sereno; dá as missões da cidade",
+            },
+
+            // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
 

@@ -695,7 +695,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // ------------------------------------------------------------------
 
         private static bool IsSkin(NpcSwatch swatch) => swatch <= NpcSwatch.SkinDeep || swatch == NpcSwatch.SkinBark
-            || swatch == NpcSwatch.SkinOrcOlive || swatch == NpcSwatch.SkinOrcGrey;
+            || swatch == NpcSwatch.SkinOrcOlive || swatch == NpcSwatch.SkinOrcGrey || swatch == NpcSwatch.SkinKoboldRust || swatch == NpcSwatch.SkinKoboldSlate;
 
         /// <summary>
         /// One arm with volume: a shoulder cap, a tapered upper arm, an elbow, a forearm ending in a cuff (wide bell sleeves
@@ -988,6 +988,20 @@ namespace Rapadura.Gameplay.NPC.Visuals
                     b.Decal(mp + mr * new Vector3(-hw * wsm * 0.24f, 0f, 0f), new Vector2(hw * wsm * 0.56f, hh * 0.032f), lip, mr * Quaternion.Euler(0f, 0f, -14f));
                     b.Decal(mp + mr * new Vector3(hw * wsm * 0.24f, 0f, 0f), new Vector2(hw * wsm * 0.56f, hh * 0.032f), lip, mr * Quaternion.Euler(0f, 0f, 14f));
                     break;
+                }
+            }
+
+            if (r.Snout)
+            {
+                // A kobold's muzzle: a short rounded snout jutting from under the eyes over the mouth, a darker nose pad with
+                // two nostrils on top (it reads as a lizard-ish face from the iso camera, never as a mask).
+                Vector3 sp = OnFace(ref rig, 0f, -hh * 0.2f, -0.01f, out Quaternion sr);
+                b.Blob(sp + sr * new Vector3(0f, 0f, 0.05f * rig.S), new Vector3(hw * 0.5f, hh * 0.3f, 0.13f * rig.S), r.Skin);
+                Vector3 pad = sp + sr * new Vector3(0f, hh * 0.04f, 0.115f * rig.S);
+                b.Blob(pad, new Vector3(hw * 0.2f, hh * 0.09f, 0.04f * rig.S), NpcSwatch.Charcoal, coarse: true);
+                foreach (float side in new[] { -1f, 1f })
+                {
+                    b.Decal(pad + sr * new Vector3(side * hw * 0.05f, hh * 0.015f, 0.021f * rig.S), new Vector2(0.014f, 0.01f) * rig.S, NpcSwatch.Lash, sr);
                 }
             }
 

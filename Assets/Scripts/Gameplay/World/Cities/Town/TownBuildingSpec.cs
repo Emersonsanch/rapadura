@@ -55,6 +55,12 @@ namespace Rapadura.Gameplay.World.Cities.Town
         RootWeaver = 21,
         /// <summary>Kessi (Tambor Rubro): a drying frame of red hides, a bow and a quiver on pegs, a coil of snare cord.</summary>
         HuntingRack = 22,
+        /// <summary>Puzur (Salões de Bronze): bronze rune plates on a stand, a slate of runes on the wall, a rune lamp.</summary>
+        Runes = 23,
+        /// <summary>Miwnay (Mercado dos Túneis): racks of glass bottles of Ar Sereno (glowing lilac), a funnel, a crate of corks.</summary>
+        AirBottles = 24,
+        /// <summary>Shayn / Takhsich (Mercado dos Túneis): mended scrap, gears on a bench, a little fan in a tube.</summary>
+        Tinkerer = 25,
     }
 
     /// <summary>
@@ -120,6 +126,19 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// </summary>
         public bool LogHall;
 
+        /// <summary>
+        /// Salões de Bronze: with <see cref="TownRoofKind.Rock"/>, a hall front carved into the granite: square pillars with
+        /// bronze capitals at the porch posts, a massive square bronze door with studs and a rune lintel that glows
+        /// (TownKit.RuneHall).
+        /// </summary>
+        public bool RuneHall;
+
+        /// <summary>
+        /// Mercado dos Túneis: with <see cref="TownRoofKind.Rock"/>, a stall set into an arched basalt niche: the round arch,
+        /// a striped canvas awning on copper poles, a counter, bottle lanterns and a copper air pipe up the rock (TownKit.TunnelBazaar).
+        /// </summary>
+        public bool TunnelStall;
+
         /// <summary>Qocho caravanserai: the porch columns become brick piers carrying stepped pointed arches.</summary>
         public bool Arcade;
 
@@ -155,7 +174,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Key of the cached mesh: equal specs share one mesh.</summary>
         public string CacheKey =>
             $"{Kind}|{Width:0.00}|{Depth:0.00}|{PorchDepth:0.00}|{FullVaranda}|{WallHeight:0.00}|{Floors}|{Roof}|{WallColor}|{TrimColor}|{RoofColor}|" +
-            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
+            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
             $"{Chimney}|{Sign}|{SignColor}|{Dressing}|{Seed}";
     }
 }

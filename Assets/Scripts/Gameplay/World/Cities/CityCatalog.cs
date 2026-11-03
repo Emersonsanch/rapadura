@@ -104,6 +104,18 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string TamborRubro = "tambor_rubro";
 
+        /// <summary>
+        /// Salões de Bronze de Napirasu, the race city of the dwarves (map 17, return city of maps 17–18, Docs/Mapas100.md §3.3).
+        /// Same id as <c>MapCatalog.SaloesDeBronze</c> and <c>CityTownRecipes.BronzeHallsCityId</c>.
+        /// </summary>
+        public const string SaloesDeBronze = "saloes_de_bronze";
+
+        /// <summary>
+        /// Mercado dos Túneis, the race city of the kobolds (map 22, return city of maps 22–23, Docs/Mapas100.md §3.3). Same id
+        /// as <c>MapCatalog.MercadoDosTuneis</c> and <c>CityTownRecipes.TunnelMarketCityId</c>.
+        /// </summary>
+        public const string MercadoDosTuneis = "mercado_dos_tuneis";
+
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
             new CitySpec(VilaZefa, BiomeType.Forest,
@@ -198,6 +210,33 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("tushratta", CityShopCatalog.ForjaTambor),
                 },
                 new List<string> { CityShopCatalog.ForjaTambor }),
+
+            // Salões de Bronze de Napirasu (dwarves, Elamite names): Napirasu the master founder (her hall at the plaza head),
+            // Untash the master builder (missions), Puzur the rune keeper (the city's shop: the Portões de Runa, with the
+            // pickaxe and torch of map 17 and the ginger tea of map 18), Shilhak the miner (second mission), Kidin the cook.
+            new CitySpec(SaloesDeBronze, BiomeType.Mountain,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("napirasu"),
+                    new CityResidentSpec("untash"),
+                    new CityResidentSpec("puzur", CityShopCatalog.PortoesRuna),
+                    new CityResidentSpec("shilhak"),
+                    new CityResidentSpec("kidin"),
+                },
+                new List<string> { CityShopCatalog.PortoesRuna }),
+
+            // Mercado dos Túneis (kobolds, names from the Sogdian Ancient Letters): Miwnay who runs the market (the city's shop:
+            // the Feira da Miwnay, with the eternal-fire oil of map 23), her daughter Shayn who mends and recycles, Farnkhund the
+            // cart driver of the tunnels (second mission), Takhsich the inventor (missions; Ícaro's favourite).
+            new CitySpec(MercadoDosTuneis, BiomeType.Caves,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("miwnay", CityShopCatalog.FeiraMiwnay),
+                    new CityResidentSpec("shayn"),
+                    new CityResidentSpec("farnkhund"),
+                    new CityResidentSpec("takhsich"),
+                },
+                new List<string> { CityShopCatalog.FeiraMiwnay }),
         };
 
         /// <summary>

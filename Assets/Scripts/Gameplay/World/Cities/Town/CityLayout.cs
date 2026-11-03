@@ -124,6 +124,36 @@ namespace Rapadura.Gameplay.World.Cities.Town
         WarDrum = 39,
         /// <summary>Tambor Rubro: the training arena of sand (a raked disc with a low log border); walkable.</summary>
         TrainingRing = 40,
+
+        // ---- Salões de Bronze de Napirasu, the dwarves' halls (drawn by TownKit.RuneHall) ----
+
+        /// <summary>Salões de Bronze: a square granite pillar with a bronze base and capital and a band of runes that glows.</summary>
+        BronzePillar = 41,
+        /// <summary>Salões de Bronze: the Grande Forja, gone cold: a stepped granite furnace, bronze bellows, two anvils and the dark crystal of Light.</summary>
+        GreatForge = 42,
+        /// <summary>Salões de Bronze: a pit of cold lava (dark crust, cracks of cold ember) in a granite rim.</summary>
+        LavaPit = 43,
+        /// <summary>Salões de Bronze: a chain lift: a bronze frame, the cage and the chains running up into the rock.</summary>
+        ChainLift = 44,
+        /// <summary>
+        /// The rock wall of a city cut into the mountain, from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> (a
+        /// thin wall, its mass behind the line). Variant 0: granite with carved niches and bronze ribs (Salões de Bronze);
+        /// 1: a round basalt tunnel wall with a copper air pipe and bottle lamps (Mercado dos Túneis).
+        /// </summary>
+        RockWall = 45,
+
+        // ---- Mercado dos Túneis, the kobolds' market (drawn by TownKit.TunnelBazaar) ----
+
+        /// <summary>Mercado dos Túneis: mine-cart rails on sleepers from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/>; walkable.</summary>
+        MineRails = 46,
+        /// <summary>Mercado dos Túneis: a mine cart (vagonete) on a short stretch of rail, loaded with ore or bottles (variant).</summary>
+        MineCart = 47,
+        /// <summary>Mercado dos Túneis: a copper air pipe rising into the rock with a fan turning inside a tube (it "pulls" the air).</summary>
+        AirPipe = 48,
+        /// <summary>Mercado dos Túneis: a market stall under a small basalt arch, canvas awning and bottle lanterns, front to local −z.</summary>
+        NicheStall = 49,
+        /// <summary>Mercado dos Túneis: a pulley frame (two posts, a wheel, a rope and a bucket of ore).</summary>
+        Pulley = 50,
     }
 
     public enum CityExitKind

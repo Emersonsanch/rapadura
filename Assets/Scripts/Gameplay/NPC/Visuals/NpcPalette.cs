@@ -37,6 +37,10 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // Tambor Rubro (orcs, Docs/Mapas100.md §3.3): olive-green and grey orc skin, ochre-red #A8452B, red sandstone
         // #C9774B, dyed hide #7A4A2A, the yellow cloth band #E8C547, war-camp bronze, ash
         SkinOrcOlive, SkinOrcGrey, OchreRed, RedSandstone, Hide, BannerYellow, Bronze, Ash,
+        // Salões de Bronze (dwarves) and Mercado dos Túneis (kobolds), Docs/Mapas100.md §3.3: rust-ochre and slate-blue
+        // smooth kobold scales, bright bronze #B07A3B, green copper #5E9C8A, rune light #FFE08A (glows), cold ember #8C3B2E,
+        // bottle-glass green #7FBF8F and the bottled Ar Sereno #C9B8F0 (both glow a little)
+        SkinKoboldRust, SkinKoboldSlate, BronzeBright, Verdigris, RuneGold, ColdEmber, GlassGreen, SereneAir,
     }
 
     /// <summary>
@@ -48,7 +52,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 12;
+        public const int Rows = 13;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -89,6 +93,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Tambor Rubro  orc olive #6F7D4A, orc grey #7E827A, ochre-red #A8452B, sandstone #C9774B, hide #7A4A2A, band #E8C547, bronze #9C6B30, ash #5E5A55
             new Color(0.44f, 0.49f, 0.29f), new Color(0.49f, 0.51f, 0.48f), new Color(0.66f, 0.27f, 0.17f), new Color(0.79f, 0.47f, 0.29f),
             new Color(0.48f, 0.29f, 0.16f), new Color(0.91f, 0.77f, 0.28f), new Color(0.61f, 0.42f, 0.19f), new Color(0.37f, 0.35f, 0.33f),
+            // Salões / Mercado  kobold rust #B0663A, kobold slate #5F7480, bronze #B07A3B, green copper #5E9C8A, rune #FFE08A, cold ember #8C3B2E, glass #7FBF8F, air #C9B8F0
+            new Color(0.69f, 0.4f, 0.23f), new Color(0.37f, 0.45f, 0.5f), new Color(0.69f, 0.48f, 0.23f), new Color(0.37f, 0.61f, 0.54f),
+            new Color(1f, 0.88f, 0.54f), new Color(0.55f, 0.23f, 0.18f), new Color(0.5f, 0.75f, 0.56f), new Color(0.79f, 0.72f, 0.94f),
         };
 
         public static int Count => Colors.Length;
@@ -103,6 +110,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 case NpcSwatch.Ember: return 0.9f;
                 case NpcSwatch.SunGlow: return 0.8f;
                 case NpcSwatch.MistWater: return 0.35f;
+                case NpcSwatch.RuneGold: return 0.8f;
+                case NpcSwatch.GlassGreen: return 0.4f;
+                case NpcSwatch.SereneAir: return 0.45f;
                 default: return 0f;
             }
         }

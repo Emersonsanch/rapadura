@@ -208,6 +208,20 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string ForjaTambor = "shop_forja_tambor";
 
+        /// <summary>
+        /// Portões de Runa (Salões de Bronze de Napirasu, the dwarves' race city, Docs/Mapas100.md §3.3): Puzur's rune counter:
+        /// bronze runes, the Pedras da Luz Presa, and the gear of the region's gates: the pickaxe and the oil lamp (torch) of
+        /// map 17 and the ginger tea of map 18 (the Cume dos Mazans, whose return city is the Salões). The counter turns weekly.
+        /// </summary>
+        public const string PortoesRuna = "shop_portoes_runa";
+
+        /// <summary>
+        /// Feira da Miwnay (Mercado dos Túneis, the kobolds' race city, Docs/Mapas100.md §3.3): the market that moves from gallery
+        /// to gallery: mended scrap, lamps and oil, potions, and the Óleo do Fogo Eterno for the gate of map 23 (the Cânion da
+        /// Roda, whose return city is the Mercado). The counter turns daily.
+        /// </summary>
+        public const string FeiraMiwnay = "shop_feira_miwnay";
+
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
@@ -366,6 +380,48 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
                 new CityShopEntry("item_mount_feed", 3, 10, rotating: true),
                 new CityShopEntry("item_iron_sword", 45, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Desert)),
+            })),
+
+            // ---- Salões de Bronze: Puzur's Portões de Runa (bronze runes), the pickaxe and lamp of map 17, the ginger tea of 18; weekly ----
+            new CityShopSpec(PortoesRuna, ShopTheme.Speciality, BiomeType.Mountain, ShopRotationPeriod.Weekly, 3, WithHouse(PortoesRuna, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 5),
+                new CityShopEntry("item_mana_potion", 15, 5),
+                // Pedras da Luz Presa (refino): the dwarves refined for the whole island before their forge went cold.
+                new CityShopEntry("item_pedra_bencao", 11, 5),
+                new CityShopEntry("item_pedra_alma", 32, 2, unlock: ShopUnlock.Cleared(BiomeType.Mountain)),
+                // Map gates (MapRequirementRules): pickaxe and torch for the Salões (17), ginger tea for the Cume dos Mazans (18).
+                new CityShopEntry("item_pickaxe", 18, 2),
+                new CityShopEntry("item_lamparina_oleo", 28, 3),
+                new CityShopEntry("item_cha_gengibre", 66, 3),
+                // The rotation: Puzur's bronze runes, iron and ore from Shilhak's seam, the hall's hammer.
+                new CityShopEntry("item_runa_clareza", 15, 2, rotating: true),
+                new CityShopEntry("item_runa_couro", 20, 2, rotating: true),
+                new CityShopEntry("item_runa_cura", 15, 2, rotating: true),
+                new CityShopEntry("item_runa_vento", 20, 2, rotating: true),
+                new CityShopEntry("item_runa_cura_grande", 35, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Mountain)),
+                new CityShopEntry("item_iron", 8, 20, rotating: true),
+                new CityShopEntry("item_iron_ore", 5, 20, rotating: true),
+                new CityShopEntry("item_hammer", 15, 1, rotating: true),
+            })),
+
+            // ---- Mercado dos Túneis: the Feira da Miwnay (mended scrap, lamps, potions), the eternal-fire oil of map 23; daily ----
+            new CityShopSpec(FeiraMiwnay, ShopTheme.Feira, BiomeType.Caves, ShopRotationPeriod.Daily, 3, WithHouse(FeiraMiwnay, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 5),
+                new CityShopEntry("item_mana_potion", 14, 5),
+                new CityShopEntry("item_lamparina_oleo", 28, 3),
+                // Map gate (MapRequirementRules): the Óleo do Fogo Eterno for the Cânion da Roda (23), whose return city this is.
+                new CityShopEntry("item_oleo_fogo_eterno", 190, 2),
+                // The rotation: what the market brought up from the four galleries today.
+                new CityShopEntry("item_iron_ore", 5, 12, rotating: true),
+                new CityShopEntry("item_stone", 1, 20, rotating: true),
+                new CityShopEntry("item_parte_lasca_golem", 10, 5, rotating: true),
+                new CityShopEntry("item_parte_asa_morcego", 12, 5, rotating: true),
+                new CityShopEntry("item_leather_helmet", 12, 1, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 24, 1, rotating: true),
+                new CityShopEntry("item_pickaxe", 18, 1, rotating: true),
+                new CityShopEntry("item_lamparina_runica", 155, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Caves)),
             })),
 
             // ---- Ferraria do Mestre Adamas (Vila): the village blacksmith ----
