@@ -55,11 +55,15 @@ namespace Rapadura.Gameplay.World.Cities
     /// progresses in combat (the quest completes on its own and the reward lands, or waits in the pending queue).
     /// Copas de Garajonay (map 05, Docs/Mapas100.md): Gara asks the cousins to calm the lizards of the dry mist (the wolves
     /// of the forest floor stand in for the Lagarto-Gigante do Louro), then Tinguaro sends them after the moss boars.
+    /// Taa Pwani (map 25): Captain Liyongo sends the cousins after the thief gulls that tear the dhows' sails, then Zawadi
+    /// asks them to free the mangrove roots from the giant crabs and pays with his own Botas de Raiz Viva (the gate of map 30).
     /// </summary>
     public static class CityQuestCatalog
     {
         public const string GarajonayMist = "quest_city_garajonay_dry_mist";
         public const string GarajonayMoss = "quest_city_garajonay_moss_tracks";
+        public const string TaaPwaniGulls = "quest_city_taa_pwani_thief_gulls";
+        public const string TaaPwaniClaws = "quest_city_taa_pwani_mangrove_claws";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -70,6 +74,15 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.CopasGarajonay, "tinguaro", new RegionQuestSpec(GarajonayMoss, BiomeType.Forest, GarajonayMist, 380,
                 new[] { new RegionObjectiveSpec("follow_moss_boars", QuestObjectiveType.KillEnemyType, "enemy_forest_peccary", 5) },
                 new[] { new RegionRewardSpec("item_hunting_bow", 1), new RegionRewardSpec("item_gold", 25) })),
+
+            // -- Taa Pwani: Captain Liyongo, the nakhoda, then Zawadi, the root weaver. Map 25's own beasts are not in the game yet:
+            // the ember vultures stand in for the Gaivota Ladra, the scorpions for the giant coconut crab (Docs/Mapas100.md 25). --
+            new CityQuestSpec(CityCatalog.TaaPwani, "liyongo", new RegionQuestSpec(TaaPwaniGulls, BiomeType.Forest, null, 700,
+                new[] { new RegionObjectiveSpec("drive_off_thief_gulls", QuestObjectiveType.KillEnemyType, "enemy_desert_ember_vulture", 6) },
+                new[] { new RegionRewardSpec("item_health_potion", 4), new RegionRewardSpec("item_mana_potion", 3), new RegionRewardSpec("item_gold", 60) })),
+            new CityQuestSpec(CityCatalog.TaaPwani, "zawadi", new RegionQuestSpec(TaaPwaniClaws, BiomeType.Forest, TaaPwaniGulls, 820,
+                new[] { new RegionObjectiveSpec("cut_free_the_roots", QuestObjectiveType.KillEnemyType, "enemy_desert_scorpion", 5) },
+                new[] { new RegionRewardSpec("item_botas_raiz", 1), new RegionRewardSpec("item_gold", 80) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();

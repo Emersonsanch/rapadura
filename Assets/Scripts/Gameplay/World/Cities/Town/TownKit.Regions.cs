@@ -62,6 +62,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.Fountain: Fountain(b, s); return true;
                 case CityPropKind.ConicalTower: ConicalTower(b, s); return true;
                 case CityPropKind.CanopyTree: CanopyTree(b, s); return true;
+                case CityPropKind.Dhow: Dhow(b, s, prop.Variant); return true;
+                case CityPropKind.CoralTower: CoralTower(b, s); return true;
+                case CityPropKind.Mangrove: Mangrove(b, s, prop.Variant); return true;
                 default: return false;
             }
         }
@@ -791,6 +794,11 @@ namespace Rapadura.Gameplay.World.Cities.Town
         {
             switch (spec.Dressing)
             {
+                case TownShopDressing.Pearls:
+                case TownShopDressing.RootWeaver:
+                    CoastDressing(b, spec, x, y, z, zFacade);
+                    break;
+
                 case TownShopDressing.Selaria:
                     // A saddle on a trestle, a rolled felt rug, bridles on the wall, a dutar leaning by the door.
                     foreach (float lx in new[] { -0.35f, 0.35f })

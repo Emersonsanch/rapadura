@@ -40,6 +40,37 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
   depois Tinguaro pede 5 Javalis de Musgo (Queixada; arco de caça + 25 ouro, 380 XP). Objetivos só de combate, como as
   missões de região. Testes: `CityGarajonayTests`.
 
+### 1.2 Cidades das regiões tardias (`CityCatalog.LateRegionCities`)
+
+Cidades das regiões 5–8 (Docs/Mapas100.md), que ainda não têm bioma no mapa-múndi. Ficam fora de `Cities` (sem painel
+no mapa-múndi, sem Ammo, fora da lista das Barcas) e de `RaceCities`; `IsLateRegionCity` as reconhece e `IsHubCity`
+separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestado (Floresta: sempre desbloqueada, então o
+`CityProgress.ApplyDefeatIn` sempre acorda na praça delas). Estilo próprio escolhido na receita (`CityTownRecipe.Style`).
+
+| Região | Cidade | Moradores | Loja | Missões |
+|---|---|---|---|---|
+| Costa das Monções (mapas 25 e 30) | **Taa Pwani** (marinheiros e mercadores suaílis, `taa_pwani`) | Capitão Liyongo, o Nakhoda (casa de 2 andares na rua Leste), Mwana, a Mercadora de Pérolas (rua Oeste), Nuru, a Guardiã do Farol (cabeça da praça, ao pé do Farol de Coral), Zawadi, o Trançador de Raízes (rua Leste), Mbaraka, o Navegador das Estrelas (rua Oeste) | **Bazar de Pérolas da Mwana** (`shop_bazar_mwana`) | Liyongo: "Ladras de Vela"; Zawadi: "Garras no Mangue" |
+
+- **Passeio da cidade:** receita `CityTownRecipes.TaaPwani` (`CityTownRecipes.TaaPwani.cs`) no estilo `TownStyles.Coast`
+  (`TownArchitecture.CoralStone`, `TownVegetation.Coast`, linha 8 da paleta da cidade: coral caiado, teca, mar, vela,
+  laterita, mangue, raiz, madrepérola): casas de pedra de coral caiada com terraço e ameias escalonadas, porta retangular
+  de teca entalhada com pinos de latão e *baraza* (banco de pedra) na fachada (`TownBuildingSpec.CoralStone`,
+  `TownKit.SwahiliFront`); mercado de pérolas na praça (barracas variante 3 com bandejas de pérola e balança), Farol de
+  Coral (torre-lâmpada de pedra de coral, peça `CoralTower`; é farol, não templo), dois dhows de vela triangular nas
+  poças de maré no fim da rua Leste (`Dhow`), mangues no sudeste (`Mangrove`), coqueiros e baobás nos quintais, varais
+  de lanternas nas ruas; Cais da Barca na rua Oeste. Peças em `TownKit.Coast.cs`, colisores em `CitySolids`.
+  `CityLayoutRules.Validate` sem problemas.
+- **Respawn:** derrota nos mapas 25 e 30 acorda na praça de Taa Pwani (`MapCatalog.RespawnCityFor` → `ApplyDefeatIn`).
+- **Bazar de Pérolas da Mwana** (diário, 3 vagas que giram): poção de vida e **todas as exigências da região**, fixas
+  desde o primeiro dia: Passagem de Dhow (25), Relíquia dos Artífices (27), Concha Respirável (28), Bolha de Ar (29) e
+  Botas de Raiz Viva (30) (Aratta e Kirta ainda não têm cidade, então os dhows da Mwana trazem o equipamento delas);
+  giram poção de mana, carne, ração de montaria, fibra, madeira e Amuleto da Sorte. O Ammo nunca para lá.
+- **Missões da cidade:** Liyongo pede 6 Gaivotas Ladras (o Abutre de Brasa faz a Gaivota; 4 poções de vida + 3 de mana +
+  60 ouro, 700 XP); depois Zawadi pede 5 Caranguejos Gigantes (o Escorpião faz o Caranguejo-dos-Coqueiros; Botas de
+  Raiz Viva + 80 ouro, 820 XP). Testes: `CityTaaPwaniTests`.
+- **Falta:** o mapa 25 ainda não é jogável, então o passeio só abre pelo menu de prévia do editor até o mapa existir; a
+  segunda cidade da região (Aratta, mapa 26) e Kirta (28) ficam para depois.
+
 Código: `CityCatalog`, `CityShopCatalog` (dados), `CityTexts` (textos en/pt-BR), `VillageHubButton` (o mesmo painel
 para toda cidade), `CityFastTravelPanel` (Barcas de Luz), `CitySafeZoneHud` (aviso), `WorldMapCityPresence` (zona
 segura, visitas e o desenho da cidade no mapa), `CityProgress` (save `Cities`). Números em

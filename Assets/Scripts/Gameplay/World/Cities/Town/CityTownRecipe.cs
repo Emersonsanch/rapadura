@@ -63,6 +63,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
         public string CityId;
         public BiomeType Region;
 
+        /// <summary>The town's material set; null = the style of <see cref="Region"/> (Taa Pwani's coral stone is picked by hand).</summary>
+        public TownStyle Style;
+
         public float PlazaRadius = 8f;
         public float StreetWidth = 4f;
         public float SidewalkWidth = 1.2f;
@@ -113,7 +116,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             {
                 CityId = recipe.CityId,
                 Region = recipe.Region,
-                Style = TownStyles.For(recipe.Region),
+                Style = recipe.Style ?? TownStyles.For(recipe.Region),
                 PlazaCenter = Vector2.zero,
                 PlazaRadius = recipe.PlazaRadius,
                 NightLights = Mathf.Clamp(recipe.NightLights, 0, 8),
@@ -305,7 +308,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 spec.FrontWindows = r.Width >= 7f ? 2 : 1;
                 spec.Chimney = (TownStyle.Hash(key, 10) % 4) == 0;
                 spec.UpperRoom = style.HouseRoof == TownRoofKind.Flat && (TownStyle.Hash(key, 11) % 3) == 0;
-                spec.StorkNest = style.Region == BiomeType.Forest && (TownStyle.Hash(key, 12) % 5) == 0;
+                spec.StorkNest = style.Architecture == TownArchitecture.Sogdian && (TownStyle.Hash(key, 12) % 5) == 0;
                 spec.DryingLoft = style.Architecture == TownArchitecture.Oasis && !spec.UpperRoom && (TownStyle.Hash(key, 13) % 3) == 0;
             }
             else
@@ -316,6 +319,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
             // Qocho's houses are rammed earth (taipa) whatever the recipe gave them.
             spec.RammedEarth |= style.Architecture == TownArchitecture.Oasis && !spec.WoodenWalls;
+
+            // Taa Pwani's houses are coral stone: the carved teak door with brass studs, the baraza and the merlons.
+            spec.CoralStone |= style.Architecture == TownArchitecture.CoralStone && !spec.WoodenWalls;
 
             switch (r.Kind)
             {

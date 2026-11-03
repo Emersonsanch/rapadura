@@ -92,6 +92,18 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// trunk and cocoon lanterns; the crown and the hanging moss above.
         /// </summary>
         CanopyTree = 30,
+
+        // ---- Taa Pwani, the Costa das Monções (drawn by TownKit.Coast) ----
+
+        /// <summary>Taa Pwani: a dhow moored in a tidal pool: a teak hull with a raked stem, the mast and its triangular (lateen) sail.</summary>
+        Dhow = 31,
+        /// <summary>
+        /// Taa Pwani: the Farol de Coral, a tall coral-stone lamp tower (the shape of the coast's coral towers, a lighthouse with
+        /// no worship): fluted shaft on a square base, a brass band, the lamp gallery and a small cap.
+        /// </summary>
+        CoralTower = 32,
+        /// <summary>Taa Pwani: a mangrove on its stilt roots over a patch of dark mud and brackish water.</summary>
+        Mangrove = 33,
     }
 
     public enum CityExitKind

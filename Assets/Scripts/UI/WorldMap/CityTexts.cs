@@ -102,6 +102,7 @@ namespace Rapadura.UI.WorldMap
                 // Same text as MountTexts.HarasShopName (the mounts' own table registers it too).
                 Shop(CityShopCatalog.HarasVila, "Srosh's Stable", "Estrebaria do Srosh"),
                 Shop(CityShopCatalog.ErvariaDacil, "Dácil's Herb House", "Ervaria da Dácil"),
+                Shop(CityShopCatalog.BazarMwana, "Mwana's Pearl Bazaar", "Bazar de Pérolas da Mwana"),
             };
 
             // ---- Cities ----
@@ -117,6 +118,10 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.Lamparinas, "Lampkeepers' Village", "Vila das Lamparinas", "Lampkeepers", "Lamparinas",
                 "At the mouth of the Threshold Caves, every house carved into the rose tuff keeps a lamp lit in the window. Since the light was stolen, nobody here lets the dark win.",
                 "Na boca das Grutas do Limiar, cada casa escavada no tufo rosa deixa uma lamparina acesa na janela. Desde que a luz foi roubada, ninguém aqui deixa o escuro ganhar.");
+
+            AddCity(entries, CityCatalog.TaaPwani, "Taa Pwani", "Taa Pwani", "Taa Pwani", "Taa Pwani",
+                "The Coast of the Lamp: whitewashed coral-stone houses with carved teak doors, a pearl market on the square, dhows with triangular sails at the quay and the Coral Light that guides them home through the monsoon.",
+                "A Costa da Lâmpada: casas de pedra de coral caiada com portas de teca entalhada, mercado de pérolas na praça, dhows de vela triangular no cais e o Farol de Coral que guia todos de volta na monção.");
 
             AddCity(entries, CityCatalog.CopasGarajonay, "Garajonay Canopy", "Copas de Garajonay", "Garajonay", "Garajonay",
                 "The city of the forest elves, up in the laurels that drink the mist: round plank houses, rope bridges from trunk to trunk and cocoon lanterns. Nobody here fells a tree.",
@@ -337,6 +342,47 @@ namespace Rapadura.UI.WorldMap
                 ("Your drone saw the boar, Ícaro? I saw it yesterday, by the moss. Slower, but no noise.", "Seu drone viu o javali, Ícaro? Eu vi ontem, pelo musgo. Mais devagar, mas sem barulho."),
                 ("Lavine, put your hand here. Still warm: the lizard passed a moment ago.", "Lavine, põe a mão aqui. Ainda está quente: o lagarto passou agora há pouco."),
                 ("Turned moss, broken fern, a dry drop on the leaf. The forest floor writes everything down.", "Musgo revirado, samambaia quebrada, gota seca na folha. O chão da mata anota tudo."));
+
+            // ---- Taa Pwani (Swahili sailors and merchants of the Costa das Monções) ----
+            AddResident(entries, "liyongo", "Captain Liyongo, the Nakhoda", "Capitão Liyongo, o Nakhoda",
+                ("Joaquim, they say a guardian doesn't sink in the mangrove mud. On my deck, though, everybody learns to swim first.", "Joaquim, dizem que guardião não afunda no lodo do mangue. No meu convés, porém, todo mundo aprende a nadar primeiro."),
+                ("Maria, sailors say a healer aboard is worth two sails. Come with us to the reef when the monsoon turns.", "Maria, os marinheiros dizem que curandeira a bordo vale por duas velas. Vem com a gente até o recife quando a monção virar."),
+                ("Maithe, did your Grandpa Jorge tell you of Liyongo, the archer-poet of this coast? I carry his name, not his bow. The bow I leave to you.", "Maithe, o Vô Jorge te contou de Liyongo, o arqueiro-poeta desta costa? Eu carrego o nome dele, não o arco. O arco eu deixo com você."),
+                ("Ícaro, a motor on a dhow? The monsoon has pushed these sails for a thousand years without a single gear. ...How much faster, you said?", "Ícaro, motor num dhow? A monção empurra estas velas há mil anos sem uma engrenagem. ...Quanto mais rápido, você disse?"),
+                ("Lavine, the Moon Ship sails over us every night and you call yourself its boatwoman? Then you outrank me, little one.", "Lavine, a Barca da Lua navega sobre nós toda noite e você se diz barqueira dela? Então você manda mais que eu, pequena."),
+                ("The monsoon blows one way half the year and back the other half. A good captain waits for the right wind.", "A monção sopra para um lado meio ano e volta no outro meio. Capitão bom espera o vento certo."));
+
+            AddResident(entries, "mwana", "Mwana the Pearl Merchant", "Mwana, a Mercadora de Pérolas",
+                ("Root boots for the guardian, Joaquim? Ah, you don't sink. Then take a pair for your sister.", "Botas de raiz para o guardião, Joaquim? Ah, você não afunda. Então leva um par para a sua irmã."),
+                ("Maria, a pearl is a grain of sand the oyster wrapped in light until it stopped hurting. You understand that better than anyone.", "Maria, pérola é um grão de areia que a ostra embrulhou em luz até parar de doer. Você entende disso melhor que ninguém."),
+                ("A dhow passage for each cousin, Maithe: five cedar tablets, and the eldest keeps them. Karibu, welcome aboard.", "Uma passagem de dhow para cada primo, Maithe: cinco tábuas de cedro, e a mais velha guarda. Karibu, bem-vindos a bordo."),
+                ("No, Ícaro, the breathing shell has no valve to open. You breathe, it sings. Don't take it apart.", "Não, Ícaro, a concha respirável não tem válvula para abrir. Você respira, ela canta. Não desmonta."),
+                ("Your Grandma Edna wears a pearl my mother sold to Grandpa Jorge, Lavine. He haggled for an hour and paid full price anyway.", "A sua Vó Edna usa uma pérola que a minha mãe vendeu para o Vô Jorge, Lavine. Ele pechinchou uma hora e pagou o preço cheio mesmo assim."),
+                ("Pearls, passages and the gear of the whole coast. The counter turns with the tide, every day.", "Pérolas, passagens e o equipamento da costa inteira. O balcão vira com a maré, todo dia."));
+
+            AddResident(entries, "nuru", "Nuru, Keeper of the Coral Light", "Nuru, a Guardiã do Farol",
+                ("You stand in front of your cousins the way my tower stands in front of the sea, Joaquim. We both keep watch.", "Você fica na frente dos primos do jeito que a minha torre fica na frente do mar, Joaquim. Nós dois vigiamos."),
+                ("Nuru means light, Maria. We are almost namesakes, you and I.", "Nuru quer dizer luz, Maria. Somos quase xarás, você e eu."),
+                ("Every dhow that comes home counts itself by my lamp, Maithe. Just the way you count your cousins.", "Todo dhow que volta para casa se conta pela minha lâmpada, Maithe. Igualzinho você conta os primos."),
+                ("A mirror behind the flame, Ícaro? ...Oh. Oh, now it reaches the reef. Don't tell the captain it was your idea.", "Um espelho atrás da chama, Ícaro? ...Ah. Ah, agora chega até o recife. Não conta para o capitão que a ideia foi sua."),
+                ("Taa Pwani means the Coast of the Lamp, Lavine. I hear your Grandma Edna's square has a lamp too; ours just stands taller.", "Taa Pwani quer dizer a Costa da Lâmpada, Lavine. Ouvi dizer que a praça da Vó Edna também tem uma lâmpada; a nossa só é mais alta."),
+                ("The shadow put out the glow of the reef, but not my lamp. While it burns, the dhows find their way home.", "A sombra apagou o brilho do recife, mas não a minha lâmpada. Enquanto ela queimar, os dhows acham o caminho de casa."));
+
+            AddResident(entries, "zawadi", "Zawadi the Root Weaver", "Zawadi, o Trançador de Raízes",
+                ("You walk the mud without sinking, Joaquim? Then you don't need my boots... but your feet will thank you anyway.", "Você anda no lodo sem afundar, Joaquim? Então nem precisa das minhas botas... mas o seu pé agradece assim mesmo."),
+                ("The mangrove roots are alive, Maria. I only braid the ones that fall; your light helps them take root again.", "As raízes do mangue são vivas, Maria. Eu só trancio as que caem; a sua luz ajuda elas a pegar de novo."),
+                ("Maithe, measure your cousins' feet for me. The boots have to fit five heroes, not one.", "Maithe, mede o pé dos primos para mim. A bota tem que servir em cinco heróis, não em um."),
+                ("A braiding machine, Ícaro? The roots braid themselves if you let them. I only tell them where.", "Uma máquina de trançar, Ícaro? As raízes se trançam sozinhas se você deixar. Eu só digo onde."),
+                ("Lavine, it was Grandpa Jorge who brought me my first root knife. Tell Grandma Edna the blade is still sharp.", "Lavine, foi o Vô Jorge que me trouxe a minha primeira faca de cortar raiz. Diz para a Vó Edna que o fio ainda está bom."),
+                ("Living-root boots grip the mud of Liyongo's mangroves. Pole pole, slowly: a good braid takes a whole tide.", "Bota de raiz viva agarra o lodo dos mangues de Liyongo. Pole pole, devagar: trança boa leva uma maré inteira."));
+
+            AddResident(entries, "mbaraka", "Mbaraka the Star Navigator", "Mbaraka, o Navegador das Estrelas",
+                ("Strong arms, Joaquim, but a sailor rows with his eyes first. Look up: the Moon Ship shows the way.", "Braço forte, Joaquim, mas marinheiro rema primeiro com os olhos. Olha para cima: a Barca da Lua mostra o caminho."),
+                ("When the moon is full, Maria, she is carrying the light back home. A healer's work, if you ask me.", "Quando a lua está cheia, Maria, ela está levando a luz de volta para casa. Trabalho de curandeira, se quer saber."),
+                ("Maithe, the eldest reads the sky for the others. I did it for my brothers sixty monsoons ago.", "Maithe, a mais velha lê o céu pelos outros. Eu fazia isso pelos meus irmãos sessenta monções atrás."),
+                ("Your compass spins near the reef, Ícaro? The stars never do. Your Grandpa Jorge learned that on my deck.", "A sua bússola gira perto do recife, Ícaro? As estrelas nunca giram. O seu avô Jorge aprendeu isso no meu convés."),
+                ("The boatwoman of the Moon! Lavine, ask the Moon Ship for a gentle monsoon this year. The old man asks.", "A barqueira da Lua! Lavine, pede para a Barca da Lua mandar uma monção mansa este ano. O velho pede."),
+                ("Sixty monsoons I have read these stars. The Moon Ship fills, empties and fills again: the light always comes home.", "Sessenta monções eu li estas estrelas. A Barca da Lua enche, esvazia e enche de novo: a luz sempre volta para casa."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

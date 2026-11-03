@@ -130,6 +130,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
             }
 
             BuildOpenings(b, spec, hw, zFacade, zBack);
+            if (spec.CoralStone)
+            {
+                TownKit.SwahiliFront(b, spec, hw, zFront, zFacade, top);
+            }
 
             // Roof.
             switch (spec.Roof)
@@ -234,7 +238,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 }
                 else
                 {
-                    TownKit.Door(b, doorX, FloorY, doorWidth, DoorHeight, spec.JoineryColor, spec.TrimColor, spec.AccentColor, arched: true);
+                    TownKit.Door(b, doorX, FloorY, doorWidth, DoorHeight, spec.JoineryColor, spec.TrimColor, spec.AccentColor, arched: !spec.CoralStone);
                 }
 
                 if (spec.Kind != CityLotKind.Stable)
@@ -254,7 +258,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                     }
                 }
 
-                if (spec.PorchDepth > 0.6f && (spec.Kind == CityLotKind.Grandma || spec.Kind == CityLotKind.House))
+                if (spec.PorchDepth > 0.6f && !spec.CoralStone && (spec.Kind == CityLotKind.Grandma || spec.Kind == CityLotKind.House))
                 {
                     // A suzani hanging on the aivan wall, on the side away from the door.
                     float sx = doorX >= 0f ? -hw * 0.55f : hw * 0.55f;

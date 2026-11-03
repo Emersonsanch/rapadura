@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Cities.Town
 {
-    /// <summary>Flat colours of the walkable-town palette texture (one 4 px cell each, 8 × 8). Docs/Cities.md §5.</summary>
+    /// <summary>Flat colours of the walkable-town palette texture (one 4 px cell each, 8 × 9). Docs/Cities.md §5.</summary>
     public enum TownSwatch
     {
         // Row 0: wood and earth (walnut joinery, carved columns).
@@ -22,6 +22,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
         LampGlow, WindowLit, Glass, Water, Ember, Skin, SkinDark, Hair,
         // Row 7: masonry, paving and accents (tile turquoise, copper, violet shadow, indigo).
         Brick, Turquoise, Paving, PavingDark, Curb, Copper, Violet, Indigo,
+        // Row 8: Taa Pwani, the Costa das Monções (Docs/Mapas100.md região 5): whitewashed coral stone, teak, the sea, dhow
+        // sail cloth, laterite, mangrove leaf and root, mother-of-pearl.
+        CoralLime, Teak, Sea, Sail, Laterite, Mangrove, MangroveRoot, Pearl,
     }
 
     /// <summary>
@@ -33,7 +36,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
     public static class TownPalette
     {
         public const int Columns = 8;
-        public const int Rows = 8;
+        public const int Rows = 9;
         private const int CellPixels = 4;
 
         private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
@@ -48,6 +51,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Hex(0xB8352E), Hex(0x2F4F8F), Hex(0xE3B23C), Hex(0x3F7D4E), Hex(0xF2EEE6), Hex(0x4A4F57), Hex(0xC9A23F), Hex(0x1E1A17),
             Hex(0xFFB347), Hex(0x3B4652), Hex(0xA9CFDB), Hex(0x3F8FA8), Hex(0xFF8A3A), Hex(0xD9A47E), Hex(0x8E5E3E), Hex(0x2E2018),
             Hex(0xA8553A), Hex(0x3FA7A3), Hex(0xD1BE9C), Hex(0xA8957A), Hex(0xC9BBA0), Hex(0xB06B3A), Hex(0x6D4C7D), Hex(0x232046),
+            Hex(0xEFE7DA), Hex(0x6B4A2E), Hex(0x2E9BB0), Hex(0xF2E6C9), Hex(0xB4583A), Hex(0x4F7A3F), Hex(0x5B4A3A), Hex(0xE6E1EC),
         };
 
         private static Material _material;

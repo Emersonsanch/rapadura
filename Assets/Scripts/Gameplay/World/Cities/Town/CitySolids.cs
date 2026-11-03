@@ -176,6 +176,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.Fountain: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, new Vector2(2.3f, 1.1f) * s, prop.Yaw), 1.5f, owner);
                 case CityPropKind.ConicalTower: return CitySolid.Capsule(prop.Position, 1.6f * s, WallColliderHeight, owner);
                 case CityPropKind.CanopyTree: return CitySolid.Capsule(prop.Position, TownKit.CanopyTrunkSolidRadius * s, WallColliderHeight, owner);
+                case CityPropKind.Dhow: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, new Vector2(TownKit.DhowBeam, TownKit.DhowLength) * s, prop.Yaw), 1.6f, owner);
+                case CityPropKind.CoralTower: return CitySolid.Capsule(prop.Position, TownKit.CoralTowerSolidRadius * s, WallColliderHeight, owner);
+                case CityPropKind.Mangrove: return CitySolid.Capsule(prop.Position, 0.9f * s, 2.5f, owner);
                 case CityPropKind.KarezChannel:
                 case CityPropKind.RopeBridge:
                 case CityPropKind.LampString:

@@ -49,6 +49,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
         Herder = 18,
         /// <summary>A Qocho potter's front: jars drying on a plank, a kick wheel.</summary>
         Pottery = 19,
+        /// <summary>Mwana (Taa Pwani): the pearl bazaar: trays of pearls and cowries, a brass scale, a rolled kanga.</summary>
+        Pearls = 20,
+        /// <summary>Zawadi (Taa Pwani): bundles of mangrove root, a rack of woven root boots, a soaking tub.</summary>
+        RootWeaver = 21,
     }
 
     /// <summary>
@@ -101,6 +105,12 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Qocho: a grape-drying chamber on the roof (walls of honeycomb brick lattice, bunches hanging inside).</summary>
         public bool DryingLoft;
 
+        /// <summary>
+        /// Taa Pwani: a coral-stone house of the Swahili coast: a rectangular carved teak door frame studded with brass, a
+        /// <i>baraza</i> (stone bench) along the facade and stepped merlons on the roof terrace's front parapet.
+        /// </summary>
+        public bool CoralStone;
+
         /// <summary>Qocho caravanserai: the porch columns become brick piers carrying stepped pointed arches.</summary>
         public bool Arcade;
 
@@ -136,7 +146,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Key of the cached mesh: equal specs share one mesh.</summary>
         public string CacheKey =>
             $"{Kind}|{Width:0.00}|{Depth:0.00}|{PorchDepth:0.00}|{FullVaranda}|{WallHeight:0.00}|{Floors}|{Roof}|{WallColor}|{TrimColor}|{RoofColor}|" +
-            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
+            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
             $"{Chimney}|{Sign}|{SignColor}|{Dressing}|{Seed}";
     }
 }

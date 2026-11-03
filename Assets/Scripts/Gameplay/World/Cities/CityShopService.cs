@@ -219,8 +219,8 @@ namespace Rapadura.Gameplay.World.Cities
             }
 
             shops.AddRange(city.ShopIds);
-            // Ammo's mule stops at the region's hub city only (a race city in the same region does not get him too).
-            if (!CityCatalog.IsRaceCity(city) && MascateRegion(date, map) == city.Region)
+            // Ammo's mule stops at the region's hub city only (a race or late-region city sharing its biome does not get him too).
+            if (CityCatalog.IsHubCity(city) && MascateRegion(date, map) == city.Region)
             {
                 shops.Add(CityShopCatalog.MascateBento);
             }

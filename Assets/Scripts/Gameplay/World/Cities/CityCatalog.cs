@@ -92,6 +92,12 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string CopasGarajonay = "copas_garajonay";
 
+        /// <summary>
+        /// Taa Pwani, the Costa da Lâmpada: the city of return of the Costa das Monções (região 5, maps 25 and 30,
+        /// Docs/Mapas100.md). Same id as <c>MapCatalog.TaaPwani</c> and <c>CityTownRecipes.TaaPwaniCityId</c>.
+        /// </summary>
+        public const string TaaPwani = "taa_pwani";
+
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
             new CitySpec(VilaZefa, BiomeType.Forest,
@@ -173,16 +179,47 @@ namespace Rapadura.Gameplay.World.Cities
                 new List<string> { CityShopCatalog.ErvariaDacil }),
         };
 
+        /// <summary>
+        /// The cities of the regions past the four biomes of the world map (Docs/Mapas100.md regiões 5–8) that already have a
+        /// walkable town. Their region has no world-map biome yet, so their <see cref="CitySpec.Region"/> is a borrowed one (the
+        /// Forest: always unlocked, so the respawn of <see cref="CityProgress.ApplyDefeatIn"/> always lands in their plaza);
+        /// like the race cities they stay out of <see cref="Cities"/> (no world-map hub, no peddler, no Barcas hub list)
+        /// and are reached through their maps. Their shops sell the gear of their region's map gates
+        /// (Docs/MetodologiaMapasERacas.md §2.1).
+        /// </summary>
+        public static readonly IReadOnlyList<CitySpec> LateRegionCities = new List<CitySpec>
+        {
+            // Taa Pwani (Swahili sailors and merchants): Captain Liyongo the nakhoda (missions), Mwana the pearl merchant (the
+            // city's shop: dhow passages and the gear of maps 25–30), Nuru the keeper of the Farol de Coral, Zawadi who braids
+            // root boots (second mission), old Mbaraka who reads the Moon Ship's stars.
+            new CitySpec(TaaPwani, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("liyongo"),
+                    new CityResidentSpec("mwana", CityShopCatalog.BazarMwana),
+                    new CityResidentSpec("nuru"),
+                    new CityResidentSpec("zawadi"),
+                    new CityResidentSpec("mbaraka"),
+                },
+                new List<string> { CityShopCatalog.BazarMwana }),
+        };
+
         /// <summary>Ammo, the peddler: not a resident of one city, he is wherever his mule is today (<see cref="ShopRotation.MascateRegion"/>).</summary>
         public static readonly CityResidentSpec Mascate = new CityResidentSpec("bento", CityShopCatalog.MascateBento, "dialogue.desert_tropeiro.name");
 
-        /// <summary>Any city with a walkable town: the region hubs, then the race cities.</summary>
-        public static IEnumerable<CitySpec> AllCities => Cities.Concat(RaceCities);
+        /// <summary>Any city with a walkable town: the region hubs, then the race cities, then the late-region cities.</summary>
+        public static IEnumerable<CitySpec> AllCities => Cities.Concat(RaceCities).Concat(LateRegionCities);
 
         public static CitySpec Get(string cityId) => AllCities.FirstOrDefault(c => c.CityId == cityId);
 
         /// <summary>Whether <paramref name="city"/> is a race city (not its region's hub: no world-map hub, no peddler).</summary>
         public static bool IsRaceCity(CitySpec city) => city != null && RaceCities.Contains(city);
+
+        /// <summary>Whether <paramref name="city"/> is a late-region city (Taa Pwani...): reached through its maps, not the world map.</summary>
+        public static bool IsLateRegionCity(CitySpec city) => city != null && LateRegionCities.Contains(city);
+
+        /// <summary>Whether <paramref name="city"/> is its region's hub (<see cref="Cities"/>): the only kind the peddler visits.</summary>
+        public static bool IsHubCity(CitySpec city) => city != null && Cities.Contains(city);
 
         public static CitySpec ForRegion(BiomeType? region)
         {

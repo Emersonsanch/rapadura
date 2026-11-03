@@ -94,6 +94,11 @@
 | **Dácil, a Ervateira** (`dacil`, Ervaria) | ervas e poções de névoa, a loja da cidade | jovem elfa gentil, duas tranças outonais, coroa de musgo, vestido de louro, avental de névoa e bolsa, cesto de ervas e jarra de água de névoa | verte a gota medida |
 | **Bencomo, o Velho Chefe** (`bencomo`) | graduações e convites; amigo do Vô Jorge | elfo idoso largo e orgulhoso, cabelo e barba longos brancos, faixa dourada na testa, cafetã de casca com ouro, capa de louro, cajado e pergaminho do convite | apoia-se e assente |
 | **Tinguaro, o Rastreador** (`tinguaro`) | lê rastro no musgo, tarefas de caça | elfo calmo de coque escuro e cavanhaque, chapan de casca, colete de couro, bolsa de laços, rolo de corda, bastão de rastreio | varre o musgo com o olhar |
+| **Capitão Liyongo, o Nakhoda** (`liyongo`, Taa Pwani) | capitão dos dhows, orgulhoso e risonho, dá as missões da cidade; leva o nome do arqueiro-poeta da costa | largo e de peito aberto, barba cheia, kofia de coral com bordado dourado, kanzu branco sob colete índigo com fio de ouro, faixa, rolo de corda no ombro e estojo de cartas náuticas | mão na cintura, chama a tripulação |
+| **Mwana, a Mercadora de Pérolas** (`mwana`, Bazar de Pérolas) | esperta, conta pérola duas vezes; vendeu pérola ao Vô Jorge | kanga vermelha na cabeça, vestido índigo com barra de madrepérola, xale de kanga, pés de hena, balança de latão erguida e bolsa de moedas | conta com a mão |
+| **Nuru, a Guardiã do Farol** (`nuru`, ao pé do Farol de Coral) | velha serena; *nuru* = luz; acende a lâmpada que traz os dhows de volta | um pouco curvada, capuz e túnica de pano de vela com barra cor de mar, xale azul-mar, poste de lanterna e lamparina | ergue a lâmpada ao entardecer |
+| **Zawadi, o Trançador de Raízes** (`zawadi`) | jovem rápido, "pole pole"; trança as Botas de Raiz Viva, dá a 2ª missão | cabeça descoberta e cavanhaque, túnica de laterita, avental de pano de vela, cinto, feixe de raiz de mangue no braço e fuso | fia, sempre |
+| **Mbaraka, o Navegador das Estrelas** (`mbaraka`) | velho marinheiro, lê as estrelas da Barca da Lua e conta as monções; ensinou o Vô Jorge | curvado, barba longa branca, kilemba de coral com faixa azul-mar, kanzu de pano de vela sob capa de teca, bastão da lua e estojo de cartas | olha o céu pensando |
 | aldeões genéricos | moradores de cada cidade | sorteio estável por lote na paleta da região: Zarafshan (damasco, choupo, romã, índigo; doppa, kalpak, lenço), Qocho (arenito, rosa, ouro, azul; envoltórios), Litema (barro, cal, cobertores; chapéu cônico), Lamparinas (branco, tufo, cobre; capuz, lamparina) | variado |
 
 ## 3. Notas
@@ -116,6 +121,10 @@
   paleta ganhou a linha 10, de Garajonay (`SkinBark`, `Laurel`, `MossLeaf`, `Bark`, `Mist`, `MistWater` com brilho leve,
   `Heather`, `HairAutumn`, Docs/Mapas100.md §3.3). Nomes da ficha 05 (lenda de Gara e Jonay; Bencomo, Tinguaro e
   Dácil de Tenerife), nunca "Seu/Dona".
+- **Marinheiros e mercadores suaílis** (Taa Pwani, 2026-11-03): a paleta ganhou a linha 11 (`Coral`, `Teak`, `SeaBlue`,
+  `Sail`, `Laterite`, `Pearl`, `KangaRed`, `Henna`, Docs/Mapas100.md região 5). Kanzus brancos, coletes bordados com fio
+  de ouro, kofia e kilemba, kangas e índigo. Nomes da ficha 25 (Capitão Liyongo, Mwana) e palavras suaílis (*nuru* =
+  luz, *zawadi* = presente, *mbaraka* = bênção), nunca "Seu/Dona".
 - **Elenco de lore nas 4 cidades** (TODO.md "História e Arcos dos NPCs"): todos têm figura e porta. Quem não tem casa
   própria na receita fica num **ponto de pé** da praça (`CityTownRecipes.AddStandingSpot`: lote `Market` de 1 × 1 m,
   sem parede nem chão), conferido por `CityGarajonayTests.LoreCast_OfTheFirstFourCities_StandsInTheirTowns_OutsideEverySolid`.

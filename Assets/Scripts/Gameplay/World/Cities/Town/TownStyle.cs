@@ -14,6 +14,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
         Mountain = 2,
         /// <summary>Grutas do Limiar: glowing blue mushrooms, fluorescent moss, juniper at the mouth.</summary>
         Caves = 3,
+        /// <summary>Costa das Monções (Taa Pwani): leaning coconut palms, baobabs, casuarinas, sea-grape shrubs.</summary>
+        Coast = 4,
     }
 
     /// <summary>The "shape signature" of a region's houses (world bible §2.5): what the kit builds for a plain house.</summary>
@@ -27,6 +29,11 @@ namespace Rapadura.Gameplay.World.Cities.Town
         Rondavel = 2,
         /// <summary>Lamparinas: houses cut into pink tuff, arched doors, round windows, lamp niches.</summary>
         CaveTuff = 3,
+        /// <summary>
+        /// Taa Pwani (Swahili coast: Kilwa, Lamu, Gedi): whitewashed coral-stone houses, flat roof terraces with stepped
+        /// merlons, carved teak doors studded with brass, a <i>baraza</i> (stone bench) along the front.
+        /// </summary>
+        CoralStone = 4,
     }
 
     /// <summary>
@@ -180,5 +187,28 @@ namespace Rapadura.Gameplay.World.Cities.Town
         };
 
         public static TownStyle For(BiomeType region) => Styles.TryGetValue(region, out TownStyle style) ? style : Styles[BiomeType.Forest];
+
+        /// <summary>
+        /// Taa Pwani, the Costa da Lâmpada (Docs/Mapas100.md região 5): the first style of a region past the four biomes of the
+        /// world map, so a recipe picks it by hand (<see cref="CityTownRecipe.Style"/>). Coral lime #EFE7DA, teak #6B4A2E,
+        /// brass #C9A23F, sea #2E9BB0, sail #F2E6C9, laterite #B4583A. <see cref="TownStyle.Region"/> is the world-map biome
+        /// the city borrows for its <c>CitySpec</c> (the Forest: Água Viva, and always unlocked).
+        /// </summary>
+        public static readonly TownStyle Coast = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Coast,
+            Architecture = TownArchitecture.CoralStone,
+            Walls = new[] { TownSwatch.CoralLime, TownSwatch.CoralLime, TownSwatch.LimeWhite, TownSwatch.Sail },
+            Trims = new[] { TownSwatch.Laterite, TownSwatch.Sail, TownSwatch.Sea },
+            Roofs = new[] { TownSwatch.CoralLime },
+            Joinery = new[] { TownSwatch.Teak, TownSwatch.Teak, TownSwatch.WoodDark },
+            Accent = TownSwatch.Gold,
+            Ground = TownSwatch.Sand, GroundAlt = TownSwatch.SandDark,
+            Street = TownSwatch.SandDark, StreetEdge = TownSwatch.CoralLime, Sidewalk = TownSwatch.Paving,
+            Plaza = TownSwatch.CoralLime, PlazaAlt = TownSwatch.Laterite,
+            Fence = TownSwatch.CoralLime, Plinth = TownSwatch.Laterite,
+            HouseRoof = TownRoofKind.Flat,
+        };
     }
 }

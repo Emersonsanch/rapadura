@@ -214,6 +214,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
         {
             switch (vegetation)
             {
+                case TownVegetation.Coast:
+                    CoastBush(b, s);
+                    return;
                 case TownVegetation.Mountain:
                     AloeBush(b, s);
                     return;
@@ -356,7 +359,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             for (int i = 0; i < 6; i++)
             {
                 float x0 = -1.05f + i * 0.35f;
-                TownSwatch c = (i & 1) == 0 ? (variant == 1 ? TownSwatch.ClothYellow : TownSwatch.ClothWhite) : (variant == 2 ? TownSwatch.ClothIndigo : TownSwatch.Turquoise);
+                TownSwatch c = (i & 1) == 0 ? (variant == 1 ? TownSwatch.ClothYellow : variant == 3 ? TownSwatch.Sail : TownSwatch.ClothWhite) : (variant == 2 ? TownSwatch.ClothIndigo : variant == 3 ? TownSwatch.Sea : TownSwatch.Turquoise);
                 b.Plate(new[] { new Vector3(x0, 2.05f, -0.75f), new Vector3(x0, 2.4f, 0.6f), new Vector3(x0 + 0.35f, 2.4f, 0.6f), new Vector3(x0 + 0.35f, 2.05f, -0.75f) }, 0.03f, c, c);
             }
 
@@ -375,6 +378,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
                         b.Cylinder(new Vector3(-0.6f + i * 0.4f, 0.9f, 0f), 0.15f, 0.12f, 0.16f, 7, TownSwatch.Thatch, i == 0 ? TownSwatch.ClothRed : i == 1 ? TownSwatch.ClothYellow : i == 2 ? TownSwatch.Aloe : TownSwatch.Fruit);
                     }
 
+                    break;
+                case 3:
+                    // Taa Pwani's pearl market: trays of pearls and cowries, a little brass scale.
+                    PearlTrays(b, new Vector3(0f, 0.9f, 0f));
                     break;
                 default:
                     for (int i = 0; i < 4; i++)
@@ -516,6 +523,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
                     return;
                 case TownVegetation.Caves:
                     GlowMushroom(b, s, variant);
+                    return;
+                case TownVegetation.Coast:
+                    CoastTree(b, variant, s);
                     return;
             }
 

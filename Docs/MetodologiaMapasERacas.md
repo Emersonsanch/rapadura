@@ -64,11 +64,11 @@ a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: 
 | Lamparina rúnica (21) | levar Lamparina Rúnica | Lamparinas da Parthenos, após o chefe das Cavernas |
 | Óleo de Fogo Eterno (23) | levar Óleo de Fogo Eterno | Lamparinas da Parthenos, após o chefe das Cavernas |
 | Asas ou salto duplo (24) · Asas/montaria (39) | asas de verdade do Tacho Encantado no slot Costas/Asas (a Capa de Feltro não voa) ou ter montaria Voadora | Tacho Encantado; montarias aladas (ainda não há no catálogo). Salto duplo não existe ainda |
-| Barco ou cais (25) | levar Passagem de Dhow ou ter montaria Aquática (Capivara) | Taa Pwani (cidade planejada) |
-| Relíquia dos Artífices (27) | levar a relíquia | Aratta (planejada) |
-| Concha respirável (28) | levar Concha Respirável | Kirta (planejada) |
-| Bolha de ar (29) | levar Bolha de Ar Engarrafada ou Concha Respirável | Kirta (planejada) |
-| Botas de raiz (30) | calçar Botas de Raiz Viva, ou montaria Aquática; Joaquim dispensa | Taa Pwani (planejada) |
+| Barco ou cais (25) | levar Passagem de Dhow ou ter montaria Aquática (Capivara) | Bazar de Pérolas da Mwana (Taa Pwani) |
+| Relíquia dos Artífices (27) | levar a relíquia | Bazar de Pérolas da Mwana (Taa Pwani), até Aratta ter cidade |
+| Concha respirável (28) | levar Concha Respirável | Bazar de Pérolas da Mwana (Taa Pwani), até Kirta ter cidade |
+| Bolha de ar (29) | levar Bolha de Ar Engarrafada ou Concha Respirável | Bazar de Pérolas da Mwana (Taa Pwani), até Kirta ter cidade |
+| Botas de raiz (30) | calçar Botas de Raiz Viva, ou montaria Aquática; Joaquim dispensa | Bazar de Pérolas da Mwana (Taa Pwani); recompensa da 2ª missão de Taa Pwani (Zawadi) |
 | Equilíbrio nas pontes (32) | levar Vara de Equilíbrio; Maithe dispensa (pontes suspensas, §3) | Jhilpur (planejada) |
 | Barco de junco (33) | levar Barco de Junco ou montaria Aquática | Palafitas de Tarchon (planejada) |
 | Amuleto antiveneno (34) | levar Amuleto Antiveneno (Lavine **não** dispensa: é mordida, não névoa) | Palafitas de Tarchon (planejada) |
@@ -78,8 +78,9 @@ a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: 
 | Proteção a tempestade (40) | levar Capa de Tempestade | Sangkent (planejada) |
 | Selo do Sol (42) | levar o Selo do Sol (preso ao herói) | Mingcheng (planejada) |
 
-Os itens das regiões 5–8 já existem (`Resources/Items`, textos en/pt-BR em `ContentTexts`), mas só entram numa loja quando
-a cidade de retorno for construída. Nada é consumido ao entrar: basta levar.
+Os itens das regiões 5–8 já existem (`Resources/Items`, textos en/pt-BR em `ContentTexts`); os da região 5 (25–30) estão à
+venda, fixos desde o primeiro dia, no Bazar de Pérolas da Mwana em Taa Pwani (2026-11-03, `CityTaaPwaniTests`); os das
+regiões 6–8 só entram numa loja quando a cidade de retorno for construída. Nada é consumido ao entrar: basta levar.
 
 ---
 

@@ -28,6 +28,9 @@ namespace Rapadura.Editor
         [MenuItem(Root + "Preview Walkable Town/Vila das Lamparinas (default plan)", priority = 13)]
         private static void PreviewLamparinas() => Preview(CityCatalog.Lamparinas);
 
+        [MenuItem(Root + "Preview Walkable Town/Taa Pwani (Costa das Monções)", priority = 14)]
+        private static void PreviewTaaPwani() => Preview(CityCatalog.TaaPwani);
+
         [MenuItem(Root + "Preview Walkable Town/Toggle Night", priority = 30)]
         private static void ToggleNight()
         {

@@ -193,6 +193,14 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string ErvariaDacil = "shop_ervaria_dacil";
 
+        /// <summary>
+        /// Bazar de Pérolas da Mwana (Taa Pwani, the Costa das Monções, Docs/Mapas100.md região 5): pearls, sea gear and the
+        /// gear of every map gate of the region (Docs/MetodologiaMapasERacas.md §2.1): the Passagem de Dhow (25), the Relíquia
+        /// dos Artífices (27), the Concha Respirável (28), the Bolha de Ar (29) and the Botas de Raiz Viva (30). Aratta and
+        /// Kirta have no walkable town yet, so Mwana's dhows bring their gear to her counter.
+        /// </summary>
+        public const string BazarMwana = "shop_bazar_mwana";
+
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
@@ -311,6 +319,26 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_mount_feed", 3, 10, rotating: true),
                 new CityShopEntry("item_hunting_bow", 33, 1, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 24, 1, rotating: true, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
+            })),
+
+            // ---- Taa Pwani: Mwana's pearl bazaar, with the gear of every gate of the Costa das Monções; the counter turns daily ----
+            new CityShopSpec(BazarMwana, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(BazarMwana, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 14, 6),
+                // Map gates (MapRequirementRules): the dhow out to the reef (25), the Artificers' relic (27), the breathing shell
+                // (28), the bottled air bubble (29) and the living-root boots (30).
+                new CityShopEntry("item_passagem_dhow", 300, 3),
+                new CityShopEntry("item_reliquia_artifices", 400, 1),
+                new CityShopEntry("item_concha_respiravel", 450, 2),
+                new CityShopEntry("item_bolha_ar", 500, 2),
+                new CityShopEntry("item_botas_raiz", 520, 1),
+                // The rotation: mist potions, salt-dried meat, mount feed, rope fibre and timber off the dhows, lucky charms.
+                new CityShopEntry("item_mana_potion", 14, 4, rotating: true),
+                new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
+                new CityShopEntry("item_mount_feed", 3, 10, rotating: true),
+                new CityShopEntry("item_fiber", 1, 20, rotating: true),
+                new CityShopEntry("item_wood", 2, 20, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 24, 1, rotating: true),
             })),
 
             // ---- Ferraria do Mestre Adamas (Vila): the village blacksmith ----

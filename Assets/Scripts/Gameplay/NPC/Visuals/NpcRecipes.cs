@@ -279,6 +279,82 @@ namespace Rapadura.Gameplay.NPC.Visuals
             },
 
             // ------------------------------------------------------------------
+            // Taa Pwani (Swahili sailors and merchants, Docs/MetodologiaMapasERacas.md §1.4): white kanzus, embroidered
+            // vests with gold thread, kofia caps and kilemba turbans, kangas, indigo cloth; coral, teak, sea and sail colours.
+            // Names from the ficha (Capitão Liyongo, Mwana) and Swahili words: nuru (light), zawadi (gift), mbaraka (blessing).
+            // ------------------------------------------------------------------
+
+            // Captain Liyongo, the nakhoda of the dhows (the city's missions): broad and proud, a full beard, the embroidered kofia,
+            // a white kanzu under a gold-threaded indigo vest, a coil of rope on the shoulder and the chart case at his hip.
+            // Hand on the hip, calls the crew across the quay.
+            new NpcRecipe
+            {
+                Id = "liyongo", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 1.06f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinBrown, Face = NpcFace.Jolly, Hair = NpcHair.Short, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.Full,
+                Headwear = NpcHeadwear.Skullcap, HeadColor = NpcSwatch.Coral, HeadTrim = NpcSwatch.OldGold,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.Coral, Trim = NpcSwatch.OldGold, Sleeves = NpcSwatch.Coral, Boots = NpcSwatch.Leather,
+                Layers = NpcLayer.Vest | NpcLayer.Sash, LayerColor = NpcSwatch.Indigo, LayerTrim = NpcSwatch.OldGold,
+                LeftArm = NpcArmPose.HipRest, RightArm = NpcArmPose.Carry, Props = new[] { NpcProp.RopeCoil, NpcProp.ScrollCase },
+                Gesture = NpcGesture.Call,
+                Story = "Nakhoda (capitão) dos dhows de Taa Pwani, dá as missões da cidade",
+            },
+
+            // Mwana, the pearl merchant (the city's shop): upright and shrewd, a red kanga wrapped round the head, an indigo
+            // dress with a pearl hem and a kanga shawl, the brass scale held up and a purse of coins. Counts pearls, twice.
+            new NpcRecipe
+            {
+                Id = "mwana", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Average, Height = 1.0f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinDeep, Face = NpcFace.Bright, Hair = NpcHair.Bun, HairColor = NpcSwatch.HairBlack,
+                Headwear = NpcHeadwear.Headwrap, HeadColor = NpcSwatch.KangaRed, HeadTrim = NpcSwatch.OldGold,
+                Garment = NpcGarment.Dress, Main = NpcSwatch.Indigo, Trim = NpcSwatch.Pearl, Sleeves = NpcSwatch.Indigo, Boots = NpcSwatch.Henna,
+                Layers = NpcLayer.Shawl | NpcLayer.Sash, LayerColor = NpcSwatch.KangaRed, LayerTrim = NpcSwatch.Sail,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Scale, NpcProp.CoinPurse },
+                Gesture = NpcGesture.Count,
+                Story = "Mercadora de pérolas, o bazar da cidade: passagem de dhow e o equipamento dos mapas 25–30",
+            },
+
+            // Nuru, keeper of the Coral Light: an old woman a little bent, a sail-cloth hood, a long robe with a sea-blue
+            // trim and a shawl, the lamp pole of the tower in her hand and an oil lamp at her side. Raises the lamp at dusk.
+            new NpcRecipe
+            {
+                Id = "nuru", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Slim, Height = 0.96f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinBrown, Face = NpcFace.Calm, Hair = NpcHair.Long, HairColor = NpcSwatch.HairGrey,
+                Headwear = NpcHeadwear.Hood, HeadColor = NpcSwatch.Sail, HeadTrim = NpcSwatch.SeaBlue,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.Sail, Trim = NpcSwatch.SeaBlue, Sleeves = NpcSwatch.Sail, Boots = NpcSwatch.Teak,
+                Layers = NpcLayer.Shawl, LayerColor = NpcSwatch.SeaBlue, LayerTrim = NpcSwatch.Brass,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.LanternPole, NpcProp.OilLamp },
+                Gesture = NpcGesture.LanternRaise,
+                Story = "Guardiã da lâmpada do Farol de Coral (Taa Pwani = a Costa da Lâmpada)",
+            },
+
+            // Zawadi, the root weaver (the second mission): young and quick, bare head and a goatee, a laterite tunic with an
+            // apron of sail cloth, a bundle of mangrove root on the arm and the spindle he twists the fibre on. Spins, always.
+            new NpcRecipe
+            {
+                Id = "zawadi", Region = BiomeType.Forest, Age = NpcAge.Youth, Build = NpcBuild.Slim, Height = 1.0f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Bright, Hair = NpcHair.Short, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.Goatee,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.Laterite, Trim = NpcSwatch.Sail, Sleeves = NpcSwatch.Laterite, Trousers = NpcSwatch.Teak, Boots = NpcSwatch.Teak,
+                Layers = NpcLayer.Apron | NpcLayer.Belt, LayerColor = NpcSwatch.Sail, LayerTrim = NpcSwatch.Teak,
+                LeftArm = NpcArmPose.Crook, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.Bundle, NpcProp.Spindle },
+                Gesture = NpcGesture.Spin,
+                Story = "Trança as Botas de Raiz Viva com as raízes do mangue, dá a 2ª missão",
+            },
+
+            // Mbaraka, the star navigator: an old sailor, bent, white long beard and a coral kilemba with a sea-blue band, a
+            // sail-cloth kanzu under a teak cape, the moon staff he sights the stars with and a case of old charts. Ponders the sky.
+            new NpcRecipe
+            {
+                Id = "mbaraka", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 0.98f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinDeep, Face = NpcFace.Dreamy, Hair = NpcHair.Short, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Long,
+                Headwear = NpcHeadwear.Turban, HeadColor = NpcSwatch.Coral, HeadTrim = NpcSwatch.SeaBlue,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.Sail, Trim = NpcSwatch.SeaBlue, Sleeves = NpcSwatch.Sail, Boots = NpcSwatch.Leather,
+                Layers = NpcLayer.Cape, LayerColor = NpcSwatch.Teak, LayerTrim = NpcSwatch.Brass,
+                LeftArm = NpcArmPose.HoldUp, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.MoonStaff, NpcProp.ScrollCase },
+                Gesture = NpcGesture.Ponder,
+                Story = "Velho navegador, lê as estrelas da Barca da Lua e conta as monções",
+            },
+
+            // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
 
