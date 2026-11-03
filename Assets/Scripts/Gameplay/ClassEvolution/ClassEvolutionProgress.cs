@@ -21,7 +21,7 @@ namespace Rapadura.Gameplay.ClassEvolution
         public List<GraduationRecord> heroes = new List<GraduationRecord>();
     }
 
-    /// <summary>Raised when a cousin graduates (tier 1..3).</summary>
+    /// <summary>Raised when a cousin graduates (tier 1..5).</summary>
     public readonly struct ClassGraduatedEvent : IGameEvent
     {
         public readonly CharacterId Hero;
@@ -182,10 +182,10 @@ namespace Rapadura.Gameplay.ClassEvolution
             return accepted;
         }
 
-        /// <summary>Counts a kill in <paramref name="region"/> for <paramref name="hero"/>'s accepted mission.</summary>
-        public bool RecordKill(CharacterId hero, BiomeType? region, int heroLevel)
+        /// <summary>Counts a kill (in <paramref name="region"/>, of a creature of <paramref name="creatureLevel"/>) for <paramref name="hero"/>'s accepted mission.</summary>
+        public bool RecordKill(CharacterId hero, BiomeType? region, int heroLevel, int creatureLevel = 0)
         {
-            bool counted = ClassEvolutionRules.RecordKill(hero, Record(hero), region);
+            bool counted = ClassEvolutionRules.RecordKill(hero, Record(hero), region, creatureLevel);
             if (counted)
             {
                 EventBus.Publish(new GraduationMissionChangedEvent(hero, Status(hero, heroLevel)));
@@ -239,6 +239,20 @@ namespace Rapadura.Gameplay.ClassEvolution
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// A special master-tree bonus (<see cref="MasterNodeEffect"/>) of the cousin on the field, 0 without one. The hook other
+        /// systems read: Ari (alert/fetch radius) today, the mount code (stamina/XP of the "Laço" line) when it reads it.
+        /// </summary>
+        public static float ActiveEffectBonus(MasterNodeEffect effect)
+        {
+            if (!TryActiveHero(out CharacterId hero))
+            {
+                return 0f;
+            }
+
+            return MasterLevelRules.EffectBonus(ResolveShared().Record(hero), effect);
         }
 
         public int ResetMasterTree(CharacterId hero, BuffController buffs = null)
@@ -316,7 +330,7 @@ namespace Rapadura.Gameplay.ClassEvolution
                 }
             }
 
-            List<SkillDefinition> owned = GraduationSkillFactory.GetAll(ClassEvolutionCatalog.SkillsUpTo(hero, tier));
+            List<SkillDefinition> owned = GraduationSkillFactory.GetAll(ClassEvolutionCatalog.SkillsUpTo(hero, tier), tier);
             skills.RegisterSkills(owned);
             int count = 0;
             foreach (SkillDefinition skill in owned)
@@ -401,10 +415,12 @@ namespace Rapadura.Gameplay.ClassEvolution
         }
 
         /// <summary>Spreads a graduation group buff from <paramref name="caster"/> to other heroes around (the caster's own copy
-        /// comes from the skill itself, through SkillManager). Returns how many allies got it.</summary>
-        public static int SpreadGroupBuff(GameObject caster, GraduationSkillSpec spec, IEnumerable<GameObject> allies)
+        /// comes from the skill itself, through SkillManager). <paramref name="extraRadius"/> and <paramref name="durationScale"/>
+        /// come from the master tree ("Luz Partilhada", "Hino do Chamado"). Returns how many allies got it.</summary>
+        public static int SpreadGroupBuff(GameObject caster, GraduationSkillSpec spec, IEnumerable<GameObject> allies, float extraRadius = 0f,
+            float durationScale = 1f)
         {
-            StatModifierDefinition effect = GraduationSkillFactory.AllyEffect(spec);
+            StatModifierDefinition effect = GraduationSkillFactory.AllyEffect(spec, durationScale);
             if (caster == null || effect == null || allies == null)
             {
                 return 0;
@@ -427,7 +443,7 @@ namespace Rapadura.Gameplay.ClassEvolution
 
             Vector3 origin = caster.transform.position;
             int count = 0;
-            foreach (string id in PartySupportRules.SelectAllies(origin.x, origin.z, spec.AreaRadius, candidates))
+            foreach (string id in PartySupportRules.SelectAllies(origin.x, origin.z, spec.AreaRadius + Math.Max(0f, extraRadius), candidates))
             {
                 if (byId[id].TryGetComponent(out BuffController buffs))
                 {
@@ -450,7 +466,10 @@ namespace Rapadura.Gameplay.ClassEvolution
             GraduationSkillSpec spec = ClassEvolutionCatalog.GetSkill(evt.Skill.SkillId);
             if (spec != null && spec.Kind == GraduationSkillKind.GroupBuff)
             {
-                SpreadGroupBuff(evt.Caster, spec, GameObject.FindGameObjectsWithTag(PlayerTag));
+                GraduationRecord record = Record(hero);
+                SpreadGroupBuff(evt.Caster, ClassEvolutionCatalog.EffectiveSkill(spec, Tier(hero)), GameObject.FindGameObjectsWithTag(PlayerTag),
+                    MasterLevelRules.EffectBonus(record, MasterNodeEffect.GroupBuffRadius),
+                    1f + MasterLevelRules.EffectBonus(record, MasterNodeEffect.GroupBuffDuration));
             }
         }
 
@@ -477,7 +496,10 @@ namespace Rapadura.Gameplay.ClassEvolution
             }
 
             BestiaryEntry entry = BestiaryCatalog.Get(DefeatedEnemyRegistry.GetId(enemy.Definition));
-            RecordKill(hero, entry?.Region, stats != null ? stats.Level : 1);
+            int creatureLevel = evt.Target.TryGetComponent(out EnemyLevelScaler scaler)
+                ? scaler.Level
+                : EnemyLevelScaling.ResolveLevel(enemy.Definition.Level, entry?.Region != null ? EnemyLevelScaling.RegionBandLevel(entry.Region.Value) : 1);
+            RecordKill(hero, entry?.Region, stats != null ? stats.Level : 1, creatureLevel);
         }
 
         private void OnCharacterSelected(CharacterSelectedEvent evt) => ApplyToPlayer(evt.CharacterId);

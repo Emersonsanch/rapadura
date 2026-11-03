@@ -25,7 +25,7 @@ namespace Rapadura.Gameplay.ClassEvolution
     public class GraduationRecord
     {
         public string characterId;
-        /// <summary>Graduations completed, 0..3.</summary>
+        /// <summary>Graduations completed, 0..5.</summary>
         public int tier;
         /// <summary>Tier of the accepted mission (tier + 1), 0 = none accepted.</summary>
         public int activeMissionTier;
@@ -86,18 +86,19 @@ namespace Rapadura.Gameplay.ClassEvolution
         }
 
         /// <summary>
-        /// Counts one kill for the accepted mission when it happened in the mission's region (bosses count once, like any
-        /// creature). Never goes past the target. True when the count moved.
+        /// Counts one kill for the accepted mission (bosses count once, like any creature): tiers 1-3 when it happened in the
+        /// mission's region, G4/G5 when the creature is at least <see cref="GraduationSpec.MissionMinCreatureLevel"/>.
+        /// Never goes past the target. True when the count moved.
         /// </summary>
-        public static bool RecordKill(CharacterId character, GraduationRecord record, BiomeType? region)
+        public static bool RecordKill(CharacterId character, GraduationRecord record, BiomeType? region, int creatureLevel = 0)
         {
-            if (record == null || record.activeMissionTier <= 0 || region == null)
+            if (record == null || record.activeMissionTier <= 0)
             {
                 return false;
             }
 
             GraduationSpec mission = ClassEvolutionCatalog.GetGraduation(character, record.activeMissionTier);
-            if (mission == null || mission.MissionRegion != region.Value || record.missionKills >= mission.MissionKills)
+            if (mission == null || !mission.KillCounts(region, creatureLevel) || record.missionKills >= mission.MissionKills)
             {
                 return false;
             }

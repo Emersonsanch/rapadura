@@ -4,6 +4,7 @@ using Rapadura.Core.Accessibility;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
+using Rapadura.Gameplay.ClassEvolution;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Items;
@@ -360,7 +361,8 @@ namespace Rapadura.Gameplay.Pets
 
             bool hiding = _time < _hideUntil;
             bool alerting = _alertEnemy != null && _time < _alertUntil && IsAlive(_alertEnemy);
-            int fetchIndex = _carrying ? -1 : CompanionMath.SelectFetch(_fetchSpots, heroPosition, transform.position);
+            int fetchIndex = _carrying ? -1 : CompanionMath.SelectFetch(_fetchSpots, heroPosition, transform.position,
+                CompanionMath.FetchRadius * (1f + ClassEvolutionProgress.ActiveEffectBonus(MasterNodeEffect.CompanionFetchRadius)));
             _mode = CompanionMath.ChooseMode(hiding, alerting, _carrying || fetchIndex >= 0);
 
             Vector3 target;
@@ -422,7 +424,8 @@ namespace Rapadura.Gameplay.Pets
 
             if (_time >= _alertCooldownUntil && _time >= _hideUntil)
             {
-                int index = CompanionMath.SelectAlert(_windupPositions, heroPosition);
+                int index = CompanionMath.SelectAlert(_windupPositions, heroPosition,
+                    CompanionMath.AlertRadius * (1f + ClassEvolutionProgress.ActiveEffectBonus(MasterNodeEffect.CompanionAlertRadius)));
                 if (index >= 0 && IsAlive(_windupEnemies[index]))
                 {
                     _alertEnemy = _windupEnemies[index];

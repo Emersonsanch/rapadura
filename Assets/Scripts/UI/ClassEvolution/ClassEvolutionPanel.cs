@@ -441,8 +441,15 @@ namespace Rapadura.UI.ClassEvolution
                     MasterLevelRules.AvailablePoints(record));
             }
 
+            MasterTreeBranch? branch = null;
             foreach (MasterNodeSpec node in MasterLevelRules.Nodes)
             {
+                if (branch != node.Branch)
+                {
+                    branch = node.Branch;
+                    AddLabel(_masterSection, "hunting-line").text = ClassEvolutionTexts.Get(localization, ClassEvolutionTexts.BranchKey(node.Branch));
+                }
+
                 var row = new VisualElement();
                 row.AddToClassList("hunting-row");
                 _masterSection.Add(row);

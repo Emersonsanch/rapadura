@@ -7,7 +7,7 @@ namespace Rapadura.Gameplay.ClassEvolution
     /// The visual change of a graduation (Docs/ClassEvolution.md §1.3), kept honest: the existing model is not replaced.
     /// Each tier washes the hero's renderers lightly with the tier colour (per-renderer <see cref="MaterialPropertyBlock"/>,
     /// shared materials untouched) and adds one small low-poly accessory built from primitives (hat, scarf, feather,
-    /// ribbon, sash, satchel, halo) placed from the model's bounds. Graduations stack: tier 3 wears all three.
+    /// ribbon, sash, satchel, halo; G4 a mantle, G5 a ring of light at the feet) placed from the model's bounds. Graduations stack: tier 5 wears all five.
     /// </summary>
     public static class ClassEvolutionVisuals
     {
@@ -159,6 +159,15 @@ namespace Rapadura.Gameplay.ClassEvolution
                     break;
                 case AccessoryShape.Pouch:
                     Part(holder, PrimitiveType.Cube, new Vector3(0.12f * h, bottom + 0.48f * h, -0.06f * h), new Vector3(0.08f * h, 0.08f * h, 0.04f * h), Vector3.zero, color, source);
+                    break;
+                case AccessoryShape.Mantle:
+                    // A short cloak hanging from the shoulders, slightly tilted away from the back.
+                    Part(holder, PrimitiveType.Cube, new Vector3(0f, top - 0.38f * h, -0.11f * h), new Vector3(0.3f * h, 0.34f * h, 0.012f * h), new Vector3(-8f, 0f, 0f), color, source);
+                    Part(holder, PrimitiveType.Cube, new Vector3(0f, top - 0.2f * h, -0.08f * h), new Vector3(0.32f * h, 0.03f * h, 0.06f * h), Vector3.zero, color * 0.85f, source);
+                    break;
+                case AccessoryShape.ColumnRing:
+                    // A thin ring of light at the feet: the first step of the Column of Glory.
+                    Part(holder, PrimitiveType.Cylinder, new Vector3(0f, bottom + 0.01f * h, 0f), new Vector3(0.5f * h, 0.004f * h, 0.5f * h), Vector3.zero, color, source);
                     break;
             }
         }

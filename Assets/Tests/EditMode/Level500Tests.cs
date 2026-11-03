@@ -243,39 +243,39 @@ namespace Rapadura.Tests
             StringAssert.Contains("500", ClassEvolutionPresenter.MasterHeader(null, record, 120));
             StringAssert.Contains("4", ClassEvolutionPresenter.MasterHeader(null, record, 120));
 
+            Assert.AreEqual(0, MasterLevelRules.AddExperience(record, 500, 1_000), "at 500 the bar waits for the 5th graduation");
+            Assert.AreEqual(12_345, record.masterExperience);
+            record.tier = ClassEvolutionCatalog.MaxTier;
             Assert.AreEqual(1, MasterLevelRules.AddExperience(record, 500, MasterLevelRules.ExperienceToNext(4)));
             Assert.AreEqual(5, record.masterLevel);
             Assert.AreEqual(12_345, record.masterExperience, "the old bar XP carried over");
         }
 
-        // ------------------------------------------------------------------ G4 / G5 hooks
+        // ------------------------------------------------------------------ G4 / G5
 
         [Test]
-        public void Graduations_G4AndG5AreDataHooksOnly()
+        public void Graduations_G4AndG5ShipAt150And350_MasterNeedsTheFifth()
         {
-            Assert.AreEqual(3, ClassEvolutionCatalog.MaxTier);
-            Assert.AreEqual(5, ClassEvolutionCatalog.PlannedMaxTier);
+            Assert.AreEqual(5, ClassEvolutionCatalog.MaxTier);
+            Assert.AreEqual(ClassEvolutionCatalog.MaxTier, MasterLevelRules.RequiredTier);
+            Assert.AreEqual(3, MasterLevelRules.LegacyRequiredTier);
             int[] expected = { 8, 14, 25, 150, 350 };
             for (int tier = 1; tier <= 5; tier++)
             {
                 Assert.AreEqual(expected[tier - 1], ClassEvolutionCatalog.MilestoneLevel(tier), $"tier {tier}");
-                Assert.AreEqual(tier <= 3, ClassEvolutionCatalog.IsTierImplemented(tier), $"tier {tier}");
             }
 
-            HashSet<string> keys = new HashSet<string>(ClassEvolutionTexts.Entries.Select(e => e.Key));
             foreach (CharacterId hero in new[] { CharacterId.Maithe, CharacterId.Maria, CharacterId.Joaquim, CharacterId.Icaro, CharacterId.Lavine })
             {
-                for (int tier = 4; tier <= 5; tier++)
-                {
-                    PlannedGraduationSpec planned = ClassEvolutionCatalog.GetPlanned(hero, tier);
-                    Assert.IsNotNull(planned, $"{hero} G{tier}");
-                    Assert.IsNull(ClassEvolutionCatalog.GetGraduation(hero, tier), "no real graduation yet");
-                    Assert.IsTrue(keys.Contains(planned.TitleKey), planned.TitleKey);
-                    Assert.Greater(planned.MissionMapId, 0);
-                }
-
                 var done = new GraduationRecord { tier = 3 };
-                Assert.AreEqual(GraduationMissionStatus.AllDone, ClassEvolutionRules.Status(hero, done, 400), "nothing offers G4 yet");
+                Assert.AreEqual(GraduationMissionStatus.LevelTooLow, ClassEvolutionRules.Status(hero, done, 149));
+                Assert.AreEqual(GraduationMissionStatus.Available, ClassEvolutionRules.Status(hero, done, 150), "G4 is offered at 150");
+                done.tier = 4;
+                Assert.AreEqual(GraduationMissionStatus.LevelTooLow, ClassEvolutionRules.Status(hero, done, 349));
+                Assert.AreEqual(GraduationMissionStatus.Available, ClassEvolutionRules.Status(hero, done, 350));
+                Assert.IsFalse(MasterLevelRules.IsMaster(done, 500));
+                done.tier = 5;
+                Assert.IsTrue(MasterLevelRules.IsMaster(done, 500));
             }
         }
 

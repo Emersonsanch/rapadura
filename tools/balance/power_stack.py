@@ -998,7 +998,12 @@ CLASS_ALL_BOSS_BUDGET = 0.70  # meal/relic/event stack + graduations: boss TTK >
 CLASS_ALL_COMMON_BUDGET = 0.55
 CLASS_BASIC_EDGE = 0.75  # NG+0, stack + graduations, basic attacks only: kill >= 75% of the time the boss needs
 CLASS_BOSS_FLOOR = 12.0
-MASTER_BOSS_BUDGET = 0.95  # the whole master tree (30 points) on top of everything else: boss TTK >= 95% of without it
+MASTER_BOSS_BUDGET = 0.95  # the whole master tree (100 points) on top of everything else: boss TTK >= 95% of without it
+MASTER_NO_DAMAGE_BRANCHES = ("Support", "Utility", "Bond")  # the lines of Progressao500 §3.3: never damage
+OFFENSIVE_STATS = ("AttackDamage", "CriticalChance", "CriticalDamage", "AttackSpeed", "CooldownReduction", "ResourceCostReduction", "Thorns")
+G4_MAX_RADIUS = 14.0  # Progressao500 §3.2: the tier-1 group buff 10 m -> 14 m
+G4_MAX_EXTRA_STUN = 0.5
+G5_COOLDOWN = 30.0
 
 
 @dataclass
@@ -1028,6 +1033,9 @@ class ClassEvolution:
     combos: list  # [(hero, bonus type, value, duration, last skill id)]
     master_nodes: list  # [(node id, Modifier at max rank, max rank)]
     combo_tier: int
+    master_branch: dict = None  # node id -> branch (Core/Support/Utility/Bond), hero-stat and special nodes
+    master_ranks: dict = None  # node id -> max rank, every node (special ones too)
+    upgrades: list = None  # [(id, hero, tier, radius, target skill id, extra stun, slow, slow seconds)]
 
     def level_of(self, skill: ClassSkill) -> int:
         return self.min_level[(skill.hero, skill.tier)]
@@ -1066,16 +1074,25 @@ def load_class_evolution() -> ClassEvolution:
         g = m.groups()
         skills.append(ClassSkill(g[0], g[1], int(g[2]), g[3], *map(float, g[4:12]), g[12], g[13] == "PercentAdditive",
                                  float(g[14]), float(g[15])))
-    min_level = {(h, int(t)): int(lv) for h, t, lv in re.findall(r"Grad\(CharacterId\.(\w+),\s*(\d+),\s*(\d+),", source)}
+    min_level = {(h, int(t)): int(lv) if lv.isdigit() else int(_const(source, lv))
+                 for h, t, lv in re.findall(r"Grad\(CharacterId\.(\w+),\s*(\d+),\s*(\w+),", source)}
     combos = [(h, kind, float(v), float(d), ids.split(",")[-1].strip().strip('"'))
               for h, ids, kind, v, d in re.findall(
                   r'Combo\("\w+",\s*CharacterId\.(\w+),\s*new\[\]\s*\{([^}]*)\},\s*[\d.]+f,\s*ComboBonusType\.(\w+),\s*([\d.]+)f,\s*([\d.]+)f\)',
                   source)]
-    master = []
-    for node, stat, app, value, rank in re.findall(
-            r'new MasterNodeSpec\("(\w+)",\s*StatType\.(\w+),\s*ModifierApplication\.(\w+),\s*([\d.]+)f,\s*(\d+)', _read(MASTER_RULES)):
+    master, branch, ranks = [], {}, {}
+    rules = _read(MASTER_RULES)
+    for node, stat, app, value, rank, rest in re.findall(
+            r'new MasterNodeSpec\("(\w+)",\s*StatType\.(\w+),\s*ModifierApplication\.(\w+),\s*([\d.]+)f,\s*(\d+)([^\n]*)', rules):
         master.append((node, Modifier(stat, app == "PercentAdditive", float(value) * int(rank)), int(rank)))
-    return ClassEvolution(skills, min_level, combos, master, int(_const(source, "ComboTier")))
+        b = re.search(r"MasterTreeBranch\.(\w+)", rest)
+        branch[node], ranks[node] = (b.group(1) if b else "Core"), int(rank)
+    for node, _effect, b, _value, rank in re.findall(
+            r'MasterNodeSpec\.Special\("(\w+)",\s*MasterNodeEffect\.(\w+),\s*MasterTreeBranch\.(\w+),\s*([\d.]+)f,\s*(\d+)', rules):
+        branch[node], ranks[node] = b, int(rank)
+    upgrades = [(u, h, int(t), float(r), target, float(stun), float(slow), float(sec)) for u, h, t, r, target, stun, slow, sec in re.findall(
+        r'Upgrade\("(\w+)",\s*CharacterId\.(\w+),\s*(\d+),\s*' + num + r',\s*"(\w+)",\s*' + num + r',\s*' + num + r',\s*' + num + r'\)', source)]
+    return ClassEvolution(skills, min_level, combos, master, int(_const(source, "ComboTier")), branch, ranks, upgrades)
 
 
 def class_data(data: rd.GameData, cls: ClassEvolution) -> rd.GameData:
@@ -1158,6 +1175,49 @@ def class_evaluate(ctx: Context, cls: ClassEvolution, runs: int, base_gear: dict
     return classed, mastered
 
 
+def high_tier_violations(cls: ClassEvolution) -> list:
+    """G4/G5 (levels 150/350, past the "até 100" scale, so outside the region fights): the G4 passive widens the tier-1
+    group buff to at most G4_MAX_RADIUS and adds only control (a short stun or a slow) to the tier-2 skill, never damage;
+    the G5 skill (cooldown G5_COOLDOWN) has no more damage, damage/level, stun, healing per second and no longer slow
+    uptime than the tier-3 one; the master tree's new lines (Support/Utility/Bond) never touch an offensive stat and the
+    whole tree is MaxMasterLevel points."""
+    out = []
+    by_id = {s.id: s for s in cls.skills}
+    for uid, hero, tier, radius, target, stun, slow, seconds in cls.upgrades or []:
+        t2 = by_id.get(target)
+        if t2 is None or t2.hero != hero or t2.tier != 2:
+            out.append(f"{uid}: target {target} is not {hero}'s tier-2 skill")
+        if tier != 4 or (hero, tier) not in cls.min_level:
+            out.append(f"{uid}: not a G4 passive")
+        if radius > G4_MAX_RADIUS:
+            out.append(f"{uid}: group buff radius {radius:g} m > {G4_MAX_RADIUS:g} m")
+        if stun > G4_MAX_EXTRA_STUN or stun < 0 or slow > 0 or (stun == 0 and slow == 0):
+            out.append(f"{uid}: control effect out of range (stun {stun:g} s, slow {slow:g})")
+    for s5 in (s for s in cls.skills if s.tier == 5):
+        t3 = next((s for s in cls.skills if s.hero == s5.hero and s.tier == 3), None)
+        if t3 is None:
+            out.append(f"{s5.id}: no tier-3 skill to compare")
+            continue
+        if s5.cooldown != G5_COOLDOWN:
+            out.append(f"{s5.id}: cooldown {s5.cooldown:g} s != {G5_COOLDOWN:g} s")
+        for name, a, b in (("damage", s5.damage, t3.damage), ("damage/level", s5.per_level, t3.per_level),
+                           ("stun", s5.stun, t3.stun), ("healing", s5.heal, t3.heal)):
+            if a / s5.cooldown > b / t3.cooldown + 1e-6:
+                out.append(f"{s5.id}: {name}/s {a / s5.cooldown:.3f} > tier 3 {b / t3.cooldown:.3f}")
+        if s5.area > t3.area:
+            out.append(f"{s5.id}: area {s5.area:g} m > tier 3 {t3.area:g} m")
+        up5, up3 = min(1.0, s5.duration / s5.cooldown), min(1.0, t3.duration / t3.cooldown)
+        if s5.value != 0 and up5 > up3 + 1e-6:
+            out.append(f"{s5.id}: debuff uptime {up5:.2f} > tier 3 {up3:.2f}")
+    ranks = cls.master_ranks or {}
+    if sum(ranks.values()) != int(_const(_read(MASTER_RULES), "MaxMasterLevel")):
+        out.append(f"master tree: {sum(ranks.values())} points != MaxMasterLevel")
+    for node, mod, _ in cls.master_nodes:
+        if (cls.master_branch or {}).get(node) in MASTER_NO_DAMAGE_BRANCHES and mod.stat in OFFENSIVE_STATS:
+            out.append(f"master node {node}: {mod.stat} in a no-damage line")
+    return out
+
+
 def class_report(plain: dict, classed: dict, mastered: dict) -> str:
     lines = ["| Ciclo | Bioma (nível do chefe) | Chefe: r8 → r8+classe → pilha+classe (+árvore de mestre) | "
              "2 comuns: r8 → r8+classe → pilha+classe | Parado, chefe mata em (pilha+classe) |", "|---|---|---|---|---|"]
@@ -1179,6 +1239,7 @@ def class_main(ctx: Context, runs: int, base_gear: dict, results: dict) -> None:
     print("\n## Orçamento da evolução de classe\n")
     problems = [f"NG+{c}: {p}" for c in classed for p in class_violations(results[c], classed[c], c)]
     problems += [f"NG+{c}: {p}" for c in mastered for p in master_violations(classed[c], mastered[c])]
+    problems += [f"G4/G5/árvore: {p}" for p in high_tier_violations(cls)]
     print("\n".join(f"- {p}" for p in problems) if problems else "- dentro do orçamento")
 
 

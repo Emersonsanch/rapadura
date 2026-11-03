@@ -2,7 +2,9 @@
 
 > **Status:** aprovado (2026-10-30). **Implementado (§1–4):** curva por partes e teto 500 (`LevelCurveMath`,
 > `ProgressionCurve`, `PlayerStats`), pontos por nível, nível do bicho (`EnemyLevelScaling`, identidade na campanha),
-> Mestre no 500 com migração, ganchos G4/G5, orçamento 1–100 em `tools/balance/level_scaling.py` (README §29).
+> Mestre no 500 com migração, orçamento 1–100 em `tools/balance/level_scaling.py` (README §29). **G4/G5 e a árvore de
+> Mestre de 100 pontos implementados (2026-11-03)**: missões, passiva do G4, skill do G5, visuais e as linhas Apoio,
+> Utilidade e Laço — `Docs/ClassEvolution.md` §1, §2 e §4.
 > **XP por abate/diferença de nível ligados (2026-11-03)** só para bichos com nível próprio (mapas abertos, `MapMonsterInfo` →
 > `ICreatureLevelSource`): até o 15 vale o XP do asset, acima a tabela do §1.2; depois o corte por diferença e, mais de 20
 > abaixo, sem equipamento (`EnemyLevelScaling.LeveledKillExperience`/`DropsEquipment`). Encontros da campanha não mudam.
@@ -160,7 +162,7 @@ Por que assim: as três graduações de hoje são a **campanha** (história da f
 2ª classe no 150 e a 3ª no 400; aqui a G4 vem no 150 (o herói já conhece o mundo grande) e a G5 no 350 (para chegar
 na reta final já graduado). O Mestre continua sendo "o que vem depois do teto".
 
-### 3.2 Títulos (proposta; textos finais pelo agente de classes)
+### 3.2 Títulos (implementados; missões, falas e skills em `Docs/ClassEvolution.md` §1–2)
 
 | Primo (elemento) | G4 (150) — capital do elemento | G5 (350) |
 |---|---|---|
@@ -174,7 +176,8 @@ na reta final já graduado). O Mestre continua sendo "o que vem depois do teto".
   (sem dano a mais). **G5** dá: uma 2ª skill de maestria em área (recarga 30 s) **com o mesmo orçamento** da do tier 3
   (§6 de ClassEvolution: entra no `power_stack.py` como mais uma skill de rotação). As missões usam o mesmo fluxo
   `ClassEvolutionRules` (Accept → RecordKill → TurnIn).
-- G4 e G5 ficam **fora do escopo "até 100"** (§5); entram com os mapas.
+- G4 e G5 ficam **fora do escopo "até 100"** (§5). Implementados em 2026-11-03 sem esperar os mapas: as missões contam
+  bichos de nível ≥ 120 (G4) / ≥ 320 (G5) em qualquer mapa e citam o lugar da história; o Mestre agora pede a G5.
 
 ### 3.3 Nível de Mestre
 
@@ -182,7 +185,8 @@ na reta final já graduado). O Mestre continua sendo "o que vem depois do teto".
   XP `25 000 × (1 + 0,15 × nível)` vira `xp(500) × 0,5 × (1 + 0,05 × nível)` (≈ 10,7 milhões no mestre 1): a barra de
   mestre tem o mesmo "peso" de um nível do fim do jogo.
 - Árvore de Mestre: as 6 linhas de hoje (30 pontos) ficam; somam-se **3 linhas novas** (Apoio, Utilidade e "Laço",
-  bônus para a montaria e o Ari, nunca dano) até 100 pontos. Teto de orçamento continua o do ClassEvolution §6:
+  bônus para a montaria e o Ari, nunca dano) até 100 pontos — **feito** (`MasterLevelRules.Nodes`, `MaxMasterLevel` 100;
+  os 2 nós da montaria esperam o código de `Gameplay/Mounts` ler `ClassEvolutionProgress.ActiveEffectBonus`). Teto de orçamento continua o do ClassEvolution §6:
   "árvore cheia por cima: chefe ≥ 95% de sem ela".
 
 ---
@@ -436,8 +440,8 @@ servidor valida o teto pelo nível do personagem e o Despertar pelos mesmos núm
   `test_level_scaling.py` (as invariantes de hoje nos níveis 25/50/75/100).
 
 **Classes**
-- `ClassEvolutionCatalog.MaxTier` 3 → 5 (G4/G5 depois do escopo), `MasterLevelRules.RequiredLevel` →
-  `ProgressionCurve.MaxLevel` (não um 50 fixo), `MaxMasterLevel` 30 → 100 quando o teto for 500.
+- `ClassEvolutionCatalog.MaxTier` 3 → 5 (**feito**), `MasterLevelRules.RequiredLevel` → `ProgressionCurve.MaxLevel` (não um
+  50 fixo), `MaxMasterLevel` 30 → 100 (**feito**).
 
 **Montarias**
 - `MountRules`: `LevelCapFor(heroLevel)`, `EffectiveLevel(level, heroLevel)`, `CombatXp(killXp)`, `GlowAfter(...)`,

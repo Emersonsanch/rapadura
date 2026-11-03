@@ -32,7 +32,7 @@ namespace Rapadura.UI.ClassEvolution
             ClassEvolutionTexts.Get(localization, ContentText.SkillNameKey(skillId));
 
         public static string RegionName(LocalizationManager localization, GraduationSpec spec) =>
-            ClassEvolutionTexts.Get(localization, ClassEvolutionTexts.RegionKey(spec.MissionRegion));
+            ClassEvolutionTexts.Get(localization, ClassEvolutionTexts.MissionPlaceKey(spec));
 
         /// <summary>The status line of the next graduation (one line, always present).</summary>
         public static string StatusLine(LocalizationManager localization, CharacterId hero, GraduationRecord record, int heroLevel)
@@ -49,8 +49,11 @@ namespace Rapadura.UI.ClassEvolution
                     return ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.StatusAvailable, MentorName(localization, next),
                         ClassEvolutionTexts.Get(localization, next.MissionTitleKey));
                 case GraduationMissionStatus.InProgress:
-                    return ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.StatusInProgress, ClassEvolutionTexts.Get(localization, next.MissionTitleKey),
-                        record.missionKills, next.MissionKills, RegionName(localization, next));
+                    return next.CountsByCreatureLevel
+                        ? ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.StatusInProgressLevel, ClassEvolutionTexts.Get(localization, next.MissionTitleKey),
+                            record.missionKills, next.MissionKills, next.MissionMinCreatureLevel, RegionName(localization, next))
+                        : ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.StatusInProgress, ClassEvolutionTexts.Get(localization, next.MissionTitleKey),
+                            record.missionKills, next.MissionKills, RegionName(localization, next));
                 default:
                     return ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.StatusReady, MentorName(localization, next));
             }
@@ -89,7 +92,7 @@ namespace Rapadura.UI.ClassEvolution
             return lines;
         }
 
-        /// <summary>What a fresh graduation brought: new title, skill, accessory and (tier 2) the class combo.</summary>
+        /// <summary>What a fresh graduation brought: new title, skill (or the G4 passive), accessory and (tier 2) the class combo.</summary>
         public static List<string> GraduatedLines(LocalizationManager localization, CharacterId hero, GraduationSpec done)
         {
             var lines = new List<string>();
@@ -99,7 +102,10 @@ namespace Rapadura.UI.ClassEvolution
             }
 
             lines.Add(ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.Graduated, ClassEvolutionTexts.Get(localization, done.TitleKey)));
-            lines.Add(ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.NewSkill, SkillName(localization, done.SkillId)));
+            GraduationUpgradeSpec passive = ClassEvolutionCatalog.GetUpgrade(done.SkillId);
+            lines.Add(passive != null
+                ? ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.NewPassive, ClassEvolutionTexts.Get(localization, passive.NameKey))
+                : ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.NewSkill, SkillName(localization, done.SkillId)));
             lines.Add(ClassEvolutionTexts.Format(localization, ClassEvolutionTexts.NewAccessory, ClassEvolutionTexts.Get(localization, done.AccessoryKey)));
             ClassComboSpec combo = ClassEvolutionCatalog.GetCombo(hero);
             if (combo != null && done.Tier == combo.RequiredTier)

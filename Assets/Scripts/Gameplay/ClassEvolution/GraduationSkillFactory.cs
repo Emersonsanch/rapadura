@@ -15,6 +15,8 @@ namespace Rapadura.Gameplay.ClassEvolution
     public static class GraduationSkillFactory
     {
         private static readonly Dictionary<string, SkillDefinition> Cache = new Dictionary<string, SkillDefinition>();
+        /// <summary>Whether each cached definition carries the G4 passive (rebuilt in place when that changes).</summary>
+        private static readonly Dictionary<string, bool> CachedUpgraded = new Dictionary<string, bool>();
 
         // Mirrors SkillDefinition's serialized field names; JsonUtility writes them into the private fields.
         [Serializable]
@@ -55,16 +57,17 @@ namespace Rapadura.Gameplay.ClassEvolution
             public string requiredClassOrSpecialization = string.Empty;
         }
 
-        public static SkillDefinition Get(string skillId)
+        /// <summary>
+        /// The definition of a graduation skill as a cousin at <paramref name="ownerTier"/> casts it (G4 widens the group buff
+        /// and adds control to the tier-2 skill, <see cref="ClassEvolutionCatalog.EffectiveSkill"/>). One instance per id: when
+        /// the owner's tier crosses G4 the same object is rewritten, so a learned <see cref="SkillInstance"/> (and its level,
+        /// slot and save) keeps working. Without <paramref name="ownerTier"/> (save restore) the cached variant is returned as is.
+        /// </summary>
+        public static SkillDefinition Get(string skillId, int? ownerTier = null)
         {
             if (string.IsNullOrEmpty(skillId))
             {
                 return null;
-            }
-
-            if (Cache.TryGetValue(skillId, out SkillDefinition cached) && cached != null)
-            {
-                return cached;
             }
 
             GraduationSkillSpec spec = ClassEvolutionCatalog.GetSkill(skillId);
@@ -73,17 +76,32 @@ namespace Rapadura.Gameplay.ClassEvolution
                 return null;
             }
 
-            SkillDefinition built = Build(spec);
+            GraduationSkillSpec effective = ClassEvolutionCatalog.EffectiveSkill(spec, ownerTier ?? 0);
+            bool upgraded = !ReferenceEquals(effective, spec);
+            if (Cache.TryGetValue(skillId, out SkillDefinition cached) && cached != null)
+            {
+                if (ownerTier.HasValue && CachedUpgraded.TryGetValue(skillId, out bool was) && was != upgraded)
+                {
+                    JsonUtility.FromJsonOverwrite(ToJson(effective), cached);
+                    cached.name = skillId;
+                    CachedUpgraded[skillId] = upgraded;
+                }
+
+                return cached;
+            }
+
+            SkillDefinition built = Build(effective);
             Cache[skillId] = built;
+            CachedUpgraded[skillId] = upgraded;
             return built;
         }
 
-        public static List<SkillDefinition> GetAll(IEnumerable<GraduationSkillSpec> specs)
+        public static List<SkillDefinition> GetAll(IEnumerable<GraduationSkillSpec> specs, int? ownerTier = null)
         {
             var list = new List<SkillDefinition>();
             foreach (GraduationSkillSpec spec in specs)
             {
-                SkillDefinition skill = Get(spec.SkillId);
+                SkillDefinition skill = Get(spec.SkillId, ownerTier);
                 if (skill != null)
                 {
                     list.Add(skill);
@@ -95,6 +113,15 @@ namespace Rapadura.Gameplay.ClassEvolution
 
         /// <summary>A fresh (uncached) definition. Tests and the cache use it.</summary>
         public static SkillDefinition Build(GraduationSkillSpec spec)
+        {
+            SkillDefinition skill = ScriptableObject.CreateInstance<SkillDefinition>();
+            JsonUtility.FromJsonOverwrite(ToJson(spec), skill);
+            skill.name = spec.SkillId;
+            skill.hideFlags = HideFlags.DontSave;
+            return skill;
+        }
+
+        private static string ToJson(GraduationSkillSpec spec)
         {
             GraduationSpec graduation = ClassEvolutionCatalog.GetGraduation(spec.Character, spec.Tier);
             bool group = spec.Kind == GraduationSkillKind.GroupBuff;
@@ -143,15 +170,14 @@ namespace Rapadura.Gameplay.ClassEvolution
                 }
             }
 
-            SkillDefinition skill = ScriptableObject.CreateInstance<SkillDefinition>();
-            JsonUtility.FromJsonOverwrite(JsonUtility.ToJson(json), skill);
-            skill.name = spec.SkillId;
-            skill.hideFlags = HideFlags.DontSave;
-            return skill;
+            return JsonUtility.ToJson(json);
         }
 
-        /// <summary>The group-buff effect a graduation skill spreads to allies (null when it is not a group buff).</summary>
-        public static StatModifierDefinition AllyEffect(GraduationSkillSpec spec)
+        /// <summary>
+        /// The group-buff effect a graduation skill spreads to allies (null when it is not a group buff), its duration scaled by
+        /// <paramref name="durationScale"/> (master tree "Hino do Chamado").
+        /// </summary>
+        public static StatModifierDefinition AllyEffect(GraduationSkillSpec spec, float durationScale = 1f)
         {
             if (spec == null || spec.Kind != GraduationSkillKind.GroupBuff || !spec.HasEffect)
             {
@@ -164,7 +190,7 @@ namespace Rapadura.Gameplay.ClassEvolution
                 affectedStat = spec.EffectStat,
                 application = spec.EffectApplication,
                 value = spec.EffectValue,
-                durationSeconds = spec.EffectDurationSeconds,
+                durationSeconds = spec.EffectDurationSeconds * Math.Max(1f, durationScale),
                 isDebuff = false,
             };
         }
