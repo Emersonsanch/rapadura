@@ -251,6 +251,19 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_mountain_irbis", "Dimmed Irbis", "Irbis Apagado"),
             EnemyName("enemy_mountain_almas", "Almas", "Almas"),
             EnemyName("enemy_mountain_giant_marmot", "Giant Marmot", "Marmota Gigante"),
+            // The beasts of the Planície de Mingcheng and the Estepe dos Nartes (Docs/Mapas100.md 41–52), formerly played by stand-ins.
+            EnemyName("enemy_forest_stone_lion", "Dimmed Stone Lion", "Leão de Pedra Apagado"),
+            EnemyName("enemy_forest_lantern_fox", "Lantern-Tail Fox", "Raposa de Cauda Lanterna"),
+            EnemyName("enemy_forest_terracotta_soldier", "Dimmed Terracotta Soldier", "Soldado de Terracota Apagado"),
+            EnemyName("enemy_forest_stone_turtle", "Stone Turtle", "Tartaruga de Pedra"),
+            EnemyName("enemy_forest_mud_buffalo", "Mud Buffalo", "Búfalo de Lama"),
+            EnemyName("enemy_forest_nian_cub", "Nian Cub", "Filhote de Nian"),
+            EnemyName("enemy_mountain_young_griffin", "Young Griffin", "Grifo Jovem"),
+            EnemyName("enemy_mountain_saiga", "Frightened Saiga", "Saiga Assustada"),
+            EnemyName("enemy_mountain_bronze_wolf", "Bronze Wolf", "Lobo de Bronze"),
+            EnemyName("enemy_mountain_sleepwalker_giant", "Sleepwalking Giant", "Gigante Sonâmbulo"),
+            EnemyName("enemy_mountain_bark_beetle", "Bark Beetle", "Besouro-Casca"),
+            EnemyName("enemy_mountain_ochokochi", "Ochokochi", "Ochokochi"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),

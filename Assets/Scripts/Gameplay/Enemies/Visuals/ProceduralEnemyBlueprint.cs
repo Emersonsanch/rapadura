@@ -107,6 +107,33 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         Almas = 45,
         /// <summary>Marmota Gigante (Teto, 36–37): chubby golden marmot with big incisors and a bushy tail.</summary>
         GiantMarmot = 46,
+
+        // The beasts of the Planície de Mingcheng and the Estepe dos Nartes (Docs/Mapas100.md 41–52) that the overworld
+        // layouts played with stand-ins (MingchengBeastRecipes, NartesBeastRecipes).
+        /// <summary>Leão de Pedra Apagado (Mingcheng, 41–42): grey guardian lion statue, curly mane, a jaw that gapes.</summary>
+        StoneLion = 47,
+        /// <summary>Raposa de Cauda Lanterna (Mingcheng, 41): red fox whose bushy tail ends in a glowing paper lantern.</summary>
+        LanternFox = 48,
+        /// <summary>Soldado de Terracota Apagado (Mingcheng, 41, 45): clay soldier in lamellar armour with a halberd.</summary>
+        TerracottaSoldier = 49,
+        /// <summary>Tartaruga de Pedra (Mingcheng, 43): stone turtle carrying a stele on its shell, a jaw that snaps.</summary>
+        StoneTurtle = 50,
+        /// <summary>Búfalo de Lama (Mingcheng, 44): grey water buffalo with swept-back horns, lowers its head to charge.</summary>
+        MudBuffalo = 51,
+        /// <summary>Filhote de Nian (Mingcheng, 45): red-and-gold lion-dog cub with one horn and a big jaw.</summary>
+        NianCub = 52,
+        /// <summary>Grifo Jovem (Nartes, 47–48): lion body, eagle head and folded wings in Scythian gold; wings spread to strike.</summary>
+        YoungGriffin = 53,
+        /// <summary>Saiga Assustada (Nartes, 47): pale steppe antelope with the drooping nose and amber horns; lowers its head to butt.</summary>
+        Saiga = 54,
+        /// <summary>Lobo de Bronze (Nartes, 48): Scythian bronze wolf from the kurgans, verdigris spirals, a jaw that gapes.</summary>
+        BronzeWolf = 55,
+        /// <summary>Gigante Sonâmbulo (Nartes, 49): huge hill giant walking in his sleep, eyes shut, arms out; slams with both.</summary>
+        SleepwalkerGiant = 56,
+        /// <summary>Besouro-Casca (Nartes, 50): six-legged beetle with bark-ridged wing cases and pincer mandibles.</summary>
+        BarkBeetle = 57,
+        /// <summary>Ochokochi (Nartes, 52): shaggy Georgian forest man with the axe-blade on his chest; arms up to hug and cut.</summary>
+        Ochokochi = 58,
     }
 
     /// <summary>

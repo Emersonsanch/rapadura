@@ -334,6 +334,32 @@ substitutos (testes: `LateRegionBeastsPlacementTests`).
 | `enemy_mountain_almas` | **Almas** / *Almas* | 38 | [elite], tímido, foge ferido | o homem selvagem dos contos mongóis e da Ásia Central; assustado pela sombra, joga bola de neve socada (no corpo a corpo por enquanto). |
 | `enemy_mountain_giant_marmot` | **Marmota Gigante** / *Giant Marmot* | 36, 37 | [enxame], foge ferido | marmota do Pamir (bicho real) que cresceu do tamanho de um cachorro; o assobio para quando ela vem. |
 
+**Terceira leva (2026-11-06): Planície de Mingcheng e Estepe dos Nartes (Mapas100 41–52).** Mesmo contrato (peso 0 no
+bioma, nível da área, números do bioma). Mingcheng fica no bioma Floresta (Água Viva) e os Nartes no Montanha, como os
+layouts `OverworldLayouts.Mingcheng/Nartes` já declaram. Modelos em `MingchengBeastRecipes` / `NartesBeastRecipes` (o
+leão de pedra, a tartaruga, o filhote de nian, o lobo de bronze, a raposa e o grifo abrem a boca/bico no bote; a raposa
+acende a lanterna do rabo e o grifo abre as asas; o búfalo e a saiga baixam a cabeça para a carga; o soldado ergue a
+alabarda, o gigante e o ochokochi erguem os dois braços; o besouro abre as pinças), Caderno em
+`MingchengNartesBestiaryTexts`. Testes: `MingchengNartesBeastsTests`. Ainda não trocados nos overworlds. O Urso do Cáucaso
+(52) pode usar o `enemy_mountain_brown_bear` e os macacos do bambu/calcário/névoa o `enemy_forest_thief_monkey`, que já
+existem; Carpa-Dragão, Cavalo de Terracota, Grou de Papel, Espelho Quebrado, Cisne de Feltro, Cervo de Ouro, Lince e
+Garanhão seguem com substitutos.
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_forest_stone_lion` | **Leão de Pedra Apagado** / *Dimmed Stone Lion* | 41 (e o Guardião de Cal do 42) | [tanque], pesado | os leões de guarda dos portões chineses (forma); o frio da sombra entrou por uma rachadura e os acordou: guardam a estrada contra todos. |
+| `enemy_forest_lantern_fox` | **Raposa de Cauda Lanterna** / *Lantern-Tail Fox* | 41 | [rápido], foge ferida | a raposa esperta dos contos chineses; levava um pouco de luz das lanternas na ponta do rabo, a gula de Āz a fez roubar todas. |
+| `enemy_forest_terracotta_soldier` | **Soldado de Terracota Apagado** / *Dimmed Terracotta Soldier* | 41, 45 | [tanque], pesado | o exército de barro de Xi'an como imagem; a sombra fez o barro marchar. Quebrado, sobe uma faísca: o carinho do oleiro. |
+| `enemy_forest_stone_turtle` | **Tartaruga de Pedra** / *Stone Turtle* | 43 | [tanque], pesado | a tartaruga que carrega estelas (bixi, forma); jurou nunca largar a pedra com os nomes de quem cavou o canal, a sombra lhe deu medo de que a tomem. |
+| `enemy_forest_mud_buffalo` | **Búfalo de Lama** / *Mud Buffalo* | 44 | [tanque], carga | búfalo-d'água (bicho real); o frio subiu dos terraços alagados até as pernas, não aguenta ninguém perto da água. |
+| `enemy_forest_nian_cub` | **Filhote de Nian** / *Nian Cub* | 45 | [elite] | filhote do *nian* do Ano-Novo chinês (monstro de conto, não divindade); foge de vermelho, luz e barulho (a granada do Ícaro). |
+| `enemy_mountain_young_griffin` | **Grifo Jovem** / *Young Griffin* | 47 (e o Grifo Guardião do 48) | [elite] | os grifos que guardam o ouro (Heródoto IV, ouros citas); a sombra pôs nos novos a gula de ouro dos velhos. Corpo a corpo. |
+| `enemy_mountain_saiga` | **Saiga Assustada** / *Frightened Saiga* | 47 | [enxame], carga, foge ferida | bicho real; a manada mais nervosa da estepe, apavorada pela sombra. |
+| `enemy_mountain_bronze_wolf` | **Lobo de Bronze** / *Bronze Wolf* | 48 | [tanque], pesado | os bichos de bronze enrolados do estilo animal cita; a sombra desceu num kurgan aberto e os acordou. |
+| `enemy_mountain_sleepwalker_giant` | **Gigante Sonâmbulo** / *Sleepwalking Giant* | 49 | [tanque], pesado | gigante-da-colina (*Livro dos Gigantes*) preso num sonho ruim fugido das tábuas do Virogdad; vencido, acorda e volta para casa. |
+| `enemy_mountain_bark_beetle` | **Besouro-Casca** / *Bark Beetle* | 50 | [tanque] | besouro da taiga que só comia madeira morta; Āz lhe deu uma fome sem fim e ele rói as casas do povo-tronco. |
+| `enemy_mountain_ochokochi` | **Ochokochi** / *Ochokochi* | 52 | [elite], pesado | o homem da mata do folclore georgiano, com a lâmina de osso no peito; sozinho e bravo pela sombra, procura alguém para "abraçar". |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |

@@ -248,6 +248,9 @@ namespace Rapadura.UI.Bestiary
             // -- Bichos da Costa, do Delta e do Teto do Mundo que os mundos contínuos faziam com substitutos (own file too) --
             LateRegionBestiaryTexts.AddPages(entries);
 
+            // -- Bichos da Planície de Mingcheng e da Estepe dos Nartes que os mundos contínuos faziam com substitutos (own file too) --
+            MingchengNartesBestiaryTexts.AddPages(entries);
+
             // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
             OssuaryBestiaryTexts.AddPages(entries);
 

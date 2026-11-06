@@ -141,6 +141,19 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_mountain_irbis", ProceduralEnemyKind.Irbis },
             { "enemy_mountain_almas", ProceduralEnemyKind.Almas },
             { "enemy_mountain_giant_marmot", ProceduralEnemyKind.GiantMarmot },
+            // The beasts of the Planície de Mingcheng and the Estepe dos Nartes (Docs/Mapas100.md 41–52), formerly played by stand-ins.
+            { "enemy_forest_stone_lion", ProceduralEnemyKind.StoneLion },
+            { "enemy_forest_lantern_fox", ProceduralEnemyKind.LanternFox },
+            { "enemy_forest_terracotta_soldier", ProceduralEnemyKind.TerracottaSoldier },
+            { "enemy_forest_stone_turtle", ProceduralEnemyKind.StoneTurtle },
+            { "enemy_forest_mud_buffalo", ProceduralEnemyKind.MudBuffalo },
+            { "enemy_forest_nian_cub", ProceduralEnemyKind.NianCub },
+            { "enemy_mountain_young_griffin", ProceduralEnemyKind.YoungGriffin },
+            { "enemy_mountain_saiga", ProceduralEnemyKind.Saiga },
+            { "enemy_mountain_bronze_wolf", ProceduralEnemyKind.BronzeWolf },
+            { "enemy_mountain_sleepwalker_giant", ProceduralEnemyKind.SleepwalkerGiant },
+            { "enemy_mountain_bark_beetle", ProceduralEnemyKind.BarkBeetle },
+            { "enemy_mountain_ochokochi", ProceduralEnemyKind.Ochokochi },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -165,6 +178,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.MangroveCrocodile, ProceduralEnemyKind.GrassLion, ProceduralEnemyKind.DustRhino, ProceduralEnemyKind.ThiefMonkey,
             ProceduralEnemyKind.ThiefOtter, ProceduralEnemyKind.Python, ProceduralEnemyKind.DimmedTroll, ProceduralEnemyKind.BrownBear,
             ProceduralEnemyKind.WildYak, ProceduralEnemyKind.Irbis, ProceduralEnemyKind.Almas, ProceduralEnemyKind.GiantMarmot,
+            ProceduralEnemyKind.StoneLion, ProceduralEnemyKind.LanternFox, ProceduralEnemyKind.TerracottaSoldier, ProceduralEnemyKind.StoneTurtle,
+            ProceduralEnemyKind.MudBuffalo, ProceduralEnemyKind.NianCub, ProceduralEnemyKind.YoungGriffin, ProceduralEnemyKind.Saiga,
+            ProceduralEnemyKind.BronzeWolf, ProceduralEnemyKind.SleepwalkerGiant, ProceduralEnemyKind.BarkBeetle, ProceduralEnemyKind.Ochokochi,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -336,6 +352,42 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.GiantMarmot:
                     PamirBeastRecipes.BuildGiantMarmot(blueprint);
+                    break;
+                case ProceduralEnemyKind.StoneLion:
+                    MingchengBeastRecipes.BuildStoneLion(blueprint);
+                    break;
+                case ProceduralEnemyKind.LanternFox:
+                    MingchengBeastRecipes.BuildLanternFox(blueprint);
+                    break;
+                case ProceduralEnemyKind.TerracottaSoldier:
+                    MingchengBeastRecipes.BuildTerracottaSoldier(blueprint);
+                    break;
+                case ProceduralEnemyKind.StoneTurtle:
+                    MingchengBeastRecipes.BuildStoneTurtle(blueprint);
+                    break;
+                case ProceduralEnemyKind.MudBuffalo:
+                    MingchengBeastRecipes.BuildMudBuffalo(blueprint);
+                    break;
+                case ProceduralEnemyKind.NianCub:
+                    MingchengBeastRecipes.BuildNianCub(blueprint);
+                    break;
+                case ProceduralEnemyKind.YoungGriffin:
+                    NartesBeastRecipes.BuildYoungGriffin(blueprint);
+                    break;
+                case ProceduralEnemyKind.Saiga:
+                    NartesBeastRecipes.BuildSaiga(blueprint);
+                    break;
+                case ProceduralEnemyKind.BronzeWolf:
+                    NartesBeastRecipes.BuildBronzeWolf(blueprint);
+                    break;
+                case ProceduralEnemyKind.SleepwalkerGiant:
+                    NartesBeastRecipes.BuildSleepwalkerGiant(blueprint);
+                    break;
+                case ProceduralEnemyKind.BarkBeetle:
+                    NartesBeastRecipes.BuildBarkBeetle(blueprint);
+                    break;
+                case ProceduralEnemyKind.Ochokochi:
+                    NartesBeastRecipes.BuildOchokochi(blueprint);
                     break;
             }
 

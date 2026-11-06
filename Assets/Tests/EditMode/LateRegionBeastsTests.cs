@@ -71,7 +71,7 @@ namespace Rapadura.Tests
         /// <summary>The commons that were in <paramref name="biome"/> before both beast passes (the region's own numbers).</summary>
         private static List<EnemyDefinition> OlderCommonsOf(BiomeType biome)
         {
-            var newer = new HashSet<string>(Beasts.Select(b => b.Id).Concat(EarlierBeasts));
+            var newer = new HashSet<string>(Beasts.Select(b => b.Id).Concat(EarlierBeasts).Concat(MingchengNartesBestiaryTexts.EnemyIds));
             BiomeDefinition home = BiomeRegistry.Get(biome);
             Assert.IsNotNull(home, biome.ToString());
             return home.Enemies.Where(e => e?.Enemy != null && !e.Enemy.IsBoss && !newer.Contains(e.Enemy.name)).Select(e => e.Enemy).ToList();

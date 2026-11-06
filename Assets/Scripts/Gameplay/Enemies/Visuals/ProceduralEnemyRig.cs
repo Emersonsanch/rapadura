@@ -107,6 +107,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     return SnakeParts;
                 case ProceduralEnemyKind.DustRhino:
                 case ProceduralEnemyKind.WildYak:
+                case ProceduralEnemyKind.MudBuffalo:
+                case ProceduralEnemyKind.Saiga:
                     return ChargerParts;
                 default: return null;
             }
@@ -442,6 +444,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
 
                 case ProceduralEnemyKind.DustRhino:
                 case ProceduralEnemyKind.WildYak:
+                case ProceduralEnemyKind.MudBuffalo:
+                case ProceduralEnemyKind.Saiga:
                 {
                     // Chargers: the head swings while grazing and drops, horns first, on the windup.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -460,6 +464,87 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     }
 
                     Pulse(ProceduralEnemyParts.StolenLight, Mathf.Lerp(0.85f, 1.15f, (0.5f + 0.5f * Mathf.Sin(t * 4.1f) * Mathf.Sin(t * 1.7f)) * Mathf.Max(k, 0.3f)) + 0.25f * r);
+                    break;
+                }
+
+                case ProceduralEnemyKind.StoneLion:
+                case ProceduralEnemyKind.StoneTurtle:
+                case ProceduralEnemyKind.NianCub:
+                case ProceduralEnemyKind.BronzeWolf:
+                {
+                    // Mingcheng's stone lion and stele turtle, the nian's cub, the kurgans' bronze wolf: the jaw gapes on the windup.
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(Mathf.Max(0f, Mathf.Sin(t * 0.7f)) * 3f * k + 30f * r, 0f, 0f));
+                    if (_kind == ProceduralEnemyKind.NianCub)
+                    {
+                        Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(0f, Mathf.Sin(t * 1.3f) * 10f * k * (1f - r), 0f));
+                    }
+
+                    break;
+                }
+
+                case ProceduralEnemyKind.LanternFox:
+                {
+                    // The tail sways and its paper lantern flickers, flaring before the bite.
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    Rotate(ProceduralEnemyParts.Tail, Quaternion.Euler(0f, Mathf.Sin(t * 1.6f) * 12f * k, 0f));
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(28f * r, 0f, 0f));
+                    float flicker = 0.5f + 0.5f * Mathf.Sin(t * 4.7f) * Mathf.Sin(t * 1.9f);
+                    Pulse(ProceduralEnemyParts.Lantern, Mathf.Lerp(0.9f, 1.12f, flicker * Mathf.Max(k, 0.3f)) + 0.25f * r);
+                    break;
+                }
+
+                case ProceduralEnemyKind.YoungGriffin:
+                {
+                    // The beak opens and the folded wings spread wide on the windup, then fold back after the strike.
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(30f * r, 0f, 0f));
+                    if (_driveLimbs)
+                    {
+                        Rotate(ProceduralEnemyParts.WingLeft, Quaternion.AngleAxis(-(Mathf.Sin(t * 0.8f) * 3f * k + 60f * r), Vector3.forward));
+                        Rotate(ProceduralEnemyParts.WingRight, Quaternion.AngleAxis(Mathf.Sin(t * 0.8f) * 3f * k + 60f * r, Vector3.forward));
+                    }
+
+                    break;
+                }
+
+                case ProceduralEnemyKind.TerracottaSoldier:
+                {
+                    // Stands to attention; the halberd arm goes up and back on the windup.
+                    float r = StepAttack(deltaTime, 4f, 2.5f);
+                    if (_driveLimbs)
+                    {
+                        Swing(ProceduralEnemyParts.ArmLeft, Mathf.Sin(t * 1.1f) * 3f * k);
+                        Swing(ProceduralEnemyParts.ArmRight, -Mathf.Sin(t * 1.1f) * 3f * k - 80f * r);
+                    }
+
+                    Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(0f, Mathf.Sin(t * 0.4f) * 6f * k, 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.SleepwalkerGiant:
+                case ProceduralEnemyKind.Ochokochi:
+                {
+                    // The giant's arms drift out in his sleep; the ochokochi's hang. Both go up for a two-handed slam/hug.
+                    float r = StepAttack(deltaTime, 3.5f, 2.2f);
+                    float drift = _kind == ProceduralEnemyKind.SleepwalkerGiant ? 0.8f : 1.3f;
+                    if (_driveLimbs)
+                    {
+                        Swing(ProceduralEnemyParts.ArmLeft, Mathf.Sin(t * drift) * 5f * k - 75f * r);
+                        Swing(ProceduralEnemyParts.ArmRight, -Mathf.Sin(t * drift) * 5f * k - 75f * r);
+                    }
+
+                    Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(Mathf.Sin(t * 0.5f) * 4f * k, Mathf.Sin(t * 0.3f) * 8f * k * (1f - r), 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.BarkBeetle:
+                {
+                    // The mandibles open wide on the windup and snap shut on the pinch.
+                    float r = StepAttack(deltaTime, 5f, 4f);
+                    float open = Mathf.Max(0f, Mathf.Sin(t * 1.5f)) * 4f * k + 32f * r;
+                    Rotate(ProceduralEnemyParts.ClawLeft, Quaternion.Euler(0f, -open, 0f));
+                    Rotate(ProceduralEnemyParts.ClawRight, Quaternion.Euler(0f, open, 0f));
                     break;
                 }
 
