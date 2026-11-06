@@ -451,6 +451,8 @@ namespace Rapadura.Gameplay.Dungeon
 
             Teleport(enemy, _hall.Clamp(position, 0.7f));
             DungeonEnemyTag.Attach(enemy, enemyId, room, _lootTable, reanimated);
+            // Level 35–45 (map 24b): directed spawns get no scaler from the arena, so the ossuary puts it on itself.
+            EnemyLevelScaler.Attach(enemy, EnemyLevelScaling.ResolveLevel(definition.Level, DungeonRules.EnemyLevel(enemyId)));
             DungeonEnemyBehaviour behaviour = AddBehaviour(enemy, enemyId);
             behaviour?.Configure(_hall);
             if (behaviour is BoneSorcererBehaviour sorcerer)

@@ -283,6 +283,55 @@ namespace Rapadura.Tests
         // ------------------------------------------------------------------
 
         [Test]
+        public void Entry_And_Guardians_AreInTheCatacombsBand_35To45()
+        {
+            // Owner's decision (2026-11-06): the ossuary is map 24b of Docs/MetodologiaMapasERacas.md (35–45), no longer 12.
+            Assert.AreEqual(35, DungeonRules.MinLevel);
+            Assert.AreEqual(35, DungeonRules.MonsterLevelMin);
+            Assert.AreEqual(45, DungeonRules.MonsterLevelMax);
+            Assert.IsFalse(DungeonRules.CanEnter(12, BiomeType.Caves), "the old level 12 no longer opens it");
+            Assert.IsFalse(DungeonRules.CanEnter(34, BiomeType.Caves));
+            Assert.IsTrue(DungeonRules.CanEnter(35, BiomeType.Caves));
+
+            foreach (string id in DungeonRules.EnemyIds)
+            {
+                int level = DungeonRules.EnemyLevel(id);
+                Assert.That(level, Is.InRange(DungeonRules.MonsterLevelMin, DungeonRules.MonsterLevelMax), id);
+                Assert.AreEqual(level, Enemy(id).Level, $"{id}: the asset's level = DungeonRules.EnemyLevel");
+                Assert.AreEqual(level, EnemyLevelScaling.ResolveLevel(Enemy(id).Level, DungeonRules.EnemyLevel(id)), id);
+                Assert.Greater(EnemyLevelScaling.HealthMultiplier(level), 1f, $"{id}: scaled above the archetype level 15");
+            }
+
+            Assert.AreEqual(DungeonRules.MonsterLevelMax, DungeonRules.EnemyLevel(DungeonRules.BoneColossusId), "the Colosso is the top of the band");
+            Assert.AreEqual(DungeonRules.MonsterLevelMin, DungeonRules.EnemyIds.Min(DungeonRules.EnemyLevel));
+            Assert.AreEqual(0, DungeonRules.EnemyLevel("enemy_not_in_the_ossuary"));
+        }
+
+        [Test]
+        public void Guardian_CarriesItsLevel_ForXpAndThePerigosoRule()
+        {
+            var go = new GameObject("guardian");
+            try
+            {
+                DungeonEnemyTag.Attach(go, DungeonRules.BoneColossusId, 2, null);
+                Assert.IsTrue(go.TryGetComponent(out ICreatureLevelSource source));
+                Assert.AreEqual(45, source.CreatureLevel);
+
+                DungeonEnemyTag relit = DungeonEnemyTag.Attach(go, DungeonRules.SkeletonWarriorId, 1, null, reanimated: true);
+                Assert.AreEqual(38, source.CreatureLevel);
+                Assert.AreEqual(0, relit.ScaleKillExperience(EnemyLevelScaling.KillExperience(38)), "a relit guardian still gives 0 XP");
+
+                // A hero at the entry level (35) against the Colosso (45): +25% crit for the boss, the hero's hits still land.
+                Assert.AreEqual(0.25f, Rapadura.Gameplay.Combat.LevelDangerRules.CreatureCritChanceBonus(45 - DungeonRules.MinLevel), 1e-6f);
+                Assert.AreEqual(1f, Rapadura.Gameplay.Combat.LevelDangerRules.HeroHitRateMultiplier(45 - DungeonRules.MinLevel));
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
+            }
+        }
+
+        [Test]
         public void Entry_NeedsTheCavesAndTheLevel()
         {
             Assert.IsTrue(DungeonRules.CanEnter(DungeonRules.MinLevel, BiomeType.Caves));

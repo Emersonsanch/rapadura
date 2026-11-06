@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
   _enemyName: "Caveira Flutuante"
   _isBoss: 0
-  _level: 0
+  _level: 35
   _maxHealth: 40
   _experienceReward: 22
   _lootItem: {fileID: 0}

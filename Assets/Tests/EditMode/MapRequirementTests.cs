@@ -324,5 +324,29 @@ namespace Rapadura.Tests
                 Assert.IsNotNull(MapTexts.GetFallback(MapTexts.RequirementHintKey(tag)), $"{tag}: no hint");
             }
         }
+
+        [Test]
+        public void Ibex_DoubleJump_DoesNotOpenTheNinhoDeMahaway()
+        {
+            // Owner's decision (2026-11-06): the Walia Ibex's "Pulo Duplo" (70 gold at the Mountain forge) would bypass the
+            // wings gate of map 24 — only real wings, a flying mount or the canvas wings worn on the back open it.
+            MapDefinition ninho = MapCatalog.Get(24);
+            Assert.AreEqual(MapRequirementTags.WingsOrDoubleJump, ninho.SpecialRequirementTag);
+
+            MountSpec ibex = MountCatalog.FindSpec(MountWaveCatalog.MountainGoat);
+            Assert.IsNotNull(ibex);
+            Assert.AreEqual(MountAbilityKind.DoubleJump, ibex.AbilityKind, "the ibex really has a double jump");
+            Assert.AreNotEqual(MountType.Voador, ibex.Type);
+
+            var slots = new[] { new InventorySlotData { itemId = ibex.WhistleItemId, quantity = 1 } };
+            var mounts = new[] { new OwnedMount { mountId = MountWaveCatalog.MountainGoat } };
+            MapRequirementState withIbex = MapRequirementHeroState.Capture(slots, null, null, mounts);
+            Assert.IsFalse(MapRequirementRules.IsMet(ninho.SpecialRequirementTag, withIbex), "the ibex's double jump is not wings");
+            Assert.AreEqual(MapAccessCheck.MissingRequirement,
+                MapAccessRules.CheckWalk(ninho, 99, null, MapRequirementRules.Lookup(withIbex)));
+
+            withIbex.Wear(EquipmentSlot.Wings, MapRequirementItems.CanvasWings);
+            Assert.IsTrue(MapRequirementRules.IsMet(ninho.SpecialRequirementTag, withIbex), "the wings still open it");
+        }
     }
 }

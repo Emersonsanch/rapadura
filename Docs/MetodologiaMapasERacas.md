@@ -122,6 +122,10 @@ Quando o herói entra em um mapa com nível significativamente inferior ao dos m
 * **Diferença de +20 Níveis do Monstro:** O jogador tem **-40% de taxa de acerto (Hit Rate)**, gerando mensagens frequentes de "Errou!" (*Miss*), e os danos recebidos aumentam em 1.5x.
 * **Diferença de +30 Níveis:** Dano sofrido é letal (quase hit-kill), desencorajando jogadores a pular degraus de conteúdo.
 
+> **No jogo (regra B, 2026-11-06):** aplicado em combate para bichos com nível próprio (`LevelDangerRules`): +10 → +25% de
+> crítico do bicho (×1,5); +20 → −40% de acerto do herói e dano do bicho ×1,5, crescendo linear até **×3 no +30** (teto).
+> Abaixo de +10 nada muda. O aviso "Perigoso" aparece a partir do +10.
+
 ---
 
 ## 5. Renascer Canônico & Cidades de Retorno (Respawn Rules)
@@ -174,8 +178,12 @@ Abaixo está o catálogo completo de acesso de todos os mapas planejados, estrut
 | **21** | Campo das Pedras-Dragão | 32–38 | 30 | 35 | 750 | Lamparina Rúnica | Vila das Lamparinas | Vishaps de Pedra |
 | **22** | Mercado dos Túneis | 34–42 | 32 | 38 | 850 | Nenhuma | Mercado dos Túneis | **Kobolds Comerciantes** |
 | **23** | Cânion da Roda | 38–46 | 36 | 42 | 1000 | Óleo de Fogo Eterno | Mercado dos Túneis | Construtos das Jarras |
-| **24** | Ninho de Mahaway | 42–50 | 40 | 46 | 1200 | Asas ou Salto Duplo | Vila das Lamparinas | Harpias das Trevas |
+| **24** | Ninho de Mahaway | 42–50 | 40 | 46 | 1200 | Asas ou Salto Duplo¹ | Vila das Lamparinas | Harpias das Trevas |
 | **24b**| **Catacumbas de Marfim** | 35–45 | 32 | 38 | 800 | **Chave de Osso Rúnica** | Vila das Lamparinas | **Esqueletos / Caveiras** |
+
+¹ *Salto Duplo* = o das Asas de Lona do Takhsich vestidas. **Decisão do dono (2026-11-06):** o Pulo Duplo do Íbex-da-Walia
+(montaria de 70 de ouro) **não** vale para o 24 — furaria a exigência das asas. O 24b é o **Ossuário dos Artífices**
+(`Docs/Dungeons.md`): entra no nível 35, guardiões 35–45.
 
 ### Região 5: Costa das Monções (Níveis 45–72) — *Água e Tempestade*
 | # | Mapa | Faixa Monstro | Walk Level | Warp (M) Level | Custo Ouro | Exigência Especial | Cidade de Retorno | Raça Predominante |

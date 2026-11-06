@@ -34,6 +34,8 @@ namespace Rapadura.UI.Common
         public const string HudAttack = "ui.hud.attack";
         public const string HudCameraLeft = "ui.hud.camera_left";
         public const string HudCameraRight = "ui.hud.camera_right";
+        /// <summary>Floating text over a creature the hero missed ("Perigoso" regra B, LevelDangerRules).</summary>
+        public const string HudMiss = "ui.hud.miss";
 
         // -- Shop --
         public const string ShopGold = "ui.shop.gold";
@@ -184,6 +186,7 @@ namespace Rapadura.UI.Common
             new LocalizationEntry(HudAttack, "Attack", "Atacar"),
             new LocalizationEntry(HudCameraLeft, "‹ Turn", "‹ Girar"),
             new LocalizationEntry(HudCameraRight, "Turn ›", "Girar ›"),
+            new LocalizationEntry(HudMiss, "Miss!", "Errou!"),
 
             new LocalizationEntry(ShopGold, "Gold:", "Ouro:"),
             new LocalizationEntry(ShopBuy, "Buy", "Comprar"),

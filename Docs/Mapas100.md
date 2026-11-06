@@ -1105,6 +1105,9 @@ região. Quanto mais fundo (sul) e mais longe da Vila, mais difícil.
 - **Exigência (no jogo, 2026-11-03):** Asas ou Pulo Duplo: vestir nas costas as **Asas de Lona do Takhsich**
   (`item_asas_lona_takhsich`, Feira da Miwnay no Mercado dos Túneis, 420 ouro: armação de cobre e lona que pega a corrente
   do Ar Sereno e dá o segundo impulso), ou asas do Tacho Encantado, ou o Grifo da Coluna da Glória.
+- **Decisão (2026-11-06, dono):** o **Pulo Duplo do Íbex-da-Walia** (`mount_mountain_goat`) **não** abre o 24 — o íbex
+  custa 70 de ouro no Curral de Litema e furaria a exigência das asas (Asas de Lona: 420). O "Pulo Duplo" da exigência é
+  só o das asas de lona vestidas. Teste: `MapRequirementTests.Ibex_DoubleJump_DoesNotOpenTheNinhoDeMahaway`.
 - **Fonte:** Mahaway, o gigante mensageiro que voa (*Livro dos Gigantes*).
 - **Bioma e visual:** poço vertical gigante com ninhos nas paredes; basalto, índigo, pedra clara, âmbar; pontes de corda
   em espiral.

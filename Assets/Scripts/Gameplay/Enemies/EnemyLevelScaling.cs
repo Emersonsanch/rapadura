@@ -174,7 +174,9 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>A creature more than <see cref="FloorXpLevelsBelow"/> levels below the hero drops no equipment (materials still drop, §1.2).</summary>
         public static bool DropsEquipment(int heroLevel, int creatureLevel) => heroLevel - creatureLevel <= FloorXpLevelsBelow;
 
-        /// <summary>More than 15 levels above the hero: "Perigoso" (the creature hits ×1.25, the hero ×0.8).</summary>
-        public static bool IsDangerous(int heroLevel, int creatureLevel) => creatureLevel - heroLevel > 15;
+        /// <summary>10+ levels above the hero: "Perigoso" (regra B, <see cref="Rapadura.Gameplay.Combat.LevelDangerRules"/>:
+        /// +25% creature crit from +10; −40% hero hit and ×1.5→×3 creature damage from +20 to +30).</summary>
+        public static bool IsDangerous(int heroLevel, int creatureLevel) =>
+            Rapadura.Gameplay.Combat.LevelDangerRules.IsDangerous(Rapadura.Gameplay.Combat.LevelDangerRules.Delta(heroLevel, creatureLevel));
     }
 }

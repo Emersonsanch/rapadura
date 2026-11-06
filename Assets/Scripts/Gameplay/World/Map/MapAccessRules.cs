@@ -31,7 +31,8 @@ namespace Rapadura.Gameplay.World.Map
 
     /// <summary>
     /// The monster level delta of Docs/MetodologiaMapasERacas.md §4, for one monster against the hero: +25% critical
-    /// chance from +10 levels, −40% hit rate and ×1.5 damage taken from +20, near-lethal (×3) from +30.
+    /// chance from +10 levels, −40% hit rate and ×1.5 damage taken from +20 rising linearly to ×3 (near-lethal) at +30.
+    /// Numbers from <see cref="Rapadura.Gameplay.Combat.LevelDangerRules"/>, which the combat applies ("Perigoso", regra B).
     /// </summary>
     public readonly struct MonsterLevelPenalty
     {
@@ -77,13 +78,14 @@ namespace Rapadura.Gameplay.World.Map
         /// <summary>Levels Ícaro (ruins) and Maithe (mountains) are spared.</summary>
         public const int HeroTerrainBonus = 5;
 
-        public const int CritDelta = 10;
-        public const int HitRateDelta = 20;
-        public const int LethalDelta = 30;
-        public const float CritChanceBonus = 0.25f;
-        public const float HitRatePenalty = 0.4f;
-        public const float HeavyDamageTaken = 1.5f;
-        public const float LethalDamageTaken = 3f;
+        // The monster level delta ("Perigoso", regra B) lives in Gameplay/Combat/LevelDangerRules (applied in combat).
+        public const int CritDelta = Rapadura.Gameplay.Combat.LevelDangerRules.CritDelta;
+        public const int HitRateDelta = Rapadura.Gameplay.Combat.LevelDangerRules.HitRateDelta;
+        public const int LethalDelta = Rapadura.Gameplay.Combat.LevelDangerRules.LethalDelta;
+        public const float CritChanceBonus = Rapadura.Gameplay.Combat.LevelDangerRules.CritChanceBonus;
+        public const float HitRatePenalty = Rapadura.Gameplay.Combat.LevelDangerRules.HitRatePenalty;
+        public const float HeavyDamageTaken = Rapadura.Gameplay.Combat.LevelDangerRules.HeavyDamageTaken;
+        public const float LethalDamageTaken = Rapadura.Gameplay.Combat.LevelDangerRules.LethalDamageTaken;
 
         /// <summary>The level actually asked of <paramref name="hero"/> for <paramref name="requiredLevel"/> on a <paramref name="regionType"/> map.</summary>
         public static int EffectiveLevelRequirement(int requiredLevel, CharacterId? hero, string regionType)
@@ -222,14 +224,14 @@ namespace Rapadura.Gameplay.World.Map
             return string.IsNullOrEmpty(tag) || (hasRequirement != null && hasRequirement(tag));
         }
 
-        /// <summary>Docs/MetodologiaMapasERacas.md §4: what a monster <paramref name="monsterLevel"/> does to a hero of <paramref name="playerLevel"/>.</summary>
+        /// <summary>Docs/MetodologiaMapasERacas.md §4 (<see cref="Rapadura.Gameplay.Combat.LevelDangerRules"/>): what a monster <paramref name="monsterLevel"/> does to a hero of <paramref name="playerLevel"/>.</summary>
         public static MonsterLevelPenalty GetMonsterLevelDeltaPenalty(int playerLevel, int monsterLevel)
         {
-            int delta = monsterLevel - playerLevel;
-            float crit = delta >= CritDelta ? CritChanceBonus : 0f;
-            float hit = delta >= HitRateDelta ? 1f - HitRatePenalty : 1f;
-            float taken = delta >= LethalDelta ? LethalDamageTaken : delta >= HitRateDelta ? HeavyDamageTaken : 1f;
-            return new MonsterLevelPenalty(delta, crit, hit, taken);
+            int delta = Rapadura.Gameplay.Combat.LevelDangerRules.Delta(playerLevel, monsterLevel);
+            return new MonsterLevelPenalty(delta,
+                Rapadura.Gameplay.Combat.LevelDangerRules.CreatureCritChanceBonus(delta),
+                Rapadura.Gameplay.Combat.LevelDangerRules.HeroHitRateMultiplier(delta),
+                Rapadura.Gameplay.Combat.LevelDangerRules.CreatureDamageMultiplier(delta));
         }
 
         /// <summary>A level inside a map's band from a 0..1 roll (spawners): min..max inclusive.</summary>

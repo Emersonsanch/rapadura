@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
   _enemyName: "Arqueiro Esqueleto do Fosso"
   _isBoss: 0
-  _level: 0
+  _level: 40
   _maxHealth: 95
   _experienceReward: 40
   _lootItem: {fileID: 11400000, guid: 57586edf12fd419c86aa5f0a56cb1932, type: 2}

@@ -252,6 +252,15 @@ namespace Rapadura.Gameplay.Combat
                 return;
             }
 
+            // "Perigoso" regra B (LevelDangerRules): the hero misses 40% of the hits on a creature 20+ levels above.
+            // The miss still opens the channel window, so one swing's overlapping checks don't re-roll.
+            if (LevelDangerCombat.HeroMisses(gameObject, info.Source))
+            {
+                StartChannelWindow(sourceId, info.Channel);
+                LevelDangerCombat.ShowMiss(transform.position);
+                return;
+            }
+
             DamageCalculator.GetDefense(Buffs, _defense, out float flatDefense, out float percentDefense);
             float finalDamage = DamageCalculator.ComputeDamage(info, flatDefense, percentDefense, _balanceConfig, _elementResistance);
             SetHealth(CurrentHealth - finalDamage);

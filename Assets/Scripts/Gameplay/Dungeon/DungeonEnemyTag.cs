@@ -13,11 +13,12 @@ namespace Rapadura.Gameplay.Dungeon
     /// <item><see cref="IsReanimated"/> — relit by the Bone Sorcerer: 40% of its max health, a dimmed look, and the golden rule
     /// of <see cref="DungeonRules.KillExperience"/>: <b>0 XP and no drop</b> when it falls again (EnemyRewardGranter reads
     /// <see cref="IKillExperienceScaler"/> before every other multiplier, so nothing can turn the 0 back into XP);</item>
+    /// <item>its level (<see cref="ICreatureLevelSource"/>, 35–45: kill XP by level, "Perigoso" in combat);</item>
     /// <item>the room it guards and whether it carries the room's bone key.</item>
     /// </list>
     /// </summary>
     [DisallowMultipleComponent]
-    public class DungeonEnemyTag : MonoBehaviour, IKillExperienceScaler, IEnemyLootSource
+    public class DungeonEnemyTag : MonoBehaviour, IKillExperienceScaler, IEnemyLootSource, ICreatureLevelSource
     {
         private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
         private static readonly int ColorId = Shader.PropertyToID("_Color");
@@ -37,6 +38,9 @@ namespace Rapadura.Gameplay.Dungeon
         public BiomeDefinition LootTable => Table;
 
         public int ScaleKillExperience(int baseExperience) => DungeonRules.KillExperience(baseExperience, IsReanimated);
+
+        /// <summary>The guardian's level (<see cref="DungeonRules.EnemyLevel"/>, 35–45): kill XP by level and the "Perigoso" rule.</summary>
+        public int CreatureLevel => DungeonRules.EnemyLevel(EnemyId);
 
         public static DungeonEnemyTag Attach(GameObject enemy, string enemyId, int room, BiomeDefinition lootTable, bool reanimated = false)
         {

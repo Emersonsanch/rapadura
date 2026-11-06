@@ -59,8 +59,17 @@ namespace Rapadura.Gameplay.Dungeon
         /// <summary>The ossuary is reached from the Grutas do Limiar (the cave region of the world map).</summary>
         public const BiomeType Region = BiomeType.Caves;
 
-        /// <summary>Hero level needed to go in (the enemies are a little above the caves' regulars).</summary>
-        public const int MinLevel = 12;
+        /// <summary>
+        /// Hero level needed to go in: the bottom of the Catacumbas de Marfim band (map 24b of
+        /// Docs/MetodologiaMapasERacas.md, monsters 35–45; owner's decision 2026-11-06, was 12).
+        /// </summary>
+        public const int MinLevel = 35;
+
+        /// <summary>Lowest guardian level (the band of map 24b).</summary>
+        public const int MonsterLevelMin = 35;
+
+        /// <summary>Highest guardian level: the Colosso de Crânios.</summary>
+        public const int MonsterLevelMax = 45;
 
         /// <summary>Resources folder of the dungeon's EnemyDefinition assets (outside Resources/Enemies: they are not in any region's random table).</summary>
         public const string EnemyResourcesFolder = "Dungeons/Ossuario/Enemies";
@@ -85,6 +94,25 @@ namespace Rapadura.Gameplay.Dungeon
         public const string RustySwordItemId = "item_rusty_watch_sword";
 
         public static string EnemyResourcePath(string enemyId) => EnemyResourcesFolder + "/" + enemyId;
+
+        /// <summary>
+        /// Creature level of each guardian inside the 35–45 band (the assets' <c>_level</c> carries the same number):
+        /// skull 35, warrior 38, archer 40, sorcerer 42, Colosso 45. Health/damage scale with it (<see cref="EnemyLevelScaling"/>,
+        /// archetype numbers at level 15), the kill XP follows the level table, and the "Perigoso" rule (LevelDangerRules)
+        /// judges it. 0 for an unknown id.
+        /// </summary>
+        public static int EnemyLevel(string enemyId)
+        {
+            switch (enemyId)
+            {
+                case FloatingSkullId: return 35;
+                case SkeletonWarriorId: return 38;
+                case SkeletonArcherId: return 40;
+                case BoneSorcererId: return 42;
+                case BoneColossusId: return MonsterLevelMax;
+                default: return 0;
+            }
+        }
 
         /// <summary>Whether a hero of <paramref name="heroLevel"/> standing in <paramref name="region"/> may go in.</summary>
         public static bool CanEnter(int heroLevel, BiomeType? region) => region == Region && heroLevel >= MinLevel;

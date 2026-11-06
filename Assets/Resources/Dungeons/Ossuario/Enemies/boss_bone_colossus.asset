@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
   _enemyName: "O Colosso de Cr\xE2nios"
   _isBoss: 1
-  _level: 0
+  _level: 45
   _maxHealth: 1400
   _experienceReward: 60
   _lootItem: {fileID: 11400000, guid: 57586edf12fd419c86aa5f0a56cb1932, type: 2}

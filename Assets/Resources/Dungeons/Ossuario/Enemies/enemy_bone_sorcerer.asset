@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Enemies.EnemyDefinition
   _enemyName: "Feiticeiro das Ossadas"
   _isBoss: 0
-  _level: 0
+  _level: 42
   _maxHealth: 220
   _experienceReward: 55
   _lootItem: {fileID: 11400000, guid: cd1946ed57284ded899464f9e6f5460f, type: 2}

@@ -22,7 +22,8 @@ Vó Edna e Vô Jorge.
 
 - No **mapa mundi**, com o token parado nas **Grutas do Limiar** (`DungeonRules.Region = Caves`), aparece o botão
   **"Entrar: Ossuário dos Artífices"** na fileira de ações (`DungeonMapButton`, mesmo visual do "Conversar").
-- Exige **nível 12** (`DungeonRules.MinLevel`); abaixo disso uma mensagem curta explica. Não há item de entrada: as
+- Exige **nível 35** (`DungeonRules.MinLevel`; era 12 — decisão do dono em 2026-11-06: o Ossuário é o mapa **24b
+  "Catacumbas de Marfim"** da `Docs/MetodologiaMapasERacas.md`, bichos 35–45); abaixo disso uma mensagem curta explica. Não há item de entrada: as
   chaves se acham lá dentro.
 - O clique monta um `EncounterPayload` com `dungeonId = "ossuario"` (`DungeonDirector.BuildPayload`) e entra pelo mesmo
   salto das salas de evento (`WorldMapController.TryStartEventRoom`, encontro **dirigido**). Na cena `Main`, o
@@ -31,7 +32,7 @@ Vó Edna e Vô Jorge.
   continuam abertos na próxima visita.
 - **Pelo mundo contínuo** (2026-11-03): no mundo das Grutas do Limiar, o portão gradeado do Ossuário (saída
   `exit_ossuario`, `OverworldLayouts.OssuaryPortal`) entra direto na masmorra — `MapModeController` reconhece a saída
-  (`MapModeController.OssuaryExitId`), confere `DungeonRules.CanEnter` (nível 12; abaixo, a mesma mensagem e o herói
+  (`MapModeController.OssuaryExitId`), confere `DungeonRules.CanEnter` (nível 35; abaixo, a mesma mensagem e o herói
   volta um passo) e chama `SceneTransitionService.BeginEncounterFromMap` com o mesmo `DungeonDirector.BuildPayload`.
   Vencer ou sair a pé traz o herói de volta ao mundo do Limiar, em frente ao portão (`PendingMapArrivalExit`); morrer
   segue o caminho de sempre (mapa mundi e cidade de retorno). O botão do mapa mundi continua igual.
@@ -63,7 +64,15 @@ refaz — a próxima visita é uma corrida nova (chaves e espólio de novo), est
 
 ## 5. Bestiário (`Resources/Dungeons/Ossuario/Enemies`, fora das tabelas aleatórias das regiões)
 
-| Id | Nome | Vida | Notas |
+**Nível** (`DungeonRules.EnemyLevel` = `_level` do asset, faixa 35–45): Caveira **35**, Guerreiro **38**, Arqueiro **40**,
+Feiticeiro **42**, Colosso **45**. A vida da tabela é a do arquétipo (nível 15); o `DungeonDirector` põe o
+`EnemyLevelScaler` em cada guardião, então vida e dano (golpes, flechas, esferas, onda, crânios e a jaula) escalam com o
+herói de referência do nível (`EnemyLevelScaling`; ex.: Caveira no 35 ≈ ×1,54 de vida e ×1,92 de dano; Colosso no 45 ≈ ×1,86 e ×2,43). O
+`DungeonEnemyTag` é `ICreatureLevelSource`: o XP do abate vem da tabela por nível (`EnemyLevelScaling.LeveledKillExperience`,
+Colosso = chefe de mapa ×9) com o corte por diferença, e o **"Perigoso"** (regra B, `LevelDangerRules`) vale lá dentro —
+herói 35 contra o Colosso 45 já toma +25% de crítico. A regra de ouro continua: reanimado = 0 XP.
+
+| Id | Nome | Vida (arquétipo) | Notas |
 |---|---|---|---|
 | `enemy_floating_skull` | Caveira Flutuante | 40 | 7,5 m/s; flutua a 1,2 m com balanço senoidal; mergulho e recuo de 2 m; luz azul-esverdeada (1,5 / 3 m) |
 | `enemy_skeleton_warrior` | Guerreiro Esqueleto de Cobre | 180 | 3,8 m/s; armadura 25%; a cada 6 s guarda de 2,5 s com escudo de osso (−60% dano frontal, reflete 15% de projéteis); larga Fragmentos de Osso |
@@ -129,6 +138,8 @@ sarcófagos abertos, parede quebrada, baú pego, visitas e vitórias. Save antig
 
 - Modelos próprios dos esqueletos/Colosso (hoje placeholders) e sons dedicados (hoje cues procedurais do `DungeonFx`).
 - Atributo de resistência a elemento (Sombra) para o elmo.
-- Encaixe no catálogo de mapas estilo MU (mapa 24b "Catacumbas de Marfim", nível 35–45 em
-  `Docs/MetodologiaMapasERacas.md`): hoje a entrada é pelas Grutas do Limiar com nível 12.
+- Encaixe no catálogo de mapas estilo MU: o **nível** já é o do mapa 24b (entrada 35, guardiões 35–45, 2026-11-06); falta
+  a linha 24b no `MapCatalog` (barca/warp 38, a pé 32) — hoje a entrada continua pelas Grutas do Limiar.
+- Armadura de Marfim (Peitoral Defesa 14, Elmo Defesa 8) não tem nível de item: os números ficaram os da versão nível 12
+  e podem pedir revisão para o 35–45.
 - Teste PlayMode de uma corrida completa (só há EditMode).

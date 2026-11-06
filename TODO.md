@@ -1574,6 +1574,7 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 > 📌 **Visão de Design:** Masmorra clássica subterrânea no estilo *MU Online Dungeon* e *Tibia*. Corredores estreitos de pedra, nichos repletos de crânios com fogo-fátuo azul/verde, portas gradeadas trancadas por chaves de osso, sarcófagos com armadilhas e hordas de esqueletos e caveiras.
 
 > ✅ **Feito** (`81e445c` + esta entrega): código em `Gameplay/Dungeon/`, inimigos/tabela em `Resources/Dungeons/Ossuario/`, chave e armadura em `Resources/Items/{Keys,Dungeon}/`, botão no mapa e HUD em `UI/Dungeon/`, testes em `Tests/EditMode/Dungeon/`. Documento: [`Docs/Dungeons.md`](Docs/Dungeons.md) (pendências no §9: modelos próprios dos esqueletos, resistência à Sombra, encaixe no catálogo de mapas MU).
+> 🔼 **2026-11-06 (decisão do dono):** o Ossuário passa a ser o mapa **24b** (Catacumbas de Marfim) — entra no **nível 35** e os guardiões têm nível 35–45 (Caveira 35, Guerreiro 38, Arqueiro 40, Feiticeiro 42, Colosso 45), com vida/dano/XP pela escala de nível e o "Perigoso" valendo lá dentro.
 
 #### 1. Infraestrutura C# e Objetos Interativos da Masmorra
 - [x] `Assets/Scripts/Gameplay/Dungeon/LockedDungeonGate.cs`:
@@ -1679,7 +1680,7 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
     * Botão "Mover" consome o ouro via `InventoryManager`, fecha a tela e chama `SceneTransitionService.TravelToMap()`.
 - [x] `Assets/Scripts/Gameplay/Characters/RaceDefinition.cs`: — feito como C# puro (`RaceCatalog`, 25 povos; os "Nagas" viram `serpent_folk`) + `RaceTexts` (pt-BR/en).
   - ScriptableObject para catalogar as 25 raças da Ilha da Aurora e além, associando traços raciais cosméticos, sotaques/estilos de diálogo e NPCs correspondentes.
-- [x] `Assets/Tests/EditMode/MapAccessRulesTests.cs` (+ `RaceCatalogTests`, `MapMonsterLevelTests`): — feito (2026-11-03): regras, catálogo × `Mapas100.md`, layouts 01/02 (`MapLayoutRules.Validate`, rio, bichos existentes), linhas da janela M e o caminho de um herói nível 1 até o Pomar (barca grátis) e o Tugai (a pé no nível 2). XP do bicho do mapa pelo nível dele + corte por diferença de nível (`EnemyLevelScaling.LeveledKillExperience`, `ICreatureLevelSource`) e sem equipamento mais de 20 níveis abaixo. Falta: aplicar em combate o "Perigoso" (bicho muito acima: ×1,25/×0,8 ou o delta do §4 da Metodologia), que hoje só gera o aviso na chegada.
+- [x] `Assets/Tests/EditMode/MapAccessRulesTests.cs` (+ `RaceCatalogTests`, `MapMonsterLevelTests`): — feito (2026-11-03): regras, catálogo × `Mapas100.md`, layouts 01/02 (`MapLayoutRules.Validate`, rio, bichos existentes), linhas da janela M e o caminho de um herói nível 1 até o Pomar (barca grátis) e o Tugai (a pé no nível 2). XP do bicho do mapa pelo nível dele + corte por diferença de nível (`EnemyLevelScaling.LeveledKillExperience`, `ICreatureLevelSource`) e sem equipamento mais de 20 níveis abaixo. ✅ "Perigoso" aplicado em combate (2026-11-06, **regra B**, decisão do dono): +10 níveis → bicho +25% de crítico; +20 → herói −40% de acerto e dano do bicho ×1,5 → ×3 no +30 (`LevelDangerRules` puro + `LevelDangerCombat` em `PlayerStats`/`Health`, `LevelDangerRulesTests`).
   - Suíte completa de testes unitários para cálculo de custos, bônus de herói, validação de sobrecarga e penalidades de nível de monstro.
 
 ---
