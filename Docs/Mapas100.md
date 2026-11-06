@@ -145,6 +145,12 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       no catálogo (☆) e viram zonas (construídos), 25 áreas numa grade 5 × 5, 14 terrenos novos, relevo próprio (`Pinnacles`,
       `CloudIsles`, `NarrowGorge`) e cenário próprio (pontes de corda deitadas nas suas linhas); o mundo cresce uma fileira ao norte
       da Estepe. Detalhes em §5, "Região 10".
+    - **Região 11 — Mar Gelado** (2026-11-06): mesmo modelo, 2400 × 2400 m (`OverworldLayouts.MarGelado.cs`, coordenadas
+      x −1200…1200, z −600…1800) com o Porto da Lua Branca em (0, 0) na beira da baía gelada (receita própria `IceCanal` no chão
+      plano de ±30 m) e os postos de 60–64 (Casa de Neve dos Barqueiros (0, 600), Tenda de Yen (−960, 120), Boca do Gelo (960, 600),
+      Farol de Gelo (480, 1080), Buraco Grande de Pesca (0, 1560)); 59–64 entram no catálogo (☆) e viram zonas (construídos), 25 áreas
+      numa grade 5 × 5, 16 terrenos novos, relevo próprio (`Floes`, `Icebergs`, `PressureRidges`, `FjordWalls`, `IceVaults`) e
+      cenário próprio; preenche o buraco murado ao norte de Mingcheng, a oeste dos Picos de Farnkesh. Detalhes em §5, "Região 11".
     - **Mundo costurado** (2026-11-03, pedido do usuário: andar entre as regiões sem portão): as quatro primeiras regiões
       formam um quadrado de 4800 × 4800 m (`OverworldLayouts.WorldId`, `OverworldLayouts.World.cs`), 2 × 2, e a **Costa das
       Monções** fica a leste do Zarafshan (x 1400…3800, z −1000…1400, deslocamento (2000, 200)) e o **Delta de Jhilpur** a
@@ -179,7 +185,14 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       portões da borda sul (`exit_degelo`, x 2300, pelo Lago de Degelo do 50, sem exigência; `exit_ohya`, x 3560, pelo Cume de Ohya
       do 52) são levados à trilha mais próxima da Estepe. O Pactolo chega à borda sul em (2880, 3800), onde nasce o Rio dos Nartes.
       Rota a pé Vila → Vale dos Sátiros ~6,7 km, → Farnkesh ~7,7 km (rampa mais íngreme 18°; o fim da estrada norte da Estepe
-      na Torre de Vigia foi desviado pelo leste, onde a chegada pelo sul tinha 30°). Quadrado original:
+      na Torre de Vigia foi desviado pelo leste, onde a chegada pelo sul tinha 30°). O **Mar Gelado** preenche a célula da quarta
+      fileira ao norte de Mingcheng e a oeste dos picos (x −1000…1400, z 3800…6200, deslocamento (200, 4400), o Porto da Lua Branca
+      no mundo em (200, 4400)): escolhida porque é vizinha de Farnkesh (a região anterior, nv até 200) e de Mingcheng, cuja estrada
+      norte já terminava atravessando a muralha a 40 m da borda; fica só **um buraco murado**, ao norte do Teto (`Holes` = 1).
+      Passagens: `exit_muralha` (x 240, borda sul) levado ao fim da estrada norte de Mingcheng; `exit_pe_dos_picos` (z 3980) e
+      `exit_pinaculos` (z 4960), na borda leste, levados às trilhas oeste dos picos (Bosque do Pé dos Picos e Bosque de Pináculos).
+      Rota a pé Vila → Porto da Lua Branca ~4,6 km (por Mingcheng, rampa mais íngreme 17°); a rota até Farnkesh passa a ~7,4 km
+      (pelo Mar Gelado, rampa 26°). Quadrado original:
       Serra de Kaggen (x −3400…−1000, z −1000…1400) | Bosque do Zarafshan (x −1000…1400, z −1000…1400) em cima;
       Grutas do Limiar (x −3400…−1000, z −3400…−1000) | Areias Flamejantes (x −1000…1400, z −3400…−1000) embaixo.
       Cada região guarda o seu layout nas suas coordenadas e é deslocada por um número inteiro de pedaços (Zarafshan
@@ -1912,6 +1925,27 @@ mamute debaixo da terra, os *kul* da água). NPCs: **Yirkap**, o caçador de esq
 gigante bom (bogatir komi). Respeito: povos do Ártico são vivos; nenhuma figura da fé deles aparece; inimigos são bichos
 e a sombra. Chefe do mundo: **o Velho Kul** (mapa 64).
 
+**No jogo (2026-11-06): mundo contínuo** (`OverworldLayouts.MarGelado.cs`, §0.10): 2400 × 2400 m ao norte de Mingcheng, a oeste
+dos Picos de Farnkesh, 25 áreas em 16 terrenos novos — Porto da Lua Branca (59, nv 180), Baía Gelada e Baía das Focas, Passo da
+Muralha (entrada de Mingcheng) e Colinas de Neve, Pastos de Rena; Canais de Gelo com a Casa de Neve dos Barqueiros, Canais do Oeste
+e Gelo Rachado (60, posto); Tundra do Sul, Tundra de Omöl com a Tenda de Yen e Lagos de Omöl (61, posto); Terra Congelada e Galerias
+dos Mamutes com a Boca do Gelo (entradas dos picos) e Fiorde das Presas (62, posto); Banquisas, Banquisas do Oeste, Mar das Auroras,
+Ilha do Farol com o Farol de Gelo e Fiorde Negro (63, posto; **Resistência à nevasca**); Buracos de Pesca, Fundo do Velho Kul com o
+Buraco Grande de Pesca, Lago do Kul, Gelo Negro e Fiorde do Kul (64, posto; **Roupa térmica refinada**, até nv 240). Relevo: placas
+de gelo com canais entre elas (`Floes`), icebergs de topo plano sobre o mar gelado (`Icebergs`), cristas de pressão (`PressureRidges`),
+fiordes de paredes em degraus (`FjordWalls`, até ~34 m), cúpulas de gelo e terra congelada das galerias (`IceVaults`); porto, baía,
+tundra e lago baixos. Água: três canais de água negra saindo do porto (dois com ponte), 7 lagos na tundra, 5 aberturas na banquisa,
+7 buracos de pesca e o Buraco Grande. Cenário: cúpulas de neve, casas de tábua com lua pintada (só forma), barcos em meia-lua, arcos
+de osso de baleia, blocos de gelo, icebergs, tendas de pastores de rena, pedras com líquen, presas de mamute, lanternas de gelo,
+varais de peixe, faróis de gelo, cristais; buracos de pesca, rachaduras e tufos de líquen no chão. Bichos existentes nos papéis das
+fichas (lontra = foca-leopardo/narval, búfalo de lama = morsa, gaivota ladra, raposa-lanterna = raposa-do-ártico, peixe-lanterna =
+peixe-gelo/lúcio, urso-pardo = urso-polar, cobra da areia = enguia-lanterna, gosma = rachadura/raiz-gelo/peixe-bruxa, urutau =
+ave-graveto de Omöl, pedra rolante = lebre-pedra, iaque = rena de barro, enxame de vaga-lumes = mosquito/kul pequeno, rinoceronte de
+poeira = mamute, marmota = toupeira-gelo, lanterna quebrada = cristal vivo, lobo = lobo-do-mar, névoa = gelo flutuante, gavião =
+gaivota-tempestade, tartaruga de pedra = foca-sombra, irbis nos fiordes), variante noturna em toda clareira, nenhum chefe (o Velho
+Kul fica para depois). Testes `OverworldMarGeladoTests` e `OverworldWorldTests`. Falta: fases da lua nos canais, gelo fino,
+estação na tundra, túneis que mudam, placas que se movem, pesca no gelo, os chefes.
+
 ### 59 · Porto da Lua Branca / *White Moon Harbor* — nv 180–188 · ☆ · capital (Ar Sereno)
 - **Fonte:** arquitetura de neve e de turfa do Ártico, casas de tábua da costa do Pacífico Norte, cidades de canais; a
   Barca da Lua (Kephalaia) e a Lavine "Barqueira da Lua" (G3).
@@ -1928,6 +1962,7 @@ e a sombra. Chefe do mundo: **o Velho Kul** (mapa 64).
 - **Ganchos:** loot pele de foca, óleo de lanterna, prata · montaria nova **Rena da Aurora** (§6) · casa: conjunto novo
   **Casa da Lua Branca** (lanterna em meia-lua, tapete de pele).
 - **Noite:** aurora no céu; a Barca da Lua passa; visão boa nos canais iluminados.
+- **No jogo (2026-11-06): cidade de verdade** (`CityTownRecipes.PortoDaLuaBranca.cs`, estilo `IceCanal`, `CityCatalog.LateRegionCities`, id `porto_da_lua_branca`): em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S a 19 m; a rua Sul é a entrada; ao norte a baía congelada): casas compridas de tábua escura com telhado de neve e a empena pintada com uma lua cheia de prata num anel lilás (sem postes de brasão) e cúpulas de neve com túnel de entrada; o Cais da Lua na praça (crescente de pedra prateada e a lanterna de lua); canais de água negra com pontes de pedra em costela de baleia nas ruas Oeste e Sul; barcos em meia-lua, varais de peixe, cristas de gelo e cúpulas pequenas; portão de costelas de baleia; Yirkap, Pamour, Pera e Makarios com falas para cada primo (o Makarios chama a Lavine de Barqueira da Lua); Peles e Barcos do Pamour com as exigências de 63 (Chá de Gengibre) e 64 (Roupa Térmica) fixas, mais barcos, lamparinas, grampos e capa; missões "Gaivotas nos Varais" e "Ursos nos Canais" (paga com a Roupa Térmica); respawn na praça para 59–64. Falta: as fases da lua, a Noite Polar, a Barca da Lua atracando, o G4 da Lavine e a Rena da Aurora.
 
 ### 60 · Canais de Gelo / *Ice Canals* — nv 186–196 · ☆
 - **Fonte:** invenção (os canais que saem do porto para o mar aberto).

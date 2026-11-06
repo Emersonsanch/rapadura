@@ -295,6 +295,40 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         CloudPuff = 232,
         /// <summary>Golden pebbles of the Pactolo (ground detail, no collider).</summary>
         GoldPebbles = 233,
+
+        // Região 11 — Mar Gelado (OverworldDecorKit.MarGelado.cs): 240–259.
+        /// <summary>A snow dome (the Arctic's snow-block form): a round dome of snow blocks, a low entrance tunnel.</summary>
+        SnowDome = 240,
+        /// <summary>A long plank house of the north coast (form only, no crest poles): a gable of dark planks, a painted moon on the front.</summary>
+        PlankLonghouse = 241,
+        /// <summary>A crescent boat drawn up on the ice, upturned or on its keel.</summary>
+        CrescentBoat = 242,
+        /// <summary>An arch of whale bone set in stone: two curved ribs meeting over the snow.</summary>
+        WhaleboneArch = 243,
+        /// <summary>A block of blue ice thrown up on the surface.</summary>
+        IceBlock = 244,
+        /// <summary>A small iceberg: an angular berg of white and blue ice with a flat top.</summary>
+        Iceberg = 245,
+        /// <summary>A reindeer herders' tent: a cone of poles covered with hides, the poles crossing at the top.</summary>
+        HerderTent = 246,
+        /// <summary>A round tundra boulder with lichen patches.</summary>
+        LichenBoulder = 247,
+        /// <summary>A giant mammoth tusk curving out of the ground (the mammoth that digs under the earth).</summary>
+        MammothTusk = 248,
+        /// <summary>An ice lantern: a block of clear ice on a post with a lilac crescent light inside.</summary>
+        IceLantern = 249,
+        /// <summary>A fishers' rack of dried fish on poles.</summary>
+        FishRack = 250,
+        /// <summary>A beacon of ice: a tapering tower of ice blocks with a lamp of Ar Sereno on top.</summary>
+        IceBeacon = 251,
+        /// <summary>A cluster of frost crystals (the galleries' living crystal).</summary>
+        FrostCrystal = 252,
+        /// <summary>A fishing hole in the ice: a dark disc with a rim of broken ice (ground detail, no collider).</summary>
+        FishingHole = 253,
+        /// <summary>A dark crack across the ice (ground detail, no collider).</summary>
+        IceCrack = 254,
+        /// <summary>A tuft of reindeer lichen and moss (ground detail, no collider).</summary>
+        LichenTuft = 255,
     }
 
     /// <summary>

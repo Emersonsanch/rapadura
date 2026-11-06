@@ -375,13 +375,14 @@ ou pelo menu de prévia do editor (`Preview Walkable Town/Vale dos Sátiros`).
 
 ### 1.2 Cidades das regiões tardias (`CityCatalog.LateRegionCities`)
 
-Cidades das regiões 5–10 (Docs/Mapas100.md), que ainda não têm bioma no mapa-múndi. Ficam fora de `Cities` (sem painel
+Cidades das regiões 5–11 (Docs/Mapas100.md), que ainda não têm bioma no mapa-múndi. Ficam fora de `Cities` (sem painel
 no mapa-múndi, sem Ammo, fora da lista das Barcas) e de `RaceCities`; `IsLateRegionCity` as reconhece e `IsHubCity`
 separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestado (Floresta: sempre desbloqueada, então o
 `CityProgress.ApplyDefeatIn` sempre acorda na praça delas). Estilo próprio escolhido na receita (`CityTownRecipe.Style`).
 
 | Região | Cidade | Moradores | Loja | Missões |
 |---|---|---|---|---|
+| Mar Gelado (mapas 59–64) | **Porto da Lua Branca** (capital do Ar Sereno, `porto_da_lua_branca`) | Yirkap, o Caçador de Esqui (casa comprida na cabeça da praça), Pamour, o Peleiro do Cais (rua Oeste), Makarios, o Guardião das Lanternas (rua Leste), Pera, o Gigante Bom (rua Sul) | **Peles e Barcos do Pamour** (`shop_peles_pamour`) | Yirkap: "Gaivotas nos Varais"; Pera: "Ursos nos Canais" |
 | Picos de Farnkesh (mapas 54–58) | **Farnkesh, os Ninhos de Pedra** (capital do Vento Vivo, `farnkesh`) | Shad-Ohrmizd, o Guardião dos Sinos (ninho na cabeça da praça), Sisin, o Mestre das Pontes (rua Oeste), Tadi, a Dobradora de Papel de Vento (rua Leste), Ardawan, o Trançador de Corda (rua Sul) | **Cordas do Sisin** (`shop_cordas_sisin`) | Shad-Ohrmizd: "Abutres nos Sinos"; Tadi: "Vento Ruim nas Pontes" |
 | Planície de Mingcheng (mapa 41; 43, 44 e 46 planejados) | **Mingcheng, a Cidade dos Nove Anéis** (capital, `mingcheng`) | Bögü, o Chefe da Guarda dos Anéis (salão na cabeça da praça), Mestre Mōzak, o Guardião das Lanternas (rua Oeste), Lin Deng, o Mestre do Canal (rua Leste), Fuduodan, o Leitor (rua Leste) | **Lanternas do Mestre Mōzak** (`shop_lanternas_mozak`) | Bögü: "Leões nos Portões"; Lin Deng: "Peixes no Canal" |
 | Teto do Mundo (mapas 36–40) | **Sangkent, a Cidade-Escadaria** (capital, `sangkent`) | Abā, o Chefe das Calhas (casa na cabeça da praça), Sisinnios, o Agasalheiro (rua Oeste), Kustai, o Escriba (rua Leste), Baraies, o Professor (rua Leste) | **Agasalhos do Sisinnios** (`shop_agasalhos_sisinnios`) | Abā: "Pedras nas Calhas"; Kustai: "Neblina no Quadro" |
@@ -561,6 +562,48 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
   Vento Ruim do 55; **Capa de Tempestade** + 210 ouro, 2900 XP). Testes: `CityFarnkeshTests`.
 - **Falta:** os pináculos em alturas de verdade (subir de cesto, descer planando), o evento Vendaval, o G4 da Maithe
   (Sopro de Farnkesh), o Senmurv e o conjunto Ninho de Pedra.
+
+**Porto da Lua Branca** (capital do Ar Sereno, região 11 — Mar Gelado, mapa 59; cidade de retorno de 59–64):
+- **Passeio da cidade:** receita `CityTownRecipes.PortoDaLuaBranca` (`CityTownRecipes.PortoDaLuaBranca.cs`) no estilo novo
+  `TownStyles.IceCanal` (`TownArchitecture.IceCanal`, linha 21 da `TownPalette`: gelo do mar `#D8E9F2`, neve `#F7FAFC`,
+  tábua `#5B4A3E`, lilás das luas `#B7A6E0`, prata `#C8D2DC`, noite polar `#1E2A4A`, água negra dos canais `#1F3A4A`,
+  lanterna de lua `#E8E4FF` (brilha)); o chão é neve sobre as ilhas de gelo. Duas casas: a **casa comprida de tábua**
+  (`TownBuildingSpec.MoonLonghouse`: `TownKit.MoonLonghouseHouse`): base de neve batida, paredes de tábua escura em pé com
+  ripas, telhado de duas águas baixo e grosso de neve com cumeeira de frente para a rua, **a empena pintada com um anel lilás
+  em volta de uma lua cheia de prata**, dois crescentes ao lado da porta de tábua com moldura de prata, janelinhas de gelo
+  aceso e uma varanda de tábua em dois postes (nos `PorchPostsX`) com alpendre de neve, **lanterna de lua** pendurada e a
+  tabuleta na viga (forma das casas de tábua da costa do Pacífico Norte, **sem postes de brasão**, que são de clãs vivos); e
+  a **cúpula de neve** (`TownBuildingSpec.SnowDome`: `TownKit.SnowDomeHouse`): quatro fiadas de blocos de neve, janela de gelo
+  claro, **túnel de entrada** baixo até a frente do lote com a boca escura, degrau de gelo e poste com lanterna de lua
+  (forma das casas de neve do Ártico; nenhuma figura da fé dos povos do Ártico). Peças: `MoonQuay` (o **Cais da Lua** na
+  praça: plataforma de gelo com borda de prata, crescente de blocos de pedra prateada aberto ao sul, três cabeços e o poste
+  alto da **lanterna de lua** pendurada num crescente lilás: onde a Barca da Lua atraca na lua cheia), `IceCanal` (canal de
+  água negra atravessando a rua entre duas ilhas, com placas de gelo nas margens e **ponte de pedra com arcos de costela de
+  baleia** no meio; pisável), `SnowDomeHut` (cúpula pequena com túnel; variante 1 com lanterna e uma pele secando),
+  `CrescentBoat` (**barco em meia-lua** puxado para o gelo em dois patins, faixa lilás, proa e popa curvas como os chifres da
+  lua, remo; variante 1 com lanterna de lua na proa), `FishRack` (varal de peixe de madeira de deriva com duas fileiras de
+  peixes de prata) e `IceBlock` (crista de pressão de blocos de gelo do mar; variante 1 mais alta, com uma rachadura de luz);
+  portão de **costelas de baleia** (`TownKit.WhaleRibGate`: duas costelas de pedra prateada que sobem dos pés na neve e se
+  curvam sobre a rua, com uma lanterna em crescente entre as pontas); vitrine do Pamour (`TownShopDressing.FurAndBoat`:
+  varal de peles brancas, barquinho em meia-lua em cavaletes com remo, rolo de linha e lanterna de lua). Peças em
+  `TownKit.IceCanal.cs`, colisores em `CitySolids`. Ruas **Oeste** (o bairro de pesca, para os Canais de Gelo: as Peles e
+  Barcos do Pamour, o Cais da Barca, varais e barcos), **Leste** (o bairro das lanternas: a casa do Makarios e uma cúpula) e
+  **Sul** (a entrada, o bairro das peles: a casa do Pera e uma cúpula) de 19 m; o Cais da Lua a 4,2 m ao norte do centro
+  (livre do respawn e da barraca do Ammo em `PlazaRadius·(0,575; −0,675)`); canais com ponte nas ruas Oeste e Sul; **sem rua
+  ao norte**: a baía congelada com barcos e cristas de gelo; tudo dentro de 22,5 m (o sólido mais longe chega a ~21,6 m), em
+  y = 0; `CityLayoutRules.Validate` sem problemas, com e sem o mascate.
+- **Respawn:** derrota nos mapas 59–64 acorda na praça do Porto, junto ao Cais da Lua (`MapCatalog.RespawnCityFor` →
+  `ApplyDefeatIn`).
+- **Peles e Barcos do Pamour** (diária, 3 vagas que giram, tema Especialidade): poções e **as exigências da região**, fixas
+  desde o primeiro dia: **Chá de Gengibre** (63, Resistência à nevasca, 70) e **Roupa Térmica** (64, vestir no peito, 900),
+  mais o que o gelo pede: Manta de Lã, Passagem de Dhow e Barco de Junco (canais e mar aberto), Lamparina de Óleo e
+  Lamparina Rúnica (Galerias dos Mamutes), Grampos de Escalada e Capa de Tempestade; giram carne, corda, Ar Sereno, Runa de
+  Clareza, Runa de Vento, Amuleto da Sorte e Pedra da Bênção (nunca Vida/Caos). O Ammo nunca para lá.
+- **Missões da cidade:** Yirkap pede 8 gaivotas ladras fora dos varais (a Gaivota Ladra faz a Gaivota-do-Gelo da ficha;
+  poções + 220 ouro, 3000 XP); depois Pera pede 6 ursos fora do gelo dos canais (o Urso-Pardo, apagado, faz o Urso-Polar do
+  60; **Roupa Térmica** + 220 ouro, 3100 XP). Testes: `CityPortoDaLuaBrancaTests`.
+- **Falta:** as fases da lua (canais que congelam na cheia e abrem na nova, rotas e lojas que mudam), o evento Noite Polar,
+  a Barca da Lua atracando, o G4 da Lavine (Lua Branca), a Rena da Aurora e o conjunto Casa da Lua Branca.
 
 Código: `CityCatalog`, `CityShopCatalog` (dados), `CityTexts` (textos en/pt-BR), `VillageHubButton` (o mesmo painel
 para toda cidade), `CityFastTravelPanel` (Barcas de Luz), `CitySafeZoneHud` (aviso), `WorldMapCityPresence` (zona

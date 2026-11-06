@@ -296,9 +296,15 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
                 case CityPropKind.StoneStage: return CitySolid.Capsule(prop.Position, TownKit.StoneStageRadius * s, 1.2f, owner);
                 case CityPropKind.GroveOak: return CitySolid.Capsule(prop.Position, TownKit.GroveOakRadius * s, 3f, owner);
+                case CityPropKind.MoonQuay: return CitySolid.Capsule(prop.Position, TownKit.MoonQuayRadius * s, WallColliderHeight, owner);
+                case CityPropKind.SnowDomeHut: return CitySolid.Capsule(prop.Position, TownKit.SnowDomeHutRadius * s, 2.5f, owner);
+                case CityPropKind.CrescentBoat: return CitySolid.Capsule(prop.Position, TownKit.CrescentBoatRadius * s, 1.4f, owner);
+                case CityPropKind.FishRack: return CitySolid.Capsule(prop.Position, TownKit.FishRackRadius * s, 2f, owner);
+                case CityPropKind.IceBlock: return CitySolid.Capsule(prop.Position, TownKit.IceBlockRadius * s, WallColliderHeight, owner);
 
                 case CityPropKind.MeltStream:
                 case CityPropKind.CloudGap:
+                case CityPropKind.IceCanal:
                 case CityPropKind.GoldenRiver:
                 case CityPropKind.CanalBridge:
                 case CityPropKind.LeafBridge:

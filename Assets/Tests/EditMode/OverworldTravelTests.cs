@@ -16,7 +16,7 @@ using UnityEngine;
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// The maps that exist only as zones of a continuous region (09–12, 15–18, 21–42, 47–58): built in the catalog, reachable by the
+    /// The maps that exist only as zones of a continuous region (09–12, 15–18, 21–42, 47–64): built in the catalog, reachable by the
     /// Barcas de Luz (arrival at their post's dock inside the right overworld), the visited docks saved with the cities (old
     /// saves migrated), and the Ossuário's portal in the Grutas do Limiar starting the dungeon run and bringing the hero back.
     /// </summary>
@@ -33,6 +33,7 @@ namespace Rapadura.Tests
             "map_041_mingcheng", "map_042_torres_brancas",
             "map_047_soslan", "map_048_kurgans", "map_049_fortim", "map_050_haripushpa", "map_051_mil_cavalos", "map_052_amirani",
             "map_053_vale_satiros", "map_054_farnkesh", "map_055_pontes_vento", "map_056_ermidas", "map_057_garganta_ays", "map_058_ninho_huma",
+            "map_059_porto_lua_branca", "map_060_canais_gelo", "map_061_tundra_omol", "map_062_galerias_mamutes", "map_063_mar_auroras", "map_064_fundo_velho_kul",
         };
 
         private readonly List<Object> _objects = new List<Object>();
@@ -95,6 +96,7 @@ namespace Rapadura.Tests
             Assert.IsTrue(MapCatalog.Built.Any(m => m.Region == MapRegion.PlanicieDeMingcheng), "region 8 is a continuous region");
             Assert.IsTrue(MapCatalog.InRegion(MapRegion.EstepeDosNartes).All(m => m.IsBuilt), "region 9 is a continuous region");
             Assert.IsTrue(MapCatalog.InRegion(MapRegion.PicosDeFarnkesh).All(m => m.IsBuilt), "region 10 is a continuous region");
+            Assert.IsTrue(MapCatalog.InRegion(MapRegion.MarGelado).All(m => m.IsBuilt), "region 11 is a continuous region");
         }
 
         [Test]

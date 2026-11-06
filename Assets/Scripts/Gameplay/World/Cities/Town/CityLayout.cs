@@ -300,6 +300,21 @@ namespace Rapadura.Gameplay.World.Cities.Town
         StoneStage = 104,
         /// <summary>Vale: a broad oak of the grove at the foot of the peaks (Variant 1: a double flute and ribbons hung on a low branch).</summary>
         GroveOak = 105,
+
+        // ---- Porto da Lua Branca (Mar Gelado; drawn by TownKit.IceCanal) ----
+
+        /// <summary>Porto: the Cais da Lua on the plaza, a crescent of silver stone round a tall moon lantern, with a crescent boat moored at it (where the Moon Ship moors on the full moon).</summary>
+        MoonQuay = 106,
+        /// <summary>Porto: a canal of black water from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> crossing the street between two islands of ice, with a stone bridge of whale-rib arches in the middle; walkable.</summary>
+        IceCanal = 107,
+        /// <summary>Porto: a small snow dome with its entrance tunnel (Variant 1: a lantern lit at the tunnel, a fur on the dome).</summary>
+        SnowDomeHut = 108,
+        /// <summary>Porto: a crescent boat drawn up on the ice on two runners (Variant 1: with a moon lantern on a pole at the bow).</summary>
+        CrescentBoat = 109,
+        /// <summary>Porto: a fish-drying rack of driftwood with rows of silver fish hanging (the fishing quarter).</summary>
+        FishRack = 110,
+        /// <summary>Porto: a pressure ridge of blocks of sea ice heaved up at an island's edge (Variant 1: taller, a blue crack of light inside).</summary>
+        IceBlock = 111,
     }
 
     public enum CityExitKind

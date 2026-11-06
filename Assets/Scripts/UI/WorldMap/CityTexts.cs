@@ -118,6 +118,7 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.ViveiroSuvarnapushpa, "Suvarnapushpa's Nursery", "Viveiro da Suvarnapushpa"),
                 Shop(CityShopCatalog.FlautaDupla, "The Double Flute", "Flauta Dupla"),
                 Shop(CityShopCatalog.CordasSisin, "Sisin's Ropes", "Cordas do Sisin"),
+                Shop(CityShopCatalog.PelesPamour, "Pamour's Furs and Boats", "Peles e Barcos do Pamour"),
             };
 
             // ---- Cities ----
@@ -189,6 +190,10 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.Farnkesh, "Farnkesh, the Stone Nests", "Farnkesh, os Ninhos de Pedra", "Farnkesh", "Farnkesh",
                 "The capital of the Living Wind, above the clouds: white houses with leaning walls on sandstone pinnacles, windows of painted red wood, plank roofs held down with stones and balconies over the void. Rope bridges cross the gaps of cloud, Sisin pulls the rope baskets up and down, and on the plaza of the largest pinnacle hangs the giant wind bell. Farn is the glory that lives up high; here people like wind and silence.",
                 "A capital do Vento Vivo, acima das nuvens: casas brancas de parede inclinada sobre pináculos de arenito, janelas de madeira pintada de vermelho, telhados de tábua presos com pedras e varandas para o vazio. Pontes de corda atravessam os vãos de nuvem, o Sisin puxa os cestos de corda para cima e para baixo, e na praça do pináculo maior fica o sino de vento gigante. Farn é a glória que mora no alto; aqui as pessoas gostam de vento e de silêncio.");
+
+            AddCity(entries, CityCatalog.PortoDaLuaBranca, "White Moon Harbor", "Porto da Lua Branca", "White Moon", "Lua Branca",
+                "The capital of the Ar Sereno, in the far north: a harbour on islands of ice joined by canals of black water and stone bridges shaped like whale ribs, long plank houses with a moon painted on the gable, round snow domes, crescent boats drawn up on the ice and racks of silver fish. In the middle stands the Cais da Lua, where the Moon Ship moors on the full moon to gather the light set free; at night the aurora dances over the canals.",
+                "A capital do Ar Sereno, no extremo norte: um porto em ilhas de gelo ligadas por canais de água negra e pontes de pedra em forma de costela de baleia, casas compridas de tábua com uma lua pintada na empena, cúpulas de neve redondas, barcos em meia-lua puxados para o gelo e varais de peixe de prata. No meio fica o Cais da Lua, onde a Barca da Lua atraca na lua cheia para recolher a luz libertada; à noite a aurora dança sobre os canais.");
 
             AddCity(entries, CityCatalog.PalafitasTarchon, "Tarchon Stilts", "Palafitas de Tarchon", "Tarchon", "Tarchon",
                 "The trols' city in the open swamp: long houses on tall piles with leaf roofs down to the floor, plank boardwalks over the bog water, nets drying, baskets as tall as a cousin and floating reed islands. At night the swamp fills with will-o'-wisps, sparks caught in the Ar Sereno; half the trols stared at them until they forgot themselves, and every spark set free wakes a neighbour.",
@@ -969,6 +974,39 @@ namespace Rapadura.UI.WorldMap
                 ("Ícaro, tug-of-war with a rope maker is a bad idea. ...Fine. One pull. Then you help me sweep.", "Ícaro, cabo de guerra com um cordoeiro é má ideia. ...Tá bom. Uma puxada. Depois você me ajuda a varrer."),
                 ("Lavine, the rope of the big bell was braided by me and your grandpa Jorge, one summer. He braided crooked. It still holds.", "Lavine, a corda do sino grande foi trançada por mim e pelo vô Jorge de vocês, num verão. Ele trançava torto. Ainda segura."),
                 ("Yak wool, nine strands, a long afternoon. Every bridge in Farnkesh hangs from someone's patience.", "Lã de iaque, nove fios, uma tarde comprida. Toda ponte de Farnkesh fica pendurada na paciência de alguém."));
+
+            // ---- Porto da Lua Branca (the Komi tales of the ficha and the Manichaean letters of Kellis; the Ar Sereno) ----
+            AddResident(entries, "yirkap", "Yirkap, the Ski Hunter", "Yirkap, o Caçador de Esqui",
+                ("Joaquim, on skis you lean forward and trust the snow. Like a guardian trusts the ones behind him.", "Joaquim, no esqui você inclina para a frente e confia na neve. Igual um guardião confia em quem está atrás dele."),
+                ("Maria, I read tracks on the ice like you read books. This one is a fox. This one is your cousin, running.", "Maria, eu leio rastro no gelo como você lê livro. Este é de raposa. Este é do seu primo, correndo."),
+                ("Maithe, the eldest always counts the others before crossing the canal. I saw you do it. Good hunter's habit.", "Maithe, a mais velha sempre conta os outros antes de atravessar o canal. Eu vi você contando. Costume de bom caçador."),
+                ("Ícaro, no, you cannot ski down the roof of the long house. ...I did, once. The whole quarter still laughs.", "Ícaro, não, você não pode descer de esqui pelo telhado da casa comprida. ...Eu desci, uma vez. O bairro inteiro ainda ri."),
+                ("Lavine, Grandpa Jorge raced me across the frozen bay and lost by a whole island. Then he asked Grandma Edna to say he won.", "Lavine, o Vô Jorge apostou corrida comigo pela baía congelada e perdeu por uma ilha inteira. Depois pediu para a Vó Edna dizer que ele ganhou."),
+                ("Skis, a bow and a long breath. On the ice, the fast one eats and the patient one comes home.", "Esqui, arco e fôlego comprido. No gelo, o rápido come e o paciente volta para casa."));
+
+            AddResident(entries, "pamour", "Pamour, the Furrier of the Quays", "Pamour, o Peleiro do Cais",
+                ("Joaquim, take the thick furs. A guardian who freezes guards nobody. ...Yes, they itch. Cold itches more.", "Joaquim, leva as peles grossas. Guardião que congela não guarda ninguém. ...Sim, pinica. O frio pinica mais."),
+                ("Maria, my family writes letters from one end of the world to the other. Write to your grandma from here: the boats carry it.", "Maria, a minha família escreve cartas de uma ponta do mundo à outra. Escreve para a sua avó daqui: os barcos levam."),
+                ("Maithe, a boat for the canals, a lamp for the galleries, furs for the tundra. You think of everything before your brother asks.", "Maithe, barco para os canais, lamparina para as galerias, pele para a tundra. Você pensa em tudo antes do seu irmão pedir."),
+                ("Ícaro, the white fur is not a costume. ...Fine, one roar. Then you put it back folded.", "Ícaro, a pele branca não é fantasia. ...Tá bom, um rugido. Depois você devolve dobradinha."),
+                ("Lavine, Grandma Edna bought a lantern from my father and paid with a jar of apricots. He kept the jar on the shelf for years.", "Lavine, a Vó Edna comprou uma lanterna do meu pai e pagou com um pote de damasco. Ele guardou o pote na prateleira por anos."),
+                ("Furs, boats, lamps and tea. Whatever the ice asks for, Pamour has. Pay before the moon turns.", "Pele, barco, lamparina e chá. O que o gelo pedir, o Pamour tem. Paga antes da lua virar."));
+
+            AddResident(entries, "pera", "Pera, the Good Giant", "Pera, o Gigante Bom",
+                ("Joaquim, you stand in front of the others like a little wall. Good. Big walls started small too.", "Joaquim, você fica na frente dos outros como uma parede pequena. Bom. Parede grande também começou pequena."),
+                ("Maria, every morning I break the ice with one knock, here, where it sings. Listen... There. That note is the canal waking up.", "Maria, toda manhã eu quebro o gelo com uma batida, aqui, onde ele canta. Escuta... Isso. Essa nota é o canal acordando."),
+                ("Maithe, you carry your brother's worries and yours. Give me one of them. I am big, I can carry it.", "Maithe, você carrega as preocupações do seu irmão e as suas. Me dá uma delas. Eu sou grande, eu carrego."),
+                ("Ícaro, yes, you can sit on my shoulder. No, you cannot steer me with my ears.", "Ícaro, sim, você pode sentar no meu ombro. Não, você não pode me guiar pelas orelhas."),
+                ("Lavine, Grandpa Jorge was the only man who ever tried to arm-wrestle me. He lost, laughing, and I let him keep the table.", "Lavine, o Vô Jorge foi o único homem que tentou ganhar de mim na queda de braço. Perdeu rindo, e eu deixei a mesa com ele."),
+                ("I am Pera. I break the ice so the boats go out. Giants are good for that, and for reaching high shelves.", "Eu sou o Pera. Quebro o gelo para os barcos saírem. Gigante serve para isso, e para alcançar prateleira alta."));
+
+            AddResident(entries, "makarios", "Makarios, the Keeper of the Lanterns", "Makarios, o Guardião das Lanternas",
+                ("Joaquim, a lantern at the end of the quay is a promise: someone is waiting. Keep yours lit for your sister.", "Joaquim, lanterna na ponta do cais é promessa: tem alguém esperando. Mantém a sua acesa para a sua irmã."),
+                ("Maria, I write to my sons every week, though the boats are slow. A letter is light you can fold and send.", "Maria, eu escrevo para os meus filhos toda semana, mesmo com os barcos lentos. Carta é luz que dá para dobrar e mandar."),
+                ("Maithe, on the full moon the canals freeze and you can walk to the Cais da Lua. Bring your brother: the moon likes families.", "Maithe, na lua cheia os canais congelam e dá para andar até o Cais da Lua. Traz o seu irmão: a lua gosta de família."),
+                ("Ícaro, no, the moon lantern is not a ball. ...It would bounce, yes. It would also break. Both.", "Ícaro, não, a lanterna de lua não é bola. ...Ia quicar, sim. Também ia quebrar. As duas coisas."),
+                ("Lavine, the Moon Ship knows you. The Ar Sereno is yours; one day you will steer it, the Barqueira da Lua. Until then, help me light the quay.", "Lavine, a Barca da Lua conhece você. O Ar Sereno é seu; um dia você vai guiar ela, a Barqueira da Lua. Até lá, me ajuda a acender o cais."),
+                ("Every night I light the lanterns of the Cais da Lua. When the Moon Ship comes, she finds the way by them.", "Toda noite eu acendo as lanternas do Cais da Lua. Quando a Barca da Lua vem, ela acha o caminho por elas."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

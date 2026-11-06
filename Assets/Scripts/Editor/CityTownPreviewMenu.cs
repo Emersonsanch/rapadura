@@ -76,6 +76,9 @@ namespace Rapadura.Editor
         [MenuItem(Root + "Preview Walkable Town/Farnkesh, os Ninhos de Pedra (capital, Picos de Farnkesh)", priority = 29)]
         private static void PreviewFarnkesh() => Preview(CityCatalog.Farnkesh);
 
+        [MenuItem(Root + "Preview Walkable Town/Porto da Lua Branca (capital, Mar Gelado)", priority = 29)]
+        private static void PreviewPortoDaLuaBranca() => Preview(CityCatalog.PortoDaLuaBranca);
+
         [MenuItem(Root + "Preview Walkable Town/Toggle Night", priority = 30)]
         private static void ToggleNight()
         {

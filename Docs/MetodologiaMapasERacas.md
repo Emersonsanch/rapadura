@@ -80,6 +80,8 @@ a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: 
 | Selo do Sol (42) | levar o Selo do Sol (preso ao herói) | Lanternas do Mestre Mōzak (Mingcheng); recompensa da 2ª missão de Mingcheng (Lin Deng) |
 | Proteção a tempestade (57) | levar Capa de Tempestade | Cordas do Sisin (Farnkesh, cidade de retorno do 57); recompensa da 2ª missão de Farnkesh (Tadi); também nos Agasalhos do Sisinnios (Sangkent) |
 | Asas ou salto duplo (58) | **vestir** no slot Costas/Asas as Asas de Lona do Takhsich, ou asas de verdade do Tacho Encantado, ou montaria Voadora | Asas de Lona: Cordas do Sisin (Farnkesh, cidade de retorno do 58), 420 ouro; também na Feira da Miwnay (Mercado dos Túneis) |
+| Resistência à nevasca (63) | levar Chá de Gengibre do Tandir ou Roupa Térmica | Peles e Barcos do Pamour (Porto da Lua Branca, cidade de retorno do 63), 70 ouro; também nos Agasalhos do Sisinnios (Sangkent) |
+| Roupa térmica (64) | **vestir** Roupa Térmica Refinada (slot Peito) | Peles e Barcos do Pamour (Porto da Lua Branca, cidade de retorno do 64), 900 ouro; recompensa da 2ª missão do Porto (Pera); também nos Agasalhos do Sisinnios (Sangkent) |
 
 Toda exigência das regiões 1–6 tem um "kit" de itens (`MapRequirementRules.KitOf`: o item principal, mais a lamparina no
 17) que a atende sozinho, e cada item do kit é vendido numa loja (`CityShopCatalog`) ou dado por missão
@@ -95,10 +97,14 @@ exigência hoje: Grampos de Escalada) estão fixos no balcão da Panela Grande d
 Arvoredo não têm exigência nos seus mapas. Os da região 10 (Picos de Farnkesh: 57 pede Capa de Tempestade, 58 Asas ou
 salto duplo; 53–56 sem exigência hoje) estão fixos no balcão das Cordas do Sisin em Farnkesh, a cidade de retorno de 54–58
 (2026-11-06, `CityFarnkeshTests`), junto com corda, Vara de Equilíbrio e Grampos para as pontes e as ermidas; a Capa é
-também a recompensa da 2ª missão de lá (Tadi); o Vale dos Sátiros (53) não tem exigência. `MapRequirementTests` agora
-cobre todas as regiões do catálogo (1–10) e confere que cada exigência das regiões 9 e 10 está à venda na própria cidade
-de retorno do mapa (`GatesOfRegionTen_AreOnTheFixedCounterOfTheirReturnCity_AtItsPrice`: balcão fixo, preço justo, o kit
-abre o mapa; nunca Pedra da Vida/Caos). Fora das exigências, a **Garrafa de Ar Sereno** dos kobolds (consumível: +20% de recuperação de vigor por
+também a recompensa da 2ª missão de lá (Tadi); o Vale dos Sátiros (53) não tem exigência. Os da região 11 (Mar Gelado: 63 pede Resistência à nevasca, 64 Roupa térmica;
+59–62 sem exigência hoje) estão fixos no balcão das Peles e Barcos do Pamour no Porto da Lua Branca, a cidade de retorno de
+59–64 (2026-11-06, `CityPortoDaLuaBrancaTests`), junto com Manta de Lã, Passagem de Dhow e Barco de Junco para os canais e o
+mar aberto, as duas lamparinas para as Galerias dos Mamutes, Grampos e Capa de Tempestade; a Roupa Térmica é também a
+recompensa da 2ª missão de lá (Pera). `MapRequirementTests` agora
+cobre todas as regiões do catálogo (1–11) e confere que cada exigência das regiões 9–11 está à venda na própria cidade
+de retorno do mapa (`GatesOfRegionTen_…` e `GatesOfRegionEleven_AreOnTheFixedCounterOfTheirReturnCity_AtItsPrice`: balcão
+fixo, preço justo, o kit abre o mapa; nunca Pedra da Vida/Caos). Fora das exigências, a **Garrafa de Ar Sereno** dos kobolds (consumível: +20% de recuperação de vigor por
 60 s, para o "ar parado" do 22) é vendida na Feira da Miwnay e dada pela missão "Teia nos Tubos" (Takhsich).
 
 Os itens das regiões 5–8 já existem (`Resources/Items`, textos en/pt-BR em `ContentTexts`); os da região 5 (25–30) estão à

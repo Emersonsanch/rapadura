@@ -130,6 +130,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// pebbles (the Phrygian myths of Marsyas, Gordias and Midas; the Pactolus).
         /// </summary>
         Glade = 19,
+        /// <summary>
+        /// Porto da Lua Branca (the Mar Gelado, Docs/Mapas100.md map 59, style <c>IceCanal</c>): a harbour on islands of ice joined
+        /// by canals of black water and stone bridges shaped like whale ribs; long plank houses with gabled snowy roofs and a moon
+        /// painted on the gable (the plank houses of the North Pacific coast as form only, without the crest poles of living
+        /// clans), round snow domes with an entrance tunnel (the Arctic snow and turf houses as form only), crescent boats drawn
+        /// up on the ice, fish racks and the Cais da Lua on the plaza where the Moon Ship moors. No figure of the faiths of the Arctic.
+        /// </summary>
+        IceCanal = 20,
     }
 
     /// <summary>
@@ -663,6 +671,31 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Street = TownSwatch.Dirt, StreetEdge = TownSwatch.GladeGreen, Sidewalk = TownSwatch.GladeStone,
             Plaza = TownSwatch.GladeGreen, PlazaAlt = TownSwatch.GladeStone,
             Fence = TownSwatch.Wicker, Plinth = TownSwatch.GladeStone,
+            HouseRoof = TownRoofKind.Flat,
+        };
+
+        /// <summary>
+        /// Porto da Lua Branca (Docs/Mapas100.md map 59): picked by hand from the ficha's palette. Sea ice #D8E9F2, snowfield
+        /// #F7FAFC, plank #5B4A3E, lilac #B7A6E0, silver #C8D2DC, the polar night #1E2A4A, the black water of the canals #1F3A4A
+        /// and the moon lanterns #E8E4FF (glow; row 21 of <see cref="TownPalette"/>). Houses are long plank houses with a moon on
+        /// the gable (<see cref="TownBuildingSpec.MoonLonghouse"/>) or snow domes (<see cref="TownBuildingSpec.SnowDome"/>); the
+        /// ground is snow on the ice islands, the streets packed snow edged with silver stone, the plaza the ice of the Cais da
+        /// Lua. The Mar Gelado has no world-map biome: <see cref="TownStyle.Region"/> is the borrowed Forest (as Farnkesh).
+        /// </summary>
+        public static readonly TownStyle IceCanal = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Mountain,
+            Architecture = TownArchitecture.IceCanal,
+            Walls = new[] { TownSwatch.MoonPlank, TownSwatch.MoonPlank, TownSwatch.WoodWeathered },
+            Trims = new[] { TownSwatch.MoonLilac, TownSwatch.MoonSilver, TownSwatch.PolarNight },
+            Roofs = new[] { TownSwatch.Snowfield, TownSwatch.Snow },
+            Joinery = new[] { TownSwatch.MoonPlank, TownSwatch.WoodDark },
+            Accent = TownSwatch.MoonSilver,
+            Ground = TownSwatch.Snowfield, GroundAlt = TownSwatch.SeaIce,
+            Street = TownSwatch.Snow, StreetEdge = TownSwatch.MoonSilver, Sidewalk = TownSwatch.SeaIce,
+            Plaza = TownSwatch.SeaIce, PlazaAlt = TownSwatch.MoonSilver,
+            Fence = TownSwatch.MoonPlank, Plinth = TownSwatch.MoonSilver,
             HouseRoof = TownRoofKind.Flat,
         };
     }

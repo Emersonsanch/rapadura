@@ -144,6 +144,12 @@ namespace Rapadura.Gameplay.World.Map
             ("map_056_ermidas", "Hanging Hermitages", "Ermidas Suspensas", "Bell Pinnacle", "Pináculo do Sino"),
             ("map_057_garganta_ays", "Gorge of the Ays", "Garganta dos Ays", "Shelter Cave", "Gruta Abrigo"),
             ("map_058_ninho_huma", "Huma's Nest", "Ninho da Huma", "Last Pinnacle", "Último Pináculo"),
+            ("map_059_porto_lua_branca", "White Moon Harbor", "Porto da Lua Branca", "White Moon Harbor", "Porto da Lua Branca"),
+            ("map_060_canais_gelo", "Ice Canals", "Canais de Gelo", "Boatmen's Snow House", "Casa de Neve dos Barqueiros"),
+            ("map_061_tundra_omol", "Omöl's Tundra", "Tundra de Omöl", "Yen's Tent", "Tenda de Yen"),
+            ("map_062_galerias_mamutes", "Mammoth Galleries", "Galerias dos Mamutes", "Mouth of the Ice", "Boca do Gelo"),
+            ("map_063_mar_auroras", "Aurora Sea", "Mar das Auroras", "Ice Lighthouse", "Farol de Gelo"),
+            ("map_064_fundo_velho_kul", "Old Kul's Deep", "Fundo do Velho Kul", "Great Fishing Hole", "Buraco Grande de Pesca"),
         };
 
         private static readonly (MapRegion Region, string En, string Pt)[] RegionNames =
@@ -158,6 +164,7 @@ namespace Rapadura.Gameplay.World.Map
             (MapRegion.PlanicieDeMingcheng, "Mingcheng Plain", "Planície de Mingcheng"),
             (MapRegion.EstepeDosNartes, "Steppe of the Narts", "Estepe dos Nartes"),
             (MapRegion.PicosDeFarnkesh, "Peaks of Farnkesh", "Picos de Farnkesh"),
+            (MapRegion.MarGelado, "Frozen Sea", "Mar Gelado"),
         };
 
         private static readonly (string Id, string En, string Pt)[] CityNames =
@@ -183,6 +190,7 @@ namespace Rapadura.Gameplay.World.Map
             ("arvoredo", "Haripushpa Grove", "Arvoredo"),
             ("vale_dos_satiros", "Satyr Vale", "Vale dos Sátiros"),
             ("farnkesh", "Farnkesh", "Farnkesh"),
+            ("porto_da_lua_branca", "White Moon Harbor", "Porto da Lua Branca"),
         };
 
         private static readonly (string Tag, string En, string Pt)[] RequirementHints =
@@ -194,7 +202,7 @@ namespace Rapadura.Gameplay.World.Map
             (MapRequirementTags.PoisonProtection, "Carry an Oasis Theriac (Qocho) or an anti-venom amulet. Lavine breathes the poison mists.", "Leve uma Teriaga do Oásis (Qocho) ou um amuleto antiveneno. A Lavine respira as névoas venenosas."),
             (MapRequirementTags.WoolCloak, "Carry a Wool Cloak (Litema forge, or Mestre Mihr's mine-pass quest) or wear the Nart Felt Cloak.", "Leve uma Manta de Lã (forja de Litema ou a missão do passo da mina do Mestre Mihr) ou vista a Capa de Feltro dos Nartes."),
             (MapRequirementTags.PickaxeTorch, "Carry a pickaxe and a lamp: Oil Lamp at Parthenos's lamps (Vila das Lamparinas).", "Leve picareta e lamparina: Lamparina de Óleo nas Lamparinas da Parthenos (Vila das Lamparinas)."),
-            (MapRequirementTags.BlizzardResistance, "Carry Tandir Ginger Tea (Litema forge) or wear fine thermal clothes.", "Leve Chá de Gengibre do Tandir (forja de Litema) ou vista roupa térmica refinada."),
+            (MapRequirementTags.BlizzardResistance, "Carry Tandir Ginger Tea (Litema forge) or wear fine thermal clothes (Sangkent; Pamour's Furs and Boats, Porto da Lua Branca); the polar wind of the Aurora Sea asks for it too.", "Leve Chá de Gengibre do Tandir (forja de Litema) ou vista roupa térmica refinada (Sangkent; Peles e Barcos do Pamour, Porto da Lua Branca); o vento polar do Mar das Auroras também pede."),
             (MapRequirementTags.TorchRequired, "Carry an Oil Lamp: Parthenos sells it in the Vila das Lamparinas and gives one for scattering the bats.", "Leve uma Lamparina de Óleo: a Parthenos vende na Vila das Lamparinas e dá uma por espantar os morcegos."),
             (MapRequirementTags.RunicLamp, "Carry a Runic Lamp: Parthenos sells it once the Caves boss has fallen.", "Leve uma Lamparina Rúnica: a Parthenos vende depois do chefe das Cavernas."),
             (MapRequirementTags.EternalFireOil, "Carry Eternal Fire Oil: Parthenos sells it once the Caves boss has fallen.", "Leve Óleo de Fogo Eterno: a Parthenos vende depois do chefe das Cavernas."),
@@ -208,7 +216,7 @@ namespace Rapadura.Gameplay.World.Map
             (MapRequirementTags.SaddleRequired, "Carry a Reed Boat (Tarchon stilt houses) or own a water mount.", "Leve um Barco de Junco (Palafitas de Tarchon) ou tenha uma montaria aquática."),
             (MapRequirementTags.AntiVenomAmulet, "Carry an Anti-Venom Amulet (Tarchon stilt houses).", "Leve um Amuleto Antiveneno (Palafitas de Tarchon)."),
             (MapRequirementTags.PurifyingFruit, "Carry a Purifying Fruit (Jhilpur).", "Leve uma Fruta Purificadora (Jhilpur)."),
-            (MapRequirementTags.ThermalClothes, "Wear Fine Thermal Clothes (Sangkent).", "Vista a Roupa Térmica Refinada (Sangkent)."),
+            (MapRequirementTags.ThermalClothes, "Wear Fine Thermal Clothes (Sangkent; Pamour's Furs and Boats, Porto da Lua Branca, or Pera's quest pays them): without them nobody fishes on Old Kul's lake.", "Vista a Roupa Térmica Refinada (Sangkent; Peles e Barcos do Pamour, Porto da Lua Branca, ou a missão do Pera paga com ela): sem ela ninguém pesca no lago do Velho Kul."),
             (MapRequirementTags.ClimbingCrampons, "Carry Climbing Crampons (Sangkent).", "Leve Grampos de Escalada (Sangkent)."),
             (MapRequirementTags.WingsRequired, "Wear wings of the Enchanted Cauldron or own a winged mount.", "Vista asas do Tacho Encantado ou tenha uma montaria alada."),
             (MapRequirementTags.StormProtection, "Carry a Storm Cloak (Sangkent; Sisin's Ropes, Farnkesh).", "Leve uma Capa de Tempestade (Sangkent; Cordas do Sisin, Farnkesh)."),

@@ -328,6 +328,40 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         CloudIsles = 192,
         /// <summary>Huma's Nest (58): the giant nest of golden branches on the highest isle, white rock and gold.</summary>
         HumaNest = 193,
+
+        // Região 11 — Mar Gelado (OverworldLayouts.MarGelado.cs, OverworldTerrains.MarGelado.cs): 200–219.
+        /// <summary>The snowy shore of the bay south of the harbour: snow over shingle, whale bones, upturned crescent boats.</summary>
+        SnowShore = 200,
+        /// <summary>The Porto da Lua Branca's ice islands (59): packed snow, snow domes, long plank houses with painted moons.</summary>
+        MoonHarbor = 201,
+        /// <summary>The frozen bay: flat sea ice in wide plates, fishing holes, boats frozen in.</summary>
+        FrozenBay = 202,
+        /// <summary>The Canais de Gelo (60): blocks of blue ice between black-water canals, thin ice.</summary>
+        IceCanals = 203,
+        /// <summary>Cracked ice (60): pressure ridges of crushed ice, dark cracks, ice blocks thrown up.</summary>
+        CrackedIce = 204,
+        /// <summary>Omöl's tundra (61): flat moss and lichen, round stones, snow patches.</summary>
+        Tundra = 205,
+        /// <summary>Omöl's lakes (61): low hummocks between round blue lakes, sedge and lichen.</summary>
+        TundraLakes = 206,
+        /// <summary>The reindeer pastures round Yen's tent: rolling lichen, herders' tents, drying racks.</summary>
+        ReindeerPasture = 207,
+        /// <summary>A fjord: high dark walls over a frozen channel, snow ledges.</summary>
+        Fjord = 208,
+        /// <summary>The Galerias dos Mamutes (62): vaults of ice and frozen earth, giant tusks in the walls, crystals.</summary>
+        MammothGalleries = 209,
+        /// <summary>Frozen earth at the foot of the peaks: brown permafrost mounds, tusks coming out of the ground.</summary>
+        FrozenEarth = 210,
+        /// <summary>The pack ice of the Mar das Auroras (63): floating plates with dark leads between them.</summary>
+        PackIce = 211,
+        /// <summary>The Mar das Auroras (63): icebergs standing out of a frozen sea under the green-lilac light.</summary>
+        AuroraSea = 212,
+        /// <summary>The isle of the ice lighthouse (63): a rocky snow isle in the pack ice, the beacon of ice.</summary>
+        LighthouseIsle = 213,
+        /// <summary>Old Kul's frozen lake (64): a huge plain of black-silver ice, fishing holes, the fishers' racks.</summary>
+        FrozenLake = 214,
+        /// <summary>Black ice (64): clear dark ice over the deep, cracks and frozen bubbles, low ridges.</summary>
+        BlackIce = 215,
     }
 
     /// <summary>

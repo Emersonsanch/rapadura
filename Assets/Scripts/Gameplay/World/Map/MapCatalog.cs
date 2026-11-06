@@ -12,12 +12,12 @@ namespace Rapadura.Gameplay.World.Map
 {
     /// <summary>
     /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II) and the six of
-    /// Região 9 (☆ 47–52, the Estepe dos Nartes) and the six of Região 10 (☆ 53–58, the Picos de Farnkesh), walked as zones of
-    /// their continuous regions: level
+    /// Região 9 (☆ 47–52, the Estepe dos Nartes), the six of Região 10 (☆ 53–58, the Picos de Farnkesh) and the six of Região 11
+    /// (☆ 59–64, the Mar Gelado), walked as zones of their continuous regions: level
     /// bands, walk/warp levels, special gates, settlements and return cities, as content-as-code like
-    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42, 47–58): a hand-made layout
+    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42, 47–64): a hand-made layout
     /// (<c>MapLayouts.Has</c>: 01–08, 13, 14, 19, 20) or only a zone of a continuous region (<c>OverworldLayouts.ForMap</c>:
-    /// 09–12, 15–18, 21–42, 47–58, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
+    /// 09–12, 15–18, 21–42, 47–64, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
     /// the flag equal to it. The rest are listed in the Barcas de Luz window, closed. The gold fare is never stored: it is always the
     /// formula of <see cref="MapAccessRules.CalculateWarpCost(int,int,bool)"/> (the "Custo Ouro" column of the methodology
     /// table is design history).
@@ -42,6 +42,7 @@ namespace Rapadura.Gameplay.World.Map
         public const string Arvoredo = "arvoredo";
         public const string ValeDosSatiros = "vale_dos_satiros";
         public const string Farnkesh = "farnkesh";
+        public const string PortoDaLuaBranca = "porto_da_lua_branca";
 
         public const string PomarId = "map_001_pomar";
         public const string TugaiId = "map_002_tugai";
@@ -53,7 +54,7 @@ namespace Rapadura.Gameplay.World.Map
         {
             CityCatalog.VilaZefa, CopasGarajonay, CityCatalog.AreiaBranca, TamborRubro, CityCatalog.SerraAlta, SaloesDeBronze,
             CityCatalog.Lamparinas, MercadoDosTuneis, TaaPwani, Aratta, Kirta, Jhilpur, PalafitasTarchon, Sangkent, Mingcheng, TorresBrancas,
-            AcampamentoSoslan, Fortim, Arvoredo, ValeDosSatiros, Farnkesh,
+            AcampamentoSoslan, Fortim, Arvoredo, ValeDosSatiros, Farnkesh, PortoDaLuaBranca,
         };
 
         public static readonly IReadOnlyList<MapDefinition> Maps = new List<MapDefinition>
@@ -131,12 +132,20 @@ namespace Rapadura.Gameplay.World.Map
             new MapDefinition(56, "map_056_ermidas", R.PicosDeFarnkesh, Y.Mountain, S.G, 158, 168, 154, 162, Fee, T.None, Farnkesh, K.Outpost, "pinaculo_do_sino", isBuilt: true),
             new MapDefinition(57, "map_057_garganta_ays", R.PicosDeFarnkesh, Y.Mountain, S.G, 166, 180, 162, 170, Fee, T.StormProtection, Farnkesh, K.Outpost, "gruta_abrigo", isBuilt: true),
             new MapDefinition(58, "map_058_ninho_huma", R.PicosDeFarnkesh, Y.Mountain, S.GG, 180, 200, 176, 186, Fee, T.WingsOrDoubleJump, Farnkesh, K.Outpost, "ultimo_pinaculo", isBuilt: true),
+
+            // Região 11 — Mar Gelado (☆, Docs/Mapas100.md §1; zones of its continuous region, OverworldLayouts.MarGelado)
+            new MapDefinition(59, "map_059_porto_lua_branca", R.MarGelado, Y.Coast, S.GG, 180, 188, 176, 184, Fee, T.None, PortoDaLuaBranca, K.Capital, "porto_da_lua_branca", isBuilt: true),
+            new MapDefinition(60, "map_060_canais_gelo", R.MarGelado, Y.Coast, S.G, 186, 196, 182, 190, Fee, T.None, PortoDaLuaBranca, K.Outpost, "casa_de_neve_dos_barqueiros", isBuilt: true),
+            new MapDefinition(61, "map_061_tundra_omol", R.MarGelado, Y.Plain, S.GG, 194, 204, 190, 198, Fee, T.None, PortoDaLuaBranca, K.Outpost, "tenda_de_yen", isBuilt: true),
+            new MapDefinition(62, "map_062_galerias_mamutes", R.MarGelado, Y.Underground, S.G, 202, 214, 198, 206, Fee, T.None, PortoDaLuaBranca, K.Outpost, "boca_do_gelo", isBuilt: true),
+            new MapDefinition(63, "map_063_mar_auroras", R.MarGelado, Y.Coast, S.GG, 212, 226, 208, 216, Fee, T.BlizzardResistance, PortoDaLuaBranca, K.Outpost, "farol_de_gelo", isBuilt: true),
+            new MapDefinition(64, "map_064_fundo_velho_kul", R.MarGelado, Y.Coast, S.GG, 226, 240, 222, 230, Fee, T.ThermalClothes, PortoDaLuaBranca, K.Outpost, "buraco_grande_de_pesca", isBuilt: true),
         };
 
         public static readonly IReadOnlyList<MapRegion> Regions = new[]
         {
             R.Zarafshan, R.AreiasFlamejantes, R.SerraDeKaggen, R.GrutasDoLimiar, R.CostaDasMoncoes, R.DeltaDeJhilpur, R.TetoDoMundo, R.PlanicieDeMingcheng,
-            R.EstepeDosNartes, R.PicosDeFarnkesh,
+            R.EstepeDosNartes, R.PicosDeFarnkesh, R.MarGelado,
         };
 
         private static Dictionary<string, MapDefinition> _byId;

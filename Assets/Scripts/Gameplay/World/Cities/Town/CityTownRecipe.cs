@@ -344,6 +344,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             spec.HollowTrunk |= style.Architecture == TownArchitecture.LivingGrove && plainHouse;
             spec.PinnacleNest |= style.Architecture == TownArchitecture.PinnacleNest && plainHouse;
             spec.GourdHut |= style.Architecture == TownArchitecture.Glade && plainHouse;
+            spec.MoonLonghouse |= style.Architecture == TownArchitecture.IceCanal && plainHouse && !spec.SnowDome;
 
             switch (r.Kind)
             {

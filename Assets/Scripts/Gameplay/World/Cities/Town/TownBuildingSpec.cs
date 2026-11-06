@@ -85,6 +85,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
         RopeWalker = 36,
         /// <summary>Marsyas (Vale dos Sátiros): double flutes on a stand, a pan-pipe, a drum and a basket of grapes.</summary>
         DoubleFlute = 37,
+        /// <summary>Pamour (Porto da Lua Branca): a rack of white furs, a crescent boat on trestles with its paddle, coils of line and a moon lantern.</summary>
+        FurAndBoat = 38,
     }
 
     /// <summary>
@@ -245,6 +247,20 @@ namespace Rapadura.Gameplay.World.Cities.Town
         public bool GourdHut;
 
         /// <summary>
+        /// Porto da Lua Branca: a long plank house (Docs/Mapas100.md map 59, style <c>IceCanal</c>): a low base of packed snow,
+        /// walls of dark vertical planks, a low gabled roof thick with snow, the gable painted with a lilac crescent round a
+        /// silver full moon, a plank porch with a moon lantern (the plank houses of the North Pacific as form only, no crest
+        /// poles; TownKit.IceCanal).
+        /// </summary>
+        public bool MoonLonghouse;
+
+        /// <summary>
+        /// Porto da Lua Branca: a round snow dome (style <c>IceCanal</c>, the Arctic snow houses as form only): a dome of snow
+        /// blocks on the ice with a low entrance tunnel facing the street, a clear ice window and a lantern by the door (TownKit.IceCanal).
+        /// </summary>
+        public bool SnowDome;
+
+        /// <summary>
         /// Mercado dos Túneis: with <see cref="TownRoofKind.Rock"/>, a stall set into an arched basalt niche: the round arch,
         /// a striped canvas awning on copper poles, a counter, bottle lanterns and a copper air pipe up the rock (TownKit.TunnelBazaar).
         /// </summary>
@@ -285,7 +301,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Key of the cached mesh: equal specs share one mesh.</summary>
         public string CacheKey =>
             $"{Kind}|{Width:0.00}|{Depth:0.00}|{PorchDepth:0.00}|{FullVaranda}|{WallHeight:0.00}|{Floors}|{Roof}|{WallColor}|{TrimColor}|{RoofColor}|" +
-            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{RootStilt}|{StiltLonghouse}|{StoneTerrace}|{RingWallHall}|{SpireHouse}|{FeltYurt}|{GiantRoundhouse}|{HollowTrunk}|{PinnacleNest}|{GourdHut}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
+            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{RootStilt}|{StiltLonghouse}|{StoneTerrace}|{RingWallHall}|{SpireHouse}|{FeltYurt}|{GiantRoundhouse}|{HollowTrunk}|{PinnacleNest}|{GourdHut}|{MoonLonghouse}|{SnowDome}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
             $"{Chimney}|{Sign}|{SignColor}|{Dressing}|{Seed}";
     }
 }

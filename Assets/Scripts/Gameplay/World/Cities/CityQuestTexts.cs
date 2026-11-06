@@ -556,6 +556,38 @@ namespace Rapadura.Gameplay.World.Cities
             new LocalizationEntry("quest.city_farnkesh_ill_wind_on_the_bridges.active",
                 "Hold the rope when the gust comes. The mist hides in the middle of the bridges, where the planks shake most.",
                 "Segurem a corda quando vier a rajada. A neblina se esconde no meio das pontes, onde as tábuas balançam mais."),
+
+            // ================= Porto da Lua Branca — Yirkap, o Caçador de Esqui =================
+            new LocalizationEntry("quest.city_porto_gulls_on_the_racks.title", "Gulls on the Racks", "Gaivotas nos Varais"),
+            new LocalizationEntry("quest.city_porto_gulls_on_the_racks.description",
+                "Gulls dimmed by the shadow have learned to steal: they dive on the fish racks of the quays, tear the silver fish down and scream at whoever comes near. The fishing quarter will have nothing to eat when the polar night comes. Yirkap, who hunts on skis faster than the reindeer run, asked the cousins to chase them off the racks.",
+                "Gaivotas apagadas pela sombra aprenderam a roubar: mergulham nos varais de peixe do cais, arrancam os peixes de prata e gritam com quem chega perto. O bairro de pesca vai ficar sem comida quando vier a noite polar. O Yirkap, que caça de esqui mais rápido que as renas correm, pediu aos primos que espantem as gaivotas dos varais."),
+            new LocalizationEntry("quest.city_porto_gulls_on_the_racks.obj_chase_the_gulls", "Chase the thieving gulls off the fish racks", "Espantar as gaivotas ladras dos varais de peixe"),
+            new LocalizationEntry("quest.city_porto_gulls_on_the_racks.journal",
+                "With the gulls gone, the fishing quarter hung its fish again and Yirkap lent Joaquim his skis for one run across the bay. Joaquim fell four times and got up five. Yirkap says that is how every ski hunter starts, and that the fifth time is the one that counts.",
+                "Com as gaivotas embora, o bairro de pesca pendurou os peixes de novo e o Yirkap emprestou os esquis para o Joaquim dar uma volta na baía. O Joaquim caiu quatro vezes e levantou cinco. O Yirkap diz que é assim que todo caçador de esqui começa, e que a quinta vez é a que conta."),
+            new LocalizationEntry("quest.city_porto_gulls_on_the_racks.offer",
+                "Edna's grandchildren, this far north! Your grandpa Jorge came up here once to see the Moon Ship and stayed a whole winter because the canals froze. Eight gulls of the shadow are stealing the fish off our racks. I am fast on skis, but a gull is faster in the air. Chase them off, and the quarter eats this winter.",
+                "Os netos da Edna, aqui no norte! O vô Jorge de vocês subiu até aqui uma vez para ver a Barca da Lua e ficou o inverno inteiro porque os canais congelaram. Oito gaivotas da sombra estão roubando o peixe dos nossos varais. Eu sou rápido no esqui, mas gaivota é mais rápida no ar. Espantem elas, e o bairro come neste inverno."),
+            new LocalizationEntry("quest.city_porto_gulls_on_the_racks.active",
+                "They come in low over the canals at dusk, when the lanterns are lit and the fishers go home.",
+                "Elas chegam baixinho por cima dos canais ao entardecer, quando as lanternas acendem e os pescadores vão para casa."),
+
+            // ================= Porto da Lua Branca — Pera, o Gigante Bom =================
+            new LocalizationEntry("quest.city_porto_bears_on_the_canals.title", "Bears on the Canals", "Ursos nos Canais"),
+            new LocalizationEntry("quest.city_porto_bears_on_the_canals.description",
+                "Bears dimmed by the shadow have come down onto the ice of the canals and will not let anyone pass: not the boats, not Pera, who breaks the ice every morning so the crescent boats can go out. A giant can break ice, but he does not like to fight. Pera asked the cousins to chase the bears back to the open tundra, and promised them a suit of thermal furs for the cold beyond the harbour.",
+                "Ursos apagados pela sombra desceram para o gelo dos canais e não deixam ninguém passar: nem os barcos, nem o Pera, que quebra o gelo toda manhã para os barcos em meia-lua saírem. Gigante quebra gelo, mas não gosta de briga. O Pera pediu aos primos que espantem os ursos de volta para a tundra aberta, e prometeu uma roupa térmica de pele para o frio depois do porto."),
+            new LocalizationEntry("quest.city_porto_bears_on_the_canals.obj_chase_the_bears", "Chase the dimmed bears off the ice of the canals", "Espantar os ursos apagados do gelo dos canais"),
+            new LocalizationEntry("quest.city_porto_bears_on_the_canals.journal",
+                "With the bears gone, Pera broke the ice of the whole canal in one morning, singing, and the crescent boats went out in a line like a necklace. Ícaro rode on his shoulder the whole way. Pera gave the cousins the thermal furs his mother sewed for him when he was small: they fit Maithe perfectly.",
+                "Com os ursos embora, o Pera quebrou o gelo do canal inteiro numa manhã, cantando, e os barcos em meia-lua saíram em fila como um colar. O Ícaro foi no ombro dele o caminho todo. O Pera deu aos primos a roupa térmica que a mãe dele costurou quando ele era pequeno: serviu certinho na Maithe."),
+            new LocalizationEntry("quest.city_porto_bears_on_the_canals.offer",
+                "Ah, the little ones who chased the gulls! Good, good. I am Pera. I am big, yes, do not worry, I only break ice. Six bears of the shadow sit on my canals and growl at the boats. Your grandma Edna once scolded a bear off this very quay with a ladle; I cannot do it like her. Chase them away and I will give you furs that keep the polar night out.",
+                "Ah, os pequenos que espantaram as gaivotas! Bom, bom. Eu sou o Pera. Sou grande, sim, não se preocupem, eu só quebro gelo. Seis ursos da sombra sentaram nos meus canais e rosnam para os barcos. A vó Edna de vocês uma vez espantou um urso deste mesmo cais com uma concha de sopa; eu não consigo fazer igual a ela. Espantem eles e eu dou uma pele que deixa a noite polar do lado de fora."),
+            new LocalizationEntry("quest.city_porto_bears_on_the_canals.active",
+                "They lie on the thin ice by the bridges, where the water is close and the fish come up.",
+                "Eles deitam no gelo fino perto das pontes, onde a água está perto e os peixes sobem."),
         };
 
         public static void EnsureLoaded(LocalizationManager localization)

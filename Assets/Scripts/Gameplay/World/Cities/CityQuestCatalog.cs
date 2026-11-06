@@ -87,6 +87,8 @@ namespace Rapadura.Gameplay.World.Cities
     /// away from the river, then Gordias wants the vine foxes out of his knotted rows and pays with wind runes.
     /// Farnkesh (map 54): Shad-Ohrmizd sends the cousins after the peak vultures that perch on the wind bells, then Tadi wants
     /// the mist of the ill wind off the rope bridges and pays with the Capa de Tempestade (the gate of map 57).
+    /// Porto da Lua Branca (map 59): Yirkap the ski hunter asks the cousins to chase the thieving gulls off the fish racks of
+    /// the quays, then Pera the good giant wants the dimmed bears off the ice of the canals and pays with the Roupa Térmica.
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -124,6 +126,8 @@ namespace Rapadura.Gameplay.World.Cities
         public const string ValeVineFoxes = "quest_city_vale_vine_foxes";
         public const string FarnkeshVultures = "quest_city_farnkesh_vultures_on_the_bells";
         public const string FarnkeshIllWind = "quest_city_farnkesh_ill_wind_on_the_bridges";
+        public const string PortoGulls = "quest_city_porto_gulls_on_the_racks";
+        public const string PortoBears = "quest_city_porto_bears_on_the_canals";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -279,6 +283,15 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.Farnkesh, "tadi", new RegionQuestSpec(FarnkeshIllWind, BiomeType.Forest, FarnkeshVultures, 2900,
                 new[] { new RegionObjectiveSpec("clear_the_mist", QuestObjectiveType.KillEnemyType, "enemy_mountain_ill_wind_mist", 6) },
                 new[] { new RegionRewardSpec("item_capa_tempestade", 1), new RegionRewardSpec("item_gold", 210) })),
+
+            // -- Porto da Lua Branca: Yirkap, then Pera. The thieving gull stands in for the Gaivota-do-Gelo of the ficha
+            // (Docs/Mapas100.md 59) and the brown bear, dimmed, for the Urso-Polar Apagado of the Canais de Gelo (60). --
+            new CityQuestSpec(CityCatalog.PortoDaLuaBranca, "yirkap", new RegionQuestSpec(PortoGulls, BiomeType.Forest, null, 3000,
+                new[] { new RegionObjectiveSpec("chase_the_gulls", QuestObjectiveType.KillEnemyType, "enemy_forest_thief_gull", 8) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 220) })),
+            new CityQuestSpec(CityCatalog.PortoDaLuaBranca, "pera", new RegionQuestSpec(PortoBears, BiomeType.Forest, PortoGulls, 3100,
+                new[] { new RegionObjectiveSpec("chase_the_bears", QuestObjectiveType.KillEnemyType, "enemy_mountain_brown_bear", 6) },
+                new[] { new RegionRewardSpec("item_roupa_termica", 1), new RegionRewardSpec("item_gold", 220) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();

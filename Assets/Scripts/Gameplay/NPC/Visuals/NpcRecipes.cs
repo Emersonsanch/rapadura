@@ -1351,6 +1351,73 @@ namespace Rapadura.Gameplay.NPC.Visuals
             },
 
             // ------------------------------------------------------------------
+            // Porto da Lua Branca (the Mar Gelado, Docs/Mapas100.md map 59): people of the ice harbour in reindeer hide, seal grey
+            // and polar snow, with the lilac and silver of the painted moons and the polar night. Names of the ficha (Yirkap and
+            // Pera, heroes of the Komi tales) and of the Manichaean letters of Kellis (Pamour, Makarios). The peoples of the Arctic
+            // are living: no figure of their faiths, only forms of clothing for the cold.
+            // ------------------------------------------------------------------
+
+            // Yirkap, the ski hunter (the city's missions): slim and upright, a black ponytail and a short beard under a fur hood, a
+            // reindeer-hide parka with snow-white hems and seal-grey trousers, a belt and a satchel, the ski pole in the right hand
+            // and the bow in the left. Scans the ice for tracks.
+            new NpcRecipe
+            {
+                Id = "yirkap", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 1.03f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Bright, Hair = NpcHair.Ponytail, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.Short,
+                Headwear = NpcHeadwear.Hood, HeadColor = NpcSwatch.ReindeerHide, HeadTrim = NpcSwatch.PolarSnow,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.ReindeerHide, Trim = NpcSwatch.PolarSnow, Sleeves = NpcSwatch.ReindeerHide, Trousers = NpcSwatch.SealGrey, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Belt | NpcLayer.Satchel, LayerColor = NpcSwatch.SealGrey, LayerTrim = NpcSwatch.MoonSilver,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.CaravanStaff, NpcProp.Bow },
+                Gesture = NpcGesture.Scan,
+                Story = "Yirkap, o caçador de esqui dos contos komi, que corria mais que as renas; aqui, o caçador que guarda o porto e dá as missões da cidade",
+            },
+
+            // Pamour, the furrier and boat-hirer of the quays (the city's shop: the gear of the gates 59–64): stout and at ease, short
+            // brown hair and a full beard under a snow-white fur cap, a seal-grey chapan with snow hems and reindeer sleeves, a plank
+            // apron and belt, a bolt of white fur and a purse. Counts the pelts, twice.
+            new NpcRecipe
+            {
+                Id = "pamour", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Stout, Height = 0.98f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinLight, Face = NpcFace.Jolly, Hair = NpcHair.Short, HairColor = NpcSwatch.HairBrown, Beard = NpcBeard.Full,
+                Headwear = NpcHeadwear.FeltCap, HeadColor = NpcSwatch.PolarSnow, HeadTrim = NpcSwatch.MoonLilac,
+                Garment = NpcGarment.Chapan, Main = NpcSwatch.SealGrey, Trim = NpcSwatch.PolarSnow, Sleeves = NpcSwatch.ReindeerHide, Trousers = NpcSwatch.MoonPlank, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Apron | NpcLayer.Belt, LayerColor = NpcSwatch.MoonPlank, LayerTrim = NpcSwatch.MoonSilver,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.Carry, Props = new[] { NpcProp.FabricBolt, NpcProp.CoinPurse },
+                Gesture = NpcGesture.Count,
+                Story = "Pamour, da família maniqueia das cartas de Kellis; aqui, o peleiro e alugador de barcos do cais que vende o que os mapas do Mar Gelado pedem",
+            },
+
+            // Pera, the good giant (the second mission): very tall and broad, long auburn hair and a full beard under a silver
+            // headband, a reindeer-hide tunic with seal hems and snow sleeves, a seal-grey belt and a lilac shawl, an ice pick on the
+            // shoulder and a log for the boats. Carries the weight easily.
+            new NpcRecipe
+            {
+                Id = "pera", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 1.12f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinFair, Face = NpcFace.Kind, Hair = NpcHair.Long, HairColor = NpcSwatch.HairAuburn, Beard = NpcBeard.Full,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.MoonSilver, HeadTrim = NpcSwatch.MoonLilac,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.ReindeerHide, Trim = NpcSwatch.SealGrey, Sleeves = NpcSwatch.PolarSnow, Trousers = NpcSwatch.SealGrey, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Belt | NpcLayer.Shawl, LayerColor = NpcSwatch.MoonLilac, LayerTrim = NpcSwatch.MoonSilver,
+                LeftArm = NpcArmPose.HipRest, RightArm = NpcArmPose.Carry, Props = new[] { NpcProp.Pick, NpcProp.Log },
+                Gesture = NpcGesture.Carry,
+                Story = "Pera, o gigante bom (bogatir) dos contos komi; aqui, o gigante que quebra o gelo dos canais para os barcos e dá a 2ª missão",
+            },
+
+            // Makarios, the keeper of the moon lanterns of the Cais da Lua: old and stooped, short white hair and a long beard under
+            // a lilac hood, a polar-night robe with silver hems and a lilac shawl, the lantern pole in the right hand and a letter for
+            // his sons in the left. Raises the lantern to the boats coming in.
+            new NpcRecipe
+            {
+                Id = "makarios", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 0.97f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinOlive, Face = NpcFace.Calm, Hair = NpcHair.Short, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Long,
+                Headwear = NpcHeadwear.Hood, HeadColor = NpcSwatch.MoonLilac, HeadTrim = NpcSwatch.MoonSilver,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.PolarNight, Trim = NpcSwatch.MoonSilver, Sleeves = NpcSwatch.PolarNight, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Shawl, LayerColor = NpcSwatch.MoonLilac, LayerTrim = NpcSwatch.MoonSilver,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.LanternPole, NpcProp.Letter },
+                Gesture = NpcGesture.LanternRaise,
+                Story = "Makarios, o pai que escreve aos filhos nas cartas maniqueias de Kellis; aqui, o guardião das lanternas de lua do Cais da Lua, que espera a Barca da Lua",
+            },
+
+            // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
 

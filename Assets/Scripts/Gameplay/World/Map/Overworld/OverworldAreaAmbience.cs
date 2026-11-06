@@ -233,6 +233,27 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { OverworldTerrain.WindScree, new AreaClimate(Dust, true) },
             { OverworldTerrain.CloudIsles, new AreaClimate(Clear, true) },
             { OverworldTerrain.HumaNest, new AreaClimate(Clear, true) },
+
+            // Região 11 — Mar Gelado: the clear polar sky over the harbour, the bay and the lighthouse isle (the aurora at night);
+            // sea smoke on the canals and over Omöl's lakes; snow on the shore, the tundra, the pastures, the cracked ice and the
+            // blizzard on the pack ice and the aurora sea (map 63); the fjords and the galleries let the biome roll it; Old Kul's
+            // lake and its black ice under a still, clear cold.
+            { OverworldTerrain.SnowShore, new AreaClimate(Snow, false) },
+            { OverworldTerrain.MoonHarbor, new AreaClimate(Clear, false) },
+            { OverworldTerrain.FrozenBay, new AreaClimate(Clear, false) },
+            { OverworldTerrain.IceCanals, new AreaClimate(Mist, false) },
+            { OverworldTerrain.CrackedIce, new AreaClimate(Snow, true) },
+            { OverworldTerrain.Tundra, new AreaClimate(Snow, false) },
+            { OverworldTerrain.TundraLakes, new AreaClimate(Mist, false) },
+            { OverworldTerrain.ReindeerPasture, new AreaClimate(Snow, false) },
+            { OverworldTerrain.Fjord, new AreaClimate(null, true) },
+            { OverworldTerrain.MammothGalleries, new AreaClimate(null, true) },
+            { OverworldTerrain.FrozenEarth, new AreaClimate(Snow, true) },
+            { OverworldTerrain.PackIce, new AreaClimate(Snow, true) },
+            { OverworldTerrain.AuroraSea, new AreaClimate(Snow, true) },
+            { OverworldTerrain.LighthouseIsle, new AreaClimate(Clear, true) },
+            { OverworldTerrain.FrozenLake, new AreaClimate(Clear, true) },
+            { OverworldTerrain.BlackIce, new AreaClimate(Clear, true) },
         };
 
         /// <summary>True when <paramref name="terrain"/> has its own line (tests: every terrain must).</summary>

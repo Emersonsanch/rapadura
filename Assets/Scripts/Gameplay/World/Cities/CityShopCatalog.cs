@@ -310,6 +310,14 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string CordasSisin = "shop_cordas_sisin";
 
+        /// <summary>
+        /// Peles e Barcos do Pamour (Porto da Lua Branca, Docs/Mapas100.md map 59): Pamour, the furrier and boat-hirer of the quays,
+        /// sells the gear of the gates of the Mar Gelado (Docs/MetodologiaMapasERacas.md §2.1), maps 59–64 that all return to the
+        /// Porto: thermal furs and ginger tea for the cold, passages and reed boats for the canals and the open sea, oil and runic
+        /// lamps for the Galerias dos Mamutes, crampons for the ice, the storm cloak for the polar wind. The counter turns daily.
+        /// </summary>
+        public const string PelesPamour = "shop_peles_pamour";
+
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
@@ -749,6 +757,33 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_garrafa_ar_sereno", 30, 4, rotating: true),
                 new CityShopEntry("item_runa_vento", 20, 2, rotating: true),
                 new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+            })),
+
+            // ---- Porto da Lua Branca: Pamour's furs and boats, the gear of every gate of the Mar Gelado (59–64); daily ----
+            new CityShopSpec(PelesPamour, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(PelesPamour, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                // Map gates (MapRequirementRules) of the maps that return to the Porto, fixed from the first day: the cold (thermal
+                // furs, ginger tea, wool), the canals and the open sea (passages, reed boats), the galleries under the ice (oil and
+                // runic lamps), the ice walls (crampons) and the polar wind (storm cloak).
+                new CityShopEntry("item_roupa_termica", 900, 2),
+                new CityShopEntry("item_cha_gengibre", 70, 4),
+                new CityShopEntry("item_manta_la", 45, 3),
+                new CityShopEntry("item_passagem_dhow", 300, 3),
+                new CityShopEntry("item_barco_junco", 600, 2),
+                new CityShopEntry("item_lamparina_oleo", 30, 4),
+                new CityShopEntry("item_lamparina_runica", 160, 2),
+                new CityShopEntry("item_grampos_escalada", 950, 1),
+                new CityShopEntry("item_capa_tempestade", 1100, 1),
+                // The rotation: what the boats bring in from the ice.
+                new CityShopEntry("item_cooked_meat", 6, 10, rotating: true),
+                new CityShopEntry("item_corda_escalada", 40, 3, rotating: true),
+                new CityShopEntry("item_garrafa_ar_sereno", 30, 4, rotating: true),
+                new CityShopEntry("item_runa_clareza", 15, 2, rotating: true),
+                new CityShopEntry("item_runa_vento", 20, 2, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
             })),

@@ -17,11 +17,12 @@ namespace Rapadura.Tests
     /// dos Nartes as ONE map: the four first tile a 4800 × 4800 m square, the Costa sits east of the Zarafshan and the Delta east of
     /// the Areias (south of the Costa), the Teto do Mundo north of the Serra de Kaggen, the Planície de Mingcheng north of the
     /// Zarafshan and the Estepe dos Nartes north of the Costa (a whole 3 × 3 square), and the Picos de Farnkesh north of the steppe,
-    /// so the world's bounds grow to 7200 × 9600 m with two walled holes in that new row (north of the Teto and of Mingcheng).
+    /// so the world's bounds grow to 7200 × 9600 m, and the Mar Gelado north of Mingcheng, west of the peaks, so that new row has
+    /// one walled hole left (north of the Teto).
     /// Every walkable point belongs to one region, the chunk grids line up, the gates between the regions became open passes
     /// (flat, joined by trails), the relief has no hole nor step on the borders, the Zarafshan is the same as on its own away
     /// from them, and the hero can walk on trails from the Vila to Qocho, Litema, the Lamparinas, Taa Pwani, Jhilpur, Sangkent,
-    /// Mingcheng, the Acampamento de Soslan, the Vale dos Sátiros and Farnkesh without a gate;
+    /// Mingcheng, the Acampamento de Soslan, the Vale dos Sátiros, Farnkesh and the Porto da Lua Branca without a gate;
     /// the island rings, the Ossuário and the docks stay.
     /// </summary>
     public class OverworldWorldTests
@@ -34,14 +35,16 @@ namespace Rapadura.Tests
         {
             OverworldLayouts.ZarafshanId, OverworldLayouts.AreiasId, OverworldLayouts.KaggenId, OverworldLayouts.LimiarId, OverworldLayouts.CostaId,
             OverworldLayouts.DeltaId, OverworldLayouts.TetoId, OverworldLayouts.MingchengId, OverworldLayouts.NartesId, OverworldLayouts.FarnkeshRegionId,
+            OverworldLayouts.MarGeladoRegionId,
         };
 
         /// <summary>
         /// The cells of the bounds no region covers: the 3 × 3 square is whole (the Estepe dos Nartes filled its last corner), and of the
-        /// fourth row the Picos de Farnkesh start (north of the steppe) only one cell is a region: north of the Teto do Mundo and of
-        /// Mingcheng, two walled holes (the peaks' west side falls into the clouds).
+        /// fourth row the Picos de Farnkesh (north of the steppe) and the Mar Gelado (north of Mingcheng, the cell next to the peaks:
+        /// its trail ends there — Mingcheng's north road through the wall and the peaks' west woods — were already waiting) are
+        /// regions: only the cell north of the Teto do Mundo stays a walled hole.
         /// </summary>
-        private static readonly Rect[] Holes = { new Rect(-3400f, 3800f, 2400f, 2400f), new Rect(-1000f, 3800f, 2400f, 2400f) };
+        private static readonly Rect[] Holes = { new Rect(-3400f, 3800f, 2400f, 2400f) };
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -55,14 +58,14 @@ namespace Rapadura.Tests
         // ------------------------------------------------------------------
 
         [Test]
-        public void World_IsValid_AndTilesTheTenRegions_EachPointInOneRegion()
+        public void World_IsValid_AndTilesTheElevenRegions_EachPointInOneRegion()
         {
             OverworldLayout w = World;
             CollectionAssert.IsEmpty(OverworldRules.Validate(w), string.Join("\n", OverworldRules.Validate(w)));
             Assert.IsTrue(w.IsStitched);
             CollectionAssert.AreEquivalent(RegionIds, w.Parts.Select(p => p.Id));
-            Assert.AreEqual(new Rect(-3400f, -3400f, 7200f, 9600f), w.Bounds, "3 × 3 regions of 2400 m and the Picos de Farnkesh on a fourth row");
-            CollectionAssert.AreEquivalent(Holes, w.Holes, "north of the Teto and of Mingcheng: two walled holes");
+            Assert.AreEqual(new Rect(-3400f, -3400f, 7200f, 9600f), w.Bounds, "3 × 3 regions of 2400 m and the Picos de Farnkesh and the Mar Gelado on a fourth row");
+            CollectionAssert.AreEquivalent(Holes, w.Holes, "north of the Teto: one walled hole left");
             Assert.AreEqual(OverworldLayouts.CostaWorldOffset, w.Parts.Find(p => p.Id == OverworldLayouts.CostaId).Offset);
             Assert.AreEqual(new Rect(1400f, -1000f, 2400f, 2400f), w.Parts.Find(p => p.Id == OverworldLayouts.CostaId).Bounds, "the Costa east of the Zarafshan");
             Assert.AreEqual(OverworldLayouts.DeltaWorldOffset, w.Parts.Find(p => p.Id == OverworldLayouts.DeltaId).Offset);
@@ -82,6 +85,10 @@ namespace Rapadura.Tests
             Assert.AreEqual(new Rect(1400f, 3800f, 2400f, 2400f), w.Parts.Find(p => p.Id == OverworldLayouts.FarnkeshRegionId).Bounds,
                 "the Picos de Farnkesh north of the Estepe dos Nartes");
             Assert.AreEqual(new Vector2(2600f, 4400f), w.Parts.Find(p => p.Id == OverworldLayouts.FarnkeshRegionId).Vila.Offset, "the Vale dos Sátiros in the world");
+            Assert.AreEqual(OverworldLayouts.MarGeladoWorldOffset, w.Parts.Find(p => p.Id == OverworldLayouts.MarGeladoRegionId).Offset);
+            Assert.AreEqual(new Rect(-1000f, 3800f, 2400f, 2400f), w.Parts.Find(p => p.Id == OverworldLayouts.MarGeladoRegionId).Bounds,
+                "the Mar Gelado north of Mingcheng, west of the Picos de Farnkesh (the hole next to the peaks)");
+            Assert.AreEqual(new Vector2(200f, 4400f), w.Parts.Find(p => p.Id == OverworldLayouts.MarGeladoRegionId).Vila.Offset, "the Porto da Lua Branca in the world");
             Assert.AreEqual(new Vector2(2600f, 5480f), w.SettlementOf(OverworldLayouts.FarnkeshMapId).Offset, "Farnkesh in the world");
             Assert.AreEqual(Vector2.zero, w.Parts.Find(p => p.Id == OverworldLayouts.ZarafshanId).Offset, "the Vila stays at (0, 0)");
             Assert.AreEqual(Vector2.zero, w.Vila.Offset);
@@ -132,7 +139,7 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void World_IsWhatMapModeLoads_ForEveryMapOfTheTenRegions()
+        public void World_IsWhatMapModeLoads_ForEveryMapOfTheElevenRegions()
         {
             OverworldLayout w = World;
             foreach (string id in RegionIds)
@@ -164,6 +171,8 @@ namespace Rapadura.Tests
             Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.AmiraniMapId), "region 9 is part of the world");
             Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.ValeSatirosMapId), "region 10 is part of the world");
             Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.NinhoHumaMapId), "region 10 is part of the world");
+            Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.PortoLuaBrancaMapId), "region 11 is part of the world");
+            Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.FundoVelhoKulMapId), "region 11 is part of the world");
             Assert.IsNull(OverworldLayouts.WorldOf("map_043_canal_lanternas"), "not a catalog map");
         }
 
@@ -172,7 +181,8 @@ namespace Rapadura.Tests
         {
             OverworldLayout w = World;
             Assert.IsFalse(w.World.Exits.Exists(e => e.Kind == MapExitKind.Map && w.ContainsMap(e.TargetMapId)), "no gate inside the world");
-            Assert.AreEqual(10, w.World.Exits.Count(e => e.Kind == MapExitKind.WorldMap && e.Id.StartsWith("exit_island")), "one stone ring per region");
+            Assert.AreEqual(11, w.World.Exits.Count(e => e.Kind == MapExitKind.WorldMap && e.Id.StartsWith("exit_island")), "one stone ring per region");
+            Assert.IsNotNull(w.World.Exits.Find(e => e.Id == "exit_island_mar_gelado"), "the stone ring by the Porto da Lua Branca");
             Assert.IsNotNull(w.World.Exits.Find(e => e.Id == "exit_island_farnkesh"), "the stone ring by the Vale dos Sátiros");
             Assert.IsNotNull(w.World.Exits.Find(e => e.Id == "exit_island_nartes"), "the stone ring by the Acampamento de Soslan");
             Assert.IsNotNull(w.World.Exits.Find(e => e.Id == "exit_island_teto"), "the stone ring by Sangkent");
@@ -190,8 +200,10 @@ namespace Rapadura.Tests
             // below the wind wheels, led to the nearest trail of the Teto), Costa–Nartes (three times: Aratta's savanna, Meroë's
             // court and Husuni's cliffs, each led from the steppe's gate to the nearest trail of the Costa) and Mingcheng–Nartes
             // (three times: the loess track, the Torres Brancas' mirror hills and the nian's peaks, led to Mingcheng's trails), and
-            // Nartes–Farnkesh (twice: by the meltwater lake and by Ohya's crest, each led from the peaks' gate to the steppe's nearest trail).
-            Assert.GreaterOrEqual(w.Passes.Count, 24);
+            // Nartes–Farnkesh (twice: by the meltwater lake and by Ohya's crest, each led from the peaks' gate to the steppe's nearest trail),
+            // Mingcheng–Mar Gelado (once: the pass of the wall, led from the frozen sea's gate to the end of Mingcheng's north road) and
+            // Farnkesh–Mar Gelado (twice: the foot woods and the pinnacle wood, led from the frozen sea's gates to the peaks' west trails).
+            Assert.GreaterOrEqual(w.Passes.Count, 27);
             OverworldRelief relief = OverworldRelief.For(w);
             foreach (Vector2 pass in w.Passes)
             {
@@ -212,6 +224,8 @@ namespace Rapadura.Tests
                 (new Vector2(3500f, 1500f), new Vector2(3500f, 1300f)), (new Vector2(1500f, 1850f), new Vector2(1300f, 1850f)),
                 (new Vector2(1500f, 2700f), new Vector2(1300f, 2700f)), (new Vector2(1500f, 3420f), new Vector2(1300f, 3420f)),
                 (new Vector2(2300f, 3900f), new Vector2(2300f, 3700f)), (new Vector2(3560f, 3900f), new Vector2(3560f, 3700f)),
+                (new Vector2(240f, 3900f), new Vector2(240f, 3700f)), (new Vector2(1300f, 3980f), new Vector2(1500f, 3980f)),
+                (new Vector2(1300f, 4960f), new Vector2(1500f, 4960f)),
             })
             {
                 Assert.AreNotEqual(w.PartAt(a), w.PartAt(b), $"{a} and {b} are in two regions");
@@ -232,11 +246,12 @@ namespace Rapadura.Tests
             float worst = 0f;
             // The inner borders: x = -1000 and z = -1000 (the whole width of the world, Costa | Delta included), x = 1400
             // (Zarafshan | Costa, Areias | Delta, Mingcheng | Nartes), z = 1400 (Kaggen | Teto, Zarafshan | Mingcheng, Costa | Nartes) and,
-            // on the fourth row, z = 3800 under the Picos de Farnkesh (Nartes | Farnkesh; west of it the holes' walls, not a border).
+            // on the fourth row, z = 3800 under the Picos de Farnkesh and the Mar Gelado (Nartes | Farnkesh, Mingcheng | Mar Gelado; west of
+            // them the hole's wall, not a border) and x = 1400 between them (Mar Gelado | Farnkesh).
             for (float t = w.Bounds.xMin + 0.5f; t < w.Bounds.xMax; t += 1.5f)
             {
                 var lines = new List<(Vector2, Vector2)> { (new Vector2(t, -1000f), Vector2.up), (new Vector2(t, 1400f), Vector2.up) };
-                if (t > 1400f)
+                if (t > -1000f)
                 {
                     lines.Add((new Vector2(t, 3800f), Vector2.up));
                 }
@@ -244,7 +259,12 @@ namespace Rapadura.Tests
                 if (t < 3800f)
                 {
                     lines.Add((new Vector2(-1000f, t), Vector2.right));
-                    lines.Add((new Vector2(1400f, t), Vector2.right));
+                }
+
+                lines.Add((new Vector2(1400f, t), Vector2.right));
+                if (t + 4800f < w.Bounds.yMax)
+                {
+                    lines.Add((new Vector2(1400f, t + 4800f), Vector2.right));
                 }
 
                 foreach ((Vector2 p, Vector2 n) in lines)
@@ -408,10 +428,10 @@ namespace Rapadura.Tests
             OverworldSettlement vila = w.Vila;
             var report = new List<string>();
             // Qocho, Litema, the Lamparinas, Taa Pwani, Jhilpur, Sangkent, Mingcheng, the Acampamento de Soslan, the Vale dos Sátiros
-            // and, up the peaks, Farnkesh (the capital of Região 10, not its region's town).
+            // and, up the peaks, Farnkesh (the capital of Região 10, not its region's town), and the Porto da Lua Branca.
             var goals = new List<OverworldSettlement>();
             foreach (string regionId in new[] { OverworldLayouts.AreiasId, OverworldLayouts.KaggenId, OverworldLayouts.LimiarId, OverworldLayouts.CostaId, OverworldLayouts.DeltaId, OverworldLayouts.TetoId, OverworldLayouts.MingchengId,
-                OverworldLayouts.NartesId, OverworldLayouts.FarnkeshRegionId })
+                OverworldLayouts.NartesId, OverworldLayouts.FarnkeshRegionId, OverworldLayouts.MarGeladoRegionId })
             {
                 goals.Add(w.Parts.Find(p => p.Id == regionId).Vila);
             }
@@ -462,7 +482,7 @@ namespace Rapadura.Tests
             OverworldLayout w = World;
             Vector2Int count = OverworldRules.ChunkCount(w);
             Assert.AreEqual(150, count.x);
-            Assert.AreEqual(200, count.y, "the fourth row of the Picos de Farnkesh");
+            Assert.AreEqual(200, count.y, "the fourth row of the Picos de Farnkesh and the Mar Gelado");
             var wanted = new List<Vector2Int>();
             foreach (Vector2 pass in w.Passes)
             {

@@ -78,6 +78,10 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // Vale dos Sátiros (sátiros, Docs/Mapas100.md §3.3 and map 53): the satyrs' warm #D9A47E and ruddy #B9785A skins, the goat
         // fur brown #6E4E34, tawny #A87E52 and black #3B302A, grape #5E3A6E, the Pactolus gold #E3B341, glade green #9CCB6A
         SkinSatyr, SkinSatyrRuddy, FurBrown, FurTawny, FurBlack, Grape, PactolusGold, GladeGreen,
+        // Porto da Lua Branca (Mar Gelado, Docs/Mapas100.md map 59): sea ice #D8E9F2, polar snow #F7FAFC, the plank of the long
+        // houses #5B4A3E, the lilac of the painted moons #B7A6E0, silver #C8D2DC, the polar night #1E2A4A, seal grey #7E7A72 and
+        // reindeer hide #9A7A56
+        SeaIce, PolarSnow, MoonPlank, MoonLilac, MoonSilver, PolarNight, SealGrey, ReindeerHide,
     }
 
     /// <summary>
@@ -89,7 +93,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 24;
+        public const int Rows = 25;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -166,6 +170,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Vale dos Sátiros  satyr #D9A47E, satyr ruddy #B9785A, fur brown #6E4E34, fur tawny #A87E52, fur black #3B302A, grape #5E3A6E, Pactolus gold #E3B341, glade green #9CCB6A
             new Color(0.85f, 0.64f, 0.49f), new Color(0.73f, 0.47f, 0.35f), new Color(0.43f, 0.31f, 0.2f), new Color(0.66f, 0.49f, 0.32f),
             new Color(0.23f, 0.19f, 0.16f), new Color(0.37f, 0.23f, 0.43f), new Color(0.89f, 0.7f, 0.25f), new Color(0.61f, 0.8f, 0.42f),
+            // Porto da Lua Branca  sea ice #D8E9F2, polar snow #F7FAFC, plank #5B4A3E, moon lilac #B7A6E0, silver #C8D2DC, polar night #1E2A4A, seal grey #7E7A72, reindeer hide #9A7A56
+            new Color(0.85f, 0.91f, 0.95f), new Color(0.97f, 0.98f, 0.99f), new Color(0.36f, 0.29f, 0.24f), new Color(0.72f, 0.65f, 0.88f),
+            new Color(0.78f, 0.82f, 0.86f), new Color(0.12f, 0.16f, 0.29f), new Color(0.49f, 0.48f, 0.45f), new Color(0.6f, 0.48f, 0.34f),
         };
 
         public static int Count => Colors.Length;

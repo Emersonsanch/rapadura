@@ -41,7 +41,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             kind == CityPropKind.TerraceWall || kind == CityPropKind.IrrigationChannel ||
             kind == CityPropKind.RingWall || kind == CityPropKind.CanalBridge || kind == CityPropKind.SpireTerrace || kind == CityPropKind.LeafBridge ||
             kind == CityPropKind.RopeCorral || kind == CityPropKind.EarthRing || kind == CityPropKind.MeltStream ||
-            kind == CityPropKind.CloudGap || kind == CityPropKind.GoldenRiver || kind == CityPropKind.VineRow;
+            kind == CityPropKind.CloudGap || kind == CityPropKind.GoldenRiver || kind == CityPropKind.VineRow || kind == CityPropKind.IceCanal;
 
         /// <summary>Unit direction of a segment prop and the side its mass stands on (left of the direction: east-going → north).</summary>
         public static Vector2 SegmentBack(Vector2 direction) => new Vector2(-direction.y, direction.x);
@@ -143,6 +143,12 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.VineRow: VineRow(b, d, s); return true;
                 case CityPropKind.StoneStage: StoneStage(b, s, prop.Variant); return true;
                 case CityPropKind.GroveOak: GroveOak(b, s, prop.Variant); return true;
+                case CityPropKind.MoonQuay: MoonQuay(b, s); return true;
+                case CityPropKind.IceCanal: IceCanal(b, d); return true;
+                case CityPropKind.SnowDomeHut: SnowDomeHut(b, s, prop.Variant); return true;
+                case CityPropKind.CrescentBoat: CrescentBoat(b, s, prop.Variant); return true;
+                case CityPropKind.FishRack: FishRack(b, s); return true;
+                case CityPropKind.IceBlock: IceBlock(b, s, prop.Variant); return true;
                 default: return false;
             }
         }
@@ -926,6 +932,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
                 case TownShopDressing.DoubleFlute:
                     GladeDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.FurAndBoat:
+                    IceCanalDressing(b, spec, x, y, z, zFacade);
                     break;
 
                 case TownShopDressing.AirBottles:

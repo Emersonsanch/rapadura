@@ -188,6 +188,13 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string Farnkesh = "farnkesh";
 
+        /// <summary>
+        /// Porto da Lua Branca, the capital of the Mar Gelado (map 59, return city of maps 59–64, Docs/Mapas100.md §2 and região
+        /// 11; the Ar Sereno, Lavine's element). Same id as <c>MapCatalog.PortoDaLuaBranca</c> and
+        /// <c>CityTownRecipes.PortoDaLuaBrancaCityId</c>.
+        /// </summary>
+        public const string PortoDaLuaBranca = "porto_da_lua_branca";
+
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
             new CitySpec(VilaZefa, BiomeType.Forest,
@@ -505,6 +512,22 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("ardawan"),
                 },
                 new List<string> { CityShopCatalog.CordasSisin }),
+
+            // Porto da Lua Branca (the Mar Gelado, região 11; the Komi tales of the ficha and the Manichaean letters of Kellis):
+            // Yirkap, the ski hunter of the Komi tales, here the hunter who keeps the harbour safe (missions), Pamour, of the
+            // Manichaean family of the Kellis letters, here the furrier and boat-hirer of the quays (the city's shop: the gear of
+            // the gates of maps 59–64), Pera, the good giant of the Komi tales, who breaks the ice for the boats (second mission),
+            // and Makarios, the father who writes letters in the Kellis papyri, here the keeper of the moon lanterns of the Cais
+            // da Lua. Region: the borrowed Forest (as Farnkesh).
+            new CitySpec(PortoDaLuaBranca, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("yirkap"),
+                    new CityResidentSpec("pamour", CityShopCatalog.PelesPamour),
+                    new CityResidentSpec("pera"),
+                    new CityResidentSpec("makarios"),
+                },
+                new List<string> { CityShopCatalog.PelesPamour }),
         };
 
         /// <summary>Ammo, the peddler: not a resident of one city, he is wherever his mule is today (<see cref="ShopRotation.MascateRegion"/>).</summary>
