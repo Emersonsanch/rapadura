@@ -370,11 +370,15 @@ a cabra-azul baixam a cabeça para a carga; a raposa e o gato-de-pallas abrem a 
 harpia abrem o bico com as asas paradas; a abelha zune e passa o ferrão por baixo; a vela do morcego cresce antes da
 mordida; o ushabti ergue os dois braços com a enxada), Caderno em `FarnkeshBestiaryTexts`. O Pássaro-Flauta e a Águia da
 Tempestade são os [distância] das fichas: jogam pena dura como o gavião (`EnemyProjectileKind.Feather`, mesmo som; entram em
-`RangedEnemiesTests`). Testes: `FarnkeshBeastsTests`. Ainda não trocados no overworld de Farnkesh. Seguem com substitutos:
-Abutre do Pico (`enemy_desert_ember_vulture`), Grifo Selvagem (pode usar o `enemy_mountain_young_griffin`), Urso, Aranha,
-Marmota e Macaco do pé dos picos (já são bichos próprios de outras regiões), Pipa-Sombra / Sino Rachado / Raio Preso
-(`enemy_desert_broken_lantern`), Neblina do Vento Ruim / Eco Apagado / Ays / Redemoinho / Ventania
-(`enemy_mountain_ill_wind_mist`) e Pedra Voadora (`enemy_mountain_rolling_stone`).
+`RangedEnemiesTests`). Testes: `FarnkeshBeastsTests`. Já no overworld de Farnkesh no lugar dos substitutos, nos grupos que
+lideram e como acompanhantes (mesmas clareiras, níveis e variantes noturnas): no Vale o bode, a abelha, o pássaro-flauta e a
+raposa (os bodes dormem de noite, as raposas seguem nos grupos deles); nos picos a gralha (também as Gralhas das Ermidas, antes
+morcegos de gruta), o takin, a cabra-azul, o morcego-vela, o ushabti, o gato-de-pallas (também nos pináculos e na escarpa), a
+águia na Gruta Abrigo e como acompanhante na Garganta e na escarpa, a harpia nas Ilhas de Nuvem; o Grifo Selvagem do Ninho da
+Huma passou a ser o `enemy_mountain_young_griffin`. Testes: `FarnkeshBeastsPlacementTests`. Seguem com substitutos: Abutre do
+Pico (`enemy_desert_ember_vulture`), Urso, Aranha, Marmota e Macaco do pé dos picos (já são bichos próprios de outras
+regiões), Pipa-Sombra / Sino Rachado / Raio Preso (`enemy_desert_broken_lantern`), Neblina do Vento Ruim / Eco Apagado / Ays /
+Redemoinho / Ventania (`enemy_mountain_ill_wind_mist`) e Pedra Voadora (`enemy_mountain_rolling_stone`).
 
 | `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
 |---|---|---|---|---|

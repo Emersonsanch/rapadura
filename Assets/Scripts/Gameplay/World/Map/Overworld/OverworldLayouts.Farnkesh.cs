@@ -28,13 +28,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// </list>
     /// Water: the Pactolo rises in the cloud lake and runs south past the vale to the south edge, where the Rio dos Nartes
     /// begins on the other side; a wide ford of golden pebbles by the vale and a stone bridge under the cloud sea. Monsters:
-    /// existing beasts that fit the sheets (the wild yak for the smoke goats and the takins, the firefly swarm for Midas's golden
-    /// bees, the crested hawk for the flute birds and the storm eagles, the jackal for the vine foxes and the blue goats, the dark
-    /// crow for the alpine choughs and the smoke harpies, the ember vulture for the peak vultures and the wild griffins, the
-    /// vampire bat for the candle bats, the broken lantern for the shadow kites, the cracked bells and the trapped lightning, the
-    /// ill-wind mist for the ill-wind fogs, the echoes, the Ays and the gales, the stone golem for the rope ushabtis, the irbis
-    /// for the Pallas cats, the rolling stone for the flying stones, the brown bear and the spider in the foot woods, the giant
-    /// marmot in the meadows, the thief monkey in the vines) and the night species; no boss.
+    /// the region's own beasts (the smoke goat, Midas's golden bee, the flute bird and the vine fox in the vale; the alpine
+    /// chough, the takin, the blue sheep, the candle bat, the rope ushabti, the Pallas cat, the storm eagle and the smoke harpy
+    /// on the peaks), the Nartes' young griffin for the wild griffins, existing beasts that fit the other sheets (the ember
+    /// vulture for the peak vultures, the broken lantern for the shadow kites, the cracked bells and the trapped lightning, the
+    /// ill-wind mist for the ill-wind fogs, the echoes, the Ays and the gales, the rolling stone for the flying stones, the brown
+    /// bear and the spider in the foot woods, the giant marmot in the meadows, the thief monkey in the vines) and the night
+    /// species; no boss.
     /// </summary>
     public static partial class OverworldLayouts
     {
@@ -78,23 +78,27 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static class Fark
         {
-            public const string Goat = "enemy_mountain_wild_yak";
-            public const string Bee = NightVariantRules.FireflySwarmEnemyId;
-            public const string Hawk = "enemy_mountain_crested_hawk";
-            public const string Fox = "enemy_desert_jackal";
-            public const string Chough = "enemy_cave_dark_crow";
+            public const string SmokeGoat = "enemy_forest_smoke_goat";
+            public const string Bee = "enemy_forest_golden_bee";
+            public const string FluteBird = "enemy_forest_flute_bird";
+            public const string VineFox = "enemy_forest_vine_fox";
+            public const string Chough = "enemy_mountain_alpine_chough";
+            public const string Takin = "enemy_mountain_takin";
+            public const string BlueSheep = "enemy_mountain_blue_sheep";
             public const string Vulture = "enemy_desert_ember_vulture";
-            public const string CandleBat = NightVariantRules.VampireBatEnemyId;
+            public const string Griffin = "enemy_mountain_young_griffin";
+            public const string CandleBat = "enemy_mountain_candle_bat";
             public const string Kite = "enemy_desert_broken_lantern";
             public const string Mist = "enemy_mountain_ill_wind_mist";
-            public const string Ushabti = PeriodSpawnTable.MountainGolem;
-            public const string Cat = "enemy_mountain_irbis";
+            public const string Ushabti = "enemy_mountain_rope_ushabti";
+            public const string Cat = "enemy_mountain_pallas_cat";
+            public const string StormEagle = "enemy_mountain_storm_eagle";
+            public const string Harpy = "enemy_mountain_smoke_harpy";
             public const string Stone = "enemy_mountain_rolling_stone";
             public const string Bear = "enemy_mountain_brown_bear";
             public const string Spider = "enemy_forest_spider";
             public const string Marmot = "enemy_mountain_giant_marmot";
             public const string Monkey = "enemy_forest_thief_monkey";
-            public const string Bats = PeriodSpawnTable.CaveBats;
         }
 
         private static OverworldLayout FarnkeshRegion()
@@ -308,52 +312,52 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             NightSpecies moon = NightVariantRules.MaeDaLua;
             NightSpecies fireflies = NightVariantRules.VagaLume;
 
-            // Vale dos Sátiros, Clareiras do Baile, Vinhas, Vau and Rio Pactolo (53): the Bode de Fumaça [tanque] (the wild yak), the
-            // Abelha Dourada [enxame] (the firefly swarm), the Pássaro-Flauta Apagado [distância] (the hawk), the Raposa da Vinha [rápido]
-            // (the jackal); the thief monkey in the vines.
-            vale.Fauna.Add(Fauna("abelhas_douradas", "[enxame]", T(N(Fark.Bee, 3), N(Fark.Fox, 1)), T(V(Fark.Bee, 2), S(fireflies, 1)), 5));
-            vale.Fauna.Add(Fauna("raposas_da_vinha", "[rápido]", T(N(Fark.Fox, 3), N(Fark.Hawk, 1)), T(V(Fark.Fox, 2), S(fireflies, 1)), 4));
-            baile.Fauna.Add(Fauna("passaros_flauta", "[distância]", T(N(Fark.Hawk, 3), N(Fark.Bee, 1)), T(V(Fark.Hawk, 2), S(fireflies, 1)), 3));
-            baile.Fauna.Add(Fauna("bodes_de_fumaca", "[tanque]", T(N(Fark.Goat, 3), N(Fark.Fox, 1)), T(V(Fark.Fox, 2), S(fireflies, 1)), 3, null, 28f));
-            gordias.Fauna.Add(Fauna("raposas_de_gordias", "[rápido]", T(N(Fark.Fox, 3), N(Fark.Monkey, 1)), T(V(Fark.Fox, 2), S(moon, 1)), 4));
+            // Vale dos Sátiros, Clareiras do Baile, Vinhas, Vau and Rio Pactolo (53): the Bode de Fumaça [tanque], the
+            // Abelha Dourada [enxame], the Pássaro-Flauta Apagado [distância], the Raposa da Vinha [rápido];
+            // the thief monkey in the vines.
+            vale.Fauna.Add(Fauna("abelhas_douradas", "[enxame]", T(N(Fark.Bee, 3), N(Fark.VineFox, 1)), T(V(Fark.Bee, 2), S(fireflies, 1)), 5));
+            vale.Fauna.Add(Fauna("raposas_da_vinha", "[rápido]", T(N(Fark.VineFox, 3), N(Fark.FluteBird, 1)), T(V(Fark.VineFox, 2), S(fireflies, 1)), 4));
+            baile.Fauna.Add(Fauna("passaros_flauta", "[distância]", T(N(Fark.FluteBird, 3), N(Fark.Bee, 1)), T(V(Fark.FluteBird, 2), S(fireflies, 1)), 3));
+            baile.Fauna.Add(Fauna("bodes_de_fumaca", "[tanque]", T(N(Fark.SmokeGoat, 3), N(Fark.VineFox, 1)), T(V(Fark.VineFox, 2), S(fireflies, 1)), 3, null, 28f));
+            gordias.Fauna.Add(Fauna("raposas_de_gordias", "[rápido]", T(N(Fark.VineFox, 3), N(Fark.Monkey, 1)), T(V(Fark.VineFox, 2), S(moon, 1)), 4));
             gordias.Fauna.Add(Fauna("macacos_das_vinhas", "[rápido]", T(N(Fark.Monkey, 3), N(Fark.Bee, 1)), T(V(Fark.Monkey, 2), S(fireflies, 1)), 4));
             sol.Fauna.Add(Fauna("abelhas_do_sol", "[enxame]", T(N(Fark.Bee, 3), N(Fark.Monkey, 1)), T(V(Fark.Bee, 2), S(fireflies, 1)), 5));
-            sol.Fauna.Add(Fauna("bodes_das_vinhas", "[tanque]", T(N(Fark.Goat, 3), N(Fark.Bee, 1)), T(V(Fark.Fox, 2), S(owl, 1)), 3, null, 28f));
-            vau.Fauna.Add(Fauna("raposas_do_vau", "[rápido]", T(N(Fark.Fox, 3), N(Fark.Hawk, 1)), T(V(Fark.Fox, 2), S(moon, 1)), 4));
-            vau.Fauna.Add(Fauna("passaros_do_vau", "[distância]", T(N(Fark.Hawk, 3), N(Fark.Fox, 1)), T(V(Fark.Hawk, 2), S(moon, 1)), 3));
-            pactolo.Fauna.Add(Fauna("abelhas_do_pactolo", "[enxame]", T(N(Fark.Bee, 3), N(Fark.Hawk, 1)), T(V(Fark.Bee, 2), S(moon, 1)), 5));
-            pactolo.Fauna.Add(Fauna("bodes_do_pactolo", "[tanque]", T(N(Fark.Goat, 3), N(Fark.Fox, 1)), T(V(Fark.Fox, 2), S(moon, 1)), 3, null, 28f));
+            sol.Fauna.Add(Fauna("bodes_das_vinhas", "[tanque]", T(N(Fark.SmokeGoat, 3), N(Fark.Bee, 1)), T(V(Fark.VineFox, 2), S(owl, 1)), 3, null, 28f));
+            vau.Fauna.Add(Fauna("raposas_do_vau", "[rápido]", T(N(Fark.VineFox, 3), N(Fark.FluteBird, 1)), T(V(Fark.VineFox, 2), S(moon, 1)), 4));
+            vau.Fauna.Add(Fauna("passaros_do_vau", "[distância]", T(N(Fark.FluteBird, 3), N(Fark.VineFox, 1)), T(V(Fark.FluteBird, 2), S(moon, 1)), 3));
+            pactolo.Fauna.Add(Fauna("abelhas_do_pactolo", "[enxame]", T(N(Fark.Bee, 3), N(Fark.FluteBird, 1)), T(V(Fark.Bee, 2), S(moon, 1)), 5));
+            pactolo.Fauna.Add(Fauna("bodes_do_pactolo", "[tanque]", T(N(Fark.SmokeGoat, 3), N(Fark.VineFox, 1)), T(V(Fark.VineFox, 2), S(moon, 1)), 3, null, 28f));
 
             // The foot woods: the brown bear, spiders, the thief monkey; the werewolf at night.
             pe.Fauna.Add(Fauna("ursos_do_pe_dos_picos", "[tanque]", T(N(Fark.Bear, 3), N(Fark.Spider, 1)), T(V(Fark.Bear, 2), S(werewolf, 1)), 3, null, 30f));
             pe.Fauna.Add(Fauna("aranhas_do_pe_dos_picos", "[controle]", T(N(Fark.Spider, 3), N(Fark.Monkey, 1)), T(V(Fark.Spider, 2), S(moon, 1)), 4));
             castanheiras.Fauna.Add(Fauna("macacos_das_castanheiras", "[rápido]", T(N(Fark.Monkey, 3), N(Fark.Spider, 1)), T(V(Fark.Monkey, 2), S(owl, 1)), 4));
-            castanheiras.Fauna.Add(Fauna("ursos_das_castanheiras", "[tanque]", T(N(Fark.Bear, 3), N(Fark.Fox, 1)), T(V(Fark.Bear, 2), S(werewolf, 1)), 3, null, 30f));
+            castanheiras.Fauna.Add(Fauna("ursos_das_castanheiras", "[tanque]", T(N(Fark.Bear, 3), N(Fark.VineFox, 1)), T(V(Fark.Bear, 2), S(werewolf, 1)), 3, null, 30f));
 
-            // Prados do Vento, Prados dos Sinos, Subida, Escadaria, Mar de Nuvens (54, outside the city): the Gralha-Alpina [rápido]
-            // (the dark crow), the Takin Apagado [tanque] (the wild yak), the Abutre do Pico [distância] (the ember vulture), the
-            // Cabra-Azul [rápido] (the jackal); the giant marmot in the meadows.
+            // Prados do Vento, Prados dos Sinos, Subida, Escadaria, Mar de Nuvens (54, outside the city): the Gralha-Alpina [rápido],
+            // the Takin Apagado [tanque], the Abutre do Pico [distância] (the ember vulture), the
+            // Cabra-Azul [rápido]; the giant marmot in the meadows.
             pradosVento.Fauna.Add(Fauna("marmotas_do_vento", "[tanque]", T(N(Fark.Marmot, 3), N(Fark.Chough, 1)), T(V(Fark.Marmot, 2), S(owl, 1)), 3, null, 28f));
             pradosVento.Fauna.Add(Fauna("gralhas_do_vento", "[rápido]", T(N(Fark.Chough, 3), N(Fark.Marmot, 1)), T(V(Fark.Chough, 2), S(owl, 1)), 4));
-            sinos.Fauna.Add(Fauna("cabras_azuis", "[rápido]", T(N(Fark.Fox, 3), N(Fark.Chough, 1)), T(V(Fark.Fox, 2), S(owl, 1)), 4));
-            sinos.Fauna.Add(Fauna("takins_dos_sinos", "[tanque]", T(N(Fark.Goat, 3), N(Fark.Marmot, 1)), T(V(Fark.Goat, 2), S(owl, 1)), 3, null, 28f));
-            subida.Fauna.Add(Fauna("gralhas_alpinas", "[rápido]", T(N(Fark.Chough, 3), N(Fark.Fox, 1)), T(V(Fark.Chough, 2), S(owl, 1)), 4));
-            subida.Fauna.Add(Fauna("marmotas_da_subida", "[tanque]", T(N(Fark.Marmot, 3), N(Fark.Fox, 1)), T(V(Fark.Marmot, 2), S(owl, 1)), 3, null, 28f));
-            escadaria.Fauna.Add(Fauna("takins_apagados", "[tanque]", T(N(Fark.Goat, 3), N(Fark.Chough, 1)), T(V(Fark.Goat, 2), S(bats, 1)), 3, null, 28f));
-            escadaria.Fauna.Add(Fauna("abutres_do_pico", "[distância]", T(N(Fark.Vulture, 3), N(Fark.Goat, 1)), T(V(Fark.Vulture, 2), S(bats, 1)), 3));
+            sinos.Fauna.Add(Fauna("cabras_azuis", "[rápido]", T(N(Fark.BlueSheep, 3), N(Fark.Chough, 1)), T(V(Fark.BlueSheep, 2), S(owl, 1)), 4));
+            sinos.Fauna.Add(Fauna("takins_dos_sinos", "[tanque]", T(N(Fark.Takin, 3), N(Fark.Marmot, 1)), T(V(Fark.Takin, 2), S(owl, 1)), 3, null, 28f));
+            subida.Fauna.Add(Fauna("gralhas_alpinas", "[rápido]", T(N(Fark.Chough, 3), N(Fark.BlueSheep, 1)), T(V(Fark.Chough, 2), S(owl, 1)), 4));
+            subida.Fauna.Add(Fauna("marmotas_da_subida", "[tanque]", T(N(Fark.Marmot, 3), N(Fark.BlueSheep, 1)), T(V(Fark.Marmot, 2), S(owl, 1)), 3, null, 28f));
+            escadaria.Fauna.Add(Fauna("takins_apagados", "[tanque]", T(N(Fark.Takin, 3), N(Fark.Chough, 1)), T(V(Fark.Takin, 2), S(bats, 1)), 3, null, 28f));
+            escadaria.Fauna.Add(Fauna("abutres_do_pico", "[distância]", T(N(Fark.Vulture, 3), N(Fark.Takin, 1)), T(V(Fark.Vulture, 2), S(bats, 1)), 3));
             nuvens.Fauna.Add(Fauna("abutres_das_nuvens", "[distância]", T(N(Fark.Vulture, 3), N(Fark.Mist, 1)), T(V(Fark.Vulture, 2), S(moon, 1)), 3));
             nuvens.Fauna.Add(Fauna("neblinas_das_nuvens", "[controle]", T(N(Fark.Mist, 3), N(Fark.Chough, 1)), T(V(Fark.Mist, 2), S(moon, 1)), 4));
             farnkesh.Fauna.Add(Fauna("gralhas_de_farnkesh", "[rápido]", T(N(Fark.Chough, 3), N(Fark.Vulture, 1)), T(V(Fark.Chough, 2), S(bats, 1)), 4));
-            farnkesh.Fauna.Add(Fauna("cabras_dos_ninhos", "[rápido]", T(N(Fark.Fox, 3), N(Fark.Goat, 1)), T(V(Fark.Fox, 2), S(owl, 1)), 4));
+            farnkesh.Fauna.Add(Fauna("cabras_dos_ninhos", "[rápido]", T(N(Fark.BlueSheep, 3), N(Fark.Takin, 1)), T(V(Fark.BlueSheep, 2), S(owl, 1)), 4));
 
-            // Bosque de Pináculos and Pináculos do Leste: vultures and choughs in the towers, the Pallas cat (the irbis).
+            // Bosque de Pináculos and Pináculos do Leste: vultures and choughs in the towers, the Pallas cat.
             bosquePin.Fauna.Add(Fauna("gatos_dos_pinaculos", "[rápido]", T(N(Fark.Cat, 3), N(Fark.Chough, 1)), T(V(Fark.Cat, 2), S(werewolf, 1)), 4));
             bosquePin.Fauna.Add(Fauna("abutres_dos_pinaculos", "[distância]", T(N(Fark.Vulture, 3), N(Fark.Cat, 1)), T(V(Fark.Vulture, 2), S(bats, 1)), 3));
             leste.Fauna.Add(Fauna("morcegos_vela_do_leste", "[rápido]", T(N(Fark.CandleBat, 3), N(Fark.Vulture, 1)), T(V(Fark.CandleBat, 3), S(bats, 1)), 4));
             leste.Fauna.Add(Fauna("pipas_sombra_do_leste", "[distância]", T(N(Fark.Kite, 3), N(Fark.CandleBat, 1)), T(V(Fark.Kite, 2), S(bats, 1)), 3));
 
-            // Pontes de Vento and Ermida Baixa (55): the Morcego-Vela [rápido] (the vampire bat), the Pipa-Sombra [distância] (the
-            // broken lantern), the Neblina do Vento Ruim [controle] (the ill-wind mist), the Ushabti de Corda [tanque] (the golem); the
+            // Pontes de Vento and Ermida Baixa (55): the Morcego-Vela [rápido], the Pipa-Sombra [distância] (the
+            // broken lantern), the Neblina do Vento Ruim [controle] (the ill-wind mist), the Ushabti de Corda [tanque]; the
             // candle bats double at night.
             pontes.Fauna.Add(Fauna("morcegos_vela", "[rápido]", T(N(Fark.CandleBat, 3), N(Fark.Kite, 1)), T(V(Fark.CandleBat, 3), S(bats, 2)), 4));
             pontes.Fauna.Add(Fauna("neblinas_do_vento_ruim", "[controle]", T(N(Fark.Mist, 3), N(Fark.Kite, 1)), T(V(Fark.Mist, 2), S(bats, 1)), 4));
@@ -362,27 +366,27 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ermidaBaixa.Fauna.Add(Fauna("ushabtis_da_ermida", "[tanque]", T(N(Fark.Ushabti, 3), N(Fark.CandleBat, 1)), T(V(Fark.Ushabti, 2), S(bats, 1)), 3, null, 30f));
 
             // Ermidas Suspensas and Pináculo do Sino (56): the Eco Apagado [controle] (the ill-wind mist), the Gato-de-Pallas Apagado
-            // [rápido] (the irbis), the Sino Rachado [distância] (the broken lantern), the Gralha [enxame] (the cave bats' swarm of choughs).
+            // [rápido], the Sino Rachado [distância] (the broken lantern), the Gralha [enxame] (a flock of alpine choughs).
             ermidas.Fauna.Add(Fauna("ecos_apagados", "[controle]", T(N(Fark.Mist, 3), N(Fark.Cat, 1)), T(V(Fark.Mist, 3), S(owl, 1)), 4));
             ermidas.Fauna.Add(Fauna("sinos_rachados", "[distância]", T(N(Fark.Kite, 3), N(Fark.Mist, 1)), T(V(Fark.Kite, 2), S(bats, 1)), 3));
             sino.Fauna.Add(Fauna("gatos_de_pallas", "[rápido]", T(N(Fark.Cat, 3), N(Fark.Kite, 1)), T(V(Fark.Cat, 2), S(werewolf, 1)), 4));
-            sino.Fauna.Add(Fauna("gralhas_das_ermidas", "[enxame]", T(N(Fark.Bats, 3), N(Fark.Chough, 1)), T(V(Fark.Bats, 2), S(bats, 2)), 5));
+            sino.Fauna.Add(Fauna("gralhas_das_ermidas", "[enxame]", T(N(Fark.Chough, 3), N(Fark.Cat, 1)), T(V(Fark.Chough, 2), S(bats, 2)), 5));
 
             // Garganta dos Ays, Gruta Abrigo, Escarpa dos Ventos (57): the Ays [rápido] (the ill-wind mist, seen in the wind's dust),
-            // the Redemoinho de Pó [controle] (the mist), the Águia da Tempestade [distância] (the hawk), the Pedra Voadora [tanque]
+            // the Redemoinho de Pó [controle] (the mist), the Águia da Tempestade [distância], the Pedra Voadora [tanque]
             // (the rolling stone).
-            garganta.Fauna.Add(Fauna("ays_do_vento", "[rápido]", T(N(Fark.Mist, 3), N(Fark.Hawk, 1)), T(V(Fark.Mist, 3), S(werewolf, 1)), 4));
+            garganta.Fauna.Add(Fauna("ays_do_vento", "[rápido]", T(N(Fark.Mist, 3), N(Fark.StormEagle, 1)), T(V(Fark.Mist, 3), S(werewolf, 1)), 4));
             garganta.Fauna.Add(Fauna("pedras_voadoras", "[tanque]", T(N(Fark.Stone, 3), N(Fark.Mist, 1)), T(V(Fark.Stone, 2), S(bats, 1)), 3, null, 28f));
-            gruta.Fauna.Add(Fauna("aguias_da_tempestade", "[distância]", T(N(Fark.Hawk, 3), N(Fark.Stone, 1)), T(V(Fark.Hawk, 2), S(bats, 1)), 3));
+            gruta.Fauna.Add(Fauna("aguias_da_tempestade", "[distância]", T(N(Fark.StormEagle, 3), N(Fark.Stone, 1)), T(V(Fark.StormEagle, 2), S(bats, 1)), 3));
             gruta.Fauna.Add(Fauna("redemoinhos_de_po", "[controle]", T(N(Fark.Mist, 3), N(Fark.Stone, 1)), T(V(Fark.Mist, 2), S(werewolf, 1)), 4));
-            escarpa.Fauna.Add(Fauna("pedras_da_escarpa", "[tanque]", T(N(Fark.Stone, 3), N(Fark.Hawk, 1)), T(V(Fark.Stone, 2), S(owl, 1)), 3, null, 28f));
+            escarpa.Fauna.Add(Fauna("pedras_da_escarpa", "[tanque]", T(N(Fark.Stone, 3), N(Fark.StormEagle, 1)), T(V(Fark.Stone, 2), S(owl, 1)), 3, null, 28f));
             escarpa.Fauna.Add(Fauna("gatos_da_escarpa", "[rápido]", T(N(Fark.Cat, 3), N(Fark.Stone, 1)), T(V(Fark.Cat, 2), S(werewolf, 1)), 4));
 
-            // Ilhas de Nuvem and Ninho da Huma (58): the Ventania [controle] (the mist), the Harpia de Fumaça [rápido] (the dark crow),
-            // the Grifo Selvagem [elite] (the ember vulture), the Raio Preso [distância] (the broken lantern).
-            ilhas.Fauna.Add(Fauna("ventanias", "[controle]", T(N(Fark.Mist, 3), N(Fark.Chough, 1)), T(V(Fark.Mist, 3), S(moon, 1)), 4));
-            ilhas.Fauna.Add(Fauna("harpias_de_fumaca", "[rápido]", T(N(Fark.Chough, 3), N(Fark.Vulture, 1)), T(V(Fark.Chough, 3), S(bats, 1)), 4));
-            ninho.Fauna.Add(Fauna("grifos_selvagens", "[elite]", T(N(Fark.Vulture, 3), N(Fark.Kite, 1)), T(V(Fark.Vulture, 2), S(owl, 1)), 3, null, 32f));
+            // Ilhas de Nuvem and Ninho da Huma (58): the Ventania [controle] (the mist), the Harpia de Fumaça [rápido],
+            // the Grifo Selvagem [elite] (a young griffin), the Raio Preso [distância] (the broken lantern).
+            ilhas.Fauna.Add(Fauna("ventanias", "[controle]", T(N(Fark.Mist, 3), N(Fark.Harpy, 1)), T(V(Fark.Mist, 3), S(moon, 1)), 4));
+            ilhas.Fauna.Add(Fauna("harpias_de_fumaca", "[rápido]", T(N(Fark.Harpy, 3), N(Fark.Vulture, 1)), T(V(Fark.Harpy, 3), S(bats, 1)), 4));
+            ninho.Fauna.Add(Fauna("grifos_selvagens", "[elite]", T(N(Fark.Griffin, 3), N(Fark.Kite, 1)), T(V(Fark.Griffin, 2), S(owl, 1)), 3, null, 32f));
             ninho.Fauna.Add(Fauna("raios_presos", "[distância]", T(N(Fark.Kite, 3), N(Fark.Mist, 1)), T(V(Fark.Kite, 2), S(moon, 1)), 3));
         }
     }
