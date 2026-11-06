@@ -112,6 +112,10 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.SmokeGoat:
                 case ProceduralEnemyKind.Takin:
                 case ProceduralEnemyKind.BlueSheep:
+                case ProceduralEnemyKind.SmokeWalrus:
+                case ProceduralEnemyKind.ClayReindeer:
+                case ProceduralEnemyKind.StoneHare:
+                case ProceduralEnemyKind.BurrowMammoth:
                     return ChargerParts;
                 default: return null;
             }
@@ -452,6 +456,10 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.SmokeGoat:
                 case ProceduralEnemyKind.Takin:
                 case ProceduralEnemyKind.BlueSheep:
+                case ProceduralEnemyKind.SmokeWalrus:
+                case ProceduralEnemyKind.ClayReindeer:
+                case ProceduralEnemyKind.StoneHare:
+                case ProceduralEnemyKind.BurrowMammoth:
                 {
                     // Chargers: the head swings while grazing and drops, horns first, on the windup.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -559,6 +567,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.AlpineChough:
                 case ProceduralEnemyKind.StormEagle:
                 case ProceduralEnemyKind.SmokeHarpy:
+                case ProceduralEnemyKind.IceGull:
+                case ProceduralEnemyKind.TwigBird:
                 {
                     // The birds of the peaks: the eagle soars on long glides, the chough and the flute bird beat quicker; the wings
                     // hold still and the beak opens on the windup (the flute bird's note, the chough's and the harpy's screech).
@@ -567,6 +577,29 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     FlapWings(t, speed * rate, Mathf.Max(k, 0.25f) * (1f - 0.7f * r), Mathf.Max(Mathf.Clamp01(MoveSpeed01), 0.5f));
                     Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(-14f * r, Mathf.Sin(t * 0.6f) * 25f * k * (1f - r), 0f));
                     Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(32f * r, 0f, 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.LeopardSeal:
+                case ProceduralEnemyKind.ArcticFox:
+                case ProceduralEnemyKind.PolarBear:
+                case ProceduralEnemyKind.SeaWolf:
+                case ProceduralEnemyKind.ShadowSeal:
+                case ProceduralEnemyKind.GiantPike:
+                {
+                    // The Mar Gelado's biters: the jaw gapes on the windup; the fox's brush and the sea wolf's finned tail sway,
+                    // the seals' hind flippers paddle, the pike's tail sweeps and its fins row in the cold air.
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(Mathf.Max(0f, Mathf.Sin(t * 0.7f)) * 3f * k + 32f * r, 0f, 0f));
+                    float sway = _kind == ProceduralEnemyKind.GiantPike ? Mathf.Sin(t * 2.6f) * 20f
+                        : _kind == ProceduralEnemyKind.LeopardSeal || _kind == ProceduralEnemyKind.ShadowSeal ? Mathf.Sin(t * 1.2f) * 10f
+                        : Mathf.Sin(t * 1.6f) * 12f;
+                    Rotate(ProceduralEnemyParts.Tail, Quaternion.Euler(0f, sway * k, 0f));
+                    if (_kind == ProceduralEnemyKind.GiantPike)
+                    {
+                        FlapWings(t, speed * 0.7f, Mathf.Max(k, 0.25f) * 0.5f, Mathf.Clamp01(MoveSpeed01));
+                    }
+
                     break;
                 }
 

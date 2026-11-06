@@ -7,6 +7,7 @@ using Rapadura.Gameplay.Enemies.Visuals;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.Gameplay.World.Map;
 using Rapadura.Gameplay.World.Map.Areas;
+using Rapadura.Gameplay.World.Map.Overworld;
 using UnityEngine;
 
 namespace Rapadura.Tests
@@ -36,6 +37,10 @@ namespace Rapadura.Tests
             // Picos de Farnkesh (53, 57): the flute bird's and the storm eagle's stiff feathers (FarnkeshBeastsTests; placed later).
             ("enemy_forest_flute_bird", BiomeType.Forest, EnemyProjectileKind.Feather, ProceduralEnemyKind.FluteBird),
             ("enemy_mountain_storm_eagle", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.StormEagle),
+            // Mar Gelado (59, 61, 63): the ice gull's frozen feathers and the twig bird's sticks (MarGeladoBeastsTests; placed by
+            // the Mar Gelado overworld, MarGeladoBeastsPlacementTests).
+            ("enemy_mountain_ice_gull", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.IceGull),
+            ("enemy_mountain_twig_bird", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.TwigBird),
         };
 
         /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>
@@ -47,6 +52,17 @@ namespace Rapadura.Tests
             { MapLayouts.HahyaId, new[] { Hawk } },
             { MapLayouts.LagoLimiarId, new[] { Fish } },
             { MapLayouts.TagesId, new[] { Fish, Lantern } },
+        };
+
+        /// <summary>
+        /// Overworld-only maps (no layout of their own: their clearings are the region's) → the [distância] enemies that lead a
+        /// [distância] group there by day (they may also come along as companions in other groups).
+        /// </summary>
+        private static readonly (string region, string map, string[] enemies)[] ExpectedByOverworldMap =
+        {
+            (OverworldLayouts.MarGeladoRegionId, OverworldLayouts.PortoLuaBrancaMapId, new[] { "enemy_mountain_ice_gull" }),
+            (OverworldLayouts.MarGeladoRegionId, OverworldLayouts.TundraOmolMapId, new[] { "enemy_mountain_twig_bird" }),
+            (OverworldLayouts.MarGeladoRegionId, OverworldLayouts.MarAurorasMapId, new[] { "enemy_mountain_ice_gull" }),
         };
 
         private readonly List<Object> _created = new List<Object>();
@@ -167,6 +183,26 @@ namespace Rapadura.Tests
                     {
                         StringAssert.Contains("[distância]", zone.Archetypes, $"{map.Key}/{zone.Id}: tagged [distância]");
                     }
+                }
+            }
+        }
+
+        [Test]
+        public void OverworldClearings_OfTheFrozenSea_SpawnTheirRangedEnemies()
+        {
+            OverworldLayouts.ClearCache();
+            foreach (var (region, map, enemies) in ExpectedByOverworldMap)
+            {
+                OverworldLayout w = OverworldLayouts.Get(region);
+                Assert.IsNotNull(w, region);
+                List<MapSpawnZone> clearings = w.World.Zones.Where(s => w.ZoneOfSpawn[s.Id].MapIdOrOwner == map).ToList();
+                Assert.IsNotEmpty(clearings, $"{map}: has clearings in {region}");
+                foreach (string enemyId in enemies)
+                {
+                    List<MapSpawnZone> zones = clearings.Where(z => z.Day.Any(e => e.EnemyId == enemyId)).ToList();
+                    Assert.IsNotEmpty(zones, $"{map}: no clearing spawns {enemyId} by day");
+                    Assert.IsTrue(zones.Any(z => z.Archetypes != null && z.Archetypes.Contains("[distância]")),
+                        $"{map}: {enemyId} leads at least one [distância] group");
                 }
             }
         }

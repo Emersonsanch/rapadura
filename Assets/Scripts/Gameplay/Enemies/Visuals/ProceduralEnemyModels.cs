@@ -167,6 +167,19 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_mountain_pallas_cat", ProceduralEnemyKind.PallasCat },
             { "enemy_mountain_storm_eagle", ProceduralEnemyKind.StormEagle },
             { "enemy_mountain_smoke_harpy", ProceduralEnemyKind.SmokeHarpy },
+            // The beasts of the Mar Gelado (Docs/Mapas100.md 59–64), formerly played by stand-ins.
+            { "enemy_mountain_leopard_seal", ProceduralEnemyKind.LeopardSeal },
+            { "enemy_mountain_smoke_walrus", ProceduralEnemyKind.SmokeWalrus },
+            { "enemy_mountain_ice_gull", ProceduralEnemyKind.IceGull },
+            { "enemy_mountain_arctic_fox", ProceduralEnemyKind.ArcticFox },
+            { "enemy_mountain_polar_bear", ProceduralEnemyKind.PolarBear },
+            { "enemy_mountain_clay_reindeer", ProceduralEnemyKind.ClayReindeer },
+            { "enemy_mountain_stone_hare", ProceduralEnemyKind.StoneHare },
+            { "enemy_mountain_twig_bird", ProceduralEnemyKind.TwigBird },
+            { "enemy_mountain_burrow_mammoth", ProceduralEnemyKind.BurrowMammoth },
+            { "enemy_mountain_sea_wolf", ProceduralEnemyKind.SeaWolf },
+            { "enemy_mountain_giant_pike", ProceduralEnemyKind.GiantPike },
+            { "enemy_mountain_shadow_seal", ProceduralEnemyKind.ShadowSeal },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -197,6 +210,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.SmokeGoat, ProceduralEnemyKind.GoldenBee, ProceduralEnemyKind.FluteBird, ProceduralEnemyKind.VineFox,
             ProceduralEnemyKind.AlpineChough, ProceduralEnemyKind.Takin, ProceduralEnemyKind.BlueSheep, ProceduralEnemyKind.CandleBat,
             ProceduralEnemyKind.RopeUshabti, ProceduralEnemyKind.PallasCat, ProceduralEnemyKind.StormEagle, ProceduralEnemyKind.SmokeHarpy,
+            ProceduralEnemyKind.LeopardSeal, ProceduralEnemyKind.SmokeWalrus, ProceduralEnemyKind.IceGull, ProceduralEnemyKind.ArcticFox,
+            ProceduralEnemyKind.PolarBear, ProceduralEnemyKind.ClayReindeer, ProceduralEnemyKind.StoneHare, ProceduralEnemyKind.TwigBird,
+            ProceduralEnemyKind.BurrowMammoth, ProceduralEnemyKind.SeaWolf, ProceduralEnemyKind.GiantPike, ProceduralEnemyKind.ShadowSeal,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -440,6 +456,42 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.SmokeHarpy:
                     FarnkeshBeastRecipes.BuildSmokeHarpy(blueprint);
+                    break;
+                case ProceduralEnemyKind.LeopardSeal:
+                    MarGeladoBeastRecipes.BuildLeopardSeal(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeWalrus:
+                    MarGeladoBeastRecipes.BuildSmokeWalrus(blueprint);
+                    break;
+                case ProceduralEnemyKind.IceGull:
+                    MarGeladoBeastRecipes.BuildIceGull(blueprint);
+                    break;
+                case ProceduralEnemyKind.ArcticFox:
+                    MarGeladoBeastRecipes.BuildArcticFox(blueprint);
+                    break;
+                case ProceduralEnemyKind.PolarBear:
+                    MarGeladoBeastRecipes.BuildPolarBear(blueprint);
+                    break;
+                case ProceduralEnemyKind.ClayReindeer:
+                    MarGeladoBeastRecipes.BuildClayReindeer(blueprint);
+                    break;
+                case ProceduralEnemyKind.StoneHare:
+                    MarGeladoBeastRecipes.BuildStoneHare(blueprint);
+                    break;
+                case ProceduralEnemyKind.TwigBird:
+                    MarGeladoBeastRecipes.BuildTwigBird(blueprint);
+                    break;
+                case ProceduralEnemyKind.BurrowMammoth:
+                    MarGeladoBeastRecipes.BuildBurrowMammoth(blueprint);
+                    break;
+                case ProceduralEnemyKind.SeaWolf:
+                    MarGeladoBeastRecipes.BuildSeaWolf(blueprint);
+                    break;
+                case ProceduralEnemyKind.GiantPike:
+                    MarGeladoBeastRecipes.BuildGiantPike(blueprint);
+                    break;
+                case ProceduralEnemyKind.ShadowSeal:
+                    MarGeladoBeastRecipes.BuildShadowSeal(blueprint);
                     break;
             }
 

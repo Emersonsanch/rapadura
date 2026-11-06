@@ -254,6 +254,9 @@ namespace Rapadura.UI.Bestiary
             // -- Bichos dos Picos de Farnkesh que o mundo contínuo fazia com substitutos (own file too) --
             FarnkeshBestiaryTexts.AddPages(entries);
 
+            // -- Bichos do Mar Gelado que o mundo contínuo fazia com substitutos (own file too) --
+            MarGeladoBestiaryTexts.AddPages(entries);
+
             // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
             OssuaryBestiaryTexts.AddPages(entries);
 

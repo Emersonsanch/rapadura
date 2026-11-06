@@ -161,6 +161,33 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         StormEagle = 69,
         /// <summary>Harpia de Fumaça (Ninho, 58): smoky bird of prey with a pale masked face and long talons; the beak opens to strike.</summary>
         SmokeHarpy = 70,
+
+        // The beasts of the Mar Gelado (Docs/Mapas100.md 59–64) that the overworld layout played with stand-ins
+        // (MarGeladoBeastRecipes).
+        /// <summary>Foca-Leopardo Apagada (Porto, 59): long spotted seal with the big reptile head; flippers, a jaw that gapes.</summary>
+        LeopardSeal = 71,
+        /// <summary>Morsa de Fumaça (Porto, 59): heavy walrus whose hide smokes, ivory tusks; lowers its head to gore.</summary>
+        SmokeWalrus = 72,
+        /// <summary>Gaivota-do-Gelo (Porto, 59): white gull with frosted grey wings; [distância], the beak opens to shoot.</summary>
+        IceGull = 73,
+        /// <summary>Raposa-do-Ártico Ladra (Porto, 59): small white fox with a stolen silver fish in its brush; a jaw that gapes.</summary>
+        ArcticFox = 74,
+        /// <summary>Urso-Polar Apagado (Canais, 60): big white bear streaked with shadow-grey; a jaw that gapes.</summary>
+        PolarBear = 75,
+        /// <summary>Rena de Barro (Tundra, 61): Omöl's clumsy reindeer of cracked clay and crooked antlers; lowers its head to charge.</summary>
+        ClayReindeer = 76,
+        /// <summary>Lebre-Pedra (Tundra, 61): Omöl's hare of grey stone with long ears; throws itself head first.</summary>
+        StoneHare = 77,
+        /// <summary>Ave-Graveto de Omöl (Tundra, 61): clumsy bird of bark and twigs, big yellow eyes; [distância].</summary>
+        TwigBird = 78,
+        /// <summary>Mamute de Baixo da Terra (Galerias, 62): shaggy mammoth that digs the valleys, frost and ice crystals on its back; lowers its tusks to charge.</summary>
+        BurrowMammoth = 79,
+        /// <summary>Lobo-do-Mar (Mar das Auroras, 63): slate-blue wolf that swims, webbed paws and a fin on the back; a jaw that gapes.</summary>
+        SeaWolf = 80,
+        /// <summary>Lúcio Gigante (Fundo do Kul, 64): long olive pike that swims in the cold air over the fishing holes; a jaw that gapes.</summary>
+        GiantPike = 81,
+        /// <summary>Foca-Sombra (Fundo do Kul, 64): round dark seal with pale glowing rings; a jaw that gapes.</summary>
+        ShadowSeal = 82,
     }
 
     /// <summary>

@@ -395,6 +395,41 @@ Redemoinho / Ventania (`enemy_mountain_ill_wind_mist`) e Pedra Voadora (`enemy_m
 | `enemy_mountain_storm_eagle` | **Águia da Tempestade** / *Storm Eagle* | 57 | [distância] | invenção sobre os *ays* armênios: as águias brigaram com o vento ruim e voltaram com raio na ponta das asas. |
 | `enemy_mountain_smoke_harpy` | **Harpia de Fumaça** / *Smoke Harpy* | 58 | [rápido] | a harpia grega (as "que agarram") só como bicho; ave de rapina meio fumaça nas mãos do Vento Destruidor. |
 
+**Quinta leva (2026-11-06): Mar Gelado (Mapas100 59–64).** Mesmo contrato (peso 0 no bioma, nível da área, números do
+bioma). A região inteira fica no bioma Montanha (Ar Sereno), como `OverworldLayouts.MarGelado` declara
+(`w.World.Biome = BiomeType.Mountain`). Modelos em `MarGeladoBeastRecipes` (a morsa, a rena de barro, a lebre-pedra e o mamute
+baixam a cabeça para a carga; as duas focas, a raposa, o urso, o lobo-do-mar e o lúcio abrem a boca, com as nadadeiras de trás
+das focas, o rabo da raposa e do lobo e a cauda do lúcio balançando e as barbatanas do lúcio remando no ar frio; a gaivota e a
+ave-graveto abrem o bico com as asas paradas), Caderno em `MarGeladoBestiaryTexts`. A Gaivota-do-Gelo e a Ave-Graveto de Omöl
+são os [distância] das fichas: jogam pena congelada / graveto como o gavião (`EnemyProjectileKind.Feather`, mesmo som; entram
+em `RangedEnemiesTests`). Testes: `MarGeladoBeastsTests`. Já no overworld do Mar Gelado no lugar dos substitutos, nos grupos
+que lideram e como acompanhantes (mesmas clareiras, níveis e variantes noturnas): no porto, nas baías, no passo e nas colinas
+a foca-leopardo, a morsa, a gaivota e a raposa; o urso-polar nos canais, no gelo rachado e nos fiordes; na tundra e nos lagos
+de Omöl a rena de barro (também nos Pastos de Rena), a lebre-pedra e a ave-graveto (de noite segue a Ave-Graveto da
+mãe-da-lua); o mamute nas galerias e no Fiorde das Presas; o lobo-do-mar nas banquisas, no farol e nos Pastos de Rena; a
+foca-leopardo também nos narvais, a gaivota também nas Gaivotas-Tempestade, o lúcio também no Peixe-Gelo dos canais; a
+foca-sombra no lago do Kul, no gelo negro e no Fiorde do Kul. Testes: `MarGeladoBeastsPlacementTests`. Respeito (ficha da
+região): só bichos e a sombra; Yen, Omöl, o mamute de baixo da terra e os *kul* só como os contos komi entram nas fichas.
+Seguem com substitutos: Enguia-Lanterna (`enemy_desert_sand_snake`), Rachadura / Raiz-Gelo / Peixe-Bruxa
+(`enemy_cave_ooze`), Mosquito da Tundra / Kul Pequeno (o enxame de vaga-lumes), Toupeira-Gelo
+(`enemy_mountain_giant_marmot`), Cristal Vivo (`enemy_desert_broken_lantern`), Gelo Flutuante
+(`enemy_mountain_ill_wind_mist`) e o irbis dos fiordes (já é bicho próprio).
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_mountain_leopard_seal` | **Foca-Leopardo Apagada** / *Dimmed Leopard Seal* | 59 (e os narvais do 63) | [rápido] | bicho real; seguia os barcos da lua na esteira; a sombra espalhou as pintas feito tinta e deu a fome da Āz. |
+| `enemy_mountain_smoke_walrus` | **Morsa de Fumaça** / *Smoke Walrus* | 59 | [tanque], carga | as morsas velhas da Baía das Focas; a sombra entrou debaixo do couro e elas fumegam com brasa nas dobras (fogo que come, não calor). |
+| `enemy_mountain_ice_gull` | **Gaivota-do-Gelo** / *Ice Gull* | 59 (e a Gaivota-Tempestade do 63) | [distância] | a gaivota ladra dos varais do Pamour; a sombra congelou as penas e deu gula por coisa brilhante; joga pena congelada de longe. |
+| `enemy_mountain_arctic_fox` | **Raposa-do-Ártico Ladra** / *Thieving Arctic Fox* | 59 | [rápido], foge ferida | bicho real; entra no bairro da pesca; a sombra fez querer todo peixe e toda lamparina, foge com o roubo amarrado no rabo. |
+| `enemy_mountain_polar_bear` | **Urso-Polar Apagado** / *Dimmed Polar Bear* | 60 | [tanque] | bicho real; os barqueiros dividiam a pesca com ele; a sombra pôs listras cinzentas e fez achar que os canais são só dele. |
+| `enemy_mountain_clay_reindeer` | **Rena de Barro** / *Clay Reindeer* | 61 | [tanque], carga | criatura desajeitada de Omöl (conto komi de Yen e Omöl): barro da tundra, uma perna mais comprida, chifres que não combinam; a sombra encheu as rachaduras de raiva. Dorme em pé de noite. |
+| `enemy_mountain_stone_hare` | **Lebre-Pedra** / *Stone Hare* | 61 | [rápido], carga, foge ferida | criatura de Omöl: lebre feita de pedra redonda que ele esqueceu de fazer leve; antes fazia os pastores rirem. |
+| `enemy_mountain_twig_bird` | **Ave-Graveto de Omöl** / *Omöl's Twig Bird* | 61 | [distância] | a mais desajeitada de Omöl: casca, graveto e líquen, olhos grandes demais, uma asa mais curta; a sombra a emburrou e ela joga os gravetos do rabo. |
+| `enemy_mountain_burrow_mammoth` | **Mamute de Baixo da Terra** / *Underground Mammoth* | 62 | [elite], pesado, carga | o mamute dos contos komi e mansi que vive debaixo da terra e cava os vales; cristal de gelo nas costas; a sombra o fez esquecer o caminho para cima. |
+| `enemy_mountain_sea_wolf` | **Lobo-do-Mar** / *Sea Wolf* | 63 (e os lobos dos Pastos de Rena) | [enxame] | invenção da ficha (lobo que nada): pata com membrana, barbatana nas costas, rabo-leme; a sombra os mandou subir no gelo em bando. |
+| `enemy_mountain_giant_pike` | **Lúcio Gigante** / *Giant Pike* | 64 (e o Peixe-Gelo do 60) | [rápido] | bicho real dos lagos frios; os *kul* guardam os peixes (conto komi); o Velho Kul azedou e os lúcios dele nadam no ar frio sobre os buracos. |
+| `enemy_mountain_shadow_seal` | **Foca-Sombra** / *Shadow Seal* | 64 | [tanque] | a foca-anelada (bicho real) escurecida feito a água debaixo do gelo, anéis que brilham; deita em cima dos buracos de pesca porque a Āz disse que todo peixe é dela. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |

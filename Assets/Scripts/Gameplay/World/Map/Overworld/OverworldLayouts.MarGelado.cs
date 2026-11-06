@@ -31,15 +31,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// </list>
     /// Water: three black-water canals out of the harbour (two running north to open leads in the pack ice, one across the north
     /// road under a whalebone bridge), seven round lakes on Omöl's tundra, open leads in the pack ice, the seven fishing holes of
-    /// Old Kul's lake and its Great Hole. Monsters: existing beasts that fit the sheets (the thief otter for the leopard seals and
-    /// the narwhals, the mud buffalo for the smoke walruses, the thief gull for the ice gulls, the lantern fox for the arctic
-    /// foxes, the lantern fish for the ice fish and Kul's pikes, the brown bear for the polar bears, the sand snake for the
-    /// lantern eels, the ooze for the cracks, the ice roots and the hagfish, the potoo for Omöl's twig birds, the rolling stone
-    /// for the stone hares, the wild yak for the clay reindeer, the firefly swarm for the tundra mosquitoes and the little kuls,
-    /// the dust rhino for the mammoths under the earth, the giant marmot for the ice moles, the broken lantern for the living
-    /// crystals, the wolf for the sea wolves, the ill-wind mist for the floating ice, the crested hawk for the storm gulls, the
-    /// stone turtle for the shadow seals, the irbis in the fjords) and the night species; no boss (the Velho Kul is the map 64
-    /// world boss: not placed).
+    /// Old Kul's lake and its Great Hole. Monsters: the region's own beasts (the leopard seal, also for the narwhals; the smoke
+    /// walrus; the ice gull, also for the storm gulls; the arctic fox; the polar bear; Omöl's clay reindeer, stone hare and twig
+    /// bird; the mammoth under the earth; the sea wolf; the giant pike, also for the ice fish; the shadow seal), existing beasts
+    /// that fit the other sheets (the sand snake for the lantern eels, the ooze for the cracks, the ice roots and the hagfish, the
+    /// firefly swarm for the tundra mosquitoes and the little kuls, the giant marmot for the ice moles, the broken lantern for the
+    /// living crystals, the ill-wind mist for the floating ice, the irbis in the fjords) and the night species; no boss (the
+    /// Velho Kul is the map 64 world boss: not placed).
     /// </summary>
     public static partial class OverworldLayouts
     {
@@ -117,25 +115,25 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static class Gelo
         {
-            public const string Seal = "enemy_forest_thief_otter";
-            public const string Walrus = "enemy_forest_mud_buffalo";
-            public const string Gull = "enemy_forest_thief_gull";
-            public const string Fox = "enemy_forest_lantern_fox";
-            public const string IceFish = "enemy_cave_lantern_fish";
-            public const string Bear = "enemy_mountain_brown_bear";
+            public const string Seal = "enemy_mountain_leopard_seal";
+            public const string Walrus = "enemy_mountain_smoke_walrus";
+            public const string Gull = "enemy_mountain_ice_gull";
+            public const string Fox = "enemy_mountain_arctic_fox";
+            public const string IceFish = "enemy_mountain_giant_pike";
+            public const string Bear = "enemy_mountain_polar_bear";
             public const string Eel = "enemy_desert_sand_snake";
             public const string Ooze = "enemy_cave_ooze";
-            public const string TwigBird = NightVariantRules.PotooEnemyId;
-            public const string Hare = "enemy_mountain_rolling_stone";
-            public const string Reindeer = "enemy_mountain_wild_yak";
+            public const string TwigBird = "enemy_mountain_twig_bird";
+            public const string Hare = "enemy_mountain_stone_hare";
+            public const string Reindeer = "enemy_mountain_clay_reindeer";
             public const string Mosquito = NightVariantRules.FireflySwarmEnemyId;
-            public const string Mammoth = "enemy_forest_dust_rhino";
+            public const string Mammoth = "enemy_mountain_burrow_mammoth";
             public const string Mole = "enemy_mountain_giant_marmot";
             public const string Crystal = "enemy_desert_broken_lantern";
-            public const string SeaWolf = "enemy_forest_wolf";
+            public const string SeaWolf = "enemy_mountain_sea_wolf";
             public const string Floe = "enemy_mountain_ill_wind_mist";
-            public const string StormGull = "enemy_mountain_crested_hawk";
-            public const string ShadowSeal = "enemy_forest_stone_turtle";
+            public const string StormGull = "enemy_mountain_ice_gull";
+            public const string ShadowSeal = "enemy_mountain_shadow_seal";
             public const string Irbis = "enemy_mountain_irbis";
         }
 
@@ -362,9 +360,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             NightSpecies moon = NightVariantRules.MaeDaLua;
             NightSpecies sparks = NightVariantRules.VagaLume;
 
-            // Porto da Lua Branca, the bays, the pass and the snow hills (59): the Foca-Leopardo Apagada [rápido] (the thief otter), the
-            // Morsa de Fumaça [tanque] (the mud buffalo), the Gaivota-do-Gelo [distância] (the thief gull), the Raposa-do-Ártico Ladra
-            // [rápido] (the lantern fox).
+            // Porto da Lua Branca, the bays, the pass and the snow hills (59): the Foca-Leopardo Apagada [rápido], the
+            // Morsa de Fumaça [tanque], the Gaivota-do-Gelo [distância], the Raposa-do-Ártico Ladra [rápido].
             porto.Fauna.Add(Fauna("gaivotas_do_gelo", "[distância]", T(N(Gelo.Gull, 3), N(Gelo.Fox, 1)), T(V(Gelo.Gull, 2), S(owl, 1)), 4));
             porto.Fauna.Add(Fauna("raposas_do_artico", "[rápido]", T(N(Gelo.Fox, 3), N(Gelo.Gull, 1)), T(V(Gelo.Fox, 2), S(owl, 1)), 4));
             focas.Fauna.Add(Fauna("focas_leopardo", "[rápido]", T(N(Gelo.Seal, 3), N(Gelo.Gull, 1)), T(V(Gelo.Seal, 2), S(moon, 1)), 4));
@@ -376,12 +373,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             colinas.Fauna.Add(Fauna("raposas_das_colinas", "[rápido]", T(N(Gelo.Fox, 3), N(Gelo.Walrus, 1)), T(V(Gelo.Fox, 2), S(owl, 1)), 4));
             colinas.Fauna.Add(Fauna("morsas_das_colinas", "[tanque]", T(N(Gelo.Walrus, 3), N(Gelo.Fox, 1)), T(V(Gelo.Walrus, 2), S(werewolf, 1)), 3, null, 30f));
 
-            // The reindeer pastures: wolves after the herd, the clay reindeer (the wild yak); the werewolf at night.
+            // The reindeer pastures: sea wolves after the herd, the clay reindeer; the werewolf at night.
             pastos.Fauna.Add(Fauna("lobos_dos_pastos", "[enxame]", T(N(Gelo.SeaWolf, 3), N(Gelo.Fox, 1)), T(V(Gelo.SeaWolf, 2), S(werewolf, 1)), 5));
             pastos.Fauna.Add(Fauna("renas_dos_pastos", "[tanque]", T(N(Gelo.Reindeer, 3), N(Gelo.Fox, 1)), T(V(Gelo.Reindeer, 2), S(owl, 1)), 3, null, 28f));
 
-            // Canais de Gelo, Canais do Oeste, Gelo Rachado (60): the Peixe-Gelo [enxame] (the lantern fish), the Urso-Polar Apagado
-            // [tanque] (the brown bear), the Enguia-Lanterna [distância] (the sand snake), the Rachadura [controle] (the ooze); the eels
+            // Canais de Gelo, Canais do Oeste, Gelo Rachado (60): the Peixe-Gelo [enxame] (the giant pike), the Urso-Polar Apagado
+            // [tanque], the Enguia-Lanterna [distância] (the sand snake), the Rachadura [controle] (the ooze); the eels
             // light up at night.
             canais.Fauna.Add(Fauna("peixes_gelo", "[enxame]", T(N(Gelo.IceFish, 3), N(Gelo.Eel, 1)), T(V(Gelo.IceFish, 2), S(moon, 1)), 5));
             canais.Fauna.Add(Fauna("enguias_lanterna", "[distância]", T(N(Gelo.Eel, 3), N(Gelo.IceFish, 1)), T(V(Gelo.Eel, 3), S(moon, 1)), 3));
@@ -390,8 +387,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             rachado.Fauna.Add(Fauna("rachaduras", "[controle]", T(N(Gelo.Ooze, 3), N(Gelo.Bear, 1)), T(V(Gelo.Ooze, 3), S(owl, 1)), 4));
             rachado.Fauna.Add(Fauna("ursos_do_gelo_rachado", "[tanque]", T(N(Gelo.Bear, 3), N(Gelo.Ooze, 1)), T(V(Gelo.Bear, 2), S(werewolf, 1)), 3, null, 30f));
 
-            // Tundra de Omöl, Tundra do Sul, Lagos de Omöl (61): Omöl's clumsy creatures — the twig bird [distância] (the potoo), the
-            // stone hare [rápido] (the rolling stone), the clay reindeer [tanque] (the wild yak) — and the tundra mosquito [enxame]
+            // Tundra de Omöl, Tundra do Sul, Lagos de Omöl (61): Omöl's clumsy creatures — the twig bird [distância], the
+            // stone hare [rápido], the clay reindeer [tanque] — and the tundra mosquito [enxame]
             // (the firefly swarm); at night they sleep standing: thinner groups, the owl and the moon-mother.
             omol.Fauna.Add(Fauna("aves_graveto", "[distância]", T(N(Gelo.TwigBird, 3), N(Gelo.Hare, 1)), T(V(Gelo.TwigBird, 1), S(moon, 1)), 3));
             omol.Fauna.Add(Fauna("lebres_pedra", "[rápido]", T(N(Gelo.Hare, 3), N(Gelo.Reindeer, 1)), T(V(Gelo.Hare, 1), S(owl, 1)), 4));
@@ -400,7 +397,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             lagos.Fauna.Add(Fauna("mosquitos_dos_lagos", "[enxame]", T(N(Gelo.Mosquito, 3), N(Gelo.Hare, 1)), T(V(Gelo.Mosquito, 2), S(moon, 1)), 5));
             lagos.Fauna.Add(Fauna("aves_graveto_dos_lagos", "[distância]", T(N(Gelo.TwigBird, 3), N(Gelo.Reindeer, 1)), T(V(Gelo.TwigBird, 1), S(moon, 2)), 3));
 
-            // Terra Congelada, Fiorde das Presas, Galerias dos Mamutes (62): the Mamute de Baixo da Terra [elite] (the dust rhino), the
+            // Terra Congelada, Fiorde das Presas, Galerias dos Mamutes (62): the Mamute de Baixo da Terra [elite], the
             // Toupeira-Gelo [enxame] (the giant marmot), the Cristal Vivo [distância] (the broken lantern), the Raiz-Gelo [controle]
             // (the ooze); the irbis on the fjord's ledges; the vampire bats at night.
             galerias.Fauna.Add(Fauna("mamutes_de_baixo_da_terra", "[elite]", T(N(Gelo.Mammoth, 3), N(Gelo.Mole, 1)), T(V(Gelo.Mammoth, 2), S(bats, 1)), 3, null, 32f));
@@ -410,9 +407,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             presas.Fauna.Add(Fauna("irbis_das_presas", "[rápido]", T(N(Gelo.Irbis, 3), N(Gelo.Mole, 1)), T(V(Gelo.Irbis, 2), S(werewolf, 1)), 4));
             presas.Fauna.Add(Fauna("mamutes_do_fiorde", "[elite]", T(N(Gelo.Mammoth, 3), N(Gelo.Crystal, 1)), T(V(Gelo.Mammoth, 2), S(bats, 1)), 3, null, 32f));
 
-            // Banquisas, Mar das Auroras, Ilha do Farol, Fiorde Negro (63): the Narval Apagado [rápido] (the thief otter), the
-            // Lobo-do-Mar [enxame] (the wolf), the Gelo Flutuante [controle] (the ill-wind mist), the Gaivota-Tempestade [distância]
-            // (the crested hawk); the aurora's sparks and the sea werewolves at night.
+            // Banquisas, Mar das Auroras, Ilha do Farol, Fiorde Negro (63): the Narval Apagado [rápido] (the leopard seal), the
+            // Lobo-do-Mar [enxame], the Gelo Flutuante [controle] (the ill-wind mist), the Gaivota-Tempestade [distância]
+            // (the ice gull); the aurora's sparks and the sea werewolves at night.
             banquisas.Fauna.Add(Fauna("lobos_do_mar", "[enxame]", T(N(Gelo.SeaWolf, 3), N(Gelo.Seal, 1)), T(V(Gelo.SeaWolf, 2), S(werewolf, 1)), 5));
             banquisas.Fauna.Add(Fauna("narvais_apagados", "[rápido]", T(N(Gelo.Seal, 3), N(Gelo.Floe, 1)), T(V(Gelo.Seal, 2), S(sparks, 1)), 4));
             banquisasOeste.Fauna.Add(Fauna("gelos_flutuantes", "[controle]", T(N(Gelo.Floe, 3), N(Gelo.SeaWolf, 1)), T(V(Gelo.Floe, 2), S(sparks, 1)), 4));
@@ -424,9 +421,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             fiordeNegro.Fauna.Add(Fauna("irbis_do_fiorde_negro", "[rápido]", T(N(Gelo.Irbis, 3), N(Gelo.StormGull, 1)), T(V(Gelo.Irbis, 2), S(werewolf, 1)), 4));
             fiordeNegro.Fauna.Add(Fauna("ursos_do_fiorde_negro", "[tanque]", T(N(Gelo.Bear, 3), N(Gelo.Floe, 1)), T(V(Gelo.Bear, 2), S(bats, 1)), 3, null, 30f));
 
-            // Fundo do Velho Kul, Buracos de Pesca, Lago do Kul, Gelo Negro, Fiorde do Kul (64): the Lúcio Gigante [rápido] (the lantern
-            // fish), the Kul Pequeno [enxame] (the firefly swarm: little water spirits that glow), the Peixe-Bruxa [controle] (the
-            // ooze), the Foca-Sombra [tanque] (the stone turtle); the holes glow at night (the moon-mother, the sparks).
+            // Fundo do Velho Kul, Buracos de Pesca, Lago do Kul, Gelo Negro, Fiorde do Kul (64): the Lúcio Gigante [rápido], the
+            // Kul Pequeno [enxame] (the firefly swarm: little water spirits that glow), the Peixe-Bruxa [controle] (the
+            // ooze), the Foca-Sombra [tanque]; the holes glow at night (the moon-mother, the sparks).
             fundo.Fauna.Add(Fauna("lucios_gigantes", "[rápido]", T(N(Gelo.IceFish, 3), N(Gelo.Mosquito, 1)), T(V(Gelo.IceFish, 2), S(moon, 1)), 4));
             fundo.Fauna.Add(Fauna("kuls_pequenos", "[enxame]", T(N(Gelo.Mosquito, 3), N(Gelo.IceFish, 1)), T(V(Gelo.Mosquito, 3), S(sparks, 1)), 5));
             buracos.Fauna.Add(Fauna("peixes_bruxa", "[controle]", T(N(Gelo.Ooze, 3), N(Gelo.IceFish, 1)), T(V(Gelo.Ooze, 2), S(moon, 1)), 4));

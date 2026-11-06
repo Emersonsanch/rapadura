@@ -277,6 +277,19 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_mountain_pallas_cat", "Dimmed Pallas's Cat", "Gato-de-Pallas Apagado"),
             EnemyName("enemy_mountain_storm_eagle", "Storm Eagle", "Águia da Tempestade"),
             EnemyName("enemy_mountain_smoke_harpy", "Smoke Harpy", "Harpia de Fumaça"),
+            // The beasts of the Mar Gelado (Docs/Mapas100.md 59–64), formerly played by stand-ins.
+            EnemyName("enemy_mountain_leopard_seal", "Dimmed Leopard Seal", "Foca-Leopardo Apagada"),
+            EnemyName("enemy_mountain_smoke_walrus", "Smoke Walrus", "Morsa de Fumaça"),
+            EnemyName("enemy_mountain_ice_gull", "Ice Gull", "Gaivota-do-Gelo"),
+            EnemyName("enemy_mountain_arctic_fox", "Thieving Arctic Fox", "Raposa-do-Ártico Ladra"),
+            EnemyName("enemy_mountain_polar_bear", "Dimmed Polar Bear", "Urso-Polar Apagado"),
+            EnemyName("enemy_mountain_clay_reindeer", "Clay Reindeer", "Rena de Barro"),
+            EnemyName("enemy_mountain_stone_hare", "Stone Hare", "Lebre-Pedra"),
+            EnemyName("enemy_mountain_twig_bird", "Omöl's Twig Bird", "Ave-Graveto de Omöl"),
+            EnemyName("enemy_mountain_burrow_mammoth", "Underground Mammoth", "Mamute de Baixo da Terra"),
+            EnemyName("enemy_mountain_sea_wolf", "Sea Wolf", "Lobo-do-Mar"),
+            EnemyName("enemy_mountain_giant_pike", "Giant Pike", "Lúcio Gigante"),
+            EnemyName("enemy_mountain_shadow_seal", "Shadow Seal", "Foca-Sombra"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),
