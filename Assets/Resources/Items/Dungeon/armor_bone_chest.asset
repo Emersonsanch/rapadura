@@ -21,7 +21,7 @@ MonoBehaviour:
   _category: 12
   _rarity: 2
   _weight: 2
-  _value: 160
+  _value: 900
   _maxStack: 1
   _gridWidth: 0
   _gridHeight: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
   _hasDurability: 1
   _maxDurability: 130
   _equipSlot: 2
-  _armorDefense: 14
+  _armorDefense: 16
   _weaponDamage: 0
   _weaponAttackSpeed: 1
   _equipStatModifiers:

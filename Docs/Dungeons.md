@@ -109,14 +109,31 @@ Testes: `OssuaryEnemyModelsTests` (+ os genéricos de `ProceduralEnemyModelsTest
 | Id | Nome | Tipo | Notas |
 |---|---|---|---|
 | `item_bone_key` | Chave de Osso Rúnica | chave (QuestItem) | Rara, peso 0,1, sem durabilidade, empilha 10; só vem dos guardiões-chaveiros |
-| `armor_bone_chest` | Armadura Peitoral de Costelas | peito | Defesa 14, +4% crítico; baú do nicho e tabela (raro) |
-| `armor_bone_helm` | Elmo Crânio de Cobre | cabeça | Defesa 8, +20 mana máx.; Colosso e tabela (raro) |
-| `item_bone_fragment` | Fragmento de Osso Antigo | material | vende/artesanato |
-| `item_qocho_holed_coin` | Moeda Furada de Qocho | material | vende |
-| `item_rusty_watch_sword` | Espada Enferrujada do Vigia | arma | dano 16 |
+| `armor_bone_chest` | Armadura Peitoral de Costelas | peito | Defesa 16, +4% crítico, valor 900; baú do nicho e tabela (raro) |
+| `armor_bone_helm` | Elmo Crânio de Cobre | cabeça | Defesa 9, +20 mana máx., valor 650; Colosso e tabela (raro) |
+| `item_bone_fragment` | Fragmento de Osso Antigo | material | valor 18; vende/artesanato |
+| `item_qocho_holed_coin` | Moeda Furada de Qocho | material | valor 45; vende |
+| `item_rusty_watch_sword` | Espada Enferrujada do Vigia | arma | dano 16, valor 90 |
 
 **Tabela das catacumbas** (`LootTable_Catacombs`, um `BiomeDefinition` usado só pelas entradas de loot, que não é região):
-fragmento 10, moeda 7, espada 3, peitoral 1, elmo 1. Guardiões rolam essa tabela pelo `IEnemyLootSource`.
+fragmento 10, moeda 7, espada 3, peitoral 1, elmo 1. Guardiões rolam essa tabela pelo `IEnemyLootSource`. O Colosso
+larga ainda 8–12 fragmentos garantidos e o elmo (Épico).
+
+**Faixa 35–45 (2026-11-06; antes os números eram os do nível 12).** Não há nível de item no jogo: quem segura o espólio
+é a entrada no 35. Como foi medido:
+- **Defesa** (plana, curva `def/(def+100)`, já é percentual): sobe só pela parte de equipamento do herói de referência,
+  `level_scaling.gear_defense_band(45)` = (1+0,005·44)/(1+0,005·14) ≈ ×1,14 → peitoral 14→16, elmo 8→9 (a vida do
+  herói e a escala dos bichos fazem o resto). Referências: Couro 8/4 (comum), Roupa Térmica Defesa 8 (Épica, mapa 18).
+- **Crítico +4%, Toque Espectral (15%, 35% do crítico)**: percentuais, acompanham o herói; ficam. **Mana +20**: a mana
+  da curva é 100 em todo nível (só Espírito sobe, 8/ponto), então +20 vale o mesmo no 35; fica.
+- **Valor**: peitoral 900 ao lado da Roupa Térmica (900, mapa 18, 36–44) e elmo 650 acima das Botas de Raiz (520).
+  Materiais ×3, o mesmo salto do custo de barca de um mapa da faixa antiga (mapa 19: 240) para o 24b (800): fragmento
+  6→18, moeda 15→45, espada 30→90; o Colosso larga 8–12 fragmentos (era 5–8). Uma corrida completa rende ~1 150 de
+  valor em materiais (~575 de ouro vendendo a 50%), ~70% da barca, a mesma proporção da versão nível 12 (364 / ~182).
+- **Espada do Vigia**: dano 16 fica abaixo da Espada de Ferro (18, a melhor arma do jogo) — não vira a melhor arma fora
+  do orçamento.
+- `power_stack.py` lê só `Resources/Items/*.asset` (sem a subpasta `Dungeon/`), então o Ossuário não entra na pilha da
+  campanha; o relatório continua "dentro do orçamento" em tudo.
 
 **Conjunto Armadura de Marfim dos Artífices — "Toque Espectral"** (`SpectralTouchSetBonus`): com as **2 peças** vestidas
 (e não quebradas), cada **acerto crítico** do herói tem **15%** de lançar um estilhaço de osso que atinge até 3 inimigos a
@@ -140,6 +157,5 @@ sarcófagos abertos, parede quebrada, baú pego, visitas e vitórias. Save antig
 - Atributo de resistência a elemento (Sombra) para o elmo.
 - Encaixe no catálogo de mapas estilo MU: o **nível** já é o do mapa 24b (entrada 35, guardiões 35–45, 2026-11-06); falta
   a linha 24b no `MapCatalog` (barca/warp 38, a pé 32) — hoje a entrada continua pelas Grutas do Limiar.
-- Armadura de Marfim (Peitoral Defesa 14, Elmo Defesa 8) não tem nível de item: os números ficaram os da versão nível 12
-  e podem pedir revisão para o 35–45.
+- ~~Armadura de Marfim com números do nível 12~~ — resolvido em 2026-11-06: espólio reequilibrado para o 35–45 (§6).
 - Teste PlayMode de uma corrida completa (só há EditMode).

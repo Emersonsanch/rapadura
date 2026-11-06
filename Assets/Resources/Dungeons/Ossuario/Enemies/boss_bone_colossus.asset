@@ -19,8 +19,8 @@ MonoBehaviour:
   _experienceReward: 60
   _lootItem: {fileID: 11400000, guid: 57586edf12fd419c86aa5f0a56cb1932, type: 2}
   _lootDropChance: 1
-  _lootQuantityMin: 5
-  _lootQuantityMax: 8
+  _lootQuantityMin: 8
+  _lootQuantityMax: 12
   _bossGuaranteedLoot: 1
   _bossBonusDropItem: {fileID: 11400000, guid: 5a99b4450cd74febaf108b3438444691, type: 2}
   _bossBonusDropRarity: 3

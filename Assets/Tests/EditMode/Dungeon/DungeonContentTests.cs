@@ -158,6 +158,37 @@ namespace Rapadura.Tests
             Assert.IsTrue(EnemyLootRoller.IsRolledAsEquipment(helm));
         }
 
+        /// <summary>
+        /// The 35–45 band numbers (Docs/Dungeons.md §6, 2026-11-06; the level-12 version had Defense 14/8 and value 160/120):
+        /// Defense x the level-45 defensive gear band (~x1.14), value next to the map-18 Roupa Térmica, materials x3 (the boat
+        /// fare of the old band's map 19 -> 24b), the Colosso's fragments 8–12; crit, mana and the set bonus kept.
+        /// </summary>
+        [Test]
+        public void IvoryArmourAndSpoils_UseTheThirtyFiveToFortyFiveNumbers()
+        {
+            ItemDefinition chest = Item(DungeonRules.BoneChestItemId);
+            ItemDefinition helm = Item(DungeonRules.BoneHelmItemId);
+            Assert.AreEqual(16f, chest.ArmorDefense, 1e-4f);
+            Assert.AreEqual(9f, helm.ArmorDefense, 1e-4f);
+            Assert.AreEqual(900, chest.Value);
+            Assert.AreEqual(650, helm.Value);
+            Assert.AreEqual(0.04f, chest.EquipStatModifiers.Single(m => m.affectedStat == StatType.CriticalChance).value, 1e-6f);
+            Assert.AreEqual(20f, helm.EquipStatModifiers.Single(m => m.affectedStat == StatType.MaxMana).value, 1e-4f);
+
+            Assert.AreEqual(18, Item(DungeonRules.BoneFragmentItemId).Value);
+            Assert.AreEqual(45, Item(DungeonRules.HoledCoinItemId).Value);
+            ItemDefinition sword = Item(DungeonRules.RustySwordItemId);
+            Assert.AreEqual(90, sword.Value);
+            Assert.AreEqual(16f, sword.WeaponDamage, 1e-4f);
+            Assert.Less(sword.WeaponDamage, Resources.Load<ItemDefinition>("Items/item_iron_sword").WeaponDamage, "never the best weapon");
+
+            EnemyDefinition colossus = Enemy(DungeonRules.BoneColossusId);
+            Assert.AreEqual(8, colossus.LootQuantityMin);
+            Assert.AreEqual(12, colossus.LootQuantityMax);
+            Assert.AreEqual(DungeonRules.BoneHelmItemId, colossus.BossBonusDropItem.ItemId);
+            Assert.AreEqual(ItemRarity.Epic, colossus.BossBonusDropRarity);
+        }
+
         [Test]
         public void DungeonItems_PtBR_MatchesDungeonTexts()
         {
