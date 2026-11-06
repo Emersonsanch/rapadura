@@ -340,10 +340,13 @@ layouts `OverworldLayouts.Mingcheng/Nartes` já declaram. Modelos em `MingchengB
 leão de pedra, a tartaruga, o filhote de nian, o lobo de bronze, a raposa e o grifo abrem a boca/bico no bote; a raposa
 acende a lanterna do rabo e o grifo abre as asas; o búfalo e a saiga baixam a cabeça para a carga; o soldado ergue a
 alabarda, o gigante e o ochokochi erguem os dois braços; o besouro abre as pinças), Caderno em
-`MingchengNartesBestiaryTexts`. Testes: `MingchengNartesBeastsTests`. Ainda não trocados nos overworlds. O Urso do Cáucaso
-(52) pode usar o `enemy_mountain_brown_bear` e os macacos do bambu/calcário/névoa o `enemy_forest_thief_monkey`, que já
-existem; Carpa-Dragão, Cavalo de Terracota, Grou de Papel, Espelho Quebrado, Cisne de Feltro, Cervo de Ouro, Lince e
-Garanhão seguem com substitutos.
+`MingchengNartesBestiaryTexts`. Testes: `MingchengNartesBeastsTests`. Já nos overworlds de Mingcheng e dos Nartes no
+lugar dos substitutos, nos grupos que lideram e como acompanhantes (mesmas clareiras, níveis e variantes noturnas; os
+búfalos seguem com a vara de queixadas à noite; o Grifo Jovem também faz o Grifo Guardião, os abutres seguem abutres). O
+Urso do Cáucaso (52) passou a ser o `enemy_mountain_brown_bear` (o lobisomem só à noite) e os macacos do
+bambu/calcário/névoa o `enemy_forest_thief_monkey` (o Filhote de Nian só nos Picos e no Portão do Nian). Testes:
+`MingchengNartesBeastsPlacementTests`. Carpa-Dragão, Cavalo de Terracota, Grou de Papel, Espelho Quebrado, Cisne de
+Feltro, Cervo de Ouro, Cabra-Montês, Lince e Garanhão seguem com substitutos.
 
 | `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
 |---|---|---|---|---|

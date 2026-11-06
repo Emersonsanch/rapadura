@@ -26,13 +26,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// </list>
     /// Water: the Rio Dourado rises here (its upper course comes down to the Zarafshan's north edge at the same point), the
     /// Canal das Lanternas runs north from it past the city to the carp's lake under the white hills, crossed only at stone
-    /// bridges; a lotus pond in the outer rings. Monsters: existing beasts that fit the sheets (the stone golem for the stone
-    /// lions and the lime guardians, the jackal for the lantern-tailed fox, the hawk for the paper crane and the ibis, the
-    /// crowned orc for the terracotta soldiers, broken lanterns for the paper kites, mirrors and scarecrows, the sand snake for
-    /// the dragon carp, the lantern fish, the ill-wind mist for the smoke boatman and the crooked ray, the coconut crab for the
-    /// stone turtle, the peccary for the mud buffalo, the thief gull for the mandarin duck, bats for the smoke locusts, the
-    /// baboon for the nian cubs and the macaques, the wolf for the terracotta horses, the spider in the bamboo, the scorpion and
-    /// the vulture in the loess, the rolling stone in the karst) and the night species; no boss.
+    /// bridges; a lotus pond in the outer rings. Monsters: the region's own beasts (the stone lion, also as the lime guardians,
+    /// the lantern-tailed fox, the terracotta soldier, the stone turtle, the mud buffalo by day, the nian cub, the thief
+    /// macaque) and existing beasts that fit the other sheets (the hawk for the paper crane and the ibis, broken lanterns for
+    /// the paper kites, mirrors and scarecrows, the sand snake for the dragon carp, the lantern fish, the ill-wind mist for the
+    /// smoke boatman and the crooked ray, the thief gull for the mandarin duck, bats for the smoke locusts, the wolf for the
+    /// terracotta horses, the spider in the bamboo, the scorpion and the vulture in the loess, the rolling stone in the karst)
+    /// and the night species; no boss.
     /// </summary>
     public static partial class OverworldLayouts
     {
@@ -74,21 +74,22 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static class Ming
         {
-            public const string Lion = PeriodSpawnTable.MountainGolem;
-            public const string Fox = "enemy_desert_jackal";
+            public const string Lion = "enemy_forest_stone_lion";
+            public const string Fox = "enemy_forest_lantern_fox";
             public const string Crane = "enemy_mountain_crested_hawk";
-            public const string Terracotta = "enemy_desert_crowned_orc";
+            public const string Terracotta = "enemy_forest_terracotta_soldier";
             public const string Kite = "enemy_desert_broken_lantern";
             public const string Carp = "enemy_desert_sand_snake";
             public const string LanternFish = "enemy_cave_lantern_fish";
             public const string Smoke = "enemy_mountain_ill_wind_mist";
-            public const string Turtle = "enemy_forest_coconut_crab";
-            public const string Buffalo = NightVariantRules.PeccaryEnemyId;
+            public const string Turtle = "enemy_forest_stone_turtle";
+            public const string Buffalo = "enemy_forest_mud_buffalo";
             public const string Duck = "enemy_forest_thief_gull";
             public const string Locusts = PeriodSpawnTable.CaveBats;
             public const string Bats = PeriodSpawnTable.CaveBats;
             public const string Spider = "enemy_forest_spider";
-            public const string Monkey = "enemy_mountain_baboon";
+            public const string Monkey = "enemy_forest_thief_monkey";
+            public const string Nian = "enemy_forest_nian_cub";
             public const string Horse = PeriodSpawnTable.ForestWolf;
             public const string Crow = "enemy_cave_dark_crow";
             public const string Scorpion = "enemy_desert_scorpion";
@@ -321,8 +322,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             NightSpecies herd = NightVariantRules.Queixada;
             NightSpecies fireflies = NightVariantRules.VagaLume;
 
-            // Anéis de Mingcheng and Vilas do Anel (41): the Leão de Pedra Apagado [tanque] (the golem), the Raposa de Cauda
-            // Lanterna [rápido] (the jackal), the Grou de Papel [distância] (the hawk), the Soldado de Terracota Apagado [tanque].
+            // Anéis de Mingcheng and Vilas do Anel (41): the Leão de Pedra Apagado [tanque], the Raposa de Cauda
+            // Lanterna [rápido], the Grou de Papel [distância] (the hawk), the Soldado de Terracota Apagado [tanque].
             aneis.Fauna.Add(Fauna("raposas_de_cauda_lanterna", "[rápido]", T(N(Ming.Fox, 3), N(Ming.Crane, 1)), T(V(Ming.Fox, 2), S(moon, 1)), 4));
             aneis.Fauna.Add(Fauna("grous_de_papel", "[distância]", T(N(Ming.Crane, 3), N(Ming.Fox, 1)), T(V(Ming.Crane, 2), S(owl, 1)), 3));
             vilas.Fauna.Add(Fauna("leoes_de_pedra", "[tanque]", T(N(Ming.Lion, 3), N(Ming.Fox, 1)), T(V(Ming.Lion, 2), V(Ming.Fox, 1)), 3, null, 30f));
@@ -359,7 +360,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             moinho.Fauna.Add(Fauna("espantalhos_apagados", "[controle]", T(N(Ming.Kite, 3), N(Ming.Buffalo, 1)), T(V(Ming.Kite, 2), S(owl, 1)), 4));
             moinho.Fauna.Add(Fauna("bufalos_do_moinho", "[tanque]", T(N(Ming.Buffalo, 3), N(Ming.Locusts, 1)), T(S(herd, 2), S(fireflies, 1)), 3, null, 28f));
 
-            // Bambuzal do Oeste: spiders in the culms, macaques (the baboon), the potoo.
+            // Bambuzal do Oeste: spiders in the culms, thief macaques, the potoo.
             bambu.Fauna.Add(Fauna("aranhas_do_bambu", "[controle]", T(N(Ming.Spider, 3), N(Ming.Potoo, 1)), T(V(Ming.Spider, 2), S(moon, 1)), 4));
             bambu.Fauna.Add(Fauna("macacos_do_bambu", "[rápido]", T(N(Ming.Monkey, 3), N(Ming.Spider, 1)), T(V(Ming.Monkey, 2), S(werewolf, 1)), 3, null, 28f));
 
@@ -367,7 +368,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             cha.Fauna.Add(Fauna("grous_do_cha", "[distância]", T(N(Ming.Crane, 3), N(Ming.Fox, 1)), T(V(Ming.Crane, 2), S(owl, 1)), 3));
             cha.Fauna.Add(Fauna("gafanhotos_do_cha", "[enxame]", T(N(Ming.Locusts, 3), N(Ming.Crane, 1)), T(V(Ming.Locusts, 2), S(fireflies, 1)), 5));
 
-            // Fossos de Terracota (41) and Vale dos Guerreiros (45): the Soldado de Terracota [tanque] (the crowned orc), the
+            // Fossos de Terracota (41) and Vale dos Guerreiros (45): the Soldado de Terracota [tanque], the
             // Cavalo de Terracota [rápido] (the wolf's body), lions and paper kites.
             fossos.Fauna.Add(Fauna("soldados_de_terracota", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.Lion, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
             fossos.Fauna.Add(Fauna("cavalos_de_terracota", "[rápido]", T(N(Ming.Horse, 3), N(Ming.Terracotta, 1)), T(V(Ming.Horse, 2), S(werewolf, 1)), 4));
@@ -389,10 +390,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             loess.Fauna.Add(Fauna("escorpioes_do_loess", "[controle]", T(N(Ming.Scorpion, 3), N(Ming.Carp, 1)), T(V(Ming.Scorpion, 2), S(owl, 1)), 4));
             loess.Fauna.Add(Fauna("abutres_do_loess", "[distância]", T(N(Ming.Vulture, 3), N(Ming.Scorpion, 1)), T(V(Ming.Vulture, 2), V(Ming.Scorpion, 1)), 3));
 
-            // Picos de Calcário and Picos do Nian: macaques and the nian's cubs (the baboon), rolling stones, bats in the caves.
+            // Picos de Calcário and Picos do Nian: thief macaques and the nian's cubs, rolling stones, bats in the caves.
             calcario.Fauna.Add(Fauna("macacos_do_calcario", "[rápido]", T(N(Ming.Monkey, 3), N(Ming.Bats, 1)), T(V(Ming.Monkey, 2), S(bats, 1)), 3, null, 28f));
             calcario.Fauna.Add(Fauna("pedras_do_calcario", "[controle]", T(N(Ming.Stone, 3), N(Ming.Crow, 1)), T(V(Ming.Stone, 2), S(bats, 1)), 3, null, 28f));
-            nian.Fauna.Add(Fauna("filhotes_de_nian", "[elite]", T(N(Ming.Monkey, 3), N(Ming.Stone, 1)), T(V(Ming.Monkey, 3), S(werewolf, 1)), 3, null, 32f));
+            nian.Fauna.Add(Fauna("filhotes_de_nian", "[elite]", T(N(Ming.Nian, 3), N(Ming.Stone, 1)), T(V(Ming.Nian, 3), S(werewolf, 1)), 3, null, 32f));
             nian.Fauna.Add(Fauna("morcegos_do_nian", "[enxame]", T(N(Ming.Bats, 3), N(Ming.Crow, 1)), T(V(Ming.Bats, 2), S(bats, 2)), 5));
 
             // Cristas dos Pinheiros and Vale da Névoa: wolves in the pines, crows, the mist.
@@ -409,7 +410,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             quinhentos.Fauna.Add(Fauna("morcegos_das_torres_de_vigia", "[enxame]", T(N(Ming.Bats, 3), N(Ming.Kite, 1)), T(V(Ming.Bats, 2), S(bats, 2)), 5));
             muralhaOeste.Fauna.Add(Fauna("soldados_do_oeste", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.Horse, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
             muralhaOeste.Fauna.Add(Fauna("pedras_da_muralha", "[controle]", T(N(Ming.Stone, 3), N(Ming.Crow, 1)), T(V(Ming.Stone, 2), S(bats, 1)), 3, null, 28f));
-            portao.Fauna.Add(Fauna("filhotes_do_portao", "[elite]", T(N(Ming.Monkey, 3), N(Ming.Terracotta, 1)), T(V(Ming.Monkey, 3), S(werewolf, 1)), 3, null, 32f));
+            portao.Fauna.Add(Fauna("filhotes_do_portao", "[elite]", T(N(Ming.Nian, 3), N(Ming.Terracotta, 1)), T(V(Ming.Nian, 3), S(werewolf, 1)), 3, null, 32f));
             portao.Fauna.Add(Fauna("arqueiros_do_portao", "[distância]", T(N(Ming.Kite, 3), N(Ming.Horse, 1)), T(V(Ming.Kite, 2), S(bats, 1)), 4));
         }
     }

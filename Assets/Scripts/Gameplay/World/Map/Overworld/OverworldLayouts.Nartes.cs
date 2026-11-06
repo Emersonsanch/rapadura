@@ -29,12 +29,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// Water: the shallow Rio dos Nartes comes down from the snows past the svan towers and the camp to a lake in the south,
     /// crossed at two wide fords (the Vau Largo) and a stone bridge under the Torre de Vigia; the Lago de Degelo in the taiga,
     /// the salt lake. Monsters: existing beasts that fit the sheets (the wolf for the steppe wolves, the stallions and the
-    /// snow wolves, the hawk for the golden eagles, the iron eagles and the smoke woodpeckers, the ember vulture for the young
-    /// and the guardian griffins and the steppe vultures, the jackal for the saigas, the golden stags and the wild goats, the
-    /// thief gull for the felt swans, the stone golem for the bronze wolves, the crowned orc for the sleepwalking giants, the
-    /// peccary for the hill boars, the crow for the smoke messengers, the coconut crab for the bark beetles, the ooze for the
-    /// dimmed fungus, the ill-wind mist for the grass storms, the baboon for the ochokochi, the werewolf's body for the
-    /// Caucasus bear, the rolling stone on the crags) and the night species; no boss.
+    /// snow wolves, the hawk for the golden eagles, the iron eagles and the smoke woodpeckers, the ember vulture for the
+    /// steppe vultures, the jackal for the golden stags and the wild goats, the thief gull for the felt swans, the peccary for
+    /// the hill boars, the crow for the smoke messengers, the ooze for the dimmed fungus, the ill-wind mist for the grass
+    /// storms, the Pamir's brown bear for the Caucasus bear, the rolling stone on the crags), the region's own beasts (the
+    /// young griffin, also as the guardian griffins, the saiga, the bronze wolf, the sleepwalking giant, the bark beetle, the
+    /// ochokochi) and the night species; no boss.
     /// </summary>
     public static partial class OverworldLayouts
     {
@@ -78,17 +78,19 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Wolf = PeriodSpawnTable.ForestWolf;
             public const string Eagle = "enemy_mountain_crested_hawk";
             public const string Griffin = "enemy_desert_ember_vulture";
-            public const string Saiga = "enemy_desert_jackal";
+            public const string YoungGriffin = "enemy_mountain_young_griffin";
+            public const string Saiga = "enemy_mountain_saiga";
+            public const string Deer = "enemy_desert_jackal";
             public const string Swan = "enemy_forest_thief_gull";
-            public const string BronzeWolf = PeriodSpawnTable.MountainGolem;
-            public const string Giant = "enemy_desert_crowned_orc";
+            public const string BronzeWolf = "enemy_mountain_bronze_wolf";
+            public const string Giant = "enemy_mountain_sleepwalker_giant";
             public const string Boar = NightVariantRules.PeccaryEnemyId;
             public const string Crow = "enemy_cave_dark_crow";
-            public const string Beetle = "enemy_forest_coconut_crab";
+            public const string Beetle = "enemy_mountain_bark_beetle";
             public const string Fungus = "enemy_cave_ooze";
             public const string Storm = "enemy_mountain_ill_wind_mist";
-            public const string Ochokochi = "enemy_mountain_baboon";
-            public const string Bear = NightVariantRules.WerewolfEnemyId;
+            public const string Ochokochi = "enemy_mountain_ochokochi";
+            public const string Bear = "enemy_mountain_brown_bear";
             public const string Stone = "enemy_mountain_rolling_stone";
             public const string Scorpion = "enemy_desert_scorpion";
             public const string Spider = "enemy_forest_spider";
@@ -235,7 +237,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Vector2 northFork = new Vector2(60f, 380f);
             Vector2 svanFork = new Vector2(-20f, 1100f);
             PathVia(w, 4f, On(new Vector2(g, 0f), new Vector2(90f, 8f), 0.5f), new Vector2(50f, 180f), northFork, new Vector2(40f, 600f), new Vector2(0f, 840f), svanFork,
-                new Vector2(-10f, 1350f), TorreDeVigiaOffset + new Vector2(0f, -18f));
+                new Vector2(-10f, 1350f), new Vector2(80f, 1460f), TorreDeVigiaOffset + new Vector2(18f, -10f));
             // The poppy road: over the second ford to the poppy fields, the rolling prairie and the Poço da Taça.
             Vector2 poppyFork = new Vector2(500f, 600f);
             PathVia(w, 3.5f, northFork, poppyFord, new Vector2(340f, 420f), poppyFork, new Vector2(700f, 800f), PocoDaTacaOffset + new Vector2(-18f, 0f));
@@ -337,13 +339,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             NightSpecies fireflies = NightVariantRules.VagaLume;
 
             // Acampamento de Soslan, Vau Largo, Pistas de Corrida (47): the Lobo da Estepe Apagado [rápido] (the wolf), the Grifo
-            // Jovem [elite] (the ember vulture), the Águia-Dourada Apagada [distância] (the hawk), the Saiga Assustada [enxame] (jackals).
+            // Jovem [elite], the Águia-Dourada Apagada [distância] (the hawk), the Saiga Assustada [enxame].
             acampamento.Fauna.Add(Fauna("saigas_assustadas", "[enxame]", T(N(Nart.Saiga, 3), N(Nart.Eagle, 1)), T(V(Nart.Saiga, 2), S(owl, 1)), 5));
             acampamento.Fauna.Add(Fauna("aguias_douradas", "[distância]", T(N(Nart.Eagle, 3), N(Nart.Saiga, 1)), T(V(Nart.Eagle, 2), S(moon, 1)), 3));
             vau.Fauna.Add(Fauna("cisnes_do_vau", "[distância]", T(N(Nart.Swan, 3), N(Nart.Saiga, 1)), T(V(Nart.Swan, 2), S(moon, 1)), 4));
             vau.Fauna.Add(Fauna("lobos_do_vau", "[rápido]", T(N(Nart.Wolf, 3), N(Nart.Swan, 1)), T(V(Nart.Wolf, 2), S(werewolf, 1)), 4));
             pistas.Fauna.Add(Fauna("lobos_da_estepe", "[rápido]", T(N(Nart.Wolf, 3), N(Nart.Saiga, 1)), T(V(Nart.Wolf, 3), S(werewolf, 1)), 4));
-            pistas.Fauna.Add(Fauna("grifos_jovens", "[elite]", T(N(Nart.Griffin, 3), N(Nart.Eagle, 1)), T(V(Nart.Griffin, 2), S(owl, 1)), 3, null, 32f));
+            pistas.Fauna.Add(Fauna("grifos_jovens", "[elite]", T(N(Nart.YoungGriffin, 3), N(Nart.Eagle, 1)), T(V(Nart.YoungGriffin, 2), S(owl, 1)), 3, null, 32f));
 
             // Estepe de Soslan and Estepe dos Ventos: wolves, saigas, golden eagles; Estepe das Saigas and the salt lake: the herds
             // in the wormwood, scorpions in the salt.
@@ -356,11 +358,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             salgado.Fauna.Add(Fauna("escorpioes_do_sal", "[controle]", T(N(Nart.Scorpion, 3), N(Nart.Griffin, 1)), T(V(Nart.Scorpion, 2), S(owl, 1)), 4));
             salgado.Fauna.Add(Fauna("cisnes_do_lago_salgado", "[distância]", T(N(Nart.Swan, 3), N(Nart.Scorpion, 1)), T(V(Nart.Swan, 2), S(moon, 1)), 4));
 
-            // Kurgans de Ouro, Kurgan Aberto, Kurgans do Leste (48): the Grifo Guardião [elite] (the ember vulture), the Cervo de Ouro
-            // Apagado [rápido] (the jackal), the Cisne de Feltro [distância] (the thief gull), the Lobo de Bronze [tanque] (the golem).
-            kurgans.Fauna.Add(Fauna("grifos_guardioes", "[elite]", T(N(Nart.Griffin, 3), N(Nart.BronzeWolf, 1)), T(V(Nart.Griffin, 2), S(bats, 1)), 3, null, 32f));
-            kurgans.Fauna.Add(Fauna("cervos_de_ouro", "[rápido]", T(N(Nart.Saiga, 3), N(Nart.Swan, 1)), T(V(Nart.Saiga, 2), S(moon, 1)), 4));
-            aberto.Fauna.Add(Fauna("lobos_de_bronze", "[tanque]", T(N(Nart.BronzeWolf, 3), N(Nart.Griffin, 1)), T(V(Nart.BronzeWolf, 2), S(bats, 1)), 3, null, 30f));
+            // Kurgans de Ouro, Kurgan Aberto, Kurgans do Leste (48): the Grifo Guardião [elite] (a young griffin), the Cervo de Ouro
+            // Apagado [rápido] (the jackal), the Cisne de Feltro [distância] (the thief gull), the Lobo de Bronze [tanque].
+            kurgans.Fauna.Add(Fauna("grifos_guardioes", "[elite]", T(N(Nart.YoungGriffin, 3), N(Nart.BronzeWolf, 1)), T(V(Nart.YoungGriffin, 2), S(bats, 1)), 3, null, 32f));
+            kurgans.Fauna.Add(Fauna("cervos_de_ouro", "[rápido]", T(N(Nart.Deer, 3), N(Nart.Swan, 1)), T(V(Nart.Deer, 2), S(moon, 1)), 4));
+            aberto.Fauna.Add(Fauna("lobos_de_bronze", "[tanque]", T(N(Nart.BronzeWolf, 3), N(Nart.YoungGriffin, 1)), T(V(Nart.BronzeWolf, 2), S(bats, 1)), 3, null, 30f));
             aberto.Fauna.Add(Fauna("cisnes_de_feltro", "[distância]", T(N(Nart.Swan, 3), N(Nart.Kite, 1)), T(V(Nart.Swan, 2), V(Nart.Kite, 1)), 4));
             leste.Fauna.Add(Fauna("lobos_de_bronze_do_leste", "[tanque]", T(N(Nart.BronzeWolf, 3), N(Nart.Saiga, 1)), T(V(Nart.BronzeWolf, 2), S(bats, 1)), 3, null, 30f));
             leste.Fauna.Add(Fauna("morcegos_dos_kurgans", "[enxame]", T(N(Nart.Bats, 3), N(Nart.Griffin, 1)), T(V(Nart.Bats, 2), S(bats, 2)), 5));
@@ -373,18 +375,18 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             betulas.Fauna.Add(Fauna("aranhas_das_betulas", "[controle]", T(N(Nart.Spider, 3), N(Nart.Potoo, 1)), T(V(Nart.Spider, 2), S(moon, 1)), 4));
             betulas.Fauna.Add(Fauna("lobos_das_betulas", "[rápido]", T(N(Nart.Wolf, 3), N(Nart.Spider, 1)), T(V(Nart.Wolf, 2), S(werewolf, 1)), 4));
 
-            // Pastos dos Gigantes, Fortim dos Gigantes, Vale das Tábuas (49): the Gigante Sonâmbulo [tanque] (the crowned orc), the
+            // Pastos dos Gigantes, Fortim dos Gigantes, Vale das Tábuas (49): the Gigante Sonâmbulo [tanque], the
             // Cabra-Montês Gigante [rápido] (the jackal), the Javali da Colina [tanque] (the peccary), the Corvo-Mensageiro de Fumaça
             // [distância] (the crow); at night the sleepwalkers double.
             pastos.Fauna.Add(Fauna("javalis_da_colina", "[tanque]", T(N(Nart.Boar, 3), N(Nart.Saiga, 1)), T(S(herd, 2), V(Nart.Saiga, 1)), 3, null, 28f));
-            pastos.Fauna.Add(Fauna("cabras_gigantes", "[rápido]", T(N(Nart.Saiga, 3), N(Nart.Boar, 1)), T(V(Nart.Saiga, 2), S(owl, 1)), 4));
+            pastos.Fauna.Add(Fauna("cabras_gigantes", "[rápido]", T(N(Nart.Deer, 3), N(Nart.Boar, 1)), T(V(Nart.Deer, 2), S(owl, 1)), 4));
             fortim.Fauna.Add(Fauna("gigantes_sonambulos", "[tanque]", T(N(Nart.Giant, 3), N(Nart.Crow, 1)), T(V(Nart.Giant, 3), S(werewolf, 1)), 3, null, 30f));
             fortim.Fauna.Add(Fauna("corvos_mensageiros", "[distância]", T(N(Nart.Crow, 3), N(Nart.Giant, 1)), T(V(Nart.Crow, 2), S(owl, 1)), 4));
             fortim.Fauna.Add(Fauna("javalis_do_fortim", "[tanque]", T(N(Nart.Boar, 3), N(Nart.Crow, 1)), T(S(herd, 2), V(Nart.Crow, 1)), 3, null, 28f));
             tabuas.Fauna.Add(Fauna("sonambulos_das_tabuas", "[tanque]", T(N(Nart.Giant, 3), N(Nart.Storm, 1)), T(V(Nart.Giant, 3), S(owl, 1)), 3, null, 30f));
             tabuas.Fauna.Add(Fauna("pesadelos_de_fumaca", "[controle]", T(N(Nart.Storm, 3), N(Nart.Crow, 1)), T(V(Nart.Storm, 2), S(moon, 1)), 4));
 
-            // Taiga de Lariços, Arvoredo de Haripushpa, Lago de Degelo (50): the Besouro-Casca [tanque] (the coconut crab), the Pica-Pau
+            // Taiga de Lariços, Arvoredo de Haripushpa, Lago de Degelo (50): the Besouro-Casca [tanque], the Pica-Pau
             // de Fumaça [distância] (the hawk), the Fungo Apagado [controle] (the ooze), the Lince da Taiga [rápido] (the wolf).
             taiga.Fauna.Add(Fauna("besouros_casca", "[tanque]", T(N(Nart.Beetle, 3), N(Nart.Fungus, 1)), T(V(Nart.Beetle, 2), S(owl, 1)), 3, null, 30f));
             taiga.Fauna.Add(Fauna("linces_da_taiga", "[rápido]", T(N(Nart.Wolf, 3), N(Nart.Beetle, 1)), T(V(Nart.Wolf, 2), S(werewolf, 1)), 4));
@@ -404,12 +406,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             cavalos.Fauna.Add(Fauna("tempestades_da_pradaria", "[controle]", T(N(Nart.Storm, 3), N(Nart.Wolf, 1)), T(V(Nart.Storm, 2), S(fireflies, 1)), 4));
             cavalos.Fauna.Add(Fauna("abutres_dos_cavalos", "[distância]", T(N(Nart.Griffin, 3), N(Nart.Storm, 1)), T(V(Nart.Griffin, 2), S(owl, 1)), 3));
 
-            // Vale das Torres Svan, Torre de Vigia, Corrente de Amirani, Cume de Ohya (52): the Ochokochi [elite] (the baboon), the Águia
-            // de Ferro [distância] (the hawk), the Urso do Cáucaso Apagado [tanque] (the werewolf's body), the Lobo de Neve [rápido]
-            // (the wolf); rolling stones off the crags.
+            // Vale das Torres Svan, Torre de Vigia, Corrente de Amirani, Cume de Ohya (52): the Ochokochi [elite], the Águia
+            // de Ferro [distância] (the hawk), the Urso do Cáucaso Apagado [tanque] (the Pamir's brown bear; the
+            // werewolf only at night), the Lobo de Neve [rápido] (the wolf); rolling stones off the crags.
             svan.Fauna.Add(Fauna("ochokochis_do_vale", "[elite]", T(N(Nart.Ochokochi, 3), N(Nart.Crow, 1)), T(V(Nart.Ochokochi, 3), S(werewolf, 1)), 3, null, 32f));
             svan.Fauna.Add(Fauna("corvos_das_torres", "[distância]", T(N(Nart.Crow, 3), N(Nart.Ochokochi, 1)), T(V(Nart.Crow, 2), S(bats, 1)), 4));
-            vigia.Fauna.Add(Fauna("ursos_do_caucaso", "[tanque]", T(N(Nart.Bear, 3), N(Nart.Crow, 1)), T(V(Nart.Crow, 2), S(werewolf, 1)), 3, null, 30f));
+            vigia.Fauna.Add(Fauna("ursos_do_caucaso", "[tanque]", T(N(Nart.Bear, 3), N(Nart.Crow, 1)), T(V(Nart.Bear, 2), S(werewolf, 1)), 3, null, 30f));
             vigia.Fauna.Add(Fauna("aguias_de_ferro", "[distância]", T(N(Nart.Eagle, 3), N(Nart.Ochokochi, 1)), T(V(Nart.Eagle, 2), S(bats, 1)), 3));
             corrente.Fauna.Add(Fauna("ochokochis_da_corrente", "[elite]", T(N(Nart.Ochokochi, 3), N(Nart.Stone, 1)), T(V(Nart.Ochokochi, 3), S(werewolf, 1)), 3, null, 32f));
             corrente.Fauna.Add(Fauna("pedras_da_corrente", "[controle]", T(N(Nart.Stone, 3), N(Nart.Eagle, 1)), T(V(Nart.Stone, 2), S(bats, 1)), 3, null, 28f));
