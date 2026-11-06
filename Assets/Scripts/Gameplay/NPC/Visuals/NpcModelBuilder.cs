@@ -481,7 +481,12 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 BuildHorse(b, ref rig);
             }
 
-            foreach (float side in r.HorseBody ? new float[0] : new[] { -1f, 1f })
+            if (r.Satyr)
+            {
+                BuildGoatLegs(b, ref rig);
+            }
+
+            foreach (float side in r.HorseBody || r.Satyr ? new float[0] : new[] { -1f, 1f })
             {
                 float x = lx * side;
                 if (!longSkirt)
@@ -526,6 +531,32 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 Vector3 p = new Vector3(rig.Rw * 0.5f, y, rig.SkirtFrontZ(y) * 0.92f + 0.012f);
                 b.Decal(p, new Vector2(0.09f, 0.08f) * rig.S, r.Trim, Quaternion.Euler(-8f, 24f, 8f));
             }
+        }
+
+        /// <summary>
+        /// A satyr's goat legs (root bone): from under the hem a furry thigh forward to the knee, the shin bent back to the hock,
+        /// the cannon down to dark cloven hooves, and a short tail of fur behind the hips.
+        /// </summary>
+        private static void BuildGoatLegs(NpcMeshBuilder b, ref Rig rig)
+        {
+            NpcRecipe r = rig.R;
+            float L = rig.Limb;
+            float lx = rig.Rw * 0.45f;
+            float top = rig.SkirtY0 + 0.04f;
+            foreach (float side in new[] { -1f, 1f })
+            {
+                float x = lx * side;
+                var hip = new Vector3(x, top, 0f);
+                var knee = new Vector3(x, top * 0.6f, 0.06f * L);
+                var hock = new Vector3(x, 0.17f * L, -0.06f * L);
+                var fetlock = new Vector3(x, 0.05f * L, -0.01f * L);
+                b.Segment(hip, knee, 0.088f * L, 0.062f * L, 6, r.Fur, caps: false);
+                b.Segment(knee, hock, 0.058f * L, 0.04f * L, 6, r.Fur, caps: false);
+                b.Segment(hock, fetlock, 0.038f * L, 0.034f * L, 5, r.Fur, caps: false);
+                b.Box(new Vector3(x, 0.03f * L, 0.01f * L), new Vector3(0.075f, 0.06f, 0.1f) * L, NpcSwatch.Charcoal, noBottom: true);
+            }
+
+            b.Blob(new Vector3(0f, rig.HipY * 0.98f, -rig.Rw * 1.05f), new Vector3(0.07f, 0.11f, 0.07f) * rig.S, r.Fur, coarse: true);
         }
 
         /// <summary>
@@ -859,7 +890,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
                     b.Cylinder(root, 0.042f * rig.S, 0f, 0.17f * rig.S, 4, r.Skin, rotation: tilt, depth: 0.45f, twist: 45f);
                 }
             }
-            else if (!coversEars && !r.Horns && !r.Gills && r.Hair != NpcHair.Long && r.Hair != NpcHair.Curly)
+            else if (!coversEars && !r.Horns && !r.Gills && !r.Satyr && r.Hair != NpcHair.Long && r.Hair != NpcHair.Curly)
             {
                 foreach (float side in new[] { -1f, 1f })
                 {
@@ -878,6 +909,11 @@ namespace Rapadura.Gameplay.NPC.Visuals
             if (r.Horns)
             {
                 BuildHorns(b, ref rig);
+            }
+
+            if (r.Satyr)
+            {
+                BuildGoatHorns(b, ref rig, coversEars);
             }
 
             if (r.Gills)
@@ -901,6 +937,35 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 Vector3 tip = root + new Vector3(x * 0.16f, 0.17f - Mathf.Abs(x) * 0.04f, -0.02f) * s;
                 b.Segment(root, tip, 0.022f * s, 0.01f * s, 4, rig.R.Skin, caps: false);
                 b.Blob(tip, new Vector3(0.08f, 0.06f, 0.08f) * s, NpcSwatch.SpringLeaf, coarse: true);
+            }
+        }
+
+        /// <summary>
+        /// The satyrs (Vale dos Sátiros): two small goat horns from the top of the brow sweeping up, back and down behind the
+        /// crown (horn ivory, dark tips), and pointed ears out to the sides under them (not under a covering headwear). Drawn over
+        /// any headwear: the horns are how a satyr reads from the iso camera.
+        /// </summary>
+        private static void BuildGoatHorns(NpcMeshBuilder b, ref Rig rig, bool coversEars)
+        {
+            float hw = rig.HeadW, hh = rig.HeadH, hd = rig.HeadD;
+            Vector3 hc = rig.HeadCenter;
+            float s = rig.S;
+            foreach (float side in new[] { -1f, 1f })
+            {
+                Vector3 root = hc + new Vector3(side * hw * 0.2f, hh * 0.4f, hd * 0.12f);
+                Vector3 p1 = root + new Vector3(side * 0.03f, 0.09f, -0.05f) * s;
+                Vector3 p2 = root + new Vector3(side * 0.07f, 0.08f, -0.14f) * s;
+                Vector3 p3 = root + new Vector3(side * 0.09f, 0.01f, -0.17f) * s;
+                b.Segment(root, p1, 0.03f * s, 0.024f * s, 5, NpcSwatch.Horn);
+                b.Segment(p1, p2, 0.024f * s, 0.016f * s, 5, NpcSwatch.Horn);
+                b.Segment(p2, p3, 0.016f * s, 0.004f * s, 4, NpcSwatch.Charcoal);
+
+                if (!coversEars)
+                {
+                    Vector3 ear = hc + new Vector3(side * hw * 0.47f, -hh * 0.02f, -hd * 0.04f);
+                    Quaternion tilt = Quaternion.FromToRotation(Vector3.up, new Vector3(side * 0.92f, 0.08f, -0.25f).normalized);
+                    b.Cylinder(ear, 0.034f * s, 0f, 0.1f * s, 4, rig.R.Skin, rotation: tilt, depth: 0.45f, twist: 45f);
+                }
             }
         }
 

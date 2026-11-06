@@ -33,6 +33,7 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
 | Estepe dos Nartes (mapas 47, 48, 51) | **Acampamento de Soslan** (centauros, `acampamento_soslan`) | Soslan, o de Pele de Aço (tenda na cabeça da praça), Syrdon, o Trapaceiro (rua Oeste), Satana, a Sábia da Casa e Uryzmæg, o Velho Chefe (rua Leste), Batradz, o Ferreiro-Guerreiro (rua Sul) | **Selaria Nômade** (`shop_selaria_nomade`) | Soslan: "Lobos em Volta dos Potros"; Satana: "Águias sobre o Acampamento" |
 | Estepe dos Nartes (mapas 49, 52) | **Fortim dos Gigantes-da-Colina** (gigantes-da-colina, `fortim`) | Baraqel, o Chefe do Fortim (casa na cabeça da praça), Shahmizad, o Patriarca (rua Oeste), Virogdad, o Sonhador (rua Sul) | **Panela Grande** (`shop_panela_grande`) | Baraqel: "Javalis na Despensa"; Virogdad: "Os Corvos do Sonho Ruim" |
 | Estepe dos Nartes (mapa 50) | **Arvoredo de Haripushpa** (povo-tronco, `arvoredo`) | Haripushpa, o Mais Velho (tronco na cabeça da praça), Suvarnapushpa, a Jardineira (rua Oeste), Aryaman Puhr, o Herbolário (rua Leste) | **Viveiro da Suvarnapushpa** (`shop_viveiro_suvarnapushpa`) | Haripushpa: "Os Comedores de Casca"; Aryaman: "Os Pássaros de Fumaça" |
+| Picos de Farnkesh (mapa 53) | **Vale dos Sátiros** (sátiros, `vale_dos_satiros`) | Midas, o Rei de Mãos Douradas (rua Norte), Marsyas, o Mestre da Flauta (rua Oeste), Gordias, o Fazendeiro dos Nós (rua Leste) | **Flauta Dupla** (`shop_flauta_dupla`) | Midas: "As Abelhas de Ouro"; Gordias: "Raposas na Vinha" |
 | Planície de Mingcheng (mapa 42; 45 planejado) | **Torres Brancas de Amanirenas** (altos-elfos, `torres_brancas`) | Rainha Amanirenas, a Guardiã (casa na cabeça da praça), Natakamani, o Mestre dos Espelhos (rua Oeste), Amanitore, a Construtora (rua Leste), Arkamani, o que Lê as Estrelas (rua Leste), Shanakdakhete, a que Ensina a Luz (rua Sul) | **Espelhos de Natakamani** (`shop_espelhos_natakamani`) | Amanirenas: "Espelhos Quebrados"; Shanakdakhete: "As Íbis Apagadas" |
 
 - **Passeio da cidade:** a mesma receita `CityTownRecipes.Garajonay` do mapa 05 e do mundo contínuo (mesmo `CityId`,
@@ -341,15 +342,47 @@ fica em y = 0 dentro de um círculo de ~22 m com 3 saídas de rua, no lugar que 
 As três cidades ficam fora de `CityCatalog.Cities` (são `RaceCities`) e abrem pelo mundo contínuo da Estepe dos Nartes
 (outro trabalho) ou pelo menu de prévia do editor (`Preview Walkable Town/…`).
 
+**Vale dos Sátiros** (sátiros, região 10 — Picos de Farnkesh, mapa 53; cidade de retorno de 53):
+- **Passeio da cidade:** receita `CityTownRecipes.ValeDosSatiros` (`CityTownRecipes.ValeDosSatiros.cs`) no estilo novo
+  `TownStyles.Glade` (`TownArchitecture.Glade`, linha 20 da `TownPalette`: verde-claro `#9CCB6A`, vime `#C9A76A`, pedra
+  `#B7AFA3`, ouro do rio `#E3B341` (brilha um pouco: o Pactolo), flor `#E27A9B`, uva `#5E3A6E`, folha de videira
+  `#5E8F3A`, vaga-lume `#F4F09A` (brilha)). Cada casa é uma **cabaça de vime** (`TownBuildingSpec.GourdHut`:
+  `TownKit.GourdHutHouse`): anel de pedras no pé, corpo de vime que incha e afina num pescoço com duas faixas trançadas de
+  palha, tampa de folhas com cabinho enrolado, porta redonda com guirlanda de flores, janelas redondas acesas; na frente um
+  **caramanchão de videira** em dois postes (nos `PorchPostsX`) com folhas, cachos de uva e a tabuleta pendurada. Peças:
+  `GoldenRiver` (o **rio de seixos dourados**, Água Viva com leito de ouro e seixos nas margens, de segmento, com **vau de
+  pedras chatas** no meio; pisável), `VineRow` (fileira de videiras em postes e arames, com cachos), `StoneStage` (o
+  **palco de pedra** redondo do baile, dois degraus com borda de ouro, suporte de flauta e anel de flores; variante 1
+  pequeno, um degrau) e `GroveOak` (carvalho largo do bosque; variante 1 com uma **flauta dupla** e uma fita penduradas no
+  galho); portão em **túnel de folhagem** (`TownKit.LeafTunnelGate`: postes com videira, três arcos de folhas, flores e uma
+  lanterna de vaga-lumes); vitrine da Flauta Dupla (`TownShopDressing.DoubleFlute`: flautas duplas num suporte, flauta de
+  pã, tambor e cesto de uvas). Peças em `TownKit.Glade.cs`. Ruas Oeste (a entrada), **Norte** (a subida para Farnkesh) e
+  Leste de 19 m; o palco grande na praça (sudoeste do centro, livre do respawn e da barraca do Ammo) e um pequeno numa
+  clareira ao sul; o rio atravessa o sul do vale (z = −13,5) e um braço cruza a rua Norte; **sem rua ao sul**: o rio e o
+  bosque; tudo dentro de 22,5 m (o sólido mais longe chega a 21,4 m), em y = 0; `CityLayoutRules.Validate` sem problemas,
+  com e sem o mascate.
+- **Respawn:** derrota no 53 acorda na clareira do baile.
+- **Flauta Dupla** (diária, 3 vagas): poções, Runa de Vento (canções de estrada), Garrafa de Ar Sereno e carne fixas; giram
+  erva, fibra, corda, Runa de Clareza, Amuleto da Sorte e Pedra da Bênção (nunca Vida/Caos). O 53 não tem exigência.
+- **Missões:** Midas pede 8 abelhas de ouro fora do rio (o Enxame de Vaga-lumes faz a Abelha Dourada da ficha; poções +
+  200 ouro, 2600 XP); depois Gordias pede 7 raposas fora da vinha (o Chacal faz a Raposa da Vinha; 3 Runas de Vento + 200
+  ouro, 2700 XP). Testes: `CityValeDosSatirosTests`.
+- **Falta:** o **dourado** (golpes das abelhas douram, lavar no rio tira), o Baile do Vale (minijogo de ritmo, Pó de Ouro do
+  Pactolo), O Ouro de Midas, o Bode Dourado de Gordias e os quebra-cabeças de corda dos baús.
+
+O Vale fica fora de `CityCatalog.Cities` (é `RaceCity`) e abre pelo mundo contínuo dos Picos de Farnkesh (outro trabalho)
+ou pelo menu de prévia do editor (`Preview Walkable Town/Vale dos Sátiros`).
+
 ### 1.2 Cidades das regiões tardias (`CityCatalog.LateRegionCities`)
 
-Cidades das regiões 5–8 (Docs/Mapas100.md), que ainda não têm bioma no mapa-múndi. Ficam fora de `Cities` (sem painel
+Cidades das regiões 5–10 (Docs/Mapas100.md), que ainda não têm bioma no mapa-múndi. Ficam fora de `Cities` (sem painel
 no mapa-múndi, sem Ammo, fora da lista das Barcas) e de `RaceCities`; `IsLateRegionCity` as reconhece e `IsHubCity`
 separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestado (Floresta: sempre desbloqueada, então o
 `CityProgress.ApplyDefeatIn` sempre acorda na praça delas). Estilo próprio escolhido na receita (`CityTownRecipe.Style`).
 
 | Região | Cidade | Moradores | Loja | Missões |
 |---|---|---|---|---|
+| Picos de Farnkesh (mapas 54–58) | **Farnkesh, os Ninhos de Pedra** (capital do Vento Vivo, `farnkesh`) | Shad-Ohrmizd, o Guardião dos Sinos (ninho na cabeça da praça), Sisin, o Mestre das Pontes (rua Oeste), Tadi, a Dobradora de Papel de Vento (rua Leste), Ardawan, o Trançador de Corda (rua Sul) | **Cordas do Sisin** (`shop_cordas_sisin`) | Shad-Ohrmizd: "Abutres nos Sinos"; Tadi: "Vento Ruim nas Pontes" |
 | Planície de Mingcheng (mapa 41; 43, 44 e 46 planejados) | **Mingcheng, a Cidade dos Nove Anéis** (capital, `mingcheng`) | Bögü, o Chefe da Guarda dos Anéis (salão na cabeça da praça), Mestre Mōzak, o Guardião das Lanternas (rua Oeste), Lin Deng, o Mestre do Canal (rua Leste), Fuduodan, o Leitor (rua Leste) | **Lanternas do Mestre Mōzak** (`shop_lanternas_mozak`) | Bögü: "Leões nos Portões"; Lin Deng: "Peixes no Canal" |
 | Teto do Mundo (mapas 36–40) | **Sangkent, a Cidade-Escadaria** (capital, `sangkent`) | Abā, o Chefe das Calhas (casa na cabeça da praça), Sisinnios, o Agasalheiro (rua Oeste), Kustai, o Escriba (rua Leste), Baraies, o Professor (rua Leste) | **Agasalhos do Sisinnios** (`shop_agasalhos_sisinnios`) | Abā: "Pedras nas Calhas"; Kustai: "Neblina no Quadro" |
 | Delta de Jhilpur (mapas 31, 32 e 35) | **Jhilpur, a Cidade nas Raízes** (capital, `jhilpur`) | Salmaios, o Guardião da Raiz-Mãe (rua Norte), Nuhzadag, o Barqueiro (rua Oeste), Abiesous, o Mestre da Escola de Barco (rua Leste), Tehat, a Erveira (rua Leste) | **Barcos e Trocas do Nuhzadag** (`shop_trocas_nuhzadag`) | Salmaios: "Lodo nos Ghats"; Abiesous: "Corvos nos Remos" |
@@ -494,6 +527,40 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
   pelo menu de prévia do editor (`Preview Walkable Town/Mingcheng`). Os 9 anéis de verdade, os portões por hora (tambor e
   sino), as Barcas de canal entre os bairros 4–6, a Festa das Lanternas com charadas, a Lâmpada de Mingcheng (G4 da
   Maria), o Qilin de Jade e o conjunto Pátio dos Nove Anéis ainda faltam.
+
+**Farnkesh, os Ninhos de Pedra** (capital do Vento Vivo, região 10 — Picos de Farnkesh, mapa 54; cidade de retorno de
+54–58):
+- **Passeio da cidade:** receita `CityTownRecipes.Farnkesh` (`CityTownRecipes.Farnkesh.cs`) no estilo novo
+  `TownStyles.PinnacleNest` (`TownArchitecture.PinnacleNest`, linha 19 da `TownPalette`: cal `#F1ECE2`, madeira vermelha
+  `#9A3B2E`, ouro `#D9A82B`, arenito `#B58A60`, nuvem `#EEF3F7`, céu `#8FB8E0`, corda de iaque `#8A7A5E`, bronze de sino
+  `#A87B3C`); o chão entre as casas é o **mar de nuvens**. Cada casa é um **ninho no pináculo**
+  (`TownBuildingSpec.PinnacleNest`: `TownKit.PinnacleNestHouse`): pé de arenito saindo das nuvens, **paredes de cal
+  inclinadas** (tronco de pirâmide), faixa de madeira pintada de vermelho sob o beiral, janelas de madeira pintada, porta
+  com moldura vermelha e verga de ouro, degraus de pedra, **telhado de tábua com pedras em cima** e remate de ouro; na
+  frente uma **varanda para o vazio** em dois postes vermelhos (nos `PorchPostsX`) com corrimão de corda de iaque, um
+  sininho e a tabuleta pendurada. Peças: `WindBell` (o **sino de vento gigante** da praça: plinto de arenito, armação de
+  madeira vermelha com remates de ouro, o sino de bronze com badalo e quatro sininhos em volta), `StonePinnacle`
+  (pináculo de arenito em três lances com nuvens no pé; variante 1 com um **ninho branco** agarrado no alto), `RopeBasket`
+  (o **cesto de corda** que o Sisin puxa: cavalete de madeira, roldana, corda e cesto de vime) e `CloudGap` (vão de nuvem
+  atravessando a rua, o céu lá embaixo, com **ponte de tábua e corda** em quatro postes; pisável); portão de **postes com
+  sininhos** (`TownKit.BellPostGate`: dois postes vermelhos com remate de ouro e uma corda com cinco sininhos de bronze);
+  vitrine do Sisin (`TownShopDressing.RopeWalker`: rolos de corda num cabideiro, tábuas de ponte, vara de equilíbrio e um
+  cesto). Peças em `TownKit.PinnacleNest.cs`, colisores em `CitySolids`. Ruas Oeste (as pontes para fora), Leste e **Sul**
+  (a entrada: a estrada que sobe do Vale dos Sátiros) de 19 m; Cais da Barca na rua Oeste; o sino a 4,2 m ao norte do centro
+  (livre do respawn); vãos de nuvem nas ruas Leste e Sul; **sem rua ao norte**: ali os pináculos ficam nas nuvens com
+  dois cestos; tudo dentro de 22,5 m (o sólido mais longe chega a 21,6 m), em y = 0; `CityLayoutRules.Validate` sem
+  problemas, com e sem o mascate.
+- **Respawn:** derrota nos mapas 54–58 acorda na praça de Farnkesh, debaixo do sino (`MapCatalog.RespawnCityFor` →
+  `ApplyDefeatIn`).
+- **Cordas do Sisin** (diária, 3 vagas que giram, tema Especialidade): poções e **as exigências da região**, fixas desde o
+  primeiro dia: a **Capa de Tempestade** (57, Garganta dos Ays, 1100) e as **Asas de Lona** (58, Ninho da Huma, 420; vestir
+  nas costas); corda, Vara de Equilíbrio e Grampos para as pontes e as ermidas; giram chá de gengibre, manta, Ar Sereno,
+  Runa de Vento, carne, Amuleto da Sorte e Pedra da Bênção (nunca Vida/Caos). O Ammo nunca para lá.
+- **Missões da cidade:** Shad-Ohrmizd pede 7 abutres do pico fora dos sinos (o Abutre de Brasa faz o Abutre do Pico da
+  ficha; poções + 210 ouro, 2800 XP); depois Tadi pede 6 neblinas de vento ruim fora das pontes de corda (a Neblina do
+  Vento Ruim do 55; **Capa de Tempestade** + 210 ouro, 2900 XP). Testes: `CityFarnkeshTests`.
+- **Falta:** os pináculos em alturas de verdade (subir de cesto, descer planando), o evento Vendaval, o G4 da Maithe
+  (Sopro de Farnkesh), o Senmurv e o conjunto Ninho de Pedra.
 
 Código: `CityCatalog`, `CityShopCatalog` (dados), `CityTexts` (textos en/pt-BR), `VillageHubButton` (o mesmo painel
 para toda cidade), `CityFastTravelPanel` (Barcas de Luz), `CitySafeZoneHud` (aviso), `WorldMapCityPresence` (zona

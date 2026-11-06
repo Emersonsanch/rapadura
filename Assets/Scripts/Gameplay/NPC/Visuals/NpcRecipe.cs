@@ -251,6 +251,16 @@ namespace Rapadura.Gameplay.NPC.Visuals
         /// </summary>
         public bool Twigs;
 
+        /// <summary>
+        /// The satyrs of the Vale (Docs/Mapas100.md §3.3): from the hips down goat legs in <see cref="Fur"/> (a thigh forward, the
+        /// shin bent back to the hock, dark cloven hooves) and a short tail; small goat horns sweeping back from the crown and
+        /// pointed ears out to the sides. Wear a short garment (<see cref="NpcGarment.Tunic"/>) so the legs show.
+        /// </summary>
+        public bool Satyr;
+
+        /// <summary>The goat fur of a <see cref="Satyr"/>'s legs and tail.</summary>
+        public NpcSwatch Fur = NpcSwatch.FurBrown;
+
         /// <summary>One line of why they look like this (Docs/NPCs.md, the preview labels).</summary>
         public string Story = string.Empty;
 
@@ -261,6 +271,6 @@ namespace Rapadura.Gameplay.NPC.Visuals
         /// <summary>A short signature of the silhouette (tests: two named NPCs never share one).</summary>
         public string SilhouetteKey =>
             $"{Age}/{Build}/{Posture}/{Hair}/{Beard}/{Headwear}/{Garment}/{(int)Layers}/{LeftArm}/{RightArm}/{string.Join(",", Props)}" + (ElfEars ? "/elf" : string.Empty) + (Tusks ? "/orc" : string.Empty) + (Snout ? "/kobold" : string.Empty)
-            + (Horns ? "/bull" : string.Empty) + (Gills ? "/reef" : string.Empty) + (HorseBody ? "/centaur" : string.Empty) + (Twigs ? "/trunk" : string.Empty);
+            + (Horns ? "/bull" : string.Empty) + (Gills ? "/reef" : string.Empty) + (HorseBody ? "/centaur" : string.Empty) + (Twigs ? "/trunk" : string.Empty) + (Satyr ? "/satyr" : string.Empty);
     }
 }

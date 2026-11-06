@@ -176,6 +176,18 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string Arvoredo = "arvoredo";
 
+        /// <summary>
+        /// The Vale dos Sátiros, race city of the satyrs (map 53, its own return city, Docs/Mapas100.md §3.3 and região 10).
+        /// Same id as <c>MapCatalog.ValeDosSatiros</c> and <c>CityTownRecipes.ValeCityId</c>.
+        /// </summary>
+        public const string ValeDosSatiros = "vale_dos_satiros";
+
+        /// <summary>
+        /// Farnkesh, os Ninhos de Pedra, the capital of the Picos de Farnkesh (map 54, return city of maps 54–58, Docs/Mapas100.md
+        /// §2 and região 10). Same id as <c>MapCatalog.Farnkesh</c> and <c>CityTownRecipes.FarnkeshCityId</c>.
+        /// </summary>
+        public const string Farnkesh = "farnkesh";
+
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
             new CitySpec(VilaZefa, BiomeType.Forest,
@@ -394,6 +406,19 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("aryaman"),
                 },
                 new List<string> { CityShopCatalog.ViveiroSuvarnapushpa }),
+
+            // Vale dos Sátiros (the satyrs, the Picos de Farnkesh, região 10; the Phrygian myths of the ficha): King Midas, touched by
+            // Āz, whose hands turn everything to gold (missions: the golden bees of the river), Marsyas, the master of the double
+            // flute (the city's shop: the Flauta Dupla) and Gordias, the farmer of the knots (second mission). Region: the borrowed
+            // Forest (the Picos de Farnkesh have no world-map biome).
+            new CitySpec(ValeDosSatiros, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("midas"),
+                    new CityResidentSpec("marsyas", CityShopCatalog.FlautaDupla),
+                    new CityResidentSpec("gordias"),
+                },
+                new List<string> { CityShopCatalog.FlautaDupla }),
         };
 
         /// <summary>
@@ -464,6 +489,22 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("fuduodan"),
                 },
                 new List<string> { CityShopCatalog.LanternasMozak }),
+
+            // Farnkesh, os Ninhos de Pedra (the Picos de Farnkesh, região 10; names of the Manichaean mission to the east):
+            // Shad-Ohrmizd, who founded an eastern branch of the church, here the guardian of the wind bells (missions), Sisin
+            // (Sisinnios, Mani's successor), here the master of the rope bridges who pulls the baskets (the city's shop: the gear
+            // of the gates 57 and 58), Tadi, the sister of Nafsha in the mission story of Palmyra, here the folder of wind paper
+            // (second mission), and Ardawan, the Parthian prince of Mar Ammo's mission, here the braider of yak rope. Region: the
+            // borrowed Forest (as Mingcheng).
+            new CitySpec(Farnkesh, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("shad_ohrmizd"),
+                    new CityResidentSpec("sisin", CityShopCatalog.CordasSisin),
+                    new CityResidentSpec("tadi"),
+                    new CityResidentSpec("ardawan"),
+                },
+                new List<string> { CityShopCatalog.CordasSisin }),
         };
 
         /// <summary>Ammo, the peddler: not a resident of one city, he is wherever his mule is today (<see cref="ShopRotation.MascateRegion"/>).</summary>

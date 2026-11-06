@@ -60,6 +60,14 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         Kurgans = 70,
         /// <summary>The Caucasus massif: tilted rock strata in long hogback ridges with sharp crests, the highest ground of the steppe.</summary>
         Massif = 71,
+
+        // Região 10 — Picos de Farnkesh (OverworldRelief.Farnkesh.cs): 80–89.
+        /// <summary>Sandstone pinnacles: sheer round towers with domed tops standing out of a low floor (the trails and clearings keep to the floor).</summary>
+        Pinnacles = 80,
+        /// <summary>Cloud isles: flat-topped stone islands with sheer sides over a low cloud floor (the trails cross on the floor).</summary>
+        CloudIsles = 81,
+        /// <summary>A narrow gorge: two high walls along the area, a level floor between them.</summary>
+        NarrowGorge = 82,
     }
 
     /// <summary>What the relief knows about one point besides its height (ground colours and scatter read it).</summary>
@@ -671,11 +679,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 default:
                     if (DesertShape(style, x, z, a, out smooth, out shaped) || CoastShape(style, x, z, a, out smooth, out shaped)
                         || DeltaShape(style, x, z, a, out smooth, out shaped) || PamirShape(style, x, z, a, out smooth, out shaped)
-                        || MingchengShape(style, x, z, a, out smooth, out shaped) || NartesShape(style, x, z, a, out smooth, out shaped))
+                        || MingchengShape(style, x, z, a, out smooth, out shaped) || NartesShape(style, x, z, a, out smooth, out shaped)
+                        || FarnkeshShape(style, x, z, a, out smooth, out shaped))
                     {
                         break; // Região 2: dunes, mesas, canyons (.Desert.cs); Região 5: cliffs, islets (.Coast.cs); Região 6: hummocks, levees (.Delta.cs);
                                // Região 7: moraines, ice tongues, seracs, peaks (.Pamir.cs); Região 8: karst towers, the wall's crest (.Mingcheng.cs);
-                               // Região 9: kurgans, the Caucasus massif (.Nartes.cs).
+                               // Região 9: kurgans, the Caucasus massif (.Nartes.cs); Região 10: pinnacles, cloud isles, the gorge (.Farnkesh.cs).
                     }
 
                     smooth = shaped = a * SmoothStep(0f, 1f, 0.5f + 0.85f * OverworldNoise.Fbm(x, z, 2));

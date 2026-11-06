@@ -81,6 +81,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
         GreatPot = 34,
         /// <summary>Suvarnapushpa (Arvoredo de Haripushpa): rows of seedlings in bark pots, a watering gourd, a young larch in a tub.</summary>
         Nursery = 35,
+        /// <summary>Sisin (Farnkesh): coils of yak rope on a peg rack, a stack of bridge planks, a balance pole and a basket.</summary>
+        RopeWalker = 36,
+        /// <summary>Marsyas (Vale dos Sátiros): double flutes on a stand, a pan-pipe, a drum and a basket of grapes.</summary>
+        DoubleFlute = 37,
     }
 
     /// <summary>
@@ -226,6 +230,21 @@ namespace Rapadura.Gameplay.World.Cities.Town
         public bool HollowTrunk;
 
         /// <summary>
+        /// Farnkesh, os Ninhos de Pedra: a house on a pinnacle (Docs/Mapas100.md map 54, style <c>PinnacleNest</c>): a sandstone
+        /// rock foot coming up out of the clouds, white lime walls leaning in, a band of painted red wood under the eaves with
+        /// window frames of painted wood, a shallow plank roof weighed down with stones and a balcony out over the void
+        /// (TownKit.PinnacleNest).
+        /// </summary>
+        public bool PinnacleNest;
+
+        /// <summary>
+        /// Vale dos Sátiros: a gourd-shaped wicker house (Docs/Mapas100.md §3.3, style <c>Glade</c>): a swelling wicker body on a
+        /// ring of stones, a narrower neck and a leafy cap with a stalk, a round door with a flower garland and a vine pergola in
+        /// front (TownKit.Glade).
+        /// </summary>
+        public bool GourdHut;
+
+        /// <summary>
         /// Mercado dos Túneis: with <see cref="TownRoofKind.Rock"/>, a stall set into an arched basalt niche: the round arch,
         /// a striped canvas awning on copper poles, a counter, bottle lanterns and a copper air pipe up the rock (TownKit.TunnelBazaar).
         /// </summary>
@@ -266,7 +285,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Key of the cached mesh: equal specs share one mesh.</summary>
         public string CacheKey =>
             $"{Kind}|{Width:0.00}|{Depth:0.00}|{PorchDepth:0.00}|{FullVaranda}|{WallHeight:0.00}|{Floors}|{Roof}|{WallColor}|{TrimColor}|{RoofColor}|" +
-            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{RootStilt}|{StiltLonghouse}|{StoneTerrace}|{RingWallHall}|{SpireHouse}|{FeltYurt}|{GiantRoundhouse}|{HollowTrunk}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
+            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{RootStilt}|{StiltLonghouse}|{StoneTerrace}|{RingWallHall}|{SpireHouse}|{FeltYurt}|{GiantRoundhouse}|{HollowTrunk}|{PinnacleNest}|{GourdHut}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
             $"{Chimney}|{Sign}|{SignColor}|{Dressing}|{Seed}";
     }
 }

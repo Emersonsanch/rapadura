@@ -40,7 +40,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
             kind == CityPropKind.RootBridge || kind == CityPropKind.Ghat || kind == CityPropKind.SwampEdge || kind == CityPropKind.Boardwalk ||
             kind == CityPropKind.TerraceWall || kind == CityPropKind.IrrigationChannel ||
             kind == CityPropKind.RingWall || kind == CityPropKind.CanalBridge || kind == CityPropKind.SpireTerrace || kind == CityPropKind.LeafBridge ||
-            kind == CityPropKind.RopeCorral || kind == CityPropKind.EarthRing || kind == CityPropKind.MeltStream;
+            kind == CityPropKind.RopeCorral || kind == CityPropKind.EarthRing || kind == CityPropKind.MeltStream ||
+            kind == CityPropKind.CloudGap || kind == CityPropKind.GoldenRiver || kind == CityPropKind.VineRow;
 
         /// <summary>Unit direction of a segment prop and the side its mass stands on (left of the direction: east-going → north).</summary>
         public static Vector2 SegmentBack(Vector2 direction) => new Vector2(-direction.y, direction.x);
@@ -134,6 +135,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.MossStone: MossStone(b, s, prop.Variant); return true;
                 case CityPropKind.Larch: Larch(b, s, prop.Variant); return true;
                 case CityPropKind.MeltStream: MeltStream(b, d); return true;
+                case CityPropKind.WindBell: WindBell(b, s); return true;
+                case CityPropKind.StonePinnacle: StonePinnacle(b, s, prop.Variant); return true;
+                case CityPropKind.RopeBasket: RopeBasket(b, s); return true;
+                case CityPropKind.CloudGap: CloudGap(b, d); return true;
+                case CityPropKind.GoldenRiver: GoldenRiver(b, d); return true;
+                case CityPropKind.VineRow: VineRow(b, d, s); return true;
+                case CityPropKind.StoneStage: StoneStage(b, s, prop.Variant); return true;
+                case CityPropKind.GroveOak: GroveOak(b, s, prop.Variant); return true;
                 default: return false;
             }
         }
@@ -909,6 +918,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
                 case TownShopDressing.Nursery:
                     LivingGroveDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.RopeWalker:
+                    PinnacleNestDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.DoubleFlute:
+                    GladeDressing(b, spec, x, y, z, zFacade);
                     break;
 
                 case TownShopDressing.AirBottles:

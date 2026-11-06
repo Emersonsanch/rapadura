@@ -116,6 +116,8 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.SelariaNomade, "Nomad Saddlery", "Selaria Nômade"),
                 Shop(CityShopCatalog.PanelaGrande, "The Great Pot", "Panela Grande"),
                 Shop(CityShopCatalog.ViveiroSuvarnapushpa, "Suvarnapushpa's Nursery", "Viveiro da Suvarnapushpa"),
+                Shop(CityShopCatalog.FlautaDupla, "The Double Flute", "Flauta Dupla"),
+                Shop(CityShopCatalog.CordasSisin, "Sisin's Ropes", "Cordas do Sisin"),
             };
 
             // ---- Cities ----
@@ -179,6 +181,14 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.Arvoredo, "Haripushpa Grove", "Arvoredo de Haripushpa", "Haripushpa Grove", "Arvoredo",
                 "The trunk folk's grove at the edge of the steppe, where the taiga begins: houses inside huge hollow trunks with root steps and nest windows, larches, a circle of mossy standing stones and streams of meltwater crossed by split logs. The trunk folk drink the Living Water of the thaw and remember everything; they say one sentence a minute, and here the clock walks at half speed.",
                 "O arvoredo do povo-tronco na beira da estepe, onde começa a taiga: casas dentro de troncos ocos enormes com degraus de raiz e janelas de ninho, lariços, um círculo de pedras com musgo e riachos de degelo cruzados por troncos rachados. O povo-tronco bebe a Água Viva do degelo e lembra de tudo; fala uma frase por minuto, e aqui o relógio anda pela metade.");
+
+            AddCity(entries, CityCatalog.ValeDosSatiros, "Satyr Vale", "Vale dos Sátiros", "Satyr Vale", "Vale dos Sátiros",
+                "The satyrs' valley at the foot of the peaks of Farnkesh: gourd-shaped wicker houses round clearings of grass, stone stages for the dance, rows of vines, broad oaks and a river of golden pebbles, the Pactolus, where King Midas washes the gold off his hands. The satyrs play the Living Wind on double flutes, and at dusk the whole valley dances in a ring.",
+                "O vale dos sátiros ao pé dos picos de Farnkesh: casas de vime em forma de cabaça em volta de clareiras de grama, palcos de pedra para o baile, fileiras de videiras, carvalhos largos e um rio de seixos dourados, o Pactolo, onde o rei Midas lava o ouro das mãos. Os sátiros tocam o Vento Vivo em flautas duplas, e ao entardecer o vale inteiro dança em roda.");
+
+            AddCity(entries, CityCatalog.Farnkesh, "Farnkesh, the Stone Nests", "Farnkesh, os Ninhos de Pedra", "Farnkesh", "Farnkesh",
+                "The capital of the Living Wind, above the clouds: white houses with leaning walls on sandstone pinnacles, windows of painted red wood, plank roofs held down with stones and balconies over the void. Rope bridges cross the gaps of cloud, Sisin pulls the rope baskets up and down, and on the plaza of the largest pinnacle hangs the giant wind bell. Farn is the glory that lives up high; here people like wind and silence.",
+                "A capital do Vento Vivo, acima das nuvens: casas brancas de parede inclinada sobre pináculos de arenito, janelas de madeira pintada de vermelho, telhados de tábua presos com pedras e varandas para o vazio. Pontes de corda atravessam os vãos de nuvem, o Sisin puxa os cestos de corda para cima e para baixo, e na praça do pináculo maior fica o sino de vento gigante. Farn é a glória que mora no alto; aqui as pessoas gostam de vento e de silêncio.");
 
             AddCity(entries, CityCatalog.PalafitasTarchon, "Tarchon Stilts", "Palafitas de Tarchon", "Tarchon", "Tarchon",
                 "The trols' city in the open swamp: long houses on tall piles with leaf roofs down to the floor, plank boardwalks over the bog water, nets drying, baskets as tall as a cousin and floating reed islands. At night the swamp fills with will-o'-wisps, sparks caught in the Ar Sereno; half the trols stared at them until they forgot themselves, and every spark set free wakes a neighbour.",
@@ -901,6 +911,64 @@ namespace Rapadura.UI.WorldMap
                 ("Ícaro, that mushroom is not for eating. That one neither. ...That one is a stone, Ícaro.", "Ícaro, esse cogumelo não é de comer. Esse também não. ...Esse aí é uma pedra, Ícaro."),
                 ("Lavine, I carry a letter from Grandma Edna to Haripushpa. It is three lines long. He will take a week to answer.", "Lavine, eu trago uma carta da Vó Edna para o Haripushpa. Tem três linhas. Ele vai levar uma semana para responder."),
                 ("A Sogdian among trees: I bring letters, I take herbs. The road between them is my house.", "Um sogdiano entre as árvores: eu trago cartas, levo ervas. A estrada entre um e outro é a minha casa."));
+
+            // ---- Vale dos Sátiros (the Phrygian myths of Midas, Marsyas and Gordias; satyrs of the Living Wind) ----
+            AddResident(entries, "midas", "Midas, the King of Golden Hands", "Midas, o Rei de Mãos Douradas",
+                ("Joaquim, do not pass me the bread. Really. Last time it became a very heavy, very shiny loaf.", "Joaquim, não me passa o pão. Sério. Da última vez virou um pão muito pesado e muito brilhante."),
+                ("Maria, gold is pretty for a day. Then you miss the taste of grapes. Remember that when someone offers you gold.", "Maria, ouro é bonito por um dia. Depois você sente falta do gosto da uva. Lembra disso quando alguém te oferecer ouro."),
+                ("Maithe, the eldest of you looks at my hands the way a doctor does. Kind and serious. Thank you for not laughing.", "Maithe, a mais velha de vocês olha para as minhas mãos como um médico olha. Gentil e séria. Obrigado por não rir."),
+                ("Ícaro, no, you cannot touch my crown to see if you turn gold. ...Yes, it would work. That is why no.", "Ícaro, não, você não pode encostar na minha coroa para ver se vira ouro. ...Sim, ia funcionar. Por isso mesmo não."),
+                ("Lavine, Grandma Edna once washed my hands in the river herself and said: there, a king again. I have tried to deserve it since.", "Lavine, a Vó Edna uma vez lavou as minhas mãos no rio ela mesma e disse: pronto, rei de novo. Desde então eu tento merecer."),
+                ("Everything I touch turns to gold, except when I wash in the river. Kings should wash more often.", "Tudo o que eu toco vira ouro, menos quando eu me lavo no rio. Rei devia se lavar mais vezes."));
+
+            AddResident(entries, "marsyas", "Marsyas, the Master of the Flute", "Marsyas, o Mestre da Flauta",
+                ("Joaquim, you breathe slow and deep, like a guardian. That is half of the flute already. The other half is daring.", "Joaquim, você respira devagar e fundo, como um guardião. Isso já é metade da flauta. A outra metade é coragem."),
+                ("Maria, every song of the road is a little map. Learn this one and you will never lose the way to the Vale.", "Maria, toda canção de estrada é um mapinha. Aprende esta e você nunca mais perde o caminho do Vale."),
+                ("Maithe, you are the one the Living Wind listens to. Play one note, just one, and hear the peaks answer you.", "Maithe, você é quem o Vento Vivo escuta. Toca uma nota, uma só, e escuta os picos te responderem."),
+                ("Ícaro, the double flute is two flutes, so you can play two wrong notes at once. You are a natural.", "Ícaro, a flauta dupla são duas flautas, então dá para tocar duas notas erradas ao mesmo tempo. Você nasceu para isso."),
+                ("Lavine, Grandpa Jorge danced at the Baile do Vale until the moon set, and he could not dance at all. That is the best kind of dancer.", "Lavine, o Vô Jorge dançou no Baile do Vale até a lua se pôr, e ele não sabia dançar nada. É o melhor tipo de dançarino."),
+                ("Flutes, songs for the road, wind runes. At dusk, the dance. Everyone dances, even the oaks, a little.", "Flautas, canções de estrada, runas de vento. Ao entardecer, o baile. Todo mundo dança, até os carvalhos, um pouquinho."));
+
+            AddResident(entries, "gordias", "Gordias, the Farmer of the Knots", "Gordias, o Fazendeiro dos Nós",
+                ("Joaquim, a good knot is like a good guardian: it holds when pulled and lets go when asked.", "Joaquim, um nó bom é como um guardião bom: segura quando puxam e solta quando pedem."),
+                ("Maria, I tie the vines so the grapes face the sun. A vine that sees the light grows sweet. People too.", "Maria, eu amarro as videiras para as uvas ficarem de frente para o sol. Videira que vê a luz fica doce. Gente também."),
+                ("Maithe, here, hold this end. ...See? The eldest always knows which end to hold. Your brother grabbed the middle.", "Maithe, toma, segura esta ponta. ...Viu? A mais velha sempre sabe qual ponta segurar. O seu irmão pegou no meio."),
+                ("Ícaro, that chest opens with a knot puzzle. Solve it and what is inside is yours. ...Take your time. Really.", "Ícaro, aquele baú abre com um quebra-cabeça de nó. Resolve e o que tiver dentro é seu. ...Sem pressa. Sério."),
+                ("Lavine, Grandma Edna tied the knot on that gate forty years ago. Nobody has opened it since, and nobody wants to.", "Lavine, a Vó Edna deu o nó daquele portão há quarenta anos. Ninguém abriu desde então, e ninguém quer."),
+                ("Rope, vines and knots. Some knots are for opening, some are for keeping. I tie both.", "Corda, videira e nó. Tem nó de abrir e nó de guardar. Eu amarro os dois."));
+
+            // ---- Farnkesh (names of the Manichaean mission to the east; the Living Wind) ----
+            AddResident(entries, "shad_ohrmizd", "Shad-Ohrmizd, the Keeper of the Bells", "Shad-Ohrmizd, o Guardião dos Sinos",
+                ("Joaquim, up here a guardian guards with his ears. Close your eyes: which bell is out of tune? ...Good. The third.", "Joaquim, aqui em cima um guardião guarda com os ouvidos. Fecha os olhos: qual sino está desafinado? ...Isso. O terceiro."),
+                ("Maria, farn is the glory that lives up high, the good luck of the light. It is not ours. We only keep it company.", "Maria, farn é a glória que mora no alto, a boa sorte da luz. Não é nossa. A gente só faz companhia para ela."),
+                ("Maithe, the Living Wind is born in these nests. You are the only one of the cousins who can hear it. It has been waiting for you.", "Maithe, o Vento Vivo nasce nestes ninhos. Você é a única dos primos que escuta ele. Ele estava esperando você."),
+                ("Ícaro, yes, the big bell rings if you hit it. Everyone in the Vale will know it was you. ...Still want to?", "Ícaro, sim, o sino grande toca se você bater nele. Todo mundo no Vale vai saber que foi você. ...Ainda quer?"),
+                ("Lavine, Grandma Edna and Grandpa Jorge sat on that balcony a whole night counting stars between the pinnacles. They lost count and laughed.", "Lavine, a Vó Edna e o Vô Jorge sentaram naquela varanda uma noite inteira contando estrelas entre os pináculos. Perderam a conta e riram."),
+                ("Nine pinnacles, a hundred bells, one wind. When the bells all ring, the ill wind stays out.", "Nove pináculos, cem sinos, um vento. Quando os sinos tocam todos, o vento ruim fica do lado de fora."));
+
+            AddResident(entries, "sisin", "Sisin, the Master of the Bridges", "Sisin, o Mestre das Pontes",
+                ("Joaquim, step where the plank is tied, not where it is pretty. A bridge is honest about where it holds.", "Joaquim, pisa onde a tábua está amarrada, não onde ela é bonita. A ponte é honesta sobre onde ela segura."),
+                ("Maria, I pull the baskets up by hand. Slow going up, fast coming down. Like learning things.", "Maria, eu puxo os cestos na mão. Devagar para subir, rápido para descer. Igual aprender as coisas."),
+                ("Maithe, you walk my bridges like they were floors. The others hold the rope; you hold your brother. Good eldest.", "Maithe, você anda nas minhas pontes como se fosse chão. Os outros seguram a corda; você segura o seu irmão. Boa mais velha."),
+                ("Ícaro, if you jump on the bridge it bounces. If it bounces I come out. If I come out, no more basket rides for you.", "Ícaro, se você pular na ponte ela balança. Se ela balançar eu apareço. Se eu aparecer, acabou o passeio de cesto para você."),
+                ("Lavine, Grandpa Jorge went up in my basket shouting the whole way. Then he asked to go again. Your family is like that.", "Lavine, o Vô Jorge subiu no meu cesto gritando o caminho todo. Depois pediu para ir de novo. A sua família é assim."),
+                ("Rope, planks, poles and cloaks for the gorge. Wings of canvas for the islands. Hold the rope when the gust comes.", "Corda, tábua, vara e capa para a garganta. Asas de lona para as ilhas. Segura a corda quando vier a rajada."));
+
+            AddResident(entries, "tadi", "Tadi, the Folder of Wind Paper", "Tadi, a Dobradora de Papel de Vento",
+                ("Joaquim, this paper is folded so the wind carries it home. Write a word on it for your sister, and let it go.", "Joaquim, este papel é dobrado para o vento levar de volta para casa. Escreve uma palavra para a sua irmã e solta."),
+                ("Maria, my sister Nafsha was healed of a long sickness once, and since then we both make things that fly. Like thank-yous.", "Maria, a minha irmã Nafsha foi curada de uma doença comprida uma vez, e desde então a gente faz coisas que voam. Como obrigados."),
+                ("Maithe, the wind paper flies best when the Living Wind is near. Today it flies for you without even trying.", "Maithe, o papel de vento voa melhor quando o Vento Vivo está perto. Hoje ele voa para você sem nem tentar."),
+                ("Ícaro, no, you cannot fly holding six kites. ...I tried. I was your age. Sisin still tells the story.", "Ícaro, não, você não consegue voar segurando seis pipas. ...Eu tentei. Tinha a sua idade. O Sisin ainda conta a história."),
+                ("Lavine, Grandma Edna folded a wind paper with me and wrote your names on it, all five. It flew so high we never saw it come down.", "Lavine, a Vó Edna dobrou um papel de vento comigo e escreveu o nome de vocês nele, os cinco. Voou tão alto que a gente nunca viu cair."),
+                ("Wind paper, kite cloth and a needle. What the wind takes, it brings back to someone.", "Papel de vento, pano de pipa e agulha. O que o vento leva, ele devolve para alguém."));
+
+            AddResident(entries, "ardawan", "Ardawan, the Braider of Rope", "Ardawan, o Trançador de Corda",
+                ("Joaquim, nine strands of yak wool make a bridge rope. One strand is weak. Nine is a family. Remember that.", "Joaquim, nove fios de lã de iaque fazem uma corda de ponte. Um fio é fraco. Nove é uma família. Lembra disso."),
+                ("Maria, I was a prince of the Parthians once, far away. Now I braid rope. The rope is more useful than the crown ever was.", "Maria, eu fui um príncipe dos partas uma vez, longe daqui. Agora tranço corda. A corda é mais útil do que a coroa jamais foi."),
+                ("Maithe, hold this while I braid. ...You hold it like the wind holds a kite: firm, never tight. That is rare.", "Maithe, segura isto enquanto eu tranço. ...Você segura como o vento segura uma pipa: firme, nunca apertado. Isso é raro."),
+                ("Ícaro, tug-of-war with a rope maker is a bad idea. ...Fine. One pull. Then you help me sweep.", "Ícaro, cabo de guerra com um cordoeiro é má ideia. ...Tá bom. Uma puxada. Depois você me ajuda a varrer."),
+                ("Lavine, the rope of the big bell was braided by me and your grandpa Jorge, one summer. He braided crooked. It still holds.", "Lavine, a corda do sino grande foi trançada por mim e pelo vô Jorge de vocês, num verão. Ele trançava torto. Ainda segura."),
+                ("Yak wool, nine strands, a long afternoon. Every bridge in Farnkesh hangs from someone's patience.", "Lã de iaque, nove fios, uma tarde comprida. Toda ponte de Farnkesh fica pendurada na paciência de alguém."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

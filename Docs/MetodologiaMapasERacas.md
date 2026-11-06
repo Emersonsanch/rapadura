@@ -78,6 +78,8 @@ a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: 
 | Grampos de escalada (38, 52) | levar Grampos de Escalada | Agasalhos do Sisinnios (Sangkent); Panela Grande do Shahmizad (Fortim dos Gigantes, cidade de retorno do 52); recompensa da 2ª missão do Fortim (Virogdad) |
 | Proteção a tempestade (40) | levar Capa de Tempestade | Agasalhos do Sisinnios (Sangkent); recompensa da 2ª missão de Sangkent (Kustai) |
 | Selo do Sol (42) | levar o Selo do Sol (preso ao herói) | Lanternas do Mestre Mōzak (Mingcheng); recompensa da 2ª missão de Mingcheng (Lin Deng) |
+| Proteção a tempestade (57) | levar Capa de Tempestade | Cordas do Sisin (Farnkesh, cidade de retorno do 57); recompensa da 2ª missão de Farnkesh (Tadi); também nos Agasalhos do Sisinnios (Sangkent) |
+| Asas ou salto duplo (58) | **vestir** no slot Costas/Asas as Asas de Lona do Takhsich, ou asas de verdade do Tacho Encantado, ou montaria Voadora | Asas de Lona: Cordas do Sisin (Farnkesh, cidade de retorno do 58), 420 ouro; também na Feira da Miwnay (Mercado dos Túneis) |
 
 Toda exigência das regiões 1–6 tem um "kit" de itens (`MapRequirementRules.KitOf`: o item principal, mais a lamparina no
 17) que a atende sozinho, e cada item do kit é vendido numa loja (`CityShopCatalog`) ou dado por missão
@@ -90,8 +92,13 @@ balcão das Lanternas do Mestre Mōzak em Mingcheng e é a recompensa da 2ª mis
 `CityMingchengTests`; as Torres Brancas, dentro do 42, não o vendem). Os da região 9 (Estepe dos Nartes, só o 52 tem
 exigência hoje: Grampos de Escalada) estão fixos no balcão da Panela Grande do Shahmizad no Fortim, a cidade de retorno do
 52, e são a recompensa da 2ª missão de lá (Virogdad) (2026-11-03, `CityFortimTests`); o Acampamento de Soslan e o
-Arvoredo não têm exigência nos seus mapas. `MapRequirementTests` agora cobre todas as regiões do catálogo (1–9) e confere
-que cada exigência da região 9 está à venda na própria cidade de retorno do mapa. Fora das exigências, a **Garrafa de Ar Sereno** dos kobolds (consumível: +20% de recuperação de vigor por
+Arvoredo não têm exigência nos seus mapas. Os da região 10 (Picos de Farnkesh: 57 pede Capa de Tempestade, 58 Asas ou
+salto duplo; 53–56 sem exigência hoje) estão fixos no balcão das Cordas do Sisin em Farnkesh, a cidade de retorno de 54–58
+(2026-11-06, `CityFarnkeshTests`), junto com corda, Vara de Equilíbrio e Grampos para as pontes e as ermidas; a Capa é
+também a recompensa da 2ª missão de lá (Tadi); o Vale dos Sátiros (53) não tem exigência. `MapRequirementTests` agora
+cobre todas as regiões do catálogo (1–10) e confere que cada exigência das regiões 9 e 10 está à venda na própria cidade
+de retorno do mapa (`GatesOfRegionTen_AreOnTheFixedCounterOfTheirReturnCity_AtItsPrice`: balcão fixo, preço justo, o kit
+abre o mapa; nunca Pedra da Vida/Caos). Fora das exigências, a **Garrafa de Ar Sereno** dos kobolds (consumível: +20% de recuperação de vigor por
 60 s, para o "ar parado" do 22) é vendida na Feira da Miwnay e dada pela missão "Teia nos Tubos" (Takhsich).
 
 Os itens das regiões 5–8 já existem (`Resources/Items`, textos en/pt-BR em `ContentTexts`); os da região 5 (25–30) estão à

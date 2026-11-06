@@ -373,6 +373,18 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 return;
             }
 
+            if (style.Architecture == TownArchitecture.PinnacleNest)
+            {
+                BellPostGate(b, a, c);
+                return;
+            }
+
+            if (style.Architecture == TownArchitecture.Glade)
+            {
+                LeafTunnelGate(b, a, c);
+                return;
+            }
+
             foreach (Vector3 p in new[] { a, c })
             {
                 b.Box(p + Vector3.up * 1.6f, new Vector3(0.7f, 3.2f, 0.7f), style.Walls[0], 0f, TownSwatch.LimeWhite);

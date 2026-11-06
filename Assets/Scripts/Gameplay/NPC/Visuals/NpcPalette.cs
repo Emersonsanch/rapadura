@@ -72,6 +72,12 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // Arvoredo de Haripushpa (povo-tronco, Docs/Mapas100.md §3.3 and map 50): old bark skin #5E4A3A and young bark #8A7458,
         // trunk moss #6E8F4A, spring leaf #A9C96B, meltwater #86C9D6 (glows a little), catkin #F0D27A, larch #4F6B3A, sap amber #D9902E
         SkinBarkOld, SkinBarkYoung, TrunkMoss, SpringLeaf, MeltWater, Catkin, LarchGreen, SapAmber,
+        // Farnkesh, os Ninhos de Pedra (Picos de Farnkesh, Docs/Mapas100.md map 54): lime #F1ECE2, painted red wood #9A3B2E,
+        // gold #D9A82B, pinnacle sandstone #B58A60, cloud #EEF3F7, the high sky #8FB8E0, yak rope #8A7A5E, bell bronze #A87B3C
+        NestLime, NestRed, NestGold, PinnacleSand, CloudWhite, HighSky, YakRope, BellBronze,
+        // Vale dos Sátiros (sátiros, Docs/Mapas100.md §3.3 and map 53): the satyrs' warm #D9A47E and ruddy #B9785A skins, the goat
+        // fur brown #6E4E34, tawny #A87E52 and black #3B302A, grape #5E3A6E, the Pactolus gold #E3B341, glade green #9CCB6A
+        SkinSatyr, SkinSatyrRuddy, FurBrown, FurTawny, FurBlack, Grape, PactolusGold, GladeGreen,
     }
 
     /// <summary>
@@ -83,7 +89,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 22;
+        public const int Rows = 24;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -154,6 +160,12 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Arvoredo  old bark #5E4A3A, young bark #8A7458, trunk moss #6E8F4A, spring leaf #A9C96B, meltwater #86C9D6, catkin #F0D27A, larch #4F6B3A, sap amber #D9902E
             new Color(0.37f, 0.29f, 0.23f), new Color(0.54f, 0.45f, 0.35f), new Color(0.43f, 0.56f, 0.29f), new Color(0.66f, 0.79f, 0.42f),
             new Color(0.53f, 0.79f, 0.84f), new Color(0.94f, 0.82f, 0.48f), new Color(0.31f, 0.42f, 0.23f), new Color(0.85f, 0.56f, 0.18f),
+            // Farnkesh  lime #F1ECE2, painted red #9A3B2E, gold #D9A82B, pinnacle sand #B58A60, cloud #EEF3F7, high sky #8FB8E0, yak rope #8A7A5E, bell bronze #A87B3C
+            new Color(0.95f, 0.93f, 0.89f), new Color(0.6f, 0.23f, 0.18f), new Color(0.85f, 0.66f, 0.17f), new Color(0.71f, 0.54f, 0.38f),
+            new Color(0.93f, 0.95f, 0.97f), new Color(0.56f, 0.72f, 0.88f), new Color(0.54f, 0.48f, 0.37f), new Color(0.66f, 0.48f, 0.24f),
+            // Vale dos Sátiros  satyr #D9A47E, satyr ruddy #B9785A, fur brown #6E4E34, fur tawny #A87E52, fur black #3B302A, grape #5E3A6E, Pactolus gold #E3B341, glade green #9CCB6A
+            new Color(0.85f, 0.64f, 0.49f), new Color(0.73f, 0.47f, 0.35f), new Color(0.43f, 0.31f, 0.2f), new Color(0.66f, 0.49f, 0.32f),
+            new Color(0.23f, 0.19f, 0.16f), new Color(0.37f, 0.23f, 0.43f), new Color(0.89f, 0.7f, 0.25f), new Color(0.61f, 0.8f, 0.42f),
         };
 
         public static int Count => Colors.Length;

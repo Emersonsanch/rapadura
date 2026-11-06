@@ -117,6 +117,19 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// Kucha).
         /// </summary>
         LivingGrove = 17,
+        /// <summary>
+        /// Farnkesh, os Ninhos de Pedra (the Picos de Farnkesh, Docs/Mapas100.md map 54, style <c>PinnacleNest</c>): white houses
+        /// with leaning walls on sandstone pinnacles above the clouds, painted red wood windows, plank roofs weighed with stones,
+        /// balconies over the void, rope bridges over the cloud gaps, rope basket lifts and the giant wind bell of the plaza
+        /// (the dzongs of Bhutan and the rocks of Meteora as form only: houses of people who like wind and silence; no cult).
+        /// </summary>
+        PinnacleNest = 18,
+        /// <summary>
+        /// The Vale dos Sátiros (the Picos de Farnkesh, Docs/Mapas100.md §3.3 and map 53, style <c>Glade</c>): clearings in a ring
+        /// with gourd-shaped wicker houses, stone stages for the dance, rows of vines, broad oaks and the river of golden
+        /// pebbles (the Phrygian myths of Marsyas, Gordias and Midas; the Pactolus).
+        /// </summary>
+        Glade = 19,
     }
 
     /// <summary>
@@ -601,6 +614,55 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Street = TownSwatch.DirtDark, StreetEdge = TownSwatch.GroveMoss, Sidewalk = TownSwatch.Lichen,
             Plaza = TownSwatch.GroveMoss, PlazaAlt = TownSwatch.Lichen,
             Fence = TownSwatch.GroveBark, Plinth = TownSwatch.GroveBark,
+            HouseRoof = TownRoofKind.Flat,
+        };
+
+        /// <summary>
+        /// Farnkesh, os Ninhos de Pedra (Docs/Mapas100.md map 54): picked by hand from the ficha's palette. Lime #F1ECE2, painted
+        /// red wood #9A3B2E, gold #D9A82B, pinnacle sandstone #B58A60, cloud #EEF3F7, the high sky #8FB8E0, yak rope #8A7A5E and
+        /// bell bronze #A87B3C (row 19 of <see cref="TownPalette"/>). Houses stand on sandstone pinnacles
+        /// (<see cref="TownBuildingSpec.PinnacleNest"/>); the ground between them is the sea of clouds, the streets are plank
+        /// walks on the rock, the plaza the sandstone top of the largest pinnacle round the wind bell. The Picos de Farnkesh have no
+        /// world-map biome: <see cref="TownStyle.Region"/> is the borrowed Forest (as the cities of regions 5–9).
+        /// </summary>
+        public static readonly TownStyle PinnacleNest = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Mountain,
+            Architecture = TownArchitecture.PinnacleNest,
+            Walls = new[] { TownSwatch.NestLime, TownSwatch.NestLime, TownSwatch.LimeWhite },
+            Trims = new[] { TownSwatch.NestRed, TownSwatch.NestRed, TownSwatch.NestGold },
+            Roofs = new[] { TownSwatch.WoodWeathered, TownSwatch.YakRope },
+            Joinery = new[] { TownSwatch.NestRed, TownSwatch.WoodDark },
+            Accent = TownSwatch.NestGold,
+            Ground = TownSwatch.CloudWhite, GroundAlt = TownSwatch.HighSky,
+            Street = TownSwatch.PinnacleStone, StreetEdge = TownSwatch.WoodWeathered, Sidewalk = TownSwatch.Sandstone,
+            Plaza = TownSwatch.PinnacleStone, PlazaAlt = TownSwatch.Sandstone,
+            Fence = TownSwatch.YakRope, Plinth = TownSwatch.PinnacleStone,
+            HouseRoof = TownRoofKind.Flat,
+        };
+
+        /// <summary>
+        /// The Vale dos Sátiros (Docs/Mapas100.md §3.3, map 53): picked by hand from the ficha's palette. Glade green #9CCB6A,
+        /// wicker #C9A76A, stage stone #B7AFA3, the gold of the river #E3B341 (glows a little), flower #E27A9B, grape #5E3A6E,
+        /// vine leaf #5E8F3A and the fireflies #F4F09A (glow; row 20 of <see cref="TownPalette"/>). Houses are gourd-shaped wicker
+        /// huts (<see cref="TownBuildingSpec.GourdHut"/>); streets are grass paths between the clearings, the plaza the round
+        /// clearing of the dance. Region: the borrowed Forest.
+        /// </summary>
+        public static readonly TownStyle Glade = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Forest,
+            Architecture = TownArchitecture.Glade,
+            Walls = new[] { TownSwatch.Wicker, TownSwatch.Wicker, TownSwatch.Straw },
+            Trims = new[] { TownSwatch.VineFlower, TownSwatch.VineLeaf },
+            Roofs = new[] { TownSwatch.VineLeaf, TownSwatch.GladeGreen },
+            Joinery = new[] { TownSwatch.WoodWeathered, TownSwatch.Wicker },
+            Accent = TownSwatch.PactolusGold,
+            Ground = TownSwatch.GladeGreen, GroundAlt = TownSwatch.Grass,
+            Street = TownSwatch.Dirt, StreetEdge = TownSwatch.GladeGreen, Sidewalk = TownSwatch.GladeStone,
+            Plaza = TownSwatch.GladeGreen, PlazaAlt = TownSwatch.GladeStone,
+            Fence = TownSwatch.Wicker, Plinth = TownSwatch.GladeStone,
             HouseRoof = TownRoofKind.Flat,
         };
     }

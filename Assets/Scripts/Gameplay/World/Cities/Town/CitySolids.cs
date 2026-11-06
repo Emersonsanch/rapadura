@@ -285,8 +285,21 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.SpoonBench: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.SpoonBenchSize * s, prop.Yaw), 1.2f, owner);
                 case CityPropKind.MossStone: return CitySolid.Capsule(prop.Position, TownKit.MossStoneRadius * s, WallColliderHeight, owner);
                 case CityPropKind.Larch: return CitySolid.Capsule(prop.Position, TownKit.LarchRadius * s, 3f, owner);
+                case CityPropKind.WindBell: return CitySolid.Capsule(prop.Position, TownKit.WindBellRadius * s, WallColliderHeight, owner);
+                case CityPropKind.StonePinnacle: return CitySolid.Capsule(prop.Position, TownKit.StonePinnacleRadius * s, WallColliderHeight, owner);
+                case CityPropKind.RopeBasket: return CitySolid.Capsule(prop.Position, TownKit.RopeBasketRadius * s, 2.5f, owner);
+                case CityPropKind.VineRow:
+                {
+                    Rect run = CityGeometry.RectFromMinMax(prop.Position, prop.End);
+                    return CitySolid.Box(CityGeometry.Inflate(run, TownKit.VineRowHalfThickness), 1.8f, owner);
+                }
+
+                case CityPropKind.StoneStage: return CitySolid.Capsule(prop.Position, TownKit.StoneStageRadius * s, 1.2f, owner);
+                case CityPropKind.GroveOak: return CitySolid.Capsule(prop.Position, TownKit.GroveOakRadius * s, 3f, owner);
 
                 case CityPropKind.MeltStream:
+                case CityPropKind.CloudGap:
+                case CityPropKind.GoldenRiver:
                 case CityPropKind.CanalBridge:
                 case CityPropKind.LeafBridge:
                 case CityPropKind.IrrigationChannel:

@@ -278,6 +278,28 @@ namespace Rapadura.Gameplay.World.Cities.Town
         Larch = 96,
         /// <summary>Arvoredo: a meltwater stream from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> crossing the trail, with a split-log bridge in the middle; walkable.</summary>
         MeltStream = 97,
+
+        // ---- Farnkesh, os Ninhos de Pedra (Picos de Farnkesh; drawn by TownKit.PinnacleNest) ----
+
+        /// <summary>Farnkesh: the giant wind bell of the plaza in a frame of red-painted timber on a sandstone plinth, a ring of small wind chimes round it.</summary>
+        WindBell = 98,
+        /// <summary>Farnkesh: a sandstone pinnacle rising out of the clouds (Variant 1: a small white nest-house clinging to its top, a balcony over the void).</summary>
+        StonePinnacle = 99,
+        /// <summary>Farnkesh: a rope basket lift (the hand elevator Sisin pulls): a timber gantry with a pulley, the yak-rope and a basket hanging under it.</summary>
+        RopeBasket = 100,
+        /// <summary>Farnkesh: a gap of cloud from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> crossing the street, with a plank-and-rope bridge over it in the middle; walkable.</summary>
+        CloudGap = 101,
+
+        // ---- Vale dos Sátiros (Picos de Farnkesh; drawn by TownKit.Glade) ----
+
+        /// <summary>Vale: the river of golden pebbles (the Pactolus) from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> crossing the street, with a ford of flat stones in the middle; walkable.</summary>
+        GoldenRiver = 102,
+        /// <summary>Vale: a row of grape vines on posts and wires from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/>, bunches hanging (its mass behind the line).</summary>
+        VineRow = 103,
+        /// <summary>Vale: the round stone stage of the dance, two steps up and a flute stand on it (Variant 1: a small one, a single step).</summary>
+        StoneStage = 104,
+        /// <summary>Vale: a broad oak of the grove at the foot of the peaks (Variant 1: a double flute and ribbons hung on a low branch).</summary>
+        GroveOak = 105,
     }
 
     public enum CityExitKind

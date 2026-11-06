@@ -140,6 +140,11 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       Arvoredo em (−960, 1560); 47–52 entram no catálogo (☆) e viram zonas (construídos), 25 áreas numa grade 5 × 5, 14 terrenos
       novos, relevo próprio (`Kurgans`, `Massif`) e cenário próprio (a Corrente de Amirani deitada pela montanha); preenche o
       último buraco murado, ao norte da Costa e a leste de Mingcheng. Detalhes em §5, "Região 9".
+    - **Região 10 — Picos de Farnkesh** (2026-11-06): mesmo modelo, 2400 × 2400 m (`OverworldLayouts.Farnkesh.cs`, coordenadas
+      x −1200…1200, z −600…1800) com o Vale dos Sátiros em (0, 0) no Pactolo e Farnkesh em (0, 1080) sobre os pináculos; 53–58 entram
+      no catálogo (☆) e viram zonas (construídos), 25 áreas numa grade 5 × 5, 14 terrenos novos, relevo próprio (`Pinnacles`,
+      `CloudIsles`, `NarrowGorge`) e cenário próprio (pontes de corda deitadas nas suas linhas); o mundo cresce uma fileira ao norte
+      da Estepe. Detalhes em §5, "Região 10".
     - **Mundo costurado** (2026-11-03, pedido do usuário: andar entre as regiões sem portão): as quatro primeiras regiões
       formam um quadrado de 4800 × 4800 m (`OverworldLayouts.WorldId`, `OverworldLayouts.World.cs`), 2 × 2, e a **Costa das
       Monções** fica a leste do Zarafshan (x 1400…3800, z −1000…1400, deslocamento (2000, 200)) e o **Delta de Jhilpur** a
@@ -167,7 +172,14 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       (`exit_auroques`, x 1700; `exit_meroe`, x 2750; `exit_husuni`, x 3500) são levados à trilha mais próxima da Costa logo ao sul
       (a estrada de Aratta, a do Pátio dos Relevos e a ponta das falésias de Husuni) e os três da borda oeste (`exit_loess`, z 1850;
       `exit_torres`, z 2700; `exit_nian`, z 3420) à de Mingcheng (a trilha das Ravinas de Loess, a das Colinas dos Espelhos e a dos
-      Picos do Nian). Rota a pé Vila → Acampamento de Soslan: ~4,0 km pela Costa. Quadrado original:
+      Picos do Nian). Rota a pé Vila → Acampamento de Soslan: ~4,0 km pela Costa. Os **Picos de Farnkesh** abrem uma quarta fileira
+      ao norte da Estepe (x 1400…3800, z 3800…6200, deslocamento (2600, 4400), o Vale dos Sátiros no mundo em (2600, 4400), Farnkesh
+      em (2600, 5480)): os limites passam a **7200 × 9600 m** e as duas células dessa fileira sem região, ao norte do Teto e de
+      Mingcheng, voltam a ser **buracos murados** (`Holes` = 2; o lado oeste dos picos é a queda nas nuvens). Passagens: os dois
+      portões da borda sul (`exit_degelo`, x 2300, pelo Lago de Degelo do 50, sem exigência; `exit_ohya`, x 3560, pelo Cume de Ohya
+      do 52) são levados à trilha mais próxima da Estepe. O Pactolo chega à borda sul em (2880, 3800), onde nasce o Rio dos Nartes.
+      Rota a pé Vila → Vale dos Sátiros ~6,7 km, → Farnkesh ~7,7 km (rampa mais íngreme 18°; o fim da estrada norte da Estepe
+      na Torre de Vigia foi desviado pelo leste, onde a chegada pelo sul tinha 30°). Quadrado original:
       Serra de Kaggen (x −3400…−1000, z −1000…1400) | Bosque do Zarafshan (x −1000…1400, z −1000…1400) em cima;
       Grutas do Limiar (x −3400…−1000, z −3400…−1000) | Areias Flamejantes (x −1000…1400, z −3400…−1000) embaixo.
       Cada região guarda o seu layout nas suas coordenadas e é deslocada por um número inteiro de pedaços (Zarafshan
@@ -1793,6 +1805,22 @@ Shahrisabz (Sogdiana). Pináculos de pedra acima das nuvens. NPCs com nomes mani
 ramo do oriente; aqui, guardião dos sinos de vento), **Sisin** (Sisinnios, sucessor de Mani; aqui, mestre das pontes de
 corda). Chefe do mundo: **O Rei-Vendaval** (mapa 58).
 
+**No jogo (2026-11-06): mundo contínuo** (`OverworldLayouts.Farnkesh.cs`, §0.10): 2400 × 2400 m ao norte da Estepe dos Nartes,
+25 áreas em 14 terrenos novos — Vinhas de Gordias e do Sol, Vau e Rio Pactolo (seixos dourados), Clareiras do Baile e o Vale dos
+Sátiros (53, nv 140), Mata das Castanheiras e Bosque do Pé dos Picos, Prados do Vento e dos Sinos, Subida de Farnkesh, Escadaria
+dos Cestos e Mar de Nuvens (54), Farnkesh (54, ninhos de pedra), Bosque de Pináculos e Pináculos do Leste, Pontes de Vento e
+Ermida Baixa (55, posto), Ermidas Suspensas e Pináculo do Sino (56, posto), Escarpa dos Ventos, Garganta dos Ays e Gruta Abrigo
+(57, posto; **Proteção contra tempestade**), Ilhas de Nuvem com o Último Pináculo e Ninho da Huma (58, posto; **asas ou planar**,
+até nv 200). Relevo: pináculos de arenito (até ~34 m), paredão das ermidas em degraus, garganta de paredes altas, ilhas de topo
+plano sobre o chão de nuvem; vale e mar de nuvens baixos. Cenário: pináculos, ermidas brancas, sinos de vento, pontes de corda,
+varais de papel de vento, cestos de corda, vinhas, cabanas-cabaça, palcos de pedra, pedras-abrigo, árvores tortas, o ninho de
+ouro; nuvens no chão e seixos dourados. Bichos existentes nos papéis das fichas (iaque = bode/takin, enxame de vaga-lumes =
+abelhas douradas, gavião, chacal, corvo = gralha, abutre, morcego-vampiro = morcego-vela, lanterna quebrada = pipa/sino/raio,
+névoa do vento ruim = eco/ays/ventania, golem = ushabti de corda, irbis = gato-de-pallas, pedra rolante, urso-pardo, aranha,
+marmota, macaco ladrão), variante noturna em toda clareira, nenhum chefe. Cidades com as próprias receitas (`Glade`,
+`PinnacleNest`) no chão plano de ±30 m. Testes `OverworldFarnkeshTests` e `OverworldWorldTests`. Falta: cestos/planar como
+mecânica, rajadas, medidor de silêncio, vento contra, os chefes.
+
 ### 53 · Vale dos Sátiros / *Satyr Vale* — nv 140–148 · ☆ · cidade de raça (sátiros)
 - **Fonte:** mitos frígios (§3.3).
 - **Bioma e visual:** vale de vinhas e bosques ao pé dos picos; paleta do Vale (§3.3); rio de seixos dourados (o Pactolo).
@@ -1806,6 +1834,7 @@ corda). Chefe do mundo: **O Rei-Vendaval** (mapa 58).
 - **Ganchos:** loot Pó de Ouro do Pactolo, uva · montaria nova **Bode Dourado de Gordias** (§6) · casa: conjunto novo
   **Flauta Dupla**.
 - **Noite:** o baile; vaga-lumes; os bodes de fumaça dormem.
+- **No jogo (2026-11-06): cidade de verdade** (`CityTownRecipes.ValeDosSatiros.cs`, estilo `Glade`, `CityCatalog.RaceCities`, id `vale_dos_satiros`): em y = 0 dentro de um círculo de 22,5 m (saídas O, N e L a 19 m; a rua Norte é a subida para Farnkesh; ao sul o rio e o bosque): casas de vime em forma de cabaça com túnel de folhagem na entrada; o palco de pedra do baile na praça e um menor numa clareira ao sul; o rio de seixos dourados (o Pactolo, Água Viva) atravessando o vale e um braço cruzando a rua Norte, com vau de pedras; fileiras de videiras e carvalhos; Midas, Marsyas e Gordias (sátiros: pernas de bode, chifres pequenos, `NpcRecipe.Satyr`) com falas para cada primo; Flauta Dupla do Marsyas (runas de vento, Ar Sereno); missões "As Abelhas de Ouro" e "Raposas na Vinha"; respawn na praça para 53. Falta: o dourado/lavar no rio, o Baile do Vale (ritmo), O Ouro de Midas e o Bode Dourado.
 
 ### 54 · Farnkesh, os Ninhos de Pedra / *Farnkesh, the Stone Nests* — nv 145–152 · ☆ · capital (Vento Vivo)
 - **Fonte:** dzongs do Butão (Paro Taktsang) e Meteora (Grécia) como **forma** (casas no alto dos rochedos, redes e cestos
@@ -1823,6 +1852,7 @@ corda). Chefe do mundo: **O Rei-Vendaval** (mapa 58).
 - **Ganchos:** loot corda de iaque, papel de vento · montaria `mount_hippogriff` (Senmurv, Despertar) · casa: conjunto novo
   **Ninho de Pedra** (sino de vento, banco de varanda).
 - **Noite:** os pináculos acendem como estrelas; vento calmo; visão ótima.
+- **No jogo (2026-11-06): cidade de verdade** (`CityTownRecipes.Farnkesh.cs`, estilo `PinnacleNest`, `CityCatalog.LateRegionCities`, id `farnkesh`): em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S a 19 m; a rua Sul é a estrada que sobe do Vale; ao norte os pináculos nas nuvens): casas brancas de parede inclinada sobre pés de arenito, faixa e janelas de madeira vermelha, telhados de tábua com pedras e varandas para o vazio; o sino de vento gigante na praça; pináculos de arenito (alguns com ninho no alto), cestos de corda e vãos de nuvem com pontes de tábua e corda nas ruas Leste e Sul; portão de postes com sininhos; Shad-Ohrmizd, Sisin, Tadi e Ardawan com falas para cada primo (a Maithe escuta o Vento Vivo); Cordas do Sisin com as exigências de 57 (Capa de Tempestade) e 58 (Asas de Lona) fixas; missões "Abutres nos Sinos" e "Vento Ruim nas Pontes" (paga com a Capa de Tempestade); respawn na praça para 54–58. Falta: pináculos em alturas de verdade, os cestos que sobem, o Vendaval e o G4 da Maithe.
 
 ### 55 · Pontes de Vento / *Wind Bridges* — nv 150–160 · ☆
 - **Fonte:** invenção (as pontes de corda do Sisin).

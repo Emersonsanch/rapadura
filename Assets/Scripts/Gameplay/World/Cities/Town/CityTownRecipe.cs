@@ -342,6 +342,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
             spec.FeltYurt |= style.Architecture == TownArchitecture.SteppeCamp && plainHouse;
             spec.GiantRoundhouse |= style.Architecture == TownArchitecture.HillFort && plainHouse;
             spec.HollowTrunk |= style.Architecture == TownArchitecture.LivingGrove && plainHouse;
+            spec.PinnacleNest |= style.Architecture == TownArchitecture.PinnacleNest && plainHouse;
+            spec.GourdHut |= style.Architecture == TownArchitecture.Glade && plainHouse;
 
             switch (r.Kind)
             {

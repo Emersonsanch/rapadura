@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Cities.Town
 {
-    /// <summary>Flat colours of the walkable-town palette texture (one 4 px cell each, 8 × 19). Docs/Cities.md §5.</summary>
+    /// <summary>Flat colours of the walkable-town palette texture (one 4 px cell each, 8 × 21). Docs/Cities.md §5.</summary>
     public enum TownSwatch
     {
         // Row 0: wood and earth (walnut joinery, carved columns).
@@ -64,6 +64,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
         // Row 18: the Arvoredo de Haripushpa (Docs/Mapas100.md §3.3 and map 50): bark #5E4A3A, moss #6E8F4A, new leaf #A9C96B,
         // meltwater #86C9D6 (glows a little), flower #F0D27A, larch #4F6B3A, lichen #B7BFA0 and the dark of a hollow #2E2620.
         GroveBark, GroveMoss, NewLeaf, MeltWater, GroveFlower, Larch, Lichen, HollowDark,
+        // Row 19: Farnkesh, os Ninhos de Pedra (Picos de Farnkesh, Docs/Mapas100.md map 54): lime #F1ECE2, painted red wood
+        // #9A3B2E, gold #D9A82B, pinnacle sandstone #B58A60, cloud #EEF3F7, the high sky #8FB8E0, yak rope #8A7A5E and the bronze
+        // of the wind bells #A87B3C.
+        NestLime, NestRed, NestGold, PinnacleStone, CloudWhite, HighSky, YakRope, BellBronze,
+        // Row 20: the Vale dos Sátiros (Docs/Mapas100.md §3.3 and map 53): glade green #9CCB6A, wicker #C9A76A, stage stone
+        // #B7AFA3, the gold of the river pebbles #E3B341 (glows a little: the Pactolus), flower #E27A9B, grape #5E3A6E, vine leaf
+        // #5E8F3A and the fireflies of the dance #F4F09A (glow).
+        GladeGreen, Wicker, GladeStone, PactolusGold, VineFlower, Grape, VineLeaf, Firefly,
     }
 
     /// <summary>
@@ -75,7 +83,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
     public static class TownPalette
     {
         public const int Columns = 8;
-        public const int Rows = 19;
+        public const int Rows = 21;
         private const int CellPixels = 4;
 
         private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
@@ -101,6 +109,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Hex(0xD8C9A8), Hex(0x8E2F2F), Hex(0x2F5E8E), Hex(0xBFAE5A), Hex(0x3A2E26), Hex(0x6E4A2E), Hex(0xD4A93A), Hex(0xFF9A4A),
             Hex(0x8A6A44), Hex(0x9A948A), Hex(0xCFC6B8), Hex(0xE2763A), Hex(0x7F9A4A), Hex(0x7A5634), Hex(0x5F7A3A), Hex(0x4A4A4E),
             Hex(0x5E4A3A), Hex(0x6E8F4A), Hex(0xA9C96B), Hex(0x86C9D6), Hex(0xF0D27A), Hex(0x4F6B3A), Hex(0xB7BFA0), Hex(0x2E2620),
+            Hex(0xF1ECE2), Hex(0x9A3B2E), Hex(0xD9A82B), Hex(0xB58A60), Hex(0xEEF3F7), Hex(0x8FB8E0), Hex(0x8A7A5E), Hex(0xA87B3C),
+            Hex(0x9CCB6A), Hex(0xC9A76A), Hex(0xB7AFA3), Hex(0xE3B341), Hex(0xE27A9B), Hex(0x5E3A6E), Hex(0x5E8F3A), Hex(0xF4F09A),
         };
 
         private static Material _material;
@@ -135,6 +145,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case TownSwatch.CampFire: return 0.9f;
                 case TownSwatch.LivingFire: return 0.8f;
                 case TownSwatch.MeltWater: return 0.3f;
+                case TownSwatch.PactolusGold: return 0.35f;
+                case TownSwatch.Firefly: return 0.9f;
                 default: return 0f;
             }
         }

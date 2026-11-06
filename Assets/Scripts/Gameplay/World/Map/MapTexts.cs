@@ -138,6 +138,12 @@ namespace Rapadura.Gameplay.World.Map
             ("map_050_haripushpa", "Haripushpa Grove", "Arvoredo de Haripushpa", "Haripushpa Grove", "Arvoredo"),
             ("map_051_mil_cavalos", "Thousand-Horse Prairie", "Pradaria dos Mil Cavalos", "Well of the Cup", "Poço da Taça"),
             ("map_052_amirani", "Amirani's Chain", "Corrente de Amirani", "Watch Tower", "Torre de Vigia"),
+            ("map_053_vale_satiros", "Satyr Vale", "Vale dos Sátiros", "Satyr Vale", "Vale dos Sátiros"),
+            ("map_054_farnkesh", "Farnkesh, the Stone Nests", "Farnkesh, os Ninhos de Pedra", "Farnkesh", "Farnkesh"),
+            ("map_055_pontes_vento", "Wind Bridges", "Pontes de Vento", "Low Hermitage", "Ermida Baixa"),
+            ("map_056_ermidas", "Hanging Hermitages", "Ermidas Suspensas", "Bell Pinnacle", "Pináculo do Sino"),
+            ("map_057_garganta_ays", "Gorge of the Ays", "Garganta dos Ays", "Shelter Cave", "Gruta Abrigo"),
+            ("map_058_ninho_huma", "Huma's Nest", "Ninho da Huma", "Last Pinnacle", "Último Pináculo"),
         };
 
         private static readonly (MapRegion Region, string En, string Pt)[] RegionNames =
@@ -151,6 +157,7 @@ namespace Rapadura.Gameplay.World.Map
             (MapRegion.TetoDoMundo, "Roof of the World", "Teto do Mundo"),
             (MapRegion.PlanicieDeMingcheng, "Mingcheng Plain", "Planície de Mingcheng"),
             (MapRegion.EstepeDosNartes, "Steppe of the Narts", "Estepe dos Nartes"),
+            (MapRegion.PicosDeFarnkesh, "Peaks of Farnkesh", "Picos de Farnkesh"),
         };
 
         private static readonly (string Id, string En, string Pt)[] CityNames =
@@ -174,6 +181,8 @@ namespace Rapadura.Gameplay.World.Map
             ("acampamento_soslan", "Soslan's Camp", "Acampamento de Soslan"),
             ("fortim", "Hill-Giant Fort", "Fortim"),
             ("arvoredo", "Haripushpa Grove", "Arvoredo"),
+            ("vale_dos_satiros", "Satyr Vale", "Vale dos Sátiros"),
+            ("farnkesh", "Farnkesh", "Farnkesh"),
         };
 
         private static readonly (string Tag, string En, string Pt)[] RequirementHints =
@@ -189,7 +198,7 @@ namespace Rapadura.Gameplay.World.Map
             (MapRequirementTags.TorchRequired, "Carry an Oil Lamp: Parthenos sells it in the Vila das Lamparinas and gives one for scattering the bats.", "Leve uma Lamparina de Óleo: a Parthenos vende na Vila das Lamparinas e dá uma por espantar os morcegos."),
             (MapRequirementTags.RunicLamp, "Carry a Runic Lamp: Parthenos sells it once the Caves boss has fallen.", "Leve uma Lamparina Rúnica: a Parthenos vende depois do chefe das Cavernas."),
             (MapRequirementTags.EternalFireOil, "Carry Eternal Fire Oil: Parthenos sells it once the Caves boss has fallen.", "Leve Óleo de Fogo Eterno: a Parthenos vende depois do chefe das Cavernas."),
-            (MapRequirementTags.WingsOrDoubleJump, "Wear Takhsich's Canvas Wings (Miwnay's Fair, Tunnel Market) or wings of the Enchanted Cauldron, or own a winged mount.", "Vista as Asas de Lona do Takhsich (Feira da Miwnay, Mercado dos Túneis) ou asas do Tacho Encantado, ou tenha uma montaria alada."),
+            (MapRequirementTags.WingsOrDoubleJump, "Wear Takhsich's Canvas Wings (Miwnay's Fair, Tunnel Market; Sisin's Ropes, Farnkesh) or wings of the Enchanted Cauldron, or own a winged mount.", "Vista as Asas de Lona do Takhsich (Feira da Miwnay, Mercado dos Túneis; Cordas do Sisin, Farnkesh) ou asas do Tacho Encantado, ou tenha uma montaria alada."),
             (MapRequirementTags.BoatOrDock, "Carry a Dhow Passage (Taa Pwani) or own a water mount.", "Leve uma Passagem de Dhow (Taa Pwani) ou tenha uma montaria aquática."),
             (MapRequirementTags.ArtificerRelic, "Carry an Artificers' Relic (Aratta).", "Leve uma Relíquia dos Artífices (Aratta)."),
             (MapRequirementTags.BreathingShell, "Carry a Breathing Shell (Kirta).", "Leve uma Concha Respirável (Kirta)."),
@@ -202,7 +211,7 @@ namespace Rapadura.Gameplay.World.Map
             (MapRequirementTags.ThermalClothes, "Wear Fine Thermal Clothes (Sangkent).", "Vista a Roupa Térmica Refinada (Sangkent)."),
             (MapRequirementTags.ClimbingCrampons, "Carry Climbing Crampons (Sangkent).", "Leve Grampos de Escalada (Sangkent)."),
             (MapRequirementTags.WingsRequired, "Wear wings of the Enchanted Cauldron or own a winged mount.", "Vista asas do Tacho Encantado ou tenha uma montaria alada."),
-            (MapRequirementTags.StormProtection, "Carry a Storm Cloak (Sangkent).", "Leve uma Capa de Tempestade (Sangkent)."),
+            (MapRequirementTags.StormProtection, "Carry a Storm Cloak (Sangkent; Sisin's Ropes, Farnkesh).", "Leve uma Capa de Tempestade (Sangkent; Cordas do Sisin, Farnkesh)."),
             (MapRequirementTags.SunSeal, "Carry the Sun Seal (Mingcheng).", "Leve o Selo do Sol (Mingcheng)."),
         };
 

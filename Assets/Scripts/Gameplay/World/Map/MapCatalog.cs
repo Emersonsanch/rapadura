@@ -12,11 +12,12 @@ namespace Rapadura.Gameplay.World.Map
 {
     /// <summary>
     /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II) and the six of
-    /// Região 9 (☆ 47–52, the Estepe dos Nartes, walked as zones of its continuous region): level
+    /// Região 9 (☆ 47–52, the Estepe dos Nartes) and the six of Região 10 (☆ 53–58, the Picos de Farnkesh), walked as zones of
+    /// their continuous regions: level
     /// bands, walk/warp levels, special gates, settlements and return cities, as content-as-code like
-    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42, 47–52): a hand-made layout
+    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42, 47–58): a hand-made layout
     /// (<c>MapLayouts.Has</c>: 01–08, 13, 14, 19, 20) or only a zone of a continuous region (<c>OverworldLayouts.ForMap</c>:
-    /// 09–12, 15–18, 21–42, 47–52, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
+    /// 09–12, 15–18, 21–42, 47–58, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
     /// the flag equal to it. The rest are listed in the Barcas de Luz window, closed. The gold fare is never stored: it is always the
     /// formula of <see cref="MapAccessRules.CalculateWarpCost(int,int,bool)"/> (the "Custo Ouro" column of the methodology
     /// table is design history).
@@ -39,6 +40,8 @@ namespace Rapadura.Gameplay.World.Map
         public const string AcampamentoSoslan = "acampamento_soslan";
         public const string Fortim = "fortim";
         public const string Arvoredo = "arvoredo";
+        public const string ValeDosSatiros = "vale_dos_satiros";
+        public const string Farnkesh = "farnkesh";
 
         public const string PomarId = "map_001_pomar";
         public const string TugaiId = "map_002_tugai";
@@ -50,7 +53,7 @@ namespace Rapadura.Gameplay.World.Map
         {
             CityCatalog.VilaZefa, CopasGarajonay, CityCatalog.AreiaBranca, TamborRubro, CityCatalog.SerraAlta, SaloesDeBronze,
             CityCatalog.Lamparinas, MercadoDosTuneis, TaaPwani, Aratta, Kirta, Jhilpur, PalafitasTarchon, Sangkent, Mingcheng, TorresBrancas,
-            AcampamentoSoslan, Fortim, Arvoredo,
+            AcampamentoSoslan, Fortim, Arvoredo, ValeDosSatiros, Farnkesh,
         };
 
         public static readonly IReadOnlyList<MapDefinition> Maps = new List<MapDefinition>
@@ -120,12 +123,20 @@ namespace Rapadura.Gameplay.World.Map
             new MapDefinition(50, "map_050_haripushpa", R.EstepeDosNartes, Y.Forest, S.G, 118, 126, 114, 122, Fee, T.None, Arvoredo, K.RaceCity, "arvoredo", isBuilt: true),
             new MapDefinition(51, "map_051_mil_cavalos", R.EstepeDosNartes, Y.Plain, S.GG, 124, 134, 120, 128, Fee, T.None, AcampamentoSoslan, K.Outpost, "poco_da_taca", isBuilt: true),
             new MapDefinition(52, "map_052_amirani", R.EstepeDosNartes, Y.Mountain, S.GG, 134, 150, 128, 140, Fee, T.ClimbingCrampons, Fortim, K.Outpost, "torre_de_vigia", isBuilt: true),
+
+            // Região 10 — Picos de Farnkesh (☆, Docs/Mapas100.md §1; zones of its continuous region, OverworldLayouts.Farnkesh)
+            new MapDefinition(53, "map_053_vale_satiros", R.PicosDeFarnkesh, Y.Forest, S.G, 140, 148, 136, 144, Fee, T.None, ValeDosSatiros, K.RaceCity, "vale_dos_satiros", isBuilt: true),
+            new MapDefinition(54, "map_054_farnkesh", R.PicosDeFarnkesh, Y.Mountain, S.GG, 145, 152, 141, 149, Fee, T.None, Farnkesh, K.Capital, "farnkesh", isBuilt: true),
+            new MapDefinition(55, "map_055_pontes_vento", R.PicosDeFarnkesh, Y.Mountain, S.G, 150, 160, 146, 154, Fee, T.None, Farnkesh, K.Outpost, "ermida_baixa", isBuilt: true),
+            new MapDefinition(56, "map_056_ermidas", R.PicosDeFarnkesh, Y.Mountain, S.G, 158, 168, 154, 162, Fee, T.None, Farnkesh, K.Outpost, "pinaculo_do_sino", isBuilt: true),
+            new MapDefinition(57, "map_057_garganta_ays", R.PicosDeFarnkesh, Y.Mountain, S.G, 166, 180, 162, 170, Fee, T.StormProtection, Farnkesh, K.Outpost, "gruta_abrigo", isBuilt: true),
+            new MapDefinition(58, "map_058_ninho_huma", R.PicosDeFarnkesh, Y.Mountain, S.GG, 180, 200, 176, 186, Fee, T.WingsOrDoubleJump, Farnkesh, K.Outpost, "ultimo_pinaculo", isBuilt: true),
         };
 
         public static readonly IReadOnlyList<MapRegion> Regions = new[]
         {
             R.Zarafshan, R.AreiasFlamejantes, R.SerraDeKaggen, R.GrutasDoLimiar, R.CostaDasMoncoes, R.DeltaDeJhilpur, R.TetoDoMundo, R.PlanicieDeMingcheng,
-            R.EstepeDosNartes,
+            R.EstepeDosNartes, R.PicosDeFarnkesh,
         };
 
         private static Dictionary<string, MapDefinition> _byId;

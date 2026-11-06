@@ -298,6 +298,36 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         ChainPeak = 172,
         /// <summary>The snow crest under the summit where Ohya waits (52): snow, ice and black rock.</summary>
         SnowCrest = 173,
+
+        // Região 10 — Picos de Farnkesh (OverworldLayouts.Farnkesh.cs, OverworldTerrains.Farnkesh.cs): 180–199.
+        /// <summary>The Vale dos Sátiros' vineyards (53): vines on stakes up the sunny slopes, wicker, grapes, light green grass.</summary>
+        VineVale = 180,
+        /// <summary>The Pactolo (53): a river of golden pebbles, plane trees and reeds on its banks.</summary>
+        GoldenRiver = 181,
+        /// <summary>The satyrs' glades (53): clearings in a ring joined by leafy tunnels, stone stages, gourd-shaped wicker huts.</summary>
+        SatyrGlades = 182,
+        /// <summary>The woods at the foot of the peaks: chestnuts and oaks on the first slopes, ferns, mossy boulders.</summary>
+        FootWoods = 183,
+        /// <summary>High flowered meadows under the pinnacles, wind bells on poles, paper streamers.</summary>
+        AlpineMeadow = 184,
+        /// <summary>A forest of sandstone pinnacles (Meteora's form): towers of rock over pines, hermitages on the tops.</summary>
+        PinnacleWood = 185,
+        /// <summary>Farnkesh, the Stone Nests (54): white houses on the nine sandstone pinnacles, rope baskets, the giant wind bell.</summary>
+        StoneNests = 186,
+        /// <summary>The sea of clouds between the peaks: pale ground under drifting cloud banks, the odd pinnacle standing out.</summary>
+        CloudSea = 187,
+        /// <summary>The Pontes de Vento (55): rope bridges and plank platforms between small pinnacles, cloud below.</summary>
+        WindBridges = 188,
+        /// <summary>The Ermidas Suspensas (56): a cliff face with houses hung on it, ladders, cracked bells.</summary>
+        BellCliffs = 189,
+        /// <summary>The Garganta dos Ays (57): a narrow grey gorge where the wind howls, dust, twisted trees, shelter stones.</summary>
+        AysGorge = 190,
+        /// <summary>Wind-scoured scree slopes above the gorge: grey shingle, twisted junipers, cairns.</summary>
+        WindScree = 191,
+        /// <summary>The loose stone islands in the clouds round Huma's nest (58): sheer-sided isles, gold-white grass.</summary>
+        CloudIsles = 192,
+        /// <summary>Huma's Nest (58): the giant nest of golden branches on the highest isle, white rock and gold.</summary>
+        HumaNest = 193,
     }
 
     /// <summary>

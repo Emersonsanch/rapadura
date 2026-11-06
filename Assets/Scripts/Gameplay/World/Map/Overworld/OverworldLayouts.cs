@@ -34,6 +34,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { MapRegion.TetoDoMundo, TetoId },
             { MapRegion.PlanicieDeMingcheng, MingchengId },
             { MapRegion.EstepeDosNartes, NartesId },
+            { MapRegion.PicosDeFarnkesh, FarnkeshRegionId },
         };
 
         /// <summary>Every continuous region of this build (texts, tests).</summary>
@@ -67,6 +68,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 case TetoId: return TetoRegion();
                 case MingchengId: return MingchengRegion();
                 case NartesId: return NartesRegion();
+                case FarnkeshRegionId: return FarnkeshRegion();
                 case WorldId: return BuildWorld();
                 default: return null;
             }

@@ -296,6 +296,20 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string ViveiroSuvarnapushpa = "shop_viveiro_suvarnapushpa";
 
+        /// <summary>
+        /// Flauta Dupla (Vale dos Sátiros, Docs/Mapas100.md §3.3): Marsyas sells wind runes and songs for the road, travel food
+        /// and the bottled Serene Air of the high paths (map 53 has no gate). The counter turns daily.
+        /// </summary>
+        public const string FlautaDupla = "shop_flauta_dupla";
+
+        /// <summary>
+        /// Cordas do Sisin (Farnkesh, Docs/Mapas100.md map 54): Sisin, the master of the rope bridges, sells the gear of the gates
+        /// of the Picos de Farnkesh (Docs/MetodologiaMapasERacas.md §2.1): the Capa de Tempestade of the Garganta dos Ays (57) and
+        /// the Asas de Lona that glide between the islands of the Ninho da Huma (58), both of them maps whose return city is
+        /// Farnkesh; rope, balance poles and crampons for the bridges and the hanging hermitages. The counter turns daily.
+        /// </summary>
+        public const string CordasSisin = "shop_cordas_sisin";
+
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
@@ -694,6 +708,47 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_mount_feed", 3, 12, rotating: true),
                 new CityShopEntry("item_corda_escalada", 40, 2, rotating: true),
                 new CityShopEntry("item_manta_la", 45, 2, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+            })),
+
+            // ---- Vale dos Sátiros: Marsyas' double flute, wind runes, songs and travel food; daily ----
+            new CityShopSpec(FlautaDupla, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(FlautaDupla, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                // The songs of the road (the wind rune) and the Serene Air bottled on the high paths.
+                new CityShopEntry("item_runa_vento", 20, 4),
+                new CityShopEntry("item_garrafa_ar_sereno", 30, 6),
+                new CityShopEntry("item_cooked_meat", 6, 10),
+                // The rotation: what the satyrs bring down from the vines and the peaks.
+                new CityShopEntry("item_herb", 3, 12, rotating: true),
+                new CityShopEntry("item_fiber", 1, 20, rotating: true),
+                new CityShopEntry("item_corda_escalada", 40, 2, rotating: true),
+                new CityShopEntry("item_runa_clareza", 15, 2, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+            })),
+
+            // ---- Farnkesh: Sisin's rope rack, the gear of the gates 57 and 58 and of the bridges; daily ----
+            new CityShopSpec(CordasSisin, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(CordasSisin, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                // Map gates (MapRequirementRules): the storm cloak of the Garganta dos Ays (57) and the canvas wings that glide
+                // between the islands of the Ninho da Huma (58); both maps return to Farnkesh.
+                new CityShopEntry("item_capa_tempestade", 1100, 2),
+                new CityShopEntry("item_asas_lona_takhsich", 420, 2),
+                // Rope and poles for the bridges, crampons for the hanging hermitages.
+                new CityShopEntry("item_corda_escalada", 40, 4),
+                new CityShopEntry("item_vara_equilibrio", 480, 2),
+                new CityShopEntry("item_grampos_escalada", 950, 1),
+                // The rotation.
+                new CityShopEntry("item_cha_gengibre", 70, 3, rotating: true),
+                new CityShopEntry("item_manta_la", 45, 2, rotating: true),
+                new CityShopEntry("item_garrafa_ar_sereno", 30, 4, rotating: true),
+                new CityShopEntry("item_runa_vento", 20, 2, rotating: true),
+                new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
             })),

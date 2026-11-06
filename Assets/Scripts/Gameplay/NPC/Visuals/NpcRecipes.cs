@@ -1235,6 +1235,122 @@ namespace Rapadura.Gameplay.NPC.Visuals
             },
 
             // ------------------------------------------------------------------
+            // Vale dos Sátiros (the Picos de Farnkesh, Docs/Mapas100.md §3.3 and map 53): satyrs with goat legs, small goat horns
+            // and pointed ears (Satyr), warm and ruddy satyr skins, brown, tawny and black fur, short tunics in glade green, grape
+            // and the gold of the Pactolus. Names of the Phrygian myths of the ficha (Midas, Marsyas, Gordias).
+            // ------------------------------------------------------------------
+
+            // Midas, the king of golden hands (the city's missions): proud, curly auburn hair and a short beard under a gold
+            // circlet, a grape tunic with gold hems, a gold cape and belt (everything he wears turned gold), a golden cup and a
+            // bundle of grapes that have become gold; tawny fur. Now and then dries an eye: he misses the taste of things.
+            new NpcRecipe
+            {
+                Id = "midas", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Average, Height = 0.98f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinSatyr, Face = NpcFace.Kind, Hair = NpcHair.Curly, HairColor = NpcSwatch.HairAuburn, Beard = NpcBeard.Short,
+                Headwear = NpcHeadwear.SunCirclet, HeadColor = NpcSwatch.PactolusGold, HeadTrim = NpcSwatch.Grape,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.Grape, Trim = NpcSwatch.PactolusGold, Sleeves = NpcSwatch.SkinSatyr,
+                Layers = NpcLayer.Cape | NpcLayer.Belt, LayerColor = NpcSwatch.PactolusGold, LayerTrim = NpcSwatch.Grape,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Cup, NpcProp.Bundle },
+                Gesture = NpcGesture.WipeTear, Satyr = true, Fur = NpcSwatch.FurTawny,
+                Story = "Midas, o rei frígio do toque de ouro e do rio Pactolo; aqui, o rei dos sátiros tocado por Āz, que lava as mãos no rio e dá as missões do vale",
+            },
+
+            // Marsyas, the master of the double flute (the city's shop: the Flauta Dupla): slim and at ease, spiky brown hair and a
+            // goatee under a crown of flowers, a glade-green tunic with flower hems and a grape sash, the double flute held up and
+            // a hand drum; brown fur. Restless little hops: the dance is always about to begin.
+            new NpcRecipe
+            {
+                Id = "marsyas", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 0.96f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinSatyrRuddy, Face = NpcFace.Bright, Hair = NpcHair.Spiky, HairColor = NpcSwatch.HairBrown, Beard = NpcBeard.Goatee,
+                Headwear = NpcHeadwear.FlowerCrown, HeadColor = NpcSwatch.FlowerPink, HeadTrim = NpcSwatch.GladeGreen,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.GladeGreen, Trim = NpcSwatch.FlowerPink, Sleeves = NpcSwatch.SkinSatyrRuddy,
+                Layers = NpcLayer.Sash, LayerColor = NpcSwatch.Grape, LayerTrim = NpcSwatch.PactolusGold,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Flute, NpcProp.HandDrum },
+                Gesture = NpcGesture.Bounce, Satyr = true, Fur = NpcSwatch.FurBrown,
+                Story = "Marsyas, o sátiro frígio da flauta dupla; aqui, o mestre de flauta do vale, que ensina canções de viagem e cuida da Flauta Dupla",
+            },
+
+            // Gordias, the farmer of the knots (the second mission): old, stout and stooped, short grey hair and a full beard under
+            // a straw hat, a vine-green tunic with wicker hems, a leather apron and belt, a coil of rope and the walking stick;
+            // black fur. Counts the knots, twice.
+            new NpcRecipe
+            {
+                Id = "gordias", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Stout, Height = 0.95f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinSatyr, Face = NpcFace.Jolly, Hair = NpcHair.Short, HairColor = NpcSwatch.HairGrey, Beard = NpcBeard.Full,
+                Headwear = NpcHeadwear.StrawCone, HeadColor = NpcSwatch.Straw, HeadTrim = NpcSwatch.Grape,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.VineGreen, Trim = NpcSwatch.Wicker, Sleeves = NpcSwatch.Straw,
+                Layers = NpcLayer.Apron | NpcLayer.Belt, LayerColor = NpcSwatch.Leather, LayerTrim = NpcSwatch.Grape,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.RopeCoil, NpcProp.WalkingStick },
+                Gesture = NpcGesture.Count, Satyr = true, Fur = NpcSwatch.FurBlack,
+                Story = "Gordias, o fazendeiro frígio do nó górdio; aqui, o sátiro dos nós que amarra as videiras, faz quebra-cabeças de corda e dá a 2ª missão",
+            },
+
+            // ------------------------------------------------------------------
+            // Farnkesh, os Ninhos de Pedra (the Picos de Farnkesh, Docs/Mapas100.md map 54): people of the wind and of silence,
+            // lime white, painted red wood, gold, the high sky, yak rope and bell bronze. Names of the Manichaean mission to the
+            // east (Shad-Ohrmizd, Sisin, Tadi of the Palmyra story, Ardawan of Mar Ammo's mission).
+            // ------------------------------------------------------------------
+
+            // Shad-Ohrmizd, the keeper of the wind bells (the city's missions): old and upright, long white hair and a long beard under
+            // a red felt cap with a gold edge, a lime robe with red hems and a sky shawl, the walking stick and a small bell in hand.
+            // Leans on the stick and listens.
+            new NpcRecipe
+            {
+                Id = "shad_ohrmizd", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 1.0f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Calm, Hair = NpcHair.Long, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Long,
+                Headwear = NpcHeadwear.FeltCap, HeadColor = NpcSwatch.NestRed, HeadTrim = NpcSwatch.NestGold,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.NestLime, Trim = NpcSwatch.NestRed, Sleeves = NpcSwatch.NestLime, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Shawl, LayerColor = NpcSwatch.HighSky, LayerTrim = NpcSwatch.NestGold,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.WalkingStick, NpcProp.CamelBell },
+                Gesture = NpcGesture.Lean,
+                Story = "Shād-Ohrmizd, que fundou um ramo maniqueu do oriente; aqui, o guardião dos sinos de vento de Farnkesh, que dá as missões da cidade",
+            },
+
+            // Sisin, the master of the rope bridges (the city's shop: the Cordas do Sisin): broad and proud, a black ponytail and a
+            // short beard under a red bandana, a yak-rope tunic with red hems and lime sleeves, a red vest and belt, a coil of rope
+            // on the shoulder and a bundle of planks. Bears the weight: he pulls the baskets.
+            new NpcRecipe
+            {
+                Id = "sisin", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 1.04f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinOlive, Face = NpcFace.Stern, Hair = NpcHair.Ponytail, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.Short,
+                Headwear = NpcHeadwear.Bandana, HeadColor = NpcSwatch.NestRed, HeadTrim = NpcSwatch.YakRope,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.YakRope, Trim = NpcSwatch.NestRed, Sleeves = NpcSwatch.NestLime, Trousers = NpcSwatch.Walnut, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Vest | NpcLayer.Belt, LayerColor = NpcSwatch.NestRed, LayerTrim = NpcSwatch.NestGold,
+                LeftArm = NpcArmPose.HipRest, RightArm = NpcArmPose.Carry, Props = new[] { NpcProp.RopeCoil, NpcProp.Bundle },
+                Gesture = NpcGesture.Carry,
+                Story = "Sisin (Sisinnios), o sucessor de Mani; aqui, o mestre das pontes de corda que puxa os cestos de Farnkesh e cuida das Cordas do Sisin",
+            },
+
+            // Tadi, the folder of wind paper (the second mission): slim and upright, two dark braids under a sky headband, a sky
+            // dress with lime hems and cloud sleeves, a cloud apron edged red, a sheet of wind paper held up and a bolt of kite
+            // cloth. Flaps her arms like a kite in the wind.
+            new NpcRecipe
+            {
+                Id = "tadi", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 0.97f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinLight, Face = NpcFace.Bright, Hair = NpcHair.TwoBraids, HairColor = NpcSwatch.HairDark,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.HighSky, HeadTrim = NpcSwatch.NestGold,
+                Garment = NpcGarment.Dress, Main = NpcSwatch.HighSky, Trim = NpcSwatch.NestLime, Sleeves = NpcSwatch.CloudWhite, Boots = NpcSwatch.Leather,
+                Layers = NpcLayer.Apron, LayerColor = NpcSwatch.CloudWhite, LayerTrim = NpcSwatch.NestRed,
+                LeftArm = NpcArmPose.Crook, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Letter, NpcProp.FabricBolt },
+                Gesture = NpcGesture.Mime,
+                Story = "Tadī, irmã de Nafshā na história da missão maniqueia de Palmira; aqui, a dobradora de papel de vento de Farnkesh que dá a 2ª missão",
+            },
+
+            // Ardawan, the braider of yak rope: at ease, curly dark hair and a full beard under a gold skullcap, a red chapan with
+            // gold hems and yak-wool sleeves, a yak-wool scarf and satchel, the spindle and a coil of rope. Twirls the spindle.
+            new NpcRecipe
+            {
+                Id = "ardawan", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Average, Height = 1.02f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinBrown, Face = NpcFace.Kind, Hair = NpcHair.Curly, HairColor = NpcSwatch.HairDark, Beard = NpcBeard.Full,
+                Headwear = NpcHeadwear.Skullcap, HeadColor = NpcSwatch.NestGold, HeadTrim = NpcSwatch.NestRed,
+                Garment = NpcGarment.Chapan, Main = NpcSwatch.NestRed, Trim = NpcSwatch.NestGold, Sleeves = NpcSwatch.YakWool, Trousers = NpcSwatch.Walnut, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Scarf | NpcLayer.Satchel, LayerColor = NpcSwatch.YakWool, LayerTrim = NpcSwatch.NestLime,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.Spindle, NpcProp.RopeCoil },
+                Gesture = NpcGesture.Spin,
+                Story = "Ardawān, o príncipe parta da missão de Mar Ammo; aqui, o trançador de corda de lã de iaque das pontes de Farnkesh",
+            },
+
+            // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
 

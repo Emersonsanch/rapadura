@@ -13,7 +13,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
     /// <see cref="CityCatalog.LateRegionCities"/>, in its own coral-stone style; then <see cref="Jhilpur"/>, the city in the roots, <see cref="Sangkent"/>, the stair city, and <see cref="Mingcheng"/>, the city of nine rings; the high elves'
     /// <see cref="TorresBrancas"/> keep their own white spires; the Estepe dos Nartes has three race cities: the centaurs'
     /// <see cref="Soslan"/> camp of felt tents on wagons, the giants' <see cref="Fortim"/> of round stone houses and the trunk
-    /// folk's <see cref="Arvoredo"/> of hollow trunks). A city added to the
+    /// folk's <see cref="Arvoredo"/> of hollow trunks; the Picos de Farnkesh have the satyrs' <see cref="ValeDosSatiros"/> of
+    /// gourd-shaped wicker huts and the capital <see cref="Farnkesh"/> of white nest-houses on pinnacles). A city added to the
     /// catalog without a recipe gets <see cref="Default"/> (the Vila's plan filled with its residents, shops and regional
     /// style) until it has one. Layouts are cached per city and "mascate today" flag (the generator is deterministic,
     /// so the cache never goes stale).
@@ -87,6 +88,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityCatalog.AcampamentoSoslan: return Soslan();
                 case CityCatalog.Fortim: return Fortim();
                 case CityCatalog.Arvoredo: return Arvoredo();
+                case CityCatalog.ValeDosSatiros: return ValeDosSatiros();
+                case CityCatalog.Farnkesh: return Farnkesh();
                 default: return null;
             }
         }

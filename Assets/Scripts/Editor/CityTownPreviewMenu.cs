@@ -70,6 +70,12 @@ namespace Rapadura.Editor
         [MenuItem(Root + "Preview Walkable Town/Arvoredo de Haripushpa (povo-tronco, Estepe dos Nartes)", priority = 27)]
         private static void PreviewArvoredo() => Preview(CityCatalog.Arvoredo);
 
+        [MenuItem(Root + "Preview Walkable Town/Vale dos Sátiros (sátiros, Picos de Farnkesh)", priority = 28)]
+        private static void PreviewValeDosSatiros() => Preview(CityCatalog.ValeDosSatiros);
+
+        [MenuItem(Root + "Preview Walkable Town/Farnkesh, os Ninhos de Pedra (capital, Picos de Farnkesh)", priority = 29)]
+        private static void PreviewFarnkesh() => Preview(CityCatalog.Farnkesh);
+
         [MenuItem(Root + "Preview Walkable Town/Toggle Night", priority = 30)]
         private static void ToggleNight()
         {

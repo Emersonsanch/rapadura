@@ -265,6 +265,36 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         FeatherTuft = 212,
         /// <summary>A clump of red poppies (ground detail, no collider).</summary>
         PoppyTuft = 213,
+
+        // Região 10 — Picos de Farnkesh (OverworldDecorKit.Farnkesh.cs): 220–239.
+        /// <summary>A sandstone pinnacle: a tall rounded tower of banded rock (Meteora's form), a few pines at its foot.</summary>
+        SandstonePinnacle = 220,
+        /// <summary>A hermitage of Farnkesh (the PinnacleNest form): white walls leaning in, a painted wooden window, a plank roof weighed with stones.</summary>
+        Hermitage = 221,
+        /// <summary>A wind bell: a wooden frame with a bronze bell and its clapper, a paper strip hanging under it.</summary>
+        WindBell = 222,
+        /// <summary>A run of a rope bridge laid along its line (planks, two rope rails on posts; <see cref="OverworldProp.End"/> = its other end).</summary>
+        RopeBridgeRun = 223,
+        /// <summary>A line of wind paper streamers between two poles (<see cref="OverworldProp.End"/> = its other end).</summary>
+        PaperStreamers = 224,
+        /// <summary>A rope basket lift: a timber crane with a pulley and a wicker basket (the Sisin pulls).</summary>
+        RopeBasket = 225,
+        /// <summary>A grape vine on its stake, bunches of grapes.</summary>
+        GrapeVine = 226,
+        /// <summary>A satyr's wicker hut shaped like a gourd.</summary>
+        GourdHut = 227,
+        /// <summary>A round stone stage of the satyrs' dances.</summary>
+        StoneStage = 228,
+        /// <summary>A shelter stone of the gorge: a curved low wall of stacked rock against the wind.</summary>
+        ShelterStone = 229,
+        /// <summary>A wind-twisted tree: a bent trunk leaning away from the wind, a flat crown.</summary>
+        TwistedTree = 230,
+        /// <summary>Huma's nest: a giant ring of golden branches with white feathers.</summary>
+        GoldenNest = 231,
+        /// <summary>A low cloud puff drifting on the ground (ground detail, no collider).</summary>
+        CloudPuff = 232,
+        /// <summary>Golden pebbles of the Pactolo (ground detail, no collider).</summary>
+        GoldPebbles = 233,
     }
 
     /// <summary>

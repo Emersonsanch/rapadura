@@ -83,6 +83,10 @@ namespace Rapadura.Gameplay.World.Cities
     /// wants the smoke crows of a bad dream off the tablets and pays with the Grampos de Escalada (the gate of map 52).
     /// Arvoredo de Haripushpa (map 50): old Haripushpa asks the cousins to clear the bark-eaters off the sleeping trunks, then
     /// Aryaman Puhr wants the smoke birds that peck the bark out of the grove and pays with healing runes.
+    /// Vale dos Sátiros (map 53): King Midas asks the cousins to chase the golden bees that sting gold into whoever they touch
+    /// away from the river, then Gordias wants the vine foxes out of his knotted rows and pays with wind runes.
+    /// Farnkesh (map 54): Shad-Ohrmizd sends the cousins after the peak vultures that perch on the wind bells, then Tadi wants
+    /// the mist of the ill wind off the rope bridges and pays with the Capa de Tempestade (the gate of map 57).
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -116,6 +120,10 @@ namespace Rapadura.Gameplay.World.Cities
         public const string FortimCrows = "quest_city_fortim_crows_of_a_bad_dream";
         public const string ArvoredoBarkEaters = "quest_city_arvoredo_bark_eaters";
         public const string ArvoredoSmokeBirds = "quest_city_arvoredo_smoke_birds";
+        public const string ValeGoldenBees = "quest_city_vale_golden_bees";
+        public const string ValeVineFoxes = "quest_city_vale_vine_foxes";
+        public const string FarnkeshVultures = "quest_city_farnkesh_vultures_on_the_bells";
+        public const string FarnkeshIllWind = "quest_city_farnkesh_ill_wind_on_the_bridges";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -253,6 +261,24 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.Arvoredo, "aryaman", new RegionQuestSpec(ArvoredoSmokeBirds, BiomeType.Forest, ArvoredoBarkEaters, 2500,
                 new[] { new RegionObjectiveSpec("chase_the_smoke_birds", QuestObjectiveType.KillEnemyType, "enemy_mountain_potoo", 6) },
                 new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 190) })),
+
+            // -- Vale dos Sátiros: Midas, then Gordias. The firefly swarm stands in for the Abelha Dourada of the ficha
+            // (Docs/Mapas100.md 53) and the jackal for the Raposa da Vinha. --
+            new CityQuestSpec(CityCatalog.ValeDosSatiros, "midas", new RegionQuestSpec(ValeGoldenBees, BiomeType.Forest, null, 2600,
+                new[] { new RegionObjectiveSpec("chase_the_bees", QuestObjectiveType.KillEnemyType, "enemy_desert_firefly_swarm", 8) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 200) })),
+            new CityQuestSpec(CityCatalog.ValeDosSatiros, "gordias", new RegionQuestSpec(ValeVineFoxes, BiomeType.Forest, ValeGoldenBees, 2700,
+                new[] { new RegionObjectiveSpec("chase_the_foxes", QuestObjectiveType.KillEnemyType, "enemy_desert_jackal", 7) },
+                new[] { new RegionRewardSpec("item_runa_vento", 3), new RegionRewardSpec("item_gold", 200) })),
+
+            // -- Farnkesh: Shad-Ohrmizd, then Tadi. The ember vulture stands in for the Abutre do Pico of the ficha
+            // (Docs/Mapas100.md 54) and the ill-wind mist is the Neblina do Vento Ruim of the Pontes de Vento (55). --
+            new CityQuestSpec(CityCatalog.Farnkesh, "shad_ohrmizd", new RegionQuestSpec(FarnkeshVultures, BiomeType.Forest, null, 2800,
+                new[] { new RegionObjectiveSpec("chase_the_vultures", QuestObjectiveType.KillEnemyType, "enemy_desert_ember_vulture", 7) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 210) })),
+            new CityQuestSpec(CityCatalog.Farnkesh, "tadi", new RegionQuestSpec(FarnkeshIllWind, BiomeType.Forest, FarnkeshVultures, 2900,
+                new[] { new RegionObjectiveSpec("clear_the_mist", QuestObjectiveType.KillEnemyType, "enemy_mountain_ill_wind_mist", 6) },
+                new[] { new RegionRewardSpec("item_capa_tempestade", 1), new RegionRewardSpec("item_gold", 210) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();

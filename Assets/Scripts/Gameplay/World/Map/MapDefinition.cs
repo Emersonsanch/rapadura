@@ -15,6 +15,7 @@ namespace Rapadura.Gameplay.World.Map
         TetoDoMundo = 6,
         PlanicieDeMingcheng = 7,
         EstepeDosNartes = 8,
+        PicosDeFarnkesh = 9,
     }
 
     /// <summary>Map size class (Docs/Mapas100.md §0.7): P ~120 m, M ~200 m, G ~300 m, GG ~400 m on a side.</summary>

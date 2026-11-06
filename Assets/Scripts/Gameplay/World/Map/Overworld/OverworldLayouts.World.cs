@@ -30,8 +30,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// Serra's trails; Região 8 (the Planície de Mingcheng) fills the corner north of the Zarafshan (x −1000…1400, z 1400…3800),
     /// its two south gates led to the Zarafshan's trails and its two west gates to the Teto's; Região 9 (the Estepe dos Nartes)
     /// fills the last corner, north of the Costa and east of Mingcheng (x 1400…3800, z 1400…3800), its three south gates led to
-    /// the Costa's trails and its three west gates to Mingcheng's: a whole 3 × 3 square of regions. A corner no region covers
-    /// would be a hole walled off like the world's edge (<see cref="OverworldLayout.Holes"/>); today there is none.
+    /// the Costa's trails and its three west gates to Mingcheng's: a whole 3 × 3 square of regions. Região 10 (the Picos de
+    /// Farnkesh) starts a fourth row north of the steppe (x 1400…3800, z 3800…6200), its two south gates led to the steppe's trails
+    /// (by the meltwater lake and Ohya's crest): the bounds grow to 7200 × 9600 m and the two cells of that row no region covers,
+    /// north of the Teto do Mundo and of Mingcheng, are holes walled off like the world's edge (<see cref="OverworldLayout.Holes"/>:
+    /// invisible walls, backdrop relief — the peaks' west side is a fall into the clouds).
     /// The relief blends across the borders like between any two areas (one relief for the whole world, each area shaped in
     /// its own region's coordinates), the chunk grids line up (offsets are multiples of the chunk), the streaming, the soft
     /// barrier, the levels and the requirements work per area as before.
@@ -75,6 +78,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// </summary>
         public static readonly Vector2 NartesWorldOffset = new Vector2(2600f, 2000f);
 
+        /// <summary>
+        /// Região 10 north of the Estepe dos Nartes (the Vale dos Sátiros at world (2600, 4400), Farnkesh at (2600, 5480)): the Picos
+        /// de Farnkesh rise over the steppe's meltwater lake and Ohya's crest, so the world grows a row northwards (bounds
+        /// 7200 × 9600 m); north of the Teto do Mundo and of Mingcheng nothing stands: two walled holes (the fall into the clouds).
+        /// </summary>
+        public static readonly Vector2 FarnkeshWorldOffset = new Vector2(2600f, 4400f);
+
         /// <summary>Width (m) of the trail that joins two passes (or a pass to the nearest trail across the border).</summary>
         public const float PassTrailWidth = 4f;
 
@@ -114,6 +124,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 (TetoRegion(), TetoWorldOffset),
                 (MingchengRegion(), MingchengWorldOffset),
                 (NartesRegion(), NartesWorldOffset),
+                (FarnkeshRegion(), FarnkeshWorldOffset),
             };
 
             Rect bounds = default;

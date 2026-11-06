@@ -214,6 +214,25 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { OverworldTerrain.SvanValley, new AreaClimate(Mist, true) },
             { OverworldTerrain.ChainPeak, new AreaClimate(Snow, true) },
             { OverworldTerrain.SnowCrest, new AreaClimate(Snow, true) },
+
+            // Região 10 — Picos de Farnkesh: clear sky over the satyrs' vines and glades, the high meadows, Farnkesh on its pinnacles
+            // (visão ótima, céu #8FB8E0) and the cloud isles round Huma's nest; mist in the sea of clouds, the pinnacle wood and on the
+            // wind bridges; dust in the Gorge of the Ays and on its scree; the Pactolo, the foot woods and the hermitages' cliff let
+            // the biome roll it.
+            { OverworldTerrain.VineVale, new AreaClimate(Clear, false) },
+            { OverworldTerrain.GoldenRiver, new AreaClimate(null, false) },
+            { OverworldTerrain.SatyrGlades, new AreaClimate(Clear, false) },
+            { OverworldTerrain.FootWoods, new AreaClimate(null, false) },
+            { OverworldTerrain.AlpineMeadow, new AreaClimate(Clear, false) },
+            { OverworldTerrain.PinnacleWood, new AreaClimate(Mist, true) },
+            { OverworldTerrain.StoneNests, new AreaClimate(Clear, false) },
+            { OverworldTerrain.CloudSea, new AreaClimate(Mist, true) },
+            { OverworldTerrain.WindBridges, new AreaClimate(Mist, true) },
+            { OverworldTerrain.BellCliffs, new AreaClimate(null, true) },
+            { OverworldTerrain.AysGorge, new AreaClimate(Dust, true) },
+            { OverworldTerrain.WindScree, new AreaClimate(Dust, true) },
+            { OverworldTerrain.CloudIsles, new AreaClimate(Clear, true) },
+            { OverworldTerrain.HumaNest, new AreaClimate(Clear, true) },
         };
 
         /// <summary>True when <paramref name="terrain"/> has its own line (tests: every terrain must).</summary>
