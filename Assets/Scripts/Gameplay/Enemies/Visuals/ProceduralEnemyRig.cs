@@ -109,6 +109,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.WildYak:
                 case ProceduralEnemyKind.MudBuffalo:
                 case ProceduralEnemyKind.Saiga:
+                case ProceduralEnemyKind.SmokeGoat:
+                case ProceduralEnemyKind.Takin:
+                case ProceduralEnemyKind.BlueSheep:
                     return ChargerParts;
                 default: return null;
             }
@@ -446,6 +449,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.WildYak:
                 case ProceduralEnemyKind.MudBuffalo:
                 case ProceduralEnemyKind.Saiga:
+                case ProceduralEnemyKind.SmokeGoat:
+                case ProceduralEnemyKind.Takin:
+                case ProceduralEnemyKind.BlueSheep:
                 {
                     // Chargers: the head swings while grazing and drops, horns first, on the windup.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -535,6 +541,65 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     }
 
                     Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(Mathf.Sin(t * 0.5f) * 4f * k, Mathf.Sin(t * 0.3f) * 8f * k * (1f - r), 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.VineFox:
+                case ProceduralEnemyKind.PallasCat:
+                {
+                    // Farnkesh's vine fox and manul: the jaw gapes on the windup; the fox's brush sways, the manul's twitches.
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(Mathf.Max(0f, Mathf.Sin(t * 0.8f)) * 3f * k + 30f * r, 0f, 0f));
+                    float sway = _kind == ProceduralEnemyKind.VineFox ? Mathf.Sin(t * 1.6f) * 12f : Mathf.Sin(t * 3.1f) * Mathf.Max(0f, Mathf.Sin(t * 0.5f)) * 8f;
+                    Rotate(ProceduralEnemyParts.Tail, Quaternion.Euler(0f, sway * k, 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.FluteBird:
+                case ProceduralEnemyKind.AlpineChough:
+                case ProceduralEnemyKind.StormEagle:
+                case ProceduralEnemyKind.SmokeHarpy:
+                {
+                    // The birds of the peaks: the eagle soars on long glides, the chough and the flute bird beat quicker; the wings
+                    // hold still and the beak opens on the windup (the flute bird's note, the chough's and the harpy's screech).
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    float rate = _kind == ProceduralEnemyKind.StormEagle ? 0.4f : _kind == ProceduralEnemyKind.SmokeHarpy ? 0.55f : 0.8f;
+                    FlapWings(t, speed * rate, Mathf.Max(k, 0.25f) * (1f - 0.7f * r), Mathf.Max(Mathf.Clamp01(MoveSpeed01), 0.5f));
+                    Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(-14f * r, Mathf.Sin(t * 0.6f) * 25f * k * (1f - r), 0f));
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(32f * r, 0f, 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.GoldenBee:
+                {
+                    // A blur of fast wingbeats; the sting swings forward under the body on the windup.
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    FlapWings(t, speed * 3.2f, Mathf.Max(k, 0.25f) * 0.6f, 0f);
+                    Rotate(ProceduralEnemyParts.Stinger, Quaternion.Euler(Mathf.Sin(t * 2.3f) * 4f * k + 55f * r, 0f, 0f));
+                    break;
+                }
+
+                case ProceduralEnemyKind.CandleBat:
+                {
+                    // Flaps like the vampire bat; the candle flame on its head flickers and flares before the bite.
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    FlapWings(t, speed * 0.6f, Mathf.Max(k, 0.25f), Mathf.Clamp01(MoveSpeed01));
+                    float flicker = 0.5f + 0.5f * Mathf.Sin(t * 5.1f) * Mathf.Sin(t * 2.3f);
+                    Pulse(ProceduralEnemyParts.Lantern, Mathf.Lerp(0.9f, 1.12f, flicker * Mathf.Max(k, 0.3f)) + 0.3f * r);
+                    break;
+                }
+
+                case ProceduralEnemyKind.RopeUshabti:
+                {
+                    // Waits with its hoe; both arms go up and the hoe comes down like on the fields of the other world.
+                    float r = StepAttack(deltaTime, 4f, 2.5f);
+                    if (_driveLimbs)
+                    {
+                        Swing(ProceduralEnemyParts.ArmLeft, Mathf.Sin(t * 1.2f) * 3f * k - 70f * r);
+                        Swing(ProceduralEnemyParts.ArmRight, -Mathf.Sin(t * 1.2f) * 3f * k - 85f * r);
+                    }
+
+                    Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(0f, Mathf.Sin(t * 0.45f) * 6f * k, 0f));
                     break;
                 }
 

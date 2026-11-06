@@ -134,6 +134,33 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         BarkBeetle = 57,
         /// <summary>Ochokochi (Nartes, 52): shaggy Georgian forest man with the axe-blade on his chest; arms up to hug and cut.</summary>
         Ochokochi = 58,
+
+        // The beasts of the Picos de Farnkesh (Docs/Mapas100.md 53–58) that the overworld layout played with stand-ins
+        // (FarnkeshBeastRecipes).
+        /// <summary>Bode de Fumaça (Vale, 53): goat whose fleece is smoke with embers, black curled horns; lowers its head to butt.</summary>
+        SmokeGoat = 59,
+        /// <summary>Abelha Dourada (Vale, 53): dog-sized bee turned to gold by Midas's touch; buzzing wings, the sting swings under.</summary>
+        GoldenBee = 60,
+        /// <summary>Pássaro-Flauta Apagado (Vale, 53): long-tailed songbird with a reed-pipe beak; [distância], the beak opens to shoot.</summary>
+        FluteBird = 61,
+        /// <summary>Raposa da Vinha (Vale, 53): red fox with a grape-stained muzzle and vines in its brush; a jaw that gapes.</summary>
+        VineFox = 62,
+        /// <summary>Gralha-Alpina (Farnkesh, 54): black chough with yellow beak and red legs; the beak opens on the windup.</summary>
+        AlpineChough = 63,
+        /// <summary>Takin Apagado (Farnkesh, 54): golden takin with the Roman nose, greyed by the shadow; lowers its head to charge.</summary>
+        Takin = 64,
+        /// <summary>Cabra-Azul (Farnkesh, 54): the bharal, slate blue with the black stripe, horns out; lowers its head to butt.</summary>
+        BlueSheep = 65,
+        /// <summary>Morcego-Vela (Pontes, 55): bat with a lit candle on its head; the flame flares before the bite.</summary>
+        CandleBat = 66,
+        /// <summary>Ushabti de Corda (Pontes, 55): servant figure of rope and clay with its hoe; both arms go up to strike.</summary>
+        RopeUshabti = 67,
+        /// <summary>Gato-de-Pallas Apagado (Ermidas, 56): stocky long-furred manul, flat ears, ringed tail; a jaw that gapes.</summary>
+        PallasCat = 68,
+        /// <summary>Águia da Tempestade (Garganta, 57): dark grey eagle with lightning in its wing tips; [distância].</summary>
+        StormEagle = 69,
+        /// <summary>Harpia de Fumaça (Ninho, 58): smoky bird of prey with a pale masked face and long talons; the beak opens to strike.</summary>
+        SmokeHarpy = 70,
     }
 
     /// <summary>

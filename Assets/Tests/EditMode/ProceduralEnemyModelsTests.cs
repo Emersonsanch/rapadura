@@ -174,6 +174,29 @@ namespace Rapadura.Tests
             { ProceduralEnemyKind.Ochokochi, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight,
                 ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight, ProceduralEnemyParts.ShinLeft, ProceduralEnemyParts.ShinRight,
                 ProceduralEnemyParts.FootLeft, ProceduralEnemyParts.FootRight } },
+            { ProceduralEnemyKind.SmokeGoat, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Tail,
+                "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.GoldenBee, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight, ProceduralEnemyParts.Stinger } },
+            { ProceduralEnemyKind.FluteBird, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight,
+                ProceduralEnemyParts.Tail } },
+            { ProceduralEnemyKind.VineFox, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail,
+                "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.AlpineChough, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight,
+                ProceduralEnemyParts.Tail } },
+            { ProceduralEnemyKind.Takin, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Tail,
+                "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.BlueSheep, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Tail,
+                "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.CandleBat, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Lantern, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight } },
+            { ProceduralEnemyKind.RopeUshabti, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight,
+                ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight, ProceduralEnemyParts.ShinLeft, ProceduralEnemyParts.ShinRight,
+                ProceduralEnemyParts.FootLeft, ProceduralEnemyParts.FootRight } },
+            { ProceduralEnemyKind.PallasCat, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail,
+                "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.StormEagle, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight,
+                ProceduralEnemyParts.Tail } },
+            { ProceduralEnemyKind.SmokeHarpy, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight,
+                ProceduralEnemyParts.Tail } },
         };
 
         /// <summary>Legs per kind; every one a Leg_ (hip) → Shin_ (knee) → Foot_ chain for ProceduralLegLocomotion.</summary>
@@ -200,6 +223,10 @@ namespace Rapadura.Tests
             { ProceduralEnemyKind.StoneTurtle, 4 }, { ProceduralEnemyKind.MudBuffalo, 4 }, { ProceduralEnemyKind.NianCub, 4 },
             { ProceduralEnemyKind.YoungGriffin, 4 }, { ProceduralEnemyKind.Saiga, 4 }, { ProceduralEnemyKind.BronzeWolf, 4 },
             { ProceduralEnemyKind.SleepwalkerGiant, 2 }, { ProceduralEnemyKind.BarkBeetle, 6 }, { ProceduralEnemyKind.Ochokochi, 2 },
+            { ProceduralEnemyKind.SmokeGoat, 4 }, { ProceduralEnemyKind.GoldenBee, 0 }, { ProceduralEnemyKind.FluteBird, 0 },
+            { ProceduralEnemyKind.VineFox, 4 }, { ProceduralEnemyKind.AlpineChough, 0 }, { ProceduralEnemyKind.Takin, 4 },
+            { ProceduralEnemyKind.BlueSheep, 4 }, { ProceduralEnemyKind.CandleBat, 0 }, { ProceduralEnemyKind.RopeUshabti, 2 },
+            { ProceduralEnemyKind.PallasCat, 4 }, { ProceduralEnemyKind.StormEagle, 0 }, { ProceduralEnemyKind.SmokeHarpy, 0 },
         };
 
         [Test]
@@ -358,7 +385,8 @@ namespace Rapadura.Tests
                 || kind == ProceduralEnemyKind.ThiefMonkey || kind == ProceduralEnemyKind.ThiefOtter || kind == ProceduralEnemyKind.Irbis
                 || kind == ProceduralEnemyKind.GiantMarmot || kind == ProceduralEnemyKind.GrassLion
                 || kind == ProceduralEnemyKind.LanternFox || kind == ProceduralEnemyKind.NianCub || kind == ProceduralEnemyKind.YoungGriffin
-                || kind == ProceduralEnemyKind.Saiga || kind == ProceduralEnemyKind.BronzeWolf;
+                || kind == ProceduralEnemyKind.Saiga || kind == ProceduralEnemyKind.BronzeWolf
+                || kind == ProceduralEnemyKind.VineFox || kind == ProceduralEnemyKind.BlueSheep || kind == ProceduralEnemyKind.PallasCat;
             Assert.That(bounds.size.x, Is.InRange(lean ? 0.3f : 0.5f, 3.5f), $"{kind}: width {bounds.size.x}");
             Assert.That(bounds.size.z, Is.InRange(0.4f, 3.5f), $"{kind}: depth {bounds.size.z}");
             Assert.That(Mathf.Abs(bounds.center.x), Is.LessThan(0.3f), $"{kind}: model must be centred on the pivot");
@@ -481,6 +509,18 @@ namespace Rapadura.Tests
             Assert.AreEqual(ProceduralEnemyKind.SleepwalkerGiant, ProceduralEnemyModels.KindFor("enemy_mountain_sleepwalker_giant"));
             Assert.AreEqual(ProceduralEnemyKind.BarkBeetle, ProceduralEnemyModels.KindFor("enemy_mountain_bark_beetle"));
             Assert.AreEqual(ProceduralEnemyKind.Ochokochi, ProceduralEnemyModels.KindFor("enemy_mountain_ochokochi"));
+            Assert.AreEqual(ProceduralEnemyKind.SmokeGoat, ProceduralEnemyModels.KindFor("enemy_forest_smoke_goat"));
+            Assert.AreEqual(ProceduralEnemyKind.GoldenBee, ProceduralEnemyModels.KindFor("enemy_forest_golden_bee"));
+            Assert.AreEqual(ProceduralEnemyKind.FluteBird, ProceduralEnemyModels.KindFor("enemy_forest_flute_bird"));
+            Assert.AreEqual(ProceduralEnemyKind.VineFox, ProceduralEnemyModels.KindFor("enemy_forest_vine_fox"));
+            Assert.AreEqual(ProceduralEnemyKind.AlpineChough, ProceduralEnemyModels.KindFor("enemy_mountain_alpine_chough"));
+            Assert.AreEqual(ProceduralEnemyKind.Takin, ProceduralEnemyModels.KindFor("enemy_mountain_takin"));
+            Assert.AreEqual(ProceduralEnemyKind.BlueSheep, ProceduralEnemyModels.KindFor("enemy_mountain_blue_sheep"));
+            Assert.AreEqual(ProceduralEnemyKind.CandleBat, ProceduralEnemyModels.KindFor("enemy_mountain_candle_bat"));
+            Assert.AreEqual(ProceduralEnemyKind.RopeUshabti, ProceduralEnemyModels.KindFor("enemy_mountain_rope_ushabti"));
+            Assert.AreEqual(ProceduralEnemyKind.PallasCat, ProceduralEnemyModels.KindFor("enemy_mountain_pallas_cat"));
+            Assert.AreEqual(ProceduralEnemyKind.StormEagle, ProceduralEnemyModels.KindFor("enemy_mountain_storm_eagle"));
+            Assert.AreEqual(ProceduralEnemyKind.SmokeHarpy, ProceduralEnemyModels.KindFor("enemy_mountain_smoke_harpy"));
             Assert.AreEqual(ProceduralEnemyKind.None, ProceduralEnemyModels.KindFor("enemy_unknown_thing"));
             Assert.AreEqual(ProceduralEnemyKind.None, ProceduralEnemyModels.KindFor((string)null));
 

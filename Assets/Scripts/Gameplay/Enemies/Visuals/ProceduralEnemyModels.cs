@@ -154,6 +154,19 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_mountain_sleepwalker_giant", ProceduralEnemyKind.SleepwalkerGiant },
             { "enemy_mountain_bark_beetle", ProceduralEnemyKind.BarkBeetle },
             { "enemy_mountain_ochokochi", ProceduralEnemyKind.Ochokochi },
+            // The beasts of the Picos de Farnkesh (Docs/Mapas100.md 53–58), formerly played by stand-ins.
+            { "enemy_forest_smoke_goat", ProceduralEnemyKind.SmokeGoat },
+            { "enemy_forest_golden_bee", ProceduralEnemyKind.GoldenBee },
+            { "enemy_forest_flute_bird", ProceduralEnemyKind.FluteBird },
+            { "enemy_forest_vine_fox", ProceduralEnemyKind.VineFox },
+            { "enemy_mountain_alpine_chough", ProceduralEnemyKind.AlpineChough },
+            { "enemy_mountain_takin", ProceduralEnemyKind.Takin },
+            { "enemy_mountain_blue_sheep", ProceduralEnemyKind.BlueSheep },
+            { "enemy_mountain_candle_bat", ProceduralEnemyKind.CandleBat },
+            { "enemy_mountain_rope_ushabti", ProceduralEnemyKind.RopeUshabti },
+            { "enemy_mountain_pallas_cat", ProceduralEnemyKind.PallasCat },
+            { "enemy_mountain_storm_eagle", ProceduralEnemyKind.StormEagle },
+            { "enemy_mountain_smoke_harpy", ProceduralEnemyKind.SmokeHarpy },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -181,6 +194,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.StoneLion, ProceduralEnemyKind.LanternFox, ProceduralEnemyKind.TerracottaSoldier, ProceduralEnemyKind.StoneTurtle,
             ProceduralEnemyKind.MudBuffalo, ProceduralEnemyKind.NianCub, ProceduralEnemyKind.YoungGriffin, ProceduralEnemyKind.Saiga,
             ProceduralEnemyKind.BronzeWolf, ProceduralEnemyKind.SleepwalkerGiant, ProceduralEnemyKind.BarkBeetle, ProceduralEnemyKind.Ochokochi,
+            ProceduralEnemyKind.SmokeGoat, ProceduralEnemyKind.GoldenBee, ProceduralEnemyKind.FluteBird, ProceduralEnemyKind.VineFox,
+            ProceduralEnemyKind.AlpineChough, ProceduralEnemyKind.Takin, ProceduralEnemyKind.BlueSheep, ProceduralEnemyKind.CandleBat,
+            ProceduralEnemyKind.RopeUshabti, ProceduralEnemyKind.PallasCat, ProceduralEnemyKind.StormEagle, ProceduralEnemyKind.SmokeHarpy,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -388,6 +404,42 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.Ochokochi:
                     NartesBeastRecipes.BuildOchokochi(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeGoat:
+                    FarnkeshBeastRecipes.BuildSmokeGoat(blueprint);
+                    break;
+                case ProceduralEnemyKind.GoldenBee:
+                    FarnkeshBeastRecipes.BuildGoldenBee(blueprint);
+                    break;
+                case ProceduralEnemyKind.FluteBird:
+                    FarnkeshBeastRecipes.BuildFluteBird(blueprint);
+                    break;
+                case ProceduralEnemyKind.VineFox:
+                    FarnkeshBeastRecipes.BuildVineFox(blueprint);
+                    break;
+                case ProceduralEnemyKind.AlpineChough:
+                    FarnkeshBeastRecipes.BuildAlpineChough(blueprint);
+                    break;
+                case ProceduralEnemyKind.Takin:
+                    FarnkeshBeastRecipes.BuildTakin(blueprint);
+                    break;
+                case ProceduralEnemyKind.BlueSheep:
+                    FarnkeshBeastRecipes.BuildBlueSheep(blueprint);
+                    break;
+                case ProceduralEnemyKind.CandleBat:
+                    FarnkeshBeastRecipes.BuildCandleBat(blueprint);
+                    break;
+                case ProceduralEnemyKind.RopeUshabti:
+                    FarnkeshBeastRecipes.BuildRopeUshabti(blueprint);
+                    break;
+                case ProceduralEnemyKind.PallasCat:
+                    FarnkeshBeastRecipes.BuildPallasCat(blueprint);
+                    break;
+                case ProceduralEnemyKind.StormEagle:
+                    FarnkeshBeastRecipes.BuildStormEagle(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeHarpy:
+                    FarnkeshBeastRecipes.BuildSmokeHarpy(blueprint);
                     break;
             }
 

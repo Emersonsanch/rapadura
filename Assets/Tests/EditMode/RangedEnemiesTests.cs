@@ -33,6 +33,9 @@ namespace Rapadura.Tests
             (Fish, BiomeType.Caves, EnemyProjectileKind.LureGlob, ProceduralEnemyKind.LanternFish),
             // Ninho de Mahaway (24): throws its feathers like the hawk (same shot and sound), placed by the Limiar overworld.
             (Crow, BiomeType.Caves, EnemyProjectileKind.Feather, ProceduralEnemyKind.DarkCrow),
+            // Picos de Farnkesh (53, 57): the flute bird's and the storm eagle's stiff feathers (FarnkeshBeastsTests; placed later).
+            ("enemy_forest_flute_bird", BiomeType.Forest, EnemyProjectileKind.Feather, ProceduralEnemyKind.FluteBird),
+            ("enemy_mountain_storm_eagle", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.StormEagle),
         };
 
         /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>

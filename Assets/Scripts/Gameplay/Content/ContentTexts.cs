@@ -264,6 +264,19 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_mountain_sleepwalker_giant", "Sleepwalking Giant", "Gigante Sonâmbulo"),
             EnemyName("enemy_mountain_bark_beetle", "Bark Beetle", "Besouro-Casca"),
             EnemyName("enemy_mountain_ochokochi", "Ochokochi", "Ochokochi"),
+            // The beasts of the Picos de Farnkesh (Docs/Mapas100.md 53–58), formerly played by stand-ins.
+            EnemyName("enemy_forest_smoke_goat", "Smoke Goat", "Bode de Fumaça"),
+            EnemyName("enemy_forest_golden_bee", "Golden Bee", "Abelha Dourada"),
+            EnemyName("enemy_forest_flute_bird", "Dimmed Flute Bird", "Pássaro-Flauta Apagado"),
+            EnemyName("enemy_forest_vine_fox", "Vine Fox", "Raposa da Vinha"),
+            EnemyName("enemy_mountain_alpine_chough", "Alpine Chough", "Gralha-Alpina"),
+            EnemyName("enemy_mountain_takin", "Dimmed Takin", "Takin Apagado"),
+            EnemyName("enemy_mountain_blue_sheep", "Bharal", "Cabra-Azul"),
+            EnemyName("enemy_mountain_candle_bat", "Candle Bat", "Morcego-Vela"),
+            EnemyName("enemy_mountain_rope_ushabti", "Rope Ushabti", "Ushabti de Corda"),
+            EnemyName("enemy_mountain_pallas_cat", "Dimmed Pallas's Cat", "Gato-de-Pallas Apagado"),
+            EnemyName("enemy_mountain_storm_eagle", "Storm Eagle", "Águia da Tempestade"),
+            EnemyName("enemy_mountain_smoke_harpy", "Smoke Harpy", "Harpia de Fumaça"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),

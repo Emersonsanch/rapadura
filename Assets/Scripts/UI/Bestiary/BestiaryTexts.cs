@@ -251,6 +251,9 @@ namespace Rapadura.UI.Bestiary
             // -- Bichos da Planície de Mingcheng e da Estepe dos Nartes que os mundos contínuos faziam com substitutos (own file too) --
             MingchengNartesBestiaryTexts.AddPages(entries);
 
+            // -- Bichos dos Picos de Farnkesh que o mundo contínuo fazia com substitutos (own file too) --
+            FarnkeshBestiaryTexts.AddPages(entries);
+
             // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
             OssuaryBestiaryTexts.AddPages(entries);
 

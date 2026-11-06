@@ -363,6 +363,34 @@ Feltro, Cervo de Ouro, Cabra-Montês, Lince e Garanhão seguem com substitutos.
 | `enemy_mountain_bark_beetle` | **Besouro-Casca** / *Bark Beetle* | 50 | [tanque] | besouro da taiga que só comia madeira morta; Āz lhe deu uma fome sem fim e ele rói as casas do povo-tronco. |
 | `enemy_mountain_ochokochi` | **Ochokochi** / *Ochokochi* | 52 | [elite], pesado | o homem da mata do folclore georgiano, com a lâmina de osso no peito; sozinho e bravo pela sombra, procura alguém para "abraçar". |
 
+**Quarta leva (2026-11-06): Picos de Farnkesh (Mapas100 53–58).** Mesmo contrato (peso 0 no bioma, nível da área,
+números do bioma). O Vale dos Sátiros (53) fica no bioma Floresta (Água Viva) e os picos (54–58) no Montanha, como as
+áreas de `OverworldLayouts.Farnkesh` já declaram (`forest` / `rock`). Modelos em `FarnkeshBeastRecipes` (o bode, o takin e
+a cabra-azul baixam a cabeça para a carga; a raposa e o gato-de-pallas abrem a boca, o pássaro-flauta, a gralha, a águia e a
+harpia abrem o bico com as asas paradas; a abelha zune e passa o ferrão por baixo; a vela do morcego cresce antes da
+mordida; o ushabti ergue os dois braços com a enxada), Caderno em `FarnkeshBestiaryTexts`. O Pássaro-Flauta e a Águia da
+Tempestade são os [distância] das fichas: jogam pena dura como o gavião (`EnemyProjectileKind.Feather`, mesmo som; entram em
+`RangedEnemiesTests`). Testes: `FarnkeshBeastsTests`. Ainda não trocados no overworld de Farnkesh. Seguem com substitutos:
+Abutre do Pico (`enemy_desert_ember_vulture`), Grifo Selvagem (pode usar o `enemy_mountain_young_griffin`), Urso, Aranha,
+Marmota e Macaco do pé dos picos (já são bichos próprios de outras regiões), Pipa-Sombra / Sino Rachado / Raio Preso
+(`enemy_desert_broken_lantern`), Neblina do Vento Ruim / Eco Apagado / Ays / Redemoinho / Ventania
+(`enemy_mountain_ill_wind_mist`) e Pedra Voadora (`enemy_mountain_rolling_stone`).
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_forest_smoke_goat` | **Bode de Fumaça** / *Smoke Goat* | 53 | [tanque], carga | as cabras dos sátiros (os bodes do Vale frígio); a sombra desceu pelo Pactolo e a lã virou fumaça com brasa; não lembram o nome e dão cabeçada em quem chama. Dormem de noite. |
+| `enemy_forest_golden_bee` | **Abelha Dourada** / *Golden Bee* | 53 | [enxame] | o toque de Midas (mito frígio, como imagem); Āz tocou as abelhas e elas viraram ouro que nunca acha que tem o bastante; a picada doura (lava no Pactolo). Corpo a corpo. |
+| `enemy_forest_flute_bird` | **Pássaro-Flauta Apagado** / *Dimmed Flute Bird* | 53 | [distância] | invenção sobre a flauta de Mársias: o bico oco feito caniço; a sombra apagou a música, joga as penas duras do rabo de longe. |
+| `enemy_forest_vine_fox` | **Raposa da Vinha** / *Vine Fox* | 53 | [rápido], foge ferida | raposa-vermelha (bicho real); o Midas deixava os cachos de baixo para elas, a sombra fez querer todos. |
+| `enemy_mountain_alpine_chough` | **Gralha-Alpina** / *Alpine Chough* | 54 (e as gralhas do 56) | [rápido] | bicho real dos picos altos; tocava os sinos de vento de brincadeira, a sombra deu gula por coisa brilhante. |
+| `enemy_mountain_takin` | **Takin Apagado** / *Dimmed Takin* | 54 | [tanque], carga | bicho real do Himalaia; a lã dele está nas cordas do Sisin; a sombra o fez achar que toda ponte é armadilha. |
+| `enemy_mountain_blue_sheep` | **Cabra-Azul** / *Bharal* | 54 | [rápido], carga, foge ferida | o bharal (bicho real); mostrava os caminhos seguros dos pináculos, agora dá cabeçada primeiro. |
+| `enemy_mountain_candle_bat` | **Morcego-Vela** / *Candle Bat* | 55 | [rápido] | invenção: os morcegos das pontes roubaram as velas das lanternas e as usam grudadas na cabeça; de noite dobram. |
+| `enemy_mountain_rope_ushabti` | **Ushabti de Corda** / *Rope Ushabti* | 55 | [tanque], pesado | os *ushabti* do Egito (servos de figura para o outro mundo, como forma); o Sisin os fez de corda e barro; a sombra desamarrou as ordens. |
+| `enemy_mountain_pallas_cat` | **Gato-de-Pallas Apagado** / *Dimmed Pallas's Cat* | 56 | [rápido] | o manul (bicho real); amigo do silêncio das ermidas, a sombra o deixou sobressaltado: pula no menor barulho. |
+| `enemy_mountain_storm_eagle` | **Águia da Tempestade** / *Storm Eagle* | 57 | [distância] | invenção sobre os *ays* armênios: as águias brigaram com o vento ruim e voltaram com raio na ponta das asas. |
+| `enemy_mountain_smoke_harpy` | **Harpia de Fumaça** / *Smoke Harpy* | 58 | [rápido] | a harpia grega (as "que agarram") só como bicho; ave de rapina meio fumaça nas mãos do Vento Destruidor. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |
