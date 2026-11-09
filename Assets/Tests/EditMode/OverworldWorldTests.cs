@@ -19,11 +19,12 @@ namespace Rapadura.Tests
     /// Zarafshan and the Estepe dos Nartes north of the Costa (a whole 3 × 3 square), and the Picos de Farnkesh north of the steppe,
     /// so the world's bounds grow to 7200 × 9600 m, the Mar Gelado north of Mingcheng, west of the peaks, and the Arquipélago de
     /// Hinokura north of the Teto, west of the frozen sea, so the 3 × 4 rectangle of twelve regions has no hole left; the Rio das Doze
-    /// Horas opens a fifth row north of the archipelago (bounds 7200 × 12000 m), the row's other two cells walled holes.
+    /// Horas opens a fifth row north of the archipelago (bounds 7200 × 12000 m), the Margens da Mistura fill the cell east of the river
+    /// (north of the Mar Gelado) and the row's last cell, north of the Picos de Farnkesh, is a walled hole.
     /// Every walkable point belongs to one region, the chunk grids line up, the gates between the regions became open passes
     /// (flat, joined by trails), the relief has no hole nor step on the borders, the Zarafshan is the same as on its own away
     /// from them, and the hero can walk on trails from the Vila to Qocho, Litema, the Lamparinas, Taa Pwani, Jhilpur, Sangkent,
-    /// Mingcheng, the Acampamento de Soslan, the Vale dos Sátiros, Farnkesh, the Porto da Lua Branca, Hinokura and the Cais de Mesektet without a gate;
+    /// Mingcheng, the Acampamento de Soslan, the Vale dos Sátiros, Farnkesh, the Porto da Lua Branca, Hinokura, the Cais de Mesektet and Dur-Jarras without a gate;
     /// the island rings, the Ossuário and the docks stay.
     /// </summary>
     public class OverworldWorldTests
@@ -36,16 +37,17 @@ namespace Rapadura.Tests
         {
             OverworldLayouts.ZarafshanId, OverworldLayouts.AreiasId, OverworldLayouts.KaggenId, OverworldLayouts.LimiarId, OverworldLayouts.CostaId,
             OverworldLayouts.DeltaId, OverworldLayouts.TetoId, OverworldLayouts.MingchengId, OverworldLayouts.NartesId, OverworldLayouts.FarnkeshRegionId,
-            OverworldLayouts.MarGeladoRegionId, OverworldLayouts.HinokuraRegionId, OverworldLayouts.RioRegionId,
+            OverworldLayouts.MarGeladoRegionId, OverworldLayouts.HinokuraRegionId, OverworldLayouts.RioRegionId, OverworldLayouts.MisturaRegionId,
         };
 
         /// <summary>
         /// The cells of the bounds no region covers: the four rows below are whole (3 × 4, no hole). The Rio das Doze Horas (Região 13) opens a
         /// fifth row north of the Arquipélago de Hinokura, the only neighbour its sheet asks for (the ash of the Devouring Fire runs down
-        /// to the night river; the region is level 260, after the archipelago's 264–280), so the other two cells of that row, north of the Mar
-        /// Gelado and of the Picos de Farnkesh, are walled holes (Região 14 and later fill them or not).
+        /// to the night river; the region is level 260, after the archipelago's 264–280). The Margens da Mistura (Região 14) fill the cell of
+        /// that row east of the river, north of the Mar Gelado (the river ends at level ~300, the Margins start at 300), reached by two passes
+        /// on their west edge; the cell north of the Picos de Farnkesh stays a walled hole.
         /// </summary>
-        private static readonly Rect[] Holes = { new Rect(-1000f, 6200f, 2400f, 2400f), new Rect(1400f, 6200f, 2400f, 2400f) };
+        private static readonly Rect[] Holes = { new Rect(1400f, 6200f, 2400f, 2400f) };
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -59,14 +61,14 @@ namespace Rapadura.Tests
         // ------------------------------------------------------------------
 
         [Test]
-        public void World_IsValid_AndTilesTheThirteenRegions_EachPointInOneRegion()
+        public void World_IsValid_AndTilesTheFourteenRegions_EachPointInOneRegion()
         {
             OverworldLayout w = World;
             CollectionAssert.IsEmpty(OverworldRules.Validate(w), string.Join("\n", OverworldRules.Validate(w)));
             Assert.IsTrue(w.IsStitched);
             CollectionAssert.AreEquivalent(RegionIds, w.Parts.Select(p => p.Id));
-            Assert.AreEqual(new Rect(-3400f, -3400f, 7200f, 12000f), w.Bounds, "3 × 3 regions of 2400 m, Hinokura, the Mar Gelado and the Picos de Farnkesh on a fourth row, the Rio das Doze Horas on a fifth");
-            CollectionAssert.AreEquivalent(Holes, w.Holes, "north of the Mar Gelado and of the Picos de Farnkesh: two walled holes");
+            Assert.AreEqual(new Rect(-3400f, -3400f, 7200f, 12000f), w.Bounds, "3 × 3 regions of 2400 m, Hinokura, the Mar Gelado and the Picos de Farnkesh on a fourth row, the Rio das Doze Horas and the Margens da Mistura on a fifth");
+            CollectionAssert.AreEquivalent(Holes, w.Holes, "north of the Picos de Farnkesh: one walled hole");
             Assert.AreEqual(OverworldLayouts.CostaWorldOffset, w.Parts.Find(p => p.Id == OverworldLayouts.CostaId).Offset);
             Assert.AreEqual(new Rect(1400f, -1000f, 2400f, 2400f), w.Parts.Find(p => p.Id == OverworldLayouts.CostaId).Bounds, "the Costa east of the Zarafshan");
             Assert.AreEqual(OverworldLayouts.DeltaWorldOffset, w.Parts.Find(p => p.Id == OverworldLayouts.DeltaId).Offset);
@@ -98,6 +100,10 @@ namespace Rapadura.Tests
             Assert.AreEqual(new Rect(-3400f, 6200f, 2400f, 2400f), w.Parts.Find(p => p.Id == OverworldLayouts.RioRegionId).Bounds,
                 "the Rio das Doze Horas north of the Arquipélago de Hinokura");
             Assert.AreEqual(new Vector2(-2200f, 6800f), w.Parts.Find(p => p.Id == OverworldLayouts.RioRegionId).Vila.Offset, "the Cais de Mesektet in the world");
+            Assert.AreEqual(OverworldLayouts.MisturaWorldOffset, w.Parts.Find(p => p.Id == OverworldLayouts.MisturaRegionId).Offset);
+            Assert.AreEqual(new Rect(-1000f, 6200f, 2400f, 2400f), w.Parts.Find(p => p.Id == OverworldLayouts.MisturaRegionId).Bounds,
+                "the Margens da Mistura east of the Rio das Doze Horas, north of the Mar Gelado");
+            Assert.AreEqual(new Vector2(-400f, 7400f), w.Parts.Find(p => p.Id == OverworldLayouts.MisturaRegionId).Vila.Offset, "Dur-Jarras in the world");
             Assert.AreEqual(new Vector2(2600f, 5480f), w.SettlementOf(OverworldLayouts.FarnkeshMapId).Offset, "Farnkesh in the world");
             Assert.AreEqual(Vector2.zero, w.Parts.Find(p => p.Id == OverworldLayouts.ZarafshanId).Offset, "the Vila stays at (0, 0)");
             Assert.AreEqual(Vector2.zero, w.Vila.Offset);
@@ -148,7 +154,7 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void World_IsWhatMapModeLoads_ForEveryMapOfTheThirteenRegions()
+        public void World_IsWhatMapModeLoads_ForEveryMapOfTheFourteenRegions()
         {
             OverworldLayout w = World;
             foreach (string id in RegionIds)
@@ -186,6 +192,8 @@ namespace Rapadura.Tests
             Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.CaldeiraMapId), "region 12 is part of the world");
             Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.CaisMesektetMapId), "region 13 is part of the world");
             Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.BancoApepMapId), "region 13 is part of the world");
+            Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.DurJarrasMapId), "region 14 is part of the world");
+            Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.TabuasSonhoMapId), "region 14 is part of the world");
             Assert.IsNull(OverworldLayouts.WorldOf("map_043_canal_lanternas"), "not a catalog map");
         }
 
@@ -194,7 +202,8 @@ namespace Rapadura.Tests
         {
             OverworldLayout w = World;
             Assert.IsFalse(w.World.Exits.Exists(e => e.Kind == MapExitKind.Map && w.ContainsMap(e.TargetMapId)), "no gate inside the world");
-            Assert.AreEqual(13, w.World.Exits.Count(e => e.Kind == MapExitKind.WorldMap && e.Id.StartsWith("exit_island")), "one stone ring per region");
+            Assert.AreEqual(14, w.World.Exits.Count(e => e.Kind == MapExitKind.WorldMap && e.Id.StartsWith("exit_island")), "one stone ring per region");
+            Assert.IsNotNull(w.World.Exits.Find(e => e.Id == "exit_island_margens_da_mistura"), "the stone ring by Dur-Jarras");
             Assert.IsNotNull(w.World.Exits.Find(e => e.Id == "exit_island_rio_doze_horas"), "the stone ring by the Cais de Mesektet");
             Assert.IsNotNull(w.World.Exits.Find(e => e.Id == "exit_island_hinokura"), "the stone ring by Hinokura");
             Assert.IsNotNull(w.World.Exits.Find(e => e.Id == "exit_island_mar_gelado"), "the stone ring by the Porto da Lua Branca");
@@ -221,8 +230,9 @@ namespace Rapadura.Tests
             // Teto–Hinokura (twice: Wakhan's pass and the crests of the ill wind, led from the archipelago's gates to the ends of the Teto's
             // northern trails), Mar Gelado–Hinokura (twice: the tundra and Omöl's lakes, led over the thaw strait to the frozen sea's
             // west trails) and Hinokura–Rio das Doze Horas (twice: the ash fields and the sea of ash, led from the river's gates over the
-            // ash to Hinokura's northern road).
-            Assert.GreaterOrEqual(w.Passes.Count, 33);
+            // ash to Hinokura's northern road) and Rio das Doze Horas–Margens da Mistura (twice: the two passes on the Margins' west edge, led to the
+            // river's east flank, the Beira Fervente).
+            Assert.GreaterOrEqual(w.Passes.Count, 35);
             OverworldRelief relief = OverworldRelief.For(w);
             foreach (Vector2 pass in w.Passes)
             {
@@ -248,6 +258,7 @@ namespace Rapadura.Tests
                 (new Vector2(-1640f, 3900f), new Vector2(-1640f, 3700f)), (new Vector2(-1200f, 3900f), new Vector2(-1200f, 3700f)),
                 (new Vector2(-1100f, 4700f), new Vector2(-900f, 4700f)), (new Vector2(-1100f, 5000f), new Vector2(-900f, 5000f)),
                 (new Vector2(-2320f, 6300f), new Vector2(-2320f, 6100f)), (new Vector2(-1720f, 6300f), new Vector2(-1720f, 6100f)),
+                (new Vector2(-900f, 7300f), new Vector2(-1100f, 7300f)), (new Vector2(-900f, 7560f), new Vector2(-1100f, 7560f)),
             })
             {
                 Assert.AreNotEqual(w.PartAt(a), w.PartAt(b), $"{a} and {b} are in two regions");
@@ -270,13 +281,14 @@ namespace Rapadura.Tests
             // (Zarafshan | Costa, Areias | Delta, Mingcheng | Nartes), z = 1400 (Kaggen | Teto, Zarafshan | Mingcheng, Costa | Nartes) and,
             // on the fourth row, z = 3800 under the Picos de Farnkesh and the Mar Gelado (Nartes | Farnkesh, Mingcheng | Mar Gelado; west of
             // them, before Região 12, the hole's wall; now the whole width, Teto | Hinokura too), x = 1400 between them (Mar Gelado |
-            // Farnkesh), x = -1000 on the fourth row (Hinokura | Mar Gelado) and z = 6200 under the Rio das Doze Horas (Hinokura | Rio).
+            // Farnkesh), x = -1000 on the fourth and fifth rows (Hinokura | Mar Gelado, Rio | Margens) and z = 6200 under the fifth row (Hinokura | Rio,
+            // Mar Gelado | Margens).
             for (float t = w.Bounds.xMin + 0.5f; t < w.Bounds.xMax; t += 1.5f)
             {
                 var lines = new List<(Vector2, Vector2)> { (new Vector2(t, -1000f), Vector2.up), (new Vector2(t, 1400f), Vector2.up) };
                 lines.Add((new Vector2(t, 3800f), Vector2.up));
                 lines.Add((new Vector2(-1000f, t), Vector2.right));
-                if (t + 4800f < 6200f)
+                if (t + 4800f < w.Bounds.yMax)
                 {
                     lines.Add((new Vector2(-1000f, t + 4800f), Vector2.right));
                 }
@@ -287,7 +299,7 @@ namespace Rapadura.Tests
                     lines.Add((new Vector2(1400f, t + 4800f), Vector2.right));
                 }
 
-                if (t < -1000f)
+                if (t < 1400f)
                 {
                     lines.Add((new Vector2(t, 6200f), Vector2.up));
                 }
@@ -453,11 +465,11 @@ namespace Rapadura.Tests
             OverworldSettlement vila = w.Vila;
             var report = new List<string>();
             // Qocho, Litema, the Lamparinas, Taa Pwani, Jhilpur, Sangkent, Mingcheng, the Acampamento de Soslan, the Vale dos Sátiros
-            // and, up the peaks, Farnkesh (the capital of Região 10, not its region's town), the Porto da Lua Branca, Hinokura and the Cais de Mesektet.
+            // and, up the peaks, Farnkesh (the capital of Região 10, not its region's town), the Porto da Lua Branca, Hinokura, the Cais de Mesektet and Dur-Jarras.
             var goals = new List<OverworldSettlement>();
             foreach (string regionId in new[] { OverworldLayouts.AreiasId, OverworldLayouts.KaggenId, OverworldLayouts.LimiarId, OverworldLayouts.CostaId, OverworldLayouts.DeltaId, OverworldLayouts.TetoId, OverworldLayouts.MingchengId,
                 OverworldLayouts.NartesId, OverworldLayouts.FarnkeshRegionId, OverworldLayouts.MarGeladoRegionId,
-                OverworldLayouts.HinokuraRegionId, OverworldLayouts.RioRegionId })
+                OverworldLayouts.HinokuraRegionId, OverworldLayouts.RioRegionId, OverworldLayouts.MisturaRegionId })
             {
                 goals.Add(w.Parts.Find(p => p.Id == regionId).Vila);
             }
@@ -492,7 +504,7 @@ namespace Rapadura.Tests
                 }
 
                 report.Add($"Vila → {goal.Id}: {route.Count} trail pieces, {length:0} m, steepest {steepest:0}°");
-                Assert.Less(length, 11000f, $"to {goal.Id}: a sensible road (the Cais is the farthest: the road goes through all of Hinokura)");
+                Assert.Less(length, 13000f, $"to {goal.Id}: a sensible road (Dur-Jarras is the farthest: the road goes through all of Hinokura and then the river's east flank)");
             }
 
             Debug.Log("[Overworld World] " + string.Join("; ", report));

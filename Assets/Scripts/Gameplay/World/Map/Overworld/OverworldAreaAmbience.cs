@@ -303,6 +303,29 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { OverworldTerrain.FireLake, new AreaClimate(Clear, true) },
             { OverworldTerrain.ApepSandbank, new AreaClimate(Dust, true) },
             { OverworldTerrain.ApepScales, new AreaClimate(Dust, true) },
+
+            // Região 14 — Margens da Mistura: clear skies over the city and its fields, dust on the Desert of the Clock and the brick
+            // gate, mist on the pitch and the cedars; the shoulder of the giant and the field of the tablets are wild.
+            { OverworldTerrain.ZigguratTerrace, new AreaClimate(Clear, false) },
+            { OverworldTerrain.BrickGate, new AreaClimate(Dust, false) },
+            { OverworldTerrain.BrickKilns, new AreaClimate(Dust, false) },
+            { OverworldTerrain.TellMounds, new AreaClimate(Clear, false) },
+            { OverworldTerrain.PalmCanal, new AreaClimate(Clear, false) },
+            { OverworldTerrain.BarleyTerraces, new AreaClimate(Clear, false) },
+            { OverworldTerrain.ClockDesert, new AreaClimate(Dust, true) },
+            { OverworldTerrain.ShadowSands, new AreaClimate(Dust, true) },
+            { OverworldTerrain.HourSands, new AreaClimate(Clear, true) },
+            { OverworldTerrain.TarPools, new AreaClimate(Mist, true) },
+            { OverworldTerrain.BitumenWells, new AreaClimate(Mist, true) },
+            { OverworldTerrain.TarReeds, new AreaClimate(Mist, true) },
+            { OverworldTerrain.CedarEdge, new AreaClimate(null, true) },
+            { OverworldTerrain.CedarRings, new AreaClimate(Mist, true) },
+            { OverworldTerrain.ElderCedars, new AreaClimate(Mist, true) },
+            { OverworldTerrain.ShoulderStone, new AreaClimate(null, true) },
+            { OverworldTerrain.SkinFolds, new AreaClimate(Dust, true) },
+            { OverworldTerrain.DioriteRise, new AreaClimate(Clear, true) },
+            { OverworldTerrain.DreamTablets, new AreaClimate(Mist, true) },
+            { OverworldTerrain.CutGarden, new AreaClimate(Mist, true) },
         };
 
         /// <summary>True when <paramref name="terrain"/> has its own line (tests: every terrain must).</summary>

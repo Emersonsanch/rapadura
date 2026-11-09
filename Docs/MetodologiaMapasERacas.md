@@ -82,6 +82,8 @@ a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: 
 | Asas ou salto duplo (58) | **vestir** no slot Costas/Asas as Asas de Lona do Takhsich, ou asas de verdade do Tacho Encantado, ou montaria Voadora | Asas de Lona: Cordas do Sisin (Farnkesh, cidade de retorno do 58), 420 ouro; também na Feira da Miwnay (Mercado dos Túneis) |
 | Resistência à nevasca (63) | levar Chá de Gengibre do Tandir ou Roupa Térmica | Peles e Barcos do Pamour (Porto da Lua Branca, cidade de retorno do 63), 70 ouro; também nos Agasalhos do Sisinnios (Sangkent) |
 | Roupa térmica (64) | **vestir** Roupa Térmica Refinada (slot Peito) | Peles e Barcos do Pamour (Porto da Lua Branca, cidade de retorno do 64), 900 ouro; recompensa da 2ª missão do Porto (Pera); também nos Agasalhos do Sisinnios (Sangkent) |
+| Região 13 — Barco de junco (72), Lamparina acesa (73), Lamparina rúnica (74), Óleo de Fogo Eterno (75), Amuleto antiveneno (76) | como acima | Trocas do Khunanup (Cais de Mesektet, cidade de retorno de 71–76), balcão fixo (`CityMesektetTests`, `MapRequirementTests`) |
+| Região 14 — Água fresca (78), Barco de junco (79), Plataformas elevadas/corda (80), Grampos de escalada (81), Lamparina acesa (82) | como acima | Betume do Atrahasis (Dur-Jarras, cidade de retorno de 77–82), balcão fixo: Odre, Barco de Junco, Corda de Escalada, Grampos e Lamparina de Óleo (`CityDurJarrasTests`, `MapRequirementTests`); 77 não pede nada |
 
 Toda exigência das regiões 1–6 tem um "kit" de itens (`MapRequirementRules.KitOf`: o item principal, mais a lamparina no
 17) que a atende sozinho, e cada item do kit é vendido numa loja (`CityShopCatalog`) ou dado por missão
@@ -109,8 +111,7 @@ de Água Fresca (calor da Caldeira, 70; esfriar a lava, 68); o Barco de Junco é
 (Sango). Fontes da cidade: o castelo de Shuri e as *gusuku* de Ryukyu (laca e telhas vermelhas, muros curvos de pedra de
 coral) e as cidades-castelo do Japão, só como forma (sem santuários); nomes japoneses comuns escolhidos pelo sentido (Akane
 "vermelho vivo", Kurogane "ferro preto", Sango "coral", Hikari "luz"); *hi no kura*, "celeiro do fogo", eco do celeiro
-celeste do ferreiro Kurdalægon (bíblia §1.6). Os da região 13 (Rio das Doze Horas, mapas 71–76, ainda **fora** do `MapCatalog`: nenhuma exigência de mapa existe
-hoje) já estão fixos no balcão das Trocas do Khunanup no Cais de Mesektet, a futura cidade de retorno de 71–76
+celeste do ferreiro Kurdalægon (bíblia §1.6). Os da região 13 (Rio das Doze Horas, mapas 71–76, agora no `MapCatalog`: ver tabela acima) estão fixos no balcão das Trocas do Khunanup no Cais de Mesektet, a cidade de retorno de 71–76
 (`CityMesektetTests`): Passagem de Dhow e Barco de Junco (rio e canais, 71 e 72), Botas de Raiz (lodo e areia movediça, 72 e 76),
 as duas lamparinas e o Óleo de Fogo Eterno (noite sem fim e Anéis de Mehen, 73 e 74), Odre (Areal e Lago de Fogo, 73 e 75), Teriaga
 e Amuleto Antiveneno (escorpiões e cobras, 73 e 76) e Corda (trenó, 73); a Lamparina Rúnica é também a recompensa da 2ª missão
@@ -118,7 +119,7 @@ de lá (Djedi). Fontes da cidade: as barcas *Mesektet* (noite) e *Mandjet* (manh
 *Livro dos Portões*; os barcos de papiro e as colunas de feixe de papiro de Kemet, só como forma (sem templo nem figura de
 deus); nomes de **personagens de contos** de Kemet, não de divindades: Sinuhe (*História de Sinuhe*), Khunanup (*O Camponês
 Eloquente*), Djedi (*Papiro Westcar*) e Setne Khamwas (contos demóticos). Quando 71–76 entrarem, escolher as tags
-(sugestão: 72 `BoatOrDock`) e estender `MapRequirementTests` para conferir que cada kit está neste balcão. Os da região 14 (Margens da Mistura, mapas 77–82, ainda **fora** do `MapCatalog`) já estão fixos no balcão do Betume do Atrahasis em Dur-Jarras, a futura cidade de retorno (`CityDurJarrasTests`): Odre (78), Barco de Junco, Passagem de Dhow, Botas de Raiz, Óleo de Fogo Eterno e Teriaga (79), Corda e Grampos (80, 81) e Lamparina de Óleo; o Barco de Junco é também a recompensa da 2ª missão (Sin-leqi-unninni). Fontes da cidade: Chogha Zanbil (*Dur-Untash*, Elam) e os muros de tijolo vidrado da Mesopotâmia, só como forma (sem templo nem figura de deus); o Relógio de Zurvan é só relógio (bíblia §1.1); nomes dos contos: Utnapishtim e Sin-leqi-unninni (*Epopeia de Gilgamesh*), Atrahasis (*Atrahasis*), Siduri (a taberneira do conto de Gilgamesh, quarta moradora, fora da ficha). `MapRequirementTests` agora
+(sugestão: 72 `BoatOrDock`) e estender `MapRequirementTests` para conferir que cada kit está neste balcão. Os da região 14 (Margens da Mistura, mapas 77–82, agora no `MapCatalog`: 78 `FreshWater`, 79 `SaddleRequired`, 80 `ElevatedPlatforms`, 81 `ClimbingCrampons`, 82 `TorchRequired`; ver tabela acima) estão fixos no balcão do Betume do Atrahasis em Dur-Jarras, a cidade de retorno (`CityDurJarrasTests`): Odre (78), Barco de Junco, Passagem de Dhow, Botas de Raiz, Óleo de Fogo Eterno e Teriaga (79), Corda e Grampos (80, 81) e Lamparina de Óleo; o Barco de Junco é também a recompensa da 2ª missão (Sin-leqi-unninni). Fontes da cidade: Chogha Zanbil (*Dur-Untash*, Elam) e os muros de tijolo vidrado da Mesopotâmia, só como forma (sem templo nem figura de deus); o Relógio de Zurvan é só relógio (bíblia §1.1); nomes dos contos: Utnapishtim e Sin-leqi-unninni (*Epopeia de Gilgamesh*), Atrahasis (*Atrahasis*), Siduri (a taberneira do conto de Gilgamesh, quarta moradora, fora da ficha). `MapRequirementTests` agora
 cobre todas as regiões do catálogo (1–12) e confere que cada exigência das regiões 9–12 está à venda na própria cidade
 de retorno do mapa (`GatesOfRegionTen_…`, `GatesOfRegionEleven_…` e `GatesOfRegionTwelve_AreOnTheFixedCounterOfTheirReturnCity_AtItsPrice`: balcão
 fixo, preço justo, o kit abre o mapa; nunca Pedra da Vida/Caos). Fora das exigências, a **Garrafa de Ar Sereno** dos kobolds (consumível: +20% de recuperação de vigor por
@@ -129,6 +130,9 @@ venda, fixos desde o primeiro dia, no Bazar de Pérolas da Mwana em Taa Pwani (2
 região 6 (32–35) nos Barcos e Trocas do Nuhzadag em Jhilpur (`CityJhilpurTests`); os da região 7 (36, 38, 40) nos
 Agasalhos do Sisinnios em Sangkent (`CitySangkentTests`); o da região 8 (42) nas Lanternas do Mestre Mōzak em Mingcheng
 (`CityMingchengTests`). Nada é consumido ao entrar: basta levar.
+
+Fontes da Fortaleza da Última Lâmpada (região 15, mapa 83, `CityUltimaLampadaTests`): a borda da Terra da Treva e as cinco covas do *Scholion* XI de Teodoro bar Konai e dos
+*Kephalaia*, só como lugar (sem figura do Príncipe; os portões ficam selados); a Lâmpada-Mãe da Parthenos (bíblia §3.10); nomes das **cartas de Kellis** (famílias maniqueias do oásis de Dakhla, séc. IV): Pamour, Tehat e Makarios, que repetem nomes já usados no Porto da Lua Branca e em Jhilpur como outras pessoas da mesma família (ids `pamour_lampadas`, `tehat_pavios`, `makarios_cartas`).
 
 ---
 

@@ -102,6 +102,18 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         CoilRings = 112,
         /// <summary>A serpent's body: one long sinuous ridge segmented like scales, over a low sandbank.</summary>
         ApepBody = 113,
+
+        // Região 14 — Margens da Mistura (OverworldRelief.Mistura.cs): 120–129.
+        /// <summary>A flat dial with twelve low radial ridges round a fixed centre (the Desert of the Clock).</summary>
+        GnomonDial = 120,
+        /// <summary>Concentric rings of root ridges round a fixed centre, low in the middle (Hobabish's cedar rings).</summary>
+        CedarRings = 121,
+        /// <summary>One broad hump along the giant's shoulder (a high spine across the area).</summary>
+        GiantShoulder = 122,
+        /// <summary>Parallel folds of stone skin.</summary>
+        SkinFolds = 123,
+        /// <summary>A rough cone of diorite rising round a fixed centre (Ullikummi).</summary>
+        DioriteRise = 124,
     }
 
     /// <summary>What the relief knows about one point besides its height (ground colours and scatter read it).</summary>
@@ -715,14 +727,16 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                         || DeltaShape(style, x, z, a, out smooth, out shaped) || PamirShape(style, x, z, a, out smooth, out shaped)
                         || MingchengShape(style, x, z, a, out smooth, out shaped) || NartesShape(style, x, z, a, out smooth, out shaped)
                         || FarnkeshShape(style, x, z, a, out smooth, out shaped) || MarGeladoShape(style, x, z, a, out smooth, out shaped)
-                        || HinokuraShape(style, x, z, a, out smooth, out shaped) || RioShape(style, x, z, a, out smooth, out shaped))
+                        || HinokuraShape(style, x, z, a, out smooth, out shaped) || RioShape(style, x, z, a, out smooth, out shaped)
+                        || MisturaShape(style, x, z, a, out smooth, out shaped))
                     {
                         break; // Região 2: dunes, mesas, canyons (.Desert.cs); Região 5: cliffs, islets (.Coast.cs); Região 6: hummocks, levees (.Delta.cs);
                                // Região 7: moraines, ice tongues, seracs, peaks (.Pamir.cs); Região 8: karst towers, the wall's crest (.Mingcheng.cs);
                                // Região 9: kurgans, the Caucasus massif (.Nartes.cs); Região 10: pinnacles, cloud isles, the gorge (.Farnkesh.cs);
                                // Região 11: floes, icebergs, pressure ridges, fjords, ice vaults (.MarGelado.cs);
                                // Região 12: the volcano's cone, lava flows, the glass reef, curved ramparts, the caldera (.Hinokura.cs);
-                               // Região 13: reed beds, zigzag dunes, Mehen's rings, Apep's body (.Rio.cs).
+                               // Região 13: reed beds, zigzag dunes, Mehen's rings, Apep's body (.Rio.cs);
+                               // Região 14: the gnomon dial, cedar rings, the giant's shoulder, folds, diorite (.Mistura.cs).
                     }
 
                     smooth = shaped = a * SmoothStep(0f, 1f, 0.5f + 0.85f * OverworldNoise.Fbm(x, z, 2));

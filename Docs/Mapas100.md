@@ -164,6 +164,12 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       `ZigzagDunes`, `CoilRings`, `ApepBody`) e cenário próprio; fica ao norte do Arquipélago de Hinokura e abre a quinta fileira do mundo
       (limites 7200 × 12000 m, 13 regiões; as outras duas células da fileira, ao norte do Mar Gelado e dos Picos de Farnkesh, são buracos
       murados). Detalhes em §5, "Região 13".
+    - **Região 14 — Margens da Mistura** (2026-11-09): mesmo modelo, 2400 × 2400 m (`OverworldLayouts.Mistura.cs`, coordenadas x −600…1800,
+      z −1200…1200) com Dur-Jarras em (0, 0) (receita própria `Ziggurat` no chão plano de ±30 m) e os postos de 78–82 (Gnômon Caído (600, 0), Balsa
+      de Junco (120, −960), Clareira do Lenhador (120, 960), Ninho no Ombro (1080, 0), Tenda dos Intérpretes (1560, 0)); 77–82 entram no catálogo (☆) e viram
+      zonas (construídos), 25 áreas numa grade 5 × 5, 20 terrenos novos (260–279), relevo próprio (`GnomonDial`, `CedarRings`, `GiantShoulder`, `SkinFolds`,
+      `DioriteRise`) e cenário próprio; preenche o buraco murado ao norte do Mar Gelado, a leste do Rio das Doze Horas (14 regiões; resta só o buraco ao
+      norte dos Picos de Farnkesh). Detalhes em §5, "Região 14".
     - **Mundo costurado** (2026-11-03, pedido do usuário: andar entre as regiões sem portão): as quatro primeiras regiões
       formam um quadrado de 4800 × 4800 m (`OverworldLayouts.WorldId`, `OverworldLayouts.World.cs`), 2 × 2, e a **Costa das
       Monções** fica a leste do Zarafshan (x 1400…3800, z −1000…1400, deslocamento (2000, 200)) e o **Delta de Jhilpur** a
@@ -214,7 +220,10 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       (x −3400…−1000, z 6200…8600, deslocamento (−2200, 6800), Cais de Mesektet no mundo em (−2200, 6800)): o único vizinho é o arquipélago, cuja
       cinza corre para o rio da noite; as outras duas células da fileira ficam **muradas** (`Holes` = 2) e o mundo vira **7200 × 12000 m, 13
       regiões**. Passagens: `exit_campos_de_cinza` (x −2320) e `exit_mar_de_cinza` (x −1720), na borda sul do rio, levadas às trilhas norte de
-      Hinokura (rota a pé Vila → Cais ~8,5 km). Quadrado original:
+      Hinokura (rota a pé Vila → Cais ~8,5 km). As **Margens da Mistura** preenchem a célula ao norte do Mar Gelado, a leste do rio (x −1000…1400,
+      z 6200…8600, deslocamento (−400, 7400), Dur-Jarras no mundo em (−400, 7400); `Holes` = 1, só ao norte dos Picos de Farnkesh; **14 regiões**): passagens
+      `exit_beira_fervente_sul` (z 7300) e `exit_beira_fervente_norte` (z 7560), na borda oeste das Margens, levadas à trilha leste do rio (Beira Fervente, nv 292–298,
+      onde o rio já chega a nv ~300); a borda com o Mar Gelado (nv 180–240) fica sem passagem, mas é relevo contínuo (a diferença de nível é da barreira suave). Quadrado original:
       Serra de Kaggen (x −3400…−1000, z −1000…1400) | Bosque do Zarafshan (x −1000…1400, z −1000…1400) em cima;
       Grutas do Limiar (x −3400…−1000, z −3400…−1000) | Areias Flamejantes (x −1000…1400, z −3400…−1000) embaixo.
       Cada região guarda o seu layout nas suas coordenadas e é deslocada por um número inteiro de pedaços (Zarafshan
@@ -2291,6 +2300,22 @@ copiou o conto de Gilgamesh; aqui, o bibliotecário), **Atrahasis** (o construto
 balsas de betume), **Utnapishtim** (o velho que viu o dilúvio; aqui, cuida do Relógio de Zurvan da cidade). Chefe do
 mundo: **o Sonho da Destruição** (mapa 82).
 
+**No jogo (2026-11-09): mundo contínuo** (`OverworldLayouts.Mistura.cs`, §0.10): 2400 × 2400 m ao norte do Mar Gelado, a leste do Rio das Doze Horas (preenche um dos
+buracos murados da quinta fileira; duas passagens abertas na borda oeste levam à Beira Fervente do rio), 25 áreas em 20 terrenos novos — Dur-Jarras, Portão de Tijolo,
+Olarias, Colinas de Tell, Canal das Palmeiras e Terraços de Cevada (77, cidade, nv 300–307); Deserto do Relógio com o Gnômon Caído e os 12 gnômons em círculo, Sombras Atrasadas e
+Areia das Horas (78, posto; **Odre de Água Fresca**); Poços de Betume com a Balsa de Junco, Poças de Piche e Juncal de Piche (79, posto; **Barco de Junco**); Cedral de Hobabish com a
+Clareira do Lenhador e as 7 lanternas de resina, Beira do Cedral e Cedros Anciãos (80, posto; **Corda de Escalada**); Ombro de Upelluri com o Ninho no Ombro, Dobras de Pedra,
+Clavícula do Gigante, Diorito Crescente e Beiral do Céu (81, posto; **Grampos de Escalada**); Campo das Tábuas com a Tenda dos Intérpretes, Jardim Cortado, Água Parada, Tábuas
+Quebradas e Tábuas do Sonho (82, posto; **Lamparina acesa**, até nv 360). Todas as exigências estão no balcão fixo do Betume do Atrahasis. Relevo: mostrador de 12 raios (`GnomonDial`), anéis de
+raízes (`CedarRings`), a corcova do ombro (`GiantShoulder`), dobras de pele de pedra (`SkinFolds`), o cone de diorito (`DioriteRise`, ~22 m); cidade e deserto baixos. Água: canal de betume
+com três pontes e lagoas de piche e de água parada. Cenário: leões vidrados, fornos e pilhas de tijolo, gnômons caídos, pilares-ampulheta, jarras de betume, lanternas de resina, cedros
+gigantes, lascas de diorito, tábuas de pedra, troncos cortados; cacos de tijolo, marcas de mostrador, bolhas de piche, gotas de resina e lascas no chão. Bichos existentes nos papéis das
+fichas (leão de pedra = leão de tijolo, grifo jovem = mušḫuššu, escorpião = homem-escorpião, besouro-da-casca = gafanhoto de betume, golem = ampulheta viva, lagarto de lava = lagarto do instante,
+névoa do vento ruim = sombra atrasada, ushabti de laca = ushabti de relógio, gosma = betume vivo, gaivota-brasa = garça de piche, lúcio = bagre negro, harpia de fumaça = fumaça de piche, troll apagado =
+cedro raivoso, irbis = lince, abelha dourada = abelha-resina, lanterna quebrada = manto de brilho, pedra rolante = diorito, águia = ave do ombro, gigante de escória = filho de Ullikummi, soldado de terracota =
+tábua quebrada, gigante sonâmbulo = jardim-sombra, coruja = pássaro-sonho, foca de sombra = água que apaga), variante noturna em toda clareira, nenhum chefe (Instante Perdido, Rei do Piche, Hobabish, Ullikummi e
+Sonho da Destruição ficam para depois). Testes `OverworldMisturaTests` e `OverworldWorldTests`. Falta: degraus do zigurate, bolhas de tempo, acender o piche, os sete mantos, o ombro que respira, acordar/sonhar e as montarias.
+
 ### 77 · Dur-Jarras, a Cidade-Zigurate / *Dur-Jarras, the Ziggurat City* — nv 300–308 · ☆ · cidade
 - **Fonte:** Chogha Zanbil (Elam), zigurates e muralhas de tijolo vidrado da Mesopotâmia.
 - **Bioma e visual:** cidade em volta de um zigurate de 5 degraus, canais e palmeiras; estilo `Ziggurat`, paleta acima.
@@ -2304,6 +2329,7 @@ mundo: **o Sonho da Destruição** (mapa 82).
 - **Ganchos:** loot tijolo vidrado, tábua de argila · montaria nova **Mušḫuššu Manso** (§6) · casa: conjunto novo **Tijolo
   Azul** (leão de azulejo).
 - **Noite:** o zigurate acende de cima para baixo; o Relógio de Zurvan marca a noite.
+- **No jogo (2026-11-09): cidade de verdade** (`CityTownRecipes.DurJarras.cs`, estilo `Ziggurat`, `CityCatalog.LateRegionCities`, id `dur_jarras`), já no mundo contínuo: em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S a 19 m; a rua Sul é a entrada; sem rua ao norte: o zigurate fecha a praça), zigurate de cinco degraus, Relógio de Zurvan, canais de betume com ponte de tijolo, palmeiras, leões vidrados e jarras; Utnapishtim, Atrahasis, Sin-leqi-unninni e Siduri; Betume do Atrahasis com as exigências de 78–82 fixas; respawn na praça para 77–82. Falta: os degraus que liberam serviços e o evento da Cheia.
 
 ### 78 · Deserto do Relógio / *Desert of the Clock* — nv 306–316 · ☆
 - **Fonte:** Zurvan, o "Tempo sem fim" dos contos persas (bíblia §1.1: só como relógio, nunca pessoa).

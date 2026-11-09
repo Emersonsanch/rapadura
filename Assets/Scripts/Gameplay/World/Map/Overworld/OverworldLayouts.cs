@@ -38,6 +38,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { MapRegion.MarGelado, MarGeladoRegionId },
             { MapRegion.ArquipelagoDeHinokura, HinokuraRegionId },
             { MapRegion.RioDasDozeHoras, RioRegionId },
+            { MapRegion.MargensDaMistura, MisturaRegionId },
         };
 
         /// <summary>Every continuous region of this build (texts, tests).</summary>
@@ -75,6 +76,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 case MarGeladoRegionId: return MarGeladoRegion();
                 case HinokuraRegionId: return HinokuraRegion();
                 case RioRegionId: return RioRegion();
+                case MisturaRegionId: return MisturaRegion();
                 case WorldId: return BuildWorld();
                 default: return null;
             }

@@ -13,11 +13,11 @@ namespace Rapadura.Gameplay.World.Map
     /// <summary>
     /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II) and the six of
     /// Região 9 (☆ 47–52, the Estepe dos Nartes), the six of Região 10 (☆ 53–58, the Picos de Farnkesh) and the six of Região 11
-    /// (☆ 59–64, the Mar Gelado), the six of Região 12 (☆ 65–70, the Arquipélago de Hinokura) and the six of Região 13 (☆ 71–76, the Rio das Doze Horas), walked as zones of their continuous regions: level
+    /// (☆ 59–64, the Mar Gelado), the six of Região 12 (☆ 65–70, the Arquipélago de Hinokura), the six of Região 13 (☆ 71–76, the Rio das Doze Horas) and the six of Região 14 (☆ 77–82, the Margens da Mistura), walked as zones of their continuous regions: level
     /// bands, walk/warp levels, special gates, settlements and return cities, as content-as-code like
-    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42, 47–76): a hand-made layout
+    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42, 47–82): a hand-made layout
     /// (<c>MapLayouts.Has</c>: 01–08, 13, 14, 19, 20) or only a zone of a continuous region (<c>OverworldLayouts.ForMap</c>:
-    /// 09–12, 15–18, 21–42, 47–76, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
+    /// 09–12, 15–18, 21–42, 47–82, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
     /// the flag equal to it. The rest are listed in the Barcas de Luz window, closed. The gold fare is never stored: it is always the
     /// formula of <see cref="MapAccessRules.CalculateWarpCost(int,int,bool)"/> (the "Custo Ouro" column of the methodology
     /// table is design history).
@@ -45,6 +45,7 @@ namespace Rapadura.Gameplay.World.Map
         public const string PortoDaLuaBranca = "porto_da_lua_branca";
         public const string Hinokura = "hinokura";
         public const string CaisDeMesektet = "cais_de_mesektet";
+        public const string DurJarras = "dur_jarras";
 
         public const string PomarId = "map_001_pomar";
         public const string TugaiId = "map_002_tugai";
@@ -56,7 +57,7 @@ namespace Rapadura.Gameplay.World.Map
         {
             CityCatalog.VilaZefa, CopasGarajonay, CityCatalog.AreiaBranca, TamborRubro, CityCatalog.SerraAlta, SaloesDeBronze,
             CityCatalog.Lamparinas, MercadoDosTuneis, TaaPwani, Aratta, Kirta, Jhilpur, PalafitasTarchon, Sangkent, Mingcheng, TorresBrancas,
-            AcampamentoSoslan, Fortim, Arvoredo, ValeDosSatiros, Farnkesh, PortoDaLuaBranca, Hinokura, CaisDeMesektet,
+            AcampamentoSoslan, Fortim, Arvoredo, ValeDosSatiros, Farnkesh, PortoDaLuaBranca, Hinokura, CaisDeMesektet, DurJarras,
         };
 
         public static readonly IReadOnlyList<MapDefinition> Maps = new List<MapDefinition>
@@ -158,12 +159,20 @@ namespace Rapadura.Gameplay.World.Map
             new MapDefinition(74, "map_074_aneis_mehen", R.RioDasDozeHoras, Y.Ruins, S.G, 284, 296, 280, 288, Fee, T.RunicLamp, CaisDeMesektet, K.Outpost, "anel_quieto", isBuilt: true),
             new MapDefinition(75, "map_075_lago_de_fogo", R.RioDasDozeHoras, Y.Coast, S.G, 292, 306, 288, 296, Fee, T.EternalFireOil, CaisDeMesektet, K.Outpost, "ilha_das_palmeiras", isBuilt: true),
             new MapDefinition(76, "map_076_banco_apep", R.RioDasDozeHoras, Y.Desert, S.GG, 304, 320, 300, 308, Fee, T.AntiVenomAmulet, CaisDeMesektet, K.Outpost, "proa_encalhada", isBuilt: true),
+
+            // Região 14 — Margens da Mistura (☆, Docs/Mapas100.md §1; zones of its continuous region, OverworldLayouts.Mistura)
+            new MapDefinition(77, "map_077_dur_jarras", R.MargensDaMistura, Y.Plain, S.GG, 300, 308, 296, 304, Fee, T.None, DurJarras, K.Capital, "dur_jarras", isBuilt: true),
+            new MapDefinition(78, "map_078_deserto_relogio", R.MargensDaMistura, Y.Desert, S.GG, 306, 316, 302, 310, Fee, T.FreshWater, DurJarras, K.Outpost, "gnomon_caido", isBuilt: true),
+            new MapDefinition(79, "map_079_pocos_betume", R.MargensDaMistura, Y.Swamp, S.G, 314, 326, 310, 318, Fee, T.SaddleRequired, DurJarras, K.Outpost, "balsa_de_junco", isBuilt: true),
+            new MapDefinition(80, "map_080_cedral_hobabish", R.MargensDaMistura, Y.Forest, S.GG, 322, 336, 318, 326, Fee, T.ElevatedPlatforms, DurJarras, K.Outpost, "clareira_do_lenhador", isBuilt: true),
+            new MapDefinition(81, "map_081_ombro_upelluri", R.MargensDaMistura, Y.Mountain, S.GG, 334, 346, 330, 338, Fee, T.ClimbingCrampons, DurJarras, K.Outpost, "ninho_no_ombro", isBuilt: true),
+            new MapDefinition(82, "map_082_tabuas_sonho", R.MargensDaMistura, Y.Ruins, S.GG, 344, 360, 340, 348, Fee, T.TorchRequired, DurJarras, K.Outpost, "tenda_dos_interpretes", isBuilt: true),
         };
 
         public static readonly IReadOnlyList<MapRegion> Regions = new[]
         {
             R.Zarafshan, R.AreiasFlamejantes, R.SerraDeKaggen, R.GrutasDoLimiar, R.CostaDasMoncoes, R.DeltaDeJhilpur, R.TetoDoMundo, R.PlanicieDeMingcheng,
-            R.EstepeDosNartes, R.PicosDeFarnkesh, R.MarGelado, R.ArquipelagoDeHinokura, R.RioDasDozeHoras,
+            R.EstepeDosNartes, R.PicosDeFarnkesh, R.MarGelado, R.ArquipelagoDeHinokura, R.RioDasDozeHoras, R.MargensDaMistura,
         };
 
         private static Dictionary<string, MapDefinition> _byId;

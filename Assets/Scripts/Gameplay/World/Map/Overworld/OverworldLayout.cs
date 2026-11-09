@@ -446,6 +446,48 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         ApepSandbank = 258,
         /// <summary>The purple scales and the quicksand (76): the serpent's skin on dark sand.</summary>
         ApepScales = 259,
+
+        // Região 14 — Margens da Mistura (OverworldLayouts.Mistura.cs, OverworldTerrains.Mistura.cs): 260–279.
+        /// <summary>The terrace round Dur-Jarras (77): packed earth and baked-brick paving under the ziggurat.</summary>
+        ZigguratTerrace = 260,
+        /// <summary>The brick gate (77): the way in from the River of the Twelve Hours, kilned brick and dust.</summary>
+        BrickGate = 261,
+        /// <summary>The brick kilns (77): clay pits and kilns, stacks of brick drying.</summary>
+        BrickKilns = 262,
+        /// <summary>The tells (77): low mounds of old brick cities.</summary>
+        TellMounds = 263,
+        /// <summary>The palm canal (77): palms and reed along the small canals.</summary>
+        PalmCanal = 264,
+        /// <summary>The barley terraces (77): stepped fields of barley north of the city.</summary>
+        BarleyTerraces = 265,
+        /// <summary>The Deserto do Relógio (78): flat light sand with twelve fallen gnomons.</summary>
+        ClockDesert = 266,
+        /// <summary>The late shadows (78): dark drifts where the shadows walk on their own.</summary>
+        ShadowSands = 267,
+        /// <summary>The sands of the hours (78): pale ripples and hourglass pillars.</summary>
+        HourSands = 268,
+        /// <summary>The tar pools (79): a net of pitch ponds on black ground.</summary>
+        TarPools = 269,
+        /// <summary>The Poços de Betume (79): wells, jars and reed rafts, the Balsa de Junco.</summary>
+        BitumenWells = 270,
+        /// <summary>The tar reeds (79): tall reeds growing out of the pitch.</summary>
+        TarReeds = 271,
+        /// <summary>The edge of the cedars (80): first giant cedars and stumps on the slope.</summary>
+        CedarEdge = 272,
+        /// <summary>The Cedral de Hobabish (80): rings of giant cedars round the woodcutter's clearing.</summary>
+        CedarRings = 273,
+        /// <summary>The elder cedars (80): the oldest trees, resin glowing in the mist.</summary>
+        ElderCedars = 274,
+        /// <summary>The Ombro de Upelluri (81): the giant's shoulder, moss and stone.</summary>
+        ShoulderStone = 275,
+        /// <summary>The folds of stone skin (81): parallel creases of the giant's skin.</summary>
+        SkinFolds = 276,
+        /// <summary>The growing diorite (81): the rock of Ullikummi rising out of the shoulder.</summary>
+        DioriteRise = 277,
+        /// <summary>The Campo das Tábuas do Sonho (82): giant stone tablets standing in the ground.</summary>
+        DreamTablets = 278,
+        /// <summary>The cut garden (82): felled trunks and still water.</summary>
+        CutGarden = 279,
     }
 
     /// <summary>

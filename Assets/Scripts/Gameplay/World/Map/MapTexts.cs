@@ -162,6 +162,12 @@ namespace Rapadura.Gameplay.World.Map
             ("map_074_aneis_mehen", "Coils of Mehen", "Anéis de Mehen", "Quiet Ring", "Anel Quieto"),
             ("map_075_lago_de_fogo", "Lake of Fire", "Lago de Fogo", "Palm Isle", "Ilha das Palmeiras"),
             ("map_076_banco_apep", "Apep's Sandbank", "Banco de Areia de Apep", "Stranded Prow", "Proa Encalhada"),
+            ("map_077_dur_jarras", "Dur-Jarras, the Ziggurat City", "Dur-Jarras, a Cidade-Zigurate", "Dur-Jarras", "Dur-Jarras"),
+            ("map_078_deserto_relogio", "Desert of the Clock", "Deserto do Relógio", "Fallen Gnomon", "Gnômon Caído"),
+            ("map_079_pocos_betume", "Bitumen Wells", "Poços de Betume", "Reed Raft", "Balsa de Junco"),
+            ("map_080_cedral_hobabish", "Hobabish Cedar Forest", "Cedral de Hobabish", "Woodcutter's Clearing", "Clareira do Lenhador"),
+            ("map_081_ombro_upelluri", "Upelluri's Shoulder", "Ombro de Upelluri", "Nest on the Shoulder", "Ninho no Ombro"),
+            ("map_082_tabuas_sonho", "Field of the Dream Tablets", "Campo das Tábuas do Sonho", "Interpreters' Tent", "Tenda dos Intérpretes"),
         };
 
         private static readonly (MapRegion Region, string En, string Pt)[] RegionNames =
@@ -179,6 +185,7 @@ namespace Rapadura.Gameplay.World.Map
             (MapRegion.MarGelado, "Frozen Sea", "Mar Gelado"),
             (MapRegion.ArquipelagoDeHinokura, "Hinokura Archipelago", "Arquipélago de Hinokura"),
             (MapRegion.RioDasDozeHoras, "River of the Twelve Hours", "Rio das Doze Horas"),
+            (MapRegion.MargensDaMistura, "Margins of the Mixture", "Margens da Mistura"),
         };
 
         private static readonly (string Id, string En, string Pt)[] CityNames =
@@ -207,19 +214,20 @@ namespace Rapadura.Gameplay.World.Map
             ("porto_da_lua_branca", "White Moon Harbor", "Porto da Lua Branca"),
             ("hinokura", "Hinokura", "Hinokura"),
             ("cais_de_mesektet", "Mesektet Quay", "Cais de Mesektet"),
+            ("dur_jarras", "Dur-Jarras", "Dur-Jarras"),
         };
 
         private static readonly (string Tag, string En, string Pt)[] RequirementHints =
         {
             (MapRequirementTags.LeatherBoots, "Wear any boots: Leather Boots at Mariam's haberdashery (Vila da Vó Edna). Joaquim does not sink in the mud.", "Calce qualquer bota: Botas de Couro no Armarinho da Mariam (Vila da Vó Edna). O Joaquim não afunda no lodo."),
-            (MapRequirementTags.ElevatedPlatforms, "Carry a Climbing Rope (Mariam's haberdashery, Vila da Vó Edna) or wear wings.", "Leve uma Corda de Escalada (Armarinho da Mariam, Vila da Vó Edna) ou use asas."),
+            (MapRequirementTags.ElevatedPlatforms, "Carry a Climbing Rope (Mariam's haberdashery, Vila da Vó Edna; Atrahasis's Bitumen, Dur-Jarras) or wear wings: the giant cedars of Hobabish are climbed.", "Leve uma Corda de Escalada (Armarinho da Mariam, Vila da Vó Edna; Betume do Atrahasis, Dur-Jarras) ou use asas: os cedros gigantes de Hobabish se sobem."),
             (MapRequirementTags.GardenKey, "Mariam gives the Garden Key for clearing the spider webs; after the Forest boss she also sells a copy.", "A Mariam dá a Chave do Jardim por limpar as teias; depois do chefe da Floresta ela também vende uma cópia."),
-            (MapRequirementTags.FreshWater, "Carry a Waterskin of Fresh Water from the Qocho Oasis saddlery or from Kurogane's Black Iron (Hinokura): the heat of the Devouring Fire Caldera asks for it too.", "Leve um Odre de Água Fresca da selaria do Oásis de Qocho ou do Ferro Preto do Kurogane (Hinokura): o calor da Caldeira do Fogo Devorador também pede."),
+            (MapRequirementTags.FreshWater, "Carry a Waterskin of Fresh Water from the Qocho Oasis saddlery or from Kurogane's Black Iron (Hinokura): the heat of the Devouring Fire Caldera asks for it too, and so does the Desert of the Clock (Atrahasis's Bitumen, Dur-Jarras).", "Leve um Odre de Água Fresca da selaria do Oásis de Qocho ou do Ferro Preto do Kurogane (Hinokura): o calor da Caldeira do Fogo Devorador também pede, e o Deserto do Relógio também (Betume do Atrahasis, Dur-Jarras)."),
             (MapRequirementTags.PoisonProtection, "Carry an Oasis Theriac (Qocho) or an anti-venom amulet. Lavine breathes the poison mists.", "Leve uma Teriaga do Oásis (Qocho) ou um amuleto antiveneno. A Lavine respira as névoas venenosas."),
             (MapRequirementTags.WoolCloak, "Carry a Wool Cloak (Litema forge, or Mestre Mihr's mine-pass quest) or wear the Nart Felt Cloak.", "Leve uma Manta de Lã (forja de Litema ou a missão do passo da mina do Mestre Mihr) ou vista a Capa de Feltro dos Nartes."),
             (MapRequirementTags.PickaxeTorch, "Carry a pickaxe and a lamp: Oil Lamp at Parthenos's lamps (Vila das Lamparinas).", "Leve picareta e lamparina: Lamparina de Óleo nas Lamparinas da Parthenos (Vila das Lamparinas)."),
             (MapRequirementTags.BlizzardResistance, "Carry Tandir Ginger Tea (Litema forge) or wear fine thermal clothes (Sangkent; Pamour's Furs and Boats, Porto da Lua Branca); the polar wind of the Aurora Sea asks for it too.", "Leve Chá de Gengibre do Tandir (forja de Litema) ou vista roupa térmica refinada (Sangkent; Peles e Barcos do Pamour, Porto da Lua Branca); o vento polar do Mar das Auroras também pede."),
-            (MapRequirementTags.TorchRequired, "Carry an Oil Lamp: Parthenos sells it in the Vila das Lamparinas and gives one for scattering the bats; Khunanup's Trades at the Mesektet Quay have it too, for the dark of the Hidden Sands.", "Leve uma Lamparina de Óleo: a Parthenos vende na Vila das Lamparinas e dá uma por espantar os morcegos; as Trocas do Khunanup, no Cais de Mesektet, também têm, para o escuro do Areal Escondido."),
+            (MapRequirementTags.TorchRequired, "Carry an Oil Lamp: Parthenos sells it in the Vila das Lamparinas and gives one for scattering the bats; Khunanup's Trades at the Mesektet Quay have it too, for the dark of the Hidden Sands, and Atrahasis's Bitumen at Dur-Jarras for the Field of the Dream Tablets.", "Leve uma Lamparina de Óleo: a Parthenos vende na Vila das Lamparinas e dá uma por espantar os morcegos; as Trocas do Khunanup, no Cais de Mesektet, também têm, para o escuro do Areal Escondido, e o Betume do Atrahasis, em Dur-Jarras, para o Campo das Tábuas do Sonho."),
             (MapRequirementTags.RunicLamp, "Carry a Runic Lamp: Parthenos sells it once the Caves boss has fallen; Khunanup's Trades at the Mesektet Quay sell it for the Coils of Mehen.", "Leve uma Lamparina Rúnica: a Parthenos vende depois do chefe das Cavernas; as Trocas do Khunanup, no Cais de Mesektet, vendem para os Anéis de Mehen."),
             (MapRequirementTags.EternalFireOil, "Carry Eternal Fire Oil: Parthenos sells it once the Caves boss has fallen; Khunanup's Trades at the Mesektet Quay sell it for the Lake of Fire.", "Leve Óleo de Fogo Eterno: a Parthenos vende depois do chefe das Cavernas; as Trocas do Khunanup, no Cais de Mesektet, vendem para o Lago de Fogo."),
             (MapRequirementTags.WingsOrDoubleJump, "Wear Takhsich's Canvas Wings (Miwnay's Fair, Tunnel Market; Sisin's Ropes, Farnkesh) or wings of the Enchanted Cauldron, or own a winged mount.", "Vista as Asas de Lona do Takhsich (Feira da Miwnay, Mercado dos Túneis; Cordas do Sisin, Farnkesh) ou asas do Tacho Encantado, ou tenha uma montaria alada."),
@@ -229,11 +237,11 @@ namespace Rapadura.Gameplay.World.Map
             (MapRequirementTags.AirBubble, "Carry a Bottled Air Bubble or a Breathing Shell (Kirta).", "Leve uma Bolha de Ar Engarrafada ou uma Concha Respirável (Kirta)."),
             (MapRequirementTags.RootBoots, "Wear Living-Root Boots (Taa Pwani) or own a water mount. Joaquim does not sink in the mud.", "Calce Botas de Raiz Viva (Taa Pwani) ou tenha uma montaria aquática. O Joaquim não afunda no lodo."),
             (MapRequirementTags.RootBridgeBalance, "Carry a Balance Pole (Jhilpur). Maithe walks the root bridges on her own.", "Leve uma Vara de Equilíbrio (Jhilpur). A Maithe atravessa as pontes de raiz sozinha."),
-            (MapRequirementTags.SaddleRequired, "Carry a Reed Boat (Tarchon stilt houses; Khunanup's Trades, Mesektet Quay) or own a water mount: the canals of the Reed Fields are crossed by boat.", "Leve um Barco de Junco (Palafitas de Tarchon; Trocas do Khunanup, Cais de Mesektet) ou tenha uma montaria aquática: os canais dos Campos de Juncos se cruzam de barco."),
+            (MapRequirementTags.SaddleRequired, "Carry a Reed Boat (Tarchon stilt houses; Khunanup's Trades, Mesektet Quay) or own a water mount: the canals of the Reed Fields and the pitch of the Bitumen Wells (Atrahasis's Bitumen, Dur-Jarras) are crossed by boat.", "Leve um Barco de Junco (Palafitas de Tarchon; Trocas do Khunanup, Cais de Mesektet; Betume do Atrahasis, Dur-Jarras) ou tenha uma montaria aquática: os canais dos Campos de Juncos e o piche dos Poços de Betume se cruzam de barco."),
             (MapRequirementTags.AntiVenomAmulet, "Carry an Anti-Venom Amulet (Tarchon stilt houses; Khunanup's Trades, Mesektet Quay): the children of Apep bite.", "Leve um Amuleto Antiveneno (Palafitas de Tarchon; Trocas do Khunanup, Cais de Mesektet): os filhos de Apep mordem."),
             (MapRequirementTags.PurifyingFruit, "Carry a Purifying Fruit (Jhilpur).", "Leve uma Fruta Purificadora (Jhilpur)."),
             (MapRequirementTags.ThermalClothes, "Wear Fine Thermal Clothes (Sangkent; Pamour's Furs and Boats, Porto da Lua Branca, or Pera's quest pays them): without them nobody fishes on Old Kul's lake.", "Vista a Roupa Térmica Refinada (Sangkent; Peles e Barcos do Pamour, Porto da Lua Branca, ou a missão do Pera paga com ela): sem ela ninguém pesca no lago do Velho Kul."),
-            (MapRequirementTags.ClimbingCrampons, "Carry Climbing Crampons (Sangkent; Kurogane's Black Iron, Hinokura): the pumice slopes of Mount Echeyde ask for them too.", "Leve Grampos de Escalada (Sangkent; Ferro Preto do Kurogane, Hinokura): as encostas de pedra-pomes do Monte Echeyde também pedem."),
+            (MapRequirementTags.ClimbingCrampons, "Carry Climbing Crampons (Sangkent; Kurogane's Black Iron, Hinokura; Atrahasis's Bitumen, Dur-Jarras): the pumice slopes of Mount Echeyde and Upelluri's Shoulder ask for them too.", "Leve Grampos de Escalada (Sangkent; Ferro Preto do Kurogane, Hinokura; Betume do Atrahasis, Dur-Jarras): as encostas de pedra-pomes do Monte Echeyde e o Ombro de Upelluri também pedem."),
             (MapRequirementTags.WingsRequired, "Wear wings of the Enchanted Cauldron or own a winged mount.", "Vista asas do Tacho Encantado ou tenha uma montaria alada."),
             (MapRequirementTags.StormProtection, "Carry a Storm Cloak (Sangkent; Sisin's Ropes, Farnkesh).", "Leve uma Capa de Tempestade (Sangkent; Cordas do Sisin, Farnkesh)."),
             (MapRequirementTags.SunSeal, "Carry the Sun Seal (Mingcheng).", "Leve o Selo do Sol (Mingcheng)."),

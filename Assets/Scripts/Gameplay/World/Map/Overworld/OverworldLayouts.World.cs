@@ -38,9 +38,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// cell, north of the Teto do Mundo and west of the frozen sea (x −3400…−1000, z 3800…6200): its two south gates led to the Teto's
     /// northern trail ends (Wakhan's pass, the crests of the ill wind), its two east gates to the Mar Gelado's tundra and lakes, so the
     /// fourth row is whole. Região 13 (the Rio das Doze Horas) starts a fifth row north of the archipelago (x −3400…−1000, z 6200…8600), its
-    /// two south gates led to the archipelago's northern trails (over the ash fields and the sea of ash): the bounds grow to 7200 × 12000 m,
-    /// and the rest of that row (north of the Mar Gelado and of the Picos de Farnkesh) is two holes walled off like the world's edge
-    /// (<see cref="OverworldLayout.Holes"/>: invisible walls, backdrop relief).
+    /// two south gates led to the archipelago's northern trails (over the ash fields and the sea of ash): the bounds grow to 7200 × 12000 m.
+    /// Região 14 (the Margens da Mistura) fills the next cell of that row, north of the Mar Gelado and east of the river (x −1000…1400,
+    /// z 6200…8600), its two west gates led to the river's east flank; the cell north of the Picos de Farnkesh stays a hole walled off
+    /// like the world's edge (<see cref="OverworldLayout.Holes"/>: invisible walls, backdrop relief).
     /// The relief blends across the borders like between any two areas (one relief for the whole world, each area shaped in
     /// its own region's coordinates), the chunk grids line up (offsets are multiples of the chunk), the streaming, the soft
     /// barrier, the levels and the requirements work per area as before.
@@ -112,6 +113,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// </summary>
         public static readonly Vector2 RioWorldOffset = new Vector2(-2200f, 6800f);
 
+        /// <summary>
+        /// Região 14 east of the Rio das Doze Horas, north of the Mar Gelado (Dur-Jarras at world (−400, 7400)): the Margens da Mistura fill
+        /// the walled cell of the fifth row beside the river (level 300 where the river ends at ~300), so only the cell north of the Picos
+        /// de Farnkesh stays a walled hole. Two open passes on its west edge lead to the river's east flank (Beira Fervente).
+        /// </summary>
+        public static readonly Vector2 MisturaWorldOffset = new Vector2(-400f, 7400f);
+
         /// <summary>Width (m) of the trail that joins two passes (or a pass to the nearest trail across the border).</summary>
         public const float PassTrailWidth = 4f;
 
@@ -155,6 +163,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 (MarGeladoRegion(), MarGeladoWorldOffset),
                 (HinokuraRegion(), HinokuraWorldOffset),
                 (RioRegion(), RioWorldOffset),
+                (MisturaRegion(), MisturaWorldOffset),
             };
 
             Rect bounds = default;

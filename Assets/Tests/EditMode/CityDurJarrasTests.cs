@@ -22,9 +22,8 @@ namespace Rapadura.Tests
     /// <see cref="CitySpec"/> among the late-region cities, the three people of the ficha (Utnapishtim, Atrahasis, Sin-leqi-unninni) and
     /// Siduri at their doors, the Ziggurat style (houses of baked brick, the ziggurat of five steps, the Relógio de Zurvan, the bitumen
     /// canals with brick bridges, palms, glazed lions and stacks of jars), the whole town inside a circle of radius ~22.5 m at y = 0
-    /// with its three roads out (W, E, S), the Betume do Atrahasis with the gear maps 77–82 will ask for (never the life or chaos
-    /// stones) and the two city quests. Maps 77–82 are not in <see cref="MapCatalog"/> yet: no respawn through the catalog and no gates
-    /// here (when they enter, add them as in CityHinokuraTests.MapsOfTheArchipelago_RespawnInItsPlaza and MapRequirementTests).
+    /// with its three roads out (W, E, S), the Betume do Atrahasis with the gear maps 77–82 ask for (never the life or chaos
+    /// stones) and the two city quests; maps 77–82 respawn on its plaza and their gates are on Atrahasis's counter (MapRequirementTests).
     /// </summary>
     public class CityDurJarrasTests
     {
@@ -46,7 +45,7 @@ namespace Rapadura.Tests
             CitySpec city = CityCatalog.Get(CityCatalog.DurJarras);
             Assert.IsNotNull(city, "Dur-Jarras has a CitySpec");
             Assert.AreEqual(BiomeType.Forest, city.Region, "the Margens borrow the Forest (always unlocked)");
-            Assert.AreEqual("dur_jarras", city.CityId, "the return city id maps 77–82 will use");
+            Assert.AreEqual("dur_jarras", city.CityId, "the return city id of maps 77–82");
             Assert.AreEqual(CityTownRecipes.DurJarrasCityId, city.CityId);
 
             Assert.IsTrue(CityCatalog.IsLateRegionCity(city));
@@ -61,6 +60,20 @@ namespace Rapadura.Tests
             var cities = new CityProgress();
             Assert.AreSame(city, cities.ApplyDefeatIn(city), "a defeat in the Margens wakes the cousins at the foot of the ziggurat");
             Assert.AreSame(city, cities.ConsumeRespawnNotice());
+        }
+
+        [Test]
+        public void MapsOfTheMargins_RespawnInItsPlaza()
+        {
+            List<MapDefinition> maps = MapCatalog.Maps.Where(m => m.ReturnCityId == CityCatalog.DurJarras).ToList();
+            CollectionAssert.AreEquivalent(new[] { 77, 78, 79, 80, 81, 82 }, maps.Select(m => m.MapId).ToArray(), "Dur-Jarras is the return city of 77–82 (Docs/Mapas100.md)");
+            foreach (MapDefinition map in maps)
+            {
+                Assert.AreEqual(CityCatalog.DurJarras, MapCatalog.RespawnCityFor(map.Id).CityId, map.Id);
+            }
+
+            Assert.AreEqual(MapSettlementKind.Capital, MapCatalog.Get("map_077_dur_jarras").Settlement);
+            Assert.IsNotNull(CityCatalog.Get(SafeZoneRules.RespawnCity("map_077_dur_jarras", _ => CityCatalog.DurJarras, CityCatalog.VilaZefa)));
         }
 
         [Test]

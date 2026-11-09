@@ -393,6 +393,42 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         FirePuddle = 292,
         /// <summary>A chip of Apep's purple scale lying on the sand (ground detail, no collider).</summary>
         ScaleChip = 293,
+
+        // Região 14 — Margens da Mistura (OverworldDecorKit.Mistura.cs): 300–319.
+        /// <summary>A lion of glazed blue brick on a plinth (the lions of the city walls).</summary>
+        GlazedLionStatue = 300,
+        /// <summary>A brick kiln of baked clay, a glow in its mouth.</summary>
+        BrickKiln = 301,
+        /// <summary>A stack of mud bricks drying.</summary>
+        BrickStack = 302,
+        /// <summary>A gigantic fallen gnomon of the Desert of the Clock.</summary>
+        FallenGnomon = 303,
+        /// <summary>A pillar shaped like an hourglass, pale sand running in it.</summary>
+        HourglassPillar = 304,
+        /// <summary>A sealed jar of bitumen with a band of reed.</summary>
+        BitumenJar = 305,
+        /// <summary>A lantern of cedar resin on a post (Hobabish's seven lanterns).</summary>
+        ResinLantern = 306,
+        /// <summary>A giant cedar with tiered flat crowns.</summary>
+        GiantCedar = 307,
+        /// <summary>A shard of dark diorite (Ullikummi's stone).</summary>
+        DioriteShard = 308,
+        /// <summary>A giant stone tablet standing in the ground.</summary>
+        TabletStone = 309,
+        /// <summary>A felled trunk from the dream's cut garden.</summary>
+        CutTrunk = 310,
+        /// <summary>A broken baked brick (ground detail, no collider).</summary>
+        BrickShard = 312,
+        /// <summary>A line of the hour dial on the sand (ground detail, no collider).</summary>
+        ClockRipple = 313,
+        /// <summary>A bubble of pitch (ground detail, no collider).</summary>
+        TarBubble = 314,
+        /// <summary>A drop of glowing resin (ground detail, no collider).</summary>
+        ResinDrip = 315,
+        /// <summary>A chip of diorite (ground detail, no collider).</summary>
+        DioriteChip = 316,
+        /// <summary>A chip of inscribed tablet (ground detail, no collider).</summary>
+        TabletChip = 317,
     }
 
     /// <summary>
