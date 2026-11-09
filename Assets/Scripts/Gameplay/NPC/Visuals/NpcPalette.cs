@@ -82,6 +82,12 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // houses #5B4A3E, the lilac of the painted moons #B7A6E0, silver #C8D2DC, the polar night #1E2A4A, seal grey #7E7A72 and
         // reindeer hide #9A7A56
         SeaIce, PolarSnow, MoonPlank, MoonLilac, MoonSilver, PolarNight, SealGrey, ReindeerHide,
+        // Hinokura (Arquipélago de Hinokura, Docs/Mapas100.md map 65): the red lacquer #B23A2E, red tile #C6492F, volcanic stone
+        // #2E2B2B, the coral stone #E8D9C0, the ember of the forges #FF8A3D, pine green #3E6B4A, obsidian #1E1A1E and pumice #C8BBA8
+        HinoLacquer, HinoTile, VolcanicStone, CoralWhite, ForgeEmber, IslandPine, ObsidianBlack, Pumice,
+        // Cais de Mesektet (Rio das Doze Horas, Docs/Mapas100.md map 71): the night of the river #1E2050, the gold of Kemet #D4AF37,
+        // papyrus #8DAA4A, the quay sandstone #C9A27A, the dark water #22324A, linen #EDE6D3, lapis #2F4F9A and kohl black #1A1A22
+        RiverNight, KemetGold, PapyrusGreen, QuaySandstone, NightWater, NileLinen, LapisBlue, KohlBlack,
     }
 
     /// <summary>
@@ -93,7 +99,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 25;
+        public const int Rows = 27;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -173,6 +179,12 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Porto da Lua Branca  sea ice #D8E9F2, polar snow #F7FAFC, plank #5B4A3E, moon lilac #B7A6E0, silver #C8D2DC, polar night #1E2A4A, seal grey #7E7A72, reindeer hide #9A7A56
             new Color(0.85f, 0.91f, 0.95f), new Color(0.97f, 0.98f, 0.99f), new Color(0.36f, 0.29f, 0.24f), new Color(0.72f, 0.65f, 0.88f),
             new Color(0.78f, 0.82f, 0.86f), new Color(0.12f, 0.16f, 0.29f), new Color(0.49f, 0.48f, 0.45f), new Color(0.6f, 0.48f, 0.34f),
+            // Hinokura  lacquer #B23A2E, red tile #C6492F, volcanic stone #2E2B2B, coral #E8D9C0, forge ember #FF8A3D, pine #3E6B4A, obsidian #1E1A1E, pumice #C8BBA8
+            new Color(0.7f, 0.23f, 0.18f), new Color(0.78f, 0.29f, 0.18f), new Color(0.18f, 0.17f, 0.17f), new Color(0.91f, 0.85f, 0.75f),
+            new Color(1f, 0.54f, 0.24f), new Color(0.24f, 0.42f, 0.29f), new Color(0.12f, 0.1f, 0.12f), new Color(0.78f, 0.73f, 0.66f),
+            // Cais de Mesektet  river night #1E2050, Kemet gold #D4AF37, papyrus #8DAA4A, quay sandstone #C9A27A, dark water #22324A, linen #EDE6D3, lapis #2F4F9A, kohl #1A1A22
+            new Color(0.12f, 0.13f, 0.31f), new Color(0.83f, 0.69f, 0.22f), new Color(0.55f, 0.67f, 0.29f), new Color(0.79f, 0.64f, 0.48f),
+            new Color(0.13f, 0.2f, 0.29f), new Color(0.93f, 0.9f, 0.83f), new Color(0.18f, 0.31f, 0.6f), new Color(0.1f, 0.1f, 0.13f),
         };
 
         public static int Count => Colors.Length;

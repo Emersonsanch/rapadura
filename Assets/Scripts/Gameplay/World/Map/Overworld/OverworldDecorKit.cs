@@ -329,6 +329,42 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         IceCrack = 254,
         /// <summary>A tuft of reindeer lichen and moss (ground detail, no collider).</summary>
         LichenTuft = 255,
+
+        // Região 12 — Arquipélago de Hinokura (OverworldDecorKit.Hinokura.cs): 260–279.
+        /// <summary>A boulder of black volcanic rock with cracks of glowing lava.</summary>
+        LavaBoulder = 260,
+        /// <summary>A pale boulder of pumice, light and full of holes.</summary>
+        PumiceRock = 261,
+        /// <summary>A stone lantern of pumice and volcanic stone with a lit fire box (a garden lamp; no shrine).</summary>
+        StoneLantern = 262,
+        /// <summary>A pine pruned in cloud pads on a block of lava rock.</summary>
+        CloudPine = 263,
+        /// <summary>A gate of red lacquer: two posts and a tiled roof on a stone step (the palaces' double gates, form only).</summary>
+        LacquerGate = 264,
+        /// <summary>A fumarole: a low cone of rock crusted yellow with sulphur, a plume of steam.</summary>
+        Fumarole = 265,
+        /// <summary>Shards of black obsidian standing out of the ground, shining.</summary>
+        ObsidianShard = 266,
+        /// <summary>Ember coral: branching coral glowing orange like coals.</summary>
+        EmberCoral = 267,
+        /// <summary>A bush of yellow broom in flower (the retama of the volcano's slopes).</summary>
+        BroomBush = 268,
+        /// <summary>A stone rose: a rosette of weathered rock leaves on the pumice.</summary>
+        StoneRose = 269,
+        /// <summary>A canary pine: a tall pine with long drooping needles and a red-brown trunk.</summary>
+        CanaryPine = 270,
+        /// <summary>A furnace tower: a round chimney of black stone with a glowing mouth and an iron band.</summary>
+        FurnaceTower = 271,
+        /// <summary>A heap of slag and cinder with a few embers in it.</summary>
+        SlagHeap = 272,
+        /// <summary>A steaming hot pool with a rim of sinter (ground detail, no collider).</summary>
+        HotPool = 273,
+        /// <summary>Raked gravel: pale lines of gravel round a stone (ground detail, no collider).</summary>
+        RakedGravel = 274,
+        /// <summary>A drift of grey ash (ground detail, no collider).</summary>
+        AshDrift = 275,
+        /// <summary>A crack of glowing lava in the black ground (ground detail, no collider).</summary>
+        LavaCrack = 276,
     }
 
     /// <summary>

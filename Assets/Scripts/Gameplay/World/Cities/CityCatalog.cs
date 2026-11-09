@@ -195,6 +195,20 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string PortoDaLuaBranca = "porto_da_lua_branca";
 
+        /// <summary>
+        /// Hinokura, a Ilha-Forja, the capital of the Arquipélago de Hinokura (map 65, return city of maps 65–70, Docs/Mapas100.md
+        /// §2 and região 12; the Fogo Vivo, Ícaro's element). Same id as <c>CityTownRecipes.HinokuraCityId</c> and the one
+        /// <c>MapCatalog</c> will use when maps 65–70 enter it (<c>MapCatalog.Hinokura</c>, map <c>map_065_hinokura</c>).
+        /// </summary>
+        public const string Hinokura = "hinokura";
+
+        /// <summary>
+        /// Cais de Mesektet, the quay of the night barque on the Rio das Doze Horas (map 71, return city of maps 71–76,
+        /// Docs/Mapas100.md região 13; Kemet's river of the night). Same id as <c>CityTownRecipes.MesektetCityId</c> and the one
+        /// <c>MapCatalog</c> will use when maps 71–76 enter it (<c>MapCatalog.CaisDeMesektet</c>, map <c>map_071_cais_mesektet</c>).
+        /// </summary>
+        public const string CaisDeMesektet = "cais_de_mesektet";
+
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
             new CitySpec(VilaZefa, BiomeType.Forest,
@@ -528,6 +542,36 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("makarios"),
                 },
                 new List<string> { CityShopCatalog.PelesPamour }),
+
+            // Hinokura, a Ilha-Forja (the Arquipélago de Hinokura, região 12; Japanese names chosen for their sense, as the ficha
+            // asks): Mestra Akane ("deep red"), the master of the lacquer, who gives the missions, Kurogane ("black iron"), the
+            // smith (the city's shop: the gear of the gates of maps 65–70), Sango ("coral"), the boatwoman of the Barco-Farol
+            // (second mission), and Hikari ("light"), who keeps the sluices of the lava channels that move the forges. Region:
+            // the borrowed Forest (as Farnkesh and the Porto).
+            new CitySpec(Hinokura, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("akane"),
+                    new CityResidentSpec("kurogane", CityShopCatalog.FerroPretoKurogane),
+                    new CityResidentSpec("sango"),
+                    new CityResidentSpec("hikari"),
+                },
+                new List<string> { CityShopCatalog.FerroPretoKurogane }),
+
+            // Cais de Mesektet (the Rio das Doze Horas, região 13; names of the tales of Kemet, characters of its literature, not
+            // gods, as the ficha asks): Sinuhe, the traveller who came home, here the chief boatman, who gives the missions,
+            // Khunanup, the eloquent peasant, here the merchant who bargains by speaking well (the city's shop: the gear of the
+            // hours 71–76), Djedi, the magician of the Papyrus Westcar (trainer of magic; second mission), and Setne, the prince
+            // who searched for books, here the librarian of the Caderno. Region: the borrowed Forest (as the Porto and Hinokura).
+            new CitySpec(CaisDeMesektet, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("sinuhe"),
+                    new CityResidentSpec("khunanup", CityShopCatalog.TrocasKhunanup),
+                    new CityResidentSpec("djedi"),
+                    new CityResidentSpec("setne"),
+                },
+                new List<string> { CityShopCatalog.TrocasKhunanup }),
         };
 
         /// <summary>Ammo, the peddler: not a resident of one city, he is wherever his mule is today (<see cref="ShopRotation.MascateRegion"/>).</summary>

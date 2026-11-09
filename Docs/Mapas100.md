@@ -151,6 +151,12 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       Farol de Gelo (480, 1080), Buraco Grande de Pesca (0, 1560)); 59–64 entram no catálogo (☆) e viram zonas (construídos), 25 áreas
       numa grade 5 × 5, 16 terrenos novos, relevo próprio (`Floes`, `Icebergs`, `PressureRidges`, `FjordWalls`, `IceVaults`) e
       cenário próprio; preenche o buraco murado ao norte de Mingcheng, a oeste dos Picos de Farnkesh. Detalhes em §5, "Região 11".
+    - **Região 12 — Arquipélago de Hinokura** (2026-11-09): mesmo modelo, 2400 × 2400 m (`OverworldLayouts.Hinokura.cs`, coordenadas
+      x −1680…720, z −600…1800) com Hinokura em (0, 0) na sua ilha (receita própria `LacquerPalace` no chão plano de ±30 m) e os
+      postos de 66–70 (Casa de Chá de Pedra (0, 600), Abrigo dos Pastores (−960, −380), Barco-Farol (0, 1080), Portão Vermelho
+      (−1330, 120), Borda Fria (−960, 1560)); 65–70 entram no catálogo (☆) e viram zonas (construídos), 25 áreas numa grade 5 × 5,
+      20 terrenos novos, relevo próprio (`VolcanoCone`, `LavaFlows`, `GlassReef`, `CurvedRamparts`, `CalderaRim`) e cenário próprio;
+      preenche o último buraco murado, ao norte do Teto do Mundo e a oeste do Mar Gelado. Detalhes em §5, "Região 12".
     - **Mundo costurado** (2026-11-03, pedido do usuário: andar entre as regiões sem portão): as quatro primeiras regiões
       formam um quadrado de 4800 × 4800 m (`OverworldLayouts.WorldId`, `OverworldLayouts.World.cs`), 2 × 2, e a **Costa das
       Monções** fica a leste do Zarafshan (x 1400…3800, z −1000…1400, deslocamento (2000, 200)) e o **Delta de Jhilpur** a
@@ -192,7 +198,12 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       Passagens: `exit_muralha` (x 240, borda sul) levado ao fim da estrada norte de Mingcheng; `exit_pe_dos_picos` (z 3980) e
       `exit_pinaculos` (z 4960), na borda leste, levados às trilhas oeste dos picos (Bosque do Pé dos Picos e Bosque de Pináculos).
       Rota a pé Vila → Porto da Lua Branca ~4,6 km (por Mingcheng, rampa mais íngreme 17°); a rota até Farnkesh passa a ~7,4 km
-      (pelo Mar Gelado, rampa 26°). Quadrado original:
+      (pelo Mar Gelado, rampa 26°). O **Arquipélago de Hinokura** preenche a última célula (x −3400…−1000, z 3800…6200, deslocamento
+      (−1720, 4400), Hinokura no mundo em (−1720, 4400)): o mar gelado degela para oeste sobre os vulcões e as geleiras do Teto descem
+      até as praias negras; o mundo vira um **retângulo inteiro de 7200 × 9600 m, 12 regiões, nenhum buraco** (`Holes` = 0).
+      Passagens: `exit_wakhan` (x −1640) e `exit_cristas` (x −1200), na borda sul, levados aos fins das trilhas norte do Teto;
+      `exit_tundra` (z 4700) e `exit_lagos` (z 5000), na borda leste, levados às trilhas oeste do Mar Gelado pelo Estreito do Degelo.
+      Rota a pé Vila → Hinokura ~5,9 km (rampa mais íngreme 25°). Quadrado original:
       Serra de Kaggen (x −3400…−1000, z −1000…1400) | Bosque do Zarafshan (x −1000…1400, z −1000…1400) em cima;
       Grutas do Limiar (x −3400…−1000, z −3400…−1000) | Areias Flamejantes (x −1000…1400, z −3400…−1000) embaixo.
       Cada região guarda o seu layout nas suas coordenadas e é deslocada por um número inteiro de pedaços (Zarafshan
@@ -1831,8 +1842,8 @@ ouro; nuvens no chão e seixos dourados. Bichos existentes nos papéis das ficha
 abelhas douradas, gavião, chacal, corvo = gralha, abutre, morcego-vampiro = morcego-vela, lanterna quebrada = pipa/sino/raio,
 névoa do vento ruim = eco/ays/ventania, golem = ushabti de corda, irbis = gato-de-pallas, pedra rolante, urso-pardo, aranha,
 marmota, macaco ladrão), variante noturna em toda clareira, nenhum chefe. Cidades com as próprias receitas (`Glade`,
-`PinnacleNest`) no chão plano de ±30 m. Testes `OverworldFarnkeshTests` e `OverworldWorldTests`. Falta: cestos/planar como
-mecânica, rajadas, medidor de silêncio, vento contra, os chefes.
+`PinnacleNest`) no chão plano de ±30 m. Testes `OverworldFarnkeshTests` e `OverworldWorldTests`. Mecânicas no ar (2026-11-09, `Map/Mechanics/`): rajadas, cestos e correntes; ver as fichas 54, 55, 57 e 58. Falta:
+medidor de silêncio, vento contra, os chefes.
 
 ### 53 · Vale dos Sátiros / *Satyr Vale* — nv 140–148 · ☆ · cidade de raça (sátiros)
 - **Fonte:** mitos frígios (§3.3).
@@ -1865,7 +1876,7 @@ mecânica, rajadas, medidor de silêncio, vento contra, os chefes.
 - **Ganchos:** loot corda de iaque, papel de vento · montaria `mount_hippogriff` (Senmurv, Despertar) · casa: conjunto novo
   **Ninho de Pedra** (sino de vento, banco de varanda).
 - **Noite:** os pináculos acendem como estrelas; vento calmo; visão ótima.
-- **No jogo (2026-11-06): cidade de verdade** (`CityTownRecipes.Farnkesh.cs`, estilo `PinnacleNest`, `CityCatalog.LateRegionCities`, id `farnkesh`): em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S a 19 m; a rua Sul é a estrada que sobe do Vale; ao norte os pináculos nas nuvens): casas brancas de parede inclinada sobre pés de arenito, faixa e janelas de madeira vermelha, telhados de tábua com pedras e varandas para o vazio; o sino de vento gigante na praça; pináculos de arenito (alguns com ninho no alto), cestos de corda e vãos de nuvem com pontes de tábua e corda nas ruas Leste e Sul; portão de postes com sininhos; Shad-Ohrmizd, Sisin, Tadi e Ardawan com falas para cada primo (a Maithe escuta o Vento Vivo); Cordas do Sisin com as exigências de 57 (Capa de Tempestade) e 58 (Asas de Lona) fixas; missões "Abutres nos Sinos" e "Vento Ruim nas Pontes" (paga com a Capa de Tempestade); respawn na praça para 54–58. Falta: pináculos em alturas de verdade, os cestos que sobem, o Vendaval e o G4 da Maithe.
+- **No jogo (2026-11-06): cidade de verdade** (`CityTownRecipes.Farnkesh.cs`, estilo `PinnacleNest`, `CityCatalog.LateRegionCities`, id `farnkesh`): em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S a 19 m; a rua Sul é a estrada que sobe do Vale; ao norte os pináculos nas nuvens): casas brancas de parede inclinada sobre pés de arenito, faixa e janelas de madeira vermelha, telhados de tábua com pedras e varandas para o vazio; o sino de vento gigante na praça; pináculos de arenito (alguns com ninho no alto), cestos de corda e vãos de nuvem com pontes de tábua e corda nas ruas Leste e Sul; portão de postes com sininhos; Shad-Ohrmizd, Sisin, Tadi e Ardawan com falas para cada primo (a Maithe escuta o Vento Vivo); Cordas do Sisin com as exigências de 57 (Capa de Tempestade) e 58 (Asas de Lona) fixas; missões "Abutres nos Sinos" e "Vento Ruim nas Pontes" (paga com a Capa de Tempestade); respawn na praça para 54–58. **Cestos de corda (2026-11-09, `SkyRouteRules`, `OverworldLayouts.SkyRoutes`):** 4 linhas com posto de cesto (Escadaria–Farnkesh, Sino, Ermida Baixa, Sino–Gruta; `[E]` no patamar, raio 4 m): sobe a 9 m/s, desce a 9 m/s ou 18 m/s com asas/montaria voadora, arco de 10 m, a barreira suave vale para toda a linha. Falta: pináculos em alturas de verdade, o Vendaval e o G4 da Maithe.
 
 ### 55 · Pontes de Vento / *Wind Bridges* — nv 150–160 · ☆
 - **Fonte:** invenção (as pontes de corda do Sisin).
@@ -1878,6 +1889,7 @@ mecânica, rajadas, medidor de silêncio, vento contra, os chefes.
 - **Mecânica:** **rajadas**: a cada 20 s uma rajada atravessa (aviso no céu); quem está numa ponte para e segura.
 - **Ganchos:** loot pena de vento · montaria nova **Filhote de Huma** (desafio) · casa: **Ninho de Pedra**.
 - **Noite:** pontes com lanternas; o Morcego-Vela dobra.
+- **No jogo (2026-11-09): rajadas** (`WindGustRules`, `FarnkeshMechanicsDriver`): ciclo de 20 s (15,5 calmo + 3 de aviso com riscos no céu e "pare e segure" + 1,5 soprando), a 4,5 m de cada linha de `WindBridgeLines`, de través e cada uma do lado oposto da anterior; quem anda é empurrado 5 m/s (7,5 m por rajada; 3,75 m com a Capa de Tempestade), quem está parado segura e não sai do lugar; nunca em zona segura. Falta: pontes sem chão por baixo (a rajada só desloca, ninguém cai) e O Cortador de Cordas.
 
 ### 56 · Ermidas Suspensas / *Hanging Hermitages* — nv 158–168 · ☆
 - **Fonte:** invenção sobre a forma de Meteora (casas grudadas no paredão).
@@ -1903,6 +1915,7 @@ mecânica, rajadas, medidor de silêncio, vento contra, os chefes.
   no formato deles).
 - **Ganchos:** loot Pó do Vento (tintura) · montaria `mount_sleipnir` (Despertar) · casa: troféu do Rei dos Ays.
 - **Noite:** o vento para pela metade; os Ays ficam visíveis como silhuetas.
+- **No jogo (2026-11-09):** as rajadas da ficha 55 também sopram em toda a área da Garganta (eixo fixo 0,8/0,6, alternando o sentido); a Capa de Tempestade, que a área já exige, reduz o empurrão à metade. Falta: o vento contra ×0,7, as pedras-abrigo e o Rei dos Ays.
 
 ### 58 · Ninho da Huma / *Huma's Nest* — nv 180–200 · ☆
 - **Fonte:** a huma, ave persa que nunca pousa e cuja sombra dá sorte (já é o nome das asas da Maithe); o Vento
@@ -1916,6 +1929,7 @@ mecânica, rajadas, medidor de silêncio, vento contra, os chefes.
 - **Mecânica:** **planar**: entre ilhas só se passa planando (asas, voadores); as correntes mudam por hora.
 - **Ganchos:** loot pena de huma · montaria nova **Filhote de Huma** (lendária) · casa: conjunto novo **Ninho de Ouro**.
 - **Noite:** as ilhas brilham; o Rei-Vendaval fica mais forte; Barca da Lua passa perto (vista bonita).
+- **No jogo (2026-11-09): correntes de planar** (`SkyRouteRules`, `OverworldLayouts.SkyRoutes`): 4 correntes ligam a trilha às ilhas de cima e as ilhas entre si (`[E]`, sino de vento marca o patamar), a 14 m/s com arco de 5 m; pedem asas, Asas de Lona ou montaria voadora; cada corrente descansa 1 hora de jogo em 3 (hora mod 3 = grupo), só na ida: a volta nunca fecha, para ninguém ficar preso numa ilha. Falta: o chão de nuvem ainda se anda (a ilha é atalho, não a única passagem) e o Rei-Vendaval.
 
 ### Região 11 — Mar Gelado (Ar Sereno) · mapas 59–64 · ☆
 
@@ -2037,6 +2051,28 @@ japoneses comuns escolhidos pelo sentido: **Mestra Akane** ("vermelho vivo", mes
 preto", ferreiro), **Sango** ("coral", barqueira). Uma ilha (67) é do vulcão guanche **Echeyde**. Chefe do mundo: **o
 Glutão de Brasa** (mapa 70).
 
+**No jogo (2026-11-09): mundo contínuo** (`OverworldLayouts.Hinokura.cs`, §0.10): 2400 × 2400 m ao norte do Teto do Mundo, a oeste
+do Mar Gelado, 25 áreas em 20 terrenos novos — Hinokura (65, nv 220), Praia de Areia Negra e Costa das Fumarolas (entradas do Teto),
+Estreito do Degelo (entrada do Mar Gelado), Canais de Lava e Fontes Termais; Jardins de Lava Laqueada com a Casa de Chá de Pedra,
+Pinhais de Nuvem e Pontes Vermelhas (66, posto; segunda entrada do Mar Gelado); Campos de Retama com o Abrigo dos Pastores, Monte
+Echeyde e Malpaís de Echeyde (67, posto; **Grampos de Escalada**); Canais Quentes, Recife de Obsidiana com o Barco-Farol e Ilhotas de
+Vidro (68, posto; **Barco ou cais**); Muralhas Curvas, Castelo das Nove Fornalhas com o Portão Vermelho, Pátio das Fornalhas e Escória
+Velha (69, posto); Campos de Cinza, Cinzas Vivas, Mar de Cinza, Borda Fria (posto), Encosta da Caldeira e Caldeira do Fogo Devorador
+(70; **Água fresca**, até nv 280). Relevo: cone do Echeyde em três anéis com cratera (`VolcanoCone`), derrames de lava (`LavaFlows`),
+lâminas do recife de obsidiana (`GlassReef`), muralhas curvas em anel com vãos (`CurvedRamparts`), borda da caldeira (`CalderaRim`);
+cidade, praia e jardins baixos. Lava que brilha (`IsLava`): dois canais domados com ponte na estrada oeste, poças do malpaís e o lago
+da caldeira. Água: fontes termais, lâminas do degelo, lagos dos jardins e das pontes, dois canais quentes e poças do recife. Cenário:
+pedras de lava, pedra-pomes, lanternas de pedra, pinheiros em nuvem, portões de laca, fumarolas, lâminas de obsidiana, coral de brasa,
+retama, rosas de pedra, pinheiros-canários, torres-fornalha, escória; poças quentes, cascalho rastelado, cinza e rachaduras de lava no
+chão. Bichos existentes nos papéis das fichas (caranguejo-do-coco = caranguejo-vulcão, cobra da areia = lagarto de lava e salamandra,
+abutre-brasa = gaivota-brasa e bomba vulcânica, pedra rolante = pedra-pomes, leão de pedra = shisa, peixe-lanterna = carpa de brasa,
+névoa = bambu de fumaça, fumarola e fole, lontra ladra = tanuki, chacal = tibicena, crocodilo = lagarto-gigante, gosma = polvo e cinza
+viva, lúcio gigante = peixe-lâmina, lanterna quebrada = coral de brasa, tartaruga de pedra = ouriço de vidro, soldado de terracota =
+ushabti de laca, troll apagado = ogro-fornalha, enxame de vaga-lumes = faísca e chama faminta, golem de pedra = gigante de escória),
+variante noturna em toda clareira, nenhum chefe (Guayota, a Tartaruga-Vulcão, o Mestre das Nove Fornalhas e o Glutão ficam para
+depois). Testes `OverworldHinokuraTests` e `OverworldWorldTests`. Falta: Tremor e comportas, cascalho rastelado, erupção a cada 10 min,
+resfriar a lava em ponte, temperatura das fornalhas, medidor de calor, os chefes e as montarias.
+
 ### 65 · Hinokura, a Ilha-Forja / *Hinokura, the Forge Isle* — nv 220–228 · ☆ · capital (Fogo Vivo)
 - **Fonte:** castelo de Shuri e as *gusuku* de Ryukyu (laca e telhas vermelhas, muros curvos de pedra de coral); cidades-
   castelo do Japão (forma).
@@ -2053,6 +2089,7 @@ Glutão de Brasa** (mapa 70).
 - **Ganchos:** loot laca, ferro preto, obsidiana · montaria nova **Leão-Guardião de Laca** (§6) · casa: conjunto novo
   **Palácio de Laca** (biombo vermelho, lanterna de pedra).
 - **Noite:** os canais de lava iluminam a ilha; lanternas vermelhas; visão boa.
+- **No jogo (2026-11-09): cidade de verdade** (`CityTownRecipes.Hinokura.cs`, estilo `LacquerPalace`, `CityCatalog.LateRegionCities`, id `hinokura`): em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S a 19 m; a rua Sul é a entrada; sem rua ao norte): salões de laca vermelha sobre muros curvos de pedra de coral, telhas vermelhas com cumeeiras brancas e cantos virados; a Forja de Hinokura na praça; canais de lava domada com comportas e pontes de pedra preta, lanternas de pedra, pinheiros podados, rochas de lava, portão de pilares vermelhos, cais de pedra; Mestra Akane, Kurogane, Sango e Hikari com falas para cada primo; Ferro Preto do Kurogane com as exigências de 67 (Grampos), 68 (Passagem de Dhow) e 70 (Odre) fixas, mais Barco de Junco, Corda, Teriaga, Amuleto Antiveneno e Vara de Equilíbrio; missões "Caranguejos nos Varais" e "Gaivotas no Barco-Farol" (paga com Barco de Junco); respawn na praça para 65–70. Falta: comportas e forja do dia, o Tremor, o G4 do Ícaro e o Leão-Guardião de Laca.
 
 ### 66 · Jardins de Lava Laqueada / *Lacquered Lava Gardens* — nv 226–236 · ☆
 - **Fonte:** jardins de pedra e cascalho rastelado (forma); as *shisa*, os leões-cão de cerâmica dos telhados de Okinawa,

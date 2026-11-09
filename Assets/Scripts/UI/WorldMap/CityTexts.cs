@@ -119,6 +119,8 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.FlautaDupla, "The Double Flute", "Flauta Dupla"),
                 Shop(CityShopCatalog.CordasSisin, "Sisin's Ropes", "Cordas do Sisin"),
                 Shop(CityShopCatalog.PelesPamour, "Pamour's Furs and Boats", "Peles e Barcos do Pamour"),
+                Shop(CityShopCatalog.FerroPretoKurogane, "Kurogane's Black Iron", "Ferro Preto do Kurogane"),
+                Shop(CityShopCatalog.TrocasKhunanup, "Khunanup's Trades", "Trocas do Khunanup"),
             };
 
             // ---- Cities ----
@@ -194,6 +196,14 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.PortoDaLuaBranca, "White Moon Harbor", "Porto da Lua Branca", "White Moon", "Lua Branca",
                 "The capital of the Ar Sereno, in the far north: a harbour on islands of ice joined by canals of black water and stone bridges shaped like whale ribs, long plank houses with a moon painted on the gable, round snow domes, crescent boats drawn up on the ice and racks of silver fish. In the middle stands the Cais da Lua, where the Moon Ship moors on the full moon to gather the light set free; at night the aurora dances over the canals.",
                 "A capital do Ar Sereno, no extremo norte: um porto em ilhas de gelo ligadas por canais de água negra e pontes de pedra em forma de costela de baleia, casas compridas de tábua com uma lua pintada na empena, cúpulas de neve redondas, barcos em meia-lua puxados para o gelo e varais de peixe de prata. No meio fica o Cais da Lua, onde a Barca da Lua atraca na lua cheia para recolher a luz libertada; à noite a aurora dança sobre os canais.");
+
+            AddCity(entries, CityCatalog.Hinokura, "Hinokura, the Forge Isle", "Hinokura, a Ilha-Forja", "Hinokura", "Hinokura",
+                "The capital of the Living Fire, on a volcanic isle: halls of red lacquer on curved walls of coral stone, roofs of red tiles with white ridges, courtyards of black stone and channels of tamed lava that move the forges, opened and closed by sluices. On the plaza burns the Forja de Hinokura; up the hill, the palace in its three courts; down by the sea, the stone harbour. Hi no kura: the granary of fire, where the light that refuses to sleep is kept.",
+                "A capital do Fogo Vivo, numa ilha vulcânica: salões de laca vermelha sobre muros curvos de pedra de coral, telhados de telha vermelha com cumeeiras brancas, pátios de pedra preta e canais de lava domada que movem as forjas, abertos e fechados por comportas. Na praça arde a Forja de Hinokura; no alto, o palácio nos seus três pátios; lá embaixo, junto ao mar, o porto de pedra. Hi no kura: o celeiro do fogo, onde se guarda a luz que se recusa a dormir.");
+
+            AddCity(entries, CityCatalog.CaisDeMesektet, "Mesektet Quay", "Cais de Mesektet", "Mesektet", "Mesektet",
+                "The quay of the night barque on the Rio das Doze Horas, where it is always night: halls of sandstone on rafts and pilings with fronts of papyrus columns and roofs of reed mats, boardwalks of dark planks over the black water, thickets of papyrus and reed skiffs on the bank. In the middle the Mesektet moors at the Cais da Barca before going down the river; around it, the twelve piers of the hours, one opening each time the barque passes. Stars are painted under every roof.",
+                "O cais da barca da noite no Rio das Doze Horas, onde é sempre noite: salões de arenito sobre balsas e pilares com frente de colunas de papiro e telhado de esteira de junco, passarelas de tábua escura sobre a água preta, moitas de papiro e barquinhos de junco na margem. No meio, a Mesektet atraca no Cais da Barca antes de descer o rio; em volta, os doze píeres das horas, um abrindo cada vez que a barca passa. Debaixo de todo telhado há estrelas pintadas.");
 
             AddCity(entries, CityCatalog.PalafitasTarchon, "Tarchon Stilts", "Palafitas de Tarchon", "Tarchon", "Tarchon",
                 "The trols' city in the open swamp: long houses on tall piles with leaf roofs down to the floor, plank boardwalks over the bog water, nets drying, baskets as tall as a cousin and floating reed islands. At night the swamp fills with will-o'-wisps, sparks caught in the Ar Sereno; half the trols stared at them until they forgot themselves, and every spark set free wakes a neighbour.",
@@ -1007,6 +1017,72 @@ namespace Rapadura.UI.WorldMap
                 ("Ícaro, no, the moon lantern is not a ball. ...It would bounce, yes. It would also break. Both.", "Ícaro, não, a lanterna de lua não é bola. ...Ia quicar, sim. Também ia quebrar. As duas coisas."),
                 ("Lavine, the Moon Ship knows you. The Ar Sereno is yours; one day you will steer it, the Barqueira da Lua. Until then, help me light the quay.", "Lavine, a Barca da Lua conhece você. O Ar Sereno é seu; um dia você vai guiar ela, a Barqueira da Lua. Até lá, me ajuda a acender o cais."),
                 ("Every night I light the lanterns of the Cais da Lua. When the Moon Ship comes, she finds the way by them.", "Toda noite eu acendo as lanternas do Cais da Lua. Quando a Barca da Lua vem, ela acha o caminho por elas."));
+
+            // ---- Hinokura, a Ilha-Forja (Japanese names chosen for their sense, as the ficha asks; the Fogo Vivo) ----
+            AddResident(entries, "akane", "Mestra Akane, the Lacquer Master", "Mestra Akane, a Mestra da Laca",
+                ("Joaquim, a guardian is like lacquer: nine thin coats, never one thick one. Thick cracks. Thin holds.", "Joaquim, guardião é igual laca: nove demãos finas, nunca uma grossa. Grossa racha. Fina segura."),
+                ("Maria, you read slowly and remember everything. That is how lacquer is made: slowly, and it remembers every hand.", "Maria, você lê devagar e lembra de tudo. É assim que se faz laca: devagar, e ela lembra de cada mão."),
+                ("Maithe, you dust your brother off before you dust yourself. I saw it. That is a master's habit, not only an elder sister's.", "Maithe, você tira a poeira do seu irmão antes de tirar a sua. Eu vi. Isso é costume de mestra, não só de irmã mais velha."),
+                ("Ícaro, do not touch the red door. ...You touched it. Now it has your finger in it forever. Fine. It is a good finger.", "Ícaro, não encosta na porta vermelha. ...Encostou. Agora ela tem o seu dedo nela para sempre. Tudo bem. É um dedo bom."),
+                ("Lavine, Grandma Edna sat on my porch a whole afternoon and said the red was the colour of her grandchildren's cheeks in winter.", "Lavine, a Vó Edna sentou na minha varanda uma tarde inteira e disse que o vermelho era a cor da bochecha dos netos dela no inverno."),
+                ("Red lacquer, nine coats, a long patience. A hall of Hinokura lasts because nobody hurried it.", "Laca vermelha, nove demãos, uma paciência comprida. Salão de Hinokura dura porque ninguém teve pressa com ele."));
+
+            AddResident(entries, "kurogane", "Kurogane, the Smith of Black Iron", "Kurogane, o Ferreiro do Ferro Preto",
+                ("Joaquim, black iron for the front of the line. Heavy, yes. The front is supposed to be heavy.", "Joaquim, ferro preto para a frente da fila. Pesado, sim. A frente é para ser pesada mesmo."),
+                ("Maria, crampons for the volcano, a boat for the reef, theriac for the fumaroles. Write it down; your cousins will forget.", "Maria, grampo para o vulcão, barco para o recife, teriaga para as fumarolas. Anota; os seus primos vão esquecer."),
+                ("Maithe, you count coins like a smith counts hammer blows: every one, out loud. I like that.", "Maithe, você conta moeda como ferreiro conta martelada: cada uma, em voz alta. Gostei."),
+                ("Ícaro, the Living Fire is yours, they say. Then come to the Forja de Hinokura one day and make something that warms people, not only iron.", "Ícaro, o Fogo Vivo é seu, dizem. Então vem um dia na Forja de Hinokura e faz alguma coisa que aqueça gente, não só ferro."),
+                ("Lavine, your grandpa Jorge sharpened a kitchen knife here for an hour and then asked if I had any rice. I did.", "Lavine, o seu vô Jorge afiou uma faca de cozinha aqui por uma hora e depois perguntou se eu tinha arroz. Eu tinha."),
+                ("Black iron, white heat, cold water. Whatever the isles ask of you, Kurogane forged it first.", "Ferro preto, calor branco, água fria. O que as ilhas pedirem de vocês, o Kurogane forjou antes."));
+
+            AddResident(entries, "sango", "Sango, the Boatwoman", "Sango, a Barqueira",
+                ("Joaquim, sit in the middle of the boat. The middle is where the strong one sits, so the boat does not tip.", "Joaquim, senta no meio do barco. O meio é lugar do forte, para o barco não virar."),
+                ("Maria, the coral grows one finger in a whole year. Patient, like your books. Do not step on it.", "Maria, o coral cresce um dedo num ano inteiro. Paciente, igual aos seus livros. Não pisa nele."),
+                ("Maithe, you look at the sea before your brother jumps in. Good. The sea here is warm, but the reef is glass.", "Maithe, você olha o mar antes do seu irmão pular. Bom. O mar aqui é quente, mas o recife é de vidro."),
+                ("Ícaro, no, the lighthouse boat does not go faster if you blow on the lamp. ...It does go a little. Do not tell Akane.", "Ícaro, não, o barco-farol não anda mais rápido se você soprar a lâmpada. ...Anda um pouquinho. Não conta para a Akane."),
+                ("Lavine, Grandma Edna rowed out with me to the reef once and sang the whole way. The fish still come up when someone sings.", "Lavine, a Vó Edna remou comigo até o recife uma vez e cantou o caminho todo. Os peixes ainda sobem quando alguém canta."),
+                ("Every night I row the Barco-Farol out among the black islets. A light at sea is a promise kept.", "Toda noite eu remo o Barco-Farol entre as ilhotas pretas. Luz no mar é promessa cumprida."));
+
+            AddResident(entries, "hikari", "Hikari, the Keeper of the Sluices", "Hikari, o Guardião das Comportas",
+                ("Joaquim, a sluice is a guardian of lava: it opens for the forge that needs it and closes for the house that does not.", "Joaquim, comporta é guardiã de lava: abre para a forja que precisa e fecha para a casa que não precisa."),
+                ("Maria, the channels change when the volcano trembles. I write each change in this book. You may read it, slowly.", "Maria, os canais mudam quando o vulcão treme. Eu escrevo cada mudança neste livro. Você pode ler, devagar."),
+                ("Maithe, you hold your brother's hand on the bridges. Keep holding. The lava is tame, but it is still lava.", "Maithe, você segura a mão do seu irmão nas pontes. Continua segurando. A lava é mansa, mas ainda é lava."),
+                ("Ícaro, the Living Fire is light that refuses to sleep. That is why the forges never go out. You do not sleep much either, I hear.", "Ícaro, o Fogo Vivo é luz que se recusa a dormir. Por isso as forjas nunca apagam. Você também dorme pouco, ouvi dizer."),
+                ("Lavine, Grandpa Jorge once opened the wrong sluice and cooked a whole pot of rice in the channel. Grandma Edna never let him forget.", "Lavine, o Vô Jorge uma vez abriu a comporta errada e cozinhou uma panela inteira de arroz no canal. A Vó Edna nunca deixou ele esquecer."),
+                ("Open the sluice, the forge wakes; close it, the forge sleeps. All day I choose which light burns.", "Abre a comporta, a forja acorda; fecha, a forja dorme. O dia inteiro eu escolho qual luz arde."));
+
+            // ---- Cais de Mesektet (names of the tales of Kemet, as the ficha asks; the river of the night) ----
+            AddResident(entries, "sinuhe", "Sinuhe, the Chief Boatman", "Sinuhe, o Barqueiro-Chefe",
+                ("Joaquim, a boatman is like a guardian: he goes first into the dark and comes back last. I went far and came home. You will too.", "Joaquim, barqueiro é igual guardião: entra primeiro no escuro e volta por último. Eu fui longe e voltei para casa. Você também vai."),
+                ("Maria, I wrote my whole journey on one papyrus, so I would not forget the way home. Read it someday; it is short, and it is true.", "Maria, eu escrevi a minha viagem inteira num papiro só, para não esquecer o caminho de casa. Lê um dia; é curto, e é verdade."),
+                ("Maithe, you count your cousins every time the barque leaves. One, two, three, four, five. Good. I count my rowers the same way.", "Maithe, você conta os seus primos toda vez que a barca sai. Um, dois, três, quatro, cinco. Bom. Eu conto os meus remadores do mesmo jeito."),
+                ("Ícaro, no, you cannot steer the Mesektet. ...Just the next hour, then. Hold the oar with both hands. Both.", "Ícaro, não, você não pode guiar a Mesektet. ...Só a próxima hora, então. Segura o remo com as duas mãos. As duas."),
+                ("Lavine, the river of the night carries light down so it can rise again. Grandpa Jorge said that is how his rice works too. I did not argue.", "Lavine, o rio da noite leva a luz para baixo para ela poder subir de novo. O Vô Jorge disse que o arroz dele também funciona assim. Eu não discuti."),
+                ("Twelve hours, twelve piers, one barque. Every night it goes down the dark river, and every morning it comes back. So did I.", "Doze horas, doze píeres, uma barca. Toda noite ela desce o rio escuro, e toda manhã ela volta. Eu também voltei."));
+
+            AddResident(entries, "khunanup", "Khunanup, the Merchant of the Quay", "Khunanup, o Comerciante do Cais",
+                ("Joaquim, a boot of root for the mud, my friend, because a guardian who sinks guards nothing. Beautiful, no? I could say it nine more ways.", "Joaquim, bota de raiz para o lodo, meu amigo, porque guardião que afunda não guarda nada. Bonito, não é? Eu sei dizer de mais nove jeitos."),
+                ("Maria, write it down: a boat for the river, a lamp for the night, a water skin for the sands, theriac for the scorpions. I say it well; you write it well.", "Maria, anota: barco para o rio, lamparina para a noite, odre para o areal, teriaga para os escorpiões. Eu falo bonito; você escreve bonito."),
+                ("Maithe, you bargain like the river: slow, patient, and you always win in the end. I lowered the price. Do not tell anyone.", "Maithe, você pechincha igual o rio: devagar, paciente, e sempre ganha no fim. Eu baixei o preço. Não conta para ninguém."),
+                ("Ícaro, the runic lamp does not get brighter if you shake it. ...It got brighter. How did you do that? Do it again, slowly.", "Ícaro, a lamparina rúnica não fica mais forte se você sacudir. ...Ficou mais forte. Como você fez isso? Faz de novo, devagar."),
+                ("Lavine, Grandma Edna bought one lamp from me and talked me down three times. Nobody has ever spoken better than Khunanup on this quay. Except her.", "Lavine, a Vó Edna comprou uma lamparina comigo e me fez baixar o preço três vezes. Ninguém nunca falou mais bonito que o Khunanup neste cais. Menos ela."),
+                ("A good word is worth more than gold, they say. Here, a good word and a little gold buys you a boat for the dark river.", "Palavra boa vale mais que ouro, dizem. Aqui, palavra boa e um pouco de ouro compram um barco para o rio escuro."));
+
+            AddResident(entries, "djedi", "Djedi, the Magician", "Djedi, o Mágico",
+                ("Joaquim, magic is a shield too: it stands between the dark and the ones behind you. Stand still and let me show you.", "Joaquim, magia também é escudo: fica entre o escuro e quem está atrás de você. Fica parado e deixa eu mostrar."),
+                ("Maria, every spell is a sentence. Say it slowly and in the right order, like your books, and the light comes.", "Maria, todo feitiço é uma frase. Fala devagar e na ordem certa, igual nos seus livros, e a luz vem."),
+                ("Maithe, you draw your circle and then fix your brother's. That is a teacher's habit. I am a hundred and ten, I know.", "Maithe, você desenha o seu círculo e depois arruma o do seu irmão. Isso é costume de professora. Eu tenho cento e dez anos, eu sei."),
+                ("Ícaro, the circle of light is not a game of jumping. ...You jumped. And it held. Hm. Do it again; this time on purpose.", "Ícaro, círculo de luz não é brincadeira de pular. ...Você pulou. E segurou. Hm. Faz de novo; dessa vez de propósito."),
+                ("Lavine, Grandma Edna lit a lamp in my circle at the first try. I still tell that story to every pupil. You have her hands.", "Lavine, a Vó Edna acendeu a lamparina no meu círculo de primeira. Eu ainda conto essa história para todo aluno. Você tem as mãos dela."),
+                ("A hundred and ten years, and the river is still dark. So I keep drawing circles of light on the sand, one a night.", "Cento e dez anos, e o rio ainda é escuro. Então eu continuo desenhando círculos de luz na areia, um por noite."));
+
+            AddResident(entries, "setne", "Setne, the Librarian of the Caderno", "Setne, o Bibliotecário do Caderno",
+                ("Joaquim, I searched all my life for one old book. Now I keep the Caderno, and every creature you face is written in it. Look before you fight.", "Joaquim, eu procurei a vida toda um livro antigo. Agora eu guardo o Caderno, e todo bicho que você enfrenta está escrito nele. Olha antes de lutar."),
+                ("Maria, you may borrow any papyrus on this quay. Any one. Just bring it back before the twelfth hour; that is the only rule.", "Maria, você pode levar emprestado qualquer papiro deste cais. Qualquer um. Só traz de volta antes da décima segunda hora; é a única regra."),
+                ("Maithe, you put the scrolls back where they were, in order. Do you know how rare that is? Come and help me whenever you like.", "Maithe, você guarda os rolos onde estavam, em ordem. Sabe como isso é raro? Vem me ajudar quando quiser."),
+                ("Ícaro, no, the crocodile page does not need a drawing of you riding it. ...It is a good drawing. I will keep it.", "Ícaro, não, a página do crocodilo não precisa de um desenho seu montado nele. ...É um desenho bom. Vou guardar."),
+                ("Lavine, Grandpa Jorge wrote a recipe for rice on the back of one of my papyri. I never erased it. It is filed under 'wisdom'.", "Lavine, o Vô Jorge escreveu uma receita de arroz no verso de um dos meus papiros. Eu nunca apaguei. Está guardada em 'sabedoria'."),
+                ("A book is a lamp you can carry down the river of the night. I keep as many as the quay can hold.", "Livro é lamparina que dá para levar pelo rio da noite. Eu guardo quantos o cais aguentar."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

@@ -80,6 +80,18 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         FjordWalls = 93,
         /// <summary>Ice vaults: round domes of ice and frozen earth with lanes (the galleries) between them.</summary>
         IceVaults = 94,
+
+        // Região 12 — Arquipélago de Hinokura (OverworldRelief.Hinokura.cs): 100–109.
+        /// <summary>A volcano's cone round a fixed centre, rising in three rings to a crater rim with a dip inside (the trails climb it).</summary>
+        VolcanoCone = 100,
+        /// <summary>Lava flows: rough lobes and ropy ridges of black lava over a low floor.</summary>
+        LavaFlows = 101,
+        /// <summary>A glass reef: sharp ridges and shards of obsidian standing out of a low floor.</summary>
+        GlassReef = 102,
+        /// <summary>Curved ramparts: long curved walls in rings round a fixed centre, gaps between them.</summary>
+        CurvedRamparts = 103,
+        /// <summary>A caldera: a high rim of cold stone in a ring round a fixed centre, a low floor inside (the lava lake).</summary>
+        CalderaRim = 104,
     }
 
     /// <summary>What the relief knows about one point besides its height (ground colours and scatter read it).</summary>
@@ -692,12 +704,14 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     if (DesertShape(style, x, z, a, out smooth, out shaped) || CoastShape(style, x, z, a, out smooth, out shaped)
                         || DeltaShape(style, x, z, a, out smooth, out shaped) || PamirShape(style, x, z, a, out smooth, out shaped)
                         || MingchengShape(style, x, z, a, out smooth, out shaped) || NartesShape(style, x, z, a, out smooth, out shaped)
-                        || FarnkeshShape(style, x, z, a, out smooth, out shaped) || MarGeladoShape(style, x, z, a, out smooth, out shaped))
+                        || FarnkeshShape(style, x, z, a, out smooth, out shaped) || MarGeladoShape(style, x, z, a, out smooth, out shaped)
+                        || HinokuraShape(style, x, z, a, out smooth, out shaped))
                     {
                         break; // Região 2: dunes, mesas, canyons (.Desert.cs); Região 5: cliffs, islets (.Coast.cs); Região 6: hummocks, levees (.Delta.cs);
                                // Região 7: moraines, ice tongues, seracs, peaks (.Pamir.cs); Região 8: karst towers, the wall's crest (.Mingcheng.cs);
                                // Região 9: kurgans, the Caucasus massif (.Nartes.cs); Região 10: pinnacles, cloud isles, the gorge (.Farnkesh.cs);
-                               // Região 11: floes, icebergs, pressure ridges, fjords, ice vaults (.MarGelado.cs).
+                               // Região 11: floes, icebergs, pressure ridges, fjords, ice vaults (.MarGelado.cs);
+                               // Região 12: the volcano's cone, lava flows, the glass reef, curved ramparts, the caldera (.Hinokura.cs).
                     }
 
                     smooth = shaped = a * SmoothStep(0f, 1f, 0.5f + 0.85f * OverworldNoise.Fbm(x, z, 2));

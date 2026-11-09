@@ -41,7 +41,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
             kind == CityPropKind.TerraceWall || kind == CityPropKind.IrrigationChannel ||
             kind == CityPropKind.RingWall || kind == CityPropKind.CanalBridge || kind == CityPropKind.SpireTerrace || kind == CityPropKind.LeafBridge ||
             kind == CityPropKind.RopeCorral || kind == CityPropKind.EarthRing || kind == CityPropKind.MeltStream ||
-            kind == CityPropKind.CloudGap || kind == CityPropKind.GoldenRiver || kind == CityPropKind.VineRow || kind == CityPropKind.IceCanal;
+            kind == CityPropKind.CloudGap || kind == CityPropKind.GoldenRiver || kind == CityPropKind.VineRow || kind == CityPropKind.IceCanal ||
+            kind == CityPropKind.LavaSluice || kind == CityPropKind.HourCanal;
 
         /// <summary>Unit direction of a segment prop and the side its mass stands on (left of the direction: east-going → north).</summary>
         public static Vector2 SegmentBack(Vector2 direction) => new Vector2(-direction.y, direction.x);
@@ -149,6 +150,16 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.CrescentBoat: CrescentBoat(b, s, prop.Variant); return true;
                 case CityPropKind.FishRack: FishRack(b, s); return true;
                 case CityPropKind.IceBlock: IceBlock(b, s, prop.Variant); return true;
+                case CityPropKind.IsleForge: IsleForge(b, s); return true;
+                case CityPropKind.LavaSluice: LavaSluice(b, d); return true;
+                case CityPropKind.StoneLantern: StoneLantern(b, s, prop.Variant); return true;
+                case CityPropKind.PrunedPine: PrunedPine(b, s, prop.Variant); return true;
+                case CityPropKind.LavaRock: LavaRock(b, s, prop.Variant); return true;
+                case CityPropKind.NightBarque: NightBarque(b, s); return true;
+                case CityPropKind.HourCanal: HourCanal(b, d); return true;
+                case CityPropKind.PapyrusColumn: PapyrusColumn(b, s, prop.Variant); return true;
+                case CityPropKind.PapyrusThicket: PapyrusThicket(b, s, prop.Variant); return true;
+                case CityPropKind.ReedSkiff: ReedSkiff(b, s, prop.Variant); return true;
                 default: return false;
             }
         }
@@ -936,6 +947,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
                 case TownShopDressing.FurAndBoat:
                     IceCanalDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.BlackIronForge:
+                    LacquerPalaceDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.ReedMarket:
+                    PapyrusQuayDressing(b, spec, x, y, z, zFacade);
                     break;
 
                 case TownShopDressing.AirBottles:

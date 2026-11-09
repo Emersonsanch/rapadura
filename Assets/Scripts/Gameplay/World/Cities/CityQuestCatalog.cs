@@ -89,6 +89,11 @@ namespace Rapadura.Gameplay.World.Cities
     /// the mist of the ill wind off the rope bridges and pays with the Capa de Tempestade (the gate of map 57).
     /// Porto da Lua Branca (map 59): Yirkap the ski hunter asks the cousins to chase the thieving gulls off the fish racks of
     /// the quays, then Pera the good giant wants the dimmed bears off the ice of the canals and pays with the Roupa Térmica.
+    /// Hinokura (map 65): Mestra Akane asks the cousins to chase the volcano crabs off the lacquer drying racks of the forge
+    /// quarter, then Sango the boatwoman wants the ember gulls away from the Barco-Farol and pays with a reed boat (the reef, 68).
+    /// Cais de Mesektet (map 71): Sinuhe the chief boatman asks the cousins to chase the crocodiles of the dark river off the
+    /// landing of the barque, then Djedi the magician wants the black scorpions out of the sands by the quay and pays with a runic
+    /// lamp (the night that never ends, 73–74).
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -128,6 +133,10 @@ namespace Rapadura.Gameplay.World.Cities
         public const string FarnkeshIllWind = "quest_city_farnkesh_ill_wind_on_the_bridges";
         public const string PortoGulls = "quest_city_porto_gulls_on_the_racks";
         public const string PortoBears = "quest_city_porto_bears_on_the_canals";
+        public const string HinokuraCrabs = "quest_city_hinokura_crabs_on_the_racks";
+        public const string HinokuraEmberGulls = "quest_city_hinokura_ember_gulls_on_the_lighthouse";
+        public const string MesektetCrocodiles = "quest_city_mesektet_crocodiles_on_the_quay";
+        public const string MesektetScorpions = "quest_city_mesektet_scorpions_in_the_sands";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -292,6 +301,24 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.PortoDaLuaBranca, "pera", new RegionQuestSpec(PortoBears, BiomeType.Forest, PortoGulls, 3100,
                 new[] { new RegionObjectiveSpec("chase_the_bears", QuestObjectiveType.KillEnemyType, "enemy_mountain_brown_bear", 6) },
                 new[] { new RegionRewardSpec("item_roupa_termica", 1), new RegionRewardSpec("item_gold", 220) })),
+
+            // -- Hinokura: Akane, then Sango. The coconut crab stands in for the Caranguejo-Vulcão of the ficha (Docs/Mapas100.md
+            // 65) and the ember vulture for its Gaivota-Brasa, until the region's own creatures exist. --
+            new CityQuestSpec(CityCatalog.Hinokura, "akane", new RegionQuestSpec(HinokuraCrabs, BiomeType.Forest, null, 3200,
+                new[] { new RegionObjectiveSpec("chase_the_crabs", QuestObjectiveType.KillEnemyType, "enemy_forest_coconut_crab", 8) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 230) })),
+            new CityQuestSpec(CityCatalog.Hinokura, "sango", new RegionQuestSpec(HinokuraEmberGulls, BiomeType.Forest, HinokuraCrabs, 3300,
+                new[] { new RegionObjectiveSpec("chase_the_gulls", QuestObjectiveType.KillEnemyType, "enemy_desert_ember_vulture", 6) },
+                new[] { new RegionRewardSpec("item_barco_junco", 1), new RegionRewardSpec("item_gold", 230) })),
+
+            // -- Cais de Mesektet: Sinuhe, then Djedi. The mangrove crocodile stands in for the Crocodilo do Rio Escuro of the
+            // ficha (Docs/Mapas100.md 71) and the desert scorpion for the Escorpião Negro of 73, until the region's own creatures exist. --
+            new CityQuestSpec(CityCatalog.CaisDeMesektet, "sinuhe", new RegionQuestSpec(MesektetCrocodiles, BiomeType.Forest, null, 3400,
+                new[] { new RegionObjectiveSpec("chase_the_crocodiles", QuestObjectiveType.KillEnemyType, "enemy_forest_mangrove_crocodile", 8) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 240) })),
+            new CityQuestSpec(CityCatalog.CaisDeMesektet, "djedi", new RegionQuestSpec(MesektetScorpions, BiomeType.Forest, MesektetCrocodiles, 3500,
+                new[] { new RegionObjectiveSpec("chase_the_scorpions", QuestObjectiveType.KillEnemyType, "enemy_desert_scorpion", 6) },
+                new[] { new RegionRewardSpec("item_lamparina_runica", 1), new RegionRewardSpec("item_gold", 240) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();

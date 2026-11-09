@@ -345,6 +345,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
             spec.PinnacleNest |= style.Architecture == TownArchitecture.PinnacleNest && plainHouse;
             spec.GourdHut |= style.Architecture == TownArchitecture.Glade && plainHouse;
             spec.MoonLonghouse |= style.Architecture == TownArchitecture.IceCanal && plainHouse && !spec.SnowDome;
+            spec.LacquerHall |= style.Architecture == TownArchitecture.LacquerPalace && plainHouse;
+            spec.PapyrusHall |= style.Architecture == TownArchitecture.PapyrusQuay && plainHouse;
 
             switch (r.Kind)
             {

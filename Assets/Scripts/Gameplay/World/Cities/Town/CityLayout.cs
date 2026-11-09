@@ -315,6 +315,32 @@ namespace Rapadura.Gameplay.World.Cities.Town
         FishRack = 110,
         /// <summary>Porto: a pressure ridge of blocks of sea ice heaved up at an island's edge (Variant 1: taller, a blue crack of light inside).</summary>
         IceBlock = 111,
+
+        // ---- Hinokura, a Ilha-Forja (Arquipélago de Hinokura; drawn by TownKit.LacquerPalace) ----
+
+        /// <summary>Hinokura: the Forja de Hinokura on the plaza, a round hearth of black stone fed by a lava runnel, an anvil, the great bellows and a red-tiled chimney hood (Ícaro's forge).</summary>
+        IsleForge = 112,
+        /// <summary>Hinokura: a channel of tamed lava from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> crossing the street, with two sluice gates and a bridge of black stone with red rails in the middle; walkable.</summary>
+        LavaSluice = 113,
+        /// <summary>Hinokura: a stone lantern of pumice and volcanic stone with a lit fire box (Variant 1: taller, with a tiled cap and a second ring).</summary>
+        StoneLantern = 114,
+        /// <summary>Hinokura: a pine pruned in cloud pads on a block of lava rock (Variant 1: leaning, held up by a crutch of lacquered wood).</summary>
+        PrunedPine = 115,
+        /// <summary>Hinokura: a boulder of volcanic rock with cracks of glowing lava (Variant 1: larger, with a wisp of steam and pumice at its foot).</summary>
+        LavaRock = 116,
+
+        // ---- Cais de Mesektet (Rio das Doze Horas; drawn by TownKit.PapyrusQuay) ----
+
+        /// <summary>Cais de Mesektet: the Cais da Barca on the plaza, a sandstone landing with the Mesektet moored at it (the papyrus barque of the night, its cabin of mats on gilded posts, the steering oar and the oil lamps).</summary>
+        NightBarque = 117,
+        /// <summary>Cais de Mesektet: a pier of the hours from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/>, a channel of dark water across the street with mooring posts and a plank bridge in the middle with an hour-lamp on each side; walkable.</summary>
+        HourCanal = 118,
+        /// <summary>Cais de Mesektet: a freestanding papyrus column on a sandstone drum, bell capital painted green and gold, an oil lamp of starlight on top (Variant 1: taller, with a band of painted stars).</summary>
+        PapyrusColumn = 119,
+        /// <summary>Cais de Mesektet: a thicket of papyrus in a bed of dark mud with umbel heads (Variant 1: larger, with a lotus pad pool at its foot).</summary>
+        PapyrusThicket = 120,
+        /// <summary>Cais de Mesektet: a skiff of bound papyrus drawn up on the bank, prow and stern curled up, a paddle across it (Variant 1: on two trestles with a net hung to dry).</summary>
+        ReedSkiff = 121,
     }
 
     public enum CityExitKind

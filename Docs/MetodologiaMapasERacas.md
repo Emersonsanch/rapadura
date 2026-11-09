@@ -101,9 +101,26 @@ também a recompensa da 2ª missão de lá (Tadi); o Vale dos Sátiros (53) não
 59–62 sem exigência hoje) estão fixos no balcão das Peles e Barcos do Pamour no Porto da Lua Branca, a cidade de retorno de
 59–64 (2026-11-06, `CityPortoDaLuaBrancaTests`), junto com Manta de Lã, Passagem de Dhow e Barco de Junco para os canais e o
 mar aberto, as duas lamparinas para as Galerias dos Mamutes, Grampos e Capa de Tempestade; a Roupa Térmica é também a
-recompensa da 2ª missão de lá (Pera). `MapRequirementTests` agora
-cobre todas as regiões do catálogo (1–11) e confere que cada exigência das regiões 9–11 está à venda na própria cidade
-de retorno do mapa (`GatesOfRegionTen_…` e `GatesOfRegionEleven_AreOnTheFixedCounterOfTheirReturnCity_AtItsPrice`: balcão
+recompensa da 2ª missão de lá (Pera). Os da região 12 (Arquipélago de Hinokura, mapas 65–70: 67 `ClimbingCrampons`, 68 `BoatOrDock`, 70 `FreshWater`) estão
+fixos no balcão do Ferro Preto do Kurogane em Hinokura, a cidade de retorno de 65–70 (2026-11-06,
+`CityHinokuraTests`): Passagem de Dhow e Barco de Junco (Recife de Obsidiana e canais quentes, 68), Grampos e Corda (Monte
+Echeyde, 67), Teriaga e Amuleto Antiveneno (fumarolas, 67 e 70), Vara de Equilíbrio (pontes vermelhas dos Jardins, 66) e Odre
+de Água Fresca (calor da Caldeira, 70; esfriar a lava, 68); o Barco de Junco é também a recompensa da 2ª missão de lá
+(Sango). Fontes da cidade: o castelo de Shuri e as *gusuku* de Ryukyu (laca e telhas vermelhas, muros curvos de pedra de
+coral) e as cidades-castelo do Japão, só como forma (sem santuários); nomes japoneses comuns escolhidos pelo sentido (Akane
+"vermelho vivo", Kurogane "ferro preto", Sango "coral", Hikari "luz"); *hi no kura*, "celeiro do fogo", eco do celeiro
+celeste do ferreiro Kurdalægon (bíblia §1.6). Os da região 13 (Rio das Doze Horas, mapas 71–76, ainda **fora** do `MapCatalog`: nenhuma exigência de mapa existe
+hoje) já estão fixos no balcão das Trocas do Khunanup no Cais de Mesektet, a futura cidade de retorno de 71–76
+(`CityMesektetTests`): Passagem de Dhow e Barco de Junco (rio e canais, 71 e 72), Botas de Raiz (lodo e areia movediça, 72 e 76),
+as duas lamparinas e o Óleo de Fogo Eterno (noite sem fim e Anéis de Mehen, 73 e 74), Odre (Areal e Lago de Fogo, 73 e 75), Teriaga
+e Amuleto Antiveneno (escorpiões e cobras, 73 e 76) e Corda (trenó, 73); a Lamparina Rúnica é também a recompensa da 2ª missão
+de lá (Djedi). Fontes da cidade: as barcas *Mesektet* (noite) e *Mandjet* (manhã) e o rio noturno de doze horas do *Amduat* e do
+*Livro dos Portões*; os barcos de papiro e as colunas de feixe de papiro de Kemet, só como forma (sem templo nem figura de
+deus); nomes de **personagens de contos** de Kemet, não de divindades: Sinuhe (*História de Sinuhe*), Khunanup (*O Camponês
+Eloquente*), Djedi (*Papiro Westcar*) e Setne Khamwas (contos demóticos). Quando 71–76 entrarem, escolher as tags
+(sugestão: 72 `BoatOrDock`) e estender `MapRequirementTests` para conferir que cada kit está neste balcão. `MapRequirementTests` agora
+cobre todas as regiões do catálogo (1–12) e confere que cada exigência das regiões 9–12 está à venda na própria cidade
+de retorno do mapa (`GatesOfRegionTen_…`, `GatesOfRegionEleven_…` e `GatesOfRegionTwelve_AreOnTheFixedCounterOfTheirReturnCity_AtItsPrice`: balcão
 fixo, preço justo, o kit abre o mapa; nunca Pedra da Vida/Caos). Fora das exigências, a **Garrafa de Ar Sereno** dos kobolds (consumível: +20% de recuperação de vigor por
 60 s, para o "ar parado" do 22) é vendida na Feira da Miwnay e dada pela missão "Teia nos Tubos" (Takhsich).
 

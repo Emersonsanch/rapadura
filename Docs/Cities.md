@@ -382,6 +382,8 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 
 | Região | Cidade | Moradores | Loja | Missões |
 |---|---|---|---|---|
+| Rio das Doze Horas (mapas 71–76, ainda fora do `MapCatalog`) | **Cais de Mesektet** (o cais da barca da noite, `cais_de_mesektet`) | Sinuhe, o Barqueiro-Chefe (salão na cabeça da praça), Khunanup, o Comerciante do Cais (rua Oeste), Djedi, o Mágico (rua Leste), Setne, o Bibliotecário do Caderno (rua Sul) | **Trocas do Khunanup** (`shop_trocas_khunanup`) | Sinuhe: "Crocodilos no Cais"; Djedi: "Escorpiões no Areal" |
+| Arquipélago de Hinokura (mapas 65–70, ainda fora do `MapCatalog`) | **Hinokura, a Ilha-Forja** (capital do Fogo Vivo, `hinokura`) | Mestra Akane, a Mestra da Laca (salão na cabeça da praça), Kurogane, o Ferreiro do Ferro Preto (rua Oeste), Hikari, o Guardião das Comportas (rua Leste), Sango, a Barqueira (rua Sul) | **Ferro Preto do Kurogane** (`shop_ferro_preto_kurogane`) | Akane: "Caranguejos nos Varais"; Sango: "Gaivotas no Barco-Farol" |
 | Mar Gelado (mapas 59–64) | **Porto da Lua Branca** (capital do Ar Sereno, `porto_da_lua_branca`) | Yirkap, o Caçador de Esqui (casa comprida na cabeça da praça), Pamour, o Peleiro do Cais (rua Oeste), Makarios, o Guardião das Lanternas (rua Leste), Pera, o Gigante Bom (rua Sul) | **Peles e Barcos do Pamour** (`shop_peles_pamour`) | Yirkap: "Gaivotas nos Varais"; Pera: "Ursos nos Canais" |
 | Picos de Farnkesh (mapas 54–58) | **Farnkesh, os Ninhos de Pedra** (capital do Vento Vivo, `farnkesh`) | Shad-Ohrmizd, o Guardião dos Sinos (ninho na cabeça da praça), Sisin, o Mestre das Pontes (rua Oeste), Tadi, a Dobradora de Papel de Vento (rua Leste), Ardawan, o Trançador de Corda (rua Sul) | **Cordas do Sisin** (`shop_cordas_sisin`) | Shad-Ohrmizd: "Abutres nos Sinos"; Tadi: "Vento Ruim nas Pontes" |
 | Planície de Mingcheng (mapa 41; 43, 44 e 46 planejados) | **Mingcheng, a Cidade dos Nove Anéis** (capital, `mingcheng`) | Bögü, o Chefe da Guarda dos Anéis (salão na cabeça da praça), Mestre Mōzak, o Guardião das Lanternas (rua Oeste), Lin Deng, o Mestre do Canal (rua Leste), Fuduodan, o Leitor (rua Leste) | **Lanternas do Mestre Mōzak** (`shop_lanternas_mozak`) | Bögü: "Leões nos Portões"; Lin Deng: "Peixes no Canal" |
@@ -604,6 +606,95 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
   60; **Roupa Térmica** + 220 ouro, 3100 XP). Testes: `CityPortoDaLuaBrancaTests`.
 - **Falta:** as fases da lua (canais que congelam na cheia e abrem na nova, rotas e lojas que mudam), o evento Noite Polar,
   a Barca da Lua atracando, o G4 da Lavine (Lua Branca), a Rena da Aurora e o conjunto Casa da Lua Branca.
+
+**Hinokura, a Ilha-Forja** (capital do Fogo Vivo, região 12 — Arquipélago de Hinokura, mapa 65; cidade de retorno de 65–70):
+- **Passeio da cidade:** receita `CityTownRecipes.Hinokura` (`CityTownRecipes.Hinokura.cs`) no estilo novo
+  `TownStyles.LacquerPalace` (`TownArchitecture.LacquerPalace`, linha 22 da `TownPalette`: laca `#B23A2E`, telha vermelha
+  `#C6492F`, pedra vulcânica `#2E2B2B`, pedra de coral `#E8D9C0`, lava domada `#FF8A3D` (brilha), pinheiro `#3E6B4A`,
+  obsidiana `#1E1A1E`, pedra-pomes `#C8BBA8`); o chão é pedra vulcânica preta, as ruas pátios de obsidiana com borda de
+  coral, a praça de pedra-pomes. A casa é o **salão de laca vermelha** (`TownBuildingSpec.LacquerHall`:
+  `TownKit.LacquerHallHouse`): sapatas de pedra vulcânica, **muro-base curvo de pedra de coral** que se arqueia para a frente
+  e sobe nos cantos (a forma das *gusuku*), paredes de laca vermelha entre pilares escuros, faixa de ouro sob o beiral,
+  janelas de treliça de papel aceso, **porta dupla** de laca com cravos de ouro, **telhado de quatro águas de telha vermelha
+  com cumeeiras de argamassa branca** e cantos e pontas da cumeeira virados para cima (a forma do castelo de Shuri), varanda
+  de pedra preta em dois pilares de laca (nos `PorchPostsX`) sob alpendre de telha, lanterninha de pedra e a placa sob o
+  beiral (sem santuário nem figura de fé). Peças: `IsleForge` (a **Forja de Hinokura** na praça, a forja do Ícaro: fornalha
+  redonda de pedra preta com borda de coral e fogo de lava domada alimentado por uma calha do norte, bigorna em bloco de
+  obsidiana ao sul, o fole grande de laca, as tenazes e a coifa de telha vermelha em quatro pilares com chaminé),
+  `LavaSluice` (**canal de lava domada** atravessando a rua entre beiras de pedra preta, crostas de obsidiana, **duas
+  comportas** de ferro e laca e **ponte de lajes pretas com corrimão vermelho** no meio; pisável), `StoneLantern` (lanterna
+  de pedra-pomes com a caixa de fogo acesa de lava; variante 1 mais alta, com anel e chapéu de telha), `PrunedPine`
+  (**pinheiro podado em nuvens** sobre bloco de lava; variante 1 inclinado, com muleta de laca) e `LavaRock` (rocha vulcânica
+  com rachaduras de lava acesa e chapéu de pomes; variante 1 maior, com vapor); portão de **pilares vermelhos sob telhado
+  duplo de telha** (`TownKit.LacquerGate`: forma dos portões cerimoniais de Shuri, não portão de santuário, com lanterna de
+  papel no meio); vitrine do Kurogane (`TownShopDressing.BlackIronForge`: bigorna em bloco de obsidiana com lingote aceso,
+  tina de têmpera, prateleira de ferramentas de ferro preto e grampos no gancho). Peças em `TownKit.LacquerPalace.cs`,
+  colisores em `CitySolids` (forja 1,3 m, lanterna 0,6 m, pinheiro 1,0 m, rocha 0,9 m × escala; o canal não é sólido).
+  Ruas **Oeste** (o bairro das forjas, para os Jardins de Lava Laqueada: o Ferro Preto do Kurogane, o Cais de Pedra e um
+  salão), **Leste** (o bairro das comportas, para o Monte Echeyde: o salão do Hikari e um salão de coral) e **Sul** (a
+  entrada, do porto de pedra: o salão da Sango e um salão) de 19 m; a Forja a 4,2 m ao norte do centro (livre do respawn e
+  da barraca do Ammo em `PlazaRadius·(0,575; −0,675)`); canais de lava com ponte nas ruas Oeste e Sul; **sem rua ao norte**:
+  a ilha sobe para os pátios do palácio e o vulcão, com rochas, pinheiros e lanternas; tudo dentro de 22,5 m (o sólido mais
+  longe chega a ~21,6 m, como no Porto), em y = 0; mesma planta validada do Porto da Lua Branca (`CityLayoutRules.Validate`
+  sem problemas, com e sem o mascate, coberto por `CityHinokuraTests`).
+- **Respawn:** a cidade aceita `ApplyDefeatIn` (praça, ao pé da Forja); os mapas 65–70 ainda **não estão** no
+  `MapCatalog`: quando entrarem (`MapCatalog.Hinokura = "hinokura"`, mapa `map_065_hinokura`, `K.Capital`, região
+  `MapRegion.ArquipelagoDeHinokura`, retorno `Hinokura` em 65–70), falta ligar `RespawnCityFor` e os testes de respawn e de
+  exigências (`MapRequirementTests`, como `GatesOfRegionEleven_…`).
+- **Ferro Preto do Kurogane** (diária, 3 vagas que giram, tema Especialidade): poções e **o que os mapas da região vão
+  pedir**, fixo desde o primeiro dia: **Passagem de Dhow** (300) e **Barco de Junco** (600) para o Recife de Obsidiana e os
+  canais quentes (68), **Grampos de Escalada** (950) e Corda de Escalada (40) para a subida do Monte Echeyde (67),
+  **Teriaga** (50) e **Amuleto Antiveneno** (700) para as fumarolas (67, 70), **Vara de Equilíbrio** (480) para as pontes
+  vermelhas dos Jardins (66) e **Odre de Água Fresca** (30) para o calor da Caldeira (70) e esfriar a lava (68); giram carne,
+  ferro, picareta, Óleo de Fogo Eterno, Runa de Couro, Runa de Cura, Amuleto da Sorte e Pedra da Bênção (nunca Vida/Caos).
+  O Ammo nunca para lá.
+- **Missões da cidade:** Akane pede 8 caranguejos fora dos varais de laca (o Caranguejo-do-Coco faz o Caranguejo-Vulcão da
+  ficha; poções + 230 ouro, 3200 XP); depois Sango pede 6 gaivotas-brasa fora do Barco-Farol (o Abutre de Brasa faz a
+  Gaivota-Brasa; **Barco de Junco** + 230 ouro, 3300 XP). Testes: `CityHinokuraTests`.
+- **Falta:** os mapas 65–70 no catálogo e no overworld, os canais de lava com comportas que mudam a forja acesa do dia, o
+  evento Tremor, os pátios do palácio no alto, o G4 do Ícaro (Forja de Hinokura), o Leão-Guardião de Laca e o conjunto
+  Palácio de Laca.
+
+**Cais de Mesektet** (o cais da barca da noite, região 13 — Rio das Doze Horas, mapa 71; cidade de retorno de 71–76):
+- **Passeio da cidade:** receita `CityTownRecipes.CaisDeMesektet` (`CityTownRecipes.Mesektet.cs`) no estilo novo
+  `TownStyles.PapyrusQuay` (`TownArchitecture.PapyrusQuay`, linha 23 da `TownPalette`: noite do rio `#1E2050`, ouro de Kemet
+  `#D4AF37`, papiro `#8DAA4A`, arenito `#C9A27A`, água escura `#22324A`, esteira `#B8A06A`, linho `#EDE6D3`, luz de estrela
+  `#F4E9B0` (brilha)); o chão é o banco de areia do cais, as ruas passarelas de tábua escura com borda de ouro, a praça de
+  arenito. A casa é o **salão do cais** (`TownBuildingSpec.PapyrusHall`: `TownKit.PapyrusHallHouse`): balsa de feixes de
+  papiro sobre estacas na água escura, paredes de arenito com cornija de ouro, frente de **colunas de feixe de papiro** com
+  capitel de sino segurando um **telhado plano de esteira de junco** em pilares, estrelas pintadas sob o teto e placa de ouro
+  na arquitrave (sem templo nem figura de deus). Peças: `NightBarque` (o **Cais da Barca** com a *Mesektet* atracada na
+  praça: casco de papiro de proa e popa enroladas, cabine de esteira em postes dourados, remo de governo e lamparinas),
+  `HourCanal` (**píer da hora**: canal de água escura atravessando a rua com estacas e ponte de tábuas no meio e lamparina da
+  hora de cada lado; pisável), `PapyrusColumn` (coluna de papiro em tambor de arenito com lamparina de estrela; variante 1
+  mais alta, com faixa de estrelas pintadas), `PapyrusThicket` (moita de papiro no lodo; variante 1 maior, com poça de
+  lótus) e `ReedSkiff` (barquinho de junco puxado para a margem com remo; variante 1 em cavaletes, com rede secando); portão
+  de **duas colunas de papiro sob cornija** (`TownKit.PapyrusQuay.cs`); vitrine do Khunanup (`TownShopDressing.ReedMarket`:
+  esteira com cestos de grão, jarros altos, balança, papiros enrolados, remo e lamparina). Colisores em `CitySolids`
+  (barca 1,8 m, coluna 0,55 m, moita 0,9 m, barquinho 0,9 m × escala; o píer não é sólido).
+  Ruas **Oeste** (rio abaixo: Trocas do Khunanup, o Cais dos Barcos e um salão), **Leste** (rio acima: o salão do Djedi e um
+  salão de linho) e **Sul** (a entrada, dos bancos de areia: o salão do Setne e um salão) de 19 m; a barca a 4,2 m ao norte do
+  centro (livre do respawn e da barraca do Ammo em `PlazaRadius·(0,575; −0,675)`); píeres das horas com ponte nas ruas Oeste
+  e Sul; **sem rua ao norte**: a margem desce para o rio escuro, com moitas, barquinhos e colunas; tudo dentro de 22,5 m, em
+  y = 0; mesma planta validada de Hinokura (`CityLayoutRules.Validate` sem problemas, com e sem o mascate, coberto por
+  `CityMesektetTests`).
+- **Respawn:** a cidade aceita `ApplyDefeatIn` (praça, ao pé da barca); os mapas 71–76 ainda **não estão** no `MapCatalog`:
+  quando entrarem (`MapCatalog.CaisDeMesektet = "cais_de_mesektet"`, mapa `map_071_cais_mesektet`, `K.Capital`, região
+  `MapRegion.RioDasDozeHoras`, retorno `CaisDeMesektet` em 71–76), falta ligar `RespawnCityFor` e os testes de respawn e de
+  exigências (`MapRequirementTests`, como `GatesOfRegionTwelve_…`).
+- **Trocas do Khunanup** (diária, 3 vagas que giram, tema Especialidade): poções e **o que as horas do rio vão pedir**, fixo
+  desde o primeiro dia: **Passagem de Dhow** (300) e **Barco de Junco** (600) para o rio e os canais (71, 72), **Botas de
+  Raiz** (520) para o lodo dos canais e a areia movediça (72, 76), **Lamparina de Óleo** (28), **Lamparina Rúnica** (155) e
+  **Óleo de Fogo Eterno** (190) para a noite sem fim e os anéis de Mehen (73, 74), **Odre de Água Fresca** (30) para o Areal e
+  o Lago de Fogo (73, 75), **Teriaga** (50) e **Amuleto Antiveneno** (700) para escorpiões e cobras (73, 76) e Corda de
+  Escalada (40) para o trenó (73); giram carne, Peixe Dourado, erva, Runa de Clareza, Runa de Cura, Amuleto da Sorte, Pedra da
+  Bênção e Pedra da Alma (nunca Vida/Caos). O Ammo nunca para lá.
+- **Missões da cidade:** Sinuhe pede 8 crocodilos fora do cais da barca (o Crocodilo do Mangue faz o Crocodilo do Rio Escuro
+  da ficha; poções + 240 ouro, 3400 XP); depois Djedi pede 6 escorpiões fora do banco de areia dos alunos (o Escorpião do
+  deserto faz o Escorpião Negro de 73; **Lamparina Rúnica** + 240 ouro, 3500 XP). Testes: `CityMesektetTests`.
+- **Falta:** os mapas 71–76 no catálogo e no overworld, os doze píeres e a abertura em sequência (a barca a cada 12 min), a
+  noite permanente do rio, o evento A Barca Atrasou, os serviços de treino do Djedi e de Caderno do Setne (hoje só falas), a
+  Íbis Real de Mesektet e o conjunto Cais do Papiro.
 
 Código: `CityCatalog`, `CityShopCatalog` (dados), `CityTexts` (textos en/pt-BR), `VillageHubButton` (o mesmo painel
 para toda cidade), `CityFastTravelPanel` (Barcas de Luz), `CitySafeZoneHud` (aviso), `WorldMapCityPresence` (zona

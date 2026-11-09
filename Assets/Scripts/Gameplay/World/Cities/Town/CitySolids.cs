@@ -301,10 +301,20 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.CrescentBoat: return CitySolid.Capsule(prop.Position, TownKit.CrescentBoatRadius * s, 1.4f, owner);
                 case CityPropKind.FishRack: return CitySolid.Capsule(prop.Position, TownKit.FishRackRadius * s, 2f, owner);
                 case CityPropKind.IceBlock: return CitySolid.Capsule(prop.Position, TownKit.IceBlockRadius * s, WallColliderHeight, owner);
+                case CityPropKind.IsleForge: return CitySolid.Capsule(prop.Position, TownKit.IsleForgeRadius * s, WallColliderHeight, owner);
+                case CityPropKind.StoneLantern: return CitySolid.Capsule(prop.Position, TownKit.StoneLanternRadius * s, 2f, owner);
+                case CityPropKind.PrunedPine: return CitySolid.Capsule(prop.Position, TownKit.PrunedPineRadius * s, 3f, owner);
+                case CityPropKind.LavaRock: return CitySolid.Capsule(prop.Position, TownKit.LavaRockRadius * s, WallColliderHeight, owner);
+                case CityPropKind.NightBarque: return CitySolid.Capsule(prop.Position, TownKit.NightBarqueRadius * s, WallColliderHeight, owner);
+                case CityPropKind.PapyrusColumn: return CitySolid.Capsule(prop.Position, TownKit.PapyrusColumnRadius * s, 3f, owner);
+                case CityPropKind.PapyrusThicket: return CitySolid.Capsule(prop.Position, TownKit.PapyrusThicketRadius * s, 2f, owner);
+                case CityPropKind.ReedSkiff: return CitySolid.Capsule(prop.Position, TownKit.ReedSkiffRadius * s, 1.4f, owner);
 
                 case CityPropKind.MeltStream:
                 case CityPropKind.CloudGap:
                 case CityPropKind.IceCanal:
+                case CityPropKind.LavaSluice:
+                case CityPropKind.HourCanal:
                 case CityPropKind.GoldenRiver:
                 case CityPropKind.CanalBridge:
                 case CityPropKind.LeafBridge:

@@ -318,6 +318,26 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string PelesPamour = "shop_peles_pamour";
 
+        /// <summary>
+        /// Ferro Preto do Kurogane (Hinokura, Docs/Mapas100.md map 65): Kurogane, the smith of the Ilha-Forja, sells the gear the
+        /// maps of the Arquipélago de Hinokura (65–70, all returning to Hinokura) will ask for (Docs/MetodologiaMapasERacas.md
+        /// §2.1): passages and reed boats for the obsidian reef and the hot channels (68), crampons and rope for the climb of
+        /// Monte Echeyde (67), theriac and the antivenom amulet for the fumaroles (67, 70), the balance pole for the red bridges
+        /// of the gardens (66) and water skins for the heat of the caldera (70) and to cool the lava (68). The counter turns daily.
+        /// </summary>
+        public const string FerroPretoKurogane = "shop_ferro_preto_kurogane";
+
+        /// <summary>
+        /// Trocas do Khunanup (Cais de Mesektet, Docs/Mapas100.md map 71): Khunanup, the eloquent merchant of the quay, sells the
+        /// gear the hours of the Rio das Doze Horas (71–76, all returning to the Cais) will ask for (Docs/MetodologiaMapasERacas.md
+        /// §2.1): passages and reed boats for the river and the canals of the Campos de Juncos (71, 72), root boots for the mud of
+        /// the canals and the quicksand of Apep's sandbank (72, 76), oil and runic lamps and the oil of eternal fire for the night
+        /// that never ends and the dark coils of Mehen (73, 74), water skins for the Areal Escondido and the Lago de Fogo (73, 75),
+        /// theriac and the antivenom amulet for the black scorpions and the snakes (73, 76) and rope for the sand-sledge (73).
+        /// The counter turns daily.
+        /// </summary>
+        public const string TrocasKhunanup = "shop_trocas_khunanup";
+
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
@@ -786,6 +806,62 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_runa_vento", 20, 2, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+            })),
+
+            // ---- Hinokura: Kurogane's black iron, the gear of the gates of the Arquipélago de Hinokura (65–70); daily ----
+            new CityShopSpec(FerroPretoKurogane, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(FerroPretoKurogane, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                // Gear of the maps that return to Hinokura, fixed from the first day: the reef and the hot channels (passages,
+                // reed boats), the volcano's walls (crampons, rope), the fumaroles (theriac, antivenom amulet), the red bridges of
+                // the gardens (balance pole) and the heat of the lava (water skins).
+                new CityShopEntry("item_passagem_dhow", 300, 3),
+                new CityShopEntry("item_barco_junco", 600, 2),
+                new CityShopEntry("item_grampos_escalada", 950, 1),
+                new CityShopEntry("item_corda_escalada", 40, 3),
+                new CityShopEntry("item_teriaga", 50, 4),
+                new CityShopEntry("item_amuleto_antiveneno", 700, 1),
+                new CityShopEntry("item_vara_equilibrio", 480, 2),
+                new CityShopEntry("item_odre_agua", 30, 5),
+                // The rotation: what the forges and the boats of the isle bring.
+                new CityShopEntry("item_cooked_meat", 6, 10, rotating: true),
+                new CityShopEntry("item_iron", 8, 20, rotating: true),
+                new CityShopEntry("item_pickaxe", 18, 1, rotating: true),
+                new CityShopEntry("item_oleo_fogo_eterno", 190, 2, rotating: true),
+                new CityShopEntry("item_runa_couro", 20, 2, rotating: true),
+                new CityShopEntry("item_runa_cura", 15, 2, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+            })),
+
+            // ---- Cais de Mesektet: Khunanup's trades, the gear of the hours of the Rio das Doze Horas (71–76); daily ----
+            new CityShopSpec(TrocasKhunanup, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(TrocasKhunanup, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                // Gear of the maps that return to the Cais, fixed from the first day: the river and the reed canals (passages,
+                // reed boats, root boots), the endless night and Mehen's coils (lamps, eternal oil), the hidden sands and the lake
+                // of fire (water skins), the scorpions and snakes (theriac, antivenom amulet) and the sand-sledge (rope).
+                new CityShopEntry("item_passagem_dhow", 300, 3),
+                new CityShopEntry("item_barco_junco", 600, 2),
+                new CityShopEntry("item_botas_raiz", 520, 1),
+                new CityShopEntry("item_lamparina_oleo", 28, 3),
+                new CityShopEntry("item_lamparina_runica", 155, 2),
+                new CityShopEntry("item_oleo_fogo_eterno", 190, 2),
+                new CityShopEntry("item_odre_agua", 30, 5),
+                new CityShopEntry("item_teriaga", 50, 4),
+                new CityShopEntry("item_amuleto_antiveneno", 700, 1),
+                new CityShopEntry("item_corda_escalada", 40, 3),
+                // The rotation: what the boats of the river bring to the quay.
+                new CityShopEntry("item_cooked_meat", 6, 10, rotating: true),
+                new CityShopEntry("item_fish_peixe_dourado", 60, 2, rotating: true),
+                new CityShopEntry("item_herb", 3, 10, rotating: true),
+                new CityShopEntry("item_runa_clareza", 15, 2, rotating: true),
+                new CityShopEntry("item_runa_cura", 15, 2, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+                new CityShopEntry("item_pedra_alma", 35, 1, rotating: true),
             })),
 
             // ---- Ferraria do Mestre Adamas (Vila): the village blacksmith ----

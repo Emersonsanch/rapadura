@@ -192,6 +192,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ScatterNartes(layout, content);
             ScatterFarnkesh(layout, content);
             ScatterMarGelado(layout, content);
+            ScatterHinokura(layout, content);
             if (content.HasFields)
             {
                 ScatterFields(layout, content);
@@ -662,7 +663,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                             ? style.SpecialMix[(int)(TownStyle.Hash(salt, i + 320000) % (uint)style.SpecialMix.Length)]
                             : style.Special;
                         float scale = special == OverworldDecor.Cypress ? 0.85f + 0.35f * s01 : 0.8f + 0.6f * s01;
-                        float room = IsDesertDecor(special) ? DesertClearance(special) : IsCoastDecor(special) ? CoastClearance(special) : IsDeltaDecor(special) ? DeltaClearance(special) : IsPamirDecor(special) ? PamirClearance(special) : IsMingchengDecor(special) ? MingchengClearance(special) : IsNartesDecor(special) ? NartesClearance(special) : IsFarnkeshDecor(special) ? FarnkeshClearance(special) : IsMarGeladoDecor(special) ? MarGeladoClearance(special) : special == OverworldDecor.Basalt ? 1.4f : 0.9f;
+                        float room = IsDesertDecor(special) ? DesertClearance(special) : IsCoastDecor(special) ? CoastClearance(special) : IsDeltaDecor(special) ? DeltaClearance(special) : IsPamirDecor(special) ? PamirClearance(special) : IsMingchengDecor(special) ? MingchengClearance(special) : IsNartesDecor(special) ? NartesClearance(special) : IsFarnkeshDecor(special) ? FarnkeshClearance(special) : IsMarGeladoDecor(special) ? MarGeladoClearance(special) : IsHinokuraDecor(special) ? HinokuraClearance(special) : special == OverworldDecor.Basalt ? 1.4f : 0.9f;
                         TryAdd(layout, content, p, room, new OverworldProp
                         {
                             Kind = CityPropKind.Rock, Decor = special, Position = p, Yaw = yaw, Scale = scale,
@@ -1066,7 +1067,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 || AddDesertDecorSolid(content, prop, ground, sink) || AddCoastDecorSolid(content, prop, ground, sink)
                 || AddDeltaDecorSolid(content, prop, ground, sink) || AddPamirDecorSolid(content, prop, ground, sink)
                 || AddMingchengDecorSolid(content, prop, ground, sink) || AddNartesDecorSolid(content, prop, ground, sink)
-                || AddFarnkeshDecorSolid(content, prop, ground, sink) || AddMarGeladoDecorSolid(content, prop, ground, sink))
+                || AddFarnkeshDecorSolid(content, prop, ground, sink) || AddMarGeladoDecorSolid(content, prop, ground, sink)
+                || AddHinokuraDecorSolid(content, prop, ground, sink))
             {
                 return;
             }
@@ -1337,13 +1339,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 bool carved = river.Width >= OverworldRelief.CarveMinWidth;
                 float y = carved ? OverworldRelief.WaterY : GroundY + 0.026f;
                 float half = carved ? river.Width * 0.5f + 0.9f : river.Width * 0.5f;
+                bool lava = OverworldLayouts.IsLava(river); // Região 12: the tamed lava and the caldera's lake glow (Ember lights the emission map).
+                TownSwatch liquid = lava ? TownSwatch.Ember : TownSwatch.Water;
                 if (!carved)
                 {
                     for (int i = 0; i + 1 < river.Points.Count; i++)
                     {
                         if (SegmentNear(near, river.Points[i], river.Points[i + 1], river.Width))
                         {
-                            Strip(b, river.Points[i], river.Points[i + 1], half + 1.2f, GroundY + 0.02f, TownSwatch.Sand);
+                            Strip(b, river.Points[i], river.Points[i + 1], half + 1.2f, GroundY + 0.02f, lava ? TownSwatch.Basalt : TownSwatch.Sand);
                         }
                     }
 
@@ -1351,7 +1355,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     {
                         if (near.Contains(p))
                         {
-                            b.Disc(new Vector3(p.x, GroundY + 0.02f, p.y), half + 1.2f, 10, TownSwatch.Sand);
+                            b.Disc(new Vector3(p.x, GroundY + 0.02f, p.y), half + 1.2f, 10, lava ? TownSwatch.Basalt : TownSwatch.Sand);
                         }
                     }
                 }
@@ -1360,7 +1364,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 {
                     if (SegmentNear(near, river.Points[i], river.Points[i + 1], river.Width))
                     {
-                        Strip(b, river.Points[i], river.Points[i + 1], half, y, TownSwatch.Water);
+                        Strip(b, river.Points[i], river.Points[i + 1], half, y, liquid);
                     }
                 }
 
@@ -1368,7 +1372,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 {
                     if (near.Contains(p))
                     {
-                        b.Disc(new Vector3(p.x, y, p.y), half, 10, TownSwatch.Water);
+                        b.Disc(new Vector3(p.x, y, p.y), half, 10, liquid);
                     }
                 }
 
@@ -1494,7 +1498,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             if (AppendCaveDecor(b, g, prop, at) || AppendMountainDecor(b, g, prop, at) || AppendDesertDecor(b, g, prop, at) || AppendCoastDecor(b, g, prop, at)
                 || AppendDeltaDecor(b, g, prop, at) || AppendPamirDecor(b, g, prop, at)
                 || AppendMingchengDecor(b, g, prop, at) || AppendNartesDecor(b, g, prop, at)
-                || AppendFarnkeshDecor(b, g, prop, at) || AppendMarGeladoDecor(b, g, prop, at))
+                || AppendFarnkeshDecor(b, g, prop, at) || AppendMarGeladoDecor(b, g, prop, at)
+                || AppendHinokuraDecor(b, g, prop, at))
             {
                 return;
             }

@@ -79,6 +79,12 @@ namespace Rapadura.Editor
         [MenuItem(Root + "Preview Walkable Town/Porto da Lua Branca (capital, Mar Gelado)", priority = 29)]
         private static void PreviewPortoDaLuaBranca() => Preview(CityCatalog.PortoDaLuaBranca);
 
+        [MenuItem(Root + "Preview Walkable Town/Hinokura, a Ilha-Forja (capital, Arquipélago de Hinokura)", priority = 29)]
+        private static void PreviewHinokura() => Preview(CityCatalog.Hinokura);
+
+        [MenuItem(Root + "Preview Walkable Town/Cais de Mesektet (capital, Rio das Doze Horas)", priority = 29)]
+        private static void PreviewCaisDeMesektet() => Preview(CityCatalog.CaisDeMesektet);
+
         [MenuItem(Root + "Preview Walkable Town/Toggle Night", priority = 30)]
         private static void ToggleNight()
         {

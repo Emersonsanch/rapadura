@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Cities.Town
 {
-    /// <summary>Flat colours of the walkable-town palette texture (one 4 px cell each, 8 × 22). Docs/Cities.md §5.</summary>
+    /// <summary>Flat colours of the walkable-town palette texture (one 4 px cell each, 8 × 24). Docs/Cities.md §5.</summary>
     public enum TownSwatch
     {
         // Row 0: wood and earth (walnut joinery, carved columns).
@@ -76,6 +76,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
         // the long houses #5B4A3E, the lilac of the painted moons #B7A6E0, silver #C8D2DC, the polar night #1E2A4A, the black water
         // of the canals #1F3A4A and the moon lanterns #E8E4FF (glow).
         SeaIce, Snowfield, MoonPlank, MoonLilac, MoonSilver, PolarNight, ColdWater, MoonGlow,
+        // Row 22: Hinokura (Arquipélago de Hinokura, Docs/Mapas100.md map 65): the red lacquer of the palaces #B23A2E, the red tiles
+        // #C6492F, the black volcanic stone #2E2B2B, the coral stone of the curved walls #E8D9C0, the tamed lava of the channels
+        // #FF8A3D (glows), the pine green #3E6B4A, obsidian #1E1A1E and pumice #C8BBA8.
+        PalaceLacquer, FireTile, VolcanicStone, CoralStone, LavaGlow, IslandPine, Obsidian, Pumice,
+        // Row 23: Cais de Mesektet (Rio das Doze Horas, Docs/Mapas100.md map 71): the night of the river #1E2050, the gold of Kemet
+        // #D4AF37, papyrus green #8DAA4A, the sandstone of the quays #C9A27A, the dark water #22324A, the reed mats of the roofs
+        // #B8A06A, linen #EDE6D3 and the starlight of the oil lamps and the painted ceilings #F4E9B0 (glows).
+        RiverNight, KemetGold, PapyrusGreen, QuaySandstone, NightWater, MesektetMat, NileLinen, StarGlow,
     }
 
     /// <summary>
@@ -87,7 +95,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
     public static class TownPalette
     {
         public const int Columns = 8;
-        public const int Rows = 22;
+        public const int Rows = 24;
         private const int CellPixels = 4;
 
         private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
@@ -116,6 +124,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Hex(0xF1ECE2), Hex(0x9A3B2E), Hex(0xD9A82B), Hex(0xB58A60), Hex(0xEEF3F7), Hex(0x8FB8E0), Hex(0x8A7A5E), Hex(0xA87B3C),
             Hex(0x9CCB6A), Hex(0xC9A76A), Hex(0xB7AFA3), Hex(0xE3B341), Hex(0xE27A9B), Hex(0x5E3A6E), Hex(0x5E8F3A), Hex(0xF4F09A),
             Hex(0xD8E9F2), Hex(0xF7FAFC), Hex(0x5B4A3E), Hex(0xB7A6E0), Hex(0xC8D2DC), Hex(0x1E2A4A), Hex(0x1F3A4A), Hex(0xE8E4FF),
+            Hex(0xB23A2E), Hex(0xC6492F), Hex(0x2E2B2B), Hex(0xE8D9C0), Hex(0xFF8A3D), Hex(0x3E6B4A), Hex(0x1E1A1E), Hex(0xC8BBA8),
+            Hex(0x1E2050), Hex(0xD4AF37), Hex(0x8DAA4A), Hex(0xC9A27A), Hex(0x22324A), Hex(0xB8A06A), Hex(0xEDE6D3), Hex(0xF4E9B0),
         };
 
         private static Material _material;
@@ -153,6 +163,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case TownSwatch.PactolusGold: return 0.35f;
                 case TownSwatch.Firefly: return 0.9f;
                 case TownSwatch.MoonGlow: return 0.85f;
+                case TownSwatch.LavaGlow: return 0.9f;
+                case TownSwatch.StarGlow: return 0.8f;
                 default: return 0f;
             }
         }

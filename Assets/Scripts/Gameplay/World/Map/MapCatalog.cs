@@ -13,11 +13,11 @@ namespace Rapadura.Gameplay.World.Map
     /// <summary>
     /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II) and the six of
     /// Região 9 (☆ 47–52, the Estepe dos Nartes), the six of Região 10 (☆ 53–58, the Picos de Farnkesh) and the six of Região 11
-    /// (☆ 59–64, the Mar Gelado), walked as zones of their continuous regions: level
+    /// (☆ 59–64, the Mar Gelado) and the six of Região 12 (☆ 65–70, the Arquipélago de Hinokura), walked as zones of their continuous regions: level
     /// bands, walk/warp levels, special gates, settlements and return cities, as content-as-code like
-    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42, 47–64): a hand-made layout
+    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42, 47–70): a hand-made layout
     /// (<c>MapLayouts.Has</c>: 01–08, 13, 14, 19, 20) or only a zone of a continuous region (<c>OverworldLayouts.ForMap</c>:
-    /// 09–12, 15–18, 21–42, 47–64, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
+    /// 09–12, 15–18, 21–42, 47–70, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
     /// the flag equal to it. The rest are listed in the Barcas de Luz window, closed. The gold fare is never stored: it is always the
     /// formula of <see cref="MapAccessRules.CalculateWarpCost(int,int,bool)"/> (the "Custo Ouro" column of the methodology
     /// table is design history).
@@ -43,6 +43,7 @@ namespace Rapadura.Gameplay.World.Map
         public const string ValeDosSatiros = "vale_dos_satiros";
         public const string Farnkesh = "farnkesh";
         public const string PortoDaLuaBranca = "porto_da_lua_branca";
+        public const string Hinokura = "hinokura";
 
         public const string PomarId = "map_001_pomar";
         public const string TugaiId = "map_002_tugai";
@@ -54,7 +55,7 @@ namespace Rapadura.Gameplay.World.Map
         {
             CityCatalog.VilaZefa, CopasGarajonay, CityCatalog.AreiaBranca, TamborRubro, CityCatalog.SerraAlta, SaloesDeBronze,
             CityCatalog.Lamparinas, MercadoDosTuneis, TaaPwani, Aratta, Kirta, Jhilpur, PalafitasTarchon, Sangkent, Mingcheng, TorresBrancas,
-            AcampamentoSoslan, Fortim, Arvoredo, ValeDosSatiros, Farnkesh, PortoDaLuaBranca,
+            AcampamentoSoslan, Fortim, Arvoredo, ValeDosSatiros, Farnkesh, PortoDaLuaBranca, Hinokura,
         };
 
         public static readonly IReadOnlyList<MapDefinition> Maps = new List<MapDefinition>
@@ -140,12 +141,20 @@ namespace Rapadura.Gameplay.World.Map
             new MapDefinition(62, "map_062_galerias_mamutes", R.MarGelado, Y.Underground, S.G, 202, 214, 198, 206, Fee, T.None, PortoDaLuaBranca, K.Outpost, "boca_do_gelo", isBuilt: true),
             new MapDefinition(63, "map_063_mar_auroras", R.MarGelado, Y.Coast, S.GG, 212, 226, 208, 216, Fee, T.BlizzardResistance, PortoDaLuaBranca, K.Outpost, "farol_de_gelo", isBuilt: true),
             new MapDefinition(64, "map_064_fundo_velho_kul", R.MarGelado, Y.Coast, S.GG, 226, 240, 222, 230, Fee, T.ThermalClothes, PortoDaLuaBranca, K.Outpost, "buraco_grande_de_pesca", isBuilt: true),
+
+            // Região 12 — Arquipélago de Hinokura (☆, Docs/Mapas100.md §1; zones of its continuous region, OverworldLayouts.Hinokura)
+            new MapDefinition(65, "map_065_hinokura", R.ArquipelagoDeHinokura, Y.Coast, S.GG, 220, 228, 216, 224, Fee, T.None, Hinokura, K.Capital, "hinokura", isBuilt: true),
+            new MapDefinition(66, "map_066_jardins_lava", R.ArquipelagoDeHinokura, Y.Plain, S.G, 226, 236, 222, 230, Fee, T.None, Hinokura, K.Outpost, "casa_de_cha_de_pedra", isBuilt: true),
+            new MapDefinition(67, "map_067_monte_echeyde", R.ArquipelagoDeHinokura, Y.Mountain, S.GG, 234, 246, 230, 238, Fee, T.ClimbingCrampons, Hinokura, K.Outpost, "abrigo_dos_pastores", isBuilt: true),
+            new MapDefinition(68, "map_068_recife_obsidiana", R.ArquipelagoDeHinokura, Y.Coast, S.G, 244, 254, 240, 248, Fee, T.BoatOrDock, Hinokura, K.Outpost, "barco_farol", isBuilt: true),
+            new MapDefinition(69, "map_069_nove_fornalhas", R.ArquipelagoDeHinokura, Y.Ruins, S.GG, 252, 264, 248, 256, Fee, T.None, Hinokura, K.Outpost, "portao_vermelho", isBuilt: true),
+            new MapDefinition(70, "map_070_caldeira_fogo_devorador", R.ArquipelagoDeHinokura, Y.Mountain, S.GG, 264, 280, 260, 268, Fee, T.FreshWater, Hinokura, K.Outpost, "borda_fria", isBuilt: true),
         };
 
         public static readonly IReadOnlyList<MapRegion> Regions = new[]
         {
             R.Zarafshan, R.AreiasFlamejantes, R.SerraDeKaggen, R.GrutasDoLimiar, R.CostaDasMoncoes, R.DeltaDeJhilpur, R.TetoDoMundo, R.PlanicieDeMingcheng,
-            R.EstepeDosNartes, R.PicosDeFarnkesh, R.MarGelado,
+            R.EstepeDosNartes, R.PicosDeFarnkesh, R.MarGelado, R.ArquipelagoDeHinokura,
         };
 
         private static Dictionary<string, MapDefinition> _byId;

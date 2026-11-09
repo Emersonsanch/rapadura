@@ -34,8 +34,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// Farnkesh) starts a fourth row north of the steppe (x 1400…3800, z 3800…6200), its two south gates led to the steppe's trails
     /// (by the meltwater lake and Ohya's crest): the bounds grow to 7200 × 9600 m. Região 11 (the Mar Gelado) fills the cell of that
     /// row north of Mingcheng, west of the peaks (x −1000…1400, z 3800…6200): its south gate led to Mingcheng's north road through
-    /// the wall, its two east gates to the peaks' foot woods and pinnacle wood; only the cell north of the Teto do Mundo stays a
-    /// hole walled off like the world's edge (<see cref="OverworldLayout.Holes"/>: invisible walls, backdrop relief).
+    /// the wall, its two east gates to the peaks' foot woods and pinnacle wood. Região 12 (the Arquipélago de Hinokura) fills the last
+    /// cell, north of the Teto do Mundo and west of the frozen sea (x −3400…−1000, z 3800…6200): its two south gates led to the Teto's
+    /// northern trail ends (Wakhan's pass, the crests of the ill wind), its two east gates to the Mar Gelado's tundra and lakes, so the
+    /// world is a whole 7200 × 9600 m rectangle of twelve regions with no hole (<see cref="OverworldLayout.Holes"/> stays for any
+    /// later shape: invisible walls, backdrop relief).
     /// The relief blends across the borders like between any two areas (one relief for the whole world, each area shaped in
     /// its own region's coordinates), the chunk grids line up (offsets are multiples of the chunk), the streaming, the soft
     /// barrier, the levels and the requirements work per area as before.
@@ -93,6 +96,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// </summary>
         public static readonly Vector2 MarGeladoWorldOffset = new Vector2(200f, 4400f);
 
+        /// <summary>
+        /// Região 12 north of the Teto do Mundo, west of the Mar Gelado (Hinokura at world (−1720, 4400)): the Arquipélago de Hinokura
+        /// fills the last walled hole (the frozen sea thaws westwards over the volcanoes, the Teto's glaciers run down to the black
+        /// beaches), so the world is a whole 7200 × 9600 m rectangle, no hole.
+        /// </summary>
+        public static readonly Vector2 HinokuraWorldOffset = new Vector2(-1720f, 4400f);
+
         /// <summary>Width (m) of the trail that joins two passes (or a pass to the nearest trail across the border).</summary>
         public const float PassTrailWidth = 4f;
 
@@ -134,6 +144,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 (NartesRegion(), NartesWorldOffset),
                 (FarnkeshRegion(), FarnkeshWorldOffset),
                 (MarGeladoRegion(), MarGeladoWorldOffset),
+                (HinokuraRegion(), HinokuraWorldOffset),
             };
 
             Rect bounds = default;

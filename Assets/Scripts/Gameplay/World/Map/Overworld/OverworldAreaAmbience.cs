@@ -254,6 +254,31 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { OverworldTerrain.LighthouseIsle, new AreaClimate(Clear, true) },
             { OverworldTerrain.FrozenLake, new AreaClimate(Clear, true) },
             { OverworldTerrain.BlackIce, new AreaClimate(Clear, true) },
+
+            // Região 12 — Arquipélago de Hinokura: a clear sky over the forge isle, the gardens, the red bridges and the broom
+            // fields (the lava channels light the night); steam (the fog) over the thaw strait, the hot springs, the fumaroles,
+            // the hot channels and the reef; ash falling (the dust) on the volcano's cone, the malpaís, the slag, the ash plains and
+            // the caldera; the castle's courts let the biome roll it.
+            { OverworldTerrain.ForgeIsle, new AreaClimate(Clear, false) },
+            { OverworldTerrain.BlackSandBeach, new AreaClimate(Clear, false) },
+            { OverworldTerrain.ThawStrait, new AreaClimate(Mist, false) },
+            { OverworldTerrain.LavaChannels, new AreaClimate(Clear, false) },
+            { OverworldTerrain.HotSprings, new AreaClimate(Mist, false) },
+            { OverworldTerrain.FumaroleCoast, new AreaClimate(Mist, true) },
+            { OverworldTerrain.LavaGardens, new AreaClimate(Clear, false) },
+            { OverworldTerrain.CloudPines, new AreaClimate(Mist, false) },
+            { OverworldTerrain.RedBridges, new AreaClimate(Clear, false) },
+            { OverworldTerrain.BroomFields, new AreaClimate(Clear, false) },
+            { OverworldTerrain.EcheydeCone, new AreaClimate(Dust, true) },
+            { OverworldTerrain.Malpais, new AreaClimate(Dust, true) },
+            { OverworldTerrain.HotChannels, new AreaClimate(Mist, true) },
+            { OverworldTerrain.ObsidianReef, new AreaClimate(Mist, true) },
+            { OverworldTerrain.GlassIslets, new AreaClimate(Mist, true) },
+            { OverworldTerrain.CurvedWalls, new AreaClimate(null, true) },
+            { OverworldTerrain.NineFurnaces, new AreaClimate(null, true) },
+            { OverworldTerrain.SlagFields, new AreaClimate(Dust, true) },
+            { OverworldTerrain.AshPlain, new AreaClimate(Dust, true) },
+            { OverworldTerrain.Caldera, new AreaClimate(Dust, true) },
         };
 
         /// <summary>True when <paramref name="terrain"/> has its own line (tests: every terrain must).</summary>

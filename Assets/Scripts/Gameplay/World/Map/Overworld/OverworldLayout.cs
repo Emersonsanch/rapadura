@@ -362,6 +362,48 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         FrozenLake = 214,
         /// <summary>Black ice (64): clear dark ice over the deep, cracks and frozen bubbles, low ridges.</summary>
         BlackIce = 215,
+
+        // Região 12 — Arquipélago de Hinokura (OverworldLayouts.Hinokura.cs, OverworldTerrains.Hinokura.cs): 220–239.
+        /// <summary>Hinokura, the Forge Isle (65): black volcanic stone and pumice round the lacquer town, stone lanterns, warm rocks.</summary>
+        ForgeIsle = 220,
+        /// <summary>A beach of black sand (65): low dunes of black sand, pumice washed up, steam where the surf meets warm rock.</summary>
+        BlackSandBeach = 221,
+        /// <summary>The thaw strait towards the Mar Gelado (65): melting ice floes on warm water, steam and sea smoke.</summary>
+        ThawStrait = 222,
+        /// <summary>The lava channels (65): tamed lava running in stone channels to the forges, black stone, bridges.</summary>
+        LavaChannels = 223,
+        /// <summary>Hot springs (65): steaming pools among sinter mounds, yellow crust, pines.</summary>
+        HotSprings = 224,
+        /// <summary>The fumarole coast (65): low basalt cliffs, fumaroles with yellow sulphur rims, steam.</summary>
+        FumaroleCoast = 225,
+        /// <summary>The Jardins de Lava Laqueada (66): raked gravel, moss, pruned pines, stone lanterns, stone lion-dogs.</summary>
+        LavaGardens = 226,
+        /// <summary>The cloud pines (66): moss and black rock under pines pruned in cloud pads, bamboo.</summary>
+        CloudPines = 227,
+        /// <summary>The red bridges (66): islets in warm ponds, red lacquer gates, lanterns.</summary>
+        RedBridges = 228,
+        /// <summary>The broom fields of Mount Echeyde (67): pumice slopes with yellow broom in flower, stone roses, canary pines.</summary>
+        BroomFields = 229,
+        /// <summary>Mount Echeyde (67): the volcano's cone in three rings up to the crater, pumice and lava.</summary>
+        EcheydeCone = 230,
+        /// <summary>The malpaís (67): fields of rough black lava in flows and lobes, glowing cracks, fumaroles.</summary>
+        Malpais = 231,
+        /// <summary>The hot channels (68): steaming blue water between black glass, ember coral.</summary>
+        HotChannels = 232,
+        /// <summary>The Recife de Obsidiana (68): a reef of black shining glass in sharp ridges, steam, ember coral.</summary>
+        ObsidianReef = 233,
+        /// <summary>The glass islets (68): low islets of obsidian in the warm sea, ember coral, steam.</summary>
+        GlassIslets = 234,
+        /// <summary>The curved walls (69): long curved ramparts of coral stone round the castle, red gates.</summary>
+        CurvedWalls = 235,
+        /// <summary>The Castelo das Nove Fornalhas (69): courts of black stone, furnace towers, slag, lacquer gates.</summary>
+        NineFurnaces = 236,
+        /// <summary>Slag fields (69): heaps of slag and cinder from the furnaces, iron-red ground, chimneys.</summary>
+        SlagFields = 237,
+        /// <summary>The ash plains (70): grey ash on cold stone, burnt stumps, cinder heaps.</summary>
+        AshPlain = 238,
+        /// <summary>The Caldeira do Fogo Devorador (70): a ring of cold stone round an open lake of lava.</summary>
+        Caldera = 239,
     }
 
     /// <summary>

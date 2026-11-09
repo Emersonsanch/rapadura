@@ -1418,6 +1418,142 @@ namespace Rapadura.Gameplay.NPC.Visuals
             },
 
             // ------------------------------------------------------------------
+            // Hinokura, a Ilha-Forja (the Arquipélago de Hinokura, Docs/Mapas100.md map 65): people of the forge isle in red
+            // lacquer, black volcanic stone, coral and obsidian, with the ember of the forges and the pine green of the isle.
+            // Japanese names chosen for their sense, as the ficha asks (Akane "deep red", Kurogane "black iron", Sango "coral",
+            // Hikari "light"); forms of clothing only (robes, work tunics, aprons), no figure of a faith.
+            // ------------------------------------------------------------------
+
+            // Mestra Akane, the master of the lacquer (the city's missions): slim and upright, black hair in a bun under a coral
+            // headband, a red lacquer robe with coral hems and obsidian sleeves, a pine-green sash and a work apron, the lacquer
+            // brush raised in the right hand and the jar of lacquer in the left. Lays a thin coat, the ninth.
+            new NpcRecipe
+            {
+                Id = "akane", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 0.98f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinLight, Face = NpcFace.Calm, Hair = NpcHair.Bun, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.None,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.CoralWhite, HeadTrim = NpcSwatch.HinoLacquer,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.HinoLacquer, Trim = NpcSwatch.CoralWhite, Sleeves = NpcSwatch.ObsidianBlack, Boots = NpcSwatch.ObsidianBlack,
+                Layers = NpcLayer.Sash | NpcLayer.Apron, LayerColor = NpcSwatch.IslandPine, LayerTrim = NpcSwatch.CoralWhite,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Brush, NpcProp.Jar },
+                Gesture = NpcGesture.Stroke,
+                Story = "Mestra Akane (\"vermelho vivo\"), a mestra da laca de Hinokura que dá nove demãos finas em cada salão; aqui, dá as missões da cidade",
+            },
+
+            // Kurogane, the smith of black iron (the city's shop: the gear of the gates 65–70): very broad and proud, a black
+            // topknot and a full beard, a volcanic-stone work tunic with ember hems and lacquer sleeves, a thick obsidian apron and
+            // belt, the hammer and the tongs. Strikes the ingot, then looks at it.
+            new NpcRecipe
+            {
+                Id = "kurogane", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 1.06f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Stern, Hair = NpcHair.Topknot, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.Full,
+                Headwear = NpcHeadwear.None,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.VolcanicStone, Trim = NpcSwatch.ForgeEmber, Sleeves = NpcSwatch.HinoLacquer, Trousers = NpcSwatch.ObsidianBlack, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Apron | NpcLayer.Belt, LayerColor = NpcSwatch.ObsidianBlack, LayerTrim = NpcSwatch.Iron,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Hammer, NpcProp.Tongs },
+                Gesture = NpcGesture.Hammer,
+                Story = "Kurogane (\"ferro preto\"), o ferreiro da Ilha-Forja que forja o ferro preto das ilhas; aqui, vende o que os mapas do Arquipélago de Hinokura pedem",
+            },
+
+            // Sango, the boatwoman of the Barco-Farol (the second mission): young, slim and at ease, a black ponytail under a
+            // pumice bandana, a coral tunic with lacquer hems and pine sleeves, a sash and a satchel, a coil of rope on the left arm
+            // and the lighthouse pole in the right. Calls the boats home.
+            new NpcRecipe
+            {
+                Id = "sango", Region = BiomeType.Forest, Age = NpcAge.Youth, Build = NpcBuild.Slim, Height = 0.95f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Bright, Hair = NpcHair.Ponytail, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.None,
+                Headwear = NpcHeadwear.Bandana, HeadColor = NpcSwatch.Pumice, HeadTrim = NpcSwatch.HinoLacquer,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.CoralWhite, Trim = NpcSwatch.HinoLacquer, Sleeves = NpcSwatch.IslandPine, Trousers = NpcSwatch.VolcanicStone, Boots = NpcSwatch.Leather,
+                Layers = NpcLayer.Sash | NpcLayer.Satchel, LayerColor = NpcSwatch.HinoTile, LayerTrim = NpcSwatch.CoralWhite,
+                LeftArm = NpcArmPose.Carry, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.RopeCoil, NpcProp.LanternPole },
+                Gesture = NpcGesture.Call,
+                Story = "Sango (\"coral\"), a barqueira que rema o Barco-Farol entre as ilhotas do Recife de Obsidiana; aqui, dá a 2ª missão da cidade",
+            },
+
+            // Hikari, the keeper of the sluices of the lava channels: old and stooped, short white hair and a long beard under an
+            // obsidian skullcap, a pumice robe with ember hems and a lacquer shawl, a belt with the sluice keys, a walking stick in the
+            // right hand and the keys in the left. Weighs which forge to wake today.
+            new NpcRecipe
+            {
+                Id = "hikari", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 0.94f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinOlive, Face = NpcFace.Kind, Hair = NpcHair.Short, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Long,
+                Headwear = NpcHeadwear.Skullcap, HeadColor = NpcSwatch.ObsidianBlack, HeadTrim = NpcSwatch.ForgeEmber,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.Pumice, Trim = NpcSwatch.ForgeEmber, Sleeves = NpcSwatch.Pumice, Boots = NpcSwatch.ObsidianBlack,
+                Layers = NpcLayer.Shawl | NpcLayer.Belt, LayerColor = NpcSwatch.HinoLacquer, LayerTrim = NpcSwatch.CoralWhite,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.WalkingStick, NpcProp.Keys },
+                Gesture = NpcGesture.Ponder,
+                Story = "Hikari (\"luz\"), o velho que abre e fecha as comportas dos canais de lava que movem as forjas de Hinokura; aqui, o guardião das comportas",
+            },
+
+            // ------------------------------------------------------------------
+            // Cais de Mesektet (the Rio das Doze Horas, Docs/Mapas100.md map 71): people of the night quay in linen, the gold of
+            // Kemet, papyrus green, lapis and the night of the river. Names of the tales of Kemet (characters of its literature, not
+            // gods), as the ficha asks: Sinuhe, Khunanup, Djedi and Setne; forms of clothing only (linen kilts and robes, broad
+            // sashes), no figure of a faith.
+            // ------------------------------------------------------------------
+
+            // Sinuhe, the chief boatman (the city's missions): the traveller of the tale who came home; proud and weathered, short
+            // black hair and a short beard under a linen headwrap, a linen kaftan with gold hems and lapis sleeves, a sash and a
+            // belt of papyrus green, a coil of mooring rope on the left arm and the punting pole in the right. Watches the river.
+            new NpcRecipe
+            {
+                Id = "sinuhe", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Average, Height = 1.0f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinBrown, Face = NpcFace.Stern, Hair = NpcHair.Short, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.Short,
+                Headwear = NpcHeadwear.Headwrap, HeadColor = NpcSwatch.NileLinen, HeadTrim = NpcSwatch.KemetGold,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.NileLinen, Trim = NpcSwatch.KemetGold, Sleeves = NpcSwatch.LapisBlue, Trousers = NpcSwatch.QuaySandstone, Boots = NpcSwatch.Leather,
+                Layers = NpcLayer.Sash | NpcLayer.Belt, LayerColor = NpcSwatch.PapyrusGreen, LayerTrim = NpcSwatch.KemetGold,
+                LeftArm = NpcArmPose.Carry, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.RopeCoil, NpcProp.CaravanStaff },
+                Gesture = NpcGesture.Scan,
+                Story = "Sinuhe, o viajante do conto de Kemet que fugiu para longe e voltou para casa já velho; aqui, o barqueiro-chefe do Cais de Mesektet, que dá as missões da cidade",
+            },
+
+            // Khunanup, the merchant (the city's shop: the gear of the hours 71–76): the eloquent peasant of the tale, who won his
+            // case by speaking well; stout and at ease, shaven head and a goatee, a linen robe with gold hems and papyrus sleeves, a
+            // lapis shawl and a satchel, the balance scale raised in the right hand and the purse in the left. Talks, and talks.
+            new NpcRecipe
+            {
+                Id = "khunanup", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Stout, Height = 0.97f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Jolly, Hair = NpcHair.Bald, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.Goatee,
+                Headwear = NpcHeadwear.None,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.NileLinen, Trim = NpcSwatch.KemetGold, Sleeves = NpcSwatch.PapyrusGreen, Boots = NpcSwatch.Leather,
+                Layers = NpcLayer.Shawl | NpcLayer.Satchel, LayerColor = NpcSwatch.LapisBlue, LayerTrim = NpcSwatch.KemetGold,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.CoinPurse, NpcProp.Scale },
+                Gesture = NpcGesture.Chatter,
+                Story = "Khunanup, o \"camponês eloquente\" do conto de Kemet, que ganhou a sua causa falando bonito nove vezes; aqui, o comerciante do cais que negocia falando bonito e vende o que as horas do rio pedem",
+            },
+
+            // Djedi, the magician (the second mission; the trainer of magic): the old wonder-worker of the Papyrus Westcar, who
+            // ate five hundred loaves a day and was a hundred and ten years old; very old and stooped, shaven head and a long white
+            // beard under a lapis skullcap, a robe of the river night with gold hems, a lapis shawl and a belt, the walking stick in
+            // the right hand and a crystal pendant held up in the left. Tells the old stories.
+            new NpcRecipe
+            {
+                Id = "djedi", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 0.93f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinBrown, Face = NpcFace.Dreamy, Hair = NpcHair.Bald, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Long,
+                Headwear = NpcHeadwear.Skullcap, HeadColor = NpcSwatch.LapisBlue, HeadTrim = NpcSwatch.KemetGold,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.RiverNight, Trim = NpcSwatch.KemetGold, Sleeves = NpcSwatch.RiverNight, Boots = NpcSwatch.KohlBlack,
+                Layers = NpcLayer.Shawl | NpcLayer.Belt, LayerColor = NpcSwatch.LapisBlue, LayerTrim = NpcSwatch.NileLinen,
+                LeftArm = NpcArmPose.HoldUp, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.WalkingStick, NpcProp.CrystalPendant },
+                Gesture = NpcGesture.Storytell,
+                Story = "Djedi, o mágico de cento e dez anos do Papiro Westcar; aqui, o treinador de magia do Cais de Mesektet, que dá a 2ª missão da cidade",
+            },
+
+            // Setne, the librarian of the Caderno: the prince of the demotic tales who searched for the book of Thoth (here only
+            // for books); young and slim, short black hair under a gold headband, a linen tunic with lapis hems and papyrus
+            // sleeves, a sash of the river night and a satchel of scrolls, a scroll case in the crook of the left arm and a scroll
+            // held open in the right. Reads while he walks.
+            new NpcRecipe
+            {
+                Id = "setne", Region = BiomeType.Forest, Age = NpcAge.Youth, Build = NpcBuild.Slim, Height = 0.96f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinOlive, Face = NpcFace.Bright, Hair = NpcHair.Short, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.None,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.KemetGold, HeadTrim = NpcSwatch.LapisBlue,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.NileLinen, Trim = NpcSwatch.LapisBlue, Sleeves = NpcSwatch.PapyrusGreen, Trousers = NpcSwatch.NileLinen, Boots = NpcSwatch.Leather,
+                Layers = NpcLayer.Sash | NpcLayer.Satchel, LayerColor = NpcSwatch.RiverNight, LayerTrim = NpcSwatch.KemetGold,
+                LeftArm = NpcArmPose.Crook, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.ScrollCase, NpcProp.Scroll },
+                Gesture = NpcGesture.Read,
+                Story = "Setne Khamwas, o príncipe dos contos demóticos de Kemet que vivia atrás de livros antigos; aqui, o bibliotecário do Caderno no Cais de Mesektet",
+            },
+
+            // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
 

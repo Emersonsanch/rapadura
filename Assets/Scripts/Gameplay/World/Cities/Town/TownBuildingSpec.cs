@@ -87,6 +87,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
         DoubleFlute = 37,
         /// <summary>Pamour (Porto da Lua Branca): a rack of white furs, a crescent boat on trestles with its paddle, coils of line and a moon lantern.</summary>
         FurAndBoat = 38,
+        /// <summary>Kurogane (Hinokura): an anvil on a block of obsidian, a quench trough, a rack of black-iron tools, crampons on a peg and a glowing ingot.</summary>
+        BlackIronForge = 39,
+        /// <summary>Khunanup (Cais de Mesektet): a reed mat with baskets of grain, tall jars, a balance scale, rolled papyri, an oar and an oil lamp.</summary>
+        ReedMarket = 40,
     }
 
     /// <summary>
@@ -261,6 +265,23 @@ namespace Rapadura.Gameplay.World.Cities.Town
         public bool SnowDome;
 
         /// <summary>
+        /// Hinokura: a hall of red lacquer (Docs/Mapas100.md map 65, style <c>LacquerPalace</c>): a curved base wall of coral stone
+        /// on black volcanic footings, red lacquered walls between dark posts, a hipped roof of red tiles with white mortar ridges
+        /// and up-turned corners, a double door with gold studs and a porch of black stone with a stone lantern (the palaces of
+        /// Shuri and the gusuku of Ryukyu as form only, no shrine; TownKit.LacquerPalace).
+        /// </summary>
+        public bool LacquerHall;
+
+        /// <summary>
+        /// Cais de Mesektet: a hall of the river quay (Docs/Mapas100.md map 71, style <c>PapyrusQuay</c>): a raft of bound
+        /// papyrus logs on pilings over the dark water, sandstone walls with a gold band and a cavetto cornice, a front of
+        /// papyrus-bundle columns with bell capitals holding a flat roof of reed mats that overhangs as a porch, a door with a
+        /// gold lintel, windows of lit linen and stars painted under the mat roof (the river towns of Kemet as form only, no
+        /// temple; TownKit.PapyrusQuay).
+        /// </summary>
+        public bool PapyrusHall;
+
+        /// <summary>
         /// Mercado dos Túneis: with <see cref="TownRoofKind.Rock"/>, a stall set into an arched basalt niche: the round arch,
         /// a striped canvas awning on copper poles, a counter, bottle lanterns and a copper air pipe up the rock (TownKit.TunnelBazaar).
         /// </summary>
@@ -301,7 +322,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Key of the cached mesh: equal specs share one mesh.</summary>
         public string CacheKey =>
             $"{Kind}|{Width:0.00}|{Depth:0.00}|{PorchDepth:0.00}|{FullVaranda}|{WallHeight:0.00}|{Floors}|{Roof}|{WallColor}|{TrimColor}|{RoofColor}|" +
-            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{RootStilt}|{StiltLonghouse}|{StoneTerrace}|{RingWallHall}|{SpireHouse}|{FeltYurt}|{GiantRoundhouse}|{HollowTrunk}|{PinnacleNest}|{GourdHut}|{MoonLonghouse}|{SnowDome}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
+            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{RootStilt}|{StiltLonghouse}|{StoneTerrace}|{RingWallHall}|{SpireHouse}|{FeltYurt}|{GiantRoundhouse}|{HollowTrunk}|{PinnacleNest}|{GourdHut}|{MoonLonghouse}|{SnowDome}|{LacquerHall}|{PapyrusHall}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
             $"{Chimney}|{Sign}|{SignColor}|{Dressing}|{Seed}";
     }
 }

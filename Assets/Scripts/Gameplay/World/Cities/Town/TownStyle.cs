@@ -138,6 +138,24 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// up on the ice, fish racks and the Cais da Lua on the plaza where the Moon Ship moors. No figure of the faiths of the Arctic.
         /// </summary>
         IceCanal = 20,
+        /// <summary>
+        /// Hinokura, a Ilha-Forja (the Arquipélago de Hinokura, Docs/Mapas100.md map 65, style <c>LacquerPalace</c>): a forge town
+        /// on a volcanic isle; halls of red lacquer on curved walls of coral stone, roofs of red tiles with white mortar ridges and
+        /// up-turned eaves, double doors, courtyards of black volcanic stone (the form of Shuri and the <i>gusuku</i> of Ryukyu
+        /// and of the Japanese castle towns, no shrines), channels of tamed lava with sluices crossed by black stone bridges,
+        /// the Forja de Hinokura on the plaza, stone lanterns, pruned pines on lava rock and a stone harbour. No figure of a faith.
+        /// </summary>
+        LacquerPalace = 21,
+        /// <summary>
+        /// Cais de Mesektet (the Rio das Doze Horas, Docs/Mapas100.md map 71, style <c>PapyrusQuay</c>): a floating quay on the
+        /// dark river of the night; houses of sandstone on rafts and pilings, a front of papyrus-bundle columns with bell
+        /// capitals holding a flat roof of reed mats on pillars, a gold cavetto cornice, boardwalks of planks over the dark water,
+        /// the Mesektet (the barque of the night) moored at the Cais da Barca on the plaza, piers of the hours with their channels
+        /// of dark water crossed by plank bridges, freestanding papyrus columns with an oil lamp, thickets of papyrus and reed
+        /// skiffs drawn up on the bank (the form of the river towns of Kemet and of their papyrus boats; no temple, no figure of
+        /// a god). Always night: stars painted on the ceilings.
+        /// </summary>
+        PapyrusQuay = 22,
     }
 
     /// <summary>
@@ -696,6 +714,57 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Street = TownSwatch.Snow, StreetEdge = TownSwatch.MoonSilver, Sidewalk = TownSwatch.SeaIce,
             Plaza = TownSwatch.SeaIce, PlazaAlt = TownSwatch.MoonSilver,
             Fence = TownSwatch.MoonPlank, Plinth = TownSwatch.MoonSilver,
+            HouseRoof = TownRoofKind.Flat,
+        };
+
+        /// <summary>
+        /// Hinokura (Docs/Mapas100.md map 65): picked by hand from the ficha's palette. Lacquer #B23A2E, red tile #C6492F, volcanic
+        /// stone #2E2B2B, coral stone #E8D9C0, the tamed lava #FF8A3D (glow), pine green #3E6B4A, obsidian #1E1A1E and pumice
+        /// #C8BBA8 (row 22 of <see cref="TownPalette"/>). Houses are halls of red lacquer on curved coral walls
+        /// (<see cref="TownBuildingSpec.LacquerHall"/>); the ground is black volcanic stone with pumice, the streets courtyards
+        /// of black stone edged with coral, the plaza pumice round the Forja de Hinokura. The archipelago has no world-map biome:
+        /// <see cref="TownStyle.Region"/> is the borrowed Forest (as Farnkesh and the Porto).
+        /// </summary>
+        public static readonly TownStyle LacquerPalace = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Mountain,
+            Architecture = TownArchitecture.LacquerPalace,
+            Walls = new[] { TownSwatch.PalaceLacquer, TownSwatch.PalaceLacquer, TownSwatch.CoralStone },
+            Trims = new[] { TownSwatch.CoralStone, TownSwatch.Gold, TownSwatch.VolcanicStone },
+            Roofs = new[] { TownSwatch.FireTile, TownSwatch.ClayTile },
+            Joinery = new[] { TownSwatch.Obsidian, TownSwatch.WoodDark },
+            Accent = TownSwatch.Gold,
+            Ground = TownSwatch.VolcanicStone, GroundAlt = TownSwatch.Pumice,
+            Street = TownSwatch.Obsidian, StreetEdge = TownSwatch.CoralStone, Sidewalk = TownSwatch.Pumice,
+            Plaza = TownSwatch.Pumice, PlazaAlt = TownSwatch.CoralStone,
+            Fence = TownSwatch.PalaceLacquer, Plinth = TownSwatch.CoralStone,
+            HouseRoof = TownRoofKind.Flat,
+        };
+
+        /// <summary>
+        /// Cais de Mesektet (Docs/Mapas100.md map 71): picked by hand from the ficha's palette. The night of the river #1E2050,
+        /// the gold of Kemet #D4AF37, papyrus #8DAA4A, the sandstone of the quays #C9A27A, the dark water #22324A, reed mats
+        /// #B8A06A, linen #EDE6D3 and the starlight of the lamps #F4E9B0 (glow) (row 23 of <see cref="TownPalette"/>). Houses are
+        /// halls of sandstone on rafts with papyrus columns and reed-mat roofs (<see cref="TownBuildingSpec.PapyrusHall"/>); the
+        /// ground is the sandbank of the quay with tufts of papyrus, the streets boardwalks of dark planks edged with gold, the
+        /// plaza sandstone round the Cais da Barca. The river has no world-map biome: <see cref="TownStyle.Region"/> is the
+        /// borrowed Forest (as Farnkesh, the Porto and Hinokura).
+        /// </summary>
+        public static readonly TownStyle PapyrusQuay = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Coast,
+            Architecture = TownArchitecture.PapyrusQuay,
+            Walls = new[] { TownSwatch.QuaySandstone, TownSwatch.QuaySandstone, TownSwatch.NileLinen },
+            Trims = new[] { TownSwatch.KemetGold, TownSwatch.PapyrusGreen, TownSwatch.RiverNight },
+            Roofs = new[] { TownSwatch.MesektetMat, TownSwatch.Thatch },
+            Joinery = new[] { TownSwatch.WoodDark, TownSwatch.RiverNight },
+            Accent = TownSwatch.KemetGold,
+            Ground = TownSwatch.QuaySandstone, GroundAlt = TownSwatch.PapyrusGreen,
+            Street = TownSwatch.WoodDark, StreetEdge = TownSwatch.KemetGold, Sidewalk = TownSwatch.MesektetMat,
+            Plaza = TownSwatch.QuaySandstone, PlazaAlt = TownSwatch.RiverNight,
+            Fence = TownSwatch.MesektetMat, Plinth = TownSwatch.QuaySandstone,
             HouseRoof = TownRoofKind.Flat,
         };
     }

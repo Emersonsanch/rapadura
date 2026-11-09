@@ -93,7 +93,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             }
 
             if (spec.ReedHall || spec.ReefTower || spec.RootStilt || spec.StiltLonghouse || spec.StoneTerrace || spec.RingWallHall || spec.SpireHouse
-                || spec.FeltYurt || spec.GiantRoundhouse || spec.HollowTrunk || spec.PinnacleNest || spec.GourdHut || spec.MoonLonghouse || spec.SnowDome)
+                || spec.FeltYurt || spec.GiantRoundhouse || spec.HollowTrunk || spec.PinnacleNest || spec.GourdHut || spec.MoonLonghouse || spec.SnowDome || spec.LacquerHall || spec.PapyrusHall)
             {
                 // Aratta's reed halls and Kirta's coral towers (TownKit.ReedHorn / CoralReef): their own mass, roof and porch.
                 float rhw = spec.Width * 0.5f;
@@ -162,12 +162,22 @@ namespace Rapadura.Gameplay.World.Cities.Town
                     // The Porto's long plank houses hang their sign from the porch beam themselves.
                     TownKit.MoonLonghouseHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
                 }
+                else if (spec.LacquerHall)
+                {
+                    // Hinokura's lacquer halls hang their sign as a plaque under the porch eave themselves.
+                    TownKit.LacquerHallHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
+                }
+                else if (spec.PapyrusHall)
+                {
+                    // The Cais de Mesektet's quay halls hang their sign as a gold plaque on the porch architrave themselves.
+                    TownKit.PapyrusHallHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
+                }
                 else
                 {
                     TownKit.ReefTowerHouse(b, spec, rhw, rzFront, rzFacade, rdepth * 0.5f, spec.EaveHeight);
                 }
 
-                if (spec.Sign && spec.PorchDepth > 0.01f && !spec.StoneTerrace && !spec.RingWallHall && !spec.SpireHouse && !spec.FeltYurt && !spec.GiantRoundhouse && !spec.HollowTrunk && !spec.PinnacleNest && !spec.GourdHut && !spec.MoonLonghouse && !spec.SnowDome)
+                if (spec.Sign && spec.PorchDepth > 0.01f && !spec.StoneTerrace && !spec.RingWallHall && !spec.SpireHouse && !spec.FeltYurt && !spec.GiantRoundhouse && !spec.HollowTrunk && !spec.PinnacleNest && !spec.GourdHut && !spec.MoonLonghouse && !spec.SnowDome && !spec.LacquerHall && !spec.PapyrusHall)
                 {
                     TownKit.SignBoard(b, new Vector3(spec.DoorOffset * spec.Width, spec.EaveHeight + 0.25f, rzFront + 0.05f), spec.SignColor, spec.AccentColor);
                 }
