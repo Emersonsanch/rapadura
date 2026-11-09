@@ -338,6 +338,14 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string TrocasKhunanup = "shop_trocas_khunanup";
 
+        /// <summary>
+        /// Betume do Atrahasis (Dur-Jarras, Docs/Mapas100.md map 77): Atrahasis, the master of the bitumen rafts, sells the gear maps
+        /// 77–82 (all returning to Dur-Jarras) will ask for (Docs/MetodologiaMapasERacas.md §2.1): water skins for the Deserto do Relógio
+        /// (78), reed boats, passages and root boots for the Poços de Betume (79), the oil of eternal fire to light the pitch (79), rope and
+        /// crampons for the Cedral and the Ombro de Upelluri (80, 81), oil lamps and theriac for the fumes of the pitch. The counter turns daily.
+        /// </summary>
+        public const string BetumeAtrahasis = "shop_betume_atrahasis";
+
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
@@ -857,6 +865,34 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_cooked_meat", 6, 10, rotating: true),
                 new CityShopEntry("item_fish_peixe_dourado", 60, 2, rotating: true),
                 new CityShopEntry("item_herb", 3, 10, rotating: true),
+                new CityShopEntry("item_runa_clareza", 15, 2, rotating: true),
+                new CityShopEntry("item_runa_cura", 15, 2, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+                new CityShopEntry("item_pedra_alma", 35, 1, rotating: true),
+            })),
+
+            // ---- Dur-Jarras: Atrahasis' bitumen yard, the gear of the Margens da Mistura (77–82); daily ----
+            new CityShopSpec(BetumeAtrahasis, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(BetumeAtrahasis, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                // Gear of the maps that return to Dur-Jarras, fixed from the first day: the desert of the clock (water skins), the
+                // pitch wells (reed boats, passages, root boots, eternal oil to light the pitch, theriac for the fumes), the climb
+                // of the cedars and the shoulder of the giant (rope, crampons) and the lamps.
+                new CityShopEntry("item_odre_agua", 30, 5),
+                new CityShopEntry("item_barco_junco", 600, 2),
+                new CityShopEntry("item_passagem_dhow", 300, 3),
+                new CityShopEntry("item_botas_raiz", 520, 1),
+                new CityShopEntry("item_oleo_fogo_eterno", 190, 2),
+                new CityShopEntry("item_teriaga", 50, 4),
+                new CityShopEntry("item_corda_escalada", 40, 3),
+                new CityShopEntry("item_grampos_escalada", 950, 1),
+                new CityShopEntry("item_lamparina_oleo", 28, 3),
+                // The rotation: what the rafts bring up the canals.
+                new CityShopEntry("item_cooked_meat", 6, 10, rotating: true),
+                new CityShopEntry("item_herb", 3, 10, rotating: true),
+                new CityShopEntry("item_iron", 8, 20, rotating: true),
                 new CityShopEntry("item_runa_clareza", 15, 2, rotating: true),
                 new CityShopEntry("item_runa_cura", 15, 2, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),

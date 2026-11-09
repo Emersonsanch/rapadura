@@ -17,7 +17,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
     /// gourd-shaped wicker huts and the capital <see cref="Farnkesh"/> of white nest-houses on pinnacles; the Mar Gelado has
     /// the capital <see cref="PortoDaLuaBranca"/> of long plank houses with painted moons and snow domes on islands of ice; the
     /// Arquipélago de Hinokura has the capital <see cref="Hinokura"/> of red lacquer halls on curved coral walls round the forge; the
-    /// Rio das Doze Horas has the <see cref="CaisDeMesektet"/> of sandstone halls on rafts with papyrus columns round the night barque). A city added to the
+    /// Rio das Doze Horas has the <see cref="CaisDeMesektet"/> of sandstone halls on rafts with papyrus columns round the night barque; the
+    /// Margens da Mistura have <see cref="DurJarras"/> of baked brick at the foot of a ziggurat of five steps). A city added to the
     /// catalog without a recipe gets <see cref="Default"/> (the Vila's plan filled with its residents, shops and regional
     /// style) until it has one. Layouts are cached per city and "mascate today" flag (the generator is deterministic,
     /// so the cache never goes stale).
@@ -96,6 +97,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityCatalog.PortoDaLuaBranca: return PortoDaLuaBranca();
                 case CityCatalog.Hinokura: return Hinokura();
                 case CityCatalog.CaisDeMesektet: return CaisDeMesektet();
+                case CityCatalog.DurJarras: return DurJarras();
                 default: return null;
             }
         }

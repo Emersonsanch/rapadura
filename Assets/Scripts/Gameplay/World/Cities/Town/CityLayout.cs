@@ -341,6 +341,20 @@ namespace Rapadura.Gameplay.World.Cities.Town
         PapyrusThicket = 120,
         /// <summary>Cais de Mesektet: a skiff of bound papyrus drawn up on the bank, prow and stern curled up, a paddle across it (Variant 1: on two trestles with a net hung to dry).</summary>
         ReedSkiff = 121,
+        // ---- Dur-Jarras (Margens da Mistura; drawn by TownKit.Ziggurat) ----
+
+        /// <summary>Dur-Jarras: the ziggurat of five steps of baked brick at the head of the plaza, a stair up its front and a glazed room on top (<see cref="TownKit.ZigguratFootprint"/>).</summary>
+        Ziggurat = 122,
+        /// <summary>Dur-Jarras: the Relógio de Zurvan, a round brick plinth with twelve marks of gold and a slanted gnomon (only a clock).</summary>
+        ZurvanClock = 123,
+        /// <summary>Dur-Jarras: a canal of black water from <see cref="CityProp.Position"/> to <see cref="CityProp.End"/> crossing the street, with brick lips and a brick bridge in the middle; walkable.</summary>
+        BitumenCanal = 124,
+        /// <summary>Dur-Jarras: a date palm on a ring of brick (Variant 1: taller, with a lean).</summary>
+        DatePalm = 125,
+        /// <summary>Dur-Jarras: a pier of glazed blue brick with a lion in gold relief on its front (Variant 1: taller, with a stepped cap).</summary>
+        GlazedLion = 126,
+        /// <summary>Dur-Jarras: a stack of clay jars on a reed mat (Variant 1: more jars and a sealed glazed jar on top).</summary>
+        JarStack = 127,
     }
 
     public enum CityExitKind

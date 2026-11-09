@@ -84,6 +84,8 @@ namespace Rapadura.Editor
 
         [MenuItem(Root + "Preview Walkable Town/Cais de Mesektet (capital, Rio das Doze Horas)", priority = 29)]
         private static void PreviewCaisDeMesektet() => Preview(CityCatalog.CaisDeMesektet);
+        [MenuItem(Root + "Preview Walkable Town/Dur-Jarras, a Cidade-Zigurate (capital, Margens da Mistura)", priority = 29)]
+        private static void PreviewDurJarras() => Preview(CityCatalog.DurJarras);
 
         [MenuItem(Root + "Preview Walkable Town/Toggle Night", priority = 30)]
         private static void ToggleNight()

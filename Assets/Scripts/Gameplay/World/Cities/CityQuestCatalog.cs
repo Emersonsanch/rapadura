@@ -94,6 +94,8 @@ namespace Rapadura.Gameplay.World.Cities
     /// Cais de Mesektet (map 71): Sinuhe the chief boatman asks the cousins to chase the crocodiles of the dark river off the
     /// landing of the barque, then Djedi the magician wants the black scorpions out of the sands by the quay and pays with a runic
     /// lamp (the night that never ends, 73–74).
+    /// Dur-Jarras (map 77): Utnapishtim asks the cousins to chase the dimmed brick lions off the canals, then Sin-leqi-unninni wants
+    /// the beetles out of the reed shelves of the tablets and pays with a reed boat (the flood, and the pitch of map 79).
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -137,6 +139,8 @@ namespace Rapadura.Gameplay.World.Cities
         public const string HinokuraEmberGulls = "quest_city_hinokura_ember_gulls_on_the_lighthouse";
         public const string MesektetCrocodiles = "quest_city_mesektet_crocodiles_on_the_quay";
         public const string MesektetScorpions = "quest_city_mesektet_scorpions_in_the_sands";
+        public const string DurJarrasLions = "quest_city_dur_jarras_lions_on_the_canals";
+        public const string DurJarrasBeetles = "quest_city_dur_jarras_beetles_on_the_tablets";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -319,6 +323,15 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.CaisDeMesektet, "djedi", new RegionQuestSpec(MesektetScorpions, BiomeType.Forest, MesektetCrocodiles, 3500,
                 new[] { new RegionObjectiveSpec("chase_the_scorpions", QuestObjectiveType.KillEnemyType, "enemy_desert_scorpion", 6) },
                 new[] { new RegionRewardSpec("item_lamparina_runica", 1), new RegionRewardSpec("item_gold", 240) })),
+
+            // -- Dur-Jarras: Utnapishtim, then Sin-leqi-unninni. The stone lion stands in for the Leão de Tijolo Apagado of the ficha
+            // (Docs/Mapas100.md 77) and the bark beetle for its Gafanhoto de Betume, until the region's own creatures exist. --
+            new CityQuestSpec(CityCatalog.DurJarras, "utnapishtim", new RegionQuestSpec(DurJarrasLions, BiomeType.Forest, null, 3600,
+                new[] { new RegionObjectiveSpec("chase_the_lions", QuestObjectiveType.KillEnemyType, "enemy_forest_stone_lion", 8) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 250) })),
+            new CityQuestSpec(CityCatalog.DurJarras, "sin_leqi_unninni", new RegionQuestSpec(DurJarrasBeetles, BiomeType.Forest, DurJarrasLions, 3700,
+                new[] { new RegionObjectiveSpec("chase_the_beetles", QuestObjectiveType.KillEnemyType, "enemy_mountain_bark_beetle", 6) },
+                new[] { new RegionRewardSpec("item_barco_junco", 1), new RegionRewardSpec("item_gold", 250) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();

@@ -652,6 +652,38 @@ namespace Rapadura.Gameplay.World.Cities
             new LocalizationEntry("quest.city_mesektet_scorpions_in_the_sands.active",
                 "They hide under the sand where the circles of light have gone dark.",
                 "Eles se escondem debaixo da areia onde os círculos de luz apagaram."),
+
+            // ================= Dur-Jarras — Utnapishtim =================
+            new LocalizationEntry("quest.city_dur_jarras_lions_on_the_canals.title", "Lions on the Canals", "Leões nos Canais"),
+            new LocalizationEntry("quest.city_dur_jarras_lions_on_the_canals.description",
+                "The brick lions of the old glazed walls, dimmed by the shadow, come down at night and lie across the canals of Dur-Jarras, right where the rafts must pass. Utnapishtim, who keeps the Relógio de Zurvan and once saw a whole world under water, asked the cousins to chase the lions back to the walls.",
+                "Os leões de tijolo dos muros vidrados antigos, apagados pela sombra, descem de noite e deitam atravessados nos canais de Dur-Jarras, bem onde as balsas passam. O Utnapishtim, que cuida do Relógio de Zurvan e um dia viu o mundo inteiro debaixo d'água, pediu aos primos que espantem os leões de volta para os muros."),
+            new LocalizationEntry("quest.city_dur_jarras_lions_on_the_canals.obj_chase_the_lions", "Chase the dimmed brick lions off the canals", "Espantar os leões de tijolo dos canais"),
+            new LocalizationEntry("quest.city_dur_jarras_lions_on_the_canals.journal",
+                "With the lions gone, the rafts passed on the hour. Utnapishtim let Maria read the shadow on the clock and wrote the hour down exactly as she said it. He said that in all the years since the water he had never once been told the time by someone so sure.",
+                "Com os leões embora, as balsas passaram na hora certa. O Utnapishtim deixou a Maria ler a sombra do relógio e anotou a hora do jeitinho que ela falou. Ele disse que, em todos os anos depois da água, nunca ninguém tinha dito a hora para ele com tanta certeza."),
+            new LocalizationEntry("quest.city_dur_jarras_lions_on_the_canals.offer",
+                "Edna's grandchildren, here at the edge of everything! I saw the water rise once, children; since then I watch the clock and the canals. Your grandpa Jorge came through here and asked me if the flood was worse than his rainy season. It was. Eight brick lions lie across my canals and the rafts cannot pass. Chase them back to the walls.",
+                "Os netos da Edna, aqui na beira de tudo! Eu vi a água subir uma vez, crianças; desde então eu olho o relógio e os canais. O vô Jorge de vocês passou aqui e me perguntou se o dilúvio foi pior que a chuva da roça dele. Foi. Oito leões de tijolo deitaram nos meus canais e as balsas não passam. Espantem eles de volta para os muros."),
+            new LocalizationEntry("quest.city_dur_jarras_lions_on_the_canals.active",
+                "They lie across the water where the bricks of the canal are warmest, after the ziggurat lights up.",
+                "Eles deitam na água onde o tijolo do canal é mais quente, depois que o zigurate acende."),
+
+            // ================= Dur-Jarras — Sin-leqi-unninni =================
+            new LocalizationEntry("quest.city_dur_jarras_beetles_on_the_tablets.title", "Beetles on the Tablets", "Besouros nas Tábuas"),
+            new LocalizationEntry("quest.city_dur_jarras_beetles_on_the_tablets.description",
+                "Beetles dimmed by the shadow have climbed the reed shelves of the house of tablets and chew through them, and a shelf that falls breaks a hundred tablets at once. Sin-leqi-unninni, the librarian who copied the oldest tale of all, asked the cousins to chase the beetles out before the next flood comes for the rest.",
+                "Besouros apagados pela sombra subiram as prateleiras de junco da casa das tábuas e estão roendo tudo, e prateleira que cai quebra cem tábuas de uma vez. O Sin-leqi-unninni, o bibliotecário que copiou o conto mais antigo de todos, pediu aos primos que espantem os besouros antes que a próxima cheia leve o resto."),
+            new LocalizationEntry("quest.city_dur_jarras_beetles_on_the_tablets.obj_chase_the_beetles", "Chase the beetles from the shelves of tablets", "Espantar os besouros das prateleiras de tábuas"),
+            new LocalizationEntry("quest.city_dur_jarras_beetles_on_the_tablets.journal",
+                "With the beetles gone, the shelves stood straight again. Sin-leqi-unninni gave the cousins the reed boat he keeps for the flood, and Ícaro pressed his thumb into wet clay to sign for it. The librarian filed the thumb among the signatures of kings.",
+                "Com os besouros embora, as prateleiras ficaram retas de novo. O Sin-leqi-unninni deu aos primos o barco de junco que guardava para a cheia, e o Ícaro apertou o dedão no barro molhado para assinar. O bibliotecário arquivou o dedão junto das assinaturas dos reis."),
+            new LocalizationEntry("quest.city_dur_jarras_beetles_on_the_tablets.offer",
+                "You chased Utnapishtim's lions! Good. I am Sin-leqi-unninni; I copy tablets, and six beetles are chewing the shelves that hold them. Your grandma Edna once dictated a recipe here and made me fix three signs. Chase the beetles, and I will give you the reed boat I keep for the flood.",
+                "Vocês espantaram os leões do Utnapishtim! Bom. Eu sou o Sin-leqi-unninni; eu copio tábuas, e seis besouros estão roendo as prateleiras que seguram elas. A vó Edna de vocês ditou uma receita aqui uma vez e me fez corrigir três sinais. Espantem os besouros, e eu dou o barco de junco que guardo para a cheia."),
+            new LocalizationEntry("quest.city_dur_jarras_beetles_on_the_tablets.active",
+                "They climb the reed shelves when the lamps of the house of tablets are low.",
+                "Eles sobem as prateleiras de junco quando as lamparinas da casa das tábuas estão baixas."),
         };
 
         public static void EnsureLoaded(LocalizationManager localization)

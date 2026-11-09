@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Cities.Town
 {
-    /// <summary>Flat colours of the walkable-town palette texture (one 4 px cell each, 8 × 24). Docs/Cities.md §5.</summary>
+    /// <summary>Flat colours of the walkable-town palette texture (one 4 px cell each, 8 × 25). Docs/Cities.md §5.</summary>
     public enum TownSwatch
     {
         // Row 0: wood and earth (walnut joinery, carved columns).
@@ -84,6 +84,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
         // #D4AF37, papyrus green #8DAA4A, the sandstone of the quays #C9A27A, the dark water #22324A, the reed mats of the roofs
         // #B8A06A, linen #EDE6D3 and the starlight of the oil lamps and the painted ceilings #F4E9B0 (glows).
         RiverNight, KemetGold, PapyrusGreen, QuaySandstone, NightWater, MesektetMat, NileLinen, StarGlow,
+        // Row 24: Dur-Jarras (Margens da Mistura, Docs/Mapas100.md região 14): baked brick #B07A4A, glazed brick blue #2F5FA8, bitumen
+        // #2A2420, marsh reed #C2AE6E, the gold of Elam #D9A23A, the dust of the sky #E8C690, palm frond #5E7F3C and the flame of the
+        // ziggurat #FFC46B (glows: it lights from top to bottom at dusk).
+        BakedBrick, GlazedBlue, Bitumen, MarshReed, ElamGold, DustSky, PalmFrond, ZigguratFlame,
     }
 
     /// <summary>
@@ -95,7 +99,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
     public static class TownPalette
     {
         public const int Columns = 8;
-        public const int Rows = 24;
+        public const int Rows = 25;
         private const int CellPixels = 4;
 
         private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
@@ -126,6 +130,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Hex(0xD8E9F2), Hex(0xF7FAFC), Hex(0x5B4A3E), Hex(0xB7A6E0), Hex(0xC8D2DC), Hex(0x1E2A4A), Hex(0x1F3A4A), Hex(0xE8E4FF),
             Hex(0xB23A2E), Hex(0xC6492F), Hex(0x2E2B2B), Hex(0xE8D9C0), Hex(0xFF8A3D), Hex(0x3E6B4A), Hex(0x1E1A1E), Hex(0xC8BBA8),
             Hex(0x1E2050), Hex(0xD4AF37), Hex(0x8DAA4A), Hex(0xC9A27A), Hex(0x22324A), Hex(0xB8A06A), Hex(0xEDE6D3), Hex(0xF4E9B0),
+            Hex(0xB07A4A), Hex(0x2F5FA8), Hex(0x2A2420), Hex(0xC2AE6E), Hex(0xD9A23A), Hex(0xE8C690), Hex(0x5E7F3C), Hex(0xFFC46B),
         };
 
         private static Material _material;
@@ -165,6 +170,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case TownSwatch.MoonGlow: return 0.85f;
                 case TownSwatch.LavaGlow: return 0.9f;
                 case TownSwatch.StarGlow: return 0.8f;
+                case TownSwatch.ZigguratFlame: return 0.85f;
                 default: return 0f;
             }
         }

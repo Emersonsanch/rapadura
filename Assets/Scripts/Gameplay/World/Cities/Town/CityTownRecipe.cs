@@ -347,6 +347,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             spec.MoonLonghouse |= style.Architecture == TownArchitecture.IceCanal && plainHouse && !spec.SnowDome;
             spec.LacquerHall |= style.Architecture == TownArchitecture.LacquerPalace && plainHouse;
             spec.PapyrusHall |= style.Architecture == TownArchitecture.PapyrusQuay && plainHouse;
+            spec.ZigguratHall |= style.Architecture == TownArchitecture.Ziggurat && plainHouse;
 
             switch (r.Kind)
             {

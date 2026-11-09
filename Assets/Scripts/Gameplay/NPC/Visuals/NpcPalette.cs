@@ -88,6 +88,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // Cais de Mesektet (Rio das Doze Horas, Docs/Mapas100.md map 71): the night of the river #1E2050, the gold of Kemet #D4AF37,
         // papyrus #8DAA4A, the quay sandstone #C9A27A, the dark water #22324A, linen #EDE6D3, lapis #2F4F9A and kohl black #1A1A22
         RiverNight, KemetGold, PapyrusGreen, QuaySandstone, NightWater, NileLinen, LapisBlue, KohlBlack,
+        // Dur-Jarras (Margens da Mistura, Docs/Mapas100.md região 14): baked brick #B07A4A, glazed blue #2F5FA8, bitumen #2A2420, the gold
+        // of Elam #D9A23A, the dust of the sky #E8C690, palm frond #5E7F3C, clay tablet #C9B08A and fringed wool #8A3B2E
+        BakedBrick, GlazedBlue, Bitumen, ElamGold, DustSky, PalmFrond, ClayTablet, FringeWool,
     }
 
     /// <summary>
@@ -99,7 +102,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 27;
+        public const int Rows = 28;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -185,6 +188,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Cais de Mesektet  river night #1E2050, Kemet gold #D4AF37, papyrus #8DAA4A, quay sandstone #C9A27A, dark water #22324A, linen #EDE6D3, lapis #2F4F9A, kohl #1A1A22
             new Color(0.12f, 0.13f, 0.31f), new Color(0.83f, 0.69f, 0.22f), new Color(0.55f, 0.67f, 0.29f), new Color(0.79f, 0.64f, 0.48f),
             new Color(0.13f, 0.2f, 0.29f), new Color(0.93f, 0.9f, 0.83f), new Color(0.18f, 0.31f, 0.6f), new Color(0.1f, 0.1f, 0.13f),
+            // Dur-Jarras  baked brick #B07A4A, glazed blue #2F5FA8, bitumen #2A2420, Elam gold #D9A23A, sky dust #E8C690, palm #5E7F3C, clay tablet #C9B08A, fringed wool #8A3B2E
+            new Color(0.69f, 0.48f, 0.29f), new Color(0.18f, 0.37f, 0.66f), new Color(0.16f, 0.14f, 0.13f), new Color(0.85f, 0.64f, 0.23f),
+            new Color(0.91f, 0.78f, 0.56f), new Color(0.37f, 0.5f, 0.24f), new Color(0.79f, 0.69f, 0.54f), new Color(0.54f, 0.23f, 0.18f),
         };
 
         public static int Count => Colors.Length;

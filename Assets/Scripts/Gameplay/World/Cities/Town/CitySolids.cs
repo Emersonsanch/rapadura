@@ -309,12 +309,18 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.PapyrusColumn: return CitySolid.Capsule(prop.Position, TownKit.PapyrusColumnRadius * s, 3f, owner);
                 case CityPropKind.PapyrusThicket: return CitySolid.Capsule(prop.Position, TownKit.PapyrusThicketRadius * s, 2f, owner);
                 case CityPropKind.ReedSkiff: return CitySolid.Capsule(prop.Position, TownKit.ReedSkiffRadius * s, 1.4f, owner);
+                case CityPropKind.Ziggurat: return CitySolid.Box(CityGeometry.RotatedBounds(prop.Position, TownKit.ZigguratFootprint * s, prop.Yaw), WallColliderHeight, owner);
+                case CityPropKind.ZurvanClock: return CitySolid.Capsule(prop.Position, TownKit.ZurvanClockRadius * s, 2f, owner);
+                case CityPropKind.DatePalm: return CitySolid.Capsule(prop.Position, TownKit.DatePalmRadius * s, 3f, owner);
+                case CityPropKind.GlazedLion: return CitySolid.Capsule(prop.Position, TownKit.GlazedLionRadius * s, 2.2f, owner);
+                case CityPropKind.JarStack: return CitySolid.Capsule(prop.Position, TownKit.JarStackRadius * s, 1.4f, owner);
 
                 case CityPropKind.MeltStream:
                 case CityPropKind.CloudGap:
                 case CityPropKind.IceCanal:
                 case CityPropKind.LavaSluice:
                 case CityPropKind.HourCanal:
+                case CityPropKind.BitumenCanal:
                 case CityPropKind.GoldenRiver:
                 case CityPropKind.CanalBridge:
                 case CityPropKind.LeafBridge:

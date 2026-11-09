@@ -156,6 +156,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// a god). Always night: stars painted on the ceilings.
         /// </summary>
         PapyrusQuay = 22,
+        /// <summary>
+        /// Dur-Jarras (the Margens da Mistura, Docs/Mapas100.md map 77, style <c>Ziggurat</c>): a brick town at the foot of a ziggurat
+        /// of five steps; houses of baked brick with buttress niches, a glazed blue band and a stepped parapet round a flat roof of
+        /// tarred reed, the Relógio de Zurvan on the plaza, canals of black water crossed by brick bridges, date palms, piers of glazed
+        /// brick with lions in relief, stacks of jars (the form of Chogha Zanbil and of the glazed walls of Mesopotamia; no temple
+        /// rite, no figure of a god).
+        /// </summary>
+        Ziggurat = 23,
     }
 
     /// <summary>
@@ -765,6 +773,30 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Street = TownSwatch.WoodDark, StreetEdge = TownSwatch.KemetGold, Sidewalk = TownSwatch.MesektetMat,
             Plaza = TownSwatch.QuaySandstone, PlazaAlt = TownSwatch.RiverNight,
             Fence = TownSwatch.MesektetMat, Plinth = TownSwatch.QuaySandstone,
+            HouseRoof = TownRoofKind.Flat,
+        };
+
+        /// <summary>
+        /// Dur-Jarras (Docs/Mapas100.md região 14): picked by hand from the ficha's palette. Baked brick #B07A4A, glazed blue #2F5FA8,
+        /// bitumen #2A2420, marsh reed #C2AE6E, Elam gold #D9A23A, the dust of the sky #E8C690, palm frond #5E7F3C and the flame of the
+        /// ziggurat #FFC46B (glow) (row 24 of <see cref="TownPalette"/>). Houses are of baked brick (<see cref="TownBuildingSpec.ZigguratHall"/>);
+        /// the ground is the pale dust of the plain with tufts of palm, the streets bitumen-set brick edged in glazed blue, the plaza
+        /// baked brick. The Margens have no world-map biome: <see cref="TownStyle.Region"/> is the borrowed Forest (as the Cais de Mesektet).
+        /// </summary>
+        public static readonly TownStyle Ziggurat = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Desert,
+            Architecture = TownArchitecture.Ziggurat,
+            Walls = new[] { TownSwatch.BakedBrick, TownSwatch.BakedBrick, TownSwatch.DustSky },
+            Trims = new[] { TownSwatch.GlazedBlue, TownSwatch.ElamGold, TownSwatch.Bitumen },
+            Roofs = new[] { TownSwatch.Bitumen, TownSwatch.MarshReed },
+            Joinery = new[] { TownSwatch.Bitumen, TownSwatch.WoodDark },
+            Accent = TownSwatch.ElamGold,
+            Ground = TownSwatch.DustSky, GroundAlt = TownSwatch.PalmFrond,
+            Street = TownSwatch.Bitumen, StreetEdge = TownSwatch.GlazedBlue, Sidewalk = TownSwatch.MarshReed,
+            Plaza = TownSwatch.BakedBrick, PlazaAlt = TownSwatch.GlazedBlue,
+            Fence = TownSwatch.BakedBrick, Plinth = TownSwatch.Bitumen,
             HouseRoof = TownRoofKind.Flat,
         };
     }

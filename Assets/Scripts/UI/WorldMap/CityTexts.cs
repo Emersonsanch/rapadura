@@ -121,6 +121,7 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.PelesPamour, "Pamour's Furs and Boats", "Peles e Barcos do Pamour"),
                 Shop(CityShopCatalog.FerroPretoKurogane, "Kurogane's Black Iron", "Ferro Preto do Kurogane"),
                 Shop(CityShopCatalog.TrocasKhunanup, "Khunanup's Trades", "Trocas do Khunanup"),
+                Shop(CityShopCatalog.BetumeAtrahasis, "Atrahasis' Bitumen Yard", "Betume do Atrahasis"),
             };
 
             // ---- Cities ----
@@ -204,6 +205,10 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.CaisDeMesektet, "Mesektet Quay", "Cais de Mesektet", "Mesektet", "Mesektet",
                 "The quay of the night barque on the Rio das Doze Horas, where it is always night: halls of sandstone on rafts and pilings with fronts of papyrus columns and roofs of reed mats, boardwalks of dark planks over the black water, thickets of papyrus and reed skiffs on the bank. In the middle the Mesektet moors at the Cais da Barca before going down the river; around it, the twelve piers of the hours, one opening each time the barque passes. Stars are painted under every roof.",
                 "O cais da barca da noite no Rio das Doze Horas, onde é sempre noite: salões de arenito sobre balsas e pilares com frente de colunas de papiro e telhado de esteira de junco, passarelas de tábua escura sobre a água preta, moitas de papiro e barquinhos de junco na margem. No meio, a Mesektet atraca no Cais da Barca antes de descer o rio; em volta, os doze píeres das horas, um abrindo cada vez que a barca passa. Debaixo de todo telhado há estrelas pintadas.");
+
+            AddCity(entries, CityCatalog.DurJarras, "Dur-Jarras, the Ziggurat City", "Dur-Jarras, a Cidade-Zigurate", "Dur-Jarras", "Dur-Jarras",
+                "The ziggurat city of the Margens da Mistura, where light and shadow are most mixed: houses of baked brick with glazed blue bands and stepped parapets, canals of black water sealed with bitumen, date palms and piers of glazed brick with lions on them. At the head of the plaza rises a ziggurat of five steps, which lights from top to bottom at dusk; in front of it the Relógio de Zurvan marks the hours.",
+                "A cidade-zigurate das Margens da Mistura, onde luz e sombra estão mais misturadas: casas de tijolo cozido com faixas de azul vidrado e parapeito em degraus, canais de água negra calafetados com betume, palmeiras e pilares de tijolo vidrado com leões. Na cabeça da praça sobe um zigurate de cinco degraus, que acende de cima para baixo ao anoitecer; na frente dele, o Relógio de Zurvan marca as horas.");
 
             AddCity(entries, CityCatalog.PalafitasTarchon, "Tarchon Stilts", "Palafitas de Tarchon", "Tarchon", "Tarchon",
                 "The trols' city in the open swamp: long houses on tall piles with leaf roofs down to the floor, plank boardwalks over the bog water, nets drying, baskets as tall as a cousin and floating reed islands. At night the swamp fills with will-o'-wisps, sparks caught in the Ar Sereno; half the trols stared at them until they forgot themselves, and every spark set free wakes a neighbour.",
@@ -1083,6 +1088,39 @@ namespace Rapadura.UI.WorldMap
                 ("Ícaro, no, the crocodile page does not need a drawing of you riding it. ...It is a good drawing. I will keep it.", "Ícaro, não, a página do crocodilo não precisa de um desenho seu montado nele. ...É um desenho bom. Vou guardar."),
                 ("Lavine, Grandpa Jorge wrote a recipe for rice on the back of one of my papyri. I never erased it. It is filed under 'wisdom'.", "Lavine, o Vô Jorge escreveu uma receita de arroz no verso de um dos meus papiros. Eu nunca apaguei. Está guardada em 'sabedoria'."),
                 ("A book is a lamp you can carry down the river of the night. I keep as many as the quay can hold.", "Livro é lamparina que dá para levar pelo rio da noite. Eu guardo quantos o cais aguentar."));
+
+            // ---- Dur-Jarras (names of the Mesopotamian tales, as the ficha asks; the ziggurat of five steps) ----
+            AddResident(entries, "utnapishtim", "Utnapishtim, Keeper of the Clock", "Utnapishtim, o Guardião do Relógio",
+                ("Joaquim, stand on the plinth and tell me where the shadow falls. Good. A boy who can read the shadow does not get lost in the desert.", "Joaquim, sobe no pedestal e me diz onde a sombra cai. Bom. Menino que lê a sombra não se perde no deserto."),
+                ("Maria, I have seen the water rise over everything, and I still keep this clock wound. Somebody must know what time it is when the water goes down.", "Maria, eu vi a água subir por cima de tudo, e mesmo assim dou corda neste relógio. Alguém precisa saber que horas são quando a água baixa."),
+                ("Maithe, you walk the top of the canal wall without looking down. I did not look down either, the day of the flood. Be careful anyway.", "Maithe, você anda em cima do muro do canal sem olhar para baixo. Eu também não olhei, no dia do dilúvio. Cuidado assim mesmo."),
+                ("Ícaro, no, the clock does not go faster if you push the gnomon. ...Put it back. Exactly where it was.", "Ícaro, não, o relógio não anda mais rápido se você empurrar a haste. ...Põe de volta. Direitinho onde estava."),
+                ("Lavine, Grandma Edna once sat here a whole afternoon and asked me nothing about the flood. Only whether I had eaten. Nobody had asked that in a thousand years.", "Lavine, a Vó Edna sentou aqui uma tarde inteira e não me perguntou nada do dilúvio. Só se eu tinha comido. Ninguém perguntava isso fazia mil anos."),
+                ("Zurvan is only a clock here, child. An hour is enough to keep; no one needs to worship it.", "Zurvan aqui é só um relógio, criança. Uma hora já basta para cuidar; ninguém precisa adorar ela."));
+
+            AddResident(entries, "atrahasis", "Atrahasis, Master of the Rafts", "Atrahasis, o Mestre das Balsas",
+                ("Joaquim, smell that? Bitumen. It holds a brick wall and it holds a boat, and it will hold your boots if you step in it. Buy something before you try.", "Joaquim, sentiu o cheiro? Betume. Segura muro de tijolo e segura barco, e segura a sua bota também se você pisar. Compra alguma coisa antes de tentar."),
+                ("Maria, I sealed one boat for the whole world once. Your raft is much easier. Sit down and hold the rope.", "Maria, eu já calafetei um barco para o mundo inteiro. A sua balsa é bem mais fácil. Senta e segura a corda."),
+                ("Maithe, you tie a better knot than my apprentices. Do not tell them; they already sulk.", "Maithe, você dá um nó melhor que os meus aprendizes. Não conta para eles; eles já ficam de cara amarrada."),
+                ("Ícaro, the pitch burns, yes. Everyone who is standing next to it burns too. Stand far away, and then we can talk.", "Ícaro, o piche queima, sim. Queima também todo mundo que estiver do lado. Fica bem longe, e aí a gente conversa."),
+                ("Lavine, your grandpa Jorge came for bitumen to fix a roof and stayed to tell me how I should have built the boat. He was right about the door.", "Lavine, o Vô Jorge de vocês veio buscar betume para arrumar um telhado e ficou me ensinando como eu devia ter feito o barco. Ele tinha razão sobre a porta."),
+                ("Bitumen, reeds, rope, water skins. The desert asks for one and the pitch for the other. I sell both.", "Betume, junco, corda, odre. O deserto pede um e o piche pede o outro. Eu vendo os dois."));
+
+            AddResident(entries, "sin_leqi_unninni", "Sin-leqi-unninni, the Librarian", "Sin-leqi-unninni, o Bibliotecário",
+                ("Joaquim, read me this tablet. Slowly. Yes, that sign is 'friend'; I copied it so many times I forgot what it meant. Thank you.", "Joaquim, lê essa tábua para mim. Devagar. Isso, esse sinal é 'amigo'; copiei tantas vezes que esqueci o que queria dizer. Obrigado."),
+                ("Maria, you may write your name on the wet clay if you do it small. In a thousand years someone will be glad you were here.", "Maria, você pode escrever o seu nome no barro molhado, desde que pequeno. Daqui a mil anos alguém vai gostar de saber que você esteve aqui."),
+                ("Maithe, you never drop a tablet. I watched. Three kings have held these tablets, and two of them dropped one.", "Maithe, você nunca derruba uma tábua. Eu reparei. Três reis já seguraram estas tábuas, e dois deles derrubaram uma."),
+                ("Ícaro, no, the tablets do not need a drawing of you on a lion. ...It is a good lion. I will fire it with the others.", "Ícaro, não, as tábuas não precisam de um desenho seu em cima de um leão. ...O leão ficou bom. Vou queimar junto com as outras."),
+                ("Lavine, Vó Edna's recipe is the most copied tablet in this house. I am not joking. People come from the Cedral for it.", "Lavine, a receita da Vó Edna é a tábua mais copiada desta casa. Não estou brincando. Vem gente do Cedral atrás dela."),
+                ("Someone copied the tale before me, and someone will copy it after. That is what a tablet is for.", "Alguém copiou o conto antes de mim, e alguém vai copiar depois. Tábua serve para isso."));
+
+            AddResident(entries, "siduri", "Siduri, the Tavern Keeper", "Siduri, a Taberneira",
+                ("Joaquim, sit down, you came a long way. Everyone who gets to this end of the canal came a long way. Eat first.", "Joaquim, senta, você veio de longe. Todo mundo que chega nesta ponta do canal veio de longe. Primeiro come."),
+                ("Maria, a king once came to my door looking for how never to die. I told him to go home and wash his hair. I still think that was good advice.", "Maria, um rei já veio na minha porta procurando como nunca morrer. Eu falei para ele voltar para casa e lavar o cabelo. Ainda acho que foi um bom conselho."),
+                ("Maithe, you helped carry the jars without anyone asking. Your grandmother would notice. I noticed.", "Maithe, você ajudou a carregar os jarros sem ninguém pedir. A sua avó ia reparar. Eu reparei."),
+                ("Ícaro, the jar is not a drum. ...Fine, one song. Then you eat.", "Ícaro, jarro não é tambor. ...Tá bom, uma música. Depois você come."),
+                ("Lavine, Vô Jorge drank one cup here and told me it needed rapadura. It did not. I put some in anyway, and now people ask for it.", "Lavine, o Vô Jorge tomou um copo aqui e disse que faltava rapadura. Não faltava. Botei assim mesmo, e agora o pessoal pede."),
+                ("The world ends a little past my door, they say. It is a good place for a tavern.", "Dizem que o mundo acaba um pouco depois da minha porta. É um bom lugar para uma taberna."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

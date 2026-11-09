@@ -382,6 +382,7 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 
 | Região | Cidade | Moradores | Loja | Missões |
 |---|---|---|---|---|
+| Margens da Mistura (mapas 77–82, ainda fora do `MapCatalog`) | **Dur-Jarras, a Cidade-Zigurate** (`dur_jarras`) | Atrahasis, o Mestre das Balsas (rua Oeste), Utnapishtim, o Guardião do Relógio e Siduri, a Taberneira (rua Leste), Sin-leqi-unninni, o Bibliotecário (rua Sul) | **Betume do Atrahasis** (`shop_betume_atrahasis`) | Utnapishtim: "Leões nos Canais"; Sin-leqi-unninni: "Besouros nas Tábuas" |
 | Rio das Doze Horas (mapas 71–76, ainda fora do `MapCatalog`) | **Cais de Mesektet** (o cais da barca da noite, `cais_de_mesektet`) | Sinuhe, o Barqueiro-Chefe (salão na cabeça da praça), Khunanup, o Comerciante do Cais (rua Oeste), Djedi, o Mágico (rua Leste), Setne, o Bibliotecário do Caderno (rua Sul) | **Trocas do Khunanup** (`shop_trocas_khunanup`) | Sinuhe: "Crocodilos no Cais"; Djedi: "Escorpiões no Areal" |
 | Arquipélago de Hinokura (mapas 65–70, ainda fora do `MapCatalog`) | **Hinokura, a Ilha-Forja** (capital do Fogo Vivo, `hinokura`) | Mestra Akane, a Mestra da Laca (salão na cabeça da praça), Kurogane, o Ferreiro do Ferro Preto (rua Oeste), Hikari, o Guardião das Comportas (rua Leste), Sango, a Barqueira (rua Sul) | **Ferro Preto do Kurogane** (`shop_ferro_preto_kurogane`) | Akane: "Caranguejos nos Varais"; Sango: "Gaivotas no Barco-Farol" |
 | Mar Gelado (mapas 59–64) | **Porto da Lua Branca** (capital do Ar Sereno, `porto_da_lua_branca`) | Yirkap, o Caçador de Esqui (casa comprida na cabeça da praça), Pamour, o Peleiro do Cais (rua Oeste), Makarios, o Guardião das Lanternas (rua Leste), Pera, o Gigante Bom (rua Sul) | **Peles e Barcos do Pamour** (`shop_peles_pamour`) | Yirkap: "Gaivotas nos Varais"; Pera: "Ursos nos Canais" |
@@ -695,6 +696,36 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 - **Falta:** os mapas 71–76 no catálogo e no overworld, os doze píeres e a abertura em sequência (a barca a cada 12 min), a
   noite permanente do rio, o evento A Barca Atrasou, os serviços de treino do Djedi e de Caderno do Setne (hoje só falas), a
   Íbis Real de Mesektet e o conjunto Cais do Papiro.
+
+**Dur-Jarras, a Cidade-Zigurate** (região 14 — Margens da Mistura, mapa 77; cidade de retorno de 77–82):
+- **Passeio da cidade:** receita `CityTownRecipes.DurJarras` (`CityTownRecipes.DurJarras.cs`) no estilo novo `TownStyles.Ziggurat`
+  (`TownArchitecture.Ziggurat`, linha 24 da `TownPalette`: tijolo cozido `#B07A4A`, azul vidrado `#2F5FA8`, betume `#2A2420`, junco
+  `#C2AE6E`, ouro de Elam `#D9A23A`, pó do céu `#E8C690`, palmeira `#5E7F3C`, chama do zigurate `#FFC46B` (brilha)). A casa é de
+  **tijolo cozido** (`TownBuildingSpec.ZigguratHall`, `TownKit.ZigguratHallHouse`): base de betume, nichos de contraforte, faixa
+  azul com rosetas de ouro, parapeito em degraus em volta do teto plano de junco alcatroado e varanda de esteira em postes de
+  tijolo. Peças (`TownKit.Ziggurat.cs`): `Ziggurat` (**zigurate de cinco degraus** na cabeça da praça, escada na frente, salinha
+  vidrada no topo, braseiros nos cantos; colisor 9,2 × 9,2 m), `ZurvanClock` (o **Relógio de Zurvan** na
+  praça, só relógio, nunca pessoa; 0,95 m), `BitumenCanal` (**canal de água negra** atravessando a rua com ponte de tijolo;
+  pisável), `DatePalm` (0,5 m), `GlazedLion` (pilar vidrado com leão em relevo; 0,8 m), `JarStack` (as jarras do nome; 0,8 m);
+  portão de **duas torres de tijolo em degraus** com lintel vidrado (`TownKit.ZigguratGate`); vitrine do Atrahasis
+  (`TownShopDressing.BitumenYard`: balsa de junco em cavaletes, jarros de betume, corda, panela com concha, braseiro).
+  Ruas **Oeste** (Pátio do Atrahasis, Cais das Balsas, uma casa), **Leste** (casa do Utnapishtim, taberna da Siduri) e **Sul** (a
+  entrada, do Deserto do Relógio: casa das tábuas e uma casa) de 19 m; **sem rua ao norte**: o zigurate fecha a praça; canais com
+  ponte nas ruas Oeste e Sul; tudo dentro de 22,5 m em y = 0 (`CityLayoutRules.Validate` sem problemas, com e sem o mascate, coberto
+  por `CityDurJarrasTests`; a barraca do Ammo em `PlazaRadius·(0,575; −0,675)` fica livre).
+- **Respawn:** a cidade aceita `ApplyDefeatIn`; os mapas 77–82 ainda **não estão** no `MapCatalog`: quando entrarem
+  (`MapCatalog.DurJarras = "dur_jarras"`, mapa `map_077_dur_jarras`, `K.Capital`, região `MapRegion.MargensDaMistura`, retorno
+  `DurJarras` em 77–82), falta ligar `RespawnCityFor` e os testes de respawn e de exigências (`MapRequirementTests`).
+- **Betume do Atrahasis** (diária, 3 vagas que giram, tema Especialidade): poções e, fixos desde o primeiro dia, **Odre** (30,
+  deserto, 78), **Barco de Junco** (600), **Passagem de Dhow** (300) e **Botas de Raiz** (520) para os Poços (79), **Óleo de Fogo
+  Eterno** (190, acender o piche), **Teriaga** (50, fumaça), **Corda** (40) e **Grampos** (950) para o Cedral e o Ombro (80, 81) e
+  **Lamparina de Óleo** (28); giram carne, erva, ferro, Runa de Clareza, Runa de Cura, Amuleto da Sorte, Pedra da Bênção e Pedra da
+  Alma (nunca Vida/Caos). O Ammo nunca para lá.
+- **Missões da cidade:** Utnapishtim pede 8 leões fora dos canais (o Leão de Pedra faz o Leão de Tijolo Apagado; poções + 250
+  ouro, 3600 XP); depois Sin-leqi-unninni pede 6 besouros fora das prateleiras de tábuas (o besouro `enemy_mountain_bark_beetle` faz o
+  Gafanhoto de Betume; **Barco de Junco** + 250 ouro, 3700 XP). Testes: `CityDurJarrasTests`.
+- **Falta:** os mapas 77–82 no catálogo e no overworld, os degraus do zigurate como bairros de serviços (feira, ofícios, biblioteca,
+  relógio, Torre), o zigurate acender de cima para baixo em sequência à noite, o evento Cheia, a Roda Celeste no céu, o Mušḫuššu Manso e o conjunto Tijolo Azul.
 
 Código: `CityCatalog`, `CityShopCatalog` (dados), `CityTexts` (textos en/pt-BR), `VillageHubButton` (o mesmo painel
 para toda cidade), `CityFastTravelPanel` (Barcas de Luz), `CitySafeZoneHud` (aviso), `WorldMapCityPresence` (zona

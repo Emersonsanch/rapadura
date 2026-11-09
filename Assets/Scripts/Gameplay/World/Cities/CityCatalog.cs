@@ -208,6 +208,12 @@ namespace Rapadura.Gameplay.World.Cities
         /// <c>MapCatalog</c> will use when maps 71–76 enter it (<c>MapCatalog.CaisDeMesektet</c>, map <c>map_071_cais_mesektet</c>).
         /// </summary>
         public const string CaisDeMesektet = "cais_de_mesektet";
+        /// <summary>
+        /// Dur-Jarras, the ziggurat city of the Margens da Mistura (map 77, return city of maps 77–82, Docs/Mapas100.md região 14;
+        /// Akkadian <i>dūr</i>, fortress). Same id as <c>CityTownRecipes.DurJarrasCityId</c> and the one <c>MapCatalog</c> will use
+        /// when maps 77–82 enter it (<c>MapCatalog.DurJarras</c>, map <c>map_077_dur_jarras</c>).
+        /// </summary>
+        public const string DurJarras = "dur_jarras";
 
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
@@ -572,6 +578,20 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("setne"),
                 },
                 new List<string> { CityShopCatalog.TrocasKhunanup }),
+
+            // Dur-Jarras (the Margens da Mistura, região 14; names of the Mesopotamian tales, as the ficha asks): Utnapishtim, who keeps
+            // the Relógio de Zurvan and gives the missions, Atrahasis, the master of the bitumen rafts (the city's shop: the gear of maps
+            // 77–82), Sin-leqi-unninni, the librarian (second mission) and Siduri, the tavern keeper at the edge of the world (the fourth
+            // resident, outside the ficha). Region: the borrowed Forest (as the Porto, Hinokura and the Cais).
+            new CitySpec(DurJarras, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("utnapishtim"),
+                    new CityResidentSpec("atrahasis", CityShopCatalog.BetumeAtrahasis),
+                    new CityResidentSpec("sin_leqi_unninni"),
+                    new CityResidentSpec("siduri"),
+                },
+                new List<string> { CityShopCatalog.BetumeAtrahasis }),
         };
 
         /// <summary>Ammo, the peddler: not a resident of one city, he is wherever his mule is today (<see cref="ShopRotation.MascateRegion"/>).</summary>

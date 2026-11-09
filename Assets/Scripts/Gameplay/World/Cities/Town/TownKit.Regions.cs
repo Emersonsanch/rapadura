@@ -42,7 +42,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             kind == CityPropKind.RingWall || kind == CityPropKind.CanalBridge || kind == CityPropKind.SpireTerrace || kind == CityPropKind.LeafBridge ||
             kind == CityPropKind.RopeCorral || kind == CityPropKind.EarthRing || kind == CityPropKind.MeltStream ||
             kind == CityPropKind.CloudGap || kind == CityPropKind.GoldenRiver || kind == CityPropKind.VineRow || kind == CityPropKind.IceCanal ||
-            kind == CityPropKind.LavaSluice || kind == CityPropKind.HourCanal;
+            kind == CityPropKind.LavaSluice || kind == CityPropKind.HourCanal || kind == CityPropKind.BitumenCanal;
 
         /// <summary>Unit direction of a segment prop and the side its mass stands on (left of the direction: east-going → north).</summary>
         public static Vector2 SegmentBack(Vector2 direction) => new Vector2(-direction.y, direction.x);
@@ -160,6 +160,12 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.PapyrusColumn: PapyrusColumn(b, s, prop.Variant); return true;
                 case CityPropKind.PapyrusThicket: PapyrusThicket(b, s, prop.Variant); return true;
                 case CityPropKind.ReedSkiff: ReedSkiff(b, s, prop.Variant); return true;
+                case CityPropKind.Ziggurat: Ziggurat(b, s); return true;
+                case CityPropKind.ZurvanClock: ZurvanClock(b, s); return true;
+                case CityPropKind.BitumenCanal: BitumenCanal(b, d); return true;
+                case CityPropKind.DatePalm: DatePalm(b, s, prop.Variant); return true;
+                case CityPropKind.GlazedLion: GlazedLion(b, s, prop.Variant); return true;
+                case CityPropKind.JarStack: JarStack(b, s, prop.Variant); return true;
                 default: return false;
             }
         }
@@ -955,6 +961,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
                 case TownShopDressing.ReedMarket:
                     PapyrusQuayDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.BitumenYard:
+                    ZigguratDressing(b, spec, x, y, z, zFacade);
                     break;
 
                 case TownShopDressing.AirBottles:

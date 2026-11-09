@@ -1553,6 +1553,66 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 Story = "Setne Khamwas, o príncipe dos contos demóticos de Kemet que vivia atrás de livros antigos; aqui, o bibliotecário do Caderno no Cais de Mesektet",
             },
 
+            // Dur-Jarras (the Margens da Mistura, Docs/Mapas100.md região 14): people of the brick town in fringed wool, the gold of Elam
+            // and glazed blue; names of the Mesopotamian tales, forms of clothing only (long fringed robes, headbands, skullcaps, no
+            // crown of a god). Siduri, who keeps the tavern at the edge of the world in the tale of Gilgamesh, is the fourth resident.
+
+            // Utnapishtim (the missions, the Relógio de Zurvan): the old man who saw the flood; very old and stooped, a long white beard
+            // under a blue turban, a fringed wool kaftan, the walking stick and the keys of the clock. Ponders the hours.
+            new NpcRecipe
+            {
+                Id = "utnapishtim", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 0.94f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Calm, Hair = NpcHair.Short, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Long,
+                Headwear = NpcHeadwear.Turban, HeadColor = NpcSwatch.GlazedBlue, HeadTrim = NpcSwatch.ElamGold,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.FringeWool, Trim = NpcSwatch.ElamGold, Sleeves = NpcSwatch.FringeWool, Trousers = NpcSwatch.DustSky, Boots = NpcSwatch.Leather,
+                Layers = NpcLayer.Shawl | NpcLayer.Belt, LayerColor = NpcSwatch.GlazedBlue, LayerTrim = NpcSwatch.ElamGold,
+                LeftArm = NpcArmPose.HoldUp, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.Keys, NpcProp.WalkingStick },
+                Gesture = NpcGesture.Ponder,
+                Story = "Utnapishtim, o velho que viu o dilúvio no conto de Gilgamesh; aqui, cuida do Relógio de Zurvan de Dur-Jarras e dá as missões da cidade",
+            },
+
+            // Atrahasis, the master of the bitumen rafts (the city's shop: the gear of maps 77–82): the builder of the flood boat; broad and
+            // proud, a full black beard and a bandana, a tunic with a bitumen apron, the rope coil on the shoulder and the oil can of tar.
+            new NpcRecipe
+            {
+                Id = "atrahasis", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 1.02f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinBrown, Face = NpcFace.Stern, Hair = NpcHair.Short, HairColor = NpcSwatch.HairBlack, Beard = NpcBeard.Full,
+                Headwear = NpcHeadwear.Bandana, HeadColor = NpcSwatch.BakedBrick, HeadTrim = NpcSwatch.Bitumen,
+                Garment = NpcGarment.Tunic, Main = NpcSwatch.DustSky, Trim = NpcSwatch.BakedBrick, Sleeves = NpcSwatch.DustSky, Trousers = NpcSwatch.BakedBrick, Boots = NpcSwatch.Bitumen,
+                Layers = NpcLayer.Apron | NpcLayer.Belt, LayerColor = NpcSwatch.Bitumen, LayerTrim = NpcSwatch.ElamGold,
+                LeftArm = NpcArmPose.Carry, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.RopeCoil, NpcProp.OilCan },
+                Gesture = NpcGesture.Knead,
+                Story = "Atrahasis, o construtor do barco do dilúvio nos contos da Mesopotâmia; aqui, o mestre das balsas de betume de Dur-Jarras, que vende o que os mapas 77–82 pedem",
+            },
+
+            // Sin-leqi-unninni, the librarian: the scribe who copied the tale of Gilgamesh; slim and upright, curly dark hair and a goatee
+            // under a gold headband, a robe of clay colour, a satchel of tablets, the tablets held in front and the stylus in the crook.
+            new NpcRecipe
+            {
+                Id = "sin_leqi_unninni", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 0.98f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinOlive, Face = NpcFace.Bright, Hair = NpcHair.Curly, HairColor = NpcSwatch.HairDark, Beard = NpcBeard.Goatee,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.ElamGold, HeadTrim = NpcSwatch.GlazedBlue,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.ClayTablet, Trim = NpcSwatch.GlazedBlue, Sleeves = NpcSwatch.ClayTablet, Boots = NpcSwatch.Leather,
+                Layers = NpcLayer.Sash | NpcLayer.Satchel, LayerColor = NpcSwatch.GlazedBlue, LayerTrim = NpcSwatch.ElamGold,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.Crook, Props = new[] { NpcProp.Tablets, NpcProp.Quill },
+                Gesture = NpcGesture.Write,
+                Story = "Sin-leqi-unninni, o escriba que copiou o conto de Gilgamesh; aqui, o bibliotecário das tábuas de Dur-Jarras, que dá a 2ª missão da cidade",
+            },
+
+            // Siduri, the tavern keeper at the edge of the world in the tale of Gilgamesh: stout and jolly, hair in a bun, a dress of glazed
+            // blue with a gold hem, an apron, a jar on the arm and a cup raised. Pours a measure for everyone.
+            new NpcRecipe
+            {
+                Id = "siduri", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Stout, Height = 0.95f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Jolly, Hair = NpcHair.Bun, HairColor = NpcSwatch.HairDark, Beard = NpcBeard.None,
+                Headwear = NpcHeadwear.None,
+                Garment = NpcGarment.Dress, Main = NpcSwatch.GlazedBlue, Trim = NpcSwatch.ElamGold, Sleeves = NpcSwatch.GlazedBlue, Boots = NpcSwatch.Leather,
+                Layers = NpcLayer.Apron | NpcLayer.Shawl, LayerColor = NpcSwatch.PalmFrond, LayerTrim = NpcSwatch.ElamGold,
+                LeftArm = NpcArmPose.Crook, RightArm = NpcArmPose.HoldUp, Props = new[] { NpcProp.Jar, NpcProp.Cup },
+                Gesture = NpcGesture.Pour,
+                Story = "Siduri, a taberneira na beira do mundo do conto de Gilgamesh, que aconselha quem chega cansado; aqui, serve quem desce o canal em Dur-Jarras",
+            },
+
             // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
