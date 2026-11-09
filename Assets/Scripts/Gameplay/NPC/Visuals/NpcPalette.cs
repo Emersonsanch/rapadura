@@ -94,6 +94,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // Fortaleza da Última Lâmpada (Limiar Profundo, Docs/Mapas100.md região 15): basalt #2C2C33, the amber of the mother lamp #FFB347 (glows), copper #B06B3A,
         // the white of the guards' cloth #F2EEE6, the indigo of the dark #232046, wick thread #D8CFB8, the grey of the abyss #4A4A54 and lamp oil #5A3A1E
         FortBasalt, MotherAmber, FortCopper, FortLinen, FortIndigo, WickThread, AbyssGrey, LampOilBrown,
+        // Cais da Coluna (Reinos do Céu, Docs/Mapas100.md região 16): white #FAF7EF, gold #E8C35A, lilac #C7B6EE, sky blue #BFD9F2, the light of the Remadores #FFF6D8 (glows),
+        // aqua #7FD3C0, orange #E8833A and the road dust still on Ammo's coat #B9A27E
+        QuayWhite, QuayGold, QuayLilac, QuaySky, QuayGlow, QuayAqua, QuayOrange, QuayRoadDust,
     }
 
     /// <summary>
@@ -105,7 +108,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 29;
+        public const int Rows = 30;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -197,6 +200,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Fortaleza da Última Lâmpada  basalt #2C2C33, mother amber #FFB347, copper #B06B3A, linen #F2EEE6, indigo #232046, wick thread #D8CFB8, abyss grey #4A4A54, lamp oil #5A3A1E
             new Color(0.17f, 0.17f, 0.2f), new Color(1f, 0.7f, 0.28f), new Color(0.69f, 0.42f, 0.23f), new Color(0.95f, 0.93f, 0.9f),
             new Color(0.14f, 0.13f, 0.27f), new Color(0.85f, 0.81f, 0.72f), new Color(0.29f, 0.29f, 0.33f), new Color(0.35f, 0.23f, 0.12f),
+            // Cais da Coluna  white #FAF7EF, gold #E8C35A, lilac #C7B6EE, sky #BFD9F2, glow #FFF6D8, aqua #7FD3C0, orange #E8833A, road dust #B9A27E
+            new Color(0.98f, 0.97f, 0.94f), new Color(0.91f, 0.76f, 0.35f), new Color(0.78f, 0.71f, 0.93f), new Color(0.75f, 0.85f, 0.95f),
+            new Color(1f, 0.96f, 0.85f), new Color(0.5f, 0.83f, 0.75f), new Color(0.91f, 0.51f, 0.23f), new Color(0.73f, 0.64f, 0.49f),
         };
 
         public static int Count => Colors.Length;
@@ -208,6 +214,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
             {
                 case NpcSwatch.LampGlow: return 1f;
                 case NpcSwatch.MotherAmber: return 0.85f;
+                case NpcSwatch.QuayGlow: return 0.7f;
                 case NpcSwatch.CrystalGlow: return 0.8f;
                 case NpcSwatch.Ember: return 0.9f;
                 case NpcSwatch.SunGlow: return 0.8f;

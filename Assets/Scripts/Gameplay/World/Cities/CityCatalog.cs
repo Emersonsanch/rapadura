@@ -220,6 +220,11 @@ namespace Rapadura.Gameplay.World.Cities
         /// will use when maps 83–90 enter it (<c>MapCatalog.FortalezaUltimaLampada</c>, map <c>map_083_fortaleza_ultima_lampada</c>).
         /// </summary>
         public const string FortalezaUltimaLampada = "fortaleza_ultima_lampada";
+        /// <summary>
+        /// Cais da Coluna, the quay above the clouds where the Barcas de Luz moor (map 91, return city of maps 91–100, Docs/Mapas100.md região 16). Same id as
+        /// <c>CityTownRecipes.CaisDaColunaCityId</c> and the one <c>MapCatalog</c> will use when maps 91–100 enter it (<c>MapCatalog.CaisDaColuna</c>, map <c>map_091_cais_da_coluna</c>).
+        /// </summary>
+        public const string CaisDaColuna = "cais_da_coluna";
 
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
@@ -611,6 +616,16 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("makarios_cartas"),
                 },
                 new List<string> { CityShopCatalog.PaviosTehat }),
+
+            // Cais da Coluna (the Reinos do Céu, região 16; the two people of the ficha): Ammo, whose last caravan comes in here (the city's shop), and Adda, retired from the
+            // Tower, who looks after the Roda Celeste (second mission). Their own ids and recipes, not the Ammo and Adda of the first regions. The Remadores are props: they do not speak.
+            new CitySpec(CaisDaColuna, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("ammo_caravaneiro", CityShopCatalog.UltimaCaravanaAmmo),
+                    new CityResidentSpec("adda_roda"),
+                },
+                new List<string> { CityShopCatalog.UltimaCaravanaAmmo }),
         };
 
         /// <summary>Ammo, the peddler: not a resident of one city, he is wherever his mule is today (<see cref="ShopRotation.MascateRegion"/>).</summary>

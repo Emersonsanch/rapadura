@@ -382,6 +382,7 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 
 | Região | Cidade | Moradores | Loja | Missões |
 |---|---|---|---|---|
+| Reinos do Céu (mapas 91–100, ainda fora do `MapCatalog`) | **Cais da Coluna** (`cais_da_coluna`) | Ammo, o Caravaneiro (rua Sul), Adda, o Guardião da Roda (píer do Sol, rua Leste) | **A Última Caravana do Ammo** (`shop_ultima_caravana_ammo`) | Ammo: "Clandestinas nos Fardos"; Adda: "Aves nas Jarras" |
 | Limiar Profundo (mapas 83–90, ainda fora do `MapCatalog`) | **Fortaleza da Última Lâmpada** (`fortaleza_ultima_lampada`) | Tehat, a Tecelã de Pavios (rua Oeste), Pamour, o Comandante das Lâmpadas (rua Leste), Makarios, o Escritor de Cartas (rua Sul) | **Pavios da Tehat** (`shop_pavios_tehat`) | Pamour: "Morcegos na Muralha"; Makarios: "Ushabtis na Estrada das Cartas" |
 | Margens da Mistura (mapas 77–82, ainda fora do `MapCatalog`) | **Dur-Jarras, a Cidade-Zigurate** (`dur_jarras`) | Atrahasis, o Mestre das Balsas (rua Oeste), Utnapishtim, o Guardião do Relógio e Siduri, a Taberneira (rua Leste), Sin-leqi-unninni, o Bibliotecário (rua Sul) | **Betume do Atrahasis** (`shop_betume_atrahasis`) | Utnapishtim: "Leões nos Canais"; Sin-leqi-unninni: "Besouros nas Tábuas" |
 | Rio das Doze Horas (mapas 71–76, ainda fora do `MapCatalog`) | **Cais de Mesektet** (o cais da barca da noite, `cais_de_mesektet`) | Sinuhe, o Barqueiro-Chefe (salão na cabeça da praça), Khunanup, o Comerciante do Cais (rua Oeste), Djedi, o Mágico (rua Leste), Setne, o Bibliotecário do Caderno (rua Sul) | **Trocas do Khunanup** (`shop_trocas_khunanup`) | Sinuhe: "Crocodilos no Cais"; Djedi: "Escorpiões no Areal" |
@@ -753,6 +754,19 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
   (`enemy_mountain_rope_ushabti` faz o Ushabti Apagado; **Lamparina Rúnica** + 260 ouro, 3900 XP). Testes: `CityUltimaLampadaTests`.
 - **Falta:** os mapas 83–90 no catálogo e no overworld, os cinco portões abrindo para as covas (hoje selados; as 3 ruas são as saídas), a rede de lâmpadas (3 anéis de zona segura), o evento Maré de
   Treva, a Raposa-Joia e o conjunto Mil Lâmpadas.
+
+**Cais da Coluna** (região 16 — Reinos do Céu, mapa 91; cidade de retorno de 91–100):
+- **Passeio da cidade:** receita `CityTownRecipes.CaisDaColuna` (`CityTownRecipes.CaisDaColuna.cs`) no estilo novo `TownStyles.SkyQuay` (`TownArchitecture.SkyQuay`, linhas 26 e 27 da `TownPalette`: branco `#FAF7EF`,
+  ouro `#E8C35A`, lilás `#C7B6EE`, azul-céu `#BFD9F2`, vidro, luz sólida e as cinco cores dos elementos). A casa é um **pavilhão de vidro e ouro** (`TownBuildingSpec.SkyPavilion`, `TownKit.SkyPavilionHouse`): plinto de nuvem firme,
+  vidro entre montantes de ouro, cúpula lilás baixa com chama, varanda com toldo lilás. Peças (`TownKit.SkyQuay.cs`): `ElementFountain` (as **cinco fontes**, Ar Sereno, Vento Vivo, Luz, Água Viva, Fogo Vivo; 0,9 m),
+  `ColumnOfGlory` (**pé da Coluna da Glória** ao norte, 1,6 m, 30 m de luz; sem figura), `SkyBarge` (**Barca do Sol** e **Barca da Lua** atracadas ao sul dos píeres; cadeia de cápsulas de 1,8 m), `LightPier`, `LightRower` (os **Remadores**: silhuetas de luz, sem fala, sem colisor),
+  `CloudPuff`, `IslandLightsGap` (dois buracos na nuvem que juntos mostram as **27 cidades**), portão de pilones de ouro (`TownKit.SkyQuayGate`), vitrine do Ammo (`TownShopDressing.LastCaravan`). Ruas **Oeste** (píer da Lua), **Leste** (píer do Sol, pavilhão do Adda) e **Sul**
+  (a chegada da caravana: balcão do Ammo) de 19 m, sem rua ao norte; tudo dentro de 22,5 m em y = 0 (`CityLayoutRules.Validate` coberto por `CityCaisDaColunaTests`; a barraca do mascate em `PlazaRadius·(0,575; −0,675)` fica livre).
+- **Postos:** Boia de Luz (92), Cabine da Proa (93), Eixo da Roda (94), Ilhota Parada (95), Pérgola do Jardineiro (96), Cabine da Popa (97), Degrau Um (98), Mão Aberta (99) e a Varanda (100) são `K.Outpost` do catálogo de mapas, não cidades com `CitySpec`: entram com os mapas.
+- **Respawn:** a cidade aceita `ApplyDefeatIn`; os mapas 91–100 ainda **não estão** no `MapCatalog`: quando entrarem (`MapCatalog.CaisDaColuna = "cais_da_coluna"`, mapa `map_091_cais_da_coluna`, `K.Capital`, região `MapRegion.ReinosDoCeu`, retorno `CaisDaColuna` em 91–100), falta ligar `RespawnCityFor` e os testes de respawn.
+- **A Última Caravana do Ammo** (diária, 3 vagas que giram, tema Especialidade; as fichas 91–100 não pedem equipamento): fixos Poção de Vida e de Mana, **Lamparina Rúnica** (155), **Óleo de Fogo Eterno** (190), **Capa de Tempestade** (1100), **Asas de Lona** (420), **Corda** (40) e **Teriaga** (50); giram carne, erva, ferro, Runa de Clareza, Runa de Cura, Amuleto da Sorte, Pedra da Bênção e Pedra da Alma (nunca Vida/Caos). O mascate nunca para lá.
+- **Missões da cidade:** Ammo pede 8 sombras fora dos fardos (`enemy_forest_creeping_dark` faz a Sombra Clandestina; poções + 270 ouro, 4000 XP); depois Adda pede 6 aves fora das jarras (`enemy_forest_dimmed_ibis` faz a Ave de Nuvem Apagada; **Capa de Tempestade** + 280 ouro, 4200 XP). Testes: `CityCaisDaColunaTests`.
+- **Falta:** os mapas 91–100 no catálogo e no overworld, a pouca gravidade do 91, o evento Chegada da Caravana, a Barca da Lua encostar só à noite (hoje as duas ficam atracadas), o céu de estrelas por baixo e o conjunto Cais de Luz.
 
 Código: `CityCatalog`, `CityShopCatalog` (dados), `CityTexts` (textos en/pt-BR), `VillageHubButton` (o mesmo painel
 para toda cidade), `CityFastTravelPanel` (Barcas de Luz), `CitySafeZoneHud` (aviso), `WorldMapCityPresence` (zona

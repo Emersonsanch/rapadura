@@ -50,6 +50,17 @@ namespace Rapadura.Gameplay.World.Cities.Town
                     continue;
                 }
 
+                if (prop.Kind == CityPropKind.SkyBarge)
+                {
+                    float scale = prop.Scale <= 0f ? 1f : prop.Scale;
+                    foreach (Vector2 at in TownKit.SkyBargeColliders(prop.Position, scale))
+                    {
+                        solids.Add(CitySolid.Capsule(at, TownKit.SkyBargeHalfBeam * scale, WallColliderHeight, nameof(CityPropKind.SkyBarge)));
+                    }
+
+                    continue;
+                }
+
                 CitySolid? solid = PropSolid(prop, layout.WalkBounds);
                 if (solid.HasValue)
                 {
@@ -329,6 +340,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.NicheStele: return CitySolid.Capsule(prop.Position, TownKit.NicheSteleRadius * s, 2.2f, owner);
                 case CityPropKind.WickRack: return CitySolid.Capsule(prop.Position, TownKit.WickRackRadius * s, 1.8f, owner);
                 case CityPropKind.OilCistern: return CitySolid.Capsule(prop.Position, TownKit.OilCisternRadius * s, 1.2f, owner);
+                case CityPropKind.ElementFountain: return CitySolid.Capsule(prop.Position, TownKit.ElementFountainRadius * s, 1.6f, owner);
+                case CityPropKind.ColumnOfGlory: return CitySolid.Capsule(prop.Position, TownKit.ColumnOfGloryRadius * s, WallColliderHeight, owner);
 
                 case CityPropKind.MeltStream:
                 case CityPropKind.CloudGap:
@@ -338,6 +351,11 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.BitumenCanal:
                 case CityPropKind.LampRampart:
                 case CityPropKind.CoveGate:
+                case CityPropKind.SkyBarge:
+                case CityPropKind.LightPier:
+                case CityPropKind.CloudPuff:
+                case CityPropKind.IslandLightsGap:
+                case CityPropKind.LightRower:
                 case CityPropKind.GoldenRiver:
                 case CityPropKind.CanalBridge:
                 case CityPropKind.LeafBridge:

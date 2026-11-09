@@ -354,6 +354,12 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string PaviosTehat = "shop_pavios_tehat";
 
+        /// <summary>
+        /// A Última Caravana do Ammo (Cais da Coluna, Docs/Mapas100.md map 91): Ammo's counter at the end of the road. The fichas of maps 91–100 ask for no gear of their own: he sells
+        /// what the road up here has always needed (potions, the runic lamp and its oil, the storm cloak and canvas wings for the high wind, rope and theriac) and what the caravans bring. The counter turns daily.
+        /// </summary>
+        public const string UltimaCaravanaAmmo = "shop_ultima_caravana_ammo";
+
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
@@ -928,6 +934,28 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_vara_equilibrio", 480, 1),
                 new CityShopEntry("item_corda_escalada", 40, 3),
                 // The rotation: what the caravans carry down to the last lamp.
+                new CityShopEntry("item_cooked_meat", 6, 10, rotating: true),
+                new CityShopEntry("item_herb", 3, 10, rotating: true),
+                new CityShopEntry("item_iron", 8, 20, rotating: true),
+                new CityShopEntry("item_runa_clareza", 15, 2, rotating: true),
+                new CityShopEntry("item_runa_cura", 15, 2, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+                new CityShopEntry("item_pedra_alma", 35, 1, rotating: true),
+            })),
+
+            // ---- Cais da Coluna: the last caravan of Ammo (maps 91–100 ask for no gear; what the high road needs); daily ----
+            new CityShopSpec(UltimaCaravanaAmmo, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(UltimaCaravanaAmmo, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                new CityShopEntry("item_lamparina_runica", 155, 1),
+                new CityShopEntry("item_oleo_fogo_eterno", 190, 2),
+                new CityShopEntry("item_capa_tempestade", 1100, 1),
+                new CityShopEntry("item_asas_lona_takhsich", 420, 1),
+                new CityShopEntry("item_corda_escalada", 40, 3),
+                new CityShopEntry("item_teriaga", 50, 4),
+                // The rotation: what the last caravan carried up.
                 new CityShopEntry("item_cooked_meat", 6, 10, rotating: true),
                 new CityShopEntry("item_herb", 3, 10, rotating: true),
                 new CityShopEntry("item_iron", 8, 20, rotating: true),

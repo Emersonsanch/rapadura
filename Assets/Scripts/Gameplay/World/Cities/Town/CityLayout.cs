@@ -369,6 +369,22 @@ namespace Rapadura.Gameplay.World.Cities.Town
         WickRack = 132,
         /// <summary>Fortaleza: a cistern of lamp oil, basalt with copper bands (Variant 1: with a smaller cistern against it).</summary>
         OilCistern = 133,
+        // ---- Cais da Coluna (Reinos do Céu; drawn by TownKit.SkyQuay) ----
+
+        /// <summary>Cais da Coluna: one of the five fountains of the light elements (Variant 0–4: Ar Sereno, Vento Vivo, Luz, Água Viva, Fogo Vivo; <see cref="TownKit.ElementFountainRadius"/>).</summary>
+        ElementFountain = 134,
+        /// <summary>Cais da Coluna: the foot of the Coluna da Glória, steps of cloud and a shaft of light going up out of sight (<see cref="TownKit.ColumnOfGloryRadius"/>).</summary>
+        ColumnOfGlory = 135,
+        /// <summary>Cais da Coluna: a Barca de Luz alongside its pier (Variant 0 Sun, 1 Moon; several colliders: <see cref="TownKit.SkyBargeColliders"/>).</summary>
+        SkyBarge = 136,
+        /// <summary>Cais da Coluna: bars of solid light across a street along world x and studs on its curbs (no collider).</summary>
+        LightPier = 137,
+        /// <summary>Cais da Coluna: a bank of cloud, walked through (Variant 1: bigger).</summary>
+        CloudPuff = 138,
+        /// <summary>Cais da Coluna: a gap in the cloud with the little lights of the island's cities far below (Variant 0–1 share the 27; no collider).</summary>
+        IslandLightsGap = 139,
+        /// <summary>Cais da Coluna: a Remador, a silhouette of light that does not speak (Variant 1: on a barge's deck; no collider).</summary>
+        LightRower = 140,
     }
 
     public enum CityExitKind

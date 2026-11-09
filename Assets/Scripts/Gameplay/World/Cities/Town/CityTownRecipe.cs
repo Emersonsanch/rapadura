@@ -349,6 +349,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             spec.PapyrusHall |= style.Architecture == TownArchitecture.PapyrusQuay && plainHouse;
             spec.ZigguratHall |= style.Architecture == TownArchitecture.Ziggurat && plainHouse;
             spec.BasaltKeep |= style.Architecture == TownArchitecture.BasaltFort && plainHouse;
+            spec.SkyPavilion |= style.Architecture == TownArchitecture.SkyQuay && plainHouse;
 
             switch (r.Kind)
             {

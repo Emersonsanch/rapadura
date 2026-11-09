@@ -172,6 +172,13 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.NicheStele: NicheStele(b, s, prop.Variant); return true;
                 case CityPropKind.WickRack: WickRack(b, s, prop.Variant); return true;
                 case CityPropKind.OilCistern: OilCistern(b, s, prop.Variant); return true;
+                case CityPropKind.ElementFountain: ElementFountain(b, s, prop.Variant); return true;
+                case CityPropKind.ColumnOfGlory: ColumnOfGlory(b, s); return true;
+                case CityPropKind.SkyBarge: SkyBarge(b, s, prop.Variant); return true;
+                case CityPropKind.LightPier: LightPier(b, s); return true;
+                case CityPropKind.CloudPuff: CloudPuff(b, s, prop.Variant); return true;
+                case CityPropKind.IslandLightsGap: IslandLightsGap(b, s, prop.Variant); return true;
+                case CityPropKind.LightRower: LightRower(b, s, prop.Variant); return true;
                 default: return false;
             }
         }
@@ -975,6 +982,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
                 case TownShopDressing.WickLoom:
                     BasaltFortDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.LastCaravan:
+                    SkyQuayDressing(b, spec, x, y, z, zFacade);
                     break;
 
                 case TownShopDressing.AirBottles:

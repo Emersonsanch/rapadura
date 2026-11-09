@@ -88,6 +88,8 @@ namespace Rapadura.Editor
         private static void PreviewDurJarras() => Preview(CityCatalog.DurJarras);
         [MenuItem(Root + "Preview Walkable Town/Fortaleza da Última Lâmpada (capital, Limiar Profundo)", priority = 29)]
         private static void PreviewFortalezaUltimaLampada() => Preview(CityCatalog.FortalezaUltimaLampada);
+        [MenuItem(Root + "Preview Walkable Town/Cais da Coluna (capital, Reinos do Céu)", priority = 29)]
+        private static void PreviewCaisDaColuna() => Preview(CityCatalog.CaisDaColuna);
 
         [MenuItem(Root + "Preview Walkable Town/Toggle Night", priority = 30)]
         private static void ToggleNight()

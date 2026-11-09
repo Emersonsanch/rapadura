@@ -98,6 +98,7 @@ namespace Rapadura.Gameplay.World.Cities
     /// the beetles out of the reed shelves of the tablets and pays with a reed boat (the flood, and the pitch of map 79).
     /// Fortaleza da Última Lâmpada (map 83): Pamour asks the cousins to chase the bats off the lamps of the rampart, then Makarios wants the dimmed
     /// ushabti off the road of his letters and pays with a runic lamp (the dark of map 88).
+    /// Cais da Coluna (map 91): Ammo wants the stowaway shadows out of the bales of his last caravan, then Adda wants the dimmed birds off the jars of the Roda Celeste and pays with a storm cloak.
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -145,6 +146,8 @@ namespace Rapadura.Gameplay.World.Cities
         public const string DurJarrasBeetles = "quest_city_dur_jarras_beetles_on_the_tablets";
         public const string UltimaLampadaBats = "quest_city_ultima_lampada_bats_on_the_rampart";
         public const string UltimaLampadaUshabti = "quest_city_ultima_lampada_ushabti_on_the_letter_road";
+        public const string CaisColunaStowaways = "quest_city_cais_coluna_stowaways_in_the_bales";
+        public const string CaisColunaBirds = "quest_city_cais_coluna_birds_on_the_jars";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -345,6 +348,15 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "makarios_cartas", new RegionQuestSpec(UltimaLampadaUshabti, BiomeType.Forest, UltimaLampadaBats, 3900,
                 new[] { new RegionObjectiveSpec("chase_the_ushabti", QuestObjectiveType.KillEnemyType, "enemy_mountain_rope_ushabti", 6) },
                 new[] { new RegionRewardSpec("item_lamparina_runica", 1), new RegionRewardSpec("item_gold", 260) })),
+
+            // -- Cais da Coluna: Ammo, then Adda. The creeping dark stands in for the Sombra Clandestina of the ficha (Docs/Mapas100.md 91) and the dimmed ibis for its
+            // Ave de Nuvem Apagada, until the region's own creatures exist. --
+            new CityQuestSpec(CityCatalog.CaisDaColuna, "ammo_caravaneiro", new RegionQuestSpec(CaisColunaStowaways, BiomeType.Forest, null, 4000,
+                new[] { new RegionObjectiveSpec("chase_the_stowaways", QuestObjectiveType.KillEnemyType, "enemy_forest_creeping_dark", 8) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 270) })),
+            new CityQuestSpec(CityCatalog.CaisDaColuna, "adda_roda", new RegionQuestSpec(CaisColunaBirds, BiomeType.Forest, CaisColunaStowaways, 4200,
+                new[] { new RegionObjectiveSpec("chase_the_birds", QuestObjectiveType.KillEnemyType, "enemy_forest_dimmed_ibis", 6) },
+                new[] { new RegionRewardSpec("item_capa_tempestade", 1), new RegionRewardSpec("item_gold", 280) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();

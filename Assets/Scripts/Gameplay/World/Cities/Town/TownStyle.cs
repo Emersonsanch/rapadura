@@ -171,6 +171,11 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// no altar, no figure). Always underground: there is no sky over it.
         /// </summary>
         BasaltFort = 24,
+        /// <summary>
+        /// The Cais da Coluna (the Reinos do Céu, Docs/Mapas100.md map 91, style <c>SkyQuay</c>): pavilions of glass and gold on firm cloud, piers of solid light with a Barca de Luz
+        /// alongside each, a round plaza with the five fountains of the elements, the foot of the Coluna da Glória and gaps in the cloud showing the cities far below (no figure of a god).
+        /// </summary>
+        SkyQuay = 25,
     }
 
     /// <summary>
@@ -828,6 +833,28 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Street = TownSwatch.LampBasalt, StreetEdge = TownSwatch.LampCopper, Sidewalk = TownSwatch.AbyssIndigo,
             Plaza = TownSwatch.LampBasalt, PlazaAlt = TownSwatch.AbyssIndigo,
             Fence = TownSwatch.LampBasalt, Plinth = TownSwatch.AbyssIndigo,
+            HouseRoof = TownRoofKind.Flat,
+        };
+
+        /// <summary>
+        /// Cais da Coluna (Docs/Mapas100.md região 16): picked by hand from the ficha's palette. Cloud white #FAF7EF, gold #E8C35A, lilac #C7B6EE, sky blue #BFD9F2 and the
+        /// five colours of the elements (rows 26–27 of <see cref="TownPalette"/>). Houses are pavilions (<see cref="TownBuildingSpec.SkyPavilion"/>); the ground is
+        /// cloud, the streets solid light edged in gold, the plaza white and lilac. The Reinos do Céu have no world-map biome: <see cref="TownStyle.Region"/> is the borrowed Forest.
+        /// </summary>
+        public static readonly TownStyle SkyQuay = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Desert,
+            Architecture = TownArchitecture.SkyQuay,
+            Walls = new[] { TownSwatch.QuayGlassPane, TownSwatch.QuayCloud, TownSwatch.QuaySkyBlue },
+            Trims = new[] { TownSwatch.QuayGold, TownSwatch.QuayLilac, TownSwatch.SolidLight },
+            Roofs = new[] { TownSwatch.QuayLilac, TownSwatch.QuaySkyBlue },
+            Joinery = new[] { TownSwatch.QuayGold, TownSwatch.QuayCloud },
+            Accent = TownSwatch.SolidLight,
+            Ground = TownSwatch.QuayCloud, GroundAlt = TownSwatch.QuayCloudShade,
+            Street = TownSwatch.SolidLight, StreetEdge = TownSwatch.QuayGold, Sidewalk = TownSwatch.QuayCloudShade,
+            Plaza = TownSwatch.QuayCloud, PlazaAlt = TownSwatch.QuayLilac,
+            Fence = TownSwatch.QuayGold, Plinth = TownSwatch.QuayCloud,
             HouseRoof = TownRoofKind.Flat,
         };
     }

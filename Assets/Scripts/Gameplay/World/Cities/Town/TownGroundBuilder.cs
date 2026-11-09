@@ -63,7 +63,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
             }
 
             Rect r = CityGeometry.Inflate(lot.Footprint, 0.3f);
-            b.Flat(r.xMin, r.yMin, r.xMax, r.yMax, 0.016f, TownSwatch.Dirt);
+            // The Cais da Coluna stands on firm cloud: no bare earth under its pavilions.
+            b.Flat(r.xMin, r.yMin, r.xMax, r.yMax, 0.016f, style.Architecture == TownArchitecture.SkyQuay ? style.Plinth : TownSwatch.Dirt);
             // The yard behind the house: a little darker.
             Rect yard = CitySolids.LocalRectToWorld(lot, new Rect(-lot.Width * 0.5f, lot.Depth * 0.5f, lot.Width, 4.2f));
             if (lot.Kind != CityLotKind.LampHouse && lot.Kind != CityLotKind.ShipDock)
@@ -85,9 +86,12 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Strip(b, d, n, 0f, roadEnd, -halfRoad, halfRoad, 0.022f, style.Street);
             Strip(b, d, n, 0f, roadEnd, -halfRoad - 0.05f, -halfRoad + 0.22f, 0.03f, style.StreetEdge);
             Strip(b, d, n, 0f, roadEnd, halfRoad - 0.22f, halfRoad + 0.05f, 0.03f, style.StreetEdge);
-            // Worn wheel ruts.
-            Strip(b, d, n, layout.PlazaRadius, roadEnd, -0.9f, -0.6f, 0.026f, TownSwatch.DirtDark);
-            Strip(b, d, n, layout.PlazaRadius, roadEnd, 0.6f, 0.9f, 0.026f, TownSwatch.DirtDark);
+            // Worn wheel ruts (not on the piers of light of the Cais da Coluna).
+            if (style.Architecture != TownArchitecture.SkyQuay)
+            {
+                Strip(b, d, n, layout.PlazaRadius, roadEnd, -0.9f, -0.6f, 0.026f, TownSwatch.DirtDark);
+                Strip(b, d, n, layout.PlazaRadius, roadEnd, 0.6f, 0.9f, 0.026f, TownSwatch.DirtDark);
+            }
 
             // Sidewalks, tiled, with curb faces; from the plaza edge to the end of the street.
             float from = layout.PlazaRadius + 0.25f;

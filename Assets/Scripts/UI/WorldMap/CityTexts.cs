@@ -123,6 +123,7 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.TrocasKhunanup, "Khunanup's Trades", "Trocas do Khunanup"),
                 Shop(CityShopCatalog.BetumeAtrahasis, "Atrahasis' Bitumen Yard", "Betume do Atrahasis"),
                 Shop(CityShopCatalog.PaviosTehat, "Tehat's Wicks", "Pavios da Tehat"),
+                Shop(CityShopCatalog.UltimaCaravanaAmmo, "Ammo's Last Caravan", "A Última Caravana do Ammo"),
             };
 
             // ---- Cities ----
@@ -214,6 +215,10 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.FortalezaUltimaLampada, "Fortress of the Last Lamp", "Fortaleza da Última Lâmpada", "Fortress", "Fortaleza",
                 "The fortress of the guardians of the lamps, cut into the basalt on the edge of the Land of Darkness: keeps of dark stone with rows of lit niches, a great arc of rampart over the abyss with a thousand little flames and five sealed gates, one for each pit of the dark. In the middle of it burns the Lâmpada-Mãe Grande, sister of the Vila das Lamparinas. There is no sky here: the guards keep the hour by the oil.",
                 "A fortaleza dos guardiões das lâmpadas, escavada no basalto na borda da Terra da Treva: torres de pedra escura com fileiras de nichos acesos, um grande arco de muralha sobre o abismo com mil chamas pequenas e cinco portões selados, um para cada cova da treva. No meio arde a Lâmpada-Mãe Grande, irmã da Vila das Lamparinas. Aqui não tem céu: os guardas contam a hora pelo óleo.");
+
+            AddCity(entries, CityCatalog.CaisDaColuna, "Column Quay", "Cais da Coluna", "Quay", "Cais",
+                "The quay above the clouds where the Barcas de Luz moor: pavilions of glass and gold on firm cloud, the pier of the Sun to the east and the pier of the Moon to the west, a round plaza with five fountains, one for each light, and to the north the foot of the Coluna da Glória going up out of sight. Far below, through the gaps in the cloud, the twenty-seven cities of the island show as little lights.",
+                "O cais sobre as nuvens onde as Barcas de Luz encostam: pavilhões de vidro e ouro em nuvem firme, o píer do Sol a leste e o píer da Lua a oeste, uma praça redonda com cinco fontes, uma para cada luz, e ao norte o pé da Coluna da Glória subindo até sumir. Lá embaixo, pelos buracos da nuvem, as vinte e sete cidades da ilha aparecem como luzinhas.");
 
             AddCity(entries, CityCatalog.PalafitasTarchon, "Tarchon Stilts", "Palafitas de Tarchon", "Tarchon", "Tarchon",
                 "The trols' city in the open swamp: long houses on tall piles with leaf roofs down to the floor, plank boardwalks over the bog water, nets drying, baskets as tall as a cousin and floating reed islands. At night the swamp fills with will-o'-wisps, sparks caught in the Ar Sereno; half the trols stared at them until they forgot themselves, and every spark set free wakes a neighbour.",
@@ -1151,6 +1156,23 @@ namespace Rapadura.UI.WorldMap
                 ("Ícaro, the ink is not paint. ...It is a very good drawing of the Treva. I will send it to my son; he needs to laugh.", "Ícaro, tinta não é tinta de pintar. ...É um desenho muito bom da Treva. Vou mandar para o meu filho; ele precisa rir."),
                 ("Lavine, write to your grandmother. Vó Edna will not say she is waiting. I am telling you she is waiting.", "Lavine, escreve para a sua avó. A Vó Edna não vai dizer que está esperando. Eu estou dizendo que ela está esperando."),
                 ("Far away is only a place letters have not reached yet. I write, and I wait for the road to clear.", "Longe é só um lugar onde a carta ainda não chegou. Eu escrevo, e espero a estrada abrir."));
+
+            // ---- Cais da Coluna (Ammo and Adda at the end of the road; the Remadores do not speak) ----
+            AddResident(entries, "ammo_caravaneiro", "Ammo, the Caravaneer", "Ammo, o Caravaneiro",
+                ("Joaquim, I walked every road on that island below, and now the road just stops at a pier. Good thing you came. I was running out of people to tell it to.", "Joaquim, eu andei todas as estradas dessa ilha aí embaixo, e agora a estrada acaba num píer. Ainda bem que você veio. Eu já estava ficando sem gente para contar."),
+                ("Maria, every city sent a present up with me, and every one of them says it is for you cousins. I told them you would only share it. They said that was the point.", "Maria, cada cidade mandou um presente comigo, e todos dizem que é para vocês primos. Eu falei que vocês iam dividir. Disseram que era essa a ideia."),
+                ("Maithe, you went up the barge's rope without touching the gangway. Teimosa would have respected that. Teimosa respected nobody.", "Maithe, você subiu pela corda da barca sem encostar na prancha. A Teimosa teria respeitado isso. A Teimosa não respeitava ninguém."),
+                ("Ícaro, no, you cannot take the mast off to see how it works. ...You already asked the Remadores, didn't you. They do not answer. That is not a yes.", "Ícaro, não, você não pode tirar o mastro para ver como funciona. ...Você já perguntou para os Remadores, não foi. Eles não respondem. Isso não é um sim."),
+                ("Lavine, your Vô Jorge and I shared a road for thirty years, and he never once let me tell the story of the bridge my way. Vó Edna says he was right. I am still telling it my way.", "Lavine, o seu Vô Jorge e eu dividimos estrada por trinta anos, e ele nunca me deixou contar a história da ponte do meu jeito. A Vó Edna diz que ele tinha razão. Eu continuo contando do meu jeito."),
+                ("This is the last caravan. I have said that before. This time the road agrees with me.", "Essa é a última caravana. Eu já disse isso antes. Dessa vez a estrada concorda comigo."));
+
+            AddResident(entries, "adda_roda", "Adda, Keeper of the Wheel", "Adda, o Guardião da Roda",
+                ("Joaquim, the Roda Celeste has twelve jars and I have counted them every morning since the Tower let me go. There are still twelve. You would be surprised how good that feels.", "Joaquim, a Roda Celeste tem doze jarras e eu conto todas elas toda manhã desde que a Torre me dispensou. Continuam doze. Você nem imagina como isso faz bem."),
+                ("Maria, every jar that comes round is full of light going home, and I cry every time one comes round. Twelve jars, Maria. It is a long day.", "Maria, cada jarra que passa vem cheia de luz voltando para casa, e eu choro toda vez que uma passa. Doze jarras, Maria. O dia é comprido."),
+                ("Maithe, you stood on the rim of the Wheel while it turned and did not hold on. I kept the Tower for forty years and never once did that. Don't do it again; do it again.", "Maithe, você ficou de pé na borda da Roda com ela girando e não se segurou. Eu guardei a Torre quarenta anos e nunca fiz isso. Não faz de novo; faz de novo."),
+                ("Ícaro, the Wheel is not stuck. It is slow. ...Put the wrench down, Ícaro. The Wheel is older than wrenches.", "Ícaro, a Roda não está emperrada. Ela é devagar. ...Larga a chave, Ícaro. A Roda é mais velha que chave."),
+                ("Lavine, Vó Edna wrote to ask if I am eating. I am a very old man who looks after a wheel in the sky, and I went and made soup.", "Lavine, a Vó Edna escreveu perguntando se eu estou comendo. Eu sou um homem muito velho que cuida de uma roda no céu, e fui lá fazer sopa."),
+                ("The Barca da Lua collects it, the Roda lifts it, the Coluna takes it home. I only count the jars.", "A Barca da Lua junta, a Roda sobe, a Coluna leva para casa. Eu só conto as jarras."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

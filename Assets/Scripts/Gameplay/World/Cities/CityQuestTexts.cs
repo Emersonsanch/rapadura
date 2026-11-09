@@ -716,6 +716,38 @@ namespace Rapadura.Gameplay.World.Cities
             new LocalizationEntry("quest.city_ultima_lampada_ushabti_on_the_letter_road.active",
                 "They stand in the road with nothing to carry, and they will not move for a letter.",
                 "Eles ficam parados na estrada sem nada para carregar, e não saem da frente por causa de carta."),
+
+            // ================= Cais da Coluna — Ammo =================
+            new LocalizationEntry("quest.city_cais_coluna_stowaways_in_the_bales.title", "Stowaways in the Bales", "Clandestinas nos Fardos"),
+            new LocalizationEntry("quest.city_cais_coluna_stowaways_in_the_bales.description",
+                "Ammo's last caravan came all the way up to the Cais da Coluna with a present from every city of the island, and shadows rode up with it, hidden between the bales. They want to reach the sky without paying the way. Ammo asked the cousins to chase them out before the Barca da Lua takes the bales aboard.",
+                "A última caravana do Ammo subiu até o Cais da Coluna com um presente de cada cidade da ilha, e sombras vieram junto, escondidas entre os fardos. Elas querem chegar no céu sem pagar o caminho. O Ammo pediu aos primos que espantem elas antes de a Barca da Lua levar os fardos."),
+            new LocalizationEntry("quest.city_cais_coluna_stowaways_in_the_bales.obj_chase_the_stowaways", "Chase the stowaway shadows out of the bales", "Espantar as sombras clandestinas dos fardos"),
+            new LocalizationEntry("quest.city_cais_coluna_stowaways_in_the_bales.journal",
+                "With the shadows gone, Ammo untied the last bale himself, and there was nothing in it but a jar of Vó Edna's rapadura and a note in her hand. He sat down on the bale and laughed until he cried. He said he had carried that jar for three years without knowing, and that it was exactly like her.",
+                "Com as sombras embora, o Ammo desamarrou o último fardo ele mesmo, e dentro só tinha um pote de rapadura da Vó Edna e um bilhete com a letra dela. Ele sentou no fardo e riu até chorar. Disse que carregou aquele pote três anos sem saber, e que isso era a cara dela."),
+            new LocalizationEntry("quest.city_cais_coluna_stowaways_in_the_bales.offer",
+                "Jorge's grandchildren, up here where the road ends! Sit, sit. I am Ammo, and this is the last caravan I will ever lead, and eight shadows have stowed away in my bales. Your grandpa would say to charge them a fare. Chase them off instead.",
+                "Os netos do Jorge, aqui em cima onde a estrada acaba! Senta, senta. Eu sou o Ammo, e essa é a última caravana que eu vou puxar, e oito sombras se esconderam nos meus fardos. O vô de vocês diria para cobrar passagem. Espantem elas, que é melhor."),
+            new LocalizationEntry("quest.city_cais_coluna_stowaways_in_the_bales.active",
+                "They slide between the bales when nobody is looking, and they are very quiet about it.",
+                "Elas escorregam entre os fardos quando ninguém está olhando, e são bem quietas nisso."),
+
+            // ================= Cais da Coluna — Adda =================
+            new LocalizationEntry("quest.city_cais_coluna_birds_on_the_jars.title", "Birds on the Jars", "Aves nas Jarras"),
+            new LocalizationEntry("quest.city_cais_coluna_birds_on_the_jars.description",
+                "Birds dimmed by the last of the shadow have come to roost on the twelve jars of the Roda Celeste, and every jar they sit on carries less light up the Coluna. Adda, who kept the Tower for years and now looks after the Wheel, asked the cousins to shoo them away.",
+                "Aves apagadas pelo resto da sombra vieram pousar nas doze jarras da Roda Celeste, e cada jarra em que elas sentam leva menos luz para a Coluna. O Adda, que guardou a Torre por anos e agora cuida da Roda, pediu aos primos que enxotem elas."),
+            new LocalizationEntry("quest.city_cais_coluna_birds_on_the_jars.obj_chase_the_birds", "Shoo the dimmed birds off the jars of the Wheel", "Enxotar as aves apagadas das jarras da Roda"),
+            new LocalizationEntry("quest.city_cais_coluna_birds_on_the_jars.journal",
+                "When the jars were clear, the Wheel gave one long turn and a thread of light climbed the Coluna higher than Adda had seen in years. He cried, of course. Then he gave Maithe the storm cloak he wore on the Tower and told her the wind up here was not to be trusted either.",
+                "Quando as jarras ficaram livres, a Roda deu uma volta longa e um fio de luz subiu pela Coluna mais alto do que o Adda via fazia anos. Ele chorou, claro. Depois deu à Maithe a capa de tempestade que usava na Torre e disse que o vento aqui em cima também não é de confiança."),
+            new LocalizationEntry("quest.city_cais_coluna_birds_on_the_jars.offer",
+                "You chased Ammo's stowaways. Good. I am Adda; I kept the Tower until my knees retired me, and now I keep the Wheel, which is the same work with a better view. Six dimmed birds are sitting on my jars. Shoo them off and you can have my old storm cloak.",
+                "Vocês espantaram as clandestinas do Ammo. Bom. Eu sou o Adda; guardei a Torre até os meus joelhos me aposentarem, e agora guardo a Roda, que é o mesmo trabalho com uma vista melhor. Seis aves apagadas estão sentadas nas minhas jarras. Enxotem elas e a minha capa de tempestade velha é de vocês."),
+            new LocalizationEntry("quest.city_cais_coluna_birds_on_the_jars.active",
+                "They come back to the same jar every time. Birds are like that. So am I.",
+                "Elas voltam sempre para a mesma jarra. Ave é assim. Eu também sou."),
         };
 
         public static void EnsureLoaded(LocalizationManager localization)

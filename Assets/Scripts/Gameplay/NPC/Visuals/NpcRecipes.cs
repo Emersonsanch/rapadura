@@ -1659,6 +1659,37 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 Story = "Makarios, o pai que escreve aos filhos nas cartas maniqueias de Kellis (outro da mesma família que o Makarios do Cais da Lua); aqui, escreve na Fortaleza e dá a 2ª missão, eco das cartas do Vô Jorge",
             },
 
+            // Cais da Coluna (the Reinos do Céu, Docs/Mapas100.md região 16): the two people of the ficha, the old road and the old watch at the end of the road, in the white and
+            // gold of the quay (their own recipes, not the Ammo and Adda of the first regions: same men, older and dressed for the sky). The Remadores are props of light (TownKit.LightRower).
+
+            // Ammo, the caravaneer of the last caravan (the city's shop): an old man finally arrived, a long white beard under a white turban, a white kaftan with gold at the
+            // hem and still the road dust on the sash, the satchel and the bell of Teimosa, the caravan staff in one hand. Tells the story with both arms.
+            new NpcRecipe
+            {
+                Id = "ammo_caravaneiro", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Slim, Height = 0.98f, Posture = NpcPosture.Relaxed,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Jolly, Hair = NpcHair.Short, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Long,
+                Headwear = NpcHeadwear.Turban, HeadColor = NpcSwatch.QuayWhite, HeadTrim = NpcSwatch.QuayGold,
+                Garment = NpcGarment.Kaftan, Main = NpcSwatch.QuayWhite, Trim = NpcSwatch.QuayGold, Sleeves = NpcSwatch.QuayWhite, Boots = NpcSwatch.Leather,
+                Layers = NpcLayer.Sash | NpcLayer.Satchel, LayerColor = NpcSwatch.QuayRoadDust, LayerTrim = NpcSwatch.QuayGold,
+                RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.CaravanStaff, NpcProp.CamelBell },
+                Gesture = NpcGesture.Storytell,
+                Story = "Ammo, o missionário que levou a fé às caravanas (texto de Turfan M 2); aqui, a última caravana dele chega ao Cais da Coluna, trazendo presentes de todas as cidades, e ele cuida da loja",
+            },
+
+            // Adda, retired from the Tower, who looks after the Roda Celeste (the second mission): stooped, a full white beard under a lilac hood, a lilac robe with a gold hem, the white
+            // sash he always had, a jar of the wheel held in front. Pours a measured drop of light.
+            new NpcRecipe
+            {
+                Id = "adda_roda", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 0.97f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinOlive, Face = NpcFace.Kind, Hair = NpcHair.Short, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Full,
+                Headwear = NpcHeadwear.Hood, HeadColor = NpcSwatch.QuayLilac, HeadTrim = NpcSwatch.QuayGold,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.QuayLilac, Trim = NpcSwatch.QuayGold, Sleeves = NpcSwatch.QuayLilac, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Sash, LayerColor = NpcSwatch.QuayWhite, LayerTrim = NpcSwatch.QuaySky,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.Jar },
+                Gesture = NpcGesture.Pour,
+                Story = "Adda, discípulo de Mani (aposentado da Torre no jogo); aqui, cuida da Roda Celeste das Doze Jarras e dá a 2ª missão do Cais da Coluna",
+            },
+
             // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------
