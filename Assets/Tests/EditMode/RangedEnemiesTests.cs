@@ -48,6 +48,9 @@ namespace Rapadura.Tests
             // Margens da Mistura (79, 82): the tar heron's glob of pitch and the broken tablet's bolt of words (MisturaBeastsTests; placed by the Margens overworld, MisturaBeastsPlacementTests).
             ("enemy_forest_tar_heron", BiomeType.Forest, EnemyProjectileKind.LureGlob, ProceduralEnemyKind.TarHeron),
             ("enemy_forest_broken_tablet", BiomeType.Forest, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.BrokenTablet),
+            // Limiar Profundo (84, 86): the smoke archer's bolt and the wind harpy's thrown feather (ProfundoBeastsTests).
+            ("enemy_forest_smoke_archer", BiomeType.Forest, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.SmokeArcher),
+            ("enemy_forest_wind_harpy", BiomeType.Forest, EnemyProjectileKind.Feather, ProceduralEnemyKind.WindHarpy),
         };
 
         /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>
@@ -74,6 +77,8 @@ namespace Rapadura.Tests
             (OverworldLayouts.HinokuraRegionId, OverworldLayouts.RecifeObsidianaMapId, new[] { "enemy_mountain_ember_coral" }),
             (OverworldLayouts.MisturaRegionId, OverworldLayouts.PocosBetumeMapId, new[] { "enemy_forest_tar_heron" }),
             (OverworldLayouts.MisturaRegionId, OverworldLayouts.TabuasSonhoMapId, new[] { "enemy_forest_broken_tablet" }),
+            (OverworldLayouts.ProfundoRegionId, OverworldLayouts.CovaFumacaMapId, new[] { "enemy_forest_smoke_archer" }),
+            (OverworldLayouts.ProfundoRegionId, OverworldLayouts.CovaVentoMapId, new[] { "enemy_forest_wind_harpy" }),
         };
 
         private readonly List<Object> _created = new List<Object>();

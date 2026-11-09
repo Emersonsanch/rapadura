@@ -219,6 +219,19 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_forest_ullikummi_son", ProceduralEnemyKind.UllikummiSon },
             { "enemy_forest_broken_tablet", ProceduralEnemyKind.BrokenTablet },
             { "enemy_forest_garden_shadow", ProceduralEnemyKind.GardenShadow },
+            // The beasts of the Limiar Profundo (Docs/Mapas100.md 84–90), formerly played by stand-ins.
+            { "enemy_forest_copy_shadow", ProceduralEnemyKind.CopyShadow },
+            { "enemy_forest_smoke_giant", ProceduralEnemyKind.SmokeGiant },
+            { "enemy_forest_smoke_archer", ProceduralEnemyKind.SmokeArcher },
+            { "enemy_forest_ember_wolf", ProceduralEnemyKind.EmberWolf },
+            { "enemy_forest_hot_smoke_lion", ProceduralEnemyKind.HotSmokeLion },
+            { "enemy_forest_black_eagle", ProceduralEnemyKind.BlackEagle },
+            { "enemy_forest_wind_harpy", ProceduralEnemyKind.WindHarpy },
+            { "enemy_forest_mud_octopus", ProceduralEnemyKind.MudOctopus },
+            { "enemy_forest_dark_fish", ProceduralEnemyKind.DarkFish },
+            { "enemy_forest_shadow_lizard", ProceduralEnemyKind.ShadowLizard },
+            { "enemy_forest_lesser_shadow_dragon", ProceduralEnemyKind.LesserShadowDragon },
+            { "enemy_forest_lesser_archon", ProceduralEnemyKind.LesserArchon },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -261,6 +274,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.BrickLion, ProceduralEnemyKind.YoungMushussu, ProceduralEnemyKind.BitumenLocust, ProceduralEnemyKind.LivingHourglass,
             ProceduralEnemyKind.LateShadow, ProceduralEnemyKind.LivingTar, ProceduralEnemyKind.TarHeron, ProceduralEnemyKind.AngryCedar,
             ProceduralEnemyKind.GlowMantle, ProceduralEnemyKind.UllikummiSon, ProceduralEnemyKind.BrokenTablet, ProceduralEnemyKind.GardenShadow,
+            ProceduralEnemyKind.CopyShadow, ProceduralEnemyKind.SmokeGiant, ProceduralEnemyKind.SmokeArcher, ProceduralEnemyKind.EmberWolf,
+            ProceduralEnemyKind.HotSmokeLion, ProceduralEnemyKind.BlackEagle, ProceduralEnemyKind.WindHarpy, ProceduralEnemyKind.MudOctopus,
+            ProceduralEnemyKind.DarkFish, ProceduralEnemyKind.ShadowLizard, ProceduralEnemyKind.LesserShadowDragon, ProceduralEnemyKind.LesserArchon,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -648,6 +664,42 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.GardenShadow:
                     MisturaBeastRecipes.BuildGardenShadow(blueprint);
+                    break;
+                case ProceduralEnemyKind.CopyShadow:
+                    ProfundoBeastRecipes.BuildCopyShadow(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeGiant:
+                    ProfundoBeastRecipes.BuildSmokeGiant(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeArcher:
+                    ProfundoBeastRecipes.BuildSmokeArcher(blueprint);
+                    break;
+                case ProceduralEnemyKind.EmberWolf:
+                    ProfundoBeastRecipes.BuildEmberWolf(blueprint);
+                    break;
+                case ProceduralEnemyKind.HotSmokeLion:
+                    ProfundoBeastRecipes.BuildHotSmokeLion(blueprint);
+                    break;
+                case ProceduralEnemyKind.BlackEagle:
+                    ProfundoBeastRecipes.BuildBlackEagle(blueprint);
+                    break;
+                case ProceduralEnemyKind.WindHarpy:
+                    ProfundoBeastRecipes.BuildWindHarpy(blueprint);
+                    break;
+                case ProceduralEnemyKind.MudOctopus:
+                    ProfundoBeastRecipes.BuildMudOctopus(blueprint);
+                    break;
+                case ProceduralEnemyKind.DarkFish:
+                    ProfundoBeastRecipes.BuildDarkFish(blueprint);
+                    break;
+                case ProceduralEnemyKind.ShadowLizard:
+                    ProfundoBeastRecipes.BuildShadowLizard(blueprint);
+                    break;
+                case ProceduralEnemyKind.LesserShadowDragon:
+                    ProfundoBeastRecipes.BuildLesserShadowDragon(blueprint);
+                    break;
+                case ProceduralEnemyKind.LesserArchon:
+                    ProfundoBeastRecipes.BuildLesserArchon(blueprint);
                     break;
             }
 

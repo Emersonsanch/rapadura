@@ -266,6 +266,9 @@ namespace Rapadura.UI.Bestiary
             // -- Bichos das Margens da Mistura que o mundo contínuo fazia com substitutos (own file too) --
             MisturaBestiaryTexts.AddPages(entries);
 
+            // -- Bichos do Limiar Profundo que o mundo contínuo fazia com substitutos (own file too) --
+            ProfundoBestiaryTexts.AddPages(entries);
+
             // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
             OssuaryBestiaryTexts.AddPages(entries);
 

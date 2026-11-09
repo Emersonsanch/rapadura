@@ -267,6 +267,32 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         BrokenTablet = 117,
         /// <summary>Jardim-Sombra (82): cut tree of the dream, sawn flat at the top; both arms go up to strike.</summary>
         GardenShadow = 118,
+
+        // The beasts of the Limiar Profundo (Docs/Mapas100.md 84–90) that the overworld layout played with stand-ins (ProfundoBeastRecipes).
+        /// <summary>Sombra-Cópia (84): thin faceless copy with an amber seam; both arms go up to strike.</summary>
+        CopyShadow = 119,
+        /// <summary>Gigante de Fumaça (84): rings of smoke stacked into a giant; both arms go up to strike.</summary>
+        SmokeGiant = 120,
+        /// <summary>Arqueiro de Fumaça (84): drifting smoke with a copper bow; a mouth that gapes, the sleeves stir.</summary>
+        SmokeArcher = 121,
+        /// <summary>Lobo de Brasa (85): ash wolf with embers on the spine; a jaw that gapes.</summary>
+        EmberWolf = 122,
+        /// <summary>Leão de Fumaça Quente (85): basalt lion, a mane of smoke with fire inside; the jaw gapes on the windup.</summary>
+        HotSmokeLion = 123,
+        /// <summary>Águia Negra (86): black eagle with white eyes; the beak opens with the wings held still.</summary>
+        BlackEagle = 124,
+        /// <summary>Harpia de Vento (86): grey-blue harpy; the mouth opens with the wings held still to throw.</summary>
+        WindHarpy = 125,
+        /// <summary>Polvo de Lodo (87): dome of mire on eight arms; flattens on the windup, the amber flares.</summary>
+        MudOctopus = 126,
+        /// <summary>Peixe da Treva (87): flat black fish swimming in the air; the fins row, the jaw gapes.</summary>
+        DarkFish = 127,
+        /// <summary>Lagarto-Sombra (88): low and very wide, nearly no eyes; the jaw gapes and the tail sways.</summary>
+        ShadowLizard = 128,
+        /// <summary>Dragão-Sombra Menor (88): small dark dragon with unfinished wings; a jaw that gapes.</summary>
+        LesserShadowDragon = 129,
+        /// <summary>Arconte Menor (90): fat with swallowed light, a crown of dead lamps; both arms go up to strike.</summary>
+        LesserArchon = 130,
     }
 
     /// <summary>

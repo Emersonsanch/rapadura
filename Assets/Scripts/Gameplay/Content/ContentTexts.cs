@@ -329,6 +329,19 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_forest_ullikummi_son", "Son of Ullikummi", "Filho de Ullikummi"),
             EnemyName("enemy_forest_broken_tablet", "Broken Tablet", "Tábua Quebrada"),
             EnemyName("enemy_forest_garden_shadow", "Garden Shadow", "Jardim-Sombra"),
+            // The beasts of the Limiar Profundo (Docs/Mapas100.md 84–90), formerly played by stand-ins.
+            EnemyName("enemy_forest_copy_shadow", "Copy Shadow", "Sombra-Cópia"),
+            EnemyName("enemy_forest_smoke_giant", "Smoke Giant", "Gigante de Fumaça"),
+            EnemyName("enemy_forest_smoke_archer", "Smoke Archer", "Arqueiro de Fumaça"),
+            EnemyName("enemy_forest_ember_wolf", "Ember Wolf", "Lobo de Brasa"),
+            EnemyName("enemy_forest_hot_smoke_lion", "Hot Smoke Lion", "Leão de Fumaça Quente"),
+            EnemyName("enemy_forest_black_eagle", "Black Eagle", "Águia Negra"),
+            EnemyName("enemy_forest_wind_harpy", "Wind Harpy", "Harpia de Vento"),
+            EnemyName("enemy_forest_mud_octopus", "Mud Octopus", "Polvo de Lodo"),
+            EnemyName("enemy_forest_dark_fish", "Dark Fish", "Peixe da Treva"),
+            EnemyName("enemy_forest_shadow_lizard", "Shadow Lizard", "Lagarto-Sombra"),
+            EnemyName("enemy_forest_lesser_shadow_dragon", "Lesser Shadow Dragon", "Dragão-Sombra Menor"),
+            EnemyName("enemy_forest_lesser_archon", "Lesser Archon", "Arconte Menor"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),

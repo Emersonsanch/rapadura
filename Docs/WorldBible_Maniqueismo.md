@@ -528,6 +528,35 @@ no campo (82). Testes: `MisturaBeastsPlacementTests`. Seguem com substitutos, se
 | `enemy_forest_broken_tablet` | **Tábua Quebrada** / *Broken Tablet* | 82 | [distância] | as tábuas do sonho de Ohya e Hahya (*Livro dos Gigantes*); joga as palavras que soltaram. |
 | `enemy_forest_garden_shadow` | **Jardim-Sombra** / *Garden Shadow* | 82 | [tanque] | as árvores cortadas do mesmo sonho, andando nos tocos sem saber para que servem. |
 
+**Nona leva (2026-11-09): Limiar Profundo (Mapas100 84–90).** Mesmo contrato (peso 0 no bioma, nível da área, números do bioma). A região
+inteira fica no bioma Floresta (`OverworldLayouts.Profundo` declara `w.World.Biome = BiomeType.Forest`), daí o prefixo `enemy_forest_` e os
+números de Floresta (vida 75–108, XP 10). Dois bichos por cova, mais o Arconte do Portão. Modelos em `ProfundoBeastRecipes` (o lobo, o leão, o
+dragão e o arqueiro abrem a boca com a cauda balançando; o peixe rema as barbatanas; o lagarto abre a boca com a cauda devagar; a águia e a
+harpia abrem o bico com as asas paradas; o polvo achata e o âmbar brilha; a cópia, o gigante e o arconte erguem os dois braços), Caderno em
+`ProfundoBestiaryTexts`. Dois são [distância], voam e atiram: o Arqueiro de Fumaça (`LanternBolt`, flecha de fumaça quente que entorta) e a
+Harpia de Vento (`Feather`; `RangedEnemiesTests`). Respeito (§1.1, §1.4 e §4.3): frio, pegajoso, barulhento e nunca gore; o Príncipe só como
+silhueta atrás do selo (a Águia e o Dragão-Sombra deixam claro que **não** são as formas dele); o Arconte Menor é gigante de conto que
+engoliu luz demais, com a luz ainda lá dentro. Testes: `ProfundoBeastsTests`. Já no overworld do Limiar no lugar dos
+substitutos (`OverworldLayouts.Profundo.cs`, classe `Profundo`), nos grupos que lideram e como acompanhantes só onde a ficha os cita (mesmas
+clareiras, níveis e variantes noturnas; a Ponte do Novelo, 89, mistura os das cinco covas). A Águia Negra é corpo a corpo e segue [rápido]; o
+Arqueiro e a Harpia lideram os grupos [distância] (84, 89 e 86). Testes: `ProfundoBeastsPlacementTests`. Seguem com substitutos, sem bicho próprio nesta leva: Sombra Pequena, Fumaça, Morcego da Treva, Ushabti Apagado, Fumaça Sufocante, Touro de Cinza, Chama Faminta,
+Morcego-Lâmina, Redemoinho, Enguia Grande, Cardume Escuro, Serpente Cega, Rastejante e Ushabti Apagado Gigante (ver `OverworldLayouts.Profundo.cs`).
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_forest_copy_shadow` | **Sombra-Cópia** / *Copy Shadow* | 84 | [rápido] | a Fumaça guarda os de duas pernas (Teodoro bar Konai, *Scholion* XI); sem forma própria, pega emprestada a de quem chega. |
+| `enemy_forest_smoke_giant` | **Gigante de Fumaça** / *Smoke Giant* | 84 | [tanque] | anéis de fumaça que se empilharam e esqueceram de descer; vento desfaz, lâmina não. |
+| `enemy_forest_smoke_archer` | **Arqueiro de Fumaça** / *Smoke Archer* | 84 | [distância] | invenção: o resto dos soldados dos Artífices soprados pelos ventiladores, que ainda lembra do arco. |
+| `enemy_forest_ember_wolf` | **Lobo de Brasa** / *Ember Wolf* | 85 | [rápido] | o Fogo Devorador guarda os de quatro patas; lobo real que só sobrou o quentinho. |
+| `enemy_forest_hot_smoke_lion` | **Leão de Fumaça Quente** / *Hot Smoke Lion* | 85 | [elite] | basalto por fora, fornalha por dentro; apaga pavios só de respirar. |
+| `enemy_forest_black_eagle` | **Águia Negra** / *Black Eagle* | 86 | [rápido] | águia comum que voou perto demais e saiu com a cor; **não** é a forma do Príncipe (§1.4). |
+| `enemy_forest_wind_harpy` | **Harpia de Vento** / *Wind Harpy* | 86 | [distância] | o que sobra quando o vento leva o que queria; atira as penas que ficaram. |
+| `enemy_forest_mud_octopus` | **Polvo de Lodo** / *Mud Octopus* | 87 | [tanque] | o Lodo guarda os que nadam; este desistiu e virou o chão da cova, com óleo de lâmpada na barriga. |
+| `enemy_forest_dark_fish` | **Peixe da Treva** / *Dark Fish* | 87 | [rápido] | a água sobe e desce pelas comportas; este continuou nadando sem ela. |
+| `enemy_forest_shadow_lizard` | **Lagarto-Sombra** / *Shadow Lizard* | 88 | [tanque] | a Treva guarda os que rastejam; os olhos encolheram e o resto se espalhou; sem luz o golpe entra pela metade. |
+| `enemy_forest_lesser_shadow_dragon` | **Dragão-Sombra Menor** / *Lesser Shadow Dragon* | 88 | [elite] | retalho do corpo de dragão preso atrás do selo, que se lembra de ser enorme; **não** é a forma do Príncipe (§1.4). |
+| `enemy_forest_lesser_archon` | **Arconte Menor** / *Lesser Archon* | 90 | [elite] | arcontes pequenos (§1.4) que chegaram tarde e engoliram o que os grandes deixaram cair; a luz ainda é luz. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |

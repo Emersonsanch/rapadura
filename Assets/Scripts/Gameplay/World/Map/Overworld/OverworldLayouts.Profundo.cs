@@ -30,7 +30,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// <item>the north end of that column (nv 424–440, map 90: a lit lamp): the <b>Praça dos Pedestais</b> with the Selo dos Artífices (post) and five
     /// lamp pedestals, and the <b>Portão da Terra da Treva</b>.</item>
     /// </list>
-    /// Monsters: existing beasts that fit the sheets (see <see cref="Profundo"/>) and the night species, a night table in every clearing; no boss
+    /// Monsters: the region's own beasts and existing ones that fit the other sheets (see <see cref="Profundo"/>) and the night species, a night table in every clearing; no boss
     /// (O Rei da Fumaça, A Leoa, A Águia, O Peixe, O Dragão do Fundo, O Guardião and A Grande Treva are not placed).
     /// </summary>
     public static partial class OverworldLayouts
@@ -107,34 +107,34 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             (new Vector2(950f, 640f), new Vector2(958f, 646f), 20f),
         };
 
-        /// <summary>The existing beasts that stand in for the sheets' monsters (Mapas100 83–90).</summary>
+        /// <summary>The sheets' monsters (Mapas100 83–90): the region's own twelve beasts, and existing ones standing in for the rest.</summary>
         private static class Profundo
         {
             public const string SmallShadow = "enemy_forest_shadow_biter";
             public const string LampSmoke = "enemy_mountain_ill_wind_mist";
             public const string DarkBat = "enemy_cave_vampire_bat";
             public const string DimUshabti = "enemy_mountain_lacquer_ushabti";
-            public const string CopyShadow = "enemy_mountain_almas";
-            public const string SmokeGiant = "enemy_mountain_sleepwalker_giant";
+            public const string CopyShadow = "enemy_forest_copy_shadow";
+            public const string SmokeGiant = "enemy_forest_smoke_giant";
             public const string ChokeSmoke = "enemy_forest_smoke_goat";
-            public const string SmokeArcher = "enemy_forest_terracotta_soldier";
-            public const string EmberWolf = "enemy_mountain_bronze_wolf";
+            public const string SmokeArcher = "enemy_forest_smoke_archer";
+            public const string EmberWolf = "enemy_forest_ember_wolf";
             public const string AshBull = "enemy_mountain_wild_yak";
-            public const string HotLion = "enemy_forest_stone_lion";
+            public const string HotLion = "enemy_forest_hot_smoke_lion";
             public const string HungryFlame = "enemy_desert_firefly_swarm";
-            public const string BlackEagle = "enemy_mountain_storm_eagle";
+            public const string BlackEagle = "enemy_forest_black_eagle";
             public const string BladeBat = "enemy_mountain_candle_bat";
-            public const string WindHarpy = "enemy_mountain_smoke_harpy";
+            public const string WindHarpy = "enemy_forest_wind_harpy";
             public const string Whirlwind = "enemy_mountain_ill_wind_mist";
-            public const string DarkFish = "enemy_mountain_blade_fish";
+            public const string DarkFish = "enemy_forest_dark_fish";
             public const string GreatEel = "enemy_forest_reed_snake";
-            public const string MudOctopus = "enemy_cave_ooze";
+            public const string MudOctopus = "enemy_forest_mud_octopus";
             public const string DarkShoal = "enemy_cave_lantern_fish";
             public const string BlindSerpent = "enemy_forest_dimmed_python";
-            public const string ShadowLizard = "enemy_mountain_giant_lava_lizard";
+            public const string ShadowLizard = "enemy_forest_shadow_lizard";
             public const string Creeper = "enemy_forest_creeping_dark";
-            public const string LesserDragon = "enemy_forest_three_headed_serpent";
-            public const string LesserArchon = "enemy_desert_crowned_orc";
+            public const string LesserDragon = "enemy_forest_lesser_shadow_dragon";
+            public const string LesserArchon = "enemy_forest_lesser_archon";
             public const string GiantUshabti = "enemy_mountain_stone_golem";
         }
 
@@ -340,7 +340,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         }
 
         // ------------------------------------------------------------------
-        // Monster groups per area (existing definitions only, no boss; Mapas100 83–90 archetypes)
+        // Monster groups per area (the region's own beasts and existing definitions, no boss; Mapas100 83–90 archetypes)
         // ------------------------------------------------------------------
 
         private static void ProfundoGroup(OverworldZone zone, string id, string archetype, string lead, string mate, NightSpecies night, int maxAlive = 4, float respawn = 25f)
@@ -374,8 +374,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ProfundoGroup(beira, "morcegos_do_abismo", "[enxame]", Profundo.DarkBat, Profundo.DimUshabti, bats, 5);
             ProfundoGroup(beira, "sombras_do_abismo", "[rápido]", Profundo.SmallShadow, Profundo.DimUshabti, werewolf);
 
-            // The Pit of Smoke (84): the Sombra-Cópia [rápido] (the almas), the Gigante de Fumaça [tanque] (the sleepwalker giant), the Fumaça Sufocante
-            // [controle] (the smoke goat), the Arqueiro de Fumaça [distância] (the terracotta soldier).
+            // The Pit of Smoke (84): the Sombra-Cópia [rápido], the Gigante de Fumaça [tanque], the Fumaça Sufocante [controle] (the smoke goat), the
+            // Arqueiro de Fumaça [distância].
             ProfundoGroup(fumaca, "sombras_copia", "[rápido]", Profundo.CopyShadow, Profundo.ChokeSmoke, owl);
             ProfundoGroup(fumaca, "gigantes_de_fumaca", "[tanque]", Profundo.SmokeGiant, Profundo.CopyShadow, moon, 3, 30f);
             ProfundoGroup(ventiladores, "fumacas_sufocantes", "[controle]", Profundo.ChokeSmoke, Profundo.SmokeArcher, bats);
@@ -383,8 +383,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ProfundoGroup(corredores, "arqueiros_de_fumaca", "[distância]", Profundo.SmokeArcher, Profundo.CopyShadow, owl);
             ProfundoGroup(corredores, "gigantes_dos_corredores", "[tanque]", Profundo.SmokeGiant, Profundo.SmokeArcher, werewolf, 3, 30f);
 
-            // The Pit of Devouring Fire (85): the Lobo de Brasa [rápido] (the bronze wolf), the Touro de Cinza [tanque] (the wild yak), the Leão de Fumaça
-            // Quente [elite] (the stone lion), the Chama Faminta [enxame] (the firefly swarm).
+            // The Pit of Devouring Fire (85): the Lobo de Brasa [rápido], the Touro de Cinza [tanque] (the wild yak), the Leão de Fumaça Quente [elite],
+            // the Chama Faminta [enxame] (the firefly swarm).
             ProfundoGroup(fogo, "lobos_de_brasa", "[rápido]", Profundo.EmberWolf, Profundo.HungryFlame, moon);
             ProfundoGroup(fogo, "chamas_famintas", "[enxame]", Profundo.HungryFlame, Profundo.EmberWolf, sparks, 5);
             ProfundoGroup(chao, "touros_de_cinza", "[tanque]", Profundo.AshBull, Profundo.HungryFlame, bats, 3, 30f);
@@ -392,8 +392,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ProfundoGroup(cinzaQuente, "leoes_de_fumaca_quente", "[elite]", Profundo.HotLion, Profundo.EmberWolf, werewolf, 3, 32f);
             ProfundoGroup(cinzaQuente, "lobos_da_cinza", "[rápido]", Profundo.EmberWolf, Profundo.AshBull, owl);
 
-            // The Pit of Ruinous Wind (86): the Águia Negra [rápido] (the storm eagle), the Morcego-Lâmina [enxame] (the candle bat), the Harpia de Vento
-            // [distância] (the smoke harpy), the Redemoinho [controle] (the ill-wind mist).
+            // The Pit of Ruinous Wind (86): the Águia Negra [rápido], the Morcego-Lâmina [enxame] (the candle bat), the Harpia de Vento [distância], the
+            // Redemoinho [controle] (the ill-wind mist).
             ProfundoGroup(vento, "aguias_negras", "[rápido]", Profundo.BlackEagle, Profundo.BladeBat, owl);
             ProfundoGroup(vento, "morcegos_lamina", "[enxame]", Profundo.BladeBat, Profundo.BlackEagle, bats, 5);
             ProfundoGroup(plataformas, "harpias_de_vento", "[distância]", Profundo.WindHarpy, Profundo.Whirlwind, moon);
@@ -401,8 +401,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ProfundoGroup(correntes, "aguias_das_correntes", "[rápido]", Profundo.BlackEagle, Profundo.WindHarpy, moon);
             ProfundoGroup(correntes, "redemoinhos_das_correntes", "[controle]", Profundo.Whirlwind, Profundo.BladeBat, sparks);
 
-            // The Pit of Mire (87): the Peixe da Treva [rápido] (the blade fish), the Enguia Grande [controle] (the reed snake), the Polvo de Lodo [tanque]
-            // (the ooze), the Cardume Escuro [enxame] (the lantern fish).
+            // The Pit of Mire (87): the Peixe da Treva [rápido], the Enguia Grande [controle] (the reed snake), the Polvo de Lodo [tanque], the Cardume
+            // Escuro [enxame] (the lantern fish).
             ProfundoGroup(lodo, "peixes_da_treva", "[rápido]", Profundo.DarkFish, Profundo.DarkShoal, moon);
             ProfundoGroup(lodo, "polvos_de_lodo", "[tanque]", Profundo.MudOctopus, Profundo.DarkFish, bats, 3, 30f);
             ProfundoGroup(alagados, "enguias_grandes", "[controle]", Profundo.GreatEel, Profundo.DarkShoal, moon);
@@ -410,8 +410,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ProfundoGroup(comportas, "polvos_das_comportas", "[tanque]", Profundo.MudOctopus, Profundo.GreatEel, moon, 3, 30f);
             ProfundoGroup(comportas, "peixes_das_comportas", "[rápido]", Profundo.DarkFish, Profundo.MudOctopus, owl);
 
-            // The Pit of Darkness (88): the Serpente Cega [rápido] (the dimmed python), the Lagarto-Sombra [tanque] (the giant lava lizard), the Rastejante
-            // [enxame] (the creeping dark), the Dragão-Sombra Menor [elite] (the three-headed serpent).
+            // The Pit of Darkness (88): the Serpente Cega [rápido] (the dimmed python), the Lagarto-Sombra [tanque], the Rastejante [enxame] (the creeping
+            // dark), the Dragão-Sombra Menor [elite].
             ProfundoGroup(treva, "serpentes_cegas", "[rápido]", Profundo.BlindSerpent, Profundo.Creeper, bats);
             ProfundoGroup(treva, "lagartos_sombra", "[tanque]", Profundo.ShadowLizard, Profundo.BlindSerpent, moon, 3, 30f);
             ProfundoGroup(tuneis, "rastejantes", "[enxame]", Profundo.Creeper, Profundo.ShadowLizard, sparks, 5);
@@ -425,7 +425,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ProfundoGroup(lances, "filhos_da_treva", "[enxame]", Profundo.Creeper, Profundo.SmokeArcher, sparks, 5);
             ProfundoGroup(lances, "arqueiros_do_novelo", "[distância]", Profundo.SmokeArcher, Profundo.AshBull, owl);
 
-            // The Gate of the Land of Darkness (90): the Filhos da Treva, the Arconte Menor [elite] (the crowned orc), the Ushabti Apagado Gigante [tanque]
+            // The Gate of the Land of Darkness (90): the Filhos da Treva, the Arconte Menor [elite], the Ushabti Apagado Gigante [tanque]
             // (the stone golem).
             ProfundoGroup(praca, "arcontes_menores", "[elite]", Profundo.LesserArchon, Profundo.Creeper, werewolf, 3, 32f);
             ProfundoGroup(praca, "ushabtis_gigantes", "[tanque]", Profundo.GiantUshabti, Profundo.LesserArchon, moon, 3, 30f);
