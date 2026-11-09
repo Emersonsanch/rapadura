@@ -40,8 +40,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// fourth row is whole. Região 13 (the Rio das Doze Horas) starts a fifth row north of the archipelago (x −3400…−1000, z 6200…8600), its
     /// two south gates led to the archipelago's northern trails (over the ash fields and the sea of ash): the bounds grow to 7200 × 12000 m.
     /// Região 14 (the Margens da Mistura) fills the next cell of that row, north of the Mar Gelado and east of the river (x −1000…1400,
-    /// z 6200…8600), its two west gates led to the river's east flank; the cell north of the Picos de Farnkesh stays a hole walled off
-    /// like the world's edge (<see cref="OverworldLayout.Holes"/>: invisible walls, backdrop relief).
+    /// z 6200…8600), its two west gates led to the river's east flank. Região 15 (the Limiar Profundo) fills the last cell, north of the Picos de
+    /// Farnkesh (x 1400…3800, z 6200…8600), its two west gates led to the Margins' east flank: the world is whole (no hole left).
     /// The relief blends across the borders like between any two areas (one relief for the whole world, each area shaped in
     /// its own region's coordinates), the chunk grids line up (offsets are multiples of the chunk), the streaming, the soft
     /// barrier, the levels and the requirements work per area as before.
@@ -120,6 +120,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// </summary>
         public static readonly Vector2 MisturaWorldOffset = new Vector2(-400f, 7400f);
 
+        /// <summary>
+        /// Região 15 east of the Margens da Mistura, north of the Picos de Farnkesh (the Fortaleza at world (2000, 7400)): the Limiar Profundo fills
+        /// the last walled cell (level 340 where the Margins end at ~344–360), so the world has no hole. Two open passes on its west edge lead to the
+        /// Margins' Field of the Tablets; none to Farnkesh south (level ~200, the difference belongs to the soft barrier).
+        /// </summary>
+        public static readonly Vector2 ProfundoWorldOffset = new Vector2(2000f, 7400f);
+
         /// <summary>Width (m) of the trail that joins two passes (or a pass to the nearest trail across the border).</summary>
         public const float PassTrailWidth = 4f;
 
@@ -164,6 +171,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 (HinokuraRegion(), HinokuraWorldOffset),
                 (RioRegion(), RioWorldOffset),
                 (MisturaRegion(), MisturaWorldOffset),
+                (ProfundoRegion(), ProfundoWorldOffset),
             };
 
             Rect bounds = default;

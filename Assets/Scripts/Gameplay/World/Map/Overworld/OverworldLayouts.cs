@@ -39,6 +39,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { MapRegion.ArquipelagoDeHinokura, HinokuraRegionId },
             { MapRegion.RioDasDozeHoras, RioRegionId },
             { MapRegion.MargensDaMistura, MisturaRegionId },
+            { MapRegion.LimiarProfundo, ProfundoRegionId },
         };
 
         /// <summary>Every continuous region of this build (texts, tests).</summary>
@@ -77,6 +78,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 case HinokuraRegionId: return HinokuraRegion();
                 case RioRegionId: return RioRegion();
                 case MisturaRegionId: return MisturaRegion();
+                case ProfundoRegionId: return ProfundoRegion();
                 case WorldId: return BuildWorld();
                 default: return null;
             }

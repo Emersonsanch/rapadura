@@ -488,6 +488,58 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         DreamTablets = 278,
         /// <summary>The cut garden (82): felled trunks and still water.</summary>
         CutGarden = 279,
+
+        // Região 15 — Limiar Profundo (OverworldLayouts.Profundo.cs, OverworldTerrains.Profundo.cs): 280–309.
+        /// <summary>the Fortaleza da Última Lâmpada (83): basalt yards round the keeps.</summary>
+        LampFortress = 280,
+        /// <summary>the arc of the rampart (83): the way in from the Margins.</summary>
+        RampartArc = 281,
+        /// <summary>the basalt niches (83): walls of lit niches.</summary>
+        BasaltNiches = 282,
+        /// <summary>the oil cisterns (83): round tanks of lamp oil.</summary>
+        OilCisterns = 283,
+        /// <summary>the wick yards (83): racks of drying wicks.</summary>
+        WickYards = 284,
+        /// <summary>the brink of the abyss (83): black ground under the wall.</summary>
+        AbyssBrink = 285,
+        /// <summary>the Cova da Fumaça (84): walls of moving grey.</summary>
+        SmokePit = 286,
+        /// <summary>the vents of the Artificers (84): copper drums.</summary>
+        ArtificerVents = 287,
+        /// <summary>the corridors of cinder (84): narrow sooty walls.</summary>
+        CinderCorridors = 288,
+        /// <summary>the Cova do Fogo Devorador (85): slabs and embers.</summary>
+        DevouringFirePit = 289,
+        /// <summary>the floor that lights (85): pattern of glowing seams.</summary>
+        GlowPatternFloor = 290,
+        /// <summary>the halls of hot ash (85): cinder and heat.</summary>
+        HotAshHalls = 291,
+        /// <summary>the Cova do Vento Destruidor (86): stepped rings of the shaft.</summary>
+        WindShaft = 292,
+        /// <summary>the loose platforms (86): steps and loose stones.</summary>
+        LoosePlatforms = 293,
+        /// <summary>the rising currents (86): spires in blue-grey.</summary>
+        Updrafts = 294,
+        /// <summary>the Cova do Lodo (87): black-green levels.</summary>
+        MirePit = 295,
+        /// <summary>the flooded halls (87): drowned columns.</summary>
+        FloodedHalls = 296,
+        /// <summary>the sluices of the Artificers (87): gates of bronze.</summary>
+        Sluices = 297,
+        /// <summary>the Cova da Treva (88): a labyrinth of walls in total dark.</summary>
+        DarknessPit = 298,
+        /// <summary>the blind tunnels (88): deeper, gold specks.</summary>
+        BlindTunnels = 299,
+        /// <summary>the head of the Ponte do Novelo (89): the causeway starts.</summary>
+        BridgeHead = 300,
+        /// <summary>the Ponte do Novelo (89): the causeway over the black.</summary>
+        NoveloBridge = 301,
+        /// <summary>the flights of the Novelo (89): under the dark globe.</summary>
+        NoveloGlobeFlights = 302,
+        /// <summary>the plaza of the pedestals (90): five lamps round the seal.</summary>
+        PedestalPlaza = 303,
+        /// <summary>the Portão da Terra da Treva (90): cracked stone before the gate.</summary>
+        DarkGateGround = 304,
     }
 
     /// <summary>

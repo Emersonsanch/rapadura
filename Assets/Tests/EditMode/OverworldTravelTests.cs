@@ -101,6 +101,7 @@ namespace Rapadura.Tests
             Assert.IsTrue(MapCatalog.InRegion(MapRegion.ArquipelagoDeHinokura).All(m => m.IsBuilt), "region 12 is a continuous region");
             Assert.IsTrue(MapCatalog.InRegion(MapRegion.RioDasDozeHoras).All(m => m.IsBuilt), "region 13 is a continuous region");
             Assert.IsTrue(MapCatalog.InRegion(MapRegion.MargensDaMistura).All(m => m.IsBuilt), "region 14 is a continuous region");
+            Assert.IsTrue(MapCatalog.InRegion(MapRegion.LimiarProfundo).All(m => m.IsBuilt), "region 15 is a continuous region");
         }
 
         [Test]

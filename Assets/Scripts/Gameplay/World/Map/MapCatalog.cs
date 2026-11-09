@@ -13,11 +13,11 @@ namespace Rapadura.Gameplay.World.Map
     /// <summary>
     /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II) and the six of
     /// Região 9 (☆ 47–52, the Estepe dos Nartes), the six of Região 10 (☆ 53–58, the Picos de Farnkesh) and the six of Região 11
-    /// (☆ 59–64, the Mar Gelado), the six of Região 12 (☆ 65–70, the Arquipélago de Hinokura), the six of Região 13 (☆ 71–76, the Rio das Doze Horas) and the six of Região 14 (☆ 77–82, the Margens da Mistura), walked as zones of their continuous regions: level
+    /// (☆ 59–64, the Mar Gelado), the six of Região 12 (☆ 65–70, the Arquipélago de Hinokura), the six of Região 13 (☆ 71–76, the Rio das Doze Horas), the six of Região 14 (☆ 77–82, the Margens da Mistura) and the eight of Região 15 (☆ 83–90, the Limiar Profundo), walked as zones of their continuous regions: level
     /// bands, walk/warp levels, special gates, settlements and return cities, as content-as-code like
-    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42, 47–82): a hand-made layout
+    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42, 47–90): a hand-made layout
     /// (<c>MapLayouts.Has</c>: 01–08, 13, 14, 19, 20) or only a zone of a continuous region (<c>OverworldLayouts.ForMap</c>:
-    /// 09–12, 15–18, 21–42, 47–82, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
+    /// 09–12, 15–18, 21–42, 47–90, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
     /// the flag equal to it. The rest are listed in the Barcas de Luz window, closed. The gold fare is never stored: it is always the
     /// formula of <see cref="MapAccessRules.CalculateWarpCost(int,int,bool)"/> (the "Custo Ouro" column of the methodology
     /// table is design history).
@@ -46,6 +46,7 @@ namespace Rapadura.Gameplay.World.Map
         public const string Hinokura = "hinokura";
         public const string CaisDeMesektet = "cais_de_mesektet";
         public const string DurJarras = "dur_jarras";
+        public const string FortalezaUltimaLampada = "fortaleza_ultima_lampada";
 
         public const string PomarId = "map_001_pomar";
         public const string TugaiId = "map_002_tugai";
@@ -57,7 +58,7 @@ namespace Rapadura.Gameplay.World.Map
         {
             CityCatalog.VilaZefa, CopasGarajonay, CityCatalog.AreiaBranca, TamborRubro, CityCatalog.SerraAlta, SaloesDeBronze,
             CityCatalog.Lamparinas, MercadoDosTuneis, TaaPwani, Aratta, Kirta, Jhilpur, PalafitasTarchon, Sangkent, Mingcheng, TorresBrancas,
-            AcampamentoSoslan, Fortim, Arvoredo, ValeDosSatiros, Farnkesh, PortoDaLuaBranca, Hinokura, CaisDeMesektet, DurJarras,
+            AcampamentoSoslan, Fortim, Arvoredo, ValeDosSatiros, Farnkesh, PortoDaLuaBranca, Hinokura, CaisDeMesektet, DurJarras, FortalezaUltimaLampada,
         };
 
         public static readonly IReadOnlyList<MapDefinition> Maps = new List<MapDefinition>
@@ -167,12 +168,22 @@ namespace Rapadura.Gameplay.World.Map
             new MapDefinition(80, "map_080_cedral_hobabish", R.MargensDaMistura, Y.Forest, S.GG, 322, 336, 318, 326, Fee, T.ElevatedPlatforms, DurJarras, K.Outpost, "clareira_do_lenhador", isBuilt: true),
             new MapDefinition(81, "map_081_ombro_upelluri", R.MargensDaMistura, Y.Mountain, S.GG, 334, 346, 330, 338, Fee, T.ClimbingCrampons, DurJarras, K.Outpost, "ninho_no_ombro", isBuilt: true),
             new MapDefinition(82, "map_082_tabuas_sonho", R.MargensDaMistura, Y.Ruins, S.GG, 344, 360, 340, 348, Fee, T.TorchRequired, DurJarras, K.Outpost, "tenda_dos_interpretes", isBuilt: true),
+
+            // Região 15 — Limiar Profundo (☆, Docs/Mapas100.md §1; zones of its continuous region, OverworldLayouts.Profundo)
+            new MapDefinition(83, "map_083_fortaleza_ultima_lampada", R.LimiarProfundo, Y.Ruins, S.GG, 340, 350, 336, 344, Fee, T.None, FortalezaUltimaLampada, K.Capital, "fortaleza_ultima_lampada", isBuilt: true),
+            new MapDefinition(84, "map_084_cova_fumaca", R.LimiarProfundo, Y.Underground, S.G, 348, 362, 344, 352, Fee, T.PoisonProtection, FortalezaUltimaLampada, K.Outpost, "lampada_1", isBuilt: true),
+            new MapDefinition(85, "map_085_cova_fogo_devorador", R.LimiarProfundo, Y.Underground, S.G, 360, 374, 356, 364, Fee, T.EternalFireOil, FortalezaUltimaLampada, K.Outpost, "lampada_2", isBuilt: true),
+            new MapDefinition(86, "map_086_cova_vento_destruidor", R.LimiarProfundo, Y.Underground, S.G, 372, 388, 368, 376, Fee, T.WingsOrDoubleJump, FortalezaUltimaLampada, K.Outpost, "lampada_3", isBuilt: true),
+            new MapDefinition(87, "map_087_cova_lodo", R.LimiarProfundo, Y.Underground, S.G, 386, 402, 382, 390, Fee, T.AirBubble, FortalezaUltimaLampada, K.Outpost, "lampada_4", isBuilt: true),
+            new MapDefinition(88, "map_088_cova_treva", R.LimiarProfundo, Y.Underground, S.G, 400, 416, 396, 404, Fee, T.RunicLamp, FortalezaUltimaLampada, K.Outpost, "lampada_5", isBuilt: true),
+            new MapDefinition(89, "map_089_ponte_novelo", R.LimiarProfundo, Y.Ruins, S.GG, 412, 428, 408, 416, Fee, T.RootBridgeBalance, FortalezaUltimaLampada, K.Outpost, "pilar_do_meio", isBuilt: true),
+            new MapDefinition(90, "map_090_portao_terra_treva", R.LimiarProfundo, Y.Ruins, S.GG, 424, 440, 420, 428, Fee, T.TorchRequired, FortalezaUltimaLampada, K.Outpost, "selo_dos_artifices", isBuilt: true),
         };
 
         public static readonly IReadOnlyList<MapRegion> Regions = new[]
         {
             R.Zarafshan, R.AreiasFlamejantes, R.SerraDeKaggen, R.GrutasDoLimiar, R.CostaDasMoncoes, R.DeltaDeJhilpur, R.TetoDoMundo, R.PlanicieDeMingcheng,
-            R.EstepeDosNartes, R.PicosDeFarnkesh, R.MarGelado, R.ArquipelagoDeHinokura, R.RioDasDozeHoras, R.MargensDaMistura,
+            R.EstepeDosNartes, R.PicosDeFarnkesh, R.MarGelado, R.ArquipelagoDeHinokura, R.RioDasDozeHoras, R.MargensDaMistura, R.LimiarProfundo,
         };
 
         private static Dictionary<string, MapDefinition> _byId;

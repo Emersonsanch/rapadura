@@ -429,6 +429,36 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         DioriteChip = 316,
         /// <summary>A chip of inscribed tablet (ground detail, no collider).</summary>
         TabletChip = 317,
+
+        // Região 15 — Limiar Profundo (OverworldDecorKit.Profundo.cs): 320–359 (ground details from 340, no collider).
+        LampNicheWall = 320,
+        WickRack = 321,
+        OilCistern = 322,
+        ArtificerVent = 323,
+        SmokeColumn = 324,
+        EmberStone = 325,
+        CinderPile = 326,
+        WindSpire = 327,
+        FloatStone = 328,
+        SluiceGate = 329,
+        DrownedColumn = 330,
+        BlindStalagmite = 331,
+        BridgePylon = 332,
+        NoveloGlobe = 333,
+        LampPedestal = 334,
+        SealSlab = 335,
+        DarkGate = 336,
+        LampEmber = 340,
+        SootPatch = 341,
+        EmberCrack = 342,
+        WindStreak = 343,
+        SludgeRing = 344,
+        ShadowPool = 345,
+        LightThread = 346,
+        SealRune = 347,
+        AshSpeck = 348,
+        CopperFiling = 349,
+        WickFiber = 350,
     }
 
     /// <summary>

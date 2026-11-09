@@ -84,6 +84,7 @@ a janela das Barcas de Luz (M) e as saídas a pé dos mapas trancam com "Exige: 
 | Roupa térmica (64) | **vestir** Roupa Térmica Refinada (slot Peito) | Peles e Barcos do Pamour (Porto da Lua Branca, cidade de retorno do 64), 900 ouro; recompensa da 2ª missão do Porto (Pera); também nos Agasalhos do Sisinnios (Sangkent) |
 | Região 13 — Barco de junco (72), Lamparina acesa (73), Lamparina rúnica (74), Óleo de Fogo Eterno (75), Amuleto antiveneno (76) | como acima | Trocas do Khunanup (Cais de Mesektet, cidade de retorno de 71–76), balcão fixo (`CityMesektetTests`, `MapRequirementTests`) |
 | Região 14 — Água fresca (78), Barco de junco (79), Plataformas elevadas/corda (80), Grampos de escalada (81), Lamparina acesa (82) | como acima | Betume do Atrahasis (Dur-Jarras, cidade de retorno de 77–82), balcão fixo: Odre, Barco de Junco, Corda de Escalada, Grampos e Lamparina de Óleo (`CityDurJarrasTests`, `MapRequirementTests`); 77 não pede nada |
+| Região 15 — Teriaga/veneno (84), Óleo de Fogo Eterno (85), Asas ou salto duplo (86), Bolha de Ar (87), Lamparina rúnica (88), Vara de Equilíbrio (89), Lamparina acesa (90) | como acima | Pavios da Tehat (Fortaleza da Última Lâmpada, cidade de retorno de 83–90), balcão fixo: Teriaga, Óleo de Fogo Eterno, Asas de Lona, Bolha de Ar, Lamparina Rúnica, Vara de Equilíbrio e Lamparina de Óleo (`CityUltimaLampadaTests`, `MapRequirementTests`); 83 não pede nada |
 
 Toda exigência das regiões 1–6 tem um "kit" de itens (`MapRequirementRules.KitOf`: o item principal, mais a lamparina no
 17) que a atende sozinho, e cada item do kit é vendido numa loja (`CityShopCatalog`) ou dado por missão
@@ -131,7 +132,7 @@ região 6 (32–35) nos Barcos e Trocas do Nuhzadag em Jhilpur (`CityJhilpurTest
 Agasalhos do Sisinnios em Sangkent (`CitySangkentTests`); o da região 8 (42) nas Lanternas do Mestre Mōzak em Mingcheng
 (`CityMingchengTests`). Nada é consumido ao entrar: basta levar.
 
-Fontes da Fortaleza da Última Lâmpada (região 15, mapa 83, `CityUltimaLampadaTests`): a borda da Terra da Treva e as cinco covas do *Scholion* XI de Teodoro bar Konai e dos
+Fontes da Fortaleza da Última Lâmpada (região 15, mapas 83–90, agora no `MapCatalog`: ver tabela acima; `CityUltimaLampadaTests`): a borda da Terra da Treva e as cinco covas do *Scholion* XI de Teodoro bar Konai e dos
 *Kephalaia*, só como lugar (sem figura do Príncipe; os portões ficam selados); a Lâmpada-Mãe da Parthenos (bíblia §3.10); nomes das **cartas de Kellis** (famílias maniqueias do oásis de Dakhla, séc. IV): Pamour, Tehat e Makarios, que repetem nomes já usados no Porto da Lua Branca e em Jhilpur como outras pessoas da mesma família (ids `pamour_lampadas`, `tehat_pavios`, `makarios_cartas`).
 
 ---

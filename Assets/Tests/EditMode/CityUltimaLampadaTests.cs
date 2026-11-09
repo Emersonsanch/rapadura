@@ -22,8 +22,7 @@ namespace Rapadura.Tests
     /// <see cref="CitySpec"/> among the late-region cities, the three people of the ficha (Pamour, Tehat, Makarios, in their own recipes) at their doors, the
     /// BasaltFort style (keeps of basalt with lit niches, the arc of the rampart with its five sealed gates of the pits, the Lâmpada-Mãe Grande, steles,
     /// racks of wicks and oil cisterns), the whole town inside a circle of radius ~22.5 m at y = 0 with its three roads out (W, E, S), the Pavios da Tehat with
-    /// the gear maps 83–90 will ask for (never the life or chaos stones) and the two city quests. Maps 83–90 are not in <see cref="MapCatalog"/> yet: no respawn
-    /// through the catalog and no gates here (when they enter, add them as in CityHinokuraTests.MapsOfTheArchipelago_RespawnInItsPlaza and MapRequirementTests).
+    /// the gear maps 83–90 ask for (never the life or chaos stones) and the two city quests; maps 83–90 respawn on its plaza and their gates are on Tehat's counter (MapRequirementTests).
     /// </summary>
     public class CityUltimaLampadaTests
     {
@@ -45,7 +44,7 @@ namespace Rapadura.Tests
             CitySpec city = CityCatalog.Get(CityCatalog.FortalezaUltimaLampada);
             Assert.IsNotNull(city, "the Fortaleza has a CitySpec");
             Assert.AreEqual(BiomeType.Forest, city.Region, "the Limiar Profundo borrows the Forest (always unlocked)");
-            Assert.AreEqual("fortaleza_ultima_lampada", city.CityId, "the return city id maps 83–90 will use");
+            Assert.AreEqual("fortaleza_ultima_lampada", city.CityId, "the return city id of maps 83–90");
             Assert.AreEqual(CityTownRecipes.FortalezaUltimaLampadaCityId, city.CityId);
 
             Assert.IsTrue(CityCatalog.IsLateRegionCity(city));
@@ -60,6 +59,20 @@ namespace Rapadura.Tests
             var cities = new CityProgress();
             Assert.AreSame(city, cities.ApplyDefeatIn(city), "a defeat in the pits wakes the cousins at the Lâmpada-Mãe");
             Assert.AreSame(city, cities.ConsumeRespawnNotice());
+        }
+
+        [Test]
+        public void MapsOfTheDeepThreshold_RespawnInItsPlaza()
+        {
+            List<MapDefinition> maps = MapCatalog.Maps.Where(m => m.ReturnCityId == CityCatalog.FortalezaUltimaLampada).ToList();
+            CollectionAssert.AreEquivalent(new[] { 83, 84, 85, 86, 87, 88, 89, 90 }, maps.Select(m => m.MapId).ToArray(), "the Fortaleza is the return city of 83–90 (Docs/Mapas100.md)");
+            foreach (MapDefinition map in maps)
+            {
+                Assert.AreEqual(CityCatalog.FortalezaUltimaLampada, MapCatalog.RespawnCityFor(map.Id).CityId, map.Id);
+            }
+
+            Assert.AreEqual(MapSettlementKind.Capital, MapCatalog.Get("map_083_fortaleza_ultima_lampada").Settlement);
+            Assert.IsNotNull(CityCatalog.Get(SafeZoneRules.RespawnCity("map_083_fortaleza_ultima_lampada", _ => CityCatalog.FortalezaUltimaLampada, CityCatalog.VilaZefa)));
         }
 
         [Test]

@@ -114,6 +114,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         SkinFolds = 123,
         /// <summary>A rough cone of diorite rising round a fixed centre (Ullikummi).</summary>
         DioriteRise = 124,
+
+        // Região 15 — Limiar Profundo (OverworldRelief.Profundo.cs): 130–139.
+        SmokeCorridors = 130,
+        EmberCells = 131,
+        ShaftTerraces = 132,
+        DarkLabyrinth = 133,
+        NoveloCauseway = 134,
     }
 
     /// <summary>What the relief knows about one point besides its height (ground colours and scatter read it).</summary>
@@ -728,7 +735,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                         || MingchengShape(style, x, z, a, out smooth, out shaped) || NartesShape(style, x, z, a, out smooth, out shaped)
                         || FarnkeshShape(style, x, z, a, out smooth, out shaped) || MarGeladoShape(style, x, z, a, out smooth, out shaped)
                         || HinokuraShape(style, x, z, a, out smooth, out shaped) || RioShape(style, x, z, a, out smooth, out shaped)
-                        || MisturaShape(style, x, z, a, out smooth, out shaped))
+                        || MisturaShape(style, x, z, a, out smooth, out shaped)
+                        || ProfundoShape(style, x, z, a, out smooth, out shaped))
                     {
                         break; // Região 2: dunes, mesas, canyons (.Desert.cs); Região 5: cliffs, islets (.Coast.cs); Região 6: hummocks, levees (.Delta.cs);
                                // Região 7: moraines, ice tongues, seracs, peaks (.Pamir.cs); Região 8: karst towers, the wall's crest (.Mingcheng.cs);
@@ -736,7 +744,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                                // Região 11: floes, icebergs, pressure ridges, fjords, ice vaults (.MarGelado.cs);
                                // Região 12: the volcano's cone, lava flows, the glass reef, curved ramparts, the caldera (.Hinokura.cs);
                                // Região 13: reed beds, zigzag dunes, Mehen's rings, Apep's body (.Rio.cs);
-                               // Região 14: the gnomon dial, cedar rings, the giant's shoulder, folds, diorite (.Mistura.cs).
+                               // Região 14: the gnomon dial, cedar rings, the giant's shoulder, folds, diorite (.Mistura.cs);
+                               // Região 15: corridors of smoke, ember cells, the shaft, the labyrinth, the causeway (.Profundo.cs).
                     }
 
                     smooth = shaped = a * SmoothStep(0f, 1f, 0.5f + 0.85f * OverworldNoise.Fbm(x, z, 2));

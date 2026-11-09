@@ -170,6 +170,10 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       zonas (construídos), 25 áreas numa grade 5 × 5, 20 terrenos novos (260–279), relevo próprio (`GnomonDial`, `CedarRings`, `GiantShoulder`, `SkinFolds`,
       `DioriteRise`) e cenário próprio; preenche o buraco murado ao norte do Mar Gelado, a leste do Rio das Doze Horas (14 regiões; resta só o buraco ao
       norte dos Picos de Farnkesh). Detalhes em §5, "Região 14".
+    - **Região 15 — Limiar Profundo** (2026-11-09): mesmo modelo, 2400 × 2400 m (`OverworldLayouts.Profundo.cs`, coordenadas x −600…1800, z −1200…1200) com a Fortaleza da Última Lâmpada em (0, 0) (receita própria `BasaltFort` no chão plano de ±30 m) e os
+      postos de 84–90 (Lâmpada 1 (600, 0), Lâmpada 2 (120, −960), Lâmpada 3 (120, 960), Lâmpada 4 (1080, 0), Lâmpada 5 (1080, −960), Pilar do Meio (1560, −480), Selo dos Artífices (1560, 480)); 83–90 entram no catálogo (☆) e viram zonas (construídos), 25 áreas numa grade 5 × 5,
+      25 terrenos novos (280–304), relevo próprio (`SmokeCorridors`, `EmberCells`, `ShaftTerraces`, `DarkLabyrinth`, `NoveloCauseway`) e cenário próprio; preenche o último buraco murado, ao norte dos Picos de Farnkesh (x 1400…3800, z 6200…8600, deslocamento (2000, 7400), 15 regiões, mundo 7200 × 12000 m sem buracos),
+      passagens `exit_tabuas_sul` e `exit_tabuas_norte` na borda oeste, levadas às trilhas leste das Margens (nv 344–360). Detalhes em §5, "Região 15".
     - **Mundo costurado** (2026-11-03, pedido do usuário: andar entre as regiões sem portão): as quatro primeiras regiões
       formam um quadrado de 4800 × 4800 m (`OverworldLayouts.WorldId`, `OverworldLayouts.World.cs`), 2 × 2, e a **Costa das
       Monções** fica a leste do Zarafshan (x 1400…3800, z −1000…1400, deslocamento (2000, 200)) e o **Delta de Jhilpur** a
@@ -223,7 +227,7 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       Hinokura (rota a pé Vila → Cais ~8,5 km). As **Margens da Mistura** preenchem a célula ao norte do Mar Gelado, a leste do rio (x −1000…1400,
       z 6200…8600, deslocamento (−400, 7400), Dur-Jarras no mundo em (−400, 7400); `Holes` = 1, só ao norte dos Picos de Farnkesh; **14 regiões**): passagens
       `exit_beira_fervente_sul` (z 7300) e `exit_beira_fervente_norte` (z 7560), na borda oeste das Margens, levadas à trilha leste do rio (Beira Fervente, nv 292–298,
-      onde o rio já chega a nv ~300); a borda com o Mar Gelado (nv 180–240) fica sem passagem, mas é relevo contínuo (a diferença de nível é da barreira suave). Quadrado original:
+      onde o rio já chega a nv ~300); a borda com o Mar Gelado (nv 180–240) fica sem passagem, mas é relevo contínuo (a diferença de nível é da barreira suave). O **Limiar Profundo** preenche a última célula, ao norte dos Picos de Farnkesh (`Holes` = 0, **15 regiões**, nenhum buraco): passagens `exit_tabuas_sul` (z 7300) e `exit_tabuas_norte` (z 7560), na borda oeste do Limiar Profundo, levadas à trilha da Tenda dos Intérpretes das Margens (nv 344–360, onde o Limiar começa a 340); a borda sul com Farnkesh (nv ~200) fica sem passagem, relevo contínuo. Quadrado original:
       Serra de Kaggen (x −3400…−1000, z −1000…1400) | Bosque do Zarafshan (x −1000…1400, z −1000…1400) em cima;
       Grutas do Limiar (x −3400…−1000, z −3400…−1000) | Areias Flamejantes (x −1000…1400, z −3400…−1000) embaixo.
       Cada região guarda o seu layout nas suas coordenadas e é deslocada por um número inteiro de pedaços (Zarafshan
@@ -375,13 +379,13 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
 | 81 | Ombro de Upelluri | *Upelluri's Shoulder* | Margens da Mistura | 334–346 | posto: Ninho no Ombro | Dur-Jarras | ☆ |
 | 82 | Campo das Tábuas do Sonho | *Field of the Dream Tablets* | Margens da Mistura | 344–360 | posto: Tenda dos Intérpretes | Dur-Jarras | ☆ |
 | 83 | Fortaleza da Última Lâmpada | *Fortress of the Last Lamp* | Limiar Profundo | 340–350 | **cidade:** Fortaleza | Fortaleza da Última Lâmpada | ☆ |
-| 84 | Cova da Fumaça | *Pit of Smoke* | Limiar Profundo | 348–362 | posto: Lâmpada 1 | Fortaleza | ☆ |
-| 85 | Cova do Fogo Devorador | *Pit of Devouring Fire* | Limiar Profundo | 360–374 | posto: Lâmpada 2 | Fortaleza | ☆ |
-| 86 | Cova do Vento Destruidor | *Pit of Ruinous Wind* | Limiar Profundo | 372–388 | posto: Lâmpada 3 | Fortaleza | ☆ |
-| 87 | Cova do Lodo | *Pit of Mire* | Limiar Profundo | 386–402 | posto: Lâmpada 4 | Fortaleza | ☆ |
-| 88 | Cova da Treva | *Pit of Darkness* | Limiar Profundo | 400–416 | posto: Lâmpada 5 | Fortaleza | ☆ |
-| 89 | Ponte do Novelo | *Bridge of the Bōlos* | Limiar Profundo | 412–428 | posto: Pilar do Meio | Fortaleza | ☆ |
-| 90 | Portão da Terra da Treva | *Gate of the Land of Darkness* | Limiar Profundo | 424–440 | posto: Selo dos Artífices | Fortaleza | ☆ |
+| 84 | Cova da Fumaça | *Pit of Smoke* | Limiar Profundo | 348–362 | posto: Lâmpada 1 | Fortaleza da Última Lâmpada | ☆ |
+| 85 | Cova do Fogo Devorador | *Pit of Devouring Fire* | Limiar Profundo | 360–374 | posto: Lâmpada 2 | Fortaleza da Última Lâmpada | ☆ |
+| 86 | Cova do Vento Destruidor | *Pit of Ruinous Wind* | Limiar Profundo | 372–388 | posto: Lâmpada 3 | Fortaleza da Última Lâmpada | ☆ |
+| 87 | Cova do Lodo | *Pit of Mire* | Limiar Profundo | 386–402 | posto: Lâmpada 4 | Fortaleza da Última Lâmpada | ☆ |
+| 88 | Cova da Treva | *Pit of Darkness* | Limiar Profundo | 400–416 | posto: Lâmpada 5 | Fortaleza da Última Lâmpada | ☆ |
+| 89 | Ponte do Novelo | *Bridge of the Bōlos* | Limiar Profundo | 412–428 | posto: Pilar do Meio | Fortaleza da Última Lâmpada | ☆ |
+| 90 | Portão da Terra da Treva | *Gate of the Land of Darkness* | Limiar Profundo | 424–440 | posto: Selo dos Artífices | Fortaleza da Última Lâmpada | ☆ |
 | 91 | Cais da Coluna | *Column Quay* | Reinos do Céu | 420–430 | **cidade:** Cais da Coluna | Cais da Coluna | ☆ |
 | 92 | Rio de Luz | *River of Light* | Reinos do Céu | 428–440 | posto: Boia de Luz | Cais da Coluna | ☆ |
 | 93 | Convés da Barca da Lua | *Moon Ship Deck* | Reinos do Céu | 436–450 | posto: Cabine da Proa | Cais da Coluna | ☆ |
@@ -2412,6 +2416,14 @@ das Lamparinas. Estilo novo `BasaltFort`. Paleta: basalto `#2C2C33`, âmbar `#FF
 **Pamour** (o comandante das lâmpadas), **Tehat** (a tecelã de pavios), **Makarios** (o pai que escreve cartas para os
 filhos longe, eco das cartas do Vô Jorge). Raide: **A Grande Treva** (mapa 90).
 
+**No jogo (2026-11-09): mundo contínuo** (`OverworldLayouts.Profundo.cs`, §0.10): 2400 × 2400 m ao norte dos Picos de Farnkesh (preenche o último buraco murado; 15 regiões, mundo sem buracos; duas passagens abertas na borda oeste levam às trilhas leste das Margens da Mistura, nv 344–360),
+25 áreas em 25 terrenos novos — Fortaleza, Muralha em Arco, Nichos de Basalto, Cisternas de Óleo, Varais de Pavios e Beira do Abismo (83, cidade, nv 340–350); Cova da Fumaça com a Lâmpada 1, Ventiladores dos Artífices e Corredores de Cinza (84, posto; **Teriaga**, nv 348–362); Cova do Fogo Devorador com a Lâmpada 2,
+Chão que Acende e Salões de Cinza Quente (85, posto; **Óleo de Fogo Eterno**, nv 360–374); Cova do Vento Destruidor com a Lâmpada 3 (poço de anéis em degraus), Plataformas Soltas e Correntes Ascendentes (86, posto; **Asas de Lona**, nv 372–388); Cova do Lodo com a Lâmpada 4, Salões Alagados e Comportas dos Artífices (87, posto; **Bolha de Ar**, nv 386–402; lagoas de água preta);
+Cova da Treva com a Lâmpada 5 e Túneis Cegos (88, posto; **Lamparina Rúnica**, nv 400–416, labirinto de paredes); Cabeceira da Ponte, Ponte do Novelo com o Pilar do Meio e Lances do Novelo (89, posto; **Vara de Equilíbrio**, nv 412–428: uma calçada elevada reta com dez pilares e o globo escuro do Novelo ao lado);
+Praça dos Pedestais com o Selo dos Artífices e cinco pedestais de lâmpada, e Portão da Terra da Treva (90, posto; **Lamparina de Óleo**, nv 424–440, com o portão gigante). Todas as exigências estão no balcão fixo dos Pavios da Tehat. Bichos existentes nos papéis das fichas (mordedor de sombra = Sombra Pequena, névoa do vento ruim = Fumaça/Redemoinho, morcego vampiro = Morcego da Treva, ushabti de laca = Ushabti Apagado, almas = Sombra-Cópia,
+gigante sonâmbulo = Gigante de Fumaça, cabra de fumaça = Fumaça Sufocante, soldado de terracota = Arqueiro de Fumaça, lobo de bronze = Lobo de Brasa, iaque = Touro de Cinza, leão de pedra = Leão de Fumaça Quente, enxame de vaga-lumes = Chama Faminta, águia da tempestade = Águia Negra, morcego-vela = Morcego-Lâmina, harpia de fumaça = Harpia de Vento, peixe-lâmina = Peixe da Treva, cobra do junco = Enguia Grande,
+gosma = Polvo de Lodo, peixe-lanterna = Cardume Escuro, píton apagada = Serpente Cega, lagarto de lava gigante = Lagarto-Sombra, treva rastejante = Rastejante, serpente de três cabeças = Dragão-Sombra Menor, orc coroado = Arconte Menor, golem de pedra = Ushabti Apagado Gigante), variante noturna em toda clareira, nenhum chefe (Rei da Fumaça, Leoa, Águia de Asas de Treva, Peixe de Cauda Negra, Dragão do Fundo, Guardião do Novelo e A Grande Treva ficam para depois). Testes `OverworldProfundoTests` e `OverworldWorldTests`. Falta: rede de lâmpadas e Maré de Treva, vento que limpa a fumaça, chão que acende com aviso, correntes de ar, comportas e nível da água, dano no escuro, ponte que acende por lances e as montarias.
+
 ### 83 · Fortaleza da Última Lâmpada / *Fortress of the Last Lamp* — nv 340–350 · ☆ · cidade
 - **Fonte:** a borda da Terra da Treva; cartas de Kellis (nomes); a Lâmpada-Mãe da Parthenos (bíblia §3.10).
 - **Bioma e visual:** fortaleza escavada no basalto com mil nichos de lâmpada; estilo `BasaltFort`.
@@ -2425,6 +2437,7 @@ filhos longe, eco das cartas do Vô Jorge). Raide: **A Grande Treva** (mapa 90).
 - **Ganchos:** loot pavio eterno, óleo de luz · montaria `mount_carbuncle` (Raposa-Joia, Despertar IV) · casa: conjunto
   novo **Mil Lâmpadas**.
 - **Noite:** igual (sem céu); à "noite do relógio" a Maré de Treva é mais forte.
+- **No jogo (2026-11-09): cidade de verdade** (`CityTownRecipes.UltimaLampada.cs`, estilo `BasaltFort`, id `fortaleza_ultima_lampada`), já no mundo contínuo: em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S, a S é a entrada; sem rua ao norte: os cinco portões selados fecham a praça), Lâmpada-Mãe Grande, Pamour, Tehat e Makarios; Pavios da Tehat com as exigências de 84–90 fixas; respawn na praça para 83–90. Falta: rede de lâmpadas e o evento da Maré de Treva.
 
 ### 84 · Cova da Fumaça / *Pit of Smoke* — nv 348–362 · ☆
 - **Fonte:** a Fumaça, 1º mundo da Treva, dos que andam em duas pernas.
