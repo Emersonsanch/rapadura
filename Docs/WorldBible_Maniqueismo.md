@@ -430,6 +430,34 @@ Seguem com substitutos: Enguia-Lanterna (`enemy_desert_sand_snake`), Rachadura /
 | `enemy_mountain_giant_pike` | **Lúcio Gigante** / *Giant Pike* | 64 (e o Peixe-Gelo do 60) | [rápido] | bicho real dos lagos frios; os *kul* guardam os peixes (conto komi); o Velho Kul azedou e os lúcios dele nadam no ar frio sobre os buracos. |
 | `enemy_mountain_shadow_seal` | **Foca-Sombra** / *Shadow Seal* | 64 | [tanque] | a foca-anelada (bicho real) escurecida feito a água debaixo do gelo, anéis que brilham; deita em cima dos buracos de pesca porque a Āz disse que todo peixe é dela. |
 
+**Sexta leva (2026-11-09): Arquipélago de Hinokura (Mapas100 65–70).** Mesmo contrato (peso 0 no bioma, nível da área, números do
+bioma). A região inteira fica no bioma Montanha (Fogo Vivo no tema, mas `OverworldLayouts.Hinokura` declara
+`w.World.Biome = BiomeType.Mountain`), daí o prefixo `enemy_mountain_`. Modelos em `HinokuraBeastRecipes` (o caranguejo abre as
+pinças; o lagarto, a shisa, o tanuki, a tibicena, o lagarto-gigante, o peixe-lâmina e o coral abrem a boca com a cauda balançando,
+as barbatanas do peixe remando no vapor e os ramos do coral mexendo devagar; o ushabti, o ogro e o gigante erguem os dois braços;
+a gaivota abre o bico com as asas paradas), Caderno em `HinokuraBestiaryTexts`. A Gaivota-Brasa e o Coral de Brasa são os
+[distância] das fichas: cospem brasa como o abutre (`EnemyProjectileKind.Ember`, entram em `RangedEnemiesTests`). Testes:
+`HinokuraBeastsTests`. Respeito (ficha da região): a shisa de Okinawa, que segue viva nos telhados, só como guardiã apagada e
+nunca ridicularizada; os tibicenas guanches só como o conto os dá, contado com cuidado; o tanuki só como o bicho brincalhão dos
+contos. Ainda não trocados nos grupos do overworld (`OverworldLayouts.Hinokura.cs`, classe `Fogo`). Seguem com substitutos:
+Pedra-Pomes Voadora, Carpa de Brasa, Bambu de Fumaça, Fumarola, Fole Vivo, Bomba Vulcânica, Polvo de Obsidiana, Ouriço de Vidro,
+Faísca Raivosa, Chama Faminta, Salamandra Devoradora e Cinza Viva.
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_mountain_volcano_crab` | **Caranguejo-Vulcão** / *Volcano Crab* | 65 | [tanque] | caranguejos das praias negras; a sombra fez a casca criar um cone que fumega e cada um achar que é dono de uma montanha (Āz: mais e mais nas costas). |
+| `enemy_mountain_lava_lizard` | **Lagarto de Lava** / *Lava Lizard* | 65 | [rápido] | lagartinhos dos canais que comiam as moscas das forjas; a sombra acendeu a listra das costas. |
+| `enemy_mountain_ember_gull` | **Gaivota-Brasa** / *Ember Gull* | 65 | [distância] | as gaivotas dos barcos de minério comeram as faíscas das chaminés; cospem brasa de longe, gulosas demais pra chegar perto. |
+| `enemy_mountain_dimmed_shisa` | **Shisa Apagada** / *Dimmed Shisa* | 66 | [elite] | a *shisa* de Okinawa (leão-cão de telhado, tradição viva) só como forma: os guardiões dos palácios de Hinokura apagaram, desceram e não lembram pra quem era a casa. |
+| `enemy_mountain_tanuki` | **Tanuki Ladrão** / *Thieving Tanuki* | 66 | [rápido], foge ferido | bicho real (cachorro-guaxinim) e o trapaceiro dos contos japoneses; a sombra tirou a brincadeira e deixou só o roubo. |
+| `enemy_mountain_tibicena` | **Tibicena** / *Tibicena* | 67 | [rápido] | os cães negros do conto guanche do Echeyde (cultura extinta, contado com cuidado); magros, só costela e fome; de noite são o dobro. |
+| `enemy_mountain_giant_lava_lizard` | **Lagarto-Gigante de Lava** / *Giant Lava Lizard* | 67 | [tanque] | lagartos do malpaís do tamanho de carroça, que dormiam cem anos; a sombra entrou pelas frestas das placas de basalto. |
+| `enemy_mountain_blade_fish` | **Peixe-Lâmina** / *Blade Fish* | 68 | [rápido] | invenção: peixes dos canais quentes que se esfregaram no vidro preto até ficarem afiados; nadam no vapor. |
+| `enemy_mountain_ember_coral` | **Coral de Brasa** / *Ember Coral* | 68 | [distância] | invenção: o coral das fontes quentes, aldeia de bichinhos; a sombra disse que a aldeia era pequena e ele soltou da pedra. |
+| `enemy_mountain_lacquer_ushabti` | **Ushabti de Laca** / *Lacquer Ushabti* | 69 | [tanque] | o ushabti de Kemet como ideia copiada pelos ferreiros: figuras de laca vermelha que seguem passando o ferro quente sem saber por quê. |
+| `enemy_mountain_furnace_ogre` | **Ogro-Fornalha** / *Furnace Ogre* | 69 | [elite] | invenção: os foguistas que cantavam nas Nove Fornalhas; a sombra disse pra guardar o fogo e a fornalha foi parar na barriga. |
+| `enemy_mountain_slag_giant` | **Gigante de Escória** / *Slag Giant* | 70 | [tanque] | o monte de tudo que as forjas jogaram fora; o Fogo Devorador o fez andar, querendo voltar a ser alguma coisa. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |

@@ -180,6 +180,19 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_mountain_sea_wolf", ProceduralEnemyKind.SeaWolf },
             { "enemy_mountain_giant_pike", ProceduralEnemyKind.GiantPike },
             { "enemy_mountain_shadow_seal", ProceduralEnemyKind.ShadowSeal },
+            // The beasts of the Arquipélago de Hinokura (Docs/Mapas100.md 65–70), formerly played by stand-ins.
+            { "enemy_mountain_volcano_crab", ProceduralEnemyKind.VolcanoCrab },
+            { "enemy_mountain_lava_lizard", ProceduralEnemyKind.LavaLizard },
+            { "enemy_mountain_ember_gull", ProceduralEnemyKind.EmberGull },
+            { "enemy_mountain_dimmed_shisa", ProceduralEnemyKind.DimmedShisa },
+            { "enemy_mountain_tanuki", ProceduralEnemyKind.Tanuki },
+            { "enemy_mountain_tibicena", ProceduralEnemyKind.Tibicena },
+            { "enemy_mountain_giant_lava_lizard", ProceduralEnemyKind.GiantLavaLizard },
+            { "enemy_mountain_blade_fish", ProceduralEnemyKind.BladeFish },
+            { "enemy_mountain_ember_coral", ProceduralEnemyKind.EmberCoral },
+            { "enemy_mountain_lacquer_ushabti", ProceduralEnemyKind.LacquerUshabti },
+            { "enemy_mountain_furnace_ogre", ProceduralEnemyKind.FurnaceOgre },
+            { "enemy_mountain_slag_giant", ProceduralEnemyKind.SlagGiant },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -213,6 +226,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.LeopardSeal, ProceduralEnemyKind.SmokeWalrus, ProceduralEnemyKind.IceGull, ProceduralEnemyKind.ArcticFox,
             ProceduralEnemyKind.PolarBear, ProceduralEnemyKind.ClayReindeer, ProceduralEnemyKind.StoneHare, ProceduralEnemyKind.TwigBird,
             ProceduralEnemyKind.BurrowMammoth, ProceduralEnemyKind.SeaWolf, ProceduralEnemyKind.GiantPike, ProceduralEnemyKind.ShadowSeal,
+            ProceduralEnemyKind.VolcanoCrab, ProceduralEnemyKind.LavaLizard, ProceduralEnemyKind.EmberGull, ProceduralEnemyKind.DimmedShisa,
+            ProceduralEnemyKind.Tanuki, ProceduralEnemyKind.Tibicena, ProceduralEnemyKind.GiantLavaLizard, ProceduralEnemyKind.BladeFish,
+            ProceduralEnemyKind.EmberCoral, ProceduralEnemyKind.LacquerUshabti, ProceduralEnemyKind.FurnaceOgre, ProceduralEnemyKind.SlagGiant,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -492,6 +508,42 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.ShadowSeal:
                     MarGeladoBeastRecipes.BuildShadowSeal(blueprint);
+                    break;
+                case ProceduralEnemyKind.VolcanoCrab:
+                    HinokuraBeastRecipes.BuildVolcanoCrab(blueprint);
+                    break;
+                case ProceduralEnemyKind.LavaLizard:
+                    HinokuraBeastRecipes.BuildLavaLizard(blueprint);
+                    break;
+                case ProceduralEnemyKind.EmberGull:
+                    HinokuraBeastRecipes.BuildEmberGull(blueprint);
+                    break;
+                case ProceduralEnemyKind.DimmedShisa:
+                    HinokuraBeastRecipes.BuildDimmedShisa(blueprint);
+                    break;
+                case ProceduralEnemyKind.Tanuki:
+                    HinokuraBeastRecipes.BuildTanuki(blueprint);
+                    break;
+                case ProceduralEnemyKind.Tibicena:
+                    HinokuraBeastRecipes.BuildTibicena(blueprint);
+                    break;
+                case ProceduralEnemyKind.GiantLavaLizard:
+                    HinokuraBeastRecipes.BuildGiantLavaLizard(blueprint);
+                    break;
+                case ProceduralEnemyKind.BladeFish:
+                    HinokuraBeastRecipes.BuildBladeFish(blueprint);
+                    break;
+                case ProceduralEnemyKind.EmberCoral:
+                    HinokuraBeastRecipes.BuildEmberCoral(blueprint);
+                    break;
+                case ProceduralEnemyKind.LacquerUshabti:
+                    HinokuraBeastRecipes.BuildLacquerUshabti(blueprint);
+                    break;
+                case ProceduralEnemyKind.FurnaceOgre:
+                    HinokuraBeastRecipes.BuildFurnaceOgre(blueprint);
+                    break;
+                case ProceduralEnemyKind.SlagGiant:
+                    HinokuraBeastRecipes.BuildSlagGiant(blueprint);
                     break;
             }
 

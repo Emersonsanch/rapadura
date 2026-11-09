@@ -188,6 +188,33 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         GiantPike = 81,
         /// <summary>Foca-Sombra (Fundo do Kul, 64): round dark seal with pale glowing rings; a jaw that gapes.</summary>
         ShadowSeal = 82,
+
+        // The beasts of the Arquipélago de Hinokura (Docs/Mapas100.md 65–70) that the overworld layout played with stand-ins
+        // (HinokuraBeastRecipes).
+        /// <summary>Caranguejo-Vulcão (Hinokura, 65): basalt crab with a smoking cone on its back; the pincers open on the windup.</summary>
+        VolcanoCrab = 83,
+        /// <summary>Lagarto de Lava (Hinokura, 65): low black lizard with a glowing stripe; a jaw that gapes.</summary>
+        LavaLizard = 84,
+        /// <summary>Gaivota-Brasa (Hinokura, 65): soot-grey gull with ember wing tips; [distância], the beak opens to spit.</summary>
+        EmberGull = 85,
+        /// <summary>Shisa Apagada (Jardins, 66): red-glazed ceramic lion-dog with a curled mane; a wide jaw.</summary>
+        DimmedShisa = 86,
+        /// <summary>Tanuki Ladrão (Jardins, 66): round masked raccoon-dog, ringed brush, a leaf on its head; a jaw that gapes.</summary>
+        Tanuki = 87,
+        /// <summary>Tibicena (Echeyde, 67): lean black dog, ribs and ember eyes; a jaw that gapes.</summary>
+        Tibicena = 88,
+        /// <summary>Lagarto-Gigante de Lava (Echeyde, 67): broad lizard plated in basalt, lava in the seams; a jaw that gapes.</summary>
+        GiantLavaLizard = 89,
+        /// <summary>Peixe-Lâmina (Recife, 68): flat fish of black glass that swims in the steam; a jaw that gapes, blade fins that row.</summary>
+        BladeFish = 90,
+        /// <summary>Coral de Brasa (Recife, 68): drifting coral with embers at its tips; [distância], the mouth opens to spit.</summary>
+        EmberCoral = 91,
+        /// <summary>Ushabti de Laca (Castelo, 69): red-lacquered servant figure with forge tongs; both arms go up to strike.</summary>
+        LacquerUshabti = 92,
+        /// <summary>Ogro-Fornalha (Castelo, 69): iron ogre with a furnace in its belly and a hammer; both arms go up to strike.</summary>
+        FurnaceOgre = 93,
+        /// <summary>Gigante de Escória (Caldeira, 70): heap of slag with lava in the seams, huge fists; both arms go up to strike.</summary>
+        SlagGiant = 94,
     }
 
     /// <summary>

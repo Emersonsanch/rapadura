@@ -257,6 +257,9 @@ namespace Rapadura.UI.Bestiary
             // -- Bichos do Mar Gelado que o mundo contínuo fazia com substitutos (own file too) --
             MarGeladoBestiaryTexts.AddPages(entries);
 
+            // -- Bichos do Arquipélago de Hinokura que o mundo contínuo fazia com substitutos (own file too) --
+            HinokuraBestiaryTexts.AddPages(entries);
+
             // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
             OssuaryBestiaryTexts.AddPages(entries);
 

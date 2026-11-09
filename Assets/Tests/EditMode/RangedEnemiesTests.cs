@@ -41,6 +41,9 @@ namespace Rapadura.Tests
             // the Mar Gelado overworld, MarGeladoBeastsPlacementTests).
             ("enemy_mountain_ice_gull", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.IceGull),
             ("enemy_mountain_twig_bird", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.TwigBird),
+            // Hinokura (65, 68): the ember gull and the ember coral spit embers like the vulture (HinokuraBeastsTests; placed later).
+            ("enemy_mountain_ember_gull", BiomeType.Mountain, EnemyProjectileKind.Ember, ProceduralEnemyKind.EmberGull),
+            ("enemy_mountain_ember_coral", BiomeType.Mountain, EnemyProjectileKind.Ember, ProceduralEnemyKind.EmberCoral),
         };
 
         /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>

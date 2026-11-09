@@ -569,6 +569,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.SmokeHarpy:
                 case ProceduralEnemyKind.IceGull:
                 case ProceduralEnemyKind.TwigBird:
+                case ProceduralEnemyKind.EmberGull:
                 {
                     // The birds of the peaks: the eagle soars on long glides, the chough and the flute bird beat quicker; the wings
                     // hold still and the beak opens on the windup (the flute bird's note, the chough's and the harpy's screech).
@@ -603,6 +604,30 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 }
 
+                case ProceduralEnemyKind.LavaLizard:
+                case ProceduralEnemyKind.DimmedShisa:
+                case ProceduralEnemyKind.Tanuki:
+                case ProceduralEnemyKind.Tibicena:
+                case ProceduralEnemyKind.GiantLavaLizard:
+                case ProceduralEnemyKind.BladeFish:
+                case ProceduralEnemyKind.EmberCoral:
+                {
+                    // Hinokura's biters: the jaw gapes on the windup and the tail sways; the blade fish's fins row in the steam, the
+                    // ember coral's fronds stir slowly as it drifts.
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(Mathf.Max(0f, Mathf.Sin(t * 0.7f)) * 3f * k + 32f * r, 0f, 0f));
+                    float sway = _kind == ProceduralEnemyKind.BladeFish ? Mathf.Sin(t * 2.8f) * 20f
+                        : _kind == ProceduralEnemyKind.EmberCoral ? Mathf.Sin(t * 0.8f) * 6f
+                        : Mathf.Sin(t * 1.6f) * 12f;
+                    Rotate(ProceduralEnemyParts.Tail, Quaternion.Euler(0f, sway * k, 0f));
+                    if (_kind == ProceduralEnemyKind.BladeFish || _kind == ProceduralEnemyKind.EmberCoral)
+                    {
+                        FlapWings(t, speed * (_kind == ProceduralEnemyKind.BladeFish ? 0.7f : 0.3f), Mathf.Max(k, 0.25f) * 0.5f, Mathf.Clamp01(MoveSpeed01));
+                    }
+
+                    break;
+                }
+
                 case ProceduralEnemyKind.GoldenBee:
                 {
                     // A blur of fast wingbeats; the sting swings forward under the body on the windup.
@@ -623,8 +648,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 }
 
                 case ProceduralEnemyKind.RopeUshabti:
+                case ProceduralEnemyKind.LacquerUshabti:
+                case ProceduralEnemyKind.FurnaceOgre:
+                case ProceduralEnemyKind.SlagGiant:
                 {
-                    // Waits with its hoe; both arms go up and the hoe comes down like on the fields of the other world.
+                    // Waits with its hoe; both arms go up and the hoe comes down like on the fields of the other world (Hinokura: the
+                    // lacquer ushabti's tongs, the furnace ogre's hammer, the slag giant's fists).
                     float r = StepAttack(deltaTime, 4f, 2.5f);
                     if (_driveLimbs)
                     {
@@ -637,6 +666,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 }
 
                 case ProceduralEnemyKind.BarkBeetle:
+                case ProceduralEnemyKind.VolcanoCrab:
                 {
                     // The mandibles open wide on the windup and snap shut on the pinch.
                     float r = StepAttack(deltaTime, 5f, 4f);

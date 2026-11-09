@@ -290,6 +290,19 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_mountain_sea_wolf", "Sea Wolf", "Lobo-do-Mar"),
             EnemyName("enemy_mountain_giant_pike", "Giant Pike", "Lúcio Gigante"),
             EnemyName("enemy_mountain_shadow_seal", "Shadow Seal", "Foca-Sombra"),
+            // The beasts of the Arquipélago de Hinokura (Docs/Mapas100.md 65–70), formerly played by stand-ins.
+            EnemyName("enemy_mountain_volcano_crab", "Volcano Crab", "Caranguejo-Vulcão"),
+            EnemyName("enemy_mountain_lava_lizard", "Lava Lizard", "Lagarto de Lava"),
+            EnemyName("enemy_mountain_ember_gull", "Ember Gull", "Gaivota-Brasa"),
+            EnemyName("enemy_mountain_dimmed_shisa", "Dimmed Shisa", "Shisa Apagada"),
+            EnemyName("enemy_mountain_tanuki", "Thieving Tanuki", "Tanuki Ladrão"),
+            EnemyName("enemy_mountain_tibicena", "Tibicena", "Tibicena"),
+            EnemyName("enemy_mountain_giant_lava_lizard", "Giant Lava Lizard", "Lagarto-Gigante de Lava"),
+            EnemyName("enemy_mountain_blade_fish", "Blade Fish", "Peixe-Lâmina"),
+            EnemyName("enemy_mountain_ember_coral", "Ember Coral", "Coral de Brasa"),
+            EnemyName("enemy_mountain_lacquer_ushabti", "Lacquer Ushabti", "Ushabti de Laca"),
+            EnemyName("enemy_mountain_furnace_ogre", "Furnace Ogre", "Ogro-Fornalha"),
+            EnemyName("enemy_mountain_slag_giant", "Slag Giant", "Gigante de Escória"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),
