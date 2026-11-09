@@ -45,6 +45,9 @@ namespace Rapadura.Tests
             // the Hinokura overworld, HinokuraBeastsPlacementTests).
             ("enemy_mountain_ember_gull", BiomeType.Mountain, EnemyProjectileKind.Ember, ProceduralEnemyKind.EmberGull),
             ("enemy_mountain_ember_coral", BiomeType.Mountain, EnemyProjectileKind.Ember, ProceduralEnemyKind.EmberCoral),
+            // Margens da Mistura (79, 82): the tar heron's glob of pitch and the broken tablet's bolt of words (MisturaBeastsTests; placed by the Margens overworld, MisturaBeastsPlacementTests).
+            ("enemy_forest_tar_heron", BiomeType.Forest, EnemyProjectileKind.LureGlob, ProceduralEnemyKind.TarHeron),
+            ("enemy_forest_broken_tablet", BiomeType.Forest, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.BrokenTablet),
         };
 
         /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>
@@ -69,6 +72,8 @@ namespace Rapadura.Tests
             (OverworldLayouts.MarGeladoRegionId, OverworldLayouts.MarAurorasMapId, new[] { "enemy_mountain_ice_gull" }),
             (OverworldLayouts.HinokuraRegionId, OverworldLayouts.HinokuraMapId, new[] { "enemy_mountain_ember_gull" }),
             (OverworldLayouts.HinokuraRegionId, OverworldLayouts.RecifeObsidianaMapId, new[] { "enemy_mountain_ember_coral" }),
+            (OverworldLayouts.MisturaRegionId, OverworldLayouts.PocosBetumeMapId, new[] { "enemy_forest_tar_heron" }),
+            (OverworldLayouts.MisturaRegionId, OverworldLayouts.TabuasSonhoMapId, new[] { "enemy_forest_broken_tablet" }),
         };
 
         private readonly List<Object> _created = new List<Object>();

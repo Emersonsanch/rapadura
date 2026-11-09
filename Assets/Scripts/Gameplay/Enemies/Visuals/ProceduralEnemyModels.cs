@@ -206,6 +206,19 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_forest_sand_ushabti", ProceduralEnemyKind.SandUshabti },
             { "enemy_forest_shadow_biter", ProceduralEnemyKind.ShadowBiter },
             { "enemy_forest_creeping_dark", ProceduralEnemyKind.CreepingDark },
+            // The beasts of the Margens da Mistura (Docs/Mapas100.md 77–82), formerly played by stand-ins.
+            { "enemy_forest_brick_lion", ProceduralEnemyKind.BrickLion },
+            { "enemy_forest_young_mushussu", ProceduralEnemyKind.YoungMushussu },
+            { "enemy_forest_bitumen_locust", ProceduralEnemyKind.BitumenLocust },
+            { "enemy_forest_living_hourglass", ProceduralEnemyKind.LivingHourglass },
+            { "enemy_forest_late_shadow", ProceduralEnemyKind.LateShadow },
+            { "enemy_forest_living_tar", ProceduralEnemyKind.LivingTar },
+            { "enemy_forest_tar_heron", ProceduralEnemyKind.TarHeron },
+            { "enemy_forest_angry_cedar", ProceduralEnemyKind.AngryCedar },
+            { "enemy_forest_glow_mantle", ProceduralEnemyKind.GlowMantle },
+            { "enemy_forest_ullikummi_son", ProceduralEnemyKind.UllikummiSon },
+            { "enemy_forest_broken_tablet", ProceduralEnemyKind.BrokenTablet },
+            { "enemy_forest_garden_shadow", ProceduralEnemyKind.GardenShadow },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -245,6 +258,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.DarkRiverCrocodile, ProceduralEnemyKind.DimmedIbis, ProceduralEnemyKind.ShadowScarab, ProceduralEnemyKind.ReedSnare,
             ProceduralEnemyKind.ShadowLocust, ProceduralEnemyKind.MudHippo, ProceduralEnemyKind.ReedSnake, ProceduralEnemyKind.ThreeHeadedSerpent,
             ProceduralEnemyKind.BlackScorpion, ProceduralEnemyKind.SandUshabti, ProceduralEnemyKind.ShadowBiter, ProceduralEnemyKind.CreepingDark,
+            ProceduralEnemyKind.BrickLion, ProceduralEnemyKind.YoungMushussu, ProceduralEnemyKind.BitumenLocust, ProceduralEnemyKind.LivingHourglass,
+            ProceduralEnemyKind.LateShadow, ProceduralEnemyKind.LivingTar, ProceduralEnemyKind.TarHeron, ProceduralEnemyKind.AngryCedar,
+            ProceduralEnemyKind.GlowMantle, ProceduralEnemyKind.UllikummiSon, ProceduralEnemyKind.BrokenTablet, ProceduralEnemyKind.GardenShadow,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -596,6 +612,42 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.CreepingDark:
                     RioBeastRecipes.BuildCreepingDark(blueprint);
+                    break;
+                case ProceduralEnemyKind.BrickLion:
+                    MisturaBeastRecipes.BuildBrickLion(blueprint);
+                    break;
+                case ProceduralEnemyKind.YoungMushussu:
+                    MisturaBeastRecipes.BuildYoungMushussu(blueprint);
+                    break;
+                case ProceduralEnemyKind.BitumenLocust:
+                    MisturaBeastRecipes.BuildBitumenLocust(blueprint);
+                    break;
+                case ProceduralEnemyKind.LivingHourglass:
+                    MisturaBeastRecipes.BuildLivingHourglass(blueprint);
+                    break;
+                case ProceduralEnemyKind.LateShadow:
+                    MisturaBeastRecipes.BuildLateShadow(blueprint);
+                    break;
+                case ProceduralEnemyKind.LivingTar:
+                    MisturaBeastRecipes.BuildLivingTar(blueprint);
+                    break;
+                case ProceduralEnemyKind.TarHeron:
+                    MisturaBeastRecipes.BuildTarHeron(blueprint);
+                    break;
+                case ProceduralEnemyKind.AngryCedar:
+                    MisturaBeastRecipes.BuildAngryCedar(blueprint);
+                    break;
+                case ProceduralEnemyKind.GlowMantle:
+                    MisturaBeastRecipes.BuildGlowMantle(blueprint);
+                    break;
+                case ProceduralEnemyKind.UllikummiSon:
+                    MisturaBeastRecipes.BuildUllikummiSon(blueprint);
+                    break;
+                case ProceduralEnemyKind.BrokenTablet:
+                    MisturaBeastRecipes.BuildBrokenTablet(blueprint);
+                    break;
+                case ProceduralEnemyKind.GardenShadow:
+                    MisturaBeastRecipes.BuildGardenShadow(blueprint);
                     break;
             }
 

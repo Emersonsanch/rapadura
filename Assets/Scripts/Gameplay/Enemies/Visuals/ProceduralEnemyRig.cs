@@ -355,6 +355,15 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 }
 
+                case ProceduralEnemyKind.BrokenTablet:
+                {
+                    // Stands and sways a little; it leans back on the windup and its broken line flares before the words fly.
+                    float r = StepAttack(deltaTime, 4f, 2.5f);
+                    Rotate(ProceduralEnemyParts.Body, Quaternion.Euler(Mathf.Sin(t * 0.8f) * 3f * k - 16f * r, 0f, Mathf.Sin(t * 0.6f + 1.1f) * 3f * k));
+                    Pulse(ProceduralEnemyParts.StolenLight, 1f + Mathf.Sin(t * 3.1f) * 0.08f * k + 0.35f * r);
+                    break;
+                }
+
                 case ProceduralEnemyKind.LanternFish:
                 {
                     // Swims in the air: tail sweeps, fins paddle, the jaw gapes and the lure brightens to shoot.
@@ -430,6 +439,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
 
                 case ProceduralEnemyKind.CaveOoze:
                 case ProceduralEnemyKind.CreepingDark:
+                case ProceduralEnemyKind.LivingTar:
                 {
                     // Squash and stretch; it flattens on the windup and the swallowed lights flare.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -581,12 +591,14 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.EmberGull:
                 case ProceduralEnemyKind.DimmedIbis:
                 case ProceduralEnemyKind.ShadowLocust:
+                case ProceduralEnemyKind.BitumenLocust:
+                case ProceduralEnemyKind.TarHeron:
                 {
                     // The birds of the peaks: the eagle soars on long glides, the chough and the flute bird beat quicker; the wings
                     // hold still and the beak opens on the windup (the flute bird's note, the chough's and the harpy's screech).
                     float r = StepAttack(deltaTime, 5f, 3f);
                     float rate = _kind == ProceduralEnemyKind.StormEagle ? 0.4f : _kind == ProceduralEnemyKind.SmokeHarpy ? 0.55f
-                        : _kind == ProceduralEnemyKind.ShadowLocust ? 1.8f : 0.8f;
+                        : _kind == ProceduralEnemyKind.ShadowLocust || _kind == ProceduralEnemyKind.BitumenLocust ? 1.8f : 0.8f;
                     FlapWings(t, speed * rate, Mathf.Max(k, 0.25f) * (1f - 0.7f * r), Mathf.Max(Mathf.Clamp01(MoveSpeed01), 0.5f));
                     Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(-14f * r, Mathf.Sin(t * 0.6f) * 25f * k * (1f - r), 0f));
                     Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(32f * r, 0f, 0f));
@@ -644,15 +656,21 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.MudHippo:
                 case ProceduralEnemyKind.ShadowBiter:
                 case ProceduralEnemyKind.ReedSnare:
+                case ProceduralEnemyKind.BrickLion:
+                case ProceduralEnemyKind.YoungMushussu:
+                case ProceduralEnemyKind.LateShadow:
+                case ProceduralEnemyKind.GlowMantle:
                 {
-                    // The river's biters: the jaw gapes on the windup and the tail sways; the reed snare's root drags slowly and its nooses stir.
+                    // The river's biters and the Margins': the jaw gapes on the windup and the tail sways; what drifts (the reed snare's root, the
+                    // late shadow's trail, the mantle's hem) drags slowly and its nooses or sleeves stir.
+                    bool drifts = _kind == ProceduralEnemyKind.ReedSnare || _kind == ProceduralEnemyKind.LateShadow || _kind == ProceduralEnemyKind.GlowMantle;
                     float r = StepAttack(deltaTime, 5f, 3f);
                     Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(Mathf.Max(0f, Mathf.Sin(t * 0.7f)) * 3f * k + 32f * r, 0f, 0f));
-                    float sway = _kind == ProceduralEnemyKind.ReedSnare ? Mathf.Sin(t * 0.8f) * 6f
-                        : _kind == ProceduralEnemyKind.MudHippo ? Mathf.Sin(t * 1.1f) * 8f
+                    float sway = drifts ? Mathf.Sin(t * 0.8f) * 6f
+                        : _kind == ProceduralEnemyKind.MudHippo || _kind == ProceduralEnemyKind.BrickLion ? Mathf.Sin(t * 1.1f) * 8f
                         : Mathf.Sin(t * 1.6f) * 12f;
                     Rotate(ProceduralEnemyParts.Tail, Quaternion.Euler(0f, sway * k, 0f));
-                    if (_kind == ProceduralEnemyKind.ReedSnare)
+                    if (drifts)
                     {
                         FlapWings(t, speed * 0.3f, Mathf.Max(k, 0.25f) * 0.5f, Mathf.Clamp01(MoveSpeed01));
                     }
@@ -684,6 +702,10 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.FurnaceOgre:
                 case ProceduralEnemyKind.SlagGiant:
                 case ProceduralEnemyKind.SandUshabti:
+                case ProceduralEnemyKind.LivingHourglass:
+                case ProceduralEnemyKind.AngryCedar:
+                case ProceduralEnemyKind.UllikummiSon:
+                case ProceduralEnemyKind.GardenShadow:
                 {
                     // Waits with its hoe; both arms go up and the hoe comes down like on the fields of the other world (Hinokura: the
                     // lacquer ushabti's tongs, the furnace ogre's hammer, the slag giant's fists).

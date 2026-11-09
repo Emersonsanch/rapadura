@@ -316,6 +316,19 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_forest_sand_ushabti", "Sand Ushabti", "Ushabti de Areia"),
             EnemyName("enemy_forest_shadow_biter", "Shadow Biter", "Mordedor de Sombra"),
             EnemyName("enemy_forest_creeping_dark", "Creeping Dark", "Treva Rastejante"),
+            // The beasts of the Margens da Mistura (Docs/Mapas100.md 77–82), formerly played by stand-ins.
+            EnemyName("enemy_forest_brick_lion", "Dimmed Brick Lion", "Leão de Tijolo Apagado"),
+            EnemyName("enemy_forest_young_mushussu", "Young Mushussu", "Mušḫuššu Jovem"),
+            EnemyName("enemy_forest_bitumen_locust", "Bitumen Locust", "Gafanhoto de Betume"),
+            EnemyName("enemy_forest_living_hourglass", "Living Hourglass", "Ampulheta Viva"),
+            EnemyName("enemy_forest_late_shadow", "Late Shadow", "Sombra Atrasada"),
+            EnemyName("enemy_forest_living_tar", "Living Tar", "Betume Vivo"),
+            EnemyName("enemy_forest_tar_heron", "Tar Heron", "Garça de Piche"),
+            EnemyName("enemy_forest_angry_cedar", "Angry Cedar", "Cedro Raivoso"),
+            EnemyName("enemy_forest_glow_mantle", "Mantle of Radiance", "Manto de Brilho"),
+            EnemyName("enemy_forest_ullikummi_son", "Son of Ullikummi", "Filho de Ullikummi"),
+            EnemyName("enemy_forest_broken_tablet", "Broken Tablet", "Tábua Quebrada"),
+            EnemyName("enemy_forest_garden_shadow", "Garden Shadow", "Jardim-Sombra"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),

@@ -496,6 +496,38 @@ Fervida e Areia Movediça (`enemy_cave_ooze`) e Crocodilo de Lodo (`enemy_forest
 | `enemy_forest_shadow_biter` | **Mordedor de Sombra** / *Shadow Biter* | 74 | [rápido] | as sombras que mordem Mehen: pedaços de treva arrancados, só boca. |
 | `enemy_forest_creeping_dark` | **Treva Rastejante** / *Creeping Dark* | 74 | [enxame] | o que sobra nos anéis de manhã, gulosa das menores coisas (Āz): arranca lascas do ouro de Mehen. |
 
+**Oitava leva (2026-11-09): Margens da Mistura (Mapas100 77–82).** Mesmo contrato (peso 0 no bioma, nível da área, números do bioma). A região
+inteira fica no bioma Floresta (`OverworldLayouts.Mistura` declara `w.World.Biome = BiomeType.Forest`), daí o prefixo `enemy_forest_` e os
+números de Floresta (vida 72–108, XP 10). Modelos em `MisturaBeastRecipes` (o leão, o mušḫuššu e a sombra atrasada abrem a boca com a cauda
+balançando; a sombra e o manto mexem as mangas devagar; o gafanhoto e a garça abrem o bico com as asas paradas; o betume achata e as brasas
+brilham; a ampulheta, o cedro, o filho de Ullikummi e o jardim-sombra erguem os dois braços; a tábua inclina para trás e a linha acesa
+brilha), Caderno em `MisturaBestiaryTexts`. Dois são [distância], voam e atiram: a Garça de Piche (gosma, `LureGlob`) e a Tábua Quebrada
+(raio de palavras, `LanternBolt`; `RangedEnemiesTests`). Respeito (§1.1 e §3.16): Zurvan só como relógio; Upelluri e Ullikummi só como
+pedra e ombro; o Hobabish é o guardião que se apagou, nunca vilão. Testes: `MisturaBeastsTests`. Já no overworld das Margens no lugar dos
+substitutos (`OverworldLayouts.Mistura.cs`, classe `Mistura`), nos grupos que lideram e como acompanhantes só onde a ficha os cita (mesmas
+clareiras, níveis e variantes noturnas): o leão, o mušḫuššu e o gafanhoto em volta de Dur-Jarras (77); a ampulheta e a sombra no deserto (78);
+o betume e a garça nos poços (79); o cedro e o manto no cedral (80); o filho de Ullikummi no diorito e no beiral (81); a tábua e o jardim-sombra
+no campo (82). Testes: `MisturaBeastsPlacementTests`. Seguem com substitutos, sem bicho próprio nesta leva: Homem-Escorpião
+(`enemy_desert_scorpion`), Lagarto do Instante (`enemy_mountain_lava_lizard`), Ushabti de Relógio (`enemy_mountain_lacquer_ushabti`), Bagre Negro
+(`enemy_mountain_giant_pike`), Fumaça de Piche (`enemy_mountain_smoke_harpy`), Lince do Cedro (`enemy_mountain_irbis`), Abelha-Resina
+(`enemy_forest_golden_bee`), Pedra de Diorito (`enemy_mountain_rolling_stone`), Ave do Ombro (`enemy_mountain_storm_eagle`), Tremor
+(`enemy_mountain_stone_golem`), Pássaro-Sonho (`enemy_forest_shroud_owl`) e Água que Apaga (`enemy_mountain_shadow_seal`).
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_forest_brick_lion` | **Leão de Tijolo Apagado** / *Dimmed Brick Lion* | 77 | [tanque] | os leões vidrados das ruas de procissão; a sombra apagou o azul por dentro. |
+| `enemy_forest_young_mushussu` | **Mušḫuššu Jovem** / *Young Mushussu* | 77 | [elite] | o dragão-serpente dos portões da Babilônia, só como bicho; novinho, ainda não sabe qual metade vai na frente. |
+| `enemy_forest_bitumen_locust` | **Gafanhoto de Betume** / *Bitumen Locust* | 77 | [enxame] | gafanhoto real que caiu nos poços; ninguém mais come ele, e virou muitos. |
+| `enemy_forest_living_hourglass` | **Ampulheta Viva** / *Living Hourglass* | 78 | [tanque] | invenção: ampulhetas da sala que media a hora mais comprida, atrás da hora roubada. |
+| `enemy_forest_late_shadow` | **Sombra Atrasada** / *Late Shadow* | 78 | [controle] | invenção da ficha: a sombra que ficou sem dono no deserto e chega um instante depois. |
+| `enemy_forest_living_tar` | **Betume Vivo** / *Living Tar* | 79 | [controle] | o betume de Elam que calafetou o barco de Atrahasis, agora com vontade própria. |
+| `enemy_forest_tar_heron` | **Garça de Piche** / *Tar Heron* | 79 | [distância] | garça real que ficou parada na poça errada e agora cospe o que não engole. |
+| `enemy_forest_angry_cedar` | **Cedro Raivoso** / *Angry Cedar* | 80 | [tanque] | os cedros do conto de Gilgamesh; a sombra disse que todo mundo traz machado. |
+| `enemy_forest_glow_mantle` | **Manto de Brilho** / *Mantle of Radiance* | 80 | [controle] | os sete mantos de brilho de Humbaba/Hobabish, vazios, procurando ombros. |
+| `enemy_forest_ullikummi_son` | **Filho de Ullikummi** / *Son of Ullikummi* | 81 | [elite] | lascas do diorito da *Canção de Ullikummi* que herdaram só a vontade de crescer. |
+| `enemy_forest_broken_tablet` | **Tábua Quebrada** / *Broken Tablet* | 82 | [distância] | as tábuas do sonho de Ohya e Hahya (*Livro dos Gigantes*); joga as palavras que soltaram. |
+| `enemy_forest_garden_shadow` | **Jardim-Sombra** / *Garden Shadow* | 82 | [tanque] | as árvores cortadas do mesmo sonho, andando nos tocos sem saber para que servem. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |

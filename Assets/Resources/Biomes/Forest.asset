@@ -95,6 +95,30 @@ MonoBehaviour:
     _weight: 0
   - _enemy: {fileID: 11400000, guid: f7113c75e00240b6a2a1a42a96d986ee, type: 2}
     _weight: 0
+  - _enemy: {fileID: 11400000, guid: 5ddb36d275af4d89ad9836162554be32, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 1ebc15eed6074ad6bbf17a16f3e998d5, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: e2aafb1e8f9143258378e278bc41699d, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: d237f3f2c9184a3d890a08b8801821df, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 04e98abf08cf4f358c8d8c8b2b9fede0, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 95d70c9e32a04b9e8986e51903c97ce0, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: e54d4d89180a44d183f6344d97af7f42, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: d536a39b63af4ae2a049d024e5ecb778, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 80e844c672644e61a324a9544d52d6a5, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: d817393a4b7c4c65a7fbcaf320e03e32, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 39c01751b50a4bf1a857e9bca7e7809a, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: b0bb3aba55ae463a900cda4dc24dd5e3, type: 2}
+    _weight: 0
   _loot:
   - _item: {fileID: 11400000, guid: c9bcdd9f33ac04a458fd22b23d3347ac, type: 2}
     _weight: 10

@@ -241,6 +241,32 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         ShadowBiter = 105,
         /// <summary>Treva Rastejante (74): low heap of dark with crawling tendrils; flattens on the windup, the swallowed gold flares.</summary>
         CreepingDark = 106,
+
+        // The beasts of the Margens da Mistura (Docs/Mapas100.md 77–82) that the overworld layout played with stand-ins (MisturaBeastRecipes).
+        /// <summary>Leão de Tijolo Apagado (77): baked-brick lion with courses of blue glaze; the jaw gapes on the windup.</summary>
+        BrickLion = 107,
+        /// <summary>Mušḫuššu Jovem (77): scaled dragon-snake, one horn, a sting on the tail; a jaw that gapes.</summary>
+        YoungMushussu = 108,
+        /// <summary>Gafanhoto de Betume (77): pitch-black locust, embers in the seams; the mouth opens with the wings held still.</summary>
+        BitumenLocust = 109,
+        /// <summary>Ampulheta Viva (78): walking stone hourglass with lit sand; both arms go up to strike.</summary>
+        LivingHourglass = 110,
+        /// <summary>Sombra Atrasada (78): ragged shadow with a long trail; a mouth that gapes, the sleeves stir.</summary>
+        LateShadow = 111,
+        /// <summary>Betume Vivo (79): heap of pitch with embers inside; flattens on the windup, the embers flare.</summary>
+        LivingTar = 112,
+        /// <summary>Garça de Piche (79): black heron on long legs; the bill opens on the windup to spit.</summary>
+        TarHeron = 113,
+        /// <summary>Cedro Raivoso (80): walking cedar with a crown of three tiers; both branches go up to strike.</summary>
+        AngryCedar = 114,
+        /// <summary>Manto de Brilho (80): an empty golden cloak that hovers; the sleeves and the hem stir.</summary>
+        GlowMantle = 115,
+        /// <summary>Filho de Ullikummi (81): diorite that grew legs, crystals on the shoulders; both arms go up to strike.</summary>
+        UllikummiSon = 116,
+        /// <summary>Tábua Quebrada (82): standing slab with a broken corner and lit cuneiform; leans back and flares to throw.</summary>
+        BrokenTablet = 117,
+        /// <summary>Jardim-Sombra (82): cut tree of the dream, sawn flat at the top; both arms go up to strike.</summary>
+        GardenShadow = 118,
     }
 
     /// <summary>
