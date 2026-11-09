@@ -13,11 +13,11 @@ namespace Rapadura.Gameplay.World.Map
     /// <summary>
     /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II) and the six of
     /// Região 9 (☆ 47–52, the Estepe dos Nartes), the six of Região 10 (☆ 53–58, the Picos de Farnkesh) and the six of Região 11
-    /// (☆ 59–64, the Mar Gelado), the six of Região 12 (☆ 65–70, the Arquipélago de Hinokura), the six of Região 13 (☆ 71–76, the Rio das Doze Horas), the six of Região 14 (☆ 77–82, the Margens da Mistura) and the eight of Região 15 (☆ 83–90, the Limiar Profundo), walked as zones of their continuous regions: level
+    /// (☆ 59–64, the Mar Gelado), the six of Região 12 (☆ 65–70, the Arquipélago de Hinokura), the six of Região 13 (☆ 71–76, the Rio das Doze Horas), the six of Região 14 (☆ 77–82, the Margens da Mistura), the eight of Região 15 (☆ 83–90, the Limiar Profundo) and the ten of Região 16 (☆ 91–100, the Reinos do Céu), walked as zones of their continuous regions: level
     /// bands, walk/warp levels, special gates, settlements and return cities, as content-as-code like
-    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42, 47–90): a hand-made layout
+    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42, 47–100): a hand-made layout
     /// (<c>MapLayouts.Has</c>: 01–08, 13, 14, 19, 20) or only a zone of a continuous region (<c>OverworldLayouts.ForMap</c>:
-    /// 09–12, 15–18, 21–42, 47–90, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
+    /// 09–12, 15–18, 21–42, 47–100, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
     /// the flag equal to it. The rest are listed in the Barcas de Luz window, closed. The gold fare is never stored: it is always the
     /// formula of <see cref="MapAccessRules.CalculateWarpCost(int,int,bool)"/> (the "Custo Ouro" column of the methodology
     /// table is design history).
@@ -47,6 +47,7 @@ namespace Rapadura.Gameplay.World.Map
         public const string CaisDeMesektet = "cais_de_mesektet";
         public const string DurJarras = "dur_jarras";
         public const string FortalezaUltimaLampada = "fortaleza_ultima_lampada";
+        public const string CaisDaColuna = "cais_da_coluna";
 
         public const string PomarId = "map_001_pomar";
         public const string TugaiId = "map_002_tugai";
@@ -58,7 +59,7 @@ namespace Rapadura.Gameplay.World.Map
         {
             CityCatalog.VilaZefa, CopasGarajonay, CityCatalog.AreiaBranca, TamborRubro, CityCatalog.SerraAlta, SaloesDeBronze,
             CityCatalog.Lamparinas, MercadoDosTuneis, TaaPwani, Aratta, Kirta, Jhilpur, PalafitasTarchon, Sangkent, Mingcheng, TorresBrancas,
-            AcampamentoSoslan, Fortim, Arvoredo, ValeDosSatiros, Farnkesh, PortoDaLuaBranca, Hinokura, CaisDeMesektet, DurJarras, FortalezaUltimaLampada,
+            AcampamentoSoslan, Fortim, Arvoredo, ValeDosSatiros, Farnkesh, PortoDaLuaBranca, Hinokura, CaisDeMesektet, DurJarras, FortalezaUltimaLampada, CaisDaColuna,
         };
 
         public static readonly IReadOnlyList<MapDefinition> Maps = new List<MapDefinition>
@@ -178,12 +179,24 @@ namespace Rapadura.Gameplay.World.Map
             new MapDefinition(88, "map_088_cova_treva", R.LimiarProfundo, Y.Underground, S.G, 400, 416, 396, 404, Fee, T.RunicLamp, FortalezaUltimaLampada, K.Outpost, "lampada_5", isBuilt: true),
             new MapDefinition(89, "map_089_ponte_novelo", R.LimiarProfundo, Y.Ruins, S.GG, 412, 428, 408, 416, Fee, T.RootBridgeBalance, FortalezaUltimaLampada, K.Outpost, "pilar_do_meio", isBuilt: true),
             new MapDefinition(90, "map_090_portao_terra_treva", R.LimiarProfundo, Y.Ruins, S.GG, 424, 440, 420, 428, Fee, T.TorchRequired, FortalezaUltimaLampada, K.Outpost, "selo_dos_artifices", isBuilt: true),
+
+            // Região 16 — Reinos do Céu (☆, Docs/Mapas100.md §1; zones of its continuous region, OverworldLayouts.Ceu)
+            new MapDefinition(91, "map_091_cais_da_coluna", R.ReinosDoCeu, Y.Plain, S.GG, 420, 430, 416, 424, Fee, T.None, CaisDaColuna, K.Capital, "cais_da_coluna", isBuilt: true),
+            new MapDefinition(92, "map_092_rio_de_luz", R.ReinosDoCeu, Y.Coast, S.GG, 428, 440, 424, 432, Fee, T.None, CaisDaColuna, K.Outpost, "boia_de_luz", isBuilt: true),
+            new MapDefinition(93, "map_093_barca_da_lua", R.ReinosDoCeu, Y.Ruins, S.G, 436, 450, 432, 440, Fee, T.None, CaisDaColuna, K.Outpost, "cabine_da_proa", isBuilt: true),
+            new MapDefinition(94, "map_094_roda_celeste", R.ReinosDoCeu, Y.Ruins, S.GG, 446, 460, 442, 450, Fee, T.ElevatedPlatforms, CaisDaColuna, K.Outpost, "eixo_da_roda", isBuilt: true),
+            new MapDefinition(95, "map_095_esferas_arcontes", R.ReinosDoCeu, Y.Ruins, S.GG, 456, 470, 452, 460, Fee, T.WingsOrDoubleJump, CaisDaColuna, K.Outpost, "ilhota_parada", isBuilt: true),
+            new MapDefinition(96, "map_096_jardim_de_luz", R.ReinosDoCeu, Y.Forest, S.G, 466, 478, 462, 470, Fee, T.None, CaisDaColuna, K.Outpost, "pergola_do_jardineiro", isBuilt: true),
+            new MapDefinition(97, "map_097_barca_do_sol", R.ReinosDoCeu, Y.Ruins, S.G, 474, 486, 470, 478, Fee, T.None, CaisDaColuna, K.Outpost, "cabine_da_popa", isBuilt: true),
+            new MapDefinition(98, "map_098_pes_da_coluna", R.ReinosDoCeu, Y.Mountain, S.GG, 482, 492, 478, 486, Fee, T.None, CaisDaColuna, K.Outpost, "degrau_um", isBuilt: true),
+            new MapDefinition(99, "map_099_mirante_do_ceu", R.ReinosDoCeu, Y.Mountain, S.GG, 488, 498, 484, 492, Fee, T.StormProtection, CaisDaColuna, K.Outpost, "mao_aberta", isBuilt: true),
+            new MapDefinition(100, "map_100_varanda", R.ReinosDoCeu, Y.Plain, S.M, 495, 500, 491, 499, Fee, T.None, CaisDaColuna, K.Outpost, "a_varanda", isBuilt: true),
         };
 
         public static readonly IReadOnlyList<MapRegion> Regions = new[]
         {
             R.Zarafshan, R.AreiasFlamejantes, R.SerraDeKaggen, R.GrutasDoLimiar, R.CostaDasMoncoes, R.DeltaDeJhilpur, R.TetoDoMundo, R.PlanicieDeMingcheng,
-            R.EstepeDosNartes, R.PicosDeFarnkesh, R.MarGelado, R.ArquipelagoDeHinokura, R.RioDasDozeHoras, R.MargensDaMistura, R.LimiarProfundo,
+            R.EstepeDosNartes, R.PicosDeFarnkesh, R.MarGelado, R.ArquipelagoDeHinokura, R.RioDasDozeHoras, R.MargensDaMistura, R.LimiarProfundo, R.ReinosDoCeu,
         };
 
         private static Dictionary<string, MapDefinition> _byId;

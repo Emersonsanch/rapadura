@@ -176,6 +176,16 @@ namespace Rapadura.Gameplay.World.Map
             ("map_088_cova_treva", "Pit of Darkness", "Cova da Treva", "Lamp 5", "Lâmpada 5"),
             ("map_089_ponte_novelo", "Bridge of the Bōlos", "Ponte do Novelo", "Middle Pillar", "Pilar do Meio"),
             ("map_090_portao_terra_treva", "Gate of the Land of Darkness", "Portão da Terra da Treva", "Artificers' Seal", "Selo dos Artífices"),
+            ("map_091_cais_da_coluna", "Column Quay", "Cais da Coluna", "Column Quay", "Cais da Coluna"),
+            ("map_092_rio_de_luz", "River of Light", "Rio de Luz", "Buoy of Light", "Boia de Luz"),
+            ("map_093_barca_da_lua", "Moon Ship Deck", "Convés da Barca da Lua", "Prow Cabin", "Cabine da Proa"),
+            ("map_094_roda_celeste", "Celestial Twelve-Jar Wheel", "Roda Celeste das Doze Jarras", "Wheel's Hub", "Eixo da Roda"),
+            ("map_095_esferas_arcontes", "Spheres of the Archons", "Esferas dos Arcontes", "Still Islet", "Ilhota Parada"),
+            ("map_096_jardim_de_luz", "Garden of Light", "Jardim de Luz", "Gardener's Pergola", "Pérgola do Jardineiro"),
+            ("map_097_barca_do_sol", "Sun Ship Deck", "Convés da Barca do Sol", "Stern Cabin", "Cabine da Popa"),
+            ("map_098_pes_da_coluna", "Foot of the Column of Glory", "Pés da Coluna da Glória", "Step One", "Degrau Um"),
+            ("map_099_mirante_do_ceu", "Lookout of the Sky-Holder", "Mirante do que Segura o Céu", "Open Hand", "Mão Aberta"),
+            ("map_100_varanda", "Porch of the Time After", "Varanda do Tempo de Depois", "The Porch", "a Varanda"),
         };
 
         private static readonly (MapRegion Region, string En, string Pt)[] RegionNames =
@@ -195,6 +205,7 @@ namespace Rapadura.Gameplay.World.Map
             (MapRegion.RioDasDozeHoras, "River of the Twelve Hours", "Rio das Doze Horas"),
             (MapRegion.MargensDaMistura, "Margins of the Mixture", "Margens da Mistura"),
             (MapRegion.LimiarProfundo, "Deep Threshold", "Limiar Profundo"),
+            (MapRegion.ReinosDoCeu, "Sky Realms", "Reinos do Céu"),
         };
 
         private static readonly (string Id, string En, string Pt)[] CityNames =
@@ -225,12 +236,13 @@ namespace Rapadura.Gameplay.World.Map
             ("cais_de_mesektet", "Mesektet Quay", "Cais de Mesektet"),
             ("dur_jarras", "Dur-Jarras", "Dur-Jarras"),
             ("fortaleza_ultima_lampada", "Fortress of the Last Lamp", "Fortaleza da Última Lâmpada"),
+            ("cais_da_coluna", "Column Quay", "Cais da Coluna"),
         };
 
         private static readonly (string Tag, string En, string Pt)[] RequirementHints =
         {
             (MapRequirementTags.LeatherBoots, "Wear any boots: Leather Boots at Mariam's haberdashery (Vila da Vó Edna). Joaquim does not sink in the mud.", "Calce qualquer bota: Botas de Couro no Armarinho da Mariam (Vila da Vó Edna). O Joaquim não afunda no lodo."),
-            (MapRequirementTags.ElevatedPlatforms, "Carry a Climbing Rope (Mariam's haberdashery, Vila da Vó Edna; Atrahasis's Bitumen, Dur-Jarras) or wear wings: the giant cedars of Hobabish are climbed.", "Leve uma Corda de Escalada (Armarinho da Mariam, Vila da Vó Edna; Betume do Atrahasis, Dur-Jarras) ou use asas: os cedros gigantes de Hobabish se sobem."),
+            (MapRequirementTags.ElevatedPlatforms, "Carry a Climbing Rope (Mariam's haberdashery, Vila da Vó Edna; Atrahasis's Bitumen, Dur-Jarras; Ammo's Last Caravan, the Column Quay) or wear wings: the giant cedars of Hobabish and the jars of the Celestial Wheel are climbed.", "Leve uma Corda de Escalada (Armarinho da Mariam, Vila da Vó Edna; Betume do Atrahasis, Dur-Jarras; Última Caravana do Ammo, Cais da Coluna) ou use asas: os cedros gigantes de Hobabish e as jarras da Roda Celeste se sobem."),
             (MapRequirementTags.GardenKey, "Mariam gives the Garden Key for clearing the spider webs; after the Forest boss she also sells a copy.", "A Mariam dá a Chave do Jardim por limpar as teias; depois do chefe da Floresta ela também vende uma cópia."),
             (MapRequirementTags.FreshWater, "Carry a Waterskin of Fresh Water from the Qocho Oasis saddlery or from Kurogane's Black Iron (Hinokura): the heat of the Devouring Fire Caldera asks for it too, and so does the Desert of the Clock (Atrahasis's Bitumen, Dur-Jarras).", "Leve um Odre de Água Fresca da selaria do Oásis de Qocho ou do Ferro Preto do Kurogane (Hinokura): o calor da Caldeira do Fogo Devorador também pede, e o Deserto do Relógio também (Betume do Atrahasis, Dur-Jarras)."),
             (MapRequirementTags.PoisonProtection, "Carry an Oasis Theriac (Qocho) or an anti-venom amulet. Lavine breathes the poison mists; Tehat's Wicks at the Fortress of the Last Lamp sells the theriac for the Pit of Smoke.", "Leve uma Teriaga do Oásis (Qocho) ou um amuleto antiveneno. A Lavine respira as névoas venenosas; os Pavios da Tehat, na Fortaleza da Última Lâmpada, vendem a teriaga para a Cova da Fumaça."),
@@ -240,7 +252,7 @@ namespace Rapadura.Gameplay.World.Map
             (MapRequirementTags.TorchRequired, "Carry an Oil Lamp: Parthenos sells it in the Vila das Lamparinas and gives one for scattering the bats; Khunanup's Trades at the Mesektet Quay have it too, for the dark of the Hidden Sands, Atrahasis's Bitumen at Dur-Jarras for the Field of the Dream Tablets, and Tehat's Wicks at the Fortress of the Last Lamp for the Gate of the Land of Darkness.", "Leve uma Lamparina de Óleo: a Parthenos vende na Vila das Lamparinas e dá uma por espantar os morcegos; as Trocas do Khunanup, no Cais de Mesektet, também têm, para o escuro do Areal Escondido, o Betume do Atrahasis, em Dur-Jarras, para o Campo das Tábuas do Sonho, e os Pavios da Tehat, na Fortaleza da Última Lâmpada, para o Portão da Terra da Treva."),
             (MapRequirementTags.RunicLamp, "Carry a Runic Lamp: Parthenos sells it once the Caves boss has fallen; Khunanup's Trades at the Mesektet Quay sell it for the Coils of Mehen, Tehat's Wicks at the Fortress of the Last Lamp for the Pit of Darkness.", "Leve uma Lamparina Rúnica: a Parthenos vende depois do chefe das Cavernas; as Trocas do Khunanup, no Cais de Mesektet, vendem para os Anéis de Mehen, e os Pavios da Tehat, na Fortaleza da Última Lâmpada, para a Cova da Treva."),
             (MapRequirementTags.EternalFireOil, "Carry Eternal Fire Oil: Parthenos sells it once the Caves boss has fallen; Khunanup's Trades at the Mesektet Quay sell it for the Lake of Fire, Tehat's Wicks at the Fortress of the Last Lamp for the Pit of Devouring Fire.", "Leve Óleo de Fogo Eterno: a Parthenos vende depois do chefe das Cavernas; as Trocas do Khunanup, no Cais de Mesektet, vendem para o Lago de Fogo, e os Pavios da Tehat, na Fortaleza da Última Lâmpada, para a Cova do Fogo Devorador."),
-            (MapRequirementTags.WingsOrDoubleJump, "Wear Takhsich's Canvas Wings (Miwnay's Fair, Tunnel Market; Sisin's Ropes, Farnkesh; Tehat's Wicks, the Fortress of the Last Lamp) or wings of the Enchanted Cauldron, or own a winged mount.", "Vista as Asas de Lona do Takhsich (Feira da Miwnay, Mercado dos Túneis; Cordas do Sisin, Farnkesh; Pavios da Tehat, Fortaleza da Última Lâmpada) ou asas do Tacho Encantado, ou tenha uma montaria alada."),
+            (MapRequirementTags.WingsOrDoubleJump, "Wear Takhsich's Canvas Wings (Miwnay's Fair, Tunnel Market; Sisin's Ropes, Farnkesh; Tehat's Wicks, the Fortress of the Last Lamp; Ammo's Last Caravan, the Column Quay) or wings of the Enchanted Cauldron, or own a winged mount.", "Vista as Asas de Lona do Takhsich (Feira da Miwnay, Mercado dos Túneis; Cordas do Sisin, Farnkesh; Pavios da Tehat, Fortaleza da Última Lâmpada; Última Caravana do Ammo, Cais da Coluna) ou asas do Tacho Encantado, ou tenha uma montaria alada."),
             (MapRequirementTags.BoatOrDock, "Carry a Dhow Passage (Taa Pwani; Kurogane's Black Iron, Hinokura) or own a water mount: the hot channels of the Obsidian Reef are crossed by boat.", "Leve uma Passagem de Dhow (Taa Pwani; Ferro Preto do Kurogane, Hinokura) ou tenha uma montaria aquática: os canais quentes do Recife de Obsidiana se cruzam de barco."),
             (MapRequirementTags.ArtificerRelic, "Carry an Artificers' Relic (Aratta).", "Leve uma Relíquia dos Artífices (Aratta)."),
             (MapRequirementTags.BreathingShell, "Carry a Breathing Shell (Kirta).", "Leve uma Concha Respirável (Kirta)."),
@@ -253,7 +265,7 @@ namespace Rapadura.Gameplay.World.Map
             (MapRequirementTags.ThermalClothes, "Wear Fine Thermal Clothes (Sangkent; Pamour's Furs and Boats, Porto da Lua Branca, or Pera's quest pays them): without them nobody fishes on Old Kul's lake.", "Vista a Roupa Térmica Refinada (Sangkent; Peles e Barcos do Pamour, Porto da Lua Branca, ou a missão do Pera paga com ela): sem ela ninguém pesca no lago do Velho Kul."),
             (MapRequirementTags.ClimbingCrampons, "Carry Climbing Crampons (Sangkent; Kurogane's Black Iron, Hinokura; Atrahasis's Bitumen, Dur-Jarras): the pumice slopes of Mount Echeyde and Upelluri's Shoulder ask for them too.", "Leve Grampos de Escalada (Sangkent; Ferro Preto do Kurogane, Hinokura; Betume do Atrahasis, Dur-Jarras): as encostas de pedra-pomes do Monte Echeyde e o Ombro de Upelluri também pedem."),
             (MapRequirementTags.WingsRequired, "Wear wings of the Enchanted Cauldron or own a winged mount.", "Vista asas do Tacho Encantado ou tenha uma montaria alada."),
-            (MapRequirementTags.StormProtection, "Carry a Storm Cloak (Sangkent; Sisin's Ropes, Farnkesh).", "Leve uma Capa de Tempestade (Sangkent; Cordas do Sisin, Farnkesh)."),
+            (MapRequirementTags.StormProtection, "Carry a Storm Cloak (Sangkent; Sisin's Ropes, Farnkesh; Ammo's Last Caravan, the Column Quay).", "Leve uma Capa de Tempestade (Sangkent; Cordas do Sisin, Farnkesh; Última Caravana do Ammo, Cais da Coluna)."),
             (MapRequirementTags.SunSeal, "Carry the Sun Seal (Mingcheng).", "Leve o Selo do Sol (Mingcheng)."),
         };
 

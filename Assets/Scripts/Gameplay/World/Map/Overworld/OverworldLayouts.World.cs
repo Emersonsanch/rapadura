@@ -41,7 +41,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// two south gates led to the archipelago's northern trails (over the ash fields and the sea of ash): the bounds grow to 7200 × 12000 m.
     /// Região 14 (the Margens da Mistura) fills the next cell of that row, north of the Mar Gelado and east of the river (x −1000…1400,
     /// z 6200…8600), its two west gates led to the river's east flank. Região 15 (the Limiar Profundo) fills the last cell, north of the Picos de
-    /// Farnkesh (x 1400…3800, z 6200…8600), its two west gates led to the Margins' east flank: the world is whole (no hole left).
+    /// Farnkesh (x 1400…3800, z 6200…8600), its two west gates led to the Margins' east flank. Região 16 (the Reinos do Céu) grows a sixth row, 2400 × 3600 m, north of the Limiar Profundo
+    /// (x 1400…3800, z 8600…12200), its two south gates led past the Gate of the Land of Darkness; the two cells of that row west of it stay holes walled off like the world's edge
+    /// (<see cref="OverworldLayout.Holes"/>: invisible walls, backdrop relief), so the bounds grow to 7200 × 15600 m.
     /// The relief blends across the borders like between any two areas (one relief for the whole world, each area shaped in
     /// its own region's coordinates), the chunk grids line up (offsets are multiples of the chunk), the streaming, the soft
     /// barrier, the levels and the requirements work per area as before.
@@ -127,6 +129,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// </summary>
         public static readonly Vector2 ProfundoWorldOffset = new Vector2(2000f, 7400f);
 
+        /// <summary>
+        /// Região 16 north of the Limiar Profundo (the Cais da Coluna at world (2600, 8960)): the end of the road, level 420 where the Gate of the Land of Darkness stands at 432–440, so the
+        /// world grows a sixth row (bounds 7200 × 15600 m; x 1400…3800, z 8600…12200). North of the Rio and of the Margens nothing stands: two walled holes (the fall into the clouds). Two open passes on
+        /// its south edge lead to the end of the Limiar's last road, one on each side of the Gate.
+        /// </summary>
+        public static readonly Vector2 CeuWorldOffset = new Vector2(2600f, 8960f);
+
         /// <summary>Width (m) of the trail that joins two passes (or a pass to the nearest trail across the border).</summary>
         public const float PassTrailWidth = 4f;
 
@@ -172,6 +181,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 (RioRegion(), RioWorldOffset),
                 (MisturaRegion(), MisturaWorldOffset),
                 (ProfundoRegion(), ProfundoWorldOffset),
+                (CeuRegion(), CeuWorldOffset),
             };
 
             Rect bounds = default;

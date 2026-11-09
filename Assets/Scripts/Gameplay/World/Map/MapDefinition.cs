@@ -21,6 +21,7 @@ namespace Rapadura.Gameplay.World.Map
         RioDasDozeHoras = 12,
         MargensDaMistura = 13,
         LimiarProfundo = 14,
+        ReinosDoCeu = 15,
     }
 
     /// <summary>Map size class (Docs/Mapas100.md §0.7): P ~120 m, M ~200 m, G ~300 m, GG ~400 m on a side.</summary>

@@ -540,6 +540,78 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         PedestalPlaza = 303,
         /// <summary>the Portão da Terra da Treva (90): cracked stone before the gate.</summary>
         DarkGateGround = 304,
+
+        // Região 16 — Reinos do Céu (OverworldLayouts.Ceu.cs, OverworldTerrains.Ceu.cs): 310–349.
+        /// <summary>the west rim of the Cais (91): banks of cloud.</summary>
+        QuayRimWest = 310,
+        /// <summary>the approach to the pier of the Moon (91).</summary>
+        MoonPierApproach = 311,
+        /// <summary>the firm cloud of the Cais da Coluna (91).</summary>
+        ColumnQuayGround = 312,
+        /// <summary>the approach to the pier of the Sun (91).</summary>
+        SunPierApproach = 313,
+        /// <summary>the gap in the cloud over the 27 cities (91): the way in from the Limiar Profundo.</summary>
+        CityLightsGap = 314,
+        /// <summary>the western reach of the Rio de Luz (92).</summary>
+        RiverMouthWest = 315,
+        /// <summary>the islets of cloud (92).</summary>
+        CloudIslets = 316,
+        /// <summary>the Rio de Luz (92): gold on firm cloud.</summary>
+        LightRiver = 317,
+        /// <summary>the banks of the current (92): terraces.</summary>
+        CurrentBanks = 318,
+        /// <summary>the eastern reach of the Rio de Luz (92).</summary>
+        RiverMouthEast = 319,
+        /// <summary>the prow of the Barca da Lua (93).</summary>
+        MoonProw = 320,
+        /// <summary>the mast deck of the Barca da Lua (93).</summary>
+        MoonMastDeck = 321,
+        /// <summary>the main deck of the Barca da Lua (93).</summary>
+        MoonDeck = 322,
+        /// <summary>the hold of the Barca da Lua (93): indigo.</summary>
+        MoonHold = 323,
+        /// <summary>the stern of the Barca da Lua (93).</summary>
+        MoonStern = 324,
+        /// <summary>the drifts of bronze gears, west (94).</summary>
+        GearDrift = 325,
+        /// <summary>the rim of jars, west (94).</summary>
+        JarRimWest = 326,
+        /// <summary>the hub of the Celestial Wheel (94).</summary>
+        WheelHub = 327,
+        /// <summary>the rim of jars, east (94).</summary>
+        JarRimEast = 328,
+        /// <summary>the drifts of bronze gears, east (94).</summary>
+        GearDriftEast = 329,
+        /// <summary>the empty orbit, west (95).</summary>
+        OrbitVoidWest = 330,
+        /// <summary>the orbit ridges, west (95).</summary>
+        OrbitRidgeWest = 331,
+        /// <summary>the still islet (95): the post.</summary>
+        StillIslet = 332,
+        /// <summary>the orbit ridges, east (95).</summary>
+        OrbitRidgeEast = 333,
+        /// <summary>the empty orbit, east (95).</summary>
+        OrbitVoidEast = 334,
+        /// <summary>the flower garden (96).</summary>
+        FlowerGarden = 335,
+        /// <summary>the orchard of light (96).</summary>
+        LightOrchard = 336,
+        /// <summary>the pavilion of the garden (96).</summary>
+        GardenPavilion = 337,
+        /// <summary>the deck of the Barca do Sol (97).</summary>
+        SunDeck = 338,
+        /// <summary>the deck under the sail of the Barca do Sol (97).</summary>
+        SunSailDeck = 339,
+        /// <summary>the rising steps west of the Coluna (98).</summary>
+        ColumnStepsWest = 340,
+        /// <summary>the foot of the Coluna da Gloria (98).</summary>
+        ColumnFoot = 341,
+        /// <summary>the cracks in the sky, west (99).</summary>
+        SkyCracksWest = 342,
+        /// <summary>the Lookout of the Sky-Holder (99).</summary>
+        SkyHolderLookout = 343,
+        /// <summary>the Porch of the Time After (100): adobe and the orchard of light.</summary>
+        TimeAfterPorch = 344,
     }
 
     /// <summary>

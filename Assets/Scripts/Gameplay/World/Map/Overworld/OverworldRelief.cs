@@ -121,6 +121,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         ShaftTerraces = 132,
         DarkLabyrinth = 133,
         NoveloCauseway = 134,
+
+        // Região 16 — Reinos do Céu (OverworldRelief.Ceu.cs): 140–149.
+        DeckTiers = 140,
+        WheelRim = 141,
+        OrbitRidges = 142,
+        ColumnRings = 143,
+        SkyFissures = 144,
     }
 
     /// <summary>What the relief knows about one point besides its height (ground colours and scatter read it).</summary>
@@ -736,7 +743,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                         || FarnkeshShape(style, x, z, a, out smooth, out shaped) || MarGeladoShape(style, x, z, a, out smooth, out shaped)
                         || HinokuraShape(style, x, z, a, out smooth, out shaped) || RioShape(style, x, z, a, out smooth, out shaped)
                         || MisturaShape(style, x, z, a, out smooth, out shaped)
-                        || ProfundoShape(style, x, z, a, out smooth, out shaped))
+                        || ProfundoShape(style, x, z, a, out smooth, out shaped)
+                        || CeuShape(style, x, z, a, out smooth, out shaped))
                     {
                         break; // Região 2: dunes, mesas, canyons (.Desert.cs); Região 5: cliffs, islets (.Coast.cs); Região 6: hummocks, levees (.Delta.cs);
                                // Região 7: moraines, ice tongues, seracs, peaks (.Pamir.cs); Região 8: karst towers, the wall's crest (.Mingcheng.cs);
@@ -745,7 +753,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                                // Região 12: the volcano's cone, lava flows, the glass reef, curved ramparts, the caldera (.Hinokura.cs);
                                // Região 13: reed beds, zigzag dunes, Mehen's rings, Apep's body (.Rio.cs);
                                // Região 14: the gnomon dial, cedar rings, the giant's shoulder, folds, diorite (.Mistura.cs);
-                               // Região 15: corridors of smoke, ember cells, the shaft, the labyrinth, the causeway (.Profundo.cs).
+                               // Região 15: corridors of smoke, ember cells, the shaft, the labyrinth, the causeway (.Profundo.cs);
+                               // Região 16: the decks, the rim of the Wheel, the orbits, the rings of the Coluna, the cracks in the sky (.Ceu.cs).
                     }
 
                     smooth = shaped = a * SmoothStep(0f, 1f, 0.5f + 0.85f * OverworldNoise.Fbm(x, z, 2));

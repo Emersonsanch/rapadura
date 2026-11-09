@@ -21,8 +21,7 @@ namespace Rapadura.Tests
     /// The Cais da Coluna, the quay of the Reinos do Céu, as a walkable capital (Docs/Cities.md, Docs/Mapas100.md map 91): its <see cref="CitySpec"/> among the
     /// late-region cities, the two people of the ficha (Ammo and Adda, in recipes of their own), the SkyQuay style (pavilions of glass and gold, the five fountains, the foot of the Coluna, the two
     /// Barcas alongside their piers, the silent Remadores and the 27 cities far below), the whole town inside a circle of radius ~22.5 m at y = 0 with three roads out (W, E, S),
-    /// A Última Caravana do Ammo (never the life or chaos stones) and the two city quests. Maps 91–100 are not in <see cref="MapCatalog"/> yet: no respawn through the catalog and no
-    /// gates here (when they enter, add them as in CityHinokuraTests.MapsOfTheArchipelago_RespawnInItsPlaza).
+    /// A Última Caravana do Ammo (never the life or chaos stones) and the two city quests; maps 91–100 respawn on its plaza and their gates are on Ammo's counter (MapRequirementTests).
     /// </summary>
     public class CityCaisDaColunaTests
     {
@@ -44,7 +43,7 @@ namespace Rapadura.Tests
             CitySpec city = CityCatalog.Get(CityCatalog.CaisDaColuna);
             Assert.IsNotNull(city, "the Cais has a CitySpec");
             Assert.AreEqual(BiomeType.Forest, city.Region, "the Reinos do Céu borrow the Forest (always unlocked)");
-            Assert.AreEqual("cais_da_coluna", city.CityId, "the return city id maps 91–100 will use");
+            Assert.AreEqual("cais_da_coluna", city.CityId, "the return city id of maps 91–100");
             Assert.AreEqual(CityTownRecipes.CaisDaColunaCityId, city.CityId);
 
             Assert.IsTrue(CityCatalog.IsLateRegionCity(city));
@@ -59,6 +58,20 @@ namespace Rapadura.Tests
             var cities = new CityProgress();
             Assert.AreSame(city, cities.ApplyDefeatIn(city), "a defeat in the sky wakes the cousins at the five fountains");
             Assert.AreSame(city, cities.ConsumeRespawnNotice());
+        }
+
+        [Test]
+        public void MapsOfTheSkyRealms_RespawnInItsPlaza()
+        {
+            List<MapDefinition> maps = MapCatalog.Maps.Where(m => m.ReturnCityId == CityCatalog.CaisDaColuna).ToList();
+            CollectionAssert.AreEquivalent(new[] { 91, 92, 93, 94, 95, 96, 97, 98, 99, 100 }, maps.Select(m => m.MapId).ToArray(), "the Cais is the return city of 91–100 (Docs/Mapas100.md)");
+            foreach (MapDefinition map in maps)
+            {
+                Assert.AreEqual(CityCatalog.CaisDaColuna, MapCatalog.RespawnCityFor(map.Id).CityId, map.Id);
+            }
+
+            Assert.AreEqual(MapSettlementKind.Capital, MapCatalog.Get("map_091_cais_da_coluna").Settlement);
+            Assert.IsNotNull(CityCatalog.Get(SafeZoneRules.RespawnCity("map_091_cais_da_coluna", _ => CityCatalog.CaisDaColuna, CityCatalog.VilaZefa)));
         }
 
         [Test]
