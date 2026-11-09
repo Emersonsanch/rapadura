@@ -131,6 +131,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             view.AreaTracker = new OverworldAreaTracker(layout);
             view._enemyPrefab = enemyPrefab;
             view.BuildStatic();
+            root.AddComponent<Mechanics.FarnkeshMechanicsDriver>();
             return view;
         }
 

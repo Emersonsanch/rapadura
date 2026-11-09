@@ -2,6 +2,7 @@ using Rapadura.Gameplay.Night;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.Gameplay.World.Cities.Town;
 using Rapadura.Gameplay.World.Map.Areas;
+using Rapadura.Gameplay.World.Map.Mechanics;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Map.Overworld
@@ -74,6 +75,44 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             new[] { new Vector2(330f, 1260f), new Vector2(460f, 1180f), new Vector2(600f, 1230f), new Vector2(700f, 1300f) },
             new[] { new Vector2(780f, 880f), new Vector2(860f, 980f), new Vector2(1060f, 960f), new Vector2(1140f, 1100f) },
             new[] { new Vector2(-200f, 900f), new Vector2(-120f, 1000f), new Vector2(-150f, 1200f), new Vector2(-60f, 1290f), new Vector2(120f, 1250f), new Vector2(200f, 1150f) },
+        };
+
+        /// <summary>The region's own rectangle (where the Farnkesh mechanics apply, in the coordinates of the routes below).</summary>
+        public static readonly Rect FarnkeshBounds = Rect.MinMaxRect(-1200f, -600f, 1200f, 1800f);
+
+        /// <summary>A zone of the region: its <see cref="OverworldZone.Origin"/> says where the region sits in the stitched world.</summary>
+        public const string FarnkeshAnchorZoneId = "farnkesh";
+
+        /// <summary>The open ground the gusts reach besides the bridges (the Gorge of the Ays, region coordinates).</summary>
+        public static readonly Rect[] GustAreas = { Rect.MinMaxRect(-1200f, 1320f, -720f, 1800f) };
+
+        /// <summary>The axis of the gusts in the gorge.</summary>
+        public static readonly Vector2 GorgeWindAxis = new Vector2(0.8f, 0.6f);
+
+        /// <summary>
+        /// The rope baskets (54–57, A = the low end) and the wind currents of the cloud isles (58, A = the end the current leaves
+        /// from), landings on the trails and on the isle tops, in the region's own coordinates; each prop stands beside its landing.
+        /// </summary>
+        public static readonly SkyRoute[] SkyRoutes =
+        {
+            Basket("cesto_escadaria", new Vector2(-30f, 640f), new Vector2(3.8f, 0f), new Vector2(10f, 860f), new Vector2(3.5f, 1.5f)),
+            Basket("cesto_sino", new Vector2(-700f, 860f), new Vector2(-3.8f, 0f), new Vector2(-560f, 988.5f), new Vector2(1.5f, -3.5f)),
+            Basket("cesto_ermida", new Vector2(700f, 1000f), new Vector2(0f, 3.8f), new Vector2(860f, 1060f), new Vector2(2.7f, -2.7f)),
+            Basket("cesto_gruta", new Vector2(-474f, 1224f), new Vector2(3.5f, 1.5f), new Vector2(-480f, 1530f), new Vector2(3.5f, 1.5f)),
+            Current("corrente_ultimo", new Vector2(540f, 1568f), new Vector2(-2.7f, 2.7f), new Vector2(692f, 1556f), new Vector2(3.5f, -1.5f), 0),
+            Current("corrente_ilhas", new Vector2(692f, 1556f), new Vector2(3.5f, -1.5f), new Vector2(900f, 1492f), new Vector2(3.5f, -1.5f), 1),
+            Current("corrente_huma", new Vector2(900f, 1492f), new Vector2(3.5f, -1.5f), new Vector2(1052f, 1500f), new Vector2(3.5f, -1.5f), 2),
+            Current("corrente_ninho", new Vector2(841f, 1621f), new Vector2(0f, -3.8f), new Vector2(1052f, 1500f), new Vector2(3.5f, -1.5f), 0),
+        };
+
+        private static SkyRoute Basket(string id, Vector2 low, Vector2 lowProp, Vector2 high, Vector2 highProp) => new SkyRoute
+        {
+            Id = id, Kind = SkyRouteKind.RopeBasket, A = low, B = high, PropA = low + lowProp, PropB = high + highProp,
+        };
+
+        private static SkyRoute Current(string id, Vector2 from, Vector2 fromProp, Vector2 to, Vector2 toProp, int group) => new SkyRoute
+        {
+            Id = id, Kind = SkyRouteKind.Glide, A = from, B = to, PropA = from + fromProp, PropB = to + toProp, CurrentGroup = group,
         };
 
         private static class Fark

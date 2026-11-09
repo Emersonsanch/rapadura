@@ -97,6 +97,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             string salt = "fk" + content.Coord.x + "_" + content.Coord.y;
             Rect r = content.Rect;
             ScatterRopeBridges(layout, content);
+            PlaceSkyRouteStations(layout, content);
 
             // Big pieces: whole inside the chunk, their footprint kept clear.
             for (int k = 0; k < 5; k++)
@@ -196,6 +197,46 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// The rope baskets' posts and the wind bells that mark the currents (<see cref="OverworldLayouts.SkyRoutes"/>), placed
+        /// before any scatter so nothing lands on the stations; the landings beside them stay clear.
+        /// </summary>
+        private static void PlaceSkyRouteStations(OverworldLayout layout, OverworldChunkContent content)
+        {
+            Rect r = content.Rect;
+            OverworldZone anchor = layout.Zone(OverworldLayouts.FarnkeshAnchorZoneId);
+            if (anchor == null)
+            {
+                return;
+            }
+
+            foreach (Mechanics.SkyRoute route in OverworldLayouts.SkyRoutes)
+            {
+                OverworldDecor decor = route.Kind == Mechanics.SkyRouteKind.RopeBasket ? OverworldDecor.RopeBasket : OverworldDecor.WindBell;
+                PlaceStation(layout, content, r, decor, anchor.Origin + route.PropA, anchor.Origin + route.A, route.Id);
+                PlaceStation(layout, content, r, decor, anchor.Origin + route.PropB, anchor.Origin + route.B, route.Id);
+            }
+        }
+
+        private static void PlaceStation(OverworldLayout layout, OverworldChunkContent content, Rect r, OverworldDecor decor, Vector2 at, Vector2 landing, string salt)
+        {
+            if (!r.Contains(at) || content.Props.Exists(p => p.Decor == decor && p.Position == at))
+            {
+                return;
+            }
+
+            var prop = new OverworldProp
+            {
+                Kind = CityPropKind.Rock, Decor = decor, Position = at, Yaw = TownStyle.Hash01(salt, 1) * 360f, Scale = 1f,
+                Variant = (int)(TownStyle.Hash(salt, 2) & 7), Color = RockColor(content.Grid.Near(at).Terrain),
+            };
+            content.Props.Add(prop);
+            AddSolid(layout, content, prop);
+            const float clear = 4.5f;
+            content.Blocked.Add(new Rect(at.x - 2f, at.y - 2f, 4f, 4f));
+            content.Blocked.Add(new Rect(landing.x - clear, landing.y - clear, clear * 2f, clear * 2f));
         }
 
         /// <summary>Lines of wind paper streamers: one short run between two poles on level ground in the meadows, nests and bridges.</summary>
