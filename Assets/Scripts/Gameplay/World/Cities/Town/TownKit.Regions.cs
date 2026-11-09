@@ -166,6 +166,12 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.DatePalm: DatePalm(b, s, prop.Variant); return true;
                 case CityPropKind.GlazedLion: GlazedLion(b, s, prop.Variant); return true;
                 case CityPropKind.JarStack: JarStack(b, s, prop.Variant); return true;
+                case CityPropKind.MotherLamp: MotherLamp(b, s); return true;
+                case CityPropKind.LampRampart: LampRampart(b, s); return true;
+                case CityPropKind.CoveGate: CoveGate(b, s, prop.Variant); return true;
+                case CityPropKind.NicheStele: NicheStele(b, s, prop.Variant); return true;
+                case CityPropKind.WickRack: WickRack(b, s, prop.Variant); return true;
+                case CityPropKind.OilCistern: OilCistern(b, s, prop.Variant); return true;
                 default: return false;
             }
         }
@@ -965,6 +971,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
                 case TownShopDressing.BitumenYard:
                     ZigguratDressing(b, spec, x, y, z, zFacade);
+                    break;
+
+                case TownShopDressing.WickLoom:
+                    BasaltFortDressing(b, spec, x, y, z, zFacade);
                     break;
 
                 case TownShopDressing.AirBottles:

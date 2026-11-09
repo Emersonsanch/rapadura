@@ -382,6 +382,7 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 
 | Região | Cidade | Moradores | Loja | Missões |
 |---|---|---|---|---|
+| Limiar Profundo (mapas 83–90, ainda fora do `MapCatalog`) | **Fortaleza da Última Lâmpada** (`fortaleza_ultima_lampada`) | Tehat, a Tecelã de Pavios (rua Oeste), Pamour, o Comandante das Lâmpadas (rua Leste), Makarios, o Escritor de Cartas (rua Sul) | **Pavios da Tehat** (`shop_pavios_tehat`) | Pamour: "Morcegos na Muralha"; Makarios: "Ushabtis na Estrada das Cartas" |
 | Margens da Mistura (mapas 77–82, ainda fora do `MapCatalog`) | **Dur-Jarras, a Cidade-Zigurate** (`dur_jarras`) | Atrahasis, o Mestre das Balsas (rua Oeste), Utnapishtim, o Guardião do Relógio e Siduri, a Taberneira (rua Leste), Sin-leqi-unninni, o Bibliotecário (rua Sul) | **Betume do Atrahasis** (`shop_betume_atrahasis`) | Utnapishtim: "Leões nos Canais"; Sin-leqi-unninni: "Besouros nas Tábuas" |
 | Rio das Doze Horas (mapas 71–76, ainda fora do `MapCatalog`) | **Cais de Mesektet** (o cais da barca da noite, `cais_de_mesektet`) | Sinuhe, o Barqueiro-Chefe (salão na cabeça da praça), Khunanup, o Comerciante do Cais (rua Oeste), Djedi, o Mágico (rua Leste), Setne, o Bibliotecário do Caderno (rua Sul) | **Trocas do Khunanup** (`shop_trocas_khunanup`) | Sinuhe: "Crocodilos no Cais"; Djedi: "Escorpiões no Areal" |
 | Arquipélago de Hinokura (mapas 65–70, ainda fora do `MapCatalog`) | **Hinokura, a Ilha-Forja** (capital do Fogo Vivo, `hinokura`) | Mestra Akane, a Mestra da Laca (salão na cabeça da praça), Kurogane, o Ferreiro do Ferro Preto (rua Oeste), Hikari, o Guardião das Comportas (rua Leste), Sango, a Barqueira (rua Sul) | **Ferro Preto do Kurogane** (`shop_ferro_preto_kurogane`) | Akane: "Caranguejos nos Varais"; Sango: "Gaivotas no Barco-Farol" |
@@ -726,6 +727,32 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
   Gafanhoto de Betume; **Barco de Junco** + 250 ouro, 3700 XP). Testes: `CityDurJarrasTests`.
 - **Falta:** os mapas 77–82 no catálogo e no overworld, os degraus do zigurate como bairros de serviços (feira, ofícios, biblioteca,
   relógio, Torre), o zigurate acender de cima para baixo em sequência à noite, o evento Cheia, a Roda Celeste no céu, o Mušḫuššu Manso e o conjunto Tijolo Azul.
+
+**Fortaleza da Última Lâmpada** (região 15 — Limiar Profundo, mapa 83; cidade de retorno de 83–90):
+- **Passeio da cidade:** receita `CityTownRecipes.FortalezaUltimaLampada` (`CityTownRecipes.UltimaLampada.cs`) no estilo novo `TownStyles.BasaltFort`
+  (`TownArchitecture.BasaltFort`, linha 25 da `TownPalette`: basalto `#2C2C33`, âmbar dos nichos `#FFB347` (brilha), cobre `#B06B3A`, branco
+  dos guardas `#F2EEE6`, índigo `#232046`, preto do abismo `#121218`, pó de basalto `#4A4A54`, óleo escuro `#5A3A1E`). A casa é uma **torre de basalto**
+  (`TownBuildingSpec.BasaltKeep`, `TownKit.BasaltKeepHouse`): base índigo, duas fileiras de nichos acesos, porta de moldura de cobre com lintel âmbar,
+  janelas em fresta, merlões em volta do teto plano e varanda de pano branco em postes de cobre. Peças (`TownKit.BasaltFort.cs`): `MotherLamp` (**Lâmpada-Mãe Grande** na
+  praça, três anéis de basalto, coluna, grande bacia de cobre; 1,4 m, ao norte do respawn), `LampRampart` (**arco da muralha sobre o abismo**, de 12° a 168°, raio 18 m,
+  com mil nichos; colisor em cadeia de cápsulas de 1,3 m a cada 1,8 m, `TownKit.LampRampartColliders`), `CoveGate` (os **cinco portões selados das
+  covas** na muralha, um por elemento, sem colisor próprio), `NicheStele` (0,7 m), `WickRack` (varal de pavios; 0,8 m), `OilCistern` (0,9 m); portão de
+  **dois pilares de basalto** com lintel e lâmpada pendurada (`TownKit.BasaltFortGate`); vitrine da Tehat (`TownShopDressing.WickLoom`: banco de meadas brancas,
+  cesto de pavios, jarros de óleo, lâmpada). Ruas **Oeste** (Oficina de Pavios da Tehat, uma casa), **Leste** (casa do Pamour, uma casa) e **Sul** (a entrada, das Grutas do
+  Limiar: casa das cartas do Makarios e uma casa) de 19 m; **sem rua ao norte**: a muralha fecha o norte; tudo dentro de 22,5 m em y = 0
+  (`CityLayoutRules.Validate` sem problemas, com e sem o mascate, coberto por `CityUltimaLampadaTests`; a barraca do Ammo em `PlazaRadius·(0,575; −0,675)` fica livre).
+- **Postos das covas:** Lâmpada 1–5 (84–88), Pilar do Meio (89) e Selo dos Artífices (90) são `K.Outpost` do catálogo de mapas (zona segura sem cidade, nunca renascem: `SafeZoneRules.IsRespawnPoint`), não cidades com `CitySpec`: entram com os mapas.
+- **Respawn:** a cidade aceita `ApplyDefeatIn`; os mapas 83–90 ainda **não estão** no `MapCatalog`: quando entrarem
+  (`MapCatalog.FortalezaUltimaLampada = "fortaleza_ultima_lampada"`, mapa `map_083_fortaleza_ultima_lampada`, `K.Capital`, região `MapRegion.LimiarProfundo`, retorno
+  `FortalezaUltimaLampada` em 83–90), falta ligar `RespawnCityFor` e os testes de respawn e de exigências (`MapRequirementTests`).
+- **Pavios da Tehat** (diária, 3 vagas que giram, tema Especialidade): poções e, fixos desde o primeiro dia, **Garrafa de Ar Sereno** (30, fumaça, 84), **Teriaga** (50), **Asas de
+  Lona** (420) e **Capa de Tempestade** (1100) para o poço do vento (86), **Concha Respirável** (450) e **Bolha de Ar** (500) para os salões afogados (87), **Lamparina de Óleo**
+  (28), **Lamparina Rúnica** (155) e **Óleo de Fogo Eterno** (190) para a Treva (88) e a rede de lâmpadas, **Vara de Equilíbrio** (480, Ponte do Novelo, 89) e **Corda** (40); giram
+  carne, erva, ferro, Runa de Clareza, Runa de Cura, Amuleto da Sorte, Pedra da Bênção e Pedra da Alma (nunca Vida/Caos). O Ammo nunca para lá.
+- **Missões da cidade:** Pamour pede 8 enxames de morcegos fora da muralha (`enemy_cave_bat_swarm` faz o Morcego da Treva; poções + 260 ouro, 3800 XP); depois Makarios pede 6 ushabtis fora da estrada das cartas
+  (`enemy_mountain_rope_ushabti` faz o Ushabti Apagado; **Lamparina Rúnica** + 260 ouro, 3900 XP). Testes: `CityUltimaLampadaTests`.
+- **Falta:** os mapas 83–90 no catálogo e no overworld, os cinco portões abrindo para as covas (hoje selados; as 3 ruas são as saídas), a rede de lâmpadas (3 anéis de zona segura), o evento Maré de
+  Treva, a Raposa-Joia e o conjunto Mil Lâmpadas.
 
 Código: `CityCatalog`, `CityShopCatalog` (dados), `CityTexts` (textos en/pt-BR), `VillageHubButton` (o mesmo painel
 para toda cidade), `CityFastTravelPanel` (Barcas de Luz), `CitySafeZoneHud` (aviso), `WorldMapCityPresence` (zona

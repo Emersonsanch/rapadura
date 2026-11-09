@@ -164,6 +164,13 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// rite, no figure of a god).
         /// </summary>
         Ziggurat = 23,
+        /// <summary>
+        /// The Fortaleza da Última Lâmpada (the Limiar Profundo, Docs/Mapas100.md map 83, style <c>BasaltFort</c>): keeps of dark basalt
+        /// with rows of lit niches, copper-framed doors and merlons, an arc of rampart over the abyss with its thousand niches and the five
+        /// sealed gates of the pits, the Lâmpada-Mãe Grande on the plaza, niche steles, racks of wicks and oil cisterns (a lamp and its oil;
+        /// no altar, no figure). Always underground: there is no sky over it.
+        /// </summary>
+        BasaltFort = 24,
     }
 
     /// <summary>
@@ -797,6 +804,30 @@ namespace Rapadura.Gameplay.World.Cities.Town
             Street = TownSwatch.Bitumen, StreetEdge = TownSwatch.GlazedBlue, Sidewalk = TownSwatch.MarshReed,
             Plaza = TownSwatch.BakedBrick, PlazaAlt = TownSwatch.GlazedBlue,
             Fence = TownSwatch.BakedBrick, Plinth = TownSwatch.Bitumen,
+            HouseRoof = TownRoofKind.Flat,
+        };
+
+        /// <summary>
+        /// Fortaleza da Última Lâmpada (Docs/Mapas100.md região 15): picked by hand from the ficha's palette. Basalt #2C2C33, the amber of
+        /// the thousand niches #FFB347 (glow), copper #B06B3A, the white of the guards' cloth #F2EEE6, the indigo of the dark #232046, the
+        /// black of the abyss #121218, basalt dust #4A4A54 and dark lamp oil #5A3A1E (row 25 of <see cref="TownPalette"/>). Houses are
+        /// of basalt (<see cref="TownBuildingSpec.BasaltKeep"/>); the ground is basalt dust, the streets dark basalt edged in copper, the plaza
+        /// basalt with indigo. The Limiar Profundo has no world-map biome: <see cref="TownStyle.Region"/> is the borrowed Forest.
+        /// </summary>
+        public static readonly TownStyle BasaltFort = new TownStyle
+        {
+            Region = BiomeType.Forest,
+            Vegetation = TownVegetation.Desert,
+            Architecture = TownArchitecture.BasaltFort,
+            Walls = new[] { TownSwatch.LampBasalt, TownSwatch.LampBasalt, TownSwatch.BasaltDust },
+            Trims = new[] { TownSwatch.LampCopper, TownSwatch.WickLinen, TownSwatch.ThousandLamps },
+            Roofs = new[] { TownSwatch.AbyssIndigo, TownSwatch.LampBasalt },
+            Joinery = new[] { TownSwatch.LampCopper, TownSwatch.OilDark },
+            Accent = TownSwatch.ThousandLamps,
+            Ground = TownSwatch.BasaltDust, GroundAlt = TownSwatch.AbyssIndigo,
+            Street = TownSwatch.LampBasalt, StreetEdge = TownSwatch.LampCopper, Sidewalk = TownSwatch.AbyssIndigo,
+            Plaza = TownSwatch.LampBasalt, PlazaAlt = TownSwatch.AbyssIndigo,
+            Fence = TownSwatch.LampBasalt, Plinth = TownSwatch.AbyssIndigo,
             HouseRoof = TownRoofKind.Flat,
         };
     }

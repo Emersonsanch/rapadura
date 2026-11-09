@@ -39,6 +39,17 @@ namespace Rapadura.Gameplay.World.Cities.Town
                     continue;
                 }
 
+                if (prop.Kind == CityPropKind.LampRampart)
+                {
+                    float scale = prop.Scale <= 0f ? 1f : prop.Scale;
+                    foreach (Vector2 at in TownKit.LampRampartColliders(prop.Position, scale))
+                    {
+                        solids.Add(CitySolid.Capsule(at, TownKit.LampRampartHalfThickness * scale, WallColliderHeight, nameof(CityPropKind.LampRampart)));
+                    }
+
+                    continue;
+                }
+
                 CitySolid? solid = PropSolid(prop, layout.WalkBounds);
                 if (solid.HasValue)
                 {
@@ -314,6 +325,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.DatePalm: return CitySolid.Capsule(prop.Position, TownKit.DatePalmRadius * s, 3f, owner);
                 case CityPropKind.GlazedLion: return CitySolid.Capsule(prop.Position, TownKit.GlazedLionRadius * s, 2.2f, owner);
                 case CityPropKind.JarStack: return CitySolid.Capsule(prop.Position, TownKit.JarStackRadius * s, 1.4f, owner);
+                case CityPropKind.MotherLamp: return CitySolid.Capsule(prop.Position, TownKit.MotherLampRadius * s, WallColliderHeight, owner);
+                case CityPropKind.NicheStele: return CitySolid.Capsule(prop.Position, TownKit.NicheSteleRadius * s, 2.2f, owner);
+                case CityPropKind.WickRack: return CitySolid.Capsule(prop.Position, TownKit.WickRackRadius * s, 1.8f, owner);
+                case CityPropKind.OilCistern: return CitySolid.Capsule(prop.Position, TownKit.OilCisternRadius * s, 1.2f, owner);
 
                 case CityPropKind.MeltStream:
                 case CityPropKind.CloudGap:
@@ -321,6 +336,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.LavaSluice:
                 case CityPropKind.HourCanal:
                 case CityPropKind.BitumenCanal:
+                case CityPropKind.LampRampart:
+                case CityPropKind.CoveGate:
                 case CityPropKind.GoldenRiver:
                 case CityPropKind.CanalBridge:
                 case CityPropKind.LeafBridge:

@@ -214,6 +214,12 @@ namespace Rapadura.Gameplay.World.Cities
         /// when maps 77–82 enter it (<c>MapCatalog.DurJarras</c>, map <c>map_077_dur_jarras</c>).
         /// </summary>
         public const string DurJarras = "dur_jarras";
+        /// <summary>
+        /// Fortaleza da Última Lâmpada, the fortress of the guardians of the lamps on the edge of the Land of Darkness (map 83, return city of
+        /// maps 83–90, Docs/Mapas100.md região 15). Same id as <c>CityTownRecipes.FortalezaUltimaLampadaCityId</c> and the one <c>MapCatalog</c>
+        /// will use when maps 83–90 enter it (<c>MapCatalog.FortalezaUltimaLampada</c>, map <c>map_083_fortaleza_ultima_lampada</c>).
+        /// </summary>
+        public const string FortalezaUltimaLampada = "fortaleza_ultima_lampada";
 
         public static readonly IReadOnlyList<CitySpec> Cities = new List<CitySpec>
         {
@@ -592,6 +598,19 @@ namespace Rapadura.Gameplay.World.Cities
                     new CityResidentSpec("siduri"),
                 },
                 new List<string> { CityShopCatalog.BetumeAtrahasis }),
+
+            // Fortaleza da Última Lâmpada (the Limiar Profundo, região 15; names of the Kellis letters, as the ficha asks): Pamour, the commander
+            // of the lamps (missions), Tehat, the weaver of wicks (the city's shop: the gear of maps 83–90), and Makarios, the father who writes to
+            // his sons far away (second mission). Three other people of the Kellis letters with the same names as Pamour of the Porto, Tehat of Jhilpur
+            // and Makarios of the Cais da Lua (the families repeat their names): their own ids and recipes. Region: the borrowed Forest.
+            new CitySpec(FortalezaUltimaLampada, BiomeType.Forest,
+                new List<CityResidentSpec>
+                {
+                    new CityResidentSpec("pamour_lampadas"),
+                    new CityResidentSpec("tehat_pavios", CityShopCatalog.PaviosTehat),
+                    new CityResidentSpec("makarios_cartas"),
+                },
+                new List<string> { CityShopCatalog.PaviosTehat }),
         };
 
         /// <summary>Ammo, the peddler: not a resident of one city, he is wherever his mule is today (<see cref="ShopRotation.MascateRegion"/>).</summary>

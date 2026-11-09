@@ -96,6 +96,8 @@ namespace Rapadura.Gameplay.World.Cities
     /// lamp (the night that never ends, 73–74).
     /// Dur-Jarras (map 77): Utnapishtim asks the cousins to chase the dimmed brick lions off the canals, then Sin-leqi-unninni wants
     /// the beetles out of the reed shelves of the tablets and pays with a reed boat (the flood, and the pitch of map 79).
+    /// Fortaleza da Última Lâmpada (map 83): Pamour asks the cousins to chase the bats off the lamps of the rampart, then Makarios wants the dimmed
+    /// ushabti off the road of his letters and pays with a runic lamp (the dark of map 88).
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -141,6 +143,8 @@ namespace Rapadura.Gameplay.World.Cities
         public const string MesektetScorpions = "quest_city_mesektet_scorpions_in_the_sands";
         public const string DurJarrasLions = "quest_city_dur_jarras_lions_on_the_canals";
         public const string DurJarrasBeetles = "quest_city_dur_jarras_beetles_on_the_tablets";
+        public const string UltimaLampadaBats = "quest_city_ultima_lampada_bats_on_the_rampart";
+        public const string UltimaLampadaUshabti = "quest_city_ultima_lampada_ushabti_on_the_letter_road";
 
         public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
         {
@@ -332,6 +336,15 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.DurJarras, "sin_leqi_unninni", new RegionQuestSpec(DurJarrasBeetles, BiomeType.Forest, DurJarrasLions, 3700,
                 new[] { new RegionObjectiveSpec("chase_the_beetles", QuestObjectiveType.KillEnemyType, "enemy_mountain_bark_beetle", 6) },
                 new[] { new RegionRewardSpec("item_barco_junco", 1), new RegionRewardSpec("item_gold", 250) })),
+
+            // -- Fortaleza da Última Lâmpada: Pamour, then Makarios. The cave bat swarm stands in for the Morcego da Treva of the ficha
+            // (Docs/Mapas100.md 83) and the rope ushabti for its Ushabti Apagado, until the region's own creatures exist. --
+            new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "pamour_lampadas", new RegionQuestSpec(UltimaLampadaBats, BiomeType.Forest, null, 3800,
+                new[] { new RegionObjectiveSpec("chase_the_bats", QuestObjectiveType.KillEnemyType, "enemy_cave_bat_swarm", 8) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 260) })),
+            new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "makarios_cartas", new RegionQuestSpec(UltimaLampadaUshabti, BiomeType.Forest, UltimaLampadaBats, 3900,
+                new[] { new RegionObjectiveSpec("chase_the_ushabti", QuestObjectiveType.KillEnemyType, "enemy_mountain_rope_ushabti", 6) },
+                new[] { new RegionRewardSpec("item_lamparina_runica", 1), new RegionRewardSpec("item_gold", 260) })),
         };
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();

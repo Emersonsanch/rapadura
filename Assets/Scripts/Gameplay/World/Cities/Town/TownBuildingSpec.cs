@@ -93,6 +93,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
         ReedMarket = 40,
         /// <summary>Atrahasis (Dur-Jarras): a tarred reed raft on trestles, jars of bitumen, a coil of reed rope, a ladle in a pot and a fire bowl.</summary>
         BitumenYard = 41,
+        /// <summary>Tehat (Fortaleza da Última Lâmpada): a bench of white skeins, a basket of wicks, jars of oil and a hanging lamp.</summary>
+        WickLoom = 42,
     }
 
     /// <summary>
@@ -288,6 +290,11 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// reed matting on brick posts (Elam and Mesopotamia as form only; TownKit.Ziggurat).
         /// </summary>
         public bool ZigguratHall;
+        /// <summary>
+        /// Fortaleza da Última Lâmpada: a keep of dark basalt (Docs/Mapas100.md map 83, style <c>BasaltFort</c>): rows of lit niches,
+        /// a copper-framed door, slit windows, merlons round a flat roof and a porch under white cloth on copper posts (TownKit.BasaltFort).
+        /// </summary>
+        public bool BasaltKeep;
 
         /// <summary>
         /// Mercado dos Túneis: with <see cref="TownRoofKind.Rock"/>, a stall set into an arched basalt niche: the round arch,
@@ -330,7 +337,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Key of the cached mesh: equal specs share one mesh.</summary>
         public string CacheKey =>
             $"{Kind}|{Width:0.00}|{Depth:0.00}|{PorchDepth:0.00}|{FullVaranda}|{WallHeight:0.00}|{Floors}|{Roof}|{WallColor}|{TrimColor}|{RoofColor}|" +
-            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{RootStilt}|{StiltLonghouse}|{StoneTerrace}|{RingWallHall}|{SpireHouse}|{FeltYurt}|{GiantRoundhouse}|{HollowTrunk}|{PinnacleNest}|{GourdHut}|{MoonLonghouse}|{SnowDome}|{LacquerHall}|{PapyrusHall}|{ZigguratHall}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
+            $"{JoineryColor}|{AccentColor}|{PlinthColor}|{WoodenWalls}|{UpperRoom}|{StorkNest}|{RammedEarth}|{DryingLoft}|{Arcade}|{CoralStone}|{LogHall}|{RuneHall}|{TunnelStall}|{ReedHall}|{ReefTower}|{RootStilt}|{StiltLonghouse}|{StoneTerrace}|{RingWallHall}|{SpireHouse}|{FeltYurt}|{GiantRoundhouse}|{HollowTrunk}|{PinnacleNest}|{GourdHut}|{MoonLonghouse}|{SnowDome}|{LacquerHall}|{PapyrusHall}|{ZigguratHall}|{BasaltKeep}|{DoorOffset:0.00}|{WideDoor}|{FrontWindows}|{SideWindows}|" +
             $"{Chimney}|{Sign}|{SignColor}|{Dressing}|{Seed}";
     }
 }

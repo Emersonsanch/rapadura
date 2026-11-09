@@ -355,6 +355,20 @@ namespace Rapadura.Gameplay.World.Cities.Town
         GlazedLion = 126,
         /// <summary>Dur-Jarras: a stack of clay jars on a reed mat (Variant 1: more jars and a sealed glazed jar on top).</summary>
         JarStack = 127,
+        // ---- Fortaleza da Última Lâmpada (Limiar Profundo; drawn by TownKit.BasaltFort) ----
+
+        /// <summary>Fortaleza: the Lâmpada-Mãe Grande, three stepped rings of basalt, a column, a great bowl of copper and the flame (<see cref="TownKit.MotherLampRadius"/>).</summary>
+        MotherLamp = 128,
+        /// <summary>Fortaleza: the arc of the rampart over the abyss with its rows of lit niches, centred on the plaza (several colliders: <see cref="TownKit.LampRampartColliders"/>).</summary>
+        LampRampart = 129,
+        /// <summary>Fortaleza: one of the five sealed gates of the pits set into the rampart (Variant 0–4: Fumaça, Fogo Devorador, Vento Destruidor, Lodo, Treva); no collider of its own, it is the rampart's face.</summary>
+        CoveGate = 130,
+        /// <summary>Fortaleza: a standing stele of basalt with rows of lit niches (Variant 1: taller, with a copper cap).</summary>
+        NicheStele = 131,
+        /// <summary>Fortaleza: a rack of white wicks drying on copper posts (Variant 1: longer, with a basket at the foot).</summary>
+        WickRack = 132,
+        /// <summary>Fortaleza: a cistern of lamp oil, basalt with copper bands (Variant 1: with a smaller cistern against it).</summary>
+        OilCistern = 133,
     }
 
     public enum CityExitKind

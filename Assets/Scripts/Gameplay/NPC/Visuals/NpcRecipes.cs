@@ -1613,6 +1613,52 @@ namespace Rapadura.Gameplay.NPC.Visuals
                 Story = "Siduri, a taberneira na beira do mundo do conto de Gilgamesh, que aconselha quem chega cansado; aqui, serve quem desce o canal em Dur-Jarras",
             },
 
+            // Fortaleza da Última Lâmpada (the Limiar Profundo, Docs/Mapas100.md região 15): the guardians of the lamps, in indigo and basalt with the
+            // white cloth and copper of the watch; names of the Kellis letters (other people of the same families as Pamour of the Porto, Tehat of Jhilpur
+            // and Makarios of the Cais da Lua: the families repeat their names).
+
+            // Pamour, the commander of the lamps (the missions): broad and proud, a full dark beard under his lamp helmet, an indigo chapan, a shawl of
+            // white cloth, the lantern pole and the keys of the rampart. Raises the lantern.
+            new NpcRecipe
+            {
+                Id = "pamour_lampadas", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Broad, Height = 1.03f, Posture = NpcPosture.Proud,
+                Skin = NpcSwatch.SkinTan, Face = NpcFace.Stern, Hair = NpcHair.Short, HairColor = NpcSwatch.HairDark, Beard = NpcBeard.Full,
+                Headwear = NpcHeadwear.LampHelmet, HeadColor = NpcSwatch.FortBasalt, HeadTrim = NpcSwatch.MotherAmber,
+                Garment = NpcGarment.Chapan, Main = NpcSwatch.FortIndigo, Trim = NpcSwatch.FortCopper, Sleeves = NpcSwatch.FortIndigo, Trousers = NpcSwatch.FortBasalt, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Shawl | NpcLayer.Belt, LayerColor = NpcSwatch.FortLinen, LayerTrim = NpcSwatch.FortCopper,
+                LeftArm = NpcArmPose.HoldUp, RightArm = NpcArmPose.HoldStaff, Props = new[] { NpcProp.Keys, NpcProp.LanternPole },
+                Gesture = NpcGesture.LanternRaise,
+                Story = "Pamour, nome das cartas maniqueias de Kellis (outro da mesma família que o Pamour do Porto); aqui, o comandante das lâmpadas da Fortaleza, que dá as missões da cidade",
+            },
+
+            // Tehat, the weaver of wicks (the city's shop: the gear of maps 83–90): slim and upright, a long braid and a copper headband, a dress of white
+            // cloth with a copper hem, an apron of lamp oil colour, a spindle turning and a bundle of wicks at her side.
+            new NpcRecipe
+            {
+                Id = "tehat_pavios", Region = BiomeType.Forest, Age = NpcAge.Adult, Build = NpcBuild.Slim, Height = 0.97f, Posture = NpcPosture.Upright,
+                Skin = NpcSwatch.SkinBrown, Face = NpcFace.Bright, Hair = NpcHair.Braid, HairColor = NpcSwatch.HairDark, Beard = NpcBeard.None,
+                Headwear = NpcHeadwear.Headband, HeadColor = NpcSwatch.FortCopper, HeadTrim = NpcSwatch.MotherAmber,
+                Garment = NpcGarment.Dress, Main = NpcSwatch.FortLinen, Trim = NpcSwatch.FortCopper, Sleeves = NpcSwatch.FortLinen, Boots = NpcSwatch.Leather,
+                Layers = NpcLayer.Apron | NpcLayer.Scarf, LayerColor = NpcSwatch.LampOilBrown, LayerTrim = NpcSwatch.WickThread,
+                LeftArm = NpcArmPose.Crook, RightArm = NpcArmPose.HoldFront, Props = new[] { NpcProp.WickBundle, NpcProp.Spindle },
+                Gesture = NpcGesture.Spin,
+                Story = "Tehat, nome das cartas maniqueias de Kellis (outra da mesma família que a Tehat de Jhilpur); aqui, a tecelã de pavios da Fortaleza, que vende o que os mapas 83–90 pedem",
+            },
+
+            // Makarios, the father who writes to his sons far away (the second mission): old and stooped, short white hair and a long beard under an indigo
+            // skullcap, a robe of basalt with a white hem, a shawl of white cloth and a satchel of letters, the letter held in front and the quill in the crook.
+            new NpcRecipe
+            {
+                Id = "makarios_cartas", Region = BiomeType.Forest, Age = NpcAge.Elder, Build = NpcBuild.Average, Height = 0.95f, Posture = NpcPosture.Stooped,
+                Skin = NpcSwatch.SkinOlive, Face = NpcFace.Calm, Hair = NpcHair.Short, HairColor = NpcSwatch.HairWhite, Beard = NpcBeard.Long,
+                Headwear = NpcHeadwear.Skullcap, HeadColor = NpcSwatch.FortIndigo, HeadTrim = NpcSwatch.FortCopper,
+                Garment = NpcGarment.Robe, Main = NpcSwatch.FortBasalt, Trim = NpcSwatch.FortLinen, Sleeves = NpcSwatch.FortBasalt, Boots = NpcSwatch.LeatherDark,
+                Layers = NpcLayer.Shawl | NpcLayer.Satchel, LayerColor = NpcSwatch.FortLinen, LayerTrim = NpcSwatch.FortCopper,
+                LeftArm = NpcArmPose.HoldFront, RightArm = NpcArmPose.Crook, Props = new[] { NpcProp.Letter, NpcProp.Quill },
+                Gesture = NpcGesture.Write,
+                Story = "Makarios, o pai que escreve aos filhos nas cartas maniqueias de Kellis (outro da mesma família que o Makarios do Cais da Lua); aqui, escreve na Fortaleza e dá a 2ª missão, eco das cartas do Vô Jorge",
+            },
+
             // ------------------------------------------------------------------
             // Oásis de Qocho (Areias Flamejantes): red sandstone, rose earth, golden sand, desert blue
             // ------------------------------------------------------------------

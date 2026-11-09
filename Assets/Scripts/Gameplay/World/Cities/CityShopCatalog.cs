@@ -346,6 +346,14 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public const string BetumeAtrahasis = "shop_betume_atrahasis";
 
+        /// <summary>
+        /// Pavios da Tehat (Fortaleza da Última Lâmpada, Docs/Mapas100.md map 83): Tehat, the weaver of wicks, sells the gear maps 83–90 (all returning
+        /// to the Fortaleza) will ask for: air bottles and theriac for the smoke (84), canvas wings and storm cloaks for the shaft of the wind (86), breathing
+        /// shells and air bubbles for the drowned halls (87), oil lamps, runic lamps and the oil of eternal fire for the dark (88) and the lamp network,
+        /// the balance pole for the bridge of the Novelo (89) and rope. The counter turns daily.
+        /// </summary>
+        public const string PaviosTehat = "shop_pavios_tehat";
+
         /// <summary>"Alforje de Feltro": buying it adds <see cref="BornalRows"/> rows to the Mochila for good (<c>InventoryManager.AddBagRows</c>).</summary>
         public const string BornalItemId = "item_bornal_couro";
 
@@ -890,6 +898,36 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_grampos_escalada", 950, 1),
                 new CityShopEntry("item_lamparina_oleo", 28, 3),
                 // The rotation: what the rafts bring up the canals.
+                new CityShopEntry("item_cooked_meat", 6, 10, rotating: true),
+                new CityShopEntry("item_herb", 3, 10, rotating: true),
+                new CityShopEntry("item_iron", 8, 20, rotating: true),
+                new CityShopEntry("item_runa_clareza", 15, 2, rotating: true),
+                new CityShopEntry("item_runa_cura", 15, 2, rotating: true),
+                new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
+                new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
+                new CityShopEntry("item_pedra_alma", 35, 1, rotating: true),
+            })),
+
+            // ---- Fortaleza da Última Lâmpada: Tehat's wick workshop, the gear of the Limiar Profundo (83–90); daily ----
+            new CityShopSpec(PaviosTehat, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(PaviosTehat, new List<CityShopEntry>
+            {
+                new CityShopEntry("item_health_potion", 15, 6),
+                new CityShopEntry("item_mana_potion", 15, 6),
+                // Gear of the maps that return to the Fortaleza, fixed from the first day: the smoke (air bottles, theriac), the shaft of the
+                // wind (canvas wings, storm cloak), the drowned halls (breathing shell, air bubble), the dark (both lamps), the lamp network
+                // (eternal oil), the bridge of the Novelo (balance pole) and rope.
+                new CityShopEntry("item_garrafa_ar_sereno", 30, 6),
+                new CityShopEntry("item_teriaga", 50, 4),
+                new CityShopEntry("item_asas_lona_takhsich", 420, 1),
+                new CityShopEntry("item_capa_tempestade", 1100, 1),
+                new CityShopEntry("item_concha_respiravel", 450, 2),
+                new CityShopEntry("item_bolha_ar", 500, 2),
+                new CityShopEntry("item_lamparina_oleo", 28, 3),
+                new CityShopEntry("item_lamparina_runica", 155, 1),
+                new CityShopEntry("item_oleo_fogo_eterno", 190, 2),
+                new CityShopEntry("item_vara_equilibrio", 480, 1),
+                new CityShopEntry("item_corda_escalada", 40, 3),
+                // The rotation: what the caravans carry down to the last lamp.
                 new CityShopEntry("item_cooked_meat", 6, 10, rotating: true),
                 new CityShopEntry("item_herb", 3, 10, rotating: true),
                 new CityShopEntry("item_iron", 8, 20, rotating: true),

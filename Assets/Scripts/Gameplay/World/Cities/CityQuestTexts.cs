@@ -684,6 +684,38 @@ namespace Rapadura.Gameplay.World.Cities
             new LocalizationEntry("quest.city_dur_jarras_beetles_on_the_tablets.active",
                 "They climb the reed shelves when the lamps of the house of tablets are low.",
                 "Eles sobem as prateleiras de junco quando as lamparinas da casa das tábuas estão baixas."),
+
+            // ================= Fortaleza da Última Lâmpada — Pamour =================
+            new LocalizationEntry("quest.city_ultima_lampada_bats_on_the_rampart.title", "Bats on the Rampart", "Morcegos na Muralha"),
+            new LocalizationEntry("quest.city_ultima_lampada_bats_on_the_rampart.description",
+                "Swarms of bats dimmed by the dark come up out of the abyss and beat their wings against the niches of the rampart until the little flames go out, and every lamp that goes out lets the shadow climb a little higher. Pamour, who commands the lamps of the Fortaleza, asked the cousins to chase the bats back down.",
+                "Enxames de morcegos apagados pela treva sobem do abismo e batem as asas nos nichos da muralha até as chamas pequenas apagarem, e cada lâmpada que apaga deixa a sombra subir mais um pouco. O Pamour, que comanda as lâmpadas da Fortaleza, pediu aos primos que espantem os morcegos de volta para baixo."),
+            new LocalizationEntry("quest.city_ultima_lampada_bats_on_the_rampart.obj_chase_the_bats", "Chase the bat swarms off the rampart", "Espantar os enxames de morcegos da muralha"),
+            new LocalizationEntry("quest.city_ultima_lampada_bats_on_the_rampart.journal",
+                "With the bats gone, the niches of the rampart stayed lit all the way to the fifth gate. Pamour let Joaquim light the last one with his own hand and stood at attention while he did it. He said a commander can count the lamps, but it takes a boy to be glad about them.",
+                "Com os morcegos embora, os nichos da muralha ficaram acesos até o quinto portão. O Pamour deixou o Joaquim acender o último com a própria mão e ficou em posição de sentido enquanto ele acendia. Ele disse que comandante conta as lâmpadas, mas é menino que fica feliz com elas."),
+            new LocalizationEntry("quest.city_ultima_lampada_bats_on_the_rampart.offer",
+                "Edna's grandchildren, down here at the last lamp! Good. I am Pamour; I command a thousand little flames and the shadow is counting them with me. Your grandpa Jorge once came to the rampart and asked why nobody had put a roof on the abyss. Eight swarms of bats are putting out my niches. Chase them back down.",
+                "Os netos da Edna, aqui embaixo na última lâmpada! Bom. Eu sou o Pamour; eu comando mil chamas pequenas e a sombra conta elas comigo. O vô Jorge de vocês veio na muralha uma vez e perguntou por que ninguém botava telhado no abismo. Oito enxames de morcegos estão apagando os meus nichos. Espantem eles de volta para baixo."),
+            new LocalizationEntry("quest.city_ultima_lampada_bats_on_the_rampart.active",
+                "They come up the wall when the dark tide rises, and they hate the amber light.",
+                "Eles sobem a muralha quando a maré de treva sobe, e têm raiva da luz âmbar."),
+
+            // ================= Fortaleza da Última Lâmpada — Makarios =================
+            new LocalizationEntry("quest.city_ultima_lampada_ushabti_on_the_letter_road.title", "Ushabti on the Letter Road", "Ushabtis na Estrada das Cartas"),
+            new LocalizationEntry("quest.city_ultima_lampada_ushabti_on_the_letter_road.description",
+                "Old rope-bound ushabti, dimmed by the shadow, have wandered onto the road the letter carriers use to come down from the Grutas do Limiar, and no letter has arrived in weeks. Makarios, who writes to his sons far away every week without fail, asked the cousins to chase them off.",
+                "Ushabtis antigos amarrados de corda, apagados pela sombra, se perderam na estrada por onde os carregadores de cartas descem das Grutas do Limiar, e faz semanas que não chega carta nenhuma. O Makarios, que escreve para os filhos longe toda semana sem falta, pediu aos primos que espantem eles dali."),
+            new LocalizationEntry("quest.city_ultima_lampada_ushabti_on_the_letter_road.obj_chase_the_ushabti", "Chase the dimmed ushabti off the letter road", "Espantar os ushabtis apagados da estrada das cartas"),
+            new LocalizationEntry("quest.city_ultima_lampada_ushabti_on_the_letter_road.journal",
+                "With the road clear, a bag of letters came down at last. Makarios gave the cousins the runic lamp he keeps for reading in the dark and read one letter aloud, slowly, twice. Then Maria asked him to write back that the cousins had been there, and he did.",
+                "Com a estrada livre, um saco de cartas chegou enfim. O Makarios deu aos primos a lamparina rúnica que guardava para ler no escuro e leu uma carta em voz alta, devagar, duas vezes. Depois a Maria pediu para ele escrever de volta que os primos tinham passado ali, e ele escreveu."),
+            new LocalizationEntry("quest.city_ultima_lampada_ushabti_on_the_letter_road.offer",
+                "You chased Pamour's bats. Good. I am Makarios; I write to my sons, and six ushabti have sat down on the road and my letters do not get through. Your grandpa Jorge writes letters the same way I do: too long, and always about the weather. Chase them off the road, and I will give you my runic lamp.",
+                "Vocês espantaram os morcegos do Pamour. Bom. Eu sou o Makarios; eu escrevo para os meus filhos, e seis ushabtis sentaram na estrada e as minhas cartas não passam. O Vô Jorge de vocês escreve carta igual a mim: comprida demais e sempre falando do tempo. Espantem eles da estrada, e eu dou a minha lamparina rúnica."),
+            new LocalizationEntry("quest.city_ultima_lampada_ushabti_on_the_letter_road.active",
+                "They stand in the road with nothing to carry, and they will not move for a letter.",
+                "Eles ficam parados na estrada sem nada para carregar, e não saem da frente por causa de carta."),
         };
 
         public static void EnsureLoaded(LocalizationManager localization)

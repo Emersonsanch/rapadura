@@ -122,6 +122,7 @@ namespace Rapadura.UI.WorldMap
                 Shop(CityShopCatalog.FerroPretoKurogane, "Kurogane's Black Iron", "Ferro Preto do Kurogane"),
                 Shop(CityShopCatalog.TrocasKhunanup, "Khunanup's Trades", "Trocas do Khunanup"),
                 Shop(CityShopCatalog.BetumeAtrahasis, "Atrahasis' Bitumen Yard", "Betume do Atrahasis"),
+                Shop(CityShopCatalog.PaviosTehat, "Tehat's Wicks", "Pavios da Tehat"),
             };
 
             // ---- Cities ----
@@ -209,6 +210,10 @@ namespace Rapadura.UI.WorldMap
             AddCity(entries, CityCatalog.DurJarras, "Dur-Jarras, the Ziggurat City", "Dur-Jarras, a Cidade-Zigurate", "Dur-Jarras", "Dur-Jarras",
                 "The ziggurat city of the Margens da Mistura, where light and shadow are most mixed: houses of baked brick with glazed blue bands and stepped parapets, canals of black water sealed with bitumen, date palms and piers of glazed brick with lions on them. At the head of the plaza rises a ziggurat of five steps, which lights from top to bottom at dusk; in front of it the Relógio de Zurvan marks the hours.",
                 "A cidade-zigurate das Margens da Mistura, onde luz e sombra estão mais misturadas: casas de tijolo cozido com faixas de azul vidrado e parapeito em degraus, canais de água negra calafetados com betume, palmeiras e pilares de tijolo vidrado com leões. Na cabeça da praça sobe um zigurate de cinco degraus, que acende de cima para baixo ao anoitecer; na frente dele, o Relógio de Zurvan marca as horas.");
+
+            AddCity(entries, CityCatalog.FortalezaUltimaLampada, "Fortress of the Last Lamp", "Fortaleza da Última Lâmpada", "Fortress", "Fortaleza",
+                "The fortress of the guardians of the lamps, cut into the basalt on the edge of the Land of Darkness: keeps of dark stone with rows of lit niches, a great arc of rampart over the abyss with a thousand little flames and five sealed gates, one for each pit of the dark. In the middle of it burns the Lâmpada-Mãe Grande, sister of the Vila das Lamparinas. There is no sky here: the guards keep the hour by the oil.",
+                "A fortaleza dos guardiões das lâmpadas, escavada no basalto na borda da Terra da Treva: torres de pedra escura com fileiras de nichos acesos, um grande arco de muralha sobre o abismo com mil chamas pequenas e cinco portões selados, um para cada cova da treva. No meio arde a Lâmpada-Mãe Grande, irmã da Vila das Lamparinas. Aqui não tem céu: os guardas contam a hora pelo óleo.");
 
             AddCity(entries, CityCatalog.PalafitasTarchon, "Tarchon Stilts", "Palafitas de Tarchon", "Tarchon", "Tarchon",
                 "The trols' city in the open swamp: long houses on tall piles with leaf roofs down to the floor, plank boardwalks over the bog water, nets drying, baskets as tall as a cousin and floating reed islands. At night the swamp fills with will-o'-wisps, sparks caught in the Ar Sereno; half the trols stared at them until they forgot themselves, and every spark set free wakes a neighbour.",
@@ -1121,6 +1126,31 @@ namespace Rapadura.UI.WorldMap
                 ("Ícaro, the jar is not a drum. ...Fine, one song. Then you eat.", "Ícaro, jarro não é tambor. ...Tá bom, uma música. Depois você come."),
                 ("Lavine, Vô Jorge drank one cup here and told me it needed rapadura. It did not. I put some in anyway, and now people ask for it.", "Lavine, o Vô Jorge tomou um copo aqui e disse que faltava rapadura. Não faltava. Botei assim mesmo, e agora o pessoal pede."),
                 ("The world ends a little past my door, they say. It is a good place for a tavern.", "Dizem que o mundo acaba um pouco depois da minha porta. É um bom lugar para uma taberna."));
+
+            // ---- Fortaleza da Última Lâmpada (names of the Kellis letters, as the ficha asks; a lamp and its oil) ----
+            AddResident(entries, "pamour_lampadas", "Pamour, Commander of the Lamps", "Pamour, o Comandante das Lâmpadas",
+                ("Joaquim, stand here on the wall and count the niches with me. Whoever counts the lamps does not sleep. I have not slept since the Bema before last.", "Joaquim, fica aqui na muralha e conta os nichos comigo. Quem conta as lâmpadas não dorme. Eu não durmo desde o penúltimo Bema."),
+                ("Maria, your light goes farther into the dark than any of my lamps. Don't tell the lamps.", "Maria, a sua luz vai mais fundo na treva do que qualquer lâmpada minha. Não conta para as lâmpadas."),
+                ("Maithe, you walked along the top of the rampart over the abyss and did not look down once. I did not order that. Do it again and I will make you a sergeant.", "Maithe, você andou em cima da muralha sobre o abismo sem olhar para baixo nenhuma vez. Eu não mandei isso. Faz de novo que eu te ponho de sargento."),
+                ("Ícaro, no, the abyss does not throw the stone back. ...Yes, I know you already tried. Leave my rampart in one piece.", "Ícaro, não, o abismo não devolve a pedra. ...Sim, eu sei que você já tentou. Deixa a minha muralha inteira."),
+                ("Lavine, Grandpa Jorge climbed up here to tell me the rampart was crooked. It is crooked. Five hundred years, and nobody else had noticed.", "Lavine, o Vô Jorge subiu aqui para dizer que a muralha estava torta. Ela está torta. Quinhentos anos, e ninguém mais tinha reparado."),
+                ("Lit: a thousand. Out: too many. Whoever walks past a dark niche with oil in hand lights it. That is the whole of the law here.", "Acesas: mil. Apagadas: demais. Quem passa por um nicho escuro com óleo na mão acende. Essa é toda a lei daqui."));
+
+            AddResident(entries, "tehat_pavios", "Tehat, Weaver of Wicks", "Tehat, a Tecelã de Pavios",
+                ("Joaquim, take this wick; hold it and pull. See? It does not break. That is all I can do for your courage, and it is quite a lot.", "Joaquim, pega esse pavio; segura e puxa. Viu? Não quebra. É tudo que eu posso fazer pela sua coragem, e já é bastante."),
+                ("Maria, every wick I twist has a little of the wool from your grandmother's shawl in it. She sent me a whole bag and said to burn it well.", "Maria, todo pavio que eu torço tem um pouco da lã do xale da sua avó. Ela me mandou um saco inteiro e disse para queimar direito."),
+                ("Maithe, you tie the knot at the end of a wick better than my apprentices. I am keeping that wick. It will burn the longest.", "Maithe, você dá o nó no fim do pavio melhor que os meus aprendizes. Vou guardar esse pavio. É o que vai queimar mais."),
+                ("Ícaro, wicks are not fuses. ...I can see from your face that you already knew that, and that you checked anyway.", "Ícaro, pavio não é estopim. ...Dá para ver na sua cara que você já sabia, e que testou assim mesmo."),
+                ("Lavine, Vó Edna sent a jar of oil and a letter that only said: 'Eat something.' I keep the letter next to the oil.", "Lavine, a Vó Edna mandou um jarro de óleo e uma carta que só dizia: 'Come alguma coisa.' Eu guardo a carta do lado do óleo."),
+                ("Bubbles for the drowned halls, wings for the shaft, oil for the dark. What goes down must see. I sell the seeing.", "Bolha para os salões afogados, asa para o poço, óleo para o escuro. Quem desce precisa enxergar. Eu vendo o enxergar."));
+
+            AddResident(entries, "makarios_cartas", "Makarios, Writer of Letters", "Makarios, o Escritor de Cartas",
+                ("Joaquim, tell your grandpa Jorge his letter arrived. All nine pages of it. It was about the rain.", "Joaquim, fala para o seu Vô Jorge que a carta dele chegou. As nove páginas. Era sobre a chuva."),
+                ("Maria, sit and I will read you what I wrote to my sons this week. Nothing happened. I wrote it down anyway. That is what a letter is for.", "Maria, senta que eu leio o que escrevi para os meus filhos esta semana. Não aconteceu nada. Escrevi assim mesmo. Carta serve para isso."),
+                ("Maithe, you carried my bag of letters to the gate without reading one. My own sons would not have managed it.", "Maithe, você levou o meu saco de cartas até o portão sem ler nenhuma. Nem os meus filhos conseguiriam."),
+                ("Ícaro, the ink is not paint. ...It is a very good drawing of the Treva. I will send it to my son; he needs to laugh.", "Ícaro, tinta não é tinta de pintar. ...É um desenho muito bom da Treva. Vou mandar para o meu filho; ele precisa rir."),
+                ("Lavine, write to your grandmother. Vó Edna will not say she is waiting. I am telling you she is waiting.", "Lavine, escreve para a sua avó. A Vó Edna não vai dizer que está esperando. Eu estou dizendo que ela está esperando."),
+                ("Far away is only a place letters have not reached yet. I write, and I wait for the road to clear.", "Longe é só um lugar onde a carta ainda não chegou. Eu escrevo, e espero a estrada abrir."));
 
             // The Vila shops of 2026-10-30, the freguesia and the house items on the counters (CityShopTexts).
             entries.AddRange(CityShopTexts.Entries);

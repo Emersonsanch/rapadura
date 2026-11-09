@@ -91,6 +91,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
         // Dur-Jarras (Margens da Mistura, Docs/Mapas100.md região 14): baked brick #B07A4A, glazed blue #2F5FA8, bitumen #2A2420, the gold
         // of Elam #D9A23A, the dust of the sky #E8C690, palm frond #5E7F3C, clay tablet #C9B08A and fringed wool #8A3B2E
         BakedBrick, GlazedBlue, Bitumen, ElamGold, DustSky, PalmFrond, ClayTablet, FringeWool,
+        // Fortaleza da Última Lâmpada (Limiar Profundo, Docs/Mapas100.md região 15): basalt #2C2C33, the amber of the mother lamp #FFB347 (glows), copper #B06B3A,
+        // the white of the guards' cloth #F2EEE6, the indigo of the dark #232046, wick thread #D8CFB8, the grey of the abyss #4A4A54 and lamp oil #5A3A1E
+        FortBasalt, MotherAmber, FortCopper, FortLinen, FortIndigo, WickThread, AbyssGrey, LampOilBrown,
     }
 
     /// <summary>
@@ -102,7 +105,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
     public static class NpcPalette
     {
         public const int Columns = 8;
-        public const int Rows = 28;
+        public const int Rows = 29;
         private const int CellPixels = 4;
 
         private static readonly Color[] Colors =
@@ -191,6 +194,9 @@ namespace Rapadura.Gameplay.NPC.Visuals
             // Dur-Jarras  baked brick #B07A4A, glazed blue #2F5FA8, bitumen #2A2420, Elam gold #D9A23A, sky dust #E8C690, palm #5E7F3C, clay tablet #C9B08A, fringed wool #8A3B2E
             new Color(0.69f, 0.48f, 0.29f), new Color(0.18f, 0.37f, 0.66f), new Color(0.16f, 0.14f, 0.13f), new Color(0.85f, 0.64f, 0.23f),
             new Color(0.91f, 0.78f, 0.56f), new Color(0.37f, 0.5f, 0.24f), new Color(0.79f, 0.69f, 0.54f), new Color(0.54f, 0.23f, 0.18f),
+            // Fortaleza da Última Lâmpada  basalt #2C2C33, mother amber #FFB347, copper #B06B3A, linen #F2EEE6, indigo #232046, wick thread #D8CFB8, abyss grey #4A4A54, lamp oil #5A3A1E
+            new Color(0.17f, 0.17f, 0.2f), new Color(1f, 0.7f, 0.28f), new Color(0.69f, 0.42f, 0.23f), new Color(0.95f, 0.93f, 0.9f),
+            new Color(0.14f, 0.13f, 0.27f), new Color(0.85f, 0.81f, 0.72f), new Color(0.29f, 0.29f, 0.33f), new Color(0.35f, 0.23f, 0.12f),
         };
 
         public static int Count => Colors.Length;
@@ -201,6 +207,7 @@ namespace Rapadura.Gameplay.NPC.Visuals
             switch (swatch)
             {
                 case NpcSwatch.LampGlow: return 1f;
+                case NpcSwatch.MotherAmber: return 0.85f;
                 case NpcSwatch.CrystalGlow: return 0.8f;
                 case NpcSwatch.Ember: return 0.9f;
                 case NpcSwatch.SunGlow: return 0.8f;
