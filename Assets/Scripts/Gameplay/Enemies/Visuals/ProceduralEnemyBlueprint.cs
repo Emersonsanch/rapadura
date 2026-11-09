@@ -293,6 +293,32 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         LesserShadowDragon = 129,
         /// <summary>Arconte Menor (90): fat with swallowed light, a crown of dead lamps; both arms go up to strike.</summary>
         LesserArchon = 130,
+
+        // The beasts of the Reinos do Céu (Docs/Mapas100.md 91–99) that the overworld layout played with stand-ins (CeuBeastRecipes).
+        /// <summary>Ave de Nuvem Apagada (91): grey bird of cloud gone out; the beak opens with the wings held still.</summary>
+        DimmedCloudBird = 131,
+        /// <summary>Peixe de Luz Apagado (92): dull gold fish swimming in the air, a spent drop on a thread; the fins row, the jaw gapes.</summary>
+        DimmedLightFish = 132,
+        /// <summary>Clandestino de Treva (93): low shadow with a stolen boarding tag; a jaw that gapes.</summary>
+        DarkStowaway = 133,
+        /// <summary>Sombra do Porão (93): heap of shadow with cargo stuck in it; flattens on the windup, the lantern flares.</summary>
+        HoldShadow = 134,
+        /// <summary>Corda Viva (93, 97): coil of ship's rope with a noose for a head; a mouth that gapes, the loose ends stir.</summary>
+        LivingRope = 135,
+        /// <summary>Um dos Doze (94): a toy ram with a tin crown and a wind-up key; a jaw that gapes.</summary>
+        ToyArchon = 136,
+        /// <summary>Jarra Rachada (94): a jar of the Wheel, floating; leans back on the windup and the crack flares.</summary>
+        CrackedJar = 137,
+        /// <summary>Arconte Acorrentado (95): sulking giant in cuffs, the chains reach the ground; both arms go up to strike.</summary>
+        ChainedArchon = 138,
+        /// <summary>Gigante-Balão (95): an archon blown up round on two thin legs; both arms go up to strike.</summary>
+        BalloonGiant = 139,
+        /// <summary>Ladrão de Āz (96): hooded, a sack of light on its back; both arms go up to strike.</summary>
+        AzThief = 140,
+        /// <summary>Gaivota de Luz Apagada (97): pale gull, spits the last ember of its light; the beak opens with the wings held still.</summary>
+        DimmedLightGull = 141,
+        /// <summary>Pedra do Céu (99): a slab of the sky on four stumps, gold in the cracks; a jaw that gapes.</summary>
+        SkyStone = 142,
     }
 
     /// <summary>

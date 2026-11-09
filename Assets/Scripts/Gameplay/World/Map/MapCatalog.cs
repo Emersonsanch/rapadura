@@ -11,13 +11,13 @@ using Y = Rapadura.Gameplay.World.Map.MapRegionTypes;
 namespace Rapadura.Gameplay.World.Map
 {
     /// <summary>
-    /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II) and the six of
-    /// Região 9 (☆ 47–52, the Estepe dos Nartes), the six of Região 10 (☆ 53–58, the Picos de Farnkesh) and the six of Região 11
+    /// The 42 maps of the "até 100" scope (★, Docs/Mapas100.md §1 and Docs/MetodologiaMapasERacas.md Part II), the four ☆ left of
+    /// Região 8 (43–46, the Planície de Mingcheng) and the six of Região 9 (☆ 47–52, the Estepe dos Nartes), the six of Região 10 (☆ 53–58, the Picos de Farnkesh) and the six of Região 11
     /// (☆ 59–64, the Mar Gelado), the six of Região 12 (☆ 65–70, the Arquipélago de Hinokura), the six of Região 13 (☆ 71–76, the Rio das Doze Horas), the six of Região 14 (☆ 77–82, the Margens da Mistura), the eight of Região 15 (☆ 83–90, the Limiar Profundo) and the ten of Região 16 (☆ 91–100, the Reinos do Céu), walked as zones of their continuous regions: level
     /// bands, walk/warp levels, special gates, settlements and return cities, as content-as-code like
-    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (01–42, 47–100): a hand-made layout
+    /// <c>CityCatalog</c>. Only <see cref="MapDefinition.IsBuilt"/> maps are playable today (all 100): a hand-made layout
     /// (<c>MapLayouts.Has</c>: 01–08, 13, 14, 19, 20) or only a zone of a continuous region (<c>OverworldLayouts.ForMap</c>:
-    /// 09–12, 15–18, 21–42, 47–100, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
+    /// 09–12, 15–18, 21–100, their posts with a Cais da Barca); <c>MapLayouts.IsPlayable</c> is the runtime check and a test keeps
     /// the flag equal to it. The rest are listed in the Barcas de Luz window, closed. The gold fare is never stored: it is always the
     /// formula of <see cref="MapAccessRules.CalculateWarpCost(int,int,bool)"/> (the "Custo Ouro" column of the methodology
     /// table is design history).
@@ -121,6 +121,10 @@ namespace Rapadura.Gameplay.World.Map
             // Região 8 — Planície de Mingcheng
             new MapDefinition(41, "map_041_mingcheng", R.PlanicieDeMingcheng, Y.Plain, S.GG, 90, 96, 88, 95, Fee, T.None, Mingcheng, K.Capital, "mingcheng", isBuilt: true),
             new MapDefinition(42, "map_042_torres_brancas", R.PlanicieDeMingcheng, Y.Plain, S.G, 95, 102, 92, 100, Fee, T.SunSeal, TorresBrancas, K.RaceCity, "torres_brancas", isBuilt: true),
+            new MapDefinition(43, "map_043_canal_das_lanternas", R.PlanicieDeMingcheng, Y.Plain, S.G, 102, 110, 98, 106, Fee, T.None, Mingcheng, K.Outpost, "eclusa_da_lua", isBuilt: true),
+            new MapDefinition(44, "map_044_arrozais_espelhados", R.PlanicieDeMingcheng, Y.Plain, S.G, 108, 116, 104, 112, Fee, T.None, Mingcheng, K.Outpost, "moinho_dagua", isBuilt: true),
+            new MapDefinition(45, "map_045_muralha_mil_torres", R.PlanicieDeMingcheng, Y.Mountain, S.GG, 115, 125, 110, 120, Fee, T.TorchRequired, TorresBrancas, K.Outpost, "torre_quinhentos", isBuilt: true),
+            new MapDefinition(46, "map_046_cidadela_gulosos", R.PlanicieDeMingcheng, Y.Plain, S.GG, 125, 140, 121, 132, Fee, T.None, Mingcheng, K.Outpost, "portao_do_nono_anel", isBuilt: true),
 
             // Região 9 — Estepe dos Nartes (☆, Docs/Mapas100.md §1; zones of its continuous region, OverworldLayouts.Nartes)
             new MapDefinition(47, "map_047_soslan", R.EstepeDosNartes, Y.Plain, S.GG, 100, 108, 96, 104, Fee, T.None, AcampamentoSoslan, K.RaceCity, "acampamento_soslan", isBuilt: true),

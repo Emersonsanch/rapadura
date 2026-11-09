@@ -51,6 +51,9 @@ namespace Rapadura.Tests
             // Limiar Profundo (84, 86): the smoke archer's bolt and the wind harpy's thrown feather (ProfundoBeastsTests).
             ("enemy_forest_smoke_archer", BiomeType.Forest, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.SmokeArcher),
             ("enemy_forest_wind_harpy", BiomeType.Forest, EnemyProjectileKind.Feather, ProceduralEnemyKind.WindHarpy),
+            // Reinos do Céu (94, 97): the cracked jar leaks a bolt of light, the gull spits its last ember (CeuBeastsTests; not placed yet).
+            ("enemy_forest_cracked_jar", BiomeType.Forest, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.CrackedJar),
+            ("enemy_forest_dimmed_light_gull", BiomeType.Forest, EnemyProjectileKind.Ember, ProceduralEnemyKind.DimmedLightGull),
         };
 
         /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>

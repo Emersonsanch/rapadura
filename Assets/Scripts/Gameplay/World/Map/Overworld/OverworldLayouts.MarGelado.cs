@@ -2,6 +2,7 @@ using Rapadura.Gameplay.Night;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.Gameplay.World.Cities.Town;
 using Rapadura.Gameplay.World.Map.Areas;
+using Rapadura.Gameplay.World.Map.Mechanics;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Map.Overworld
@@ -112,6 +113,56 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             (new Vector2(-300f, 900f), new Vector2(-320f, 950f), 50f),
             (new Vector2(360f, 880f), new Vector2(390f, 930f), 50f),
         };
+
+        /// <summary>The region's own rectangle (where the Mar Gelado mechanics apply, in the coordinates of the places below).</summary>
+        public static readonly Rect MarGeladoBounds = Rect.MinMaxRect(-1200f, -600f, 1200f, 1800f);
+
+        /// <summary>A zone of the region: its <see cref="OverworldZone.Origin"/> says where the region sits in the stitched world.</summary>
+        public const string MarGeladoAnchorZoneId = "porto_da_lua_branca";
+
+        /// <summary>
+        /// Where a canal can be crossed while the moon freezes it, or by boat (59: <see cref="MoonCanalRules"/>): a landing on each
+        /// bank, 10 m off the canal's axis, and the ice lantern that marks it.
+        /// </summary>
+        public static readonly SkyRoute[] CanalCrossings =
+        {
+            CanalFord("travessia_oeste_sul", new Vector2(-169.4f, 381.7f), new Vector2(-150.6f, 388.3f)),
+            CanalFord("travessia_leste_sul", new Vector2(165.75f, 388.8f), new Vector2(184.25f, 381.2f)),
+            CanalFord("travessia_meio_leste", new Vector2(184.2f, 685f), new Vector2(185.8f, 705f)),
+            CanalFord("travessia_oeste_norte", new Vector2(-264.8f, 718.2f), new Vector2(-245.2f, 721.8f)),
+            CanalFord("travessia_leste_norte", new Vector2(295.5f, 723f), new Vector2(314.5f, 717f)),
+        };
+
+        /// <summary>The thin ice (60: <see cref="ThinIceRules"/>): on the north and the west road, and out on the canals and the cracked ice.</summary>
+        public static readonly Rect[] ThinIcePatches =
+        {
+            Rect.MinMaxRect(-40f, 470f, 30f, 540f),
+            Rect.MinMaxRect(-520f, 590f, -440f, 650f),
+            Rect.MinMaxRect(-640f, 440f, -540f, 520f),
+            Rect.MinMaxRect(380f, 480f, 500f, 600f),
+            Rect.MinMaxRect(520f, 650f, 640f, 760f),
+        };
+
+        /// <summary>The fishing holes of Old Kul's lake (64: <see cref="IceFishingSession"/>), read off <see cref="KulHoles"/>; the Great Hole is the last.</summary>
+        public static readonly IceHole[] IceFishingHoles = BuildIceHoles();
+
+        private static IceHole[] BuildIceHoles()
+        {
+            var holes = new IceHole[KulHoles.Length];
+            for (int i = 0; i < holes.Length; i++)
+            {
+                (Vector2 a, Vector2 b, float width) = KulHoles[i];
+                holes[i] = new IceHole((a + b) * 0.5f, width * 0.5f + Vector2.Distance(a, b) * 0.5f, i == holes.Length - 1);
+            }
+
+            return holes;
+        }
+
+        private static SkyRoute CanalFord(string id, Vector2 a, Vector2 b)
+        {
+            Vector2 along = Vector2.Perpendicular((b - a).normalized) * 3f;
+            return new SkyRoute { Id = id, Kind = SkyRouteKind.RopeBasket, A = a, B = b, PropA = a + along, PropB = b + along };
+        }
 
         private static class Gelo
         {

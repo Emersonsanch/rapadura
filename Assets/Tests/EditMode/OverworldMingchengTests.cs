@@ -30,7 +30,11 @@ namespace Rapadura.Tests
 
         private static OverworldRelief Relief => OverworldRelief.For(World);
 
-        private static readonly string[] MingchengMaps = { OverworldLayouts.MingchengMapId, OverworldLayouts.TorresBrancasMapId };
+        private static readonly string[] MingchengMaps =
+        {
+            OverworldLayouts.MingchengMapId, OverworldLayouts.TorresBrancasMapId, OverworldLayouts.CanalLanternasMapId, OverworldLayouts.ArrozaisMapId,
+            OverworldLayouts.MuralhaMapId, OverworldLayouts.CidadelaMapId,
+        };
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -83,9 +87,15 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void Region_HoldsMaps41And42_ManyAreas_EachWithItsOwnMonsters()
+        public void Region_HoldsMaps41To46_ManyAreas_EachWithItsOwnMonsters()
         {
             OverworldLayout w = World;
+            Assert.AreEqual(OverworldLayouts.CanalLanternasMapId, w.Zone("canal_das_lanternas").MapId);
+            Assert.AreEqual(OverworldLayouts.CanalLanternasMapId, w.Zone("eclusa_da_lua").MapIdOrOwner, "the Eclusa da Lua is the canal's open approach");
+            Assert.AreEqual(OverworldLayouts.ArrozaisMapId, w.Zone("arrozais_espelhados").MapId);
+            Assert.AreEqual(OverworldLayouts.ArrozaisMapId, w.Zone("moinho_dagua").MapIdOrOwner, "the Moinho d'Água is the paddies' open approach");
+            Assert.AreEqual(4, w.ZonesOfMap(OverworldLayouts.MuralhaMapId).Count(), "the four wall areas");
+            Assert.AreEqual(OverworldLayouts.CidadelaMapId, w.Zone("cidadela_dos_quatro_gulosos").MapId);
             Assert.GreaterOrEqual(w.Zones.Count, 20);
             Assert.GreaterOrEqual(w.Zones.Select(z => z.Terrain).Distinct().Count(), 15, "many kinds of plain, hill and mountain");
             Assert.IsTrue(w.Zones.All(z => OverworldTerrains.IsMingcheng(z.Terrain)), "the plain's own terrains");
@@ -170,7 +180,8 @@ namespace Rapadura.Tests
                 {
                     float da = OverworldRules.DistanceFromVila(w, a);
                     float db = OverworldRules.DistanceFromVila(w, b);
-                    if (db >= da + 250f)
+                    // The canal (43, band 102–110 in §1) runs close past the city: the one area above the ramp, off the roads to the Torres Brancas.
+                    if (db >= da + 250f && a.MapId != OverworldLayouts.CanalLanternasMapId)
                     {
                         Assert.GreaterOrEqual(b.MinLevel, a.MinLevel, $"{b.Id} ({db:0} m) is farther than {a.Id} ({da:0} m) but easier");
                     }
@@ -187,7 +198,7 @@ namespace Rapadura.Tests
             List<OverworldZone> byDistance = w.Zones.OrderBy(z => OverworldRules.DistanceFromVila(w, z)).ToList();
             Assert.AreEqual(MapCatalog.Get(OverworldLayouts.MingchengMapId).MonsterLevelMin, byDistance[0].MinLevel, "level 90 at Mingcheng (41 is 90–96)");
             Assert.AreEqual(90, byDistance[0].MinLevel);
-            Assert.GreaterOrEqual(byDistance.Last().MinLevel, 115, "the wall and the nian's peaks are the end of the plain");
+            Assert.GreaterOrEqual(byDistance.Last().MinLevel, 125, "the Cidadela (46) is the end of the plain");
             Assert.GreaterOrEqual(w.Zones.Max(z => z.MaxLevel), 120, "the wall of the ☆ sheets (45: 115–125)");
             foreach (OverworldZone zone in w.ZonesOfMap(OverworldLayouts.TorresBrancasMapId))
             {
@@ -224,14 +235,26 @@ namespace Rapadura.Tests
             }
 
             Assert.AreEqual(MapRequirementTags.None, MapCatalog.Get(OverworldLayouts.MingchengMapId).SpecialRequirementTag);
-            foreach (OverworldZone zone in w.Zones.Where(z => z.MapId != OverworldLayouts.TorresBrancasMapId))
+            Assert.AreEqual(MapRequirementTags.TorchRequired, MapCatalog.Get(OverworldLayouts.MuralhaMapId).SpecialRequirementTag);
+            foreach (OverworldZone zone in w.ZonesOfMap(OverworldLayouts.MuralhaMapId))
             {
-                Assert.IsTrue(string.IsNullOrEmpty(zone.RequirementTag), $"{zone.Id}: only the Torres Brancas ask for an item");
+                Assert.AreEqual(MapRequirementTags.TorchRequired, zone.RequirementTag, zone.Id);
+                Assert.AreEqual(MapAccessCheck.MissingRequirement, OverworldRules.CheckEnter(zone, 130, CharacterId.Lavine, null), $"{zone.Id}: asks for a lamp");
+                Assert.AreEqual(MapAccessCheck.Ok, OverworldRules.CheckEnter(zone, 130, CharacterId.Lavine, tag => tag == MapRequirementTags.TorchRequired));
+            }
+
+            foreach (OverworldZone zone in w.Zones.Where(z => z.MapId != OverworldLayouts.TorresBrancasMapId && z.MapId != OverworldLayouts.MuralhaMapId))
+            {
+                Assert.IsTrue(string.IsNullOrEmpty(zone.RequirementTag), $"{zone.Id}: only the Torres Brancas and the wall ask for an item");
             }
 
             Assert.AreEqual(MapAccessCheck.Ok, OverworldRules.CheckEnter(w.Zone("aneis_de_mingcheng"), 90, CharacterId.Lavine, null), "the city's rings");
             Assert.AreEqual(MapAccessCheck.Ok, OverworldRules.CheckEnter(w.Zone("caminho_dos_leoes"), 91, CharacterId.Lavine, null), "the way in from the Zarafshan");
-            Assert.AreEqual(MapAccessCheck.Ok, OverworldRules.CheckEnter(w.Zone("arrozais_espelhados"), 96, CharacterId.Lavine, null), "the way in from the Teto");
+            Assert.AreEqual(MapAccessCheck.Ok, OverworldRules.CheckEnter(w.Zone("moinho_dagua"), 96, CharacterId.Lavine, null), "the way in from the Teto");
+            Assert.AreEqual(MapAccessCheck.LevelTooLow, OverworldRules.CheckEnter(w.Zone("arrozais_espelhados"), 96, CharacterId.Lavine, null), "the paddies (44) are for level 104");
+            Assert.AreEqual(MapAccessCheck.LevelTooLow, OverworldRules.CheckEnter(w.Zone("canal_das_lanternas"), 96, CharacterId.Lavine, null), "the canal (43) is for level 98");
+            Assert.AreEqual(MapAccessCheck.LevelTooLow, OverworldRules.CheckEnter(w.Zone("cidadela_dos_quatro_gulosos"), 120, CharacterId.Lavine, null), "the Cidadela (46) is for level 121");
+            Assert.AreEqual(MapAccessCheck.Ok, OverworldRules.CheckEnter(w.Zone("eclusa_da_lua"), 92, CharacterId.Lavine, null), "the Eclusa da Lua stays open at the canal's foot");
             Assert.AreEqual(MapAccessCheck.LevelTooLow, OverworldRules.CheckEnter(w.Zone("caminho_dos_leoes"), 40, CharacterId.Lavine, null), "the plain is for level 90");
             Assert.AreEqual(MapAccessCheck.LevelTooLow, OverworldRules.CheckEnter(w.Zone("muralha_oeste"), 100, CharacterId.Lavine, tag => true));
         }

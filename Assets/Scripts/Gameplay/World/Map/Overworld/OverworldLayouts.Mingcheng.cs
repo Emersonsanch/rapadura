@@ -7,7 +7,9 @@ using UnityEngine;
 namespace Rapadura.Gameplay.World.Map.Overworld
 {
     /// <summary>
-    /// Região 8 — Planície de Mingcheng as ONE continuous map of 2400 × 2400 m (Docs/Mapas100.md §0.10 and §5, maps 41–46),
+    /// Região 8 — Planície de Mingcheng as ONE continuous map of 2400 × 2400 m (Docs/Mapas100.md §0.10 and §5, maps 41–46, all in
+    /// the catalog: 43 is the canal, the Eclusa its open approach; 44 the paddies, the Moinho their open approach; 45 the four wall areas; 46 the
+    /// Cidadela, north of the nian's peaks),
     /// no scene change between Mingcheng and the country round it. Mingcheng (41, the city of nine rings, the region's return
     /// city) stands at the plaza (0, 0) on the river plain, 600 m from the south edge where the spirit way comes up from the
     /// Bosque do Zarafshan (in the stitched world the plain fills the walled corner north of the Zarafshan, the Teto do Mundo
@@ -40,9 +42,17 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         public const string MingchengMapId = "map_041_mingcheng";
         public const string TorresBrancasMapId = "map_042_torres_brancas";
+        public const string CanalLanternasMapId = "map_043_canal_das_lanternas";
+        public const string ArrozaisMapId = "map_044_arrozais_espelhados";
+        public const string MuralhaMapId = "map_045_muralha_mil_torres";
+        public const string CidadelaMapId = "map_046_cidadela_gulosos";
 
         public static readonly Vector2 MingchengOffset = Vector2.zero;
         public static readonly Vector2 TorresBrancasOffset = new Vector2(960f, 600f);
+        public static readonly Vector2 EclusaDaLuaOffset = new Vector2(600f, 560f);
+        public static readonly Vector2 MoinhoDaguaOffset = new Vector2(-960f, 240f);
+        public static readonly Vector2 TorreQuinhentosOffset = new Vector2(-400f, 1380f);
+        public static readonly Vector2 PortaoNonoAnelOffset = new Vector2(960f, 1660f);
 
         /// <summary>Half the side (m) of Mingcheng's flat ground (reserved for the ring city's recipe, ±28 m and more).</summary>
         public const float MingchengGround = 30f;
@@ -104,6 +114,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             w.World.Biome = BiomeType.Forest;
             const string ming = MingchengMapId;
             const string torres = TorresBrancasMapId;
+            const string canalMap = CanalLanternasMapId;
+            const string arrozaisMap = ArrozaisMapId;
+            const string muralhaMap = MuralhaMapId;
+            const string cidadelaMap = CidadelaMapId;
+            const string torch = MapRequirementTags.TorchRequired;
             const string plain = MapRegionTypes.Plain;
             const string forest = MapRegionTypes.Forest;
             const string rock = MapRegionTypes.Mountain;
@@ -122,24 +137,24 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             OverworldZone zLoess = Zone(w, "ravinas_de_loess", null, ming, 720f, -600f, 1200f, -120f, OverworldTerrain.LoessGullies, 96, 100, 94,
                 "Loess Gullies", "Ravinas de Loess", rock, spacing: 90f);
             // Second row: the mirror paddies (44), the ring villages and the rings of Mingcheng (41), the moon lock, the garden terraces (42).
-            OverworldZone zArrozais = Zone(w, "arrozais_espelhados", null, ming, -1200f, -120f, -720f, 360f, OverworldTerrain.MirrorPaddies, 96, 100, 94,
+            OverworldZone zArrozais = Zone(w, "arrozais_espelhados", arrozaisMap, null, -1200f, -120f, -720f, 360f, OverworldTerrain.MirrorPaddies, 108, 116, 104,
                 "Mirror Rice Terraces", "Arrozais Espelhados", plain, spacing: 90f);
             OverworldZone zVilas = Zone(w, "vilas_do_anel", ming, null, -720f, -120f, -240f, 360f, OverworldTerrain.NineRings, 92, 95, 90,
                 "Ring Villages", "Vilas do Anel", plain, spacing: 85f);
             OverworldZone zAneis = Zone(w, "aneis_de_mingcheng", ming, null, -240f, -120f, 240f, 360f, OverworldTerrain.NineRings, 90, 93, 88,
                 "Rings of Mingcheng", "Anéis de Mingcheng", plain, spacing: 80f);
-            OverworldZone zEclusa = Zone(w, "eclusa_da_lua", null, ming, 240f, -120f, 720f, 360f, OverworldTerrain.LanternCanal, 92, 96, 90,
+            OverworldZone zEclusa = Zone(w, "eclusa_da_lua", null, canalMap, 240f, -120f, 720f, 360f, OverworldTerrain.LanternCanal, 92, 96, 90,
                 "Moon Lock", "Eclusa da Lua", plain, spacing: 85f);
             OverworldZone zJardins = Zone(w, "jardins_em_terraco", torres, null, 720f, -120f, 1200f, 360f, OverworldTerrain.SpireGardens, 96, 100, 94,
                 "Terrace Gardens", "Jardins em Terraço", plain, seal, 90f);
             // Middle row: the water mill (44), the tea hills, the terracotta pits (41), the lantern canal (43), the Torres Brancas (42).
-            OverworldZone zMoinho = Zone(w, "moinho_dagua", null, ming, -1200f, 360f, -720f, 840f, OverworldTerrain.MirrorPaddies, 97, 101, 95,
+            OverworldZone zMoinho = Zone(w, "moinho_dagua", null, arrozaisMap, -1200f, 360f, -720f, 840f, OverworldTerrain.MirrorPaddies, 97, 101, 95,
                 "Water Mill", "Moinho d'Água", plain, spacing: 90f);
             OverworldZone zCha = Zone(w, "colinas_de_cha", null, ming, -720f, 360f, -240f, 840f, OverworldTerrain.TeaTerraces, 95, 98, 93,
                 "Tea Hills", "Colinas de Chá", forest, spacing: 90f);
             OverworldZone zFossos = Zone(w, "fossos_de_terracota", ming, null, -240f, 360f, 240f, 840f, OverworldTerrain.TerracottaPits, 94, 96, 92,
                 "Terracotta Pits", "Fossos de Terracota", plain, spacing: 85f);
-            OverworldZone zCanal = Zone(w, "canal_das_lanternas", null, ming, 240f, 360f, 720f, 840f, OverworldTerrain.LanternCanal, 95, 99, 93,
+            OverworldZone zCanal = Zone(w, "canal_das_lanternas", canalMap, null, 240f, 360f, 720f, 840f, OverworldTerrain.LanternCanal, 102, 110, 98,
                 "Lantern Canal", "Canal das Lanternas", plain, spacing: 90f);
             OverworldZone zTorres = Zone(w, "torres_brancas", torres, null, 720f, 360f, 1200f, 840f, OverworldTerrain.WhiteHills, 97, 102, 95,
                 "White Spires", "Torres Brancas", plain, seal, 90f);
@@ -154,20 +169,23 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 "Mirror Hills", "Colinas dos Espelhos", plain, spacing: 95f);
             OverworldZone zNevoa = Zone(w, "vale_da_nevoa", null, torres, 720f, 840f, 1200f, 1320f, OverworldTerrain.PineRidge, 110, 115, 108,
                 "Valley of Mist", "Vale da Névoa", rock, spacing: 95f);
-            // North row: the Muralha das Mil Torres (45, return to the Torres Brancas) and the nian's peaks.
-            OverworldZone zMuralhaOeste = Zone(w, "muralha_oeste", null, torres, -1200f, 1320f, -720f, 1800f, OverworldTerrain.GreatWall, 118, 124, 116,
-                "Western Wall", "Muralha Oeste", rock, spacing: 100f);
-            OverworldZone zQuinhentos = Zone(w, "torre_quinhentos", null, torres, -720f, 1320f, -240f, 1800f, OverworldTerrain.GreatWall, 115, 122, 113,
-                "Tower Five Hundred", "Torre Quinhentos", rock, spacing: 100f);
-            OverworldZone zMuralha = Zone(w, "muralha_das_mil_torres", null, torres, -240f, 1320f, 240f, 1800f, OverworldTerrain.GreatWall, 115, 121, 113,
-                "Wall of a Thousand Towers", "Muralha das Mil Torres", rock, spacing: 100f);
-            OverworldZone zPortao = Zone(w, "portao_do_nian", null, torres, 240f, 1320f, 720f, 1800f, OverworldTerrain.GreatWall, 116, 123, 114,
-                "Gate of the Nian", "Portão do Nian", rock, spacing: 100f);
-            OverworldZone zNian = Zone(w, "picos_do_nian", null, torres, 720f, 1320f, 1200f, 1800f, OverworldTerrain.KarstPeaks, 118, 126, 116,
+            // North row: the Muralha das Mil Torres (45, return to the Torres Brancas: an oil lamp for the dark of its towers), the nian's
+            // peaks and, carved out of their north half, the Cidadela dos Quatro Gulosos (46): the end of the plain, level 125.
+            OverworldZone zMuralhaOeste = Zone(w, "muralha_oeste", muralhaMap, null, -1200f, 1320f, -720f, 1800f, OverworldTerrain.GreatWall, 118, 124, 116,
+                "Western Wall", "Muralha Oeste", rock, torch, 100f);
+            OverworldZone zQuinhentos = Zone(w, "torre_quinhentos", muralhaMap, null, -720f, 1320f, -240f, 1800f, OverworldTerrain.GreatWall, 115, 122, 113,
+                "Tower Five Hundred", "Torre Quinhentos", rock, torch, 100f);
+            OverworldZone zMuralha = Zone(w, "muralha_das_mil_torres", muralhaMap, null, -240f, 1320f, 240f, 1800f, OverworldTerrain.GreatWall, 115, 121, 113,
+                "Wall of a Thousand Towers", "Muralha das Mil Torres", rock, torch, 100f);
+            OverworldZone zPortao = Zone(w, "portao_do_nian", muralhaMap, null, 240f, 1320f, 720f, 1800f, OverworldTerrain.GreatWall, 116, 123, 114,
+                "Gate of the Nian", "Portão do Nian", rock, torch, 100f);
+            OverworldZone zNian = Zone(w, "picos_do_nian", null, torres, 720f, 1320f, 1200f, 1560f, OverworldTerrain.KarstPeaks, 118, 126, 116,
                 "Peaks of the Nian", "Picos do Nian", rock, spacing: 100f);
+            OverworldZone zCidadela = Zone(w, "cidadela_dos_quatro_gulosos", cidadelaMap, null, 720f, 1560f, 1200f, 1800f, OverworldTerrain.NineRings, 125, 140, 121,
+                "Citadel of the Four Gluttons", "Cidadela dos Quatro Gulosos", plain, spacing: 90f);
 
             AddMingchengFauna(zBambu, zPainco, zLeoes, zSalgueiros, zLoess, zArrozais, zVilas, zAneis, zEclusa, zJardins, zMoinho, zCha, zFossos, zCanal,
-                zTorres, zCalcario, zPinheiros, zGuerreiros, zEspelhos, zNevoa, zMuralhaOeste, zQuinhentos, zMuralha, zPortao, zNian);
+                zTorres, zCalcario, zPinheiros, zGuerreiros, zEspelhos, zNevoa, zMuralhaOeste, zQuinhentos, zMuralha, zPortao, zNian, zCidadela);
 
             // ---------------- Settlements ----------------
             // Mingcheng first: the region's return city and the barca's stop for 41 (its own recipe on flat ground at y = 0, ±30 m;
@@ -175,6 +193,16 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             w.Vila = Place(w, ming, MingchengRecipe(), MingchengOffset, Rect.MinMaxRect(-26f, -26f, 26f, 26f), MingchengGround, true);
             // The Torres Brancas (42, the high elves' city): the return city of 42.
             Place(w, torres, TorresBrancasRecipe(), TorresBrancasOffset, Rect.MinMaxRect(-24f, -24f, 24f, 24f), RaceCityGround, true);
+            // The posts of 43–46, each with its Cais da Barca, inside the map's own area (OverworldRules.Validate): the Eclusa da Lua's post on the
+            // canal's east bank, the Moinho d'Água's on the paddies (the lock and the mill themselves stay in the open approach areas below them).
+            Place(w, canalMap, Post("eclusa_da_lua", TownSwatch.Stone, TownSwatch.Slate, TownRoofKind.Gable, TownShopDressing.BoatTrader, false),
+                EclusaDaLuaOffset, PostSafe, 18f, false);
+            Place(w, arrozaisMap, Post("moinho_dagua", TownSwatch.Stone, TownSwatch.Thatch, TownRoofKind.Gable, TownShopDressing.Herder, false),
+                MoinhoDaguaOffset, PostSafe, 18f, false);
+            Place(w, muralhaMap, Post("torre_quinhentos", TownSwatch.Granite, TownSwatch.Slate, TownRoofKind.Gable, TownShopDressing.Ferraria, false),
+                TorreQuinhentosOffset, PostSafe, 18f, false);
+            Place(w, cidadelaMap, Post("portao_do_nono_anel", TownSwatch.Granite, TownSwatch.Gold, TownRoofKind.Gable, TownShopDressing.Mercearia, false),
+                PortaoNonoAnelOffset, PostSafe, 18f, false);
 
             // ---------------- Water ----------------
             // The upper Rio Dourado (10 m, like its lower course in the Zarafshan), a stone bridge on the south-east road.
@@ -249,6 +277,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             PathVia(w, 3.5f, new Vector2(-1100f, 1430f), new Vector2(-800f, 1410f), new Vector2(-480f, 1440f), new Vector2(-200f, 1410f), wallFork,
                 new Vector2(300f, 1400f), new Vector2(650f, 1420f), new Vector2(1100f, 1420f));
 
+            // The spurs to the posts of 43–46.
+            PathVia(w, 3.5f, new Vector2(600f, 170f), new Vector2(590f, 400f), EclusaDaLuaOffset + new Vector2(-18f, 0f));
+            PathVia(w, 3.5f, new Vector2(700f, 700f), EclusaDaLuaOffset + new Vector2(18f, 0f));
+            PathVia(w, 3.5f, new Vector2(-960f, 100f), MoinhoDaguaOffset + new Vector2(-18f, 0f));
+            PathVia(w, 3.5f, new Vector2(-480f, 1440f), TorreQuinhentosOffset + new Vector2(-18f, 0f));
+            PathVia(w, 3.5f, new Vector2(960f, 1420f), new Vector2(950f, 1540f), PortaoNonoAnelOffset + new Vector2(-18f, 0f));
+
             // ---------------- Landmarks ----------------
             Sign(w, lionFork, new Vector2(150f, -200f), 4f, 0f);
             Sign(w, milletFork, new Vector2(-300f, -330f), 4f, 0f);
@@ -311,7 +346,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             OverworldZone arrozais, OverworldZone vilas, OverworldZone aneis, OverworldZone eclusa, OverworldZone jardins, OverworldZone moinho,
             OverworldZone cha, OverworldZone fossos, OverworldZone canal, OverworldZone torres, OverworldZone calcario, OverworldZone pinheiros,
             OverworldZone guerreiros, OverworldZone espelhos, OverworldZone nevoa, OverworldZone muralhaOeste, OverworldZone quinhentos,
-            OverworldZone muralha, OverworldZone portao, OverworldZone nian)
+            OverworldZone muralha, OverworldZone portao, OverworldZone nian, OverworldZone cidadela)
         {
             // At night: the werewolf in the pines and on the wall, the shroud owl over the fields, the vampire bats in the karst and
             // the towers, the moon-mother by the water, the mud buffaloes' night herd (the queixada), fireflies over the paddies.
@@ -412,6 +447,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             muralhaOeste.Fauna.Add(Fauna("pedras_da_muralha", "[controle]", T(N(Ming.Stone, 3), N(Ming.Crow, 1)), T(V(Ming.Stone, 2), S(bats, 1)), 3, null, 28f));
             portao.Fauna.Add(Fauna("filhotes_do_portao", "[elite]", T(N(Ming.Nian, 3), N(Ming.Terracotta, 1)), T(V(Ming.Nian, 3), S(werewolf, 1)), 3, null, 32f));
             portao.Fauna.Add(Fauna("arqueiros_do_portao", "[distância]", T(N(Ming.Kite, 3), N(Ming.Horse, 1)), T(V(Ming.Kite, 2), S(bats, 1)), 4));
+
+            // Cidadela dos Quatro Gulosos (46): the Servos de Taotie [tanque] (the terracotta soldier), the Bolhas de Hundun [controle]
+            // (the ill-wind mist), the Filhotes de Qiongqi [rápido] (the wolf), the Guarda de Taowu [elite] (the stone lion); no boss yet.
+            cidadela.Fauna.Add(Fauna("servos_de_taotie", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.Lion, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
+            cidadela.Fauna.Add(Fauna("bolhas_de_hundun", "[controle]", T(N(Ming.Smoke, 3), N(Ming.Kite, 1)), T(V(Ming.Smoke, 3), S(owl, 1)), 4));
+            cidadela.Fauna.Add(Fauna("filhotes_de_qiongqi", "[rápido]", T(N(Ming.Horse, 3), N(Ming.Smoke, 1)), T(V(Ming.Horse, 2), S(werewolf, 1)), 4));
+            cidadela.Fauna.Add(Fauna("guarda_de_taowu", "[elite]", T(N(Ming.Lion, 3), N(Ming.Terracotta, 1)), T(V(Ming.Lion, 3), S(bats, 1)), 3, null, 32f));
         }
     }
 }

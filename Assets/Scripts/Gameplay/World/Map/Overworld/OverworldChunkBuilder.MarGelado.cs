@@ -101,6 +101,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             string salt = "mg" + content.Coord.x + "_" + content.Coord.y;
             Rect r = content.Rect;
+            PlaceCanalCrossingLanterns(layout, content);
 
             // Big pieces: whole inside the chunk, their footprint kept clear.
             for (int k = 0; k < 5; k++)
@@ -143,6 +144,22 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             }
 
             ScatterMarGeladoDetail(layout, content, salt);
+        }
+
+        /// <summary>The ice lanterns that mark the canal crossings (<see cref="OverworldLayouts.CanalCrossings"/>), placed before any scatter so the landings stay clear.</summary>
+        private static void PlaceCanalCrossingLanterns(OverworldLayout layout, OverworldChunkContent content)
+        {
+            OverworldZone anchor = layout.Zone(OverworldLayouts.MarGeladoAnchorZoneId);
+            if (anchor == null)
+            {
+                return;
+            }
+
+            foreach (Mechanics.SkyRoute route in OverworldLayouts.CanalCrossings)
+            {
+                PlaceStation(layout, content, content.Rect, OverworldDecor.IceLantern, anchor.Origin + route.PropA, anchor.Origin + route.A, route.Id);
+                PlaceStation(layout, content, content.Rect, OverworldDecor.IceLantern, anchor.Origin + route.PropB, anchor.Origin + route.B, route.Id);
+            }
         }
 
         /// <summary>Fishing holes, cracks in the ice, lichen tufts, snow drifts and mist banks (ground detail: no colliders).</summary>

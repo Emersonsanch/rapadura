@@ -557,6 +557,31 @@ Morcego-Lâmina, Redemoinho, Enguia Grande, Cardume Escuro, Serpente Cega, Raste
 | `enemy_forest_lesser_shadow_dragon` | **Dragão-Sombra Menor** / *Lesser Shadow Dragon* | 88 | [elite] | retalho do corpo de dragão preso atrás do selo, que se lembra de ser enorme; **não** é a forma do Príncipe (§1.4). |
 | `enemy_forest_lesser_archon` | **Arconte Menor** / *Lesser Archon* | 90 | [elite] | arcontes pequenos (§1.4) que chegaram tarde e engoliram o que os grandes deixaram cair; a luz ainda é luz. |
 
+**Décima leva (2026-11-09): Reinos do Céu (Mapas100 91–99).** Mesmo contrato (peso 0 no bioma, nível da área, números do bioma). A região inteira
+fica no bioma Floresta (`OverworldLayouts.Ceu` declara `w.World.Biome = BiomeType.Forest`), daí o prefixo `enemy_forest_` e os números de Floresta (vida 75–108, XP 10).
+Modelos em `CeuBeastRecipes` (a ave e a gaivota abrem o bico com as asas paradas; o peixe rema as barbatanas; o clandestino, o Um dos Doze e a Pedra abrem a boca com a cauda balançando;
+a corda solta as pontas devagar; a sombra do porão achata e o lampião brilha; a jarra inclina e a rachadura brilha; o arconte, o balão e o ladrão erguem os dois braços), Caderno em
+`CeuBestiaryTexts`. Dois são [distância], voam e atiram: a Jarra Rachada (`LanternBolt`) e a Gaivota de Luz Apagada (`Ember`; `RangedEnemiesTests`). Respeito (§0.2, §1.4 e §4.3):
+quieto, pálido e meio bobo, nunca gore; os arcontes são gigantes de conto que engoliram luz demais, com a luz ainda lá dentro, e o Pai da Grandeza não aparece. Testes: `CeuBeastsTests`. **Ainda não
+trocados nos grupos do overworld** (`OverworldLayouts.Ceu.cs`, classe `Ceu`, segue com os substitutos). Sem bicho próprio nesta leva, seguem com substitutos: Arconte Fujão/Menor/Fugido (o `enemy_forest_lesser_archon` da nona leva serve),
+Faísca Confusa, Sombra Clandestina e Sombra que Pisa as Flores, Sombra Nadadora e do Meio-Dia, Corrente Errada e Rachadura do Céu, Lanterna Fugitiva, Faísca Teimosa, Gota de Treva, Fumaça de Esfera,
+Vento de Órbita e do Alto, Espinho de Fumaça, Clandestino de Brasa e Última Sombra.
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_forest_dimmed_cloud_bird` | **Ave de Nuvem Apagada** / *Dimmed Cloud Bird* | 91 | [rápido] | as aves de nuvem que levam luz dos píeres às barcas; esta esqueceu onde deixou a sua. |
+| `enemy_forest_dimmed_light_fish` | **Peixe de Luz Apagado** / *Dimmed Light Fish* | 92 | [rápido] | o rio é estrada (bíblia §3.16); o peixe parou de carregar, sobrou uma gota pendurada. |
+| `enemy_forest_dark_stowaway` | **Clandestino de Treva** / *Dark Stowaway* | 93 | [rápido] | sombra que subiu escondida numa barca, com a etiqueta de embarque de outro. |
+| `enemy_forest_hold_shadow` | **Sombra do Porão** / *Hold Shadow* | 93 | [tanque] | embarcou no fundo do mundo e sentou em cima da bagagem, com o lampião preso nela. |
+| `enemy_forest_living_rope` | **Corda Viva** / *Living Rope* | 93 (e Corda de Fumaça, 97) | [controle] | corda que ficou amarrada numa sombra e pegou mania de agarrar. |
+| `enemy_forest_toy_archon` | **Um dos Doze** / *One of the Twelve* | 94 | [elite] | os doze arcontes presos na Roda (*Acta Archelai* 8), gastos em brinquedo de corda. |
+| `enemy_forest_cracked_jar` | **Jarra Rachada** / *Cracked Jar* | 94 | [distância] | jarra da Roda que levou uma pancada: não derrama, vaza de lado. |
+| `enemy_forest_chained_archon` | **Arconte Acorrentado** / *Chained Archon* | 95 | [tanque] | o Espírito Vivo prende os arcontes nas esferas (Teodoro bar Konai); empurra e resmunga. |
+| `enemy_forest_balloon_giant` | **Gigante-Balão** / *Balloon Giant* | 95 | [elite] | o arconte que segurou tanto o que engoliu que inchou redondo, como na ficha. |
+| `enemy_forest_az_thief` | **Ladrão de Āz** / *Thief of Āz* | 96 | [elite] | Āz, a Cobiça, quer o jardim numa arca (M 47) e manda gente de capuz colher. |
+| `enemy_forest_dimmed_light_gull` | **Gaivota de Luz Apagada** / *Dimmed Light Gull* | 97 | [distância] | gaivota que seguiu a barca do Sol de perto demais e cospe a última brasa. |
+| `enemy_forest_sky_stone` | **Pedra do Céu** / *Sky Stone* | 99 (e fora do pomar, 100) | [tanque] | pedaço do teto do céu caído das rachaduras; quer voltar para casa. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |

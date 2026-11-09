@@ -232,6 +232,19 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_forest_shadow_lizard", ProceduralEnemyKind.ShadowLizard },
             { "enemy_forest_lesser_shadow_dragon", ProceduralEnemyKind.LesserShadowDragon },
             { "enemy_forest_lesser_archon", ProceduralEnemyKind.LesserArchon },
+            // The beasts of the Reinos do Céu (Docs/Mapas100.md 91–99), formerly played by stand-ins.
+            { "enemy_forest_dimmed_cloud_bird", ProceduralEnemyKind.DimmedCloudBird },
+            { "enemy_forest_dimmed_light_fish", ProceduralEnemyKind.DimmedLightFish },
+            { "enemy_forest_dark_stowaway", ProceduralEnemyKind.DarkStowaway },
+            { "enemy_forest_hold_shadow", ProceduralEnemyKind.HoldShadow },
+            { "enemy_forest_living_rope", ProceduralEnemyKind.LivingRope },
+            { "enemy_forest_toy_archon", ProceduralEnemyKind.ToyArchon },
+            { "enemy_forest_cracked_jar", ProceduralEnemyKind.CrackedJar },
+            { "enemy_forest_chained_archon", ProceduralEnemyKind.ChainedArchon },
+            { "enemy_forest_balloon_giant", ProceduralEnemyKind.BalloonGiant },
+            { "enemy_forest_az_thief", ProceduralEnemyKind.AzThief },
+            { "enemy_forest_dimmed_light_gull", ProceduralEnemyKind.DimmedLightGull },
+            { "enemy_forest_sky_stone", ProceduralEnemyKind.SkyStone },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -277,6 +290,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.CopyShadow, ProceduralEnemyKind.SmokeGiant, ProceduralEnemyKind.SmokeArcher, ProceduralEnemyKind.EmberWolf,
             ProceduralEnemyKind.HotSmokeLion, ProceduralEnemyKind.BlackEagle, ProceduralEnemyKind.WindHarpy, ProceduralEnemyKind.MudOctopus,
             ProceduralEnemyKind.DarkFish, ProceduralEnemyKind.ShadowLizard, ProceduralEnemyKind.LesserShadowDragon, ProceduralEnemyKind.LesserArchon,
+            ProceduralEnemyKind.DimmedCloudBird, ProceduralEnemyKind.DimmedLightFish, ProceduralEnemyKind.DarkStowaway, ProceduralEnemyKind.HoldShadow,
+            ProceduralEnemyKind.LivingRope, ProceduralEnemyKind.ToyArchon, ProceduralEnemyKind.CrackedJar, ProceduralEnemyKind.ChainedArchon,
+            ProceduralEnemyKind.BalloonGiant, ProceduralEnemyKind.AzThief, ProceduralEnemyKind.DimmedLightGull, ProceduralEnemyKind.SkyStone,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -700,6 +716,42 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.LesserArchon:
                     ProfundoBeastRecipes.BuildLesserArchon(blueprint);
+                    break;
+                case ProceduralEnemyKind.DimmedCloudBird:
+                    CeuBeastRecipes.BuildDimmedCloudBird(blueprint);
+                    break;
+                case ProceduralEnemyKind.DimmedLightFish:
+                    CeuBeastRecipes.BuildDimmedLightFish(blueprint);
+                    break;
+                case ProceduralEnemyKind.DarkStowaway:
+                    CeuBeastRecipes.BuildDarkStowaway(blueprint);
+                    break;
+                case ProceduralEnemyKind.HoldShadow:
+                    CeuBeastRecipes.BuildHoldShadow(blueprint);
+                    break;
+                case ProceduralEnemyKind.LivingRope:
+                    CeuBeastRecipes.BuildLivingRope(blueprint);
+                    break;
+                case ProceduralEnemyKind.ToyArchon:
+                    CeuBeastRecipes.BuildToyArchon(blueprint);
+                    break;
+                case ProceduralEnemyKind.CrackedJar:
+                    CeuBeastRecipes.BuildCrackedJar(blueprint);
+                    break;
+                case ProceduralEnemyKind.ChainedArchon:
+                    CeuBeastRecipes.BuildChainedArchon(blueprint);
+                    break;
+                case ProceduralEnemyKind.BalloonGiant:
+                    CeuBeastRecipes.BuildBalloonGiant(blueprint);
+                    break;
+                case ProceduralEnemyKind.AzThief:
+                    CeuBeastRecipes.BuildAzThief(blueprint);
+                    break;
+                case ProceduralEnemyKind.DimmedLightGull:
+                    CeuBeastRecipes.BuildDimmedLightGull(blueprint);
+                    break;
+                case ProceduralEnemyKind.SkyStone:
+                    CeuBeastRecipes.BuildSkyStone(blueprint);
                     break;
             }
 

@@ -30,7 +30,7 @@ namespace Rapadura.Tests
             "map_025_taa_pwani", "map_026_auroques", "map_027_meroe", "map_028_kirta", "map_029_kilwa", "map_030_liyongo",
             "map_031_jhilpur", "map_032_raiz_viva", "map_033_tarchon", "map_034_ninki_nanka", "map_035_coracao_lodo",
             "map_036_sangkent", "map_037_calhas", "map_038_geleira", "map_039_forte_ventos", "map_040_wakhan",
-            "map_041_mingcheng", "map_042_torres_brancas",
+            "map_041_mingcheng", "map_042_torres_brancas", "map_043_canal_das_lanternas", "map_044_arrozais_espelhados", "map_045_muralha_mil_torres", "map_046_cidadela_gulosos",
             "map_047_soslan", "map_048_kurgans", "map_049_fortim", "map_050_haripushpa", "map_051_mil_cavalos", "map_052_amirani",
             "map_053_vale_satiros", "map_054_farnkesh", "map_055_pontes_vento", "map_056_ermidas", "map_057_garganta_ays", "map_058_ninho_huma",
             "map_059_porto_lua_branca", "map_060_canais_gelo", "map_061_tundra_omol", "map_062_galerias_mamutes", "map_063_mar_auroras", "map_064_fundo_velho_kul",
@@ -94,7 +94,7 @@ namespace Rapadura.Tests
             }
 
             CollectionAssert.IsSubsetOf(OverworldOnlyMaps, MapCatalog.Built.Select(m => m.Id).ToArray());
-            Assert.IsTrue(MapCatalog.Built.Any(m => m.Region == MapRegion.PlanicieDeMingcheng), "region 8 is a continuous region");
+            Assert.IsTrue(MapCatalog.InRegion(MapRegion.PlanicieDeMingcheng).All(m => m.IsBuilt), "region 8 is a continuous region");
             Assert.IsTrue(MapCatalog.InRegion(MapRegion.EstepeDosNartes).All(m => m.IsBuilt), "region 9 is a continuous region");
             Assert.IsTrue(MapCatalog.InRegion(MapRegion.PicosDeFarnkesh).All(m => m.IsBuilt), "region 10 is a continuous region");
             Assert.IsTrue(MapCatalog.InRegion(MapRegion.MarGelado).All(m => m.IsBuilt), "region 11 is a continuous region");

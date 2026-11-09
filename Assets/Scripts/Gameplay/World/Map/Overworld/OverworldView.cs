@@ -132,6 +132,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             view._enemyPrefab = enemyPrefab;
             view.BuildStatic();
             root.AddComponent<Mechanics.FarnkeshMechanicsDriver>();
+            root.AddComponent<Mechanics.MarGeladoMechanicsDriver>();
             return view;
         }
 

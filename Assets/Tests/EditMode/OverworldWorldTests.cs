@@ -208,7 +208,6 @@ namespace Rapadura.Tests
             Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.PortaoTrevaMapId), "region 15 is part of the world");
             Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.CaisDaColunaMapId), "region 16 is part of the world");
             Assert.AreSame(w, OverworldLayouts.WorldOf(OverworldLayouts.VarandaMapId), "region 16 is part of the world");
-            Assert.IsNull(OverworldLayouts.WorldOf("map_043_canal_lanternas"), "not a catalog map");
         }
 
         [Test]

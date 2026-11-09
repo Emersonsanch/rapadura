@@ -342,6 +342,19 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_forest_shadow_lizard", "Shadow Lizard", "Lagarto-Sombra"),
             EnemyName("enemy_forest_lesser_shadow_dragon", "Lesser Shadow Dragon", "Dragão-Sombra Menor"),
             EnemyName("enemy_forest_lesser_archon", "Lesser Archon", "Arconte Menor"),
+            // The beasts of the Reinos do Céu (Docs/Mapas100.md 91–99), formerly played by stand-ins.
+            EnemyName("enemy_forest_dimmed_cloud_bird", "Dimmed Cloud Bird", "Ave de Nuvem Apagada"),
+            EnemyName("enemy_forest_dimmed_light_fish", "Dimmed Light Fish", "Peixe de Luz Apagado"),
+            EnemyName("enemy_forest_dark_stowaway", "Dark Stowaway", "Clandestino de Treva"),
+            EnemyName("enemy_forest_hold_shadow", "Hold Shadow", "Sombra do Porão"),
+            EnemyName("enemy_forest_living_rope", "Living Rope", "Corda Viva"),
+            EnemyName("enemy_forest_toy_archon", "One of the Twelve", "Um dos Doze"),
+            EnemyName("enemy_forest_cracked_jar", "Cracked Jar", "Jarra Rachada"),
+            EnemyName("enemy_forest_chained_archon", "Chained Archon", "Arconte Acorrentado"),
+            EnemyName("enemy_forest_balloon_giant", "Balloon Giant", "Gigante-Balão"),
+            EnemyName("enemy_forest_az_thief", "Thief of Āz", "Ladrão de Āz"),
+            EnemyName("enemy_forest_dimmed_light_gull", "Dimmed Light Gull", "Gaivota de Luz Apagada"),
+            EnemyName("enemy_forest_sky_stone", "Sky Stone", "Pedra do Céu"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),

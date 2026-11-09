@@ -172,15 +172,15 @@ namespace Rapadura.Tests
         [Test]
         public void Catalog_Has42MapsAndRegions9To16_UniqueIdsAndNumbers_InOrder()
         {
-            // The 42 maps of the "até 100" scope (01–42), Região 9's six (47–52), Região 10's six (53–58), Região 11's six (59–64), Região 12's six
+            // The 42 maps of the "até 100" scope (01–42), Região 8's last four (43–46), Região 9's six (47–52), Região 10's six (53–58), Região 11's six (59–64), Região 12's six
             // (65–70), Região 13's six (71–76), Região 14's six (77–82), Região 15's eight (83–90) and Região 16's ten (91–100), ☆, walked as their continuous regions.
-            Assert.AreEqual(96, MapCatalog.Maps.Count);
+            Assert.AreEqual(100, MapCatalog.Maps.Count);
             Assert.AreEqual(MapCatalog.Maps.Count, MapCatalog.Maps.Select(m => m.Id).Distinct().Count(), "unique ids");
             Assert.AreEqual(MapCatalog.Maps.Count, MapCatalog.Maps.Select(m => m.MapId).Distinct().Count(), "unique numbers");
             for (int i = 0; i < MapCatalog.Maps.Count; i++)
             {
                 MapDefinition map = MapCatalog.Maps[i];
-                Assert.AreEqual(i < 42 ? i + 1 : i + 5, map.MapId);
+                Assert.AreEqual(i + 1, map.MapId);
                 StringAssert.IsMatch(@"^map_\d{3}_[a-z_]+$", map.Id);
                 StringAssert.StartsWith($"map_{map.MapId:000}_", map.Id);
                 Assert.AreSame(map, MapCatalog.Get(map.Id));
@@ -234,7 +234,7 @@ namespace Rapadura.Tests
             foreach (MapDefinition map in MapCatalog.Maps)
             {
                 Assert.IsTrue(rows.TryGetValue(map.MapId, out Match doc), $"map {map.MapId:00} missing from Mapas100.md §1");
-                Assert.AreEqual(map.MapId <= 42 ? "★" : "☆", doc.Groups[7].Value, $"{map.Id}: in the 'até 100' scope (Regiões 9 to 16 are ☆)");
+                Assert.AreEqual(map.MapId <= 42 ? "★" : "☆", doc.Groups[7].Value, $"{map.Id}: in the 'até 100' scope (43–46 and Regiões 9 to 16 are ☆)");
                 Assert.AreEqual(int.Parse(doc.Groups[4].Value), map.MonsterLevelMin, $"{map.Id}: band min");
                 Assert.AreEqual(int.Parse(doc.Groups[5].Value), map.MonsterLevelMax, $"{map.Id}: band max");
                 Assert.AreEqual(doc.Groups[2].Value, MapTexts.MapName(null, map), $"{map.Id}: pt-BR name");

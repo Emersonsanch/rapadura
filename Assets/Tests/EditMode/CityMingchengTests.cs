@@ -265,7 +265,7 @@ namespace Rapadura.Tests
         // ------------------------------------------------------------------
 
         [Test]
-        public void MozaksCounter_SellsTheSunSeal_TheOnlyItemGateOfThePlain_AtBalancedPrices_AndTurnsDaily()
+        public void MozaksCounter_SellsTheItemGatesOfThePlain_AtBalancedPrices_AndTurnsDaily()
         {
             CityShopSpec shop = CityShopCatalog.Get(CityShopCatalog.LanternasMozak);
             Assert.IsNotNull(shop);
@@ -273,9 +273,9 @@ namespace Rapadura.Tests
             Assert.AreEqual(ShopRotationPeriod.Daily, shop.Period);
 
             List<MapDefinition> gated = MapCatalog.Maps.Where(m => m.Region == MapRegion.PlanicieDeMingcheng && m.HasSpecialRequirement).ToList();
-            CollectionAssert.AreEquivalent(new[] { 42 }, gated.Select(m => m.MapId).ToArray());
+            CollectionAssert.AreEquivalent(new[] { 42, 45 }, gated.Select(m => m.MapId).ToArray());
             List<string> gates = gated.Select(m => MapRequirementRules.PrimaryItemOf(m.SpecialRequirementTag)).Where(i => i != null).ToList();
-            CollectionAssert.AreEquivalent(new[] { MapRequirementItems.SunSeal }, gates);
+            CollectionAssert.AreEquivalent(new[] { MapRequirementItems.SunSeal, MapRequirementItems.OilLamp }, gates);
             foreach (string gate in gates)
             {
                 CityShopEntry entry = CityShopCatalog.EntryOf(shop.ShopId, gate);

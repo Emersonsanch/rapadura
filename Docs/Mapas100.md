@@ -132,8 +132,8 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       grade 5 × 5, 19 terrenos novos, relevo próprio (`Moraines`, `IceTongue`, `SeracField`, `Peaks`) e cenário próprio;
       costurada ao norte da Serra de Kaggen (o alto da Serra continua no Teto). Detalhes em §5, "Região 7".
     - **Região 8 — Planície de Mingcheng** (2026-11-03): mesmo modelo, 2400 × 2400 m (`OverworldLayouts.Mingcheng.cs`, coordenadas
-      x −1200…1200, z −600…1800) com Mingcheng em (0, 0) na planície do rio e as Torres Brancas em (960, 600); 41 e 42 viram zonas
-      (construídos), 25 áreas numa grade 5 × 5, 15 terrenos novos, relevo próprio (`KarstTowers`, `WallRidge`) e cenário próprio;
+      x −1200…1200, z −600…1800) com Mingcheng em (0, 0) na planície do rio e as Torres Brancas em (960, 600); 41 a 46 viram zonas
+      (construídos), 26 áreas numa grade 5 × 5 (a Cidadela tirada da metade norte dos Picos do Nian), 15 terrenos novos, relevo próprio (`KarstTowers`, `WallRidge`) e cenário próprio;
       preenche o buraco murado ao norte do Zarafshan, entre o Teto e a Costa. Detalhes em §5, "Região 8".
     - **Região 9 — Estepe dos Nartes** (2026-11-03): mesmo modelo, 2400 × 2400 m (`OverworldLayouts.Nartes.cs`, coordenadas
       x −1200…1200, z −600…1800) com o Acampamento de Soslan em (0, 0) junto do Rio dos Nartes, o Fortim em (−480, 1080) e o
@@ -1577,7 +1577,7 @@ Portão** (Bögü Qaghan, o khagan uigur que adotou o maniqueísmo em 762; aqui,
 Deng** (maniqueu da era Song em Fujian **[verificar]**; aqui, o mestre do canal). Chefe do mundo: **Os Quatro Gulosos**
 (mapa 46).
 
-- **Mundo contínuo (2026-11-03): mapas 41–42 jogáveis a pé (43–46 viram áreas sem mapa de catálogo).** A região inteira é um mapa
+- **Mundo contínuo (2026-11-03; 43–46 no catálogo em 2026-11-09): mapas 41–46 jogáveis a pé.** A região inteira é um mapa
   de 2400 × 2400 m (`OverworldLayouts.Mingcheng`, `MingchengId`) costurado ao norte do Zarafshan e a leste do Teto do Mundo, sem
   portão. Mingcheng (`CityTownRecipes.Mingcheng()`, Backdrop desligado, chão plano de ±30 m em y = 0; ruas O/L/S, a muralha do 7º
   anel fecha o norte, a estrada do norte sai da estrada leste) fica em (0, 0), 600 m da borda sul; as Torres Brancas
@@ -1590,8 +1590,7 @@ Deng** (maniqueu da era Song em Fujian **[verificar]**; aqui, o mestre do canal)
     Bambuzal do Oeste, Ravinas de Loess, e a leste os Jardins em Terraço e as Torres Brancas (42: **Selo do Sol**).
   - **Longe (104–126):** Picos de Calcário, Cristas dos Pinheiros, Vale dos Guerreiros (terracota), Colinas dos Espelhos e Vale da
     Névoa (o atalho dos espelhos, retorno às Torres), e ao norte a Muralha das Mil Torres (45): Muralha Oeste, Torre Quinhentos,
-    a muralha, Portão do Nian e Picos do Nian (retorno às Torres Brancas). 43–46 são ☆ e não estão no catálogo: as áreas usam o
-    41 ou o 42 como dono e os "postos" das fichas viram marcos (fogueira da Eclusa da Lua, moinho d'água, fogueira da Torre Quinhentos).
+    a muralha, Portão do Nian e Picos do Nian (retorno às Torres Brancas). 43–46 estão no catálogo: ver "No jogo" de cada ficha.
   - **Água:** o Rio Dourado nasce na cabeceira do canal e desce até a borda sul (continua no Zarafshan); o Canal das Lanternas (14 m)
     sobe para o norte até o Lago da Carpa, sob as colinas brancas; leitos cavados, só pontes de pedra (3); lagoa de lótus nos anéis,
     lagoa do moinho.
@@ -1663,6 +1662,7 @@ Deng** (maniqueu da era Song em Fujian **[verificar]**; aqui, o mestre do canal)
 - **Ganchos:** loot escama de carpa, seda de canal · montaria `mount_river_seahorse` · casa: **Festa das Lanternas**
   (Lanterna-peixe).
 - **Noite:** lanternas no canal; o Barqueiro de Fumaça rema.
+- **No jogo (2026-11-09): zona do mundo contínuo.** A área `canal_das_lanternas` é o mapa (nv 102–110, a pé 98, barca 106); a `eclusa_da_lua` fica como área de entrada dele (nv 92–96, sem subir a faixa, para não fechar a estrada leste às Torres Brancas). O posto Eclusa da Lua, com Cais da Barca, fica em (600, 560), na margem leste dentro da área do canal, ligado à estrada leste e à do norte. Exigência: nenhuma (a Metodologia pede "Barco de Bambu", que não existe nem é vendido em Mingcheng ou nas Torres). Falta: as 4 eclusas que mudam a água, A Carpa que Não Pulou, a montaria e a casa.
 
 ### 44 · Arrozais Espelhados / *Mirror Rice Terraces* — nv 108–116 · ☆
 - **Fonte:** terraços de arroz em montanha (Yuanyang, Longji) como forma; a Barca da Lua refletida na água (bíblia §1.5).
@@ -1676,6 +1676,7 @@ Deng** (maniqueu da era Song em Fujian **[verificar]**; aqui, o mestre do canal)
   existem no seco; pisar na trilha refletida funciona por 10 s.
 - **Ganchos:** loot arroz, palha dourada · montaria nova **Búfalo-d'Água** (Despertar) · casa: conjunto novo **Arrozal**.
 - **Noite:** a lua no espelho dobra as trilhas do reflexo; vaga-lumes.
+- **No jogo (2026-11-09): zona do mundo contínuo.** A área `arrozais_espelhados` é o mapa (nv 108–116, a pé 104, barca 112); o `moinho_dagua` fica como área de entrada (nv 97–101), e é por ele que a segunda passagem do Teto do Mundo continua aberta. O posto Moinho d'Água, com Cais, fica em (−960, 240), dentro dos arrozais; a roda-d'água continua na área do moinho, ao norte. Exigência: nenhuma. A primeira passagem do Teto (pelas Calhas) entra direto nos arrozais e passa a pedir nível 104. Falta: o mundo do reflexo, O Espantalho de Palha Dourada, o Búfalo-d'Água e o conjunto Arrozal.
 
 ### 45 · Muralha das Mil Torres / *Wall of a Thousand Towers* — nv 115–125 · ☆
 - **Fonte:** a Grande Muralha (forma); o *nian*, a fera do Ano-Novo dos contos chineses, que foge do vermelho e do
@@ -1692,6 +1693,7 @@ Deng** (maniqueu da era Song em Fujian **[verificar]**; aqui, o mestre do canal)
 - **Ganchos:** loot tijolo vidrado, lanterna vermelha · montaria nova **Cavalo de Terracota Desperto** (§6) · casa: **Festa
   das Lanternas**.
 - **Noite:** os faróis acesos ficam; o nian é mais ativo; névoa nos vales.
+- **No jogo (2026-11-09): zonas do mundo contínuo.** Quatro áreas são o mapa: Muralha Oeste, Torre Quinhentos, Muralha das Mil Torres e Portão do Nian (nv 115–124, mapa a pé 110, barca 120); posto Torre Quinhentos com Cais em (−400, 1380). Exigência: **Tocha** (`TorchRequired`, a Lamparina de Óleo do balcão fixo das Lanternas de Mōzak, em Mingcheng), barreira suave em todas as quatro; a estrada norte até o Mar Gelado passa por elas e também pede a lamparina. Falta: a parede andável, os faróis e o corredor de luz, Nian, o Cavalo de Terracota Desperto.
 
 ### 46 · Cidadela dos Quatro Gulosos / *Citadel of the Four Gluttons* — nv 125–140 · ☆
 - **Fonte:** os "Quatro Perigos" das lendas chinesas antigas (*Zuo Zhuan*, *Shan Hai Jing*): **Taotie** (o guloso, a cara
@@ -1710,6 +1712,7 @@ Deng** (maniqueu da era Song em Fujian **[verificar]**; aqui, o mestre do canal)
 - **Ganchos:** loot bronze antigo, conjunto antigo "Vasos de Bronze" · montaria `mount_kirin` (Despertar III) · casa:
   troféu dos Quatro (vaso de bronze).
 - **Noite:** os palácios trocam de guloso; Hundun mais forte.
+- **No jogo (2026-11-09): zona do mundo contínuo, fora do lugar da ficha.** A área `cidadela_dos_quatro_gulosos` (nv 125–140, a pé 121, barca 132; 480 × 240 m) foi tirada da metade norte dos Picos do Nian, sem aumentar a região, com o posto Portão do Nono Anel e Cais em (960, 1660). A ficha a põe nos anéis 7–9 de Mingcheng, mas a cidade é só a receita de ±30 m e a estrada norte passa colada nela: uma área de nível 125 ali cortaria a região. Exigência: nenhuma. Os bichos são corpos existentes (soldado de terracota, neblina, lobo, leão de pedra). Falta: os 4 palácios, o Salão Central, a mecânica do que cada um come e os Quatro Gulosos.
 
 ### Região 9 — Estepe dos Nartes (estepe e Cáucaso, Vento Vivo) · mapas 47–52 · ☆
 
@@ -2003,7 +2006,7 @@ estação na tundra, túneis que mudam, placas que se movem, pesca no gelo, os c
 - **Ganchos:** loot pele de foca, óleo de lanterna, prata · montaria nova **Rena da Aurora** (§6) · casa: conjunto novo
   **Casa da Lua Branca** (lanterna em meia-lua, tapete de pele).
 - **Noite:** aurora no céu; a Barca da Lua passa; visão boa nos canais iluminados.
-- **No jogo (2026-11-06): cidade de verdade** (`CityTownRecipes.PortoDaLuaBranca.cs`, estilo `IceCanal`, `CityCatalog.LateRegionCities`, id `porto_da_lua_branca`): em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S a 19 m; a rua Sul é a entrada; ao norte a baía congelada): casas compridas de tábua escura com telhado de neve e a empena pintada com uma lua cheia de prata num anel lilás (sem postes de brasão) e cúpulas de neve com túnel de entrada; o Cais da Lua na praça (crescente de pedra prateada e a lanterna de lua); canais de água negra com pontes de pedra em costela de baleia nas ruas Oeste e Sul; barcos em meia-lua, varais de peixe, cristas de gelo e cúpulas pequenas; portão de costelas de baleia; Yirkap, Pamour, Pera e Makarios com falas para cada primo (o Makarios chama a Lavine de Barqueira da Lua); Peles e Barcos do Pamour com as exigências de 63 (Chá de Gengibre) e 64 (Roupa Térmica) fixas, mais barcos, lamparinas, grampos e capa; missões "Gaivotas nos Varais" e "Ursos nos Canais" (paga com a Roupa Térmica); respawn na praça para 59–64. Falta: as fases da lua, a Noite Polar, a Barca da Lua atracando, o G4 da Lavine e a Rena da Aurora.
+- **No jogo (2026-11-06): cidade de verdade** (`CityTownRecipes.PortoDaLuaBranca.cs`, estilo `IceCanal`, `CityCatalog.LateRegionCities`, id `porto_da_lua_branca`): em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S a 19 m; a rua Sul é a entrada; ao norte a baía congelada): casas compridas de tábua escura com telhado de neve e a empena pintada com uma lua cheia de prata num anel lilás (sem postes de brasão) e cúpulas de neve com túnel de entrada; o Cais da Lua na praça (crescente de pedra prateada e a lanterna de lua); canais de água negra com pontes de pedra em costela de baleia nas ruas Oeste e Sul; barcos em meia-lua, varais de peixe, cristas de gelo e cúpulas pequenas; portão de costelas de baleia; Yirkap, Pamour, Pera e Makarios com falas para cada primo (o Makarios chama a Lavine de Barqueira da Lua); Peles e Barcos do Pamour com as exigências de 63 (Chá de Gengibre) e 64 (Roupa Térmica) fixas, mais barcos, lamparinas, grampos e capa; missões "Gaivotas nos Varais" e "Ursos nos Canais" (paga com a Roupa Térmica); respawn na praça para 59–64. **Fases da lua (2026-11-09):** ciclo de 8 dias do jogo (dia 1 = nova, dia 5 = cheia); os três canais congelam 3 dias em 8 (dias 4–6) e 5 travessias marcadas com lanterna de gelo levam de uma margem à outra: a pé no gelo (6 m/s), de barco nos outros dias (9 m/s; Barco de Junco, passagem ou montaria aquática); sem barco o aviso conta os dias até congelar; as estradas e pontes de osso seguem abertas, então nenhuma margem prende (`MoonCanalRules`, `MarGeladoMechanicsDriver`). Falta: as lojas mudarem com a lua, a Noite Polar, a Barca da Lua atracando, o G4 da Lavine e a Rena da Aurora.
 
 ### 60 · Canais de Gelo / *Ice Canals* — nv 186–196 · ☆
 - **Fonte:** invenção (os canais que saem do porto para o mar aberto).
@@ -2016,6 +2019,7 @@ estação na tundra, túneis que mudam, placas que se movem, pesca no gelo, os c
 - **Ganchos:** loot gelo eterno, marfim de pedra · montaria `mount_woolly_mammoth` (cuidado com o gelo) · casa: **Casa da
   Lua Branca**.
 - **Noite:** o gelo racha mais; enguias acendem.
+- **No jogo (2026-11-09): gelo fino** (`ThinIceRules`, `OverworldLayouts.ThinIcePatches`): 5 placas (2 sobre a estrada norte e a estrada oeste, 3 em Canais do Oeste e Gelo Rachado), contorno azul a 40 m e vermelho quando range. Só montaria pesada (mamute, tartaruga anciã, boi-bumbá) carrega o gelo: range com 1,2 s, quebra com 4 s (2,5 s de noite); ao quebrar a montaria foge e a água fria tira 8 % da vida, sem nunca matar; a pé o gelo aguenta. Falta: a espessura no mapa da UI e a Morsa-Rainha.
 
 ### 61 · Tundra de Omöl / *Omöl's Tundra* — nv 194–204 · ☆
 - **Fonte:** Yen e Omöl, os irmãos criadores do mito komi: Yen fez as coisas boas, Omöl as desajeitadas (a Ave-Graveto
@@ -2030,6 +2034,7 @@ estação na tundra, túneis que mudam, placas que se movem, pesca no gelo, os c
 - **Mecânica:** **estação**: no verão a tundra vira brejo (lento), no inverno neve (rápido); `SeasonCalendar`.
 - **Ganchos:** loot musgo-de-rena, chifre · montaria nova **Rena da Aurora** · casa: conjunto novo **Tenda da Tundra**.
 - **Noite:** aurora longa; as criaturas de Omöl dormem em pé (passar sem acordar).
+- **No jogo (2026-11-09):** sem mecânica própria ainda (falta a estação: brejo no verão, neve no inverno); as criaturas de Omöl já rareiam à noite.
 
 ### 62 · Galerias dos Mamutes / *Mammoth Galleries* — nv 202–214 · ☆
 - **Fonte:** no folclore komi e mansi, o mamute é um bicho que vive debaixo da terra e cava os vales (bíblia §3.17).
@@ -2043,6 +2048,7 @@ estação na tundra, túneis que mudam, placas que se movem, pesca no gelo, os c
 - **Ganchos:** loot marfim de pedra, gelo eterno · montaria `mount_woolly_mammoth` (Despertar III: Mamute de Komi) · casa:
   conjunto novo **Galeria do Mamute**.
 - **Noite:** igual (subterrâneo).
+- **No jogo (2026-11-09):** sem mecânica própria ainda (faltam os túneis que mudam por semana).
 
 ### 63 · Mar das Auroras / *Aurora Sea* — nv 212–226 · ☆
 - **Fonte:** invenção (a aurora como luz presa que dança, Ar Sereno).
@@ -2055,6 +2061,7 @@ estação na tundra, túneis que mudam, placas que se movem, pesca no gelo, os c
 - **Ganchos:** loot luz de aurora (refino), gelo · montaria `mount_river_seahorse` (Despertar) · casa: conjunto novo
   **Aurora** (lanterna verde).
 - **Noite:** a aurora fica no céu a noite toda (visão ótima); as placas param.
+- **No jogo (2026-11-09):** sem mecânica própria ainda (faltam as placas que se movem e a rota da aurora).
 
 ### 64 · Fundo do Velho Kul / *Old Kul's Deep* — nv 226–240 · ☆
 - **Fonte:** os *kul*, espíritos da água dos contos komi (folclore).
@@ -2069,6 +2076,7 @@ estação na tundra, túneis que mudam, placas que se movem, pesca no gelo, os c
 - **Ganchos:** loot peixe-prata, Lendário **Peixe-Dourado** · montaria nova **Rena da Aurora** (variante prata) · casa:
   troféu do Velho Kul.
 - **Noite:** os buracos brilham; o Kul fica mais forte.
+- **No jogo (2026-11-09): pesca no gelo** (`IceFishingSession`, `OverworldLayouts.IceFishingHoles`): nos 7 buracos e no Buraco Grande, [E] até 4,5 m da borda (a pé), o peixe puxa em 5–11 s e há 1,4 s para apertar; cedo espanta, tarde escapa, andar recolhe a linha; cada buraco descansa 30 s. Pesos 70/24/5,5/0,5 (Lambari, Cascudo; Piau, Mandi; Surubim; Peixe-Dourado), raro × 2 de noite, Buraco Grande raro × 1,5 e lendário × 3; o peixe entra na Coleção e na mochila. Falta: as iscas e o Velho Kul.
 
 ### Região 12 — Arquipélago de Hinokura (Fogo Vivo) · mapas 65–70 · ☆
 

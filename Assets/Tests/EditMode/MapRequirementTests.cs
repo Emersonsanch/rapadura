@@ -228,6 +228,17 @@ namespace Rapadura.Tests
             Assert.Greater(gated.Count, 10);
             Assert.IsTrue(gated.Any(m => m.MapId == 36) && gated.Any(m => m.MapId == 38) && gated.Any(m => m.MapId == 40), "the Teto do Mundo's item gates");
             Assert.IsTrue(gated.Any(m => m.MapId == 42 && m.SpecialRequirementTag == MapRequirementTags.SunSeal), "the Planície de Mingcheng's item gate (the Sun Seal)");
+            // Map 45's lamp is on Mōzak's fixed counter in Mingcheng, the walk before the Torres Brancas (its return city, which sells only stones).
+            MapDefinition wall = MapCatalog.Get(45);
+            Assert.AreEqual(MapRequirementTags.TorchRequired, wall.SpecialRequirementTag);
+            foreach (string itemId in MapRequirementRules.KitOf(wall.SpecialRequirementTag))
+            {
+                CityShopEntry lamp = CityCatalog.Get(MapCatalog.Mingcheng).ShopIds.Select(id => CityShopCatalog.EntryOf(id, itemId)).FirstOrDefault(e => e != null);
+                Assert.IsNotNull(lamp, $"{itemId} is not sold in Mingcheng");
+                Assert.IsFalse(lamp.Rotating, $"{itemId} is always on Mōzak's counter");
+            }
+
+            CollectionAssert.AreEqual(new[] { 45 }, MapCatalog.Maps.Where(m => m.MapId >= 43 && m.MapId <= 46 && m.HasSpecialRequirement).Select(m => m.MapId).ToArray(), "only the wall of 43–46 asks for an item");
             foreach (MapDefinition map in gated.Where(m => m.MapId >= 47 && m.MapId <= 100))
             {
                 // Regiões 9–16: the gate items of a map are on the counter of its own return city (the Panela Grande for 52,
