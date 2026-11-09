@@ -24,19 +24,19 @@ namespace Rapadura.Gameplay.Items.Durability
 
         private void OnEnable()
         {
-            EventBus.Subscribe<PlayerAttackPerformedEvent>(OnAttack);
+            EventBus.Subscribe<PlayerAttackPerformedEvent>(OnAttackPerformed);
             EventBus.Subscribe<DamageAppliedEvent>(OnDamage);
             EventBus.Subscribe<PlayerDiedEvent>(OnDied);
         }
 
         private void OnDisable()
         {
-            EventBus.Unsubscribe<PlayerAttackPerformedEvent>(OnAttack);
+            EventBus.Unsubscribe<PlayerAttackPerformedEvent>(OnAttackPerformed);
             EventBus.Unsubscribe<DamageAppliedEvent>(OnDamage);
             EventBus.Unsubscribe<PlayerDiedEvent>(OnDied);
         }
 
-        private void OnAttack(PlayerAttackPerformedEvent evt)
+        private void OnAttackPerformed(PlayerAttackPerformedEvent evt)
         {
             if (evt.Attacker == gameObject)
             {

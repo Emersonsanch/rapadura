@@ -561,7 +561,7 @@ namespace Rapadura.Gameplay.Mounts
             if (!_subscribed)
             {
                 _subscribed = true;
-                EventBus.Subscribe<PlayerAttackPerformedEvent>(OnAttack);
+                EventBus.Subscribe<PlayerAttackPerformedEvent>(OnAttackPerformed);
             }
         }
 
@@ -570,14 +570,14 @@ namespace Rapadura.Gameplay.Mounts
             if (_subscribed)
             {
                 _subscribed = false;
-                EventBus.Unsubscribe<PlayerAttackPerformedEvent>(OnAttack);
+                EventBus.Unsubscribe<PlayerAttackPerformedEvent>(OnAttackPerformed);
             }
 
             EndRideEffects();
             EndNightVision();
         }
 
-        private void OnAttack(PlayerAttackPerformedEvent evt)
+        private void OnAttackPerformed(PlayerAttackPerformedEvent evt)
         {
             if (evt.Attacker == gameObject)
             {
