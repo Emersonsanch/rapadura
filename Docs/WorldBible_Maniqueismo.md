@@ -437,11 +437,17 @@ pinças; o lagarto, a shisa, o tanuki, a tibicena, o lagarto-gigante, o peixe-l�
 as barbatanas do peixe remando no vapor e os ramos do coral mexendo devagar; o ushabti, o ogro e o gigante erguem os dois braços;
 a gaivota abre o bico com as asas paradas), Caderno em `HinokuraBestiaryTexts`. A Gaivota-Brasa e o Coral de Brasa são os
 [distância] das fichas: cospem brasa como o abutre (`EnemyProjectileKind.Ember`, entram em `RangedEnemiesTests`). Testes:
-`HinokuraBeastsTests`. Respeito (ficha da região): a shisa de Okinawa, que segue viva nos telhados, só como guardiã apagada e
+`HinokuraBeastsTests`. Já no overworld de Hinokura no lugar dos substitutos, nos grupos que lideram e como acompanhantes (mesmas
+clareiras, níveis e variantes noturnas): o caranguejo, o lagarto de lava e a gaivota na ilha da forja, na praia, nas fumarolas, no
+estreito, nos canais de lava e nas fontes; a shisa e o tanuki nos jardins, nos pinhais e nas pontes; a tibicena (o dobro de noite) na
+retama, no Echeyde e no malpaís, com o lagarto-gigante no malpaís; o peixe-lâmina e o coral nos canais quentes, no recife e nas
+ilhotas; o ushabti e o ogro nas muralhas, no castelo, no pátio e na escória; o gigante de escória na caldeira, na encosta, na borda,
+nos campos e no mar de cinza. Testes: `HinokuraBeastsPlacementTests`. Respeito (ficha da região): a shisa de Okinawa, que segue viva nos telhados, só como guardiã apagada e
 nunca ridicularizada; os tibicenas guanches só como o conto os dá, contado com cuidado; o tanuki só como o bicho brincalhão dos
-contos. Ainda não trocados nos grupos do overworld (`OverworldLayouts.Hinokura.cs`, classe `Fogo`). Seguem com substitutos:
-Pedra-Pomes Voadora, Carpa de Brasa, Bambu de Fumaça, Fumarola, Fole Vivo, Bomba Vulcânica, Polvo de Obsidiana, Ouriço de Vidro,
-Faísca Raivosa, Chama Faminta, Salamandra Devoradora e Cinza Viva.
+contos. Seguem com substitutos: Pedra-Pomes Voadora (`enemy_mountain_rolling_stone`), Carpa de Brasa (`enemy_cave_lantern_fish`),
+Bambu de Fumaça / Fumarola / Fole Vivo (`enemy_mountain_ill_wind_mist`), Bomba Vulcânica (`enemy_desert_ember_vulture`), Polvo de
+Obsidiana / Cinza Viva (`enemy_cave_ooze`), Ouriço de Vidro (`enemy_forest_stone_turtle`), Faísca Raivosa / Chama Faminta (o enxame
+de vaga-lumes) e Salamandra Devoradora (`enemy_desert_sand_snake`).
 
 | `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
 |---|---|---|---|---|

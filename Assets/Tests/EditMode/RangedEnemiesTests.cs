@@ -41,7 +41,8 @@ namespace Rapadura.Tests
             // the Mar Gelado overworld, MarGeladoBeastsPlacementTests).
             ("enemy_mountain_ice_gull", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.IceGull),
             ("enemy_mountain_twig_bird", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.TwigBird),
-            // Hinokura (65, 68): the ember gull and the ember coral spit embers like the vulture (HinokuraBeastsTests; placed later).
+            // Hinokura (65, 68): the ember gull and the ember coral spit embers like the vulture (HinokuraBeastsTests; placed by
+            // the Hinokura overworld, HinokuraBeastsPlacementTests).
             ("enemy_mountain_ember_gull", BiomeType.Mountain, EnemyProjectileKind.Ember, ProceduralEnemyKind.EmberGull),
             ("enemy_mountain_ember_coral", BiomeType.Mountain, EnemyProjectileKind.Ember, ProceduralEnemyKind.EmberCoral),
         };
@@ -66,6 +67,8 @@ namespace Rapadura.Tests
             (OverworldLayouts.MarGeladoRegionId, OverworldLayouts.PortoLuaBrancaMapId, new[] { "enemy_mountain_ice_gull" }),
             (OverworldLayouts.MarGeladoRegionId, OverworldLayouts.TundraOmolMapId, new[] { "enemy_mountain_twig_bird" }),
             (OverworldLayouts.MarGeladoRegionId, OverworldLayouts.MarAurorasMapId, new[] { "enemy_mountain_ice_gull" }),
+            (OverworldLayouts.HinokuraRegionId, OverworldLayouts.HinokuraMapId, new[] { "enemy_mountain_ember_gull" }),
+            (OverworldLayouts.HinokuraRegionId, OverworldLayouts.RecifeObsidianaMapId, new[] { "enemy_mountain_ember_coral" }),
         };
 
         private readonly List<Object> _created = new List<Object>();
