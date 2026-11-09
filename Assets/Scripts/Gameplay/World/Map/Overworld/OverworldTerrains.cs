@@ -273,8 +273,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // Room for the regions' own terrains (Região 4: 40–59, OverworldTerrains.Caves.cs; … Região 7: 120–139, OverworldTerrains.Pamir.cs;
             // Região 8: 140–159, OverworldTerrains.Mingcheng.cs; Região 9: 160–179, OverworldTerrains.Nartes.cs;
             // Região 10: 180–199, OverworldTerrains.Farnkesh.cs; Região 11: 200–219, OverworldTerrains.MarGelado.cs;
-            // Região 12: 220–239, OverworldTerrains.Hinokura.cs).
-            var styles = new OverworldTerrainStyle[240];
+            // Região 12: 220–239, OverworldTerrains.Hinokura.cs; Região 13: 240–259, OverworldTerrains.Rio.cs).
+            var styles = new OverworldTerrainStyle[260];
             styles[(int)OverworldTerrain.Orchard] = new OverworldTerrainStyle
             {
                 Terrain = OverworldTerrain.Orchard, Mottle = TownSwatch.Vine, Relief = 2.6f, ReliefScale = 200f, ReliefDetail = 0.2f, Hollow = TownSwatch.GrassDark,
@@ -429,6 +429,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             FarnkeshStyles(styles);
             MarGeladoStyles(styles);
             HinokuraStyles(styles);
+            RioStyles(styles);
             return styles;
         }
     }

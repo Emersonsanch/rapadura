@@ -279,6 +279,30 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { OverworldTerrain.SlagFields, new AreaClimate(Dust, true) },
             { OverworldTerrain.AshPlain, new AreaClimate(Dust, true) },
             { OverworldTerrain.Caldera, new AreaClimate(Dust, true) },
+
+            // Região 13 — Rio das Doze Horas: always night; a clear starry sky over the quay, the piers and the fields; mist over the river's
+            // reaches, the reed beds and the canals; dust blowing on the hidden sands, the zigzag and Apep's bed; the coils and the lake
+            // are wild.
+            { OverworldTerrain.NightQuay, new AreaClimate(Clear, false) },
+            { OverworldTerrain.PapyrusBank, new AreaClimate(Mist, false) },
+            { OverworldTerrain.AshDelta, new AreaClimate(Mist, true) },
+            { OverworldTerrain.RowersBeach, new AreaClimate(Clear, false) },
+            { OverworldTerrain.HourPiers, new AreaClimate(Clear, false) },
+            { OverworldTerrain.BarqueCanal, new AreaClimate(Mist, false) },
+            { OverworldTerrain.ReedBeds, new AreaClimate(Mist, false) },
+            { OverworldTerrain.ReedFields, new AreaClimate(Clear, false) },
+            { OverworldTerrain.LightWheat, new AreaClimate(Clear, false) },
+            { OverworldTerrain.SekhetCanals, new AreaClimate(Mist, false) },
+            { OverworldTerrain.HiddenSands, new AreaClimate(Dust, true) },
+            { OverworldTerrain.ClosedGates, new AreaClimate(Dust, true) },
+            { OverworldTerrain.ZigzagSands, new AreaClimate(Dust, true) },
+            { OverworldTerrain.MehenCoils, new AreaClimate(null, true) },
+            { OverworldTerrain.CoilKnot, new AreaClimate(Mist, true) },
+            { OverworldTerrain.OuterCoil, new AreaClimate(null, true) },
+            { OverworldTerrain.FireLakeShore, new AreaClimate(Dust, true) },
+            { OverworldTerrain.FireLake, new AreaClimate(Clear, true) },
+            { OverworldTerrain.ApepSandbank, new AreaClimate(Dust, true) },
+            { OverworldTerrain.ApepScales, new AreaClimate(Dust, true) },
         };
 
         /// <summary>True when <paramref name="terrain"/> has its own line (tests: every terrain must).</summary>

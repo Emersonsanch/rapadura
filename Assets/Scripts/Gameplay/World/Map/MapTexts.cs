@@ -156,6 +156,12 @@ namespace Rapadura.Gameplay.World.Map
             ("map_068_recife_obsidiana", "Obsidian Reef", "Recife de Obsidiana", "Lighthouse Boat", "Barco-Farol"),
             ("map_069_nove_fornalhas", "Castle of Nine Furnaces", "Castelo das Nove Fornalhas", "Red Gate", "Portão Vermelho"),
             ("map_070_caldeira_fogo_devorador", "Devouring Fire Caldera", "Caldeira do Fogo Devorador", "Cold Rim", "Borda Fria"),
+            ("map_071_cais_mesektet", "Mesektet Quay", "Cais de Mesektet", "Mesektet Quay", "Cais de Mesektet"),
+            ("map_072_campos_juncos", "Reed Fields", "Campos de Juncos", "Reed House", "Casa de Junco"),
+            ("map_073_areal_escondido", "Hidden Sands", "Areal Escondido", "Sand Sled", "Trenó de Areia"),
+            ("map_074_aneis_mehen", "Coils of Mehen", "Anéis de Mehen", "Quiet Ring", "Anel Quieto"),
+            ("map_075_lago_de_fogo", "Lake of Fire", "Lago de Fogo", "Palm Isle", "Ilha das Palmeiras"),
+            ("map_076_banco_apep", "Apep's Sandbank", "Banco de Areia de Apep", "Stranded Prow", "Proa Encalhada"),
         };
 
         private static readonly (MapRegion Region, string En, string Pt)[] RegionNames =
@@ -172,6 +178,7 @@ namespace Rapadura.Gameplay.World.Map
             (MapRegion.PicosDeFarnkesh, "Peaks of Farnkesh", "Picos de Farnkesh"),
             (MapRegion.MarGelado, "Frozen Sea", "Mar Gelado"),
             (MapRegion.ArquipelagoDeHinokura, "Hinokura Archipelago", "Arquipélago de Hinokura"),
+            (MapRegion.RioDasDozeHoras, "River of the Twelve Hours", "Rio das Doze Horas"),
         };
 
         private static readonly (string Id, string En, string Pt)[] CityNames =
@@ -199,6 +206,7 @@ namespace Rapadura.Gameplay.World.Map
             ("farnkesh", "Farnkesh", "Farnkesh"),
             ("porto_da_lua_branca", "White Moon Harbor", "Porto da Lua Branca"),
             ("hinokura", "Hinokura", "Hinokura"),
+            ("cais_de_mesektet", "Mesektet Quay", "Cais de Mesektet"),
         };
 
         private static readonly (string Tag, string En, string Pt)[] RequirementHints =
@@ -211,9 +219,9 @@ namespace Rapadura.Gameplay.World.Map
             (MapRequirementTags.WoolCloak, "Carry a Wool Cloak (Litema forge, or Mestre Mihr's mine-pass quest) or wear the Nart Felt Cloak.", "Leve uma Manta de Lã (forja de Litema ou a missão do passo da mina do Mestre Mihr) ou vista a Capa de Feltro dos Nartes."),
             (MapRequirementTags.PickaxeTorch, "Carry a pickaxe and a lamp: Oil Lamp at Parthenos's lamps (Vila das Lamparinas).", "Leve picareta e lamparina: Lamparina de Óleo nas Lamparinas da Parthenos (Vila das Lamparinas)."),
             (MapRequirementTags.BlizzardResistance, "Carry Tandir Ginger Tea (Litema forge) or wear fine thermal clothes (Sangkent; Pamour's Furs and Boats, Porto da Lua Branca); the polar wind of the Aurora Sea asks for it too.", "Leve Chá de Gengibre do Tandir (forja de Litema) ou vista roupa térmica refinada (Sangkent; Peles e Barcos do Pamour, Porto da Lua Branca); o vento polar do Mar das Auroras também pede."),
-            (MapRequirementTags.TorchRequired, "Carry an Oil Lamp: Parthenos sells it in the Vila das Lamparinas and gives one for scattering the bats.", "Leve uma Lamparina de Óleo: a Parthenos vende na Vila das Lamparinas e dá uma por espantar os morcegos."),
-            (MapRequirementTags.RunicLamp, "Carry a Runic Lamp: Parthenos sells it once the Caves boss has fallen.", "Leve uma Lamparina Rúnica: a Parthenos vende depois do chefe das Cavernas."),
-            (MapRequirementTags.EternalFireOil, "Carry Eternal Fire Oil: Parthenos sells it once the Caves boss has fallen.", "Leve Óleo de Fogo Eterno: a Parthenos vende depois do chefe das Cavernas."),
+            (MapRequirementTags.TorchRequired, "Carry an Oil Lamp: Parthenos sells it in the Vila das Lamparinas and gives one for scattering the bats; Khunanup's Trades at the Mesektet Quay have it too, for the dark of the Hidden Sands.", "Leve uma Lamparina de Óleo: a Parthenos vende na Vila das Lamparinas e dá uma por espantar os morcegos; as Trocas do Khunanup, no Cais de Mesektet, também têm, para o escuro do Areal Escondido."),
+            (MapRequirementTags.RunicLamp, "Carry a Runic Lamp: Parthenos sells it once the Caves boss has fallen; Khunanup's Trades at the Mesektet Quay sell it for the Coils of Mehen.", "Leve uma Lamparina Rúnica: a Parthenos vende depois do chefe das Cavernas; as Trocas do Khunanup, no Cais de Mesektet, vendem para os Anéis de Mehen."),
+            (MapRequirementTags.EternalFireOil, "Carry Eternal Fire Oil: Parthenos sells it once the Caves boss has fallen; Khunanup's Trades at the Mesektet Quay sell it for the Lake of Fire.", "Leve Óleo de Fogo Eterno: a Parthenos vende depois do chefe das Cavernas; as Trocas do Khunanup, no Cais de Mesektet, vendem para o Lago de Fogo."),
             (MapRequirementTags.WingsOrDoubleJump, "Wear Takhsich's Canvas Wings (Miwnay's Fair, Tunnel Market; Sisin's Ropes, Farnkesh) or wings of the Enchanted Cauldron, or own a winged mount.", "Vista as Asas de Lona do Takhsich (Feira da Miwnay, Mercado dos Túneis; Cordas do Sisin, Farnkesh) ou asas do Tacho Encantado, ou tenha uma montaria alada."),
             (MapRequirementTags.BoatOrDock, "Carry a Dhow Passage (Taa Pwani; Kurogane's Black Iron, Hinokura) or own a water mount: the hot channels of the Obsidian Reef are crossed by boat.", "Leve uma Passagem de Dhow (Taa Pwani; Ferro Preto do Kurogane, Hinokura) ou tenha uma montaria aquática: os canais quentes do Recife de Obsidiana se cruzam de barco."),
             (MapRequirementTags.ArtificerRelic, "Carry an Artificers' Relic (Aratta).", "Leve uma Relíquia dos Artífices (Aratta)."),
@@ -221,8 +229,8 @@ namespace Rapadura.Gameplay.World.Map
             (MapRequirementTags.AirBubble, "Carry a Bottled Air Bubble or a Breathing Shell (Kirta).", "Leve uma Bolha de Ar Engarrafada ou uma Concha Respirável (Kirta)."),
             (MapRequirementTags.RootBoots, "Wear Living-Root Boots (Taa Pwani) or own a water mount. Joaquim does not sink in the mud.", "Calce Botas de Raiz Viva (Taa Pwani) ou tenha uma montaria aquática. O Joaquim não afunda no lodo."),
             (MapRequirementTags.RootBridgeBalance, "Carry a Balance Pole (Jhilpur). Maithe walks the root bridges on her own.", "Leve uma Vara de Equilíbrio (Jhilpur). A Maithe atravessa as pontes de raiz sozinha."),
-            (MapRequirementTags.SaddleRequired, "Carry a Reed Boat (Tarchon stilt houses) or own a water mount.", "Leve um Barco de Junco (Palafitas de Tarchon) ou tenha uma montaria aquática."),
-            (MapRequirementTags.AntiVenomAmulet, "Carry an Anti-Venom Amulet (Tarchon stilt houses).", "Leve um Amuleto Antiveneno (Palafitas de Tarchon)."),
+            (MapRequirementTags.SaddleRequired, "Carry a Reed Boat (Tarchon stilt houses; Khunanup's Trades, Mesektet Quay) or own a water mount: the canals of the Reed Fields are crossed by boat.", "Leve um Barco de Junco (Palafitas de Tarchon; Trocas do Khunanup, Cais de Mesektet) ou tenha uma montaria aquática: os canais dos Campos de Juncos se cruzam de barco."),
+            (MapRequirementTags.AntiVenomAmulet, "Carry an Anti-Venom Amulet (Tarchon stilt houses; Khunanup's Trades, Mesektet Quay): the children of Apep bite.", "Leve um Amuleto Antiveneno (Palafitas de Tarchon; Trocas do Khunanup, Cais de Mesektet): os filhos de Apep mordem."),
             (MapRequirementTags.PurifyingFruit, "Carry a Purifying Fruit (Jhilpur).", "Leve uma Fruta Purificadora (Jhilpur)."),
             (MapRequirementTags.ThermalClothes, "Wear Fine Thermal Clothes (Sangkent; Pamour's Furs and Boats, Porto da Lua Branca, or Pera's quest pays them): without them nobody fishes on Old Kul's lake.", "Vista a Roupa Térmica Refinada (Sangkent; Peles e Barcos do Pamour, Porto da Lua Branca, ou a missão do Pera paga com ela): sem ela ninguém pesca no lago do Velho Kul."),
             (MapRequirementTags.ClimbingCrampons, "Carry Climbing Crampons (Sangkent; Kurogane's Black Iron, Hinokura): the pumice slopes of Mount Echeyde ask for them too.", "Leve Grampos de Escalada (Sangkent; Ferro Preto do Kurogane, Hinokura): as encostas de pedra-pomes do Monte Echeyde também pedem."),

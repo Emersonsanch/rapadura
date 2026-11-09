@@ -157,6 +157,13 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       (−1330, 120), Borda Fria (−960, 1560)); 65–70 entram no catálogo (☆) e viram zonas (construídos), 25 áreas numa grade 5 × 5,
       20 terrenos novos, relevo próprio (`VolcanoCone`, `LavaFlows`, `GlassReef`, `CurvedRamparts`, `CalderaRim`) e cenário próprio;
       preenche o último buraco murado, ao norte do Teto do Mundo e a oeste do Mar Gelado. Detalhes em §5, "Região 12".
+    - **Região 13 — Rio das Doze Horas** (2026-11-09): mesmo modelo, 2400 × 2400 m (`OverworldLayouts.Rio.cs`, coordenadas x −1200…1200,
+      z −600…1800) com o Cais de Mesektet em (0, 0) (receita própria `PapyrusQuay` no chão plano de ±30 m) e os postos de 72–76 (Casa de
+      Junco (0, 600), Trenó de Areia (−960, 120), Anel Quieto (−480, 1080), Ilha das Palmeiras (800, 1090), Proa Encalhada (0, 1560)); 71–76
+      entram no catálogo (☆) e viram zonas (construídos), 25 áreas numa grade 5 × 5, 20 terrenos novos, relevo próprio (`ReedBedGrid`,
+      `ZigzagDunes`, `CoilRings`, `ApepBody`) e cenário próprio; fica ao norte do Arquipélago de Hinokura e abre a quinta fileira do mundo
+      (limites 7200 × 12000 m, 13 regiões; as outras duas células da fileira, ao norte do Mar Gelado e dos Picos de Farnkesh, são buracos
+      murados). Detalhes em §5, "Região 13".
     - **Mundo costurado** (2026-11-03, pedido do usuário: andar entre as regiões sem portão): as quatro primeiras regiões
       formam um quadrado de 4800 × 4800 m (`OverworldLayouts.WorldId`, `OverworldLayouts.World.cs`), 2 × 2, e a **Costa das
       Monções** fica a leste do Zarafshan (x 1400…3800, z −1000…1400, deslocamento (2000, 200)) e o **Delta de Jhilpur** a
@@ -203,7 +210,11 @@ mapa (para copiar) · 5. Os 100 mapas, por região · 6. Montarias novas propost
       até as praias negras; o mundo vira um **retângulo inteiro de 7200 × 9600 m, 12 regiões, nenhum buraco** (`Holes` = 0).
       Passagens: `exit_wakhan` (x −1640) e `exit_cristas` (x −1200), na borda sul, levados aos fins das trilhas norte do Teto;
       `exit_tundra` (z 4700) e `exit_lagos` (z 5000), na borda leste, levados às trilhas oeste do Mar Gelado pelo Estreito do Degelo.
-      Rota a pé Vila → Hinokura ~5,9 km (rampa mais íngreme 25°). Quadrado original:
+      Rota a pé Vila → Hinokura ~5,9 km (rampa mais íngreme 25°). O **Rio das Doze Horas** abre a quinta fileira ao norte de Hinokura
+      (x −3400…−1000, z 6200…8600, deslocamento (−2200, 6800), Cais de Mesektet no mundo em (−2200, 6800)): o único vizinho é o arquipélago, cuja
+      cinza corre para o rio da noite; as outras duas células da fileira ficam **muradas** (`Holes` = 2) e o mundo vira **7200 × 12000 m, 13
+      regiões**. Passagens: `exit_campos_de_cinza` (x −2320) e `exit_mar_de_cinza` (x −1720), na borda sul do rio, levadas às trilhas norte de
+      Hinokura (rota a pé Vila → Cais ~8,5 km). Quadrado original:
       Serra de Kaggen (x −3400…−1000, z −1000…1400) | Bosque do Zarafshan (x −1000…1400, z −1000…1400) em cima;
       Grutas do Limiar (x −3400…−1000, z −3400…−1000) | Areias Flamejantes (x −1000…1400, z −3400…−1000) embaixo.
       Cada região guarda o seu layout nas suas coordenadas e é deslocada por um número inteiro de pedaços (Zarafshan
@@ -2171,6 +2182,25 @@ eloquente"; aqui, o comerciante que negocia falando bonito), **Djedi** (o mágic
 magia), **Setne** (o príncipe dos contos demóticos que procurava livros; aqui, o bibliotecário do Caderno). Chefe do
 mundo: **Apep** (mapa 76), que nunca morre: recua toda noite.
 
+**No jogo (2026-11-09): mundo contínuo** (`OverworldLayouts.Rio.cs`, §0.10): 2400 × 2400 m ao norte do Arquipélago de Hinokura (abre a quinta
+fileira do mundo; as duas outras células da fileira viram buracos murados), 25 áreas em 20 terrenos novos — Cais de Mesektet (71, nv 260), Margem de
+Papiro, Foz das Cinzas e Praia dos Remadores (entradas de Hinokura), Píeres das Horas e Canal da Barca; Campos de Juncos com a Casa de Junco, Canteiros
+de Juncos, Trigais de Luz e Canais de Sekhet (72, posto; **Barco de Junco**); Areal Escondido com o Trenó de Areia, Portas Fechadas, Zigue-Zague do Areal e
+Caminho das Serpentes (73, posto; **Lamparina acesa**); Anel Externo, Anéis de Mehen com o Anel Quieto e Nó Errado (74, posto; **Lamparina Rúnica**); Beira
+Fervente, Praia de Brasa e Lago de Fogo com a Ilha das Palmeiras (75, posto; **Óleo de Fogo Eterno**); Banco de Areia de Apep com a Proa Encalhada, Corpo de
+Apep, Rio Seco, Escamas Roxas e Areia Movediça (76, posto; **Amuleto Antiveneno**, até nv 320). Todas as exigências estão no balcão fixo das Trocas do
+Khunanup. Relevo: canteiros em grade (`ReedBedGrid`), dunas em zigue-zague (`ZigzagDunes`), anéis de escama em volta do Anel Quieto (`CoilRings`), o corpo de
+Apep em cristas sinuosas (`ApepBody`); cais e campos baixos. Água: o rio escuro ao norte do cais (duas pontes nas estradas do norte), dois canais nos
+campos (três pontes) e seis lagoas; fogo: três lóbulos do Lago de Fogo em volta da Ilha das Palmeiras e duas poças (brilham como a lava de Hinokura). Cenário:
+papiros, feixes de trigo de luz, portas de pedra, escaravelhos de ouro, arcos de Mehen, tamareiras, obeliscos da noite, escamas de Apep, cascos de junco; vitórias-régias,
+ondulações de areia, poças de fogo e lascas de escama no chão. Bichos existentes nos papéis das fichas (crocodilo-do-mangue = crocodilo do rio escuro e de lodo, gaivota
+ladra = íbis apagada e ganso ladrão, besouro-da-casca = escaravelho de sombra, névoa do vento ruim = junco-laço, enxame de vaga-lumes = gafanhoto e chama faminta,
+búfalo-do-barro = hipopótamo de lodo, cobra da areia = cobra do junco e salamandra, píton apagada = serpente de três cabeças e filhos de Apep, escorpião = escorpião negro,
+ushabti de corda = ushabti de areia e apagado, chacal = mordedor de sombra, gosma = treva rastejante, sombra fervida e areia movediça, soldado de terracota = ushabti
+rachado, abutre-brasa na foz), variante noturna em toda clareira, nenhum chefe (Barca Atrasou, Hipopótamo-de-Junco, Grande Serpente, Nó Errado, Guardião do Lago e Apep ficam
+para depois). Testes `OverworldRioTests` e `OverworldWorldTests`. Falta: as horas da barca, jangadas, puxar o trenó, os anéis que giram, o fogo que escolhe, defender a barca, os chefes e as
+montarias.
+
 ### 71 · Cais de Mesektet / *Mesektet Quay* — nv 260–268 · ☆ · cidade
 - **Fonte:** a barca *Mesektet* da noite e a *Mandjet* da manhã (textos de Kemet; bíblia §3.16).
 - **Bioma e visual:** cais flutuante no rio escuro, margens de papiro; estilo `PapyrusQuay` e paleta acima.
@@ -2184,6 +2214,7 @@ mundo: **Apep** (mapa 76), que nunca morre: recua toda noite.
 - **Ganchos:** loot papiro, ouro de Kemet · montaria nova **Íbis Real de Mesektet** (§6) · casa: conjunto novo **Cais do
   Papiro** (coluna de papiro, barquinha).
 - **Noite:** sempre noite aqui (o rio é a noite); estrelas no teto do céu como um tecido.
+- **No jogo (2026-11-09): cidade de verdade** (`CityTownRecipes.Mesektet.cs`, estilo `PapyrusQuay`, `CityCatalog.LateRegionCities`, id `cais_de_mesektet`), já no mundo contínuo: em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S a 19 m; a rua Sul é a entrada; sem rua ao norte: a margem cai para o rio escuro), salões de arenito sobre balsas, a Mesektet no Cais da Barca, dois píeres das horas com pontes de tábua, colunas de papiro, moitas e barquinhos; Sinuhe, Khunanup, Djedi e Setne; Trocas do Khunanup com as exigências de 72–76 fixas; missões "Crocodilos no Cais" e "Escorpiões do Areal"; respawn na praça para 71–76. Falta: as horas da barca (píeres abrindo a cada 12 min), o evento A Barca Atrasou, a Íbis Real.
 
 ### 72 · Campos de Juncos / *Reed Fields* — nv 266–276 · ☆
 - **Fonte:** os "campos de juncos" (*sekhet-aaru*), o lugar calmo e fértil dos contos de Kemet.

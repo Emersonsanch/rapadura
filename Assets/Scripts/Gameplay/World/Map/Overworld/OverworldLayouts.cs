@@ -37,6 +37,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             { MapRegion.PicosDeFarnkesh, FarnkeshRegionId },
             { MapRegion.MarGelado, MarGeladoRegionId },
             { MapRegion.ArquipelagoDeHinokura, HinokuraRegionId },
+            { MapRegion.RioDasDozeHoras, RioRegionId },
         };
 
         /// <summary>Every continuous region of this build (texts, tests).</summary>
@@ -73,6 +74,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 case FarnkeshRegionId: return FarnkeshRegion();
                 case MarGeladoRegionId: return MarGeladoRegion();
                 case HinokuraRegionId: return HinokuraRegion();
+                case RioRegionId: return RioRegion();
                 case WorldId: return BuildWorld();
                 default: return null;
             }

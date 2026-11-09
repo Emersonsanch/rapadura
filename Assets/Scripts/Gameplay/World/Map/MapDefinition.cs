@@ -18,6 +18,7 @@ namespace Rapadura.Gameplay.World.Map
         PicosDeFarnkesh = 9,
         MarGelado = 10,
         ArquipelagoDeHinokura = 11,
+        RioDasDozeHoras = 12,
     }
 
     /// <summary>Map size class (Docs/Mapas100.md §0.7): P ~120 m, M ~200 m, G ~300 m, GG ~400 m on a side.</summary>

@@ -404,6 +404,48 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         AshPlain = 238,
         /// <summary>The Caldeira do Fogo Devorador (70): a ring of cold stone round an open lake of lava.</summary>
         Caldera = 239,
+
+        // Região 13 — Rio das Doze Horas (OverworldLayouts.Rio.cs, OverworldTerrains.Rio.cs): 240–259.
+        /// <summary>The Cais de Mesektet (71): dark sandstone and night sand round the quay, papyrus by the water.</summary>
+        NightQuay = 240,
+        /// <summary>The papyrus bank (71): mud and tall papyrus, the way in from Hinokura's ash.</summary>
+        PapyrusBank = 241,
+        /// <summary>The ash delta (71): the Devouring Fire's ash washed down to the black water.</summary>
+        AshDelta = 242,
+        /// <summary>The rowers' beach (71): dark sand with reed skiffs hauled up, the second way in from Hinokura.</summary>
+        RowersBeach = 243,
+        /// <summary>The piers of the hours (71): sandstone banks along the river, obelisks marking the hours.</summary>
+        HourPiers = 244,
+        /// <summary>The barque's canal (71): the wide east reach of the river, mooring stones and lotus.</summary>
+        BarqueCanal = 245,
+        /// <summary>The reed beds (72): raised beds of reed in a grid with dark furrows.</summary>
+        ReedBeds = 246,
+        /// <summary>The Campos de Juncos (72): golden reed and wheat under the stars, the Casa de Junco.</summary>
+        ReedFields = 247,
+        /// <summary>The wheat of light (72): low gold wheat whose tips glow faintly.</summary>
+        LightWheat = 248,
+        /// <summary>The canals of Sekhet (72): low green banks, sluice stones and lotus ponds.</summary>
+        SekhetCanals = 249,
+        /// <summary>The Areal Escondido (73): dark sand in low drifts, gold in the stone, the Sand Sled.</summary>
+        HiddenSands = 250,
+        /// <summary>The closed gates and the serpents' way (73): stone doorways between ridges of dark sand.</summary>
+        ClosedGates = 251,
+        /// <summary>The zigzag of the sands (73): sharp diagonal ridges of dark sand, lanes in zigzag.</summary>
+        ZigzagSands = 252,
+        /// <summary>The Anéis de Mehen (74): rings of green scales and gold light round the Quiet Ring.</summary>
+        MehenCoils = 253,
+        /// <summary>The Wrong Knot (74): the darkest coils, tangled ridges, purple shadow.</summary>
+        CoilKnot = 254,
+        /// <summary>The outer coil (74): the first low ring of scales on the dark sand.</summary>
+        OuterCoil = 255,
+        /// <summary>The boiling shore and the ember beach (75): ember sand, palms, a low red glow.</summary>
+        FireLakeShore = 256,
+        /// <summary>The Lago de Fogo (75): ember rock round the three lobes of the lake, the Palm Isle.</summary>
+        FireLake = 257,
+        /// <summary>The Banco de Areia de Apep (76): the dry bed of the river, the serpent's body in long ridges.</summary>
+        ApepSandbank = 258,
+        /// <summary>The purple scales and the quicksand (76): the serpent's skin on dark sand.</summary>
+        ApepScales = 259,
     }
 
     /// <summary>

@@ -365,6 +365,34 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         AshDrift = 275,
         /// <summary>A crack of glowing lava in the black ground (ground detail, no collider).</summary>
         LavaCrack = 276,
+
+        // Região 13 — Rio das Doze Horas (OverworldDecorKit.Rio.cs): 280–299.
+        /// <summary>A clump of papyrus with open umbels.</summary>
+        PapyrusClump = 280,
+        /// <summary>A sheaf of wheat of light, its tip glowing faintly.</summary>
+        WheatSheaf = 281,
+        /// <summary>A doorway of sandstone with a gold lintel stripe (the closed doors of the hidden sands).</summary>
+        StoneDoorway = 282,
+        /// <summary>A gold scarab on a plinth of dark stone.</summary>
+        ScarabIdol = 283,
+        /// <summary>An arch of Mehen's coil: bent lengths of green scales, gold at the crest.</summary>
+        MehenArch = 284,
+        /// <summary>A date palm of the islets of the Lake of Fire.</summary>
+        DatePalm = 285,
+        /// <summary>A night obelisk of dark sandstone, a gold cap, a band of painted stars.</summary>
+        NightObelisk = 286,
+        /// <summary>A slab of Apep's skin: a tall purple scale half-sunk in the sand.</summary>
+        ApepScaleSlab = 287,
+        /// <summary>A reed hull hauled up on the bank, bound papyrus curling up at both ends.</summary>
+        StrandedHull = 288,
+        /// <summary>A lotus pad with a flower (ground detail, no collider).</summary>
+        LotusPad = 290,
+        /// <summary>Ripples of dark sand (ground detail, no collider).</summary>
+        SandRipple = 291,
+        /// <summary>A puddle of fire with a ring of ash (ground detail, no collider).</summary>
+        FirePuddle = 292,
+        /// <summary>A chip of Apep's purple scale lying on the sand (ground detail, no collider).</summary>
+        ScaleChip = 293,
     }
 
     /// <summary>

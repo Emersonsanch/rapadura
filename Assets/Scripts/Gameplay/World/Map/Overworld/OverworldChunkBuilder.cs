@@ -193,6 +193,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ScatterFarnkesh(layout, content);
             ScatterMarGelado(layout, content);
             ScatterHinokura(layout, content);
+            ScatterRio(layout, content);
             if (content.HasFields)
             {
                 ScatterFields(layout, content);
@@ -663,7 +664,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                             ? style.SpecialMix[(int)(TownStyle.Hash(salt, i + 320000) % (uint)style.SpecialMix.Length)]
                             : style.Special;
                         float scale = special == OverworldDecor.Cypress ? 0.85f + 0.35f * s01 : 0.8f + 0.6f * s01;
-                        float room = IsDesertDecor(special) ? DesertClearance(special) : IsCoastDecor(special) ? CoastClearance(special) : IsDeltaDecor(special) ? DeltaClearance(special) : IsPamirDecor(special) ? PamirClearance(special) : IsMingchengDecor(special) ? MingchengClearance(special) : IsNartesDecor(special) ? NartesClearance(special) : IsFarnkeshDecor(special) ? FarnkeshClearance(special) : IsMarGeladoDecor(special) ? MarGeladoClearance(special) : IsHinokuraDecor(special) ? HinokuraClearance(special) : special == OverworldDecor.Basalt ? 1.4f : 0.9f;
+                        float room = IsDesertDecor(special) ? DesertClearance(special) : IsCoastDecor(special) ? CoastClearance(special) : IsDeltaDecor(special) ? DeltaClearance(special) : IsPamirDecor(special) ? PamirClearance(special) : IsMingchengDecor(special) ? MingchengClearance(special) : IsNartesDecor(special) ? NartesClearance(special) : IsFarnkeshDecor(special) ? FarnkeshClearance(special) : IsMarGeladoDecor(special) ? MarGeladoClearance(special) : IsHinokuraDecor(special) ? HinokuraClearance(special) : IsRioDecor(special) ? RioClearance(special) : special == OverworldDecor.Basalt ? 1.4f : 0.9f;
                         TryAdd(layout, content, p, room, new OverworldProp
                         {
                             Kind = CityPropKind.Rock, Decor = special, Position = p, Yaw = yaw, Scale = scale,
@@ -1068,7 +1069,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 || AddDeltaDecorSolid(content, prop, ground, sink) || AddPamirDecorSolid(content, prop, ground, sink)
                 || AddMingchengDecorSolid(content, prop, ground, sink) || AddNartesDecorSolid(content, prop, ground, sink)
                 || AddFarnkeshDecorSolid(content, prop, ground, sink) || AddMarGeladoDecorSolid(content, prop, ground, sink)
-                || AddHinokuraDecorSolid(content, prop, ground, sink))
+                || AddHinokuraDecorSolid(content, prop, ground, sink) || AddRioDecorSolid(content, prop, ground, sink))
             {
                 return;
             }
@@ -1499,7 +1500,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 || AppendDeltaDecor(b, g, prop, at) || AppendPamirDecor(b, g, prop, at)
                 || AppendMingchengDecor(b, g, prop, at) || AppendNartesDecor(b, g, prop, at)
                 || AppendFarnkeshDecor(b, g, prop, at) || AppendMarGeladoDecor(b, g, prop, at)
-                || AppendHinokuraDecor(b, g, prop, at))
+                || AppendHinokuraDecor(b, g, prop, at) || AppendRioDecor(b, g, prop, at))
             {
                 return;
             }

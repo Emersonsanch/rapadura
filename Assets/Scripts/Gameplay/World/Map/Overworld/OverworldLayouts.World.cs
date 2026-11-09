@@ -37,8 +37,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// the wall, its two east gates to the peaks' foot woods and pinnacle wood. Região 12 (the Arquipélago de Hinokura) fills the last
     /// cell, north of the Teto do Mundo and west of the frozen sea (x −3400…−1000, z 3800…6200): its two south gates led to the Teto's
     /// northern trail ends (Wakhan's pass, the crests of the ill wind), its two east gates to the Mar Gelado's tundra and lakes, so the
-    /// world is a whole 7200 × 9600 m rectangle of twelve regions with no hole (<see cref="OverworldLayout.Holes"/> stays for any
-    /// later shape: invisible walls, backdrop relief).
+    /// fourth row is whole. Região 13 (the Rio das Doze Horas) starts a fifth row north of the archipelago (x −3400…−1000, z 6200…8600), its
+    /// two south gates led to the archipelago's northern trails (over the ash fields and the sea of ash): the bounds grow to 7200 × 12000 m,
+    /// and the rest of that row (north of the Mar Gelado and of the Picos de Farnkesh) is two holes walled off like the world's edge
+    /// (<see cref="OverworldLayout.Holes"/>: invisible walls, backdrop relief).
     /// The relief blends across the borders like between any two areas (one relief for the whole world, each area shaped in
     /// its own region's coordinates), the chunk grids line up (offsets are multiples of the chunk), the streaming, the soft
     /// barrier, the levels and the requirements work per area as before.
@@ -103,6 +105,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// </summary>
         public static readonly Vector2 HinokuraWorldOffset = new Vector2(-1720f, 4400f);
 
+        /// <summary>
+        /// Região 13 north of the Arquipélago de Hinokura (the Cais de Mesektet at world (−2200, 6800)): the river of the night grows a
+        /// fifth row of the world where the ash of the Devouring Fire runs down to the black water (bounds 7200 × 12000 m); north of the
+        /// Mar Gelado and of the Picos de Farnkesh nothing stands, so that row's other two cells are walled holes.
+        /// </summary>
+        public static readonly Vector2 RioWorldOffset = new Vector2(-2200f, 6800f);
+
         /// <summary>Width (m) of the trail that joins two passes (or a pass to the nearest trail across the border).</summary>
         public const float PassTrailWidth = 4f;
 
@@ -145,6 +154,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 (FarnkeshRegion(), FarnkeshWorldOffset),
                 (MarGeladoRegion(), MarGeladoWorldOffset),
                 (HinokuraRegion(), HinokuraWorldOffset),
+                (RioRegion(), RioWorldOffset),
             };
 
             Rect bounds = default;

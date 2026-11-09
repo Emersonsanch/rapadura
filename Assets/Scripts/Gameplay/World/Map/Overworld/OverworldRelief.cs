@@ -92,6 +92,16 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         CurvedRamparts = 103,
         /// <summary>A caldera: a high rim of cold stone in a ring round a fixed centre, a low floor inside (the lava lake).</summary>
         CalderaRim = 104,
+
+        // Região 13 — Rio das Doze Horas (OverworldRelief.Rio.cs): 110–119.
+        /// <summary>Raised rectangular beds with furrows between them.</summary>
+        ReedBedGrid = 110,
+        /// <summary>Diagonal zigzag ridges of dark sand with lanes between them.</summary>
+        ZigzagDunes = 111,
+        /// <summary>Concentric rings of scales round a fixed centre, a gap in each ring that turns from ring to ring.</summary>
+        CoilRings = 112,
+        /// <summary>A serpent's body: one long sinuous ridge segmented like scales, over a low sandbank.</summary>
+        ApepBody = 113,
     }
 
     /// <summary>What the relief knows about one point besides its height (ground colours and scatter read it).</summary>
@@ -705,13 +715,14 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                         || DeltaShape(style, x, z, a, out smooth, out shaped) || PamirShape(style, x, z, a, out smooth, out shaped)
                         || MingchengShape(style, x, z, a, out smooth, out shaped) || NartesShape(style, x, z, a, out smooth, out shaped)
                         || FarnkeshShape(style, x, z, a, out smooth, out shaped) || MarGeladoShape(style, x, z, a, out smooth, out shaped)
-                        || HinokuraShape(style, x, z, a, out smooth, out shaped))
+                        || HinokuraShape(style, x, z, a, out smooth, out shaped) || RioShape(style, x, z, a, out smooth, out shaped))
                     {
                         break; // Região 2: dunes, mesas, canyons (.Desert.cs); Região 5: cliffs, islets (.Coast.cs); Região 6: hummocks, levees (.Delta.cs);
                                // Região 7: moraines, ice tongues, seracs, peaks (.Pamir.cs); Região 8: karst towers, the wall's crest (.Mingcheng.cs);
                                // Região 9: kurgans, the Caucasus massif (.Nartes.cs); Região 10: pinnacles, cloud isles, the gorge (.Farnkesh.cs);
                                // Região 11: floes, icebergs, pressure ridges, fjords, ice vaults (.MarGelado.cs);
-                               // Região 12: the volcano's cone, lava flows, the glass reef, curved ramparts, the caldera (.Hinokura.cs).
+                               // Região 12: the volcano's cone, lava flows, the glass reef, curved ramparts, the caldera (.Hinokura.cs);
+                               // Região 13: reed beds, zigzag dunes, Mehen's rings, Apep's body (.Rio.cs).
                     }
 
                     smooth = shaped = a * SmoothStep(0f, 1f, 0.5f + 0.85f * OverworldNoise.Fbm(x, z, 2));

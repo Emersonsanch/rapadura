@@ -23,9 +23,8 @@ namespace Rapadura.Tests
     /// Khunanup, Djedi, Setne) at their doors, the PapyrusQuay style (halls of sandstone on rafts with papyrus columns, the Cais
     /// da Barca with the Mesektet moored, the piers of the hours with plank bridges, papyrus columns and thickets, reed skiffs),
     /// the whole town inside a circle of radius ~22.5 m at y = 0 with its three roads out (W, E, S), the Trocas do Khunanup with
-    /// the gear the hours of the river will ask for (never the life or chaos stones) and the two city quests. Maps 71–76 are not
-    /// in <see cref="MapCatalog"/> yet: no respawn through the catalog and no gates here (when they enter, add them as in
-    /// CityHinokuraTests.MapsOfTheArchipelago_RespawnInItsPlaza and MapRequirementTests).
+    /// the gear the hours of the river ask for (never the life or chaos stones) and the two city quests; maps 71–76 respawn on its
+    /// plaza and their gates are on Khunanup's counter (MapRequirementTests).
     /// </summary>
     public class CityMesektetTests
     {
@@ -51,7 +50,7 @@ namespace Rapadura.Tests
             CitySpec cais = CityCatalog.Get(CityCatalog.CaisDeMesektet);
             Assert.IsNotNull(cais, "the Cais has a CitySpec");
             Assert.AreEqual(BiomeType.Forest, cais.Region, "the river borrows the Forest (always unlocked)");
-            Assert.AreEqual("cais_de_mesektet", cais.CityId, "the return city id maps 71–76 will use");
+            Assert.AreEqual("cais_de_mesektet", cais.CityId, "the return city id of maps 71–76");
             Assert.AreEqual(CityTownRecipes.MesektetCityId, cais.CityId, "the recipe's city id");
 
             Assert.IsTrue(CityCatalog.IsLateRegionCity(cais), "a capital of the late regions, as Hinokura and the Porto");
@@ -66,6 +65,20 @@ namespace Rapadura.Tests
             var cities = new CityProgress();
             Assert.AreSame(cais, cities.ApplyDefeatIn(cais), "a defeat on the river wakes the cousins by the barque");
             Assert.AreSame(cais, cities.ConsumeRespawnNotice());
+        }
+
+        [Test]
+        public void MapsOfTheRiver_RespawnInItsPlaza()
+        {
+            List<MapDefinition> maps = MapCatalog.Maps.Where(m => m.ReturnCityId == CityCatalog.CaisDeMesektet).ToList();
+            CollectionAssert.AreEquivalent(new[] { 71, 72, 73, 74, 75, 76 }, maps.Select(m => m.MapId).ToArray(), "the Cais is the return city of 71–76 (Docs/Mapas100.md)");
+            foreach (MapDefinition map in maps)
+            {
+                Assert.AreEqual(CityCatalog.CaisDeMesektet, MapCatalog.RespawnCityFor(map.Id).CityId, map.Id);
+            }
+
+            Assert.AreEqual(MapSettlementKind.Capital, MapCatalog.Get("map_071_cais_mesektet").Settlement);
+            Assert.IsNotNull(CityCatalog.Get(SafeZoneRules.RespawnCity("map_071_cais_mesektet", _ => CityCatalog.CaisDeMesektet, CityCatalog.VilaZefa)));
         }
 
         // ------------------------------------------------------------------
@@ -260,8 +273,7 @@ namespace Rapadura.Tests
             Assert.AreEqual(BiomeType.Forest, shop.HomeRegion);
             Assert.AreEqual(ShopRotationPeriod.Daily, shop.Period);
 
-            // The gear the hours 71–76 will ask for, fixed from the first day. When the maps enter MapCatalog, MapRequirementTests
-            // checks their tags against this counter.
+            // The gear the hours 71–76 ask for, fixed from the first day (MapRequirementTests checks their tags against this counter).
             var gear = new[]
             {
                 MapRequirementItems.DhowPassage, MapRequirementItems.ReedBoat, MapRequirementItems.RootBoots, MapRequirementItems.OilLamp, MapRequirementItems.RunicLamp,

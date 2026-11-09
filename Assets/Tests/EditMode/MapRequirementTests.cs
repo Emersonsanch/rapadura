@@ -212,11 +212,11 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void EveryGateOfRegionsOneToTwelve_HasAnItemKitThatMeetsIt_AndEveryItemIsSoldOrGivenByAQuest()
+        public void EveryGateOfRegionsOneToThirteen_HasAnItemKitThatMeetsIt_AndEveryItemIsSoldOrGivenByAQuest()
         {
             // Every region of the catalog (1–8, the Estepe dos Nartes, região 9, whose Corrente de Amirani 52 asks for crampons, the
             // Picos de Farnkesh, região 10, whose gates return to Farnkesh, and the Mar Gelado, região 11, whose gates return to the
-            // Porto da Lua Branca, and the Arquipélago de Hinokura, região 12, whose gates return to Hinokura).
+            // Porto da Lua Branca, the Arquipélago de Hinokura, região 12, whose gates return to Hinokura, and the Rio das Doze Horas, região 13, whose gates return to the Cais de Mesektet).
             var regions = (MapRegion[])System.Enum.GetValues(typeof(MapRegion));
 
             // The Forte dos Ventos (39) asks for real wings or a flying mount (Tacho Encantado, the Grifo da Coluna): no item kit.
@@ -228,9 +228,9 @@ namespace Rapadura.Tests
             Assert.Greater(gated.Count, 10);
             Assert.IsTrue(gated.Any(m => m.MapId == 36) && gated.Any(m => m.MapId == 38) && gated.Any(m => m.MapId == 40), "the Teto do Mundo's item gates");
             Assert.IsTrue(gated.Any(m => m.MapId == 42 && m.SpecialRequirementTag == MapRequirementTags.SunSeal), "the Planície de Mingcheng's item gate (the Sun Seal)");
-            foreach (MapDefinition map in gated.Where(m => m.MapId >= 47 && m.MapId <= 70))
+            foreach (MapDefinition map in gated.Where(m => m.MapId >= 47 && m.MapId <= 76))
             {
-                // Regiões 9–12: the gate items of a map are on the counter of its own return city (the Panela Grande for 52,
+                // Regiões 9–13: the gate items of a map are on the counter of its own return city (the Panela Grande for 52,
                 // the Cordas do Sisin in Farnkesh for the Picos de Farnkesh, the Peles e Barcos do Pamour for the Mar Gelado).
                 CitySpec home = CityCatalog.Get(map.ReturnCityId);
                 Assert.IsNotNull(home, $"{map}: its return city {map.ReturnCityId} is a walkable town");
@@ -382,6 +382,46 @@ namespace Rapadura.Tests
             {
                 Assert.IsFalse(isles.Select(m => CityCatalog.Get(m.ReturnCityId)).Where(c => c != null).SelectMany(c => c.ShopIds)
                     .Any(id => CityShopCatalog.EntryOf(id, never) != null), $"{never} is never sold in the archipelago");
+            }
+        }
+
+        [Test]
+        public void GatesOfRegionThirteen_AreOnTheFixedCounterOfTheirReturnCity_AtItsPrice()
+        {
+            // Região 13 (Rio das Doze Horas, maps 71–76): every item gate (the reed boat on the Campos de Juncos, a lit lamp on the Areal
+            // Escondido, the runic lamp in the Anéis de Mehen, Eternal Fire Oil on the Lago de Fogo, the anti-venom amulet on Apep's sandbank)
+            // is answered by an item kit on the fixed counter (never the rotation) of the map's own return city: the Trocas do Khunanup
+            // at the Cais de Mesektet.
+            List<MapDefinition> river = MapCatalog.Maps.Where(m => m.MapId >= 71 && m.MapId <= 76).ToList();
+            Assert.AreEqual(6, river.Count);
+            Assert.IsTrue(river.All(m => m.ReturnCityId == CityCatalog.CaisDeMesektet), "every map of the river returns to the Cais");
+            Assert.AreEqual(5, river.Count(m => m.HasSpecialRequirement), "the fields, the sands, the coils, the lake and Apep's sandbank; the quay asks for nothing");
+            foreach (MapDefinition map in river.Where(m => m.HasSpecialRequirement))
+            {
+                CitySpec home = CityCatalog.Get(map.ReturnCityId);
+                Assert.IsNotNull(home, $"{map}: its return city {map.ReturnCityId} is a walkable town");
+                string[] kit = MapRequirementRules.KitOf(map.SpecialRequirementTag);
+                Assert.IsNotEmpty(kit, $"{map}: no item meets {map.SpecialRequirementTag}");
+                var state = new MapRequirementState();
+                foreach (string itemId in kit)
+                {
+                    CityShopEntry entry = home.ShopIds.Select(id => CityShopCatalog.EntryOf(id, itemId)).FirstOrDefault(e => e != null);
+                    Assert.IsNotNull(entry, $"{map}: {itemId} is not sold in {home.CityId}");
+                    Assert.IsFalse(entry.Rotating, $"{map}: {itemId} is always on the counter");
+                    Assert.IsFalse(entry.Unlock.IsGated, $"{map}: {itemId} is on sale from the first day");
+                    ItemDefinition item = ItemDatabase.GetById(itemId);
+                    Assert.IsNotNull(item, itemId);
+                    Assert.That(entry.Price, Is.InRange(UnityEngine.Mathf.FloorToInt(item.Value * 0.8f), UnityEngine.Mathf.CeilToInt(item.Value * 1.25f)), itemId);
+                    state.Carry(itemId).Wear(item.EquipSlot, itemId);
+                }
+
+                Assert.IsTrue(MapRequirementRules.IsMet(map.SpecialRequirementTag, state), $"{map}: the kit bought in {home.CityId} opens it");
+            }
+
+            foreach (string never in new[] { "item_pedra_vida", "item_pedra_caos" })
+            {
+                Assert.IsFalse(river.Select(m => CityCatalog.Get(m.ReturnCityId)).Where(c => c != null).SelectMany(c => c.ShopIds)
+                    .Any(id => CityShopCatalog.EntryOf(id, never) != null), $"{never} is never sold on the river");
             }
         }
 
