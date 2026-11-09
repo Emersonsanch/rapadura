@@ -303,6 +303,19 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_mountain_lacquer_ushabti", "Lacquer Ushabti", "Ushabti de Laca"),
             EnemyName("enemy_mountain_furnace_ogre", "Furnace Ogre", "Ogro-Fornalha"),
             EnemyName("enemy_mountain_slag_giant", "Slag Giant", "Gigante de Escória"),
+            // The beasts of the Rio das Doze Horas (Docs/Mapas100.md 71–74), formerly played by stand-ins.
+            EnemyName("enemy_forest_dark_river_crocodile", "Dark River Crocodile", "Crocodilo do Rio Escuro"),
+            EnemyName("enemy_forest_dimmed_ibis", "Dimmed Ibis", "Íbis Apagada"),
+            EnemyName("enemy_forest_shadow_scarab", "Shadow Scarab", "Escaravelho de Sombra"),
+            EnemyName("enemy_forest_reed_snare", "Reed Snare", "Junco-Laço"),
+            EnemyName("enemy_forest_shadow_locust", "Shadow Locust", "Gafanhoto de Sombra"),
+            EnemyName("enemy_forest_mud_hippo", "Mud Hippo", "Hipopótamo de Lodo"),
+            EnemyName("enemy_forest_reed_snake", "Reed Snake", "Cobra do Junco"),
+            EnemyName("enemy_forest_three_headed_serpent", "Three-Headed Serpent", "Serpente de Três Cabeças"),
+            EnemyName("enemy_forest_black_scorpion", "Black Scorpion", "Escorpião Negro"),
+            EnemyName("enemy_forest_sand_ushabti", "Sand Ushabti", "Ushabti de Areia"),
+            EnemyName("enemy_forest_shadow_biter", "Shadow Biter", "Mordedor de Sombra"),
+            EnemyName("enemy_forest_creeping_dark", "Creeping Dark", "Treva Rastejante"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),

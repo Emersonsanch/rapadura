@@ -193,6 +193,19 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_mountain_lacquer_ushabti", ProceduralEnemyKind.LacquerUshabti },
             { "enemy_mountain_furnace_ogre", ProceduralEnemyKind.FurnaceOgre },
             { "enemy_mountain_slag_giant", ProceduralEnemyKind.SlagGiant },
+            // The beasts of the Rio das Doze Horas (Docs/Mapas100.md 71–74), formerly played by stand-ins.
+            { "enemy_forest_dark_river_crocodile", ProceduralEnemyKind.DarkRiverCrocodile },
+            { "enemy_forest_dimmed_ibis", ProceduralEnemyKind.DimmedIbis },
+            { "enemy_forest_shadow_scarab", ProceduralEnemyKind.ShadowScarab },
+            { "enemy_forest_reed_snare", ProceduralEnemyKind.ReedSnare },
+            { "enemy_forest_shadow_locust", ProceduralEnemyKind.ShadowLocust },
+            { "enemy_forest_mud_hippo", ProceduralEnemyKind.MudHippo },
+            { "enemy_forest_reed_snake", ProceduralEnemyKind.ReedSnake },
+            { "enemy_forest_three_headed_serpent", ProceduralEnemyKind.ThreeHeadedSerpent },
+            { "enemy_forest_black_scorpion", ProceduralEnemyKind.BlackScorpion },
+            { "enemy_forest_sand_ushabti", ProceduralEnemyKind.SandUshabti },
+            { "enemy_forest_shadow_biter", ProceduralEnemyKind.ShadowBiter },
+            { "enemy_forest_creeping_dark", ProceduralEnemyKind.CreepingDark },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -229,6 +242,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.VolcanoCrab, ProceduralEnemyKind.LavaLizard, ProceduralEnemyKind.EmberGull, ProceduralEnemyKind.DimmedShisa,
             ProceduralEnemyKind.Tanuki, ProceduralEnemyKind.Tibicena, ProceduralEnemyKind.GiantLavaLizard, ProceduralEnemyKind.BladeFish,
             ProceduralEnemyKind.EmberCoral, ProceduralEnemyKind.LacquerUshabti, ProceduralEnemyKind.FurnaceOgre, ProceduralEnemyKind.SlagGiant,
+            ProceduralEnemyKind.DarkRiverCrocodile, ProceduralEnemyKind.DimmedIbis, ProceduralEnemyKind.ShadowScarab, ProceduralEnemyKind.ReedSnare,
+            ProceduralEnemyKind.ShadowLocust, ProceduralEnemyKind.MudHippo, ProceduralEnemyKind.ReedSnake, ProceduralEnemyKind.ThreeHeadedSerpent,
+            ProceduralEnemyKind.BlackScorpion, ProceduralEnemyKind.SandUshabti, ProceduralEnemyKind.ShadowBiter, ProceduralEnemyKind.CreepingDark,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -544,6 +560,42 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.SlagGiant:
                     HinokuraBeastRecipes.BuildSlagGiant(blueprint);
+                    break;
+                case ProceduralEnemyKind.DarkRiverCrocodile:
+                    RioBeastRecipes.BuildDarkRiverCrocodile(blueprint);
+                    break;
+                case ProceduralEnemyKind.DimmedIbis:
+                    RioBeastRecipes.BuildDimmedIbis(blueprint);
+                    break;
+                case ProceduralEnemyKind.ShadowScarab:
+                    RioBeastRecipes.BuildShadowScarab(blueprint);
+                    break;
+                case ProceduralEnemyKind.ReedSnare:
+                    RioBeastRecipes.BuildReedSnare(blueprint);
+                    break;
+                case ProceduralEnemyKind.ShadowLocust:
+                    RioBeastRecipes.BuildShadowLocust(blueprint);
+                    break;
+                case ProceduralEnemyKind.MudHippo:
+                    RioBeastRecipes.BuildMudHippo(blueprint);
+                    break;
+                case ProceduralEnemyKind.ReedSnake:
+                    RioBeastRecipes.BuildReedSnake(blueprint);
+                    break;
+                case ProceduralEnemyKind.ThreeHeadedSerpent:
+                    RioBeastRecipes.BuildThreeHeadedSerpent(blueprint);
+                    break;
+                case ProceduralEnemyKind.BlackScorpion:
+                    RioBeastRecipes.BuildBlackScorpion(blueprint);
+                    break;
+                case ProceduralEnemyKind.SandUshabti:
+                    RioBeastRecipes.BuildSandUshabti(blueprint);
+                    break;
+                case ProceduralEnemyKind.ShadowBiter:
+                    RioBeastRecipes.BuildShadowBiter(blueprint);
+                    break;
+                case ProceduralEnemyKind.CreepingDark:
+                    RioBeastRecipes.BuildCreepingDark(blueprint);
                     break;
             }
 

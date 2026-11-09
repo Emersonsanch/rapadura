@@ -464,6 +464,38 @@ de vaga-lumes) e Salamandra Devoradora (`enemy_desert_sand_snake`).
 | `enemy_mountain_furnace_ogre` | **Ogro-Fornalha** / *Furnace Ogre* | 69 | [elite] | invenção: os foguistas que cantavam nas Nove Fornalhas; a sombra disse pra guardar o fogo e a fornalha foi parar na barriga. |
 | `enemy_mountain_slag_giant` | **Gigante de Escória** / *Slag Giant* | 70 | [tanque] | o monte de tudo que as forjas jogaram fora; o Fogo Devorador o fez andar, querendo voltar a ser alguma coisa. |
 
+**Sétima leva (2026-11-09): Rio das Doze Horas (Mapas100 71–74).** Mesmo contrato (peso 0 no bioma, nível da área, números do
+bioma). A região inteira fica no bioma Floresta (`OverworldLayouts.Rio` declara `w.World.Biome = BiomeType.Forest`), daí o prefixo
+`enemy_forest_` e os números de Floresta (vida 72–108, XP 10). Modelos em `RioBeastRecipes` (o crocodilo, o hipopótamo, o mordedor e o
+junco-laço abrem a boca com a cauda balançando, os laços do junco mexendo devagar; a íbis e o gafanhoto abrem o bico com as asas
+paradas; o escaravelho e o escorpião abrem as pinças, e o ferrão recua; a cobra e a serpente fazem a onda na cauda, e a serpente mexe as
+duas cabeças laterais; o ushabti ergue os dois braços; a treva achata e o ouro engolido brilha), Caderno em `RioBestiaryTexts`. Nenhum é
+[distância]: as fichas 71–74 não pedem (o abutre-brasa da Foz é bicho do layout, não da ficha). Testes: `RioBeastsTests`. Respeito
+(§3.16): só os bichos dos contos de Kemet, nunca os deuses; o escaravelho é besouro e as serpentes são cobras. Já no overworld do Rio
+no lugar dos substitutos (`OverworldLayouts.Rio.cs`, classe `Rio`), nos grupos que lideram e como acompanhantes só onde a ficha os cita
+(mesmas clareiras, níveis e variantes noturnas): o crocodilo, a íbis e o junco-laço nas margens do Cais (71); o gafanhoto, o hipopótamo e
+a cobra nos campos, canteiros, trigais e canais (72); a serpente, o escorpião e o ushabti de areia no areal, nas portas, no caminho e no
+zigue-zague (73); o mordedor e a treva nos anéis, no anel externo e no nó (74); o escaravelho em 71, 73 e 76. Testes:
+`RioBeastsPlacementTests`. Seguem com substitutos: Ganso Ladrão (`enemy_forest_thief_gull`), Chama Faminta (o enxame de vaga-lumes),
+Salamandra de Sombra (`enemy_desert_sand_snake`), Filhos de Apep (`enemy_forest_dimmed_python`), Escorpião [tanque] do 74
+(`enemy_desert_scorpion`), Ushabti Apagado (`enemy_mountain_rope_ushabti`), Ushabti Rachado (`enemy_forest_terracotta_soldier`), Sombra
+Fervida e Areia Movediça (`enemy_cave_ooze`) e Crocodilo de Lodo (`enemy_forest_mangrove_crocodile`).
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_forest_dark_river_crocodile` | **Crocodilo do Rio Escuro** / *Dark River Crocodile* | 71 | [tanque] | bicho real; olhava a barca passar, cada um na sua hora, e a sombra ensinou que o que boia é de quem está embaixo. |
+| `enemy_forest_dimmed_ibis` | **Íbis Apagada** / *Dimmed Ibis* | 71 | [rápido] | ave real da margem; contava as horas, perdeu o branco e agora só pega o que brilha. |
+| `enemy_forest_shadow_scarab` | **Escaravelho de Sombra** / *Shadow Scarab* | 71, 73, 76 | [enxame] | besouro de esterco real (se guia pelas estrelas), não o deus; a sombra fez querer uma bola cada vez maior. |
+| `enemy_forest_reed_snare` | **Junco-Laço** / *Reed Snare* | 71 | [controle] | invenção: feixes de papiro largados na margem, que agora querem amarrar alguma coisa. |
+| `enemy_forest_shadow_locust` | **Gafanhoto de Sombra** / *Shadow Locust* | 72 | [enxame] | gafanhoto real e a praga que come os campos de luz; cada um só tem fome, mas são fome demais. |
+| `enemy_forest_mud_hippo` | **Hipopótamo de Lodo** / *Mud Hippo* | 72 | [tanque] | bicho real, roçador dos canais; a sombra disse que os canais eram dele. |
+| `enemy_forest_reed_snake` | **Cobra do Junco** / *Reed Snake* | 72 | [rápido] | cobra que espantava os ratos dos campos; a sombra tirou a paciência e deixou a cor. |
+| `enemy_forest_three_headed_serpent` | **Serpente de Três Cabeças** / *Three-Headed Serpent* | 73 | [elite] | as serpentes do *Amduat* só como bicho; cada cabeça acha que só ela puxa a barca. |
+| `enemy_forest_black_scorpion` | **Escorpião Negro** / *Black Scorpion* | 73 | [rápido] | bicho real; a sombra virou a paciência dele em pressa. |
+| `enemy_forest_sand_ushabti` | **Ushabti de Areia** / *Sand Ushabti* | 73 | [tanque] | o servo de tumba de Kemet na versão mais barata, ainda esperando a ordem nas portas fechadas. |
+| `enemy_forest_shadow_biter` | **Mordedor de Sombra** / *Shadow Biter* | 74 | [rápido] | as sombras que mordem Mehen: pedaços de treva arrancados, só boca. |
+| `enemy_forest_creeping_dark` | **Treva Rastejante** / *Creeping Dark* | 74 | [enxame] | o que sobra nos anéis de manhã, gulosa das menores coisas (Āz): arranca lascas do ouro de Mehen. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |

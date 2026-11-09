@@ -39,7 +39,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         // ------------------------------------------------------------------
 
         /// <summary>Four legs: a hip → knee → foot chain each (<c>Leg_FL</c>, <c>Leg_HR</c>…).</summary>
-        private static void AddFourLegs(ProceduralEnemyBlueprint bp, float hipY, float halfWidth, float front, float hind, float radius,
+        internal static void AddFourLegs(ProceduralEnemyBlueprint bp, float hipY, float halfWidth, float front, float hind, float radius,
             EnemySwatch fur, EnemySwatch paw, string meshKey)
         {
             float upper = hipY * 0.5f;
@@ -55,7 +55,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         }
 
         /// <summary>Four thick legs with broad feet, for the heavy ones.</summary>
-        private static void AddHeavyLegs(ProceduralEnemyBlueprint bp, float hipY, float halfWidth, float front, float hind, float radius,
+        internal static void AddHeavyLegs(ProceduralEnemyBlueprint bp, float hipY, float halfWidth, float front, float hind, float radius,
             EnemySwatch fur, EnemySwatch foot, string meshKey)
         {
             float upper = hipY * 0.5f;
@@ -72,7 +72,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         }
 
         /// <summary>Two legs as thigh → shin → foot (the named biped parts ProceduralLegLocomotion drives).</summary>
-        private static void AddBipedLegs(ProceduralEnemyBlueprint bp, float hipY, float halfWidth, float radius, EnemySwatch thigh, EnemySwatch shinSwatch,
+        internal static void AddBipedLegs(ProceduralEnemyBlueprint bp, float hipY, float halfWidth, float radius, EnemySwatch thigh, EnemySwatch shinSwatch,
             EnemySwatch foot, string meshKey)
         {
             float upper = (hipY - 0.03f) * 0.5f;
@@ -89,7 +89,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             }
         }
 
-        private static void AddEyes(EnemyMeshBuilder b, float x, float y, float z, float size, EnemySwatch swatch)
+        internal static void AddEyes(EnemyMeshBuilder b, float x, float y, float z, float size, EnemySwatch swatch)
         {
             for (int s = -1; s <= 1; s += 2)
             {

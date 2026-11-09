@@ -28,8 +28,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// </list>
     /// Water: the dark river north of the quay (carved, two bridges on the north roads), the two irrigation canals of the fields (bridged on
     /// the same roads) and a few ponds. Fire: three lobes of the Lake of Fire and two small fire ponds, drawn glowing like the lava of
-    /// Hinokura (<see cref="IsLava"/>). Monsters: existing beasts that fit the sheets (see <see cref="Rio"/>) and the night species, a night
-    /// table in every clearing; no boss (A Barca Atrasou, the Hipopótamo-de-Junco, the Grande Serpente, O Nó Errado, O Guardião do Lago and
+    /// Hinokura (<see cref="IsLava"/>). Monsters: the region's own beasts of maps 71–74 and the scarab of 76, existing beasts that still fit
+    /// the other sheets (see <see cref="Rio"/>) and the night species, a night table in every clearing; no boss (A Barca Atrasou, the Hipopótamo-de-Junco, the Grande Serpente, O Nó Errado, O Guardião do Lago and
     /// Apep are not placed).
     /// </summary>
     public static partial class OverworldLayouts
@@ -95,21 +95,29 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             (new Vector2(470f, 970f), new Vector2(480f, 976f), 20f),
         };
 
-        /// <summary>The existing beasts that stand in for the sheets' monsters (Mapas100 71–76).</summary>
+        /// <summary>The region's own beasts (Mapas100 71–74, the scarab also in 76) and the existing beasts that still stand in for the other sheets.</summary>
         private static class Rio
         {
-            public const string Crocodile = "enemy_forest_mangrove_crocodile";
-            public const string Ibis = "enemy_forest_thief_gull";
-            public const string Scarab = "enemy_mountain_bark_beetle";
-            public const string Reedsnare = "enemy_mountain_ill_wind_mist";
+            public const string Crocodile = "enemy_forest_dark_river_crocodile";
+            public const string MudCrocodile = "enemy_forest_mangrove_crocodile";
+            public const string Ibis = "enemy_forest_dimmed_ibis";
+            public const string Goose = "enemy_forest_thief_gull";
+            public const string Scarab = "enemy_forest_shadow_scarab";
+            public const string Reedsnare = "enemy_forest_reed_snare";
+            public const string ShadowLocust = "enemy_forest_shadow_locust";
             public const string Locust = NightVariantRules.FireflySwarmEnemyId;
-            public const string Hippo = "enemy_forest_mud_buffalo";
-            public const string ReedSnake = "enemy_desert_sand_snake";
+            public const string Hippo = "enemy_forest_mud_hippo";
+            public const string ReedSnake = "enemy_forest_reed_snake";
+            public const string Salamander = "enemy_desert_sand_snake";
+            public const string ThreeHeaded = "enemy_forest_three_headed_serpent";
             public const string Python = "enemy_forest_dimmed_python";
-            public const string Scorpion = "enemy_desert_scorpion";
-            public const string SandUshabti = "enemy_mountain_rope_ushabti";
-            public const string ShadowBiter = "enemy_desert_jackal";
-            public const string Creeper = "enemy_cave_ooze";
+            public const string Scorpion = "enemy_forest_black_scorpion";
+            public const string RingScorpion = "enemy_desert_scorpion";
+            public const string SandUshabti = "enemy_forest_sand_ushabti";
+            public const string DimmedUshabti = "enemy_mountain_rope_ushabti";
+            public const string ShadowBiter = "enemy_forest_shadow_biter";
+            public const string Creeper = "enemy_forest_creeping_dark";
+            public const string Ooze = "enemy_cave_ooze";
             public const string CrackedUshabti = "enemy_forest_terracotta_soldier";
             public const string Vulture = "enemy_desert_ember_vulture";
         }
@@ -333,8 +341,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             NightSpecies sparks = NightVariantRules.VagaLume;
             NightSpecies werewolf = NightVariantRules.Lobisomem;
 
-            // The margins of the quay (71): the Crocodilo do Rio Escuro [tanque] (the mangrove crocodile), the Íbis Apagada [rápido] (the thief gull),
-            // the Escaravelho de Sombra [enxame] (the bark beetle), the Junco-Laço [controle] (the ill-wind mist).
+            // The margins of the quay (71): the Crocodilo do Rio Escuro [tanque], the Íbis Apagada [rápido], the Escaravelho de Sombra [enxame],
+            // the Junco-Laço [controle].
             cais.Fauna.Add(Fauna("ibis_apagadas", "[rápido]", T(N(Rio.Ibis, 3), N(Rio.Crocodile, 1)), T(V(Rio.Ibis, 2), S(moon, 1)), 4));
             cais.Fauna.Add(Fauna("escaravelhos_do_cais", "[enxame]", T(N(Rio.Scarab, 3), N(Rio.Ibis, 1)), T(V(Rio.Scarab, 3), S(sparks, 1)), 5));
             margem.Fauna.Add(Fauna("crocodilos_do_rio_escuro", "[tanque]", T(N(Rio.Crocodile, 3), N(Rio.Ibis, 1)), T(V(Rio.Crocodile, 2), S(moon, 1)), 3, null, 30f));
@@ -348,58 +356,58 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             canal.Fauna.Add(Fauna("crocodilos_do_canal", "[tanque]", T(N(Rio.Crocodile, 3), N(Rio.Reedsnare, 1)), T(V(Rio.Crocodile, 2), S(sparks, 1)), 3, null, 30f));
             canal.Fauna.Add(Fauna("escaravelhos_do_canal", "[enxame]", T(N(Rio.Scarab, 3), N(Rio.Crocodile, 1)), T(V(Rio.Scarab, 3), S(moon, 1)), 5));
 
-            // Campos de Juncos (72): the Gafanhoto de Sombra [enxame] (the firefly swarm), the Hipopótamo de Lodo [tanque] (the mud buffalo), the Cobra do
-            // Junco [rápido] (the sand snake), the Ganso Ladrão [rápido] (the thief gull).
-            campos.Fauna.Add(Fauna("gafanhotos_de_sombra", "[enxame]", T(N(Rio.Locust, 3), N(Rio.ReedSnake, 1)), T(V(Rio.Locust, 3), S(sparks, 1)), 5));
-            campos.Fauna.Add(Fauna("gansos_ladroes", "[rápido]", T(N(Rio.Ibis, 3), N(Rio.ReedSnake, 1)), T(V(Rio.Ibis, 3), S(owl, 1)), 4));
+            // Campos de Juncos (72): the Gafanhoto de Sombra [enxame], the Hipopótamo de Lodo [tanque], the Cobra do Junco [rápido], the Ganso
+            // Ladrão [rápido] (the thief gull).
+            campos.Fauna.Add(Fauna("gafanhotos_de_sombra", "[enxame]", T(N(Rio.ShadowLocust, 3), N(Rio.ReedSnake, 1)), T(V(Rio.ShadowLocust, 3), S(sparks, 1)), 5));
+            campos.Fauna.Add(Fauna("gansos_ladroes", "[rápido]", T(N(Rio.Goose, 3), N(Rio.ReedSnake, 1)), T(V(Rio.Goose, 3), S(owl, 1)), 4));
             canteiros.Fauna.Add(Fauna("hipopotamos_de_lodo", "[tanque]", T(N(Rio.Hippo, 3), N(Rio.ReedSnake, 1)), T(V(Rio.Hippo, 2), S(moon, 1)), 3, null, 30f));
-            canteiros.Fauna.Add(Fauna("cobras_do_junco", "[rápido]", T(N(Rio.ReedSnake, 3), N(Rio.Locust, 1)), T(V(Rio.ReedSnake, 3), S(owl, 1)), 4));
-            trigais.Fauna.Add(Fauna("gafanhotos_dos_trigais", "[enxame]", T(N(Rio.Locust, 3), N(Rio.Ibis, 1)), T(V(Rio.Locust, 3), S(sparks, 1)), 5));
-            trigais.Fauna.Add(Fauna("gansos_dos_trigais", "[rápido]", T(N(Rio.Ibis, 3), N(Rio.Hippo, 1)), T(V(Rio.Ibis, 3), S(moon, 1)), 4));
-            canais.Fauna.Add(Fauna("hipopotamos_dos_canais", "[tanque]", T(N(Rio.Hippo, 3), N(Rio.Locust, 1)), T(V(Rio.Hippo, 3), S(moon, 1)), 3, null, 30f));
+            canteiros.Fauna.Add(Fauna("cobras_do_junco", "[rápido]", T(N(Rio.ReedSnake, 3), N(Rio.ShadowLocust, 1)), T(V(Rio.ReedSnake, 3), S(owl, 1)), 4));
+            trigais.Fauna.Add(Fauna("gafanhotos_dos_trigais", "[enxame]", T(N(Rio.ShadowLocust, 3), N(Rio.Goose, 1)), T(V(Rio.ShadowLocust, 3), S(sparks, 1)), 5));
+            trigais.Fauna.Add(Fauna("gansos_dos_trigais", "[rápido]", T(N(Rio.Goose, 3), N(Rio.Hippo, 1)), T(V(Rio.Goose, 3), S(moon, 1)), 4));
+            canais.Fauna.Add(Fauna("hipopotamos_dos_canais", "[tanque]", T(N(Rio.Hippo, 3), N(Rio.ShadowLocust, 1)), T(V(Rio.Hippo, 3), S(moon, 1)), 3, null, 30f));
             canais.Fauna.Add(Fauna("cobras_dos_canais", "[rápido]", T(N(Rio.ReedSnake, 3), N(Rio.Hippo, 1)), T(V(Rio.ReedSnake, 3), S(owl, 1)), 4));
 
-            // Areal Escondido (73): the Serpente de Três Cabeças [elite] (the dimmed python), the Escorpião Negro [rápido] (the scorpion), the
-            // Escaravelho de Sombra [enxame], the Ushabti de Areia [tanque] (the rope ushabti).
-            areal.Fauna.Add(Fauna("serpentes_de_tres_cabecas", "[elite]", T(N(Rio.Python, 3), N(Rio.Scorpion, 1)), T(V(Rio.Python, 2), S(werewolf, 1)), 3, null, 32f));
+            // Areal Escondido (73): the Serpente de Três Cabeças [elite], the Escorpião Negro [rápido], the Escaravelho de Sombra [enxame], the
+            // Ushabti de Areia [tanque].
+            areal.Fauna.Add(Fauna("serpentes_de_tres_cabecas", "[elite]", T(N(Rio.ThreeHeaded, 3), N(Rio.Scorpion, 1)), T(V(Rio.ThreeHeaded, 2), S(werewolf, 1)), 3, null, 32f));
             areal.Fauna.Add(Fauna("escorpioes_negros", "[rápido]", T(N(Rio.Scorpion, 3), N(Rio.Scarab, 1)), T(V(Rio.Scorpion, 3), S(owl, 1)), 4));
             portas.Fauna.Add(Fauna("ushabtis_de_areia", "[tanque]", T(N(Rio.SandUshabti, 3), N(Rio.Scarab, 1)), T(V(Rio.SandUshabti, 2), S(bats, 1)), 3, null, 30f));
             portas.Fauna.Add(Fauna("escaravelhos_das_portas", "[enxame]", T(N(Rio.Scarab, 3), N(Rio.SandUshabti, 1)), T(V(Rio.Scarab, 3), S(sparks, 1)), 5));
-            caminho.Fauna.Add(Fauna("serpentes_do_caminho", "[elite]", T(N(Rio.Python, 3), N(Rio.Scarab, 1)), T(V(Rio.Python, 2), S(owl, 1)), 3, null, 32f));
+            caminho.Fauna.Add(Fauna("serpentes_do_caminho", "[elite]", T(N(Rio.ThreeHeaded, 3), N(Rio.Scarab, 1)), T(V(Rio.ThreeHeaded, 2), S(owl, 1)), 3, null, 32f));
             caminho.Fauna.Add(Fauna("ushabtis_do_caminho", "[tanque]", T(N(Rio.SandUshabti, 3), N(Rio.Scorpion, 1)), T(V(Rio.SandUshabti, 2), S(moon, 1)), 3, null, 30f));
-            zigue.Fauna.Add(Fauna("escorpioes_do_zigue_zague", "[rápido]", T(N(Rio.Scorpion, 3), N(Rio.Python, 1)), T(V(Rio.Scorpion, 3), S(owl, 1)), 4));
+            zigue.Fauna.Add(Fauna("escorpioes_do_zigue_zague", "[rápido]", T(N(Rio.Scorpion, 3), N(Rio.ThreeHeaded, 1)), T(V(Rio.Scorpion, 3), S(owl, 1)), 4));
             zigue.Fauna.Add(Fauna("escaravelhos_do_zigue_zague", "[enxame]", T(N(Rio.Scarab, 3), N(Rio.Scorpion, 1)), T(V(Rio.Scarab, 3), S(sparks, 1)), 5));
 
-            // Anéis de Mehen (74): the Mordedor de Sombra [rápido] (the jackal), the Treva Rastejante [enxame] (the ooze), the Escorpião [tanque], the
+            // Anéis de Mehen (74): the Mordedor de Sombra [rápido], the Treva Rastejante [enxame], the Escorpião [tanque] (the desert scorpion), the
             // Ushabti Apagado [tanque] (the rope ushabti); the bats in the rings.
             aneis.Fauna.Add(Fauna("mordedores_de_sombra", "[rápido]", T(N(Rio.ShadowBiter, 3), N(Rio.Creeper, 1)), T(V(Rio.ShadowBiter, 3), S(bats, 1)), 4));
             aneis.Fauna.Add(Fauna("trevas_rastejantes", "[enxame]", T(N(Rio.Creeper, 3), N(Rio.ShadowBiter, 1)), T(V(Rio.Creeper, 3), S(sparks, 1)), 5));
-            anelExterno.Fauna.Add(Fauna("escorpioes_dos_aneis", "[tanque]", T(N(Rio.Scorpion, 3), N(Rio.Creeper, 1)), T(V(Rio.Scorpion, 2), S(bats, 1)), 3, null, 30f));
-            anelExterno.Fauna.Add(Fauna("mordedores_do_anel", "[rápido]", T(N(Rio.ShadowBiter, 3), N(Rio.Scorpion, 1)), T(V(Rio.ShadowBiter, 3), S(werewolf, 1)), 4));
-            no.Fauna.Add(Fauna("ushabtis_apagados", "[tanque]", T(N(Rio.SandUshabti, 3), N(Rio.ShadowBiter, 1)), T(V(Rio.SandUshabti, 2), S(bats, 1)), 3, null, 30f));
-            no.Fauna.Add(Fauna("trevas_do_no", "[enxame]", T(N(Rio.Creeper, 3), N(Rio.SandUshabti, 1)), T(V(Rio.Creeper, 3), S(bats, 1)), 5));
+            anelExterno.Fauna.Add(Fauna("escorpioes_dos_aneis", "[tanque]", T(N(Rio.RingScorpion, 3), N(Rio.Creeper, 1)), T(V(Rio.RingScorpion, 2), S(bats, 1)), 3, null, 30f));
+            anelExterno.Fauna.Add(Fauna("mordedores_do_anel", "[rápido]", T(N(Rio.ShadowBiter, 3), N(Rio.RingScorpion, 1)), T(V(Rio.ShadowBiter, 3), S(werewolf, 1)), 4));
+            no.Fauna.Add(Fauna("ushabtis_apagados", "[tanque]", T(N(Rio.DimmedUshabti, 3), N(Rio.ShadowBiter, 1)), T(V(Rio.DimmedUshabti, 2), S(bats, 1)), 3, null, 30f));
+            no.Fauna.Add(Fauna("trevas_do_no", "[enxame]", T(N(Rio.Creeper, 3), N(Rio.DimmedUshabti, 1)), T(V(Rio.Creeper, 3), S(bats, 1)), 5));
 
             // Lago de Fogo (75): the Chama Faminta [enxame] (the firefly swarm), the Salamandra de Sombra [rápido] (the sand snake), the Sombra Fervida
             // [controle] (the ooze), the Ushabti Rachado [tanque] (the terracotta soldier).
-            lago.Fauna.Add(Fauna("chamas_famintas_do_lago", "[enxame]", T(N(Rio.Locust, 3), N(Rio.ReedSnake, 1)), T(V(Rio.Locust, 3), S(sparks, 1)), 5));
+            lago.Fauna.Add(Fauna("chamas_famintas_do_lago", "[enxame]", T(N(Rio.Locust, 3), N(Rio.Salamander, 1)), T(V(Rio.Locust, 3), S(sparks, 1)), 5));
             lago.Fauna.Add(Fauna("ushabtis_rachados", "[tanque]", T(N(Rio.CrackedUshabti, 3), N(Rio.Locust, 1)), T(V(Rio.CrackedUshabti, 2), S(bats, 1)), 3, null, 30f));
-            beira.Fauna.Add(Fauna("salamandras_de_sombra", "[rápido]", T(N(Rio.ReedSnake, 3), N(Rio.Creeper, 1)), T(V(Rio.ReedSnake, 3), S(sparks, 1)), 4));
-            beira.Fauna.Add(Fauna("sombras_fervidas", "[controle]", T(N(Rio.Creeper, 3), N(Rio.ReedSnake, 1)), T(V(Rio.Creeper, 2), S(owl, 1)), 4));
-            brasa.Fauna.Add(Fauna("sombras_da_brasa", "[controle]", T(N(Rio.Creeper, 3), N(Rio.Locust, 1)), T(V(Rio.Creeper, 2), S(sparks, 1)), 4));
-            brasa.Fauna.Add(Fauna("ushabtis_da_brasa", "[tanque]", T(N(Rio.CrackedUshabti, 3), N(Rio.ReedSnake, 1)), T(V(Rio.CrackedUshabti, 2), S(moon, 1)), 3, null, 30f));
+            beira.Fauna.Add(Fauna("salamandras_de_sombra", "[rápido]", T(N(Rio.Salamander, 3), N(Rio.Ooze, 1)), T(V(Rio.Salamander, 3), S(sparks, 1)), 4));
+            beira.Fauna.Add(Fauna("sombras_fervidas", "[controle]", T(N(Rio.Ooze, 3), N(Rio.Salamander, 1)), T(V(Rio.Ooze, 2), S(owl, 1)), 4));
+            brasa.Fauna.Add(Fauna("sombras_da_brasa", "[controle]", T(N(Rio.Ooze, 3), N(Rio.Locust, 1)), T(V(Rio.Ooze, 2), S(sparks, 1)), 4));
+            brasa.Fauna.Add(Fauna("ushabtis_da_brasa", "[tanque]", T(N(Rio.CrackedUshabti, 3), N(Rio.Salamander, 1)), T(V(Rio.CrackedUshabti, 2), S(moon, 1)), 3, null, 30f));
 
             // Banco de Areia de Apep (76): the Filhos de Apep [rápido] (the dimmed python), the Areia Movediça [controle] (the ooze), the Escaravelho de
-            // Sombra [enxame], the Crocodilo de Lodo [tanque] (the mangrove crocodile).
+            // Sombra [enxame] (the region's own), the Crocodilo de Lodo [tanque] (the mangrove crocodile).
             banco.Fauna.Add(Fauna("filhos_de_apep", "[rápido]", T(N(Rio.Python, 3), N(Rio.Scarab, 1)), T(V(Rio.Python, 3), S(werewolf, 1)), 4));
-            banco.Fauna.Add(Fauna("crocodilos_de_lodo", "[tanque]", T(N(Rio.Crocodile, 3), N(Rio.Python, 1)), T(V(Rio.Crocodile, 2), S(moon, 1)), 3, null, 30f));
-            corpo.Fauna.Add(Fauna("filhos_do_corpo", "[rápido]", T(N(Rio.Python, 3), N(Rio.Creeper, 1)), T(V(Rio.Python, 3), S(bats, 1)), 4));
+            banco.Fauna.Add(Fauna("crocodilos_de_lodo", "[tanque]", T(N(Rio.MudCrocodile, 3), N(Rio.Python, 1)), T(V(Rio.MudCrocodile, 2), S(moon, 1)), 3, null, 30f));
+            corpo.Fauna.Add(Fauna("filhos_do_corpo", "[rápido]", T(N(Rio.Python, 3), N(Rio.Ooze, 1)), T(V(Rio.Python, 3), S(bats, 1)), 4));
             corpo.Fauna.Add(Fauna("escaravelhos_do_corpo", "[enxame]", T(N(Rio.Scarab, 3), N(Rio.Python, 1)), T(V(Rio.Scarab, 3), S(sparks, 1)), 5));
-            seco.Fauna.Add(Fauna("crocodilos_do_rio_seco", "[tanque]", T(N(Rio.Crocodile, 3), N(Rio.Scarab, 1)), T(V(Rio.Crocodile, 2), S(moon, 1)), 3, null, 30f));
-            seco.Fauna.Add(Fauna("escaravelhos_do_rio_seco", "[enxame]", T(N(Rio.Scarab, 3), N(Rio.Crocodile, 1)), T(V(Rio.Scarab, 3), S(sparks, 1)), 5));
-            escamas.Fauna.Add(Fauna("filhos_das_escamas", "[rápido]", T(N(Rio.Python, 3), N(Rio.Crocodile, 1)), T(V(Rio.Python, 3), S(werewolf, 1)), 4));
-            escamas.Fauna.Add(Fauna("areias_das_escamas", "[controle]", T(N(Rio.Creeper, 3), N(Rio.Scarab, 1)), T(V(Rio.Creeper, 2), S(bats, 1)), 4));
-            movedica.Fauna.Add(Fauna("areias_movedicas", "[controle]", T(N(Rio.Creeper, 3), N(Rio.Crocodile, 1)), T(V(Rio.Creeper, 2), S(owl, 1)), 4));
-            movedica.Fauna.Add(Fauna("filhos_da_areia_movedica", "[rápido]", T(N(Rio.Python, 3), N(Rio.Creeper, 1)), T(V(Rio.Python, 3), S(moon, 1)), 4));
+            seco.Fauna.Add(Fauna("crocodilos_do_rio_seco", "[tanque]", T(N(Rio.MudCrocodile, 3), N(Rio.Scarab, 1)), T(V(Rio.MudCrocodile, 2), S(moon, 1)), 3, null, 30f));
+            seco.Fauna.Add(Fauna("escaravelhos_do_rio_seco", "[enxame]", T(N(Rio.Scarab, 3), N(Rio.MudCrocodile, 1)), T(V(Rio.Scarab, 3), S(sparks, 1)), 5));
+            escamas.Fauna.Add(Fauna("filhos_das_escamas", "[rápido]", T(N(Rio.Python, 3), N(Rio.MudCrocodile, 1)), T(V(Rio.Python, 3), S(werewolf, 1)), 4));
+            escamas.Fauna.Add(Fauna("areias_das_escamas", "[controle]", T(N(Rio.Ooze, 3), N(Rio.Scarab, 1)), T(V(Rio.Ooze, 2), S(bats, 1)), 4));
+            movedica.Fauna.Add(Fauna("areias_movedicas", "[controle]", T(N(Rio.Ooze, 3), N(Rio.MudCrocodile, 1)), T(V(Rio.Ooze, 2), S(owl, 1)), 4));
+            movedica.Fauna.Add(Fauna("filhos_da_areia_movedica", "[rápido]", T(N(Rio.Python, 3), N(Rio.Ooze, 1)), T(V(Rio.Python, 3), S(moon, 1)), 4));
         }
     }
 }

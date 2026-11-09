@@ -215,6 +215,32 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         FurnaceOgre = 93,
         /// <summary>Gigante de Escória (Caldeira, 70): heap of slag with lava in the seams, huge fists; both arms go up to strike.</summary>
         SlagGiant = 94,
+
+        // The beasts of the Rio das Doze Horas (Docs/Mapas100.md 71–74) that the overworld layout played with stand-ins (RioBeastRecipes).
+        /// <summary>Crocodilo do Rio Escuro (71): night-blue crocodile, gold eyes; the jaw gapes on the windup.</summary>
+        DarkRiverCrocodile = 95,
+        /// <summary>Íbis Apagada (71): ash-grey ibis, black head, long down-curved bill; the bill opens on the windup.</summary>
+        DimmedIbis = 96,
+        /// <summary>Escaravelho de Sombra (71): black scarab with gold seams, a dim sun on its brow; the mandibles open.</summary>
+        ShadowScarab = 97,
+        /// <summary>Junco-Laço (71): drifting sheaf of reeds with a noose on each side; a mouth that gapes.</summary>
+        ReedSnare = 98,
+        /// <summary>Gafanhoto de Sombra (72): dark locust, glassy wings; the mouth opens with the wings held still.</summary>
+        ShadowLocust = 99,
+        /// <summary>Hipopótamo de Lodo (72): barrel of mud with reeds on its back, huge square mouth that gapes.</summary>
+        MudHippo = 100,
+        /// <summary>Cobra do Junco (72): reed-green snake with a raised head and a jaw; the tail waves.</summary>
+        ReedSnake = 101,
+        /// <summary>Serpente de Três Cabeças (73): heavy sand-gold serpent, three raised heads, the tail waves.</summary>
+        ThreeHeadedSerpent = 102,
+        /// <summary>Escorpião Negro (73): black scorpion, gold-banded tail, ember sting; the claws open and the sting draws back.</summary>
+        BlackScorpion = 103,
+        /// <summary>Ushabti de Areia (73): servant figure of packed sand with a hoe; both arms go up to strike.</summary>
+        SandUshabti = 104,
+        /// <summary>Mordedor de Sombra (74): lean dog of the dark, all mouth; a jaw that gapes.</summary>
+        ShadowBiter = 105,
+        /// <summary>Treva Rastejante (74): low heap of dark with crawling tendrils; flattens on the windup, the swallowed gold flares.</summary>
+        CreepingDark = 106,
     }
 
     /// <summary>

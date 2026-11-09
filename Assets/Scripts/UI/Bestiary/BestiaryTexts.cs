@@ -260,6 +260,9 @@ namespace Rapadura.UI.Bestiary
             // -- Bichos do Arquipélago de Hinokura que o mundo contínuo fazia com substitutos (own file too) --
             HinokuraBestiaryTexts.AddPages(entries);
 
+            // -- Bichos do Rio das Doze Horas que o mundo contínuo fazia com substitutos (own file too) --
+            RioBestiaryTexts.AddPages(entries);
+
             // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
             OssuaryBestiaryTexts.AddPages(entries);
 

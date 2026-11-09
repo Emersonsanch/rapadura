@@ -104,6 +104,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.ShroudOwl: return OwlParts;
                 case ProceduralEnemyKind.SandSnake:
                 case ProceduralEnemyKind.Python:
+                case ProceduralEnemyKind.ReedSnake:
+                case ProceduralEnemyKind.ThreeHeadedSerpent:
                     return SnakeParts;
                 case ProceduralEnemyKind.DustRhino:
                 case ProceduralEnemyKind.WildYak:
@@ -380,6 +382,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
 
                 case ProceduralEnemyKind.SandSnake:
                 case ProceduralEnemyKind.Python:
+                case ProceduralEnemyKind.ReedSnake:
+                case ProceduralEnemyKind.ThreeHeadedSerpent:
                 {
                     // Slithers: a travelling wave down the tail, the raised head sways and pulls back before it strikes.
                     float r = StepAttack(deltaTime, 6f, 3f);
@@ -392,6 +396,10 @@ namespace Rapadura.Gameplay.Enemies.Visuals
 
                     Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(-25f * r, Mathf.Sin(t * 1.1f) * 12f * k * (1f - r), 0f));
                     Offset(ProceduralEnemyParts.Head, new Vector3(0f, 0f, -0.08f * r));
+                    // The river's snakes have a jaw that drops open; the serpent's two side heads rear back with the middle one, out of step.
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(34f * r, 0f, 0f));
+                    Rotate(RioBeastRecipes.SerpentHeadLeft, Quaternion.Euler(-20f * r, Mathf.Sin(t * 0.9f + 1f) * 12f * k * (1f - r), 0f));
+                    Rotate(RioBeastRecipes.SerpentHeadRight, Quaternion.Euler(-20f * r, Mathf.Sin(t * 1.3f + 2f) * 12f * k * (1f - r), 0f));
                     break;
                 }
 
@@ -421,6 +429,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 }
 
                 case ProceduralEnemyKind.CaveOoze:
+                case ProceduralEnemyKind.CreepingDark:
                 {
                     // Squash and stretch; it flattens on the windup and the swallowed lights flare.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -570,11 +579,14 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.IceGull:
                 case ProceduralEnemyKind.TwigBird:
                 case ProceduralEnemyKind.EmberGull:
+                case ProceduralEnemyKind.DimmedIbis:
+                case ProceduralEnemyKind.ShadowLocust:
                 {
                     // The birds of the peaks: the eagle soars on long glides, the chough and the flute bird beat quicker; the wings
                     // hold still and the beak opens on the windup (the flute bird's note, the chough's and the harpy's screech).
                     float r = StepAttack(deltaTime, 5f, 3f);
-                    float rate = _kind == ProceduralEnemyKind.StormEagle ? 0.4f : _kind == ProceduralEnemyKind.SmokeHarpy ? 0.55f : 0.8f;
+                    float rate = _kind == ProceduralEnemyKind.StormEagle ? 0.4f : _kind == ProceduralEnemyKind.SmokeHarpy ? 0.55f
+                        : _kind == ProceduralEnemyKind.ShadowLocust ? 1.8f : 0.8f;
                     FlapWings(t, speed * rate, Mathf.Max(k, 0.25f) * (1f - 0.7f * r), Mathf.Max(Mathf.Clamp01(MoveSpeed01), 0.5f));
                     Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(-14f * r, Mathf.Sin(t * 0.6f) * 25f * k * (1f - r), 0f));
                     Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(32f * r, 0f, 0f));
@@ -628,6 +640,26 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 }
 
+                case ProceduralEnemyKind.DarkRiverCrocodile:
+                case ProceduralEnemyKind.MudHippo:
+                case ProceduralEnemyKind.ShadowBiter:
+                case ProceduralEnemyKind.ReedSnare:
+                {
+                    // The river's biters: the jaw gapes on the windup and the tail sways; the reed snare's root drags slowly and its nooses stir.
+                    float r = StepAttack(deltaTime, 5f, 3f);
+                    Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(Mathf.Max(0f, Mathf.Sin(t * 0.7f)) * 3f * k + 32f * r, 0f, 0f));
+                    float sway = _kind == ProceduralEnemyKind.ReedSnare ? Mathf.Sin(t * 0.8f) * 6f
+                        : _kind == ProceduralEnemyKind.MudHippo ? Mathf.Sin(t * 1.1f) * 8f
+                        : Mathf.Sin(t * 1.6f) * 12f;
+                    Rotate(ProceduralEnemyParts.Tail, Quaternion.Euler(0f, sway * k, 0f));
+                    if (_kind == ProceduralEnemyKind.ReedSnare)
+                    {
+                        FlapWings(t, speed * 0.3f, Mathf.Max(k, 0.25f) * 0.5f, Mathf.Clamp01(MoveSpeed01));
+                    }
+
+                    break;
+                }
+
                 case ProceduralEnemyKind.GoldenBee:
                 {
                     // A blur of fast wingbeats; the sting swings forward under the body on the windup.
@@ -651,6 +683,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.LacquerUshabti:
                 case ProceduralEnemyKind.FurnaceOgre:
                 case ProceduralEnemyKind.SlagGiant:
+                case ProceduralEnemyKind.SandUshabti:
                 {
                     // Waits with its hoe; both arms go up and the hoe comes down like on the fields of the other world (Hinokura: the
                     // lacquer ushabti's tongs, the furnace ogre's hammer, the slag giant's fists).
@@ -667,12 +700,15 @@ namespace Rapadura.Gameplay.Enemies.Visuals
 
                 case ProceduralEnemyKind.BarkBeetle:
                 case ProceduralEnemyKind.VolcanoCrab:
+                case ProceduralEnemyKind.ShadowScarab:
+                case ProceduralEnemyKind.BlackScorpion:
                 {
-                    // The mandibles open wide on the windup and snap shut on the pinch.
+                    // The mandibles open wide on the windup and snap shut on the pinch (the scorpion's sting draws back over it).
                     float r = StepAttack(deltaTime, 5f, 4f);
                     float open = Mathf.Max(0f, Mathf.Sin(t * 1.5f)) * 4f * k + 32f * r;
                     Rotate(ProceduralEnemyParts.ClawLeft, Quaternion.Euler(0f, -open, 0f));
                     Rotate(ProceduralEnemyParts.ClawRight, Quaternion.Euler(0f, open, 0f));
+                    Rotate(ProceduralEnemyParts.Tail, Quaternion.Euler(-30f * r + Mathf.Sin(t * 1.3f) * 4f * k, 0f, 0f));
                     break;
                 }
 
