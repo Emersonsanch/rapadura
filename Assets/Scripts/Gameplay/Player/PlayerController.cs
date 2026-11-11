@@ -122,7 +122,10 @@ namespace Rapadura.Gameplay.Player
             // transitions or per-frame state logic). Camera look still works so a stunned player
             // isn't also blind, matching common ARPG stun conventions (e.g. Diablo/PoE) where
             // camera/UI stays responsive but character action does not.
-            if (!IsStunned)
+            // A frozen frame (GameplayPause: inventory, skill tree, dialogue… timeScale 0) moves nothing: a CharacterController.Move
+            // of zero touches no ground, so isGrounded went false and a hero standing still dropped into the fall state for as long as
+            // the screen stayed open (and played the fall pose behind it).
+            if (!IsStunned && Time.deltaTime > 0f)
             {
                 StateMachine.Tick(Time.deltaTime);
 

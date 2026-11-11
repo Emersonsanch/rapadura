@@ -43,10 +43,10 @@ namespace Rapadura.Tests.PlayMode
         /// <summary>The 16 regions in catalog order: the region's layout id and the drivers that must run there.</summary>
         private static readonly (int Number, string PartId, Type[] Drivers)[] Regions =
         {
-            (1, OverworldLayouts.ZarafshanId, new[] { typeof(ZarafshanMechanicsDriver), typeof(ZarafshanGardenMechanicsDriver) }),
+            (1, OverworldLayouts.ZarafshanId, new[] { typeof(ZarafshanMechanicsDriver), typeof(ZarafshanGardenMechanicsDriver), typeof(ZarafshanMireMechanicsDriver) }),
             (2, OverworldLayouts.AreiasId, new[] { typeof(AreiasMechanicsDriver) }),
             (3, OverworldLayouts.KaggenId, new[] { typeof(KaggenMechanicsDriver) }),
-            (4, OverworldLayouts.LimiarId, new[] { typeof(LimiarMechanicsDriver) }),
+            (4, OverworldLayouts.LimiarId, new[] { typeof(LimiarMechanicsDriver), typeof(LimiarLakeMechanicsDriver) }),
             (5, OverworldLayouts.CostaId, new[] { typeof(CostaDeltaTetoMechanicsDriver) }),
             (6, OverworldLayouts.DeltaId, new[] { typeof(CostaDeltaTetoMechanicsDriver) }),
             (7, OverworldLayouts.TetoId, new[] { typeof(CostaDeltaTetoMechanicsDriver), typeof(TetoCartMechanicsDriver) }),
@@ -141,12 +141,14 @@ namespace Rapadura.Tests.PlayMode
             Vector2 farnkesh = AnchorOrigin(world, OverworldLayouts.FarnkeshAnchorZoneId);
             Rect[] gorge = OverworldLayouts.GustAreas.Select(r => MechanicsDriverHub.WorldArea(r, farnkesh)).ToArray();
             Vector2[][] ropes = OverworldLayouts.WindBridgeLines.Select(line => line.Select(p => p + farnkesh).ToArray()).ToArray();
-            yield return WalkTrailOrTown(world, player, click, "Região 10 (Farnkesh, gorge gusts)", OverworldLayouts.FarnkeshRegionId, gorge, null, ropes);
+            // The gust blows 1.5 s of every 20 (Time.time): the walk starts a second before it, so it always walks through one.
+            yield return WalkTrailOrTown(world, player, click, "Região 10 (Farnkesh, gorge gusts)", OverworldLayouts.FarnkeshRegionId, gorge, null, ropes,
+                () => WindGustRules.CycleTime(Time.time) is float t && t >= WindGustRules.PeriodSeconds - WindGustRules.BlowSeconds - 1f && t < WindGustRules.PeriodSeconds - WindGustRules.BlowSeconds);
         }
 
         /// <summary>Walks a trail piece inside <paramref name="areas"/>; when the layout has none there, a few metres out of the region's town instead (logged).</summary>
         private static IEnumerator WalkTrailOrTown(OverworldLayout world, GameObject player, PlayerClickToMove click, string what, string partId,
-            Rect[] areas, Vector2[] avoidPoints, Vector2[][] avoidLines)
+            Rect[] areas, Vector2[] avoidPoints, Vector2[][] avoidLines, Func<bool> startWhen = null)
         {
             Vector2 from;
             Vector2 to;
@@ -168,6 +170,11 @@ namespace Rapadura.Tests.PlayMode
 
             Place(player, from, to - from);
             yield return WaitRealtime(1f);
+            if (startWhen != null)
+            {
+                yield return WaitUntilOrFail(startWhen, $"{what}: the moment to start the walk", 25f);
+            }
+
             yield return WalkAndWatch(player, click, to, what);
         }
 
@@ -203,14 +210,18 @@ namespace Rapadura.Tests.PlayMode
                     fallSince = -1f;
                 }
 
-                Assert.Less(longestFall, MaxFallSeconds, $"{what}: the hero has been in the fall state for {longestFall:0.0}s at {Ground(player)} (stuck falling?).");
+                if (longestFall >= MaxFallSeconds)
+                {
+                    Assert.Fail($"{what}: the hero has been in the fall state for {longestFall:0.0}s at {Ground(player)} (stuck falling?) ({Diagnose(player)}).");
+                }
                 yield return null;
             }
 
             // Blocked (a river, a wall) or arrived: either way the walk is over; what matters is how the hero stands.
+            Debug.Log($"{LogTag} {what}: walk over at {Ground(player)}, longest fall {longestFall:0.00}s ({Diagnose(player)})");
             click.ClearDestination();
             yield return WaitRealtime(0.6f);
-            Assert.IsFalse(controller.StateMachine.IsInState<PlayerFallState>(), $"{what}: the hero is still in the fall state after the walk, at {Ground(player)}.");
+            Assert.IsFalse(controller.StateMachine.IsInState<PlayerFallState>(), $"{what}: the hero is still in the fall state after the walk, at {Ground(player)} ({Diagnose(player)}).");
             Assert.Greater(Vector2.Distance(start, Ground(player)), 1.5f, $"{what}: the hero never left {start} (clicked {target}).");
             AssertStanding(player, what);
         }
@@ -405,7 +416,7 @@ namespace Rapadura.Tests.PlayMode
 
             PlayerController controller = player.GetComponent<PlayerController>();
             Assert.IsNotNull(controller);
-            Assert.IsFalse(controller.StateMachine.IsInState<PlayerFallState>(), $"{where}: the hero is in the fall state at {p} (ground: {hit}).");
+            Assert.IsFalse(controller.StateMachine.IsInState<PlayerFallState>(), $"{where}: the hero is in the fall state at {p} (ground: {hit}; {Diagnose(player)}).");
         }
 
         private static bool GroundUnder(GameObject player, out string hitName)
@@ -465,6 +476,24 @@ namespace Rapadura.Tests.PlayMode
             }
 
             Assert.AreEqual(0, wrong.Length, $"{where}: MechanicsDriverHub:{wrong}");
+        }
+
+        /// <summary>What a stuck fall state looks like from the inside (pause, CharacterController, motor, stun, drivers on), for the failure message.</summary>
+        private static string Diagnose(GameObject player)
+        {
+            var owners = new List<object>();
+            Rapadura.Core.Systems.GameplayPause.CopyOwnersTo(owners);
+            CharacterController character = player.GetComponent<CharacterController>();
+            PlayerController controller = player.GetComponent<PlayerController>();
+            string on = MapModeController.Current != null && MapModeController.Current.OverworldArea != null
+                ? string.Join(",", MapModeController.Current.OverworldArea.GetComponents<MonoBehaviour>().Where(b => b is IRegionMechanics && b.enabled).Select(b => b.GetType().Name))
+                : "?";
+            Vector3 at = player.transform.position;
+            float surface = MapModeController.Current != null && MapModeController.Current.OverworldArea != null ? MapModeController.Current.OverworldArea.GroundHeight(new Vector2(at.x, at.z)) : float.NaN;
+            return $"y {at.y:0.00}, surface {surface:0.00}, Farnkesh gust {WindGustRules.PhaseAt(Time.time)} {WindGustRules.CycleTime(Time.time):0.0}s, timeScale {Time.timeScale}, paused {Rapadura.Core.Systems.GameplayPause.IsPaused} by [{string.Join(",", owners)}], " +
+                   $"cc on {character != null && character.enabled}, cc grounded {character != null && character.isGrounded}, " +
+                   $"motor grounded {controller?.Motor.IsGrounded}, vy {controller?.Motor.VerticalVelocity:0.00}, controller on {controller != null && controller.enabled}, " +
+                   $"stunned {controller != null && controller.IsStunned}, busy {BusyDrivers()}, drivers on [{on}]";
         }
 
         private static string BusyDrivers()
