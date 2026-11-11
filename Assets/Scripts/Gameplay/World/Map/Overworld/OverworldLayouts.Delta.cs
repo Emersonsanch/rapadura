@@ -52,6 +52,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>The arena of the Lodo-que-Engole (35): the stone ring of the Olho do Lodo, west of the Raiz-Mãe.</summary>
         public static readonly Vector2 LodoArena = new Vector2(-900f, -1640f);
 
+        /// <summary>A Ponte que Esqueceu's arena (32, map boss): the stone ring on the trail through the Cascatas da Chuva, above the root gorges.</summary>
+        public static readonly Vector2 PonteQueEsqueceuArena = new Vector2(-767f, 367f);
+
         /// <summary>Half the side (m) of Jhilpur's flat ground (its solids reach 22.5 m, its roads leave at 18.6 m).</summary>
         public const float JhilpurGround = 30f;
 
@@ -294,6 +297,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, -1010f, -930f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, -760f, 300f, 0f, 0.8f);
             Landmark(w, MapLandmarkKind.StoneRing, LodoArena.x, LodoArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, PonteQueEsqueceuArena.x, PonteQueEsqueceuArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

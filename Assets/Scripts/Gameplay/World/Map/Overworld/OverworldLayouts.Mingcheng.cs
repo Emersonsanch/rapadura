@@ -57,6 +57,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>The arena of the Quatro Gulosos (46): the Salão Central's stone ring, east of the Portão do Nono Anel at the end of its spur.</summary>
         public static readonly Vector2 GulososArena = new Vector2(1100f, 1700f);
 
+        /// <summary>A Carpa que Não Pulou's arena (43, map boss): the stone ring on the west bank trail of the Canal das Lanternas.</summary>
+        public static readonly Vector2 CarpaQueNaoPulouArena = new Vector2(373f, 613f);
+
         /// <summary>Half the side (m) of Mingcheng's flat ground (reserved for the ring city's recipe, ±28 m and more).</summary>
         public const float MingchengGround = 30f;
 
@@ -311,6 +314,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, 120f, 700f, 0f, 0.9f);
             Landmark(w, MapLandmarkKind.StoneRing, -1000f, 1000f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, GulososArena.x, GulososArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, CarpaQueNaoPulouArena.x, CarpaQueNaoPulouArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

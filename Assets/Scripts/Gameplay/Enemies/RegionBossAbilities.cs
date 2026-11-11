@@ -69,6 +69,14 @@ namespace Rapadura.Gameplay.Enemies
         private int _strokes;
         private float _strokeHeat = 1f;
 
+        // The map bosses of the middle story: the octopus's slams, the bridge's stomps, the Almas's throws and the carp's leaps in this fight
+        // (each turns the pattern of the next), and the cart's run-up for the roll being telegraphed.
+        private int _slams;
+        private int _stomps;
+        private int _throws;
+        private int _leaps;
+        private float _runUp;
+
         public RegionBossPhase Phase => _phase;
 
         /// <summary>True while a great blow is telegraphed.</summary>
@@ -98,6 +106,11 @@ namespace Rapadura.Gameplay.Enemies
             _roars = 0;
             _strokes = 0;
             _strokeHeat = 1f;
+            _slams = 0;
+            _stomps = 0;
+            _throws = 0;
+            _leaps = 0;
+            _runUp = 0f;
             EventBus.Subscribe<CombatTargetDiedEvent>(HandleTargetDied);
         }
 
@@ -335,6 +348,25 @@ namespace Rapadura.Gameplay.Enemies
             {
                 DungeonShockwave.Spawn(_echo, null, _controller.gameObject, 0f, 0f);
             }
+            else if (signature == RegionBossSignature.RunawayRun)
+            {
+                _runUp = FlatDistance(_signatureImpact, _signatureOrigin);
+            }
+            else if (signature == RegionBossSignature.SnowSparks)
+            {
+                // The three sparks it hid in the snow: the only places the burst passes by.
+                foreach (Vector2 spark in RegionBossRules.SnowSparkSpots(Flat(_signatureOrigin), _throws))
+                {
+                    DungeonFx.Say(new Vector3(spark.x, _signatureOrigin.y + 1.2f, spark.y), Text(RegionBossTexts.SnowSparkKey));
+                }
+            }
+            else if (signature == RegionBossSignature.FailedLeap)
+            {
+                bool fallsShort = RegionBossRules.LeapFallsShort(_leaps);
+                warning = RegionBossTexts.CarpLeapKey(fallsShort);
+                Vector2 landing = RegionBossRules.LeapLanding(_leaps, Flat(_signatureOrigin), Flat(_signatureImpact));
+                DungeonShockwave.Spawn(new Vector3(landing.x, _signatureImpact.y, landing.y), null, _controller.gameObject, 0f, 0f);
+            }
 
             DungeonShockwave.Spawn(MarksTheHeroSpot(signature) ? _signatureImpact : transform.position, null, _controller.gameObject, 0f, 0f);
             DungeonFx.Warn(transform.position + Vector3.up * 4f, Text(warning));
@@ -520,6 +552,61 @@ namespace Rapadura.Gameplay.Enemies
                     }
 
                     _strokeHeat = 1f;
+                    break;
+
+                case RegionBossSignature.MonsoonArms:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.OctopusArmsHit(_slams++, Flat(transform.position), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.ArmsDamageFactor), ElementType.Wind, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.HerdSnort:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.SnortHits(Flat(transform.position), Flat(_signatureImpact) - Flat(_signatureOrigin), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.SnortDamageFactor), ElementType.Dark, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.ForgottenPlanks:
+                    DungeonShockwave.Spawn(_signatureImpact, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.ForgottenPlankHits(_stomps++, Flat(_signatureOrigin), Flat(_signatureImpact), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.PlanksDamageFactor), ElementType.Earth, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.RunawayRun:
+                    DungeonShockwave.Spawn(_signatureImpact, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.RunawayHits(Flat(_signatureImpact), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.RunawayDamageFactor(_runUp)), ElementType.Physical, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.SnowSparks:
+                    DungeonShockwave.Spawn(_signatureOrigin, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.SnowBurstHits(Flat(_signatureOrigin), _throws++, heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.SnowDamageFactor), ElementType.Ice, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.FailedLeap:
+                    Vector2 splash = RegionBossRules.LeapLanding(_leaps, Flat(_signatureOrigin), Flat(_signatureImpact));
+                    DungeonShockwave.Spawn(new Vector3(splash.x, _signatureImpact.y, splash.y), null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.LeapHits(_leaps++, Flat(_signatureOrigin), Flat(_signatureImpact), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.LeapDamageFactor), ElementType.Physical, _controller.gameObject);
+                    }
+
                     break;
 
                 case RegionBossSignature.GreedOfTheArk:
@@ -795,7 +882,8 @@ namespace Rapadura.Gameplay.Enemies
         private static bool MarksTheHeroSpot(RegionBossSignature signature) =>
             signature == RegionBossSignature.DreamFall || signature == RegionBossSignature.PassBreath || signature == RegionBossSignature.FourAppetites
             || signature == RegionBossSignature.RopeCut || signature == RegionBossSignature.EchoToll || signature == RegionBossSignature.BellyFlop
-            || signature == RegionBossSignature.CeilingFall || signature == RegionBossSignature.ForgeStroke;
+            || signature == RegionBossSignature.CeilingFall || signature == RegionBossSignature.ForgeStroke
+            || signature == RegionBossSignature.ForgottenPlanks || signature == RegionBossSignature.RunawayRun;
 
         private static long UtcDay() => (long)(System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc)).TotalDays;
 

@@ -435,6 +435,20 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         ShisaKing = 208,
         /// <summary>O Mestre das Nove Fornalhas (69): an iron forging engine with a furnace for a chest and a hammer arm; map boss of the Castelo das Nove Fornalhas.</summary>
         FurnaceMaster = 209,
+
+        // The map bosses on the road of the middle story (Docs/Mapas100.md 25, 26, 32, 37, 38, 43), Regions 5–8.
+        /// <summary>O Polvo das Monções (25): a dimmed octopus heaped on the sand, a torn dhow sail on its head, eight arms; map boss of the Praia dos Dhows.</summary>
+        MonsoonOctopus = 240,
+        /// <summary>O Touro de Fumaça (26): a giant aurochs gone dark, smoke curling off its hide, ember-lit nostrils; map boss of the Savana dos Auroques.</summary>
+        SmokeAurochs = 241,
+        /// <summary>A Ponte que Esqueceu (32): a living root bridge walking on four root legs, planks on its back, rope rails hanging; map boss of the Cascatas da Chuva.</summary>
+        ForgetfulBridge = 242,
+        /// <summary>O Carrinho Desgovernado (37): an Artificer ore cart on four iron legs, its engine lit inside, ore heaped high; map boss of the Encosta dos Zimbros.</summary>
+        RunawayCart = 243,
+        /// <summary>O Grande Almas (38): a huge, shy, hairy wild man of the snow, sparks frozen in the snow on his shoulders; map boss of the Lago Turquesa.</summary>
+        GreatAlmas = 244,
+        /// <summary>A Carpa que Não Pulou (43): a great dark carp standing on its fins at the canal's edge, barbels and a dim dragon's pearl; map boss of the Canal das Lanternas.</summary>
+        UnleapedCarp = 245,
     }
 
     /// <summary>

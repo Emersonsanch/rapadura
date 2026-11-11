@@ -302,6 +302,13 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { RegionBossRules.GrandfatherMammothId, ProceduralEnemyKind.GrandfatherMammoth },
             { RegionBossRules.ShisaKingId, ProceduralEnemyKind.ShisaKing },
             { RegionBossRules.FurnaceMasterId, ProceduralEnemyKind.FurnaceMaster },
+            // The map bosses on the road of the middle story (Docs/Mapas100.md 25, 26, 32, 37, 38, 43).
+            { RegionBossRules.MonsoonOctopusId, ProceduralEnemyKind.MonsoonOctopus },
+            { RegionBossRules.SmokeAurochsId, ProceduralEnemyKind.SmokeAurochs },
+            { RegionBossRules.ForgetfulBridgeId, ProceduralEnemyKind.ForgetfulBridge },
+            { RegionBossRules.RunawayCartId, ProceduralEnemyKind.RunawayCart },
+            { RegionBossRules.GreatAlmasId, ProceduralEnemyKind.GreatAlmas },
+            { RegionBossRules.UnleapedCarpId, ProceduralEnemyKind.UnleapedCarp },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -362,6 +369,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.Hedammu, ProceduralEnemyKind.SwallowingMire, ProceduralEnemyKind.Aydahar, ProceduralEnemyKind.FourGluttons, ProceduralEnemyKind.Ohya,
             ProceduralEnemyKind.RopeCutter, ProceduralEnemyKind.EndlessBell, ProceduralEnemyKind.WalrusQueen, ProceduralEnemyKind.GrandfatherMammoth,
             ProceduralEnemyKind.ShisaKing, ProceduralEnemyKind.FurnaceMaster,
+            ProceduralEnemyKind.MonsoonOctopus, ProceduralEnemyKind.SmokeAurochs, ProceduralEnemyKind.ForgetfulBridge, ProceduralEnemyKind.RunawayCart,
+            ProceduralEnemyKind.GreatAlmas, ProceduralEnemyKind.UnleapedCarp,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -390,7 +399,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             (kind >= ProceduralEnemyKind.WindKing && kind <= ProceduralEnemyKind.Ohya) || IsMapBoss(kind);
 
         /// <summary>The map bosses of the fichas (<see cref="MapBossRecipes"/>; <see cref="RegionBossRules.MapSpawns"/>).</summary>
-        public static bool IsMapBoss(ProceduralEnemyKind kind) => kind >= ProceduralEnemyKind.RopeCutter && kind <= ProceduralEnemyKind.FurnaceMaster;
+        public static bool IsMapBoss(ProceduralEnemyKind kind) =>
+            (kind >= ProceduralEnemyKind.RopeCutter && kind <= ProceduralEnemyKind.FurnaceMaster)
+            || (kind >= ProceduralEnemyKind.MonsoonOctopus && kind <= ProceduralEnemyKind.UnleapedCarp);
 
         private static string RegionBossIdOf(ProceduralEnemyKind kind)
         {
@@ -413,6 +424,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.GrandfatherMammoth: return RegionBossRules.GrandfatherMammothId;
                 case ProceduralEnemyKind.ShisaKing: return RegionBossRules.ShisaKingId;
                 case ProceduralEnemyKind.FurnaceMaster: return RegionBossRules.FurnaceMasterId;
+                case ProceduralEnemyKind.MonsoonOctopus: return RegionBossRules.MonsoonOctopusId;
+                case ProceduralEnemyKind.SmokeAurochs: return RegionBossRules.SmokeAurochsId;
+                case ProceduralEnemyKind.ForgetfulBridge: return RegionBossRules.ForgetfulBridgeId;
+                case ProceduralEnemyKind.RunawayCart: return RegionBossRules.RunawayCartId;
+                case ProceduralEnemyKind.GreatAlmas: return RegionBossRules.GreatAlmasId;
+                case ProceduralEnemyKind.UnleapedCarp: return RegionBossRules.UnleapedCarpId;
                 default: return RegionBossRules.EmberGluttonId;
             }
         }
@@ -1015,6 +1032,24 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.FurnaceMaster:
                     MapBossRecipes.BuildFurnaceMaster(blueprint);
+                    break;
+                case ProceduralEnemyKind.MonsoonOctopus:
+                    MapBossRecipes.BuildMonsoonOctopus(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeAurochs:
+                    MapBossRecipes.BuildSmokeAurochs(blueprint);
+                    break;
+                case ProceduralEnemyKind.ForgetfulBridge:
+                    MapBossRecipes.BuildForgetfulBridge(blueprint);
+                    break;
+                case ProceduralEnemyKind.RunawayCart:
+                    MapBossRecipes.BuildRunawayCart(blueprint);
+                    break;
+                case ProceduralEnemyKind.GreatAlmas:
+                    MapBossRecipes.BuildGreatAlmas(blueprint);
+                    break;
+                case ProceduralEnemyKind.UnleapedCarp:
+                    MapBossRecipes.BuildUnleapedCarp(blueprint);
                     break;
             }
 

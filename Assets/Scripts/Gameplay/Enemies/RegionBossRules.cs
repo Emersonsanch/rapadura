@@ -58,6 +58,26 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>O Mestre das Nove Fornalhas strikes the anvil on the hero's spot; each stroke heats the next until the ninth vents the furnaces.</summary>
         ForgeStroke = 15,
+
+        // The map bosses of the middle story (RegionBossRules.MapBosses.cs: Docs/Mapas100.md 25, 26, 32, 37, 38, 43).
+
+        /// <summary>O Polvo das Monções slams its eight arms out round itself like spokes; the gaps between them are safe, and each slam turns half an arm.</summary>
+        MonsoonArms = 16,
+
+        /// <summary>O Touro de Fumaça snorts smoke all round itself except straight behind, where the herd walks; far away is safe too.</summary>
+        HerdSnort = 17,
+
+        /// <summary>A Ponte que Esqueceu forgets every other plank across the hero's spot; which rows fall swaps each stomp, and sideways never helps.</summary>
+        ForgottenPlanks = 18,
+
+        /// <summary>O Carrinho Desgovernado rolls onto the hero's spot: the longer its run-up, the harder it hits; up close it has no room to get going.</summary>
+        RunawayRun = 19,
+
+        /// <summary>O Grande Almas bursts the snow round itself; only the three sparks it hid in the snow are safe, and they move round each throw.</summary>
+        SnowSparks = 20,
+
+        /// <summary>A Carpa que Não Pulou leaps at the hero's spot and never lands on it: short of it, then past it, in turn.</summary>
+        FailedLeap = 21,
     }
 
     /// <summary>The four appetites of the Cidadela (46), one a week in turn (<see cref="RegionBossRules.AppetiteFor"/>).</summary>
@@ -478,6 +498,12 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.CeilingFall:
                 case RegionBossSignature.TwoMouths:
                 case RegionBossSignature.ForgeStroke:
+                case RegionBossSignature.MonsoonArms:
+                case RegionBossSignature.HerdSnort:
+                case RegionBossSignature.ForgottenPlanks:
+                case RegionBossSignature.RunawayRun:
+                case RegionBossSignature.SnowSparks:
+                case RegionBossSignature.FailedLeap:
                     return MapBossInterval(signature);
                 default: return FormSeconds;
             }
@@ -501,6 +527,12 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.CeilingFall:
                 case RegionBossSignature.TwoMouths:
                 case RegionBossSignature.ForgeStroke:
+                case RegionBossSignature.MonsoonArms:
+                case RegionBossSignature.HerdSnort:
+                case RegionBossSignature.ForgottenPlanks:
+                case RegionBossSignature.RunawayRun:
+                case RegionBossSignature.SnowSparks:
+                case RegionBossSignature.FailedLeap:
                     return MapBossWindup(signature);
                 default: return 0f;
             }

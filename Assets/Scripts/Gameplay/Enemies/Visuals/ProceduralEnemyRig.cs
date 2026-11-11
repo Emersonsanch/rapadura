@@ -887,6 +887,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.GrandfatherMammoth:
                 case ProceduralEnemyKind.ShisaKing:
                 case ProceduralEnemyKind.FurnaceMaster:
+                case ProceduralEnemyKind.MonsoonOctopus:
+                case ProceduralEnemyKind.SmokeAurochs:
+                case ProceduralEnemyKind.ForgetfulBridge:
+                case ProceduralEnemyKind.RunawayCart:
+                case ProceduralEnemyKind.GreatAlmas:
+                case ProceduralEnemyKind.UnleapedCarp:
                     TickRegionBoss(deltaTime, t, k, speed);
                     break;
             }

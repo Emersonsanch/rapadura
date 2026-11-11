@@ -86,7 +86,7 @@ namespace Rapadura.Tests
                 Assert.AreEqual(RegionBossRules.WorldBossKillXpMultiplier, RegionBossRules.KillXpRankMultiplier(spawn.EnemyId, true), spawn.EnemyId);
             }
 
-            Assert.AreEqual(6, RegionBossRules.MapSpawns.Count);
+            Assert.AreEqual(12, RegionBossRules.MapSpawns.Count);
             foreach (RegionBossSpawn spawn in RegionBossRules.MapSpawns)
             {
                 Assert.AreEqual(RegionBossRules.MapBossKillXpMultiplier, RegionBossRules.KillXpRankMultiplier(spawn.EnemyId, true), spawn.EnemyId);

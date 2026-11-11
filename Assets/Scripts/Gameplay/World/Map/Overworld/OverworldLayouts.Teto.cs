@@ -50,6 +50,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>Aydahar's arena (40): the stone ring at the top of the trail from the caravanserai to the dragon's nest.</summary>
         public static readonly Vector2 AydaharArena = new Vector2(560f, 1640f);
 
+        /// <summary>O Carrinho Desgovernado's arena (37, map boss): the stone ring on the shelf of the Encosta dos Zimbros, by its trail, far from the cart course.</summary>
+        public static readonly Vector2 CarrinhoDesgovernadoArena = new Vector2(997f, -185f);
+
+        /// <summary>O Grande Almas's arena (38, map boss): the stone ring on the shore trail of the Lago Turquesa, below the glacier.</summary>
+        public static readonly Vector2 GrandeAlmasArena = new Vector2(-797f, 205f);
+
         /// <summary>Half the side (m) of Sangkent's flat ground (reserved for the stair city's recipe, ±28 m and more).</summary>
         public const float SangkentGround = 30f;
 
@@ -248,6 +254,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, -860f, 470f, 0f, 0.8f);
             Landmark(w, MapLandmarkKind.StoneRing, -150f, 1460f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, AydaharArena.x, AydaharArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, CarrinhoDesgovernadoArena.x, CarrinhoDesgovernadoArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, GrandeAlmasArena.x, GrandeAlmasArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

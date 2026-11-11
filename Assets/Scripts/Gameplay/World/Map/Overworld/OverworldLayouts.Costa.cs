@@ -51,6 +51,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>Hedammu's arena (30): the Largo de Hedammu, the stone ring at the end of the mangrove trail past the Hedammu ford.</summary>
         public static readonly Vector2 HedammuArena = new Vector2(1540f, -1150f);
 
+        /// <summary>O Polvo das Monções's arena (25, map boss): the stone ring on the south road through the Praia dos Dhows, where the beached dhows lie.</summary>
+        public static readonly Vector2 PolvoDasMoncoesArena = new Vector2(6f, -488f);
+
+        /// <summary>O Touro de Fumaça's arena (26, map boss): the stone ring on the trail through the north of the Savana dos Auroques, past Aratta.</summary>
+        public static readonly Vector2 TouroDeFumacaArena = new Vector2(-311f, 1115f);
+
         /// <summary>Half the side (m) of the flat town ground of the race cities Aratta and Kirta (their solids reach 22 m).</summary>
         public const float RaceCityGround = 28f;
 
@@ -341,6 +347,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, -200f, 960f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, 560f, 1100f, 0f, 0.8f);
             Landmark(w, MapLandmarkKind.StoneRing, HedammuArena.x, HedammuArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, PolvoDasMoncoesArena.x, PolvoDasMoncoesArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, TouroDeFumacaArena.x, TouroDeFumacaArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);
