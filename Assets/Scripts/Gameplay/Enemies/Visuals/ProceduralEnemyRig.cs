@@ -869,6 +869,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.Aydahar:
                 case ProceduralEnemyKind.FourGluttons:
                 case ProceduralEnemyKind.Ohya:
+                case ProceduralEnemyKind.RopeCutter:
+                case ProceduralEnemyKind.EndlessBell:
+                case ProceduralEnemyKind.WalrusQueen:
+                case ProceduralEnemyKind.GrandfatherMammoth:
+                case ProceduralEnemyKind.ShisaKing:
+                case ProceduralEnemyKind.FurnaceMaster:
                     TickRegionBoss(deltaTime, t, k, speed);
                     break;
             }
@@ -924,7 +930,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 // No limbs at all: she sways and her tail tip drags behind.
                 Rotate(ProceduralEnemyParts.Tail, Quaternion.Euler(0f, Mathf.Sin(t * 1.4f) * 18f * k, 0f));
             }
-            else if (_kind == ProceduralEnemyKind.WindKing || _kind == ProceduralEnemyKind.GreatDark || _kind == ProceduralEnemyKind.Aydahar)
+            else if (_kind == ProceduralEnemyKind.WindKing || _kind == ProceduralEnemyKind.GreatDark || _kind == ProceduralEnemyKind.Aydahar
+                     || _kind == ProceduralEnemyKind.RopeCutter)
             {
                 FlapWings(t, speed * 0.6f, Mathf.Max(k, 0.25f) * (1f - 0.6f * r), Mathf.Max(Mathf.Clamp01(MoveSpeed01), 0.5f));
             }

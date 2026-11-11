@@ -50,6 +50,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>The Rei-Vendaval's arena (58): the stone ring of the nest.</summary>
         public static readonly Vector2 ReiVendavalArena = new Vector2(880f, 1500f);
+
+        /// <summary>O Cortador de Cordas's arena (55, map boss): the stone ring on the road from Farnkesh to the wind bridges.</summary>
+        public static readonly Vector2 CortadorDeCordasArena = new Vector2(500f, 1060f);
+
+        /// <summary>O Sino que Não Para's arena (56, map boss): the stone ring on the west road below the Pináculo do Sino, clear of the post's flat ground.</summary>
+        public static readonly Vector2 SinoQueNaoParaArena = new Vector2(-582f, 968f);
         public static readonly Vector2 ValeSatirosOffset = Vector2.zero;
         public static readonly Vector2 FarnkeshOffset = new Vector2(0f, 1080f);
         public static readonly Vector2 ErmidaBaixaOffset = new Vector2(960f, 1080f);
@@ -310,6 +316,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, 160f, 1380f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, -420f, 200f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, 880f, 1500f, 0f, 0.9f);
+            Landmark(w, MapLandmarkKind.StoneRing, CortadorDeCordasArena.x, CortadorDeCordasArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, SinoQueNaoParaArena.x, SinoQueNaoParaArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

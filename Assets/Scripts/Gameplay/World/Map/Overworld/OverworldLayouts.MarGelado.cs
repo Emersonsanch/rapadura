@@ -54,6 +54,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public static readonly Vector2 PortoLuaBrancaOffset = Vector2.zero;
         /// <summary>The Velho Kul's arena (64): a stone ring on the ice behind the Great Hole.</summary>
         public static readonly Vector2 VelhoKulArena = new Vector2(0f, 1762f);
+
+        /// <summary>A Morsa-Rainha's arena (60, map boss): the stone ring on the north road past the whalebone bridge.</summary>
+        public static readonly Vector2 MorsaRainhaArena = new Vector2(18f, 800f);
+
+        /// <summary>O Mamute Avô's arena (62, map boss): the stone ring on the road from the Boca do Gelo down the galleries.</summary>
+        public static readonly Vector2 MamuteAvoArena = new Vector2(984f, 758f);
         public static readonly Vector2 CasaDeNeveOffset = new Vector2(0f, 600f);
         public static readonly Vector2 TendaDeYenOffset = new Vector2(-960f, 120f);
         public static readonly Vector2 BocaDoGeloOffset = new Vector2(960f, 600f);
@@ -373,6 +379,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, -420f, 220f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, 860f, 1400f, 0f, 0.9f);
             Landmark(w, MapLandmarkKind.StoneRing, VelhoKulArena.x, VelhoKulArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, MorsaRainhaArena.x, MorsaRainhaArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, MamuteAvoArena.x, MamuteAvoArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

@@ -56,6 +56,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public static readonly Vector2 HinokuraOffset = Vector2.zero;
         /// <summary>The Glutão de Brasa's arena (70): the cold stone north of the caldera's rim (flat ground, open from the Borda Fria).</summary>
         public static readonly Vector2 GlutaoArena = new Vector2(-1440f, 1690f);
+
+        /// <summary>O Rei Shisa do Telhado's arena (66, map boss): the stone ring on the tea house's east road over the red bridges.</summary>
+        public static readonly Vector2 ReiShisaArena = new Vector2(350f, 600f);
+
+        /// <summary>O Mestre das Nove Fornalhas's arena (69, map boss): the stone ring on the road through the furnaces' court.</summary>
+        public static readonly Vector2 MestreDasFornalhasArena = new Vector2(-1366f, 540f);
         public static readonly Vector2 CasaDeChaOffset = new Vector2(0f, 600f);
         public static readonly Vector2 AbrigoPastoresOffset = new Vector2(-960f, -380f);
         public static readonly Vector2 BarcoFarolOffset = new Vector2(0f, 1080f);
@@ -374,6 +380,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, -400f, 1500f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, 160f, 520f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, GlutaoArena.x, GlutaoArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, ReiShisaArena.x, ReiShisaArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, MestreDasFornalhasArena.x, MestreDasFornalhasArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

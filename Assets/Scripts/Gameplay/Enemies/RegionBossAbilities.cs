@@ -58,6 +58,17 @@ namespace Rapadura.Gameplay.Enemies
         // Qiongqi's swap of the hero's steps (Player/HeroControlMirror ends it by itself; this only says so and ends it early).
         private bool _mirrorStarted;
 
+        // The map bosses (RegionBossRules.MapBosses.cs): where the hero stood when the rope's last moment began, the echo of the bell's
+        // last toll, how many times the Shisa King has roared and the Master of the Nine Furnaces has struck in this fight.
+        private Vector3 _holdMark;
+        private bool _holdMarked;
+        private Vector3 _echo;
+        private bool _hasEcho;
+        private int _roars;
+        private ShisaMouth _mouth;
+        private int _strokes;
+        private float _strokeHeat = 1f;
+
         public RegionBossPhase Phase => _phase;
 
         /// <summary>True while a great blow is telegraphed.</summary>
@@ -82,6 +93,11 @@ namespace Rapadura.Gameplay.Enemies
             _form = GreatDarkForm.Lion;
             ResetOfferings();
             _mirrorStarted = false;
+            _holdMarked = false;
+            _hasEcho = false;
+            _roars = 0;
+            _strokes = 0;
+            _strokeHeat = 1f;
             EventBus.Subscribe<CombatTargetDiedEvent>(HandleTargetDied);
         }
 
@@ -268,6 +284,13 @@ namespace Rapadura.Gameplay.Enemies
             if (_signatureWindup > 0f)
             {
                 _signatureWindup -= deltaTime;
+                if (signature == RegionBossSignature.RopeCut && !_holdMarked && _signatureWindup <= RegionBossRules.RopeCutHoldSeconds && hero != null)
+                {
+                    // From here on the hero must be holding still: wherever they are now is where the rope will look for them.
+                    _holdMark = hero.position;
+                    _holdMarked = true;
+                }
+
                 if (_signatureWindup <= 0f)
                 {
                     _signatureWindup = 0f;
@@ -298,6 +321,19 @@ namespace Rapadura.Gameplay.Enemies
             {
                 _appetite = RegionBossRules.AppetiteFor(UtcDay(), IsNight());
                 warning = RegionBossTexts.AppetiteKey(_appetite);
+            }
+            else if (signature == RegionBossSignature.TwoMouths)
+            {
+                _mouth = RegionBossRules.ShisaMouthFor(_roars++);
+                warning = RegionBossTexts.ShisaMouthKey(_mouth);
+            }
+            else if (signature == RegionBossSignature.RopeCut)
+            {
+                _holdMarked = false;
+            }
+            else if (signature == RegionBossSignature.EchoToll && _hasEcho)
+            {
+                DungeonShockwave.Spawn(_echo, null, _controller.gameObject, 0f, 0f);
             }
 
             DungeonShockwave.Spawn(MarksTheHeroSpot(signature) ? _signatureImpact : transform.position, null, _controller.gameObject, 0f, 0f);
@@ -414,6 +450,76 @@ namespace Rapadura.Gameplay.Enemies
                         victim.ApplyDamage(Damage(RegionBossRules.ChainDamageFactor), ElementType.Physical, _controller.gameObject);
                     }
 
+                    break;
+
+                case RegionBossSignature.RopeCut:
+                    DungeonShockwave.Spawn(_signatureImpact, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.RopeCutHits(Flat(_holdMarked ? _holdMark : _signatureImpact), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.RopeCutDamageFactor), ElementType.Wind, _controller.gameObject);
+                    }
+
+                    _holdMarked = false;
+                    break;
+
+                case RegionBossSignature.EchoToll:
+                    DungeonShockwave.Spawn(_signatureImpact, null, _controller.gameObject, 0f, 0f);
+                    if (_hasEcho)
+                    {
+                        DungeonShockwave.Spawn(_echo, null, _controller.gameObject, 0f, 0f);
+                    }
+
+                    if (RegionBossRules.TollHits(Flat(_signatureImpact), _hasEcho ? Flat(_echo) : (Vector2?)null, heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.TollDamageFactor), ElementType.Arcane, _controller.gameObject);
+                    }
+
+                    // This toll is the echo of the next one.
+                    _echo = _signatureImpact;
+                    _hasEcho = true;
+                    break;
+
+                case RegionBossSignature.BellyFlop:
+                    DungeonShockwave.Spawn(_signatureImpact, null, _controller.gameObject, 0f, 0f);
+                    float flop = RegionBossRules.FlopDamageFactor(Vector2.Distance(Flat(_signatureImpact), heroFlat));
+                    if (flop > 0f)
+                    {
+                        victim.ApplyDamage(Damage(flop), ElementType.Ice, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.CeilingFall:
+                    foreach (Vector2 stone in RegionBossRules.CeilingStones(Flat(_signatureImpact)))
+                    {
+                        DungeonShockwave.Spawn(new Vector3(stone.x, _signatureImpact.y, stone.y), null, _controller.gameObject, 0f, 0f);
+                    }
+
+                    if (RegionBossRules.CeilingFallHits(Flat(_signatureImpact), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.CeilingDamageFactor), ElementType.Earth, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.TwoMouths:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.ShisaHits(_mouth, FlatDistance(hero.position, transform.position)))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.ShisaDamageFactor), ElementType.Fire, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.ForgeStroke:
+                    DungeonShockwave.Spawn(_signatureImpact, null, _controller.gameObject, 0f, 0f);
+                    _strokeHeat = RegionBossRules.ForgeHeatMultiplier(_strokes++);
+                    if (RegionBossRules.ForgeStrokeHits(Flat(_signatureImpact), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.ForgeDamageFactor), ElementType.Fire, _controller.gameObject);
+                    }
+
+                    _strokeHeat = 1f;
                     break;
 
                 case RegionBossSignature.GreedOfTheArk:
@@ -678,6 +784,8 @@ namespace Rapadura.Gameplay.Enemies
                     return RegionBossRules.AppetiteMultiplier(_appetite, IsNight());
                 case RegionBossSignature.SwallowingMire:
                     return RegionBossRules.MireFountainMultiplier(LodoFountainBoard.LitCount(Time.time));
+                case RegionBossSignature.ForgeStroke:
+                    return _strokeHeat;
                 default:
                     return 1f;
             }
@@ -685,7 +793,9 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>The signatures whose danger is drawn where the hero stood (the others are drawn round the boss).</summary>
         private static bool MarksTheHeroSpot(RegionBossSignature signature) =>
-            signature == RegionBossSignature.DreamFall || signature == RegionBossSignature.PassBreath || signature == RegionBossSignature.FourAppetites;
+            signature == RegionBossSignature.DreamFall || signature == RegionBossSignature.PassBreath || signature == RegionBossSignature.FourAppetites
+            || signature == RegionBossSignature.RopeCut || signature == RegionBossSignature.EchoToll || signature == RegionBossSignature.BellyFlop
+            || signature == RegionBossSignature.CeilingFall || signature == RegionBossSignature.ForgeStroke;
 
         private static long UtcDay() => (long)(System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc)).TotalDays;
 

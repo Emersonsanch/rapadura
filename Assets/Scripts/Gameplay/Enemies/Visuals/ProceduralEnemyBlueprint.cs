@@ -395,6 +395,20 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         StoneJackdaw = 202,
         /// <summary>Ubır Jovem (20): floating ball of dark hair with an ember mouth; the mouth gapes, the claws stir.</summary>
         YoungUbir = 203,
+
+        // The map bosses of the fichas (RegionBossRules.MapSpawns, MapBossRecipes): one per map the story walks through in the 150–300 band.
+        /// <summary>O Cortador de Cordas (55): a shadow bird with blade-edged wings and a frayed rope in its beak; map boss of the Pontes de Vento.</summary>
+        RopeCutter = 204,
+        /// <summary>O Sino que Não Para (56): a giant bronze bell walking on two legs, its clapper the tongue, its sound lit inside; map boss of the Ermidas Suspensas.</summary>
+        EndlessBell = 205,
+        /// <summary>A Morsa-Rainha (60): a crowned walrus sitting up on her flippers, fish shining in her belly; map boss of the Canais de Gelo.</summary>
+        WalrusQueen = 206,
+        /// <summary>O Mamute Avô (62): the old mammoth of the galleries, hair to the ground, tusks curling, earth on its back; map boss of the Galerias dos Mamutes.</summary>
+        GrandfatherMammoth = 207,
+        /// <summary>O Rei Shisa do Telhado (66): the ceramic lion-dog of the palace roof, grown huge, its mane of glazed curls; map boss of the Jardins de Lava Laqueada.</summary>
+        ShisaKing = 208,
+        /// <summary>O Mestre das Nove Fornalhas (69): an iron forging engine with a furnace for a chest and a hammer arm; map boss of the Castelo das Nove Fornalhas.</summary>
+        FurnaceMaster = 209,
     }
 
     /// <summary>

@@ -38,6 +38,26 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>Ohya swings his chain round: a ring at the chain's length; hugging him or keeping well away are safe.</summary>
         ChainSweep = 9,
+
+        // The map bosses of the fichas (RegionBossRules.MapBosses.cs: Docs/Mapas100.md 55, 56, 60, 62, 66, 69).
+
+        /// <summary>O Cortador de Cordas cuts the rope under the hero: whoever is still walking when it snaps falls; whoever stopped and held on is safe.</summary>
+        RopeCut = 10,
+
+        /// <summary>O Sino que Não Para tolls on the hero's spot, and the echo of the last toll rings again where it fell: two places to stay out of.</summary>
+        EchoToll = 11,
+
+        /// <summary>A Morsa-Rainha flops onto the hero's spot: the closer to the middle, the harder; at the edge it is only a splash.</summary>
+        BellyFlop = 12,
+
+        /// <summary>O Mamute Avô shakes the gallery: stones fall on the hero's spot and four more round it in a cross; the diagonals are safe.</summary>
+        CeilingFall = 13,
+
+        /// <summary>O Rei Shisa do Telhado roars with the open mouth (far away is hit) and the closed one (up close is hit) in turn.</summary>
+        TwoMouths = 14,
+
+        /// <summary>O Mestre das Nove Fornalhas strikes the anvil on the hero's spot; each stroke heats the next until the ninth vents the furnaces.</summary>
+        ForgeStroke = 15,
     }
 
     /// <summary>The four appetites of the Cidadela (46), one a week in turn (<see cref="RegionBossRules.AppetiteFor"/>).</summary>
@@ -121,7 +141,7 @@ namespace Rapadura.Gameplay.Enemies
     /// the Glutão de Brasa, Apep, o Sonho da Destruição, A Grande Treva and Āz. Region 16's is on map 96: map 100 has no fight by its ficha. Phases by health, the numbers of their abilities and where they stand. <see cref="RegionBossAbilities"/> plays
     /// the fight and <see cref="RegionBossDirector"/> keeps them in the world.
     /// </summary>
-    public static class RegionBossRules
+    public static partial class RegionBossRules
     {
         public const string WindKingId = "enemy_mountain_wind_king";
         public const string OldKulId = "enemy_mountain_old_kul";
@@ -344,7 +364,7 @@ namespace Rapadura.Gameplay.Enemies
                 OverworldLayouts.NartesWorldOffset, 150, EnemyProjectileKind.Feather, false, RegionBossSignature.ChainSweep),
         };
 
-        /// <summary>Every world boss the <see cref="RegionBossDirector"/> keeps: Regions 5–9 and 10–16.</summary>
+        /// <summary>Every world boss of Regions 5–9 and 10–16 (the director also keeps the map bosses: <see cref="DirectorSpawns"/>).</summary>
         public static readonly IReadOnlyList<RegionBossSpawn> AllSpawns = Concat(MidSpawns, Spawns);
 
         private static RegionBossSpawn[] Concat(IReadOnlyList<RegionBossSpawn> a, IReadOnlyList<RegionBossSpawn> b)
@@ -356,7 +376,7 @@ namespace Rapadura.Gameplay.Enemies
 
         public static RegionBossSpawn SpawnOf(string enemyId)
         {
-            foreach (RegionBossSpawn spawn in AllSpawns)
+            foreach (RegionBossSpawn spawn in DirectorSpawns)
             {
                 if (spawn.EnemyId == enemyId)
                 {
@@ -367,6 +387,7 @@ namespace Rapadura.Gameplay.Enemies
             return null;
         }
 
+        /// <summary>A boss the <see cref="RegionBossDirector"/> keeps: a world boss or a map boss (<see cref="MapSpawns"/>).</summary>
         public static bool IsRegionBoss(string enemyId) => SpawnOf(enemyId) != null;
 
         public static RegionBossPhase PhaseFor(float healthFraction)
@@ -414,6 +435,13 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.PassBreath: return BreathIntervalSeconds;
                 case RegionBossSignature.FourAppetites: return AppetiteIntervalSeconds;
                 case RegionBossSignature.ChainSweep: return ChainIntervalSeconds;
+                case RegionBossSignature.RopeCut:
+                case RegionBossSignature.EchoToll:
+                case RegionBossSignature.BellyFlop:
+                case RegionBossSignature.CeilingFall:
+                case RegionBossSignature.TwoMouths:
+                case RegionBossSignature.ForgeStroke:
+                    return MapBossInterval(signature);
                 default: return FormSeconds;
             }
         }
@@ -430,6 +458,13 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.PassBreath: return BreathWindupSeconds;
                 case RegionBossSignature.FourAppetites: return AppetiteWindupSeconds;
                 case RegionBossSignature.ChainSweep: return ChainWindupSeconds;
+                case RegionBossSignature.RopeCut:
+                case RegionBossSignature.EchoToll:
+                case RegionBossSignature.BellyFlop:
+                case RegionBossSignature.CeilingFall:
+                case RegionBossSignature.TwoMouths:
+                case RegionBossSignature.ForgeStroke:
+                    return MapBossWindup(signature);
                 default: return 0f;
             }
         }

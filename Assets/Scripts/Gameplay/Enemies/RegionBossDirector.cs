@@ -15,7 +15,7 @@ using UnityEngine;
 namespace Rapadura.Gameplay.Enemies
 {
     /// <summary>
-    /// Keeps the world bosses of Regions 10–16 at their arenas. <see cref="MapMonsterSpawner"/> refuses bosses on purpose and every
+    /// Keeps the world bosses of Regions 5–16 and the map bosses (<see cref="RegionBossRules.DirectorSpawns"/>) at their arenas. <see cref="MapMonsterSpawner"/> refuses bosses on purpose and every
     /// region test holds that its clearings have none, so they get this small director instead, built on the same spawn steps
     /// (arena prefab, ResetForSpawn, visual swap, level scaler, <see cref="MapMonsterInfo"/>, <see cref="EnemySpawnedEvent"/>): it needs nothing from the world
     /// but <see cref="MapModeController.Current"/>. A boss appears when the hero comes near, leaves (back to full health) when the hero walks far
@@ -56,7 +56,7 @@ namespace Rapadura.Gameplay.Enemies
 
         private void Awake()
         {
-            foreach (RegionBossSpawn spawn in RegionBossRules.AllSpawns)
+            foreach (RegionBossSpawn spawn in RegionBossRules.DirectorSpawns)
             {
                 _slots.Add(new Slot { Spawn = spawn });
             }

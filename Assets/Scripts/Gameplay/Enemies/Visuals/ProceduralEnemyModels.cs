@@ -283,6 +283,13 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { RegionBossRules.AydaharId, ProceduralEnemyKind.Aydahar },
             { RegionBossRules.FourGluttonsId, ProceduralEnemyKind.FourGluttons },
             { RegionBossRules.OhyaId, ProceduralEnemyKind.Ohya },
+            // The map bosses of the fichas (Docs/Mapas100.md 55, 56, 60, 62, 66, 69).
+            { RegionBossRules.RopeCutterId, ProceduralEnemyKind.RopeCutter },
+            { RegionBossRules.EndlessBellId, ProceduralEnemyKind.EndlessBell },
+            { RegionBossRules.WalrusQueenId, ProceduralEnemyKind.WalrusQueen },
+            { RegionBossRules.GrandfatherMammothId, ProceduralEnemyKind.GrandfatherMammoth },
+            { RegionBossRules.ShisaKingId, ProceduralEnemyKind.ShisaKing },
+            { RegionBossRules.FurnaceMasterId, ProceduralEnemyKind.FurnaceMaster },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -339,6 +346,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.WindKing, ProceduralEnemyKind.OldKul, ProceduralEnemyKind.EmberGlutton,
             ProceduralEnemyKind.Apep, ProceduralEnemyKind.DreamOfDestruction, ProceduralEnemyKind.GreatDark, ProceduralEnemyKind.AzCaptain,
             ProceduralEnemyKind.Hedammu, ProceduralEnemyKind.SwallowingMire, ProceduralEnemyKind.Aydahar, ProceduralEnemyKind.FourGluttons, ProceduralEnemyKind.Ohya,
+            ProceduralEnemyKind.RopeCutter, ProceduralEnemyKind.EndlessBell, ProceduralEnemyKind.WalrusQueen, ProceduralEnemyKind.GrandfatherMammoth,
+            ProceduralEnemyKind.ShisaKing, ProceduralEnemyKind.FurnaceMaster,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -362,8 +371,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 || kind == ProceduralEnemyKind.AlphaWolf || kind == ProceduralEnemyKind.BoneColossus || IsRegionWorldBoss(kind);
         }
 
-        /// <summary>The world bosses of Regions 5–16 (<see cref="RegionBossRecipes"/>).</summary>
-        public static bool IsRegionWorldBoss(ProceduralEnemyKind kind) => kind >= ProceduralEnemyKind.WindKing && kind <= ProceduralEnemyKind.Ohya;
+        /// <summary>The bosses that fight with <see cref="RegionBossAbilities"/>: the world bosses of Regions 5–16 (<see cref="RegionBossRecipes"/>) and the map bosses (<see cref="MapBossRecipes"/>).</summary>
+        public static bool IsRegionWorldBoss(ProceduralEnemyKind kind) =>
+            (kind >= ProceduralEnemyKind.WindKing && kind <= ProceduralEnemyKind.Ohya) || IsMapBoss(kind);
+
+        /// <summary>The map bosses of the fichas (<see cref="MapBossRecipes"/>; <see cref="RegionBossRules.MapSpawns"/>).</summary>
+        public static bool IsMapBoss(ProceduralEnemyKind kind) => kind >= ProceduralEnemyKind.RopeCutter && kind <= ProceduralEnemyKind.FurnaceMaster;
 
         private static string RegionBossIdOf(ProceduralEnemyKind kind)
         {
@@ -380,6 +393,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.Aydahar: return RegionBossRules.AydaharId;
                 case ProceduralEnemyKind.FourGluttons: return RegionBossRules.FourGluttonsId;
                 case ProceduralEnemyKind.Ohya: return RegionBossRules.OhyaId;
+                case ProceduralEnemyKind.RopeCutter: return RegionBossRules.RopeCutterId;
+                case ProceduralEnemyKind.EndlessBell: return RegionBossRules.EndlessBellId;
+                case ProceduralEnemyKind.WalrusQueen: return RegionBossRules.WalrusQueenId;
+                case ProceduralEnemyKind.GrandfatherMammoth: return RegionBossRules.GrandfatherMammothId;
+                case ProceduralEnemyKind.ShisaKing: return RegionBossRules.ShisaKingId;
+                case ProceduralEnemyKind.FurnaceMaster: return RegionBossRules.FurnaceMasterId;
                 default: return RegionBossRules.EmberGluttonId;
             }
         }
@@ -928,6 +947,24 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.Ohya:
                     RegionBossRecipes.BuildOhya(blueprint);
+                    break;
+                case ProceduralEnemyKind.RopeCutter:
+                    MapBossRecipes.BuildRopeCutter(blueprint);
+                    break;
+                case ProceduralEnemyKind.EndlessBell:
+                    MapBossRecipes.BuildEndlessBell(blueprint);
+                    break;
+                case ProceduralEnemyKind.WalrusQueen:
+                    MapBossRecipes.BuildWalrusQueen(blueprint);
+                    break;
+                case ProceduralEnemyKind.GrandfatherMammoth:
+                    MapBossRecipes.BuildGrandfatherMammoth(blueprint);
+                    break;
+                case ProceduralEnemyKind.ShisaKing:
+                    MapBossRecipes.BuildShisaKing(blueprint);
+                    break;
+                case ProceduralEnemyKind.FurnaceMaster:
+                    MapBossRecipes.BuildFurnaceMaster(blueprint);
                     break;
             }
 

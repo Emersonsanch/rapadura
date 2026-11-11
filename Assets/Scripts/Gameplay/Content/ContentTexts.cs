@@ -344,6 +344,13 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_mountain_aydahar", "Aydahar, the Dragon of the Pass", "Aydahar, o Dragão do Passo"),
             EnemyName("enemy_mountain_four_gluttons", "The Four Gluttons", "Os Quatro Gulosos"),
             EnemyName("enemy_mountain_ohya", "Ohya, the Giant Brother", "Ohya, o Gigante Irmão"),
+            // The map bosses of the fichas (Docs/Mapas100.md 55, 56, 60, 62, 66, 69; RegionBossRules.MapSpawns).
+            EnemyName("enemy_mountain_rope_cutter", "The Rope Cutter", "O Cortador de Cordas"),
+            EnemyName("enemy_mountain_endless_bell", "The Bell That Never Stops", "O Sino que Não Para"),
+            EnemyName("enemy_mountain_walrus_queen", "The Walrus Queen", "A Morsa-Rainha"),
+            EnemyName("enemy_mountain_grandfather_mammoth", "The Grandfather Mammoth", "O Mamute Avô"),
+            EnemyName("enemy_mountain_shisa_king", "The Shisa King of the Roof", "O Rei Shisa do Telhado"),
+            EnemyName("enemy_mountain_nine_furnaces_master", "The Master of the Nine Furnaces", "O Mestre das Nove Fornalhas"),
             // The beasts of the Rio das Doze Horas (Docs/Mapas100.md 71–74), formerly played by stand-ins.
             EnemyName("enemy_forest_dark_river_crocodile", "Dark River Crocodile", "Crocodilo do Rio Escuro"),
             EnemyName("enemy_forest_dimmed_ibis", "Dimmed Ibis", "Íbis Apagada"),

@@ -9,13 +9,15 @@ namespace Rapadura.UI.Bestiary
     /// Kept apart like <see cref="CeuBestiaryTexts"/>; <see cref="BestiaryTexts"/> appends these to its entries. The Rei-Vendaval is the Vento Destruidor and the
     /// Glutão the Fogo Devorador (bible §1.3), not gods: they lose and go back, like the Dark.
     /// </summary>
-    public static class RegionBossTexts
+    public static partial class RegionBossTexts
     {
         public static readonly string[] EnemyIds = 
         {
             RegionBossRules.WindKingId, RegionBossRules.OldKulId, RegionBossRules.EmberGluttonId,
             RegionBossRules.ApepId, RegionBossRules.DreamOfDestructionId, RegionBossRules.GreatDarkId, RegionBossRules.AzCaptainId,
             RegionBossRules.HedammuId, RegionBossRules.SwallowingMireId, RegionBossRules.AydaharId, RegionBossRules.FourGluttonsId, RegionBossRules.OhyaId,
+            RegionBossRules.RopeCutterId, RegionBossRules.EndlessBellId, RegionBossRules.WalrusQueenId, RegionBossRules.GrandfatherMammothId,
+            RegionBossRules.ShisaKingId, RegionBossRules.FurnaceMasterId,
         };
 
         public static string PhaseKey(string enemyId, RegionBossPhase phase) => $"region_boss.{enemyId}.phase{(int)phase}";
@@ -249,6 +251,8 @@ namespace Rapadura.UI.Bestiary
             Line(entries, RegionBossRules.OhyaId, RegionBossPhase.LastStand, "The giant tears at the chain!", "O gigante puxa a corrente!");
             Blow(entries, RegionBossRules.OhyaId, "His fist comes down!", "Lá vem o punho!");
             Signature(entries, RegionBossRules.OhyaId, "The chain swings round! In close or far away!", "A corrente vai girar! Bem perto ou bem longe!");
+
+            AddMapBossPages(entries);
 
             // -- Fallback for a boss without its own phase line --
             entries.Add(new LocalizationEntry(GenericPhaseKey(RegionBossPhase.Storm), "It's getting angrier!", "Ele ficou mais bravo!"));
