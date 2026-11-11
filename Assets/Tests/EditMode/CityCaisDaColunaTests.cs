@@ -374,7 +374,7 @@ namespace Rapadura.Tests
         [Test]
         public void CityQuests_AreGivenByAmmoAndAdda_OnExistingEnemies_WithAStormCloakAsTheLastReward()
         {
-            List<CityQuestSpec> quests = CityQuestCatalog.QuestsIn(CityCatalog.CaisDaColuna).ToList();
+            List<CityQuestSpec> quests = CityQuestCatalog.HomeQuestsIn(CityCatalog.CaisDaColuna).ToList();
             Assert.AreEqual(2, quests.Count);
             CollectionAssert.AreEqual(new[] { "ammo_caravaneiro", "adda_roda" }, quests.Select(q => q.GiverResidentId).ToArray());
             foreach (CityQuestSpec spec in quests)

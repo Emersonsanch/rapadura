@@ -128,7 +128,9 @@ namespace Rapadura.Tests
             Assert.AreEqual(Spec(CityQuestCatalog.CaisColunaBirds).OfferKey, CityResidentTalk.QuestLine(closed, Adda, CharacterId.Maria, 500));
             Assert.AreEqual(Spec(CityQuestCatalog.CaisColunaBirds).ActiveKey, CityResidentTalk.QuestLine(closed, Adda, CharacterId.Maria, 500));
 
-            QuestManager allDone = NewQuests(WholeStory().Append(CityQuestCatalog.CaisColunaStowaways).Append(CityQuestCatalog.CaisColunaBirds).ToArray());
+            // Adda's quests on the road come after the birds; with all of them done, nothing is left.
+            QuestManager allDone = NewQuests(WholeStory().Append(CityQuestCatalog.CaisColunaStowaways)
+                .Concat(CityQuestCatalog.QuestsOf(Adda).Select(q => q.QuestId)).ToArray());
             Assert.AreEqual(LateStoryCatalog.FinaleKeyBase + "maria", CityResidentTalk.QuestLine(allDone, Adda, CharacterId.Maria, 500), "the closing line is back when nothing is left");
         }
 
@@ -165,7 +167,8 @@ namespace Rapadura.Tests
 
                 // The giver's earlier quests are done, so this is the one they are up to.
                 earlier.AddRange(CityQuestCatalog.QuestsOf(spec.GiverResidentId).TakeWhile(q => q != spec).Select(q => q.QuestId));
-                AssertOffered(spec, lot, NewQuests(earlier.ToArray()), 1);
+                // A quest on the road is offered from its level on (from level 1 for the city's own).
+                AssertOffered(spec, lot, NewQuests(earlier.ToArray()), Mathf.Max(1, spec.MinLevel));
                 AssertOffered(spec, lot, NewQuests(earlier.Concat(WholeStory()).Distinct().ToArray()), 500);
             }
         }

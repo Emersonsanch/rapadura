@@ -384,7 +384,7 @@ namespace Rapadura.Tests
         [Test]
         public void CityQuests_AreGivenByAkaneAndSango_OnExistingEnemies_WithAReedBoatAsTheLastReward()
         {
-            List<CityQuestSpec> quests = CityQuestCatalog.QuestsIn(CityCatalog.Hinokura).ToList();
+            List<CityQuestSpec> quests = CityQuestCatalog.HomeQuestsIn(CityCatalog.Hinokura).ToList();
             Assert.AreEqual(2, quests.Count);
             CollectionAssert.AreEqual(new[] { "akane", "sango" }, quests.Select(q => q.GiverResidentId).ToArray());
             foreach (CityQuestSpec spec in quests)

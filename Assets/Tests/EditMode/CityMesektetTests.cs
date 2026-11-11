@@ -382,7 +382,7 @@ namespace Rapadura.Tests
         [Test]
         public void CityQuests_AreGivenBySinuheAndDjedi_OnExistingEnemies_WithARunicLampAsTheLastReward()
         {
-            List<CityQuestSpec> quests = CityQuestCatalog.QuestsIn(CityCatalog.CaisDeMesektet).ToList();
+            List<CityQuestSpec> quests = CityQuestCatalog.HomeQuestsIn(CityCatalog.CaisDeMesektet).ToList();
             Assert.AreEqual(2, quests.Count);
             CollectionAssert.AreEqual(new[] { "sinuhe", "djedi" }, quests.Select(q => q.GiverResidentId).ToArray());
             foreach (CityQuestSpec spec in quests)

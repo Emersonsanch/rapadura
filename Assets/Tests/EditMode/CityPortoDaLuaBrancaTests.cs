@@ -398,7 +398,7 @@ namespace Rapadura.Tests
         [Test]
         public void CityQuests_AreGivenByYirkapAndPera_OnExistingEnemies_WithTheThermalClothesAsTheLastReward()
         {
-            List<CityQuestSpec> quests = CityQuestCatalog.QuestsIn(CityCatalog.PortoDaLuaBranca).ToList();
+            List<CityQuestSpec> quests = CityQuestCatalog.HomeQuestsIn(CityCatalog.PortoDaLuaBranca).ToList();
             Assert.AreEqual(2, quests.Count);
             CollectionAssert.AreEqual(new[] { "yirkap", "pera" }, quests.Select(q => q.GiverResidentId).ToArray());
             foreach (CityQuestSpec spec in quests)

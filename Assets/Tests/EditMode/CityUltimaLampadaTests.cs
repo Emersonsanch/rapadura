@@ -356,7 +356,7 @@ namespace Rapadura.Tests
         [Test]
         public void CityQuests_AreGivenByPamourAndMakarios_OnExistingEnemies_WithARunicLampAsTheLastReward()
         {
-            List<CityQuestSpec> quests = CityQuestCatalog.QuestsIn(CityCatalog.FortalezaUltimaLampada).ToList();
+            List<CityQuestSpec> quests = CityQuestCatalog.HomeQuestsIn(CityCatalog.FortalezaUltimaLampada).ToList();
             Assert.AreEqual(2, quests.Count);
             CollectionAssert.AreEqual(new[] { "pamour_lampadas", "makarios_cartas" }, quests.Select(q => q.GiverResidentId).ToArray());
             foreach (CityQuestSpec spec in quests)

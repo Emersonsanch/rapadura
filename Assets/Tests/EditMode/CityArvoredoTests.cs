@@ -358,7 +358,7 @@ namespace Rapadura.Tests
         [Test]
         public void CityQuests_AreGivenByHaripushpaAndAryaman_OnExistingEnemies()
         {
-            List<CityQuestSpec> quests = CityQuestCatalog.QuestsIn(CityCatalog.Arvoredo).ToList();
+            List<CityQuestSpec> quests = CityQuestCatalog.HomeQuestsIn(CityCatalog.Arvoredo).ToList();
             Assert.AreEqual(2, quests.Count);
             CollectionAssert.AreEqual(new[] { "haripushpa", "aryaman" }, quests.Select(q => q.GiverResidentId).ToArray());
             foreach (CityQuestSpec spec in quests)

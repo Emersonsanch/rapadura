@@ -374,7 +374,7 @@ namespace Rapadura.Tests
         [Test]
         public void CityQuests_AreGivenByShadOhrmizdAndTadi_OnExistingEnemies_WithTheStormCloakAsTheLastReward()
         {
-            List<CityQuestSpec> quests = CityQuestCatalog.QuestsIn(CityCatalog.Farnkesh).ToList();
+            List<CityQuestSpec> quests = CityQuestCatalog.HomeQuestsIn(CityCatalog.Farnkesh).ToList();
             Assert.AreEqual(2, quests.Count);
             CollectionAssert.AreEqual(new[] { "shad_ohrmizd", "tadi" }, quests.Select(q => q.GiverResidentId).ToArray());
             foreach (CityQuestSpec spec in quests)

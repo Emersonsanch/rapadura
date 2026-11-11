@@ -21,12 +21,33 @@ namespace Rapadura.Gameplay.World.Cities
         public readonly string GiverResidentId;
         public readonly RegionQuestSpec Quest;
 
+        /// <summary>A quest on the road (<see cref="IsOnTheRoad"/>): the map and zone of the city's region where its beasts live; null for a quest of the city's own map.</summary>
+        public readonly string MapId;
+        public readonly string ZoneId;
+
+        /// <summary>A quest on the road: the hero level the giver waits for, and the level its XP is paid at (0 = a quest of the city's own map, any level, paid at <see cref="CityQuestCatalog.LevelOf"/>).</summary>
+        public readonly int MinLevel;
+
         public CityQuestSpec(string cityId, string giverResidentId, RegionQuestSpec quest)
+            : this(cityId, giverResidentId, null, null, 0, quest)
+        {
+        }
+
+        public CityQuestSpec(string cityId, string giverResidentId, string mapId, string zoneId, int minLevel, RegionQuestSpec quest)
         {
             CityId = cityId;
             GiverResidentId = giverResidentId;
+            MapId = mapId;
+            ZoneId = zoneId;
+            MinLevel = Math.Max(0, minLevel);
             Quest = quest;
         }
+
+        /// <summary>Sent out to a zone of the region at <see cref="MinLevel"/> (Docs/Balanco100a500.md §5.3, sugestão 5), not on the city's own map.</summary>
+        public bool IsOnTheRoad => MinLevel > 0;
+
+        /// <summary>The level the quest's XP follows (<see cref="QuestXpRules"/>): <see cref="MinLevel"/> on the road, else the city's walk level.</summary>
+        public int PaidLevel => IsOnTheRoad ? MinLevel : CityQuestCatalog.LevelOf(CityId);
 
         public string QuestId => Quest.QuestId;
         public string KeyBase => Quest.KeyBase;
@@ -100,6 +121,9 @@ namespace Rapadura.Gameplay.World.Cities
     /// Fortaleza da Última Lâmpada (map 83): Pamour asks the cousins to chase the bats off the lamps of the rampart, then Makarios wants the dimmed
     /// ushabti off the road of his letters and pays with a runic lamp (the dark of map 88).
     /// Cais da Coluna (map 91): Ammo wants the stowaway shadows out of the bales of his last caravan, then Adda wants the dimmed birds off the jars of the Roda Celeste and pays with a storm cloak.
+    /// On the road (<see cref="CityQuestSpec.IsOnTheRoad"/>, regions 9–16): after their own quests, the same givers send the cousins to a zone of
+    /// their region at a level (two per band of 10 levels of 101–500 that had no quest, Docs/Balanco100a500.md §5.3 sugestão 5); offered from that
+    /// level on (<see cref="Decide(string, Func{string, bool}, Func{string, bool}, int, out CityQuestSpec)"/>) and paid at it.
     /// </summary>
     public static class CityQuestCatalog
     {
@@ -149,6 +173,49 @@ namespace Rapadura.Gameplay.World.Cities
         public const string UltimaLampadaUshabti = "quest_city_ultima_lampada_ushabti_on_the_letter_road";
         public const string CaisColunaStowaways = "quest_city_cais_coluna_stowaways_in_the_bales";
         public const string CaisColunaBirds = "quest_city_cais_coluna_birds_on_the_jars";
+
+        // Quests on the road (Docs/Balanco100a500.md §5.3, sugestão 5): a giver of the city sends the cousins to a zone of the region at a
+        // level, one or two per band of 10 levels between 101 and 500 that had no quest (paid at that level, offered from it on).
+        public const string ArvoredoHeartwood = "quest_city_arvoredo_beetles_in_the_heartwood";
+        public const string FortimWatchtower = "quest_city_fortim_ochokochi_at_the_watchtower";
+        public const string FarnkeshShelter = "quest_city_farnkesh_eagles_over_the_shelter";
+        public const string FarnkeshGorge = "quest_city_farnkesh_stones_in_the_gorge";
+        public const string PortoIrbis = "quest_city_porto_irbis_in_the_fjord_of_tusks";
+        public const string PortoAuroraSeals = "quest_city_porto_seals_under_the_auroras";
+        public const string PortoKulSeals = "quest_city_porto_seals_under_the_kul";
+        public const string HinokuraEcheyde = "quest_city_hinokura_bombs_on_echeyde";
+        public const string HinokuraCoral = "quest_city_hinokura_coral_on_the_reef";
+        public const string HinokuraBladeFish = "quest_city_hinokura_blade_fish_in_the_warm_channels";
+        public const string MesektetSerpent = "quest_city_mesektet_serpent_in_the_hidden_sands";
+        public const string MesektetOuterRing = "quest_city_mesektet_biters_on_the_outer_ring";
+        public const string MesektetCoils = "quest_city_mesektet_dark_in_the_coils";
+        public const string MesektetBoilingShore = "quest_city_mesektet_snakes_on_the_boiling_shore";
+        public const string DurJarrasTar = "quest_city_dur_jarras_living_tar_in_the_wells";
+        public const string DurJarrasHerons = "quest_city_dur_jarras_herons_in_the_pitch_reeds";
+        public const string DurJarrasCedars = "quest_city_dur_jarras_angry_cedars";
+        public const string DurJarrasMantles = "quest_city_dur_jarras_glow_mantles_of_the_elders";
+        public const string UltimaLampadaSmoke = "quest_city_ultima_lampada_smoke_giants";
+        public const string UltimaLampadaEmberWolves = "quest_city_ultima_lampada_ember_wolves";
+        public const string UltimaLampadaLions = "quest_city_ultima_lampada_hot_smoke_lions";
+        public const string UltimaLampadaBladeBats = "quest_city_ultima_lampada_blade_bats";
+        public const string UltimaLampadaEagles = "quest_city_ultima_lampada_black_eagles";
+        public const string UltimaLampadaHarpies = "quest_city_ultima_lampada_wind_harpies";
+        public const string UltimaLampadaDarkFish = "quest_city_ultima_lampada_dark_fish";
+        public const string UltimaLampadaEels = "quest_city_ultima_lampada_great_eels";
+        public const string UltimaLampadaOctopus = "quest_city_ultima_lampada_mud_octopus";
+        public const string UltimaLampadaSerpents = "quest_city_ultima_lampada_blind_serpents";
+        public const string UltimaLampadaLizards = "quest_city_ultima_lampada_shadow_lizards";
+        public const string UltimaLampadaDragons = "quest_city_ultima_lampada_lesser_dragons";
+        public const string CaisColunaRiverShadows = "quest_city_cais_coluna_shadows_in_the_light_river";
+        public const string CaisColunaHold = "quest_city_cais_coluna_hold_of_the_moon_barque";
+        public const string CaisColunaRopes = "quest_city_cais_coluna_ropes_on_the_prow";
+        public const string CaisColunaCrackedJars = "quest_city_cais_coluna_cracked_jars";
+        public const string CaisColunaToyArchons = "quest_city_cais_coluna_toy_archons";
+        public const string CaisColunaChainedArchons = "quest_city_cais_coluna_chained_archons";
+        public const string CaisColunaBalloonGiants = "quest_city_cais_coluna_balloon_giants";
+        public const string CaisColunaGardenThieves = "quest_city_cais_coluna_thieves_in_the_garden";
+        public const string CaisColunaSunGulls = "quest_city_cais_coluna_gulls_on_the_sun_barque";
+        public const string CaisColunaSmokeRopes = "quest_city_cais_coluna_smoke_ropes_on_the_sail";
 
         /// <summary>
         /// Every city quest. The XP written below is the authored number; above level 50 the quest pays
@@ -363,6 +430,131 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.CaisDaColuna, "adda_roda", new RegionQuestSpec(CaisColunaBirds, BiomeType.Forest, CaisColunaStowaways, 4200,
                 new[] { new RegionObjectiveSpec("chase_the_birds", QuestObjectiveType.KillEnemyType, "enemy_forest_dimmed_ibis", 6) },
                 new[] { new RegionRewardSpec("item_capa_tempestade", 1), new RegionRewardSpec("item_gold", 280) })),
+
+            // ================= On the road (regions 9–16): the same givers, each quest at a zone of the region and a level =================
+            // (map, zone, level). The beast lives in that zone's fauna; the giver hands it out from that level on and it pays 25% of
+            // the XP of that level (QuestXpRules), one or two per band of 10 levels of 121–481 that had no quest. Chained after the
+            // giver's own quests.
+            new CityQuestSpec(CityCatalog.Arvoredo, "aryaman", "map_050_haripushpa", "arvoredo_de_haripushpa", 124, new RegionQuestSpec(ArvoredoHeartwood, BiomeType.Forest, ArvoredoSmokeBirds, 4300,
+                new[] { new RegionObjectiveSpec("clear_the_heartwood", QuestObjectiveType.KillEnemyType, "enemy_mountain_bark_beetle", 7) },
+                new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 200) })),
+            new CityQuestSpec(CityCatalog.Fortim, "virogdad", "map_052_amirani", "torre_de_vigia", 128, new RegionQuestSpec(FortimWatchtower, BiomeType.Forest, FortimCrows, 4400,
+                new[] { new RegionObjectiveSpec("chase_the_ochokochi", QuestObjectiveType.KillEnemyType, "enemy_mountain_ochokochi", 6) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 200) })),
+            new CityQuestSpec(CityCatalog.Farnkesh, "tadi", "map_057_garganta_ays", "gruta_abrigo", 164, new RegionQuestSpec(FarnkeshShelter, BiomeType.Forest, FarnkeshIllWind, 4500,
+                new[] { new RegionObjectiveSpec("chase_the_storm_eagles", QuestObjectiveType.KillEnemyType, "enemy_mountain_storm_eagle", 7) },
+                new[] { new RegionRewardSpec("item_runa_vento", 3), new RegionRewardSpec("item_gold", 210) })),
+            new CityQuestSpec(CityCatalog.Farnkesh, "shad_ohrmizd", "map_057_garganta_ays", "garganta_dos_ays", 168, new RegionQuestSpec(FarnkeshGorge, BiomeType.Forest, FarnkeshVultures, 4600,
+                new[] { new RegionObjectiveSpec("clear_the_gorge", QuestObjectiveType.KillEnemyType, "enemy_mountain_rolling_stone", 7) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 210) })),
+            new CityQuestSpec(CityCatalog.PortoDaLuaBranca, "yirkap", "map_062_galerias_mamutes", "fiorde_das_presas", 202, new RegionQuestSpec(PortoIrbis, BiomeType.Forest, PortoGulls, 4650,
+                new[] { new RegionObjectiveSpec("chase_the_irbis", QuestObjectiveType.KillEnemyType, "enemy_mountain_irbis", 6) },
+                new[] { new RegionRewardSpec("item_runa_vento", 3), new RegionRewardSpec("item_gold", 215) })),
+            new CityQuestSpec(CityCatalog.PortoDaLuaBranca, "yirkap", "map_063_mar_auroras", "mar_das_auroras", 208, new RegionQuestSpec(PortoAuroraSeals, BiomeType.Forest, PortoIrbis, 4680,
+                new[] { new RegionObjectiveSpec("chase_the_leopard_seals", QuestObjectiveType.KillEnemyType, "enemy_mountain_leopard_seal", 7) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 215) })),
+            new CityQuestSpec(CityCatalog.PortoDaLuaBranca, "pera", "map_064_fundo_velho_kul", "fiorde_do_kul", 232, new RegionQuestSpec(PortoKulSeals, BiomeType.Forest, PortoBears, 4700,
+                new[] { new RegionObjectiveSpec("chase_the_shadow_seals", QuestObjectiveType.KillEnemyType, "enemy_mountain_shadow_seal", 7) },
+                new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 220) })),
+            new CityQuestSpec(CityCatalog.Hinokura, "akane", "map_067_monte_echeyde", "monte_echeyde", 236, new RegionQuestSpec(HinokuraEcheyde, BiomeType.Forest, HinokuraCrabs, 4800,
+                new[] { new RegionObjectiveSpec("calm_the_bombs", QuestObjectiveType.KillEnemyType, "enemy_mountain_volcanic_bomb", 6) },
+                new[] { new RegionRewardSpec("item_pedra_bencao", 2), new RegionRewardSpec("item_gold", 220) })),
+            new CityQuestSpec(CityCatalog.Hinokura, "sango", "map_068_recife_obsidiana", "recife_de_obsidiana", 244, new RegionQuestSpec(HinokuraCoral, BiomeType.Forest, HinokuraEmberGulls, 4900,
+                new[] { new RegionObjectiveSpec("break_the_ember_coral", QuestObjectiveType.KillEnemyType, "enemy_mountain_ember_coral", 7) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 230) })),
+            new CityQuestSpec(CityCatalog.Hinokura, "akane", "map_068_recife_obsidiana", "canais_quentes", 248, new RegionQuestSpec(HinokuraBladeFish, BiomeType.Forest, HinokuraEcheyde, 5000,
+                new[] { new RegionObjectiveSpec("chase_the_blade_fish", QuestObjectiveType.KillEnemyType, "enemy_mountain_blade_fish", 6) },
+                new[] { new RegionRewardSpec("item_pedra_alma", 2), new RegionRewardSpec("item_gold", 230) })),
+            new CityQuestSpec(CityCatalog.CaisDeMesektet, "djedi", "map_073_areal_escondido", "areal_escondido", 274, new RegionQuestSpec(MesektetSerpent, BiomeType.Forest, MesektetScorpions, 5100,
+                new[] { new RegionObjectiveSpec("chase_the_serpents", QuestObjectiveType.KillEnemyType, "enemy_forest_three_headed_serpent", 6) },
+                new[] { new RegionRewardSpec("item_pedra_alma", 2), new RegionRewardSpec("item_gold", 240) })),
+            new CityQuestSpec(CityCatalog.CaisDeMesektet, "sinuhe", "map_074_aneis_mehen", "anel_externo", 280, new RegionQuestSpec(MesektetOuterRing, BiomeType.Forest, MesektetCrocodiles, 5200,
+                new[] { new RegionObjectiveSpec("chase_the_biters", QuestObjectiveType.KillEnemyType, "enemy_forest_shadow_biter", 8) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 240) })),
+            new CityQuestSpec(CityCatalog.CaisDeMesektet, "djedi", "map_074_aneis_mehen", "aneis_de_mehen", 284, new RegionQuestSpec(MesektetCoils, BiomeType.Forest, MesektetSerpent, 5300,
+                new[] { new RegionObjectiveSpec("chase_the_creeping_dark", QuestObjectiveType.KillEnemyType, "enemy_forest_creeping_dark", 8) },
+                new[] { new RegionRewardSpec("item_runa_vento", 3), new RegionRewardSpec("item_gold", 250) })),
+            new CityQuestSpec(CityCatalog.CaisDeMesektet, "sinuhe", "map_075_lago_de_fogo", "beira_fervente", 288, new RegionQuestSpec(MesektetBoilingShore, BiomeType.Forest, MesektetOuterRing, 5400,
+                new[] { new RegionObjectiveSpec("chase_the_snakes", QuestObjectiveType.KillEnemyType, "enemy_desert_sand_snake", 7) },
+                new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 250) })),
+            new CityQuestSpec(CityCatalog.DurJarras, "utnapishtim", "map_079_pocos_betume", "pocos_de_betume", 314, new RegionQuestSpec(DurJarrasTar, BiomeType.Forest, DurJarrasLions, 5500,
+                new[] { new RegionObjectiveSpec("scrape_the_living_tar", QuestObjectiveType.KillEnemyType, "enemy_forest_living_tar", 7) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 260) })),
+            new CityQuestSpec(CityCatalog.DurJarras, "sin_leqi_unninni", "map_079_pocos_betume", "juncal_de_piche", 318, new RegionQuestSpec(DurJarrasHerons, BiomeType.Forest, DurJarrasBeetles, 5600,
+                new[] { new RegionObjectiveSpec("chase_the_tar_herons", QuestObjectiveType.KillEnemyType, "enemy_forest_tar_heron", 6) },
+                new[] { new RegionRewardSpec("item_pedra_alma", 2), new RegionRewardSpec("item_gold", 260) })),
+            new CityQuestSpec(CityCatalog.DurJarras, "utnapishtim", "map_080_cedral_hobabish", "cedral_de_hobabish", 322, new RegionQuestSpec(DurJarrasCedars, BiomeType.Forest, DurJarrasTar, 5700,
+                new[] { new RegionObjectiveSpec("calm_the_cedars", QuestObjectiveType.KillEnemyType, "enemy_forest_angry_cedar", 6) },
+                new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 270) })),
+            new CityQuestSpec(CityCatalog.DurJarras, "sin_leqi_unninni", "map_080_cedral_hobabish", "cedros_anciaos", 326, new RegionQuestSpec(DurJarrasMantles, BiomeType.Forest, DurJarrasHerons, 5800,
+                new[] { new RegionObjectiveSpec("chase_the_glow_mantles", QuestObjectiveType.KillEnemyType, "enemy_forest_glow_mantle", 7) },
+                new[] { new RegionRewardSpec("item_runa_vento", 3), new RegionRewardSpec("item_gold", 270) })),
+            new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "pamour_lampadas", "map_084_cova_fumaca", "corredores_de_cinza", 354, new RegionQuestSpec(UltimaLampadaSmoke, BiomeType.Forest, UltimaLampadaBats, 5900,
+                new[] { new RegionObjectiveSpec("chase_the_smoke_giants", QuestObjectiveType.KillEnemyType, "enemy_forest_smoke_giant", 6) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 280) })),
+            new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "makarios_cartas", "map_085_cova_fogo_devorador", "cova_do_fogo_devorador", 358, new RegionQuestSpec(UltimaLampadaEmberWolves, BiomeType.Forest, UltimaLampadaUshabti, 6000,
+                new[] { new RegionObjectiveSpec("chase_the_ember_wolves", QuestObjectiveType.KillEnemyType, "enemy_forest_ember_wolf", 8) },
+                new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 280) })),
+            new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "pamour_lampadas", "map_085_cova_fogo_devorador", "saloes_de_cinza_quente", 364, new RegionQuestSpec(UltimaLampadaLions, BiomeType.Forest, UltimaLampadaSmoke, 6100,
+                new[] { new RegionObjectiveSpec("chase_the_hot_lions", QuestObjectiveType.KillEnemyType, "enemy_forest_hot_smoke_lion", 5) },
+                new[] { new RegionRewardSpec("item_pedra_alma", 2), new RegionRewardSpec("item_gold", 285) })),
+            new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "makarios_cartas", "map_086_cova_vento_destruidor", "cova_do_vento_destruidor", 368, new RegionQuestSpec(UltimaLampadaBladeBats, BiomeType.Forest, UltimaLampadaEmberWolves, 6200,
+                new[] { new RegionObjectiveSpec("chase_the_blade_bats", QuestObjectiveType.KillEnemyType, "enemy_forest_blade_bat", 8) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 285) })),
+            new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "pamour_lampadas", "map_086_cova_vento_destruidor", "cova_do_vento_destruidor", 372, new RegionQuestSpec(UltimaLampadaEagles, BiomeType.Forest, UltimaLampadaLions, 6300,
+                new[] { new RegionObjectiveSpec("chase_the_black_eagles", QuestObjectiveType.KillEnemyType, "enemy_forest_black_eagle", 7) },
+                new[] { new RegionRewardSpec("item_runa_vento", 3), new RegionRewardSpec("item_gold", 290) })),
+            new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "makarios_cartas", "map_086_cova_vento_destruidor", "plataformas_soltas", 376, new RegionQuestSpec(UltimaLampadaHarpies, BiomeType.Forest, UltimaLampadaBladeBats, 6400,
+                new[] { new RegionObjectiveSpec("chase_the_wind_harpies", QuestObjectiveType.KillEnemyType, "enemy_forest_wind_harpy", 7) },
+                new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 290) })),
+            new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "pamour_lampadas", "map_087_cova_lodo", "cova_do_lodo", 384, new RegionQuestSpec(UltimaLampadaDarkFish, BiomeType.Forest, UltimaLampadaEagles, 6500,
+                new[] { new RegionObjectiveSpec("chase_the_dark_fish", QuestObjectiveType.KillEnemyType, "enemy_forest_dark_fish", 8) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 295) })),
+            new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "makarios_cartas", "map_087_cova_lodo", "saloes_alagados", 388, new RegionQuestSpec(UltimaLampadaEels, BiomeType.Forest, UltimaLampadaHarpies, 6600,
+                new[] { new RegionObjectiveSpec("chase_the_great_eels", QuestObjectiveType.KillEnemyType, "enemy_forest_great_eel", 6) },
+                new[] { new RegionRewardSpec("item_pedra_alma", 2), new RegionRewardSpec("item_gold", 295) })),
+            new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "pamour_lampadas", "map_087_cova_lodo", "comportas_artifices", 394, new RegionQuestSpec(UltimaLampadaOctopus, BiomeType.Forest, UltimaLampadaDarkFish, 6700,
+                new[] { new RegionObjectiveSpec("chase_the_mud_octopus", QuestObjectiveType.KillEnemyType, "enemy_forest_mud_octopus", 6) },
+                new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 300) })),
+            new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "makarios_cartas", "map_088_cova_treva", "cova_da_treva", 398, new RegionQuestSpec(UltimaLampadaSerpents, BiomeType.Forest, UltimaLampadaEels, 6800,
+                new[] { new RegionObjectiveSpec("chase_the_blind_serpents", QuestObjectiveType.KillEnemyType, "enemy_forest_dimmed_python", 7) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 300) })),
+            new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "pamour_lampadas", "map_088_cova_treva", "cova_da_treva", 402, new RegionQuestSpec(UltimaLampadaLizards, BiomeType.Forest, UltimaLampadaOctopus, 6900,
+                new[] { new RegionObjectiveSpec("chase_the_shadow_lizards", QuestObjectiveType.KillEnemyType, "enemy_forest_shadow_lizard", 6) },
+                new[] { new RegionRewardSpec("item_runa_vento", 3), new RegionRewardSpec("item_gold", 305) })),
+            new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "makarios_cartas", "map_088_cova_treva", "tuneis_cegos", 406, new RegionQuestSpec(UltimaLampadaDragons, BiomeType.Forest, UltimaLampadaSerpents, 7000,
+                new[] { new RegionObjectiveSpec("chase_the_shadow_dragons", QuestObjectiveType.KillEnemyType, "enemy_forest_lesser_shadow_dragon", 5) },
+                new[] { new RegionRewardSpec("item_pedra_alma", 2), new RegionRewardSpec("item_gold", 305) })),
+            new CityQuestSpec(CityCatalog.CaisDaColuna, "ammo_caravaneiro", "map_092_rio_de_luz", "foz_oeste", 432, new RegionQuestSpec(CaisColunaRiverShadows, BiomeType.Forest, CaisColunaStowaways, 7100,
+                new[] { new RegionObjectiveSpec("chase_the_swimming_shadows", QuestObjectiveType.KillEnemyType, "enemy_forest_late_shadow", 7) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 300) })),
+            new CityQuestSpec(CityCatalog.CaisDaColuna, "adda_roda", "map_093_barca_da_lua", "conves_da_lua", 436, new RegionQuestSpec(CaisColunaHold, BiomeType.Forest, CaisColunaBirds, 7200,
+                new[] { new RegionObjectiveSpec("chase_the_hold_shadows", QuestObjectiveType.KillEnemyType, "enemy_forest_hold_shadow", 6) },
+                new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 300) })),
+            new CityQuestSpec(CityCatalog.CaisDaColuna, "ammo_caravaneiro", "map_093_barca_da_lua", "proa_da_lua", 442, new RegionQuestSpec(CaisColunaRopes, BiomeType.Forest, CaisColunaRiverShadows, 7300,
+                new[] { new RegionObjectiveSpec("untangle_the_living_ropes", QuestObjectiveType.KillEnemyType, "enemy_forest_living_rope", 7) },
+                new[] { new RegionRewardSpec("item_runa_vento", 3), new RegionRewardSpec("item_gold", 310) })),
+            new CityQuestSpec(CityCatalog.CaisDaColuna, "adda_roda", "map_094_roda_celeste", "roda_celeste", 446, new RegionQuestSpec(CaisColunaCrackedJars, BiomeType.Forest, CaisColunaHold, 7400,
+                new[] { new RegionObjectiveSpec("break_the_cracked_jars", QuestObjectiveType.KillEnemyType, "enemy_forest_cracked_jar", 7) },
+                new[] { new RegionRewardSpec("item_pedra_alma", 2), new RegionRewardSpec("item_gold", 310) })),
+            new CityQuestSpec(CityCatalog.CaisDaColuna, "ammo_caravaneiro", "map_094_roda_celeste", "engrenagens_leste", 452, new RegionQuestSpec(CaisColunaToyArchons, BiomeType.Forest, CaisColunaRopes, 7500,
+                new[] { new RegionObjectiveSpec("chase_the_toy_archons", QuestObjectiveType.KillEnemyType, "enemy_forest_toy_archon", 5) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 315) })),
+            new CityQuestSpec(CityCatalog.CaisDaColuna, "adda_roda", "map_095_esferas_arcontes", "esferas_dos_arcontes", 456, new RegionQuestSpec(CaisColunaChainedArchons, BiomeType.Forest, CaisColunaCrackedJars, 7600,
+                new[] { new RegionObjectiveSpec("chase_the_chained_archons", QuestObjectiveType.KillEnemyType, "enemy_forest_chained_archon", 6) },
+                new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 315) })),
+            new CityQuestSpec(CityCatalog.CaisDaColuna, "ammo_caravaneiro", "map_095_esferas_arcontes", "orbita_vazia_leste", 462, new RegionQuestSpec(CaisColunaBalloonGiants, BiomeType.Forest, CaisColunaToyArchons, 7700,
+                new[] { new RegionObjectiveSpec("chase_the_balloon_giants", QuestObjectiveType.KillEnemyType, "enemy_forest_balloon_giant", 5) },
+                new[] { new RegionRewardSpec("item_runa_vento", 3), new RegionRewardSpec("item_gold", 320) })),
+            new CityQuestSpec(CityCatalog.CaisDaColuna, "adda_roda", "map_096_jardim_de_luz", "pergola_do_jardineiro", 466, new RegionQuestSpec(CaisColunaGardenThieves, BiomeType.Forest, CaisColunaChainedArchons, 7800,
+                new[] { new RegionObjectiveSpec("chase_the_garden_thieves", QuestObjectiveType.KillEnemyType, "enemy_forest_az_thief", 7) },
+                new[] { new RegionRewardSpec("item_pedra_alma", 2), new RegionRewardSpec("item_gold", 320) })),
+            new CityQuestSpec(CityCatalog.CaisDaColuna, "ammo_caravaneiro", "map_097_barca_do_sol", "conves_do_sol", 474, new RegionQuestSpec(CaisColunaSunGulls, BiomeType.Forest, CaisColunaBalloonGiants, 7900,
+                new[] { new RegionObjectiveSpec("chase_the_dimmed_gulls", QuestObjectiveType.KillEnemyType, "enemy_forest_dimmed_light_gull", 7) },
+                new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 330) })),
+            new CityQuestSpec(CityCatalog.CaisDaColuna, "adda_roda", "map_097_barca_do_sol", "vela_do_sol", 478, new RegionQuestSpec(CaisColunaSmokeRopes, BiomeType.Forest, CaisColunaGardenThieves, 8000,
+                new[] { new RegionObjectiveSpec("cut_the_smoke_ropes", QuestObjectiveType.KillEnemyType, "enemy_forest_smoke_rope", 6) },
+                new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 330) })),
         });
 
         /// <summary>
@@ -391,7 +583,7 @@ namespace Rapadura.Gameplay.World.Cities
         }
 
         private static IReadOnlyList<CityQuestSpec> AtCityLevel(List<CityQuestSpec> quests) =>
-            quests.Select(q => new CityQuestSpec(q.CityId, q.GiverResidentId, QuestXpRules.Apply(q.Quest, QuestXpKind.City, LevelOf(q.CityId)))).ToList();
+            quests.Select(q => new CityQuestSpec(q.CityId, q.GiverResidentId, q.MapId, q.ZoneId, q.MinLevel, QuestXpRules.Apply(q.Quest, QuestXpKind.City, q.PaidLevel))).ToList();
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();
 
@@ -408,12 +600,23 @@ namespace Rapadura.Gameplay.World.Cities
 
         public static IEnumerable<CityQuestSpec> QuestsIn(string cityId) => Quests.Where(q => q.CityId == cityId);
 
+        /// <summary>The quests of the city's own map (any level), without the ones on the road.</summary>
+        public static IEnumerable<CityQuestSpec> HomeQuestsIn(string cityId) => QuestsIn(cityId).Where(q => !q.IsOnTheRoad);
+
+        /// <summary>The quests that send the cousins out to a zone of the region at a level (<see cref="CityQuestSpec.IsOnTheRoad"/>).</summary>
+        public static IEnumerable<CityQuestSpec> RoadQuestsIn(string cityId) => QuestsIn(cityId).Where(q => q.IsOnTheRoad);
+
+        /// <summary><see cref="Decide(string, Func{string, bool}, Func{string, bool}, int, out CityQuestSpec)"/> for a hero of any level.</summary>
+        public static CityQuestTalk Decide(string residentId, Func<string, bool> isActive, Func<string, bool> isCompleted, out CityQuestSpec quest) =>
+            Decide(residentId, isActive, isCompleted, int.MaxValue, out quest);
+
         /// <summary>
         /// What <paramref name="residentId"/> does now (pure: the caller passes the quest state): the first of their quests
         /// that is running → <see cref="CityQuestTalk.Active"/>; else the first not done whose prerequisite is done →
-        /// <see cref="CityQuestTalk.Offer"/>; else <see cref="CityQuestTalk.None"/>.
+        /// <see cref="CityQuestTalk.Offer"/>, when <paramref name="heroLevel"/> reaches its <see cref="CityQuestSpec.MinLevel"/>
+        /// (a quest on the road waits for its level); else <see cref="CityQuestTalk.None"/>.
         /// </summary>
-        public static CityQuestTalk Decide(string residentId, Func<string, bool> isActive, Func<string, bool> isCompleted, out CityQuestSpec quest)
+        public static CityQuestTalk Decide(string residentId, Func<string, bool> isActive, Func<string, bool> isCompleted, int heroLevel, out CityQuestSpec quest)
         {
             quest = null;
             if (string.IsNullOrEmpty(residentId) || isActive == null || isCompleted == null)
@@ -435,7 +638,7 @@ namespace Rapadura.Gameplay.World.Cities
                 }
 
                 string prerequisite = spec.Quest.PrerequisiteQuestId;
-                if (string.IsNullOrEmpty(prerequisite) || isCompleted(prerequisite))
+                if ((string.IsNullOrEmpty(prerequisite) || isCompleted(prerequisite)) && heroLevel >= spec.MinLevel)
                 {
                     quest = spec;
                     return CityQuestTalk.Offer;
@@ -449,16 +652,17 @@ namespace Rapadura.Gameplay.World.Cities
 
         /// <summary>
         /// The cousins step up to <paramref name="residentId"/>: starts the offered quest on <paramref name="quests"/> and
-        /// returns the line key to say (offer or progress), or null for the resident's usual line.
+        /// returns the line key to say (offer or progress), or null for the resident's usual line. A quest on the road is
+        /// only offered from its level on (<paramref name="heroLevel"/>; left out = any level).
         /// </summary>
-        public static string Talk(QuestManager quests, string residentId)
+        public static string Talk(QuestManager quests, string residentId, int heroLevel = int.MaxValue)
         {
             if (quests == null)
             {
                 return null;
             }
 
-            switch (Decide(residentId, quests.IsActive, quests.IsCompleted, out CityQuestSpec spec))
+            switch (Decide(residentId, quests.IsActive, quests.IsCompleted, heroLevel, out CityQuestSpec spec))
             {
                 case CityQuestTalk.Active:
                     return spec.ActiveKey;

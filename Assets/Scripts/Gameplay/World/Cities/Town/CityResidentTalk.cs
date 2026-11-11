@@ -76,7 +76,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 }
             }
 
-            string cityLine = CityQuestCatalog.Talk(quests, residentId);
+            string cityLine = CityQuestCatalog.Talk(quests, residentId, heroLevel);
             if (cityLine != null)
             {
                 return cityLine;

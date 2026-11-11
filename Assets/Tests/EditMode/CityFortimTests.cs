@@ -362,7 +362,7 @@ namespace Rapadura.Tests
         [Test]
         public void CityQuests_AreGivenByBaraqelAndVirogdad_OnExistingEnemies_AndPayTheCrampons()
         {
-            List<CityQuestSpec> quests = CityQuestCatalog.QuestsIn(CityCatalog.Fortim).ToList();
+            List<CityQuestSpec> quests = CityQuestCatalog.HomeQuestsIn(CityCatalog.Fortim).ToList();
             Assert.AreEqual(2, quests.Count);
             CollectionAssert.AreEqual(new[] { "baraqel", "virogdad" }, quests.Select(q => q.GiverResidentId).ToArray());
             foreach (CityQuestSpec spec in quests)

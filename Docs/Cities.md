@@ -395,6 +395,17 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 | Delta de Jhilpur (mapas 31, 32 e 35) | **Jhilpur, a Cidade nas Raízes** (capital, `jhilpur`) | Salmaios, o Guardião da Raiz-Mãe (rua Norte), Nuhzadag, o Barqueiro (rua Oeste), Abiesous, o Mestre da Escola de Barco (rua Leste), Tehat, a Erveira (rua Leste) | **Barcos e Trocas do Nuhzadag** (`shop_trocas_nuhzadag`) | Salmaios: "Lodo nos Ghats"; Abiesous: "Corvos nos Remos" |
 | Costa das Monções (mapas 25 e 30) | **Taa Pwani** (marinheiros e mercadores suaílis, `taa_pwani`) | Capitão Liyongo, o Nakhoda (casa de 2 andares na rua Leste), Mwana, a Mercadora de Pérolas (rua Oeste), Nuru, a Guardiã do Farol (cabeça da praça, ao pé do Farol de Coral), Zawadi, o Trançador de Raízes (rua Leste), Mbaraka, o Navegador das Estrelas (rua Oeste) | **Bazar de Pérolas da Mwana** (`shop_bazar_mwana`) | Liyongo: "Ladras de Vela"; Zawadi: "Garras no Mangue" |
 
+**Missões na estrada (Regiões 9–16, `CityQuestSpec.IsOnTheRoad`, Balanco100a500 §5.3 sugestão 5):** além das duas missões de
+casa, os mesmos moradores mandam os primos a uma zona de um mapa da região num nível, caçar um bicho da fauna daquela zona;
+só oferecem a partir do nível e a missão paga 25% do XP dele. Encadeadas depois das de casa, duas por faixa de 10 níveis que
+não tinha missão: Arvoredo (Aryaman, 124 no Arvoredo de Haripushpa) e Fortim (Virogdad, 128 na Torre de Vigia de Amirani);
+Farnkesh (Tadi 164, Shad-Ohrmizd 168, Garganta dos Ays); Porto da Lua Branca (Yirkap 202 no Fiorde das Presas e 208 no Mar das Auroras, Pera 232 no Fiorde do Kul); Hinokura (Akane 236
+no Echeyde e 248 nos Canais Quentes, Sango 244 no Recife de Obsidiana); Cais de Mesektet (Djedi 274/284, Sinuhe 280/288:
+Areal Escondido, Anéis de Mehen, Beira Fervente); Dur-Jarras (Utnapishtim 314/322, Sin-leqi-unninni 318/326: Poços de Betume,
+Cedral de Hobabish); Fortaleza da Última Lâmpada (Pamour e Makarios, seis cada, 354–406, uma cova da treva por par: fumaça,
+fogo devorador, vento destruidor, lodo, treva); Cais da Coluna (Ammo e Adda, cinco cada, 432–478: Rio de Luz, Barca da Lua,
+Roda Celeste, Esferas dos Arcontes, Jardim de Luz, Barca do Sol). Testes em `CityRoadQuestTests`.
+
 - **Passeio da cidade:** receita `CityTownRecipes.TaaPwani` (`CityTownRecipes.TaaPwani.cs`) no estilo `TownStyles.Coast`
   (`TownArchitecture.CoralStone`, `TownVegetation.Coast`, linha 8 da paleta da cidade: coral caiado, teca, mar, vela,
   laterita, mangue, raiz, madrepérola): casas de pedra de coral caiada com terraço e ameias escalonadas, porta retangular

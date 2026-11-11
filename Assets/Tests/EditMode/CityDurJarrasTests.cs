@@ -352,7 +352,7 @@ namespace Rapadura.Tests
         [Test]
         public void CityQuests_AreGivenByUtnapishtimAndSinLeqi_OnExistingEnemies_WithAReedBoatAsTheLastReward()
         {
-            List<CityQuestSpec> quests = CityQuestCatalog.QuestsIn(CityCatalog.DurJarras).ToList();
+            List<CityQuestSpec> quests = CityQuestCatalog.HomeQuestsIn(CityCatalog.DurJarras).ToList();
             Assert.AreEqual(2, quests.Count);
             CollectionAssert.AreEqual(new[] { "utnapishtim", "sin_leqi_unninni" }, quests.Select(q => q.GiverResidentId).ToArray());
             foreach (CityQuestSpec spec in quests)
