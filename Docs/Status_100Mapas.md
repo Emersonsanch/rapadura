@@ -268,6 +268,44 @@ feito por um bicho de outra região ou do bioma.
 
 ---
 
+## Buracos de progressão
+
+Teste de rota de ponta a ponta: `Assets/Tests/EditMode/ProgressionPathTests.cs`, com as regras puras em
+`ProgressionPathRules` (`Gameplay/World/Map/ProgressionPathRules.cs`). Um herói sem dom de primo sai da Vila no nível 1 e
+anda o mundo contínuo a pé. Sobe de nível só com os bichos das zonas que alcançou, até 5 níveis acima do mais forte deles.
+Compra nas lojas das cidades onde entrou (`CityShopCatalog`, inclusive as linhas rotativas e as "depois do chefe") e faz as
+missões de região, de cidade, das Cartas da Estrada e da história do meio (`MidStoryCatalog`, contada só quando existe).
+Também pega o loot dos bichos e dos chefes do mundo que encontrou (`RegionBossRules.AllSpawns`) e faz as receitas. A Barca só
+liga cais já visitados a pé, então não abre nada novo. Depois, cada um dos 100 mapas, em ordem de nível de entrada, é
+conferido assim:
+
+- **(a)** o nível de entrada é alcançável com os bichos dos mapas anteriores, e o mapa abre na simulação até 5 níveis depois
+  da entrada;
+- **(b)** cada exigência (do mapa e das zonas dele) é atendida por uma fonte real até 5 níveis depois da entrada;
+- **(c)** a cidade de retorno existe e é alcançada, e o posto ou cais do mapa fica numa zona alcançada;
+- **(d)** a fonte de cada exigência não depende de um mapa posterior.
+
+Nenhum mapa pede nível de reset, então não há o que conferir nisso.
+
+Resultado em **2026-11-11**, rodado fora do Unity com as mesmas regras e sem o loot dos assets, que não tem item de exigência
+além de botas e picareta. O herói chega ao nível 500 e abre os 100 mapas. Há **1 buraco real**, que aparece em 2 mapas.
+O teste fica vermelho só por ele:
+
+1. **Mapas 19 (Lago do Limiar) e 20 (Salão de Tages): Lamparina (`TorchRequired`) só no nível 32.**
+   - A entrada desses mapas é no nível 12–13, e todas as zonas deles pedem lamparina.
+   - A Lamparina de Óleo só é vendida (ou dada, pela `quest_region_caves_dark_lamps`) na Vila das Lamparinas, que fica dentro
+     do próprio `lago_do_limiar`. Ou então nos Salões de Bronze (mapa 17, que pede Picareta e Tocha, ou seja, lamparina de
+     novo) e no Mercado dos Túneis (mapa 22, entrada 32). Nenhuma cidade alcançável antes disso vende lamparina (Vila, Areia
+     Branca, Serra Alta, Copas, Tambor Rubro).
+   - Efeito: as Grutas ficam ~20 níveis atrasadas. Isso pega o fim da campanha (Tages e o selo, por volta do nível 20) e o
+     primeiro passo da história do meio (`quest_mid_story_r04_moon`, mapa 20, nível 20). Os mapas 17 (entrada 28) e 21
+     (entrada 30) também só abrem no 32, mas isso está dentro da folga de 5 níveis.
+   - Conserto simples (fica a cargo de quem cuida de cidades e lojas): vender a lamparina na Serra Alta (mapa 13, vizinho do
+     Lago do Limiar) ou na Vila; ou tirar a exigência da zona `lago_do_limiar`, onde fica a cidade; ou dar a lamparina numa
+     missão da campanha antes do Ato IV.
+
+---
+
 ## As 10 coisas mais importantes para jogar do começo ao fim
 
 1. **Rodar de novo a suíte EditMode (e a PlayMode) no Unity e deixá-la verde.**
@@ -289,6 +327,8 @@ feito por um bicho de outra região ou do bioma.
    especiais (asas, lamparina, corda, capa…), onde cada item é comprado ou ganho, e cais visitados.
    - Por quê: são 100 zonas com exigências. Basta uma exigência sem fonte antes do nível do mapa para o jogo travar no meio.
    - A janela M está com outro agente, mas o teste é independente dela.
+   - **Feito em 2026-11-11** (`ProgressionPathTests`, ainda não rodado no Unity). Achou 1 buraco: a lamparina das Grutas,
+     ver "Buracos de progressão" acima.
 6. **Balanço de 100 a 500 aplicado e conferido com o conteúdo real** (XP por bicho, curva, dano dos chefes, loot e preço
    das exigências).
    - Por quê: sem isso o fim fica inalcançável ou trivial.
