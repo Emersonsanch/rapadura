@@ -9,7 +9,7 @@ namespace Rapadura.Gameplay.Housing
 {
     public static partial class HouseCatalog
     {
-        public const int GeneratedItemCount = 620;
+        public const int GeneratedItemCount = 632;
 
         // id, pt-BR name, category, rarity, placement, footprint x, y, rotation step, surface slots, function, function param,
         // comfort, set, gold price, event price, sellable, tradeable, account bound, min house level, season, sources
@@ -534,6 +534,18 @@ namespace Rapadura.Gameplay.Housing
                 new HouseItemDefinition("casa_trofeu_022", "Lasquinha do Cristal ainda morna", HouseItemCategory.Trophy, ItemRarity.Epic, HousePlacement.Surface, 1, 1, 45, 0, HouseItemFunction.None, 0, 8, "set_cristal_sol", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Drop, "enemy_cave_dweller", 3, "Drop: Tages, o Habitante Ancestral (chefe)")),
                 new HouseItemDefinition("casa_trofeu_023", "Cabeça entalhada de Tages", HouseItemCategory.Trophy, ItemRarity.Epic, HousePlacement.Wall, 2, 2, 0, 0, HouseItemFunction.None, 0, 9, "", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Drop, "enemy_cave_dweller", 3, "Drop: Tages, o Habitante Ancestral (chefe)")),
                 new HouseItemDefinition("casa_trofeu_024", "Estátua de Tages abraçando a luz", HouseItemCategory.Trophy, ItemRarity.Legendary, HousePlacement.Floor, 2, 2, 90, 0, HouseItemFunction.None, 0, 15, "set_cristal_sol", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Drop, "enemy_cave_dweller", 3, "Drop: Tages, o Habitante Ancestral (chefe)")),
+                new HouseItemDefinition("casa_trofeu_025", "Cabeça entalhada de Hedammu", HouseItemCategory.Trophy, ItemRarity.Epic, HousePlacement.Wall, 2, 2, 0, 0, HouseItemFunction.None, 0, 9, "", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Craft, "forge", 1, "Crafting: Forja")),
+                new HouseItemDefinition("casa_trofeu_026", "Pedestal da lama limpa do Lodo-que-Engole", HouseItemCategory.Trophy, ItemRarity.Epic, HousePlacement.Floor, 2, 2, 90, 0, HouseItemFunction.None, 0, 8, "", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Craft, "forge", 1, "Crafting: Forja")),
+                new HouseItemDefinition("casa_trofeu_027", "Estandarte de escamas de Aydahar", HouseItemCategory.Trophy, ItemRarity.Epic, HousePlacement.Wall, 2, 3, 0, 0, HouseItemFunction.None, 0, 8, "", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Craft, "forge", 1, "Crafting: Forja")),
+                new HouseItemDefinition("casa_trofeu_028", "Vaso de bronze dos Quatro Gulosos", HouseItemCategory.Trophy, ItemRarity.Epic, HousePlacement.Floor, 2, 2, 90, 0, HouseItemFunction.None, 0, 9, "", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Craft, "forge", 1, "Crafting: Forja")),
+                new HouseItemDefinition("casa_trofeu_029", "Corrente partida de Ohya", HouseItemCategory.Trophy, ItemRarity.Epic, HousePlacement.Wall, 2, 2, 0, 0, HouseItemFunction.None, 0, 9, "", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Craft, "forge", 1, "Crafting: Forja")),
+                new HouseItemDefinition("casa_trofeu_030", "Leque de penas do Rei-Vendaval", HouseItemCategory.Trophy, ItemRarity.Epic, HousePlacement.Wall, 2, 2, 0, 0, HouseItemFunction.None, 0, 9, "", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Craft, "forge", 1, "Crafting: Forja")),
+                new HouseItemDefinition("casa_trofeu_031", "Quadro da barbatana-prata do Velho Kul", HouseItemCategory.Trophy, ItemRarity.Epic, HousePlacement.Wall, 2, 2, 0, 0, HouseItemFunction.None, 0, 9, "", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Craft, "forge", 1, "Crafting: Forja")),
+                new HouseItemDefinition("casa_trofeu_032", "Braseiro da brasa viva do Glutão", HouseItemCategory.Trophy, ItemRarity.Epic, HousePlacement.Floor, 2, 2, 90, 0, HouseItemFunction.None, 0, 9, "", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Craft, "forge", 1, "Crafting: Forja")),
+                new HouseItemDefinition("casa_trofeu_033", "Barca de luz vencendo Apep, em miniatura", HouseItemCategory.Trophy, ItemRarity.Epic, HousePlacement.Floor, 2, 2, 90, 0, HouseItemFunction.None, 0, 9, "", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Craft, "forge", 1, "Crafting: Forja")),
+                new HouseItemDefinition("casa_trofeu_034", "Painel das Tábuas do Sonho", HouseItemCategory.Trophy, ItemRarity.Epic, HousePlacement.Wall, 3, 2, 0, 0, HouseItemFunction.None, 0, 9, "", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Craft, "forge", 1, "Crafting: Forja")),
+                new HouseItemDefinition("casa_trofeu_035", "Estátua do Selo da Treva remendado de luz", HouseItemCategory.Trophy, ItemRarity.Legendary, HousePlacement.Floor, 2, 2, 90, 0, HouseItemFunction.None, 0, 14, "", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Craft, "forge", 1, "Crafting: Forja")),
+                new HouseItemDefinition("casa_trofeu_036", "Estátua de Āz devolvendo a arca", HouseItemCategory.Trophy, ItemRarity.Legendary, HousePlacement.Floor, 2, 2, 90, 0, HouseItemFunction.None, 0, 15, "", 0, 0, false, true, false, 1, HouseSeason.None, S(HouseItemSourceType.Craft, "forge", 1, "Crafting: Forja")),
                 new HouseItemDefinition("casa_sazonal_001", "Cordão de lanternas de cinco cores", HouseItemCategory.Seasonal, ItemRarity.Common, HousePlacement.Ceiling, 6, 1, 90, 0, HouseItemFunction.None, 0, 1, "set_arraia", 0, 7, true, true, false, 1, HouseSeason.Junina, S(HouseItemSourceType.Event, "event_festa_junina", 1, "Evento: Bema")),
                 new HouseItemDefinition("casa_sazonal_002", "Bema de cinco degraus em miniatura", HouseItemCategory.Seasonal, ItemRarity.Uncommon, HousePlacement.Yard, 1, 1, 90, 0, HouseItemFunction.None, 0, 3, "set_arraia", 0, 23, true, true, false, 1, HouseSeason.Junina, S(HouseItemSourceType.Event, "event_festa_junina", 1, "Evento: Bema")),
                 new HouseItemDefinition("casa_sazonal_003", "Lanterna de papel enfeitada, sem fogo", HouseItemCategory.Seasonal, ItemRarity.Common, HousePlacement.Ceiling, 1, 1, 90, 0, HouseItemFunction.None, 0, 1, "set_arraia", 0, 9, true, true, false, 1, HouseSeason.Junina, S(HouseItemSourceType.Event, "event_festa_junina", 1, "Evento: Bema")),
@@ -1232,6 +1244,18 @@ namespace Rapadura.Gameplay.Housing
             { "casa_trofeu_022", "Still-warm Crystal sliver" },
             { "casa_trofeu_023", "Carved Tages head" },
             { "casa_trofeu_024", "Statue of Tages hugging the light" },
+            { "casa_trofeu_025", "Carved Hedammu head" },
+            { "casa_trofeu_026", "Pedestal of the Swallowing Mire's clean mud" },
+            { "casa_trofeu_027", "Aydahar scale banner" },
+            { "casa_trofeu_028", "Bronze vessel of the Four Gluttons" },
+            { "casa_trofeu_029", "Ohya's broken chain" },
+            { "casa_trofeu_030", "Gale King's feather fan" },
+            { "casa_trofeu_031", "Old Kul's framed silver fin" },
+            { "casa_trofeu_032", "Glutton's living-ember brazier" },
+            { "casa_trofeu_033", "Miniature light barque beating Apep" },
+            { "casa_trofeu_034", "Dream Tablets panel" },
+            { "casa_trofeu_035", "Statue of the Darkness Seal mended with light" },
+            { "casa_trofeu_036", "Statue of Āz giving back the ark" },
             { "casa_util_001", "Plain wooden chest" },
             { "casa_util_002", "Studded leather chest" },
             { "casa_util_003", "Reinforced iron chest" },

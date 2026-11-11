@@ -1,7 +1,7 @@
 # Rapadura — Casa própria, lojas e guarda-roupa
 
 > Documento de design da **Fase 15** do `TODO.md` (pedido do usuário, 2026-10-29). Começou como só design; o que já existe em código está nas seções "Estado no código" (§7.8 = H3 Fontes, §9.8 = H5 Guarda-roupa).
-> Catálogos: [`Docs/Housing/CatalogoCasa.md`](Housing/CatalogoCasa.md) (580 itens de casa) e [`Docs/Housing/CatalogoRoupas.md`](Housing/CatalogoRoupas.md) (234 roupas, acessórios, tinturas e visuais de arma).
+> Catálogos: [`Docs/Housing/CatalogoCasa.md`](Housing/CatalogoCasa.md) (632 itens de casa) e [`Docs/Housing/CatalogoRoupas.md`](Housing/CatalogoRoupas.md) (234 roupas, acessórios, tinturas e visuais de arma).
 > Os catálogos são o **conjunto inicial de lançamento**, não a lista de tudo o que pode existir. Itens novos entram por temporada/evento com ID novo.
 >
 > Marcadores: **[decidido]** = decisão do usuário; **[proposto]** = proposta deste documento, à espera de aprovação; **[online]** = só faz sentido no multiplayer (Fase 12); **[offline]** = vale para a campanha single-player atual.
@@ -292,16 +292,16 @@ São 26 conjuntos no catálogo, cada um com um tema (Iwan da Vó Edna, Caravana 
 
 ## 7. De onde vêm os itens de casa
 
-Resumo do catálogo (580 itens):
+Resumo do catálogo (632 itens):
 
 | Origem | Itens |
 |---|---|
-| Lojas | 376 |
+| Lojas | 416 |
 | Drop de inimigo ou chefe | 80 |
 | Eventos | 48 |
 | Missões | 34 |
 | Conquistas | 24 |
-| Crafting | 12 |
+| Crafting | 24 (12 deles os troféus dos chefes do mundo, §7.6) |
 | Segredos do mapa | 6 |
 
 Um item pode ter mais de uma origem: a coluna "Origem" mostra a principal, e as tabelas abaixo somam as outras.
@@ -398,6 +398,27 @@ O crafting usa a Bancada, a Forja e o Fogão com os **materiais reais dos biomas
 | Forno de torrar farinha | 6 lingote + 10 pedra | Forja |
 | Tapete de raízes entrelaçadas | 12 fibra + 6 madeira | Bancada |
 
+**Troféus dos chefes do mundo (Regiões 5–16)** **[feito, 2026-11-11]**. Cada um dos 12 chefes do mundo (`RegionBossRules.AllSpawns`) tem um troféu de casa (`casa_trofeu_025`–`036`, `HouseCraftRules.WorldBossTrophies`), feito na **Forja** com o loot próprio daquele chefe (o `LootItem` do asset, `HouseCraftRules.WorldBossKeepsakes`) e só depois de vencê-lo (`RequiredBossId`). Números propostos. Épico: conforto 8–9; Lendário (os dois últimos chefes): 14–15. Troféu não se vende.
+
+| Chefe | Troféu | Raridade · conforto · encaixe | Insumos (Forja) |
+|---|---|---|---|
+| Hedammu | Cabeça entalhada de Hedammu `casa_trofeu_025` | Épico · 9 · Parede | 6 lingote + 6 pedra + 3 Escama de Hedammu |
+| o Lodo-que-Engole | Pedestal da lama limpa do Lodo-que-Engole `casa_trofeu_026` | Épico · 8 · Piso | 6 lingote + 8 pedra + 3 Lama Limpa do Lodo |
+| Aydahar | Estandarte de escamas de Aydahar `casa_trofeu_027` | Épico · 8 · Parede | 6 lingote + 6 fibra + 3 Escama de Aydahar |
+| os Quatro Gulosos | Vaso de bronze dos Quatro Gulosos `casa_trofeu_028` | Épico · 9 · Piso | 8 lingote + 6 pedra + 2 Bronze Antigo dos Vasos |
+| Ohya | Corrente partida de Ohya `casa_trofeu_029` | Épico · 9 · Parede | 8 lingote + 6 pedra + 2 Elo de Ferro Antigo de Ohya |
+| o Rei-Vendaval | Leque de penas do Rei-Vendaval `casa_trofeu_030` | Épico · 9 · Parede | 6 lingote + 6 madeira + 2 Pena do Rei-Vendaval |
+| o Velho Kul | Quadro da barbatana-prata do Velho Kul `casa_trofeu_031` | Épico · 9 · Parede | 6 lingote + 6 madeira + 2 Barbatana-Prata do Velho Kul |
+| o Glutão de Brasa | Braseiro da brasa viva do Glutão `casa_trofeu_032` | Épico · 9 · Piso | 8 lingote + 8 pedra + 2 Brasa Viva do Glutão |
+| Apep | Barca de luz vencendo Apep, em miniatura `casa_trofeu_033` | Épico · 9 · Piso | 8 lingote + 8 madeira + 2 Escama de Apep |
+| o Sonho da Destruição | Painel das Tábuas do Sonho `casa_trofeu_034` | Épico · 9 · Parede | 8 lingote + 10 pedra + 2 Tábua do Sonho |
+| a Grande Treva | Estátua do Selo da Treva remendado de luz `casa_trofeu_035` | Lendário · 14 · Piso | 12 lingote + 20 pedra + 2 Lasca do Selo da Treva |
+| Āz, a Capitã Cobiçosa | Estátua de Āz devolvendo a arca `casa_trofeu_036` | Lendário · 15 · Piso | 12 lingote + 20 pedra + 2 Semente de Luz de Āz |
+
+O modelo é o procedural de troféu de `HouseFurnitureMeshes` (placa com relevo na parede; pedestal com estátua no chão), como os troféus dos 4 primeiros chefes.
+
+**Roupas de chefe (`CatalogoRoupas.md`)** **[feito, 2026-11-11]**: as 10 peças Épicas e Lendárias de chefe também gastam esse loot próprio: Épico no Tear (10 fibra + 2–3 do material) ou na Forja (lingotes + pedra/fibra + 2); Lendário no Tear de mestre (12 fibra + 4 materiais de chefe diferentes).
+
 Toda receita de móvel conta para "Mestre Artesão".
 
 ### 7.7 Caravaneiro (estoque rotativo) **[proposto]**
@@ -410,7 +431,7 @@ Toda receita de móvel conta para "Mestre Artesão".
 
 - **Drop de inimigo e chefe:** `HouseDropRules` (puro, RNG injetada, roda igual no servidor) + `HouseService.Sources.cs`. É uma **rolagem a mais**, separada do `EnemyLootRoller` (não mexe nas tabelas dele): o `HouseService` ouve o `EnemyDiedEvent` e sorteia com os números do §7.2 (4% / 5% à noite; grupo = "Drop: <inimigo>" peso 3 + lojas da cidade do bioma até Raro peso 1; raridade cai um nível até achar). Chefe: placa garantida na 1ª vitória (`BossTrophies`), 1 rolagem + 25% de outra, e proteção de azar de 25 vitórias sem Lendário (`HouseBossRecord.sinceLegendary`).
 - **Missões, diárias, conquistas:** `HouseRewardRules` lê a coluna "Origem" do catálogo (+ os 2 extras regionais do Bosque do Zarafshan). Cada uma paga **uma vez por save** (`HouseSourceBook.Claim`); diária dá a "Caixinha da Vó" toda vez e o item fixo só na primeira.
-- **Crafting:** `HouseCraftRules` (15 receitas: as 7 do §7.6 com os números do doc, mais 5 da oficina do Ícaro/cortina/música e 3 entradas de guarda-roupa com números **propostos**). Painel `HouseWorkbenchPanel`, aberto ao tocar numa Bancada/Forja/Fogão montado na casa; paga da mochila + Baú da casa, tudo ou nada. A Lareira pede a Bancada de mestre e o Senhor da Guerra derrotado (a lembrança não é gasta). As receitas do **Tear** precisam de material de chefe que ainda não existe como item: ficam de fora.
+- **Crafting:** `HouseCraftRules` (**38 receitas**: as 7 do §7.6 com os números do doc; 5 da oficina do Ícaro/cortina/música, 3 entradas de guarda-roupa, as 10 roupas de chefe e os **12 troféus dos chefes do mundo**, com números **propostos**). Painel `HouseWorkbenchPanel`, aberto ao tocar numa Bancada/Forja/Fogão/Tear montado na casa; paga da mochila + Baú da casa, tudo ou nada. A Lareira pede a Bancada de mestre e o Senhor da Guerra derrotado (a lembrança não é gasta). Os materiais de chefe já existem: cada chefe do mundo solta o seu (`HouseCraftRules.WorldBossKeepsakes`, `Resources/Items/item_chefe_*`), gasto nas roupas de chefe do Tear/Forja e no troféu do chefe na Forja (que também pede o chefe vencido).
 - **Entrega:** tudo vai para o **Depósito** (`HouseService.GrantItem`, nunca na mochila, nunca perdido), com o texto dourado "+ Encomenda: …" e o toast "Encomenda para a casa!" (`HouseGrantToastRelay`, reaproveita o `SecretToastController`). Evento `HouseItemGrantedEvent`; `HouseRecipeCraftedEvent` para o "Mestre Artesão".
 - **Save:** `HouseSaveState.sources` (versão 3); saves antigos carregam sem registro de chefe e sem nada pago.
 - Testes: `HouseSourcesTests`.
@@ -610,7 +631,7 @@ São mecânicas comuns em MMOs de casa do tipo que o usuário citou como inspira
 | 11.7 | **Ajudante da casa** | Um parente da vila ("primo de segundo grau" ou "tia ajudante") fica no balcão (`casa_util_031`). Ele guarda até 10 itens negociáveis e **vende pelo preço que o dono marcar** para visitantes enquanto o dono está offline, com taxa de 5%. **Riscos para a economia:** vira mercado paralelo à Casa de Leilões, facilita lavagem de ouro de bots e pode esvaziar as lojas de NPC. **Freios:** preço mínimo = 25% de referência e máximo = 3× referência; 10 vendas por dia; só para quem tem acesso à casa; tudo registrado. Alternativa mais simples: o ajudante só põe os itens no leilão por você. | Sim |
 | 11.8 | **Boneco de treino de palha** | **Decidido (2026-10-30): serve para testar os poderes, não dá XP.** Tocar no boneco em "Minha casa" abre o painel `TrainingDummyPanel`: o primo ativo escolhe o ataque básico ou um poder de ataque aprendido (no nível dele) e vê uma sessão de 10 s (`TrainingDummyRules.SessionSeconds`) com **dano por golpe** (normal e crítico), **críticos** (quantos, taxa e chance) e **dano por segundo**, usando as fórmulas reais (`OutgoingDamage`: nível, AttackDamage fixo e %, crítico; `DamageCalculator`: armadura do boneco = 0, arredondamento, mínimo 1). Com o herói vivo na cena, conta equipamento e buffs; no mapa, conta nível, Destreza/Poder Arcano e nível dos poderes do save. **Não dá XP, ouro, loot, nem gasta mana ou durabilidade** (`TrainingDummyRules.ExperienceGranted = 0`; a cidade é zona segura). Cada primo comenta o DPS (o Joaquim se gaba dos números). Regra pura e com semente (`TrainingDummyTests`). **[online]** o servidor pode rodar a mesma sessão; nada a proteger contra bot porque não rende nada. | Não |
 | 11.9 | **Plantas que pedem água** | Plantas e canteiros têm um "humor": felizes até 3 dias sem água, depois **murcham** (ficam caídas, perdem metade do conforto). **Nunca morrem nem somem.** Uma regada com o regador (água do poço) volta tudo na hora. A chuva do `WeatherSystem` rega o quintal sozinha. Canteiros regados dão colheita (erva, ingredientes da cozinha). | Não |
-| 11.10 | **Troféus de chefe na parede** | Em vez de bicho empalhado, **cabeças entalhadas em madeira** no estilo carranca, mais estátuas em paz e placas. Combina com a história (os chefes são libertados) e com o tom infantil. São 4 cabeças, uma por chefe, Épicas, no catálogo. | Não |
+| 11.10 | **Troféus de chefe na parede** | Em vez de bicho empalhado, **cabeças entalhadas em madeira** no estilo carranca, mais estátuas em paz e placas. Combina com a história (os chefes são libertados) e com o tom infantil. São 4 cabeças, uma por chefe, Épicas, no catálogo, mais os 12 troféus dos chefes do mundo (cabeça, estandarte, vaso, estátua…, §7.6), feitos na Forja com o loot próprio de cada um. | Não |
 | 11.11 | **Casa em cada cidade + sede do clã** | Terrenos em todas as 4 cidades, com 1 casa principal por conta (§1) **[proposto]**. **Sede do clã:** um casarão especial por clã, com nível próprio, baú do clã por cargo, mural do brasão, sala de reunião e troféus de guerra de clãs. Cargos do clã substituem a lista de convidados. | Sim |
 | 11.12 | **Passar ou vender casa** | Só online, só pela Casa de Leilões, e **só o terreno com a casa vazia**: os itens ficam com o dono antigo, no Depósito. Salvaguardas: conta com mais de 30 dias e nível 20; confirmação dupla; 3 dias de espera antes de concluir (dá para desistir); preço mínimo = custo das subidas × 50%; 1 venda por conta a cada 60 dias. | Sim |
 | 11.13 | **Quadro de terrenos** | Na praça de cada cidade, um quadro de madeira mostra os terrenos: livre (placa "Vende-se"), ocupado (nome do dono e nível da casa) ou em leilão. Tocar num terreno ocupado mostra a fachada e um botão "Pedir para visitar" (manda um pedido; não entra direto). | Sim |

@@ -40,7 +40,8 @@ namespace Rapadura.Gameplay.Housing
     }
 
     /// <summary>
-    /// H3 crafting of the catalog's "Crafting:" items (12 house items + 13 wardrobe entries). Materials are the real biome
+    /// H3 crafting of the catalog's "Crafting:" items (25 house items, 12 of them the world bosses' trophies, + 13 wardrobe
+    /// entries: 38 recipes). Materials are the real biome
     /// materials (<c>item_wood</c>, <c>item_fiber</c>, <c>item_stone</c>, <c>item_iron</c> = lingote, <c>item_iron_ore</c>),
     /// paid from the bag and the Baú da casa (<see cref="IHouseWallet"/>), all or nothing. Pure.
     /// The clothing catalog's boss recipes (Tear, Tear de mestre, "Forja (lingotes + material de chefe)") take the world
@@ -144,7 +145,53 @@ namespace Rapadura.Gameplay.Housing
             fireplace.StationItemId = MasterBenchId;
             fireplace.RequiredBossId = "enemy_mountain_warlord";
             list.Insert(4, fireplace);
+
+            // The world bosses' house trophies (CatalogoCasa.md casa_trofeu_025–036, "Crafting: Forja"): forged with that boss's
+            // own keepsake, and only after beating it (proposed numbers). Épico: lingotes + pedra + 2–3 keepsakes; Lendário:
+            // the last two bosses, more metal and 2 of their (rarer) keepsake.
+            list.Add(Trophy("casa_trofeu_025", "enemy_mountain_hedammu", (Iron, 6), (Stone, 6), (HedammuScale, 3)));
+            list.Add(Trophy("casa_trofeu_026", "enemy_mountain_swallowing_mire", (Iron, 6), (Stone, 8), (CleanMud, 3)));
+            list.Add(Trophy("casa_trofeu_027", "enemy_mountain_aydahar", (Iron, 6), (Fiber, 6), (AydaharScale, 3)));
+            list.Add(Trophy("casa_trofeu_028", "enemy_mountain_four_gluttons", (Iron, 8), (Stone, 6), (VesselBronze, 2)));
+            list.Add(Trophy("casa_trofeu_029", "enemy_mountain_ohya", (Iron, 8), (Stone, 6), (AncientIron, 2)));
+            list.Add(Trophy("casa_trofeu_030", "enemy_mountain_wind_king", (Iron, 6), (Wood, 6), (GaleFeather, 2)));
+            list.Add(Trophy("casa_trofeu_031", "enemy_mountain_old_kul", (Iron, 6), (Wood, 6), (SilverFin, 2)));
+            list.Add(Trophy("casa_trofeu_032", "enemy_mountain_ember_glutton", (Iron, 8), (Stone, 8), (LivingEmber, 2)));
+            list.Add(Trophy("casa_trofeu_033", "enemy_mountain_apep", (Iron, 8), (Wood, 8), (ApepScale, 2)));
+            list.Add(Trophy("casa_trofeu_034", "enemy_mountain_dream_of_destruction", (Iron, 8), (Stone, 10), (DreamTablet, 2)));
+            list.Add(Trophy("casa_trofeu_035", "enemy_mountain_great_dark", (Iron, 12), (Stone, 20), (SealShard, 2)));
+            list.Add(Trophy("casa_trofeu_036", "enemy_mountain_az_captain", (Iron, 12), (Stone, 20), (SeedOfLight, 2)));
             return list;
+        }
+
+        /// <summary>
+        /// The house trophy of each world boss (<see cref="WorldBossKeepsakes"/> keys): <c>casa_trofeu_025</c>–<c>036</c>, one per boss,
+        /// each made by a <see cref="BossTrophyRecipes"/> recipe.
+        /// </summary>
+        public static readonly IReadOnlyDictionary<string, string> WorldBossTrophies = new Dictionary<string, string>
+        {
+            { "enemy_mountain_hedammu", "casa_trofeu_025" },
+            { "enemy_mountain_swallowing_mire", "casa_trofeu_026" },
+            { "enemy_mountain_aydahar", "casa_trofeu_027" },
+            { "enemy_mountain_four_gluttons", "casa_trofeu_028" },
+            { "enemy_mountain_ohya", "casa_trofeu_029" },
+            { "enemy_mountain_wind_king", "casa_trofeu_030" },
+            { "enemy_mountain_old_kul", "casa_trofeu_031" },
+            { "enemy_mountain_ember_glutton", "casa_trofeu_032" },
+            { "enemy_mountain_apep", "casa_trofeu_033" },
+            { "enemy_mountain_dream_of_destruction", "casa_trofeu_034" },
+            { "enemy_mountain_great_dark", "casa_trofeu_035" },
+            { "enemy_mountain_az_captain", "casa_trofeu_036" },
+        };
+
+        /// <summary>The trophy recipes of <see cref="WorldBossTrophies"/>, in boss order.</summary>
+        public static IEnumerable<HouseCraftRecipe> BossTrophyRecipes => All.Where(r => r.ResultId.StartsWith("casa_trofeu_", StringComparison.Ordinal));
+
+        private static HouseCraftRecipe Trophy(string trophyId, string bossId, params (string Id, int Qty)[] costs)
+        {
+            HouseCraftRecipe recipe = R(trophyId, HouseItemFunction.Forge, false, costs);
+            recipe.RequiredBossId = bossId;
+            return recipe;
         }
 
         public static HouseCraftRecipe Get(string recipeId) => All.FirstOrDefault(r => r.Id == recipeId);

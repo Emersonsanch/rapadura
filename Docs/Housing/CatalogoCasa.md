@@ -3,16 +3,16 @@
 > Gerado a partir de uma lista curada (cada nome escrito à mão). Design do sistema em [`Docs/Housing.md`](../Housing.md). Tema: a Ilha da Aurora (ver [`Docs/WorldBible_Maniqueismo.md`](../WorldBible_Maniqueismo.md) §3.20); ids, números e colunas não mudaram no re-tema.
 > **Este é o conjunto inicial de lançamento da casa, não a lista de todos os itens possíveis.** Novos itens entram por temporada e evento, sempre com ID novo (`casa_<categoria>_<nnn>` continuando a numeração); um ID nunca é reaproveitado.
 
-**Total: 620 itens únicos.** Checagem automática: 620 IDs distintos, 620 nomes distintos, nenhuma duplicata (inclusive ignorando acento, maiúscula e pontuação).
+**Total: 632 itens únicos.** Checagem automática: 632 IDs distintos, 632 nomes distintos, nenhuma duplicata (inclusive ignorando acento, maiúscula e pontuação).
 
 | Raridade | Itens | % |
 |---|---|---|
-| Comum | 230 | 37,1% |
-| Incomum | 164 | 26,5% |
-| Raro | 141 | 22,7% |
-| Épico | 69 | 11,1% |
-| Lendário | 16 | 2,6% |
-| **Total** | **620** | 100% |
+| Comum | 230 | 36,4% |
+| Incomum | 164 | 25,9% |
+| Raro | 141 | 22,3% |
+| Épico | 79 | 12,5% |
+| Lendário | 18 | 2,8% |
+| **Total** | **632** | 100% |
 
 | Categoria | Itens |
 |---|---|
@@ -30,7 +30,7 @@
 | [Instrumentos musicais](#musica) | 23 |
 | [Brinquedos](#brinquedo) | 31 |
 | [Decoração regional por região](#regional) | 50 |
-| [Troféus de chefes](#trofeu) | 24 |
+| [Troféus de chefes](#trofeu) | 36 |
 | [Itens sazonais](#sazonal) | 45 |
 | [Raros e lendários com história de família](#familia) | 27 |
 | [Utilitários (baús, prateleiras, bancadas)](#util) | 31 |
@@ -42,7 +42,7 @@
 | Missão (regional, pessoal, diária ou da casa) | 34 |
 | Conquista | 24 |
 | Evento sazonal | 48 |
-| Crafting | 12 |
+| Crafting | 24 |
 | Segredo do mapa | 6 |
 
 ## Como ler
@@ -52,6 +52,7 @@
 - **Conforto:** pontos somados ao conforto da casa (Comum 1–2, Incomum 3–4, Raro 5–6, Épico 8–9, Lendário 12–15; utilitários valem metade).
 - **Encaixe:** Piso, Parede, Teto, Superfície (em cima de mesa/estante/cômoda) ou Quintal.
 - **Origem "Drop":** o item entra no sorteio de itens de casa daquele inimigo (tabela de chances em Housing.md §7.2). Itens de loja também podem cair de qualquer inimigo do bioma da cidade da loja, nunca acima de Raro.
+- **Troféus dos chefes do mundo (`casa_trofeu_025`–`036`):** origem "Crafting: Forja": receita na Forja da casa com o loot próprio do chefe (Escama de Hedammu, Lama Limpa, Semente de Luz de Āz…), que só abre depois de vencê-lo (`HouseCraftRules`, Housing.md §7.6). Um por chefe do mundo das Regiões 5–16.
 
 <a id="sala"></a>
 ## Móveis de sala (55)
@@ -631,7 +632,7 @@
 | `casa_regional_050` | Gota de luz em redoma | Comum | Loja: A Última Caravana do Ammo | 30 | 2 | Móveis do Cais de Luz | Superfície |
 
 <a id="trofeu"></a>
-## Troféus de chefes (24)
+## Troféus de chefes (36)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -659,6 +660,18 @@
 | `casa_trofeu_022` | Lasquinha do Cristal ainda morna | Épico | Drop: Tages, o Habitante Ancestral (chefe) | — | 8 | Cristal do Sol | Superfície |
 | `casa_trofeu_023` | Cabeça entalhada de Tages | Épico | Drop: Tages, o Habitante Ancestral (chefe) | — | 9 | — | Parede |
 | `casa_trofeu_024` | Estátua de Tages abraçando a luz | Lendário | Drop: Tages, o Habitante Ancestral (chefe) | — | 15 | Cristal do Sol | Piso |
+| `casa_trofeu_025` | Cabeça entalhada de Hedammu | Épico | Crafting: Forja | — | 9 | — | Parede |
+| `casa_trofeu_026` | Pedestal da lama limpa do Lodo-que-Engole | Épico | Crafting: Forja | — | 8 | — | Piso |
+| `casa_trofeu_027` | Estandarte de escamas de Aydahar | Épico | Crafting: Forja | — | 8 | — | Parede |
+| `casa_trofeu_028` | Vaso de bronze dos Quatro Gulosos | Épico | Crafting: Forja | — | 9 | — | Piso |
+| `casa_trofeu_029` | Corrente partida de Ohya | Épico | Crafting: Forja | — | 9 | — | Parede |
+| `casa_trofeu_030` | Leque de penas do Rei-Vendaval | Épico | Crafting: Forja | — | 9 | — | Parede |
+| `casa_trofeu_031` | Quadro da barbatana-prata do Velho Kul | Épico | Crafting: Forja | — | 9 | — | Parede |
+| `casa_trofeu_032` | Braseiro da brasa viva do Glutão | Épico | Crafting: Forja | — | 9 | — | Piso |
+| `casa_trofeu_033` | Barca de luz vencendo Apep, em miniatura | Épico | Crafting: Forja | — | 9 | — | Piso |
+| `casa_trofeu_034` | Painel das Tábuas do Sonho | Épico | Crafting: Forja | — | 9 | — | Parede |
+| `casa_trofeu_035` | Estátua do Selo da Treva remendado de luz | Lendário | Crafting: Forja | — | 14 | — | Piso |
+| `casa_trofeu_036` | Estátua de Āz devolvendo a arca | Lendário | Crafting: Forja | — | 15 | — | Piso |
 
 <a id="sazonal"></a>
 ## Itens sazonais (45)
