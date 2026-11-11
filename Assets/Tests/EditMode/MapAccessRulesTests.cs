@@ -48,6 +48,29 @@ namespace Rapadura.Tests
         }
 
         [Test]
+        public void WarpCost_StopsGrowingAtTheLevelCap_905AtMost()
+        {
+            // Docs/Balanco100a500.md §5.3 sugestão 1: gold per hour is flat (~930–1 130/h), so the fare follows the warp level
+            // only up to 57; map 100 (warp 499) cost 7 535, ~8 h of farming, and now 905 (~58 min).
+            Assert.AreEqual(57, MapAccessRules.WarpFeeLevelCap);
+            Assert.AreEqual(905, MapAccessRules.MaxWarpFee);
+            Assert.AreEqual(50 + 56 * 15, MapAccessRules.CalculateWarpCost(56, false), "still grows below the cap");
+            Assert.AreEqual(905, MapAccessRules.CalculateWarpCost(57, false));
+            Assert.AreEqual(905, MapAccessRules.CalculateWarpCost(58, false));
+            Assert.AreEqual(905, MapAccessRules.CalculateWarpCost(499, false));
+            Assert.AreEqual(2 * 905, MapAccessRules.CalculateWarpCost(499, true), "the overload doubles the capped fare");
+            Assert.AreEqual(0, MapAccessRules.CalculateWarpCost(0, 499, false), "the tutorial map stays free");
+            Assert.AreEqual(905, MapAccessRules.CalculateWarpCost(MapCatalog.Get(100), false));
+            Assert.AreEqual(1, MapAccessRules.FareLevel(-3));
+            Assert.AreEqual(57, MapAccessRules.FareLevel(500));
+
+            foreach (MapDefinition map in MapCatalog.Maps)
+            {
+                Assert.That(MapAccessRules.CalculateWarpCost(map, false), Is.InRange(0, MapAccessRules.MaxWarpFee), map.Id);
+            }
+        }
+
+        [Test]
         public void Overloaded_OnlyAboveFullCapacity()
         {
             Assert.IsFalse(MapAccessRules.IsOverloaded(0.5f));

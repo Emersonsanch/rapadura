@@ -6,13 +6,14 @@ level_500.py checks the fights; this one checks what the fights pay and what the
   * XP: the curve (LevelCurveMath), the kill XP of a common of the hero's level (EnemyLevelScaling.KillExperience, the
     open maps' table; the commons of the campaign keep their asset XP, which the table matches up to ~15) and the quest XP
     by the level it opens at: the 15 steps of the middle story (MidStoryCatalog), the letters (LateStoryCatalog), the city
-    quests (CityQuestCatalog, at the walk level of the city's map) and the 8 campaign region quests (RegionQuestCatalog, at
-    their region's band). Quest XP is spent first, the rest is kills at KILLS_PER_HOUR (Docs/Progressao500.md §1.3: 200
-    kills/h of active farming, ×1.4 for town, travel and deaths). Fôlego/Descansado/Caça diária are left out (they are the
-    "folga" of §1.3, on top).
+    quests (CityQuestCatalog, at the walk level of the city's map: CityQuestCatalog.LevelOf) and the 8 campaign region
+    quests (RegionQuestCatalog, at their region's band); above level 50 the steps, letters and city quests pay a share of
+    the XP of their level (QuestXpRules.For: 50% / 150% / 25%, never less than the authored number).
+    Quest XP is spent first, the rest is kills at KILLS_PER_HOUR (Docs/Progressao500.md §1.3: 200 kills/h of active
+    farming, ×1.4 for town, travel and deaths). Fôlego/Descansado/Caça diária are left out (the "folga" of §1.3, on top).
   * gold: item_gold of every common's base loot (EnemyDefinition._lootItem at _lootDropChance) plus the biome table of the
     biome that lists it (BiomeRegistry.FindBiomeOf) sold back at the shop rate (ShopManager: value × 0.5), plus quest
-    item_gold. Against: the Barca fare (MapAccessRules.CalculateWarpCost: BaseWarpFee + warp level × WarpFeePerLevel), the
+    item_gold. Against: the Barca fare (MapAccessRules.CalculateWarpCost: BaseWarpFee + min(warp level, WarpFeeLevelCap) × WarpFeePerLevel), the
     special gates of the maps (MapRequirementRules: the cheapest shop line of any item that meets the tag, CityShopCatalog,
     unless a quest the hero has done by then already gave one) and shop equipment.
   * loot: the world bosses' own keepsakes (item_chefe_*, their asset LootItem) against what HouseCraftRules spends of
@@ -41,6 +42,7 @@ GAMEPLAY = os.path.join(rd.ROOT, "Assets", "Scripts", "Gameplay")
 CURVE_CS = os.path.join(GAMEPLAY, "Player", "LevelCurveMath.cs")
 SCALING_CS = os.path.join(GAMEPLAY, "Enemies", "EnemyLevelScaling.cs")
 MID_CS = os.path.join(GAMEPLAY, "Quests", "MidStoryCatalog.cs")
+QUEST_XP_CS = os.path.join(GAMEPLAY, "Quests", "QuestXpRules.cs")
 LATE_CS = os.path.join(GAMEPLAY, "Quests", "LateStoryCatalog.cs")
 CITY_QUEST_CS = os.path.join(GAMEPLAY, "World", "Cities", "CityQuestCatalog.cs")
 CITY_CS = os.path.join(GAMEPLAY, "World", "Cities", "CityCatalog.cs")
@@ -67,6 +69,11 @@ DOC_PLAY_HOURS = {50: 8.0, 100: 45.0, 200: 157.0, 300: 310.0, 400: 513.0, 500: 8
 BUDGET_MILESTONE_TOLERANCE = 0.20  # cumulative play hours within ±20% of DOC_PLAY_HOURS
 BUDGET_BAND_STEP = (0.85, 1.60)  # hours per level of a band / of the band before: no wall, no free ride (above the campaign curve, 51+)
 BUDGET_QUEST_SHARE_MAX = 0.60  # quests never pay more than 60% of a band's XP ("passa voando")
+# Above 100 (QuestXpRules): a band with a quest gets 3-40% of its XP from quests (the bands without a letter sit at the
+# floor, city quests alone), and quests pay at least 5% of all the XP of 101-500 (0% before the rule; the 20-30% of
+# Progressao500 §1.3 needs quests in the 19 bands that have none, see Docs/Balanco100a500.md §5.3).
+BUDGET_QUEST_SHARE_BAND_ABOVE_100 = (0.03, 0.40)
+BUDGET_QUEST_SHARE_ABOVE_100 = (0.05, 0.30)
 BUDGET_FARE_MINUTES = 60.0  # a Barca fare costs at most an hour of farming gold at its warp level
 BUDGET_KEEPSAKE_KILLS = 20.0  # expected kills of a world boss to collect what the house recipes spend of its keepsake
 BUDGET_SET_KILLS = 1500.0  # expected kills farming the set's region for both pieces (~7.5 h of kills)
@@ -75,10 +82,6 @@ PERIGOSO_DELTA = 30
 # a row kills), or kill a hero who just stands there in this many seconds.
 PERIGOSO_PULL_SHARE = 0.60
 PERIGOSO_PARKED_SECONDS = 15.0
-# Suggested quest XP (report only): a story step worth this share of the level it opens at, a city quest this share.
-SUGGEST_MID_FRACTION = 0.5  # 15 steps in 20-97: dense
-SUGGEST_LATE_FRACTION = 1.5  # 17 letters in 100-495: two per region, sparse
-SUGGEST_CITY_FRACTION = 0.25
 
 
 def _read(path: str) -> str:
@@ -169,6 +172,7 @@ class QuestReward:
     xp: int
     gold: int
     items: list  # [(item_id, qty)] other than gold
+    authored: int = 0  # the XP written in the catalog (xp is what QuestXpRules makes of it)
 
 
 def _rewards(text: str) -> list:
@@ -178,6 +182,27 @@ def _rewards(text: str) -> list:
 def _split(rewards: list) -> tuple:
     gold = sum(q for i, q in rewards if i == GOLD)
     return gold, [(i, q) for i, q in rewards if i != GOLD]
+
+
+@dataclass
+class QuestXp:
+    """QuestXpRules: above `above`, a share of the XP to pass the quest's level, never less than the authored number."""
+    shares: dict  # source → share
+    above: int
+
+    def apply(self, curve: "Curve", source: str, level: int, authored: int) -> int:
+        share = self.shares.get(source, 0.0) if level > self.above else 0.0
+        return max(authored, int(math.floor(share * curve.to_next(level) + 0.5))) if share > 0 else authored
+
+
+def load_quest_xp() -> QuestXp:
+    src = _read(QUEST_XP_CS)
+    return QuestXp({"meio": _const(src, "MidStoryShare"), "cartas": _const(src, "RoadLetterShare"), "cidade": _const(src, "CityShare")},
+                   int(_const(src, "ScaledAboveLevel")))
+
+
+def scale_quests(quests: list, rule: QuestXp, curve: "Curve") -> list:
+    return [dataclasses.replace(q, authored=q.xp, xp=rule.apply(curve, q.source, q.level, q.xp)) for q in quests]
 
 
 def load_story(path: str, source: str) -> list:
@@ -211,18 +236,19 @@ class MapInfo:
     settlement: str
 
     def fare(self, access: "Access") -> int:
-        return 0 if self.base_fee <= 0 else self.base_fee + max(1, self.warp) * access.fee_per_level
+        return 0 if self.base_fee <= 0 else self.base_fee + min(access.level_cap, max(1, self.warp)) * access.fee_per_level
 
 
 @dataclass
 class Access:
     base_fee: int
     fee_per_level: int
+    level_cap: int  # MapAccessRules.WarpFeeLevelCap
 
 
 def load_access() -> Access:
     src = _read(ACCESS_CS)
-    return Access(int(_const(src, "BaseWarpFee")), int(_const(src, "WarpFeePerLevel")))
+    return Access(int(_const(src, "BaseWarpFee")), int(_const(src, "WarpFeePerLevel")), int(_const(src, "WarpFeeLevelCap")))
 
 
 def load_maps(access: Access) -> list:
@@ -595,12 +621,14 @@ def build(data: rd.GameData | None = None) -> Economy:
     data = data or rd.load_all()
     access = load_access()
     maps = load_maps(access)
-    quests = load_story(MID_CS, "meio") + load_story(LATE_CS, "cartas") + load_city_quests(maps) + load_campaign_quests()
+    curve = load_curve()
+    authored = load_story(MID_CS, "meio") + load_story(LATE_CS, "cartas") + load_city_quests(maps) + load_campaign_quests()
+    quests = scale_quests(authored, load_quest_xp(), curve)
     values = load_item_values()
     lines = load_shop_lines()
     regions = l5.load_regions(data)
     pay = {lv: kill_pay(data, regions, values, lv) for lv in range(1, MAX_LEVEL + 1)}
-    eco = Economy(load_curve(), load_kill_xp(), quests, maps, access, values, cheapest(lines), lines, load_gates(), pay)
+    eco = Economy(curve, load_kill_xp(), quests, maps, access, values, cheapest(lines), lines, load_gates(), pay)
     simulate(eco)
     eco.gate_rows = gates_along_the_way(eco)
     eco.fare_rows = [FareRow(m, m.fare(access), eco.cum_gold(m.warp), eco.gold_per_hour(m.warp), eco.cum_coin(m.warp)) for m in maps if m.fare(access) > 0]
@@ -749,18 +777,9 @@ def world_boss_xp(eco: Economy, bosses: list, kill_seconds: float = 18.0) -> lis
     return rows
 
 
-def with_quest_xp(eco: Economy, mid_fraction: float, late_fraction: float, city_fraction: float) -> Economy:
-    """The same economy with every middle-story step worth `mid_fraction` of the XP of the level it opens at, every letter
-    `late_fraction` and every city quest above 25 `city_fraction` (never less than today; the campaign region quests
-    unchanged): the "quests 20-30% of the XP" of §1.3, in numbers."""
-    quests = []
-    for q in eco.quests:
-        if q.source in ("meio", "cartas"):
-            fraction = mid_fraction if q.source == "meio" else late_fraction
-            q = dataclasses.replace(q, xp=max(q.xp, int(round(fraction * eco.curve.to_next(q.level)))))
-        elif q.source == "cidade" and q.level > eco.curve.campaign // 2:
-            q = dataclasses.replace(q, xp=max(q.xp, int(round(city_fraction * eco.curve.to_next(q.level)))))
-        quests.append(q)
+def with_authored_quest_xp(eco: Economy) -> Economy:
+    """The same economy with every quest paying the XP written in its catalog (before QuestXpRules): the "antes"."""
+    quests = [dataclasses.replace(q, xp=q.authored) for q in eco.quests]
     other = dataclasses.replace(eco, quests=quests, levels=[])
     simulate(other)
     other.gate_rows = gates_along_the_way(other)
@@ -769,7 +788,8 @@ def with_quest_xp(eco: Economy, mid_fraction: float, late_fraction: float, city_
 
 
 def fare_cap(eco: Economy) -> int:
-    """Highest warp level the fare can follow so no fare costs more than BUDGET_FARE_MINUTES of the poorest band's farming."""
+    """Highest warp level the fare can follow so no fare costs more than BUDGET_FARE_MINUTES of the poorest band's farming
+    (MapAccessRules.WarpFeeLevelCap must stay at or under it)."""
     poorest = min(eco.gold_per_hour(lv) for lv in range(eco.curve.campaign, MAX_LEVEL + 1))
     return int((poorest * BUDGET_FARE_MINUTES / 60.0 - eco.access.base_fee) // eco.access.fee_per_level)
 
@@ -782,6 +802,12 @@ def milestone_hours(eco: Economy) -> dict:
     for level in DOC_PLAY_HOURS:
         out[level] = sum(r.hours for r in eco.levels if r.level < level) * PLAY_FACTOR
     return out
+
+
+def quest_share_above_100(eco: Economy) -> float:
+    """Share of the XP of levels 101-499 that quests pay."""
+    rows = [r for r in eco.levels if r.level > 100]
+    return sum(r.quest_xp for r in rows) / sum(r.xp for r in rows)
 
 
 def problems(eco: Economy) -> list:
@@ -801,6 +827,11 @@ def problems(eco: Economy) -> list:
             out.append(("band", band.low, "drop"))
         if band.quest_xp > BUDGET_QUEST_SHARE_MAX * band.xp:
             out.append(("band", band.low, "quests_carry"))
+        if band.low > 100 and band.quest_xp > 0 and not BUDGET_QUEST_SHARE_BAND_ABOVE_100[0] <= band.quest_xp / band.xp <= BUDGET_QUEST_SHARE_BAND_ABOVE_100[1]:
+            out.append(("band", band.low, "quest_share"))
+    share = quest_share_above_100(eco)
+    if not BUDGET_QUEST_SHARE_ABOVE_100[0] <= share <= BUDGET_QUEST_SHARE_ABOVE_100[1]:
+        out.append(("xp", 100, "quest_share"))
     for g in eco.gate_rows:
         if g.how == "compra" and g.cost > g.balance_before:
             out.append(("gate", g.map.number, "unaffordable"))
@@ -889,8 +920,8 @@ def report_gates(eco: Economy) -> str:
 
 def report_fares(eco: Economy) -> str:
     picks = [f for f in eco.fare_rows if f.map.number in (2, 3, 13, 25, 41, 47, 59, 71, 83, 91, 100)]
-    lines = [f"Passagem = {eco.access.base_fee} + nível da barca × {eco.access.fee_per_level} (`MapAccessRules.CalculateWarpCost`; o dobro com a "
-             "mochila pesada).", "", "| Mapa | Nível da barca | Passagem | Ouro acumulado no nível (sem vender nada) | Ouro/h no nível | Passagem em min de caça |",
+    lines = [f"Passagem = {eco.access.base_fee} + min(nível da barca, {eco.access.level_cap}) × {eco.access.fee_per_level} "
+             "(`MapAccessRules.CalculateWarpCost`; o dobro com a mochila pesada).", "", "| Mapa | Nível da barca | Passagem | Ouro acumulado no nível (sem vender nada) | Ouro/h no nível | Passagem em min de caça |",
              "|---|---|---|---|---|---|"]
     for f in picks:
         mark = " **(fora)**" if f.minutes > BUDGET_FARE_MINUTES else ""
@@ -948,19 +979,24 @@ def report_xp_extras(eco: Economy, data: rd.GameData, bosses: list) -> str:
     return "\n".join(lines)
 
 
-def report_quest_suggestion(eco: Economy, mid_fraction: float = SUGGEST_MID_FRACTION, late_fraction: float = SUGGEST_LATE_FRACTION,
-                            city_fraction: float = SUGGEST_CITY_FRACTION) -> str:
-    other = with_quest_xp(eco, mid_fraction, late_fraction, city_fraction)
-    picks = [b for b in other.bands if b.low in (21, 41, 51, 91, 101, 151, 201, 261, 301, 341, 421, 491)]
-    base = {b.low: b for b in eco.bands}
-    lines = [f"Etapa da história do meio = {mid_fraction:.0%} do XP do nível em que abre, Carta = {late_fraction:.0%}, missão de cidade "
-             f"(acima do {eco.curve.campaign // 2}) = {city_fraction:.0%}; nunca menos que hoje:", "",
-             "| Faixa | XP de missão hoje | Com a sugestão | Horas da faixa: hoje → sugestão |", "|---|---|---|---|"]
+def report_quest_rule(eco: Economy) -> str:
+    rule = load_quest_xp()
+    before = with_authored_quest_xp(eco)
+    picks = [b for b in eco.bands if b.low in (21, 41, 51, 91, 101, 151, 201, 261, 301, 341, 421, 491)]
+    base = {b.low: b for b in before.bands}
+    above = [b for b in eco.bands if b.low > 100]
+    lines = [f"`QuestXpRules.For`: acima do nível {rule.above}, etapa da história do meio = {rule.shares['meio']:.0%} do XP do nível em que abre, "
+             f"Carta = {rule.shares['cartas']:.0%}, missão de cidade = {rule.shares['cidade']:.0%} (no nível de andar do mapa da cidade); nunca "
+             "menos que o número escrito no catálogo. Campanha (Atos I–V, missões de região) sem mudança.", "",
+             "| Faixa | XP de missão só com o escrito | Com a regra | Horas da faixa: antes → depois |", "|---|---|---|---|"]
     for b in picks:
         now = base[b.low]
         lines.append(f"| {b.low}–{b.high} | {now.quest_xp / now.xp:.0%} | {b.quest_xp / b.xp:.0%} | {_h(now.play_hours)} → {_h(b.play_hours)} |")
-    marks = milestone_hours(other)
-    lines += ["", "Marcos com a sugestão: " + " · ".join(f"{lv}: {_h(h)} h" for lv, h in marks.items())]
+    with_quests = [b.quest_xp / b.xp for b in above if b.quest_xp > 0]
+    lines += ["", f"Faixas 101–500: {min(with_quests):.0%}–{max(with_quests):.0%} de missão nas {len(with_quests)} faixas que têm missão, "
+              f"0% nas outras {len(above) - len(with_quests)}; no total {quest_share_above_100(eco):.0%} do XP de 101 a 500 "
+              f"(antes {quest_share_above_100(before):.0%}).",
+              "", "Marcos só com o escrito: " + " · ".join(f"{lv}: {_h(h)} h" for lv, h in milestone_hours(before).items())]
     return "\n".join(lines)
 
 
@@ -970,11 +1006,12 @@ def report(eco: Economy, perigoso_rows: list | None = None, data: rd.GameData | 
     blocks = ["### XP e ouro por faixa de 10 níveis\n", report_bands(eco)]
     if data is not None and bosses:
         blocks += ["\n### XP por bicho\n", report_xp_extras(eco, data, bosses)]
-    blocks += ["\n### Sugestão: XP de missão proporcional ao nível\n", report_quest_suggestion(eco),
+    blocks += ["\n### XP de missão proporcional ao nível (QuestXpRules)\n", report_quest_rule(eco),
                "\n### Exigências dos mapas (na ordem do nível de andar)\n", report_gates(eco),
                "\n### Passagem da barca\n", report_fares(eco)
-               + f"\n\nTeto sugerido: a passagem segue o nível da barca só até o {cap} (passagem máxima "
-               f"{eco.access.base_fee + cap * eco.access.fee_per_level}, ≤ {BUDGET_FARE_MINUTES:.0f} min de caça na faixa mais pobre).",
+               + f"\n\nTeto: a passagem segue o nível da barca só até o {eco.access.level_cap} (`MapAccessRules.WarpFeeLevelCap`, passagem "
+               f"máxima {eco.access.base_fee + eco.access.level_cap * eco.access.fee_per_level}); o teto que ainda cabe em "
+               f"{BUDGET_FARE_MINUTES:.0f} min de caça na faixa mais pobre é o {cap}.",
                "\n### Loot\n", report_loot(eco)]
     if perigoso_rows:
         blocks += ["\n### \"Perigoso +30\" nos comuns\n", report_perigoso(perigoso_rows)]
@@ -996,11 +1033,176 @@ def summarize(miss: list) -> str:
     return "\n".join(lines)
 
 
+# ----------------------------------------------------------------------------- gold destinations above 100 (sugestão 3)
+
+DURABILITY_CS = os.path.join(GAMEPLAY, "Items", "Durability", "DurabilityRules.cs")
+REFINE_CS = os.path.join(GAMEPLAY, "Refining", "RefineRules.cs")
+REFINE_DROPS_CS = os.path.join(GAMEPLAY, "Refining", "RefineStoneDrops.cs")
+TALENT_CS = os.path.join(GAMEPLAY, "Talents", "TalentWheelRules.cs")
+TALENT_CATALOG_CS = os.path.join(GAMEPLAY, "Talents", "TalentWheelCatalog.cs")
+SINK_FROM = 101  # the bands the destinations are measured on (101-111 .. 491-500)
+SINK_HITS_PER_KILL = 3.0  # hits a farming kill costs (2 commons, ~1.4 hits/s while both stand, ~3.3 s of fight a kill: level_500)
+SINK_SET_REFINE = 9  # the worn set is at +9 (Pedra da Alma alone; the fee starts at +9)
+SINK_LEVELS_PER_RESPEC = 50  # one talent reset every 50 levels (a new region's build)
+BUDGET_SINK_SHARE = (0.30, 0.60)  # the destinations take 30-60% of the gold of 101-500
+BUDGET_SINK_BAND = (0.25, 0.70)  # and no band of 10 levels leaves them idle or eats all its gold
+
+
+@dataclass
+class SinkRules:
+    repair_cap: float
+    repair_fraction: float
+    refine_cost_per_level: float
+    wear_per_hit: float
+    rarity: list
+    fee_start: int
+    fee_step: int
+    gold_per_soul: float  # average gold paid with each Pedra da Alma on the chain +0 -> +15 (RefineRules.ExpectedCostTo)
+    soul_chance: dict  # biome -> Pedra da Alma chance per common kill
+    respec_point: int
+    respec_min: int
+    respec_high_start: int
+    respec_high_point: int
+    unlock: int
+    campaign_cap: int
+    levels_per_point: int
+
+    def fee_multiplier(self, level: int) -> float:
+        return 1.0 + max(0, level - self.fee_start) / self.fee_step
+
+    def points(self, level: int) -> int:
+        """TalentWheelRules.EarnedPoints."""
+        if level < self.unlock:
+            return 0
+        return (min(level, self.campaign_cap) - self.unlock + 1) + max(0, level - self.campaign_cap) // self.levels_per_point
+
+    def respec(self, spent: int) -> int:
+        """TalentWheelRules.RespecCostFor."""
+        if spent <= 0:
+            return 0
+        return max(self.respec_min, spent * (self.respec_point + self.respec_high_point * max(0, spent - self.respec_high_start)))
+
+
+def _floats(source: str, name: str) -> list:
+    body = re.search(name + r"\s*=\s*\{(.*?)\};", source, re.DOTALL).group(1)
+    return [float(x) for x in re.findall(r"\d+(?:\.\d+)?", re.sub(r"//[^\n]*", "", body))]
+
+
+def load_sink_rules() -> SinkRules:
+    dur, ref, drops, tal, cat = (_read(p) for p in (DURABILITY_CS, REFINE_CS, REFINE_DROPS_CS, TALENT_CS, TALENT_CATALOG_CS))
+    chances, gold = _floats(ref, "Chances"), _floats(ref, "GoldCosts")
+    blessing = int(_const(ref, "BlessingCap"))
+    step_souls, step_gold = [0.0] * len(chances), [0.0] * len(chances)
+    for i, p in enumerate(chances):  # the Markov chain of RefineRules.ExpectedCostTo: a failure above +6 drops one level
+        back = i > blessing
+        step_souls[i] = (1 + (1 - p) * (step_souls[i - 1] if back else 0)) / p
+        step_gold[i] = (gold[i] + (1 - p) * (step_gold[i - 1] if back else 0)) / p
+    souls = sum(step_souls[blessing:])
+    row = re.search(r"RefineItems\.SoulStone, new\[\] \{([^}]*)\}", drops).group(1)
+    soul = dict(zip(rd.BIOME_ORDER, (float(x.strip().rstrip("f")) for x in row.split(","))))
+    return SinkRules(_const(dur, "RepairValueCap"), _const(dur, "RepairValueFraction"), _const(dur, "RefineCostPerLevel"),
+                     _const(dur, "ArmourWearPerHit"), _floats(dur, "RarityMultipliers"), int(_const(ref, "FeeLevelStart")),
+                     int(_const(ref, "FeeLevelsPerStep")), sum(step_gold[blessing:]) / souls, soul,
+                     int(_const(tal, "RespecGoldPerPoint")), int(_const(tal, "RespecMinimumGold")), int(_const(tal, "RespecHighPointsStart")),
+                     int(_const(tal, "RespecHighGoldPerPoint")), int(_const(cat, "UnlockLevel")), int(_const(cat, "HighLevelStart")),
+                     int(_const(cat, "HighLevelLevelsPerPoint")))
+
+
+def _set_piece(key: str, part: str) -> tuple:
+    """(value, rarity, max durability) of a set piece's asset (Sets/ or Dungeon/ for the Marfim)."""
+    for folder in ("Sets", "Dungeon"):
+        path = os.path.join(ITEMS_DIR, folder, f"armor_{key}_{part}.asset")
+        if os.path.exists(path):
+            text = _read(path)
+
+            def num(name: str) -> float:
+                return float(re.search(name + r":\s*([\d.]+)", text).group(1))
+
+            return num("_value"), int(num("_rarity")), num("_maxDurability")
+    raise FileNotFoundError(f"armor_{key}_{part}")
+
+
+@dataclass
+class SinkRow:
+    low: int
+    high: int
+    income: float  # kills + quests of the band
+    souls: float  # Pedras da Alma dropped in the band (all go to the refine chain)
+    refine: float
+    set_key: str
+    repair: float
+    respec: float
+
+    @property
+    def spent(self) -> float:
+        return self.refine + self.repair + self.respec
+
+    @property
+    def share(self) -> float:
+        return self.spent / self.income if self.income else 0.0
+
+
+def gold_sinks(eco: Economy, data: rd.GameData) -> list:
+    """What the three destinations take out of each band of 101-500: the ferreiro's refine fee on every Pedra da Alma that
+    drops (RefineRules.FeeFor), the repair of the worn set (DurabilityRules, capped value) and one talent reset every
+    SINK_LEVELS_PER_RESPEC levels (TalentWheelRules.RespecCostFor). None is forced: this is a hero who refines, wears the set
+    and changes the build."""
+    import level_500 as l5  # noqa: E402
+    rules = load_sink_rules()
+    sets = l5.load_sets(l5.load_regions(data))
+    rows = []
+    for band in eco.bands:
+        if band.low < SINK_FROM:
+            continue
+        chunk = [r for r in eco.levels if band.low <= r.level < band.high]
+
+        def souls_of(r) -> float:
+            return r.kills * sum(share * rules.soul_chance.get(b, 0.0) for b, share in eco.pay[r.level].biomes.items())
+
+        souls = sum(souls_of(r) for r in chunk)
+        refine = sum(souls_of(r) * rules.gold_per_soul * rules.fee_multiplier(r.level) for r in chunk)
+        key = l5.available_sets(sets, band.low)[-1].key
+        per_point = 0.0
+        for part in ("chest", "helm"):
+            value, rarity, durability = _set_piece(key, part)
+            per_point += (min(value, rules.repair_cap) * rules.repair_fraction * rules.rarity[rarity]
+                          * (1 + SINK_SET_REFINE * rules.refine_cost_per_level) / durability)
+        repair = band.kills * SINK_HITS_PER_KILL * rules.wear_per_hit * per_point
+        respec = rules.respec(rules.points(band.low)) * len(chunk) / SINK_LEVELS_PER_RESPEC
+        rows.append(SinkRow(band.low, band.high, band.gold + band.quest_gold, souls, refine, key, repair, respec))
+    return rows
+
+
+def sink_total_share(rows: list) -> float:
+    income = sum(r.income for r in rows)
+    return sum(r.spent for r in rows) / income if income else 0.0
+
+
+def report_gold_sinks(rows: list) -> str:
+    rules = load_sink_rules()
+    lines = [f"Destinos (nenhum obrigatório): taxa do ferreiro no refino (`RefineRules.FeeFor`: preço da campanha × (1 + (nível − "
+             f"{rules.fee_start}) / {rules.fee_step}); cada Pedra da Alma que cai vai para a cadeia +0 → +15, {rules.gold_per_soul:.1f} "
+             f"de ouro por pedra no preço da campanha), conserto do conjunto vestido (+{SINK_SET_REFINE}, {SINK_HITS_PER_KILL:.0f} golpes por "
+             f"abate, valor no máximo {rules.repair_cap:.0f}: `DurabilityRules.RepairValueCap`) e um reset da Roda a cada "
+             f"{SINK_LEVELS_PER_RESPEC} níveis (`TalentWheelRules.RespecCostFor`).", "",
+             "| Faixa | Ouro que entra | Pedras da Alma | Refino | Conjunto | Conserto | Reset (rateado) | Gasto | % do ouro |",
+             "|---|---|---|---|---|---|---|---|---|"]
+    for r in rows:
+        lines.append(f"| {r.low}–{r.high} | {_n(r.income)} | {r.souls:.0f} | {_n(r.refine)} | {r.set_key} | {_n(r.repair)} | {_n(r.respec)} | "
+                     f"{_n(r.spent)} | {r.share:.0%} |")
+    income = sum(r.income for r in rows)
+    lines.append(f"| **{rows[0].low}–{rows[-1].high}** | **{_n(income)}** | {sum(r.souls for r in rows):.0f} | {_n(sum(r.refine for r in rows))} | | "
+                 f"{_n(sum(r.repair for r in rows))} | {_n(sum(r.respec for r in rows))} | **{_n(sum(r.spent for r in rows))}** | "
+                 f"**{sink_total_share(rows):.0%}** |")
+    return "\n".join(lines)
+
+
 def run(runs: int = 40) -> str:
     import level_500 as l5  # noqa: E402
     world = l5.World(runs)
     eco = build(world.base)
-    return report(eco, perigoso(world), world.base, world.bosses)
+    return (report(eco, perigoso(world), world.base, world.bosses)
+            + "\n\n### Destinos do ouro acima do 100 (sugestão 3)\n\n" + report_gold_sinks(gold_sinks(eco, world.base)))
 
 
 def main() -> int:

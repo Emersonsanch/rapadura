@@ -276,6 +276,8 @@ namespace Rapadura.Gameplay.Quests
 
         private static RegionRewardSpec Reward(string itemId, int quantity) => new RegionRewardSpec(itemId, quantity);
 
+        /// <summary><paramref name="experience"/> is the authored XP; above level 50 the step pays <see cref="QuestXpRules.RoadLetterShare"/> of the XP of
+        /// <paramref name="minLevel"/> when that is more (<see cref="QuestXpRules"/>).</summary>
         private static LateStoryStep Step(int region, string cityId, string giver, string zoneId, string mapId, int minLevel, string questId, string prerequisite, int experience,
             string enemyId, int killCount, params RegionRewardSpec[] rewards)
         {
@@ -286,7 +288,7 @@ namespace Rapadura.Gameplay.Quests
             }
 
             return new LateStoryStep(region, cityId, giver, zoneId, mapId, minLevel,
-                new RegionQuestSpec(questId, BiomeType.Forest, prerequisite, experience, objectives.ToArray(), rewards));
+                new RegionQuestSpec(questId, BiomeType.Forest, prerequisite, QuestXpRules.For(QuestXpKind.RoadLetter, minLevel, experience), objectives.ToArray(), rewards));
         }
     }
 }

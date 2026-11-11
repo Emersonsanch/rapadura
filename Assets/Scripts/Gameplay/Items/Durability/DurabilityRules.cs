@@ -11,8 +11,8 @@ namespace Rapadura.Gameplay.Items.Durability
     /// piece a little per hit taken, and every equipped piece <see cref="DeathWearFraction"/> of its maximum per death.</item>
     /// <item>At 0 the piece is <b>broken</b>: it gives no stats at all (base, affixes, refine, options) but is never
     /// destroyed, dropped or unequipped by force — it waits for the ferreiro.</item>
-    /// <item>Repair at the ferreiro: gold by the item's value × rarity × refine level (+ options), scaled by how much is
-    /// missing; a broken piece costs <see cref="BrokenSurcharge"/> more.</item>
+    /// <item>Repair at the ferreiro: gold by the item's value (at most <see cref="RepairValueCap"/>) × rarity × refine level
+    /// (+ options), scaled by how much is missing; a broken piece costs <see cref="BrokenSurcharge"/> more.</item>
     /// </list>
     /// Save-compatible: the value lives in <see cref="InventorySlotData.currentDurability"/> (and the save's
     /// <c>EquippedEntry.durability</c>), which already existed.
@@ -28,6 +28,12 @@ namespace Rapadura.Gameplay.Items.Durability
         /// <summary>Below this share the tooltip/forge call the piece "gasto" (worn).</summary>
         public const float WornThreshold = 0.25f;
 
+        /// <summary>
+        /// The repair prices an item at most at this value (Docs/Balanco100a500.md §5.3, sugestão 3): the sets of Regions 13–16
+        /// sell for 4 700–10 400 and, priced by that, the ~3 hits a kill takes cost 2–4× the gold a farming hour brings. With
+        /// the cap the worn set costs ~145–240 gold an hour at +9 (14–23% of the farm), every band from 100 to 500.
+        /// </summary>
+        public const int RepairValueCap = 200;
         /// <summary>A full repair (from 0) costs this share of the item's value, before the multipliers.</summary>
         public const float RepairValueFraction = 0.25f;
         /// <summary>Each refine level adds this share to the repair cost (+10 = ×2).</summary>
@@ -86,7 +92,7 @@ namespace Rapadura.Gameplay.Items.Durability
         /// <summary>Gold of a repair from 0 to full (without the broken surcharge), at least 1.</summary>
         public static int FullRepairCost(int itemValue, ItemRarity rarity, int refineLevel, bool hasOptions)
         {
-            double cost = Math.Max(1, itemValue) * RepairValueFraction * RarityMultiplier(rarity)
+            double cost = Math.Min(RepairValueCap, Math.Max(1, itemValue)) * RepairValueFraction * RarityMultiplier(rarity)
                 * (1.0 + Math.Max(0, refineLevel) * RefineCostPerLevel) * (hasOptions ? 1.0 + OptionsCostBonus : 1.0);
             return Math.Max(1, (int)Math.Ceiling(cost - 1e-4));
         }

@@ -24,7 +24,10 @@ Todo mapa do jogo possui três níveis de corte:
    * Geralmente é **`WalkLevel + 5`** ou **`WalkLevel + 10`** níveis acima da caminhada a pé.
 3. **Custo de Ouro por Teleporte (`WarpFee`):**
    * Fórmula estilo MU Online:  
-     $$\text{Custo (Ouro)} = \text{BaseFee} + (\text{WarpLevel} \times 15)$$
+     $$\text{Custo (Ouro)} = \text{BaseFee} + (\min(\text{WarpLevel}, 57) \times 15)$$
+   * Teto: a parte por nível para na barca 57 (`MapAccessRules.WarpFeeLevelCap`), então a passagem nunca passa de
+     **905** de ouro (`MaxWarpFee`, 50 + 57 × 15). O ouro por hora é quase plano (~910–1 190/h em todos os níveis), e sem o
+     teto o mapa 100 custava 7 535 (~8 h de caça); com ele, ≤ 60 min (Docs/Balanco100a500.md §5.3).
    * Se o jogador estiver com a mochila sobrecarregada (>100% de capacidade), o custo de teleporte dobra (+100%).
 
 ---

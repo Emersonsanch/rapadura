@@ -65,7 +65,7 @@ namespace Rapadura.Gameplay.World.Map
     /// <summary>
     /// MU-Online-style map access (Docs/MetodologiaMapasERacas.md Part I), pure C# so the online server runs the same
     /// file: walk level (cross the border on foot), warp level (the Barcas de Luz, window M), the fare
-    /// <c>50 + warpLevel × 15</c> doubled when the backpack is overloaded, the hero bonuses (Ícaro −5 in ruins, Maithe −5
+    /// <c>50 + min(warpLevel, 57) × 15</c> (at most 905) doubled when the backpack is overloaded, the hero bonuses (Ícaro −5 in ruins, Maithe −5
     /// in mountains, never below 1) and the monster level delta. Failure reasons are <see cref="MapTexts"/> keys, never
     /// sentences, so the rules never localize. EditMode-tested (MapAccessRulesTests).
     /// </summary>
@@ -73,6 +73,15 @@ namespace Rapadura.Gameplay.World.Map
     {
         public const int BaseWarpFee = 50;
         public const int WarpFeePerLevel = 15;
+
+        /// <summary>
+        /// The fare follows the warp level only up to here (Docs/Balanco100a500.md §5.3, sugestão 1): gold per hour is flat
+        /// (~930–1 130/h at every level), so above it the fare would cost more than an hour of farming (7 535, ~8 h, at map 100).
+        /// </summary>
+        public const int WarpFeeLevelCap = 57;
+
+        /// <summary>The dearest fare without the overload: <see cref="BaseWarpFee"/> + <see cref="WarpFeeLevelCap"/> × <see cref="WarpFeePerLevel"/> = 905.</summary>
+        public const int MaxWarpFee = BaseWarpFee + WarpFeeLevelCap * WarpFeePerLevel;
         public const int OverloadFareMultiplier = 2;
 
         /// <summary>Levels Ícaro (ruins) and Maithe (mountains) are spared.</summary>
@@ -140,7 +149,7 @@ namespace Rapadura.Gameplay.World.Map
             return true;
         }
 
-        /// <summary>The fare: <see cref="BaseWarpFee"/> + warpLevel × <see cref="WarpFeePerLevel"/>, doubled when overloaded.</summary>
+        /// <summary>The fare: <see cref="BaseWarpFee"/> + min(warpLevel, <see cref="WarpFeeLevelCap"/>) × <see cref="WarpFeePerLevel"/>, doubled when overloaded.</summary>
         public static int CalculateWarpCost(int warpLevel, bool isOverloaded) => CalculateWarpCost(BaseWarpFee, warpLevel, isOverloaded);
 
         /// <summary>The fare with an explicit base: 0 base = the free tutorial map (no per-level part either).</summary>
@@ -151,9 +160,12 @@ namespace Rapadura.Gameplay.World.Map
                 return 0;
             }
 
-            int cost = baseFee + Math.Max(1, warpLevel) * WarpFeePerLevel;
+            int cost = baseFee + FareLevel(warpLevel) * WarpFeePerLevel;
             return isOverloaded ? cost * OverloadFareMultiplier : cost;
         }
+
+        /// <summary>The warp level the fare counts: at least 1, at most <see cref="WarpFeeLevelCap"/>.</summary>
+        public static int FareLevel(int warpLevel) => Math.Min(WarpFeeLevelCap, Math.Max(1, warpLevel));
 
         public static int CalculateWarpCost(MapDefinition map, bool isOverloaded)
         {

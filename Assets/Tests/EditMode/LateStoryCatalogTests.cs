@@ -109,7 +109,9 @@ namespace Rapadura.Tests
         {
             foreach (LateStoryStep step in AllSteps)
             {
-                Assert.That(step.Quest.RewardExperience, Is.InRange(2000, 4800), step.QuestId);
+                // QuestXpRules: a letter pays 150% of the XP of its level (128 064 at 100 … ~30 million at 495), always more than the
+                // 2 300–4 600 written in the catalog.
+                Assert.AreEqual(QuestXpRules.For(QuestXpKind.RoadLetter, step.MinLevel), step.Quest.RewardExperience, step.QuestId);
                 Assert.IsTrue(step.Quest.Rewards.All(r => ItemDatabase.GetById(r.ItemId) != null), $"{step.QuestId}: items exist");
                 Assert.IsFalse(step.Quest.Rewards.Any(r => r.ItemId == "item_pedra_vida" || r.ItemId == "item_pedra_caos"), step.QuestId);
                 Assert.That(step.Quest.Rewards.Where(r => r.ItemId == "item_gold").Sum(r => r.Quantity), Is.InRange(100, 320), step.QuestId);

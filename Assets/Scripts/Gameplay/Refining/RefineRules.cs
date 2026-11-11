@@ -64,7 +64,8 @@ namespace Rapadura.Gameplay.Refining
     /// <list type="bullet">
     /// <item>+0 → +6: one <see cref="RefineStone.Blessing"/>, always succeeds (the luck charm is not used).</item>
     /// <item>+6 → +9: one <see cref="RefineStone.Soul"/>, 80% / 75% / 70%.</item>
-    /// <item>+9 → +15: one <see cref="RefineStone.Soul"/> + 10..50 gold, 60% falling to 35%.</item>
+    /// <item>+9 → +15: one <see cref="RefineStone.Soul"/> + 10..50 gold, 60% falling to 35%; above hero level
+    /// <see cref="FeeLevelStart"/> the ferreiro's fee grows (<see cref="FeeFor"/>: ×2 at 225, ×4.2 at 500).</item>
     /// <item>Failure (user decision 2026-10-29): the item goes back ONE level, never below +6 (the always-safe band),
     /// and never disappears.</item>
     /// <item>Amuleto da Sorte: +10 points of chance on a roll that can fail (capped at 95%), spent on that roll.</item>
@@ -179,11 +180,34 @@ namespace Rapadura.Gameplay.Refining
             return withCharm || luck ? Math.Min(MaxChance, chance) : chance;
         }
 
-        /// <summary>Gold paid with the stone to refine from <paramref name="level"/>.</summary>
+        /// <summary>Gold paid with the stone to refine from <paramref name="level"/> (the campaign price, hero level ≤ <see cref="FeeLevelStart"/>).</summary>
         public static int GoldCostFor(int level)
         {
             level = ClampLevel(level);
             return level >= MaxLevel ? 0 : GoldCosts[level];
+        }
+
+        /// <summary>Hero level up to which the refine gold is the campaign price of <see cref="GoldCostFor"/>.</summary>
+        public const int FeeLevelStart = 100;
+        /// <summary>Above <see cref="FeeLevelStart"/>, every this many hero levels add one more campaign price to the fee.</summary>
+        public const int FeeLevelsPerStep = 125;
+
+        /// <summary>
+        /// The ferreiro's fee: <see cref="GoldCostFor"/> × (1 + (hero level − 100) / 125), rounded up; the campaign price at
+        /// level ≤ 100, ×2 at 225, ×4.2 at 500 (+14 → +15: 50 → 210 gold). A gold destination that grows with the band
+        /// (Docs/Balanco100a500.md §5.3, sugestão 3).
+        /// </summary>
+        public static int FeeFor(int level, int heroLevel)
+        {
+            int baseGold = GoldCostFor(level);
+            int above = Math.Max(0, heroLevel - FeeLevelStart);
+            if (baseGold <= 0 || above == 0)
+            {
+                return baseGold;
+            }
+
+            long scaled = (long)baseGold * (FeeLevelsPerStep + above);
+            return (int)((scaled + FeeLevelsPerStep - 1) / FeeLevelsPerStep);
         }
 
         /// <summary>What a failed roll from <paramref name="level"/> leaves: one level less above +6 (decided), else the same.</summary>
@@ -246,7 +270,11 @@ namespace Rapadura.Gameplay.Refining
         // -------------------------------------------------------------- checks
 
         /// <summary>Whether <paramref name="level"/> → +1 can be tried with what the bag holds.</summary>
-        public static RefineCheck Check(bool refinable, int level, int stonesOwned, int goldOwned, bool useCharm, int charmsOwned)
+        public static RefineCheck Check(bool refinable, int level, int stonesOwned, int goldOwned, bool useCharm, int charmsOwned) =>
+            Check(refinable, level, stonesOwned, goldOwned, useCharm, charmsOwned, FeeLevelStart);
+
+        /// <summary><see cref="Check(bool, int, int, int, bool, int)"/> with the gold of <see cref="FeeFor"/> at <paramref name="heroLevel"/>.</summary>
+        public static RefineCheck Check(bool refinable, int level, int stonesOwned, int goldOwned, bool useCharm, int charmsOwned, int heroLevel)
         {
             if (!refinable)
             {
@@ -263,7 +291,7 @@ namespace Rapadura.Gameplay.Refining
                 return RefineCheck.MissingStone;
             }
 
-            if (goldOwned < GoldCostFor(level))
+            if (goldOwned < FeeFor(level, heroLevel))
             {
                 return RefineCheck.NotEnoughGold;
             }
@@ -314,18 +342,26 @@ namespace Rapadura.Gameplay.Refining
         /// Resolves a roll already drawn: success when <c>roll &lt; chance</c>. At the cap there is nothing to attempt
         /// (<see cref="Check"/> answers <see cref="RefineCheck.MaxLevel"/>), so a stray call is a no-op, never a drop.
         /// </summary>
-        public static RefineAttempt Resolve(int level, bool withCharm, double roll, bool luck = false)
+        public static RefineAttempt Resolve(int level, bool withCharm, double roll, bool luck = false) =>
+            Resolve(level, withCharm, roll, luck, FeeLevelStart);
+
+        /// <summary><see cref="Resolve(int, bool, double, bool)"/> reporting the gold of <see cref="FeeFor"/> at <paramref name="heroLevel"/>.</summary>
+        public static RefineAttempt Resolve(int level, bool withCharm, double roll, bool luck, int heroLevel)
         {
             level = ClampLevel(level);
             float chance = ChanceFor(level, withCharm, luck);
             bool atCap = level >= MaxLevel;
             bool success = !atCap && roll < chance;
             int to = success ? level + 1 : atCap ? level : FailureLevel(level);
-            return new RefineAttempt(level, to, StoneFor(level), chance, GoldCostFor(level), withCharm && CanFail(level), roll, success);
+            return new RefineAttempt(level, to, StoneFor(level), chance, FeeFor(level, heroLevel), withCharm && CanFail(level), roll, success);
         }
 
         /// <summary>One refine from <paramref name="level"/> with <paramref name="seed"/> (online: the server's seed).</summary>
         public static RefineAttempt Attempt(int level, bool withCharm, int seed, bool luck = false) => Resolve(level, withCharm, Roll(seed), luck);
+
+        /// <summary><see cref="Attempt(int, bool, int, bool)"/> at <paramref name="heroLevel"/> (the fee of <see cref="FeeFor"/>).</summary>
+        public static RefineAttempt Attempt(int level, bool withCharm, int seed, bool luck, int heroLevel) =>
+            Resolve(level, withCharm, Roll(seed), luck, heroLevel);
 
         /// <summary>One Pedra da Vida on <paramref name="option"/>: the new option level (unchanged on failure).</summary>
         public static int ResolveOption(int option, double roll)

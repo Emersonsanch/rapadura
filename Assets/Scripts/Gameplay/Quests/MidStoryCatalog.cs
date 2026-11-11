@@ -103,6 +103,8 @@ namespace Rapadura.Gameplay.Quests
 
         private static RegionRewardSpec Reward(string itemId, int quantity) => new RegionRewardSpec(itemId, quantity);
 
+        /// <summary><paramref name="experience"/> is the authored XP; above level 50 the step pays <see cref="QuestXpRules.MidStoryShare"/> of the XP of
+        /// <paramref name="minLevel"/> when that is more (<see cref="QuestXpRules"/>).</summary>
         private static LateStoryStep Step(int region, string cityId, string giver, string zoneId, string mapId, int minLevel, string questId, string prerequisite, int experience,
             string enemyId, int killCount, params RegionRewardSpec[] rewards)
         {
@@ -111,7 +113,7 @@ namespace Rapadura.Gameplay.Quests
                 new RegionObjectiveSpec(LateStoryCatalog.ReachObjectiveId, QuestObjectiveType.ReachLocation, zoneId, 1),
                 new RegionObjectiveSpec(LateStoryCatalog.KillObjectiveId, QuestObjectiveType.KillEnemyType, enemyId, killCount),
             };
-            return new LateStoryStep(region, cityId, giver, zoneId, mapId, minLevel, new RegionQuestSpec(questId, BiomeType.Forest, prerequisite, experience, objectives, rewards));
+            return new LateStoryStep(region, cityId, giver, zoneId, mapId, minLevel, new RegionQuestSpec(questId, BiomeType.Forest, prerequisite, QuestXpRules.For(QuestXpKind.MidStory, minLevel, experience), objectives, rewards));
         }
 
         /// <summary>The root: no prerequisite quest; the seal (Tages, one kill, credited when already faced) and the visit to his hall.</summary>
@@ -123,7 +125,7 @@ namespace Rapadura.Gameplay.Quests
                 new RegionObjectiveSpec(SealObjectiveId, QuestObjectiveType.KillEnemyType, SealEnemyId, 1),
                 new RegionObjectiveSpec(LateStoryCatalog.ReachObjectiveId, QuestObjectiveType.ReachLocation, zoneId, 1),
             };
-            return new LateStoryStep(region, cityId, giver, zoneId, mapId, minLevel, new RegionQuestSpec(questId, BiomeType.Caves, null, experience, objectives, rewards));
+            return new LateStoryStep(region, cityId, giver, zoneId, mapId, minLevel, new RegionQuestSpec(questId, BiomeType.Caves, null, QuestXpRules.For(QuestXpKind.MidStory, minLevel, experience), objectives, rewards));
         }
     }
 }

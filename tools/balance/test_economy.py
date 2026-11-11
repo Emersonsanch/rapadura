@@ -17,12 +17,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import economy as ec  # noqa: E402
 import level_500 as l5  # noqa: E402
 
-# What Docs/Balanco100a500.md "Economia" reports as off budget. The only miss is the Barca fare: gold per hour is flat
-# (~930-1130/h at every level: item_gold and the 4 campaign biome tables do not scale), the fare grows 15 per warp level,
-# so from map 29 (warp 65) on it costs more than an hour of farming (never more than the gold earned by then). The fix
-# is a design call in MapAccessRules (a cap, or gold that grows with level), not a MapCatalog Fee, so it stays a
-# suggestion. When this moves, rerun `python -I tools/balance/economy.py`, update the doc, then this snapshot.
-DOCUMENTED_EXPENSIVE_FARES = set(range(29, 101))
+# What Docs/Balanco100a500.md "Economia" reports as off budget, after sugestões 1 and 2 (§5.3). The fare is capped at
+# warp level 57 (MapAccessRules.WarpFeeLevelCap, 905 at most): no fare costs more than an hour of farming any more.
+# The quest XP of QuestXpRules (50% / 150% / 25% of the level's XP above 50; up to 50 the campaign curve keeps the authored
+# numbers, so level 50 stays at 6.7 h, -16%) makes one documented miss: 251-261 (three letters, 35% of its XP) is ×0.67
+# the hours per level of 241-251. When this moves, rerun `python -I tools/balance/economy.py`, update the doc, then this
+# snapshot.
+DOCUMENTED_EXPENSIVE_FARES: set = set()
+DOCUMENTED_MISSES = {("band", 251, "drop")}
 
 
 @pytest.fixture(scope="module")
@@ -54,6 +56,10 @@ def test_content_is_read_from_the_code(eco):
 
 def test_milestones_follow_progressao500(eco):
     for level, hours in ec.milestone_hours(eco).items():
+        if ("xp", level, "fast") in DOCUMENTED_MISSES:
+            target = ec.DOC_PLAY_HOURS[level]
+            assert target * (1 - 1.25 * ec.BUDGET_MILESTONE_TOLERANCE) <= hours < target * (1 - ec.BUDGET_MILESTONE_TOLERANCE), (level, hours)  # -20% to -25%
+            continue
         target = ec.DOC_PLAY_HOURS[level]
         assert abs(hours / target - 1) <= ec.BUDGET_MILESTONE_TOLERANCE, (level, hours, target)
 
@@ -64,8 +70,41 @@ def test_no_wall_and_no_free_ride_above_the_campaign(eco):
         if band.low <= eco.curve.campaign:
             continue
         step = band.hours_per_level / before.hours_per_level
-        assert low <= step <= high, (band.low, step)
+        if ("band", band.low, "drop") in DOCUMENTED_MISSES:
+            assert 0.6 <= step < low, (band.low, step)
+        else:
+            assert low <= step <= high, (band.low, step)
         assert band.quest_xp <= ec.BUDGET_QUEST_SHARE_MAX * band.xp, band.low
+
+
+def test_quests_pay_their_share_above_100(eco):
+    low, high = ec.BUDGET_QUEST_SHARE_BAND_ABOVE_100
+    above = [b for b in eco.bands if b.low > 100]
+    for band in above:
+        if band.quest_xp > 0:
+            assert low <= band.quest_xp / band.xp <= high, (band.low, band.quest_xp / band.xp)
+    assert ec.BUDGET_QUEST_SHARE_ABOVE_100[0] <= ec.quest_share_above_100(eco) <= ec.BUDGET_QUEST_SHARE_ABOVE_100[1]
+    assert ec.quest_share_above_100(ec.with_authored_quest_xp(eco)) < 0.01  # the authored numbers alone: ~0%
+
+
+def test_quest_xp_follows_quest_xp_rules(eco):
+    rule = ec.load_quest_xp()
+    assert rule.above == 50 and rule.shares == {"meio": 0.5, "cartas": 1.5, "cidade": 0.25}
+    for q in eco.quests:
+        assert q.xp >= q.authored, q.quest_id
+        if q.level <= rule.above or q.source == "campanha":
+            assert q.xp == q.authored, q.quest_id
+        else:
+            assert q.xp == max(q.authored, int(rule.shares[q.source] * eco.curve.to_next(q.level) + 0.5)), q.quest_id
+    letters = [q for q in eco.quests if q.source == "cartas"]
+    assert all(q.xp > q.authored for q in letters)  # 150% of a level above 100 is always more than the 2 300-4 600 written
+
+
+def test_fare_is_capped(eco):
+    assert eco.access.level_cap == 57
+    assert max(f.fare for f in eco.fare_rows) == 905
+    assert eco.access.level_cap <= ec.fare_cap(eco)
+    assert all(f.minutes <= ec.BUDGET_FARE_MINUTES for f in eco.fare_rows)
 
 
 def test_every_gate_is_affordable_on_arrival(eco):
@@ -110,4 +149,23 @@ def test_perigoso_plus_30_still_scares(perigoso_rows):
 
 def test_only_the_documented_misses(eco, perigoso_rows):
     miss = ec.problems(eco) + ec.perigoso_problems(perigoso_rows)
-    assert {(k, m) for k, _, m in miss} <= {("fare", "expensive")}
+    assert set(miss) == DOCUMENTED_MISSES
+
+
+def test_gold_has_destinations_above_100(eco, world):
+    """Sugestão 3 (Docs/Balanco100a500.md §5.3): refine fee, capped repair and talent reset take 30-60% of the gold of 101-500,
+    no band of 10 levels outside 25-70%, and the three grow with the band (none forced)."""
+    rows = ec.gold_sinks(eco, world.base)
+    assert rows[0].low == ec.SINK_FROM and rows[-1].high == ec.MAX_LEVEL
+    low, high = ec.BUDGET_SINK_SHARE
+    assert low <= ec.sink_total_share(rows) <= high, ec.sink_total_share(rows)
+    band_low, band_high = ec.BUDGET_SINK_BAND
+    for r in rows:
+        assert band_low <= r.share <= band_high, (r.low, r.share)
+        assert r.refine > 0 and r.repair > 0 and r.respec > 0, r.low
+    rules = ec.load_sink_rules()
+    assert rules.fee_multiplier(100) == 1.0 and rules.fee_multiplier(500) > 4  # campaign price up to 100, x4.2 at 500
+    assert rules.respec(rules.points(100)) == 44 * rules.respec_point and rules.respec(rules.points(500)) == 14700
+    assert rows[-1].respec > rows[0].respec and rows[-1].refine > rows[0].refine
+    # the cap is what keeps the repair of the sets of Regions 13-16 (4 700-10 400 of value) below a farming hour of gold
+    assert all(r.repair / r.income <= 0.30 for r in rows)

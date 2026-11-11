@@ -1755,6 +1755,8 @@ Refino estilo MU Online (FASE 16). Regras puras em `RefineRules` (`Assets/Script
 - Falha: −1 nível acima de +6 (+6 é o piso seguro, porque a Faísca sobe até lá sem falhar).
 - Pedra da Água Viva: opção extra 0→4, 60% por pedra; falhar não muda nada.
 - Pedra da Mistura: só definida (item e drop); vai para o Uasamonga depois.
+- **Taxa do ferreiro acima do nível 100** (2026-11-11, `RefineRules.FeeFor`): o ouro da tabela × (1 + (nível do herói − 100) / 125),
+  arredondado para cima: igual até o 100, ×2 no 225, ×4,2 no 500 (+14 → +15: 50 → 210). Ver Balanco100a500.md §5.3 (sugestão 3).
 - Rolagem com semente (`RefineRules.Roll`, SplitMix64): mesmo resultado em qualquer plataforma. **Online, o servidor
   sorteia** (`RefineRules.Attempt` com a semente dele) e o cliente só mostra a resposta.
 
@@ -2366,6 +2368,9 @@ Conserto (ouro): `cheio = valor × 25% × raridade × (1 + 10% por nível de ref
 Comum 1 / Incomum 1,25 / Raro 1,5 / Épico 2 / Lendário 2,5; o preço é `cheio × fração que falta` (arredonda para cima,
 mínimo 1) e uma peça quebrada paga **×1,25** (o castigo de deixar quebrar). Espada de ferro (45, Incomum, +0): conserto
 completo 15 de ouro, quebrada 19; a mesma espada +10 com opções, ~45/56 — barato perto do que se ganha numa ida.
+**Teto de valor (2026-11-11):** o conserto conta o valor até **200** (`DurabilityRules.RepairValueCap`). Sem ele os conjuntos
+das Regiões 13–16 (valor 4 700–10 400) custavam 4–7× o ouro da caça em conserto; com ele o conjunto vestido a +9 leva 14–23%
+(Balanco100a500.md §5.3, sugestão 3).
 
 Onde consertar: a janela do **Ferreiro** da Vila (`VillageRefinePanel`, a do refino) ganhou "Consertar tudo" (tudo ou
 nada) e um "Consertar" por peça. `RepairService.Quote/TryRepair/TryRepairAll/ListWorn` são públicos e puros sobre um
@@ -2557,7 +2562,7 @@ primo na borda (custa 3, pede 6 pontos já no quarto). Um quarto cabe 12 pontos,
 | Apoio | Cura de Quintal +5% regen. vida; Fôlego de Reza +2% regen. mana; Mente Mansa −0,2% custo | Berrante Amigo +10% regen. vida | Benzedura Forte +15% regen. vida | Ninho Seguro +5% regen. mana | Pilha Reserva −0,5% custo | Vaga-lume Sereno +5% regen. mana |
 | Utilidade | Pé Ligeiro +1% velocidade; Vigor de Caravana +2% fôlego; Fôlego Largo +3% recup. fôlego | Passo da Correnteza +6% fôlego | Viajante Incansável +8% recup. | Voo Rasante +3% velocidade | Bota de Mola +3% velocidade | Rastro de Luz +8% recup. |
 
-**Recomeçar** (respec): devolve todos os pontos por `max(50, 15 × pontos gastos)` de ouro da mochila (`item_gold`) —
+**Recomeçar** (respec): devolve todos os pontos por `max(50, pontos × (15 + 4 × pontos acima de 44))` de ouro (até 44 pontos, o nível 100, igual a antes; 64 pontos = 6 080, 84 = 14 700; 2026-11-11, Balanco100a500.md §5.3) da mochila (`item_gold`) —
 uma roda de 39 pontos custa 585, uma ida às Grutas do Limiar rende mais. A janela "Roda de Talentos" abre por um botão na Ficha
 (abaixo dos atributos): roda desenhada em quatro quartos, nós de 56 px nos três anéis, tocar seleciona (nome, bônus,
 grau, o que falta), "Aprender" gasta, "Recomeçar (N de ouro)" limpa; B/Esc volta para a Ficha.

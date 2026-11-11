@@ -148,6 +148,13 @@ namespace Rapadura.Gameplay.Refining
             return targets;
         }
 
+        /// <summary>The level of the hero who carries <paramref name="bag"/> (1 without one): the ferreiro's fee grows with it (<see cref="RefineRules.FeeFor"/>).</summary>
+        public static int HeroLevelOf(InventoryManager bag)
+        {
+            Rapadura.Gameplay.Player.PlayerStats stats = bag != null ? bag.GetComponentInParent<Rapadura.Gameplay.Player.PlayerStats>() : null;
+            return stats != null ? stats.Level : 1;
+        }
+
         public static RefinePreview Preview(InventoryManager bag, RefineTarget target, bool useCharm)
         {
             InventorySlotData data = Resolve(bag, target);
@@ -163,10 +170,11 @@ namespace Rapadura.Gameplay.Refining
             int life = bag != null ? bag.GetTotalCount(RefineItems.LifeStone) : 0;
             bool canFail = RefineRules.CanFail(level);
             bool charm = useCharm && canFail;
+            int heroLevel = HeroLevelOf(bag);
 
-            return new RefinePreview(item, data, level, option, stone, stones, RefineRules.GoldCostFor(level), gold, charms, life,
+            return new RefinePreview(item, data, level, option, stone, stones, RefineRules.FeeFor(level, heroLevel), gold, charms, life,
                 RefineRules.ChanceFor(level, charm, data != null && data.luck), canFail, RefineRules.FailureLevel(level),
-                RefineRules.Check(refinable, level, stones, gold, charm, charms),
+                RefineRules.Check(refinable, level, stones, gold, charm, charms, heroLevel),
                 RefineRules.CheckOption(refinable, option, life));
         }
 
@@ -202,7 +210,7 @@ namespace Rapadura.Gameplay.Refining
                 bag.RemoveById(RefineItems.LuckCharm, 1);
             }
 
-            attempt = RefineRules.Attempt(preview.Level, charm, seed, data.luck);
+            attempt = RefineRules.Attempt(preview.Level, charm, seed, data.luck, HeroLevelOf(bag));
             data.refineLevel = attempt.ToLevel;
             bag.NotifyItemDataChanged(target.IsEquipped ? target.EquipSlot : EquipmentSlot.None);
             EventBus.Publish(new ItemRefinedEvent(data.itemId, attempt));

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_chefe_escama_aydahar
   _displayName: "Escama de Aydahar"
-  _description: "Escama fria do dragão do passo, lisa como gelo de caravana. Corta o vento que ele mesmo soprava."
+  _description: "Escama fria do dragão do passo, lisa como gelo de caravana. Corta o fogo que ele mesmo soprava."
   _icon: {fileID: 21300000, guid: a5032405e04b745674a7ea50dba69eea, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0

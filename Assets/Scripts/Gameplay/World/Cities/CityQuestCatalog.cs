@@ -4,6 +4,7 @@ using System.Linq;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.World.Biomes;
+using Rapadura.Gameplay.World.Map;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Cities
@@ -149,7 +150,12 @@ namespace Rapadura.Gameplay.World.Cities
         public const string CaisColunaStowaways = "quest_city_cais_coluna_stowaways_in_the_bales";
         public const string CaisColunaBirds = "quest_city_cais_coluna_birds_on_the_jars";
 
-        public static readonly IReadOnlyList<CityQuestSpec> Quests = new List<CityQuestSpec>
+        /// <summary>
+        /// Every city quest. The XP written below is the authored number; above level 50 the quest pays
+        /// <see cref="QuestXpRules.CityShare"/> of the XP of its city's level (<see cref="LevelOf"/>) when that is more
+        /// (<see cref="QuestXpRules"/>, Docs/Balanco100a500.md §5.3).
+        /// </summary>
+        public static readonly IReadOnlyList<CityQuestSpec> Quests = AtCityLevel(new List<CityQuestSpec>
         {
             // -- Copas de Garajonay: Gara, guardiã das copas, then Tinguaro, the tracker --
             new CityQuestSpec(CityCatalog.CopasGarajonay, "gara", new RegionQuestSpec(GarajonayMist, BiomeType.Forest, null, 320,
@@ -357,7 +363,35 @@ namespace Rapadura.Gameplay.World.Cities
             new CityQuestSpec(CityCatalog.CaisDaColuna, "adda_roda", new RegionQuestSpec(CaisColunaBirds, BiomeType.Forest, CaisColunaStowaways, 4200,
                 new[] { new RegionObjectiveSpec("chase_the_birds", QuestObjectiveType.KillEnemyType, "enemy_forest_dimmed_ibis", 6) },
                 new[] { new RegionRewardSpec("item_capa_tempestade", 1), new RegionRewardSpec("item_gold", 280) })),
-        };
+        });
+
+        /// <summary>
+        /// The level a city's quests are paid at: the walk level of the city's own map (the lowest non-outpost map that returns
+        /// to it), else of the lowest map that returns to it, else 1.
+        /// </summary>
+        public static int LevelOf(string cityId)
+        {
+            int own = int.MaxValue;
+            int any = int.MaxValue;
+            foreach (MapDefinition map in MapCatalog.Maps)
+            {
+                if (map.ReturnCityId != cityId)
+                {
+                    continue;
+                }
+
+                any = Math.Min(any, map.WalkLevelRequirement);
+                if (map.Settlement != MapSettlementKind.Outpost)
+                {
+                    own = Math.Min(own, map.WalkLevelRequirement);
+                }
+            }
+
+            return own != int.MaxValue ? own : any != int.MaxValue ? any : 1;
+        }
+
+        private static IReadOnlyList<CityQuestSpec> AtCityLevel(List<CityQuestSpec> quests) =>
+            quests.Select(q => new CityQuestSpec(q.CityId, q.GiverResidentId, QuestXpRules.Apply(q.Quest, QuestXpKind.City, LevelOf(q.CityId)))).ToList();
 
         private static readonly Dictionary<string, QuestDefinition> Built = new Dictionary<string, QuestDefinition>();
 

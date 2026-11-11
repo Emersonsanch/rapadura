@@ -49,6 +49,13 @@ namespace Rapadura.Gameplay.Talents
     {
         public const int RespecGoldPerPoint = 15;
         public const int RespecMinimumGold = 50;
+        /// <summary>Points spent up to here (the 44 of hero level 100) pay <see cref="RespecGoldPerPoint"/> each.</summary>
+        public const int RespecHighPointsStart = 44;
+        /// <summary>
+        /// Every point spent above <see cref="RespecHighPointsStart"/> adds this to the price of each point (Docs/Balanco100a500.md
+        /// §5.3, sugestão 3): 64 points (level 300) = 6 080 gold, 84 points (level 500) = 14 700; 44 or fewer cost as before.
+        /// </summary>
+        public const int RespecHighGoldPerPoint = 4;
 
         public static bool IsUnlocked(int heroLevel) => heroLevel >= TalentWheelCatalog.UnlockLevel;
 
@@ -181,11 +188,22 @@ namespace Rapadura.Gameplay.Talents
             return result;
         }
 
-        /// <summary>Gold a reset costs: <see cref="RespecGoldPerPoint"/> per spent point, at least <see cref="RespecMinimumGold"/> (0 = nothing spent).</summary>
-        public static int RespecCost(TalentRecord record)
+        /// <summary>
+        /// Gold a reset costs: <see cref="RespecGoldPerPoint"/> per spent point (+ <see cref="RespecHighGoldPerPoint"/> per point
+        /// above <see cref="RespecHighPointsStart"/>, on each point), at least <see cref="RespecMinimumGold"/> (0 = nothing spent).
+        /// </summary>
+        public static int RespecCost(TalentRecord record) => RespecCostFor(SpentPoints(record));
+
+        /// <summary><see cref="RespecCost(TalentRecord)"/> of a wheel with <paramref name="spent"/> points spent.</summary>
+        public static int RespecCostFor(int spent)
         {
-            int spent = SpentPoints(record);
-            return spent <= 0 ? 0 : Math.Max(RespecMinimumGold, spent * RespecGoldPerPoint);
+            if (spent <= 0)
+            {
+                return 0;
+            }
+
+            int perPoint = RespecGoldPerPoint + RespecHighGoldPerPoint * Math.Max(0, spent - RespecHighPointsStart);
+            return Math.Max(RespecMinimumGold, spent * perPoint);
         }
 
         public static TalentRespecResult CanRespec(TalentRecord record, int goldOwned)
