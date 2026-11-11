@@ -23,5 +23,22 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             new TetoChuteLane(new Vector2(350f, 830f), new Vector2(470f, 380f), 18f),
             new TetoChuteLane(new Vector2(510f, 835f), new Vector2(525f, 395f), 18f),
         };
+
+        /// <summary>
+        /// The course of the cart of map 37 (<c>TetoCartRules</c>), top to foot (≈ 813 m): it boards where the chute-bridge road crosses the east
+        /// chute of the Calhas Geladas (lane 3, 9 m north of the road), runs down that chute's centre line, over the shelf to the head of the east
+        /// chute of the Calhas de Pedra (lane 0) and down it to the foot, 140 m west of the Encosta dos Zimbros. Clear of the Rio do Wakhan
+        /// (≥ 80 m west of every point) and of the pond.
+        /// </summary>
+        public static readonly Vector2[] TetoCartCourse =
+        {
+            new Vector2(515f, 684f), new Vector2(525f, 398f), new Vector2(598f, 342f), new Vector2(580.3f, -92f),
+        };
+
+        /// <summary>The top station (where [E] boards the cart): the first point of <see cref="TetoCartCourse"/>.</summary>
+        public static Vector2 TetoCartTop => TetoCartCourse[0];
+
+        /// <summary>The foot of the course, where the cart leaves the hero.</summary>
+        public static Vector2 TetoCartFoot => TetoCartCourse[TetoCartCourse.Length - 1];
     }
 }

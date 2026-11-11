@@ -115,6 +115,19 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private float _toY;
         private float _travelled;
         private Vector3 _last;
+        private float _dropSpeed;
+
+        /// <summary>
+        /// Metres to the right of the line of travel, set by the driver each frame (a steered cart, map 37); 0 rides the line itself. Begin
+        /// puts it back to 0.
+        /// </summary>
+        public float Lateral { get; set; }
+
+        /// <summary>Whether a ride begun with <paramref name="keepMount"/> gets the hero off the mount first (pure): every ride but the mount's own.</summary>
+        public static bool DismountsHero(bool keepMount) => !keepMount;
+
+        /// <summary>True when the last <see cref="Begin"/> left the hero on the mount; <see cref="End"/> never dismounts either way.</summary>
+        public bool KeepsMount { get; private set; }
 
         /// <summary>True while the ride holds the controls.</summary>
         public bool Active { get; private set; }
@@ -129,13 +142,18 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public Vector2 End2D => _points != null && _points.Length > 0 ? _points[_points.Length - 1] : Vector2.zero;
 
         /// <summary>Where the hero is now (world x/z).</summary>
-        public Vector2 Here => _points != null ? RidePath.PointAt(_points, _travelled) : Vector2.zero;
+        public Vector2 Here => _points != null ? RidePath.PointAt(_points, _travelled) + Right(RidePath.DirectionAt(_points, _travelled)) * Lateral : Vector2.zero;
 
         /// <summary>
         /// Takes the controls and starts along <paramref name="worldPoints"/> at <paramref name="speed"/> m/s, <paramref name="hover"/> metres over the
         /// ground or water and <paramref name="arc"/> metres higher at the middle. False (nothing changes) when the hero's parts are missing.
+        /// <paramref name="dropSpeed"/> &gt; 0 lets the hero fall at most that many metres a second when the ground drops away (a cart off a
+        /// terrace step) instead of snapping down; climbing always follows the ground at once. <paramref name="keepMount"/> leaves the hero on
+        /// the mount (Taweret's hippo swimming a canal): the mount rides along, parented to the hero, and the hero is still mounted when the
+        /// controls come back; every other ride gets the hero off first (<see cref="DismountsHero"/>).
         /// </summary>
-        public bool Begin(GameObject hero, OverworldLayout layout, Vector2[] worldPoints, float speed, float arc, float hover)
+        public bool Begin(GameObject hero, OverworldLayout layout, Vector2[] worldPoints, float speed, float arc, float hover, float dropSpeed = 0f,
+            bool keepMount = false)
         {
             if (Active || hero == null || worldPoints == null || worldPoints.Length < 2 || speed <= 0f)
             {
@@ -150,7 +168,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return false;
             }
 
-            MountController.Active?.Dismount(startRecall: false, leave: false);
+            if (DismountsHero(keepMount))
+            {
+                MountController.Active?.Dismount(startRecall: false, leave: false);
+            }
+
+            KeepsMount = keepMount;
             _player = hero.transform;
             _controller = controller;
             _character = character;
@@ -164,6 +187,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _fromY = Floor(worldPoints[0]);
             _toY = Floor(worldPoints[worldPoints.Length - 1]);
             _travelled = 0f;
+            _dropSpeed = Mathf.Max(0f, dropSpeed);
+            Lateral = 0f;
             Elapsed = 0f;
 
             // Clears the motor's velocity so the Animator rests in idle while the controls are off.
@@ -195,10 +220,15 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             Elapsed += deltaTime;
             _travelled = Mathf.Min(_length, _travelled + _speed * deltaTime);
             float t = Progress;
-            Vector2 ground = RidePath.PointAt(_points, _travelled);
-            float y = Mathf.Max(SkyRouteRules.HeightAt(_fromY, _toY, _arc, t), Floor(ground));
-            _player.position = new Vector3(ground.x, y, ground.y);
             Vector2 d = RidePath.DirectionAt(_points, _travelled);
+            Vector2 ground = RidePath.PointAt(_points, _travelled) + Right(d) * Lateral;
+            float y = Mathf.Max(SkyRouteRules.HeightAt(_fromY, _toY, _arc, t), Floor(ground));
+            if (_dropSpeed > 0f && y < _last.y)
+            {
+                y = Mathf.Max(y, _last.y - _dropSpeed * deltaTime);
+            }
+
+            _player.position = new Vector3(ground.x, y, ground.y);
             _player.rotation = Quaternion.LookRotation(new Vector3(d.x, 0f, d.y));
             _last = _player.position;
             if (t >= 1f)
@@ -229,6 +259,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 _controller.enabled = true;
             }
         }
+
+        /// <summary>The right-hand side of a direction of travel (world x/z).</summary>
+        public static Vector2 Right(Vector2 direction) => new Vector2(direction.y, -direction.x);
 
         private float Floor(Vector2 p)
         {

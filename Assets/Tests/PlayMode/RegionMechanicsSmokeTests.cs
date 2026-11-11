@@ -43,22 +43,22 @@ namespace Rapadura.Tests.PlayMode
         /// <summary>The 16 regions in catalog order: the region's layout id and the drivers that must run there.</summary>
         private static readonly (int Number, string PartId, Type[] Drivers)[] Regions =
         {
-            (1, OverworldLayouts.ZarafshanId, new[] { typeof(ZarafshanMechanicsDriver) }),
+            (1, OverworldLayouts.ZarafshanId, new[] { typeof(ZarafshanMechanicsDriver), typeof(ZarafshanGardenMechanicsDriver) }),
             (2, OverworldLayouts.AreiasId, new[] { typeof(AreiasMechanicsDriver) }),
             (3, OverworldLayouts.KaggenId, new[] { typeof(KaggenMechanicsDriver) }),
             (4, OverworldLayouts.LimiarId, new[] { typeof(LimiarMechanicsDriver) }),
             (5, OverworldLayouts.CostaId, new[] { typeof(CostaDeltaTetoMechanicsDriver) }),
             (6, OverworldLayouts.DeltaId, new[] { typeof(CostaDeltaTetoMechanicsDriver) }),
-            (7, OverworldLayouts.TetoId, new[] { typeof(CostaDeltaTetoMechanicsDriver) }),
+            (7, OverworldLayouts.TetoId, new[] { typeof(CostaDeltaTetoMechanicsDriver), typeof(TetoCartMechanicsDriver) }),
             (8, OverworldLayouts.MingchengId, new[] { typeof(MingchengMechanicsDriver) }),
             (9, OverworldLayouts.NartesId, new[] { typeof(NartesMechanicsDriver) }),
-            (10, OverworldLayouts.FarnkeshRegionId, new[] { typeof(FarnkeshMechanicsDriver) }),
+            (10, OverworldLayouts.FarnkeshRegionId, new[] { typeof(FarnkeshMechanicsDriver), typeof(FarnkeshSilenceMechanicsDriver) }),
             (11, OverworldLayouts.MarGeladoRegionId, new[] { typeof(MarGeladoMechanicsDriver) }),
             (12, OverworldLayouts.HinokuraRegionId, new[] { typeof(HinokuraMechanicsDriver) }),
             (13, OverworldLayouts.RioRegionId, new[] { typeof(RioMechanicsDriver), typeof(RioRaftMechanicsDriver) }),
             (14, OverworldLayouts.MisturaRegionId, new[] { typeof(MisturaMechanicsDriver) }),
             (15, OverworldLayouts.ProfundoRegionId, new[] { typeof(ProfundoMechanicsDriver), typeof(ProfundoGateMechanicsDriver), typeof(ProfundoPathsMechanicsDriver) }),
-            (16, OverworldLayouts.CeuRegionId, new[] { typeof(CeuMechanicsDriver) }),
+            (16, OverworldLayouts.CeuRegionId, new[] { typeof(CeuMechanicsDriver), typeof(CeuRiverMechanicsDriver) }),
         };
 
         private bool _bossSpawningBefore;

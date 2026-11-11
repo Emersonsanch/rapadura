@@ -149,7 +149,7 @@ namespace Rapadura.UI.Housing
             new LocalizationEntry(LayerYard, "Yard", "Quintal"),
             new LocalizationEntry(Confirm, "✓ Place", "✓ Colocar"),
             new LocalizationEntry(Rotate, "Rotate 90°", "Girar 90°"),
-            new LocalizationEntry(Mirror, "⇋ Mirror", "⇋ Espelhar"),
+            new LocalizationEntry(Mirror, "Mirror", "Espelhar"), // ⇋ is not in the UI font either (drew as a box)
             new LocalizationEntry(Store, "Put away", "Guardar"),
             new LocalizationEntry(Cancel, "Cancel", "Cancelar"),
             new LocalizationEntry(HintPc, "Pick an item from the Storage or click one in the house · Q/E rotate · click places · Del puts away · right click cancels", "Escolha um item do Depósito ou clique num da casa · Q/E gira · clique coloca · Del guarda · botão direito cancela"),

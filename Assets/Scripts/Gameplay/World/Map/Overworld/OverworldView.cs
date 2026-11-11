@@ -147,6 +147,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             root.AddComponent<Mechanics.AreiasMechanicsDriver>(); root.AddComponent<Mechanics.KaggenMechanicsDriver>(); root.AddComponent<Mechanics.LimiarMechanicsDriver>();
             root.AddComponent<Mechanics.CostaDeltaTetoMechanicsDriver>();
             root.AddComponent<Mechanics.ZarafshanMechanicsDriver>();
+            root.AddComponent<Mechanics.ZarafshanGardenMechanicsDriver>(); root.AddComponent<Mechanics.TetoCartMechanicsDriver>(); root.AddComponent<Mechanics.FarnkeshSilenceMechanicsDriver>(); root.AddComponent<Mechanics.CeuRiverMechanicsDriver>();
 
             // Switches off, ten times a second, the drivers whose region is far from the hero (added after them: it reads them all).
             root.AddComponent<Mechanics.MechanicsDriverHub>();
