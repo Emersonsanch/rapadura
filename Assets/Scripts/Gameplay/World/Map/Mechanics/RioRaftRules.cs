@@ -99,6 +99,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         /// <summary>Whether the raft tied at <paramref name="builtAt"/> still keeps at <paramref name="now"/>.</summary>
         public static bool RaftLive(long builtAt, long now) => builtAt > 0L && now >= builtAt && now - builtAt < RaftLifeSeconds;
 
+        /// <summary>
+        /// Whether a ride from <paramref name="check"/> is the hippo swimming the canal (no live raft, the hero on Taweret's hippo): the hero
+        /// stays mounted the whole way (<see cref="MechanicsRide.Begin"/> keepMount) and the mud hippos let it through.
+        /// </summary>
+        public static bool SwimsOnHippo(RioRaftCheck check, bool hippoMount, bool raftLive) =>
+            check == RioRaftCheck.Ride && hippoMount && !raftLive;
+
         /// <summary>What [E] at a landing does. <paramref name="zonesOpen"/> = the soft barrier lets the hero over every zone of the canal.</summary>
         public static RioRaftCheck Check(bool zonesOpen, bool raftLive, bool hippoMount, int bundles, float sinceRide)
         {

@@ -19,6 +19,26 @@ namespace Rapadura.Tests
         private static OverworldLayout World => OverworldLayouts.Get(OverworldLayouts.RioRegionId);
 
         [Test]
+        public void TaweretsHippo_SwimsTheCanal_WithTheHeroStillMounted()
+        {
+            Assert.IsTrue(RioRaftRules.SwimsOnHippo(RioRaftCheck.Ride, hippoMount: true, raftLive: false), "no raft: the hippo swims");
+            Assert.IsFalse(RioRaftRules.SwimsOnHippo(RioRaftCheck.Ride, hippoMount: true, raftLive: true), "a live raft: the hero sails it");
+            Assert.IsFalse(RioRaftRules.SwimsOnHippo(RioRaftCheck.Ride, hippoMount: false, raftLive: true));
+            Assert.IsFalse(RioRaftRules.SwimsOnHippo(RioRaftCheck.Resting, hippoMount: true, raftLive: false));
+            Assert.IsFalse(RioRaftRules.SwimsOnHippo(RioRaftCheck.ZoneBlocked, hippoMount: true, raftLive: false));
+
+            Assert.IsFalse(MechanicsRide.DismountsHero(keepMount: true), "the hippo's own swim keeps the hero on it");
+            Assert.IsTrue(MechanicsRide.DismountsHero(keepMount: false), "every other ride (raft, updraft, cart, river) gets the hero off");
+
+            var ride = new MechanicsRide();
+            Assert.IsFalse(ride.Begin(null, World, new[] { Vector2.zero, Vector2.one }, 1f, 0f, 0f, keepMount: true), "no hero: nothing changes");
+            Assert.IsFalse(ride.Active);
+            Assert.IsFalse(ride.KeepsMount);
+            ride.End();
+            Assert.AreEqual(RideStep.Idle, ride.Tick(0.1f));
+        }
+
+        [Test]
         public void Reeds_RegrowAfterFiveMinutes()
         {
             Assert.IsTrue(RioRaftRules.ReedReady(0L, T), "never cut");

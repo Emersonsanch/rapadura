@@ -195,6 +195,39 @@ namespace Rapadura.Tests
         }
 
         [Test]
+        public void ProtectedRefine_PaysTheFerreirosFee_AtEveryHeroLevel()
+        {
+            TachoRecipe protection = TachoRules.Get(TachoRules.ProtectedRefineId);
+            int[] heroLevels = { 1, 50, 100, 101, 150, 225, 300, 400, 499, 500 };
+            foreach (int hero in heroLevels)
+            {
+                for (int level = 0; level <= RefineRules.MaxLevel; level++)
+                {
+                    Assert.AreEqual(RefineRules.FeeFor(level, hero), TachoRules.GoldFor(protection, level, hero),
+                        $"+{level} at hero level {hero}");
+                }
+            }
+
+            Assert.AreEqual(210, TachoRules.GoldFor(protection, 14, 500), "+14 → +15 at 500: the same 210 as the ferreiro");
+            Assert.AreEqual(RefineRules.GoldCostFor(14), TachoRules.GoldFor(protection, 14), "no hero level: the campaign price");
+
+            int fee = RefineRules.FeeFor(14, 500);
+            var owned = new Dictionary<string, int>
+            {
+                [TachoRules.Gold] = fee - 1,
+            };
+            foreach (TachoIngredient ingredient in TachoRules.CostFor(protection, 14))
+            {
+                owned[ingredient.ItemId] = System.Math.Max(owned.TryGetValue(ingredient.ItemId, out int n) ? n : 0, ingredient.Quantity);
+            }
+
+            int Owned(string id) => owned.TryGetValue(id, out int n) ? n : 0;
+            Assert.AreEqual(TachoCheck.NotEnoughGold, TachoRules.Check(protection, true, 14, "item_iron_sword", Owned, 500));
+            owned[TachoRules.Gold] = fee;
+            Assert.AreEqual(TachoCheck.Ok, TachoRules.Check(protection, true, 14, "item_iron_sword", Owned, 500));
+        }
+
+        [Test]
         public void Checks_NeedTheMainItem_PlusFour_TheMaterials_AndTheGold()
         {
             TachoRecipe wings = TachoRules.Get(TachoRules.CreateWingsId(WingStyle.Carcara));

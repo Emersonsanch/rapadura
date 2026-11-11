@@ -264,15 +264,18 @@ namespace Rapadura.Gameplay.Tacho
             }
         }
 
-        /// <summary>Gold of <paramref name="recipe"/>: the protected refine pays what the normal refine pays (+9 and up).</summary>
-        public static int GoldFor(TachoRecipe recipe, int mainLevel)
+        /// <summary>
+        /// Gold of <paramref name="recipe"/>: the protected refine pays what the normal refine pays, the ferreiro's fee of
+        /// <see cref="RefineRules.FeeFor"/> at <paramref name="heroLevel"/> (the campaign price up to level 100).
+        /// </summary>
+        public static int GoldFor(TachoRecipe recipe, int mainLevel, int heroLevel = 1)
         {
             if (recipe == null)
             {
                 return 0;
             }
 
-            return recipe.Kind == TachoRecipeKind.ProtectedRefine ? RefineRules.GoldCostFor(mainLevel) : recipe.Gold;
+            return recipe.Kind == TachoRecipeKind.ProtectedRefine ? RefineRules.FeeFor(mainLevel, heroLevel) : recipe.Gold;
         }
 
         /// <summary>
@@ -303,9 +306,11 @@ namespace Rapadura.Gameplay.Tacho
 
         /// <summary>
         /// Whether <paramref name="recipe"/> can be tried. <paramref name="hasMain"/>/<paramref name="mainLevel"/>/<paramref name="mainItemId"/>
-        /// describe the chosen main item; <paramref name="owned"/> counts an item id in the bag.
+        /// describe the chosen main item; <paramref name="owned"/> counts an item id in the bag; <paramref name="heroLevel"/> sets
+        /// the gold of a protected refine (<see cref="GoldFor"/>).
         /// </summary>
-        public static TachoCheck Check(TachoRecipe recipe, bool hasMain, int mainLevel, string mainItemId, Func<string, int> owned)
+        public static TachoCheck Check(TachoRecipe recipe, bool hasMain, int mainLevel, string mainItemId, Func<string, int> owned,
+            int heroLevel = 1)
         {
             if (recipe == null)
             {
@@ -373,7 +378,7 @@ namespace Rapadura.Gameplay.Tacho
                 }
             }
 
-            return owned(Gold) < GoldFor(recipe, mainLevel) ? TachoCheck.NotEnoughGold : TachoCheck.Ok;
+            return owned(Gold) < GoldFor(recipe, mainLevel, heroLevel) ? TachoCheck.NotEnoughGold : TachoCheck.Ok;
         }
 
         /// <summary>The first material line the bag lacks (null when every line is there).</summary>

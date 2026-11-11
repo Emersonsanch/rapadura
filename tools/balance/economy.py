@@ -70,11 +70,12 @@ DOC_PLAY_HOURS = {50: 8.0, 100: 45.0, 200: 157.0, 300: 310.0, 400: 513.0, 500: 8
 BUDGET_MILESTONE_TOLERANCE = 0.20  # cumulative play hours within ±20% of DOC_PLAY_HOURS
 BUDGET_BAND_STEP = (0.85, 1.60)  # hours per level of a band / of the band before: no wall, no free ride (above the campaign curve, 51+)
 BUDGET_QUEST_SHARE_MAX = 0.60  # quests never pay more than 60% of a band's XP ("passa voando")
-# Above 100 (QuestXpRules): a band with a quest gets 3-40% of its XP from quests (the bands without a letter sit at the
-# floor, city quests alone), and quests pay at least 5% of all the XP of 101-500 (0% before the rule; the 20-30% of
-# Progressao500 §1.3 needs quests in the 19 bands that have none, see Docs/Balanco100a500.md §5.3).
+# Above 100 (QuestXpRules): every band has a quest and gets 3-40% of its XP from quests (the bands without a letter sit at
+# the floor, two city quests alone: ~5%). Quests pay 8-15% of all the XP of 101-500 (decided 2026-11-11, Progressao500 §1.3
+# and Docs/Balanco100a500.md §5: MU style, past 100 the hero climbs by hunting and quests are a bonus; 0% before the rule,
+# ~9% with the city quests on the road of sugestão 5). The old 20-30% target is dropped.
 BUDGET_QUEST_SHARE_BAND_ABOVE_100 = (0.03, 0.40)
-BUDGET_QUEST_SHARE_ABOVE_100 = (0.05, 0.30)
+BUDGET_QUEST_SHARE_ABOVE_100 = (0.08, 0.15)
 BUDGET_FARE_MINUTES = 60.0  # a Barca fare costs at most an hour of farming gold at its warp level
 BUDGET_KEEPSAKE_KILLS = 20.0  # expected kills of a world boss to collect what the house recipes spend of its keepsake
 BUDGET_BOSS_CAMP = (1.1, 1.5)  # camping a world boss pays 1.1-1.5x the XP/h of farming the commons of its level (sugestão 4)
@@ -291,12 +292,13 @@ def load_city_quests(maps: list) -> list:
     out = []
     chunks = re.split(r"(?=new CityQuestSpec\()", src)[1:]
     for chunk in chunks:
-        match = re.match(r'new CityQuestSpec\(CityCatalog\.(\w+), "\w+", new RegionQuestSpec\((\w+), BiomeType\.\w+, [\w.]+, (\d+),', chunk)
+        # A quest on the road names its map, zone and level (CityQuestSpec.MinLevel) and is paid at that level.
+        match = re.match(r'new CityQuestSpec\(CityCatalog\.(\w+), "\w+", (?:"\w+", "\w+", (\d+), )?new RegionQuestSpec\((\w+), BiomeType\.\w+, [\w.]+, (\d+),', chunk)
         if not match:
             continue
-        city, quest, xp = match.groups()
+        city, road_level, quest, xp = match.groups()
         gold, items = _split(_rewards(chunk))
-        out.append(QuestReward("cidade", quest, levels[cities[city]], int(xp), gold, items))
+        out.append(QuestReward("cidade", quest, int(road_level) if road_level else levels[cities[city]], int(xp), gold, items))
     return out
 
 
@@ -611,13 +613,16 @@ class SetRow:
 def load_sets(regions: dict) -> list:
     src = _read(SET_CS)
     chance = _const(src, "DropChance")
-    region_of = {"Papyrus": "Rio", "BlueBrick": "Mistura", "Seal": "Profundo", "Light": "Ceu"}
+    middle = _const(src, "MiddleDropChance")
+    region_of = {"Coral": "Costa", "Lotus": "Delta", "Yak": "Teto", "Bronze": "Mingcheng", "Kurgan": "Nartes",
+                 "Papyrus": "Rio", "BlueBrick": "Mistura", "Seal": "Profundo", "Light": "Ceu"}
     rows = []
     for name, body in re.findall(r"ArmorSetDefinition (\w+) = new ArmorSetDefinition\((.*?)\}\);", src, re.DOTALL):
         beasts = re.findall(r'"(enemy_\w+)"', body)
         region = regions[region_of[name]]
         own = len([b for b in beasts if b in region.species])
-        kills = 3.0 / chance  # coupon collector, 2 pieces: 1/p + 2/p
+        p = middle if "MiddleDropChance" in body else chance  # Regions 5-9: ArmorSetRules.MiddleDropChance
+        kills = 3.0 / p  # coupon collector, 2 pieces: 1/p + 2/p
         farm = kills * len(region.species) / max(1, own)
         rows.append(SetRow(re.search(r'"(\w+)"', body).group(1), len(beasts), len(region.species), kills, farm, farm / KILLS_PER_HOUR))
     return rows
@@ -993,7 +998,7 @@ def report_loot(eco: Economy) -> str:
         mark = " **(fora)**" if k.kills > BUDGET_KEEPSAKE_KILLS else ""
         lines.append(f"| {k.boss_name} ({k.level}) | {k.item} | {k.chance:.0%} × {k.mean_qty:g} | {k.value} ({int(k.value * SELL_BACK_RATE)}) | "
                      f"{k.recipes} / {k.needed} | {k.kills:.1f}{mark} | {k.hours:.1f} |")
-    lines += ["", "Conjuntos das regiões 13–16 (`ArmorSetRules.DropChance`, só as feras do conjunto soltam):", "",
+    lines += ["", "Conjuntos das regiões 5–9 (`ArmorSetRules.MiddleDropChance`) e 13–16 (`DropChance`), só as feras do conjunto soltam:", "",
               "| Conjunto | Feras / espécies da região | Abates de fera p/ as 2 peças | Abates caçando a região | Horas de abate |", "|---|---|---|---|---|"]
     for s in eco.sets:
         lines.append(f"| {s.name} | {s.beasts} / {s.region_species} | {_n(s.kills)} | {_n(s.farm_kills)} | {s.farm_hours:.1f} |")
@@ -1050,7 +1055,7 @@ def report_quest_rule(eco: Economy) -> str:
     base = {b.low: b for b in before.bands}
     above = [b for b in eco.bands if b.low > 100]
     lines = [f"`QuestXpRules.For`: acima do nível {rule.above}, etapa da história do meio = {rule.shares['meio']:.0%} do XP do nível em que abre, "
-             f"Carta = {rule.shares['cartas']:.0%}, missão de cidade = {rule.shares['cidade']:.0%} (no nível de andar do mapa da cidade); nunca "
+             f"Carta = {rule.shares['cartas']:.0%}, missão de cidade = {rule.shares['cidade']:.0%} (no nível de andar do mapa da cidade; na estrada, no nível da missão); nunca "
              "menos que o número escrito no catálogo. Campanha (Atos I–V, missões de região) sem mudança.", "",
              "| Faixa | XP de missão só com o escrito | Com a regra | Horas da faixa: antes → depois |", "|---|---|---|---|"]
     for b in picks:

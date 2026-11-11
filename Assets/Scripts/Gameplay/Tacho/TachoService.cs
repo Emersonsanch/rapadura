@@ -143,12 +143,13 @@ namespace Rapadura.Gameplay.Tacho
             InventorySlotData data = recipe != null && recipe.NeedsMainItem && target.HasValue ? RefineService.Resolve(bag, target.Value) : null;
             ItemDefinition item = data != null ? ItemDatabase.GetById(data.itemId) : null;
             int level = MainLevelOf(recipe, data);
-            int gold = TachoRules.GoldFor(recipe, level);
+            int heroLevel = RefineService.HeroLevelOf(bag);
+            int gold = TachoRules.GoldFor(recipe, level, heroLevel);
             int goldOwned = bag != null ? bag.GetTotalCount(TachoRules.Gold) : 0;
             bool hasMain = data != null && (recipe.Kind == TachoRecipeKind.UpgradeWings || RefineRules.IsRefinable(item));
             TachoCheck check = bag == null
                 ? TachoCheck.MissingMaterial
-                : TachoRules.Check(recipe, hasMain, level, data?.itemId, bag.GetTotalCount);
+                : TachoRules.Check(recipe, hasMain, level, data?.itemId, bag.GetTotalCount, heroLevel);
             return new TachoPreview(recipe, target, data, item, level, TachoRules.ChanceFor(recipe, level), gold, goldOwned,
                 TachoRules.CostFor(recipe, level), check);
         }

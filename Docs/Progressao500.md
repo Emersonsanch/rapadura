@@ -87,7 +87,10 @@ continua exatamente no ritmo de hoje**; daí em diante os bichos dos mapas novos
 
 "Horas de abate" = só matando no mapa certo a **200 abates por hora** (o ritmo de hoje: ~3,5 abates por minuto
 incluindo andar). "Horas de jogo" = ×1,4 (cidade, viagem, morte e volta, eventos). As missões regionais, diárias e de
-caça (~20–30% do XP no campo) entram como **folga**: quem faz missão chega antes.
+caça entram como **folga**: quem faz missão chega antes. Até o 100 elas pesam mais (~20–30% do XP de algumas faixas da
+campanha); **acima do 100 a meta é 8–15% do XP** (revista em 2026-11-11, antes 20–30%): no estilo MU o herói sobe
+caçando e a missão é bônus, não o caminho. Hoje ~9% (Cartas, história do meio e missões de cidade, inclusive as da
+estrada; `BUDGET_QUEST_SHARE_ABOVE_100` em `tools/balance/economy.py`, Docs/Balanco100a500.md §5).
 
 | Nível | XP para o próximo | XP total para chegar | XP por abate (mesmo nível) | Abates por nível | Horas de abate (acum.) | **Horas de jogo (acum.)** |
 |---|---|---|---|---|---|---|

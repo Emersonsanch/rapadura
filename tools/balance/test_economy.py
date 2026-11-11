@@ -46,12 +46,12 @@ def test_content_is_read_from_the_code(eco):
     by_source = {}
     for q in eco.quests:
         by_source[q.source] = by_source.get(q.source, 0) + 1
-    assert by_source == {"meio": 15, "cartas": 17, "cidade": 46, "campanha": 8}
+    assert by_source == {"meio": 15, "cartas": 17, "cidade": 86, "campanha": 8}  # 46 + 40 on the road (regions 9-16)
     assert len(eco.maps) == 100 and [m.number for m in eco.maps] == list(range(1, 101))
     assert len(eco.fare_rows) == 99  # map 01 is the free tutorial map
     assert eco.curve.campaign == 50 and len(eco.levels) == ec.MAX_LEVEL - 1
     assert all(q.xp > 0 for q in eco.quests if q.source != "campanha")
-    assert len(eco.keepsakes) == 12 and len(eco.sets) == 4
+    assert len(eco.keepsakes) == 12 and len(eco.sets) == 9  # Regions 5-9 and 13-16 (ArmorSetRules)
 
 
 def test_milestones_follow_progressao500(eco):
@@ -80,9 +80,12 @@ def test_no_wall_and_no_free_ride_above_the_campaign(eco):
 def test_quests_pay_their_share_above_100(eco):
     low, high = ec.BUDGET_QUEST_SHARE_BAND_ABOVE_100
     above = [b for b in eco.bands if b.low > 100]
+    assert all(b.quest_xp > 0 for b in above), [b.low for b in above if b.quest_xp == 0]  # sugestão 5: no band of 101-500 without a quest
     for band in above:
         if band.quest_xp > 0:
             assert low <= band.quest_xp / band.xp <= high, (band.low, band.quest_xp / band.xp)
+    # MU style (Progressao500 §1.3, decided 2026-11-11): past 100 the hero climbs by hunting, quests pay 8-15% of 101-500.
+    assert ec.BUDGET_QUEST_SHARE_ABOVE_100 == (0.08, 0.15)
     assert ec.BUDGET_QUEST_SHARE_ABOVE_100[0] <= ec.quest_share_above_100(eco) <= ec.BUDGET_QUEST_SHARE_ABOVE_100[1]
     assert ec.quest_share_above_100(ec.with_authored_quest_xp(eco)) < 0.01  # the authored numbers alone: ~0%
 
@@ -174,7 +177,7 @@ def test_gold_has_destinations_above_100(eco, world):
 def test_bosses_pay_their_xp_per_hour(eco, world):
     """Sugestão 4 (Docs/Balanco100a500.md §5.3): camping a world boss (RegionBossRules.WorldBossKillXpMultiplier) pays 1.1-1.5x the
     XP per hour of farming the commons of its level; a map boss of the fichas (MapBossKillXpMultiplier) 0.8-1.2x."""
-    assert len(world.bosses) == 12 and len(ec.load_map_bosses()) == 6
+    assert len(world.bosses) == 12 and len(ec.load_map_bosses()) == 12
     assert ec.boss_camp_problems(eco, world.bosses) == []
     world_rank, map_rank = ec.boss_xp_ranks()
     assert world_rank > map_rank > eco.kill_xp.ranks["MapBoss"]

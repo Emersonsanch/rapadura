@@ -308,7 +308,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                     Say(RioRaftTexts.Built);
                 }
 
-                BeginRide(landing, hippo && !live && check == RioRaftCheck.Ride);
+                BeginRide(landing, RioRaftRules.SwimsOnHippo(check, hippo, live));
             }
             else if (Time.unscaledTime >= _nextDenied)
             {
@@ -347,7 +347,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private void BeginRide(int landing, bool onHippo)
         {
             Vector2[] course = RidePath.ToWorld(RioRaftRules.Course(OverworldLayouts.RioRaftCanals, landing), _origin, false);
-            if (!_ride.Begin(_player.gameObject, _layout, course, RioRaftRules.Speed, 0f, RioRaftRules.Hover))
+            if (!_ride.Begin(_player.gameObject, _layout, course, RioRaftRules.Speed, 0f, RioRaftRules.Hover, keepMount: onHippo))
             {
                 return;
             }

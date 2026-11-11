@@ -250,27 +250,31 @@ Piso de vida base 170 nos comuns do mundo aberto (aplicado no jogo do nível 100
 ## 5. Economia
 
 > Medido em 2026-11-11 com `python -I tools/balance/economy.py` (também no fim de `python -I tools/balance/power_stack.py`)
-> e travado em `tools/balance/test_economy.py`. **Sugestões 1 (teto da passagem) e 2 (XP de missão pelo nível) aplicadas
-> no jogo em 2026-11-11**; 5.1 traz o antes → depois e as tabelas da 5.4 já são o "depois". Tudo lido do C#/assets: curva (`LevelCurveMath`), XP de abate
+> e travado em `tools/balance/test_economy.py`. **Sugestões 1 (teto da passagem), 2 (XP de missão pelo nível) e 5 (missões
+> de cidade na estrada) aplicadas no jogo em 2026-11-11**; 5.1 traz o antes → depois e as tabelas da 5.4 já são o "depois". Tudo lido do C#/assets: curva (`LevelCurveMath`), XP de abate
 > (`EnemyLevelScaling.KillExperience`), missões (`MidStoryCatalog`, `LateStoryCatalog`, `CityQuestCatalog`,
 > `RegionQuestCatalog`), mapas e passagem (`MapCatalog`, `MapAccessRules`), exigências (`MapRequirementRules` ×
 > `CityShopCatalog`), lembranças de chefe (`HouseCraftRules` × LootItem do asset), conjuntos (`ArmorSetRules`) e tabelas de
 > bioma.
 
-### 5.1 Resumo (depois das sugestões 1 e 2, aplicadas em 2026-11-11)
+### 5.1 Resumo (depois das sugestões 1, 2 e 5, aplicadas em 2026-11-11)
 
 - **XP:** marcos 50: 6,7 h (−16%, igual a antes: até o 50 as missões pagam o escrito); 100: 37,6 h (−16%; antes 42,8 h);
-  200: 139 h (antes 155 h); 300: 278 h (antes 307 h); 400: 470 h (antes 511 h); 500: 797 h (−7%; antes 857 h); todos dentro
-  de ±20%. Acima do 50 o passo por faixa fica em ×0,87–×1,34, com uma **queda** documentada: 251–261 (três Cartas, 35% de
-  missão) é ×0,67 da 241–251. Grind mais longo: 471–481 com 4,0 h/nível.
+  200: 138 h (antes 155 h); 300: 274 h (antes 307 h); 400: 458 h (antes 511 h); 500: 775 h (−10%; antes 857 h); todos dentro
+  de ±20%. Acima do 50 o passo por faixa fica em ×0,88–×1,34, com uma **queda** documentada: 251–261 (três Cartas, 35% de
+  missão) é ×0,70 da 241–251. Grind mais longo: 471–481 com 3,8 h/nível (antes 4,0).
 - **Missões acima do 100:** antes 0% em todas as faixas de 101 em diante (173 mil XP de missão no jogo todo contra 1 bilhão
-  de 100 a 500). Agora 5–35% nas 21 faixas de 101–500 que têm missão (o mínimo, 5%, nas faixas só com missão de cidade) e
-  0% nas 19 sem Carta nem cidade; no total 6% do XP de 101 a 500 (108 milhões de XP de missão: Cartas 99 mi, cidade 8,8 mi,
-  meio 200 mil). A meta de 20–30% do doc só sai com missões nas faixas vazias (ver 5.3, nova sugestão 5).
+  de 100 a 500). Agora **todas as 40 faixas** de 101–500 têm missão, com 5–35% (o mínimo, 5%, nas faixas só com missão de
+  cidade; as 19 que estavam em 0% e a 201–211, que só tinha o XP de missão que sobrava da faixa de antes, ganharam duas
+  missões de cidade na estrada cada, sugestão 5); no total **9%** do XP de 101
+  a 500 (antes 6%; 163 milhões de XP de missão: Cartas 99 mi, cidade 64 mi, meio 200 mil). **Meta revista em 2026-11-11:
+  8–15% do XP de 101 a 500** (antes 20–30%): no estilo MU, depois do 100 o herói sobe caçando e a missão é bônus, não o
+  caminho; 20–30% pediria uma Carta a mais em cada uma das 19 faixas só com missão de cidade e deixaria a caça em segundo
+  plano. Os 9% de hoje já estão dentro da meta, sem conteúdo novo (`BUDGET_QUEST_SHARE_ABOVE_100` em `economy.py`).
 - **Ouro é plano:** ~910–1 190 de ouro/h em **todos** os níveis (item_gold + venda das 4 tabelas de bioma da campanha).
   Com o teto, a passagem para de crescer na barca 57: máximo **905** (no mapa 100 era 7 535 = 8 h; agora 58 min). Nenhuma
   passagem passa de 60 min de caça (antes 72 de 99 mapas, do 29 ao 100). O herói junta um pouco menos de ouro porque mata
-  menos (missão paga parte do XP): 33 mil no 100 (antes 37 mil), 574 mil no 500 (antes 616 mil).
+  menos (missão paga parte do XP): 33 mil no 100 (antes 37 mil), 569 mil no 500 (antes 616 mil).
 - **Exigências dos mapas:** todas pagáveis no nível de andar; a mais cara em minutos continua `item_grampos_escalada` 950
   no mapa 38 (54 min de caça, 15 604 na bolsa). Nenhuma loja vende abaixo do que paga de volta.
 - **Loot de chefe:** cada lembrança (`item_chefe_*`) sai em 4,8–13,3 abates do chefe (0,4–1,1 h só de respawn) para tudo o
@@ -304,8 +308,8 @@ Piso de vida base 170 nos comuns do mundo aberto (aplicado no jogo do nível 100
    **25%**; nunca menos que o número escrito no catálogo (os números escritos ficaram como estavam). Até o 50 (a curva da
    campanha) e a campanha (Atos I–V, missões de região) sem mudança: Trono de Namrael (30) 560 e Gaivotas de Taa Pwani (42)
    700 ficam. Exemplos acima do 50: Baobás (52) 1 060 → 6 003; Kirta (52) 1 040 → 3 001; Lua Cheia de Mingcheng (97)
-   2 150 → 38 960; primeira Carta (100) 2 300 → 128 064; última Carta (495) 4 600 → 30,3 milhões. Resultado: 5–35% de missão nas faixas 101–500 que têm missão (meta do doc 20–30%; o total de 101 a 500
-   fica em 6% por causa das 19 faixas vazias); marcos em 5.1.
+   2 150 → 38 960; primeira Carta (100) 2 300 → 128 064; última Carta (495) 4 600 → 30,3 milhões. Resultado: 5–35% de missão nas faixas 101–500 que têm missão (o total de 101 a 500
+   ficou em 6% por causa das 19 faixas vazias, 9% depois da sugestão 5; meta 8–15%, ver 5.1); marcos em 5.1.
 3. **[APLICADA] Destinos do ouro depois do 100** (2026-11-11): três sistemas que já existiam passam a cobrar com a faixa,
    nenhum obrigatório e nenhum sistema novo:
    - **Taxa do ferreiro no refino** (`RefineRules.FeeFor`, usada por `RefineService`): o ouro da tabela (+9 → +15: 10, 15,
@@ -333,11 +337,27 @@ Piso de vida base 170 nos comuns do mundo aberto (aplicado no jogo do nível 100
    virar a única forma de subir: o chefe volta só a cada 5 min e ×30 (1,7×) deixaria a caça de lado. Travado em
    `test_bosses_pay_their_xp_per_hour` (mundo 1,1–1,5×, mapa 0,8–1,2×). Os marcos de 5.1 não mudam (a simulação sobe só
    com missões e comuns).
-5. **Faixas sem missão (nova):** 121–131, 161–171, 231–251, 271–291, 311–331, 351–411 e 431–481 não têm Carta nem missão
-   de cidade e ficam em 0%. Uma missão de cidade (25%) ou uma terceira Carta por região nessas faixas leva o total de 101–500
-   para perto dos 20%.
+5. **[APLICADA] Faixas sem missão** (2026-11-11): 121–131, 161–171, 231–251, 271–291, 311–331, 351–411 e 431–481 não tinham
+   Carta nem missão de cidade (0%), e na 201–211 nenhuma missão abria (os 5% dela eram o XP da Carta do 200 que sobrava).
+   Agora cada uma dessas 20 faixas tem **duas missões de cidade na estrada** (40 no total,
+   `CityQuestSpec.IsOnTheRoad`): um morador que já dava missão nas cidades das Regiões 9–16 manda os primos a uma zona de um
+   mapa da própria região (`MapId`, `ZoneId`) num nível (`MinLevel`), caçar um bicho da fauna daquela zona; ele só oferece a
+   partir do nível (`CityQuestCatalog.Decide(..., heroLevel, ...)`, `Talk(..., heroLevel)`) e a missão paga 25% do XP daquele
+   nível (`CityQuestSpec.PaidLevel`; as de casa continuam no nível da cidade). Encadeadas depois das missões de casa do mesmo
+   morador. Por faixa: 121 Aryaman (Arvoredo, mapa 50, 124) e Virogdad (Fortim, 52, 128); 161 Tadi e Shad-Ohrmizd (Farnkesh,
+   57, 164/168); 201 Yirkap (Porto, 62/63, 202/208); 231 Pera (Porto, 64, 232) e Akane (Hinokura, 67, 236); 241 Sango e Akane (Hinokura, 68, 244/248); 271 Djedi
+   e Sinuhe (Mesektet, 73/74, 274/280); 281 Djedi e Sinuhe (74/75, 284/288); 311 Utnapishtim e Sin-leqi-unninni (Dur-Jarras,
+   79, 314/318); 321 os mesmos (80, 322/326); 351–401 Pamour e Makarios (Fortaleza, uma cova da treva por par: fumaça 84,
+   fogo 85, vento 86, lodo 87, treva 88; 354–406); 431–471 Ammo e Adda (Cais da Coluna, 92–97: Rio de Luz, Barca da Lua,
+   Roda Celeste, Esferas dos Arcontes, Jardim de Luz, Barca do Sol; 432–478). Travado em `CityRoadQuestTests` e
+   `test_quests_pay_their_share_above_100` (nenhuma faixa de 101–500 sem missão). Resultado: **5%** em cada faixa antes
+   vazia (201–211: 5% → 10%); total de 101–500 **6% → 9%** (uma missão de cidade é 25% do XP de **um** nível, ~2,5% da faixa de 10). Com a meta
+   revista para **8–15%** (5.1: estilo MU, subir caçando) isso basta e não se acrescentam Cartas. Para referência, a meta
+   antiga de 20% pediria ~210 milhões de XP de missão a mais (quase tudo de 351 para cima): uma Carta a mais (150% do nível,
+   ~15% da faixa) em cada uma das 19 faixas só com missão de cidade daria +168 milhões (~18%); subir
+   `QuestXpRules.CityShare` não serve (passaria nas faixas de casa também).
 
-### 5.4 Tabelas (saída do `economy.py`, depois das sugestões 1 e 2)
+### 5.4 Tabelas (saída do `economy.py`, depois das sugestões 1, 2 e 5)
 
 #### XP e ouro por faixa de 10 níveis
 
@@ -349,56 +369,56 @@ Ritmo: 200 abates/h de caça ativa, horas de jogo = abate × 1.4 (Progressao500 
 | 11–21 | 4 133 | 1 534 (37%) | 57 | 0.4 (2 min, ×0.95) | 0.8 h | 300 + 65 | 1 056 | 683 | item_corda_escalada 36 (mapa 5) |
 | 21–31 | 10 721 | 3 280 (31%) | 103 | 0.7 (4 min, ×1.81) | 1.5 h | 545 + 325 | 1 060 | 1 553 | item_lamparina_runica 150 (mapa 21) |
 | 31–41 | 27 808 | 3 200 (12%) | 255 | 1.8 (11 min, ×2.48) | 3.3 h | 1 454 + 285 | 1 141 | 3 291 | item_asas_lona_takhsich 420 (mapa 24) |
-| 41–51 | 72 132 | 4 360 (6%) | 567 | 4.0 (24 min, ×2.22) | 7.3 h | 3 073 + 395 | 1 085 | 6 760 | item_reliquia_artifices 400 (mapa 27) |
-| 51–61 | 147 126 | 29 556 (20%) | 710 | 5.0 (30 min, ×1.25) | 12.3 h | 3 696 + 630 | 1 041 | 11 086 |  |
-| 61–71 | 241 300 | 36 885 (15%) | 833 | 5.8 (35 min, ×1.17) | 18.1 h | 4 237 + 640 | 1 017 | 15 963 | item_roupa_termica 900 (mapa 36) |
-| 71–81 | 369 027 | 37 556 (10%) | 960 | 6.7 (40 min, ×1.15) | 24.8 h | 5 089 + 270 | 1 060 | 21 323 | item_grampos_escalada 950 (mapa 38) |
-| 81–91 | 535 429 | 87 362 (16%) | 975 | 6.8 (41 min, ×1.01) | 31.6 h | 5 234 + 610 | 1 074 | 27 166 |  |
-| 91–101 | 745 628 | 230 800 (31%) | 858 | 6.0 (36 min, ×0.88) | 37.6 h | 4 449 + 1 200 | 1 037 | 32 815 |  |
-| 101–111 | 1 004 748 | 248 988 (25%) | 982 | 6.9 (41 min, ×1.14) | 44.5 h | 5 189 + 550 | 1 057 | 38 553 |  |
-| 111–121 | 1 317 913 | 63 244 (5%) | 1 309 | 9.2 (55 min, ×1.33) | 53.7 h | 6 916 + 380 | 1 057 | 45 850 |  |
-| 121–131 | 1 690 242 | 0 (0%) | 1 448 | 10.1 (61 min, ×1.11) | 63.8 h | 7 651 + 0 | 1 057 | 53 500 |  |
-| 131–141 | 2 126 860 | 107 380 (5%) | 1 440 | 10.1 (60 min, ×0.99) | 73.9 h | 7 619 + 400 | 1 058 | 61 520 |  |
-| 141–151 | 2 632 886 | 534 821 (20%) | 1 266 | 8.9 (53 min, ×0.88) | 82.8 h | 7 011 + 630 | 1 107 | 69 161 |  |
-| 151–161 | 3 213 449 | 486 185 (15%) | 1 401 | 9.8 (59 min, ×1.11) | 92.6 h | 7 628 + 220 | 1 089 | 77 008 |  |
-| 161–171 | 3 873 666 | 0 (0%) | 1 710 | 12.0 (72 min, ×1.22) | 105 h | 9 310 + 0 | 1 089 | 86 319 |  |
-| 171–181 | 4 618 660 | 232 726 (5%) | 1 682 | 11.8 (71 min, ×0.98) | 116 h | 9 200 + 440 | 1 094 | 95 958 |  |
-| 181–191 | 5 453 557 | 797 775 (15%) | 1 559 | 10.9 (65 min, ×0.93) | 127 h | 8 827 + 230 | 1 133 | 105 015 |  |
-| 191–201 | 6 383 476 | 683 008 (11%) | 1 698 | 11.9 (71 min, ×1.09) | 139 h | 9 615 + 230 | 1 133 | 114 860 |  |
-| 201–211 | 7 413 542 | 341 504 (5%) | 1 852 | 13.0 (78 min, ×1.09) | 152 h | 10 992 + 0 | 1 187 | 125 852 |  |
-| 211–221 | 8 548 875 | 430 196 (5%) | 1 903 | 13.3 (80 min, ×1.03) | 165 h | 11 273 + 460 | 1 185 | 137 585 |  |
-| 221–231 | 9 794 601 | 1 439 366 (15%) | 1 752 | 12.3 (74 min, ×0.92) | 178 h | 10 229 + 240 | 1 168 | 148 053 |  |
-| 231–241 | 11 155 840 | 0 (0%) | 2 113 | 14.8 (89 min, ×1.21) | 192 h | 12 334 + 0 | 1 168 | 160 388 |  |
-| 241–251 | 12 637 715 | 0 (0%) | 2 166 | 15.2 (91 min, ×1.03) | 208 h | 12 505 + 0 | 1 155 | 172 892 |  |
-| 251–261 | 14 245 352 | 5 014 088 (35%) | 1 443 | 10.1 (61 min, ×0.67) **(queda)** | 218 h | 8 190 + 980 | 1 135 | 182 063 |  |
-| 261–271 | 15 983 867 | 2 303 196 (14%) | 1 933 | 13.5 (81 min, ×1.34) | 231 h | 9 942 + 260 | 1 028 | 192 265 |  |
-| 271–281 | 17 858 387 | 0 (0%) | 2 321 | 16.2 (97 min, ×1.20) | 248 h | 11 936 + 0 | 1 028 | 204 201 |  |
-| 281–291 | 19 874 032 | 0 (0%) | 2 371 | 16.6 (100 min, ×1.02) | 264 h | 10 785 + 0 | 910 | 214 986 |  |
-| 291–301 | 22 035 929 | 3 412 238 (15%) | 2 055 | 14.4 (86 min, ×0.87) | 278 h | 9 348 + 760 | 910 | 225 094 |  |
-| 301–311 | 24 373 174 | 4 680 273 (19%) | 1 984 | 13.9 (83 min, ×0.97) | 292 h | 9 331 + 270 | 941 | 234 695 |  |
-| 311–321 | 26 987 199 | 0 (0%) | 2 534 | 17.7 (106 min, ×1.28) | 310 h | 11 916 + 0 | 941 | 246 611 |  |
-| 321–331 | 29 938 017 | 0 (0%) | 2 608 | 18.3 (110 min, ×1.03) | 328 h | 12 635 + 0 | 969 | 259 246 |  |
-| 331–341 | 33 275 353 | 5 161 595 (16%) | 2 287 | 16.0 (96 min, ×0.88) | 344 h | 11 079 + 790 | 969 | 271 114 |  |
-| 341–351 | 37 054 209 | 7 210 417 (19%) | 2 245 | 15.7 (94 min, ×0.98) | 360 h | 10 523 + 280 | 937 | 281 917 |  |
-| 351–361 | 41 335 093 | 0 (0%) | 2 914 | 20.4 (122 min, ×1.30) | 380 h | 13 657 + 0 | 937 | 295 575 |  |
-| 361–371 | 46 184 301 | 0 (0%) | 3 046 | 21.3 (128 min, ×1.05) | 402 h | 14 141 + 0 | 928 | 309 716 |  |
-| 371–381 | 51 674 155 | 0 (0%) | 3 194 | 22.4 (134 min, ×1.05) | 424 h | 14 829 + 0 | 928 | 324 545 |  |
-| 381–391 | 57 883 263 | 0 (0%) | 3 359 | 23.5 (141 min, ×1.05) | 448 h | 15 595 + 0 | 928 | 340 140 |  |
-| 391–401 | 64 896 778 | 0 (0%) | 3 542 | 24.8 (149 min, ×1.05) | 472 h | 16 443 + 0 | 928 | 356 583 |  |
-| 401–411 | 72 806 656 | 0 (0%) | 3 742 | 26.2 (157 min, ×1.06) | 499 h | 17 374 + 0 | 928 | 373 957 |  |
-| 411–421 | 81 711 909 | 4 106 978 (5%) | 3 763 | 26.3 (158 min, ×1.01) | 525 h | 17 465 + 550 | 928 | 391 973 |  |
-| 421–431 | 91 718 860 | 13 829 969 (15%) | 3 570 | 25.0 (150 min, ×0.95) | 550 h | 16 531 + 280 | 926 | 408 784 |  |
-| 431–441 | 102 941 399 | 0 (0%) | 4 458 | 31.2 (187 min, ×1.25) | 581 h | 20 648 + 0 | 926 | 429 432 |  |
-| 441–451 | 115 501 245 | 0 (0%) | 4 737 | 33.2 (199 min, ×1.06) | 614 h | 22 045 + 0 | 931 | 451 477 |  |
-| 451–461 | 129 528 192 | 0 (0%) | 5 037 | 35.3 (212 min, ×1.06) | 650 h | 23 439 + 0 | 931 | 474 916 |  |
-| 461–471 | 145 160 375 | 0 (0%) | 5 358 | 37.5 (225 min, ×1.06) | 687 h | 24 934 + 0 | 931 | 499 851 |  |
-| 471–481 | 162 544 524 | 0 (0%) | 5 701 | 39.9 (239 min, ×1.06) | 727 h | 26 532 + 0 | 931 | 526 383 |  |
-| 481–491 | 181 836 214 | 26 216 103 (14%) | 5 179 | 36.3 (218 min, ×0.91) | 763 h | 24 099 + 290 | 931 | 550 771 |  |
-| 491–500 | 181 856 128 | 30 298 173 (17%) | 4 829 | 33.8 (225 min, ×1.04) | 797 h | 22 472 + 300 | 931 | 573 543 |  |
+| 41–51 | 72 132 | 4 360 (6%) | 567 | 4.0 (24 min, ×2.22) | 7.3 h | 3 010 + 395 | 1 062 | 6 696 | item_reliquia_artifices 400 (mapa 27) |
+| 51–61 | 147 126 | 29 556 (20%) | 710 | 5.0 (30 min, ×1.25) | 12.3 h | 3 584 + 630 | 1 009 | 10 910 |  |
+| 61–71 | 241 300 | 36 885 (15%) | 833 | 5.8 (35 min, ×1.17) | 18.1 h | 4 164 + 640 | 1 000 | 15 714 | item_roupa_termica 900 (mapa 36) |
+| 71–81 | 369 027 | 37 556 (10%) | 960 | 6.7 (40 min, ×1.15) | 24.8 h | 5 063 + 270 | 1 054 | 21 047 | item_grampos_escalada 950 (mapa 38) |
+| 81–91 | 535 429 | 87 362 (16%) | 975 | 6.8 (41 min, ×1.01) | 31.6 h | 5 234 + 610 | 1 074 | 26 891 |  |
+| 91–101 | 745 628 | 230 800 (31%) | 858 | 6.0 (36 min, ×0.88) | 37.6 h | 4 449 + 1 200 | 1 037 | 32 539 |  |
+| 101–111 | 1 004 748 | 248 988 (25%) | 982 | 6.9 (41 min, ×1.14) | 44.5 h | 5 189 + 550 | 1 057 | 38 278 |  |
+| 111–121 | 1 317 913 | 63 244 (5%) | 1 309 | 9.2 (55 min, ×1.33) | 53.7 h | 6 916 + 380 | 1 057 | 45 574 |  |
+| 121–131 | 1 690 242 | 85 457 (5%) | 1 376 | 9.6 (58 min, ×1.05) | 63.3 h | 7 267 + 400 | 1 057 | 53 242 |  |
+| 131–141 | 2 126 860 | 107 380 (5%) | 1 440 | 10.1 (60 min, ×1.05) | 73.4 h | 7 619 + 400 | 1 058 | 61 261 |  |
+| 141–151 | 2 632 886 | 534 821 (20%) | 1 266 | 8.9 (53 min, ×0.88) | 82.3 h | 7 011 + 630 | 1 107 | 68 902 |  |
+| 151–161 | 3 213 449 | 486 185 (15%) | 1 401 | 9.8 (59 min, ×1.11) | 92.1 h | 7 628 + 220 | 1 089 | 76 750 |  |
+| 161–171 | 3 873 666 | 195 353 (5%) | 1 624 | 11.4 (68 min, ×1.16) | 103 h | 8 844 + 420 | 1 089 | 86 014 |  |
+| 171–181 | 4 618 660 | 232 726 (5%) | 1 682 | 11.8 (71 min, ×1.04) | 115 h | 9 200 + 440 | 1 094 | 95 653 |  |
+| 181–191 | 5 453 557 | 797 775 (15%) | 1 559 | 10.9 (65 min, ×0.93) | 126 h | 8 827 + 230 | 1 133 | 104 710 |  |
+| 191–201 | 6 383 476 | 683 008 (11%) | 1 698 | 11.9 (71 min, ×1.09) | 138 h | 9 615 + 230 | 1 133 | 114 555 |  |
+| 201–211 | 7 413 542 | 709 503 (10%) | 1 755 | 12.3 (74 min, ×1.03) | 150 h | 10 415 + 430 | 1 187 | 125 400 |  |
+| 211–221 | 8 548 875 | 430 196 (5%) | 1 903 | 13.3 (80 min, ×1.08) | 164 h | 11 273 + 460 | 1 185 | 137 133 |  |
+| 221–231 | 9 794 601 | 1 439 366 (15%) | 1 752 | 12.3 (74 min, ×0.92) | 176 h | 10 229 + 240 | 1 168 | 147 601 |  |
+| 231–241 | 11 155 840 | 547 077 (5%) | 2 007 | 14.1 (84 min, ×1.15) | 190 h | 11 720 + 440 | 1 168 | 159 762 |  |
+| 241–251 | 12 637 715 | 635 620 (5%) | 2 058 | 14.4 (86 min, ×1.03) | 204 h | 11 879 + 460 | 1 155 | 172 100 |  |
+| 251–261 | 14 245 352 | 5 014 088 (35%) | 1 443 | 10.1 (61 min, ×0.70) **(queda)** | 214 h | 8 190 + 980 | 1 135 | 181 270 |  |
+| 261–271 | 15 983 867 | 2 303 196 (14%) | 1 933 | 13.5 (81 min, ×1.34) | 228 h | 9 942 + 260 | 1 028 | 191 473 |  |
+| 271–281 | 17 858 387 | 907 608 (5%) | 2 205 | 15.4 (93 min, ×1.14) | 243 h | 11 338 + 480 | 1 028 | 203 290 |  |
+| 281–291 | 19 874 032 | 998 775 (5%) | 2 253 | 15.8 (95 min, ×1.02) | 259 h | 10 245 + 500 | 910 | 214 036 |  |
+| 291–301 | 22 035 929 | 3 412 238 (15%) | 2 055 | 14.4 (86 min, ×0.91) | 274 h | 9 348 + 760 | 910 | 224 144 |  |
+| 301–311 | 24 373 174 | 4 680 273 (19%) | 1 984 | 13.9 (83 min, ×0.97) | 287 h | 9 331 + 270 | 941 | 233 744 |  |
+| 311–321 | 26 987 199 | 1 355 958 (5%) | 2 407 | 16.8 (101 min, ×1.21) | 304 h | 11 319 + 520 | 941 | 245 583 |  |
+| 321–331 | 29 938 017 | 1 473 200 (5%) | 2 478 | 17.3 (104 min, ×1.03) | 322 h | 12 006 + 540 | 969 | 258 130 |  |
+| 331–341 | 33 275 353 | 5 161 595 (16%) | 2 287 | 16.0 (96 min, ×0.92) | 338 h | 11 079 + 790 | 969 | 269 998 |  |
+| 341–351 | 37 054 209 | 7 210 417 (19%) | 2 245 | 15.7 (94 min, ×0.98) | 353 h | 10 523 + 280 | 937 | 280 801 |  |
+| 351–361 | 41 335 093 | 2 077 568 (5%) | 2 768 | 19.4 (116 min, ×1.23) | 373 h | 12 973 + 560 | 937 | 294 334 |  |
+| 361–371 | 46 184 301 | 2 321 464 (5%) | 2 893 | 20.3 (122 min, ×1.05) | 393 h | 13 432 + 570 | 928 | 308 337 |  |
+| 371–381 | 51 674 155 | 2 539 591 (5%) | 3 036 | 21.3 (128 min, ×1.05) | 414 h | 14 093 + 580 | 928 | 323 010 |  |
+| 381–391 | 57 883 263 | 2 909 846 (5%) | 3 191 | 22.3 (134 min, ×1.05) | 437 h | 14 814 + 590 | 928 | 338 414 |  |
+| 391–401 | 64 896 778 | 3 262 553 (5%) | 3 364 | 23.6 (141 min, ×1.05) | 460 h | 15 619 + 600 | 928 | 354 632 |  |
+| 401–411 | 72 806 656 | 3 576 921 (5%) | 3 557 | 24.9 (149 min, ×1.06) | 485 h | 16 513 + 610 | 928 | 371 755 |  |
+| 411–421 | 81 711 909 | 4 106 978 (5%) | 3 763 | 26.3 (158 min, ×1.06) | 511 h | 17 465 + 550 | 928 | 389 770 |  |
+| 421–431 | 91 718 860 | 13 829 969 (15%) | 3 570 | 25.0 (150 min, ×0.95) | 536 h | 16 531 + 280 | 926 | 406 582 |  |
+| 431–441 | 102 941 399 | 5 057 392 (5%) | 4 238 | 29.7 (178 min, ×1.19) | 566 h | 19 625 + 600 | 926 | 426 807 |  |
+| 441–451 | 115 501 245 | 5 674 814 (5%) | 4 503 | 31.5 (189 min, ×1.06) | 598 h | 20 953 + 620 | 931 | 448 379 |  |
+| 451–461 | 129 528 192 | 6 364 583 (5%) | 4 787 | 33.5 (201 min, ×1.06) | 631 h | 22 278 + 630 | 931 | 471 288 |  |
+| 461–471 | 145 160 375 | 7 133 541 (5%) | 5 093 | 35.6 (214 min, ×1.06) | 667 h | 23 699 + 640 | 931 | 495 627 |  |
+| 471–481 | 162 544 524 | 8 171 090 (5%) | 5 416 | 37.9 (227 min, ×1.06) | 705 h | 25 201 + 660 | 931 | 521 489 |  |
+| 481–491 | 181 836 214 | 26 216 103 (14%) | 5 179 | 36.3 (218 min, ×0.96) | 741 h | 24 099 + 290 | 931 | 545 877 |  |
+| 491–500 | 181 856 128 | 30 298 173 (17%) | 4 829 | 33.8 (225 min, ×1.04) | 775 h | 22 472 + 300 | 931 | 568 649 |  |
 
-Marcos (horas de jogo acumuladas): 50: 6.7 h (doc 8 h, -16%) · 100: 37.6 h (doc 45 h, -16%) · 200: 139 h (doc 157 h, -11%) · 300: 278 h (doc 310 h, -10%) · 400: 470 h (doc 513 h, -8%) · 500: 797 h (doc 860 h, -7%)
+Marcos (horas de jogo acumuladas): 50: 6.7 h (doc 8 h, -16%) · 100: 37.6 h (doc 45 h, -16%) · 200: 138 h (doc 157 h, -12%) · 300: 274 h (doc 310 h, -12%) · 400: 458 h (doc 513 h, -11%) · 500: 775 h (doc 860 h, -10%)
 
-XP e ouro de missão por fonte: meio: 15 missões, 200 479 XP, 1 650 ouro · cartas: 17 missões, 99 074 613 XP, 4 210 ouro · cidade: 46 missões, 8 757 130 XP, 7 100 ouro · campanha: 8 missões, 1 140 XP, 15 ouro (total 108 033 362 XP).
+XP e ouro de missão por fonte: meio: 15 missões, 200 479 XP, 1 650 ouro · cartas: 17 missões, 99 074 613 XP, 4 210 ouro · cidade: 86 missões, 64 413 540 XP, 17 950 ouro · campanha: 8 missões, 1 140 XP, 15 ouro (total 163 689 772 XP).
 
 #### XP por bicho
 
@@ -432,7 +452,7 @@ Acampar o chefe = um abate a cada 300 s de volta + 18 s de luta; caçar comuns =
 
 #### XP de missão proporcional ao nível (QuestXpRules)
 
-`QuestXpRules.For`: acima do nível 50, etapa da história do meio = 50% do XP do nível em que abre, Carta = 150%, missão de cidade = 25% (no nível de andar do mapa da cidade); nunca menos que o número escrito no catálogo. Campanha (Atos I–V, missões de região) sem mudança.
+`QuestXpRules.For`: acima do nível 50, etapa da história do meio = 50% do XP do nível em que abre, Carta = 150%, missão de cidade = 25% (no nível de andar do mapa da cidade; na estrada, no nível da missão); nunca menos que o número escrito no catálogo. Campanha (Atos I–V, missões de região) sem mudança.
 
 | Faixa | XP de missão só com o escrito | Com a regra | Horas da faixa: antes → depois |
 |---|---|---|---|
@@ -442,16 +462,16 @@ Acampar o chefe = um abate a cada 300 s de volta + 18 s de luta; caçar comuns =
 | 91–101 | 2% | 31% | 8.4 → 6.0 |
 | 101–111 | 1% | 25% | 9.1 → 6.9 |
 | 151–161 | 0% | 15% | 11.5 → 9.8 |
-| 201–211 | 0% | 5% | 13.6 → 13.0 |
+| 201–211 | 0% | 10% | 13.6 → 12.3 |
 | 261–271 | 0% | 14% | 15.9 → 13.5 |
 | 301–311 | 0% | 19% | 17.3 → 13.9 |
 | 341–351 | 0% | 19% | 19.6 → 15.7 |
 | 421–431 | 0% | 15% | 29.4 → 25.0 |
 | 491–500 | 0% | 17% | 40.5 → 33.8 |
 
-Faixas 101–500: 5%–35% de missão nas 21 faixas que têm missão, 0% nas outras 19; no total 6% do XP de 101 a 500 (antes 0%).
+Faixas 101–500: 5%–35% de missão nas 40 faixas que têm missão, 0% nas outras 0; no total 9% do XP de 101 a 500 (antes 0%).
 
-Marcos só com o escrito: 50: 6.7 h · 100: 42.8 h · 200: 155 h · 300: 307 h · 400: 511 h · 500: 857 h
+Marcos só com o escrito: 50: 6.7 h · 100: 42.8 h · 200: 155 h · 300: 307 h · 400: 511 h · 500: 856 h
 
 #### Exigências dos mapas (na ordem do nível de andar)
 
@@ -471,48 +491,48 @@ Marcos só com o escrito: 50: 6.7 h · 100: 42.8 h · 200: 155 h · 300: 307 h �
 | 23 (36 / 42) | EternalFireOil | missão | item_oleo_fogo_eterno | — | 1 950 | — |
 | 24 (40 / 46) | WingsOrDoubleJump | compra | item_asas_lona_takhsich | 420 | 2 729 | 21 min |
 | 25 (42 / 48) | BoatOrDock | missão | item_passagem_dhow | — | 2 818 | — |
-| 27 (50 / 56) | ArtificerRelic | compra | item_reliquia_artifices | 400 | 5 604 | 23 min |
-| 28 (52 / 60) | BreathingShell | missão | item_concha_respiravel | — | 6 079 | — |
-| 29 (58 / 65) | AirBubble | missão | item_bolha_ar | — | 8 671 | — |
-| 30 (60 / 70) | RootBoots (Joaquim passa) | missão | item_botas_raiz | — | 9 619 | — |
-| 32 (62 / 68) | RootBridgeBalance (Maithe passa) | missão | item_vara_equilibrio | — | 10 441 | — |
-| 33 (66 / 74) | SaddleRequired | compra | item_barco_junco | 600 | 12 267 | 36 min |
-| 36 (68 / 75) | ThermalClothes | compra | item_roupa_termica | 900 | 12 670 | 53 min |
-| 34 (72 / 80) | AntiVenomAmulet | missão | item_amuleto_antiveneno | — | 13 883 | — |
-| 38 (76 / 84) | ClimbingCrampons | compra | item_grampos_escalada | 950 | 15 959 | 54 min |
-| 35 (78 / 85) | PurifyingFruit | missão | item_fruta_purificadora | — | 16 152 | — |
-| 39 (80 / 88) | WingsRequired | sem compra | asas do Tacho / montaria voadora | — | 17 164 | — |
-| 40 (86 / 94) | StormProtection | missão | item_capa_tempestade | — | 20 753 | — |
-| 42 (92 / 100) | SunSeal | missão | item_selo_sol | — | 24 219 | — |
-| 45 (110 / 120) | TorchRequired | missão | item_lamparina_oleo | — | 34 275 | — |
-| 52 (128 / 140) | ClimbingCrampons | missão | item_grampos_escalada | — | 47 596 | — |
-| 57 (162 / 170) | StormProtection | missão | item_capa_tempestade | — | 74 353 | — |
-| 58 (176 / 186) | WingsOrDoubleJump | já tinha | item_asas_lona_takhsich | — | 87 528 | — |
-| 63 (208 / 216) | BlizzardResistance | missão | item_cha_gengibre | — | 118 780 | — |
-| 64 (222 / 230) | ThermalClothes | missão | item_roupa_termica | — | 135 201 | — |
-| 67 (230 / 238) | ClimbingCrampons | missão | item_grampos_escalada | — | 143 266 | — |
-| 68 (240 / 248) | BoatOrDock | missão | item_passagem_dhow | — | 155 569 | — |
-| 70 (260 / 268) | FreshWater | missão | item_odre_agua | — | 177 339 | — |
-| 72 (262 / 270) | SaddleRequired | missão | item_barco_junco | — | 179 647 | — |
-| 73 (270 / 278) | TorchRequired | missão | item_lamparina_oleo | — | 187 514 | — |
-| 74 (280 / 288) | RunicLamp | missão | item_lamparina_runica | — | 199 425 | — |
-| 75 (288 / 296) | EternalFireOil | missão | item_oleo_fogo_eterno | — | 208 156 | — |
-| 76 (300 / 308) | AntiVenomAmulet | missão | item_amuleto_antiveneno | — | 221 263 | — |
-| 78 (302 / 310) | FreshWater | missão | item_odre_agua | — | 222 105 | — |
-| 79 (310 / 318) | SaddleRequired | missão | item_barco_junco | — | 229 949 | — |
-| 80 (318 / 326) | ElevatedPlatforms | já tinha | item_corda_escalada | — | 239 431 | — |
-| 81 (330 / 338) | ClimbingCrampons | missão | item_grampos_escalada | — | 254 393 | — |
-| 82 (340 / 348) | TorchRequired | missão | item_lamparina_oleo | — | 267 273 | — |
-| 84 (344 / 352) | PoisonProtection (Lavine passa) | missão | item_teriaga | — | 270 786 | — |
-| 85 (356 / 364) | EternalFireOil | missão | item_oleo_fogo_eterno | — | 285 102 | — |
-| 86 (368 / 376) | WingsOrDoubleJump | já tinha | item_asas_lona_takhsich | — | 301 834 | — |
-| 87 (382 / 390) | AirBubble | missão | item_bolha_ar | — | 322 498 | — |
-| 88 (396 / 404) | RunicLamp | missão | item_lamparina_runica | — | 344 680 | — |
-| 89 (408 / 416) | RootBridgeBalance (Maithe passa) | missão | item_vara_equilibrio | — | 365 071 | — |
-| 90 (420 / 428) | TorchRequired | missão | item_lamparina_oleo | — | 386 519 | — |
-| 94 (442 / 450) | ElevatedPlatforms | já tinha | item_corda_escalada | — | 428 005 | — |
-| 95 (452 / 460) | WingsOrDoubleJump | já tinha | item_asas_lona_takhsich | — | 450 185 | — |
-| 99 (484 / 492) | StormProtection | missão | item_capa_tempestade | — | 527 252 | — |
+| 27 (50 / 56) | ArtificerRelic | compra | item_reliquia_artifices | 400 | 5 554 | 24 min |
+| 28 (52 / 60) | BreathingShell | missão | item_concha_respiravel | — | 6 002 | — |
+| 29 (58 / 65) | AirBubble | missão | item_bolha_ar | — | 8 521 | — |
+| 30 (60 / 70) | RootBoots (Joaquim passa) | missão | item_botas_raiz | — | 9 447 | — |
+| 32 (62 / 68) | RootBridgeBalance (Maithe passa) | missão | item_vara_equilibrio | — | 10 258 | — |
+| 33 (66 / 74) | SaddleRequired | compra | item_barco_junco | 600 | 12 056 | 36 min |
+| 36 (68 / 75) | ThermalClothes | compra | item_roupa_termica | 900 | 12 447 | 54 min |
+| 34 (72 / 80) | AntiVenomAmulet | missão | item_amuleto_antiveneno | — | 13 621 | — |
+| 38 (76 / 84) | ClimbingCrampons | compra | item_grampos_escalada | 950 | 15 684 | 54 min |
+| 35 (78 / 85) | PurifyingFruit | missão | item_fruta_purificadora | — | 15 877 | — |
+| 39 (80 / 88) | WingsRequired | sem compra | asas do Tacho / montaria voadora | — | 16 888 | — |
+| 40 (86 / 94) | StormProtection | missão | item_capa_tempestade | — | 20 478 | — |
+| 42 (92 / 100) | SunSeal | missão | item_selo_sol | — | 23 943 | — |
+| 45 (110 / 120) | TorchRequired | missão | item_lamparina_oleo | — | 34 000 | — |
+| 52 (128 / 140) | ClimbingCrampons | missão | item_grampos_escalada | — | 47 331 | — |
+| 57 (162 / 170) | StormProtection | missão | item_capa_tempestade | — | 74 094 | — |
+| 58 (176 / 186) | WingsOrDoubleJump | já tinha | item_asas_lona_takhsich | — | 87 223 | — |
+| 63 (208 / 216) | BlizzardResistance | missão | item_cha_gengibre | — | 118 404 | — |
+| 64 (222 / 230) | ThermalClothes | missão | item_roupa_termica | — | 134 749 | — |
+| 67 (230 / 238) | ClimbingCrampons | missão | item_grampos_escalada | — | 142 814 | — |
+| 68 (240 / 248) | BoatOrDock | missão | item_passagem_dhow | — | 154 943 | — |
+| 70 (260 / 268) | FreshWater | missão | item_odre_agua | — | 176 547 | — |
+| 72 (262 / 270) | SaddleRequired | missão | item_barco_junco | — | 178 855 | — |
+| 73 (270 / 278) | TorchRequired | missão | item_lamparina_oleo | — | 186 722 | — |
+| 74 (280 / 288) | RunicLamp | missão | item_lamparina_runica | — | 198 575 | — |
+| 75 (288 / 296) | EternalFireOil | missão | item_oleo_fogo_eterno | — | 207 226 | — |
+| 76 (300 / 308) | AntiVenomAmulet | missão | item_amuleto_antiveneno | — | 220 313 | — |
+| 78 (302 / 310) | FreshWater | missão | item_odre_agua | — | 221 154 | — |
+| 79 (310 / 318) | SaddleRequired | missão | item_barco_junco | — | 228 999 | — |
+| 80 (318 / 326) | ElevatedPlatforms | já tinha | item_corda_escalada | — | 238 444 | — |
+| 81 (330 / 338) | ClimbingCrampons | missão | item_grampos_escalada | — | 253 277 | — |
+| 82 (340 / 348) | TorchRequired | missão | item_lamparina_oleo | — | 266 157 | — |
+| 84 (344 / 352) | PoisonProtection (Lavine passa) | missão | item_teriaga | — | 269 670 | — |
+| 85 (356 / 364) | EternalFireOil | missão | item_oleo_fogo_eterno | — | 283 927 | — |
+| 86 (368 / 376) | WingsOrDoubleJump | já tinha | item_asas_lona_takhsich | — | 300 527 | — |
+| 87 (382 / 390) | AirBubble | missão | item_bolha_ar | — | 320 963 | — |
+| 88 (396 / 404) | RunicLamp | missão | item_lamparina_runica | — | 342 845 | — |
+| 89 (408 / 416) | RootBridgeBalance (Maithe passa) | missão | item_vara_equilibrio | — | 362 869 | — |
+| 90 (420 / 428) | TorchRequired | missão | item_lamparina_oleo | — | 384 316 | — |
+| 94 (442 / 450) | ElevatedPlatforms | já tinha | item_corda_escalada | — | 425 380 | — |
+| 95 (452 / 460) | WingsOrDoubleJump | já tinha | item_asas_lona_takhsich | — | 447 088 | — |
+| 99 (484 / 492) | StormProtection | missão | item_capa_tempestade | — | 522 358 | — |
 
 #### Passagem da barca
 
@@ -523,14 +543,14 @@ Passagem = 50 + min(nível da barca, 57) × 15 (`MapAccessRules.CalculateWarpCos
 | 02 | 5 | 125 | 160 (39) | 1 025 | 7 min |
 | 03 | 18 | 320 | 554 (141) | 1 060 | 18 min |
 | 13 | 12 | 230 | 342 (93) | 1 042 | 13 min |
-| 25 | 48 | 770 | 5 553 (2 057) | 1 042 | 44 min |
-| 41 | 95 | 905 | 29 553 (9 592) | 1 045 | 52 min |
-| 47 | 104 | 905 | 34 516 (11 275) | 1 057 | 51 min |
-| 59 | 184 | 905 | 99 033 (27 647) | 1 133 | 48 min |
-| 71 | 264 | 905 | 184 065 (47 185) | 1 028 | 53 min |
-| 83 | 344 | 905 | 274 357 (71 141) | 937 | 58 min |
-| 91 | 424 | 905 | 397 688 (103 589) | 926 | 59 min |
-| 100 | 499 | 905 | 570 473 (148 830) | 931 | 58 min |
+| 25 | 48 | 770 | 5 527 (2 057) | 1 010 | 46 min |
+| 41 | 95 | 905 | 29 278 (9 592) | 1 045 | 52 min |
+| 47 | 104 | 905 | 34 241 (11 275) | 1 057 | 51 min |
+| 59 | 184 | 905 | 98 728 (28 277) | 1 133 | 48 min |
+| 71 | 264 | 905 | 183 273 (48 772) | 1 028 | 53 min |
+| 83 | 344 | 905 | 273 241 (74 178) | 937 | 58 min |
+| 91 | 424 | 905 | 395 486 (108 950) | 926 | 59 min |
+| 100 | 499 | 905 | 565 579 (155 832) | 931 | 58 min |
 
 Teto: a passagem segue o nível da barca só até o 57 (`MapAccessRules.WarpFeeLevelCap`, passagem máxima 905); o teto que ainda cabe em 60 min de caça na faixa mais pobre é o 57.
 
@@ -568,7 +588,7 @@ Saque de bioma por faixa (o valor por abate, venda a 50%; só existem as 4 tabel
 |---|---|---|---|---|---|---|
 | 5 | 19 | Forest 37%, Desert 32%, Mountain 26%, Caves 5% | 1.20 | 3.92 | 5.12 | 1025 |
 | 25 | 24 | Forest 29%, Mountain 29%, Desert 25%, Caves 17% | 1.20 | 4.10 | 5.30 | 1060 |
-| 50 | 15 | Forest 33%, Desert 27%, Caves 20%, Mountain 20% | 1.20 | 4.01 | 5.21 | 1042 |
+| 50 | 27 | Forest 48%, Mountain 26%, Desert 15%, Caves 11% | 1.20 | 3.85 | 5.05 | 1010 |
 | 100 | 27 | Mountain 37%, Forest 33%, Desert 19%, Caves 11% | 1.20 | 4.08 | 5.28 | 1057 |
 | 200 | 36 | Mountain 72%, Forest 17%, Desert 8%, Caves 3% | 1.20 | 4.46 | 5.66 | 1133 |
 | 300 | 46 | Forest 72%, Mountain 20%, Desert 7%, Caves 2% | 1.20 | 3.50 | 4.70 | 941 |
@@ -594,55 +614,54 @@ Equipamento à venda nas lojas (preço em ouro): item_leather_boots 9, item_wood
 
 "Vida gasta numa luta" = dano esperado dos dois comuns (os dois batem na primeira metade da caça de 2, um na segunda) em % da vida, sem poção nem cura; acima de 100% o herói morre antes de matar o par.
 
-#### Destinos do ouro acima do 100
+#### Fora do orçamento
 
-Saída do `economy.py` (sugestão 3): taxa do ferreiro em cada Pedra da Alma que cai, conserto do conjunto vestido (+9, 3 golpes
-por abate, valor no máximo 200) e um reset da Roda a cada 50 níveis (rateado por faixa).
+- band drop: 251
+
+#### Destinos do ouro acima do 100 (sugestão 3)
+
+Destinos (nenhum obrigatório): taxa do ferreiro no refino (`RefineRules.FeeFor`: preço da campanha × (1 + (nível − 100) / 125); cada Pedra da Alma que cai vai para a cadeia +0 → +15, 17.6 de ouro por pedra no preço da campanha), conserto do conjunto vestido (+9, 3 golpes por abate, valor no máximo 200: `DurabilityRules.RepairValueCap`) e um reset da Roda a cada 50 níveis (`TalentWheelRules.RespecCostFor`).
 
 | Faixa | Ouro que entra | Pedras da Alma | Refino | Conjunto | Conserto | Reset (rateado) | Gasto | % do ouro |
 |---|---|---|---|---|---|---|---|---|
 | 101–111 | 5 739 | 16 | 297 | bone | 1 184 | 132 | 1 614 | 28% |
 | 111–121 | 7 296 | 22 | 427 | bone | 1 579 | 171 | 2 177 | 30% |
-| 121–131 | 7 651 | 24 | 506 | bone | 1 746 | 212 | 2 464 | 32% |
+| 121–131 | 7 667 | 23 | 481 | bone | 1 659 | 212 | 2 351 | 31% |
 | 131–141 | 8 019 | 24 | 538 | bone | 1 737 | 254 | 2 528 | 32% |
 | 141–151 | 7 641 | 24 | 584 | bone | 1 527 | 298 | 2 408 | 32% |
 | 151–161 | 7 848 | 24 | 601 | bone | 1 689 | 343 | 2 633 | 34% |
-| 161–171 | 9 310 | 29 | 775 | bone | 2 062 | 390 | 3 227 | 35% |
+| 161–171 | 9 264 | 27 | 736 | bone | 1 958 | 390 | 3 085 | 33% |
 | 171–181 | 9 640 | 29 | 821 | bone | 2 028 | 439 | 3 288 | 34% |
 | 181–191 | 9 057 | 32 | 944 | bone | 1 879 | 489 | 3 312 | 37% |
 | 191–201 | 9 845 | 35 | 1 074 | bone | 2 047 | 541 | 3 662 | 37% |
-| 201–211 | 10 992 | 46 | 1 488 | bone | 2 233 | 594 | 4 315 | 39% |
+| 201–211 | 10 845 | 43 | 1 410 | bone | 2 116 | 594 | 4 120 | 38% |
 | 211–221 | 11 733 | 47 | 1 586 | bone | 2 294 | 649 | 4 529 | 39% |
 | 221–231 | 10 469 | 41 | 1 465 | bone | 2 113 | 706 | 4 283 | 41% |
-| 231–241 | 12 334 | 50 | 1 836 | bone | 2 547 | 764 | 5 147 | 42% |
-| 241–251 | 12 505 | 51 | 1 950 | bone | 2 612 | 824 | 5 386 | 43% |
+| 231–241 | 12 160 | 48 | 1 745 | bone | 2 421 | 764 | 4 929 | 41% |
+| 241–251 | 12 339 | 49 | 1 852 | bone | 2 481 | 824 | 5 157 | 42% |
 | 251–261 | 9 170 | 32 | 1 256 | bone | 1 740 | 885 | 3 882 | 42% |
 | 261–271 | 10 202 | 27 | 1 087 | papiro | 1 506 | 948 | 3 541 | 35% |
-| 271–281 | 11 936 | 32 | 1 348 | papiro | 1 807 | 1 013 | 4 168 | 35% |
-| 281–291 | 10 785 | 12 | 518 | papiro | 1 847 | 1 079 | 3 444 | 32% |
+| 271–281 | 11 818 | 30 | 1 280 | papiro | 1 717 | 1 013 | 4 009 | 34% |
+| 281–291 | 10 745 | 11 | 492 | papiro | 1 754 | 1 079 | 3 325 | 31% |
 | 291–301 | 10 108 | 10 | 463 | papiro | 1 600 | 1 147 | 3 210 | 32% |
 | 301–311 | 9 601 | 13 | 624 | tijolo | 1 426 | 1 216 | 3 266 | 34% |
-| 311–321 | 11 916 | 17 | 819 | tijolo | 1 822 | 1 287 | 3 927 | 33% |
-| 321–331 | 12 635 | 22 | 1 073 | tijolo | 1 875 | 1 360 | 4 307 | 34% |
+| 311–321 | 11 839 | 16 | 778 | tijolo | 1 730 | 1 287 | 3 795 | 32% |
+| 321–331 | 12 546 | 21 | 1 019 | tijolo | 1 782 | 1 360 | 4 161 | 33% |
 | 331–341 | 11 869 | 19 | 966 | tijolo | 1 644 | 1 434 | 4 044 | 34% |
 | 341–351 | 10 803 | 15 | 799 | selo | 1 963 | 1 510 | 4 271 | 40% |
-| 351–361 | 13 657 | 20 | 1 063 | selo | 2 548 | 1 587 | 5 198 | 38% |
-| 361–371 | 14 141 | 21 | 1 139 | selo | 2 664 | 1 666 | 5 468 | 39% |
-| 371–381 | 14 829 | 22 | 1 225 | selo | 2 793 | 1 747 | 5 765 | 39% |
-| 381–391 | 15 595 | 23 | 1 320 | selo | 2 938 | 1 829 | 6 087 | 39% |
-| 391–401 | 16 443 | 24 | 1 426 | selo | 3 097 | 1 913 | 6 436 | 39% |
-| 401–411 | 17 374 | 25 | 1 543 | selo | 3 273 | 1 998 | 6 813 | 39% |
+| 351–361 | 13 533 | 19 | 1 010 | selo | 2 420 | 1 587 | 5 017 | 37% |
+| 361–371 | 14 002 | 20 | 1 082 | selo | 2 530 | 1 666 | 5 278 | 38% |
+| 371–381 | 14 673 | 21 | 1 164 | selo | 2 655 | 1 747 | 5 566 | 38% |
+| 381–391 | 15 404 | 22 | 1 254 | selo | 2 790 | 1 829 | 5 873 | 38% |
+| 391–401 | 16 219 | 23 | 1 355 | selo | 2 942 | 1 913 | 6 209 | 38% |
+| 401–411 | 17 123 | 24 | 1 467 | selo | 3 110 | 1 998 | 6 575 | 38% |
 | 411–421 | 18 015 | 25 | 1 577 | selo | 3 291 | 2 085 | 6 952 | 39% |
 | 421–431 | 16 811 | 23 | 1 445 | luz | 2 869 | 2 174 | 6 488 | 39% |
-| 431–441 | 20 648 | 28 | 1 845 | luz | 3 584 | 2 264 | 7 693 | 37% |
-| 441–451 | 22 045 | 30 | 1 976 | luz | 3 808 | 2 356 | 8 140 | 37% |
-| 451–461 | 23 439 | 32 | 2 146 | luz | 4 049 | 2 449 | 8 644 | 37% |
-| 461–471 | 24 934 | 34 | 2 330 | luz | 4 307 | 2 544 | 9 181 | 37% |
-| 471–481 | 26 532 | 36 | 2 530 | luz | 4 583 | 2 641 | 9 754 | 37% |
+| 431–441 | 20 225 | 27 | 1 754 | luz | 3 406 | 2 264 | 7 424 | 37% |
+| 441–451 | 21 573 | 28 | 1 879 | luz | 3 619 | 2 356 | 7 854 | 36% |
+| 451–461 | 22 908 | 30 | 2 040 | luz | 3 848 | 2 449 | 8 337 | 36% |
+| 461–471 | 24 339 | 32 | 2 215 | luz | 4 094 | 2 544 | 8 853 | 36% |
+| 471–481 | 25 861 | 34 | 2 403 | luz | 4 353 | 2 641 | 9 397 | 36% |
 | 481–491 | 24 389 | 33 | 2 347 | luz | 4 163 | 2 739 | 9 248 | 38% |
 | 491–500 | 22 772 | 30 | 2 226 | luz | 3 882 | 2 555 | 8 663 | 38% |
-| **101–500** | **540 729** | 1098 | 49 983 | | 98 356 | 51 224 | **199 563** | **37%** |
-
-#### Fora do orçamento
-
-- band drop: 251
+| **101–500** | **536 110** | 1069 | 48 542 | | 95 548 | 51 224 | **195 314** | **36%** |
