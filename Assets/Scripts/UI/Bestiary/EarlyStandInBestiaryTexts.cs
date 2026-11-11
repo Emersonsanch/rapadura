@@ -91,8 +91,8 @@ namespace Rapadura.UI.Bestiary
 
             // -- Dunas que Cantam (10) --
             Page(entries, "enemy_desert_thorn_lizard",
-                "There is a lizard in the sands that drinks the dew off its own back, through the grooves between its thorns; your grandfather showed me one on the caravan road and I didn't believe him. The Living Fire dried the dunes, and this kind learned to drink the sparks instead. The thorns glow at the tips now. It is quick and low, so watch your ankles, and don't grab it, whatever Joaquim says.",
-                "Tem um lagarto nas areias que bebe o orvalho das próprias costas, pelos sulcos entre os espinhos; o avô de vocês me mostrou um na estrada das caravanas e eu não acreditei. O Fogo Vivo secou as dunas, e esse tipo aprendeu a beber faísca no lugar. Os espinhos agora brilham na ponta. É rápido e baixinho, então cuidado com os tornozelos, e não peguem com a mão, diga o Joaquim o que disser.",
+                "There is a lizard in the sands that drinks the dew off its own back, through the grooves between its thorns; your grandfather showed me one on the caravan road and I didn't believe him. The Devouring Fire dried the dunes, and this kind learned to drink the sparks instead. The thorns glow at the tips now. It is quick and low, so watch your ankles, and don't grab it, whatever Joaquim says.",
+                "Tem um lagarto nas areias que bebe o orvalho das próprias costas, pelos sulcos entre os espinhos; o avô de vocês me mostrou um na estrada das caravanas e eu não acreditei. O Fogo Devorador secou as dunas, e esse tipo aprendeu a beber faísca no lugar. Os espinhos agora brilham na ponta. É rápido e baixinho, então cuidado com os tornozelos, e não peguem com a mão, diga o Joaquim o que disser.",
                 ("Low and fast. Strike down, not across.", "Baixo e rápido. Bate pra baixo, não de lado."),
                 ("It learned to drink sparks just to stay alive. Clever thing.", "Aprendeu a beber faísca só pra sobreviver. Espertinho."),
                 ("I grabbed it. Don't grab it.", "Eu peguei. Não peguem."),

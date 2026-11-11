@@ -17,8 +17,8 @@ Edna olha do iwan há uma semana e **a lua continua uma unha**.
   aquedutos profundos. A cada lugar a lua "engorda um fio", e a Vó confere duas vezes. Nos aquedutos a água leva parte das
   faíscas para o mar: o Takhsich paga a passagem de dhow.
 - **Região 5 (Costa das Monções):** gaivotas ladras, babuínos que guardam faíscas no oco dos baobás e crocodilos do mangue
-  (o Hedammu dorme mais para dentro: "deixem ele dormir"). A lua passa da metade; o resto da luz vai rio acima com a chuva.
-- **Região 6 (Delta de Jhilpur):** pítons enroladas na chuva das cascatas e trolls que embolsam faíscas na mata morta, perto
+  (a Hedammu dorme mais para dentro: "deixem ela dormir"). A lua passa da metade; o resto da luz vai rio acima com a chuva.
+- **Região 6 (Delta de Jhilpur):** pítons enroladas na chuva das cascatas e trols que embolsam faíscas na mata morta, perto
   do Coração do Lodo (o Lodo-que-Engole fica "para outro dia"). Falta uma fatia da lua, e ela aponta para o norte.
 - **Região 7 (Teto do Mundo):** ursos dormindo em montes de faísca nos zimbros e os almas que empilharam a luz das montanhas
   nos picos gelados. Do alto se vê, a leste, a planície dos nove anéis. O Aydahar dorme no passo: os primos dão a volta.
@@ -49,7 +49,7 @@ Toda etapa exige a anterior e um nível maior; o doador só entrega a partir do 
 | 7 | 5 | Os Baobás Ocos | Ensuhkeshdanna (Aratta) | Bosque dos Baobás (26) | 52 | 6 babuínos | botas de raiz |
 | 8 | 5 | Dentes no Mangue | Capitão Liyongo (Taa Pwani) | Mangue Raso (30) | 60 | 6 crocodilos do mangue | vara de equilíbrio |
 | 9 | 6 Delta de Jhilpur | Anéis na Chuva | Salmaios (Jhilpur) | Cascatas da Chuva (32) | 64 | 6 pítons apagadas | amuleto antiveneno |
-| 10 | 6 | A Mata Morta | Ramtha (Palafitas de Tarchon) | Mata Morta (35) | 74 | 5 trolls apagados | roupa térmica (frio do Teto) |
+| 10 | 6 | A Mata Morta | Ramtha (Palafitas de Tarchon) | Mata Morta (35) | 74 | 5 trols apagados | roupa térmica (frio do Teto) |
 | 11 | 7 Teto do Mundo | Ursos nos Zimbros | Abā (Sangkent) | Encosta dos Zimbros (37) | 78 | 6 ursos-pardos | grampos de escalada |
 | 12 | 7 | O Quinto Vale | Baraies (Sangkent) | Picos Gelados (38) | 86 | 5 almas | capa de tempestade |
 | 13 | 8 Planície de Mingcheng | O Caminho dos Espíritos | Bögü (Mingcheng) | Caminho dos Leões (41) | 90 | 6 leões de pedra | selo do sol |

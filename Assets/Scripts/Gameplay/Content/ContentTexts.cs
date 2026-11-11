@@ -69,7 +69,7 @@ namespace Rapadura.Gameplay.Content
             ItemName("item_chefe_lama_limpa", "Clean Mud of the Mire", "Lama Limpa do Lodo"),
             ItemDescription("item_chefe_lama_limpa", "A handful of the Swallowing Mire once beaten: mud that let go of the darkness and now holds only Living Water.", "Um punhado do Lodo-que-Engole depois de vencido: lama que soltou a escuridão e agora só segura Água Viva."),
             ItemName("item_chefe_escama_aydahar", "Aydahar's Scale", "Escama de Aydahar"),
-            ItemDescription("item_chefe_escama_aydahar", "A cold scale of the dragon of the pass, smooth as caravan ice. It breaks the very wind he used to breathe.", "Escama fria do dragão do passo, lisa como gelo de caravana. Corta o vento que ele mesmo soprava."),
+            ItemDescription("item_chefe_escama_aydahar", "A cold scale of the dragon of the pass, smooth as caravan ice. It breaks the very fire he used to breathe.", "Escama fria do dragão do passo, lisa como gelo de caravana. Corta o fogo que ele mesmo soprava."),
             ItemName("item_chefe_bronze_antigo", "Ancient Bronze of the Vessels", "Bronze Antigo dos Vasos"),
             ItemDescription("item_chefe_bronze_antigo", "A sliver of bronze from the vessels where the Four Gluttons went back to being mere figures. Āz's four appetites no longer live in it.", "Lasca de bronze dos vasos onde os Quatro Gulosos voltaram a ser só figuras. Os quatro apetites de Āz não moram mais nela."),
             ItemName("item_chefe_ferro_antigo", "Ohya's Ancient Iron Link", "Elo de Ferro Antigo de Ohya"),

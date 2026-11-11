@@ -105,7 +105,7 @@ mundo, invasão). Os chefes de região **não** são arcontes: são guardiões a
 | **Namrael** | Chefe do mundo do Deserto: tomou um escorpião-rei. Parceira de Saklas, ciumenta. | Namraēl/Nebrōēl, a arconte companheira de Saklas (Teodoro bar Konai). |
 | **Mazan** (os Mazans) | Chefe do mundo da Montanha (já no código): gigantes de pedra briguentos. | *māzan* / *mazanān*, "gigantes, monstros" nos textos médio-persas maniqueus. |
 | **Āz** | Capitã da Invasão: a **Cobiça**. Quer tudo para ela, enfeitiça os bichos e "esconde" a luz em arcas. | Āz, demônia da cobiça e mãe dos demônios nos textos médio-persas (M 7980 etc.). |
-| **Hahya** e **Ohya** | Dois irmãos gigantes do *Livro dos Gigantes*. **Hahya** é o chefe da Montanha (apagado, volta a si). **Ohya** fica de reserva para a NG+ e o online. | *Livro dos Gigantes* maniqueu (fragmentos de Turfan e Qumran: ʾOhyā e Hahyā). |
+| **Hahya** e **Ohya** | Dois irmãos gigantes do *Livro dos Gigantes*. **Hahya** é o chefe da Montanha (apagado, volta a si). **Ohya** (2026-11-09) é o chefe do mundo da Estepe dos Nartes (mapa 52, §3.4.1): ainda não voltou a si, acorrentou-se à montanha "para não brigar" e briga com quem sobe; vencido, desce para morar com o Hahya. | *Livro dos Gigantes* maniqueu (fragmentos de Turfan e Qumran: ʾOhyā e Hahyā). |
 | **Mahaway** | Chefe do mundo das Cavernas (**decidido**, ver abaixo): o gigante que **voa** como redemoinho, agora "Rei da Revoada". | Mahaway, o gigante mensageiro que voa, no *Livro dos Gigantes*. |
 | **O Príncipe das Trevas** (Ahriman, nos textos persas) | **O vilão final, sem rosto.** É a sombra que escorre das Grutas. Tem cinco formas juntas (cabeça de leão, asas de águia, corpo de dragão, cauda de peixe, pés de demônio), mostradas só em silhueta. | Descrição do "Rei da Treva" em Teodoro bar Konai e nos Kephalaia (*Kephalaion* 6); "Ahriman" nos textos médio-persas maniqueus. |
 
@@ -279,6 +279,36 @@ Grafia en: Mariam the Herbalist, Master Adamas, Master Omophoros, Mistress Naris
 Ammo the Caravaneer, Srosh the Stablekeeper, Patig the Tracker, Nafsha the Potter, Master Xroshtag, Adda the Tower
 Keeper, Ramrat the Lampkeeper, Vandak the Saddler, Yardena of the Cistern, Uzzai the Herder, Master Mihr the Miner, Coti
 the Weaver, Innaios the Player, Parthenos of the Lamps, Old Mihrshah, Aso the Storyteller, Gabryab of the Wick.
+
+#### 3.1.1 Quem dá a história do meio, "A Lua que Não Enche" (2026-11-09)
+
+A cadeia do nível 20 ao 97 (`Docs/HistoriaMeio_20a100.md`, `MidStoryCatalog`/`MidStoryTexts`) começa na **Vó Edna** e passa
+por 14 moradores das cidades das Regiões 1–8, cada um com uma fala por primo e uma lembrança do Vô Jorge no diário. Ficha
+completa (figura, casa, fonte) em `Docs/NPCs.md`. Regra dos nomes: nas **cidades humanas** o nome vem da história maniqueia;
+nas **cidades de raça** (elfos, orcs, anões, kobolds, povo-touro, trols, suaílis) vem da lenda ou da história da região da
+ficha (`Docs/MetodologiaMapasERacas.md`), sempre com fonte e nunca "Seu/Dona". Divindades de fé viva não entram (§0).
+
+| Etapa | Quem | Cidade | Fonte do nome |
+|---|---|---|---|
+| 1 | **Vó Edna** | Vila da Vó Edna | família (§1.7). |
+| 2 | **Gara, a Guardiã das Copas** | Copas de Garajonay (elfos-da-mata) | lenda canária de Gara e Jonay (La Gomera). |
+| 3 | **Ashmunikal, a Matriarca dos Tambores** | Tambor Rubro (orcs) | rainha hitita (histórica). |
+| 4 | **Napirasu, a Mestra Fundidora** | Salões de Bronze (anões) | rainha elamita (a estátua de bronze do Louvre). |
+| 5 | **Takhsich, o Inventor** | Mercado dos Túneis (kobolds) | nome sogdiano dos documentos de Mug. |
+| 6 | **Nuru, a Guardiã do Farol** | Taa Pwani (suaílis) | *nuru*, "luz" em suaíli. |
+| 7 | **Ensuhkeshdanna, o Rival Amigo** | Aratta (povo-touro) | o senhor de Aratta que perde as charadas para Enmerkar (épica suméria). |
+| 8 | **Capitão Liyongo, o Nakhoda** | Taa Pwani | Fumo Liyongo, herói-arqueiro da épica suaíli. |
+| 9 | **Salmaios, o Guardião da Raiz-Mãe** | Jhilpur | o asceta do Códice Maniqueu de Colônia. |
+| 10 | **Ramtha, a Curandeira** | Palafitas de Tarchon (trols) | nome etrusco de Tarquínia. |
+| 11 | **Abā, o Chefe das Calhas** | Sangkent | Abā, missionário de Mani. |
+| 12 | **Baraies, o Professor** | Sangkent | Baraies, o mestre do Códice de Colônia. |
+| 13 | **Bögü, o Chefe da Guarda dos Anéis** | Mingcheng | Bögü Qaghan, khagan uigur que adotou o maniqueísmo em 762. |
+| 14 | **Lin Deng, o Mestre do Canal** | Mingcheng | Lin Deng, maniqueu de Fujian (era Song). |
+| 15 | **Fuduodan, o Leitor** | Mingcheng | o *fuduodan* persa que levou o *Livro dos Dois Princípios* à corte chinesa em 694. |
+
+Também citados: **Tages** (Salão de Tages, que agora é vizinho e diz os quatro lugares) e **Mihrshah** (o jardim do mapa 06).
+Os chefes do mundo das Regiões 5–7 aparecem só como perigo ao lado (§3.4.1). No fim, a luz da lua cai no forro do Caderno,
+numa costura do Vô Jorge, e a cadeia passa para o Soslan e as Cartas da Estrada (`Docs/HistoriaFinal_Cartas.md`).
 
 ### 3.2 Inimigos comuns
 
@@ -599,6 +629,31 @@ Vento de Órbita e do Alto, Espinho de Fumaça, Clandestino de Brasa e Última S
 | `enemy_forest_ash_bull` | **Touro de Cinza** / *Ash Bull* | 85 | [tanque] | queimou de ponta a ponta sem perceber; cinza por fora, mau gênio por dentro. |
 | `enemy_forest_smoke_rope` | **Corda de Fumaça** / *Smoke Rope* | 97 | [controle] | a corda da barca do Sol queimou; a fumaça não ficou sabendo e segue amarrando. |
 
+**Décima segunda leva (2026-11-11): os substitutos mais visíveis das Regiões 1–4 (Mapas100 02–06, 10, 14–16, 20).** Mesmo
+contrato (peso 0 no bioma, nível da área, números do bioma), prefixo conforme o bioma do layout (`enemy_forest_` no
+Zarafshan, `enemy_desert_` nas Areias, `enemy_mountain_` em Kaggen, `enemy_cave_` no Limiar). Modelos em
+`EarlyStandInBeastRecipes`, Caderno em `EarlyStandInBestiaryTexts`. Seis são [distância] e atiram: a cegonha, o pombo e a
+gralha (`Feather`), o sapo-bolha e a mariposa (`LureGlob`) e o pavão (`Ember`). Respeito: o ubır só como os contos tártaros
+o dão (§3.5), um espírito faminto, e aqui ainda novinho; os abrigos pintados são as pinturas de eland dos San, sem nenhuma
+figura sagrada (o Borrão é invenção). Testes: `EarlyStandInBeastsTests` e `EarlyStandInBeastsPlacementTests`. Já no
+overworld (`OverworldLayouts.Zarafshan/Areias/Kaggen/Limiar`) no lugar dos substitutos, com as mesmas clareiras, níveis e
+variantes noturnas; entre parênteses, o substituto que saiu. Estes doze saem das listas de "seguem com substitutos".
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_forest_dimmed_stork` | **Cegonha Apagada** / *Dimmed Stork* | 02 Prado das Cegonhas e várzea (era a Ave-Graveto) | [distância], voa | bicho real; voltou cinzenta nas bordas, "como se alguém tivesse soprado o branco"; joga os gravetos do ninho. |
+| `enemy_forest_bubble_toad` | **Sapo-Bolha do Lodo** / *Mire Bubble Toad* | 03 (era o enxame de morcegos) | [distância] | o brejo bebeu um pouco da Treva e os sapos beberam o brejo; sopra bolha de lama que gruda nos pés (a água do Joaquim lava). |
+| `enemy_forest_smoke_mosquito` | **Mosquito de Fumaça** / *Smoke Mosquito* | 03 (era o enxame de morcegos) | [enxame], voa | a Fumaça, 1º elemento da Treva (§1.3), juntou-se em mosquitos; o que bebem brilha na barriga. |
+| `enemy_forest_silk_moth` | **Mariposa de Seda Gigante** / *Giant Silk Moth* | 04 (era a Ave-Graveto) | [distância], voa | a mariposa da seda que comeu as amoreiras dos quintais de tear e nunca fiou; o pó das asas dá sono. |
+| `enemy_forest_laurel_pigeon` | **Pombo-do-Louro Apagado** / *Dimmed Laurel Pigeon* | 05 (era a Ave-Graveto) | [distância], voa | o pombo das laurisilvas das Canárias (bicho real); a névoa tirou a cor, menos a faixa verde; cospe caroço das copas. |
+| `enemy_forest_laurel_lizard` | **Lagarto-Gigante do Louro** / *Giant Laurel Lizard* | 05 (era o Lobo do Tugai) | [rápido] | os lagartos-gigantes das Canárias (bicho real); as fontes secaram e ele subiu para as copas. |
+| `enemy_forest_smoke_peacock` | **Pavão de Fumaça** / *Smoke Peacock* | 06 (era a Ave-Graveto) | [distância], voa | o último pavão do jardim de Mihrshah, quase todo fumaça; joga os olhos acesos da cauda. "Quando os canais correrem de novo, ele vai lembrar." |
+| `enemy_desert_thorn_lizard` | **Lagarto-Espinho** / *Thorn Lizard* | 10 (era o Chacal Apagado) | [rápido] | o lagarto que bebe o orvalho pelos sulcos das costas (bicho real); o **Fogo Devorador** secou as dunas e ele aprendeu a beber faísca. O Vô Jorge mostrou um para a Vó na estrada das caravanas. |
+| `enemy_mountain_dimmed_lynx` | **Lince Apagado** / *Dimmed Lynx* | 14 Passo do Hahya (era o Lobo do Tugai) | [rápido] | bicho real; a mancha escura no flanco engole a neve: "um buraco no branco". |
+| `enemy_mountain_smudge` | **Borrão** / *Smudge* | 15 Abrigos Pintados (era o Lobo do Tugai) | [rápido], voa | invenção: a coisa que comeu as pinturas uma cor de cada vez; vencido, as cores voltam para a parede. |
+| `enemy_mountain_stone_jackdaw` | **Gralha de Pedra** / *Stone Jackdaw* | 16 Muralhas de Pedra Seca (era a Ave-Graveto) | [distância], voa | bicho real; forrava o ninho com lasquinhas e passou a levar o muro, pedra por pedra. |
+| `enemy_cave_young_ubir` | **Ubır Jovem** / *Young Ubır* | 20 Terraços de Tufo (era a Aranha-Tecelã) | [rápido], voa | o ubır (§3.5) que ainda não aprendeu a se esconder em ninguém: bola de cabelo preto com brasa na boca; tem fome de luz. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |
@@ -621,6 +676,58 @@ Vento de Órbita e do Alto, Espinho de Fumaça, Clandestino de Brasa e Última S
 | "{0} do bando" | **"{0} do bando de Āz"** | — |
 | Bandidos "com chapéu de couro" | bichos com **coroinhas de lata dourada** que Āz põe neles ("tudo o que brilha é meu") | invenção. |
 | Botão "Defender do Cangaço" | **"Defender de Āz"** | — |
+
+#### 3.4.1 Chefes do mundo das Regiões 5–16 (2026-11-09 a 11-11)
+
+Um chefe por região, no último mapa dela (`RegionBossRules.MidSpawns` para 5–9, `Spawns` para 10–16; Caderno e falas de
+luta em `RegionBossTexts`; nome em `ContentTexts`). Arena plana com anel de pedra; o chefe acorda a 90 m e dorme (volta com
+vida cheia) a 125 m. Mesma regra dos arcontes (§1.4): **são apetites, não deuses.** Os "que nunca morrem" só **recuam**
+(cospem a luz e voltam ao fundo, menores), como o Príncipe. Nenhum chefe é necessário para a história do meio
+(`Docs/HistoriaMeio_20a100.md`): os doadores só **avisam** que ele está ali ("deixem ele dormir").
+
+| `id` | pt / en | Mapa · Nv | Golpe próprio | Fonte / no jogo |
+|---|---|---|---|---|
+| `enemy_mountain_hedammu` | **Hedammu, a Serpente Gulosa do Mar** / *Hedammu, the Gluttonous Sea Serpent* | 30 Mangues de Liyongo · 72 | mordida em cone à frente ("pro lado dela!"); recua | a serpente do mar que comia tudo e nunca enchia, da *Canção de Hedammu* (ciclo hurrita/hitita de Kumarbi). **Feminina.** Āz gosta dela. Vencida, cospe as faíscas e volta ao fundo, menor. |
+| `enemy_mountain_swallowing_mire` | **O Lodo-que-Engole** / *The Swallowing Mire* | 35 Coração do Lodo (área `olho_do_lodo`) · 88 | puxão: fica parado, a lama brilha, e engole quem está nela; mais forte à noite; recua | o Lodo, quarto dos cinco mundos da Treva, o da água turva e "dos que nadam" (Teodoro bar Konai). Lama sem rosto e sem osso: não se vence de vez. Só surge com as **5 Fontes do Lodo** acesas (§3.4.2), e cada fonte que apaga na luta o fortalece 10%. |
+| `enemy_mountain_aydahar` | **Aydahar, o Dragão do Passo** / *Aydahar, the Dragon of the Pass* | 40 Passo de Wakhan · 98 | sopro em linha reta passo abaixo ("um passo pro lado"); recua | *aydahar*, o dragão comprido de bigode dos contos cazaques e da estepe (do persa *aždahā*). Deitado no ouro de Āz sem saber por quê, como cachorro que guarda porta que ninguém usa. Libertado, voa embora e o passo abre para as caravanas. |
+| `enemy_mountain_four_gluttons` | **Os Quatro Gulosos** / *The Four Gluttons* | 46 Cidadela dos Quatro Gulosos · 140 | um apetite manda por semana e outro de noite: **Taotie** come o chão (sair da marca) e as oferendas de moeda que o vaso derrama (pega já, ou ele devolve em dobro ao cair); **Hundun** apaga a luz fora da marca (ficar); **Qiongqi** troca os passos por 3 s com aviso (chegar perto); **Taowu** bate em volta (ficar longe) | os "quatro perigos" (*sì xiōng*) das lendas chinesas antigas (*Zuo Zhuan*), num corpo de bronze só, cada um um apetite de Āz sozinho; vencidos, voltam a ser figuras nos vasos (o *taotie* dos bronzes antigos). |
+| `enemy_mountain_ohya` | **Ohya, o Gigante Irmão** / *Ohya, the Giant Brother* | 52 Corrente de Amirani (área `cume_de_ohya`) · 150 | gira a corrente no comprimento todo ("bem perto ou bem longe") | ʾOhyā, irmão de Hahya no *Livro dos Gigantes* (§1.4). A corrente lembra o Amirani acorrentado no Cáucaso (épica georgiana), só como cenário. Vencido, solta a corrente e vai morar com o Hahya ("brigam por causa da comida"). |
+| `enemy_mountain_wind_king` | **O Rei-Vendaval** / *The Gale King* | 58 Ninho da Huma · 200 | — | o Vento Destruidor (§1.3), não deus. |
+| `enemy_mountain_old_kul` | **O Velho Kul** / *Old Kul* | 64 Fundo do Velho Kul · 240 | — | o *kul* das águas dos contos komi, azedo pela sombra. |
+| `enemy_mountain_ember_glutton` | **O Glutão de Brasa** / *The Ember Glutton* | 70 Caldeira do Fogo Devorador · 280 | — | o Fogo Devorador (§1.3). |
+| `enemy_mountain_apep` | **Apep, a Serpente que Bebe o Rio** / *Apep, the Serpent Who Drinks the River* | 76 Banco de Areia de Apep · 320 | bebe o rio; recua e volta na noite seguinte | a serpente que ataca a barca do Sol (Kemet), só como o conto dá. Ver a barca encalhada (§3.4.2). |
+| `enemy_mountain_dream_of_destruction` | **O Sonho da Destruição** / *The Dream of Destruction* | 82 Campo das Tábuas do Sonho · 360 | tábuas que caem | o sonho de Ohya e Hahya no *Livro dos Gigantes*. |
+| `enemy_mountain_great_dark` | **A Grande Treva** / *The Great Darkness* | 90 Portão da Terra da Treva · 440 | as cinco formas | a sombra do Príncipe (§1.4); recua, nunca morre. |
+| `enemy_mountain_az_captain` | **Āz, a Capitã Cobiçosa** / *Āz, the Greedy Captain* | 96 Jardim de Luz · 478 | a Arca leva do que o herói tem; recua | Āz (§1.4). Vencida, devolve a arca, envergonhada. |
+
+**Loot e troféus (2026-11-11).** Cada chefe solta um loot próprio (`item_chefe_*`, ícone e texto em `ContentTexts`), que
+destrava as 10 peças de roupa de chefe (Tear, Forja, Tear de mestre) e um **troféu de casa** feito na Forja depois de
+vencê-lo (`casa_trofeu_025`–`036`, `HouseCraftRules.WorldBossTrophies`; `Docs/Housing.md`). Regra do texto: o loot é a luz
+**devolvida**, nunca pedaço arrancado ("não prende mais ninguém", "é fogo vivo, não fogo devorador").
+
+| Chefe | Loot (`id`) | Troféu |
+|---|---|---|
+| Hedammu | Escama de Hedammu (`item_chefe_escama_hedammu`) | Cabeça entalhada de Hedammu (`casa_trofeu_025`) |
+| o Lodo-que-Engole | Lama Limpa do Lodo (`item_chefe_lama_limpa`): lama que só segura Água Viva | Pedestal da lama limpa do Lodo-que-Engole (`026`) |
+| Aydahar | Escama de Aydahar (`item_chefe_escama_aydahar`) | Estandarte de escamas de Aydahar (`027`) |
+| os Quatro Gulosos | Bronze Antigo dos Vasos (`item_chefe_bronze_antigo`) | Vaso de bronze dos Quatro Gulosos (`028`) |
+| Ohya | Elo de Ferro Antigo de Ohya (`item_chefe_ferro_antigo`) | Corrente partida de Ohya (`029`) |
+| o Rei-Vendaval | Pena do Rei-Vendaval (`item_chefe_pena_vendaval`): aponta para onde a Huma voa | Leque de penas do Rei-Vendaval (`030`) |
+| o Velho Kul | Barbatana-Prata do Velho Kul (`item_chefe_barbatana_kul`) | Quadro da barbatana-prata do Velho Kul (`031`) |
+| o Glutão de Brasa | Brasa Viva do Glutão (`item_chefe_brasa_viva`) | Braseiro da brasa viva do Glutão (`032`) |
+| Apep | Escama de Apep (`item_chefe_escama_apep`) | Barca de luz vencendo Apep, em miniatura (`033`) |
+| o Sonho da Destruição | Tábua do Sonho (`item_chefe_tabua_sonho`): "o fim é bom" | Painel das Tábuas do Sonho (`034`) |
+| a Grande Treva | Lasca do Selo da Treva (`item_chefe_lasca_selo`) | Estátua do Selo da Treva remendado de luz (`035`, Lendário) |
+| Āz | Semente de Luz de Āz (`item_chefe_semente_luz`) | Estátua de Āz devolvendo a arca (`036`, Lendário) |
+
+#### 3.4.2 Mecânicas que mudam o caminho (onde ficam no mundo)
+
+| Mecânica | Onde | No jogo | Tema |
+|---|---|---|---|
+| **Poços de vento** | 24 Ninho de Mahaway (Grutas do Limiar) | com asas, [E] sobre o poço: a corrente ergue e o herói **plana de borda a borda** do abismo, em vez de 250–450 m pela Última Ponte de Corda. Sem asas, o caminho longo é a ponte. A **revoada de Mahaway** bica quem fica no ar; o pouso dá uma rajada que empurra os bichos. O poço "prende o fôlego" entre um voo e outro. (`LimiarWindWellRules`) | o Vento Vivo (Maithe) contra a revoada de Mahaway (§1.4). |
+| **A barca encalhada de Apep** | 76 Banco de Areia de Apep, posto Proa Encalhada (Rio das Doze Horas) | [E] chama os remadores: 90 s protegendo o casco dos bichos e segurando a **proa** quando Apep "bebe o rio" (puxão). Solta, a barca navega pelo banco até o fim do dia. Se o casco cede ou o herói sai, a barca volta para a areia. (`RioBarqueDefenseRules`) | a barca do Sol contra Apep: a luz segue viagem mesmo de noite. |
+| **Os cinco portões das covas** | 83 Fortaleza da Última Lâmpada (Limiar Profundo) | um portão para cada cova: **da Fumaça, do Fogo Devorador, do Vento Destruidor, do Lodo e da Treva** (os cinco da Treva, §1.3). Cada portão está selado do outro lado e só abre depois de o herói chegar **a pé** à lâmpada da cova; aí a Fortaleza encurta o caminho (600–1900 m). Na **Maré de Treva** os guardiões trancam todos. A lâmpada do portão queima os bichos da porta. (`ProfundoGateRules`) | as cinco covas da Terra da Treva, cada uma com a sua lâmpada guardiã. |
+| **As 5 Fontes do Lodo** | 35 Coração do Lodo (Delta de Jhilpur), em espiral até o **Olho do Lodo** | o lodo preto morde, puxa para o Olho e encolhe a cada fonte purificada (3 s parado com [E]/Usar). Fonte limpa vira **Água Viva**: zona segura por 2 min que fere os bichos. Com as 5 acesas o **Lodo-que-Engole** sobe no Olho (§3.4.1). Prêmio diário: 1 Pedra da Água Viva. (`LodoFountainRules`) | Água Viva (Joaquim) contra o Lodo. |
 
 ### 3.5 Espécies da noite
 

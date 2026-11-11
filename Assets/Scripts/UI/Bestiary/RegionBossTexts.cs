@@ -172,7 +172,7 @@ namespace Rapadura.UI.Bestiary
                 "Hedammu é a serpente do mar da canção hurrita antiga, a que comia tudo e nunca enchia, e Āz gosta muito dela por isso. Ela se enrola no Largo no meio dos mangues e engole o que passar: peixe, barco, as faisquinhas de luz que a maré traz. Dá pra ver elas brilhando por baixo das escamas. Quando ela abre aquela boca, morde reto pra frente, larga como uma porta, então não fiquem na frente dela, fiquem do lado. Vencida, cospe todas as faíscas que engoliu e volta pro fundo, menor e mais calma. Ela volta. Apetite sempre volta. Mas um pouco menor de cada vez, e é assim que se faz.",
                 ("The mouth only goes one way. Be the other way.", "A boca só vai pra um lado. Seja o outro lado."),
                 ("She's so hungry she can't even taste it. That's the saddest part.", "Ela tem tanta fome que nem sente o gosto. Essa é a parte mais triste."),
-                ("Lady, chew! Nobody's going to take it from you!", "Dona, mastiga! Ninguém vai tirar de você!"),
+                ("Hey, chew! Nobody's going to take it from you!", "Ei, mastiga! Ninguém vai tirar de você!"),
                 ("Everything goes in and nothing fills her. The sparks don't belong to her, that's why.", "Tudo entra e nada enche. As faíscas não são dela, por isso."),
                 ("She ate the little lights! Spit them out, they're scared in there!", "Ela comeu as luzinhas! Cospe, elas tão com medo aí dentro!"));
             Line(entries, RegionBossRules.HedammuId, RegionBossPhase.Storm, "Hedammu spits the tide!", "Hedammu cospe a maré!");
