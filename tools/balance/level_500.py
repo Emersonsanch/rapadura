@@ -1,10 +1,10 @@
 """Bands 100-500 against the real world (Docs/Progressao500.md §4, Docs/Balanco100a500.md):
-python -I tools/balance/level_500.py [--runs N] [--markdown]
+python -I tools/balance/level_500.py [--runs N]   (also printed at the end of power_stack.py)
 
 level_scaling.py stops at 100 and plays the campaign archetypes. This one reads what the open world actually has:
 
   * creatures: every Resources/Enemies asset named by a region layout (OverworldLayouts.*.cs) whose level band reaches the
-    level, times EnemyLevelScaling; the seven world bosses of RegionBossRules at their own level, with their real abilities;
+    level, times EnemyLevelScaling; the world bosses of RegionBossRules from level 100 up (those with an asset) at their own level, with their real abilities;
   * reference hero at level L: the curve, 2 attribute points per level (Vitality + Arcane Power), skill points, the talent
     wheel and training, the graduations' active skills unlocked by L, and gear the game can really give: campaign loot
     farmed (Monte Carlo over the shipped tables) and the best head+chest pair OBTAINABLE at L (Ossuário from its entry
@@ -14,8 +14,13 @@ level_scaling.py stops at 100 and plays the campaign archetypes. This one reads 
     per band and the armour of the pieces counted);
   * "Perigoso" (LevelDangerRules) with the hero 10/20/30 levels below the creature.
 
+Commons are read three ways: "abertura" (every cooldown ready, the ultimate included: the first pull after a rest),
+"caça" (sustained farming: only skills whose cooldown fits a pull, <= FARM_COOLDOWN s) and basic attack only. The target
+is judged on "caça".
+
 Targets are §4.1: commons 4-7 s, bosses 15-22 s, parked hero dies to the boss in 12-40 s, basic-attack-only needs at least
-75% of that time. Misses are reported, not fixed: this module never touches the game.
+75% of that time. Misses are reported, not fixed: this module never touches the game; `suggestions` turns them into numbers
+(health/damage factors that would put each band back on target) for Docs/Balanco100a500.md.
 """
 
 from __future__ import annotations
@@ -57,6 +62,13 @@ PARKED_TARGET = (12.0, 40.0)
 BASIC_EDGE = 0.75
 MIN_SWINGS_TO_DIE = 3  # below this a boss "kills in a few blows"
 MIN_HERO_HITS_ON_BOSS = 8  # below this a boss "dies in a few blows"
+FARM_COOLDOWN = 12.0  # "caça": a skill with a longer cooldown is not up for every pull (fight + walk to the next pack)
+COMMON_GOAL = 5.5  # middle of COMMON_TARGET: what the suggested health factor aims at
+PARKED_GOAL = 15.0  # what the suggested boss damage factor aims at (low in 12-40 s so Perigoso still bites)
+BOSS_GOAL = 18.5  # middle of BOSS_TARGET
+SUGGEST_LEVELS = [100, 200, 300, 400, 500]
+ARCHETYPE_COMMON_HEALTH = 170.0  # Docs/Progressao500.md §4.1: the common archetype (Enxame de Morcegos) the scaling assumes
+TOUGHNESS_CANDIDATES = [0.0025, 0.0]  # EnemyLevelScaling.HeroToughnessGrowthPerLevel (today 0.005) tried by the what-if
 FARM_KILLS = 400  # commons farmed on top of the campaign before the band's gear is read
 FARM_BOSSES = 20
 DEFAULT_RUNS = 120
@@ -139,6 +151,7 @@ class BossRules:
     greed_interval: float
     storm_shots: int = 3
     last_shots: int = 5
+    signature_factor: dict = dataclasses.field(default_factory=dict)  # signature -> damage factor of its own blow
 
 
 @dataclass
@@ -149,13 +162,25 @@ class WorldBoss:
     signature: str
 
 
+# The signature blows of the bosses added after the first seven (Regions 5-9): one hit of factor x the swing each.
+SIGNATURE_FACTOR_CONSTS = {"GluttonBite": "BiteDamageFactor", "SwallowingMire": "MireDamageFactor",
+                           "PassBreath": "BreathDamageFactor", "FourAppetites": "AppetiteDamageFactor",
+                           "ChainSweep": "ChainDamageFactor"}
+
+
 def load_boss_rules() -> BossRules:
     src = _read(BOSS_RULES)
     c = lambda name: _const(src, name)  # noqa: E731
+    factors = {}
+    for signature, const in SIGNATURE_FACTOR_CONSTS.items():
+        try:
+            factors[signature] = c(const)
+        except ValueError:
+            pass
     return BossRules(c("RingDamageFactor"), c("BarrageDamageFactor"), c("BarrageIntervalSeconds"), c("GreatBlowDamageFactor"),
                      c("GreatBlowIntervalSeconds"), c("NightAbilityMultiplier"), c("DrinkDamageFactor"), c("DrinkIntervalSeconds"),
                      c("MidnightPeakMultiplier"), c("DreamFallDamageFactor"), c("DreamFallIntervalSeconds"),
-                     c("GreedHealthFraction"), c("GreedIntervalSeconds"))
+                     c("GreedHealthFraction"), c("GreedIntervalSeconds"), signature_factor=factors)
 
 
 def load_world_bosses() -> list:
@@ -353,13 +378,17 @@ class World:
 
     def __init__(self, runs: int = DEFAULT_RUNS, data: rd.GameData | None = None):
         base = data or rd.load_all()
+        self.base = base
         self.cls = ps.load_class_evolution()
         self.data = ps.class_data(base, self.cls)  # the graduations' active skills, each from its own level
         self.model = bm.Model(self.data)
+        self.farm = FarmModel(self.data)
         self.scaling = ls.load_scaling()
         self.danger = load_danger()
         self.boss_rules = load_boss_rules()
-        self.bosses = load_world_bosses()
+        listed = [b for b in load_world_bosses() if b.level >= LEVELS[0]]  # the 100-500 bands only
+        self.bosses = [b for b in listed if b.enemy_id in self.data.enemies]
+        self.pending_bosses = [b for b in listed if b.enemy_id not in self.data.enemies]  # spawn listed, asset not made yet
         self.regions = load_regions(self.data)
         self.sets = load_sets(self.regions)
         self.talents = ps.load_talents()
@@ -385,29 +414,48 @@ class World:
 # ----------------------------------------------------------------------------- measurements
 
 
+class FarmModel(bm.Model):
+    """The same hero in sustained farming: skills on a cooldown longer than FARM_COOLDOWN are left out of the pull."""
+
+    def player(self, build: bm.Build) -> bm.PlayerStats:
+        p = super().player(build)
+        return dataclasses.replace(p, skills=[(s, lv) for s, lv in p.skills if s.cycle * (1 - p.cdr) <= FARM_COOLDOWN])
+
+
 def _ceil_hits(hp: float, hit: float) -> int:
     return math.inf if hit <= 0 else max(1, math.ceil(hp / hit))
 
 
-def common_row(world: World, creature: int, variant: str = "real", delta: int = 0) -> dict:
-    """A pair of every common of the world at level `creature`, the hero `delta` levels below: means over species and cousins."""
+def common_row(world: World, creature: int, variant: str = "real", delta: int = 0, health_factor: float = 1.0,
+               health_floor: float = 0.0) -> dict:
+    """A pair of every common of the world at level `creature`, the hero `delta` levels below: means over species and cousins.
+    `time` is the opening pull (whole kit ready), `farm` the sustained pull (FarmModel), `basic` the basic attack alone."""
     level = creature - delta
     species = commons_at(world.data, world.regions, creature)
     gear = world.hero_gear(level, variant).build_gear
     d = world.danger
-    times, hits = [], []
+    times, farms, basics, hits = [], [], [], []
     for enemy in species:
-        foe = scaled(enemy, world.scaling, creature)
-        t, h = [], []
+        foe = scaled(dataclasses.replace(enemy, max_health=max(enemy.max_health, health_floor)), world.scaling, creature)
+        foe = dataclasses.replace(foe, max_health=foe.max_health * health_factor)
+        t, f, b, h = [], [], [], []
         for hero in bm.HEROES:
             build = bm.Build(hero, level, gear)
             player = world.model.player(build)
-            t.append(world.model.fight(build, [foe, foe])["time"] * world.k_common / d.hit_rate(delta))
+            miss = world.k_common / d.hit_rate(delta)
+            t.append(world.model.fight(build, [foe, foe])["time"] * miss)
+            f.append(world.farm.fight(build, [foe, foe])["time"] * miss)
+            b.append(world.model.fight(build, [foe, foe], use_skills=False)["time"] / d.hit_rate(delta))
             h.append(_ceil_hits(player.hp, foe.attack_damage * player.defense_mult * d.worst_hit(delta)))
         times.append(statistics.mean(t))
+        farms.append(statistics.mean(f))
+        basics.append(statistics.mean(b))
         hits.append(statistics.mean(h))
+    bases = [e.max_health for e in species]
     return {"level": level, "creature": creature, "species": len(species), "time": statistics.mean(times), "time_min": min(times),
-            "time_max": max(times), "hits": statistics.mean(hits), "hits_min": min(hits)}
+            "time_max": max(times), "farm": statistics.mean(farms), "farm_min": min(farms), "farm_max": max(farms),
+            "basic": statistics.mean(basics), "hits": statistics.mean(hits), "hits_min": min(hits),
+            "base_health": statistics.mean(bases), "base_health_min": min(bases), "base_health_max": max(bases)}
 
 
 def boss_row(world: World, boss: WorldBoss, delta: int = 0, variant: str = "real") -> dict:
@@ -431,7 +479,8 @@ def boss_row(world: World, boss: WorldBoss, delta: int = 0, variant: str = "real
         parked = p.hp / ((swing + ring) / cycle * expected)
         great = swing * r.great_factor * form * night
         biggest = max(swing + ring, great)
-        extra = {"DrinkTheRiver": swing * r.drink_factor * r.midnight, "DreamFall": swing * r.dream_factor}.get(boss.signature, 0.0)
+        extra = {"DrinkTheRiver": swing * r.drink_factor * r.midnight, "DreamFall": swing * r.dream_factor}.get(
+            boss.signature, swing * r.signature_factor.get(boss.signature, 0.0))
         biggest = max(biggest, extra)
         # The fight as played: Wrath, Storm and Last Stand take a third of the kill each; the hero stands next to the boss.
         strikes = kill / cycle
@@ -441,7 +490,7 @@ def boss_row(world: World, boss: WorldBoss, delta: int = 0, variant: str = "real
         total += great * (kill / 3 / r.great_interval)
         if boss.signature == "GreedOfTheArk":
             total += p.hp * r.greed_fraction * p.defense_mult * (kill * 2 / 3 / r.greed_interval)
-        rows.append({"kill": kill, "basic": basic, "parked": parked, "swings": _ceil_hits(p.hp, swing * worst),
+        rows.append({"kill": kill, "basic": basic, "parked": parked, "swings": _ceil_hits(p.hp, swing * worst), "swing": swing,
                      "blow": biggest * worst / p.hp, "hero_hits": _ceil_hits(foe.max_health, p.hit(bm.BASIC_BASE[0])),
                      "taken": total * expected / p.hp, "hp": p.hp})
     out = {k: statistics.mean(r2[k] for r2 in rows) for k in rows[0]}
@@ -471,9 +520,9 @@ def misses(result: Result, variant: str = "real") -> list:
     out = []
     for level, by in result.commons.items():
         row = by[variant]
-        if row["time"] < COMMON_TARGET[0]:
+        if row["farm"] < COMMON_TARGET[0]:
             out.append(("common", level, "fast"))
-        elif row["time"] > COMMON_TARGET[1]:
+        elif row["farm"] > COMMON_TARGET[1]:
             out.append(("common", level, "slow"))
     for boss, by in result.bosses:
         row = by[variant]
@@ -496,6 +545,119 @@ def misses(result: Result, variant: str = "real") -> list:
     return out
 
 
+# ----------------------------------------------------------------------------- suggested adjustments
+
+
+def _solve_increasing(fn, goal: float, lo: float = 0.25, hi: float = 16.0, iterations: int = 9) -> float:
+    """x in [lo, hi] with fn(x) ~= goal, fn increasing (bisection on a log scale)."""
+    if fn(hi) < goal:
+        return hi
+    if fn(lo) > goal:
+        return lo
+    for _ in range(iterations):
+        mid = math.sqrt(lo * hi)
+        if fn(mid) < goal:
+            lo = mid
+        else:
+            hi = mid
+    return math.sqrt(lo * hi)
+
+
+@dataclass
+class CommonFix:
+    level: int
+    farm: float
+    health_factor: float  # on the commons' health at this level so "caça" lands on COMMON_GOAL
+    after: dict  # common_row with that factor
+
+
+@dataclass
+class BossFix:
+    boss: WorldBoss
+    name: str
+    damage_factor: float  # on the boss's damage so the parked hero dies in PARKED_GOAL s
+    swings_after: float
+    blow_after: float
+    health_factor_doc: float  # on its health if the "doc" hero (band affixes + armour) ever ships
+
+
+@dataclass
+class ToughnessWhatIf:
+    tough: float
+    parked: dict  # boss level -> parked time-to-die with that constant
+    swings: dict  # boss level -> boss swings to kill the hero
+    common_hits: dict  # SUGGEST_LEVELS -> hits a common needs at its level
+    up_to_100: list  # level_scaling.violations (levels 15-100) with that constant
+
+
+def toughness_whatif(world: World, result: Result, tough: float) -> ToughnessWhatIf:
+    """Boss and common damage with another HeroToughnessGrowthPerLevel: health is untouched, so only the damage side moves."""
+    other = dataclasses.replace(world.scaling, tough=tough)
+    parked, swings, hits = {}, {}, {}
+    for boss, by in result.bosses:
+        ratio = world.scaling.damage_mult(boss.level) / other.damage_mult(boss.level)
+        real = by["real"]
+        parked[boss.level] = real["parked"] * ratio
+        swings[boss.level] = _ceil_hits(real["hp"], real["swing"] / ratio * world.danger.worst_hit(0))
+    for level in SUGGEST_LEVELS:
+        hits[level] = result.commons[level]["real"]["hits"] * world.scaling.damage_mult(level) / other.damage_mult(level)
+    original = ls.load_scaling
+    ls.load_scaling = lambda: other  # noqa: E731 (level_scaling reads the constant itself)
+    try:
+        problems = ls.violations(ls.evaluate(300, world.base))
+    finally:
+        ls.load_scaling = original
+    return ToughnessWhatIf(tough, parked, swings, hits, problems)
+
+
+def suggestions(world: World, result: Result) -> tuple:
+    commons = []
+    for level in SUGGEST_LEVELS:
+        row = result.commons[level]["real"]
+        factor = _solve_increasing(lambda f: common_row(world, level, "real", 0, f)["farm"], COMMON_GOAL)
+        commons.append(CommonFix(level, row["farm"], factor, common_row(world, level, "real", 0, factor)))
+    bosses = []
+    for boss, by in result.bosses:
+        real, doc = by["real"], by["doc"]
+        factor = min(1.0, real["parked"] / PARKED_GOAL)
+        swings = _ceil_hits(real["hp"], real["swing"] * factor * world.danger.worst_hit(0))
+        bosses.append(BossFix(boss, real["name"], factor, swings, real["blow"] * factor, BOSS_GOAL / doc["kill"]))
+    floor = {lv: common_row(world, lv, "real", 0, 1.0, ARCHETYPE_COMMON_HEALTH) for lv in SUGGEST_LEVELS}
+    whatifs = [toughness_whatif(world, result, t) for t in [world.scaling.tough] + TOUGHNESS_CANDIDATES]
+    return commons, bosses, floor, whatifs
+
+
+def report_suggestions(commons: list, bosses: list, floor: dict, whatifs: list) -> str:
+    lines = ["| Nível | 2 comuns, caça: hoje | ×vida dos comuns para 5,5 s | Depois: caça / abertura / só básico | Golpes para morrer |",
+             "|---|---|---|---|---|"]
+    for c in commons:
+        a = c.after
+        lines.append(f"| {c.level} | {_s(c.farm)} | ×{c.health_factor:.2f} | {_s(a['farm'])} / {_s(a['time'])} / {_s(a['basic'])} | "
+                     f"{a['hits']:.0f} |")
+    lines += ["", "| Chefe (nível) | ×dano para o herói parado durar 15 s | Golpes para morrer depois | Maior golpe depois | "
+              "×vida se o herói \"doc\" for implementado |", "|---|---|---|---|---|"]
+    for b in bosses:
+        lines.append(f"| {b.name} ({b.boss.level}) | ×{b.damage_factor:.2f} | {b.swings_after:.0f} | {b.blow_after:.0%} | "
+                     f"×{b.health_factor_doc:.2f} |")
+    lines += ["", f"Piso de vida base {ARCHETYPE_COMMON_HEALTH:.0f} (o comum-arquétipo da escala) nos comuns do mundo aberto:", "",
+              "| Nível | Caça (mais rápido–mais lento) | Abertura | Só básico | Golpes para morrer |", "|---|---|---|---|---|"]
+    for level, row in floor.items():
+        lines.append(f"| {level} | {_s(row['farm'])}{_common_mark(row['farm'])} ({row['farm_min']:.1f}–{row['farm_max']:.1f}) | "
+                     f"{_s(row['time'])} | {_s(row['basic'])} | {row['hits']:.0f} |")
+    order = [b.boss.level for b in bosses]
+    lines += ["", "`EnemyLevelScaling.HeroToughnessGrowthPerLevel` (só mexe no dano dos bichos): herói parado morre em · "
+              "golpes do chefe para morrer (pior crítico):", "",
+              "| Valor | " + " | ".join(f"chefe {lv}" for lv in order) + " | Golpes de comum p/ morrer ("
+              + "/".join(str(lv) for lv in SUGGEST_LEVELS) + ") | Orçamento 15–100 (level_scaling) |",
+              "|---|" + "---|" * len(order) + "---|---|"]
+    for w in whatifs:
+        cells = [f"{_s(w.parked[lv])}{_parked_mark(w.parked[lv])} · {w.swings[lv]}" for lv in order]
+        hits = "/".join(f"{w.common_hits[lv]:.0f}" for lv in SUGGEST_LEVELS)
+        budget = "dentro" if not w.up_to_100 else "; ".join(w.up_to_100)
+        lines.append(f"| {w.tough:g} | " + " | ".join(cells) + f" | {hits} | {budget} |")
+    return "\n".join(lines)
+
+
 # ----------------------------------------------------------------------------- report
 
 
@@ -516,14 +678,16 @@ def _parked_mark(t: float) -> str:
 
 
 def report_commons(world: World, result: Result) -> str:
-    lines = ["| Nível | Conjunto obtível | Espécies | ×vida / ×dano | 2 comuns: real (mais rápido–mais lento) | 2 comuns: doc | "
-             "Golpes para morrer: real / doc |", "|---|---|---|---|---|---|---|"]
+    lines = ["| Nível | Conjunto obtível | Espécies (vida base média, mín–máx) | ×vida / ×dano | 2 comuns, caça: real (mais rápido–mais lento) | "
+             "Caça: doc | Abertura (kit todo) | Só básico | Golpes para morrer: real / doc |", "|---|---|---|---|---|---|---|---|---|"]
     for level, by in result.commons.items():
         real, doc = by["real"], by["doc"]
-        lines.append(f"| {level} | {SET_NAMES[world.hero_gear(level).set_key]} | {real['species']} | "
+        lines.append(f"| {level} | {SET_NAMES[world.hero_gear(level).set_key]} | {real['species']} "
+                     f"({real['base_health']:.0f}, {real['base_health_min']:.0f}–{real['base_health_max']:.0f}) | "
                      f"{world.scaling.health_mult(level):.1f} / {world.scaling.damage_mult(level):.1f} | "
-                     f"{_s(real['time'])}{_common_mark(real['time'])} ({real['time_min']:.1f}–{real['time_max']:.1f}) | "
-                     f"{_s(doc['time'])}{_common_mark(doc['time'])} | {real['hits']:.0f} / {doc['hits']:.0f} |")
+                     f"{_s(real['farm'])}{_common_mark(real['farm'])} ({real['farm_min']:.1f}–{real['farm_max']:.1f}) | "
+                     f"{_s(doc['farm'])}{_common_mark(doc['farm'])} | {_s(real['time'])} | {_s(real['basic'])} | "
+                     f"{real['hits']:.0f} / {doc['hits']:.0f} |")
     return "\n".join(lines)
 
 
@@ -542,9 +706,9 @@ def report_bosses(result: Result) -> str:
 
 def report_perigoso(result: Result) -> str:
     head = ["| Bicho | " + " | ".join(f"+{d}" for d in PERIGOSO_DELTAS) + " |", "|---|" + "---|" * len(PERIGOSO_DELTAS)]
-    lines = ["Comuns (2 por luta): tempo para matar · golpes para morrer no pior crítico. O bicho fica no nível da linha; o herói está delta níveis abaixo.", ""] + head
+    lines = ["Comuns (2 por luta): tempo para matar (caça) · golpes para morrer no pior crítico. O bicho fica no nível da linha; o herói está delta níveis abaixo.", ""] + head
     for level, by in result.perigoso_commons.items():
-        cells = [f"{_s(by[d]['time'])} · {by[d]['hits']:.0f}" for d in PERIGOSO_DELTAS]
+        cells = [f"{_s(by[d]['farm'])} · {by[d]['hits']:.0f}" for d in PERIGOSO_DELTAS]
         lines.append(f"| comuns {level} | " + " | ".join(cells) + " |")
     lines += ["", "Chefes do mundo: tempo para matar · golpes do chefe para morrer (pior crítico) · herói morre parado em.", ""] + head
     for boss, by in result.perigoso_bosses:
@@ -553,13 +717,19 @@ def report_perigoso(result: Result) -> str:
     return "\n".join(lines)
 
 
-def report(world: World, result: Result) -> str:
+def report(world: World, result: Result, with_suggestions: bool = True) -> str:
     miss = misses(result)
-    blocks = ["### Herói de referência × comuns do mundo\n", report_commons(world, result),
-              "\n### Chefes do mundo (herói no nível do chefe)\n", report_bosses(result),
+    blocks = [f"Fator jogo/modelo (r7): comuns ×{world.k_common:.2f}, chefes ×{world.k_boss:.2f}. \"Caça\" = só skills com recarga ≤ "
+              f"{FARM_COOLDOWN:g} s; \"abertura\" = kit inteiro pronto, a suprema incluída.\n",
+              "### Herói de referência × comuns do mundo\n", report_commons(world, result),
+              "\n### Chefes do mundo (herói no nível do chefe)\n", report_bosses(result)
+              + "".join(f"\n\nAinda sem asset em `Resources/Enemies` (fora da tabela): `{b.enemy_id}` (nível {b.level})"
+                        for b in world.pending_bosses),
               "\n### Regra \"Perigoso\"\n", report_perigoso(result),
               "\n### Fora da meta (leitura \"real\")\n",
               "\n".join(f"- {k} {lv}: {m}" for k, lv, m in miss) if miss else "- nada"]
+    if with_suggestions:
+        blocks += ["\n### Ajustes que levariam à meta (sugestão, não aplicada)\n", report_suggestions(*suggestions(world, result))]
     return "\n".join(blocks)
 
 

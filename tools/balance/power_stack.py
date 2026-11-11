@@ -1495,6 +1495,16 @@ def main():
     options_main(ctx, args.runs, base_gear, results, curve)
     talent_main(ctx, args.runs, base_gear, results)
     level_main(ctx, args.runs)
+    level_500_main(args.runs)
+
+
+def level_500_main(runs: int) -> None:
+    """Bands 100-500 against the open world's real creatures, world bosses, sets and Perigoso (level_500.py,
+    Docs/Balanco100a500.md). Informative: the misses are the doc's table, not a budget this run fails on."""
+    import level_500 as l5  # noqa: E402 (sibling module, lazy like level_scaling)
+    world = l5.World(min(runs, l5.DEFAULT_RUNS))
+    print("\n## Faixas 100–500 no mundo aberto (bichos e chefes reais, conjuntos, \"Perigoso\")\n")
+    print(l5.report(world, l5.evaluate(world)))
 
 
 def level_main(ctx: Context, runs: int) -> None:
