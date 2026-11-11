@@ -14,15 +14,25 @@ using UnityEngine;
 
 namespace Rapadura.Tests
 {
-    /// <summary>The world bosses of Regions 10–16 (Docs/Mapas100.md 58, 64, 70, 76, 82, 90, 96): the asset, the model, the page, the arena and the rules of the fight.</summary>
+    /// <summary>The world bosses of Regions 5–16 (Docs/Mapas100.md 30, 35, 40, 46, 52, 58, 64, 70, 76, 82, 90, 96): the asset, the model, the page, the arena and the rules of the fight.</summary>
     public class RegionBossTests
     {
-        private static readonly string[] LateIds = { RegionBossRules.ApepId, RegionBossRules.DreamOfDestructionId, RegionBossRules.GreatDarkId, RegionBossRules.AzCaptainId };
+        private static readonly string[] MidIds =
+        {
+            RegionBossRules.HedammuId, RegionBossRules.SwallowingMireId, RegionBossRules.AydaharId, RegionBossRules.FourGluttonsId, RegionBossRules.OhyaId,
+        };
+
+        private static readonly string[] LateIds =
+        {
+            RegionBossRules.ApepId, RegionBossRules.DreamOfDestructionId, RegionBossRules.GreatDarkId, RegionBossRules.AzCaptainId,
+            RegionBossRules.HedammuId, RegionBossRules.SwallowingMireId, RegionBossRules.AydaharId, RegionBossRules.FourGluttonsId, RegionBossRules.OhyaId,
+        };
 
         private static readonly string[] Ids =
         {
             RegionBossRules.WindKingId, RegionBossRules.OldKulId, RegionBossRules.EmberGluttonId,
             RegionBossRules.ApepId, RegionBossRules.DreamOfDestructionId, RegionBossRules.GreatDarkId, RegionBossRules.AzCaptainId,
+            RegionBossRules.HedammuId, RegionBossRules.SwallowingMireId, RegionBossRules.AydaharId, RegionBossRules.FourGluttonsId, RegionBossRules.OhyaId,
         };
 
         private const float WalkableDegrees = 45f;
@@ -161,6 +171,9 @@ namespace Rapadura.Tests
         [TestCase(ProceduralEnemyKind.EmberGlutton)]
         [TestCase(ProceduralEnemyKind.DreamOfDestruction)]
         [TestCase(ProceduralEnemyKind.AzCaptain)]
+        [TestCase(ProceduralEnemyKind.SwallowingMire)]
+        [TestCase(ProceduralEnemyKind.FourGluttons)]
+        [TestCase(ProceduralEnemyKind.Ohya)]
         public void TheWalkers_RaiseTheirArms_OnTheWindup(ProceduralEnemyKind kind)
         {
             GameObject visual = ProceduralEnemyModels.Instantiate(kind, null);
@@ -364,6 +377,11 @@ namespace Rapadura.Tests
         [TestCase(ProceduralEnemyKind.DreamOfDestruction, 0.5f, 3.5f)]
         [TestCase(ProceduralEnemyKind.GreatDark, 0.5f, 3.5f)]
         [TestCase(ProceduralEnemyKind.AzCaptain, 0.5f, 3.5f)]
+        [TestCase(ProceduralEnemyKind.Hedammu, 0.5f, 3.5f)]
+        [TestCase(ProceduralEnemyKind.SwallowingMire, 0.5f, 3.5f)]
+        [TestCase(ProceduralEnemyKind.Aydahar, 0.5f, 3.5f)]
+        [TestCase(ProceduralEnemyKind.FourGluttons, 0.5f, 3.5f)]
+        [TestCase(ProceduralEnemyKind.Ohya, 0.5f, 3.5f)]
         public void LateModels_StayWithinTheBounds_AndGlow(ProceduralEnemyKind kind, float minWidth, float maxSize)
         {
             GameObject visual = ProceduralEnemyModels.Instantiate(kind, null);
@@ -387,6 +405,105 @@ namespace Rapadura.Tests
             }
 
             Assert.IsTrue(glows, $"{kind}: at least one colour that glows");
+        }
+
+        [Test]
+        public void Spawns_KeepTheFarListApart_AndTheDirectorKeepsThemAll()
+        {
+            Assert.AreEqual(RegionBossRules.Spawns.Count + RegionBossRules.MidSpawns.Count, RegionBossRules.AllSpawns.Count);
+            CollectionAssert.AreEquivalent(MidIds, RegionBossRules.MidSpawns.Select(s => s.EnemyId));
+            CollectionAssert.IsEmpty(RegionBossRules.Spawns.Select(s => s.EnemyId).Intersect(MidIds), "ach_bosses_far_all counts only Regions 10–16");
+            CollectionAssert.AllItemsAreUnique(RegionBossRules.AllSpawns.Select(s => s.EnemyId));
+            foreach (string id in MidIds)
+            {
+                Assert.IsTrue(RegionBossRules.IsRegionBoss(id), id);
+            }
+        }
+
+        [Test]
+        public void Fichas_TheMidBossesThatWithdraw()
+        {
+            Assert.IsTrue(RegionBossRules.SpawnOf(RegionBossRules.HedammuId).NeverDies, "Hedammu goes back to the bottom");
+            Assert.IsTrue(RegionBossRules.SpawnOf(RegionBossRules.SwallowingMireId).NeverDies, "the Lodo is never beaten for good");
+            Assert.IsTrue(RegionBossRules.SpawnOf(RegionBossRules.AydaharId).NeverDies, "Aydahar flies away");
+            Assert.IsFalse(RegionBossRules.SpawnOf(RegionBossRules.FourGluttonsId).NeverDies);
+            Assert.IsFalse(RegionBossRules.SpawnOf(RegionBossRules.OhyaId).NeverDies);
+            Assert.IsTrue(RegionBossRules.SpawnOf(RegionBossRules.SwallowingMireId).StrongerAtNight, "the mud grows by itself at night");
+        }
+
+        [Test]
+        public void HedammuBite_ReachesOnlyTheConeInFront()
+        {
+            Vector2 boss = Vector2.zero;
+            Vector2 aim = Vector2.up;
+            Assert.IsTrue(RegionBossRules.BiteHits(boss, aim, new Vector2(0f, RegionBossRules.BiteRange - 0.1f)));
+            Assert.IsFalse(RegionBossRules.BiteHits(boss, aim, new Vector2(0f, RegionBossRules.BiteRange + 0.1f)), "out of reach");
+            Assert.IsFalse(RegionBossRules.BiteHits(boss, aim, new Vector2(4f, 0f)), "beside her");
+            Assert.IsFalse(RegionBossRules.BiteHits(boss, aim, new Vector2(0f, -3f)), "behind her");
+            Assert.IsTrue(RegionBossRules.BiteHits(boss, aim, new Vector2(2f, 4f)), "inside the cone");
+        }
+
+        [Test]
+        public void Mire_GrowsInTheLastStand()
+        {
+            Assert.AreEqual(0f, RegionBossRules.MireRadius(RegionBossPhase.Wrath));
+            Assert.Greater(RegionBossRules.MireRadius(RegionBossPhase.LastStand), RegionBossRules.MireRadius(RegionBossPhase.Storm));
+            Assert.IsTrue(RegionBossRules.MireHits(RegionBossRules.MireRadiusStorm, RegionBossPhase.Storm));
+            Assert.IsFalse(RegionBossRules.MireHits(RegionBossRules.MireRadiusStorm + 0.1f, RegionBossPhase.Storm));
+            Assert.IsTrue(RegionBossRules.MireHits(RegionBossRules.MireRadiusStorm + 0.1f, RegionBossPhase.LastStand), "further out in the end");
+        }
+
+        [Test]
+        public void AydaharBreath_IsALine_ASideStepClearsIt()
+        {
+            Vector2 origin = Vector2.zero;
+            Vector2 aim = new Vector2(0f, 6f);
+            Assert.IsTrue(RegionBossRules.BreathHits(origin, aim, aim));
+            Assert.IsTrue(RegionBossRules.BreathHits(origin, aim, new Vector2(0f, RegionBossRules.BreathLength - 0.1f)), "the fire goes on past the mark");
+            Assert.IsFalse(RegionBossRules.BreathHits(origin, aim, new Vector2(0f, RegionBossRules.BreathLength + 0.5f)));
+            Assert.IsFalse(RegionBossRules.BreathHits(origin, aim, aim + Vector2.right * (RegionBossRules.BreathHalfWidth + 0.1f)), "one step aside");
+            Assert.IsFalse(RegionBossRules.BreathHits(origin, aim, new Vector2(0f, -4f)), "behind it");
+            Assert.IsTrue(RegionBossRules.BreathHits(origin, origin, new Vector2(1f, 0f)), "aimed at its feet");
+        }
+
+        [Test]
+        public void Gluttons_OneAWeek_TheNextAtNight_EachWithItsSafePlace()
+        {
+            Assert.AreEqual(GluttonAppetite.Taotie, RegionBossRules.AppetiteFor(0, false));
+            Assert.AreEqual(GluttonAppetite.Taotie, RegionBossRules.AppetiteFor(6, false), "the same week");
+            Assert.AreEqual(GluttonAppetite.Hundun, RegionBossRules.AppetiteFor(7, false));
+            Assert.AreEqual(GluttonAppetite.Taotie, RegionBossRules.AppetiteFor(28, false), "four weeks round");
+            Assert.AreEqual(GluttonAppetite.Hundun, RegionBossRules.AppetiteFor(0, true), "the palaces swap at night");
+            Assert.AreEqual(GluttonAppetite.Taotie, RegionBossRules.AppetiteFor(21, true));
+            Assert.AreEqual(GluttonAppetite.Taowu, RegionBossRules.AppetiteFor(-1, false), "before the epoch still turns");
+
+            Vector2 boss = Vector2.zero;
+            Vector2 mark = new Vector2(8f, 0f);
+            Assert.IsTrue(RegionBossRules.AppetiteHits(GluttonAppetite.Taotie, mark, boss, mark));
+            Assert.IsFalse(RegionBossRules.AppetiteHits(GluttonAppetite.Taotie, mark, boss, mark + Vector2.up * 5f), "Taotie: move");
+            Assert.IsFalse(RegionBossRules.AppetiteHits(GluttonAppetite.Hundun, mark, boss, mark), "Hundun: stay on the lantern");
+            Assert.IsTrue(RegionBossRules.AppetiteHits(GluttonAppetite.Hundun, mark, boss, mark + Vector2.up * 5f));
+            Assert.IsFalse(RegionBossRules.AppetiteHits(GluttonAppetite.Qiongqi, mark, boss, new Vector2(2f, 0f)), "Qiongqi: up close");
+            Assert.IsTrue(RegionBossRules.AppetiteHits(GluttonAppetite.Qiongqi, mark, boss, mark));
+            Assert.IsTrue(RegionBossRules.AppetiteHits(GluttonAppetite.Taowu, mark, boss, new Vector2(2f, 0f)));
+            Assert.IsFalse(RegionBossRules.AppetiteHits(GluttonAppetite.Taowu, mark, boss, mark), "Taowu: keep away");
+            Assert.Greater(RegionBossRules.AppetiteMultiplier(GluttonAppetite.Hundun, true), 1f, "Hundun is stronger at night");
+            Assert.AreEqual(1f, RegionBossRules.AppetiteMultiplier(GluttonAppetite.Taotie, true));
+
+            Dictionary<string, LocalizationEntry> table = BestiaryTexts.Entries.ToDictionary(e => e.Key);
+            foreach (GluttonAppetite appetite in System.Enum.GetValues(typeof(GluttonAppetite)))
+            {
+                Assert.IsTrue(table.ContainsKey(RegionBossTexts.AppetiteKey(appetite)), appetite.ToString());
+            }
+        }
+
+        [Test]
+        public void OhyaChain_SparesWhoeverHugsHimOrStaysFar()
+        {
+            Assert.IsFalse(RegionBossRules.ChainSweepHits(RegionBossRules.ChainInnerRadius - 0.1f));
+            Assert.IsTrue(RegionBossRules.ChainSweepHits(RegionBossRules.ChainInnerRadius));
+            Assert.IsTrue(RegionBossRules.ChainSweepHits(RegionBossRules.ChainOuterRadius));
+            Assert.IsFalse(RegionBossRules.ChainSweepHits(RegionBossRules.ChainOuterRadius + 0.1f));
         }
 
         [Test]

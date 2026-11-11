@@ -22,6 +22,37 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>Āz opens the Ark: takes a share of the health the hero has right now, so the fuller, the worse.</summary>
         GreedOfTheArk = 4,
+
+        /// <summary>Hedammu's gluttonous bite: a cone in front of her, toward where the hero stood; beside or behind her is safe.</summary>
+        GluttonBite = 5,
+
+        /// <summary>The Lodo-que-Engole swallows the ground round it: whoever is still inside the mud's radius (it grows in the Last Stand) is hit.</summary>
+        SwallowingMire = 6,
+
+        /// <summary>Aydahar breathes down the pass: a long narrow line from it toward the hero's spot; a step to the side is enough.</summary>
+        PassBreath = 7,
+
+        /// <summary>The Quatro Gulosos: the appetite of the week (and the next one at night) decides where it is safe.</summary>
+        FourAppetites = 8,
+
+        /// <summary>Ohya swings his chain round: a ring at the chain's length; hugging him or keeping well away are safe.</summary>
+        ChainSweep = 9,
+    }
+
+    /// <summary>The four appetites of the Cidadela (46), one a week in turn (<see cref="RegionBossRules.AppetiteFor"/>).</summary>
+    public enum GluttonAppetite
+    {
+        /// <summary>Taotie eats the ground where you stand: move off the mark.</summary>
+        Taotie = 0,
+
+        /// <summary>Hundun puts out the light everywhere but the mark (the lantern): stay on it.</summary>
+        Hundun = 1,
+
+        /// <summary>Qiongqi turns right into wrong: the safe place is next to it.</summary>
+        Qiongqi = 2,
+
+        /// <summary>Taowu won't listen: it strikes round itself, so keep away.</summary>
+        Taowu = 3,
     }
 
     /// <summary>The five forms of the Prince of Darkness (Theodore bar Konai; Kephalaia 6), in the order A Grande Treva wears them.</summary>
@@ -34,7 +65,7 @@ namespace Rapadura.Gameplay.Enemies
         Demon = 4,
     }
 
-    /// <summary>The fight phases of a world boss of Regions 10–16, by health (<see cref="RegionBossRules.PhaseFor"/>).</summary>
+    /// <summary>The fight phases of a world boss of Regions 5–16, by health (<see cref="RegionBossRules.PhaseFor"/>).</summary>
     public enum RegionBossPhase
     {
         /// <summary>Above 66%: the swing and a ring of force at each strike.</summary>
@@ -47,7 +78,7 @@ namespace Rapadura.Gameplay.Enemies
         LastStand = 3,
     }
 
-    /// <summary>Where a world boss of Regions 10–16 stands and how strong it is.</summary>
+    /// <summary>Where a world boss of Regions 5–16 stands and how strong it is.</summary>
     public sealed class RegionBossSpawn
     {
         public readonly string EnemyId;
@@ -84,7 +115,8 @@ namespace Rapadura.Gameplay.Enemies
     }
 
     /// <summary>
-    /// Pure rules of the world bosses of the continuous Regions 10–16 (Docs/Mapas100.md 58, 64, 70, 76, 82, 90, 96): the Rei-Vendaval, the Velho Kul,
+    /// Pure rules of the world bosses of the continuous Regions 5–9 (<see cref="MidSpawns"/>: Hedammu, the Lodo-que-Engole, Aydahar, the Quatro Gulosos
+    /// and Ohya, maps 30, 35, 40, 46, 52) and 10–16 (Docs/Mapas100.md 58, 64, 70, 76, 82, 90, 96): the Rei-Vendaval, the Velho Kul,
     /// the Glutão de Brasa, Apep, o Sonho da Destruição, A Grande Treva and Āz. Region 16's is on map 96: map 100 has no fight by its ficha. Phases by health, the numbers of their abilities and where they stand. <see cref="RegionBossAbilities"/> plays
     /// the fight and <see cref="RegionBossDirector"/> keeps them in the world.
     /// </summary>
@@ -97,6 +129,13 @@ namespace Rapadura.Gameplay.Enemies
         public const string DreamOfDestructionId = "enemy_mountain_dream_of_destruction";
         public const string GreatDarkId = "enemy_mountain_great_dark";
         public const string AzCaptainId = "enemy_mountain_az_captain";
+
+        // Regions 5–9 (Docs/Mapas100.md 30, 35, 40, 46, 52): the last map of each region.
+        public const string HedammuId = "enemy_mountain_hedammu";
+        public const string SwallowingMireId = "enemy_mountain_swallowing_mire";
+        public const string AydaharId = "enemy_mountain_aydahar";
+        public const string FourGluttonsId = "enemy_mountain_four_gluttons";
+        public const string OhyaId = "enemy_mountain_ohya";
 
         /// <summary>A Grande Treva's ring (90), in region coordinates: the stone ring before the Gate (Profundo's layout already sets it there).</summary>
         public static readonly Vector2 GrandeTrevaArena = new Vector2(1400f, 1000f);
@@ -184,6 +223,59 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>The share of the hero's current health the Ark takes.</summary>
         public const float GreedHealthFraction = 0.15f;
 
+        // ---- Hedammu (30): the gluttonous bite ----
+
+        public const float BiteIntervalSeconds = 10f;
+        public const float BiteWindupSeconds = 1.8f;
+        public const float BiteDamageFactor = 1.3f;
+        public const float BiteRange = 9f;
+
+        /// <summary>Half the opening of the bite (degrees either side of where she aimed).</summary>
+        public const float BiteHalfAngle = 50f;
+
+        // ---- O Lodo-que-Engole (35): the mire swallows ----
+
+        public const float MireIntervalSeconds = 12f;
+        public const float MireWindupSeconds = 2.4f;
+        public const float MireDamageFactor = 1.2f;
+        public const float MireRadiusStorm = 6f;
+        public const float MireRadiusLastStand = 9f;
+
+        // ---- Aydahar (40): the breath down the pass ----
+
+        public const float BreathIntervalSeconds = 11f;
+        public const float BreathWindupSeconds = 2f;
+        public const float BreathDamageFactor = 1.5f;
+        public const float BreathLength = 16f;
+        public const float BreathHalfWidth = 2f;
+
+        // ---- Os Quatro Gulosos (46): the appetite of the week ----
+
+        public const float AppetiteIntervalSeconds = 12f;
+        public const float AppetiteWindupSeconds = 2.2f;
+        public const float AppetiteDamageFactor = 1.3f;
+
+        /// <summary>Taotie's mouth on the marked spot.</summary>
+        public const float TaotieRadius = 4f;
+
+        /// <summary>The lantern Hundun leaves lit on the marked spot.</summary>
+        public const float HundunLanternRadius = 3f;
+
+        /// <summary>Qiongqi's safe place round itself, and Taowu's stubborn reach.</summary>
+        public const float GluttonNearRadius = 6f;
+
+        /// <summary>The ficha: "Hundun mais forte" at night.</summary>
+        public const float HundunNightMultiplier = 1.25f;
+
+        // ---- Ohya (52): the chain swings round ----
+
+        public const float ChainIntervalSeconds = 10f;
+        public const float ChainWindupSeconds = 2f;
+        public const float ChainDamageFactor = 1.4f;
+        public const float ChainInnerRadius = 4f;
+        public const float ChainOuterRadius = 10f;
+
+        /// <summary>The world bosses of Regions 10–16 (the "far" bosses: <c>ach_bosses_far_all</c> counts exactly these).</summary>
         public static readonly IReadOnlyList<RegionBossSpawn> Spawns = new[]
         {
             new RegionBossSpawn(WindKingId, OverworldLayouts.NinhoHumaMapId, "ninho_da_huma", OverworldLayouts.ReiVendavalArena,
@@ -202,9 +294,34 @@ namespace Rapadura.Gameplay.Enemies
                 OverworldLayouts.CeuWorldOffset, 478, EnemyProjectileKind.LanternBolt, false, RegionBossSignature.GreedOfTheArk, neverDies: true),
         };
 
+        /// <summary>The world bosses of Regions 5–9 (Docs/Mapas100.md 30, 35, 40, 46, 52), at the last map of each region.</summary>
+        public static readonly IReadOnlyList<RegionBossSpawn> MidSpawns = new[]
+        {
+            new RegionBossSpawn(HedammuId, OverworldLayouts.LiyongoId, "mangues_de_liyongo", OverworldLayouts.HedammuArena,
+                OverworldLayouts.CostaWorldOffset, 72, EnemyProjectileKind.LureGlob, false, RegionBossSignature.GluttonBite, neverDies: true),
+            new RegionBossSpawn(SwallowingMireId, OverworldLayouts.CoracaoLodoId, "olho_do_lodo", OverworldLayouts.LodoArena,
+                OverworldLayouts.DeltaWorldOffset, 88, EnemyProjectileKind.LureGlob, true, RegionBossSignature.SwallowingMire, neverDies: true),
+            new RegionBossSpawn(AydaharId, OverworldLayouts.WakhanId, "ninho_de_aydahar", OverworldLayouts.AydaharArena,
+                OverworldLayouts.TetoWorldOffset, 98, EnemyProjectileKind.Ember, false, RegionBossSignature.PassBreath, neverDies: true),
+            new RegionBossSpawn(FourGluttonsId, OverworldLayouts.CidadelaMapId, "cidadela_dos_quatro_gulosos", OverworldLayouts.GulososArena,
+                OverworldLayouts.MingchengWorldOffset, 140, EnemyProjectileKind.LanternBolt, false, RegionBossSignature.FourAppetites),
+            new RegionBossSpawn(OhyaId, OverworldLayouts.AmiraniMapId, "cume_de_ohya", OverworldLayouts.OhyaArena,
+                OverworldLayouts.NartesWorldOffset, 150, EnemyProjectileKind.Feather, false, RegionBossSignature.ChainSweep),
+        };
+
+        /// <summary>Every world boss the <see cref="RegionBossDirector"/> keeps: Regions 5–9 and 10–16.</summary>
+        public static readonly IReadOnlyList<RegionBossSpawn> AllSpawns = Concat(MidSpawns, Spawns);
+
+        private static RegionBossSpawn[] Concat(IReadOnlyList<RegionBossSpawn> a, IReadOnlyList<RegionBossSpawn> b)
+        {
+            var all = new List<RegionBossSpawn>(a);
+            all.AddRange(b);
+            return all.ToArray();
+        }
+
         public static RegionBossSpawn SpawnOf(string enemyId)
         {
-            foreach (RegionBossSpawn spawn in Spawns)
+            foreach (RegionBossSpawn spawn in AllSpawns)
             {
                 if (spawn.EnemyId == enemyId)
                 {
@@ -257,6 +374,11 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.DrinkTheRiver: return DrinkIntervalSeconds;
                 case RegionBossSignature.DreamFall: return DreamFallIntervalSeconds;
                 case RegionBossSignature.GreedOfTheArk: return GreedIntervalSeconds;
+                case RegionBossSignature.GluttonBite: return BiteIntervalSeconds;
+                case RegionBossSignature.SwallowingMire: return MireIntervalSeconds;
+                case RegionBossSignature.PassBreath: return BreathIntervalSeconds;
+                case RegionBossSignature.FourAppetites: return AppetiteIntervalSeconds;
+                case RegionBossSignature.ChainSweep: return ChainIntervalSeconds;
                 default: return FormSeconds;
             }
         }
@@ -268,6 +390,11 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.DrinkTheRiver: return DrinkWindupSeconds;
                 case RegionBossSignature.DreamFall: return DreamFallWindupSeconds;
                 case RegionBossSignature.GreedOfTheArk: return GreedWindupSeconds;
+                case RegionBossSignature.GluttonBite: return BiteWindupSeconds;
+                case RegionBossSignature.SwallowingMire: return MireWindupSeconds;
+                case RegionBossSignature.PassBreath: return BreathWindupSeconds;
+                case RegionBossSignature.FourAppetites: return AppetiteWindupSeconds;
+                case RegionBossSignature.ChainSweep: return ChainWindupSeconds;
                 default: return 0f;
             }
         }
@@ -312,6 +439,84 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>What the Ark takes from a hero who has <paramref name="currentHealth"/> left: always something, proportional to what is left.</summary>
         public static float GreedDamage(float currentHealth) => Mathf.Max(1f, Mathf.Max(0f, currentHealth) * GreedHealthFraction);
+
+        /// <summary>Does Hedammu's bite, aimed from <paramref name="boss"/> along <paramref name="aim"/>, reach a hero at <paramref name="hero"/>? Within range and inside the cone.</summary>
+        public static bool BiteHits(Vector2 boss, Vector2 aim, Vector2 hero)
+        {
+            Vector2 toHero = hero - boss;
+            if (toHero.sqrMagnitude > BiteRange * BiteRange)
+            {
+                return false;
+            }
+
+            if (toHero.sqrMagnitude < 0.01f || aim.sqrMagnitude < 1e-6f)
+            {
+                return true;
+            }
+
+            return Vector2.Angle(aim, toHero) <= BiteHalfAngle;
+        }
+
+        /// <summary>How far the swallowing mud reaches in <paramref name="phase"/> (none in the Wrath phase).</summary>
+        public static float MireRadius(RegionBossPhase phase)
+        {
+            switch (phase)
+            {
+                case RegionBossPhase.Storm: return MireRadiusStorm;
+                case RegionBossPhase.LastStand: return MireRadiusLastStand;
+                default: return 0f;
+            }
+        }
+
+        /// <summary>Is a hero <paramref name="distance"/> m from the Lodo still in the mud when it swallows?</summary>
+        public static bool MireHits(float distance, RegionBossPhase phase) => distance <= MireRadius(phase);
+
+        /// <summary>Does Aydahar's breath, from <paramref name="origin"/> toward <paramref name="aim"/>, reach a hero at <paramref name="hero"/>? A line <see cref="BreathLength"/> long, 2 × <see cref="BreathHalfWidth"/> wide.</summary>
+        public static bool BreathHits(Vector2 origin, Vector2 aim, Vector2 hero)
+        {
+            Vector2 axis = aim - origin;
+            Vector2 toHero = hero - origin;
+            if (axis.sqrMagnitude < 1e-6f)
+            {
+                return toHero.sqrMagnitude <= BreathHalfWidth * BreathHalfWidth;
+            }
+
+            axis.Normalize();
+            float along = Vector2.Dot(toHero, axis);
+            if (along < -BreathHalfWidth || along > BreathLength)
+            {
+                return false;
+            }
+
+            float across = Mathf.Abs(toHero.x * axis.y - toHero.y * axis.x);
+            return across <= BreathHalfWidth;
+        }
+
+        /// <summary>The appetite of the Quatro Gulosos on UTC day <paramref name="utcDay"/>: one a week in turn (the ficha's online rotation); at night the palaces swap to the next.</summary>
+        public static GluttonAppetite AppetiteFor(long utcDay, bool isNight)
+        {
+            long week = utcDay >= 0 ? utcDay / 7 : (utcDay - 6) / 7;
+            long index = (week + (isNight ? 1 : 0)) % 4;
+            return (GluttonAppetite)(index < 0 ? index + 4 : index);
+        }
+
+        /// <summary>Does the appetite's blow, marked on <paramref name="impact"/> by the Gulosos at <paramref name="boss"/>, reach a hero at <paramref name="hero"/>?</summary>
+        public static bool AppetiteHits(GluttonAppetite appetite, Vector2 impact, Vector2 boss, Vector2 hero)
+        {
+            switch (appetite)
+            {
+                case GluttonAppetite.Taotie: return Vector2.Distance(hero, impact) <= TaotieRadius;
+                case GluttonAppetite.Hundun: return Vector2.Distance(hero, impact) > HundunLanternRadius;
+                case GluttonAppetite.Qiongqi: return Vector2.Distance(hero, boss) > GluttonNearRadius;
+                default: return Vector2.Distance(hero, boss) <= GluttonNearRadius;
+            }
+        }
+
+        /// <summary>Ability multiplier of the appetite: Hundun is stronger at night.</summary>
+        public static float AppetiteMultiplier(GluttonAppetite appetite, bool isNight) => appetite == GluttonAppetite.Hundun && isNight ? HundunNightMultiplier : 1f;
+
+        /// <summary>Is a hero <paramref name="distance"/> m from Ohya under the chain as it swings round?</summary>
+        public static bool ChainSweepHits(float distance) => distance >= ChainInnerRadius && distance <= ChainOuterRadius;
 
         /// <summary>Apep is back only when a night begins after she withdrew: a day must have passed first (her ficha's "até a noite seguinte").</summary>
         public static bool NightReturnReady(bool sawDaySinceWithdrawing, bool isNight) => sawDaySinceWithdrawing && isNight;

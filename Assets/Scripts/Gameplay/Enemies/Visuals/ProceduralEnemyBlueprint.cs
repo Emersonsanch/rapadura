@@ -333,6 +333,16 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         GreatDark = 148,
         /// <summary>Āz, a Capitã Cobiçosa (96): the greedy captain holding the Última Arca; world boss of the Reinos do Céu.</summary>
         AzCaptain = 149,
+        /// <summary>Hedammu, a Serpente Gulosa do Mar (30): coiled, mouth open, the swallowed sparks lit; world boss of the Costa das Monções.</summary>
+        Hedammu = 150,
+        /// <summary>O Lodo-que-Engole (35): the faceless mud of the Dark standing up; world boss of the Delta de Jhilpur.</summary>
+        SwallowingMire = 151,
+        /// <summary>Aydahar, o Dragão do Passo (40): the snow-pale dragon on Āz's gold; world boss of the Teto do Mundo.</summary>
+        Aydahar = 152,
+        /// <summary>Os Quatro Gulosos (46): a walking bronze vessel with four faces; world boss of the Planície de Mingcheng.</summary>
+        FourGluttons = 153,
+        /// <summary>Ohya, o Gigante Irmão (52): Hahya's chained brother; world boss of the Estepe dos Nartes.</summary>
+        Ohya = 154,
 
         // The eleventh pass of beasts (bible §3.2.1): the roles of Regions 12–16 that still used stand-ins (LateStandInBeastRecipes).
         /// <summary>Salamandra Devoradora (70): low dark salamander with an ember stripe; jaw and tail.</summary>

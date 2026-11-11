@@ -47,6 +47,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public static readonly Vector2 ForteVentosOffset = new Vector2(960f, 1080f);
         public static readonly Vector2 CaravancaraPedraOffset = new Vector2(0f, 1560f);
 
+        /// <summary>Aydahar's arena (40): the stone ring at the top of the trail from the caravanserai to the dragon's nest.</summary>
+        public static readonly Vector2 AydaharArena = new Vector2(560f, 1640f);
+
         /// <summary>Half the side (m) of Sangkent's flat ground (reserved for the stair city's recipe, ±28 m and more).</summary>
         public const float SangkentGround = 30f;
 
@@ -244,6 +247,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, -560f, 1240f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, -860f, 470f, 0f, 0.8f);
             Landmark(w, MapLandmarkKind.StoneRing, -150f, 1460f, 0f, 1f);
+            Landmark(w, MapLandmarkKind.StoneRing, AydaharArena.x, AydaharArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

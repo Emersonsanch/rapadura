@@ -49,6 +49,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public static readonly Vector2 IlhotaLanternasOffset = new Vector2(480f, -1560f);
         public static readonly Vector2 RaizMaeOffset = new Vector2(-480f, -1560f);
 
+        /// <summary>The arena of the Lodo-que-Engole (35): the stone ring of the Olho do Lodo, west of the Raiz-Mãe.</summary>
+        public static readonly Vector2 LodoArena = new Vector2(-900f, -1640f);
+
         /// <summary>Half the side (m) of Jhilpur's flat ground (its solids reach 22.5 m, its roads leave at 18.6 m).</summary>
         public const float JhilpurGround = 30f;
 
@@ -290,7 +293,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, 740f, -1300f, 0f, 1f);
             Landmark(w, MapLandmarkKind.Campfire, -1010f, -930f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, -760f, 300f, 0f, 0.8f);
-            Landmark(w, MapLandmarkKind.StoneRing, -900f, -1640f, 0f, 1f);
+            Landmark(w, MapLandmarkKind.StoneRing, LodoArena.x, LodoArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

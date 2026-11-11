@@ -54,6 +54,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public static readonly Vector2 PocoDaTacaOffset = new Vector2(960f, 1080f);
         public static readonly Vector2 TorreDeVigiaOffset = new Vector2(0f, 1560f);
 
+        /// <summary>Ohya's arena (52): the stone ring on the crest where the chain trail and the well trail meet.</summary>
+        public static readonly Vector2 OhyaArena = new Vector2(1000f, 1680f);
+
         /// <summary>Half the side (m) of the flat ground of the three towns of the steppe (reserved for their recipes, ±28 m and more).</summary>
         public const float NartesCityGround = 30f;
 
@@ -309,6 +312,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, 60f, 1220f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, 560f, 220f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, -960f, 600f, 0f, 0.9f);
+            Landmark(w, MapLandmarkKind.StoneRing, OhyaArena.x, OhyaArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

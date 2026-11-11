@@ -48,6 +48,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public static readonly Vector2 FarolDeCoralOffset = new Vector2(1500f, 470f);
         public static readonly Vector2 CaisDasDhowsOffset = new Vector2(1500f, -480f);
 
+        /// <summary>Hedammu's arena (30): the Largo de Hedammu, the stone ring at the end of the mangrove trail past the Hedammu ford.</summary>
+        public static readonly Vector2 HedammuArena = new Vector2(1540f, -1150f);
+
         /// <summary>Half the side (m) of the flat town ground of the race cities Aratta and Kirta (their solids reach 22 m).</summary>
         public const float RaceCityGround = 28f;
 
@@ -316,6 +319,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, 1270f, 1000f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, -200f, 960f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, 560f, 1100f, 0f, 0.8f);
+            Landmark(w, MapLandmarkKind.StoneRing, HedammuArena.x, HedammuArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

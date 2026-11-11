@@ -852,6 +852,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.DreamOfDestruction:
                 case ProceduralEnemyKind.GreatDark:
                 case ProceduralEnemyKind.AzCaptain:
+                case ProceduralEnemyKind.Hedammu:
+                case ProceduralEnemyKind.SwallowingMire:
+                case ProceduralEnemyKind.Aydahar:
+                case ProceduralEnemyKind.FourGluttons:
+                case ProceduralEnemyKind.Ohya:
                     TickRegionBoss(deltaTime, t, k, speed);
                     break;
             }
@@ -891,7 +896,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         }
 
         /// <summary>
-        /// The world bosses of Regions 10–16: the glowing core feeds on the fight's phase (<see cref="RegionBossRules.PhaseFor"/>; a state, so "Reduzir Movimento"
+        /// The world bosses of Regions 5–16: the glowing core feeds on the fight's phase (<see cref="RegionBossRules.PhaseFor"/>; a state, so "Reduzir Movimento"
         /// only slows it), the mouth opens on the windup, the Rei-Vendaval beats its wings and the others raise both arms.
         /// </summary>
         private void TickRegionBoss(float deltaTime, float t, float k, float speed)
@@ -902,12 +907,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             Pulse(ProceduralEnemyParts.Core, 1f + Mathf.Sin(t * (2f + 2f * rage)) * 0.07f * Mathf.Max(k, 0.3f) + 0.2f * rage + 0.2f * r);
             Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(30f * r, 0f, 0f));
             Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(-10f * r, Mathf.Sin(t * 0.6f) * 8f * k * (1f - r), 0f));
-            if (_kind == ProceduralEnemyKind.Apep)
+            if (_kind == ProceduralEnemyKind.Apep || _kind == ProceduralEnemyKind.Hedammu)
             {
                 // No limbs at all: she sways and her tail tip drags behind.
                 Rotate(ProceduralEnemyParts.Tail, Quaternion.Euler(0f, Mathf.Sin(t * 1.4f) * 18f * k, 0f));
             }
-            else if (_kind == ProceduralEnemyKind.WindKing || _kind == ProceduralEnemyKind.GreatDark)
+            else if (_kind == ProceduralEnemyKind.WindKing || _kind == ProceduralEnemyKind.GreatDark || _kind == ProceduralEnemyKind.Aydahar)
             {
                 FlapWings(t, speed * 0.6f, Mathf.Max(k, 0.25f) * (1f - 0.6f * r), Mathf.Max(Mathf.Clamp01(MoveSpeed01), 0.5f));
             }

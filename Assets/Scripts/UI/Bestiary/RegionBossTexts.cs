@@ -5,7 +5,7 @@ using Rapadura.Gameplay.Enemies;
 namespace Rapadura.UI.Bestiary
 {
     /// <summary>
-    /// "Caderno da Vó Edna" pages of the world bosses of Regions 10–16 (Docs/Mapas100.md 58, 64, 70, 76, 82, 90, 96) and the short lines they call out in the fight, en + pt-BR.
+    /// "Caderno da Vó Edna" pages of the world bosses of Regions 5–16 (Docs/Mapas100.md 30, 35, 40, 46, 52, 58, 64, 70, 76, 82, 90, 96) and the short lines they call out in the fight, en + pt-BR.
     /// Kept apart like <see cref="CeuBestiaryTexts"/>; <see cref="BestiaryTexts"/> appends these to its entries. The Rei-Vendaval is the Vento Destruidor and the
     /// Glutão the Fogo Devorador (bible §1.3), not gods: they lose and go back, like the Dark.
     /// </summary>
@@ -15,6 +15,7 @@ namespace Rapadura.UI.Bestiary
         {
             RegionBossRules.WindKingId, RegionBossRules.OldKulId, RegionBossRules.EmberGluttonId,
             RegionBossRules.ApepId, RegionBossRules.DreamOfDestructionId, RegionBossRules.GreatDarkId, RegionBossRules.AzCaptainId,
+            RegionBossRules.HedammuId, RegionBossRules.SwallowingMireId, RegionBossRules.AydaharId, RegionBossRules.FourGluttonsId, RegionBossRules.OhyaId,
         };
 
         public static string PhaseKey(string enemyId, RegionBossPhase phase) => $"region_boss.{enemyId}.phase{(int)phase}";
@@ -26,6 +27,8 @@ namespace Rapadura.UI.Bestiary
         public static string WithdrawKey(string enemyId) => $"region_boss.{enemyId}.withdraw";
 
         public static string FormKey(GreatDarkForm form) => $"region_boss.great_dark.form.{form.ToString().ToLowerInvariant()}";
+
+        public static string AppetiteKey(GluttonAppetite appetite) => $"region_boss.four_gluttons.appetite.{appetite.ToString().ToLowerInvariant()}";
 
         public static void AddPages(List<LocalizationEntry> entries)
         {
@@ -129,6 +132,83 @@ namespace Rapadura.UI.Bestiary
             Blow(entries, RegionBossRules.AzCaptainId, "Her boot comes down!", "Lá vem a bota!");
             Signature(entries, RegionBossRules.AzCaptainId, "The Ark is opening! It takes from what you have!", "A Arca abriu! Ela leva do que vocês têm!");
             Withdraw(entries, RegionBossRules.AzCaptainId, "Āz gives the ark back and stands there, ashamed, in front of the whole garden.", "Āz devolve a arca e fica ali com vergonha, na frente do jardim inteiro.");
+
+            // -- Mangues de Liyongo (30) --
+            Page(entries, RegionBossRules.HedammuId,
+                "Hedammu is the sea serpent of the old Hurrian song, the one who ate everything and was never full, and Āz is very fond of her for that. She coils up in the Largo in the middle of the mangroves and swallows whatever drifts by: fish, boats, the little sparks of light the tide brings in. You can see them shining through her scales. When she opens that mouth she bites straight ahead, wide as a doorway, so don't stand in front of her, stand beside her. Beaten, she spits out every spark she swallowed and goes back down to the bottom, smaller and calmer. She'll be back. Appetites always come back. But a little smaller each time, and that is how it's done.",
+                "Hedammu é a serpente do mar da canção hurrita antiga, a que comia tudo e nunca enchia, e Āz gosta muito dela por isso. Ela se enrola no Largo no meio dos mangues e engole o que passar: peixe, barco, as faisquinhas de luz que a maré traz. Dá pra ver elas brilhando por baixo das escamas. Quando ela abre aquela boca, morde reto pra frente, larga como uma porta, então não fiquem na frente dela, fiquem do lado. Vencida, cospe todas as faíscas que engoliu e volta pro fundo, menor e mais calma. Ela volta. Apetite sempre volta. Mas um pouco menor de cada vez, e é assim que se faz.",
+                ("The mouth only goes one way. Be the other way.", "A boca só vai pra um lado. Seja o outro lado."),
+                ("She's so hungry she can't even taste it. That's the saddest part.", "Ela tem tanta fome que nem sente o gosto. Essa é a parte mais triste."),
+                ("Lady, chew! Nobody's going to take it from you!", "Dona, mastiga! Ninguém vai tirar de você!"),
+                ("Everything goes in and nothing fills her. The sparks don't belong to her, that's why.", "Tudo entra e nada enche. As faíscas não são dela, por isso."),
+                ("She ate the little lights! Spit them out, they're scared in there!", "Ela comeu as luzinhas! Cospe, elas tão com medo aí dentro!"));
+            Line(entries, RegionBossRules.HedammuId, RegionBossPhase.Storm, "Hedammu spits the tide!", "Hedammu cospe a maré!");
+            Line(entries, RegionBossRules.HedammuId, RegionBossPhase.LastStand, "She wants all of it now!", "Agora ela quer tudo!");
+            Blow(entries, RegionBossRules.HedammuId, "Her coils come down!", "Lá vêm os anéis dela!");
+            Signature(entries, RegionBossRules.HedammuId, "Hedammu opens her mouth! Get beside her!", "Hedammu abriu a boca! Pro lado dela!");
+            Withdraw(entries, RegionBossRules.HedammuId, "Hedammu spits out the sparks she swallowed and sinks back to the bottom, smaller and calmer.", "Hedammu cospe as faíscas que engoliu e volta pro fundo, menor e mais calma.");
+
+            // -- Coração do Lodo (35) --
+            Page(entries, RegionBossRules.SwallowingMireId,
+                "The Mire is the fourth of the five worlds of the Darkness, the murky water, and its people are the ones who swim. Down at the bottom of the delta it stands up as mud with no face and swallows: the roots, the clean water, the ground under your feet. It has no bones to break, children, so it can't be beaten for good. It draws back when the five springs are lit and the clean water pushes it away, like the Prince himself. When it goes still and the mud starts to shine round it, get out of the mud, and get further out in the end, because by then it reaches more. At night it grows by itself. Light the springs anyway.",
+                "O Lodo é o quarto dos cinco mundos da Treva, a água turva, e o povo dele são os que nadam. Lá no fundo do delta ele se levanta como lama sem rosto e engole: as raízes, a água limpa, o chão debaixo dos pés. Não tem osso pra quebrar, crianças, então não se vence de vez. Ele recua quando as cinco fontes acendem e a água limpa empurra ele pra longe, como o Príncipe. Quando ele ficar parado e a lama começar a brilhar em volta, saiam da lama, e saiam mais longe no fim, que aí ele alcança mais. De noite ele cresce sozinho. Acendam as fontes mesmo assim.",
+                ("When it stops moving, you start. Out of the mud, every time.", "Quando ele para de mexer, você começa. Pra fora da lama, toda vez."),
+                ("It swallowed the clean water and it still looks thirsty.", "Engoliu a água limpa e ainda parece com sede."),
+                ("My boots are never going to be the same. Neither is my dignity.", "Minha bota nunca mais vai ser a mesma. Nem minha dignidade."),
+                ("No face, no bones, no centre. It is the shape of being stuck.", "Sem rosto, sem osso, sem centro. É o formato de estar atolado."),
+                ("It took the water! Give it back, the fishes need it!", "Ele pegou a água! Devolve, os peixinhos precisam!"));
+            Line(entries, RegionBossRules.SwallowingMireId, RegionBossPhase.Storm, "The mud boils!", "A lama ferve!");
+            Line(entries, RegionBossRules.SwallowingMireId, RegionBossPhase.LastStand, "The Mire spreads out!", "O Lodo se espalha!");
+            Blow(entries, RegionBossRules.SwallowingMireId, "The mud comes up under you!", "A lama sobe debaixo de você!");
+            Signature(entries, RegionBossRules.SwallowingMireId, "The Mire swallows! Out of the mud!", "O Lodo vai engolir! Sai da lama!");
+            Withdraw(entries, RegionBossRules.SwallowingMireId, "The Mire sinks back into the bottom of the delta. The clean water pushes it away, for now.", "O Lodo afunda de volta no fundo do delta. A água limpa empurra ele pra longe, por enquanto.");
+
+            // -- Passo de Wakhan (40) --
+            Page(entries, RegionBossRules.AydaharId,
+                "Aydahar is the dragon of the old steppe tales, the long one with whiskers, and this one has been coiled across the Wakhan Pass for longer than anyone remembers, lying on Āz's gold without ever asking why. The scales went gold from lying on it. It isn't wicked, I don't think. It is simply guarding, the way a dog guards a door nobody uses. When it draws breath and goes quiet, it will breathe straight down the pass at you: one step to the side and the fire goes past. Set it free and it flies off, and the pass opens again for the caravans. That is the best ending a guard can have.",
+                "Aydahar é o dragão dos contos antigos da estepe, o comprido de bigode, e este está enrolado no Passo de Wakhan há mais tempo do que alguém lembra, deitado no ouro de Āz sem nunca perguntar por quê. As escamas ficaram douradas de tanto deitar em cima. Não acho que seja mau. Só está guardando, como um cachorro guarda uma porta que ninguém usa. Quando ele puxar o ar e ficar quieto, vai soprar reto passo abaixo em vocês: um passo pro lado e o fogo passa. Libertem ele e ele voa embora, e o passo abre de novo pras caravanas. É o melhor fim que um guarda pode ter.",
+                ("Straight lines are easy to leave. Sidestep and hit.", "Linha reta é fácil de sair. Passo pro lado e bate."),
+                ("Guarding gold he never wanted. Somebody should tell him he can go.", "Guardando um ouro que ele nem queria. Alguém precisa dizer que ele pode ir."),
+                ("Nice whiskers. Not as nice as mine will be.", "Belo bigode. Não tão bonito quanto o meu vai ser."),
+                ("The fire travels along the pass. The pass is the problem, not the dragon.", "O fogo corre pelo passo. O problema é o passo, não o dragão."),
+                ("Can I ride him after? Just a little? He looks soft!", "Posso andar nele depois? Só um pouquinho? Ele parece fofinho!"));
+            Line(entries, RegionBossRules.AydaharId, RegionBossPhase.Storm, "Aydahar spits embers!", "Aydahar cospe brasa!");
+            Line(entries, RegionBossRules.AydaharId, RegionBossPhase.LastStand, "The dragon uncoils!", "O dragão se desenrola!");
+            Blow(entries, RegionBossRules.AydaharId, "Its tail comes down!", "Lá vem a cauda!");
+            Signature(entries, RegionBossRules.AydaharId, "Aydahar draws breath! Step aside!", "Aydahar puxou o ar! Sai da frente!");
+            Withdraw(entries, RegionBossRules.AydaharId, "Aydahar shakes off the gold and flies away. The pass is open.", "Aydahar sacode o ouro e voa embora. O passo está aberto.");
+
+            // -- Cidadela dos Quatro Gulosos (46) --
+            Page(entries, RegionBossRules.FourGluttonsId,
+                "The old legends of the plain speak of four perils, and here they are, sharing one bronze body like four people sharing one blanket: Taotie the glutton, Hundun the chaos with no face, Qiongqi who turns right into wrong, and Taowu who never listens. Each is one appetite of Āz left on its own. One of them is in charge each week, and at night the palaces swap and the next one takes over. Taotie eats the ground you stand on, so move. Hundun puts out the light except where it marked, so stay. Qiongqi is safe up close. Taowu strikes all round itself, so keep away. Beaten, they go back to being figures on the old vessels. Good. That's where they belong.",
+                "As lendas antigas da planície falam de quatro perigos, e aqui estão eles, dividindo um corpo de bronze como quatro pessoas dividindo um cobertor: Taotie, o guloso, Hundun, o caos sem rosto, Qiongqi, que troca o certo pelo errado, e Taowu, que nunca escuta. Cada um é um apetite de Āz que ficou sozinho. Um deles manda em cada semana, e de noite os palácios trocam e o seguinte assume. Taotie come o chão onde vocês pisam, então saiam. Hundun apaga a luz menos onde marcou, então fiquem. Com Qiongqi, perto é seguro. Taowu bate em volta de si, então fiquem longe. Vencidos, voltam a ser figuras nos vasos antigos. Ótimo. Lugar deles é lá.",
+                ("Listen to which one shouts. Then do what it hates.", "Escuta qual deles grita. Depois faz o que ele odeia."),
+                ("Four of them in one body and every one of them alone.", "Quatro num corpo só e cada um sozinho."),
+                ("Four faces and not one of them has ever said thank you.", "Quatro caras e nenhuma delas nunca disse obrigado."),
+                ("A rule that changes every week is still a rule. You just have to read the calendar.", "Regra que muda toda semana ainda é regra. Só tem que olhar o calendário."),
+                ("The one with no face is the scariest! No wait, the one that doesn't listen! No, all of them!", "O sem cara é o mais assustador! Não, espera, o que não escuta! Não, todos!"));
+            Line(entries, RegionBossRules.FourGluttonsId, RegionBossPhase.Storm, "The vessel rings!", "O vaso toca!");
+            Line(entries, RegionBossRules.FourGluttonsId, RegionBossPhase.LastStand, "All four are hungry!", "Os quatro estão com fome!");
+            Blow(entries, RegionBossRules.FourGluttonsId, "The bronze comes down!", "Lá vem o bronze!");
+            Signature(entries, RegionBossRules.FourGluttonsId, "An appetite wakes!", "Um apetite acordou!");
+            Appetite(entries, GluttonAppetite.Taotie, "Taotie eats the ground! Off the mark!", "Taotie come o chão! Sai da marca!");
+            Appetite(entries, GluttonAppetite.Hundun, "Hundun puts out the light! Stay on the mark!", "Hundun apaga a luz! Fica na marca!");
+            Appetite(entries, GluttonAppetite.Qiongqi, "Qiongqi turns it all round! Come close!", "Qiongqi vira tudo do avesso! Chega perto!");
+            Appetite(entries, GluttonAppetite.Taowu, "Taowu won't listen! Keep away!", "Taowu não escuta! Fica longe!");
+
+            // -- Corrente de Amirani (52) --
+            Page(entries, RegionBossRules.OhyaId,
+                "Ohya is one of the two giant brothers of the old Book of the Giants, and Hahya, the one you met at the pass, is the other. Hahya has come back to himself. Ohya hasn't, not yet. He chained himself to the mountain so as not to fight anyone, he says, and then he fights everyone who climbs up, which is very like a brother. When he swings the chain round, it passes at its full length: get in close against his legs or stay well out of reach. Don't hate him for it. Beaten, he lets go of the chain and walks down to live with Hahya, and I'm told they argue about the cooking now. Which is the right thing for brothers to argue about.",
+                "Ohya é um dos dois irmãos gigantes do antigo Livro dos Gigantes, e o Hahya, o que vocês conheceram no passo, é o outro. O Hahya voltou a si. O Ohya não, ainda não. Ele se prendeu à montanha pra não brigar com ninguém, diz ele, e depois briga com todo mundo que sobe, o que é bem coisa de irmão. Quando ele girar a corrente, ela passa no comprimento todo: cheguem bem perto das pernas dele ou fiquem bem fora do alcance. Não tenham raiva dele. Vencido, ele solta a corrente e desce pra morar com o Hahya, e me contaram que agora eles brigam por causa da comida. Que é a briga certa pra irmão ter.",
+                ("The chain has a length. Either inside it or outside it, never on it.", "A corrente tem um comprimento. Ou dentro, ou fora, nunca em cima."),
+                ("He tied himself up so he wouldn't hurt anyone. He just needs someone to untie him.", "Ele se amarrou pra não machucar ninguém. Só precisa de alguém que desamarre."),
+                ("I fight with my sister too. Not with a chain. Usually.", "Eu também brigo com minha irmã. Não com corrente. Normalmente."),
+                ("A giant who chains himself to stop fighting and fights anyway. The chain was never the point.", "Um gigante que se acorrenta pra parar de brigar e briga mesmo assim. A corrente nunca foi o ponto."),
+                ("He's so big! I bet I can still beat him! I'm not small!", "Ele é muito grande! Aposto que eu ganho dele! Eu não sou pequena!"));
+            Line(entries, RegionBossRules.OhyaId, RegionBossPhase.Storm, "Ohya throws the snow!", "Ohya joga a neve!");
+            Line(entries, RegionBossRules.OhyaId, RegionBossPhase.LastStand, "The giant tears at the chain!", "O gigante puxa a corrente!");
+            Blow(entries, RegionBossRules.OhyaId, "His fist comes down!", "Lá vem o punho!");
+            Signature(entries, RegionBossRules.OhyaId, "The chain swings round! In close or far away!", "A corrente vai girar! Bem perto ou bem longe!");
         }
 
         private static void Signature(List<LocalizationEntry> entries, string enemyId, string en, string pt) =>
@@ -136,6 +216,9 @@ namespace Rapadura.UI.Bestiary
 
         private static void Withdraw(List<LocalizationEntry> entries, string enemyId, string en, string pt) =>
             entries.Add(new LocalizationEntry(WithdrawKey(enemyId), en, pt));
+
+        private static void Appetite(List<LocalizationEntry> entries, GluttonAppetite appetite, string en, string pt) =>
+            entries.Add(new LocalizationEntry(AppetiteKey(appetite), en, pt));
 
         private static void Form(List<LocalizationEntry> entries, GreatDarkForm form, string en, string pt) =>
             entries.Add(new LocalizationEntry(FormKey(form), en, pt));

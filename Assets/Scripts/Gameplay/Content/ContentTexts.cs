@@ -312,6 +312,12 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_mountain_dream_of_destruction", "The Dream of Destruction", "O Sonho da Destruição"),
             EnemyName("enemy_mountain_great_dark", "The Great Darkness", "A Grande Treva"),
             EnemyName("enemy_mountain_az_captain", "Āz, the Greedy Captain", "Āz, a Capitã Cobiçosa"),
+            // The world bosses of Regions 5–9 (Docs/Mapas100.md 30, 35, 40, 46, 52).
+            EnemyName("enemy_mountain_hedammu", "Hedammu, the Gluttonous Sea Serpent", "Hedammu, a Serpente Gulosa do Mar"),
+            EnemyName("enemy_mountain_swallowing_mire", "The Swallowing Mire", "O Lodo-que-Engole"),
+            EnemyName("enemy_mountain_aydahar", "Aydahar, the Dragon of the Pass", "Aydahar, o Dragão do Passo"),
+            EnemyName("enemy_mountain_four_gluttons", "The Four Gluttons", "Os Quatro Gulosos"),
+            EnemyName("enemy_mountain_ohya", "Ohya, the Giant Brother", "Ohya, o Gigante Irmão"),
             // The beasts of the Rio das Doze Horas (Docs/Mapas100.md 71–74), formerly played by stand-ins.
             EnemyName("enemy_forest_dark_river_crocodile", "Dark River Crocodile", "Crocodilo do Rio Escuro"),
             EnemyName("enemy_forest_dimmed_ibis", "Dimmed Ibis", "Íbis Apagada"),

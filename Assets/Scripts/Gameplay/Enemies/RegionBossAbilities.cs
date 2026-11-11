@@ -12,7 +12,7 @@ using UnityEngine;
 namespace Rapadura.Gameplay.Enemies
 {
     /// <summary>
-    /// The fight of a world boss of Regions 10–16, on its procedural model (added by <see cref="ProceduralEnemyModels.Instantiate(ProceduralEnemyBlueprint, Material, Transform)"/>,
+    /// The fight of a world boss of Regions 5–16, on its procedural model (added by <see cref="ProceduralEnemyModels.Instantiate(ProceduralEnemyBlueprint, Material, Transform)"/>,
     /// so every way of spawning one gets it; re-armed on enable for the pool). The regular <see cref="EnemyController"/> brain still chases and swings, like the
     /// ossuary's Colosso: this only adds on top. Each strike sends out a ring (<see cref="RegionBossRules.RingDamageFactor"/>), the Storm phase adds barrages of the boss's
     /// shot, the Last Stand a great blow telegraphed on the ground where the hero stood. Numbers in <see cref="RegionBossRules"/>.
@@ -34,6 +34,8 @@ namespace Rapadura.Gameplay.Enemies
         private Vector3 _signatureImpact;
         private float _fightSeconds;
         private GreatDarkForm _form;
+        private Vector3 _signatureOrigin;
+        private GluttonAppetite _appetite;
 
         public RegionBossPhase Phase => _phase;
 
@@ -234,9 +236,17 @@ namespace Rapadura.Gameplay.Enemies
             _signatureTimer = RegionBossRules.SignatureInterval(signature);
             _signatureWindup = RegionBossRules.SignatureWindup(signature);
             _signatureImpact = hero.position;
+            _signatureOrigin = transform.position;
             _controller.HoldAggro(_signatureWindup);
-            DungeonShockwave.Spawn(signature == RegionBossSignature.DreamFall ? _signatureImpact : transform.position, null, _controller.gameObject, 0f, 0f);
-            DungeonFx.Warn(transform.position + Vector3.up * 4f, Text(RegionBossTexts.SignatureKey(_spawn.EnemyId)));
+            string warning = RegionBossTexts.SignatureKey(_spawn.EnemyId);
+            if (signature == RegionBossSignature.FourAppetites)
+            {
+                _appetite = RegionBossRules.AppetiteFor(UtcDay(), IsNight());
+                warning = RegionBossTexts.AppetiteKey(_appetite);
+            }
+
+            DungeonShockwave.Spawn(MarksTheHeroSpot(signature) ? _signatureImpact : transform.position, null, _controller.gameObject, 0f, 0f);
+            DungeonFx.Warn(transform.position + Vector3.up * 4f, Text(warning));
         }
 
         private void TickForms(float deltaTime, Transform hero)
@@ -298,6 +308,51 @@ namespace Rapadura.Gameplay.Enemies
 
                     break;
 
+                case RegionBossSignature.GluttonBite:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.BiteHits(Flat(transform.position), Flat(_signatureImpact) - Flat(_signatureOrigin), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.BiteDamageFactor), ElementType.Physical, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.SwallowingMire:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.MireHits(FlatDistance(hero.position, transform.position), _phase))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.MireDamageFactor), ElementType.Dark, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.PassBreath:
+                    DungeonShockwave.Spawn(_signatureImpact, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.BreathHits(Flat(_signatureOrigin), Flat(_signatureImpact), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.BreathDamageFactor), ElementType.Fire, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.FourAppetites:
+                    DungeonShockwave.Spawn(_signatureImpact, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.AppetiteHits(_appetite, Flat(_signatureImpact), Flat(transform.position), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.AppetiteDamageFactor), ElementType.Arcane, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.ChainSweep:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.ChainSweepHits(FlatDistance(hero.position, transform.position)))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.ChainDamageFactor), ElementType.Physical, _controller.gameObject);
+                    }
+
+                    break;
+
                 case RegionBossSignature.GreedOfTheArk:
                     // The hero's health lives on PlayerStats, not on a Health.
                     PlayerStats stats = hero.GetComponentInParent<PlayerStats>();
@@ -321,10 +376,20 @@ namespace Rapadura.Gameplay.Enemies
                     return ServiceLocator.TryGet(out TimeOfDayManager time) && time != null ? RegionBossRules.MidnightMultiplier(time.CurrentHour) : 1f;
                 case RegionBossSignature.FiveForms:
                     return RegionBossRules.FormDamageMultiplier(_form);
+                case RegionBossSignature.FourAppetites:
+                    return RegionBossRules.AppetiteMultiplier(_appetite, IsNight());
                 default:
                     return 1f;
             }
         }
+
+        /// <summary>The signatures whose danger is drawn where the hero stood (the others are drawn round the boss).</summary>
+        private static bool MarksTheHeroSpot(RegionBossSignature signature) =>
+            signature == RegionBossSignature.DreamFall || signature == RegionBossSignature.PassBreath || signature == RegionBossSignature.FourAppetites;
+
+        private static long UtcDay() => (long)(System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc)).TotalDays;
+
+        private static Vector2 Flat(Vector3 p) => new Vector2(p.x, p.z);
 
         private static bool IsNight() => ServiceLocator.TryGet(out TimeOfDayManager time) && time != null && time.Phase == TimeOfDayPhase.Night;
 

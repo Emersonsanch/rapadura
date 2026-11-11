@@ -1329,6 +1329,7 @@ Viva e Fogo Vivo (o sol da savana). Chefe do mundo: **Hedammu** (mapa 30).
 - **Ganchos:** loot escama de Hedammu, raiz de mangue · montaria nova **Garça do Brejo** (variante de mangue) · casa:
   troféu de Hedammu.
 - **Noite:** vaga-lumes nos mangues; o kongamato dobra; os canais ficam escuros (lanterna ajuda).
+- **No jogo (2026-11-11): chefe do mundo Hedammu** (`RegionBossRules.MidSpawns`, `RegionBossDirector`, `enemy_mountain_hedammu`, nv 72): arena no anel de pedras do Largo de Hedammu, no fim da trilha do mangue depois do vau (1540, −1150 na região); aparece com o herói a 90 m, some a 125 m (de volta à vida cheia) e volta 5 min depois de cair; acima de 66% golpe e anel de força, 66–33% rajada de 3 tiros a cada 8 s, abaixo de 33% rajada de 5 e o Grande Golpe marcado no chão (2 s, 4,5 m); as clareiras comuns ficam a 22 m ou mais do anel, chão plano e trilha até ele; peso 0 no bioma (nunca sai em encontro). Própria: **mordida gulosa** a partir de 66% (a cada 10 s, 1,8 s de aviso): cone de 50° para cada lado e 9 m na direção em que o herói estava; do lado ou atrás dela não pega. Vencida, cospe as faíscas e volta para o fundo (não fica corpo). Loot: o do bioma (escama de Hedammu ainda não existe como item). Falta: a troca de canal pela maré, a Garça do Brejo e o troféu.
 
 ### Região 6 — Delta de Jhilpur (pântano de raízes, Água Viva) · mapas 31–35
 
@@ -1458,6 +1459,7 @@ Capital **Jhilpur** (§2). *Jhil* = lago/charco (bengali e hindi), *pur* = cidad
 - **Ganchos:** loot Pedra da Água Viva, "Lama Limpa" · montaria `mount_elder_tortoise` (Despertar II) · casa: troféu do
   Lodo (um broto num pote).
 - **Noite:** o lodo cresce sozinho; os Filhos do Lodo dobram; só as fontes limpas iluminam.
+- **No jogo (2026-11-11): chefe do mundo o Lodo-que-Engole** (`enemy_mountain_swallowing_mire`, nv 88): arena no anel de pedras do Olho do Lodo (−900, −1640 na região), a oeste da Raiz-Mãe; aparece com o herói a 90 m, some a 125 m (de volta à vida cheia) e volta 5 min depois de cair; acima de 66% golpe e anel de força, 66–33% rajada de 3 tiros a cada 8 s, abaixo de 33% rajada de 5 e o Grande Golpe marcado no chão (2 s, 4,5 m); as clareiras comuns ficam a 22 m ou mais do anel, chão plano e trilha até ele; peso 0 no bioma (nunca sai em encontro). Própria: **o lodo engole** a partir de 66% (a cada 12 s, 2,4 s de aviso): quem estiver a até 6 m dele (9 m abaixo de 33%) leva o golpe; habilidades +25% à noite (o lodo cresce sozinho). Não se vence de vez: recua e não fica corpo. Falta: as 5 fontes a purificar e o chefe só aparecer com as 5 acesas.
 
 ### Região 7 — Teto do Mundo (Pamir) · mapas 36–40
 
@@ -1575,6 +1577,7 @@ Códice; aqui, professor e contador de mapas). Chefe do mundo: **Aydahar** (mapa
   emboscadas); recompensa grande.
 - **Ganchos:** loot escama de aydahar, seda · montaria nova **Camelo-Bactriano Branco** (§6) · casa: troféu de Aydahar.
 - **Noite:** o passo fecha para caravanas (só herói); avalanches mais frequentes; aurora.
+- **No jogo (2026-11-11): chefe do mundo Aydahar** (`enemy_mountain_aydahar`, nv 98): arena no anel de pedras no alto da trilha do Caravançará ao Ninho de Aydahar (560, 1640 na região); aparece com o herói a 90 m, some a 125 m (de volta à vida cheia) e volta 5 min depois de cair; acima de 66% golpe e anel de força, 66–33% rajada de 3 tiros a cada 8 s, abaixo de 33% rajada de 5 e o Grande Golpe marcado no chão (2 s, 4,5 m); as clareiras comuns ficam a 22 m ou mais do anel, chão plano e trilha até ele; peso 0 no bioma (nunca sai em encontro). Própria: **sopro do passo** a partir de 66% (a cada 11 s, 2 s de aviso): linha de 16 m × 4 m dele até onde o herói estava (passa da marca); um passo para o lado basta. Libertado, voa embora (não fica corpo). Falta: a escolta da caravana e o Camelo-Bactriano Branco.
 
 ### Região 8 — Planície de Mingcheng (Luz) · mapas 41–46
 
@@ -1721,6 +1724,7 @@ Deng** (maniqueu da era Song em Fujian **[verificar]**; aqui, o mestre do canal)
   troféu dos Quatro (vaso de bronze).
 - **Noite:** os palácios trocam de guloso; Hundun mais forte.
 - **No jogo (2026-11-09): zona do mundo contínuo, fora do lugar da ficha.** A área `cidadela_dos_quatro_gulosos` (nv 125–140, a pé 121, barca 132; 480 × 240 m) foi tirada da metade norte dos Picos do Nian, sem aumentar a região, com o posto Portão do Nono Anel e Cais em (960, 1660). A ficha a põe nos anéis 7–9 de Mingcheng, mas a cidade é só a receita de ±30 m e a estrada norte passa colada nela: uma área de nível 125 ali cortaria a região. Exigência: nenhuma. Os bichos são corpos existentes (soldado de terracota, neblina, lobo, leão de pedra). Falta: os 4 palácios, o Salão Central, a mecânica do que cada um come e os Quatro Gulosos.
+- **No jogo (2026-11-11): chefe do mundo os Quatro Gulosos** (`enemy_mountain_four_gluttons`, nv 140): um corpo de vaso de bronze com uma cara de cada lado; arena no anel de pedras do Salão Central, a leste do Portão do Nono Anel, no fim de um ramal novo da trilha (1100, 1700 na região); aparece com o herói a 90 m, some a 125 m (de volta à vida cheia) e volta 5 min depois de cair; acima de 66% golpe e anel de força, 66–33% rajada de 3 tiros a cada 8 s, abaixo de 33% rajada de 5 e o Grande Golpe marcado no chão (2 s, 4,5 m); as clareiras comuns ficam a 22 m ou mais do anel, chão plano e trilha até ele; peso 0 no bioma (nunca sai em encontro). Própria: **o apetite da semana** a partir de 66% (a cada 12 s, 2,2 s de aviso): um por semana UTC em rodízio (Taotie, Hundun, Qiongqi, Taowu) e, à noite, o seguinte; Taotie come o chão marcado (sair de 4 m), Hundun apaga tudo menos a marca (ficar a até 3 m dela; +25% à noite), Qiongqi pega quem está a mais de 6 m dele (chegar perto), Taowu pega quem está a até 6 m (ficar longe). Vencidos, caem como os outros. Falta: os 4 palácios, Taotie comendo o loot do chão, Qiongqi trocando os controles e o evento de fim de temporada.
 
 ### Região 9 — Estepe dos Nartes (estepe e Cáucaso, Vento Vivo) · mapas 47–52 · ☆
 
@@ -1862,6 +1866,7 @@ Hahya guardado para o online, bíblia §1.4).
   (um elo).
 - **Noite:** a corrente brilha onde a luz já subiu; neve forte.
 - **No jogo (2026-11-09): subir pela corrente** (`NartesChainRules.cs`, ao longo de `AmiraniChain`, ~800 m): faixa de 6 m sobre os elos, argolas a cada 40 m (abrigo de 5 m, acendem conforme o herói sobe). Rajada a cada 16 s (10,5 calmo, 3 de aviso com texto e traço laranja, 2,5 soprando), de lados alternados, empurra 3,5 m/s de través: correndo contra dá para segurar. Quem é jogado para fora cai na argola de baixo (nunca mais longe) e perde 4 % da vida, nunca abaixo de 1. Sair andando fora da rajada não custa nada; montado não sobe (aviso). O alto paga 150 pepitas uma vez por dia UTC. Falta: Ohya e o loot de ferro antigo; o brilho noturno.
+- **No jogo (2026-11-11): chefe do mundo Ohya** (`enemy_mountain_ohya`, nv 150): arena no anel de pedras no Cume de Ohya, onde a trilha da corrente encontra a do Poço da Taça (1000, 1680 na região, a ~45 m dos elos); aparece com o herói a 90 m, some a 125 m (de volta à vida cheia) e volta 5 min depois de cair; acima de 66% golpe e anel de força, 66–33% rajada de 3 tiros a cada 8 s, abaixo de 33% rajada de 5 e o Grande Golpe marcado no chão (2 s, 4,5 m); as clareiras comuns ficam a 22 m ou mais do anel, chão plano e trilha até ele; peso 0 no bioma (nunca sai em encontro). Própria: **a corrente gira** a partir de 66% (a cada 10 s, 2 s de aviso): pega quem está entre 4 e 10 m dele; colado nas pernas ou longe, nada. Vencido, cai como os outros. Falta: soltar a corrente e descer para morar com o Hahya (cena), o loot de ferro antigo.
 
 ### Região 10 — Picos de Farnkesh (Vento Vivo) · mapas 53–58 · ☆
 

@@ -54,6 +54,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public static readonly Vector2 TorreQuinhentosOffset = new Vector2(-400f, 1380f);
         public static readonly Vector2 PortaoNonoAnelOffset = new Vector2(960f, 1660f);
 
+        /// <summary>The arena of the Quatro Gulosos (46): the Salão Central's stone ring, east of the Portão do Nono Anel at the end of its spur.</summary>
+        public static readonly Vector2 GulososArena = new Vector2(1100f, 1700f);
+
         /// <summary>Half the side (m) of Mingcheng's flat ground (reserved for the ring city's recipe, ±28 m and more).</summary>
         public const float MingchengGround = 30f;
 
@@ -283,6 +286,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             PathVia(w, 3.5f, new Vector2(-960f, 100f), MoinhoDaguaOffset + new Vector2(-18f, 0f));
             PathVia(w, 3.5f, new Vector2(-480f, 1440f), TorreQuinhentosOffset + new Vector2(-18f, 0f));
             PathVia(w, 3.5f, new Vector2(960f, 1420f), new Vector2(950f, 1540f), PortaoNonoAnelOffset + new Vector2(-18f, 0f));
+            PathVia(w, 3.5f, PortaoNonoAnelOffset + new Vector2(18f, 0f), new Vector2(1040f, 1680f), GulososArena);
 
             // ---------------- Landmarks ----------------
             Sign(w, lionFork, new Vector2(150f, -200f), 4f, 0f);
@@ -306,6 +310,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, 860f, 1240f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, 120f, 700f, 0f, 0.9f);
             Landmark(w, MapLandmarkKind.StoneRing, -1000f, 1000f, 0f, 1f);
+            Landmark(w, MapLandmarkKind.StoneRing, GulososArena.x, GulososArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

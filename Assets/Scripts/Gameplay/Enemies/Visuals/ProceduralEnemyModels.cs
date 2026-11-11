@@ -265,6 +265,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { RegionBossRules.DreamOfDestructionId, ProceduralEnemyKind.DreamOfDestruction },
             { RegionBossRules.GreatDarkId, ProceduralEnemyKind.GreatDark },
             { RegionBossRules.AzCaptainId, ProceduralEnemyKind.AzCaptain },
+            // The world bosses of Regions 5–9 (Docs/Mapas100.md 30, 35, 40, 46, 52).
+            { RegionBossRules.HedammuId, ProceduralEnemyKind.Hedammu },
+            { RegionBossRules.SwallowingMireId, ProceduralEnemyKind.SwallowingMire },
+            { RegionBossRules.AydaharId, ProceduralEnemyKind.Aydahar },
+            { RegionBossRules.FourGluttonsId, ProceduralEnemyKind.FourGluttons },
+            { RegionBossRules.OhyaId, ProceduralEnemyKind.Ohya },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -318,6 +324,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.BladeBat, ProceduralEnemyKind.GreatEel, ProceduralEnemyKind.AshBull, ProceduralEnemyKind.SmokeRope,
             ProceduralEnemyKind.WindKing, ProceduralEnemyKind.OldKul, ProceduralEnemyKind.EmberGlutton,
             ProceduralEnemyKind.Apep, ProceduralEnemyKind.DreamOfDestruction, ProceduralEnemyKind.GreatDark, ProceduralEnemyKind.AzCaptain,
+            ProceduralEnemyKind.Hedammu, ProceduralEnemyKind.SwallowingMire, ProceduralEnemyKind.Aydahar, ProceduralEnemyKind.FourGluttons, ProceduralEnemyKind.Ohya,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -341,8 +348,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 || kind == ProceduralEnemyKind.AlphaWolf || kind == ProceduralEnemyKind.BoneColossus || IsRegionWorldBoss(kind);
         }
 
-        /// <summary>The world bosses of Regions 10–16 (<see cref="RegionBossRecipes"/>).</summary>
-        public static bool IsRegionWorldBoss(ProceduralEnemyKind kind) => kind >= ProceduralEnemyKind.WindKing && kind <= ProceduralEnemyKind.AzCaptain;
+        /// <summary>The world bosses of Regions 5–16 (<see cref="RegionBossRecipes"/>).</summary>
+        public static bool IsRegionWorldBoss(ProceduralEnemyKind kind) => kind >= ProceduralEnemyKind.WindKing && kind <= ProceduralEnemyKind.Ohya;
 
         private static string RegionBossIdOf(ProceduralEnemyKind kind)
         {
@@ -354,6 +361,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.DreamOfDestruction: return RegionBossRules.DreamOfDestructionId;
                 case ProceduralEnemyKind.GreatDark: return RegionBossRules.GreatDarkId;
                 case ProceduralEnemyKind.AzCaptain: return RegionBossRules.AzCaptainId;
+                case ProceduralEnemyKind.Hedammu: return RegionBossRules.HedammuId;
+                case ProceduralEnemyKind.SwallowingMire: return RegionBossRules.SwallowingMireId;
+                case ProceduralEnemyKind.Aydahar: return RegionBossRules.AydaharId;
+                case ProceduralEnemyKind.FourGluttons: return RegionBossRules.FourGluttonsId;
+                case ProceduralEnemyKind.Ohya: return RegionBossRules.OhyaId;
                 default: return RegionBossRules.EmberGluttonId;
             }
         }
@@ -851,6 +863,21 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.AzCaptain:
                     RegionBossRecipes.BuildAzCaptain(blueprint);
+                    break;
+                case ProceduralEnemyKind.Hedammu:
+                    RegionBossRecipes.BuildHedammu(blueprint);
+                    break;
+                case ProceduralEnemyKind.SwallowingMire:
+                    RegionBossRecipes.BuildSwallowingMire(blueprint);
+                    break;
+                case ProceduralEnemyKind.Aydahar:
+                    RegionBossRecipes.BuildAydahar(blueprint);
+                    break;
+                case ProceduralEnemyKind.FourGluttons:
+                    RegionBossRecipes.BuildFourGluttons(blueprint);
+                    break;
+                case ProceduralEnemyKind.Ohya:
+                    RegionBossRecipes.BuildOhya(blueprint);
                     break;
             }
 

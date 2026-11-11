@@ -54,7 +54,7 @@ namespace Rapadura.Gameplay.Enemies
 
         private void Awake()
         {
-            foreach (RegionBossSpawn spawn in RegionBossRules.Spawns)
+            foreach (RegionBossSpawn spawn in RegionBossRules.AllSpawns)
             {
                 _slots.Add(new Slot { Spawn = spawn });
             }

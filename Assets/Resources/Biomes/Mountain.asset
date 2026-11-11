@@ -135,6 +135,16 @@ MonoBehaviour:
     _weight: 0
   - _enemy: {fileID: 11400000, guid: d07c94f6bad8afc4e287adf6bf94a077, type: 2}
     _weight: 0
+  - _enemy: {fileID: 11400000, guid: 4168e4e8956f4ace8146432b08d3c91c, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 2605ba34c97c441bb1b157c950fc86e2, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 00331015df5f40a78f959050905a121c, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 22844c9db8c541948dc6c01ff3077b24, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 6b2b36ef495e4d068425305f91986fb8, type: 2}
+    _weight: 0
   - _enemy: {fileID: 11400000, guid: e04fc9d32e434313820fb0a9403453ca, type: 2}
     _weight: 0
   - _enemy: {fileID: 11400000, guid: 5d5399fc73fc43d4b48b96a436d480a7, type: 2}
