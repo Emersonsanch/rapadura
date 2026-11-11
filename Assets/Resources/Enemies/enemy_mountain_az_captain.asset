@@ -17,11 +17,11 @@ MonoBehaviour:
   _level: 478
   _maxHealth: 1180
   _experienceReward: 40
-  _lootItem: {fileID: 11400000, guid: 214ad08bc7a3def4cbeb45bedcc4524c, type: 2}
-  _lootDropChance: 0.6
-  _lootQuantityMin: 12
-  _lootQuantityMax: 18
-  _bossGuaranteedLoot: 1
+  _lootItem: {fileID: 11400000, guid: 5c105d6571fa6c9306d553d0f58da57e, type: 2}
+  _lootDropChance: 0.3
+  _lootQuantityMin: 1
+  _lootQuantityMax: 1
+  _bossGuaranteedLoot: 0
   _bossBonusDropItem: {fileID: 11400000, guid: 5ea679476970ef742b84d30b4dd65031, type: 2}
   _bossBonusDropRarity: 3
   _bossExperienceMultiplier: 8

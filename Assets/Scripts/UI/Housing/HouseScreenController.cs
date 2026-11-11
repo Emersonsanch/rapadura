@@ -1127,6 +1127,7 @@ namespace Rapadura.UI.Housing
                 case HouseItemFunction.Bench:
                 case HouseItemFunction.Forge:
                 case HouseItemFunction.Stove:
+                case HouseItemFunction.Loom:
                     _lifePanel?.Hide();
                     _dummy?.Hide();
                     _wardrobe?.Hide();

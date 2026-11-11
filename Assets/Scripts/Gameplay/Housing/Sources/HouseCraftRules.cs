@@ -40,14 +40,48 @@ namespace Rapadura.Gameplay.Housing
     }
 
     /// <summary>
-    /// H3 crafting of the catalog's "Crafting:" items (12 house items + 3 wardrobe entries). Materials are the real biome
+    /// H3 crafting of the catalog's "Crafting:" items (12 house items + 13 wardrobe entries). Materials are the real biome
     /// materials (<c>item_wood</c>, <c>item_fiber</c>, <c>item_stone</c>, <c>item_iron</c> = lingote, <c>item_iron_ore</c>),
     /// paid from the bag and the Baú da casa (<see cref="IHouseWallet"/>), all or nothing. Pure.
-    /// The Tear recipes of the clothing catalog need boss materials that do not exist as items yet: not here.
+    /// The clothing catalog's boss recipes (Tear, Tear de mestre, "Forja (lingotes + material de chefe)") take the world
+    /// bosses' own keepsakes (<see cref="WorldBossKeepsakes"/>, each one the <c>LootItem</c> of its boss asset).
     /// </summary>
     public static class HouseCraftRules
     {
         public const string MasterBenchId = "casa_util_012";
+
+        /// <summary>
+        /// The own drop of each world boss of Regions 5–16 (<c>RegionBossRules.AllSpawns</c>), by boss asset name. Each one is
+        /// that asset's <c>LootItem</c> (<c>Resources/Items</c>) and goes into at least one recipe of <see cref="All"/>.
+        /// </summary>
+        public static readonly IReadOnlyDictionary<string, string> WorldBossKeepsakes = new Dictionary<string, string>
+        {
+            { "enemy_mountain_hedammu", "item_chefe_escama_hedammu" },
+            { "enemy_mountain_swallowing_mire", "item_chefe_lama_limpa" },
+            { "enemy_mountain_aydahar", "item_chefe_escama_aydahar" },
+            { "enemy_mountain_four_gluttons", "item_chefe_bronze_antigo" },
+            { "enemy_mountain_ohya", "item_chefe_ferro_antigo" },
+            { "enemy_mountain_wind_king", "item_chefe_pena_vendaval" },
+            { "enemy_mountain_old_kul", "item_chefe_barbatana_kul" },
+            { "enemy_mountain_ember_glutton", "item_chefe_brasa_viva" },
+            { "enemy_mountain_apep", "item_chefe_escama_apep" },
+            { "enemy_mountain_dream_of_destruction", "item_chefe_tabua_sonho" },
+            { "enemy_mountain_great_dark", "item_chefe_lasca_selo" },
+            { "enemy_mountain_az_captain", "item_chefe_semente_luz" },
+        };
+
+        private const string HedammuScale = "item_chefe_escama_hedammu";
+        private const string CleanMud = "item_chefe_lama_limpa";
+        private const string AydaharScale = "item_chefe_escama_aydahar";
+        private const string VesselBronze = "item_chefe_bronze_antigo";
+        private const string AncientIron = "item_chefe_ferro_antigo";
+        private const string GaleFeather = "item_chefe_pena_vendaval";
+        private const string SilverFin = "item_chefe_barbatana_kul";
+        private const string LivingEmber = "item_chefe_brasa_viva";
+        private const string ApepScale = "item_chefe_escama_apep";
+        private const string DreamTablet = "item_chefe_tabua_sonho";
+        private const string SealShard = "item_chefe_lasca_selo";
+        private const string SeedOfLight = "item_chefe_semente_luz";
         private const string Wood = HouseUpgradeRules.WoodId;
         private const string Fiber = HouseUpgradeRules.FiberId;
         private const string Stone = HouseUpgradeRules.StoneId;
@@ -91,6 +125,19 @@ namespace Rapadura.Gameplay.Housing
                 R("tinta_006", HouseItemFunction.Stove, false, (Wood, 2)),
                 R("tinta_019", HouseItemFunction.Forge, false, (Iron, 1), (IronOre, 1)),
                 R("visual_arma_icaro_002", HouseItemFunction.Bench, false, (Iron, 2), (Fiber, 2)),
+                // CatalogoRoupas.md's boss pieces (proposed numbers). Épico: "Tear (tecido + material de chefe)" and
+                // "Forja (lingotes + material de chefe)", one world boss keepsake each.
+                R("roupa_maithe_015", HouseItemFunction.Loom, false, (Fiber, 10), (GaleFeather, 2)),
+                R("roupa_maria_015", HouseItemFunction.Loom, false, (Fiber, 10), (HedammuScale, 3)),
+                R("roupa_lavine_015", HouseItemFunction.Loom, false, (Fiber, 10), (ApepScale, 2)),
+                R("roupa_joaquim_015", HouseItemFunction.Forge, false, (Iron, 6), (Stone, 4), (AncientIron, 2)),
+                R("roupa_icaro_015", HouseItemFunction.Forge, false, (Iron, 6), (Fiber, 2), (LivingEmber, 2)),
+                // Lendário: "Tear de mestre (4 lembranças de chefe)", four different keepsakes each.
+                R("roupa_maithe_019", HouseItemFunction.Loom, false, (Fiber, 12), (GaleFeather, 1), (AydaharScale, 1), (VesselBronze, 1), (SilverFin, 1)),
+                R("roupa_maria_019", HouseItemFunction.Loom, false, (Fiber, 12), (SeedOfLight, 1), (CleanMud, 1), (HedammuScale, 1), (SilverFin, 1)),
+                R("roupa_joaquim_019", HouseItemFunction.Loom, false, (Fiber, 12), (AncientIron, 1), (CleanMud, 1), (VesselBronze, 1), (DreamTablet, 1)),
+                R("roupa_icaro_019", HouseItemFunction.Loom, false, (Fiber, 12), (LivingEmber, 1), (VesselBronze, 1), (AncientIron, 1), (SealShard, 1)),
+                R("roupa_lavine_019", HouseItemFunction.Loom, false, (Fiber, 12), (ApepScale, 1), (DreamTablet, 1), (SealShard, 1), (SeedOfLight, 1)),
             };
 
             HouseCraftRecipe fireplace = R("casa_sala_041", HouseItemFunction.Bench, true, (Stone, 30), (Wood, 10));
@@ -103,6 +150,9 @@ namespace Rapadura.Gameplay.Housing
         public static HouseCraftRecipe Get(string recipeId) => All.FirstOrDefault(r => r.Id == recipeId);
 
         public static HouseCraftRecipe ForResult(string resultId) => All.FirstOrDefault(r => r.ResultId == resultId);
+
+        /// <summary>The recipes that spend <paramref name="itemId"/>.</summary>
+        public static IEnumerable<HouseCraftRecipe> UsesOf(string itemId) => All.Where(r => r.Costs.Any(c => c.ItemId == itemId));
 
         /// <param name="hasStation">Is a piece with this function (or this exact item, when given) placed in the house?</param>
         public static HouseCraftBlock Check(HouseCraftRecipe recipe, bool hasHouse, Func<HouseItemFunction, string, bool> hasStation,

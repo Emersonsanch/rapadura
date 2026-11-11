@@ -47,7 +47,7 @@ namespace Rapadura.Gameplay.Wardrobe
         DailyQuest,
         Achievement,
         Event,
-        /// <summary>Station id: workbench, forge, stove (house recipes) or loom / master_loom / forge_boss (not craftable yet).</summary>
+        /// <summary>Station id: workbench, forge, stove (house recipes) or loom / master_loom / forge_boss (the boss pieces: Loom and Forge recipes of HouseCraftRules with the world bosses' keepsakes).</summary>
         Craft,
         /// <summary>Relic id.</summary>
         Secret,

@@ -44,6 +44,7 @@ namespace Rapadura.Gameplay.Housing
         public const string StationForge = "ui.house_sources.station_forge";
         public const string StationStove = "ui.house_sources.station_stove";
         public const string StationMaster = "ui.house_sources.station_master";
+        public const string StationLoom = "ui.house_sources.station_loom";
         public const string Close = "ui.house_sources.close";
 
         private static readonly LocalizationEntry[] EntryArray =
@@ -76,12 +77,26 @@ namespace Rapadura.Gameplay.Housing
             E(StationForge, "Forge", "Forja"),
             E(StationStove, "Tandir (clay oven)", "Tandir (forno de barro)"),
             E(StationMaster, "Master craftsman's bench", "Bancada de mestre"),
+            E(StationLoom, "Loom", "Tear"),
             E(Close, "Close", "Fechar"),
             E(MaterialKey("item_wood"), "Wood", "Madeira"),
             E(MaterialKey("item_fiber"), "Fiber", "Fibra"),
             E(MaterialKey("item_stone"), "Stone", "Pedra"),
             E(MaterialKey("item_iron"), "Iron ingot", "Ferro (lingote)"),
             E(MaterialKey("item_iron_ore"), "Iron ore", "Minério de ferro"),
+            // The world bosses' keepsakes (HouseCraftRules.WorldBossKeepsakes; same names as ContentTexts).
+            E(MaterialKey("item_chefe_escama_hedammu"), "Hedammu's Scale", "Escama de Hedammu"),
+            E(MaterialKey("item_chefe_lama_limpa"), "Clean Mud of the Mire", "Lama Limpa do Lodo"),
+            E(MaterialKey("item_chefe_escama_aydahar"), "Aydahar's Scale", "Escama de Aydahar"),
+            E(MaterialKey("item_chefe_bronze_antigo"), "Ancient Bronze of the Vessels", "Bronze Antigo dos Vasos"),
+            E(MaterialKey("item_chefe_ferro_antigo"), "Ohya's Ancient Iron Link", "Elo de Ferro Antigo de Ohya"),
+            E(MaterialKey("item_chefe_pena_vendaval"), "Gale King's Feather", "Pena do Rei-Vendaval"),
+            E(MaterialKey("item_chefe_barbatana_kul"), "Old Kul's Silver Fin", "Barbatana-Prata do Velho Kul"),
+            E(MaterialKey("item_chefe_brasa_viva"), "Glutton's Living Ember", "Brasa Viva do Glutão"),
+            E(MaterialKey("item_chefe_escama_apep"), "Apep's Scale", "Escama de Apep"),
+            E(MaterialKey("item_chefe_tabua_sonho"), "Dream Tablet", "Tábua do Sonho"),
+            E(MaterialKey("item_chefe_lasca_selo"), "Shard of the Darkness Seal", "Lasca do Selo da Treva"),
+            E(MaterialKey("item_chefe_semente_luz"), "Āz's Seed of Light", "Semente de Luz de Āz"),
         };
 
         public static string MaterialKey(string itemId) => "ui.house_sources.item." + itemId;
@@ -122,6 +137,7 @@ namespace Rapadura.Gameplay.Housing
             {
                 case HouseItemFunction.Forge: return StationForge;
                 case HouseItemFunction.Stove: return StationStove;
+                case HouseItemFunction.Loom: return StationLoom;
                 default: return StationBench;
             }
         }

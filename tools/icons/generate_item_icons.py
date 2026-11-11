@@ -995,6 +995,96 @@ def r_fish(**kw):
     return lambda ic: fish(ic, **kw)
 
 
+# ---------------------------------------------------------------- lembranças dos chefes do mundo (HouseCraftRules)
+def scale_plate(ic, col, edge, glint=None, cx=64, cy=62):
+    """Escama: gota invertida facetada com nervuras."""
+    if glint:
+        ic.glow(cx, cy, 40, glint, 120)
+    ic.poly([(cx, cy - 44), (cx + 34, cy - 18), (cx + 30, cy + 22), (cx, cy + 46), (cx - 30, cy + 22), (cx - 34, cy - 18)], col)
+    ic.poly([(cx, cy - 30), (cx + 20, cy - 10), (cx, cy + 30), (cx - 20, cy - 10)], lighter(col, 0.18), outline=False)
+    for dx in (-14, 0, 14):
+        ic.stroke([(cx + dx * 0.4, cy - 34), (cx + dx, cy + 30)], 1.6, edge)
+
+
+def r_chefe_escama_hedammu(ic):
+    scale_plate(ic, (70, 140, 120), (40, 90, 80), glint=GOLD_LIGHT)
+    for x, y in ((50, 48), (76, 60), (60, 80)):
+        ic.dot(x, y, 2.6, GOLD_LIGHT)
+
+
+def r_chefe_lama_limpa(ic):
+    ic.ngon(64, 74, 42, 11, (110, 92, 66), ry=28)
+    ic.ngon(60, 66, 28, 9, (134, 112, 80), ry=18, outline=False)
+    ic.glow(64, 64, 18, (150, 230, 220), 200)
+    ic.poly([(64, 46), (74, 62), (64, 74), (54, 62)], (150, 230, 220), shade=False)
+
+
+def r_chefe_escama_aydahar(ic):
+    scale_plate(ic, (150, 190, 214), (90, 120, 150), glint=SKY)
+    ic.stroke([(40, 30), (88, 94)], 1.6, (240, 250, 255))
+
+
+def r_chefe_bronze_antigo(ic):
+    ic.poly([(22, 40), (60, 22), (104, 34), (98, 92), (56, 106), (28, 88)], BRONZE)
+    ic.poly([(22, 40), (60, 22), (104, 34), (64, 48)], lighter(BRONZE, 0.2), outline=False)
+    ic.stroke([(36, 62), (48, 54), (60, 62), (72, 54), (86, 62)], 2.4, (70, 130, 110))
+    ic.stroke([(36, 78), (48, 70), (60, 78), (72, 70), (86, 78)], 2.4, (70, 130, 110))
+
+
+def r_chefe_ferro_antigo(ic):
+    ic.ngon(64, 64, 44, 10, IRON_DARK, ry=30, rot=-30)
+    ic.img.paste((0, 0, 0, 0), (0, 0), ic._mask(lambda d: d.ellipse([40 * SS, 50 * SS, 88 * SS, 78 * SS], fill=255)))
+    ic.dot(36, 54, 3, RUST)
+    ic.dot(90, 76, 3.5, RUST)
+
+
+def r_chefe_pena_vendaval(ic):
+    ic.glow(64, 64, 34, SKY, 110)
+    ic.poly([(30, 106), (44, 70), (66, 38), (100, 16), (94, 48), (74, 78), (40, 104)], (220, 230, 240))
+    ic.poly([(66, 38), (100, 16), (94, 48)], GOLD, outline=False)
+    ic.stroke([(28, 110), (96, 22)], 2.2, BROWN)
+
+
+def r_chefe_barbatana_kul(ic):
+    ic.glow(64, 64, 36, (200, 220, 240), 130)
+    ic.poly([(20, 100), (40, 34), (70, 14), (108, 40), (86, 66), (100, 100)], (200, 208, 220))
+    for x in (40, 58, 76):
+        ic.stroke([(30, 98), (x, 30 + (x - 40) * 0.2)], 1.6, (150, 160, 180))
+
+
+def r_chefe_brasa_viva(ic):
+    ic.ngon(64, 76, 30, 7, (60, 40, 34), rot=12)
+    ic.poly([(46, 70), (64, 58), (82, 70), (70, 88), (56, 88)], (220, 90, 40), outline=False)
+    flame(ic, 64, 54, 18)
+
+
+def r_chefe_escama_apep(ic):
+    scale_plate(ic, (70, 60, 90), (40, 30, 60), glint=(150, 110, 210))
+    ic.stroke([(64, 30), (64, 96)], 2, (170, 140, 220))
+
+
+def r_chefe_tabua_sonho(ic):
+    ic.poly([(30, 22), (98, 18), (102, 104), (26, 108)], (190, 150, 110))
+    for y in (36, 50, 64, 78, 92):
+        for x in range(38, 92, 10):
+            ic.poly([(x, y), (x + 5, y - 3), (x + 6, y + 3)], (130, 96, 66), shade=False, outline=False)
+    ic.poly([(98, 18), (102, 46), (86, 30)], (160, 120, 84))
+
+
+def r_chefe_lasca_selo(ic):
+    ic.glow(64, 64, 38, GOLD_LIGHT, 170)
+    ic.poly([(28, 92), (40, 36), (76, 16), (100, 52), (82, 104)], (60, 56, 70))
+    ic.ngon(64, 62, 12, 8, GOLD_LIGHT)
+    ic.stroke([(40, 36), (60, 58), (82, 104)], 2, GOLD)
+
+
+def r_chefe_semente_luz(ic):
+    ic.glow(64, 64, 42, GOLD_LIGHT, 220)
+    ic.ngon(64, 70, 26, 10, (250, 236, 170), ry=34)
+    ic.poly([(64, 34), (70, 22), (82, 18), (74, 30)], LEAF)
+    ic.poly([(54, 56), (60, 50), (58, 70)], (255, 255, 255), shade=False, outline=False)
+
+
 RECIPES = {
     # exigências de mapa (MapRequirementRules)
     "item_corda_escalada": r_corda_escalada,
@@ -1079,6 +1169,19 @@ RECIPES = {
     "item_parte_presa_lobo": r_parte_presa_lobo,
     "item_parte_seda_aranha": r_parte_seda_aranha,
     "item_parte_trofeu_fera": r_parte_trofeu_fera,
+    # lembranças dos chefes do mundo (Regiões 5–16)
+    "item_chefe_escama_hedammu": r_chefe_escama_hedammu,
+    "item_chefe_lama_limpa": r_chefe_lama_limpa,
+    "item_chefe_escama_aydahar": r_chefe_escama_aydahar,
+    "item_chefe_bronze_antigo": r_chefe_bronze_antigo,
+    "item_chefe_ferro_antigo": r_chefe_ferro_antigo,
+    "item_chefe_pena_vendaval": r_chefe_pena_vendaval,
+    "item_chefe_barbatana_kul": r_chefe_barbatana_kul,
+    "item_chefe_brasa_viva": r_chefe_brasa_viva,
+    "item_chefe_escama_apep": r_chefe_escama_apep,
+    "item_chefe_tabua_sonho": r_chefe_tabua_sonho,
+    "item_chefe_lasca_selo": r_chefe_lasca_selo,
+    "item_chefe_semente_luz": r_chefe_semente_luz,
     # amuletos / bolsas / chaves / convites
     "item_amuleto_sorte": r_amuleto_sorte,
     "item_patua_vo_zefa": r_patua,
