@@ -59,5 +59,45 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         }
 
         private static ZarafshanGardenSpark[] _mihrshahSparks;
+
+        /// <summary>
+        /// The marsh of the Brejo do Lodo Escuro (03, <c>ZarafshanMireRules</c>): the bounds of its embedded map (−100…100 × −170…30 round the
+        /// map's own origin), where the mud slows the hero off the log walkways.
+        /// </summary>
+        public static Rect BrejoMireBounds => new Rect(BrejoOffset + new Vector2(-100f, -170f), new Vector2(200f, 200f));
+
+        /// <summary>The mulberry grove of the Bosque das Amoreiras (04, <c>ZarafshanWebRules</c>): the bounds of its embedded map (−100…100 both ways).</summary>
+        public static Rect AmoreirasGroveBounds => new Rect(AmoreirasOffset + new Vector2(-100f, -100f), new Vector2(200f, 200f));
+
+        /// <summary>
+        /// The eight webs of the Amoreiras (04): each between two neighbouring trees of a row (the rows are planted every 8.5 m along x and 10 m
+        /// along z from the block's corner), two per block, beside the clearings of the spiders, the cocoons, the drying lines and the great
+        /// loom, at least 15 m from every trail and yard. Built on first use: the map's offset lives in another part of this partial class.
+        /// </summary>
+        public static ZarafshanWeb[] AmoreirasWebs
+        {
+            get
+            {
+                if (_amoreirasWebs == null)
+                {
+                    Vector2 o = AmoreirasOffset;
+                    _amoreirasWebs = new[]
+                    {
+                        new ZarafshanWeb("so_fileiras", o + new Vector2(-61f, -45f), o + new Vector2(-52.5f, -45f)),
+                        new ZarafshanWeb("so_fundo", o + new Vector2(-35.5f, -75f), o + new Vector2(-27f, -75f)),
+                        new ZarafshanWeb("se_varais", o + new Vector2(65f, -35f), o + new Vector2(73.5f, -35f)),
+                        new ZarafshanWeb("se_fundo", o + new Vector2(22.5f, -55f), o + new Vector2(31f, -55f)),
+                        new ZarafshanWeb("no_casulos", o + new Vector2(-44f, 38f), o + new Vector2(-35.5f, 38f)),
+                        new ZarafshanWeb("no_oeste", o + new Vector2(-86.5f, 58f), o + new Vector2(-78f, 58f)),
+                        new ZarafshanWeb("ne_tear", o + new Vector2(48f, 68f), o + new Vector2(56.5f, 68f)),
+                        new ZarafshanWeb("ne_leste", o + new Vector2(73.5f, 18f), o + new Vector2(82f, 18f)),
+                    };
+                }
+
+                return _amoreirasWebs;
+            }
+        }
+
+        private static ZarafshanWeb[] _amoreirasWebs;
     }
 }

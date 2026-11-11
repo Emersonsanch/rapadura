@@ -39,5 +39,53 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>The rope bridges the wells spare (the long way round: west scarps, bottomless abyss), for the docs and the tests.</summary>
         public static readonly Vector2 ScarpsBridge = new Vector2(-950f, -1880f);
         public static readonly Vector2 BottomlessBridge = new Vector2(950f, -1840f);
+
+        /// <summary>
+        /// The boat of the Lago do Limiar (19, <c>LimiarBoatRules</c>): from the north landing under the Vila, 5 m off the shore and 26 m below the
+        /// trail to the tunnels, over the dark lake (28 m wide round its centre line z ≈ −96…−102) to the south landing on the beach, 5 m off the
+        /// shore, between the trail down to the Colunata and the beach's clearing. The Lago's map is embedded at the region's origin.
+        /// </summary>
+        public static readonly Vector2[] LimiarBoatCourse =
+        {
+            new Vector2(9f, -82f),
+            new Vector2(6f, -92f),
+            new Vector2(-4f, -103f),
+            new Vector2(-14f, -118f),
+        };
+
+        /// <summary>The Lago do Limiar's embedded map (19), where the boat's driver works.</summary>
+        public static readonly Rect LimiarLakeBounds = Rect.MinMaxRect(-100f, -170f, 100f, 30f);
+
+        /// <summary>The Salão de Tages' embedded map (20, −100…100 both ways round <see cref="TagesOffset"/>), where the lamps' driver works.</summary>
+        public static Rect TagesHallBounds => new Rect(TagesOffset + new Vector2(-100f, -100f), new Vector2(200f, 200f));
+
+        /// <summary>
+        /// The six lamps of the Salão de Tages (20, <c>TagesDarkRules</c>): the three lamp posts in the niches of the corridor of columns (3.6 m
+        /// beside its centre line, at 14, 30 and 46 m from the stream end) and one by each clearing, 12–14 m from its centre, off the trails: the
+        /// south gallery, the dark ford and the colonnade. Built on first use: the hall's offset lives in another part of this partial class.
+        /// </summary>
+        public static TagesLamp[] TagesLamps
+        {
+            get
+            {
+                if (_tagesLamps == null)
+                {
+                    Vector2 o = TagesOffset;
+                    _tagesLamps = new[]
+                    {
+                        new TagesLamp("corredor_1", o + new Vector2(48.2f, 44.3f)),
+                        new TagesLamp("corredor_2", o + new Vector2(34.6f, 52.7f)),
+                        new TagesLamp("corredor_3", o + new Vector2(20.9f, 61f)),
+                        new TagesLamp("galeria_sul", o + new Vector2(-50f, -41f)),
+                        new TagesLamp("vau_escuro", o + new Vector2(74f, -54f)),
+                        new TagesLamp("colunata", o + new Vector2(78f, 52f)),
+                    };
+                }
+
+                return _tagesLamps;
+            }
+        }
+
+        private static TagesLamp[] _tagesLamps;
     }
 }
