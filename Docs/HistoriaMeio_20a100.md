@@ -81,6 +81,18 @@ frio do cume, passagem de dhow para a Costa, roupa térmica para o Teto…).
 - O selo é um objetivo de matar o Tages (`enemy_cave_dweller`, 1): o `QuestManager` credita chefe já vencido ao começar a missão
   (`CreditDefeatedUniqueEnemies`), então quem terminou a campanha só precisa descer ao salão.
 
+### Saves antigos
+
+- Save de antes da Lua (ou de antes de a primeira carta exigir a Lua) com **qualquer Carta começada ou concluída**: ao carregar,
+  `MidStorySaveMigration.Upgrade` (chamado no `QuestManager.RestoreState`) põe as 15 etapas da Lua direto na lista de concluídas
+  e tira da lista de ativas. Não passa por `CompleteQuest`: nada de XP, ouro ou itens de novo, nada vai para as recompensas
+  pendentes e nenhum evento sai. A cadeia segue da Carta onde o herói estava.
+- Save **sem nenhuma Carta**, mesmo no nível 100 ou mais: a Lua é conteúdo novo e é feita normalmente. A primeira carta não
+  fica muda à toa: a Vó Edna (raiz, sem pré-requisito) oferece a primeira etapa a qualquer herói do nível 20 para cima, e
+  `MidStorySaveMigration.NextMainStep` aponta a etapa certa da cadeia inteira.
+- `QuestSaveState.StorySchema` marca o save já migrado (0 nos antigos, 1 nos novos); a regra roda uma vez só.
+  Testes: `MidStorySaveMigrationTests`.
+
 ## O que só dá para ver jogando
 
 - Se o ritmo de nível fecha: as etapas pulam de 5 a 10 níveis, e entre elas ficam as missões de cidade e os mapas.

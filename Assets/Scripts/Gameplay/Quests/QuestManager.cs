@@ -36,6 +36,9 @@ namespace Rapadura.Gameplay.Quests
 
         /// <summary>Completed quests whose rewards are still owed (completed while no Player existed, e.g. on the world map).</summary>
         public List<string> PendingRewardQuestIds = new List<string>();
+
+        /// <summary>Story schema of the save (<see cref="MidStorySaveMigration.Schema"/>); 0 in saves written before the mid story, upgraded on restore.</summary>
+        public int StorySchema;
     }
 
     /// <summary>
@@ -793,7 +796,8 @@ namespace Rapadura.Gameplay.Quests
             {
                 ActiveQuests = _activeQuests.Values.Select(CloneProgress).ToList(),
                 CompletedQuestIds = _completedQuestIds.ToList(),
-                PendingRewardQuestIds = _pendingRewardQuestIds.ToList()
+                PendingRewardQuestIds = _pendingRewardQuestIds.ToList(),
+                StorySchema = MidStorySaveMigration.Schema
             };
         }
 
@@ -808,12 +812,19 @@ namespace Rapadura.Gameplay.Quests
                 return;
             }
 
+            // An old save with the letters already taken: the moon counts as done, with no rewards (MidStorySaveMigration).
+            int marked = MidStorySaveMigration.Upgrade(saveState);
+            if (marked > 0)
+            {
+                GameLogger.Info(LogCategory, $"Old save: {marked} steps of the mid story marked done (the letters were already taken).");
+            }
+
             if (saveState.PendingRewardQuestIds != null)
             {
                 _pendingRewardQuestIds.AddRange(saveState.PendingRewardQuestIds.Where(id => !string.IsNullOrEmpty(id)).Distinct());
             }
 
-            foreach (QuestProgress progress in saveState.ActiveQuests)
+            foreach (QuestProgress progress in saveState.ActiveQuests ?? new List<QuestProgress>())
             {
                 if (progress == null || string.IsNullOrEmpty(progress.QuestId))
                 {
@@ -829,7 +840,7 @@ namespace Rapadura.Gameplay.Quests
                 _activeQuests[restored.QuestId] = restored;
             }
 
-            foreach (string questId in saveState.CompletedQuestIds)
+            foreach (string questId in saveState.CompletedQuestIds ?? new List<string>())
             {
                 if (!string.IsNullOrEmpty(questId))
                 {
