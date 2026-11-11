@@ -60,6 +60,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private readonly List<string> _sleep = new List<string>();
         private readonly HashSet<Vector2Int> _pinned = new HashSet<Vector2Int>();
         private readonly List<Vector2Int> _clearingChunks = new List<Vector2Int>();
+        private readonly List<int> _nearSpawns = new List<int>();
         private readonly List<Vector3> _colliderVertices = new List<Vector3>(400);
         private readonly List<int> _colliderTriangles = new List<int>(1600);
         private readonly Stack<Mesh> _meshPool = new Stack<Mesh>();
@@ -143,6 +144,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             root.AddComponent<Mechanics.AreiasMechanicsDriver>(); root.AddComponent<Mechanics.KaggenMechanicsDriver>(); root.AddComponent<Mechanics.LimiarMechanicsDriver>();
             root.AddComponent<Mechanics.CostaDeltaTetoMechanicsDriver>();
             root.AddComponent<Mechanics.ZarafshanMechanicsDriver>();
+
+            // Switches off, ten times a second, the drivers whose region is far from the hero (added after them: it reads them all).
+            root.AddComponent<Mechanics.MechanicsDriverHub>();
             return view;
         }
 
@@ -557,6 +561,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         // Spawners
         // ------------------------------------------------------------------
 
+        /// <summary>
+        /// Radius (m) of the chunks whose clearings are tested for waking. A clearing wakes when its edge is within
+        /// <see cref="OverworldRules.SpawnerActiveRadius"/> (85 m) and is bucketed in every chunk its edge + 17 m touches, so
+        /// 68 m would do; the full 85 m keeps a margin.
+        /// </summary>
+        public const float SpawnWakeQueryRadius = OverworldRules.SpawnerActiveRadius;
+
         private void UpdateSpawners(Vector2 at)
         {
             _sleep.Clear();
@@ -589,8 +600,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 }
             }
 
-            foreach (MapSpawnZone zone in Layout.World.Zones)
+            // Only the clearings bucketed in the chunks round the hero can wake (the index of OverworldChunkBuilder): the same
+            // ones a pass over the whole world would wake, in the same order, without walking the ~1 600 of the stitched world.
+            List<MapSpawnZone> zones = Layout.World.Zones;
+            OverworldChunkBuilder.SpawnsNear(Layout, at, SpawnWakeQueryRadius, _nearSpawns);
+            foreach (int zoneIndex in _nearSpawns)
             {
+                MapSpawnZone zone = zones[zoneIndex];
                 if (_spawners.ContainsKey(zone.Id) || !OverworldRules.SpawnerShouldRun(zone, at, false))
                 {
                     continue;

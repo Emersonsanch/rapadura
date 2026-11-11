@@ -85,5 +85,54 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         }
 
         private static List<int> Near(Dictionary<Vector2Int, List<int>> map, Vector2Int chunk) => map.TryGetValue(chunk, out List<int> list) ? list : NoIndex;
+
+        /// <summary>
+        /// The indices into <c>layout.World.Zones</c> of every clearing registered in a chunk within <paramref name="radius"/> of
+        /// <paramref name="p"/> (cleared into <paramref name="result"/>, ascending, no repeats: the layout's order). A clearing whose
+        /// edge is within <c>radius + GatherMargin</c> of <paramref name="p"/> is always among them (its registered box reaches that
+        /// far), so the spawner wake test can read these instead of the whole world.
+        /// </summary>
+        public static void SpawnsNear(OverworldLayout layout, Vector2 p, float radius, List<int> result)
+        {
+            result.Clear();
+            if (layout == null || layout.World == null)
+            {
+                return;
+            }
+
+            ChunkIndex index = IndexOf(layout);
+            Vector2Int min = OverworldRules.ChunkOf(layout, p - new Vector2(radius, radius));
+            Vector2Int max = OverworldRules.ChunkOf(layout, p + new Vector2(radius, radius));
+            for (int x = min.x; x <= max.x; x++)
+            {
+                for (int y = min.y; y <= max.y; y++)
+                {
+                    var c = new Vector2Int(x, y);
+                    if (OverworldRules.DistanceToChunk(layout, p, c) > radius || !index.Spawns.TryGetValue(c, out List<int> list))
+                    {
+                        continue;
+                    }
+
+                    result.AddRange(list);
+                }
+            }
+
+            if (result.Count < 2)
+            {
+                return;
+            }
+
+            result.Sort();
+            int write = 1;
+            for (int read = 1; read < result.Count; read++)
+            {
+                if (result[read] != result[write - 1])
+                {
+                    result[write++] = result[read];
+                }
+            }
+
+            result.RemoveRange(write, result.Count - write);
+        }
     }
 }

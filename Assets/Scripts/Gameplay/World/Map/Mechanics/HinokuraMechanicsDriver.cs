@@ -18,7 +18,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// The driver never takes the controls: the heat and the eruption only take health, down to their floors, after their warnings.
     /// The moment each forge was lit is saved per slot in <see cref="WorldMapProgress"/> (a server would keep the same three numbers); with the UTC clock, a forge survives a reload.
     /// </summary>
-    public sealed class HinokuraMechanicsDriver : MonoBehaviour
+    public sealed class HinokuraMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const float HintCooldown = 3f;
@@ -41,6 +41,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private readonly long[] _litAt = { HinokuraForgeRules.NeverLit, HinokuraForgeRules.NeverLit, HinokuraForgeRules.NeverLit };
         private readonly List<LineRenderer> _sluiceBeacons = new List<LineRenderer>();
         private readonly List<LineRenderer> _stoneBeacons = new List<LineRenderer>();
+        private readonly StaticGroundCache _ground = new StaticGroundCache();
 
         private OverworldView _view;
         private OverworldLayout _layout;
@@ -70,6 +71,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private float _pulseTimer;
         private bool _saidFed;
 
+        private Rect[] _areas;
+
+        /// <inheritdoc/>
+        public Rect[] MechanicsAreas => _areas;
+
+        /// <inheritdoc/>
+        public bool MechanicsBusy => false;
+
         private void Start()
         {
             _view = GetComponent<OverworldView>();
@@ -82,7 +91,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _origin = anchor.Origin;
+            _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.HinokuraBounds, _origin) };
         }
+
+        private void OnDisable() => HideFeedback();
 
         private void OnDestroy()
         {
@@ -586,12 +598,18 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             foreach (LineRenderer beacon in _sluiceBeacons)
             {
-                beacon.enabled = false;
+                if (beacon != null)
+                {
+                    beacon.enabled = false;
+                }
             }
 
             foreach (LineRenderer beacon in _stoneBeacons)
             {
-                beacon.enabled = false;
+                if (beacon != null)
+                {
+                    beacon.enabled = false;
+                }
             }
 
             ResetHeat();
@@ -603,10 +621,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _eruptionTick = 0f;
         }
 
+        /// <summary>The ground under a fixed point (sluices, stones, the 13 points of each eruption route), sampled once per point.</summary>
         private Vector3 Ground(Vector2 local)
         {
             Vector2 world = _origin + local;
-            return new Vector3(world.x, Mathf.Max(0f, OverworldRules.SurfaceAt(_layout, world)), world.y);
+            return new Vector3(world.x, _ground.GroundAt(_layout, world), world.y);
         }
 
         private LineRenderer NewLine(string objectName, float width)

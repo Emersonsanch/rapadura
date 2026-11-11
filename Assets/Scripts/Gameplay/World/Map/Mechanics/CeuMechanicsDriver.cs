@@ -29,7 +29,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// When each crack reopens is saved per slot in <see cref="WorldMapProgress"/>, so reloading cannot unseal one and heal again. The porch keeps nothing: the story comes from the UTC clock and
     /// sitting is a rest with no daily limit or prize, so there is no state to save.
     /// </summary>
-    public sealed class CeuMechanicsDriver : MonoBehaviour
+    public sealed class CeuMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const float HintCooldown = 3f;
@@ -54,6 +54,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private readonly CeuSkyHoldSession _hold = new CeuSkyHoldSession();
         private readonly CeuPorchSession _porch = new CeuPorchSession();
         private readonly LineRenderer[] _crackBeams = new LineRenderer[CeuSkyHoldRules.Cracks];
+        private readonly HeroRequirementCache _heroState = new HeroRequirementCache();
+        private readonly StaticGroundCache _ground = new StaticGroundCache();
 
         private OverworldView _view;
         private OverworldLayout _layout;
@@ -86,6 +88,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private bool _atChair;
         private float _lastHealth = -1f;
 
+        private Rect[] _areas;
+
+        /// <inheritdoc/>
+        public Rect[] MechanicsAreas => _areas;
+
+        /// <inheritdoc/>
+        public bool MechanicsBusy => _riding;
+
         private void Start()
         {
             _view = GetComponent<OverworldView>();
@@ -98,13 +108,18 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _origin = anchor.Origin;
+            _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.CeuBounds, _origin) };
         }
+
+        private void OnEnable() => _heroState.Attach();
 
         private void OnDisable()
         {
             EndRide(false);
             _hold.Cancel();
             _porch.Cancel();
+            Quiet();
+            _heroState.Detach();
         }
 
         private void OnDestroy()
@@ -287,11 +302,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         /// <summary>The soft barrier's verdict on the zone at a point of the region, for this hero.</summary>
         private bool ZoneOpen(Vector2 local)
         {
-            MapRequirementState state = MapRequirementHeroState.Capture(_bag);
+            MapRequirementState state = _heroState.Get(_bag);
             MapModeController mode = MapModeController.Current;
             int level = mode != null ? mode.HeroLevel : 1;
             OverworldZone zone = OverworldRules.ZoneAt(_layout, _origin + local);
-            return zone != null && OverworldRules.CheckEnter(zone, level, state.Hero, MapRequirementRules.Lookup(state)) == MapAccessCheck.Ok;
+            return zone != null && OverworldRules.CheckEnter(zone, level, state.Hero, _heroState.Lookup) == MapAccessCheck.Ok;
         }
 
         private void BeginRide(Vector2 here, Vector2 land)
@@ -691,10 +706,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
         }
 
+        /// <summary>The ground under a fixed point of the region (cracks, pier, berth, ring centres), sampled once per point.</summary>
         private Vector3 Ground(Vector2 local)
         {
             Vector2 world = _origin + local;
-            return new Vector3(world.x, Mathf.Max(0f, OverworldRules.SurfaceAt(_layout, world)), world.y);
+            return new Vector3(world.x, _ground.GroundAt(_layout, world), world.y);
         }
 
         private void DrawRing(LineRenderer ring, Vector2 center, float radius)

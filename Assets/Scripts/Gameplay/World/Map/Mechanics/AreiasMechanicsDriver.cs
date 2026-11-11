@@ -13,7 +13,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// unless the layout holds the region and the hero stands in it. The hero keeps the controls all the time; the storm only wears
     /// health down to the rule's floor, after the warning, and the towns and the oasis areas are always safe.
     /// </summary>
-    public sealed class AreiasMechanicsDriver : MonoBehaviour
+    public sealed class AreiasMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const int StreakCount = 10;
@@ -33,11 +33,20 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private PlayerStats _stats;
         private Material _material;
         private LineRenderer _beacon;
+        private int _beaconShelter = -1;
 
         private long _warned = long.MinValue;
         private long _hit = long.MinValue;
         private long _sheltered = long.MinValue;
         private float _wearTick;
+
+        private Rect[] _areas;
+
+        /// <inheritdoc/>
+        public Rect[] MechanicsAreas => _areas;
+
+        /// <inheritdoc/>
+        public bool MechanicsBusy => false;
 
         private void Start()
         {
@@ -51,7 +60,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _origin = anchor.Origin;
+            _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.AreiasBounds, _origin) };
         }
+
+        private void OnDisable() => Hide();
 
         private void OnDestroy()
         {
@@ -193,8 +205,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             bool show = nearest >= 0 && distance <= BeaconRange;
             _beacon = _beacon != null ? _beacon : NewLine("Ar_ShelterBeacon", 0.5f, BeaconColor);
             _beacon.enabled = show;
-            if (show)
+            if (show && nearest != _beaconShelter)
             {
+                // The shelters never move: the beacon is placed again (one ground sample) only when the nearest one changes.
+                _beaconShelter = nearest;
                 Vector2 point = _origin + OverworldLayouts.AreiasStormShelters[nearest];
                 float y = Mathf.Max(0f, OverworldRules.SurfaceAt(_layout, point));
                 _beacon.SetPosition(0, new Vector3(point.x, y, point.y));

@@ -20,7 +20,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// towers carry the hero up and down in one press. Speed changes are short-lived effects, refreshed while they apply. The deck's sides are
     /// open and a fall does no harm, so nothing here can hold or kill the hero.
     /// </summary>
-    public sealed class MingchengMechanicsDriver : MonoBehaviour
+    public sealed class MingchengMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const string CorridorSource = "mingcheng_corridor";
@@ -85,6 +85,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private bool _wasInCorridor;
         private bool _wasVision;
 
+        private Rect[] _areas;
+
+        /// <inheritdoc/>
+        public Rect[] MechanicsAreas => _areas;
+
+        /// <inheritdoc/>
+        public bool MechanicsBusy => false;
+
         private void Start()
         {
             OverworldView view = GetComponent<OverworldView>();
@@ -97,10 +105,15 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _origin = anchor.Origin;
+            _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.MingchengBounds, _origin) };
             _beacons = new float[OverworldLayouts.GreatWallTowerXs.Length];
         }
 
-        private void OnDisable() => ClearHeroEffects();
+        private void OnDisable()
+        {
+            ClearHeroEffects();
+            LeaveRegion();
+        }
 
         private void OnDestroy()
         {

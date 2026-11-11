@@ -23,7 +23,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// peace and bites the beasts on its shore. A ride takes the controls for at most 6 s, and hands them back on arrival, on death
     /// or if anything else moves the hero.
     /// </summary>
-    public sealed class RioMechanicsDriver : MonoBehaviour
+    public sealed class RioMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const float HintCooldown = 3f;
@@ -44,6 +44,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private readonly List<LineRenderer> _berthBeacons = new List<LineRenderer>();
         private readonly List<(SkyRoute Route, bool ToB)> _stations = new List<(SkyRoute, bool)>();
         private readonly LineRenderer[] _ringHalves = new LineRenderer[2];
+        private readonly HeroRequirementCache _heroState = new HeroRequirementCache();
 
         private OverworldView _view;
         private OverworldLayout _layout;
@@ -86,6 +87,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private float _ringY;
 
+        private Rect[] _areas;
+
+        /// <inheritdoc/>
+        public Rect[] MechanicsAreas => _areas;
+
+        /// <inheritdoc/>
+        public bool MechanicsBusy => _riding;
+
         private void Start()
         {
             _view = GetComponent<OverworldView>();
@@ -98,9 +107,17 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _origin = anchor.Origin;
+            _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.RioBounds, _origin) };
         }
 
-        private void OnDisable() => EndRide(false);
+        private void OnEnable() => _heroState.Attach();
+
+        private void OnDisable()
+        {
+            EndRide(false);
+            HideFeedback();
+            _heroState.Detach();
+        }
 
         private void OnDestroy()
         {
@@ -161,11 +178,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         /// <summary>The soft barrier's verdict on the zone at a point of the region, for this hero.</summary>
         private bool ZoneOpen(Vector2 local)
         {
-            MapRequirementState state = MapRequirementHeroState.Capture(_bag);
+            MapRequirementState state = _heroState.Get(_bag);
             MapModeController mode = MapModeController.Current;
             int level = mode != null ? mode.HeroLevel : 1;
             OverworldZone zone = OverworldRules.ZoneAt(_layout, _origin + local);
-            return zone != null && OverworldRules.CheckEnter(zone, level, state.Hero, MapRequirementRules.Lookup(state)) == MapAccessCheck.Ok;
+            return zone != null && OverworldRules.CheckEnter(zone, level, state.Hero, _heroState.Lookup) == MapAccessCheck.Ok;
         }
 
         // ------------------------------------------------------------------
@@ -330,8 +347,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private (Characters.CharacterId? hero, Func<string, bool> has) HeroRequirements()
         {
-            MapRequirementState state = MapRequirementHeroState.Capture(_bag);
-            return (state.Hero, MapRequirementRules.Lookup(state));
+            MapRequirementState state = _heroState.Get(_bag);
+            return (state.Hero, _heroState.Lookup);
         }
 
         private void SayGate(bool open, bool zones, int gate, double now)
@@ -661,12 +678,18 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             foreach (LineRenderer beacon in _pierBeacons)
             {
-                beacon.enabled = false;
+                if (beacon != null)
+                {
+                    beacon.enabled = false;
+                }
             }
 
             foreach (LineRenderer beacon in _berthBeacons)
             {
-                beacon.enabled = false;
+                if (beacon != null)
+                {
+                    beacon.enabled = false;
+                }
             }
 
             foreach (LineRenderer half in _ringHalves)

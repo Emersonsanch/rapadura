@@ -16,7 +16,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// checks the destination zone still admits the hero and uses the same placement as the Farnkesh baskets, so nobody is left in
     /// a zone they could not walk into.
     /// </summary>
-    public sealed class LimiarMechanicsDriver : MonoBehaviour
+    public sealed class LimiarMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const float HintCooldown = 3f;
@@ -30,6 +30,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private static readonly Color UnlitColor = new Color(0.45f, 0.42f, 0.5f, 0.8f);
 
         private readonly LimiarLampProgress _progress = new LimiarLampProgress();
+        private readonly HeroRequirementCache _heroState = new HeroRequirementCache();
 
         private OverworldView _view;
         private OverworldLayout _layout;
@@ -39,12 +40,21 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private InventoryManager _bag;
         private Material _material;
         private LineRenderer[] _beacons;
+        private float[] _beaconY;
         private Rapadura.Save.SaveManager _saves;
 
         private float _lastTravel = float.NegativeInfinity;
         private float _nextHint;
         private float _nextDenied;
         private int _hintLamp = -1;
+
+        private Rect[] _areas;
+
+        /// <inheritdoc/>
+        public Rect[] MechanicsAreas => _areas;
+
+        /// <inheritdoc/>
+        public bool MechanicsBusy => false;
 
         private void Start()
         {
@@ -58,7 +68,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _origin = anchor.Origin;
+            _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.LimiarBounds, _origin) };
             _beacons = new LineRenderer[OverworldLayouts.LimiarLamps.Length];
+            _beaconY = new float[_beacons.Length];
 
             // The lamps are in the save: registered only while the region exists, the SaveManager carries them otherwise.
             if (ServiceLocator.TryGet(out _saves))
@@ -66,6 +78,18 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 _saves.Register(_progress);
                 _saves.RestoreCarriedState();
             }
+        }
+
+        private void OnEnable() => _heroState.Attach();
+
+        private void OnDisable()
+        {
+            if (_beacons != null)
+            {
+                ShowBeacons(Vector2.zero, false);
+            }
+
+            _heroState.Detach();
         }
 
         private void OnDestroy()
@@ -179,11 +203,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private bool ZoneOpen(Vector2 world)
         {
-            MapRequirementState state = MapRequirementHeroState.Capture(_bag);
+            MapRequirementState state = _heroState.Get(_bag);
             MapModeController mode = MapModeController.Current;
             int level = mode != null ? mode.HeroLevel : 1;
             OverworldZone zone = OverworldRules.ZoneAt(_layout, world);
-            return zone != null && OverworldRules.CheckEnter(zone, level, state.Hero, MapRequirementRules.Lookup(state)) == MapAccessCheck.Ok;
+            return zone != null && OverworldRules.CheckEnter(zone, level, state.Hero, _heroState.Lookup) == MapAccessCheck.Ok;
         }
 
         private void Deny(string key)
@@ -217,9 +241,15 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 }
 
                 bool lit = LimiarLampRules.IsLit(i, OverworldLayouts.LimiarLamps, _progress.Lit);
-                line = line != null ? line : (_beacons[i] = NewLine());
                 Vector2 point = _origin + lamp.Position;
-                float y = Mathf.Max(0f, OverworldRules.SurfaceAt(_layout, point));
+                if (line == null)
+                {
+                    // The lamps never move: the ground under each is sampled once, with its line.
+                    line = _beacons[i] = NewLine();
+                    _beaconY[i] = Mathf.Max(0f, OverworldRules.SurfaceAt(_layout, point));
+                }
+
+                float y = _beaconY[i];
                 line.enabled = true;
                 line.startColor = line.endColor = lit ? LitColor : UnlitColor;
                 line.SetPosition(0, new Vector3(point.x, y, point.y));

@@ -19,7 +19,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// Speed changes are short-lived effects on the BuffController, refreshed while they apply, so they end by themselves if this driver stops;
     /// the shoulder pushes through the CharacterController, so walls still hold. Nothing here takes the hero's controls away.
     /// </summary>
-    public sealed class MisturaMechanicsDriver : MonoBehaviour
+    public sealed class MisturaMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const string BubbleSource = "mistura_time_bubble";
@@ -100,7 +100,16 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             EventBus.Unsubscribe<SkillCastEvent>(OnSkillCast);
             ClearHeroEffects();
+            LeaveRegion();
         }
+
+        private Rect[] _areas;
+
+        /// <inheritdoc/>
+        public Rect[] MechanicsAreas => _areas;
+
+        /// <inheritdoc/>
+        public bool MechanicsBusy => false;
 
         private void Start()
         {
@@ -114,6 +123,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _origin = anchor.Origin;
+            _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.MisturaBounds, _origin) };
             _tar = new MisturaTarState[OverworldLayouts.TarPatches.Length];
             _fuseWarned = new bool[_tar.Length];
             _burnWarned = new bool[_tar.Length];
@@ -184,17 +194,26 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             SetStreaks(false, Vector2.zero, false);
             foreach (LineRenderer ring in _rings.Values)
             {
-                ring.enabled = false;
+                if (ring != null)
+                {
+                    ring.enabled = false;
+                }
             }
 
             foreach (LineRenderer flame in _flames.Values)
             {
-                flame.enabled = false;
+                if (flame != null)
+                {
+                    flame.enabled = false;
+                }
             }
 
             foreach (Light light in _lights.Values)
             {
-                light.enabled = false;
+                if (light != null)
+                {
+                    light.enabled = false;
+                }
             }
         }
 

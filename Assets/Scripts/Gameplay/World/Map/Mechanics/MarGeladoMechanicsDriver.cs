@@ -24,7 +24,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// mount and throw the rider off with a warning first; the holes of Old Kul's lake fish with one button, the hero keeping
     /// every control. Nothing here can hold the hero: the crossing hands control back on arrival or if anything else moves them.
     /// </summary>
-    public sealed class MarGeladoMechanicsDriver : MonoBehaviour
+    public sealed class MarGeladoMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const float HintCooldown = 3f;
@@ -38,6 +38,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private readonly List<(SkyRoute Route, bool ToB)> _stations = new List<(SkyRoute, bool)>();
         private readonly Dictionary<int, float> _holeRestUntil = new Dictionary<int, float>();
         private readonly List<LineRenderer> _sheets = new List<LineRenderer>();
+        private readonly HeroRequirementCache _heroState = new HeroRequirementCache();
 
         private OverworldView _view;
         private OverworldLayout _layout;
@@ -50,6 +51,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private PlayerStats _stats;
         private Material _material;
         private LineRenderer _outline;
+        private int _outlinePatch = -1;
         private LineRenderer _fishLine;
 
         private SkyRoute _ride;
@@ -73,6 +75,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private bool _saidBite;
         private int _hintHole = -1;
 
+        private Rect[] _areas;
+
+        /// <inheritdoc/>
+        public Rect[] MechanicsAreas => _areas;
+
+        /// <inheritdoc/>
+        public bool MechanicsBusy => _ride != null;
+
         private void Start()
         {
             _view = GetComponent<OverworldView>();
@@ -85,12 +95,17 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _origin = anchor.Origin;
+            _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.MarGeladoBounds, _origin) };
         }
+
+        private void OnEnable() => _heroState.Attach();
 
         private void OnDisable()
         {
             EndRide(false);
             _fishing = null;
+            HideFeedback();
+            _heroState.Detach();
         }
 
         private void OnDestroy()
@@ -239,18 +254,35 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
-            _outline = _outline != null ? _outline : NewLine("Mg_ThinIceOutline", 0.22f);
+            if (_outline == null)
+            {
+                _outline = NewLine("Mg_ThinIceOutline", 0.22f);
+                _outlinePatch = -1;
+            }
+
             Color color = stage == ThinIceStage.Holding ? new Color(0.55f, 0.85f, 1f, 1f) : new Color(1f, 0.35f, 0.2f, 1f);
             _outline.startColor = _outline.endColor = color;
             _outline.enabled = true;
-            Rect r = patches[nearest];
-            var corners = new[] { new Vector2(r.xMin, r.yMin), new Vector2(r.xMax, r.yMin), new Vector2(r.xMax, r.yMax), new Vector2(r.xMin, r.yMax), new Vector2(r.xMin, r.yMin) };
-            _outline.positionCount = corners.Length;
-            for (int i = 0; i < corners.Length; i++)
+            if (nearest == _outlinePatch)
             {
-                Vector2 world = _origin + corners[i];
-                _outline.SetPosition(i, new Vector3(world.x, Mathf.Max(0f, OverworldRules.SurfaceAt(_layout, world)) + 0.25f, world.y));
+                return;
             }
+
+            // The patches never move: the five corners (and their ground) are set again only when the nearest patch changes.
+            _outlinePatch = nearest;
+            Rect r = patches[nearest];
+            _outline.positionCount = 5;
+            SetOutlineCorner(0, new Vector2(r.xMin, r.yMin));
+            SetOutlineCorner(1, new Vector2(r.xMax, r.yMin));
+            SetOutlineCorner(2, new Vector2(r.xMax, r.yMax));
+            SetOutlineCorner(3, new Vector2(r.xMin, r.yMax));
+            SetOutlineCorner(4, new Vector2(r.xMin, r.yMin));
+        }
+
+        private void SetOutlineCorner(int index, Vector2 corner)
+        {
+            Vector2 world = _origin + corner;
+            _outline.SetPosition(index, new Vector3(world.x, Mathf.Max(0f, OverworldRules.SurfaceAt(_layout, world)) + 0.25f, world.y));
         }
 
         // ------------------------------------------------------------------
@@ -267,10 +299,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             (SkyRoute route, bool toB) = _stations[0];
-            MapRequirementState state = MapRequirementHeroState.Capture(_bag);
+            MapRequirementState state = _heroState.Get(_bag);
             MapModeController mode = MapModeController.Current;
             int level = mode != null ? mode.HeroLevel : 1;
-            bool open = SkyRouteRules.AllZonesOpen(_layout, _origin, route, level, state.Hero, MapRequirementRules.Lookup(state));
+            bool open = SkyRouteRules.AllZonesOpen(_layout, _origin, route, level, state.Hero, _heroState.Lookup);
             bool hasBoat = state.Has(MapRequirementItems.ReedBoat) || MapRequirementRules.IsMet(MapRequirementTags.BoatOrDock, state);
             CanalCrossCheck check = MoonCanalRules.Check(day, hasBoat, RidingHeavyMount(), open);
             if (_hintRoute != route || Time.unscaledTime >= _nextHint)
@@ -533,7 +565,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
             foreach (LineRenderer sheet in _sheets)
             {
-                sheet.enabled = show;
+                if (sheet != null)
+                {
+                    sheet.enabled = show;
+                }
             }
         }
 

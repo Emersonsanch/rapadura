@@ -3,7 +3,6 @@ using Rapadura.Core.DI;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Combat;
-using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.World.Map.Overworld;
 using UnityEngine;
@@ -15,7 +14,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// the layout holds the region and the hero stands in it. Gusts go through the CharacterController, so walls hold, and never
     /// touch a hero on a rope bridge. The hero keeps the controls all the time.
     /// </summary>
-    public sealed class KaggenMechanicsDriver : MonoBehaviour
+    public sealed class KaggenMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const int StreakCount = 8;
@@ -32,13 +31,20 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private PlayerController _controller;
         private CharacterController _character;
         private PlayerStats _stats;
-        private InventoryManager _bag;
         private Material _material;
 
         private long _warnedGust = long.MinValue;
         private long _hitGust = long.MinValue;
         private float _nextBridgeHint;
         private bool _onBridgeBefore;
+
+        private Rect[] _areas;
+
+        /// <inheritdoc/>
+        public Rect[] MechanicsAreas => _areas;
+
+        /// <inheritdoc/>
+        public bool MechanicsBusy => false;
 
         private void Start()
         {
@@ -52,7 +58,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _origin = anchor.Origin;
+            _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.KaggenBounds, _origin) };
         }
+
+        private void OnDisable() => ShowStreaks(false, Vector2.zero, false);
 
         private void OnDestroy()
         {
@@ -77,7 +86,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
-            CharacterId? hero = MapRequirementHeroState.Capture(_bag).Hero;
+            // Only the cousin is needed: read it straight from the selection instead of capturing the whole bag every frame.
+            CharacterId? hero = ServiceLocator.TryGet(out CharacterSelectionState selection) ? selection.Selected : null;
             bool onBridge = KaggenWindRules.OnBridge(local, OverworldLayouts.KaggenBridges);
             TickBridge(onBridge, hero);
             TickWind(local, world, onBridge, hero);
@@ -97,7 +107,6 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 _controller = go.GetComponent<PlayerController>();
                 _character = go.GetComponent<CharacterController>();
                 _stats = go.GetComponent<PlayerStats>();
-                _bag = go.GetComponentInChildren<InventoryManager>();
             }
 
             return _controller != null && _character != null && _stats != null;

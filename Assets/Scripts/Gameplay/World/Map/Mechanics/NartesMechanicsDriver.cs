@@ -22,7 +22,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// stands in it. The hero keeps the controls all the time. The UTC-day claims are saved per slot as daily marks of
     /// <see cref="WorldMapProgress"/>; the rules take the day as a number, so a server can hold it.
     /// </summary>
-    public sealed class NartesMechanicsDriver : MonoBehaviour
+    public sealed class NartesMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const string GoldItemId = "item_gold";
@@ -46,6 +46,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private readonly List<LineRenderer> _anchorBeacons = new List<LineRenderer>();
         private readonly List<LineRenderer> _goldBeacons = new List<LineRenderer>();
+        private readonly HeroRequirementCache _heroState = new HeroRequirementCache();
+        private string[] _goldKeys;
 
         private OverworldView _view;
         private OverworldLayout _layout;
@@ -77,6 +79,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private int _hintGold = -1;
         private bool _hintRace;
 
+        private Rect[] _areas;
+
+        /// <inheritdoc/>
+        public Rect[] MechanicsAreas => _areas;
+
+        /// <inheritdoc/>
+        public bool MechanicsBusy => _race != null || _climb != null;
+
         private void Start()
         {
             _view = GetComponent<OverworldView>();
@@ -89,8 +99,17 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _origin = anchor.Origin;
+            _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.NartesBounds, _origin) };
             _anchors = NartesChainRules.Anchors(OverworldLayouts.AmiraniChain);
             _chainLength = NartesChainRules.Length(OverworldLayouts.AmiraniChain);
+        }
+
+        private void OnEnable() => _heroState.Attach();
+
+        private void OnDisable()
+        {
+            HideFeedback();
+            _heroState.Detach();
         }
 
         private void OnDestroy()
@@ -147,11 +166,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private bool ZoneOpen(Vector2 local)
         {
-            MapRequirementState state = MapRequirementHeroState.Capture(_bag);
+            MapRequirementState state = _heroState.Get(_bag);
             MapModeController mode = MapModeController.Current;
             int level = mode != null ? mode.HeroLevel : 1;
             OverworldZone zone = OverworldRules.ZoneAt(_layout, _origin + local);
-            return zone != null && OverworldRules.CheckEnter(zone, level, state.Hero, MapRequirementRules.Lookup(state)) == MapAccessCheck.Ok;
+            return zone != null && OverworldRules.CheckEnter(zone, level, state.Hero, _heroState.Lookup) == MapAccessCheck.Ok;
         }
 
         private static bool Mounted => MountController.Active != null && MountController.Active.IsMounted;
@@ -572,8 +591,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
-            string key = GoldDayKeyPrefix + here;
-            MapRequirementState state = MapRequirementHeroState.Capture(_bag);
+            string key = GoldKey(here);
+            MapRequirementState state = _heroState.Get(_bag);
             NartesSkyGoldCheck check = NartesSkyGoldRules.Check(state.Hero, LastDay(key), today);
             ServiceLocator.TryGet(out LocalizationManager localization);
             string name = NartesMechanicsTexts.Get(localization, NartesMechanicsTexts.Golds[here]);
@@ -591,6 +610,21 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 EventBus.Publish(new RegionFeatEvent(RegionFeats.NartesSkyGold(here)));
                 SayText(NartesMechanicsTexts.Format(localization, NartesMechanicsTexts.GoldTaken, NartesSkyGoldRules.Purse));
             }
+        }
+
+        /// <summary>The claim key of Gold <paramref name="index"/> ("gold" + index), built once instead of per frame.</summary>
+        private string GoldKey(int index)
+        {
+            if (_goldKeys == null)
+            {
+                _goldKeys = new string[OverworldLayouts.NartesSkyGolds.Length];
+                for (int i = 0; i < _goldKeys.Length; i++)
+                {
+                    _goldKeys[i] = GoldDayKeyPrefix + i;
+                }
+            }
+
+            return _goldKeys[index];
         }
 
         private void ShowGolds(Vector2 local)
@@ -638,7 +672,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             foreach (LineRenderer line in lines)
             {
-                line.enabled = false;
+                if (line != null)
+                {
+                    line.enabled = false;
+                }
             }
         }
 

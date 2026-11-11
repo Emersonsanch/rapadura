@@ -20,7 +20,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// in the stitched world. Damage goes through <see cref="ApplyHazard"/> on the hero's PlayerStats and always stops at a floor of life. Nothing here
     /// takes the hero's controls away, and no method is named after a PlayerInput action.
     /// </summary>
-    public sealed class CostaDeltaTetoMechanicsDriver : MonoBehaviour
+    public sealed class CostaDeltaTetoMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const string TideSource = "costa_tide";
@@ -58,6 +58,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private static readonly Color FrontColor = new Color(0.95f, 0.98f, 1f, 1f);
 
         private readonly Dictionary<int, LineRenderer> _rings = new Dictionary<int, LineRenderer>();
+        private readonly Dictionary<int, (Vector2 Center, float Radius)> _ringShapes = new Dictionary<int, (Vector2, float)>();
         private readonly LineRenderer[] _beacons = new LineRenderer[OverworldLayouts.TideFlats.Length];
 
         private OverworldLayout _layout;
@@ -108,6 +109,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private LineRenderer _laneLine;
         private LineRenderer _frontLine;
 
+        private Rect[] _areas;
+
+        /// <inheritdoc/>
+        public Rect[] MechanicsAreas => _areas;
+
+        /// <inheritdoc/>
+        public bool MechanicsBusy => false;
+
         private void Start()
         {
             OverworldView view = GetComponent<OverworldView>();
@@ -146,6 +155,24 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 _hasTeto = true;
                 _tetoOrigin = teto.Origin;
             }
+
+            var areas = new List<Rect>(3);
+            if (_hasCosta)
+            {
+                areas.Add(MechanicsDriverHub.WorldArea(OverworldLayouts.CostaBounds, _costaOrigin));
+            }
+
+            if (_hasDelta)
+            {
+                areas.Add(MechanicsDriverHub.WorldArea(OverworldLayouts.DeltaBounds, _deltaOrigin));
+            }
+
+            if (_hasTeto)
+            {
+                areas.Add(MechanicsDriverHub.WorldArea(OverworldLayouts.TetoBounds, _tetoOrigin));
+            }
+
+            _areas = areas.ToArray();
         }
 
         private static StatModifierDefinition NewSlow(string displayName, float bonus)
@@ -165,6 +192,23 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             ClearTideSlow();
             ClearBogSlow();
+            if (_inCosta)
+            {
+                _inCosta = false;
+                LeaveCosta();
+            }
+
+            if (_inDelta)
+            {
+                _inDelta = false;
+                LeaveDelta();
+            }
+
+            if (_inTeto)
+            {
+                _inTeto = false;
+                LeaveTeto();
+            }
         }
 
         private void OnDestroy()
@@ -337,10 +381,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             {
                 float distance = Vector2.Distance(local, flats[i].Center);
                 bool near = distance <= flats[i].Radius + FlatRange;
-                DrawRing(FlatKeys + i, _costaOrigin, flats[i].Center, flats[i].Radius, border, near);
-                DrawRing(WaterKeys + i, _costaOrigin, flats[i].Center, Mathf.Max(0.5f, flats[i].Radius * water), WaterEdgeColor, near && water > 0.02f);
+                DrawRing(FlatKeys + i, _costaOrigin, flats[i].Center, flats[i].Radius, border, near, true);
+                DrawRing(WaterKeys + i, _costaOrigin, flats[i].Center, Mathf.Max(0.5f, flats[i].Radius * water), WaterEdgeColor, near && water > 0.02f, false);
                 bool open = phase != CostaTidePhase.High && _chestTides[i] != tide;
-                DrawRing(ChestKeys + i, _costaOrigin, flats[i].Center, CostaTideRules.ChestReach, TreasureColor, near && open);
+                DrawRing(ChestKeys + i, _costaOrigin, flats[i].Center, CostaTideRules.ChestReach, TreasureColor, near && open, true);
                 ShowBeacon(i, flats[i].Center, open && distance <= BeaconRange);
             }
         }
@@ -493,12 +537,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             for (int i = 0; i < DeltaIslandRules.Islands; i++)
             {
-                DrawRing(IslandKeys + i, _deltaOrigin, DeltaIslandRules.Position(stations, i, now), DeltaIslandRules.IslandRadius, IslandColor, true);
+                DrawRing(IslandKeys + i, _deltaOrigin, DeltaIslandRules.Position(stations, i, now), DeltaIslandRules.IslandRadius, IslandColor, true, false);
             }
 
             bool spark = DeltaIslandRules.CanFreeSpark(_sparkFreedLayout, layout);
-            DrawRing(SparkKey, _deltaOrigin, DeltaIslandRules.Position(stations, DeltaIslandRules.SparkIsland(layout), now), DeltaIslandRules.SparkReach, SparkColor, spark);
-            DrawRing(BogKey, _deltaOrigin, OverworldLayouts.ReedBogCenter, OverworldLayouts.ReedBogRadius, BogColor, true);
+            DrawRing(SparkKey, _deltaOrigin, DeltaIslandRules.Position(stations, DeltaIslandRules.SparkIsland(layout), now), DeltaIslandRules.SparkReach, SparkColor, spark, false);
+            DrawRing(BogKey, _deltaOrigin, OverworldLayouts.ReedBogCenter, OverworldLayouts.ReedBogRadius, BogColor, true, true);
         }
 
         private void HideIslands()
@@ -711,8 +755,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private float Ground(Vector2 world) => OverworldRules.SurfaceAt(_layout, world);
 
-        /// <summary>Draws (or hides) a ring round a centre in region coordinates; its points follow the ground again on every call.</summary>
-        private void DrawRing(int key, Vector2 origin, Vector2 center, float radius, Color color, bool show)
+        /// <summary>
+        /// Draws (or hides) a ring round a centre in region coordinates. The points are placed again only when the centre or the
+        /// radius changed since the last draw: a <paramref name="fixedRing"/> (tide flat, reef chest, bog: never moves) follows the
+        /// ground point by point, paid once; a moving one (drifting island, spark, water edge) samples the ground once, at its centre.
+        /// </summary>
+        private void DrawRing(int key, Vector2 origin, Vector2 center, float radius, Color color, bool show, bool fixedRing)
         {
             _rings.TryGetValue(key, out LineRenderer ring);
             if (!show)
@@ -731,13 +779,19 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 ring.loop = true;
                 ring.positionCount = RingPoints;
                 _rings[key] = ring;
+                _ringShapes.Remove(key);
             }
 
-            for (int i = 0; i < RingPoints; i++)
+            if (!_ringShapes.TryGetValue(key, out (Vector2 Center, float Radius) shape) || shape.Center != center || shape.Radius != radius)
             {
-                float a = i * Mathf.PI * 2f / RingPoints;
-                Vector2 world = origin + center + new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * radius;
-                ring.SetPosition(i, new Vector3(world.x, Ground(world) + 0.25f, world.y));
+                _ringShapes[key] = (center, radius);
+                float centreY = fixedRing ? 0f : Ground(origin + center) + 0.25f;
+                for (int i = 0; i < RingPoints; i++)
+                {
+                    float a = i * Mathf.PI * 2f / RingPoints;
+                    Vector2 world = origin + center + new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * radius;
+                    ring.SetPosition(i, new Vector3(world.x, fixedRing ? Ground(world) + 0.25f : centreY, world.y));
+                }
             }
 
             ring.startColor = ring.endColor = color;

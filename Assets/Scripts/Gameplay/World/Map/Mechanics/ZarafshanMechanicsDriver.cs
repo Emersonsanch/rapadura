@@ -15,7 +15,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// added to the overworld root, idle unless the layout holds the region and the hero stands in it. It never takes control, deals no damage
     /// and only reads [E] within reach of a tree, so walking through the region is exactly as it was.
     /// </summary>
-    public sealed class ZarafshanMechanicsDriver : MonoBehaviour
+    public sealed class ZarafshanMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const float HintCooldown = 3f;
@@ -41,12 +41,24 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private Material _material;
         private LineRenderer[] _trees;
         private LineRenderer[] _fords;
+        private float[] _treeY;
+        private float[] _fordY;
+        private string[] _treeKeys;
+        private bool _shown;
 
         private float _nextHint;
         private int _hintSpot = -1;
         private float _nextFordSay;
         private float _healTick;
         private int _fordInside = -1;
+
+        private Rect[] _areas;
+
+        /// <inheritdoc/>
+        public Rect[] MechanicsAreas => _areas;
+
+        /// <inheritdoc/>
+        public bool MechanicsBusy => false;
 
         private void Start()
         {
@@ -60,9 +72,19 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _origin = anchor.Origin;
+            _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.ZarafshanBounds, _origin) };
             _trees = new LineRenderer[OverworldLayouts.ZarafshanHarvestSpots.Length];
             _fords = new LineRenderer[OverworldLayouts.ZarafshanFords.Length];
+            _treeY = new float[_trees.Length];
+            _fordY = new float[_fords.Length];
+            _treeKeys = new string[_trees.Length];
+            for (int i = 0; i < _treeKeys.Length; i++)
+            {
+                _treeKeys[i] = ZarafshanHarvestRules.MarkKey(OverworldLayouts.ZarafshanHarvestSpots[i].Id);
+            }
         }
+
+        private void OnDisable() => HideBeacons();
 
         private void OnDestroy()
         {
@@ -81,17 +103,20 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
             Vector2 local = new Vector2(_player.position.x, _player.position.z) - _origin;
             bool inRegion = OverworldLayouts.ZarafshanBounds.Contains(local);
-            int day = ServiceLocator.TryGet(out TimeOfDayManager clock) ? clock.Day : 1;
-            ServiceLocator.TryGet(out WorldMapProgress progress);
-            int ford = inRegion ? ZarafshanFordRules.FordAt(local, OverworldLayouts.ZarafshanFords) : -1;
-            ShowBeacons(local, inRegion, day, progress, ford);
             if (!inRegion)
             {
+                // Outside the region every beacon is hidden: hide them once instead of walking the trees every frame.
+                HideBeacons();
                 _hintSpot = -1;
                 _fordInside = -1;
                 _healTick = 0f;
                 return;
             }
+
+            int day = ServiceLocator.TryGet(out TimeOfDayManager clock) ? clock.Day : 1;
+            ServiceLocator.TryGet(out WorldMapProgress progress);
+            int ford = ZarafshanFordRules.FordAt(local, OverworldLayouts.ZarafshanFords);
+            ShowBeacons(local, day, progress, ford);
 
             TickHarvest(local, day, progress);
             TickFord(ford);
@@ -125,7 +150,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
-            string mark = ZarafshanHarvestRules.MarkKey(OverworldLayouts.ZarafshanHarvestSpots[spot].Id);
+            string mark = _treeKeys[spot];
             bool ripe = ZarafshanHarvestRules.IsRipe(progress.GetDailyMark(mark), day);
             if (ripe && (_hintSpot != spot || Time.unscaledTime >= _nextHint))
             {
@@ -211,25 +236,54 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         // Feedback
         // ------------------------------------------------------------------
 
-        private void ShowBeacons(Vector2 local, bool inRegion, int day, WorldMapProgress progress, int ford)
+        private void ShowBeacons(Vector2 local, int day, WorldMapProgress progress, int ford)
         {
+            _shown = true;
             ZarafshanHarvestSpot[] spots = OverworldLayouts.ZarafshanHarvestSpots;
             for (int i = 0; i < spots.Length; i++)
             {
-                bool ripe = progress != null && ZarafshanHarvestRules.IsRipe(progress.GetDailyMark(ZarafshanHarvestRules.MarkKey(spots[i].Id)), day);
-                SetBeacon(_trees, i, spots[i].Position, local, inRegion, ripe ? RipeColor : PickedColor, ripe ? RipeHeight : PickedHeight);
+                bool ripe = progress != null && ZarafshanHarvestRules.IsRipe(progress.GetDailyMark(_treeKeys[i]), day);
+                SetBeacon(_trees, _treeY, i, spots[i].Position, local, ripe ? RipeColor : PickedColor, ripe ? RipeHeight : PickedHeight);
             }
 
             Vector2[] fords = OverworldLayouts.ZarafshanFords;
             for (int i = 0; i < fords.Length; i++)
             {
-                SetBeacon(_fords, i, fords[i], local, inRegion, FordColor, i == ford ? FordHealingHeight : FordHeight);
+                SetBeacon(_fords, _fordY, i, fords[i], local, FordColor, i == ford ? FordHealingHeight : FordHeight);
             }
         }
 
-        private void SetBeacon(LineRenderer[] lines, int index, Vector2 position, Vector2 local, bool inRegion, Color color, float height)
+        private void HideBeacons()
         {
-            bool visible = inRegion && (position - local).sqrMagnitude < BeaconRange * BeaconRange;
+            if (!_shown)
+            {
+                return;
+            }
+
+            _shown = false;
+            HideLines(_trees);
+            HideLines(_fords);
+        }
+
+        private static void HideLines(LineRenderer[] lines)
+        {
+            if (lines == null)
+            {
+                return;
+            }
+
+            foreach (LineRenderer line in lines)
+            {
+                if (line != null)
+                {
+                    line.enabled = false;
+                }
+            }
+        }
+
+        private void SetBeacon(LineRenderer[] lines, float[] heights, int index, Vector2 position, Vector2 local, Color color, float height)
+        {
+            bool visible = (position - local).sqrMagnitude < BeaconRange * BeaconRange;
             LineRenderer line = lines[index];
             if (!visible)
             {
@@ -241,9 +295,15 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
-            line = line != null ? line : (lines[index] = NewLine());
             Vector2 point = _origin + position;
-            float y = Mathf.Max(0f, OverworldRules.SurfaceAt(_layout, point));
+            if (line == null)
+            {
+                // The trees and fords never move: the ground under each is sampled once, with its line.
+                line = lines[index] = NewLine();
+                heights[index] = Mathf.Max(0f, OverworldRules.SurfaceAt(_layout, point));
+            }
+
+            float y = heights[index];
             line.enabled = true;
             line.startColor = line.endColor = color;
             line.SetPosition(0, new Vector3(point.x, y, point.y));

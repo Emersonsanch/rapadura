@@ -18,7 +18,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// in a gust through the CharacterController (so walls still hold), and carries them along rope baskets and wind currents
     /// with the player's own controls off, giving them back on arrival or if anything else moves the hero meanwhile (respawn, barca).
     /// </summary>
-    public sealed class FarnkeshMechanicsDriver : MonoBehaviour
+    public sealed class FarnkeshMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const int StreakCount = 8;
@@ -29,6 +29,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private readonly List<(SkyRoute Route, bool ToB)> _stations = new List<(SkyRoute, bool)>();
         private readonly LineRenderer[] _streaks = new LineRenderer[StreakCount];
+        private readonly HeroRequirementCache _heroState = new HeroRequirementCache();
 
         private OverworldView _view;
         private OverworldLayout _layout;
@@ -55,6 +56,15 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private float _nextHint;
         private float _nextDenied;
         private SkyRoute _hintRoute;
+        private SkyRoute _ropeRoute;
+
+        private Rect[] _areas;
+
+        /// <inheritdoc/>
+        public Rect[] MechanicsAreas => _areas;
+
+        /// <inheritdoc/>
+        public bool MechanicsBusy => _ride != null;
 
         private void Start()
         {
@@ -68,9 +78,17 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _origin = anchor.Origin;
+            _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.FarnkeshBounds, _origin) };
         }
 
-        private void OnDisable() => EndRide(false);
+        private void OnEnable() => _heroState.Attach();
+
+        private void OnDisable()
+        {
+            EndRide(false);
+            HideFeedback();
+            _heroState.Detach();
+        }
 
         private void OnDestroy()
         {
@@ -156,7 +174,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
-            MapRequirementState state = MapRequirementHeroState.Capture(_bag);
+            MapRequirementState state = _heroState.Get(_bag);
             Vector2 push = WindGustRules.PushVelocity(direction, !_controller.HasMoveIntent, state.Has(MapRequirementItems.StormCloak));
             if (push == Vector2.zero || !_character.enabled)
             {
@@ -215,7 +233,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
-            MapRequirementState state = MapRequirementHeroState.Capture(_bag);
+            MapRequirementState state = _heroState.Get(_bag);
             float hour = ServiceLocator.TryGet(out TimeOfDayManager clock) ? clock.CurrentHour : TimeOfDayManager.DefaultStartHour;
             bool canGlide = MapRequirementRules.IsMet(MapRequirementTags.WingsOrDoubleJump, state);
             MapModeController mode = MapModeController.Current;
@@ -227,7 +245,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             for (int i = 0; i < _stations.Count; i++)
             {
                 (SkyRoute route, bool toB) = _stations[i];
-                bool open = SkyRouteRules.AllZonesOpen(_layout, _origin, route, level, state.Hero, MapRequirementRules.Lookup(state));
+                bool open = SkyRouteRules.AllZonesOpen(_layout, _origin, route, level, state.Hero, _heroState.Lookup);
                 SkyRideCheck c = SkyRouteRules.Check(route, toB, hour, canGlide, open);
                 if (i == 0)
                 {
@@ -371,9 +389,17 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                     _rope.enabled = false;
                 }
 
+                _ropeRoute = null;
                 return;
             }
 
+            // The rope of a route never moves: the ground under its ends is sampled once, when it is first shown.
+            if (route == _ropeRoute && _rope != null && _rope.enabled)
+            {
+                return;
+            }
+
+            _ropeRoute = route;
             _rope = _rope != null ? _rope : NewLine("Fk_Rope", 0.05f, new Color(0.45f, 0.32f, 0.18f, 1f));
             _rope.enabled = true;
             float arc = SkyRouteRules.Arc(route);

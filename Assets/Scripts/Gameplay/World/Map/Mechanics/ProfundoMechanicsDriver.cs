@@ -19,7 +19,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// (no input is read, nothing is named after a PlayerInput action); damage goes through <see cref="ApplyHazard"/> on the hero's PlayerStats, and
     /// always stops at a floor of life. Nothing here takes the hero's controls away.
     /// </summary>
-    public sealed class ProfundoMechanicsDriver : MonoBehaviour
+    public sealed class ProfundoMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const string SmokeSource = "profundo_smoke";
@@ -102,7 +102,16 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             EventBus.Unsubscribe<SkillCastEvent>(HandleSkillCast);
             ClearSmokeEffect();
+            LeaveRegion();
         }
+
+        private Rect[] _areas;
+
+        /// <inheritdoc/>
+        public Rect[] MechanicsAreas => _areas;
+
+        /// <inheritdoc/>
+        public bool MechanicsBusy => false;
 
         private void Start()
         {
@@ -116,6 +125,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _origin = anchor.Origin;
+            _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.ProfundoBounds, _origin) };
             _network = new ProfundoLampNetwork(OverworldLayouts.WallLamps.Length);
             _clearLeft = new float[OverworldLayouts.SmokeBanks.Length];
             _smokeSlow = new StatModifierDefinition
@@ -199,7 +209,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
             foreach (LineRenderer ring in _rings.Values)
             {
-                ring.enabled = false;
+                if (ring != null)
+                {
+                    ring.enabled = false;
+                }
             }
 
             foreach (Light light in _lampLights)
