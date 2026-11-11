@@ -18,7 +18,9 @@
     min-width: 420px;
     max-width: 900px;
     margin-bottom: 40px;
-    background-color: rgba(46, 27, 16, 0.95);
+    /* Opaque: on phones the box spans the touch action row and "Atacar" / the hotbar read through the 0.95 fill
+       (linear blending; phone audit 2026-11). */
+    background-color: rgb(46, 27, 16);
     padding: 16px 20px;
 }
 
@@ -48,7 +50,7 @@
 }
 
 .dialogue-choice-button {
-    min-height: 44px;
+    min-height: 48px;
     margin: 4px 0;
     padding: 8px 12px;
     font-size: 15px;
@@ -75,7 +77,8 @@
 
 .dialogue-continue-button {
     align-self: flex-end;
-    height: 44px;
+    height: auto;
+    min-height: 48px;
     margin: 0;
     padding: 0 18px;
     font-size: 16px;

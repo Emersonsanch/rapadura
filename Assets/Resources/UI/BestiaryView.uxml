@@ -16,7 +16,7 @@
                 <ui:Button name="bestiary-close" text="Fechar" focusable="true" class="bestiary-close rap-button rap-button--primary loc" view-data-key="ui.bestiary.close" />
             </ui:VisualElement>
             <ui:VisualElement class="bestiary-body">
-                <ui:ScrollView name="bestiary-list" class="bestiary-list" />
+                <ui:ScrollView name="bestiary-list" class="bestiary-list" mode="Vertical" horizontal-scroller-visibility="Hidden" />
                 <ui:ScrollView name="bestiary-page" class="bestiary-page">
                     <ui:VisualElement class="bestiary-page-head">
                         <ui:VisualElement name="bestiary-portrait" class="bestiary-portrait">

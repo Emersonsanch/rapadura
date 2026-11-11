@@ -55,6 +55,9 @@ namespace Rapadura.UI.Tutorial
 
                 _resetButton = new Button(OnResetClicked) { name = ResetButtonName, text = TutorialTexts.GetFallback(TutorialTexts.SettingsReset), focusable = true };
                 _resetButton.AddToClassList("settings-rebind-footer-button");
+                // Themed like Cancelar / Restaurar tudo (it rendered as Unity's grey default button), left-aligned under the toggle.
+                _resetButton.AddToClassList("rap-button");
+                _resetButton.style.alignSelf = Align.FlexStart;
 
                 _statusLabel = new Label(string.Empty) { name = StatusLabelName };
                 _statusLabel.AddToClassList("settings-rebind-status");

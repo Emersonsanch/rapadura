@@ -44,10 +44,10 @@
     padding: 4px 10px;
 }
 
-/* Touch-first: 44px+ hit targets. */
+/* Touch-first: 48px+ hit targets (phone audit 2026-11). */
 .inventory-close-button {
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     margin: 0;
     padding: 0;
 }
@@ -57,7 +57,7 @@
 }
 
 .inventory-sort-button {
-    height: 44px;
+    height: 48px;
     margin: 0 12px 0 0;
     padding: 0 14px;
     font-size: 16px;
@@ -106,7 +106,7 @@
 }
 
 .inventory-row-button {
-    min-height: 44px;
+    min-height: 48px;
     margin: 3px 0;
     padding: 8px 10px;
     background-color: var(--rap-brown);

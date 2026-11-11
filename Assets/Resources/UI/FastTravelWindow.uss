@@ -8,10 +8,14 @@
     height: 100%;
 }
 
+/* Floating "Mapa (M)" (maps / city walk; Main.unity has no island-map HUD cluster to join). Not in the top-right corner:
+   at top 12 / right 12 it sat on the HUD's "Menu" button (HudView.uss .hud-top-right-cluster, top 32, 68 tall) on every
+   screen size (phone audit 2026-11). Here it lines up with the QuestTracker card (QuestTrackerView.uss: right 24, top 130,
+   260 wide), just left of it, below the menu row. */
 .ftw-compass {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 130px;
+    right: 296px;
     min-width: 96px;
     min-height: 52px;
     height: auto;

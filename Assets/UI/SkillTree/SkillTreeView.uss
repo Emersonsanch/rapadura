@@ -53,7 +53,8 @@
 }
 
 .skill-tree-close-button {
-    height: 44px;
+    height: auto;
+    min-height: 48px;
     margin: 0;
     padding: 0 16px;
     min-width: 96px;
@@ -108,7 +109,8 @@
 
 .skill-node-level-label {
     position: absolute;
-    bottom: -20px;
+    /* -24: at -20 the "1/5" sat on the node's 3px ring (phone audit 2026-11). */
+    bottom: -24px;
     font-size: 12px;
     color: var(--rap-cream);
     -unity-font-style: bold;

@@ -26,7 +26,9 @@
     position: absolute;
     left: 24px;
     top: 24px;
-    max-width: 62%;
+    /* 44% (was 62%): the top-right cluster grew to 7 buttons (+ Caderno, Mapa, Modo foto) and its left part sat on
+       this bar at 1280x720 and on 20:9 phones (phone audit 2026-11); the bar's own rows wrap instead. */
+    max-width: 44%;
     flex-direction: row;
     align-items: center;
     padding: 8px 14px;
@@ -218,7 +220,8 @@
     min-width: 68px;
     height: 68px;
     border-radius: 34px;
-    margin: 0 0 0 22px;
+    /* 8px (was 22): 7 buttons; keeps the row clear of the top bar (max-width 44%) down to a ~1300px-wide panel. */
+    margin: 0 0 0 8px;
     padding: 0 10px;
     font-size: 13px;
     white-space: nowrap;

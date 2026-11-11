@@ -7,6 +7,13 @@
 
 @import url("/Assets/UI/Common/RapaduraTheme.uss");
 
+/* BestiaryCharmsTab attaches this sheet to the Caderno's card, so the imported theme's .rap-panel (0.92 alpha) beat the
+   card's own opaque fill (BestiaryView.uss) and the world showed through the pages (phone audit 2026-11). Two classes
+   outrank the theme's one. */
+.bestiary-card.rap-panel {
+    background-color: var(--rap-brown-deep);
+}
+
 .hunting-panel {
     width: 640px;
     max-width: 94%;
@@ -118,6 +125,8 @@
 .hunting-tabs {
     flex-direction: row;
     margin: 4px 0;
+    /* Never squeezed by the Caderno's page list (it fell to ~3px on phones and the tabs overlapped the header). */
+    flex-shrink: 0;
 }
 
 .hunting-tab {

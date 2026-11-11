@@ -35,6 +35,10 @@
     font-size: 12px;
     -unity-font-style: bold;
     color: var(--rap-cream);
+    /* Wraps inside the chip: "Você está em zona segura · Vila da Vó Edna" ran past the chip into the weather column
+       of the island top bar at 1280x720 (phone audit 2026-11). */
+    flex-shrink: 1;
+    white-space: normal;
 }
 
 .city-notice {

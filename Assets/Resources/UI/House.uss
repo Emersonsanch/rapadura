@@ -81,9 +81,11 @@
 .house-arrange {
     position: absolute;
     right: 12px;
-    top: 110px;
+    /* Phone audit 2026-11 (2400x1080, panel ~1433x645): at top 110 / 300 wide the panel started under the 3-line top bar and
+       its tabs, depot, 5 actions and hint shrank onto each other. 136 clears the top bar; 340 fits 3 actions per row. */
+    top: 136px;
     bottom: 96px;
-    width: 300px;
+    width: 340px;
     max-width: 46%;
     padding: 8px 10px;
     flex-direction: column;
@@ -91,6 +93,15 @@
     border-color: var(--rap-panel-border);
     border-width: 2px;
     border-radius: 12px;
+}
+
+/* Only the depot list gives up height when the arrange panel is short; the rest keeps its size (no overlap). */
+.house-section,
+.house-tabs,
+.house-actions,
+.house-hint,
+.house-depot-empty {
+    flex-shrink: 0;
 }
 
 .house-section {
@@ -107,7 +118,7 @@
 }
 
 .house-tab {
-    min-height: 44px;
+    min-height: 48px;
     min-width: 84px;
     margin: 2px;
     font-size: 14px;
@@ -151,7 +162,10 @@
 }
 
 .house-action {
-    min-height: 56px;
+    min-height: 48px;
+    /* 8px sides (theme: 18): three actions per row in the 340px arrange panel, so the hint stays inside it. */
+    padding-left: 8px;
+    padding-right: 8px;
     min-width: 88px;
     flex-grow: 1;
     margin: 2px;
@@ -225,7 +239,7 @@
 .house-life {
     position: absolute;
     left: 12px;
-    top: 110px;
+    top: 136px;
     bottom: 96px;
     width: 380px;
     max-width: 52%;
@@ -282,7 +296,7 @@
 }
 
 .house-life-close {
-    min-height: 44px;
+    min-height: 48px;
     min-width: 88px;
     font-size: 14px;
 }

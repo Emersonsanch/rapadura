@@ -283,7 +283,8 @@
 /* "Continuar com <herói>" — only shown when a save with a chosen hero exists (CharacterSelectController.RefreshContinueOption). */
 .character-select__continue {
     margin-top: 8px;
-    height: 44px;
+    height: auto;
+    min-height: 48px;
     font-size: 17px;
     border-left-color: rgb(112, 146, 62);
     border-right-color: rgb(112, 146, 62);

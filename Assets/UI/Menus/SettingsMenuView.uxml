@@ -17,7 +17,7 @@
                 <ui:Button name="tab-accessibility-button" text="Acessibilidade" focusable="true" class="settings-tab-button loc" view-data-key="ui.settings.tab.accessibility" />
             </ui:VisualElement>
 
-            <ui:VisualElement name="settings-content" class="settings-content">
+            <ui:ScrollView name="settings-content" class="settings-content" mode="Vertical" horizontal-scroller-visibility="Hidden">
                 <ui:VisualElement name="panel-graphics" class="settings-panel">
                     <ui:DropdownField name="quality-dropdown" label="Qualidade" focusable="true" class="settings-field loc" view-data-key="ui.settings.graphics.quality" />
                     <ui:Toggle name="fullscreen-toggle" label="Tela Cheia" focusable="true" class="settings-field loc" view-data-key="ui.settings.graphics.fullscreen" />
@@ -60,7 +60,7 @@
                     <ui:Toggle name="reduce-motion-toggle" label="Reduzir Movimento" focusable="true" class="settings-field loc" view-data-key="ui.settings.accessibility.reduce_motion" />
                     <ui:Toggle name="clearer-night-toggle" label="Noite mais clara" focusable="true" class="settings-field loc" view-data-key="ui.settings.accessibility.clearer_night" />
                 </ui:VisualElement>
-            </ui:VisualElement>
+            </ui:ScrollView>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

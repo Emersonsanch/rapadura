@@ -15,11 +15,13 @@
     bottom: 0;
 }
 
-/* ---- Button: right column, above the 5-slot hotbar (hotbar: right 32px, bottom 132px, 64px tall) ---- */
+/* ---- Button: right column, above the 5-slot hotbar (hotbar: right 32px, bottom 132px, 64px tall) and above the
+   touch camera row (HudView.uss .hud-camera-cluster: bottom 208px, 48px tall): at bottom 212 it covered "Girar ›" on
+   phones (audit 2026-11). 268 = 208 + 48 + 12 gap; its top (360px) stays under the QuestTracker card on a 645px panel. ---- */
 
 .duo-strike-button {
     right: 32px;
-    bottom: 212px;
+    bottom: 268px;
     width: 92px;
     height: 92px;
     border-radius: 46px;

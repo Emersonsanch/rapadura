@@ -448,6 +448,12 @@ namespace Rapadura.UI.Housing
             _card = new VisualElement { name = "wm-house-card" };
             _card.AddToClassList("house-card");
             _card.style.display = DisplayStyle.None;
+            // The card lives on the HUD root (outside _overlay, so it also shows before entering), so it needs House.uss of its
+            // own: without it the Vó Edna card rendered unstyled across the top of the screen (phone audit 2026-11).
+            if (sheet != null)
+            {
+                _card.styleSheets.Add(sheet);
+            }
             var cardPanel = new VisualElement();
             cardPanel.AddToClassList("rap-panel");
             cardPanel.AddToClassList("house-card-panel");

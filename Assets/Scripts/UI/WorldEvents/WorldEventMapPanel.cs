@@ -196,7 +196,9 @@ namespace Rapadura.UI.WorldEvents
             LocalizationManager localization = Localization;
             WorldEventProgress progress = WorldEventProgress.ResolveShared();
             bool hudVisible = _hud != null && _hud.IsVisible;
-            _pill.style.display = hudVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            // The pill is on the island HUD document, above screens built on it (Minha casa, the village panels): it steps
+            // aside while any modal holds the pause, like the other message cards (phone audit 2026-11).
+            _pill.style.display = hudVisible && !MessageCards.ShouldHold(MessageCards.IsModalOpen) ? DisplayStyle.Flex : DisplayStyle.None;
             MessageCards.LayoutNoticeColumn(_hudDocument.rootVisualElement);
 
             SetText(_bossLine, BossLine(localization, now, progress));

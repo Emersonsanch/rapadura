@@ -107,6 +107,7 @@ namespace Rapadura.UI.WorldMap
         private VisualElement _layer;
         private VisualElement _root;
         private Button _compass;
+        private bool _compassHeldByModal;
         private Label _title;
         private Label _subtitle;
         private Label _hero;
@@ -479,6 +480,15 @@ namespace Rapadura.UI.WorldMap
             else if (keyboard != null && keyboard.mKey.wasPressedThisFrame && !GameplayPause.IsPausedByOthers(this))
             {
                 OpenFromShortcut();
+            }
+
+            // Another window (Mochila, Ficha, diálogo...) holds the pause: the floating "Mapa (M)" lives on this document,
+            // which draws above theirs, so it steps aside at once instead of floating over their header.
+            bool heldByModal = GameplayPause.IsPausedByOthers(this);
+            if (heldByModal != _compassHeldByModal)
+            {
+                _compassHeldByModal = heldByModal;
+                RefreshCompass();
             }
 
             if (Time.unscaledTime >= _nextHudScan)
@@ -1068,8 +1078,9 @@ namespace Rapadura.UI.WorldMap
             if (_compass != null)
             {
                 _compass.text = label;
-                _compass.style.display = floating && !_open ? DisplayStyle.Flex : DisplayStyle.None;
-                _compass.pickingMode = floating && !_open ? PickingMode.Position : PickingMode.Ignore;
+                bool show = floating && !_open && !_compassHeldByModal;
+                _compass.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
+                _compass.pickingMode = show ? PickingMode.Position : PickingMode.Ignore;
             }
 
             // Island map: a button in the HUD cluster, before "Menu".
