@@ -69,6 +69,9 @@ namespace Rapadura.Gameplay.Mounts.Visuals
         public bool Beard;
         public bool Wings;
 
+        /// <summary>A dhow's lateen sail on the back, behind the saddle (the Dhow-Tartaruga, MountMidRegionRecipes).</summary>
+        public bool Sail;
+
         // ---- Flyers (MountSkyRecipes) ----
 
         /// <summary>Two big jointed wings that flap (<see cref="MountParts.WingLeft"/>...), not the folded <see cref="Wings"/> of the rheas.</summary>
@@ -160,6 +163,11 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                     if (MountFarRegionRecipes.TryShape(recipe, out QuadrupedShape far))
                     {
                         return far;
+                    }
+
+                    if (MountMidRegionRecipes.TryShape(recipe, out QuadrupedShape mid))
+                    {
+                        return mid;
                     }
 
                     return new QuadrupedShape

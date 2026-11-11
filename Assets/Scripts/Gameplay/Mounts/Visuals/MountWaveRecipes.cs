@@ -282,7 +282,7 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                 bp.Mesh(Prefix + "Head", head, Vector3.zero, b => DrawHeadExtras(b, s));
             }
 
-            if (s.Pattern != MountCoatPattern.None || s.Shell || s.Shaggy || s.FlameCrest || s.Wings)
+            if (s.Pattern != MountCoatPattern.None || s.Shell || s.Shaggy || s.FlameCrest || s.Wings || s.Sail)
             {
                 bp.Mesh(Prefix + "Body", body, Vector3.zero, b => DrawBodyExtras(b, s));
             }
@@ -370,6 +370,18 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                 b.Box(new Vector3(0f, top - 0.02f, -0.02f), new Vector3(w * 0.8f, 0.035f, l * 0.32f), s.Blanket);
                 b.Box(new Vector3(0f, top + 0.02f, -0.02f), new Vector3(w * 0.5f, 0.05f, l * 0.24f), s.Saddle);
                 b.Box(new Vector3(0f, top + 0.06f, l * 0.1f), new Vector3(w * 0.22f, 0.06f, 0.05f), s.Saddle);
+            }
+
+            if (s.Sail)
+            {
+                // A dhow's lateen sail behind the saddle (the Dhow-Tartaruga): mast, slanted yard and the sail, in Saddle and Light.
+                float deck = t * 0.5f + (s.Shell ? ShellSeatLift(s) : 0f);
+                float mastHeight = 0.95f;
+                Vector3 mastFoot = new Vector3(0f, deck, -l * 0.3f);
+                b.Box(mastFoot + new Vector3(0f, mastHeight * 0.5f, 0f), new Vector3(0.045f, mastHeight, 0.045f), s.Saddle);
+                b.Box(mastFoot + new Vector3(0f, mastHeight * 0.82f, 0.02f), new Vector3(0.03f, 0.03f, 0.95f), s.Saddle, Quaternion.Euler(-28f, 0f, 0f));
+                b.Box(mastFoot + new Vector3(0.03f, mastHeight * 0.55f, 0.02f), new Vector3(0.012f, mastHeight * 0.62f, 0.62f), s.Light,
+                    Quaternion.Euler(-28f, 0f, 0f));
             }
 
             if (s.Shaggy)

@@ -30,7 +30,7 @@ namespace Rapadura.Gameplay.Mounts
     }
 
     /// <summary>
-    /// The "Caderno de Montarias" (Docs/Mounts.md §7, phase M2): all 31 species of §3 (30 + the Grifo da Coluna, §3.8), in catalog order. Owned ones show
+    /// The "Caderno de Montarias" (Docs/Mounts.md §7, phase M2): all 44 species of §3 (30 + the Grifo da Coluna, §3.8, + the 8 of §3.9 + the 5 of §3.10), in catalog order. Owned ones show
     /// their name and stats, seen-but-not-owned ones their name, the rest a "???" silhouette with the hint of where they
     /// appear. The species in <see cref="MountCatalog"/> (3 starters + M3 wave 1 + the first flyer) are playable, the rest only listed; their names and
     /// hints live in <see cref="MountTexts"/>, the others here.
@@ -82,6 +82,13 @@ namespace Rapadura.Gameplay.Mounts
             (MountFarRegionCatalog.AuroraReindeer, ItemRarity.Epic, BiomeType.Mountain, "Aurora Reindeer", "Rena da Aurora", "Help Pera with the bears on the canals of the White Moon Harbor.", "Ajude o Pera com os ursos nos canais do Porto da Lua Branca."),
             (MountFarRegionCatalog.LacquerLion, ItemRarity.Epic, BiomeType.Mountain, "Lacquer Guardian Lion", "Leão-Guardião de Laca", "Help Sango with the ember gulls on the Hinokura lighthouse.", "Ajude a Sango com as gaivotas-brasa no farol de Hinokura."),
             (MountFarRegionCatalog.Mushhushshu, ItemRarity.Epic, BiomeType.Desert, "Tame Mushussu", "Mušḫuššu Manso", "Help Sin-leqi-unninni with the beetles on the tablets of Dur-Jarras.", "Ajude o Sin-leqi-unninni com os besouros nas tábuas de Dur-Jarras."),
+
+            // Regions 5–9 (MountMidRegionCatalog, Docs/Mounts.md §3.10).
+            (MountMidRegionCatalog.TarchonFrog, ItemRarity.Uncommon, BiomeType.Forest, "Tarchon Giant Frog", "Sapo-Gigante de Tarchon", "Larthia's baskets, on the Tarchon stilts.", "A cestaria da Larthia, nas Palafitas de Tarchon."),
+            (MountMidRegionCatalog.RoofYak, ItemRarity.Uncommon, BiomeType.Mountain, "Roof-of-the-World Yak", "Iaque do Teto do Mundo", "Sisinnios' mountain gear, in Sangkent.", "Os agasalhos do Sisinnios, em Sangkent."),
+            (MountMidRegionCatalog.GoldenSteppeHorse, ItemRarity.Rare, BiomeType.Mountain, "Golden Steppe Horse", "Cavalo Dourado da Estepe", "Help Satana with the eagles over Soslan's Camp.", "Ajude a Satana com as águias sobre o Acampamento de Soslan."),
+            (MountMidRegionCatalog.DhowTurtle, ItemRarity.Epic, BiomeType.Desert, "Dhow Turtle", "Dhow-Tartaruga", "Help Zawadi with the claws in the mangrove of Taa Pwani.", "Ajude o Zawadi com as garras no mangue de Taa Pwani."),
+            (MountMidRegionCatalog.WhiteLightStag, ItemRarity.Epic, BiomeType.Caves, "White Light Stag", "Cervo de Luz Branca", "Help Shanakdakhete with the dimmed ibises of the White Spires.", "Ajude a Shanakdakhete com as íbis apagadas das Torres Brancas."),
         };
 
         public static readonly IReadOnlyList<MountCodexEntry> Entries = Rows.Select(r => new MountCodexEntry(r.Id, r.Rarity, r.Region)).ToList();

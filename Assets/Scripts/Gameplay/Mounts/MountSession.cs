@@ -114,6 +114,18 @@ namespace Rapadura.Gameplay.Mounts
 
         public void StartShell(float seconds) => ShellRemaining = IsMounted ? Mathf.Max(ShellRemaining, seconds) : 0f;
 
+        /// <summary>Fôlego de Soslan (MountMidRegionCatalog): the mount's stamina back to full and the "tired" lock lifted; only while mounted.</summary>
+        public void RefillStamina()
+        {
+            if (!IsMounted)
+            {
+                return;
+            }
+
+            Stamina = MaxStamina;
+            _exhausted = false;
+        }
+
         /// <summary>One ride step: gallop when wanted and allowed (and not in a city), stamina spent/refilled.</summary>
         public void Tick(float deltaTime, bool wantsGallop, MountPlace place, bool hungry = false)
         {

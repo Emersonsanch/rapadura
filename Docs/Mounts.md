@@ -17,6 +17,7 @@
 **Total: 30 montarias**, sendo 20 dos mitos e contos antigos (Rota da Seda, Kemet, Kush, Pérsia, estepes) e 10 bichos "de verdade" (alguns gigantes).
 **+1 (2026-11-03):** o **Grifo da Coluna da Glória** (§3.8), a primeira voadora no código; o Caderno lista 31.
 **+8 (2026-11-09):** as montarias das fichas das Regiões 10–16 (§3.9); o Caderno lista 39.
+**+5 (2026-11-11):** uma montaria própria para cada uma das Regiões 5–9 (§3.10); o Caderno lista 44.
 
 | Raridade (`ItemRarity`) | Montarias | Como se consegue |
 |---|---|---|
@@ -335,6 +336,38 @@ que responde a `WingsRequired`/`WingsOrDoubleJump`.
 - **Limites:** a Cabra ainda não anula chão quente de mapa, porque esse sistema não existe (Mapas100 §Hinokura: "medidor de calor");
   o bico da Íbis é o de águia do Grifo, não o curvo de uma íbis.
 - **Testes:** `MountFarRegionTests`.
+
+### 3.10 Montarias das Regiões 5–9 (no código, 2026-11-11)
+
+Uma por região, das fichas dos mapas 25, 33, 36, 42 e 47 (`Docs/Mapas100.md` §6), em `MountMidRegionCatalog`, cada uma exata
+no orçamento do §2.4. Mesmas regras do §3.9: as Incomuns são apito à venda na cidade da região (preço = valor do item, §5.1);
+Raras e Épicas nunca se vendem e vêm da 2ª missão da cidade da região (`MountSourceHooks`, uma vez só). Nenhuma voa. A
+Dhow-Tartaruga e o Sapo-Gigante são **aquáticos**: abrem as exigências de barco e de sela (`BoatOrDock`, `SaddleRequired`),
+a maré alta do recife não morde (`CostaTideRules.Drenches`) e o lodo das ilhas de junco não atrasa (`DeltaIslandRules.BogSlows`).
+
+| Id | Nome | Região (tema) | Tipo | Raridade | Vel. | Def. | Vida | Fôlego | Pts | Carga | Habilidade | Como consegue | Favorito |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `mount_tarchon_frog` | Sapo-Gigante de Tarchon / *Tarchon Giant Frog* | 6 Delta (anfíbio) | aquático | Incomum | 1,50 | +2% | 150 | 140 | 12 | 100 | **Salto do Charco:** pula 10 m por cima de água e lama; bichos a até 4 m do pouso ficam 30% mais lentos por 3 s (chefe 1,5 s). Recarga 16 s | Apito, 145 de ouro, Cestaria da Larthia (Palafitas de Tarchon) | — |
+| `mount_roof_yak` | Iaque do Teto do Mundo / *Roof-of-the-World Yak* | 7 Teto (altitude, frio) | terrestre, grande | Incomum | 1,30 | +5% | 200 | 130 | 12 | 350 | **Lã do Teto:** primo e grupo a até 6 m perdem a lentidão e ganham +15% de defesa por 8 s. Recarga 35 s | Apito, 150 de ouro, Agasalhos do Sisinnios (Sangkent) | — |
+| `mount_golden_steppe_horse` | Cavalo Dourado da Estepe / *Golden Steppe Horse* | 9 Nartes (estepe) | terrestre | Raro | 1,75 | +1% | 125 | 150 | 16 | 160 | **Fôlego de Soslan:** o fôlego do cavalo volta cheio na hora (tira o "cansado") e os primos a até 8 m recuperam 30% do fôlego. Recarga 45 s | Missão `quest_city_soslan_eagles_over_the_camp` (Satana, Acampamento de Soslan) | Maria |
+| `mount_dhow_turtle` | Dhow-Tartaruga / *Dhow Turtle* | 5 Costa (mar) | aquático, grande | Épico | 1,45 | +8% | 250 | 140 | 21 | 300 | **Vela da Monção:** 8 s de galope sem cansar e uma rajada que empurra 4 m os bichos comuns a até 6 m (chefe não). Recarga 40 s | Missão `quest_city_taa_pwani_mangrove_claws` (Zawadi, Taa Pwani) | Joaquim |
+| `mount_white_light_stag` | Cervo de Luz Branca / *White Light Stag* | 8 Mingcheng (luz, cerimônia) | terrestre | Épico | 1,70 | +4% | 175 | 160 | 21 | 150 | **Rastro de Luz Branca:** 8 s de rastro de luz; quem do grupo pisa nele cura 2% da vida máxima por segundo, e uma luz branca clareia 12 m em volta. Recarga 40 s | Missão `quest_city_torres_brancas_dimmed_ibises` (Shanakdakhete, Torres Brancas) | Lavine |
+
+- **Decisões:** o Iaque subiu de Comum (ficha) para Incomum, porque Sangkent é nível 70+ e o padrão das regiões novas vende
+  Incomuns; nenhuma repete a Hipopotinha de Taweret (`mount_capybara`). As outras propostas das fichas
+  (Auroque de Aratta, Elefante de Musawwarat, Búfalo-d'Água, Ninki Nanka Mansa, Camelo-Bactriano Branco, Cavalo de Terracota
+  Desperto, Qilin de Jade) seguem só no `Mapas100.md` §6.
+- **Efeitos novos** (`MountMidRegionAbilities`, regras puras em `MountMidRegionRules`): `MonsoonSail`, `BogLeap`, `WarmFleece`,
+  `LightTrail` e `SecondWind`, acrescentados ao fim de `MountAbilityKind`: continua um efeito por espécie (§3.7). O
+  `MountFarRegionAbilities` passa adiante os tipos que não conhece. Peças novas no caminho: `MountSession.RefillStamina`,
+  `MountAbilityEffects.TrailKind.Light` (cura de 1 em 1 s em quem está no rastro) e `StartLamp` com cor.
+- **Modelos:** `MountMidRegionRecipes`, no mesmo sistema. A tartaruga usa o casco do Ijapa e ganha uma vela latina de dhow
+  (`QuadrupedShape.Sail`, mastro, verga e vela atrás da sela); o iaque tem lã até o chão, chifres de boi, alforjes e sino.
+- **Carga (§2.7):** em `EncumbranceRules.MountBaseCapacity`; o Iaque é o carregador do grupo (350), abaixo do Asno, do Mamute e do Ijapa.
+- **Som:** usa os de `MountAudio` (rajada com `mount.wingbeat`, sino do iaque com `mount.cowbell`); nenhum som novo.
+- **Limites:** o Iaque não anula o medidor de frio dos passos (o efeito é lentidão + defesa); a rajada da vela não tem
+  vento de verdade no mapa.
+- **Testes:** `MountMidRegionTests`.
 
 ### 3.7 Checagem de unicidade
 

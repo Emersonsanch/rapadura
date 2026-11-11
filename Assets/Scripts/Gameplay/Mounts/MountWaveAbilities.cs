@@ -357,6 +357,9 @@ namespace Rapadura.Gameplay.Mounts
         {
             Speed,
             Burn,
+
+            /// <summary>Rastro de Luz Branca (MountMidRegionCatalog): allies standing on it heal a fraction of their max life every second.</summary>
+            Light,
         }
 
         /// <summary>Hook read by the enemies' detection (<see cref="EnemyDetectionUtility.TargetDetectionScale"/>).</summary>
@@ -368,6 +371,7 @@ namespace Rapadura.Gameplay.Mounts
         private float _trailRadius;
         private float _trailMagnitude;
         private float _trailDropTimer;
+        private float _trailHealTick;
         private TrailKind _trailKind;
         private float _healRemaining;
         private float _healRadius;
@@ -498,6 +502,7 @@ namespace Rapadura.Gameplay.Mounts
             _trailRadius = Mathf.Max(0.3f, radius);
             _trailMagnitude = magnitude;
             _trailDropTimer = 0f;
+            _trailHealTick = 0f;
             _trail.Clear();
         }
 
@@ -529,7 +534,10 @@ namespace Rapadura.Gameplay.Mounts
             EnemyDetectionUtility.TargetDetectionScale = DetectionScaleFor;
         }
 
-        public void StartLamp(float seconds, float radius)
+        public void StartLamp(float seconds, float radius) => StartLamp(seconds, radius, new Color(1f, 0.55f, 0.35f));
+
+        /// <summary>The lamp in another colour (the white light of the Cervo de Luz Branca).</summary>
+        public void StartLamp(float seconds, float radius, Color color)
         {
             _lampRemaining = seconds;
             if (_lamp == null)
@@ -539,10 +547,11 @@ namespace Rapadura.Gameplay.Mounts
                 go.transform.localPosition = new Vector3(0f, 2.2f, 0.6f);
                 _lamp = go.AddComponent<Light>();
                 _lamp.type = LightType.Point;
-                _lamp.color = new Color(1f, 0.55f, 0.35f);
                 _lamp.intensity = 2.5f;
                 _lamp.shadows = LightShadows.None;
             }
+
+            _lamp.color = color;
 
             _lamp.range = Mathf.Max(1f, radius);
             _lamp.enabled = true;
@@ -730,6 +739,21 @@ namespace Rapadura.Gameplay.Mounts
                     {
                         buffs.ApplyEffect(MountWaveAbilities.Modifier("trilha", StatType.MoveSpeed, _trailMagnitude, MountWaveAbilityRules.TrailBuffSeconds, false),
                             MountWaveAbilities.BuffSourcePrefix + "trilha_da_caipora", gameObject);
+                    }
+                }
+            }
+            else if (_trailKind == TrailKind.Light)
+            {
+                _trailHealTick += dt;
+                while (_trailHealTick >= 1f)
+                {
+                    _trailHealTick -= 1f;
+                    foreach (PlayerStats ally in MountWaveAbilities.Allies(at, 60f))
+                    {
+                        if (MountWaveAbilityRules.OnTrail(_trail, ally.transform.position, _trailRadius))
+                        {
+                            ally.Heal(MountWaveAbilityRules.HealPerSecond(ally.MaxHealth, _trailMagnitude));
+                        }
                     }
                 }
             }

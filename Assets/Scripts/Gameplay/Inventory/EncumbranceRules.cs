@@ -154,6 +154,12 @@ namespace Rapadura.Gameplay.Inventory
             { "mount_aurora_reindeer", 220f },
             { "mount_lacquer_lion", 200f },
             { "mount_mushhushshu", 240f },
+            // Regiões 5–9 (Mounts.md §3.10)
+            { "mount_dhow_turtle", 300f }, // the dhow's hold on the shell: a sea carrier
+            { "mount_tarchon_frog", 100f },
+            { "mount_roof_yak", 350f }, // the caravan yak of the passes: a pack animal, under the Asno, the mammoth and the Ijapa
+            { "mount_white_light_stag", 150f },
+            { "mount_golden_steppe_horse", 160f },
         };
 
         // ------------------------------------------------------------------

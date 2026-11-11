@@ -76,6 +76,13 @@ namespace Rapadura.Gameplay.Mounts
         Mushhushshu = 27,
         TaigaElk = 28,
         HillRam = 29,
+
+        // Regions 5–9 (MountMidRegionCatalog, MountMidRegionRecipes). Appended only.
+        DhowTurtle = 30,
+        TarchonFrog = 31,
+        RoofYak = 32,
+        WhiteLightStag = 33,
+        GoldenSteppeHorse = 34,
     }
 
     /// <summary>The effect family of a mount ability (§12.2). M1 implements Dash, LootMagnet and Fear; M3 wave 1 the walkers' kinds (MountWaveAbilities).</summary>
@@ -119,6 +126,13 @@ namespace Rapadura.Gameplay.Mounts
         Dread,
         ThicketStride,
         BoulderCharge,
+
+        // Regions 5–9 (MountMidRegionAbilities). Appended only: assets store the int.
+        MonsoonSail,
+        BogLeap,
+        WarmFleece,
+        LightTrail,
+        SecondWind,
     }
 
     /// <summary>Where the hero is, as far as riding goes (§2.1, §2.5).</summary>

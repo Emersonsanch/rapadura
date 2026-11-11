@@ -47,7 +47,7 @@ namespace Rapadura.Gameplay.Mounts
 
     /// <summary>
     /// What the Regions 10–16 abilities do in the arena; called by <see cref="MountWaveAbilities.Execute"/> for the kinds
-    /// it does not handle itself. The numbers come from the ability definition. Returns the toast key, or null.
+    /// it does not handle itself (the kinds of the Regions 5–9 go on to <see cref="MountMidRegionAbilities"/>). The numbers come from the ability definition. Returns the toast key, or null.
     /// </summary>
     public static class MountFarRegionAbilities
     {
@@ -95,7 +95,8 @@ namespace Rapadura.Gameplay.Mounts
                     return BoulderCharge(ability, ctx, effects, at);
             }
 
-            return null;
+            // Regions 5–9 (MountMidRegionCatalog).
+            return MountMidRegionAbilities.Execute(ability, ctx, effects);
         }
 
         private static string Untie(MountAbilityDefinition ability, MountAbilityContext ctx, Vector3 at)

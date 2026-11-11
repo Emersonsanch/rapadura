@@ -239,7 +239,8 @@ namespace Rapadura.Tests
         public void Catalog_ThreeStarters_HitTheCommonBudget()
         {
             Assert.AreEqual(3, MountCatalog.Starters.Count);
-            Assert.AreEqual(3 + MountWaveCatalog.Specs.Count + MountSkyCatalog.Specs.Count + MountFarRegionCatalog.Specs.Count, MountCatalog.Specs.Count);
+            Assert.AreEqual(3 + MountWaveCatalog.Specs.Count + MountSkyCatalog.Specs.Count + MountFarRegionCatalog.Specs.Count + MountMidRegionCatalog.Specs.Count,
+                MountCatalog.Specs.Count);
             foreach (string id in new[] { MountCatalog.Pony, MountCatalog.BigDog, MountCatalog.PackDonkey })
             {
                 MountDefinition definition = MountCatalog.Get(id);
@@ -676,8 +677,8 @@ namespace Rapadura.Tests
         [Test]
         public void Codex_ListsThe31_WithTexts()
         {
-            Assert.AreEqual(39, MountCodex.Count, "the 30 of §3 + the Grifo da Coluna (§3.8) + the 8 of §3.9");
-            Assert.AreEqual(39, MountCodex.Entries.Select(e => e.MountId).Distinct().Count());
+            Assert.AreEqual(44, MountCodex.Count, "the 30 of §3 + the Grifo da Coluna (§3.8) + the 8 of §3.9 + the 5 of §3.10");
+            Assert.AreEqual(44, MountCodex.Entries.Select(e => e.MountId).Distinct().Count());
             var keys = new HashSet<string>(MountTexts.Entries.Select(e => e.Key));
             foreach (MountCodexEntry entry in MountCodex.Entries)
             {

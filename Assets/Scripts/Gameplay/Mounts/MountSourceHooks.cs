@@ -74,6 +74,11 @@ namespace Rapadura.Gameplay.Mounts
             new MountSourceHook(MountFarRegionCatalog.LacquerLion, MountSourceKind.Quest, CityQuestCatalog.HinokuraEmberGulls),
             new MountSourceHook(MountFarRegionCatalog.MesektetIbis, MountSourceKind.Quest, CityQuestCatalog.MesektetScorpions),
             new MountSourceHook(MountFarRegionCatalog.Mushhushshu, MountSourceKind.Quest, CityQuestCatalog.DurJarrasBeetles),
+
+            // Regions 5–9 (MountMidRegionCatalog): same rule, the second city quest of the region's city.
+            new MountSourceHook(MountMidRegionCatalog.DhowTurtle, MountSourceKind.Quest, CityQuestCatalog.TaaPwaniClaws),
+            new MountSourceHook(MountMidRegionCatalog.WhiteLightStag, MountSourceKind.Quest, CityQuestCatalog.TorresIbises),
+            new MountSourceHook(MountMidRegionCatalog.GoldenSteppeHorse, MountSourceKind.Quest, CityQuestCatalog.SoslanEagles),
         };
 
         public static IEnumerable<MountSourceHook> Matching(MountSourceKind kind, string hookId)
