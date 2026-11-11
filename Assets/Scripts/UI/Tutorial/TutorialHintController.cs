@@ -218,7 +218,7 @@ namespace Rapadura.UI.Tutorial
             ProbeWorldMap();
 
             bool deferred = ShouldDefer(
-                GameplayPause.IsPausedByOthers(this),
+                MessageCards.IsModalOpenFor(this),
                 BossIntroBannerController.IsAnyShowing,
                 StoryPanelController.IsShowing || IsStoryPending(),
                 IsWorldOverlayOpen());
@@ -233,6 +233,9 @@ namespace Rapadura.UI.Tutorial
                 _dirty = false;
                 Render();
             }
+
+            // Same top-centre band as the area banner / toasts: moves down below one that is already up.
+            MessageCards.Place(_hint, MessageCards.TutorialHintId, MessageCards.TutorialHintPriority, _shown != null && !_deferred);
 
             if (_shown == null)
             {

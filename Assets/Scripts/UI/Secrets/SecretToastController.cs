@@ -251,6 +251,7 @@ namespace Rapadura.UI.Secrets
                     _toast.style.display = DisplayStyle.None;
                 }
 
+                MessageCards.Release(_toast, MessageCards.SecretToastId);
                 return;
             }
 
@@ -282,8 +283,10 @@ namespace Rapadura.UI.Secrets
                 return;
             }
 
-            bool paused = GameplayPause.IsPaused;
+            // A modal (any GameplayPause owner) holds the queue; never stacked on another top-centre card.
+            bool paused = MessageCards.ShouldHold(MessageCards.IsModalOpen);
             _toast.style.display = paused ? DisplayStyle.None : DisplayStyle.Flex;
+            MessageCards.Place(_toast, MessageCards.SecretToastId, MessageCards.SecretToastPriority, !paused);
             if (paused)
             {
                 return;

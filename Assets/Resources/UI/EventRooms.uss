@@ -7,7 +7,7 @@
 
 @import url("/Assets/UI/Common/RapaduraTheme.uss");
 
-/* ---- World map: schedule pill (top centre, under the night pill) ---- */
+/* ---- World map: schedule pill (MessageCards notice column; the absolute top is only a fallback) ---- */
 
 .er-map-pill {
     position: absolute;
@@ -24,11 +24,14 @@
     border-radius: 12px;
     padding: 4px 12px;
     align-items: center;
+    /* In MessageCards' notice column (beside / under the top bar): never wider than the column. */
+    max-width: 100%;
 }
 
 .er-map-line {
     font-size: 15px;
     color: var(--rap-cream);
+    white-space: normal;
     -unity-text-align: middle-center;
 }
 

@@ -4,6 +4,7 @@ using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Dungeon;
 using Rapadura.Gameplay.Enemies;
 using Rapadura.UI.HUD;
+using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -123,6 +124,13 @@ namespace Rapadura.UI.Dungeon
 
             if (!EnsureBound())
             {
+                return;
+            }
+
+            // Sorts at 560, above every window: a modal (Barcas de Luz, Mochila, pause...) hides it, banner and all.
+            if (MessageCards.ShouldHold(MessageCards.IsModalOpen))
+            {
+                _layer.style.display = DisplayStyle.None;
                 return;
             }
 

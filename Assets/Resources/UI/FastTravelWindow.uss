@@ -42,6 +42,9 @@
 }
 
 .ftw-header {
+    /* Never squeezed: with the default flex-shrink 1 a long list (or a 3-line status hint) shrank these below their
+       wrapped text and the next block was drawn over it. Only .ftw-list gives up height (it scrolls). */
+    flex-shrink: 0;
     flex-direction: row;
     align-items: center;
 }
@@ -68,6 +71,7 @@
 }
 
 .ftw-chips {
+    flex-shrink: 0;
     flex-direction: row;
     flex-wrap: wrap;
     margin: 8px 0 8px 0;
@@ -85,6 +89,7 @@
 .ftw-list {
     flex-grow: 1;
     flex-shrink: 1;
+    min-height: 96px;
 }
 
 /* Region filter strip: one row of chips that scrolls sideways (16 regions never wrap off the card on a phone). */
@@ -127,6 +132,8 @@
 }
 
 .ftw-region {
+    /* Rows and headers keep their content height inside the ScrollView (they used to overlap when squeezed). */
+    flex-shrink: 0;
     border-left-width: 6px;
     border-left-color: var(--rap-gold);
     padding: 0 0 0 8px;
@@ -148,12 +155,14 @@
 }
 
 .ftw-empty {
+    flex-shrink: 0;
     margin: 16px 4px 0 4px;
     white-space: normal;
     color: var(--rap-cream-dim);
 }
 
 .ftw-row {
+    flex-shrink: 0;
     flex-direction: row;
     align-items: center;
     min-height: 60px;
@@ -254,6 +263,7 @@
 }
 
 .ftw-status {
+    flex-shrink: 0;
     min-height: 22px;
     margin-top: 6px;
     white-space: normal;

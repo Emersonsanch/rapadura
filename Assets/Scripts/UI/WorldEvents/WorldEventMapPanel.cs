@@ -8,6 +8,7 @@ using Rapadura.Gameplay.World.Map;
 using Rapadura.Gameplay.WorldEvents;
 using Rapadura.Save;
 using Rapadura.UI.WorldMap;
+using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -196,6 +197,7 @@ namespace Rapadura.UI.WorldEvents
             WorldEventProgress progress = WorldEventProgress.ResolveShared();
             bool hudVisible = _hud != null && _hud.IsVisible;
             _pill.style.display = hudVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            MessageCards.LayoutNoticeColumn(_hudDocument.rootVisualElement);
 
             SetText(_bossLine, BossLine(localization, now, progress));
             SetText(_invasionLine, InvasionLine(localization, now, progress));
@@ -302,7 +304,8 @@ namespace Rapadura.UI.WorldEvents
                 card.Add(_invasionLine);
                 card.Add(_message);
                 _pill.Add(card);
-                root.Add(_pill);
+                // Shared column with the other map notices: stacked, beside / under the top bar (never over it).
+                MessageCards.AddToNoticeColumn(root, _pill);
             }
 
             _bossButton = EnsureButton(row, _bossButton, BossButtonName, OnBossClicked);

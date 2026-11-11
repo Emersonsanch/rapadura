@@ -253,8 +253,10 @@ namespace Rapadura.UI.HUD
         {
             if (_showing && _banner != null)
             {
-                bool paused = GameplayPause.IsPaused;
+                // A modal holds the letreiro (and its clock); it is the first card of the top-centre lane.
+                bool paused = MessageCards.ShouldHold(MessageCards.IsModalOpen);
                 _banner.style.display = paused ? DisplayStyle.None : DisplayStyle.Flex;
+                MessageCards.Place(_banner, MessageCards.AreaBannerId, MessageCards.AreaBannerPriority, !paused);
                 if (!paused && !_fadingOut)
                 {
                     _remaining -= Time.unscaledDeltaTime;
@@ -263,6 +265,11 @@ namespace Rapadura.UI.HUD
                         FadeOut();
                     }
                 }
+            }
+
+            else
+            {
+                MessageCards.Release(_banner, MessageCards.AreaBannerId);
             }
 
             if (Time.unscaledTime >= _nextLabel)

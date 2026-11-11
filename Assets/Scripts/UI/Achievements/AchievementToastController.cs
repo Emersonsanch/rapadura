@@ -3,6 +3,7 @@ using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Achievements;
+using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,8 +12,8 @@ namespace Rapadura.UI.Achievements
     /// <summary>
     /// Shows a small "Conquista desbloqueada!" toast (AchievementToastView.uxml/.uss) whenever
     /// <see cref="AchievementUnlockedEvent"/> fires. Unlocks arriving while a toast is on screen are
-    /// queued and shown one after another. Timing uses the panel scheduler (real time), so toasts
-    /// still advance while the game is paused; the whole view has picking-mode Ignore so it never
+    /// queued and shown one after another. Timing is real time, but held (toast hidden) while a modal
+    /// screen is open, see <see cref="MessageCards"/>; the whole view has picking-mode Ignore so it never
     /// blocks touches/clicks on the HUD underneath.
     ///
     /// Needs only a <see cref="UIDocument"/> with AchievementToastView.uxml as its source asset; it
@@ -38,6 +39,8 @@ namespace Rapadura.UI.Achievements
         private Label _descriptionLabel;
         private LocalizationManager _localization;
         private bool _isShowing;
+        private bool _fading;
+        private float _remaining;
 
         public bool IsShowing => _isShowing;
         public int PendingCount => _pending.Count;
@@ -72,6 +75,8 @@ namespace Rapadura.UI.Achievements
             EventBus.Unsubscribe<AchievementUnlockedEvent>(OnAchievementUnlocked);
             _pending.Clear();
             _isShowing = false;
+            _fading = false;
+            MessageCards.Release(_toast, MessageCards.AchievementId);
         }
 
         private void OnAchievementUnlocked(AchievementUnlockedEvent evt)
@@ -83,7 +88,67 @@ namespace Rapadura.UI.Achievements
 
             _pending.Enqueue(evt.Achievement);
 
+            if (!_isShowing && !MessageCards.ShouldHold(MessageCards.IsModalOpen))
+            {
+                ShowNext();
+            }
+        }
+
+        /// <summary>
+        /// Real-time clock of the toast. While a modal is open (Barcas de Luz, Mochila, Loja, diálogo...) the toast is
+        /// hidden and its clock and queue are held: this document sorts at 60, above every window, and the toast used
+        /// to slide in over the travel window's rows. In the top-centre lane it moves below the area banner.
+        /// </summary>
+        private void Update()
+        {
+            if (_toast == null)
+            {
+                return;
+            }
+
+            bool hold = MessageCards.ShouldHold(MessageCards.IsModalOpen);
             if (!_isShowing)
+            {
+                MessageCards.Release(_toast, MessageCards.AchievementId);
+                if (!hold && _pending.Count > 0)
+                {
+                    ShowNext();
+                }
+
+                return;
+            }
+
+            if (hold)
+            {
+                _toast.RemoveFromClassList(VisibleClass);
+                MessageCards.Release(_toast, MessageCards.AchievementId);
+                return;
+            }
+
+            if (!_fading)
+            {
+                _toast.AddToClassList(VisibleClass);
+            }
+
+            MessageCards.Place(_toast, MessageCards.AchievementId, MessageCards.AchievementPriority, true);
+            _remaining -= Time.unscaledDeltaTime;
+            if (_remaining > 0f)
+            {
+                return;
+            }
+
+            if (!_fading)
+            {
+                // Slide/fade out, then the next one.
+                _fading = true;
+                _toast.RemoveFromClassList(VisibleClass);
+                _remaining = Mathf.Max(0f, _transitionSeconds);
+                return;
+            }
+
+            _fading = false;
+            _isShowing = false;
+            if (_pending.Count > 0)
             {
                 ShowNext();
             }
@@ -98,6 +163,8 @@ namespace Rapadura.UI.Achievements
             }
 
             _isShowing = true;
+            _fading = false;
+            _remaining = Mathf.Max(0.5f, _displaySeconds);
             AchievementDefinition achievement = _pending.Dequeue();
 
             if (_localization == null && ServiceLocator.TryGet(out _localization))
@@ -117,15 +184,6 @@ namespace Rapadura.UI.Achievements
             }
 
             _toast.AddToClassList(VisibleClass);
-
-            long visibleMs = (long)(Mathf.Max(0.5f, _displaySeconds) * 1000f);
-            long transitionMs = (long)(Mathf.Max(0f, _transitionSeconds) * 1000f);
-
-            _toast.schedule.Execute(() =>
-            {
-                _toast.RemoveFromClassList(VisibleClass);
-                _toast.schedule.Execute(ShowNext).ExecuteLater(transitionMs);
-            }).ExecuteLater(visibleMs);
         }
     }
 }

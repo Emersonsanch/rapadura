@@ -27,6 +27,11 @@
     max-width: 680px;
 }
 
+/* In MessageCards' notice column (beside / under the top bar): never wider than the column. */
+.msg-notice-column .we-map-card {
+    max-width: 100%;
+}
+
 .we-map-line {
     font-size: 15px;
     color: var(--rap-cream);

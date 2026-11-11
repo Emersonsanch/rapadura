@@ -95,6 +95,7 @@ namespace Rapadura.UI.WorldMap
             public int Priority = 3;
             // Hidden until the first projection places it (no flash at the panel's top-left corner).
             public bool OnScreen;
+            public bool Covered;
             public Vector2 LastPosition = new Vector2(float.NaN, float.NaN);
         }
 
@@ -112,6 +113,7 @@ namespace Rapadura.UI.WorldMap
         private UIDocument _uiDocument;
         private VisualElement _root;
         private VisualElement _labelsLayer;
+        private VisualElement _topBarElement;
         private Label _heroNameLabel;
         private Label _heroLevelLabel;
         private Label _regionNameLabel;
@@ -774,6 +776,12 @@ namespace Rapadura.UI.WorldMap
             }
 
             WorldMapHudPresenter.ResolveLabelOverlaps(_labelRects, _labelPriorities, count, LabelGap, _labelOffsets, _labelOrder);
+            if (_topBarElement == null || _topBarElement.panel == null)
+            {
+                _topBarElement = _root.Q<VisualElement>("wm-top-bar");
+            }
+
+            Rect topBar = _topBarElement != null && _topBarElement.resolvedStyle.display != DisplayStyle.None ? _topBarElement.worldBound : default;
 
             for (int i = 0; i < count; i++)
             {
@@ -781,6 +789,17 @@ namespace Rapadura.UI.WorldMap
                 if (label.Node == null || !label.OnScreen)
                 {
                     continue;
+                }
+
+                // A label projected under the (translucent) top bar showed through it like a second card on top of
+                // its rows; the top bar already names the current region, so the label steps aside there.
+                Rect placed = _labelRects[i];
+                placed.y += _labelOffsets[i];
+                bool covered = MessageCards.IsCovered(placed, topBar);
+                if (covered != label.Covered)
+                {
+                    label.Covered = covered;
+                    label.Root.style.visibility = covered ? Visibility.Hidden : Visibility.Visible;
                 }
 
                 Vector2 position = _labelAnchors[i] + new Vector2(0f, _labelOffsets[i]);
