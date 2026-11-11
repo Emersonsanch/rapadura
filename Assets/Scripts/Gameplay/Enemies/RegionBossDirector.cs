@@ -8,6 +8,7 @@ using Rapadura.Gameplay.Environment;
 using Rapadura.UI.Bestiary;
 using Rapadura.Gameplay.World.Map;
 using Rapadura.Gameplay.World.Map.Areas;
+using Rapadura.Gameplay.World.Map.Mechanics;
 using Rapadura.Gameplay.World.Map.Overworld;
 using UnityEngine;
 
@@ -164,7 +165,8 @@ namespace Rapadura.Gameplay.Enemies
             bool hasClock = ServiceLocator.TryGet(out TimeOfDayManager time) && time != null;
             if (!slot.Returns.CanReturn(Time.time, hasClock, hasClock ? time.Day : 0, hasClock ? time.CurrentHour : 0f,
                     hasClock && time.Phase == TimeOfDayPhase.Night, TimeOfDayManager.NightStartHour)
-                || !RegionBossRules.ShouldWake(distance))
+                || !RegionBossRules.ShouldWake(distance)
+                || !RegionBossRules.SummonReady(slot.Spawn, LodoFountainBoard.LitCount(Time.time)))
             {
                 return;
             }

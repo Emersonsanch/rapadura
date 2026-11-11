@@ -10,6 +10,7 @@ using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
+using Rapadura.Gameplay.World.Map.Mechanics;
 using Rapadura.UI.Bestiary;
 using Rapadura.Core.Localization;
 using UnityEngine;
@@ -664,7 +665,7 @@ namespace Rapadura.Gameplay.Enemies
 
         private float Damage(float factor) => _controller.EffectiveAttackDamage * factor * RegionBossRules.AbilityMultiplier(_spawn.StrongerAtNight, IsNight()) * SignatureMultiplier();
 
-        /// <summary>What the boss's signature adds to every ability: Apep's clock near midnight, the form A Grande Treva wears.</summary>
+        /// <summary>What the boss's signature adds to every ability: Apep's clock near midnight, the form A Grande Treva wears, the Lodo's fountains gone dark.</summary>
         private float SignatureMultiplier()
         {
             switch (_spawn.Signature)
@@ -675,6 +676,8 @@ namespace Rapadura.Gameplay.Enemies
                     return RegionBossRules.FormDamageMultiplier(_form);
                 case RegionBossSignature.FourAppetites:
                     return RegionBossRules.AppetiteMultiplier(_appetite, IsNight());
+                case RegionBossSignature.SwallowingMire:
+                    return RegionBossRules.MireFountainMultiplier(LodoFountainBoard.LitCount(Time.time));
                 default:
                     return 1f;
             }

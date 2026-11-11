@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Rapadura.Gameplay.World.Map.Areas;
+using Rapadura.Gameplay.World.Map.Mechanics;
 using Rapadura.Gameplay.World.Map.Overworld;
 using UnityEngine;
 
@@ -240,6 +241,9 @@ namespace Rapadura.Gameplay.Enemies
         public const float MireDamageFactor = 1.2f;
         public const float MireRadiusStorm = 6f;
         public const float MireRadiusLastStand = 9f;
+
+        /// <summary>What each Fonte do Lodo gone dark during the fight adds to all its abilities (+10% each, +50% with none lit).</summary>
+        public const float MireUnlitFountainBonus = 0.1f;
 
         // ---- Aydahar (40): the breath down the pass ----
 
@@ -503,6 +507,20 @@ namespace Rapadura.Gameplay.Enemies
                 default: return 0f;
             }
         }
+
+        /// <summary>The Lodo-que-Engole rises only with the five Fontes do Lodo lit (<see cref="LodoFountainRules"/>; the ficha of map 35).</summary>
+        public static bool MireSummonReady(int litFountains) => litFountains >= LodoFountainRules.Count;
+
+        /// <summary>
+        /// Whether a dormant boss may appear at all, besides the hero's distance: the Lodo waits for its five fountains
+        /// (<paramref name="mireFountainsLit"/>), every other boss is always ready.
+        /// </summary>
+        public static bool SummonReady(RegionBossSpawn spawn, int mireFountainsLit) =>
+            spawn != null && (spawn.Signature != RegionBossSignature.SwallowingMire || MireSummonReady(mireFountainsLit));
+
+        /// <summary>The Lodo's ability multiplier for <paramref name="litFountains"/> fountains still lit: 1 with the five, +<see cref="MireUnlitFountainBonus"/> per one gone dark.</summary>
+        public static float MireFountainMultiplier(int litFountains) =>
+            1f + MireUnlitFountainBonus * (LodoFountainRules.Count - Mathf.Clamp(litFountains, 0, LodoFountainRules.Count));
 
         /// <summary>Is a hero <paramref name="distance"/> m from the Lodo still in the mud when it swallows?</summary>
         public static bool MireHits(float distance, RegionBossPhase phase) => distance <= MireRadius(phase);

@@ -15,12 +15,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 {
     /// <summary>
     /// Scene side of the mechanics of Regions 5–7: the tide of the reef (<see cref="CostaTideRules"/>), the wandering reed islands
-    /// (<see cref="DeltaIslandRules"/>) and the avalanches of the chutes (<see cref="TetoAvalancheRules"/>). Added to the overworld root; each region is
+    /// (<see cref="DeltaIslandRules"/>) with the Fontes do Lodo of map 35 (<see cref="LodoFountainRules"/>, CostaDeltaTetoMechanicsDriver.Lodo.cs) and the avalanches of the chutes (<see cref="TetoAvalancheRules"/>). Added to the overworld root; each region is
     /// idle unless the layout holds it and the hero stands inside it. Positions are region coordinates, the anchor zone's origin says where the region sits
     /// in the stitched world. Damage goes through <see cref="ApplyHazard"/> on the hero's PlayerStats and always stops at a floor of life. Nothing here
     /// takes the hero's controls away, and no method is named after a PlayerInput action.
     /// </summary>
-    public sealed class CostaDeltaTetoMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class CostaDeltaTetoMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const string TideSource = "costa_tide";
@@ -200,6 +200,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private void OnDisable()
         {
+            // The lit fountains belong to this visit of the Delta: off with the driver (the hero left the region, the scene changed).
+            LodoFountainBoard.Clear();
             ClearTideSlow();
             ClearBogSlow();
             if (_inCosta)
@@ -265,6 +267,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             {
                 _inDelta = true;
                 TickIslands(world - _deltaOrigin, now, redraw);
+                TickLodo(world - _deltaOrigin, redraw);
             }
             else if (_inDelta)
             {
@@ -651,6 +654,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _wasBog = false;
             ClearBogSlow();
             HideIslands();
+            LeaveLodo();
         }
 
         // ------------------------------------------------------------------
