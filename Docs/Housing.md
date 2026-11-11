@@ -1,7 +1,7 @@
 # Rapadura — Casa própria, lojas e guarda-roupa
 
 > Documento de design da **Fase 15** do `TODO.md` (pedido do usuário, 2026-10-29). Começou como só design; o que já existe em código está nas seções "Estado no código" (§7.8 = H3 Fontes, §9.8 = H5 Guarda-roupa).
-> Catálogos: [`Docs/Housing/CatalogoCasa.md`](Housing/CatalogoCasa.md) (632 itens de casa) e [`Docs/Housing/CatalogoRoupas.md`](Housing/CatalogoRoupas.md) (234 roupas, acessórios, tinturas e visuais de arma).
+> Catálogos: [`Docs/Housing/CatalogoCasa.md`](Housing/CatalogoCasa.md) (672 itens de casa) e [`Docs/Housing/CatalogoRoupas.md`](Housing/CatalogoRoupas.md) (234 roupas, acessórios, tinturas e visuais de arma).
 > Os catálogos são o **conjunto inicial de lançamento**, não a lista de tudo o que pode existir. Itens novos entram por temporada/evento com ID novo.
 >
 > Marcadores: **[decidido]** = decisão do usuário; **[proposto]** = proposta deste documento, à espera de aprovação; **[online]** = só faz sentido no multiplayer (Fase 12); **[offline]** = vale para a campanha single-player atual.
@@ -273,7 +273,24 @@ Cada item colocado soma os pontos de **Conforto** do catálogo (Comum 1–2, Inc
 
 ### 6.2 Conjuntos **[proposto]**
 
-São 26 conjuntos no catálogo, cada um com um tema (Iwan da Vó Edna, Caravana do Vô Jorge, Oficina do Ícaro, Noite Rubra da Lavine, Bema…). A lista e a contagem de peças estão no fim do `CatalogoCasa.md`.
+São 31 conjuntos no catálogo, cada um com um tema (Iwan da Vó Edna, Caravana do Vô Jorge, Oficina do Ícaro, Noite Rubra da Lavine, Bema…). A lista e a contagem de peças estão no fim do `CatalogoCasa.md`.
+
+Dez deles são **conjuntos de móveis regionais**, de 8 peças (1 Comum, 3 Incomuns, 3 Raras, 1 Épica), vendidos só na loja da capital da região a preço de catálogo, com a Épica como especial da semana (`houseSlots: 3, weeklySlots: 1`). O nome começa com "Móveis" para não confundir com o conjunto de equipamento da mesma região (`Docs/Items.md`):
+
+| Região | Conjunto | Loja (cidade) | Preço | Épica |
+|---|---|---|---|---|
+| 5 Costa das Monções | Móveis da Porta Suaíli | Bazar de Pérolas da Mwana (Taa Pwani) | 22–360 | Painel da porta entalhada de Taa Pwani |
+| 6 Delta de Jhilpur | Móveis da Casa nas Raízes | Barcos e Trocas do Nuhzadag (Jhilpur) | 22–375 | Estátua de búfalo-d'água entalhada em raiz |
+| 7 Teto do Mundo | Móveis do Terraço do Pamir | Agasalhos do Sisinnios (Sangkent) | 24–395 | Fogão de pedra do terraço |
+| 8 Planície de Mingcheng | Móveis do Pátio dos Nove Anéis | Lanternas do Mestre Mōzak (Mingcheng) | 24–410 | Biombo laqueado dos nove anéis |
+| 9 Estepe dos Nartes | Móveis da Tenda de Feltro | Selaria Nômade (Acampamento de Soslan) | 24–420 | Tenda de feltro dos Nartes |
+| 11 Mar Gelado | Móveis da Casa da Lua Branca | Peles e Barcos do Pamour (Porto da Lua Branca) | 28–420 | Cama de peles do Cais da Lua |
+| 13 Rio das Doze Horas | Móveis do Cais do Papiro | Trocas do Khunanup (Cais de Mesektet) | 30–480 | Coluna de papiro entalhada |
+| 14 Margens da Mistura | Móveis de Tijolo Azul | Betume do Atrahasis (Dur-Jarras) | 30–540 | Estátua de leão de azulejo vidrado |
+| 15 Limiar Profundo | Móveis das Mil Lâmpadas | Pavios da Tehat (Fortaleza da Última Lâmpada) | 30–600 | Lustre de mil pavios |
+| 16 Reinos do Céu | Móveis do Cais de Luz | A Última Caravana do Ammo (Cais da Coluna) | 30–680 | Coluna de luz sólida |
+
+Os das Regiões 5–9 custam no máximo o que a peça de mesma raridade custa nos distantes (Comum 22–24, Incomum 55–65, Raro 135–165, Épico 360–420) e dão o mesmo conforto (2/3/5/8). Testes: `HouseMiddleRegionSetsTests` e `HouseFarRegionSetsTests`.
 
 | Peças do mesmo conjunto colocadas | Bônus |
 |---|---|
@@ -292,11 +309,11 @@ São 26 conjuntos no catálogo, cada um com um tema (Iwan da Vó Edna, Caravana 
 
 ## 7. De onde vêm os itens de casa
 
-Resumo do catálogo (632 itens):
+Resumo do catálogo (672 itens):
 
 | Origem | Itens |
 |---|---|
-| Lojas | 416 |
+| Lojas | 456 |
 | Drop de inimigo ou chefe | 80 |
 | Eventos | 48 |
 | Missões | 34 |
@@ -456,6 +473,7 @@ Hoje existe **uma** loja: `shop_general_store` (Armazém Geral). Ela vende pelo 
 | **Feira livre** | uma cidade por dia: Vila (sáb/dom), Qocho (qua), Litema (qui), Lamparinas (sex) | itens "Loja: Feira livre" + 4 itens locais da cidade do dia + tintas naturais | todo dia muda | já aberta |
 | **Olaria da Náfsha** **[proposto]** | Qocho | barro: talha, moringa, filtro, pratos, azulejos, ladrilho | 8 por dia | Qocho aberta |
 | **Caravaneiro Ammo** | itinerante (§7.7) | raros e curiosidades | 6 por parada | depois de "Reserva pra Travessia" |
+| **Lojas das capitais regionais** (Mwana, Nuhzadag, Sisinnios, Mōzak, Syrdon; Pamour, Khunanup, Atrahasis, Tehat, Ammo da Coluna) | capitais das Regiões 5–9, 11 e 13–16 | o conjunto de móveis da região (§6.2), ao lado do que a loja já vende | 3 itens de casa por dia + a Épica como especial da semana | Comum já; Incomum, Raro e Épico pelas mesmas travas da Marcenaria |
 | **Forja do Mestre Mihr** | Litema | ferragens, lampiões de ferro, baús reforçados, armaduras e roupas de metal (Joaquim e Ícaro), forja de quintal | 8 por dia | Mestre Mihr abre a forja depois de "A Passagem da Mina" |
 | **Lamparinas da Parthenos** | Lamparinas | iluminação, cristais, cortinas de contas, tintas escuras | 8 por dia | depois de "Lamparinas Apagadas" |
 | **Tenda das Oferendas** | Vila da Vó Edna, só durante evento | itens sazonais por oferendas | por evento | evento ativo |

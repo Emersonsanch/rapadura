@@ -3,33 +3,33 @@
 > Gerado a partir de uma lista curada (cada nome escrito à mão). Design do sistema em [`Docs/Housing.md`](../Housing.md). Tema: a Ilha da Aurora (ver [`Docs/WorldBible_Maniqueismo.md`](../WorldBible_Maniqueismo.md) §3.20); ids, números e colunas não mudaram no re-tema.
 > **Este é o conjunto inicial de lançamento da casa, não a lista de todos os itens possíveis.** Novos itens entram por temporada e evento, sempre com ID novo (`casa_<categoria>_<nnn>` continuando a numeração); um ID nunca é reaproveitado.
 
-**Total: 632 itens únicos.** Checagem automática: 632 IDs distintos, 632 nomes distintos, nenhuma duplicata (inclusive ignorando acento, maiúscula e pontuação).
+**Total: 672 itens únicos.** Checagem automática: 672 IDs distintos, 672 nomes distintos, nenhuma duplicata (inclusive ignorando acento, maiúscula e pontuação).
 
 | Raridade | Itens | % |
 |---|---|---|
-| Comum | 230 | 36,4% |
-| Incomum | 164 | 25,9% |
-| Raro | 141 | 22,3% |
-| Épico | 79 | 12,5% |
-| Lendário | 18 | 2,8% |
-| **Total** | **632** | 100% |
+| Comum | 235 | 35,0% |
+| Incomum | 179 | 26,6% |
+| Raro | 156 | 23,2% |
+| Épico | 84 | 12,5% |
+| Lendário | 18 | 2,7% |
+| **Total** | **672** | 100% |
 
 | Categoria | Itens |
 |---|---|
-| [Móveis de sala](#sala) | 55 |
-| [Quarto](#quarto) | 38 |
-| [Cozinha](#cozinha) | 45 |
+| [Móveis de sala](#sala) | 67 |
+| [Quarto](#quarto) | 41 |
+| [Cozinha](#cozinha) | 47 |
 | [Banheiro](#banheiro) | 21 |
-| [Quintal e horta](#quintal) | 42 |
+| [Quintal e horta](#quintal) | 44 |
 | [Curral e animais](#curral) | 27 |
-| [Iluminação](#luz) | 37 |
-| [Paredes e quadros](#parede) | 45 |
-| [Tapetes](#tapete) | 28 |
-| [Cortinas](#cortina) | 19 |
-| [Plantas](#planta) | 32 |
+| [Iluminação](#luz) | 42 |
+| [Paredes e quadros](#parede) | 50 |
+| [Tapetes](#tapete) | 32 |
+| [Cortinas](#cortina) | 20 |
+| [Plantas](#planta) | 34 |
 | [Instrumentos musicais](#musica) | 23 |
 | [Brinquedos](#brinquedo) | 31 |
-| [Decoração regional por região](#regional) | 50 |
+| [Decoração regional por região](#regional) | 54 |
 | [Troféus de chefes](#trofeu) | 36 |
 | [Itens sazonais](#sazonal) | 45 |
 | [Raros e lendários com história de família](#familia) | 27 |
@@ -37,7 +37,7 @@
 
 | Origem | Itens |
 |---|---|
-| Loja | 416 |
+| Loja | 456 |
 | Drop de inimigo/chefe | 80 |
 | Missão (regional, pessoal, diária ou da casa) | 34 |
 | Conquista | 24 |
@@ -55,7 +55,7 @@
 - **Troféus dos chefes do mundo (`casa_trofeu_025`–`036`):** origem "Crafting: Forja": receita na Forja da casa com o loot próprio do chefe (Escama de Hedammu, Lama Limpa, Semente de Luz de Āz…), que só abre depois de vencê-lo (`HouseCraftRules`, Housing.md §7.6). Um por chefe do mundo das Regiões 5–16.
 
 <a id="sala"></a>
-## Móveis de sala (55)
+## Móveis de sala (67)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -114,9 +114,21 @@
 | `casa_sala_053` | Banco de basalto da muralha | Incomum | Loja: Pavios da Tehat | 85 | 4 | Móveis das Mil Lâmpadas | Piso |
 | `casa_sala_054` | Coluna de luz sólida | Épico | Loja: A Última Caravana do Ammo | 680 | 9 | Móveis do Cais de Luz | Piso |
 | `casa_sala_055` | Banco do píer de nuvens | Incomum | Loja: A Última Caravana do Ammo | 90 | 4 | Móveis do Cais de Luz | Piso |
+| `casa_sala_056` | Baú suaíli de pregos de latão | Raro | Loja: Bazar de Pérolas da Mwana | 150 | 5 | Móveis da Porta Suaíli | Piso |
+| `casa_sala_057` | Banco baraza de pedra de coral | Incomum | Loja: Bazar de Pérolas da Mwana | 60 | 3 | Móveis da Porta Suaíli | Piso |
+| `casa_sala_058` | Mesinha de raiz trançada | Comum | Loja: Barcos e Trocas do Nuhzadag | 22 | 2 | Móveis da Casa nas Raízes | Piso |
+| `casa_sala_059` | Estátua de búfalo-d'água entalhada em raiz | Épico | Loja: Barcos e Trocas do Nuhzadag | 375 | 8 | Móveis da Casa nas Raízes | Piso |
+| `casa_sala_060` | Banquinho de nogueira de Sangkent | Comum | Loja: Agasalhos do Sisinnios | 24 | 2 | Móveis do Terraço do Pamir | Piso |
+| `casa_sala_061` | Arca de cedro pintada do Pamir | Raro | Loja: Agasalhos do Sisinnios | 160 | 5 | Móveis do Terraço do Pamir | Piso |
+| `casa_sala_062` | Biombo laqueado dos nove anéis | Épico | Loja: Lanternas do Mestre Mōzak | 410 | 8 | Móveis do Pátio dos Nove Anéis | Piso |
+| `casa_sala_063` | Mesa de chá laqueada | Raro | Loja: Lanternas do Mestre Mōzak | 165 | 5 | Móveis do Pátio dos Nove Anéis | Piso |
+| `casa_sala_064` | Banquinho de porcelana azul | Comum | Loja: Lanternas do Mestre Mōzak | 24 | 2 | Móveis do Pátio dos Nove Anéis | Piso |
+| `casa_sala_065` | Banco de selas empilhadas | Incomum | Loja: Selaria Nômade | 64 | 3 | Móveis da Tenda de Feltro | Piso |
+| `casa_sala_066` | Arca de couro com placas de ouro | Raro | Loja: Selaria Nômade | 160 | 5 | Móveis da Tenda de Feltro | Piso |
+| `casa_sala_067` | Mesinha de bétula da estepe | Comum | Loja: Selaria Nômade | 24 | 2 | Móveis da Tenda de Feltro | Piso |
 
 <a id="quarto"></a>
-## Quarto (38)
+## Quarto (41)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -158,9 +170,12 @@
 | `casa_quarto_036` | Cama de peles do Cais da Lua | Épico | Loja: Peles do Pamour | 420 | 8 | Móveis da Casa da Lua Branca | Piso |
 | `casa_quarto_037` | Catre de junco do barqueiro | Raro | Loja: Trocas do Khunanup | 180 | 5 | Móveis do Cais do Papiro | Piso |
 | `casa_quarto_038` | Cama de nuvem firme | Raro | Loja: A Última Caravana do Ammo | 250 | 6 | Móveis do Cais de Luz | Piso |
+| `casa_quarto_039` | Cama de cordas de coqueiro | Raro | Loja: Bazar de Pérolas da Mwana | 140 | 5 | Móveis da Porta Suaíli | Piso |
+| `casa_quarto_040` | Catre de bambu sobre raízes | Raro | Loja: Barcos e Trocas do Nuhzadag | 150 | 5 | Móveis da Casa nas Raízes | Piso |
+| `casa_quarto_041` | Cama de mantas de lã de iaque | Raro | Loja: Agasalhos do Sisinnios | 155 | 5 | Móveis do Terraço do Pamir | Piso |
 
 <a id="cozinha"></a>
-## Cozinha (45)
+## Cozinha (47)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -209,6 +224,8 @@
 | `casa_cozinha_043` | Marmita de cobre do caravaneiro | Incomum | Loja: Caravana do Ammo | 55 | 3 | Caravana do Vô Jorge | Superfície |
 | `casa_cozinha_044` | Cesta da Mão Amiga | Comum | Conquista: Mão Amiga | — | 2 | — | Superfície |
 | `casa_cozinha_045` | Jarro de barro vidrado de azul | Comum | Loja: Betume do Atrahasis | 30 | 2 | Móveis de Tijolo Azul | Superfície |
+| `casa_cozinha_046` | Jarro de barro de Kilwa | Incomum | Loja: Bazar de Pérolas da Mwana | 55 | 3 | Móveis da Porta Suaíli | Superfície |
+| `casa_cozinha_047` | Fogão de pedra do terraço | Épico | Loja: Agasalhos do Sisinnios | 395 | 8 | Móveis do Terraço do Pamir | Piso |
 
 <a id="banheiro"></a>
 ## Banheiro (21)
@@ -238,7 +255,7 @@
 | `casa_banheiro_021` | Banheira de tufo rosa de fonte termal | Épico | Drop: Tages, o Habitante Ancestral (chefe) | — | 8 | Tufo Rosa das Lamparinas | Piso |
 
 <a id="quintal"></a>
-## Quintal e horta (42)
+## Quintal e horta (44)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -284,6 +301,8 @@
 | `casa_quintal_040` | Cerca de costelas de baleia | Raro | Loja: Peles do Pamour | 240 | 6 | Móveis da Casa da Lua Branca | Quintal |
 | `casa_quintal_041` | Barquinha de junco trançado | Raro | Loja: Trocas do Khunanup | 200 | 6 | Móveis do Cais do Papiro | Quintal |
 | `casa_quintal_042` | Barquinha dos remadores de luz | Raro | Loja: A Última Caravana do Ammo | 245 | 6 | Móveis do Cais de Luz | Quintal |
+| `casa_quintal_043` | Barquinha de remo do delta | Raro | Loja: Barcos e Trocas do Nuhzadag | 160 | 5 | Móveis da Casa nas Raízes | Quintal |
+| `casa_quintal_044` | Tenda de feltro dos Nartes | Épico | Loja: Selaria Nômade | 420 | 8 | Móveis da Tenda de Feltro | Quintal |
 
 <a id="curral"></a>
 ## Curral e animais (27)
@@ -319,7 +338,7 @@
 | `casa_curral_027` | Ferradura da sorte no portão | Incomum | Loja: Forja do Mestre Mihr | 60 | 4 | Caravana do Vô Jorge | Quintal |
 
 <a id="luz"></a>
-## Iluminação (37)
+## Iluminação (42)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -360,9 +379,14 @@
 | `casa_luz_035` | Arandela de basalto dos portões | Raro | Loja: Pavios da Tehat | 225 | 5 | Móveis das Mil Lâmpadas | Parede |
 | `casa_luz_036` | Lamparina de pavio eterno | Raro | Loja: Pavios da Tehat | 245 | 6 | Móveis das Mil Lâmpadas | Superfície |
 | `casa_luz_037` | Lanterna do remador de luz | Raro | Loja: A Última Caravana do Ammo | 240 | 6 | Móveis do Cais de Luz | Superfície |
+| `casa_luz_038` | Lanterna de latão do bazar | Incomum | Loja: Bazar de Pérolas da Mwana | 58 | 3 | Móveis da Porta Suaíli | Superfície |
+| `casa_luz_039` | Lanterna de lótus de seda | Incomum | Loja: Barcos e Trocas do Nuhzadag | 62 | 3 | Móveis da Casa nas Raízes | Superfície |
+| `casa_luz_040` | Lamparina das cinco luzes de pedra-sabão | Raro | Loja: Agasalhos do Sisinnios | 150 | 5 | Móveis do Terraço do Pamir | Superfície |
+| `casa_luz_041` | Lanterna de seda vermelha do pátio | Incomum | Loja: Lanternas do Mestre Mōzak | 63 | 3 | Móveis do Pátio dos Nove Anéis | Superfície |
+| `casa_luz_042` | Lamparina de bronze da estepe | Incomum | Loja: Selaria Nômade | 65 | 3 | Móveis da Tenda de Feltro | Superfície |
 
 <a id="parede"></a>
-## Paredes e quadros (45)
+## Paredes e quadros (50)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -411,9 +435,14 @@
 | `casa_parede_043` | Nicho de lâmpada de basalto | Raro | Loja: Pavios da Tehat | 235 | 6 | Móveis das Mil Lâmpadas | Parede |
 | `casa_parede_044` | Prateleira de pavios trançados | Incomum | Loja: Pavios da Tehat | 88 | 4 | Móveis das Mil Lâmpadas | Parede |
 | `casa_parede_045` | Quadro das vinte e sete luzinhas | Incomum | Loja: A Última Caravana do Ammo | 90 | 4 | Móveis do Cais de Luz | Parede |
+| `casa_parede_046` | Painel da porta entalhada de Taa Pwani | Épico | Loja: Bazar de Pérolas da Mwana | 360 | 8 | Móveis da Porta Suaíli | Parede |
+| `casa_parede_047` | Rede de raiz aérea viva | Raro | Loja: Barcos e Trocas do Nuhzadag | 145 | 5 | Móveis da Casa nas Raízes | Parede |
+| `casa_parede_048` | Quadro da Cidade-Escadaria | Incomum | Loja: Agasalhos do Sisinnios | 64 | 3 | Móveis do Terraço do Pamir | Parede |
+| `casa_parede_049` | Quadro de tinta das montanhas de nuvem | Incomum | Loja: Lanternas do Mestre Mōzak | 65 | 3 | Móveis do Pátio dos Nove Anéis | Parede |
+| `casa_parede_050` | Estandarte de crina dos Nartes | Incomum | Loja: Selaria Nômade | 65 | 3 | Móveis da Tenda de Feltro | Parede |
 
 <a id="tapete"></a>
-## Tapetes (28)
+## Tapetes (32)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -445,9 +474,13 @@
 | `casa_tapete_026` | Tapete de lã azul-lápis | Incomum | Loja: Betume do Atrahasis | 88 | 4 | Móveis de Tijolo Azul | Piso |
 | `casa_tapete_027` | Passadeira de feltro preto da fortaleza | Incomum | Loja: Pavios da Tehat | 82 | 3 | Móveis das Mil Lâmpadas | Piso |
 | `casa_tapete_028` | Passadeira de luz dourada | Incomum | Loja: A Última Caravana do Ammo | 88 | 4 | Móveis do Cais de Luz | Piso |
+| `casa_tapete_029` | Esteira de palha de coqueiro | Comum | Loja: Bazar de Pérolas da Mwana | 22 | 2 | Móveis da Porta Suaíli | Piso |
+| `casa_tapete_030` | Tapete de feltro do Pamir | Incomum | Loja: Agasalhos do Sisinnios | 63 | 3 | Móveis do Terraço do Pamir | Piso |
+| `casa_tapete_031` | Tapete de seda dos nove anéis | Raro | Loja: Lanternas do Mestre Mōzak | 165 | 5 | Móveis do Pátio dos Nove Anéis | Piso |
+| `casa_tapete_032` | Tapete de feltro com cervos de ouro | Raro | Loja: Selaria Nômade | 165 | 5 | Móveis da Tenda de Feltro | Piso |
 
 <a id="cortina"></a>
-## Cortinas (19)
+## Cortinas (20)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -470,9 +503,10 @@
 | `casa_cortina_017` | Persiana de junco | Comum | Loja: Marcenaria do Mestre Omóforo | 25 | 1 | — | Parede |
 | `casa_cortina_018` | Cortina blecaute de lona | Comum | Crafting: Bancada | — | 1 | Oficina do Ícaro | Parede |
 | `casa_cortina_019` | Cortina de lã de rena prateada | Incomum | Loja: Peles do Pamour | 80 | 4 | Móveis da Casa da Lua Branca | Parede |
+| `casa_cortina_020` | Cortina de seda de lótus | Incomum | Loja: Barcos e Trocas do Nuhzadag | 65 | 3 | Móveis da Casa nas Raízes | Parede |
 
 <a id="planta"></a>
-## Plantas (32)
+## Plantas (34)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -508,6 +542,8 @@
 | `casa_planta_030` | Vaso de flores de papel crepom | Comum | Loja: Bazar de Linhas da Mariam | 10 | 2 | — | Superfície |
 | `casa_planta_031` | Muda de amoreira | Incomum | Loja: Viveiro da Nana | 80 | 4 | Moinho do Pomar | Piso |
 | `casa_planta_032` | Moita de papiro em vaso | Incomum | Loja: Trocas do Khunanup | 65 | 3 | Móveis do Cais do Papiro | Piso |
+| `casa_planta_033` | Lótus de Jhilpur em tina | Incomum | Loja: Barcos e Trocas do Nuhzadag | 60 | 3 | Móveis da Casa nas Raízes | Piso |
+| `casa_planta_034` | Pinheiro-anão em vaso de porcelana | Incomum | Loja: Lanternas do Mestre Mōzak | 64 | 3 | Móveis do Pátio dos Nove Anéis | Piso |
 
 <a id="musica"></a>
 ## Instrumentos musicais (23)
@@ -576,7 +612,7 @@
 | `casa_brinquedo_031` | Aranhinha de crochê | Incomum | Drop: Aranha-Tecelã Apagada | — | 3 | Tugai do Zarafshan | Superfície |
 
 <a id="regional"></a>
-## Decoração regional por região (50)
+## Decoração regional por região (54)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -630,6 +666,10 @@
 | `casa_regional_048` | Raiz que brilha do teto da gruta | Incomum | Drop: Enxame de Morcegos do Limiar | — | 4 | Tufo Rosa das Lamparinas | Teto |
 | `casa_regional_049` | Cesto de pavios de reserva | Comum | Loja: Pavios da Tehat | 30 | 2 | Móveis das Mil Lâmpadas | Superfície |
 | `casa_regional_050` | Gota de luz em redoma | Comum | Loja: A Última Caravana do Ammo | 30 | 2 | Móveis do Cais de Luz | Superfície |
+| `casa_regional_051` | Concha de madrepérola em suporte | Raro | Loja: Bazar de Pérolas da Mwana | 135 | 5 | Móveis da Porta Suaíli | Superfície |
+| `casa_regional_052` | Cesto de damascos secos | Incomum | Loja: Agasalhos do Sisinnios | 58 | 3 | Móveis do Terraço do Pamir | Superfície |
+| `casa_regional_053` | Vaso de bronze antigo de três pés | Raro | Loja: Lanternas do Mestre Mōzak | 160 | 5 | Móveis do Pátio dos Nove Anéis | Superfície |
+| `casa_regional_054` | Taça de chifre do banquete dos Nartes | Raro | Loja: Selaria Nômade | 165 | 5 | Móveis da Tenda de Feltro | Superfície |
 
 <a id="trofeu"></a>
 ## Troféus de chefes (36)
@@ -827,6 +867,11 @@ Bônus de conjunto em Housing.md §6.2. Peças por conjunto:
 | Móveis de Tijolo Azul | móveis, não o equipamento Tijolo Azul: Dur-Jarras, leão de azulejo e tijolo vidrado | 8 | 1 |
 | Móveis das Mil Lâmpadas | móveis: Fortaleza da Última Lâmpada, pavios e nichos de basalto | 8 | 1 |
 | Móveis do Cais de Luz | móveis, não o equipamento Cais de Luz: Cais da Coluna, luz sólida e barquinha dos remadores | 8 | 1 |
+| Móveis da Porta Suaíli | móveis: Taa Pwani, porta entalhada, banco baraza e lanterna de latão | 8 | 1 |
+| Móveis da Casa nas Raízes | móveis: Jhilpur, rede de raiz e lanterna de lótus | 8 | 1 |
+| Móveis do Terraço do Pamir | móveis: Sangkent, fogão de pedra e tapete de feltro | 8 | 1 |
+| Móveis do Pátio dos Nove Anéis | móveis: Mingcheng, biombo laqueado e lanterna de seda | 8 | 1 |
+| Móveis da Tenda de Feltro | móveis: Acampamento de Soslan, tenda de feltro e taça do banquete | 8 | 1 |
 
 <a id="drops"></a>
 ## Itens de casa exclusivos de drop, por inimigo

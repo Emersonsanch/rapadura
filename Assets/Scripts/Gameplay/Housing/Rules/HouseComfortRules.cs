@@ -34,7 +34,7 @@ namespace Rapadura.Gameplay.Housing
         WoodRefund,
     }
 
-    /// <summary>One of the 26 furniture sets (Housing.md §6.2, <c>CatalogoCasa.md</c> "Conjuntos").</summary>
+    /// <summary>One of the 31 furniture sets (Housing.md §6.2, <c>CatalogoCasa.md</c> "Conjuntos").</summary>
     public sealed class HouseSetDefinition
     {
         public readonly string Id;
@@ -55,7 +55,7 @@ namespace Rapadura.Gameplay.Housing
         public string TitleKey => "ui.house_life.set_title." + ShortId;
     }
 
-    /// <summary>The 26 sets, in the catalog's order.</summary>
+    /// <summary>The 31 sets, in the catalog's order.</summary>
     public static class HouseSetCatalog
     {
         public const int FirstStagePieces = 3;
@@ -94,6 +94,12 @@ namespace Rapadura.Gameplay.Housing
             new HouseSetDefinition("set_moveis_tijolo_azul"),
             new HouseSetDefinition("set_moveis_mil_lampadas"),
             new HouseSetDefinition("set_moveis_cais_luz"),
+            // Furniture sets of Regions 5–9, the road of the middle story (sold in each region's capital).
+            new HouseSetDefinition("set_moveis_porta_suaili"),
+            new HouseSetDefinition("set_moveis_casa_raizes"),
+            new HouseSetDefinition("set_moveis_terraco_pamir"),
+            new HouseSetDefinition("set_moveis_patio_nove_aneis"),
+            new HouseSetDefinition("set_moveis_tenda_feltro"),
         };
 
         public static HouseSetDefinition Get(string setId) => string.IsNullOrEmpty(setId) ? null : All.FirstOrDefault(s => s.Id == setId);

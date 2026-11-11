@@ -350,6 +350,11 @@ namespace Rapadura.UI.Housing
                 ("set_moveis_tijolo_azul", "Blue Brick Furniture", "Móveis de Tijolo Azul", "Blue brick house", "Casa de tijolo azul"),
                 ("set_moveis_mil_lampadas", "Thousand Lamps Furniture", "Móveis das Mil Lâmpadas", "House of a thousand lamps", "Casa das mil lâmpadas"),
                 ("set_moveis_cais_luz", "Quay of Light Furniture", "Móveis do Cais de Luz", "Quay of light house", "Casa do cais de luz"),
+                ("set_moveis_porta_suaili", "Swahili Door Furniture", "Móveis da Porta Suaíli", "Carved door house", "Casa da porta entalhada"),
+                ("set_moveis_casa_raizes", "House in the Roots Furniture", "Móveis da Casa nas Raízes", "House in the roots", "Casa nas raízes"),
+                ("set_moveis_terraco_pamir", "Pamir Terrace Furniture", "Móveis do Terraço do Pamir", "Pamir terrace house", "Casa do terraço do Pamir"),
+                ("set_moveis_patio_nove_aneis", "Nine Rings Courtyard Furniture", "Móveis do Pátio dos Nove Anéis", "Nine rings courtyard house", "Casa do pátio dos nove anéis"),
+                ("set_moveis_tenda_feltro", "Felt Tent Furniture", "Móveis da Tenda de Feltro", "Felt tent house", "Casa da tenda de feltro"),
             };
 
             foreach ((string id, string enName, string ptName, string enTitle, string ptTitle) in sets)

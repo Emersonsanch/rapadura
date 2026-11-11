@@ -302,6 +302,8 @@ namespace Rapadura.Gameplay.Housing
             { "Estrebaria do Srosh", "shop_haras_vila" }, { "Ferraria do Mestre Adamas", "shop_ferraria_severino" },
             { "Marcenaria do Mestre Omóforo", "shop_marcenaria_damiao" }, { "Costureira Mestra Narisah", "shop_costureira_fatima" },
             { "Casa de Música do Mestre Xroshtag", "shop_casa_musica_bene" }, { "Olaria da Náfsha", "shop_olaria_rosa" },
+            // City shops whose names do not slug to their ids (CityTexts): the furniture sets of Regions 5 and 6.
+            { "Bazar de Pérolas da Mwana", "shop_bazar_mwana" }, { "Barcos e Trocas do Nuhzadag", "shop_trocas_nuhzadag" },
         };
 
         /// <summary>

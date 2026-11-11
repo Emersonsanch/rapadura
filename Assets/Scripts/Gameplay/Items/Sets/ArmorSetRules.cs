@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.Items.Sets
 {
-    /// <summary>One two-piece armour set of the late regions (Docs/Items.md) and the region beasts that drop it.</summary>
+    /// <summary>One two-piece armour set of a region (Docs/Items.md: Regions 5–9 and 13–16) and the region beasts that drop it.</summary>
     public sealed class ArmorSetDefinition
     {
         public readonly string Id;
@@ -11,11 +11,20 @@ namespace Rapadura.Gameplay.Items.Sets
         public readonly string HelmItemId;
         public readonly IReadOnlyList<string> Beasts;
 
+        /// <summary>Chance of a piece per kill of one of <see cref="Beasts"/> (either piece, evenly).</summary>
+        public readonly double DropChance;
+
         public ArmorSetDefinition(string id, string chestItemId, string helmItemId, IReadOnlyList<string> beasts)
+            : this(id, chestItemId, helmItemId, ArmorSetRules.DropChance, beasts)
+        {
+        }
+
+        public ArmorSetDefinition(string id, string chestItemId, string helmItemId, double dropChance, IReadOnlyList<string> beasts)
         {
             Id = id;
             ChestItemId = chestItemId;
             HelmItemId = helmItemId;
+            DropChance = dropChance;
             Beasts = beasts;
         }
     }
@@ -31,6 +40,12 @@ namespace Rapadura.Gameplay.Items.Sets
         /// <summary>Chance of a piece per kill of one of the region's own beasts (one kill in 200; either piece, evenly).</summary>
         public const double DropChance = 0.005;
 
+        /// <summary>
+        /// The same chance for the sets of Regions 5–9 (one kill in 100): their regions have 6–9 own beasts among many borrowed
+        /// ones, against 12 in Regions 13–16, so at 1/200 the pair would cost more than the 1 500 kills of the economy budget.
+        /// </summary>
+        public const double MiddleDropChance = 0.01;
+
         public const string PapyrusChestId = "armor_papiro_chest";
         public const string PapyrusHelmId = "armor_papiro_helm";
         public const string BlueBrickChestId = "armor_tijolo_chest";
@@ -39,6 +54,56 @@ namespace Rapadura.Gameplay.Items.Sets
         public const string SealHelmId = "armor_selo_helm";
         public const string LightChestId = "armor_luz_chest";
         public const string LightHelmId = "armor_luz_helm";
+        public const string CoralChestId = "armor_coral_chest";
+        public const string CoralHelmId = "armor_coral_helm";
+        public const string LotusChestId = "armor_lotus_chest";
+        public const string LotusHelmId = "armor_lotus_helm";
+        public const string YakChestId = "armor_iaque_chest";
+        public const string YakHelmId = "armor_iaque_helm";
+        public const string BronzeChestId = "armor_bronze_chest";
+        public const string BronzeHelmId = "armor_bronze_helm";
+        public const string KurganChestId = "armor_kurgan_chest";
+        public const string KurganHelmId = "armor_kurgan_helm";
+
+        // ---- Regions 5–9, the road of the middle story: each set drops from the region's own beasts (Docs/Status_100Mapas.md).
+
+        /// <summary>Coral de Kilwa (Região 5, Costa das Monções).</summary>
+        public static readonly ArmorSetDefinition Coral = new ArmorSetDefinition("coral_de_kilwa", CoralChestId, CoralHelmId, MiddleDropChance, new[]
+        {
+            "enemy_forest_thief_gull", "enemy_forest_coconut_crab", "enemy_forest_mangrove_crocodile", "enemy_forest_grass_lion",
+            "enemy_forest_dust_rhino", "enemy_forest_dimmed_moray", "enemy_forest_smoke_urchin", "enemy_forest_lightning_bird",
+            "enemy_forest_fiddler_crab",
+        });
+
+        /// <summary>Seda de Lótus (Região 6, Delta de Jhilpur).</summary>
+        public static readonly ArmorSetDefinition Lotus = new ArmorSetDefinition("seda_de_lotus", LotusChestId, LotusHelmId, MiddleDropChance, new[]
+        {
+            "enemy_forest_thief_monkey", "enemy_forest_thief_otter", "enemy_forest_dimmed_python", "enemy_forest_dimmed_troll",
+            "enemy_forest_spear_heron", "enemy_forest_mire_leech",
+        });
+
+        /// <summary>Lã de Iaque (Região 7, Teto do Mundo).</summary>
+        public static readonly ArmorSetDefinition Yak = new ArmorSetDefinition("la_de_iaque", YakChestId, YakHelmId, MiddleDropChance, new[]
+        {
+            "enemy_mountain_brown_bear", "enemy_mountain_wild_yak", "enemy_mountain_irbis", "enemy_mountain_almas",
+            "enemy_mountain_giant_marmot", "enemy_mountain_red_billed_chough", "enemy_mountain_bearded_vulture", "enemy_mountain_ice_wolf",
+        });
+
+        /// <summary>Vasos de Bronze (Região 8, Planície de Mingcheng): the "conjunto antigo" of the sheet of map 46.</summary>
+        public static readonly ArmorSetDefinition Bronze = new ArmorSetDefinition("vasos_de_bronze", BronzeChestId, BronzeHelmId, MiddleDropChance, new[]
+        {
+            "enemy_forest_stone_lion", "enemy_forest_lantern_fox", "enemy_forest_terracotta_soldier", "enemy_forest_stone_turtle",
+            "enemy_forest_mud_buffalo", "enemy_forest_nian_cub", "enemy_forest_dragon_carp", "enemy_forest_terracotta_horse",
+        });
+
+        /// <summary>Ouro dos Kurgans (Região 9, Estepe dos Nartes).</summary>
+        public static readonly ArmorSetDefinition Kurgan = new ArmorSetDefinition("ouro_dos_kurgans", KurganChestId, KurganHelmId, MiddleDropChance, new[]
+        {
+            "enemy_mountain_young_griffin", "enemy_mountain_saiga", "enemy_mountain_bronze_wolf", "enemy_mountain_sleepwalker_giant",
+            "enemy_mountain_bark_beetle", "enemy_mountain_ochokochi", "enemy_mountain_felt_swan",
+        });
+
+        // ---- Regions 13–16.
 
         /// <summary>Cais do Papiro (Região 13, Rio das Doze Horas).</summary>
         public static readonly ArmorSetDefinition Papyrus = new ArmorSetDefinition("cais_do_papiro", PapyrusChestId, PapyrusHelmId, new[]
@@ -72,7 +137,38 @@ namespace Rapadura.Gameplay.Items.Sets
             "enemy_forest_hold_shadow", "enemy_forest_living_rope", "enemy_forest_sky_stone", "enemy_forest_toy_archon",
         });
 
-        public static readonly IReadOnlyList<ArmorSetDefinition> All = new[] { Papyrus, BlueBrick, Seal, Light };
+        /// <summary>The five sets of Regions 5–9, in region order.</summary>
+        public static readonly IReadOnlyList<ArmorSetDefinition> Middle = new[] { Coral, Lotus, Yak, Bronze, Kurgan };
+
+        /// <summary>The four sets of Regions 13–16, in region order.</summary>
+        public static readonly IReadOnlyList<ArmorSetDefinition> Far = new[] { Papyrus, BlueBrick, Seal, Light };
+
+        /// <summary>Every set, in region order.</summary>
+        public static readonly IReadOnlyList<ArmorSetDefinition> All = new[] { Coral, Lotus, Yak, Bronze, Kurgan, Papyrus, BlueBrick, Seal, Light };
+
+        // "Coral que Fecha" (Coral de Kilwa): a hit taken may close up, healing part of it back.
+        public const double ClosingCoralChance = 0.15;
+        public const float ClosingCoralHealFraction = 0.30f;
+
+        // "Seiva do Lótus" (Seda de Lótus): a kill may give mana back.
+        public const double LotusSapChance = 0.20;
+        public const float LotusSapManaFraction = 0.05f;
+
+        // "Fôlego do Pamir" (Lã de Iaque): a critical hit may heal the hero.
+        public const double PamirBreathChance = 0.20;
+        public const float PamirBreathHealFraction = 0.03f;
+
+        // "Gongo de Bronze" (Vasos de Bronze): a hit taken may ring out at the enemies around the hero.
+        public const double BronzeGongChance = 0.10;
+        public const float BronzeGongDamageFraction = 0.20f;
+        public const float BronzeGongRadius = 4f;
+        public const int BronzeGongMaxTargets = 3;
+
+        // "Galope dos Nartes" (Ouro dos Kurgans): a critical hit may run on into the enemies nearby.
+        public const double NartGallopChance = 0.10;
+        public const float NartGallopDamageFraction = 0.30f;
+        public const float NartGallopRadius = 4f;
+        public const int NartGallopMaxTargets = 3;
 
         // "Hora da Barca" (Cais do Papiro): a kill may heal the hero.
         public const double BargeHourChance = 0.25;
@@ -118,7 +214,7 @@ namespace Rapadura.Gameplay.Items.Sets
         public static string RollDrop(string enemyId, double roll, double pieceRoll)
         {
             ArmorSetDefinition set = SetOfBeast(enemyId);
-            if (set == null || roll >= DropChance)
+            if (set == null || roll >= set.DropChance)
             {
                 return null;
             }
@@ -182,5 +278,28 @@ namespace Rapadura.Gameplay.Items.Sets
 
         /// <summary>Damage of each ray: 40% of the critical hit (never below 1 for a positive hit).</summary>
         public static float ColumnRayDamage(float criticalDamage) => criticalDamage > 0f ? Mathf.Max(1f, criticalDamage * ColumnRayDamageFraction) : 0f;
+
+        public static bool ClosingCoralProcs(ArmorSetDefinition worn, double roll) => worn == Coral && roll < ClosingCoralChance;
+
+        /// <summary>Health given back: 30% of the hit taken.</summary>
+        public static float ClosingCoralHeal(float damageTaken) => damageTaken > 0f ? damageTaken * ClosingCoralHealFraction : 0f;
+
+        public static bool LotusSapProcs(ArmorSetDefinition worn, double roll) => worn == Lotus && roll < LotusSapChance;
+
+        public static float LotusSapMana(float maxMana) => maxMana > 0f ? maxMana * LotusSapManaFraction : 0f;
+
+        public static bool PamirBreathProcs(ArmorSetDefinition worn, bool critical, double roll) => critical && worn == Yak && roll < PamirBreathChance;
+
+        public static float PamirBreathHeal(float maxHealth) => maxHealth > 0f ? maxHealth * PamirBreathHealFraction : 0f;
+
+        public static bool BronzeGongProcs(ArmorSetDefinition worn, double roll) => worn == Bronze && roll < BronzeGongChance;
+
+        /// <summary>Damage of the gong to each enemy around: 20% of the hit taken (never below 1 for a positive hit).</summary>
+        public static float BronzeGongDamage(float damageTaken) => damageTaken > 0f ? Mathf.Max(1f, damageTaken * BronzeGongDamageFraction) : 0f;
+
+        public static bool NartGallopProcs(ArmorSetDefinition worn, bool critical, double roll) => critical && worn == Kurgan && roll < NartGallopChance;
+
+        /// <summary>Damage of the gallop to each enemy nearby: 30% of the critical hit (never below 1 for a positive hit).</summary>
+        public static float NartGallopDamage(float criticalDamage) => criticalDamage > 0f ? Mathf.Max(1f, criticalDamage * NartGallopDamageFraction) : 0f;
     }
 }

@@ -15,7 +15,7 @@ namespace Rapadura.Gameplay.Items.Sets
 {
     /// <summary>
     /// Wires <see cref="ArmorSetRules"/> to combat through the same events the combat FX listen to (like the Armadura de Marfim's
-    /// <c>SpectralTouchSetBonus</c>): the four two-piece bonuses, and the rare drop of a piece when a region's own beast dies. The
+    /// <c>SpectralTouchSetBonus</c>): the nine two-piece bonuses, and the rare drop of a piece when a region's own beast dies. The
     /// drop lives here, not in the enemy's single <c>_lootItem</c> (the gold of every beast). Reflected hits and rays are plain,
     /// non-critical hits dealt by the hero, so no bonus can chain.
     /// </summary>
@@ -86,8 +86,35 @@ namespace Rapadura.Gameplay.Items.Sets
 
         private static void OnHeroStruck(DamageAppliedEvent evt)
         {
-            ArmorSetDefinition worn = WornSet(evt.Target.GetComponentInParent<InventoryManager>());
-            if (worn == null || !ArmorSetRules.GlazedReflectProcs(worn, NextRoll()))
+            InventoryManager inventory = evt.Target.GetComponentInParent<InventoryManager>();
+            ArmorSetDefinition worn = WornSet(inventory);
+            if (worn == null)
+            {
+                return;
+            }
+
+            double roll = NextRoll();
+            if (ArmorSetRules.ClosingCoralProcs(worn, roll))
+            {
+                PlayerStats stats = inventory.GetComponentInParent<PlayerStats>();
+                if (stats != null && stats.IsAlive)
+                {
+                    stats.Heal(ArmorSetRules.ClosingCoralHeal(evt.FinalDamage));
+                    Say(evt.Target, ArmorSetTexts.ClosingCoral);
+                }
+
+                return;
+            }
+
+            if (ArmorSetRules.BronzeGongProcs(worn, roll))
+            {
+                StrikeAround(evt.Target.transform.position, null, evt.Target, ArmorSetRules.BronzeGongDamage(evt.FinalDamage),
+                    ArmorSetRules.BronzeGongRadius, ArmorSetRules.BronzeGongMaxTargets, ElementType.Earth);
+                Say(evt.Target, ArmorSetTexts.BronzeGong);
+                return;
+            }
+
+            if (!ArmorSetRules.GlazedReflectProcs(worn, roll))
             {
                 return;
             }
@@ -123,29 +150,43 @@ namespace Rapadura.Gameplay.Items.Sets
             }
             else if (ArmorSetRules.ColumnRayProcs(worn, true, roll))
             {
-                StrikeAround(evt);
+                StrikeAround(evt.Target.transform.position, evt.Target, evt.Source, ArmorSetRules.ColumnRayDamage(evt.FinalDamage),
+                    ArmorSetRules.ColumnRayRadius, ArmorSetRules.ColumnRayMaxTargets, ElementType.Holy);
+                Say(evt.Target, ArmorSetTexts.ColumnRay);
+            }
+            else if (ArmorSetRules.PamirBreathProcs(worn, true, roll))
+            {
+                PlayerStats stats = inventory.GetComponentInParent<PlayerStats>();
+                if (stats != null && stats.IsAlive)
+                {
+                    stats.Heal(ArmorSetRules.PamirBreathHeal(stats.MaxHealth));
+                    Say(evt.Target, ArmorSetTexts.PamirBreath);
+                }
+            }
+            else if (ArmorSetRules.NartGallopProcs(worn, true, roll))
+            {
+                StrikeAround(evt.Target.transform.position, evt.Target, evt.Source, ArmorSetRules.NartGallopDamage(evt.FinalDamage),
+                    ArmorSetRules.NartGallopRadius, ArmorSetRules.NartGallopMaxTargets, ElementType.Physical);
+                Say(evt.Target, ArmorSetTexts.NartGallop);
             }
         }
 
-        private static void StrikeAround(DamageAppliedEvent evt)
+        /// <summary>Plain hits from <paramref name="hero"/> on up to <paramref name="maxTargets"/> living enemies within <paramref name="radius"/> of <paramref name="center"/>, <paramref name="skip"/> left out.</summary>
+        private static void StrikeAround(Vector3 center, GameObject skip, GameObject hero, float damage, float radius, int maxTargets, ElementType element)
         {
-            float damage = ArmorSetRules.ColumnRayDamage(evt.FinalDamage);
-            Vector3 center = evt.Target.transform.position;
-            int count = Physics.OverlapSphereNonAlloc(center, ArmorSetRules.ColumnRayRadius, Hits, ~0, QueryTriggerInteraction.Ignore);
+            int count = Physics.OverlapSphereNonAlloc(center, radius, Hits, ~0, QueryTriggerInteraction.Ignore);
             var struck = new HashSet<EnemyController>();
-            for (int i = 0; i < count && struck.Count < ArmorSetRules.ColumnRayMaxTargets; i++)
+            for (int i = 0; i < count && struck.Count < maxTargets; i++)
             {
                 EnemyController enemy = Hits[i] != null ? Hits[i].GetComponentInParent<EnemyController>() : null;
-                if (enemy == null || enemy.gameObject == evt.Target || struck.Contains(enemy) || enemy.Health == null || enemy.Health.IsDead)
+                if (enemy == null || enemy.gameObject == skip || struck.Contains(enemy) || enemy.Health == null || enemy.Health.IsDead)
                 {
                     continue;
                 }
 
                 struck.Add(enemy);
-                enemy.Health.ApplyDamage(damage, ElementType.Holy, evt.Source);
+                enemy.Health.ApplyDamage(damage, element, hero);
             }
-
-            Say(evt.Target, ArmorSetTexts.ColumnRay);
         }
 
         private static void OnCombatTargetDied(CombatTargetDiedEvent evt)
@@ -167,8 +208,30 @@ namespace Rapadura.Gameplay.Items.Sets
                 return;
             }
 
-            TryBargeHourHeal(inventory, WornSet(inventory), NextRoll());
+            ArmorSetDefinition worn = WornSet(inventory);
+            double roll = NextRoll();
+            TryBargeHourHeal(inventory, worn, roll);
+            TryLotusSap(inventory, worn, roll);
             TryDropPiece(evt.Target, enemy, inventory);
+        }
+
+        /// <summary>The Seiva do Lótus bonus: gives the hero mana back when <paramref name="roll"/> procs. True if it restored.</summary>
+        public static bool TryLotusSap(InventoryManager inventory, ArmorSetDefinition worn, double roll)
+        {
+            if (inventory == null || !ArmorSetRules.LotusSapProcs(worn, roll))
+            {
+                return false;
+            }
+
+            PlayerStats stats = inventory.GetComponentInParent<PlayerStats>();
+            if (stats == null || !stats.IsAlive)
+            {
+                return false;
+            }
+
+            stats.RestoreMana(ArmorSetRules.LotusSapMana(stats.MaxMana));
+            Say(inventory.gameObject, ArmorSetTexts.LotusSap);
+            return true;
         }
 
         /// <summary>The Hora da Barca bonus: heals the hero (PlayerStats, the hero has no Health) when <paramref name="roll"/> procs. True if it healed.</summary>

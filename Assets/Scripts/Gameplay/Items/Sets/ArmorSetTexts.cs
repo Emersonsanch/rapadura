@@ -14,6 +14,11 @@ namespace Rapadura.Gameplay.Items.Sets
         public const string GlazedReflect = "armor_set.glazed_reflect";
         public const string ReopenedSeal = "armor_set.reopened_seal";
         public const string ColumnRay = "armor_set.column_ray";
+        public const string ClosingCoral = "armor_set.closing_coral";
+        public const string LotusSap = "armor_set.lotus_sap";
+        public const string PamirBreath = "armor_set.pamir_breath";
+        public const string BronzeGong = "armor_set.bronze_gong";
+        public const string NartGallop = "armor_set.nart_gallop";
 
         public static readonly List<LocalizationEntry> Entries = new List<LocalizationEntry>
         {
@@ -21,6 +26,11 @@ namespace Rapadura.Gameplay.Items.Sets
             new LocalizationEntry(GlazedReflect, "Glazed Reflection!", "Reflexo Vidrado!"),
             new LocalizationEntry(ReopenedSeal, "Seal Reopened!", "Selo Reaberto!"),
             new LocalizationEntry(ColumnRay, "Ray of the Column!", "Raio da Coluna!"),
+            new LocalizationEntry(ClosingCoral, "Closing Coral!", "Coral que Fecha!"),
+            new LocalizationEntry(LotusSap, "Lotus Sap!", "Seiva do Lótus!"),
+            new LocalizationEntry(PamirBreath, "Pamir Breath!", "Fôlego do Pamir!"),
+            new LocalizationEntry(BronzeGong, "Bronze Gong!", "Gongo de Bronze!"),
+            new LocalizationEntry(NartGallop, "Gallop of the Narts!", "Galope dos Nartes!"),
         };
 
         private static LocalizationManager _mergedInto;

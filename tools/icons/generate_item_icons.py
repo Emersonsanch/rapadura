@@ -719,6 +719,107 @@ def r_armor_luz_helm(ic):
     ic.ngon(64, 78, 9, 4, LIGHT_LILAC, rot=45)
 
 
+# ---- conjuntos das Regiões 5–9 (Docs/Items.md)
+CORAL_STONE = (226, 206, 178)
+CORAL_PINK = (232, 128, 112)
+NACRE = (222, 226, 236)
+LOTUS_SILK = (214, 140, 178)
+ROOT_BROWN = (122, 92, 60)
+YAK_WOOL = (150, 112, 80)
+FELT_RED = (168, 52, 44)
+OLD_BRONZE = (70, 128, 104)
+KURGAN_GOLD = (232, 176, 60)
+FELT_DARK = (64, 44, 36)
+
+
+def r_armor_coral_chest(ic):
+    tunic(ic, CORAL_STONE, trim=CORAL_PINK)
+    for y in (46, 62, 78):
+        for i, x in enumerate(range(40, 88, 16)):
+            ic.rect(x + (8 if (y // 16) % 2 else 0), y, x + 14 + (8 if (y // 16) % 2 else 0), y + 12, darker(CORAL_STONE, 0.12 if i % 2 else 0.05))
+    ic.ngon(64, 92, 6, 6, CORAL_PINK)
+
+
+def r_armor_coral_helm(ic):
+    ic.poly([(26, 76), (30, 42), (50, 22), (78, 22), (98, 42), (102, 76), (90, 102), (38, 102)], NACRE)
+    ic.rect(26, 64, 102, 74, CORAL_PINK)
+    ic.ngon(48, 54, 8, 6, NIGHT, shade=False)
+    ic.ngon(80, 54, 8, 6, NIGHT, shade=False)
+    for (x, y) in ((40, 34), (64, 28), (88, 34)):
+        ic.dot(x, y, 4, lighter(NACRE, 0.5))
+    ic.poly([(56, 22), (64, 8), (72, 22)], CORAL_PINK)
+
+
+def r_armor_lotus_chest(ic):
+    tunic(ic, LOTUS_SILK, trim=LEAF_DARK)
+    for (x, y) in ((50, 56), (78, 56), (64, 80)):
+        ic.poly([(x, y - 10), (x + 6, y), (x, y + 6), (x - 6, y)], lighter(LOTUS_SILK, 0.35))
+        ic.poly([(x - 10, y - 2), (x - 2, y + 4), (x - 8, y + 6)], darker(LOTUS_SILK, 0.15))
+        ic.poly([(x + 10, y - 2), (x + 2, y + 4), (x + 8, y + 6)], darker(LOTUS_SILK, 0.15))
+
+
+def r_armor_lotus_helm(ic):
+    ic.poly([(24, 92), (30, 50), (48, 24), (80, 24), (98, 50), (104, 92), (84, 84), (44, 84)], ROOT_BROWN)
+    for x in (38, 50, 64, 78, 90):
+        ic.stroke([(x, 30 if abs(x - 64) < 20 else 44), (x + (x - 64) * 0.15, 90)], 2.2, darker(ROOT_BROWN, 0.35))
+    ic.poly([(46, 52), (82, 52), (78, 80), (50, 80)], NIGHT, shade=False)
+    ic.poly([(58, 26), (64, 12), (70, 26)], LEAF)
+
+
+def r_armor_iaque_chest(ic):
+    tunic(ic, YAK_WOOL, quilted=True, trim=FELT_RED)
+    for y in (40, 108):
+        for x in range(38, 92, 6):
+            ic.stroke([(x, y - 4), (x + 2, y + 4)], 1.6, lighter(YAK_WOOL, 0.3))
+
+
+def r_armor_iaque_helm(ic):
+    ic.poly([(28, 70), (34, 38), (52, 22), (76, 22), (94, 38), (100, 70)], FELT_RED)
+    ic.poly([(24, 66), (40, 66), (40, 104), (28, 98)], YAK_WOOL)
+    ic.poly([(88, 66), (104, 66), (100, 98), (88, 104)], YAK_WOOL)
+    ic.rect(28, 62, 100, 72, WOOL)
+    for x in (44, 56, 68, 80):
+        ic.ngon(x + 2, 44, 4, 4, GOLD, rot=45)
+    ic.ngon(64, 18, 7, 8, WOOL)
+
+
+def r_armor_bronze_chest(ic):
+    tunic(ic, OLD_BRONZE, trim=BRONZE)
+    for y in (48, 64, 80):
+        ic.stroke([(40, y), (52, y + 6), (64, y), (76, y + 6), (88, y)], 2.2, lighter(OLD_BRONZE, 0.3))
+    ic.ngon(64, 92, 7, 8, BRONZE)
+
+
+def r_armor_bronze_helm(ic):
+    ic.poly([(30, 96), (26, 56), (40, 30), (88, 30), (102, 56), (98, 96)], OLD_BRONZE)
+    ic.rect(24, 24, 104, 34, BRONZE)
+    for x in (34, 94):
+        ic.poly([(x - 6, 30), (x, 12), (x + 6, 30)], BRONZE)
+    # the Taotie mask: two eyes and the brow spiral
+    ic.ngon(48, 58, 9, 8, BRONZE)
+    ic.ngon(80, 58, 9, 8, BRONZE)
+    ic.dot(48, 58, 3.5, NIGHT)
+    ic.dot(80, 58, 3.5, NIGHT)
+    ic.stroke([(40, 46), (56, 42), (64, 50), (72, 42), (88, 46)], 2.4, lighter(OLD_BRONZE, 0.35))
+    ic.rect(52, 74, 76, 82, NIGHT, shade=False)
+
+
+def r_armor_kurgan_chest(ic):
+    tunic(ic, LEATHER, trim=KURGAN_GOLD)
+    for y in (40, 54, 68, 82):
+        for x in range(42, 88, 10):
+            ic.ngon(x + (5 if (y // 14) % 2 else 0), y + 6, 5.5, 6, KURGAN_GOLD if (x // 10) % 2 else darker(KURGAN_GOLD, 0.15), rot=30)
+
+
+def r_armor_kurgan_helm(ic):
+    ic.poly([(28, 92), (30, 50), (46, 26), (64, 12), (82, 26), (98, 50), (100, 92)], FELT_DARK)
+    ic.rect(26, 60, 102, 70, KURGAN_GOLD)
+    for (x, y) in ((44, 44), (64, 34), (84, 44)):
+        ic.ngon(x, y, 7, 4, KURGAN_GOLD, rot=45)
+    ic.poly([(46, 74), (82, 74), (78, 92), (50, 92)], NIGHT, shade=False)
+    ic.stroke([(64, 12), (64, 2)], 3, KURGAN_GOLD)
+
+
 def r_item_bone_fragment(ic):
     ic.bar(30, 92, 94, 36, 14, BONE)
     for (x, y) in ((24, 92), (34, 102), (90, 26), (100, 38)):
@@ -1127,6 +1228,17 @@ RECIPES = {
     "armor_selo_helm": r_armor_selo_helm,
     "armor_luz_chest": r_armor_luz_chest,
     "armor_luz_helm": r_armor_luz_helm,
+    # Conjuntos das Regiões 5–9
+    "armor_coral_chest": r_armor_coral_chest,
+    "armor_coral_helm": r_armor_coral_helm,
+    "armor_lotus_chest": r_armor_lotus_chest,
+    "armor_lotus_helm": r_armor_lotus_helm,
+    "armor_iaque_chest": r_armor_iaque_chest,
+    "armor_iaque_helm": r_armor_iaque_helm,
+    "armor_bronze_chest": r_armor_bronze_chest,
+    "armor_bronze_helm": r_armor_bronze_helm,
+    "armor_kurgan_chest": r_armor_kurgan_chest,
+    "armor_kurgan_helm": r_armor_kurgan_helm,
     # ferramentas / armas / armaduras
     "item_axe": r_axe,
     "item_pickaxe": r_pickaxe,

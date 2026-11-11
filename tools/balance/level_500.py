@@ -73,10 +73,12 @@ FARM_KILLS = 400  # commons farmed on top of the campaign before the band's gear
 FARM_BOSSES = 20
 DEFAULT_RUNS = 120
 
-# Which layout file holds each set's region (ArmorSetRules: Regions 13-16).
-SET_REGION = {"papiro": "Rio", "tijolo": "Mistura", "selo": "Profundo", "luz": "Ceu"}
-SET_NAMES = {"bone": "Marfim (Ossuário)", "papiro": "Cais do Papiro", "tijolo": "Tijolo Azul", "selo": "Selo dos Artífices",
-             "luz": "Cais de Luz", None: "peças do saque"}
+# Which layout file holds each set's region (ArmorSetRules: Regions 5-9 and 13-16).
+SET_REGION = {"coral": "Costa", "lotus": "Delta", "iaque": "Teto", "bronze": "Mingcheng", "kurgan": "Nartes",
+              "papiro": "Rio", "tijolo": "Mistura", "selo": "Profundo", "luz": "Ceu"}
+SET_NAMES = {"bone": "Marfim (Ossuário)", "coral": "Coral de Kilwa", "lotus": "Seda de Lótus", "iaque": "Lã de Iaque",
+             "bronze": "Vasos de Bronze", "kurgan": "Ouro dos Kurgans", "papiro": "Cais do Papiro", "tijolo": "Tijolo Azul",
+             "selo": "Selo dos Artífices", "luz": "Cais de Luz", None: "peças do saque"}
 LOOT_ARMOR = 12.0  # item_leather_helmet + item_leather_chest: what the loot table drops for those slots
 BOOTS_ARMOR = 3.0  # item_leather_boots / item_botas_raiz: the only boots there are
 

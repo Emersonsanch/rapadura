@@ -48,7 +48,9 @@ def test_sets_only_from_the_level_they_can_be_had(world):
     keys = {s.key: s.min_level for s in world.sets}
     assert keys["bone"] == 35  # DungeonRules.MinLevel: the Ossuário
     assert keys["papiro"] == world.regions["Rio"].low and keys["luz"] == world.regions["Ceu"].low
-    assert l5.loadout(world.slots, world.sets, keys["papiro"] - 1).set_key in ("bone", None)
+    # Before the Rio only the Marfim and the sets of Regions 5-9 can be had.
+    assert l5.loadout(world.slots, world.sets, keys["papiro"] - 1).set_key in ("bone", "coral", "lotus", "iaque", "bronze", "kurgan", None)
+    assert keys["kurgan"] == world.regions["Nartes"].low and keys["coral"] == world.regions["Costa"].low
     assert all(l5.loadout(world.slots, world.sets, lv).set_key in [k for k, m in keys.items() if m <= lv] + [None]
                for lv in l5.LEVELS)
 

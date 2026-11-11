@@ -499,7 +499,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_fiber", 1, 20, rotating: true),
                 new CityShopEntry("item_wood", 2, 20, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 24, 1, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Tambor Rubro: Tushratta's Forja de Tambor (copper and bronze smiths), the theriac of map 12; the counter turns weekly ----
             new CityShopSpec(ForjaTambor, ShopTheme.Ferreiro, BiomeType.Desert, ShopRotationPeriod.Weekly, 3, WithHouse(ForjaTambor, new List<CityShopEntry>
@@ -622,7 +622,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_fiber", 1, 20, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Palafitas de Tarchon: Larthia's baskets, the reed boat of 33 and the antivenom amulet of 34; daily ----
             new CityShopSpec(CestariaLarthia, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(CestariaLarthia, new List<CityShopEntry>
@@ -638,6 +638,8 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_lamparina_oleo", 30, 3),
                 // Larthia's bags (Docs/Mapas100.md §3.3: +1 row of the backpack, her version of the Alforje): one per save.
                 new CityShopEntry(BornalItemId, 160, 1, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
+                // Sapo-Gigante de Tarchon (Docs/Mounts.md §3.10): the trols' stilt-to-stilt frog.
+                new CityShopEntry("item_whistle_mount_tarchon_frog", 145, -1),
                 // The rotation: what the trols weave and fish.
                 new CityShopEntry("item_fish_bagre_cego", 15, 4, rotating: true),
                 new CityShopEntry("item_fish_traira", 8, 4, rotating: true),
@@ -662,6 +664,8 @@ namespace Rapadura.Gameplay.World.Cities
                 // For the cold of the passes (Docs/Mapas100.md 38: the medidor de frio): wool cloaks and ginger tea.
                 new CityShopEntry("item_manta_la", 45, 2),
                 new CityShopEntry("item_cha_gengibre", 70, 3),
+                // Iaque do Teto do Mundo (Docs/Mounts.md §3.10): the caravans' yak of the passes.
+                new CityShopEntry("item_whistle_mount_roof_yak", 150, -1),
                 // The rotation: what the caravans bring up the Rota da Seda.
                 new CityShopEntry("item_corda_escalada", 40, 2, rotating: true),
                 new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
@@ -670,7 +674,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_herb", 3, 12, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Mingcheng: Mōzak's lanterns, the gear of the gate 42 (the Selo do Sol); daily ----
             new CityShopSpec(LanternasMozak, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(LanternasMozak, new List<CityShopEntry>
@@ -690,7 +694,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_corda_escalada", 40, 2, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Torres Brancas: Natakamani's mirrors, the stones of the refining; daily ----
             new CityShopSpec(EspelhosNatakamani, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(EspelhosNatakamani, new List<CityShopEntry>
@@ -726,7 +730,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_herb", 3, 12, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Fortim dos Gigantes: Shahmizad's great pot, food for the group and the gear of the gate 52; daily ----
             new CityShopSpec(PanelaGrande, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(PanelaGrande, new List<CityShopEntry>
