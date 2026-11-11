@@ -31,7 +31,10 @@ namespace Rapadura.Tests
             return quests;
         }
 
-        private static string[] WholeStory() => LateStoryCatalog.Steps.Select(s => s.QuestId).ToArray();
+        /// <summary>Every step of the main story after the campaign: "A Lua que Não Enche" and the letters.</summary>
+        private static string[] WholeStory() => LateStoryCatalog.WholeStory.Select(s => s.QuestId).ToArray();
+
+        private static string[] MidStory() => MidStoryCatalog.Steps.Select(s => s.QuestId).ToArray();
 
         private static CityQuestSpec Spec(string questId) => CityQuestCatalog.FindSpec(questId);
 
@@ -134,7 +137,7 @@ namespace Rapadura.Tests
         {
             LateStoryStep first = LateStoryCatalog.Steps[0];
             Assert.AreEqual("soslan", first.GiverResidentId);
-            QuestManager quests = NewQuests();
+            QuestManager quests = NewQuests(MidStory()); // the first letter requires the full moon of the mid story
             Assert.AreEqual(first.OfferKey(CharacterId.Lavine), CityResidentTalk.QuestLine(quests, "soslan", CharacterId.Lavine, first.MinLevel));
             Assert.IsFalse(quests.IsActive(CityQuestCatalog.SoslanWolves));
         }

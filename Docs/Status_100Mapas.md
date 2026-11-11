@@ -321,6 +321,8 @@ O teste fica vermelho só por ele:
 4. **História principal entre o nível ~20 e o 100.**
    - Por quê: a campanha (Atos I–V) termina por volta do nível 20, e As Cartas da Estrada só começam no 100 (Soslan, mapa
      47). Entre os dois só há missões de cidade.
+   - Escrita e no código (2026-11-11, ainda não jogada): "A Lua que Não Enche", 15 etapas do nível 20 ao 97
+     (`Docs/HistoriaMeio_20a100.md`, `MidStoryCatalog`); falta conferir o ritmo jogando.
    - Ficam sem fio condutor o segundo anel das Regiões 1–4 e as Regiões 5–8 inteiras, ou seja, cerca de 80 níveis em que o
      jogador não sabe para onde ir.
 5. **Um teste de rota de ponta a ponta**, que leve um herói do mapa 01 ao 100 checando nível a pé e de barca, exigências

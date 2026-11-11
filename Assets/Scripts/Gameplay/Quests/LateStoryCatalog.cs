@@ -12,7 +12,7 @@ namespace Rapadura.Gameplay.Quests
     /// <summary>One step of the late main story: which quest, who hands it out, where it happens and from which level it opens.</summary>
     public sealed class LateStoryStep
     {
-        /// <summary>World region of Docs/Mapas100.md (9..16).</summary>
+        /// <summary>World region of Docs/Mapas100.md (1..16: 9..16 for the letters, 1..8 for <see cref="MidStoryCatalog"/>).</summary>
         public readonly int Region;
         public readonly string CityId;
         public readonly string GiverResidentId;
@@ -69,6 +69,8 @@ namespace Rapadura.Gameplay.Quests
     /// content as code like <see cref="CityQuestCatalog"/> and kept apart from it because a step also has a level gate, a place and a line per cousin. Same content
     /// rules: kill targets are non-boss <c>enemy_*</c> assets of the zone's own fauna, rewards are <c>Resources/Items</c> ids; a location objective is the id of an
     /// overworld zone, reported by <see cref="LateStoryLocationReporter"/>. Every step requires the one before it and a higher level, so the chain opens in order.
+    /// The first letter requires the last step of "A Lua que Não Enche" (<see cref="MidStoryCatalog"/>, levels 20–97), and the lookups below (<see cref="FindStep"/>,
+    /// <see cref="StepsOf"/>, <see cref="Decide"/>, <see cref="Talk"/>, <see cref="GetQuest"/>) see both chains as one story (<see cref="WholeStory"/>).
     /// </summary>
     public static class LateStoryCatalog
     {
@@ -102,7 +104,7 @@ namespace Rapadura.Gameplay.Quests
         public static readonly IReadOnlyList<LateStoryStep> Steps = new List<LateStoryStep>
         {
             // -- Região 9, Estepe dos Nartes --
-            Step(9, CityCatalog.AcampamentoSoslan, "soslan", "pistas_de_corrida", "map_047_soslan", 100, SteppeFoals, null, 2300, "enemy_mountain_young_griffin", 5,
+            Step(9, CityCatalog.AcampamentoSoslan, "soslan", "pistas_de_corrida", "map_047_soslan", 100, SteppeFoals, MidStoryCatalog.FinalQuestId, 2300, "enemy_mountain_young_griffin", 5,
                 Reward("item_health_potion", 5), Reward("item_mana_potion", 5), Reward("item_gold", 180)),
             Step(9, CityCatalog.AcampamentoSoslan, "satana", "kurgans_de_ouro", "map_048_kurgans", 106, SteppeKurgans, SteppeFoals, 2400, "enemy_mountain_bronze_wolf", 6,
                 Reward("item_lamparina_runica", 1), Reward("item_gold", 190)),
@@ -162,16 +164,20 @@ namespace Rapadura.Gameplay.Quests
         /// <summary>"Icaro" → "icaro": the suffix of a per-cousin key.</summary>
         public static string HeroKey(CharacterId hero) => hero.ToString().ToLowerInvariant();
 
-        public static LateStoryStep FindStep(string questId) =>
-            string.IsNullOrEmpty(questId) ? null : Steps.FirstOrDefault(s => s.QuestId == questId);
+        /// <summary>The whole main story after the campaign, in order: "A Lua que Não Enche" (<see cref="MidStoryCatalog"/>), then the letters (<see cref="Steps"/>).</summary>
+        public static IEnumerable<LateStoryStep> WholeStory => MidStoryCatalog.Steps.Concat(Steps);
 
-        public static IEnumerable<LateStoryStep> StepsOf(string residentId) => Steps.Where(s => s.GiverResidentId == residentId);
+        public static LateStoryStep FindStep(string questId) =>
+            string.IsNullOrEmpty(questId) ? null : WholeStory.FirstOrDefault(s => s.QuestId == questId);
+
+        public static IEnumerable<LateStoryStep> StepsOf(string residentId) => WholeStory.Where(s => s.GiverResidentId == residentId);
 
         public static IEnumerable<LateStoryStep> StepsIn(int region) => Steps.Where(s => s.Region == region);
 
         /// <summary>
         /// What <paramref name="residentId"/> does now (pure: the caller passes the quest state and the hero's level): a running step of theirs → Active; the next one whose
-        /// prerequisite is done → Offer, or TooLow under its level; once the last step of the chain is done, the last giver → Finale; else None.
+        /// prerequisite is done → Offer, or TooLow under its level; once the last step of the chain is done, the last giver → Finale; else None. The root of the chain (no
+        /// prerequisite, Vó Edna) stays silent under its level: the cousins meet her from level 1, long before the story needs her.
         /// </summary>
         public static LateStoryTalk Decide(string residentId, Func<string, bool> isActive, Func<string, bool> isCompleted, int heroLevel, out LateStoryStep step)
         {
@@ -196,6 +202,11 @@ namespace Rapadura.Gameplay.Quests
 
                 string prerequisite = candidate.Quest.PrerequisiteQuestId;
                 if (!string.IsNullOrEmpty(prerequisite) && !isCompleted(prerequisite))
+                {
+                    return LateStoryTalk.None;
+                }
+
+                if (heroLevel < candidate.MinLevel && string.IsNullOrEmpty(prerequisite))
                 {
                     return LateStoryTalk.None;
                 }
@@ -231,7 +242,7 @@ namespace Rapadura.Gameplay.Quests
                 case LateStoryTalk.Offer:
                     return quests.StartQuest(GetQuest(step.QuestId)) ? step.OfferKey(hero) : null;
                 case LateStoryTalk.TooLow:
-                    return TooLowKeyBase + HeroKey(hero);
+                    return (MidStoryCatalog.FindStep(step.QuestId) != null ? MidStoryCatalog.TooLowKeyBase : TooLowKeyBase) + HeroKey(hero);
                 case LateStoryTalk.Finale:
                     return FinaleKeyBase + HeroKey(hero);
                 default:
@@ -260,7 +271,8 @@ namespace Rapadura.Gameplay.Quests
             return definition;
         }
 
-        public static IEnumerable<QuestDefinition> GetAllQuests() => Steps.Select(s => GetQuest(s.QuestId));
+        /// <summary>Every step of <see cref="WholeStory"/> (the quest log, the saves and <c>CityQuestCatalog.GetAllQuests</c>).</summary>
+        public static IEnumerable<QuestDefinition> GetAllQuests() => WholeStory.Select(s => GetQuest(s.QuestId));
 
         private static RegionRewardSpec Reward(string itemId, int quantity) => new RegionRewardSpec(itemId, quantity);
 

@@ -51,11 +51,15 @@ namespace Rapadura.Tests
         [Test]
         public void Chain_HasNoCycles_EachStepRequiresThePreviousOne_AndLevelsGrow()
         {
-            Assert.IsNull(LateStoryCatalog.Steps[0].Quest.PrerequisiteQuestId, "the chain has one root");
+            // The letters open after "A Lua que Não Enche" (MidStoryCatalog): the one root of the story is the first step of that chain, and the walk below goes
+            // through both chains, so the first letter must require the last step of the mid story.
+            Assert.AreEqual(MidStoryCatalog.FinalQuestId, LateStoryCatalog.Steps[0].Quest.PrerequisiteQuestId, "the first letter waits for the full moon");
+            Assert.AreEqual(1, LateStoryCatalog.WholeStory.Count(s => string.IsNullOrEmpty(s.Quest.PrerequisiteQuestId)), "the chain has one root");
+            Assert.IsNull(LateStoryCatalog.WholeStory.First().Quest.PrerequisiteQuestId, "the root comes first");
             int level = 0;
             string previous = null;
             var seen = new HashSet<string>();
-            foreach (LateStoryStep step in AllSteps)
+            foreach (LateStoryStep step in LateStoryCatalog.WholeStory)
             {
                 Assert.IsTrue(seen.Add(step.QuestId), $"{step.QuestId} repeats");
                 Assert.AreEqual(previous, step.Quest.PrerequisiteQuestId, $"{step.QuestId} requires the step right before it");
@@ -204,6 +208,10 @@ namespace Rapadura.Tests
             LateStoryStep first = LateStoryCatalog.Steps[0];
             LateStoryStep second = LateStoryCatalog.Steps[1];
 
+            // The first letter now waits for "A Lua que Não Enche": Soslan has nothing to say until the full moon, at any level.
+            Assert.AreEqual(LateStoryTalk.None, LateStoryCatalog.Decide(first.GiverResidentId, active.Contains, done.Contains, 500, out _), "before the mid story is done");
+            done.UnionWith(MidStoryCatalog.Steps.Select(s => s.QuestId));
+
             Assert.AreEqual(LateStoryTalk.TooLow, LateStoryCatalog.Decide(first.GiverResidentId, active.Contains, done.Contains, first.MinLevel - 1, out _), "under the level");
             Assert.AreEqual(LateStoryTalk.Offer, LateStoryCatalog.Decide(first.GiverResidentId, active.Contains, done.Contains, first.MinLevel, out LateStoryStep offered));
             Assert.AreSame(first, offered);
@@ -229,7 +237,9 @@ namespace Rapadura.Tests
         [Test]
         public void Talk_StartsTheStep_AndAReportedZoneCompletesTheFinalStep()
         {
+            // The mid story is done (the first letter requires its last step).
             var quests = new QuestManager();
+            quests.RestoreState(new QuestSaveState { CompletedQuestIds = MidStoryCatalog.Steps.Select(s => s.QuestId).ToList() });
             LateStoryStep first = LateStoryCatalog.Steps[0];
             Assert.AreEqual(first.OfferKey(CharacterId.Lavine), LateStoryCatalog.Talk(quests, first.GiverResidentId, CharacterId.Lavine, first.MinLevel));
             Assert.IsTrue(quests.IsActive(first.QuestId));

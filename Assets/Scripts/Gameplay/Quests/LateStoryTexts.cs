@@ -9,6 +9,7 @@ namespace Rapadura.Gameplay.Quests
     /// Localization (en + pt-BR) of "As Cartas da Estrada" (<see cref="LateStoryCatalog"/>, Docs/HistoriaFinal_Cartas.md): per step the title, the description (a letter of
     /// Vô Jorge), the objectives, the journal (Vó Edna on the radio), the progress line and one offer per cousin; and, for the whole chain, one "too low" and one closing
     /// line per cousin. Keys <c>quest.late_story_*</c>; carried by <c>CityQuestTexts</c>, which every loader of quest texts already goes through.
+    /// <see cref="All"/> also carries the texts of "A Lua que Não Enche" (<see cref="MidStoryTexts"/>, keys <c>quest.mid_story_*</c>).
     /// </summary>
     public static class LateStoryTexts
     {
@@ -30,9 +31,9 @@ namespace Rapadura.Gameplay.Quests
         /// <summary>pt-BR text of <paramref name="key"/> without a manager, or null.</summary>
         public static string GetFallback(string key) => All.FirstOrDefault(e => e.Key == key)?.PtBR;
 
-        private static (string En, string Pt) T(string en, string pt) => (en, pt);
+        internal static (string En, string Pt) T(string en, string pt) => (en, pt);
 
-        private static void Step(List<LocalizationEntry> all, string id, (string En, string Pt) title, (string En, string Pt) description, (string En, string Pt) reach,
+        internal static void Step(List<LocalizationEntry> all, string id, (string En, string Pt) title, (string En, string Pt) description, (string En, string Pt) reach,
             (string En, string Pt)? kill, (string En, string Pt) journal, (string En, string Pt) active, params (string En, string Pt)[] offers)
         {
             string key = "quest." + id;
@@ -444,6 +445,8 @@ namespace Rapadura.Gameplay.Quests
             all.Add(new LocalizationEntry(LateStoryCatalog.FinaleKeyBase + "lavine", "You went first, Lavine, and you were not small, and nobody needs telling now. Grandma Edna is keeping a place for you beside her. Grandpa Jorge underlined it twice.",
                 "Você foi primeiro, Lavine, e não era pequena, e ninguém precisa mais ouvir isso. A Vó Edna guardou um lugar do lado dela para você. O Vô Jorge sublinhou duas vezes."));
 
+            // "A Lua que Não Enche" (MidStoryCatalog), the chain before the letters: same keys, same loaders.
+            MidStoryTexts.AddTo(all);
             return all;
         }
     }
