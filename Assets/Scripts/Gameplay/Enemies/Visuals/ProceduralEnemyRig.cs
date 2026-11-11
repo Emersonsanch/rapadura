@@ -893,6 +893,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.RunawayCart:
                 case ProceduralEnemyKind.GreatAlmas:
                 case ProceduralEnemyKind.UnleapedCarp:
+                case ProceduralEnemyKind.ForgottenSpinner:
+                case ProceduralEnemyKind.WellDrinkingRoot:
+                case ProceduralEnemyKind.GreatSmudge:
+                case ProceduralEnemyKind.NinkiNanka:
+                case ProceduralEnemyKind.Nian:
+                case ProceduralEnemyKind.OldKurganGriffin:
                     TickRegionBoss(deltaTime, t, k, speed);
                     break;
             }

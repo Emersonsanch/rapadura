@@ -169,6 +169,18 @@ MonoBehaviour:
     _weight: 0
   - _enemy: {fileID: 11400000, guid: a4a0ae608d05454c814d987a0d3a11ff, type: 2}
     _weight: 0
+  - _enemy: {fileID: 11400000, guid: 0446656229fb4ea08e928a0978c3e8a8, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: e18cb7666f434f0ab69bb6e2ba118aa2, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 35321a0c1f1d4709a6e1ae68cf4be3cb, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 1d88978c8781445f93c59149bc3faf09, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 57add5d8e72840b5950442887459d23c, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 09502f70d0614304aa749524fd6deb7a, type: 2}
+    _weight: 0
   - _enemy: {fileID: 11400000, guid: e04fc9d32e434313820fb0a9403453ca, type: 2}
     _weight: 0
   - _enemy: {fileID: 11400000, guid: 5d5399fc73fc43d4b48b96a436d480a7, type: 2}

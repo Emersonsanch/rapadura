@@ -44,6 +44,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public static readonly Vector2 CaravancaraOffset = new Vector2(-200f, 130f);
         public static readonly Vector2 ArtificesOffset = new Vector2(-400f, -150f);
         public static readonly Vector2 BocaDoKarezOffset = new Vector2(0f, -1100f);
+
+        /// <summary>A Raiz que Bebeu o Poço's arena (09, map boss): the stone ring on the trail north of the Boca do Karez, over the dry galleries.</summary>
+        public static readonly Vector2 RaizQueBebeuOPocoArena = new Vector2(3f, -987f);
         public static readonly Vector2 PocoTamareirasOffset = new Vector2(0f, -1480f);
         public static readonly Vector2 TamborRubroOffset = new Vector2(-800f, -1600f);
         public static readonly Vector2 TorreDeTaipaOffset = new Vector2(800f, -1450f);
@@ -241,6 +244,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             Landmark(w, MapLandmarkKind.StoneRing, -560f, -820f, 0f, 1.2f);
             Landmark(w, MapLandmarkKind.StoneRing, 960f, -560f, 0f, 0.8f);
+            Landmark(w, MapLandmarkKind.StoneRing, RaizQueBebeuOPocoArena.x, RaizQueBebeuOPocoArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

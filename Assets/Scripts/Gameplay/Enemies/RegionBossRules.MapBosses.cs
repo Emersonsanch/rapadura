@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Rapadura.Gameplay.World.Map.Areas;
 using Rapadura.Gameplay.World.Map.Overworld;
 using UnityEngine;
 
@@ -14,11 +15,25 @@ namespace Rapadura.Gameplay.Enemies
         Closed = 1,
     }
 
+    /// <summary>Which colour O Grande Borrão has not eaten yet (<see cref="RegionBossRules.SmudgeColourFor"/>): the one band round it the smear leaves clean.</summary>
+    public enum SmudgeColour
+    {
+        /// <summary>The ochre of the eland's body: the band right next to it is clean.</summary>
+        Ochre = 0,
+
+        /// <summary>The red of the dancers: the middle band is clean.</summary>
+        Red = 1,
+
+        /// <summary>The white of the painted rain: the far band is clean.</summary>
+        White = 2,
+    }
+
     /// <summary>
-    /// The map bosses of the fichas (Docs/Mapas100.md 55, 56, 60, 62, 66, 69 and, on the road of the middle story, 25, 26, 32, 37, 38, 43): smaller
-    /// than the world bosses, one per map the story walks through in the 150–300 band and in Regions 5–8. They are kept by the same <see cref="RegionBossDirector"/>, fight with the same <see cref="RegionBossAbilities"/>
+    /// The map bosses of the fichas (Docs/Mapas100.md 55, 56, 60, 62, 66, 69; on the road of the middle story, 25, 26, 32, 37, 38, 43; in the first regions,
+    /// that every player walks, 04, 09, 15; and 34, 45, 48): smaller than the world bosses, one per map the story walks through in the 150–300 band, in
+    /// Regions 5–8 and in Regions 1–3. They are kept by the same <see cref="RegionBossDirector"/>, fight with the same <see cref="RegionBossAbilities"/>
     /// (phases, ring, barrage, great blow) and stand on a stone ring of their map, each with one ability of its own
-    /// (<see cref="RegionBossSignature"/> 10–21). They stay out of <see cref="AllSpawns"/> (the world bosses: keepsakes, trophies,
+    /// (<see cref="RegionBossSignature"/> 10–27). They stay out of <see cref="AllSpawns"/> (the world bosses: keepsakes, trophies,
     /// the progression's boss steps) and drop items that already exist. Beaten, each is freed and leaves (<see cref="RegionBossSpawn.NeverDies"/>).
     /// </summary>
     public static partial class RegionBossRules
@@ -38,7 +53,15 @@ namespace Rapadura.Gameplay.Enemies
         public const string GreatAlmasId = "enemy_mountain_great_almas";
         public const string UnleapedCarpId = "enemy_mountain_unleaped_carp";
 
-        /// <summary>The map bosses (25, 26, 32, 37, 38, 43; 55, 56, 60, 62, 66, 69), each at the top of its map's band.</summary>
+        // The maps every player walks through (Regions 1–3: Docs/Mapas100.md 04, 09, 15), with no boss of the campaign on them, and 34, 45, 48.
+        public const string ForgottenSpinnerId = "enemy_mountain_forgotten_spinner";
+        public const string WellDrinkingRootId = "enemy_mountain_well_drinking_root";
+        public const string GreatSmudgeId = "enemy_mountain_great_smudge";
+        public const string NinkiNankaId = "enemy_mountain_ninki_nanka";
+        public const string NianId = "enemy_mountain_nian";
+        public const string OldKurganGriffinId = "enemy_mountain_old_kurgan_griffin";
+
+        /// <summary>The map bosses (04, 09, 15; 25, 26, 32, 34, 37, 38, 43, 45, 48; 55, 56, 60, 62, 66, 69), each at the top of its map's band.</summary>
         public static readonly IReadOnlyList<RegionBossSpawn> MapSpawns = new[]
         {
             new RegionBossSpawn(RopeCutterId, OverworldLayouts.PontesVentoMapId, "pontes_de_vento", OverworldLayouts.CortadorDeCordasArena,
@@ -65,6 +88,18 @@ namespace Rapadura.Gameplay.Enemies
                 OverworldLayouts.TetoWorldOffset, 86, EnemyProjectileKind.LureGlob, true, RegionBossSignature.SnowSparks, neverDies: true),
             new RegionBossSpawn(UnleapedCarpId, OverworldLayouts.CanalLanternasMapId, "canal_das_lanternas", OverworldLayouts.CarpaQueNaoPulouArena,
                 OverworldLayouts.MingchengWorldOffset, 110, EnemyProjectileKind.LanternBolt, false, RegionBossSignature.FailedLeap, neverDies: true),
+            new RegionBossSpawn(ForgottenSpinnerId, MapLayouts.AmoreirasId, "amoreiras", OverworldLayouts.FiandeiraEsquecidaArena,
+                OverworldLayouts.ZarafshanWorldOffset, 24, EnemyProjectileKind.Feather, false, RegionBossSignature.TautThread, neverDies: true),
+            new RegionBossSpawn(WellDrinkingRootId, OverworldLayouts.KarezId, "galerias_do_karez", OverworldLayouts.RaizQueBebeuOPocoArena,
+                OverworldLayouts.AreiasWorldOffset, 26, EnemyProjectileKind.LureGlob, false, RegionBossSignature.RootTrail, neverDies: true),
+            new RegionBossSpawn(GreatSmudgeId, OverworldLayouts.AbrigosId, "abrigos_pintados", OverworldLayouts.GrandeBorraoArena,
+                OverworldLayouts.KaggenWorldOffset, 32, EnemyProjectileKind.LanternBolt, true, RegionBossSignature.StolenColours, neverDies: true),
+            new RegionBossSpawn(NinkiNankaId, OverworldLayouts.NinkiNankaId, "brejo_das_palmeiras", OverworldLayouts.NinkiNankaArena,
+                OverworldLayouts.DeltaWorldOffset, 82, EnemyProjectileKind.LureGlob, false, RegionBossSignature.ShyGaze, neverDies: true),
+            new RegionBossSpawn(NianId, OverworldLayouts.MuralhaMapId, "portao_do_nian", OverworldLayouts.NianArena,
+                OverworldLayouts.MingchengWorldOffset, 125, EnemyProjectileKind.Ember, true, RegionBossSignature.NoiseFright, neverDies: true),
+            new RegionBossSpawn(OldKurganGriffinId, OverworldLayouts.KurgansMapId, "kurgans_de_ouro", OverworldLayouts.GrifoVelhoArena,
+                OverworldLayouts.NartesWorldOffset, 114, EnemyProjectileKind.Feather, false, RegionBossSignature.HoardGuard, neverDies: true),
         };
 
         /// <summary>Every boss the <see cref="RegionBossDirector"/> keeps: the world bosses (<see cref="AllSpawns"/>) and the map bosses (<see cref="MapSpawns"/>).</summary>
@@ -221,6 +256,73 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>A long leap lands this many metres past the hero's spot.</summary>
         public const float LeapOvershoot = 4.5f;
 
+        // ---- A Fiandeira Esquecida (04): the thread pulled taut ----
+
+        public const float ThreadIntervalSeconds = 10f;
+        public const float ThreadWindupSeconds = 2.2f;
+        public const float ThreadDamageFactor = 1.3f;
+
+        /// <summary>How much closer than when the thread was tied the hero must be for it to hang slack when she pulls.</summary>
+        public const float ThreadSlack = 2f;
+
+        /// <summary>Right at her legs there is no thread to pull.</summary>
+        public const float ThreadHugDistance = 2.5f;
+
+        /// <summary>The longest thread she spins: a hero further than this when she ties it has nothing tied to them.</summary>
+        public const float ThreadReach = 14f;
+
+        // ---- A Raiz que Bebeu o Poço (09): the roots come up on the hero's steps ----
+
+        public const float RootIntervalSeconds = 10f;
+        public const float RootWindupSeconds = 2.4f;
+        public const float RootDamageFactor = 1.3f;
+
+        /// <summary>How often the root marks the hero's step during the warning (the first mark is where the warning began).</summary>
+        public const float RootStepSeconds = 0.4f;
+
+        /// <summary>How near a marked step the root coming up reaches.</summary>
+        public const float RootRadius = 1.6f;
+
+        // ---- O Grande Borrão (15): the colours it ate ----
+
+        public const float SmudgeIntervalSeconds = 10f;
+        public const float SmudgeWindupSeconds = 2f;
+        public const float SmudgeDamageFactor = 1.3f;
+
+        /// <summary>The width of each colour's band round it: ochre next to it, red in the middle, white outside.</summary>
+        public const float SmudgeBandWidth = 3f;
+
+        public const int SmudgeColours = 3;
+
+        // ---- Ninki Nanka (34): don't look ----
+
+        public const float GazeIntervalSeconds = 9f;
+        public const float GazeWindupSeconds = 1.8f;
+        public const float GazeDamageFactor = 1.35f;
+        public const float GazeReach = 14f;
+
+        /// <summary>How far off her (degrees, either side) a hero may be facing and still be looking at her when she shines.</summary>
+        public const float GazeHalfAngle = 60f;
+
+        // ---- Nian (45): noise scares it off ----
+
+        public const float NianIntervalSeconds = 10f;
+        public const float NianWindupSeconds = 2.4f;
+        public const float NianDamageFactor = 1.5f;
+        public const float NianPounceRadius = 4.5f;
+
+        /// <summary>The share of its health the hero must knock off it during the warning for the noise to frighten it out of the pounce.</summary>
+        public const float NianNoiseFraction = 0.04f;
+
+        // ---- O Grifo Velho do Kurgan (48): the hoard ----
+
+        public const float HoardIntervalSeconds = 11f;
+        public const float HoardWindupSeconds = 2f;
+        public const float HoardDamageFactor = 1.4f;
+
+        /// <summary>The gold he keeps lies within this many metres of where he was found: the stone ring of his arena.</summary>
+        public const float HoardRadius = 8f;
+
         private static float MapBossInterval(RegionBossSignature signature)
         {
             switch (signature)
@@ -236,6 +338,12 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.RunawayRun: return RunawayIntervalSeconds;
                 case RegionBossSignature.SnowSparks: return SnowIntervalSeconds;
                 case RegionBossSignature.FailedLeap: return LeapIntervalSeconds;
+                case RegionBossSignature.TautThread: return ThreadIntervalSeconds;
+                case RegionBossSignature.RootTrail: return RootIntervalSeconds;
+                case RegionBossSignature.StolenColours: return SmudgeIntervalSeconds;
+                case RegionBossSignature.ShyGaze: return GazeIntervalSeconds;
+                case RegionBossSignature.NoiseFright: return NianIntervalSeconds;
+                case RegionBossSignature.HoardGuard: return HoardIntervalSeconds;
                 default: return ForgeIntervalSeconds;
             }
         }
@@ -255,6 +363,12 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.RunawayRun: return RunawayWindupSeconds;
                 case RegionBossSignature.SnowSparks: return SnowWindupSeconds;
                 case RegionBossSignature.FailedLeap: return LeapWindupSeconds;
+                case RegionBossSignature.TautThread: return ThreadWindupSeconds;
+                case RegionBossSignature.RootTrail: return RootWindupSeconds;
+                case RegionBossSignature.StolenColours: return SmudgeWindupSeconds;
+                case RegionBossSignature.ShyGaze: return GazeWindupSeconds;
+                case RegionBossSignature.NoiseFright: return NianWindupSeconds;
+                case RegionBossSignature.HoardGuard: return HoardWindupSeconds;
                 default: return ForgeWindupSeconds;
             }
         }
@@ -447,5 +561,94 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>Does leap number <paramref name="leap"/> splash a hero at <paramref name="hero"/>?</summary>
         public static bool LeapHits(int leap, Vector2 carp, Vector2 mark, Vector2 hero) =>
             (hero - LeapLanding(leap, carp, mark)).sqrMagnitude <= LeapSplashRadius * LeapSplashRadius;
+
+        /// <summary>
+        /// Does the Fiandeira's thread, tied to a hero <paramref name="tiedAt"/> m from her when the warning began, throw down that hero now
+        /// <paramref name="distanceNow"/> m away? Only if it is taut: the hero did not come <see cref="ThreadSlack"/> m closer, nor is hugging her legs.
+        /// Running away is the worst of it; a hero beyond <see cref="ThreadReach"/> had no thread.
+        /// </summary>
+        public static bool TautThreadHits(float tiedAt, float distanceNow)
+        {
+            if (tiedAt > ThreadReach)
+            {
+                return false;
+            }
+
+            return distanceNow > ThreadHugDistance && distanceNow > tiedAt - ThreadSlack;
+        }
+
+        /// <summary>Is it time to mark another of the hero's steps, <paramref name="sinceLastStep"/> s after the last one?</summary>
+        public static bool RootMarksStep(float sinceLastStep) => sinceLastStep >= RootStepSeconds;
+
+        /// <summary>The most steps the root can mark in one warning (the first included).</summary>
+        public static int RootMaxSteps => Mathf.FloorToInt(RootWindupSeconds / RootStepSeconds) + 1;
+
+        /// <summary>Does the root come up under a hero at <paramref name="hero"/>, having marked the steps <paramref name="steps"/> during the warning? Only new ground is safe.</summary>
+        public static bool RootTrailHits(IReadOnlyList<Vector2> steps, Vector2 hero)
+        {
+            if (steps == null)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < steps.Count; i++)
+            {
+                if ((hero - steps[i]).sqrMagnitude <= RootRadius * RootRadius)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>The colour the Borrão has not eaten yet on smear number <paramref name="smear"/> of the fight (0 first): ochre, red, white, ochre…</summary>
+        public static SmudgeColour SmudgeColourFor(int smear) => (SmudgeColour)(Mathf.Abs(smear) % SmudgeColours);
+
+        /// <summary>
+        /// Does the smear reach a hero <paramref name="distance"/> m from the Borrão when <paramref name="clean"/> is the colour left? It covers the three bands
+        /// of <see cref="SmudgeBandWidth"/> round it but the clean one; beyond the last band is safe too.
+        /// </summary>
+        public static bool SmudgeHits(SmudgeColour clean, float distance)
+        {
+            if (distance > SmudgeBandWidth * SmudgeColours)
+            {
+                return false;
+            }
+
+            int band = Mathf.Min(SmudgeColours - 1, Mathf.FloorToInt(Mathf.Max(0f, distance) / SmudgeBandWidth));
+            return band != (int)clean;
+        }
+
+        /// <summary>
+        /// Is a hero at <paramref name="hero"/> facing <paramref name="heroFacing"/> looking at Ninki Nanka (at <paramref name="dragon"/>) when she shines?
+        /// Within <see cref="GazeReach"/>, facing her within <see cref="GazeHalfAngle"/>: turning one's back is the way; nose to nose there is no looking away.
+        /// </summary>
+        public static bool GazeHits(Vector2 dragon, Vector2 hero, Vector2 heroFacing)
+        {
+            Vector2 toHer = dragon - hero;
+            if (toHer.sqrMagnitude > GazeReach * GazeReach)
+            {
+                return false;
+            }
+
+            if (toHer.sqrMagnitude < 0.25f || heroFacing.sqrMagnitude < 1e-6f)
+            {
+                return true;
+            }
+
+            return Vector2.Angle(heroFacing, toHer) <= GazeHalfAngle;
+        }
+
+        /// <summary>Did the hero make enough noise to frighten Nian, knocking it from <paramref name="healthAtWarning"/> to <paramref name="healthNow"/> of <paramref name="maxHealth"/> during the warning?</summary>
+        public static bool NianTakesFright(float healthAtWarning, float healthNow, float maxHealth) =>
+            maxHealth > 0f && healthAtWarning - healthNow >= maxHealth * NianNoiseFraction;
+
+        /// <summary>Does Nian's pounce on <paramref name="mark"/> land on a hero at <paramref name="hero"/>? Never once it took fright.</summary>
+        public static bool NianPounceHits(bool frightened, Vector2 mark, Vector2 hero) =>
+            !frightened && (hero - mark).sqrMagnitude <= NianPounceRadius * NianPounceRadius;
+
+        /// <summary>Is a hero at <paramref name="hero"/> standing on the old griffin's hoard (at <paramref name="hoard"/>)? Wherever the griffin is.</summary>
+        public static bool HoardHits(Vector2 hoard, Vector2 hero) => (hero - hoard).sqrMagnitude <= HoardRadius * HoardRadius;
     }
 }

@@ -449,6 +449,20 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         GreatAlmas = 244,
         /// <summary>A Carpa que Não Pulou (43): a great dark carp standing on its fins at the canal's edge, barbels and a dim dragon's pearl; map boss of the Canal das Lanternas.</summary>
         UnleapedCarp = 245,
+
+        // The map bosses every player meets (Docs/Mapas100.md 04, 09, 15) and 34, 45, 48.
+        /// <summary>A Fiandeira Esquecida (04): a great pale spider standing tall, a silk cocoon with a spark in it held to her chest; map boss of the Bosque das Amoreiras.</summary>
+        ForgottenSpinner = 246,
+        /// <summary>A Raiz que Bebeu o Poço (09): a vine stump walking on its roots, dry leaves, an empty water jar caught in it; map boss of the Galerias do Karez.</summary>
+        WellDrinkingRoot = 247,
+        /// <summary>O Grande Borrão (15): a grey heap of smeared paint with handprints and ochre, red and white streaks; map boss of the Abrigos Pintados.</summary>
+        GreatSmudge = 248,
+        /// <summary>Ninki Nanka (34): a shy bog dragoness sitting up, reed crest, hiding her face behind a forearm; map boss of the Brejo das Palmeiras.</summary>
+        NinkiNanka = 249,
+        /// <summary>Nian (45): the beast of the year on four legs, a single horn, a red mane gone dark, a lantern hanging from its jaw; map boss of the Portão do Nian.</summary>
+        Nian = 250,
+        /// <summary>O Grifo Velho do Kurgan (48): an old eagle-lion with ragged golden wings, a Scythian gold plaque on its chest; map boss of the Kurgans de Ouro.</summary>
+        OldKurganGriffin = 251,
     }
 
     /// <summary>

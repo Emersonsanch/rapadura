@@ -358,6 +358,13 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_mountain_runaway_cart", "The Runaway Cart", "O Carrinho Desgovernado"),
             EnemyName("enemy_mountain_great_almas", "The Great Almas", "O Grande Almas"),
             EnemyName("enemy_mountain_unleaped_carp", "The Carp That Never Leapt", "A Carpa que Não Pulou"),
+            // The map bosses every player meets (Docs/Mapas100.md 04, 09, 15) and 34, 45, 48 (RegionBossRules.MapSpawns).
+            EnemyName("enemy_mountain_forgotten_spinner", "The Forgotten Spinner", "A Fiandeira Esquecida"),
+            EnemyName("enemy_mountain_well_drinking_root", "The Root That Drank the Well", "A Raiz que Bebeu o Poço"),
+            EnemyName("enemy_mountain_great_smudge", "The Great Smudge", "O Grande Borrão"),
+            EnemyName("enemy_mountain_ninki_nanka", "Ninki Nanka, the Bog Dragon", "Ninki Nanka, a Dragoa do Charco"),
+            EnemyName("enemy_mountain_nian", "Nian, the Beast of the Year", "Nian, a Fera do Ano"),
+            EnemyName("enemy_mountain_old_kurgan_griffin", "The Old Griffin of the Kurgan", "O Grifo Velho do Kurgan"),
             // The beasts of the Rio das Doze Horas (Docs/Mapas100.md 71–74), formerly played by stand-ins.
             EnemyName("enemy_forest_dark_river_crocodile", "Dark River Crocodile", "Crocodilo do Rio Escuro"),
             EnemyName("enemy_forest_dimmed_ibis", "Dimmed Ibis", "Íbis Apagada"),

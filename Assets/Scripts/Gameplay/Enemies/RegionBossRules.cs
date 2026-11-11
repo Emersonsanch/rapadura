@@ -78,6 +78,26 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>A Carpa que Não Pulou leaps at the hero's spot and never lands on it: short of it, then past it, in turn.</summary>
         FailedLeap = 21,
+
+        // The map bosses every player meets (Regions 1–3: Docs/Mapas100.md 04, 09, 15) and the three left out before (34, 45, 48).
+
+        /// <summary>A Fiandeira Esquecida ties a thread to the hero and pulls it taut: whoever did not come closer by the time it snaps is hit; slack is safe.</summary>
+        TautThread = 22,
+
+        /// <summary>A Raiz que Bebeu o Poço follows the hero's steps under the ground: the roots come up on every spot the hero trod during the warning.</summary>
+        RootTrail = 23,
+
+        /// <summary>O Grande Borrão smears the ground round itself; only the band of the colour it has not eaten yet stays clean, and the colour changes each time.</summary>
+        StolenColours = 24,
+
+        /// <summary>Ninki Nanka shines: whoever is looking at her when she does is hit; turning your back on her is safe.</summary>
+        ShyGaze = 25,
+
+        /// <summary>Nian pounces on the hero's spot unless the hero made noise (struck it hard enough) during the warning: then it takes fright and the pounce is called off.</summary>
+        NoiseFright = 26,
+
+        /// <summary>O Grifo Velho do Kurgan strikes everyone standing on his hoard (the ring where he keeps the gold), wherever he is; off the gold is safe.</summary>
+        HoardGuard = 27,
     }
 
     /// <summary>The four appetites of the Cidadela (46), one a week in turn (<see cref="RegionBossRules.AppetiteFor"/>).</summary>
@@ -504,6 +524,12 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.RunawayRun:
                 case RegionBossSignature.SnowSparks:
                 case RegionBossSignature.FailedLeap:
+                case RegionBossSignature.TautThread:
+                case RegionBossSignature.RootTrail:
+                case RegionBossSignature.StolenColours:
+                case RegionBossSignature.ShyGaze:
+                case RegionBossSignature.NoiseFright:
+                case RegionBossSignature.HoardGuard:
                     return MapBossInterval(signature);
                 default: return FormSeconds;
             }
@@ -533,6 +559,12 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.RunawayRun:
                 case RegionBossSignature.SnowSparks:
                 case RegionBossSignature.FailedLeap:
+                case RegionBossSignature.TautThread:
+                case RegionBossSignature.RootTrail:
+                case RegionBossSignature.StolenColours:
+                case RegionBossSignature.ShyGaze:
+                case RegionBossSignature.NoiseFright:
+                case RegionBossSignature.HoardGuard:
                     return MapBossWindup(signature);
                 default: return 0f;
             }

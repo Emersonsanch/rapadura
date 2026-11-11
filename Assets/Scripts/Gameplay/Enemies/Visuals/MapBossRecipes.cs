@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Rapadura.Gameplay.Enemies.Visuals
 {
     /// <summary>
-    /// The map bosses of the fichas (Docs/Mapas100.md 25, 26, 32, 37, 38, 43, 55, 56, 60, 62, 66, 69; <see cref="RegionBossRules.MapSpawns"/>), low-poly from the shared
+    /// The map bosses of the fichas (Docs/Mapas100.md 04, 09, 15, 25, 26, 32, 34, 37, 38, 43, 45, 48, 55, 56, 60, 62, 66, 69; <see cref="RegionBossRules.MapSpawns"/>), low-poly from the shared
     /// palette like <see cref="RegionBossRecipes"/>. Pivot at the feet (y = 0), facing +Z, each with the glowing <c>Core</c> the rig feeds with the
     /// fight's phase. Every one of them is a creature gone dark that the cousins free, not a villain: the faces say so.
     /// <list type="bullet">
@@ -19,6 +19,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
     /// <item><b>O Carrinho Desgovernado</b> (37, ~2.65 m): an Artificer ore cart on four iron legs, ore heaped high, the engine lit behind the grate; brake levers for arms, the plough for the <c>Jaw</c>.</item>
     /// <item><b>O Grande Almas</b> (38, ~3 m): a huge shy hairy wild man, snow and frozen sparks on his shoulders, a snowball in hand; two legs.</item>
     /// <item><b>A Carpa que Não Pulou</b> (43, ~2.65 m): a great dull-gold carp standing on its fins, barbels, the dragon's pearl under its chin; pectoral fins for arms; no legs.</item>
+    /// <item><b>A Fiandeira Esquecida</b> (04, ~2.8 m): a great pale spider, a silk cocoon with a spark held to her chest by two feelers (the arms); four walking legs, four more arched to the ground.</item>
+    /// <item><b>A Raiz que Bebeu o Poço</b> (09, ~3 m): a vine stump walking on four roots, dry leaves on top, an empty water jar caught in it; two tendrils for arms.</item>
+    /// <item><b>O Grande Borrão</b> (15, ~2.9 m): a grey heap of the colours it ate, ochre, red and white running down it, handprints on its palms; no legs.</item>
+    /// <item><b>Ninki Nanka</b> (34, ~3.1 m): the shy bog dragoness sitting up, a crest of reeds, forearms folded before her face, her tail on the boardwalk; two legs.</item>
+    /// <item><b>Nian</b> (45, ~2.9 m): the beast of the year, one horn, a dark red mane, dull gold scales down its back; four legs and a <c>Tail</c>.</item>
+    /// <item><b>O Grifo Velho do Kurgan</b> (48, ~2.8 m): lion behind, old eagle in front, ragged wings folded (the arms), a plaque of Scythian gold on its chest; four legs.</item>
     /// </list>
     /// </summary>
     public static class MapBossRecipes
@@ -754,6 +760,357 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     b.Box(new Vector3(0f, 0.28f * s, -0.45f), new Vector3(0.05f, 0.62f, 0.36f), EnemySwatch.Shadow, Quaternion.Euler(30f * s, 0f, 0f));
                 }
             });
+        }
+
+        // ------------------------------------------------------------------
+        // A Fiandeira Esquecida (04)
+        // ------------------------------------------------------------------
+
+        public static void BuildForgottenSpinner(ProceduralEnemyBlueprint bp)
+        {
+            int body = bp.Mesh(ProceduralEnemyParts.Body, -1, new Vector3(0f, 1.55f, -0.1f), b =>
+            {
+                // The spinner of the mulberry grove, gone pale in the dark, who wrapped the spark that fell in her web and forgot her own name.
+                b.Blob(new Vector3(0f, 0f, 0.35f), new Vector3(1f, 0.7f, 1f), EnemySwatch.IvoryDark, coarse: true);
+                b.Blob(new Vector3(0f, 0.45f, -0.75f), new Vector3(1.45f, 1.35f, 1.6f), EnemySwatch.IvoryDark);
+                // The silk bands round the abdomen, and the spinnerets.
+                for (int i = 0; i < 4; i++)
+                {
+                    b.Box(new Vector3(0f, 1.05f - i * 0.08f, -0.4f - i * 0.28f), new Vector3(0.9f - 0.08f * i, 0.06f, 0.12f), EnemySwatch.Ivory, Quaternion.Euler(-20f - i * 14f, 0f, 0f));
+                }
+
+                b.Blob(new Vector3(0f, 0.1f, -1.48f), new Vector3(0.3f, 0.3f, 0.24f), EnemySwatch.Bone, coarse: true);
+                // The four middle legs, arched out and down to the ground (the front and hind pairs walk).
+                for (int s = -1; s <= 1; s += 2)
+                {
+                    for (int j = 0; j < 2; j++)
+                    {
+                        float z = 0.3f - j * 0.45f;
+                        float spread = j == 0 ? 0.15f : -0.2f;
+                        Vector3 knee = new Vector3(1f * s, 0.55f, z + spread);
+                        Vector3 foot = new Vector3(1.32f * s, -1.5f, z + spread * 2f);
+                        b.Segment(new Vector3(0.4f * s, 0f, z), knee, 0.09f, 0.07f, 5, EnemySwatch.IvoryDark);
+                        b.Segment(knee, foot, 0.07f, 0.03f, 5, EnemySwatch.Ivory);
+                    }
+                }
+
+                // Threads of silk still hanging off her, and a tuft on top.
+                for (int i = -1; i <= 1; i++)
+                {
+                    b.Box(new Vector3(0.35f * i, -0.25f, -1.1f + 0.1f * i), new Vector3(0.02f, 0.7f, 0.02f), EnemySwatch.Bone);
+                }
+
+                b.Blob(new Vector3(0f, 1.18f, -0.7f), new Vector3(0.5f, 0.24f, 0.5f), EnemySwatch.Ivory, coarse: true);
+            });
+            // The cocoon she spun round the spark that fell in her web, held to her chest: it shines through the silk.
+            bp.Mesh(ProceduralEnemyParts.Core, body, new Vector3(0f, -0.18f, 0.95f), b => b.Blob(Vector3.zero, new Vector3(0.32f, 0.46f, 0.3f), EnemySwatch.StolenLight, coarse: true));
+            int head = bp.Mesh(ProceduralEnemyParts.Head, body, new Vector3(0f, 0.18f, 0.82f), b =>
+            {
+                b.Blob(Vector3.zero, new Vector3(0.6f, 0.5f, 0.5f), EnemySwatch.IvoryDark, coarse: true);
+                // Eight eyes, in rows, soft and frightened.
+                HinokuraBeastRecipes.AddEyes(b, 0.1f, 0.1f, 0.22f, 0.09f, EnemySwatch.SoftEye);
+                HinokuraBeastRecipes.AddEyes(b, 0.22f, 0.06f, 0.18f, 0.06f, EnemySwatch.SoftEye);
+                HinokuraBeastRecipes.AddEyes(b, 0.08f, 0.2f, 0.18f, 0.05f, EnemySwatch.SoftEye);
+                HinokuraBeastRecipes.AddEyes(b, 0.18f, 0.18f, 0.14f, 0.04f, EnemySwatch.SoftEye);
+            });
+            // The fangs, that open on the windup.
+            bp.Mesh(ProceduralEnemyParts.Jaw, head, new Vector3(0f, -0.2f, 0.2f), b =>
+            {
+                for (int s = -1; s <= 1; s += 2)
+                {
+                    b.Horn(new Vector3(0.08f * s, 0f, 0f), 0.04f, 0.2f, 3, 20f, EnemySwatch.Fang, Quaternion.Euler(150f, 0f, 0f));
+                }
+            });
+
+            for (int s = -1; s <= 1; s += 2)
+            {
+                float side = s;
+                bool right = s > 0;
+                // The two feelers she holds the cocoon with: they lift on the windup, when she ties the thread.
+                bp.Mesh(right ? ProceduralEnemyParts.ArmRight : ProceduralEnemyParts.ArmLeft, body, new Vector3(0.32f * side, -0.05f, 0.72f), b =>
+                {
+                    b.Segment(Vector3.zero, new Vector3(0.22f * side, -0.18f, 0.3f), 0.07f, 0.06f, 5, EnemySwatch.IvoryDark);
+                    b.Segment(new Vector3(0.22f * side, -0.18f, 0.3f), new Vector3(0.08f * side, -0.32f, 0.42f), 0.06f, 0.03f, 5, EnemySwatch.Ivory);
+                    b.Box(new Vector3(0.12f * side, -0.25f, 0.4f), new Vector3(0.02f, 0.02f, 0.3f), EnemySwatch.Bone);
+                }, meshKey: right ? "ForgottenSpinnerFeeler_R" : "ForgottenSpinnerFeeler_L");
+            }
+
+            HinokuraBeastRecipes.AddFourLegs(bp, 1.15f, 0.55f, 0.6f, -0.5f, 0.1f, EnemySwatch.IvoryDark, EnemySwatch.Ivory, "ForgottenSpinner");
+        }
+
+        // ------------------------------------------------------------------
+        // A Raiz que Bebeu o Poço (09)
+        // ------------------------------------------------------------------
+
+        public static void BuildWellDrinkingRoot(ProceduralEnemyBlueprint bp)
+        {
+            int body = bp.Mesh(ProceduralEnemyParts.Body, -1, new Vector3(0f, 1.55f, 0f), b =>
+            {
+                // The vine at the end of the karez that drank only what it needed, until the shadow got into its roots and it drank the well dry.
+                b.Cylinder(new Vector3(0f, -0.6f, 0f), 0.62f, 0.38f, 1.55f, 9, EnemySwatch.Bark, EnemySwatch.BarkDark, twist: 25f);
+                for (int i = 0; i < 5; i++)
+                {
+                    float a = i * Mathf.PI * 2f / 5f;
+                    b.Segment(new Vector3(Mathf.Cos(a) * 0.5f, -0.5f, Mathf.Sin(a) * 0.5f), new Vector3(Mathf.Cos(a + 0.6f) * 0.34f, 0.85f, Mathf.Sin(a + 0.6f) * 0.34f),
+                        0.08f, 0.05f, 4, EnemySwatch.BarkDark);
+                }
+
+                // The canopy of leaves gone dry, and the last grapes, shrivelled.
+                b.Blob(new Vector3(0f, 1.12f, -0.05f), new Vector3(1.5f, 0.62f, 1.3f), EnemySwatch.SandstoneDark, coarse: true);
+                b.Blob(new Vector3(0.3f, 1.3f, 0.2f), new Vector3(0.7f, 0.4f, 0.6f), EnemySwatch.Lichen, coarse: true);
+                for (int s = -1; s <= 1; s += 2)
+                {
+                    b.Blob(new Vector3(0.55f * s, 0.78f, 0.35f), new Vector3(0.16f, 0.26f, 0.16f), EnemySwatch.VampWing, coarse: true);
+                }
+
+                // The empty water jar of the oasis, caught in its roots.
+                b.Cylinder(new Vector3(-0.5f, -0.62f, 0.42f), 0.16f, 0.1f, 0.36f, 7, EnemySwatch.CopperDark, EnemySwatch.Black, Quaternion.Euler(0f, 0f, 25f));
+            });
+            // The last drop of the well it holds inside: Living Water still, glowing in the heartwood.
+            bp.Mesh(ProceduralEnemyParts.Core, body, new Vector3(0f, 0.15f, 0.5f), b => b.Blob(Vector3.zero, new Vector3(0.3f, 0.36f, 0.16f), EnemySwatch.Rune, coarse: true));
+            int head = bp.Mesh(ProceduralEnemyParts.Head, body, new Vector3(0f, 0.62f, 0.36f), b =>
+            {
+                // A knot in the trunk that became a thirsty face.
+                b.Blob(Vector3.zero, new Vector3(0.56f, 0.5f, 0.3f), EnemySwatch.BarkDark, coarse: true);
+                HinokuraBeastRecipes.AddEyes(b, 0.13f, 0.06f, 0.13f, 0.08f, EnemySwatch.SoftEye);
+            });
+            bp.Mesh(ProceduralEnemyParts.Jaw, head, new Vector3(0f, -0.18f, 0.14f), b => b.Box(new Vector3(0f, -0.02f, 0.02f), new Vector3(0.3f, 0.08f, 0.08f), EnemySwatch.Black));
+
+            for (int s = -1; s <= 1; s += 2)
+            {
+                float side = s;
+                bool right = s > 0;
+                // Two vine tendrils, curling down: they rise on the windup, before the roots come up.
+                bp.Mesh(right ? ProceduralEnemyParts.ArmRight : ProceduralEnemyParts.ArmLeft, body, new Vector3(0.42f * side, 0.55f, 0.05f), b =>
+                {
+                    b.Segment(Vector3.zero, new Vector3(0.42f * side, -0.25f, 0.18f), 0.1f, 0.08f, 5, EnemySwatch.Bark);
+                    b.Segment(new Vector3(0.42f * side, -0.25f, 0.18f), new Vector3(0.55f * side, -0.75f, 0.3f), 0.08f, 0.05f, 5, EnemySwatch.Bark);
+                    b.Segment(new Vector3(0.55f * side, -0.75f, 0.3f), new Vector3(0.4f * side, -0.95f, 0.42f), 0.05f, 0.02f, 4, EnemySwatch.Lichen);
+                    b.Blob(new Vector3(0.48f * side, -0.5f, 0.28f), new Vector3(0.22f, 0.12f, 0.2f), EnemySwatch.SandstoneDark, coarse: true);
+                }, meshKey: right ? "WellDrinkingRootTendril_R" : "WellDrinkingRootTendril_L");
+            }
+
+            HinokuraBeastRecipes.AddHeavyLegs(bp, 0.95f, 0.5f, 0.42f, -0.42f, 0.14f, EnemySwatch.Bark, EnemySwatch.BarkDark, "WellDrinkingRoot");
+        }
+
+        // ------------------------------------------------------------------
+        // O Grande Borrão (15)
+        // ------------------------------------------------------------------
+
+        public static void BuildGreatSmudge(ProceduralEnemyBlueprint bp)
+        {
+            int body = bp.Mesh(ProceduralEnemyParts.Body, -1, new Vector3(0f, 1.2f, 0f), b =>
+            {
+                // A shadow that came out of the paintings and ate their colours until it was the size of a shelter, all of them gone grey.
+                b.Box(new Vector3(0f, -1.15f, 0f), new Vector3(1.9f, 0.1f, 1.7f), EnemySwatch.Shadow);
+                b.Blob(new Vector3(0f, -0.4f, 0f), new Vector3(2.1f, 1.6f, 1.8f), EnemySwatch.Shroud, coarse: true);
+                b.Blob(new Vector3(0f, 0.55f, -0.05f), new Vector3(1.55f, 1.35f, 1.35f), EnemySwatch.GolemStoneDark);
+                // Streaks of the colours it ate running down it: ochre, red and white, the three of the painted walls.
+                EnemySwatch[] paint = { EnemySwatch.SandstoneDark, EnemySwatch.WarCape, EnemySwatch.Bone };
+                for (int i = 0; i < 9; i++)
+                {
+                    float a = (i * 40f + 15f) * Mathf.Deg2Rad;
+                    Vector3 at = new Vector3(Mathf.Sin(a) * 0.86f, 0.1f - 0.12f * (i % 3), Mathf.Cos(a) * 0.74f);
+                    b.Box(at, new Vector3(0.12f, 0.7f, 0.06f), paint[i % 3], Quaternion.Euler(0f, a * Mathf.Rad2Deg, 0f));
+                }
+
+                // Handprints of the old painters, stolen with the colour.
+                for (int s = -1; s <= 1; s += 2)
+                {
+                    b.Box(new Vector3(0.38f * s, 0.85f, 0.62f), new Vector3(0.18f, 0.2f, 0.04f), EnemySwatch.Bone, Quaternion.Euler(-15f, 0f, 12f * s));
+                }
+            });
+            // The colours it still has inside, swirling: they shine brighter the more it is hurt.
+            bp.Mesh(ProceduralEnemyParts.Core, body, new Vector3(0f, 0.15f, 0.72f), b => b.Blob(Vector3.zero, new Vector3(0.44f, 0.44f, 0.2f), EnemySwatch.StolenLight, coarse: true));
+            int head = bp.Mesh(ProceduralEnemyParts.Head, body, new Vector3(0f, 1.3f, 0.15f), b =>
+            {
+                b.Blob(Vector3.zero, new Vector3(0.8f, 0.62f, 0.72f), EnemySwatch.Shroud, coarse: true);
+                b.Box(new Vector3(-0.15f, 0.22f, 0.2f), new Vector3(0.3f, 0.08f, 0.3f), EnemySwatch.SandstoneDark, Quaternion.Euler(0f, 0f, 14f));
+                HinokuraBeastRecipes.AddEyes(b, 0.16f, 0.04f, 0.3f, 0.09f, EnemySwatch.SoftEye);
+            });
+            bp.Mesh(ProceduralEnemyParts.Jaw, head, new Vector3(0f, -0.2f, 0.3f), b => b.Blob(Vector3.zero, new Vector3(0.3f, 0.12f, 0.1f), EnemySwatch.Black, coarse: true));
+
+            for (int s = -1; s <= 1; s += 2)
+            {
+                float side = s;
+                bool right = s > 0;
+                // Two arms of running paint, a white handprint on each palm: they rise on the windup, before the smear.
+                bp.Mesh(right ? ProceduralEnemyParts.ArmRight : ProceduralEnemyParts.ArmLeft, body, new Vector3(0.85f * side, 0.55f, 0.1f), b =>
+                {
+                    b.Segment(Vector3.zero, new Vector3(0.3f * side, -0.55f, 0.15f), 0.24f, 0.18f, 6, EnemySwatch.GolemStoneDark);
+                    b.Segment(new Vector3(0.3f * side, -0.55f, 0.15f), new Vector3(0.36f * side, -1f, 0.3f), 0.18f, 0.14f, 6, EnemySwatch.Shroud);
+                    b.Blob(new Vector3(0.36f * side, -1.1f, 0.32f), new Vector3(0.32f, 0.26f, 0.3f), EnemySwatch.Shroud, coarse: true);
+                    b.Box(new Vector3(0.36f * side, -1.12f, 0.48f), new Vector3(0.16f, 0.16f, 0.03f), EnemySwatch.Bone);
+                }, meshKey: right ? "GreatSmudgeArm_R" : "GreatSmudgeArm_L");
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // Ninki Nanka (34)
+        // ------------------------------------------------------------------
+
+        public static void BuildNinkiNanka(ProceduralEnemyBlueprint bp)
+        {
+            int body = bp.Mesh(ProceduralEnemyParts.Body, -1, new Vector3(0f, 1.5f, 0f), b =>
+            {
+                // The dragoness of the bog sitting up in the reeds, so shy that being looked at hurts her, and whoever stares feels it.
+                b.Blob(Vector3.zero, new Vector3(1.1f, 1.5f, 1f), EnemySwatch.CaveMoss);
+                b.Blob(new Vector3(0f, -0.15f, 0.3f), new Vector3(0.78f, 1.1f, 0.5f), EnemySwatch.Lichen, coarse: true);
+                // Bog mud on her flanks and a ridge of soft spines down the back.
+                b.Blob(new Vector3(0f, -0.55f, -0.1f), new Vector3(1.05f, 0.5f, 0.9f), EnemySwatch.BarkDark, coarse: true);
+                for (int i = 0; i < 5; i++)
+                {
+                    b.Crystal(new Vector3(0f, 0.6f - i * 0.28f, -0.44f - 0.03f * i), 0.06f, 0.22f, EnemySwatch.Verdigris, Quaternion.Euler(-70f, 0f, 0f));
+                }
+            });
+            // The light in her chest that she hides from everyone.
+            bp.Mesh(ProceduralEnemyParts.Core, body, new Vector3(0f, 0.1f, 0.5f), b => b.Blob(Vector3.zero, new Vector3(0.3f, 0.36f, 0.16f), EnemySwatch.MoonEye, coarse: true));
+            int head = bp.Mesh(ProceduralEnemyParts.Head, body, new Vector3(0f, 0.95f, 0.22f), b =>
+            {
+                b.Blob(new Vector3(0f, 0.05f, 0f), new Vector3(0.55f, 0.5f, 0.55f), EnemySwatch.CaveMoss, coarse: true);
+                b.Blob(new Vector3(0f, -0.04f, 0.36f), new Vector3(0.36f, 0.26f, 0.42f), EnemySwatch.CaveMoss, coarse: true);
+                // Eyes cast down.
+                HinokuraBeastRecipes.AddEyes(b, 0.15f, 0.08f, 0.24f, 0.07f, EnemySwatch.SoftEye);
+                // A crest of reeds, the colour of the bog's junco.
+                for (int i = -2; i <= 2; i++)
+                {
+                    b.Horn(new Vector3(i * 0.07f, 0.26f, -0.1f), 0.03f, 0.42f - 0.05f * Mathf.Abs(i), 3, -10f, EnemySwatch.Sandstone, Quaternion.Euler(-20f, i * 10f, 0f));
+                }
+            });
+            bp.Mesh(ProceduralEnemyParts.Jaw, head, new Vector3(0f, -0.15f, 0.36f), b => b.Blob(new Vector3(0f, -0.02f, 0.06f), new Vector3(0.3f, 0.1f, 0.34f), EnemySwatch.Lichen, coarse: true));
+
+            for (int s = -1; s <= 1; s += 2)
+            {
+                float side = s;
+                bool right = s > 0;
+                // The forearms, folded up in front of her face: she hides behind them, and lifts them to shine.
+                bp.Mesh(right ? ProceduralEnemyParts.ArmRight : ProceduralEnemyParts.ArmLeft, body, new Vector3(0.5f * side, 0.42f, 0.25f), b =>
+                {
+                    b.Segment(Vector3.zero, new Vector3(0.12f * side, -0.45f, 0.28f), 0.13f, 0.1f, 6, EnemySwatch.CaveMoss);
+                    b.Segment(new Vector3(0.12f * side, -0.45f, 0.28f), new Vector3(-0.12f * side, -0.05f, 0.45f), 0.1f, 0.08f, 6, EnemySwatch.CaveMoss);
+                    b.Blob(new Vector3(-0.15f * side, 0f, 0.48f), new Vector3(0.18f, 0.14f, 0.16f), EnemySwatch.Verdigris, coarse: true);
+                }, meshKey: right ? "NinkiNankaArm_R" : "NinkiNankaArm_L");
+            }
+
+            // The long tail lying on the boardwalk behind her.
+            bp.Mesh(ProceduralEnemyParts.Tail, body, new Vector3(0f, -0.85f, -0.42f), b =>
+            {
+                b.Segment(Vector3.zero, new Vector3(0f, -0.5f, -0.55f), 0.28f, 0.18f, 6, EnemySwatch.CaveMoss);
+                b.Segment(new Vector3(0f, -0.5f, -0.55f), new Vector3(0.18f, -0.55f, -1.25f), 0.18f, 0.08f, 6, EnemySwatch.BarkDark);
+                b.Crystal(new Vector3(0.2f, -0.5f, -1.28f), 0.05f, 0.16f, EnemySwatch.Verdigris);
+            });
+
+            HinokuraBeastRecipes.AddBipedLegs(bp, 0.85f, 0.36f, 0.16f, EnemySwatch.CaveMoss, EnemySwatch.Verdigris, EnemySwatch.BarkDark, "NinkiNanka");
+        }
+
+        // ------------------------------------------------------------------
+        // Nian (45)
+        // ------------------------------------------------------------------
+
+        public static void BuildNian(ProceduralEnemyBlueprint bp)
+        {
+            int body = bp.Mesh(ProceduralEnemyParts.Body, -1, new Vector3(0f, 1.45f, 0f), b =>
+            {
+                // The beast that comes down from the peaks at the turn of the year, gone dark and forgetting it is afraid of red and of noise.
+                b.Blob(Vector3.zero, new Vector3(1.1f, 1f, 1.9f), EnemySwatch.VampFur);
+                b.Blob(new Vector3(0f, 0.12f, 0.55f), new Vector3(1.15f, 1f, 0.9f), EnemySwatch.VampFur, coarse: true);
+                b.Blob(new Vector3(0f, -0.32f, 0.1f), new Vector3(0.82f, 0.4f, 1.4f), EnemySwatch.WolfBelly, coarse: true);
+                // Old scales of gold down its back, gone dull.
+                for (int i = 0; i < 5; i++)
+                {
+                    b.Box(new Vector3(0f, 0.5f - i * 0.03f, 0.45f - i * 0.3f), new Vector3(0.26f, 0.06f, 0.22f), i % 2 == 0 ? EnemySwatch.Gold : EnemySwatch.CopperDark);
+                }
+            });
+            // The ember of the old year it swallowed, glowing in its chest.
+            bp.Mesh(ProceduralEnemyParts.Core, body, new Vector3(0f, -0.05f, 0.95f), b => b.Blob(Vector3.zero, new Vector3(0.36f, 0.38f, 0.16f), EnemySwatch.Ember, coarse: true));
+            int head = bp.Mesh(ProceduralEnemyParts.Head, body, new Vector3(0f, 0.42f, 1.05f), b =>
+            {
+                b.Blob(Vector3.zero, new Vector3(0.78f, 0.68f, 0.72f), EnemySwatch.VampFur, coarse: true);
+                b.Blob(new Vector3(0f, -0.1f, 0.34f), new Vector3(0.5f, 0.34f, 0.3f), EnemySwatch.WolfBelly, coarse: true);
+                HinokuraBeastRecipes.AddEyes(b, 0.2f, 0.12f, 0.3f, 0.11f, EnemySwatch.WarEye);
+                // The single horn of the nian, and its red mane gone dark.
+                b.Horn(new Vector3(0f, 0.3f, 0.05f), 0.09f, 0.62f, 4, -12f, EnemySwatch.Horn, Quaternion.Euler(-15f, 0f, 0f));
+                for (int i = 0; i < 7; i++)
+                {
+                    float a = Mathf.Lerp(-110f, 110f, i / 6f) * Mathf.Deg2Rad;
+                    b.Blob(new Vector3(Mathf.Sin(a) * 0.42f, Mathf.Cos(a) * 0.34f, -0.18f), new Vector3(0.24f, 0.3f, 0.2f), i % 2 == 0 ? EnemySwatch.WarCape : EnemySwatch.VampWing, coarse: true);
+                }
+            });
+            // The wide jaw with its fangs, that drops on the windup.
+            bp.Mesh(ProceduralEnemyParts.Jaw, head, new Vector3(0f, -0.26f, 0.3f), b =>
+            {
+                b.Blob(new Vector3(0f, -0.02f, 0.06f), new Vector3(0.48f, 0.16f, 0.34f), EnemySwatch.VampWing, coarse: true);
+                for (int s = -1; s <= 1; s += 2)
+                {
+                    b.Crystal(new Vector3(0.14f * s, 0.04f, 0.18f), 0.03f, 0.12f, EnemySwatch.Fang);
+                }
+            });
+            bp.Mesh(ProceduralEnemyParts.Tail, body, new Vector3(0f, 0.2f, -0.95f), b =>
+            {
+                b.Segment(Vector3.zero, new Vector3(0f, 0.35f, -0.35f), 0.1f, 0.07f, 5, EnemySwatch.VampFur);
+                b.Blob(new Vector3(0f, 0.45f, -0.45f), new Vector3(0.3f, 0.34f, 0.3f), EnemySwatch.WarCape, coarse: true);
+            });
+
+            HinokuraBeastRecipes.AddFourLegs(bp, 1f, 0.42f, 0.6f, -0.6f, 0.17f, EnemySwatch.VampFur, EnemySwatch.Black, "Nian");
+        }
+
+        // ------------------------------------------------------------------
+        // O Grifo Velho do Kurgan (48)
+        // ------------------------------------------------------------------
+
+        public static void BuildOldKurganGriffin(ProceduralEnemyBlueprint bp)
+        {
+            int body = bp.Mesh(ProceduralEnemyParts.Body, -1, new Vector3(0f, 1.45f, 0f), b =>
+            {
+                // The griffin that has guarded the gold of the kurgans so long it forgot whose it was: lion behind, old eagle in front.
+                b.Blob(new Vector3(0f, -0.05f, -0.25f), new Vector3(1f, 0.95f, 1.5f), EnemySwatch.SandstoneDark);
+                b.Blob(new Vector3(0f, 0.12f, 0.5f), new Vector3(1.05f, 1.05f, 0.95f), EnemySwatch.IvoryDark, coarse: true);
+                // Ruffled chest feathers, grey with age.
+                for (int i = 0; i < 6; i++)
+                {
+                    b.Box(new Vector3((i % 3 - 1) * 0.22f, 0.2f - (i / 3) * 0.22f, 0.92f), new Vector3(0.2f, 0.18f, 0.05f), i % 2 == 0 ? EnemySwatch.Ivory : EnemySwatch.IvoryDark, Quaternion.Euler(-10f, 0f, 0f));
+                }
+            });
+            // The plaque of Scythian gold on its chest, a stag curled on it: the part of the hoard it never lets go.
+            bp.Mesh(ProceduralEnemyParts.Core, body, new Vector3(0f, -0.25f, 0.95f), b => b.Box(Vector3.zero, new Vector3(0.34f, 0.26f, 0.05f), EnemySwatch.StolenLight));
+            int head = bp.Mesh(ProceduralEnemyParts.Head, body, new Vector3(0f, 0.75f, 0.95f), b =>
+            {
+                b.Blob(Vector3.zero, new Vector3(0.56f, 0.6f, 0.66f), EnemySwatch.Ivory, coarse: true);
+                HinokuraBeastRecipes.AddEyes(b, 0.18f, 0.1f, 0.18f, 0.08f, EnemySwatch.MoonEye);
+                // The hooked beak, and the ear tufts of an old griffin.
+                b.Crystal(new Vector3(0f, 0.02f, 0.28f), 0.1f, 0.34f, EnemySwatch.Gold, Quaternion.Euler(95f, 0f, 0f));
+                for (int s = -1; s <= 1; s += 2)
+                {
+                    b.Horn(new Vector3(0.16f * s, 0.26f, -0.1f), 0.05f, 0.32f, 3, -16f, EnemySwatch.IvoryDark, Quaternion.Euler(-25f, 0f, -18f * s));
+                }
+            });
+            bp.Mesh(ProceduralEnemyParts.Jaw, head, new Vector3(0f, -0.12f, 0.24f), b => b.Crystal(Vector3.zero, 0.06f, 0.2f, EnemySwatch.CopperDark, Quaternion.Euler(100f, 0f, 0f)));
+
+            for (int s = -1; s <= 1; s += 2)
+            {
+                float side = s;
+                bool right = s > 0;
+                // The old wings, ragged, folded along its sides: they open on the windup, over the hoard.
+                bp.Mesh(right ? ProceduralEnemyParts.ArmRight : ProceduralEnemyParts.ArmLeft, body, new Vector3(0.5f * side, 0.4f, 0.35f), b =>
+                {
+                    b.Segment(Vector3.zero, new Vector3(0.12f * side, 0.45f, -0.6f), 0.12f, 0.09f, 5, EnemySwatch.Copper);
+                    b.Segment(new Vector3(0.12f * side, 0.45f, -0.6f), new Vector3(0.08f * side, 0.2f, -1.25f), 0.09f, 0.05f, 5, EnemySwatch.CopperDark);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        float t = i / 4f;
+                        Vector3 root = Vector3.Lerp(new Vector3(0.12f * side, 0.3f, -0.1f), new Vector3(0.1f * side, 0.3f, -1.15f), t);
+                        b.Box(root + new Vector3(0.03f * side, -0.32f, -0.04f), new Vector3(0.05f, 0.62f - 0.06f * i, 0.24f), i % 2 == 0 ? EnemySwatch.Copper : EnemySwatch.Gold);
+                    }
+                }, meshKey: right ? "OldKurganGriffinWing_R" : "OldKurganGriffinWing_L");
+            }
+
+            bp.Mesh(ProceduralEnemyParts.Tail, body, new Vector3(0f, 0.05f, -1f), b =>
+            {
+                b.Segment(Vector3.zero, new Vector3(0f, -0.6f, -0.3f), 0.07f, 0.05f, 5, EnemySwatch.SandstoneDark);
+                b.Blob(new Vector3(0f, -0.66f, -0.32f), new Vector3(0.18f, 0.24f, 0.18f), EnemySwatch.BarkDark, coarse: true);
+            });
+
+            HinokuraBeastRecipes.AddFourLegs(bp, 1f, 0.4f, 0.62f, -0.6f, 0.15f, EnemySwatch.SandstoneDark, EnemySwatch.Horn, "OldKurganGriffin");
         }
     }
 }

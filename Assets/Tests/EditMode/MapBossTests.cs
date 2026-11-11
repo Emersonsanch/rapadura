@@ -12,13 +12,14 @@ using Rapadura.Gameplay.World.Map;
 using Rapadura.Gameplay.World.Map.Areas;
 using Rapadura.Gameplay.World.Map.Mechanics;
 using Rapadura.Gameplay.World.Map.Overworld;
+using Rapadura.Gameplay.WorldEvents;
 using Rapadura.UI.Bestiary;
 using UnityEngine;
 
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// The map bosses of the fichas (Docs/Mapas100.md 25, 26, 32, 37, 38, 43, 55, 56, 60, 62, 66, 69; <see cref="RegionBossRules.MapSpawns"/>): kept by the world bosses'
+    /// The map bosses of the fichas (Docs/Mapas100.md 04, 09, 15, 25, 26, 32, 34, 37, 38, 43, 45, 48, 55, 56, 60, 62, 66, 69; <see cref="RegionBossRules.MapSpawns"/>): kept by the world bosses'
     /// director and fought with their abilities, each with an ability of its own. Pure rules and data: the procedural models are built with the
     /// runtime's own components (no MonoBehaviour of this assembly is added).
     /// </summary>
@@ -31,12 +32,21 @@ namespace Rapadura.Tests
             RegionBossRules.RunawayCartId, RegionBossRules.GreatAlmasId, RegionBossRules.UnleapedCarpId,
         };
 
+        /// <summary>The map bosses of the maps every player walks (Regions 1–3: 04, 09, 15) and of the three left out of the middle story's leva (34, 45, 48).</summary>
+        private static readonly string[] FirstIds =
+        {
+            RegionBossRules.ForgottenSpinnerId, RegionBossRules.WellDrinkingRootId, RegionBossRules.GreatSmudgeId,
+            RegionBossRules.NinkiNankaId, RegionBossRules.NianId, RegionBossRules.OldKurganGriffinId,
+        };
+
         private static readonly string[] Ids =
         {
             RegionBossRules.RopeCutterId, RegionBossRules.EndlessBellId, RegionBossRules.WalrusQueenId,
             RegionBossRules.GrandfatherMammothId, RegionBossRules.ShisaKingId, RegionBossRules.FurnaceMasterId,
             RegionBossRules.MonsoonOctopusId, RegionBossRules.SmokeAurochsId, RegionBossRules.ForgetfulBridgeId,
             RegionBossRules.RunawayCartId, RegionBossRules.GreatAlmasId, RegionBossRules.UnleapedCarpId,
+            RegionBossRules.ForgottenSpinnerId, RegionBossRules.WellDrinkingRootId, RegionBossRules.GreatSmudgeId,
+            RegionBossRules.NinkiNankaId, RegionBossRules.NianId, RegionBossRules.OldKurganGriffinId,
         };
 
         /// <summary>The maps the story walks through in the 150–300 band (LateStoryCatalog) that have a boss in their ficha.</summary>
@@ -53,7 +63,17 @@ namespace Rapadura.Tests
             OverworldLayouts.CalhasId, OverworldLayouts.GeleiraId, OverworldLayouts.CanalLanternasMapId,
         };
 
-        private static readonly string[] StoryMaps = LateStoryMaps.Concat(MidStoryMaps).ToArray();
+        /// <summary>The maps of Regions 1–3 whose ficha has a boss the campaign does not already fight there, and 34, 45, 48.</summary>
+        private static readonly string[] FirstMaps =
+        {
+            MapLayouts.AmoreirasId, OverworldLayouts.KarezId, OverworldLayouts.AbrigosId,
+            OverworldLayouts.NinkiNankaId, OverworldLayouts.MuralhaMapId, OverworldLayouts.KurgansMapId,
+        };
+
+        /// <summary>The maps of Regions 1–4 where the campaign already has its boss (Kök-Böri 02, O Grande Ushabti 08, Hahya 14, Tages 20).</summary>
+        private static readonly int[] CampaignBossMaps = { 2, 8, 14, 20 };
+
+        private static readonly string[] StoryMaps = LateStoryMaps.Concat(MidStoryMaps).Concat(FirstMaps).ToArray();
 
         private const float WalkableDegrees = 45f;
 
@@ -129,6 +149,26 @@ namespace Rapadura.Tests
         }
 
         [Test]
+        public void TheFirstRegionsAndTheLeftOutMaps_GetTheirFichaBoss_WhereNoOtherBossStands()
+        {
+            foreach (string mapId in FirstMaps)
+            {
+                MapDefinition map = MapCatalog.Get(mapId);
+                Assert.IsNotNull(map, mapId);
+                CollectionAssert.DoesNotContain(CampaignBossMaps, map.MapId, $"{mapId}: the campaign already has its boss there");
+                Assert.IsFalse(RegionBossRules.AllSpawns.Any(s => s.MapId == mapId), $"{mapId}: no world boss on it");
+                Assert.AreEqual(1, RegionBossRules.MapSpawns.Count(s => s.MapId == mapId), mapId);
+            }
+
+            foreach (string mapId in FirstMaps.Take(3))
+            {
+                Assert.That(MapCatalog.Get(mapId).MonsterLevelMax, Is.InRange(1, 44), $"{mapId}: Regions 1–3, before the middle story");
+            }
+
+            CollectionAssert.AreEquivalent(FirstIds, RegionBossRules.MapSpawns.Where(s => FirstMaps.Contains(s.MapId)).Select(s => s.EnemyId));
+        }
+
+        [Test]
         public void TheLodo_StillWaitsForItsFiveFountains_TheMapBossesDoNot()
         {
             RegionBossSpawn lodo = RegionBossRules.SpawnOf(RegionBossRules.SwallowingMireId);
@@ -177,6 +217,21 @@ namespace Rapadura.Tests
             Assert.Less(Load(RegionBossRules.RunawayCartId).MaxHealth, Load(RegionBossRules.AydaharId).MaxHealth);
             Assert.Less(Load(RegionBossRules.GreatAlmasId).MaxHealth, Load(RegionBossRules.AydaharId).MaxHealth);
             Assert.Less(Load(RegionBossRules.UnleapedCarpId).MaxHealth, Load(RegionBossRules.FourGluttonsId).MaxHealth);
+            // Regions 1–3: their world boss is the scheduled event (WorldBossRules: one common of the region ×15).
+            Assert.Less(Load(RegionBossRules.ForgottenSpinnerId).MaxHealth, EventWorldBossHealth(BiomeType.Forest));
+            Assert.Less(Load(RegionBossRules.WellDrinkingRootId).MaxHealth, EventWorldBossHealth(BiomeType.Desert));
+            Assert.Less(Load(RegionBossRules.GreatSmudgeId).MaxHealth, EventWorldBossHealth(BiomeType.Mountain));
+            Assert.Less(Load(RegionBossRules.NinkiNankaId).MaxHealth, Load(RegionBossRules.SwallowingMireId).MaxHealth);
+            Assert.Less(Load(RegionBossRules.NianId).MaxHealth, Load(RegionBossRules.FourGluttonsId).MaxHealth);
+            Assert.Less(Load(RegionBossRules.OldKurganGriffinId).MaxHealth, Load(RegionBossRules.OhyaId).MaxHealth);
+            Assert.Less(Load(RegionBossRules.NinkiNankaId).AttackDamage, Load(RegionBossRules.SwallowingMireId).AttackDamage);
+            Assert.Less(Load(RegionBossRules.NianId).AttackDamage, Load(RegionBossRules.FourGluttonsId).AttackDamage);
+            Assert.Less(Load(RegionBossRules.OldKurganGriffinId).AttackDamage, Load(RegionBossRules.OhyaId).AttackDamage);
+            foreach (string id in FirstIds)
+            {
+                Assert.Less(Load(id).MaxHealth, 1180, $"{id}: below the strongest boss of the first regions (Tages)");
+            }
+
             foreach (string id in MidIds)
             {
                 Assert.Less(Load(id).AttackDamage, Load(RegionBossRules.FourGluttonsId).AttackDamage, $"{id}: hits softer than the last world boss of Regions 5–8");
@@ -186,6 +241,8 @@ namespace Rapadura.Tests
                 Assert.Less(Load(id).BossExperienceMultiplier, Load(RegionBossRules.WindKingId).BossExperienceMultiplier, id);
             }
         }
+
+        private static float EventWorldBossHealth(BiomeType region) => Load(WorldBossRules.For(region).DayEnemyId).MaxHealth * WorldBossRules.HealthCommons;
 
         [TestCaseSource(nameof(Ids))]
         public void Biome_ListsIt_AtWeightZero_SoEncountersNeverRollIt(string id)
@@ -257,6 +314,11 @@ namespace Rapadura.Tests
         [TestCase(ProceduralEnemyKind.RunawayCart)]
         [TestCase(ProceduralEnemyKind.GreatAlmas)]
         [TestCase(ProceduralEnemyKind.UnleapedCarp)]
+        [TestCase(ProceduralEnemyKind.ForgottenSpinner)]
+        [TestCase(ProceduralEnemyKind.WellDrinkingRoot)]
+        [TestCase(ProceduralEnemyKind.GreatSmudge)]
+        [TestCase(ProceduralEnemyKind.NinkiNanka)]
+        [TestCase(ProceduralEnemyKind.OldKurganGriffin)]
         public void TheOnesWithArms_RaiseThem_OnTheWindup(ProceduralEnemyKind kind)
         {
             GameObject visual = ProceduralEnemyModels.Instantiate(kind, null);
@@ -328,6 +390,22 @@ namespace Rapadura.Tests
             Assert.AreNotEqual(RegionBossTexts.CarpLeapKey(true), RegionBossTexts.CarpLeapKey(false));
         }
 
+        [Test]
+        public void GreatSmudge_CallsOutEachColour_AndNianItsFright()
+        {
+            Dictionary<string, LocalizationEntry> table = BestiaryTexts.Entries.ToDictionary(e => e.Key);
+            var keys = System.Enum.GetValues(typeof(SmudgeColour)).Cast<SmudgeColour>().Select(RegionBossTexts.SmudgeColourKey).ToList();
+            keys.Add(RegionBossTexts.NianFrightKey);
+            foreach (string key in keys)
+            {
+                Assert.IsTrue(table.TryGetValue(key, out LocalizationEntry entry), key);
+                Assert.IsFalse(string.IsNullOrWhiteSpace(entry.PtBR), key);
+                Assert.IsFalse(string.IsNullOrWhiteSpace(entry.En), key);
+            }
+
+            CollectionAssert.AllItemsAreUnique(keys);
+        }
+
         // ---------------------------------------------------------------- the arena
 
         [TestCaseSource(nameof(Ids))]
@@ -340,7 +418,13 @@ namespace Rapadura.Tests
             Vector2 arena = found.Value;
             Assert.AreEqual(spawn.LocalArena + spawn.WorldOffset, arena, id);
             Assert.AreEqual(spawn.MapId, OverworldRules.ZoneAt(world, arena).MapIdOrOwner, $"{id}: an area of its own map");
-            Assert.IsTrue(string.IsNullOrEmpty(OverworldRules.ZoneAt(world, arena).RequirementTag), $"{id}: on foot, nothing asked");
+            // On foot, nothing asked beyond what the whole map asks (the Muralha das Mil Torres, 45, wants its lamp in every one of its areas).
+            string tag = OverworldRules.ZoneAt(world, arena).RequirementTag;
+            if (!string.IsNullOrEmpty(tag))
+            {
+                Assert.AreEqual(MapCatalog.Get(spawn.MapId).SpecialRequirementTag, tag, $"{id}: on foot, nothing asked but the map's own");
+                Assert.IsTrue(world.Zones.Where(z => z.MapIdOrOwner == spawn.MapId).All(z => z.RequirementTag == tag), $"{id}: no area of its map asks less");
+            }
             Assert.IsTrue(world.World.Landmarks.Any(l => l.Kind == MapLandmarkKind.StoneRing && Vector2.Distance(l.Position, arena) < 1f), $"{id}: a stone ring marks the arena");
             foreach (MapSpawnZone clearing in world.World.Zones)
             {
@@ -592,6 +676,133 @@ namespace Rapadura.Tests
             Assert.IsTrue(RegionBossRules.LeapHits(1, carp, mark, new Vector2(0f, 13f)), "backing away into a long leap");
             Assert.AreEqual(mark, RegionBossRules.LeapLanding(1, mark, mark), "on top of the mark there is nowhere to overshoot");
             Assert.Greater(RegionBossRules.LeapOvershoot, RegionBossRules.LeapSplashRadius, "the mark is clear of a long leap");
+        }
+
+        [Test]
+        public void ForgottenSpinner_ATautThreadThrowsDown_ASlackOneDoesNot()
+        {
+            Assert.IsTrue(RegionBossRules.TautThreadHits(8f, 8f), "stood still: the thread is taut");
+            Assert.IsTrue(RegionBossRules.TautThreadHits(8f, 12f), "ran away: worse");
+            Assert.IsTrue(RegionBossRules.TautThreadHits(8f, 8f - RegionBossRules.ThreadSlack + 0.1f), "not close enough");
+            Assert.IsFalse(RegionBossRules.TautThreadHits(8f, 8f - RegionBossRules.ThreadSlack), "came in: slack");
+            Assert.IsFalse(RegionBossRules.TautThreadHits(3f, 2f), "at her legs there is nothing to pull");
+            Assert.IsFalse(RegionBossRules.TautThreadHits(3f, RegionBossRules.ThreadHugDistance), "hugging her");
+            Assert.IsTrue(RegionBossRules.TautThreadHits(3f, 3f), "close but standing still");
+            Assert.IsFalse(RegionBossRules.TautThreadHits(RegionBossRules.ThreadReach + 0.1f, 20f), "too far to be tied");
+            Assert.Less(RegionBossRules.ThreadReach, RegionBossRules.AbilityRange);
+            Assert.Less(RegionBossRules.ThreadSlack, RegionBossRules.ThreadReach - RegionBossRules.ThreadHugDistance, "there is always room to come in");
+        }
+
+        [Test]
+        public void WellDrinkingRoot_ComesUpOnTheHeroSteps_NewGroundIsSafe()
+        {
+            var steps = new List<Vector2> { new Vector2(0f, 0f), new Vector2(1.5f, 0f), new Vector2(3f, 0f) };
+            Assert.IsTrue(RegionBossRules.RootTrailHits(steps, Vector2.zero), "stood where the warning began");
+            Assert.IsTrue(RegionBossRules.RootTrailHits(steps, new Vector2(1.5f, 0.8f)), "on an old step");
+            Assert.IsTrue(RegionBossRules.RootTrailHits(steps, new Vector2(-1f, 0f)), "went back the way it came");
+            Assert.IsFalse(RegionBossRules.RootTrailHits(steps, new Vector2(3f + RegionBossRules.RootRadius + 0.1f, 0f)), "kept walking onto new ground");
+            Assert.IsFalse(RegionBossRules.RootTrailHits(steps, new Vector2(1.5f, RegionBossRules.RootRadius + 0.1f)), "stepped off the trail");
+            Assert.IsFalse(RegionBossRules.RootTrailHits(new List<Vector2>(), Vector2.zero));
+            Assert.IsFalse(RegionBossRules.RootTrailHits(null, Vector2.zero));
+            Assert.IsFalse(RegionBossRules.RootMarksStep(RegionBossRules.RootStepSeconds - 0.01f));
+            Assert.IsTrue(RegionBossRules.RootMarksStep(RegionBossRules.RootStepSeconds));
+            Assert.AreEqual(7, RegionBossRules.RootMaxSteps, "the first spot and one every 0.4 s of the 2.4 s warning");
+            Assert.Greater(5f * RegionBossRules.RootStepSeconds, RegionBossRules.RootRadius, "walking, the hero is off the last step by the time it comes up");
+        }
+
+        [Test]
+        public void GreatSmudge_OnlyTheColourLeftIsClean_AndItTurnsRound()
+        {
+            Assert.AreEqual(SmudgeColour.Ochre, RegionBossRules.SmudgeColourFor(0));
+            Assert.AreEqual(SmudgeColour.Red, RegionBossRules.SmudgeColourFor(1));
+            Assert.AreEqual(SmudgeColour.White, RegionBossRules.SmudgeColourFor(2));
+            Assert.AreEqual(SmudgeColour.Ochre, RegionBossRules.SmudgeColourFor(3));
+            Assert.AreEqual(SmudgeColour.Red, RegionBossRules.SmudgeColourFor(-1), "never throws on a bad count");
+            float near = 1f, middle = RegionBossRules.SmudgeBandWidth + 1f, far = RegionBossRules.SmudgeBandWidth * 2f + 1f;
+            Assert.IsFalse(RegionBossRules.SmudgeHits(SmudgeColour.Ochre, near), "ochre: right next to it");
+            Assert.IsTrue(RegionBossRules.SmudgeHits(SmudgeColour.Ochre, middle));
+            Assert.IsTrue(RegionBossRules.SmudgeHits(SmudgeColour.Ochre, far));
+            Assert.IsTrue(RegionBossRules.SmudgeHits(SmudgeColour.Red, near));
+            Assert.IsFalse(RegionBossRules.SmudgeHits(SmudgeColour.Red, middle), "red: the middle band");
+            Assert.IsTrue(RegionBossRules.SmudgeHits(SmudgeColour.White, middle));
+            Assert.IsFalse(RegionBossRules.SmudgeHits(SmudgeColour.White, far), "white: the far band");
+            Assert.IsFalse(RegionBossRules.SmudgeHits(SmudgeColour.Ochre, RegionBossRules.SmudgeBandWidth * RegionBossRules.SmudgeColours + 0.1f), "out of the smear");
+            Assert.IsTrue(RegionBossRules.SmudgeHits(SmudgeColour.Red, 0f), "under it");
+            Assert.Less(RegionBossRules.SmudgeBandWidth * RegionBossRules.SmudgeColours, RegionBossRules.AbilityRange);
+            Assert.IsTrue(RegionBossRules.SpawnOf(RegionBossRules.GreatSmudgeId).StrongerAtNight, "the ficha: the paintings only glow faintly at night");
+        }
+
+        [Test]
+        public void NinkiNanka_WhoeverLooksIsHit_TurningYourBackIsSafe()
+        {
+            Vector2 dragon = new Vector2(0f, 6f);
+            Vector2 hero = Vector2.zero;
+            Assert.IsTrue(RegionBossRules.GazeHits(dragon, hero, Vector2.up), "staring at her");
+            Assert.IsTrue(RegionBossRules.GazeHits(dragon, hero, new Vector2(0.8f, 1f)), "half looking");
+            Assert.IsFalse(RegionBossRules.GazeHits(dragon, hero, Vector2.down), "back turned");
+            Assert.IsFalse(RegionBossRules.GazeHits(dragon, hero, Vector2.right), "looking away");
+            Assert.IsFalse(RegionBossRules.GazeHits(dragon, new Vector2(0f, -RegionBossRules.GazeReach), Vector2.up), "too far to be seen");
+            Assert.IsTrue(RegionBossRules.GazeHits(dragon, dragon + new Vector2(0.2f, 0f), Vector2.down), "nose to nose there is no looking away");
+            Assert.IsTrue(RegionBossRules.GazeHits(dragon, hero, Vector2.zero), "no facing: caught looking");
+            Assert.Less(RegionBossRules.GazeHalfAngle, 90f, "turning sideways is enough");
+        }
+
+        [Test]
+        public void Nian_NoiseDuringTheWarning_CallsOffThePounce()
+        {
+            Vector2 mark = new Vector2(4f, 4f);
+            float max = 1000f;
+            Assert.IsTrue(RegionBossRules.NianTakesFright(800f, 800f - max * RegionBossRules.NianNoiseFraction, max), "hit hard enough");
+            Assert.IsFalse(RegionBossRules.NianTakesFright(800f, 800f - max * RegionBossRules.NianNoiseFraction + 1f, max), "not enough noise");
+            Assert.IsFalse(RegionBossRules.NianTakesFright(800f, 800f, max), "stood there quietly");
+            Assert.IsFalse(RegionBossRules.NianTakesFright(800f, 900f, max), "healing is no noise");
+            Assert.IsFalse(RegionBossRules.NianTakesFright(800f, 0f, 0f), "no health to read");
+            Assert.IsTrue(RegionBossRules.NianPounceHits(false, mark, mark + Vector2.left * (RegionBossRules.NianPounceRadius - 0.1f)));
+            Assert.IsFalse(RegionBossRules.NianPounceHits(false, mark, mark + Vector2.left * (RegionBossRules.NianPounceRadius + 0.1f)), "out of its leap");
+            Assert.IsFalse(RegionBossRules.NianPounceHits(true, mark, mark), "frightened, it jumps back");
+            Assert.Less(RegionBossRules.NianNoiseFraction, 0.1f, "a few blows in the warning are enough");
+            Assert.IsTrue(RegionBossRules.SpawnOf(RegionBossRules.NianId).StrongerAtNight, "the ficha: the nian is bolder at night");
+        }
+
+        [Test]
+        public void OldKurganGriffin_StrikesWhoeverStandsOnTheHoard_WhereverItIs()
+        {
+            Vector2 hoard = new Vector2(-10f, 30f);
+            Assert.IsTrue(RegionBossRules.HoardHits(hoard, hoard));
+            Assert.IsTrue(RegionBossRules.HoardHits(hoard, hoard + Vector2.up * (RegionBossRules.HoardRadius - 0.1f)), "on the edge of the gold");
+            Assert.IsFalse(RegionBossRules.HoardHits(hoard, hoard + Vector2.up * (RegionBossRules.HoardRadius + 0.1f)), "off the ring");
+            Assert.Less(RegionBossRules.HoardRadius, RegionBossRules.ArenaClearRadius, "no clearing reaches the hoard");
+            Assert.Less(RegionBossRules.HoardRadius, RegionBossRules.AbilityRange, "there is ground to fight on outside the ring");
+        }
+
+        [Test]
+        public void FirstMapBosses_EachSignatureIsNewToTheDirector_AtTheTopOfItsMap()
+        {
+            RegionBossSignature[] first =
+            {
+                RegionBossSignature.TautThread, RegionBossSignature.RootTrail, RegionBossSignature.StolenColours,
+                RegionBossSignature.ShyGaze, RegionBossSignature.NoiseFright, RegionBossSignature.HoardGuard,
+            };
+            CollectionAssert.AreEquivalent(first, FirstIds.Select(id => RegionBossRules.SpawnOf(id).Signature));
+            foreach (RegionBossSignature signature in first)
+            {
+                Assert.Greater((int)signature, (int)RegionBossSignature.FailedLeap, $"{signature}: after the ones that already exist");
+            }
+
+            foreach (string id in FirstIds)
+            {
+                RegionBossSpawn spawn = RegionBossRules.SpawnOf(id);
+                Assert.AreEqual(MapCatalog.Get(spawn.MapId).MonsterLevelMax, spawn.Level, id);
+                Assert.Less(spawn.Level, RegionBossRules.SpawnOf(RegionBossRules.OhyaId).Level, $"{id}: below the band of the letters");
+            }
+
+            for (int i = 0; i < FirstIds.Length; i++)
+            {
+                for (int j = i + 1; j < FirstIds.Length; j++)
+                {
+                    Assert.AreNotEqual(RegionBossRules.SpawnOf(FirstIds[i]).MapId, RegionBossRules.SpawnOf(FirstIds[j]).MapId);
+                }
+            }
         }
 
         [Test]

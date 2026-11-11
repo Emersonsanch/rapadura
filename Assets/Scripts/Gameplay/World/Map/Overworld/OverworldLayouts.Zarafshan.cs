@@ -57,6 +57,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public static readonly Vector2 MoinhoOffset = new Vector2(420f, 40f);
         public static readonly Vector2 BrejoOffset = new Vector2(880f, -560f);
         public static readonly Vector2 AmoreirasOffset = new Vector2(1225f, -560f);
+
+        /// <summary>A Fiandeira Esquecida's arena (04, map boss): the stone ring by the trail west of the mulberry grove, outside its rows and webs.</summary>
+        public static readonly Vector2 FiandeiraEsquecidaArena = new Vector2(1099f, -579f);
         public static readonly Vector2 GarajonayOffset = new Vector2(1225f, 300f);
         public static readonly Vector2 MihrshahOffset = new Vector2(1150f, 1050f);
 
@@ -269,6 +272,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, 120f, 1250f, 0f, 0.7f);
             Landmark(w, MapLandmarkKind.StoneRing, -640f, 600f, 0f, 0.6f);
             Landmark(w, MapLandmarkKind.StoneRing, 980f, 600f, 0f, 0.9f);
+            Landmark(w, MapLandmarkKind.StoneRing, FiandeiraEsquecidaArena.x, FiandeiraEsquecidaArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

@@ -55,6 +55,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>A Ponte que Esqueceu's arena (32, map boss): the stone ring on the trail through the Cascatas da Chuva, above the root gorges.</summary>
         public static readonly Vector2 PonteQueEsqueceuArena = new Vector2(-767f, 367f);
 
+        /// <summary>Ninki Nanka's arena (34, map boss): the stone ring on the boardwalk trail of the Brejo das Palmeiras, the one area of the bog that asks for no amulet.</summary>
+        public static readonly Vector2 NinkiNankaArena = new Vector2(1009f, -695f);
+
         /// <summary>Half the side (m) of Jhilpur's flat ground (its solids reach 22.5 m, its roads leave at 18.6 m).</summary>
         public const float JhilpurGround = 30f;
 
@@ -298,6 +301,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, -760f, 300f, 0f, 0.8f);
             Landmark(w, MapLandmarkKind.StoneRing, LodoArena.x, LodoArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, PonteQueEsqueceuArena.x, PonteQueEsqueceuArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, NinkiNankaArena.x, NinkiNankaArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

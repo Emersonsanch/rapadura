@@ -42,15 +42,21 @@
     um comum do nível (`28b8f39`). O Lodo-que-Engole só surge com as 5 Fontes acesas (`f0991e3`).
     - Regiões 5–9: Hedammu (30), Lodo-que-Engole (35), Aydahar (40), Quatro Gulosos (46) e Ohya (52).
     - Regiões 10–16: Rei-Vendaval, Velho Kul, Glutão de Brasa, Apep, Sonho da Destruição, A Grande Treva (solo) e Āz.
-- **Chefes de mapa:** 11 feitos, de cerca de 68 pedidos pelas fichas.
+- **Chefes de mapa:** 23 feitos, de cerca de 68 pedidos pelas fichas.
   - 5 antigos: Kök-Böri (02), O Grande Ushabti (08), Hahya (14) e Tages (20), lutados pelo mapa-múndi, e o Colosso de
     Crânios no Ossuário (24b).
   - 6 novos no mundo contínuo (`5b6dcb7`, `RegionBossRules.MapSpawns`, Nv 160–264), com golpe próprio, arena na trilha,
     modelo, loot e Caderno, e XP ×18 de um comum do nível: Cortador de Cordas (55), Sino que Não Para (56), Morsa-Rainha
     (60), Mamute Avô (62), Rei Shisa do Telhado (66) e Mestre das Nove Fornalhas (69).
-  - Faltam 57 (lista por região abaixo), 31 deles nas Regiões 1–9.
-- **Montarias:** 30 do catálogo-base (`MountCodex`), mais o Grifo da Coluna e as 8 das Regiões 10–14 (`MountFarRegionCatalog`).
-- **Conjuntos de equipamento:** Marfim dos Artífices (Ossuário, mapa 24b) e mais 4, das Regiões 13–16 (`ArmorSetRules`).
+  - 6 na estrada da história do meio (`27e4b96`, Nv 50–110): Polvo das Monções (25), Touro de Fumaça (26), Ponte que Esqueceu
+    (32), Carrinho Desgovernado (37), Grande Almas (38) e Carpa que Não Pulou (43).
+  - 6 nos mapas que todo jogador vê e nos três que ficaram de fora (2026-11-11, Nv 24–125, sem commit): Fiandeira Esquecida
+    (04), Raiz que Bebeu o Poço (09), Grande Borrão (15), Ninki Nanka (34), Nian (45) e Grifo Velho do Kurgan (48).
+  - Faltam 45 (lista por região abaixo), 19 deles nas Regiões 1–9.
+- **Montarias:** 30 do catálogo-base (`MountCodex`), mais o Grifo da Coluna, as 8 das Regiões 10–14 (`MountFarRegionCatalog`) e
+  1 própria em cada Região 5–9 (`MountMidRegionCatalog`, 2026-11-11): o Caderno lista 44.
+- **Conjuntos de equipamento:** Marfim dos Artífices (Ossuário, mapa 24b), 1 em cada Região 5–9 (`ArmorSetRules.Middle`, 2026-11-11) e 4 das Regiões 13–16 (`ArmorSetRules.Far`).
+- **Conjuntos de móveis regionais:** 1 em cada Região 5–9 (2026-11-11), na 11 e nas 13–16, vendidos na loja da capital (`Docs/Housing.md` §6.2).
 - **História:**
   - Campanha dos Atos I–V nas Regiões 1–4, até o nível ~20.
   - Cadeias pessoais dos 5 primos e a convergência.
@@ -87,7 +93,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Colheita diária no Pomar (01), vaus de Água Viva que curam até 70% (02) |
 | Mecânicas faltantes | Lama ×0,7 fora da passarela e Água Viva limpando poças (03); teias que prendem (04); andar nas plataformas, névoa a cada 3 min (05); item de damasco próprio (01). Em andamento, sem commit: libertar as faíscas para encher os canais (06, `ZarafshanGardenRules`) |
 | Chefe do mundo | Saklas, o Lobo de Cinzas (evento com horário, arena do mapa-múndi) |
-| Chefe de mapa | Feito: Kök-Böri (02, pelo mapa-múndi). Faltam 3: Mãe-Lodo (03), A Fiandeira Esquecida (04), O Velho da Névoa (05) |
+| Chefe de mapa | Feitos: Kök-Böri (02, pelo mapa-múndi) e A Fiandeira Esquecida (04, Nv 24, no mundo contínuo: fio esticado). Faltam 2: Mãe-Lodo (03), O Velho da Névoa (05) |
 | Montaria | Catálogo-base. Faltam as da ficha: Garça do Brejo (03), Lagarto-do-Louro (05) |
 | Conjunto | Nenhum de equipamento (o "do jardim" da ficha está em `Docs/Items.md` Falta) |
 | Móveis | Tugai do Zarafshan, Iwan da Vó Edna, Moinho do Pomar, Cozinha da Vó e outros conjuntos de família |
@@ -102,7 +108,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Tempestade de areia em toda a região, com abrigos (`AreiasStormRules`) |
 | Mecânicas faltantes | Escolta da caravana e visão de 6 m (07); leitura das inscrições (08); 09, 10 e 12 sem mecânica própria; Ritmo do Tambor e Têmpera do Tambor (11); Tambor Rubro numa mesa |
 | Chefe do mundo | Namrael, o Escorpião-Rei (evento com horário) |
-| Chefe de mapa | Feito: O Grande Ushabti (08, pelo mapa-múndi). Faltam 3: A Raiz que Bebeu o Poço (09), O Coral da Duna (10), O Chefe Coroado (11) |
+| Chefe de mapa | Feitos: O Grande Ushabti (08, pelo mapa-múndi) e A Raiz que Bebeu o Poço (09, Nv 26: raízes nos passos). Faltam 2: O Coral da Duna (10), O Chefe Coroado (11) |
 | Montaria | Catálogo-base. Falta a da ficha: Lobo de Guerra Ocre (11) |
 | Conjunto | Nenhum de equipamento |
 | Móveis | Areias Flamejantes, Caravana do Vô Jorge |
@@ -117,7 +123,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Ventos da serra (13–14) e pontes de corda que gastam fôlego dobrado, que a Maithe ignora (`KaggenWindRules`) |
 | Mecânicas faltantes | Curvar projéteis (13); neve no chão (14); balanço visual das pontes; ar fino no cume (18); gravar 1 runa por dia e as 5 etapas da Grande Forja (17) |
 | Chefe do mundo | Mazan, o Gigante da Serra (evento com horário) |
-| Chefe de mapa | Feito: Hahya (14, pelo mapa-múndi). Faltam 3: O Grande Borrão (15), O Pedreiro Mazan (16), O Fole Apagado (17) |
+| Chefe de mapa | Feitos: Hahya (14, pelo mapa-múndi) e O Grande Borrão (15, Nv 32: a cor que sobrou). Faltam 2: O Pedreiro Mazan (16), O Fole Apagado (17) |
 | Montaria | Catálogo-base. Faltam as da ficha: Eland (15), Carneiro de Bronze (17) |
 | Conjunto | Nenhum de equipamento |
 | Móveis | Picos de Litema |
@@ -147,10 +153,10 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Maré do recife de 8 min com 6 baixios e baú (25, `CostaTideRules`) |
 | Mecânicas faltantes | Corrida de Shulgi e Lira do Touro (26); câmera em corte, andar no fundo e reacender o coral (28); 27, 29 e 30 sem mecânica própria |
 | Chefe do mundo | Hedammu (30, Nv 72): mordida em cone, vida ×1,2 (`068253c`). Loot próprio (Escama de Hedammu) e troféu de casa |
-| Chefe de mapa | Nenhum feito. Faltam 5: O Polvo das Monções (25), O Touro de Fumaça (26), O Leão dos Relevos (27), A Moreia do Coral Cinza (28), O Caranguejo-Palácio (29) |
-| Montaria | Nenhuma da ficha: Dhow-Tartaruga, Auroque de Aratta, Elefante de Musawwarat |
-| Conjunto | Nenhum |
-| Móveis | Nenhum conjunto da região |
+| Chefe de mapa | Feitos 2 (`27e4b96`): O Polvo das Monções (25, Nv 50) e O Touro de Fumaça (26, Nv 55). Faltam 3: O Leão dos Relevos (27), A Moreia do Coral Cinza (28), O Caranguejo-Palácio (29) |
+| Montaria | Dhow-Tartaruga (25, épica, aquática; missão Garras no Mangue de Taa Pwani), `MountMidRegionCatalog`. Faltam Auroque de Aratta e Elefante de Musawwarat |
+| Conjunto | Coral de Kilwa (2 peças: Couraça de Pedra de Coral e Elmo de Madrepérola, Defesa 17/10; Coral que Fecha: ao ser atingido, 15% de curar 30% do golpe). Drop dos 9 bichos próprios da região, 1% por abate (`ArmorSetRules.Coral`, 2026-11-11) |
+| Móveis | Móveis da Porta Suaíli (8 peças, 22–360 de ouro, no Bazar de Pérolas da Mwana; Épica: Painel da porta entalhada de Taa Pwani, especial da semana; 2026-11-11) |
 
 ## Região 6 — Delta de Jhilpur · mapas 31–35 · nv 60–88
 
@@ -162,10 +168,10 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Ilhas de junco que mudam de lugar a cada 15 min (33, `DeltaIslandRules`); as 5 Fontes do Lodo (35, `LodoFountainRules`, `f0991e3`): espiral até o Olho do Lodo, lodo preto que morde e puxa e encolhe a cada fonte purificada (3 s com [E]/Usar), fonte limpa vira zona segura por 2 min, prêmio diário de 1 Pedra da Água Viva |
 | Mecânicas faltantes | Monção, escola de barco e Maré de Lodo (31); Lanterna de Fogo-Fátuo e Despertar o vizinho (33); 32 e 34 sem mecânica própria |
 | Chefe do mundo | Lodo-que-Engole (35, Nv 88): puxão, mais forte à noite, vida ×1,18 (`068253c`). Só surge com as 5 Fontes acesas, e cada fonte apagada na luta o fortalece 10%. Loot próprio (Lama Limpa do Lodo) e troféu |
-| Chefe de mapa | Nenhum feito. Faltam 3: A Ponte que Esqueceu (32), O Pescador de Luzes (33), Ninki Nanka (34); e o evento Maré de Lodo (31) |
-| Montaria | Nenhuma da ficha: Búfalo-d'Água, Sapo-Gigante, Ninki Nanka Mansa |
-| Conjunto | Nenhum |
-| Móveis | Nenhum |
+| Chefe de mapa | Feitos 2: A Ponte que Esqueceu (32, Nv 70, `27e4b96`) e Ninki Nanka (34, Nv 82: não olhe). Falta 1: O Pescador de Luzes (33); e o evento Maré de Lodo (31) |
+| Montaria | Sapo-Gigante de Tarchon (33, incomum, aquático; apito na Cestaria da Larthia), `MountMidRegionCatalog`. Faltam Búfalo-d'Água e Ninki Nanka Mansa |
+| Conjunto | Seda de Lótus (Gibão de Seda de Lótus e Capuz de Raiz Aérea, Defesa 18/10; Seiva do Lótus: ao matar, 20% de devolver 5% da mana). Drop dos 6 bichos próprios, 1% por abate (`ArmorSetRules.Lotus`, 2026-11-11) |
+| Móveis | Móveis da Casa nas Raízes (8 peças, 22–375 de ouro, em Barcos e Trocas do Nuhzadag; Épica: Estátua de búfalo-d'água entalhada em raiz; 2026-11-11) |
 
 ## Região 7 — Teto do Mundo · mapas 36–40 · nv 70–98
 
@@ -177,10 +183,10 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Avalanches com sino de 20 s nas 4 calhas (37, `TetoAvalancheRules`) |
 | Mecânicas faltantes | Os 7 terraços (36); 38–40 sem mecânica própria. Em andamento, sem commit: carrinho e descida cronometrada pelas calhas (37, `TetoCartRules`) |
 | Chefe do mundo | Aydahar (40, Nv 98): sopro em linha, vida ×1,2 (`068253c`). Loot próprio e troféu |
-| Chefe de mapa | Nenhum feito. Faltam 3: O Carrinho Desgovernado (37), O Grande Almas (38), O Senhor do Cata-Vento (39); e o evento Avalanche (36) |
-| Montaria | Nenhuma da ficha: Iaque do Teto do Mundo, Camelo-Bactriano Branco |
-| Conjunto | Nenhum (Terraço do Pamir só na ficha) |
-| Móveis | Nenhum |
+| Chefe de mapa | Feitos 2 (`27e4b96`): O Carrinho Desgovernado (37, Nv 80) e O Grande Almas (38, Nv 86). Falta 1: O Senhor do Cata-Vento (39); e o evento Avalanche (36) |
+| Montaria | Iaque do Teto do Mundo (36, incomum, carrega 350; apito nos Agasalhos do Sisinnios), `MountMidRegionCatalog`. Falta o Camelo-Bactriano Branco |
+| Conjunto | Lã de Iaque (Casaco de Lã de Iaque e Gorro de Feltro do Pamir, Defesa 19/10; Fôlego do Pamir: no crítico, 20% de curar 3% da vida). Drop dos 8 bichos próprios, 1% por abate (`ArmorSetRules.Yak`, 2026-11-11) |
+| Móveis | Móveis do Terraço do Pamir (o conjunto da ficha 36: 8 peças, 24–395 de ouro, em Agasalhos do Sisinnios; Épica: Fogão de pedra do terraço; 2026-11-11) |
 
 ## Região 8 — Planície de Mingcheng · mapas 41–46 · nv 90–140
 
@@ -192,10 +198,10 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Muralha andável com faróis e corredor de luz (45); mundo do reflexo nos arrozais (44) |
 | Mecânicas faltantes | 9 anéis e portões por hora (41); Relógio de Espelhos (42); 4 eclusas (43); palácios e o que cada um come (46) |
 | Chefe do mundo | Quatro Gulosos (46, Nv 140): um apetite por semana e outro à noite. Taotie derrama oferendas de moedas e avisa antes de engolir; Qiongqi inverte os passos por 3 s (`HeroControlMirror`, teto de 4 s). Loot próprio (Bronze Antigo dos Vasos) e troféu |
-| Chefe de mapa | Nenhum feito. Faltam 4: O Pequeno Eclipse (42), A Carpa que Não Pulou (43), O Espantalho de Palha Dourada (44), Nian, a Fera do Ano (45); e o evento Festa das Lanternas (41) |
-| Montaria | Nenhuma da ficha: Cervo de Luz Branca, Cavalo de Terracota Desperto, Qilin de Jade (cosmético) |
-| Conjunto | Nenhum (Vasos de Bronze, Arrozal, Torre Branca e Pátio dos Nove Anéis só nas fichas) |
-| Móveis | Nenhum regional (Festa das Lanternas é sazonal) |
+| Chefe de mapa | Feitos 2: A Carpa que Não Pulou (43, Nv 110, `27e4b96`) e Nian, a Fera do Ano (45, Nv 125: o barulho espanta). Faltam 2: O Pequeno Eclipse (42), O Espantalho de Palha Dourada (44); e o evento Festa das Lanternas (41) |
+| Montaria | Cervo de Luz Branca (42, épico; missão As Íbis Apagadas das Torres Brancas), `MountMidRegionCatalog`. Faltam Cavalo de Terracota Desperto e Qilin de Jade (cosmético) |
+| Conjunto | Vasos de Bronze (o conjunto antigo da ficha 46: Couraça de Bronze Antigo e Elmo do Vaso Ritual, Defesa 21/12; Gongo de Bronze: ao ser atingido, 10% de atingir até 3 inimigos a 4 m com 20% do golpe). Drop dos 8 bichos próprios, 1% por abate (`ArmorSetRules.Bronze`, 2026-11-11). Arrozal e Torre Branca só nas fichas |
+| Móveis | Móveis do Pátio dos Nove Anéis (o conjunto da ficha 41: 8 peças, 24–410 de ouro, nas Lanternas do Mestre Mōzak; Épica: Biombo laqueado dos nove anéis; 2026-11-11). A Festa das Lanternas é sazonal |
 
 ## Região 9 — Estepe dos Nartes · mapas 47–52 · nv 100–150
 
@@ -207,10 +213,10 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Corrida de estepe (47), Ouros do Céu (48, só a Lavine levanta), subida da Corrente de Amirani (52) |
 | Mecânicas faltantes | A cidade que anda (47); escala gigante e sonhos com baús (49); tempo lento (50); 51 sem mecânica própria |
 | Chefe do mundo | Ohya (52, Nv 150): corrente girando. Loot próprio (Elo de Ferro Antigo de Ohya) e troféu |
-| Chefe de mapa | Nenhum feito. Faltam 5: O Cavalo de Fumaça (47), O Grifo Velho do Kurgan (48), O Pesadelo da Tábua (49), A Serra de Āz (50), O Garanhão Cinzento (51) |
-| Montaria | Carneiro Gigante da Colina e Alce da Taiga (fichas 49/50) existem, mas vendidos em Dur-Jarras (R14). Faltam Cavalo Dourado da Estepe e Cavalo de Fumaça |
-| Conjunto | Nenhum |
-| Móveis | Nenhum |
+| Chefe de mapa | Feito 1: O Grifo Velho do Kurgan (48, Nv 114: o tesouro). Faltam 4: O Cavalo de Fumaça (47), O Pesadelo da Tábua (49), A Serra de Āz (50), O Garanhão Cinzento (51) |
+| Montaria | Cavalo Dourado da Estepe (47, raro; missão das águias do Acampamento de Soslan), `MountMidRegionCatalog`. Carneiro Gigante da Colina e Alce da Taiga (fichas 49/50) existem, mas vendidos em Dur-Jarras (R14). Falta o Cavalo de Fumaça |
+| Conjunto | Ouro dos Kurgans (Couraça de Escamas de Ouro e Elmo de Feltro e Ouro, Defesa 21/12; Galope dos Nartes: no crítico, 10% de atingir até 3 inimigos a 4 m com 30% do crítico). Drop dos 7 bichos próprios, 1% por abate (`ArmorSetRules.Kurgan`, 2026-11-11) |
+| Móveis | Móveis da Tenda de Feltro (o conjunto da ficha 47: 8 peças, 24–420 de ouro, na Selaria Nômade do Acampamento de Soslan; Épica: Tenda de feltro dos Nartes; 2026-11-11) |
 
 ## Região 10 — Picos de Farnkesh · mapas 53–58 · nv 140–200
 
@@ -387,11 +393,12 @@ a PlayMode inteira, que nunca rodou de uma vez.
      vermelho pelo `PlayModeReloadLock`.
    - Em andamento, sem commit: faíscas e canais do 06, carrinho do 37, silêncio do 56 e correnteza do 92. Precisam de teste
      passando no Unity e de commit antes de entrar como feitos.
-4. **Chefes de mapa das fichas: faltam 57.**
-   - Por quê: cada ficha promete um chefe que "se liberta", e hoje só há 11 (Kök-Böri, Grande Ushabti, Hahya, Tages, o
-     Colosso e os 6 de `5b6dcb7` nas Regiões 10–12). O sistema de `RegionBossRules.MapSpawns` já existe e é só reusar.
-   - Começar pelas Regiões 1–9, onde faltam 31 e por onde passa a história do meio: Mãe-Lodo (03), Fiandeira Esquecida (04),
-     Velho da Névoa (05), Polvo das Monções (25), Ninki Nanka (34), Carrinho Desgovernado (37), Nian (45), Grifo Velho (48)…
+4. **Chefes de mapa das fichas: faltam 45.**
+   - Por quê: cada ficha promete um chefe que "se liberta", e hoje há 23 (Kök-Böri, Grande Ushabti, Hahya, Tages, o
+     Colosso, os 6 de `5b6dcb7` nas Regiões 10–12, os 6 da história do meio de `27e4b96` e os 6 de 04, 09, 15, 34, 45 e 48).
+     O sistema de `RegionBossRules.MapSpawns` já existe e é só reusar.
+   - Começar pelas Regiões 1–9, onde faltam 19: Mãe-Lodo (03), Velho da Névoa (05), Coral da Duna (10), Chefe Coroado (11),
+     Pedreiro Mazan (16), Fole Apagado (17)…
      Depois os 6 das covas do Profundo (84–89) e os 6 do Céu.
 5. **Mecânicas que ainda mudam o percurso.**
    - Na estrada das Regiões 1–8: lama ×0,7 (03), teias que prendem (04), barcos do lago (19), medo do escuro (20), andar no
@@ -403,10 +410,12 @@ a PlayMode inteira, que nunca rodou de uma vez.
    - Por quê: a sensação de "região nova" depende deles. A primeira leva tirou 24; os maiores buracos agora são as Regiões
      16 (~16), 9 (~15), 5, 6, 7 e 15 (~11 cada). Seguir pela estrada da história: 9, depois 5–7.
 7. **Montarias, conjuntos e móveis das Regiões 1–9.**
-   - Por quê: as Regiões 5–9 não têm nenhum dos três, e as 1–4 só têm o Grifo da Coluna, o Marfim dos Artífices e os móveis
-     de família. São 19 montarias propostas no `Mapas100.md` §6 (Garça do Brejo, Lobo de Guerra Ocre, Eland, Dhow-Tartaruga,
-     Búfalo-d'Água, Iaque do Teto, Cervo de Luz Branca, Cavalo Dourado da Estepe…) e os conjuntos das fichas (Terraço do
-     Pamir, Vasos de Bronze…).
+   - Por quê: as Regiões 5–9 já têm 1 montaria própria cada (Dhow-Tartaruga, Sapo-Gigante, Iaque, Cervo de Luz Branca e
+     Cavalo Dourado), 1 conjunto de equipamento e 1 de móveis cada (2026-11-11: Coral de Kilwa, Seda de Lótus, Lã de Iaque,
+     Vasos de Bronze e Ouro dos Kurgans; Móveis da Porta Suaíli, da Casa nas Raízes, do Terraço do Pamir, do Pátio dos Nove
+     Anéis e da Tenda de Feltro); as 1–4 só têm o Grifo da Coluna, o Marfim dos Artífices e os móveis de família. Faltam 11 montarias das Regiões 1–9 propostas no `Mapas100.md` §6 (Garça do Brejo, Lobo de Guerra Ocre, Eland,
+     Auroque de Aratta, Búfalo-d'Água, Camelo-Bactriano…), os conjuntos das Regiões 1–4 e os outros conjuntos de casa das
+     fichas 5–9 (Jardim de Coral, Palafita, Arrozal, Torre Branca, Ouro da Estepe…).
 8. **Medir o mundo de 7200 × 15600 m num celular Android, com toque de verdade.**
    - Já feito por código: o `MechanicsDriverHub`, o fim do lixo das exigências, as amostras de chão reduzidas e a auditoria
      de telas com prints em 1280×720 e 2400×1080 (`c5b0a2a`, alvos de toque de 48 px). Nada disso foi medido em aparelho.

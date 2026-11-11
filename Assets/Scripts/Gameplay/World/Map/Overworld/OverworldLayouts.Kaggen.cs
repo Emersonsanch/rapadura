@@ -51,6 +51,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public static readonly Vector2 LitemaOffset = Vector2.zero;
         public static readonly Vector2 HahyaOffset = new Vector2(475f, 475f);
         public static readonly Vector2 AbrigoOffset = new Vector2(150f, 1300f);
+
+        /// <summary>O Grande Borrão's arena (15, map boss): the stone ring under the sandstone wall, by the trail west of the Abrigo do Eland.</summary>
+        public static readonly Vector2 GrandeBorraoArena = new Vector2(-267f, 1335f);
         public static readonly Vector2 RecintoOffset = new Vector2(-900f, 1300f);
         public static readonly Vector2 SaloesOffset = new Vector2(-1500f, -300f);
         public static readonly Vector2 EstelaOffset = new Vector2(-1500f, 500f);
@@ -206,6 +209,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, MazanRing.x, MazanRing.y, 0f, 1.3f);
             Landmark(w, MapLandmarkKind.StoneRing, -760f, 1230f, 0f, 0.9f);
             Landmark(w, MapLandmarkKind.StoneRing, -1080f, -620f, 0f, 0.7f);
+            Landmark(w, MapLandmarkKind.StoneRing, GrandeBorraoArena.x, GrandeBorraoArena.y, 0f, 1.1f);
             Sign(w, westFork, new Vector2(-280f, 60f), 4f, 0f);
             Sign(w, new Vector2(220f, -108f), new Vector2(440f, -104f), 4f, 20f);
             Sign(w, new Vector2(-40f, -420f), new Vector2(-230f, -380f), 4f, 0f);

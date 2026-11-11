@@ -60,6 +60,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>A Carpa que Não Pulou's arena (43, map boss): the stone ring on the west bank trail of the Canal das Lanternas.</summary>
         public static readonly Vector2 CarpaQueNaoPulouArena = new Vector2(373f, 613f);
 
+        /// <summary>Nian's arena (45, map boss): the stone ring on the trail of the Portão do Nian, south of the wall, under the peaks it comes down from.</summary>
+        public static readonly Vector2 NianArena = new Vector2(505f, 1417f);
+
         /// <summary>Half the side (m) of Mingcheng's flat ground (reserved for the ring city's recipe, ±28 m and more).</summary>
         public const float MingchengGround = 30f;
 
@@ -315,6 +318,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, -1000f, 1000f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, GulososArena.x, GulososArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, CarpaQueNaoPulouArena.x, CarpaQueNaoPulouArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, NianArena.x, NianArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

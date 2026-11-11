@@ -309,6 +309,13 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { RegionBossRules.RunawayCartId, ProceduralEnemyKind.RunawayCart },
             { RegionBossRules.GreatAlmasId, ProceduralEnemyKind.GreatAlmas },
             { RegionBossRules.UnleapedCarpId, ProceduralEnemyKind.UnleapedCarp },
+            // The map bosses every player meets (Docs/Mapas100.md 04, 09, 15) and 34, 45, 48.
+            { RegionBossRules.ForgottenSpinnerId, ProceduralEnemyKind.ForgottenSpinner },
+            { RegionBossRules.WellDrinkingRootId, ProceduralEnemyKind.WellDrinkingRoot },
+            { RegionBossRules.GreatSmudgeId, ProceduralEnemyKind.GreatSmudge },
+            { RegionBossRules.NinkiNankaId, ProceduralEnemyKind.NinkiNanka },
+            { RegionBossRules.NianId, ProceduralEnemyKind.Nian },
+            { RegionBossRules.OldKurganGriffinId, ProceduralEnemyKind.OldKurganGriffin },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -371,6 +378,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.ShisaKing, ProceduralEnemyKind.FurnaceMaster,
             ProceduralEnemyKind.MonsoonOctopus, ProceduralEnemyKind.SmokeAurochs, ProceduralEnemyKind.ForgetfulBridge, ProceduralEnemyKind.RunawayCart,
             ProceduralEnemyKind.GreatAlmas, ProceduralEnemyKind.UnleapedCarp,
+            ProceduralEnemyKind.ForgottenSpinner, ProceduralEnemyKind.WellDrinkingRoot, ProceduralEnemyKind.GreatSmudge, ProceduralEnemyKind.NinkiNanka,
+            ProceduralEnemyKind.Nian, ProceduralEnemyKind.OldKurganGriffin,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -401,7 +410,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>The map bosses of the fichas (<see cref="MapBossRecipes"/>; <see cref="RegionBossRules.MapSpawns"/>).</summary>
         public static bool IsMapBoss(ProceduralEnemyKind kind) =>
             (kind >= ProceduralEnemyKind.RopeCutter && kind <= ProceduralEnemyKind.FurnaceMaster)
-            || (kind >= ProceduralEnemyKind.MonsoonOctopus && kind <= ProceduralEnemyKind.UnleapedCarp);
+            || (kind >= ProceduralEnemyKind.MonsoonOctopus && kind <= ProceduralEnemyKind.OldKurganGriffin);
 
         private static string RegionBossIdOf(ProceduralEnemyKind kind)
         {
@@ -430,6 +439,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.RunawayCart: return RegionBossRules.RunawayCartId;
                 case ProceduralEnemyKind.GreatAlmas: return RegionBossRules.GreatAlmasId;
                 case ProceduralEnemyKind.UnleapedCarp: return RegionBossRules.UnleapedCarpId;
+                case ProceduralEnemyKind.ForgottenSpinner: return RegionBossRules.ForgottenSpinnerId;
+                case ProceduralEnemyKind.WellDrinkingRoot: return RegionBossRules.WellDrinkingRootId;
+                case ProceduralEnemyKind.GreatSmudge: return RegionBossRules.GreatSmudgeId;
+                case ProceduralEnemyKind.NinkiNanka: return RegionBossRules.NinkiNankaId;
+                case ProceduralEnemyKind.Nian: return RegionBossRules.NianId;
+                case ProceduralEnemyKind.OldKurganGriffin: return RegionBossRules.OldKurganGriffinId;
                 default: return RegionBossRules.EmberGluttonId;
             }
         }
@@ -1050,6 +1065,24 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.UnleapedCarp:
                     MapBossRecipes.BuildUnleapedCarp(blueprint);
+                    break;
+                case ProceduralEnemyKind.ForgottenSpinner:
+                    MapBossRecipes.BuildForgottenSpinner(blueprint);
+                    break;
+                case ProceduralEnemyKind.WellDrinkingRoot:
+                    MapBossRecipes.BuildWellDrinkingRoot(blueprint);
+                    break;
+                case ProceduralEnemyKind.GreatSmudge:
+                    MapBossRecipes.BuildGreatSmudge(blueprint);
+                    break;
+                case ProceduralEnemyKind.NinkiNanka:
+                    MapBossRecipes.BuildNinkiNanka(blueprint);
+                    break;
+                case ProceduralEnemyKind.Nian:
+                    MapBossRecipes.BuildNian(blueprint);
+                    break;
+                case ProceduralEnemyKind.OldKurganGriffin:
+                    MapBossRecipes.BuildOldKurganGriffin(blueprint);
                     break;
             }
 

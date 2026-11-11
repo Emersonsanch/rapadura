@@ -77,6 +77,16 @@ namespace Rapadura.Gameplay.Enemies
         private int _leaps;
         private float _runUp;
 
+        // The map bosses of the first regions and of 34, 45, 48: how far the hero was when the Fiandeira tied her thread, the steps the root marked
+        // during its warning, the Borrão's smears and the colour it left, Nian's health when it began to stalk, and where the old griffin keeps his hoard.
+        private float _threadTiedAt;
+        private readonly List<Vector2> _rootSteps = new List<Vector2>(RegionBossRules.RootMaxSteps);
+        private float _rootStepTimer;
+        private int _smears;
+        private SmudgeColour _smudgeClean;
+        private float _healthAtWarning;
+        private Vector3 _home;
+
         public RegionBossPhase Phase => _phase;
 
         /// <summary>True while a great blow is telegraphed.</summary>
@@ -111,6 +121,11 @@ namespace Rapadura.Gameplay.Enemies
             _throws = 0;
             _leaps = 0;
             _runUp = 0f;
+            _threadTiedAt = 0f;
+            _rootSteps.Clear();
+            _rootStepTimer = 0f;
+            _smears = 0;
+            _healthAtWarning = 0f;
             EventBus.Subscribe<CombatTargetDiedEvent>(HandleTargetDied);
         }
 
@@ -139,6 +154,8 @@ namespace Rapadura.Gameplay.Enemies
             _health = _controller.Health != null ? _controller.Health : GetComponentInParent<Health>();
             _spawn = _spawn ?? RegionBossRules.SpawnOf(_controller.Definition.name);
             _lastStrike = _controller.StrikeSequence;
+            // Armed on the first frame after the director put it on its ring: where the old griffin keeps his gold.
+            _home = transform.position;
             _armed = _spawn != null;
             return _armed;
         }
@@ -304,6 +321,17 @@ namespace Rapadura.Gameplay.Enemies
                     _holdMarked = true;
                 }
 
+                if (signature == RegionBossSignature.RootTrail && hero != null)
+                {
+                    // The root follows the hero's steps under the ground while it warns.
+                    _rootStepTimer += deltaTime;
+                    if (RegionBossRules.RootMarksStep(_rootStepTimer) && _rootSteps.Count < RegionBossRules.RootMaxSteps)
+                    {
+                        _rootStepTimer = 0f;
+                        _rootSteps.Add(Flat(hero.position));
+                    }
+                }
+
                 if (_signatureWindup <= 0f)
                 {
                     _signatureWindup = 0f;
@@ -366,6 +394,30 @@ namespace Rapadura.Gameplay.Enemies
                 warning = RegionBossTexts.CarpLeapKey(fallsShort);
                 Vector2 landing = RegionBossRules.LeapLanding(_leaps, Flat(_signatureOrigin), Flat(_signatureImpact));
                 DungeonShockwave.Spawn(new Vector3(landing.x, _signatureImpact.y, landing.y), null, _controller.gameObject, 0f, 0f);
+            }
+            else if (signature == RegionBossSignature.TautThread)
+            {
+                _threadTiedAt = FlatDistance(_signatureImpact, _signatureOrigin);
+            }
+            else if (signature == RegionBossSignature.RootTrail)
+            {
+                _rootSteps.Clear();
+                _rootSteps.Add(Flat(_signatureImpact));
+                _rootStepTimer = 0f;
+            }
+            else if (signature == RegionBossSignature.StolenColours)
+            {
+                _smudgeClean = RegionBossRules.SmudgeColourFor(_smears++);
+                warning = RegionBossTexts.SmudgeColourKey(_smudgeClean);
+            }
+            else if (signature == RegionBossSignature.NoiseFright)
+            {
+                _healthAtWarning = _health != null ? _health.CurrentHealth : 0f;
+            }
+            else if (signature == RegionBossSignature.HoardGuard)
+            {
+                // The ring of his gold: the only place he strikes.
+                DungeonShockwave.Spawn(_home, null, _controller.gameObject, 0f, 0f);
             }
 
             DungeonShockwave.Spawn(MarksTheHeroSpot(signature) ? _signatureImpact : transform.position, null, _controller.gameObject, 0f, 0f);
@@ -605,6 +657,72 @@ namespace Rapadura.Gameplay.Enemies
                     if (RegionBossRules.LeapHits(_leaps++, Flat(_signatureOrigin), Flat(_signatureImpact), heroFlat))
                     {
                         victim.ApplyDamage(Damage(RegionBossRules.LeapDamageFactor), ElementType.Physical, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.TautThread:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.TautThreadHits(_threadTiedAt, FlatDistance(hero.position, transform.position)))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.ThreadDamageFactor), ElementType.Physical, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.RootTrail:
+                    foreach (Vector2 step in _rootSteps)
+                    {
+                        DungeonShockwave.Spawn(new Vector3(step.x, _signatureImpact.y, step.y), null, _controller.gameObject, 0f, 0f);
+                    }
+
+                    if (RegionBossRules.RootTrailHits(_rootSteps, heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.RootDamageFactor), ElementType.Earth, _controller.gameObject);
+                    }
+
+                    _rootSteps.Clear();
+                    break;
+
+                case RegionBossSignature.StolenColours:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.SmudgeHits(_smudgeClean, FlatDistance(hero.position, transform.position)))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.SmudgeDamageFactor), ElementType.Dark, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.ShyGaze:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.GazeHits(Flat(transform.position), heroFlat, Flat(hero.forward)))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.GazeDamageFactor), ElementType.Poison, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.NoiseFright:
+                    bool frightened = _health != null && RegionBossRules.NianTakesFright(_healthAtWarning, _health.CurrentHealth, _health.MaxHealth);
+                    if (frightened)
+                    {
+                        DungeonFx.Warn(transform.position + Vector3.up * 4f, Text(RegionBossTexts.NianFrightKey));
+                        break;
+                    }
+
+                    DungeonShockwave.Spawn(_signatureImpact, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.NianPounceHits(false, Flat(_signatureImpact), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.NianDamageFactor), ElementType.Fire, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.HoardGuard:
+                    DungeonShockwave.Spawn(_home, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.HoardHits(Flat(_home), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.HoardDamageFactor), ElementType.Wind, _controller.gameObject);
                     }
 
                     break;
@@ -883,7 +1001,8 @@ namespace Rapadura.Gameplay.Enemies
             signature == RegionBossSignature.DreamFall || signature == RegionBossSignature.PassBreath || signature == RegionBossSignature.FourAppetites
             || signature == RegionBossSignature.RopeCut || signature == RegionBossSignature.EchoToll || signature == RegionBossSignature.BellyFlop
             || signature == RegionBossSignature.CeilingFall || signature == RegionBossSignature.ForgeStroke
-            || signature == RegionBossSignature.ForgottenPlanks || signature == RegionBossSignature.RunawayRun;
+            || signature == RegionBossSignature.ForgottenPlanks || signature == RegionBossSignature.RunawayRun
+            || signature == RegionBossSignature.RootTrail || signature == RegionBossSignature.NoiseFright;
 
         private static long UtcDay() => (long)(System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc)).TotalDays;
 
