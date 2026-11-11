@@ -299,40 +299,24 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void Hub_SwitchesFakeDriversByPosition_AndLeavesUnreadyOnesAlone()
+        public void Hub_SwitchesDriversByPosition_AndLeavesUnreadyOnesAlone()
         {
-            var go = new GameObject("HubTest");
-            try
-            {
-                FakeRegionMechanics west = go.AddComponent<FakeRegionMechanics>();
-                FakeRegionMechanics east = go.AddComponent<FakeRegionMechanics>();
-                FakeRegionMechanics unready = go.AddComponent<FakeRegionMechanics>();
-                west.Areas = new[] { Rect.MinMaxRect(0f, 0f, 1000f, 1000f) };
-                east.Areas = new[] { Rect.MinMaxRect(1000f, 0f, 2000f, 1000f) };
-                unready.enabled = false;
-                MechanicsDriverHub hub = go.AddComponent<MechanicsDriverHub>();
-                Assert.AreEqual(3, hub.DriverCount);
+            // A MonoBehaviour from this editor-only test assembly cannot be added to a GameObject, so the hub's per-driver
+            // decision is checked through its pure Decide (what Refresh applies to each driver).
+            Rect[] west = { Rect.MinMaxRect(0f, 0f, 1000f, 1000f) };
+            Rect[] east = { Rect.MinMaxRect(1000f, 0f, 2000f, 1000f) };
 
-                hub.Refresh(new Vector2(500f, 500f));
-                Assert.IsTrue(west.enabled);
-                Assert.IsFalse(east.enabled);
-                Assert.IsFalse(unready.enabled, "no areas: left as it was");
+            Assert.AreEqual(true, MechanicsDriverHub.Decide(west, new Vector2(500f, 500f), false));
+            Assert.AreEqual(false, MechanicsDriverHub.Decide(east, new Vector2(500f, 500f), false));
+            Assert.IsNull(MechanicsDriverHub.Decide(null, new Vector2(500f, 500f), false), "no areas: left as it was");
+            Assert.IsNull(MechanicsDriverHub.Decide(null, new Vector2(500f, 500f), true), "no areas, even busy: left as it was");
 
-                hub.Refresh(new Vector2(990f, 500f));
-                Assert.IsTrue(west.enabled && east.enabled, "both at the border");
+            Assert.IsTrue(MechanicsDriverHub.Decide(west, new Vector2(990f, 500f), false) == true
+                && MechanicsDriverHub.Decide(east, new Vector2(990f, 500f), false) == true, "both at the border");
 
-                hub.Refresh(new Vector2(1500f, 500f));
-                Assert.IsFalse(west.enabled);
-                Assert.IsTrue(east.enabled);
-
-                west.Busy = true;
-                hub.Refresh(new Vector2(1500f, 500f));
-                Assert.IsTrue(west.enabled, "a busy driver stays on");
-            }
-            finally
-            {
-                Object.DestroyImmediate(go);
-            }
+            Assert.AreEqual(false, MechanicsDriverHub.Decide(west, new Vector2(1500f, 500f), false));
+            Assert.AreEqual(true, MechanicsDriverHub.Decide(east, new Vector2(1500f, 500f), false));
+            Assert.AreEqual(true, MechanicsDriverHub.Decide(west, new Vector2(1500f, 500f), true), "a busy driver stays on");
         }
     }
 }

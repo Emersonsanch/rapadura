@@ -78,6 +78,20 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             return false;
         }
 
+        /// <summary>
+        /// What <see cref="Refresh"/> does to one driver (pure): null leaves it as it is (not started yet, or the layout has no
+        /// such region and the driver turned itself off for good), otherwise whether it runs with the hero at <paramref name="hero"/>.
+        /// </summary>
+        public static bool? Decide(Rect[] areas, Vector2 hero, bool busy)
+        {
+            if (areas == null)
+            {
+                return null;
+            }
+
+            return ShouldRun(areas, hero, Margin, busy);
+        }
+
         private void Update()
         {
             if (Time.unscaledTime < _nextTick)
@@ -108,17 +122,15 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             for (int i = 0; i < _drivers.Count; i++)
             {
                 Behaviour driver = _drivers[i];
-                Rect[] areas = _regions[i].MechanicsAreas;
-                if (driver == null || areas == null)
+                if (driver == null)
                 {
-                    // Not started yet, or the layout has no such region (the driver turned itself off for good).
                     continue;
                 }
 
-                bool run = ShouldRun(areas, hero, Margin, _regions[i].MechanicsBusy);
-                if (driver.enabled != run)
+                bool? run = Decide(_regions[i].MechanicsAreas, hero, _regions[i].MechanicsBusy);
+                if (run.HasValue && driver.enabled != run.Value)
                 {
-                    driver.enabled = run;
+                    driver.enabled = run.Value;
                 }
             }
         }
