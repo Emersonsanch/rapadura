@@ -2732,10 +2732,12 @@ Implementa `Docs/Progressao500.md` §1–4 (escopo de conteúdo "até 100"; o c�
 | Nível | ×vida / ×dano | 2 comuns | Chefe | Parado, chefe mata em | Só básico: mata em |
 |---|---|---|---|---|---|
 | 15 | 1,00 / 1,00 | 4,0 s | 19,9 s | 26,5 s | 33,5 s |
-| 50 | 2,02 / 2,70 | 4,0 s | 19,7 s | 27,2 s | 32,0 s |
-| 100 | 4,06 / 5,88 | 4,0 s | 19,2 s | 24,1 s | 30,5 s |
+| 50 | 2,02 / 2,32 | 4,0 s | 19,7 s | 31,5 s | 32,0 s |
+| 100 | 4,06 / 4,21 | 4,0 s | 19,3 s | 33,2 s | 30,5 s |
 
   Limites: chefe 85–120% e comuns 80–130% do nível 15, parado 12–40 s, só básico ≥ 75% do tempo para morrer. Tudo dentro.
+  Números de 2026-11-11, depois de `HeroToughnessGrowthPerLevel` 0,005 → 0 (`Docs/Progressao500.md` §4.1,
+  `Docs/Balanco100a500.md`): o ×dano passou a ser só a curva de vida, e o chefe parado demora mais para matar.
 - **Mestre**: abre no **500** (`MasterLevelRules.RequiredLevel = LevelCurveMath.MaxLevel`); XP de mestre
   `xp(500) × 0,5 × (1 + 0,05 × nível)` (10,7 mi no mestre 0). `MaxMasterLevel` fica 30 até a árvore ganhar as 3 linhas novas.
   Migração em `Docs/ClassEvolution.md` §4.

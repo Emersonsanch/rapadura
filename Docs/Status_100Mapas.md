@@ -1,14 +1,19 @@
 # Status dos 100 mapas, região por região
 
-> Levantamento de **2026-11-11**, conferido no código do commit `4c8bb42` (não no CHANGELOG). Fontes das faltas: linhas
+> Levantamento de **2026-11-11**, conferido no código até o commit `6804e2b` (não no CHANGELOG), mais as mecânicas dos mapas
+> 24, 76 e 83, que estão no código e ainda não foram commitadas. Fontes das faltas: linhas
 > "Falta" / "No jogo" de `Docs/Mapas100.md` e `Docs/Cities.md`; bichos em `Docs/WorldBible_Maniqueismo.md` §3.2.1;
 > montarias em `Docs/Mounts.md` §3.8–3.9; conjuntos em `Docs/Items.md`; móveis em `Docs/Housing/CatalogoCasa.md`.
 >
-> **Nada desta página foi visto jogando**, salvo onde está escrito. Tudo foi feito por código e testes EditMode. A última suíte
-> EditMode passou, menos 6 casos que o `4c8bb42` corrigiu e que ainda não rodaram de novo no Unity.
+> **Nada desta página foi visto jogando**, salvo onde está escrito. Tudo foi feito por código e testes EditMode.
 >
-> Trabalho em andamento de outros agentes, **não contado aqui como pronto**: chefes do mundo das Regiões 5–9, janela de
-> mapas (tecla M) e balanço dos níveis 100–500.
+> Estado dos testes no Unity:
+> - **Rodados e passando:** a suíte EditMode de `84f51a4` (7.384 casos; das 7 falhas, as 2 do código commitado foram corrigidas
+>   no próprio commit). Ela cobre os chefes das Regiões 5–9, a janela de mapas, o DriverHub e a performance, o botão Usar e o
+>   save do baú e da faísca. Também passaram a história do meio (`7373d95`), a migração de saves (`13c8f95`), os Quatro Gulosos
+>   (`6804e2b`) e a rota 01→100 (`ProgressionPathTests`, `89a7c19`).
+> - **Ainda não rodados no Unity:** loot dos chefes (`24b116a`), troféus de chefe (`eca5d21`), balanço 100–500 aplicado
+>   (`17941ef`, conferido só no Python), níveis das áreas (`d404331`) e as mecânicas dos mapas 24, 76 e 83 (sendo validadas agora).
 
 ## Visão geral
 
@@ -20,12 +25,18 @@
   Todas ficam dentro do mundo contínuo e usam a própria receita (`CityTownRecipes.*`). Os postos são `K.Outpost`, sem respawn.
 - **Bichos próprios:** 130 nas tabelas da bíblia §3.2.1, todos com asset em `Resources/Enemies`. Somam-se a eles os 19
   bichos de base dos 4 biomas.
-- **Mecânicas:** 65 arquivos em `Gameplay/World/Map/Mechanics/`, com pelo menos uma mecânica por região. São regras puras
-  com driver por região, e o estado vai salvo por slot em `WorldMapProgress`.
+- **Mecânicas:** 73 arquivos em `Gameplay/World/Map/Mechanics/`, com pelo menos uma mecânica por região. São regras puras
+  com driver por região, e o estado vai salvo por slot em `WorldMapProgress`. O `MechanicsDriverHub` liga só o driver da
+  região do herói (1 `Update` por frame em vez de 14). O botão de toque **Usar** do HUD acende quando há uma interação [E] ao
+  alcance, o que faz as mecânicas funcionarem no celular.
 - **Chefes do mundo:**
   - Regiões 1–4: eventos com horário marcado (`WorldBossRules`), lutados numa arena do mapa-múndi e não no mundo contínuo.
-  - Regiões 10–16: chefes no anel de pedras (`RegionBossRules`/`RegionBossDirector`).
-  - Regiões 5–9: nenhum ainda.
+  - Regiões 5–16: 12 chefes no mundo contínuo (`RegionBossRules`/`RegionBossDirector`), cada um com arena plana e alcançável,
+    página no Caderno, loot próprio (`24b116a`, destrava as 10 peças de roupa de chefe) e troféu de casa feito na Forja depois
+    de vencê-lo (`casa_trofeu_025–036`). O estado de volta dos chefes zera em novo jogo e ao carregar, e conta pelo relógio do
+    jogo (`RegionBossReturns`).
+    - Regiões 5–9: Hedammu (30), Lodo-que-Engole (35), Aydahar (40), Quatro Gulosos (46) e Ohya (52).
+    - Regiões 10–16: Rei-Vendaval, Velho Kul, Glutão de Brasa, Apep, Sonho da Destruição, A Grande Treva (solo) e Āz.
 - **Montarias:** 30 do catálogo-base (`MountCodex`), mais o Grifo da Coluna e as 8 das Regiões 10–14 (`MountFarRegionCatalog`).
 - **Conjuntos de equipamento:** Marfim dos Artífices (Ossuário, mapa 24b) e mais 4, das Regiões 13–16 (`ArmorSetRules`).
 - **História:**
@@ -33,8 +44,14 @@
   - Cadeias pessoais dos 5 primos e a convergência.
   - Missões regionais nos 4 hubs (`RegionQuestCatalog`, Regiões 1–4) e 2 missões em cada uma das outras 23 cidades
     (46 `quest_city_*`).
+  - **A Lua que Não Enche** (`MidStoryCatalog`, `Docs/HistoriaMeio_20a100.md`): 15 etapas nas Regiões 1–8, do nível 20 ao
+    97, do Salão de Tages aos Fossos de Terracota, com fala dos 5 primos e o diário da Vó Edna. A primeira Carta da Estrada
+    passa a exigir a lua cheia. Saves antigos: o `MidStorySaveMigration` roda uma vez ao carregar (StorySchema 0 → 1). Quem
+    já tocou nas Cartas recebe as 15 etapas como concluídas, sem recompensa repetida. Quem não tocou faz a Lua como conteúdo
+    novo, oferecida pela Vó Edna a partir do nível 20.
   - **As Cartas da Estrada** (`LateStoryCatalog`): 17 etapas nas Regiões 9–16, do nível 100 ao 500, até a Varanda do mapa 100.
-  - **Buraco:** não há história principal entre o nível ~20 e o 100.
+- **Níveis:** as áreas do mundo contínuo batem com o `MapCatalog` (`d404331`: 22 divergências corrigidas,
+  `MapZoneLevelConsistencyTests`). O balanço 100–500 está aplicado (`17941ef`, `Docs/Balanco100a500.md`).
 - **Rede:** só o estudo (`Docs/Network.md`: Mirror + KCP, servidor Linux dedicado, Nakama). O protótipo ainda não começou.
 
 Legenda: **feito** = no código, com testes; *(não testado jogando)* vale para tudo; "emprestado" = papel de uma ficha
@@ -91,8 +108,8 @@ feito por um bicho de outra região ou do bioma.
 | Cidade | Vila das Lamparinas (hub) e Mercado dos Túneis (raça, 22, estilo `TunnelBazaar`), dentro do mundo |
 | Mundo contínuo | Feito, 2400 × 2400 m (`OverworldLayouts.Limiar.cs`), com o portão do Ossuário |
 | Bichos próprios | 6: 4 de base das Cavernas e mais Lodo de Gruta e Corvo-da-Treva. Ainda sem bicho próprio: Ubır jovem (20). Ossuário com 5 esqueletos próprios |
-| Mecânicas feitas | Lâmpadas salvas que encurtam a volta à Vila (19, `LimiarLampRules`) |
-| Mecânicas faltantes | Barcos do lago (19); medo do escuro (20); poços de vento para planar (24); a feira que muda de galeria por dia (22); entrada direta no Ossuário sem passar pelo mapa da ilha |
+| Mecânicas feitas | Lâmpadas salvas que encurtam a volta à Vila (19, `LimiarLampRules`); poços de vento para planar sobre os abismos do Ninho de Mahaway (24, `LimiarWindWellRules`, ainda não validado no Unity) |
+| Mecânicas faltantes | Barcos do lago (19); medo do escuro (20); a feira que muda de galeria por dia (22); entrada direta no Ossuário sem passar pelo mapa da ilha |
 | Chefe do mundo | Mahaway, o Rei da Revoada (evento com horário); chefe de região Tages; Colosso de Crânios no Ossuário (24b) |
 | Montaria | Grifo da Coluna da Glória (missão de nível 40, voadora) |
 | Conjunto | Marfim dos Artífices (Ossuário, 2 peças, Toque Espectral) |
@@ -107,7 +124,7 @@ feito por um bicho de outra região ou do bioma.
 | Bichos próprios | 5: Gaivota Ladra, Caranguejo-dos-Coqueiros, Crocodilo do Mangue, Leão do Capim, Rinoceronte-de-Pó. Cerca de 15 papéis com bicho de outra região (chacal, escorpião, aranha, lobo, ushabti…) |
 | Mecânicas feitas | Maré do recife de 8 min com 6 baixios e baú (25, `CostaTideRules`) |
 | Mecânicas faltantes | Corrida de Shulgi e Lira do Touro (26); câmera em corte, andar no fundo e reacender o coral (28); 27, 29 e 30 sem mecânica própria |
-| Chefe do mundo | Nenhum (outro agente trabalhando nisso, não está pronto) |
+| Chefe do mundo | Hedammu (30, Nv 72): mordida em cone. Loot próprio (Escama de Hedammu) e troféu de casa |
 | Montaria | Nenhuma da ficha: Dhow-Tartaruga, Auroque de Aratta, Elefante de Musawwarat |
 | Conjunto | Nenhum |
 | Móveis | Nenhum conjunto da região |
@@ -121,7 +138,7 @@ feito por um bicho de outra região ou do bioma.
 | Bichos próprios | 4: Macaco Ladrão, Lontra Ladra, Píton Apagada, Trol Apagado, mais o Crocodilo do Mangue da Costa. Cerca de 13 papéis emprestados (Peixe-Saltador, garças, sanguessuga, fogo-fátuo, Sapo-Boi…) |
 | Mecânicas feitas | Ilhas de junco que mudam de lugar a cada 15 min (33, `DeltaIslandRules`) |
 | Mecânicas faltantes | Monção, escola de barco e Maré de Lodo (31); Lanterna de Fogo-Fátuo e Despertar o vizinho (33); 32, 34 e 35 sem mecânica própria |
-| Chefe do mundo | Nenhum (em andamento por outro agente) |
+| Chefe do mundo | Lodo-que-Engole (35, Nv 88): puxão, mais forte à noite. Loot próprio (Lama Limpa do Lodo) e troféu |
 | Montaria | Nenhuma da ficha: Búfalo-d'Água, Sapo-Gigante, Ninki Nanka Mansa |
 | Conjunto | Nenhum |
 | Móveis | Nenhum |
@@ -135,7 +152,7 @@ feito por um bicho de outra região ou do bioma.
 | Bichos próprios | 5: Urso-Pardo do Pamir, Iaque Selvagem, Irbis, Almas, Marmota Gigante. Cerca de 14 papéis emprestados (Argali, gralhas, ushabtis de calha, abutre-barbudo…) |
 | Mecânicas feitas | Avalanches com sino de 20 s nas 4 calhas (37, `TetoAvalancheRules`) |
 | Mecânicas faltantes | Descida cronometrada (37); calhas e carrinhos andáveis e os 7 terraços (36); 38–40 sem mecânica própria |
-| Chefe do mundo | Nenhum (em andamento por outro agente) |
+| Chefe do mundo | Aydahar (40, Nv 98): sopro em linha. Loot próprio e troféu |
 | Montaria | Nenhuma da ficha: Iaque do Teto do Mundo, Camelo-Bactriano Branco |
 | Conjunto | Nenhum (Terraço do Pamir só na ficha) |
 | Móveis | Nenhum |
@@ -149,7 +166,7 @@ feito por um bicho de outra região ou do bioma.
 | Bichos próprios | 6: Leão de Pedra, Raposa de Cauda Lanterna, Soldado de Terracota, Tartaruga de Pedra, Búfalo de Lama, Filhote de Nian. Ainda emprestados, cerca de 12: Carpa-Dragão, Cavalo de Terracota, Grou de Papel, Espelho Quebrado, Espantalho… |
 | Mecânicas feitas | Muralha andável com faróis e corredor de luz (45); mundo do reflexo nos arrozais (44) |
 | Mecânicas faltantes | 9 anéis e portões por hora (41); Relógio de Espelhos (42); 4 eclusas (43); palácios e o que cada um come (46) |
-| Chefe do mundo | Nenhum (em andamento por outro agente) |
+| Chefe do mundo | Quatro Gulosos (46, Nv 140): um apetite por semana e outro à noite. Taotie derrama oferendas de moedas e avisa antes de engolir; Qiongqi inverte os passos por 3 s (`HeroControlMirror`, teto de 4 s). Loot próprio (Bronze Antigo dos Vasos) e troféu |
 | Montaria | Nenhuma da ficha: Cervo de Luz Branca, Cavalo de Terracota Desperto, Qilin de Jade (cosmético) |
 | Conjunto | Nenhum (Vasos de Bronze, Arrozal, Torre Branca e Pátio dos Nove Anéis só nas fichas) |
 | Móveis | Nenhum regional (Festa das Lanternas é sazonal) |
@@ -163,7 +180,7 @@ feito por um bicho de outra região ou do bioma.
 | Bichos próprios | 6: Grifo Jovem, Saiga, Lobo de Bronze, Gigante Sonâmbulo, Besouro-Casca, Ochokochi. Ainda emprestados, cerca de 16: Cisne de Feltro, Cervo de Ouro, Cabra-Montês, Lince, Garanhão, lobos e águias da estepe… |
 | Mecânicas feitas | Corrida de estepe (47), Ouros do Céu (48, só a Lavine levanta), subida da Corrente de Amirani (52) |
 | Mecânicas faltantes | A cidade que anda (47); escala gigante e sonhos com baús (49); tempo lento (50); 51 sem mecânica própria |
-| Chefe do mundo | Nenhum (em andamento por outro agente) |
+| Chefe do mundo | Ohya (52, Nv 150): corrente girando. Loot próprio (Elo de Ferro Antigo de Ohya) e troféu |
 | Montaria | Carneiro Gigante da Colina e Alce da Taiga (fichas 49/50) existem, mas vendidos em Dur-Jarras (R14). Faltam Cavalo Dourado da Estepe e Cavalo de Fumaça |
 | Conjunto | Nenhum |
 | Móveis | Nenhum |
@@ -205,7 +222,7 @@ feito por um bicho de outra região ou do bioma.
 | Bichos próprios | 14 (12 e mais a Salamandra Devoradora e a Bomba Vulcânica). Ainda emprestados, cerca de 10: Pedra-Pomes Voadora, Carpa de Brasa, Bambu de Fumaça, Fumarola, Fole Vivo, Polvo de Obsidiana, Cinza Viva, Ouriço de Vidro, Faísca Raivosa, Chama Faminta |
 | Mecânicas feitas | Comportas e Tremor com 3 forjas (65/69); erupção do Echeyde (67); medidor de calor da Caldeira (70) |
 | Mecânicas faltantes | Bônus de refino da forja do dia e G4 do Ícaro (65); cascalho rastelado (66); resfriar a lava em ponte (68); temperatura das fornalhas (69); chão quente para a Cabra anular |
-| Chefe do mundo | O Glutão de Brasa (70). Faltam Guayota, a Tartaruga-Vulcão, o Mestre das Nove Fornalhas, troféu e montaria do chefe |
+| Chefe do mundo | O Glutão de Brasa (70). Faltam Guayota, a Tartaruga-Vulcão, o Mestre das Nove Fornalhas e a montaria do chefe (loot próprio e troféu já existem) |
 | Montaria | Leão-Guardião de Laca (65), Cabra-dos-Pastores do Vulcão (67) |
 | Conjunto | Nenhum (Kurdalægon e Palácio de Laca só nas fichas) |
 | Móveis | Nenhum |
@@ -217,9 +234,9 @@ feito por um bicho de outra região ou do bioma.
 | Cidade | Cais de Mesektet, dentro do mundo |
 | Mundo contínuo | Feito, ao norte de Hinokura (`OverworldLayouts.Rio.cs`) |
 | Bichos próprios | 15 (12 e mais Ganso Ladrão, Filho de Apep e Areia Movediça). Ainda emprestados, 7: Chama Faminta, Salamandra de Sombra, Escorpião [tanque] do 74, Ushabti Apagado, Ushabti Rachado, Sombra Fervida, Crocodilo de Lodo |
-| Mecânicas feitas | Horas da barca com 12 píeres e hora de 3 min (71); anel de Mehen que gira (74); fogo que escolhe (75) |
-| Mecânicas faltantes | Evento A Barca Atrasou e noite permanente (71); jangadas (72); puxar o trenó (73); defender a barca (76) |
-| Chefe do mundo | Apep (76), que recua até a noite seguinte. Faltam os chefes de mapa e os ganchos (escama, Pedra da Mistura, troféu) |
+| Mecânicas feitas | Horas da barca com 12 píeres e hora de 3 min (71); anel de Mehen que gira (74); fogo que escolhe (75); defender a barca encalhada enquanto os remadores a desencalham (76, `RioBarqueDefenseRules`, ainda não validado no Unity) |
+| Mecânicas faltantes | Evento A Barca Atrasou e noite permanente (71); jangadas (72); puxar o trenó (73) |
+| Chefe do mundo | Apep (76), que recua até a noite seguinte. Loot próprio e troféu (Barca de luz vencendo Apep). Faltam os chefes de mapa e a Pedra da Mistura |
 | Montaria | Íbis Real de Mesektet (71, voadora). Falta a Barquinha de Luz (76) |
 | Conjunto | Cais do Papiro (2 peças, por drop) |
 | Móveis | Móveis do Cais do Papiro (8 peças) |
@@ -245,8 +262,8 @@ feito por um bicho de outra região ou do bioma.
 | Cidade | Fortaleza da Última Lâmpada, dentro do mundo |
 | Mundo contínuo | Feito, ao norte de Farnkesh (`OverworldLayouts.Profundo.cs`) |
 | Bichos próprios | 15 (12 e mais Morcego-Lâmina, Enguia Grande e Touro de Cinza). Ainda emprestados, cerca de 11: Sombra Pequena, Fumaça, Morcego da Treva, Ushabti Apagado, Fumaça Sufocante, Chama Faminta, Redemoinho, Cardume Escuro, Serpente Cega, Rastejante, Ushabti Apagado Gigante |
-| Mecânicas feitas | Rede de 12 lâmpadas com a Maré de Treva (83); vento limpa a fumaça (84); chão que acende (85); limite comum de dano que nunca mata (`ProfundoHazardRules`) |
-| Mecânicas faltantes | Os 5 portões das covas (83); correntes de ar (86); comportas e nível da água (87); dano no escuro (88); ponte que acende por lances (89); a raide de 5 grupos (90, precisa de servidor) |
+| Mecânicas feitas | Rede de 12 lâmpadas com a Maré de Treva (83); vento limpa a fumaça (84); chão que acende (85); limite comum de dano que nunca mata (`ProfundoHazardRules`); os 5 portões das covas na muralha da Fortaleza, que abrem ao chegar à lâmpada de cada cova (83, `ProfundoGateRules` e o novo `ProfundoGateMechanicsDriver`, ainda não validado no Unity) |
+| Mecânicas faltantes | Correntes de ar (86); comportas e nível da água (87); dano no escuro (88); ponte que acende por lances (89); a raide de 5 grupos (90, precisa de servidor) |
 | Chefe do mundo | A Grande Treva, versão solo (90). Faltam a raide e os chefes das covas |
 | Montaria | Nenhuma. A Raposa-Joia e o Cavalo-Estrela (precisa de servidor) faltam |
 | Conjunto | Selo dos Artífices (2 peças, por drop até existir a raide) |
@@ -261,7 +278,7 @@ feito por um bicho de outra região ou do bioma.
 | Bichos próprios | 13 (12 e mais Corda de Fumaça; os arcontes reaproveitam o Arconte Menor da R15). Ainda emprestados, cerca de 16: Faísca Confusa, Sombra Clandestina, Sombra que Pisa as Flores, Sombra Nadadora, Corrente Errada, Rachadura do Céu, Lanterna Fugitiva, Gota de Treva, Vento de Órbita… |
 | Mecânicas feitas | Barca da Lua só à noite (93); segurar o céu nas 5 rachaduras (99); sentar ao lado da cadeira do Vô Jorge, uma história por dia (100) |
 | Mecânicas faltantes | Pouca gravidade e Chegada da Caravana (91); correnteza no Rio de Luz (92); lua crescendo e lanternas (93); jarras e esferas que giram (94–95); plantar luz (96); carregar lanternas entre as barcas (97); faíscas escoltadas; pilares em grupo (99, online); pose sentada e história do dia no save (100) |
-| Chefe do mundo | Āz, a Capitã Cobiçosa (96). Faltam a Arca Resgatada +5 e o troféu |
+| Chefe do mundo | Āz, a Capitã Cobiçosa (96). A Arca nunca mata (tira no máximo vida − 1). Loot próprio (Semente de Luz de Āz) e troféu (Estátua de Āz devolvendo a arca). Falta a Arca Resgatada +5 |
 | Montaria | Nenhuma (o Cavalo-Estrela da ficha é de temporada e online) |
 | Conjunto | Cais de Luz (2 peças, por drop) |
 | Móveis | Móveis do Cais de Luz (8 peças) |
@@ -287,59 +304,68 @@ conferido assim:
 
 Nenhum mapa pede nível de reset, então não há o que conferir nisso.
 
-Resultado em **2026-11-11**, rodado fora do Unity com as mesmas regras e sem o loot dos assets, que não tem item de exigência
-além de botas e picareta. O herói chega ao nível 500 e abre os 100 mapas. Há **1 buraco real**, que aparece em 2 mapas.
-O teste fica vermelho só por ele:
+Resultado em **2026-11-11**: o herói chega ao nível 500 e abre os 100 mapas, e o `ProgressionPathTests` **passa no Unity**
+(`89a7c19`). Não há buraco aberto.
 
-1. **Mapas 19 (Lago do Limiar) e 20 (Salão de Tages): Lamparina (`TorchRequired`) só no nível 32.**
-   - A entrada desses mapas é no nível 12–13, e todas as zonas deles pedem lamparina.
-   - A Lamparina de Óleo só é vendida (ou dada, pela `quest_region_caves_dark_lamps`) na Vila das Lamparinas, que fica dentro
-     do próprio `lago_do_limiar`. Ou então nos Salões de Bronze (mapa 17, que pede Picareta e Tocha, ou seja, lamparina de
-     novo) e no Mercado dos Túneis (mapa 22, entrada 32). Nenhuma cidade alcançável antes disso vende lamparina (Vila, Areia
-     Branca, Serra Alta, Copas, Tambor Rubro).
-   - Efeito: as Grutas ficam ~20 níveis atrasadas. Isso pega o fim da campanha (Tages e o selo, por volta do nível 20) e o
-     primeiro passo da história do meio (`quest_mid_story_r04_moon`, mapa 20, nível 20). Os mapas 17 (entrada 28) e 21
-     (entrada 30) também só abrem no 32, mas isso está dentro da folga de 5 níveis.
-   - Conserto simples (fica a cargo de quem cuida de cidades e lojas): vender a lamparina na Serra Alta (mapa 13, vizinho do
-     Lago do Limiar) ou na Vila; ou tirar a exigência da zona `lago_do_limiar`, onde fica a cidade; ou dar a lamparina numa
-     missão da campanha antes do Ato IV.
+Buraco fechado:
+
+1. **Mapas 19 (Lago do Limiar) e 20 (Salão de Tages): a Lamparina (`TorchRequired`) só chegava no nível 32.**
+   - A entrada desses mapas é no nível 12–13, e todas as zonas deles pedem lamparina. A Lamparina de Óleo só era vendida
+     dentro das próprias Grutas (Vila das Lamparinas), nos Salões de Bronze (mapa 17, que também pede lamparina) e no Mercado
+     dos Túneis (entrada 32). Isso atrasava as Grutas ~20 níveis, com o fim da campanha e o primeiro passo da história do meio.
+   - Conserto (`89a7c19`): a Forja do Tonho, na Vila de Litema (mapa 13), vende a lamparina. Toda galeria que desce do Passo
+     do Hahya já pede lamparina, então ela fica à venda antes da primeira descida.
+
+As áreas do mundo contínuo também batem com o catálogo: `d404331` corrigiu 22 divergências (entrada a pé baixada até a do mapa
+em 19 mapas, topo da faixa subido em 7) e o `MapZoneLevelConsistencyTests` vigia isso. As áreas de passagem, como a Eclusa da
+Lua, ficam de fora de propósito. Esse teste ainda não rodou no Unity.
 
 ---
 
 ## As 10 coisas mais importantes para jogar do começo ao fim
 
-1. **Rodar de novo a suíte EditMode (e a PlayMode) no Unity e deixá-la verde.**
-   - Por quê: o `4c8bb42` corrigiu 6 casos que ainda não rodaram. Tudo o que vem depois se apoia em testes, e qualquer
-     coisa construída sobre uma suíte vermelha esconde regressão.
-2. **Jogar de verdade do nível 1 ao fim do Ato V** (Vila, Areias, Serra e Grutas, níveis ~1–20, com Tages e o selo).
-   - Por quê: é o trecho que todo jogador vê. Nenhum mundo contínuo, mecânica ou chefe novo foi visto rodando. Bordas de
-     área, densidade, colisão, zona segura, respawn, cais e o novo diálogo dos lojistas só se conferem jogando.
-3. **Medir o mundo de 7200 × 15600 m num celular Android.**
-   - Por quê: o jogo é mobile, e o streaming por pedaços só foi medido fora do Editor (.NET).
-   - Ponto de partida: a auditoria só de leitura em `Docs/PerformanceOverworld.md` (2026-11-11), que nada mediu em aparelho.
+Revisto em 2026-11-11, à noite. Saíram da lista, porque ficaram prontos: o teste de rota de 01 a 100 (passando, buraco da
+lamparina fechado), a história do meio (escrita, no código, com migração de saves) e os chefes do mundo das Regiões 5–9 (com
+loot e troféu). O balanço 100–500 foi aplicado e desceu de prioridade: agora falta só conferi-lo.
+
+1. **Rodar no Unity o que ainda não rodou e deixar EditMode e PlayMode verdes.**
+   - O que falta rodar: loot dos chefes (`24b116a`), troféus (`eca5d21`), balanço aplicado (`17941ef`), níveis das áreas
+     (`MapZoneLevelConsistencyTests`) e as mecânicas dos mapas 24, 76 e 83. Falta também a PlayMode inteira, que o
+     `PlayModeReloadLock` agora protege do falso vermelho por domain reload no meio da suíte.
+   - Por quê: tudo o que vem depois se apoia em testes, e o que é construído sobre uma suíte vermelha esconde regressão.
+2. **Jogar de verdade do nível 1 ao começo da Lua** (Vila, Areias, Serra e Grutas, níveis ~1–30, com Tages, o selo e a
+   primeira etapa de "A Lua que Não Enche").
+   - Por quê: é o trecho que todo jogador vê, e nada do mundo contínuo, das mecânicas ou dos chefes foi visto rodando. Bordas
+     de área, densidade, colisão, zona segura, respawn, cais, a lamparina na Forja do Tonho e a oferta da Vó Edna só se
+     conferem jogando.
+3. **Medir o mundo de 7200 × 15600 m num celular Android, com toque de verdade.**
+   - Já feito por código: o `MechanicsDriverHub` (1 driver ligado por vez), o fim do lixo das exigências e as amostras de chão
+     reduzidas (`ea20744`, `Docs/PerformanceOverworld.md`). Nada disso foi medido em aparelho.
+   - O botão Usar, a janela de mapas (M) com o botão Mover empilhado e os controles invertidos do Qiongqi só se conferem num
+     aparelho.
    - 🙋 Depende do dono: instalar o **Android Build Support** e ter um aparelho para teste.
-4. **História principal entre o nível ~20 e o 100.**
-   - Por quê: a campanha (Atos I–V) termina por volta do nível 20, e As Cartas da Estrada só começam no 100 (Soslan, mapa
-     47). Entre os dois só há missões de cidade.
-   - Escrita e no código (2026-11-11, ainda não jogada): "A Lua que Não Enche", 15 etapas do nível 20 ao 97
-     (`Docs/HistoriaMeio_20a100.md`, `MidStoryCatalog`); falta conferir o ritmo jogando.
-   - Ficam sem fio condutor o segundo anel das Regiões 1–4 e as Regiões 5–8 inteiras, ou seja, cerca de 80 níveis em que o
-     jogador não sabe para onde ir.
-5. **Um teste de rota de ponta a ponta**, que leve um herói do mapa 01 ao 100 checando nível a pé e de barca, exigências
-   especiais (asas, lamparina, corda, capa…), onde cada item é comprado ou ganho, e cais visitados.
-   - Por quê: são 100 zonas com exigências. Basta uma exigência sem fonte antes do nível do mapa para o jogo travar no meio.
-   - A janela M está com outro agente, mas o teste é independente dela.
-   - **Feito em 2026-11-11** (`ProgressionPathTests`, ainda não rodado no Unity). Achou 1 buraco: a lamparina das Grutas,
-     ver "Buracos de progressão" acima.
-6. **Balanço de 100 a 500 aplicado e conferido com o conteúdo real** (XP por bicho, curva, dano dos chefes, loot e preço
-   das exigências).
-   - Por quê: sem isso o fim fica inalcançável ou trivial.
-   - O balanço está com outro agente. Falta validá-lo contra as 16 regiões e os chefes 10–16.
-7. **Chefes do mundo das Regiões 5–9 e chefes de mapa das fichas.**
-   - Por quê: há um vão de chefes entre o Mahaway (R4) e o Rei-Vendaval (R10), justo nos níveis 45–150. Além disso, quase
-     nenhuma ficha tem o próprio chefe de mapa.
-   - Os chefes de 5–9 estão com outro agente.
-8. **Decisões do dono sobre o online** (`Docs/Network.md` §8, `TODO.md` 12.1):
+4. **Jogar a faixa do meio, níveis 20–150:** as 15 etapas da Lua e os chefes Hedammu, Lodo-que-Engole, Aydahar, Quatro
+   Gulosos e Ohya.
+   - Por quê: a história e os chefes estão no código, mas o ritmo ("sei para onde ir?"), as arenas, os avisos de fase e as
+     regras novas (oferendas do Taotie, passos trocados do Qiongqi) só se julgam jogando. Vale carregar um save antigo para
+     ver a migração da Lua.
+5. **Chefes de mapa das fichas.**
+   - Por quê: agora há um chefe do mundo por região, mas quase nenhuma ficha tem o próprio chefe de mapa (Fiandeira Esquecida,
+     Cortador de Cordas, Rei dos Ays, Guayota, Hobabish, os chefes das covas do Profundo…).
+6. **Fechar as mecânicas que ainda mudam o percurso.**
+   - Feitas hoje e ainda não validadas: poços de vento do 24, defender a barca do 76 e os 5 portões do 83.
+   - Faltam: barcos do lago (19), medo do escuro (20), jangadas (72), trenó (73), correntes de ar (86), comportas (87), ponte
+     que acende por lances (89) e pouca gravidade (91), além das 09, 10, 12, 27, 29, 30, 32, 34, 35, 38–40 e 51 sem mecânica
+     própria.
+7. **Trocar os bichos emprestados mais vistos.**
+   - Por quê: são cerca de 150 papéis de ficha com bicho de outra região, e a sensação de "região nova" depende deles. Começar
+     pelas Regiões 5–9, que o jogador agora atravessa com a história do meio.
+8. **Conferir o balanço 100–500 com o conteúdo real.**
+   - Aplicado (`17941ef`): a resistência do herói por nível foi zerada, os comuns têm piso de vida 170 a partir do 100, a caça
+     de comuns fica em 5,5–6,7 s e o herói parado dura 14,5–24 s diante dos chefes 200–478.
+   - Falta: rodar no Unity, ver jogando, e o que o simulador não mede, como XP por bicho, preço das exigências, loot de chefe
+     e Perigoso +30 (chefes ainda matam em 2–3 golpes). Ver `Docs/Balanco100a500.md` §4.5.
+9. **Decisões do dono sobre o online** (`Docs/Network.md` §8, `TODO.md` 12.1):
    - campanha offline separada ou tudo online;
    - escala (MMO ou salas de 4–8);
    - os 5 primos como classes ou NPCs;
@@ -351,10 +377,6 @@ O teste fica vermelho só por ele:
 
    Por quê: essas decisões definem o que é "o fim". A raide da Grande Treva, os pilares em grupo do 99 e o Cavalo-Estrela
    só existem com servidor, e o save, a pausa e os eventos mudam de forma.
-9. **Trocar os bichos emprestados mais vistos e fechar as mecânicas que mudam o percurso.**
-   - Por quê: são cerca de 150 papéis de ficha com bicho de outra região, e a sensação de "região nova" depende deles.
-   - Mecânicas que mudam o percurso: poços de vento do 24, barcos do lago, defender a barca do 76, os 5 portões do 83.
-   - Pesa menos que jogar e balancear, mas é o que faz as 16 regiões parecerem 16.
 10. **Arte e áudio finais no lugar dos placeholders procedurais.**
     - Por quê: quem joga do começo ao fim vê centenas de modelos e ouve sons sintetizados.
     - 🙋 Depende do dono:
@@ -362,6 +384,8 @@ O teste fica vermelho só por ele:
       - ícones por geração de imagem;
       - música e efeitos reais (`Docs/Audio.md`);
       - rig da Maithe (Meshy ou Mixamo).
+
+Fora da lista, ainda faltando: montarias, conjuntos e móveis das Regiões 1–9 (as Regiões 5–9 não têm nenhum dos três).
 
 ### Só o dono decide (resumo)
 

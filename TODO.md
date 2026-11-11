@@ -4,11 +4,16 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-11-11 (noite — documentação em dia com o trabalho do dia, conferida no código até `6804e2b`)
+- 🧪 Testes no Unity: a suíte EditMode de `84f51a4` rodou (7.384 casos) e cobre os chefes das Regiões 5–9, a janela de mapas, o DriverHub, a performance, o botão Usar e o save do baú e da faísca. Passaram também a história do meio, a migração de saves, os Quatro Gulosos e a rota 01→100. **Ainda não rodados:** loot e troféus de chefe, balanço 100–500 aplicado, níveis das áreas e as mecânicas dos mapas 24, 76 e 83.
+- ✅ Chefes do mundo das Regiões 5–9 (Hedammu, Lodo-que-Engole, Aydahar, Quatro Gulosos completos, Ohya), loot próprio e troféu de casa dos 12 chefes, "A Lua que Não Enche" (nível 20–97) com `MidStorySaveMigration`, rota 01→100 passando com a lamparina na Forja do Tonho, níveis das áreas alinhados ao catálogo, `MechanicsDriverHub`, botão de toque Usar, janela de mapas (M) para os 100 mapas, `PlayModeReloadLock`, balanço 100–500 aplicado e correções dos chefes, do baú do recife e da faísca do Delta.
+- 🗺️ [`Docs/Status_100Mapas.md`](Docs/Status_100Mapas.md) com as 10 prioridades revistas: saíram o teste de rota, a história do meio e os chefes 5–9; subiram jogar a faixa 20–150, os chefes de mapa das fichas e as mecânicas que mudam o percurso.
+
 ### 2026-11-11 (documentação — status real dos 100 mapas, conferido no código de `4c8bb42`)
 - 🗺️ Novo [`Docs/Status_100Mapas.md`](Docs/Status_100Mapas.md): uma tabela por região (cidade, mundo contínuo, bichos próprios e emprestados, mecânicas feitas/faltantes, chefe do mundo, montaria, conjunto, móveis) e as 10 prioridades para o jogo ser jogável do começo ao fim, com o que só o dono decide.
 - ✅ Marcados no TODO o que já existe no código: 100 mapas no catálogo (todos `isBuilt`), 16 mundos contínuos costurados, 27 cidades dentro do mundo, mecânicas das 16 regiões, chefes do mundo das Regiões 10–16, 122 bichos próprios das Regiões 5–16, 8 montarias das Regiões 10–14, 4 conjuntos de 2 peças, 5 conjuntos de móveis, As Cartas da Estrada e o estudo de rede. Nada disso foi visto jogando.
 - ⚠️ A suíte EditMode passou antes do `4c8bb42`, exceto 6 casos que ele corrigiu e que ainda não rodaram de novo no Unity.
-- ⏳ Em andamento com outros agentes (não marcados como prontos): chefes das Regiões 5–9, janela de mapas e balanço 100–500.
+- ⏳ Em andamento com outros agentes (não marcados como prontos): chefes das Regiões 5–9, janela de mapas e balanço 100–500 (prontos à noite; ver a entrada acima).
 
 ### 2026-10-30 (tarde — expansão de lore dos NPCs, ferramentas MCP e pipeline dos 100 mapas)
 - 📜 **História e Arcos dos NPCs da Ilha da Aurora**: catálogo completo de lore dos NPCs das 4 primeiras regiões (Vila da Vó Edna, Oásis de Qocho, Vila de Litema e Vila das Lamparinas) integrado ao TODO com suas histórias pessoais, personalidades, papéis de gameplay e conexão com os contos do Vô Jorge e acolhimento da Vó Edna.
@@ -1703,22 +1708,36 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
   - [ ] Marcar no chão a borda das áreas trancadas.
 
 #### 📊 Status real dos 100 mapas (conferido no código em 2026-11-11; detalhe por região em [`Docs/Status_100Mapas.md`](Docs/Status_100Mapas.md))
-> Tudo abaixo existe no código com testes EditMode e **nunca foi visto jogando**. A suíte passou antes do `4c8bb42`, exceto 6 casos que ele corrigiu e que ainda não foram reexecutados no Unity.
+> Tudo abaixo existe no código com testes EditMode e **nunca foi visto jogando**. Atualizado em 2026-11-11 à noite (código até `6804e2b`). Legenda: `[x]` testes rodados e passando no Unity; `[~]` feito, mas testes ainda não rodados no Unity ou parte faltando.
 - [x] **100 mapas no catálogo** (`MapCatalog`, todos `isBuilt: true`, cada um zona de um mundo contínuo; 43–46 fecharam a conta em `2665da9`). *Não testado jogando.*
 - [x] **16 regiões** em mundo contínuo (`OverworldLayouts.<Região>.cs`), costuradas em 6 fileiras com 2 buracos murados. *Não testado jogando.*
 - [x] **27 cidades** do `Mapas100.md` §1 no `CityCatalog` (4 hubs, 12 de raça, 11 de região tardia), todas dentro do mundo contínuo com receita própria; moradores, loja e 2 missões em cada cidade não-hub. *Não testado jogando.*
-- [~] **Mecânicas das fichas**: pelo menos uma por região, 65 arquivos em `Gameplay/World/Map/Mechanics/` (regras puras + driver por região, estado salvo por slot em `WorldMapProgress`, empurrões pelo `GroundedPush`). Faltam muitas das fichas (lista por região no Status). *Não testado jogando.*
-- [~] **Chefes do mundo**: Regiões 1–4 como eventos com horário em arena do mapa-múndi (`WorldBossRules`: Saklas, Namrael, Mazan, Mahaway); Regiões 10–16 no mundo contínuo (`RegionBossRules`: Rei-Vendaval, Velho Kul, Glutão de Brasa, Apep, Sonho da Destruição, A Grande Treva solo, Āz). *Não testado jogando.*
-  - [ ] Chefes do mundo das Regiões 5–9 — em andamento com outro agente, não pronto.
+- [~] **Mecânicas das fichas**: pelo menos uma por região, 73 arquivos em `Gameplay/World/Map/Mechanics/` (regras puras + driver por região, estado salvo por slot em `WorldMapProgress`, empurrões pelo `GroundedPush`). Faltam muitas das fichas (lista por região no Status). *Não testado jogando.*
+  - [~] Poços de vento do Ninho de Mahaway (24, `LimiarWindWellRules`), defender a barca encalhada (76, `RioBarqueDefenseRules`) e os 5 portões das covas (83, `ProfundoGateRules` + `ProfundoGateMechanicsDriver`). Sendo validados no Unity agora. *Não testado jogando.*
+  - [x] `MechanicsDriverHub`: só o driver da região do herói roda (1 `Update` por frame em vez de 14), mais cache do estado do herói para exigências, amostras de chão reduzidas e `UpdateSpawners` pelo índice por pedaço (`ea20744`; teste da regra pura `MechanicsDriverHub.Decide` corrigido em `84f51a4`). *Não medido em aparelho.*
+  - [x] Botão de toque **Usar** no HUD: as interações [E] das mecânicas funcionam no celular e o botão acende nos 10 drivers quando há [E] ao alcance (`b8c78d1`, `e2d088d`). *Não testado jogando.*
+  - [x] Correções: baú do recife e faísca do Delta gravam no save a maré/arranjo em que foram pegos (não dá para pegar de novo recarregando); lâmpadas do Limiar não vazam de um slot para outro (`b8c78d1`, `e2d088d`).
+- [~] **Chefes do mundo**: Regiões 1–4 como eventos com horário em arena do mapa-múndi (`WorldBossRules`: Saklas, Namrael, Mazan, Mahaway); Regiões 5–16 no mundo contínuo (`RegionBossRules`; 5–9 abaixo; 10–16: Rei-Vendaval, Velho Kul, Glutão de Brasa, Apep, Sonho da Destruição, A Grande Treva solo, Āz). *Não testado jogando.*
+  - [x] Chefes do mundo das Regiões 5–9 no mundo contínuo: Hedammu (30, Nv 72), Lodo-que-Engole (35, Nv 88), Aydahar (40, Nv 98), Quatro Gulosos (46, Nv 140) e Ohya (52, Nv 150), com modelo, arena plana e alcançável e página no Caderno (`504c6c1`). *Não testado jogando.*
+  - [x] Quatro Gulosos completos: Taotie derrama oferendas de moedas e avisa antes de engolir; Qiongqi troca os passos por 3 s com aviso, com fim garantido (`HeroControlMirror`, teto de 4 s) (`6804e2b`). *Não testado jogando.*
+  - [x] Correções dos chefes (`17941ef`): aviso de fase só quando a luta fica mais grave, estado de volta zerado em novo jogo e ao carregar e contado pelo relógio do jogo (`RegionBossReturns`), Arca do Āz nunca mata.
+  - [~] Loot próprio dos 12 chefes do mundo (Escama de Hedammu, Lama Limpa, Bronze Antigo, Elo de Ferro Antigo de Ohya, Semente de Luz de Āz…), que destrava as 10 peças de roupa de chefe (`24b116a`). Testes ainda não rodados no Unity.
+  - [~] Troféu de casa para cada um dos 12 chefes (`casa_trofeu_025–036`, feitos na Forja com o loot do chefe, só depois de vencê-lo; `eca5d21`). Testes ainda não rodados no Unity.
   - [ ] Chefes de mapa das fichas (Fiandeira Esquecida, Cortador de Cordas, Guayota, Hobabish…) e a raide da Grande Treva (precisa de servidor).
 - [~] **Bichos próprios**: 130 nas levas da bíblia §3.2.1 (8 das Regiões 2–4 e 122 das Regiões 5–16), com modelo, rig, loot, Caderno e testes de colocação, já nos grupos do mundo. Cerca de 150 papéis de ficha ainda usam bicho de outra região (contagem por região no Status). *Não testado jogando.*
 - [~] **Montarias das fichas**: 8 das Regiões 10–14 (`MountFarRegionCatalog`, `Docs/Mounts.md` §3.9) + o Grifo da Coluna; as 19 propostas restantes do `Mapas100.md` §6 (Regiões 1–9, Barquinha de Luz, Filhote de Huma, Cavalo-Estrela) não existem. *Não testado jogando.*
 - [~] **Conjuntos de equipamento**: Marfim dos Artífices (Ossuário) + Cais do Papiro, Tijolo Azul, Selo dos Artífices e Cais de Luz (`ArmorSetRules`, Regiões 13–16, só por drop); os "conjuntos antigos" das outras fichas não existem. *Não testado jogando.*
 - [~] **Móveis por região**: conjuntos das Regiões 1–4 e, desde `4c8bb42`, Casa da Lua Branca (R11), Cais do Papiro (R13), Tijolo Azul (R14), Mil Lâmpadas (R15) e Cais de Luz (R16), 8 peças cada (`Docs/Housing/CatalogoCasa.md`, 620 itens); Regiões 5–10 e 12 sem conjunto regional. *Não testado jogando.*
 - [x] **História das Regiões 9–16**: As Cartas da Estrada (`LateStoryCatalog`, 17 etapas, nível 100–500, até a Varanda do mapa 100; `Docs/HistoriaFinal_Cartas.md`). *Não testada jogando.*
-  - [ ] História principal entre o nível ~20 (fim do Ato V) e o 100 (primeira carta): hoje só há missões de cidade.
+  - [x] História principal entre o nível ~20 e o 100: "A Lua que Não Enche", 15 etapas nas Regiões 1–8 (nível 20–97), com fala dos 5 primos e o diário da Vó Edna; a primeira Carta passa a exigir a lua cheia (`7373d95`, `MidStoryCatalog`, `Docs/HistoriaMeio_20a100.md`). *Não testada jogando.*
+  - [x] Migração de saves antigos: `MidStorySaveMigration` roda uma vez ao carregar (StorySchema 0 → 1); quem já tocou nas Cartas tem as 15 etapas concluídas sem recompensa repetida, quem não tocou recebe a Lua da Vó Edna a partir do nível 20 (`13c8f95`).
 - [~] **Rede**: estudo da stack feito (`Docs/Network.md`: Mirror + KCP, servidor Linux dedicado, Nakama; plano B FishNet + FishMMO). Protótipo das 7 etapas não começou; decisões do dono em §8.
-- [ ] Rodar de novo a suíte EditMode completa no Unity (os 6 casos corrigidos em `4c8bb42`) e a PlayMode.
+- [x] **Rota do mapa 01 ao 100** (`ProgressionPathTests` + `ProgressionPathRules`, `db36c96`): passa no Unity depois que a Forja do Tonho (Vila de Litema) passou a vender a lamparina, o que fechou o buraco das Grutas (`89a7c19`).
+- [~] **Níveis das áreas alinhados ao catálogo**: 22 divergências corrigidas, `MapZoneLevelConsistencyTests` novo (`d404331`). Teste ainda não rodado no Unity.
+- [~] **Balanço 100–500 aplicado** (`17941ef`, `Docs/Balanco100a500.md`): `HeroToughnessGrowthPerLevel` 0 e piso de vida 170 dos comuns a partir do 100; conferido só no simulador Python (`tools/balance/level_500.py`). Falta rodar no Unity e ver jogando.
+- [x] **Janela de mapas (M) para os 100 mapas**: filtros por região e "Do meu nível", onde conseguir o item exigido, botão Mover empilhado no celular (`f7717fe`; os 13 testes rodaram na suíte de `84f51a4`). *Não testado jogando.*
+- [x] **`PlayModeReloadLock`**: o Editor segura recompilação e domain reload em Play Mode, porque um reload no meio da suíte PlayMode fazia o `CityWalkSmokeTests` falhar sem bug no jogo (`42ae754`).
+- [~] Suíte EditMode rodada em `84f51a4` (7.384 casos). Falta rodar de novo, com loot, troféus, balanço, níveis das áreas e mecânicas 24/76/83, e a PlayMode inteira.
 > 📌 **Fundamentos de Design de Cenários (`Docs/Mapas100.md` e `Docs/Progressao500.md`):**
 > 1. **Zona Segura Obrigatória:** Todo mapa conta com uma **cidade completa** (respawn, ferreiro, lojas, estrebaria, barca) ou um **posto avançado seguro** (fogueira/lâmpada, baú de passagem, conserto básico).
 > 2. **Renascer Canônico:** O jogador **sempre renasce na cidade de retorno** da região (na praça com a Lâmpada de Ramrat); nunca no próprio ponto de morte ou na arena.
