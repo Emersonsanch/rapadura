@@ -263,8 +263,8 @@ fica em y = 0 dentro de um círculo de ~22 m com 3 saídas de rua, no lugar que 
   Quebrado da ficha; 5 poções de vida + 5 de mana + 160 ouro, 1850 XP); depois Shanakdakhete pede 6 íbis apagadas fora
   dos terraços (o Corvo Sombrio faz a Íbis de Luz Apagada; **Lamparina Rúnica** + 2 Pedras da Alma + 170 ouro, 1950
   XP). Testes: `CityTorresBrancasTests`.
-- **Falta:** o mundo contínuo da Planície de Mingcheng vai encaixar a cidade; até lá o passeio só abre pelo menu de
-  prévia do editor (`Preview Walkable Town/Torres Brancas`). O Relógio de Espelhos como quebra-cabeça (raios que mudam
+- **Falta:** ~~o mundo contínuo da Planície de Mingcheng vai encaixar a cidade~~ (já encaixa: a cidade fica dentro do
+  mundo contínuo da região 8, com esta receita; 2026-11-11). O Relógio de Espelhos como quebra-cabeça (raios que mudam
   com a hora, salas de baú, atalho para o 45), as 7 torres andáveis com as pontes de folha, O Pequeno Eclipse, o Cervo
   de Luz Branca e o conjunto Torre Branca ainda faltam.
 
@@ -289,7 +289,7 @@ fica em y = 0 dentro de um círculo de ~22 m com 3 saídas de rua, no lugar que 
 - **Missões:** Soslan pede 8 lobos apagados longe dos potros (o Lobo faz o Lobo da Estepe Apagado; poções + 170 ouro,
   2000 XP); depois Satana pede 6 águias apagadas longe da lâmpada guardiã (o Gavião-de-Crista faz a Águia-Dourada
   Apagada; **Lamparina Rúnica** + 170 ouro, 2100 XP). Testes: `CitySoslanTests`.
-- **Falta:** a cidade que anda (3 pontos por dia), a corrida de estepe, o Cavalo de Fumaça e o Cavalo Dourado da Estepe.
+- **Falta:** a cidade que anda (3 pontos por dia), o Cavalo de Fumaça e o Cavalo Dourado da Estepe. (A corrida de estepe já existe: `NartesRaceRules`, Pistas de Corrida; 2026-11-11.)
 
 **Fortim dos Gigantes-da-Colina** (gigantes-da-colina, região 9, mapa 49; cidade de retorno de 49 e 52):
 - **Passeio da cidade:** receita `CityTownRecipes.Fortim` (`CityTownRecipes.Fortim.cs`) no estilo novo
@@ -315,7 +315,7 @@ fica em y = 0 dentro de um círculo de ~22 m com 3 saídas de rua, no lugar que 
   depois Virogdad pede 6 corvos de fumaça fora das tábuas de sonho (o Corvo Sombrio faz o Corvo-Mensageiro de Fumaça;
   **Grampos de Escalada** + 180 ouro, 2300 XP). Testes: `CityFortimTests`.
 - **Falta:** a escala gigante andável (móveis 3×, parkour leve), os sonhos diários do Virogdad com baús, o Pesadelo da
-  Tábua e o Carneiro Gigante da Colina.
+  Tábua. (O Carneiro Gigante da Colina já existe, apito à venda em Dur-Jarras; 2026-11-11.)
 
 **Arvoredo de Haripushpa** (povo-tronco, região 9, mapa 50; cidade de retorno de 50):
 - **Passeio da cidade:** receita `CityTownRecipes.Arvoredo` (`CityTownRecipes.Arvoredo.cs`) no estilo novo
@@ -336,8 +336,8 @@ fica em y = 0 dentro de um círculo de ~22 m com 3 saídas de rua, no lugar que 
 - **Missões:** Haripushpa pede 7 comedores de casca fora dos que dormem (a Aranha faz o Besouro-Casca; poções + 190 ouro,
   2400 XP); depois Aryaman Puhr pede 6 pássaros de fumaça fora do arvoredo (o Urutau faz o Pica-Pau de Fumaça; 3 Runas de
   Cura + 190 ouro, 2500 XP). Testes: `CityArvoredoTests`.
-- **Falta:** o tempo lento (relógio pela metade, plantas da casa 2×), as mudas raras da casa (Housing), a Serra de Āz e o
-  Alce da Taiga.
+- **Falta:** o tempo lento (relógio pela metade, plantas da casa 2×), as mudas raras da casa (Housing) e a Serra de Āz. (O
+  Alce da Taiga já existe, apito à venda em Dur-Jarras; 2026-11-11.)
 
 As três cidades ficam fora de `CityCatalog.Cities` (são `RaceCities`) e abrem pelo mundo contínuo da Estepe dos Nartes
 (outro trabalho) ou pelo menu de prévia do editor (`Preview Walkable Town/…`).
@@ -368,14 +368,15 @@ As três cidades ficam fora de `CityCatalog.Cities` (são `RaceCities`) e abrem 
   200 ouro, 2600 XP); depois Gordias pede 7 raposas fora da vinha (o Chacal faz a Raposa da Vinha; 3 Runas de Vento + 200
   ouro, 2700 XP). Testes: `CityValeDosSatirosTests`.
 - **Falta:** o **dourado** (golpes das abelhas douram, lavar no rio tira), o Baile do Vale (minijogo de ritmo, Pó de Ouro do
-  Pactolo), O Ouro de Midas, o Bode Dourado de Gordias e os quebra-cabeças de corda dos baús.
+  Pactolo), O Ouro de Midas e os quebra-cabeças de corda dos baús. (O Bode Dourado de Gordias já existe, recompensa da
+  missão do Gordias; 2026-11-11.)
 
 O Vale fica fora de `CityCatalog.Cities` (é `RaceCity`) e abre pelo mundo contínuo dos Picos de Farnkesh (outro trabalho)
 ou pelo menu de prévia do editor (`Preview Walkable Town/Vale dos Sátiros`).
 
 ### 1.2 Cidades das regiões tardias (`CityCatalog.LateRegionCities`)
 
-Cidades das regiões 5–11 (Docs/Mapas100.md), que ainda não têm bioma no mapa-múndi. Ficam fora de `Cities` (sem painel
+Cidades das regiões 5–16 (Docs/Mapas100.md; em 2026-11-11 são 11, de Taa Pwani ao Cais da Coluna), que ainda não têm bioma no mapa-múndi. Ficam fora de `Cities` (sem painel
 no mapa-múndi, sem Ammo, fora da lista das Barcas) e de `RaceCities`; `IsLateRegionCity` as reconhece e `IsHubCity`
 separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestado (Floresta: sempre desbloqueada, então o
 `CityProgress.ApplyDefeatIn` sempre acorda na praça delas). Estilo próprio escolhido na receita (`CityTownRecipe.Style`).
@@ -412,8 +413,8 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 - **Missões da cidade:** Liyongo pede 6 Gaivotas Ladras (`enemy_forest_thief_gull`; 4 poções de vida + 3 de mana +
   60 ouro, 700 XP); depois Zawadi pede 5 Caranguejos Gigantes (`enemy_forest_coconut_crab`; Botas de
   Raiz Viva + 80 ouro, 820 XP). Testes: `CityTaaPwaniTests`.
-- **Falta:** o mapa 25 ainda não é jogável, então o passeio só abre pelo menu de prévia do editor até o mapa existir. As
-  outras cidades da região, Aratta (26) e Kirta (28), estão em §1.1 (cidades de raça).
+- ~~**Falta:** o mapa 25 ainda não é jogável~~ — o mapa 25 é zona do mundo contínuo da Costa e a cidade fica dentro dele
+  (2026-11-11). As outras cidades da região, Aratta (26) e Kirta (28), estão em §1.1 (cidades de raça).
 
 **Jhilpur, a Cidade nas Raízes** (capital do Delta de Jhilpur, região 6, mapa 31; cidade de retorno de 31, 32 e 35):
 - **Passeio da cidade:** receita `CityTownRecipes.Jhilpur` (`CityTownRecipes.Jhilpur.cs`) no estilo novo
@@ -445,8 +446,7 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
   Gruta faz os Filhos do Lodo da Maré de Lodo; 5 poções de vida + 4 de mana + 110 ouro, 1200 XP); depois Abiesous pede
   6 corvos fora do telhado da escola de barco (o Corvo-da-Treva faz a Garça-Lança Apagada que rouba os remos; **Fruta
   Purificadora** + 120 ouro, 1300 XP). Testes: `CityJhilpurTests`.
-- **Falta:** o mapa 31 e o mundo contínuo do delta ainda não existem, então o passeio só abre pelo menu de prévia do
-  editor (`Preview Walkable Town/Jhilpur`); a monção que sobe um andar, a escola de barco ensinando a remar, a Maré de
+- **Falta:** ~~o mapa 31 e o mundo contínuo do delta~~ (já existem, com a cidade dentro; 2026-11-11); a monção que sobe um andar, a escola de barco ensinando a remar, a Maré de
   Lodo e a Casa nas Raízes ainda faltam.
 
 **Sangkent, a Cidade-Escadaria** (capital do Teto do Mundo, região 7, mapa 36; cidade de retorno de 36–40):
@@ -488,8 +488,7 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
   da ficha; 5 poções de vida + 5 de mana + 130 ouro, 1500 XP); depois Kustai pede 6 neblinas do vento ruim fora do
   quadro de avisos das caravanas (`enemy_mountain_ill_wind_mist`; **Capa de Tempestade** + 140 ouro, 1600 XP). Testes:
   `CitySangkentTests`.
-- **Falta:** o mundo contínuo do Teto do Mundo (outro trabalho) vai encaixar a cidade; até lá o passeio só abre pelo
-  menu de prévia do editor (`Preview Walkable Town/Sangkent`). As calhas e os carrinhos andáveis (transporte da cidade,
+- **Falta:** ~~o mundo contínuo do Teto do Mundo vai encaixar a cidade~~ (já encaixa; 2026-11-11). As calhas e os carrinhos andáveis (transporte da cidade,
   fila de 1 por vez), os 7 terraços de verdade, o evento Avalanche, o Iaque do Teto do Mundo e o conjunto Terraço do
   Pamir ainda faltam.
 
@@ -529,8 +528,7 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 - **Missões da cidade:** Bögü pede 7 leões de pedra apagados fora dos portões (o Golem de Pedra faz o Leão de Pedra
   Apagado da ficha; 5 poções de vida + 5 de mana + 150 ouro, 1700 XP); depois Lin Deng pede 6 peixes-lanterna fora do
   canal (a Lanterna-Peixe do Canal das Lanternas, 43; **Selo do Sol** + 150 ouro, 1800 XP). Testes: `CityMingchengTests`.
-- **Falta:** o mundo contínuo da Planície de Mingcheng (outro trabalho) vai encaixar a cidade; até lá o passeio só abre
-  pelo menu de prévia do editor (`Preview Walkable Town/Mingcheng`). Os 9 anéis de verdade, os portões por hora (tambor e
+- **Falta:** ~~o mundo contínuo da Planície de Mingcheng vai encaixar a cidade~~ (já encaixa; 2026-11-11). Os 9 anéis de verdade, os portões por hora (tambor e
   sino), as Barcas de canal entre os bairros 4–6, a Festa das Lanternas com charadas, a Lâmpada de Mingcheng (G4 da
   Maria), o Qilin de Jade e o conjunto Pátio dos Nove Anéis ainda faltam.
 
@@ -565,7 +563,7 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 - **Missões da cidade:** Shad-Ohrmizd pede 7 abutres do pico fora dos sinos (o Abutre de Brasa faz o Abutre do Pico da
   ficha; poções + 210 ouro, 2800 XP); depois Tadi pede 6 neblinas de vento ruim fora das pontes de corda (a Neblina do
   Vento Ruim do 55; **Capa de Tempestade** + 210 ouro, 2900 XP). Testes: `CityFarnkeshTests`.
-- **Falta:** os pináculos em alturas de verdade (subir de cesto, descer planando), o evento Vendaval, o G4 da Maithe
+- **Falta:** os pináculos em alturas de verdade (os cestos de corda e as correntes de planar já existem, `SkyRouteRules`; 2026-11-11), o evento Vendaval, o G4 da Maithe
   (Sopro de Farnkesh), o Senmurv e o conjunto Ninho de Pedra.
 
 **Porto da Lua Branca** (capital do Ar Sereno, região 11 — Mar Gelado, mapa 59; cidade de retorno de 59–64):
@@ -607,8 +605,9 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 - **Missões da cidade:** Yirkap pede 8 gaivotas ladras fora dos varais (a Gaivota Ladra faz a Gaivota-do-Gelo da ficha;
   poções + 220 ouro, 3000 XP); depois Pera pede 6 ursos fora do gelo dos canais (o Urso-Pardo, apagado, faz o Urso-Polar do
   60; **Roupa Térmica** + 220 ouro, 3100 XP). Testes: `CityPortoDaLuaBrancaTests`.
-- **Falta:** as fases da lua (canais que congelam na cheia e abrem na nova, rotas e lojas que mudam), o evento Noite Polar,
-  a Barca da Lua atracando, o G4 da Lavine (Lua Branca), a Rena da Aurora e o conjunto Casa da Lua Branca.
+- **Falta:** rotas e lojas que mudam com a lua, o evento Noite Polar, a Barca da Lua atracando e o G4 da Lavine (Lua
+  Branca). (Já existem, 2026-11-11: os canais que congelam e abrem com a lua, `MoonCanalRules`; a Rena da Aurora; e os
+  Móveis da Casa da Lua Branca, conjunto de casa.)
 
 **Hinokura, a Ilha-Forja** (capital do Fogo Vivo, região 12 — Arquipélago de Hinokura, mapa 65; cidade de retorno de 65–70):
 - **Passeio da cidade:** receita `CityTownRecipes.Hinokura` (`CityTownRecipes.Hinokura.cs`) no estilo novo
@@ -654,9 +653,9 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 - **Missões da cidade:** Akane pede 8 caranguejos fora dos varais de laca (o Caranguejo-do-Coco faz o Caranguejo-Vulcão da
   ficha; poções + 230 ouro, 3200 XP); depois Sango pede 6 gaivotas-brasa fora do Barco-Farol (o Abutre de Brasa faz a
   Gaivota-Brasa; **Barco de Junco** + 230 ouro, 3300 XP). Testes: `CityHinokuraTests`.
-- **Falta:** os mapas 65–70 no catálogo e no overworld, os canais de lava com comportas que mudam a forja acesa do dia, o
-  evento Tremor, os pátios do palácio no alto, o G4 do Ícaro (Forja de Hinokura), o Leão-Guardião de Laca e o conjunto
-  Palácio de Laca.
+- **Falta:** o bônus de refino da forja acesa do dia, os pátios do palácio no alto, o G4 do Ícaro (Forja de Hinokura) e o
+  conjunto Palácio de Laca. (Já existem, 2026-11-11: os mapas 65–70 no catálogo e no overworld, as comportas e o Tremor,
+  `HinokuraForgeRules`, e o Leão-Guardião de Laca.)
 
 **Cais de Mesektet** (o cais da barca da noite, região 13 — Rio das Doze Horas, mapa 71; cidade de retorno de 71–76):
 - **Passeio da cidade:** receita `CityTownRecipes.CaisDeMesektet` (`CityTownRecipes.Mesektet.cs`) no estilo novo
@@ -695,9 +694,10 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 - **Missões da cidade:** Sinuhe pede 8 crocodilos fora do cais da barca (o Crocodilo do Mangue faz o Crocodilo do Rio Escuro
   da ficha; poções + 240 ouro, 3400 XP); depois Djedi pede 6 escorpiões fora do banco de areia dos alunos (o Escorpião do
   deserto faz o Escorpião Negro de 73; **Lamparina Rúnica** + 240 ouro, 3500 XP). Testes: `CityMesektetTests`.
-- **Falta:** os mapas 71–76 no catálogo e no overworld, os doze píeres e a abertura em sequência (a barca a cada 12 min), a
-  noite permanente do rio, o evento A Barca Atrasou, os serviços de treino do Djedi e de Caderno do Setne (hoje só falas), a
-  Íbis Real de Mesektet e o conjunto Cais do Papiro.
+- **Falta:** a noite permanente do rio, o evento A Barca Atrasou e os serviços de treino do Djedi e de Caderno do Setne
+  (hoje só falas). (Já existem, 2026-11-11: os mapas 71–76 no catálogo e no overworld; os doze píeres com a barca por hora,
+  `RioHourRules`, com hora de 3 min e não 12; a Íbis Real de Mesektet; o conjunto de equipamento Cais do Papiro e os Móveis
+  do Cais do Papiro.)
 
 **Dur-Jarras, a Cidade-Zigurate** (região 14 — Margens da Mistura, mapa 77; cidade de retorno de 77–82):
 - **Passeio da cidade:** receita `CityTownRecipes.DurJarras` (`CityTownRecipes.DurJarras.cs`) no estilo novo `TownStyles.Ziggurat`
@@ -726,8 +726,8 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 - **Missões da cidade:** Utnapishtim pede 8 leões fora dos canais (o Leão de Pedra faz o Leão de Tijolo Apagado; poções + 250
   ouro, 3600 XP); depois Sin-leqi-unninni pede 6 besouros fora das prateleiras de tábuas (o besouro `enemy_mountain_bark_beetle` faz o
   Gafanhoto de Betume; **Barco de Junco** + 250 ouro, 3700 XP). Testes: `CityDurJarrasTests`.
-- **Falta:** os mapas 77–82 no catálogo e no overworld, os degraus do zigurate como bairros de serviços (feira, ofícios, biblioteca,
-  relógio, Torre), o zigurate acender de cima para baixo em sequência à noite, o evento Cheia, a Roda Celeste no céu, o Mušḫuššu Manso e o conjunto Tijolo Azul.
+- **Falta:** os degraus do zigurate como bairros de serviços (feira, ofícios, biblioteca,
+  relógio, Torre), o zigurate acender de cima para baixo em sequência à noite, o evento Cheia e a Roda Celeste no céu. (Já existem, 2026-11-11: os mapas 77–82 no catálogo e no overworld, o Mušḫuššu Manso, o conjunto de equipamento Tijolo Azul e os Móveis de Tijolo Azul.)
 
 **Fortaleza da Última Lâmpada** (região 15 — Limiar Profundo, mapa 83; cidade de retorno de 83–90):
 - **Passeio da cidade:** receita `CityTownRecipes.FortalezaUltimaLampada` (`CityTownRecipes.UltimaLampada.cs`) no estilo novo `TownStyles.BasaltFort`
@@ -752,8 +752,8 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
   carne, erva, ferro, Runa de Clareza, Runa de Cura, Amuleto da Sorte, Pedra da Bênção e Pedra da Alma (nunca Vida/Caos). O Ammo nunca para lá.
 - **Missões da cidade:** Pamour pede 8 enxames de morcegos fora da muralha (`enemy_cave_bat_swarm` faz o Morcego da Treva; poções + 260 ouro, 3800 XP); depois Makarios pede 6 ushabtis fora da estrada das cartas
   (`enemy_mountain_rope_ushabti` faz o Ushabti Apagado; **Lamparina Rúnica** + 260 ouro, 3900 XP). Testes: `CityUltimaLampadaTests`.
-- **Falta:** os mapas 83–90 no catálogo e no overworld, os cinco portões abrindo para as covas (hoje selados; as 3 ruas são as saídas), a rede de lâmpadas (3 anéis de zona segura), o evento Maré de
-  Treva, a Raposa-Joia e o conjunto Mil Lâmpadas.
+- **Falta:** os cinco portões abrindo para as covas (hoje selados; as 3 ruas são as saídas) e a Raposa-Joia. (Já existem, 2026-11-11: os mapas 83–90 no catálogo e no overworld, a rede de 12 lâmpadas em 3 anéis com a Maré de
+  Treva, `ProfundoLampRules`, e os Móveis das Mil Lâmpadas, conjunto de casa.)
 
 **Cais da Coluna** (região 16 — Reinos do Céu, mapa 91; cidade de retorno de 91–100):
 - **Passeio da cidade:** receita `CityTownRecipes.CaisDaColuna` (`CityTownRecipes.CaisDaColuna.cs`) no estilo novo `TownStyles.SkyQuay` (`TownArchitecture.SkyQuay`, linhas 26 e 27 da `TownPalette`: branco `#FAF7EF`,
@@ -766,7 +766,7 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 - **Respawn:** a cidade aceita `ApplyDefeatIn`; os mapas 91–100 ainda **não estão** no `MapCatalog`: quando entrarem (`MapCatalog.CaisDaColuna = "cais_da_coluna"`, mapa `map_091_cais_da_coluna`, `K.Capital`, região `MapRegion.ReinosDoCeu`, retorno `CaisDaColuna` em 91–100), falta ligar `RespawnCityFor` e os testes de respawn.
 - **A Última Caravana do Ammo** (diária, 3 vagas que giram, tema Especialidade; as fichas 91–100 não pedem equipamento): fixos Poção de Vida e de Mana, **Lamparina Rúnica** (155), **Óleo de Fogo Eterno** (190), **Capa de Tempestade** (1100), **Asas de Lona** (420), **Corda** (40) e **Teriaga** (50); giram carne, erva, ferro, Runa de Clareza, Runa de Cura, Amuleto da Sorte, Pedra da Bênção e Pedra da Alma (nunca Vida/Caos). O mascate nunca para lá.
 - **Missões da cidade:** Ammo pede 8 sombras fora dos fardos (`enemy_forest_creeping_dark` faz a Sombra Clandestina; poções + 270 ouro, 4000 XP); depois Adda pede 6 aves fora das jarras (`enemy_forest_dimmed_ibis` faz a Ave de Nuvem Apagada; **Capa de Tempestade** + 280 ouro, 4200 XP). Testes: `CityCaisDaColunaTests`.
-- **Falta:** os mapas 91–100 no catálogo e no overworld, a pouca gravidade do 91, o evento Chegada da Caravana, a Barca da Lua encostar só à noite (hoje as duas ficam atracadas), o céu de estrelas por baixo e o conjunto Cais de Luz.
+- **Falta:** a pouca gravidade do 91, o evento Chegada da Caravana e o céu de estrelas por baixo. (Já existem, 2026-11-11: os mapas 91–100 no catálogo e no overworld, a Barca da Lua que só leva ao convés à noite, `CeuMoonBarqueRules`, o conjunto de equipamento Cais de Luz e os Móveis do Cais de Luz.)
 
 Código: `CityCatalog`, `CityShopCatalog` (dados), `CityTexts` (textos en/pt-BR), `VillageHubButton` (o mesmo painel
 para toda cidade), `CityFastTravelPanel` (Barcas de Luz), `CitySafeZoneHud` (aviso), `WorldMapCityPresence` (zona

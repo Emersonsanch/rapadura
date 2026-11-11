@@ -4,6 +4,12 @@
 
 ## 📝 Changelog do Roadmap
 
+### 2026-11-11 (documentação — status real dos 100 mapas, conferido no código de `4c8bb42`)
+- 🗺️ Novo [`Docs/Status_100Mapas.md`](Docs/Status_100Mapas.md): uma tabela por região (cidade, mundo contínuo, bichos próprios e emprestados, mecânicas feitas/faltantes, chefe do mundo, montaria, conjunto, móveis) e as 10 prioridades para o jogo ser jogável do começo ao fim, com o que só o dono decide.
+- ✅ Marcados no TODO o que já existe no código: 100 mapas no catálogo (todos `isBuilt`), 16 mundos contínuos costurados, 27 cidades dentro do mundo, mecânicas das 16 regiões, chefes do mundo das Regiões 10–16, 122 bichos próprios das Regiões 5–16, 8 montarias das Regiões 10–14, 4 conjuntos de 2 peças, 5 conjuntos de móveis, As Cartas da Estrada e o estudo de rede. Nada disso foi visto jogando.
+- ⚠️ A suíte EditMode passou antes do `4c8bb42`, exceto 6 casos que ele corrigiu e que ainda não rodaram de novo no Unity.
+- ⏳ Em andamento com outros agentes (não marcados como prontos): chefes das Regiões 5–9, janela de mapas e balanço 100–500.
+
 ### 2026-10-30 (tarde — expansão de lore dos NPCs, ferramentas MCP e pipeline dos 100 mapas)
 - 📜 **História e Arcos dos NPCs da Ilha da Aurora**: catálogo completo de lore dos NPCs das 4 primeiras regiões (Vila da Vó Edna, Oásis de Qocho, Vila de Litema e Vila das Lamparinas) integrado ao TODO com suas histórias pessoais, personalidades, papéis de gameplay e conexão com os contos do Vô Jorge e acolhimento da Vó Edna.
 - 🛠️ **Ferramentas MCP para Construção de Cenas e Validação de NPCs**: diretrizes de uso do Unity MCP para criação, instanciação, configuração de diálogos e validação física de colisores e pontos de interação no Editor.
@@ -1415,6 +1421,8 @@ frontal + lateral + traseira de cada personagem para servir como referência par
 - [x] Principal — `QuestManager` + `QuestType.MainStory`, 5 quests pessoais + convergência autoradas, oferecidas por NPCs via diálogo (2026-10-21) e acompanhadas no log de missões + rastreador (`UI/Quests/QuestLogController.cs`, `QuestTrackerController.cs`)
 - [~] Secundárias — `QuestType.Side`, mesmo backend
 - [x] Diárias — `DailyQuestService` + 8 assets em `Resources/Quests/Daily` (2026-10-21)
+- [x] Principal das Regiões 9–16 — **As Cartas da Estrada** (`LateStoryCatalog` + `LateStoryTexts`, 17 etapas do nível 100 ao 500, fala por primo, Vó Edna no rádio, fim sentado ao lado da cadeira do Vô Jorge no mapa 100; `Docs/HistoriaFinal_Cartas.md`, `LateStoryCatalogTests`). *Não testada jogando.*
+- [ ] Principal entre o fim do Ato V (nível ~20) e a primeira carta (nível 100): hoje o jogador só tem missões de cidade nesse trecho (`Docs/Status_100Mapas.md`, prioridade 4).
 
 > ✅ `QuestManager` registrado em `GameManager.BuildManagers()` + `SaveManager.Register`. ~~Pendente: `SetRewardTargets`, conteúdo real, UI de log.~~ Tudo feito: `GameManager.RegisterQuestRewardTargets` (2026-09-10), quests de conteúdo em `Resources/Quests`, log de missões + rastreador (2026-10-21). Também corrigido em 2026-10-21: quests restauradas do save sem definição registrada não entregavam recompensa.
 
@@ -1561,7 +1569,7 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 ---
 
 ### Biomas e Regiões Iniciais
-- [~] Floresta (Bosque do Zarafshan) — camada de dados pronta (`World/Biomes/BiomeDefinition.cs` + `BiomeSeeder.cs`) e, desde 2026-10-21, região do `WorldMap.unity` com encontros, clima e VFX ambiente próprios; terreno/Scene real bloqueado (exige Unity Editor)
+- [~] Floresta (Bosque do Zarafshan) — camada de dados pronta (`World/Biomes/BiomeDefinition.cs` + `BiomeSeeder.cs`) e, desde 2026-10-21, região do `WorldMap.unity` com encontros, clima e VFX ambiente próprios; terreno/Scene real bloqueado (exige Unity Editor) — 2026-11-11: Bosque do Zarafshan, Areias, Serra e Grutas já são mundos contínuos com terreno, cidades e bichos (`OverworldLayouts.*`); ficam `[~]` porque nunca foram vistos jogando e as fichas têm faltas (`Docs/Status_100Mapas.md`).
 - [~] Deserto (Areias Flamejantes) — idem
 - [~] Montanha (Serra de Kaggen) — idem
 - [~] Cavernas (Grutas do Limiar) — idem
@@ -1665,7 +1673,7 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 > 📌 **Documento Mestre Detalhado:** Veja [`Docs/MetodologiaMapasERacas.md`](Docs/MetodologiaMapasERacas.md) para a metodologia completa de níveis, fórmulas de teleporte (M), penalidades de delta de nível de monstros, exigências de Asas/Montarias/Tochas e a enciclopédia das mais de 20 raças (Sogdianos, Nômades, San, Suaílis, Elfos-da-Mata, Altos-Elfos, Orcs do Tambor Rubro, Esqueletos de Marfim, Jhilpuris Védicos, Nagas, Vanaras, Gandharvas, Anões, Kobolds, Povo-Touro, Povo-do-Mar, Trols, Centauros, etc.).
 
 #### Tarefas de Implementação Técnica (Para o Claude / Agentes):
-- [x] `Assets/Scripts/Gameplay/World/Map/MapDefinition.cs`: — feito como C# puro (`MapDefinition` + `MapCatalog` com os 42 mapas ★, `MapDefinitionAsset` opcional), conferido contra a tabela do `Docs/Mapas100.md` por teste.
+- [x] `Assets/Scripts/Gameplay/World/Map/MapDefinition.cs`: — feito como C# puro (`MapDefinition` + `MapCatalog`, `MapDefinitionAsset` opcional), conferido contra a tabela do `Docs/Mapas100.md` por teste. Desde 2026-11-09 o catálogo tem os **100 mapas**, todos `isBuilt: true` (zonas dos 16 mundos contínuos); eram 42 ★ em 2026-11-03.
   - ScriptableObject para cada mapa: `int mapId`, `string mapNameKey`, `int walkLevelRequirement`, `int warpLevelRequirement`, `int baseWarpGoldFee`, `string specialRequirementTag` (ex: "WingsRequired", "TorchRequired", "SaddleRequired"), `string returnCityId`.
 - [x] `Assets/Scripts/Gameplay/World/Map/MapAccessRules.cs`: — feito (`CheckWarp`/`CheckWalk` na ordem aqui → ocupado → construído → nível → exigência → ouro).
   - Classe utilitária com lógica pura (testável fora da Unity):
@@ -1673,7 +1681,7 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
     * `CanWarpToMap(int playerLevel, int warpLevel, int playerGold, int cost, out string failureReason)`.
     * `CalculateWarpCost(int warpLevel, bool isOverloaded)`: $50 + (\text{warpLevel} \times 15)$, dobrado se sobrecarregado.
     * `GetMonsterLevelDeltaPenalty(int playerLevel, int monsterLevel)`: retorna bônus de dano do monstro (+25% crítico em +10 níveis) e penalidade de hit rate (-40% acerto em +20 níveis).
-- [x] `Assets/Scripts/UI/WorldMap/FastTravelWindowController.cs` & `FastTravelWindow.uxml`: — feito (tecla M, bússola, Cais da Barca); só 01 e 02 abrem nesta versão (os outros aparecem trancados). Exigências especiais (asas, tocha…) ainda não têm fonte: contam como não atendidas.
+- [x] `Assets/Scripts/UI/WorldMap/FastTravelWindowController.cs` & `FastTravelWindow.uxml`: — feito (tecla M, bússola, Cais da Barca). ~~Só 01 e 02 abrem nesta versão; exigências especiais ainda não têm fonte~~ — desde então os 100 mapas são `isBuilt` (a barca leva aos cais já visitados a pé, `OverworldProgress`, salvos no slot) e as exigências têm fonte real (`MapRequirementRules` lê mochila, equipamento, primo e montarias). A revisão da janela está com outro agente (2026-11-11).
   - Interface aberta pela tecla **M** ou botão de bússola na HUD mobile:
     * Lista dinâmica dos 100 mapas agrupados por região.
     * Mapas inacessíveis ficam acinzentados com cadeado e indicação: *"Exige Nível {warpLevel} (ou a pé nível {walkLevel}) - Barca: {cost} ouro"*.
@@ -1687,7 +1695,30 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 
 ### 🗺️ Próximos Mapas para Desenvolver (Pipeline dos 100 Mapas — Escopo Níveis 1–100)
 - [x] 🌍 **Mundo contínuo da Região 1** (pedido do usuário 2026-11-03: mapa inicial gigante, ≥ 20× o tamanho, ligado à cidade sem teleporte, várias planícies e bichos por área) — feito: overworld 2400 × 2400 m com a Vila, 18 áreas, os mapas 01–06 encaixados como zonas, streaming por pedaços, barreira suave, portões 07/13/19 (`Docs/Mapas100.md` §0.10, `OverworldTests`, `OverworldWalkSmokeTests`).
-- [ ] 🌍 Mundo contínuo — próximos passos: conferir no Play (visual das bordas entre áreas, densidade, custo no celular, sombras das árvores), salvar os cais visitados no save (hoje vale a sessão), música/clima por área, marcar no chão a borda das áreas trancadas, nome da área no HUD, colocar a Areias (07–12), a Serra (13–18) e as Grutas (19–24) no mesmo esquema e ligá-las ao Zarafshan sem portão.
+- [~] 🌍 Mundo contínuo — próximos passos: conferir no Play (visual das bordas entre áreas, densidade, custo no celular, sombras das árvores), salvar os cais visitados no save (hoje vale a sessão), música/clima por área, marcar no chão a borda das áreas trancadas, nome da área no HUD, colocar a Areias (07–12), a Serra (13–18) e as Grutas (19–24) no mesmo esquema e ligá-las ao Zarafshan sem portão.
+  - [x] Areias, Serra e Grutas no mesmo esquema e as **16 regiões** costuradas num mundo só de 7200 × 15600 m, sem portão entre elas (`OverworldLayouts.World.cs`, `OverworldWorldTests`). *Não testado jogando.*
+  - [x] Cais visitados salvos no slot (`OverworldProgress` → `CitySaveState.visitedDocks`).
+  - [x] Nome da área no HUD (`AreaBannerController`) e ambiente por área (`OverworldAreaAmbience`). *Não testado jogando.*
+  - [ ] Conferir no Play (bordas, densidade, sombras) e medir no celular (precisa do Android Build Support, decisão do dono).
+  - [ ] Marcar no chão a borda das áreas trancadas.
+
+#### 📊 Status real dos 100 mapas (conferido no código em 2026-11-11; detalhe por região em [`Docs/Status_100Mapas.md`](Docs/Status_100Mapas.md))
+> Tudo abaixo existe no código com testes EditMode e **nunca foi visto jogando**. A suíte passou antes do `4c8bb42`, exceto 6 casos que ele corrigiu e que ainda não foram reexecutados no Unity.
+- [x] **100 mapas no catálogo** (`MapCatalog`, todos `isBuilt: true`, cada um zona de um mundo contínuo; 43–46 fecharam a conta em `2665da9`). *Não testado jogando.*
+- [x] **16 regiões** em mundo contínuo (`OverworldLayouts.<Região>.cs`), costuradas em 6 fileiras com 2 buracos murados. *Não testado jogando.*
+- [x] **27 cidades** do `Mapas100.md` §1 no `CityCatalog` (4 hubs, 12 de raça, 11 de região tardia), todas dentro do mundo contínuo com receita própria; moradores, loja e 2 missões em cada cidade não-hub. *Não testado jogando.*
+- [~] **Mecânicas das fichas**: pelo menos uma por região, 65 arquivos em `Gameplay/World/Map/Mechanics/` (regras puras + driver por região, estado salvo por slot em `WorldMapProgress`, empurrões pelo `GroundedPush`). Faltam muitas das fichas (lista por região no Status). *Não testado jogando.*
+- [~] **Chefes do mundo**: Regiões 1–4 como eventos com horário em arena do mapa-múndi (`WorldBossRules`: Saklas, Namrael, Mazan, Mahaway); Regiões 10–16 no mundo contínuo (`RegionBossRules`: Rei-Vendaval, Velho Kul, Glutão de Brasa, Apep, Sonho da Destruição, A Grande Treva solo, Āz). *Não testado jogando.*
+  - [ ] Chefes do mundo das Regiões 5–9 — em andamento com outro agente, não pronto.
+  - [ ] Chefes de mapa das fichas (Fiandeira Esquecida, Cortador de Cordas, Guayota, Hobabish…) e a raide da Grande Treva (precisa de servidor).
+- [~] **Bichos próprios**: 130 nas levas da bíblia §3.2.1 (8 das Regiões 2–4 e 122 das Regiões 5–16), com modelo, rig, loot, Caderno e testes de colocação, já nos grupos do mundo. Cerca de 150 papéis de ficha ainda usam bicho de outra região (contagem por região no Status). *Não testado jogando.*
+- [~] **Montarias das fichas**: 8 das Regiões 10–14 (`MountFarRegionCatalog`, `Docs/Mounts.md` §3.9) + o Grifo da Coluna; as 19 propostas restantes do `Mapas100.md` §6 (Regiões 1–9, Barquinha de Luz, Filhote de Huma, Cavalo-Estrela) não existem. *Não testado jogando.*
+- [~] **Conjuntos de equipamento**: Marfim dos Artífices (Ossuário) + Cais do Papiro, Tijolo Azul, Selo dos Artífices e Cais de Luz (`ArmorSetRules`, Regiões 13–16, só por drop); os "conjuntos antigos" das outras fichas não existem. *Não testado jogando.*
+- [~] **Móveis por região**: conjuntos das Regiões 1–4 e, desde `4c8bb42`, Casa da Lua Branca (R11), Cais do Papiro (R13), Tijolo Azul (R14), Mil Lâmpadas (R15) e Cais de Luz (R16), 8 peças cada (`Docs/Housing/CatalogoCasa.md`, 620 itens); Regiões 5–10 e 12 sem conjunto regional. *Não testado jogando.*
+- [x] **História das Regiões 9–16**: As Cartas da Estrada (`LateStoryCatalog`, 17 etapas, nível 100–500, até a Varanda do mapa 100; `Docs/HistoriaFinal_Cartas.md`). *Não testada jogando.*
+  - [ ] História principal entre o nível ~20 (fim do Ato V) e o 100 (primeira carta): hoje só há missões de cidade.
+- [~] **Rede**: estudo da stack feito (`Docs/Network.md`: Mirror + KCP, servidor Linux dedicado, Nakama; plano B FishNet + FishMMO). Protótipo das 7 etapas não começou; decisões do dono em §8.
+- [ ] Rodar de novo a suíte EditMode completa no Unity (os 6 casos corrigidos em `4c8bb42`) e a PlayMode.
 > 📌 **Fundamentos de Design de Cenários (`Docs/Mapas100.md` e `Docs/Progressao500.md`):**
 > 1. **Zona Segura Obrigatória:** Todo mapa conta com uma **cidade completa** (respawn, ferreiro, lojas, estrebaria, barca) ou um **posto avançado seguro** (fogueira/lâmpada, baú de passagem, conserto básico).
 > 2. **Renascer Canônico:** O jogador **sempre renasce na cidade de retorno** da região (na praça com a Lâmpada de Ramrat); nunca no próprio ponto de morte ou na arena.
@@ -1696,6 +1727,7 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 > 5. **Escopo Prioritário (★):** Desenvolvimento focado na progressão até o **nível 100** (mapas 01 ao 42), abrangendo 8 regiões marcantes.
 
 #### Catálogo dos Próximos 42 Mapas (Escopo ★):
+> 2026-11-11: os 42 ★ e os 58 ☆ estão todos no `MapCatalog` (100 mapas, `isBuilt`); a tabela abaixo fica como registro do design.
 
 | # | Mapa (PT / EN) | Região / Bioma | Faixa de Nível | Assentamento no Mapa | Cidade de Retorno | Arquétipos de Monstros & Destaques |
 |---|---|---|---|---|---|---|
@@ -1743,13 +1775,14 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 | **42** | **Torres Brancas de Amanirenas** / *White Spires* | Planície de Mingcheng | 95–102 | **Cidade de Raça:** Altos-Elfos | Torres Brancas | [elite] Campeões da Luz Eterna, [mágico] Conjuradores do Sol. Pináculos de mármore branco e jardins suspensos. |
 
 #### Checklist de Produção de Cada Mapa (Passo a Passo Técnico):
-- [ ] **1. Setup Geométrico e Greybox:** Criar cena aditiva ou bounds de arena; montar terrenos, rios e pontes respeitando a escala padrão (P = 120×120m, M = 200×200m, G = 300×300m, GG = 400×400m).
-- [ ] **2. Aplicação do TownKit:** Montar a cidade ou posto seguro com as peças modulares do `TownStyles` e paleta de cores correspondente da região.
-- [ ] **3. Colisores com `SolidPropBinder`:** Adicionar colisores em todas as árvores, pedras, muros e tendas, testando com o script de validação de colisão para garantir zero travamentos de heróis/montarias.
-- [ ] **4. Spawners e Tabelas de Encontro:** Configurar pontos de spawn de monstros com cotas de nível corretas e arquétipos balanceados (rápido, tanque, enxame, distância, elite, controle).
-- [ ] **5. Variante Noturna e Iluminação:** Configurar transição de ciclo dia/noite (`NightVariantRules`), marcando quais espécies nascem apenas sob a lua e validando o cone de alcance da Lamparina do Herói.
-- [ ] **6. Registro no Sistema de Viagem e Cidades:** Registrar a cidade de retorno no `CheckpointManager`, cadastrar cais da Barca de Luz (`FastTravelService`) e validar fluxo de morte/respawn automático.
-- [~] Floresta — camada de dados pronta (`World/Biomes/BiomeDefinition.cs` + `BiomeSeeder.cs`) e, desde 2026-10-21, região do `WorldMap.unity` com encontros, clima e VFX ambiente próprios; terreno/Scene real bloqueado (exige Unity Editor)
+> 2026-11-11: para os 100 mapas, os passos 1, 2, 4, 5 e 6 estão feitos **por código** dentro dos mundos contínuos (relevo e terrenos por área, cidades e postos pelo kit, grupos de bichos por área com variante noturna, cais e cidade de retorno no catálogo); o passo 3 vale para as cidades (colisão do kit) e não foi conferido jogando. Nenhum passo foi verificado no Play, por isso ficam `[~]`.
+- [~] **1. Setup Geométrico e Greybox:** Criar cena aditiva ou bounds de arena; montar terrenos, rios e pontes respeitando a escala padrão (P = 120×120m, M = 200×200m, G = 300×300m, GG = 400×400m).
+- [~] **2. Aplicação do TownKit:** Montar a cidade ou posto seguro com as peças modulares do `TownStyles` e paleta de cores correspondente da região.
+- [~] **3. Colisores com `SolidPropBinder`:** Adicionar colisores em todas as árvores, pedras, muros e tendas, testando com o script de validação de colisão para garantir zero travamentos de heróis/montarias.
+- [~] **4. Spawners e Tabelas de Encontro:** Configurar pontos de spawn de monstros com cotas de nível corretas e arquétipos balanceados (rápido, tanque, enxame, distância, elite, controle).
+- [~] **5. Variante Noturna e Iluminação:** Configurar transição de ciclo dia/noite (`NightVariantRules`), marcando quais espécies nascem apenas sob a lua e validando o cone de alcance da Lamparina do Herói.
+- [~] **6. Registro no Sistema de Viagem e Cidades:** Registrar a cidade de retorno no `CheckpointManager`, cadastrar cais da Barca de Luz (`FastTravelService`) e validar fluxo de morte/respawn automático.
+- [~] Floresta — camada de dados pronta (`World/Biomes/BiomeDefinition.cs` + `BiomeSeeder.cs`) e, desde 2026-10-21, região do `WorldMap.unity` com encontros, clima e VFX ambiente próprios; terreno/Scene real bloqueado (exige Unity Editor) — 2026-11-11: o terreno real existe como mundo contínuo da Região 1 (e as outras 15 regiões também); falta só ver jogando.
 - [~] Deserto — idem
 - [~] Montanha — idem
 - [~] Cavernas — idem
@@ -1848,7 +1881,7 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 - [ ] Progressão: mantém o single-player offline (campanha) separado do online, ou tudo vira online?
 
 ### 12.2 Fundação técnica
-- [ ] Escolher a stack de rede, com protótipo comparativo. **Servidor dedicado autoritativo** com Unity headless + Netcode for GameObjects, FishNet ou Mirror; contas e dados com backend próprio ou Nakama/PlayFab/UGS. Registrar a decisão em `Docs/Network.md`.
+- [~] Escolher a stack de rede, com protótipo comparativo. — 2026-11-09: estudo e recomendação em [`Docs/Network.md`](Docs/Network.md) (Mirror + KCP, build Linux Dedicated Server, Nakama auto-hospedado; plano B FishNet + FishMMO) e inventário do que assume um jogador só (§6). Falta o protótipo das 7 etapas (§7) e as decisões do dono (§8); o item só fecha depois da etapa 7. **Servidor dedicado autoritativo** com Unity headless + Netcode for GameObjects, FishNet ou Mirror; contas e dados com backend próprio ou Nakama/PlayFab/UGS. Registrar a decisão em `Docs/Network.md`.
 - [ ] Separar a lógica de jogo da apresentação. Combate, dano, loot, XP, missões e IA precisam rodar no servidor; o cliente só envia intenções (andar, atacar, usar skill). Muitas regras já são classes puras testadas (`StunRules`, `ThornsRules`, `EnemyLootRoller`, `LootGrantRules`…), e isso ajuda.
 - [ ] Revisar o que hoje assume um jogador só: singletons de gameplay, `Time.timeScale`/`GameplayPause` (online não pausa o mundo; pausa, modo foto e tutorial viram locais), save local em arquivo (vira banco de dados no servidor), seeds de aleatoriedade no cliente, "encontros aleatórios" em arena isolada (viram mapas compartilhados ou instâncias).
 - [ ] Contas e login: e-mail/Google/Apple, recuperação de senha, personagens por conta, LGPD (dados pessoais, exclusão de conta, termos de uso e política de privacidade).
@@ -1860,11 +1893,11 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 - [ ] Ambiente de testes: bots headless (reaproveitar o autopiloto do teste de resistência de 30 min), teste de carga com N jogadores simulados, testes de latência e perda de pacote.
 
 ### 12.3a Cidades e zonas seguras (decisão do usuário, 2026-10-29)
-- [ ] **Todo mapa/região tem uma cidade.** Floresta: a Vila da Vó Zefa; Deserto, Montanha e Cavernas ganham a sua (nomes e NPCs próprios, loja local, missões da região, casas para comprar).
+- [x] **Todo mapa/região tem uma cidade.** Floresta: a Vila da Vó Zefa; Deserto, Montanha e Cavernas ganham a sua (nomes e NPCs próprios, loja local, missões da região, casas para comprar). — 2026-11-11: as 16 regiões têm cidade (27 no `CityCatalog`, todas dentro do mundo contínuo; todo mapa tem cidade ou posto). *Não testado jogando.*
 - [ ] **Dentro da cidade ninguém luta:** bichos não atacam e não entram (param na divisa e voltam), jogadores não atacam bichos nem outros jogadores (nem a si mesmos: skills de dano ficam desabilitadas, só movimento, conversa, troca, loja e casa). Área marcada no chão/mapa e aviso "Você está em zona segura".
-- [ ] Regras numa classe pura (`SafeZoneRules`: pode atacar? pode receber dano? inimigo pode perseguir até aqui?) usada pelo combate offline agora e pelo servidor no online.
-- [ ] Ao morrer, renasce na cidade da região; viagem rápida entre cidades já visitadas.
-- [ ] Quem sai da cidade em combate não pode voltar para se esconder no meio da luta sem perder o alvo (evitar abuso), e debuffs param ao entrar.
+- [x] Regras numa classe pura (`SafeZoneRules`: pode atacar? pode receber dano? inimigo pode perseguir até aqui?) usada pelo combate offline agora e pelo servidor no online. — `Gameplay/World/Cities/SafeZoneRules.cs` (o lado do servidor espera a Fase 12.2).
+- [~] Ao morrer, renasce na cidade da região; viagem rápida entre cidades já visitadas. — offline no código: `SafeZoneRules.RespawnCity` pela cidade de retorno do mapa, Barcas de Luz entre os cais visitados (`OverworldProgress`). *Não testado jogando*; online pendente.
+- [~] Quem sai da cidade em combate não pode voltar para se esconder no meio da luta sem perder o alvo (evitar abuso), e debuffs param ao entrar. — regras puras prontas (`SafeZoneRules.CanEnterCity`, `ShouldDropTarget`, `ShouldClearDebuffsOnEntry`); o caso entre jogadores depende do online.
 
 ### 12.3 Funcionalidades estilo MU Online
 - [ ] Cidade-hub compartilhada (a Vila da Vó Zefa) com outros jogadores, NPCs, loja, Baú e Fogão.
@@ -1891,7 +1924,7 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
   - [ ] Alianças entre guildas e guerra de guildas declarada (só PvP consentido entre as duas, placar, regras claras); depois, disputa de território/castelo por temporada.
 - [ ] PvP: duelo consentido, arena ranqueada, áreas PvP marcadas; nada de PvP forçado nas regiões iniciais.
 - [ ] Eventos agendados no espírito de Blood Castle/Devil Square, com tema sertanejo: "Noite do Lobisomem" (sobreviver a ondas), "Cerco ao Engenho" (defender a vila), "Caçada ao Habitante Ancestral" (chefe mundial com várias pessoas), e a Festa Junina como evento sazonal.
-- [ ] Chefes mundiais com reaparecimento por horário e loot por contribuição.
+- [~] Chefes mundiais com reaparecimento por horário e loot por contribuição. — offline: 4 chefes com horário nas Regiões 1–4 (`WorldBossRules`) e 7 chefes que voltam 5 min depois nas Regiões 10–16 (`RegionBossRules`); loot por contribuição só no online. *Não testado jogando.*
 - [ ] Ranking (nível, PvP, eventos) e temporadas.
 - [ ] Sistema de reset/renascimento estilo MU (pode substituir ou conviver com o New Game+ single-player).
 - [ ] Moderação: denúncias, bloqueio de jogador, ferramentas de GM (teleporte, banimento, logs).
@@ -2008,7 +2041,7 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 - [x] Evolução de classe por missão (5 graduações por primo: 8/14/25 na campanha, G4 no 150 e G5 no 350; skill/passiva e visual novos) e nível de mestre depois do máximo (500 + G5, 100 pontos em 4 linhas) — `Docs/ClassEvolution.md`. Falta: as montarias lerem os nós do Laço (`ClassEvolutionProgress.ActiveEffectBonus`).
 - [ ] Combo de skills da classe e buffs de suporte para o grupo.
 - [x] Refino de item +0 a +15 com "Pedras do Sertão" (Bênção, Alma, Vida, Caos); falha sem destruir o item.
-- [ ] Itens excelentes, conjuntos antigos com bônus por peça, opção de sorte, engaste de soquetes.
+- [~] Itens excelentes, conjuntos antigos com bônus por peça, opção de sorte, engaste de soquetes. — conjuntos: 5 de 2 peças no código (Marfim dos Artífices + 4 das Regiões 13–16, `ArmorSetRules`); o resto não.
 - [ ] Durabilidade e conserto no ferreiro.
 - [x] Asas (níveis 1–4) e "Tacho Encantado" para combinar itens com chance (asas, montarias, refino alto).
 - [ ] Caixas de tesouro "Baú do Cangaço +1…+5" em invasões; frutas de atributo; barra de poções e poção automática.
