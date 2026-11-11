@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
+using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Dungeon;
 using Rapadura.Gameplay.Environment;
 using Rapadura.UI.Bestiary;
@@ -18,6 +19,8 @@ namespace Rapadura.Gameplay.Enemies
     /// (arena prefab, ResetForSpawn, visual swap, level scaler, <see cref="MapMonsterInfo"/>, <see cref="EnemySpawnedEvent"/>): it needs nothing from the world
     /// but <see cref="MapModeController.Current"/>. A boss appears when the hero comes near, leaves (back to full health) when the hero walks far
     /// off, and returns <see cref="RegionBossRules.RespawnSeconds"/> after dying, like the clearings refill.
+    /// It lives across scenes (DontDestroyOnLoad) but its timers belong to one game: a new game (<see cref="NewSessionResetEvent"/>) or a save
+    /// read from disk (<see cref="GameLoadedEvent"/> not from carried state) puts every boss back at its arena, so nothing leaks between slots.
     /// </summary>
     public sealed class RegionBossDirector : MonoBehaviour
     {
@@ -31,9 +34,7 @@ namespace Rapadura.Gameplay.Enemies
             public GameObject Instance;
             public GameObject Corpse;
             public float CorpseUntil;
-            public float BackAt;
-            public bool WaitingForNight;
-            public bool SawDay;
+            public readonly RegionBossReturns Returns = new RegionBossReturns();
         }
 
         /// <summary>Off in tests.</summary>
@@ -63,11 +64,40 @@ namespace Rapadura.Gameplay.Enemies
         private void OnEnable()
         {
             EventBus.Subscribe<EnemyDiedEvent>(OnEnemyDied);
+            EventBus.Subscribe<NewSessionResetEvent>(OnNewSession);
+            EventBus.Subscribe<GameLoadedEvent>(OnGameLoaded);
         }
 
         private void OnDisable()
         {
             EventBus.Unsubscribe<EnemyDiedEvent>(OnEnemyDied);
+            EventBus.Unsubscribe<NewSessionResetEvent>(OnNewSession);
+            EventBus.Unsubscribe<GameLoadedEvent>(OnGameLoaded);
+        }
+
+        private void OnNewSession(NewSessionResetEvent _) => ResetSlots();
+
+        private void OnGameLoaded(GameLoadedEvent evt)
+        {
+            // A scene swap hands carried state back to the same game: the timers still hold. Only a save read from disk starts over.
+            if (RegionBossReturns.LoadResets(evt.FromCarriedState))
+            {
+                ResetSlots();
+            }
+        }
+
+        /// <summary>Every boss back at its arena, no respawn timer, no night to wait for.</summary>
+        private void ResetSlots()
+        {
+            foreach (Slot slot in _slots)
+            {
+                Clear(slot);
+                slot.CorpseUntil = 0f;
+                slot.Returns.Reset();
+            }
+
+            _player = null;
+            _nextTick = 0f;
         }
 
         private void Update()
@@ -130,19 +160,11 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
-            if (slot.WaitingForNight)
-            {
-                bool isNight = IsNight();
-                slot.SawDay |= !isNight;
-                if (!RegionBossRules.NightReturnReady(slot.SawDay, isNight))
-                {
-                    return;
-                }
-
-                slot.WaitingForNight = false;
-            }
-
-            if (slot.BackAt > Time.time || !RegionBossRules.ShouldWake(distance))
+            // The night is read off the game clock (its day and hour), so a day spent away from the boss's world still counts.
+            bool hasClock = ServiceLocator.TryGet(out TimeOfDayManager time) && time != null;
+            if (!slot.Returns.CanReturn(Time.time, hasClock, hasClock ? time.Day : 0, hasClock ? time.CurrentHour : 0f,
+                    hasClock && time.Phase == TimeOfDayPhase.Night, TimeOfDayManager.NightStartHour)
+                || !RegionBossRules.ShouldWake(distance))
             {
                 return;
             }
@@ -203,9 +225,7 @@ namespace Rapadura.Gameplay.Enemies
                     slot.Corpse = slot.Instance;
                     slot.CorpseUntil = Time.time + (slot.Spawn.NeverDies ? RegionBossRules.WithdrawSeconds : RegionBossRules.CorpseSeconds);
                     slot.Instance = null;
-                    slot.BackAt = Time.time + RegionBossRules.RespawnSeconds;
-                    slot.WaitingForNight = slot.Spawn.ReturnsNextNight;
-                    slot.SawDay = false;
+                    slot.Returns.Withdraw(Time.time, slot.Spawn.ReturnsNextNight, CurrentNight());
                     if (slot.Spawn.NeverDies)
                     {
                         ServiceLocator.TryGet(out LocalizationManager localization);
@@ -217,7 +237,9 @@ namespace Rapadura.Gameplay.Enemies
             }
         }
 
-        private static bool IsNight() => ServiceLocator.TryGet(out TimeOfDayManager time) && time != null && time.Phase == TimeOfDayPhase.Night;
+        /// <summary>The night the game clock is in or last went through (by the game's day, not by what the hero saw); 0 without a clock.</summary>
+        private static int CurrentNight() =>
+            ServiceLocator.TryGet(out TimeOfDayManager time) && time != null ? RegionBossRules.NightIndex(time.Day, time.CurrentHour, TimeOfDayManager.NightStartHour) : 0;
 
         private static void ReleaseCorpse(Slot slot)
         {

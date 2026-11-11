@@ -370,7 +370,106 @@ namespace Rapadura.Tests
         {
             Assert.AreEqual(150f, RegionBossRules.GreedDamage(1000f), 1e-3f);
             Assert.Greater(RegionBossRules.GreedDamage(2000f), RegionBossRules.GreedDamage(500f), "the fuller, the worse");
-            Assert.AreEqual(1f, RegionBossRules.GreedDamage(0f), 1e-3f);
+            Assert.AreEqual(1f, RegionBossRules.GreedDamage(5f), 1e-3f, "always something while it cannot kill");
+        }
+
+        [Test]
+        public void Greed_NeverKillsTheHero()
+        {
+            Assert.AreEqual(0f, RegionBossRules.GreedDamage(1f), 1e-4f, "1 life left: the Ark takes nothing");
+            Assert.AreEqual(0f, RegionBossRules.GreedDamage(0.5f), 1e-4f);
+            Assert.AreEqual(0f, RegionBossRules.GreedDamage(0f), 1e-4f);
+            Assert.AreEqual(0.5f, RegionBossRules.GreedDamage(1.5f), 1e-4f, "stops at 1 life left");
+            foreach (float health in new[] { 1f, 1.2f, 2f, 3f, 6.6f, 7f, 10f, 100f, 5000f })
+            {
+                Assert.LessOrEqual(RegionBossRules.GreedDamage(health), health - 1f + 1e-4f, health.ToString());
+                Assert.GreaterOrEqual(health - RegionBossRules.GreedDamage(health), 1f - 1e-4f, health.ToString());
+            }
+        }
+
+        [Test]
+        public void PhaseCallout_OnlyWhenTheFightGetsGraver()
+        {
+            Assert.IsTrue(RegionBossRules.ShouldAnnouncePhase(RegionBossPhase.Wrath, RegionBossPhase.Storm));
+            Assert.IsTrue(RegionBossRules.ShouldAnnouncePhase(RegionBossPhase.Storm, RegionBossPhase.LastStand));
+            Assert.IsTrue(RegionBossRules.ShouldAnnouncePhase(RegionBossPhase.Wrath, RegionBossPhase.LastStand), "a big hit skipping the Storm");
+            Assert.IsFalse(RegionBossRules.ShouldAnnouncePhase(RegionBossPhase.Storm, RegionBossPhase.Wrath), "healed back over 66% (Apep's drink)");
+            Assert.IsFalse(RegionBossRules.ShouldAnnouncePhase(RegionBossPhase.Storm, RegionBossPhase.Storm), "falling again to a phase already called");
+            Assert.IsFalse(RegionBossRules.ShouldAnnouncePhase(RegionBossPhase.LastStand, RegionBossPhase.Storm));
+        }
+
+        [Test]
+        public void PhaseCallout_KeyIsAlwaysAWrittenLine()
+        {
+            Dictionary<string, LocalizationEntry> table = BestiaryTexts.Entries.ToDictionary(e => e.Key);
+            foreach (string id in RegionBossTexts.EnemyIds.Concat(new[] { "enemy_without_lines" }))
+            {
+                Assert.IsNull(RegionBossTexts.PhaseWarningKey(id, RegionBossPhase.Wrath), "the opening phase is never called out");
+                foreach (RegionBossPhase phase in new[] { RegionBossPhase.Storm, RegionBossPhase.LastStand })
+                {
+                    string key = RegionBossTexts.PhaseWarningKey(id, phase);
+                    Assert.IsTrue(table.ContainsKey(key), $"{id} {phase}: {key} has no text");
+                }
+            }
+
+            Assert.AreEqual(RegionBossTexts.PhaseKey(RegionBossRules.ApepId, RegionBossPhase.Storm), RegionBossTexts.PhaseWarningKey(RegionBossRules.ApepId, RegionBossPhase.Storm), "a boss's own line wins");
+            Assert.AreEqual(RegionBossTexts.GenericPhaseKey(RegionBossPhase.LastStand), RegionBossTexts.PhaseWarningKey("enemy_without_lines", RegionBossPhase.LastStand));
+        }
+
+        [Test]
+        public void NightReturn_FollowsTheGameDay_NotWhatTheHeroSaw()
+        {
+            const float nightStart = 20f;
+            Assert.AreEqual(3, RegionBossRules.NightIndex(3, 22f, nightStart));
+            Assert.AreEqual(3, RegionBossRules.NightIndex(4, 2f, nightStart), "the small hours belong to the night before");
+            Assert.AreEqual(3, RegionBossRules.NightIndex(4, 12f, nightStart), "by day the clock still reads the last night");
+
+            // Withdrew at 22:00 of day 3: not that night (nor its small hours), yes on the night of day 4, even if the hero spent the whole day elsewhere.
+            int night = RegionBossRules.NightIndex(3, 22f, nightStart);
+            Assert.IsFalse(RegionBossRules.NightReturnReady(night, 3, 23f, true, nightStart));
+            Assert.IsFalse(RegionBossRules.NightReturnReady(night, 4, 3f, true, nightStart));
+            Assert.IsFalse(RegionBossRules.NightReturnReady(night, 4, 12f, false, nightStart), "never by day");
+            Assert.IsTrue(RegionBossRules.NightReturnReady(night, 4, 20.5f, true, nightStart));
+            Assert.IsTrue(RegionBossRules.NightReturnReady(night, 9, 21f, true, nightStart), "days away still count");
+
+            // Withdrew at 02:00 of day 4 (the night of day 3): back at 20:00 of day 4.
+            night = RegionBossRules.NightIndex(4, 2f, nightStart);
+            Assert.IsFalse(RegionBossRules.NightReturnReady(night, 4, 4f, true, nightStart));
+            Assert.IsTrue(RegionBossRules.NightReturnReady(night, 4, 20f, true, nightStart));
+
+            // Withdrew by day (12:00 of day 5): the same evening is already a later night.
+            night = RegionBossRules.NightIndex(5, 12f, nightStart);
+            Assert.IsTrue(RegionBossRules.NightReturnReady(night, 5, 21f, true, nightStart));
+        }
+
+        [Test]
+        public void Returns_WaitForTheTimerAndTheNextNight_AndStartOverOnANewGameOrLoad()
+        {
+            const float nightStart = 20f;
+            var returns = new RegionBossReturns();
+            Assert.IsTrue(returns.CanReturn(0f, true, 1, 8f, false, nightStart), "fresh: at the arena");
+
+            // Apep withdraws at 22:00 of day 3 (t = 100 s).
+            returns.Withdraw(100f, true, RegionBossRules.NightIndex(3, 22f, nightStart));
+            float later = 100f + RegionBossRules.RespawnSeconds + 1f;
+            Assert.IsFalse(returns.CanReturn(later, true, 3, 23f, true, nightStart), "the same night doesn't count");
+            Assert.IsFalse(returns.CanReturn(later, false, 0, 0f, false, nightStart), "no clock: keeps waiting");
+            Assert.IsTrue(returns.CanReturn(later, true, 4, 21f, true, nightStart), "next night of the game clock");
+
+            // A boss that doesn't wait for the night: only the timer.
+            returns.Withdraw(100f, false, 0);
+            Assert.IsFalse(returns.CanReturn(101f, true, 1, 12f, false, nightStart));
+            Assert.IsTrue(returns.CanReturn(later, true, 1, 12f, false, nightStart));
+
+            // New game / save read from disk: nothing left from the other slot.
+            returns.Withdraw(100f, true, RegionBossRules.NightIndex(3, 22f, nightStart));
+            returns.Reset();
+            Assert.AreEqual(0f, returns.BackAt);
+            Assert.IsFalse(returns.WaitingForNight);
+            Assert.IsTrue(returns.CanReturn(0f, true, 1, 8f, false, nightStart), "the other slot's Apep is not held back");
+
+            Assert.IsTrue(RegionBossReturns.LoadResets(false), "a save read from disk starts over");
+            Assert.IsFalse(RegionBossReturns.LoadResets(true), "a scene swap carrying the same game keeps the timers");
         }
 
         [TestCase(ProceduralEnemyKind.Apep, 0.5f, 3.5f)]

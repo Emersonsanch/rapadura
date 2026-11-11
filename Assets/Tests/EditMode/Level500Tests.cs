@@ -304,21 +304,30 @@ namespace Rapadura.Tests
         [Test]
         public void CreatureLevel_ScalesWithTheReferenceHero_DocTable()
         {
-            // Docs/Progressao500.md §4.1: x health / x damage at 25, 50, 100, 500.
+            // Docs/Progressao500.md §4.1: x health / x damage at 25, 50, 100, 500. Damage = Rh(L)/Rh(15) with Rh = 1 + 0.08(L-1)
+            // since HeroToughnessGrowthPerLevel = 0 (2026-11-11; was 1.44 / 2.70 / 5.88 / 63.1 with the 0.005 factor).
             Assert.AreEqual(1.26f, EnemyLevelScaling.HealthMultiplier(25), 0.01f);
-            Assert.AreEqual(1.44f, EnemyLevelScaling.DamageMultiplier(25), 0.01f);
+            Assert.AreEqual(1.38f, EnemyLevelScaling.DamageMultiplier(25), 0.01f);
             Assert.AreEqual(2.02f, EnemyLevelScaling.HealthMultiplier(50), 0.01f);
-            Assert.AreEqual(2.70f, EnemyLevelScaling.DamageMultiplier(50), 0.01f);
+            Assert.AreEqual(2.32f, EnemyLevelScaling.DamageMultiplier(50), 0.01f);
             Assert.AreEqual(4.06f, EnemyLevelScaling.HealthMultiplier(100), 0.01f);
-            Assert.AreEqual(5.88f, EnemyLevelScaling.DamageMultiplier(100), 0.01f);
+            Assert.AreEqual(4.21f, EnemyLevelScaling.DamageMultiplier(100), 0.01f);
             Assert.AreEqual(45.1f, EnemyLevelScaling.HealthMultiplier(500), 0.1f);
-            Assert.AreEqual(63.1f, EnemyLevelScaling.DamageMultiplier(500), 0.1f);
+            Assert.AreEqual(19.3f, EnemyLevelScaling.DamageMultiplier(500), 0.1f);
             for (int level = EnemyLevelScaling.ArchetypeLevel + 1; level <= EnemyLevelScaling.MaxLevel; level++)
             {
                 Assert.Greater(EnemyLevelScaling.HealthMultiplier(level), EnemyLevelScaling.HealthMultiplier(level - 1), $"health at {level}");
             }
 
             Assert.AreEqual(4796f, EnemyLevelScaling.HealthFor(1180f, 100), 2f, "Tages archetype at 100");
+            Assert.AreEqual(0.0, EnemyLevelScaling.HeroToughnessGrowthPerLevel, "Docs/Balanco100a500.md suggestion 1");
+
+            // Suggestion 2: a common of level 100+ is scaled from at least 170 base health; bosses and lower levels keep theirs.
+            Assert.AreEqual(70f * EnemyLevelScaling.HealthMultiplier(99), EnemyLevelScaling.HealthFor(70f, 99, false), 1e-2f);
+            Assert.AreEqual(170f * EnemyLevelScaling.HealthMultiplier(100), EnemyLevelScaling.HealthFor(70f, 100, false), 1e-2f);
+            Assert.AreEqual(170f * EnemyLevelScaling.HealthMultiplier(300), EnemyLevelScaling.HealthFor(108f, 300, false), 1e-1f);
+            Assert.AreEqual(210f * EnemyLevelScaling.HealthMultiplier(300), EnemyLevelScaling.HealthFor(210f, 300, false), 1e-1f);
+            Assert.AreEqual(70f * EnemyLevelScaling.HealthMultiplier(300), EnemyLevelScaling.HealthFor(70f, 300, true), 1e-1f, "bosses are not floored");
 
             Assert.AreEqual(10, EnemyLevelScaling.KillExperience(2));
             Assert.AreEqual(19, EnemyLevelScaling.KillExperience(5));

@@ -17,9 +17,9 @@ import level_500 as l5  # noqa: E402
 
 # What Docs/Balanco100a500.md reports as off target (real reading, same-level fights). When the game changes and this
 # list moves, rerun `python -I tools/balance/level_500.py`, update the doc's tables, then this snapshot.
-DOCUMENTED_MISSES = sorted(
-    [("common", lv, "fast") for lv in (100, 120, 140, 160, 260, 280, 300, 320, 340, 360, 380, 400, 420, 440, 460, 478, 500)]
-    + [("boss", lv, "parked_short") for lv in (200, 240, 280, 320, 360, 440, 478)])
+# Since HeroToughnessGrowthPerLevel = 0 and the commons' health floor 170 from level 100 up (2026-11-11) only the three
+# Regions 5-9 bosses below 100 (Hedammu 72, Lodo-que-Engole 88, Aydahar 98: 13-14 s to kill, target 15-22) are off.
+DOCUMENTED_MISSES = sorted([("boss", lv, "fast") for lv in (72, 88, 98)])
 
 
 @pytest.fixture(scope="module")
@@ -34,7 +34,7 @@ def result(world):
 
 def test_world_bosses_and_regions_are_read_from_the_code(world):
     levels = [b.level for b in world.bosses]
-    assert {200, 240, 280, 320, 360, 440, 478} <= set(levels) and min(levels) >= l5.LEVELS[0]
+    assert {72, 88, 98, 140, 150, 200, 240, 280, 320, 360, 440, 478} <= set(levels) and levels == sorted(levels)
     assert all(b.enemy_id in world.data.enemies and world.data.enemies[b.enemy_id].is_boss for b in world.bosses)
     assert all(b.enemy_id not in world.data.enemies for b in world.pending_bosses)
     for level in l5.LEVELS:
@@ -73,7 +73,7 @@ def test_perigoso_only_makes_fights_worse(result):
     for _, by in result.perigoso_bosses:
         parked = [by[delta]["parked"] for delta in l5.PERIGOSO_DELTAS]
         assert parked == sorted(parked, reverse=True)
-        assert by[30]["swings"] <= 2  # +30 is "quase hit-kill" by design
+        assert by[30]["swings"] <= 3 and by[30]["parked"] < l5.PARKED_TARGET[0]  # +30 is "quase hit-kill" by design
 
 
 def test_off_target_bands_are_the_documented_ones(result):
@@ -82,16 +82,28 @@ def test_off_target_bands_are_the_documented_ones(result):
 
 def test_world_boss_kill_time_is_on_target_today(result):
     for boss, by in result.bosses:
+        if ("boss", boss.level, "fast") in DOCUMENTED_MISSES:
+            continue
         assert l5.BOSS_TARGET[0] <= by["real"]["kill"] <= l5.BOSS_TARGET[1], boss.level
 
 
-def test_suggested_toughness_puts_every_boss_on_target_without_breaking_up_to_100(world, result):
+def test_shipped_toughness_puts_every_boss_on_target_without_breaking_up_to_100(world, result):
+    assert world.scaling.tough == 0.0  # Docs/Balanco100a500.md suggestion 1, applied
     whatif = l5.toughness_whatif(world, result, 0.0)
     assert whatif.up_to_100 == []
     for boss, by in result.bosses:
         assert l5.PARKED_TARGET[0] <= whatif.parked[boss.level] <= l5.PARKED_TARGET[1], boss.level
         assert whatif.swings[boss.level] >= l5.MIN_SWINGS_TO_DIE
         assert by["real"]["basic"] >= l5.BASIC_EDGE * whatif.parked[boss.level]
+
+
+def test_commons_health_floor_is_read_from_the_code(world):
+    s = world.scaling
+    assert s.common_floor == 170.0 and s.floor_from == 100
+    assert s.base_health(70.0, 99, False) == 70.0 and s.base_health(70.0, 100, False) == 170.0
+    assert s.base_health(70.0, 300, True) == 70.0 and s.base_health(210.0, 300, False) == 210.0
+    enemy = min(l5.commons_at(world.data, world.regions, 300), key=lambda e: e.max_health)
+    assert l5.scaled(enemy, s, 300).max_health == pytest.approx(170.0 * s.health_mult(300))
 
 
 def test_suggested_health_floor_puts_sustained_commons_on_target(world):

@@ -438,7 +438,12 @@ namespace Rapadura.Gameplay.Enemies
         public static int FormExtraShots(GreatDarkForm form) => form == GreatDarkForm.Eagle ? EagleExtraShots : 0;
 
         /// <summary>What the Ark takes from a hero who has <paramref name="currentHealth"/> left: always something, proportional to what is left.</summary>
-        public static float GreedDamage(float currentHealth) => Mathf.Max(1f, Mathf.Max(0f, currentHealth) * GreedHealthFraction);
+        /// <remarks>The Ark never kills: at most <c>currentHealth − 1</c> (0 when the hero has 1 or less left).</remarks>
+        public static float GreedDamage(float currentHealth)
+        {
+            float left = Mathf.Max(0f, currentHealth);
+            return Mathf.Min(Mathf.Max(1f, left * GreedHealthFraction), Mathf.Max(0f, left - 1f));
+        }
 
         /// <summary>Does Hedammu's bite, aimed from <paramref name="boss"/> along <paramref name="aim"/>, reach a hero at <paramref name="hero"/>? Within range and inside the cone.</summary>
         public static bool BiteHits(Vector2 boss, Vector2 aim, Vector2 hero)
@@ -520,6 +525,26 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>Apep is back only when a night begins after she withdrew: a day must have passed first (her ficha's "até a noite seguinte").</summary>
         public static bool NightReturnReady(bool sawDaySinceWithdrawing, bool isNight) => sawDaySinceWithdrawing && isNight;
+
+        /// <summary>
+        /// Which night the game clock (<paramref name="day"/>, <paramref name="hour"/> of <c>TimeOfDayManager</c>) is in, or last went through:
+        /// the night that begins at <paramref name="nightStartHour"/> of day D is night D, and until the next one starts (its small hours of
+        /// day D+1, the next morning and afternoon) the clock still reads night D.
+        /// </summary>
+        public static int NightIndex(int day, float hour, float nightStartHour) => hour >= nightStartHour ? day : day - 1;
+
+        /// <summary>
+        /// <see cref="NightReturnReady(bool, bool)"/> by the game's own day: a later night than the one that held the withdrawal
+        /// (a withdrawal by day counts the night before), whether or not the hero was in the boss's world while the day went by.
+        /// </summary>
+        public static bool NightReturnReady(int withdrawnNight, int day, float hour, bool isNight, float nightStartHour) =>
+            isNight && NightIndex(day, hour, nightStartHour) > withdrawnNight;
+
+        /// <summary>
+        /// Whether a change of phase is called out: only when it reaches a phase graver than <paramref name="gravestSoFar"/> in this
+        /// fight, so a boss healing back over a threshold (Apep's drink) and dropping again stays quiet.
+        /// </summary>
+        public static bool ShouldAnnouncePhase(RegionBossPhase gravestSoFar, RegionBossPhase phase) => phase > gravestSoFar;
 
         /// <summary>Whether a dormant boss should appear for a hero <paramref name="distance"/> m from its arena.</summary>
         public static bool ShouldWake(float distance) => distance <= ActiveRadius;

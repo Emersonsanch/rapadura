@@ -216,20 +216,21 @@ Rd(L) = dano por segundo do herói de referência no nível L     (o modelo mede
 Rh(L) = vida efetiva do herói de referência no nível L
 Proposta inicial (para os assets antes do modelo rodar):
 Rd(L) = (1 + 0,02·(L−1)) × (1 + 0,01·(L−1))       ← damage_mult × (atributos + equipamento por faixa)
-Rh(L) = (1 + 0,08·(L−1)) × (1 + 0,005·(L−1))      ← curva de vida × (Vitalidade + defesa por faixa)
+Rh(L) = 1 + 0,08·(L−1)                            ← curva de vida (a "defesa por faixa" (1 + 0,005·(L−1)) saiu em
+                                                    2026-11-11: o herói real não a ganha, Docs/Balanco100a500.md sugestão 1)
 ```
 
 | Nível do bicho | ×vida | ×dano | Chefe-arquétipo (Tages: 1 180 / 42) | Comum-arquétipo (Morcegos: 170) | Vida do herói (curva) |
 |---|---|---|---|---|---|
 | 15 | 1,00 | 1,00 | 1 180 / 42 | 170 | 212 |
-| 25 | 1,26 | 1,44 | 1 484 / 61 | 214 | 292 |
-| 50 | 2,02 | 2,70 | 2 386 / 113 | 344 | 492 |
-| 100 | 4,06 | 5,88 | 4 796 / 247 | 691 | 892 |
-| 150 | 6,79 | 9,94 | 8 014 / 417 | 1 155 | 1 292 |
-| 200 | 10,2 | 14,9 | 12 041 / 625 | 1 735 | 1 692 |
-| 300 | 19,1 | 27,4 | 22 521 / 1 151 | 3 245 | 2 492 |
-| 400 | 30,7 | 43,5 | 36 236 / 1 826 | 5 220 | 3 292 |
-| 500 | 45,1 | 63,1 | 53 186 / 2 648 | 7 662 | 4 092 |
+| 25 | 1,26 | 1,38 | 1 484 / 58 | 214 | 292 |
+| 50 | 2,02 | 2,32 | 2 386 / 97 | 344 | 492 |
+| 100 | 4,06 | 4,21 | 4 796 / 177 | 691 | 892 |
+| 150 | 6,79 | 6,09 | 8 014 / 256 | 1 155 | 1 292 |
+| 200 | 10,2 | 7,98 | 12 041 / 335 | 1 735 | 1 692 |
+| 300 | 19,1 | 11,8 | 22 521 / 494 | 3 245 | 2 492 |
+| 400 | 30,7 | 15,5 | 36 236 / 652 | 5 220 | 3 292 |
+| 500 | 45,1 | 19,3 | 53 186 / 811 | 7 662 | 4 092 |
 
 Os números cabem folgados em `float`/`int` (o maior golpe fica na casa dos milhares). Abaixo do 15 a tabela não é
 usada: os 4 biomas da campanha **ficam com os números de hoje** (r8/r9), o que garante que o 1–15 não muda.

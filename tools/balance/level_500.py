@@ -4,7 +4,7 @@ python -I tools/balance/level_500.py [--runs N]   (also printed at the end of po
 level_scaling.py stops at 100 and plays the campaign archetypes. This one reads what the open world actually has:
 
   * creatures: every Resources/Enemies asset named by a region layout (OverworldLayouts.*.cs) whose level band reaches the
-    level, times EnemyLevelScaling; the world bosses of RegionBossRules from level 100 up (those with an asset) at their own level, with their real abilities;
+    level, times EnemyLevelScaling; every world boss of RegionBossRules (those with an asset) at its own level, with their real abilities;
   * reference hero at level L: the curve, 2 attribute points per level (Vitality + Arcane Power), skill points, the talent
     wheel and training, the graduations' active skills unlocked by L, and gear the game can really give: campaign loot
     farmed (Monte Carlo over the shipped tables) and the best head+chest pair OBTAINABLE at L (Ossuário from its entry
@@ -67,8 +67,8 @@ COMMON_GOAL = 5.5  # middle of COMMON_TARGET: what the suggested health factor a
 PARKED_GOAL = 15.0  # what the suggested boss damage factor aims at (low in 12-40 s so Perigoso still bites)
 BOSS_GOAL = 18.5  # middle of BOSS_TARGET
 SUGGEST_LEVELS = [100, 200, 300, 400, 500]
-ARCHETYPE_COMMON_HEALTH = 170.0  # Docs/Progressao500.md §4.1: the common archetype (Enxame de Morcegos) the scaling assumes
-TOUGHNESS_CANDIDATES = [0.0025, 0.0]  # EnemyLevelScaling.HeroToughnessGrowthPerLevel (today 0.005) tried by the what-if
+ARCHETYPE_COMMON_HEALTH = ls.load_scaling().common_floor  # EnemyLevelScaling.CommonHealthFloor (170): the common archetype (Docs/Progressao500.md §4.1)
+TOUGHNESS_CANDIDATES = [0.005, 0.0025]  # earlier HeroToughnessGrowthPerLevel values (0.005 until 2026-11-11) for the what-if
 FARM_KILLS = 400  # commons farmed on top of the campaign before the band's gear is read
 FARM_BOSSES = 20
 DEFAULT_RUNS = 120
@@ -127,7 +127,9 @@ def commons_at(data: rd.GameData, regions: dict, level: int) -> list:
 
 
 def scaled(enemy: rd.Enemy, scaling: ls.Scaling, level: int) -> rd.Enemy:
-    return dataclasses.replace(enemy, max_health=enemy.max_health * scaling.health_mult(level),
+    """EnemyLevelScaling.HealthFor(base, level, isBoss) / DamageFor: the commons' health floor above 100 included."""
+    health = scaling.base_health(enemy.max_health, level, enemy.is_boss)
+    return dataclasses.replace(enemy, max_health=health * scaling.health_mult(level),
                                attack_damage=enemy.attack_damage * scaling.damage_mult(level))
 
 
@@ -386,7 +388,8 @@ class World:
         self.scaling = ls.load_scaling()
         self.danger = load_danger()
         self.boss_rules = load_boss_rules()
-        listed = [b for b in load_world_bosses() if b.level >= LEVELS[0]]  # the 100-500 bands only
+        # Every world boss of RegionBossRules, by level: the Regions 5-9 ones (72-150) included, they share the same rules.
+        listed = sorted(load_world_bosses(), key=lambda b: b.level)
         self.bosses = [b for b in listed if b.enemy_id in self.data.enemies]
         self.pending_bosses = [b for b in listed if b.enemy_id not in self.data.enemies]  # spawn listed, asset not made yet
         self.regions = load_regions(self.data)
@@ -623,7 +626,7 @@ def suggestions(world: World, result: Result) -> tuple:
         swings = _ceil_hits(real["hp"], real["swing"] * factor * world.danger.worst_hit(0))
         bosses.append(BossFix(boss, real["name"], factor, swings, real["blow"] * factor, BOSS_GOAL / doc["kill"]))
     floor = {lv: common_row(world, lv, "real", 0, 1.0, ARCHETYPE_COMMON_HEALTH) for lv in SUGGEST_LEVELS}
-    whatifs = [toughness_whatif(world, result, t) for t in [world.scaling.tough] + TOUGHNESS_CANDIDATES]
+    whatifs = [toughness_whatif(world, result, t) for t in [world.scaling.tough] + [c for c in TOUGHNESS_CANDIDATES if c != world.scaling.tough]]
     return commons, bosses, floor, whatifs
 
 
@@ -639,7 +642,8 @@ def report_suggestions(commons: list, bosses: list, floor: dict, whatifs: list) 
     for b in bosses:
         lines.append(f"| {b.name} ({b.boss.level}) | ×{b.damage_factor:.2f} | {b.swings_after:.0f} | {b.blow_after:.0%} | "
                      f"×{b.health_factor_doc:.2f} |")
-    lines += ["", f"Piso de vida base {ARCHETYPE_COMMON_HEALTH:.0f} (o comum-arquétipo da escala) nos comuns do mundo aberto:", "",
+    lines += ["", f"Piso de vida base {ARCHETYPE_COMMON_HEALTH:.0f} nos comuns do mundo aberto (aplicado no jogo do nível 100 em diante: "
+              "`EnemyLevelScaling.CommonHealthFloor`):", "",
               "| Nível | Caça (mais rápido–mais lento) | Abertura | Só básico | Golpes para morrer |", "|---|---|---|---|---|"]
     for level, row in floor.items():
         lines.append(f"| {level} | {_s(row['farm'])}{_common_mark(row['farm'])} ({row['farm_min']:.1f}–{row['farm_max']:.1f}) | "
@@ -729,7 +733,7 @@ def report(world: World, result: Result, with_suggestions: bool = True) -> str:
               "\n### Fora da meta (leitura \"real\")\n",
               "\n".join(f"- {k} {lv}: {m}" for k, lv, m in miss) if miss else "- nada"]
     if with_suggestions:
-        blocks += ["\n### Ajustes que levariam à meta (sugestão, não aplicada)\n", report_suggestions(*suggestions(world, result))]
+        blocks += ["\n### Ajustes (piso de vida 170 e HeroToughnessGrowthPerLevel = 0 já aplicados; o resto é sugestão)\n", report_suggestions(*suggestions(world, result))]
     return "\n".join(blocks)
 
 

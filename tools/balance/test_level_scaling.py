@@ -64,8 +64,8 @@ def test_skill_points_past_fifty_follow_the_curve():
 
 def test_scaling_constants_match_the_doc_table():
     s = ls.load_scaling()
-    assert s.archetype_level == 15
-    for level, (hp, dmg) in {25: (1.26, 1.44), 50: (2.02, 2.70), 100: (4.06, 5.88), 500: (45.1, 63.1)}.items():
+    assert s.archetype_level == 15 and s.tough == 0.0  # HeroToughnessGrowthPerLevel (0.005 until 2026-11-11)
+    for level, (hp, dmg) in {25: (1.26, 1.38), 50: (2.02, 2.32), 100: (4.06, 4.21), 500: (45.1, 19.3)}.items():
         assert s.health_mult(level) == pytest.approx(hp, abs=0.06 if level == 500 else 0.01)
         assert s.damage_mult(level) == pytest.approx(dmg, abs=0.06 if level == 500 else 0.01)
     assert all(s.health_mult(level) == 1.0 and s.damage_mult(level) == 1.0 for level in (3, 7, 10, 15))

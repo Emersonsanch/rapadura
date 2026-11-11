@@ -20,6 +20,24 @@ namespace Rapadura.UI.Bestiary
 
         public static string PhaseKey(string enemyId, RegionBossPhase phase) => $"region_boss.{enemyId}.phase{(int)phase}";
 
+        /// <summary>The line every boss without one of its own calls out on reaching <paramref name="phase"/>.</summary>
+        public static string GenericPhaseKey(RegionBossPhase phase) => $"region_boss.phase{(int)phase}";
+
+        /// <summary>
+        /// The key to show when a boss reaches <paramref name="phase"/>: its own line (<see cref="PhaseKey"/>) when it has one, else
+        /// <see cref="GenericPhaseKey"/>; null for <see cref="RegionBossPhase.Wrath"/>, the opening phase, which nobody calls out.
+        /// </summary>
+        public static string PhaseWarningKey(string enemyId, RegionBossPhase phase)
+        {
+            if (phase <= RegionBossPhase.Wrath)
+            {
+                return null;
+            }
+
+            string own = PhaseKey(enemyId, phase);
+            return BestiaryTexts.GetFallback(own) != null ? own : GenericPhaseKey(phase);
+        }
+
         public static string GreatBlowKey(string enemyId) => $"region_boss.{enemyId}.great_blow";
 
         public static string SignatureKey(string enemyId) => $"region_boss.{enemyId}.signature";
@@ -209,6 +227,10 @@ namespace Rapadura.UI.Bestiary
             Line(entries, RegionBossRules.OhyaId, RegionBossPhase.LastStand, "The giant tears at the chain!", "O gigante puxa a corrente!");
             Blow(entries, RegionBossRules.OhyaId, "His fist comes down!", "Lá vem o punho!");
             Signature(entries, RegionBossRules.OhyaId, "The chain swings round! In close or far away!", "A corrente vai girar! Bem perto ou bem longe!");
+
+            // -- Fallback for a boss without its own phase line --
+            entries.Add(new LocalizationEntry(GenericPhaseKey(RegionBossPhase.Storm), "It's getting angrier!", "Ele ficou mais bravo!"));
+            entries.Add(new LocalizationEntry(GenericPhaseKey(RegionBossPhase.LastStand), "It's fighting with everything now!", "Agora ele luta com tudo!"));
         }
 
         private static void Signature(List<LocalizationEntry> entries, string enemyId, string en, string pt) =>

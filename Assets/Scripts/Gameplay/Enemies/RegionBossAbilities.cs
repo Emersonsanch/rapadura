@@ -23,6 +23,7 @@ namespace Rapadura.Gameplay.Enemies
         private Health _health;
         private RegionBossSpawn _spawn;
         private RegionBossPhase _phase;
+        private RegionBossPhase _gravestPhase;
         private float _barrageTimer;
         private float _greatBlowTimer;
         private float _windupLeft;
@@ -51,6 +52,7 @@ namespace Rapadura.Gameplay.Enemies
         {
             _armed = false;
             _phase = RegionBossPhase.Wrath;
+            _gravestPhase = RegionBossPhase.Wrath;
             _barrageTimer = RegionBossRules.BarrageIntervalSeconds * 0.5f;
             _greatBlowTimer = 1f;
             _windupLeft = 0f;
@@ -150,7 +152,18 @@ namespace Rapadura.Gameplay.Enemies
                 _greatBlowTimer = 1f;
             }
 
-            DungeonFx.Warn(transform.position + Vector3.up * 4f, Text(RegionBossTexts.PhaseKey(_spawn.EnemyId, phase)));
+            // Healing back over a threshold (Apep's drink) changes the phase but is not announced, nor is falling again to one already called.
+            if (!RegionBossRules.ShouldAnnouncePhase(_gravestPhase, phase))
+            {
+                return;
+            }
+
+            _gravestPhase = phase;
+            string key = RegionBossTexts.PhaseWarningKey(_spawn.EnemyId, phase);
+            if (key != null)
+            {
+                DungeonFx.Warn(transform.position + Vector3.up * 4f, Text(key));
+            }
         }
 
         private void FireBarrage(Transform hero, int shots)
@@ -354,11 +367,16 @@ namespace Rapadura.Gameplay.Enemies
                     break;
 
                 case RegionBossSignature.GreedOfTheArk:
-                    // The hero's health lives on PlayerStats, not on a Health.
+                    // The hero's health lives on PlayerStats, not on a Health. The Ark never kills (GreedDamage stops at 1 life left), so it goes
+                    // through the path that cannot pass that floor: ApplyHazardDamage caps the defence multiplier at 1 and keeps 1 life.
                     PlayerStats stats = hero.GetComponentInParent<PlayerStats>();
-                    if (stats != null)
+                    if (stats != null && !stats.IsInvulnerable)
                     {
-                        stats.ApplyDamage(RegionBossRules.GreedDamage(stats.CurrentHealth));
+                        float greed = RegionBossRules.GreedDamage(stats.CurrentHealth);
+                        if (greed > 0f)
+                        {
+                            stats.ApplyHazardDamage(greed);
+                        }
                     }
 
                     break;

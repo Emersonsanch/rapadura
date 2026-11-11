@@ -40,6 +40,12 @@ class Scaling:
     off: float
     hp: float
     tough: float
+    common_floor: float = 0.0  # EnemyLevelScaling.CommonHealthFloor: base health floor of a common...
+    floor_from: int = 10 ** 9  # ...from this level up (CommonHealthFloorFromLevel)
+
+    def base_health(self, health: float, level: int, is_boss: bool) -> float:
+        """EnemyLevelScaling.FlooredBaseHealth: a common of level floor_from or more starts from at least common_floor."""
+        return health if is_boss or level < self.floor_from else max(health, self.common_floor)
 
     def rd(self, level: int) -> float:
         s = max(1, level) - 1
@@ -77,7 +83,8 @@ def load_scaling() -> Scaling:
         src = handle.read()
     return Scaling(int(_const(src, "ArchetypeLevel")), _const(src, "HeroDamageGrowthPerLevel"),
                    _const(src, "HeroOffenseGrowthPerLevel"), _const(src, "HeroHealthGrowthPerLevel"),
-                   _const(src, "HeroToughnessGrowthPerLevel"))
+                   _const(src, "HeroToughnessGrowthPerLevel"), _const(src, "CommonHealthFloor"),
+                   int(_const(src, "CommonHealthFloorFromLevel")))
 
 
 def band_gear(gear: bm.Gear, scaling: Scaling, level: int) -> bm.Gear:
@@ -91,7 +98,7 @@ def band_gear(gear: bm.Gear, scaling: Scaling, level: int) -> bm.Gear:
 def scaled_data(data: rd.GameData, scaling: Scaling, level: int) -> rd.GameData:
     out = bm.clone_data(data)
     for enemy in out.enemies.values():
-        enemy.max_health = round(enemy.max_health * scaling.health_mult(level))
+        enemy.max_health = round(scaling.base_health(enemy.max_health, level, enemy.is_boss) * scaling.health_mult(level))
         enemy.attack_damage = round(enemy.attack_damage * scaling.damage_mult(level), 1)
     return out
 

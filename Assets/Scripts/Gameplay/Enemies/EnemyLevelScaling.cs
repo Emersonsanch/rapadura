@@ -18,10 +18,14 @@ namespace Rapadura.Gameplay.Enemies
     /// <see cref="ArchetypeLevel"/>) times the ratio between the reference hero at its level and at level 15:
     /// <code>
     /// health(L) = archetype × Rd(L) / Rd(15)     Rd(L) = (1 + 0.02(L−1)) × (1 + 0.01(L−1))   reference hero damage
-    /// damage(L) = archetype × Rh(L) / Rh(15)     Rh(L) = (1 + 0.08(L−1)) × (1 + 0.005(L−1))  reference hero toughness
+    /// damage(L) = archetype × Rh(L) / Rh(15)     Rh(L) = 1 + 0.08(L−1)                       reference hero toughness
     /// </code>
     /// so the time targets (commons 4–7 s, bosses 15–22 s, the boss kills a parked hero in 12–40 s) hold at any level.
     /// At or below 15 the multipliers are exactly 1: the four campaign regions (bands 3 / 7 / 10 / 15) keep today's numbers.
+    /// Rh is the curve's health only: the real hero gains no defence per band (item base armour is not applied, affixes do not
+    /// grow), so the old (1 + 0.005(L−1)) factor made world bosses kill a parked hero in 4.6–11 s (Docs/Balanco100a500.md).
+    /// From <see cref="CommonHealthFloorFromLevel"/> up a common's base health is floored at <see cref="CommonHealthFloor"/>
+    /// (the archetype common) before the multiplier: many high-region species reuse forest bases (70–108).
     /// Pure (no Unity): the encounter spawner and the future server call the same functions. Budgeted by
     /// <c>tools/balance/level_scaling.py</c> (levels 15–100).
     /// </summary>
@@ -37,7 +41,13 @@ namespace Rapadura.Gameplay.Enemies
         public const double HeroOffenseGrowthPerLevel = 0.01;
         /// <summary>Rh(L): the curve's health growth × Vitality/defence growth of the reference hero.</summary>
         public const double HeroHealthGrowthPerLevel = 0.08;
-        public const double HeroToughnessGrowthPerLevel = 0.005;
+        /// <summary>Defence per band of the reference hero: 0 (was 0.005; Docs/Balanco100a500.md suggestion 1, applied).</summary>
+        public const double HeroToughnessGrowthPerLevel = 0;
+
+        /// <summary>Base health floor of a common (not a boss) from <see cref="CommonHealthFloorFromLevel"/> up: the common
+        /// archetype the scaling assumes (Docs/Progressao500.md §4.1; Docs/Balanco100a500.md suggestion 2, applied).</summary>
+        public const float CommonHealthFloor = 170f;
+        public const int CommonHealthFloorFromLevel = 100;
 
         /// <summary>Band level of each campaign region (the reference hero of its boss, README §10): 3 / 7 / 10 / 15.</summary>
         public const int ForestBandLevel = 3;
@@ -92,6 +102,15 @@ namespace Rapadura.Gameplay.Enemies
             level <= ArchetypeLevel ? 1f : (float)(ReferenceHeroToughness(level) / ReferenceHeroToughness(ArchetypeLevel));
 
         public static float HealthFor(float archetypeHealth, int level) => archetypeHealth * HealthMultiplier(level);
+
+        /// <summary>The base health a creature is scaled from: a common of level <see cref="CommonHealthFloorFromLevel"/> or more never
+        /// starts below <see cref="CommonHealthFloor"/>; bosses and lower levels keep their own.</summary>
+        public static float FlooredBaseHealth(float baseHealth, int level, bool isBoss) =>
+            !isBoss && ClampLevel(level) >= CommonHealthFloorFromLevel ? Math.Max(baseHealth, CommonHealthFloor) : baseHealth;
+
+        /// <summary>Final max health of a creature of <paramref name="level"/>: <see cref="FlooredBaseHealth"/> × <see cref="HealthMultiplier"/>.</summary>
+        public static float HealthFor(float baseHealth, int level, bool isBoss) =>
+            FlooredBaseHealth(baseHealth, level, isBoss) * HealthMultiplier(level);
 
         public static float DamageFor(float archetypeDamage, int level) => archetypeDamage * DamageMultiplier(level);
 

@@ -8,7 +8,7 @@ namespace Rapadura.Gameplay.Enemies
     /// <summary>
     /// Puts a creature's level on its stats (<see cref="EnemyLevelScaling"/>): a frame after spawn (EnemyController.Start
     /// re-applies the definition's health, as for <c>EventRoomEnemyScaler</c> / <c>NightVariantTag</c>) it multiplies the max
-    /// health and adds a PercentAdditive AttackDamage buff. Only attached when the level is above the archetype level
+    /// health (a common of level 100 or more from at least <see cref="EnemyLevelScaling.CommonHealthFloor"/>) and adds a PercentAdditive AttackDamage buff. Only attached when the level is above the archetype level
     /// (<see cref="EnemyLevelScaling.IsIdentity"/>), so today's campaign encounters never get one.
     /// </summary>
     public class EnemyLevelScaler : MonoBehaviour
@@ -53,13 +53,17 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             _applied = true;
-            float health = EnemyLevelScaling.HealthMultiplier(Level);
             float damage = EnemyLevelScaling.DamageMultiplier(Level);
             EnemyController controller = GetComponent<EnemyController>();
             Health target = controller != null && controller.Health != null ? controller.Health : GetComponent<Health>();
-            if (target != null && !Mathf.Approximately(health, 1f))
+            if (target != null)
             {
-                target.ConfigureMaxHealth(target.MaxHealth * health);
+                bool isBoss = controller != null && controller.IsBoss;
+                float scaled = EnemyLevelScaling.HealthFor(target.MaxHealth, Level, isBoss);
+                if (!Mathf.Approximately(scaled, target.MaxHealth))
+                {
+                    target.ConfigureMaxHealth(scaled);
+                }
             }
 
             BuffController buffs = controller != null ? controller.Buffs : GetComponent<BuffController>();
