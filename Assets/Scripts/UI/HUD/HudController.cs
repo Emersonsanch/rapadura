@@ -153,6 +153,7 @@ namespace Rapadura.UI.HUD
         private Button _characterSheetButton;
         private Label _characterSheetBadge;
         private Button _attackButton;
+        private Button _useButton;
         private VisualElement _cameraCluster;
         private Button _cameraLeftButton;
         private Button _cameraRightButton;
@@ -181,6 +182,10 @@ namespace Rapadura.UI.HUD
         public const string CharacterSheetBadgeName = "character-sheet-badge";
         public const string BadgeHiddenClass = "hud-menu-badge--hidden";
         public const string AttackButtonName = "attack-button";
+        /// <summary>Touch "Usar" button: one-shot <see cref="PlayerInputHandler.TouchInteractRequested"/> (the [E] of every mechanics point).</summary>
+        public const string UseButtonName = "use-button";
+        /// <summary>On the "Usar" button while <see cref="InteractPromptRegistry.IsAvailable"/>: full colour instead of dimmed.</summary>
+        public const string UseButtonReadyClass = "hud-use-button--ready";
         public const string CameraClusterName = "hud-camera-cluster";
         public const string CameraLeftButtonName = "camera-left-button";
         public const string CameraRightButtonName = "camera-right-button";
@@ -312,6 +317,7 @@ namespace Rapadura.UI.HUD
             _characterSheetButton = rootVisualElement.Q<Button>(CharacterSheetButtonName);
             _characterSheetBadge = rootVisualElement.Q<Label>(CharacterSheetBadgeName);
             _attackButton = rootVisualElement.Q<Button>(AttackButtonName);
+            _useButton = rootVisualElement.Q<Button>(UseButtonName);
             _cameraCluster = rootVisualElement.Q<VisualElement>(CameraClusterName);
             _cameraLeftButton = rootVisualElement.Q<Button>(CameraLeftButtonName);
             _cameraRightButton = rootVisualElement.Q<Button>(CameraRightButtonName);
@@ -366,6 +372,12 @@ namespace Rapadura.UI.HUD
             {
                 // One-shot, same pattern as Jump; PlayerInputHandler gates it on pause only.
                 _attackButton.RegisterCallback<PointerDownEvent>(OnAttackButtonPressed, TrickleDown.TrickleDown);
+            }
+
+            if (_useButton != null)
+            {
+                // One-shot, same pattern as Atacar: the [E] of lamps, chests, boats... on a phone.
+                _useButton.RegisterCallback<PointerDownEvent>(OnUseButtonPressed, TrickleDown.TrickleDown);
             }
 
             if (_cameraLeftButton != null)
@@ -461,6 +473,11 @@ namespace Rapadura.UI.HUD
                 _attackButton.UnregisterCallback<PointerDownEvent>(OnAttackButtonPressed, TrickleDown.TrickleDown);
             }
 
+            if (_useButton != null)
+            {
+                _useButton.UnregisterCallback<PointerDownEvent>(OnUseButtonPressed, TrickleDown.TrickleDown);
+            }
+
             if (_cameraLeftButton != null)
             {
                 _cameraLeftButton.clicked -= OnCameraLeftClicked;
@@ -544,6 +561,7 @@ namespace Rapadura.UI.HUD
             }
 
             ReleaseStuckTouchControls();
+            _useButton?.EnableInClassList(UseButtonReadyClass, InteractPromptRegistry.IsAvailable(Time.unscaledTime));
         }
 
         /// <summary>
@@ -655,6 +673,15 @@ namespace Rapadura.UI.HUD
             }
         }
 
+        // Not "OnInteract": PlayerInput SendMessages its action names to every component on the player.
+        private void OnUseButtonPressed(PointerDownEvent evt)
+        {
+            if (_playerInput != null)
+            {
+                _playerInput.TouchInteractRequested = true;
+            }
+        }
+
         // ---------------------------------------------------------------
         // Touch-only controls (Atacar, camera rotate, virtual joystick)
         // ---------------------------------------------------------------
@@ -671,6 +698,7 @@ namespace Rapadura.UI.HUD
             bool cameraRotates = !touch || !ResolveCameraController() || _cameraController.AllowsRotation;
 
             _attackButton?.EnableInClassList(HiddenClass, !touch);
+            _useButton?.EnableInClassList(HiddenClass, !touch);
             _cameraCluster?.EnableInClassList(HiddenClass, !(touch && cameraRotates));
 
             if (_joystick != null)

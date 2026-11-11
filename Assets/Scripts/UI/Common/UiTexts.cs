@@ -32,6 +32,7 @@ namespace Rapadura.UI.Common
         public const string HudMenu = "ui.hud.menu";
         // Touch-only HUD controls (shown only with a touchscreen, see HudController).
         public const string HudAttack = "ui.hud.attack";
+        public const string HudUse = "ui.hud.use";
         public const string HudCameraLeft = "ui.hud.camera_left";
         public const string HudCameraRight = "ui.hud.camera_right";
         /// <summary>Floating text over a creature the hero missed ("Perigoso" regra B, LevelDangerRules).</summary>
@@ -184,6 +185,7 @@ namespace Rapadura.UI.Common
             new LocalizationEntry(HudSkills, "Skills", "Skills"),
             new LocalizationEntry(HudMenu, "Menu", "Menu"),
             new LocalizationEntry(HudAttack, "Attack", "Atacar"),
+            new LocalizationEntry(HudUse, "Use", "Usar"),
             new LocalizationEntry(HudCameraLeft, "‹ Turn", "‹ Girar"),
             new LocalizationEntry(HudCameraRight, "Turn ›", "Girar ›"),
             new LocalizationEntry(HudMiss, "Miss!", "Errou!"),

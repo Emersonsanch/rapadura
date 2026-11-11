@@ -37,6 +37,7 @@
         <ui:Button name="run-button" text="Correr" class="hud-touch-button hud-run-button loc" view-data-key="ui.hud.run" />
         <ui:Button name="jump-button" text="Pular" class="hud-touch-button hud-jump-button loc" view-data-key="ui.hud.jump" />
         <ui:Button name="attack-button" text="Atacar" class="hud-touch-button hud-attack-button hud-hidden loc" view-data-key="ui.hud.attack" />
+        <ui:Button name="use-button" text="Usar" class="hud-touch-button hud-use-button hud-hidden loc" view-data-key="ui.hud.use" />
         <ui:VisualElement name="hud-camera-cluster" class="hud-camera-cluster hud-hidden" picking-mode="Ignore">
             <ui:Button name="camera-left-button" text="‹ Girar" class="hud-touch-button hud-camera-button loc" view-data-key="ui.hud.camera_left" />
             <ui:Button name="camera-right-button" text="Girar ›" class="hud-touch-button hud-camera-button loc" view-data-key="ui.hud.camera_right" />

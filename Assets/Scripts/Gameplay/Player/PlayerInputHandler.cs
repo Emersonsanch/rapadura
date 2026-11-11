@@ -11,7 +11,7 @@ namespace Rapadura.Gameplay.Player
     /// in PlayerControls.inputactions; touch is tap/hold-to-move (MoveClick on
     /// &lt;Touchscreen&gt;/primaryTouch/press) plus the UI Toolkit HUD (HudController), which writes
     /// the Touch* properties below — an optional virtual joystick (<see cref="TouchMoveInput"/>), and
-    /// Run/Jump/Atacar buttons. Deliberately no uGUI OnScreenStick/OnScreenButton: those feed a
+    /// Run/Jump/Atacar/Usar buttons. Deliberately no uGUI OnScreenStick/OnScreenButton: those feed a
     /// virtual Gamepad, which makes PlayerInput switch to the Gamepad scheme and unpair the
     /// Touchscreen (tap-to-move and pinch then stop working).
     /// </summary>
@@ -63,6 +63,14 @@ namespace Rapadura.Gameplay.Player
         /// </summary>
         public bool TouchJumpRequested { get; set; }
         public bool InteractPressedThisFrame { get; private set; }
+
+        /// <summary>
+        /// Set by the HUD's "Usar" touch button press (one-shot, like <see cref="TouchJumpRequested"/>):
+        /// consumed the next Update into <see cref="InteractPressedThisFrame"/> — the [E] of every
+        /// mechanics point (lamps, chests, boats...) on a phone, where the Interact action has no binding.
+        /// Only the pause gate applies (it is a UI press, like Atacar).
+        /// </summary>
+        public bool TouchInteractRequested { get; set; }
         public bool AttackPressedThisFrame { get; private set; }
 
         /// <summary>
@@ -191,6 +199,17 @@ namespace Rapadura.Gameplay.Player
             return acceptedPressThisFrame || wasHeld;
         }
 
+        /// <summary>
+        /// Pure one-shot read (EditMode-testable): the physical action's press OR a pending touch
+        /// request, which is consumed (cleared) so it is true for exactly one frame.
+        /// </summary>
+        public static bool ReadOneShot(bool actionPressedThisFrame, ref bool touchRequested)
+        {
+            bool pressed = actionPressedThisFrame || touchRequested;
+            touchRequested = false;
+            return pressed;
+        }
+
         /// <summary>Pure combine of the Move action with the HUD joystick: summed, magnitude clamped to 1.</summary>
         public static Vector2 CombineMove(Vector2 actionMove, Vector2 touchMove)
         {
@@ -205,9 +224,12 @@ namespace Rapadura.Gameplay.Player
             IsCrouchHeld = _crouchAction.IsPressed();
             PointerPosition = _pointerPositionAction.ReadValue<Vector2>();
 
-            bool jump = _jumpAction.WasPressedThisFrame() || TouchJumpRequested;
-            TouchJumpRequested = false;
-            bool interact = _interactAction.WasPressedThisFrame();
+            bool touchJump = TouchJumpRequested;
+            bool jump = ReadOneShot(_jumpAction.WasPressedThisFrame(), ref touchJump);
+            TouchJumpRequested = touchJump;
+            bool touchInteract = TouchInteractRequested;
+            bool interact = ReadOneShot(_interactAction.WasPressedThisFrame(), ref touchInteract);
+            TouchInteractRequested = touchInteract;
             bool attack = _attackAction.WasPressedThisFrame();
             bool touchAttack = TouchAttackRequested;
             TouchAttackRequested = false;
