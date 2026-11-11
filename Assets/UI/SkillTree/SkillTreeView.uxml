@@ -9,7 +9,7 @@
             <ui:Label name="skill-points-label" text="Pontos disponíveis: 0" class="skill-points-label rap-chip" />
             <ui:Button name="close-button" text="Fechar" class="skill-tree-close-button loc rap-button" view-data-key="ui.skilltree.close" />
         </ui:VisualElement>
-        <ui:ScrollView name="skill-tree-scroll" class="skill-tree-scroll" horizontal-scroller-visibility="Auto" vertical-scroller-visibility="Auto">
+        <ui:ScrollView name="skill-tree-scroll" class="skill-tree-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Auto">
             <ui:VisualElement name="skill-tree-canvas" class="skill-tree-canvas">
                 <ui:VisualElement name="connector-layer" class="connector-layer" />
                 <ui:VisualElement name="node-layer" class="node-layer" />

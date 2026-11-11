@@ -8,6 +8,7 @@ using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
 using Rapadura.UI.Common;
+using Rapadura.UI.HUD;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -31,6 +32,10 @@ namespace Rapadura.UI.SkillTree
     {
         private const float CellSize = 120f;
         private const float NodeRadius = 42f;
+        /// <summary>Room under the bottom row for its "1/5" label (USS .skill-node-level-label: bottom -24px).</summary>
+        private const float LevelLabelRoom = 24f;
+        /// <summary>Characters per line of the name drawn in a node without an icon (84px node, 11px bold).</summary>
+        private const int NodeNameCharsPerLine = 12;
 
         [Header("References")]
         [SerializeField] private SkillManager _skillManager;
@@ -50,6 +55,7 @@ namespace Rapadura.UI.SkillTree
         private Button _closeButton;
         private ScrollView _scrollView;
         private VisualElement _nodeLayer;
+        private VisualElement _canvas;
         private SkillTreeConnectorElement _connectorLayer;
         private Label _detailNameLabel;
         private Label _detailDescriptionLabel;
@@ -131,6 +137,7 @@ namespace Rapadura.UI.SkillTree
             _closeButton = _uiDocument.rootVisualElement.Q<Button>("close-button");
             _scrollView = _uiDocument.rootVisualElement.Q<ScrollView>("skill-tree-scroll");
             _nodeLayer = _uiDocument.rootVisualElement.Q<VisualElement>("node-layer");
+            _canvas = _uiDocument.rootVisualElement.Q<VisualElement>("skill-tree-canvas");
             _detailNameLabel = _uiDocument.rootVisualElement.Q<Label>("detail-name-label");
             _detailDescriptionLabel = _uiDocument.rootVisualElement.Q<Label>("detail-description-label");
             _detailStatsLabel = _uiDocument.rootVisualElement.Q<Label>("detail-stats-label");
@@ -271,7 +278,37 @@ namespace Rapadura.UI.SkillTree
                 _nodeElementsBySkillId[node.skill.SkillId] = nodeElement;
             }
 
+            SizeCanvas();
             RefreshAll();
+        }
+
+        /// <summary>
+        /// The canvas is exactly as big as the tree's grid (no fixed 1200x900): a 4x2 hero tree is 444x228, so it fits a
+        /// phone without scrolling; the node layer's buttons are absolute and would not size it on their own.
+        /// </summary>
+        private void SizeCanvas()
+        {
+            if (_canvas == null)
+            {
+                return;
+            }
+
+            int maxX = 0;
+            int maxY = 0;
+
+            foreach (SkillTreeNodeData node in _activeTree.Nodes)
+            {
+                if (node?.skill == null)
+                {
+                    continue;
+                }
+
+                maxX = Mathf.Max(maxX, node.gridPosition.x);
+                maxY = Mathf.Max(maxY, node.gridPosition.y);
+            }
+
+            _canvas.style.width = maxX * CellSize + NodeRadius * 2f;
+            _canvas.style.height = maxY * CellSize + NodeRadius * 2f + LevelLabelRoom;
         }
 
         private VisualElement CreateNodeElement(SkillTreeNodeData node)
@@ -286,6 +323,17 @@ namespace Rapadura.UI.SkillTree
                 var icon = new Image { sprite = node.skill.Icon };
                 icon.AddToClassList("skill-node-icon");
                 button.Add(icon);
+            }
+            else
+            {
+                // No skill has an icon yet: show its name, the same fallback as the HUD hotbar slots.
+                var nameLabel = new Label(SkillSlotDisplayMath.FormatSlotName(node.skill.LocalizedName(), NodeNameCharsPerLine))
+                {
+                    name = "node-name",
+                    pickingMode = PickingMode.Ignore
+                };
+                nameLabel.AddToClassList("skill-node-name");
+                button.Add(nameLabel);
             }
 
             var levelLabel = new Label { name = "level-label" };
@@ -341,6 +389,13 @@ namespace Rapadura.UI.SkillTree
 
                 SkillInstance instance = _skillManager.GetLearnedSkill(node.skill.SkillId);
                 Label levelLabel = element.Q<Label>("level-label");
+                Label nameLabel = element.Q<Label>("node-name");
+
+                if (nameLabel != null)
+                {
+                    // Re-read here so a language switch (RefreshAll) renames the nodes too.
+                    nameLabel.text = SkillSlotDisplayMath.FormatSlotName(node.skill.LocalizedName(), NodeNameCharsPerLine);
+                }
 
                 if (instance != null)
                 {

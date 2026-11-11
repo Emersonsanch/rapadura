@@ -92,6 +92,13 @@
     white-space: normal;
 }
 
+/* Two classes so it beats .rap-button's "margin: 0 0 10px 0", which Hunting.uss re-imports on the card (a deeper sheet
+   wins ties): the one-class rule above never applied. Right margin: the list's vertical scroller sits flush against
+   the viewport, so a 0 margin hid the rows' right border and rounded corner under it (phone audit 2026-11). */
+.bestiary-list-item.rap-button {
+    margin: 0 10px 6px 0;
+}
+
 .bestiary-list-item--boss {
     border-left-width: 6px;
     border-left-color: var(--rap-gold);

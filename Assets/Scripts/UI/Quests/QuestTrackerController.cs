@@ -3,6 +3,7 @@ using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Quests;
+using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -251,6 +252,17 @@ namespace Rapadura.UI.Quests
 
                 _objectivesContainer.Add(row);
                 shown++;
+            }
+
+            // Hidden rows become one short "+N more" line instead of growing the card down onto the touch HUD's
+            // Dupla button (QuestTrackerView.uss caps the card's height).
+            int hidden = ordered.Count - shown;
+
+            if (hidden > 0)
+            {
+                var more = new Label(UiTexts.Format(_data.Localization, UiTexts.QuestTrackerMore, hidden)) { pickingMode = PickingMode.Ignore };
+                more.AddToClassList("quest-tracker-more");
+                _objectivesContainer.Add(more);
             }
         }
 

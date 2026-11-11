@@ -21,6 +21,13 @@
     border-color: rgba(150, 96, 48, 0.8);
     border-left-width: 4px;
     border-left-color: var(--rap-gold);
+    /* Height cap: on a 20:9 phone (panel ~1433x645) the touch HUD's Dupla button (DuoStrike.uss: bottom 268px, 92px
+       tall) tops out at 645 - 360 = 285px, right under this card; 130 + 143 + 12 gap = 285. One line for the title and
+       each objective (ellipsis), at most 3 rows plus a "+N" line (QuestTrackerController): ~120px. Nothing inside
+       shrinks (flex-shrink 0, else the rows got squashed onto each other); overflow: hidden clips the bottom instead,
+       the last resort under a large accessibility font scale. */
+    max-height: 143px;
+    overflow: hidden;
     display: none;
 }
 
@@ -29,15 +36,23 @@
 }
 
 .quest-tracker-title {
+    flex-shrink: 0;
     font-size: 14px;
     -unity-font-style: bold;
     color: var(--rap-gold-light);
-    white-space: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
     margin-bottom: 4px;
 }
 
+.quest-tracker-objectives {
+    flex-shrink: 0;
+}
+
 .quest-tracker-objective {
+    flex-shrink: 0;
     flex-direction: row;
     align-items: flex-start;
     margin-bottom: 2px;
@@ -46,17 +61,33 @@
 .quest-tracker-objective-text {
     flex-grow: 1;
     flex-shrink: 1;
+    /* The theme's 4px label margin + padding made each 12px row ~29px tall, so a 3rd row pushed "+N" out of the cap. */
+    margin: 0;
+    padding: 0;
     font-size: 12px;
     color: var(--rap-cream);
-    white-space: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
 }
 
 .quest-tracker-objective-progress {
+    padding: 0;
     font-size: 12px;
     -unity-font-style: bold;
     color: var(--rap-gold-light);
-    margin-left: 6px;
+    margin: 0 0 0 6px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.quest-tracker-more {
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    -unity-font-style: italic;
+    color: var(--rap-cream-dim);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
 }
 

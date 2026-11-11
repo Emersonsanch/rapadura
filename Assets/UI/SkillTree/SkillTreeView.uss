@@ -69,10 +69,12 @@
 
 .skill-tree-canvas {
     position: relative;
-    /* Breathing room so top-row nodes don't touch the header and the left column isn't flush to the screen edge. */
-    margin: 24px 0 0 48px;
-    min-width: 1200px;
-    min-height: 900px;
+    /* Sized in code to the tree's own grid (SkillTreeController.SizeCanvas: a hero tree is 444x228), centred, so the
+       5-node hero trees fit a 1280x720 or 2400x1080 (panel ~1433x645) screen without scrolling. The old fixed
+       1200x900 canvas scrolled for nothing on phones (audit 2026-11). The scroll view stays as a fallback for the
+       20-node general tree under a large font scale. */
+    align-self: center;
+    margin: 16px 0 16px 0;
 }
 
 .connector-layer {
@@ -105,6 +107,19 @@
 .skill-node-icon {
     width: 48px;
     height: 48px;
+}
+
+/* Name inside the node when the skill has no icon yet (none of the 45 hero skills has one): the same fallback the
+   HUD hotbar uses (SkillSlotDisplayMath.FormatSlotName, whole words, explicit line breaks). */
+.skill-node-name {
+    font-size: 11px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+    color: var(--rap-cream);
+    text-shadow: 1px 1px 1px rgba(20, 8, 2, 0.95);
+    margin: 0;
+    padding: 0;
 }
 
 .skill-node-level-label {

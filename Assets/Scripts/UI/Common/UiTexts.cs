@@ -94,6 +94,9 @@ namespace Rapadura.UI.Common
         public const string SkillTreeUpgradeCost = "ui.skilltree.upgrade_cost";
         public const string SkillTreeMaxLevel = "ui.skilltree.max_level";
 
+        // -- Quest tracker --
+        public const string QuestTrackerMore = "ui.questtracker.more";
+
         // -- Save / Load --
         public const string SaveLoadTitleSave = "ui.saveload.title_save";
         public const string SaveLoadTitleLoad = "ui.saveload.title_load";
@@ -234,6 +237,8 @@ namespace Rapadura.UI.Common
             new LocalizationEntry(SkillTreeLearnCost, "Learn (1 point)", "Aprender (1 ponto)"),
             new LocalizationEntry(SkillTreeUpgradeCost, "Upgrade (1 point)", "Evoluir (1 ponto)"),
             new LocalizationEntry(SkillTreeMaxLevel, "Max level", "Nível máximo"),
+
+            new LocalizationEntry(QuestTrackerMore, "+{0} more", "+{0} a mais"),
 
             new LocalizationEntry(SaveLoadTitleSave, "Save Game", "Salvar Jogo"),
             new LocalizationEntry(SaveLoadTitleLoad, "Load Game", "Carregar Jogo"),
