@@ -265,7 +265,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 SayPier(check, clock);
             }
 
-            InteractPromptRegistry.Ping(Time.unscaledTime);
+            if (check == CeuBarqueCheck.Board)
+            {
+                // Lights the touch Use button only when boarding works (by day [E] just shows the refusal).
+                InteractPromptRegistry.Ping(Time.unscaledTime);
+            }
+
             if (!Interacted)
             {
                 return;

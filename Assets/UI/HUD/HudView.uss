@@ -165,11 +165,13 @@
     border-color: rgb(244, 160, 110);
 }
 
-/* "Usar" (touch [E]: lamps, chests, boats...), left of Atacar with a 24px gap (Atacar ends ~288px
-   from the right at scale 1). 64px round (above the 48px touch minimum). Dimmed until something
-   reports an [E] point in reach (InteractPromptRegistry -> .hud-use-button--ready). */
+/* "Usar" (touch [E]: lamps, chests, boats...), left of Atacar with a 52px gap at scale 1 (Atacar ends
+   ~288px from the right): Atacar grows left when the accessibility text scale goes up, and the gap
+   covers that up to the largest scale, so the two never overlap. 64px round (above the 48px touch
+   minimum). Dimmed until something reports an [E] point in reach (InteractPromptRegistry ->
+   .hud-use-button--ready). */
 .hud-use-button {
-    right: 312px;
+    right: 340px;
     bottom: 32px;
     min-width: 64px;
     width: auto;

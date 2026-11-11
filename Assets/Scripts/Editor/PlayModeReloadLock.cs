@@ -30,6 +30,9 @@ namespace Rapadura.Editor
 
                     break;
                 case PlayModeStateChange.ExitingPlayMode:
+                case PlayModeStateChange.EnteredEditMode:
+                    // EnteredEditMode too: if another listener threw on ExitingPlayMode and this one never ran, the
+                    // Editor still gets its recompiles back once it is in Edit Mode.
                     if (_locked)
                     {
                         EditorApplication.UnlockReloadAssemblies();
