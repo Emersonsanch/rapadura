@@ -99,7 +99,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             // ---------------- Zones (a 5 × 5 grid that tiles the region; columns x −600/−150/250/750/1250/1800, rows z −1200/−700/−250/250/700/1200) ----------------
             // North row: the savanna of 26, Meroë (27), the north cliffs, the palace of Husuni (29).
-            OverworldZone zAuroques = Zone(w, "savana_dos_auroques", AuroquesId, null, -600f, 700f, -150f, 1200f, OverworldTerrain.Savanna, 48, 53, 46,
+            OverworldZone zAuroques = Zone(w, "savana_dos_auroques", AuroquesId, null, -600f, 700f, -150f, 1200f, OverworldTerrain.Savanna, 48, 53, 45,
                 "Aurochs Savanna", "Savana dos Auroques", plain, spacing: 90f);
             OverworldZone zAcacias = Zone(w, "savana_das_acacias", AuroquesId, null, -150f, 700f, 250f, 1200f, OverworldTerrain.Savanna, 50, 55, 47,
                 "Acacia Savanna", "Savana das Acácias", plain, spacing: 90f);
@@ -140,7 +140,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 "Southern Shallows", "Baixios do Sul", coast, spacing: 85f);
             OverworldZone zLagoaGrande = Zone(w, "lagoa_grande", null, KirtaMapId, 750f, -700f, 1250f, -250f, OverworldTerrain.TideLagoons, 55, 59, 52,
                 "Great Lagoon", "Lagoa Grande", coast, spacing: 85f);
-            OverworldZone zCanais = Zone(w, "canais_de_liyongo", LiyongoId, null, 1250f, -700f, 1800f, -250f, OverworldTerrain.Mangrove, 64, 68, 62,
+            OverworldZone zCanais = Zone(w, "canais_de_liyongo", LiyongoId, null, 1250f, -700f, 1800f, -250f, OverworldTerrain.Mangrove, 64, 68, 60,
                 "Liyongo Channels", "Canais de Liyongo", swamp, MapRequirementTags.RootBoots, 85f);
             // South row: baobabs, the red cliffs, Gedi's ruins, the shallow mangrove, the Mangues de Liyongo.
             OverworldZone zBaobas = Zone(w, "bosque_dos_baobas", null, AuroquesId, -600f, -1200f, -150f, -700f, OverworldTerrain.BaobabWoods, 52, 56, 49,

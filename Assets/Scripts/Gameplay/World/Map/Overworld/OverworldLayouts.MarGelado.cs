@@ -237,7 +237,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 "Western Canals", "Canais do Oeste", coast, spacing: 95f);
             OverworldZone zCanais = Zone(w, "canais_de_gelo", canais, null, -240f, 360f, 240f, 840f, OverworldTerrain.IceCanals, 186, 190, 182,
                 "Ice Canals", "Canais de Gelo", coast, spacing: 90f);
-            OverworldZone zRachado = Zone(w, "gelo_rachado", canais, null, 240f, 360f, 720f, 840f, OverworldTerrain.CrackedIce, 187, 193, 182,
+            OverworldZone zRachado = Zone(w, "gelo_rachado", canais, null, 240f, 360f, 720f, 840f, OverworldTerrain.CrackedIce, 187, 196, 182,
                 "Cracked Ice", "Gelo Rachado", coast, spacing: 95f);
             OverworldZone zGalerias = Zone(w, "galerias_dos_mamutes", galerias, null, 720f, 360f, 1200f, 840f, OverworldTerrain.MammothGalleries, 204, 212, 198,
                 "Mammoth Galleries", "Galerias dos Mamutes", under, spacing: 100f);

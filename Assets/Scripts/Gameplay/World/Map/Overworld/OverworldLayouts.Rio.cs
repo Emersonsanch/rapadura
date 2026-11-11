@@ -219,10 +219,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 "Papyrus Bank", "Margem de Papiro", coast, spacing: 90f);
             OverworldZone zPraia = Zone(w, "praia_dos_remadores", cais, null, 240f, -600f, 720f, -120f, OverworldTerrain.RowersBeach, 263, 267, 259,
                 "Rowers' Beach", "Praia dos Remadores", coast, spacing: 90f);
-            OverworldZone zCaminho = Zone(w, "caminho_das_serpentes", areal, null, 720f, -600f, 1200f, -120f, OverworldTerrain.ClosedGates, 276, 283, 272,
+            OverworldZone zCaminho = Zone(w, "caminho_das_serpentes", areal, null, 720f, -600f, 1200f, -120f, OverworldTerrain.ClosedGates, 276, 286, 272,
                 "Serpents' Way", "Caminho das Serpentes", desert, lamp, 95f);
             // Second row: the hidden sands and the Sand Sled (73), the piers of the hours, the Cais, the barque's canal, the zigzag (73).
-            OverworldZone zAreal = Zone(w, "areal_escondido", areal, null, -1200f, -120f, -720f, 360f, OverworldTerrain.HiddenSands, 275, 281, 271,
+            OverworldZone zAreal = Zone(w, "areal_escondido", areal, null, -1200f, -120f, -720f, 360f, OverworldTerrain.HiddenSands, 275, 281, 270,
                 "Hidden Sands", "Areal Escondido", desert, lamp, 95f);
             OverworldZone zPieres = Zone(w, "pieres_das_horas", cais, null, -720f, -120f, -240f, 360f, OverworldTerrain.HourPiers, 262, 266, 258,
                 "Piers of the Hours", "Píeres das Horas", coast, spacing: 90f);
@@ -230,7 +230,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 "Mesektet Quay", "Cais de Mesektet", coast, spacing: 85f);
             OverworldZone zCanal = Zone(w, "canal_da_barca", cais, null, 240f, -120f, 720f, 360f, OverworldTerrain.BarqueCanal, 262, 266, 258,
                 "Barque's Canal", "Canal da Barca", coast, spacing: 90f);
-            OverworldZone zZigue = Zone(w, "zigue_zague_do_areal", areal, null, 720f, -120f, 1200f, 360f, OverworldTerrain.ZigzagSands, 275, 281, 271,
+            OverworldZone zZigue = Zone(w, "zigue_zague_do_areal", areal, null, 720f, -120f, 1200f, 360f, OverworldTerrain.ZigzagSands, 275, 281, 270,
                 "Zigzag of the Sands", "Zigue-Zague do Areal", desert, lamp, 95f);
             // Middle row: the outer coil (74), the reed beds, the fields with the Casa de Junco, the light wheat (72), the boiling shore (75).
             OverworldZone zAnelExterno = Zone(w, "anel_externo", aneis, null, -1200f, 360f, -720f, 840f, OverworldTerrain.OuterCoil, 284, 290, 280,

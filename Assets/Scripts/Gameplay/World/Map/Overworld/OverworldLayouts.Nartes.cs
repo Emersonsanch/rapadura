@@ -145,9 +145,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 "Steppe of the Winds", "Estepe dos Ventos", plain, spacing: 90f);
             OverworldZone zSaigas = Zone(w, "estepe_das_saigas", null, soslan, -720f, -600f, -240f, -120f, OverworldTerrain.WormwoodSteppe, 101, 104, 99,
                 "Saiga Steppe", "Estepe das Saigas", plain, spacing: 85f);
-            OverworldZone zVau = Zone(w, "vau_largo", soslan, null, -240f, -600f, 240f, -120f, OverworldTerrain.SteppeRiver, 100, 103, 98,
+            OverworldZone zVau = Zone(w, "vau_largo", soslan, null, -240f, -600f, 240f, -120f, OverworldTerrain.SteppeRiver, 100, 103, 96,
                 "Wide Ford", "Vau Largo", plain, spacing: 85f);
-            OverworldZone zPistas = Zone(w, "pistas_de_corrida", soslan, null, 240f, -600f, 720f, -120f, OverworldTerrain.FeatherSteppe, 101, 105, 99,
+            OverworldZone zPistas = Zone(w, "pistas_de_corrida", soslan, null, 240f, -600f, 720f, -120f, OverworldTerrain.FeatherSteppe, 101, 108, 99,
                 "Race Tracks", "Pistas de Corrida", plain, spacing: 85f);
             OverworldZone zSalgado = Zone(w, "lago_salgado", null, kurgans, 720f, -600f, 1200f, -120f, OverworldTerrain.WormwoodSteppe, 107, 111, 105,
                 "Salt Lake", "Lago Salgado", plain, spacing: 90f);
@@ -156,14 +156,14 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 "Birch Wood", "Bosque de Bétulas", forest, spacing: 90f);
             OverworldZone zEstepe = Zone(w, "estepe_de_soslan", null, soslan, -720f, -120f, -240f, 360f, OverworldTerrain.FeatherSteppe, 101, 104, 99,
                 "Steppe of Soslan", "Estepe de Soslan", plain, spacing: 85f);
-            OverworldZone zAcampamento = Zone(w, "acampamento_de_soslan", soslan, null, -240f, -120f, 240f, 360f, OverworldTerrain.HorseCamp, 100, 103, 98,
+            OverworldZone zAcampamento = Zone(w, "acampamento_de_soslan", soslan, null, -240f, -120f, 240f, 360f, OverworldTerrain.HorseCamp, 100, 103, 96,
                 "Soslan's Camp", "Acampamento de Soslan", plain, spacing: 80f);
-            OverworldZone zKurgans = Zone(w, "kurgans_de_ouro", kurgans, null, 240f, -120f, 720f, 360f, OverworldTerrain.KurganField, 106, 110, 104,
+            OverworldZone zKurgans = Zone(w, "kurgans_de_ouro", kurgans, null, 240f, -120f, 720f, 360f, OverworldTerrain.KurganField, 106, 110, 102,
                 "Golden Kurgans", "Kurgans de Ouro", plain, spacing: 90f);
             OverworldZone zAberto = Zone(w, "kurgan_aberto", kurgans, null, 720f, -120f, 1200f, 360f, OverworldTerrain.KurganField, 108, 112, 106,
                 "Open Kurgan", "Kurgan Aberto", plain, spacing: 90f);
             // Middle row: the dream tablets (49), the giants' pastures, the river, the poppies, the eastern kurgans.
-            OverworldZone zTabuas = Zone(w, "vale_das_tabuas_de_sonho", fortim, null, -1200f, 360f, -720f, 840f, OverworldTerrain.DreamVale, 112, 116, 110,
+            OverworldZone zTabuas = Zone(w, "vale_das_tabuas_de_sonho", fortim, null, -1200f, 360f, -720f, 840f, OverworldTerrain.DreamVale, 112, 116, 108,
                 "Vale of the Dream Tablets", "Vale das Tábuas de Sonho", forest, spacing: 90f);
             OverworldZone zPastos = Zone(w, "pastos_dos_gigantes", null, fortim, -720f, 360f, -240f, 840f, OverworldTerrain.GiantHills, 105, 109, 103,
                 "Giants' Pastures", "Pastos dos Gigantes", forest, spacing: 90f);
@@ -176,20 +176,20 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // Fourth row: the larch taiga (50), the hill giants' fort (49), the svan valley, the rolling prairie, the thousand horses (51).
             OverworldZone zTaiga = Zone(w, "taiga_de_laricos", null, arvoredo, -1200f, 840f, -720f, 1320f, OverworldTerrain.Taiga, 118, 122, 116,
                 "Larch Taiga", "Taiga de Lariços", forest, spacing: 95f);
-            OverworldZone zFortim = Zone(w, "fortim_dos_gigantes", fortim, null, -720f, 840f, -240f, 1320f, OverworldTerrain.GiantHills, 113, 117, 111,
+            OverworldZone zFortim = Zone(w, "fortim_dos_gigantes", fortim, null, -720f, 840f, -240f, 1320f, OverworldTerrain.GiantHills, 113, 120, 111,
                 "Hill-Giant Fort", "Fortim dos Gigantes", forest, spacing: 90f);
             OverworldZone zSvan = Zone(w, "vale_das_torres_svan", null, amirani, -240f, 840f, 240f, 1320f, OverworldTerrain.SvanValley, 112, 116, 110,
                 "Valley of the Svan Towers", "Vale das Torres Svan", rock, spacing: 95f);
             OverworldZone zOndulada = Zone(w, "pradaria_ondulada", null, cavalos, 240f, 840f, 720f, 1320f, OverworldTerrain.PoppyPrairie, 114, 118, 112,
                 "Rolling Prairie", "Pradaria Ondulada", plain, spacing: 95f);
-            OverworldZone zCavalos = Zone(w, "pradaria_dos_mil_cavalos", cavalos, null, 720f, 840f, 1200f, 1320f, OverworldTerrain.HorsePlains, 124, 130, 122,
+            OverworldZone zCavalos = Zone(w, "pradaria_dos_mil_cavalos", cavalos, null, 720f, 840f, 1200f, 1320f, OverworldTerrain.HorsePlains, 124, 134, 120,
                 "Thousand-Horse Prairie", "Pradaria dos Mil Cavalos", plain, spacing: 95f);
             // North row: the trunk folk's grove and the meltwater lake (50), the Caucasus of Amirani's chain (52: Climbing Crampons).
             OverworldZone zArvoredo = Zone(w, "arvoredo_de_haripushpa", arvoredo, null, -1200f, 1320f, -720f, 1800f, OverworldTerrain.Taiga, 124, 126, 122,
                 "Haripushpa Grove", "Arvoredo de Haripushpa", forest, spacing: 95f);
-            OverworldZone zDegelo = Zone(w, "lago_de_degelo", arvoredo, null, -720f, 1320f, -240f, 1800f, OverworldTerrain.Taiga, 120, 126, 118,
+            OverworldZone zDegelo = Zone(w, "lago_de_degelo", arvoredo, null, -720f, 1320f, -240f, 1800f, OverworldTerrain.Taiga, 120, 126, 114,
                 "Meltwater Lake", "Lago de Degelo", forest, spacing: 95f);
-            OverworldZone zVigia = Zone(w, "torre_de_vigia", amirani, null, -240f, 1320f, 240f, 1800f, OverworldTerrain.SvanValley, 134, 140, 132,
+            OverworldZone zVigia = Zone(w, "torre_de_vigia", amirani, null, -240f, 1320f, 240f, 1800f, OverworldTerrain.SvanValley, 134, 140, 128,
                 "Watch Tower", "Torre de Vigia", rock, crampons, 100f);
             OverworldZone zCorrente = Zone(w, "corrente_de_amirani", amirani, null, 240f, 1320f, 720f, 1800f, OverworldTerrain.ChainPeak, 138, 146, 136,
                 "Amirani's Chain", "Corrente de Amirani", rock, crampons, 100f);

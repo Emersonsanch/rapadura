@@ -110,7 +110,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 "High Steppe", "Estepe Alta", plain, spacing: 90f);
             OverworldZone zTerracos = Zone(w, "terracos_de_sangkent", sang, null, -240f, -120f, 240f, 360f, OverworldTerrain.StairTerraces, 70, 73, 68,
                 "Terraces of Sangkent", "Terraços de Sangkent", rock, spacing: 80f);
-            OverworldZone zCalhas = Zone(w, "calhas_de_pedra", CalhasId, null, 240f, -120f, 720f, 360f, OverworldTerrain.StoneChutes, 74, 78, 72,
+            OverworldZone zCalhas = Zone(w, "calhas_de_pedra", CalhasId, null, 240f, -120f, 720f, 360f, OverworldTerrain.StoneChutes, 74, 78, 70,
                 "Stone Chutes", "Calhas de Pedra", rock, spacing: 90f);
             OverworldZone zEstacao = Zone(w, "estacao_da_calha_alta", CalhasId, null, 720f, -120f, 1200f, 360f, OverworldTerrain.StoneChutes, 76, 80, 74,
                 "High Chute Station", "Estação da Calha Alta", rock, spacing: 90f);
@@ -128,20 +128,20 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // Fourth row: the seracs and the glacier (38), the Wakhan valley, the gorge and the Fort of the Winds (39).
             OverworldZone zSeracs = Zone(w, "campo_de_seracs", GeleiraId, null, -1200f, 840f, -720f, 1320f, OverworldTerrain.Seracs, 82, 86, 80,
                 "Serac Field", "Campo de Seracs", rock, MapRequirementTags.ClimbingCrampons, 95f);
-            OverworldZone zGeleira = Zone(w, "geleira_do_teto_do_mundo", GeleiraId, null, -720f, 840f, -240f, 1320f, OverworldTerrain.Glacier, 80, 84, 78,
+            OverworldZone zGeleira = Zone(w, "geleira_do_teto_do_mundo", GeleiraId, null, -720f, 840f, -240f, 1320f, OverworldTerrain.Glacier, 80, 84, 76,
                 "Roof-of-the-World Glacier", "Geleira do Teto do Mundo", rock, MapRequirementTags.ClimbingCrampons, 95f);
             OverworldZone zVale = Zone(w, "vale_do_wakhan", null, WakhanId, -240f, 840f, 240f, 1320f, OverworldTerrain.WakhanValley, 80, 84, 78,
                 "Wakhan Valley", "Vale do Wakhan", plain, spacing: 90f);
-            OverworldZone zDesfiladeiro = Zone(w, "desfiladeiro_dos_ventos", ForteVentosId, null, 240f, 840f, 720f, 1320f, OverworldTerrain.FortRock, 84, 88, 82,
+            OverworldZone zDesfiladeiro = Zone(w, "desfiladeiro_dos_ventos", ForteVentosId, null, 240f, 840f, 720f, 1320f, OverworldTerrain.FortRock, 84, 88, 80,
                 "Gorge of the Winds", "Desfiladeiro dos Ventos", rock, MapRequirementTags.WingsRequired, 95f);
             OverworldZone zForte = Zone(w, "forte_dos_ventos", ForteVentosId, null, 720f, 840f, 1200f, 1320f, OverworldTerrain.FortRock, 86, 92, 84,
                 "Fort of the Winds", "Forte dos Ventos", rock, MapRequirementTags.WingsRequired, 95f);
             // North row: the ice peaks, the high Wakhan and its pass (40), the dragon's nest, the crests of the ill wind.
             OverworldZone zPicos = Zone(w, "picos_gelados", null, GeleiraId, -1200f, 1320f, -720f, 1800f, OverworldTerrain.IcePeaks, 88, 94, 86,
                 "Ice Peaks", "Picos Gelados", rock, spacing: 100f);
-            OverworldZone zAltoWakhan = Zone(w, "alto_do_wakhan", WakhanId, null, -720f, 1320f, -240f, 1800f, OverworldTerrain.WakhanPass, 90, 95, 88,
+            OverworldZone zAltoWakhan = Zone(w, "alto_do_wakhan", WakhanId, null, -720f, 1320f, -240f, 1800f, OverworldTerrain.WakhanPass, 90, 95, 86,
                 "High Wakhan", "Alto do Wakhan", rock, MapRequirementTags.StormProtection, 95f);
-            OverworldZone zPasso = Zone(w, "passo_de_wakhan", WakhanId, null, -240f, 1320f, 240f, 1800f, OverworldTerrain.WakhanPass, 90, 96, 88,
+            OverworldZone zPasso = Zone(w, "passo_de_wakhan", WakhanId, null, -240f, 1320f, 240f, 1800f, OverworldTerrain.WakhanPass, 90, 96, 86,
                 "Wakhan Pass", "Passo de Wakhan", rock, MapRequirementTags.StormProtection, 95f);
             OverworldZone zNinho = Zone(w, "ninho_de_aydahar", WakhanId, null, 240f, 1320f, 720f, 1800f, OverworldTerrain.DragonCrags, 92, 98, 90,
                 "Aydahar's Nest", "Ninho de Aydahar", rock, MapRequirementTags.StormProtection, 100f);

@@ -148,7 +148,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 "Rings of Mingcheng", "Anéis de Mingcheng", plain, spacing: 80f);
             OverworldZone zEclusa = Zone(w, "eclusa_da_lua", null, canalMap, 240f, -120f, 720f, 360f, OverworldTerrain.LanternCanal, 92, 96, 90,
                 "Moon Lock", "Eclusa da Lua", plain, spacing: 85f);
-            OverworldZone zJardins = Zone(w, "jardins_em_terraco", torres, null, 720f, -120f, 1200f, 360f, OverworldTerrain.SpireGardens, 96, 100, 94,
+            OverworldZone zJardins = Zone(w, "jardins_em_terraco", torres, null, 720f, -120f, 1200f, 360f, OverworldTerrain.SpireGardens, 96, 100, 92,
                 "Terrace Gardens", "Jardins em Terraço", plain, seal, 90f);
             // Middle row: the water mill (44), the tea hills, the terracotta pits (41), the lantern canal (43), the Torres Brancas (42).
             OverworldZone zMoinho = Zone(w, "moinho_dagua", null, arrozaisMap, -1200f, 360f, -720f, 840f, OverworldTerrain.MirrorPaddies, 97, 101, 95,
@@ -176,9 +176,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // peaks and, carved out of their north half, the Cidadela dos Quatro Gulosos (46): the end of the plain, level 125.
             OverworldZone zMuralhaOeste = Zone(w, "muralha_oeste", muralhaMap, null, -1200f, 1320f, -720f, 1800f, OverworldTerrain.GreatWall, 118, 124, 116,
                 "Western Wall", "Muralha Oeste", rock, torch, 100f);
-            OverworldZone zQuinhentos = Zone(w, "torre_quinhentos", muralhaMap, null, -720f, 1320f, -240f, 1800f, OverworldTerrain.GreatWall, 115, 122, 113,
+            OverworldZone zQuinhentos = Zone(w, "torre_quinhentos", muralhaMap, null, -720f, 1320f, -240f, 1800f, OverworldTerrain.GreatWall, 115, 122, 110,
                 "Tower Five Hundred", "Torre Quinhentos", rock, torch, 100f);
-            OverworldZone zMuralha = Zone(w, "muralha_das_mil_torres", muralhaMap, null, -240f, 1320f, 240f, 1800f, OverworldTerrain.GreatWall, 115, 121, 113,
+            OverworldZone zMuralha = Zone(w, "muralha_das_mil_torres", muralhaMap, null, -240f, 1320f, 240f, 1800f, OverworldTerrain.GreatWall, 115, 121, 110,
                 "Wall of a Thousand Towers", "Muralha das Mil Torres", rock, torch, 100f);
             OverworldZone zPortao = Zone(w, "portao_do_nian", muralhaMap, null, 240f, 1320f, 720f, 1800f, OverworldTerrain.GreatWall, 116, 123, 114,
                 "Gate of the Nian", "Portão do Nian", rock, torch, 100f);

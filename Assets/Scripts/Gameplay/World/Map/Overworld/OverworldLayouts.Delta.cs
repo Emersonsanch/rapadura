@@ -118,7 +118,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 "Living Root Bridges", "Pontes de Raiz Viva", forest, MapRequirementTags.RootBridgeBalance, 95f);
             OverworldZone zFigueiral = Zone(w, "figueiral_das_raizes", null, jhil, -720f, -360f, -240f, 120f, OverworldTerrain.BanyanGrove, 61, 64, 59,
                 "Banyan Grove", "Figueiral das Raízes", forest, spacing: 85f);
-            OverworldZone zLago = Zone(w, "lago_de_jhilpur", jhil, null, -240f, -360f, 240f, 120f, OverworldTerrain.RootLake, 60, 63, 58,
+            OverworldZone zLago = Zone(w, "lago_de_jhilpur", jhil, null, -240f, -360f, 240f, 120f, OverworldTerrain.RootLake, 60, 66, 58,
                 "Lake of Jhilpur", "Lago de Jhilpur", swamp, spacing: 80f);
             OverworldZone zVarzea = Zone(w, "varzea_dos_bufalos", null, jhil, 240f, -360f, 720f, 120f, OverworldTerrain.PaddyLevees, 61, 64, 59,
                 "Buffalo Floodplain", "Várzea dos Búfalos", plain, spacing: 85f);
@@ -142,18 +142,18 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 "Drowned Roots", "Raízes Afogadas", swamp, spacing: 90f);
             OverworldZone zBancosLama = Zone(w, "bancos_de_lama", null, TarchonMapId, -240f, -1320f, 240f, -840f, OverworldTerrain.MudFlats, 70, 74, 68,
                 "Mud Banks", "Bancos de Lama", swamp, spacing: 85f);
-            OverworldZone zTarchon = Zone(w, "palafitas_de_tarchon", TarchonMapId, null, 240f, -1320f, 720f, -840f, OverworldTerrain.ReedIslands, 70, 74, 68,
+            OverworldZone zTarchon = Zone(w, "palafitas_de_tarchon", TarchonMapId, null, 240f, -1320f, 720f, -840f, OverworldTerrain.ReedIslands, 70, 74, 66,
                 "Tarchon Stilts", "Palafitas de Tarchon", swamp, MapRequirementTags.SaddleRequired, 85f);
             OverworldZone zIlhasAndam = Zone(w, "ilhas_que_andam", TarchonMapId, null, 720f, -1320f, 1200f, -840f, OverworldTerrain.ReedIslands, 74, 78, 72,
                 "Wandering Islands", "Ilhas que Andam", swamp, MapRequirementTags.SaddleRequired, 85f);
             // South row: the eye and the heart of the mire (35), the Ninki Nanka's bog, the lantern islet and the dragon's den (34).
             OverworldZone zOlho = Zone(w, "olho_do_lodo", CoracaoLodoId, null, -1200f, -1800f, -720f, -1320f, OverworldTerrain.BlackMire, 84, 88, 82,
                 "Eye of the Mire", "Olho do Lodo", swamp, MapRequirementTags.PurifyingFruit, 90f);
-            OverworldZone zCoracao = Zone(w, "coracao_do_lodo", CoracaoLodoId, null, -720f, -1800f, -240f, -1320f, OverworldTerrain.BlackMire, 82, 86, 80,
+            OverworldZone zCoracao = Zone(w, "coracao_do_lodo", CoracaoLodoId, null, -720f, -1800f, -240f, -1320f, OverworldTerrain.BlackMire, 82, 86, 78,
                 "Heart of the Mire", "Coração do Lodo", swamp, MapRequirementTags.PurifyingFruit, 90f);
-            OverworldZone zNinki = Zone(w, "charco_do_ninki_nanka", NinkiNankaId, null, -240f, -1800f, 240f, -1320f, OverworldTerrain.RaffiaBog, 78, 82, 76,
+            OverworldZone zNinki = Zone(w, "charco_do_ninki_nanka", NinkiNankaId, null, -240f, -1800f, 240f, -1320f, OverworldTerrain.RaffiaBog, 76, 82, 72,
                 "Ninki Nanka Bog", "Charco do Ninki Nanka", swamp, MapRequirementTags.AntiVenomAmulet, 90f);
-            OverworldZone zIlhota = Zone(w, "ilhota_das_lanternas", NinkiNankaId, null, 240f, -1800f, 720f, -1320f, OverworldTerrain.RaffiaBog, 78, 82, 76,
+            OverworldZone zIlhota = Zone(w, "ilhota_das_lanternas", NinkiNankaId, null, 240f, -1800f, 720f, -1320f, OverworldTerrain.RaffiaBog, 78, 82, 72,
                 "Lantern Islet", "Ilhota das Lanternas", swamp, MapRequirementTags.AntiVenomAmulet, 90f);
             OverworldZone zToca = Zone(w, "toca_da_dragoa", NinkiNankaId, null, 720f, -1800f, 1200f, -1320f, OverworldTerrain.RaffiaBog, 80, 82, 78,
                 "Dragon's Den", "Toca da Dragoa", swamp, MapRequirementTags.AntiVenomAmulet, 90f);

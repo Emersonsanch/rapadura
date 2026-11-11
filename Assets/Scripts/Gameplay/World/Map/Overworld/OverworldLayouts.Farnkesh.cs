@@ -162,9 +162,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // Pactolo's ford, the vines of the sun, the windy meadows (the way in from Ohya's crest).
             OverworldZone zPe = Zone(w, "bosque_do_pe_dos_picos", null, vale, -1200f, -600f, -720f, -120f, OverworldTerrain.FootWoods, 146, 150, 144,
                 "Wood at the Foot of the Peaks", "Bosque do Pé dos Picos", forest, spacing: 95f);
-            OverworldZone zGordias = Zone(w, "vinhas_de_gordias", vale, null, -720f, -600f, -240f, -120f, OverworldTerrain.VineVale, 140, 144, 138,
+            OverworldZone zGordias = Zone(w, "vinhas_de_gordias", vale, null, -720f, -600f, -240f, -120f, OverworldTerrain.VineVale, 140, 144, 136,
                 "Gordias's Vines", "Vinhas de Gordias", forest, spacing: 90f);
-            OverworldZone zVau = Zone(w, "vau_do_pactolo", vale, null, -240f, -600f, 240f, -120f, OverworldTerrain.GoldenRiver, 140, 143, 138,
+            OverworldZone zVau = Zone(w, "vau_do_pactolo", vale, null, -240f, -600f, 240f, -120f, OverworldTerrain.GoldenRiver, 140, 143, 136,
                 "Ford of the Pactolus", "Vau do Pactolo", forest, spacing: 90f);
             OverworldZone zSol = Zone(w, "vinhas_do_sol", null, vale, 240f, -600f, 720f, -120f, OverworldTerrain.VineVale, 141, 145, 139,
                 "Vines of the Sun", "Vinhas do Sol", forest, spacing: 90f);
@@ -173,9 +173,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // Second row: the chestnut wood, the dance glades, the Vale dos Sátiros (53), the Pactolo, the meadows of the bells.
             OverworldZone zCastanheiras = Zone(w, "mata_das_castanheiras", vale, null, -1200f, -120f, -720f, 360f, OverworldTerrain.FootWoods, 145, 148, 143,
                 "Chestnut Wood", "Mata das Castanheiras", forest, spacing: 95f);
-            OverworldZone zBaile = Zone(w, "clareiras_do_baile", vale, null, -720f, -120f, -240f, 360f, OverworldTerrain.SatyrGlades, 140, 144, 138,
+            OverworldZone zBaile = Zone(w, "clareiras_do_baile", vale, null, -720f, -120f, -240f, 360f, OverworldTerrain.SatyrGlades, 140, 144, 136,
                 "Glades of the Dance", "Clareiras do Baile", forest, spacing: 90f);
-            OverworldZone zVale = Zone(w, "vale_dos_satiros", vale, null, -240f, -120f, 240f, 360f, OverworldTerrain.SatyrGlades, 140, 143, 138,
+            OverworldZone zVale = Zone(w, "vale_dos_satiros", vale, null, -240f, -120f, 240f, 360f, OverworldTerrain.SatyrGlades, 140, 143, 136,
                 "Satyr Vale", "Vale dos Sátiros", forest, spacing: 85f);
             OverworldZone zPactolo = Zone(w, "rio_pactolo", vale, null, 240f, -120f, 720f, 360f, OverworldTerrain.GoldenRiver, 141, 145, 139,
                 "River Pactolus", "Rio Pactolo", forest, spacing: 90f);
@@ -194,7 +194,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             OverworldZone zLeste = Zone(w, "pinaculos_do_leste", pontes, null, 720f, 360f, 1200f, 840f, OverworldTerrain.PinnacleWood, 150, 154, 146,
                 "Eastern Pinnacles", "Pináculos do Leste", rock, spacing: 100f);
             // Fourth row: the hanging hermitages and the Pináculo do Sino (56), Farnkesh (54), the wind bridges and the Ermida Baixa (55).
-            OverworldZone zErmidas = Zone(w, "ermidas_suspensas", ermidas, null, -1200f, 840f, -720f, 1320f, OverworldTerrain.BellCliffs, 158, 164, 154,
+            OverworldZone zErmidas = Zone(w, "ermidas_suspensas", ermidas, null, -1200f, 840f, -720f, 1320f, OverworldTerrain.BellCliffs, 158, 168, 154,
                 "Hanging Hermitages", "Ermidas Suspensas", rock, spacing: 100f);
             OverworldZone zSino = Zone(w, "pinaculo_do_sino", ermidas, null, -720f, 840f, -240f, 1320f, OverworldTerrain.BellCliffs, 158, 162, 154,
                 "Bell Pinnacle", "Pináculo do Sino", rock, spacing: 100f);
