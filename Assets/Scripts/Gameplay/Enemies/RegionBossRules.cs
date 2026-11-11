@@ -164,6 +164,43 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>Seconds from a boss's death to its return (the commons take their fauna's 20–40 s; a boss takes a coffee break).</summary>
         public const float RespawnSeconds = 300f;
 
+        /// <summary>
+        /// Kill XP of a world boss (<see cref="AllSpawns"/>), in commons of its level (<see cref="EnemyLevelScaling.KillExperienceTimes"/>):
+        /// camping one (a kill every <see cref="RespawnSeconds"/> + ~18 s of fight) pays ~1.3× the XP per hour of farming the commons of
+        /// that level (200 kills/h, Progressao500 §1.3), so a boss is worth the walk without being the only way up
+        /// (Docs/Balanco100a500.md §5.3, sugestão 4; the generic boss rank, ×9, paid ~0.51×).
+        /// </summary>
+        public const int WorldBossKillXpMultiplier = 23;
+
+        /// <summary>Kill XP of a map boss (<see cref="MapSpawns"/>), in commons of its level: ~1.0× the commons' XP per hour when camped.</summary>
+        public const int MapBossKillXpMultiplier = 18;
+
+        /// <summary>
+        /// The multiplier over a common of the level that a kill of <paramref name="enemyId"/> pays above the archetype level:
+        /// <see cref="WorldBossKillXpMultiplier"/> for a world boss, <see cref="MapBossKillXpMultiplier"/> for a map boss and, for
+        /// anything else, the generic rank (<see cref="EnemyLevelScaling.RankOf"/>: ×9 for another boss, ×1 for a common).
+        /// </summary>
+        public static int KillXpRankMultiplier(string enemyId, bool isBoss)
+        {
+            if (!string.IsNullOrEmpty(enemyId))
+            {
+                if (IsMapBoss(enemyId))
+                {
+                    return MapBossKillXpMultiplier;
+                }
+
+                foreach (RegionBossSpawn spawn in AllSpawns)
+                {
+                    if (spawn.EnemyId == enemyId)
+                    {
+                        return WorldBossKillXpMultiplier;
+                    }
+                }
+            }
+
+            return EnemyLevelScaling.RankMultiplier(EnemyLevelScaling.RankOf(isBoss));
+        }
+
         /// <summary>How long the body of one that "never dies" stays before it has withdrawn.</summary>
         public const float WithdrawSeconds = 2.5f;
 

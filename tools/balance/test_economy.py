@@ -169,3 +169,14 @@ def test_gold_has_destinations_above_100(eco, world):
     assert rows[-1].respec > rows[0].respec and rows[-1].refine > rows[0].refine
     # the cap is what keeps the repair of the sets of Regions 13-16 (4 700-10 400 of value) below a farming hour of gold
     assert all(r.repair / r.income <= 0.30 for r in rows)
+
+
+def test_bosses_pay_their_xp_per_hour(eco, world):
+    """Sugestão 4 (Docs/Balanco100a500.md §5.3): camping a world boss (RegionBossRules.WorldBossKillXpMultiplier) pays 1.1-1.5x the
+    XP per hour of farming the commons of its level; a map boss of the fichas (MapBossKillXpMultiplier) 0.8-1.2x."""
+    assert len(world.bosses) == 12 and len(ec.load_map_bosses()) == 6
+    assert ec.boss_camp_problems(eco, world.bosses) == []
+    world_rank, map_rank = ec.boss_xp_ranks()
+    assert world_rank > map_rank > eco.kill_xp.ranks["MapBoss"]
+    for _b, _xp, before, camp, commons in ec.world_boss_xp(eco, world.bosses):
+        assert before / commons < 0.6 < ec.BUDGET_BOSS_CAMP[0] <= camp / commons  # was ~0.51x with the generic x9

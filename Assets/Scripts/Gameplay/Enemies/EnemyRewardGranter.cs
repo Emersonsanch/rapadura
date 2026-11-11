@@ -52,7 +52,9 @@ namespace Rapadura.Gameplay.Enemies
             // the MU-style level-difference cut (Docs/Progressao500.md §1.2). Campaign encounters have no level source.
             if (enemy.TryGetComponent(out ICreatureLevelSource leveled))
             {
-                reward = EnemyLevelScaling.LeveledKillExperience(reward, leveled.CreatureLevel, EnemyLevelScaling.RankOf(enemy.Definition.IsBoss), killerStats.Level);
+                // The rank: x23 a world boss, x18 a map boss (RegionBossRules.KillXpRankMultiplier), x9 another boss, x1 a common.
+                int rankMultiplier = RegionBossRules.KillXpRankMultiplier(enemy.Definition.name, enemy.Definition.IsBoss);
+                reward = EnemyLevelScaling.LeveledKillExperience(reward, leveled.CreatureLevel, rankMultiplier, killerStats.Level);
             }
 
             // "Presa do dia" / "Bicho destaque do dia" (EnemyRewardHooks; x1 when nothing is installed).

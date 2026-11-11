@@ -52,6 +52,7 @@ ACCESS_CS = os.path.join(GAMEPLAY, "World", "Map", "MapAccessRules.cs")
 REQUIREMENT_CS = os.path.join(GAMEPLAY, "World", "Map", "MapRequirementRules.cs")
 HOUSE_CRAFT_CS = os.path.join(GAMEPLAY, "Housing", "Sources", "HouseCraftRules.cs")
 BOSS_CS = os.path.join(GAMEPLAY, "Enemies", "RegionBossRules.cs")
+MAP_BOSS_CS = os.path.join(GAMEPLAY, "Enemies", "RegionBossRules.MapBosses.cs")
 SET_CS = os.path.join(GAMEPLAY, "Items", "Sets", "ArmorSetRules.cs")
 ITEMS_DIR = os.path.join(rd.ROOT, "Assets", "Resources", "Items")
 
@@ -76,6 +77,8 @@ BUDGET_QUEST_SHARE_BAND_ABOVE_100 = (0.03, 0.40)
 BUDGET_QUEST_SHARE_ABOVE_100 = (0.05, 0.30)
 BUDGET_FARE_MINUTES = 60.0  # a Barca fare costs at most an hour of farming gold at its warp level
 BUDGET_KEEPSAKE_KILLS = 20.0  # expected kills of a world boss to collect what the house recipes spend of its keepsake
+BUDGET_BOSS_CAMP = (1.1, 1.5)  # camping a world boss pays 1.1-1.5x the XP/h of farming the commons of its level (sugestão 4)
+BUDGET_MAP_BOSS_CAMP = (0.8, 1.2)  # a map boss of the fichas (MapSpawns) about the same as the commons
 BUDGET_SET_KILLS = 1500.0  # expected kills farming the set's region for both pieces (~7.5 h of kills)
 PERIGOSO_DELTA = 30
 # "Ainda assusta?": at +30 one pull of two commons should take at least this share of the hero's health (a second pull in
@@ -145,11 +148,15 @@ class KillXp:
         return int(math.floor(value + 0.5))
 
     def of(self, level: int, rank: str) -> int:
+        return self.times(level, self.ranks[rank])
+
+    def times(self, level: int, multiplier: int) -> int:
+        """EnemyLevelScaling.KillExperienceTimes(level, multiplier)."""
         if level <= self.campaign:
             value = self.low_scale * ((level + 1) / 3.0) ** self.low_exp
         else:
             value = self.high_at_cap * (level / self.campaign) ** self.high_exp
-        return int(math.floor(value * self.ranks[rank] + 0.5))
+        return int(math.floor(value * max(0, multiplier) + 0.5))
 
 
 def load_kill_xp() -> KillXp:
@@ -767,14 +774,57 @@ def campaign_xp_check(data: rd.GameData, kill_xp: KillXp) -> list:
     return out
 
 
-def world_boss_xp(eco: Economy, bosses: list, kill_seconds: float = 18.0) -> list:
-    """XP of camping a world boss (rank MapBoss, ×9: EnemyLevelScaling.RankOf(isBoss)) against farming commons, per hour."""
+BOSS_KILL_SECONDS = 18.0  # the fight on top of RegionBossRules.RespawnSeconds when camping a boss
+
+
+def boss_xp_ranks() -> tuple:
+    """RegionBossRules.WorldBossKillXpMultiplier / MapBossKillXpMultiplier (kill XP in commons of the boss's level)."""
+    src = _read(BOSS_CS)
+    return int(_const(src, "WorldBossKillXpMultiplier")), int(_const(src, "MapBossKillXpMultiplier"))
+
+
+def load_map_bosses() -> list:
+    """RegionBossRules.MapSpawns (enemy id, level), the six map bosses of the fichas."""
+    src = _read(MAP_BOSS_CS)
+    ids = dict(re.findall(r'const string (\w+Id) = "(enemy_\w+)"', src))
+    return [(ids[name], int(level)) for name, level in
+            re.findall(r"new RegionBossSpawn\((\w+Id),[^;]*?,\s*(\d+),\s*EnemyProjectileKind", src)]
+
+
+def boss_camp_rows(eco: Economy, levels: list, rank: int, kill_seconds: float = BOSS_KILL_SECONDS) -> list:
+    """(level, kill XP, XP/h camping, XP/h farming commons, ratio) of a boss of each level paying `rank` commons a kill."""
+    rows = []
+    for level in levels:
+        xp = eco.kill_xp.times(level, rank)
+        camp = xp * 3600.0 / (RESPAWN_SECONDS + kill_seconds)
+        commons = eco.kill_xp.common(level) * KILLS_PER_HOUR
+        rows.append((level, xp, camp, commons, camp / commons))
+    return rows
+
+
+def world_boss_xp(eco: Economy, bosses: list, kill_seconds: float = BOSS_KILL_SECONDS) -> list:
+    """XP of camping a world boss (RegionBossRules.WorldBossKillXpMultiplier commons a kill) against farming commons, per hour;
+    also what the generic boss rank (MapBoss, ×9: EnemyLevelScaling.RankOf(isBoss)) paid before sugestão 4."""
+    world_rank, _ = boss_xp_ranks()
     rows = []
     for b in bosses:
-        xp = eco.kill_xp.of(b.level, "MapBoss")
-        camp = xp * 3600.0 / (RESPAWN_SECONDS + kill_seconds)
-        rows.append((b, xp, eco.kill_xp.of(b.level, "WorldBoss"), camp, eco.kill_xp.common(b.level) * KILLS_PER_HOUR))
+        level, xp, camp, commons, _ratio = boss_camp_rows(eco, [b.level], world_rank, kill_seconds)[0]
+        before = eco.kill_xp.of(b.level, "MapBoss") * 3600.0 / (RESPAWN_SECONDS + kill_seconds)
+        rows.append((b, xp, before, camp, commons))
     return rows
+
+
+def boss_camp_problems(eco: Economy, bosses: list) -> list:
+    """Bosses whose camping XP/h falls out of BUDGET_BOSS_CAMP (world) / BUDGET_MAP_BOSS_CAMP (map)."""
+    world_rank, map_rank = boss_xp_ranks()
+    out = []
+    for level, _xp, _camp, _commons, ratio in boss_camp_rows(eco, [b.level for b in bosses], world_rank):
+        if not BUDGET_BOSS_CAMP[0] <= ratio <= BUDGET_BOSS_CAMP[1]:
+            out.append(("world_boss", level, round(ratio, 2)))
+    for level, _xp, _camp, _commons, ratio in boss_camp_rows(eco, [lv for _, lv in load_map_bosses()], map_rank):
+        if not BUDGET_MAP_BOSS_CAMP[0] <= ratio <= BUDGET_MAP_BOSS_CAMP[1]:
+            out.append(("map_boss", level, round(ratio, 2)))
+    return out
 
 
 def with_authored_quest_xp(eco: Economy) -> Economy:
@@ -971,11 +1021,25 @@ def report_perigoso(rows: list) -> str:
 
 def report_xp_extras(eco: Economy, data: rd.GameData, bosses: list) -> str:
     lines = ["Campanha (asset × tabela no nível da banda): " + " · ".join(
-        f"{name} {band}: {asset:.0f} × {table}" for name, band, asset, table in campaign_xp_check(data, eco.kill_xp)) + ".", "",
-             "| Chefe do mundo (nível) | XP hoje (×9, MapBoss) | XP se fosse ×30 (WorldBoss, §1.2) | XP/h acampando o chefe (×9) | XP/h caçando comuns |",
-             "|---|---|---|---|---|"]
-    for b, xp, world_xp, camp, commons in world_boss_xp(eco, bosses):
-        lines.append(f"| {data.enemies[b.enemy_id].name.strip(chr(34))} ({b.level}) | {_n(xp)} | {_n(world_xp)} | {_n(camp)} | {_n(commons)} |")
+        f"{name} {band}: {asset:.0f} × {table}" for name, band, asset, table in campaign_xp_check(data, eco.kill_xp)) + ".", ""]
+    world_rank, map_rank = boss_xp_ranks()
+    lines += [f"Acampar o chefe = um abate a cada {RESPAWN_SECONDS:.0f} s de volta + {BOSS_KILL_SECONDS:.0f} s de luta; caçar comuns = "
+              f"{KILLS_PER_HOUR:.0f} abates/h. Chefe do mundo paga ×{world_rank} um comum do nível "
+              f"(`RegionBossRules.WorldBossKillXpMultiplier`, orçamento {BUDGET_BOSS_CAMP[0]:g}–{BUDGET_BOSS_CAMP[1]:g}× os comuns), "
+              f"chefe de mapa ×{map_rank} (`MapBossKillXpMultiplier`, {BUDGET_MAP_BOSS_CAMP[0]:g}–{BUDGET_MAP_BOSS_CAMP[1]:g}×); "
+              "antes, os dois ×9 (o posto genérico de chefe, `EnemyLevelScaling.RankOf`).", "",
+              f"| Chefe do mundo (nível) | XP por abate (×{world_rank}) | XP/h acampando: antes (×9) → agora | XP/h caçando comuns | Acampar / caçar |",
+              "|---|---|---|---|---|"]
+    for b, xp, before, camp, commons in world_boss_xp(eco, bosses):
+        lines.append(f"| {data.enemies[b.enemy_id].name.strip(chr(34))} ({b.level}) | {_n(xp)} | {_n(before)} → {_n(camp)} | {_n(commons)} | "
+                     f"{before / commons:.2f}× → {camp / commons:.2f}× |")
+    lines += ["", f"| Chefe de mapa (nível) | XP por abate (×{map_rank}) | XP/h acampando: antes (×9) → agora | XP/h caçando comuns | Acampar / caçar |",
+              "|---|---|---|---|---|"]
+    maps = load_map_bosses()
+    for (enemy_id, _), (level, xp, camp, commons, ratio) in zip(maps, boss_camp_rows(eco, [lv for _, lv in maps], map_rank)):
+        before = eco.kill_xp.of(level, "MapBoss") * 3600.0 / (RESPAWN_SECONDS + BOSS_KILL_SECONDS)
+        name = data.enemies[enemy_id].name.strip(chr(34)) if enemy_id in data.enemies else enemy_id
+        lines.append(f"| {name} ({level}) | {_n(xp)} | {_n(before)} → {_n(camp)} | {_n(commons)} | {before / commons:.2f}× → {ratio:.2f}× |")
     return "\n".join(lines)
 
 

@@ -74,5 +74,57 @@ namespace Rapadura.Tests
                 Object.DestroyImmediate(go);
             }
         }
+
+        [Test]
+        public void RegionBosses_TakeTheirOwnXpRank_WorldX23_MapX18()
+        {
+            Assert.AreEqual(23, RegionBossRules.WorldBossKillXpMultiplier);
+            Assert.AreEqual(18, RegionBossRules.MapBossKillXpMultiplier);
+            Assert.AreEqual(12, RegionBossRules.AllSpawns.Count);
+            foreach (RegionBossSpawn spawn in RegionBossRules.AllSpawns)
+            {
+                Assert.AreEqual(RegionBossRules.WorldBossKillXpMultiplier, RegionBossRules.KillXpRankMultiplier(spawn.EnemyId, true), spawn.EnemyId);
+            }
+
+            Assert.AreEqual(6, RegionBossRules.MapSpawns.Count);
+            foreach (RegionBossSpawn spawn in RegionBossRules.MapSpawns)
+            {
+                Assert.AreEqual(RegionBossRules.MapBossKillXpMultiplier, RegionBossRules.KillXpRankMultiplier(spawn.EnemyId, true), spawn.EnemyId);
+            }
+
+            Assert.AreEqual(9, RegionBossRules.KillXpRankMultiplier("enemy_some_campaign_boss", true), "any other boss: the generic x9");
+            Assert.AreEqual(1, RegionBossRules.KillXpRankMultiplier("enemy_some_common", false));
+            Assert.AreEqual(1, RegionBossRules.KillXpRankMultiplier(null, false));
+        }
+
+        [Test]
+        public void KillExperienceTimes_MatchesTheRanks_AndTheLeveledPathTakesIt()
+        {
+            foreach (EnemyRank rank in new[] { EnemyRank.Common, EnemyRank.Elite, EnemyRank.MapBoss, EnemyRank.WorldBoss })
+            {
+                Assert.AreEqual(EnemyLevelScaling.KillExperience(200, rank), EnemyLevelScaling.KillExperienceTimes(200, EnemyLevelScaling.RankMultiplier(rank)), rank.ToString());
+            }
+
+            Assert.AreEqual(0, EnemyLevelScaling.KillExperienceTimes(200, -3), "a negative multiplier pays nothing");
+            int common = EnemyLevelScaling.KillExperience(200);
+            Assert.AreEqual(23 * common, EnemyLevelScaling.KillExperienceTimes(200, 23), 23);
+            Assert.AreEqual(EnemyLevelScaling.KillExperienceTimes(200, 23), EnemyLevelScaling.LeveledKillExperience(10, 200, 23, 200));
+            Assert.AreEqual(90, EnemyLevelScaling.LeveledKillExperience(90, 10, 23, 10), "up to 15 the asset XP is kept");
+        }
+
+        [Test]
+        public void CampingAWorldBoss_PaysAbout1Point3TheCommons_AMapBossAbout1()
+        {
+            // A kill every RespawnSeconds + ~18 s of fight against 200 commons an hour (Progressao500 §1.3).
+            double killsPerHour = 3600.0 / (RegionBossRules.RespawnSeconds + 18.0);
+            foreach (int level in new[] { 72, 150, 264, 478 })
+            {
+                double commons = EnemyLevelScaling.KillExperience(level) * 200.0;
+                double world = EnemyLevelScaling.KillExperienceTimes(level, RegionBossRules.WorldBossKillXpMultiplier) * killsPerHour / commons;
+                double map = EnemyLevelScaling.KillExperienceTimes(level, RegionBossRules.MapBossKillXpMultiplier) * killsPerHour / commons;
+                Assert.That(world, Is.InRange(1.1, 1.5), $"world boss {level}");
+                Assert.That(map, Is.InRange(0.8, 1.2), $"map boss {level}");
+            }
+        }
     }
 }

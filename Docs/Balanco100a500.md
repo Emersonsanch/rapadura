@@ -322,8 +322,17 @@ Piso de vida base 170 nos comuns do mundo aberto (aplicado no jogo do nível 100
      de sobra para casa, roupa e montaria. Tabela em 5.4 "Destinos do ouro acima do 100".
    - Não usados: móveis de luxo nas cidades altas (pede itens novos no `CatalogoCasa.md` com modelo), montarias raras à
      venda (pede montaria nova), tingimento (as tintas custam 5–30 e são compra única).
-4. **Chefe do mundo vale menos que comuns:** acampando (×9, MapBoss, respawn 300 s) dá ~51% do XP/h de caçar comuns do
-   mesmo nível. Se o chefe deve compensar, multiplicador **×18** empata e ×30 (WorldBoss, §1.2) dá ~1,7×.
+4. **[APLICADA] XP de chefe com posto próprio** (2026-11-11): antes, acampando (×9, MapBoss, respawn 300 s) o chefe dava
+   ~51% do XP/h de caçar comuns do mesmo nível. Agora o abate de um chefe com nível próprio paga um múltiplo do comum do
+   nível (`EnemyLevelScaling.KillExperienceTimes`) escolhido por `RegionBossRules.KillXpRankMultiplier`, lido em
+   `EnemyRewardGranter`: os **12 chefes do mundo** (`MidSpawns` + `Spawns`) **×23** (`WorldBossKillXpMultiplier`) e os
+   **6 chefes de mapa** (`MapSpawns`) **×18** (`MapBossKillXpMultiplier`); qualquer outro chefe continua ×9 e os assets
+   não mudam (acima do nível 15 o XP do asset não entra). Acampar (um abate a cada 300 + 18 s) contra 200 comuns/h:
+   chefe do mundo **0,51× → 1,30×** (Hedammu 72: 31 291 → 79 958 XP/h contra 61 400; Āz 478: 2,94 → 7,51 milhões contra
+   5,77), chefe de mapa **0,51× → 1,02×** (Cortador de Cordas 160: 212 660 → 425 321 contra 417 400). Vale a pena sem
+   virar a única forma de subir: o chefe volta só a cada 5 min e ×30 (1,7×) deixaria a caça de lado. Travado em
+   `test_bosses_pay_their_xp_per_hour` (mundo 1,1–1,5×, mapa 0,8–1,2×). Os marcos de 5.1 não mudam (a simulação sobe só
+   com missões e comuns).
 5. **Faixas sem missão (nova):** 121–131, 161–171, 231–251, 271–291, 311–331, 351–411 e 431–481 não têm Carta nem missão
    de cidade e ficam em 0%. Uma missão de cidade (25%) ou uma terceira Carta por região nessas faixas leva o total de 101–500
    para perto dos 20%.
@@ -395,20 +404,31 @@ XP e ouro de missão por fonte: meio: 15 missões, 200 479 XP, 1 650 ouro · car
 
 Campanha (asset × tabela no nível da banda): Forest 3: 10 × 13 · Desert 7: 18 × 24 · Mountain 10: 28 × 32 · Caves 15: 40 × 45.
 
-| Chefe do mundo (nível) | XP hoje (×9, MapBoss) | XP se fosse ×30 (WorldBoss, §1.2) | XP/h acampando o chefe (×9) | XP/h caçando comuns |
+Acampar o chefe = um abate a cada 300 s de volta + 18 s de luta; caçar comuns = 200 abates/h. Chefe do mundo paga ×23 um comum do nível (`RegionBossRules.WorldBossKillXpMultiplier`, orçamento 1.1–1.5× os comuns), chefe de mapa ×18 (`MapBossKillXpMultiplier`, 0.8–1.2×); antes, os dois ×9 (o posto genérico de chefe, `EnemyLevelScaling.RankOf`).
+
+| Chefe do mundo (nível) | XP por abate (×23) | XP/h acampando: antes (×9) → agora | XP/h caçando comuns | Acampar / caçar |
 |---|---|---|---|---|
-| Hedammu, a Serpente Gulosa do Mar (72) | 2 764 | 9 213 | 31 291 | 61 400 |
-| O Lodo-que-Engole (88) | 4 474 | 14 913 | 50 649 | 99 400 |
-| Aydahar, o Dragão do Passo (98) | 5 793 | 19 308 | 65 581 | 128 800 |
-| Os Quatro Gulosos (140) | 13 634 | 45 448 | 154 347 | 303 000 |
-| Ohya, o Gigante Irmão (150) | 16 090 | 53 632 | 182 151 | 357 600 |
-| O Rei-Vendaval (200) | 32 092 | 106 973 | 363 306 | 713 200 |
-| O Velho Kul (240) | 49 709 | 165 695 | 562 743 | 1 104 600 |
-| O Glutão de Brasa (280) | 71 962 | 239 874 | 814 664 | 1 599 200 |
-| Apep, a Serpente que Bebe o Rio (320) | 99 148 | 330 494 | 1 122 430 | 2 203 200 |
-| O Sonho da Destruição (360) | 131 538 | 438 459 | 1 489 109 | 2 923 000 |
-| A Grande Treva (440) | 212 917 | 709 724 | 2 410 381 | 4 731 400 |
-| Āz, a Capitã Cobiçosa (478) | 259 748 | 865 825 | 2 940 543 | 5 772 200 |
+| Hedammu, a Serpente Gulosa do Mar (72) | 7 063 | 31 291 → 79 958 | 61 400 | 0.51× → 1.30× |
+| O Lodo-que-Engole (88) | 11 433 | 50 649 → 129 430 | 99 400 | 0.51× → 1.30× |
+| Aydahar, o Dragão do Passo (98) | 14 803 | 65 581 → 167 581 | 128 800 | 0.51× → 1.30× |
+| Os Quatro Gulosos (140) | 34 843 | 154 347 → 394 449 | 303 000 | 0.51× → 1.30× |
+| Ohya, o Gigante Irmão (150) | 41 118 | 182 151 → 465 487 | 357 600 | 0.51× → 1.30× |
+| O Rei-Vendaval (200) | 82 013 | 363 306 → 928 449 | 713 200 | 0.51× → 1.30× |
+| O Velho Kul (240) | 127 033 | 562 743 → 1 438 109 | 1 104 600 | 0.51× → 1.30× |
+| O Glutão de Brasa (280) | 183 903 | 814 664 → 2 081 921 | 1 599 200 | 0.51× → 1.30× |
+| Apep, a Serpente que Bebe o Rio (320) | 253 378 | 1 122 430 → 2 868 430 | 2 203 200 | 0.51× → 1.30× |
+| O Sonho da Destruição (360) | 336 152 | 1 489 109 → 3 805 494 | 2 923 000 | 0.51× → 1.30× |
+| A Grande Treva (440) | 544 122 | 2 410 381 → 6 159 872 | 4 731 400 | 0.51× → 1.30× |
+| Āz, a Capitã Cobiçosa (478) | 663 799 | 2 940 543 → 7 514 706 | 5 772 200 | 0.51× → 1.30× |
+
+| Chefe de mapa (nível) | XP por abate (×18) | XP/h acampando: antes (×9) → agora | XP/h caçando comuns | Acampar / caçar |
+|---|---|---|---|---|
+| O Cortador de Cordas (160) | 37 570 | 212 660 → 425 321 | 417 400 | 0.51× → 1.02× |
+| O Sino que Não Para (168) | 42 237 | 239 083 → 478 155 | 469 400 | 0.51× → 1.02× |
+| A Morsa-Rainha (196) | 61 146 | 346 109 → 692 219 | 679 400 | 0.51× → 1.02× |
+| O Mamute Avô (214) | 75 500 | 427 358 → 854 717 | 838 800 | 0.51× → 1.02× |
+| O Rei Shisa do Telhado (236) | 95 487 | 540 487 → 1 080 985 | 1 061 000 | 0.51× → 1.02× |
+| O Mestre das Nove Fornalhas (264) | 124 969 | 707 377 → 1 414 743 | 1 388 600 | 0.51× → 1.02× |
 
 #### XP de missão proporcional ao nível (QuestXpRules)
 

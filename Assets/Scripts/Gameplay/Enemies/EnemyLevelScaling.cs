@@ -120,13 +120,17 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>Kill XP of a creature of <paramref name="level"/> and <paramref name="rank"/> (§1.2). Campaign encounters keep
         /// their assets' XP; a creature with its own level (open maps, <see cref="ICreatureLevelSource"/>) gets this above the
         /// archetype level through <see cref="LeveledKillExperience"/>.</summary>
-        public static int KillExperience(int level, EnemyRank rank = EnemyRank.Common)
+        public static int KillExperience(int level, EnemyRank rank = EnemyRank.Common) => KillExperienceTimes(level, RankMultiplier(rank));
+
+        /// <summary><see cref="KillExperience(int, EnemyRank)"/> with an explicit multiplier over a common of the level (the
+        /// region bosses: <see cref="RegionBossRules.KillXpRankMultiplier"/>). A multiplier below 0 counts as 0.</summary>
+        public static int KillExperienceTimes(int level, int rankMultiplier)
         {
             level = ClampLevel(level);
             double common = level <= Rapadura.Gameplay.Player.LevelCurveMath.CampaignLevels
                 ? LowKillXpScale * Math.Pow((level + 1) / 3.0, LowKillXpExponent)
                 : HighKillXpAtCampaignCap * Math.Pow(level / (double)Rapadura.Gameplay.Player.LevelCurveMath.CampaignLevels, HighKillXpExponent);
-            return (int)Math.Floor(common * RankMultiplier(rank) + 0.5);
+            return (int)Math.Floor(common * Math.Max(0, rankMultiplier) + 0.5);
         }
 
         public static int RankMultiplier(EnemyRank rank)
@@ -177,10 +181,15 @@ namespace Rapadura.Gameplay.Enemies
         /// the 1–15 pace is today's), above it the table (<see cref="KillExperience"/>); then the level-difference
         /// multiplier against <paramref name="heroLevel"/>. Rounded; a positive reward never drops to 0.
         /// </summary>
-        public static int LeveledKillExperience(int assetExperience, int creatureLevel, EnemyRank rank, int heroLevel)
+        public static int LeveledKillExperience(int assetExperience, int creatureLevel, EnemyRank rank, int heroLevel) =>
+            LeveledKillExperience(assetExperience, creatureLevel, RankMultiplier(rank), heroLevel);
+
+        /// <summary><see cref="LeveledKillExperience(int, int, EnemyRank, int)"/> with an explicit multiplier over a common of the
+        /// level (<see cref="KillExperienceTimes"/>): what <c>EnemyRewardGranter</c> uses, so the region bosses take theirs.</summary>
+        public static int LeveledKillExperience(int assetExperience, int creatureLevel, int rankMultiplier, int heroLevel)
         {
             int level = ClampLevel(creatureLevel);
-            int baseExperience = IsIdentity(level) ? Math.Max(0, assetExperience) : KillExperience(level, rank);
+            int baseExperience = IsIdentity(level) ? Math.Max(0, assetExperience) : KillExperienceTimes(level, rankMultiplier);
             if (baseExperience <= 0)
             {
                 return 0;
