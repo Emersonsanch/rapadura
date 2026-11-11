@@ -55,9 +55,9 @@ namespace Rapadura.Tests.PlayMode
             (10, OverworldLayouts.FarnkeshRegionId, new[] { typeof(FarnkeshMechanicsDriver) }),
             (11, OverworldLayouts.MarGeladoRegionId, new[] { typeof(MarGeladoMechanicsDriver) }),
             (12, OverworldLayouts.HinokuraRegionId, new[] { typeof(HinokuraMechanicsDriver) }),
-            (13, OverworldLayouts.RioRegionId, new[] { typeof(RioMechanicsDriver) }),
+            (13, OverworldLayouts.RioRegionId, new[] { typeof(RioMechanicsDriver), typeof(RioRaftMechanicsDriver) }),
             (14, OverworldLayouts.MisturaRegionId, new[] { typeof(MisturaMechanicsDriver) }),
-            (15, OverworldLayouts.ProfundoRegionId, new[] { typeof(ProfundoMechanicsDriver), typeof(ProfundoGateMechanicsDriver) }),
+            (15, OverworldLayouts.ProfundoRegionId, new[] { typeof(ProfundoMechanicsDriver), typeof(ProfundoGateMechanicsDriver), typeof(ProfundoPathsMechanicsDriver) }),
             (16, OverworldLayouts.CeuRegionId, new[] { typeof(CeuMechanicsDriver) }),
         };
 

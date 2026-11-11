@@ -25,6 +25,38 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static ProfundoGate[] _profundoGates;
 
+        /// <summary>
+        /// The rising currents of the Cova do Vento (86, <c>ProfundoUpdraftRules</c>): four vents 30 m round the Lâmpada 3 (outside its 18 m of flat
+        /// ground, clear of its roads west, east and south-south-east), each up to a landing on the outer ring, 160–200 m off the roads: north-west and
+        /// south-west on the Plataformas Soltas, north-east and south-east on the Correntes Ascendentes.
+        /// </summary>
+        public static ProfundoUpdraft[] ProfundoUpdrafts => _profundoUpdrafts ??= new[]
+        {
+            new ProfundoUpdraft("corrente_noroeste", LampadaVentoOffset + new Vector2(-15f, 26f), new Vector2(-260f, 1150f)),
+            new ProfundoUpdraft("corrente_nordeste", LampadaVentoOffset + new Vector2(15f, 26f), new Vector2(500f, 1150f)),
+            new ProfundoUpdraft("corrente_sudoeste", LampadaVentoOffset + new Vector2(-21f, -21f), new Vector2(-200f, 760f)),
+            new ProfundoUpdraft("corrente_sudeste", LampadaVentoOffset + new Vector2(21f, -21f), new Vector2(470f, 780f)),
+        };
+
+        private static ProfundoUpdraft[] _profundoUpdrafts;
+
+        /// <summary>
+        /// The deep stretches of the Cova do Lodo (87, <c>ProfundoSluiceRules</c>): one band of 56 m across the whole column in the Salões Alagados
+        /// (z −480, on the road from the Lâmpada 4 to the Cova da Treva) and one in the Comportas (z 480, on the road north to the Túneis Cegos);
+        /// each lever stands on the Lâmpada 4 side, 195 m east of the road and clear of the pools of black water.
+        /// </summary>
+        public static readonly ProfundoSluice[] ProfundoSluices =
+        {
+            new ProfundoSluice("saloes_alagados", Rect.MinMaxRect(840f, -508f, 1320f, -452f), new Vector2(1275f, -436f)),
+            new ProfundoSluice("comportas", Rect.MinMaxRect(840f, 452f, 1320f, 508f), new Vector2(1275f, 436f)),
+        };
+
+        /// <summary>
+        /// The cages of sparks of the Ponte do Novelo (89, <c>NoveloBridgeRules</c>): one at the pylon of each of flights 0–8 (alternate sides of the
+        /// causeway, 7 m off the road on its crest); freeing cage k lights flight k + 1.
+        /// </summary>
+        public static Vector2 NoveloCage(int cage) => NoveloPylonPosition(cage);
+
         private static Vector2 GateSpot(float degrees)
         {
             float a = degrees * Mathf.Deg2Rad;
