@@ -87,12 +87,70 @@
     flex-shrink: 1;
 }
 
+/* Region filter strip: one row of chips that scrolls sideways (16 regions never wrap off the card on a phone). */
+.ftw-filters {
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-height: 60px;
+    max-height: 72px;
+    margin: 0 0 6px 0;
+}
+
+.ftw-filters > .unity-scroll-view__content-viewport > .unity-scroll-view__content-container {
+    flex-direction: row;
+}
+
+.ftw-filter {
+    min-height: 48px;
+    height: auto;
+    min-width: 72px;
+    padding: 4px 12px 4px 12px;
+    margin: 0 6px 4px 0;
+    font-size: 15px;
+    white-space: nowrap;
+    border-radius: 8px;
+    border-width: 1px;
+    border-bottom-width: 4px;
+    border-color: var(--rap-panel-border);
+    background-color: var(--rap-brown);
+    color: var(--rap-cream-dim);
+}
+
+.ftw-filter--level {
+    border-bottom-color: var(--rap-cane-green);
+}
+
+.ftw-filter--on {
+    background-color: var(--rap-caramel);
+    color: var(--rap-cream);
+    -unity-font-style: bold;
+}
+
+.ftw-region {
+    border-left-width: 6px;
+    border-left-color: var(--rap-gold);
+    padding: 0 0 0 8px;
+    margin: 12px 0 6px 0;
+}
+
 .ftw-region-header {
     font-size: 19px;
     -unity-font-style: bold;
     color: var(--rap-gold-light);
-    margin: 12px 0 4px 2px;
+    margin: 0;
     white-space: normal;
+}
+
+.ftw-region-summary {
+    font-size: 13px;
+    color: var(--rap-cream-dim);
+    white-space: normal;
+}
+
+.ftw-empty {
+    margin: 16px 4px 0 4px;
+    white-space: normal;
+    color: var(--rap-cream-dim);
 }
 
 .ftw-row {
@@ -167,6 +225,32 @@
     height: auto;
     margin-left: 10px;
     white-space: normal;
+}
+
+.ftw-row__where {
+    font-size: 13px;
+    color: var(--rap-cream-dim);
+    -unity-font-style: italic;
+    white-space: normal;
+}
+
+/* Phone portrait (card narrower than FastTravelWindowController.NarrowCardWidth): the button drops under the text. */
+.ftw-card--narrow .ftw-row {
+    flex-wrap: wrap;
+}
+
+.ftw-card--narrow .ftw-row__body {
+    flex-basis: 70%;
+}
+
+.ftw-card--narrow .ftw-go {
+    min-width: 120px;
+    flex-grow: 1;
+    margin: 6px 0 0 0;
+}
+
+.ftw-card--narrow .ftw-title {
+    font-size: 22px;
 }
 
 .ftw-status {

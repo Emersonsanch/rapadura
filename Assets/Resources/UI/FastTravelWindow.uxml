@@ -21,7 +21,9 @@
                     <ui:Label name="ftw-gold" text="" class="ftw-chip rap-chip" />
                     <ui:Label name="ftw-overloaded" text="" class="ftw-chip ftw-chip--warning rap-chip" />
                 </ui:VisualElement>
-                <ui:ScrollView name="ftw-list" class="ftw-list" />
+                <!-- Region filter strip (Do meu nível · Todas · the 16 regions), built in code; scrolls sideways on a phone. -->
+                <ui:ScrollView name="ftw-filters" mode="Horizontal" horizontal-scroller-visibility="Auto" vertical-scroller-visibility="Hidden" class="ftw-filters" />
+                <ui:ScrollView name="ftw-list" mode="Vertical" horizontal-scroller-visibility="Hidden" class="ftw-list" />
                 <ui:Label name="ftw-status" text="" class="ftw-status" />
             </ui:VisualElement>
         </ui:VisualElement>

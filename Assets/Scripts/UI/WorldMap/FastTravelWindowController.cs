@@ -79,6 +79,9 @@ namespace Rapadura.UI.WorldMap
     /// can be walked into. "Mover" pays the fare from the bag (<see cref="InventoryManager.RemoveById"/>) and travels
     /// (<see cref="SceneTransitionService.TravelToMap"/>).
     /// <list type="bullet">
+    /// <item>100 maps in 16 regions: a sideways filter strip ("Do meu nível", "Todas", one chip per region with its
+    /// <see cref="MapRegionColors"/> colour; LB/RB or PgUp/PgDn cycle). The window opens on the hero's region
+    /// (<see cref="DefaultRegion"/>) and builds only the rows in view.</item>
     /// <item>Opened by <b>M</b>, by the compass button (injected into the island-map HUD cluster; floating top-right in a
     /// playable map or a city walk) and by the Cais da Barca (the city hub delegates to it, a map's dock calls
     /// <see cref="MapModeController.DockReached"/>). Never during an encounter.</item>
@@ -110,7 +113,11 @@ namespace Rapadura.UI.WorldMap
         private Label _gold;
         private Label _overloaded;
         private ScrollView _list;
+        private ScrollView _filters;
+        private VisualElement _card;
         private Label _status;
+        private MapRegion? _regionFilter;
+        private bool _levelOnly;
         private Button _close;
 
         private FastTravelWindowRequest _request;
@@ -185,6 +192,143 @@ namespace Rapadura.UI.WorldMap
                 : check == MapAccessCheck.MissingRequirement ? status + " · " + MapTexts.RequirementHint(localization, map.SpecialRequirementTag)
                 : status;
             return new MapTravelRow(map, check, cost, MapTexts.NumberedName(localization, map), meta, requirement, status, button, hint);
+        }
+
+        // ---- Region / level filters (100 maps in 16 regions: one region at a time by default) ----
+
+        /// <summary>A map counts as "Do meu nível" when its monsters are within this many levels of the hero (either side).</summary>
+        public const int LevelFilterSpread = 12;
+
+        /// <summary>Below this card width (panel px) a row stacks its "Mover" button under the text (phone portrait).</summary>
+        public const float NarrowCardWidth = 620f;
+
+        public const string FilterChipPrefix = "ftw-filter-";
+        public const string FilterAllName = "ftw-filter-all";
+        public const string FilterLevelName = "ftw-filter-level";
+
+        /// <summary>The map's monsters are near <paramref name="level"/> (<see cref="LevelFilterSpread"/>), or the hero is inside its range.</summary>
+        public static bool FitsLevel(MapDefinition map, int level)
+        {
+            if (map == null)
+            {
+                return false;
+            }
+
+            return level + LevelFilterSpread >= map.MonsterLevelMin && level - LevelFilterSpread <= map.MonsterLevelMax;
+        }
+
+        /// <summary>The regions the list shows: only <paramref name="filter"/>, or every catalog region (in order) when null.</summary>
+        public static List<MapRegion> RegionsInView(MapRegion? filter)
+        {
+            var regions = new List<MapRegion>();
+            foreach (MapRegion region in MapCatalog.Regions)
+            {
+                if (!filter.HasValue || filter.Value == region)
+                {
+                    regions.Add(region);
+                }
+            }
+
+            return regions;
+        }
+
+        /// <summary>The maps listed under <paramref name="region"/>: all of them, or only those of the hero's level; the map the hero stands on always stays.</summary>
+        public static List<MapDefinition> MapsInView(MapRegion region, bool levelOnly, int level, string currentMapId = null)
+        {
+            var maps = new List<MapDefinition>();
+            foreach (MapDefinition map in MapCatalog.InRegion(region))
+            {
+                if (!levelOnly || FitsLevel(map, level) || map.Id == currentMapId)
+                {
+                    maps.Add(map);
+                }
+            }
+
+            return maps;
+        }
+
+        /// <summary>
+        /// The region the window opens on: the one of the map the hero stands on, else the region of the overworld zone the hero
+        /// walks in (a zone without a catalog map of its own), else the last region whose first maps the hero's level can walk into.
+        /// </summary>
+        public static MapRegion DefaultRegion(string currentMapId, MapRegion? overworldRegion, int level)
+        {
+            MapDefinition here = MapCatalog.Get(currentMapId);
+            if (here != null)
+            {
+                return here.Region;
+            }
+
+            if (overworldRegion.HasValue)
+            {
+                return overworldRegion.Value;
+            }
+
+            MapRegion best = MapCatalog.Regions[0];
+            foreach (MapRegion region in MapCatalog.Regions)
+            {
+                int lowest = int.MaxValue;
+                foreach (MapDefinition map in MapCatalog.InRegion(region))
+                {
+                    lowest = Mathf.Min(lowest, map.WalkLevelRequirement);
+                }
+
+                if (lowest != int.MaxValue && lowest <= Mathf.Max(1, level))
+                {
+                    best = region;
+                }
+            }
+
+            return best;
+        }
+
+        /// <summary>The next / previous filter (null = "Todas" sits before the first region), wrapping around.</summary>
+        public static MapRegion? CycleRegion(MapRegion? current, int step)
+        {
+            int count = MapCatalog.Regions.Count + 1;
+            int index = 0;
+            if (current.HasValue)
+            {
+                for (int i = 0; i < MapCatalog.Regions.Count; i++)
+                {
+                    if (MapCatalog.Regions[i] == current.Value)
+                    {
+                        index = i + 1;
+                        break;
+                    }
+                }
+            }
+
+            int next = ((index + step) % count + count) % count;
+            return next == 0 ? (MapRegion?)null : MapCatalog.Regions[next - 1];
+        }
+
+        /// <summary>"10 mapas · monstros Nv 1–40" for a region header.</summary>
+        public static string RegionSummary(LocalizationManager localization, MapRegion region)
+        {
+            int count = 0;
+            int min = int.MaxValue;
+            int max = 0;
+            foreach (MapDefinition map in MapCatalog.InRegion(region))
+            {
+                count++;
+                min = Mathf.Min(min, map.MonsterLevelMin);
+                max = Mathf.Max(max, map.MonsterLevelMax);
+            }
+
+            return MapTravelWindowTexts.Format(localization, MapTravelWindowTexts.RegionSummary, count, count > 0 ? min : 0, max);
+        }
+
+        /// <summary>
+        /// Panel size (UI Toolkit px) of a <paramref name="screenWidth"/>×<paramref name="screenHeight"/> screen under a
+        /// Scale With Screen Size panel (match width/height = <paramref name="match"/>), as DefaultPanelSettings does.
+        /// </summary>
+        public static Vector2 PanelSizeFor(float screenWidth, float screenHeight, Vector2 referenceResolution, float match)
+        {
+            float logW = Mathf.Log(screenWidth / referenceResolution.x, 2f);
+            float logH = Mathf.Log(screenHeight / referenceResolution.y, 2f);
+            float scale = Mathf.Pow(2f, Mathf.Lerp(logW, logH, match));
+            return new Vector2(screenWidth / scale, screenHeight / scale);
         }
 
         /// <summary>The default map trip: the Barca leaves for <paramref name="mapId"/> (Main.unity in map mode, arrival at its dock).</summary>
@@ -323,6 +467,14 @@ namespace Rapadura.UI.WorldMap
                 {
                     Close();
                 }
+                else if ((keyboard != null && keyboard.pageDownKey.wasPressedThisFrame) || (pad != null && pad.rightShoulder.wasPressedThisFrame))
+                {
+                    SelectRegionFilter(CycleRegion(_regionFilter, 1));
+                }
+                else if ((keyboard != null && keyboard.pageUpKey.wasPressedThisFrame) || (pad != null && pad.leftShoulder.wasPressedThisFrame))
+                {
+                    SelectRegionFilter(CycleRegion(_regionFilter, -1));
+                }
             }
             else if (keyboard != null && keyboard.mKey.wasPressedThisFrame && !GameplayPause.IsPausedByOthers(this))
             {
@@ -385,7 +537,11 @@ namespace Rapadura.UI.WorldMap
             _releasePauseAtFrame = -1;
             GameplayPause.Acquire(this);
             _status.text = string.Empty;
+            MapModeController mode = MapModeController.Current;
+            _regionFilter = DefaultRegion(mode != null ? mode.MapId : null, mode != null && mode.Overworld != null ? mode.Overworld.Region : (MapRegion?)null,
+                HeroLevelNow());
             Render();
+            _list.scrollOffset = Vector2.zero;
             SetRootVisible(true);
             return true;
         }
@@ -517,6 +673,17 @@ namespace Rapadura.UI.WorldMap
             _gold = _layer.Q<Label>("ftw-gold");
             _overloaded = _layer.Q<Label>("ftw-overloaded");
             _list = _layer.Q<ScrollView>("ftw-list");
+            _list.mode = ScrollViewMode.Vertical;
+            _list.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
+            _filters = _layer.Q<ScrollView>("ftw-filters");
+            if (_filters != null)
+            {
+                _filters.mode = ScrollViewMode.Horizontal;
+                _filters.verticalScrollerVisibility = ScrollerVisibility.Hidden;
+            }
+
+            _card = _layer.Q<VisualElement>("ftw-card");
+            _card?.RegisterCallback<GeometryChangedEvent>(evt => _card.EnableInClassList("ftw-card--narrow", evt.newRect.width > 0f && evt.newRect.width < NarrowCardWidth));
             _status = _layer.Q<Label>("ftw-status");
             _close = _layer.Q<Button>("ftw-close");
             _close.clicked -= Close;
@@ -570,30 +737,44 @@ namespace Rapadura.UI.WorldMap
             _overloaded.style.display = overloaded ? DisplayStyle.Flex : DisplayStyle.None;
             _close.text = MapTexts.Get(localization, MapTexts.Close);
 
+            RenderFilters(localization);
+
             _list.Clear();
             Button first = null;
             Func<string, bool> hasRequirement = MapRequirementHeroState.LookupFor(bag);
             Func<string, bool> unvisitedStop = UnvisitedStopLookup();
-            foreach (MapRegion region in MapCatalog.Regions)
+            int shownMaps = 0;
+            foreach (MapRegion region in RegionsInView(_regionFilter))
             {
-                var header = new Label(MapTexts.RegionName(localization, region));
-                header.AddToClassList("ftw-region-header");
-                _list.Add(header);
-
+                List<MapDefinition> maps = MapsInView(region, _levelOnly, level, here);
                 BiomeType? biome = MapCatalog.LegacyBiomeOf(region);
-                CitySpec city = map != null ? CityCatalog.ForRegion(biome) : null;
+                CitySpec city = map != null && biome.HasValue ? CityCatalog.ForRegion(biome) : null;
+                // "Todas" + "Do meu nível": regions with nothing for this level are skipped instead of showing bare headers.
+                if (maps.Count == 0 && city == null && !_regionFilter.HasValue)
+                {
+                    continue;
+                }
+
+                _list.Add(RegionHeader(localization, region));
+
                 if (city != null)
                 {
                     Button go = AddCityRow(city, map, gold, localization);
                     first ??= go;
                 }
 
-                foreach (MapDefinition def in MapCatalog.InRegion(region))
+                foreach (MapDefinition def in maps)
                 {
                     MapTravelRow row = BuildMapRow(def, level, hero, gold, overloaded, here, busy, hasRequirement, localization, unvisitedStop);
-                    Button go = AddMapRow(row);
+                    Button go = AddMapRow(row, localization);
                     first ??= go;
+                    shownMaps++;
                 }
+            }
+
+            if (shownMaps == 0)
+            {
+                _list.Add(NewLabel(MapTravelWindowTexts.Format(localization, MapTravelWindowTexts.EmptyLevel, level), "ftw-empty"));
             }
 
             (first ?? _close).Focus();
@@ -637,7 +818,7 @@ namespace Rapadura.UI.WorldMap
             return row.CanTravel ? go : null;
         }
 
-        private Button AddMapRow(MapTravelRow row)
+        private Button AddMapRow(MapTravelRow row, LocalizationManager localization)
         {
             var element = new VisualElement { name = MapRowPrefix + row.Map.Id };
             element.AddToClassList("ftw-row");
@@ -652,6 +833,13 @@ namespace Rapadura.UI.WorldMap
             body.Add(NewLabel(row.Name, "ftw-row__name"));
             body.Add(NewLabel(row.Meta, "ftw-row__meta"));
             body.Add(NewLabel(string.IsNullOrEmpty(row.Status) ? row.Requirement : row.Requirement + " · " + row.Status, "ftw-row__req"));
+            if (row.Check == MapAccessCheck.MissingRequirement && row.Map.HasSpecialRequirement)
+            {
+                // Where the missing item is sold / given, right on the row (it was only on click before).
+                body.Add(NewLabel(MapTravelWindowTexts.Format(localization, MapTravelWindowTexts.WhereToGet,
+                    MapTexts.RequirementHint(localization, row.Map.SpecialRequirementTag)), "ftw-row__where"));
+            }
+
             string hint = row.Hint;
             element.RegisterCallback<ClickEvent>(_ =>
             {
@@ -676,6 +864,95 @@ namespace Rapadura.UI.WorldMap
             return row.CanTravel ? go : null;
         }
 
+        private VisualElement RegionHeader(LocalizationManager localization, MapRegion region)
+        {
+            var header = new VisualElement { name = "ftw-region-" + region };
+            header.AddToClassList("ftw-region");
+            header.style.borderLeftColor = MapRegionColors.Of(region);
+            header.Add(NewLabel(MapTexts.RegionName(localization, region), "ftw-region-header"));
+            header.Add(NewLabel(RegionSummary(localization, region), "ftw-region-summary"));
+            return header;
+        }
+
+        private void RenderFilters(LocalizationManager localization)
+        {
+            if (_filters == null)
+            {
+                return;
+            }
+
+            _filters.Clear();
+            Button selected = null;
+
+            var level = new Button(ToggleLevelFilter) { name = FilterLevelName, focusable = true, text = MapTravelWindowTexts.Get(localization, MapTravelWindowTexts.FilterLevel) };
+            level.AddToClassList("ftw-filter");
+            level.AddToClassList("ftw-filter--level");
+            level.EnableInClassList("ftw-filter--on", _levelOnly);
+            _filters.Add(level);
+
+            var all = new Button(() => SelectRegionFilter(null)) { name = FilterAllName, focusable = true, text = MapTravelWindowTexts.Get(localization, MapTravelWindowTexts.FilterAll) };
+            all.AddToClassList("ftw-filter");
+            all.EnableInClassList("ftw-filter--on", !_regionFilter.HasValue);
+            _filters.Add(all);
+            if (!_regionFilter.HasValue)
+            {
+                selected = all;
+            }
+
+            foreach (MapRegion region in MapCatalog.Regions)
+            {
+                MapRegion target = region;
+                var chip = new Button(() => SelectRegionFilter(target)) { name = FilterChipPrefix + region, focusable = true, text = MapTexts.RegionName(localization, region) };
+                chip.AddToClassList("ftw-filter");
+                chip.style.borderBottomColor = MapRegionColors.Of(region);
+                bool on = _regionFilter.HasValue && _regionFilter.Value == region;
+                chip.EnableInClassList("ftw-filter--on", on);
+                _filters.Add(chip);
+                if (on)
+                {
+                    selected = chip;
+                }
+            }
+
+            if (selected != null)
+            {
+                Button chipToShow = selected;
+                // After layout, so the chip of a far region (Reinos do Céu) is scrolled into the strip on a phone.
+                chipToShow.schedule.Execute(() =>
+                {
+                    if (_filters != null && chipToShow.parent != null)
+                    {
+                        _filters.ScrollTo(chipToShow);
+                    }
+                });
+            }
+        }
+
+        private void SelectRegionFilter(MapRegion? region)
+        {
+            if (!_open)
+            {
+                return;
+            }
+
+            _regionFilter = region;
+            _status.text = string.Empty;
+            Render();
+            _list.scrollOffset = Vector2.zero;
+        }
+
+        private void ToggleLevelFilter()
+        {
+            if (!_open)
+            {
+                return;
+            }
+
+            _levelOnly = !_levelOnly;
+            Render();
+            _list.scrollOffset = Vector2.zero;
+        }
+
         private static Label NewLabel(string text, string className)
         {
             var label = new Label(text);
@@ -695,6 +972,11 @@ namespace Rapadura.UI.WorldMap
             }
 
             MapDefinition map = MapCatalog.Get(mapId);
+            if (map == null)
+            {
+                return;
+            }
+
             InventoryManager bag = _request.Bag;
             CharacterId? hero = ServiceLocator.TryGet(out CharacterSelectionState selection) ? selection.Selected : null;
             bool busy = _request.Map != null && CityFastTravelPanel.IsEventActive(_request.Map);
