@@ -724,8 +724,8 @@ namespace Rapadura.Gameplay.World.Cities
                 "A última caravana do Ammo subiu até o Cais da Coluna com um presente de cada cidade da ilha, e sombras vieram junto, escondidas entre os fardos. Elas querem chegar no céu sem pagar o caminho. O Ammo pediu aos primos que espantem elas antes de a Barca da Lua levar os fardos."),
             new LocalizationEntry("quest.city_cais_coluna_stowaways_in_the_bales.obj_chase_the_stowaways", "Chase the stowaway shadows out of the bales", "Espantar as sombras clandestinas dos fardos"),
             new LocalizationEntry("quest.city_cais_coluna_stowaways_in_the_bales.journal",
-                "With the shadows gone, Ammo untied the last bale himself, and there was nothing in it but a jar of Vó Edna's rapadura and a note in her hand. He sat down on the bale and laughed until he cried. He said he had carried that jar for three years without knowing, and that it was exactly like her.",
-                "Com as sombras embora, o Ammo desamarrou o último fardo ele mesmo, e dentro só tinha um pote de rapadura da Vó Edna e um bilhete com a letra dela. Ele sentou no fardo e riu até chorar. Disse que carregou aquele pote três anos sem saber, e que isso era a cara dela."),
+                "With the shadows gone, Ammo untied the last bale himself, and there was nothing in it but a jar of Vó Edna's Golden Brick and a note in her hand. He sat down on the bale and laughed until he cried. He said he had carried that jar for three years without knowing, and that it was exactly like her.",
+                "Com as sombras embora, o Ammo desamarrou o último fardo ele mesmo, e dentro só tinha um pote de Torrão Dourado da Vó Edna e um bilhete com a letra dela. Ele sentou no fardo e riu até chorar. Disse que carregou aquele pote três anos sem saber, e que isso era a cara dela."),
             new LocalizationEntry("quest.city_cais_coluna_stowaways_in_the_bales.offer",
                 "Jorge's grandchildren, up here where the road ends! Sit, sit. I am Ammo, and this is the last caravan I will ever lead, and eight shadows have stowed away in my bales. Your grandpa would say to charge them a fare. Chase them off instead.",
                 "Os netos do Jorge, aqui em cima onde a estrada acaba! Senta, senta. Eu sou o Ammo, e essa é a última caravana que eu vou puxar, e oito sombras se esconderam nos meus fardos. O vô de vocês diria para cobrar passagem. Espantem elas, que é melhor."),
@@ -749,6 +749,9 @@ namespace Rapadura.Gameplay.World.Cities
                 "They come back to the same jar every time. Birds are like that. So am I.",
                 "Elas voltam sempre para a mesma jarra. Ave é assim. Eu também sou."),
         };
+
+        /// <summary>The late main story's texts travel with the city quests', so every loader and fallback finds them.</summary>
+        static CityQuestTexts() => All.AddRange(Rapadura.Gameplay.Quests.LateStoryTexts.All);
 
         public static void EnsureLoaded(LocalizationManager localization)
         {

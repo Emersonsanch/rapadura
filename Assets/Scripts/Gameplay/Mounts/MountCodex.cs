@@ -72,6 +72,16 @@ namespace Rapadura.Gameplay.Mounts
             ("mount_sertao_phoenix", ItemRarity.Legendary, BiomeType.Caves, "Bennu, Bird of Renewal", "Bennu, a Ave do Recomeço", "A feather of light deep in the caves… very rare.", "Uma pena de luz no fundo das Grutas… muito rara."),
             ("mount_dragon_hatchling", ItemRarity.Legendary, BiomeType.Desert, "Little Ember Vishap", "Vishap Filhote Brasinha", "An egg, warm, near the Great Ushabti.", "Um ovo, quentinho, perto do Grande Ushabti."),
             ("mount_elder_tortoise", ItemRarity.Legendary, BiomeType.Forest, "Ijapa the Elder Tortoise", "Ijapa, a Tartaruga Anciã", "Patience: 100 days of daily quests.", "Paciência: 100 dias de missões diárias."),
+
+            // Regions 10–16 (MountFarRegionCatalog, Docs/Mounts.md §3.9).
+            (MountFarRegionCatalog.VolcanoGoat, ItemRarity.Uncommon, BiomeType.Mountain, "Volcano Herders' Goat", "Cabra-dos-Pastores do Vulcão", "Kurogane's black iron shop, in Hinokura.", "A forja de ferro preto do Kurogane, em Hinokura."),
+            (MountFarRegionCatalog.TaigaElk, ItemRarity.Uncommon, BiomeType.Forest, "Taiga Elk", "Alce da Taiga", "Atrahasis' bitumen yard, in Dur-Jarras.", "O pátio de betume do Atrahasis, em Dur-Jarras."),
+            (MountFarRegionCatalog.HillRam, ItemRarity.Uncommon, BiomeType.Desert, "Hill-Giant Ram", "Carneiro Gigante da Colina", "Atrahasis' bitumen yard, in Dur-Jarras.", "O pátio de betume do Atrahasis, em Dur-Jarras."),
+            (MountFarRegionCatalog.GordiasGoat, ItemRarity.Rare, BiomeType.Forest, "Gordias' Golden Goat", "Bode Dourado de Gordias", "Help old Gordias with the foxes in the Satyr Vale.", "Ajude o velho Gordias com as raposas do Vale dos Sátiros."),
+            (MountFarRegionCatalog.MesektetIbis, ItemRarity.Rare, BiomeType.Desert, "Royal Ibis of Mesektet", "Íbis Real de Mesektet", "Help Djedi with the scorpions on the Mesektet Quay.", "Ajude o Djedi com os escorpiões do Cais de Mesektet."),
+            (MountFarRegionCatalog.AuroraReindeer, ItemRarity.Epic, BiomeType.Mountain, "Aurora Reindeer", "Rena da Aurora", "Help Pera with the bears on the canals of the White Moon Harbor.", "Ajude o Pera com os ursos nos canais do Porto da Lua Branca."),
+            (MountFarRegionCatalog.LacquerLion, ItemRarity.Epic, BiomeType.Mountain, "Lacquer Guardian Lion", "Leão-Guardião de Laca", "Help Sango with the ember gulls on the Hinokura lighthouse.", "Ajude a Sango com as gaivotas-brasa no farol de Hinokura."),
+            (MountFarRegionCatalog.Mushhushshu, ItemRarity.Epic, BiomeType.Desert, "Tame Mushussu", "Mušḫuššu Manso", "Help Sin-leqi-unninni with the beetles on the tablets of Dur-Jarras.", "Ajude o Sin-leqi-unninni com os besouros nas tábuas de Dur-Jarras."),
         };
 
         public static readonly IReadOnlyList<MountCodexEntry> Entries = Rows.Select(r => new MountCodexEntry(r.Id, r.Rarity, r.Region)).ToList();

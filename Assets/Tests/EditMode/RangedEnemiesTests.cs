@@ -51,9 +51,12 @@ namespace Rapadura.Tests
             // Limiar Profundo (84, 86): the smoke archer's bolt and the wind harpy's thrown feather (ProfundoBeastsTests).
             ("enemy_forest_smoke_archer", BiomeType.Forest, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.SmokeArcher),
             ("enemy_forest_wind_harpy", BiomeType.Forest, EnemyProjectileKind.Feather, ProceduralEnemyKind.WindHarpy),
-            // Reinos do Céu (94, 97): the cracked jar leaks a bolt of light, the gull spits its last ember (CeuBeastsTests; not placed yet).
+            // Reinos do Céu (94, 97): the cracked jar leaks a bolt of light, the gull spits its last ember (CeuBeastsTests; placed by the Céu overworld, CeuBeastsPlacementTests).
             ("enemy_forest_cracked_jar", BiomeType.Forest, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.CrackedJar),
             ("enemy_forest_dimmed_light_gull", BiomeType.Forest, EnemyProjectileKind.Ember, ProceduralEnemyKind.DimmedLightGull),
+            // The eleventh pass: the Volcanic Bomb and the Scorpion-Man (LateStandInBeastsTests).
+            ("enemy_mountain_volcanic_bomb", BiomeType.Mountain, EnemyProjectileKind.Ember, ProceduralEnemyKind.VolcanicBomb),
+            ("enemy_forest_scorpion_man", BiomeType.Forest, EnemyProjectileKind.Feather, ProceduralEnemyKind.ScorpionMan),
         };
 
         /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>
@@ -82,6 +85,10 @@ namespace Rapadura.Tests
             (OverworldLayouts.MisturaRegionId, OverworldLayouts.TabuasSonhoMapId, new[] { "enemy_forest_broken_tablet" }),
             (OverworldLayouts.ProfundoRegionId, OverworldLayouts.CovaFumacaMapId, new[] { "enemy_forest_smoke_archer" }),
             (OverworldLayouts.ProfundoRegionId, OverworldLayouts.CovaVentoMapId, new[] { "enemy_forest_wind_harpy" }),
+            (OverworldLayouts.CeuRegionId, OverworldLayouts.RodaCelesteMapId, new[] { "enemy_forest_cracked_jar" }),
+            (OverworldLayouts.CeuRegionId, OverworldLayouts.BarcaDoSolMapId, new[] { "enemy_forest_dimmed_light_gull" }),
+            (OverworldLayouts.HinokuraRegionId, OverworldLayouts.MonteEcheydeMapId, new[] { "enemy_mountain_volcanic_bomb" }),
+            (OverworldLayouts.MisturaRegionId, OverworldLayouts.DurJarrasMapId, new[] { "enemy_forest_scorpion_man" }),
         };
 
         private readonly List<Object> _created = new List<Object>();

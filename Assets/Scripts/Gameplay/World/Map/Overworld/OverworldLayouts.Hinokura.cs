@@ -54,6 +54,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public const string CaldeiraMapId = "map_070_caldeira_fogo_devorador";
 
         public static readonly Vector2 HinokuraOffset = Vector2.zero;
+        /// <summary>The Glutão de Brasa's arena (70): the cold stone north of the caldera's rim (flat ground, open from the Borda Fria).</summary>
+        public static readonly Vector2 GlutaoArena = new Vector2(-1440f, 1690f);
         public static readonly Vector2 CasaDeChaOffset = new Vector2(0f, 600f);
         public static readonly Vector2 AbrigoPastoresOffset = new Vector2(-960f, -380f);
         public static readonly Vector2 BarcoFarolOffset = new Vector2(0f, 1080f);
@@ -118,7 +120,37 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             (new Vector2(-1470f, 1320f), new Vector2(-1410f, 1330f), 210f),
         };
 
-        private static readonly ConditionalWeakTable<MapRiver, object> Lava = new ConditionalWeakTable<MapRiver, object>();
+        // ---------------- Places of the region's mechanics (Mechanics/Hinokura*Rules; region coordinates) ----------------
+
+        /// <summary>The zone whose origin maps this region onto the stitched world.</summary>
+        public const string HinokuraAnchorZoneId = "hinokura";
+
+        public static readonly Rect HinokuraBounds = Rect.MinMaxRect(-1680f, -600f, 720f, 1800f);
+
+        /// <summary>The three sluices: beside the bridges of the two lava channels (65) and on the road through the furnaces' court (69).</summary>
+        public static readonly Vector2[] ForgeSluices =
+        {
+            new Vector2(-403f, 40f), new Vector2(-616f, 44f), new Vector2(-1344f, 672f),
+        };
+
+        /// <summary>The caldera's lake alone (the last of <see cref="LavaPools"/>), which is what the heat meter measures.</summary>
+        public static readonly (Vector2 A, Vector2 B, float Width)[] CaldeiraLake = { LavaPools[LavaPools.Length - 1] };
+
+        /// <summary>The cold stones on the ring between the lake and the rim, where the road comes in and round the far side.</summary>
+        public static readonly Vector2[] CaldeiraColdStones =
+        {
+            new Vector2(-1316f, 1396f), new Vector2(-1290f, 1290f), new Vector2(-1396f, 1160f), new Vector2(-1590f, 1330f),
+        };
+
+        /// <summary>The three flanks the lava of Echeyde runs down (A at the crater's lip, B at the foot): west along the crater road, south, north.</summary>
+        public static readonly (Vector2 A, Vector2 B, float Width)[] EruptionRoutes =
+        {
+            (new Vector2(-1006f, 118f), new Vector2(-1170f, 100f), 14f),
+            (new Vector2(-960f, 74f), new Vector2(-960f, -105f), 14f),
+            (new Vector2(-960f, 166f), new Vector2(-1000f, 345f), 14f),
+        };
+
+        private static readonly ConditionalWeakTable<MapRiver, object> Lava =new ConditionalWeakTable<MapRiver, object>();
 
         /// <summary>True for a river or pool of lava (Região 12: drawn glowing; for the rest of the rules it is water nobody wades).</summary>
         public static bool IsLava(MapRiver river) => river != null && Lava.TryGetValue(river, out _);
@@ -134,9 +166,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         {
             public const string Crab = "enemy_mountain_volcano_crab";
             public const string Lizard = "enemy_mountain_lava_lizard";
-            public const string Salamander = "enemy_desert_sand_snake";
+            public const string Salamander = "enemy_mountain_devouring_salamander";
             public const string EmberGull = "enemy_mountain_ember_gull";
-            public const string Bomb = "enemy_desert_ember_vulture";
+            public const string Bomb = "enemy_mountain_volcanic_bomb";
             public const string Pumice = "enemy_mountain_rolling_stone";
             public const string Shisa = "enemy_mountain_dimmed_shisa";
             public const string Carp = "enemy_cave_lantern_fish";
@@ -341,6 +373,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, -1260f, 560f, 0f, 1f);
             Landmark(w, MapLandmarkKind.Campfire, -400f, 1500f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, 160f, 520f, 0f, 1f);
+            Landmark(w, MapLandmarkKind.StoneRing, GlutaoArena.x, GlutaoArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

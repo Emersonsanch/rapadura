@@ -28,6 +28,8 @@ namespace Rapadura.UI.WorldMap
         public const string ButtonNews = "ui.city.button_news";
         /// <summary>{0} = resident, {1} = what they say.</summary>
         public const string Speech = "ui.city.speech";
+        public const string TalkOpenShop = "ui.city.talk.open_shop";
+        public const string TalkGoodbye = "ui.city.talk.goodbye";
         public const string PeddlerToday = "ui.city.peddler_today";
 
         public const string FastTravel = "ui.city.fast_travel";
@@ -69,6 +71,8 @@ namespace Rapadura.UI.WorldMap
                 new LocalizationEntry(Respawned, "You woke up in {0}. Nobody fights in here.", "Vocês acordaram em {0}. Aqui ninguém briga."),
                 new LocalizationEntry(ButtonNews, "{0} (!)", "{0} (!)"),
                 new LocalizationEntry(Speech, "{0}: “{1}”", "{0}: “{1}”"),
+                new LocalizationEntry(TalkOpenShop, "See what's for sale", "Ver o que tem à venda"),
+                new LocalizationEntry(TalkGoodbye, "See you later", "Até logo"),
                 new LocalizationEntry(PeddlerToday, "Ammo's caravan is in town today!", "A caravana do Ammo está na cidade hoje!"),
 
                 // ---- Barcas de Luz (Sun ship by day, Moon ship at night) ----
@@ -557,7 +561,7 @@ namespace Rapadura.UI.WorldMap
 
             AddResident(entries, "shilhak", "Shilhak the Miner", "Shilhak, o Minerador",
                 ("Joaquim, you go first in the seam. If the roof speaks, you'll hear it before the rest of us. That's what shoulders like yours are for.", "Joaquim, você vai na frente no veio. Se o teto falar, você escuta antes de todo mundo. É para isso que serve um ombro desse."),
-                ("Maria, sing to the rock with me before the pick. It isn't a prayer, it's manners. The rock was here first.", "Maria, canta para a pedra comigo antes da picareta. Não é reza, é educação. A pedra chegou primeiro."),
+                ("Maria, sing to the rock with me before the pick. It isn't a spell, it's manners. The rock was here first.", "Maria, canta para a pedra comigo antes da picareta. Não é feitiço, é educação. A pedra chegou primeiro."),
                 ("Maithe, in the seam you can't shoot far. Count your steps instead. Eleven from the lamp to the bend. Remember it.", "Maithe, no veio não dá para atirar longe. Conta os passos em vez disso. Onze da lamparina até a curva. Guarda isso."),
                 ("Ícaro, a lamp that hangs from the helmet and turns with your head? ...I'll wear it if you make it. I'll complain, but I'll wear it.", "Ícaro, uma lamparina que pendura no capacete e vira com a cabeça? ...Eu uso se você fizer. Vou reclamar, mas uso."),
                 ("Lavine, you heard the bats crying? They're not bad. They nested in the forge's last warm cracks and the cold went to their heads. Grandpa Jorge would say the same.", "Lavine, você ouviu os morcegos chorando? Eles não são maus. Fizeram ninho nas últimas fendas quentes da forja e o frio subiu à cabeça. O Vô Jorge diria igual."),
@@ -1129,7 +1133,7 @@ namespace Rapadura.UI.WorldMap
                 ("Maria, a king once came to my door looking for how never to die. I told him to go home and wash his hair. I still think that was good advice.", "Maria, um rei já veio na minha porta procurando como nunca morrer. Eu falei para ele voltar para casa e lavar o cabelo. Ainda acho que foi um bom conselho."),
                 ("Maithe, you helped carry the jars without anyone asking. Your grandmother would notice. I noticed.", "Maithe, você ajudou a carregar os jarros sem ninguém pedir. A sua avó ia reparar. Eu reparei."),
                 ("Ícaro, the jar is not a drum. ...Fine, one song. Then you eat.", "Ícaro, jarro não é tambor. ...Tá bom, uma música. Depois você come."),
-                ("Lavine, Vô Jorge drank one cup here and told me it needed rapadura. It did not. I put some in anyway, and now people ask for it.", "Lavine, o Vô Jorge tomou um copo aqui e disse que faltava rapadura. Não faltava. Botei assim mesmo, e agora o pessoal pede."),
+                ("Lavine, Vô Jorge drank one cup here and told me it needed Golden Brick. It did not. I put some in anyway, and now people ask for it.", "Lavine, o Vô Jorge tomou um copo aqui e disse que faltava Torrão Dourado. Não faltava. Botei assim mesmo, e agora o pessoal pede."),
                 ("The world ends a little past my door, they say. It is a good place for a tavern.", "Dizem que o mundo acaba um pouco depois da minha porta. É um bom lugar para uma taberna."));
 
             // ---- Fortaleza da Última Lâmpada (names of the Kellis letters, as the ficha asks; a lamp and its oil) ----

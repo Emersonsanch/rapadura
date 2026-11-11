@@ -13,8 +13,8 @@ namespace Rapadura.Tests
     /// stood (Docs/Mapas100.md 65–70), same idea as <see cref="MarGeladoBeastsPlacementTests"/>: each one is in the day table of
     /// every group its sheet gives it (leading the group or as its companion), its night form in the same group's night table
     /// where the beast leads it, the stand-in left those groups' day tables, and every case is checked on the clearings the
-    /// group really got (each group listed here draws at least one clearing in its area), at that area's levels. The sand snake
-    /// and the ember vulture stay on as the Devouring Salamander and the Volcanic Bomb: the lava lizard stays out of the caldera
+    /// group really got (each group listed here draws at least one clearing in its area), at that area's levels. The Devouring
+    /// Salamander and the Volcanic Bomb have their own beasts (LateStandInBeastsTests): the lava lizard stays out of the caldera
     /// (70) and the ember gull off Mount Echeyde (67).
     /// </summary>
     public class HinokuraBeastsPlacementTests
@@ -34,7 +34,9 @@ namespace Rapadura.Tests
 
         private const string CoconutCrab = "enemy_forest_coconut_crab";
         private const string SandSnake = "enemy_desert_sand_snake";
+        private const string Salamander = "enemy_mountain_devouring_salamander";
         private const string Vulture = "enemy_desert_ember_vulture";
+        private const string Bomb = "enemy_mountain_volcanic_bomb";
         private const string StoneLion = "enemy_forest_stone_lion";
         private const string Otter = "enemy_forest_thief_otter";
         private const string Jackal = "enemy_desert_jackal";
@@ -143,19 +145,21 @@ namespace Rapadura.Tests
         [TestCase("salamandras_devoradoras")]
         [TestCase("salamandras_das_cinzas")]
         [TestCase("salamandras_do_mar")]
-        public void TheDevouringSalamanders_KeepTheirStandIn(string group)
+        public void TheDevouringSalamanders_AreTheirOwnBeast(string group)
         {
             OverworldFauna fauna = Group(group);
-            Assert.IsTrue(fauna.Day.Any(e => e.EnemyId == SandSnake), $"{group}: still the sand snake by day");
-            Assert.IsTrue(fauna.Night.Any(e => e.EnemyId == SandSnake), $"{group}: still the sand snake at night");
+            Assert.IsTrue(fauna.Day.Any(e => e.EnemyId == Salamander), $"{group}: the salamander by day");
+            Assert.IsTrue(fauna.Night.Any(e => e.EnemyId == Salamander), $"{group}: the salamander at night");
+            Assert.IsFalse(fauna.Day.Any(e => e.EnemyId == SandSnake), $"{group}: no sand snake by day");
         }
 
         [Test]
-        public void TheVolcanicBombs_KeepTheirStandIn()
+        public void TheVolcanicBombs_AreTheirOwnBeast()
         {
             OverworldFauna fauna = Group("bombas_vulcanicas");
-            Assert.IsTrue(fauna.Day.Any(e => e.EnemyId == Vulture), "the bombs are still the ember vulture by day");
-            Assert.IsTrue(fauna.Night.Any(e => e.EnemyId == Vulture), "the bombs are still the ember vulture at night");
+            Assert.IsTrue(fauna.Day.Any(e => e.EnemyId == Bomb), "the bombs by day");
+            Assert.IsTrue(fauna.Night.Any(e => e.EnemyId == Bomb), "the bombs at night");
+            Assert.IsFalse(fauna.Day.Any(e => e.EnemyId == Vulture), "no ember vulture among the bombs by day");
             Assert.IsFalse(fauna.Day.Concat(fauna.Night).Any(e => e.EnemyId == EmberGull), "no ember gull among the bombs");
         }
 

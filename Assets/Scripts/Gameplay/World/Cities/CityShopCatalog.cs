@@ -828,7 +828,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_runa_vento", 20, 2, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Hinokura: Kurogane's black iron, the gear of the gates of the Arquipélago de Hinokura (65–70); daily ----
             new CityShopSpec(FerroPretoKurogane, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(FerroPretoKurogane, new List<CityShopEntry>
@@ -846,6 +846,8 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_amuleto_antiveneno", 700, 1),
                 new CityShopEntry("item_vara_equilibrio", 480, 2),
                 new CityShopEntry("item_odre_agua", 30, 5),
+                // Cabra-dos-Pastores do Vulcão (Docs/Mounts.md §3.9): the herders of Echeyde sell through the forge.
+                new CityShopEntry("item_whistle_mount_volcano_goat", 145, -1),
                 // The rotation: what the forges and the boats of the isle bring.
                 new CityShopEntry("item_cooked_meat", 6, 10, rotating: true),
                 new CityShopEntry("item_iron", 8, 20, rotating: true),
@@ -884,7 +886,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
                 new CityShopEntry("item_pedra_alma", 35, 1, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Dur-Jarras: Atrahasis' bitumen yard, the gear of the Margens da Mistura (77–82); daily ----
             new CityShopSpec(BetumeAtrahasis, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(BetumeAtrahasis, new List<CityShopEntry>
@@ -903,6 +905,9 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_corda_escalada", 40, 3),
                 new CityShopEntry("item_grampos_escalada", 950, 1),
                 new CityShopEntry("item_lamparina_oleo", 28, 3),
+                // Alce da Taiga e Carneiro Gigante da Colina (Docs/Mounts.md §3.9): the rafts bring them down from the cedars and the tablets.
+                new CityShopEntry("item_whistle_mount_taiga_elk", 150, -1),
+                new CityShopEntry("item_whistle_mount_hill_ram", 150, -1),
                 // The rotation: what the rafts bring up the canals.
                 new CityShopEntry("item_cooked_meat", 6, 10, rotating: true),
                 new CityShopEntry("item_herb", 3, 10, rotating: true),
@@ -912,7 +917,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
                 new CityShopEntry("item_pedra_alma", 35, 1, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Fortaleza da Última Lâmpada: Tehat's wick workshop, the gear of the Limiar Profundo (83–90); daily ----
             new CityShopSpec(PaviosTehat, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(PaviosTehat, new List<CityShopEntry>
@@ -942,7 +947,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
                 new CityShopEntry("item_pedra_alma", 35, 1, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Cais da Coluna: the last caravan of Ammo (maps 91–100 ask for no gear; what the high road needs); daily ----
             new CityShopSpec(UltimaCaravanaAmmo, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(UltimaCaravanaAmmo, new List<CityShopEntry>
@@ -964,7 +969,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
                 new CityShopEntry("item_pedra_alma", 35, 1, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Ferraria do Mestre Adamas (Vila): the village blacksmith ----
             new CityShopSpec(FerrariaSeverino, ShopTheme.Ferreiro, BiomeType.Forest, ShopRotationPeriod.Weekly, 2, new List<CityShopEntry>

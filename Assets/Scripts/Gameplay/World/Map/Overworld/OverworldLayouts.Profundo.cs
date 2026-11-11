@@ -91,6 +91,36 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             return SeloArtificesOffset + new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * LampPedestalRingRadius;
         }
 
+        /// <summary>The region's rectangle (region coordinates): where <see cref="Mechanics.ProfundoMechanicsDriver"/> runs.</summary>
+        public static readonly Rect ProfundoBounds = Rect.MinMaxRect(-600f, -1200f, 1800f, 1200f);
+
+        /// <summary>A zone of the region: its <see cref="OverworldZone.Origin"/> says where the region sits in the stitched world.</summary>
+        public const string ProfundoAnchorZoneId = "fortaleza_ultima_lampada";
+
+        /// <summary>The lamps of the network round the fortress (map 83): three rings of four, inner ring first, off the roads and the gate of the isle.</summary>
+        public static readonly Vector2[] WallLamps =
+        {
+            new Vector2(46f, 46f), new Vector2(-46f, 46f), new Vector2(-46f, -46f), new Vector2(46f, -46f),
+            new Vector2(108f, 39f), new Vector2(-39f, 108f), new Vector2(-108f, -39f), new Vector2(39f, -108f),
+            new Vector2(124f, 124f), new Vector2(-124f, 124f), new Vector2(-124f, -124f), new Vector2(124f, -124f),
+        };
+
+        /// <summary>The Floor That Lights (map 85): the whole of its area (region coordinates).</summary>
+        public static readonly Rect FireFloorArea = Rect.MinMaxRect(-600f, -1200f, -120f, -720f);
+
+        /// <summary>The banks of smoke of the Pit of Smoke (map 84), on its roads, each with its fan outside the rim.</summary>
+        public static readonly Mechanics.ProfundoSmokeBank[] SmokeBanks =
+        {
+            new Mechanics.ProfundoSmokeBank(new Vector2(470f, 8f), 24f, new Vector2(470f, 40f)),
+            new Mechanics.ProfundoSmokeBank(new Vector2(735f, 6f), 24f, new Vector2(735f, 38f)),
+            new Mechanics.ProfundoSmokeBank(new Vector2(600f, -150f), 26f, new Vector2(640f, -150f)),
+            new Mechanics.ProfundoSmokeBank(new Vector2(600f, -360f), 26f, new Vector2(640f, -360f)),
+            new Mechanics.ProfundoSmokeBank(new Vector2(600f, -600f), 26f, new Vector2(640f, -600f)),
+            new Mechanics.ProfundoSmokeBank(new Vector2(600f, 150f), 26f, new Vector2(640f, 150f)),
+            new Mechanics.ProfundoSmokeBank(new Vector2(600f, 360f), 26f, new Vector2(640f, 360f)),
+            new Mechanics.ProfundoSmokeBank(new Vector2(610f, 600f), 26f, new Vector2(650f, 600f)),
+        };
+
         /// <summary>The pools of black water of the Cova do Lodo (centre segment, width).</summary>
         public static readonly (Vector2 A, Vector2 B, float Width)[] LodoPools =
         {
@@ -119,15 +149,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string ChokeSmoke = "enemy_forest_smoke_goat";
             public const string SmokeArcher = "enemy_forest_smoke_archer";
             public const string EmberWolf = "enemy_forest_ember_wolf";
-            public const string AshBull = "enemy_mountain_wild_yak";
+            public const string AshBull = "enemy_forest_ash_bull";
             public const string HotLion = "enemy_forest_hot_smoke_lion";
             public const string HungryFlame = "enemy_desert_firefly_swarm";
             public const string BlackEagle = "enemy_forest_black_eagle";
-            public const string BladeBat = "enemy_mountain_candle_bat";
+            public const string BladeBat = "enemy_forest_blade_bat";
             public const string WindHarpy = "enemy_forest_wind_harpy";
             public const string Whirlwind = "enemy_mountain_ill_wind_mist";
             public const string DarkFish = "enemy_forest_dark_fish";
-            public const string GreatEel = "enemy_forest_reed_snake";
+            public const string GreatEel = "enemy_forest_great_eel";
             public const string MudOctopus = "enemy_forest_mud_octopus";
             public const string DarkShoal = "enemy_cave_lantern_fish";
             public const string BlindSerpent = "enemy_forest_dimmed_python";
@@ -140,7 +170,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static OverworldLayout ProfundoRegion()
         {
-            OverworldLayout w = NewRegion(ProfundoRegionId, MapRegion.LimiarProfundo, Rect.MinMaxRect(-600f, -1200f, 1800f, 1200f));
+            OverworldLayout w = NewRegion(ProfundoRegionId, MapRegion.LimiarProfundo, ProfundoBounds);
             w.World.Biome = BiomeType.Forest;
             const string fortaleza = FortalezaUltimaLampadaMapId;
             const string fumaca = CovaFumacaMapId;
@@ -311,6 +341,16 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             KeepClearingsOff(w, NoveloGlobeCenter, 9.5f);
             KeepClearingsOff(w, DarkGateCenter, 17.5f);
+            foreach (Vector2 wallLamp in WallLamps)
+            {
+                KeepClearingsOff(w, wallLamp, 2f);
+            }
+
+            foreach (Mechanics.ProfundoSmokeBank bank in SmokeBanks)
+            {
+                KeepClearingsOff(w, bank.Vent, 2f);
+            }
+
             TrimSteepClearings(w);
             return w;
         }

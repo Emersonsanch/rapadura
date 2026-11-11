@@ -62,7 +62,7 @@ namespace Rapadura.Gameplay.Mounts
         public const string ZurroEspantaBicho = "zurro_espanta_bicho";
 
         /// <summary>Every playable species: the three M1 starters, then M3 wave 1 (<see cref="MountWaveCatalog"/>), then the flyers (<see cref="MountSkyCatalog"/>).</summary>
-        public static readonly IReadOnlyList<MountSpec> Specs = StarterSpecs().Concat(MountWaveCatalog.Specs).Concat(MountSkyCatalog.Specs).ToList();
+        public static readonly IReadOnlyList<MountSpec> Specs = StarterSpecs().Concat(MountWaveCatalog.Specs).Concat(MountSkyCatalog.Specs).Concat(MountFarRegionCatalog.Specs).ToList();
 
         /// <summary>The three M1 starters (§13 M1).</summary>
         public static IReadOnlyList<MountSpec> Starters => Specs.Take(3).ToList();

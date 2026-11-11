@@ -73,5 +73,23 @@ namespace Rapadura.Gameplay.Achievements
 
         /// <summary>Highest wing level reached in the Tacho Encantado (<c>TachoService</c>, through <see cref="AchievementManager.RecordMax"/>).</summary>
         WingLevelReached = 61,
+
+        /// <summary>World regions set foot in (<c>AreaChangedEvent.CurrentPart</c>, distinct). Target ids = the region's layout id (<c>OverworldPart.Id</c>).</summary>
+        WorldRegionsVisited = 70,
+
+        /// <summary>Region mechanics feats (<see cref="RegionFeatEvent"/>, distinct). Target ids = <see cref="RegionFeats"/>.</summary>
+        RegionFeat = 71,
+
+        /// <summary>
+        /// A deed done by one particular cousin (distinct): a boss beaten or a quest finished with that hero selected.
+        /// Target ids = <c>hero:enemyOrQuestId</c>, built by <see cref="AchievementManager.HeroDeedId"/>.
+        /// </summary>
+        HeroDeed = 72,
+
+        /// <summary>Mounts that joined the collection (<c>MountGrantedEvent</c>, distinct). Target ids = mount ids.</summary>
+        MountsOwned = 73,
+
+        /// <summary>House items bought or received (<c>ItemPurchasedEvent</c> of a <c>casa_*</c> id and <c>HouseItemGrantedEvent</c>, distinct). Target ids = house item ids.</summary>
+        HouseItemsCollected = 74,
     }
 }

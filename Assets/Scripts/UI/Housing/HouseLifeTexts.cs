@@ -345,6 +345,11 @@ namespace Rapadura.UI.Housing
                 ("set_arraia", "Bema", "Bema", "Festival house", "Casa do Bema"),
                 ("set_natal_sertanejo", "Yalda Night", "Noite de Yalda", "Longest-night house", "Casa de Yalda"),
                 ("set_frevo_maracatu", "Lantern Festival", "Festa das Lanternas", "Lantern house", "Casa das lanternas"),
+                ("set_moveis_casa_lua_branca", "White Moon House Furniture", "Móveis da Casa da Lua Branca", "White moon house", "Casa da lua branca"),
+                ("set_moveis_cais_papiro", "Papyrus Quay Furniture", "Móveis do Cais do Papiro", "Papyrus quay house", "Casa de cais e papiro"),
+                ("set_moveis_tijolo_azul", "Blue Brick Furniture", "Móveis de Tijolo Azul", "Blue brick house", "Casa de tijolo azul"),
+                ("set_moveis_mil_lampadas", "Thousand Lamps Furniture", "Móveis das Mil Lâmpadas", "House of a thousand lamps", "Casa das mil lâmpadas"),
+                ("set_moveis_cais_luz", "Quay of Light Furniture", "Móveis do Cais de Luz", "Quay of light house", "Casa do cais de luz"),
             };
 
             foreach ((string id, string enName, string ptName, string enTitle, string ptTitle) in sets)

@@ -228,7 +228,7 @@ A proposta é um **`HouseMeshBuilder`** (irmão desses dois) que monta a casa a 
 |---|---|---|
 | **Baú da casa** | `casa_util_001` (o primeiro vem com a casa) | Guarda itens comuns do jogo (não itens de casa). Sem peso, como o Baú da Vó Edna. Capacidade pelo nível: 20/30/45/60/90. **Baús extras** somam espaços: couro `casa_util_002` +10, ferro `casa_util_003` +15, arca `casa_util_004` +20; no máximo 1 extra no N1–N2, 2 no N3–N4 e 3 no N5. Só o dono abre. |
 | **Baú-correio da Vó Edna** | `casa_util_005` (Épico, Missão "Tijolo por Tijolo") | Abre o **Baú da Vó Edna** (`VillageChestStorage`, 60 espaços, chave de save `"VillageChest"`) de dentro de casa, sem ir até a Vila. |
-| **Guarda-roupa** | `casa_util_006`, `casa_util_007` | Abre a tela de aparência (§9). Também guarda até 3 trajes salvos (o de jacarandá guarda 6). |
+| **Guarda-roupa** | `casa_util_006`, `casa_util_007` | Abre a tela de aparência (§9). Também guarda até 3 trajes salvos (o de cedro guarda 6). |
 | **Espelho de provador / manequim** | `casa_util_010`, `casa_util_009` | O espelho mostra o primo de corpo inteiro com a câmera girando. O manequim expõe um traje para as visitas verem. |
 | **Bancada** | `casa_util_011`, `casa_util_012` | Mesma lógica das receitas de hoje (`CraftingManager`, `Resources/Recipes`) mais as receitas de móveis (§7.6). A de mestre artesão faz os móveis Épicos. |
 | **Tandir de barro** | `casa_cozinha_001` | O **Forno da Vó Edna que já existe** (`MealService`, `MealCatalog`: nan do tandir, chá de karkadé, pão de tâmara, torrão dourado, plov da Vó, samsa assada) também funciona de casa, com os mesmos pratos e buffs. |
@@ -273,7 +273,7 @@ Cada item colocado soma os pontos de **Conforto** do catálogo (Comum 1–2, Inc
 
 ### 6.2 Conjuntos **[proposto]**
 
-São 21 conjuntos no catálogo, cada um com um tema (Iwan da Vó Edna, Caravana do Vô Jorge, Oficina do Ícaro, Noite Rubra da Lavine, Bema…). A lista e a contagem de peças estão no fim do `CatalogoCasa.md`.
+São 26 conjuntos no catálogo, cada um com um tema (Iwan da Vó Edna, Caravana do Vô Jorge, Oficina do Ícaro, Noite Rubra da Lavine, Bema…). A lista e a contagem de peças estão no fim do `CatalogoCasa.md`.
 
 | Peças do mesmo conjunto colocadas | Bônus |
 |---|---|
@@ -493,7 +493,7 @@ Cada primo tem **6 conjuntos de 4 peças** (Cabeça, Peito, Pernas, Pés), um po
 - No guarda-roupa, cada slot escolhe "usar a aparência de…" qualquer peça desbloqueada **do mesmo slot**. Os atributos continuam os da peça equipada.
 - Os conjuntos dos primos servem só para o primo dono, porque a modelagem é do corpo dele. As roupas comuns servem para todos.
 - **Itens procedurais** (`ProceduralItemGenerator`, com afixos): o nome e os afixos continuam procedurais. A aparência padrão é a peça do conjunto do primo que tem o mesmo slot e a mesma raridade. Por exemplo, um "Peitoral de Couro" Raro numa Maithe aparece como "Túnica de linho verde bordada de vento". Assim, o loot de hoje já ganha visual sem nenhum item novo.
-- Trocar de aparência é **grátis**, e é possível salvar trajes (3, ou 6 com o guarda-roupa de jacarandá).
+- Trocar de aparência é **grátis**, e é possível salvar trajes (3, ou 6 com o guarda-roupa de cedro).
 - "Esconder chapéu" é uma opção por slot.
 
 ### 9.4 Tintas

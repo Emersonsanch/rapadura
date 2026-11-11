@@ -73,6 +73,28 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             new Vector2(470f, 1340f), new Vector2(600f, 1460f), new Vector2(760f, 1580f), new Vector2(940f, 1700f), new Vector2(1100f, 1780f),
         };
 
+        /// <summary>The zone whose origin places the mechanics' region coordinates in the stitched world.</summary>
+        public const string NartesAnchorZoneId = "acampamento_de_soslan";
+
+        /// <summary>The region's own rectangle (the one <c>NartesRegion</c> is built on).</summary>
+        public static readonly Rect NartesBounds = Rect.MinMaxRect(-1200f, -600f, 1200f, 1800f);
+
+        /// <summary>The start and finish post of the steppe race (map 47, Pistas de Corrida).</summary>
+        public static readonly Vector2 NartesRaceStart = new Vector2(440f, -210f);
+
+        /// <summary>The race's gates, in order, ending back at the start post (a loop of about 1035 m inside the Pistas de Corrida).</summary>
+        public static readonly Vector2[] NartesRaceCourse =
+        {
+            new Vector2(600f, -240f), new Vector2(660f, -400f), new Vector2(600f, -530f), new Vector2(440f, -540f), new Vector2(350f, -430f),
+            new Vector2(360f, -280f), NartesRaceStart,
+        };
+
+        /// <summary>The four Golds of Heaven (map 48): plough, yoke, axe and cup, on the floors of the kurgans.</summary>
+        public static readonly Vector2[] NartesSkyGolds =
+        {
+            new Vector2(540f, 180f), new Vector2(380f, 250f), new Vector2(640f, 20f), new Vector2(960f, 200f),
+        };
+
         private static class Nart
         {
             public const string Wolf = PeriodSpawnTable.ForestWolf;

@@ -152,9 +152,6 @@ namespace Rapadura.Tests
         private static OverworldFauna Group(string id) =>
             OverworldLayouts.Get(MisturaId).Zones.SelectMany(z => z.Fauna).First(f => f.Id == id);
 
-        [TestCase("homens_escorpiao_do_portao", Scorpion)]
-        [TestCase("homens_escorpiao_do_tell", Scorpion)]
-        [TestCase("homens_escorpiao_do_canal", Scorpion)]
         [TestCase("lagartos_do_instante", LavaLizard)]
         [TestCase("lagartos_das_horas", LavaLizard)]
         [TestCase("ushabtis_de_relogio", LacquerUshabti)]
@@ -162,8 +159,6 @@ namespace Rapadura.Tests
         [TestCase("bagres_negros", Pike)]
         [TestCase("fumacas_de_piche", SmokeHarpy)]
         [TestCase("fumacas_do_juncal", SmokeHarpy)]
-        [TestCase("linces_do_cedro", Irbis)]
-        [TestCase("abelhas_resina", GoldenBee)]
         [TestCase("pedras_de_diorito", RollingStone)]
         [TestCase("pedras_do_diorito", RollingStone)]
         [TestCase("pedras_da_clavicula", RollingStone)]

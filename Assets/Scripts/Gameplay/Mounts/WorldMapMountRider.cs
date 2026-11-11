@@ -500,7 +500,8 @@ namespace Rapadura.Gameplay.Mounts
                     MountNotices.Raise(MountTexts.Format(localization, MountWaveTexts.ToastFreeGallop, MountTexts.MountName(localization, definition)));
                     break;
                 case MountAbilityKind.ShortFlight:
-                    // Voo da Coluna on the road: the griffin just climbs and circles back down over the token (look only).
+                case MountAbilityKind.Glide:
+                    // Voo da Coluna / Planar de Mesektet on the road: the griffin just climbs and circles back down over the token (look only).
                     _actor?.Soar(ability.DurationSeconds * 2f);
                     MountAudio.Play(MountAudio.GriffinCry);
                     MountNotices.Raise(MountTexts.Format(localization, MountWaveTexts.MapShowOff, MountTexts.MountName(localization, definition),

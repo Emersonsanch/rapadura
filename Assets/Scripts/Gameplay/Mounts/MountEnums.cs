@@ -66,6 +66,16 @@ namespace Rapadura.Gameplay.Mounts
 
         // First flyer (MountSkyCatalog, MountSkyRecipes). Appended only.
         ColumnGriffin = 21,
+
+        // Regions 10–16 (MountFarRegionCatalog, MountFarRegionRecipes). Appended only.
+        GordiasGoat = 22,
+        AuroraReindeer = 23,
+        LacquerLion = 24,
+        VolcanoGoat = 25,
+        MesektetIbis = 26,
+        Mushhushshu = 27,
+        TaigaElk = 28,
+        HillRam = 29,
     }
 
     /// <summary>The effect family of a mount ability (§12.2). M1 implements Dash, LootMagnet and Fear; M3 wave 1 the walkers' kinds (MountWaveAbilities).</summary>
@@ -101,6 +111,14 @@ namespace Rapadura.Gameplay.Mounts
         Revive,
         Invulnerable,
         ConeBreath,
+
+        // Regions 10–16 (MountFarRegionAbilities). Appended only: assets store the int.
+        Untie,
+        AuroraRun,
+        Reveal,
+        Dread,
+        ThicketStride,
+        BoulderCharge,
     }
 
     /// <summary>Where the hero is, as far as riding goes (§2.1, §2.5).</summary>

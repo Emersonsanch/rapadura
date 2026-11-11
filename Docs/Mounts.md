@@ -16,6 +16,7 @@
 
 **Total: 30 montarias**, sendo 20 dos mitos e contos antigos (Rota da Seda, Kemet, Kush, Pérsia, estepes) e 10 bichos "de verdade" (alguns gigantes).
 **+1 (2026-11-03):** o **Grifo da Coluna da Glória** (§3.8), a primeira voadora no código; o Caderno lista 31.
+**+8 (2026-11-09):** as montarias das fichas das Regiões 10–16 (§3.9); o Caderno lista 39.
 
 | Raridade (`ItemRarity`) | Montarias | Como se consegue |
 |---|---|---|
@@ -308,6 +309,32 @@ assusta quem quer queimar o bosque.
   de águia, não assusta) sintetizados em `MountAudio`.
 - **Testes:** `MountSkyTests` (catálogo e orçamento, textos, portões 24/39, missão de ponta a ponta e reposição, regras
   do voo, modelo, sons).
+
+### 3.9 Montarias das Regiões 10–16 (no código, 2026-11-09)
+
+As fichas dos mapas 53, 59, 65, 67, 71, 77, 80 e 82 (`Docs/Mapas100.md` §6), em `MountFarRegionCatalog`, cada uma exata no
+orçamento do §2.4. As Incomuns são apito à venda na cidade da região (preço = valor do item, §5.1); Raras e Épicas nunca se
+vendem e vêm da 2ª missão da cidade da região (`MountSourceHooks`, uma vez só). Só a Íbis é voadora: é a única das oito
+que responde a `WingsRequired`/`WingsOrDoubleJump`.
+
+| Id | Nome | Tipo | Raridade | Vel. | Def. | Vida | Fôlego | Pts | Guerra | Habilidade (G) | Como consegue | Mapa | Favorito |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `mount_volcano_goat` | Cabra-dos-Pastores do Vulcão / *Volcano Herders' Goat* | terrestre | Incomum | 1,45 | +3% | 150 | 140 | 12 | — | **Cascos de Pedra-Pomes:** apaga queimaduras e outros males e os mantém longe por 8 s. Recarga 40 s | Apito, 145 de ouro, Ferro Preto do Kurogane (Hinokura) | 67 | — |
+| `mount_taiga_elk` | Alce da Taiga / *Taiga Elk* | terrestre | Incomum | 1,55 | +2% | 175 | 120 | 12 | — | **Passo do Cedral:** tira a lentidão e a ignora por 8 s (atordoamento ainda pega). Recarga 30 s | Apito, 150 de ouro, Betume do Atrahasis (Dur-Jarras) | 80 | — |
+| `mount_hill_ram` | Carneiro Gigante da Colina / *Hill-Giant Ram* | terrestre | Incomum | 1,35 | +6% | 175 | 120 | 12 | — | **Cabeçada de Pedra:** investe 9 m; bichos comuns no caminho são jogados de lado e segredos na frente quebram. Recarga 22 s | Apito, 150 de ouro, Betume do Atrahasis (Dur-Jarras) | 82 | — |
+| `mount_gordias_goat` | Bode Dourado de Gordias / *Gordias' Golden Goat* | terrestre | Raro | 1,60 | +4% | 150 | 140 | 16 | — | **Nó de Gordias:** desfaz o segredo mais perto a até 14 m. Recarga 18 s | Missão `quest_city_vale_vine_foxes` (Gordias, Vale dos Sátiros) | 53 | Ícaro |
+| `mount_mesektet_ibis` | Íbis Real de Mesektet / *Royal Ibis of Mesektet* | voador | Raro | 1,70 | +1% | 100 | 170 | 16 | — | **Planar de Mesektet:** plana 16 m em 1,4 s (parede segura; voo só visual). Recarga 20 s | Missão `quest_city_mesektet_scorpions_in_the_sands` (Djedi, Cais de Mesektet) | 71 | — |
+| `mount_aurora_reindeer` | Rena da Aurora / *Aurora Reindeer* | terrestre | Épico | 1,75 | +3% | 175 | 160 | 21 | — | **Trote da Aurora:** 10 s de galope sem cansar e sem lentidão. Recarga 45 s. Não quebra gelo fino (não é pesada, `ThinIceRules`) | Missão `quest_city_porto_bears_on_the_canals` (Pera, Porto da Lua Branca) | 59 | Maithe |
+| `mount_lacquer_lion` | Leão-Guardião de Laca / *Lacquer Guardian Lion* | terrestre | Épico | 1,50 | +9% | 200 | 140 | 21 | Sim | **Olho da Guarda:** marca todo bicho e segredo a até 22 m. Recarga 30 s | Missão `quest_city_hinokura_ember_gulls_on_the_lighthouse` (Sango, Hinokura) | 65 | — |
+| `mount_mushhushshu` | Mušḫuššu Manso / *Tame Mushussu* | terrestre | Épico | 1,60 | +7% | 200 | 140 | 21 | Sim | **Rugido do Portão:** bichos comuns a até 8 m fogem por 4 s e batem 15% mais fraco; chefe não. Recarga 40 s | Missão `quest_city_dur_jarras_beetles_on_the_tablets` (Sin-leqi-unninni, Dur-Jarras) | 77 | — |
+
+- **Efeitos novos** (`MountFarRegionAbilities`, regras puras em `MountFarRegionRules`): `Untie`, `AuroraRun`, `Reveal`, `Dread`,
+  `ThicketStride` e `BoulderCharge` (acrescentados ao fim de `MountAbilityKind`), mais `Glide` e `WeatherImmunity`, que já
+  existiam sem uso: continua um efeito por espécie (§3.7).
+- **Modelos:** `MountFarRegionRecipes`, no mesmo sistema; a Íbis usa as asas e o bico de `MountSkyRecipes`, com duas pernas.
+- **Limites:** a Cabra ainda não anula chão quente de mapa, porque esse sistema não existe (Mapas100 §Hinokura: "medidor de calor");
+  o bico da Íbis é o de águia do Grifo, não o curvo de uma íbis.
+- **Testes:** `MountFarRegionTests`.
 
 ### 3.7 Checagem de unicidade
 
@@ -719,7 +746,7 @@ dos primos com as falas.
    - **Fitas de Luz:** cada vitória contra um dos 4 chefes dá 1 fita daquele chefe (salva em `bossRibbonIds/Counts`);
      `MountCollection.RedeemRibbons` troca 25 pela Rara e 80 pela Épica (Lendário nunca). Falta o botão na Estrebaria.
    - **Missão/conquista/segredo/evento:** `MountSourceHooks` com os ids `quest_agua_pro_jumento`,
-     `achievement_amigo_da_caipora`, `achievement_paciencia_de_jabuti`, `secret_mata_que_nao_queima` e
+     `ach_world_all_regions` (pisar nas 16 regiões), `ach_porch_story` (ouvir uma história inteira na cadeira do Vô Jorge), `secret_mata_que_nao_queima` e
      `event_festa_junina`. A coleção ouve `QuestCompletedEvent`, `AchievementUnlockedEvent` e `SecretClaimedEvent` e dá
      a montaria uma vez só; quem escrever a missão/conquista/segredo só precisa usar o id. A loja da Bema chama
      `MountCollection.BuyWithPrendas` (Avestruz de Brasa 90, Boi das Canções 250). O conteúdo (missão, conquistas, segredo,

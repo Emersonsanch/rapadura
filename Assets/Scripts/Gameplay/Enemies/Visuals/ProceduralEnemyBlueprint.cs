@@ -319,6 +319,46 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         DimmedLightGull = 141,
         /// <summary>Pedra do Céu (99): a slab of the sky on four stumps, gold in the cracks; a jaw that gapes.</summary>
         SkyStone = 142,
+        /// <summary>O Rei-Vendaval (58): the faceless wind-bird, world boss of the Picos de Farnkesh.</summary>
+        WindKing = 143,
+        /// <summary>O Velho Kul (64): the sour old water spirit, world boss of the Mar Gelado.</summary>
+        OldKul = 144,
+        /// <summary>O Glutão de Brasa (70): the mouth of the Devouring Fire, world boss of Hinokura.</summary>
+        EmberGlutton = 145,
+        /// <summary>Apep (76): the serpent that drinks the river, coiled with her neck up; world boss of the Rio das Doze Horas.</summary>
+        Apep = 146,
+        /// <summary>O Sonho da Destruição (82): a robed shadow of broken tablets; world boss of the Margens da Mistura.</summary>
+        DreamOfDestruction = 147,
+        /// <summary>A Grande Treva (90): the Prince of Darkness in silhouette (lion head, eagle wings, dragon body, fish tail, demon feet); world boss of the Limiar Profundo.</summary>
+        GreatDark = 148,
+        /// <summary>Āz, a Capitã Cobiçosa (96): the greedy captain holding the Última Arca; world boss of the Reinos do Céu.</summary>
+        AzCaptain = 149,
+
+        // The eleventh pass of beasts (bible §3.2.1): the roles of Regions 12–16 that still used stand-ins (LateStandInBeastRecipes).
+        /// <summary>Salamandra Devoradora (70): low dark salamander with an ember stripe; jaw and tail.</summary>
+        DevouringSalamander = 180,
+        /// <summary>Bomba Vulcânica (67): cracked ball of slag; tilts on the windup and the core flares.</summary>
+        VolcanicBomb = 181,
+        /// <summary>Ganso Ladrão (72): big goose with a stolen ring; beak opens with the wings held still.</summary>
+        ThiefGoose = 182,
+        /// <summary>Filho de Apep (76): small violet serpent, head up; the tail waves, jaw gapes.</summary>
+        ChildOfApep = 183,
+        /// <summary>Areia Movediça (76): slow heap of sand; flattens on the windup, the sunken lamp flares.</summary>
+        Quicksand = 184,
+        /// <summary>Homem-Escorpião (77): bow in hand, a hand above the ground; a jaw that gapes, the tail sways.</summary>
+        ScorpionMan = 185,
+        /// <summary>Lince do Cedro (80): tufted, resin in the fur; jaw and tail.</summary>
+        CedarLynx = 186,
+        /// <summary>Abelha-Resina (80): fat bee with a lit abdomen; fast wings, the sting swings.</summary>
+        ResinBee = 187,
+        /// <summary>Morcego-Lâmina (86): iron bat with blade fingers; bites with the wings held still.</summary>
+        BladeBat = 188,
+        /// <summary>Enguia Grande (87): thick dark eel with barbels; the tail waves, jaw gapes.</summary>
+        GreatEel = 189,
+        /// <summary>Touro de Cinza (85): bull of packed ash with embers in the seams; the head drops, horns first.</summary>
+        AshBull = 190,
+        /// <summary>Corda de Fumaça (97): a coil of smoke shaped like a rope; a mouth that gapes, the loose ends stir.</summary>
+        SmokeRope = 191,
     }
 
     /// <summary>

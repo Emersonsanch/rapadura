@@ -17,6 +17,14 @@ namespace Rapadura.Gameplay.World.Map
 
         /// <summary>Regions whose boss challenge was won (absent in pre-boss-challenge saves = empty list).</summary>
         public List<int> clearedRegions = new List<int>();
+
+        /// <summary>Once-a-day world spots, as parallel lists (absent in older saves = empty).</summary>
+        public List<string> dailyMarkKeys = new List<string>();
+        public List<int> dailyMarkDays = new List<int>();
+
+        /// <summary>World spots stamped with a Unix time, as parallel lists (absent in older saves = empty).</summary>
+        public List<string> timeMarkKeys = new List<string>();
+        public List<long> timeMarkValues = new List<long>();
     }
 
     /// <summary>
@@ -32,6 +40,8 @@ namespace Rapadura.Gameplay.World.Map
         private readonly HashSet<BiomeType> _unlocked = new HashSet<BiomeType>();
         private readonly Dictionary<BiomeType, int> _victories = new Dictionary<BiomeType, int>();
         private readonly HashSet<BiomeType> _cleared = new HashSet<BiomeType>();
+        private readonly Dictionary<string, int> _dailyMarks = new Dictionary<string, int>();
+        private readonly Dictionary<string, long> _timeMarks = new Dictionary<string, long>();
 
         public string SaveKey => "WorldMap";
 
@@ -60,11 +70,23 @@ namespace Rapadura.Gameplay.World.Map
             _unlocked.Clear();
             _victories.Clear();
             _cleared.Clear();
+            _dailyMarks.Clear();
+            _timeMarks.Clear();
             _unlocked.Add(_startingRegion);
             CurrentRegion = _startingRegion;
         }
 
         void IResettable.ResetForNewSession() => ResetToNewGame();
+
+        /// <summary>The day a once-a-day world spot was last used (0 = never): TimeOfDayManager.Day (starts at 1) or the UTC day number, whichever the spot counts in.</summary>
+        public int GetDailyMark(string key) => _dailyMarks.TryGetValue(key, out int day) ? day : 0;
+
+        public void SetDailyMark(string key, int day) => _dailyMarks[key] = day;
+
+        /// <summary>The Unix time stamped on a world spot, or <paramref name="fallback"/> if it has none.</summary>
+        public long GetTimeMark(string key, long fallback = 0L) => _timeMarks.TryGetValue(key, out long unix) ? unix : fallback;
+
+        public void SetTimeMark(string key, long unix) => _timeMarks[key] = unix;
 
         public bool IsUnlocked(BiomeType region) => _unlocked.Contains(region);
 
@@ -144,6 +166,18 @@ namespace Rapadura.Gameplay.World.Map
                 state.clearedRegions.Add((int)region);
             }
 
+            foreach (KeyValuePair<string, int> pair in _dailyMarks)
+            {
+                state.dailyMarkKeys.Add(pair.Key);
+                state.dailyMarkDays.Add(pair.Value);
+            }
+
+            foreach (KeyValuePair<string, long> pair in _timeMarks)
+            {
+                state.timeMarkKeys.Add(pair.Key);
+                state.timeMarkValues.Add(pair.Value);
+            }
+
             return state;
         }
 
@@ -157,6 +191,26 @@ namespace Rapadura.Gameplay.World.Map
             _unlocked.Clear();
             _victories.Clear();
             _cleared.Clear();
+            _dailyMarks.Clear();
+            _timeMarks.Clear();
+
+            if (saved.timeMarkKeys != null && saved.timeMarkValues != null)
+            {
+                int stamps = Math.Min(saved.timeMarkKeys.Count, saved.timeMarkValues.Count);
+                for (int i = 0; i < stamps; i++)
+                {
+                    _timeMarks[saved.timeMarkKeys[i]] = saved.timeMarkValues[i];
+                }
+            }
+
+            if (saved.dailyMarkKeys != null && saved.dailyMarkDays != null)
+            {
+                int marks = Math.Min(saved.dailyMarkKeys.Count, saved.dailyMarkDays.Count);
+                for (int i = 0; i < marks; i++)
+                {
+                    _dailyMarks[saved.dailyMarkKeys[i]] = saved.dailyMarkDays[i];
+                }
+            }
 
             // The starting region is always reachable, even if an old/hand-edited save omits it.
             _unlocked.Add(_startingRegion);

@@ -647,6 +647,78 @@ def r_armor_bone_helm(ic):
     ic.poly([(56, 16), (64, 4), (72, 16)], COPPER)
 
 
+# ---- conjuntos das Regiões 13–16 (Docs/Items.md)
+PAPYRUS = (206, 186, 118)
+GLAZED_BLUE = (47, 95, 168)
+SEAL_BRONZE = (110, 84, 60)
+SOLID_LIGHT = (250, 240, 200)
+LIGHT_LILAC = (199, 182, 238)
+
+
+def r_armor_papiro_chest(ic):
+    tunic(ic, PAPYRUS, trim=darker(PAPYRUS, 0.3))
+    for x in (46, 56, 66, 76, 84):
+        ic.stroke([(x, 34), (x, 98)], 2, darker(PAPYRUS, 0.3))
+    for y in (52, 70, 88):
+        ic.stroke([(38, y), (90, y)], 1.6, darker(PAPYRUS, 0.2))
+
+
+def r_armor_papiro_helm(ic):
+    ic.poly([(26, 82), (34, 42), (52, 22), (76, 22), (94, 42), (102, 82)], PAPYRUS)
+    for x in (42, 54, 66, 78, 88):
+        ic.stroke([(x, 30), (x + (x - 64) * 0.2, 82)], 2, darker(PAPYRUS, 0.3))
+    ic.rect(24, 80, 104, 92, darker(PAPYRUS, 0.3))
+    ic.poly([(58, 22), (64, 8), (70, 22)], LEAF_DARK)
+
+
+def r_armor_tijolo_chest(ic):
+    tunic(ic, GLAZED_BLUE, trim=GOLD)
+    for y in (50, 66, 82):
+        for x in range(42, 88, 14):
+            ic.rect(x, y, x + 12, y + 13, lighter(GLAZED_BLUE, 0.2 if (x + y) % 4 else 0.05))
+
+
+def r_armor_tijolo_helm(ic):
+    ic.poly([(26, 72), (30, 40), (50, 20), (78, 20), (98, 40), (102, 72), (90, 104), (38, 104)], GLAZED_BLUE)
+    for (x, y) in ((22, 44), (20, 66), (28, 88), (106, 44), (108, 66), (100, 88)):
+        ic.ngon(x, y, 11, 6, GOLD)
+    ic.ngon(48, 56, 8, 6, GOLD_LIGHT, shade=False)
+    ic.ngon(80, 56, 8, 6, GOLD_LIGHT, shade=False)
+    ic.poly([(64, 62), (72, 80), (56, 80)], darker(GLAZED_BLUE, 0.4), shade=False)
+    ic.rect(50, 88, 78, 96, CREAM, shade=False)
+
+
+def r_armor_selo_chest(ic):
+    tunic(ic, SEAL_BRONZE, quilted=True)
+    for (x, y) in ((50, 54), (78, 54), (64, 72), (50, 90), (78, 90)):
+        ic.ngon(x, y, 8, 8, FLAME)
+        ic.stroke([(x - 4, y - 3), (x + 1, y + 1), (x - 1, y + 5)], 1.6, NIGHT)
+
+
+def r_armor_selo_helm(ic):
+    ic.poly([(26, 74), (30, 40), (50, 20), (78, 20), (98, 40), (102, 74), (90, 104), (38, 104)], SEAL_BRONZE)
+    ic.rect(26, 62, 102, 74, darker(SEAL_BRONZE, 0.3))
+    ic.rect(40, 64, 88, 72, NIGHT, shade=False)
+    ic.glow(64, 44, 14, FLAME, 180)
+    ic.ngon(64, 44, 12, 8, FLAME_CORE)
+    ic.stroke([(60, 38), (66, 44), (62, 52)], 2, NIGHT)
+
+
+def r_armor_luz_chest(ic):
+    ic.glow(64, 64, 52, SOLID_LIGHT, 160)
+    tunic(ic, SOLID_LIGHT, trim=GOLD)
+    ic.stroke([(64, 36), (64, 104)], 3, GOLD)
+    ic.ngon(64, 62, 10, 4, LIGHT_LILAC, rot=45)
+
+
+def r_armor_luz_helm(ic):
+    ic.glow(64, 58, 44, SOLID_LIGHT, 170)
+    ic.poly([(24, 84), (32, 62), (96, 62), (104, 84), (90, 94), (38, 94)], GOLD)
+    for x, h in ((36, 28), (50, 40), (64, 52), (78, 40), (92, 28)):
+        ic.poly([(x - 7, 64), (x, 64 - h), (x + 7, 64)], SOLID_LIGHT)
+    ic.ngon(64, 78, 9, 4, LIGHT_LILAC, rot=45)
+
+
 def r_item_bone_fragment(ic):
     ic.bar(30, 92, 94, 36, 14, BONE)
     for (x, y) in ((24, 92), (34, 102), (90, 26), (100, 38)):
@@ -956,6 +1028,15 @@ RECIPES = {
     "item_qocho_holed_coin": r_item_qocho_holed_coin,
     "item_rusty_watch_sword": r_item_rusty_watch_sword,
     "item_bone_key": r_item_bone_key,
+    # Conjuntos das Regiões 13–16
+    "armor_papiro_chest": r_armor_papiro_chest,
+    "armor_papiro_helm": r_armor_papiro_helm,
+    "armor_tijolo_chest": r_armor_tijolo_chest,
+    "armor_tijolo_helm": r_armor_tijolo_helm,
+    "armor_selo_chest": r_armor_selo_chest,
+    "armor_selo_helm": r_armor_selo_helm,
+    "armor_luz_chest": r_armor_luz_chest,
+    "armor_luz_helm": r_armor_luz_helm,
     # ferramentas / armas / armaduras
     "item_axe": r_axe,
     "item_pickaxe": r_pickaxe,

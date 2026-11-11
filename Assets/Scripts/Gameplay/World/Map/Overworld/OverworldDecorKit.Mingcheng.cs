@@ -153,17 +153,29 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>A beacon tower of the wall: square grey stone, a crenellated top with its beacon basin, a red banner.</summary>
         public static void BeaconTower(TownMeshBuilder b, float s, int variant)
         {
-            b.Box(new Vector3(0f, 2.4f, 0f) * s, new Vector3(5f, 6.4f, 5f) * s, TownSwatch.Stone, 0f, TownSwatch.Paving);
-            b.Box(new Vector3(0f, 3.2f, -2.52f) * s, new Vector3(1f, 1.4f, 0.06f) * s, TownSwatch.Black);
+            // The solid foot up to the wall's deck, then two side blocks and a roof: the wall's walk (local z) passes through.
+            b.Box(new Vector3(0f, 1.3f, 0f) * s, new Vector3(5f, 4.2f, 5f) * s, TownSwatch.Stone, 0f, TownSwatch.Paving);
+            foreach (float side in new[] { -1.85f, 1.85f })
+            {
+                b.Box(new Vector3(side, 4.75f, 0f) * s, new Vector3(1.3f, 2.7f, 5f) * s, TownSwatch.Stone);
+            }
+
+            b.Box(new Vector3(0f, 5.75f, 0f) * s, new Vector3(5f, 0.7f, 5f) * s, TownSwatch.Stone, 0f, TownSwatch.Paving);
             foreach (Vector2 c in new[] { new Vector2(-2.2f, -2.2f), new Vector2(0f, -2.2f), new Vector2(2.2f, -2.2f), new Vector2(-2.2f, 2.2f), new Vector2(0f, 2.2f),
                          new Vector2(2.2f, 2.2f), new Vector2(-2.2f, 0f), new Vector2(2.2f, 0f) })
             {
-                b.Box(new Vector3(c.x, 5.9f, c.y) * s, new Vector3(0.7f, 0.7f, 0.7f) * s, TownSwatch.StoneDark);
+                b.Box(new Vector3(c.x, 6.4f, c.y) * s, new Vector3(0.7f, 0.7f, 0.7f) * s, TownSwatch.StoneDark);
             }
 
-            b.Cylinder(new Vector3(0f, 5.6f, 0f) * s, 0.9f * s, 1.1f * s, 0.6f * s, 6, TownSwatch.Iron, (variant & 1) == 0 ? TownSwatch.Ember : TownSwatch.StoneDark);
-            b.Log(new Vector3(2f, 5.6f, -2f) * s, new Vector3(2f, 7.6f, -2f) * s, 0.05f * s, TownSwatch.WoodDark, 3);
-            b.TwoSidedQuad(new Vector3(2f, 7.5f, -2f) * s, new Vector3(2.9f, 7.4f, -2f) * s, new Vector3(2.9f, 6.8f, -2f) * s, new Vector3(2f, 6.9f, -2f) * s, TownSwatch.ClothRed);
+            b.Cylinder(new Vector3(0f, 6.1f, 0f) * s, 0.9f * s, 1.1f * s, 0.6f * s, 6, TownSwatch.Iron, (variant & 1) == 0 ? TownSwatch.Ember : TownSwatch.StoneDark);
+            b.Log(new Vector3(2f, 6.1f, -2f) * s, new Vector3(2f, 8.1f, -2f) * s, 0.05f * s, TownSwatch.WoodDark, 3);
+            b.TwoSidedQuad(new Vector3(2f, 8f, -2f) * s, new Vector3(2.9f, 7.9f, -2f) * s, new Vector3(2.9f, 7.3f, -2f) * s, new Vector3(2f, 7.4f, -2f) * s, TownSwatch.ClothRed);
+        }
+
+        /// <summary>The wall's walk carried over a gap in its body (a gate over a trail): a stone slab 3 m over the ground, nothing under it.</summary>
+        public static void GreatWallDeckSpan(TownMeshBuilder b, Vector3 a, Vector3 c)
+        {
+            Run(b, a, c, 3.6f, 3f, 3.4f, TownSwatch.StoneDark, TownSwatch.Paving);
         }
 
         /// <summary>A clump of bamboo: thin jointed culms, tufts of leaves up high, leaning out.</summary>

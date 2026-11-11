@@ -113,6 +113,9 @@ namespace Rapadura.Gameplay.Mounts
                 case MountVisualRecipe.Boitata:
                 case MountVisualRecipe.ElderTortoise:
                 case MountVisualRecipe.ColumnGriffin:
+                case MountVisualRecipe.LacquerLion:
+                case MountVisualRecipe.MesektetIbis:
+                case MountVisualRecipe.Mushhushshu:
                     return PawStep;
                 default:
                     return HoofStep;

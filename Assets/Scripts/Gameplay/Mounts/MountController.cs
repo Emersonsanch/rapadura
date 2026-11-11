@@ -684,7 +684,7 @@ namespace Rapadura.Gameplay.Mounts
 
         private void Execute(MountAbilityDefinition ability)
         {
-            if (ability.Kind == MountAbilityKind.ShortFlight && _actor != null)
+            if ((ability.Kind == MountAbilityKind.ShortFlight || ability.Kind == MountAbilityKind.Glide) && _actor != null)
             {
                 // Voo da Coluna: the model climbs while MountWaveAbilities lunges the hero on the ground.
                 _actor.Soar(ability.DurationSeconds);

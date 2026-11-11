@@ -21,6 +21,14 @@ namespace Rapadura.Gameplay.Housing
             { "quest_region_forest_spider_webs", new[] { "casa_regional_005" } },
         };
 
+        /// <summary>Achievements of the far regions that also pay a house item whose primary origin is a shop or a drop.</summary>
+        public static readonly IReadOnlyDictionary<string, string[]> ExtraAchievementRewards = new Dictionary<string, string[]>(StringComparer.Ordinal)
+        {
+            { "ach_lavine_sky_golds", new[] { "casa_luz_010" } },
+            { "ach_letters_complete", new[] { "casa_luz_037" } },
+            { "ach_bosses_far_all", new[] { "casa_regional_049" } },
+        };
+
         public static readonly IReadOnlyList<(ItemRarity Rarity, int Weight)> DailyBoxRarityWeights = new[]
         {
             (ItemRarity.Common, 80), (ItemRarity.Uncommon, 18), (ItemRarity.Rare, 2),
@@ -56,9 +64,15 @@ namespace Rapadura.Gameplay.Housing
 
         public static List<string> AchievementRewards(string achievementId, IEnumerable<HouseItemDefinition> catalog = null)
         {
-            return (catalog ?? HouseCatalog.All)
+            List<string> rewards = (catalog ?? HouseCatalog.All)
                 .Where(i => i?.PrimarySource != null && i.PrimarySource.Type == HouseItemSourceType.Achievement && i.PrimarySource.RefId == achievementId)
                 .Select(i => i.ItemId).ToList();
+            if (achievementId != null && ExtraAchievementRewards.TryGetValue(achievementId, out string[] extras))
+            {
+                rewards.AddRange(extras);
+            }
+
+            return rewards;
         }
 
         /// <summary>"Caixinha da Vó" group: shop items of the city's shops, up to Rare, never seasonal.</summary>

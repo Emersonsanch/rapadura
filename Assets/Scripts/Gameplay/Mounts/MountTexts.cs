@@ -245,6 +245,7 @@ namespace Rapadura.Gameplay.Mounts
             entries.AddRange(MountCodex.TextEntries());
             entries.AddRange(MountWaveTexts.Entries); // M3 wave 1: the 18 walkers, their abilities, whistles, drops and ribbons.
             entries.AddRange(MountSkyTexts.Entries); // The flyers: Grifo da Coluna da Glória, Voo da Coluna, "Asas da Coluna".
+            entries.AddRange(MountFarRegionTexts.Entries); // Regions 10–16: the eight mounts of the map sheets.
             foreach (var m in Mounts)
             {
                 entries.Add(new LocalizationEntry("mount." + m.Id + ".name", m.NameEn, m.NamePt));

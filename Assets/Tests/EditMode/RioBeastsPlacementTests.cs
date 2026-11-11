@@ -158,20 +158,12 @@ namespace Rapadura.Tests
         private static OverworldFauna Group(string id) =>
             OverworldLayouts.Get(RioId).Zones.SelectMany(z => z.Fauna).First(f => f.Id == id);
 
-        [TestCase("gansos_ladroes", Gull)]
-        [TestCase("gansos_dos_trigais", Gull)]
         [TestCase("chamas_famintas_do_lago", Firefly)]
         [TestCase("salamandras_de_sombra", SandSnake)]
-        [TestCase("filhos_de_apep", Python)]
-        [TestCase("filhos_do_corpo", Python)]
-        [TestCase("filhos_das_escamas", Python)]
-        [TestCase("filhos_da_areia_movedica", Python)]
         [TestCase("escorpioes_dos_aneis", DesertScorpion)]
         [TestCase("ushabtis_apagados", RopeUshabti)]
         [TestCase("sombras_fervidas", Ooze)]
         [TestCase("sombras_da_brasa", Ooze)]
-        [TestCase("areias_das_escamas", Ooze)]
-        [TestCase("areias_movedicas", Ooze)]
         [TestCase("crocodilos_de_lodo", Mangrove)]
         [TestCase("crocodilos_do_rio_seco", Mangrove)]
         public void TheOtherSheets_KeepTheirStandIn(string group, string standIn)

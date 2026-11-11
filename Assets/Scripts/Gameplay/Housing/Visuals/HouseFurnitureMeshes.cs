@@ -115,6 +115,12 @@ namespace Rapadura.Gameplay.Housing.Visuals
                     return;
             }
 
+            if (word == "Coluna" && item.NamePtBR.IndexOf("tombada", StringComparison.Ordinal) < 0)
+            {
+                Column(b, Mathf.Min(w, d), item.NamePtBR.IndexOf("luz", StringComparison.Ordinal) >= 0 ? HouseSwatch.LampGlow : HouseSwatch.Straw);
+                return;
+            }
+
             if (item.Category == HouseItemCategory.Plant || word.StartsWith("Árvore", StringComparison.Ordinal))
             {
                 PottedPlant(b, Mathf.Min(w, d), 0.9f + Mathf.Min(w, d) * 0.6f, cloth);
@@ -139,6 +145,15 @@ namespace Rapadura.Gameplay.Housing.Visuals
             // Generic piece of furniture: wooden body with a coloured top.
             float height = Mathf.Clamp(0.3f + (w + d) * 0.2f, 0.4f, 1.1f);
             b.Box(new Vector3(0f, height * 0.5f, 0f), new Vector3(w, height, d), wood, top: cloth);
+        }
+
+        /// <summary>A freestanding column: stone foot, shaft and a gold capital.</summary>
+        private static void Column(HouseMeshBuilder b, float footprint, HouseSwatch shaft)
+        {
+            float radius = Mathf.Clamp(footprint * 0.22f, 0.12f, 0.28f);
+            b.Cylinder(Vector3.zero, radius * 1.5f, radius * 1.5f, 0.14f, 8, HouseSwatch.Stone);
+            b.Cylinder(new Vector3(0f, 0.14f, 0f), radius * 0.85f, radius, 1.7f, 8, shaft);
+            b.Cylinder(new Vector3(0f, 1.84f, 0f), radius * 1.6f, radius * 0.85f, 0.2f, 8, HouseSwatch.Gold);
         }
 
         private static void Table(HouseMeshBuilder b, float w, float d, float height, HouseSwatch wood, HouseSwatch? shelf)
@@ -375,6 +390,13 @@ namespace Rapadura.Gameplay.Housing.Visuals
 
                     b.Box(new Vector3(0f, 0.55f, 0f), new Vector3(w, 0.06f, 0.04f), HouseSwatch.WoodRaw);
                     b.Box(new Vector3(0f, 0.3f, 0f), new Vector3(w, 0.06f, 0.04f), HouseSwatch.WoodRaw);
+                    return;
+                case "Barquinha":
+                    b.Box(new Vector3(0f, 0.18f, 0f), new Vector3(w * 0.85f, 0.36f, d * 0.55f), wood, top: HouseSwatch.FloorBoard);
+                    b.Box(new Vector3(-w * 0.48f, 0.34f, 0f), new Vector3(w * 0.16f, 0.3f, d * 0.3f), wood);
+                    b.Box(new Vector3(w * 0.48f, 0.34f, 0f), new Vector3(w * 0.16f, 0.3f, d * 0.3f), wood);
+                    b.Box(new Vector3(0f, 0.95f, 0f), new Vector3(0.06f, 1.2f, 0.06f), HouseSwatch.WoodDark);
+                    b.Box(new Vector3(0f, 1.05f, 0f), new Vector3(w * 0.5f, 0.7f, 0.02f), cloth);
                     return;
             }
 

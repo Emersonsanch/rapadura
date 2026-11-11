@@ -56,7 +56,7 @@ namespace Rapadura.UI.Bestiary
                 ("Midas left grapes for her. She only forgot that sharing is nicer.", "O Midas deixava uva pra ela. Ela só esqueceu que dividir é mais gostoso."),
                 ("She stole my snack. From my pocket. While I was fighting.", "Ela roubou meu lanche. Do meu bolso. Enquanto eu lutava."),
                 ("If she runs away hurt, she'll come back. I'm setting a grape trap.", "Se ela foge machucada, ela volta. Vou montar uma armadilha de uva."),
-                ("Her mouth is all purple! She looks like me after Vó's jabuticaba.", "A boca dela tá toda roxa! Parece eu depois da jabuticaba da Vó."));
+                ("Her mouth is all purple! She looks like me after Vó's mulberries.", "A boca dela tá toda roxa! Parece eu depois das amoras da Vó."));
 
             // -- Picos de Farnkesh (listed with the Mountain) --
             Page(entries, "enemy_mountain_alpine_chough",

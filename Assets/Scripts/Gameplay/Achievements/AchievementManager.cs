@@ -2,15 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Interfaces;
+using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Crafting;
 using Rapadura.Gameplay.Enemies;
+using Rapadura.Gameplay.Housing;
+using Rapadura.Gameplay.Mounts;
 using Rapadura.Gameplay.Quests;
 using Rapadura.Gameplay.Shop;
 using Rapadura.Gameplay.Skills;
 using Rapadura.Gameplay.Story;
 using Rapadura.Gameplay.World.Map;
+using Rapadura.Gameplay.World.Map.Overworld;
 using Rapadura.Save;
 using UnityEngine;
 
@@ -72,6 +77,7 @@ namespace Rapadura.Gameplay.Achievements
         public const string PlayerTag = "Player";
         public const string ProfileFileName = "profile.json";
 
+        private const string HouseItemIdPrefix = "casa_";
         private const string LegacySlotSearchPattern = "slot_*.json";
         private const string BackupFileExtension = ".bak";
         private const string TempFileExtension = ".tmp";
@@ -162,6 +168,11 @@ namespace Rapadura.Gameplay.Achievements
             EventBus.Subscribe<CampaignCompletedEvent>(OnCampaignCompleted);
             EventBus.Subscribe<NewGamePlusCycleCompletedEvent>(OnNewGamePlusCycleCompleted);
             EventBus.Subscribe<BestiaryCompletedEvent>(OnBestiaryCompleted);
+            EventBus.Subscribe<AreaChangedEvent>(OnAreaChanged);
+            EventBus.Subscribe<RegionFeatEvent>(OnRegionFeat);
+            EventBus.Subscribe<MountGrantedEvent>(OnMountGranted);
+            EventBus.Subscribe<ItemPurchasedEvent>(OnItemPurchased);
+            EventBus.Subscribe<HouseItemGrantedEvent>(OnHouseItemGranted);
         }
 
         public void Shutdown()
@@ -187,6 +198,11 @@ namespace Rapadura.Gameplay.Achievements
                 EventBus.Unsubscribe<CampaignCompletedEvent>(OnCampaignCompleted);
                 EventBus.Unsubscribe<NewGamePlusCycleCompletedEvent>(OnNewGamePlusCycleCompleted);
                 EventBus.Unsubscribe<BestiaryCompletedEvent>(OnBestiaryCompleted);
+                EventBus.Unsubscribe<AreaChangedEvent>(OnAreaChanged);
+                EventBus.Unsubscribe<RegionFeatEvent>(OnRegionFeat);
+                EventBus.Unsubscribe<MountGrantedEvent>(OnMountGranted);
+                EventBus.Unsubscribe<ItemPurchasedEvent>(OnItemPurchased);
+                EventBus.Unsubscribe<HouseItemGrantedEvent>(OnHouseItemGranted);
             }
 
             ClearProgress();
@@ -424,11 +440,51 @@ namespace Rapadura.Gameplay.Achievements
             if (evt.WasBoss)
             {
                 RecordProgress(AchievementConditionType.BossesDefeated, 1, enemyId);
+                RecordHeroDeed(enemyId);
             }
         }
 
-        private void OnQuestCompleted(QuestCompletedEvent evt) =>
+        private void OnQuestCompleted(QuestCompletedEvent evt)
+        {
             RecordProgress(AchievementConditionType.QuestsCompleted, 1, evt.QuestId);
+            RecordHeroDeed(evt.QuestId);
+        }
+
+        /// <summary>Id of "<paramref name="heroKey"/> did <paramref name="deedId"/>" (<see cref="AchievementConditionType.HeroDeed"/>); hero keys as in <see cref="LateStoryCatalog.HeroKey"/>.</summary>
+        public static string HeroDeedId(string heroKey, string deedId) => heroKey + ":" + deedId;
+
+        private void RecordHeroDeed(string deedId)
+        {
+            if (!string.IsNullOrEmpty(deedId) && ServiceLocator.TryGet(out CharacterSelectionState selection) && selection != null && selection.Selected.HasValue)
+            {
+                RecordProgress(AchievementConditionType.HeroDeed, 1, HeroDeedId(LateStoryCatalog.HeroKey(selection.Selected.Value), deedId), distinct: true);
+            }
+        }
+
+        private void OnAreaChanged(AreaChangedEvent evt)
+        {
+            if (evt.CurrentPart != null)
+            {
+                RecordProgress(AchievementConditionType.WorldRegionsVisited, 1, evt.CurrentPart.Id, distinct: true);
+            }
+        }
+
+        private void OnRegionFeat(RegionFeatEvent evt) =>
+            RecordProgress(AchievementConditionType.RegionFeat, 1, evt.FeatId, distinct: true);
+
+        private void OnMountGranted(MountGrantedEvent evt) =>
+            RecordProgress(AchievementConditionType.MountsOwned, 1, evt.MountId, distinct: true);
+
+        private void OnItemPurchased(ItemPurchasedEvent evt)
+        {
+            if (evt.ItemId != null && evt.ItemId.StartsWith(HouseItemIdPrefix, StringComparison.Ordinal))
+            {
+                RecordProgress(AchievementConditionType.HouseItemsCollected, 1, evt.ItemId, distinct: true);
+            }
+        }
+
+        private void OnHouseItemGranted(HouseItemGrantedEvent evt) =>
+            RecordProgress(AchievementConditionType.HouseItemsCollected, 1, evt.ItemId, distinct: true);
 
         private void OnExperienceChanged(PlayerExperienceChangedEvent evt) =>
             RecordMax(AchievementConditionType.LevelReached, evt.Level);

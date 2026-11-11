@@ -194,6 +194,24 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 }
             }
 
+            for (int i = 0; i < OverworldLayouts.WallLamps.Length; i++)
+            {
+                Vector2 p = OverworldLayouts.WallLamps[i] + offset;
+                if (content.Rect.Contains(p))
+                {
+                    TryPlaceFixedProfundo(layout, content, OverworldDecor.LampPedestal, p, 90f * i, 1.1f, i, 1f);
+                }
+            }
+
+            foreach (Mechanics.ProfundoSmokeBank bank in OverworldLayouts.SmokeBanks)
+            {
+                Vector2 p = bank.Vent + offset;
+                if (content.Rect.Contains(p))
+                {
+                    TryPlaceFixedProfundo(layout, content, OverworldDecor.ArtificerVent, p, 0f, 1f, 0, 1.6f);
+                }
+            }
+
             Vector2 globe = OverworldLayouts.NoveloGlobeCenter + offset;
             if (content.Rect.Contains(globe))
             {

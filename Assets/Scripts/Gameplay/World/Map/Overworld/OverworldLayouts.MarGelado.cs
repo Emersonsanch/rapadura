@@ -52,6 +52,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public const string FundoVelhoKulMapId = "map_064_fundo_velho_kul";
 
         public static readonly Vector2 PortoLuaBrancaOffset = Vector2.zero;
+        /// <summary>The Velho Kul's arena (64): a stone ring on the ice behind the Great Hole.</summary>
+        public static readonly Vector2 VelhoKulArena = new Vector2(0f, 1762f);
         public static readonly Vector2 CasaDeNeveOffset = new Vector2(0f, 600f);
         public static readonly Vector2 TendaDeYenOffset = new Vector2(-960f, 120f);
         public static readonly Vector2 BocaDoGeloOffset = new Vector2(960f, 600f);
@@ -370,6 +372,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, 700f, 1180f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, -420f, 220f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, 860f, 1400f, 0f, 0.9f);
+            Landmark(w, MapLandmarkKind.StoneRing, VelhoKulArena.x, VelhoKulArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

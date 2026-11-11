@@ -41,6 +41,58 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public const string OmbroUpelluriMapId = "map_081_ombro_upelluri";
         public const string TabuasSonhoMapId = "map_082_tabuas_sonho";
 
+        /// <summary>O Sonho da Destruição's arena (82): the stone ring at the north of the Dream Tablets.</summary>
+        public static readonly Vector2 SonhoDaDestruicaoArena = new Vector2(1640f, 980f);
+
+        /// <summary>The region's rectangle (region coordinates): where <see cref="Mechanics.MisturaMechanicsDriver"/> runs.</summary>
+        public static readonly Rect MisturaBounds = Rect.MinMaxRect(-600f, -1200f, 1800f, 1200f);
+
+        /// <summary>A zone of the region: its <see cref="OverworldZone.Origin"/> says where the region sits in the stitched world.</summary>
+        public const string MisturaAnchorZoneId = "dur_jarras";
+
+        /// <summary>The bubbles of time of the Desert of the Clock (map 78): most on its roads, slow and fast in turn.</summary>
+        public static readonly Mechanics.MisturaTimeBubble[] TimeBubbles =
+        {
+            new Mechanics.MisturaTimeBubble(new Vector2(470f, 5f), 26f, Mechanics.MisturaTimeBubbleRules.SlowFactor),
+            new Mechanics.MisturaTimeBubble(new Vector2(600f, 130f), 24f, Mechanics.MisturaTimeBubbleRules.FastFactor),
+            new Mechanics.MisturaTimeBubble(new Vector2(600f, 360f), 26f, Mechanics.MisturaTimeBubbleRules.SlowFactor),
+            new Mechanics.MisturaTimeBubble(new Vector2(600f, 600f), 24f, Mechanics.MisturaTimeBubbleRules.FastFactor),
+            new Mechanics.MisturaTimeBubble(new Vector2(600f, -130f), 24f, Mechanics.MisturaTimeBubbleRules.FastFactor),
+            new Mechanics.MisturaTimeBubble(new Vector2(600f, -360f), 26f, Mechanics.MisturaTimeBubbleRules.SlowFactor),
+            new Mechanics.MisturaTimeBubble(new Vector2(600f, -600f), 24f, Mechanics.MisturaTimeBubbleRules.FastFactor),
+            new Mechanics.MisturaTimeBubble(new Vector2(450f, -480f), 24f, Mechanics.MisturaTimeBubbleRules.FastFactor),
+            new Mechanics.MisturaTimeBubble(new Vector2(750f, -60f), 28f, Mechanics.MisturaTimeBubbleRules.SlowFactor),
+            new Mechanics.MisturaTimeBubble(new Vector2(450f, 470f), 26f, Mechanics.MisturaTimeBubbleRules.FastFactor),
+            new Mechanics.MisturaTimeBubble(new Vector2(760f, 480f), 26f, Mechanics.MisturaTimeBubbleRules.SlowFactor),
+        };
+
+        /// <summary>The patches of pitch of the Bitumen Wells (map 79): six across the three south roads, three off them.</summary>
+        public static readonly Mechanics.MisturaTarPatch[] TarPatches =
+        {
+            new Mechanics.MisturaTarPatch(new Vector2(-445f, -870f), 9f),
+            new Mechanics.MisturaTarPatch(new Vector2(-425f, -965f), 10f),
+            new Mechanics.MisturaTarPatch(new Vector2(84f, -850f), 9f),
+            new Mechanics.MisturaTarPatch(new Vector2(95f, -915f), 8f),
+            new Mechanics.MisturaTarPatch(new Vector2(605f, -830f), 10f),
+            new Mechanics.MisturaTarPatch(new Vector2(610f, -915f), 11f),
+            new Mechanics.MisturaTarPatch(new Vector2(-240f, -1000f), 10f),
+            new Mechanics.MisturaTarPatch(new Vector2(220f, -1010f), 10f),
+            new Mechanics.MisturaTarPatch(new Vector2(510f, -1030f), 10f),
+        };
+
+        /// <summary>The column of the giant's shoulder (map 81), where the ground breathes (region coordinates).</summary>
+        public static readonly Rect ShoulderArea = Rect.MinMaxRect(840f, -1200f, 1320f, 1200f);
+
+        /// <summary>The anchor stones of the shoulder (map 81): a diorite shard every 120 m beside the road, then a few out on the folds.</summary>
+        public static readonly Vector2[] BreathStones =
+        {
+            new Vector2(992f, -960f), new Vector2(998f, -840f), new Vector2(1049f, -720f), new Vector2(1044f, -600f), new Vector2(1092f, -480f), new Vector2(1068f, -360f),
+            new Vector2(1092f, -240f), new Vector2(1068f, -120f), new Vector2(1092f, 120f), new Vector2(1068f, 240f), new Vector2(1092f, 360f), new Vector2(1068f, 480f),
+            new Vector2(1070f, 600f), new Vector2(1028f, 720f), new Vector2(1052f, 840f), new Vector2(1028f, 960f),
+            new Vector2(900f, -960f), new Vector2(1260f, -960f), new Vector2(900f, -480f), new Vector2(1260f, -480f),
+            new Vector2(900f, 480f), new Vector2(1260f, 480f), new Vector2(900f, 960f), new Vector2(1260f, 960f),
+        };
+
         public static readonly Vector2 DurJarrasOffset = Vector2.zero;
         public static readonly Vector2 GnomonCaidoOffset = new Vector2(600f, 0f);
         public static readonly Vector2 BalsaJuncoOffset = new Vector2(120f, -960f);
@@ -107,7 +159,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         {
             public const string BrickLion = "enemy_forest_brick_lion";
             public const string Mushussu = "enemy_forest_young_mushussu";
-            public const string ScorpionMan = "enemy_desert_scorpion";
+            public const string ScorpionMan = "enemy_forest_scorpion_man";
             public const string Locust = "enemy_forest_bitumen_locust";
             public const string Hourglass = "enemy_forest_living_hourglass";
             public const string InstantLizard = "enemy_mountain_lava_lizard";
@@ -118,8 +170,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Catfish = "enemy_mountain_giant_pike";
             public const string TarSmoke = "enemy_mountain_smoke_harpy";
             public const string AngryCedar = "enemy_forest_angry_cedar";
-            public const string CedarLynx = "enemy_mountain_irbis";
-            public const string ResinBee = "enemy_forest_golden_bee";
+            public const string CedarLynx = "enemy_forest_cedar_lynx";
+            public const string ResinBee = "enemy_forest_resin_bee";
             public const string GlowMantle = "enemy_forest_glow_mantle";
             public const string Diorite = "enemy_mountain_rolling_stone";
             public const string ShoulderBird = "enemy_mountain_storm_eagle";
@@ -133,7 +185,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static OverworldLayout MisturaRegion()
         {
-            OverworldLayout w = NewRegion(MisturaRegionId, MapRegion.MargensDaMistura, Rect.MinMaxRect(-600f, -1200f, 1800f, 1200f));
+            OverworldLayout w = NewRegion(MisturaRegionId, MapRegion.MargensDaMistura, MisturaBounds);
             w.World.Biome = BiomeType.Forest;
             const string durJarras = DurJarrasMapId;
             const string relogio = DesertoRelogioMapId;
@@ -299,7 +351,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, -170f, 1050f, 0f, 1f);
             Landmark(w, MapLandmarkKind.Campfire, 930f, 420f, 0f, 1f);
             Landmark(w, MapLandmarkKind.Campfire, 1400f, -440f, 0f, 1f);
-            Landmark(w, MapLandmarkKind.StoneRing, 1640f, 980f, 0f, 1f);
+            Landmark(w, MapLandmarkKind.StoneRing, SonhoDaDestruicaoArena.x, SonhoDaDestruicaoArena.y, 0f, 1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

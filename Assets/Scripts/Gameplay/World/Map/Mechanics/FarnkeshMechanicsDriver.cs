@@ -37,6 +37,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private PlayerController _controller;
         private PlayerMotor _motor;
         private CharacterController _character;
+        private PlayerStats _stats;
         private InventoryManager _bag;
         private LineRenderer _rope;
         private Material _material;
@@ -117,6 +118,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 _controller = go.GetComponent<PlayerController>();
                 _motor = go.GetComponent<PlayerMotor>();
                 _character = go.GetComponent<CharacterController>();
+                _stats = go.GetComponent<PlayerStats>();
                 _bag = go.GetComponentInChildren<InventoryManager>();
             }
 
@@ -161,7 +163,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
-            _character.Move(new Vector3(push.x, 0f, push.y) * Time.deltaTime);
+            GroundedPush.Shove(_character, push * Time.deltaTime);
             if (_hitGust != gust)
             {
                 _hitGust = gust;
@@ -304,9 +306,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private void TickRide()
         {
-            if ((_player.position - _lastRidePosition).sqrMagnitude > ExternalMoveTolerance * ExternalMoveTolerance)
+            bool dead = _stats != null && !_stats.IsAlive;
+            if (dead || (_player.position - _lastRidePosition).sqrMagnitude > ExternalMoveTolerance * ExternalMoveTolerance)
             {
-                // Something else moved the hero (a respawn, the barca): the ride is over where they are.
+                // The hero died, or something else moved them (a respawn, the barca): the ride is over where they are.
                 EndRide(false);
                 return;
             }

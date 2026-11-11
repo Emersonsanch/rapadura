@@ -1,0 +1,348 @@
+using System;
+using System.Collections.Generic;
+using Rapadura.Gameplay.World.Map.Areas;
+using Rapadura.Gameplay.World.Map.Overworld;
+using UnityEngine;
+
+namespace Rapadura.Gameplay.Enemies
+{
+    /// <summary>The ability only one boss has, on top of the shared phases (<see cref="RegionBossSpawn.Signature"/>). Regions 10–12 have none.</summary>
+    public enum RegionBossSignature
+    {
+        None = 0,
+
+        /// <summary>Apep drinks the river: whoever is far from her when she swallows takes the hit; she heals on it.</summary>
+        DrinkTheRiver = 1,
+
+        /// <summary>The Dream of Destruction: a ring falls round the spot the hero stood on, and the centre (and well outside) is the only safe place.</summary>
+        DreamFall = 2,
+
+        /// <summary>A Grande Treva wears its five forms in turn, each with its own damage (and the eagle's extra shots).</summary>
+        FiveForms = 3,
+
+        /// <summary>Āz opens the Ark: takes a share of the health the hero has right now, so the fuller, the worse.</summary>
+        GreedOfTheArk = 4,
+    }
+
+    /// <summary>The five forms of the Prince of Darkness (Theodore bar Konai; Kephalaia 6), in the order A Grande Treva wears them.</summary>
+    public enum GreatDarkForm
+    {
+        Lion = 0,
+        Eagle = 1,
+        Dragon = 2,
+        Fish = 3,
+        Demon = 4,
+    }
+
+    /// <summary>The fight phases of a world boss of Regions 10–16, by health (<see cref="RegionBossRules.PhaseFor"/>).</summary>
+    public enum RegionBossPhase
+    {
+        /// <summary>Above 66%: the swing and a ring of force at each strike.</summary>
+        Wrath = 1,
+
+        /// <summary>66%–33%: also a barrage of shots at intervals.</summary>
+        Storm = 2,
+
+        /// <summary>Below 33%: also a telegraphed great blow on the spot the hero stood on.</summary>
+        LastStand = 3,
+    }
+
+    /// <summary>Where a world boss of Regions 10–16 stands and how strong it is.</summary>
+    public sealed class RegionBossSpawn
+    {
+        public readonly string EnemyId;
+        public readonly string MapId;
+        public readonly string AreaId;
+        public readonly Vector2 LocalArena;
+        public readonly Vector2 WorldOffset;
+        public readonly int Level;
+        public readonly EnemyProjectileKind Shot;
+        public readonly bool StrongerAtNight;
+        public readonly RegionBossSignature Signature;
+
+        /// <summary>The fichas say it doesn't die, it withdraws: it says so on the way out and its body doesn't stay.</summary>
+        public readonly bool NeverDies;
+
+        /// <summary>Apep (76): she comes back on the next night, not after the usual wait alone.</summary>
+        public readonly bool ReturnsNextNight;
+
+        public RegionBossSpawn(string enemyId, string mapId, string areaId, Vector2 localArena, Vector2 worldOffset, int level,
+            EnemyProjectileKind shot, bool strongerAtNight, RegionBossSignature signature = RegionBossSignature.None, bool neverDies = false, bool returnsNextNight = false)
+        {
+            EnemyId = enemyId;
+            MapId = mapId;
+            AreaId = areaId;
+            LocalArena = localArena;
+            WorldOffset = worldOffset;
+            Level = level;
+            Shot = shot;
+            StrongerAtNight = strongerAtNight;
+            Signature = signature;
+            NeverDies = neverDies;
+            ReturnsNextNight = returnsNextNight;
+        }
+    }
+
+    /// <summary>
+    /// Pure rules of the world bosses of the continuous Regions 10–16 (Docs/Mapas100.md 58, 64, 70, 76, 82, 90, 96): the Rei-Vendaval, the Velho Kul,
+    /// the Glutão de Brasa, Apep, o Sonho da Destruição, A Grande Treva and Āz. Region 16's is on map 96: map 100 has no fight by its ficha. Phases by health, the numbers of their abilities and where they stand. <see cref="RegionBossAbilities"/> plays
+    /// the fight and <see cref="RegionBossDirector"/> keeps them in the world.
+    /// </summary>
+    public static class RegionBossRules
+    {
+        public const string WindKingId = "enemy_mountain_wind_king";
+        public const string OldKulId = "enemy_mountain_old_kul";
+        public const string EmberGluttonId = "enemy_mountain_ember_glutton";
+        public const string ApepId = "enemy_mountain_apep";
+        public const string DreamOfDestructionId = "enemy_mountain_dream_of_destruction";
+        public const string GreatDarkId = "enemy_mountain_great_dark";
+        public const string AzCaptainId = "enemy_mountain_az_captain";
+
+        /// <summary>A Grande Treva's ring (90), in region coordinates: the stone ring before the Gate (Profundo's layout already sets it there).</summary>
+        public static readonly Vector2 GrandeTrevaArena = new Vector2(1400f, 1000f);
+
+        /// <summary>Seconds from a boss's death to its return (the commons take their fauna's 20–40 s; a boss takes a coffee break).</summary>
+        public const float RespawnSeconds = 300f;
+
+        /// <summary>How long the body of one that "never dies" stays before it has withdrawn.</summary>
+        public const float WithdrawSeconds = 2.5f;
+
+        /// <summary>The boss appears when the hero comes within this many metres of the arena.</summary>
+        public const float ActiveRadius = 90f;
+
+        /// <summary>It goes away (back to full health) when the hero is further than this: inside <c>OverworldRules.UnloadRadius</c>, so it is gone before the ground under it unloads.</summary>
+        public const float SleepRadius = 125f;
+
+        /// <summary>How long a fallen boss lies there, like the commons' corpses.</summary>
+        public const float CorpseSeconds = 9f;
+
+        /// <summary>No ordinary clearing centre this close to an arena (the stone ring keeps them off: clearing radius + 12 m, radius at least 10 m).</summary>
+        public const float ArenaClearRadius = 22f;
+
+        public const float StormPhaseStart = 0.66f;
+        public const float LastStandPhaseStart = 0.33f;
+
+        /// <summary>The ring of force at each strike, as a fraction of the swing.</summary>
+        public const float RingDamageFactor = 0.5f;
+
+        public const float BarrageIntervalSeconds = 8f;
+        public const float BarrageDamageFactor = 0.4f;
+        public const float BarrageRange = 12f;
+        /// <summary>Metres between neighbouring shots at the muzzle.</summary>
+        public const float BarrageSpread = 0.9f;
+
+        public const float GreatBlowIntervalSeconds = 12f;
+        public const float GreatBlowWindupSeconds = 2f;
+        public const float GreatBlowRadius = 4.5f;
+        public const float GreatBlowDamageFactor = 1.6f;
+
+        public const float NightAbilityMultiplier = 1.25f;
+
+        /// <summary>Beyond this the boss leaves the hero alone with its abilities (it may still be chasing).</summary>
+        public const float AbilityRange = 22f;
+
+        // ---- Apep (76): she drinks the river ----
+
+        public const float DrinkIntervalSeconds = 14f;
+        public const float DrinkWindupSeconds = 2.5f;
+        public const float DrinkDamageFactor = 1.1f;
+
+        /// <summary>Within this many metres of her you are too close to be swallowed with the river.</summary>
+        public const float DrinkSafeRadius = 7f;
+
+        /// <summary>What a swallow that lands gives her back, as a fraction of her health.</summary>
+        public const float DrinkHealFraction = 0.02f;
+
+        /// <summary>Peak ability multiplier at midnight (ficha: "Apep mais forte perto da meia-noite").</summary>
+        public const float MidnightPeakMultiplier = 1.4f;
+
+        /// <summary>Hours either side of midnight in which the clock strengthens her.</summary>
+        public const float MidnightWindowHours = 3f;
+
+        // ---- O Sonho da Destruição (82): the ring of cut trees ----
+
+        public const float DreamFallIntervalSeconds = 11f;
+        public const float DreamFallWindupSeconds = 2.2f;
+        public const float DreamFallDamageFactor = 1.4f;
+
+        /// <summary>Inside this radius of the marked spot the ring passes over you.</summary>
+        public const float DreamFallInnerRadius = 2.5f;
+
+        /// <summary>Beyond this radius it never reached.</summary>
+        public const float DreamFallOuterRadius = 7f;
+
+        // ---- A Grande Treva (90): five forms ----
+
+        public const float FormSeconds = 9f;
+        public const int EagleExtraShots = 2;
+
+        // ---- Āz (96): the greed of the Ark ----
+
+        public const float GreedIntervalSeconds = 16f;
+        public const float GreedWindupSeconds = 2f;
+
+        /// <summary>The share of the hero's current health the Ark takes.</summary>
+        public const float GreedHealthFraction = 0.15f;
+
+        public static readonly IReadOnlyList<RegionBossSpawn> Spawns = new[]
+        {
+            new RegionBossSpawn(WindKingId, OverworldLayouts.NinhoHumaMapId, "ninho_da_huma", OverworldLayouts.ReiVendavalArena,
+                OverworldLayouts.FarnkeshWorldOffset, 200, EnemyProjectileKind.Feather, true),
+            new RegionBossSpawn(OldKulId, OverworldLayouts.FundoVelhoKulMapId, "fundo_do_velho_kul", OverworldLayouts.VelhoKulArena,
+                OverworldLayouts.MarGeladoWorldOffset, 240, EnemyProjectileKind.LureGlob, true),
+            new RegionBossSpawn(EmberGluttonId, OverworldLayouts.CaldeiraMapId, "caldeira_do_fogo_devorador", OverworldLayouts.GlutaoArena,
+                OverworldLayouts.HinokuraWorldOffset, 280, EnemyProjectileKind.Ember, false),
+            new RegionBossSpawn(ApepId, OverworldLayouts.BancoApepMapId, "banco_de_areia_de_apep", OverworldLayouts.ApepArena,
+                OverworldLayouts.RioWorldOffset, 320, EnemyProjectileKind.LureGlob, false, RegionBossSignature.DrinkTheRiver, neverDies: true, returnsNextNight: true),
+            new RegionBossSpawn(DreamOfDestructionId, OverworldLayouts.TabuasSonhoMapId, "tabuas_do_sonho", OverworldLayouts.SonhoDaDestruicaoArena,
+                OverworldLayouts.MisturaWorldOffset, 360, EnemyProjectileKind.LanternBolt, false, RegionBossSignature.DreamFall),
+            new RegionBossSpawn(GreatDarkId, OverworldLayouts.PortaoTrevaMapId, "portao_da_terra_da_treva", GrandeTrevaArena,
+                OverworldLayouts.ProfundoWorldOffset, 440, EnemyProjectileKind.Ember, false, RegionBossSignature.FiveForms, neverDies: true),
+            new RegionBossSpawn(AzCaptainId, OverworldLayouts.JardimDeLuzMapId, "jardim_das_flores", OverworldLayouts.CapitaAzArena,
+                OverworldLayouts.CeuWorldOffset, 478, EnemyProjectileKind.LanternBolt, false, RegionBossSignature.GreedOfTheArk, neverDies: true),
+        };
+
+        public static RegionBossSpawn SpawnOf(string enemyId)
+        {
+            foreach (RegionBossSpawn spawn in Spawns)
+            {
+                if (spawn.EnemyId == enemyId)
+                {
+                    return spawn;
+                }
+            }
+
+            return null;
+        }
+
+        public static bool IsRegionBoss(string enemyId) => SpawnOf(enemyId) != null;
+
+        public static RegionBossPhase PhaseFor(float healthFraction)
+        {
+            if (healthFraction > StormPhaseStart)
+            {
+                return RegionBossPhase.Wrath;
+            }
+
+            return healthFraction >= LastStandPhaseStart ? RegionBossPhase.Storm : RegionBossPhase.LastStand;
+        }
+
+        public static int ShotsFor(RegionBossPhase phase)
+        {
+            switch (phase)
+            {
+                case RegionBossPhase.Storm: return 3;
+                case RegionBossPhase.LastStand: return 5;
+                default: return 0;
+            }
+        }
+
+        /// <summary>Sideways offset (m) of shot <paramref name="index"/> of <paramref name="count"/>: centred on the muzzle.</summary>
+        public static float ShotOffset(int index, int count) => (index - (count - 1) * 0.5f) * BarrageSpread;
+
+        public static bool GreatBlowEnabled(RegionBossPhase phase) => phase == RegionBossPhase.LastStand;
+
+        /// <summary>Does a great blow aimed at <paramref name="impact"/> reach someone at <paramref name="hero"/>? (flat distance)</summary>
+        public static bool GreatBlowHits(Vector2 impact, Vector2 hero) => (hero - impact).sqrMagnitude <= GreatBlowRadius * GreatBlowRadius;
+
+        /// <summary>Ability damage multiplier: the fichas make the Rei-Vendaval and the Kul stronger at night, the Glutão lives in a caldera that is always night.</summary>
+        public static float AbilityMultiplier(bool strongerAtNight, bool isNight) => strongerAtNight && isNight ? NightAbilityMultiplier : 1f;
+
+        public static bool SignatureEnabled(RegionBossSignature signature, RegionBossPhase phase) => signature != RegionBossSignature.None && phase != RegionBossPhase.Wrath;
+
+        public static float SignatureInterval(RegionBossSignature signature)
+        {
+            switch (signature)
+            {
+                case RegionBossSignature.DrinkTheRiver: return DrinkIntervalSeconds;
+                case RegionBossSignature.DreamFall: return DreamFallIntervalSeconds;
+                case RegionBossSignature.GreedOfTheArk: return GreedIntervalSeconds;
+                default: return FormSeconds;
+            }
+        }
+
+        public static float SignatureWindup(RegionBossSignature signature)
+        {
+            switch (signature)
+            {
+                case RegionBossSignature.DrinkTheRiver: return DrinkWindupSeconds;
+                case RegionBossSignature.DreamFall: return DreamFallWindupSeconds;
+                case RegionBossSignature.GreedOfTheArk: return GreedWindupSeconds;
+                default: return 0f;
+            }
+        }
+
+        /// <summary>Does Apep's swallow reach a hero <paramref name="distance"/> m from her? Only those who stayed away.</summary>
+        public static bool DrinkHits(float distance) => distance > DrinkSafeRadius;
+
+        /// <summary>Ability multiplier for the hour: 1 until <see cref="MidnightWindowHours"/> from midnight, up to the peak at 0:00 (wraps round the day).</summary>
+        public static float MidnightMultiplier(float hour)
+        {
+            float fromMidnight = Mathf.Abs(Mathf.Repeat(hour + 12f, 24f) - 12f);
+            return Mathf.Lerp(MidnightPeakMultiplier, 1f, Mathf.Clamp01(fromMidnight / MidnightWindowHours));
+        }
+
+        /// <summary>Is a hero at <paramref name="hero"/> under the ring that falls round <paramref name="impact"/>? Staying exactly put, or getting well out, are safe.</summary>
+        public static bool DreamFallHits(Vector2 impact, Vector2 hero)
+        {
+            float distance = Vector2.Distance(impact, hero);
+            return distance >= DreamFallInnerRadius && distance <= DreamFallOuterRadius;
+        }
+
+        /// <summary>The form worn <paramref name="fightSeconds"/> into the fight.</summary>
+        public static GreatDarkForm FormAt(float fightSeconds)
+        {
+            int index = Mathf.FloorToInt(Mathf.Max(0f, fightSeconds) / FormSeconds);
+            return (GreatDarkForm)(index % 5);
+        }
+
+        public static float FormDamageMultiplier(GreatDarkForm form)
+        {
+            switch (form)
+            {
+                case GreatDarkForm.Lion: return 1.3f;
+                case GreatDarkForm.Dragon: return 1.15f;
+                case GreatDarkForm.Fish: return 0.85f;
+                case GreatDarkForm.Demon: return 1.2f;
+                default: return 1f;
+            }
+        }
+
+        public static int FormExtraShots(GreatDarkForm form) => form == GreatDarkForm.Eagle ? EagleExtraShots : 0;
+
+        /// <summary>What the Ark takes from a hero who has <paramref name="currentHealth"/> left: always something, proportional to what is left.</summary>
+        public static float GreedDamage(float currentHealth) => Mathf.Max(1f, Mathf.Max(0f, currentHealth) * GreedHealthFraction);
+
+        /// <summary>Apep is back only when a night begins after she withdrew: a day must have passed first (her ficha's "até a noite seguinte").</summary>
+        public static bool NightReturnReady(bool sawDaySinceWithdrawing, bool isNight) => sawDaySinceWithdrawing && isNight;
+
+        /// <summary>Whether a dormant boss should appear for a hero <paramref name="distance"/> m from its arena.</summary>
+        public static bool ShouldWake(float distance) => distance <= ActiveRadius;
+
+        /// <summary>Whether a standing boss should go away for a hero <paramref name="distance"/> m from its arena.</summary>
+        public static bool ShouldSleep(float distance) => distance > SleepRadius;
+
+        /// <summary>
+        /// The arena in the coordinates of <paramref name="layout"/>: the stitched world (the region's offset) or the region alone (no offset);
+        /// null when neither lands in the boss's area (the world being played doesn't contain this region).
+        /// </summary>
+        public static Vector2? ArenaIn(OverworldLayout layout, RegionBossSpawn spawn)
+        {
+            if (layout == null || spawn == null)
+            {
+                return null;
+            }
+
+            foreach (Vector2 candidate in new[] { spawn.LocalArena + spawn.WorldOffset, spawn.LocalArena })
+            {
+                OverworldZone zone = OverworldRules.ZoneAt(layout, candidate);
+                if (zone != null && string.Equals(zone.Id, spawn.AreaId, StringComparison.Ordinal))
+                {
+                    return candidate;
+                }
+            }
+
+            return null;
+        }
+    }
+}

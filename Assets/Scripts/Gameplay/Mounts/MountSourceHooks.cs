@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Rapadura.Gameplay.World.Cities;
 
 namespace Rapadura.Gameplay.Mounts
 {
@@ -46,8 +47,11 @@ namespace Rapadura.Gameplay.Mounts
     public static class MountSourceHooks
     {
         public const string QuestAguaProJumento = "quest_agua_pro_jumento";
-        public const string AchievementAmigoDaCaipora = "achievement_amigo_da_caipora";
-        public const string AchievementPacienciaDeJabuti = "achievement_paciencia_de_jabuti";
+        /// <summary>"Todas as Estradas, Até o Fim": the trailblazer warthog goes to whoever walked all 16 regions.</summary>
+        public const string AchievementAmigoDaCaipora = "ach_world_all_regions";
+
+        /// <summary>"A Cadeira do Vô": the old tortoise goes to whoever had the patience to hear a story to the end.</summary>
+        public const string AchievementPacienciaDeJabuti = "ach_porch_story";
         public const string SecretMataQueNaoQueima = "secret_mata_que_nao_queima";
         public const string EventFestaJunina = "event_festa_junina";
 
@@ -63,6 +67,13 @@ namespace Rapadura.Gameplay.Mounts
             new MountSourceHook(MountWaveCatalog.FireRhea, MountSourceKind.Event, EventFestaJunina, 90),
             new MountSourceHook(MountWaveCatalog.BoiBumba, MountSourceKind.Event, EventFestaJunina, 250),
             new MountSourceHook(MountSkyCatalog.ColumnGriffin, MountSourceKind.Quest, QuestAsasDaColuna),
+
+            // Regions 10–16 (MountFarRegionCatalog): the Rare and Epic ones reward the second city quest of their region.
+            new MountSourceHook(MountFarRegionCatalog.GordiasGoat, MountSourceKind.Quest, CityQuestCatalog.ValeVineFoxes),
+            new MountSourceHook(MountFarRegionCatalog.AuroraReindeer, MountSourceKind.Quest, CityQuestCatalog.PortoBears),
+            new MountSourceHook(MountFarRegionCatalog.LacquerLion, MountSourceKind.Quest, CityQuestCatalog.HinokuraEmberGulls),
+            new MountSourceHook(MountFarRegionCatalog.MesektetIbis, MountSourceKind.Quest, CityQuestCatalog.MesektetScorpions),
+            new MountSourceHook(MountFarRegionCatalog.Mushhushshu, MountSourceKind.Quest, CityQuestCatalog.DurJarrasBeetles),
         };
 
         public static IEnumerable<MountSourceHook> Matching(MountSourceKind kind, string hookId)

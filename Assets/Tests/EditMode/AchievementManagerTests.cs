@@ -499,6 +499,7 @@ namespace Rapadura.Tests
             Assert.AreEqual(seeded.Length, seeded.Select(d => d.AchievementId).Distinct().Count(), "Achievement ids must be unique.");
 
             var knownQuestIds = new HashSet<string>(Resources.LoadAll<QuestDefinition>("Quests").Select(q => q.QuestId));
+            knownQuestIds.UnionWith(LateStoryCatalog.Steps.Select(s => s.QuestId)); // "As Cartas da Estrada" is content as code.
 
             foreach (AchievementDefinition definition in seeded)
             {

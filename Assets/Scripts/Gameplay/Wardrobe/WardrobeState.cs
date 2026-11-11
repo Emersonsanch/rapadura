@@ -110,7 +110,7 @@ namespace Rapadura.Gameplay.Wardrobe
         public const int SaveVersion = 1;
         public const int BaseOutfitSlots = 3;
         public const int RosewoodOutfitSlots = 6;
-        /// <summary>"Guarda-roupa de jacarandá com espelho": doubles the outfit slots (§9.3).</summary>
+        /// <summary>"Guarda-roupa de cedro com espelho": doubles the outfit slots (§9.3).</summary>
         public const string RosewoodWardrobeItemId = "casa_util_007";
 
         private readonly HashSet<string> _unlocked = new HashSet<string>(StringComparer.Ordinal);

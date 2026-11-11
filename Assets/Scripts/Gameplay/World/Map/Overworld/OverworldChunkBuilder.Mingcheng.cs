@@ -19,6 +19,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private const int BeaconEvery = 20;
 
+        /// <summary>Top (m over the ground) of the wall's and the towers' colliders: under the deck the hero walks on (3.4 m), well above a jump.</summary>
+        private const float WallBodyTop = 3.1f;
+
         /// <summary>A Planície de Mingcheng terrain (Região 8, 140–159).</summary>
         public static bool IsMingcheng(OverworldTerrain t) => OverworldTerrains.IsMingcheng(t);
 
@@ -193,6 +196,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                         content.Blocked.Add(new Rect(a.x - 3.2f, a.y - 3.2f, 6.4f, 6.4f));
                     }
 
+                    AddWallDeckSpan(content, a, c);
                     continue;
                 }
 
@@ -203,7 +207,20 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     content.Props.Add(run);
                     AddSolid(layout, content, run);
                 }
+                else
+                {
+                    AddWallDeckSpan(content, a, c);
+                }
             }
+        }
+
+        /// <summary>Marks a <see cref="OverworldDecor.GreatWallRun"/> as only the deck over a gap (a gate over a trail, the stretch beside a tower): no body, no collider.</summary>
+        private const int WallDeckVariant = int.MinValue;
+
+        /// <summary>The wall's walk carried over a gap in its body, high enough to pass under.</summary>
+        private static void AddWallDeckSpan(OverworldChunkContent content, Vector2 a, Vector2 c)
+        {
+            content.Props.Add(new OverworldProp { Kind = CityPropKind.FenceRun, Decor = OverworldDecor.GreatWallRun, Position = a, End = c, Scale = 1f, Variant = WallDeckVariant });
         }
 
         /// <summary>Tea rows and paddy bunds along the contour; straight field banks in the millet.</summary>
@@ -356,7 +373,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     content.Solids.Add(new OverworldSolid { Center = p, Base = ground, Radius = 3.4f * s, Height = 1.2f * s + sink });
                     break;
                 case OverworldDecor.BeaconTower:
-                    content.Solids.Add(new OverworldSolid { Center = p, Base = ground, IsBox = true, Size = new Vector2(5.1f * s, 5.1f * s), Height = 6.4f * s + sink, Yaw = prop.Yaw });
+                    // Only up to under the wall's deck: the walk goes through the tower's open passage (Mechanics.MingchengWallRules).
+                    content.Solids.Add(new OverworldSolid { Center = p, Base = ground, IsBox = true, Size = new Vector2(5.1f * s, 5.1f * s), Height = WallBodyTop * s + sink, Yaw = prop.Yaw });
                     break;
                 case OverworldDecor.Bamboo:
                     content.Solids.Add(new OverworldSolid { Center = p, Base = ground, Radius = 0.55f * s, Height = 4f * s + sink });
@@ -377,8 +395,23 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     content.Solids.Add(new OverworldSolid { Center = p, Base = ground, Radius = 0.25f * s, Height = 2.2f * s + sink });
                     break;
                 case OverworldDecor.GreatWallRun:
-                    AddRunSolid(content, prop, 3.6f, 4.2f, sink + 1.4f);
+                {
+                    if (prop.Variant == WallDeckVariant)
+                    {
+                        break;
+                    }
+
+                    // The body stops under the deck (at the low end of the run, so no point of it pokes through), still far above a jump.
+                    Vector2 d = prop.End - prop.Position;
+                    float low = Mathf.Min(content.Grid.Sample(prop.Position), content.Grid.Sample(prop.End));
+                    float deep = sink + 1.4f;
+                    content.Solids.Add(new OverworldSolid
+                    {
+                        Center = (prop.Position + prop.End) * 0.5f, Base = low - deep, IsBox = true, Size = new Vector2(3.6f, d.magnitude), Height = WallBodyTop + deep,
+                        Yaw = Mathf.Atan2(d.x, d.y) * Mathf.Rad2Deg,
+                    });
                     break;
+                }
             }
 
             return true;
@@ -395,6 +428,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             switch (prop.Decor)
             {
                 case OverworldDecor.GreatWallRun:
+                    if (prop.Variant == WallDeckVariant)
+                    {
+                        OverworldDecorKit.GreatWallDeckSpan(b, at, new Vector3(prop.End.x, g.Sample(prop.End), prop.End.y));
+                        return true;
+                    }
+
                     OverworldDecorKit.GreatWallRun(b, at, new Vector3(prop.End.x, g.Sample(prop.End), prop.End.y), prop.Variant);
                     return true;
                 case OverworldDecor.MilletTuft:

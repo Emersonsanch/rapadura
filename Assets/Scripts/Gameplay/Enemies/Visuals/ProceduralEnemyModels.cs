@@ -245,6 +245,26 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_forest_az_thief", ProceduralEnemyKind.AzThief },
             { "enemy_forest_dimmed_light_gull", ProceduralEnemyKind.DimmedLightGull },
             { "enemy_forest_sky_stone", ProceduralEnemyKind.SkyStone },
+            { "enemy_mountain_devouring_salamander", ProceduralEnemyKind.DevouringSalamander },
+            { "enemy_mountain_volcanic_bomb", ProceduralEnemyKind.VolcanicBomb },
+            { "enemy_forest_thief_goose", ProceduralEnemyKind.ThiefGoose },
+            { "enemy_forest_child_of_apep", ProceduralEnemyKind.ChildOfApep },
+            { "enemy_forest_quicksand", ProceduralEnemyKind.Quicksand },
+            { "enemy_forest_scorpion_man", ProceduralEnemyKind.ScorpionMan },
+            { "enemy_forest_cedar_lynx", ProceduralEnemyKind.CedarLynx },
+            { "enemy_forest_resin_bee", ProceduralEnemyKind.ResinBee },
+            { "enemy_forest_blade_bat", ProceduralEnemyKind.BladeBat },
+            { "enemy_forest_great_eel", ProceduralEnemyKind.GreatEel },
+            { "enemy_forest_ash_bull", ProceduralEnemyKind.AshBull },
+            { "enemy_forest_smoke_rope", ProceduralEnemyKind.SmokeRope },
+            // The world bosses of Regions 10–12 (Docs/Mapas100.md 58, 64, 70), at their arenas.
+            { RegionBossRules.WindKingId, ProceduralEnemyKind.WindKing },
+            { RegionBossRules.OldKulId, ProceduralEnemyKind.OldKul },
+            { RegionBossRules.EmberGluttonId, ProceduralEnemyKind.EmberGlutton },
+            { RegionBossRules.ApepId, ProceduralEnemyKind.Apep },
+            { RegionBossRules.DreamOfDestructionId, ProceduralEnemyKind.DreamOfDestruction },
+            { RegionBossRules.GreatDarkId, ProceduralEnemyKind.GreatDark },
+            { RegionBossRules.AzCaptainId, ProceduralEnemyKind.AzCaptain },
             // Ossuário dos Artífices (Resources/Dungeons/Ossuario/Enemies, spawned by the DungeonDirector).
             { "enemy_floating_skull", ProceduralEnemyKind.FloatingSkull },
             { "enemy_skeleton_warrior", ProceduralEnemyKind.SkeletonWarrior },
@@ -293,6 +313,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.DimmedCloudBird, ProceduralEnemyKind.DimmedLightFish, ProceduralEnemyKind.DarkStowaway, ProceduralEnemyKind.HoldShadow,
             ProceduralEnemyKind.LivingRope, ProceduralEnemyKind.ToyArchon, ProceduralEnemyKind.CrackedJar, ProceduralEnemyKind.ChainedArchon,
             ProceduralEnemyKind.BalloonGiant, ProceduralEnemyKind.AzThief, ProceduralEnemyKind.DimmedLightGull, ProceduralEnemyKind.SkyStone,
+            ProceduralEnemyKind.DevouringSalamander, ProceduralEnemyKind.VolcanicBomb, ProceduralEnemyKind.ThiefGoose, ProceduralEnemyKind.ChildOfApep,
+            ProceduralEnemyKind.Quicksand, ProceduralEnemyKind.ScorpionMan, ProceduralEnemyKind.CedarLynx, ProceduralEnemyKind.ResinBee,
+            ProceduralEnemyKind.BladeBat, ProceduralEnemyKind.GreatEel, ProceduralEnemyKind.AshBull, ProceduralEnemyKind.SmokeRope,
+            ProceduralEnemyKind.WindKing, ProceduralEnemyKind.OldKul, ProceduralEnemyKind.EmberGlutton,
+            ProceduralEnemyKind.Apep, ProceduralEnemyKind.DreamOfDestruction, ProceduralEnemyKind.GreatDark, ProceduralEnemyKind.AzCaptain,
         };
 
         /// <summary>The Ossuário dos Artífices guardians (<see cref="OssuaryEnemyRecipes"/>).</summary>
@@ -313,7 +338,24 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         public static bool IsBoss(ProceduralEnemyKind kind)
         {
             return kind == ProceduralEnemyKind.Warlord || kind == ProceduralEnemyKind.RuinGuardian || kind == ProceduralEnemyKind.AncientDweller
-                || kind == ProceduralEnemyKind.AlphaWolf || kind == ProceduralEnemyKind.BoneColossus;
+                || kind == ProceduralEnemyKind.AlphaWolf || kind == ProceduralEnemyKind.BoneColossus || IsRegionWorldBoss(kind);
+        }
+
+        /// <summary>The world bosses of Regions 10–16 (<see cref="RegionBossRecipes"/>).</summary>
+        public static bool IsRegionWorldBoss(ProceduralEnemyKind kind) => kind >= ProceduralEnemyKind.WindKing && kind <= ProceduralEnemyKind.AzCaptain;
+
+        private static string RegionBossIdOf(ProceduralEnemyKind kind)
+        {
+            switch (kind)
+            {
+                case ProceduralEnemyKind.WindKing: return RegionBossRules.WindKingId;
+                case ProceduralEnemyKind.OldKul: return RegionBossRules.OldKulId;
+                case ProceduralEnemyKind.Apep: return RegionBossRules.ApepId;
+                case ProceduralEnemyKind.DreamOfDestruction: return RegionBossRules.DreamOfDestructionId;
+                case ProceduralEnemyKind.GreatDark: return RegionBossRules.GreatDarkId;
+                case ProceduralEnemyKind.AzCaptain: return RegionBossRules.AzCaptainId;
+                default: return RegionBossRules.EmberGluttonId;
+            }
         }
 
         public static int TriangleBudget(ProceduralEnemyKind kind) => IsBoss(kind) ? BossTriangleBudget : CommonTriangleBudget;
@@ -750,8 +792,65 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.DimmedLightGull:
                     CeuBeastRecipes.BuildDimmedLightGull(blueprint);
                     break;
+                case ProceduralEnemyKind.DevouringSalamander:
+                    LateStandInBeastRecipes.BuildDevouringSalamander(blueprint);
+                    break;
+                case ProceduralEnemyKind.VolcanicBomb:
+                    LateStandInBeastRecipes.BuildVolcanicBomb(blueprint);
+                    break;
+                case ProceduralEnemyKind.ThiefGoose:
+                    LateStandInBeastRecipes.BuildThiefGoose(blueprint);
+                    break;
+                case ProceduralEnemyKind.ChildOfApep:
+                    LateStandInBeastRecipes.BuildChildOfApep(blueprint);
+                    break;
+                case ProceduralEnemyKind.Quicksand:
+                    LateStandInBeastRecipes.BuildQuicksand(blueprint);
+                    break;
+                case ProceduralEnemyKind.ScorpionMan:
+                    LateStandInBeastRecipes.BuildScorpionMan(blueprint);
+                    break;
+                case ProceduralEnemyKind.CedarLynx:
+                    LateStandInBeastRecipes.BuildCedarLynx(blueprint);
+                    break;
+                case ProceduralEnemyKind.ResinBee:
+                    LateStandInBeastRecipes.BuildResinBee(blueprint);
+                    break;
+                case ProceduralEnemyKind.BladeBat:
+                    LateStandInBeastRecipes.BuildBladeBat(blueprint);
+                    break;
+                case ProceduralEnemyKind.GreatEel:
+                    LateStandInBeastRecipes.BuildGreatEel(blueprint);
+                    break;
+                case ProceduralEnemyKind.AshBull:
+                    LateStandInBeastRecipes.BuildAshBull(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeRope:
+                    LateStandInBeastRecipes.BuildSmokeRope(blueprint);
+                    break;
                 case ProceduralEnemyKind.SkyStone:
                     CeuBeastRecipes.BuildSkyStone(blueprint);
+                    break;
+                case ProceduralEnemyKind.WindKing:
+                    RegionBossRecipes.BuildWindKing(blueprint);
+                    break;
+                case ProceduralEnemyKind.OldKul:
+                    RegionBossRecipes.BuildOldKul(blueprint);
+                    break;
+                case ProceduralEnemyKind.EmberGlutton:
+                    RegionBossRecipes.BuildEmberGlutton(blueprint);
+                    break;
+                case ProceduralEnemyKind.Apep:
+                    RegionBossRecipes.BuildApep(blueprint);
+                    break;
+                case ProceduralEnemyKind.DreamOfDestruction:
+                    RegionBossRecipes.BuildDreamOfDestruction(blueprint);
+                    break;
+                case ProceduralEnemyKind.GreatDark:
+                    RegionBossRecipes.BuildGreatDark(blueprint);
+                    break;
+                case ProceduralEnemyKind.AzCaptain:
+                    RegionBossRecipes.BuildAzCaptain(blueprint);
                     break;
             }
 
@@ -819,6 +918,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             }
 
             root.AddComponent<ProceduralEnemyRig>().Configure(blueprint.Kind);
+            if (IsRegionWorldBoss(blueprint.Kind))
+            {
+                root.AddComponent<RegionBossAbilities>().Configure(RegionBossIdOf(blueprint.Kind));
+            }
+
             if (IsNightSpecies(blueprint.Kind))
             {
                 // Arrival call + attack cue through the procedural synth (pool-safe: re-armed on every enable).

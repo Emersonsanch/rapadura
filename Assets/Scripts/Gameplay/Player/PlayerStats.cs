@@ -448,6 +448,32 @@ namespace Rapadura.Gameplay.Player
             return amount;
         }
 
+        /// <summary>
+        /// Damage from the world itself (tar, smoke, heat, thin ice...), for ticks that can be shorter than the i-frames: it neither grants
+        /// nor respects invulnerability, so a hazard cannot shield the hero from monsters nor lose a tick after a blow. Publishes the same
+        /// <see cref="DamageAppliedEvent"/> as any hit (no source).
+        /// Hazard rules compute a bite that stops at their own floor of life, so defense may only shrink it: the multiplier is capped at 1
+        /// (armor and buffs still help, a Defense debuff cannot push the bite past the rule's floor). A hazard never kills: at least 1 life is left.
+        /// </summary>
+        /// <returns>The damage actually taken.</returns>
+        public float ApplyHazardDamage(float amount)
+        {
+            if (IsDead || amount <= 0f)
+            {
+                return 0f;
+            }
+
+            float taken = Mathf.Min(amount * Mathf.Min(1f, DefenseMultiplier), CurrentHealth - 1f);
+            if (taken <= 0f)
+            {
+                return 0f;
+            }
+
+            SetHealth(CurrentHealth - taken);
+            EventBus.Publish(new DamageAppliedEvent(gameObject, null, taken, ElementType.None, false));
+            return taken;
+        }
+
         public void Heal(float amount)
         {
             if (IsDead)

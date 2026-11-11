@@ -52,7 +52,7 @@ namespace Rapadura.Tests.EditMode
             Assert.AreEqual(MountType.Voador, spec.Type);
             Assert.IsTrue(MountSkyCatalog.IsFlyer(MountSkyCatalog.ColumnGriffin));
             Assert.IsFalse(MountSkyCatalog.IsFlyer(MountCatalog.Pony));
-            Assert.AreEqual(1, MountCatalog.Specs.Count(s => s.Type == MountType.Voador), "the first and only flyer for now");
+            Assert.AreEqual(2, MountCatalog.Specs.Count(s => s.Type == MountType.Voador), "the Grifo da Coluna and the Íbis Real");
 
             MountDefinition definition = MountCatalog.Get(MountSkyCatalog.ColumnGriffin);
             Assert.IsNotNull(definition);

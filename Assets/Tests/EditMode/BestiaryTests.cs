@@ -418,7 +418,8 @@ namespace Rapadura.Tests
             foreach (IGrouping<(BiomeType?, string), BestiaryEntry> region in entries.GroupBy(e => (e.Region, e.DungeonId)))
             {
                 Assert.IsNotNull(region.Key.Item1, $"{region.First().Id} is in no biome spawn table.");
-                Assert.AreEqual(1, region.Count(e => e.IsBoss), $"{region.Key} should have exactly one boss page.");
+                // The world bosses of Regions 10–12 stand beside the region's campaign boss (RegionBossRules).
+                Assert.AreEqual(1, region.Count(e => e.IsBoss && !RegionBossRules.IsRegionBoss(e.Id)), $"{region.Key} should have exactly one boss page.");
                 Assert.IsTrue(region.Last().IsBoss, $"{region.Key}: the boss page comes last.");
             }
 

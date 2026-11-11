@@ -354,10 +354,10 @@ namespace Rapadura.Gameplay.ClassEvolution
             Accessory(list, "xale_da_aurora", "Dawn Shawl", "Xale da Aurora");
             Accessory(list, "resplendor_de_candeia", "Lantern Glow", "Resplendor de Candeia");
             Accessory(list, "faixa_de_raiz", "Root Sash", "Faixa de Raiz");
-            Accessory(list, "bornal_de_couro", "Leather Satchel", "Bornal de Couro");
+            Accessory(list, "bornal_de_couro", "Leather Satchel", "Alforje de Couro");
             Accessory(list, "chapeu_de_aroeira", "Felt Cap with a Tamarisk Sprig", "Gorro de Feltro com Raminho de Tamargueira");
             Accessory(list, "oculos_de_solda", "Welding Goggles", "Óculos de Solda");
-            Accessory(list, "bornal_de_ferramentas", "Tool Satchel", "Bornal de Ferramentas");
+            Accessory(list, "bornal_de_ferramentas", "Tool Satchel", "Alforje de Ferramentas");
             Accessory(list, "antena_do_radio", "Radio Antenna", "Antena do Rádio");
             Accessory(list, "laco_rubro", "Red Bow", "Laço Rubro");
             Accessory(list, "lenco_de_sombra", "Shadow Scarf", "Lenço de Sombra");

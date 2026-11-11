@@ -272,7 +272,12 @@ namespace Rapadura.UI.Bestiary
             // -- Bichos dos Reinos do Céu que o mundo contínuo faz com substitutos (own file too) --
             CeuBestiaryTexts.AddPages(entries);
 
+            // -- Papéis das Regiões 12–16 que ainda eram substitutos (own file too) --
+            LateStandInBestiaryTexts.AddPages(entries);
+
             // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
+            RegionBossTexts.AddPages(entries);
+
             OssuaryBestiaryTexts.AddPages(entries);
 
             return entries;

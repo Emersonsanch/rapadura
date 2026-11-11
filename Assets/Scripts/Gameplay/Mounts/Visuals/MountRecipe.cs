@@ -157,6 +157,11 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                         return sky;
                     }
 
+                    if (MountFarRegionRecipes.TryShape(recipe, out QuadrupedShape far))
+                    {
+                        return far;
+                    }
+
                     return new QuadrupedShape
                     {
                         LegLength = 0.6f, BodyLength = 1.12f, BodyThickness = 0.44f, BodyWidth = 0.4f,

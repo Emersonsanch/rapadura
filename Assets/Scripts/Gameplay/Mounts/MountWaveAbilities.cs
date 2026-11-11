@@ -257,9 +257,10 @@ namespace Rapadura.Gameplay.Mounts
                     ctx.Stats?.GrantInvulnerability(ability.DurationSeconds);
                     MountAudio.Play(MountAudio.Bray, at);
                     return MountWaveTexts.ToastShell;
-            }
 
-            return null;
+                default:
+                    return MountFarRegionAbilities.Execute(ability, ctx, effects);
+            }
         }
 
         // ------------------------------------------------------------------
@@ -392,6 +393,9 @@ namespace Rapadura.Gameplay.Mounts
 
         public float CleanseRemaining { get; set; }
         public float CcImmuneRemaining { get; set; }
+
+        /// <summary>Slows only (Trote da Aurora, Passo do Cedral): unlike <see cref="CcImmuneRemaining"/>, stuns still land.</summary>
+        public float SlowImmuneRemaining { get; set; }
         public string PounceMarkSource { get; set; }
         public bool IsHidden => _stealthRemaining > 0f;
         public IReadOnlyList<Vector3> Trail => _trail;
@@ -657,6 +661,12 @@ namespace Rapadura.Gameplay.Mounts
                     _ctx.Buffs.ClearStun();
                     _ctx.Buffs.RemoveDebuffs(StatType.MoveSpeed);
                 }
+            }
+
+            if (SlowImmuneRemaining > 0f)
+            {
+                SlowImmuneRemaining -= dt;
+                _ctx.Buffs?.RemoveDebuffs(StatType.MoveSpeed);
             }
         }
 

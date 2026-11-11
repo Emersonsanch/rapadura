@@ -48,6 +48,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public const string GargantaAysMapId = "map_057_garganta_ays";
         public const string NinhoHumaMapId = "map_058_ninho_huma";
 
+        /// <summary>The Rei-Vendaval's arena (58): the stone ring of the nest.</summary>
+        public static readonly Vector2 ReiVendavalArena = new Vector2(880f, 1500f);
         public static readonly Vector2 ValeSatirosOffset = Vector2.zero;
         public static readonly Vector2 FarnkeshOffset = new Vector2(0f, 1080f);
         public static readonly Vector2 ErmidaBaixaOffset = new Vector2(960f, 1080f);

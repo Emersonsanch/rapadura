@@ -2743,3 +2743,31 @@ Implementa `Docs/Progressao500.md` §1–4 (escopo de conteúdo "até 100"; o c�
   `MaxTier` continua 3, nada oferece a missão.
 - **Interface**: barra de XP do HUD, Ficha, barra de mestre e "−N XP" da morte usam `LargeNumberFormat` ("288k",
   "21,3M"/"21.3M", truncado, nunca arredonda para cima).
+
+## 30. Conquistas do conteúdo distante: chefes, primos, mecânicas, estrada, montarias e móveis (2026-11-09)
+
+25 conquistas em `Resources/Achievements` (ordem 80–104), textos em `AchievementTexts`; a tela e o toast leem o catálogo sozinhos. Valem por perfil, como as outras.
+
+**Tipos novos** (`AchievementConditionType`):
+
+| Tipo | Valor | Fonte | Ids |
+|---|---|---|---|
+| `WorldRegionsVisited` | 70 | `AreaChangedEvent.CurrentPart` | layout da região (`OverworldPart.Id`) |
+| `RegionFeat` | 71 | `RegionFeatEvent` (novo; `NartesMechanicsDriver`, `CeuMechanicsDriver`) | `RegionFeats` |
+| `HeroDeed` | 72 | `EnemyDiedEvent` de chefe e `QuestCompletedEvent`, com o primo selecionado | `heroi:idDoChefeOuMissao` |
+| `MountsOwned` | 73 | `MountGrantedEvent` | id da montaria |
+| `HouseItemsCollected` | 74 | `ItemPurchasedEvent` de id `casa_*` e `HouseItemGrantedEvent` | id do móvel |
+
+**Lista:**
+
+- Chefes do mundo (`BossesDefeated`): `ach_boss_wind_king`, `ach_boss_old_kul`, `ach_boss_ember_glutton`, `ach_boss_apep`, `ach_boss_dream`, `ach_boss_great_dark`, `ach_boss_az_captain` e `ach_bosses_far_all` (os sete). Os que "recuam" também publicam `EnemyDiedEvent`, então contam.
+- Um primo só (`HeroDeed`): `ach_cousin_maithe_wind` (Rei-Vendaval), `ach_cousin_joaquim_apep` (Apep), `ach_cousin_maria_dark` (Grande Treva), `ach_cousin_icaro_dream` (Sonho da Destruição), `ach_cousin_lavine_az` (Āz).
+- Mecânicas (`RegionFeat`): `ach_nartes_race_gold` (ouro na corrida), `ach_lavine_sky_golds` (os 4 Ouros do Céu, que só a Lavine levanta), `ach_amirani_chain_top` (topo da Corrente), `ach_porch_story` (história inteira na Varanda), `ach_sky_whole` (todas as rachaduras seladas).
+- Estrada: `ach_world_all_regions` (as 16 regiões; chegar de barca também conta).
+- As Cartas da Estrada: `ach_letters_complete` (`QuestsCompleted`, última etapa) e `ach_letters_all_cousins` (secreta, `HeroDeed`, a última etapa com cada um dos cinco).
+- Montarias (`MountsOwned`): `ach_mounts_far_regions` (as 8 de `MountFarRegionCatalog`), `ach_column_griffin`.
+- Móveis (`HouseItemsCollected`): `ach_house_cais_de_luz` (8 peças) e `ach_house_far_sets` (40 peças dos cinco conjuntos das Regiões 12–16).
+
+**Recompensas**, nos canais que já existiam: `mount_caipora_peccary` (`MountSourceHooks`) em `ach_world_all_regions`, `mount_elder_tortoise` em `ach_porch_story`; `HouseRewardRules.ExtraAchievementRewards` dá `casa_luz_010` em `ach_lavine_sky_golds`, `casa_luz_037` em `ach_letters_complete` e `casa_regional_049` em `ach_bosses_far_all`. As demais só marcam a conquista, como a maioria das antigas.
+
+Testes: `AchievementFarContentTests` (texto nos dois idiomas, cada id existe no seu catálogo, móvel à venda, recompensas e eventos).

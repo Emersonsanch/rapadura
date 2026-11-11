@@ -178,6 +178,7 @@ namespace Rapadura.Core.Managers
             QuestManager = new QuestManager();
             // City side quests (Gara, Tinguaro...) live in code: registered up front so a quest restored from a save still pays.
             Rapadura.Gameplay.World.Cities.CityQuestCatalog.RegisterAll(QuestManager);
+            Rapadura.Gameplay.Quests.LateStoryLocationReporter.Install(QuestManager);
             DailyQuestService = new DailyQuestService(QuestManager);
             DailyStamina = new Rapadura.Gameplay.Daily.DailyStaminaService();
             DailyLogin = new Rapadura.Gameplay.Daily.DailyLoginService();

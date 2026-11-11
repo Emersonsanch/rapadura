@@ -120,6 +120,70 @@ namespace Rapadura.UI.Achievements
             Description("ach_wings_first", "Make your first pair of wings in Grandma Edna's Uasamonga.", "Faça o primeiro par de asas na Uasamonga da Vó Edna."),
             Title("ach_wings_level3", "Above Dawn Isle", "Por Cima da Ilha da Aurora"),
             Description("ach_wings_level3", "Strengthen a pair of wings up to level 3 in the Uasamonga.", "Fortaleça um par de asas até o nível 3 na Uasamonga."),
+
+            // World bosses of Regions 10–16 (EnemyDiedEvent with WasBoss; three of them only ever withdraw).
+            Title("ach_boss_wind_king", "The Gale Stops", "O Vendaval Parou"),
+            Description("ach_boss_wind_king", "Defeat the Wind King in the Picos de Farnkesh.", "Vença o Rei-Vendaval nos Picos de Farnkesh."),
+            Title("ach_boss_old_kul", "Thin Ice, Old Kul", "Gelo Fino, Velho Kul"),
+            Description("ach_boss_old_kul", "Defeat Old Kul at the bottom of the Frozen Sea.", "Vença o Velho Kul no fundo do Mar Gelado."),
+            Title("ach_boss_ember_glutton", "Enough Embers", "Chega de Brasa"),
+            Description("ach_boss_ember_glutton", "Defeat the Ember Glutton in the caldera of Hinokura.", "Vença o Glutão de Brasa na caldeira de Hinokura."),
+            Title("ach_boss_apep", "Back Tomorrow Night", "Volta Amanhã à Noite"),
+            Description("ach_boss_apep", "Make Apep withdraw from her sandbank. She drinks the river, and she will be back the next night.", "Faça Apep recuar do banco de areia. Ela bebe o rio, e volta na noite seguinte."),
+            Title("ach_boss_dream", "Wide Awake", "Bem Acordados"),
+            Description("ach_boss_dream", "Defeat the Dream of Destruction on the Tablets of the Dream.", "Vença o Sonho da Destruição nas Tábuas do Sonho."),
+            Title("ach_boss_great_dark", "Five Faces, One Lamp", "Cinco Caras, Uma Lâmpada"),
+            Description("ach_boss_great_dark", "Make the Great Dark withdraw at the Gate of the Land of Darkness, through all its forms.", "Faça a Grande Treva recuar no Portão da Terra da Treva, passando por todas as suas formas."),
+            Title("ach_boss_az_captain", "The Ark Comes Up Empty", "A Arca Voltou Vazia"),
+            Description("ach_boss_az_captain", "Make Āz, the Greedy Captain, withdraw in the Garden of Light.", "Faça Āz, a Capitã Cobiçosa, recuar no Jardim de Luz."),
+            Title("ach_bosses_far_all", "Seven Doors Shut", "Sete Portas Fechadas"),
+            Description("ach_bosses_far_all", "Face and overcome all seven world bosses of Regions 10 to 16.", "Enfrente e supere os sete chefes do mundo das Regiões 10 a 16."),
+
+            // One particular cousin (HeroDeed: boss beaten with that hero selected).
+            Title("ach_cousin_maithe_wind", "Wind Knows Wind", "Vento Conhece Vento"),
+            Description("ach_cousin_maithe_wind", "As Maithe, defeat the Wind King. The storm never did move her.", "Como Maithe, vença o Rei-Vendaval. A ventania nunca conseguiu movê-la."),
+            Title("ach_cousin_joaquim_apep", "Close Enough to Stay Dry", "Perto o Bastante para Não se Molhar"),
+            Description("ach_cousin_joaquim_apep", "As Joaquim, drive off Apep. Only those who stand close escape the swallow, and he never was one to step back.", "Como Joaquim, afaste Apep. Só escapa do gole quem fica perto, e ele nunca foi de dar um passo atrás."),
+            Title("ach_cousin_maria_dark", "Lit From Within", "Acesa por Dentro"),
+            Description("ach_cousin_maria_dark", "As Maria, make the Great Dark withdraw. The light in the family was always hers to carry.", "Como Maria, faça a Grande Treva recuar. A luz da família sempre foi ela quem carregou."),
+            Title("ach_cousin_icaro_dream", "Stood Exactly Still", "Parado no Lugar Certo"),
+            Description("ach_cousin_icaro_dream", "As Ícaro, defeat the Dream of Destruction. He worked out where the ring doesn't fall and wrote it down.", "Como Ícaro, vença o Sonho da Destruição. Ele calculou onde o anel não cai e anotou no caderno."),
+            Title("ach_cousin_lavine_az", "The Youngest Asks for Nothing", "A Caçula Não Pediu Nada"),
+            Description("ach_cousin_lavine_az", "As Lavine, make Āz withdraw. Greed has nothing to offer someone who only came for her cousins.", "Como Lavine, faça Āz recuar. A cobiça não tem o que oferecer a quem só veio pelos primos."),
+
+            // Region mechanics (RegionFeatEvent from the drivers of World/Map/Mechanics).
+            Title("ach_nartes_race_gold", "First Across the Steppe", "Primeiro na Estepe"),
+            Description("ach_nartes_race_gold", "Win a gold medal in the steppe race of the Nartes.", "Ganhe medalha de ouro na corrida da Estepe dos Nartes."),
+            Title("ach_lavine_sky_golds", "Only the Youngest", "Só a Caçula"),
+            Description("ach_lavine_sky_golds", "Lift all four Golds of Heaven in the kurgans. They burn everyone else's hands; only Lavine can pick them up.", "Levante os quatro Ouros do Céu nos kurgans. Eles queimam a mão dos outros; só a Lavine consegue pegar."),
+            Title("ach_amirani_chain_top", "All the Way Up the Links", "Até a Última Argola"),
+            Description("ach_amirani_chain_top", "Climb Amirani's Chain to the very top, gusts and all.", "Suba a Corrente de Amirani até o topo, com rajada e tudo."),
+            Title("ach_porch_story", "Grandpa's Chair", "A Cadeira do Vô"),
+            Description("ach_porch_story", "Sit in Grandpa Jorge's chair on the Porch and hear a story through to the end.", "Sente na cadeira do Vô Jorge na Varanda e ouça uma história até o fim."),
+            Title("ach_sky_whole", "Holding Up the Sky", "Segurando o Céu"),
+            Description("ach_sky_whole", "Seal all the cracks of the Lookout so the sky is whole again.", "Sele todas as rachaduras do Mirante até o céu ficar inteiro de novo."),
+
+            // The whole road (AreaChangedEvent.CurrentPart).
+            Title("ach_world_all_regions", "Every Road, All the Way", "Todas as Estradas, Até o Fim"),
+            Description("ach_world_all_regions", "Set foot in all 16 regions of the world, from the Zarafshan Woods to the Kingdoms of the Sky.", "Pise nas 16 regiões do mundo, do Bosque do Zarafshan aos Reinos do Céu."),
+
+            // "As Cartas da Estrada" (LateStoryCatalog).
+            Title("ach_letters_complete", "The Last Letter", "A Última Carta"),
+            Description("ach_letters_complete", "Follow the Letters of the Road all the way to the Porch.", "Siga as Cartas da Estrada até a Varanda."),
+            Title("ach_letters_all_cousins", "Five Readings of the Same Letters", "Cinco Leituras das Mesmas Cartas"),
+            Description("ach_letters_all_cousins", "Finish the Letters of the Road once with each of the five cousins. Grandpa Jorge wrote a different line for every one of them.", "Termine as Cartas da Estrada uma vez com cada um dos cinco primos. O Vô Jorge escreveu uma linha diferente para cada um."),
+
+            // New mounts (MountGrantedEvent).
+            Title("ach_mounts_far_regions", "A Stable from Far Away", "Estrebaria de Longe"),
+            Description("ach_mounts_far_regions", "Own all eight mounts of the far regions, from the golden goat of the Satyr Vale to the dragon-serpent of Dur-Jarras.", "Tenha as oito montarias das regiões distantes, do bode dourado do Vale dos Sátiros ao dragão-serpente de Dur-Jarras."),
+            Title("ach_column_griffin", "Wings of the Column", "Asas da Coluna"),
+            Description("ach_column_griffin", "Earn the Griffin of the Column of Glory, the first mount that truly flies.", "Conquiste o Grifo da Coluna da Glória, a primeira montaria que voa de verdade."),
+
+            // New furniture sets (ItemPurchasedEvent / HouseItemGrantedEvent).
+            Title("ach_house_cais_de_luz", "A Room on the Quay of Light", "Um Cômodo no Cais de Luz"),
+            Description("ach_house_cais_de_luz", "Collect all 8 pieces of the Quay of Light furniture.", "Reúna as 8 peças dos Móveis do Cais de Luz."),
+            Title("ach_house_far_sets", "Furnished from Far Away", "Mobiliada de Longe"),
+            Description("ach_house_far_sets", "Collect all 40 pieces of the five furniture sets from Regions 12 to 16.", "Reúna as 40 peças dos cinco conjuntos de móveis das Regiões 12 a 16."),
         };
 
         private static LocalizationEntry Title(string id, string en, string ptBR) => new LocalizationEntry($"achievement.{id}.title", en, ptBR);

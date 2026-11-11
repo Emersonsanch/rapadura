@@ -231,6 +231,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, 1170f, 270f, 0f, 1f);
             Landmark(w, MapLandmarkKind.Campfire, -980f, 160f, 0f, 0.8f);
             Landmark(w, MapLandmarkKind.Campfire, 820f, -1100f, 0f, 0.9f);
+            // Two more fires on the caravan road's first stretches: shelters from the sandstorm (OverworldLayouts.AreiasMechanics.cs).
+            Landmark(w, MapLandmarkKind.Campfire, -272f, -36f, 0f, 0.8f);
+            Landmark(w, MapLandmarkKind.Campfire, -590f, 318f, 0f, 0.8f);
             foreach (Vector2 camp in ClanCamps)
             {
                 Landmark(w, MapLandmarkKind.Campfire, camp.x, camp.y, 0f, 1.1f);

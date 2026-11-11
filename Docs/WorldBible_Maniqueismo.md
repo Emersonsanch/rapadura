@@ -562,8 +562,8 @@ fica no bioma Floresta (`OverworldLayouts.Ceu` declara `w.World.Biome = BiomeTyp
 Modelos em `CeuBeastRecipes` (a ave e a gaivota abrem o bico com as asas paradas; o peixe rema as barbatanas; o clandestino, o Um dos Doze e a Pedra abrem a boca com a cauda balançando;
 a corda solta as pontas devagar; a sombra do porão achata e o lampião brilha; a jarra inclina e a rachadura brilha; o arconte, o balão e o ladrão erguem os dois braços), Caderno em
 `CeuBestiaryTexts`. Dois são [distância], voam e atiram: a Jarra Rachada (`LanternBolt`) e a Gaivota de Luz Apagada (`Ember`; `RangedEnemiesTests`). Respeito (§0.2, §1.4 e §4.3):
-quieto, pálido e meio bobo, nunca gore; os arcontes são gigantes de conto que engoliram luz demais, com a luz ainda lá dentro, e o Pai da Grandeza não aparece. Testes: `CeuBeastsTests`. **Ainda não
-trocados nos grupos do overworld** (`OverworldLayouts.Ceu.cs`, classe `Ceu`, segue com os substitutos). Sem bicho próprio nesta leva, seguem com substitutos: Arconte Fujão/Menor/Fugido (o `enemy_forest_lesser_archon` da nona leva serve),
+quieto, pálido e meio bobo, nunca gore; os arcontes são gigantes de conto que engoliram luz demais, com a luz ainda lá dentro, e o Pai da Grandeza não aparece. Testes: `CeuBeastsTests`. Já no overworld dos Reinos do Céu no lugar dos
+substitutos (`OverworldLayouts.Ceu.cs`, classe `Ceu`), nos grupos que lideram e como acompanhantes só onde a ficha os cita (mesmas clareiras, níveis e variantes noturnas). A Jarra e a Gaivota lideram os grupos [distância] (94 e 97). A Pedra do Céu também fica na Varanda (100), como pede a ficha ("fora do pomar, os bichos do 99"). O Arconte Fujão Menor (91), o Arconte Menor (98) e o Arconte Fugido (99) usam o `enemy_forest_lesser_archon` da nona leva. Testes: `CeuBeastsPlacementTests`. Sem bicho próprio nesta leva, seguem com substitutos: Corda de Fumaça (97, o junco-laço; a Corda Viva fica só na Barca da Lua),
 Faísca Confusa, Sombra Clandestina e Sombra que Pisa as Flores, Sombra Nadadora e do Meio-Dia, Corrente Errada e Rachadura do Céu, Lanterna Fugitiva, Faísca Teimosa, Gota de Treva, Fumaça de Esfera,
 Vento de Órbita e do Alto, Espinho de Fumaça, Clandestino de Brasa e Última Sombra.
 
@@ -573,7 +573,7 @@ Vento de Órbita e do Alto, Espinho de Fumaça, Clandestino de Brasa e Última S
 | `enemy_forest_dimmed_light_fish` | **Peixe de Luz Apagado** / *Dimmed Light Fish* | 92 | [rápido] | o rio é estrada (bíblia §3.16); o peixe parou de carregar, sobrou uma gota pendurada. |
 | `enemy_forest_dark_stowaway` | **Clandestino de Treva** / *Dark Stowaway* | 93 | [rápido] | sombra que subiu escondida numa barca, com a etiqueta de embarque de outro. |
 | `enemy_forest_hold_shadow` | **Sombra do Porão** / *Hold Shadow* | 93 | [tanque] | embarcou no fundo do mundo e sentou em cima da bagagem, com o lampião preso nela. |
-| `enemy_forest_living_rope` | **Corda Viva** / *Living Rope* | 93 (e Corda de Fumaça, 97) | [controle] | corda que ficou amarrada numa sombra e pegou mania de agarrar. |
+| `enemy_forest_living_rope` | **Corda Viva** / *Living Rope* | 93 | [controle] | corda que ficou amarrada numa sombra e pegou mania de agarrar. |
 | `enemy_forest_toy_archon` | **Um dos Doze** / *One of the Twelve* | 94 | [elite] | os doze arcontes presos na Roda (*Acta Archelai* 8), gastos em brinquedo de corda. |
 | `enemy_forest_cracked_jar` | **Jarra Rachada** / *Cracked Jar* | 94 | [distância] | jarra da Roda que levou uma pancada: não derrama, vaza de lado. |
 | `enemy_forest_chained_archon` | **Arconte Acorrentado** / *Chained Archon* | 95 | [tanque] | o Espírito Vivo prende os arcontes nas esferas (Teodoro bar Konai); empurra e resmunga. |
@@ -581,6 +581,23 @@ Vento de Órbita e do Alto, Espinho de Fumaça, Clandestino de Brasa e Última S
 | `enemy_forest_az_thief` | **Ladrão de Āz** / *Thief of Āz* | 96 | [elite] | Āz, a Cobiça, quer o jardim numa arca (M 47) e manda gente de capuz colher. |
 | `enemy_forest_dimmed_light_gull` | **Gaivota de Luz Apagada** / *Dimmed Light Gull* | 97 | [distância] | gaivota que seguiu a barca do Sol de perto demais e cospe a última brasa. |
 | `enemy_forest_sky_stone` | **Pedra do Céu** / *Sky Stone* | 99 (e fora do pomar, 100) | [tanque] | pedaço do teto do céu caído das rachaduras; quer voltar para casa. |
+
+**Décima primeira leva (2026-11-09): os substitutos mais visíveis das Regiões 12–16.** Mesmo contrato (peso 0 no bioma, nível da área, números do bioma), no máximo três por região, prefixo conforme o bioma do layout (`enemy_mountain_` em Hinokura, `enemy_forest_` nas demais). Modelos em `LateStandInBeastRecipes`, Caderno em `LateStandInBestiaryTexts`. Dois são [distância], voam e atiram: a Bomba Vulcânica (`Ember`) e o Homem-Escorpião (`Feather`; `RangedEnemiesTests`), que paira um palmo acima do chão porque só quem voa atira. Respeito (§1.1 e §3.16): os Filhos de Apep são só cobras; o Homem-Escorpião é o *girtablullu* só como o conto o dá, nunca deus. Testes: `LateStandInBeastsTests` e `LateStandInBeastsPlacementTests`. Já no overworld no lugar dos substitutos, com as mesmas clareiras, níveis e variantes noturnas (classes `Fogo`, `Rio`, `Mistura`, `Profundo` e `Ceu`; `Rio.Quicksand` é constante nova, e `Rio.Ooze` segue fazendo a Sombra Fervida). Estes doze saem das listas de "seguem com substitutos" das levas anteriores; os demais papéis citados nelas continuam com substituto.
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_mountain_devouring_salamander` | **Salamandra Devoradora** / *Devouring Salamander* | 70 | [rápido] | invenção: comeu o fogo da borda da caldeira; quanto mais engole, mais fome (Fogo Devorador). |
+| `enemy_mountain_volcanic_bomb` | **Bomba Vulcânica** / *Volcanic Bomb* | 67 | [distância] | pedra que o Echeyde jogou e nunca desceu; cospe o que ainda tem dentro. |
+| `enemy_forest_thief_goose` | **Ganso Ladrão** / *Thief Goose* | 72 | [rápido] | bicho real; a sombra só deu um empurrãozinho no mau gênio. |
+| `enemy_forest_child_of_apep` | **Filho de Apep** / *Child of Apep* | 76 | [rápido] | cobras que estavam deitadas em Apep quando ela passou e saíram achando que eram ela; só bicho. |
+| `enemy_forest_quicksand` | **Areia Movediça** / *Quicksand* | 76 | [controle] | banco de areia a quem a sombra disse que podia ficar com o que pisasse nele. |
+| `enemy_forest_scorpion_man` | **Homem-Escorpião** / *Scorpion-Man* | 77 | [distância] | *girtablullu*, guarda das montanhas no conto de Gilgamesh; ficou de guarda no portão de tijolo e esqueceu para quê. |
+| `enemy_forest_cedar_lynx` | **Lince do Cedro** / *Cedar Lynx* | 80 | [rápido] | lince real que se esfregou nos cedros raivosos até a resina colar no pelo. |
+| `enemy_forest_resin_bee` | **Abelha-Resina** / *Resin Bee* | 80 | [enxame] | a abelha que levou resina para casa em vez de mel. |
+| `enemy_forest_blade_bat` | **Morcego-Lâmina** / *Blade Bat* | 86 | [enxame] | o Vento Destruidor gastou tudo até virar fio. |
+| `enemy_forest_great_eel` | **Enguia Grande** / *Great Eel* | 87 | [controle] | continuou deitada onde a água estava; nada no ar dos salões alagados. |
+| `enemy_forest_ash_bull` | **Touro de Cinza** / *Ash Bull* | 85 | [tanque] | queimou de ponta a ponta sem perceber; cinza por fora, mau gênio por dentro. |
+| `enemy_forest_smoke_rope` | **Corda de Fumaça** / *Smoke Rope* | 97 | [controle] | a corda da barca do Sol queimou; a fumaça não ficou sabendo e segue amarrando. |
 
 ### 3.3 Chefes de região (apagados, nunca vilões)
 

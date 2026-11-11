@@ -106,6 +106,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.Python:
                 case ProceduralEnemyKind.ReedSnake:
                 case ProceduralEnemyKind.ThreeHeadedSerpent:
+                case ProceduralEnemyKind.ChildOfApep:
+                case ProceduralEnemyKind.GreatEel:
                     return SnakeParts;
                 case ProceduralEnemyKind.DustRhino:
                 case ProceduralEnemyKind.WildYak:
@@ -118,6 +120,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.ClayReindeer:
                 case ProceduralEnemyKind.StoneHare:
                 case ProceduralEnemyKind.BurrowMammoth:
+                case ProceduralEnemyKind.AshBull:
                     return ChargerParts;
                 default: return null;
             }
@@ -357,6 +360,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
 
                 case ProceduralEnemyKind.BrokenTablet:
                 case ProceduralEnemyKind.CrackedJar:
+                case ProceduralEnemyKind.VolcanicBomb:
                 {
                     // Stands and sways a little; it leans back on the windup and its broken line flares before the words fly.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -394,6 +398,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.Python:
                 case ProceduralEnemyKind.ReedSnake:
                 case ProceduralEnemyKind.ThreeHeadedSerpent:
+                case ProceduralEnemyKind.ChildOfApep:
+                case ProceduralEnemyKind.GreatEel:
                 {
                     // Slithers: a travelling wave down the tail, the raised head sways and pulls back before it strikes.
                     float r = StepAttack(deltaTime, 6f, 3f);
@@ -443,6 +449,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.LivingTar:
                 case ProceduralEnemyKind.MudOctopus:
                 case ProceduralEnemyKind.HoldShadow:
+                case ProceduralEnemyKind.Quicksand:
                 {
                     // Squash and stretch; it flattens on the windup and the swallowed lights flare.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -482,6 +489,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.ClayReindeer:
                 case ProceduralEnemyKind.StoneHare:
                 case ProceduralEnemyKind.BurrowMammoth:
+                case ProceduralEnemyKind.AshBull:
                 {
                     // Chargers: the head swings while grazing and drops, horns first, on the windup.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -600,6 +608,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.WindHarpy:
                 case ProceduralEnemyKind.DimmedCloudBird:
                 case ProceduralEnemyKind.DimmedLightGull:
+                case ProceduralEnemyKind.ThiefGoose:
+                case ProceduralEnemyKind.BladeBat:
                 {
                     // The birds of the peaks: the eagle soars on long glides, the chough and the flute bird beat quicker; the wings
                     // hold still and the beak opens on the windup (the flute bird's note, the chough's and the harpy's screech).
@@ -644,6 +654,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.EmberCoral:
                 case ProceduralEnemyKind.DarkFish:
                 case ProceduralEnemyKind.DimmedLightFish:
+                case ProceduralEnemyKind.DevouringSalamander:
+                case ProceduralEnemyKind.CedarLynx:
                 case ProceduralEnemyKind.ShadowLizard:
                 {
                     // Hinokura's biters: the jaw gapes on the windup and the tail sways; the blade fish's fins row in the steam, the
@@ -676,12 +688,14 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.LesserShadowDragon:
                 case ProceduralEnemyKind.DarkStowaway:
                 case ProceduralEnemyKind.LivingRope:
+                case ProceduralEnemyKind.SmokeRope:
+                case ProceduralEnemyKind.ScorpionMan:
                 case ProceduralEnemyKind.ToyArchon:
                 case ProceduralEnemyKind.SkyStone:
                 {
                     // The river's biters and the Margins': the jaw gapes on the windup and the tail sways; what drifts (the reed snare's root, the
                     // late shadow's trail, the mantle's hem) drags slowly and its nooses or sleeves stir.
-                    bool drifts = _kind == ProceduralEnemyKind.LivingRope || _kind == ProceduralEnemyKind.ReedSnare || _kind == ProceduralEnemyKind.LateShadow || _kind == ProceduralEnemyKind.GlowMantle || _kind == ProceduralEnemyKind.SmokeArcher;
+                    bool drifts = _kind == ProceduralEnemyKind.LivingRope || _kind == ProceduralEnemyKind.SmokeRope || _kind == ProceduralEnemyKind.ReedSnare || _kind == ProceduralEnemyKind.LateShadow || _kind == ProceduralEnemyKind.GlowMantle || _kind == ProceduralEnemyKind.SmokeArcher;
                     float r = StepAttack(deltaTime, 5f, 3f);
                     Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(Mathf.Max(0f, Mathf.Sin(t * 0.7f)) * 3f * k + 32f * r, 0f, 0f));
                     float sway = drifts ? Mathf.Sin(t * 0.8f) * 6f
@@ -697,6 +711,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 }
 
                 case ProceduralEnemyKind.GoldenBee:
+                case ProceduralEnemyKind.ResinBee:
                 {
                     // A blur of fast wingbeats; the sting swings forward under the body on the windup.
                     float r = StepAttack(deltaTime, 5f, 3f);
@@ -830,6 +845,15 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.BoneColossus:
                     TickColossus(deltaTime, t, k, speed);
                     break;
+                case ProceduralEnemyKind.WindKing:
+                case ProceduralEnemyKind.OldKul:
+                case ProceduralEnemyKind.EmberGlutton:
+                case ProceduralEnemyKind.Apep:
+                case ProceduralEnemyKind.DreamOfDestruction:
+                case ProceduralEnemyKind.GreatDark:
+                case ProceduralEnemyKind.AzCaptain:
+                    TickRegionBoss(deltaTime, t, k, speed);
+                    break;
             }
         }
 
@@ -863,6 +887,34 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             if (_driveLimbs)
             {
                 Swing(ProceduralEnemyParts.ArmLeft, Mathf.Sin(t * 1.1f) * 4f * k);
+            }
+        }
+
+        /// <summary>
+        /// The world bosses of Regions 10–16: the glowing core feeds on the fight's phase (<see cref="RegionBossRules.PhaseFor"/>; a state, so "Reduzir Movimento"
+        /// only slows it), the mouth opens on the windup, the Rei-Vendaval beats its wings and the others raise both arms.
+        /// </summary>
+        private void TickRegionBoss(float deltaTime, float t, float k, float speed)
+        {
+            float r = StepAttack(deltaTime, 4f, 2.5f);
+            float health01 = _health != null && _health.MaxHealth > 0f ? _health.CurrentHealth / _health.MaxHealth : Health01Override;
+            float rage = ((int)RegionBossRules.PhaseFor(Mathf.Clamp01(health01)) - 1) * 0.5f;
+            Pulse(ProceduralEnemyParts.Core, 1f + Mathf.Sin(t * (2f + 2f * rage)) * 0.07f * Mathf.Max(k, 0.3f) + 0.2f * rage + 0.2f * r);
+            Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(30f * r, 0f, 0f));
+            Rotate(ProceduralEnemyParts.Head, Quaternion.Euler(-10f * r, Mathf.Sin(t * 0.6f) * 8f * k * (1f - r), 0f));
+            if (_kind == ProceduralEnemyKind.Apep)
+            {
+                // No limbs at all: she sways and her tail tip drags behind.
+                Rotate(ProceduralEnemyParts.Tail, Quaternion.Euler(0f, Mathf.Sin(t * 1.4f) * 18f * k, 0f));
+            }
+            else if (_kind == ProceduralEnemyKind.WindKing || _kind == ProceduralEnemyKind.GreatDark)
+            {
+                FlapWings(t, speed * 0.6f, Mathf.Max(k, 0.25f) * (1f - 0.6f * r), Mathf.Max(Mathf.Clamp01(MoveSpeed01), 0.5f));
+            }
+            else if (_driveLimbs)
+            {
+                Swing(ProceduralEnemyParts.ArmLeft, Mathf.Sin(t * 1.2f) * 3f * k - 70f * r);
+                Swing(ProceduralEnemyParts.ArmRight, -Mathf.Sin(t * 1.2f) * 3f * k - 85f * r);
             }
         }
 

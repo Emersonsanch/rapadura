@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7fe309d8334becbc1f92b69454b59e, type: 3}
+  m_Name: ach_world_all_regions
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Achievements.AchievementDefinition
+  _achievementId: ach_world_all_regions
+  _titleKey: achievement.ach_world_all_regions.title
+  _descriptionKey: achievement.ach_world_all_regions.description
+  _icon: {fileID: 0}
+  _conditionType: 70
+  _targetValue: 16
+  _targetIds:
+  - overworld_zarafshan
+  - overworld_areias
+  - overworld_kaggen
+  - overworld_limiar
+  - overworld_costa
+  - overworld_delta
+  - overworld_teto
+  - overworld_mingcheng
+  - overworld_nartes
+  - overworld_farnkesh
+  - overworld_mar_gelado
+  - overworld_hinokura
+  - overworld_rio_doze_horas
+  - overworld_margens_da_mistura
+  - overworld_limiar_profundo
+  - overworld_reinos_do_ceu
+  _hidden: 0
+  _sortOrder: 98

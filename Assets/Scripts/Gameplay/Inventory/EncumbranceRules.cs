@@ -145,6 +145,15 @@ namespace Rapadura.Gameplay.Inventory
             { "mount_sertao_phoenix", 130f },
             { "mount_dragon_hatchling", 220f },
             { "mount_elder_tortoise", 400f },
+            // Regiões 10–14 (Mounts.md §3.9)
+            { "mount_volcano_goat", 130f },
+            { "mount_taiga_elk", 180f },
+            { "mount_hill_ram", 170f },
+            { "mount_gordias_goat", 150f },
+            { "mount_mesektet_ibis", 90f }, // flyer: light frame
+            { "mount_aurora_reindeer", 220f },
+            { "mount_lacquer_lion", 200f },
+            { "mount_mushhushshu", 240f },
         };
 
         // ------------------------------------------------------------------

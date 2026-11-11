@@ -2,6 +2,7 @@ using Rapadura.Gameplay.Night;
 using Rapadura.Gameplay.World.Biomes;
 using Rapadura.Gameplay.World.Cities.Town;
 using Rapadura.Gameplay.World.Map.Areas;
+using Rapadura.Gameplay.World.Map.Mechanics;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Map.Overworld
@@ -43,6 +44,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public const string LagoDeFogoMapId = "map_075_lago_de_fogo";
         public const string BancoApepMapId = "map_076_banco_apep";
 
+        /// <summary>Apep's arena (76): a stone ring on the flat of the sandbank east of the Proa Encalhada, south of her spine (so no climb from the road).</summary>
+        public static readonly Vector2 ApepArena = new Vector2(170f, 1590f);
+
         public static readonly Vector2 CaisMesektetOffset = Vector2.zero;
         public static readonly Vector2 CasaDeJuncoOffset = new Vector2(0f, 600f);
         public static readonly Vector2 TrenoDeAreiaOffset = new Vector2(-960f, 120f);
@@ -61,6 +65,68 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         {
             new Vector2(-700f, 240f), new Vector2(-350f, 200f), new Vector2(0f, 230f), new Vector2(350f, 200f), new Vector2(700f, 240f),
         };
+
+        /// <summary>A zone of the region: its <see cref="OverworldZone.Origin"/> says where the region sits in the stitched world.</summary>
+        public const string RioAnchorZoneId = "cais_de_mesektet";
+
+        /// <summary>The region in its own coordinates (the rectangle of <see cref="RioRegion"/>).</summary>
+        public static readonly Rect RioBounds = Rect.MinMaxRect(-1200f, -600f, 1200f, 1800f);
+
+        /// <summary>Distance (m) from the river's centre line to a pier's landing on the south bank (the river is 14 m wide).</summary>
+        private const float PierSetback = 14f;
+
+        /// <summary>The twelve piers of the hours along the south bank, west to east, 70 m apart and clear of the two bridges (<see cref="RioHourRules"/>).</summary>
+        public static readonly Vector2[] HourPiers =
+        {
+            RioPier(-385f), RioPier(-315f), RioPier(-245f), RioPier(-175f), RioPier(-105f), RioPier(-35f),
+            RioPier(35f), RioPier(105f), RioPier(175f), RioPier(245f), RioPier(315f), RioPier(385f),
+        };
+
+        /// <summary>The barque's berths at the posts of 72–76, in the order of <see cref="RioHourRules.DestinationOf"/>: just off each post's ground, and each one also the way back.</summary>
+        public static readonly Vector2[] BarqueBerths =
+        {
+            CasaDeJuncoOffset + new Vector2(10f, -26f), TrenoDeAreiaOffset + new Vector2(10f, -26f), AnelQuietoOffset + new Vector2(10f, -26f),
+            IlhaPalmeirasOffset + new Vector2(10f, -26f), ProaEncalhadaOffset + new Vector2(10f, -26f),
+        };
+
+        /// <summary>Where the return barque leaves the hero: on the south road, just outside the Cais.</summary>
+        public static readonly Vector2 QuayBerth = new Vector2(4f, -46f);
+
+        /// <summary>Radius (m) of the troughs either side of Mehen's second scale wall, joined by <see cref="MehenGates"/>.</summary>
+        public const float MehenGateInner = OverworldRelief.MehenRingPeriod;
+        public const float MehenGateOuter = OverworldRelief.MehenRingPeriod * 2f;
+
+        /// <summary>The eight gates over the wall of the turning ring (<see cref="RioMehenRules"/>); index = gate, 45° apart, A inside and B outside.</summary>
+        public static readonly SkyRoute[] MehenGates = NewMehenGates();
+
+        private static Vector2 RioPier(float x)
+        {
+            for (int i = 0; i + 1 < RioNoturno.Length; i++)
+            {
+                if (x <= RioNoturno[i + 1].x)
+                {
+                    float t = Mathf.InverseLerp(RioNoturno[i].x, RioNoturno[i + 1].x, x);
+                    return new Vector2(x, Mathf.Lerp(RioNoturno[i].y, RioNoturno[i + 1].y, t) - PierSetback);
+                }
+            }
+
+            return new Vector2(x, RioNoturno[RioNoturno.Length - 1].y - PierSetback);
+        }
+
+        private static SkyRoute[] NewMehenGates()
+        {
+            var gates = new SkyRoute[RioMehenRules.Gates];
+            for (int i = 0; i < gates.Length; i++)
+            {
+                float angle = i * RioMehenRules.DegreesPerStep * Mathf.Deg2Rad;
+                Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+                Vector2 inner = MehenCenter + direction * MehenGateInner;
+                Vector2 outer = MehenCenter + direction * MehenGateOuter;
+                gates[i] = new SkyRoute { Id = "mehen_gate_" + i, Kind = SkyRouteKind.RopeBasket, A = inner, B = outer, PropA = inner, PropB = outer };
+            }
+
+            return gates;
+        }
 
         /// <summary>The south irrigation canal of the fields (z 500).</summary>
         public static readonly Vector2[] CanalSekhetSul =
@@ -101,7 +167,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Crocodile = "enemy_forest_dark_river_crocodile";
             public const string MudCrocodile = "enemy_forest_mangrove_crocodile";
             public const string Ibis = "enemy_forest_dimmed_ibis";
-            public const string Goose = "enemy_forest_thief_gull";
+            public const string Goose = "enemy_forest_thief_goose";
             public const string Scarab = "enemy_forest_shadow_scarab";
             public const string Reedsnare = "enemy_forest_reed_snare";
             public const string ShadowLocust = "enemy_forest_shadow_locust";
@@ -110,7 +176,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string ReedSnake = "enemy_forest_reed_snake";
             public const string Salamander = "enemy_desert_sand_snake";
             public const string ThreeHeaded = "enemy_forest_three_headed_serpent";
-            public const string Python = "enemy_forest_dimmed_python";
+            public const string Python = "enemy_forest_child_of_apep";
             public const string Scorpion = "enemy_forest_black_scorpion";
             public const string RingScorpion = "enemy_desert_scorpion";
             public const string SandUshabti = "enemy_forest_sand_ushabti";
@@ -118,6 +184,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string ShadowBiter = "enemy_forest_shadow_biter";
             public const string Creeper = "enemy_forest_creeping_dark";
             public const string Ooze = "enemy_cave_ooze";
+            public const string Quicksand = "enemy_forest_quicksand";
             public const string CrackedUshabti = "enemy_forest_terracotta_soldier";
             public const string Vulture = "enemy_desert_ember_vulture";
         }
@@ -302,6 +369,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, 500f, 1250f, 0f, 1f);
             Landmark(w, MapLandmarkKind.Campfire, -520f, 1650f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, -330f, 640f, 0f, 1f);
+            Landmark(w, MapLandmarkKind.StoneRing, ApepArena.x, ApepArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);
@@ -400,14 +468,14 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // Sombra [enxame] (the region's own), the Crocodilo de Lodo [tanque] (the mangrove crocodile).
             banco.Fauna.Add(Fauna("filhos_de_apep", "[rápido]", T(N(Rio.Python, 3), N(Rio.Scarab, 1)), T(V(Rio.Python, 3), S(werewolf, 1)), 4));
             banco.Fauna.Add(Fauna("crocodilos_de_lodo", "[tanque]", T(N(Rio.MudCrocodile, 3), N(Rio.Python, 1)), T(V(Rio.MudCrocodile, 2), S(moon, 1)), 3, null, 30f));
-            corpo.Fauna.Add(Fauna("filhos_do_corpo", "[rápido]", T(N(Rio.Python, 3), N(Rio.Ooze, 1)), T(V(Rio.Python, 3), S(bats, 1)), 4));
+            corpo.Fauna.Add(Fauna("filhos_do_corpo", "[rápido]", T(N(Rio.Python, 3), N(Rio.Quicksand, 1)), T(V(Rio.Python, 3), S(bats, 1)), 4));
             corpo.Fauna.Add(Fauna("escaravelhos_do_corpo", "[enxame]", T(N(Rio.Scarab, 3), N(Rio.Python, 1)), T(V(Rio.Scarab, 3), S(sparks, 1)), 5));
             seco.Fauna.Add(Fauna("crocodilos_do_rio_seco", "[tanque]", T(N(Rio.MudCrocodile, 3), N(Rio.Scarab, 1)), T(V(Rio.MudCrocodile, 2), S(moon, 1)), 3, null, 30f));
             seco.Fauna.Add(Fauna("escaravelhos_do_rio_seco", "[enxame]", T(N(Rio.Scarab, 3), N(Rio.MudCrocodile, 1)), T(V(Rio.Scarab, 3), S(sparks, 1)), 5));
             escamas.Fauna.Add(Fauna("filhos_das_escamas", "[rápido]", T(N(Rio.Python, 3), N(Rio.MudCrocodile, 1)), T(V(Rio.Python, 3), S(werewolf, 1)), 4));
-            escamas.Fauna.Add(Fauna("areias_das_escamas", "[controle]", T(N(Rio.Ooze, 3), N(Rio.Scarab, 1)), T(V(Rio.Ooze, 2), S(bats, 1)), 4));
-            movedica.Fauna.Add(Fauna("areias_movedicas", "[controle]", T(N(Rio.Ooze, 3), N(Rio.MudCrocodile, 1)), T(V(Rio.Ooze, 2), S(owl, 1)), 4));
-            movedica.Fauna.Add(Fauna("filhos_da_areia_movedica", "[rápido]", T(N(Rio.Python, 3), N(Rio.Ooze, 1)), T(V(Rio.Python, 3), S(moon, 1)), 4));
+            escamas.Fauna.Add(Fauna("areias_das_escamas", "[controle]", T(N(Rio.Quicksand, 3), N(Rio.Scarab, 1)), T(V(Rio.Quicksand, 2), S(bats, 1)), 4));
+            movedica.Fauna.Add(Fauna("areias_movedicas", "[controle]", T(N(Rio.Quicksand, 3), N(Rio.MudCrocodile, 1)), T(V(Rio.Quicksand, 2), S(owl, 1)), 4));
+            movedica.Fauna.Add(Fauna("filhos_da_areia_movedica", "[rápido]", T(N(Rio.Python, 3), N(Rio.Quicksand, 1)), T(V(Rio.Python, 3), S(moon, 1)), 4));
         }
     }
 }

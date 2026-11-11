@@ -133,6 +133,16 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             view.BuildStatic();
             root.AddComponent<Mechanics.FarnkeshMechanicsDriver>();
             root.AddComponent<Mechanics.MarGeladoMechanicsDriver>();
+            root.AddComponent<Mechanics.MisturaMechanicsDriver>();
+            root.AddComponent<Mechanics.RioMechanicsDriver>();
+            root.AddComponent<Mechanics.MingchengMechanicsDriver>();
+            root.AddComponent<Mechanics.ProfundoMechanicsDriver>();
+            root.AddComponent<Mechanics.CeuMechanicsDriver>();
+            root.AddComponent<Mechanics.NartesMechanicsDriver>();
+            root.AddComponent<Mechanics.HinokuraMechanicsDriver>();
+            root.AddComponent<Mechanics.AreiasMechanicsDriver>(); root.AddComponent<Mechanics.KaggenMechanicsDriver>(); root.AddComponent<Mechanics.LimiarMechanicsDriver>();
+            root.AddComponent<Mechanics.CostaDeltaTetoMechanicsDriver>();
+            root.AddComponent<Mechanics.ZarafshanMechanicsDriver>();
             return view;
         }
 

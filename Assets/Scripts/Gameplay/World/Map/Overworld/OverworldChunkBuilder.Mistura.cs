@@ -162,6 +162,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     TryPlaceFixedMistura(layout, content, OverworldDecor.ResinLantern, p, 0f, 1.1f, i, 1f);
                 }
             }
+
+            for (int i = 0; i < OverworldLayouts.BreathStones.Length; i++)
+            {
+                Vector2 p = OverworldLayouts.BreathStones[i] + offset;
+                if (content.Rect.Contains(p))
+                {
+                    TryPlaceFixedMistura(layout, content, OverworldDecor.DioriteShard, p, 40f * i, 1.2f, i, 1.9f);
+                }
+            }
         }
 
         private static void TryPlaceFixedMistura(OverworldLayout layout, OverworldChunkContent content, OverworldDecor decor, Vector2 p, float yaw, float scale, int variant, float radius)

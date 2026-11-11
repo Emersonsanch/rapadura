@@ -47,7 +47,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private PlayerMotor _motor;
         private CharacterController _character;
         private InventoryManager _bag;
-        private Health _health;
+        private PlayerStats _stats;
         private Material _material;
         private LineRenderer _outline;
         private LineRenderer _fishLine;
@@ -143,7 +143,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 _motor = go.GetComponent<PlayerMotor>();
                 _character = go.GetComponent<CharacterController>();
                 _bag = go.GetComponentInChildren<InventoryManager>();
-                _health = go.GetComponent<Health>();
+                _stats = go.GetComponent<PlayerStats>();
             }
 
             return _controller != null && _motor != null && _character != null;
@@ -202,12 +202,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _warnedPatch = false;
             _warnedCreak = false;
             MountController.Active?.Dismount(startRecall: true, leave: true);
-            if (_health != null && _health.IsAlive)
+            if (_stats != null && _stats.IsAlive)
             {
-                float bite = ThinIceRules.BreakDamage(_health.CurrentHealth, _health.MaxHealth);
+                float bite = ThinIceRules.BreakDamage(_stats.CurrentHealth, _stats.MaxHealth);
                 if (bite > 0f)
                 {
-                    _health.ApplyDamage(bite, ElementType.None, null);
+                    _stats.ApplyHazardDamage(bite);
                 }
             }
 
@@ -437,7 +437,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private void TickFishingSession(Vector2 local)
         {
             bool stillThere = IceFishingRules.HoleAt(OverworldLayouts.IceFishingHoles, local) == _fishingHole;
-            bool alive = _health == null || _health.IsAlive;
+            bool alive = _stats == null || _stats.IsAlive;
             if (_controller.HasMoveIntent || !stillThere || !alive)
             {
                 _fishing = null;
