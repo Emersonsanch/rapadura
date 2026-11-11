@@ -1496,6 +1496,16 @@ def main():
     talent_main(ctx, args.runs, base_gear, results)
     level_main(ctx, args.runs)
     level_500_main(args.runs)
+    economy_main(args.runs)
+
+
+def economy_main(runs: int) -> None:
+    """XP, gold, fares, gates and loot of levels 1-500 against the real content (economy.py, Docs/Balanco100a500.md
+    "Economia"). Informative here; test_economy.py holds the budgets."""
+    import economy  # noqa: E402 (sibling module, lazy like level_500)
+    import level_500 as l5  # noqa: E402
+    print("\n## Economia 1–500 (XP, ouro, passagem, exigências, loot, \"Perigoso +30\")\n")
+    print(economy.run(min(runs, l5.DEFAULT_RUNS)))
 
 
 def level_500_main(runs: int) -> None:
