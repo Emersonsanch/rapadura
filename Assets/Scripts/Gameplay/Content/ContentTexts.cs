@@ -408,6 +408,19 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_forest_great_eel", "Great Eel", "Enguia Grande"),
             EnemyName("enemy_forest_ash_bull", "Ash Bull", "Touro de Cinza"),
             EnemyName("enemy_forest_smoke_rope", "Smoke Rope", "Corda de Fumaça"),
+            // The roles of Regions 1–4 (Docs/Mapas100.md 02–06, 10, 14–16, 20), formerly played by stand-ins.
+            EnemyName("enemy_forest_dimmed_stork", "Dimmed Stork", "Cegonha Apagada"),
+            EnemyName("enemy_forest_bubble_toad", "Mire Bubble Toad", "Sapo-Bolha do Lodo"),
+            EnemyName("enemy_forest_smoke_mosquito", "Smoke Mosquito", "Mosquito de Fumaça"),
+            EnemyName("enemy_forest_silk_moth", "Giant Silk Moth", "Mariposa de Seda Gigante"),
+            EnemyName("enemy_forest_laurel_pigeon", "Dimmed Laurel Pigeon", "Pombo-do-Louro Apagado"),
+            EnemyName("enemy_forest_laurel_lizard", "Giant Laurel Lizard", "Lagarto-Gigante do Louro"),
+            EnemyName("enemy_forest_smoke_peacock", "Smoke Peacock", "Pavão de Fumaça"),
+            EnemyName("enemy_desert_thorn_lizard", "Thorn Lizard", "Lagarto-Espinho"),
+            EnemyName("enemy_mountain_dimmed_lynx", "Dimmed Lynx", "Lince Apagado"),
+            EnemyName("enemy_mountain_smudge", "Smudge", "Borrão"),
+            EnemyName("enemy_mountain_stone_jackdaw", "Stone Jackdaw", "Gralha de Pedra"),
+            EnemyName("enemy_cave_young_ubir", "Young Ubır", "Ubır Jovem"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),

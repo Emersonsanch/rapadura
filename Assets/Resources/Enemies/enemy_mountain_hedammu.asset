@@ -15,7 +15,7 @@ MonoBehaviour:
   _enemyName: "Hedammu, a Serpente Gulosa do Mar"
   _isBoss: 1
   _level: 72
-  _maxHealth: 960
+  _maxHealth: 1152
   _experienceReward: 40
   _lootItem: {fileID: 11400000, guid: 398ccc109ba79c654322a45cbacccf71, type: 2}
   _lootDropChance: 0.6

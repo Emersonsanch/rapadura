@@ -23,8 +23,8 @@
   sem trocar de cena.
 - **Cidades:** as 27 cidades do `Docs/Mapas100.md` §1 estão no `CityCatalog`: 4 hubs, 12 de raça e 11 de região tardia.
   Todas ficam dentro do mundo contínuo e usam a própria receita (`CityTownRecipes.*`). Os postos são `K.Outpost`, sem respawn.
-- **Bichos próprios:** 130 nas tabelas da bíblia §3.2.1, todos com asset em `Resources/Enemies`. Somam-se a eles os 19
-  bichos de base dos 4 biomas.
+- **Bichos próprios:** 142, todos com asset em `Resources/Enemies`: os 130 das tabelas da bíblia §3.2.1 e mais 12 das Regiões 1–4
+  (2026-11-11, `EarlyStandInBeastRecipes`, no lugar dos emprestados mais vistos). Somam-se a eles os 19 bichos de base dos 4 biomas.
 - **Mecânicas:** 73 arquivos em `Gameplay/World/Map/Mechanics/`, com pelo menos uma mecânica por região. São regras puras
   com driver por região, e o estado vai salvo por slot em `WorldMapProgress`. O `MechanicsDriverHub` liga só o driver da
   região do herói (1 `Update` por frame em vez de 14). O botão de toque **Usar** do HUD acende quando há uma interação [E] ao
@@ -65,7 +65,7 @@ feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Vila da Vó Edna (hub, 01) e Copas de Garajonay (raça, 05), dentro do mundo |
 | Mundo contínuo | Feito, 2400 × 2400 m, 18 áreas (`OverworldLayouts.Zarafshan.cs`). Falta conferir no Play: bordas, densidade, sombras e custo no celular |
-| Bichos próprios | Fauna base da Floresta (lobo, aranha, queixada, coruja, lobisomem e Kök-Böri). Ainda sem bicho próprio, 4 das fichas: Sapo-Bolha (03), Mariposa de Seda (04), Pombo-do-Louro (05), Pavão de Fumaça (06) |
+| Bichos próprios | Fauna base da Floresta (lobo, aranha, queixada, coruja, lobisomem e Kök-Böri) e mais 7 (2026-11-11): Cegonha Apagada (02), Sapo-Bolha e Mosquito de Fumaça (03), Mariposa de Seda (04), Pombo-do-Louro e Lagarto-Gigante do Louro (05), Pavão de Fumaça (06). Ainda emprestados: Enguia de Lama (03), Lagarta-Casulo e Gralha Ladra (04), Névoa Pegajosa (05), Roseira-Espinho e Lobo de Cinzas (06) |
 | Mecânicas feitas | Colheita diária no Pomar (01), vaus de Água Viva que curam até 70% (02) |
 | Mecânicas faltantes | Lama ×0,7 fora da passarela e Água Viva limpando poças (03); teias que prendem (04); andar nas plataformas, névoa a cada 3 min (05); libertar 4 faíscas para encher os canais (06); item de damasco próprio (01) |
 | Chefe do mundo | Saklas, o Lobo de Cinzas (evento com horário, arena do mapa-múndi); chefe de região Kök-Böri. Falta a Fiandeira Esquecida (04) |
@@ -79,7 +79,7 @@ feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Oásis de Qocho (hub) e Tambor Rubro (raça, 11, estilo `WarCamp`), as duas dentro do mundo com a própria receita |
 | Mundo contínuo | Feito, 2400 × 2400 m (`OverworldLayouts.Areias.cs`). Os 4 postos de 09–12 estão no mapa |
-| Bichos próprios | 8: 5 de base do Deserto e mais Chacal, Cobra-de-Areia e Orc Coroado de Āz. Os papéis das fichas 09–12 usam bichos existentes |
+| Bichos próprios | 9: 5 de base do Deserto e mais Chacal, Cobra-de-Areia, Orc Coroado de Āz e Lagarto-Espinho (10). Os outros papéis das fichas 09–12 usam bichos existentes |
 | Mecânicas feitas | Tempestade de areia em toda a região, com abrigos (`AreiasStormRules`) |
 | Mecânicas faltantes | Escolta da caravana e visão de 6 m (07); leitura das inscrições (08); 09, 10 e 12 sem mecânica própria; Ritmo do Tambor e Têmpera do Tambor (11); Tambor Rubro numa mesa |
 | Chefe do mundo | Namrael, o Escorpião-Rei (evento com horário); chefe de região O Grande Ushabti (08, luta pelo mapa-múndi) |
@@ -93,7 +93,7 @@ feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Vila de Litema (hub) e Salões de Bronze (raça, 17), dentro do mundo |
 | Mundo contínuo | Feito, 2400 × 2400 m (`OverworldLayouts.Kaggen.cs`). Liga com as Areias sem portão no mundo costurado |
-| Bichos próprios | 7: 4 de base da Montanha e mais Pedra que Rola, Neblina do Vento Ruim e Babuíno. Papéis de 15–18 com bichos existentes |
+| Bichos próprios | 10: 4 de base da Montanha e mais Pedra que Rola, Neblina do Vento Ruim, Babuíno, Lince Apagado (14), Borrão (15) e Gralha de Pedra (16). Os outros papéis de 15–18 usam bichos existentes (Lagarto-de-Pedra, Águia-Preta, Salamandra Fria…) |
 | Mecânicas feitas | Ventos da serra (13–14) e pontes de corda que gastam fôlego dobrado, que a Maithe ignora (`KaggenWindRules`) |
 | Mecânicas faltantes | Curvar projéteis (13); neve no chão (14); balanço visual das pontes; ar fino no cume (18); gravar 1 runa por dia e as 5 etapas da Grande Forja (17) |
 | Chefe do mundo | Mazan, o Gigante da Serra (evento com horário); chefe de região Hahya |
@@ -107,7 +107,7 @@ feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Vila das Lamparinas (hub) e Mercado dos Túneis (raça, 22, estilo `TunnelBazaar`), dentro do mundo |
 | Mundo contínuo | Feito, 2400 × 2400 m (`OverworldLayouts.Limiar.cs`), com o portão do Ossuário |
-| Bichos próprios | 6: 4 de base das Cavernas e mais Lodo de Gruta e Corvo-da-Treva. Ainda sem bicho próprio: Ubır jovem (20). Ossuário com 5 esqueletos próprios |
+| Bichos próprios | 7: 4 de base das Cavernas e mais Lodo de Gruta, Corvo-da-Treva e Ubır Jovem (20, nos Terraços de Tufo). Ainda emprestados: Aranha de Gruta (19), Sombra Pequena e Pedra-Lâmina (20). Ossuário com 5 esqueletos próprios |
 | Mecânicas feitas | Lâmpadas salvas que encurtam a volta à Vila (19, `LimiarLampRules`); poços de vento para planar sobre os abismos do Ninho de Mahaway (24, `LimiarWindWellRules`, ainda não validado no Unity) |
 | Mecânicas faltantes | Barcos do lago (19); medo do escuro (20); a feira que muda de galeria por dia (22); entrada direta no Ossuário sem passar pelo mapa da ilha |
 | Chefe do mundo | Mahaway, o Rei da Revoada (evento com horário); chefe de região Tages; Colosso de Crânios no Ossuário (24b) |

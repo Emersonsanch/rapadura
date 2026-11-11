@@ -15,7 +15,7 @@ MonoBehaviour:
   _enemyName: "O Lodo-que-Engole"
   _isBoss: 1
   _level: 88
-  _maxHealth: 980
+  _maxHealth: 1176
   _experienceReward: 40
   _lootItem: {fileID: 11400000, guid: bf05c6234af4bd99cdb9f8dae1d50143, type: 2}
   _lootDropChance: 0.6

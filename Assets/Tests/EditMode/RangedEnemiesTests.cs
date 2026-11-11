@@ -57,6 +57,14 @@ namespace Rapadura.Tests
             // The eleventh pass: the Volcanic Bomb and the Scorpion-Man (LateStandInBeastsTests).
             ("enemy_mountain_volcanic_bomb", BiomeType.Mountain, EnemyProjectileKind.Ember, ProceduralEnemyKind.VolcanicBomb),
             ("enemy_forest_scorpion_man", BiomeType.Forest, EnemyProjectileKind.Feather, ProceduralEnemyKind.ScorpionMan),
+            // The twelfth pass, Regions 1–4 (EarlyStandInBeastsTests): the stork's twigs, the toad's and the moth's globs, the pigeon's berry stones,
+            // the peacock's ember eyes and the jackdaw's pebbles.
+            ("enemy_forest_dimmed_stork", BiomeType.Forest, EnemyProjectileKind.Feather, ProceduralEnemyKind.DimmedStork),
+            ("enemy_forest_bubble_toad", BiomeType.Forest, EnemyProjectileKind.LureGlob, ProceduralEnemyKind.BubbleToad),
+            ("enemy_forest_silk_moth", BiomeType.Forest, EnemyProjectileKind.LureGlob, ProceduralEnemyKind.SilkMoth),
+            ("enemy_forest_laurel_pigeon", BiomeType.Forest, EnemyProjectileKind.Feather, ProceduralEnemyKind.LaurelPigeon),
+            ("enemy_forest_smoke_peacock", BiomeType.Forest, EnemyProjectileKind.Ember, ProceduralEnemyKind.SmokePeacock),
+            ("enemy_mountain_stone_jackdaw", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.StoneJackdaw),
         };
 
         /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>

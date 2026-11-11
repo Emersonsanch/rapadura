@@ -15,7 +15,7 @@ MonoBehaviour:
   _enemyName: "Aydahar, o Dragão do Passo"
   _isBoss: 1
   _level: 98
-  _maxHealth: 1000
+  _maxHealth: 1180
   _experienceReward: 40
   _lootItem: {fileID: 11400000, guid: 39f508702400d9ca324eb18b55328b6a, type: 2}
   _lootDropChance: 0.55

@@ -34,6 +34,26 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private const string Bats = PeriodSpawnTable.CaveBats;
         private const string Potoo = NightVariantRules.PotooEnemyId;
 
+        /// <summary>
+        /// The twelfth pass of beasts (bible §3.2.1, <c>EarlyStandInBeastRecipes</c>): the roles of Regions 1–4 that the continuous world played with
+        /// stand-ins (Docs/Mapas100.md 02–06, 10, 14–16, 20), placed in the groups of their sheets here and in the Areias, Kaggen and Limiar layouts.
+        /// </summary>
+        public static class EarlyBeasts
+        {
+            public const string Stork = "enemy_forest_dimmed_stork";
+            public const string BubbleToad = "enemy_forest_bubble_toad";
+            public const string SmokeMosquito = "enemy_forest_smoke_mosquito";
+            public const string SilkMoth = "enemy_forest_silk_moth";
+            public const string LaurelPigeon = "enemy_forest_laurel_pigeon";
+            public const string LaurelLizard = "enemy_forest_laurel_lizard";
+            public const string SmokePeacock = "enemy_forest_smoke_peacock";
+            public const string ThornLizard = "enemy_desert_thorn_lizard";
+            public const string DimmedLynx = "enemy_mountain_dimmed_lynx";
+            public const string Smudge = "enemy_mountain_smudge";
+            public const string StoneJackdaw = "enemy_mountain_stone_jackdaw";
+            public const string YoungUbir = "enemy_cave_young_ubir";
+        }
+
         public static readonly Vector2 MoinhoOffset = new Vector2(420f, 40f);
         public static readonly Vector2 BrejoOffset = new Vector2(880f, -560f);
         public static readonly Vector2 AmoreirasOffset = new Vector2(1225f, -560f);
@@ -304,12 +324,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             campinas.Fauna.Add(Fauna("teias_do_capim", "[enxame]", T(N(Spider, 2), N(Boar, 1)), T(V(Spider, 2), S(NightVariantRules.VagaLume, 1)), 4));
 
             // Prado das Cegonhas: the potoo stands in for the Cegonha Apagada [distância], spiders in the reeds.
-            prado.Fauna.Add(Fauna("cegonhas", "[distância]", T(N(Potoo, 3), N(Spider, 1)), T(V(Potoo, 2), S(NightVariantRules.RasgaMortalha, 1)), 3));
+            prado.Fauna.Add(Fauna("cegonhas", "[distância]", T(N(EarlyBeasts.Stork, 3), N(Spider, 1)), T(V(EarlyBeasts.Stork, 2), S(NightVariantRules.RasgaMortalha, 1)), 3));
             prado.Fauna.Add(Fauna("juncal", "[enxame] [tanque]", T(N(Spider, 2), N(Boar, 2)), T(V(Spider, 2), S(NightVariantRules.Queixada, 1)), 4));
 
             // Várzea Dourada: spiders and boars in the mud, birds over the backwater.
             varzea.Fauna.Add(Fauna("lodo_raso", "[tanque] [enxame]", T(N(Boar, 2), N(Spider, 2)), T(S(NightVariantRules.Queixada, 2), V(Spider, 2)), 4));
-            varzea.Fauna.Add(Fauna("aves_da_varzea", "[distância]", T(N(Potoo, 3)), T(V(Potoo, 2), S(NightVariantRules.VagaLume, 1)), 3));
+            varzea.Fauna.Add(Fauna("aves_da_varzea", "[distância]", T(N(EarlyBeasts.Stork, 3)), T(V(EarlyBeasts.Stork, 2), S(NightVariantRules.VagaLume, 1)), 3));
 
             // Colinas de Mihryazd and the Altos: stone golems [tanque], potoos [distância], wolves; the Mardagayl on the heights.
             colinas.Fauna.Add(Fauna("pedras_vivas", "[tanque]", T(N(Golem, 2), N(Wolf, 1)), T(V(Golem, 2), S(NightVariantRules.RasgaMortalha, 1)), 3, null, 30f));
@@ -332,14 +352,14 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ravina.Fauna.Add(Fauna("beiral", "[tanque] [enxame]", T(N(Golem, 2), N(Bats, 1)), T(V(Golem, 2), S(NightVariantRules.MorcegoVampiro, 1)), 3, null, 30f));
 
             // The far east around the embedded maps (their own clearings come with them).
-            brejo.Fauna.Add(Fauna("lodo_escuro", "[tanque] [enxame]", T(N(Boar, 3), N(Bats, 2)), T(S(NightVariantRules.Queixada, 2), S(NightVariantRules.VagaLume, 1)), 5));
-            brejo.Fauna.Add(Fauna("fumaca", "[enxame]", T(N(Bats, 3), N(Spider, 1)), T(N(Bats, 3), S(NightVariantRules.VagaLume, 1)), 5, null, 22f));
+            brejo.Fauna.Add(Fauna("lodo_escuro", "[tanque] [distância]", T(N(Boar, 3), N(EarlyBeasts.BubbleToad, 2)), T(S(NightVariantRules.Queixada, 2), S(NightVariantRules.VagaLume, 1)), 5));
+            brejo.Fauna.Add(Fauna("fumaca", "[enxame]", T(N(EarlyBeasts.SmokeMosquito, 3), N(Spider, 1)), T(V(EarlyBeasts.SmokeMosquito, 3), S(NightVariantRules.VagaLume, 1)), 5, null, 22f));
             amoreiras.Fauna.Add(Fauna("fiandeiras", "[enxame]", T(N(Spider, 4)), T(V(Spider, 3), S(NightVariantRules.VagaLume, 1)), 5, null, 22f));
-            amoreiras.Fauna.Add(Fauna("gralhas", "[rápido] [distância]", T(N(Potoo, 3), N(Spider, 1)), T(V(Potoo, 2), S(NightVariantRules.RasgaMortalha, 1)), 4));
-            garajonay.Fauna.Add(Fauna("louros", "[rápido] [tanque]", T(N(Wolf, 2), N(Boar, 2)), T(V(Wolf, 2), S(NightVariantRules.Lobisomem, 1)), 4, null, 28f));
-            garajonay.Fauna.Add(Fauna("nevoa", "[controle] [distância]", T(N(Spider, 2), N(Potoo, 2)), T(V(Spider, 2), S(NightVariantRules.VagaLume, 1)), 4));
+            amoreiras.Fauna.Add(Fauna("gralhas", "[rápido] [distância]", T(N(EarlyBeasts.SilkMoth, 3), N(Spider, 1)), T(V(EarlyBeasts.SilkMoth, 2), S(NightVariantRules.RasgaMortalha, 1)), 4));
+            garajonay.Fauna.Add(Fauna("louros", "[rápido] [tanque]", T(N(EarlyBeasts.LaurelLizard, 2), N(Boar, 2)), T(V(EarlyBeasts.LaurelLizard, 2), S(NightVariantRules.Lobisomem, 1)), 4, null, 28f));
+            garajonay.Fauna.Add(Fauna("nevoa", "[controle] [distância]", T(N(Spider, 2), N(EarlyBeasts.LaurelPigeon, 2)), T(V(Spider, 1), V(EarlyBeasts.LaurelPigeon, 2), S(NightVariantRules.VagaLume, 1)), 4));
             jardim.Fauna.Add(Fauna("jardineiros", "[tanque]", T(N(Golem, 3), N(Wolf, 1)), T(V(Golem, 2), S(NightVariantRules.Lobisomem, 1)), 4, null, 30f));
-            jardim.Fauna.Add(Fauna("lobos_de_cinzas", "[rápido]", T(N(Wolf, 3), N(Potoo, 1)), T(V(Wolf, 3), S(NightVariantRules.VagaLume, 1)), 4));
+            jardim.Fauna.Add(Fauna("lobos_de_cinzas", "[rápido] [distância]", T(N(Wolf, 3), N(EarlyBeasts.SmokePeacock, 1)), T(V(Wolf, 3), S(NightVariantRules.VagaLume, 1)), 4));
         }
     }
 }

@@ -18,8 +18,10 @@ import level_500 as l5  # noqa: E402
 # What Docs/Balanco100a500.md reports as off target (real reading, same-level fights). When the game changes and this
 # list moves, rerun `python -I tools/balance/level_500.py`, update the doc's tables, then this snapshot.
 # Since HeroToughnessGrowthPerLevel = 0 and the commons' health floor 170 from level 100 up (2026-11-11) only the three
-# Regions 5-9 bosses below 100 (Hedammu 72, Lodo-que-Engole 88, Aydahar 98: 13-14 s to kill, target 15-22) are off.
-DOCUMENTED_MISSES = sorted([("boss", lv, "fast") for lv in (72, 88, 98)])
+# Regions 5-9 bosses below 100 were off (Hedammu 72, Lodo-que-Engole 88, Aydahar 98: 13-14 s to kill, target 15-22). Their
+# base health went up x1.2 (2026-11-11: 1152 / 1176; Aydahar x1.18 = 1180, the RegionBossTests cap: no world boss above
+# Tages, enemy_cave_dweller), so they now die in 16.2-17.0 s and nothing is off.
+DOCUMENTED_MISSES: list = []
 
 
 @pytest.fixture(scope="module")

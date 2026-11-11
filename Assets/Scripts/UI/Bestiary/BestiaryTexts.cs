@@ -275,6 +275,9 @@ namespace Rapadura.UI.Bestiary
             // -- Papéis das Regiões 12–16 que ainda eram substitutos (own file too) --
             LateStandInBestiaryTexts.AddPages(entries);
 
+            // -- Papéis das Regiões 1–4 que ainda eram substitutos (own file too) --
+            EarlyStandInBestiaryTexts.AddPages(entries);
+
             // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
             RegionBossTexts.AddPages(entries);
 

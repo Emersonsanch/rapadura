@@ -450,6 +450,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.MudOctopus:
                 case ProceduralEnemyKind.HoldShadow:
                 case ProceduralEnemyKind.Quicksand:
+                case ProceduralEnemyKind.BubbleToad:
                 {
                     // Squash and stretch; it flattens on the windup and the swallowed lights flare.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -610,6 +611,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.DimmedLightGull:
                 case ProceduralEnemyKind.ThiefGoose:
                 case ProceduralEnemyKind.BladeBat:
+                case ProceduralEnemyKind.DimmedStork:
+                case ProceduralEnemyKind.SilkMoth:
+                case ProceduralEnemyKind.LaurelPigeon:
+                case ProceduralEnemyKind.SmokePeacock:
+                case ProceduralEnemyKind.StoneJackdaw:
                 {
                     // The birds of the peaks: the eagle soars on long glides, the chough and the flute bird beat quicker; the wings
                     // hold still and the beak opens on the windup (the flute bird's note, the chough's and the harpy's screech).
@@ -656,6 +662,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.DimmedLightFish:
                 case ProceduralEnemyKind.DevouringSalamander:
                 case ProceduralEnemyKind.CedarLynx:
+                case ProceduralEnemyKind.LaurelLizard:
+                case ProceduralEnemyKind.ThornLizard:
+                case ProceduralEnemyKind.DimmedLynx:
                 case ProceduralEnemyKind.ShadowLizard:
                 {
                     // Hinokura's biters: the jaw gapes on the windup and the tail sways; the blade fish's fins row in the steam, the
@@ -689,13 +698,15 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.DarkStowaway:
                 case ProceduralEnemyKind.LivingRope:
                 case ProceduralEnemyKind.SmokeRope:
+                case ProceduralEnemyKind.Smudge:
+                case ProceduralEnemyKind.YoungUbir:
                 case ProceduralEnemyKind.ScorpionMan:
                 case ProceduralEnemyKind.ToyArchon:
                 case ProceduralEnemyKind.SkyStone:
                 {
                     // The river's biters and the Margins': the jaw gapes on the windup and the tail sways; what drifts (the reed snare's root, the
                     // late shadow's trail, the mantle's hem) drags slowly and its nooses or sleeves stir.
-                    bool drifts = _kind == ProceduralEnemyKind.LivingRope || _kind == ProceduralEnemyKind.SmokeRope || _kind == ProceduralEnemyKind.ReedSnare || _kind == ProceduralEnemyKind.LateShadow || _kind == ProceduralEnemyKind.GlowMantle || _kind == ProceduralEnemyKind.SmokeArcher;
+                    bool drifts = _kind == ProceduralEnemyKind.LivingRope || _kind == ProceduralEnemyKind.SmokeRope || _kind == ProceduralEnemyKind.Smudge || _kind == ProceduralEnemyKind.YoungUbir || _kind == ProceduralEnemyKind.ReedSnare || _kind == ProceduralEnemyKind.LateShadow || _kind == ProceduralEnemyKind.GlowMantle || _kind == ProceduralEnemyKind.SmokeArcher;
                     float r = StepAttack(deltaTime, 5f, 3f);
                     Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(Mathf.Max(0f, Mathf.Sin(t * 0.7f)) * 3f * k + 32f * r, 0f, 0f));
                     float sway = drifts ? Mathf.Sin(t * 0.8f) * 6f
@@ -712,6 +723,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
 
                 case ProceduralEnemyKind.GoldenBee:
                 case ProceduralEnemyKind.ResinBee:
+                case ProceduralEnemyKind.SmokeMosquito:
                 {
                     // A blur of fast wingbeats; the sting swings forward under the body on the windup.
                     float r = StepAttack(deltaTime, 5f, 3f);

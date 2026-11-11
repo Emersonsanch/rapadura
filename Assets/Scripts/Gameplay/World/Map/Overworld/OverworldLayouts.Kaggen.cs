@@ -415,7 +415,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             // Passos Estreitos: ushabtis and hawks on the walls, the lynx (wolf) in the gaps, the Neblina do Vento Ruim at dusk.
             passos.Fauna.Add(Fauna("paredoes", "[tanque] [distância]", T(N(Golem, 2), N(KaggenHawk, 2)), T(V(Golem, 2), V(KaggenHawk, 1), S(aveGraveto, 1)), 4, null, 28f));
-            passos.Fauna.Add(Fauna("lince", "[rápido] [controle]", T(N(Wolf, 3), N(KaggenMist, 1)), T(V(Wolf, 2), V(KaggenMist, 1), S(NightVariantRules.MorcegoVampiro, 1)), 4,
+            passos.Fauna.Add(Fauna("lince", "[rápido] [controle]", T(N(EarlyBeasts.DimmedLynx, 3), N(KaggenMist, 1)), T(V(EarlyBeasts.DimmedLynx, 2), V(KaggenMist, 1), S(NightVariantRules.MorcegoVampiro, 1)), 4,
                 T(N(Wolf, 2), N(KaggenMist, 2))));
 
             // Escarpas de Arenito: sandstone ushabtis, the black eagles (hawks) on the steps.
@@ -424,12 +424,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             // Abrigos Pintados (15): the Borrão [rápido] (the wolf of shadow) and the Babuínos Apagados, thieves [enxame]; the
             // Ushabti de Arenito [tanque]; the black eagle [distância].
-            abrigos.Fauna.Add(Fauna("borroes", "[rápido] [enxame]", T(N(Wolf, 3), N(KaggenBaboon, 2)), T(V(Wolf, 2), V(KaggenBaboon, 1), S(NightVariantRules.Lobisomem, 1)), 5));
+            abrigos.Fauna.Add(Fauna("borroes", "[rápido] [enxame]", T(N(EarlyBeasts.Smudge, 3), N(KaggenBaboon, 2)), T(V(EarlyBeasts.Smudge, 2), V(KaggenBaboon, 1), S(NightVariantRules.Lobisomem, 1)), 5));
             abrigos.Fauna.Add(Fauna("ushabti_de_arenito", "[tanque] [distância]", T(N(Golem, 3), N(KaggenHawk, 1)), T(V(Golem, 2), S(aveGraveto, 1)), 4, null, 30f));
 
             // Muralhas de Pedra Seca (16): the granite ushabtis [tanque] (and the lesser Mazan at night), the stone crows [distância].
             pedraSeca.Fauna.Add(Fauna("muralhas", "[tanque] [elite]", T(N(Golem, 3)), T(V(Golem, 3), S(NightVariantRules.Lobisomem, 1)), 4, null, 32f));
-            pedraSeca.Fauna.Add(Fauna("gralhas_de_pedra", "[distância]", T(N(KaggenHawk, 2), N(Potoo, 2)), T(V(KaggenHawk, 1), V(Potoo, 1), S(aveGraveto, 1)), 4));
+            pedraSeca.Fauna.Add(Fauna("gralhas_de_pedra", "[distância]", T(N(EarlyBeasts.StoneJackdaw, 3), N(KaggenHawk, 1)), T(V(EarlyBeasts.StoneJackdaw, 2), V(KaggenHawk, 1), S(aveGraveto, 1)), 4));
             pedraSeca.Fauna.Add(Fauna("lagartos", "[rápido]", T(N(Wolf, 3), N(Boar, 1)), T(V(Wolf, 3), S(NightVariantRules.Queixada, 1)), 4));
 
             // Campos de Neve: snow ushabtis and wolves, the Neblina do Vento Ruim [controle].

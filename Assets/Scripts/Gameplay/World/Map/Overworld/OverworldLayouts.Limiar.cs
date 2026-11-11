@@ -394,7 +394,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             tages.Fauna.Add(Fauna("lanternas_quebradas", "[distância] [tanque]", T(N(lantern, 2), N(golem, 2)), T(V(lantern, 2), S(ubir, 1)), 4, null, 28f));
             fendas.Fauna.Add(Fauna("beirais", "[tanque] [enxame]", T(N(golem, 2), N(bats, 2)), T(V(golem, 2), S(ubir, 2)), 4, null, 28f));
             fendas.Fauna.Add(Fauna("urutaus_da_fenda", "[distância]", T(N(potoo, 3), N(bats, 1)), T(V(potoo, 2), S(ubir, 1)), 3));
-            terracos.Fauna.Add(Fauna("degraus_rosados", "[rápido] [enxame]", T(N(spider, 2), N(bats, 2)), T(V(spider, 2), S(ubir, 1)), 4));
+            terracos.Fauna.Add(Fauna("degraus_rosados", "[rápido] [enxame]", T(N(EarlyBeasts.YoungUbir, 2), N(bats, 2)), T(V(EarlyBeasts.YoungUbir, 2), S(ubir, 1)), 4));
             terracos.Fauna.Add(Fauna("guardas_de_tufo", "[tanque] [distância]", T(N(golem, 2), N(lantern, 1)), T(V(golem, 2), V(lantern, 1)), 3, null, 30f));
 
             // Row 2 — mushrooms, crystals, the colonnade by the Ossuário, the lantern fish's lake, the eastern abyss.

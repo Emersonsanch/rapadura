@@ -369,6 +369,32 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         AshBull = 190,
         /// <summary>Corda de Fumaça (97): a coil of smoke shaped like a rope; a mouth that gapes, the loose ends stir.</summary>
         SmokeRope = 191,
+
+        // The twelfth pass of beasts (bible §3.2.1): the roles of Regions 1–4 that still used stand-ins (EarlyStandInBeastRecipes).
+        /// <summary>Cegonha Apagada (02): grey-edged stork with twigs to throw; the beak opens, wings held still.</summary>
+        DimmedStork = 192,
+        /// <summary>Sapo-Bolha do Lodo (03): fat mud toad; flattens on the windup and the bubble in its throat flares.</summary>
+        BubbleToad = 193,
+        /// <summary>Mosquito de Fumaça (03): a smoke mosquito; fast wings, the proboscis swings up.</summary>
+        SmokeMosquito = 194,
+        /// <summary>Mariposa de Seda Gigante (04): pale moth with lit eyespots; the palps open, wings held still.</summary>
+        SilkMoth = 195,
+        /// <summary>Pombo-do-Louro Apagado (05): plump grey pigeon with a green band; the beak opens.</summary>
+        LaurelPigeon = 196,
+        /// <summary>Lagarto-Gigante do Louro (05): green lizard with a crest of bark; jaw and tail.</summary>
+        LaurelLizard = 197,
+        /// <summary>Pavão de Fumaça (06): a peacock of smoke with ember eyes in its fan; the beak opens.</summary>
+        SmokePeacock = 198,
+        /// <summary>Lagarto-Espinho (10): sand lizard all thorns, the tips lit; jaw and tail.</summary>
+        ThornLizard = 199,
+        /// <summary>Lince Apagado (14): grey lynx with a dark patch; jaw and tail.</summary>
+        DimmedLynx = 200,
+        /// <summary>Borrão (15): the shadow out of the paintings; the mouth gapes, the smeared arms stir.</summary>
+        Smudge = 201,
+        /// <summary>Gralha de Pedra (16): slate jackdaw with a pebble in the beak; the beak opens.</summary>
+        StoneJackdaw = 202,
+        /// <summary>Ubır Jovem (20): floating ball of dark hair with an ember mouth; the mouth gapes, the claws stir.</summary>
+        YoungUbir = 203,
     }
 
     /// <summary>

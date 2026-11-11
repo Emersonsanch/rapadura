@@ -37,6 +37,8 @@ MonoBehaviour:
     _weight: 0
   - _enemy: {fileID: 11400000, guid: ee1927b26e6f4687a5315eb421b32b63, type: 2}
     _weight: 0
+  - _enemy: {fileID: 11400000, guid: 3d4e46bcf17e48ee89d28cc3aea2a73d, type: 2}
+    _weight: 0
   _loot:
   - _item: {fileID: 11400000, guid: cd94a946f8299c04893b92f91853aede, type: 2}
     _weight: 10

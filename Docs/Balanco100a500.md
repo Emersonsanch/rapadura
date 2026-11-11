@@ -45,7 +45,7 @@
 | Chefes 320–478: herói parado morre em | 12–40 s | 4,6–7,9 s (fora) | 14,5–19,2 s |
 | Āz (478): golpes / maior golpe | ≥ 3 / < 100% | 3 / 60% | 9 / 19% |
 | Chefes 140–150 (Quatro Gulosos, Ohya) | 15–22 s · 12–40 s | sem asset | 15,3 s · 27,4–27,7 s parado |
-| Chefes 72–98 (Hedammu, Lodo, Aydahar) | 15–22 s · 12–40 s | fora da tabela | **13,1–14,2 s (rápido)** · 26,7–30,1 s parado |
+| Chefes 72–98 (Hedammu, Lodo, Aydahar) | 15–22 s · 12–40 s | fora da tabela | 16,2–17,0 s (vida base ×1,2; Aydahar ×1,18) · 26,7–30,1 s parado |
 | Perigoso +30, comuns: golpes para morrer | — | 4–5 | 8–11 |
 | Perigoso +30, chefes: golpes / parado | — | 1–2 / 1,3–2,8 s | 2–3 / 4,0–6,6 s |
 | Orçamento 15–100 (`level_scaling.py`) | dentro | dentro | dentro |
@@ -56,8 +56,10 @@ O que mudou no jogo: `EnemyLevelScaling.HeroToughnessGrowthPerLevel` 0,005 → 0
 (não nos chefes) antes do multiplicador, aplicado pelo `EnemyLevelScaler`; nenhum asset foi editado. O piso começa no
 100 (não no 101) porque com ele a faixa 100 também entra na meta (3,1 → 5,5 s) e o orçamento 15–100 continua dentro.
 
-Fica fora da meta: **Hedammu, Lodo-que-Engole e Aydahar (72–98) morrem em 13,1–14,2 s** (meta 15–22). Correção
-possível, não aplicada: vida desses três × 1,15–1,25 no asset (só eles; o resto dos chefes está dentro).
+Hedammu, Lodo-que-Engole e Aydahar (72–98) morriam em 13,1–14,2 s (meta 15–22). **Aplicado em 2026-11-11:** vida
+base no asset × 1,2 (Hedammu 960 → 1152, Lodo-que-Engole 980 → 1176) e × 1,18 no Aydahar (1000 → 1180, o teto do
+`RegionBossTests`: nenhum chefe do mundo acima de Tages, `enemy_cave_dweller`, 1180; a escala por nível faz o resto).
+Agora morrem em 16,2 / 16,8 / 17,0 s; nada fica fora da meta.
 
 ### 2.2 Antes das sugestões (medição original)
 
@@ -120,7 +122,7 @@ comuns) e juntas põem todas as faixas da leitura "real" na meta.
    recarga deixar "suprema a cada pacote", olhe a recarga mínima.
 
 Depois de mudar o jogo: rodar `python -I tools/balance/level_500.py`, atualizar as tabelas da §4 e o
-`DOCUMENTED_MISSES` de `tools/balance/test_level_500.py` (hoje: só os chefes 72, 88 e 98, rápidos).
+`DOCUMENTED_MISSES` de `tools/balance/test_level_500.py` (hoje: vazio).
 
 ## 4. Tabelas (saída do `level_500.py`, depois das sugestões 1 e 2)
 
@@ -156,9 +158,9 @@ Fator jogo/modelo (r7): comuns ×1.73, chefes ×0.89. "Caça" = só skills com r
 
 | Chefe (nível) | Vida / dano | Mata: real | Mata: doc | Parado morre em: real / doc | Só básico mata em (real) | Golpes do chefe para morrer: real / doc | Maior golpe (% da vida): real / doc | Dano da luta (× vida): real / doc | Básicos do herói no chefe (real) |
 |---|---|---|---|---|---|---|---|---|---|
-| "Hedammu, a Serpente Gulosa do Mar" (72) | 2,722 / 82 | 13.1 s **(fora)** | 9.8 s **(fora)** | 30.1 s / 38.5 s | 23.5 s | 18 / 23 | 9% / 7% | 0.6 / 0.3 | 50 |
-| "O Lodo-que-Engole" (88) | 3,441 / 105 | 13.8 s **(fora)** | 9.8 s **(fora)** | 28.2 s / 36.1 s | 24.5 s | 17 / 21 | 12% / 10% | 0.7 / 0.4 | 52 |
-| "Aydahar, o Dragão do Passo" (98) | 3,969 / 124 | 14.2 s **(fora)** | 9.8 s **(fora)** | 26.7 s / 34.1 s | 25.5 s | 16 / 20 | 10% / 8% | 0.7 / 0.4 | 54 |
+| "Hedammu, a Serpente Gulosa do Mar" (72) | 3,267 / 82 | 16.2 s | 12.5 s **(fora)** | 30.1 s / 38.5 s | 28.3 s | 18 / 23 | 9% / 7% | 0.7 / 0.4 | 60 |
+| "O Lodo-que-Engole" (88) | 4,129 / 105 | 16.8 s | 12.4 s **(fora)** | 28.2 s / 36.1 s | 29.3 s | 17 / 21 | 12% / 10% | 0.8 / 0.5 | 63 |
+| "Aydahar, o Dragão do Passo" (98) | 4,684 / 124 | 17.0 s | 12.2 s **(fora)** | 26.7 s / 34.1 s | 30.3 s | 16 / 20 | 10% / 8% | 0.8 / 0.5 | 64 |
 | "Os Quatro Gulosos" (140) | 6,315 / 183 | 15.3 s | 9.5 s **(fora)** | 27.4 s / 35.1 s | 26.9 s | 15 / 19 | 11% / 9% | 0.7 / 0.4 | 58 |
 | "Ohya, o Gigante Irmão" (150) | 6,995 / 207 | 15.3 s | 9.4 s **(fora)** | 27.7 s / 35.5 s | 27.9 s | 14 / 18 | 12% / 9% | 0.7 / 0.4 | 59 |
 | "O Rei-Vendaval" (200) | 10,613 / 271 | 15.9 s | 8.9 s **(fora)** | 20.7 s / 26.5 s | 28.8 s | 15 / 18 | 14% / 11% | 1.0 / 0.4 | 61 |
@@ -185,9 +187,9 @@ Chefes do mundo: tempo para matar · golpes do chefe para morrer (pior crítico)
 
 | Bicho | +0 | +10 | +20 | +30 |
 |---|---|---|---|---|
-| "Hedammu, a Serpente Gulosa do Mar" (72) | 13.1 s · 18 · 30.1 s | 15.3 s · 11 · 23.3 s | 29.8 s · 6 · 13.2 s | 35.6 s · 3 · 5.4 s |
-| "O Lodo-que-Engole" (88) | 13.8 s · 17 · 28.2 s | 15.6 s · 10 · 22.4 s | 30.3 s · 6 · 13.1 s | 35.4 s · 3 · 5.6 s |
-| "Aydahar, o Dragão do Passo" (98) | 14.2 s · 16 · 26.7 s | 16.2 s · 10 · 21.4 s | 30.6 s · 6 · 12.7 s | 35.7 s · 3 · 5.6 s |
+| "Hedammu, a Serpente Gulosa do Mar" (72) | 16.2 s · 18 · 30.1 s | 18.5 s · 11 · 23.3 s | 36.7 s · 6 · 13.2 s | 44.2 s · 3 · 5.4 s |
+| "O Lodo-que-Engole" (88) | 16.8 s · 17 · 28.2 s | 19.0 s · 10 · 22.4 s | 37.4 s · 6 · 13.1 s | 43.9 s · 3 · 5.6 s |
+| "Aydahar, o Dragão do Passo" (98) | 17.0 s · 16 · 26.7 s | 19.2 s · 10 · 21.4 s | 37.4 s · 6 · 12.7 s | 43.4 s · 3 · 5.6 s |
 | "Os Quatro Gulosos" (140) | 15.3 s · 15 · 27.4 s | 16.6 s · 10 · 22.7 s | 30.5 s · 6 · 14.0 s | 34.9 s · 3 · 6.4 s |
 | "Ohya, o Gigante Irmão" (150) | 15.3 s · 14 · 27.7 s | 16.8 s · 9 · 23.1 s | 30.8 s · 6 · 14.3 s | 35.2 s · 3 · 6.6 s |
 | "O Rei-Vendaval" (200) | 15.9 s · 15 · 20.7 s | 17.1 s · 9 · 17.5 s | 30.7 s · 6 · 11.1 s | 33.8 s · 3 · 5.2 s |
@@ -200,9 +202,7 @@ Chefes do mundo: tempo para matar · golpes do chefe para morrer (pior crítico)
 
 ### 4.4 Fora da meta (leitura "real")
 
-- boss 72: fast
-- boss 88: fast
-- boss 98: fast
+- nada
 
 ### 4.5 Ajustes (piso de vida 170 e HeroToughnessGrowthPerLevel = 0 já aplicados; o resto é sugestão)
 
@@ -216,9 +216,9 @@ Chefes do mundo: tempo para matar · golpes do chefe para morrer (pior crítico)
 
 | Chefe (nível) | ×dano para o herói parado durar 15 s | Golpes para morrer depois | Maior golpe depois | ×vida se o herói "doc" for implementado |
 |---|---|---|---|---|
-| "Hedammu, a Serpente Gulosa do Mar" (72) | ×1.00 | 18 | 9% | ×1.89 |
-| "O Lodo-que-Engole" (88) | ×1.00 | 17 | 12% | ×1.88 |
-| "Aydahar, o Dragão do Passo" (98) | ×1.00 | 16 | 10% | ×1.88 |
+| "Hedammu, a Serpente Gulosa do Mar" (72) | ×1.00 | 18 | 9% | ×1.48 |
+| "O Lodo-que-Engole" (88) | ×1.00 | 17 | 12% | ×1.49 |
+| "Aydahar, o Dragão do Passo" (98) | ×1.00 | 16 | 10% | ×1.51 |
 | "Os Quatro Gulosos" (140) | ×1.00 | 15 | 11% | ×1.94 |
 | "Ohya, o Gigante Irmão" (150) | ×1.00 | 14 | 12% | ×1.96 |
 | "O Rei-Vendaval" (200) | ×1.00 | 15 | 14% | ×2.09 |

@@ -676,7 +676,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             // 10 · Dunas que Cantam: the giant scorpions [tanque], jackals for the spiny lizards [rápido], the sparks doubling at night.
             dunas.Fauna.Add(Fauna("escorpioes_gigantes", "[tanque]", T(N(esc, 4)), T(V(esc, 3), S(faiscas, 2)), 4, null, 28f));
-            dunas.Fauna.Add(Fauna("lagartos_da_duna", "[rápido]", T(N(chacal, 3), N(abutre, 1)), T(V(chacal, 2), S(faiscas, 2)), 4));
+            dunas.Fauna.Add(Fauna("lagartos_da_duna", "[rápido]", T(N(EarlyBeasts.ThornLizard, 3), N(abutre, 1)), T(V(EarlyBeasts.ThornLizard, 2), S(faiscas, 2)), 4));
             dunas.Fauna.Add(Fauna("faiscas_da_duna", "[enxame]", T(N(esc, 1), N(abutre, 1)), T(S(faiscas, 3)), 5, T(S(faiscas, 2), N(esc, 1)), 20f));
 
             // 11 · Ermos do Tambor Rubro: the ember hawks [rápido], the Escorpião-Rubro [tanque], the Pedra que Rola [controle] and
