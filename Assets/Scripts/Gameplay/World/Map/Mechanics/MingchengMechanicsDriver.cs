@@ -278,6 +278,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                     : action == MingchengWallAction.LightBeacon ? MingchengMechanicsTexts.LightPrompt : MingchengMechanicsTexts.DescendPrompt);
             }
 
+            InteractPromptRegistry.Ping(Time.unscaledTime);
             if (!_controller.Input.InteractPressedThisFrame)
             {
                 return;
@@ -516,6 +517,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 Say(_reflection.Ready ? MingchengMechanicsTexts.LookPrompt : MingchengMechanicsTexts.LookResting);
             }
 
+            if (_reflection.Ready)
+            {
+                InteractPromptRegistry.Ping(Time.unscaledTime);
+            }
+
             if (_controller.Input.InteractPressedThisFrame && _reflection.Ready)
             {
                 _reflection = MingchengReflectionRules.Look(_reflection, night);
@@ -533,6 +539,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             {
                 _nextHint = Time.unscaledTime + HintCooldown;
                 Say(canOpen ? MingchengMechanicsTexts.ChestPrompt : MingchengMechanicsTexts.ChestEmpty);
+            }
+
+            if (canOpen)
+            {
+                InteractPromptRegistry.Ping(Time.unscaledTime);
             }
 
             if (!canOpen || !_controller.Input.InteractPressedThisFrame)

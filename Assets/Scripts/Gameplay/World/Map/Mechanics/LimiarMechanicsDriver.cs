@@ -158,6 +158,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 Say(action == LimiarLampAction.Light ? LimiarMechanicsTexts.LightPrompt : action == LimiarLampAction.ReturnToVila ? LimiarMechanicsTexts.BackPrompt : LimiarMechanicsTexts.DeepPrompt);
             }
 
+            InteractPromptRegistry.Ping(Time.unscaledTime);
             if (!_controller.Input.InteractPressedThisFrame)
             {
                 return;

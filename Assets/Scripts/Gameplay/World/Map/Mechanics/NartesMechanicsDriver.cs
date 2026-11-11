@@ -224,6 +224,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                     Say(NartesMechanicsTexts.RaceCall);
                 }
 
+                InteractPromptRegistry.Ping(Time.unscaledTime);
                 if (_controller.Input.InteractPressedThisFrame && ZoneOpen(OverworldLayouts.NartesRaceStart))
                 {
                     _race = new NartesRaceSession(OverworldLayouts.NartesRaceCourse);
@@ -602,6 +603,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 _nextHint = Time.unscaledTime + HintCooldown;
                 string text = check == NartesSkyGoldCheck.Take ? NartesMechanicsTexts.GoldCall : check == NartesSkyGoldCheck.Cooled ? NartesMechanicsTexts.GoldCooled : NartesMechanicsTexts.GoldHot;
                 SayText(NartesMechanicsTexts.Format(localization, text, name));
+            }
+
+            if (check == NartesSkyGoldCheck.Take)
+            {
+                InteractPromptRegistry.Ping(Time.unscaledTime);
             }
 
             if (check == NartesSkyGoldCheck.Take && _controller.Input.InteractPressedThisFrame && ZoneOpen(local) && Pay(NartesSkyGoldRules.Purse))

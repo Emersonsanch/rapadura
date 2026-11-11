@@ -268,6 +268,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 Say(HintKey(pick.Route, pick.ToB, check));
             }
 
+            InteractPromptRegistry.Ping(Time.unscaledTime);
             if (!_controller.Input.InteractPressedThisFrame)
             {
                 return;

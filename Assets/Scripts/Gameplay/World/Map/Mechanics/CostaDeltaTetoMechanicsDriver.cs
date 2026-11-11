@@ -46,6 +46,16 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private const int SparkKey = 400;
         private const int BogKey = 401;
 
+        /// <summary>Read back for a reef chest or the spark with no mark in the save (older saves, a new game): never taken.</summary>
+        public const long NeverTaken = long.MinValue;
+
+        /// <summary>WorldMapProgress time mark holding the island layout whose spark was last freed.</summary>
+        public const string SparkMarkKey = "delta.spark";
+
+        private const string ReefChestMarkPrefix = "costa.reefchest.";
+
+        private static string[] s_reefChestMarkKeys;
+
         private static readonly Color FlatDryColor = new Color(0.95f, 0.85f, 0.55f, 0.9f);
         private static readonly Color FlatTurningColor = new Color(1f, 0.6f, 0.15f, 1f);
         private static readonly Color FlatHighColor = new Color(0.2f, 0.55f, 0.9f, 0.9f);
@@ -305,6 +315,44 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public static float ApplyHazard(PlayerStats stats, float fraction, float floorFraction) => ProfundoMechanicsDriver.ApplyHazard(stats, fraction, floorFraction);
 
         // ------------------------------------------------------------------
+        // What was taken, in the save (WorldMapProgress time marks hold the tide / layout number, not a Unix time)
+        // ------------------------------------------------------------------
+
+        /// <summary>The WorldMapProgress key of reef chest <paramref name="chest"/> ("costa.reefchest." + index), built once.</summary>
+        public static string ReefChestMarkKey(int chest)
+        {
+            if (s_reefChestMarkKeys == null)
+            {
+                var keys = new string[OverworldLayouts.TideFlats.Length];
+                for (int i = 0; i < keys.Length; i++)
+                {
+                    keys[i] = ReefChestMarkPrefix + i;
+                }
+
+                s_reefChestMarkKeys = keys;
+            }
+
+            return chest >= 0 && chest < s_reefChestMarkKeys.Length ? s_reefChestMarkKeys[chest] : ReefChestMarkPrefix + chest;
+        }
+
+        /// <summary>The tide in which reef chest <paramref name="chest"/> was last opened in this save, or <see cref="NeverTaken"/>.</summary>
+        public static long ReefChestTide(WorldMapProgress progress, int chest) => progress != null ? progress.GetTimeMark(ReefChestMarkKey(chest), NeverTaken) : NeverTaken;
+
+        public static void StoreReefChest(WorldMapProgress progress, int chest, long tide) => progress?.SetTimeMark(ReefChestMarkKey(chest), tide);
+
+        /// <summary>The island layout whose spark was last freed in this save, or <see cref="NeverTaken"/>.</summary>
+        public static long SparkLayout(WorldMapProgress progress) => progress != null ? progress.GetTimeMark(SparkMarkKey, NeverTaken) : NeverTaken;
+
+        public static void StoreSpark(WorldMapProgress progress, long layout) => progress?.SetTimeMark(SparkMarkKey, layout);
+
+        /// <summary>The save's mark when there is a WorldMapProgress, else this component's memory (a standalone scene).</summary>
+        private long ChestTide(WorldMapProgress progress, int chest) => progress != null ? ReefChestTide(progress, chest) : _chestTides[chest];
+
+        private long FreedSparkLayout(WorldMapProgress progress) => progress != null ? SparkLayout(progress) : _sparkFreedLayout;
+
+        private static WorldMapProgress Progress() => ServiceLocator.TryGet(out WorldMapProgress progress) ? progress : null;
+
+        // ------------------------------------------------------------------
         // The tide of the reef (Costa)
         // ------------------------------------------------------------------
 
@@ -366,24 +414,32 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
-            bool canOpen = CostaTideRules.CanOpenChest(_chestTides[chest], tide, phase);
+            WorldMapProgress progress = Progress();
+            bool canOpen = CostaTideRules.CanOpenChest(ChestTide(progress, chest), tide, phase);
             Hint(canOpen ? CostaDeltaTetoMechanicsTexts.TideChestPrompt : CostaDeltaTetoMechanicsTexts.TideChestSpent);
+            if (canOpen)
+            {
+                InteractPromptRegistry.Ping(Time.unscaledTime);
+            }
+
             if (canOpen && _controller.Input.InteractPressedThisFrame && TryGive(CostaTideRules.ChestItem(chest, tide)))
             {
                 _chestTides[chest] = tide;
+                StoreReefChest(progress, chest, tide);
             }
         }
 
         private void ShowTide(Vector2 local, CostaTideFlat[] flats, CostaTidePhase phase, long tide, float water)
         {
             Color border = phase == CostaTidePhase.High ? FlatHighColor : phase == CostaTidePhase.Turning ? FlatTurningColor : FlatDryColor;
+            WorldMapProgress progress = Progress();
             for (int i = 0; i < flats.Length; i++)
             {
                 float distance = Vector2.Distance(local, flats[i].Center);
                 bool near = distance <= flats[i].Radius + FlatRange;
                 DrawRing(FlatKeys + i, _costaOrigin, flats[i].Center, flats[i].Radius, border, near, true);
                 DrawRing(WaterKeys + i, _costaOrigin, flats[i].Center, Mathf.Max(0.5f, flats[i].Radius * water), WaterEdgeColor, near && water > 0.02f, false);
-                bool open = phase != CostaTidePhase.High && _chestTides[i] != tide;
+                bool open = CostaTideRules.CanOpenChest(ChestTide(progress, i), tide, phase);
                 DrawRing(ChestKeys + i, _costaOrigin, flats[i].Center, CostaTideRules.ChestReach, TreasureColor, near && open, true);
                 ShowBeacon(i, flats[i].Center, open && distance <= BeaconRange);
             }
@@ -520,16 +576,19 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private void TickSpark(Vector2 local, Vector2[] stations, double now, long layout)
         {
-            if (!DeltaIslandRules.CanFreeSpark(_sparkFreedLayout, layout)
+            WorldMapProgress progress = Progress();
+            if (!DeltaIslandRules.CanFreeSpark(FreedSparkLayout(progress), layout)
                 || Vector2.Distance(local, DeltaIslandRules.Position(stations, DeltaIslandRules.SparkIsland(layout), now)) > DeltaIslandRules.SparkReach)
             {
                 return;
             }
 
             Hint(CostaDeltaTetoMechanicsTexts.SparkPrompt);
+            InteractPromptRegistry.Ping(Time.unscaledTime);
             if (_controller.Input.InteractPressedThisFrame && TryGive(DeltaIslandRules.SparkItem(layout)))
             {
                 _sparkFreedLayout = layout;
+                StoreSpark(progress, layout);
             }
         }
 
@@ -540,7 +599,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 DrawRing(IslandKeys + i, _deltaOrigin, DeltaIslandRules.Position(stations, i, now), DeltaIslandRules.IslandRadius, IslandColor, true, false);
             }
 
-            bool spark = DeltaIslandRules.CanFreeSpark(_sparkFreedLayout, layout);
+            bool spark = DeltaIslandRules.CanFreeSpark(FreedSparkLayout(Progress()), layout);
             DrawRing(SparkKey, _deltaOrigin, DeltaIslandRules.Position(stations, DeltaIslandRules.SparkIsland(layout), now), DeltaIslandRules.SparkReach, SparkColor, spark, false);
             DrawRing(BogKey, _deltaOrigin, OverworldLayouts.ReedBogCenter, OverworldLayouts.ReedBogRadius, BogColor, true, true);
         }

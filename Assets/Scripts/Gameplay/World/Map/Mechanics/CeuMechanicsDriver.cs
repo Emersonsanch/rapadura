@@ -248,6 +248,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 Say(CeuMechanicsTexts.BarqueReturn);
             }
 
+            InteractPromptRegistry.Ping(Time.unscaledTime);
             if (Interacted)
             {
                 BeginRide(local, OverworldLayouts.MoonBarquePier);
@@ -264,6 +265,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 SayPier(check, clock);
             }
 
+            InteractPromptRegistry.Ping(Time.unscaledTime);
             if (!Interacted)
             {
                 return;
@@ -406,6 +408,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 if (HintDue(crack))
                 {
                     Say(isSealed ? CeuMechanicsTexts.CrackSealed : CeuMechanicsTexts.CrackRaise);
+                }
+
+                if (!isSealed)
+                {
+                    InteractPromptRegistry.Ping(Time.unscaledTime);
                 }
 
                 if (Interacted && !isSealed && _hold.TryRaise(crack, unix))
@@ -589,6 +596,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 Say(CeuMechanicsTexts.PorchSit);
             }
 
+            InteractPromptRegistry.Ping(Time.unscaledTime);
             if (Interacted || sitsByTouch)
             {
                 _porch.Begin(CeuPorchRules.StoryIndex(unix), isNight);

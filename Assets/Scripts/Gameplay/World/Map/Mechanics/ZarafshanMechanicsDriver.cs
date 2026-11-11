@@ -159,6 +159,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 Say(ZarafshanMechanicsTexts.HarvestPrompt);
             }
 
+            if (ripe)
+            {
+                InteractPromptRegistry.Ping(Time.unscaledTime);
+            }
+
             if (!_controller.Input.InteractPressedThisFrame)
             {
                 return;

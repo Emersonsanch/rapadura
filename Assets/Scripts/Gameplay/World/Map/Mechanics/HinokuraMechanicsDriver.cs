@@ -211,6 +211,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 SaySluice(check, sluice, unix);
             }
 
+            InteractPromptRegistry.Ping(Time.unscaledTime);
             if (_controller.Input == null || !_controller.Input.InteractPressedThisFrame)
             {
                 return;

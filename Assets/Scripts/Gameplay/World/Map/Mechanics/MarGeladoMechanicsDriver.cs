@@ -312,6 +312,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 SayCrossing(check, day);
             }
 
+            InteractPromptRegistry.Ping(Time.unscaledTime);
             if (!_controller.Input.InteractPressedThisFrame)
             {
                 return;
@@ -446,6 +447,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 Say(prompt);
             }
 
+            InteractPromptRegistry.Ping(Time.unscaledTime);
             if (!_controller.Input.InteractPressedThisFrame || Time.unscaledTime < _nextDenied)
             {
                 return;
@@ -478,6 +480,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
+            InteractPromptRegistry.Ping(Time.unscaledTime);
             if (_controller.Input.InteractPressedThisFrame)
             {
                 _fishing.Press();

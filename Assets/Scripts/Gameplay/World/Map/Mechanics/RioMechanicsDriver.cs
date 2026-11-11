@@ -218,6 +218,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 Say(RioMechanicsTexts.ReturnBerth);
             }
 
+            InteractPromptRegistry.Ping(Time.unscaledTime);
             if (_controller.Input.InteractPressedThisFrame)
             {
                 BeginBarque(OverworldLayouts.QuayBerth);
@@ -255,6 +256,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 SayPier(check, pier, unix);
             }
 
+            InteractPromptRegistry.Ping(Time.unscaledTime);
             if (!_controller.Input.InteractPressedThisFrame)
             {
                 return;
@@ -321,6 +323,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 SayGate(open, zones, gate, now);
             }
 
+            InteractPromptRegistry.Ping(Time.unscaledTime);
             if (!_controller.Input.InteractPressedThisFrame)
             {
                 return;
