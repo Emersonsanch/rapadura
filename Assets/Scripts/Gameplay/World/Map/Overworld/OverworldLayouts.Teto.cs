@@ -282,15 +282,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             // Terraços de Sangkent (36): the Urso-Pardo do Pamir [tanque] (the werewolf's body), the Gralha-de-Bico-Vermelho
             // [rápido] (crows), the Marmota Gigante [enxame] (jackals), the Pedra-Rolante [controle].
-            terracos.Fauna.Add(Fauna("gralhas_de_bico_vermelho", "[rápido]", T(N(Teto.Chough, 3), N(Teto.Marmot, 1)), T(V(Teto.Chough, 2), S(owl, 1)), 4));
+            terracos.Fauna.Add(Fauna("gralhas_de_bico_vermelho", "[rápido]", T(N(MidBeasts.RedBilledChough, 3), N(Teto.Marmot, 1)), T(V(MidBeasts.RedBilledChough, 2), S(owl, 1)), 4));
             terracos.Fauna.Add(Fauna("marmotas_gigantes", "[enxame]", T(N(Teto.Marmot, 3), N(Teto.Chough, 1)), T(V(Teto.Marmot, 2), S(moon, 1)), 5));
             terracos.Fauna.Add(Fauna("pedras_rolantes", "[controle]", T(N(Teto.RollingStone, 3), N(Teto.Marmot, 1)), T(V(Teto.RollingStone, 2), V(Teto.Marmot, 1)), 3, null, 28f));
 
             // Vale dos Damasqueiros and Choupal dos Canais: marmots under the apricots, choughs, the brown bear in the poplars.
             damascos.Fauna.Add(Fauna("marmotas_dos_pomares", "[enxame]", T(N(Teto.Marmot, 3), N(Teto.Chough, 1)), T(V(Teto.Marmot, 2), S(moon, 1)), 5));
-            damascos.Fauna.Add(Fauna("gralhas_dos_pomares", "[rápido]", T(N(Teto.Chough, 3), N(Teto.Hawk, 1)), T(V(Teto.Chough, 2), S(owl, 1)), 4));
+            damascos.Fauna.Add(Fauna("gralhas_dos_pomares", "[rápido]", T(N(MidBeasts.RedBilledChough, 3), N(Teto.Hawk, 1)), T(V(MidBeasts.RedBilledChough, 2), S(owl, 1)), 4));
             choupal.Fauna.Add(Fauna("ursos_do_choupal", "[tanque]", T(N(Teto.Bear, 3), N(Teto.Marmot, 1)), T(V(Teto.Bear, 2), S(werewolf, 1)), 3, null, 30f));
-            choupal.Fauna.Add(Fauna("gralhas_dos_canais", "[rápido]", T(N(Teto.Chough, 3), N(Teto.Potoo, 1)), T(V(Teto.Chough, 2), S(moon, 1)), 4));
+            choupal.Fauna.Add(Fauna("gralhas_dos_canais", "[rápido]", T(N(MidBeasts.RedBilledChough, 3), N(Teto.Potoo, 1)), T(V(MidBeasts.RedBilledChough, 2), S(moon, 1)), 4));
 
             // Estepe Alta: marmot colonies, hawks, the yaks' cousins (the argali's body, the peccary).
             estepe.Fauna.Add(Fauna("colonias_de_marmotas", "[enxame]", T(N(Teto.Marmot, 3), N(Teto.Hawk, 1)), T(V(Teto.Marmot, 2), S(owl, 1)), 5));
@@ -309,40 +309,40 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             // Lago Turquesa: mists on the water, vultures, marmots on the shore.
             lago.Fauna.Add(Fauna("neblinas_do_lago", "[controle]", T(N(Teto.Mist, 3), N(Teto.Hawk, 1)), T(V(Teto.Mist, 2), S(owl, 1)), 4));
-            lago.Fauna.Add(Fauna("abutres_do_lago", "[distância]", T(N(Teto.Vulture, 3), N(Teto.Marmot, 1)), T(V(Teto.Vulture, 2), V(Teto.Marmot, 1)), 3));
+            lago.Fauna.Add(Fauna("abutres_do_lago", "[distância]", T(N(MidBeasts.BeardedVulture, 3), N(Teto.Marmot, 1)), T(V(MidBeasts.BeardedVulture, 2), V(Teto.Marmot, 1)), 3));
 
             // Calhas de Pedra, Estação da Calha Alta and Calhas Geladas (37): the Ushabti de Calha [tanque] (the golem), the
             // Abutre-Barbudo Apagado [distância, drops stones] (the ember vulture), the Marmota Gigante, the Neblina do Vento Ruim.
             calhas.Fauna.Add(Fauna("ushabtis_de_calha", "[tanque]", T(N(Teto.Ushabti, 3), N(Teto.RollingStone, 1)), T(V(Teto.Ushabti, 2), V(Teto.RollingStone, 1)), 3, null, 30f));
-            calhas.Fauna.Add(Fauna("abutres_barbudos", "[distância]", T(N(Teto.Vulture, 3), N(Teto.Chough, 1)), T(V(Teto.Vulture, 2), S(owl, 1)), 3));
+            calhas.Fauna.Add(Fauna("abutres_barbudos", "[distância]", T(N(MidBeasts.BeardedVulture, 3), N(Teto.Chough, 1)), T(V(MidBeasts.BeardedVulture, 2), S(owl, 1)), 3));
             calhas.Fauna.Add(Fauna("marmotas_das_calhas", "[enxame]", T(N(Teto.Marmot, 3), N(Teto.RollingStone, 1)), T(V(Teto.Marmot, 2), S(moon, 1)), 5));
             estacao.Fauna.Add(Fauna("ushabtis_da_estacao", "[tanque]", T(N(Teto.Ushabti, 3), N(Teto.Mist, 1)), T(V(Teto.Ushabti, 2), V(Teto.Mist, 1)), 3, null, 30f));
             estacao.Fauna.Add(Fauna("neblinas_do_vento_ruim", "[controle]", T(N(Teto.Mist, 3), N(Teto.Vulture, 1)), T(V(Teto.Mist, 2), S(owl, 1)), 4));
-            geladas.Fauna.Add(Fauna("abutres_das_calhas_geladas", "[distância]", T(N(Teto.Vulture, 3), N(Teto.Ushabti, 1)), T(V(Teto.Vulture, 2), V(Teto.Ushabti, 1)), 3));
+            geladas.Fauna.Add(Fauna("abutres_das_calhas_geladas", "[distância]", T(N(MidBeasts.BeardedVulture, 3), N(Teto.Ushabti, 1)), T(V(MidBeasts.BeardedVulture, 2), V(Teto.Ushabti, 1)), 3));
             geladas.Fauna.Add(Fauna("pedras_das_calhas", "[controle]", T(N(Teto.RollingStone, 3), N(Teto.Mist, 1)), T(V(Teto.RollingStone, 2), S(owl, 1)), 3, null, 28f));
 
             // Campos de Neve and Terraços Altos (36, the cold): ice wolves, the bear, choughs in the snow.
             neves.Fauna.Add(Fauna("lobos_das_neves", "[rápido]", T(N(Teto.Wolf, 3), N(Teto.Chough, 1)), T(V(Teto.Wolf, 2), S(werewolf, 1)), 4));
             neves.Fauna.Add(Fauna("ursos_das_neves", "[tanque]", T(N(Teto.Bear, 3), N(Teto.Wolf, 1)), T(V(Teto.Bear, 2), S(werewolf, 1)), 3, null, 30f));
-            altos.Fauna.Add(Fauna("gralhas_dos_terracos_altos", "[rápido]", T(N(Teto.Chough, 3), N(Teto.RollingStone, 1)), T(V(Teto.Chough, 2), S(owl, 1)), 4));
+            altos.Fauna.Add(Fauna("gralhas_dos_terracos_altos", "[rápido]", T(N(MidBeasts.RedBilledChough, 3), N(Teto.RollingStone, 1)), T(V(MidBeasts.RedBilledChough, 2), S(owl, 1)), 4));
             altos.Fauna.Add(Fauna("pedras_dos_terracos", "[controle]", T(N(Teto.RollingStone, 3), N(Teto.Wolf, 1)), T(V(Teto.RollingStone, 2), V(Teto.Wolf, 1)), 3, null, 28f));
 
             // Morenas da Geleira: rolling stones on the ridges, wild yaks, wolves.
             morenas.Fauna.Add(Fauna("pedras_das_morenas", "[controle]", T(N(Teto.RollingStone, 3), N(Teto.Yak, 1)), T(V(Teto.RollingStone, 2), S(herd, 1)), 3, null, 28f));
-            morenas.Fauna.Add(Fauna("lobos_das_morenas", "[rápido]", T(N(Teto.Wolf, 3), N(Teto.Chough, 1)), T(V(Teto.Wolf, 2), S(werewolf, 1)), 4));
+            morenas.Fauna.Add(Fauna("lobos_das_morenas", "[rápido]", T(N(MidBeasts.IceWolf, 3), N(Teto.Chough, 1)), T(V(MidBeasts.IceWolf, 2), S(werewolf, 1)), 4));
 
             // Geleira do Teto do Mundo and Campo de Seracs (38): the Iaque Selvagem Apagado [tanque], the Almas [elite, shy,
             // snowballs] (the baboon; it comes out at night), the Lobo de Gelo [rápido], the Fenda Viva [controle] (the ooze).
             geleira.Fauna.Add(Fauna("iaques_da_geleira", "[tanque]", T(N(Teto.Yak, 3), N(Teto.Wolf, 1)), T(V(Teto.Yak, 2), S(herd, 1), V(Teto.Wolf, 1)), 3, null, 28f));
             geleira.Fauna.Add(Fauna("almas", "[elite]", T(N(Teto.Almas, 3), N(Teto.Yak, 1)), T(V(Teto.Almas, 3), S(owl, 1)), 3, null, 32f));
             geleira.Fauna.Add(Fauna("fendas_vivas", "[controle]", T(N(Teto.Crevasse, 3), N(Teto.Mist, 1)), T(V(Teto.Crevasse, 2), V(Teto.Mist, 1)), 4));
-            seracs.Fauna.Add(Fauna("lobos_de_gelo", "[rápido]", T(N(Teto.Wolf, 3), N(Teto.Crevasse, 1)), T(V(Teto.Wolf, 2), S(werewolf, 1)), 4));
+            seracs.Fauna.Add(Fauna("lobos_de_gelo", "[rápido]", T(N(MidBeasts.IceWolf, 3), N(Teto.Crevasse, 1)), T(V(MidBeasts.IceWolf, 2), S(werewolf, 1)), 4));
             seracs.Fauna.Add(Fauna("fendas_dos_seracs", "[controle]", T(N(Teto.Crevasse, 3), N(Teto.Almas, 1)), T(V(Teto.Crevasse, 2), V(Teto.Almas, 1)), 4));
             seracs.Fauna.Add(Fauna("almas_dos_seracs", "[elite]", T(N(Teto.Almas, 3), N(Teto.Wolf, 1)), T(V(Teto.Almas, 3), S(werewolf, 1)), 3, null, 32f));
 
             // Vale do Wakhan: argali on the gravel flats, vultures, choughs on the caravan road.
             vale.Fauna.Add(Fauna("argalis_do_vale", "[tanque]", T(N(Teto.Yak, 3), N(Teto.Chough, 1)), T(V(Teto.Yak, 2), S(herd, 1), V(Teto.Chough, 1)), 3, null, 28f));
-            vale.Fauna.Add(Fauna("abutres_do_vale", "[distância]", T(N(Teto.Vulture, 3), N(Teto.Marmot, 1)), T(V(Teto.Vulture, 2), S(owl, 1)), 3));
+            vale.Fauna.Add(Fauna("abutres_do_vale", "[distância]", T(N(MidBeasts.BeardedVulture, 3), N(Teto.Marmot, 1)), T(V(MidBeasts.BeardedVulture, 2), S(owl, 1)), 3));
             vale.Fauna.Add(Fauna("marmotas_do_vale", "[enxame]", T(N(Teto.Marmot, 3), N(Teto.Chough, 1)), T(V(Teto.Marmot, 2), V(Teto.Chough, 1)), 5));
 
             // Desfiladeiro and Forte dos Ventos (39): the Pipa de Fumaça [distância] (broken lanterns), the Gavião-Real Apagado
@@ -365,10 +365,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             altoWakhan.Fauna.Add(Fauna("irbis_apagados", "[rápido]", T(N(Teto.Irbis, 3), N(Teto.Chough, 1)), T(V(Teto.Irbis, 2), S(werewolf, 1)), 4));
             altoWakhan.Fauna.Add(Fauna("bandoleiros_do_alto", "[elite]", T(N(Teto.Bandit, 3), N(Teto.Yak, 1)), T(V(Teto.Bandit, 2), S(herd, 1)), 3, null, 32f));
             ninho.Fauna.Add(Fauna("irbis_do_ninho", "[rápido]", T(N(Teto.Irbis, 3), N(Teto.Vulture, 1)), T(V(Teto.Irbis, 2), S(werewolf, 1)), 4));
-            ninho.Fauna.Add(Fauna("abutres_do_ninho", "[distância]", T(N(Teto.Vulture, 3), N(Teto.Bandit, 1)), T(V(Teto.Vulture, 2), V(Teto.Bandit, 1)), 3));
+            ninho.Fauna.Add(Fauna("abutres_do_ninho", "[distância]", T(N(MidBeasts.BeardedVulture, 3), N(Teto.Bandit, 1)), T(V(MidBeasts.BeardedVulture, 2), V(Teto.Bandit, 1)), 3));
             ninho.Fauna.Add(Fauna("guardas_do_ouro_de_az", "[elite] [tanque]", T(N(Teto.Bandit, 3), N(Teto.Ushabti, 1)), T(V(Teto.Bandit, 2), V(Teto.Ushabti, 1)), 3, null, 32f));
             picos.Fauna.Add(Fauna("almas_dos_picos", "[elite]", T(N(Teto.Almas, 3), N(Teto.Crevasse, 1)), T(V(Teto.Almas, 3), S(owl, 1)), 3, null, 32f));
-            picos.Fauna.Add(Fauna("lobos_dos_picos", "[rápido]", T(N(Teto.Wolf, 3), N(Teto.Mist, 1)), T(V(Teto.Wolf, 2), S(werewolf, 1)), 4));
+            picos.Fauna.Add(Fauna("lobos_dos_picos", "[rápido]", T(N(MidBeasts.IceWolf, 3), N(Teto.Mist, 1)), T(V(MidBeasts.IceWolf, 2), S(werewolf, 1)), 4));
         }
     }
 }

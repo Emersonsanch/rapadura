@@ -269,6 +269,18 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_mountain_smudge", ProceduralEnemyKind.Smudge },
             { "enemy_mountain_stone_jackdaw", ProceduralEnemyKind.StoneJackdaw },
             { "enemy_cave_young_ubir", ProceduralEnemyKind.YoungUbir },
+            { "enemy_forest_lightning_bird", ProceduralEnemyKind.LightningBird },
+            { "enemy_forest_spear_heron", ProceduralEnemyKind.SpearHeron },
+            { "enemy_mountain_bearded_vulture", ProceduralEnemyKind.BeardedVulture },
+            { "enemy_mountain_felt_swan", ProceduralEnemyKind.FeltSwan },
+            { "enemy_mountain_red_billed_chough", ProceduralEnemyKind.RedBilledChough },
+            { "enemy_forest_dimmed_moray", ProceduralEnemyKind.DimmedMoray },
+            { "enemy_forest_dragon_carp", ProceduralEnemyKind.DragonCarp },
+            { "enemy_mountain_ice_wolf", ProceduralEnemyKind.IceWolf },
+            { "enemy_forest_terracotta_horse", ProceduralEnemyKind.TerracottaHorse },
+            { "enemy_forest_fiddler_crab", ProceduralEnemyKind.FiddlerCrab },
+            { "enemy_forest_smoke_urchin", ProceduralEnemyKind.SmokeUrchin },
+            { "enemy_forest_mire_leech", ProceduralEnemyKind.MireLeech },
             // The world bosses of Regions 10–12 (Docs/Mapas100.md 58, 64, 70), at their arenas.
             { RegionBossRules.WindKingId, ProceduralEnemyKind.WindKing },
             { RegionBossRules.OldKulId, ProceduralEnemyKind.OldKul },
@@ -343,6 +355,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.BladeBat, ProceduralEnemyKind.GreatEel, ProceduralEnemyKind.AshBull, ProceduralEnemyKind.SmokeRope,
             ProceduralEnemyKind.DimmedStork, ProceduralEnemyKind.BubbleToad, ProceduralEnemyKind.SmokeMosquito, ProceduralEnemyKind.SilkMoth, ProceduralEnemyKind.LaurelPigeon, ProceduralEnemyKind.LaurelLizard,
             ProceduralEnemyKind.SmokePeacock, ProceduralEnemyKind.ThornLizard, ProceduralEnemyKind.DimmedLynx, ProceduralEnemyKind.Smudge, ProceduralEnemyKind.StoneJackdaw, ProceduralEnemyKind.YoungUbir,
+            ProceduralEnemyKind.LightningBird, ProceduralEnemyKind.SpearHeron, ProceduralEnemyKind.BeardedVulture, ProceduralEnemyKind.FeltSwan, ProceduralEnemyKind.RedBilledChough, ProceduralEnemyKind.DimmedMoray,
+            ProceduralEnemyKind.DragonCarp, ProceduralEnemyKind.IceWolf, ProceduralEnemyKind.TerracottaHorse, ProceduralEnemyKind.FiddlerCrab, ProceduralEnemyKind.SmokeUrchin, ProceduralEnemyKind.MireLeech,
             ProceduralEnemyKind.WindKing, ProceduralEnemyKind.OldKul, ProceduralEnemyKind.EmberGlutton,
             ProceduralEnemyKind.Apep, ProceduralEnemyKind.DreamOfDestruction, ProceduralEnemyKind.GreatDark, ProceduralEnemyKind.AzCaptain,
             ProceduralEnemyKind.Hedammu, ProceduralEnemyKind.SwallowingMire, ProceduralEnemyKind.Aydahar, ProceduralEnemyKind.FourGluttons, ProceduralEnemyKind.Ohya,
@@ -908,6 +922,42 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.YoungUbir:
                     EarlyStandInBeastRecipes.BuildYoungUbir(blueprint);
+                    break;
+                case ProceduralEnemyKind.LightningBird:
+                    MidStandInBeastRecipes.BuildLightningBird(blueprint);
+                    break;
+                case ProceduralEnemyKind.SpearHeron:
+                    MidStandInBeastRecipes.BuildSpearHeron(blueprint);
+                    break;
+                case ProceduralEnemyKind.BeardedVulture:
+                    MidStandInBeastRecipes.BuildBeardedVulture(blueprint);
+                    break;
+                case ProceduralEnemyKind.FeltSwan:
+                    MidStandInBeastRecipes.BuildFeltSwan(blueprint);
+                    break;
+                case ProceduralEnemyKind.RedBilledChough:
+                    MidStandInBeastRecipes.BuildRedBilledChough(blueprint);
+                    break;
+                case ProceduralEnemyKind.DimmedMoray:
+                    MidStandInBeastRecipes.BuildDimmedMoray(blueprint);
+                    break;
+                case ProceduralEnemyKind.DragonCarp:
+                    MidStandInBeastRecipes.BuildDragonCarp(blueprint);
+                    break;
+                case ProceduralEnemyKind.IceWolf:
+                    MidStandInBeastRecipes.BuildIceWolf(blueprint);
+                    break;
+                case ProceduralEnemyKind.TerracottaHorse:
+                    MidStandInBeastRecipes.BuildTerracottaHorse(blueprint);
+                    break;
+                case ProceduralEnemyKind.FiddlerCrab:
+                    MidStandInBeastRecipes.BuildFiddlerCrab(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeUrchin:
+                    MidStandInBeastRecipes.BuildSmokeUrchin(blueprint);
+                    break;
+                case ProceduralEnemyKind.MireLeech:
+                    MidStandInBeastRecipes.BuildMireLeech(blueprint);
                     break;
                 case ProceduralEnemyKind.SkyStone:
                     CeuBeastRecipes.BuildSkyStone(blueprint);

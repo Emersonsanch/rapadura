@@ -65,6 +65,12 @@ namespace Rapadura.Tests
             ("enemy_forest_laurel_pigeon", BiomeType.Forest, EnemyProjectileKind.Feather, ProceduralEnemyKind.LaurelPigeon),
             ("enemy_forest_smoke_peacock", BiomeType.Forest, EnemyProjectileKind.Ember, ProceduralEnemyKind.SmokePeacock),
             ("enemy_mountain_stone_jackdaw", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.StoneJackdaw),
+            // The thirteenth pass, Regions 5–9 (MidStandInBeastsTests): the lightning bird's caught spark, the heron's spear, the vulture's stones
+            // and the felt swan's feathers.
+            ("enemy_forest_lightning_bird", BiomeType.Forest, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.LightningBird),
+            ("enemy_forest_spear_heron", BiomeType.Forest, EnemyProjectileKind.Feather, ProceduralEnemyKind.SpearHeron),
+            ("enemy_mountain_bearded_vulture", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.BeardedVulture),
+            ("enemy_mountain_felt_swan", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.FeltSwan),
         };
 
         /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>

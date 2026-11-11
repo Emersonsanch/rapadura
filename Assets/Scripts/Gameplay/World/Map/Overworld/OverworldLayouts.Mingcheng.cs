@@ -380,13 +380,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             painco.Fauna.Add(Fauna("raposas_do_painco", "[rápido]", T(N(Ming.Fox, 3), N(Ming.Locusts, 1)), T(V(Ming.Fox, 2), S(owl, 1)), 4));
 
             // Rio dos Salgueiros: dragon carps in the shallows (the sand snake), mandarin ducks, mud buffaloes on the banks.
-            salgueiros.Fauna.Add(Fauna("carpas_do_rio", "[rápido]", T(N(Ming.Carp, 3), N(Ming.Duck, 1)), T(V(Ming.Carp, 2), S(moon, 1)), 4));
+            salgueiros.Fauna.Add(Fauna("carpas_do_rio", "[rápido]", T(N(MidBeasts.DragonCarp, 3), N(Ming.Duck, 1)), T(V(MidBeasts.DragonCarp, 2), S(moon, 1)), 4));
             salgueiros.Fauna.Add(Fauna("patos_mandarins", "[rápido]", T(N(Ming.Duck, 3), N(Ming.Carp, 1)), T(V(Ming.Duck, 2), S(owl, 1)), 4));
             salgueiros.Fauna.Add(Fauna("bufalos_da_margem", "[tanque]", T(N(Ming.Buffalo, 3), N(Ming.Duck, 1)), T(S(herd, 2), V(Ming.Duck, 1)), 3, null, 28f));
 
             // Eclusa da Lua and Canal das Lanternas (43): the Carpa-Dragão Apagada [rápido], the Barqueiro de Fumaça [elite] (the
             // ill-wind mist), the Lanterna-Peixe [enxame] (the lantern fish), the Tartaruga de Pedra [tanque] (the coconut crab).
-            eclusa.Fauna.Add(Fauna("carpas_da_eclusa", "[rápido]", T(N(Ming.Carp, 3), N(Ming.LanternFish, 1)), T(V(Ming.Carp, 2), S(moon, 1)), 4));
+            eclusa.Fauna.Add(Fauna("carpas_da_eclusa", "[rápido]", T(N(MidBeasts.DragonCarp, 3), N(Ming.LanternFish, 1)), T(V(MidBeasts.DragonCarp, 2), S(moon, 1)), 4));
             eclusa.Fauna.Add(Fauna("tartarugas_de_pedra", "[tanque]", T(N(Ming.Turtle, 3), N(Ming.Carp, 1)), T(V(Ming.Turtle, 2), V(Ming.Carp, 1)), 3, null, 30f));
             canal.Fauna.Add(Fauna("lanternas_peixe", "[enxame]", T(N(Ming.LanternFish, 3), N(Ming.Carp, 1)), T(V(Ming.LanternFish, 3), S(moon, 1)), 5));
             canal.Fauna.Add(Fauna("barqueiros_de_fumaca", "[elite]", T(N(Ming.Smoke, 3), N(Ming.LanternFish, 1)), T(V(Ming.Smoke, 3), S(owl, 1)), 3, null, 32f));
@@ -411,10 +411,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // Fossos de Terracota (41) and Vale dos Guerreiros (45): the Soldado de Terracota [tanque], the
             // Cavalo de Terracota [rápido] (the wolf's body), lions and paper kites.
             fossos.Fauna.Add(Fauna("soldados_de_terracota", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.Lion, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
-            fossos.Fauna.Add(Fauna("cavalos_de_terracota", "[rápido]", T(N(Ming.Horse, 3), N(Ming.Terracotta, 1)), T(V(Ming.Horse, 2), S(werewolf, 1)), 4));
+            fossos.Fauna.Add(Fauna("cavalos_de_terracota", "[rápido]", T(N(MidBeasts.TerracottaHorse, 3), N(Ming.Terracotta, 1)), T(V(MidBeasts.TerracottaHorse, 2), S(werewolf, 1)), 4));
             guerreiros.Fauna.Add(Fauna("guerreiros_de_terracota", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.Horse, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
             guerreiros.Fauna.Add(Fauna("arqueiros_de_papel", "[distância]", T(N(Ming.Kite, 3), N(Ming.Terracotta, 1)), T(V(Ming.Kite, 2), S(owl, 1)), 4));
-            guerreiros.Fauna.Add(Fauna("cavalos_do_vale", "[rápido]", T(N(Ming.Horse, 3), N(Ming.Lion, 1)), T(V(Ming.Horse, 2), S(werewolf, 1)), 4));
+            guerreiros.Fauna.Add(Fauna("cavalos_do_vale", "[rápido]", T(N(MidBeasts.TerracottaHorse, 3), N(Ming.Lion, 1)), T(V(MidBeasts.TerracottaHorse, 2), S(werewolf, 1)), 4));
 
             // Jardins em Terraço and Torres Brancas (42): the Espelho Quebrado [distância] (a broken lantern), the Íbis de Luz
             // Apagada [rápido] (the hawk), the Guardião de Cal [tanque] (the golem), the Raio Torto [controle] (the ill-wind mist).
@@ -446,7 +446,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // the Cavalo de Terracota [rápido] (the wolf), the Filhote de Nian [elite] (the baboon); bats in the towers.
             muralha.Fauna.Add(Fauna("soldados_da_muralha", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.Kite, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
             muralha.Fauna.Add(Fauna("arqueiros_de_terracota", "[distância]", T(N(Ming.Kite, 3), N(Ming.Terracotta, 1)), T(V(Ming.Kite, 2), S(bats, 1)), 4));
-            quinhentos.Fauna.Add(Fauna("cavalos_da_muralha", "[rápido]", T(N(Ming.Horse, 3), N(Ming.Terracotta, 1)), T(V(Ming.Horse, 2), S(werewolf, 1)), 4));
+            quinhentos.Fauna.Add(Fauna("cavalos_da_muralha", "[rápido]", T(N(MidBeasts.TerracottaHorse, 3), N(Ming.Terracotta, 1)), T(V(MidBeasts.TerracottaHorse, 2), S(werewolf, 1)), 4));
             quinhentos.Fauna.Add(Fauna("morcegos_das_torres_de_vigia", "[enxame]", T(N(Ming.Bats, 3), N(Ming.Kite, 1)), T(V(Ming.Bats, 2), S(bats, 2)), 5));
             muralhaOeste.Fauna.Add(Fauna("soldados_do_oeste", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.Horse, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
             muralhaOeste.Fauna.Add(Fauna("pedras_da_muralha", "[controle]", T(N(Ming.Stone, 3), N(Ming.Crow, 1)), T(V(Ming.Stone, 2), S(bats, 1)), 3, null, 28f));

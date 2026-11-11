@@ -451,6 +451,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.HoldShadow:
                 case ProceduralEnemyKind.Quicksand:
                 case ProceduralEnemyKind.BubbleToad:
+                case ProceduralEnemyKind.SmokeUrchin:
+                case ProceduralEnemyKind.MireLeech:
                 {
                     // Squash and stretch; it flattens on the windup and the swallowed lights flare.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -616,6 +618,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.LaurelPigeon:
                 case ProceduralEnemyKind.SmokePeacock:
                 case ProceduralEnemyKind.StoneJackdaw:
+                case ProceduralEnemyKind.LightningBird:
+                case ProceduralEnemyKind.SpearHeron:
+                case ProceduralEnemyKind.BeardedVulture:
+                case ProceduralEnemyKind.FeltSwan:
+                case ProceduralEnemyKind.RedBilledChough:
                 {
                     // The birds of the peaks: the eagle soars on long glides, the chough and the flute bird beat quicker; the wings
                     // hold still and the beak opens on the windup (the flute bird's note, the chough's and the harpy's screech).
@@ -666,6 +673,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.ThornLizard:
                 case ProceduralEnemyKind.DimmedLynx:
                 case ProceduralEnemyKind.ShadowLizard:
+                case ProceduralEnemyKind.DimmedMoray:
+                case ProceduralEnemyKind.DragonCarp:
+                case ProceduralEnemyKind.IceWolf:
+                case ProceduralEnemyKind.TerracottaHorse:
+                case ProceduralEnemyKind.FiddlerCrab:
                 {
                     // Hinokura's biters: the jaw gapes on the windup and the tail sways; the blade fish's fins row in the steam, the
                     // ember coral's fronds stir slowly as it drifts.

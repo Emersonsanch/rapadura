@@ -23,8 +23,9 @@
   sem trocar de cena.
 - **Cidades:** as 27 cidades do `Docs/Mapas100.md` §1 estão no `CityCatalog`: 4 hubs, 12 de raça e 11 de região tardia.
   Todas ficam dentro do mundo contínuo e usam a própria receita (`CityTownRecipes.*`). Os postos são `K.Outpost`, sem respawn.
-- **Bichos próprios:** 142, todos com asset em `Resources/Enemies`: os 130 das tabelas da bíblia §3.2.1 e mais 12 das Regiões 1–4
-  (2026-11-11, `EarlyStandInBeastRecipes`, no lugar dos emprestados mais vistos). Somam-se a eles os 19 bichos de base dos 4 biomas.
+- **Bichos próprios:** 154, todos com asset em `Resources/Enemies`: os 130 das tabelas da bíblia §3.2.1, mais 12 das Regiões 1–4
+  (2026-11-11, `EarlyStandInBeastRecipes`) e mais 12 das Regiões 5–9, na estrada da história do meio (2026-11-11, `MidStandInBeastRecipes`),
+  no lugar dos emprestados mais vistos. Somam-se a eles os 19 bichos de base dos 4 biomas.
 - **Mecânicas:** 73 arquivos em `Gameplay/World/Map/Mechanics/`, com pelo menos uma mecânica por região. São regras puras
   com driver por região, e o estado vai salvo por slot em `WorldMapProgress`. O `MechanicsDriverHub` liga só o driver da
   região do herói (1 `Update` por frame em vez de 14). O botão de toque **Usar** do HUD acende quando há uma interação [E] ao
@@ -121,7 +122,7 @@ feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Taa Pwani (região tardia), Aratta e Kirta (raça), dentro do mundo com a própria receita |
 | Mundo contínuo | Feito, a leste do Zarafshan (`OverworldLayouts.Costa.cs`) |
-| Bichos próprios | 5: Gaivota Ladra, Caranguejo-dos-Coqueiros, Crocodilo do Mangue, Leão do Capim, Rinoceronte-de-Pó. Cerca de 15 papéis com bicho de outra região (chacal, escorpião, aranha, lobo, ushabti…) |
+| Bichos próprios | 9: Gaivota Ladra, Caranguejo-dos-Coqueiros, Crocodilo do Mangue, Leão do Capim, Rinoceronte-de-Pó e mais 4 (2026-11-11): Moreia Apagada e Ouriço de Fumaça (25), Ave-Relâmpago (26), Caranguejo-Violinista (30). Cerca de 11 papéis ainda com bicho de outra região (chacal, escorpião, ushabti, Kongamato, Garça Apagada, Abada…) |
 | Mecânicas feitas | Maré do recife de 8 min com 6 baixios e baú (25, `CostaTideRules`) |
 | Mecânicas faltantes | Corrida de Shulgi e Lira do Touro (26); câmera em corte, andar no fundo e reacender o coral (28); 27, 29 e 30 sem mecânica própria |
 | Chefe do mundo | Hedammu (30, Nv 72): mordida em cone. Loot próprio (Escama de Hedammu) e troféu de casa |
@@ -135,7 +136,7 @@ feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Jhilpur (capital) e Palafitas de Tarchon (raça), dentro do mundo |
 | Mundo contínuo | Feito, ao sul da Costa (`OverworldLayouts.Delta.cs`) |
-| Bichos próprios | 4: Macaco Ladrão, Lontra Ladra, Píton Apagada, Trol Apagado, mais o Crocodilo do Mangue da Costa. Cerca de 13 papéis emprestados (Peixe-Saltador, garças, sanguessuga, fogo-fátuo, Sapo-Boi…) |
+| Bichos próprios | 6: Macaco Ladrão, Lontra Ladra, Píton Apagada, Trol Apagado, Garça-Lança Apagada (31) e Sanguessuga do Lodo (32, 2026-11-11), mais o Crocodilo do Mangue da Costa. Cerca de 11 papéis emprestados (Peixe-Saltador, Garça-Fantasma, Raiz-Laço, fogo-fátuo, Sapo-Boi…) |
 | Mecânicas feitas | Ilhas de junco que mudam de lugar a cada 15 min (33, `DeltaIslandRules`) |
 | Mecânicas faltantes | Monção, escola de barco e Maré de Lodo (31); Lanterna de Fogo-Fátuo e Despertar o vizinho (33); 32, 34 e 35 sem mecânica própria |
 | Chefe do mundo | Lodo-que-Engole (35, Nv 88): puxão, mais forte à noite. Loot próprio (Lama Limpa do Lodo) e troféu |
@@ -149,7 +150,7 @@ feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Sangkent (capital), dentro do mundo |
 | Mundo contínuo | Feito, ao norte da Serra (`OverworldLayouts.Teto.cs`) |
-| Bichos próprios | 5: Urso-Pardo do Pamir, Iaque Selvagem, Irbis, Almas, Marmota Gigante. Cerca de 14 papéis emprestados (Argali, gralhas, ushabtis de calha, abutre-barbudo…) |
+| Bichos próprios | 8: Urso-Pardo do Pamir, Iaque Selvagem, Irbis, Almas, Marmota Gigante e mais 3 (2026-11-11): Gralha-de-Bico-Vermelho (36), Abutre-Barbudo Apagado (37), Lobo de Gelo (38). Cerca de 11 papéis emprestados (Argali, ushabtis de calha, Fenda Viva, Gralha das Neves…) |
 | Mecânicas feitas | Avalanches com sino de 20 s nas 4 calhas (37, `TetoAvalancheRules`) |
 | Mecânicas faltantes | Descida cronometrada (37); calhas e carrinhos andáveis e os 7 terraços (36); 38–40 sem mecânica própria |
 | Chefe do mundo | Aydahar (40, Nv 98): sopro em linha. Loot próprio e troféu |
@@ -163,7 +164,7 @@ feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Mingcheng (capital) e Torres Brancas (raça), dentro do mundo |
 | Mundo contínuo | Feito, ao norte do Zarafshan (`OverworldLayouts.Mingcheng.cs`). 43–46 fechados no catálogo |
-| Bichos próprios | 6: Leão de Pedra, Raposa de Cauda Lanterna, Soldado de Terracota, Tartaruga de Pedra, Búfalo de Lama, Filhote de Nian. Ainda emprestados, cerca de 12: Carpa-Dragão, Cavalo de Terracota, Grou de Papel, Espelho Quebrado, Espantalho… |
+| Bichos próprios | 8: Leão de Pedra, Raposa de Cauda Lanterna, Soldado de Terracota, Tartaruga de Pedra, Búfalo de Lama, Filhote de Nian, Carpa-Dragão Apagada (43) e Cavalo de Terracota (45, 2026-11-11). Ainda emprestados, cerca de 10: Grou de Papel, Espelho Quebrado, Espantalho… |
 | Mecânicas feitas | Muralha andável com faróis e corredor de luz (45); mundo do reflexo nos arrozais (44) |
 | Mecânicas faltantes | 9 anéis e portões por hora (41); Relógio de Espelhos (42); 4 eclusas (43); palácios e o que cada um come (46) |
 | Chefe do mundo | Quatro Gulosos (46, Nv 140): um apetite por semana e outro à noite. Taotie derrama oferendas de moedas e avisa antes de engolir; Qiongqi inverte os passos por 3 s (`HeroControlMirror`, teto de 4 s). Loot próprio (Bronze Antigo dos Vasos) e troféu |
@@ -177,7 +178,7 @@ feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Acampamento de Soslan, Fortim e Arvoredo (raça), dentro do mundo |
 | Mundo contínuo | Feito, ao norte da Costa (`OverworldLayouts.Nartes.cs`) |
-| Bichos próprios | 6: Grifo Jovem, Saiga, Lobo de Bronze, Gigante Sonâmbulo, Besouro-Casca, Ochokochi. Ainda emprestados, cerca de 16: Cisne de Feltro, Cervo de Ouro, Cabra-Montês, Lince, Garanhão, lobos e águias da estepe… |
+| Bichos próprios | 7: Grifo Jovem, Saiga, Lobo de Bronze, Gigante Sonâmbulo, Besouro-Casca, Ochokochi e Cisne de Feltro (48, 2026-11-11). Ainda emprestados, cerca de 15: Cervo de Ouro, Cabra-Montês, Lince, Garanhão, lobos e águias da estepe… |
 | Mecânicas feitas | Corrida de estepe (47), Ouros do Céu (48, só a Lavine levanta), subida da Corrente de Amirani (52) |
 | Mecânicas faltantes | A cidade que anda (47); escala gigante e sonhos com baús (49); tempo lento (50); 51 sem mecânica própria |
 | Chefe do mundo | Ohya (52, Nv 150): corrente girando. Loot próprio (Elo de Ferro Antigo de Ohya) e troféu |
@@ -353,9 +354,9 @@ loot e troféu). O balanço 100–500 foi aplicado e desceu de prioridade: agora
    - Por quê: agora há um chefe do mundo por região, mas quase nenhuma ficha tem o próprio chefe de mapa (Fiandeira Esquecida,
      Cortador de Cordas, Rei dos Ays, Guayota, Hobabish, os chefes das covas do Profundo…).
 6. **Fechar as mecânicas que ainda mudam o percurso.**
-   - Feitas hoje e ainda não validadas: poços de vento do 24, defender a barca do 76 e os 5 portões do 83.
-   - Faltam: barcos do lago (19), medo do escuro (20), jangadas (72), trenó (73), correntes de ar (86), comportas (87), ponte
-     que acende por lances (89) e pouca gravidade (91), além das 09, 10, 12, 27, 29, 30, 32, 34, 35, 38–40 e 51 sem mecânica
+   - Feitas hoje e ainda não validadas: poços de vento do 24, defender a barca do 76, os 5 portões do 83, jangadas (72), correntes (86),
+     comportas (87) e a ponte que acende (89).
+   - Faltam: barcos do lago (19), medo do escuro (20), trenó (73) e pouca gravidade (91), além das 09, 10, 12, 27, 29, 30, 32, 34, 35, 38–40 e 51 sem mecânica
      própria.
 7. **Trocar os bichos emprestados mais vistos.**
    - Por quê: são cerca de 150 papéis de ficha com bicho de outra região, e a sensação de "região nova" depende deles. Começar

@@ -720,6 +720,7 @@ Apagada, Javali do Lodo. Chefe do mundo da região: **Saklas** (arconte, mapa 06
   visão normal (a Vila é iluminada).
 
 ### 02 · Tugai do Rio Dourado / *Golden River Tugai* — nv 2–5 · ★
+- **No jogo (2026-11-11): bicho próprio** no mundo contínuo (`EarlyStandInBeastRecipes`, página no Caderno, `EarlyStandInBeastsPlacementTests`): Cegonha Apagada [distância] (`enemy_forest_dimmed_stork`, joga gravetos de 8 m) lidera "cegonhas" no Prado das Cegonhas e "aves_da_varzea" na Várzea Dourada, no lugar do urutau.
 - **No jogo (2026-11-09): vaus de Água Viva** (`ZarafshanFordRules`): nos 4 vaus do rio dentro do Tugai (feixe turquesa, 6 m) o herói ferido recupera 3% da vida máxima por segundo, só até 70%, com fala da Vó Edna. O ×0,6 da ficha **não** foi aplicado, de propósito: é o segundo mapa do jogo e os vaus são caminho principal; a mecânica fica só como bônus.
 - **Fonte:** *Zarafšān*, "o que espalha ouro"; *tugai*, mata de beira de rio da Ásia Central; Kök-Böri, o lobo celeste
   das lendas túrquicas.
@@ -736,7 +737,8 @@ Apagada, Javali do Lodo. Chefe do mundo da região: **Saklas** (arconte, mapa 06
 - **Noite:** **Mardagayl** (o lobo das sete noites) e **Javali do Lodo** em bando; a visão encurta fora da trilha.
 
 ### 03 · Brejo do Lodo Escuro / *Dark Mire Marsh* — nv 16–22 · ★
-- **No jogo (2026-11-03): jogável** (`MapLayouts.Zarafshan.cs`): posto Ponte do Aryk (lâmpada, casa do barqueiro, cais) na ilha norte, dois canais de água preta atravessados só por 3 passarelas de tronco, Poço Turvo no charco oeste (anel da Mãe-Lodo; a luta segue como desafio do mapa-múndi); trilha a pé do Tugai (saída sul do 02) e para o 04; 5 clareiras nv 16–22 (Javali [tanque]; Lobo no lugar da Enguia [rápido]; Aranha e Enxame de Morcegos no lugar dos Mosquitos [enxame]; à noite Javali do Lodo, Faíscas Presas no lugar do Fogo-Fátuo e Mardagayl raro). Falta: Sapo-Bolha [distância], lama ×0,7 fora da passarela, Água Viva limpando poças.
+- **No jogo (2026-11-11): bicho próprio** no mundo contínuo (`EarlyStandInBeastRecipes`, página no Caderno, `EarlyStandInBeastsPlacementTests`): Sapo-Bolha do Lodo [distância] (`enemy_forest_bubble_toad`, bolha de lama de 7,5 m) entra em "lodo_escuro" e Mosquito de Fumaça [enxame] (`enemy_forest_smoke_mosquito`) lidera "fumaca", os dois no lugar do Enxame de Morcegos.
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Zarafshan.cs`): posto Ponte do Aryk (lâmpada, casa do barqueiro, cais) na ilha norte, dois canais de água preta atravessados só por 3 passarelas de tronco, Poço Turvo no charco oeste (anel da Mãe-Lodo; a luta segue como desafio do mapa-múndi); trilha a pé do Tugai (saída sul do 02) e para o 04; 5 clareiras nv 16–22 (Javali [tanque]; Lobo no lugar da Enguia [rápido]; Aranha e Enxame de Morcegos no lugar dos Mosquitos [enxame]; à noite Javali do Lodo, Faíscas Presas no lugar do Fogo-Fátuo e Mardagayl raro). Falta: lama ×0,7 fora da passarela, Água Viva limpando poças.
 - **Fonte:** o **Lodo**, elemento da Treva contrário à Água Viva (Teodoro bar Konai; bíblia §1.3).
 - **Bioma e visual:** tugai alagado; lama `#3E3A2F`, água verde `#5F7F5A`, junco seco `#B6A66A`, faísca `#4FC3B0`; troncos
   podres, pegadas de lama, bolhas.
@@ -751,7 +753,8 @@ Apagada, Javali do Lodo. Chefe do mundo da região: **Saklas** (arconte, mapa 06
 - **Noite:** os mosquitos dobram; **Fogo-Fátuo Preso** [enxame, só à noite] (luz presa perdida); visão curta.
 
 ### 04 · Bosque das Amoreiras de Seda / *Silk Mulberry Grove* — nv 18–24 · ★
-- **No jogo (2026-11-03): jogável** (`MapLayouts.Zarafshan.cs`): posto Casa do Tear (oficina, casa da tecelã, cais) no meio de 4 quadras de amoreiras em fileiras (labirinto suave), 4 quintais de tear em ruína (muros, teares/varais, caixas de casulo); oeste para o 03, leste para o 05; 4 clareiras nv 18–24 (Aranha-Tecelã [enxame]; Javali no lugar da Lagarta-Casulo [tanque]; Lobo no lugar da Gralha [rápido]; à noite Coruja-de-Fumaça e Faíscas no lugar das mariposas). Falta: Mariposa de Seda [distância], teias que prendem 1,5 s, Fiandeira Esquecida.
+- **No jogo (2026-11-11): bicho próprio** no mundo contínuo (`EarlyStandInBeastRecipes`, página no Caderno, `EarlyStandInBeastsPlacementTests`): Mariposa de Seda Gigante [distância] (`enemy_forest_silk_moth`, pó de 7,5 m) lidera "gralhas", no lugar do urutau.
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Zarafshan.cs`): posto Casa do Tear (oficina, casa da tecelã, cais) no meio de 4 quadras de amoreiras em fileiras (labirinto suave), 4 quintais de tear em ruína (muros, teares/varais, caixas de casulo); oeste para o 03, leste para o 05; 4 clareiras nv 18–24 (Aranha-Tecelã [enxame]; Javali no lugar da Lagarta-Casulo [tanque]; Lobo no lugar da Gralha [rápido]; à noite Coruja-de-Fumaça e Faíscas no lugar das mariposas). Falta: teias que prendem 1,5 s, Fiandeira Esquecida.
 - **Fonte:** amoreira e bicho-da-seda da Sogdiana; a lenda da princesa que levou ovos de bicho-da-seda escondidos no
   chapéu para Khotan (Xuanzang; painel de Dandan-Uiliq).
 - **Bioma e visual:** pomar abandonado; folha `#6FA34A`, amora `#5B2A4A`, seda `#F4EDE1`, casulo `#EFE3C8`; casas do tear
@@ -768,6 +771,7 @@ Apagada, Javali do Lodo. Chefe do mundo da região: **Saklas** (arconte, mapa 06
 - **Noite:** as mariposas acendem; a **Coruja-de-Fumaça** caça; visão normal nas fileiras.
 
 ### 05 · Copas de Garajonay / *Garajonay Canopy* — nv 20–26 · ★ · cidade de raça (elfos-da-mata)
+- **No jogo (2026-11-11): bicho próprio** no mundo contínuo (`EarlyStandInBeastRecipes`, página no Caderno, `EarlyStandInBeastsPlacementTests`): Lagarto-Gigante do Louro [rápido] (`enemy_forest_laurel_lizard`) lidera "louros", no lugar do lobo; Pombo-do-Louro Apagado [distância] (`enemy_forest_laurel_pigeon`, caroço de 8 m) lidera "nevoa" com a aranha, no lugar do urutau.
 - **No jogo (2026-11-03): jogável** (`MapLayouts.Zarafshan.cs`, receita `CityTownRecipes.Garajonay`): a cidade dos elfos-da-mata no centro (cidade de retorno, respawn na praça; casas redondas de tábua com telhado de folha de louro, salão da Gara, cais) e as copas: 6 louros gigantes com plataforma em anel a ~8,8 m, casa redonda no alto, escada em espiral no tronco e lanternas de casulo (peça nova `CanopyTree` do kit, com colisor), ligados por 5 pontes de cipó; chão da mata com 3 trilhas, 2 córregos em cascata com pontes e o anel do Velho da Névoa ao norte; oeste para o 04, leste para o 06; 6 clareiras nv 20–26 (Lobo no lugar do Lagarto-Gigante [rápido], Javali de Musgo [tanque], Aranha no lugar da Névoa Pegajosa [controle]; à noite Mardagayl, Faíscas e Coruja). Desde 2026-11-03 é `CitySpec` de cidade de raça (`CityCatalog.RaceCities`): passeio da cidade, respawn dos mapas 05–06 na praça, Gara/Jonay/Dácil/Bencomo/Tinguaro nas portas com visual de elfo e falas, Ervaria da Dácil (Corda de Escalada, Chave do Jardim) e 2 missões da cidade (Docs/Cities.md §1.1). Falta: andar nas plataformas (hoje são cenário alto; anda-se no chão), Pombo-do-Louro [distância], névoa a cada 3 min, Coletor de Névoa, banco da praça encostado na rua Sul (receita).
 - **Fonte:** lenda de Gara e Jonay (La Gomera, Canárias); a laurissilva, mata de louro que "bebe a névoa".
 - **Bioma e visual:** mata de louro alta e nublada; paleta da cidade em §3.3; urze arbórea, samambaias, musgo pendurado,
@@ -784,7 +788,8 @@ Apagada, Javali do Lodo. Chefe do mundo da região: **Saklas** (arconte, mapa 06
 - **Noite:** as pontes acendem; **Mardagayl** na mata baixa; vaga-lumes guiam a trilha.
 
 ### 06 · Jardim Esquecido de Mihrshah / *Mihrshah's Forgotten Garden* — nv 26–32 · ★
-- **No jogo (2026-11-03): jogável** (`MapLayouts.Zarafshan.cs`): posto Portão do Jardim (lâmpada, casa do jardineiro, cais) no portão oeste; o chahar bagh murado (muro de 4 lados com 4 portões, canais secos em cruz, fileiras de ciprestes, roseiras, 4 fontes secas) e o pavilhão de 8 colunas no centro (arena de Saklas; a luta segue como evento do mapa-múndi); oeste de volta ao 05; 4 clareiras, uma por quadrante, nv 26–32 (Aranha no lugar da Roseira-Espinho [controle], Lobo no lugar do Lobo de Cinzas [rápido], Ushabti de Pedra = Jardineiro de Barro [tanque]; à noite Faíscas, Coruja e Mardagayl). Falta: Pavão de Fumaça [distância], libertar as 4 faíscas para encher os canais e abrir o pavilhão, água que cura.
+- **No jogo (2026-11-11): bicho próprio** no mundo contínuo (`EarlyStandInBeastRecipes`, página no Caderno, `EarlyStandInBeastsPlacementTests`): Pavão de Fumaça [distância] (`enemy_forest_smoke_peacock`, olho de brasa de 8 m) entra em "lobos_de_cinzas", no lugar do urutau.
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Zarafshan.cs`): posto Portão do Jardim (lâmpada, casa do jardineiro, cais) no portão oeste; o chahar bagh murado (muro de 4 lados com 4 portões, canais secos em cruz, fileiras de ciprestes, roseiras, 4 fontes secas) e o pavilhão de 8 colunas no centro (arena de Saklas; a luta segue como evento do mapa-múndi); oeste de volta ao 05; 4 clareiras, uma por quadrante, nv 26–32 (Aranha no lugar da Roseira-Espinho [controle], Lobo no lugar do Lobo de Cinzas [rápido], Ushabti de Pedra = Jardineiro de Barro [tanque]; à noite Faíscas, Coruja e Mardagayl). Falta: libertar as 4 faíscas para encher os canais e abrir o pavilhão, água que cura.
 - **Fonte:** o jardim de luz que Mani mostra a Mihrshah (texto médio-persa M 47); o Velho Mihrshah (NPC das Grutas) o
   viu quando jovem.
 - **Bioma e visual:** jardim murado persa (*chahar bagh*: quatro canteiros e canais em cruz) tomado pelo mato; azulejo
@@ -885,6 +890,7 @@ Enxame de Faíscas Presas (noite). Chefe do mundo: **Namrael** (mapa 12).
 - **Noite:** sem fachos (só lâmpadas); **Ubır** desce pelos poços.
 
 ### 10 · Dunas que Cantam / *Singing Dunes* — nv 22–28 · ★
+- **No jogo (2026-11-11): bicho próprio** no mundo contínuo (`EarlyStandInBeastRecipes`, página no Caderno, `EarlyStandInBeastsPlacementTests`): Lagarto-Espinho [rápido] (`enemy_desert_thorn_lizard`) lidera "lagartos_da_duna", no lugar do chacal. Falta: Verme de Areia Apagado [elite].
 - **Fonte:** as dunas "que cantam" de Mingsha Shan ("montanha da areia que ecoa", perto de Dunhuang).
 - **Bioma e visual:** mar de dunas altas; areia `#E7C27D`, sombra `#B98A4E`, céu `#F2A65A`; lago em meia-lua,
   tamareiras, pegadas que somem.
@@ -986,6 +992,7 @@ gigantes, ushabtis e bichos (bíblia §2.3).
 - **Noite:** **Ave-Graveto de Omöl**; frio leve; vila iluminada.
 
 ### 14 · Passo do Hahya / *Hahya's Pass* — nv 10–13 · ★
+- **No jogo (2026-11-11): bicho próprio** no mundo contínuo (`EarlyStandInBeastRecipes`, página no Caderno, `EarlyStandInBeastsPlacementTests`): Lince Apagado [rápido] (`enemy_mountain_dimmed_lynx`) lidera "lince" nos Passos Estreitos (dono: 14), no lugar do lobo.
 - **No jogo (2026-11-03): jogável** (`MapLayouts.Kaggen.cs`): posto Boca da Mina do Mihr (forja, rondavéis, cais), passo estreito entre muralhas de pedra, torrente com 2 pontes, anel de pedras de Hahya no alto, galeria para o 19; 4 clareiras nv 10–13 (Ushabti [tanque], Lobo no lugar do Lince [rápido], Enxame de Morcegos = Morcego da Mina [enxame], Neblina do Vento Ruim [controle] na garganta; Ubır, Ave-Graveto e Coruja à noite; Gavião-de-Penacho [distância]). Atiradores [distância] mantêm distância: se o herói chega a ~3,5–4 m, recuam flanqueando até reabrir o alcance; só o projétil fere, cada um com seu som de tiro. **Pontes de corda** (`KaggenWindRules`): correr nas 6 pontes da região gasta o dobro do fôlego; a rajada nunca derruba ninguém delas; a Maithe ignora. Falta: neve no chão.
 - **Fonte:** Hahya, o gigante do *Livro dos Gigantes* que sonha e se arrepende (bíblia §3.3).
 - **Bioma e visual:** passo de pedra com neve; granito `#8A8A84`, neve `#DDE8F0`; ponte de corda, boca de mina, forja.
@@ -999,6 +1006,7 @@ gigantes, ushabtis e bichos (bíblia §2.3).
 - **Noite:** neve azul; Ave-Graveto; a boca da mina acende.
 
 ### 15 · Abrigos Pintados / *Painted Shelters* — nv 26–32 · ★
+- **No jogo (2026-11-11): bicho próprio** no mundo contínuo (`EarlyStandInBeastRecipes`, página no Caderno, `EarlyStandInBeastsPlacementTests`): Borrão [rápido] (`enemy_mountain_smudge`) lidera "borroes", no lugar do lobo (o Babuíno Ladrão segue no grupo).
 - **Fonte:** pinturas de rocha com elands e gente dançando (Drakensberg); o eland nos contos \|xam (**só a imagem e o
   conto de bicho, nunca rito**).
 - **Bioma e visual:** paredões de arenito com abrigos rasos; arenito `#C88A5A`, ocre `#9E4B2A`, branco de pintura
@@ -1014,6 +1022,7 @@ gigantes, ushabtis e bichos (bíblia §2.3).
 - **Noite:** as pinturas brilham fraco; Ave-Graveto; nada de dança noturna (respeito).
 
 ### 16 · Muralhas de Pedra Seca / *Drystone Walls* — nv 28–34 · ★
+- **No jogo (2026-11-11): bicho próprio** no mundo contínuo (`EarlyStandInBeastRecipes`, página no Caderno, `EarlyStandInBeastsPlacementTests`): Gralha de Pedra [distância] (`enemy_mountain_stone_jackdaw`, pedra de 8,5 m) lidera "gralhas_de_pedra" com o gavião, no lugar do urutau. Falta: Lagarto-de-Pedra [rápido] (ainda o lobo).
 - **Fonte:** muralhas curvas do Grande Zimbábue (shona), com friso em espinha de peixe; estelas de Aksum.
 - **Bioma e visual:** colinas de granito com recintos murados; granito, líquen `#9DAA5A`, capim; torre cônica de pedra,
   passagens estreitas.
@@ -1114,7 +1123,8 @@ região. Quanto mais fundo (sul) e mais longe da Vila, mais difícil.
 - **Noite:** igual (subterrâneo); na noite do relógio, **Ubır** sai do lago.
 
 ### 20 · Salão de Tages / *Tages' Hall* — nv 14–18 · ★
-- **No jogo (2026-11-03): jogável** (`MapLayouts.Limiar.cs`): posto Nicho da Ponte (nicho da lâmpada, casas de tufo, cais, lâmpadas sobre a rua), riacho subterrâneo com ponte e vau, corredor de colunas até o salão e o anel de pedras de Tages (luta segue como desafio do mapa-múndi); 4 clareiras nv 14–18 (Morcegos [enxame], Aranha no lugar da Sombra Pequena [rápido], Ushabti no lugar da Pedra-Lâmina [controle]; Peixe-Lanterna Apagado e Lanterna Quebrada [distância]; Ubır à noite). Atiradores [distância] mantêm distância: se o herói chega a ~3,5–4 m, recuam flanqueando até reabrir o alcance; só o projétil fere, cada um com seu som de tiro. Falta: Ubır jovem, medo do escuro (apagar/acender lâmpadas).
+- **No jogo (2026-11-11): bicho próprio** no mundo contínuo (`EarlyStandInBeastRecipes`, página no Caderno, `EarlyStandInBeastsPlacementTests`): Ubır Jovem [rápido] (`enemy_cave_young_ubir`) lidera "degraus_rosados" nos Terraços de Tufo (dono: 20), no lugar da aranha. Falta: Sombra Pequena, Pedra-Lâmina.
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Limiar.cs`): posto Nicho da Ponte (nicho da lâmpada, casas de tufo, cais, lâmpadas sobre a rua), riacho subterrâneo com ponte e vau, corredor de colunas até o salão e o anel de pedras de Tages (luta segue como desafio do mapa-múndi); 4 clareiras nv 14–18 (Morcegos [enxame], Aranha no lugar da Sombra Pequena [rápido], Ushabti no lugar da Pedra-Lâmina [controle]; Peixe-Lanterna Apagado e Lanterna Quebrada [distância]; Ubır à noite). Atiradores [distância] mantêm distância: se o herói chega a ~3,5–4 m, recuam flanqueando até reabrir o alcance; só o projétil fere, cada um com seu som de tiro. Falta: medo do escuro (apagar/acender lâmpadas).
 - **Fonte:** Tages, o ser etrusco de rosto de criança e sabedoria de velho (Cícero, *De Divinatione* II.50).
 - **Bioma e visual:** salão de estalactites; cristal `#9FD3E6`, índigo `#232046`, âmbar; colunas naturais, o sulco de
   terra de onde Tages brotou.
@@ -1185,6 +1195,7 @@ região. Quanto mais fundo (sul) e mais longe da Vila, mais difícil.
 - **Inimigos:** Revoada de Mahaway [enxame]; Ubır [rápido]; Morcegão de Pedra [tanque]; Corvo-da-Treva [distância].
 - **Chefe:** **chefe do mundo: Mahaway, o Rei da Revoada / o Morcegão da Treva** (já no código).
 - **Mecânica:** **correntes de ar**: subir pelos poços de vento (planando) é atalho; cair é a rota longa.
+- **No jogo (2026-11-11): poços de vento** (`LimiarWindWellRules`, pontos em `OverworldLayouts.LimiarMechanics.cs`, driver `LimiarMechanicsDriver`, teste `LimiarWindWellMechanicsTests`): 6 poços em 3 pares, um em cada borda, por cima do poço de Mahaway (passa pelos ninhos), da fenda das Escarpas da Revoada e do Abismo sem Fundo. Cada poço respira: 8 s soprando, 4 s parado (coluna azul alta ou cinza baixa; cada poço com sua fase). Com asas (`WingsOrDoubleJump`: Asas de Lona, asas do Tacho ou o Grifo; o íbex não) e o vento soprando, [E] (ou "Usar" no toque) a até 4 m plana até a outra borda a 14 m/s, arco de 12 m: 65–95 m em 5–7 s, contra 250–450 m a pé até a ponte de corda (x ±950) ou contornando o poço. A revoada bica quem está no ar: 2% da vida máxima a cada 2 s (3% à noite), nunca abaixo de 30%; a rajada do pouso tira 6% da vida dos bichos a até 8 m (chefe 1%). 3 s entre voos; as duas zonas e as do caminho têm de estar abertas para o herói. Falta: as pontes em espiral e a queda como rota longa de verdade (o mundo é plano: hoje o "longo" é a volta pela ponte).
 - **Ganchos:** loot Pena de Mahaway · montaria `mount_pegasus` (conquista longa), `mount_sertao_phoenix` (Bennu,
   lendária de chefe) · casa: troféu de Mahaway.
 - **Noite:** Mahaway vira o Morcegão da Treva; luz só nas pontes.
@@ -1243,6 +1254,7 @@ Viva e Fogo Vivo (o sol da savana). Chefe do mundo: **Hedammu** (mapa 30).
   a oeste; Cais da Barca e cais de dhows. Retorno: Taa Pwani.
 - **Inimigos:** Caranguejo-dos-Coqueiros Gigante [tanque] (bicho real); Moreia Apagada [rápido]; Gaivota Ladra [rápido];
   Ouriço de Fumaça [controle, espinhos lentos] (invenção).
+- **No jogo (2026-11-11): bichos próprios no lugar dos emprestados** (`MidStandInBeastRecipes`, `MidStandInBestiaryTexts`, `OverworldLayouts.MidBeasts`; modelo com rig, loot base e página no Caderno): Moreia Apagada (`enemy_forest_dimmed_moray`) nas moreias do Recife de Taa Pwani, no lugar da cobra-de-areia; Ouriço de Fumaça (`enemy_forest_smoke_urchin`) no lodo das Lagoas de Maré, no lugar do lodo de gruta, e junto dos caranguejos dos cascos na Praia dos Dhows, no lugar da aranha (as gaivotas dos dhows, alvo da etapa da história do meio, ficam). Falta: o Caranguejo-dos-Coqueiros Gigante (é o caranguejo comum) e os espinhos lentos do ouriço (hoje golpe corpo a corpo).
 - **Chefe:** **O Polvo das Monções**, polvo enorme apagado que segura as velas dos barcos; libertado, a monção volta.
 - **Mecânica:** **maré**: a cada 8 min a maré baixa (3 min) e abre trilhas no recife com baús e faíscas; na maré alta só
   montaria aquática atravessa.
@@ -1261,6 +1273,7 @@ Viva e Fogo Vivo (o sol da savana). Chefe do mundo: **Hedammu** (mapa 30).
   Retorno: Aratta.
 - **Inimigos:** Leão do Capim Apagado [rápido] (bicho real); Rinoceronte-de-Pó [tanque] (bicho real); Abada [elite] (o
   "unicórnio" de dois chifres dos relatos do Congo); Ave-Relâmpago [distância] (impundulu, folclore xhosa e zulu).
+- **No jogo (2026-11-11): bichos próprios no lugar dos emprestados** (`MidStandInBeastRecipes`, `MidStandInBestiaryTexts`, `OverworldLayouts.MidBeasts`; modelo com rig, loot base e página no Caderno): Ave-Relâmpago (`enemy_forest_lightning_bird`, [distância], solta a faísca) nas aves das Savanas dos Auroques e das Acácias, no lugar do abutre de brasa, e nos urutaus do Bosque dos Baobás, no lugar do urutau. Os babuínos dos baobás continuam o babuíno da Serra: é o id que a etapa da história do meio nos baobás manda caçar. Falta: Abada [elite].
 - **Chefe:** **O Touro de Fumaça**, auroque gigante apagado que pisoteia o capim; libertado, guia o rebanho de Aratta.
 - **Mecânica:** **fogo baixo**: o povo-touro queima o capim velho em faixas (Fogo Vivo que renova); as faixas queimadas
   viram trilhas rápidas; os bichos fogem delas.
@@ -1323,6 +1336,7 @@ Viva e Fogo Vivo (o sol da savana). Chefe do mundo: **Hedammu** (mapa 30).
   das Dhows**. Retorno: Taa Pwani.
 - **Inimigos:** Crocodilo do Mangue [tanque] (bicho real); Kongamato [distância]; Caranguejo-Violinista [enxame] (bicho
   real); Garça Apagada [rápido].
+- **No jogo (2026-11-11): bichos próprios no lugar dos emprestados** (`MidStandInBeastRecipes`, `MidStandInBestiaryTexts`, `OverworldLayouts.MidBeasts`; modelo com rig, loot base e página no Caderno): Caranguejo-Violinista (`enemy_forest_fiddler_crab`, a garra grande desce no golpe) nos violinistas do Mangue Raso, no lugar da aranha (o caranguejo-dos-coqueiros fica de acompanhante), e nos de Liyongo, no lugar do caranguejo-dos-coqueiros; os crocodilos do Mangue Raso, alvo da etapa da história do meio, ficam. Falta: Kongamato (corvo-da-treva) e Garça Apagada (gaivota).
 - **Chefe:** **chefe do mundo: Hedammu, a Serpente Gulosa do Mar** (nova; aliada de Āz: "come tudo e nunca enche").
   Vencida, cospe as faíscas que engoliu e volta para o fundo, menor e mais calma.
 - **Mecânica:** **canais e dhows**: barcos pequenos de aluguel (2 ouro) andam rápido nos canais; a maré fecha canais.
@@ -1386,6 +1400,7 @@ Capital **Jhilpur** (§2). *Jhil* = lago/charco (bengali e hindi), *pur* = cidad
   descem para a água; bairros de barqueiros, de cesteiros e de ervas. Retorno: Jhilpur.
 - **Inimigos (arredores):** Peixe-Saltador de Lodo [enxame] (bicho real); Gavial do Lodo [tanque] (bicho real); Lontra
   Ladra [rápido]; Garça-Lança Apagada [distância].
+- **No jogo (2026-11-11): bichos próprios no lugar dos emprestados** (`MidStandInBeastRecipes`, `MidStandInBestiaryTexts`, `OverworldLayouts.MidBeasts`; modelo com rig, loot base e página no Caderno): Garça-Lança Apagada (`enemy_forest_spear_heron`, [distância]) nas garças do Lago de Jhilpur, dos Diques do Norte, da Várzea dos Búfalos, das Lagoas de Lótus e dos Bancos de Lama, no lugar da gaivota. Falta: Peixe-Saltador de Lodo (peixe-lanterna); a Garça-Fantasma do 33 continua a gaivota.
 - **Chefe:** nenhum na capital; evento de cidade **Maré de Lodo** (ondas de Filhos do Lodo sobem os ghats; defender a
   Raiz-Mãe, estilo Crywolf do MU, Referências §2).
 - **Mecânica:** **monção**: na estação das chuvas (`SeasonCalendar`) a água sobe um andar; ruas viram canais e a cidade
@@ -1403,6 +1418,7 @@ Capital **Jhilpur** (§2). *Jhil* = lago/charco (bengali e hindi), *pur* = cidad
   das Garças**. Retorno: Jhilpur.
 - **Inimigos:** Macaco Ladrão [rápido]; Sanguessuga do Lodo [enxame]; Píton Apagada [controle] (bicho real); Raiz-Laço
   [controle].
+- **No jogo (2026-11-11): bichos próprios no lugar dos emprestados** (`MidStandInBeastRecipes`, `MidStandInBestiaryTexts`, `OverworldLayouts.MidBeasts`; modelo com rig, loot base e página no Caderno): Sanguessuga do Lodo (`enemy_forest_mire_leech`) nas sanguessugas da Floresta de Chuva, das Lagoas de Lótus e das Gargantas Esquecidas, no lugar do lodo de gruta. Falta: Raiz-Laço (aranha).
 - **Chefe:** **A Ponte que Esqueceu**, uma ponte de raiz que virou bicho e anda; libertada, volta a ser ponte (atalho).
 - **Mecânica:** **fazer crescer**: regar as pontes desfeitas com Água Viva (skills do Joaquim ou Gota de Água Viva) as
   faz crescer em 10 s; abre caminhos e baús.
@@ -1459,7 +1475,7 @@ Capital **Jhilpur** (§2). *Jhil* = lago/charco (bengali e hindi), *pur* = cidad
 - **Ganchos:** loot Pedra da Água Viva, "Lama Limpa" · montaria `mount_elder_tortoise` (Despertar II) · casa: troféu do
   Lodo (um broto num pote).
 - **Noite:** o lodo cresce sozinho; os Filhos do Lodo dobram; só as fontes limpas iluminam.
-- **No jogo (2026-11-11): chefe do mundo o Lodo-que-Engole** (`enemy_mountain_swallowing_mire`, nv 88): arena no anel de pedras do Olho do Lodo (−900, −1640 na região), a oeste da Raiz-Mãe; aparece com o herói a 90 m, some a 125 m (de volta à vida cheia) e volta 5 min depois de cair; acima de 66% golpe e anel de força, 66–33% rajada de 3 tiros a cada 8 s, abaixo de 33% rajada de 5 e o Grande Golpe marcado no chão (2 s, 4,5 m); as clareiras comuns ficam a 22 m ou mais do anel, chão plano e trilha até ele; peso 0 no bioma (nunca sai em encontro). Própria: **o lodo engole** a partir de 66% (a cada 12 s, 2,4 s de aviso): quem estiver a até 6 m dele (9 m abaixo de 33%) leva o golpe; habilidades +25% à noite (o lodo cresce sozinho). Não se vence de vez: recua e não fica corpo. Loot próprio (2026-11-11): **Lama Limpa do Lodo** (`item_chefe_lama_limpa`, rara, 60% por vitória, 1–2, 140 de venda; no lugar do punhado de ouro, o loot do bioma segue igual); vai no Tear/Forja da casa (`HouseCraftRules`): Saia de aurora da Maria e Grevas do tronco milenar do Joaquim (Tear de mestre). Troféu de casa (2026-11-11): **Pedestal da lama limpa do Lodo-que-Engole** (`casa_trofeu_026`, épico, piso), feito na Forja da casa com 3 Lama Limpa e o chefe já vencido (`HouseCraftRules.WorldBossTrophies`). Falta: as 5 fontes a purificar e o chefe só aparecer com as 5 acesas.
+- **No jogo (2026-11-11): chefe do mundo o Lodo-que-Engole** (`enemy_mountain_swallowing_mire`, nv 88): arena no anel de pedras do Olho do Lodo (−900, −1640 na região), a oeste da Raiz-Mãe; aparece com o herói a 90 m, some a 125 m (de volta à vida cheia) e volta 5 min depois de cair; acima de 66% golpe e anel de força, 66–33% rajada de 3 tiros a cada 8 s, abaixo de 33% rajada de 5 e o Grande Golpe marcado no chão (2 s, 4,5 m); as clareiras comuns ficam a 22 m ou mais do anel, chão plano e trilha até ele; peso 0 no bioma (nunca sai em encontro). Própria: **o lodo engole** a partir de 66% (a cada 12 s, 2,4 s de aviso): quem estiver a até 6 m dele (9 m abaixo de 33%) leva o golpe; habilidades +25% à noite (o lodo cresce sozinho). Não se vence de vez: recua e não fica corpo. Loot próprio (2026-11-11): **Lama Limpa do Lodo** (`item_chefe_lama_limpa`, rara, 60% por vitória, 1–2, 140 de venda; no lugar do punhado de ouro, o loot do bioma segue igual); vai no Tear/Forja da casa (`HouseCraftRules`): Saia de aurora da Maria e Grevas do tronco milenar do Joaquim (Tear de mestre). Troféu de casa (2026-11-11): **Pedestal da lama limpa do Lodo-que-Engole** (`casa_trofeu_026`, épico, piso), feito na Forja da casa com 3 Lama Limpa e o chefe já vencido (`HouseCraftRules.WorldBossTrophies`). **As 5 Fontes do Lodo (2026-11-11)** (`LodoFountainRules`, `CostaDeltaTetoMechanicsDriver.Lodo.cs`, pontos em `OverworldLayouts.LodoFountains`): espiral até o Olho, a 170, 140, 110, 80 e 50 m do anel de pedras (355 m de caminhada da 1ª à 5ª, 71 s a pé). O **lodo preto** cobre um círculo de 200 m em volta do Olho (240 m à noite: cresce sozinho), encolhe 1/5 por fonte acesa e some com as 5; dentro dele morde 4% da vida a cada 3 s (nunca abaixo de 30%) e puxa o herói para o Olho a 1,2 m/s (para a 12 m do anel). **[E] a até 4 m** de uma fonte purifica em 3 s parado perto (sair cancela; sem puxão enquanto purifica); limpa, ela queima os bichos a até 10 m (30% da vida; 5% a cada 2 s enquanto acesa; chefes não) e é **zona segura de 10 m por 2 min** (sem mordida nem puxão), com feixe e luz de Água Viva (`#4FC3B0`): à noite só as fontes limpas iluminam; pode ser renovada no último minuto. **O Lodo-que-Engole só aparece com as 5 acesas** (`RegionBossRules.SummonReady`, consultado pelo `RegionBossDirector`); depois de surgir, cada fonte que se apaga deixa as habilidades dele +10% (até +50%, `MireFountainMultiplier`), então vale reacender durante a luta. Prêmio: a primeira vez no dia de jogo que as 5 ficam acesas juntas dá 1 **Pedra da Água Viva** (`item_pedra_vida`, marca diária `delta.lodo.fountains`). O estado das fontes não vai no save (dura 2 min) e zera ao sair do Delta. Falta: os Filhos do Lodo dobrarem à noite (grupos de bichos do bioma) e modelo próprio das fontes (hoje anel no chão, feixe e luz).
 
 ### Região 7 — Teto do Mundo (Pamir) · mapas 36–40
 
@@ -1510,6 +1526,7 @@ Códice; aqui, professor e contador de mapas). Chefe do mundo: **Aydahar** (mapa
   1 por vez, fila); praça no 4º terraço; mercado no 1º; o forte no 7º. Retorno: Sangkent.
 - **Inimigos (arredores):** Urso-Pardo do Pamir Apagado [tanque] (bicho real); Gralha-de-Bico-Vermelho [rápido] (bicho
   real); Marmota Gigante [enxame]; Pedra-Rolante [controle].
+- **No jogo (2026-11-11): bichos próprios no lugar dos emprestados** (`MidStandInBeastRecipes`, `MidStandInBestiaryTexts`, `OverworldLayouts.MidBeasts`; modelo com rig, loot base e página no Caderno): Gralha-de-Bico-Vermelho (`enemy_mountain_red_billed_chough`) nas gralhas dos Terraços de Sangkent, do Vale dos Damasqueiros, do Choupal dos Canais e dos Terraços Altos, no lugar do corvo-da-treva (que segue de acompanhante em outros grupos). Falta: Pedra-Rolante própria (é a Pedra que Rola da Serra).
 - **Chefe:** nenhum na capital; evento **Avalanche** (desce a neve, os primos protegem os terraços de baixo).
 - **Mecânica:** **calhas**: descer de carrinho é rápido, subir pede escada ou elevador de corda (fila); o carrinho pode
   levar até 5 (o grupo).
@@ -1525,6 +1542,7 @@ Códice; aqui, professor e contador de mapas). Chefe do mundo: **Aydahar** (mapa
 - **Layout:** G (vertical). Rede de 4 calhas com estações; **posto: Estação da Calha Alta**. Retorno: Sangkent.
 - **Inimigos:** Ushabti de Calha [tanque]; Abutre-Barbudo Apagado [distância, solta pedras] (bicho real); Marmota
   Gigante [enxame]; Neblina do Vento Ruim [controle].
+- **No jogo (2026-11-11): bichos próprios no lugar dos emprestados** (`MidStandInBeastRecipes`, `MidStandInBestiaryTexts`, `OverworldLayouts.MidBeasts`; modelo com rig, loot base e página no Caderno): Abutre-Barbudo Apagado (`enemy_mountain_bearded_vulture`, [distância], solta pedras) nos abutres das Calhas de Pedra, das Calhas Geladas, do Lago Turquesa, do Vale do Wakhan e do Ninho de Aydahar, no lugar do abutre de brasa. Falta: Ushabti de Calha (ushabti de pedra).
 - **Chefe:** **O Carrinho Desgovernado**, engenho de minério dos Artífices que desce sozinho; libertado, vira o carrinho
   mais rápido da cidade.
 - **Mecânica:** **descida cronometrada**: descer de carrinho pegando faíscas no caminho (corrida; ranking online).
@@ -1540,6 +1558,7 @@ Códice; aqui, professor e contador de mapas). Chefe do mundo: **Aydahar** (mapa
 - **Layout:** G. Uma língua de gelo com 3 ramos; **posto: Cabana do Iaque**. Retorno: Sangkent.
 - **Inimigos:** Iaque Selvagem Apagado [tanque] (bicho real); Almas [elite, tímido, joga bolas de neve]; Lobo de Gelo
   [rápido]; Fenda Viva [controle, a fenda que "abre"].
+- **No jogo (2026-11-11): bichos próprios no lugar dos emprestados** (`MidStandInBeastRecipes`, `MidStandInBestiaryTexts`, `OverworldLayouts.MidBeasts`; modelo com rig, loot base e página no Caderno): Lobo de Gelo (`enemy_mountain_ice_wolf`) nos lobos do Campo de Seracs, dos Picos Gelados e das Morenas da Geleira, no lugar do lobo da floresta; os Almas dos Picos Gelados, alvo da etapa da história do meio, ficam. Falta: Fenda Viva (lodo de gruta).
 - **Chefe:** **O Grande Almas**, peludo gigante que esconde faíscas na neve por medo; libertado, vira o guia da geleira.
 - **Mecânica:** **frio**: medidor de frio fora dos abrigos (lentidão leve quando cheio); fogueiras e chá de karkadé zeram.
 - **Ganchos:** loot gelo eterno (refino), lã · montaria `mount_snow_tiger` (Despertar), `mount_woolly_mammoth` · casa:
@@ -1667,6 +1686,7 @@ Deng** (maniqueu da era Song em Fujian **[verificar]**; aqui, o mestre do canal)
 - **Layout:** G. Canal de norte a sul com 4 eclusas; **posto: Eclusa da Lua**. Retorno: Mingcheng.
 - **Inimigos:** Carpa-Dragão Apagada [rápido]; Barqueiro de Fumaça [elite]; Lanterna-Peixe [enxame]; Tartaruga de Pedra
   (a tartaruga que carrega estelas) [tanque].
+- **No jogo (2026-11-11): bichos próprios no lugar dos emprestados** (`MidStandInBeastRecipes`, `MidStandInBestiaryTexts`, `OverworldLayouts.MidBeasts`; modelo com rig, loot base e página no Caderno): Carpa-Dragão Apagada (`enemy_forest_dragon_carp`) nas carpas da Eclusa da Lua e do Rio dos Salgueiros, no lugar da cobra-de-areia; as tartarugas de pedra da eclusa, alvo da etapa da história do meio, ficam. Falta: Lanterna-Peixe (peixe-lanterna) e Barqueiro de Fumaça (neblina).
 - **Chefe:** **A Carpa que Não Pulou**, carpa enorme que desistiu de pular a cascata e ficou apagada; libertada, pula e
   vira um arco de luz.
 - **Mecânica:** **eclusas**: abrir e fechar as eclusas muda o nível da água e abre os bairros baixos.
@@ -1698,6 +1718,7 @@ Deng** (maniqueu da era Song em Fujian **[verificar]**; aqui, o mestre do canal)
   Retorno: Torres Brancas.
 - **Inimigos:** Soldado de Terracota [tanque]; Arqueiro de Terracota [distância]; Cavalo de Terracota [rápido]; Filhote de
   Nian [elite].
+- **No jogo (2026-11-11): bichos próprios no lugar dos emprestados** (`MidStandInBeastRecipes`, `MidStandInBestiaryTexts`, `OverworldLayouts.MidBeasts`; modelo com rig, loot base e página no Caderno): Cavalo de Terracota (`enemy_forest_terracotta_horse`) nos cavalos dos Fossos de Terracota, do Vale dos Guerreiros e da Torre Quinhentos, no lugar do lobo; os soldados de terracota dos fossos, alvo da etapa da história do meio, ficam. Falta: Arqueiro de Terracota (lanterna quebrada).
 - **Chefe:** **Nian, a Fera do Ano**: assusta-se com lanternas vermelhas e com barulho (granada do Ícaro, tambor); a luta
   é espantar, não bater; vencida, vai dormir até o ano que vem.
 - **Mecânica:** **faróis**: acender os faróis das torres liga um "corredor de luz" (velocidade +10% a pé dentro dele).
@@ -1724,7 +1745,7 @@ Deng** (maniqueu da era Song em Fujian **[verificar]**; aqui, o mestre do canal)
   troféu dos Quatro (vaso de bronze).
 - **Noite:** os palácios trocam de guloso; Hundun mais forte.
 - **No jogo (2026-11-09): zona do mundo contínuo, fora do lugar da ficha.** A área `cidadela_dos_quatro_gulosos` (nv 125–140, a pé 121, barca 132; 480 × 240 m) foi tirada da metade norte dos Picos do Nian, sem aumentar a região, com o posto Portão do Nono Anel e Cais em (960, 1660). A ficha a põe nos anéis 7–9 de Mingcheng, mas a cidade é só a receita de ±30 m e a estrada norte passa colada nela: uma área de nível 125 ali cortaria a região. Exigência: nenhuma. Os bichos são corpos existentes (soldado de terracota, neblina, lobo, leão de pedra). Falta: os 4 palácios, o Salão Central, a mecânica do que cada um come e os Quatro Gulosos.
-- **No jogo (2026-11-11): chefe do mundo os Quatro Gulosos** (`enemy_mountain_four_gluttons`, nv 140): um corpo de vaso de bronze com uma cara de cada lado; arena no anel de pedras do Salão Central, a leste do Portão do Nono Anel, no fim de um ramal novo da trilha (1100, 1700 na região); aparece com o herói a 90 m, some a 125 m (de volta à vida cheia) e volta 5 min depois de cair; acima de 66% golpe e anel de força, 66–33% rajada de 3 tiros a cada 8 s, abaixo de 33% rajada de 5 e o Grande Golpe marcado no chão (2 s, 4,5 m); as clareiras comuns ficam a 22 m ou mais do anel, chão plano e trilha até ele; peso 0 no bioma (nunca sai em encontro). Própria: **o apetite da semana** a partir de 66% (a cada 12 s, 2,2 s de aviso): um por semana UTC em rodízio (Taotie, Hundun, Qiongqi, Taowu) e, à noite, o seguinte; Taotie come o chão marcado (sair de 4 m), Hundun apaga tudo menos a marca (ficar a até 3 m dela; +25% à noite), Qiongqi pega quem está a mais de 6 m dele (chegar perto), Taowu pega quem está a até 6 m (ficar longe). Vencidos, caem como os outros. Loot próprio (2026-11-11): **Bronze Antigo dos Vasos** (`item_chefe_bronze_antigo`, épico, 50% por vitória, 260 de venda; no lugar do punhado de ouro, o loot do bioma segue igual); vai no Tear/Forja da casa (`HouseCraftRules`): Saia-calça de relâmpago, Grevas do tronco milenar e Pernas mecânicas assistidas (Tear de mestre). Troféu de casa (2026-11-11): **Vaso de bronze dos Quatro Gulosos** (`casa_trofeu_028`, épico, piso), feito na Forja da casa com 2 Bronze Antigo e o chefe já vencido (`HouseCraftRules.WorldBossTrophies`). Falta: os 4 palácios, Taotie comendo o loot do chão, Qiongqi trocando os controles e o evento de fim de temporada.
+- **No jogo (2026-11-11): chefe do mundo os Quatro Gulosos** (`enemy_mountain_four_gluttons`, nv 140): um corpo de vaso de bronze com uma cara de cada lado; arena no anel de pedras do Salão Central, a leste do Portão do Nono Anel, no fim de um ramal novo da trilha (1100, 1700 na região); aparece com o herói a 90 m, some a 125 m (de volta à vida cheia) e volta 5 min depois de cair; acima de 66% golpe e anel de força, 66–33% rajada de 3 tiros a cada 8 s, abaixo de 33% rajada de 5 e o Grande Golpe marcado no chão (2 s, 4,5 m); as clareiras comuns ficam a 22 m ou mais do anel, chão plano e trilha até ele; peso 0 no bioma (nunca sai em encontro). Própria: **o apetite da semana** a partir de 66% (a cada 12 s, 2,2 s de aviso): um por semana UTC em rodízio (Taotie, Hundun, Qiongqi, Taowu) e, à noite, o seguinte; Taotie come o chão marcado (sair de 4 m), Hundun apaga tudo menos a marca (ficar a até 3 m dela; +25% à noite), Qiongqi pega quem está a mais de 6 m dele (chegar perto), Taowu pega quem está a até 6 m (ficar longe). Vencidos, caem como os outros. Loot próprio (2026-11-11): **Bronze Antigo dos Vasos** (`item_chefe_bronze_antigo`, épico, 50% por vitória, 260 de venda; no lugar do punhado de ouro, o loot do bioma segue igual); vai no Tear/Forja da casa (`HouseCraftRules`): Saia-calça de relâmpago, Grevas do tronco milenar e Pernas mecânicas assistidas (Tear de mestre). Troféu de casa (2026-11-11): **Vaso de bronze dos Quatro Gulosos** (`casa_trofeu_028`, épico, piso), feito na Forja da casa com 2 Bronze Antigo e o chefe já vencido (`HouseCraftRules.WorldBossTrophies`). **Taotie come o loot do chão e Qiongqi troca os controles (2026-11-11):** o jogo não tem loot no chão (tudo vai direto para a mochila), então na semana de Taotie o vaso derrama **oferendas** de 40 Moedas Furadas (`item_gold_coin`) a 3–7 m dele (a primeira aos 3 s, depois a cada 8 s; até 3 no chão e 6 por luta); a cada 9 s (a primeira aos 6 s) Taotie marca com o anel a oferenda mais perto da boca (até 12 m) e avisa ("Taotie quer a oferenda! Pega ou deixa!"); 2,5 s depois a engole, a menos que o herói tenha passado por cima dela (1,6 m) e pegado 1×. O que ele engoliu volta **em dobro** quando ele cai (e as oferendas que sobraram no chão, 1×); se ele some sem cair, perde-se: pegar já ou arriscar. Qiongqi, no golpe do apetite, **troca os passos** de quem está na luta por 3 s (aviso no anel antes, "Passos trocados!" ao começar e "Os passos voltaram ao normal" ao acabar): teclado/controle/joystick andam ao contrário e o clique/toque no chão leva ao ponto espelhado pelo herói; clique/toque num inimigo continua mirando o inimigo, para quem joga no celular não ficar travado. `Player/HeroControlMirror` guarda só a hora do fim (teto de 4 s), então acaba sozinho com o herói morto, a luta acabada ou a cena trocada (o chefe ainda encerra cedo no OnDisable, na morte do herói e na própria queda). Regras em `RegionBossRules` (Taotie*/Qiongqi*), testes em `FourGluttonsAppetiteTests`. Falta: os 4 palácios e o evento de fim de temporada.
 
 ### Região 9 — Estepe dos Nartes (estepe e Cáucaso, Vento Vivo) · mapas 47–52 · ☆
 
@@ -1799,6 +1820,7 @@ Hahya guardado para o online, bíblia §1.4).
 - **Layout:** G. 9 kurgans; um aberto (posto); **posto: Kurgan Aberto**. Retorno: Acampamento de Soslan.
 - **Inimigos:** Grifo Guardião [elite]; Cervo de Ouro Apagado [rápido]; Cisne de Feltro [distância] (as figuras de feltro
   de Pazyryk, invenção); Lobo de Bronze [tanque].
+- **No jogo (2026-11-11): bichos próprios no lugar dos emprestados** (`MidStandInBeastRecipes`, `MidStandInBestiaryTexts`, `OverworldLayouts.MidBeasts`; modelo com rig, loot base e página no Caderno): Cisne de Feltro (`enemy_mountain_felt_swan`, [distância]) nos cisnes do Vau Largo, do Lago Salgado, do Kurgan Aberto e do Rio dos Nartes, no lugar da gaivota. Falta: Cervo de Ouro (chacal) e Grifo Guardião (grifo jovem).
 - **Chefe:** **O Grifo Velho do Kurgan**, que guarda o ouro há tanto tempo que esqueceu de quem; libertado, deixa um
   presente para cada primo.
 - **Mecânica:** **os Ouros do Céu** (segredo): quatro objetos de ouro (arado com canga, machado, taça) quentes demais
@@ -1936,7 +1958,8 @@ medidor de silêncio, vento contra, os chefes de mapa das fichas (o do mundo já
 - **Mecânica:** **rajadas**: a cada 20 s uma rajada atravessa (aviso no céu); quem está numa ponte para e segura.
 - **Ganchos:** loot pena de vento · montaria nova **Filhote de Huma** (desafio) · casa: **Ninho de Pedra**.
 - **Noite:** pontes com lanternas; o Morcego-Vela dobra.
-- **No jogo (2026-11-09): rajadas** (`WindGustRules`, `FarnkeshMechanicsDriver`): ciclo de 20 s (15,5 calmo + 3 de aviso com riscos no céu e "pare e segure" + 1,5 soprando), a 4,5 m de cada linha de `WindBridgeLines`, de través e cada uma do lado oposto da anterior; quem anda é empurrado 5 m/s (7,5 m por rajada; 3,75 m com a Capa de Tempestade), quem está parado segura e não sai do lugar; nunca em zona segura. Falta: pontes sem chão por baixo (a rajada só desloca, ninguém cai) e O Cortador de Cordas.
+- **No jogo (2026-11-09): rajadas** (`WindGustRules`, `FarnkeshMechanicsDriver`): ciclo de 20 s (15,5 calmo + 3 de aviso com riscos no céu e "pare e segure" + 1,5 soprando), a 4,5 m de cada linha de `WindBridgeLines`, de través e cada uma do lado oposto da anterior; quem anda é empurrado 5 m/s (7,5 m por rajada; 3,75 m com a Capa de Tempestade), quem está parado segura e não sai do lugar; nunca em zona segura. Falta: pontes sem chão por baixo (a rajada só desloca, ninguém cai).
+- **No jogo (2026-11-11): chefe do mapa O Cortador de Cordas** (`RegionBossRules.MapSpawns`, `enemy_mountain_rope_cutter`, Nv 160): anel de pedra na estrada de Farnkesh às pontes (`CortadorDeCordasArena`), o mesmo diretor e as mesmas fases dos chefes do mundo; habilidade própria **corta a corda** (`RopeCutHits`): aviso de 2 s e, nos últimos 0,6 s, quem anda mais de 0,5 m leva o golpe, quem para e segura não. Loot: Runa do Vento (60 %, 1–2) e peça de roupa; libertado, vira guarda das pontes. Falta: a queda de verdade (a ponte não some).
 
 ### 56 · Ermidas Suspensas / *Hanging Hermitages* — nv 158–168 · ☆
 - **Fonte:** invenção sobre a forma de Meteora (casas grudadas no paredão).
@@ -1950,6 +1973,7 @@ medidor de silêncio, vento contra, os chefes de mapa das fichas (o do mundo já
 - **Ganchos:** loot bronze de sino · montaria `mount_unicorn` (Shadhavar, Despertar: o chifre toca) · casa: conjunto novo
   **Sino de Bronze**.
 - **Noite:** o medidor enche mais devagar (todos dormem); os ecos ficam visíveis.
+- **No jogo (2026-11-11): chefe do mapa O Sino que Não Para** (`enemy_mountain_endless_bell`, Nv 168): anel de pedra na estrada oeste logo abaixo do Pináculo do Sino (`SinoQueNaoParaArena`); habilidade própria **badalada com eco** (`TollHits`): bate onde o herói estava e a nota anterior toca de novo onde caiu, então não dá para voltar ao lugar de antes. Loot: Pedra da Alma Viva (50 %); parado, o paredão fica em silêncio. Falta: o medidor de silêncio e os Ecos.
 
 ### 57 · Garganta dos Ays / *Gorge of the Ays* — nv 166–180 · ☆
 - **Fonte:** os *ays*, espíritos do vento ruim do folclore armênio.
@@ -2039,7 +2063,8 @@ placas que se movem. *(Corrigido em 2026-11-11: fases da lua nos canais, gelo fi
 - **Ganchos:** loot gelo eterno, marfim de pedra · montaria `mount_woolly_mammoth` (cuidado com o gelo) · casa: **Casa da
   Lua Branca**.
 - **Noite:** o gelo racha mais; enguias acendem.
-- **No jogo (2026-11-09): gelo fino** (`ThinIceRules`, `OverworldLayouts.ThinIcePatches`): 5 placas (2 sobre a estrada norte e a estrada oeste, 3 em Canais do Oeste e Gelo Rachado), contorno azul a 40 m e vermelho quando range. Só montaria pesada (mamute, tartaruga anciã, boi-bumbá) carrega o gelo: range com 1,2 s, quebra com 4 s (2,5 s de noite); ao quebrar a montaria foge e a água fria tira 8 % da vida, sem nunca matar; a pé o gelo aguenta. Falta: a espessura no mapa da UI e a Morsa-Rainha.
+- **No jogo (2026-11-09): gelo fino** (`ThinIceRules`, `OverworldLayouts.ThinIcePatches`): 5 placas (2 sobre a estrada norte e a estrada oeste, 3 em Canais do Oeste e Gelo Rachado), contorno azul a 40 m e vermelho quando range. Só montaria pesada (mamute, tartaruga anciã, boi-bumbá) carrega o gelo: range com 1,2 s, quebra com 4 s (2,5 s de noite); ao quebrar a montaria foge e a água fria tira 8 % da vida, sem nunca matar; a pé o gelo aguenta. Falta: a espessura no mapa da UI.
+- **No jogo (2026-11-11): chefe do mapa A Morsa-Rainha** (`enemy_mountain_walrus_queen`, Nv 196, mais forte à noite): anel de pedra na estrada norte depois da ponte de osso de baleia (`MorsaRainhaArena`); habilidade própria **tombo** (`FlopDamageFactor`): cai onde o herói estava, ×1,6 no meio e só ×0,3 na beirada de 7 m. Loot: Pedra da Água Viva (50 %); libertada, divide os peixes.
 
 ### 61 · Tundra de Omöl / *Omöl's Tundra* — nv 194–204 · ☆
 - **Fonte:** Yen e Omöl, os irmãos criadores do mito komi: Yen fez as coisas boas, Omöl as desajeitadas (a Ave-Graveto
@@ -2069,6 +2094,7 @@ placas que se movem. *(Corrigido em 2026-11-11: fases da lua nos canais, gelo fi
   conjunto novo **Galeria do Mamute**.
 - **Noite:** igual (subterrâneo).
 - **No jogo (2026-11-09):** sem mecânica própria ainda (faltam os túneis que mudam por semana).
+- **No jogo (2026-11-11): chefe do mapa O Mamute Avô** (`enemy_mountain_grandfather_mammoth`, Nv 214): anel de pedra na estrada da Boca do Gelo galerias abaixo (`MamuteAvoArena`); habilidade própria **o teto cai em cruz** (`CeilingFallHits`): pedras no lugar do herói e a 4,5 m na frente, atrás e dos lados; na diagonal é seguro. Loot: Troféu da Fera (60 %, 1–2); libertado, lembra o caminho para cima. Falta: o vale novo que ele abre.
 
 ### 63 · Mar das Auroras / *Aurora Sea* — nv 212–226 · ☆
 - **Fonte:** invenção (a aurora como luz presa que dança, Ar Sereno).
@@ -2160,6 +2186,7 @@ temperatura das fornalhas, forja do dia (bônus de refino), Guayota, a Tartaruga
 - **Ganchos:** loot musgo de lava, cerâmica · montaria nova **Leão-Guardião de Laca** · casa: conjunto novo **Jardim de
   Pedra**.
 - **Noite:** as lanternas de pedra acendem; os tanukis saem.
+- **No jogo (2026-11-11): chefe do mapa O Rei Shisa do Telhado** (`enemy_mountain_shisa_king`, Nv 236): anel de pedra na estrada leste da Casa de Chá, nas Pontes Vermelhas (`ReiShisaArena`); habilidade própria **as duas bocas** (`ShisaMouthFor`, `ShisaHits`): alterna boca aberta (acerta quem está a mais de 6 m) e boca fechada (acerta quem está perto). Loot: Pedra-Faísca (60 %, 2–3); libertado, volta para o telhado. Falta: o cascalho rastelado e a casa de chá secreta.
 
 ### 67 · Monte Echeyde / *Mount Echeyde* — nv 234–246 · ☆
 - **Fonte:** *Echeyde*, nome guanche do Teide (Tenerife); Guayota, o ser das profundezas do vulcão que, no conto, prendeu
@@ -2205,6 +2232,7 @@ temperatura das fornalhas, forja do dia (bônus de refino), Guayota, a Tartaruga
 - **Ganchos:** loot ferro celeste, conjunto antigo "Kurdalægon" · montaria `mount_dragon_hatchling` (Despertar III) · casa:
   conjunto novo **Fornalha** (bigorna de enfeite).
 - **Noite:** as fornalhas ficam mais quentes (mais difícil); faíscas no céu.
+- **No jogo (2026-11-11): chefe do mapa O Mestre das Nove Fornalhas** (`enemy_mountain_nine_furnaces_master`, Nv 264, mais forte à noite): anel de pedra na estrada do pátio das fornalhas (`MestreDasFornalhasArena`); habilidade própria **martelada que esquenta** (`ForgeHeatMultiplier`): bate onde o herói estava, cada martelada +8 % sobre a anterior até a nona, que solta o vapor e recomeça. Loot: Pedra da Mistura (40 %); parado, as fornalhas viram a forja de todos. Falta: o medidor de temperatura das 9 fornalhas.
 
 ### 70 · Caldeira do Fogo Devorador / *Devouring Fire Caldera* — nv 264–280 · ☆
 - **Fonte:** o Fogo Devorador, contraparte da Treva do Fogo Vivo (Teodoro bar Konai; bíblia §1.3): o 2º dos cinco mundos
@@ -2282,7 +2310,8 @@ para depois; desde 2026-11-09 Apep já é o chefe do mundo, no 76). Testes `Over
 - **Ganchos:** loot trigo de luz, junco · montaria `mount_capybara` (Despertar III) · casa: conjunto novo **Campo de
   Juncos**.
 - **Noite:** sempre noite; os campos brilham fraco.
-- **No jogo (2026-11-09):** sem mecânica própria ainda (faltam as jangadas); a barca das horas para na Casa de Junco.
+- **No jogo (2026-11-09):** a barca das horas para na Casa de Junco.
+- **No jogo (2026-11-11): jangadas** (`RioRaftRules`, canais e touceiras em `OverworldLayouts.RioMechanics.cs`, driver novo `RioRaftMechanicsDriver`, teste `RioRaftMechanicsTests`): 8 touceiras de junco nas margens dos 2 canais compridos (z 500 e 760, 840 m dos Canteiros aos Trigais); [E] corta 1 feixe (a touceira cresce de novo em 5 min); 3 feixes amarram uma jangada num embarcadouro (12 m depois de cada ponta), que desce o canal inteiro a 14 m/s (864 m em ~62 s, contra ~2 km pelas estradas da Casa de Junco) e aguenta 2 min para a volta; os hipopótamos de lodo mordem 2% da vida a cada 5 s (3% à noite, nunca abaixo de 30%) e o tranco da chegada tira 6% dos bichos a até 8 m; com a Hipopotinha de Taweret (`mount_capybara`) passa direto, sem junco e sem mordida. Feixes e jangada ficam no save (marcas de tempo `rio.raft.reed.N` e `rio.raft.built`). Falta: o Hipopótamo-de-Junco Gigante.
 
 ### 73 · Areal Escondido / *Hidden Sands* — nv 274–286 · ☆
 - **Fonte:** a "4ª hora" do *Amduat*, um deserto onde a barca vira serpente para atravessar a areia.
@@ -2337,8 +2366,9 @@ para depois; desde 2026-11-09 Apep já é o chefe do mundo, no 76). Testes `Over
 - **Ganchos:** loot escama de Apep, Pedra da Mistura · montaria nova **Barquinha de Luz** (lendária, §6) · casa: troféu de
   Apep (escama).
 - **Noite:** sempre noite; Apep mais forte perto da meia-noite do relógio.
-- **No jogo (2026-11-09): chefe do mundo: Apep** (`enemy_mountain_apep`, nv 320): arena num anel de pedras novo no banco, a leste da Proa Encalhada (170, 1590 na região), ao sul da espinha; as mesmas três fases, com rajadas de lodo. Própria: **beber o rio** (a cada 14 s, da 2ª fase, aviso de 2,5 s: quem estiver a mais de 7 m dela leva 1,1× e ela cura 2%). Mais forte até 1,4× na meia-noite do relógio (±3 h). Não morre: cospe o rio, recua e só volta numa noite seguinte. Loot próprio (2026-11-11): **Escama de Apep** (`item_chefe_escama_apep`, épica, 40% por vitória, 450 de venda; no lugar do punhado de ouro, o loot do bioma segue igual); vai no Tear/Forja da casa (`HouseCraftRules`): Saia de eclipse da Lavine (Tear, 2) e Saia do horizonte apagado (Tear de mestre). Troféu de casa (2026-11-11): **Barca de luz vencendo Apep, em miniatura** (`casa_trofeu_033`, épico, piso), feito na Forja da casa com 2 Escama de Apep e o chefe já vencido (`HouseCraftRules.WorldBossTrophies`). Falta: defender a barca com vida (desencalhe) e os ganchos (Pedra da Mistura, Barquinha de Luz).
-- **No jogo (2026-11-09):** sem mecânica própria ainda (falta defender a barca); a barca das horas para na Proa Encalhada.
+- **No jogo (2026-11-09): chefe do mundo: Apep** (`enemy_mountain_apep`, nv 320): arena num anel de pedras novo no banco, a leste da Proa Encalhada (170, 1590 na região), ao sul da espinha; as mesmas três fases, com rajadas de lodo. Própria: **beber o rio** (a cada 14 s, da 2ª fase, aviso de 2,5 s: quem estiver a mais de 7 m dela leva 1,1× e ela cura 2%). Mais forte até 1,4× na meia-noite do relógio (±3 h). Não morre: cospe o rio, recua e só volta numa noite seguinte. Loot próprio (2026-11-11): **Escama de Apep** (`item_chefe_escama_apep`, épica, 40% por vitória, 450 de venda; no lugar do punhado de ouro, o loot do bioma segue igual); vai no Tear/Forja da casa (`HouseCraftRules`): Saia de eclipse da Lavine (Tear, 2) e Saia do horizonte apagado (Tear de mestre). Troféu de casa (2026-11-11): **Barca de luz vencendo Apep, em miniatura** (`casa_trofeu_033`, épico, piso), feito na Forja da casa com 2 Escama de Apep e o chefe já vencido (`HouseCraftRules.WorldBossTrophies`). Falta: os ganchos (Pedra da Mistura, Barquinha de Luz).
+- **No jogo (2026-11-09):** a barca das horas para na Proa Encalhada.
+- **No jogo (2026-11-11): defender a barca** (`RioBarqueDefenseRules` + `RioBarqueDefense`, casco em `OverworldLayouts.RioMechanics.cs`, driver `RioMechanicsDriver`, teste `RioBarqueDefenseMechanicsTests`): a barca encalhada fica na areia lisa a sudeste da Proa (40, 1500 na região), longe da espinha de Apep. [E] (ou "Usar") a até 6 m chama os remadores: eles empurram por 90 s de tempo guardado (herói a até 25 m; 15 s seguidos longe e eles largam os remos). O casco tem 100: cada bicho a até 12 m rói 1,5 por segundo (chefe 4; no máximo 6 contados); Apep bebe o rio aos 20, 40, 60 e 80 s (aviso 3 s antes, anel roxo): tira 12 do casco, ou, se o herói estiver na proa (5 m), cai nele: 4% da vida máxima, nunca abaixo de 30%. A cada 2 s os remos batem nos bichos a até 6 m (4% da vida, chefe 0,5%). Casco a zero ou abandonada: 30 s de descanso. Solta: devolve 20% da vida, a luz tira 12% dos bichos a até 20 m (chefe 2%) e, até o fim do dia do jogo (`WorldMapProgress.SetDailyMark`, chave `rio.barque.freed`), a barca solta navega pelo banco a 55 m/s por cima das dobras de Apep: do casco às duas pontas da estrada (Corpo de Apep, −600, 1530; Rio Seco, 600, 1530) em 10–12 s, e de volta; a pé são 100–115 s subindo e descendo a espinha. Uma vez por dia; sem prêmio em item (o prêmio é o atalho). Falta: grupo de verdade (online) e a ligação com a luta de Apep.
 
 ### Região 14 — Margens da Mistura (Elam, Mesopotâmia, terras hurritas; o deserto do Tempo) · mapas 77–82 · ☆
 
@@ -2494,7 +2524,8 @@ gosma = Polvo de Lodo, peixe-lanterna = Cardume Escuro, píton apagada = Serpent
   novo **Mil Lâmpadas**.
 - **Noite:** igual (sem céu); à "noite do relógio" a Maré de Treva é mais forte.
 - **No jogo (2026-11-09): cidade de verdade** (`CityTownRecipes.UltimaLampada.cs`, estilo `BasaltFort`, id `fortaleza_ultima_lampada`), já no mundo contínuo: em y = 0 dentro de um círculo de 22,5 m (saídas O, L e S, a S é a entrada; sem rua ao norte: os cinco portões selados fecham a praça), Lâmpada-Mãe Grande, Pamour, Tehat e Makarios; Pavios da Tehat com as exigências de 84–90 fixas; respawn na praça para 83–90.
-- **No jogo (2026-11-09): rede de lâmpadas e Maré de Treva** (`ProfundoLampRules`): 12 lâmpadas em 3 anéis de 4 em volta da fortaleza (o anel de dentro já começa aceso); ficar 2 s a até 3,5 m acende; um anel vale com 3 de 4 acesas e os de dentro valendo. Zona segura a partir da praça: 35 / 80 / 130 / 190 m com 0 / 1 / 2 / 3 anéis, e cada lâmpada acesa protege 10 m em volta. A Maré vem a cada 240 s: 180 s de calma, 20 s de aviso (texto e frente de sombra fechando), 40 s subindo, até 320 m da praça (só o mapa 83): apaga uma lâmpada a cada 8 s, de fora para dentro (5 s à noite do relógio) e, fora da luz, tira 2% da vida máxima a cada 2 s (3% à noite), sem passar de 30% da vida; a primeira mordida só avisa. Terminando com um anel de pé, a Lâmpada-Mãe devolve 20% da vida. A praça nunca é atingida. Ainda não: os 5 portões selados continuam decoração.
+- **No jogo (2026-11-09): rede de lâmpadas e Maré de Treva** (`ProfundoLampRules`): 12 lâmpadas em 3 anéis de 4 em volta da fortaleza (o anel de dentro já começa aceso); ficar 2 s a até 3,5 m acende; um anel vale com 3 de 4 acesas e os de dentro valendo. Zona segura a partir da praça: 35 / 80 / 130 / 190 m com 0 / 1 / 2 / 3 anéis, e cada lâmpada acesa protege 10 m em volta. A Maré vem a cada 240 s: 180 s de calma, 20 s de aviso (texto e frente de sombra fechando), 40 s subindo, até 320 m da praça (só o mapa 83): apaga uma lâmpada a cada 8 s, de fora para dentro (5 s à noite do relógio) e, fora da luz, tira 2% da vida máxima a cada 2 s (3% à noite), sem passar de 30% da vida; a primeira mordida só avisa. Terminando com um anel de pé, a Lâmpada-Mãe devolve 20% da vida. A praça nunca é atingida.
+- **No jogo (2026-11-11): os 5 portões das covas** (`ProfundoGateRules`, pontos em `OverworldLayouts.ProfundoMechanics.cs`, driver novo `ProfundoGateMechanicsDriver`, teste `ProfundoGateMechanicsTests`): os portões da muralha (150°, 120°, 90°, 60°, 30°: Fumaça, Fogo Devorador, Vento Destruidor, Lodo, Treva) estão selados do outro lado; chegar a pé a até 20 m da lâmpada-posto da cova (84–88) rompe o selo para sempre (`WorldMapProgress.SetTimeMark`, chave `profundo.gate.N`). Portão aberto: [E] (ou "Usar") a até 3,5 m na praça leva ao caminho do posto, 24 m fora dele, e de lá (4 m) volta para a frente do portão; a pé seriam ~600 (Fumaça), ~950 (Fogo), ~1080 (Lodo), ~1250 (Vento) e ~1900 m (Treva). Enquanto a Maré de Treva sobe (40 s de cada 240 s) os guardiões trancam todos. Cada passagem: o bafo da cova tira 3% da vida máxima (4% à noite do relógio), nunca abaixo de 30%; saindo na cova, a lâmpada do portão tira 8% dos bichos a até 10 m (chefe 1%). 3 s entre passagens; a zona de chegada tem de estar aberta para o herói. Coluna na cor do elemento quando aberto, cinza baixa quando selado. Falta: abrir o portão com animação (hoje o herói só aparece do outro lado).
 - **No jogo (2026-11-09): conjunto de casa **Móveis das Mil Lâmpadas**** (móveis, `Docs/Housing/CatalogoCasa.md`): 8 peças à venda em Pavios da Tehat, 30–600 de ouro; Épica só como especial da semana. Lustre de mil pavios, Nicho de lâmpada de basalto, Lamparina de pavio eterno.
 
 ### 84 · Cova da Fumaça / *Pit of Smoke* — nv 348–362 · ☆
@@ -2531,6 +2562,7 @@ gosma = Polvo de Lodo, peixe-lanterna = Cardume Escuro, píton apagada = Serpent
 - **Mecânica:** **correntes**: pular nas correntes de ar para subir; voadores sobem sem elas.
 - **Ganchos:** loot pena de treva · casa: troféu da Águia.
 - **Noite:** igual.
+- **No jogo (2026-11-11): correntes** (`ProfundoUpdraftRules`, pontos em `OverworldLayouts.ProfundoMechanics.cs`, driver novo `ProfundoPathsMechanicsDriver`, teste `ProfundoPathsMechanicsTests`): 4 correntes a 30 m da Lâmpada 3 sobem o herói a 26 m/s até o anel de fora (Plataformas Soltas e Correntes Ascendentes), 340–410 m em 13–16 s, contra 62–75 s subindo os terraços ou 550–600 m pelas estradas; [E] ou "Usar"; 3 s entre subidas; a Maré de Treva desliga as correntes; as harpias bicam 2% da vida a cada 3 s no ar (3% à noite, nunca abaixo de 30%) e a rajada do pouso tira 6% dos bichos a até 9 m. Falta: voadores subirem sem elas, a Águia de Asas de Treva.
 
 ### 87 · Cova do Lodo / *Pit of Mire* — nv 386–402 · ☆
 - **Fonte:** o Lodo (a água turva), 4º mundo da Treva, dos que nadam.
@@ -2541,6 +2573,7 @@ gosma = Polvo de Lodo, peixe-lanterna = Cardume Escuro, píton apagada = Serpent
 - **Mecânica:** **nível da água**: comportas dos Artífices sobem e descem a água; Bolhas de Ar para os trechos fundos.
 - **Ganchos:** loot lodo condensado (Pedra da Água Viva ao purificar) · casa: troféu do Peixe.
 - **Noite:** igual.
+- **No jogo (2026-11-11): nível da água** (`ProfundoSluiceRules`, pontos em `OverworldLayouts.ProfundoMechanics.cs`, driver `ProfundoPathsMechanicsDriver`, teste `ProfundoPathsMechanicsTests`): 2 trechos fundos de 56 m atravessam a coluna inteira (Salões Alagados e Comportas, nas estradas da Lâmpada 4); com a água alta o herói anda a −50% e, depois de 4 s de Bolha de Ar, a água preta morde 2% da vida a cada 1,5 s (3% à noite, nunca abaixo de 30%): ~20 s e ~22% da vida por trecho; a alavanca da comporta (195 m a leste da estrada, ~390 m de desvio) baixa a água até o fim do dia do jogo (marca diária `profundo.sluice.<id>`) e a correnteza tira 6% dos bichos do trecho. Falta: o Peixe de Cauda Negra.
 
 ### 88 · Cova da Treva / *Pit of Darkness* — nv 400–416 · ☆
 - **Fonte:** a Treva, 5º mundo, dos que rastejam (corpo de dragão do Príncipe).
@@ -2564,6 +2597,7 @@ gosma = Polvo de Lodo, peixe-lanterna = Cardume Escuro, píton apagada = Serpent
 - **Mecânica:** **a ponte acende**: cada lance só aparece quando as faíscas do lance anterior são libertadas.
 - **Ganchos:** loot fio de novelo · casa: conjunto novo **Novelo** (globo de enfeite).
 - **Noite:** igual.
+- **No jogo (2026-11-11): a ponte acende** (`NoveloBridgeRules`, gaiolas nos pilones em `OverworldLayouts.ProfundoMechanics.cs`, driver `ProfundoPathsMechanicsDriver`, teste `ProfundoPathsMechanicsTests`): 10 lances de 145 m, o 1º aceso; 9 gaiolas de faíscas, uma no pilone de cada lance; [E] e ficar a até 6 m por 5 s (o sopro do Novelo tira 3% da vida a cada 1,5 s, 4% à noite, nunca abaixo de 30%) acende o lance seguinte para sempre (marca de tempo `profundo.novelo.flight.N`) e queima 8% dos bichos a até 10 m; a treva dos lances apagados (a coluna leste inteira, menos os 40 m do Pilar do Meio) empurra o herói de volta a 7 m/s. Ponte acesa: 1425 m da cabeceira ao Selo; a volta pela coluna do Lodo, ~1900 m. Falta: o Guardião do Novelo.
 
 ### 90 · Portão da Terra da Treva / *Gate of the Land of Darkness* — nv 424–440 · ☆
 - **Fonte:** o selo dos Artífices na porta da Terra da Treva (bíblia §2.4); o Príncipe das Trevas, com cinco formas juntas

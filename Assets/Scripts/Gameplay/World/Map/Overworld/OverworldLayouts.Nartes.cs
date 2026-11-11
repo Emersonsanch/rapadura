@@ -368,7 +368,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // Jovem [elite], the Águia-Dourada Apagada [distância] (the hawk), the Saiga Assustada [enxame].
             acampamento.Fauna.Add(Fauna("saigas_assustadas", "[enxame]", T(N(Nart.Saiga, 3), N(Nart.Eagle, 1)), T(V(Nart.Saiga, 2), S(owl, 1)), 5));
             acampamento.Fauna.Add(Fauna("aguias_douradas", "[distância]", T(N(Nart.Eagle, 3), N(Nart.Saiga, 1)), T(V(Nart.Eagle, 2), S(moon, 1)), 3));
-            vau.Fauna.Add(Fauna("cisnes_do_vau", "[distância]", T(N(Nart.Swan, 3), N(Nart.Saiga, 1)), T(V(Nart.Swan, 2), S(moon, 1)), 4));
+            vau.Fauna.Add(Fauna("cisnes_do_vau", "[distância]", T(N(MidBeasts.FeltSwan, 3), N(Nart.Saiga, 1)), T(V(MidBeasts.FeltSwan, 2), S(moon, 1)), 4));
             vau.Fauna.Add(Fauna("lobos_do_vau", "[rápido]", T(N(Nart.Wolf, 3), N(Nart.Swan, 1)), T(V(Nart.Wolf, 2), S(werewolf, 1)), 4));
             pistas.Fauna.Add(Fauna("lobos_da_estepe", "[rápido]", T(N(Nart.Wolf, 3), N(Nart.Saiga, 1)), T(V(Nart.Wolf, 3), S(werewolf, 1)), 4));
             pistas.Fauna.Add(Fauna("grifos_jovens", "[elite]", T(N(Nart.YoungGriffin, 3), N(Nart.Eagle, 1)), T(V(Nart.YoungGriffin, 2), S(owl, 1)), 3, null, 32f));
@@ -382,19 +382,19 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             saigas.Fauna.Add(Fauna("manadas_de_saigas", "[enxame]", T(N(Nart.Saiga, 3), N(Nart.Griffin, 1)), T(V(Nart.Saiga, 2), S(owl, 1)), 5));
             saigas.Fauna.Add(Fauna("abutres_do_absinto", "[distância]", T(N(Nart.Griffin, 3), N(Nart.Saiga, 1)), T(V(Nart.Griffin, 2), V(Nart.Saiga, 1)), 3));
             salgado.Fauna.Add(Fauna("escorpioes_do_sal", "[controle]", T(N(Nart.Scorpion, 3), N(Nart.Griffin, 1)), T(V(Nart.Scorpion, 2), S(owl, 1)), 4));
-            salgado.Fauna.Add(Fauna("cisnes_do_lago_salgado", "[distância]", T(N(Nart.Swan, 3), N(Nart.Scorpion, 1)), T(V(Nart.Swan, 2), S(moon, 1)), 4));
+            salgado.Fauna.Add(Fauna("cisnes_do_lago_salgado", "[distância]", T(N(MidBeasts.FeltSwan, 3), N(Nart.Scorpion, 1)), T(V(MidBeasts.FeltSwan, 2), S(moon, 1)), 4));
 
             // Kurgans de Ouro, Kurgan Aberto, Kurgans do Leste (48): the Grifo Guardião [elite] (a young griffin), the Cervo de Ouro
             // Apagado [rápido] (the jackal), the Cisne de Feltro [distância] (the thief gull), the Lobo de Bronze [tanque].
             kurgans.Fauna.Add(Fauna("grifos_guardioes", "[elite]", T(N(Nart.YoungGriffin, 3), N(Nart.BronzeWolf, 1)), T(V(Nart.YoungGriffin, 2), S(bats, 1)), 3, null, 32f));
             kurgans.Fauna.Add(Fauna("cervos_de_ouro", "[rápido]", T(N(Nart.Deer, 3), N(Nart.Swan, 1)), T(V(Nart.Deer, 2), S(moon, 1)), 4));
             aberto.Fauna.Add(Fauna("lobos_de_bronze", "[tanque]", T(N(Nart.BronzeWolf, 3), N(Nart.YoungGriffin, 1)), T(V(Nart.BronzeWolf, 2), S(bats, 1)), 3, null, 30f));
-            aberto.Fauna.Add(Fauna("cisnes_de_feltro", "[distância]", T(N(Nart.Swan, 3), N(Nart.Kite, 1)), T(V(Nart.Swan, 2), V(Nart.Kite, 1)), 4));
+            aberto.Fauna.Add(Fauna("cisnes_de_feltro", "[distância]", T(N(MidBeasts.FeltSwan, 3), N(Nart.Kite, 1)), T(V(MidBeasts.FeltSwan, 2), V(Nart.Kite, 1)), 4));
             leste.Fauna.Add(Fauna("lobos_de_bronze_do_leste", "[tanque]", T(N(Nart.BronzeWolf, 3), N(Nart.Saiga, 1)), T(V(Nart.BronzeWolf, 2), S(bats, 1)), 3, null, 30f));
             leste.Fauna.Add(Fauna("morcegos_dos_kurgans", "[enxame]", T(N(Nart.Bats, 3), N(Nart.Griffin, 1)), T(V(Nart.Bats, 2), S(bats, 2)), 5));
 
             // Rio dos Nartes: felt swans on the shingle, wolves at the fords, the river's mist.
-            rio.Fauna.Add(Fauna("cisnes_do_rio", "[distância]", T(N(Nart.Swan, 3), N(Nart.Wolf, 1)), T(V(Nart.Swan, 2), S(moon, 1)), 4));
+            rio.Fauna.Add(Fauna("cisnes_do_rio", "[distância]", T(N(MidBeasts.FeltSwan, 3), N(Nart.Wolf, 1)), T(V(MidBeasts.FeltSwan, 2), S(moon, 1)), 4));
             rio.Fauna.Add(Fauna("neblinas_do_rio", "[controle]", T(N(Nart.Storm, 3), N(Nart.Swan, 1)), T(V(Nart.Storm, 2), S(owl, 1)), 4));
 
             // Bosque de Bétulas: spiders in the birches, wolves, the potoo.

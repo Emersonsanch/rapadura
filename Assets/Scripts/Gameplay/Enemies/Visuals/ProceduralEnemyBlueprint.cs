@@ -396,6 +396,32 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>Ubır Jovem (20): floating ball of dark hair with an ember mouth; the mouth gapes, the claws stir.</summary>
         YoungUbir = 203,
 
+        // The thirteenth pass of beasts (bible §3.2.1): the roles of Regions 5–9 that still used stand-ins (MidStandInBeastRecipes).
+        /// <summary>Ave-Relâmpago (26): black-and-white savanna bird crackling with caught light; the beak opens, wings held still.</summary>
+        LightningBird = 220,
+        /// <summary>Garça-Lança Apagada (31): grey heron with a spearhead beak; the beak opens.</summary>
+        SpearHeron = 221,
+        /// <summary>Abutre-Barbudo Apagado (37): bearded vulture with a stone in its claws; the beak opens.</summary>
+        BeardedVulture = 222,
+        /// <summary>Cisne de Feltro (48): a swan of white felt with sewn-on colours; the beak opens.</summary>
+        FeltSwan = 223,
+        /// <summary>Gralha-de-Bico-Vermelho (36): glossy black chough with a red bill; the beak opens.</summary>
+        RedBilledChough = 224,
+        /// <summary>Moreia Apagada (25): a moray coiled on the reef, head raised; jaw and tail.</summary>
+        DimmedMoray = 225,
+        /// <summary>Carpa-Dragão Apagada (43): grey carp swimming in the air, a few gold scales left; jaw and tail.</summary>
+        DragonCarp = 226,
+        /// <summary>Lobo de Gelo (38): a wolf of packed snow, ice along the spine; jaw and tail.</summary>
+        IceWolf = 227,
+        /// <summary>Cavalo de Terracota (45): a clay horse lit through its cracks; jaw and tail.</summary>
+        TerracottaHorse = 228,
+        /// <summary>Caranguejo-Violinista (30): dark mangrove crab with one huge pale claw (the Jaw) that swings down on the windup.</summary>
+        FiddlerCrab = 229,
+        /// <summary>Ouriço de Fumaça (25): a smoke urchin; squashes on the windup and the ember on top flares.</summary>
+        SmokeUrchin = 230,
+        /// <summary>Sanguessuga do Lodo (32): a rearing leech; squashes on the windup and the lit sucker flares.</summary>
+        MireLeech = 231,
+
         // The map bosses of the fichas (RegionBossRules.MapSpawns, MapBossRecipes): one per map the story walks through in the 150–300 band.
         /// <summary>O Cortador de Cordas (55): a shadow bird with blade-edged wings and a frayed rope in its beak; map boss of the Pontes de Vento.</summary>
         RopeCutter = 204,

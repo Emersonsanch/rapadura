@@ -201,6 +201,22 @@ MonoBehaviour:
     _weight: 0
   - _enemy: {fileID: 11400000, guid: 84a3192e09224db0bfa2b3ca2bd1a9e6, type: 2}
     _weight: 0
+  - _enemy: {fileID: 11400000, guid: 9ace732b7fc74c6eac442f0df95a3d0b, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 0965464610864873ada451b0a8826802, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: a302302f552a48f6b08fe245aa914201, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 15c3d387178342abb9a6fe6d90106770, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 44b8fb0fa3f8481ebbb9105101569b76, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 81581911210a42a29afad0e1eefe2062, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 3672f5bbe7a848caaa6eb16551d7719b, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 962d2c1d2d3249b48b581276b7f9ec9d, type: 2}
+    _weight: 0
   _loot:
   - _item: {fileID: 11400000, guid: c9bcdd9f33ac04a458fd22b23d3347ac, type: 2}
     _weight: 10

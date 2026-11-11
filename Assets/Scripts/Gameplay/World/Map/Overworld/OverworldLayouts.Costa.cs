@@ -60,6 +60,27 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             new Vector2(300f, -700f), new Vector2(285f, -420f), new Vector2(300f, -150f), new Vector2(280f, 120f), new Vector2(300f, 380f), new Vector2(330f, 700f),
         };
 
+        /// <summary>
+        /// The thirteenth pass of beasts (bible §3.2.1, <c>MidStandInBeastRecipes</c>): the roles of Regions 5–9, the road of the middle story
+        /// (<c>MidStoryCatalog</c>), that the continuous world played with stand-ins (Docs/Mapas100.md 25, 26, 30–32, 36–38, 43, 45, 48), placed in the
+        /// groups of their sheets here and in the Delta, Teto, Mingcheng and Nartes layouts.
+        /// </summary>
+        public static class MidBeasts
+        {
+            public const string Moray = "enemy_forest_dimmed_moray";
+            public const string SmokeUrchin = "enemy_forest_smoke_urchin";
+            public const string LightningBird = "enemy_forest_lightning_bird";
+            public const string FiddlerCrab = "enemy_forest_fiddler_crab";
+            public const string SpearHeron = "enemy_forest_spear_heron";
+            public const string MireLeech = "enemy_forest_mire_leech";
+            public const string RedBilledChough = "enemy_mountain_red_billed_chough";
+            public const string BeardedVulture = "enemy_mountain_bearded_vulture";
+            public const string IceWolf = "enemy_mountain_ice_wolf";
+            public const string DragonCarp = "enemy_forest_dragon_carp";
+            public const string TerracottaHorse = "enemy_forest_terracotta_horse";
+            public const string FeltSwan = "enemy_mountain_felt_swan";
+        }
+
         private static class Coast
         {
             public const string Gull = "enemy_forest_thief_gull";
@@ -406,7 +427,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             // Recife de Taa Pwani (25): crabs on the coral, the Moreia Apagada [rápido] (the sand snake's body), lantern fish in the pools.
             recife.Fauna.Add(Fauna("caranguejos_do_recife", "[tanque]", T(N(Coast.Crab, 3), N(Coast.LanternFish, 1)), T(V(Coast.Crab, 2), V(Coast.LanternFish, 1)), 3, null, 28f));
-            recife.Fauna.Add(Fauna("moreias", "[rápido]", T(N(Coast.SandSnake, 3), N(Coast.Gull, 1)), T(V(Coast.SandSnake, 2), S(plankton, 1)), 4));
+            recife.Fauna.Add(Fauna("moreias", "[rápido]", T(N(MidBeasts.Moray, 3), N(Coast.Gull, 1)), T(V(MidBeasts.Moray, 2), S(plankton, 1)), 4));
             recife.Fauna.Add(Fauna("gaivotas_do_recife", "[rápido] [distância]", T(N(Coast.Gull, 3), N(Coast.LanternFish, 1)), T(V(Coast.Gull, 2), S(plankton, 1)), 4, null, 22f));
 
             // Dunas das Casuarinas: jackals and sand snakes, scorpions under the casuarinas.
@@ -419,7 +440,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             // Praia dos Dhows: gulls on the hulls, crabs under them, spiders in the nets.
             dhows.Fauna.Add(Fauna("gaivotas_dos_dhows", "[rápido]", T(N(Coast.Gull, 3), N(Coast.Jackal, 1)), T(V(Coast.Gull, 2), V(Coast.Jackal, 1)), 4, null, 22f));
-            dhows.Fauna.Add(Fauna("caranguejos_dos_cascos", "[tanque] [enxame]", T(N(Coast.Crab, 3), N(Coast.Spider, 1)), T(V(Coast.Crab, 2), S(NightVariantRules.RasgaMortalha, 1)), 4));
+            dhows.Fauna.Add(Fauna("caranguejos_dos_cascos", "[tanque] [controle]", T(N(Coast.Crab, 3), N(MidBeasts.SmokeUrchin, 1)), T(V(Coast.Crab, 2), S(NightVariantRules.RasgaMortalha, 1)), 4));
 
             // Cravais: peccaries rooting under the clove trees, spiders in the rows.
             cravais.Fauna.Add(Fauna("queixadas_do_cravo", "[rápido]", T(N(Coast.Boar, 3), N(Coast.Spider, 1)), T(S(NightVariantRules.Queixada, 2), V(Coast.Spider, 1)), 4));
@@ -430,7 +451,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             restinga.Fauna.Add(Fauna("queixadas_da_restinga", "[rápido] [tanque]", T(N(Coast.Boar, 2), N(Coast.Crab, 2)), T(S(NightVariantRules.Queixada, 2), V(Coast.Crab, 1)), 4));
 
             // Lagoas de Maré: the lodo in the mud [controle], crabs and lantern fish in the pools.
-            lagoas.Fauna.Add(Fauna("lodo_da_lagoa", "[controle]", T(N(Coast.Ooze, 3), N(Coast.Gull, 1)), T(V(Coast.Ooze, 2), S(plankton, 1)), 4));
+            lagoas.Fauna.Add(Fauna("lodo_da_lagoa", "[controle]", T(N(MidBeasts.SmokeUrchin, 3), N(Coast.Gull, 1)), T(V(MidBeasts.SmokeUrchin, 2), S(plankton, 1)), 4));
             lagoas.Fauna.Add(Fauna("pocas_de_mare", "[tanque] [distância]", T(N(Coast.Crab, 2), N(Coast.LanternFish, 2)), T(V(Coast.Crab, 2), V(Coast.LanternFish, 1)), 4));
 
             // Baixios do Sul: gulls over the shallows, lantern fish in the channel.
@@ -441,13 +462,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // (peccary and ushabti), the Ave-Relâmpago [distância] (the ember vulture); the smoke hyenas at night.
             auroques.Fauna.Add(Fauna("leoes_do_capim", "[rápido]", T(N(Coast.Lion, 3), N(Coast.Jackal, 1)), T(V(Coast.Lion, 2), S(mngwa, 1)), 4));
             auroques.Fauna.Add(Fauna("rinocerontes_de_po", "[tanque]", T(N(Coast.Rhino, 3), N(Coast.Jackal, 1)), T(V(Coast.Rhino, 2), S(NightVariantRules.Queixada, 1)), 3, null, 30f));
-            auroques.Fauna.Add(Fauna("aves_relampago", "[distância]", T(N(Coast.Vulture, 3), N(Coast.Hawk, 1)), T(V(Coast.Vulture, 2), S(NightVariantRules.RasgaMortalha, 1)), 3));
+            auroques.Fauna.Add(Fauna("aves_relampago", "[distância]", T(N(MidBeasts.LightningBird, 3), N(Coast.Hawk, 1)), T(V(MidBeasts.LightningBird, 2), S(NightVariantRules.RasgaMortalha, 1)), 3));
             acacias.Fauna.Add(Fauna("hienas_de_fumaca", "[enxame] [rápido]", T(N(Coast.Jackal, 3), N(Coast.Wolf, 1)), T(V(Coast.Jackal, 3), S(mngwa, 1)), 5));
-            acacias.Fauna.Add(Fauna("aves_das_acacias", "[distância]", T(N(Coast.Vulture, 2), N(Coast.Hawk, 2)), T(V(Coast.Vulture, 1), V(Coast.Hawk, 1), S(NightVariantRules.RasgaMortalha, 1)), 4));
+            acacias.Fauna.Add(Fauna("aves_das_acacias", "[distância]", T(N(MidBeasts.LightningBird, 2), N(Coast.Hawk, 2)), T(V(MidBeasts.LightningBird, 1), V(Coast.Hawk, 1), S(NightVariantRules.RasgaMortalha, 1)), 4));
 
             // Bosque dos Baobás: baboons in the baobabs, potoos on the branches.
             baobas.Fauna.Add(Fauna("babuinos_dos_baobas", "[rápido] [enxame]", T(N(Coast.Baboon, 3), N(Coast.Boar, 1)), T(V(Coast.Baboon, 2), S(NightVariantRules.Queixada, 1)), 4));
-            baobas.Fauna.Add(Fauna("urutaus", "[distância]", T(N(Coast.Potoo, 3), N(Coast.Vulture, 1)), T(S(NightVariantRules.MaeDaLua, 2), V(Coast.Potoo, 1)), 3));
+            baobas.Fauna.Add(Fauna("urutaus", "[distância]", T(N(MidBeasts.LightningBird, 3), N(Coast.Vulture, 1)), T(S(NightVariantRules.MaeDaLua, 2), V(MidBeasts.LightningBird, 1)), 3));
 
             // Falésias Vermelhas: hawks on the bluffs, the Pedra que Rola down the laterite.
             falesias.Fauna.Add(Fauna("gavioes_das_falesias", "[distância]", T(N(Coast.Hawk, 3), N(Coast.Gull, 1)), T(V(Coast.Hawk, 2), S(NightVariantRules.MaeDaLua, 1)), 3));
@@ -499,7 +520,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             // Mangue Raso: the Crocodilo do Mangue [tanque] (the sand snake's body), the fiddler crabs [enxame].
             mangueRaso.Fauna.Add(Fauna("crocodilos_do_mangue", "[tanque]", T(N(Coast.Crocodile, 3), N(Coast.Crab, 1)), T(V(Coast.Crocodile, 2), S(plankton, 1)), 3, null, 28f));
-            mangueRaso.Fauna.Add(Fauna("caranguejos_violinistas", "[enxame]", T(N(Coast.Crab, 3), N(Coast.Spider, 1)), T(V(Coast.Crab, 3), S(plankton, 1)), 5));
+            mangueRaso.Fauna.Add(Fauna("caranguejos_violinistas", "[enxame]", T(N(MidBeasts.FiddlerCrab, 3), N(Coast.Crab, 1)), T(V(MidBeasts.FiddlerCrab, 2), V(Coast.Crab, 1), S(plankton, 1)), 5));
 
             // Canais e Mangues de Liyongo (30): the Kongamato [distância] (the crow, the vampire bat at night: it doubles), the
             // Garça Apagada [rápido] (the gull's body), the crocodiles, the fiddler crabs; fireflies in the mangroves at night.
@@ -507,7 +528,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             canais.Fauna.Add(Fauna("garcas_apagadas", "[rápido]", T(N(Coast.Gull, 3), N(Coast.Crow, 1)), T(V(Coast.Gull, 2), S(plankton, 1)), 4, null, 22f));
             canais.Fauna.Add(Fauna("crocodilos_dos_canais", "[tanque]", T(N(Coast.Crocodile, 3), N(Coast.Ooze, 1)), T(V(Coast.Crocodile, 2), V(Coast.Ooze, 1)), 3, null, 30f));
             mangues.Fauna.Add(Fauna("kongamatos_de_liyongo", "[distância]", T(N(Coast.Crow, 3), N(Coast.Bats, 1)), T(V(Coast.Crow, 2), S(kongamato, 2)), 4));
-            mangues.Fauna.Add(Fauna("violinistas_de_liyongo", "[enxame] [tanque]", T(N(Coast.Crab, 3), N(Coast.Ooze, 1)), T(V(Coast.Crab, 2), S(plankton, 1)), 5));
+            mangues.Fauna.Add(Fauna("violinistas_de_liyongo", "[enxame] [tanque]", T(N(MidBeasts.FiddlerCrab, 3), N(Coast.Ooze, 1)), T(V(MidBeasts.FiddlerCrab, 2), S(plankton, 1)), 5));
             mangues.Fauna.Add(Fauna("crocodilos_de_liyongo", "[tanque] [elite]", T(N(Coast.Crocodile, 3), N(Coast.Spider, 1)), T(V(Coast.Crocodile, 2), V(Coast.Spider, 1)), 3, null, 32f));
         }
     }

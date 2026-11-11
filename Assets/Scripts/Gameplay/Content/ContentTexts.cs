@@ -428,6 +428,19 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_mountain_smudge", "Smudge", "Borrão"),
             EnemyName("enemy_mountain_stone_jackdaw", "Stone Jackdaw", "Gralha de Pedra"),
             EnemyName("enemy_cave_young_ubir", "Young Ubır", "Ubır Jovem"),
+            // The roles of Regions 5–9 (Docs/Mapas100.md 25, 26, 30–32, 36–38, 43, 45, 48), formerly played by stand-ins.
+            EnemyName("enemy_forest_dimmed_moray", "Dimmed Moray", "Moreia Apagada"),
+            EnemyName("enemy_forest_smoke_urchin", "Smoke Urchin", "Ouriço de Fumaça"),
+            EnemyName("enemy_forest_lightning_bird", "Lightning Bird", "Ave-Relâmpago"),
+            EnemyName("enemy_forest_fiddler_crab", "Fiddler Crab", "Caranguejo-Violinista"),
+            EnemyName("enemy_forest_spear_heron", "Dimmed Spear Heron", "Garça-Lança Apagada"),
+            EnemyName("enemy_forest_mire_leech", "Mire Leech", "Sanguessuga do Lodo"),
+            EnemyName("enemy_mountain_red_billed_chough", "Red-billed Chough", "Gralha-de-Bico-Vermelho"),
+            EnemyName("enemy_mountain_bearded_vulture", "Dimmed Bearded Vulture", "Abutre-Barbudo Apagado"),
+            EnemyName("enemy_mountain_ice_wolf", "Ice Wolf", "Lobo de Gelo"),
+            EnemyName("enemy_forest_dragon_carp", "Dimmed Dragon Carp", "Carpa-Dragão Apagada"),
+            EnemyName("enemy_forest_terracotta_horse", "Terracotta Horse", "Cavalo de Terracota"),
+            EnemyName("enemy_mountain_felt_swan", "Felt Swan", "Cisne de Feltro"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),
