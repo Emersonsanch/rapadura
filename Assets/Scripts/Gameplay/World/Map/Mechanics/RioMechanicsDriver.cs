@@ -4,6 +4,7 @@ using Rapadura.Core.DI;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Enemies;
+using Rapadura.Gameplay.Environment;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Mounts;
 using Rapadura.Gameplay.Player;
@@ -17,10 +18,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 {
     /// <summary>
     /// Scene side of the Rio das Doze Horas mechanics (the rules are <see cref="RioHourRules"/>, <see cref="RioFireRules"/> and
-    /// <see cref="RioMehenRules"/>): added to the overworld root, idle unless the layout holds the region and the hero stands in it.
+    /// <see cref="RioMehenRules"/>, and for the stranded barque of 76 <see cref="RioBarqueDefenseRules"/>): added to the overworld root, idle unless the layout holds the region and the hero stands in it.
     /// The barque boards at the pier of the hour and sets the hero down at a post, and every post has a berth back; the ring of Mehen
     /// turns over the scale wall and its gates carry the hero across while an opening is held; the Lake of Fire mends the hero at
-    /// peace and bites the beasts on its shore. A ride takes the controls for at most 6 s, and hands them back on arrival, on death
+    /// peace and bites the beasts on its shore; on Apep's sandbank the hero guards the stranded barque while the rowers free it (the controls
+    /// stay with the hero), and the freed barque sails the dry river for the rest of the in-game day (the day is saved with
+    /// <c>WorldMapProgress.SetDailyMark</c>). A ride takes the controls for at most 12 s, and hands them back on arrival, on death
     /// or if anything else moves the hero.
     /// </summary>
     public sealed class RioMechanicsDriver : MonoBehaviour, IRegionMechanics
@@ -39,12 +42,17 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private const float RingOpeningDegrees = 22f;
         private const float BeaconClosedHeight = 5f;
         private const float BeaconOpenHeight = 22f;
+        private const float DefenseViewRange = 120f;
+        private const float DefenseStatusSeconds = 6f;
+        private const int PullRingSegments = 24;
+        private const string FreedMarkKey = "rio.barque.freed";
 
         private readonly List<LineRenderer> _pierBeacons = new List<LineRenderer>();
         private readonly List<LineRenderer> _berthBeacons = new List<LineRenderer>();
         private readonly List<(SkyRoute Route, bool ToB)> _stations = new List<(SkyRoute, bool)>();
         private readonly LineRenderer[] _ringHalves = new LineRenderer[2];
         private readonly HeroRequirementCache _heroState = new HeroRequirementCache();
+        private readonly RioBarqueDefense _defense = new RioBarqueDefense();
 
         private OverworldView _view;
         private OverworldLayout _layout;
@@ -68,6 +76,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private float _rideSeconds;
         private float _rideFromY;
         private float _rideToY;
+        private bool _rideHugsGround;
         private Vector3 _lastRidePosition;
 
         private int _shownHour = -1;
@@ -86,6 +95,15 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private bool _saidBurn;
 
         private float _ringY;
+
+        private LineRenderer _hullLine;
+        private LineRenderer _hullBar;
+        private LineRenderer _pullRing;
+        private bool _hintHull;
+        private SkyRoute _hintSail;
+        private float _nextDefenseStatus;
+        private float _lastDefenseFail = float.NegativeInfinity;
+        private int _freedDay;
 
         private Rect[] _areas;
 
@@ -152,6 +170,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             TickRiver(local, unix);
             TickRings(local, now);
             TickFire(local);
+            TickDefense(local);
         }
 
         private bool FindPlayer()
@@ -376,9 +395,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         // ------------------------------------------------------------------
 
         /// <summary><paramref name="land"/> is where the hero is set down at the end; for the barque it is far from where the ride bobs.</summary>
-        private void BeginRide(Vector2 from, Vector2 to, Vector2 land, float arc, float seconds)
+        private void BeginRide(Vector2 from, Vector2 to, Vector2 land, float arc, float seconds, bool hugGround = false)
         {
             _riding = true;
+            _rideHugsGround = hugGround;
             _rideFrom = from;
             _rideTo = to;
             _rideLand = land;
@@ -409,6 +429,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _rideT = Mathf.Min(1f, _rideT + Time.deltaTime / _rideSeconds);
             Vector2 ground = _origin + Vector2.Lerp(_rideFrom, _rideTo, _rideT);
             float y = SkyRouteRules.HeightAt(_rideFromY, _rideToY, _rideArc, _rideT);
+            if (_rideHugsGround)
+            {
+                // The freed barque rides over Apep's coils instead of through them.
+                y = Mathf.Max(y, Mathf.Max(0f, OverworldRules.SurfaceAt(_layout, ground)) + RioBarqueDefenseRules.SailArc);
+            }
+
             _player.position = new Vector3(ground.x, y, ground.y);
             _lastRidePosition = _player.position;
             if (_rideT >= 1f)
@@ -538,6 +564,339 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             {
                 _saidBurn = true;
                 Say(RioMechanicsTexts.FireBurns);
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // Defending the stranded barque (76)
+        // ------------------------------------------------------------------
+
+        private int Today() => ServiceLocator.TryGet(out TimeOfDayManager clock) ? clock.Day : 1;
+
+        private bool BarqueFreedToday()
+        {
+            int marked = ServiceLocator.TryGet(out WorldMapProgress progress) ? progress.GetDailyMark(FreedMarkKey) : _freedDay;
+            return RioBarqueDefenseRules.FreedToday(marked, Today());
+        }
+
+        private void TickDefense(Vector2 local)
+        {
+            Vector2 hull = OverworldLayouts.StrandedBarque;
+            float distance = Vector2.Distance(local, hull);
+            bool freed = BarqueFreedToday();
+            ShowHull(distance < DefenseViewRange, freed);
+            if (_defense.Running)
+            {
+                RunDefense(distance);
+                return;
+            }
+
+            if (freed)
+            {
+                TickSails(local);
+                return;
+            }
+
+            if (distance > RioBarqueDefenseRules.HullReach)
+            {
+                _hintHull = false;
+                return;
+            }
+
+            if (_stats != null && !_stats.IsAlive)
+            {
+                return;
+            }
+
+            RioDefenseStart check = RioBarqueDefenseRules.CheckStart(false, Time.time - _lastDefenseFail, ZoneOpen(hull));
+            if (!_hintHull || Time.unscaledTime >= _nextHint)
+            {
+                _hintHull = true;
+                _nextHint = Time.unscaledTime + HintCooldown;
+                SayDefenseStart(check);
+            }
+
+            InteractPromptRegistry.Ping(Time.unscaledTime);
+            if (!_controller.Input.InteractPressedThisFrame)
+            {
+                return;
+            }
+
+            if (check == RioDefenseStart.Ok)
+            {
+                _defense.Begin();
+                _nextDefenseStatus = Time.unscaledTime + DefenseStatusSeconds;
+                Say(RioMechanicsTexts.DefenseBegins);
+            }
+            else if (Time.unscaledTime >= _nextDenied)
+            {
+                _nextDenied = Time.unscaledTime + DeniedCooldown;
+                SayDefenseStart(check);
+            }
+        }
+
+        private void SayDefenseStart(RioDefenseStart check)
+        {
+            switch (check)
+            {
+                case RioDefenseStart.Ok:
+                    Say(RioMechanicsTexts.DefensePrompt);
+                    break;
+                case RioDefenseStart.ZoneBlocked:
+                    Say(RioMechanicsTexts.BankBlocked);
+                    break;
+                default:
+                    ServiceLocator.TryGet(out LocalizationManager localization);
+                    float wait = RioBarqueDefenseRules.RetrySeconds - (Time.time - _lastDefenseFail);
+                    SayText(RioMechanicsTexts.Format(localization, RioMechanicsTexts.DefenseResting, Mathf.Max(1, Mathf.CeilToInt(wait))));
+                    break;
+            }
+        }
+
+        private void RunDefense(float distance)
+        {
+            if (_stats != null && !_stats.IsAlive)
+            {
+                _defense.Cancel();
+                _lastDefenseFail = Time.time;
+                return;
+            }
+
+            CountGnawers(out int beasts, out int bosses);
+            RioDefenseEvent happened = _defense.Tick(Time.deltaTime, distance, RioBarqueDefenseRules.GnawRate(beasts, bosses));
+            if ((happened & RioDefenseEvent.PullWarning) != 0)
+            {
+                Say(RioMechanicsTexts.PullWarning);
+            }
+
+            if ((happened & RioDefenseEvent.Pull) != 0)
+            {
+                PullLands();
+            }
+
+            if ((happened & RioDefenseEvent.Oars) != 0)
+            {
+                StrikeBeasts(RioBarqueDefenseRules.OarRadius, false);
+            }
+
+            if ((happened & RioDefenseEvent.Freed) != 0)
+            {
+                FreeBarque();
+                return;
+            }
+
+            if ((happened & (RioDefenseEvent.Sunk | RioDefenseEvent.Abandoned)) != 0)
+            {
+                _lastDefenseFail = Time.time;
+                Say((happened & RioDefenseEvent.Sunk) != 0 ? RioMechanicsTexts.DefenseSunk : RioMechanicsTexts.DefenseAbandoned);
+                return;
+            }
+
+            if (Time.unscaledTime < _nextDefenseStatus)
+            {
+                return;
+            }
+
+            _nextDefenseStatus = Time.unscaledTime + DefenseStatusSeconds;
+            ServiceLocator.TryGet(out LocalizationManager localization);
+            string key = (happened & RioDefenseEvent.HeroAway) != 0 ? RioMechanicsTexts.DefenseComeBack : RioMechanicsTexts.DefenseStatus;
+            SayText(RioMechanicsTexts.Format(localization, key, Mathf.RoundToInt(_defense.Progress * 100f), Mathf.CeilToInt(_defense.HullFraction * 100f)));
+        }
+
+        /// <summary>Apep drinks the river under the hull: the hull pays, or the hero standing on the bow does (a hazard, never past the floor).</summary>
+        private void PullLands()
+        {
+            if (!_defense.LastPullOnHero || _stats == null)
+            {
+                Say(RioMechanicsTexts.PullHull);
+                return;
+            }
+
+            float bite = RioBarqueDefenseRules.PullOnHero(_stats.CurrentHealth, _stats.MaxHealth);
+            if (bite > 0f)
+            {
+                _stats.ApplyHazardDamage(bite);
+            }
+
+            Say(RioMechanicsTexts.PullHero);
+        }
+
+        private void CountGnawers(out int beasts, out int bosses)
+        {
+            beasts = 0;
+            bosses = 0;
+            float radiusSq = RioBarqueDefenseRules.GnawRadius * RioBarqueDefenseRules.GnawRadius;
+            Vector2 hull = _origin + OverworldLayouts.StrandedBarque;
+            foreach (EnemyController enemy in EnemyController.EnabledEnemies)
+            {
+                if (enemy == null || enemy.Health == null || !enemy.Health.IsAlive)
+                {
+                    continue;
+                }
+
+                Vector3 p = enemy.transform.position;
+                if ((new Vector2(p.x, p.z) - hull).sqrMagnitude > radiusSq)
+                {
+                    continue;
+                }
+
+                if (enemy.IsBoss)
+                {
+                    bosses++;
+                }
+                else
+                {
+                    beasts++;
+                }
+            }
+        }
+
+        /// <summary>The rowers' oars (<paramref name="burst"/> false) or the light of the freed barque (true) on the beasts by the hull.</summary>
+        private void StrikeBeasts(float radius, bool burst)
+        {
+            float radiusSq = radius * radius;
+            Vector2 hull = _origin + OverworldLayouts.StrandedBarque;
+            foreach (EnemyController enemy in EnemyController.EnabledEnemies)
+            {
+                if (enemy == null || enemy.Health == null || !enemy.Health.IsAlive)
+                {
+                    continue;
+                }
+
+                Vector3 p = enemy.transform.position;
+                if ((new Vector2(p.x, p.z) - hull).sqrMagnitude > radiusSq)
+                {
+                    continue;
+                }
+
+                float amount = burst
+                    ? RioBarqueDefenseRules.BurstAmount(enemy.Health.MaxHealth, enemy.IsBoss)
+                    : RioBarqueDefenseRules.OarAmount(enemy.Health.MaxHealth, enemy.IsBoss);
+                if (amount > 0f)
+                {
+                    enemy.Health.ApplyDamage(amount, burst ? ElementType.Holy : ElementType.Physical, burst ? _player.gameObject : null);
+                }
+            }
+        }
+
+        private void FreeBarque()
+        {
+            int today = Today();
+            _freedDay = today;
+            if (ServiceLocator.TryGet(out WorldMapProgress progress))
+            {
+                progress.SetDailyMark(FreedMarkKey, today);
+            }
+
+            if (_stats != null && _stats.IsAlive)
+            {
+                _stats.Heal(_stats.MaxHealth * RioBarqueDefenseRules.FreedHealFraction);
+            }
+
+            StrikeBeasts(RioBarqueDefenseRules.BurstRadius, true);
+            Say(RioMechanicsTexts.DefenseFreed);
+        }
+
+        /// <summary>The freed barque's sails along the dry river (the rest of the in-game day): beside the hull, and back from each far end.</summary>
+        private void TickSails(Vector2 local)
+        {
+            SkyRouteRules.StationsAt(OverworldLayouts.FreedBarqueSails, local, _stations);
+            if (_stations.Count == 0)
+            {
+                _hintSail = null;
+                return;
+            }
+
+            (SkyRoute route, bool toB) = _stations[0];
+            bool zones = SkyRouteRules.AllZonesOpen(_layout, _origin, route, HeroLevel(), HeroRequirements().hero, HeroRequirements().has);
+            if (_hintSail != route || Time.unscaledTime >= _nextHint)
+            {
+                _hintSail = route;
+                _nextHint = Time.unscaledTime + HintCooldown;
+                Say(zones ? (toB ? RioMechanicsTexts.SailOut : RioMechanicsTexts.SailBack) : RioMechanicsTexts.BankBlocked);
+            }
+
+            InteractPromptRegistry.Ping(Time.unscaledTime);
+            if (!_controller.Input.InteractPressedThisFrame)
+            {
+                return;
+            }
+
+            if (!zones)
+            {
+                if (Time.unscaledTime >= _nextDenied)
+                {
+                    _nextDenied = Time.unscaledTime + DeniedCooldown;
+                    Say(RioMechanicsTexts.BankBlocked);
+                }
+
+                return;
+            }
+
+            MountController.Active?.Dismount(startRecall: false, leave: false);
+            Vector2 from = SkyRouteRules.PositionAt(route, toB, 0f);
+            Vector2 to = SkyRouteRules.PositionAt(route, toB, 1f);
+            Say(RioMechanicsTexts.Sailing);
+            BeginRide(from, to, to, RioBarqueDefenseRules.SailArc, RioBarqueDefenseRules.SailSeconds(Vector2.Distance(from, to)), true);
+        }
+
+        private void ShowHull(bool near, bool freed)
+        {
+            if (!near)
+            {
+                HideHull();
+                return;
+            }
+
+            if (_hullLine == null)
+            {
+                _hullLine = NewLine("Rio_StrandedBarque", 2.6f);
+                _hullBar = NewLine("Rio_BarqueHullBar", 0.5f);
+                _pullRing = NewLine("Rio_ApepPullRing", 0.25f);
+                _pullRing.positionCount = PullRingSegments + 1;
+            }
+
+            Vector3 foot = Ground(OverworldLayouts.StrandedBarque);
+            float lift = freed ? 0.9f + Mathf.Sin(Time.time * 0.8f) * 0.1f : 0.4f;
+            Vector3 stem = foot + new Vector3(-7f, lift, 0f);
+            _hullLine.enabled = true;
+            _hullLine.startColor = _hullLine.endColor = freed ? new Color(1f, 0.85f, 0.4f, 1f) : new Color(0.83f, 0.69f, 0.22f, 1f);
+            _hullLine.SetPosition(0, stem);
+            _hullLine.SetPosition(1, stem + Vector3.right * 14f);
+
+            bool running = _defense.Running;
+            _hullBar.enabled = running;
+            if (running)
+            {
+                // The bar over the hull: its length is the hull left, its colour runs from gold to red.
+                float hull = _defense.HullFraction;
+                Vector3 left = foot + new Vector3(-6f, 4.5f, 0f);
+                _hullBar.startColor = _hullBar.endColor = Color.Lerp(new Color(1f, 0.25f, 0.2f, 1f), new Color(1f, 0.82f, 0.3f, 1f), hull);
+                _hullBar.SetPosition(0, left);
+                _hullBar.SetPosition(1, left + Vector3.right * Mathf.Max(0.1f, 12f * hull));
+            }
+
+            bool pulling = running && _defense.PullImminent;
+            _pullRing.enabled = pulling;
+            if (pulling)
+            {
+                _pullRing.startColor = _pullRing.endColor = new Color(0.55f, 0.3f, 0.7f, 1f);
+                for (int i = 0; i <= PullRingSegments; i++)
+                {
+                    float angle = i * 2f * Mathf.PI / PullRingSegments;
+                    _pullRing.SetPosition(i, foot + new Vector3(Mathf.Cos(angle) * RioBarqueDefenseRules.BowReach, 0.2f, Mathf.Sin(angle) * RioBarqueDefenseRules.BowReach));
+                }
+            }
+        }
+
+        private void HideHull()
+        {
+            foreach (LineRenderer line in new[] { _hullLine, _hullBar, _pullRing })
+            {
+                if (line != null)
+                {
+                    line.enabled = false;
+                }
             }
         }
 
@@ -709,6 +1068,16 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             ShowFireGlow(false);
+            HideHull();
+            if (_defense.Running)
+            {
+                // Leaving the bank drops the oars, as walking away would.
+                _defense.Cancel();
+                _lastDefenseFail = Time.time;
+            }
+
+            _hintHull = false;
+            _hintSail = null;
             _shownHour = -1;
             _shownHourSpoken = false;
             _lastHealth = -1f;

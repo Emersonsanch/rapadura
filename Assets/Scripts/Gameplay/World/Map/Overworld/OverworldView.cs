@@ -138,6 +138,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             root.AddComponent<Mechanics.RioMechanicsDriver>();
             root.AddComponent<Mechanics.MingchengMechanicsDriver>();
             root.AddComponent<Mechanics.ProfundoMechanicsDriver>();
+            root.AddComponent<Mechanics.ProfundoGateMechanicsDriver>();
             root.AddComponent<Mechanics.CeuMechanicsDriver>();
             root.AddComponent<Mechanics.NartesMechanicsDriver>();
             root.AddComponent<Mechanics.HinokuraMechanicsDriver>();

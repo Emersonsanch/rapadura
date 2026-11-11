@@ -20,6 +20,21 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const string GateOpen = "ui.rio.gate_open";
         public const string GateShut = "ui.rio.gate_shut";
         public const string GateBlocked = "ui.rio.gate_blocked";
+        public const string DefensePrompt = "ui.rio.defense_prompt";
+        public const string DefenseBegins = "ui.rio.defense_begins";
+        public const string DefenseResting = "ui.rio.defense_resting";
+        public const string DefenseStatus = "ui.rio.defense_status";
+        public const string DefenseComeBack = "ui.rio.defense_come_back";
+        public const string DefenseSunk = "ui.rio.defense_sunk";
+        public const string DefenseAbandoned = "ui.rio.defense_abandoned";
+        public const string DefenseFreed = "ui.rio.defense_freed";
+        public const string PullWarning = "ui.rio.pull_warning";
+        public const string PullHull = "ui.rio.pull_hull";
+        public const string PullHero = "ui.rio.pull_hero";
+        public const string SailOut = "ui.rio.sail_out";
+        public const string SailBack = "ui.rio.sail_back";
+        public const string Sailing = "ui.rio.sailing";
+        public const string BankBlocked = "ui.rio.bank_blocked";
 
         /// <summary>The barque's destinations, indexed by <see cref="RioHourRules.DestinationOf"/>.</summary>
         public static readonly string[] Destinations =
@@ -44,6 +59,24 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             new LocalizationEntry(GateOpen, "[E] Cross through the ring's opening", "[E] Passar pela abertura do anel"),
             new LocalizationEntry(GateShut, "The opening lines up here in {0} s", "A abertura alinha aqui em {0} s"),
             new LocalizationEntry(GateBlocked, "The other side of the ring is closed to you", "O outro lado do anel ainda está fechado para você"),
+            new LocalizationEntry(DefensePrompt, "[E] Call the rowers: guard the stranded barque while they free it",
+                "[E] Chamar os remadores: proteja a barca encalhada enquanto eles a soltam"),
+            new LocalizationEntry(DefenseBegins, "The rowers push! Keep the beasts off the hull, and stand on the bow when Apep drinks",
+                "Os remadores empurram! Tire os bichos de perto do casco e fique na proa quando Apep beber"),
+            new LocalizationEntry(DefenseResting, "The rowers are catching their breath: {0} s", "Os remadores estão tomando fôlego: {0} s"),
+            new LocalizationEntry(DefenseStatus, "Barque: {0}% free · hull {1}%", "Barca: {0}% solta · casco {1}%"),
+            new LocalizationEntry(DefenseComeBack, "Come back to the barque! {0}% free · hull {1}%", "Volte para a barca! {0}% solta · casco {1}%"),
+            new LocalizationEntry(DefenseSunk, "The hull gave way: the barque sinks back into the sand", "O casco cedeu: a barca afundou de novo na areia"),
+            new LocalizationEntry(DefenseAbandoned, "Alone, the rowers dropped their oars", "Sozinhos, os remadores largaram os remos"),
+            new LocalizationEntry(DefenseFreed, "Apep spits the river back: the barque floats! It sails the bank until the day ends",
+                "Apep cuspiu o rio: a barca flutua! Ela navega pelo banco até o fim do dia"),
+            new LocalizationEntry(PullWarning, "Apep is about to drink the river: to the bow!", "Apep vai beber o rio: para a proa!"),
+            new LocalizationEntry(PullHull, "Apep drank the river under the hull!", "Apep bebeu o rio debaixo do casco!"),
+            new LocalizationEntry(PullHero, "You hold the bow against Apep's pull!", "Você segura a proa contra o puxão de Apep!"),
+            new LocalizationEntry(SailOut, "[E] Sail the freed barque down the bank", "[E] Navegar na barca solta pelo banco"),
+            new LocalizationEntry(SailBack, "[E] Sail back to the barque's hull", "[E] Voltar navegando até a barca"),
+            new LocalizationEntry(Sailing, "The barque glides on the river Apep gave back...", "A barca desliza no rio que Apep devolveu..."),
+            new LocalizationEntry(BankBlocked, "That part of the bank is still closed to you", "Essa parte do banco ainda está fechada para você"),
             new LocalizationEntry(Destinations[0], "the Reed House", "a Casa de Junco"),
             new LocalizationEntry(Destinations[1], "the Sand Sled", "o Trenó de Areia"),
             new LocalizationEntry(Destinations[2], "the Quiet Ring", "o Anel Quieto"),
