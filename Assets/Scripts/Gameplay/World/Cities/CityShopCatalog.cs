@@ -441,6 +441,9 @@ namespace Rapadura.Gameplay.World.Cities
                 // Map gates (MapRequirementRules): the wool cloak of the Passo do Hahya (14), ginger tea for the Mazans (18).
                 new CityShopEntry("item_manta_la", 42, 2),
                 new CityShopEntry("item_cha_gengibre", 66, 3, unlock: ShopUnlock.Cleared(BiomeType.Mountain)),
+                // The oil lamp of the Grutas (17, 19, 20): every gallery down from the Passo do Hahya already asks for it, so the
+                // forge on the way down sells it too (a little dearer than the Vila das Lamparinas), or the Grutas could not be entered.
+                new CityShopEntry("item_lamparina_oleo", 30, 2),
             }), houseSlots: 2),
 
             // ---- Vila das Lamparinas (Cavernas): lamparinas e botica ----
