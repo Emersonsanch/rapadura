@@ -48,6 +48,21 @@ namespace Rapadura.UI.Bestiary
 
         public static string AppetiteKey(GluttonAppetite appetite) => $"region_boss.four_gluttons.appetite.{appetite.ToString().ToLowerInvariant()}";
 
+        // Taotie's offerings and Qiongqi's swapped steps (RegionBossAbilities); {0} is a number.
+        public const string TaotieSpillKey = "region_boss.four_gluttons.taotie.spill";
+        public const string TaotieEatWarningKey = "region_boss.four_gluttons.taotie.eat_warning";
+        public const string TaotieEatenKey = "region_boss.four_gluttons.taotie.eaten";
+        public const string TaotieMissedKey = "region_boss.four_gluttons.taotie.missed";
+        public const string TaotieReturnedKey = "region_boss.four_gluttons.taotie.returned";
+        public const string QiongqiMirrorKey = "region_boss.four_gluttons.qiongqi.mirror";
+        public const string QiongqiMirrorEndKey = "region_boss.four_gluttons.qiongqi.mirror_end";
+
+        /// <summary>The fight lines of Taotie's offerings and Qiongqi's swap.</summary>
+        public static readonly string[] FourGluttonsFightKeys =
+        {
+            TaotieSpillKey, TaotieEatWarningKey, TaotieEatenKey, TaotieMissedKey, TaotieReturnedKey, QiongqiMirrorKey, QiongqiMirrorEndKey,
+        };
+
         public static void AddPages(List<LocalizationEntry> entries)
         {
             // -- Ninho da Huma (58) --
@@ -198,21 +213,28 @@ namespace Rapadura.UI.Bestiary
 
             // -- Cidadela dos Quatro Gulosos (46) --
             Page(entries, RegionBossRules.FourGluttonsId,
-                "The old legends of the plain speak of four perils, and here they are, sharing one bronze body like four people sharing one blanket: Taotie the glutton, Hundun the chaos with no face, Qiongqi who turns right into wrong, and Taowu who never listens. Each is one appetite of Āz left on its own. One of them is in charge each week, and at night the palaces swap and the next one takes over. Taotie eats the ground you stand on, so move. Hundun puts out the light except where it marked, so stay. Qiongqi is safe up close. Taowu strikes all round itself, so keep away. Beaten, they go back to being figures on the old vessels. Good. That's where they belong.",
-                "As lendas antigas da planície falam de quatro perigos, e aqui estão eles, dividindo um corpo de bronze como quatro pessoas dividindo um cobertor: Taotie, o guloso, Hundun, o caos sem rosto, Qiongqi, que troca o certo pelo errado, e Taowu, que nunca escuta. Cada um é um apetite de Āz que ficou sozinho. Um deles manda em cada semana, e de noite os palácios trocam e o seguinte assume. Taotie come o chão onde vocês pisam, então saiam. Hundun apaga a luz menos onde marcou, então fiquem. Com Qiongqi, perto é seguro. Taowu bate em volta de si, então fiquem longe. Vencidos, voltam a ser figuras nos vasos antigos. Ótimo. Lugar deles é lá.",
+                "The old legends of the plain speak of four perils, and here they are, sharing one bronze body like four people sharing one blanket: Taotie the glutton, Hundun the chaos with no face, Qiongqi who turns right into wrong, and Taowu who never listens. Each is one appetite of Āz left on its own. One of them is in charge each week, and at night the palaces swap and the next one takes over. Taotie eats the ground you stand on, so move, and it eats the offerings the vessel spills too: grab them while you can, or let it swallow them and it gives them back double when it falls, if it falls. Hundun puts out the light except where it marked, so stay. Qiongqi is safe up close, and it swaps your steps round for a moment: left goes right, so walk the other way and don't panic, it passes. Taowu strikes all round itself, so keep away. Beaten, they go back to being figures on the old vessels. Good. That's where they belong.",
+                "As lendas antigas da planície falam de quatro perigos, e aqui estão eles, dividindo um corpo de bronze como quatro pessoas dividindo um cobertor: Taotie, o guloso, Hundun, o caos sem rosto, Qiongqi, que troca o certo pelo errado, e Taowu, que nunca escuta. Cada um é um apetite de Āz que ficou sozinho. Um deles manda em cada semana, e de noite os palácios trocam e o seguinte assume. Taotie come o chão onde vocês pisam, então saiam, e come também as oferendas que o vaso derrama: peguem enquanto dá, ou deixem ele engolir, que ele devolve em dobro quando cair, se cair. Hundun apaga a luz menos onde marcou, então fiquem. Com Qiongqi, perto é seguro, e ele troca os passos de vocês por um instante: esquerda vira direita, então andem pro outro lado e sem pânico, que passa. Taowu bate em volta de si, então fiquem longe. Vencidos, voltam a ser figuras nos vasos antigos. Ótimo. Lugar deles é lá.",
                 ("Listen to which one shouts. Then do what it hates.", "Escuta qual deles grita. Depois faz o que ele odeia."),
                 ("Four of them in one body and every one of them alone.", "Quatro num corpo só e cada um sozinho."),
-                ("Four faces and not one of them has ever said thank you.", "Quatro caras e nenhuma delas nunca disse obrigado."),
-                ("A rule that changes every week is still a rule. You just have to read the calendar.", "Regra que muda toda semana ainda é regra. Só tem que olhar o calendário."),
-                ("The one with no face is the scariest! No wait, the one that doesn't listen! No, all of them!", "O sem cara é o mais assustador! Não, espera, o que não escuta! Não, todos!"));
+                ("Let it eat the coins! It gives them back double! ...Unless we lose. Let's not lose.", "Deixa ele comer as moedas! Devolve em dobro! ...A não ser que a gente perca. Vamos não perder."),
+                ("Qiongqi swaps left and right for three seconds. Three seconds is a rule too. Count, then walk.", "Qiongqi troca esquerda e direita por três segundos. Três segundos também é regra. Conta e anda."),
+                ("My feet went the wrong way! Do it again! No, don't!", "Meu pé foi pro lado errado! Faz de novo! Não, não faz!"));
             Line(entries, RegionBossRules.FourGluttonsId, RegionBossPhase.Storm, "The vessel rings!", "O vaso toca!");
             Line(entries, RegionBossRules.FourGluttonsId, RegionBossPhase.LastStand, "All four are hungry!", "Os quatro estão com fome!");
             Blow(entries, RegionBossRules.FourGluttonsId, "The bronze comes down!", "Lá vem o bronze!");
             Signature(entries, RegionBossRules.FourGluttonsId, "An appetite wakes!", "Um apetite acordou!");
             Appetite(entries, GluttonAppetite.Taotie, "Taotie eats the ground! Off the mark!", "Taotie come o chão! Sai da marca!");
             Appetite(entries, GluttonAppetite.Hundun, "Hundun puts out the light! Stay on the mark!", "Hundun apaga a luz! Fica na marca!");
-            Appetite(entries, GluttonAppetite.Qiongqi, "Qiongqi turns it all round! Come close!", "Qiongqi vira tudo do avesso! Chega perto!");
+            Appetite(entries, GluttonAppetite.Qiongqi, "Qiongqi will swap your steps! Come close!", "Qiongqi vai trocar seus passos! Chega perto!");
             Appetite(entries, GluttonAppetite.Taowu, "Taowu won't listen! Keep away!", "Taowu não escuta! Fica longe!");
+            entries.Add(new LocalizationEntry(TaotieSpillKey, "The vessel spills an offering!", "O vaso derramou uma oferenda!"));
+            entries.Add(new LocalizationEntry(TaotieEatWarningKey, "Taotie wants the offering! Grab it or let it go!", "Taotie quer a oferenda! Pega ou deixa!"));
+            entries.Add(new LocalizationEntry(TaotieEatenKey, "Taotie swallowed it! Back double if it falls ({0})", "Taotie engoliu! Volta em dobro se ele cair ({0})"));
+            entries.Add(new LocalizationEntry(TaotieMissedKey, "Taotie bit the air!", "Taotie mordeu o vento!"));
+            entries.Add(new LocalizationEntry(TaotieReturnedKey, "Taotie gives it all back double: +{0}", "Taotie devolve tudo em dobro: +{0}"));
+            entries.Add(new LocalizationEntry(QiongqiMirrorKey, "Steps swapped! Walk the other way ({0} s)", "Passos trocados! Anda pro outro lado ({0} s)"));
+            entries.Add(new LocalizationEntry(QiongqiMirrorEndKey, "Your steps are yours again", "Os passos voltaram ao normal"));
 
             // -- Corrente de Amirani (52) --
             Page(entries, RegionBossRules.OhyaId,

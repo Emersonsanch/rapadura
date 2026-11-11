@@ -267,6 +267,37 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>The ficha: "Hundun mais forte" at night.</summary>
         public const float HundunNightMultiplier = 1.25f;
 
+        // Taotie eats the loot on the ground. The game has no loot lying about (drops go straight into the bag, EnemyLootGranter),
+        // so on Taotie's week the vessel spills offerings of coins round itself and Taotie eats the one nearest its mouth.
+        // Grab one now (1x, but next to the boss) or let it go: what Taotie swallowed comes back doubled when it falls.
+
+        /// <summary>What an offering is: a stack of the island's coin (not the boss's Bronze, which the house recipes count one by one).</summary>
+        public const string TaotieOfferingItemId = "item_gold_coin";
+        public const int TaotieOfferingCoins = 40;
+        public const float TaotieFirstSpillSeconds = 3f;
+        public const float TaotieSpillIntervalSeconds = 8f;
+        public const int TaotieMaxOfferingsOnGround = 3;
+        public const int TaotieMaxOfferingsPerFight = 6;
+        public const float TaotieSpillMinRadius = 3f;
+        public const float TaotieSpillMaxRadius = 7f;
+        public const float TaotieFirstEatSeconds = 6f;
+        public const float TaotieEatIntervalSeconds = 9f;
+
+        /// <summary>The ring on the offering before Taotie eats it: time to run and grab it.</summary>
+        public const float TaotieEatWindupSeconds = 2.5f;
+
+        /// <summary>How far from Taotie an offering may lie and still be eaten.</summary>
+        public const float TaotieEatReach = 12f;
+
+        /// <summary>Walking this close to an offering picks it up.</summary>
+        public const float TaotieOfferingPickupRadius = 1.6f;
+
+        /// <summary>What Taotie swallowed comes back this many times over when it falls.</summary>
+        public const int TaotieReturnFactor = 2;
+
+        /// <summary>Qiongqi swaps the hero's steps for this long after its blow (Player/HeroControlMirror caps any swap at 4 s).</summary>
+        public const float QiongqiMirrorSeconds = 3f;
+
         // ---- Ohya (52): the chain swings round ----
 
         public const float ChainIntervalSeconds = 10f;
@@ -519,6 +550,58 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>Ability multiplier of the appetite: Hundun is stronger at night.</summary>
         public static float AppetiteMultiplier(GluttonAppetite appetite, bool isNight) => appetite == GluttonAppetite.Hundun && isNight ? HundunNightMultiplier : 1f;
+
+        /// <summary>Does the vessel spill another offering? Only while fewer than <see cref="TaotieMaxOfferingsOnGround"/> lie about and the fight's <see cref="TaotieMaxOfferingsPerFight"/> aren't used up.</summary>
+        public static bool TaotieShouldSpill(int onGround, int spilledThisFight) =>
+            onGround < TaotieMaxOfferingsOnGround && spilledThisFight < TaotieMaxOfferingsPerFight;
+
+        /// <summary>Where an offering lands round Taotie at <paramref name="boss"/>: <paramref name="angle01"/> round the circle, <paramref name="radius01"/> between the spill radii (both 0–1).</summary>
+        public static Vector2 TaotieSpillSpot(Vector2 boss, float angle01, float radius01)
+        {
+            float angle = Mathf.Repeat(angle01, 1f) * Mathf.PI * 2f;
+            float radius = Mathf.Lerp(TaotieSpillMinRadius, TaotieSpillMaxRadius, Mathf.Clamp01(radius01));
+            return boss + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+        }
+
+        /// <summary>
+        /// Which offering Taotie goes for: the nearest to its mouth within <see cref="TaotieEatReach"/>; -1 when none is in reach.
+        /// One the hero is already standing on is skipped (it is being picked up this very frame).
+        /// </summary>
+        public static int TaotieChooseOffering(IReadOnlyList<Vector2> offerings, Vector2 boss, Vector2 hero)
+        {
+            int best = -1;
+            float bestDistance = TaotieEatReach * TaotieEatReach;
+            for (int i = 0; offerings != null && i < offerings.Count; i++)
+            {
+                if (TaotieOfferingPicked(offerings[i], hero))
+                {
+                    continue;
+                }
+
+                float distance = (offerings[i] - boss).sqrMagnitude;
+                if (distance <= bestDistance)
+                {
+                    best = i;
+                    bestDistance = distance;
+                }
+            }
+
+            return best;
+        }
+
+        /// <summary>Is a hero at <paramref name="hero"/> close enough to pick up the offering at <paramref name="offering"/>?</summary>
+        public static bool TaotieOfferingPicked(Vector2 offering, Vector2 hero) =>
+            (hero - offering).sqrMagnitude <= TaotieOfferingPickupRadius * TaotieOfferingPickupRadius;
+
+        /// <summary>
+        /// The coins Taotie gives back when it falls: what it swallowed <see cref="TaotieReturnFactor"/> times over, plus the offerings
+        /// still lying about (the fight is over, nobody is in a hurry). Nothing comes back if it leaves instead of falling.
+        /// </summary>
+        public static int TaotieDeathReturn(int eaten, int leftOnGround) =>
+            (Mathf.Max(0, eaten) * TaotieReturnFactor + Mathf.Max(0, leftOnGround)) * TaotieOfferingCoins;
+
+        /// <summary>Does Qiongqi's blow swap the steps of a hero <paramref name="distance"/> m from it? On its appetite, everyone in the fight.</summary>
+        public static bool QiongqiSwapsSteps(GluttonAppetite appetite, float distance) => appetite == GluttonAppetite.Qiongqi && distance <= AbilityRange;
 
         /// <summary>Is a hero <paramref name="distance"/> m from Ohya under the chain as it swings round?</summary>
         public static bool ChainSweepHits(float distance) => distance >= ChainInnerRadius && distance <= ChainOuterRadius;

@@ -265,7 +265,9 @@ namespace Rapadura.Gameplay.Player
                 else
                 {
                     AttackTarget = null;
-                    Destination = hit.point;
+                    // HeroControlMirror: while Qiongqi (map 46) swaps the steps, the ground point is mirrored through the hero;
+                    // a tap on an enemy (above) is left alone so touch players can still fight.
+                    Destination = HeroControlMirror.ApplyDestination(transform.position, hit.point);
                 }
 
                 HasDestination = true;

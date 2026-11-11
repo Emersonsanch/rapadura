@@ -218,7 +218,8 @@ namespace Rapadura.Gameplay.Player
 
         private void Update()
         {
-            MoveInput = CombineMove(_moveAction.ReadValue<Vector2>(), TouchMoveInput);
+            // HeroControlMirror: Qiongqi (map 46) swaps the steps for a few seconds; a no-op otherwise.
+            MoveInput = HeroControlMirror.Apply(CombineMove(_moveAction.ReadValue<Vector2>(), TouchMoveInput));
             LookInput = _lookAction.ReadValue<Vector2>();
             IsRunHeld = _runAction.IsPressed() || TouchRunHeld;
             IsCrouchHeld = _crouchAction.IsPressed();

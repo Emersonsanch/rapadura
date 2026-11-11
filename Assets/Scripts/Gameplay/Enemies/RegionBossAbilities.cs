@@ -1,8 +1,13 @@
+using System.Collections.Generic;
 using Rapadura.Core.DI;
+using Rapadura.Core.Events;
 using Rapadura.Gameplay.Combat;
+using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Dungeon;
 using Rapadura.Gameplay.Enemies.Visuals;
 using Rapadura.Gameplay.Environment;
+using Rapadura.Gameplay.Inventory;
+using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.Skills;
 using Rapadura.UI.Bestiary;
@@ -38,6 +43,20 @@ namespace Rapadura.Gameplay.Enemies
         private Vector3 _signatureOrigin;
         private GluttonAppetite _appetite;
 
+        // Taotie's offerings (map 46): coins spilled round the vessel, which Taotie eats; what it ate comes back doubled when it falls.
+        private readonly List<GameObject> _offerings = new List<GameObject>(RegionBossRules.TaotieMaxOfferingsOnGround);
+        private readonly List<Vector2> _offeringSpots = new List<Vector2>(RegionBossRules.TaotieMaxOfferingsOnGround);
+        private int _offeringsSpilled;
+        private int _offeringsEaten;
+        private float _spillTimer;
+        private float _eatTimer;
+        private float _eatWindup;
+        private GameObject _eatTarget;
+        private bool _paidOut;
+
+        // Qiongqi's swap of the hero's steps (Player/HeroControlMirror ends it by itself; this only says so and ends it early).
+        private bool _mirrorStarted;
+
         public RegionBossPhase Phase => _phase;
 
         /// <summary>True while a great blow is telegraphed.</summary>
@@ -60,6 +79,18 @@ namespace Rapadura.Gameplay.Enemies
             _signatureWindup = 0f;
             _fightSeconds = 0f;
             _form = GreatDarkForm.Lion;
+            ResetOfferings();
+            _mirrorStarted = false;
+            EventBus.Subscribe<CombatTargetDiedEvent>(HandleTargetDied);
+        }
+
+        private void OnDisable()
+        {
+            EventBus.Unsubscribe<CombatTargetDiedEvent>(HandleTargetDied);
+            // The boss went to sleep, back to the pool or the scene changed: the offerings go (what Taotie ate is lost: it didn't fall)
+            // and the steps come back at once.
+            ResetOfferings();
+            EndMirror();
         }
 
         private bool Arm()
@@ -87,10 +118,16 @@ namespace Rapadura.Gameplay.Enemies
             float deltaTime = Time.deltaTime;
             if (deltaTime <= 0f || !Arm() || (_health != null && _health.IsDead))
             {
+                if (_health != null && _health.IsDead)
+                {
+                    EndMirror();
+                }
+
                 return;
             }
 
             Transform hero = _controller.Target;
+            TickMirror(hero);
             UpdatePhase();
             if (_controller.StrikeSequence != _lastStrike)
             {
@@ -103,6 +140,10 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             TickSignature(deltaTime, hero);
+            if (_spawn.Signature == RegionBossSignature.FourAppetites)
+            {
+                TickOfferings(deltaTime, hero);
+            }
 
             if (_windupLeft > 0f)
             {
@@ -355,6 +396,14 @@ namespace Rapadura.Gameplay.Enemies
                         victim.ApplyDamage(Damage(RegionBossRules.AppetiteDamageFactor), ElementType.Arcane, _controller.gameObject);
                     }
 
+                    if (victim.IsAlive && RegionBossRules.QiongqiSwapsSteps(_appetite, FlatDistance(hero.position, transform.position)))
+                    {
+                        HeroControlMirror.Begin(RegionBossRules.QiongqiMirrorSeconds);
+                        _mirrorStarted = true;
+                        DungeonFx.Warn(hero.position + Vector3.up * 2.6f,
+                            string.Format(Text(RegionBossTexts.QiongqiMirrorKey), Mathf.RoundToInt(RegionBossRules.QiongqiMirrorSeconds)));
+                    }
+
                     break;
 
                 case RegionBossSignature.ChainSweep:
@@ -381,6 +430,236 @@ namespace Rapadura.Gameplay.Enemies
 
                     break;
             }
+        }
+
+        // ---- Qiongqi: the swapped steps ----
+
+        private void TickMirror(Transform hero)
+        {
+            if (!_mirrorStarted)
+            {
+                return;
+            }
+
+            PlayerStats stats = hero != null ? hero.GetComponentInParent<PlayerStats>() : null;
+            if (hero == null || (stats != null && stats.IsDead))
+            {
+                EndMirror();
+                return;
+            }
+
+            if (!HeroControlMirror.IsActive)
+            {
+                _mirrorStarted = false;
+                DungeonFx.Say(hero.position + Vector3.up * 2.6f, Text(RegionBossTexts.QiongqiMirrorEndKey));
+            }
+        }
+
+        /// <summary>Ends early the swap this boss started (never one it didn't start).</summary>
+        private void EndMirror()
+        {
+            if (!_mirrorStarted)
+            {
+                return;
+            }
+
+            _mirrorStarted = false;
+            HeroControlMirror.End();
+        }
+
+        // ---- Taotie: the offerings on the ground ----
+
+        /// <summary>
+        /// Picks up the offerings the hero walks over (whatever the appetite: they stay where they fell), and on Taotie's appetite spills
+        /// new ones round the vessel and eats the nearest to its mouth after a ring on it and a warning.
+        /// </summary>
+        private void TickOfferings(float deltaTime, Transform hero)
+        {
+            if (hero != null)
+            {
+                PickUpOfferings(hero);
+            }
+
+            if (_eatWindup > 0f)
+            {
+                _eatWindup -= deltaTime;
+                if (_eatWindup <= 0f)
+                {
+                    _eatWindup = 0f;
+                    FinishEating();
+                }
+
+                return;
+            }
+
+            bool taotie = RegionBossRules.AppetiteFor(UtcDay(), IsNight()) == GluttonAppetite.Taotie;
+            if (!taotie || hero == null || FlatDistance(hero.position, transform.position) > RegionBossRules.AbilityRange)
+            {
+                return;
+            }
+
+            _spillTimer -= deltaTime;
+            if (_spillTimer <= 0f)
+            {
+                _spillTimer = RegionBossRules.TaotieSpillIntervalSeconds;
+                if (RegionBossRules.TaotieShouldSpill(_offerings.Count, _offeringsSpilled))
+                {
+                    SpillOffering();
+                }
+            }
+
+            _eatTimer -= deltaTime;
+            if (_eatTimer <= 0f)
+            {
+                _eatTimer = RegionBossRules.TaotieEatIntervalSeconds;
+                int index = RegionBossRules.TaotieChooseOffering(_offeringSpots, Flat(transform.position), Flat(hero.position));
+                if (index >= 0)
+                {
+                    _eatTarget = _offerings[index];
+                    _eatWindup = RegionBossRules.TaotieEatWindupSeconds;
+                    Vector3 spot = _eatTarget.transform.position;
+                    DungeonShockwave.Spawn(spot, null, _controller.gameObject, 0f, 0f);
+                    DungeonFx.Warn(spot + Vector3.up * 2.4f, Text(RegionBossTexts.TaotieEatWarningKey));
+                }
+            }
+        }
+
+        private void SpillOffering()
+        {
+            Vector2 spot = RegionBossRules.TaotieSpillSpot(Flat(transform.position), Random.value, Random.value);
+            Vector3 position = new Vector3(spot.x, transform.position.y, spot.y);
+            GameObject offering = new GameObject("TaotieOffering");
+            offering.transform.position = position;
+            Color bronze = new Color(0.86f, 0.62f, 0.24f);
+            DungeonProps.Part(offering.transform, PrimitiveType.Cylinder, "Coins", position + Vector3.up * 0.08f, Quaternion.identity,
+                new Vector3(0.7f, 0.08f, 0.7f), bronze, null, glow: true);
+            DungeonProps.Part(offering.transform, PrimitiveType.Cylinder, "Coins", position + new Vector3(0.12f, 0.22f, -0.08f), Quaternion.identity,
+                new Vector3(0.45f, 0.07f, 0.45f), bronze, null, glow: true);
+            _offerings.Add(offering);
+            _offeringSpots.Add(spot);
+            _offeringsSpilled++;
+            DungeonShockwave.Spawn(position, null, _controller.gameObject, 0f, 0f);
+            DungeonFx.Say(position + Vector3.up * 2f, Text(RegionBossTexts.TaotieSpillKey));
+        }
+
+        private void PickUpOfferings(Transform hero)
+        {
+            Vector2 heroFlat = Flat(hero.position);
+            for (int i = _offerings.Count - 1; i >= 0; i--)
+            {
+                if (!RegionBossRules.TaotieOfferingPicked(_offeringSpots[i], heroFlat))
+                {
+                    continue;
+                }
+
+                Vector3 label = _offerings[i] != null ? _offerings[i].transform.position + Vector3.up * 1.6f : hero.position + Vector3.up * 2f;
+                if (GrantCoins(hero.GetComponentInParent<InventoryManager>(), RegionBossRules.TaotieOfferingCoins, label) <= 0)
+                {
+                    continue; // nothing went in (no bag): it stays on the ground
+                }
+
+                if (_offerings[i] == _eatTarget)
+                {
+                    _eatTarget = null; // grabbed from under its mouth: FinishEating bites the air
+                }
+
+                RemoveOffering(i);
+            }
+        }
+
+        private void FinishEating()
+        {
+            int index = _eatTarget != null ? _offerings.IndexOf(_eatTarget) : -1;
+            _eatTarget = null;
+            if (index < 0)
+            {
+                DungeonFx.Say(transform.position + Vector3.up * 4f, Text(RegionBossTexts.TaotieMissedKey));
+                return;
+            }
+
+            Vector3 spot = _offerings[index].transform.position;
+            RemoveOffering(index);
+            _offeringsEaten++;
+            DungeonShockwave.Spawn(spot, null, _controller.gameObject, 0f, 0f);
+            DungeonFx.Warn(transform.position + Vector3.up * 4f,
+                string.Format(Text(RegionBossTexts.TaotieEatenKey), RegionBossRules.TaotieDeathReturn(_offeringsEaten, 0)));
+        }
+
+        /// <summary>The boss fell: Taotie gives back what it ate, doubled, and the offerings still lying about go into the bag too.</summary>
+        private void HandleTargetDied(CombatTargetDiedEvent evt)
+        {
+            if (_paidOut || !_armed || _controller == null || evt.Target != _controller.gameObject)
+            {
+                return;
+            }
+
+            EndMirror();
+            int coins = RegionBossRules.TaotieDeathReturn(_offeringsEaten, _offerings.Count);
+            bool doubled = _offeringsEaten > 0;
+            ResetOfferings();
+            _paidOut = true;
+            if (coins <= 0)
+            {
+                return;
+            }
+
+            InventoryManager inventory = evt.Killer != null ? evt.Killer.GetComponentInParent<InventoryManager>() : null;
+            if (inventory == null)
+            {
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                inventory = player != null ? player.GetComponent<InventoryManager>() : null;
+            }
+
+            Vector3 label = transform.position + Vector3.up * 4.4f;
+            if (GrantCoins(inventory, coins, label + Vector3.up * 0.4f) > 0 && doubled)
+            {
+                DungeonFx.Say(label, string.Format(Text(RegionBossTexts.TaotieReturnedKey), coins));
+            }
+        }
+
+        /// <summary>Puts <paramref name="coins"/> of the offering's coin in <paramref name="inventory"/> through the loot path; returns how many went in.</summary>
+        private static int GrantCoins(InventoryManager inventory, int coins, Vector3 label)
+        {
+            ItemDefinition coin = ItemDatabase.GetById(RegionBossRules.TaotieOfferingItemId);
+            if (inventory == null || coin == null || coins <= 0)
+            {
+                return 0;
+            }
+
+            LootGrantResult result = LootGrantRules.Grant(inventory, new LootDrop(coin, coins), null);
+            if (result.Granted > 0)
+            {
+                CombatFxManager.SpawnLootText(label, $"+{result.Granted} {coin.LocalizedName()}");
+            }
+
+            return result.Granted;
+        }
+
+        private void RemoveOffering(int index)
+        {
+            if (_offerings[index] != null)
+            {
+                Destroy(_offerings[index]);
+            }
+
+            _offerings.RemoveAt(index);
+            _offeringSpots.RemoveAt(index);
+        }
+
+        private void ResetOfferings()
+        {
+            for (int i = _offerings.Count - 1; i >= 0; i--)
+            {
+                RemoveOffering(i);
+            }
+
+            _offeringsSpilled = 0;
+            _offeringsEaten = 0;
+            _spillTimer = RegionBossRules.TaotieFirstSpillSeconds;
+            _eatTimer = RegionBossRules.TaotieFirstEatSeconds;
+            _eatWindup = 0f;
+            _eatTarget = null;
+            _paidOut = false;
         }
 
         private float Damage(float factor) => _controller.EffectiveAttackDamage * factor * RegionBossRules.AbilityMultiplier(_spawn.StrongerAtNight, IsNight()) * SignatureMultiplier();
