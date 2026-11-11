@@ -84,7 +84,7 @@ namespace Rapadura.Tests.PlayMode
 
                 Vector3 at = player.transform.position;
                 float miss = Vector2.Distance(new Vector2(at.x, at.z), lot.DoorApproach);
-                Assert.Less(miss, ArrivalTolerance, $"The hero stopped {miss:0.00} m short of the door of '{lot.Id}' (blocked by a collider?).");
+                Assert.Less(miss, ArrivalTolerance, $"The hero stopped {miss:0.00} m short of the door of '{lot.Id}' (blocked by a collider?) at {at}; around: {Around(at)}.");
                 yield return WaitFrames(3);
                 CityResidentPost post = mode.Town.PostOf(lot.Id);
                 Assert.IsNotNull(post, $"No keeper at '{lot.Id}'.");
@@ -104,6 +104,16 @@ namespace Rapadura.Tests.PlayMode
             Assert.IsFalse(transition.HasPendingCityVisit, "The city visit was not closed when leaving.");
             yield return WaitForMap(m => map = m);
             Assert.AreEqual(Rapadura.Gameplay.World.Biomes.BiomeType.Forest, map.Progress.CurrentRegion, "Leaving the Vila must put the token back on its node.");
+        }
+
+        /// <summary>The solid colliders within 1.5 m of the hero (names and positions), to tell which one stopped the walk.</summary>
+        private static string Around(Vector3 at)
+        {
+            var hits = Physics.OverlapSphere(at + Vector3.up * 0.9f, 1.5f, ~0, QueryTriggerInteraction.Ignore)
+                .Where(c => !c.CompareTag("Player"))
+                .Select(c => $"{c.name} ({c.GetType().Name}) at {c.bounds.center}");
+            string list = string.Join("; ", hits);
+            return list.Length > 0 ? list : "nothing";
         }
 
         private static IEnumerator WalkTo(PlayerClickToMove click, GameObject player, Vector2 target, string what)
