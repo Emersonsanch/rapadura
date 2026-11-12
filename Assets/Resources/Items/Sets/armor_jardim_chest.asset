@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f171d806ae04e9545a71dcbace88f076, type: 3}
+  m_Name: armor_jardim_chest
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
+  _itemId: armor_jardim_chest
+  _displayName: "Colete do Jardineiro de Mihrshah"
+  _description: "Colete de linho verde-choupo com bolsos de sementes, dos jardineiros que cuidavam do jardim de luz. Conjunto Jardim de Mihrshah (2 pe\xE7as): Orvalho do Jardim."
+  _icon: {fileID: 21300000, guid: e858bacc5893bc9a206e91f086e68ae0, type: 3}
+  _worldModelPrefab: {fileID: 0}
+  _type: 3
+  _category: 12
+  _rarity: 1
+  _weight: 2
+  _value: 360
+  _maxStack: 1
+  _gridWidth: 0
+  _gridHeight: 0
+  _isBound: 0
+  _hasDurability: 1
+  _maxDurability: 100
+  _equipSlot: 2
+  _armorDefense: 10
+  _weaponDamage: 0
+  _weaponAttackSpeed: 1
+  _equipStatModifiers:
+  - displayName: "Seiva do Choupo"
+    affectedStat: 4
+    application: 0
+    value: 10
+    durationSeconds: 0
+    isDebuff: 0
+    ticksOverTime: 0
+    tickIntervalSeconds: 1
+    tickDamageOrHeal: 0
+  _healthRestore: 0
+  _staminaRestore: 0
+  _manaRestore: 0
+  _consumeBuffs: []

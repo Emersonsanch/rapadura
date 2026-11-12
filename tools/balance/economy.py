@@ -616,14 +616,16 @@ def load_sets(regions: dict) -> list:
     src = _read(SET_CS)
     chance = _const(src, "DropChance")
     middle = _const(src, "MiddleDropChance")
-    region_of = {"Coral": "Costa", "Lotus": "Delta", "Yak": "Teto", "Bronze": "Mingcheng", "Kurgan": "Nartes",
+    early = _const(src, "EarlyDropChance")
+    region_of = {"Garden": "Zarafshan", "RedLeather": "Areias", "Drystone": "Kaggen", "Wick": "Limiar", "Coral": "Costa", "Lotus": "Delta", "Yak": "Teto", "Bronze": "Mingcheng", "Kurgan": "Nartes",
                  "Papyrus": "Rio", "BlueBrick": "Mistura", "Seal": "Profundo", "Light": "Ceu"}
     rows = []
     for name, body in re.findall(r"ArmorSetDefinition (\w+) = new ArmorSetDefinition\((.*?)\}\);", src, re.DOTALL):
         beasts = re.findall(r'"(enemy_\w+)"', body)
         region = regions[region_of[name]]
         own = len([b for b in beasts if b in region.species])
-        p = middle if "MiddleDropChance" in body else chance  # Regions 5-9: ArmorSetRules.MiddleDropChance
+        # Regions 5-9: ArmorSetRules.MiddleDropChance; Regions 1-4: EarlyDropChance; 13-16: DropChance.
+        p = middle if "MiddleDropChance" in body else early if "EarlyDropChance" in body else chance
         kills = 3.0 / p  # coupon collector, 2 pieces: 1/p + 2/p
         farm = kills * len(region.species) / max(1, own)
         rows.append(SetRow(re.search(r'"(\w+)"', body).group(1), len(beasts), len(region.species), kills, farm, farm / KILLS_PER_HOUR))
@@ -1008,7 +1010,7 @@ def report_loot(eco: Economy) -> str:
         mark = " **(fora)**" if k.kills > BUDGET_KEEPSAKE_KILLS else ""
         lines.append(f"| {k.boss_name} ({k.level}) | {k.item} | {k.chance:.0%} × {k.mean_qty:g} | {k.value} ({int(k.value * SELL_BACK_RATE)}) | "
                      f"{k.recipes} / {k.needed} | {k.kills:.1f}{mark} | {k.hours:.1f} |")
-    lines += ["", "Conjuntos das regiões 5–9 (`ArmorSetRules.MiddleDropChance`) e 13–16 (`DropChance`), só as feras do conjunto soltam:", "",
+    lines += ["", "Conjuntos das regiões 1–4 (`ArmorSetRules.EarlyDropChance`), 5–9 (`MiddleDropChance`) e 13–16 (`DropChance`), só as feras do conjunto soltam:", "",
               "| Conjunto | Feras / espécies da região | Abates de fera p/ as 2 peças | Abates caçando a região | Horas de abate |", "|---|---|---|---|---|"]
     for s in eco.sets:
         lines.append(f"| {s.name} | {s.beasts} / {s.region_species} | {_n(s.kills)} | {_n(s.farm_kills)} | {s.farm_hours:.1f} |")

@@ -820,6 +820,92 @@ def r_armor_kurgan_helm(ic):
     ic.stroke([(64, 12), (64, 2)], 3, KURGAN_GOLD)
 
 
+
+# ---- conjuntos das Regiões 1–4 (Docs/Items.md)
+POPLAR_GREEN = (127, 166, 80)
+APRICOT = (217, 160, 102)
+PETAL_LIGHT = (255, 236, 196)
+RED_LEATHER = (168, 64, 44)
+SILK_SAND = (231, 194, 125)
+GRANITE = (138, 138, 132)
+GRANITE_DARK = (98, 98, 94)
+LIME_WHITE = (239, 230, 216)
+TUFF_PINK = (201, 143, 134)
+LAMP_AMBER = (255, 179, 71)
+
+
+def r_armor_jardim_chest(ic):
+    tunic(ic, POPLAR_GREEN, trim=APRICOT)
+    for (x, y) in ((48, 70), (80, 70)):
+        ic.rect(x - 9, y - 7, x + 9, y + 9, darker(POPLAR_GREEN, 0.2))
+        ic.dot(x - 3, y + 1, 2.2, APRICOT)
+        ic.dot(x + 3, y + 3, 2.2, APRICOT)
+    ic.stroke([(64, 36), (64, 98)], 2, darker(POPLAR_GREEN, 0.35))
+
+
+def r_armor_jardim_helm(ic):
+    ic.glow(64, 64, 44, PETAL_LIGHT, 120)
+    ic.stroke([(26, 70), (40, 50), (64, 42), (88, 50), (102, 70)], 6, WOOD_DARK)
+    for i, (x, y) in enumerate(((30, 64), (42, 50), (56, 44), (72, 44), (86, 50), (98, 64))):
+        ic.ngon(x, y, 8, 5, PETAL_LIGHT if i % 2 else APRICOT, rot=18 * i)
+        ic.dot(x, y, 2.4, GOLD)
+    for (x, y) in ((36, 58), (64, 40), (92, 58)):
+        ic.poly([(x - 6, y + 4), (x, y - 8), (x + 6, y + 4)], LEAF)
+
+
+def r_armor_rubro_chest(ic):
+    tunic(ic, RED_LEATHER, trim=SILK_SAND)
+    for y in (50, 66, 82):
+        ic.stroke([(40, y), (88, y)], 2, darker(RED_LEATHER, 0.3))
+    for (x, y) in ((50, 58), (78, 58), (50, 74), (78, 74)):
+        ic.dot(x, y, 2.6, BRONZE)
+    ic.ngon(64, 92, 6, 4, FLAME, rot=45)
+
+
+def r_armor_rubro_helm(ic):
+    ic.poly([(26, 82), (28, 52), (44, 30), (84, 30), (100, 52), (102, 82), (64, 92)], SILK_SAND)
+    for y in (44, 56, 68):
+        ic.stroke([(30, y + 6), (64, y - 2), (98, y + 6)], 2.4, darker(SILK_SAND, 0.25))
+    ic.rect(28, 76, 100, 88, RED_LEATHER)
+    ic.ngon(64, 40, 7, 6, FLAME)
+    ic.dot(64, 40, 3, FLAME_CORE)
+
+
+def r_armor_pedra_chest(ic):
+    tunic(ic, GRANITE, trim=GRANITE_DARK)
+    for row, y in enumerate((42, 54, 66, 78, 90)):
+        for x in range(40, 88, 12):
+            dx = 6 if row % 2 else 0
+            ic.poly([(x + dx, y + 5), (x + dx + 6, y), (x + dx + 12, y + 5), (x + dx + 6, y + 10)],
+                    lighter(GRANITE, 0.15) if (x // 12 + row) % 2 else darker(GRANITE, 0.1))
+
+
+def r_armor_pedra_helm(ic):
+    ic.poly([(28, 96), (26, 56), (40, 30), (88, 30), (102, 56), (100, 96)], GRANITE)
+    for i, x in enumerate(range(32, 98, 10)):
+        ic.stroke([(x, 64 if i % 2 else 72), (x + 10, 72 if i % 2 else 64)], 2.4, LIME_WHITE)
+    ic.poly([(46, 78), (82, 78), (78, 92), (50, 92)], NIGHT, shade=False)
+    ic.poly([(56, 30), (64, 14), (72, 30)], GRANITE_DARK)
+
+
+def r_armor_pavio_chest(ic):
+    tunic(ic, LIME_WHITE, trim=COPPER)
+    for x in (48, 80):
+        ic.rect(x - 7, 60, x + 7, 76, darker(LIME_WHITE, 0.12))
+        ic.stroke([(x, 56), (x, 62)], 2, CREAM_DIM)
+    ic.glow(64, 46, 12, LAMP_AMBER, 160)
+    ic.ngon(64, 46, 6, 8, LAMP_AMBER)
+
+
+def r_armor_pavio_helm(ic):
+    ic.poly([(24, 100), (28, 58), (44, 28), (84, 28), (100, 58), (104, 100), (86, 92), (42, 92)], TUFF_PINK)
+    ic.poly([(46, 54), (82, 54), (78, 86), (50, 86)], NIGHT, shade=False)
+    ic.glow(64, 30, 16, LAMP_AMBER, 180)
+    ic.poly([(54, 36), (74, 36), (70, 28), (58, 28)], COPPER)
+    ic.ngon(64, 22, 6, 6, LAMP_AMBER)
+    ic.dot(64, 22, 2.5, FLAME_CORE)
+
+
 def r_item_bone_fragment(ic):
     ic.bar(30, 92, 94, 36, 14, BONE)
     for (x, y) in ((24, 92), (34, 102), (90, 26), (100, 38)):
@@ -1239,6 +1325,15 @@ RECIPES = {
     "armor_bronze_helm": r_armor_bronze_helm,
     "armor_kurgan_chest": r_armor_kurgan_chest,
     "armor_kurgan_helm": r_armor_kurgan_helm,
+    # Conjuntos das Regiões 1–4
+    "armor_jardim_chest": r_armor_jardim_chest,
+    "armor_jardim_helm": r_armor_jardim_helm,
+    "armor_rubro_chest": r_armor_rubro_chest,
+    "armor_rubro_helm": r_armor_rubro_helm,
+    "armor_pedra_chest": r_armor_pedra_chest,
+    "armor_pedra_helm": r_armor_pedra_helm,
+    "armor_pavio_chest": r_armor_pavio_chest,
+    "armor_pavio_helm": r_armor_pavio_helm,
     # ferramentas / armas / armaduras
     "item_axe": r_axe,
     "item_pickaxe": r_pickaxe,

@@ -368,10 +368,10 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("chase_the_foxes", QuestObjectiveType.KillEnemyType, "enemy_desert_jackal", 7) },
                 new[] { new RegionRewardSpec("item_runa_vento", 3), new RegionRewardSpec("item_gold", 200) })),
 
-            // -- Farnkesh: Shad-Ohrmizd, then Tadi. The ember vulture stands in for the Abutre do Pico of the ficha
-            // (Docs/Mapas100.md 54) and the ill-wind mist is the Neblina do Vento Ruim of the Pontes de Vento (55). --
+            // -- Farnkesh: Shad-Ohrmizd, then Tadi. The Abutre do Pico of the ficha (Docs/Mapas100.md 54, its own beast now, FarStandInBeastRecipes)
+            // and the ill-wind mist is the Neblina do Vento Ruim of the Pontes de Vento (55). --
             new CityQuestSpec(CityCatalog.Farnkesh, "shad_ohrmizd", new RegionQuestSpec(FarnkeshVultures, BiomeType.Forest, null, 2800,
-                new[] { new RegionObjectiveSpec("chase_the_vultures", QuestObjectiveType.KillEnemyType, "enemy_desert_ember_vulture", 7) },
+                new[] { new RegionObjectiveSpec("chase_the_vultures", QuestObjectiveType.KillEnemyType, "enemy_mountain_peak_vulture", 7) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 210) })),
             new CityQuestSpec(CityCatalog.Farnkesh, "tadi", new RegionQuestSpec(FarnkeshIllWind, BiomeType.Forest, FarnkeshVultures, 2900,
                 new[] { new RegionObjectiveSpec("clear_the_mist", QuestObjectiveType.KillEnemyType, "enemy_mountain_ill_wind_mist", 6) },

@@ -140,9 +140,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>The sheets' monsters (Mapas100 83–90): the region's own twelve beasts, and existing ones standing in for the rest.</summary>
         private static class Profundo
         {
-            public const string SmallShadow = "enemy_forest_shadow_biter";
+            public const string SmallShadow = FarBeasts.LittleShadow;
             public const string LampSmoke = "enemy_mountain_ill_wind_mist";
-            public const string DarkBat = "enemy_cave_vampire_bat";
+            public const string DarkBat = FarBeasts.DarkBat;
             public const string DimUshabti = "enemy_mountain_lacquer_ushabti";
             public const string CopyShadow = "enemy_forest_copy_shadow";
             public const string SmokeGiant = "enemy_forest_smoke_giant";
@@ -151,7 +151,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string EmberWolf = "enemy_forest_ember_wolf";
             public const string AshBull = "enemy_forest_ash_bull";
             public const string HotLion = "enemy_forest_hot_smoke_lion";
-            public const string HungryFlame = "enemy_desert_firefly_swarm";
+            public const string HungryFlame = FarBeasts.HungryFlame;
             public const string BlackEagle = "enemy_forest_black_eagle";
             public const string BladeBat = "enemy_forest_blade_bat";
             public const string WindHarpy = "enemy_forest_wind_harpy";
@@ -399,8 +399,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             NightSpecies sparks = NightVariantRules.VagaLume;
             NightSpecies werewolf = NightVariantRules.Lobisomem;
 
-            // Outside the gates of the fortress (83): the Sombra Pequena [rápido] (the shadow biter), the Fumaça [controle] (the ill-wind mist), the
-            // Morcego da Treva [enxame] (the vampire bat), the Ushabti Apagado [tanque] (the lacquer ushabti).
+            // Outside the gates of the fortress (83): the Sombra Pequena [rápido] (its own beast now, FarBeasts), the Fumaça [controle] (the ill-wind mist), the
+            // Morcego da Treva [enxame] (its own beast too), the Ushabti Apagado [tanque] (the lacquer ushabti).
             ProfundoGroup(fortaleza, "sombras_da_muralha", "[rápido]", Profundo.SmallShadow, Profundo.DarkBat, moon);
             ProfundoGroup(fortaleza, "morcegos_da_muralha", "[enxame]", Profundo.DarkBat, Profundo.SmallShadow, bats, 5);
             ProfundoGroup(muralha, "ushabtis_da_muralha", "[tanque]", Profundo.DimUshabti, Profundo.SmallShadow, moon, 3, 30f);
@@ -424,7 +424,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ProfundoGroup(corredores, "gigantes_dos_corredores", "[tanque]", Profundo.SmokeGiant, Profundo.SmokeArcher, werewolf, 3, 30f);
 
             // The Pit of Devouring Fire (85): the Lobo de Brasa [rápido], the Touro de Cinza [tanque] (the wild yak), the Leão de Fumaça Quente [elite],
-            // the Chama Faminta [enxame] (the firefly swarm).
+            // the Chama Faminta [enxame] (its own beast now, FarBeasts).
             ProfundoGroup(fogo, "lobos_de_brasa", "[rápido]", Profundo.EmberWolf, Profundo.HungryFlame, moon);
             ProfundoGroup(fogo, "chamas_famintas", "[enxame]", Profundo.HungryFlame, Profundo.EmberWolf, sparks, 5);
             ProfundoGroup(chao, "touros_de_cinza", "[tanque]", Profundo.AshBull, Profundo.HungryFlame, bats, 3, 30f);

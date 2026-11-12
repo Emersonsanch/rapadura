@@ -28,6 +28,22 @@ namespace Rapadura.Gameplay.Enemies
         White = 2,
     }
 
+    /// <summary>Where the wind blows from in O Senhor do Cata-Vento's gust (<see cref="RegionBossRules.VaneWindFor"/>): it turns a quarter, clockwise, each gust.</summary>
+    public enum VaneWind
+    {
+        /// <summary>From the north: it blows toward the south, and north of him is safe.</summary>
+        North = 0,
+
+        /// <summary>From the east: east of him is safe.</summary>
+        East = 1,
+
+        /// <summary>From the south: south of him is safe.</summary>
+        South = 2,
+
+        /// <summary>From the west: west of him is safe.</summary>
+        West = 3,
+    }
+
     /// <summary>
     /// The map bosses of the fichas (Docs/Mapas100.md 55, 56, 60, 62, 66, 69; on the road of the middle story, 25, 26, 32, 37, 38, 43; in the first regions,
     /// that every player walks, 04, 09, 15; and 34, 45, 48): smaller than the world bosses, one per map the story walks through in the 150–300 band, in
@@ -61,7 +77,15 @@ namespace Rapadura.Gameplay.Enemies
         public const string NianId = "enemy_mountain_nian";
         public const string OldKurganGriffinId = "enemy_mountain_old_kurgan_griffin";
 
-        /// <summary>The map bosses (04, 09, 15; 25, 26, 32, 34, 37, 38, 43, 45, 48; 55, 56, 60, 62, 66, 69), each at the top of its map's band.</summary>
+        // Six more of Regions 1–8, one per region the earlier levas left without one: Docs/Mapas100.md 05, 10, 22, 33, 39, 42.
+        public const string MistElderId = "enemy_mountain_mist_elder";
+        public const string DuneChoirId = "enemy_mountain_dune_choir";
+        public const string GreedyBottlerId = "enemy_mountain_greedy_bottler";
+        public const string LightFisherId = "enemy_mountain_light_fisher";
+        public const string VaneLordId = "enemy_mountain_vane_lord";
+        public const string LittleEclipseId = "enemy_mountain_little_eclipse";
+
+        /// <summary>The map bosses (04, 05, 09, 10, 15, 22; 25, 26, 32, 33, 34, 37, 38, 39, 42, 43, 45, 48; 55, 56, 60, 62, 66, 69), each at the top of its map's band.</summary>
         public static readonly IReadOnlyList<RegionBossSpawn> MapSpawns = new[]
         {
             new RegionBossSpawn(RopeCutterId, OverworldLayouts.PontesVentoMapId, "pontes_de_vento", OverworldLayouts.CortadorDeCordasArena,
@@ -100,6 +124,18 @@ namespace Rapadura.Gameplay.Enemies
                 OverworldLayouts.MingchengWorldOffset, 125, EnemyProjectileKind.Ember, true, RegionBossSignature.NoiseFright, neverDies: true),
             new RegionBossSpawn(OldKurganGriffinId, OverworldLayouts.KurgansMapId, "kurgans_de_ouro", OverworldLayouts.GrifoVelhoArena,
                 OverworldLayouts.NartesWorldOffset, 114, EnemyProjectileKind.Feather, false, RegionBossSignature.HoardGuard, neverDies: true),
+            new RegionBossSpawn(MistElderId, MapLayouts.GarajonayId, "garajonay", OverworldLayouts.VelhoDaNevoaArena,
+                OverworldLayouts.ZarafshanWorldOffset, 26, EnemyProjectileKind.LureGlob, false, RegionBossSignature.MistStare, neverDies: true),
+            new RegionBossSpawn(DuneChoirId, OverworldLayouts.DunasId, "dunas_que_cantam", OverworldLayouts.CoralDaDunaArena,
+                OverworldLayouts.AreiasWorldOffset, 28, EnemyProjectileKind.Ember, false, RegionBossSignature.DuneVerses, neverDies: true),
+            new RegionBossSpawn(GreedyBottlerId, OverworldLayouts.MercadoTuneisMapId, "mercado_dos_tuneis", OverworldLayouts.EngarrafadorGulosoArena,
+                OverworldLayouts.LimiarWorldOffset, 42, EnemyProjectileKind.LanternBolt, true, RegionBossSignature.StaleAir, neverDies: true),
+            new RegionBossSpawn(LightFisherId, OverworldLayouts.TarchonMapId, "bancos_de_lama", OverworldLayouts.PescadorDeLuzesArena,
+                OverworldLayouts.DeltaWorldOffset, 78, EnemyProjectileKind.LureGlob, true, RegionBossSignature.LeadCast, neverDies: true),
+            new RegionBossSpawn(VaneLordId, OverworldLayouts.ForteVentosId, "torres_de_cata_vento", OverworldLayouts.SenhorDoCataVentoArena,
+                OverworldLayouts.TetoWorldOffset, 92, EnemyProjectileKind.Feather, false, RegionBossSignature.VaneGust, neverDies: true),
+            new RegionBossSpawn(LittleEclipseId, OverworldLayouts.TorresBrancasMapId, "colinas_dos_espelhos", OverworldLayouts.PequenoEclipseArena,
+                OverworldLayouts.MingchengWorldOffset, 102, EnemyProjectileKind.LanternBolt, false, RegionBossSignature.GrowingEclipse, neverDies: true),
         };
 
         /// <summary>Every boss the <see cref="RegionBossDirector"/> keeps: the world bosses (<see cref="AllSpawns"/>) and the map bosses (<see cref="MapSpawns"/>).</summary>
@@ -323,6 +359,97 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>The gold he keeps lies within this many metres of where he was found: the stone ring of his arena.</summary>
         public const float HoardRadius = 8f;
 
+        // ---- O Velho da Névoa (05): don't lose sight of him in the mist ----
+
+        public const float MistIntervalSeconds = 10f;
+        public const float MistWindupSeconds = 2.2f;
+        public const float MistDamageFactor = 1.3f;
+
+        /// <summary>How far his snap out of the mist reaches.</summary>
+        public const float MistReach = 16f;
+
+        /// <summary>How far off him (degrees, either side) a hero may be facing and still have him in sight when the mist parts.</summary>
+        public const float MistSightHalfAngle = 80f;
+
+        // ---- O Coral da Duna (10): each verse further ----
+
+        public const float VerseIntervalSeconds = 10f;
+        public const float VerseWindupSeconds = 2f;
+        public const float VerseDamageFactor = 1.3f;
+
+        /// <summary>How far the first verse makes the sand burst; each verse after reaches <see cref="VerseStep"/> m further, then it starts again.</summary>
+        public const float VerseFirstRadius = 4f;
+
+        public const float VerseStep = 3f;
+
+        public const int DuneVerseCount = 3;
+
+        // ---- O Engarrafador Guloso (22): behind the bottles ----
+
+        public const float StaleIntervalSeconds = 11f;
+        public const float StaleWindupSeconds = 2.4f;
+        public const float StaleDamageFactor = 1.3f;
+
+        /// <summary>How far the stale air he lets out reaches.</summary>
+        public const float StaleReach = 14f;
+
+        public const int BottleCount = 3;
+
+        /// <summary>The bottles stand on a ring of this radius round where he uncorked them.</summary>
+        public const float BottleRingRadius = 5f;
+
+        /// <summary>Each uncorking turns the ring of bottles this many degrees.</summary>
+        public const float BottleTurnDegrees = 40f;
+
+        /// <summary>How far to the side of the line from him a bottle still shelters a hero standing behind it.</summary>
+        public const float BottleShelter = 1.5f;
+
+        // ---- O Pescador de Luzes (33): the lure leads the fish ----
+
+        public const float LureIntervalSeconds = 10f;
+        public const float LureWindupSeconds = 2.4f;
+        public const float LureDamageFactor = 1.35f;
+
+        /// <summary>How long before the cast he takes his first look at where the hero is going, and his second.</summary>
+        public const float LureFirstLookSeconds = 1.2f;
+
+        public const float LureSecondLookSeconds = 0.8f;
+
+        /// <summary>He casts as far ahead of the second look as the hero would go before the cast at the pace seen between the looks.</summary>
+        public static float LureLeadFactor => LureSecondLookSeconds / (LureFirstLookSeconds - LureSecondLookSeconds);
+
+        /// <summary>The farthest ahead he casts.</summary>
+        public const float LureMaxLead = 8f;
+
+        /// <summary>How near the lure the hook catches.</summary>
+        public const float LureRadius = 2.5f;
+
+        // ---- O Senhor do Cata-Vento (39): upwind is safe ----
+
+        public const float GustIntervalSeconds = 10f;
+        public const float GustWindupSeconds = 2f;
+        public const float GustDamageFactor = 1.35f;
+        public const float GustReach = 16f;
+
+        /// <summary>The vane's own width: a hero this far upwind of his line is still in the gust.</summary>
+        public const float GustLee = 1f;
+
+        public const int VaneWinds = 4;
+
+        // ---- O Pequeno Eclipse (42): a wider slice each time ----
+
+        public const float EclipseIntervalSeconds = 11f;
+        public const float EclipseWindupSeconds = 2.2f;
+        public const float EclipseDamageFactor = 1.4f;
+
+        /// <summary>How far its shadow falls.</summary>
+        public const float EclipseReach = 12f;
+
+        /// <summary>Each cover adds this many degrees either side of the hero's bearing: 45, 90, 135, then the whole round (180), then again.</summary>
+        public const float EclipseStepDegrees = 45f;
+
+        public const int EclipsePhases = 4;
+
         private static float MapBossInterval(RegionBossSignature signature)
         {
             switch (signature)
@@ -344,6 +471,12 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.ShyGaze: return GazeIntervalSeconds;
                 case RegionBossSignature.NoiseFright: return NianIntervalSeconds;
                 case RegionBossSignature.HoardGuard: return HoardIntervalSeconds;
+                case RegionBossSignature.MistStare: return MistIntervalSeconds;
+                case RegionBossSignature.DuneVerses: return VerseIntervalSeconds;
+                case RegionBossSignature.StaleAir: return StaleIntervalSeconds;
+                case RegionBossSignature.LeadCast: return LureIntervalSeconds;
+                case RegionBossSignature.VaneGust: return GustIntervalSeconds;
+                case RegionBossSignature.GrowingEclipse: return EclipseIntervalSeconds;
                 default: return ForgeIntervalSeconds;
             }
         }
@@ -369,6 +502,12 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.ShyGaze: return GazeWindupSeconds;
                 case RegionBossSignature.NoiseFright: return NianWindupSeconds;
                 case RegionBossSignature.HoardGuard: return HoardWindupSeconds;
+                case RegionBossSignature.MistStare: return MistWindupSeconds;
+                case RegionBossSignature.DuneVerses: return VerseWindupSeconds;
+                case RegionBossSignature.StaleAir: return StaleWindupSeconds;
+                case RegionBossSignature.LeadCast: return LureWindupSeconds;
+                case RegionBossSignature.VaneGust: return GustWindupSeconds;
+                case RegionBossSignature.GrowingEclipse: return EclipseWindupSeconds;
                 default: return ForgeWindupSeconds;
             }
         }
@@ -650,5 +789,156 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>Is a hero at <paramref name="hero"/> standing on the old griffin's hoard (at <paramref name="hoard"/>)? Wherever the griffin is.</summary>
         public static bool HoardHits(Vector2 hoard, Vector2 hero) => (hero - hoard).sqrMagnitude <= HoardRadius * HoardRadius;
+
+        /// <summary>
+        /// Does O Velho da Névoa (at <paramref name="elder"/>) snap at a hero at <paramref name="hero"/> facing <paramref name="heroFacing"/> when the mist parts?
+        /// Within <see cref="MistReach"/>, unless the hero kept him in sight (facing him within <see cref="MistSightHalfAngle"/>). No facing is no sight;
+        /// right at his snout there is no mist to hide in.
+        /// </summary>
+        public static bool MistSnapHits(Vector2 elder, Vector2 hero, Vector2 heroFacing)
+        {
+            Vector2 toHim = elder - hero;
+            if (toHim.sqrMagnitude > MistReach * MistReach || toHim.sqrMagnitude < 0.25f)
+            {
+                return false;
+            }
+
+            if (heroFacing.sqrMagnitude < 1e-6f)
+            {
+                return true;
+            }
+
+            return Vector2.Angle(heroFacing, toHim) > MistSightHalfAngle;
+        }
+
+        /// <summary>Which verse O Coral da Duna sings on song number <paramref name="song"/> of the fight (0 first): 0, 1, 2, 0…</summary>
+        public static int DuneVerseOf(int song) => Mathf.Abs(song) % DuneVerseCount;
+
+        /// <summary>How far verse <paramref name="verse"/> makes the sand burst round the worm: 4, 7, 10 m.</summary>
+        public static float VerseRadius(int verse) => VerseFirstRadius + VerseStep * DuneVerseOf(verse);
+
+        /// <summary>Does verse <paramref name="verse"/> reach a hero <paramref name="distance"/> m from the worm? Everything inside its radius; beyond is safe.</summary>
+        public static bool VerseHits(int verse, float distance) => distance <= VerseRadius(verse);
+
+        /// <summary>Where the three great bottles stand on uncorking number <paramref name="uncorking"/> (0 first), round <paramref name="origin"/>: 120° apart, turning 40° each time.</summary>
+        public static Vector2[] BottleSpots(Vector2 origin, int uncorking)
+        {
+            var spots = new Vector2[BottleCount];
+            float start = Mathf.Abs(uncorking) * BottleTurnDegrees;
+            for (int i = 0; i < BottleCount; i++)
+            {
+                float a = (start + i * 360f / BottleCount) * Mathf.Deg2Rad;
+                spots[i] = origin + new Vector2(Mathf.Sin(a), Mathf.Cos(a)) * BottleRingRadius;
+            }
+
+            return spots;
+        }
+
+        /// <summary>
+        /// Does the stale air O Engarrafador Guloso blows out from <paramref name="origin"/> reach a hero at <paramref name="hero"/>? Within <see cref="StaleReach"/>,
+        /// unless one of <paramref name="bottles"/> stands between them (nearer him than the hero, within <see cref="BottleShelter"/> of the line).
+        /// </summary>
+        public static bool StaleAirHits(Vector2 origin, IReadOnlyList<Vector2> bottles, Vector2 hero)
+        {
+            Vector2 line = hero - origin;
+            float reach = line.magnitude;
+            if (reach > StaleReach)
+            {
+                return false;
+            }
+
+            if (bottles == null || reach < 0.01f)
+            {
+                return true;
+            }
+
+            Vector2 along = line / reach;
+            for (int i = 0; i < bottles.Count; i++)
+            {
+                Vector2 toBottle = bottles[i] - origin;
+                float ahead = Vector2.Dot(toBottle, along);
+                if (ahead <= 0f || ahead >= reach)
+                {
+                    continue;
+                }
+
+                if ((toBottle - along * ahead).sqrMagnitude <= BottleShelter * BottleShelter)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Where O Pescador de Luzes casts his lure, having seen the hero at <paramref name="firstLook"/> and then at <paramref name="secondLook"/>: as far
+        /// ahead of the second look as the hero would go before the cast at the same pace (<see cref="LureLeadFactor"/>), at most <see cref="LureMaxLead"/> m.
+        /// </summary>
+        public static Vector2 LureSpot(Vector2 firstLook, Vector2 secondLook)
+        {
+            Vector2 lead = (secondLook - firstLook) * LureLeadFactor;
+            return secondLook + Vector2.ClampMagnitude(lead, LureMaxLead);
+        }
+
+        /// <summary>Does the lure cast on <paramref name="lure"/> hook a hero at <paramref name="hero"/>? Only whoever kept going as they were.</summary>
+        public static bool LureHits(Vector2 lure, Vector2 hero) => (hero - lure).sqrMagnitude <= LureRadius * LureRadius;
+
+        /// <summary>Where the wind blows from on gust number <paramref name="gust"/> of the fight (0 first): north, east, south, west, north…</summary>
+        public static VaneWind VaneWindFor(int gust) => (VaneWind)(Mathf.Abs(gust) % VaneWinds);
+
+        /// <summary>The flat direction the wind blows toward when it comes from <paramref name="from"/> (+y is north).</summary>
+        public static Vector2 WindBlowsToward(VaneWind from)
+        {
+            switch (from)
+            {
+                case VaneWind.North: return Vector2.down;
+                case VaneWind.East: return Vector2.left;
+                case VaneWind.South: return Vector2.up;
+                default: return Vector2.right;
+            }
+        }
+
+        /// <summary>
+        /// Does the gust of O Senhor do Cata-Vento (at <paramref name="vane"/>), with the wind from <paramref name="from"/>, reach a hero at <paramref name="hero"/>?
+        /// Within <see cref="GustReach"/> and downwind of him (or no more than <see cref="GustLee"/> upwind of his line); upwind is safe.
+        /// </summary>
+        public static bool VaneGustHits(VaneWind from, Vector2 vane, Vector2 hero)
+        {
+            Vector2 offset = hero - vane;
+            if (offset.sqrMagnitude > GustReach * GustReach)
+            {
+                return false;
+            }
+
+            return Vector2.Dot(offset, WindBlowsToward(from)) >= -GustLee;
+        }
+
+        /// <summary>Which cover O Pequeno Eclipse makes on cast number <paramref name="cast"/> of the fight (0 first): 0, 1, 2, 3 (the whole round), 0…</summary>
+        public static int EclipsePhaseOf(int cast) => Mathf.Abs(cast) % EclipsePhases;
+
+        /// <summary>How many degrees either side of the hero's bearing cover <paramref name="phase"/> darkens: 45, 90, 135, 180.</summary>
+        public static float EclipseHalfAngle(int phase) => EclipseStepDegrees * (EclipsePhaseOf(phase) + 1);
+
+        /// <summary>
+        /// Does cover <paramref name="phase"/> of O Pequeno Eclipse (at <paramref name="eclipse"/>), aimed at <paramref name="aim"/> (where the hero stood when it began),
+        /// darken a hero at <paramref name="hero"/>? Within <see cref="EclipseReach"/> and inside the slice; right under the disc is dark too.
+        /// </summary>
+        public static bool EclipseHits(int phase, Vector2 eclipse, Vector2 aim, Vector2 hero)
+        {
+            Vector2 offset = hero - eclipse;
+            if (offset.sqrMagnitude > EclipseReach * EclipseReach)
+            {
+                return false;
+            }
+
+            Vector2 bearing = aim - eclipse;
+            if (offset.sqrMagnitude < 0.25f || bearing.sqrMagnitude < 1e-6f)
+            {
+                return true;
+            }
+
+            return Vector2.Angle(bearing, offset) <= EclipseHalfAngle(phase) + 0.01f;
+        }
     }
 }

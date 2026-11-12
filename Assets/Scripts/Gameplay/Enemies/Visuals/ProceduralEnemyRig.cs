@@ -453,6 +453,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.BubbleToad:
                 case ProceduralEnemyKind.SmokeUrchin:
                 case ProceduralEnemyKind.MireLeech:
+                case ProceduralEnemyKind.DriftingFloe:
+                case ProceduralEnemyKind.LittleKul:
+                case ProceduralEnemyKind.HungryFlame:
+                case ProceduralEnemyKind.DioriteStone:
+                case ProceduralEnemyKind.OrbitWind:
+                case ProceduralEnemyKind.RunawayLantern:
                 {
                     // Squash and stretch; it flattens on the windup and the swallowed lights flare.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -623,6 +629,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.BeardedVulture:
                 case ProceduralEnemyKind.FeltSwan:
                 case ProceduralEnemyKind.RedBilledChough:
+                case ProceduralEnemyKind.PeakVulture:
+                case ProceduralEnemyKind.ShadowKite:
+                case ProceduralEnemyKind.ShoulderBird:
+                case ProceduralEnemyKind.DreamBird:
+                case ProceduralEnemyKind.DarkBat:
                 {
                     // The birds of the peaks: the eagle soars on long glides, the chough and the flute bird beat quicker; the wings
                     // hold still and the beak opens on the windup (the flute bird's note, the chough's and the harpy's screech).
@@ -678,6 +689,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.IceWolf:
                 case ProceduralEnemyKind.TerracottaHorse:
                 case ProceduralEnemyKind.FiddlerCrab:
+                case ProceduralEnemyKind.LittleShadow:
                 {
                     // Hinokura's biters: the jaw gapes on the windup and the tail sways; the blade fish's fins row in the steam, the
                     // ember coral's fronds stir slowly as it drifts.
@@ -899,6 +911,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.NinkiNanka:
                 case ProceduralEnemyKind.Nian:
                 case ProceduralEnemyKind.OldKurganGriffin:
+                case ProceduralEnemyKind.MistElder:
+                case ProceduralEnemyKind.DuneChoir:
+                case ProceduralEnemyKind.GreedyBottler:
+                case ProceduralEnemyKind.LightFisher:
+                case ProceduralEnemyKind.VaneLord:
+                case ProceduralEnemyKind.LittleEclipse:
                     TickRegionBoss(deltaTime, t, k, speed);
                     break;
             }

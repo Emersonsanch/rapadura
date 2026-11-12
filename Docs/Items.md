@@ -1,22 +1,32 @@
-# Rapadura — Conjuntos de armadura das Regiões 5–9 e 13–16
+# Rapadura — Conjuntos de armadura das Regiões 1–9 e 13–16
 
-Nove conjuntos de **2 peças** (peitoral + elmo), no molde da Armadura de Marfim dos Artífices (`Docs/Dungeons.md` §6):
-assets em `Assets/Resources/Items/Sets/`, regras puras em `ArmorSetRules` (`Middle` = Regiões 5–9, `Far` = 13–16, `All` =
-os nove), ligação ao combate em `ArmorSetBonuses`, textos das peças em `ContentTexts` e dos avisos em `ArmorSetTexts`, ícones
-em `tools/icons/generate_item_icons.py`, testes em `ArmorSetsTests` e `MiddleArmorSetsTests`. Quebrada, a peça não conta para
+Treze conjuntos de **2 peças** (peitoral + elmo), no molde da Armadura de Marfim dos Artífices (`Docs/Dungeons.md` §6):
+assets em `Assets/Resources/Items/Sets/`, regras puras em `ArmorSetRules` (`Early` = Regiões 1–4, `Middle` = 5–9, `Far` =
+13–16, `All` = os treze), ligação ao combate em `ArmorSetBonuses`, textos das peças em `ContentTexts` e dos avisos em
+`ArmorSetTexts`, ícones em `tools/icons/generate_item_icons.py`, testes em `ArmorSetsTests`, `EarlyArmorSetsTests` e
+`MiddleArmorSetsTests`. Quebrada, a peça não conta para
 o conjunto.
 
 > **Nomes:** nas fichas de `Docs/Mapas100.md` e em `Docs/Cities.md`, "Cais do Papiro", "Tijolo Azul" e "Cais de Luz" são
 > também conjuntos de **casa** (móveis do `CatalogoCasa`, "Móveis do Cais do Papiro" e outros). Estes aqui são os conjuntos
 > de **equipamento** com o mesmo nome. Os das Regiões 5–9 têm nomes próprios, diferentes dos móveis da mesma região
 > ("Móveis da Porta Suaíli", "Móveis da Casa nas Raízes", "Móveis do Terraço do Pamir", "Móveis do Pátio dos Nove Anéis",
-> "Móveis da Tenda de Feltro", `Docs/Housing.md` §6.2). "Vasos de Bronze" é o "conjunto antigo" da ficha do mapa 46 e o
-> "Selo dos Artífices" o da ficha do mapa 90.
+> "Móveis da Tenda de Feltro", `Docs/Housing.md` §6.2). O mesmo vale para as Regiões 1–4 ("Móveis do Tear de Seda", "Móveis da
+> Cisterna de Qocho", "Móveis do Rondavel", "Móveis da Casa na Rocha"). "Jardim de Mihrshah" é o "conjunto antigo do jardim" da
+> ficha do mapa 06, "Vasos de Bronze" o da ficha do mapa 46 e o "Selo dos Artífices" o da ficha do mapa 90.
 
 ## Peças
 
 | Conjunto | Região (nível) | Id | Peça | Raridade | Defesa | Atributo | Dur. | Valor |
 |---|---|---|---|---|---|---|---|---|
+| Jardim de Mihrshah | 1 Bosque do Zarafshan (1–32) | `armor_jardim_chest` | Colete do Jardineiro de Mihrshah | Incomum | 10 | +10 mana máx. | 100 | 360 |
+| | | `armor_jardim_helm` | Grinalda de Pétalas de Luz | Incomum | 5 | +2% crítico | 70 | 260 |
+| Couro Rubro | 2 Areias Flamejantes (5–38) | `armor_rubro_chest` | Gibão de Couro Rubro | Incomum | 11 | +2% crítico | 105 | 470 |
+| | | `armor_rubro_helm` | Turbante de Seda da Caravana | Incomum | 6 | +10 mana máx. | 75 | 340 |
+| Pedra Seca | 3 Serra de Kaggen (9–44) | `armor_pedra_chest` | Couraça de Pedra Seca | Incomum | 12 | +15 mana máx. | 110 | 590 |
+| | | `armor_pedra_helm` | Elmo de Granito em Espinha | Incomum | 7 | +3% crítico | 80 | 420 |
+| Pavio do Limiar | 4 Grutas do Limiar (13–50) | `armor_pavio_chest` | Túnica Branca do Lamparineiro | Incomum | 13 | +3% crítico | 115 | 700 |
+| | | `armor_pavio_helm` | Capuz de Tufo Rosa | Incomum | 8 | +15 mana máx. | 85 | 500 |
 | Coral de Kilwa | 5 Costa das Monções (45–72) | `armor_coral_chest` | Couraça de Pedra de Coral | Rara | 17 | +20 mana máx. | 135 | 1 300 |
 | | | `armor_coral_helm` | Elmo de Madrepérola | Rara | 10 | +4% crítico | 95 | 900 |
 | Seda de Lótus | 6 Delta de Jhilpur (60–88) | `armor_lotus_chest` | Gibão de Seda de Lótus | Rara | 18 | +4% crítico | 140 | 1 700 |
@@ -40,6 +50,10 @@ o conjunto.
 
 | Conjunto | Bônus | Regra |
 |---|---|---|
+| Jardim de Mihrshah | Orvalho do Jardim | ao matar, 15% de curar 3% da vida máxima |
+| Couro Rubro | Areia que Queima | ao ser atingido por um bicho, 10% de devolver 20% do dano ao atacante (Fogo) |
+| Pedra Seca | Rajada do Kaggen | no acerto crítico, 10% de atingir até 2 outros inimigos a 3 m com 20% do dano do crítico (Vento) |
+| Pavio do Limiar | Pavio Aceso | ao matar, 15% de devolver 4% da mana máxima |
 | Coral de Kilwa | Coral que Fecha | ao ser atingido por um bicho, 15% de curar 30% do dano recebido |
 | Seda de Lótus | Seiva do Lótus | ao matar, 20% de devolver 5% da mana máxima |
 | Lã de Iaque | Fôlego do Pamir | no acerto crítico, 20% de curar 3% da vida máxima |
@@ -50,7 +64,7 @@ o conjunto.
 | Selo dos Artífices | Selo Reaberto | no acerto crítico, 25% de devolver 8% da mana máxima |
 | Cais de Luz | Raio da Coluna | no acerto crítico, 15% de atingir até 4 outros inimigos a 5 m com 40% do dano do crítico (Sagrado) |
 
-O reflexo, o gongo, o galope e os raios são golpes comuns, nunca críticos, então nenhum bônus encadeia. Com dois espaços (peito
+O reflexo, a areia, o gongo, a rajada, o galope e os raios são golpes comuns, nunca críticos, então nenhum bônus encadeia. Com dois espaços (peito
 e cabeça) só um conjunto fica completo por vez.
 
 ## Como obter
@@ -72,10 +86,24 @@ abaixo do herói não larga equipamento. O drop mora em `ArmorSetBonuses` e não
   - Vasos de Bronze: Leão de Pedra, Raposa de Cauda Lanterna, Soldado de Terracota, Tartaruga de Pedra, Búfalo de Lama,
     Filhote de Nian, Carpa-Dragão Apagada, Cavalo de Terracota.
   - Ouro dos Kurgans: Grifo Jovem, Saiga, Lobo de Bronze, Gigante Sonâmbulo, Besouro-Casca, Ochokochi, Cisne de Feltro.
+- **Regiões 1–4 (as regiões-sede):** os bichos próprios de cada uma (os de base do bioma, as espécies da noite e os novos de
+  `EarlyBeasts`), **0,5%** por abate (`EarlyDropChance`), ~200 abates por peça. Aqui quase tudo o que anda na região é dela,
+  e o herói passa os níveis 1–50 caçando ali: a 1% o par sairia bem antes do chefe do mundo. A economia mede 600–1 030 abates
+  caçando a região inteira (só conta as espécies escritas por extenso no arquivo da região, então é o caso pior).
+  - Jardim de Mihrshah: Lobo do Tugai, Aranha-Tecelã Apagada, Javali do Lodo, Coruja-de-Fumaça, Mardagayl, Cegonha Apagada,
+    Sapo-Bolha do Lodo, Mosquito de Fumaça, Mariposa de Seda, Pombo-do-Louro, Lagarto-Gigante do Louro, Pavão de Fumaça.
+  - Couro Rubro: Escorpião das Areias Flamejantes, Abutre de Brasa, Lanterna Quebrada dos Artífices, Enxame de Faíscas Presas,
+    Chacal, Cobra-de-Areia, Orc Coroado de Āz, Lagarto-Espinho.
+  - Pedra Seca: Ushabti de Pedra, Pedra que Rola, Gavião-de-Penacho, Ave-Graveto de Omöl, Neblina do Vento Ruim, Babuíno
+    Apagado, Lince Apagado, Borrão, Gralha de Pedra.
+  - Pavio do Limiar: Enxame de Morcegos do Limiar, Ubır (o Morcegão Bebe-Luz), Peixe-Lanterna Apagado, Lodo de Gruta,
+    Corvo-da-Treva, Ubır Jovem.
 
-Um bicho só pertence a um conjunto. Alguns (a Gaivota Ladra, o Macaco Ladrão, o Filhote de Nian, o Lobo de Bronze, o Gigante
+Um bicho só pertence a um conjunto. Os de base das Regiões 1–4 (lobo, aranha, javali, escorpião, ushabti, morcegos, Ubır,
+Ave-Graveto) andam emprestados por quase toda a ilha e, em qualquer lugar, largam a peça da sua região de origem (com a regra
+dos 20 níveis valendo). Alguns (a Gaivota Ladra, o Macaco Ladrão, o Filhote de Nian, o Lobo de Bronze, o Gigante
 Sonâmbulo) ainda fazem papel de emprestado em outras regiões e, lá, largam a peça do conjunto da sua região de origem.
-`MiddleArmorSetsTests` confere que cada bicho anda na sua região, nos níveis dela.
+`MiddleArmorSetsTests` e `EarlyArmorSetsTests` conferem que cada bicho anda na sua região, nos níveis dela.
 
 ## Como os números foram medidos
 
@@ -95,6 +123,13 @@ Não há nível de item no jogo: quem segura o espólio é o nível da região.
   0,6% contra 2% do Selo Reaberto; Gongo de Bronze 6% (3 alvos) contra 7% do Reflexo; Galope dos Nartes 9% (3 alvos a 4 m)
   contra 24% do Raio da Coluna (4 alvos a 5 m). `MiddleArmorSetsTests` trava essas desigualdades.
 - **Valor:** peitoral 900 do Marfim (nível 40) proporcional ao nível do meio da região; elmo a 72% do peitoral, a mesma razão.
+- **Regiões 1–4:** **Incomuns**, uma raridade abaixo das Raras do meio. A defesa sobe um ponto por região entre o couro das lojas
+  (peitoral 8, elmo 4) e o Marfim (16/9): 10/5, 11/6, 12/7, 13/8, sempre abaixo do Coral de Kilwa (17/10). Atributos: crítico +2%
+  ou +3% e mana +10 ou +15, abaixo do menor valor do mesmo atributo nos conjuntos do meio (+4%, +20). Bônus com valor esperado por
+  gatilho abaixo do bônus de mesmo tipo do meio: Orvalho do Jardim 0,45% contra 1% da Seiva do Lótus (e 0,6% do Fôlego do Pamir);
+  Areia que Queima 2% contra 4,5% do Coral que Fecha; Rajada do Kaggen 4% (2 alvos a 3 m) contra 9% do Galope dos Nartes; Pavio
+  Aceso 0,6% contra 1% da Seiva do Lótus. Durabilidade 100–115 / 70–85. `EarlyArmorSetsTests` trava essas desigualdades. Abaixo
+  do nível 100, então a seção "Faixas 100–500" (`level_500.py`) não precisa deles; a economia (`economy.py`) lista os treze.
 - **Pilha de poder:** `power_stack.py` lê só `Resources/Items/*.asset`, então a subpasta `Sets/` não entra na campanha
   (como a `Dungeon/`). A seção "Faixas 100–500" (`level_500.py`) já conhece os nove: de 100 a 259 o herói de referência
   veste o Ouro dos Kurgans no lugar do Marfim; as lutas de comuns e chefes não mudam de faixa e nada novo sai do orçamento.
@@ -103,7 +138,6 @@ Não há nível de item no jogo: quem segura o espólio é o nível da região.
 ## Falta
 
 - Listar as peças no Bestiário (`BestiaryCatalog` só conhece o `_lootItem` e a tabela do bioma).
-- Os "conjuntos antigos" das fichas que ainda não existem: "Kurdalægon" (Região 12), "Gigantes" (Região 14) e o do jardim
-  (Região 1).
-- Uma conquista para os conjuntos de equipamento das Regiões 5–9 (como a `ach_house_far_sets` dos móveis): os textos de
+- Os "conjuntos antigos" das fichas que ainda não existem: "Kurdalægon" (Região 12) e "Gigantes" (Região 14).
+- Uma conquista para os conjuntos de equipamento das Regiões 1–9 (como a `ach_house_far_sets` dos móveis): os textos de
   conquista moram em `UI/Achievements`.

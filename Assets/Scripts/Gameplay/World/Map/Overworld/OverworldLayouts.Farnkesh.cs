@@ -123,6 +123,27 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Id = id, Kind = SkyRouteKind.Glide, A = from, B = to, PropA = from + fromProp, PropB = to + toProp, CurrentGroup = group,
         };
 
+        /// <summary>
+        /// The fourteenth pass of beasts (bible §3.2.1, <c>FarStandInBeastRecipes</c>): the most-seen roles of Regions 10–16 that the continuous
+        /// world played with stand-ins (Docs/Mapas100.md 54, 55, 63, 64, 70, 75, 81–83, 85, 92, 95), placed in the groups of their sheets here and in
+        /// the Mar Gelado, Hinokura, Rio, Mistura, Profundo and Céu layouts (their region constants now point here).
+        /// </summary>
+        public static class FarBeasts
+        {
+            public const string PeakVulture = "enemy_mountain_peak_vulture";
+            public const string ShadowKite = "enemy_mountain_shadow_kite";
+            public const string DriftingFloe = "enemy_mountain_drifting_floe";
+            public const string LittleKul = "enemy_mountain_little_kul";
+            public const string HungryFlame = "enemy_mountain_hungry_flame";
+            public const string DioriteStone = "enemy_forest_diorite_stone";
+            public const string ShoulderBird = "enemy_forest_shoulder_bird";
+            public const string DreamBird = "enemy_forest_dream_bird";
+            public const string LittleShadow = "enemy_forest_little_shadow";
+            public const string DarkBat = "enemy_forest_dark_bat";
+            public const string OrbitWind = "enemy_forest_orbit_wind";
+            public const string RunawayLantern = "enemy_forest_runaway_lantern";
+        }
+
         private static class Fark
         {
             public const string SmokeGoat = "enemy_forest_smoke_goat";
@@ -132,10 +153,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Chough = "enemy_mountain_alpine_chough";
             public const string Takin = "enemy_mountain_takin";
             public const string BlueSheep = "enemy_mountain_blue_sheep";
-            public const string Vulture = "enemy_desert_ember_vulture";
+            public const string Vulture = FarBeasts.PeakVulture;
             public const string Griffin = "enemy_mountain_young_griffin";
             public const string CandleBat = "enemy_mountain_candle_bat";
             public const string Kite = "enemy_desert_broken_lantern";
+            public const string ShadowKite = FarBeasts.ShadowKite;
             public const string Mist = "enemy_mountain_ill_wind_mist";
             public const string Ushabti = "enemy_mountain_rope_ushabti";
             public const string Cat = "enemy_mountain_pallas_cat";
@@ -384,7 +406,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             castanheiras.Fauna.Add(Fauna("ursos_das_castanheiras", "[tanque]", T(N(Fark.Bear, 3), N(Fark.VineFox, 1)), T(V(Fark.Bear, 2), S(werewolf, 1)), 3, null, 30f));
 
             // Prados do Vento, Prados dos Sinos, Subida, Escadaria, Mar de Nuvens (54, outside the city): the Gralha-Alpina [rápido],
-            // the Takin Apagado [tanque], the Abutre do Pico [distância] (the ember vulture), the
+            // the Takin Apagado [tanque], the Abutre do Pico [distância] (its own beast now, FarBeasts), the
             // Cabra-Azul [rápido]; the giant marmot in the meadows.
             pradosVento.Fauna.Add(Fauna("marmotas_do_vento", "[tanque]", T(N(Fark.Marmot, 3), N(Fark.Chough, 1)), T(V(Fark.Marmot, 2), S(owl, 1)), 3, null, 28f));
             pradosVento.Fauna.Add(Fauna("gralhas_do_vento", "[rápido]", T(N(Fark.Chough, 3), N(Fark.Marmot, 1)), T(V(Fark.Chough, 2), S(owl, 1)), 4));
@@ -403,15 +425,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             bosquePin.Fauna.Add(Fauna("gatos_dos_pinaculos", "[rápido]", T(N(Fark.Cat, 3), N(Fark.Chough, 1)), T(V(Fark.Cat, 2), S(werewolf, 1)), 4));
             bosquePin.Fauna.Add(Fauna("abutres_dos_pinaculos", "[distância]", T(N(Fark.Vulture, 3), N(Fark.Cat, 1)), T(V(Fark.Vulture, 2), S(bats, 1)), 3));
             leste.Fauna.Add(Fauna("morcegos_vela_do_leste", "[rápido]", T(N(Fark.CandleBat, 3), N(Fark.Vulture, 1)), T(V(Fark.CandleBat, 3), S(bats, 1)), 4));
-            leste.Fauna.Add(Fauna("pipas_sombra_do_leste", "[distância]", T(N(Fark.Kite, 3), N(Fark.CandleBat, 1)), T(V(Fark.Kite, 2), S(bats, 1)), 3));
+            leste.Fauna.Add(Fauna("pipas_sombra_do_leste", "[distância]", T(N(Fark.ShadowKite, 3), N(Fark.CandleBat, 1)), T(V(Fark.ShadowKite, 2), S(bats, 1)), 3));
 
-            // Pontes de Vento and Ermida Baixa (55): the Morcego-Vela [rápido], the Pipa-Sombra [distância] (the
-            // broken lantern), the Neblina do Vento Ruim [controle] (the ill-wind mist), the Ushabti de Corda [tanque]; the
+            // Pontes de Vento and Ermida Baixa (55): the Morcego-Vela [rápido], the Pipa-Sombra [distância] (its own beast now,
+            // FarBeasts), the Neblina do Vento Ruim [controle] (the ill-wind mist), the Ushabti de Corda [tanque]; the
             // candle bats double at night.
-            pontes.Fauna.Add(Fauna("morcegos_vela", "[rápido]", T(N(Fark.CandleBat, 3), N(Fark.Kite, 1)), T(V(Fark.CandleBat, 3), S(bats, 2)), 4));
+            pontes.Fauna.Add(Fauna("morcegos_vela", "[rápido]", T(N(Fark.CandleBat, 3), N(Fark.ShadowKite, 1)), T(V(Fark.CandleBat, 3), S(bats, 2)), 4));
             pontes.Fauna.Add(Fauna("neblinas_do_vento_ruim", "[controle]", T(N(Fark.Mist, 3), N(Fark.Kite, 1)), T(V(Fark.Mist, 2), S(bats, 1)), 4));
             pontes.Fauna.Add(Fauna("ushabtis_de_corda", "[tanque]", T(N(Fark.Ushabti, 3), N(Fark.Mist, 1)), T(V(Fark.Ushabti, 2), S(bats, 1)), 3, null, 30f));
-            ermidaBaixa.Fauna.Add(Fauna("pipas_sombra", "[distância]", T(N(Fark.Kite, 3), N(Fark.Ushabti, 1)), T(V(Fark.Kite, 2), S(bats, 2)), 3));
+            ermidaBaixa.Fauna.Add(Fauna("pipas_sombra", "[distância]", T(N(Fark.ShadowKite, 3), N(Fark.Ushabti, 1)), T(V(Fark.ShadowKite, 2), S(bats, 2)), 3));
             ermidaBaixa.Fauna.Add(Fauna("ushabtis_da_ermida", "[tanque]", T(N(Fark.Ushabti, 3), N(Fark.CandleBat, 1)), T(V(Fark.Ushabti, 2), S(bats, 1)), 3, null, 30f));
 
             // Ermidas Suspensas and Pináculo do Sino (56): the Eco Apagado [controle] (the ill-wind mist), the Gato-de-Pallas Apagado

@@ -19,7 +19,7 @@ using UnityEngine;
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// The map bosses of the fichas (Docs/Mapas100.md 04, 09, 15, 25, 26, 32, 34, 37, 38, 43, 45, 48, 55, 56, 60, 62, 66, 69; <see cref="RegionBossRules.MapSpawns"/>): kept by the world bosses'
+    /// The map bosses of the fichas (Docs/Mapas100.md 04, 05, 09, 10, 15, 22, 25, 26, 32, 33, 34, 37, 38, 39, 42, 43, 45, 48, 55, 56, 60, 62, 66, 69; <see cref="RegionBossRules.MapSpawns"/>): kept by the world bosses'
     /// director and fought with their abilities, each with an ability of its own. Pure rules and data: the procedural models are built with the
     /// runtime's own components (no MonoBehaviour of this assembly is added).
     /// </summary>
@@ -39,6 +39,13 @@ namespace Rapadura.Tests
             RegionBossRules.NinkiNankaId, RegionBossRules.NianId, RegionBossRules.OldKurganGriffinId,
         };
 
+        /// <summary>Six more, one in each of Regions 1, 2, 4, 6, 7 and 8 (05, 10, 22, 33, 39, 42).</summary>
+        private static readonly string[] MoreIds =
+        {
+            RegionBossRules.MistElderId, RegionBossRules.DuneChoirId, RegionBossRules.GreedyBottlerId,
+            RegionBossRules.LightFisherId, RegionBossRules.VaneLordId, RegionBossRules.LittleEclipseId,
+        };
+
         private static readonly string[] Ids =
         {
             RegionBossRules.RopeCutterId, RegionBossRules.EndlessBellId, RegionBossRules.WalrusQueenId,
@@ -47,6 +54,8 @@ namespace Rapadura.Tests
             RegionBossRules.RunawayCartId, RegionBossRules.GreatAlmasId, RegionBossRules.UnleapedCarpId,
             RegionBossRules.ForgottenSpinnerId, RegionBossRules.WellDrinkingRootId, RegionBossRules.GreatSmudgeId,
             RegionBossRules.NinkiNankaId, RegionBossRules.NianId, RegionBossRules.OldKurganGriffinId,
+            RegionBossRules.MistElderId, RegionBossRules.DuneChoirId, RegionBossRules.GreedyBottlerId,
+            RegionBossRules.LightFisherId, RegionBossRules.VaneLordId, RegionBossRules.LittleEclipseId,
         };
 
         /// <summary>The maps the story walks through in the 150–300 band (LateStoryCatalog) that have a boss in their ficha.</summary>
@@ -73,7 +82,14 @@ namespace Rapadura.Tests
         /// <summary>The maps of Regions 1–4 where the campaign already has its boss (Kök-Böri 02, O Grande Ushabti 08, Hahya 14, Tages 20).</summary>
         private static readonly int[] CampaignBossMaps = { 2, 8, 14, 20 };
 
-        private static readonly string[] StoryMaps = LateStoryMaps.Concat(MidStoryMaps).Concat(FirstMaps).ToArray();
+        /// <summary>The maps of the six more (05, 10, 22, 33, 39, 42), each in a region the earlier levas left without one of its own.</summary>
+        private static readonly string[] MoreMaps =
+        {
+            MapLayouts.GarajonayId, OverworldLayouts.DunasId, OverworldLayouts.MercadoTuneisMapId,
+            OverworldLayouts.TarchonMapId, OverworldLayouts.ForteVentosId, OverworldLayouts.TorresBrancasMapId,
+        };
+
+        private static readonly string[] StoryMaps = LateStoryMaps.Concat(MidStoryMaps).Concat(FirstMaps).Concat(MoreMaps).ToArray();
 
         private const float WalkableDegrees = 45f;
 
@@ -169,6 +185,23 @@ namespace Rapadura.Tests
         }
 
         [Test]
+        public void TheSixMoreMaps_GetTheirFichaBoss_OnePerRegion_WhereNoOtherBossStands()
+        {
+            foreach (string mapId in MoreMaps)
+            {
+                MapDefinition map = MapCatalog.Get(mapId);
+                Assert.IsNotNull(map, mapId);
+                CollectionAssert.DoesNotContain(CampaignBossMaps, map.MapId, $"{mapId}: the campaign already has its boss there");
+                Assert.IsFalse(RegionBossRules.AllSpawns.Any(s => s.MapId == mapId), $"{mapId}: no world boss on it");
+                Assert.AreEqual(1, RegionBossRules.MapSpawns.Count(s => s.MapId == mapId), mapId);
+                Assert.That(map.MonsterLevelMax, Is.InRange(1, 149), $"{mapId}: Regions 1–8, below the band of the letters");
+            }
+
+            CollectionAssert.AllItemsAreUnique(MoreMaps.Select(m => MapCatalog.Get(m).Region), "one per region");
+            CollectionAssert.AreEquivalent(MoreIds, RegionBossRules.MapSpawns.Where(s => MoreMaps.Contains(s.MapId)).Select(s => s.EnemyId));
+        }
+
+        [Test]
         public void TheLodo_StillWaitsForItsFiveFountains_TheMapBossesDoNot()
         {
             RegionBossSpawn lodo = RegionBossRules.SpawnOf(RegionBossRules.SwallowingMireId);
@@ -228,6 +261,21 @@ namespace Rapadura.Tests
             Assert.Less(Load(RegionBossRules.NianId).AttackDamage, Load(RegionBossRules.FourGluttonsId).AttackDamage);
             Assert.Less(Load(RegionBossRules.OldKurganGriffinId).AttackDamage, Load(RegionBossRules.OhyaId).AttackDamage);
             foreach (string id in FirstIds)
+            {
+                Assert.Less(Load(id).MaxHealth, 1180, $"{id}: below the strongest boss of the first regions (Tages)");
+            }
+
+            // The six more: Regions 1, 2 and 4 against their scheduled event, 6, 7 and 8 against their world boss.
+            Assert.Less(Load(RegionBossRules.MistElderId).MaxHealth, EventWorldBossHealth(BiomeType.Forest));
+            Assert.Less(Load(RegionBossRules.DuneChoirId).MaxHealth, EventWorldBossHealth(BiomeType.Desert));
+            Assert.Less(Load(RegionBossRules.GreedyBottlerId).MaxHealth, EventWorldBossHealth(BiomeType.Caves));
+            Assert.Less(Load(RegionBossRules.LightFisherId).MaxHealth, Load(RegionBossRules.SwallowingMireId).MaxHealth);
+            Assert.Less(Load(RegionBossRules.VaneLordId).MaxHealth, Load(RegionBossRules.AydaharId).MaxHealth);
+            Assert.Less(Load(RegionBossRules.LittleEclipseId).MaxHealth, Load(RegionBossRules.FourGluttonsId).MaxHealth);
+            Assert.Less(Load(RegionBossRules.LightFisherId).AttackDamage, Load(RegionBossRules.SwallowingMireId).AttackDamage);
+            Assert.Less(Load(RegionBossRules.VaneLordId).AttackDamage, Load(RegionBossRules.AydaharId).AttackDamage);
+            Assert.Less(Load(RegionBossRules.LittleEclipseId).AttackDamage, Load(RegionBossRules.FourGluttonsId).AttackDamage);
+            foreach (string id in MoreIds)
             {
                 Assert.Less(Load(id).MaxHealth, 1180, $"{id}: below the strongest boss of the first regions (Tages)");
             }
@@ -319,6 +367,10 @@ namespace Rapadura.Tests
         [TestCase(ProceduralEnemyKind.GreatSmudge)]
         [TestCase(ProceduralEnemyKind.NinkiNanka)]
         [TestCase(ProceduralEnemyKind.OldKurganGriffin)]
+        [TestCase(ProceduralEnemyKind.GreedyBottler)]
+        [TestCase(ProceduralEnemyKind.LightFisher)]
+        [TestCase(ProceduralEnemyKind.VaneLord)]
+        [TestCase(ProceduralEnemyKind.LittleEclipse)]
         public void TheOnesWithArms_RaiseThem_OnTheWindup(ProceduralEnemyKind kind)
         {
             GameObject visual = ProceduralEnemyModels.Instantiate(kind, null);
@@ -404,6 +456,26 @@ namespace Rapadura.Tests
             }
 
             CollectionAssert.AllItemsAreUnique(keys);
+        }
+
+        [Test]
+        public void TheSixMore_CallOutTheirVersesBottlesLureWindsAndCovers()
+        {
+            Dictionary<string, LocalizationEntry> table = BestiaryTexts.Entries.ToDictionary(e => e.Key);
+            var keys = new List<string> { RegionBossTexts.BottleKey, RegionBossTexts.LureKey };
+            keys.AddRange(Enumerable.Range(0, RegionBossRules.DuneVerseCount).Select(RegionBossTexts.DuneVerseKey));
+            keys.AddRange(System.Enum.GetValues(typeof(VaneWind)).Cast<VaneWind>().Select(RegionBossTexts.VaneWindKey));
+            keys.AddRange(Enumerable.Range(0, RegionBossRules.EclipsePhases).Select(RegionBossTexts.EclipseCoverKey));
+            foreach (string key in keys)
+            {
+                Assert.IsTrue(table.TryGetValue(key, out LocalizationEntry entry), key);
+                Assert.IsFalse(string.IsNullOrWhiteSpace(entry.PtBR), key);
+                Assert.IsFalse(string.IsNullOrWhiteSpace(entry.En), key);
+            }
+
+            CollectionAssert.AllItemsAreUnique(keys);
+            Assert.AreEqual(RegionBossTexts.DuneVerseKey(0), RegionBossTexts.DuneVerseKey(RegionBossRules.DuneVerseCount), "the verses come round");
+            Assert.AreEqual(RegionBossTexts.EclipseCoverKey(0), RegionBossTexts.EclipseCoverKey(RegionBossRules.EclipsePhases), "the covers come round");
         }
 
         // ---------------------------------------------------------------- the arena
@@ -802,6 +874,166 @@ namespace Rapadura.Tests
                 {
                     Assert.AreNotEqual(RegionBossRules.SpawnOf(FirstIds[i]).MapId, RegionBossRules.SpawnOf(FirstIds[j]).MapId);
                 }
+            }
+        }
+
+        [Test]
+        public void MistElder_SnapsAtWhoeverTurnedTheirBack_FacingHimIsSafe()
+        {
+            Vector2 elder = new Vector2(0f, 6f);
+            Vector2 hero = Vector2.zero;
+            Assert.IsFalse(RegionBossRules.MistSnapHits(elder, hero, Vector2.up), "facing him");
+            Assert.IsFalse(RegionBossRules.MistSnapHits(elder, hero, new Vector2(1f, 0.3f)), "he is still at the edge of sight");
+            Assert.IsTrue(RegionBossRules.MistSnapHits(elder, hero, Vector2.down), "back turned");
+            Assert.IsTrue(RegionBossRules.MistSnapHits(elder, hero, new Vector2(1f, -0.3f)), "looking away");
+            Assert.IsTrue(RegionBossRules.MistSnapHits(elder, hero, Vector2.zero), "no facing: lost him in the mist");
+            Assert.IsFalse(RegionBossRules.MistSnapHits(elder, new Vector2(0f, 6f - RegionBossRules.MistReach - 0.1f), Vector2.down), "out of his snap");
+            Assert.IsFalse(RegionBossRules.MistSnapHits(elder, elder + new Vector2(0.2f, 0f), Vector2.down), "right at his snout there is no mist");
+            Assert.Greater(RegionBossRules.MistSightHalfAngle, RegionBossRules.GazeHalfAngle, "keeping him in sight is easier than looking away from Ninki Nanka");
+            Assert.Less(RegionBossRules.MistSightHalfAngle, 90f, "running away from him is turning your back");
+            Assert.IsFalse(RegionBossRules.SpawnOf(RegionBossRules.MistElderId).StrongerAtNight);
+        }
+
+        [Test]
+        public void DuneChoir_EachVerseReachesFurther_ThenItStartsAgain()
+        {
+            Assert.AreEqual(0, RegionBossRules.DuneVerseOf(0));
+            Assert.AreEqual(1, RegionBossRules.DuneVerseOf(1));
+            Assert.AreEqual(2, RegionBossRules.DuneVerseOf(2));
+            Assert.AreEqual(0, RegionBossRules.DuneVerseOf(3));
+            Assert.AreEqual(1, RegionBossRules.DuneVerseOf(-1), "never throws on a bad count");
+            Assert.AreEqual(4f, RegionBossRules.VerseRadius(0));
+            Assert.AreEqual(7f, RegionBossRules.VerseRadius(1));
+            Assert.AreEqual(10f, RegionBossRules.VerseRadius(2));
+            Assert.IsTrue(RegionBossRules.VerseHits(0, 0f), "under it");
+            Assert.IsTrue(RegionBossRules.VerseHits(0, 4f));
+            Assert.IsFalse(RegionBossRules.VerseHits(0, 4.1f), "just past the first verse");
+            Assert.IsTrue(RegionBossRules.VerseHits(1, 5f), "where the first verse was safe");
+            Assert.IsFalse(RegionBossRules.VerseHits(1, 7.1f));
+            Assert.IsTrue(RegionBossRules.VerseHits(2, 9.5f));
+            Assert.IsFalse(RegionBossRules.VerseHits(2, 10.1f), "past the third verse");
+            Assert.Less(RegionBossRules.VerseRadius(2), RegionBossRules.AbilityRange, "there is always ground past the last verse");
+        }
+
+        [Test]
+        public void GreedyBottler_OnlyBehindABottleIsSafe_AndTheBottlesTurn()
+        {
+            Vector2 origin = new Vector2(10f, -4f);
+            Vector2[] bottles = RegionBossRules.BottleSpots(origin, 0);
+            Assert.AreEqual(RegionBossRules.BottleCount, bottles.Length);
+            foreach (Vector2 bottle in bottles)
+            {
+                Assert.AreEqual(RegionBossRules.BottleRingRadius, Vector2.Distance(origin, bottle), 0.001f);
+            }
+
+            Assert.AreEqual(0f, Vector2.Distance(origin + Vector2.up * RegionBossRules.BottleRingRadius, bottles[0]), 0.001f, "the first bottle due north");
+            Vector2 north = Vector2.up;
+            Assert.IsFalse(RegionBossRules.StaleAirHits(origin, bottles, origin + north * 8f), "behind the north bottle");
+            Assert.IsFalse(RegionBossRules.StaleAirHits(origin, bottles, origin + north * 8f + Vector2.right * (RegionBossRules.BottleShelter - 0.2f)), "still in its lee");
+            Assert.IsTrue(RegionBossRules.StaleAirHits(origin, bottles, origin + north * 3f), "between him and the bottle");
+            Assert.IsTrue(RegionBossRules.StaleAirHits(origin, bottles, origin + Vector2.down * 8f), "no bottle to the south");
+            Assert.IsTrue(RegionBossRules.StaleAirHits(origin, bottles, origin), "on top of him");
+            Assert.IsFalse(RegionBossRules.StaleAirHits(origin, bottles, origin + Vector2.down * (RegionBossRules.StaleReach + 0.1f)), "out of the stale air");
+            Assert.IsTrue(RegionBossRules.StaleAirHits(origin, null, origin + north * 8f), "no bottles, no shelter");
+
+            Vector2[] next = RegionBossRules.BottleSpots(origin, 1);
+            Assert.IsTrue(RegionBossRules.StaleAirHits(origin, next, origin + north * 8f), "the bottles turned: the old shelter is gone");
+            Assert.AreEqual(0f, Vector2.Distance(bottles[0], RegionBossRules.BottleSpots(origin, 9)[0]), 0.001f, "nine turns of 40° come round");
+            Assert.Less(RegionBossRules.BottleRingRadius + 1f, RegionBossRules.StaleReach, "room to stand behind a bottle inside the reach");
+            Assert.IsTrue(RegionBossRules.SpawnOf(RegionBossRules.GreedyBottlerId).StrongerAtNight, "the ficha: the ones touched by Āz come out double at night");
+        }
+
+        [Test]
+        public void LightFisher_CastsWhereTheHeroIsGoing_AChangeOfCourseIsSafe()
+        {
+            Vector2 first = new Vector2(0f, 0f);
+            Vector2 second = new Vector2(2f, 0f);
+            Vector2 lure = RegionBossRules.LureSpot(first, second);
+            Assert.AreEqual(0f, Vector2.Distance(new Vector2(6f, 0f), lure), 0.001f, "0.4 s from the first look to the second, 0.8 s to the cast: twice as far again");
+            Assert.IsTrue(RegionBossRules.LureHits(lure, new Vector2(6f, 0.5f)), "kept running straight");
+            Assert.IsFalse(RegionBossRules.LureHits(lure, new Vector2(2f, 3f)), "turned aside");
+            Assert.IsFalse(RegionBossRules.LureHits(lure, new Vector2(0f, 0f)), "turned back");
+            Assert.IsFalse(RegionBossRules.LureHits(lure, second), "stopped after the second look");
+
+            Vector2 still = new Vector2(4f, 4f);
+            Assert.AreEqual(0f, Vector2.Distance(still, RegionBossRules.LureSpot(still, still)), 0.001f);
+            Assert.IsTrue(RegionBossRules.LureHits(RegionBossRules.LureSpot(still, still), still), "standing still waiting is caught");
+            Assert.AreEqual(RegionBossRules.LureMaxLead, Vector2.Distance(new Vector2(0f, 10f), RegionBossRules.LureSpot(Vector2.zero, new Vector2(0f, 10f))), 0.001f, "he never casts too far ahead");
+            Assert.Less(RegionBossRules.LureSecondLookSeconds, RegionBossRules.LureFirstLookSeconds);
+            Assert.Less(RegionBossRules.LureFirstLookSeconds, RegionBossRules.LureWindupSeconds, "both looks fall inside the warning");
+            Assert.IsTrue(RegionBossRules.SpawnOf(RegionBossRules.LightFisherId).StrongerAtNight, "the ficha: the will-o'-wisps double at night");
+        }
+
+        [Test]
+        public void VaneLord_TheWindTurnsAQuarterEachGust_UpwindIsSafe()
+        {
+            Assert.AreEqual(VaneWind.North, RegionBossRules.VaneWindFor(0));
+            Assert.AreEqual(VaneWind.East, RegionBossRules.VaneWindFor(1));
+            Assert.AreEqual(VaneWind.South, RegionBossRules.VaneWindFor(2));
+            Assert.AreEqual(VaneWind.West, RegionBossRules.VaneWindFor(3));
+            Assert.AreEqual(VaneWind.North, RegionBossRules.VaneWindFor(4));
+            Assert.AreEqual(VaneWind.East, RegionBossRules.VaneWindFor(-1), "never throws on a bad count");
+            Vector2 vane = new Vector2(-5f, 20f);
+            Assert.IsFalse(RegionBossRules.VaneGustHits(VaneWind.North, vane, vane + Vector2.up * 5f), "wind from the north: north of him is safe");
+            Assert.IsTrue(RegionBossRules.VaneGustHits(VaneWind.North, vane, vane + Vector2.down * 5f), "downwind");
+            Assert.IsTrue(RegionBossRules.VaneGustHits(VaneWind.North, vane, vane + Vector2.right * 5f), "beside him is still in the gust");
+            Assert.IsTrue(RegionBossRules.VaneGustHits(VaneWind.North, vane, vane + new Vector2(3f, RegionBossRules.GustLee - 0.1f)), "not upwind enough");
+            Assert.IsFalse(RegionBossRules.VaneGustHits(VaneWind.East, vane, vane + Vector2.right * 5f), "wind from the east: east of him is safe");
+            Assert.IsTrue(RegionBossRules.VaneGustHits(VaneWind.East, vane, vane + Vector2.left * 5f));
+            Assert.IsFalse(RegionBossRules.VaneGustHits(VaneWind.South, vane, vane + Vector2.down * 5f));
+            Assert.IsFalse(RegionBossRules.VaneGustHits(VaneWind.West, vane, vane + Vector2.left * 5f));
+            Assert.IsFalse(RegionBossRules.VaneGustHits(VaneWind.North, vane, vane + Vector2.down * (RegionBossRules.GustReach + 0.1f)), "out of the gust");
+            Assert.IsTrue(RegionBossRules.VaneGustHits(VaneWind.West, vane, vane), "on top of him");
+            Assert.IsFalse(RegionBossRules.SpawnOf(RegionBossRules.VaneLordId).StrongerAtNight);
+        }
+
+        [Test]
+        public void LittleEclipse_EachCoverIsWider_UntilTheWholeRoundIsDark()
+        {
+            Assert.AreEqual(45f, RegionBossRules.EclipseHalfAngle(0));
+            Assert.AreEqual(90f, RegionBossRules.EclipseHalfAngle(1));
+            Assert.AreEqual(135f, RegionBossRules.EclipseHalfAngle(2));
+            Assert.AreEqual(180f, RegionBossRules.EclipseHalfAngle(3));
+            Assert.AreEqual(0, RegionBossRules.EclipsePhaseOf(4));
+            Assert.AreEqual(1, RegionBossRules.EclipsePhaseOf(-1), "never throws on a bad count");
+            Vector2 eclipse = new Vector2(30f, 30f);
+            Vector2 aim = eclipse + Vector2.up * 6f;
+            Vector2 aside = eclipse + Vector2.right * 6f;
+            Vector2 behind = eclipse + Vector2.down * 6f;
+            Vector2 halfBack = eclipse + new Vector2(5f, -5f);
+            Assert.IsTrue(RegionBossRules.EclipseHits(0, eclipse, aim, aim), "the slice falls toward the hero");
+            Assert.IsFalse(RegionBossRules.EclipseHits(0, eclipse, aim, aside), "a quarter: a step aside");
+            Assert.IsTrue(RegionBossRules.EclipseHits(1, eclipse, aim, aside), "half: aside is dark now");
+            Assert.IsFalse(RegionBossRules.EclipseHits(1, eclipse, aim, halfBack));
+            Assert.IsTrue(RegionBossRules.EclipseHits(2, eclipse, aim, halfBack), "three quarters");
+            Assert.IsFalse(RegionBossRules.EclipseHits(2, eclipse, aim, behind), "three quarters: only behind it is light");
+            Assert.IsTrue(RegionBossRules.EclipseHits(3, eclipse, aim, behind), "the whole round");
+            Assert.IsFalse(RegionBossRules.EclipseHits(3, eclipse, aim, eclipse + Vector2.down * (RegionBossRules.EclipseReach + 0.1f)), "beyond its shadow");
+            Assert.IsTrue(RegionBossRules.EclipseHits(0, eclipse, aim, eclipse), "under the disc");
+            Assert.IsTrue(RegionBossRules.EclipseHits(0, eclipse, eclipse, behind), "no bearing: the slice is everywhere");
+            Assert.Less(RegionBossRules.EclipseReach, RegionBossRules.AbilityRange, "there is ground beyond the shadow");
+            Assert.IsFalse(RegionBossRules.SpawnOf(RegionBossRules.LittleEclipseId).StrongerAtNight);
+        }
+
+        [Test]
+        public void MoreMapBosses_EachSignatureIsNewToTheDirector_AtTheTopOfItsMap()
+        {
+            RegionBossSignature[] more =
+            {
+                RegionBossSignature.MistStare, RegionBossSignature.DuneVerses, RegionBossSignature.StaleAir,
+                RegionBossSignature.LeadCast, RegionBossSignature.VaneGust, RegionBossSignature.GrowingEclipse,
+            };
+            CollectionAssert.AreEquivalent(more, MoreIds.Select(id => RegionBossRules.SpawnOf(id).Signature));
+            foreach (RegionBossSignature signature in more)
+            {
+                Assert.Greater((int)signature, (int)RegionBossSignature.HoardGuard, $"{signature}: after the ones that already exist");
+            }
+
+            foreach (string id in MoreIds)
+            {
+                RegionBossSpawn spawn = RegionBossRules.SpawnOf(id);
+                Assert.AreEqual(MapCatalog.Get(spawn.MapId).MonsterLevelMax, spawn.Level, id);
+                Assert.Less(spawn.Level, RegionBossRules.SpawnOf(RegionBossRules.OhyaId).Level, $"{id}: below the band of the letters");
             }
         }
 

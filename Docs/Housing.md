@@ -273,12 +273,16 @@ Cada item colocado soma os pontos de **Conforto** do catálogo (Comum 1–2, Inc
 
 ### 6.2 Conjuntos **[proposto]**
 
-São 31 conjuntos no catálogo, cada um com um tema (Iwan da Vó Edna, Caravana do Vô Jorge, Oficina do Ícaro, Noite Rubra da Lavine, Bema…). A lista e a contagem de peças estão no fim do `CatalogoCasa.md`.
+São 35 conjuntos no catálogo, cada um com um tema (Iwan da Vó Edna, Caravana do Vô Jorge, Oficina do Ícaro, Noite Rubra da Lavine, Bema…). A lista e a contagem de peças estão no fim do `CatalogoCasa.md`.
 
-Dez deles são **conjuntos de móveis regionais**, de 8 peças (1 Comum, 3 Incomuns, 3 Raras, 1 Épica), vendidos só na loja da capital da região a preço de catálogo, com a Épica como especial da semana (`houseSlots: 3, weeklySlots: 1`). O nome começa com "Móveis" para não confundir com o conjunto de equipamento da mesma região (`Docs/Items.md`):
+Catorze deles são **conjuntos de móveis regionais**, de 8 peças (1 Comum, 3 Incomuns, 3 Raras, 1 Épica), vendidos só na loja da capital da região a preço de catálogo, com a Épica como especial da semana (`houseSlots: 3, weeklySlots: 1`). O nome começa com "Móveis" para não confundir com o conjunto de equipamento da mesma região (`Docs/Items.md`):
 
 | Região | Conjunto | Loja (cidade) | Preço | Épica |
 |---|---|---|---|---|
+| 1 Bosque do Zarafshan | Móveis do Tear de Seda | Costureira Mestra Narisah (Vila da Vó Edna) | 16–300 | Cama de dossel de seda sogdiana |
+| 2 Areias Flamejantes | Móveis da Cisterna de Qocho | Selaria do Vandak (Oásis de Qocho) | 17–310 | Painel das iluminuras de Qocho |
+| 3 Serra de Kaggen | Móveis do Rondavel | Forja do Mestre Mihr (Vila de Litema) | 18–320 | Estela com janelinhas entalhadas |
+| 4 Grutas do Limiar | Móveis da Casa na Rocha | Lamparinas da Parthenos (Vila das Lamparinas) | 20–340 | Estante de nichos de lâmpada escavada |
 | 5 Costa das Monções | Móveis da Porta Suaíli | Bazar de Pérolas da Mwana (Taa Pwani) | 22–360 | Painel da porta entalhada de Taa Pwani |
 | 6 Delta de Jhilpur | Móveis da Casa nas Raízes | Barcos e Trocas do Nuhzadag (Jhilpur) | 22–375 | Estátua de búfalo-d'água entalhada em raiz |
 | 7 Teto do Mundo | Móveis do Terraço do Pamir | Agasalhos do Sisinnios (Sangkent) | 24–395 | Fogão de pedra do terraço |
@@ -290,7 +294,7 @@ Dez deles são **conjuntos de móveis regionais**, de 8 peças (1 Comum, 3 Incom
 | 15 Limiar Profundo | Móveis das Mil Lâmpadas | Pavios da Tehat (Fortaleza da Última Lâmpada) | 30–600 | Lustre de mil pavios |
 | 16 Reinos do Céu | Móveis do Cais de Luz | A Última Caravana do Ammo (Cais da Coluna) | 30–680 | Coluna de luz sólida |
 
-Os das Regiões 5–9 custam no máximo o que a peça de mesma raridade custa nos distantes (Comum 22–24, Incomum 55–65, Raro 135–165, Épico 360–420) e dão o mesmo conforto (2/3/5/8). Testes: `HouseMiddleRegionSetsTests` e `HouseFarRegionSetsTests`.
+Os das Regiões 5–9 custam no máximo o que a peça de mesma raridade custa nos distantes (Comum 22–24, Incomum 55–65, Raro 135–165, Épico 360–420) e dão o mesmo conforto (2/3/5/8). Os das Regiões 1–4 custam menos que os do meio (Comum 16–20, Incomum 40–50, Raro 100–125, Épico 300–340), com o mesmo conforto, e são vendidos numa loja que já existia na vila-sede, ao lado dos móveis que ela já vendia (só a Selaria do Vandak não tinha móveis): a Costureira ganhou a vaga de especial da semana, a Forja do Mihr e as Lamparinas da Parthenos passaram de 2 para 3 vagas de casa e ganharam a especial, a Selaria ganhou 3 vagas e a especial. Testes: `HouseEarlyRegionSetsTests`, `HouseMiddleRegionSetsTests` e `HouseFarRegionSetsTests`.
 
 | Peças do mesmo conjunto colocadas | Bônus |
 |---|---|

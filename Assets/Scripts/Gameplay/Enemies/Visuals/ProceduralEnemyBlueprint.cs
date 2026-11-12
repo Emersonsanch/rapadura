@@ -422,6 +422,32 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>Sanguessuga do Lodo (32): a rearing leech; squashes on the windup and the lit sucker flares.</summary>
         MireLeech = 231,
 
+        // The fourteenth pass of beasts (bible §3.2.1): the most-seen roles of Regions 10–16 that still used stand-ins (FarStandInBeastRecipes).
+        /// <summary>Abutre do Pico (54): dark vulture of the pinnacles with a ruff of cloud; the beak opens.</summary>
+        PeakVulture = 300,
+        /// <summary>Pipa-Sombra (55): a shadow-paper kite cut loose from the wind bridges; the painted mouth (the Jaw) drops open.</summary>
+        ShadowKite = 301,
+        /// <summary>Gelo Flutuante (63): a slab of pack ice with the aurora inside; squashes on the windup and the aurora flares.</summary>
+        DriftingFloe = 302,
+        /// <summary>Kul Pequeno (64): a little water spirit of the fishing holes; squashes on the windup and the lamp-light in its chest flares.</summary>
+        LittleKul = 303,
+        /// <summary>Chama Faminta (70, 75, 85): a flame with a mouth on a heap of ash; squashes on the windup and the eaten light flares.</summary>
+        HungryFlame = 304,
+        /// <summary>Pedra de Diorito (81): a crawling block of Ullikummi's stone; squashes on the windup and its lit eye flares.</summary>
+        DioriteStone = 305,
+        /// <summary>Ave do Ombro (81): stone-grey bird with lichen on its back; the beak opens.</summary>
+        ShoulderBird = 306,
+        /// <summary>Pássaro-Sonho (82): night-blue bird with the dream tablets' marks on it; the beak opens.</summary>
+        DreamBird = 307,
+        /// <summary>Sombra Pequena (83): a child-sized shadow on all fours with a stolen wick; jaw and tail.</summary>
+        LittleShadow = 308,
+        /// <summary>Morcego da Treva (83): a bat of the Dark with horn-tall ears; the fanged jaw opens.</summary>
+        DarkBat = 309,
+        /// <summary>Vento de Órbita (95): a ring of wind round a lit core; squashes on the windup and the core flares.</summary>
+        OrbitWind = 310,
+        /// <summary>Lanterna Fugitiva (92): a paper lantern that ran off a Barca de Luz; squashes on the windup and the flame flares.</summary>
+        RunawayLantern = 311,
+
         // The map bosses of the fichas (RegionBossRules.MapSpawns, MapBossRecipes): one per map the story walks through in the 150–300 band.
         /// <summary>O Cortador de Cordas (55): a shadow bird with blade-edged wings and a frayed rope in its beak; map boss of the Pontes de Vento.</summary>
         RopeCutter = 204,
@@ -463,6 +489,20 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         Nian = 250,
         /// <summary>O Grifo Velho do Kurgan (48): an old eagle-lion with ragged golden wings, a Scythian gold plaque on its chest; map boss of the Kurgans de Ouro.</summary>
         OldKurganGriffin = 251,
+
+        // Six more map bosses (Docs/Mapas100.md 05, 10, 22, 33, 39, 42).
+        /// <summary>O Velho da Névoa (05): a house-sized laurel lizard, dry scales, moss on its back, a mist-drop core; map boss of the Copas de Garajonay.</summary>
+        MistElder = 252,
+        /// <summary>O Coral da Duna (10): a great sand worm reared up out of a dune, ringed mouth open in song; map boss of the Dunas que Cantam.</summary>
+        DuneChoir = 253,
+        /// <summary>O Engarrafador Guloso (22): a fat kobold under a rack of bottles, a great jug in his arms; map boss of the Mercado dos Túneis.</summary>
+        GreedyBottler = 254,
+        /// <summary>O Pescador de Luzes (33): a boat-sized catfish standing on its fins, whiskers, a lure of light on a stalk, wisps glowing in its belly; map boss of the Palafitas de Tarchon.</summary>
+        LightFisher = 255,
+        /// <summary>O Senhor do Cata-Vento (39): an Artificer engine of walnut and bronze on a tripod, four vane blades for a head; map boss of the Forte dos Ventos.</summary>
+        VaneLord = 256,
+        /// <summary>O Pequeno Eclipse (42): a disc of shadow floating over a column of dark light, a rim of stolen gold; map boss of the Torres Brancas.</summary>
+        LittleEclipse = 257,
     }
 
     /// <summary>

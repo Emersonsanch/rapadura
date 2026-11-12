@@ -5,7 +5,7 @@ using Rapadura.Gameplay.Enemies;
 namespace Rapadura.UI.Bestiary
 {
     /// <summary>
-    /// "Caderno da Vó Edna" pages of the map bosses of the fichas (Docs/Mapas100.md 04, 09, 15, 25, 26, 32, 34, 37, 38, 43, 45, 48, 55, 56, 60, 62, 66, 69; <see cref="RegionBossRules.MapSpawns"/>)
+    /// "Caderno da Vó Edna" pages of the map bosses of the fichas (Docs/Mapas100.md 04, 05, 09, 10, 15, 22, 25, 26, 32, 33, 34, 37, 38, 39, 42, 43, 45, 48, 55, 56, 60, 62, 66, 69; <see cref="RegionBossRules.MapSpawns"/>)
     /// and the lines they call out, en + pt-BR. Each is a creature or an engine gone dark: beaten, it is freed, and its last line says what it goes back to.
     /// </summary>
     public static partial class RegionBossTexts
@@ -25,10 +25,26 @@ namespace Rapadura.UI.Bestiary
         /// <summary>What Nian does when the hero's noise frightens it out of its pounce (<see cref="RegionBossRules.NianTakesFright"/>).</summary>
         public const string NianFrightKey = "region_boss.nian.fright";
 
+        /// <summary>The verse the Dune Choir sings (<see cref="RegionBossRules.DuneVerseOf"/>), called out as it warns: how far the sand will burst.</summary>
+        public static string DuneVerseKey(int verse) => $"region_boss.dune_choir.verse{RegionBossRules.DuneVerseOf(verse)}";
+
+        /// <summary>The label over each great bottle the Greedy Bottler sets down (<see cref="RegionBossRules.BottleSpots"/>).</summary>
+        public const string BottleKey = "region_boss.greedy_bottler.bottle";
+
+        /// <summary>The label over the spot the Light Fisher casts his lure on (<see cref="RegionBossRules.LureSpot"/>).</summary>
+        public const string LureKey = "region_boss.light_fisher.lure";
+
+        /// <summary>Where the wind comes from in the Vane Lord's gust (<see cref="RegionBossRules.VaneWindFor"/>), called out as he warns.</summary>
+        public static string VaneWindKey(VaneWind from) => $"region_boss.vane_lord.wind.{from.ToString().ToLowerInvariant()}";
+
+        /// <summary>How much of the light the Little Eclipse covers (<see cref="RegionBossRules.EclipsePhaseOf"/>), called out as it warns.</summary>
+        public static string EclipseCoverKey(int cover) => $"region_boss.little_eclipse.cover{RegionBossRules.EclipsePhaseOf(cover)}";
+
         private static void AddMapBossPages(List<LocalizationEntry> entries)
         {
             AddMidMapBossPages(entries);
             AddFirstMapBossPages(entries);
+            AddMoreMapBossPages(entries);
 
             // -- Pontes de Vento (55) --
             Page(entries, RegionBossRules.RopeCutterId,
@@ -315,6 +331,112 @@ namespace Rapadura.UI.Bestiary
             Blow(entries, RegionBossRules.OldKurganGriffinId, "He dives!", "Ele mergulha!");
             Signature(entries, RegionBossRules.OldKurganGriffinId, "He screeches for his gold! Get off the ring!", "Ele grita pelo ouro! Sai do anel!");
             Withdraw(entries, RegionBossRules.OldKurganGriffinId, "The Old Griffin of the Kurgan sets down five little gold pieces, one for each cousin, and flies off north to the open sky.", "O Grifo Velho do Kurgan deixa cinco pecinhas de ouro, uma para cada primo, e voa para o norte, para o céu aberto.");
+        }
+
+        private static void AddMoreMapBossPages(List<LocalizationEntry> entries)
+        {
+            // -- Copas de Garajonay (05) --
+            Page(entries, RegionBossRules.MistElderId,
+                "The laurel forest of Garajonay drinks the mist, children: the leaves catch it and it drips down to the roots. The Old One of the Mist is a lizard as big as a house who lived under those leaves for longer than the elves can count, licking the drops and guarding the forest floor. Then the shadow dried the drops on his tongue, and he has been thirsty and cross ever since. When the mist rises he hides in it and snaps at whoever turns their back on him. So don't run from him in the mist: face him. As long as you keep him in sight he cannot find a back to bite. Free him and he drinks again, and he goes back to keeping the forest.",
+                "A mata de louro de Garajonay bebe a névoa, crianças: as folhas seguram e ela pinga até as raízes. O Velho da Névoa é um lagarto do tamanho de uma casa que viveu debaixo dessas folhas mais tempo do que os elfos sabem contar, lambendo as gotas e guardando o chão da mata. Aí a sombra secou as gotas na língua dele, e desde então ele vive com sede e de mau humor. Quando a névoa sobe ele se esconde nela e morde quem estiver de costas pra ele. Então não fujam dele na névoa: encarem. Enquanto vocês tiverem ele na vista, ele não acha costas pra morder. Libertem ele e ele volta a beber, e volta a guardar a mata.",
+                ("The mist rises, I turn to him. Eyes on the lizard, always.", "A névoa subiu, eu viro pra ele. Olho no lagarto, sempre."),
+                ("He's not mean, he's thirsty. Anyone gets cross when their mouth is dry.", "Ele não é mau, está com sede. Qualquer um fica bravo de boca seca."),
+                ("So the rule with giant lizards is: stare at them. Not where I'd have started, but okay.", "Então a regra com lagarto gigante é: encarar. Não é por onde eu começaria, mas tá bom."),
+                ("The mist hides only what we stop looking at.", "A névoa só esconde o que a gente para de olhar."),
+                ("I'm looking at him SO hard. He can't bite me. I'm the best at looking.", "Tô olhando pra ele com TODA a força. Ele não pode me morder. Eu sou a melhor em olhar."));
+            Line(entries, RegionBossRules.MistElderId, RegionBossPhase.Storm, "The Old One spits balls of dry moss!", "O Velho cospe bolas de musgo seco!");
+            Line(entries, RegionBossRules.MistElderId, RegionBossPhase.LastStand, "He whips his tail through the laurels!", "Ele chicoteia o rabo pelos louros!");
+            Blow(entries, RegionBossRules.MistElderId, "His great jaw comes down!", "Lá vem a bocarra!");
+            Signature(entries, RegionBossRules.MistElderId, "The mist is rising! Face him, don't turn your back!", "A névoa está subindo! Encara ele, não vira de costas!");
+            Withdraw(entries, RegionBossRules.MistElderId, "The Old One of the Mist opens his mouth to the mist, drinks his fill for the first time in years, and walks slowly back under the laurels to keep the forest.", "O Velho da Névoa abre a boca para a névoa, bebe à vontade pela primeira vez em anos e volta devagar para debaixo dos louros, guardando a mata.");
+
+            // -- Dunas que Cantam (10) --
+            Page(entries, RegionBossRules.DuneChoirId,
+                "Have you ever heard a dune sing? When the sand slides down it hums, low, like a choir far away. The old people of the oasis said it was the dunes calling the light home at sunset. The Choir of the Dune is the worm that lives under the singing sand, and it went dark and kept on singing, only now its song calls the shadow. It sings in verses, children, and each verse makes the sand burst further round it: the first one close, the second further, the third far away, and then it starts again. Listen for the verse and step just past it. Free it and the dune sings beautifully again, and the light comes home.",
+                "Vocês já ouviram uma duna cantar? Quando a areia escorrega ela zune, baixinho, feito um coral bem longe. O povo antigo do oásis dizia que eram as dunas chamando a luz pra casa no pôr do sol. O Coral da Duna é o verme que mora debaixo da areia que canta, e ele apagou e continuou cantando, só que agora o canto dele chama a sombra. Ele canta em versos, crianças, e cada verso faz a areia estourar mais longe em volta dele: o primeiro perto, o segundo mais longe, o terceiro bem longe, e aí começa de novo. Escutem o verso e passem um pouco além dele. Libertem ele e a duna volta a cantar bonito, e a luz volta pra casa.",
+                ("First verse close, second further, third far. Count and step past it.", "Primeiro verso perto, segundo mais longe, terceiro longe. Conta e passa dele."),
+                ("It never stopped singing, even in the dark. That's a kind of bravery.", "Ele nunca parou de cantar, nem no escuro. Isso é um tipo de coragem."),
+                ("A worm with a choir. Of course. Why would the desert have a normal worm.", "Um verme com coral. Claro. Por que o deserto ia ter um verme normal."),
+                ("A song has a shape. Learn the shape and you know where to stand.", "Toda música tem um desenho. Aprende o desenho e você sabe onde ficar."),
+                ("I'm singing too! La-laaa! ...Why is everybody running?", "Eu também tô cantando! Lá-láaa! ...Por que todo mundo está correndo?"));
+            Line(entries, RegionBossRules.DuneChoirId, RegionBossPhase.Storm, "The Choir spits sparks of hot sand!", "O Coral cospe faíscas de areia quente!");
+            Line(entries, RegionBossRules.DuneChoirId, RegionBossPhase.LastStand, "The whole dune is singing!", "A duna inteira está cantando!");
+            Blow(entries, RegionBossRules.DuneChoirId, "It rears up and crashes down!", "Ele se ergue e desaba!");
+            Signature(entries, RegionBossRules.DuneChoirId, "It's singing a verse! Step past it!", "Ele vai cantar um verso! Passa além dele!");
+            entries.Add(new LocalizationEntry(DuneVerseKey(0), "First verse: the sand bursts close to it!", "Primeiro verso: a areia estoura perto dele!"));
+            entries.Add(new LocalizationEntry(DuneVerseKey(1), "Second verse: further out!", "Segundo verso: mais longe!"));
+            entries.Add(new LocalizationEntry(DuneVerseKey(2), "Third verse: far out, get well away!", "Terceiro verso: bem longe, se afasta bastante!"));
+            Withdraw(entries, RegionBossRules.DuneChoirId, "The Choir of the Dune sinks into the sand humming softly, and the whole dune sings with it, low and beautiful, calling the light home.", "O Coral da Duna afunda na areia cantarolando baixinho, e a duna inteira canta junto, grave e bonito, chamando a luz pra casa.");
+
+            // -- Mercado dos Túneis (22) --
+            Page(entries, RegionBossRules.GreedyBottlerId,
+                "In the tunnels the air stands still, children, and the kobolds bottle the good air of the pipes, the Pure Air, and share it at the fair so nobody runs out of breath. The Greedy Bottler was the best of them at it, until Āz whispered in his ear that whoever holds all the air holds everyone. He bottled every breath he could find and hid it for her. Now he sets down his three biggest bottles and lets out the stale air all round him, and only behind a bottle can you breathe. Keep a bottle between you and him. Beaten, he uncorks the bottles, and he ends up helping at the fair, handing the air out again.",
+                "Nos túneis o ar fica parado, crianças, e os kobolds engarrafam o ar bom dos canos, o Ar Sereno, e dividem na feira pra ninguém ficar sem fôlego. O Engarrafador Guloso era o melhor deles nisso, até Āz cochichar no ouvido dele que quem segura todo o ar segura todo mundo. Ele engarrafou cada fôlego que achou e guardou pra ela. Agora ele bota no chão as três garrafas maiores e solta o ar parado em volta dele, e só atrás de uma garrafa dá pra respirar. Fiquem com uma garrafa entre vocês e ele. Vencido, ele destampa as garrafas, e acaba ajudando na feira, distribuindo o ar de novo.",
+                ("He sets the bottles down, I get behind one. Then I come round and hit.", "Ele botou as garrafas, eu fico atrás de uma. Depois dou a volta e bato."),
+                ("Keeping all the air for yourself and still feeling short of breath. That's what greed does.", "Guardar todo o ar pra si e ainda se sentir sem fôlego. É isso que a ganância faz."),
+                ("Hiding behind a jar from a kobold. My heroic career, everyone.", "Me escondendo atrás de um pote fugindo de um kobold. Minha carreira de herói, gente."),
+                ("Air that is held goes stale. Only the air that is shared stays good.", "Ar guardado fica parado. Só o ar dividido continua bom."),
+                ("Can I keep one bottle? A little one? For breathing later?", "Posso ficar com uma garrafa? Uma pequenininha? Pra respirar depois?"));
+            Line(entries, RegionBossRules.GreedyBottlerId, RegionBossPhase.Storm, "The Bottler throws bottle lanterns!", "O Engarrafador atira lanternas de garrafa!");
+            Line(entries, RegionBossRules.GreedyBottlerId, RegionBossPhase.LastStand, "He uncorks every bottle at once!", "Ele destampa todas as garrafas de uma vez!");
+            Blow(entries, RegionBossRules.GreedyBottlerId, "He swings his great jug!", "Lá vem o garrafão!");
+            Signature(entries, RegionBossRules.GreedyBottlerId, "He's letting out the stale air! Get behind a bottle!", "Ele vai soltar o ar parado! Fica atrás de uma garrafa!");
+            entries.Add(new LocalizationEntry(BottleKey, "Shelter!", "Abrigo!"));
+            Withdraw(entries, RegionBossRules.GreedyBottlerId, "The Greedy Bottler pulls the corks out one by one, and the Pure Air runs back down the pipes. Wiping his snout, he goes off to help at the fair.", "O Engarrafador Guloso tira as rolhas uma a uma, e o Ar Sereno volta a correr pelos canos. Limpando o focinho, ele vai ajudar na feira.");
+
+            // -- Palafitas de Tarchon (33) --
+            Page(entries, RegionBossRules.LightFisherId,
+                "The will-o'-wisps of the marsh are little sparks of light that got lost on their way up to the moon, children. The Fisher of Lights is a catfish as big as a boat who swallowed them one by one, so he could have light all to himself, and the more he swallowed the darker he got inside. He fishes with a lure of light, and he is clever: he doesn't cast where you are, he casts where you are going. If you keep walking the way you were, or stand there waiting, he hooks you. Change course right when he looks at you. Free him and he lets the sparks go, a whole cloud of them, back up towards the moon.",
+                "Os fogos-fátuos do pântano são faisquinhas de luz que se perderam no caminho pra lua, crianças. O Pescador de Luzes é um bagre do tamanho de um barco que engoliu elas uma por uma, pra ter luz só pra ele, e quanto mais engolia mais escuro ficava por dentro. Ele pesca com uma isca de luz, e é esperto: não joga onde vocês estão, joga onde vocês vão estar. Se continuarem andando do mesmo jeito, ou ficarem parados esperando, ele fisga. Mudem de rumo bem na hora em que ele olhar pra vocês. Libertem ele e ele solta as faíscas, uma nuvem inteira, de volta pra lua.",
+                ("He looks twice, then casts ahead. So on the second look, I turn.", "Ele olha duas vezes e joga na frente. Então no segundo olhar, eu viro."),
+                ("He swallowed all that light and got darker. Light doesn't stay where it's kept.", "Ele engoliu toda aquela luz e ficou mais escuro. Luz não fica onde é guardada."),
+                ("A fish that predicts my moves. Even the fish here are smarter than me.", "Um peixe que adivinha meus passos. Até os peixes daqui são mais espertos que eu."),
+                ("Whoever only follows the road ahead is easy to catch. Turn when it matters.", "Quem só segue a estrada da frente é fácil de pegar. Vira quando importa."),
+                ("Zig! Zag! Zig! ...He can't catch a zigzag! Nobody can catch a zigzag!", "Zig! Zag! Zig! ...Ele não pega zigue-zague! Ninguém pega zigue-zague!"));
+            Line(entries, RegionBossRules.LightFisherId, RegionBossPhase.Storm, "The Fisher spits balls of marsh light!", "O Pescador cospe bolas de luz do pântano!");
+            Line(entries, RegionBossRules.LightFisherId, RegionBossPhase.LastStand, "He thrashes the whole mud bank!", "Ele se debate no banco de lama inteiro!");
+            Blow(entries, RegionBossRules.LightFisherId, "His tail slaps down!", "Lá vem o rabo!");
+            Signature(entries, RegionBossRules.LightFisherId, "He's watching where you go! Change course!", "Ele está vendo pra onde você vai! Muda de rumo!");
+            entries.Add(new LocalizationEntry(LureKey, "The lure!", "A isca!"));
+            Withdraw(entries, RegionBossRules.LightFisherId, "The Fisher of Lights opens his great mouth and a cloud of will-o'-wisps pours out and floats up towards the moon. Lighter at last, he slides back into the marsh.", "O Pescador de Luzes abre a bocarra e uma nuvem de fogos-fátuos sai e sobe flutuando pra lua. Mais leve enfim, ele escorrega de volta pro pântano.");
+
+            // -- Forte dos Ventos (39) --
+            Page(entries, RegionBossRules.VaneLordId,
+                "The Artificers built great wind vanes round the Fort of the Winds to tell the wind of the valley which way to blow, and the biggest of them was the Lord of the Vane: an engine of walnut wood and bronze that turned slowly and kept the breeze kind. The shadow got into his gears and now he turns a quarter every gust and blows the whole valley down. Here is the trick, children: wind only pushes one way. When he calls where the wind comes from, go to that side of him, upwind, and the gust passes you by. Free him and he turns the right way round, and the valley has a good breeze again.",
+                "Os Artífices construíram cata-ventos enormes em volta do Forte dos Ventos pra dizer ao vento do vale pra onde soprar, e o maior deles era o Senhor do Cata-Vento: um engenho de nogueira e bronze que girava devagar e deixava a brisa mansa. A sombra entrou nas engrenagens dele e agora ele gira um quarto a cada rajada e sopra o vale inteiro pra baixo. O segredo é este, crianças: vento só empurra pra um lado. Quando ele disser de onde vem o vento, vão pra esse lado dele, contra o vento, e a rajada passa longe. Libertem ele e ele gira pro lado certo, e o vale volta a ter brisa boa.",
+                ("He calls the wind, I go stand where it comes from.", "Ele diz o vento, eu vou ficar de onde ele vem."),
+                ("He was made to keep the breeze kind. He just forgot which way kind was.", "Ele foi feito pra deixar a brisa mansa. Só esqueceu pra que lado era mansa."),
+                ("Walk INTO the wind to dodge the wind. Physics in this family is optional.", "Andar CONTRA o vento pra escapar do vento. Física nessa família é opcional."),
+                ("The wind pushes away from where it comes. Stand at the source and it has nothing to push.", "O vento empurra pra longe de onde vem. Fica na origem e ele não tem o que empurrar."),
+                ("North! No, east! No... which one is north again?", "Norte! Não, leste! Não... qual é o norte mesmo?"));
+            Line(entries, RegionBossRules.VaneLordId, RegionBossPhase.Storm, "The Vane Lord throws bronze feathers!", "O Senhor do Cata-Vento atira penas de bronze!");
+            Line(entries, RegionBossRules.VaneLordId, RegionBossPhase.LastStand, "His blades spin faster and faster!", "As pás dele giram cada vez mais rápido!");
+            Blow(entries, RegionBossRules.VaneLordId, "His great blade comes round!", "Lá vem a pá grande!");
+            Signature(entries, RegionBossRules.VaneLordId, "He's turning the wind! Go upwind of him!", "Ele vai virar o vento! Vai pro lado de onde ele vem!");
+            entries.Add(new LocalizationEntry(VaneWindKey(VaneWind.North), "Wind from the north: go north of him!", "Vento do norte: vai pro norte dele!"));
+            entries.Add(new LocalizationEntry(VaneWindKey(VaneWind.East), "Wind from the east: go east of him!", "Vento do leste: vai pro leste dele!"));
+            entries.Add(new LocalizationEntry(VaneWindKey(VaneWind.South), "Wind from the south: go south of him!", "Vento do sul: vai pro sul dele!"));
+            entries.Add(new LocalizationEntry(VaneWindKey(VaneWind.West), "Wind from the west: go west of him!", "Vento do oeste: vai pro oeste dele!"));
+            Withdraw(entries, RegionBossRules.VaneLordId, "The Lord of the Vane creaks, slows and turns the right way round. A soft breeze runs down the valley, and the wind bells of the fort ring all together.", "O Senhor do Cata-Vento range, desacelera e gira pro lado certo. Uma brisa mansa desce o vale, e os sinos de vento do forte tocam todos juntos.");
+
+            // -- Torres Brancas de Amanirenas (42) --
+            Page(entries, RegionBossRules.LittleEclipseId,
+                "The mirrors of the White Spires pass the light of the sun from tower to tower so the whole hill is bright. The Little Eclipse is a disc of shadow that stuck itself to the towers and eats that light, a little more every time. It isn't big, children, but it is patient: first it covers a slice of the light towards you, then half, then more, and then the whole round goes dark at once. So watch how much it covers. Step out of the slice when it is small, and when it says the light is all gone, run beyond its shadow. Free it and it stays in the square as a shadow clock, telling the hour instead of hiding it.",
+                "Os espelhos das Torres Brancas passam a luz do sol de torre em torre pra colina inteira ficar clara. O Pequeno Eclipse é um disco de sombra que grudou nas torres e come essa luz, um pouco mais a cada vez. Ele não é grande, crianças, mas é paciente: primeiro cobre uma fatia da luz na direção de vocês, depois metade, depois mais, e então a roda inteira escurece de uma vez. Então vejam quanto ele cobre. Saiam da fatia quando ela for pequena, e quando ele disser que a luz acabou, corram pra fora da sombra dele. Libertem ele e ele fica na praça como relógio de sombra, dizendo a hora em vez de escondê-la.",
+                ("A quarter, a half, three quarters... and on the fourth, I run.", "Um quarto, metade, três quartos... e no quarto, eu corro."),
+                ("A shadow that only takes a little at a time. Those are the hardest to notice.", "Uma sombra que só pega um pouquinho de cada vez. Essas são as mais difíceis de perceber."),
+                ("It's called LITTLE Eclipse. It's covering the WHOLE sky. Somebody lied.", "Chama PEQUENO Eclipse. Está cobrindo o céu INTEIRO. Alguém mentiu."),
+                ("What grows a little each time, we must count. Counting is how we see it coming.", "O que cresce um pouco a cada vez, a gente precisa contar. Contar é como a gente vê chegando."),
+                ("I'll hold the sun with my hands! ...It's too hot. Never mind.", "Vou segurar o sol com as mãos! ...Está quente demais. Deixa pra lá."));
+            Line(entries, RegionBossRules.LittleEclipseId, RegionBossPhase.Storm, "The Eclipse throws bolts of stolen light!", "O Eclipse atira raios de luz roubada!");
+            Line(entries, RegionBossRules.LittleEclipseId, RegionBossPhase.LastStand, "It spreads over every tower!", "Ele se espalha por todas as torres!");
+            Blow(entries, RegionBossRules.LittleEclipseId, "Its rim comes down on you!", "Lá vem a borda!");
+            Signature(entries, RegionBossRules.LittleEclipseId, "It's covering the light! Get out of its slice!", "Ele vai cobrir a luz! Sai da fatia dele!");
+            entries.Add(new LocalizationEntry(EclipseCoverKey(0), "A quarter of the light: a thin slice towards you!", "Um quarto da luz: uma fatia fina na sua direção!"));
+            entries.Add(new LocalizationEntry(EclipseCoverKey(1), "Half the light: step well to the side!", "Metade da luz: vai bem pro lado!"));
+            entries.Add(new LocalizationEntry(EclipseCoverKey(2), "Three quarters: only behind it is light!", "Três quartos: só atrás dele tem luz!"));
+            entries.Add(new LocalizationEntry(EclipseCoverKey(3), "The whole light! Run out of its shadow!", "A luz inteira! Corre pra fora da sombra!"));
+            Withdraw(entries, RegionBossRules.LittleEclipseId, "The Little Eclipse slides off the towers and settles in the middle of the square, a round shadow on the stone that tells the hour as the sun goes by.", "O Pequeno Eclipse escorrega das torres e assenta no meio da praça, uma sombra redonda na pedra que diz a hora enquanto o sol passa.");
         }
     }
 }

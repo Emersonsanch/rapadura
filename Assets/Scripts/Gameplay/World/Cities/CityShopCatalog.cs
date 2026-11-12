@@ -405,8 +405,8 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_iron_ore", 6, 5, rotating: true, unlock: ShopUnlock.Unlocked(BiomeType.Mountain)),
             }), houseSlots: 3),
 
-            // ---- Oásis de Qocho (Deserto): couro de vaqueiro ----
-            new CityShopSpec(SelariaVava, ShopTheme.Speciality, BiomeType.Desert, ShopRotationPeriod.Weekly, 2, new List<CityShopEntry>
+            // ---- Oásis de Qocho (Deserto): couro de vaqueiro; and the Móveis da Cisterna de Qocho (Docs/Housing.md §6.2), the Epic as the week's special ----
+            new CityShopSpec(SelariaVava, ShopTheme.Speciality, BiomeType.Desert, ShopRotationPeriod.Weekly, 2, WithHouse(SelariaVava, new List<CityShopEntry>
             {
                 new CityShopEntry("item_leather_boots", 9, 3),
                 new CityShopEntry("item_leather_helmet", 11, 2),
@@ -420,9 +420,9 @@ namespace Rapadura.Gameplay.World.Cities
                 // Map gates (MapRequirementRules): water for the Dunas que Cantam (10), theriac for Namrael (12).
                 new CityShopEntry("item_odre_agua", 28, 5),
                 new CityShopEntry("item_teriaga", 48, 3),
-            }),
+            }), houseSlots: 3, weeklySlots: 1),
 
-            // ---- Vila de Litema (Montanha): ferreiro ----
+            // ---- Vila de Litema (Montanha): ferreiro; and the Móveis do Rondavel (Docs/Housing.md §6.2), the Epic as the week's special ----
             new CityShopSpec(ForjaTonho, ShopTheme.Ferreiro, BiomeType.Mountain, ShopRotationPeriod.Weekly, 2, WithHouse(ForjaTonho, new List<CityShopEntry>
             {
                 new CityShopEntry("item_iron", 7, 20),
@@ -444,9 +444,9 @@ namespace Rapadura.Gameplay.World.Cities
                 // The oil lamp of the Grutas (17, 19, 20): every gallery down from the Passo do Hahya already asks for it, so the
                 // forge on the way down sells it too (a little dearer than the Vila das Lamparinas), or the Grutas could not be entered.
                 new CityShopEntry("item_lamparina_oleo", 30, 2),
-            }), houseSlots: 2),
+            }), houseSlots: 3, weeklySlots: 1),
 
-            // ---- Vila das Lamparinas (Cavernas): lamparinas e botica ----
+            // ---- Vila das Lamparinas (Cavernas): lamparinas e botica; and the Móveis da Casa na Rocha (Docs/Housing.md §6.2), the Epic as the week's special ----
             new CityShopSpec(LamparinasBenedita, ShopTheme.Speciality, BiomeType.Caves, ShopRotationPeriod.Daily, 2, WithHouse(LamparinasBenedita, new List<CityShopEntry>
             {
                 new CityShopEntry("item_health_potion", 15, 5),
@@ -463,7 +463,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_lamparina_oleo", 27, 3),
                 new CityShopEntry("item_lamparina_runica", 150, 1, unlock: ShopUnlock.Cleared(BiomeType.Caves)),
                 new CityShopEntry("item_oleo_fogo_eterno", 185, 2, unlock: ShopUnlock.Cleared(BiomeType.Caves)),
-            }), houseSlots: 2),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Copas de Garajonay (elfos-da-mata): Dácil's herbs, mist potions and canopy gear; the counter turns daily ----
             new CityShopSpec(ErvariaDacil, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(ErvariaDacil, new List<CityShopEntry>
@@ -1001,7 +1001,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_axe", 18, 1, rotating: true),
             }), houseSlots: 10, weeklySlots: 1),
 
-            // ---- Costureira Mestra Narisah (Vila): 6 looks + 6 cloth house items a day (Housing.md §8.1) ----
+            // ---- Costureira Mestra Narisah (Vila): 6 looks + 6 cloth house items a day (Housing.md §8.1); the Móveis do Tear de Seda (§6.2) with the Epic as the week's special ----
             new CityShopSpec(CostureiraFatima, ShopTheme.Costureira, BiomeType.Forest, ShopRotationPeriod.Daily, 6, WithHouse(CostureiraFatima, new List<CityShopEntry>
             {
                 new CityShopEntry("item_fiber", 1, 30),
@@ -1047,7 +1047,7 @@ namespace Rapadura.Gameplay.World.Cities
                 Outfit("acess_018", 23, 5),
                 Outfit("acess_024", 55, 3, ShopUnlock.Cleared(BiomeType.Forest)),
                 Outfit("acess_035", 55, 3, ShopUnlock.Cleared(BiomeType.Forest)),
-            }), houseSlots: 6),
+            }), houseSlots: 6, weeklySlots: 1),
 
             // ---- Estrebaria do Srosh (Srosh): the starter mounts' whistles (Docs/Mounts.md §3.1, phase M1) ----
             new CityShopSpec(HarasVila, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Weekly, 0, new List<CityShopEntry>

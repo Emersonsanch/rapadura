@@ -51,7 +51,7 @@ def test_content_is_read_from_the_code(eco):
     assert len(eco.fare_rows) == 99  # map 01 is the free tutorial map
     assert eco.curve.campaign == 50 and len(eco.levels) == ec.MAX_LEVEL - 1
     assert all(q.xp > 0 for q in eco.quests if q.source != "campanha")
-    assert len(eco.keepsakes) == 12 and len(eco.sets) == 9  # Regions 5-9 and 13-16 (ArmorSetRules)
+    assert len(eco.keepsakes) == 12 and len(eco.sets) == 13  # Regions 1-9 and 13-16 (ArmorSetRules)
 
 
 def test_milestones_follow_progressao500(eco):
@@ -184,7 +184,7 @@ def test_gold_has_destinations_above_100(eco, world):
 def test_bosses_pay_their_xp_per_hour(eco, world):
     """Sugestão 4 (Docs/Balanco100a500.md §5.3): camping a world boss (RegionBossRules.WorldBossKillXpMultiplier) pays 1.1-1.5x the
     XP per hour of farming the commons of its level; a map boss of the fichas (MapBossKillXpMultiplier) 0.8-1.2x."""
-    assert len(world.bosses) == 12 and len(ec.load_map_bosses()) == 18
+    assert len(world.bosses) == 12 and len(ec.load_map_bosses()) == 24
     assert ec.boss_camp_problems(eco, world.bosses) == []
     world_rank, map_rank = ec.boss_xp_ranks()
     assert world_rank > map_rank > eco.kill_xp.ranks["MapBoss"]

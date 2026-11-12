@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f171d806ae04e9545a71dcbace88f076, type: 3}
+  m_Name: armor_rubro_helm
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
+  _itemId: armor_rubro_helm
+  _displayName: "Turbante de Seda da Caravana"
+  _description: "Turbante de seda das caravanas de Qocho, enrolado sobre um casquete de couro rubro. Conjunto Couro Rubro (2 pe\xE7as): Areia que Queima."
+  _icon: {fileID: 21300000, guid: 8047f4ca93febb11aef1e1fc830c6428, type: 3}
+  _worldModelPrefab: {fileID: 0}
+  _type: 3
+  _category: 11
+  _rarity: 1
+  _weight: 1
+  _value: 340
+  _maxStack: 1
+  _gridWidth: 0
+  _gridHeight: 0
+  _isBound: 0
+  _hasDurability: 1
+  _maxDurability: 75
+  _equipSlot: 1
+  _armorDefense: 6
+  _weaponDamage: 0
+  _weaponAttackSpeed: 1
+  _equipStatModifiers:
+  - displayName: "F\xF4lego do Karez"
+    affectedStat: 4
+    application: 0
+    value: 10
+    durationSeconds: 0
+    isDebuff: 0
+    ticksOverTime: 0
+    tickIntervalSeconds: 1
+    tickDamageOrHeal: 0
+  _healthRestore: 0
+  _staminaRestore: 0
+  _manaRestore: 0
+  _consumeBuffs: []

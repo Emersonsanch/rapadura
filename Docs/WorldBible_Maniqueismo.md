@@ -654,6 +654,38 @@ variantes noturnas; entre parênteses, o substituto que saiu. Estes doze saem da
 | `enemy_mountain_stone_jackdaw` | **Gralha de Pedra** / *Stone Jackdaw* | 16 Muralhas de Pedra Seca (era a Ave-Graveto) | [distância], voa | bicho real; forrava o ninho com lasquinhas e passou a levar o muro, pedra por pedra. |
 | `enemy_cave_young_ubir` | **Ubır Jovem** / *Young Ubır* | 20 Terraços de Tufo (era a Aranha-Tecelã) | [rápido], voa | o ubır (§3.5) que ainda não aprendeu a se esconder em ninguém: bola de cabelo preto com brasa na boca; tem fome de luz. |
 
+**Décima quarta leva (2026-11-12): os substitutos mais vistos das Regiões 10–16 (Mapas100 54, 55, 63, 64, 70, 75, 81–83, 85, 92, 95).**
+(A décima terceira, Regiões 5–9, é `MidStandInBeastRecipes`.) Mesmo contrato (peso 0 no bioma, nível da área, números do bioma),
+prefixo conforme o bioma do layout (`enemy_mountain_` em Farnkesh, no Mar Gelado e em Hinokura, `enemy_forest_` na Mistura, no
+Profundo e no Céu). Modelos em `FarStandInBeastRecipes` (as aves usam o esqueleto de `MidStandInBeastRecipes`), Caderno em
+`FarStandInBestiaryTexts`. Dois são [distância], voam e atiram: o Abutre do Pico (`Feather`) e a Pipa-Sombra (`LanternBolt`;
+`RangedEnemiesTests`). A Chama Faminta é um bicho só para as três fogueiras das fichas (70, 75 e 85). Os ids ficam em
+`OverworldLayouts.FarBeasts`; as constantes de região que eram só daquele papel passaram a apontar para lá (`Fark.Vulture`,
+`Gelo.Floe`, `Rio.Locust`, `Mistura.Diorite/ShoulderBird/DreamBird`, `Profundo.SmallShadow/DarkBat/HungryFlame`,
+`Ceu.OrbitWind/RunawayLantern`), e as que outros papéis dividiam ganharam constante nova (`Fark.ShadowKite`, `Gelo.Kul`,
+`Fogo.HungryFlame`). Respeito: os *kul* só como os contos komi os dão (o povo da água que guarda os peixes); Ullikummi e
+Upelluri só como a canção hurrita os dá, sem deus nenhum (a Pedra de Diorito são lascas da criança de pedra, a Ave do Ombro
+mora no ombro do gigante); o Fogo Devorador é o fogo da Treva (§1.3); as Barcas de Luz e a Coluna da Glória como em §1.5.
+Testes: `FarStandInBeastsTests` e `FarStandInBeastsPlacementTests`. Já no overworld no lugar dos substitutos, com as mesmas
+clareiras, níveis e variantes noturnas; entre parênteses, o substituto que saiu. Estes doze saem das listas de "seguem com
+substitutos"; o Sino Rachado e o Raio Preso (lanterna quebrada), o Mosquito da Tundra e a Faísca Raivosa (enxame de vaga-lumes)
+continuam com substituto.
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_mountain_peak_vulture` | **Abutre do Pico** / *Peak Vulture* | 54 Escadaria dos Cestos, Mar de Nuvens e Bosque de Pináculos (era o Abutre de Brasa) | [distância], voa | os abutres que limpavam os picos e ganhavam as sobras nas pedras altas; o vento ruim se aninhou na gola de nuvem e agora guardam as escadas dos cestos. |
+| `enemy_mountain_shadow_kite` | **Pipa-Sombra** / *Shadow Kite* | 55 Pináculos do Leste e Ermida Baixa (era a Lanterna Quebrada) | [distância], voa | invenção: as pipas de papel das crianças de Farnkesh, com rosto pintado, que seguiram voando sozinhas quando cortaram as cordas das pontes; cospem a luz das lamparinas que roubaram. |
+| `enemy_mountain_drifting_floe` | **Gelo Flutuante** / *Drifting Floe* | 63 Banquisas do Oeste e Mar das Auroras (era a Neblina do Vento Ruim) | [controle], pesado | um pedaço da banquisa que se soltou com uma fita da aurora congelada dentro; vai atrás dos barcos e encosta o peso no que é quente. |
+| `enemy_mountain_little_kul` | **Kul Pequeno** / *Little Kul* | 64 Fundo do Velho Kul e Lago do Kul (era o enxame de vaga-lumes) | [enxame], voa | os *kul* dos contos komi, o povo da água que guarda os peixes; os pequenos subiram pelos buracos de pesca atrás das lamparinas quando o Velho Kul azedou. |
+| `enemy_mountain_hungry_flame` | **Chama Faminta** / *Hungry Flame* | 70 Caldeira, Borda Fria e Campos de Cinza; 75 Lago de Fogo; 85 Cova do Fogo Devorador e Chão que Acende (era o enxame de vaga-lumes) | [enxame], voa | linguinhas do Fogo Devorador (§1.3), o fogo que come e não esquenta; a luz que comeram arde no meio. |
+| `enemy_forest_diorite_stone` | **Pedra de Diorito** / *Diorite Stone* | 81 Ombro de Upelluri, Clavícula e Diorito Crescente (era a Pedra que Rola) | [tanque], pesado | lascas de Ullikummi, a criança de diorito da canção hurrita que cresceu no ombro de Upelluri; andam em tocos procurando o resto de si. |
+| `enemy_forest_shoulder_bird` | **Ave do Ombro** / *Shoulder Bird* | 81 Ombro, Dobras de Pedra e Beiral do Céu (era a Águia da Tempestade) | [rápido], voa | os pássaros que fazem ninho no ombro do gigante sem ele sentir; pegaram a cor e o gênio da pedra, com líquen nas costas. |
+| `enemy_forest_dream_bird` | **Pássaro-Sonho** / *Dream Bird* | 82 Campo das Tábuas, Jardim Cortado e Tábuas do Sonho (era a Coruja-de-Fumaça) | [rápido], voa | invenção: o pássaro que saiu de um sonho escrito em barro e ficou com a escrita nas penas; a sombra quebrou as tábuas e ele perdeu o caminho de volta. |
+| `enemy_forest_little_shadow` | **Sombra Pequena** / *Little Shadow* | 83 Fortaleza, Muralha em Arco, Cisternas e Beira do Abismo (era o Mordedor de Sombra) | [rápido] | invenção: as sombras que as lâmpadas da fortaleza jogam na parede e que saíram andando; roubam pavio porque é a única coisa de que têm medo. |
+| `enemy_forest_dark_bat` | **Morcego da Treva** / *Bat of the Dark* | 83 Fortaleza, Nichos de Basalto e Beira do Abismo (era o Ubır, o Morcegão Bebe-Luz) | [enxame], voa | os morcegos das seteiras da última fortaleza que bebem as lâmpadas uma por uma, devagar; vêm em nuvem. |
+| `enemy_forest_orbit_wind` | **Vento de Órbita** / *Orbit Wind* | 95 Órbitas Vazias e Esferas dos Arcontes, 99 Mirante, 100 Varanda (era a Águia da Tempestade) | [rápido], voa | os ventos que levam as luzes ao redor das esferas até subirem pela Coluna (§1.5); os arcontes tiraram este da órbita e ele gira em volta de quem chega. |
+| `enemy_forest_runaway_lantern` | **Lanterna Fugitiva** / *Runaway Lantern* | 92 Ilhotas de Nuvem, Margens da Corrente e Foz Leste (era a Lanterna Quebrada) | [enxame], voa | uma lanterna de papel de uma Barca de Luz (§3.16) que não quis subir, fugiu do convés e queimou dois furinhos pra enxergar; apagada com jeito, a Barca volta pra buscar a luz. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |

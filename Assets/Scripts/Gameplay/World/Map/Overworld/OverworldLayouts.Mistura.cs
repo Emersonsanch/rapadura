@@ -173,13 +173,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string CedarLynx = "enemy_forest_cedar_lynx";
             public const string ResinBee = "enemy_forest_resin_bee";
             public const string GlowMantle = "enemy_forest_glow_mantle";
-            public const string Diorite = "enemy_mountain_rolling_stone";
-            public const string ShoulderBird = "enemy_mountain_storm_eagle";
+            public const string Diorite = FarBeasts.DioriteStone;
+            public const string ShoulderBird = FarBeasts.ShoulderBird;
             public const string Tremor = "enemy_mountain_stone_golem";
             public const string UllikummiSon = "enemy_forest_ullikummi_son";
             public const string BrokenTablet = "enemy_forest_broken_tablet";
             public const string GardenShadow = "enemy_forest_garden_shadow";
-            public const string DreamBird = "enemy_forest_shroud_owl";
+            public const string DreamBird = FarBeasts.DreamBird;
             public const string ErasingWater = "enemy_mountain_shadow_seal";
         }
 
@@ -436,7 +436,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             MisturaGroup(anciaos, "cedros_anciaos_raivosos", "[tanque]", Mistura.AngryCedar, Mistura.GlowMantle, werewolf, 3, 30f);
             MisturaGroup(anciaos, "mantos_dos_anciaos", "[controle]", Mistura.GlowMantle, Mistura.ResinBee, bats);
 
-            // The shoulder of Upelluri (81): the Pedra de Diorito [tanque] (the rolling stone), the Ave do Ombro [rápido] (the storm eagle), the Tremor
+            // The shoulder of Upelluri (81): the Pedra de Diorito [tanque] and the Ave do Ombro [rápido] (their own beasts now, FarBeasts), the Tremor
             // [controle] (the stone golem), the Filho de Ullikummi [elite].
             MisturaGroup(ombro, "aves_do_ombro", "[rápido]", Mistura.ShoulderBird, Mistura.Diorite, owl);
             MisturaGroup(ombro, "pedras_de_diorito", "[tanque]", Mistura.Diorite, Mistura.ShoulderBird, bats, 3, 30f);
@@ -450,7 +450,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             MisturaGroup(beiral, "aves_do_beiral", "[rápido]", Mistura.ShoulderBird, Mistura.UllikummiSon, owl);
 
             // The Field of the Dream Tablets (82): the Tábua Quebrada [distância], the Jardim-Sombra [tanque], the Pássaro-Sonho [rápido]
-            // (the shroud owl), the Água que Apaga [controle] (the shadow seal).
+            // (its own beast now, FarBeasts), the Água que Apaga [controle] (the shadow seal).
             MisturaGroup(campo, "tabuas_do_campo", "[distância]", Mistura.BrokenTablet, Mistura.DreamBird, moon);
             MisturaGroup(campo, "passaros_sonho", "[rápido]", Mistura.DreamBird, Mistura.BrokenTablet, owl);
             MisturaGroup(jardim, "jardins_sombra", "[tanque]", Mistura.GardenShadow, Mistura.DreamBird, werewolf, 3, 30f);

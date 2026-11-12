@@ -190,6 +190,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Ushabti = "enemy_mountain_lacquer_ushabti";
             public const string Ogre = "enemy_mountain_furnace_ogre";
             public const string Spark = NightVariantRules.FireflySwarmEnemyId;
+            public const string HungryFlame = FarBeasts.HungryFlame;
             public const string Giant = "enemy_mountain_slag_giant";
             public const string Nian = "enemy_forest_nian_cub";
             public const string Crow = "enemy_cave_dark_crow";
@@ -480,18 +481,18 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             escoria.Fauna.Add(Fauna("ushabtis_da_escoria", "[tanque]", T(N(Fogo.Ushabti, 3), N(Fogo.Spark, 1)), T(V(Fogo.Ushabti, 2), S(bats, 1)), 3, null, 30f));
             escoria.Fauna.Add(Fauna("faiscas_da_escoria", "[enxame]", T(N(Fogo.Spark, 3), N(Fogo.Ushabti, 1)), T(V(Fogo.Spark, 3), S(sparks, 1)), 5));
 
-            // The Devouring Fire (70): the Chama Faminta [enxame] (the firefly swarm), the Salamandra Devoradora [rápido] (the sand
+            // The Devouring Fire (70): the Chama Faminta [enxame] (its own beast now, FarBeasts), the Salamandra Devoradora [rápido] (the sand
             // snake), the Gigante de Escória [tanque], the Cinza Viva [controle] (the ooze); always night in the
             // caldera (its night groups are the same beasts, stronger).
-            caldeira.Fauna.Add(Fauna("gigantes_de_escoria", "[tanque]", T(N(Fogo.Giant, 3), N(Fogo.Spark, 1)), T(V(Fogo.Giant, 3), S(bats, 1)), 3, null, 30f));
-            caldeira.Fauna.Add(Fauna("chamas_famintas", "[enxame]", T(N(Fogo.Spark, 3), N(Fogo.Salamander, 1)), T(V(Fogo.Spark, 3), S(sparks, 1)), 5));
+            caldeira.Fauna.Add(Fauna("gigantes_de_escoria", "[tanque]", T(N(Fogo.Giant, 3), N(Fogo.HungryFlame, 1)), T(V(Fogo.Giant, 3), S(bats, 1)), 3, null, 30f));
+            caldeira.Fauna.Add(Fauna("chamas_famintas", "[enxame]", T(N(Fogo.HungryFlame, 3), N(Fogo.Salamander, 1)), T(V(Fogo.HungryFlame, 3), S(sparks, 1)), 5));
             encosta.Fauna.Add(Fauna("salamandras_devoradoras", "[rápido]", T(N(Fogo.Salamander, 3), N(Fogo.Giant, 1)), T(V(Fogo.Salamander, 3), S(sparks, 1)), 4));
             encosta.Fauna.Add(Fauna("cinzas_vivas_da_encosta", "[controle]", T(N(Fogo.Octopus, 3), N(Fogo.Salamander, 1)), T(V(Fogo.Octopus, 2), S(bats, 1)), 4));
             borda.Fauna.Add(Fauna("gigantes_da_borda", "[tanque]", T(N(Fogo.Giant, 3), N(Fogo.Octopus, 1)), T(V(Fogo.Giant, 2), S(werewolf, 1)), 3, null, 30f));
-            borda.Fauna.Add(Fauna("chamas_da_borda", "[enxame]", T(N(Fogo.Spark, 3), N(Fogo.Giant, 1)), T(V(Fogo.Spark, 3), S(sparks, 1)), 5));
+            borda.Fauna.Add(Fauna("chamas_da_borda", "[enxame]", T(N(Fogo.HungryFlame, 3), N(Fogo.Giant, 1)), T(V(Fogo.HungryFlame, 3), S(sparks, 1)), 5));
             cinzasVivas.Fauna.Add(Fauna("cinzas_vivas", "[controle]", T(N(Fogo.Octopus, 3), N(Fogo.Spark, 1)), T(V(Fogo.Octopus, 2), S(sparks, 1)), 4));
             cinzasVivas.Fauna.Add(Fauna("salamandras_das_cinzas", "[rápido]", T(N(Fogo.Salamander, 3), N(Fogo.Octopus, 1)), T(V(Fogo.Salamander, 3), S(bats, 1)), 4));
-            campos.Fauna.Add(Fauna("chamas_dos_campos", "[enxame]", T(N(Fogo.Spark, 3), N(Fogo.Crow, 1)), T(V(Fogo.Spark, 3), S(sparks, 1)), 5));
+            campos.Fauna.Add(Fauna("chamas_dos_campos", "[enxame]", T(N(Fogo.HungryFlame, 3), N(Fogo.Crow, 1)), T(V(Fogo.HungryFlame, 3), S(sparks, 1)), 5));
             campos.Fauna.Add(Fauna("corvos_da_cinza", "[distância]", T(N(Fogo.Crow, 3), N(Fogo.Giant, 1)), T(V(Fogo.Crow, 2), S(owl, 1)), 3));
             mar.Fauna.Add(Fauna("gigantes_do_mar_de_cinza", "[tanque]", T(N(Fogo.Giant, 3), N(Fogo.Salamander, 1)), T(V(Fogo.Giant, 2), S(bats, 1)), 3, null, 30f));
             mar.Fauna.Add(Fauna("salamandras_do_mar", "[rápido]", T(N(Fogo.Salamander, 3), N(Fogo.Spark, 1)), T(V(Fogo.Salamander, 3), S(sparks, 1)), 4));

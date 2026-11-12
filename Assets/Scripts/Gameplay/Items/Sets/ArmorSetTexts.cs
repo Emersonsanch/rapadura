@@ -19,6 +19,10 @@ namespace Rapadura.Gameplay.Items.Sets
         public const string PamirBreath = "armor_set.pamir_breath";
         public const string BronzeGong = "armor_set.bronze_gong";
         public const string NartGallop = "armor_set.nart_gallop";
+        public const string GardenDew = "armor_set.garden_dew";
+        public const string BurningSand = "armor_set.burning_sand";
+        public const string KaggenGust = "armor_set.kaggen_gust";
+        public const string LitWick = "armor_set.lit_wick";
 
         public static readonly List<LocalizationEntry> Entries = new List<LocalizationEntry>
         {
@@ -31,6 +35,10 @@ namespace Rapadura.Gameplay.Items.Sets
             new LocalizationEntry(PamirBreath, "Pamir Breath!", "Fôlego do Pamir!"),
             new LocalizationEntry(BronzeGong, "Bronze Gong!", "Gongo de Bronze!"),
             new LocalizationEntry(NartGallop, "Gallop of the Narts!", "Galope dos Nartes!"),
+            new LocalizationEntry(GardenDew, "Garden Dew!", "Orvalho do Jardim!"),
+            new LocalizationEntry(BurningSand, "Burning Sand!", "Areia que Queima!"),
+            new LocalizationEntry(KaggenGust, "Kaggen Gust!", "Rajada do Kaggen!"),
+            new LocalizationEntry(LitWick, "Wick Alight!", "Pavio Aceso!"),
         };
 
         private static LocalizationManager _mergedInto;

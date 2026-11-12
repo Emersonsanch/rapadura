@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Rapadura.Tests
 {
-    /// <summary>The nine armour sets of Regions 5–9 and 13–16 (Docs/Items.md): pieces, drop rule, the two-piece bonuses and the texts.</summary>
+    /// <summary>The thirteen armour sets of Regions 1–9 and 13–16 (Docs/Items.md): pieces, drop rule, the two-piece bonuses and the texts.</summary>
     public class ArmorSetsTests
     {
         private static IEnumerable<ArmorSetDefinition> Sets => ArmorSetRules.All;
@@ -19,7 +19,7 @@ namespace Rapadura.Tests
         [Test]
         public void EverySet_HasAChestAndAHelm_WithIcon()
         {
-            Assert.AreEqual(9, ArmorSetRules.All.Count);
+            Assert.AreEqual(13, ArmorSetRules.All.Count);
             foreach (ArmorSetDefinition set in Sets)
             {
                 ItemDefinition chest = Load(set.ChestItemId);
@@ -57,7 +57,7 @@ namespace Rapadura.Tests
             var seen = new HashSet<string>();
             foreach (ArmorSetDefinition set in Sets)
             {
-                // Regions 13–16 have 12 own beasts each; Regions 5–9 have 6–9 (Docs/Status_100Mapas.md).
+                // Regions 13–16 have 12 own beasts each; Regions 1–9 have 6–12 (Docs/Status_100Mapas.md).
                 Assert.GreaterOrEqual(set.Beasts.Count, ArmorSetRules.Far.Contains(set) ? 12 : 6, set.Id);
                 Assert.LessOrEqual(set.Beasts.Count, 12, set.Id);
                 foreach (string beast in set.Beasts)
@@ -76,7 +76,7 @@ namespace Rapadura.Tests
             Assert.AreEqual(ArmorSetRules.BlueBrickChestId, ArmorSetRules.RollDrop(beast, 0.0, 0.49));
             Assert.AreEqual(ArmorSetRules.BlueBrickHelmId, ArmorSetRules.RollDrop(beast, 0.0049, 0.5));
             Assert.IsNull(ArmorSetRules.RollDrop(beast, ArmorSetRules.DropChance, 0.0), "the chance is exclusive");
-            Assert.IsNull(ArmorSetRules.RollDrop("enemy_cave_ooze", 0.0, 0.0), "other beasts drop nothing");
+            Assert.IsNull(ArmorSetRules.RollDrop("enemy_cave_dweller", 0.0, 0.0), "other beasts (here a region boss) drop nothing");
             Assert.IsNull(ArmorSetRules.RollDrop(null, 0.0, 0.0));
         }
 

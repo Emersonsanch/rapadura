@@ -171,7 +171,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Scarab = "enemy_forest_shadow_scarab";
             public const string Reedsnare = "enemy_forest_reed_snare";
             public const string ShadowLocust = "enemy_forest_shadow_locust";
-            public const string Locust = NightVariantRules.FireflySwarmEnemyId;
+            public const string Locust = FarBeasts.HungryFlame;
             public const string Hippo = "enemy_forest_mud_hippo";
             public const string ReedSnake = "enemy_forest_reed_snake";
             public const string Salamander = "enemy_desert_sand_snake";
@@ -455,7 +455,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             no.Fauna.Add(Fauna("ushabtis_apagados", "[tanque]", T(N(Rio.DimmedUshabti, 3), N(Rio.ShadowBiter, 1)), T(V(Rio.DimmedUshabti, 2), S(bats, 1)), 3, null, 30f));
             no.Fauna.Add(Fauna("trevas_do_no", "[enxame]", T(N(Rio.Creeper, 3), N(Rio.DimmedUshabti, 1)), T(V(Rio.Creeper, 3), S(bats, 1)), 5));
 
-            // Lago de Fogo (75): the Chama Faminta [enxame] (the firefly swarm), the Salamandra de Sombra [rápido] (the sand snake), the Sombra Fervida
+            // Lago de Fogo (75): the Chama Faminta [enxame] (its own beast now, FarBeasts), the Salamandra de Sombra [rápido] (the sand snake), the Sombra Fervida
             // [controle] (the ooze), the Ushabti Rachado [tanque] (the terracotta soldier).
             lago.Fauna.Add(Fauna("chamas_famintas_do_lago", "[enxame]", T(N(Rio.Locust, 3), N(Rio.Salamander, 1)), T(V(Rio.Locust, 3), S(sparks, 1)), 5));
             lago.Fauna.Add(Fauna("ushabtis_rachados", "[tanque]", T(N(Rio.CrackedUshabti, 3), N(Rio.Locust, 1)), T(V(Rio.CrackedUshabti, 2), S(bats, 1)), 3, null, 30f));

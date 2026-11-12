@@ -137,7 +137,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string LightFish = "enemy_forest_dimmed_light_fish";
             public const string SwimmingShadow = "enemy_forest_late_shadow";
             public const string WrongCurrent = "enemy_mountain_ill_wind_mist";
-            public const string RunawayLantern = "enemy_desert_broken_lantern";
+            public const string RunawayLantern = FarBeasts.RunawayLantern;
             public const string DarkStowaway = "enemy_forest_dark_stowaway";
             public const string StubbornSpark = "enemy_forest_glow_mantle";
             public const string HoldShadow = "enemy_forest_hold_shadow";
@@ -147,7 +147,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string DarkDrop = "enemy_cave_ooze";
             public const string ChainedArchon = "enemy_forest_chained_archon";
             public const string SphereSmoke = "enemy_forest_smoke_goat";
-            public const string OrbitWind = "enemy_mountain_storm_eagle";
+            public const string OrbitWind = FarBeasts.OrbitWind;
             public const string BalloonGiant = "enemy_forest_balloon_giant";
             public const string FlowerShadow = "enemy_forest_garden_shadow";
             public const string AzThief = "enemy_forest_az_thief";
@@ -450,7 +450,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             CeuGroup(fresta, "sombras_da_fresta", "[controle]", Ceu.StowawayShadow, Ceu.ConfusedSpark, bats);
 
             // The Rio de Luz (92): the Peixe de Luz Apagado [rápido], the Sombra Nadadora [controle] (the late shadow), the Corrente Errada [controle] (the ill-wind mist),
-            // the Lanterna Fugitiva [enxame] (the broken lantern).
+            // the Lanterna Fugitiva [enxame] (its own beast now, FarBeasts).
             CeuGroup(fozOeste, "peixes_apagados", "[rápido]", Ceu.LightFish, Ceu.SwimmingShadow, moon);
             CeuGroup(fozOeste, "sombras_nadadoras", "[controle]", Ceu.SwimmingShadow, Ceu.LightFish, owl);
             CeuGroup(ilhas, "lanternas_fugitivas", "[enxame]", Ceu.RunawayLantern, Ceu.SwimmingShadow, sparks, 5);
@@ -487,7 +487,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             CeuGroup(gearsE, "gotas_do_leste", "[rápido]", Ceu.DarkDrop, Ceu.CrackedJar, bats);
             CeuGroup(gearsE, "jarras_rachadas_leste", "[distância]", Ceu.CrackedJar, Ceu.ToyArchon, moon);
 
-            // The Spheres (95): the Arconte Acorrentado Menor [tanque], the Fumaça de Esfera [controle] (the smoke goat), the Vento de Órbita [rápido] (the storm eagle),
+            // The Spheres (95): the Arconte Acorrentado Menor [tanque], the Fumaça de Esfera [controle] (the smoke goat), the Vento de Órbita [rápido] (its own beast now, FarBeasts),
             // the Gigante-Balão [elite].
             CeuGroup(vazioW, "ventos_de_orbita_oeste", "[rápido]", Ceu.OrbitWind, Ceu.SphereSmoke, owl);
             CeuGroup(vazioW, "gigantes_balao_oeste", "[elite]", Ceu.BalloonGiant, Ceu.OrbitWind, werewolf, 3, 32f);

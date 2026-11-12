@@ -158,7 +158,6 @@ namespace Rapadura.Tests
         private static OverworldFauna Group(string id) =>
             OverworldLayouts.Get(RioId).Zones.SelectMany(z => z.Fauna).First(f => f.Id == id);
 
-        [TestCase("chamas_famintas_do_lago", Firefly)]
         [TestCase("salamandras_de_sombra", SandSnake)]
         [TestCase("escorpioes_dos_aneis", DesertScorpion)]
         [TestCase("ushabtis_apagados", RopeUshabti)]

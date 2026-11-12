@@ -60,6 +60,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>A Fiandeira Esquecida's arena (04, map boss): the stone ring by the trail west of the mulberry grove, outside its rows and webs.</summary>
         public static readonly Vector2 FiandeiraEsquecidaArena = new Vector2(1099f, -579f);
+
+        /// <summary>O Velho da Névoa's arena (05, map boss): the ring the Copas de Garajonay already keep at the end of their north trail (GarajonayOffset + (−16, 124)).</summary>
+        public static readonly Vector2 VelhoDaNevoaArena = new Vector2(1209f, 424f);
         public static readonly Vector2 GarajonayOffset = new Vector2(1225f, 300f);
         public static readonly Vector2 MihrshahOffset = new Vector2(1150f, 1050f);
 

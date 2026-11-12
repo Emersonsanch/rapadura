@@ -87,6 +87,21 @@ namespace Rapadura.Gameplay.Enemies
         private float _healthAtWarning;
         private Vector3 _home;
 
+        // The six more map bosses (05, 10, 22, 33, 39, 42): the worm's songs and the verse it sings, the bottler's uncorkings and where his bottles
+        // stand, the fisher's two looks and where he cast, the vane's gusts and the wind, the eclipse's covers and the slice it darkens.
+        private int _songs;
+        private int _verse;
+        private int _uncorkings;
+        private Vector2[] _bottles;
+        private Vector3 _lureFirstLook;
+        private bool _lureFirstSeen;
+        private bool _lureCast;
+        private Vector2 _lure;
+        private int _gusts;
+        private VaneWind _wind;
+        private int _covers;
+        private int _cover;
+
         public RegionBossPhase Phase => _phase;
 
         /// <summary>True while a great blow is telegraphed.</summary>
@@ -126,6 +141,13 @@ namespace Rapadura.Gameplay.Enemies
             _rootStepTimer = 0f;
             _smears = 0;
             _healthAtWarning = 0f;
+            _songs = 0;
+            _uncorkings = 0;
+            _bottles = null;
+            _lureFirstSeen = false;
+            _lureCast = false;
+            _gusts = 0;
+            _covers = 0;
             EventBus.Subscribe<CombatTargetDiedEvent>(HandleTargetDied);
         }
 
@@ -332,6 +354,24 @@ namespace Rapadura.Gameplay.Enemies
                     }
                 }
 
+                if (signature == RegionBossSignature.LeadCast && hero != null)
+                {
+                    // The fisher looks twice at where the hero is going, then casts ahead of them.
+                    if (!_lureFirstSeen && _signatureWindup <= RegionBossRules.LureFirstLookSeconds)
+                    {
+                        _lureFirstLook = hero.position;
+                        _lureFirstSeen = true;
+                    }
+                    else if (_lureFirstSeen && !_lureCast && _signatureWindup <= RegionBossRules.LureSecondLookSeconds)
+                    {
+                        _lure = RegionBossRules.LureSpot(Flat(_lureFirstLook), Flat(hero.position));
+                        _lureCast = true;
+                        Vector3 lure = new Vector3(_lure.x, hero.position.y, _lure.y);
+                        DungeonShockwave.Spawn(lure, null, _controller.gameObject, 0f, 0f);
+                        DungeonFx.Say(lure + Vector3.up * 1.2f, Text(RegionBossTexts.LureKey));
+                    }
+                }
+
                 if (_signatureWindup <= 0f)
                 {
                     _signatureWindup = 0f;
@@ -418,6 +458,37 @@ namespace Rapadura.Gameplay.Enemies
             {
                 // The ring of his gold: the only place he strikes.
                 DungeonShockwave.Spawn(_home, null, _controller.gameObject, 0f, 0f);
+            }
+            else if (signature == RegionBossSignature.DuneVerses)
+            {
+                _verse = RegionBossRules.DuneVerseOf(_songs++);
+                warning = RegionBossTexts.DuneVerseKey(_verse);
+            }
+            else if (signature == RegionBossSignature.StaleAir)
+            {
+                // The three great bottles he sets down: the only shelter from the air he lets out.
+                _bottles = RegionBossRules.BottleSpots(Flat(_signatureOrigin), _uncorkings++);
+                foreach (Vector2 bottle in _bottles)
+                {
+                    Vector3 at = new Vector3(bottle.x, _signatureOrigin.y, bottle.y);
+                    DungeonShockwave.Spawn(at, null, _controller.gameObject, 0f, 0f);
+                    DungeonFx.Say(at + Vector3.up * 1.2f, Text(RegionBossTexts.BottleKey));
+                }
+            }
+            else if (signature == RegionBossSignature.LeadCast)
+            {
+                _lureFirstSeen = false;
+                _lureCast = false;
+            }
+            else if (signature == RegionBossSignature.VaneGust)
+            {
+                _wind = RegionBossRules.VaneWindFor(_gusts++);
+                warning = RegionBossTexts.VaneWindKey(_wind);
+            }
+            else if (signature == RegionBossSignature.GrowingEclipse)
+            {
+                _cover = RegionBossRules.EclipsePhaseOf(_covers++);
+                warning = RegionBossTexts.EclipseCoverKey(_cover);
             }
 
             DungeonShockwave.Spawn(MarksTheHeroSpot(signature) ? _signatureImpact : transform.position, null, _controller.gameObject, 0f, 0f);
@@ -727,6 +798,65 @@ namespace Rapadura.Gameplay.Enemies
 
                     break;
 
+                case RegionBossSignature.MistStare:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.MistSnapHits(Flat(transform.position), heroFlat, Flat(hero.forward)))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.MistDamageFactor), ElementType.Physical, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.DuneVerses:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.VerseHits(_verse, FlatDistance(hero.position, transform.position)))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.VerseDamageFactor), ElementType.Earth, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.StaleAir:
+                    DungeonShockwave.Spawn(_signatureOrigin, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.StaleAirHits(Flat(_signatureOrigin), _bottles, heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.StaleDamageFactor), ElementType.Wind, _controller.gameObject);
+                    }
+
+                    _bottles = null;
+                    break;
+
+                case RegionBossSignature.LeadCast:
+                    // If the looks were missed (the hero came into range late), he casts where the hero is.
+                    Vector2 lureAt = _lureCast ? _lure : heroFlat;
+                    DungeonShockwave.Spawn(new Vector3(lureAt.x, hero.position.y, lureAt.y), null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.LureHits(lureAt, heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.LureDamageFactor), ElementType.Dark, _controller.gameObject);
+                    }
+
+                    _lureFirstSeen = false;
+                    _lureCast = false;
+                    break;
+
+                case RegionBossSignature.VaneGust:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.VaneGustHits(_wind, Flat(transform.position), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.GustDamageFactor), ElementType.Wind, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.GrowingEclipse:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.EclipseHits(_cover, Flat(transform.position), Flat(_signatureImpact), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.EclipseDamageFactor), ElementType.Dark, _controller.gameObject);
+                    }
+
+                    break;
+
                 case RegionBossSignature.GreedOfTheArk:
                     // The hero's health lives on PlayerStats, not on a Health. The Ark never kills (GreedDamage stops at 1 life left), so it goes
                     // through the path that cannot pass that floor: ApplyHazardDamage caps the defence multiplier at 1 and keeps 1 life.
@@ -1002,7 +1132,8 @@ namespace Rapadura.Gameplay.Enemies
             || signature == RegionBossSignature.RopeCut || signature == RegionBossSignature.EchoToll || signature == RegionBossSignature.BellyFlop
             || signature == RegionBossSignature.CeilingFall || signature == RegionBossSignature.ForgeStroke
             || signature == RegionBossSignature.ForgottenPlanks || signature == RegionBossSignature.RunawayRun
-            || signature == RegionBossSignature.RootTrail || signature == RegionBossSignature.NoiseFright;
+            || signature == RegionBossSignature.RootTrail || signature == RegionBossSignature.NoiseFright
+            || signature == RegionBossSignature.GrowingEclipse;
 
         private static long UtcDay() => (long)(System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc)).TotalDays;
 

@@ -63,6 +63,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>Nian's arena (45, map boss): the stone ring on the trail of the Portão do Nian, south of the wall, under the peaks it comes down from.</summary>
         public static readonly Vector2 NianArena = new Vector2(505f, 1417f);
 
+        /// <summary>O Pequeno Eclipse's arena (42, map boss): the stone ring on the Colinas dos Espelhos north-west of the White Spires, by the trail, where no Sun Seal is asked.</summary>
+        public static readonly Vector2 PequenoEclipseArena = new Vector2(692f, 1216f);
+
         /// <summary>Half the side (m) of Mingcheng's flat ground (reserved for the ring city's recipe, ±28 m and more).</summary>
         public const float MingchengGround = 30f;
 
@@ -319,6 +322,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, GulososArena.x, GulososArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, CarpaQueNaoPulouArena.x, CarpaQueNaoPulouArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, NianArena.x, NianArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, PequenoEclipseArena.x, PequenoEclipseArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

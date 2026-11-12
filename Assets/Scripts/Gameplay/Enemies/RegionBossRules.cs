@@ -98,6 +98,26 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>O Grifo Velho do Kurgan strikes everyone standing on his hoard (the ring where he keeps the gold), wherever he is; off the gold is safe.</summary>
         HoardGuard = 27,
+
+        // Six more map bosses of Regions 1–8 (Docs/Mapas100.md 05, 10, 22, 33, 39, 42).
+
+        /// <summary>O Velho da Névoa hides in the rising mist and snaps at whoever turned their back on him; facing him is safe.</summary>
+        MistStare = 28,
+
+        /// <summary>O Coral da Duna sings in verses: each verse makes the sand burst further round it (near, middle, far, then near again).</summary>
+        DuneVerses = 29,
+
+        /// <summary>O Engarrafador Guloso sets three great bottles round himself and blows the stale air out; only behind a bottle is safe.</summary>
+        StaleAir = 30,
+
+        /// <summary>O Pescador de Luzes casts his lure where the hero is heading; standing still or running straight is caught, a change of course is safe.</summary>
+        LeadCast = 31,
+
+        /// <summary>O Senhor do Cata-Vento turns the wind a quarter each gust and blows down it; upwind of him is safe.</summary>
+        VaneGust = 32,
+
+        /// <summary>O Pequeno Eclipse covers a wider slice of the light each time, toward the hero, until the whole round is dark; beyond its shadow is safe.</summary>
+        GrowingEclipse = 33,
     }
 
     /// <summary>The four appetites of the Cidadela (46), one a week in turn (<see cref="RegionBossRules.AppetiteFor"/>).</summary>
@@ -530,6 +550,12 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.ShyGaze:
                 case RegionBossSignature.NoiseFright:
                 case RegionBossSignature.HoardGuard:
+                case RegionBossSignature.MistStare:
+                case RegionBossSignature.DuneVerses:
+                case RegionBossSignature.StaleAir:
+                case RegionBossSignature.LeadCast:
+                case RegionBossSignature.VaneGust:
+                case RegionBossSignature.GrowingEclipse:
                     return MapBossInterval(signature);
                 default: return FormSeconds;
             }
@@ -565,6 +591,12 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.ShyGaze:
                 case RegionBossSignature.NoiseFright:
                 case RegionBossSignature.HoardGuard:
+                case RegionBossSignature.MistStare:
+                case RegionBossSignature.DuneVerses:
+                case RegionBossSignature.StaleAir:
+                case RegionBossSignature.LeadCast:
+                case RegionBossSignature.VaneGust:
+                case RegionBossSignature.GrowingEclipse:
                     return MapBossWindup(signature);
                 default: return 0f;
             }

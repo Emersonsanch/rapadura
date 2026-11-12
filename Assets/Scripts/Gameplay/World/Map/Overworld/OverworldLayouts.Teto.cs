@@ -56,6 +56,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>O Grande Almas's arena (38, map boss): the stone ring on the shore trail of the Lago Turquesa, below the glacier.</summary>
         public static readonly Vector2 GrandeAlmasArena = new Vector2(-797f, 205f);
 
+        /// <summary>O Senhor do Cata-Vento's arena (39, map boss): the stone ring among the Torres de Cata-Vento below the fort, by the trail, where no wings are asked.</summary>
+        public static readonly Vector2 SenhorDoCataVentoArena = new Vector2(928f, 616f);
+
         /// <summary>Half the side (m) of Sangkent's flat ground (reserved for the stair city's recipe, ±28 m and more).</summary>
         public const float SangkentGround = 30f;
 
@@ -256,6 +259,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, AydaharArena.x, AydaharArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, CarrinhoDesgovernadoArena.x, CarrinhoDesgovernadoArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, GrandeAlmasArena.x, GrandeAlmasArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, SenhorDoCataVentoArena.x, SenhorDoCataVentoArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

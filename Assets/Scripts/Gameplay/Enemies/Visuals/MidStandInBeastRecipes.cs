@@ -27,7 +27,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         // Shared: the walking birds' legs (feet on the ground, y = 0)
         // ------------------------------------------------------------------
 
-        private static void DrawBirdLegs(EnemyMeshBuilder b, float bodyY, float spread, EnemySwatch leg, EnemySwatch foot)
+        internal static void DrawBirdLegs(EnemyMeshBuilder b, float bodyY, float spread, EnemySwatch leg, EnemySwatch foot)
         {
             float ground = -bodyY + 0.02f;
             for (int s = -1; s <= 1; s += 2)
@@ -39,7 +39,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         }
 
         /// <summary>The five birds share one skeleton: Body → Head → Jaw (the lower beak), two broad wings and a fan tail.</summary>
-        private static void BuildBird(ProceduralEnemyBlueprint bp, string key, float bodyY, System.Action<EnemyMeshBuilder> drawBody, Vector3 headAt,
+        internal static void BuildBird(ProceduralEnemyBlueprint bp, string key, float bodyY, System.Action<EnemyMeshBuilder> drawBody, Vector3 headAt,
             System.Action<EnemyMeshBuilder> drawHead, Vector3 jawAt, System.Action<EnemyMeshBuilder> drawJaw, EnemySwatch wingTop, EnemySwatch wingUnder,
             EnemySwatch wingTip, float span, EnemySwatch tailTop, EnemySwatch tailUnder)
         {

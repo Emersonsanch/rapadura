@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.Items.Sets
 {
-    /// <summary>One two-piece armour set of a region (Docs/Items.md: Regions 5–9 and 13–16) and the region beasts that drop it.</summary>
+    /// <summary>One two-piece armour set of a region (Docs/Items.md: Regions 1–9 and 13–16) and the region beasts that drop it.</summary>
     public sealed class ArmorSetDefinition
     {
         public readonly string Id;
@@ -46,6 +46,13 @@ namespace Rapadura.Gameplay.Items.Sets
         /// </summary>
         public const double MiddleDropChance = 0.01;
 
+        /// <summary>
+        /// The chance for the Uncommon sets of Regions 1–4, the hub regions (one kill in 200, like the far sets): there the region's own
+        /// beasts are almost everything that walks (the base beasts of each biome plus the early ones) and the hero spends levels 1–50
+        /// killing them, so at 1/100 the pair would come long before the region's world boss.
+        /// </summary>
+        public const double EarlyDropChance = 0.005;
+
         public const string PapyrusChestId = "armor_papiro_chest";
         public const string PapyrusHelmId = "armor_papiro_helm";
         public const string BlueBrickChestId = "armor_tijolo_chest";
@@ -64,6 +71,46 @@ namespace Rapadura.Gameplay.Items.Sets
         public const string BronzeHelmId = "armor_bronze_helm";
         public const string KurganChestId = "armor_kurgan_chest";
         public const string KurganHelmId = "armor_kurgan_helm";
+        public const string GardenChestId = "armor_jardim_chest";
+        public const string GardenHelmId = "armor_jardim_helm";
+        public const string RedLeatherChestId = "armor_rubro_chest";
+        public const string RedLeatherHelmId = "armor_rubro_helm";
+        public const string DrystoneChestId = "armor_pedra_chest";
+        public const string DrystoneHelmId = "armor_pedra_helm";
+        public const string WickChestId = "armor_pavio_chest";
+        public const string WickHelmId = "armor_pavio_helm";
+
+        // ---- Regions 1–4, the hub regions: Uncommon sets below the Marfim, from the region's own beasts (Docs/Status_100Mapas.md).
+
+        /// <summary>Jardim de Mihrshah (Região 1, Bosque do Zarafshan): the "conjunto antigo do jardim" of the sheet of map 06.</summary>
+        public static readonly ArmorSetDefinition Garden = new ArmorSetDefinition("jardim_de_mihrshah", GardenChestId, GardenHelmId, EarlyDropChance, new[]
+        {
+            "enemy_forest_wolf", "enemy_forest_spider", "enemy_forest_peccary", "enemy_forest_shroud_owl", "enemy_forest_werewolf",
+            "enemy_forest_dimmed_stork", "enemy_forest_bubble_toad", "enemy_forest_smoke_mosquito", "enemy_forest_silk_moth",
+            "enemy_forest_laurel_pigeon", "enemy_forest_laurel_lizard", "enemy_forest_smoke_peacock",
+        });
+
+        /// <summary>Couro Rubro (Região 2, Areias Flamejantes).</summary>
+        public static readonly ArmorSetDefinition RedLeather = new ArmorSetDefinition("couro_rubro", RedLeatherChestId, RedLeatherHelmId, EarlyDropChance, new[]
+        {
+            "enemy_desert_scorpion", "enemy_desert_ember_vulture", "enemy_desert_broken_lantern", "enemy_desert_firefly_swarm",
+            "enemy_desert_jackal", "enemy_desert_sand_snake", "enemy_desert_crowned_orc", "enemy_desert_thorn_lizard",
+        });
+
+        /// <summary>Pedra Seca (Região 3, Serra de Kaggen).</summary>
+        public static readonly ArmorSetDefinition Drystone = new ArmorSetDefinition("pedra_seca", DrystoneChestId, DrystoneHelmId, EarlyDropChance, new[]
+        {
+            "enemy_mountain_stone_golem", "enemy_mountain_rolling_stone", "enemy_mountain_crested_hawk", "enemy_mountain_potoo",
+            "enemy_mountain_ill_wind_mist", "enemy_mountain_baboon", "enemy_mountain_dimmed_lynx", "enemy_mountain_smudge",
+            "enemy_mountain_stone_jackdaw",
+        });
+
+        /// <summary>Pavio do Limiar (Região 4, Grutas do Limiar).</summary>
+        public static readonly ArmorSetDefinition Wick = new ArmorSetDefinition("pavio_do_limiar", WickChestId, WickHelmId, EarlyDropChance, new[]
+        {
+            "enemy_cave_bat_swarm", "enemy_cave_vampire_bat", "enemy_cave_lantern_fish", "enemy_cave_ooze", "enemy_cave_dark_crow",
+            "enemy_cave_young_ubir",
+        });
 
         // ---- Regions 5–9, the road of the middle story: each set drops from the region's own beasts (Docs/Status_100Mapas.md).
 
@@ -137,6 +184,9 @@ namespace Rapadura.Gameplay.Items.Sets
             "enemy_forest_hold_shadow", "enemy_forest_living_rope", "enemy_forest_sky_stone", "enemy_forest_toy_archon",
         });
 
+        /// <summary>The four sets of Regions 1–4, in region order.</summary>
+        public static readonly IReadOnlyList<ArmorSetDefinition> Early = new[] { Garden, RedLeather, Drystone, Wick };
+
         /// <summary>The five sets of Regions 5–9, in region order.</summary>
         public static readonly IReadOnlyList<ArmorSetDefinition> Middle = new[] { Coral, Lotus, Yak, Bronze, Kurgan };
 
@@ -144,7 +194,28 @@ namespace Rapadura.Gameplay.Items.Sets
         public static readonly IReadOnlyList<ArmorSetDefinition> Far = new[] { Papyrus, BlueBrick, Seal, Light };
 
         /// <summary>Every set, in region order.</summary>
-        public static readonly IReadOnlyList<ArmorSetDefinition> All = new[] { Coral, Lotus, Yak, Bronze, Kurgan, Papyrus, BlueBrick, Seal, Light };
+        public static readonly IReadOnlyList<ArmorSetDefinition> All = new[]
+        {
+            Garden, RedLeather, Drystone, Wick, Coral, Lotus, Yak, Bronze, Kurgan, Papyrus, BlueBrick, Seal, Light,
+        };
+
+        // "Orvalho do Jardim" (Jardim de Mihrshah): a kill may heal the hero a little.
+        public const double GardenDewChance = 0.15;
+        public const float GardenDewHealFraction = 0.03f;
+
+        // "Areia que Queima" (Couro Rubro): a hit taken may burn back at the attacker.
+        public const double BurningSandChance = 0.10;
+        public const float BurningSandFraction = 0.20f;
+
+        // "Rajada do Kaggen" (Pedra Seca): a critical hit may gust into the enemies right next to the target.
+        public const double KaggenGustChance = 0.10;
+        public const float KaggenGustDamageFraction = 0.20f;
+        public const float KaggenGustRadius = 3f;
+        public const int KaggenGustMaxTargets = 2;
+
+        // "Pavio Aceso" (Pavio do Limiar): a kill may give a little mana back.
+        public const double LitWickChance = 0.15;
+        public const float LitWickManaFraction = 0.04f;
 
         // "Coral que Fecha" (Coral de Kilwa): a hit taken may close up, healing part of it back.
         public const double ClosingCoralChance = 0.15;
@@ -301,5 +372,23 @@ namespace Rapadura.Gameplay.Items.Sets
 
         /// <summary>Damage of the gallop to each enemy nearby: 30% of the critical hit (never below 1 for a positive hit).</summary>
         public static float NartGallopDamage(float criticalDamage) => criticalDamage > 0f ? Mathf.Max(1f, criticalDamage * NartGallopDamageFraction) : 0f;
+
+        public static bool GardenDewProcs(ArmorSetDefinition worn, double roll) => worn == Garden && roll < GardenDewChance;
+
+        public static float GardenDewHeal(float maxHealth) => maxHealth > 0f ? maxHealth * GardenDewHealFraction : 0f;
+
+        public static bool BurningSandProcs(ArmorSetDefinition worn, double roll) => worn == RedLeather && roll < BurningSandChance;
+
+        /// <summary>Damage burnt back: 20% of the hit taken (never below 1 for a positive hit).</summary>
+        public static float BurningSandDamage(float damageTaken) => damageTaken > 0f ? Mathf.Max(1f, damageTaken * BurningSandFraction) : 0f;
+
+        public static bool KaggenGustProcs(ArmorSetDefinition worn, bool critical, double roll) => critical && worn == Drystone && roll < KaggenGustChance;
+
+        /// <summary>Damage of the gust to each enemy next to the target: 20% of the critical hit (never below 1 for a positive hit).</summary>
+        public static float KaggenGustDamage(float criticalDamage) => criticalDamage > 0f ? Mathf.Max(1f, criticalDamage * KaggenGustDamageFraction) : 0f;
+
+        public static bool LitWickProcs(ArmorSetDefinition worn, double roll) => worn == Wick && roll < LitWickChance;
+
+        public static float LitWickMana(float maxMana) => maxMana > 0f ? maxMana * LitWickManaFraction : 0f;
     }
 }

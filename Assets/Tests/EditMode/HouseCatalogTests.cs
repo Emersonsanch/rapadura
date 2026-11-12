@@ -36,13 +36,13 @@ namespace Rapadura.Tests
         [Test]
         public void Catalog_Has580Items_WithTheDocumentedRarities()
         {
-            Assert.AreEqual(672, HouseCatalog.All.Count);
-            Assert.AreEqual(672, HouseCatalog.GeneratedItemCount);
+            Assert.AreEqual(704, HouseCatalog.All.Count);
+            Assert.AreEqual(704, HouseCatalog.GeneratedItemCount);
             var byRarity = HouseCatalog.All.GroupBy(i => i.Rarity).ToDictionary(g => g.Key, g => g.Count());
-            Assert.AreEqual(235, byRarity[ItemRarity.Common]);
-            Assert.AreEqual(179, byRarity[ItemRarity.Uncommon]);
-            Assert.AreEqual(156, byRarity[ItemRarity.Rare]);
-            Assert.AreEqual(84, byRarity[ItemRarity.Epic]);
+            Assert.AreEqual(239, byRarity[ItemRarity.Common]);
+            Assert.AreEqual(191, byRarity[ItemRarity.Uncommon]);
+            Assert.AreEqual(168, byRarity[ItemRarity.Rare]);
+            Assert.AreEqual(88, byRarity[ItemRarity.Epic]);
             Assert.AreEqual(18, byRarity[ItemRarity.Legendary]);
         }
 
@@ -118,6 +118,7 @@ namespace Rapadura.Tests
                 "shop_viveiro_nenem", "shop_casa_musica_bene", "shop_olaria_rosa",
                 "shop_peles_pamour", "shop_trocas_khunanup", "shop_betume_atrahasis", "shop_pavios_tehat", "shop_ultima_caravana_ammo",
                 "shop_bazar_mwana", "shop_trocas_nuhzadag", "shop_agasalhos_sisinnios", "shop_lanternas_mozak", "shop_selaria_nomade",
+                "shop_selaria_vava",
             };
             var houseQuests = new HashSet<string>
             {
@@ -165,7 +166,7 @@ namespace Rapadura.Tests
         public void TheDocumentedOriginCounts_Hold()
         {
             int Count(params HouseItemSourceType[] types) => HouseCatalog.All.Count(i => types.Contains(i.PrimarySource.Type));
-            Assert.AreEqual(456, Count(HouseItemSourceType.Shop));
+            Assert.AreEqual(488, Count(HouseItemSourceType.Shop));
             Assert.AreEqual(80, Count(HouseItemSourceType.Drop));
             Assert.AreEqual(48, Count(HouseItemSourceType.Event));
             Assert.AreEqual(34, Count(HouseItemSourceType.Quest, HouseItemSourceType.HouseQuest, HouseItemSourceType.DailyQuest));

@@ -58,6 +58,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>Ninki Nanka's arena (34, map boss): the stone ring on the boardwalk trail of the Brejo das Palmeiras, the one area of the bog that asks for no amulet.</summary>
         public static readonly Vector2 NinkiNankaArena = new Vector2(1009f, -695f);
 
+        /// <summary>O Pescador de Luzes's arena (33, map boss): the stone ring on the Bancos de Lama west of Tarchon, by the trail, the one area of the stilts that asks for no saddle.</summary>
+        public static readonly Vector2 PescadorDeLuzesArena = new Vector2(-168f, -932f);
+
         /// <summary>Half the side (m) of Jhilpur's flat ground (its solids reach 22.5 m, its roads leave at 18.6 m).</summary>
         public const float JhilpurGround = 30f;
 
@@ -302,6 +305,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, LodoArena.x, LodoArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, PonteQueEsqueceuArena.x, PonteQueEsqueceuArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, NinkiNankaArena.x, NinkiNankaArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, PescadorDeLuzesArena.x, PescadorDeLuzesArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

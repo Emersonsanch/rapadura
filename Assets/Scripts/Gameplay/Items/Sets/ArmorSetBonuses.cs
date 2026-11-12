@@ -15,7 +15,7 @@ namespace Rapadura.Gameplay.Items.Sets
 {
     /// <summary>
     /// Wires <see cref="ArmorSetRules"/> to combat through the same events the combat FX listen to (like the Armadura de Marfim's
-    /// <c>SpectralTouchSetBonus</c>): the nine two-piece bonuses, and the rare drop of a piece when a region's own beast dies. The
+    /// <c>SpectralTouchSetBonus</c>): the thirteen two-piece bonuses, and the rare drop of a piece when a region's own beast dies. The
     /// drop lives here, not in the enemy's single <c>_lootItem</c> (the gold of every beast). Reflected hits and rays are plain,
     /// non-critical hits dealt by the hero, so no bonus can chain.
     /// </summary>
@@ -114,19 +114,27 @@ namespace Rapadura.Gameplay.Items.Sets
                 return;
             }
 
-            if (!ArmorSetRules.GlazedReflectProcs(worn, roll))
+            if (ArmorSetRules.GlazedReflectProcs(worn, roll))
             {
-                return;
+                StrikeBack(evt, ArmorSetRules.GlazedReflectDamage(evt.FinalDamage), ElementType.Earth, ArmorSetTexts.GlazedReflect);
             }
+            else if (ArmorSetRules.BurningSandProcs(worn, roll))
+            {
+                StrikeBack(evt, ArmorSetRules.BurningSandDamage(evt.FinalDamage), ElementType.Fire, ArmorSetTexts.BurningSand);
+            }
+        }
 
+        /// <summary>A plain hit from the struck hero back at the attacking beast (the Reflexo Vidrado, the Areia que Queima).</summary>
+        private static void StrikeBack(DamageAppliedEvent evt, float damage, ElementType element, string textKey)
+        {
             EnemyController attacker = evt.Source.GetComponentInParent<EnemyController>();
-            if (attacker.Health == null || attacker.Health.IsDead)
+            if (attacker == null || attacker.Health == null || attacker.Health.IsDead)
             {
                 return;
             }
 
-            attacker.Health.ApplyDamage(ArmorSetRules.GlazedReflectDamage(evt.FinalDamage), ElementType.Earth, evt.Target);
-            Say(evt.Target, ArmorSetTexts.GlazedReflect);
+            attacker.Health.ApplyDamage(damage, element, evt.Target);
+            Say(evt.Target, textKey);
         }
 
         private static void OnHeroCritical(DamageAppliedEvent evt)
@@ -168,6 +176,12 @@ namespace Rapadura.Gameplay.Items.Sets
                 StrikeAround(evt.Target.transform.position, evt.Target, evt.Source, ArmorSetRules.NartGallopDamage(evt.FinalDamage),
                     ArmorSetRules.NartGallopRadius, ArmorSetRules.NartGallopMaxTargets, ElementType.Physical);
                 Say(evt.Target, ArmorSetTexts.NartGallop);
+            }
+            else if (ArmorSetRules.KaggenGustProcs(worn, true, roll))
+            {
+                StrikeAround(evt.Target.transform.position, evt.Target, evt.Source, ArmorSetRules.KaggenGustDamage(evt.FinalDamage),
+                    ArmorSetRules.KaggenGustRadius, ArmorSetRules.KaggenGustMaxTargets, ElementType.Wind);
+                Say(evt.Target, ArmorSetTexts.KaggenGust);
             }
         }
 
@@ -212,7 +226,47 @@ namespace Rapadura.Gameplay.Items.Sets
             double roll = NextRoll();
             TryBargeHourHeal(inventory, worn, roll);
             TryLotusSap(inventory, worn, roll);
+            TryGardenDew(inventory, worn, roll);
+            TryLitWick(inventory, worn, roll);
             TryDropPiece(evt.Target, enemy, inventory);
+        }
+
+        /// <summary>The Orvalho do Jardim bonus: heals the hero a little when <paramref name="roll"/> procs. True if it healed.</summary>
+        public static bool TryGardenDew(InventoryManager inventory, ArmorSetDefinition worn, double roll)
+        {
+            if (inventory == null || !ArmorSetRules.GardenDewProcs(worn, roll))
+            {
+                return false;
+            }
+
+            PlayerStats stats = inventory.GetComponentInParent<PlayerStats>();
+            if (stats == null || !stats.IsAlive)
+            {
+                return false;
+            }
+
+            stats.Heal(ArmorSetRules.GardenDewHeal(stats.MaxHealth));
+            Say(inventory.gameObject, ArmorSetTexts.GardenDew);
+            return true;
+        }
+
+        /// <summary>The Pavio Aceso bonus: gives the hero a little mana back when <paramref name="roll"/> procs. True if it restored.</summary>
+        public static bool TryLitWick(InventoryManager inventory, ArmorSetDefinition worn, double roll)
+        {
+            if (inventory == null || !ArmorSetRules.LitWickProcs(worn, roll))
+            {
+                return false;
+            }
+
+            PlayerStats stats = inventory.GetComponentInParent<PlayerStats>();
+            if (stats == null || !stats.IsAlive)
+            {
+                return false;
+            }
+
+            stats.RestoreMana(ArmorSetRules.LitWickMana(stats.MaxMana));
+            Say(inventory.gameObject, ArmorSetTexts.LitWick);
+            return true;
         }
 
         /// <summary>The Seiva do Lótus bonus: gives the hero mana back when <paramref name="roll"/> procs. True if it restored.</summary>

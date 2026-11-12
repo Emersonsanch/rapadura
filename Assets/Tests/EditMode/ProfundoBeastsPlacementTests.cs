@@ -148,21 +148,12 @@ namespace Rapadura.Tests
         private static OverworldFauna Group(string id) =>
             OverworldLayouts.Get(ProfundoId).Zones.SelectMany(z => z.Fauna).First(f => f.Id == id);
 
-        [TestCase("sombras_da_muralha", ShadowBiter)]
-        [TestCase("sombras_do_arco", ShadowBiter)]
-        [TestCase("sombras_das_cisternas", ShadowBiter)]
-        [TestCase("sombras_do_abismo", ShadowBiter)]
         [TestCase("fumacas_dos_nichos", Mist)]
         [TestCase("fumacas_dos_varais", Mist)]
-        [TestCase("morcegos_da_muralha", VampireBat)]
-        [TestCase("morcegos_dos_nichos", VampireBat)]
-        [TestCase("morcegos_do_abismo", VampireBat)]
         [TestCase("ushabtis_da_muralha", LacquerUshabti)]
         [TestCase("ushabtis_das_cisternas", LacquerUshabti)]
         [TestCase("ushabtis_dos_varais", LacquerUshabti)]
         [TestCase("fumacas_sufocantes", SmokeGoat)]
-        [TestCase("chamas_famintas", FireflySwarm)]
-        [TestCase("chamas_do_chao", FireflySwarm)]
         [TestCase("redemoinhos", Mist)]
         [TestCase("redemoinhos_das_correntes", Mist)]
         [TestCase("cardumes_escuros", LanternFish)]

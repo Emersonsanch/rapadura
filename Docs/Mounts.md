@@ -369,6 +369,20 @@ a maré alta do recife não morde (`CostaTideRules.Drenches`) e o lodo das ilhas
   vento de verdade no mapa.
 - **Testes:** `MountMidRegionTests`.
 
+### 3.11 Regiões 1–4: já têm montaria própria (conferido em 2026-11-12)
+
+As Regiões 5–9 e 10–16 ganharam montarias próprias porque não tinham nenhuma. As Regiões 1–4 não precisam: as 30 montarias do
+catálogo-base (§3.1–3.5) e o Grifo (§3.8) já são todas delas, cada região com montaria de loja na vila-sede, de bicho, de chefe
+e de missão. Nenhuma montaria nova foi feita para elas; as propostas das fichas (Garça do Brejo, Lagarto-do-Louro, Lobo de
+Guerra Ocre, Eland do Capim Alto, Carneiro de Bronze) seguem só no `Mapas100.md` §6.
+
+| Região | Montarias próprias (id) | Na loja da vila-sede |
+|---|---|---|
+| 1 Bosque do Zarafshan | `mount_pony`, `mount_big_dog`, `mount_capybara`, `mount_pinto_horse`, `mount_maned_wolf`, `mount_caipora_peccary`, `mount_river_seahorse`, `mount_unicorn`, `mount_light_jaguar`, `mount_boitata`, `mount_boi_bumba` | Estrebaria do Srosh |
+| 2 Areias Flamejantes | `mount_pack_donkey`, `mount_rhea`, `mount_enchanted_donkey`, `mount_golden_scarab`, `mount_griffin`, `mount_fire_rhea`, `mount_dragon_hatchling` | Selaria do Vandak (Avestruz) |
+| 3 Serra de Kaggen | `mount_mountain_goat`, `mount_snow_tiger`, `mount_woolly_mammoth`, `mount_hippogriff`, `mount_pegasus` | Forja do Mestre Mihr (Íbex) |
+| 4 Grutas do Limiar | `mount_giant_armadillo`, `mount_giant_anteater`, `mount_carbuncle`, `mount_kirin`, `mount_sertao_phoenix`, `mount_column_griffin` | Lamparinas da Parthenos (Porco-Formigueiro) |
+
 ### 3.7 Checagem de unicidade
 
 30 IDs distintos, 30 nomes distintos e 30 habilidades com nome e efeito distintos, conferidos por script (inclusive
