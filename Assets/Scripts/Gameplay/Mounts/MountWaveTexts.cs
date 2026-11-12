@@ -80,13 +80,13 @@ namespace Rapadura.Gameplay.Mounts
         // id, en desc, pt desc
         private static readonly (string Id, string DescEn, string DescPt)[] Descriptions =
         {
-            (MountWaveCatalog.Capybara, "A round little pygmy hippo who loves mud baths. Vó Edna says Taweret, the hippo of the old tales, watches over children just like this one. Lavine says it is the comfiest seat in the world.",
+            (MountWaveCatalog.Capybara, "A round little pygmy hippo who loves mud baths. Grandma Edna says Taweret, the hippo of the old tales, watches over children just like this one. Lavine says it is the comfiest seat in the world.",
                 "Uma hipopotinha-pigmeu redonda que adora banho de lama. A Vó Edna diz que Taweret, a hipopótama dos contos antigos, cuidava das crianças igualzinho. A Lavine diz que é o assento mais fofo do mundo."),
             (MountWaveCatalog.MountainGoat, "A Walia ibex with great curved horns that jumps where no one else can. Ícaro measures every jump with a stick.",
                 "Um íbex-da-walia de chifres grandes e curvos que pula onde ninguém alcança. O Ícaro mede cada pulo com um graveto."),
             (MountWaveCatalog.Rhea, "A long-legged ostrich that runs and runs and never gets tired.",
                 "Uma avestruz de pernas compridas que corre, corre e não cansa nunca."),
-            (MountWaveCatalog.PintoHorse, "A golden heavenly horse of Ferghana, the kind old emperors sent whole caravans to fetch. Vô Jorge used to say he rode one just like it across the steppe.",
+            (MountWaveCatalog.PintoHorse, "A golden heavenly horse of Ferghana, the kind old emperors sent whole caravans to fetch. Grandpa Jorge used to say he rode one just like it across the steppe.",
                 "Um cavalo celeste de Fergana, dourado, daqueles que imperadores antigos mandavam caravanas inteiras buscar. O Vô Jorge dizia que montou um igualzinho atravessando a estepe."),
             (MountWaveCatalog.EnchantedDonkey, "The three-legged ass of the old tale, white as milk, that cleans the waters wherever it steps. It remembers every well and only follows who brings it water.",
                 "O asno de três patas do conto antigo, branco como leite, que limpa as águas por onde pisa. Lembra de todo poço e só segue quem traz água para ele."),
@@ -106,7 +106,7 @@ namespace Rapadura.Gameplay.Mounts
                 "Um leão de luz como os dos relevos antigos de Meroé. Silencioso, rápido e muito orgulhoso."),
             (MountWaveCatalog.Carbuncle, "A small fox of the Threshold Caves with a red jewel on its forehead that lights the dark.",
                 "Uma raposinha das Grutas do Limiar com uma joia vermelha na testa que acende o escuro."),
-            (MountWaveCatalog.FireRhea, "An ostrich with feathers like embers, prize of the Bema. Vó Edna says it was born of a spark from the lamps.",
+            (MountWaveCatalog.FireRhea, "An ostrich with feathers like embers, prize of the Bema. Grandma Edna says it was born of a spark from the lamps.",
                 "Uma avestruz de penas cor de brasa, prêmio do Bema. A Vó Edna diz que nasceu de uma faísca das lâmpadas."),
             (MountWaveCatalog.Kirin, "A dew-coloured qilin that walks without bending the grass.",
                 "Um qilin cor de orvalho que anda sem dobrar a grama."),
@@ -114,7 +114,7 @@ namespace Rapadura.Gameplay.Mounts
                 "Mehen, a serpente guardiã dos contos antigos, que se enrola em volta do sol para protegê-lo à noite. Espanta quem quer queimar o bosque."),
             (MountWaveCatalog.BoiBumba, "A starry ox that has a song made just for it. Nobody stands still when the song starts.",
                 "Um boi estrelado que tem uma canção feita só para ele. Ninguém fica parado quando a canção começa."),
-            (MountWaveCatalog.ElderTortoise, "Ijapa, an ancient, clever tortoise older than the Vila. Vô Jorge used to say she knew his own grandfather.",
+            (MountWaveCatalog.ElderTortoise, "Ijapa, an ancient, clever tortoise older than the Vila. Grandpa Jorge used to say she knew his own grandfather.",
                 "Ijapa, uma tartaruga antiquíssima e esperta, mais velha que a Vila. O Vô Jorge dizia que ela conheceu o avô dele."),
         };
 

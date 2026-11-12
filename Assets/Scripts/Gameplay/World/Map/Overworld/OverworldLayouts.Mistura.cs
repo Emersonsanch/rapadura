@@ -394,7 +394,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             NightSpecies sparks = NightVariantRules.VagaLume;
             NightSpecies werewolf = NightVariantRules.Lobisomem;
 
-            // Round the city (77): the Leão de Tijolo Apagado [tanque], the Mušḫuššu Jovem [elite], the Homem-Escorpião [distância] (the scorpion),
+            // Round the city (77): the Leão de Tijolo Apagado [tanque], the Mušhuššu Jovem [elite], the Homem-Escorpião [distância] (the scorpion),
             // the Gafanhoto de Betume [enxame].
             MisturaGroup(durJarras, "leoes_do_terraco", "[tanque]", Mistura.BrickLion, Mistura.Locust, moon, 3, 30f);
             MisturaGroup(durJarras, "gafanhotos_do_terraco", "[enxame]", Mistura.Locust, Mistura.BrickLion, sparks, 5);

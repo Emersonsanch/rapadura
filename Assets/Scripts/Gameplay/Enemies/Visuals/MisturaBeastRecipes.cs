@@ -8,7 +8,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
     /// <list type="bullet">
     /// <item><b>Leão de Tijolo Apagado</b> (77, ~1.3 m, 2 m long): baked-brick lion from the walls, courses of blue glaze along the flank.
     /// <c>Body</c> → <c>Head</c> → <c>Jaw</c>, <c>Tail</c>; four heavy legs.</item>
-    /// <item><b>Mušḫuššu Jovem</b> (77, ~1.5 m): scaled dragon-snake of the gates, one curled horn, a sting at the end of the tail.
+    /// <item><b>Mušhuššu Jovem</b> (77, ~1.5 m): scaled dragon-snake of the gates, one curled horn, a sting at the end of the tail.
     /// <c>Body</c> → <c>Head</c> → <c>Jaw</c>, <c>Tail</c>; four legs.</item>
     /// <item><b>Gafanhoto de Betume</b> (77, ~0.8 m): locust dipped in pitch with embers in its seams.
     /// <c>Body</c> → <c>Head</c> → <c>Jaw</c>, <c>Wing_L</c>/<c>Wing_R</c>, <c>Tail</c>.</item>
@@ -92,7 +92,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         }
 
         // ------------------------------------------------------------------
-        // Mušḫuššu Jovem
+        // Mušhuššu Jovem
         // ------------------------------------------------------------------
 
         public static void BuildYoungMushussu(ProceduralEnemyBlueprint bp)

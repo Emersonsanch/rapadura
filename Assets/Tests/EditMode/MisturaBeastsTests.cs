@@ -14,7 +14,7 @@ namespace Rapadura.Tests
 {
     /// <summary>
     /// The beasts of the Margens da Mistura (Docs/Mapas100.md 77–82) that the overworld layout still plays with stand-ins: Leão de Tijolo
-    /// Apagado, Mušḫuššu Jovem, Gafanhoto de Betume (77), Ampulheta Viva, Sombra Atrasada (78), Betume Vivo, Garça de Piche (79), Cedro
+    /// Apagado, Mušhuššu Jovem, Gafanhoto de Betume (77), Ampulheta Viva, Sombra Atrasada (78), Betume Vivo, Garça de Piche (79), Cedro
     /// Raivoso, Manto de Brilho (80), Filho de Ullikummi (81), Tábua Quebrada and Jardim-Sombra (82), all in the Forest biome like the
     /// region's <c>OverworldLayouts.Mistura</c>. Same contract as <see cref="RioBeastsTests"/>: each definition loads, is a weight-0 common
     /// of its biome with the region tier's numbers and no pinned level (it takes the area's), has its bestiary page and name, and its own

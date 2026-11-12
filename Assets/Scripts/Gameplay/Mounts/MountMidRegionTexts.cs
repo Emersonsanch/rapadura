@@ -34,7 +34,7 @@ namespace Rapadura.Gameplay.Mounts
             (MountMidRegionCatalog.RoofYak,
                 "A shaggy yak of the Roof of the World. Slow and stubborn, it carries a whole caravan's load and its wool keeps the cold off the group.",
                 "Um iaque peludo do Teto do Mundo. Lento e teimoso, carrega a carga de uma caravana inteira, e a lã dele tira o frio do grupo.",
-                "The caravans of Sangkent cross the passes behind them, bell by bell. Vô Jorge used to say a yak never hurries and never gets lost. Maria thinks that is exactly what he said about himself.",
+                "The caravans of Sangkent cross the passes behind them, bell by bell. Grandpa Jorge used to say a yak never hurries and never gets lost. Maria thinks that is exactly what he said about himself.",
                 "As caravanas de Sangkent cruzam os passos atrás deles, sino por sino. O Vô Jorge dizia que iaque nunca tem pressa e nunca se perde. A Maria acha que era exatamente o que ele dizia de si mesmo."),
             (MountMidRegionCatalog.WhiteLightStag,
                 "A stag of white light from the White Spires of Amanirenas. Where it steps the ground keeps shining a little, and the light heals.",

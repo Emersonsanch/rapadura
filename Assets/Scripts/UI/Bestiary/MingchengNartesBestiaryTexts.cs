@@ -49,7 +49,7 @@ namespace Rapadura.UI.Bestiary
                 ("Each one has a different face. Someone loved making them.", "Cada um tem um rosto diferente. Alguém gostou muito de fazer eles."),
                 ("He's got a halberd. I've got a shield. And a better hairstyle.", "Ele tem uma alabarda. Eu tenho um escudo. E um penteado melhor."),
                 ("Fired clay, bronze blade, about two thousand years. They don't make them like this anymore.", "Barro cozido, lâmina de bronze, uns dois mil anos. Não se faz mais assim."),
-                ("He looks like Vô Jorge when he's sleeping in the chair.", "Ele parece o Vô Jorge quando dorme na cadeira."));
+                ("He looks like Grandpa Jorge when he's sleeping in the chair.", "Ele parece o Vô Jorge quando dorme na cadeira."));
 
             Page(entries, "enemy_forest_stone_turtle",
                 "The stone turtles of the canal carry the steles of Mingcheng on their backs, the big stones with the names of everyone who dug the canal, and Lin Deng says they swore never to put them down. The shadow didn't make them drop the stones; it made them afraid someone would take them. Now they snap at anyone who comes close to the locks. They are the slowest thing on the plain and the hardest to hurt. Go round behind: a turtle can't turn its head with a stone that big on its back.",

@@ -245,7 +245,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         // The beasts of the Margens da Mistura (Docs/Mapas100.md 77–82) that the overworld layout played with stand-ins (MisturaBeastRecipes).
         /// <summary>Leão de Tijolo Apagado (77): baked-brick lion with courses of blue glaze; the jaw gapes on the windup.</summary>
         BrickLion = 107,
-        /// <summary>Mušḫuššu Jovem (77): scaled dragon-snake, one horn, a sting on the tail; a jaw that gapes.</summary>
+        /// <summary>Mušhuššu Jovem (77): scaled dragon-snake, one horn, a sting on the tail; a jaw that gapes.</summary>
         YoungMushussu = 108,
         /// <summary>Gafanhoto de Betume (77): pitch-black locust, embers in the seams; the mouth opens with the wings held still.</summary>
         BitumenLocust = 109,

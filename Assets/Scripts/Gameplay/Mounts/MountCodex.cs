@@ -81,7 +81,7 @@ namespace Rapadura.Gameplay.Mounts
             (MountFarRegionCatalog.MesektetIbis, ItemRarity.Rare, BiomeType.Desert, "Royal Ibis of Mesektet", "Íbis Real de Mesektet", "Help Djedi with the scorpions on the Mesektet Quay.", "Ajude o Djedi com os escorpiões do Cais de Mesektet."),
             (MountFarRegionCatalog.AuroraReindeer, ItemRarity.Epic, BiomeType.Mountain, "Aurora Reindeer", "Rena da Aurora", "Help Pera with the bears on the canals of the White Moon Harbor.", "Ajude o Pera com os ursos nos canais do Porto da Lua Branca."),
             (MountFarRegionCatalog.LacquerLion, ItemRarity.Epic, BiomeType.Mountain, "Lacquer Guardian Lion", "Leão-Guardião de Laca", "Help Sango with the ember gulls on the Hinokura lighthouse.", "Ajude a Sango com as gaivotas-brasa no farol de Hinokura."),
-            (MountFarRegionCatalog.Mushhushshu, ItemRarity.Epic, BiomeType.Desert, "Tame Mushussu", "Mušḫuššu Manso", "Help Sin-leqi-unninni with the beetles on the tablets of Dur-Jarras.", "Ajude o Sin-leqi-unninni com os besouros nas tábuas de Dur-Jarras."),
+            (MountFarRegionCatalog.Mushhushshu, ItemRarity.Epic, BiomeType.Desert, "Tame Mushussu", "Mušhuššu Manso", "Help Sin-leqi-unninni with the beetles on the tablets of Dur-Jarras.", "Ajude o Sin-leqi-unninni com os besouros nas tábuas de Dur-Jarras."),
 
             // Regions 5–9 (MountMidRegionCatalog, Docs/Mounts.md §3.10).
             (MountMidRegionCatalog.TarchonFrog, ItemRarity.Uncommon, BiomeType.Forest, "Tarchon Giant Frog", "Sapo-Gigante de Tarchon", "Larthia's baskets, on the Tarchon stilts.", "A cestaria da Larthia, nas Palafitas de Tarchon."),

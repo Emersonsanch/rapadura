@@ -40,7 +40,7 @@ namespace Rapadura.UI.Bestiary
                 ("She's burning inside and doesn't know. We have to put that fire out.", "Ela tá queimando por dentro e não sabe. A gente tem que apagar esse fogo."),
                 ("She leaned on my shield. My arms are still shaking.", "Ela se encostou no meu escudo. Meus braços ainda tão tremendo."),
                 ("A walrus that smokes in the snow. The thermodynamics are all wrong.", "Uma morsa que fumega na neve. A termodinâmica tá toda errada."),
-                ("She has a moustache like Vô Jorge! An angry Vô Jorge.", "Ela tem bigode igual o Vô Jorge! Um Vô Jorge bravo."));
+                ("She has a moustache like Grandpa Jorge! An angry Grandpa Jorge.", "Ela tem bigode igual o Vô Jorge! Um Vô Jorge bravo."));
 
             Page(entries, "enemy_mountain_ice_gull",
                 "The ice gulls are the harbour's own birds, white with grey wings, and they have always stolen a fish or two from the drying racks; Pamour says a harbour without thieving gulls is a sad harbour. The shadow froze their feathers hard as icicles and gave them a hunger for everything that shines. Now they circle high over the racks and throw those frozen feathers down from far away. Look for the beak opening: the feather comes right after.",

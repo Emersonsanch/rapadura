@@ -25,7 +25,7 @@ namespace Rapadura.Gameplay.Mounts
                 "A griffin of light: lion body, eagle head, wings tipped with sparks. It flies a little above the ground, so the cousins cross where only wings go (Mahaway's Roost, Fort of the Winds).",
                 "Um grifo de luz: corpo de leão, cabeça de águia, asas com pontas de faísca. Voa um pouco acima do chão, e os primos passam onde só asa passa (Ninho de Mahaway, Forte dos Ventos)."),
             new LocalizationEntry("mount." + Id + ".lore",
-                "The griffins guard the Column of Glory, the path the freed sparks climb home. This one was put out and fell into the Threshold Caves. Vô Jorge used to say that when enough light goes up, someone always comes down to help.",
+                "The griffins guard the Column of Glory, the path the freed sparks climb home. This one was put out and fell into the Threshold Caves. Grandpa Jorge used to say that when enough light goes up, someone always comes down to help.",
                 "Os grifos guardam a Coluna da Glória, o caminho por onde as faíscas libertadas sobem para casa. Este foi apagado e caiu nas Grutas do Limiar. O Vô Jorge dizia que, quando sobe luz que chega, sempre desce alguém para ajudar."),
             new LocalizationEntry("mount." + Id + ".favorite_line",
                 "Up, up! The air up here is the calmest there is.",

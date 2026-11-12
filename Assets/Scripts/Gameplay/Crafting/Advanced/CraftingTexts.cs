@@ -63,7 +63,7 @@ namespace Rapadura.Gameplay.Crafting.Advanced
         {
             // -- Creature parts (Resources/Items; pt-BR = the asset's text) --
             ItemName(CreatureParts.WolfFang, "Wolf Fang", "Presa de Lobo"),
-            ItemDesc(CreatureParts.WolfFang, "A sharp fang from a Tugai wolf. Vô Jorge used to rub one on the blade for a keener edge.",
+            ItemDesc(CreatureParts.WolfFang, "A sharp fang from a Tugai wolf. Grandpa Jorge used to rub one on the blade for a keener edge.",
                 "Presa afiada de lobo do tugai. O Vô Jorge esfregava na lâmina para dar mais corte."),
             ItemName(CreatureParts.SpiderSilk, "Spider Silk", "Seda de Aranha"),
             ItemDesc(CreatureParts.SpiderSilk, "Strong, sticky thread from the weaver spider of the woods. Makes a weapon quicker and becomes rune paper.",
@@ -119,7 +119,7 @@ namespace Rapadura.Gameplay.Crafting.Advanced
             new LocalizationEntry(NoRoom, "No room in the backpack for the result.", "Não cabe o resultado na mochila."),
 
             // -- Vô Jorge's weapon enchantments --
-            new LocalizationEntry(ImbueTitle, "Vô Jorge's blade secret", "Segredo de lâmina do Vô Jorge"),
+            new LocalizationEntry(ImbueTitle, "Grandpa Jorge's blade secret", "Segredo de lâmina do Vô Jorge"),
             new LocalizationEntry(ImbueGrandpa, "Grandpa Jorge used to say: give the blade a piece of the creature, and the road teaches the iron.",
                 "O Vô Jorge dizia: dá pra lâmina um pedaço do bicho, que a estrada ensina o ferro."),
             new LocalizationEntry(ImbueActive, "On the weapon: {0} ({1} fights left)", "Na arma: {0} (faltam {1} lutas)"),

@@ -135,7 +135,7 @@ namespace Rapadura.UI.Bestiary
                 ("Everything anyone ever threw away, walking. He only wants someone to look at him.", "Tudo que alguém já jogou fora, andando. Ele só quer que alguém olhe pra ele."),
                 ("He picked me up and looked at me. Then he put me down. I don't know which was worse.", "Ele me pegou e olhou pra mim. Depois me pôs no chão. Não sei o que foi pior."),
                 ("Calcium silicates, iron oxide and no reason at all to be walking.", "Silicato de cálcio, óxido de ferro e nenhum motivo pra estar andando."),
-                ("He's a big pile of grumpy! Why does he smell like Vô Jorge's frying pan?", "Ele é um montão de mau humor! Por que ele tem cheiro da frigideira do Vô Jorge?"));
+                ("He's a big pile of grumpy! Why does he smell like Grandpa Jorge's frying pan?", "Ele é um montão de mau humor! Por que ele tem cheiro da frigideira do Vô Jorge?"));
         }
 
         /// <summary>Lore + one comment per cousin (Maithe, Maria, Joaquim, Ícaro, Lavine, in that order).</summary>

@@ -192,7 +192,7 @@ namespace Rapadura.Gameplay.WorldEvents
                 (CharacterId.Maithe, "Did you hear that roar? A world boss showed up. Let's check the map!", "Ouviram esse rugido? Apareceu um chefe do mundo. Bora olhar o mapa!"),
                 (CharacterId.Icaro, "My boss detector is beeping! It's working... I think.", "Meu detector de chefe está apitando! Está funcionando... eu acho."),
                 (CharacterId.Joaquim, "The ground is trembling. Something big came to visit.", "O chão está tremendo. Coisa grande veio visitar."),
-                (CharacterId.Maria, "Vó Edna always says: when the birds go quiet, something huge is near.", "A Vó Edna sempre diz: quando os passarinhos calam, tem coisa enorme por perto."),
+                (CharacterId.Maria, "Grandma Edna always says: when the birds go quiet, something huge is near.", "A Vó Edna sempre diz: quando os passarinhos calam, tem coisa enorme por perto."),
                 (CharacterId.Lavine, "A giant! A real giant! Can we go see? Please?", "Um gigante! Um gigante de verdade! Podemos ir ver? Por favor?"),
             });
             AddLines(entries, WorldEventMoment.BossStart, new[]
@@ -207,7 +207,7 @@ namespace Rapadura.Gameplay.WorldEvents
             {
                 (CharacterId.Maithe, "At night it's even bigger. Ícaro, light the lamp!", "De noite ele fica ainda maior. Ícaro, acende a lamparina!"),
                 (CharacterId.Icaro, "Glowing eyes in the dark... my sister goes first, right?", "Olhos brilhando no escuro... minha irmã vai na frente, né?"),
-                (CharacterId.Joaquim, "In Vô Jorge's stories they faced worse on moonlit nights. So can we.", "Nas histórias do Vô Jorge, enfrentaram coisa pior em noite de lua. A gente também consegue."),
+                (CharacterId.Joaquim, "In Grandpa Jorge's stories they faced worse on moonlit nights. So can we.", "Nas histórias do Vô Jorge, enfrentaram coisa pior em noite de lua. A gente também consegue."),
                 (CharacterId.Maria, "Stay close, everyone. In the dark, we hold hands.", "Fiquem pertinho. No escuro, a gente se dá as mãos."),
                 (CharacterId.Lavine, "I'm not scared! ...Just a tiny bit. Okay, let's go!", "Eu não tô com medo! ...Só um tiquinho. Tá, vamos!"),
             });
@@ -217,7 +217,7 @@ namespace Rapadura.Gameplay.WorldEvents
                 (CharacterId.Icaro, "Plan worked! I'll write it down before I forget.", "O plano funcionou! Vou anotar antes que eu esqueça."),
                 (CharacterId.Joaquim, "The crown fell off and the spark went up. Everything is calm again.", "A coroa caiu e a faísca subiu. Ficou tudo calmo de novo."),
                 (CharacterId.Maria, "Everyone's fine! Joaquim, you can stop flexing now.", "Todo mundo bem! Joaquim, pode parar de fazer muque."),
-                (CharacterId.Lavine, "We beat the king! Vó Edna will make apricot cake, right?", "A gente venceu o rei! A Vó Edna vai fazer bolo de damasco, né?"),
+                (CharacterId.Lavine, "We beat the king! Grandma Edna will make apricot cake, right?", "A gente venceu o rei! A Vó Edna vai fazer bolo de damasco, né?"),
             });
             AddLines(entries, WorldEventMoment.BossLose, new[]
             {
@@ -232,7 +232,7 @@ namespace Rapadura.Gameplay.WorldEvents
                 (CharacterId.Maithe, "Little gold crowns on the road! Āz and her band are back.", "Coroinha dourada na estrada! A Āz e o bando dela voltaram."),
                 (CharacterId.Icaro, "She enchanted the bichos with tin crowns. That's actually clever... and very rude!", "Ela enfeitiçou os bichos com coroinha de lata. Até que é esperto... e muito mal-educado!"),
                 (CharacterId.Joaquim, "Āz and her band again. Let's protect the people there.", "A Āz e o bando dela de novo. Vamos proteger o povo de lá."),
-                (CharacterId.Maria, "Vô Jorge told stories about Āz, who wants everything that shines. Now it's our turn.", "O Vô Jorge contava da Āz, que quer tudo o que brilha. Agora é a nossa vez."),
+                (CharacterId.Maria, "Grandpa Jorge told stories about Āz, who wants everything that shines. Now it's our turn.", "O Vô Jorge contava da Āz, que quer tudo o que brilha. Agora é a nossa vez."),
                 (CharacterId.Lavine, "If we win, we rescue the chest she hid! I want the +5!", "Se a gente ganhar, resgata a arca que ela escondeu! Eu quero a +5!"),
             });
             AddLines(entries, WorldEventMoment.InvasionStart, new[]
@@ -249,7 +249,7 @@ namespace Rapadura.Gameplay.WorldEvents
                 (CharacterId.Icaro, "Chest opened! I'm keeping the hinge for an invention.", "Arca aberta! A dobradiça eu guardo pra uma invenção."),
                 (CharacterId.Joaquim, "The region is free. That's what a guardian does.", "A região está livre. É isso que guardião faz."),
                 (CharacterId.Maria, "Look at the bichos! Without the crowns they're so sweet.", "Olha os bichos! Sem a coroinha eles são tão bonzinhos."),
-                (CharacterId.Lavine, "Treasure! I'll show Vó Edna. Vô Jorge would have loved this!", "Tesouro! Vou mostrar pra Vó Edna. O Vô Jorge ia adorar isso!"),
+                (CharacterId.Lavine, "Treasure! I'll show Grandma Edna. Grandpa Jorge would have loved this!", "Tesouro! Vou mostrar pra Vó Edna. O Vô Jorge ia adorar isso!"),
             });
             AddLines(entries, WorldEventMoment.InvasionLose, new[]
             {

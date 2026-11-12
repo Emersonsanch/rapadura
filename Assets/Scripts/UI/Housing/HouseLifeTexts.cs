@@ -186,7 +186,7 @@ namespace Rapadura.UI.Housing
                 E(UpgradeTitle, "Improve the house", "Melhorar a casa"),
                 E(UpgradeNext, "{0} → {1}", "{0} → {1}"),
                 E(UpgradeMax, "Your house is already a manor! There's nothing left to build — just to enjoy.", "Sua casa já é um casarão! Não falta mais nada pra construir — só aproveitar."),
-                E(UpgradeNoHouse, "First Vó Edna has to hand you the key.", "Primeiro a Vó Edna precisa te entregar a chave."),
+                E(UpgradeNoHouse, "First Grandma Edna has to hand you the key.", "Primeiro a Vó Edna precisa te entregar a chave."),
                 E(ReqLevel, "Cousin at level {0} (now {1})", "Primo no nível {0} (agora {1})"),
                 E(ReqBoss, "{0} set free", "{0} libertado"),
                 E(ReqItem, "{0}: {1}/{2}", "{0}: {1}/{2}"),
@@ -209,7 +209,7 @@ namespace Rapadura.UI.Housing
                 E(SceneKey(2), "Joaquim carried the boards, Maria brought water for everyone and Lavine painted the porch door green.", "O Joaquim carregou as tábuas, a Maria trouxe água pra todo mundo e a Lavine pintou a porta da varanda de verde."),
                 E(SceneKey(3), "Joaquim carried brick by brick, Ícaro \"optimized\" the clay mixer and Maithe climbed up to lay the roof tiles.", "O Joaquim carregou tijolo por tijolo, o Ícaro \"otimizou\" a betoneira de barro e a Maithe subiu no telhado pra pôr as telhas."),
                 E(SceneKey(4), "Ícaro's mixer only exploded once, Maria served water and Lavine painted the stripe at the bottom of the walls.", "A betoneira do Ícaro só explodiu uma vez, a Maria serviu água e a Lavine pintou o barrado das paredes."),
-                E(SceneKey(5), "The whole family came: Joaquim with the bricks, Ícaro with the mixer, Maithe on the roof, Maria with the water and Lavine painting the big door. Vó Edna cried a little.", "A família inteira veio: o Joaquim com os tijolos, o Ícaro com a betoneira, a Maithe no telhado, a Maria com a água e a Lavine pintando a porta grande. A Vó Edna chorou um pouquinho."),
+                E(SceneKey(5), "The whole family came: Joaquim with the bricks, Ícaro with the mixer, Maithe on the roof, Maria with the water and Lavine painting the big door. Grandma Edna cried a little.", "A família inteira veio: o Joaquim com os tijolos, o Ícaro com a betoneira, a Maithe no telhado, a Maria com a água e a Lavine pintando a porta grande. A Vó Edna chorou um pouquinho."),
 
                 E(LifeTitle, "Life at home", "Vida na casa"),
                 E(ComfortLine, "Comfort {0} — {1}", "Conforto {0} — {1}"),
@@ -324,8 +324,8 @@ namespace Rapadura.UI.Housing
         {
             (string id, string enName, string ptName, string enTitle, string ptTitle)[] sets =
             {
-                ("set_varanda_vo_zefa", "Vó Edna's Iwan", "Iwan da Vó Edna", "Grandma's iwan", "Iwan de Vó"),
-                ("set_tropeiro_vo_chico", "Vô Jorge's Caravan", "Caravana do Vô Jorge", "Caravaneer's house", "Casa de caravaneiro"),
+                ("set_varanda_vo_zefa", "Grandma Edna's Iwan", "Iwan da Vó Edna", "Grandma's iwan", "Iwan de Vó"),
+                ("set_tropeiro_vo_chico", "Grandpa Jorge's Caravan", "Caravana do Vô Jorge", "Caravaneer's house", "Casa de caravaneiro"),
                 ("set_casa_farinha", "Orchard Mill", "Moinho do Pomar", "Millstone folk", "Gente do moinho"),
                 ("set_cozinha_vo", "Vó's Kitchen", "Cozinha da Vó", "Best kitchen around", "Cozinha mais gostosa da ilha"),
                 ("set_oficina_icaro", "Ícaro's Workshop", "Oficina do Ícaro", "Crazy workshop", "Oficina maluca"),
@@ -404,7 +404,7 @@ namespace Rapadura.UI.Housing
                 ("Lavine", "Lavine", "Lavine",
                     new[] { "{0} looks beautiful under the moon.", "I drew the house in my notebook. With stars.", "At night the shadows here are soft. I like it." },
                     new[] { "{0} fica lindo(a) debaixo da lua.", "Desenhei a casa no meu caderno. Com estrelas.", "De noite as sombras daqui são macias. Gosto." }),
-                (HouseVisitRules.VoZefa, "Vó Edna", "Vó Edna",
+                (HouseVisitRules.VoZefa, "Grandma Edna", "Vó Edna",
                     new[] { "Oh, {0}! Just like the one I had when I was a girl.", "Your grandpa would be proud of this house.", "I left a pot of Golden Brick in the kitchen. Don't tell the others." },
                     new[] { "Ai, {0}! Igualzinho ao que eu tinha quando era menina.", "Seu avô ia ter orgulho desta casa.", "Deixei um pote de Torrão Dourado na cozinha. Não conta pros outros." }),
                 (HouseVisitRules.DonaCida, "Mariam the Herbalist", "Mariam, a Ervateira",

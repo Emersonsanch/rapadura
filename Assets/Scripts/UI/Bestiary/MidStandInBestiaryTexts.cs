@@ -98,7 +98,7 @@ namespace Rapadura.UI.Bestiary
                 ("He has a beard. He looks like a very tired grandfather.", "Ele tem barba. Parece um avô muito cansado."),
                 ("It dropped a rock on my foot. On purpose!", "Ele soltou uma pedra no meu pé. De propósito!"),
                 ("The mountain's oldest craftsman, retrained as artillery.", "O artesão mais velho da montanha, retreinado como artilharia."),
-                ("He has a beard like Vô Jorge! A pointy one!", "Ele tem barba igual o Vô Jorge! Uma pontuda!"));
+                ("He has a beard like Grandpa Jorge! A pointy one!", "Ele tem barba igual o Vô Jorge! Uma pontuda!"));
 
             // -- Geleira do Teto do Mundo (38) --
             Page(entries, "enemy_mountain_ice_wolf",

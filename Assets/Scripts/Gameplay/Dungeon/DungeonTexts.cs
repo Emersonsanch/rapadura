@@ -153,13 +153,13 @@ namespace Rapadura.Gameplay.Dungeon
                 (CharacterId.Maria, "Poor guardians, they lost their light. Let's help them rest, Joaquim.", "Coitados dos guardiões, perderam a luz. Vamos ajudar eles a descansar, Joaquim."),
                 (CharacterId.Joaquim, "Cracked walls? My Tide can open any of them. Stand back, Maria!", "Paredes rachadas? Meu Maremoto abre qualquer uma. Afasta, Maria!"),
                 (CharacterId.Icaro, "These are the Artificers' machines of bone! I bet a grenade opens that wall...", "São as máquinas de osso dos Artífices! Aposto que uma granada abre aquela parede..."),
-                (CharacterId.Lavine, "Vó Edna told me about this place! The skulls only look scary, right? ...Right?", "A Vó Edna me contou deste lugar! As caveiras só parecem assustadoras, né? ...Né?"),
+                (CharacterId.Lavine, "Grandma Edna told me about this place! The skulls only look scary, right? ...Right?", "A Vó Edna me contou deste lugar! As caveiras só parecem assustadoras, né? ...Né?"),
             });
             AddLines(entries, true, new[]
             {
                 (CharacterId.Maithe, "Done. Now they can sleep — and Ícaro owes me one.", "Pronto. Agora eles podem dormir — e o Ícaro me deve uma."),
                 (CharacterId.Maria, "Sleep well, Colossus. The Light is gentle with those who rest.", "Dorme bem, Colosso. A Luz é gentil com quem descansa."),
-                (CharacterId.Joaquim, "Big one, huh? Wait till I tell Vô Jorge!", "Grandão, hein? Espera eu contar pro Vô Jorge!"),
+                (CharacterId.Joaquim, "Big one, huh? Wait till I tell Grandpa Jorge!", "Grandão, hein? Espera eu contar pro Vô Jorge!"),
                 (CharacterId.Icaro, "I'm keeping a rib for my next invention. For science!", "Vou guardar uma costela pra minha próxima invenção. Pela ciência!"),
                 (CharacterId.Lavine, "We did it! I wasn't scared. Not even a little. Okay, a little.", "Conseguimos! Eu não tive medo. Nem um pouquinho. Tá, um pouquinho."),
             });

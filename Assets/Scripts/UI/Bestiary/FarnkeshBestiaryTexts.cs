@@ -120,7 +120,7 @@ namespace Rapadura.UI.Bestiary
                 ("She fought the bad wind to protect the gorge. She's brave. She's just confused now.", "Ela brigou com o vento ruim pra proteger a garganta. Ela é corajosa. Só tá confusa agora."),
                 ("I got hit by a feather and it hurt like a rock. Feathers shouldn't do that.", "Levei uma pena e doeu feito pedra. Pena não devia fazer isso."),
                 ("Lightning in the wing tips. Maithe, if I catch one feather, I'll charge my drone forever.", "Raio na ponta da asa. Maithe, se eu pegar uma pena, carrego meu drone pra sempre."),
-                ("Her wings go zap! Like Vô Jorge's radio when it rains.", "As asas dela fazem zap! Igual o rádio do Vô Jorge quando chove."));
+                ("Her wings go zap! Like Grandpa Jorge's radio when it rains.", "As asas dela fazem zap! Igual o rádio do Vô Jorge quando chove."));
 
             Page(entries, "enemy_mountain_smoke_harpy",
                 "In the old Greek tales the harpies were the snatchers, winged things of the storm that grabbed and carried off. Up on the cloud islands around the Huma's nest they are only beasts, big birds of prey made half of smoke, with a pale face like a mask. The Destroying Wind has them in its grip now: they snatch whatever they can from the nest and from travellers, and they are very fast. Never fight one at the edge of an island. Step to the middle and make it come to you.",

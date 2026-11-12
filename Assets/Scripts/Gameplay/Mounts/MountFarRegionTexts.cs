@@ -43,7 +43,7 @@ namespace Rapadura.Gameplay.Mounts
             (MountFarRegionCatalog.VolcanoGoat,
                 "The goat of the herders of Mount Echeyde. Its hooves are hard as pumice, and burns do not stick to it.",
                 "A cabra dos pastores do Monte Echeyde. Tem casco duro como pedra-pomes, e queimadura não pega nela.",
-                "The shepherds of Echeyde walk their flocks across warm rock. Vó Edna says a goat that has eaten ash is afraid of nothing, least of all her soup.",
+                "The shepherds of Echeyde walk their flocks across warm rock. Grandma Edna says a goat that has eaten ash is afraid of nothing, least of all her soup.",
                 "Os pastores do Echeyde levam o rebanho por cima da pedra quente. A Vó Edna diz que cabra que já comeu cinza não tem medo de nada, muito menos da sopa dela."),
             (MountFarRegionCatalog.MesektetIbis,
                 "A great white ibis of the Mesektet Quay. It glides long stretches low over the ground. A true winged mount.",

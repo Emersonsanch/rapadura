@@ -132,7 +132,7 @@ namespace Rapadura.UI.Bestiary
                 "No sonho tem um jardim com todas as árvores cortadas. É só isso o sonho, e assustou tanto o Ohya e o Hahya que eles não conseguiram guardar pra si. Quem cortou não está na história. As árvores estão. Saíram andando do sonho nos tocos, cortadas retinho no alto, com os anéis ainda brilhando onde a lâmina passou, e não têm raiva como os cedros têm. É pior. Eles só não sabem pra que servem. Vão devagar, batam forte e não olhem pra dentro dos anéis.",
                 ("Slow swings. Stay out of the arc.", "Golpes lentos. Fica fora do arco."),
                 ("It's not angry. It just doesn't know why it's still here.", "Não tem raiva. Só não sabe por que ainda está aqui."),
-                ("I counted his rings. He's older than Vô Jorge. Barely.", "Contei os anéis dele. Ele é mais velho que o Vô Jorge. Por pouco."),
+                ("I counted his rings. He's older than Grandpa Jorge. Barely.", "Contei os anéis dele. Ele é mais velho que o Vô Jorge. Por pouco."),
                 ("Growth rings record every year. His stop all at the same one.", "Os anéis registram cada ano. Os dele param todos no mesmo."),
                 ("He has a flat head. I could put my cup on it!", "A cabeça dele é reta. Dá pra pôr meu copo em cima!"));
         }
