@@ -13,10 +13,9 @@
 >   entrou depois (Fontes do Lodo, `MessageCards`, economia, mecânicas 72/86/87/89, 6 chefes de mapa, telas no celular e os
 >   24 bichos novos). Na PlayMode passaram, uma a uma, a fumaça das 16 regiões (`RegionMechanicsSmokeTests`, `ef7b9f6`) e a
 >   história do meio jogada inteira por código (`MidStoryPlaythroughTests`, `37b4820`, 23 s).
-> - **Ainda não rodado:** a suíte PlayMode inteira de uma vez.
-> - **Em andamento, sem commit** (outros agentes, não contados como prontos): faíscas e canais do Jardim de Mihrshah (06),
->   carrinho das calhas (37), medidor de silêncio das Ermidas (56) e correnteza do Rio de Luz (92), mais ajustes de missões
->   de cidade e do `economy.py`.
+> - **Rodadas inteiras em `8422885` (2026-11-12):** EditMode 8.390/8.390 e PlayMode 22/22 (os 2 testes de resistência,
+>   `Soak*`, só rodam chamados pelo nome). Isso valida tudo o que entrou de `24e1425` a `f5073f8`: pose de queda, missões de
+>   estrada, Tacho, telas, montarias e conjuntos das Regiões 5–9, as 4 mecânicas do começo e os 12 chefes de mapa novos.
 
 ## Visão geral
 
@@ -50,7 +49,7 @@
     (60), Mamute Avô (62), Rei Shisa do Telhado (66) e Mestre das Nove Fornalhas (69).
   - 6 na estrada da história do meio (`27e4b96`, Nv 50–110): Polvo das Monções (25), Touro de Fumaça (26), Ponte que Esqueceu
     (32), Carrinho Desgovernado (37), Grande Almas (38) e Carpa que Não Pulou (43).
-  - 6 nos mapas que todo jogador vê e nos três que ficaram de fora (2026-11-11, Nv 24–125, sem commit): Fiandeira Esquecida
+  - 6 nos mapas que todo jogador vê e nos três que ficaram de fora (`f5073f8`, Nv 24–125): Fiandeira Esquecida
     (04), Raiz que Bebeu o Poço (09), Grande Borrão (15), Ninki Nanka (34), Nian (45) e Grifo Velho do Kurgan (48).
   - Faltam 45 (lista por região abaixo), 19 deles nas Regiões 1–9.
 - **Montarias:** 30 do catálogo-base (`MountCodex`), mais o Grifo da Coluna, as 8 das Regiões 10–14 (`MountFarRegionCatalog`) e
