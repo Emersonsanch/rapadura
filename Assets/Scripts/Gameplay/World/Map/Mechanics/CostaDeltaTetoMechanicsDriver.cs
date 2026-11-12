@@ -256,6 +256,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             {
                 _inCosta = true;
                 TickTide(world - _costaOrigin, (long)now, redraw);
+                TickSavanna(world - _costaOrigin, now);
             }
             else if (_inCosta)
             {
@@ -268,6 +269,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 _inDelta = true;
                 TickIslands(world - _deltaOrigin, now, redraw);
                 TickLodo(world - _deltaOrigin, redraw);
+                TickGaze(world - _deltaOrigin, now);
             }
             else if (_inDelta)
             {
@@ -280,6 +282,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 _inTeto = true;
                 TickAvalanche(world - _tetoOrigin, now);
                 TickCold(world - _tetoOrigin);
+                TickVanes(world - _tetoOrigin);
             }
             else if (_inTeto)
             {
@@ -503,6 +506,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private void LeaveCosta()
         {
+            LeaveSavanna();
             _flatHere = -1;
             ClearTideSlow();
             CostaTideFlat[] flats = OverworldLayouts.TideFlats;
@@ -651,6 +655,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private void LeaveDelta()
         {
+            LeaveGaze();
             _islandHere = -1;
             _wasBog = false;
             ClearBogSlow();
@@ -786,6 +791,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private void LeaveTeto()
         {
             LeaveCold();
+            LeaveVanes();
             if (_laneLine != null)
             {
                 _laneLine.enabled = false;

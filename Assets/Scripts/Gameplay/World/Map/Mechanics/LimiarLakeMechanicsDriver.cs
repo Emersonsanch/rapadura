@@ -129,6 +129,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             LeaveLake();
             LeaveHall();
             LeaveStillAir();
+            LeaveStones();
         }
 
         private void OnDestroy()
@@ -182,6 +183,16 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             else
             {
                 LeaveStillAir();
+            }
+
+            // 21 · the waking stones of the Campo das Pedras-Dragão (LimiarLakeMechanicsDriver.Vishapakar.cs).
+            if (OverworldLayouts.DragonstoneFieldBounds.Contains(local))
+            {
+                TickStones(local);
+            }
+            else
+            {
+                LeaveStones();
             }
 
             if (!acted)
