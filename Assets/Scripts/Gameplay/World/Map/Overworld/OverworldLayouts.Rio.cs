@@ -47,6 +47,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>Apep's arena (76): a stone ring on the flat of the sandbank east of the Proa Encalhada, south of her spine (so no climb from the road).</summary>
         public static readonly Vector2 ApepArena = new Vector2(170f, 1590f);
 
+        /// <summary>A Grande Serpente do Areal's arena (73, map boss): the stone ring on the Areal Escondido, by the trail the sledge would take.</summary>
+        public static readonly Vector2 GrandeSerpenteDoArealArena = new Vector2(-832f, 96f);
+
         public static readonly Vector2 CaisMesektetOffset = Vector2.zero;
         public static readonly Vector2 CasaDeJuncoOffset = new Vector2(0f, 600f);
         public static readonly Vector2 TrenoDeAreiaOffset = new Vector2(-960f, 120f);
@@ -370,6 +373,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, -520f, 1650f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, -330f, 640f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, ApepArena.x, ApepArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, GrandeSerpenteDoArealArena.x, GrandeSerpenteDoArealArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

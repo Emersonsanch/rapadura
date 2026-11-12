@@ -110,7 +110,7 @@ namespace Rapadura.UI.Bestiary
                 ("It's afraid of the wick, so it steals it. That's so sad.", "Tem medo do pavio, então rouba. Que coisa triste."),
                 ("It took my candle! I wasn't even using it! Okay, I was.", "Levou minha vela! Eu nem tava usando! Tá, tava."),
                 ("A shadow without anyone to belong to. It must be cold.", "Uma sombra sem ninguém pra pertencer. Deve ser frio."),
-                ("It's my size! Vó, it's exactly my size!", "É do meu tamanho! Vó, é igualzinha do meu tamanho!"));
+                ("It's my size! Grandma, it's exactly my size!", "É do meu tamanho! Vó, é igualzinha do meu tamanho!"));
 
             // -- Fortaleza da Última Lâmpada e Nichos de Basalto (83) --
             Page(entries, "enemy_forest_dark_bat",

@@ -62,6 +62,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>O Mestre das Nove Fornalhas's arena (69, map boss): the stone ring on the road through the furnaces' court.</summary>
         public static readonly Vector2 MestreDasFornalhasArena = new Vector2(-1366f, 540f);
+
+        /// <summary>A Tartaruga-Vulcão's arena (68, map boss): the stone ring on the Ilhotas de Vidro of the Obsidian Reef, by the trail.</summary>
+        public static readonly Vector2 TartarugaVulcaoArena = new Vector2(432f, 1144f);
         public static readonly Vector2 CasaDeChaOffset = new Vector2(0f, 600f);
         public static readonly Vector2 AbrigoPastoresOffset = new Vector2(-960f, -380f);
         public static readonly Vector2 BarcoFarolOffset = new Vector2(0f, 1080f);
@@ -383,6 +386,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, GlutaoArena.x, GlutaoArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, ReiShisaArena.x, ReiShisaArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, MestreDasFornalhasArena.x, MestreDasFornalhasArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, TartarugaVulcaoArena.x, TartarugaVulcaoArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

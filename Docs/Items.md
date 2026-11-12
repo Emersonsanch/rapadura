@@ -1,10 +1,10 @@
-# Rapadura — Conjuntos de armadura das Regiões 1–9 e 13–16
+# Rapadura — Conjuntos de armadura das Regiões 1–16
 
-Treze conjuntos de **2 peças** (peitoral + elmo), no molde da Armadura de Marfim dos Artífices (`Docs/Dungeons.md` §6):
-assets em `Assets/Resources/Items/Sets/`, regras puras em `ArmorSetRules` (`Early` = Regiões 1–4, `Middle` = 5–9, `Far` =
-13–16, `All` = os treze), ligação ao combate em `ArmorSetBonuses`, textos das peças em `ContentTexts` e dos avisos em
-`ArmorSetTexts`, ícones em `tools/icons/generate_item_icons.py`, testes em `ArmorSetsTests`, `EarlyArmorSetsTests` e
-`MiddleArmorSetsTests`. Quebrada, a peça não conta para
+Dezesseis conjuntos de **2 peças** (peitoral + elmo), no molde da Armadura de Marfim dos Artífices (`Docs/Dungeons.md` §6):
+assets em `Assets/Resources/Items/Sets/`, regras puras em `ArmorSetRules` (`Early` = Regiões 1–4, `Middle` = 5–9, `High` =
+10–12, `Far` = 13–16, `All` = os dezesseis), ligação ao combate em `ArmorSetBonuses`, textos das peças em `ContentTexts` e dos avisos em
+`ArmorSetTexts`, ícones em `tools/icons/generate_item_icons.py`, testes em `ArmorSetsTests`, `EarlyArmorSetsTests`,
+`MiddleArmorSetsTests` e `HighArmorSetsTests`. Quebrada, a peça não conta para
 o conjunto.
 
 > **Nomes:** nas fichas de `Docs/Mapas100.md` e em `Docs/Cities.md`, "Cais do Papiro", "Tijolo Azul" e "Cais de Luz" são
@@ -12,8 +12,9 @@ o conjunto.
 > de **equipamento** com o mesmo nome. Os das Regiões 5–9 têm nomes próprios, diferentes dos móveis da mesma região
 > ("Móveis da Porta Suaíli", "Móveis da Casa nas Raízes", "Móveis do Terraço do Pamir", "Móveis do Pátio dos Nove Anéis",
 > "Móveis da Tenda de Feltro", `Docs/Housing.md` §6.2). O mesmo vale para as Regiões 1–4 ("Móveis do Tear de Seda", "Móveis da
-> Cisterna de Qocho", "Móveis do Rondavel", "Móveis da Casa na Rocha"). "Jardim de Mihrshah" é o "conjunto antigo do jardim" da
-> ficha do mapa 06, "Vasos de Bronze" o da ficha do mapa 46 e o "Selo dos Artífices" o da ficha do mapa 90.
+> Cisterna de Qocho", "Móveis do Rondavel", "Móveis da Casa na Rocha"). As Regiões 10 e 12 também ("Móveis do Ninho de
+> Pedra", "Móveis do Palácio de Laca"). "Jardim de Mihrshah" é o "conjunto antigo do jardim" da ficha do mapa 06, "Kurdalægon"
+> o da ficha do mapa 69, "Vasos de Bronze" o da ficha do mapa 46 e o "Selo dos Artífices" o da ficha do mapa 90.
 
 ## Peças
 
@@ -37,6 +38,12 @@ o conjunto.
 | | | `armor_bronze_helm` | Elmo do Vaso Ritual | Rara | 12 | +4% crítico | 105 | 1 900 |
 | Ouro dos Kurgans | 9 Estepe dos Nartes (100–150) | `armor_kurgan_chest` | Couraça de Escamas de Ouro | Rara | 21 | +4% crítico | 155 | 2 800 |
 | | | `armor_kurgan_helm` | Elmo de Feltro e Ouro | Rara | 12 | +25 mana máx. | 105 | 2 000 |
+| Sino de Vento | 10 Picos de Farnkesh (140–200) | `armor_sino_chest` | Gibão de Corda de Iaque | Rara | 24 | +25 mana máx. | 170 | 3 800 |
+| | | `armor_sino_helm` | Elmo do Sino de Vento | Rara | 14 | +4% crítico | 115 | 2 750 |
+| Prata da Aurora | 11 Mar Gelado (180–240) | `armor_aurora_chest` | Parka de Pele de Foca | Rara | 27 | +4% crítico | 180 | 4 700 |
+| | | `armor_aurora_helm` | Capuz de Prata da Aurora | Rara | 15 | +30 mana máx. | 125 | 3 400 |
+| Kurdalægon | 12 Arquipélago de Hinokura (220–280) | `armor_ferro_chest` | Couraça de Ferro Celeste | Rara | 29 | +5% vida máx. | 190 | 5 600 |
+| | | `armor_ferro_helm` | Elmo da Bigorna de Kurdalægon | Rara | 17 | +30 mana máx. | 130 | 4 050 |
 | Cais do Papiro | 13 Rio das Doze Horas (260–320) | `armor_papiro_chest` | Couraça de Papiro Trançado | Rara | 32 | +5% vida máx. | 200 | 6 500 |
 | | | `armor_papiro_helm` | Touca de Junco do Remador | Rara | 18 | +30 mana máx. | 140 | 4 700 |
 | Tijolo Azul | 14 Margens da Mistura (300–360) | `armor_tijolo_chest` | Peitoral de Azulejos Vidrados | Rara | 35 | +6% vida máx. | 220 | 7 400 |
@@ -59,6 +66,9 @@ o conjunto.
 | Lã de Iaque | Fôlego do Pamir | no acerto crítico, 20% de curar 3% da vida máxima |
 | Vasos de Bronze | Gongo de Bronze | ao ser atingido por um bicho, 10% de atingir até 3 inimigos a 4 m do herói com 20% do dano recebido (Terra) |
 | Ouro dos Kurgans | Galope dos Nartes | no acerto crítico, 10% de atingir até 3 outros inimigos a 4 m com 30% do dano do crítico (Físico) |
+| Sino de Vento | Badalada das Ermidas | no acerto crítico, 12% de atingir até 3 outros inimigos a 4,5 m com 35% do dano do crítico (Vento) |
+| Prata da Aurora | Calor da Lanterna | ao matar, 22% de curar 5% da vida máxima |
+| Kurdalægon | Brasa da Bigorna | ao ser atingido por um bicho, 20% de devolver 30% do dano ao atacante (Fogo) |
 | Cais do Papiro | Hora da Barca | ao matar, 25% de curar 5% da vida máxima |
 | Tijolo Azul | Reflexo Vidrado | ao ser atingido por um bicho, 20% de devolver 35% do dano ao atacante (Terra) |
 | Selo dos Artífices | Selo Reaberto | no acerto crítico, 25% de devolver 8% da mana máxima |
@@ -75,6 +85,16 @@ abaixo do herói não larga equipamento. O drop mora em `ArmorSetBonuses` e não
 único e é o ouro de todos eles: **nenhum asset de inimigo foi alterado**.
 
 - **Regiões 13–16:** os 12 bichos próprios de cada região, **0,5%** por abate (`DropChance`), ~200 abates por peça.
+- **Regiões 10–12:** os 12 bichos próprios de cada região, **0,75%** por abate (`HighDropChance`), ~133 abates por peça. Têm 12
+  próprios como o norte, mas no meio de 17–32 espécies (os Picos de Farnkesh são os que mais emprestam): a 0,5% o Sino de Vento
+  passaria dos 1 500 abates do orçamento (1 600); a 0,75% fica em 570–1 070 caçando a região.
+  - Sino de Vento: Bode de Fumaça, Abelha Dourada, Pássaro-Flauta Apagado, Raposa da Vinha, Gralha-Alpina, Takin Apagado,
+    Cabra-Azul, Morcego-Vela, Ushabti de Corda, Gato-de-Pallas Apagado, Águia da Tempestade, Harpia de Fumaça.
+  - Prata da Aurora: Foca-Leopardo Apagada, Morsa de Fumaça, Gaivota-do-Gelo, Raposa-do-Ártico Ladra, Urso-Polar Apagado,
+    Rena de Barro, Lebre-Pedra, Ave-Graveto do gelo, Mamute de Baixo da Terra, Lobo-do-Mar, Lúcio Gigante, Foca-Sombra.
+  - Kurdalægon: Caranguejo-Vulcão, Lagarto de Lava, Gaivota-Brasa, Shisa Apagada, Tanuki Ladrão, Tibicena, Lagarto-Gigante de Lava,
+    Peixe-Lâmina, Coral de Brasa, Ushabti de Laca, Ogro-Fornalha, Gigante de Escória. A Salamandra Devoradora e a Bomba
+    Vulcânica, também próprias, ficaram de fora pelo teto de 12 por conjunto; a Chama Faminta (70, 75, 85) não é de conjunto.
 - **Regiões 5–9:** os bichos próprios de cada região (Docs/Status_100Mapas.md), **1%** por abate (`MiddleDropChance`), ~100
   abates por peça. São só 6–9 por região, no meio de muitos emprestados; a 0,5% o par passaria dos 1 500 abates do orçamento
   da economia (`tools/balance/economy.py`, `BUDGET_SET_KILLS`); a 1% fica em 780–975 abates caçando a região inteira.
@@ -129,15 +149,22 @@ Não há nível de item no jogo: quem segura o espólio é o nível da região.
   gatilho abaixo do bônus de mesmo tipo do meio: Orvalho do Jardim 0,45% contra 1% da Seiva do Lótus (e 0,6% do Fôlego do Pamir);
   Areia que Queima 2% contra 4,5% do Coral que Fecha; Rajada do Kaggen 4% (2 alvos a 3 m) contra 9% do Galope dos Nartes; Pavio
   Aceso 0,6% contra 1% da Seiva do Lótus. Durabilidade 100–115 / 70–85. `EarlyArmorSetsTests` trava essas desigualdades. Abaixo
-  do nível 100, então a seção "Faixas 100–500" (`level_500.py`) não precisa deles; a economia (`economy.py`) lista os treze.
+  do nível 100, então a seção "Faixas 100–500" (`level_500.py`) não precisa deles; a economia (`economy.py`) lista todos.
+- **Regiões 10–12:** **Raras**, entre o Ouro dos Kurgans (21/12) e o Cais do Papiro (32/18): defesa pela mesma faixa de nível
+  (peitoral 14 × 1,72/1,91/2,10 no meio da região) = 24/14, 27/15, 29/17. Atributos dentro do que o norte dá (crítico +4%, mana
+  +25/+30, vida +5%; a vida % entra aqui porque a faixa já é 220+). Valor 900 × nível do meio / 40; durabilidade 170–190 / 115–130.
+  Bônus com valor esperado entre o do meio e o do norte, do mesmo tipo: Badalada das Ermidas 12,6% (3 alvos a 4,5 m) entre o
+  Galope dos Nartes (9%) e o Raio da Coluna (24%); Calor da Lanterna 1,1% entre a Seiva do Lótus (1%) e a Hora da Barca (1,25%);
+  Brasa da Bigorna 6% entre o Coral que Fecha (4,5%) e o Reflexo Vidrado (7%). `HighArmorSetsTests` trava essas desigualdades.
 - **Pilha de poder:** `power_stack.py` lê só `Resources/Items/*.asset`, então a subpasta `Sets/` não entra na campanha
-  (como a `Dungeon/`). A seção "Faixas 100–500" (`level_500.py`) já conhece os nove: de 100 a 259 o herói de referência
-  veste o Ouro dos Kurgans no lugar do Marfim; as lutas de comuns e chefes não mudam de faixa e nada novo sai do orçamento.
-  A economia (`economy.py`) lista os nove com os abates esperados.
+  (como a `Dungeon/`). A seção "Faixas 100–500" (`level_500.py`) conhece os doze de 5–16: o herói de referência veste o
+  Ouro dos Kurgans de 100 a 139, o Sino de Vento de 140, a Prata da Aurora de 180 e o Kurdalægon de 220 a 259 (a Brasa da Bigorna
+  entra como espinho, como o Reflexo Vidrado); as lutas de comuns e chefes não mudam de faixa e nada novo sai do orçamento.
+  A economia (`economy.py`) lista os dezesseis com os abates esperados.
 
 ## Falta
 
 - Listar as peças no Bestiário (`BestiaryCatalog` só conhece o `_lootItem` e a tabela do bioma).
-- Os "conjuntos antigos" das fichas que ainda não existem: "Kurdalægon" (Região 12) e "Gigantes" (Região 14).
-- Uma conquista para os conjuntos de equipamento das Regiões 1–9 (como a `ach_house_far_sets` dos móveis): os textos de
+- O "conjunto antigo" das fichas que ainda não existe: "Gigantes" (Região 14).
+- Uma conquista para os conjuntos de equipamento das Regiões 1–12 (como a `ach_house_far_sets` dos móveis): os textos de
   conquista moram em `UI/Achievements`.

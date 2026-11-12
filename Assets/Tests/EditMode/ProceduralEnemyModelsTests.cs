@@ -329,6 +329,18 @@ namespace Rapadura.Tests
             { ProceduralEnemyKind.DarkBat, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight, ProceduralEnemyParts.Tail } },
             { ProceduralEnemyKind.OrbitWind, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
             { ProceduralEnemyKind.RunawayLantern, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.SteppeVulture, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight, ProceduralEnemyParts.Tail } },
+            { ProceduralEnemyKind.SteppeWolf, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.GrassStorm, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.MarshWisp, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.BullFrog, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.Mudskipper, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail } },
+            { ProceduralEnemyKind.BrokenMirror, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.PaperCrane, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight, ProceduralEnemyParts.Tail } },
+            { ProceduralEnemyKind.SmokeLocust, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight, ProceduralEnemyParts.Tail } },
+            { ProceduralEnemyKind.CoralUshabti, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.ConfusedSpark, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.DarkDrop, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
             { ProceduralEnemyKind.WindKing, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight, ProceduralEnemyParts.Tail } },
             { ProceduralEnemyKind.OldKul, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight } },
             { ProceduralEnemyKind.EmberGlutton, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight } },
@@ -365,6 +377,18 @@ namespace Rapadura.Tests
             { ProceduralEnemyKind.LightFisher, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.Tail } },
             { ProceduralEnemyKind.VaneLord, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.Tail } },
             { ProceduralEnemyKind.LittleEclipse, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight } },
+            { ProceduralEnemyKind.MidasGold, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight, ProceduralEnemyParts.FootLeft, ProceduralEnemyParts.FootRight } },
+            { ProceduralEnemyKind.FirstClumsy, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight, ProceduralEnemyParts.FootLeft, ProceduralEnemyParts.FootRight } },
+            { ProceduralEnemyKind.VolcanoTurtle, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.SledgeSerpent, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core } },
+            { ProceduralEnemyKind.PitchKing, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight } },
+            { ProceduralEnemyKind.GreatStowaway, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight, ProceduralEnemyParts.FootLeft, ProceduralEnemyParts.FootRight } },
+            { ProceduralEnemyKind.MireMother, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight } },
+            { ProceduralEnemyKind.CrownedChief, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight, ProceduralEnemyParts.LegLeft, ProceduralEnemyParts.LegRight, ProceduralEnemyParts.FootLeft, ProceduralEnemyParts.FootRight } },
+            { ProceduralEnemyKind.DarkBellows, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.SleepingVishap, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.ReliefLion, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.SmokeStallion, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Core, ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
         };
 
         /// <summary>Legs per kind; every one a Leg_ (hip) → Shin_ (knee) → Foot_ chain for ProceduralLegLocomotion.</summary>
@@ -382,6 +406,10 @@ namespace Rapadura.Tests
             { ProceduralEnemyKind.NinkiNanka, 2 }, { ProceduralEnemyKind.Nian, 4 }, { ProceduralEnemyKind.OldKurganGriffin, 4 },
             { ProceduralEnemyKind.MistElder, 4 }, { ProceduralEnemyKind.DuneChoir, 0 }, { ProceduralEnemyKind.GreedyBottler, 2 },
             { ProceduralEnemyKind.LightFisher, 0 }, { ProceduralEnemyKind.VaneLord, 0 }, { ProceduralEnemyKind.LittleEclipse, 0 },
+            { ProceduralEnemyKind.MidasGold, 2 }, { ProceduralEnemyKind.FirstClumsy, 2 }, { ProceduralEnemyKind.VolcanoTurtle, 4 },
+            { ProceduralEnemyKind.SledgeSerpent, 0 }, { ProceduralEnemyKind.PitchKing, 0 }, { ProceduralEnemyKind.GreatStowaway, 2 },
+            { ProceduralEnemyKind.MireMother, 0 }, { ProceduralEnemyKind.CrownedChief, 2 }, { ProceduralEnemyKind.DarkBellows, 4 },
+            { ProceduralEnemyKind.SleepingVishap, 4 }, { ProceduralEnemyKind.ReliefLion, 4 }, { ProceduralEnemyKind.SmokeStallion, 4 },
             { ProceduralEnemyKind.BatSwarm, 0 }, { ProceduralEnemyKind.StoneGolem, 2 }, { ProceduralEnemyKind.Warlord, 2 },
             { ProceduralEnemyKind.RuinGuardian, 2 }, { ProceduralEnemyKind.AncientDweller, 2 }, { ProceduralEnemyKind.Wolf, 4 },
             { ProceduralEnemyKind.AlphaWolf, 4 }, { ProceduralEnemyKind.Spider, 8 }, { ProceduralEnemyKind.Scorpion, 8 },
@@ -430,6 +458,7 @@ namespace Rapadura.Tests
             { ProceduralEnemyKind.DimmedStork, 0 }, { ProceduralEnemyKind.BubbleToad, 0 }, { ProceduralEnemyKind.SmokeMosquito, 0 }, { ProceduralEnemyKind.SilkMoth, 0 }, { ProceduralEnemyKind.LaurelPigeon, 0 }, { ProceduralEnemyKind.LaurelLizard, 4 }, { ProceduralEnemyKind.SmokePeacock, 0 }, { ProceduralEnemyKind.ThornLizard, 4 }, { ProceduralEnemyKind.DimmedLynx, 4 }, { ProceduralEnemyKind.Smudge, 0 }, { ProceduralEnemyKind.StoneJackdaw, 0 }, { ProceduralEnemyKind.YoungUbir, 0 },
             { ProceduralEnemyKind.LightningBird, 0 }, { ProceduralEnemyKind.SpearHeron, 0 }, { ProceduralEnemyKind.BeardedVulture, 0 }, { ProceduralEnemyKind.FeltSwan, 0 }, { ProceduralEnemyKind.RedBilledChough, 0 }, { ProceduralEnemyKind.DimmedMoray, 0 }, { ProceduralEnemyKind.DragonCarp, 0 }, { ProceduralEnemyKind.IceWolf, 4 }, { ProceduralEnemyKind.TerracottaHorse, 4 }, { ProceduralEnemyKind.FiddlerCrab, 0 }, { ProceduralEnemyKind.SmokeUrchin, 0 }, { ProceduralEnemyKind.MireLeech, 0 },
             { ProceduralEnemyKind.PeakVulture, 0 }, { ProceduralEnemyKind.ShadowKite, 0 }, { ProceduralEnemyKind.DriftingFloe, 0 }, { ProceduralEnemyKind.LittleKul, 0 }, { ProceduralEnemyKind.HungryFlame, 0 }, { ProceduralEnemyKind.DioriteStone, 0 }, { ProceduralEnemyKind.ShoulderBird, 0 }, { ProceduralEnemyKind.DreamBird, 0 }, { ProceduralEnemyKind.LittleShadow, 4 }, { ProceduralEnemyKind.DarkBat, 0 }, { ProceduralEnemyKind.OrbitWind, 0 }, { ProceduralEnemyKind.RunawayLantern, 0 },
+            { ProceduralEnemyKind.SteppeVulture, 0 }, { ProceduralEnemyKind.SteppeWolf, 4 }, { ProceduralEnemyKind.GrassStorm, 0 }, { ProceduralEnemyKind.MarshWisp, 0 }, { ProceduralEnemyKind.BullFrog, 0 }, { ProceduralEnemyKind.Mudskipper, 0 }, { ProceduralEnemyKind.BrokenMirror, 0 }, { ProceduralEnemyKind.PaperCrane, 0 }, { ProceduralEnemyKind.SmokeLocust, 0 }, { ProceduralEnemyKind.CoralUshabti, 0 }, { ProceduralEnemyKind.ConfusedSpark, 0 }, { ProceduralEnemyKind.DarkDrop, 0 },
         };
 
         [Test]
@@ -848,6 +877,18 @@ namespace Rapadura.Tests
             Assert.AreEqual(ProceduralEnemyKind.DarkBat, ProceduralEnemyModels.KindFor("enemy_forest_dark_bat"));
             Assert.AreEqual(ProceduralEnemyKind.OrbitWind, ProceduralEnemyModels.KindFor("enemy_forest_orbit_wind"));
             Assert.AreEqual(ProceduralEnemyKind.RunawayLantern, ProceduralEnemyModels.KindFor("enemy_forest_runaway_lantern"));
+            Assert.AreEqual(ProceduralEnemyKind.SteppeVulture, ProceduralEnemyModels.KindFor("enemy_desert_steppe_vulture"));
+            Assert.AreEqual(ProceduralEnemyKind.SteppeWolf, ProceduralEnemyModels.KindFor("enemy_mountain_steppe_wolf"));
+            Assert.AreEqual(ProceduralEnemyKind.GrassStorm, ProceduralEnemyModels.KindFor("enemy_mountain_grass_storm"));
+            Assert.AreEqual(ProceduralEnemyKind.MarshWisp, ProceduralEnemyModels.KindFor("enemy_forest_marsh_wisp"));
+            Assert.AreEqual(ProceduralEnemyKind.BullFrog, ProceduralEnemyModels.KindFor("enemy_forest_bull_frog"));
+            Assert.AreEqual(ProceduralEnemyKind.Mudskipper, ProceduralEnemyModels.KindFor("enemy_forest_mudskipper"));
+            Assert.AreEqual(ProceduralEnemyKind.BrokenMirror, ProceduralEnemyModels.KindFor("enemy_desert_broken_mirror"));
+            Assert.AreEqual(ProceduralEnemyKind.PaperCrane, ProceduralEnemyModels.KindFor("enemy_mountain_paper_crane"));
+            Assert.AreEqual(ProceduralEnemyKind.SmokeLocust, ProceduralEnemyModels.KindFor("enemy_cave_smoke_locust"));
+            Assert.AreEqual(ProceduralEnemyKind.CoralUshabti, ProceduralEnemyModels.KindFor("enemy_forest_coral_ushabti"));
+            Assert.AreEqual(ProceduralEnemyKind.ConfusedSpark, ProceduralEnemyModels.KindFor("enemy_desert_confused_spark"));
+            Assert.AreEqual(ProceduralEnemyKind.DarkDrop, ProceduralEnemyModels.KindFor("enemy_cave_dark_drop"));
             Assert.AreEqual(ProceduralEnemyKind.None, ProceduralEnemyModels.KindFor("enemy_unknown_thing"));
             Assert.AreEqual(ProceduralEnemyKind.None, ProceduralEnemyModels.KindFor((string)null));
 

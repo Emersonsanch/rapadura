@@ -906,6 +906,63 @@ def r_armor_pavio_helm(ic):
     ic.dot(64, 22, 2.5, FLAME_CORE)
 
 
+
+# ---- conjuntos das Regiões 10–12 (Docs/Items.md)
+YAK_ROPE = (190, 160, 112)
+PINNACLE_RED = (154, 59, 46)
+SEALSKIN = (112, 104, 96)
+AURORA_GREEN = (110, 230, 170)
+SILVER = (214, 220, 228)
+CELESTIAL_IRON = (70, 74, 86)
+LACQUER_RED = (178, 58, 46)
+EMBER = (255, 138, 61)
+
+
+def r_armor_sino_chest(ic):
+    tunic(ic, YAK_ROPE, trim=PINNACLE_RED)
+    for y in (44, 58, 72, 86):
+        ic.stroke([(40, y), (52, y + 6), (64, y), (76, y + 6), (88, y)], 2.4, darker(YAK_ROPE, 0.3))
+    for x in (46, 64, 82):
+        ic.poly([(x - 4, 26), (x + 4, 26), (x + 5, 34), (x - 5, 34)], BRONZE)
+
+
+def r_armor_sino_helm(ic):
+    ic.poly([(30, 96), (34, 62), (44, 36), (64, 24), (84, 36), (94, 62), (98, 96)], BRONZE)
+    ic.rect(28, 90, 100, 100, darker(BRONZE, 0.25))
+    ic.poly([(48, 60), (80, 60), (76, 84), (52, 84)], NIGHT, shade=False)
+    ic.stroke([(64, 24), (64, 10)], 3, PINNACLE_RED)
+    ic.dot(64, 8, 4, GOLD)
+
+
+def r_armor_aurora_chest(ic):
+    tunic(ic, SEALSKIN, quilted=True, trim=WOOL)
+    ic.stroke([(42, 44), (56, 54), (72, 46), (86, 56)], 3, AURORA_GREEN)
+
+
+def r_armor_aurora_helm(ic):
+    ic.glow(64, 56, 42, AURORA_GREEN, 110)
+    ic.poly([(24, 100), (28, 58), (44, 28), (84, 28), (100, 58), (104, 100), (86, 92), (42, 92)], WOOL)
+    ic.poly([(40, 52), (88, 52), (84, 88), (44, 88)], SEALSKIN)
+    ic.poly([(48, 58), (80, 58), (76, 84), (52, 84)], NIGHT, shade=False)
+    ic.stroke([(36, 50), (64, 40), (92, 50)], 3, SILVER)
+
+
+def r_armor_ferro_chest(ic):
+    tunic(ic, CELESTIAL_IRON, trim=LACQUER_RED)
+    for y in (48, 64, 80):
+        ic.stroke([(40, y), (88, y)], 2, lighter(CELESTIAL_IRON, 0.3))
+    ic.glow(64, 70, 12, EMBER, 160)
+    ic.ngon(64, 70, 7, 6, EMBER)
+
+
+def r_armor_ferro_helm(ic):
+    ic.poly([(28, 96), (26, 58), (40, 30), (88, 30), (102, 58), (100, 96)], CELESTIAL_IRON)
+    ic.rect(26, 60, 102, 70, LACQUER_RED)
+    ic.poly([(46, 76), (82, 76), (78, 92), (50, 92)], NIGHT, shade=False)
+    ic.poly([(44, 30), (52, 16), (76, 16), (84, 30)], darker(CELESTIAL_IRON, 0.2))
+    ic.dot(64, 44, 4, EMBER)
+
+
 def r_item_bone_fragment(ic):
     ic.bar(30, 92, 94, 36, 14, BONE)
     for (x, y) in ((24, 92), (34, 102), (90, 26), (100, 38)):
@@ -1334,6 +1391,13 @@ RECIPES = {
     "armor_pedra_helm": r_armor_pedra_helm,
     "armor_pavio_chest": r_armor_pavio_chest,
     "armor_pavio_helm": r_armor_pavio_helm,
+    # Conjuntos das Regiões 10–12
+    "armor_sino_chest": r_armor_sino_chest,
+    "armor_sino_helm": r_armor_sino_helm,
+    "armor_aurora_chest": r_armor_aurora_chest,
+    "armor_aurora_helm": r_armor_aurora_helm,
+    "armor_ferro_chest": r_armor_ferro_chest,
+    "armor_ferro_helm": r_armor_ferro_helm,
     # ferramentas / armas / armaduras
     "item_axe": r_axe,
     "item_pickaxe": r_pickaxe,

@@ -5,7 +5,7 @@ using Rapadura.Gameplay.Enemies;
 namespace Rapadura.UI.Bestiary
 {
     /// <summary>
-    /// "Caderno da Vó Edna" pages of the map bosses of the fichas (Docs/Mapas100.md 04, 05, 09, 10, 15, 22, 25, 26, 32, 33, 34, 37, 38, 39, 42, 43, 45, 48, 55, 56, 60, 62, 66, 69; <see cref="RegionBossRules.MapSpawns"/>)
+    /// "Caderno da Vó Edna" pages of the map bosses of the fichas (Docs/Mapas100.md 03, 04, 05, 09, 10, 11, 15, 17, 21, 22, 25, 26, 27, 32, 33, 34, 37, 38, 39, 42, 43, 45, 47, 48, 53, 55, 56, 60, 61, 62, 66, 68, 69, 73, 79, 93; <see cref="RegionBossRules.MapSpawns"/>)
     /// and the lines they call out, en + pt-BR. Each is a creature or an engine gone dark: beaten, it is freed, and its last line says what it goes back to.
     /// </summary>
     public static partial class RegionBossTexts
@@ -38,6 +38,18 @@ namespace Rapadura.UI.Bestiary
         public static string VaneWindKey(VaneWind from) => $"region_boss.vane_lord.wind.{from.ToString().ToLowerInvariant()}";
 
         /// <summary>How much of the light the Little Eclipse covers (<see cref="RegionBossRules.EclipsePhaseOf"/>), called out as it warns.</summary>
+        /// <summary>The label over each hatch of the Moon Ship's hold the Great Stowaway can burst out of (<see cref="RegionBossRules.HatchSpots"/>).</summary>
+        public const string HatchKey = "region_boss.great_stowaway.hatch";
+
+        /// <summary>The label over each tin crown the Crowned Chief throws (<see cref="RegionBossRules.CrownSpots"/>).</summary>
+        public const string CrownKey = "region_boss.crowned_chief.crown";
+
+        /// <summary>What the Dark Bellows calls out as it breathes (<see cref="RegionBossRules.BellowsBlowsOut"/>): blowing out in front, or drawing in behind.</summary>
+        public static string BellowsBreathKey(bool blowsOut) => blowsOut ? "region_boss.dark_bellows.out" : "region_boss.dark_bellows.in";
+
+        /// <summary>How far the Sleeping Vishap's springs rise (<see cref="RegionBossRules.SpringsRiseOf"/>), called out as it warns.</summary>
+        public static string SpringsRiseKey(int rise) => $"region_boss.sleeping_vishap.rise{RegionBossRules.SpringsRiseOf(rise)}";
+
         public static string EclipseCoverKey(int cover) => $"region_boss.little_eclipse.cover{RegionBossRules.EclipsePhaseOf(cover)}";
 
         private static void AddMapBossPages(List<LocalizationEntry> entries)
@@ -45,6 +57,8 @@ namespace Rapadura.UI.Bestiary
             AddMidMapBossPages(entries);
             AddFirstMapBossPages(entries);
             AddMoreMapBossPages(entries);
+            AddHighMapBossPages(entries);
+            AddLastFirstMapBossPages(entries);
 
             // -- Pontes de Vento (55) --
             Page(entries, RegionBossRules.RopeCutterId,
@@ -437,6 +451,199 @@ namespace Rapadura.UI.Bestiary
             entries.Add(new LocalizationEntry(EclipseCoverKey(2), "Three quarters: only behind it is light!", "Três quartos: só atrás dele tem luz!"));
             entries.Add(new LocalizationEntry(EclipseCoverKey(3), "The whole light! Run out of its shadow!", "A luz inteira! Corre pra fora da sombra!"));
             Withdraw(entries, RegionBossRules.LittleEclipseId, "The Little Eclipse slides off the towers and settles in the middle of the square, a round shadow on the stone that tells the hour as the sun goes by.", "O Pequeno Eclipse escorrega das torres e assenta no meio da praça, uma sombra redonda na pedra que diz a hora enquanto o sol passa.");
+        }
+
+        private static void AddHighMapBossPages(List<LocalizationEntry> entries)
+        {
+            // -- Vale dos Sátiros (53) --
+            Page(entries, RegionBossRules.MidasGoldId,
+                "You know the old tale of the king of Phrygia who wished that everything he touched would turn to gold, and then could not eat, or drink, or hug his own daughter? He washed his hands in the River Pactolus and the gold went into the sand. In the Vale of the Satyrs the gold remembered: a statue of the king, all of solid gold, got up off its plinth and walks the river bank, and the shadow of Āz shines in it. Here is the trick, children: when it glows, hold your blows. Whoever strikes it hard while it shines gets a little of its gold, and gold is heavy. Strike between the glows. When Midas comes to wash his hands in the river, the statue stops and stands still for good.",
+                "Vocês conhecem o conto velho do rei da Frígia que pediu que tudo o que ele tocasse virasse ouro, e aí não podia comer, nem beber, nem abraçar a própria filha? Ele lavou as mãos no rio Pactolo e o ouro foi pra areia. No Vale dos Sátiros o ouro lembrou: uma estátua do rei, toda de ouro maciço, desceu do pedestal e anda na beira do rio, e a sombra de Āz brilha nela. O segredo é este, crianças: quando ela brilhar, segurem o golpe. Quem bate forte nela enquanto brilha leva um pouco do ouro dela, e ouro pesa. Batam entre um brilho e outro. Quando o Midas vem lavar as mãos no rio, a estátua para e fica em pé de vez.",
+                ("It glows, I stop. It dims, I hit. Simple.", "Brilhou, eu paro. Apagou, eu bato. Simples."),
+                ("He wanted everything to be gold and lost everything that wasn't. That's the saddest wish.", "Ele quis que tudo fosse ouro e perdeu tudo que não era. É o desejo mais triste."),
+                ("A statue that punishes you for hitting it. Finally, an enemy with my conflict-avoidance strategy.", "Uma estátua que castiga quem bate nela. Finalmente um inimigo com a minha estratégia de evitar briga."),
+                ("Greed isn't beaten by force. Sometimes it's beaten by not reaching for it.", "Ganância não se vence com força. Às vezes se vence não estendendo a mão."),
+                ("If I touch it, will I turn into gold? ...Would that be so bad? I'd be shiny.", "Se eu encostar, eu viro ouro? ...Seria tão ruim assim? Eu ia ficar brilhante."));
+            Line(entries, RegionBossRules.MidasGoldId, RegionBossPhase.Storm, "The Gold of Midas throws golden sparks!", "O Ouro de Midas atira faíscas douradas!");
+            Line(entries, RegionBossRules.MidasGoldId, RegionBossPhase.LastStand, "Everything around it is turning gold!", "Tudo em volta dele está virando ouro!");
+            Blow(entries, RegionBossRules.MidasGoldId, "Its golden hand comes down!", "Lá vem a mão de ouro!");
+            Signature(entries, RegionBossRules.MidasGoldId, "It's glowing! Hold your blows!", "Ele está brilhando! Segura o golpe!");
+            Withdraw(entries, RegionBossRules.MidasGoldId, "The Gold of Midas walks to the river, kneels where the king washed his hands, and stands still at last, a statue again, the gold running off it into the sand.", "O Ouro de Midas anda até o rio, se ajoelha onde o rei lavou as mãos e fica parado enfim, estátua de novo, o ouro escorrendo dele para a areia.");
+
+            // -- Tundra de Omöl (61) --
+            Page(entries, RegionBossRules.FirstClumsyId,
+                "In the tale of the far north there were two brothers who made the world: Yen made the good things, and Omöl made the clumsy ones, the twig bird, the stone hare, the clay reindeer. The very first thing Omöl ever made is this one, children: lopsided, one arm long and one short, a stone in its side where no stone should be. It was so sad about being crooked that the shadow found it easily. It leans, and leans, and then it falls over, a long way, onto whatever is on that side. Watch which way it leans and stand beside it, not in front. Free it, and it finds out that crooked things are good for something too.",
+                "No conto do extremo norte tinha dois irmãos que fizeram o mundo: o Yen fez as coisas boas, e o Omöl fez as desajeitadas, a ave-graveto, a lebre-pedra, a rena de barro. A primeiríssima coisa que o Omöl fez é esta, crianças: torta, um braço comprido e um curto, uma pedra do lado onde não devia ter pedra. Ficou tão triste de ser torta que a sombra achou ela fácil. Ela se inclina, e se inclina, e aí cai, comprido, em cima do que estiver daquele lado. Vejam pra que lado ela pende e fiquem do lado dela, não na frente. Libertem ela, e ela descobre que coisa torta também serve pra alguma coisa.",
+                ("It leans, I step to the side of the lean. Then I hit the clumsy thing.", "Pendeu, eu passo pro lado. Depois bato na coisa torta."),
+                ("Being crooked isn't a fault. It's just a different way of standing.", "Ser torto não é defeito. É só um jeito diferente de ficar em pé."),
+                ("Finally someone who trips more than I do. I feel seen.", "Finalmente alguém que tropeça mais do que eu. Me senti representado."),
+                ("It falls the way it leans. Watch the lean, not the fall.", "Ela cai pra onde pende. Olha o pender, não a queda."),
+                ("I like it! It looks like my drawings! Can we keep it?", "Eu gostei! Parece meus desenhos! A gente pode ficar com ela?"));
+            Line(entries, RegionBossRules.FirstClumsyId, RegionBossPhase.Storm, "The First Clumsy One throws twigs everywhere!", "O Primeiro Desajeitado atira gravetos pra todo lado!");
+            Line(entries, RegionBossRules.FirstClumsyId, RegionBossPhase.LastStand, "It wobbles worse than ever!", "Ele balança mais do que nunca!");
+            Blow(entries, RegionBossRules.FirstClumsyId, "Its long arm swings round!", "Lá vem o braço comprido!");
+            Signature(entries, RegionBossRules.FirstClumsyId, "It's leaning! Get out from in front of the lean!", "Ele está pendendo! Sai da frente de onde ele vai cair!");
+            Withdraw(entries, RegionBossRules.FirstClumsyId, "The First Clumsy One sits down crookedly in the snow, and a stone hare comes and curls up in the hollow of its long arm. It laughs, crooked too.", "O Primeiro Desajeitado senta torto na neve, e uma lebre-pedra vem se enroscar na curva do braço comprido dele. Ele ri, torto também.");
+
+            // -- Recife de Obsidiana (68) --
+            Page(entries, RegionBossRules.VolcanoTurtleId,
+                "Where the lava ran into the sea it turned to black glass, and that is the Obsidian Reef. The Volcano Turtle carries a little island on its back, with its own little volcano, and it swam in these warm waters so long that the island got too hot, and the shadow got into the heat. Now everywhere it walks it leaves the ground burning behind it, children, and when it rumbles, all the spots it walked over in the last few moments burst with lava. So never follow in its wake: walk beside it, not behind it. Free it and it cools down at last, and the island on its back turns green.",
+                "Onde a lava correu pro mar ela virou vidro preto, e esse é o Recife de Obsidiana. A Tartaruga-Vulcão carrega uma ilhazinha nas costas, com um vulcãozinho próprio, e nadou tanto nessas águas quentes que a ilha esquentou demais, e a sombra entrou no calor. Agora por onde ela anda deixa o chão queimando atrás, crianças, e quando ela ronca, todos os lugares por onde ela passou nos últimos instantes estouram em lava. Então nunca sigam o rastro dela: andem do lado dela, não atrás. Libertem ela e ela esfria enfim, e a ilha das costas fica verde.",
+                ("Never walk in its wake. Beside it, always beside it.", "Nunca anda no rastro dela. Do lado, sempre do lado."),
+                ("Carrying a whole island and nobody ever asked if it was heavy.", "Carregando uma ilha inteira e ninguém nunca perguntou se pesava."),
+                ("A turtle that leaves lava footprints. Slow, sure. Harmless? Not even a little.", "Uma tartaruga que deixa pegada de lava. Lenta, tudo bem. Inofensiva? Nem um pouco."),
+                ("The burn is in where it has been. Where it is going is still cool.", "A queimadura está onde ela já passou. Pra onde ela vai ainda está frio."),
+                ("Can I ride on the island after? When it's cold? Please?", "Posso andar na ilha depois? Quando esfriar? Por favor?"));
+            Line(entries, RegionBossRules.VolcanoTurtleId, RegionBossPhase.Storm, "The Volcano Turtle spits embers!", "A Tartaruga-Vulcão cospe brasas!");
+            Line(entries, RegionBossRules.VolcanoTurtleId, RegionBossPhase.LastStand, "The volcano on its back is erupting!", "O vulcão das costas está entrando em erupção!");
+            Blow(entries, RegionBossRules.VolcanoTurtleId, "It slams down its shell!", "Ela bate o casco no chão!");
+            Signature(entries, RegionBossRules.VolcanoTurtleId, "It's rumbling! Get off its trail!", "Ela está roncando! Sai do rastro dela!");
+            Withdraw(entries, RegionBossRules.VolcanoTurtleId, "The Volcano Turtle sinks into the sea with a long hiss of steam. When it rises again its volcano is quiet, and moss is already growing on the island.", "A Tartaruga-Vulcão afunda no mar com um chiado comprido de vapor. Quando sobe de novo, o vulcão está quieto, e já tem musgo crescendo na ilha.");
+
+            // -- Areal Escondido (73) --
+            Page(entries, RegionBossRules.SledgeSerpentId,
+                "In the fourth hour of the night, say the old books of Kemet, the barca of light has to cross a hidden desert, and there it becomes a sledge pulled by a great serpent across the sand. This serpent pulled it for ages, children, and then the shadow made it forget: it let go of the barca and kept the rope. Its sledge still lies on the stone ring where it left it, and when the serpent whips the rope it swings in a line from the sledge, through the serpent, and on past it. Don't stand on that line: step to the side, and the rope goes by. Free it and it remembers, and it goes back to pulling the barca across the sand.",
+                "Na quarta hora da noite, dizem os livros velhos de Kemet, a barca de luz precisa atravessar um deserto escondido, e lá ela vira um trenó puxado por uma serpente enorme pela areia. Esta serpente puxou ela por eras, crianças, e aí a sombra fez ela esquecer: soltou a barca e ficou com a corda. O trenó dela ainda está no anel de pedra onde ela largou, e quando a serpente chicoteia a corda, ela passa numa linha que sai do trenó, atravessa a serpente e vai além. Não fiquem nessa linha: deem um passo pro lado, e a corda passa. Libertem ela e ela lembra, e volta a puxar a barca pela areia.",
+                ("Find the sledge, find the line. Then stay off it.", "Acha o trenó, acha a linha. Aí sai dela."),
+                ("She held that rope so long she forgot what it was for.", "Ela segurou essa corda tanto tempo que esqueceu pra que servia."),
+                ("A snake with a jump rope. Of all the things to be good at.", "Uma cobra com corda de pular. De todas as coisas pra ser bom."),
+                ("A rope only reaches where it's pointed. Stand where it isn't pointing.", "Corda só alcança pra onde aponta. Fica onde ela não aponta."),
+                ("I want to pull the sledge too! I'm strong! ...With help.", "Eu também quero puxar o trenó! Eu sou forte! ...Com ajuda."));
+            Line(entries, RegionBossRules.SledgeSerpentId, RegionBossPhase.Storm, "The Serpent spits sand!", "A Serpente cospe areia!");
+            Line(entries, RegionBossRules.SledgeSerpentId, RegionBossPhase.LastStand, "She coils up and lashes the whole sand!", "Ela se enrola e chicoteia o areal inteiro!");
+            Blow(entries, RegionBossRules.SledgeSerpentId, "She strikes!", "Ela dá o bote!");
+            Signature(entries, RegionBossRules.SledgeSerpentId, "She's whipping the rope! Off the line from the sledge!", "Ela vai chicotear a corda! Sai da linha do trenó!");
+            Withdraw(entries, RegionBossRules.SledgeSerpentId, "The Great Serpent of the Sands takes the rope in her jaws, finds the sledge, and starts to pull, slowly, the way she always did, across the hidden sands.", "A Grande Serpente do Areal pega a corda nos dentes, acha o trenó e começa a puxar, devagar, do jeito que sempre puxou, pelo areal escondido.");
+
+            // -- Poços de Betume (79) --
+            Page(entries, RegionBossRules.PitchKingId,
+                "The old people between the rivers sealed their boats and their bricks with bitumen, the black pitch that comes up out of the ground; the boat of the great flood was sealed with it. The King of Pitch is a great bubble of it that went dark in the wells. He doesn't hit hard, children, he sticks. When he shudders, his tar spreads around him, and whoever lingers in it too long gets stuck when it hardens. So don't stand next to him through the warning: get in, get out. Free him and he becomes the good pitch again, the one that keeps the rafts afloat.",
+                "O povo antigo entre os rios calafetava os barcos e os tijolos com betume, o piche preto que sobe da terra; o barco do grande dilúvio foi calafetado com ele. O Rei do Piche é uma bolha enorme dele que apagou nos poços. Ele não bate forte, crianças, ele gruda. Quando ele treme, o piche se espalha em volta, e quem fica tempo demais nele gruda quando endurece. Então não fiquem do lado dele o aviso inteiro: entra, bate, sai. Libertem ele e ele vira o piche bom de novo, o que segura as balsas na água.",
+                ("In, two hits, out. Never stay in the tar.", "Entra, dois golpes, sai. Nunca fica no piche."),
+                ("Something meant to hold boats together, now just holding on. Poor thing.", "Uma coisa feita pra segurar barco, agora só segurando. Coitado."),
+                ("I just washed these boots. In a river. Of light. And now this.", "Eu acabei de lavar essas botas. Num rio. De luz. E agora isso."),
+                ("What sticks only catches what stays. Keep moving and it has nothing to hold.", "O que gruda só pega o que fica. Continua andando e ele não tem o que segurar."),
+                ("Ew. Ew! It's on my shoe! Why is it always my shoe?", "Eca. Eca! Está no meu sapato! Por que é sempre o meu sapato?"));
+            Line(entries, RegionBossRules.PitchKingId, RegionBossPhase.Storm, "The King of Pitch spits blobs of tar!", "O Rei do Piche cospe bolas de piche!");
+            Line(entries, RegionBossRules.PitchKingId, RegionBossPhase.LastStand, "The whole well is bubbling!", "O poço inteiro está borbulhando!");
+            Blow(entries, RegionBossRules.PitchKingId, "He slaps down a sticky arm!", "Lá vem o braço grudento!");
+            Signature(entries, RegionBossRules.PitchKingId, "His tar is spreading! Don't linger next to him!", "O piche dele está se espalhando! Não fica parado do lado dele!");
+            Withdraw(entries, RegionBossRules.PitchKingId, "The King of Pitch settles into the well, warm and amber, and a raft drifting by is glad of a fresh coat of good pitch.", "O Rei do Piche se acomoda no poço, morno e cor de âmbar, e uma balsa que passa fica feliz com uma camada nova de piche bom.");
+
+            // -- Convés da Barca da Lua (93) --
+            Page(entries, RegionBossRules.GreatStowawayId,
+                "The Moon Ship gathers the light that comes up from the world and carries it on to the Sun. Down in its hold, among the jars of light, a big shadow hid itself, children, wrapped in a stolen sail-cloth, hoping to sneak up into the sky. It is more scared than wicked. It hides under the four hatches of the hold, and when it hears you it bursts out of the hatch nearest to you. So keep away from the hatches: the middle of the hold, between them, is safe, and so is far away. Beaten, it climbs back down to the world where it belongs, and gives back the lantern it stole.",
+                "A Barca da Lua junta a luz que sobe do mundo e leva até o Sol. Lá embaixo no porão, entre as jarras de luz, uma sombra grande se escondeu, crianças, enrolada numa lona roubada, querendo subir escondida pro céu. Ela tem mais medo do que maldade. Ela se esconde debaixo dos quatro alçapões do porão, e quando escuta vocês sai pelo alçapão mais perto. Então fiquem longe dos alçapões: o meio do porão, entre eles, é seguro, e longe também. Vencida, ela desce de volta pro mundo, que é o lugar dela, e devolve a lanterna que roubou.",
+                ("Middle of the hold, away from every hatch. Let it come to me.", "No meio do porão, longe de todo alçapão. Deixa ela vir até mim."),
+                ("It only wanted to go up to the sky. So did we, once.", "Ela só queria subir pro céu. A gente também quis, um dia."),
+                ("A stowaway hiding from us. On a flying moon boat. Okay, sure, why not.", "Uma clandestina se escondendo da gente. Num barco-lua voador. Tá, claro, por que não."),
+                ("The light can't be stolen up into the sky. It has to be carried.", "A luz não se rouba pro céu. Ela tem que ser levada."),
+                ("Hide and seek! I'm good at hide and seek! ...It's better.", "Esconde-esconde! Eu sou boa em esconde-esconde! ...Ela é melhor."));
+            Line(entries, RegionBossRules.GreatStowawayId, RegionBossPhase.Storm, "The Stowaway throws stolen light!", "O Clandestino atira luz roubada!");
+            Line(entries, RegionBossRules.GreatStowawayId, RegionBossPhase.LastStand, "It's darting between all the hatches!", "Ele está pulando entre todos os alçapões!");
+            Blow(entries, RegionBossRules.GreatStowawayId, "It lunges out of the dark!", "Ele salta do escuro!");
+            Signature(entries, RegionBossRules.GreatStowawayId, "It's in the hatches! Keep away from them!", "Ele está nos alçapões! Fica longe deles!");
+            entries.Add(new LocalizationEntry(HatchKey, "Hatch!", "Alçapão!"));
+            Withdraw(entries, RegionBossRules.GreatStowawayId, "The Great Stowaway leaves the stolen lantern on the deck, folds its sail-cloth, and climbs down the side of the Moon Ship, back to the world below.", "O Clandestino Grande deixa a lanterna roubada no convés, dobra a lona e desce pelo costado da Barca da Lua, de volta para o mundo lá embaixo.");
+        }
+
+        private static void AddLastFirstMapBossPages(List<LocalizationEntry> entries)
+        {
+            // -- Brejo do Lodo Escuro (03) --
+            Page(entries, RegionBossRules.MireMotherId,
+                "The Lodo is the dark mud of the old tales, the opposite of Living Water. When it crept into the marsh, the great mother toad who looked after the spring swallowed the spring whole, to keep it safe from the mud, and the dark got into her with it. Now she sits by the Poço Turvo with the spring glowing in her throat and snaps at anything that comes near. She is slow, children, but her tongue is quick, and it catches whoever walks into her mouth: if you step closer when she opens it, or stand at her lips, it gets you. Hold your ground or step back, and strike when it shuts. Free her and she gives the spring back, and goes back to looking after the marsh.",
+                "O Lodo é a lama escura dos contos velhos, o contrário da Água Viva. Quando ele entrou no brejo, a sapa-mãe enorme que cuidava da fonte engoliu a fonte inteira, pra guardar ela da lama, e o escuro entrou nela junto. Agora ela fica sentada no Poço Turvo com a fonte brilhando na garganta e abocanha o que chega perto. Ela é lenta, crianças, mas a língua é rápida, e pega quem anda pra dentro da boca dela: se vocês chegarem mais perto quando ela abrir, ou ficarem colados nos lábios dela, ela pega. Fiquem onde estão ou recuem, e batam quando ela fechar. Libertem ela e ela devolve a fonte, e volta a cuidar do brejo.",
+                ("Mouth open, I hold still or step back. Mouth shut, I go in.", "Boca aberta, eu paro ou recuo. Boca fechada, eu entro."),
+                ("She swallowed the spring to protect it. She just held on too long.", "Ela engoliu a fonte pra proteger. Só segurou tempo demais."),
+                ("A toad the size of a house. With a tongue. And I'm the one standing closest. Of course.", "Uma sapa do tamanho de uma casa. Com língua. E eu sou quem está mais perto. Claro."),
+                ("She can only catch what comes to her. Let her come to us.", "Ela só pega o que vai até ela. Deixa ela vir até a gente."),
+                ("Ribbit! ...She didn't answer. Maybe she speaks a different frog.", "Croac! ...Ela não respondeu. Vai ver ela fala outro sapo."));
+            Line(entries, RegionBossRules.MireMotherId, RegionBossPhase.Storm, "Mother Mire spits balls of mud!", "A Mãe-Lodo cospe bolas de lama!");
+            Line(entries, RegionBossRules.MireMotherId, RegionBossPhase.LastStand, "The whole marsh is bubbling around her!", "O brejo inteiro borbulha em volta dela!");
+            Blow(entries, RegionBossRules.MireMotherId, "She jumps and comes down hard!", "Ela pula e cai com tudo!");
+            Signature(entries, RegionBossRules.MireMotherId, "She's opening her mouth! Don't step closer!", "Ela está abrindo a boca! Não chega mais perto!");
+            Withdraw(entries, RegionBossRules.MireMotherId, "Mother Mire opens her mouth wide, and the spring pours out of it, clear, into the Poço Turvo. She croaks once, softly, and settles down beside it to keep watch.", "A Mãe-Lodo abre bem a boca, e a fonte sai dela, limpa, para o Poço Turvo. Ela coaxa uma vez, baixinho, e se acomoda do lado para vigiar.");
+
+            // -- Ermos do Tambor Rubro (11) --
+            Page(entries, RegionBossRules.CrownedChiefId,
+                "The orcs of the Red Drum are a good people, children, drummers and hunters; but some of them were touched by Āz, the greed, and wear little tin crowns she gave them. This one gathered more gold for her than any other, and carries it on his back in a chest, and the crown on his head is the biggest. When he roars he throws tin crowns all round where you stand, three of them. Don't run off onto one: stay right where you are, in the middle, and they land around you. Beaten, he takes off his crown, gives the chest back to the town, and asks to drum again with his clan.",
+                "Os orcs do Tambor Rubro são um povo bom, crianças, tocadores de tambor e caçadores; mas alguns foram tocados por Āz, a ganância, e usam coroinhas de lata que ela deu. Este juntou mais ouro pra ela do que qualquer outro, e carrega nas costas numa arca, e a coroa da cabeça dele é a maior. Quando ele ruge, atira coroas de lata em volta de onde vocês estão, três delas. Não saiam correndo pra cima de uma: fiquem bem onde estão, no meio, e elas caem em volta. Vencido, ele tira a coroa, devolve a arca pra cidade e pede pra tocar tambor de novo com o clã dele.",
+                ("Crowns in the air, I plant my feet. Middle of the three.", "Coroa no ar, eu finco os pés. No meio das três."),
+                ("A crown that makes you carry everyone's gold isn't a crown. It's a weight.", "Uma coroa que faz você carregar o ouro de todo mundo não é coroa. É peso."),
+                ("Dodging by not moving. My favourite kind of dodging.", "Desviar ficando parado. Meu tipo preferido de desvio."),
+                ("What greed throws at you falls around you if you don't go to meet it.", "O que a ganância atira em você cai em volta se você não for ao encontro."),
+                ("Can I wear one of the crowns? Just to see? I'll give it back!", "Posso usar uma das coroas? Só pra ver? Eu devolvo!"));
+            Line(entries, RegionBossRules.CrownedChiefId, RegionBossPhase.Storm, "The Crowned Chief throws burning coins!", "O Chefe Coroado atira moedas em brasa!");
+            Line(entries, RegionBossRules.CrownedChiefId, RegionBossPhase.LastStand, "He beats his chest like a war drum!", "Ele bate no peito feito tambor de guerra!");
+            Blow(entries, RegionBossRules.CrownedChiefId, "His big fist comes down!", "Lá vem o punho grande!");
+            Signature(entries, RegionBossRules.CrownedChiefId, "He's throwing the crowns! Stand still in the middle!", "Ele vai atirar as coroas! Fica parado no meio!");
+            entries.Add(new LocalizationEntry(CrownKey, "Crown!", "Coroa!"));
+            Withdraw(entries, RegionBossRules.CrownedChiefId, "The Crowned Chief takes off his tin crown, sets the chest of gold down in the dust, and walks off towards the town, already drumming on his own belly.", "O Chefe Coroado tira a coroa de lata, põe a arca de ouro na poeira e vai embora para a cidade, já batucando na própria barriga.");
+
+            // -- Salões de Bronze de Napirasu (17) --
+            Page(entries, RegionBossRules.DarkBellowsId,
+                "Deep in the Bronze Halls the dwarves had a Great Forge, and it was blown by a great bellows of walnut wood, leather and bronze, so big that four dwarves pumped it. When the forge went out, the shadow got into the bellows, and now it walks about on its iron legs and breathes on its own: out through the nozzle in front, hot as the forge, and in through the back, pulling everything to it. It does one, then the other, children, and it says which. Out in front: get behind it. Drawing in: stay in front. Beside it is always safe. Free it and it lights the first fire of the Great Forge again.",
+                "Lá no fundo dos Salões de Bronze os anões tinham uma Grande Forja, e ela era soprada por um fole enorme de nogueira, couro e bronze, tão grande que quatro anões bombeavam. Quando a forja apagou, a sombra entrou no fole, e agora ele anda nas pernas de ferro e respira sozinho: sopra pelo bico na frente, quente como a forja, e puxa pelas costas, arrastando tudo pra ele. Faz um, depois o outro, crianças, e diz qual. Soprando na frente: vão pra trás dele. Puxando: fiquem na frente. Do lado é sempre seguro. Libertem ele e ele acende de novo o primeiro fogo da Grande Forja.",
+                ("Out, I go behind. In, I go in front. Or just stay beside.", "Soprou, eu vou pra trás. Puxou, eu vou pra frente. Ou fico do lado."),
+                ("It just wants to breathe for the forge again. It doesn't know the forge is out.", "Ele só quer respirar pra forja de novo. Não sabe que a forja apagou."),
+                ("An angry accordion. I am fighting an angry accordion.", "Uma sanfona brava. Eu estou lutando com uma sanfona brava."),
+                ("Every breath has two halves. Learn both and you'll never be caught.", "Toda respiração tem duas metades. Aprende as duas e nunca te pegam."),
+                ("When it breathes out it's warm! It's like a big hairdryer!", "Quando ele sopra é quentinho! Parece um secador gigante!"));
+            Line(entries, RegionBossRules.DarkBellowsId, RegionBossPhase.Storm, "The Bellows blows out sparks!", "O Fole sopra faíscas!");
+            Line(entries, RegionBossRules.DarkBellowsId, RegionBossPhase.LastStand, "It pumps faster and faster!", "Ele bombeia cada vez mais rápido!");
+            Blow(entries, RegionBossRules.DarkBellowsId, "It slams its boards together!", "Ele bate as tábuas!");
+            Signature(entries, RegionBossRules.DarkBellowsId, "It's taking a breath!", "Ele vai respirar!");
+            entries.Add(new LocalizationEntry(BellowsBreathKey(true), "It's blowing out in front: get behind it!", "Ele vai soprar na frente: vai pra trás dele!"));
+            entries.Add(new LocalizationEntry(BellowsBreathKey(false), "It's drawing in behind: stay in front!", "Ele vai puxar por trás: fica na frente!"));
+            Withdraw(entries, RegionBossRules.DarkBellowsId, "The Dark Bellows lets out one long, warm breath. Somewhere below, in the Great Forge, a first small flame catches and holds.", "O Fole Apagado solta um sopro comprido e morno. Lá embaixo, na Grande Forja, uma primeira chaminha pega e fica.");
+
+            // -- Campo das Pedras-Dragão (21) --
+            Page(entries, RegionBossRules.SleepingVishapId,
+                "In the old mountains of the north-west, people raised tall stones with fish heads carved on them and called them dragon-stones, vishapakar, because the vishaps, the water dragons, lived under them by the springs. Under the biggest stone of this field a vishap slept for so long that the shadow crept into its dreams. It is still half asleep, children, and when it dreams it opens the springs, and the water rises everywhere around the great stone, more each time: first only far away, then closer, then almost up to the stone. So go towards the great stone when it dreams. Free it and it wakes up properly, and the springs run clean again.",
+                "Nas montanhas antigas do noroeste, o povo erguia pedras altas com cabeças de peixe entalhadas e chamava de pedras-dragão, vishapakar, porque os vishaps, os dragões d'água, moravam debaixo delas junto das fontes. Debaixo da maior pedra deste campo um vishap dormiu tanto tempo que a sombra entrou nos sonhos dele. Ele ainda está meio dormindo, crianças, e quando sonha abre as fontes, e a água sobe em volta da pedra grande, mais a cada vez: primeiro só longe, depois mais perto, depois quase até a pedra. Então vão pra perto da pedra grande quando ele sonhar. Libertem ele e ele acorda de verdade, e as fontes correm limpas de novo.",
+                ("It dreams, I run to the great stone. Closer each time.", "Ele sonhou, eu corro pra pedra grande. Mais perto a cada vez."),
+                ("Imagine having a bad dream for a hundred years. Let's wake him gently.", "Imagina ter um pesadelo por cem anos. Vamos acordar ele com jeito."),
+                ("The dragon is asleep and still winning. That's honestly impressive.", "O dragão está dormindo e ainda está ganhando. Sinceramente, impressionante."),
+                ("The water rises from the edges. The stone stays dry the longest.", "A água sobe pelas beiradas. A pedra é a que fica seca por mais tempo."),
+                ("Shhh! Everybody whisper! ...Why are we hitting him if he's sleeping?", "Shhh! Todo mundo cochichando! ...Por que a gente bate nele se ele está dormindo?"));
+            Line(entries, RegionBossRules.SleepingVishapId, RegionBossPhase.Storm, "The Vishap spits spring water in its sleep!", "O Vishap cospe água da fonte dormindo!");
+            Line(entries, RegionBossRules.SleepingVishapId, RegionBossPhase.LastStand, "It thrashes in a nightmare!", "Ele se debate num pesadelo!");
+            Blow(entries, RegionBossRules.SleepingVishapId, "It rolls over in its sleep!", "Ele rola no sono!");
+            Signature(entries, RegionBossRules.SleepingVishapId, "It's dreaming! The springs are rising, go to the great stone!", "Ele está sonhando! As fontes vão subir, vai pra pedra grande!");
+            entries.Add(new LocalizationEntry(SpringsRiseKey(0), "The water rises far away: stay within ten steps of the stone!", "A água sobe longe: fica a dez passos da pedra!"));
+            entries.Add(new LocalizationEntry(SpringsRiseKey(1), "The water rises closer: within seven steps!", "A água sobe mais perto: a sete passos!"));
+            entries.Add(new LocalizationEntry(SpringsRiseKey(2), "The water is almost at the stone: get right up to it!", "A água está quase na pedra: cola nela!"));
+            Withdraw(entries, RegionBossRules.SleepingVishapId, "The Sleeping Vishap opens its eyes at last, yawns, and slides back under the great stone. All over the field, the springs bubble up clear.", "O Vishap Adormecido abre enfim os olhos, boceja e escorrega de volta para debaixo da pedra grande. Pelo campo inteiro, as fontes brotam limpas.");
+
+            // -- Pirâmides Altas de Meroë (27) --
+            Page(entries, RegionBossRules.ReliefLionId,
+                "At Meroë, among the steep pyramids of the old kings of Kush, there is a courtyard whose walls are covered in carvings, and the guardian of the courtyard was a lion carved in the stone, with its paint still bright. The shadow got into the wall and the lion came off it, children. It still guards the courtyard, but it no longer knows who is a friend. When it crouches it pounces on where you stand, and then it leaps straight back to its place on the wall: both spots get hit. So don't stand where you were, and don't stand by its wall. Free it and it goes back into the relief, and keeps watch from there, gently.",
+                "Em Meroé, entre as pirâmides altas dos reis antigos de Kush, tem um pátio com as paredes cobertas de entalhes, e o guardião do pátio era um leão entalhado na pedra, com a tinta ainda viva. A sombra entrou na parede e o leão saiu dela, crianças. Ele ainda guarda o pátio, mas não sabe mais quem é amigo. Quando ele se agacha, pula onde vocês estão, e depois salta direto de volta pro lugar dele na parede: os dois lugares levam o golpe. Então não fiquem onde estavam, e não fiquem perto da parede dele. Libertem ele e ele volta pro relevo, e vigia de lá, manso.",
+                ("It crouches, I move. Not where I was, not by the wall.", "Agachou, eu saio. Nem onde eu estava, nem perto da parede."),
+                ("It's still guarding. It just forgot what it was guarding against.", "Ele ainda está guardando. Só esqueceu contra o quê."),
+                ("Two-dimensional lion. Three-dimensional teeth. Not fair.", "Leão de duas dimensões. Dentes de três dimensões. Não é justo."),
+                ("Whoever always returns to the same place can be read. Watch where it comes from.", "Quem sempre volta pro mesmo lugar dá pra ler. Olha de onde ele vem."),
+                ("It's painted! Look, it has stripes! Red and gold! ...Okay, running now.", "Ele é pintado! Olha, tem listras! Vermelho e dourado! ...Tá, correndo agora."));
+            Line(entries, RegionBossRules.ReliefLionId, RegionBossPhase.Storm, "The Lion of the Reliefs throws bolts of painted light!", "O Leão dos Relevos atira raios de luz pintada!");
+            Line(entries, RegionBossRules.ReliefLionId, RegionBossPhase.LastStand, "It roars and the whole courtyard shakes!", "Ele ruge e o pátio inteiro treme!");
+            Blow(entries, RegionBossRules.ReliefLionId, "Its stone paw comes down!", "Lá vem a pata de pedra!");
+            Signature(entries, RegionBossRules.ReliefLionId, "It's crouching! Get away from your spot and from its wall!", "Ele está se agachando! Sai do seu lugar e de perto da parede dele!");
+            Withdraw(entries, RegionBossRules.ReliefLionId, "The Lion of the Reliefs walks back to its wall, turns round three times and steps into the stone, flat again, its paint shining a little brighter than before.", "O Leão dos Relevos volta para a parede, dá três voltas e entra na pedra, chato de novo, a tinta brilhando um pouco mais do que antes.");
+
+            // -- Acampamento de Soslan (47) --
+            Page(entries, RegionBossRules.SmokeStallionId,
+                "The Nart heroes of the old sagas rode horses that were almost people, and the centaurs of Soslan's camp still race across the steppe. Lately the foals have been going missing: a stallion made of smoke comes and gallops round them and carries them off. Under the smoke there is a real horse, children, one the shadow took first. When it rears it gallops a ring of smoke round where you are standing. The ring is what hurts: inside it, with the foals, you are safe, and far outside it too. Just don't be standing on the ring. Free it and the smoke blows away, and it is a real horse again, and leads the foals home.",
+                "Os heróis nartes das sagas antigas montavam cavalos que eram quase gente, e os centauros do acampamento de Soslan ainda correm pela estepe. Ultimamente os potros andam sumindo: um garanhão feito de fumaça vem, galopa em volta deles e leva embora. Debaixo da fumaça tem um cavalo de verdade, crianças, um que a sombra pegou primeiro. Quando ele empina, galopa um anel de fumaça em volta de onde vocês estão. O anel é que machuca: dentro dele, junto dos potros, é seguro, e bem fora também. Só não fiquem em cima do anel. Libertem ele e a fumaça vai embora, e ele vira cavalo de verdade de novo, e leva os potros pra casa.",
+                ("It rears, I stay in the middle of the ring. With the foals.", "Empinou, eu fico no meio do anel. Junto dos potros."),
+                ("There's a real horse in there, scared. That's who we're freeing.", "Tem um cavalo de verdade ali dentro, com medo. É ele que a gente vai libertar."),
+                ("Standing still while a smoke horse runs circles around me. Very calm. Totally calm.", "Ficar parado enquanto um cavalo de fumaça corre em volta de mim. Muito calmo. Totalmente calmo."),
+                ("A circle closes on the edge, never in the middle.", "Um círculo fecha na borda, nunca no meio."),
+                ("Can I ride it after? It'll be a real horse! A real one!", "Posso montar nele depois? Vai ser um cavalo de verdade! De verdade!"));
+            Line(entries, RegionBossRules.SmokeStallionId, RegionBossPhase.Storm, "The Smoke Stallion throws plumes of smoke!", "O Cavalo de Fumaça atira plumas de fumaça!");
+            Line(entries, RegionBossRules.SmokeStallionId, RegionBossPhase.LastStand, "It gallops round the whole camp!", "Ele galopa em volta do acampamento inteiro!");
+            Blow(entries, RegionBossRules.SmokeStallionId, "Its hooves come down!", "Lá vêm os cascos!");
+            Signature(entries, RegionBossRules.SmokeStallionId, "It's rearing! Stay inside the ring, don't stand on it!", "Ele está empinando! Fica dentro do anel, não em cima dele!");
+            Withdraw(entries, RegionBossRules.SmokeStallionId, "The smoke blows off the stallion in long grey ribbons, and underneath is a bay horse, trembling. It whinnies, and three foals come trotting out of the grass to follow it home.", "A fumaça se solta do garanhão em fitas cinzentas compridas, e embaixo tem um cavalo baio, tremendo. Ele relincha, e três potros saem trotando do capim para seguir ele até em casa.");
         }
     }
 }

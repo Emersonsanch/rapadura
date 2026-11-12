@@ -24,6 +24,10 @@ namespace Rapadura.UI.Bestiary
             RegionBossRules.NianId, RegionBossRules.OldKurganGriffinId,
             RegionBossRules.MistElderId, RegionBossRules.DuneChoirId, RegionBossRules.GreedyBottlerId, RegionBossRules.LightFisherId,
             RegionBossRules.VaneLordId, RegionBossRules.LittleEclipseId,
+            RegionBossRules.MidasGoldId, RegionBossRules.FirstClumsyId, RegionBossRules.VolcanoTurtleId, RegionBossRules.SledgeSerpentId,
+            RegionBossRules.PitchKingId, RegionBossRules.GreatStowawayId,
+            RegionBossRules.MireMotherId, RegionBossRules.CrownedChiefId, RegionBossRules.DarkBellowsId, RegionBossRules.SleepingVishapId,
+            RegionBossRules.ReliefLionId, RegionBossRules.SmokeStallionId,
         };
 
         public static string PhaseKey(string enemyId, RegionBossPhase phase) => $"region_boss.{enemyId}.phase{(int)phase}";

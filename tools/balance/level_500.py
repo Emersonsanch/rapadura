@@ -78,11 +78,12 @@ FARM_KILLS = 400  # commons farmed on top of the campaign before the band's gear
 FARM_BOSSES = 20
 DEFAULT_RUNS = 120
 
-# Which layout file holds each set's region (ArmorSetRules: Regions 5-9 and 13-16).
+# Which layout file holds each set's region (ArmorSetRules: Regions 5-16; the Uncommon sets of 1-4 stay below level 100).
 SET_REGION = {"coral": "Costa", "lotus": "Delta", "iaque": "Teto", "bronze": "Mingcheng", "kurgan": "Nartes",
-              "papiro": "Rio", "tijolo": "Mistura", "selo": "Profundo", "luz": "Ceu"}
+              "sino": "Farnkesh", "aurora": "MarGelado", "ferro": "Hinokura", "papiro": "Rio", "tijolo": "Mistura", "selo": "Profundo", "luz": "Ceu"}
 SET_NAMES = {"bone": "Marfim (Ossuário)", "coral": "Coral de Kilwa", "lotus": "Seda de Lótus", "iaque": "Lã de Iaque",
-             "bronze": "Vasos de Bronze", "kurgan": "Ouro dos Kurgans", "papiro": "Cais do Papiro", "tijolo": "Tijolo Azul",
+             "bronze": "Vasos de Bronze", "kurgan": "Ouro dos Kurgans", "sino": "Sino de Vento", "aurora": "Prata da Aurora",
+             "ferro": "Kurdalægon", "papiro": "Cais do Papiro", "tijolo": "Tijolo Azul",
              "selo": "Selo dos Artífices", "luz": "Cais de Luz", None: "peças do saque"}
 LOOT_ARMOR = 12.0  # item_leather_helmet + item_leather_chest: what the loot table drops for those slots
 BOOTS_ARMOR = 3.0  # item_leather_boots / item_botas_raiz: the only boots there are
@@ -305,6 +306,7 @@ def load_sets(regions: dict) -> list:
     stat_types = rd.load_stat_types()
     rules = _read(SET_RULES)
     reflect = _const(rules, "GlazedReflectChance") * _const(rules, "GlazedReflectFraction")
+    anvil = _const(rules, "AnvilEmberChance") * _const(rules, "AnvilEmberFraction")  # Brasa da Bigorna (Kurdalægon): a reflect too
     sets = []
 
     def build(key, folder, chest, helm, level, thorns=0.0):
@@ -313,7 +315,8 @@ def load_sets(regions: dict) -> list:
 
     build("bone", "Dungeon", "armor_bone_chest", "armor_bone_helm", int(_const(_read(DUNGEON_RULES), "MinLevel")))
     for key, region in SET_REGION.items():
-        build(key, "Sets", f"armor_{key}_chest", f"armor_{key}_helm", regions[region].low, reflect if key == "tijolo" else 0.0)
+        build(key, "Sets", f"armor_{key}_chest", f"armor_{key}_helm", regions[region].low,
+              reflect if key == "tijolo" else anvil if key == "ferro" else 0.0)
     return sets
 
 

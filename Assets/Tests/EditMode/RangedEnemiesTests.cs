@@ -74,6 +74,10 @@ namespace Rapadura.Tests
             // The fourteenth pass, Regions 10–16 (FarStandInBeastsTests): the peak vulture's hard feathers and the shadow kite's bolts of stolen lamp-light.
             ("enemy_mountain_peak_vulture", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.PeakVulture),
             ("enemy_mountain_shadow_kite", BiomeType.Mountain, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.ShadowKite),
+            // The fifteenth pass, Regions 5–16 (WideStandInBeastsTests): the steppe vulture's feathers, the paper crane's folds and the broken mirror's moonlight.
+            ("enemy_desert_steppe_vulture", BiomeType.Desert, EnemyProjectileKind.Feather, ProceduralEnemyKind.SteppeVulture),
+            ("enemy_mountain_paper_crane", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.PaperCrane),
+            ("enemy_desert_broken_mirror", BiomeType.Desert, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.BrokenMirror),
         };
 
         /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>

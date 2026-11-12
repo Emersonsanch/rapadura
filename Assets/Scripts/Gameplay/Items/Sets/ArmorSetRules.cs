@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rapadura.Gameplay.Items.Sets
 {
-    /// <summary>One two-piece armour set of a region (Docs/Items.md: Regions 1–9 and 13–16) and the region beasts that drop it.</summary>
+    /// <summary>One two-piece armour set of a region (Docs/Items.md: Regions 1–16) and the region beasts that drop it.</summary>
     public sealed class ArmorSetDefinition
     {
         public readonly string Id;
@@ -53,6 +53,12 @@ namespace Rapadura.Gameplay.Items.Sets
         /// </summary>
         public const double EarlyDropChance = 0.005;
 
+        /// <summary>
+        /// The chance for the sets of Regions 10–12 (one kill in ~133), between the middle and the far ones: 12 own beasts each, but among
+        /// 17–32 species (the Picos de Farnkesh borrow the most), so at 1/200 the pair would pass the 1 500 kills of the economy budget.
+        /// </summary>
+        public const double HighDropChance = 0.0075;
+
         public const string PapyrusChestId = "armor_papiro_chest";
         public const string PapyrusHelmId = "armor_papiro_helm";
         public const string BlueBrickChestId = "armor_tijolo_chest";
@@ -79,6 +85,12 @@ namespace Rapadura.Gameplay.Items.Sets
         public const string DrystoneHelmId = "armor_pedra_helm";
         public const string WickChestId = "armor_pavio_chest";
         public const string WickHelmId = "armor_pavio_helm";
+        public const string WindBellChestId = "armor_sino_chest";
+        public const string WindBellHelmId = "armor_sino_helm";
+        public const string AuroraSilverChestId = "armor_aurora_chest";
+        public const string AuroraSilverHelmId = "armor_aurora_helm";
+        public const string CelestialIronChestId = "armor_ferro_chest";
+        public const string CelestialIronHelmId = "armor_ferro_helm";
 
         // ---- Regions 1–4, the hub regions: Uncommon sets below the Marfim, from the region's own beasts (Docs/Status_100Mapas.md).
 
@@ -150,6 +162,33 @@ namespace Rapadura.Gameplay.Items.Sets
             "enemy_mountain_bark_beetle", "enemy_mountain_ochokochi", "enemy_mountain_felt_swan",
         });
 
+        // ---- Regions 10–12, the high north before the Rio: Rare sets between the middle and the far ones, from the 12 own beasts of
+        // each region (Docs/Status_100Mapas.md), at HighDropChance.
+
+        /// <summary>Sino de Vento (Região 10, Picos de Farnkesh).</summary>
+        public static readonly ArmorSetDefinition WindBell = new ArmorSetDefinition("sino_de_vento", WindBellChestId, WindBellHelmId, HighDropChance, new[]
+        {
+            "enemy_forest_smoke_goat", "enemy_forest_golden_bee", "enemy_forest_flute_bird", "enemy_forest_vine_fox",
+            "enemy_mountain_alpine_chough", "enemy_mountain_takin", "enemy_mountain_blue_sheep", "enemy_mountain_candle_bat",
+            "enemy_mountain_rope_ushabti", "enemy_mountain_pallas_cat", "enemy_mountain_storm_eagle", "enemy_mountain_smoke_harpy",
+        });
+
+        /// <summary>Prata da Aurora (Região 11, Mar Gelado).</summary>
+        public static readonly ArmorSetDefinition AuroraSilver = new ArmorSetDefinition("prata_da_aurora", AuroraSilverChestId, AuroraSilverHelmId, HighDropChance, new[]
+        {
+            "enemy_mountain_leopard_seal", "enemy_mountain_smoke_walrus", "enemy_mountain_ice_gull", "enemy_mountain_arctic_fox",
+            "enemy_mountain_polar_bear", "enemy_mountain_clay_reindeer", "enemy_mountain_stone_hare", "enemy_mountain_twig_bird",
+            "enemy_mountain_burrow_mammoth", "enemy_mountain_sea_wolf", "enemy_mountain_giant_pike", "enemy_mountain_shadow_seal",
+        });
+
+        /// <summary>Kurdalægon (Região 12, Arquipélago de Hinokura): the "conjunto antigo" of the sheet of map 69.</summary>
+        public static readonly ArmorSetDefinition CelestialIron = new ArmorSetDefinition("kurdalaegon", CelestialIronChestId, CelestialIronHelmId, HighDropChance, new[]
+        {
+            "enemy_mountain_volcano_crab", "enemy_mountain_lava_lizard", "enemy_mountain_ember_gull", "enemy_mountain_dimmed_shisa",
+            "enemy_mountain_tanuki", "enemy_mountain_tibicena", "enemy_mountain_giant_lava_lizard", "enemy_mountain_blade_fish",
+            "enemy_mountain_ember_coral", "enemy_mountain_lacquer_ushabti", "enemy_mountain_furnace_ogre", "enemy_mountain_slag_giant",
+        });
+
         // ---- Regions 13–16.
 
         /// <summary>Cais do Papiro (Região 13, Rio das Doze Horas).</summary>
@@ -166,6 +205,8 @@ namespace Rapadura.Gameplay.Items.Sets
             "enemy_forest_angry_cedar", "enemy_forest_bitumen_locust", "enemy_forest_brick_lion", "enemy_forest_broken_tablet",
             "enemy_forest_garden_shadow", "enemy_forest_glow_mantle", "enemy_forest_late_shadow", "enemy_forest_living_hourglass",
             "enemy_forest_living_tar", "enemy_forest_tar_heron", "enemy_forest_ullikummi_son", "enemy_forest_young_mushussu",
+            // The fourteenth pass of beasts (FarStandInBeastRecipes): the roles of the sheets of 81 and 82 that were stand-ins.
+            "enemy_forest_diorite_stone", "enemy_forest_shoulder_bird", "enemy_forest_dream_bird",
         });
 
         /// <summary>Selo dos Artífices (Região 15, Limiar Profundo).</summary>
@@ -174,6 +215,9 @@ namespace Rapadura.Gameplay.Items.Sets
             "enemy_forest_black_eagle", "enemy_forest_copy_shadow", "enemy_forest_dark_fish", "enemy_forest_ember_wolf",
             "enemy_forest_hot_smoke_lion", "enemy_forest_lesser_archon", "enemy_forest_lesser_shadow_dragon", "enemy_forest_mud_octopus",
             "enemy_forest_shadow_lizard", "enemy_forest_smoke_archer", "enemy_forest_smoke_giant", "enemy_forest_wind_harpy",
+            // The fourteenth pass: the Sombra Pequena and the Morcego da Treva of the fortress (83). The Chama Faminta (70, 75, 85) burns in three
+            // regions and belongs to none of the sets.
+            "enemy_forest_little_shadow", "enemy_forest_dark_bat",
         });
 
         /// <summary>Cais de Luz (Região 16, Reinos do Céu).</summary>
@@ -182,6 +226,8 @@ namespace Rapadura.Gameplay.Items.Sets
             "enemy_forest_az_thief", "enemy_forest_balloon_giant", "enemy_forest_chained_archon", "enemy_forest_cracked_jar",
             "enemy_forest_dark_stowaway", "enemy_forest_dimmed_cloud_bird", "enemy_forest_dimmed_light_fish", "enemy_forest_dimmed_light_gull",
             "enemy_forest_hold_shadow", "enemy_forest_living_rope", "enemy_forest_sky_stone", "enemy_forest_toy_archon",
+            // The fourteenth pass: the Lanterna Fugitiva (92) and the Vento de Órbita (95, 99, 100).
+            "enemy_forest_runaway_lantern", "enemy_forest_orbit_wind",
         });
 
         /// <summary>The four sets of Regions 1–4, in region order.</summary>
@@ -191,12 +237,15 @@ namespace Rapadura.Gameplay.Items.Sets
         public static readonly IReadOnlyList<ArmorSetDefinition> Middle = new[] { Coral, Lotus, Yak, Bronze, Kurgan };
 
         /// <summary>The four sets of Regions 13–16, in region order.</summary>
+        /// <summary>The three sets of Regions 10–12, in region order.</summary>
+        public static readonly IReadOnlyList<ArmorSetDefinition> High = new[] { WindBell, AuroraSilver, CelestialIron };
+
         public static readonly IReadOnlyList<ArmorSetDefinition> Far = new[] { Papyrus, BlueBrick, Seal, Light };
 
         /// <summary>Every set, in region order.</summary>
         public static readonly IReadOnlyList<ArmorSetDefinition> All = new[]
         {
-            Garden, RedLeather, Drystone, Wick, Coral, Lotus, Yak, Bronze, Kurgan, Papyrus, BlueBrick, Seal, Light,
+            Garden, RedLeather, Drystone, Wick, Coral, Lotus, Yak, Bronze, Kurgan, WindBell, AuroraSilver, CelestialIron, Papyrus, BlueBrick, Seal, Light,
         };
 
         // "Orvalho do Jardim" (Jardim de Mihrshah): a kill may heal the hero a little.
@@ -216,6 +265,20 @@ namespace Rapadura.Gameplay.Items.Sets
         // "Pavio Aceso" (Pavio do Limiar): a kill may give a little mana back.
         public const double LitWickChance = 0.15;
         public const float LitWickManaFraction = 0.04f;
+
+        // "Badalada das Ermidas" (Sino de Vento): a critical hit may toll into the enemies around the target.
+        public const double HermitageTollChance = 0.12;
+        public const float HermitageTollDamageFraction = 0.35f;
+        public const float HermitageTollRadius = 4.5f;
+        public const int HermitageTollMaxTargets = 3;
+
+        // "Calor da Lanterna" (Prata da Aurora): a kill may heal the hero.
+        public const double LanternWarmthChance = 0.22;
+        public const float LanternWarmthHealFraction = 0.05f;
+
+        // "Brasa da Bigorna" (Kurdalægon): a hit taken may burn back at the attacker.
+        public const double AnvilEmberChance = 0.20;
+        public const float AnvilEmberFraction = 0.30f;
 
         // "Coral que Fecha" (Coral de Kilwa): a hit taken may close up, healing part of it back.
         public const double ClosingCoralChance = 0.15;
@@ -390,5 +453,19 @@ namespace Rapadura.Gameplay.Items.Sets
         public static bool LitWickProcs(ArmorSetDefinition worn, double roll) => worn == Wick && roll < LitWickChance;
 
         public static float LitWickMana(float maxMana) => maxMana > 0f ? maxMana * LitWickManaFraction : 0f;
+
+        public static bool HermitageTollProcs(ArmorSetDefinition worn, bool critical, double roll) => critical && worn == WindBell && roll < HermitageTollChance;
+
+        /// <summary>Damage of the toll to each enemy around the target: 35% of the critical hit (never below 1 for a positive hit).</summary>
+        public static float HermitageTollDamage(float criticalDamage) => criticalDamage > 0f ? Mathf.Max(1f, criticalDamage * HermitageTollDamageFraction) : 0f;
+
+        public static bool LanternWarmthProcs(ArmorSetDefinition worn, double roll) => worn == AuroraSilver && roll < LanternWarmthChance;
+
+        public static float LanternWarmthHeal(float maxHealth) => maxHealth > 0f ? maxHealth * LanternWarmthHealFraction : 0f;
+
+        public static bool AnvilEmberProcs(ArmorSetDefinition worn, double roll) => worn == CelestialIron && roll < AnvilEmberChance;
+
+        /// <summary>Damage burnt back: 30% of the hit taken (never below 1 for a positive hit).</summary>
+        public static float AnvilEmberDamage(float damageTaken) => damageTaken > 0f ? Mathf.Max(1f, damageTaken * AnvilEmberFraction) : 0f;
     }
 }

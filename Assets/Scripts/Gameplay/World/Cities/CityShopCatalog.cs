@@ -787,7 +787,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
             })),
 
-            // ---- Farnkesh: Sisin's rope rack, the gear of the gates 57 and 58 and of the bridges; daily ----
+            // ---- Farnkesh: Sisin's rope rack, the gear of the gates 57 and 58 and of the bridges; daily; and the Móveis do Ninho de Pedra (Docs/Housing.md §6.2), the Epic as the week's special ----
             new CityShopSpec(CordasSisin, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(CordasSisin, new List<CityShopEntry>
             {
                 new CityShopEntry("item_health_potion", 15, 6),
@@ -808,7 +808,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Porto da Lua Branca: Pamour's furs and boats, the gear of every gate of the Mar Gelado (59–64); daily ----
             new CityShopSpec(PelesPamour, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(PelesPamour, new List<CityShopEntry>
@@ -837,7 +837,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
             }), houseSlots: 3, weeklySlots: 1),
 
-            // ---- Hinokura: Kurogane's black iron, the gear of the gates of the Arquipélago de Hinokura (65–70); daily ----
+            // ---- Hinokura: Kurogane's black iron, the gear of the gates of the Arquipélago de Hinokura (65–70); daily; and the Móveis do Palácio de Laca (Docs/Housing.md §6.2), the Epic as the week's special ----
             new CityShopSpec(FerroPretoKurogane, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(FerroPretoKurogane, new List<CityShopEntry>
             {
                 new CityShopEntry("item_health_potion", 15, 6),
@@ -864,7 +864,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_runa_cura", 15, 2, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Cais de Mesektet: Khunanup's trades, the gear of the hours of the Rio das Doze Horas (71–76); daily ----
             new CityShopSpec(TrocasKhunanup, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(TrocasKhunanup, new List<CityShopEntry>

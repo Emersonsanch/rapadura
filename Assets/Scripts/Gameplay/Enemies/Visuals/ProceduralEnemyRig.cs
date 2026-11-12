@@ -453,6 +453,13 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.BubbleToad:
                 case ProceduralEnemyKind.SmokeUrchin:
                 case ProceduralEnemyKind.MireLeech:
+                case ProceduralEnemyKind.GrassStorm:
+                case ProceduralEnemyKind.MarshWisp:
+                case ProceduralEnemyKind.BullFrog:
+                case ProceduralEnemyKind.BrokenMirror:
+                case ProceduralEnemyKind.CoralUshabti:
+                case ProceduralEnemyKind.ConfusedSpark:
+                case ProceduralEnemyKind.DarkDrop:
                 case ProceduralEnemyKind.DriftingFloe:
                 case ProceduralEnemyKind.LittleKul:
                 case ProceduralEnemyKind.HungryFlame:
@@ -629,6 +636,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.BeardedVulture:
                 case ProceduralEnemyKind.FeltSwan:
                 case ProceduralEnemyKind.RedBilledChough:
+                case ProceduralEnemyKind.SteppeVulture:
+                case ProceduralEnemyKind.PaperCrane:
+                case ProceduralEnemyKind.SmokeLocust:
                 case ProceduralEnemyKind.PeakVulture:
                 case ProceduralEnemyKind.ShadowKite:
                 case ProceduralEnemyKind.ShoulderBird:
@@ -689,6 +699,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.IceWolf:
                 case ProceduralEnemyKind.TerracottaHorse:
                 case ProceduralEnemyKind.FiddlerCrab:
+                case ProceduralEnemyKind.SteppeWolf:
+                case ProceduralEnemyKind.Mudskipper:
                 case ProceduralEnemyKind.LittleShadow:
                 {
                     // Hinokura's biters: the jaw gapes on the windup and the tail sways; the blade fish's fins row in the steam, the
@@ -917,6 +929,18 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.LightFisher:
                 case ProceduralEnemyKind.VaneLord:
                 case ProceduralEnemyKind.LittleEclipse:
+                case ProceduralEnemyKind.MidasGold:
+                case ProceduralEnemyKind.FirstClumsy:
+                case ProceduralEnemyKind.VolcanoTurtle:
+                case ProceduralEnemyKind.SledgeSerpent:
+                case ProceduralEnemyKind.PitchKing:
+                case ProceduralEnemyKind.GreatStowaway:
+                case ProceduralEnemyKind.MireMother:
+                case ProceduralEnemyKind.CrownedChief:
+                case ProceduralEnemyKind.DarkBellows:
+                case ProceduralEnemyKind.SleepingVishap:
+                case ProceduralEnemyKind.ReliefLion:
+                case ProceduralEnemyKind.SmokeStallion:
                     TickRegionBoss(deltaTime, t, k, speed);
                     break;
             }

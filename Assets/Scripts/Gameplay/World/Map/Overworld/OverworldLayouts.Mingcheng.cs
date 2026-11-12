@@ -101,13 +101,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Crane = "enemy_mountain_crested_hawk";
             public const string Terracotta = "enemy_forest_terracotta_soldier";
             public const string Kite = "enemy_desert_broken_lantern";
+            public const string Mirror = "enemy_desert_broken_mirror";
+            public const string PaperCrane = "enemy_mountain_paper_crane";
             public const string Carp = "enemy_desert_sand_snake";
             public const string LanternFish = "enemy_cave_lantern_fish";
             public const string Smoke = "enemy_mountain_ill_wind_mist";
             public const string Turtle = "enemy_forest_stone_turtle";
             public const string Buffalo = "enemy_forest_mud_buffalo";
             public const string Duck = "enemy_forest_thief_gull";
-            public const string Locusts = PeriodSpawnTable.CaveBats;
+            public const string Locusts = "enemy_cave_smoke_locust";
             public const string Bats = PeriodSpawnTable.CaveBats;
             public const string Spider = "enemy_forest_spider";
             public const string Monkey = "enemy_forest_thief_monkey";
@@ -375,17 +377,17 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             NightSpecies fireflies = NightVariantRules.VagaLume;
 
             // Anéis de Mingcheng and Vilas do Anel (41): the Leão de Pedra Apagado [tanque], the Raposa de Cauda
-            // Lanterna [rápido], the Grou de Papel [distância] (the hawk), the Soldado de Terracota Apagado [tanque].
-            aneis.Fauna.Add(Fauna("raposas_de_cauda_lanterna", "[rápido]", T(N(Ming.Fox, 3), N(Ming.Crane, 1)), T(V(Ming.Fox, 2), S(moon, 1)), 4));
-            aneis.Fauna.Add(Fauna("grous_de_papel", "[distância]", T(N(Ming.Crane, 3), N(Ming.Fox, 1)), T(V(Ming.Crane, 2), S(owl, 1)), 3));
+            // Lanterna [rápido], the Grou de Papel [distância] (its own beast now, WideBeasts), the Soldado de Terracota Apagado [tanque].
+            aneis.Fauna.Add(Fauna("raposas_de_cauda_lanterna", "[rápido]", T(N(Ming.Fox, 3), N(Ming.PaperCrane, 1)), T(V(Ming.Fox, 2), S(moon, 1)), 4));
+            aneis.Fauna.Add(Fauna("grous_de_papel", "[distância]", T(N(Ming.PaperCrane, 3), N(Ming.Fox, 1)), T(V(Ming.PaperCrane, 2), S(owl, 1)), 3));
             vilas.Fauna.Add(Fauna("leoes_de_pedra", "[tanque]", T(N(Ming.Lion, 3), N(Ming.Fox, 1)), T(V(Ming.Lion, 2), V(Ming.Fox, 1)), 3, null, 30f));
             vilas.Fauna.Add(Fauna("raposas_das_vilas", "[rápido]", T(N(Ming.Fox, 3), N(Ming.Duck, 1)), T(V(Ming.Fox, 2), S(owl, 1)), 4));
-            vilas.Fauna.Add(Fauna("grous_das_vilas", "[distância]", T(N(Ming.Crane, 3), N(Ming.Kite, 1)), T(V(Ming.Crane, 2), S(moon, 1)), 3));
+            vilas.Fauna.Add(Fauna("grous_das_vilas", "[distância]", T(N(Ming.PaperCrane, 3), N(Ming.Kite, 1)), T(V(Ming.PaperCrane, 2), S(moon, 1)), 3));
 
             // Caminho dos Leões (41): the lions of the spirit way, terracotta soldiers on watch, foxes.
-            leoes.Fauna.Add(Fauna("leoes_do_caminho", "[tanque]", T(N(Ming.Lion, 3), N(Ming.Crane, 1)), T(V(Ming.Lion, 2), S(owl, 1)), 3, null, 30f));
+            leoes.Fauna.Add(Fauna("leoes_do_caminho", "[tanque]", T(N(Ming.Lion, 3), N(Ming.PaperCrane, 1)), T(V(Ming.Lion, 2), S(owl, 1)), 3, null, 30f));
             leoes.Fauna.Add(Fauna("soldados_do_caminho", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.Lion, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
-            leoes.Fauna.Add(Fauna("raposas_do_caminho", "[rápido]", T(N(Ming.Fox, 3), N(Ming.Crane, 1)), T(V(Ming.Fox, 2), S(moon, 1)), 4));
+            leoes.Fauna.Add(Fauna("raposas_do_caminho", "[rápido]", T(N(Ming.Fox, 3), N(Ming.PaperCrane, 1)), T(V(Ming.Fox, 2), S(moon, 1)), 4));
 
             // Campos de Painço: smoke locusts over the millet (bats), thieving ducks, foxes.
             painco.Fauna.Add(Fauna("gafanhotos_do_painco", "[enxame]", T(N(Ming.Locusts, 3), N(Ming.Duck, 1)), T(V(Ming.Locusts, 2), S(fireflies, 1)), 5));
@@ -405,7 +407,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             canal.Fauna.Add(Fauna("tartarugas_do_canal", "[tanque]", T(N(Ming.Turtle, 3), N(Ming.Smoke, 1)), T(V(Ming.Turtle, 2), V(Ming.Smoke, 1)), 3, null, 30f));
 
             // Arrozais Espelhados and Moinho d'Água (44): the Búfalo de Lama [tanque] (the peccary), the Pato-Mandarim Ladrão
-            // [rápido] (the thief gull), the Gafanhoto de Fumaça [enxame] (bats), the Espantalho Apagado [controle] (a broken lantern).
+            // [rápido] (the thief gull), the Gafanhoto de Fumaça [enxame] (its own beast now), the Espantalho Apagado [controle] (a broken lantern).
             arrozais.Fauna.Add(Fauna("bufalos_de_lama", "[tanque]", T(N(Ming.Buffalo, 3), N(Ming.Duck, 1)), T(S(herd, 2), V(Ming.Duck, 1)), 3, null, 28f));
             arrozais.Fauna.Add(Fauna("patos_ladroes", "[rápido]", T(N(Ming.Duck, 3), N(Ming.Locusts, 1)), T(V(Ming.Duck, 2), S(fireflies, 1)), 4));
             arrozais.Fauna.Add(Fauna("gafanhotos_de_fumaca", "[enxame]", T(N(Ming.Locusts, 3), N(Ming.Duck, 1)), T(V(Ming.Locusts, 2), S(fireflies, 2)), 5));
@@ -417,8 +419,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             bambu.Fauna.Add(Fauna("macacos_do_bambu", "[rápido]", T(N(Ming.Monkey, 3), N(Ming.Spider, 1)), T(V(Ming.Monkey, 2), S(werewolf, 1)), 3, null, 28f));
 
             // Colinas de Chá: paper cranes over the rows, foxes, smoke locusts.
-            cha.Fauna.Add(Fauna("grous_do_cha", "[distância]", T(N(Ming.Crane, 3), N(Ming.Fox, 1)), T(V(Ming.Crane, 2), S(owl, 1)), 3));
-            cha.Fauna.Add(Fauna("gafanhotos_do_cha", "[enxame]", T(N(Ming.Locusts, 3), N(Ming.Crane, 1)), T(V(Ming.Locusts, 2), S(fireflies, 1)), 5));
+            cha.Fauna.Add(Fauna("grous_do_cha", "[distância]", T(N(Ming.PaperCrane, 3), N(Ming.Fox, 1)), T(V(Ming.PaperCrane, 2), S(owl, 1)), 3));
+            cha.Fauna.Add(Fauna("gafanhotos_do_cha", "[enxame]", T(N(Ming.Locusts, 3), N(Ming.PaperCrane, 1)), T(V(Ming.Locusts, 2), S(fireflies, 1)), 5));
 
             // Fossos de Terracota (41) and Vale dos Guerreiros (45): the Soldado de Terracota [tanque], the
             // Cavalo de Terracota [rápido] (the wolf's body), lions and paper kites.
@@ -428,14 +430,14 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             guerreiros.Fauna.Add(Fauna("arqueiros_de_papel", "[distância]", T(N(Ming.Kite, 3), N(Ming.Terracotta, 1)), T(V(Ming.Kite, 2), S(owl, 1)), 4));
             guerreiros.Fauna.Add(Fauna("cavalos_do_vale", "[rápido]", T(N(MidBeasts.TerracottaHorse, 3), N(Ming.Lion, 1)), T(V(MidBeasts.TerracottaHorse, 2), S(werewolf, 1)), 4));
 
-            // Jardins em Terraço and Torres Brancas (42): the Espelho Quebrado [distância] (a broken lantern), the Íbis de Luz
+            // Jardins em Terraço and Torres Brancas (42): the Espelho Quebrado [distância] (its own beast now), the Íbis de Luz
             // Apagada [rápido] (the hawk), the Guardião de Cal [tanque] (the golem), the Raio Torto [controle] (the ill-wind mist).
-            jardins.Fauna.Add(Fauna("ibis_de_luz", "[rápido]", T(N(Ming.Crane, 3), N(Ming.Kite, 1)), T(V(Ming.Crane, 2), S(moon, 1)), 4));
-            jardins.Fauna.Add(Fauna("espelhos_quebrados", "[distância]", T(N(Ming.Kite, 3), N(Ming.Crane, 1)), T(V(Ming.Kite, 2), S(owl, 1)), 4));
+            jardins.Fauna.Add(Fauna("ibis_de_luz", "[rápido]", T(N(Ming.Crane, 3), N(Ming.Mirror, 1)), T(V(Ming.Crane, 2), S(moon, 1)), 4));
+            jardins.Fauna.Add(Fauna("espelhos_quebrados", "[distância]", T(N(Ming.Mirror, 3), N(Ming.Crane, 1)), T(V(Ming.Mirror, 2), S(owl, 1)), 4));
             torres.Fauna.Add(Fauna("guardioes_de_cal", "[tanque]", T(N(Ming.Lion, 3), N(Ming.Smoke, 1)), T(V(Ming.Lion, 2), V(Ming.Smoke, 1)), 3, null, 30f));
-            torres.Fauna.Add(Fauna("raios_tortos", "[controle]", T(N(Ming.Smoke, 3), N(Ming.Kite, 1)), T(V(Ming.Smoke, 2), S(owl, 1)), 4));
-            torres.Fauna.Add(Fauna("espelhos_das_torres", "[distância]", T(N(Ming.Kite, 3), N(Ming.Lion, 1)), T(V(Ming.Kite, 2), S(bats, 1)), 4));
-            espelhos.Fauna.Add(Fauna("espelhos_do_atalho", "[distância]", T(N(Ming.Kite, 3), N(Ming.Smoke, 1)), T(V(Ming.Kite, 2), S(owl, 1)), 4));
+            torres.Fauna.Add(Fauna("raios_tortos", "[controle]", T(N(Ming.Smoke, 3), N(Ming.Mirror, 1)), T(V(Ming.Smoke, 2), S(owl, 1)), 4));
+            torres.Fauna.Add(Fauna("espelhos_das_torres", "[distância]", T(N(Ming.Mirror, 3), N(Ming.Lion, 1)), T(V(Ming.Mirror, 2), S(bats, 1)), 4));
+            espelhos.Fauna.Add(Fauna("espelhos_do_atalho", "[distância]", T(N(Ming.Mirror, 3), N(Ming.Smoke, 1)), T(V(Ming.Mirror, 2), S(owl, 1)), 4));
             espelhos.Fauna.Add(Fauna("guardioes_das_colinas", "[tanque]", T(N(Ming.Lion, 3), N(Ming.Crane, 1)), T(V(Ming.Lion, 2), S(bats, 1)), 3, null, 30f));
 
             // Ravinas de Loess: scorpions in the yellow earth, vultures, sand snakes.

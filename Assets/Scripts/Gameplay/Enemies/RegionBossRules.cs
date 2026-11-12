@@ -118,6 +118,46 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>O Pequeno Eclipse covers a wider slice of the light each time, toward the hero, until the whole round is dark; beyond its shadow is safe.</summary>
         GrowingEclipse = 33,
+
+        // Six map bosses of Regions 10–16 (Docs/Mapas100.md 53, 61, 68, 73, 79, 93).
+
+        /// <summary>O Ouro de Midas glows: whoever strikes it hard while it glows is turned to gold; holding your blows is safe.</summary>
+        GoldenTouch = 34,
+
+        /// <summary>O Primeiro Desajeitado topples over the way it leans, a long strip; the lean turns 135° each fall, and beside the strip is safe.</summary>
+        ClumsyFall = 35,
+
+        /// <summary>A Tartaruga-Vulcão's wake: lava bursts on every spot it walked over in the last seconds; off its trail is safe.</summary>
+        MoltenWake = 36,
+
+        /// <summary>A Grande Serpente do Areal whips the sledge rope: from its sledge (the ring), through itself and on past; off the rope's line is safe.</summary>
+        SledgeRope = 37,
+
+        /// <summary>O Rei do Piche soaks whoever lingers near him during the warning; long enough in his tar and it hardens on them.</summary>
+        TarSoak = 38,
+
+        /// <summary>O Clandestino Grande bursts out of the hatch of the hold nearest the hero; the middle of the hold and far away are safe.</summary>
+        HoldHatches = 39,
+
+        // Six more of Regions 1–9 (Docs/Mapas100.md 03, 11, 17, 21, 27, 47).
+
+        /// <summary>A Mãe-Lodo shoots her tongue at whoever walks into her mouth: coming closer during the warning (or standing at her lips) is caught; keeping your distance is safe.</summary>
+        TongueSnap = 40,
+
+        /// <summary>O Chefe Coroado throws three tin crowns round the hero's spot; standing still in the middle of them is safe, stepping out onto one is not.</summary>
+        TinCrowns = 41,
+
+        /// <summary>O Fole Apagado blows out in front and draws in behind, in turn; beside it is always safe.</summary>
+        BellowsBreath = 42,
+
+        /// <summary>O Vishap Adormecido opens the springs: the water floods everything beyond a ring round the great stone that shrinks each time (10, 7, 4 m); close to the stone is safe.</summary>
+        RisingSprings = 43,
+
+        /// <summary>O Leão dos Relevos pounces on the hero's spot and leaps back to its wall: both places are hit, everywhere else is safe.</summary>
+        ReliefPounce = 44,
+
+        /// <summary>O Cavalo de Fumaça gallops a ring of smoke round the hero's spot; inside the corral, with the foals, and outside it are safe.</summary>
+        SmokeCorral = 45,
     }
 
     /// <summary>The four appetites of the Cidadela (46), one a week in turn (<see cref="RegionBossRules.AppetiteFor"/>).</summary>
@@ -556,6 +596,18 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.LeadCast:
                 case RegionBossSignature.VaneGust:
                 case RegionBossSignature.GrowingEclipse:
+                case RegionBossSignature.GoldenTouch:
+                case RegionBossSignature.ClumsyFall:
+                case RegionBossSignature.MoltenWake:
+                case RegionBossSignature.SledgeRope:
+                case RegionBossSignature.TarSoak:
+                case RegionBossSignature.HoldHatches:
+                case RegionBossSignature.TongueSnap:
+                case RegionBossSignature.TinCrowns:
+                case RegionBossSignature.BellowsBreath:
+                case RegionBossSignature.RisingSprings:
+                case RegionBossSignature.ReliefPounce:
+                case RegionBossSignature.SmokeCorral:
                     return MapBossInterval(signature);
                 default: return FormSeconds;
             }
@@ -597,6 +649,18 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.LeadCast:
                 case RegionBossSignature.VaneGust:
                 case RegionBossSignature.GrowingEclipse:
+                case RegionBossSignature.GoldenTouch:
+                case RegionBossSignature.ClumsyFall:
+                case RegionBossSignature.MoltenWake:
+                case RegionBossSignature.SledgeRope:
+                case RegionBossSignature.TarSoak:
+                case RegionBossSignature.HoldHatches:
+                case RegionBossSignature.TongueSnap:
+                case RegionBossSignature.TinCrowns:
+                case RegionBossSignature.BellowsBreath:
+                case RegionBossSignature.RisingSprings:
+                case RegionBossSignature.ReliefPounce:
+                case RegionBossSignature.SmokeCorral:
                     return MapBossWindup(signature);
                 default: return 0f;
             }

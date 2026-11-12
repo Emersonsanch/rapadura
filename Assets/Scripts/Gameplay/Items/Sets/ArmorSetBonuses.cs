@@ -15,7 +15,7 @@ namespace Rapadura.Gameplay.Items.Sets
 {
     /// <summary>
     /// Wires <see cref="ArmorSetRules"/> to combat through the same events the combat FX listen to (like the Armadura de Marfim's
-    /// <c>SpectralTouchSetBonus</c>): the thirteen two-piece bonuses, and the rare drop of a piece when a region's own beast dies. The
+    /// <c>SpectralTouchSetBonus</c>): the sixteen two-piece bonuses, and the rare drop of a piece when a region's own beast dies. The
     /// drop lives here, not in the enemy's single <c>_lootItem</c> (the gold of every beast). Reflected hits and rays are plain,
     /// non-critical hits dealt by the hero, so no bonus can chain.
     /// </summary>
@@ -122,6 +122,10 @@ namespace Rapadura.Gameplay.Items.Sets
             {
                 StrikeBack(evt, ArmorSetRules.BurningSandDamage(evt.FinalDamage), ElementType.Fire, ArmorSetTexts.BurningSand);
             }
+            else if (ArmorSetRules.AnvilEmberProcs(worn, roll))
+            {
+                StrikeBack(evt, ArmorSetRules.AnvilEmberDamage(evt.FinalDamage), ElementType.Fire, ArmorSetTexts.AnvilEmber);
+            }
         }
 
         /// <summary>A plain hit from the struck hero back at the attacking beast (the Reflexo Vidrado, the Areia que Queima).</summary>
@@ -183,6 +187,12 @@ namespace Rapadura.Gameplay.Items.Sets
                     ArmorSetRules.KaggenGustRadius, ArmorSetRules.KaggenGustMaxTargets, ElementType.Wind);
                 Say(evt.Target, ArmorSetTexts.KaggenGust);
             }
+            else if (ArmorSetRules.HermitageTollProcs(worn, true, roll))
+            {
+                StrikeAround(evt.Target.transform.position, evt.Target, evt.Source, ArmorSetRules.HermitageTollDamage(evt.FinalDamage),
+                    ArmorSetRules.HermitageTollRadius, ArmorSetRules.HermitageTollMaxTargets, ElementType.Wind);
+                Say(evt.Target, ArmorSetTexts.HermitageToll);
+            }
         }
 
         /// <summary>Plain hits from <paramref name="hero"/> on up to <paramref name="maxTargets"/> living enemies within <paramref name="radius"/> of <paramref name="center"/>, <paramref name="skip"/> left out.</summary>
@@ -228,7 +238,27 @@ namespace Rapadura.Gameplay.Items.Sets
             TryLotusSap(inventory, worn, roll);
             TryGardenDew(inventory, worn, roll);
             TryLitWick(inventory, worn, roll);
+            TryLanternWarmth(inventory, worn, roll);
             TryDropPiece(evt.Target, enemy, inventory);
+        }
+
+        /// <summary>The Calor da Lanterna bonus: heals the hero when <paramref name="roll"/> procs. True if it healed.</summary>
+        public static bool TryLanternWarmth(InventoryManager inventory, ArmorSetDefinition worn, double roll)
+        {
+            if (inventory == null || !ArmorSetRules.LanternWarmthProcs(worn, roll))
+            {
+                return false;
+            }
+
+            PlayerStats stats = inventory.GetComponentInParent<PlayerStats>();
+            if (stats == null || !stats.IsAlive)
+            {
+                return false;
+            }
+
+            stats.Heal(ArmorSetRules.LanternWarmthHeal(stats.MaxHealth));
+            Say(inventory.gameObject, ArmorSetTexts.LanternWarmth);
+            return true;
         }
 
         /// <summary>The Orvalho do Jardim bonus: heals the hero a little when <paramref name="roll"/> procs. True if it healed.</summary>

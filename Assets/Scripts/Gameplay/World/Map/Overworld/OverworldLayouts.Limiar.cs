@@ -45,8 +45,14 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>The Mercado dos Túneis (22), the kobolds' race city of the caves.</summary>
         public const string MercadoTuneisMapId = "map_022_mercado_tuneis";
 
+        /// <summary>The Campo das Pedras-Dragão (21), the vishapakar meadows of the caves.</summary>
+        public const string PedrasDragaoMapId = "map_021_pedras_dragao";
+
         /// <summary>O Engarrafador Guloso's arena (22, map boss): the stone ring in the gallery east of the market, off the rails, by its trail.</summary>
         public static readonly Vector2 EngarrafadorGulosoArena = new Vector2(160f, -1464f);
+
+        /// <summary>O Vishap Adormecido's arena (21, map boss): the stone ring on the Prados de Musgo, by the trail, the one area of the Dragonstone Field that asks for no lamp.</summary>
+        public static readonly Vector2 VishapAdormecidoArena = new Vector2(-476f, -1010f);
         public static readonly Vector2 PedrasDragaoPost = new Vector2(-500f, -1475f);
         public static readonly Vector2 MercadoTuneisPost = new Vector2(0f, -1475f);
         public static readonly Vector2 TorreJarrasPost = new Vector2(500f, -1475f);
@@ -269,6 +275,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, -760f, -1120f, 0f, 0.8f);
             Landmark(w, MapLandmarkKind.StoneRing, 1040f, -150f, 0f, 0.9f);
             Landmark(w, MapLandmarkKind.StoneRing, EngarrafadorGulosoArena.x, EngarrafadorGulosoArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, VishapAdormecidoArena.x, VishapAdormecidoArena.y, 0f, 1.1f);
 
             // ---------------- The areas' own monuments ----------------
             // 21: the twelve vishapakar of the dragonstone field (the biggest one is the outpost's lamp stone).

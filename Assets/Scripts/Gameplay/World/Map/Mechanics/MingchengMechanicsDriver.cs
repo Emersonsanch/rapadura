@@ -20,7 +20,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// towers carry the hero up and down in one press. Speed changes are short-lived effects, refreshed while they apply. The deck's sides are
     /// open and a fall does no harm, so nothing here can hold or kill the hero.
     /// </summary>
-    public sealed class MingchengMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class MingchengMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const string CorridorSource = "mingcheng_corridor";
@@ -142,6 +142,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             MingchengBeaconRules.Advance(_beacons, Time.deltaTime, night);
             TickWall(local);
             TickReflection(local, night, clock != null ? clock.Day : 1);
+
+            // 42 · the mirror clock of the Torres Brancas (MingchengMechanicsDriver.Mirrors.cs).
+            TickMirrorClock(local, clock);
         }
 
         private bool FindPlayer()
@@ -177,6 +180,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             ShowBeacons(Vector2.zero, false);
             ShowRibbon(false, 0);
             HideMirror();
+            LeaveMirrorClock();
             _hintTower = -1;
             _hintPool = -1;
         }

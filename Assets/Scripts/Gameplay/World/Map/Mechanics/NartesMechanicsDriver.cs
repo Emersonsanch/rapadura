@@ -22,7 +22,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// stands in it. The hero keeps the controls all the time. The UTC-day claims are saved per slot as daily marks of
     /// <see cref="WorldMapProgress"/>; the rules take the day as a number, so a server can hold it.
     /// </summary>
-    public sealed class NartesMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class NartesMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const string GoldItemId = "item_gold";
@@ -109,6 +109,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private void OnDisable()
         {
             HideFeedback();
+            LeaveSteppe();
             _heroState.Detach();
         }
 
@@ -134,6 +135,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 AbandonRace();
                 EndClimb();
                 HideFeedback();
+                LeaveSteppe();
                 return;
             }
 
@@ -142,6 +144,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             TickRace(local, today);
             TickChain(local, now, today);
             TickGolds(local, today);
+
+            // 49, 50, 51 (NartesMechanicsDriver.Steppe.cs).
+            TickSteppe(local, now, today);
         }
 
         private bool FindPlayer()

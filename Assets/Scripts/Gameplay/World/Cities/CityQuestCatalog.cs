@@ -296,10 +296,10 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("chase_the_crows", QuestObjectiveType.KillEnemyType, "enemy_cave_dark_crow", 6) },
                 new[] { new RegionRewardSpec("item_fruta_purificadora", 1), new RegionRewardSpec("item_gold", 120) })),
 
-            // -- Palafitas de Tarchon: old Tarchon, then Vel. The firefly swarm stands in for the Fogos-Fátuos Presos (the swarm of
-            // Docs/Mapas100.md 33) and the shroud owl for the Garça-Fantasma that steals from the nets (its ranged bird). --
+            // -- Palafitas de Tarchon: old Tarchon, then Vel. The Fogos-Fátuos Presos (the swarm of Docs/Mapas100.md 33) are their own beast
+            // now (WideStandInBeastRecipes); the shroud owl still stands in for the Garça-Fantasma that steals from the nets (its ranged bird). --
             new CityQuestSpec(CityCatalog.PalafitasTarchon, "tarchon", new RegionQuestSpec(TarchonWisps, BiomeType.Forest, null, 1350,
-                new[] { new RegionObjectiveSpec("free_the_wisps", QuestObjectiveType.KillEnemyType, "enemy_desert_firefly_swarm", 8) },
+                new[] { new RegionObjectiveSpec("free_the_wisps", QuestObjectiveType.KillEnemyType, "enemy_forest_marsh_wisp", 8) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 120) })),
             new CityQuestSpec(CityCatalog.PalafitasTarchon, "vel", new RegionQuestSpec(TarchonNets, BiomeType.Forest, TarchonWisps, 1450,
                 new[] { new RegionObjectiveSpec("chase_the_herons", QuestObjectiveType.KillEnemyType, "enemy_forest_shroud_owl", 6) },
@@ -323,10 +323,10 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("clear_the_canal", QuestObjectiveType.KillEnemyType, "enemy_cave_lantern_fish", 6) },
                 new[] { new RegionRewardSpec("item_selo_sol", 1), new RegionRewardSpec("item_gold", 150) })),
 
-            // -- Torres Brancas: Amanirenas, then Shanakdakhete. The broken lantern stands in for the Espelho Quebrado of the ficha
-            // (Docs/Mapas100.md 42) and the dark crow for the Íbis de Luz Apagada. --
+            // -- Torres Brancas: Amanirenas, then Shanakdakhete. The Espelho Quebrado of the ficha (Docs/Mapas100.md 42) is its own beast now
+            // (WideStandInBeastRecipes); the dark crow still stands in for the Íbis de Luz Apagada. --
             new CityQuestSpec(CityCatalog.TorresBrancas, "amanirenas", new RegionQuestSpec(TorresMirrors, BiomeType.Forest, null, 1850,
-                new[] { new RegionObjectiveSpec("break_the_mirrors", QuestObjectiveType.KillEnemyType, "enemy_desert_broken_lantern", 7) },
+                new[] { new RegionObjectiveSpec("break_the_mirrors", QuestObjectiveType.KillEnemyType, "enemy_desert_broken_mirror", 7) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 160) })),
             new CityQuestSpec(CityCatalog.TorresBrancas, "shanakdakhete", new RegionQuestSpec(TorresIbises, BiomeType.Forest, TorresMirrors, 1950,
                 new[] { new RegionObjectiveSpec("chase_the_ibises", QuestObjectiveType.KillEnemyType, "enemy_cave_dark_crow", 6) },
@@ -413,10 +413,10 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("chase_the_beetles", QuestObjectiveType.KillEnemyType, "enemy_mountain_bark_beetle", 6) },
                 new[] { new RegionRewardSpec("item_barco_junco", 1), new RegionRewardSpec("item_gold", 250) })),
 
-            // -- Fortaleza da Última Lâmpada: Pamour, then Makarios. The cave bat swarm stands in for the Morcego da Treva of the ficha
-            // (Docs/Mapas100.md 83) and the rope ushabti for its Ushabti Apagado, until the region's own creatures exist. --
+            // -- Fortaleza da Última Lâmpada: Pamour, then Makarios. The Morcego da Treva of the ficha (Docs/Mapas100.md 83) is its own beast now
+            // (FarStandInBeastRecipes); the rope ushabti still stands in for its Ushabti Apagado. --
             new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "pamour_lampadas", new RegionQuestSpec(UltimaLampadaBats, BiomeType.Forest, null, 3800,
-                new[] { new RegionObjectiveSpec("chase_the_bats", QuestObjectiveType.KillEnemyType, "enemy_cave_bat_swarm", 8) },
+                new[] { new RegionObjectiveSpec("chase_the_bats", QuestObjectiveType.KillEnemyType, "enemy_forest_dark_bat", 8) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 260) })),
             new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "makarios_cartas", new RegionQuestSpec(UltimaLampadaUshabti, BiomeType.Forest, UltimaLampadaBats, 3900,
                 new[] { new RegionObjectiveSpec("chase_the_ushabti", QuestObjectiveType.KillEnemyType, "enemy_mountain_rope_ushabti", 6) },

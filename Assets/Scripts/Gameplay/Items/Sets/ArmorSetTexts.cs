@@ -23,6 +23,9 @@ namespace Rapadura.Gameplay.Items.Sets
         public const string BurningSand = "armor_set.burning_sand";
         public const string KaggenGust = "armor_set.kaggen_gust";
         public const string LitWick = "armor_set.lit_wick";
+        public const string HermitageToll = "armor_set.hermitage_toll";
+        public const string LanternWarmth = "armor_set.lantern_warmth";
+        public const string AnvilEmber = "armor_set.anvil_ember";
 
         public static readonly List<LocalizationEntry> Entries = new List<LocalizationEntry>
         {
@@ -39,6 +42,9 @@ namespace Rapadura.Gameplay.Items.Sets
             new LocalizationEntry(BurningSand, "Burning Sand!", "Areia que Queima!"),
             new LocalizationEntry(KaggenGust, "Kaggen Gust!", "Rajada do Kaggen!"),
             new LocalizationEntry(LitWick, "Wick Alight!", "Pavio Aceso!"),
+            new LocalizationEntry(HermitageToll, "Toll of the Hermitages!", "Badalada das Ermidas!"),
+            new LocalizationEntry(LanternWarmth, "Lantern Warmth!", "Calor da Lanterna!"),
+            new LocalizationEntry(AnvilEmber, "Anvil Ember!", "Brasa da Bigorna!"),
         };
 
         private static LocalizationManager _mergedInto;

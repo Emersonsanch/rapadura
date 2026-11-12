@@ -686,6 +686,36 @@ continuam com substituto.
 | `enemy_forest_orbit_wind` | **Vento de Órbita** / *Orbit Wind* | 95 Órbitas Vazias e Esferas dos Arcontes, 99 Mirante, 100 Varanda (era a Águia da Tempestade) | [rápido], voa | os ventos que levam as luzes ao redor das esferas até subirem pela Coluna (§1.5); os arcontes tiraram este da órbita e ele gira em volta de quem chega. |
 | `enemy_forest_runaway_lantern` | **Lanterna Fugitiva** / *Runaway Lantern* | 92 Ilhotas de Nuvem, Margens da Corrente e Foz Leste (era a Lanterna Quebrada) | [enxame], voa | uma lanterna de papel de uma Barca de Luz (§3.16) que não quis subir, fugiu do convés e queimou dois furinhos pra enxergar; apagada com jeito, a Barca volta pra buscar a luz. |
 
+**Décima quinta leva (2026-11-12): os substitutos mais vistos que sobravam nas Regiões 5–16 (Mapas100 29, 31, 33, 34, 41, 42, 44, 47, 51, 91, 94).**
+Mesmo contrato (peso 0 no bioma, nível da área, números do bioma). Modelos em `WideStandInBeastRecipes` (as aves usam o esqueleto de
+`MidStandInBeastRecipes`), Caderno em `WideStandInBestiaryTexts`. Três são [distância], voam e atiram: o Abutre da Estepe e o Grou de
+Papel (`Feather`) e o Espelho Quebrado (`LanternBolt`; `RangedEnemiesTests`). **Bioma:** os de Delta, Costa e Nartes seguem o bioma
+do layout; o Abutre da Estepe, os três de Mingcheng e os dois do Céu ficam no bioma do substituto que trocaram (Deserto, Montanha,
+Cavernas), para a economia de ouro e de Pedras da Alma das faixas 100–140 e 420–500 (`tools/balance`, afinada nos substitutos)
+não mudar. Os ids ficam como texto nas constantes de cada região (o `tools/balance` lê as espécies de cada layout pelos textos
+dele) e `OverworldLayouts.WideBeasts` aponta para elas. Os sapos-boi passaram a ter a própria variante noturna no lugar da manada de
+queixadas. Respeito: os fogos-fátuos de Tarchon são só luzes do pântano presas em gaiola; os ushabtis de coral são os dos
+Artífices (§2.2); a Fumaça é o 1º elemento da Treva (§1.3); as Barcas de Luz e a Roda como em §1.5 e §3.16. Testes:
+`WideStandInBeastsTests` e `WideStandInBeastsPlacementTests`. Missões que apontavam para o substituto agora apontam para o bicho:
+Tarchon "free_the_wisps" (Fogo-Fátuo), Torres Brancas "break_the_mirrors" (Espelho Quebrado). Seguem com substituto os papéis que
+dividiam a constante: o Ushabti de Bronze Kushita, o Espantalho e os Arqueiros de Terracota, a Íbis de Luz, os linces, garanhões e
+lobos-cinzentos/de neve dos Nartes, a Neblina do Rio e o Pesadelo de Fumaça.
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_desert_steppe_vulture` | **Abutre da Estepe** / *Steppe Vulture* | 51 (e o 50 das saigas; era o Abutre de Brasa) | [distância], voa | os abutres que seguiam manadas e cavaleiros; a sombra veio no vento das papoulas e agora seguem quem ainda anda. |
+| `enemy_mountain_steppe_wolf` | **Lobo da Estepe Apagado** / *Dimmed Steppe Wolf* | 47 Vau, Pistas, Estepe de Soslan, Bétulas (era o lobo) | [rápido] | corriam ao lado dos cavalos do Soslan por alegria; a sombra os afinou e os ensinou a correr contra os cavalos. |
+| `enemy_mountain_grass_storm` | **Tempestade de Capim** / *Grass Storm* | 51 Papoulas, Mil Cavalos e a Estepe dos Ventos (era a Neblina do Vento Ruim) | [controle], voa | o vento que levantava o capim de tarde e não o pôs mais de volta; uma faísca do último raio no meio. |
+| `enemy_forest_marsh_wisp` | **Fogo-Fátuo Preso** / *Caged Marsh Light* | 33 Ilhas de Junco, Pântano, Tarchon, Ilhas que Andam (era a Lanterna Quebrada) | [enxame], voa | as luzes do pântano que os pescadores de Tarchon prendiam em gaiolas de junco; a Treva entrou nas gaiolas. |
+| `enemy_forest_bull_frog` | **Sapo-Boi** / *Bullfrog* | 34 Brejo das Palmeiras, Charco do Ninki Nanka, Toca da Dragoa (era a queixada) | [tanque], pesado | cantavam a chuva toda tarde; o lodo entrou na garganta e a canção puxa os viajantes para a lama. |
+| `enemy_forest_mudskipper` | **Peixe-Saltador de Lodo** / *Mudskipper* | 31 Lago e Bancos de Jhilpur, Charcos de Lótus (era o Peixe-Lanterna) | [enxame] | bicho real; anda na lama com as barbatanas, olhos em cima da cabeça; o lodo o ensinou a pular nas pessoas. |
+| `enemy_desert_broken_mirror` | **Espelho Quebrado** / *Broken Mirror* | 42 Jardins em Terraço, Torres Brancas, Colinas dos Espelhos (era a Lanterna Quebrada) | [distância], voa | os espelhos de bronze que mandavam o luar para dentro das casas; rachados, mandam a lua em quem passa. |
+| `enemy_mountain_paper_crane` | **Grou de Papel** / *Paper Crane* | 41 Anéis, Vilas do Anel, Colinas de Chá (era o Gavião-de-Penacho) | [distância], voa | os mil grous dobrados para um pedido que a sombra comeu; jogam dobras afiadas de papel. |
+| `enemy_cave_smoke_locust` | **Gafanhoto de Fumaça** / *Smoke Locust* | 44 Painço, Arrozais Espelhados, Colinas de Chá (era o enxame de morcegos) | [enxame], voa | a Fumaça (§1.3) pousou onde havia fome e tomou a forma de gafanhoto, "fome com perna". |
+| `enemy_forest_coral_ushabti` | **Ushabti de Coral** / *Coral Ushabti* | 29 Gedi, Kilwa Afundada, Husuni (era o Golem de Pedra) | [tanque], pesado | os respondedores dos Artífices deixados na cidade afogada; o coral cresceu por cima e eles esqueceram por quem esperavam. |
+| `enemy_desert_confused_spark` | **Faísca Confusa** / *Confused Spark* | 91 Beira Oeste, Cais da Coluna, Píer do Sol (era o enxame de vaga-lumes) | [enxame], voa | faíscas que esperaram tanto a vez nas Barcas que esqueceram o que esperavam. |
+| `enemy_cave_dark_drop` | **Gota de Treva** / *Drop of the Dark* | 94 Engrenagens e Jarras da Roda (era o Lodo de Gruta) | [rápido], pesado | a gota da Treva que sobe grudada nas jarras da Roda e desce atrás de mais luz para cair em cima. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |

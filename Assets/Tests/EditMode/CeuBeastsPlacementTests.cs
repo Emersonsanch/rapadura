@@ -179,9 +179,6 @@ namespace Rapadura.Tests
         private static OverworldFauna Group(string id) =>
             OverworldLayouts.Get(CeuId).Zones.SelectMany(z => z.Fauna).First(f => f.Id == id);
 
-        [TestCase("faiscas_da_beira", FireflySwarm)]
-        [TestCase("faiscas_do_cais", FireflySwarm)]
-        [TestCase("faiscas_do_sol", FireflySwarm)]
         [TestCase("sombras_clandestinas", GardenShadow)]
         [TestCase("sombras_da_fresta", GardenShadow)]
         [TestCase("sombras_das_flores", GardenShadow)]
@@ -194,9 +191,6 @@ namespace Rapadura.Tests
         [TestCase("rachaduras_do_ceu", Mist)]
         [TestCase("faiscas_teimosas", GlowMantle)]
         [TestCase("faiscas_do_conves", GlowMantle)]
-        [TestCase("gotas_do_oeste", Ooze)]
-        [TestCase("gotas_das_jarras", Ooze)]
-        [TestCase("gotas_do_leste", Ooze)]
         [TestCase("fumacas_de_esfera", SmokeGoat)]
         [TestCase("fumacas_do_leste", SmokeGoat)]
         [TestCase("espinhos_das_flores", AngryCedar)]

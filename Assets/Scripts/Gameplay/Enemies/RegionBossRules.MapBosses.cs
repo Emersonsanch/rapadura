@@ -85,7 +85,23 @@ namespace Rapadura.Gameplay.Enemies
         public const string VaneLordId = "enemy_mountain_vane_lord";
         public const string LittleEclipseId = "enemy_mountain_little_eclipse";
 
-        /// <summary>The map bosses (04, 05, 09, 10, 15, 22; 25, 26, 32, 33, 34, 37, 38, 39, 42, 43, 45, 48; 55, 56, 60, 62, 66, 69), each at the top of its map's band.</summary>
+        // Six of Regions 10–16, one in each of 10, 11, 12, 13, 14 and 16: Docs/Mapas100.md 53, 61, 68, 73, 79, 93.
+        public const string MidasGoldId = "enemy_mountain_midas_gold";
+        public const string FirstClumsyId = "enemy_mountain_first_clumsy";
+        public const string VolcanoTurtleId = "enemy_mountain_volcano_turtle";
+        public const string SledgeSerpentId = "enemy_mountain_sledge_serpent";
+        public const string PitchKingId = "enemy_mountain_pitch_king";
+        public const string GreatStowawayId = "enemy_mountain_great_stowaway";
+
+        // Six more of Regions 1–9, one in each of 1, 2, 3, 4, 5 and 9: Docs/Mapas100.md 03, 11, 17, 21, 27, 47.
+        public const string MireMotherId = "enemy_mountain_mire_mother";
+        public const string CrownedChiefId = "enemy_mountain_crowned_chief";
+        public const string DarkBellowsId = "enemy_mountain_dark_bellows";
+        public const string SleepingVishapId = "enemy_mountain_sleeping_vishap";
+        public const string ReliefLionId = "enemy_mountain_relief_lion";
+        public const string SmokeStallionId = "enemy_mountain_smoke_stallion";
+
+        /// <summary>The map bosses (03, 04, 05, 09, 10, 11, 15, 17, 21, 22; 25, 26, 27, 32, 33, 34, 37, 38, 39, 42, 43, 45, 47, 48; 53, 55, 56, 60, 61, 62, 66, 68, 69, 73, 79, 93), each at the top of its map's band.</summary>
         public static readonly IReadOnlyList<RegionBossSpawn> MapSpawns = new[]
         {
             new RegionBossSpawn(RopeCutterId, OverworldLayouts.PontesVentoMapId, "pontes_de_vento", OverworldLayouts.CortadorDeCordasArena,
@@ -136,6 +152,30 @@ namespace Rapadura.Gameplay.Enemies
                 OverworldLayouts.TetoWorldOffset, 92, EnemyProjectileKind.Feather, false, RegionBossSignature.VaneGust, neverDies: true),
             new RegionBossSpawn(LittleEclipseId, OverworldLayouts.TorresBrancasMapId, "colinas_dos_espelhos", OverworldLayouts.PequenoEclipseArena,
                 OverworldLayouts.MingchengWorldOffset, 102, EnemyProjectileKind.LanternBolt, false, RegionBossSignature.GrowingEclipse, neverDies: true),
+            new RegionBossSpawn(MidasGoldId, OverworldLayouts.ValeSatirosMapId, "rio_pactolo", OverworldLayouts.OuroDeMidasArena,
+                OverworldLayouts.FarnkeshWorldOffset, 148, EnemyProjectileKind.LanternBolt, false, RegionBossSignature.GoldenTouch, neverDies: true),
+            new RegionBossSpawn(FirstClumsyId, OverworldLayouts.TundraOmolMapId, "tundra_de_omol", OverworldLayouts.PrimeiroDesajeitadoArena,
+                OverworldLayouts.MarGeladoWorldOffset, 204, EnemyProjectileKind.Feather, false, RegionBossSignature.ClumsyFall, neverDies: true),
+            new RegionBossSpawn(VolcanoTurtleId, OverworldLayouts.RecifeObsidianaMapId, "ilhotas_de_vidro", OverworldLayouts.TartarugaVulcaoArena,
+                OverworldLayouts.HinokuraWorldOffset, 254, EnemyProjectileKind.Ember, false, RegionBossSignature.MoltenWake, neverDies: true),
+            new RegionBossSpawn(SledgeSerpentId, OverworldLayouts.ArealEscondidoMapId, "areal_escondido", OverworldLayouts.GrandeSerpenteDoArealArena,
+                OverworldLayouts.RioWorldOffset, 286, EnemyProjectileKind.LureGlob, true, RegionBossSignature.SledgeRope, neverDies: true),
+            new RegionBossSpawn(PitchKingId, OverworldLayouts.PocosBetumeMapId, "pocos_de_betume", OverworldLayouts.ReiDoPicheArena,
+                OverworldLayouts.MisturaWorldOffset, 326, EnemyProjectileKind.LureGlob, false, RegionBossSignature.TarSoak, neverDies: true),
+            new RegionBossSpawn(GreatStowawayId, OverworldLayouts.BarcaDaLuaMapId, "porao_da_lua", OverworldLayouts.ClandestinoGrandeArena,
+                OverworldLayouts.CeuWorldOffset, 450, EnemyProjectileKind.LanternBolt, true, RegionBossSignature.HoldHatches, neverDies: true),
+            new RegionBossSpawn(MireMotherId, MapLayouts.BrejoId, "brejo", OverworldLayouts.MaeLodoArena,
+                OverworldLayouts.ZarafshanWorldOffset, 22, EnemyProjectileKind.LureGlob, false, RegionBossSignature.TongueSnap, neverDies: true),
+            new RegionBossSpawn(CrownedChiefId, OverworldLayouts.TamborRubroMapId, "ermos_do_tambor_rubro", OverworldLayouts.ChefeCoroadoArena,
+                OverworldLayouts.AreiasWorldOffset, 32, EnemyProjectileKind.Ember, false, RegionBossSignature.TinCrowns, neverDies: true),
+            new RegionBossSpawn(DarkBellowsId, OverworldLayouts.NapirasuId, "saloes_de_napirasu", OverworldLayouts.FoleApagadoArena,
+                OverworldLayouts.KaggenWorldOffset, 38, EnemyProjectileKind.Ember, false, RegionBossSignature.BellowsBreath, neverDies: true),
+            new RegionBossSpawn(SleepingVishapId, OverworldLayouts.PedrasDragaoMapId, "prados_de_musgo", OverworldLayouts.VishapAdormecidoArena,
+                OverworldLayouts.LimiarWorldOffset, 38, EnemyProjectileKind.LureGlob, true, RegionBossSignature.RisingSprings, neverDies: true),
+            new RegionBossSpawn(ReliefLionId, OverworldLayouts.MeroeId, "falesias_do_norte", OverworldLayouts.LeaoDosRelevosArena,
+                OverworldLayouts.CostaWorldOffset, 58, EnemyProjectileKind.LanternBolt, false, RegionBossSignature.ReliefPounce, neverDies: true),
+            new RegionBossSpawn(SmokeStallionId, OverworldLayouts.SoslanMapId, "pistas_de_corrida", OverworldLayouts.CavaloDeFumacaArena,
+                OverworldLayouts.NartesWorldOffset, 108, EnemyProjectileKind.Feather, true, RegionBossSignature.SmokeCorral, neverDies: true),
         };
 
         /// <summary>Every boss the <see cref="RegionBossDirector"/> keeps: the world bosses (<see cref="AllSpawns"/>) and the map bosses (<see cref="MapSpawns"/>).</summary>
@@ -450,6 +490,154 @@ namespace Rapadura.Gameplay.Enemies
 
         public const int EclipsePhases = 4;
 
+        // ---- O Ouro de Midas (53): hold your blows while it glows ----
+
+        public const float GoldIntervalSeconds = 10f;
+        public const float GoldWindupSeconds = 2.2f;
+        public const float GoldDamageFactor = 1.35f;
+        public const float GoldReach = 16f;
+
+        /// <summary>The share of its health a hero must knock off it during the warning to be turned to gold.</summary>
+        public const float GoldTouchFraction = 0.02f;
+
+        // ---- O Primeiro Desajeitado (61): it falls the way it leans ----
+
+        public const float FallIntervalSeconds = 10f;
+        public const float FallWindupSeconds = 2.2f;
+        public const float FallDamageFactor = 1.4f;
+
+        /// <summary>How far the toppling body reaches from where it stood, and how wide it is either side.</summary>
+        public const float FallLength = 8f;
+
+        public const float FallHalfWidth = 1.8f;
+
+        /// <summary>Its own footprint behind where it stood, that the fall also crushes.</summary>
+        public const float FallHeel = 1f;
+
+        /// <summary>Each fall it leans this many degrees further round (clockwise from north): eight falls before it leans the same way again.</summary>
+        public const float FallTurnDegrees = 135f;
+
+        // ---- A Tartaruga-Vulcão (68): the wake ----
+
+        public const float WakeIntervalSeconds = 11f;
+        public const float WakeWindupSeconds = 2.2f;
+        public const float WakeDamageFactor = 1.3f;
+
+        /// <summary>How often the turtle leaves a hot spot where it walks, and how many it keeps (the last 6 s).</summary>
+        public const float WakeStepSeconds = 0.5f;
+
+        public const int WakeSteps = 12;
+
+        /// <summary>How near a hot spot the lava reaches when it bursts.</summary>
+        public const float WakeRadius = 2f;
+
+        // ---- A Grande Serpente do Areal (73): the sledge rope ----
+
+        public const float SledgeIntervalSeconds = 10f;
+        public const float SledgeWindupSeconds = 2f;
+        public const float SledgeDamageFactor = 1.35f;
+
+        /// <summary>How far either side of the rope's line the whip reaches.</summary>
+        public const float SledgeRopeHalfWidth = 1.6f;
+
+        /// <summary>How far past the serpent the rope swings out.</summary>
+        public const float SledgeRopeOvershoot = 6f;
+
+        // ---- O Rei do Piche (79): don't linger in the tar ----
+
+        public const float TarIntervalSeconds = 11f;
+        public const float TarWindupSeconds = 2.6f;
+        public const float TarDamageFactor = 1.4f;
+
+        /// <summary>How near him the tar spreads during the warning.</summary>
+        public const float TarNearRadius = 6f;
+
+        /// <summary>How long (s) a hero may stand in the tar during the warning before it hardens on them.</summary>
+        public const float TarSoakSeconds = 1.2f;
+
+        // ---- O Clandestino Grande (93): the hatches of the hold ----
+
+        public const float HatchIntervalSeconds = 10f;
+        public const float HatchWindupSeconds = 2.2f;
+        public const float HatchDamageFactor = 1.4f;
+        public const int HatchCount = 4;
+
+        /// <summary>The four hatches lie this far north, east, south and west of the ring; it bursts out within this radius of one.</summary>
+        public const float HatchRingRadius = 7f;
+
+        public const float HatchBurstRadius = 3.5f;
+
+        // ---- A Mãe-Lodo (03): don't walk into her mouth ----
+
+        public const float TongueIntervalSeconds = 10f;
+        public const float TongueWindupSeconds = 2f;
+        public const float TongueDamageFactor = 1.3f;
+        public const float TongueReach = 12f;
+
+        /// <summary>At her lips there is no getting away from the tongue.</summary>
+        public const float TongueLips = 3f;
+
+        /// <summary>How much closer than when she opened her mouth a hero may come and still not be walking into it.</summary>
+        public const float TongueApproach = 1.5f;
+
+        // ---- O Chefe Coroado (11): the tin crowns ----
+
+        public const float CrownIntervalSeconds = 10f;
+        public const float CrownWindupSeconds = 2.2f;
+        public const float CrownDamageFactor = 1.3f;
+        public const int CrownCount = 3;
+
+        /// <summary>The crowns land on a ring of this radius round the hero's spot, 120° apart, turning 40° each toss; each hits within <see cref="CrownRadius"/>.</summary>
+        public const float CrownRingRadius = 3.5f;
+
+        public const float CrownRadius = 1.8f;
+        public const float CrownTurnDegrees = 40f;
+
+        // ---- O Fole Apagado (17): out in front, in behind ----
+
+        public const float BellowsIntervalSeconds = 10f;
+        public const float BellowsWindupSeconds = 2.2f;
+        public const float BellowsDamageFactor = 1.35f;
+        public const float BellowsReach = 10f;
+
+        /// <summary>How wide (degrees, either side) the blast in front and the draw behind are.</summary>
+        public const float BellowsHalfAngle = 60f;
+
+        // ---- O Vishap Adormecido (21): the springs rise ----
+
+        public const float SpringsIntervalSeconds = 11f;
+        public const float SpringsWindupSeconds = 2.4f;
+        public const float SpringsDamageFactor = 1.3f;
+
+        /// <summary>How far from the great stone the dry ground reaches on the first rise; each rise after it shrinks by <see cref="SpringsStep"/>, then it starts again.</summary>
+        public const float SpringsFirstSafeRadius = 10f;
+
+        public const float SpringsStep = 3f;
+        public const int SpringsRises = 3;
+
+        /// <summary>The flood reaches this far from the great stone.</summary>
+        public const float SpringsReach = 20f;
+
+        // ---- O Leão dos Relevos (27): the pounce and the leap back ----
+
+        public const float ReliefIntervalSeconds = 10f;
+        public const float ReliefWindupSeconds = 2f;
+        public const float ReliefDamageFactor = 1.35f;
+
+        /// <summary>How far round the hero's spot (the pounce) and its wall (the leap back) it lands.</summary>
+        public const float ReliefRadius = 3f;
+
+        // ---- O Cavalo de Fumaça (47): the corral of smoke ----
+
+        public const float CorralIntervalSeconds = 10f;
+        public const float CorralWindupSeconds = 2.2f;
+        public const float CorralDamageFactor = 1.35f;
+
+        /// <summary>The radius of the ring it gallops round the hero's spot, and how wide the smoke is either side of it.</summary>
+        public const float CorralRadius = 6f;
+
+        public const float CorralHalfWidth = 1.2f;
+
         private static float MapBossInterval(RegionBossSignature signature)
         {
             switch (signature)
@@ -477,6 +665,18 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.LeadCast: return LureIntervalSeconds;
                 case RegionBossSignature.VaneGust: return GustIntervalSeconds;
                 case RegionBossSignature.GrowingEclipse: return EclipseIntervalSeconds;
+                case RegionBossSignature.GoldenTouch: return GoldIntervalSeconds;
+                case RegionBossSignature.ClumsyFall: return FallIntervalSeconds;
+                case RegionBossSignature.MoltenWake: return WakeIntervalSeconds;
+                case RegionBossSignature.SledgeRope: return SledgeIntervalSeconds;
+                case RegionBossSignature.TarSoak: return TarIntervalSeconds;
+                case RegionBossSignature.HoldHatches: return HatchIntervalSeconds;
+                case RegionBossSignature.TongueSnap: return TongueIntervalSeconds;
+                case RegionBossSignature.TinCrowns: return CrownIntervalSeconds;
+                case RegionBossSignature.BellowsBreath: return BellowsIntervalSeconds;
+                case RegionBossSignature.RisingSprings: return SpringsIntervalSeconds;
+                case RegionBossSignature.ReliefPounce: return ReliefIntervalSeconds;
+                case RegionBossSignature.SmokeCorral: return CorralIntervalSeconds;
                 default: return ForgeIntervalSeconds;
             }
         }
@@ -508,6 +708,18 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.LeadCast: return LureWindupSeconds;
                 case RegionBossSignature.VaneGust: return GustWindupSeconds;
                 case RegionBossSignature.GrowingEclipse: return EclipseWindupSeconds;
+                case RegionBossSignature.GoldenTouch: return GoldWindupSeconds;
+                case RegionBossSignature.ClumsyFall: return FallWindupSeconds;
+                case RegionBossSignature.MoltenWake: return WakeWindupSeconds;
+                case RegionBossSignature.SledgeRope: return SledgeWindupSeconds;
+                case RegionBossSignature.TarSoak: return TarWindupSeconds;
+                case RegionBossSignature.HoldHatches: return HatchWindupSeconds;
+                case RegionBossSignature.TongueSnap: return TongueWindupSeconds;
+                case RegionBossSignature.TinCrowns: return CrownWindupSeconds;
+                case RegionBossSignature.BellowsBreath: return BellowsWindupSeconds;
+                case RegionBossSignature.RisingSprings: return SpringsWindupSeconds;
+                case RegionBossSignature.ReliefPounce: return ReliefWindupSeconds;
+                case RegionBossSignature.SmokeCorral: return CorralWindupSeconds;
                 default: return ForgeWindupSeconds;
             }
         }
@@ -940,5 +1152,191 @@ namespace Rapadura.Gameplay.Enemies
 
             return Vector2.Angle(bearing, offset) <= EclipseHalfAngle(phase) + 0.01f;
         }
+
+        /// <summary>
+        /// Does the glow of O Ouro de Midas turn to gold a hero <paramref name="distance"/> m from it, who knocked it from <paramref name="healthAtWarning"/>
+        /// to <paramref name="healthNow"/> of <paramref name="maxHealth"/> during the warning? Within <see cref="GoldReach"/>, only whoever struck it hard.
+        /// </summary>
+        public static bool GoldenTouchHits(float healthAtWarning, float healthNow, float maxHealth, float distance) =>
+            maxHealth > 0f && distance <= GoldReach && healthAtWarning - healthNow >= maxHealth * GoldTouchFraction;
+
+        /// <summary>The flat direction O Primeiro Desajeitado leans and falls on fall number <paramref name="fall"/> of the fight (0 first: north, then 135° on, clockwise).</summary>
+        public static Vector2 FallDirection(int fall)
+        {
+            float a = (Mathf.Abs(fall) % 8) * FallTurnDegrees * Mathf.Deg2Rad;
+            return new Vector2(Mathf.Sin(a), Mathf.Cos(a));
+        }
+
+        /// <summary>Does fall number <paramref name="fall"/> of O Primeiro Desajeitado (standing at <paramref name="clumsy"/>) crush a hero at <paramref name="hero"/>? The strip it topples onto.</summary>
+        public static bool ClumsyFallHits(int fall, Vector2 clumsy, Vector2 hero)
+        {
+            Vector2 along = FallDirection(fall);
+            Vector2 offset = hero - clumsy;
+            float ahead = Vector2.Dot(offset, along);
+            if (ahead < -FallHeel || ahead > FallLength)
+            {
+                return false;
+            }
+
+            return Mathf.Abs(along.x * offset.y - along.y * offset.x) <= FallHalfWidth;
+        }
+
+        /// <summary>Is it time for the turtle to leave another hot spot, <paramref name="sinceLastStep"/> s after the last one?</summary>
+        public static bool WakeMarksStep(float sinceLastStep) => sinceLastStep >= WakeStepSeconds;
+
+        /// <summary>Does the lava of the turtle's <paramref name="wake"/> (the hot spots it left) burst under a hero at <paramref name="hero"/>?</summary>
+        public static bool WakeHits(IReadOnlyList<Vector2> wake, Vector2 hero)
+        {
+            if (wake == null)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < wake.Count; i++)
+            {
+                if ((hero - wake[i]).sqrMagnitude <= WakeRadius * WakeRadius)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Does the sledge rope of A Grande Serpente do Areal, from its sledge at <paramref name="sledge"/> through the serpent at <paramref name="serpent"/> and
+        /// <see cref="SledgeRopeOvershoot"/> m on past it, whip a hero at <paramref name="hero"/>? Within <see cref="SledgeRopeHalfWidth"/> of the line.
+        /// </summary>
+        public static bool SledgeRopeHits(Vector2 sledge, Vector2 serpent, Vector2 hero)
+        {
+            Vector2 rope = serpent - sledge;
+            float length = rope.magnitude;
+            if (length < 0.5f)
+            {
+                // Coiled up on its sledge: the rope lashes round it.
+                return (hero - sledge).sqrMagnitude <= (SledgeRopeHalfWidth * 2f) * (SledgeRopeHalfWidth * 2f);
+            }
+
+            Vector2 along = rope / length;
+            Vector2 offset = hero - sledge;
+            float ahead = Vector2.Dot(offset, along);
+            if (ahead < 0f || ahead > length + SledgeRopeOvershoot)
+            {
+                return false;
+            }
+
+            return Mathf.Abs(along.x * offset.y - along.y * offset.x) <= SledgeRopeHalfWidth;
+        }
+
+        /// <summary>Is a hero <paramref name="distance"/> m from O Rei do Piche standing in his tar?</summary>
+        public static bool InTar(float distance) => distance <= TarNearRadius;
+
+        /// <summary>Does the tar harden on a hero who stood in it <paramref name="secondsInTar"/> s of the warning?</summary>
+        public static bool TarSoakHits(float secondsInTar) => secondsInTar >= TarSoakSeconds;
+
+        /// <summary>The four hatches of the hold round <paramref name="ring"/>: north, east, south, west.</summary>
+        public static Vector2[] HatchSpots(Vector2 ring) => new[]
+        {
+            ring + Vector2.up * HatchRingRadius, ring + Vector2.right * HatchRingRadius,
+            ring + Vector2.down * HatchRingRadius, ring + Vector2.left * HatchRingRadius,
+        };
+
+        /// <summary>The hatch of the hold round <paramref name="ring"/> nearest a hero at <paramref name="hero"/>: the one O Clandestino Grande bursts out of.</summary>
+        public static Vector2 NearestHatch(Vector2 ring, Vector2 hero)
+        {
+            Vector2[] hatches = HatchSpots(ring);
+            Vector2 best = hatches[0];
+            for (int i = 1; i < hatches.Length; i++)
+            {
+                if ((hatches[i] - hero).sqrMagnitude < (best - hero).sqrMagnitude)
+                {
+                    best = hatches[i];
+                }
+            }
+
+            return best;
+        }
+
+        /// <summary>Does O Clandestino Grande, bursting out of the hatch nearest the hero, catch a hero at <paramref name="hero"/>?</summary>
+        public static bool HatchHits(Vector2 ring, Vector2 hero) => (hero - NearestHatch(ring, hero)).sqrMagnitude <= HatchBurstRadius * HatchBurstRadius;
+
+        /// <summary>
+        /// Does A Mãe-Lodo's tongue catch a hero who was <paramref name="distanceAtWarning"/> m from her when she opened her mouth and is now
+        /// <paramref name="distanceNow"/> m away? Within <see cref="TongueReach"/>: at her lips, or having come <see cref="TongueApproach"/> m closer.
+        /// </summary>
+        public static bool TongueSnapHits(float distanceAtWarning, float distanceNow) =>
+            distanceNow <= TongueReach && (distanceNow <= TongueLips || distanceAtWarning - distanceNow >= TongueApproach);
+
+        /// <summary>Where the three tin crowns land on toss number <paramref name="toss"/> (0 first) round the hero's spot <paramref name="mark"/>.</summary>
+        public static Vector2[] CrownSpots(Vector2 mark, int toss)
+        {
+            var spots = new Vector2[CrownCount];
+            float start = Mathf.Abs(toss) * CrownTurnDegrees;
+            for (int i = 0; i < CrownCount; i++)
+            {
+                float a = (start + i * 360f / CrownCount) * Mathf.Deg2Rad;
+                spots[i] = mark + new Vector2(Mathf.Sin(a), Mathf.Cos(a)) * CrownRingRadius;
+            }
+
+            return spots;
+        }
+
+        /// <summary>Does one of the tin crowns of toss number <paramref name="toss"/> round <paramref name="mark"/> land on a hero at <paramref name="hero"/>?</summary>
+        public static bool TinCrownsHit(Vector2 mark, int toss, Vector2 hero)
+        {
+            foreach (Vector2 crown in CrownSpots(mark, toss))
+            {
+                if ((hero - crown).sqrMagnitude <= CrownRadius * CrownRadius)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>Does O Fole Apagado blow out (true: in front) on breath number <paramref name="breath"/> of the fight, or draw in (false: behind)? In turn, out first.</summary>
+        public static bool BellowsBlowsOut(int breath) => Mathf.Abs(breath) % 2 == 0;
+
+        /// <summary>
+        /// Does the breath of O Fole Apagado (at <paramref name="bellows"/>, facing <paramref name="facing"/>) reach a hero at <paramref name="hero"/>? Within
+        /// <see cref="BellowsReach"/>: blowing out, the cone in front (<see cref="BellowsHalfAngle"/> either side); drawing in, the same cone behind. Beside it is safe.
+        /// </summary>
+        public static bool BellowsHits(bool blowsOut, Vector2 bellows, Vector2 facing, Vector2 hero)
+        {
+            Vector2 offset = hero - bellows;
+            if (offset.sqrMagnitude > BellowsReach * BellowsReach)
+            {
+                return false;
+            }
+
+            if (offset.sqrMagnitude < 0.25f || facing.sqrMagnitude < 1e-6f)
+            {
+                return true;
+            }
+
+            float angle = Vector2.Angle(facing, offset);
+            return blowsOut ? angle <= BellowsHalfAngle : angle >= 180f - BellowsHalfAngle;
+        }
+
+        /// <summary>Which rise of the springs O Vishap Adormecido opens on rise number <paramref name="rise"/> of the fight (0 first): 0, 1, 2, 0…</summary>
+        public static int SpringsRiseOf(int rise) => Mathf.Abs(rise) % SpringsRises;
+
+        /// <summary>How far from the great stone the ground stays dry on rise <paramref name="rise"/>: 10, 7, 4 m.</summary>
+        public static float SpringsSafeRadius(int rise) => SpringsFirstSafeRadius - SpringsStep * SpringsRiseOf(rise);
+
+        /// <summary>Does rise <paramref name="rise"/> of the springs flood a hero at <paramref name="hero"/>, the great stone being at <paramref name="stone"/>? Beyond the dry ring, within <see cref="SpringsReach"/>.</summary>
+        public static bool SpringsHit(int rise, Vector2 stone, Vector2 hero)
+        {
+            float distance = Vector2.Distance(stone, hero);
+            return distance > SpringsSafeRadius(rise) && distance <= SpringsReach;
+        }
+
+        /// <summary>Does O Leão dos Relevos, pouncing on <paramref name="mark"/> and leaping back to its wall at <paramref name="wall"/>, land on a hero at <paramref name="hero"/>?</summary>
+        public static bool ReliefPounceHits(Vector2 mark, Vector2 wall, Vector2 hero) =>
+            (hero - mark).sqrMagnitude <= ReliefRadius * ReliefRadius || (hero - wall).sqrMagnitude <= ReliefRadius * ReliefRadius;
+
+        /// <summary>Does the ring of smoke O Cavalo de Fumaça gallops round <paramref name="mark"/> catch a hero at <paramref name="hero"/>? Only on the ring; inside and outside are safe.</summary>
+        public static bool SmokeCorralHits(Vector2 mark, Vector2 hero) => Mathf.Abs(Vector2.Distance(mark, hero) - CorralRadius) <= CorralHalfWidth;
     }
 }

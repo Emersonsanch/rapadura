@@ -107,6 +107,8 @@ namespace Rapadura.Tests
             }
 
             Assert.IsTrue(TunnelStillAirRules.NearPipe(pipes, OverworldLayouts.MercadoTuneisPost), "the market breathes");
+            Assert.IsTrue(TunnelStillAirRules.NearPipe(pipes, OverworldLayouts.EngarrafadorGulosoArena), "the boss's ring breathes");
+            Assert.IsTrue(TunnelStillAirRules.NearPipe(pipes, OverworldLayouts.EngarrafadorGulosoArena + new Vector2(0f, 14f)), "the whole ring");
             Assert.IsTrue(TunnelStillAirRules.NearPipe(pipes, new Vector2(0f, -1405f)), "30 m round a pipe");
             Assert.IsFalse(TunnelStillAirRules.NearPipe(pipes, new Vector2(0f, -1425f)), "between two pipes of a gallery");
             Assert.IsFalse(TunnelStillAirRules.NearPipe(pipes, new Vector2(-200f, -1350f)), "a clearing off the galleries");

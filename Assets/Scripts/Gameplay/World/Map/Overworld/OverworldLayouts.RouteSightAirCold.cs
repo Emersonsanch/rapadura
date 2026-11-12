@@ -17,7 +17,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>
         /// The kobolds' air pipes (22): one at the market and one every 100 m along each of its four galleries (the trails that leave its four
-        /// streets), to the edge of the map.
+        /// streets), to the edge of the map, and one in the middle of the map boss's ring.
         /// </summary>
         public static readonly Vector2[] TunnelAirPipes =
         {
@@ -26,6 +26,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             new Vector2(0f, -1575f), new Vector2(0f, -1675f),
             new Vector2(-100f, -1475f), new Vector2(-200f, -1475f), new Vector2(-290f, -1475f),
             new Vector2(100f, -1475f), new Vector2(200f, -1475f), new Vector2(290f, -1475f),
+
+            // The ring of O Engarrafador Guloso (22's map boss, EngarrafadorGulosoArena): the fight is about his bottles, not the still air.
+            new Vector2(160f, -1464f),
         };
 
         /// <summary>The Geleira do Teto do Mundo (38): its two zones, the serac field and the glacier itself.</summary>

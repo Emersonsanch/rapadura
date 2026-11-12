@@ -34,7 +34,7 @@ namespace Rapadura.Gameplay.Housing
         WoodRefund,
     }
 
-    /// <summary>One of the 35 furniture sets (Housing.md §6.2, <c>CatalogoCasa.md</c> "Conjuntos").</summary>
+    /// <summary>One of the 37 furniture sets (Housing.md §6.2, <c>CatalogoCasa.md</c> "Conjuntos").</summary>
     public sealed class HouseSetDefinition
     {
         public readonly string Id;
@@ -55,7 +55,7 @@ namespace Rapadura.Gameplay.Housing
         public string TitleKey => "ui.house_life.set_title." + ShortId;
     }
 
-    /// <summary>The 35 sets, in the catalog's order.</summary>
+    /// <summary>The 37 sets, in the catalog's order.</summary>
     public static class HouseSetCatalog
     {
         public const int FirstStagePieces = 3;
@@ -105,6 +105,9 @@ namespace Rapadura.Gameplay.Housing
             new HouseSetDefinition("set_moveis_cisterna_qocho"),
             new HouseSetDefinition("set_moveis_rondavel"),
             new HouseSetDefinition("set_moveis_casa_rocha"),
+            // Furniture sets of Regions 10 and 12 (Região 11 has the Casa da Lua Branca): sold in Farnkesh and Hinokura.
+            new HouseSetDefinition("set_moveis_ninho_pedra"),
+            new HouseSetDefinition("set_moveis_palacio_laca"),
         };
 
         public static HouseSetDefinition Get(string setId) => string.IsNullOrEmpty(setId) ? null : All.FirstOrDefault(s => s.Id == setId);

@@ -60,6 +60,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>O Mamute Avô's arena (62, map boss): the stone ring on the road from the Boca do Gelo down the galleries.</summary>
         public static readonly Vector2 MamuteAvoArena = new Vector2(984f, 758f);
+
+        /// <summary>O Primeiro Desajeitado's arena (61, map boss): the stone ring on the open Tundra de Omöl, by the trail, among the crooked things Omöl made.</summary>
+        public static readonly Vector2 PrimeiroDesajeitadoArena = new Vector2(-956f, 164f);
         public static readonly Vector2 CasaDeNeveOffset = new Vector2(0f, 600f);
         public static readonly Vector2 TendaDeYenOffset = new Vector2(-960f, 120f);
         public static readonly Vector2 BocaDoGeloOffset = new Vector2(960f, 600f);
@@ -382,6 +385,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, VelhoKulArena.x, VelhoKulArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, MorsaRainhaArena.x, MorsaRainhaArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, MamuteAvoArena.x, MamuteAvoArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, PrimeiroDesajeitadoArena.x, PrimeiroDesajeitadoArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

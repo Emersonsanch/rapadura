@@ -37,6 +37,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>Āz's arena (96): a stone ring in the Flower Garden, north of the end of the west garden road. Map 100, the end of the region, has no fight.</summary>
         public static readonly Vector2 CapitaAzArena = new Vector2(-960f, 2570f);
+
+        /// <summary>O Clandestino Grande's arena (93, map boss): the stone ring in the hold of the Moon Ship, by the trail, over the hatches.</summary>
+        public static readonly Vector2 ClandestinoGrandeArena = new Vector2(468f, 836f);
         public const string BarcaDoSolMapId = "map_097_barca_do_sol";
         public const string PesDaColunaMapId = "map_098_pes_da_coluna";
         public const string MiranteCeuMapId = "map_099_mirante_do_ceu";
@@ -131,7 +134,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private static class Ceu
         {
             public const string LesserArchon = "enemy_forest_lesser_archon";
-            public const string ConfusedSpark = "enemy_desert_firefly_swarm";
+            public const string ConfusedSpark = "enemy_desert_confused_spark";
             public const string CloudBird = "enemy_forest_dimmed_cloud_bird";
             public const string StowawayShadow = "enemy_forest_garden_shadow";
             public const string LightFish = "enemy_forest_dimmed_light_fish";
@@ -144,7 +147,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string LivingRope = "enemy_forest_living_rope";
             public const string ToyArchon = "enemy_forest_toy_archon";
             public const string CrackedJar = "enemy_forest_cracked_jar";
-            public const string DarkDrop = "enemy_cave_ooze";
+            public const string DarkDrop = "enemy_cave_dark_drop";
             public const string ChainedArchon = "enemy_forest_chained_archon";
             public const string SphereSmoke = "enemy_forest_smoke_goat";
             public const string OrbitWind = FarBeasts.OrbitWind;
@@ -361,6 +364,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, -700f, 2820f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, 1040f, 3000f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, CapitaAzArena.x, CapitaAzArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, ClandestinoGrandeArena.x, ClandestinoGrandeArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);
@@ -436,7 +440,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             NightSpecies sparks = NightVariantRules.VagaLume;
             NightSpecies werewolf = NightVariantRules.Lobisomem;
 
-            // The edges of the Cais (91): the Arconte Fujão Menor [elite], the Faísca Confusa [enxame] (the firefly swarm), the Ave de Nuvem Apagada [rápido],
+            // The edges of the Cais (91): the Arconte Fujão Menor [elite], the Faísca Confusa [enxame] (its own beast now, WideBeasts), the Ave de Nuvem Apagada [rápido],
             // the Sombra Clandestina [controle] (the garden shadow).
             CeuGroup(beira, "arcontes_da_beira", "[elite]", Ceu.LesserArchon, Ceu.CloudBird, moon, 3, 32f);
             CeuGroup(beira, "faiscas_da_beira", "[enxame]", Ceu.ConfusedSpark, Ceu.StowawayShadow, sparks, 5);
@@ -475,7 +479,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             CeuGroup(popa, "sombras_da_popa", "[tanque]", Ceu.HoldShadow, Ceu.StubbornSpark, moon, 3, 30f);
             CeuGroup(popa, "cordas_da_popa", "[controle]", Ceu.LivingRope, Ceu.DarkStowaway, owl);
 
-            // The Celestial Wheel (94): Os Doze da Roda [elite], the Jarra Rachada [distância], the Gota de Treva [rápido] (the ooze).
+            // The Celestial Wheel (94): Os Doze da Roda [elite], the Jarra Rachada [distância], the Gota de Treva [rápido] (its own beast now, WideBeasts).
             CeuGroup(gearsW, "gotas_do_oeste", "[rápido]", Ceu.DarkDrop, Ceu.ToyArchon, owl);
             CeuGroup(gearsW, "jarras_rachadas_oeste", "[distância]", Ceu.CrackedJar, Ceu.DarkDrop, moon);
             CeuGroup(jarrasW, "doze_oeste", "[elite]", Ceu.ToyArchon, Ceu.CrackedJar, moon, 3, 32f);

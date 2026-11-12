@@ -56,6 +56,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>O Sino que Não Para's arena (56, map boss): the stone ring on the west road below the Pináculo do Sino, clear of the post's flat ground.</summary>
         public static readonly Vector2 SinoQueNaoParaArena = new Vector2(-582f, 968f);
+
+        /// <summary>O Ouro de Midas's arena (53, map boss): the stone ring on the bank of the Rio Pactolo, by the trail, where Midas comes to wash his hands.</summary>
+        public static readonly Vector2 OuroDeMidasArena = new Vector2(548f, 140f);
         public static readonly Vector2 ValeSatirosOffset = Vector2.zero;
         public static readonly Vector2 FarnkeshOffset = new Vector2(0f, 1080f);
         public static readonly Vector2 ErmidaBaixaOffset = new Vector2(960f, 1080f);
@@ -340,6 +343,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, 880f, 1500f, 0f, 0.9f);
             Landmark(w, MapLandmarkKind.StoneRing, CortadorDeCordasArena.x, CortadorDeCordasArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, SinoQueNaoParaArena.x, SinoQueNaoParaArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, OuroDeMidasArena.x, OuroDeMidasArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

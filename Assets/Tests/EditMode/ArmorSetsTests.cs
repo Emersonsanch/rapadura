@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Rapadura.Tests
 {
-    /// <summary>The thirteen armour sets of Regions 1–9 and 13–16 (Docs/Items.md): pieces, drop rule, the two-piece bonuses and the texts.</summary>
+    /// <summary>The sixteen armour sets of Regions 1–16 (Docs/Items.md): pieces, drop rule, the two-piece bonuses and the texts.</summary>
     public class ArmorSetsTests
     {
         private static IEnumerable<ArmorSetDefinition> Sets => ArmorSetRules.All;
@@ -19,7 +19,7 @@ namespace Rapadura.Tests
         [Test]
         public void EverySet_HasAChestAndAHelm_WithIcon()
         {
-            Assert.AreEqual(13, ArmorSetRules.All.Count);
+            Assert.AreEqual(16, ArmorSetRules.All.Count);
             foreach (ArmorSetDefinition set in Sets)
             {
                 ItemDefinition chest = Load(set.ChestItemId);
@@ -57,9 +57,10 @@ namespace Rapadura.Tests
             var seen = new HashSet<string>();
             foreach (ArmorSetDefinition set in Sets)
             {
-                // Regions 13–16 have 12 own beasts each; Regions 1–9 have 6–12 (Docs/Status_100Mapas.md).
+                // Regions 13–16 have 12 own beasts each plus the stand-in passes that landed there (up to 15); Regions 1–9 have 6–12
+                // (Docs/Status_100Mapas.md).
                 Assert.GreaterOrEqual(set.Beasts.Count, ArmorSetRules.Far.Contains(set) ? 12 : 6, set.Id);
-                Assert.LessOrEqual(set.Beasts.Count, 12, set.Id);
+                Assert.LessOrEqual(set.Beasts.Count, ArmorSetRules.Far.Contains(set) ? 15 : 12, set.Id);
                 foreach (string beast in set.Beasts)
                 {
                     Assert.IsTrue(seen.Add(beast), beast + " is in two sets");

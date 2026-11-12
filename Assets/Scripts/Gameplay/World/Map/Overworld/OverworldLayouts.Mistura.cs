@@ -44,6 +44,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>O Sonho da Destruição's arena (82): the stone ring at the north of the Dream Tablets.</summary>
         public static readonly Vector2 SonhoDaDestruicaoArena = new Vector2(1640f, 980f);
 
+        /// <summary>O Rei do Piche's arena (79, map boss): the stone ring among the Poços de Betume, by the trail, off the tar pools.</summary>
+        public static readonly Vector2 ReiDoPicheArena = new Vector2(96f, -968f);
+
         /// <summary>The region's rectangle (region coordinates): where <see cref="Mechanics.MisturaMechanicsDriver"/> runs.</summary>
         public static readonly Rect MisturaBounds = Rect.MinMaxRect(-600f, -1200f, 1800f, 1200f);
 
@@ -352,6 +355,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, 930f, 420f, 0f, 1f);
             Landmark(w, MapLandmarkKind.Campfire, 1400f, -440f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, SonhoDaDestruicaoArena.x, SonhoDaDestruicaoArena.y, 0f, 1f);
+            Landmark(w, MapLandmarkKind.StoneRing, ReiDoPicheArena.x, ReiDoPicheArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

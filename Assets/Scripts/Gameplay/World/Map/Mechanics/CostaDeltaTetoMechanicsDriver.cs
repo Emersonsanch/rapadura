@@ -125,7 +125,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public Rect[] MechanicsAreas => _areas;
 
         /// <inheritdoc/>
-        public bool MechanicsBusy => false;
+        public bool MechanicsBusy => _dhowRide.Active || _caravanOn;
 
         private void Start()
         {
@@ -202,6 +202,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             // The lit fountains belong to this visit of the Delta: off with the driver (the hero left the region, the scene changed).
             LodoFountainBoard.Clear();
+            EndDhowRide(false);
             ClearTideSlow();
             ClearBogSlow();
             if (_inCosta)
@@ -238,6 +239,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
+            // 30 · a dhow under sail holds the controls (CostaDeltaTetoMechanicsDriver.Dhow.cs).
+            if (TickDhowRide())
+            {
+                return;
+            }
+
             double now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000d;
             Vector2 world = new Vector2(_player.position.x, _player.position.z);
             if (Time.unscaledTime >= _nextStateRefresh)
@@ -257,6 +264,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 _inCosta = true;
                 TickTide(world - _costaOrigin, (long)now, redraw);
                 TickSavanna(world - _costaOrigin, now);
+                TickShadows(world - _costaOrigin);
+                TickHouses(world - _costaOrigin);
+                TickDhow(world - _costaOrigin, (long)now);
             }
             else if (_inCosta)
             {
@@ -270,6 +280,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 TickIslands(world - _deltaOrigin, now, redraw);
                 TickLodo(world - _deltaOrigin, redraw);
                 TickGaze(world - _deltaOrigin, now);
+                TickRootBridges(world - _deltaOrigin);
             }
             else if (_inDelta)
             {
@@ -283,6 +294,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 TickAvalanche(world - _tetoOrigin, now);
                 TickCold(world - _tetoOrigin);
                 TickVanes(world - _tetoOrigin);
+                TickCaravan(world - _tetoOrigin, now);
             }
             else if (_inTeto)
             {
@@ -507,6 +519,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private void LeaveCosta()
         {
             LeaveSavanna();
+            LeaveShadows();
+            LeaveHouses();
+            LeaveDhow();
             _flatHere = -1;
             ClearTideSlow();
             CostaTideFlat[] flats = OverworldLayouts.TideFlats;
@@ -656,6 +671,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private void LeaveDelta()
         {
             LeaveGaze();
+            LeaveRootBridges();
             _islandHere = -1;
             _wasBog = false;
             ClearBogSlow();
@@ -792,6 +808,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             LeaveCold();
             LeaveVanes();
+            AbandonCaravan();
             if (_laneLine != null)
             {
                 _laneLine.enabled = false;

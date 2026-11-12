@@ -448,6 +448,32 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>Lanterna Fugitiva (92): a paper lantern that ran off a Barca de Luz; squashes on the windup and the flame flares.</summary>
         RunawayLantern = 311,
 
+        // The fifteenth pass of beasts (bible §3.2.1): the most-seen roles of Regions 5–16 still played by stand-ins (WideStandInBeastRecipes).
+        /// <summary>Abutre da Estepe (51): tawny steppe vulture with a pale ruff; the beak opens.</summary>
+        SteppeVulture = 312,
+        /// <summary>Lobo da Estepe Apagado (47): lean grey-tan wolf of the grass; jaw and tail.</summary>
+        SteppeWolf = 313,
+        /// <summary>Tempestade de Capim (51): a funnel of dry grass round a caught spark; squashes on the windup and the spark flares.</summary>
+        GrassStorm = 314,
+        /// <summary>Fogo-Fátuo Preso (33): a marsh light in a reed cage; squashes on the windup and the light flares.</summary>
+        MarshWisp = 315,
+        /// <summary>Sapo-Boi (34): a fat bullfrog; squashes on the windup and its lit throat sac swells.</summary>
+        BullFrog = 316,
+        /// <summary>Peixe-Saltador de Lodo (31): a mudskipper propped on its fins; jaw and tail.</summary>
+        Mudskipper = 317,
+        /// <summary>Espelho Quebrado (42): a cracked bronze mirror on its stand; squashes on the windup and the glass flares.</summary>
+        BrokenMirror = 318,
+        /// <summary>Grou de Papel (41): a folded paper crane; the beak opens.</summary>
+        PaperCrane = 319,
+        /// <summary>Gafanhoto de Fumaça (44): a locust of smoke on jumping legs; the mandibles (the Jaw) part.</summary>
+        SmokeLocust = 320,
+        /// <summary>Ushabti de Coral (29): a squat coral figure, arms crossed; squashes on the windup and the chest seal flares.</summary>
+        CoralUshabti = 321,
+        /// <summary>Faísca Confusa (91): a spark with a halo of shards; squashes on the windup and the spark flares.</summary>
+        ConfusedSpark = 322,
+        /// <summary>Gota de Treva (94): a teardrop of the Dark on its puddle; squashes on the windup and the swallowed light flares.</summary>
+        DarkDrop = 323,
+
         // The map bosses of the fichas (RegionBossRules.MapSpawns, MapBossRecipes): one per map the story walks through in the 150–300 band.
         /// <summary>O Cortador de Cordas (55): a shadow bird with blade-edged wings and a frayed rope in its beak; map boss of the Pontes de Vento.</summary>
         RopeCutter = 204,
@@ -503,6 +529,34 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         VaneLord = 256,
         /// <summary>O Pequeno Eclipse (42): a disc of shadow floating over a column of dark light, a rim of stolen gold; map boss of the Torres Brancas.</summary>
         LittleEclipse = 257,
+
+        // Six map bosses of Regions 10–16 (Docs/Mapas100.md 53, 61, 68, 73, 79, 93).
+        /// <summary>O Ouro de Midas (53): a golden statue of a man that walked off its plinth, arms out, its touch shining; map boss of the Vale dos Sátiros.</summary>
+        MidasGold = 258,
+        /// <summary>O Primeiro Desajeitado (61): Omöl's first crooked creature, lopsided, one long arm and one short, leaning; map boss of the Tundra de Omöl.</summary>
+        FirstClumsy = 259,
+        /// <summary>A Tartaruga-Vulcão (68): a great turtle carrying a smoking island of obsidian on its back; map boss of the Recife de Obsidiana.</summary>
+        VolcanoTurtle = 260,
+        /// <summary>A Grande Serpente do Areal (73): a sand serpent reared up, a frayed tow rope round its neck; map boss of the Areal Escondido.</summary>
+        SledgeSerpent = 261,
+        /// <summary>O Rei do Piche (79): a heap of black bitumen with a crown of bubbles and two dripping arms; map boss of the Poços de Betume.</summary>
+        PitchKing = 262,
+        /// <summary>O Clandestino Grande (93): a hunched shadow wrapped in a sail-cloth, a lantern stolen from the deck; map boss of the Barca da Lua.</summary>
+        GreatStowaway = 263,
+
+        // Six more map bosses of Regions 1–9 (Docs/Mapas100.md 03, 11, 17, 21, 27, 47).
+        /// <summary>Mãe-Lodo (03): a giant dark toad sitting up in the mud, throat swollen with the spring she swallowed; map boss of the Brejo do Lodo Escuro.</summary>
+        MireMother = 264,
+        /// <summary>O Chefe Coroado (11): a big orc with a tin crown and a chest of Āz's gold on his back; map boss of the Ermos do Tambor Rubro.</summary>
+        CrownedChief = 265,
+        /// <summary>O Fole Apagado (17): the forge's great bellows of bronze and leather on iron legs, its nozzle for a head; map boss of the Salões de Napirasu.</summary>
+        DarkBellows = 266,
+        /// <summary>O Vishap Adormecido (21): a water dragon with a fish head like the vishapakar stones, half asleep, coiled on four legs; map boss of the Campo das Pedras-Dragão.</summary>
+        SleepingVishap = 267,
+        /// <summary>O Leão dos Relevos (27): the stone guardian lion of the reliefs, flat-sided like a carving, sandstone with painted bands; map boss of Meroë.</summary>
+        ReliefLion = 268,
+        /// <summary>O Cavalo de Fumaça (47): a stallion of smoke rearing on four legs, mane streaming; map boss of the Acampamento de Soslan.</summary>
+        SmokeStallion = 269,
     }
 
     /// <summary>

@@ -57,6 +57,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>O Touro de Fumaça's arena (26, map boss): the stone ring on the trail through the north of the Savana dos Auroques, past Aratta.</summary>
         public static readonly Vector2 TouroDeFumacaArena = new Vector2(-311f, 1115f);
 
+        /// <summary>O Leão dos Relevos's arena (27, map boss): the stone ring on the Falésias do Norte above Meroë, by the trail, where no Artificer relic is asked.</summary>
+        public static readonly Vector2 LeaoDosRelevosArena = new Vector2(998f, 1020f);
+
         /// <summary>Half the side (m) of the flat town ground of the race cities Aratta and Kirta (their solids reach 22 m).</summary>
         public const float RaceCityGround = 28f;
 
@@ -87,6 +90,27 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string FeltSwan = "enemy_mountain_felt_swan";
         }
 
+        /// <summary>
+        /// The fifteenth pass of beasts (bible §3.2.1, <c>WideStandInBeastRecipes</c>): the most-seen roles of Regions 5–16 that the continuous world
+        /// still played with stand-ins after the passes by region (Docs/Mapas100.md 29, 31, 33, 34, 41, 42, 44, 47, 51, 91, 94), placed in the
+        /// groups of their sheets in the Costa, Delta, Mingcheng, Nartes and Céu layouts.
+        /// </summary>
+        public static class WideBeasts
+        {
+            public const string SteppeVulture = Nart.Griffin;
+            public const string SteppeWolf = Nart.SteppeWolf;
+            public const string GrassStorm = Nart.GrassStorm;
+            public const string MarshWisp = Delta.Lantern;
+            public const string BullFrog = Delta.BullFrog;
+            public const string Mudskipper = Delta.LanternFish;
+            public const string BrokenMirror = Ming.Mirror;
+            public const string PaperCrane = Ming.PaperCrane;
+            public const string SmokeLocust = Ming.Locusts;
+            public const string CoralUshabti = Coast.CoralUshabti;
+            public const string ConfusedSpark = Ceu.ConfusedSpark;
+            public const string DarkDrop = Ceu.DarkDrop;
+        }
+
         private static class Coast
         {
             public const string Gull = "enemy_forest_thief_gull";
@@ -100,6 +124,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Wolf = PeriodSpawnTable.ForestWolf;
             public const string Boar = NightVariantRules.PeccaryEnemyId;
             public const string Ushabti = PeriodSpawnTable.MountainGolem;
+            public const string CoralUshabti = "enemy_forest_coral_ushabti";
             public const string Potoo = NightVariantRules.PotooEnemyId;
             public const string Bats = PeriodSpawnTable.CaveBats;
             public const string Hawk = "enemy_mountain_crested_hawk";
@@ -349,6 +374,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, HedammuArena.x, HedammuArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, PolvoDasMoncoesArena.x, PolvoDasMoncoesArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, TouroDeFumacaArena.x, TouroDeFumacaArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, LeaoDosRelevosArena.x, LeaoDosRelevosArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);
@@ -493,7 +519,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             falesiasNorte.Fauna.Add(Fauna("babuinos_da_falesia", "[rápido] [controle]", T(N(Coast.Baboon, 3), N(Coast.RollingStone, 1)), T(V(Coast.Baboon, 2), V(Coast.RollingStone, 1)), 4));
 
             // Ruínas de Gedi: coral ushabtis, the crows of the dark on the pillar tombs.
-            gedi.Fauna.Add(Fauna("ushabtis_de_coral", "[tanque]", T(N(Coast.Ushabti, 3), N(Coast.Crow, 1)), T(V(Coast.Ushabti, 2), V(Coast.Crow, 1)), 3, null, 30f));
+            gedi.Fauna.Add(Fauna("ushabtis_de_coral", "[tanque]", T(N(Coast.CoralUshabti, 3), N(Coast.Crow, 1)), T(V(Coast.CoralUshabti, 2), V(Coast.Crow, 1)), 3, null, 30f));
             gedi.Fauna.Add(Fauna("corvos_de_gedi", "[distância]", T(N(Coast.Crow, 3), N(Coast.Bats, 1)), T(V(Coast.Crow, 2), S(kongamato, 1)), 4));
 
             // Atol de Kirta (28): the Caranguejo-Aranha [tanque], the Peixe-Leão Apagado [distância] (lantern fish), the
@@ -514,15 +540,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             lagoaGrande.Fauna.Add(Fauna("lodo_da_lagoa_grande", "[controle]", T(N(Coast.Ooze, 3), N(Coast.Crow, 1)), T(V(Coast.Ooze, 2), S(plankton, 1)), 4));
             lagoaGrande.Fauna.Add(Fauna("margens_da_lagoa", "[tanque] [rápido]", T(N(Coast.Crab, 2), N(Coast.Gull, 2)), T(V(Coast.Crab, 1), V(Coast.Gull, 2)), 4));
 
-            // Kilwa Afundada (29): coral ushabtis [tanque], the Polvo Ladrão [controle] (the lodo), the Raia de Fumaça [rápido]
+            // Kilwa Afundada (29): the Ushabti de Coral [tanque] (its own beast now, WideBeasts), the Polvo Ladrão [controle] (the lodo), the Raia de Fumaça [rápido]
             // (lantern fish); the dingonek prowls at night (the werewolf's body).
-            kilwa.Fauna.Add(Fauna("ushabtis_de_kilwa", "[tanque]", T(N(Coast.Ushabti, 3), N(Coast.Ooze, 1)), T(V(Coast.Ushabti, 2), V(Coast.Ooze, 1)), 3, null, 30f));
+            kilwa.Fauna.Add(Fauna("ushabtis_de_kilwa", "[tanque]", T(N(Coast.CoralUshabti, 3), N(Coast.Ooze, 1)), T(V(Coast.CoralUshabti, 2), V(Coast.Ooze, 1)), 3, null, 30f));
             kilwa.Fauna.Add(Fauna("polvos_ladroes", "[controle]", T(N(Coast.Ooze, 3), N(Coast.Crab, 1)), T(V(Coast.Ooze, 2), S(plankton, 1)), 4));
             kilwa.Fauna.Add(Fauna("raias_de_fumaca", "[rápido]", T(N(Coast.LanternFish, 3), N(Coast.Gull, 1)), T(V(Coast.LanternFish, 2), S(mngwa, 1)), 4));
 
             // Palácio de Husuni (29): coral ushabtis, crows on the arches, the hermit crabs (the coconut crab) round the
             // octagonal pool, the broken lanterns.
-            husuni.Fauna.Add(Fauna("guardas_de_coral", "[tanque] [elite]", T(N(Coast.Ushabti, 3), N(Coast.Lantern, 1)), T(V(Coast.Ushabti, 2), V(Coast.Lantern, 1)), 3, null, 32f));
+            husuni.Fauna.Add(Fauna("guardas_de_coral", "[tanque] [elite]", T(N(Coast.CoralUshabti, 3), N(Coast.Lantern, 1)), T(V(Coast.CoralUshabti, 2), V(Coast.Lantern, 1)), 3, null, 32f));
             husuni.Fauna.Add(Fauna("eremitas_do_palacio", "[tanque]", T(N(Coast.Crab, 3), N(Coast.Gull, 1)), T(V(Coast.Crab, 2), S(mngwa, 1)), 3, null, 28f));
             husuni.Fauna.Add(Fauna("corvos_de_husuni", "[distância]", T(N(Coast.Crow, 3), N(Coast.Bats, 1)), T(V(Coast.Crow, 2), S(kongamato, 1)), 4));
 

@@ -102,6 +102,21 @@ namespace Rapadura.Gameplay.Enemies
         private int _covers;
         private int _cover;
 
+        // The map bosses of Regions 10–16 (53, 61, 68, 73, 79, 93): the clumsy one's falls, the turtle's wake, the time the hero stood in the tar.
+        private int _falls;
+        private readonly List<Vector2> _wake = new List<Vector2>(RegionBossRules.WakeSteps);
+        private float _wakeTimer;
+        private float _tarSeconds;
+
+        // The six more of Regions 1–9 (03, 11, 17, 21, 27, 47): the hero's distance when the Mãe-Lodo opened her mouth, the chief's tosses,
+        // the bellows' breaths and the one it is taking, the vishap's rises and the one it is opening.
+        private float _tongueAt;
+        private int _tosses;
+        private int _breaths;
+        private bool _blowsOut;
+        private int _rises;
+        private int _rise;
+
         public RegionBossPhase Phase => _phase;
 
         /// <summary>True while a great blow is telegraphed.</summary>
@@ -148,6 +163,13 @@ namespace Rapadura.Gameplay.Enemies
             _lureCast = false;
             _gusts = 0;
             _covers = 0;
+            _falls = 0;
+            _wake.Clear();
+            _wakeTimer = 0f;
+            _tarSeconds = 0f;
+            _tosses = 0;
+            _breaths = 0;
+            _rises = 0;
             EventBus.Subscribe<CombatTargetDiedEvent>(HandleTargetDied);
         }
 
@@ -333,6 +355,22 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
+            if (signature == RegionBossSignature.MoltenWake)
+            {
+                // The turtle leaves hot spots where it walks, all fight long: the last few are its wake.
+                _wakeTimer += deltaTime;
+                if (RegionBossRules.WakeMarksStep(_wakeTimer))
+                {
+                    _wakeTimer = 0f;
+                    if (_wake.Count >= RegionBossRules.WakeSteps)
+                    {
+                        _wake.RemoveAt(0);
+                    }
+
+                    _wake.Add(Flat(transform.position));
+                }
+            }
+
             if (_signatureWindup > 0f)
             {
                 _signatureWindup -= deltaTime;
@@ -352,6 +390,11 @@ namespace Rapadura.Gameplay.Enemies
                         _rootStepTimer = 0f;
                         _rootSteps.Add(Flat(hero.position));
                     }
+                }
+
+                if (signature == RegionBossSignature.TarSoak && hero != null && RegionBossRules.InTar(FlatDistance(hero.position, transform.position)))
+                {
+                    _tarSeconds += deltaTime;
                 }
 
                 if (signature == RegionBossSignature.LeadCast && hero != null)
@@ -450,7 +493,7 @@ namespace Rapadura.Gameplay.Enemies
                 _smudgeClean = RegionBossRules.SmudgeColourFor(_smears++);
                 warning = RegionBossTexts.SmudgeColourKey(_smudgeClean);
             }
-            else if (signature == RegionBossSignature.NoiseFright)
+            else if (signature == RegionBossSignature.NoiseFright || signature == RegionBossSignature.GoldenTouch)
             {
                 _healthAtWarning = _health != null ? _health.CurrentHealth : 0f;
             }
@@ -489,6 +532,64 @@ namespace Rapadura.Gameplay.Enemies
             {
                 _cover = RegionBossRules.EclipsePhaseOf(_covers++);
                 warning = RegionBossTexts.EclipseCoverKey(_cover);
+            }
+            else if (signature == RegionBossSignature.ClumsyFall)
+            {
+                // Where it will land: the far end of the strip it leans over.
+                Vector2 end = Flat(_signatureOrigin) + RegionBossRules.FallDirection(_falls) * RegionBossRules.FallLength;
+                DungeonShockwave.Spawn(new Vector3(end.x, _signatureOrigin.y, end.y), null, _controller.gameObject, 0f, 0f);
+            }
+            else if (signature == RegionBossSignature.MoltenWake)
+            {
+                foreach (Vector2 spot in _wake)
+                {
+                    DungeonShockwave.Spawn(new Vector3(spot.x, _signatureOrigin.y, spot.y), null, _controller.gameObject, 0f, 0f);
+                }
+            }
+            else if (signature == RegionBossSignature.SledgeRope)
+            {
+                DungeonShockwave.Spawn(_home, null, _controller.gameObject, 0f, 0f);
+            }
+            else if (signature == RegionBossSignature.TarSoak)
+            {
+                _tarSeconds = 0f;
+            }
+            else if (signature == RegionBossSignature.TongueSnap)
+            {
+                _tongueAt = FlatDistance(_signatureImpact, _signatureOrigin);
+            }
+            else if (signature == RegionBossSignature.TinCrowns)
+            {
+                foreach (Vector2 crown in RegionBossRules.CrownSpots(Flat(_signatureImpact), _tosses))
+                {
+                    Vector3 at = new Vector3(crown.x, _signatureImpact.y, crown.y);
+                    DungeonShockwave.Spawn(at, null, _controller.gameObject, 0f, 0f);
+                    DungeonFx.Say(at + Vector3.up * 1.2f, Text(RegionBossTexts.CrownKey));
+                }
+            }
+            else if (signature == RegionBossSignature.BellowsBreath)
+            {
+                _blowsOut = RegionBossRules.BellowsBlowsOut(_breaths++);
+                warning = RegionBossTexts.BellowsBreathKey(_blowsOut);
+            }
+            else if (signature == RegionBossSignature.RisingSprings)
+            {
+                _rise = RegionBossRules.SpringsRiseOf(_rises++);
+                warning = RegionBossTexts.SpringsRiseKey(_rise);
+                DungeonShockwave.Spawn(_home, null, _controller.gameObject, 0f, 0f);
+            }
+            else if (signature == RegionBossSignature.ReliefPounce)
+            {
+                DungeonShockwave.Spawn(_home, null, _controller.gameObject, 0f, 0f);
+            }
+            else if (signature == RegionBossSignature.HoldHatches)
+            {
+                foreach (Vector2 hatch in RegionBossRules.HatchSpots(Flat(_home)))
+                {
+                    Vector3 at = new Vector3(hatch.x, _home.y, hatch.y);
+                    DungeonShockwave.Spawn(at, null, _controller.gameObject, 0f, 0f);
+                    DungeonFx.Say(at + Vector3.up * 1.2f, Text(RegionBossTexts.HatchKey));
+                }
             }
 
             DungeonShockwave.Spawn(MarksTheHeroSpot(signature) ? _signatureImpact : transform.position, null, _controller.gameObject, 0f, 0f);
@@ -857,6 +958,127 @@ namespace Rapadura.Gameplay.Enemies
 
                     break;
 
+                case RegionBossSignature.GoldenTouch:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (_health != null && RegionBossRules.GoldenTouchHits(_healthAtWarning, _health.CurrentHealth, _health.MaxHealth, FlatDistance(hero.position, transform.position)))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.GoldDamageFactor), ElementType.Holy, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.ClumsyFall:
+                    Vector2 landed = Flat(_signatureOrigin) + RegionBossRules.FallDirection(_falls) * (RegionBossRules.FallLength * 0.5f);
+                    DungeonShockwave.Spawn(new Vector3(landed.x, _signatureOrigin.y, landed.y), null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.ClumsyFallHits(_falls++, Flat(_signatureOrigin), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.FallDamageFactor), ElementType.Earth, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.MoltenWake:
+                    foreach (Vector2 spot in _wake)
+                    {
+                        DungeonShockwave.Spawn(new Vector3(spot.x, transform.position.y, spot.y), null, _controller.gameObject, 0f, 0f);
+                    }
+
+                    if (RegionBossRules.WakeHits(_wake, heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.WakeDamageFactor), ElementType.Fire, _controller.gameObject);
+                    }
+
+                    _wake.Clear();
+                    break;
+
+                case RegionBossSignature.SledgeRope:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.SledgeRopeHits(Flat(_home), Flat(transform.position), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.SledgeDamageFactor), ElementType.Earth, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.TarSoak:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.TarSoakHits(_tarSeconds))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.TarDamageFactor), ElementType.Dark, _controller.gameObject);
+                    }
+
+                    _tarSeconds = 0f;
+                    break;
+
+                case RegionBossSignature.HoldHatches:
+                    Vector2 hatchOut = RegionBossRules.NearestHatch(Flat(_home), heroFlat);
+                    DungeonShockwave.Spawn(new Vector3(hatchOut.x, _home.y, hatchOut.y), null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.HatchHits(Flat(_home), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.HatchDamageFactor), ElementType.Dark, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.TongueSnap:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.TongueSnapHits(_tongueAt, FlatDistance(hero.position, transform.position)))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.TongueDamageFactor), ElementType.Poison, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.TinCrowns:
+                    foreach (Vector2 crown in RegionBossRules.CrownSpots(Flat(_signatureImpact), _tosses))
+                    {
+                        DungeonShockwave.Spawn(new Vector3(crown.x, _signatureImpact.y, crown.y), null, _controller.gameObject, 0f, 0f);
+                    }
+
+                    if (RegionBossRules.TinCrownsHit(Flat(_signatureImpact), _tosses++, heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.CrownDamageFactor), ElementType.Physical, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.BellowsBreath:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.BellowsHits(_blowsOut, Flat(_signatureOrigin), Flat(_signatureImpact) - Flat(_signatureOrigin), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.BellowsDamageFactor), _blowsOut ? ElementType.Fire : ElementType.Wind, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.RisingSprings:
+                    DungeonShockwave.Spawn(_home, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.SpringsHit(_rise, Flat(_home), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.SpringsDamageFactor), ElementType.Ice, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.ReliefPounce:
+                    DungeonShockwave.Spawn(_signatureImpact, null, _controller.gameObject, 0f, 0f);
+                    DungeonShockwave.Spawn(_home, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.ReliefPounceHits(Flat(_signatureImpact), Flat(_home), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.ReliefDamageFactor), ElementType.Earth, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.SmokeCorral:
+                    DungeonShockwave.Spawn(_signatureImpact, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.SmokeCorralHits(Flat(_signatureImpact), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.CorralDamageFactor), ElementType.Dark, _controller.gameObject);
+                    }
+
+                    break;
+
                 case RegionBossSignature.GreedOfTheArk:
                     // The hero's health lives on PlayerStats, not on a Health. The Ark never kills (GreedDamage stops at 1 life left), so it goes
                     // through the path that cannot pass that floor: ApplyHazardDamage caps the defence multiplier at 1 and keeps 1 life.
@@ -1133,7 +1355,8 @@ namespace Rapadura.Gameplay.Enemies
             || signature == RegionBossSignature.CeilingFall || signature == RegionBossSignature.ForgeStroke
             || signature == RegionBossSignature.ForgottenPlanks || signature == RegionBossSignature.RunawayRun
             || signature == RegionBossSignature.RootTrail || signature == RegionBossSignature.NoiseFright
-            || signature == RegionBossSignature.GrowingEclipse;
+            || signature == RegionBossSignature.GrowingEclipse || signature == RegionBossSignature.ReliefPounce
+            || signature == RegionBossSignature.SmokeCorral;
 
         private static long UtcDay() => (long)(System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc)).TotalDays;
 

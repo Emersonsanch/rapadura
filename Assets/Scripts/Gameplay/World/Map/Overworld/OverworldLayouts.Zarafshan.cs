@@ -63,6 +63,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>O Velho da Névoa's arena (05, map boss): the ring the Copas de Garajonay already keep at the end of their north trail (GarajonayOffset + (−16, 124)).</summary>
         public static readonly Vector2 VelhoDaNevoaArena = new Vector2(1209f, 424f);
+
+        /// <summary>A Mãe-Lodo's arena (03, map boss): the ring the Brejo already keeps at the Poço Turvo, where she swallowed the spring (BrejoOffset + (−30, −96)).</summary>
+        public static readonly Vector2 MaeLodoArena = new Vector2(850f, -656f);
         public static readonly Vector2 GarajonayOffset = new Vector2(1225f, 300f);
         public static readonly Vector2 MihrshahOffset = new Vector2(1150f, 1050f);
 

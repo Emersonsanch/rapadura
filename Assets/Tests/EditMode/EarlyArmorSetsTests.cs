@@ -49,7 +49,7 @@ namespace Rapadura.Tests
         {
             CollectionAssert.AreEqual(Sets.Select(s => s.Set).ToList(), ArmorSetRules.Early.ToList());
             CollectionAssert.AreEqual(ArmorSetRules.Early.ToList(), ArmorSetRules.All.Take(ArmorSetRules.Early.Count).ToList());
-            Assert.AreEqual(ArmorSetRules.Early.Count + ArmorSetRules.Middle.Count + ArmorSetRules.Far.Count, ArmorSetRules.All.Count);
+            Assert.AreEqual(ArmorSetRules.Early.Count + ArmorSetRules.Middle.Count + ArmorSetRules.High.Count + ArmorSetRules.Far.Count, ArmorSetRules.All.Count);
             Assert.AreEqual(ArmorSetRules.All.Count, ArmorSetRules.All.Select(s => s.Id).Distinct().Count());
         }
 

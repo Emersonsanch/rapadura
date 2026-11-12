@@ -50,6 +50,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>O Coral da Duna's arena (10, map boss): the stone ring between the dune waves, by the trail west of the Poço das Tamareiras.</summary>
         public static readonly Vector2 CoralDaDunaArena = new Vector2(-312f, -1516f);
+
+        /// <summary>O Chefe Coroado's arena (11, map boss): the stone ring in the Ermos do Tambor Rubro, by the trail through the red canyons.</summary>
+        public static readonly Vector2 ChefeCoroadoArena = new Vector2(-1052f, -1640f);
         public static readonly Vector2 PocoTamareirasOffset = new Vector2(0f, -1480f);
         public static readonly Vector2 TamborRubroOffset = new Vector2(-800f, -1600f);
         public static readonly Vector2 TorreDeTaipaOffset = new Vector2(800f, -1450f);
@@ -249,6 +252,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, 960f, -560f, 0f, 0.8f);
             Landmark(w, MapLandmarkKind.StoneRing, RaizQueBebeuOPocoArena.x, RaizQueBebeuOPocoArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, CoralDaDunaArena.x, CoralDaDunaArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, ChefeCoroadoArena.x, ChefeCoroadoArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

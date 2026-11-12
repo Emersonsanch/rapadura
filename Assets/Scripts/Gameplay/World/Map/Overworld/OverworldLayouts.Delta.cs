@@ -80,17 +80,18 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private static class Delta
         {
             public const string Ooze = "enemy_cave_ooze";
-            public const string LanternFish = "enemy_cave_lantern_fish";
+            public const string LanternFish = "enemy_forest_mudskipper";
             public const string Crow = "enemy_cave_dark_crow";
             public const string Bats = PeriodSpawnTable.CaveBats;
             public const string Crocodile = "enemy_forest_mangrove_crocodile";
             public const string Python = "enemy_forest_dimmed_python";
             public const string Otter = "enemy_forest_thief_otter";
-            public const string Lantern = "enemy_desert_broken_lantern";
+            public const string Lantern = "enemy_forest_marsh_wisp";
             public const string Gull = "enemy_forest_thief_gull";
             public const string Crab = "enemy_forest_coconut_crab";
             public const string Spider = PeriodSpawnTable.ForestSpider;
             public const string Boar = NightVariantRules.PeccaryEnemyId;
+            public const string BullFrog = "enemy_forest_bull_frog";
             public const string Potoo = NightVariantRules.PotooEnemyId;
             public const string Monkey = "enemy_forest_thief_monkey";
             public const string Hawk = "enemy_mountain_crested_hawk";
@@ -386,11 +387,14 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             NightSpecies ghostHeron = NightVariantRules.RasgaMortalha;
             NightSpecies bats = NightVariantRules.MorcegoVampiro;
 
-            // Lago de Jhilpur (31): the Peixe-Saltador de Lodo [enxame] (lantern fish), the Gavial do Lodo [tanque] (the sand
+            // Lago de Jhilpur (31): the Peixe-Saltador de Lodo [enxame] (its own beast now, WideBeasts), the Gavial do Lodo [tanque] (the sand
             // snake), the Garça-Lança Apagada [distância] (the gull's body).
             lago.Fauna.Add(Fauna("peixes_saltadores", "[enxame]", T(N(Delta.LanternFish, 3), N(Delta.Ooze, 1)), T(V(Delta.LanternFish, 2), S(fireflies, 1)), 5));
             lago.Fauna.Add(Fauna("gaviais_do_lodo", "[tanque]", T(N(Delta.Crocodile, 3), N(Delta.Crab, 1)), T(V(Delta.Crocodile, 2), V(Delta.Crab, 1)), 3, null, 28f));
             lago.Fauna.Add(Fauna("garcas_lanca", "[distância]", T(N(MidBeasts.SpearHeron, 3), N(Delta.Hawk, 1)), T(V(MidBeasts.SpearHeron, 2), S(ghostHeron, 1)), 4, null, 22f));
+            // A second shoal in the shallows: with three groups the lake's only mudskipper clearing fell on the pass trail and was
+            // cleared, and the clearings are dealt by position, so a fourth group gives each of them some (2, 6, 2 and 4 of 14).
+            lago.Fauna.Add(Fauna("peixes_do_raso", "[enxame]", T(N(Delta.LanternFish, 3), N(Delta.Crab, 1)), T(V(Delta.LanternFish, 2), S(fireflies, 1)), 5));
 
             // Bancos de Jhilpur: the Lontra Ladra [rápido] (the jackal's body), mudskippers.
             bancosJhilpur.Fauna.Add(Fauna("lontras_ladras", "[rápido]", T(N(Delta.Otter, 3), N(Delta.Gull, 1)), T(V(Delta.Otter, 2), S(fireflies, 1)), 4));
@@ -431,15 +435,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             chuva.Fauna.Add(Fauna("macacos_da_chuva", "[rápido]", T(N(Delta.Monkey, 3), N(Delta.Potoo, 1)), T(V(Delta.Monkey, 2), S(NightVariantRules.MaeDaLua, 1)), 4));
             chuva.Fauna.Add(Fauna("sanguessugas_da_chuva", "[enxame] [controle]", T(N(MidBeasts.MireLeech, 3), N(Delta.Spider, 1)), T(V(MidBeasts.MireLeech, 2), V(Delta.Spider, 1)), 5));
 
-            // Ilhas de Junco and Pântano Aberto (towards 33): the Fogo-Fátuo Preso [enxame] (broken lanterns, the fireflies at
+            // Ilhas de Junco and Pântano Aberto (towards 33): the Fogo-Fátuo Preso [enxame] (its own beast now, the fireflies at
             // night), the Garça-Fantasma [distância] (the gull by day, the shroud owl at night), the Crocodilo de Musgo [tanque].
             ilhasJunco.Fauna.Add(Fauna("fogos_fatuos", "[enxame]", T(N(Delta.Lantern, 3), N(Delta.Mist, 1)), T(V(Delta.Lantern, 2), S(fireflies, 2)), 5));
             ilhasJunco.Fauna.Add(Fauna("garcas_fantasma", "[distância]", T(N(Delta.Gull, 3), N(Delta.Crow, 1)), T(V(Delta.Gull, 1), S(ghostHeron, 2)), 4, null, 22f));
             pantano.Fauna.Add(Fauna("fogos_fatuos_do_pantano", "[enxame]", T(N(Delta.Lantern, 3), N(Delta.Bats, 1)), T(V(Delta.Lantern, 2), S(fireflies, 2)), 5));
             pantano.Fauna.Add(Fauna("crocodilos_de_musgo", "[tanque]", T(N(Delta.Crocodile, 3), N(Delta.Ooze, 1)), T(V(Delta.Crocodile, 2), V(Delta.Ooze, 1)), 3, null, 28f));
 
-            // Brejo das Palmeiras (towards 34): the Sapo-Boi [tanque] (the peccary's body), the Cobra-d'Água [rápido].
-            palmeiras.Fauna.Add(Fauna("sapos_boi", "[tanque]", T(N(Delta.Boar, 3), N(Delta.Ooze, 1)), T(S(NightVariantRules.Queixada, 2), V(Delta.Ooze, 1)), 3, null, 28f));
+            // Brejo das Palmeiras (towards 34): the Sapo-Boi [tanque] (its own beast now, WideBeasts), the Cobra-d'Água [rápido].
+            palmeiras.Fauna.Add(Fauna("sapos_boi", "[tanque]", T(N(Delta.BullFrog, 3), N(Delta.Ooze, 1)), T(V(Delta.BullFrog, 2), V(Delta.Ooze, 1)), 3, null, 28f));
             palmeiras.Fauna.Add(Fauna("cobras_dagua", "[rápido]", T(N(Delta.Python, 3), N(Delta.Gull, 1)), T(V(Delta.Python, 2), S(fireflies, 1)), 4));
 
             // Mata Morta and Raízes Afogadas (towards 35): the Raiz Podre [distância] (crows), forgotten trolls (the golem),
@@ -465,11 +469,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // snake's body), the Sapo-Boi [tanque], the Libélula de Fumaça [enxame] (bats), the Cobra-d'Água [rápido].
             ninki.Fauna.Add(Fauna("filhotes_de_ninki_nanka", "[elite]", T(N(Delta.Crocodile, 3), N(Delta.Mist, 1)), T(V(Delta.Crocodile, 2), V(Delta.Mist, 1)), 3, null, 32f));
             ninki.Fauna.Add(Fauna("libelulas_de_fumaca", "[enxame]", T(N(Delta.Bats, 3), N(Delta.Lantern, 1)), T(V(Delta.Bats, 2), S(fireflies, 2)), 5));
-            ninki.Fauna.Add(Fauna("sapos_boi_do_charco", "[tanque]", T(N(Delta.Boar, 3), N(Delta.Ooze, 1)), T(S(NightVariantRules.Queixada, 2), V(Delta.Ooze, 1)), 3, null, 28f));
+            ninki.Fauna.Add(Fauna("sapos_boi_do_charco", "[tanque]", T(N(Delta.BullFrog, 3), N(Delta.Ooze, 1)), T(V(Delta.BullFrog, 2), V(Delta.Ooze, 1)), 3, null, 28f));
             ilhota.Fauna.Add(Fauna("libelulas_das_lanternas", "[enxame]", T(N(Delta.Bats, 3), N(Delta.Lantern, 1)), T(V(Delta.Bats, 2), S(fireflies, 2)), 5));
             ilhota.Fauna.Add(Fauna("cobras_dagua_da_ilhota", "[rápido]", T(N(Delta.Python, 3), N(Delta.Gull, 1)), T(V(Delta.Python, 2), S(ghostHeron, 1)), 4));
             toca.Fauna.Add(Fauna("filhotes_da_toca", "[elite]", T(N(Delta.Crocodile, 3), N(Delta.Golem, 1)), T(V(Delta.Crocodile, 2), V(Delta.Golem, 1)), 3, null, 32f));
-            toca.Fauna.Add(Fauna("sapos_da_toca", "[tanque] [enxame]", T(N(Delta.Boar, 3), N(Delta.Bats, 1)), T(S(NightVariantRules.Queixada, 2), V(Delta.Bats, 1)), 4));
+            toca.Fauna.Add(Fauna("sapos_da_toca", "[tanque] [enxame]", T(N(Delta.BullFrog, 3), N(Delta.Bats, 1)), T(V(Delta.BullFrog, 2), V(Delta.Bats, 1)), 4));
 
             // Coração do Lodo and Olho do Lodo (35): the Filhos do Lodo [enxame] (the lodo, doubled at night), the Bolha de
             // Fumaça [controle], the Gavial-Sombra [tanque], the Raiz Podre [distância].
