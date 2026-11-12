@@ -28,6 +28,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const float HurtFractionPerSecond = 0.015f;
         public const float HealthFloorFraction = 0.35f;
 
+        /// <summary>How far the hero sees in the storm (Docs/Mapas100.md 07: "visão 6 m"): past it the beasts are lost in the sand (bosses show).</summary>
+        public const float StormSightRange = 6f;
+
         /// <summary>The second of the cycle the warning starts.</summary>
         public const float WarningStart = CycleSeconds - StormSeconds - WarningSeconds;
 
@@ -44,6 +47,15 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             float t = SecondOfCycle(unixSeconds);
             return t < WarningStart ? AreiasStormPhase.Calm : t < WarningStart + WarningSeconds ? AreiasStormPhase.Warning : AreiasStormPhase.Storm;
+        }
+
+        /// <summary>
+        /// The hero's sight under the storm: <see cref="StormSightRange"/> while it blows (a shelter breaks the sand, not the dark of it), no cut
+        /// in the calm or the warning, in a town or a free zone, or when the hero is down (<see cref="BeastSightRules.NoLimit"/>).
+        /// </summary>
+        public static float SightRange(AreiasStormPhase phase, bool exempt, bool alive)
+        {
+            return phase == AreiasStormPhase.Storm && !exempt && alive ? StormSightRange : BeastSightRules.NoLimit;
         }
 
         public static bool IsSheltered(Vector2 local, IReadOnlyList<Vector2> shelters)

@@ -19,6 +19,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const string GlareOn = "ui.areias.glare_on";
         public const string GlareShade = "ui.areias.glare_shade";
         public const string GlareOver = "ui.areias.glare_over";
+        public const string StormBlind = "ui.areias.storm_blind";
 
         private static List<LocalizationEntry> _entries;
         private static Dictionary<string, string> _fallback;
@@ -34,6 +35,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             new LocalizationEntry(GlareOn, "Noon on the salt: you can't see past 10 m!", "Meio-dia no sal: você não enxerga além de 10 m!"),
             new LocalizationEntry(GlareShade, "In the tower's shade: you can see again", "Na sombra da torre: dá para enxergar de novo"),
             new LocalizationEntry(GlareOver, "The salt stops blinding", "O sal parou de ofuscar"),
+            new LocalizationEntry(StormBlind, "In the sand you can't see past 6 m: listen for the beasts", "Na areia você não enxerga além de 6 m: escute os bichos"),
         };
 
         public static string Get(LocalizationManager manager, string key)

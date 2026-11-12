@@ -73,7 +73,23 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const string BuiltKey = "rio.raft.built";
 
         /// <summary>The save key of reed clump <paramref name="clump"/> (a time mark: the unix second it was last cut, 0 = never).</summary>
-        public static string ReedKey(int clump) => "rio.raft.reed." + clump;
+        public static string ReedKey(int clump)
+        {
+            // Read every frame by the driver: each key is built once (same text as "rio.raft.reed." + clump).
+            if (clump < 0 || clump >= 256)
+            {
+                return "rio.raft.reed." + clump;
+            }
+
+            if (s_reedKeys == null || clump >= s_reedKeys.Length)
+            {
+                System.Array.Resize(ref s_reedKeys, clump + 1);
+            }
+
+            return s_reedKeys[clump] ??= "rio.raft.reed." + clump;
+        }
+
+        private static string[] s_reedKeys;
 
         /// <summary>Whether a clump last cut at <paramref name="cutAt"/> has grown back by <paramref name="now"/> (unix seconds).</summary>
         public static bool ReedReady(long cutAt, long now) => cutAt <= 0L || now - cutAt >= ReedRegrowSeconds;

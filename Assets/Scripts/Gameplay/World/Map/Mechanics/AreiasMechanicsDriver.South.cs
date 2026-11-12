@@ -15,8 +15,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// outside their maps): the sunbeams of the Galerias do Karez (09, <see cref="KarezSunbeamRules"/>: short-lived ManaRegen effects on the
     /// hero, dazzle effects on the beasts in a beam, refreshed while they apply, so they end by themselves if the driver stops), the singing of
     /// the Dunas que Cantam (10, <see cref="DuneSongRules"/>: a slide down a dune stuns the beasts round the hero) and the blinding salt of the
-    /// Trono de Namrael (12, <see cref="NamraelGlareRules"/>: at noon the renderers of the beasts past 10 m are switched off, and every one is
-    /// switched back on when the glare ends, the hero leaves the salt or the driver stops). Never takes the controls and deals no damage.
+    /// Trono de Namrael (12, <see cref="NamraelGlareRules"/>: at noon the beasts past 10 m are lost to sight). The sight cuts, this one and the
+    /// sandstorm's 6 m (07, set in Update), go through one <see cref="BeastSightHider"/>, which shows every beast again when the cut ends, the
+    /// hero leaves the region or the driver stops. Never takes the controls and deals no damage.
     /// </summary>
     public sealed partial class AreiasMechanicsDriver
     {
@@ -26,7 +27,6 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private const float SouthEffectSeconds = 1.2f;
         private const float SouthEffectRefresh = 0.5f;
         private const float BeastPassSeconds = 0.5f;
-        private const float GlarePassSeconds = 0.2f;
         private const float SouthBeastRange = 80f;
         private const float BeamViewRange = 110f;
         private const float BeamHeight = 26f;
@@ -44,10 +44,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private readonly StaticGroundCache _southGround = new StaticGroundCache();
         private readonly DuneSlide _slide = new DuneSlide();
-        private readonly Dictionary<EnemyController, Renderer[]> _glareHidden = new Dictionary<EnemyController, Renderer[]>();
-        private readonly List<EnemyController> _glareSeen = new List<EnemyController>();
-        private readonly List<EnemyController> _glareStale = new List<EnemyController>();
-        private readonly List<Renderer> _rendererScratch = new List<Renderer>();
+        private readonly BeastSightHider _sight = new BeastSightHider();
         private readonly LineRenderer[] _glints = new LineRenderer[GlintCount];
 
         private BuffController _heroBuffs;
@@ -78,7 +75,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private NamraelGlarePhase _glarePhase;
         private bool _blinded;
         private bool _shadedBefore;
-        private float _nextGlarePass;
+        private float _glareSight;
+        private float _stormSight;
+        private bool _stormBlindBefore;
 
         private void StartSouth()
         {
@@ -148,6 +147,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             LeaveGalleries();
             LeaveDunes();
             LeaveSalt();
+            RevealAll();
         }
 
         // ------------------------------------------------------------------
@@ -435,110 +435,31 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _shadedBefore = shaded || onPost;
             _blinded = blinded;
             ShowGlints(blinded);
-            if (!blinded)
-            {
-                RevealAll();
-                return;
-            }
-
-            if (Time.time < _nextGlarePass)
-            {
-                return;
-            }
-
-            _nextGlarePass = Time.time + GlarePassSeconds;
-            _glareSeen.Clear();
-            foreach (EnemyController enemy in EnemyController.EnabledEnemies)
-            {
-                if (enemy == null || enemy.Health == null || !enemy.Health.IsAlive)
-                {
-                    continue;
-                }
-
-                Vector2 at = new Vector2(enemy.transform.position.x, enemy.transform.position.z) - _origin;
-                if (!NamraelGlareRules.Hidden(true, enemy.IsBoss, Vector2.Distance(at, local)))
-                {
-                    continue;
-                }
-
-                _glareSeen.Add(enemy);
-                HideInGlare(enemy);
-            }
-
-            // Every beast hidden before and not lost in the glare now (came close, died, despawned) shows again.
-            _glareStale.Clear();
-            foreach (EnemyController enemy in _glareHidden.Keys)
-            {
-                if (enemy == null || !_glareSeen.Contains(enemy))
-                {
-                    _glareStale.Add(enemy);
-                }
-            }
-
-            foreach (EnemyController enemy in _glareStale)
-            {
-                Reveal(enemy);
-            }
+            _glareSight = blinded ? NamraelGlareRules.SightRange : BeastSightRules.NoLimit;
         }
 
-        private void HideInGlare(EnemyController enemy)
+        /// <summary>
+        /// The hero's sight this frame: the shorter of the sandstorm's (07, <see cref="AreiasStormRules.StormSightRange"/>, set by Update) and the
+        /// salt's (12), fed to the shared <see cref="BeastSightHider"/>.
+        /// </summary>
+        private void TickSight()
         {
-            if (_glareHidden.ContainsKey(enemy))
+            bool stormBlind = BeastSightRules.Active(_stormSight);
+            if (stormBlind && !_stormBlindBefore)
             {
-                return;
+                SaySouth(AreiasSouthTexts.StormBlind);
             }
 
-            _rendererScratch.Clear();
-            enemy.GetComponentsInChildren(false, _rendererScratch);
-            var hidden = new List<Renderer>(_rendererScratch.Count);
-            foreach (Renderer renderer in _rendererScratch)
-            {
-                if (renderer != null && renderer.enabled)
-                {
-                    renderer.enabled = false;
-                    hidden.Add(renderer);
-                }
-            }
-
-            _glareHidden[enemy] = hidden.ToArray();
-        }
-
-        private void Reveal(EnemyController enemy)
-        {
-            if (!_glareHidden.TryGetValue(enemy, out Renderer[] renderers))
-            {
-                return;
-            }
-
-            _glareHidden.Remove(enemy);
-            foreach (Renderer renderer in renderers)
-            {
-                if (renderer != null)
-                {
-                    renderer.enabled = true;
-                }
-            }
+            _stormBlindBefore = stormBlind;
+            _sight.Tick(_player.position, BeastSightRules.Shortest(_stormSight, _glareSight), Time.time);
         }
 
         private void RevealAll()
         {
-            if (_glareHidden.Count == 0)
-            {
-                return;
-            }
-
-            foreach (Renderer[] renderers in _glareHidden.Values)
-            {
-                foreach (Renderer renderer in renderers)
-                {
-                    if (renderer != null)
-                    {
-                        renderer.enabled = true;
-                    }
-                }
-            }
-
-            _glareHidden.Clear();
+            _stormSight = BeastSightRules.NoLimit;
+            _glareSight = BeastSightRules.NoLimit;
+            _stormBlindBefore = false;
+            _sight.RevealAll();
         }
 
         /// <summary>White glints of the salt round a blinded hero.</summary>
@@ -578,7 +499,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _blinded = false;
             _shadedBefore = false;
             _glarePhase = NamraelGlarePhase.None;
-            RevealAll();
+            _glareSight = BeastSightRules.NoLimit;
             ShowGlints(false);
         }
 

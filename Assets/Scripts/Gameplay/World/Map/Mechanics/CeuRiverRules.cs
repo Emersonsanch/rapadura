@@ -41,7 +41,23 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const float CooldownSeconds = 3f;
 
         /// <summary>The save key of a buoy (a time mark: the unix second it was lit, 0 = dark).</summary>
-        public static string LitKey(int buoy) => "ceu.river.buoy." + buoy;
+        public static string LitKey(int buoy)
+        {
+            // Read every frame by the driver: each key is built once (same text as "ceu.river.buoy." + buoy).
+            if (buoy < 0 || buoy >= 256)
+            {
+                return "ceu.river.buoy." + buoy;
+            }
+
+            if (s_litKeys == null || buoy >= s_litKeys.Length)
+            {
+                System.Array.Resize(ref s_litKeys, buoy + 1);
+            }
+
+            return s_litKeys[buoy] ??= "ceu.river.buoy." + buoy;
+        }
+
+        private static string[] s_litKeys;
 
         public static bool IsLit(long litAt) => litAt > 0L;
 

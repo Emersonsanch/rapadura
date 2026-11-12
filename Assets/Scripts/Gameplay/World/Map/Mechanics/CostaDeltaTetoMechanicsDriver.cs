@@ -279,6 +279,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             {
                 _inTeto = true;
                 TickAvalanche(world - _tetoOrigin, now);
+                TickCold(world - _tetoOrigin);
             }
             else if (_inTeto)
             {
@@ -784,6 +785,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private void LeaveTeto()
         {
+            LeaveCold();
             if (_laneLine != null)
             {
                 _laneLine.enabled = false;

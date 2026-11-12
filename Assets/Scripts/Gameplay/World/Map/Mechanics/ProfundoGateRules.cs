@@ -66,7 +66,23 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const float LampBossFraction = 0.01f;
 
         /// <summary>The save key of gate <paramref name="gate"/> (a time mark: when its seal broke; 0 = still sealed).</summary>
-        public static string MarkKey(int gate) => "profundo.gate." + gate;
+        public static string MarkKey(int gate)
+        {
+            // Read every frame by the driver: each key is built once (same text as "profundo.gate." + gate).
+            if (gate < 0 || gate >= 256)
+            {
+                return "profundo.gate." + gate;
+            }
+
+            if (s_markKeys == null || gate >= s_markKeys.Length)
+            {
+                System.Array.Resize(ref s_markKeys, gate + 1);
+            }
+
+            return s_markKeys[gate] ??= "profundo.gate." + gate;
+        }
+
+        private static string[] s_markKeys;
 
         /// <summary>True once the seal of a gate has broken (any positive mark).</summary>
         public static bool IsOpen(long mark) => mark > 0L;

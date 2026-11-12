@@ -94,12 +94,16 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
-            // The far south (09, 10, 12: AreiasMechanicsDriver.South.cs) runs under the storm, whatever its phase.
-            TickSouth(world, local);
-
             double now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000d;
             AreiasStormPhase phase = AreiasStormRules.PhaseAt(now);
             long index = AreiasStormRules.StormIndex(now);
+            bool exempt = phase != AreiasStormPhase.Calm && (OverworldRules.SettlementAt(_layout, world) != null
+                || OverworldLayouts.AreiasStormFreeZones.Contains(OverworldRules.ZoneAt(_layout, world)?.Id ?? string.Empty));
+
+            // In the storm the hero sees 6 m (07); the far south (09, 10, 12: AreiasMechanicsDriver.South.cs) runs under it, whatever its phase.
+            _stormSight = AreiasStormRules.SightRange(phase, exempt, _stats.IsAlive);
+            TickSouth(world, local);
+            TickSight();
             if (phase == AreiasStormPhase.Calm)
             {
                 if (_sheltered == index - 1L)
@@ -112,8 +116,6 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
-            bool exempt = OverworldRules.SettlementAt(_layout, world) != null
-                || OverworldLayouts.AreiasStormFreeZones.Contains(OverworldRules.ZoneAt(_layout, world)?.Id ?? string.Empty);
             if (exempt)
             {
                 Hide();

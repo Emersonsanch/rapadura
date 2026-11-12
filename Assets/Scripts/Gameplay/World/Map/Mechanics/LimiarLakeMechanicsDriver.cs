@@ -20,7 +20,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// BuffController (bold by a dark lamp, calm by a lit one), refreshed while they apply, so they end by themselves when this driver stops. Deals
     /// no damage; the moment each lamp was lit stays in the save (time marks).
     /// </summary>
-    public sealed class LimiarLakeMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class LimiarLakeMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const string BoldSource = "tages_dark_bold";
@@ -54,6 +54,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private LineRenderer[] _lampLines;
         private long[] _lit;
         private long[] _litLocal;
+        private string[] _litKeys;
         private bool[] _wasBurning;
 
         private StatModifierDefinition _boldDamage;
@@ -98,6 +99,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _lit = new long[lamps];
             _litLocal = new long[lamps];
             _wasBurning = new bool[lamps];
+
+            // The save keys are read every frame in the hall: built once, not concatenated per frame.
+            _litKeys = new string[lamps];
+            for (int i = 0; i < lamps; i++)
+            {
+                _litKeys[i] = TagesDarkRules.LitKey(OverworldLayouts.TagesLamps[i].Id);
+            }
+
             _landingLines = new LineRenderer[2];
             _boldDamage = NewEffect(StatType.AttackDamage, TagesDarkRules.BoldDamageFactor);
             _boldSpeed = NewEffect(StatType.MoveSpeed, TagesDarkRules.BoldSpeedFactor);
@@ -119,6 +128,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             EndRide(false);
             LeaveLake();
             LeaveHall();
+            LeaveStillAir();
         }
 
         private void OnDestroy()
@@ -162,6 +172,16 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             else
             {
                 LeaveHall();
+            }
+
+            // 22 · the still air of the Mercado dos Túneis (LimiarLakeMechanicsDriver.StillAir.cs).
+            if (OverworldLayouts.TunnelMarketBounds.Contains(local))
+            {
+                TickStillAir(local);
+            }
+            else
+            {
+                LeaveStillAir();
             }
 
             if (!acted)
@@ -311,7 +331,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             TagesLamp[] lamps = OverworldLayouts.TagesLamps;
             for (int i = 0; i < lamps.Length; i++)
             {
-                _lit[i] = saved ? progress.GetTimeMark(TagesDarkRules.LitKey(lamps[i].Id)) : _litLocal[i];
+                _lit[i] = saved ? progress.GetTimeMark(_litKeys[i]) : _litLocal[i];
             }
         }
 
@@ -375,7 +395,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _wasBurning[lamp] = true;
             if (ServiceLocator.TryGet(out WorldMapProgress progress))
             {
-                progress.SetTimeMark(TagesDarkRules.LitKey(lamps[lamp].Id), now);
+                progress.SetTimeMark(_litKeys[lamp], now);
             }
 
             _nextHint = Time.unscaledTime + HintCooldown;

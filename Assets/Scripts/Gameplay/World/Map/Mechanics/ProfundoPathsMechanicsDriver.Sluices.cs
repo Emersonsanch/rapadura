@@ -32,7 +32,27 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         /// <summary>Whether sluice <paramref name="index"/> was opened on <paramref name="today"/> in this save.</summary>
         public static bool DrainedIn(WorldMapProgress progress, int index, int today) =>
-            progress != null && ProfundoSluiceRules.DrainedToday(progress.GetDailyMark(ProfundoSluiceRules.MarkKey(OverworldLayouts.ProfundoSluices[index].Id)), today);
+            progress != null && ProfundoSluiceRules.DrainedToday(progress.GetDailyMark(SluiceKey(index)), today);
+
+        /// <summary>The save key of sluice <paramref name="index"/>, built once (Drained is read every frame for every visible sluice).</summary>
+        private static string SluiceKey(int index)
+        {
+            ProfundoSluice[] sluices = OverworldLayouts.ProfundoSluices;
+            if (s_sluiceKeys == null || s_sluiceKeys.Length != sluices.Length)
+            {
+                var keys = new string[sluices.Length];
+                for (int i = 0; i < keys.Length; i++)
+                {
+                    keys[i] = ProfundoSluiceRules.MarkKey(sluices[i].Id);
+                }
+
+                s_sluiceKeys = keys;
+            }
+
+            return s_sluiceKeys[index];
+        }
+
+        private static string[] s_sluiceKeys;
 
         private bool Drained(int index)
         {
@@ -138,7 +158,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _drainedLocalDay[index] = today;
             if (ServiceLocator.TryGet(out WorldMapProgress progress))
             {
-                progress.SetDailyMark(ProfundoSluiceRules.MarkKey(sluice.Id), today);
+                progress.SetDailyMark(SluiceKey(index), today);
             }
 
             _hintSpot = -1;

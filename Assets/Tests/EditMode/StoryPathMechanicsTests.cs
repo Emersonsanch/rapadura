@@ -309,5 +309,21 @@ namespace Rapadura.Tests
                 Assert.AreEqual(i, CeuRiverRules.BuoyAt(buoys, b));
             }
         }
+
+        [Test]
+        public void SaveKeysOfIndexedMarks_KeepTheirTextAndAreBuiltOnce()
+        {
+            // The drivers read these every frame: the same text as before (saves still load), and the same string instance each call.
+            Assert.AreEqual("ceu.river.buoy.3", CeuRiverRules.LitKey(3));
+            Assert.AreEqual("rio.raft.reed.7", RioRaftRules.ReedKey(7));
+            Assert.AreEqual("profundo.gate.2", ProfundoGateRules.MarkKey(2));
+            Assert.AreEqual("profundo.novelo.flight.9", NoveloBridgeRules.MarkKey(9));
+            Assert.AreSame(CeuRiverRules.LitKey(3), CeuRiverRules.LitKey(3));
+            Assert.AreSame(RioRaftRules.ReedKey(0), RioRaftRules.ReedKey(0));
+            Assert.AreSame(ProfundoGateRules.MarkKey(5), ProfundoGateRules.MarkKey(5));
+            Assert.AreSame(NoveloBridgeRules.MarkKey(1), NoveloBridgeRules.MarkKey(1));
+            Assert.AreEqual("ceu.river.buoy.-1", CeuRiverRules.LitKey(-1));
+            Assert.AreEqual("rio.raft.reed.1000", RioRaftRules.ReedKey(1000));
+        }
     }
 }

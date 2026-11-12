@@ -20,7 +20,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// stops); Joaquim's skills open clean pools (rings of Living Water). A whole web holds the hero with a 1.5 s stun and tears; a hero skill that
     /// reaches a web cuts it. Never takes the controls and deals no damage; the moment each web broke stays in the save (time marks).
     /// </summary>
-    public sealed class ZarafshanMireMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class ZarafshanMireMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const string MudSource = "zarafshan_mud";
@@ -55,6 +55,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private LineRenderer[] _webLines;
         private long[] _broken;
         private long[] _brokenLocal;
+        private string[] _brokenKeys;
 
         private StatModifierDefinition _mudEffect;
         private bool _mudOn;
@@ -94,6 +95,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _webLines = new LineRenderer[webs];
             _broken = new long[webs];
             _brokenLocal = new long[webs];
+
+            // The save keys are read every frame in the grove: built once, not concatenated per frame.
+            _brokenKeys = new string[webs];
+            for (int i = 0; i < webs; i++)
+            {
+                _brokenKeys[i] = ZarafshanWebRules.BrokenKey(OverworldLayouts.AmoreirasWebs[i].Id);
+            }
+
             _mudEffect = new StatModifierDefinition
             {
                 displayName = "Lama",
@@ -146,6 +155,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             SetMud(false);
             LeaveMire();
             LeaveGrove();
+            LeaveFog();
         }
 
         private void OnDestroy()
@@ -182,6 +192,16 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             else
             {
                 LeaveGrove();
+            }
+
+            // 05 · the fog of Garajonay (ZarafshanMireMechanicsDriver.Fog.cs).
+            if (OverworldLayouts.GarajonayFogBounds.Contains(local))
+            {
+                TickFog(local);
+            }
+            else
+            {
+                LeaveFog();
             }
         }
 
@@ -319,7 +339,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             ZarafshanWeb[] webs = OverworldLayouts.AmoreirasWebs;
             for (int i = 0; i < webs.Length; i++)
             {
-                _broken[i] = saved ? progress.GetTimeMark(ZarafshanWebRules.BrokenKey(webs[i].Id)) : _brokenLocal[i];
+                _broken[i] = saved ? progress.GetTimeMark(_brokenKeys[i]) : _brokenLocal[i];
             }
         }
 
@@ -329,7 +349,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _broken[web] = now;
             if (ServiceLocator.TryGet(out WorldMapProgress progress))
             {
-                progress.SetTimeMark(ZarafshanWebRules.BrokenKey(OverworldLayouts.AmoreirasWebs[web].Id), now);
+                progress.SetTimeMark(_brokenKeys[web], now);
             }
         }
 

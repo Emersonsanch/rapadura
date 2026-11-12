@@ -786,6 +786,7 @@ Apagada, Javali do Lodo. Chefe do mundo da região: **Saklas** (arconte, mapa 06
 - **Chefe:** **O Velho da Névoa**, lagarto do tamanho de uma casa que ficou sem água; libertado, volta a guardar a mata.
 - **Mecânica:** **névoa**: a cada 3 min a névoa sobe e esconde bichos a mais de 8 m; o Coletor de Névoa da cidade dá
   gotas por névoa atravessada.
+- **No jogo (2026-11-12): névoa** (`GarajonayFogRules`, `ZarafshanMireMechanicsDriver.Fog.cs`, `BeastSightHider`, teste `RouteSightAirColdMechanicsTests`): a cada 3 min (relógio UTC, igual para todos) 2 min 15 s de céu limpo, 10 s de névoa subindo (aviso) e 35 s de névoa; no chão da mata, fora da cidade, o herói não vê bicho a mais de 8 m (chefe sempre aparece), com faixas de névoa em volta; numa plataforma das copas (6 m ou mais acima do chão) fica acima da névoa e vê normal. Passar 20 s de uma névoa no mapa fora da cidade conta como atravessada: 1 gota para o Coletor de Névoa (no máximo 3 por dia do jogo e 3 esperando, salvas em `WorldMapProgress`), que entrega como Erva quando o herói pisa na cidade. Falta: item Gota de Névoa próprio, o Coletor como NPC e a névoa de verdade no visual.
 - **Ganchos:** loot Gota de Névoa, madeira de louro · montaria nova **Lagarto-do-Louro** (§6) · casa: conjunto novo
   **Copas de Louro** (cadeira de cipó, lanterna de casulo).
 - **Noite:** as pontes acendem; **Mardagayl** na mata baixa; vaga-lumes guiam a trilha.
@@ -850,7 +851,7 @@ Enxame de Faíscas Presas (noite). Chefe do mundo: **Namrael** (mapa 12).
   as regiões 3/4 já viraram mundo e o mundo costurado liga as bordas sem portão.)*
 
 ### 07 · Estrada das Caravanas / *Caravan Road* — nv 5–7 · ★
-- **No jogo (2026-11-03): jogável** (`MapLayouts.Areias.cs`): estrada de 5 m oeste→leste, Caravançará do Ammo murado (cais, cisterna, camelos, fardos), desvio norte pela fila de karez e sul para o 08; 4 clareiras nv 5–7 (Escorpião [tanque]; Chacal Apagado [rápido]; Faíscas Presas no crepúsculo/noite, Mardagayl raro; Abutre de Brasa [distância], cospe brasa de 8 m). Atiradores [distância] mantêm distância: se o herói chega a ~3,5–4 m, recuam flanqueando até reabrir o alcance; só o projétil fere, cada um com seu som de tiro. **Tempestade de areia** (`AreiasStormRules`, em toda a Região 2): a cada 10 min, aviso de 15 s e 40 s de areia; fora de abrigo (fogueiras, carroças, ruínas, arcos de pedra, raio 14 m, coluna de luz no mais próximo) tira 1,5% da vida/s até o piso de 35%, nunca mata; cidades e os oásis não pegam. Falta: bicho coroado de Āz, visão 6 m e a caravana que pede escolta, o Ammo vendendo.
+- **No jogo (2026-11-03): jogável** (`MapLayouts.Areias.cs`): estrada de 5 m oeste→leste, Caravançará do Ammo murado (cais, cisterna, camelos, fardos), desvio norte pela fila de karez e sul para o 08; 4 clareiras nv 5–7 (Escorpião [tanque]; Chacal Apagado [rápido]; Faíscas Presas no crepúsculo/noite, Mardagayl raro; Abutre de Brasa [distância], cospe brasa de 8 m). Atiradores [distância] mantêm distância: se o herói chega a ~3,5–4 m, recuam flanqueando até reabrir o alcance; só o projétil fere, cada um com seu som de tiro. **Tempestade de areia** (`AreiasStormRules`, em toda a Região 2): a cada 10 min, aviso de 15 s e 40 s de areia; fora de abrigo (fogueiras, carroças, ruínas, arcos de pedra, raio 14 m, coluna de luz no mais próximo) tira 1,5% da vida/s até o piso de 35%, nunca mata; cidades e os oásis não pegam. Falta: bicho coroado de Āz, a caravana que pede escolta, o Ammo vendendo (a visão 6 m entrou em 2026-11-12, linha abaixo).
 - **Fonte:** a Rota da Seda e os caravançarás; Ammo, o Caravaneiro (Mār Ammō, texto parto M 2).
 - **Bioma e visual:** estepe seca virando areia; areia `#E7C27D`, arenito `#B5482F`, espinheiro `#8DAA3A`; marcos de
   pedra, bocas de karez em fila, carroças quebradas, fardos de seda.
@@ -860,6 +861,7 @@ Enxame de Faíscas Presas (noite). Chefe do mundo: **Namrael** (mapa 12).
   [distância] (bicho real); bicho coroado do bando de Āz [elite] (bíblia §3.4).
 - **Chefe:** nenhum; a **Invasão de Āz** passa por aqui.
 - **Mecânica:** **tempestade de areia** (evento de hoje) a cada ~10 min: visão 6 m, a caravana para e pede escolta.
+- **No jogo (2026-11-12): visão 6 m na tempestade** (`AreiasStormRules.SightRange`, `AreiasMechanicsDriver`, `BeastSightHider`, teste `RouteSightAirColdMechanicsTests`): enquanto a areia sopra (os 40 s), em toda a Região 2 fora das cidades e dos oásis, o herói não vê bicho a mais de 6 m (chefe sempre aparece), abrigado ou não; junto com o sal do 12 vale a menor visão. Falta: a caravana que pede escolta.
 - **Ganchos:** loot Moeda Furada de Qocho, fardos · montaria `mount_pack_donkey`, `mount_rhea` · casa: **Caravana do Vô
   Jorge**.
 - **Noite:** **Enxame de Faíscas Presas**; frio (o fôlego volta 20% mais devagar fora do caravançará).
@@ -936,7 +938,7 @@ Enxame de Faíscas Presas (noite). Chefe do mundo: **Namrael** (mapa 12).
   [elite]; Espelho de Sal [distância, reflete projéteis] (invenção).
 - **Chefe:** **chefe do mundo: Namrael, o Escorpião-Rei / da Lua Cheia** (já no código).
 - **Mecânica:** **sal que ofusca**: ao meio-dia o sal brilha e corta a visão a 10 m (aqui o dia é o perigoso).
-- **No jogo (2026-11-12): sal que ofusca** (`NamraelGlareRules`, `AreiasMechanicsDriver.South.cs`, `OverworldLayouts.NamraelShadeTowers`, teste `SouthSandsSummitMechanicsTests`): das 11h às 14h do relógio do jogo (aviso às 10h30), no sal aberto do mapa, o herói não vê bicho a mais de 10 m (os renderers deles apagam e voltam quando chegam perto, quando o brilho passa ou o herói sai do sal; os atiradores continuam atirando); brilhos brancos em volta do herói. A sombra das 6 torres de taipa (14 m) e o posto Torre de Taipa são seguros; chefe sempre aparece. Falta: o clarão na tela e o Espelho de Sal refletindo projéteis.
+- **No jogo (2026-11-12): sal que ofusca** (`NamraelGlareRules`, `AreiasMechanicsDriver.South.cs`, `OverworldLayouts.NamraelShadeTowers`, teste `SouthSandsSummitMechanicsTests`): das 11h às 14h do relógio do jogo (aviso às 10h30), no sal aberto do mapa, o herói não vê bicho a mais de 10 m (os renderers deles e de tudo o que estiver preso neles apagam pelo `BeastSightHider` e voltam quando chegam perto, quando o brilho passa ou o herói sai do sal; os bichos não têm barra de vida nem nome no mundo, e os números de dano saem soltos no golpe; os atiradores continuam atirando); brilhos brancos em volta do herói. A sombra das 6 torres de taipa (14 m) e o posto Torre de Taipa são seguros; chefe sempre aparece. Falta: o clarão na tela e o Espelho de Sal refletindo projéteis.
 - **Ganchos:** loot Cristal de Sal Rubro (refino) · montaria `mount_light_jaguar` (noite) · casa: troféu de Namrael.
 - **Noite:** visão boa sob a lua; Namrael só na lua cheia; Ubır nas torres.
 
@@ -1172,6 +1174,7 @@ região. Quanto mais fundo (sul) e mais longe da Vila, mais difícil.
 - **Chefe:** **O Engarrafador Guloso**, kobold que guardou todo o Ar Sereno para Āz; vencido, solta as garrafas e vira
   ajudante da feira.
 - **Mecânica:** **ar parado**: longe dos tubos o fôlego cai devagar; as Garrafas de Ar Sereno resolvem.
+- **No jogo (2026-11-12): ar parado** (`TunnelStillAirRules`, `LimiarLakeMechanicsDriver.StillAir.cs`, `OverworldLayouts.TunnelAirPipes`, teste `RouteSightAirColdMechanicsTests`): 11 tubos de ar (o do mercado e um a cada 100 m nas quatro galerias, coluna verde-cobre) respiram 30 m em volta; longe de todos, no mapa e fora do mercado, o fôlego não volta (StaminaRegen −100%) e cai devagar (um décimo do gasto de correr, 1,5/s), nunca abaixo de 30%. Com uma Garrafa de Ar Sereno aberta (a das lojas, +20% por 60 s) nada disso vale. Falta: tubos de cobre de verdade nas galerias.
 - **Ganchos:** loot sucata, lápis-lazúli, garrafas · montaria `mount_giant_anteater` · casa: conjunto novo **Bazar dos
   Túneis** (lanterna de garrafa).
 - **Noite:** metade do mercado fecha; os tocados por Āz saem em dobro.
@@ -1580,6 +1583,7 @@ Códice; aqui, professor e contador de mapas). Chefe do mundo: **Aydahar** (mapa
 - **Chefe:** **O Grande Almas**, peludo gigante que esconde faíscas na neve por medo; libertado, vira o guia da geleira.
 - **No jogo (2026-11-11): chefe do mapa O Grande Almas** (`enemy_mountain_great_almas`, Nv 86): anel de pedra na trilha da margem do Lago Turquesa, abaixo da geleira (`GrandeAlmasArena`, a 8 m da trilha, desnível 0,08 m a 12 m; as áreas da própria geleira pedem Grampos); habilidade própria **faíscas na neve** (`SnowSparkSpots`, `SnowBurstHits`): aviso de 2,4 s com "Faísca!" sobre as 3 faíscas que ele escondeu a 4,5 m de si; a neve estoura em 8 m e só quem está em cima de uma faísca (1,6 m) escapa; a cada arremesso elas giram 40°. Mais forte à noite. Loot: Pedra da Alma Viva (50 %, 1); libertado, mostra as faíscas e vira guia. Falta: o medidor de frio e o guia da geleira depois de libertado.
 - **Mecânica:** **frio**: medidor de frio fora dos abrigos (lentidão leve quando cheio); fogueiras e chá de karkadé zeram.
+- **No jogo (2026-11-12): frio** (`GlacierColdRules`, `CostaDeltaTetoMechanicsDriver.Frio.cs`, `OverworldLayouts.GlacierFires`, teste `RouteSightAirColdMechanicsTests`): no Campo de Seracs e na geleira, fora da Cabana do Iaque, o medidor de frio enche 1/s (100 s), o dobro à noite e a metade com Chá de Karkadé ativo (o prato é feito na cidade, então o chá não zera: mesma escolha do calor da Caldeira); aviso a 60; cheio, o herói anda a ×0,85 até se aquecer. Numa das 5 fogueiras de pastor (7 m, coluna laranja) ou na Cabana zera na hora; fora do mapa cai 10/s. Nunca fere. Falta: fogueira de verdade no modelo e o medidor na tela.
 - **Ganchos:** loot gelo eterno (refino), lã · montaria `mount_snow_tiger` (Despertar), `mount_woolly_mammoth` · casa:
   **Picos de Litema**.
 - **Noite:** o gelo brilha azul; o Almas sai; frio dobra.

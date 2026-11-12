@@ -52,7 +52,23 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const float FlightEnd = FlightStart + FlightStep * FlightCount;
 
         /// <summary>The save key of flight <paramref name="flight"/> (1–9; a time mark: when it lit, 0 = still dark).</summary>
-        public static string MarkKey(int flight) => "profundo.novelo.flight." + flight;
+        public static string MarkKey(int flight)
+        {
+            // Read every frame by the driver: each key is built once (same text as "profundo.novelo.flight." + flight).
+            if (flight < 0 || flight >= 256)
+            {
+                return "profundo.novelo.flight." + flight;
+            }
+
+            if (s_markKeys == null || flight >= s_markKeys.Length)
+            {
+                System.Array.Resize(ref s_markKeys, flight + 1);
+            }
+
+            return s_markKeys[flight] ??= "profundo.novelo.flight." + flight;
+        }
+
+        private static string[] s_markKeys;
 
         /// <summary>South end (region z) of flight <paramref name="flight"/>.</summary>
         public static float FlightSouth(int flight) => FlightStart + FlightStep * flight;

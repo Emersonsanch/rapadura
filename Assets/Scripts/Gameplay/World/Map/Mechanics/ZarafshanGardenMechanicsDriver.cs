@@ -50,6 +50,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private LineRenderer[] _canals;
         private long[] _freed;
         private long[] _freedLocal;
+        private string[] _freedKeys;
 
         private float _nextHint;
         private int _hintSpot = -1;
@@ -85,6 +86,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _canals = new LineRenderer[n];
             _freed = new long[n];
             _freedLocal = new long[n];
+
+            // The save keys are read every frame in the garden: built once, not concatenated per frame.
+            _freedKeys = new string[n];
+            for (int i = 0; i < n; i++)
+            {
+                _freedKeys[i] = ZarafshanGardenRules.FreedKey(OverworldLayouts.MihrshahSparks[i].Id);
+            }
         }
 
         private void OnEnable() => _combat.Attach();
@@ -160,7 +168,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             ZarafshanGardenSpark[] sparks = OverworldLayouts.MihrshahSparks;
             for (int i = 0; i < sparks.Length; i++)
             {
-                _freed[i] = saved ? progress.GetTimeMark(ZarafshanGardenRules.FreedKey(sparks[i].Id)) : _freedLocal[i];
+                _freed[i] = saved ? progress.GetTimeMark(_freedKeys[i]) : _freedLocal[i];
             }
         }
 
@@ -235,7 +243,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _freed[cage] = now;
             if (ServiceLocator.TryGet(out WorldMapProgress progress))
             {
-                progress.SetTimeMark(ZarafshanGardenRules.FreedKey(sparks[cage].Id), now);
+                progress.SetTimeMark(_freedKeys[cage], now);
             }
 
             _nextHint = Time.unscaledTime + HintCooldown;
