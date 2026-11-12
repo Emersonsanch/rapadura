@@ -65,7 +65,9 @@ def test_creatures_are_scaled_by_enemy_level_scaling(world):
 def test_perigoso_matches_level_danger_rules(world):
     d = world.danger
     assert d.expected_hit(0) == 1.0 and d.hit_rate(19) == 1.0
-    assert d.damage_mult(20) == pytest.approx(1.5) and d.damage_mult(25) == pytest.approx(2.25) and d.damage_mult(40) == 3.0
+    assert d.damage_mult(20) == pytest.approx(1.15) and d.damage_mult(25) == pytest.approx(1.225)
+    assert d.damage_mult(30) == pytest.approx(1.3) and d.damage_mult(40) == pytest.approx(1.3)
+    assert d.worst_hit(30) == pytest.approx(1.95) and d.expected_hit(30) == pytest.approx(1.3 * 1.125)
     assert d.hit_rate(20) == pytest.approx(0.6) and d.crit(10) == pytest.approx(0.25)
 
 
@@ -77,7 +79,19 @@ def test_perigoso_only_makes_fights_worse(result):
     for _, by in result.perigoso_bosses:
         parked = [by[delta]["parked"] for delta in l5.PERIGOSO_DELTAS]
         assert parked == sorted(parked, reverse=True)
-        assert by[30]["swings"] <= 3 and by[30]["parked"] < l5.PARKED_TARGET[0]  # +30 is "quase hit-kill" by design
+        assert by[30]["parked"] < by[0]["parked"] and by[30]["kill"] > 1.5 * by[0]["kill"]
+
+
+def test_perigoso_plus_30_boss_is_deadly_but_not_a_few_swings(result):
+    """Docs/Balanco100a500.md §4.6: 30 levels under a world boss the hero dies in 5-8 basic swings (before: 2-3), the
+    biggest blow stays under 60% and standing still still loses the fight long before the boss falls."""
+    low, high = l5.PERIGOSO_BOSS_SWINGS
+    for boss, by in result.perigoso_bosses:
+        plus30 = by[30]
+        assert low <= plus30["swings"] <= high, boss.level
+        assert plus30["blow"] < l5.PERIGOSO_BOSS_BLOW, boss.level
+        assert plus30["parked"] < l5.PARKED_TARGET[1] and plus30["parked"] < plus30["kill"] / 2, boss.level
+        assert by[20]["swings"] >= plus30["swings"], boss.level
 
 
 def test_off_target_bands_are_the_documented_ones(result):

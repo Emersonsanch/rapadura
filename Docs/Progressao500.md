@@ -9,8 +9,8 @@
 > `ICreatureLevelSource`): até o 15 vale o XP do asset, acima a tabela do §1.2; depois o corte por diferença e, mais de 20
 > abaixo, sem equipamento (`EnemyLevelScaling.LeveledKillExperience`/`DropsEquipment`). Encontros da campanha não mudam.
 > **"Perigoso" aplicado no combate (2026-11-06, regra B, decisão do dono):** bicho com nível próprio 10+ acima do herói
-> ganha +25% de crítico (×1,5); 20+ acima o herói erra 40% ("Errou!") e o dano do bicho vai de ×1,5 (+20) a ×3 (+30,
-> linear, teto ×3) — `LevelDangerRules` (C# puro, servidor) ligado em `PlayerStats`/`Health` por `LevelDangerCombat`.
+> ganha +25% de crítico (×1,5); 20+ acima o herói erra 40% ("Errou!") e o dano do bicho vai de ×1,15 (+20) a ×1,3 (+30,
+> linear, teto ×1,3; era ×1,5 → ×3 até 2026-11-12, ver `Docs/Balanco100a500.md` §4.6) — `LevelDangerRules` (C# puro, servidor) ligado em `PlayerStats`/`Health` por `LevelDangerCombat`.
 > Ainda não: montarias (§6), respawn (§7, feito por outro agente), NG+ com piso.
 > Pedido do usuário: "as montarias ... quero que elas evoluam também conforme os heróis forem evoluindo, porém elas têm
 > limite até lvl 20 e os heróis podem chegar até nível 500; quero que você também crie no md para desenvolvimento até
@@ -81,7 +81,7 @@ continua exatamente no ritmo de hoje**; daí em diante os bichos dos mapas novos
 | até 10 níveis abaixo, ou acima | 100% |
 | 11–20 abaixo | −5% por nível além do 10 (20 abaixo = 50%) |
 | mais de 20 abaixo | 10% (e sem drop de equipamento; materiais continuam) |
-| 10 ou mais acima | 100% de XP; **"Perigoso" (regra B, aplicada):** +10 → bicho +25% de crítico; +20 → herói −40% de acerto ("Errou!") e dano do bicho ×1,5, subindo linear até ×3 no +30 (teto). Abaixo de +10 nada muda (`LevelDangerRules`) |
+| 10 ou mais acima | 100% de XP; **"Perigoso" (regra B, aplicada):** +10 → bicho +25% de crítico; +20 → herói −40% de acerto ("Errou!") e dano do bicho ×1,15, subindo linear até ×1,3 no +30 (teto; era ×1,5 → ×3 até 2026-11-12). Abaixo de +10 nada muda (`LevelDangerRules`) |
 
 ### 1.3 Marcos
 

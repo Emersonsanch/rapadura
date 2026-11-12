@@ -162,8 +162,11 @@ Quando o herói entra em um mapa com nível significativamente inferior ao dos m
 * **Diferença de +30 Níveis:** Dano sofrido é letal (quase hit-kill), desencorajando jogadores a pular degraus de conteúdo.
 
 > **No jogo (regra B, 2026-11-06):** aplicado em combate para bichos com nível próprio (`LevelDangerRules`): +10 → +25% de
-> crítico do bicho (×1,5); +20 → −40% de acerto do herói e dano do bicho ×1,5, crescendo linear até **×3 no +30** (teto).
-> Abaixo de +10 nada muda. O aviso "Perigoso" aparece a partir do +10.
+> crítico do bicho (×1,5); +20 → −40% de acerto do herói e dano do bicho ×1,15, crescendo linear até **×1,3 no +30** (teto).
+> Abaixo de +10 nada muda. O aviso "Perigoso" aparece a partir do +10. A rampa era ×1,5 → ×3 até 2026-11-12: somada à escala
+> por nível, um par de comuns do +30 tirava 101–208% da vida numa luta e um chefe do mundo matava em 2–3 golpes; agora o par
+> tira 44–90%, um bando de 4 mata e o chefe pede 5–7 golpes (`Docs/Balanco100a500.md` §4.6). O "quase hit-kill" do +30 vem
+> sobretudo da escala abaixo do nível 100, onde 30 níveis são um salto enorme.
 
 ---
 

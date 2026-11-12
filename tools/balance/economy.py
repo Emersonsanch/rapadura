@@ -82,10 +82,12 @@ BUDGET_BOSS_CAMP = (1.1, 1.5)  # camping a world boss pays 1.1-1.5x the XP/h of 
 BUDGET_MAP_BOSS_CAMP = (0.8, 1.2)  # a map boss of the fichas (MapSpawns) about the same as the commons
 BUDGET_SET_KILLS = 1500.0  # expected kills farming the set's region for both pieces (~7.5 h of kills)
 PERIGOSO_DELTA = 30
-# "Ainda assusta?": at +30 one pull of two commons should take at least this share of the hero's health (a second pull in
-# a row kills), or kill a hero who just stands there in this many seconds.
-PERIGOSO_PULL_SHARE = 0.60
-PERIGOSO_PARKED_SECONDS = 15.0
+# "Perigoso +30" on the commons (Docs/Balanco100a500.md §4.6, 2026-11-12): one fair pull of two commons 30 levels above
+# leaves an on-curve hero alive without a potion (at most 95% of the health) but still costs a real share (at least 40%:
+# no chaining pulls), and a pack of four kills him (at least 100%). Before the ×1.15 -> ×1.3 ramp a pair took 101-208%.
+PERIGOSO_PULL_SHARE = (0.40, 0.95)
+PERIGOSO_PACK = 4
+PERIGOSO_PACK_SHARE = 1.0
 
 
 def _read(path: str) -> str:
@@ -736,6 +738,7 @@ class PerigosoRow:
     hits_min: int
     parked: float  # the hero standing still dies to the pair in
     pull_share: float  # share of the hero's health one pull costs (both hit for the first half, one for the second)
+    pack_share: float  # the same for a pack of PERIGOSO_PACK (killed one by one: on average (n + 1) / 2 hitting)
 
 
 def perigoso(world, levels=(100, 200, 300, 400, 478), deltas=(0, 30), lethal: float | None = None) -> list:
@@ -748,18 +751,21 @@ def perigoso(world, levels=(100, 200, 300, 400, 478), deltas=(0, 30), lethal: fl
             level = creature - delta
             gear = world.hero_gear(level).build_gear
             row = l5.common_row(world, creature, "real", delta)
-            parked, shares, hits = [], [], []
+            parked, shares, packs, hits = [], [], [], []
             for enemy in l5.commons_at(world.data, world.regions, creature):
                 foe = l5.scaled(enemy, world.scaling, creature)
                 for hero in bm.HEROES:
-                    p = world.model.player(bm.Build(hero, level, gear))
+                    build = bm.Build(hero, level, gear)
+                    p = world.model.player(build)
                     blow = foe.attack_damage * p.defense_mult
                     dps = blow * danger.expected_hit(delta) / max(foe.attack_cooldown, foe.windup)
                     parked.append(p.hp / (2 * dps))
                     shares.append(0.75 * 2 * dps * row["farm"] / p.hp)
+                    pack_time = world.farm.fight(build, [foe] * PERIGOSO_PACK)["time"] * world.k_common / danger.hit_rate(delta)
+                    packs.append((PERIGOSO_PACK + 1) / 2 * dps * pack_time / p.hp)
                     hits.append(math.ceil(p.hp / (blow * danger.worst_hit(delta))))
             rows.append(PerigosoRow(creature, delta, row["farm"], statistics.mean(hits), min(hits), statistics.mean(parked),
-                                    statistics.mean(shares)))
+                                    statistics.mean(shares), statistics.mean(packs)))
     return rows
 
 
@@ -911,7 +917,11 @@ def problems(eco: Economy) -> list:
 def perigoso_problems(rows: list) -> list:
     out = []
     for r in rows:
-        if r.delta == PERIGOSO_DELTA and r.pull_share < PERIGOSO_PULL_SHARE and r.parked > PERIGOSO_PARKED_SECONDS:
+        if r.delta != PERIGOSO_DELTA:
+            continue
+        if r.pull_share > PERIGOSO_PULL_SHARE[1]:
+            out.append(("perigoso", r.creature, "lethal"))
+        elif r.pull_share < PERIGOSO_PULL_SHARE[0] or r.pack_share < PERIGOSO_PACK_SHARE:
             out.append(("perigoso", r.creature, "tame"))
     return out
 
@@ -1013,14 +1023,20 @@ def report_loot(eco: Economy) -> str:
 
 
 def report_perigoso(rows: list) -> str:
-    lines = ["| Comuns (nível) | Herói | Caça de 2 | Golpes p/ morrer (pior crítico, média / mín.) | Parado morre em | Vida gasta numa luta |",
-             "|---|---|---|---|---|---|"]
+    lines = ["| Comuns (nível) | Herói | Caça de 2 | Golpes p/ morrer (pior crítico, média / mín.) | Parado morre em | Vida gasta numa luta: 2 "
+             f"| Bando de {PERIGOSO_PACK} |",
+             "|---|---|---|---|---|---|---|"]
+    marks = {(c, kind) for _, c, kind in perigoso_problems(rows)}
     for r in rows:
-        mark = " **(manso)**" if r.delta == PERIGOSO_DELTA and r.pull_share < PERIGOSO_PULL_SHARE and r.parked > PERIGOSO_PARKED_SECONDS else ""
+        mark = (" **(letal)**" if (r.creature, "lethal") in marks and r.delta == PERIGOSO_DELTA
+                else " **(manso)**" if (r.creature, "tame") in marks and r.delta == PERIGOSO_DELTA else "")
         lines.append(f"| {r.creature} | +{r.delta} ({r.creature - r.delta}) | {r.farm:.1f} s | {r.hits:.0f} / {r.hits_min} | {r.parked:.1f} s | "
-                     f"{r.pull_share:.0%}{mark} |")
-    lines += ["", "\"Vida gasta numa luta\" = dano esperado dos dois comuns (os dois batem na primeira metade da caça de 2, um na "
-              "segunda) em % da vida, sem poção nem cura; acima de 100% o herói morre antes de matar o par."]
+                     f"{r.pull_share:.0%}{mark} | {r.pack_share:.0%} |")
+    lines += ["", "\"Vida gasta numa luta\" = dano esperado dos comuns (mortos um a um: na luta de 2, os dois batem na primeira metade "
+              f"da caça e um na segunda; no bando de {PERIGOSO_PACK}, em média {(PERIGOSO_PACK + 1) / 2:g} batendo) em % da vida, sem poção nem "
+              "cura; acima de 100% o herói morre antes de matar o grupo. Meta no +30: o par custa "
+              f"{PERIGOSO_PULL_SHARE[0]:.0%}–{PERIGOSO_PULL_SHARE[1]:.0%} (o herói no nível da curva sobrevive a uma luta justa) e o bando "
+              f"de {PERIGOSO_PACK} mata (≥ {PERIGOSO_PACK_SHARE:.0%})."]
     return "\n".join(lines)
 
 

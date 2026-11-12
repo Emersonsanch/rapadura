@@ -31,7 +31,7 @@ namespace Rapadura.Gameplay.World.Map
 
     /// <summary>
     /// The monster level delta of Docs/MetodologiaMapasERacas.md §4, for one monster against the hero: +25% critical
-    /// chance from +10 levels, −40% hit rate and ×1.5 damage taken from +20 rising linearly to ×3 (near-lethal) at +30.
+    /// chance from +10 levels, −40% hit rate and ×1.15 damage taken from +20 rising linearly to ×1.3 (the cap) at +30.
     /// Numbers from <see cref="Rapadura.Gameplay.Combat.LevelDangerRules"/>, which the combat applies ("Perigoso", regra B).
     /// </summary>
     public readonly struct MonsterLevelPenalty

@@ -7,10 +7,15 @@ namespace Rapadura.Gameplay.Combat
     /// hero does in combat. <c>delta = creature level − hero level</c>:
     /// <code>
     /// delta ≥ 10   the creature gets +25% critical chance against the hero (crit = ×1.5)
-    /// delta ≥ 20   the hero's hit chance ×0.6 (−40%: "Errou!") and the creature's damage ×1.5
-    /// 20..30       the creature's damage grows linearly ×1.5 → ×3
-    /// delta ≥ 30   the creature's damage ×3 ("quase hit-kill")
+    /// delta ≥ 20   the hero's hit chance ×0.6 (−40%: "Errou!") and the creature's damage ×1.15
+    /// 20..30       the creature's damage grows linearly ×1.15 → ×1.3
+    /// delta ≥ 30   the creature's damage ×1.3 (the cap)
     /// </code>
+    /// The damage ramp was ×1.5 → ×3 until 2026-11-12 (Docs/Balanco100a500.md §4.6): on top of the level scaling, which
+    /// already makes a creature 30 levels up hit harder and last longer, it let a pair of +30 commons take 101–208% of the
+    /// hero's health in one pull and a +30 world boss kill in 2–3 basic swings. With ×1.15 → ×1.3 the pair takes 44–90%
+    /// (a pack of four still kills) and a +30 boss needs 5–7 swings; most of the threat is the 40% miss (a fight twice as
+    /// long) and the +25% crit.
     /// Below +10 (and any creature at or below the hero's level) nothing changes. Only creatures with their own level
     /// (<c>ICreatureLevelSource</c>: the open maps) are judged; campaign encounters never are. Pure C# (no Unity): the
     /// online server runs the same file; the rolls are injected (uniform 0..1). Wired by <see cref="LevelDangerCombat"/>
@@ -24,7 +29,7 @@ namespace Rapadura.Gameplay.Combat
         /// <summary>From this many levels above the hero the hero misses more and the creature hits harder.</summary>
         public const int HitRateDelta = 20;
 
-        /// <summary>From this many levels above the hero the creature's damage is at its cap (near one-shot).</summary>
+        /// <summary>From this many levels above the hero the creature's damage is at its cap (×1.3; the level scaling already makes such a creature far stronger).</summary>
         public const int LethalDelta = 30;
 
         /// <summary>Added to the creature's critical chance (creatures have none of their own today).</summary>
@@ -37,10 +42,10 @@ namespace Rapadura.Gameplay.Combat
         public const float HitRatePenalty = 0.4f;
 
         /// <summary>Creature damage multiplier at <see cref="HitRateDelta"/>.</summary>
-        public const float HeavyDamageTaken = 1.5f;
+        public const float HeavyDamageTaken = 1.15f;
 
         /// <summary>Creature damage multiplier at and beyond <see cref="LethalDelta"/>.</summary>
-        public const float LethalDamageTaken = 3f;
+        public const float LethalDamageTaken = 1.3f;
 
         /// <summary>Creature level − hero level (negative = the hero is above).</summary>
         public static int Delta(int heroLevel, int creatureLevel) => creatureLevel - heroLevel;
@@ -56,7 +61,7 @@ namespace Rapadura.Gameplay.Combat
         /// <summary>Multiplier on the hero's hit chance against the creature: 0.6 from <see cref="HitRateDelta"/>, else 1.</summary>
         public static float HeroHitRateMultiplier(int delta) => delta >= HitRateDelta ? 1f - HitRatePenalty : 1f;
 
-        /// <summary>Multiplier on the creature's damage to the hero: 1 below +20, ×1.5 at +20 rising linearly to ×3 at +30, ×3 beyond.</summary>
+        /// <summary>Multiplier on the creature's damage to the hero: 1 below +20, ×1.15 at +20 rising linearly to ×1.3 at +30, ×1.3 beyond.</summary>
         public static float CreatureDamageMultiplier(int delta)
         {
             if (delta < HitRateDelta)

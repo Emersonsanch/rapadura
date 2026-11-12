@@ -430,7 +430,7 @@ namespace Rapadura.Gameplay.Player
             // Context-aware protection (hunting charms / prey against a creature type); 1 when no hook is installed.
             amount *= CombatModifierHooks.ResolveDamageTakenMultiplier(gameObject, source);
 
-            // "Perigoso" regra B (LevelDangerRules): a creature with its own level 10+ above crits more, 20+ above hits ×1.5..×3.
+            // "Perigoso" regra B (LevelDangerRules): a creature with its own level 10+ above crits more, 20+ above hits ×1.15..×1.3.
             amount = LevelDangerCombat.ResolveCreatureHit(amount, Level, source, out bool dangerCritical);
             isCritical |= dangerCritical;
             amount *= DefenseMultiplier;

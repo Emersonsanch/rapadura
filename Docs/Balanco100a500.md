@@ -27,7 +27,7 @@
   em % da vida e golpes básicos do herói no chefe. Os chefes das Regiões 5–9 (Hedammu 72, Lodo-que-Engole 88, Aydahar 98,
   Quatro Gulosos 140, Ohya 150) entram com o golpe-assinatura lido do C#; os três abaixo de 100 usam a mesma regra.
 - **"Perigoso"** (`LevelDangerRules`): o bicho no nível da linha e o herói 10, 20 e 30 níveis abaixo (crítico +25% ×1,5
-  a partir de +10; de +20 o herói erra 40% e o dano vai de ×1,5 a ×3 em +30).
+  a partir de +10; de +20 o herói erra 40% e o dano vai de ×1,15 a ×1,3 em +30; até 2026-11-12 era ×1,5 → ×3, ver §4.6).
 
 ## 2. Resumo: faixas fora da meta (leitura "real")
 
@@ -46,8 +46,9 @@
 | Āz (478): golpes / maior golpe | ≥ 3 / < 100% | 3 / 60% | 9 / 19% |
 | Chefes 140–150 (Quatro Gulosos, Ohya) | 15–22 s · 12–40 s | sem asset | 15,3 s · 27,4–27,7 s parado |
 | Chefes 72–98 (Hedammu, Lodo, Aydahar) | 15–22 s · 12–40 s | fora da tabela | 16,2–17,0 s (vida base ×1,2; Aydahar ×1,18) · 26,7–30,1 s parado |
-| Perigoso +30, comuns: golpes para morrer | — | 4–5 | 8–11 |
-| Perigoso +30, chefes: golpes / parado | — | 1–2 / 1,3–2,8 s | 2–3 / 4,0–6,6 s |
+| Perigoso +30, comuns: golpes para morrer | — | 4–5 | 8–11 (rampa ×1,15 → ×1,3, §4.6: 17–24) |
+| Perigoso +30, chefes: golpes / parado | — | 1–2 / 1,3–2,8 s | 2–3 / 4,0–6,6 s (rampa ×1,15 → ×1,3, §4.6: 5–7 / 9,3–15,3 s) |
+| Perigoso +30, par de comuns: vida gasta numa luta | herói vivo | — | 101–208% (§4.6: 44–90%; bando de 4: 130–241%) |
 | Orçamento 15–100 (`level_scaling.py`) | dentro | dentro | dentro |
 
 O que mudou no jogo: `EnemyLevelScaling.HeroToughnessGrowthPerLevel` 0,005 → 0 (×dano do bicho no 25/50/100/500:
@@ -171,34 +172,34 @@ Fator jogo/modelo (r7): comuns ×1.73, chefes ×0.89. "Caça" = só skills com r
 | "A Grande Treva" (440) | 42,447 / 920 | 18.4 s | 7.6 s **(fora)** | 17.4 s / 29.7 s | 34.6 s | 9 / 16 | 20% / 11% | 1.5 / 0.4 | 73 |
 | "Āz, a Capitã Cobiçosa" (478) | 49,179 / 1,071 | 18.6 s | 7.3 s **(fora)** | 14.5 s / 24.8 s | 35.1 s | 9 / 15 | 19% / 11% | 1.8 / 0.4 | 74 |
 
-### 4.3 Regra "Perigoso"
+### 4.3 Regra "Perigoso" (rampa ×1,15 → ×1,3 desde 2026-11-12, §4.6)
 
 Comuns (2 por luta): tempo para matar (caça) · golpes para morrer no pior crítico. O bicho fica no nível da linha; o herói está delta níveis abaixo.
 
 | Bicho | +0 | +10 | +20 | +30 |
 |---|---|---|---|---|
-| comuns 100 | 5.5 s · 44 | 6.8 s · 27 | 14.7 s · 16 | 18.3 s · 8 |
-| comuns 200 | 6.1 s · 46 | 7.2 s · 29 | 14.1 s · 19 | 16.0 s · 9 |
-| comuns 300 | 6.4 s · 53 | 7.3 s · 34 | 13.9 s · 22 | 15.5 s · 11 |
-| comuns 400 | 6.5 s · 48 | 7.2 s · 31 | 12.6 s · 21 | 14.6 s · 10 |
-| comuns 478 | 6.6 s · 48 | 7.1 s · 32 | 12.7 s · 21 | 13.0 s · 10 |
+| comuns 100 | 5.5 s · 44 | 6.8 s · 27 | 14.7 s · 21 | 18.3 s · 17 |
+| comuns 200 | 6.1 s · 46 | 7.2 s · 29 | 14.1 s · 24 | 16.0 s · 20 |
+| comuns 300 | 6.4 s · 53 | 7.3 s · 34 | 13.9 s · 29 | 15.5 s · 24 |
+| comuns 400 | 6.5 s · 48 | 7.2 s · 31 | 12.6 s · 27 | 14.6 s · 23 |
+| comuns 478 | 6.6 s · 48 | 7.1 s · 32 | 12.7 s · 27 | 13.0 s · 23 |
 
 Chefes do mundo: tempo para matar · golpes do chefe para morrer (pior crítico) · herói morre parado em.
 
 | Bicho | +0 | +10 | +20 | +30 |
 |---|---|---|---|---|
-| "Hedammu, a Serpente Gulosa do Mar" (72) | 16.2 s · 18 · 30.1 s | 18.5 s · 11 · 23.3 s | 36.7 s · 6 · 13.2 s | 44.2 s · 3 · 5.4 s |
-| "O Lodo-que-Engole" (88) | 16.8 s · 17 · 28.2 s | 19.0 s · 10 · 22.4 s | 37.4 s · 6 · 13.1 s | 43.9 s · 3 · 5.6 s |
-| "Aydahar, o Dragão do Passo" (98) | 17.0 s · 16 · 26.7 s | 19.2 s · 10 · 21.4 s | 37.4 s · 6 · 12.7 s | 43.4 s · 3 · 5.6 s |
-| "Os Quatro Gulosos" (140) | 15.3 s · 15 · 27.4 s | 16.6 s · 10 · 22.7 s | 30.5 s · 6 · 14.0 s | 34.9 s · 3 · 6.4 s |
-| "Ohya, o Gigante Irmão" (150) | 15.3 s · 14 · 27.7 s | 16.8 s · 9 · 23.1 s | 30.8 s · 6 · 14.3 s | 35.2 s · 3 · 6.6 s |
-| "O Rei-Vendaval" (200) | 15.9 s · 15 · 20.7 s | 17.1 s · 9 · 17.5 s | 30.7 s · 6 · 11.1 s | 33.8 s · 3 · 5.2 s |
-| "O Velho Kul" (240) | 17.1 s · 13 · 21.7 s | 18.2 s · 9 · 18.5 s | 32.6 s · 6 · 11.8 s | 36.0 s · 3 · 5.6 s |
-| "O Glutão de Brasa" (280) | 18.4 s · 13 · 24.0 s | 20.1 s · 8 · 20.6 s | 35.4 s · 5 · 13.2 s | 37.2 s · 3 · 6.1 s |
-| "Apep, a Serpente que Bebe o Rio" (320) | 18.6 s · 12 · 19.2 s | 20.1 s · 8 · 16.6 s | 35.2 s · 5 · 10.7 s | 38.0 s · 3 · 5.1 s |
-| "O Sonho da Destruição" (360) | 18.3 s · 10 · 18.0 s | 19.3 s · 7 · 15.6 s | 34.3 s · 5 · 10.1 s | 37.5 s · 3 · 5.2 s |
-| "A Grande Treva" (440) | 18.4 s · 9 · 17.4 s | 19.3 s · 6 · 15.1 s | 33.9 s · 4 · 9.8 s | 35.8 s · 2 · 4.8 s |
-| "Āz, a Capitã Cobiçosa" (478) | 18.6 s · 9 · 14.5 s | 19.4 s · 6 · 12.6 s | 33.9 s · 4 · 8.2 s | 35.7 s · 2 · 4.0 s |
+| "Hedammu, a Serpente Gulosa do Mar" (72) | 16.2 s · 18 · 30.1 s | 18.5 s · 11 · 23.3 s | 36.7 s · 8 · 17.2 s | 44.2 s · 6 · 12.5 s |
+| "O Lodo-que-Engole" (88) | 16.8 s · 17 · 28.2 s | 19.2 s · 10 · 22.4 s | 37.4 s · 8 · 17.1 s | 43.9 s · 6 · 13.0 s |
+| "Aydahar, o Dragão do Passo" (98) | 17.0 s · 16 · 26.7 s | 19.4 s · 10 · 21.4 s | 37.3 s · 8 · 16.6 s | 43.4 s · 6 · 12.9 s |
+| "Os Quatro Gulosos" (140) | 15.1 s · 15 · 27.4 s | 16.7 s · 10 · 22.7 s | 30.4 s · 8 · 18.3 s | 34.8 s · 6 · 14.9 s |
+| "Ohya, o Gigante Irmão" (150) | 15.3 s · 14 · 27.7 s | 16.8 s · 9 · 23.1 s | 30.8 s · 7 · 18.7 s | 35.0 s · 6 · 15.3 s |
+| "O Rei-Vendaval" (200) | 15.9 s · 15 · 20.7 s | 17.1 s · 9 · 17.5 s | 30.6 s · 8 · 14.4 s | 34.0 s · 7 · 12.1 s |
+| "O Velho Kul" (240) | 17.0 s · 13 · 21.7 s | 18.0 s · 9 · 18.5 s | 32.8 s · 7 · 15.4 s | 35.7 s · 6 · 13.0 s |
+| "O Glutão de Brasa" (280) | 18.4 s · 13 · 24.0 s | 20.1 s · 8 · 20.6 s | 35.4 s · 7 · 17.3 s | 37.1 s · 6 · 14.0 s |
+| "Apep, a Serpente que Bebe o Rio" (320) | 18.6 s · 12 · 19.2 s | 20.1 s · 8 · 16.6 s | 35.2 s · 7 · 14.0 s | 38.0 s · 6 · 11.8 s |
+| "O Sonho da Destruição" (360) | 18.3 s · 10 · 18.0 s | 19.3 s · 7 · 15.6 s | 34.3 s · 6 · 13.2 s | 37.5 s · 5 · 12.0 s |
+| "A Grande Treva" (440) | 18.4 s · 9 · 17.4 s | 19.3 s · 6 · 15.1 s | 33.9 s · 5 · 12.8 s | 35.8 s · 5 · 11.1 s |
+| "Āz, a Capitã Cobiçosa" (478) | 18.6 s · 9 · 14.5 s | 19.4 s · 6 · 12.6 s | 33.9 s · 5 · 10.8 s | 35.7 s · 5 · 9.3 s |
 
 ### 4.4 Fora da meta (leitura "real")
 
@@ -247,6 +248,46 @@ Piso de vida base 170 nos comuns do mundo aberto (aplicado no jogo do nível 100
 | 0.005 | 23.8 s · 14 | 21.0 s · 13 | 19.2 s · 12 | 17.3 s · 10 | 17.0 s · 9 | 11.1 s **(fora)** · 8 | 10.6 s **(fora)** · 7 | 10.7 s **(fora)** · 6 | 7.9 s **(fora)** · 5 | 6.9 s **(fora)** · 4 | 5.8 s **(fora)** · 4 | 4.6 s **(fora)** · 3 | 32/25/23/17/15 | dentro |
 | 0.0025 | 26.5 s · 16 | 24.0 s · 14 | 22.2 s · 13 | 21.1 s · 12 | 20.9 s · 11 | 14.3 s · 10 | 14.1 s · 9 | 14.7 s · 8 | 11.1 s **(fora)** · 7 | 9.8 s **(fora)** · 6 | 8.6 s **(fora)** · 5 | 6.9 s **(fora)** · 4 | 37/32/31/25/22 | dentro |
 
+### 4.6 "Perigoso" suavizado (aplicado em 2026-11-12)
+
+Os dois problemas que sobravam na faixa 100–500 eram da regra "Perigoso" no +30, não da escala: (1) **um par de comuns
+30 níveis acima tirava 101–208% da vida do herói numa luta** (morria antes de matar o par, sem chance de poção) e (2)
+**os chefes do mundo matavam o herói 30 níveis abaixo em 2–3 golpes básicos** (Grande Treva e Āz em 2; parado em
+4,0–6,6 s). A causa é a soma: a escala por nível (`EnemyLevelScaling`) já faz o bicho do +30 bater mais forte e durar mais
+(no 100 contra o 70: dano ×1,37 e o herói mais fraco; o +0 → +30 custa ×2,9 sem a regra), e a regra ainda multiplicava o
+golpe por ×3 e o crítico por ×1,5 (pior golpe ×4,5) e alongava a luta (o herói erra 40%).
+
+**Metas (estilo MU: o bicho do alto é uma surra lenta, não um hit-kill):** no +30, com o herói na curva e sem poção, um
+par de comuns custa **40–95%** da vida (sobrevive a uma luta justa, não emenda duas) e um **bando de 4 mata** (≥ 100%);
+nenhum comum mata em menos de 5 golpes no pior crítico; um chefe do mundo pede **5–8 golpes básicos** (pior crítico) e o
+maior golpe (os telegrafados incluídos) fica abaixo de **60%**; parado, o herói ainda morre muito antes do chefe cair. No
++0 nada muda (chefes 9–18 golpes, parado 14,5–30 s, já na meta da §2.1).
+
+**O que mudou no jogo** (central, vale para todo bicho com nível próprio, inclusive os chefes e feras novos): a rampa de
+dano do `LevelDangerRules` passou de ×1,5 (+20) → ×3 (+30) para **`HeavyDamageTaken` ×1,15 → `LethalDamageTaken` ×1,3**
+(pior golpe do +30: ×4,5 → ×1,95). Os limiares (10/20/30), o crítico +25% ×1,5 e o erro de 40% ficaram; o aviso
+"Perigoso", a prévia do mapa (`MapAccessRules.GetMonsterLevelDeltaPenalty`) e as ferramentas leem as mesmas constantes. A
+ameaça do +30 passa a vir mais do erro (luta 2–3× mais longa) e do crítico do que do dano. Por que esses números: o
+limite é o par de comuns no 100 (o vão de 30 níveis é ×1,4 do nível ali e só ×1,07 no 478): com ×1,4 no +30 ele já gasta
+97% e o Āz cai para 4 golpes; ×1,3 é o maior teto que põe as duas coisas na meta.
+
+| +30 | Antes (×1,5 → ×3) | Depois (×1,15 → ×1,3) | Meta |
+|---|---|---|---|
+| Par de comuns 100 / 200 / 300 / 400 / 478: vida gasta numa luta | 208% / 160% / 123% / 120% / 101% | 90% / 70% / 53% / 52% / 44% | 40–95% |
+| Bando de 4 comuns (mesmos níveis) | 555% / 432% / 327% / 333% / 300% | 241% / 187% / 142% / 144% / 130% | ≥ 100% |
+| Comuns: golpes para morrer (média / mín.) | 8–11 / 5–7 | 17–24 / 10–16 | mín. ≥ 5 |
+| Comuns: parado morre em | 6,8–10,2 s | 15,8–23,6 s | — |
+| Chefes do mundo: golpes básicos para morrer | 2–3 | 5–7 (Āz, Treva e Sonho 5; Rei-Vendaval 7) | 5–8 |
+| Chefes: maior golpe (% da vida) | 62–95% | 27–41% | < 60% |
+| Chefes: parado morre em / tempo para matar | 4,0–6,6 s / 34–44 s | 9,3–15,3 s / 34–44 s | parado < metade da luta |
+| Chefes no +20: golpes / parado | 4–6 / 8,2–14,3 s | 5–8 / 10,8–18,7 s | — |
+
+No +0 e no +10 nada mudou (§4.1, §4.2). Travado em `tools/balance/test_level_500.py`
+(`test_perigoso_plus_30_boss_is_deadly_but_not_a_few_swings`, `PERIGOSO_BOSS_SWINGS`), `tools/balance/test_economy.py`
+(`test_perigoso_plus_30_scares_in_packs_but_a_fair_pair_leaves_the_hero_alive`, `PERIGOSO_PULL_SHARE`/`PERIGOSO_PACK_SHARE`)
+e nos EditMode `LevelDangerRulesTests` / `MapAccessRulesTests`. Abaixo do 100 a regra só ficou mais branda; lá o vão de
+30 níveis é tão grande na escala (herói 20 contra bicho 50: dano ×1,95 só da escala) que o +30 continua quase letal.
+
 ## 5. Economia
 
 > Medido em 2026-11-11 com `python -I tools/balance/economy.py` (também no fim de `python -I tools/balance/power_stack.py`)
@@ -279,8 +320,9 @@ Piso de vida base 170 nos comuns do mundo aberto (aplicado no jogo do nível 100
   no mapa 38 (54 min de caça, 15 604 na bolsa). Nenhuma loja vende abaixo do que paga de volta.
 - **Loot de chefe:** cada lembrança (`item_chefe_*`) sai em 4,8–13,3 abates do chefe (0,4–1,1 h só de respawn) para tudo o
   que as roupas e troféus da casa gastam; todas são usadas. Conjuntos 13–16: 1 100–1 350 abates na região (5,5–6,8 h).
-- **"Perigoso +30":** com a resistência do herói zerada ainda assusta: um par de comuns tira 101–208% da vida numa luta
-  sem poção, e parado o herói morre em 6,8–10,2 s (contra 31–37 s no mesmo nível). Nada a mudar.
+- **"Perigoso +30":** antes um par de comuns tirava 101–208% da vida numa luta sem poção (parado: 6,8–10,2 s). Com a rampa
+  ×1,15 → ×1,3 (§4.6, 2026-11-12) o par tira **44–90%** (o herói sobrevive a uma luta justa), um bando de 4 tira
+  **130–241%** (mata) e parado o herói morre em 15,8–23,6 s (contra 31–37 s no mesmo nível).
 
 ### 5.2 Erros de dado corrigidos
 
@@ -597,22 +639,22 @@ Saque de bioma por faixa (o valor por abate, venda a 50%; só existem as 4 tabel
 
 Equipamento à venda nas lojas (preço em ouro): item_leather_boots 9, item_wooden_sword 10, item_leather_helmet 11, item_hammer 15, item_leather_chest 18, item_pickaxe 18, item_axe 18, item_hunting_bow 33, item_iron_sword 41, item_asas_lona_takhsich 420, item_botas_raiz 520, item_amuleto_antiveneno 700, item_roupa_termica 900.
 
-#### "Perigoso +30" nos comuns
+#### "Perigoso +30" nos comuns (depois da rampa ×1,15 → ×1,3, §4.6)
 
-| Comuns (nível) | Herói | Caça de 2 | Golpes p/ morrer (pior crítico, média / mín.) | Parado morre em | Vida gasta numa luta |
-|---|---|---|---|---|---|
-| 100 | +0 (100) | 5.5 s | 44 / 28 | 32.3 s | 13% |
-| 100 | +30 (70) | 18.3 s | 8 / 5 | 6.8 s | 208% |
-| 200 | +0 (200) | 6.1 s | 46 / 27 | 30.9 s | 16% |
-| 200 | +30 (170) | 16.0 s | 9 / 6 | 7.8 s | 160% |
-| 300 | +0 (300) | 6.4 s | 53 / 31 | 37.4 s | 13% |
-| 300 | +30 (270) | 15.5 s | 11 / 6 | 9.9 s | 123% |
-| 400 | +0 (400) | 6.5 s | 48 / 31 | 34.8 s | 15% |
-| 400 | +30 (370) | 14.6 s | 10 / 7 | 9.5 s | 120% |
-| 478 | +0 (478) | 6.6 s | 48 / 33 | 36.9 s | 14% |
-| 478 | +30 (448) | 13.0 s | 10 / 7 | 10.2 s | 101% |
+| Comuns (nível) | Herói | Caça de 2 | Golpes p/ morrer (pior crítico, média / mín.) | Parado morre em | Vida gasta numa luta: 2 | Bando de 4 |
+|---|---|---|---|---|---|---|
+| 100 | +0 (100) | 5.5 s | 44 / 28 | 32.3 s | 13% | 40% |
+| 100 | +30 (70) | 18.3 s | 17 / 10 | 15.8 s | 90% | 241% |
+| 200 | +0 (200) | 6.1 s | 46 / 27 | 30.9 s | 16% | 47% |
+| 200 | +30 (170) | 16.0 s | 20 / 12 | 18.0 s | 70% | 187% |
+| 300 | +0 (300) | 6.4 s | 53 / 31 | 37.4 s | 13% | 39% |
+| 300 | +30 (270) | 15.5 s | 24 / 14 | 22.8 s | 53% | 142% |
+| 400 | +0 (400) | 6.5 s | 48 / 31 | 34.8 s | 15% | 44% |
+| 400 | +30 (370) | 14.6 s | 23 / 15 | 22.0 s | 52% | 144% |
+| 478 | +0 (478) | 6.6 s | 48 / 33 | 36.9 s | 14% | 44% |
+| 478 | +30 (448) | 13.0 s | 23 / 16 | 23.6 s | 44% | 130% |
 
-"Vida gasta numa luta" = dano esperado dos dois comuns (os dois batem na primeira metade da caça de 2, um na segunda) em % da vida, sem poção nem cura; acima de 100% o herói morre antes de matar o par.
+"Vida gasta numa luta" = dano esperado dos comuns (mortos um a um: na luta de 2, os dois batem na primeira metade da caça e um na segunda; no bando de 4, em média 2.5 batendo) em % da vida, sem poção nem cura; acima de 100% o herói morre antes de matar o grupo. Meta no +30: o par custa 40%–95% (o herói no nível da curva sobrevive a uma luta justa) e o bando de 4 mata (≥ 100%).
 
 #### Fora do orçamento
 

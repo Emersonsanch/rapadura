@@ -13,8 +13,8 @@ namespace Rapadura.Tests
 {
     /// <summary>
     /// "Perigoso" — regra B (Docs/MetodologiaMapasERacas.md §4, Docs/Progressao500.md §1.2, <see cref="LevelDangerRules"/>):
-    /// +25% creature crit from +10 levels, −40% hero hit and ×1.5 creature damage from +20 rising to ×3 at +30; nothing
-    /// below +10. Then the wiring: <see cref="PlayerStats"/> takes the creature's hit through it, <see cref="Health"/> lets the
+    /// +25% creature crit from +10 levels, −40% hero hit and ×1.15 creature damage from +20 rising to ×1.3 at +30; nothing
+    /// below +10 (the ramp was ×1.5 → ×3 until 2026-11-12, Docs/Balanco100a500.md §4.6). Then the wiring: <see cref="PlayerStats"/> takes the creature's hit through it, <see cref="Health"/> lets the
     /// hero miss, and campaign creatures (no <see cref="ICreatureLevelSource"/>) are never touched.
     /// </summary>
     public class LevelDangerRulesTests
@@ -56,8 +56,8 @@ namespace Rapadura.Tests
             Assert.AreEqual(30, LevelDangerRules.LethalDelta);
             Assert.AreEqual(0.25f, LevelDangerRules.CritChanceBonus);
             Assert.AreEqual(0.4f, LevelDangerRules.HitRatePenalty);
-            Assert.AreEqual(1.5f, LevelDangerRules.HeavyDamageTaken);
-            Assert.AreEqual(3f, LevelDangerRules.LethalDamageTaken);
+            Assert.AreEqual(1.15f, LevelDangerRules.HeavyDamageTaken);
+            Assert.AreEqual(1.3f, LevelDangerRules.LethalDamageTaken);
         }
 
         [Test]
@@ -96,7 +96,7 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void FromTwenty_HeroMisses40Percent_AndDamageScales_1_5_To_3()
+        public void FromTwenty_HeroMisses40Percent_AndDamageScales_1_15_To_1_3()
         {
             Assert.AreEqual(0.6f, LevelDangerRules.HeroHitRateMultiplier(20), 1e-6f);
             Assert.AreEqual(0.6f, LevelDangerRules.HeroHitRateMultiplier(45), 1e-6f);
@@ -104,19 +104,33 @@ namespace Rapadura.Tests
             Assert.IsFalse(LevelDangerRules.HeroHitLands(10, 30, 0.6f));
 
             Assert.AreEqual(1f, LevelDangerRules.CreatureDamageMultiplier(19), 1e-6f);
-            Assert.AreEqual(1.5f, LevelDangerRules.CreatureDamageMultiplier(20), 1e-6f);
-            Assert.AreEqual(2.25f, LevelDangerRules.CreatureDamageMultiplier(25), 1e-6f);
-            Assert.AreEqual(2.85f, LevelDangerRules.CreatureDamageMultiplier(29), 1e-5f);
-            Assert.AreEqual(3f, LevelDangerRules.CreatureDamageMultiplier(30), 1e-6f);
-            Assert.AreEqual(3f, LevelDangerRules.CreatureDamageMultiplier(80), 1e-6f, "capped at ×3");
+            Assert.AreEqual(1.15f, LevelDangerRules.CreatureDamageMultiplier(20), 1e-6f);
+            Assert.AreEqual(1.225f, LevelDangerRules.CreatureDamageMultiplier(25), 1e-5f);
+            Assert.AreEqual(1.285f, LevelDangerRules.CreatureDamageMultiplier(29), 1e-5f);
+            Assert.AreEqual(1.3f, LevelDangerRules.CreatureDamageMultiplier(30), 1e-6f);
+            Assert.AreEqual(1.3f, LevelDangerRules.CreatureDamageMultiplier(80), 1e-6f, "capped at ×1.3");
             Assert.IsTrue(LevelDangerRules.IsLethal(30));
             Assert.IsFalse(LevelDangerRules.IsLethal(29));
 
-            // +30 with a crit: ×3 × ×1.5 = ×4.5.
-            Assert.AreEqual(180f, LevelDangerRules.ResolveCreatureHit(40f, 1, 31, 0f, out bool crit), 1e-3f);
+            // +30 with a crit: ×1.3 × ×1.5 = ×1.95.
+            Assert.AreEqual(78f, LevelDangerRules.ResolveCreatureHit(40f, 1, 31, 0f, out bool crit), 1e-3f);
             Assert.IsTrue(crit);
             Assert.AreEqual(0f, LevelDangerRules.ResolveCreatureHit(0f, 1, 31, 0f, out crit));
             Assert.IsFalse(crit);
+        }
+
+        [Test]
+        public void PlusThirty_WorstHit_IsUnderTwiceTheBlow_SoAWorldBossNeedsFiveSwings()
+        {
+            // Docs/Balanco100a500.md §4.6: an on-curve hero has 7.9–10.6 world-boss swings of health 30 levels below the boss
+            // (Āz 478 the lowest); the worst +30 blow (damage cap × crit) must stay under 7.85 / 4 so even Āz needs 5.
+            float worst = LevelDangerRules.CreatureDamageMultiplier(LevelDangerRules.LethalDelta) * LevelDangerRules.CreatureCriticalMultiplier;
+            Assert.Less(worst, 7.85f / 4f);
+            Assert.Greater(worst, 1.5f, "still clearly worse than a same-level crit");
+            for (int delta = LevelDangerRules.HitRateDelta; delta < LevelDangerRules.LethalDelta; delta++)
+            {
+                Assert.LessOrEqual(LevelDangerRules.CreatureDamageMultiplier(delta), LevelDangerRules.CreatureDamageMultiplier(delta + 1), $"delta {delta}");
+            }
         }
 
         [Test]
@@ -145,8 +159,8 @@ namespace Rapadura.Tests
             Assert.AreEqual(40f, HitHero(Creature(1)), 1e-3f, "same level as the hero (1): unchanged");
             Assert.AreEqual(40f, HitHero(Creature(10)), 1e-3f, "+9: unchanged");
             Assert.AreEqual(40f, HitHero(Campaign()), 1e-3f, "campaign creature without a level: unchanged");
-            Assert.AreEqual(60f, HitHero(Creature(21)), 1e-3f, "+20: ×1.5");
-            Assert.AreEqual(120f, HitHero(Creature(31)), 1e-3f, "+30: ×3");
+            Assert.AreEqual(46f, HitHero(Creature(21)), 1e-3f, "+20: ×1.15");
+            Assert.AreEqual(52f, HitHero(Creature(31)), 1e-3f, "+30: ×1.3");
 
             LevelDangerCombat.Random = () => 0f; // always under the bonus
             bool critical = false;

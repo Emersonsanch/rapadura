@@ -143,11 +143,18 @@ def test_gold_per_kill_is_positive_everywhere(eco):
     assert all(p.total > 0 and not math.isnan(p.total) for p in eco.pay.values())
 
 
-def test_perigoso_plus_30_still_scares(perigoso_rows):
+def test_perigoso_plus_30_scares_in_packs_but_a_fair_pair_leaves_the_hero_alive(perigoso_rows):
+    """Docs/Balanco100a500.md §4.6 (LevelDangerRules ×1.15 -> ×1.3 since 2026-11-12; before, a pair took 101-208%)."""
     assert ec.perigoso_problems(perigoso_rows) == []
+    low, high = ec.PERIGOSO_PULL_SHARE
     for r in perigoso_rows:
         if r.delta == ec.PERIGOSO_DELTA:
-            assert r.pull_share >= ec.PERIGOSO_PULL_SHARE and r.parked <= ec.PERIGOSO_PARKED_SECONDS, r
+            assert low <= r.pull_share <= high, r
+            assert r.pack_share >= ec.PERIGOSO_PACK_SHARE, r
+            assert r.hits_min >= 5, r  # no near one-shot from a common: the worst crit still needs five blows
+        else:
+            same = r
+            assert same.pull_share < low and same.pack_share < ec.PERIGOSO_PACK_SHARE, r  # at its own level a pack of four is farm
 
 
 def test_only_the_documented_misses(eco, perigoso_rows):

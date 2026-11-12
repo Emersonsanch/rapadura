@@ -12,7 +12,7 @@ namespace Rapadura.Gameplay.Combat
     /// Unity side of <see cref="LevelDangerRules"/> (the "Perigoso" regra B): finds the two levels on the GameObjects of a
     /// hit — the hero's <see cref="PlayerStats.Level"/> and the creature's <see cref="ICreatureLevelSource"/> (open-map
     /// monsters only; campaign encounters have none and are never touched) — and applies the rule. Called by
-    /// <see cref="PlayerStats"/> (creature → hero: damage ×1.5..×3 and +25% crit) and <see cref="Health"/> (hero → creature:
+    /// <see cref="PlayerStats"/> (creature → hero: damage ×1.15..×1.3 and +25% crit) and <see cref="Health"/> (hero → creature:
     /// −40% hit, "Errou!"). The random source is only sampled when the rule is active, so ordinary fights stay deterministic.
     /// </summary>
     public static class LevelDangerCombat

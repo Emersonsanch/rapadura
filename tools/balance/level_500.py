@@ -61,6 +61,11 @@ BOSS_TARGET = (15.0, 22.0)
 PARKED_TARGET = (12.0, 40.0)
 BASIC_EDGE = 0.75
 MIN_SWINGS_TO_DIE = 3  # below this a boss "kills in a few blows"
+# "Perigoso +30" against a world boss (Docs/Balanco100a500.md §4.6, LevelDangerRules ×1.15 -> ×1.3 since 2026-11-12): the
+# hero 30 levels below still needs this many of the boss's basic swings (worst crit) to die, the telegraphed great blow may
+# take more; before, 2-3 swings ("quase hit-kill") with the rule's ×3.
+PERIGOSO_BOSS_SWINGS = (5, 8)
+PERIGOSO_BOSS_BLOW = 0.6  # the biggest single blow (telegraphed included) at +30, share of the hero's health
 MIN_HERO_HITS_ON_BOSS = 8  # below this a boss "dies in a few blows"
 FARM_COOLDOWN = 12.0  # "caça": a skill with a longer cooldown is not up for every pull (fight + walk to the next pack)
 COMMON_GOAL = 5.5  # middle of COMMON_TARGET: what the suggested health factor aims at

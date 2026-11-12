@@ -160,10 +160,10 @@ namespace Rapadura.Tests
 
             MonsterLevelPenalty twenty = MapAccessRules.GetMonsterLevelDeltaPenalty(10, 30);
             Assert.AreEqual(0.6f, twenty.PlayerHitRateMultiplier, 1e-6f);
-            Assert.AreEqual(1.5f, twenty.DamageTakenMultiplier, 1e-6f);
+            Assert.AreEqual(1.15f, twenty.DamageTakenMultiplier, 1e-6f);
 
             MonsterLevelPenalty thirty = MapAccessRules.GetMonsterLevelDeltaPenalty(10, 40);
-            Assert.AreEqual(3f, thirty.DamageTakenMultiplier, 1e-6f);
+            Assert.AreEqual(1.3f, thirty.DamageTakenMultiplier, 1e-6f);
             Assert.IsTrue(thirty.IsLethal);
         }
 
