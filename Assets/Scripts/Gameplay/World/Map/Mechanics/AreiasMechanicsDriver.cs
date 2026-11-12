@@ -13,7 +13,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// unless the layout holds the region and the hero stands in it. The hero keeps the controls all the time; the storm only wears
     /// health down to the rule's floor, after the warning, and the towns and the oasis areas are always safe.
     /// </summary>
-    public sealed class AreiasMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class AreiasMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const int StreakCount = 10;
@@ -61,9 +61,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
             _origin = anchor.Origin;
             _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.AreiasBounds, _origin) };
+            StartSouth();
         }
 
-        private void OnDisable() => Hide();
+        private void OnDisable()
+        {
+            Hide();
+            LeaveSouth();
+        }
 
         private void OnDestroy()
         {
@@ -85,8 +90,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             if (!OverworldLayouts.AreiasBounds.Contains(local))
             {
                 Hide();
+                LeaveSouth();
                 return;
             }
+
+            // The far south (09, 10, 12: AreiasMechanicsDriver.South.cs) runs under the storm, whatever its phase.
+            TickSouth(world, local);
 
             double now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000d;
             AreiasStormPhase phase = AreiasStormRules.PhaseAt(now);

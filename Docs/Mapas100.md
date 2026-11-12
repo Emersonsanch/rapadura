@@ -890,6 +890,7 @@ Enxame de Faíscas Presas (noite). Chefe do mundo: **Namrael** (mapa 12).
 - **Chefe:** **A Raiz que Bebeu o Poço**, parreira enorme apagada; libertada, devolve a água ao oásis.
 - **No jogo (2026-11-11): chefe do mapa A Raiz que Bebeu o Poço** (`enemy_mountain_well_drinking_root`, Nv 26): anel de pedra na trilha ao norte da Boca do Karez (`RaizQueBebeuOPocoArena`, a 5 m da trilha, desnível 0,14 m a 12 m); habilidade própria **raízes nos passos** (`RootTrailHits`): aviso de 2,4 s em que a raiz marca onde o herói pisa (o lugar do aviso e mais um passo a cada 0,4 s, até 7) e sobe em todos eles (1,6 m): ficar parado ou voltar pelo próprio caminho pega; seguir andando para chão novo salva. Loot: Madeira (70 %, 2–3); libertada, devolve a água ao karez. Falta: o oásis de Qocho com água de novo.
 - **Mecânica:** **fachos de sol**: só dentro deles o herói regenera mana; os bichos evitam a luz.
+- **No jogo (2026-11-12): fachos de sol** (`KarezSunbeamRules`, `AreiasMechanicsDriver.South.cs`, `OverworldLayouts.KarezSunbeams`, teste `SouthSandsSummitMechanicsTests`): de dia cai um facho a cada 4 poços das duas linhas de karez sobre as galerias (17 fachos de 6 m, coluna de luz dourada a até 110 m). Nas galerias, de dia, fora do posto, a mana do herói volta a ×0,5 no escuro e a ×2,5 dentro de um facho; bicho comum dentro do facho fica ofuscado (dano ×0,8, velocidade ×0,75; chefe não). À noite não há fachos e nada muda (só as lâmpadas). Efeitos curtos no `BuffController`, renovados enquanto valem. Falta: os 3 andares de verdade e o facho no modelo do poço (hoje é uma coluna de luz).
 - **Ganchos:** loot barro fino, Gota de Água Viva · montaria `mount_giant_armadillo` (escavador: túneis) · casa: conjunto
   novo **Cisterna de Qocho** (cântaro, bica de pedra).
 - **Noite:** sem fachos (só lâmpadas); **Ubır** desce pelos poços.
@@ -905,6 +906,7 @@ Enxame de Faíscas Presas (noite). Chefe do mundo: **Namrael** (mapa 12).
 - **Chefe:** **O Coral da Duna**, verme que "canta" para chamar a luz; libertado, a duna canta bonito.
 - **Mecânica:** **canto da duna**: escorregar duna abaixo faz a areia cantar e assusta os comuns por 4 s (a cada 30 s;
   não vale em chefe).
+- **No jogo (2026-11-12): canto da duna** (`DuneSongRules`, `AreiasMechanicsDriver.South.cs`, teste `SouthSandsSummitMechanicsTests`): descer correndo a face de uma duna (4 m de descida sem parar, a 2 m/s ou mais, subindo no máximo 0,4 m no caminho) faz a areia cantar: todo bicho a até 14 m do herói, menos chefe, fica atordoado de susto por 4 s (`ApplyStun`), com anel dourado se abrindo na areia; no máximo uma vez a cada 30 s; não vale no posto nem no lago em crescente. Falta: som do canto e o Coral da Duna.
 - **Ganchos:** loot Areia que Canta (tintura) · montaria `mount_fire_rhea` (Bema) · casa: **Areias Flamejantes**.
 - **Noite:** areia fria e azulada; o Enxame de Faíscas Presas dobra; o lago reflete a Barca da Lua.
 
@@ -934,6 +936,7 @@ Enxame de Faíscas Presas (noite). Chefe do mundo: **Namrael** (mapa 12).
   [elite]; Espelho de Sal [distância, reflete projéteis] (invenção).
 - **Chefe:** **chefe do mundo: Namrael, o Escorpião-Rei / da Lua Cheia** (já no código).
 - **Mecânica:** **sal que ofusca**: ao meio-dia o sal brilha e corta a visão a 10 m (aqui o dia é o perigoso).
+- **No jogo (2026-11-12): sal que ofusca** (`NamraelGlareRules`, `AreiasMechanicsDriver.South.cs`, `OverworldLayouts.NamraelShadeTowers`, teste `SouthSandsSummitMechanicsTests`): das 11h às 14h do relógio do jogo (aviso às 10h30), no sal aberto do mapa, o herói não vê bicho a mais de 10 m (os renderers deles apagam e voltam quando chegam perto, quando o brilho passa ou o herói sai do sal; os atiradores continuam atirando); brilhos brancos em volta do herói. A sombra das 6 torres de taipa (14 m) e o posto Torre de Taipa são seguros; chefe sempre aparece. Falta: o clarão na tela e o Espelho de Sal refletindo projéteis.
 - **Ganchos:** loot Cristal de Sal Rubro (refino) · montaria `mount_light_jaguar` (noite) · casa: troféu de Namrael.
 - **Noite:** visão boa sob a lua; Namrael só na lua cheia; Ubır nas torres.
 
@@ -978,7 +981,7 @@ gigantes, ushabtis e bichos (bíblia §2.3).
   torrente do Hahya prolongada até a borda sul (ponte na estrada do Zarafshan), três lagoas de degelo.
 - **Orçamento medido** (2704 pedaços, .NET 6 fora do Editor): ~5,2 mil triângulos em média, pior 10,7 mil (meta ≤ 12
   mil); geração média ~0,74 ms, p95 ~1,1 ms; montar a região ~0,12 s. Testes em `OverworldKaggenTests` (EditMode).
-- **Falta:** pontes de corda que balançam (visual), ar fino no cume, NPCs dos Salões de Bronze. *(Corrigido em 2026-11-11:
+- **Falta:** pontes de corda que balançam (visual), NPCs dos Salões de Bronze (o ar fino do cume entrou em 2026-11-12, ver o 18). *(Corrigido em 2026-11-11:
   15–18 já são `isBuilt: true` (zonas, barca até elas); ventos da serra e pontes de corda que gastam fôlego estão em
   `KaggenWindRules`; Pedra que Rola e Neblina do Vento Ruim são bichos próprios (bíblia §3.2.1); o mundo costurado liga a
   Serra às Areias sem portão.)*
@@ -1064,6 +1067,7 @@ gigantes, ushabtis e bichos (bíblia §2.3).
   [controle].
 - **Chefe:** **chefe do mundo: Mazan, o Gigante da Serra / da Pedra-Lua** (já no código).
 - **Mecânica:** **ar fino**: no platô de cima o fôlego volta 30% mais devagar; a Maithe ignora.
+- **No jogo (2026-11-12): ar fino** (`MazanThinAirRules`, `KaggenMechanicsDriver.ThinAir.cs`, `OverworldLayouts.MazanThinAirBounds`, teste `SouthSandsSummitMechanicsTests`): no platô de cima do Cume (a metade norte do mapa, em volta do anel de Mazan) o fôlego do herói volta 30% mais devagar (efeito curto de StaminaRegen −30% no `BuffController`, renovado enquanto vale); a Maithe não sente (fala própria). Falta: respiração ofegante e névoa fina no visual.
 - **Ganchos:** loot Pedra-Lua, troféu de Mazan · montaria `mount_hippogriff` · casa: **Picos de Litema**.
 - **Noite:** Mazan da Pedra-Lua; aurora fraca; Ave-Graveto no gelo.
 

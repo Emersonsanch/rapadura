@@ -14,7 +14,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// the layout holds the region and the hero stands in it. Gusts go through the CharacterController, so walls hold, and never
     /// touch a hero on a rope bridge. The hero keeps the controls all the time.
     /// </summary>
-    public sealed class KaggenMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class KaggenMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const int StreakCount = 8;
@@ -61,7 +61,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.KaggenBounds, _origin) };
         }
 
-        private void OnDisable() => ShowStreaks(false, Vector2.zero, false);
+        private void OnDisable()
+        {
+            ShowStreaks(false, Vector2.zero, false);
+            LeaveThinAir();
+        }
 
         private void OnDestroy()
         {
@@ -83,11 +87,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             if (!OverworldLayouts.KaggenBounds.Contains(local) || !_stats.IsAlive)
             {
                 ShowStreaks(false, Vector2.zero, false);
+                LeaveThinAir();
                 return;
             }
 
             // Only the cousin is needed: read it straight from the selection instead of capturing the whole bag every frame.
             CharacterId? hero = ServiceLocator.TryGet(out CharacterSelectionState selection) ? selection.Selected : null;
+            TickThinAir(local, hero);
             bool onBridge = KaggenWindRules.OnBridge(local, OverworldLayouts.KaggenBridges);
             TickBridge(onBridge, hero);
             TickWind(local, world, onBridge, hero);
