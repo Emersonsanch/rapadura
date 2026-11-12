@@ -10,7 +10,7 @@ namespace Rapadura.UI.Housing
 {
     /// <summary>
     /// H5 "Guarda-roupa" (Housing.md §9.3–9.5), opened from a wardrobe placed in the house: the active cousin's layers
-    /// (◀ ▶ through the unlocked looks that fit, hide/show, dye main/detail with the dye in hand, coconut soap), the pot of
+    /// (‹ › through the unlocked looks that fit, hide/show, dye main/detail with the dye in hand, coconut soap), the pot of
     /// dyes and the saved outfits (3, or 6 with the rosewood wardrobe). Built in code on the house overlay and styled with
     /// the existing <c>house-life*</c> / <c>house-actions</c> classes of <c>Resources/UI/House.uss</c> (no new sheet). All
     /// rules in <see cref="WardrobeService"/> / <see cref="WardrobeBook"/>.
