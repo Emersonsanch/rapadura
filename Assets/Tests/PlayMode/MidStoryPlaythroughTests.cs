@@ -231,14 +231,21 @@ namespace Rapadura.Tests.PlayMode
             InventoryManager bag = FindPlayer().GetComponent<InventoryManager>();
             long xpBefore = stats.TotalExperience;
             Dictionary<string, int> itemsBefore = step.Quest.Rewards.ToDictionary(r => r.ItemId, r => Owned(bag, r.ItemId));
+            var doneBefore = new HashSet<string>(quests.CompletedQuestIds);
 
             Kill(last, what);
+
+            // The same blow can finish another quest the run holds (a daily of the hero, by the date and the order the suite ran in):
+            // its XP is not the step's, so it is taken off before the step's reward is checked.
+            long otherXp = Resources.LoadAll<QuestDefinition>("Quests")
+                .Where(q => q != null && q.QuestId != step.QuestId && !doneBefore.Contains(q.QuestId) && quests.IsCompleted(q.QuestId))
+                .Sum(q => (long)q.RewardExperience);
 
             Assert.IsTrue(quests.IsCompleted(step.QuestId), $"{what}: the last kill did not complete the step ({Describe(quests.GetProgress(step.QuestId))}).");
             Assert.IsFalse(quests.IsActive(step.QuestId));
             CollectionAssert.DoesNotContain(quests.PendingRewardQuestIds, step.QuestId, $"{what}: the rewards were queued instead of given (no live hero?).");
             Assert.Greater(definition.RewardExperience, 0, $"{what}: the step pays no XP.");
-            Assert.AreEqual(definition.RewardExperience, stats.TotalExperience - xpBefore, $"{what}: the XP reward.");
+            Assert.AreEqual(definition.RewardExperience, stats.TotalExperience - xpBefore - otherXp, $"{what}: the XP reward.");
             foreach (RegionRewardSpec reward in step.Quest.Rewards)
             {
                 Assert.IsNotNull(ItemDatabase.GetById(reward.ItemId), $"{what}: the reward item '{reward.ItemId}' does not exist (it can never arrive).");
